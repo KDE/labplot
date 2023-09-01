@@ -1160,7 +1160,6 @@ bool InfoElement::load(XmlStreamReader* reader, bool preview) {
 	Q_D(InfoElement);
 
 	QXmlStreamAttributes attribs;
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QString str;
 	QString curvePath;
 
@@ -1182,7 +1181,7 @@ bool InfoElement::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value(QStringLiteral("visible")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("x")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("x"));
 			else
 				setVisible(str.toInt());
 
@@ -1218,6 +1217,10 @@ bool InfoElement::load(XmlStreamReader* reader, bool preview) {
 		} else if (reader->name() == QLatin1String("point")) {
 			attribs = reader->attributes();
 			curvePath = attribs.value(QStringLiteral("curvepath")).toString();
+		} else { // unknown element
+			reader->raiseUnknownElementWarning();
+			if (!reader->skipToEndElement())
+				return false;
 		}
 	}
 

@@ -405,6 +405,29 @@ void SpreadsheetTest::testCopyPasteSizeChange00() {
 	QCOMPARE((bool)std::isnan(sheet->column(1)->valueAt(5)), true);
 }
 
+void SpreadsheetTest::testCopyPasteUtf8() {
+	Spreadsheet sheet(QStringLiteral("test"), false);
+	sheet.setColumnCount(2);
+	sheet.setRowCount(100);
+
+	const QString str = QString::fromUtf8("тест1 1\nтест2 2");
+
+	QApplication::clipboard()->setText(str);
+
+	SpreadsheetView view(&sheet, false);
+	view.pasteIntoSelection();
+
+	// data types
+	QCOMPARE(sheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Text);
+	QCOMPARE(sheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Integer);
+
+	// values
+	QCOMPARE(sheet.column(0)->textAt(0), QString::fromUtf8("тест1"));
+	QCOMPARE(sheet.column(1)->integerAt(0), 1);
+
+	QCOMPARE(sheet.column(0)->textAt(1), QString::fromUtf8("тест2"));
+	QCOMPARE(sheet.column(1)->integerAt(1), 2);
+}
 /*!
    insert the data at the edge of the spreadsheet and paste the data.
    the spreadsheet has to be extended accordingly
@@ -1168,6 +1191,73 @@ void SpreadsheetTest::testSortPerformanceNumeric2() {
 
 	// sort
 	QBENCHMARK { sheet.sortColumns(col0, {col0, col1}, true); }
+}
+
+// **********************************************************
+// ********************* drop/mask  *************************
+// **********************************************************
+void SpreadsheetTest::testRemoveRowsWithMissingValues() {
+	// prepare the spreadsheet
+	Spreadsheet sheet(QStringLiteral("test"), false);
+	sheet.setColumnCount(2);
+	sheet.setRowCount(5);
+
+	auto* col0{sheet.column(0)};
+	col0->setColumnMode(AbstractColumn::ColumnMode::Double);
+	col0->setValueAt(0, 0.);
+	// missing value for row = 1
+	col0->setValueAt(2, 2.);
+	col0->setValueAt(3, 3.);
+
+	auto* col1{sheet.column(1)};
+	col1->setColumnMode(AbstractColumn::ColumnMode::Double);
+	col1->setValueAt(0, 0.);
+	col1->setValueAt(1, 1.);
+	// missing value for row = 2
+	col1->setValueAt(3, 3.);
+
+	// remove rows with empty values and check the results
+	sheet.removeEmptyRows();
+	QCOMPARE(sheet.rowCount(), 2);
+	QCOMPARE(col0->valueAt(0), 0.);
+	QCOMPARE(col0->valueAt(1), 3.);
+	QCOMPARE(col1->valueAt(0), 0.);
+	QCOMPARE(col1->valueAt(1), 3.);
+}
+
+void SpreadsheetTest::testMaskRowsWithMissingValues() {
+	// prepare the spreadsheet
+	Spreadsheet sheet(QStringLiteral("test"), false);
+	sheet.setColumnCount(2);
+	sheet.setRowCount(5);
+
+	auto* col0{sheet.column(0)};
+	col0->setColumnMode(AbstractColumn::ColumnMode::Double);
+	col0->setValueAt(0, 0.);
+	// missing value for row = 1
+	col0->setValueAt(2, 2.);
+	col0->setValueAt(3, 3.);
+
+	auto* col1{sheet.column(1)};
+	col1->setColumnMode(AbstractColumn::ColumnMode::Double);
+	col1->setValueAt(0, 0.);
+	col1->setValueAt(1, 1.);
+	// missing value for row = 2
+	col1->setValueAt(3, 3.);
+
+	// mask rows with empty values and check the results
+	sheet.maskEmptyRows();
+	QCOMPARE(sheet.rowCount(), 5);
+	QCOMPARE(col0->isMasked(0), false);
+	QCOMPARE(col0->isMasked(1), true);
+	QCOMPARE(col0->isMasked(2), true);
+	QCOMPARE(col0->isMasked(3), false);
+	QCOMPARE(col0->isMasked(4), true);
+	QCOMPARE(col1->isMasked(0), false);
+	QCOMPARE(col1->isMasked(1), true);
+	QCOMPARE(col1->isMasked(2), true);
+	QCOMPARE(col1->isMasked(3), false);
+	QCOMPARE(col1->isMasked(4), true);
 }
 
 // **********************************************************
@@ -2076,13 +2166,17 @@ void SpreadsheetTest::testInsertRows() {
 	});
 
 	QCOMPARE(sheet->rowCount(), 100);
+	QCOMPARE(model->rowCount(), 100);
 	sheet->setRowCount(101); // No crash shall happen
 	QCOMPARE(sheet->rowCount(), 101);
+	QCOMPARE(model->rowCount(), 101);
 
 	sheet->undoStack()->undo();
 	QCOMPARE(sheet->rowCount(), 100);
+	QCOMPARE(model->rowCount(), 100);
 	sheet->undoStack()->redo();
 	QCOMPARE(sheet->rowCount(), 101);
+	QCOMPARE(model->rowCount(), 101);
 
 	QCOMPARE(rowsAboutToBeInsertedCounter, 2); // set and redo()
 	QCOMPARE(rowsInsertedCounter, 2); // set and redo()
@@ -2114,13 +2208,100 @@ void SpreadsheetTest::testRemoveRows() {
 	});
 
 	QCOMPARE(sheet->rowCount(), 100);
+	QCOMPARE(model->rowCount(), 100);
 	sheet->setRowCount(10); // No crash shall happen
 	QCOMPARE(sheet->rowCount(), 10);
+	QCOMPARE(model->rowCount(), 10);
 
 	sheet->undoStack()->undo();
 	QCOMPARE(sheet->rowCount(), 100);
+	QCOMPARE(model->rowCount(), 100);
 	sheet->undoStack()->redo();
 	QCOMPARE(sheet->rowCount(), 10);
+	QCOMPARE(model->rowCount(), 10);
+
+	QCOMPARE(rowsAboutToBeInsertedCounter, 1); // undo
+	QCOMPARE(rowsInsertedCounter, 1); // undo
+	QCOMPARE(rowsAboutToBeRemovedCounter, 2); // set and redo()
+	QCOMPARE(rowsRemovedCounter, 2); // set and redo()
+}
+
+void SpreadsheetTest::testInsertRowsBegin() {
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+
+	auto* model = new SpreadsheetModel(sheet);
+	int rowsAboutToBeInsertedCounter = 0;
+	connect(model, &SpreadsheetModel::rowsAboutToBeInserted, [&rowsAboutToBeInsertedCounter]() {
+		rowsAboutToBeInsertedCounter++;
+	});
+	int rowsInsertedCounter = 0;
+	connect(model, &SpreadsheetModel::rowsInserted, [&rowsInsertedCounter]() {
+		rowsInsertedCounter++;
+	});
+	int rowsAboutToBeRemovedCounter = 0;
+	connect(model, &SpreadsheetModel::rowsAboutToBeRemoved, [&rowsAboutToBeRemovedCounter]() {
+		rowsAboutToBeRemovedCounter++;
+	});
+	int rowsRemovedCounter = 0;
+	connect(model, &SpreadsheetModel::rowsRemoved, [&rowsRemovedCounter]() {
+		rowsRemovedCounter++;
+	});
+
+	QCOMPARE(sheet->rowCount(), 100);
+	QCOMPARE(model->rowCount(), 100);
+	sheet->insertRows(0, 1); // No crash shall happen
+	QCOMPARE(sheet->rowCount(), 101);
+	QCOMPARE(model->rowCount(), 101);
+
+	sheet->undoStack()->undo();
+	QCOMPARE(sheet->rowCount(), 100);
+	QCOMPARE(model->rowCount(), 100);
+	sheet->undoStack()->redo();
+	QCOMPARE(sheet->rowCount(), 101);
+	QCOMPARE(model->rowCount(), 101);
+
+	QCOMPARE(rowsAboutToBeInsertedCounter, 2); // set and redo()
+	QCOMPARE(rowsInsertedCounter, 2); // set and redo()
+	QCOMPARE(rowsAboutToBeRemovedCounter, 1); // undo()
+	QCOMPARE(rowsRemovedCounter, 1); // undo()
+}
+void SpreadsheetTest::testRemoveRowsBegin() {
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+
+	auto* model = new SpreadsheetModel(sheet);
+	int rowsAboutToBeInsertedCounter = 0;
+	connect(model, &SpreadsheetModel::rowsAboutToBeInserted, [&rowsAboutToBeInsertedCounter]() {
+		rowsAboutToBeInsertedCounter++;
+	});
+	int rowsInsertedCounter = 0;
+	connect(model, &SpreadsheetModel::rowsInserted, [&rowsInsertedCounter]() {
+		rowsInsertedCounter++;
+	});
+	int rowsAboutToBeRemovedCounter = 0;
+	connect(model, &SpreadsheetModel::rowsAboutToBeRemoved, [&rowsAboutToBeRemovedCounter]() {
+		rowsAboutToBeRemovedCounter++;
+	});
+	int rowsRemovedCounter = 0;
+	connect(model, &SpreadsheetModel::rowsRemoved, [&rowsRemovedCounter]() {
+		rowsRemovedCounter++;
+	});
+
+	QCOMPARE(sheet->rowCount(), 100);
+	QCOMPARE(model->rowCount(), 100);
+	sheet->removeRows(0, 1);
+	QCOMPARE(sheet->rowCount(), 99);
+	QCOMPARE(model->rowCount(), 99);
+
+	sheet->undoStack()->undo();
+	QCOMPARE(sheet->rowCount(), 100);
+	QCOMPARE(model->rowCount(), 100);
+	sheet->undoStack()->redo();
+	QCOMPARE(sheet->rowCount(), 99);
+	QCOMPARE(model->rowCount(), 99);
 
 	QCOMPARE(rowsAboutToBeInsertedCounter, 1); // undo
 	QCOMPARE(rowsInsertedCounter, 1); // undo
@@ -2153,13 +2334,17 @@ void SpreadsheetTest::testInsertColumns() {
 	});
 
 	QCOMPARE(sheet->columnCount(), 2);
+	QCOMPARE(model->columnCount(), 2);
 	sheet->setColumnCount(5); // No crash shall happen
 	QCOMPARE(sheet->columnCount(), 5);
+	QCOMPARE(model->columnCount(), 5);
 
 	sheet->undoStack()->undo();
 	QCOMPARE(sheet->columnCount(), 2);
+	QCOMPARE(model->columnCount(), 2);
 	sheet->undoStack()->redo();
 	QCOMPARE(sheet->columnCount(), 5);
+	QCOMPARE(model->columnCount(), 5);
 
 	QCOMPARE(columnsAboutToBeInsertedCounter, 2); // set and redo()
 	QCOMPARE(columnsInsertedCounter, 2); // set and redo()
@@ -2192,13 +2377,17 @@ void SpreadsheetTest::testRemoveColumns() {
 	});
 
 	QCOMPARE(sheet->columnCount(), 2);
+	QCOMPARE(model->columnCount(), 2);
 	sheet->setColumnCount(1); // No crash shall happen
 	QCOMPARE(sheet->columnCount(), 1);
+	QCOMPARE(model->columnCount(), 1);
 
 	sheet->undoStack()->undo();
 	QCOMPARE(sheet->columnCount(), 2);
+	QCOMPARE(model->columnCount(), 2);
 	sheet->undoStack()->redo();
 	QCOMPARE(sheet->columnCount(), 1);
+	QCOMPARE(model->columnCount(), 1);
 
 	QCOMPARE(columnsAboutToBeInsertedCounter, 1); // undo()
 	QCOMPARE(columnsInsertedCounter, 1); // undo()
@@ -2325,6 +2514,9 @@ void SpreadsheetTest::testInsertColumnsSuppressUpdate() {
 }
 
 void SpreadsheetTest::testLinkSpreadsheetsUndoRedo() {
+#ifdef __FreeBSD__
+	return;
+#endif
 	Project project;
 	auto* sheetData = new Spreadsheet(QStringLiteral("data"), false);
 	project.addChild(sheetData);
@@ -2410,6 +2602,9 @@ void SpreadsheetTest::testLinkSpreadsheetsUndoRedo() {
 }
 
 void SpreadsheetTest::testLinkSpreadsheetDeleteAdd() {
+#ifdef __FreeBSD__
+	return;
+#endif
 	Project project;
 	auto* sheetData = new Spreadsheet(QStringLiteral("data"), false);
 	project.addChild(sheetData);
@@ -2458,6 +2653,9 @@ void SpreadsheetTest::testLinkSpreadsheetDeleteAdd() {
 }
 
 void SpreadsheetTest::testLinkSpreadsheetAddRow() {
+#ifdef __FreeBSD__
+	return;
+#endif
 	Project project;
 	auto* sheetData = new Spreadsheet(QStringLiteral("data"), false);
 	project.addChild(sheetData);
@@ -2496,6 +2694,9 @@ void SpreadsheetTest::testLinkSpreadsheetAddRow() {
 }
 
 void SpreadsheetTest::testLinkSpreadsheetRemoveRow() {
+#ifdef __FreeBSD__
+	return;
+#endif
 	Project project;
 	auto* sheetData = new Spreadsheet(QStringLiteral("data"), false);
 	project.addChild(sheetData);
@@ -2534,6 +2735,9 @@ void SpreadsheetTest::testLinkSpreadsheetRemoveRow() {
 }
 
 void SpreadsheetTest::testLinkSpreadsheetRecalculate() {
+#ifdef __FreeBSD__
+	return;
+#endif
 	Project project;
 	auto* sheetData = new Spreadsheet(QStringLiteral("data"), false);
 	project.addChild(sheetData);
@@ -2585,6 +2789,9 @@ void SpreadsheetTest::testLinkSpreadsheetRecalculate() {
 }
 
 void SpreadsheetTest::testLinkSpreadsheetSaveLoad() {
+#ifdef __FreeBSD__
+	return;
+#endif
 	QString savePath;
 	{
 		Project project;

@@ -677,7 +677,6 @@ bool ReferenceRange::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
@@ -699,25 +698,25 @@ bool ReferenceRange::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value(QStringLiteral("logicalPosStartX")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("logicalPosStartX")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("logicalPosStartX"));
 			else
 				d->positionLogicalStart.setX(str.toDouble());
 
 			str = attribs.value(QStringLiteral("logicalPosStartY")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("logicalPosStartY")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("logicalPosStartY"));
 			else
 				d->positionLogicalStart.setY(str.toDouble());
 
 			str = attribs.value(QStringLiteral("logicalPosEndX")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("logicalPosEndX")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("logicalPosEndX"));
 			else
 				d->positionLogicalEnd.setX(str.toDouble());
 
 			str = attribs.value(QStringLiteral("logicalPosEndY")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("logicalPosEndY")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("logicalPosEndY"));
 			else
 				d->positionLogicalEnd.setY(str.toDouble());
 		} else if (!preview && reader->name() == QStringLiteral("background"))
@@ -725,7 +724,7 @@ bool ReferenceRange::load(XmlStreamReader* reader, bool preview) {
 		else if (!preview && reader->name() == QStringLiteral("line"))
 			d->line->load(reader, preview);
 		else { // unknown element
-			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
+			reader->raiseUnknownElementWarning();
 			if (!reader->skipToEndElement())
 				return false;
 		}

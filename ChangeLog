@@ -5,12 +5,17 @@ New features:
 		* New visualization types:
 			* Lollipop plot
 			* Q-Q plot
+		* New worksheet theme "Dracula"
 	* [spreadsheet]
 		* Spreadsheet linking - allow to synchronize number of rows across multiple spreadsheets
 		* Extended search and replace
 		* Column statistics spreadsheet - child spreadsheet showing various statistical properties of the parent spreadsheet
+		* Remove/mask rows with missing values
+		* Allow to sort the whole spreadsheet even if one single column was selected, use it rather as the key sort column
 	* [notebook]
 		* Export to PDF
+	* [import]
+		* Templates for ASCII and Binary import filters - allow to save and load current filter settings
 
 Performance improvements:
 	* Make baseline removal much faster by using Eigen3 library (optional dependency)

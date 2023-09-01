@@ -125,18 +125,6 @@ void AsciiFilter::write(const QString& fileName, AbstractDataSource* dataSource)
 }
 
 /*!
-  loads the predefined filter settings for \c filterName
-*/
-void AsciiFilter::loadFilterSettings(const QString& /*filterName*/) {
-}
-
-/*!
-  saves the current settings as a new filter with the name \c filterName
-*/
-void AsciiFilter::saveFilterSettings(const QString& /*filterName*/) const {
-}
-
-/*!
   returns the list with the names of all saved
   (system wide or user defined) filter settings.
 */
@@ -2002,7 +1990,6 @@ void AsciiFilter::save(QXmlStreamWriter* writer) const {
   Loads from XML.
 */
 bool AsciiFilter::load(XmlStreamReader* reader) {
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs = reader->attributes();
 	QString str;
 

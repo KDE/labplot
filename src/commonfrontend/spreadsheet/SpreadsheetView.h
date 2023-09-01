@@ -90,6 +90,7 @@ private:
 	void exportToExcel(const QString& path, bool exportHeaders) const;
 	void exportToSQLite(const QString& path) const;
 	int maxRowToExport() const;
+	bool hasValues(const QVector<Column*>);
 
 	void insertColumnsLeft(int);
 	void insertColumnsRight(int);
@@ -137,7 +138,6 @@ private:
 	QAction* action_select_all{nullptr};
 	QAction* action_clear_spreadsheet{nullptr};
 	QAction* action_clear_masks{nullptr};
-	QAction* action_sort_spreadsheet{nullptr};
 	QAction* action_formatting_heatmap{nullptr};
 	QAction* action_formatting_remove{nullptr};
 	QAction* action_go_to_cell{nullptr};
@@ -177,9 +177,9 @@ private:
 	QAction* action_join_columns{nullptr};
 	QActionGroup* normalizeColumnActionGroup{nullptr};
 	QActionGroup* ladderOfPowersActionGroup{nullptr};
-	QAction* action_sort_columns{nullptr};
-	QAction* action_sort_asc_column{nullptr};
-	QAction* action_sort_desc_column{nullptr};
+	QAction* action_sort{nullptr};
+	QAction* action_sort_asc{nullptr};
+	QAction* action_sort_desc{nullptr};
 	QAction* action_statistics_columns{nullptr};
 	QAction* action_freeze_columns{nullptr};
 
@@ -190,6 +190,8 @@ private:
 	QAction* action_insert_rows_below{nullptr};
 	QAction* action_remove_rows{nullptr};
 	QAction* action_clear_rows{nullptr};
+	QAction* action_remove_missing_value_rows{nullptr};
+	QAction* action_mask_missing_value_rows{nullptr};
 	QAction* action_statistics_rows{nullptr};
 
 	// analysis and plot data menu actions
@@ -215,7 +217,6 @@ private:
 	QMenu* m_columnManipulateDataMenu{nullptr};
 	QMenu* m_columnNormalizeMenu{nullptr};
 	QMenu* m_columnLadderOfPowersMenu{nullptr};
-	QMenu* m_columnSortMenu{nullptr};
 	QMenu* m_rowMenu{nullptr};
 	QMenu* m_spreadsheetMenu{nullptr};
 	QMenu* m_plotDataMenu{nullptr};
@@ -248,8 +249,6 @@ private Q_SLOTS:
 	void goToNextColumn();
 	void goToPreviousColumn();
 	void goToCell();
-	void sortSpreadsheet();
-	void sortDialog(const QVector<Column*>&);
 	void formatHeatmap();
 	void removeFormat();
 
@@ -295,9 +294,9 @@ private Q_SLOTS:
 	void normalizeSelectedColumns(QAction*);
 	void powerTransformSelectedColumns(QAction*);
 
-	void sortSelectedColumns();
-	void sortColumnAscending();
-	void sortColumnDescending();
+	void sortCustom();
+	void sortAscending();
+	void sortDescending();
 
 	void setSelectionAs();
 

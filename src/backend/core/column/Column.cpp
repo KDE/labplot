@@ -1279,30 +1279,29 @@ bool Column::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs = reader->attributes();
 
 	QString str = attribs.value(QStringLiteral("rows")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs(QStringLiteral("rows")).toString());
+		reader->raiseMissingAttributeWarning(QStringLiteral("rows"));
 	else
 		d->resizeTo(str.toInt());
 
 	str = attribs.value(QStringLiteral("designation")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs(QStringLiteral("designation")).toString());
+		reader->raiseMissingAttributeWarning(QStringLiteral("designation"));
 	else
 		d->setPlotDesignation(AbstractColumn::PlotDesignation(str.toInt()));
 
 	str = attribs.value(QStringLiteral("mode")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs(QStringLiteral("mode")).toString());
+		reader->raiseMissingAttributeWarning(QStringLiteral("mode"));
 	else
 		setColumnModeFast(AbstractColumn::ColumnMode(str.toInt()));
 
 	str = attribs.value(QStringLiteral("width")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs(QStringLiteral("width")).toString());
+		reader->raiseMissingAttributeWarning(QStringLiteral("width"));
 	else
 		d->setWidth(str.toInt());
 
@@ -1334,25 +1333,25 @@ bool Column::load(XmlStreamReader* reader, bool preview) {
 				auto& format = heatmapFormat();
 				str = attribs.value(QStringLiteral("min")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs(QStringLiteral("min")).toString());
+					reader->raiseMissingAttributeWarning(QStringLiteral("min"));
 				else
 					format.min = str.toDouble();
 
 				str = attribs.value(QStringLiteral("max")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs(QStringLiteral("max")).toString());
+					reader->raiseMissingAttributeWarning(QStringLiteral("max"));
 				else
 					format.max = str.toDouble();
 
 				str = attribs.value(QStringLiteral("name")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs(QStringLiteral("name")).toString());
+					reader->raiseMissingAttributeWarning(QStringLiteral("name"));
 				else
 					format.name = str;
 
 				str = attribs.value(QStringLiteral("type")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs(QStringLiteral("max")).toString());
+					reader->raiseMissingAttributeWarning(QStringLiteral("max"));
 				else
 					format.type = static_cast<Formatting>(str.toInt());
 
@@ -1409,7 +1408,7 @@ bool Column::load(XmlStreamReader* reader, bool preview) {
 				}
 				}
 			} else { // unknown element
-				reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
+				reader->raiseUnknownElementWarning();
 				if (!reader->skipToEndElement())
 					return false;
 			}

@@ -101,7 +101,7 @@ CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget* parent)
 	auto* layout = new QHBoxLayout(frame);
 	layout->setContentsMargins(0, 11, 0, 11);
 
-	auto* templateHandler = new TemplateHandler(this, TemplateHandler::ClassName::CartesianPlotLegend);
+	auto* templateHandler = new TemplateHandler(this, QLatin1String("CartesianPlotLegend"));
 	layout->addWidget(templateHandler);
 	connect(templateHandler, &TemplateHandler::loadConfigRequested, this, &CartesianPlotLegendDock::loadConfigFromTemplate);
 	connect(templateHandler, &TemplateHandler::saveConfigRequested, this, &CartesianPlotLegendDock::saveConfigAsTemplate);
@@ -708,14 +708,7 @@ void CartesianPlotLegendDock::load() {
 }
 
 void CartesianPlotLegendDock::loadConfigFromTemplate(KConfig& config) {
-	// extract the name of the template from the file name
-	QString name;
-	int index = config.name().lastIndexOf(QLatin1String("/"));
-	if (index != -1)
-		name = config.name().right(config.name().size() - index - 1);
-	else
-		name = config.name();
-
+	auto name = TemplateHandler::templateName(config);
 	int size = m_legendList.size();
 	if (size > 1)
 		m_legend->beginMacro(i18n("%1 cartesian plot legends: template \"%2\" loaded", size, name));
