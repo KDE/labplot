@@ -3489,6 +3489,7 @@ void SpreadsheetView::sortCustom() {
 	QVector<Column*> columnsToSort;
 	Column* leadingColumn{nullptr};
 
+	bool sortAll{true};
 	if (cols.size() == 0)
 		// no columns selected, the function is being called from the spreadsheet context menu,
 		// sort all columns
@@ -3498,8 +3499,10 @@ void SpreadsheetView::sortCustom() {
 		// with the current selected column being the leading column
 		columnsToSort = m_spreadsheet->children<Column>();
 		leadingColumn = cols.constFirst();
-	} else
+	} else {
 		columnsToSort = cols;
+		sortAll = (cols.size() == m_spreadsheet->columnCount());
+	}
 
 	// don't do any sort if there are no values yet in the columns
 	if (!hasValues(columnsToSort))
@@ -3508,7 +3511,7 @@ void SpreadsheetView::sortCustom() {
 	for (auto* col : columnsToSort)
 		col->setSuppressDataChangedSignal(true);
 
-	auto* dlg = new SortDialog();
+	auto* dlg = new SortDialog(this, sortAll);
 	connect(dlg, &SortDialog::sort, m_spreadsheet, &Spreadsheet::sortColumns);
 	dlg->setColumns(columnsToSort, leadingColumn);
 

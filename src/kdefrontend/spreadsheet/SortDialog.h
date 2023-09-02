@@ -18,7 +18,7 @@ class SortDialog : public QDialog {
 	Q_OBJECT
 
 public:
-	explicit SortDialog(QWidget* parent = nullptr);
+	explicit SortDialog(QWidget* parent = nullptr, bool sortAll = true);
 	~SortDialog() override;
 
 	void setColumns(const QVector<Column*>&, const Column* leadingColumn = nullptr);
