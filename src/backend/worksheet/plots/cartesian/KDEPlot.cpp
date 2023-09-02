@@ -538,16 +538,19 @@ bool KDEPlot::load(XmlStreamReader* reader, bool preview) {
 				return false;
 		} else if (reader->name() == QLatin1String("xyCurve")) {
 			if (!estimationCurveInitialized) {
-				if (!d->estimationCurve->load(reader, preview))
+				if (d->estimationCurve->load(reader, preview)) {
+					estimationCurveInitialized = true;
+					continue;
+				}else
 					return false;
-				estimationCurveInitialized = true;
 			}
 
-			// TODO
 			if (!rugCurveInitialized) {
-				if (!d->rugCurve->load(reader, preview))
+				if (d->rugCurve->load(reader, preview)) {
+					rugCurveInitialized = true;
+					continue;
+				} else
 					return false;
-				rugCurveInitialized = true;
 			}
 		} else { // unknown element
 			reader->raiseUnknownElementWarning();
