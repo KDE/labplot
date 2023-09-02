@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-29 00:41+0000\n"
+"POT-Creation-Date: 2023-09-02 00:42+0000\n"
 "PO-Revision-Date: 2023-06-23 15:21+0200\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
@@ -202,10 +202,10 @@ msgstr "Dnů"
 # žádné parametry funkce v inspektoru funkcí
 #: src/backend/core/AbstractColumn.cpp:158 src/backend/nsl/nsl_conv.c:22
 #: src/backend/nsl/nsl_conv.c:23 src/backend/nsl/nsl_corr.c:19
-#: src/backend/nsl/nsl_smooth.c:22 src/kdefrontend/dockwidgets/AxisDock.cpp:276
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:289
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:57
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:225
+#: src/backend/nsl/nsl_smooth.c:22 src/kdefrontend/dockwidgets/AxisDock.cpp:271
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:284
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:55
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:221
 #: src/kdefrontend/GuiTools.cpp:150
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:128
 #: src/kdefrontend/widgets/LineWidget.cpp:52
@@ -496,7 +496,7 @@ msgid "%1   (no values)"
 msgstr ""
 
 #: src/backend/core/AspectTreeModel.cpp:226
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1457
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1458
 #, kde-format
 msgid "Size: %1"
 msgstr "Velikost: %1"
@@ -1142,7 +1142,7 @@ msgstr "Rejstřík"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2344
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2362
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2379
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:151
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:150
 #: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:188
 #: src/kdefrontend/ui/dockwidgets/columndock.ui:182
 #: src/kdefrontend/widgets/FITSHeaderEditWidget.cpp:65
@@ -1340,8 +1340,8 @@ msgstr ""
 #: src/backend/datasources/filters/HDF5Filter.cpp:308
 #: src/backend/datasources/filters/MatioFilter.cpp:577
 #: src/backend/datasources/filters/MatioFilter.cpp:581
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:370
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:374
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:378
 #, kde-format
 msgid "No"
 msgstr "Ne"
@@ -1447,7 +1447,7 @@ msgstr "h5dump nenalezen."
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:357
 #: src/backend/datasources/filters/NetCDFFilter.cpp:267
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1432
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1433
 #, kde-format
 msgid "Reading from file %1 failed."
 msgstr ""
@@ -2791,7 +2791,7 @@ msgstr ""
 
 #: src/backend/gsl/errors.h:20
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1955
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1211
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1210
 #, kde-format
 msgid "Success"
 msgstr "Úspěch"
@@ -2974,10 +2974,9 @@ msgid "Comparison Functions"
 msgstr "Porovnávací funkce"
 
 #: src/backend/gsl/functions.cpp:46
-#, fuzzy, kde-format
-#| msgid "Basic Functions"
+#, kde-format
 msgid "Logical Functions"
-msgstr "Základní funkce"
+msgstr ""
 
 #: src/backend/gsl/functions.cpp:48
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:28
@@ -3391,10 +3390,9 @@ msgid "outside with boundaries excluded"
 msgstr ""
 
 #: src/backend/gsl/functions.cpp:236
-#, fuzzy, kde-format
-#| msgid "if(condition, ifTrue, ifFalse)"
+#, kde-format
 msgid "if(condition; ifTrue; ifFalse)"
-msgstr "if(podmínka; je-liPravda; je-liNepravda)"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lAnd)
 #. i18n: ectx: property (text), widget (QLabel, lAndDateTime)
@@ -5253,28 +5251,24 @@ msgid "x"
 msgstr "x"
 
 #: src/backend/gsl/functions.cpp:1181
-#, fuzzy, kde-format
-#| msgid "min."
+#, kde-format
 msgid "min"
-msgstr "min."
+msgstr "min"
 
 #: src/backend/gsl/functions.cpp:1183
-#, fuzzy, kde-format
-#| msgid "max."
+#, kde-format
 msgid "max"
-msgstr "max."
+msgstr "max"
 
 #: src/backend/gsl/functions.cpp:1191
-#, fuzzy, kde-format
-#| msgid "1"
+#, kde-format
 msgid "v1"
-msgstr "1"
+msgstr "v1"
 
 #: src/backend/gsl/functions.cpp:1193
-#, fuzzy, kde-format
-#| msgid "2"
+#, kde-format
 msgid "v2"
-msgstr "2"
+msgstr "v2"
 
 #: src/backend/gsl/functions.cpp:1195
 #, kde-format
@@ -5549,7 +5543,7 @@ msgstr "Kruhový"
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoBinRanges)
 #. i18n: ectx: property (text), widget (QCheckBox, chkAuto)
 #. i18n: ectx: property (text), widget (QCheckBox, chkAuto2)
-#: src/backend/nsl/nsl_conv.c:21 src/kdefrontend/dockwidgets/AxisDock.cpp:241
+#: src/backend/nsl/nsl_conv.c:21 src/kdefrontend/dockwidgets/AxisDock.cpp:236
 #: src/kdefrontend/dockwidgets/InfoElementDock.cpp:151
 #: src/kdefrontend/dockwidgets/InfoElementDock.cpp:316
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:718
@@ -5848,11 +5842,11 @@ msgstr ""
 #: src/backend/nsl/nsl_fit.c:24
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:490
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:531
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1201
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:243
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1202
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:238
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:300
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:785
-#: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:85
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:784
+#: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:83
 #, kde-format
 msgid "Custom"
 msgstr "Vlastní"
@@ -6033,13 +6027,13 @@ msgid "Simpson's 3/8 (4-point)"
 msgstr ""
 
 #: src/backend/nsl/nsl_interp.c:16
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:233
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:229
 #, kde-format
 msgid "Cubic Spline (Natural)"
 msgstr ""
 
 #: src/backend/nsl/nsl_interp.c:17
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:234
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:230
 #, kde-format
 msgid "Cubic Spline (Periodic)"
 msgstr ""
@@ -6534,7 +6528,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbCount)
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:31
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:189
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:184
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:62
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:93
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:99
@@ -6869,14 +6863,14 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:83
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:112
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:127
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:259
-#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:57
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:54
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:186
-#: src/kdefrontend/dockwidgets/LollipopPlotDock.cpp:53
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:254
+#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:55
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:52
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:181
+#: src/kdefrontend/dockwidgets/LollipopPlotDock.cpp:51
 #: src/kdefrontend/dockwidgets/ReferenceLineDock.cpp:26
 #: src/kdefrontend/dockwidgets/ReferenceRangeDock.cpp:27
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:113
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:112
 #, kde-format
 msgid "Horizontal"
 msgstr "Vodorovný"
@@ -6889,16 +6883,16 @@ msgstr "Vodorovný"
 #: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:86
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:115
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:130
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:260
-#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:58
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:55
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:255
+#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:56
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:53
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:867
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:871
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:185
-#: src/kdefrontend/dockwidgets/LollipopPlotDock.cpp:54
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:180
+#: src/kdefrontend/dockwidgets/LollipopPlotDock.cpp:52
 #: src/kdefrontend/dockwidgets/ReferenceLineDock.cpp:27
 #: src/kdefrontend/dockwidgets/ReferenceRangeDock.cpp:28
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:112
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:111
 #, kde-format
 msgid "Vertical"
 msgstr "Svislý"
@@ -6919,7 +6913,7 @@ msgstr "Orientace"
 #. i18n: ectx: property (text), widget (QLabel, lLine)
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:290
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:138
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:226
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:222
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:467
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:607
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:680
@@ -6942,7 +6936,7 @@ msgstr "Styl"
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:297
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:145
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:160
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:319
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:314
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:136
 #, kde-format
 msgid "Color"
@@ -6954,7 +6948,7 @@ msgid "%1: set axis range type"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:548
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:637
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:632
 #, kde-format
 msgid "%1: set axis orientation"
 msgstr ""
@@ -7362,7 +7356,7 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:349
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:403
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:469
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:79
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:78
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:140
 #, kde-format
 msgid "Histogram"
@@ -7379,10 +7373,9 @@ msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:351
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:406
-#, fuzzy, kde-format
-#| msgid "Plot"
+#, kde-format
 msgid "Q-Q Plot"
-msgstr "Vykreslit"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:354
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:392
@@ -7534,8 +7527,8 @@ msgstr "Referenční rozsah"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:424
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:504
-#: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:433
-#: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:438
+#: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:430
+#: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:435
 #, kde-format
 msgid "Convolution"
 msgstr ""
@@ -8064,10 +8057,9 @@ msgstr ""
 "minimální."
 
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:278
-#, fuzzy, kde-format
-#| msgid "%1: set equation"
+#, kde-format
 msgid "%1: set distribution"
-msgstr "%1: nastavit rovnici"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:153
 #, kde-format
@@ -9649,10 +9641,9 @@ msgid "Insert Multiple Columns Right"
 msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:313
-#, fuzzy, kde-format
-#| msgid "Remove Columns"
+#, kde-format
 msgid "Remove Selected Column(s)"
-msgstr "Odstranit sloupce"
+msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:315
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1603
@@ -9681,16 +9672,14 @@ msgid "Divide"
 msgstr "Dělit"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:357
-#, fuzzy, kde-format
-#| msgid "Values"
+#, kde-format
 msgid "Drop Values"
-msgstr "Hodnoty"
+msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:358
-#, fuzzy, kde-format
-#| msgid "Values"
+#, kde-format
 msgid "Mask Values"
-msgstr "Hodnoty"
+msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:360
 #, kde-format
@@ -9780,10 +9769,9 @@ msgid "Rescale to [a, b]"
 msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:441
-#, fuzzy, kde-format
-#| msgid "Export..."
+#, kde-format
 msgid "&Sort..."
-msgstr "Exportovat..."
+msgstr "&Seřadit..."
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:442
 #, kde-format
@@ -9791,10 +9779,9 @@ msgid "Sort multiple columns together"
 msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:443
-#, fuzzy, kde-format
-#| msgid "&Ascending"
+#, kde-format
 msgid "Sort &Ascending"
-msgstr "&Vzestupně"
+msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:444
 #, kde-format
@@ -9802,10 +9789,9 @@ msgid "Sort the selected columns separately in ascending order"
 msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:445
-#, fuzzy, kde-format
-#| msgid "&Descending"
+#, kde-format
 msgid "Sort &Descending"
-msgstr "&Sestupně"
+msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:446
 #, kde-format
@@ -9843,10 +9829,9 @@ msgid "Insert Multiple Rows Below"
 msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:460
-#, fuzzy, kde-format
-#| msgid "%1: remove selected rows"
+#, kde-format
 msgid "Remo&ve Selected Row(s)"
-msgstr "%1: odstranit vybrané řádky"
+msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:462
 #, kde-format
@@ -10218,15 +10203,15 @@ msgstr ""
 #: src/commonfrontend/workbook/WorkbookView.cpp:52
 #: src/commonfrontend/workbook/WorkbookView.cpp:165
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:115
-#: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:57
-#: src/kdefrontend/dockwidgets/XYCorrelationCurveDock.cpp:59
-#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:58
-#: src/kdefrontend/dockwidgets/XYDifferentiationCurveDock.cpp:58
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:77
-#: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:55
-#: src/kdefrontend/dockwidgets/XYIntegrationCurveDock.cpp:58
-#: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:60
-#: src/kdefrontend/dockwidgets/XYSmoothCurveDock.cpp:54
+#: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:55
+#: src/kdefrontend/dockwidgets/XYCorrelationCurveDock.cpp:57
+#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:56
+#: src/kdefrontend/dockwidgets/XYDifferentiationCurveDock.cpp:56
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:76
+#: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:53
+#: src/kdefrontend/dockwidgets/XYIntegrationCurveDock.cpp:56
+#: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:58
+#: src/kdefrontend/dockwidgets/XYSmoothCurveDock.cpp:52
 #: src/kdefrontend/labplot2ui.rc:28 src/kdefrontend/MainWin.cpp:666
 #: src/kdefrontend/MainWin.cpp:2027 src/kdefrontend/SettingsDialog.cpp:68
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:237
@@ -11190,25 +11175,25 @@ msgid ""
 "to be subscribed."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:885
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:886
 #, kde-format
 msgctxt "@title:window"
 msgid "Select the File Data Source"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:915
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:916
 #, kde-format
 msgctxt "@title:window"
 msgid "Select the DBC file"
 msgstr "Vyberte soubor DBC"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:915
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:916
 #, kde-format
 msgid "DBC file (*.dbc)"
 msgstr "Soubor DBC (*.dbc)"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataFormat)
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1117
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1118
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:402
 #, kde-format
 msgid "Data Format"
@@ -11216,7 +11201,7 @@ msgstr "Formát dat"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_3)
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataPreview)
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1118
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1119
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:456
 #: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:158
 #, kde-format
@@ -11225,104 +11210,104 @@ msgstr "Náhled"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_4)
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataPortion)
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1120
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1121
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:535
 #: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:239
 #, kde-format
 msgid "Data Portion to Read"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1157
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1158
 #, kde-format
 msgid "Data format && preview"
 msgstr "Formát dat && náhled"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1200
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1201
 #: src/kdefrontend/SettingsGeneralPage.cpp:183
 #, kde-format
 msgid "Automatic"
 msgstr "Automaticky"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1424
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1425
 #, kde-format
 msgid "file command not found"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1435
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1436
 #, kde-format
 msgid "cannot open"
 msgstr "nelze otevřít"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1440
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1441
 #, kde-format
 msgid "<b>File type:</b> %1"
 msgstr "<b>Typ souboru:</b> %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1445
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1446
 #, kde-format
 msgid "General:"
 msgstr "Obecné:"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1447
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1448
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1449
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1450
 #, kde-format
 msgid "yes"
 msgstr "ano"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1447
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1448
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1449
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1450
 #, kde-format
 msgid "no"
 msgstr "ne"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1447
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1448
 #, kde-format
 msgid "Readable: %1"
 msgstr "Čitelné: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1448
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1449
 #, kde-format
 msgid "Writable: %1"
 msgstr "Zapisovatelné: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1449
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1450
 #, kde-format
 msgid "Executable: %1"
 msgstr "Program: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1451
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1452
 #, kde-format
 msgid "Birth time: %1"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1452
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1453
 #, kde-format
 msgid "Last metadata changed: %1"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1453
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1454
 #, kde-format
 msgid "Last modified: %1"
 msgstr "Poslední změna: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1454
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1455
 #, kde-format
 msgid "Last read: %1"
 msgstr "Poslední přístup ke čtení: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1455
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1456
 #, kde-format
 msgid "Owner: %1"
 msgstr "Vlastník : %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1456
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1457
 #, kde-format
 msgid "Group: %1"
 msgstr "Skupina: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1457
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1458
 #, kde-format
 msgid "%1 cByte"
 msgid_plural "%1 cBytes"
@@ -11330,79 +11315,79 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1460
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1461
 #, kde-format
 msgid "Summary:"
 msgstr "Shrnutí:"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1480
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1485
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1481
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1486
 #, kde-format
 msgid "Content:"
 msgstr "Obsah:"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1513
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1514
 #, kde-format
 msgid "Could not open file %1 for reading."
 msgstr "Nelze otevřít soubor %1 pro čtení."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1673
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1674
 #, kde-format
 msgid "No data arrived yet for the selected topic"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1895
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1896
 #, kde-format
 msgid "Not a HDF5 file: %1"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2323
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2324
 #, kde-format
 msgid "Couldn't subscribe to all available topics."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2353
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2354
 #, kde-format
 msgid "Disconnected from '%1'."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2422
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2423
 #, kde-format
 msgid "Available (%1)"
 msgstr "Dostupné (%1)"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2534
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2535
 #, kde-format
 msgid "Wrong username or password"
 msgstr "Špatné uživatelské jméno nebo heslo"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2537
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2538
 #, kde-format
 msgid "The client ID wasn't accepted"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2541
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2542
 #, kde-format
 msgid "The broker %1 couldn't be reached."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2544
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2545
 #, kde-format
 msgid "The client is not authorized to connect."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2547
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2548
 #, kde-format
 msgid "An unknown error occurred."
 msgstr "Došlo k neznámé chybě."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2553
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2556
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2554
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2557
 #, kde-format
 msgid "An error occurred."
 msgstr "Vyskytla se chyba."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2570
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2571
 #, kde-format
 msgid "Connecting to '%1:%2' timed out."
 msgstr ""
@@ -11804,10 +11789,10 @@ msgid "Array Size"
 msgstr ""
 
 #. i18n("Center") ); // must not updated
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:235
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:301
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:497
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:500
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:230
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:296
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:492
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:495
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:268
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:276
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:51
@@ -11819,10 +11804,10 @@ msgstr ""
 msgid "Top"
 msgstr "Nahoře"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:236
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:302
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:498
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:501
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:231
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:297
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:493
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:496
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:270
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:278
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:53
@@ -11834,25 +11819,25 @@ msgstr "Nahoře"
 msgid "Bottom"
 msgstr "Dole"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:237
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:232
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:152
 #, kde-format
 msgid "Centered"
 msgstr "Na střed"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twContent)
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:238
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:233
 #: src/kdefrontend/ui/datasources/matiooptionswidget.ui:57
 #, kde-format
 msgid "Logical"
 msgstr "Logické"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:242
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:237
 #, kde-format
 msgid "Auto Data"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:246
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:241
 #, kde-format
 msgid ""
 "Axis range:<ul><li>Auto - automatically set the start and end points of the "
@@ -11862,37 +11847,37 @@ msgid ""
 "points of the axis</li></ul>"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:264
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:259
 #, kde-format
 msgid "No arrow"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:265
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:260
 #, kde-format
 msgid "Simple, Small"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:266
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:261
 #, kde-format
 msgid "Simple, Big"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:267
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:262
 #, kde-format
 msgid "Filled, Small"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:268
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:263
 #, kde-format
 msgid "Filled, Big"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:269
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:264
 #, kde-format
 msgid "Semi-filled, Small"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:270
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:265
 #, kde-format
 msgid "Semi-filled, Big"
 msgstr ""
@@ -11900,15 +11885,15 @@ msgstr ""
 #. i18n("Original"));
 #. i18n("Custom"));
 #. Positioning and alignment
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:272
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:505
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:509
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:267
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:500
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:504
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:264
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:272
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:47
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:57
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:65
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:370
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:366
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:132
 #: src/kdefrontend/widgets/LabelWidget.cpp:138
 #: src/kdefrontend/widgets/LabelWidget.cpp:155
@@ -11918,15 +11903,15 @@ msgid "Left"
 msgstr "Vlevo"
 
 #. i18n("Center") ); // must not updated
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:273
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:506
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:508
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:268
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:501
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:503
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:266
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:274
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:49
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:59
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:67
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:371
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:367
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:133
 #: src/kdefrontend/widgets/LabelWidget.cpp:140
 #: src/kdefrontend/widgets/LabelWidget.cpp:157
@@ -11935,177 +11920,177 @@ msgstr "Vlevo"
 msgid "Right"
 msgstr "Vpravo"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:274
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:114
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:269
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:113
 #, kde-format
 msgid "Both"
 msgstr "Oboje"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:277
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:290
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:272
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:285
 #, kde-format
 msgid "In"
 msgstr "Dovnitř"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:278
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:291
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:273
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:286
 #, kde-format
 msgid "Out"
 msgstr "Ven"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:279
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:292
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:274
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:287
 #, kde-format
 msgid "In and Out"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:281
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:294
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:276
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:289
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:56
 #, kde-format
 msgid "Number"
 msgstr "Číslo"
 
 #. i18n: ectx: property (text), widget (QLabel, lSpacing)
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:282
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:295
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:277
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:290
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:644
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:454
 #, kde-format
 msgid "Spacing"
 msgstr "Rozestupy"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:283
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:296
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:305
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:278
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:291
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:300
 #, kde-format
 msgid "Custom column"
 msgstr "Vlastní sloupec"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:284
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:279
 #, kde-format
 msgid "Column labels"
 msgstr "Popisky sloupců"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:286
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:281
 #, kde-format
 msgid "Absolute Value"
 msgstr "Absolutní hodnota"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:287
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:282
 #, kde-format
 msgid "Offset"
 msgstr "Posun"
 
 #. i18n("Column labels"));
 #. labels
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:300
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:295
 #, kde-format
 msgid "No labels"
 msgstr "Žádné popisky"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:304
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:299
 #, kde-format
 msgid "Position values"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:308
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:303
 #, kde-format
 msgid "Decimal notation"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:309
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:304
 #, kde-format
 msgid "Scientific notation"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:310
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:305
 #, kde-format
 msgid "Scientific E notation"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:311
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:306
 #, kde-format
 msgid "Powers of 10"
 msgstr "Mocniny 10"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:312
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:307
 #, kde-format
 msgid "Powers of 2"
 msgstr "Mocniny 2"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:313
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:308
 #, kde-format
 msgid "Powers of e"
 msgstr "Mocniny e"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:314
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:309
 #, kde-format
 msgid "Multiples of π"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:318
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:313
 #, kde-format
 msgid "Transparent"
 msgstr "Průhledný"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:592
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:587
 #, kde-format
 msgid "%1: set axis color"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:594
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:589
 #, kde-format
 msgid "%1 axes: set color"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:1994
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:1989
 #, kde-format
 msgid "%1 axes: template \"%2\" loaded"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:1996
-#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:532
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:761
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:1991
+#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:530
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:759
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1814
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:716
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:408
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:768
-#: src/kdefrontend/dockwidgets/LollipopPlotDock.cpp:504
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:763
+#: src/kdefrontend/dockwidgets/LollipopPlotDock.cpp:502
 #: src/kdefrontend/dockwidgets/MatrixDock.cpp:287
-#: src/kdefrontend/dockwidgets/QQPlotDock.cpp:358
+#: src/kdefrontend/dockwidgets/QQPlotDock.cpp:354
 #: src/kdefrontend/dockwidgets/ReferenceLineDock.cpp:258
 #: src/kdefrontend/dockwidgets/SpreadsheetDock.cpp:243
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:629
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1305
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1301
 #, kde-format
 msgid "%1: template \"%2\" loaded"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:53
+#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:51
 #, kde-format
 msgid "Grouped"
 msgstr "Seskupeno"
 
-#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:54
+#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:52
 #, kde-format
 msgid "Stacked"
 msgstr "Skládaný"
 
-#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:55
+#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:53
 #, kde-format
 msgid "Stacked 100%"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:61
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:76
-#: src/kdefrontend/dockwidgets/LollipopPlotDock.cpp:57
+#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:59
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:74
+#: src/kdefrontend/dockwidgets/LollipopPlotDock.cpp:55
 #, kde-format
 msgid ""
 "Select the data column for which the properties should be shown and edited"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:65
+#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:63
 #, kde-format
 msgid ""
 "Specify the factor in percent to control the width of the bar relative to "
@@ -12113,12 +12098,12 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lColumnCount)
-#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:369
-#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:395
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:384
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:409
-#: src/kdefrontend/dockwidgets/LollipopPlotDock.cpp:362
-#: src/kdefrontend/dockwidgets/LollipopPlotDock.cpp:388
+#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:367
+#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:393
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:382
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:407
+#: src/kdefrontend/dockwidgets/LollipopPlotDock.cpp:360
+#: src/kdefrontend/dockwidgets/LollipopPlotDock.cpp:386
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:85
 #: src/kdefrontend/ui/dockwidgets/matrixdock.ui:115
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:197
@@ -12132,9 +12117,9 @@ msgstr "Sloupce:"
 #. i18n: ectx: property (text), widget (QLabel, lMinorTicksColumn)
 #. i18n: ectx: property (text), widget (QLabel, lColumn)
 #. i18n: ectx: property (text), widget (QLabel, lValuesColumn)
-#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:397
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:413
-#: src/kdefrontend/dockwidgets/LollipopPlotDock.cpp:390
+#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:395
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:411
+#: src/kdefrontend/dockwidgets/LollipopPlotDock.cpp:388
 #: src/kdefrontend/spreadsheet/GoToDialog.cpp:49
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:854
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1048
@@ -12145,80 +12130,80 @@ msgstr "Sloupce:"
 msgid "Column:"
 msgstr "Sloupec:"
 
-#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:530
+#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:528
 #, kde-format
 msgid "%1 bar plots: template \"%2\" loaded"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/BaseDock.cpp:149
+#: src/kdefrontend/dockwidgets/BaseDock.cpp:152
 #: src/kdefrontend/dockwidgets/LiveDataDock.cpp:366
 #: src/kdefrontend/dockwidgets/LiveDataDock.cpp:374
 #, kde-format
 msgid "Please choose another name, because this is already in use."
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:50
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:48
 #, kde-format
 msgid "10/90 percentiles"
 msgstr "10/90 percentily"
 
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:51
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:49
 #, kde-format
 msgid "5/95 percentiles"
 msgstr "5/95 percentily"
 
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:52
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:50
 #, kde-format
 msgid "1/99 percentiles"
 msgstr "1/99 percentily"
 
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:58
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:56
 #, kde-format
 msgid "By Median, Ascending"
 msgstr "Podle mediánu, Vzestupně"
 
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:59
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:57
 #, kde-format
 msgid "By Median, Descending"
 msgstr "Podle mediánu, Sestupně"
 
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:60
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:58
 #, kde-format
 msgid "By Mean, Ascending"
 msgstr "Podle průměru, Vzestupně"
 
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:61
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:59
 #, kde-format
 msgid "By Mean, Descending"
 msgstr "Podle průměru, Sestupně"
 
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:63
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:61
 #, kde-format
 msgid ""
 "If multiple data sets are provided, define how they should be ordered or use "
 "'None' to keep the original order."
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:67
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:65
 #, kde-format
 msgid ""
 "If checked, the box width is made proportional to the square root of the "
 "number of data points."
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:71
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:69
 #, kde-format
 msgid "Parameter controlling the range of the inner fences of the box plot."
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:80
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:78
 #, kde-format
 msgid ""
 "Specify the factor in percent to control the width of the box relative to "
 "its default value."
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:759
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:757
 #, kde-format
 msgid "%1 box plots: template \"%2\" loaded"
 msgstr ""
@@ -12436,7 +12421,7 @@ msgstr ""
 
 #: src/kdefrontend/dockwidgets/ColumnDock.cpp:44
 #: src/kdefrontend/dockwidgets/MatrixDock.cpp:32
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:69
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:68
 #: src/kdefrontend/widgets/ValueWidget.cpp:41
 #, kde-format
 msgid "Decimal"
@@ -12444,7 +12429,7 @@ msgstr "Desítková"
 
 #: src/kdefrontend/dockwidgets/ColumnDock.cpp:45
 #: src/kdefrontend/dockwidgets/MatrixDock.cpp:33
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:70
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:69
 #: src/kdefrontend/widgets/ValueWidget.cpp:42
 #, kde-format
 msgid "Scientific (e)"
@@ -12452,21 +12437,21 @@ msgstr ""
 
 #: src/kdefrontend/dockwidgets/ColumnDock.cpp:46
 #: src/kdefrontend/dockwidgets/MatrixDock.cpp:34
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:71
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:70
 #: src/kdefrontend/widgets/ValueWidget.cpp:43
 #, kde-format
 msgid "Scientific (E)"
 msgstr ""
 
 #: src/kdefrontend/dockwidgets/ColumnDock.cpp:47
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:72
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:71
 #: src/kdefrontend/widgets/ValueWidget.cpp:44
 #, kde-format
 msgid "Automatic (e)"
 msgstr ""
 
 #: src/kdefrontend/dockwidgets/ColumnDock.cpp:48
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:73
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:72
 #: src/kdefrontend/widgets/ValueWidget.cpp:45
 #, kde-format
 msgid "Automatic (E)"
@@ -12498,17 +12483,17 @@ msgid "Expand all curves"
 msgstr ""
 
 #: src/kdefrontend/dockwidgets/CursorDock.cpp:150
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1343
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1349
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1355
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1342
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1348
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1354
 #, kde-format
 msgid "Copy Selection"
 msgstr "Zkopírovat výběr"
 
 #: src/kdefrontend/dockwidgets/CursorDock.cpp:151
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1344
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1350
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1356
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1343
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1349
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1355
 #, kde-format
 msgid "Copy All"
 msgstr "Zkopírovat vše"
@@ -12523,117 +12508,117 @@ msgstr ""
 msgid "%1 custom points: template \"%2\" loaded"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:84
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:89
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:82
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:88
 #, kde-format
 msgid "Uncertainty Bars"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:85
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:90
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:83
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:89
 #, kde-format
 msgid "X Uncertainty"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:171
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:166
 #, kde-format
 msgid "By Number"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:172
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:167
 #, kde-format
 msgid "By Width"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:173
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:168
 #, kde-format
 msgid "Square-root"
 msgstr "Odmocnina"
 
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:174
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:169
 #, kde-format
 msgid "Rice"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:175
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:170
 #, kde-format
 msgid "Sturges"
 msgstr "Sturges"
 
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:176
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:171
 #, kde-format
 msgid "Doane"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:177
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:172
 #, kde-format
 msgid "Scott"
 msgstr "Scott"
 
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:180
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:175
 #, kde-format
 msgid "Ordinary Histogram"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:181
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:176
 #, kde-format
 msgid "Cumulative Histogram"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:190
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:185
 #, kde-format
 msgid "Probability"
 msgstr "Pravděpodobnost"
 
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:191
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:186
 #, kde-format
 msgid "Count Density"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:192
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:187
 #, kde-format
 msgid "Probability Density"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:197
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:192
 #, kde-format
 msgid "No Uncertainties"
 msgstr ""
 
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:193
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:198
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:203
 #, kde-format
 msgid "Poisson variance, sqrt(N)"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:199
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:194
 #, kde-format
 msgid "Custom Uncertainty Values, symmetric"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:200
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:195
 #, kde-format
 msgid "Custom Uncertainty Values, asymmetric"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:202
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:197
 #, kde-format
 msgid "No Errors"
 msgstr "Žádná chyba"
 
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:204
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:199
 #, kde-format
 msgid "Custom Error Values, symmetric"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:205
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:200
 #, kde-format
 msgid "Custom Error Values, asymmetric"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:552
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:960
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1015
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:547
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:956
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1011
 #, kde-format
 msgid "Data, +-:"
 msgstr ""
@@ -12641,9 +12626,9 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, lXErrorDataPlus)
 #. i18n: ectx: property (text), widget (QLabel, lYErrorDataPlus)
 #. i18n: ectx: property (text), widget (QLabel, lErrorDataPlus)
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:559
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:967
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1022
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:554
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:963
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1018
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:404
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:654
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:661
@@ -12651,7 +12636,7 @@ msgstr ""
 msgid "Data, +:"
 msgstr "Data, +:"
 
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:766
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:761
 #, kde-format
 msgid "%1 histograms: template \"%2\" loaded"
 msgstr ""
@@ -12705,7 +12690,7 @@ msgstr ""
 msgid "Couldn't subscribe to all available topics. Something went wrong"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/LollipopPlotDock.cpp:502
+#: src/kdefrontend/dockwidgets/LollipopPlotDock.cpp:500
 #, kde-format
 msgid "%1 lollipop plots: template \"%2\" loaded"
 msgstr ""
@@ -12734,8 +12719,8 @@ msgid ""
 "longer project load times."
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/QQPlotDock.cpp:356
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1303
+#: src/kdefrontend/dockwidgets/QQPlotDock.cpp:352
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1299
 #, kde-format
 msgid "%1 xy-curves: template \"%2\" loaded"
 msgstr ""
@@ -12808,307 +12793,307 @@ msgstr ""
 msgid "calculation time: %1 ms"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:58
-#: src/kdefrontend/dockwidgets/XYCorrelationCurveDock.cpp:60
-#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:59
-#: src/kdefrontend/dockwidgets/XYDifferentiationCurveDock.cpp:59
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:78
-#: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:56
-#: src/kdefrontend/dockwidgets/XYIntegrationCurveDock.cpp:59
-#: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:61
-#: src/kdefrontend/dockwidgets/XYSmoothCurveDock.cpp:55
+#: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:56
+#: src/kdefrontend/dockwidgets/XYCorrelationCurveDock.cpp:58
+#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:57
+#: src/kdefrontend/dockwidgets/XYDifferentiationCurveDock.cpp:57
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:77
+#: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:54
+#: src/kdefrontend/dockwidgets/XYIntegrationCurveDock.cpp:57
+#: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:59
+#: src/kdefrontend/dockwidgets/XYSmoothCurveDock.cpp:53
 #, kde-format
 msgid "XY-Curve"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lKernel)
-#: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:245
+#: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:242
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:30
 #, kde-format
 msgid "or Kernel/Size:"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:259
+#: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:256
 #, kde-format
 msgid "with Kernel/Size:"
 msgstr ""
 
+#: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:431
 #: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:434
-#: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:437
 #, kde-format
 msgid "Deconvolution"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:474
+#: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:471
 #, kde-format
 msgid "Convolution status: %1"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:476
+#: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:473
 #, kde-format
 msgid "Deconvolution status: %1"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/XYCorrelationCurveDock.cpp:368
+#: src/kdefrontend/dockwidgets/XYCorrelationCurveDock.cpp:365
 #, kde-format
 msgid "Correlation status: %1"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:91
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:90
 #, kde-format
 msgid "Y Uncertainty"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:227
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:223
 #, kde-format
 msgid "Horiz. Start"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:228
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:224
 #, kde-format
 msgid "Vert. Start"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:229
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:225
 #, kde-format
 msgid "Horiz. Midpoint"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:230
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:226
 #, kde-format
 msgid "Vert. Midpoint"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:231
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:227
 #, kde-format
 msgid "2-segments"
 msgstr "2-segmenty"
 
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:232
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:228
 #, kde-format
 msgid "3-segments"
 msgstr "3-segmenty"
 
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:235
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:231
 #, kde-format
 msgid "Akima-spline (Natural)"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:236
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:232
 #, kde-format
 msgid "Akima-spline (Periodic)"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:361
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:357
 #: src/kdefrontend/widgets/ValueWidget.cpp:31
 #, kde-format
 msgid "No Values"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:366
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:362
 #: src/kdefrontend/widgets/ValueWidget.cpp:33
 #, kde-format
 msgid "Custom Column"
 msgstr "Vlastní sloupec"
 
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:368
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:364
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:129
 #: src/kdefrontend/widgets/ValueWidget.cpp:35
 #, kde-format
 msgid "Above"
 msgstr "Nad"
 
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:369
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:365
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:130
 #: src/kdefrontend/widgets/ValueWidget.cpp:36
 #, kde-format
 msgid "Below"
 msgstr "Dole"
 
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:371
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:375
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:379
 #: src/kdefrontend/widgets/DatapickerCurveWidget.cpp:32
 #: src/kdefrontend/widgets/DatapickerCurveWidget.cpp:36
 #, kde-format
 msgid "Symmetric"
 msgstr "Symetrické"
 
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:372
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:376
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:380
 #: src/kdefrontend/widgets/DatapickerCurveWidget.cpp:33
 #: src/kdefrontend/widgets/DatapickerCurveWidget.cpp:37
 #, kde-format
 msgid "Asymmetric"
 msgstr "Nesouměrně"
 
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:619
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:620
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:615
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:616
 #, kde-format
 msgid ""
 "If checked, connect neighbour points with lines even if there are gaps "
 "(invalid or masked values) between them"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:621
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:622
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:617
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:618
 #, kde-format
 msgid ""
 "If checked, connect data points only for strictly increasing values of X"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:70
+#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:68
 #, kde-format
 msgid "This method is much slower than any other"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:426
-#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:458
-#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:503
+#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:423
+#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:455
+#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:500
 #, kde-format
 msgid "Tolerance (distance):"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:437
+#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:434
 #, kde-format
 msgid "Number of points:"
 msgstr "Počet bodů:"
 
-#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:448
+#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:445
 #, kde-format
 msgid "Step size:"
 msgstr "Velikost kroku:"
 
-#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:465
+#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:462
 #, kde-format
 msgid "Repeats:"
 msgstr "Opakuje se:"
 
-#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:475
+#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:472
 #, kde-format
 msgid "Tolerance (area):"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:486
+#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:483
 #, kde-format
 msgid "Minimum tolerance:"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:490
+#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:487
 #, kde-format
 msgid "Maximum tolerance:"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:507
+#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:504
 #, kde-format
 msgid "Search region:"
 msgstr "Hledat oblast:"
 
-#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:573
+#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:570
 #, kde-format
 msgid "Data reduction status: %1"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:612
+#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:609
 #, kde-format
 msgid "number of points: %1"
 msgstr "počet bodů: %1"
 
-#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:613
+#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:610
 #, kde-format
 msgid "positional squared error: %1"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:614
+#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:611
 #, kde-format
 msgid "area error: %1"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/XYDifferentiationCurveDock.cpp:469
+#: src/kdefrontend/dockwidgets/XYDifferentiationCurveDock.cpp:466
 #, kde-format
 msgid "Differentiation status: %1"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/XYEquationCurveDock.cpp:73
+#: src/kdefrontend/dockwidgets/XYEquationCurveDock.cpp:71
 #, kde-format
 msgid "Cartesian"
 msgstr "Kartézský"
 
-#: src/kdefrontend/dockwidgets/XYEquationCurveDock.cpp:74
+#: src/kdefrontend/dockwidgets/XYEquationCurveDock.cpp:72
 #, kde-format
 msgid "Polar"
 msgstr "Polární"
 
-#: src/kdefrontend/dockwidgets/XYEquationCurveDock.cpp:75
+#: src/kdefrontend/dockwidgets/XYEquationCurveDock.cpp:73
 #, kde-format
 msgid "Parametric"
 msgstr "Parametrický"
 
-#: src/kdefrontend/dockwidgets/XYEquationCurveDock.cpp:185
+#: src/kdefrontend/dockwidgets/XYEquationCurveDock.cpp:182
 #, kde-format
 msgid "x, min"
 msgstr "x, min"
 
-#: src/kdefrontend/dockwidgets/XYEquationCurveDock.cpp:186
+#: src/kdefrontend/dockwidgets/XYEquationCurveDock.cpp:183
 #, kde-format
 msgid "x, max"
 msgstr "x, max"
 
-#: src/kdefrontend/dockwidgets/XYEquationCurveDock.cpp:197
+#: src/kdefrontend/dockwidgets/XYEquationCurveDock.cpp:194
 #, kde-format
 msgid "φ, min"
 msgstr "φ, min"
 
-#: src/kdefrontend/dockwidgets/XYEquationCurveDock.cpp:198
+#: src/kdefrontend/dockwidgets/XYEquationCurveDock.cpp:195
 #, kde-format
 msgid "φ, max"
 msgstr "φ, max"
 
 #. i18n: ectx: property (text), widget (QLabel, lMin)
-#: src/kdefrontend/dockwidgets/XYEquationCurveDock.cpp:210
+#: src/kdefrontend/dockwidgets/XYEquationCurveDock.cpp:207
 #: src/kdefrontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:326
 #, kde-format
 msgid "t, min"
 msgstr "t, min"
 
 #. i18n: ectx: property (text), widget (QLabel, lMax)
-#: src/kdefrontend/dockwidgets/XYEquationCurveDock.cpp:211
+#: src/kdefrontend/dockwidgets/XYEquationCurveDock.cpp:208
 #: src/kdefrontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:184
 #, kde-format
 msgid "t, max"
 msgstr "t, max"
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:151
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:150
 #, kde-format
 msgid "Uncertainty"
 msgstr "Nepřesnost"
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:151
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:150
 #, kde-format
 msgid "Uncertainty, %"
 msgstr "Nepřesnost, %"
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:151
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:150
 #, kde-format
 msgid "t statistic"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:152
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:151
 #, kde-format
 msgid "Lower"
 msgstr "Dát do pozadí"
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:152
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:151
 #, kde-format
 msgid "Upper"
 msgstr "Velká"
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:183
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:182
 #, kde-format
 msgid "test"
 msgstr "test"
 
 #. i18n: ectx: property (text), widget (QLabel, lDataSourceCurve)
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:431
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:430
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:97
 #: src/kdefrontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:378
 #: src/kdefrontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:92
@@ -13122,108 +13107,108 @@ msgstr "test"
 msgid "Curve:"
 msgstr "Křivka:"
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:451
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:450
 #, kde-format
 msgid "Histogram:"
 msgstr "Histogram:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDegree)
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:833
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:832
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:549
 #, kde-format
 msgid "Degree:"
 msgstr "Stupeň:"
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:890
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:889
 #, kde-format
 msgid "Number of peaks:"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1212
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1211
 #, kde-format
 msgid "Fit status: %1"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1390
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1389
 #, kde-format
 msgid "%1 % lower confidence level"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1391
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1390
 #, kde-format
 msgid "%1 % upper confidence level"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lCutoff)
-#: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:355
+#: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:352
 #: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:241
 #, kde-format
 msgid "Cutoff:"
 msgstr "Bod zkrácení"
 
-#: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:363
+#: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:360
 #, kde-format
 msgid "Lower cutoff:"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:364
+#: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:361
 #, kde-format
 msgid "Upper cutoff:"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:498
+#: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:495
 #, kde-format
 msgid ""
 "The band width is <= 0 since lower cutoff value is not smaller than upper "
 "cutoff value. Please fix this."
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:499
+#: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:496
 #, kde-format
 msgid "band width <= 0"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:508
+#: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:505
 #, kde-format
 msgid "Fourier-Filter status: %1"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/XYFourierTransformCurveDock.cpp:289
+#: src/kdefrontend/dockwidgets/XYFourierTransformCurveDock.cpp:286
 #, kde-format
 msgid "Fourier transformation status: %1"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/XYHilbertTransformCurveDock.cpp:237
+#: src/kdefrontend/dockwidgets/XYHilbertTransformCurveDock.cpp:234
 #, kde-format
 msgid "Hilbert transformation status: %1"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/XYIntegrationCurveDock.cpp:394
+#: src/kdefrontend/dockwidgets/XYIntegrationCurveDock.cpp:391
 #, kde-format
 msgid "Integration status: %1"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/XYIntegrationCurveDock.cpp:431
+#: src/kdefrontend/dockwidgets/XYIntegrationCurveDock.cpp:428
 #, kde-format
 msgid "value: %1"
 msgstr "hodnota: %1"
 
-#: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:83
+#: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:81
 #, kde-format
 msgid "Auto (5x data points)"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:84
+#: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:82
 #, kde-format
 msgid "Multiple of data points"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:622
+#: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:619
 #, kde-format
 msgid "Interpolation status: %1"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/XYSmoothCurveDock.cpp:499
+#: src/kdefrontend/dockwidgets/XYSmoothCurveDock.cpp:496
 #, kde-format
 msgid "Smoothing status: %1"
 msgstr ""
@@ -13405,11 +13390,10 @@ msgid "Properties: Box Plot"
 msgstr ""
 
 #: src/kdefrontend/GuiObserver.cpp:375
-#, fuzzy, kde-format
-#| msgid "Plot"
+#, kde-format
 msgctxt "@title:window"
 msgid "Q-Q Plot"
-msgstr "Vykreslit"
+msgstr ""
 
 #: src/kdefrontend/GuiObserver.cpp:380
 #, kde-format
@@ -14386,16 +14370,14 @@ msgid "Open Project"
 msgstr "Otevřít projekt"
 
 #: src/kdefrontend/MainWin.cpp:1544
-#, fuzzy, kde-format
-#| msgid "File does not exist."
+#, kde-format
 msgid "The project file %1 doesn't exist."
-msgstr "Soubor neexistuje."
+msgstr ""
 
 #: src/kdefrontend/MainWin.cpp:1549
-#, fuzzy, kde-format
-#| msgid "Couldn't open the file"
+#, kde-format
 msgid "Couldn't read the project file %1."
-msgstr "Soubor nelze otevřít"
+msgstr ""
 
 #: src/kdefrontend/MainWin.cpp:1563
 #, kde-format
@@ -14767,10 +14749,9 @@ msgid ""
 msgstr ""
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:169
-#, fuzzy, kde-format
-#| msgid "Original Size"
+#, kde-format
 msgid "Original Position"
-msgstr "Původní velikost"
+msgstr ""
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:170
 #, kde-format
@@ -19228,17 +19209,15 @@ msgstr "Distribuce:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFunc)
 #: src/kdefrontend/ui/dockwidgets/qqplotdock.ui:151
-#, fuzzy, kde-format
-#| msgid "f(x) ="
+#, kde-format
 msgid "p(x) ="
-msgstr "f(x) ="
+msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabPercentiles)
 #: src/kdefrontend/ui/dockwidgets/qqplotdock.ui:189
-#, fuzzy, kde-format
-#| msgid "Percentile"
+#, kde-format
 msgid "Percentiles"
-msgstr "Percentil"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lPositionDateTimeStart)
 #. i18n: ectx: property (text), widget (QLabel, lPositionStart)
@@ -21142,10 +21121,9 @@ msgstr "Přepnout panel do režimu rozšířeného hledání a nahrazování"
 
 #. i18n: ectx: property (text), widget (QLabel, lColumns)
 #: src/kdefrontend/ui/spreadsheet/sortdialogwidget.ui:17
-#, fuzzy, kde-format
-#| msgid "Sort"
+#, kde-format
 msgid "Sort by"
-msgstr "Seřadit"
+msgstr "Řadit dle"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbOrdering)
 #: src/kdefrontend/ui/spreadsheet/sortdialogwidget.ui:64
@@ -21994,33 +21972,3 @@ msgstr ""
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Nelze otevřít soubor:"
-
-#~ msgid "Conditions"
-#~ msgstr "Podmínky"
-
-#~ msgid "Sort columns:"
-#~ msgstr "Seřadit sloupce:"
-
-#~ msgid "Separately"
-#~ msgstr "Samostatně"
-
-#~ msgid "Leading column:"
-#~ msgstr "Úvodní sloupec"
-
-#~ msgid "Filter name:"
-#~ msgstr "Název filtru:"
-
-#~ msgid "new filter"
-#~ msgstr "nový filtr"
-
-#~ msgid "Save the current filter settings"
-#~ msgstr "Uložit současné nastavení filtru"
-
-#~ msgid "Manage filters"
-#~ msgstr "Spravovat filtry"
-
-#~ msgid "Drop"
-#~ msgstr "Pustit"
-
-#~ msgid "Mask"
-#~ msgstr "Maska"
