@@ -73,7 +73,6 @@
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QSqlQuery>
-#include <QString>
 #include <QTableView>
 #include <QTextStream>
 #include <QTimer>
@@ -3602,15 +3601,10 @@ void SpreadsheetView::selectionChanged(const QItemSelection& /*selected*/, const
 	QPair<int, int> selectedRowCol = qMakePair(selectedRowCount(false), selectedColumnCount(false));
 	int noMaskedValues = 0;
 	int noMissingValues = 0;
-	int first = firstSelectedRow();
-	int last = lastSelectedRow();
 	int noCellsSelected = 0;
-	if (first < 0)
-		return;
 	const auto& columns = selectedColumns(false);
 	for (auto* column : columns) {
 		int index = m_spreadsheet->indexOfChild<Column>(column);
-
 		for (int row = 0; row < m_spreadsheet->rowCount(); row++) {
 			if (isCellSelected(row, index)) {
 				noCellsSelected++;
@@ -3634,7 +3628,7 @@ void SpreadsheetView::selectionChanged(const QItemSelection& /*selected*/, const
 
 	if (noCellsSelected == selectedRowCol.first * selectedRowCol.second) {
 		QString noMaskedValuesText = (noMaskedValues == 0) ? QString::fromLatin1("") : QString::fromLatin1(" , ") + QString::number(noMaskedValues);
-		QString noMissingValuesText = (noMissingValues == 0) ? QString::fromLatin1("") :  QString::fromLatin1(", ")+QString::number(noMissingValues);
+		QString noMissingValuesText = (noMissingValues == 0) ? QString::fromLatin1("") : QString::fromLatin1(", ") + QString::number(noMissingValues);
 
 		QString resultString = QString::fromLatin1("Selected: %1 %2 , %3 %4%5 %6 %7 %8")
 								   .arg(selectedRowCol.first)
@@ -3649,7 +3643,7 @@ void SpreadsheetView::selectionChanged(const QItemSelection& /*selected*/, const
 		Q_EMIT m_spreadsheet->statusInfo(resultString);
 	} else {
 		QString noMaskedValuesText = (noMaskedValues == 0) ? QString::fromLatin1("") : QString::fromLatin1(" , ") + QString::number(noMaskedValues);
-		QString noMissingValuesText = (noMissingValues == 0) ? QString::fromLatin1("") : QString::fromLatin1(", ")+ QString::number(noMissingValues);
+		QString noMissingValuesText = (noMissingValues == 0) ? QString::fromLatin1("") : QString::fromLatin1(", ") + QString::number(noMissingValues);
 		QString resultString = QString::fromLatin1("Selected: %1 %2%3 %4 %5 %6")
 								   .arg(noCellsSelected)
 								   .arg(selectedCellsText)
