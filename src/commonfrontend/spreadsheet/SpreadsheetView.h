@@ -62,6 +62,7 @@ public:
 	int firstSelectedColumn(bool full = false) const;
 	int lastSelectedColumn(bool full = false) const;
 
+	int selectedRowCount(bool full = true) const;
 	bool isRowSelected(int row, bool full = false) const;
 	int firstSelectedRow(bool full = false) const;
 	int lastSelectedRow(bool full = false) const;
