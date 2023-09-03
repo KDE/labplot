@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-02 00:42+0000\n"
+"POT-Creation-Date: 2023-09-03 00:41+0000\n"
 "PO-Revision-Date: 2023-08-29 15:30+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -5450,14 +5450,14 @@ msgid "unexpected end of document"
 msgstr "final inesperat del document"
 
 #: src/backend/matrix/Matrix.cpp:116
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3596
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3599
 #, kde-format
 msgid "FITS image"
 msgstr "Imatge FITS"
 
 # Nota: https://en.wikipedia.org/wiki/FITS
 #: src/backend/matrix/Matrix.cpp:116
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3596
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3599
 #, kde-format
 msgid "FITS table"
 msgstr "Taula FITS"
@@ -9294,16 +9294,16 @@ msgid "Curve"
 msgstr "Corba"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:866
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3836
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3890
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3839
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3893
 #: src/commonfrontend/worksheet/WorksheetView.cpp:2242
 #, kde-format
 msgid "Failed to export"
 msgstr "No s'ha pogut exportar"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:866
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3836
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3890
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3839
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3893
 #: src/commonfrontend/worksheet/WorksheetView.cpp:2242
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
@@ -10267,23 +10267,23 @@ msgstr "%1: neteja les files seleccionades"
 msgid "%1: clear selected cells"
 msgstr "%1: neteja les cel·les seleccionades"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3653
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3656
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Spreadsheet"
 msgstr "Imprimix el full de càlcul"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4258
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4261
 #, kde-format
 msgid "Couldn't create the SQLite database %1."
 msgstr "No s'ha pogut crear la base de dades SQLite %1."
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4290
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4293
 #, kde-format
 msgid "Failed to create table in the SQLite database %1."
 msgstr "No s'ha pogut crear la taula en la base de dades SQLite %1."
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4343
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4346
 #, kde-format
 msgid "Failed to insert values into the table."
 msgstr "No s'ha pogut inserir valors a la taula."
@@ -16312,13 +16312,23 @@ msgstr "Busca arrere positiva de llargària fixa"
 msgid "Fixed-length negative lookbehind"
 msgstr "Busca arrere negativa de llargària fixa"
 
-#: src/kdefrontend/spreadsheet/SortDialog.cpp:29
-#, kde-format
+#: src/kdefrontend/spreadsheet/SortDialog.cpp:33
+#, fuzzy, kde-format
+#| msgctxt "@title:window"
+#| msgid "Sort Columns"
 msgctxt "@title:window"
-msgid "Sort Columns"
+msgid "Sort All Columns"
 msgstr "Ordena les columnes"
 
 #: src/kdefrontend/spreadsheet/SortDialog.cpp:35
+#, fuzzy, kde-format
+#| msgctxt "@title:window"
+#| msgid "Flatten Selected Columns"
+msgctxt "@title:window"
+msgid "Sort Selected Columns"
+msgstr "Aplanar les columnes seleccionades"
+
+#: src/kdefrontend/spreadsheet/SortDialog.cpp:39
 #, kde-format
 msgid "Sort"
 msgstr "Ordena"

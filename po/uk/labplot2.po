@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-02 00:42+0000\n"
+"POT-Creation-Date: 2023-09-03 00:41+0000\n"
 "PO-Revision-Date: 2023-08-29 09:48+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
@@ -5416,13 +5416,13 @@ msgid "unexpected end of document"
 msgstr "неочікуване завершення документа"
 
 #: src/backend/matrix/Matrix.cpp:116
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3596
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3599
 #, kde-format
 msgid "FITS image"
 msgstr "Зображення FITS"
 
 #: src/backend/matrix/Matrix.cpp:116
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3596
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3599
 #, kde-format
 msgid "FITS table"
 msgstr "Таблиця FITS"
@@ -9262,16 +9262,16 @@ msgid "Curve"
 msgstr "Крива"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:866
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3836
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3890
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3839
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3893
 #: src/commonfrontend/worksheet/WorksheetView.cpp:2242
 #, kde-format
 msgid "Failed to export"
 msgstr "Не вдалося експортувати"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:866
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3836
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3890
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3839
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3893
 #: src/commonfrontend/worksheet/WorksheetView.cpp:2242
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
@@ -10245,23 +10245,23 @@ msgstr "%1: спорожнити позначені рядки"
 msgid "%1: clear selected cells"
 msgstr "%1: спорожнити позначені комірки"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3653
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3656
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Spreadsheet"
 msgstr "Друк електронної таблиці"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4258
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4261
 #, kde-format
 msgid "Couldn't create the SQLite database %1."
 msgstr "Не вдалося створити базу даних SQLite %1."
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4290
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4293
 #, kde-format
 msgid "Failed to create table in the SQLite database %1."
 msgstr "Не вдалося створити таблицю у базі даних SQLite %1."
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4343
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4346
 #, kde-format
 msgid "Failed to insert values into the table."
 msgstr "Не вдалося вставити значення до таблиці."
@@ -16264,13 +16264,22 @@ msgstr "Додатний пошук назад із фіксованою дов�
 msgid "Fixed-length negative lookbehind"
 msgstr "Від'ємний пошук назад із фіксованою довжиною"
 
-#: src/kdefrontend/spreadsheet/SortDialog.cpp:29
-#, kde-format
+#: src/kdefrontend/spreadsheet/SortDialog.cpp:33
+#, fuzzy, kde-format
+#| msgctxt "@title:window"
+#| msgid "Sort Columns"
 msgctxt "@title:window"
-msgid "Sort Columns"
+msgid "Sort All Columns"
 msgstr "Упорядковування стовпчиків"
 
 #: src/kdefrontend/spreadsheet/SortDialog.cpp:35
+#, fuzzy, kde-format
+#| msgid "&Selected Columns"
+msgctxt "@title:window"
+msgid "Sort Selected Columns"
+msgstr "&Позначені стовпчики"
+
+#: src/kdefrontend/spreadsheet/SortDialog.cpp:39
 #, kde-format
 msgid "Sort"
 msgstr "Упорядкувати"
@@ -22404,9 +22413,6 @@ msgstr "Не вдалося відкрити файл:"
 
 #~ msgid "&Sort Spreadsheet"
 #~ msgstr "&Упорядкувати електронну таблицю"
-
-#~ msgid "&Selected Columns"
-#~ msgstr "&Позначені стовпчики"
 
 #~ msgid "Sort columns:"
 #~ msgstr "Упорядковування стовпчиків:"

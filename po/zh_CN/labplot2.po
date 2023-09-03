@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-02 00:42+0000\n"
-"PO-Revision-Date: 2023-08-27 03:40\n"
+"POT-Creation-Date: 2023-09-03 00:41+0000\n"
+"PO-Revision-Date: 2023-09-02 02:57\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -2965,10 +2965,9 @@ msgid "Comparison Functions"
 msgstr ""
 
 #: src/backend/gsl/functions.cpp:46
-#, fuzzy, kde-format
-#| msgid "Functions"
+#, kde-format
 msgid "Logical Functions"
-msgstr "函数"
+msgstr ""
 
 #: src/backend/gsl/functions.cpp:48
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:28
@@ -5243,28 +5242,24 @@ msgid "x"
 msgstr ""
 
 #: src/backend/gsl/functions.cpp:1181
-#, fuzzy, kde-format
-#| msgid "min."
+#, kde-format
 msgid "min"
-msgstr "最小."
+msgstr ""
 
 #: src/backend/gsl/functions.cpp:1183
-#, fuzzy, kde-format
-#| msgid "max."
+#, kde-format
 msgid "max"
-msgstr "最大."
+msgstr ""
 
 #: src/backend/gsl/functions.cpp:1191
-#, fuzzy, kde-format
-#| msgid "1"
+#, kde-format
 msgid "v1"
-msgstr "1"
+msgstr ""
 
 #: src/backend/gsl/functions.cpp:1193
-#, fuzzy, kde-format
-#| msgid "2"
+#, kde-format
 msgid "v2"
-msgstr "2"
+msgstr ""
 
 #: src/backend/gsl/functions.cpp:1195
 #, kde-format
@@ -5325,13 +5320,13 @@ msgid "unexpected end of document"
 msgstr ""
 
 #: src/backend/matrix/Matrix.cpp:116
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3596
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3599
 #, kde-format
 msgid "FITS image"
 msgstr ""
 
 #: src/backend/matrix/Matrix.cpp:116
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3596
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3599
 #, kde-format
 msgid "FITS table"
 msgstr ""
@@ -9119,16 +9114,16 @@ msgid "Curve"
 msgstr "曲线"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:866
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3836
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3890
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3839
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3893
 #: src/commonfrontend/worksheet/WorksheetView.cpp:2242
 #, kde-format
 msgid "Failed to export"
 msgstr ""
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:866
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3836
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3890
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3839
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3893
 #: src/commonfrontend/worksheet/WorksheetView.cpp:2242
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
@@ -9729,10 +9724,9 @@ msgid "Rescale to [a, b]"
 msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:441
-#, fuzzy, kde-format
-#| msgid "Sort"
+#, kde-format
 msgid "&Sort..."
-msgstr "排序"
+msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:442
 #, kde-format
@@ -9740,10 +9734,9 @@ msgid "Sort multiple columns together"
 msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:443
-#, fuzzy, kde-format
-#| msgid "&Ascending"
+#, kde-format
 msgid "Sort &Ascending"
-msgstr "升序(&A)"
+msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:444
 #, kde-format
@@ -9751,10 +9744,9 @@ msgid "Sort the selected columns separately in ascending order"
 msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:445
-#, fuzzy, kde-format
-#| msgid "&Descending"
+#, kde-format
 msgid "Sort &Descending"
-msgstr "降序(&D)"
+msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:446
 #, kde-format
@@ -10083,23 +10075,23 @@ msgstr ""
 msgid "%1: clear selected cells"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3653
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3656
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Spreadsheet"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4258
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4261
 #, kde-format
 msgid "Couldn't create the SQLite database %1."
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4290
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4293
 #, kde-format
 msgid "Failed to create table in the SQLite database %1."
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4343
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4346
 #, kde-format
 msgid "Failed to insert values into the table."
 msgstr ""
@@ -15826,13 +15818,20 @@ msgstr ""
 msgid "Fixed-length negative lookbehind"
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/SortDialog.cpp:29
-#, kde-format
+#: src/kdefrontend/spreadsheet/SortDialog.cpp:33
+#, fuzzy, kde-format
+#| msgid "Columns"
 msgctxt "@title:window"
-msgid "Sort Columns"
-msgstr ""
+msgid "Sort All Columns"
+msgstr "列"
 
 #: src/kdefrontend/spreadsheet/SortDialog.cpp:35
+#, kde-format
+msgctxt "@title:window"
+msgid "Sort Selected Columns"
+msgstr ""
+
+#: src/kdefrontend/spreadsheet/SortDialog.cpp:39
 #, kde-format
 msgid "Sort"
 msgstr "排序"
@@ -21053,10 +21052,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lColumns)
 #: src/kdefrontend/ui/spreadsheet/sortdialogwidget.ui:17
-#, fuzzy, kde-format
-#| msgid "Sort"
+#, kde-format
 msgid "Sort by"
-msgstr "排序"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbOrdering)
 #: src/kdefrontend/ui/spreadsheet/sortdialogwidget.ui:64
@@ -21905,12 +21903,3 @@ msgstr ""
 #, kde-format
 msgid "Unable to open file:"
 msgstr ""
-
-#~ msgid "Filter name:"
-#~ msgstr "过滤名称："
-
-#~ msgid "new filter"
-#~ msgstr "新过滤器"
-
-#~ msgid "Manage filters"
-#~ msgstr "管理过滤器"
