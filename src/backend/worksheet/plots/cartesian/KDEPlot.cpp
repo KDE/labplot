@@ -61,10 +61,13 @@ KDEPlot::~KDEPlot() = default;
 void KDEPlot::init() {
 	Q_D(KDEPlot);
 
-	// setUndoAware(false);
-
 	KConfig config;
 	KConfigGroup group = config.group("KDEPlot");
+
+	// general
+	d->kernelType = static_cast<nsl_kernel_type>(group.readEntry(QStringLiteral("kernelType"), static_cast<int>(nsl_kernel_gauss)));
+	d->bandwidthType = static_cast<nsl_kde_bandwidth_type>(group.readEntry(QStringLiteral("bandwidthType"), static_cast<int>(nsl_kde_bandwidth_silverman)));
+	d->bandwidth = group.readEntry(QStringLiteral("bandwidth"), 0.1);
 
 	// estimation curve
 	d->estimationCurve = new XYCurve(QString());

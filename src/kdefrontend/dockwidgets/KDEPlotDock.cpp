@@ -187,6 +187,8 @@ void KDEPlotDock::setPlots(QList<KDEPlot*> list) {
 	connect(m_plot, &KDEPlot::kernelTypeChanged, this, &KDEPlotDock::plotKernelTypeChanged);
 	connect(m_plot, &KDEPlot::bandwidthTypeChanged, this, &KDEPlotDock::plotBandwidthTypeChanged);
 	connect(m_plot, &KDEPlot::bandwidthChanged, this, &KDEPlotDock::plotBandwidthChanged);
+	connect(m_plot, &WorksheetElement::plotRangeListChanged, this, &KDEPlotDock::updatePlotRanges);
+	connect(m_plot, &WorksheetElement::visibleChanged, this, &KDEPlotDock::plotVisibilityChanged);
 
 	//"Margin Plots"-Tab
 	auto* curve = m_plot->rugCurve();
@@ -222,18 +224,7 @@ void KDEPlotDock::updateLocale() {
 }
 
 void KDEPlotDock::updatePlotRanges() {
-	const int cSystemCount{m_plot->coordinateSystemCount()};
-	const int cSystemIndex{m_plot->coordinateSystemIndex()};
-	DEBUG(Q_FUNC_INFO << ", plot ranges count: " << cSystemCount)
-	DEBUG(Q_FUNC_INFO << ", current plot range: " << cSystemIndex + 1)
-
-	// fill ui.cbPlotRanges
-	ui.cbPlotRanges->clear();
-	for (int i{0}; i < cSystemCount; i++)
-		ui.cbPlotRanges->addItem(QString::number(i + 1) + QLatin1String(" : ") + m_plot->coordinateSystemInfo(i));
-	ui.cbPlotRanges->setCurrentIndex(cSystemIndex);
-	// disable when there is only on plot range
-	ui.cbPlotRanges->setEnabled(cSystemCount == 1 ? false : true);
+	updatePlotRangeList(ui.cbPlotRanges);
 }
 
 //*************************************************************
@@ -400,24 +391,23 @@ void KDEPlotDock::load() {
 void KDEPlotDock::loadConfig(KConfig& config) {
 	KConfigGroup group = config.group(QLatin1String("KDEPlot"));
 
-	// General
-	// we don't load/save the settings in the general-tab, since they are not style related.
-	// It doesn't make sense to load/save them in the template.
-	// This data is read in KDEPlotDock::setCurves().
+	// general
+	auto kernelType = group.readEntry(QLatin1String("kernelType"), static_cast<int>(m_plot->kernelType()));
+	int index = ui.cbKernelType->findData(kernelType);
+	ui.cbKernelType->setCurrentIndex(index);
 
-	// TODO
+	auto bandwidthType = group.readEntry(QLatin1String("bandwidthType"), static_cast<int>(m_plot->bandwidthType()));
+	index = ui.cbBandwidthType->findData(bandwidthType);
+	ui.cbBandwidthType->setCurrentIndex(index);
+
+	ui.sbBandwidth->setValue(group.readEntry(QLatin1String("bandwidth"), m_plot->bandwidth()));
+
+	// properties of the estimation and margin curves
 	// lineWidget->loadConfig(group);
 }
 
 void KDEPlotDock::loadConfigFromTemplate(KConfig& config) {
-	// extract the name of the template from the file name
-	QString name;
-	int index = config.name().lastIndexOf(QLatin1String("/"));
-	if (index != -1)
-		name = config.name().right(config.name().size() - index - 1);
-	else
-		name = config.name();
-
+	auto name = TemplateHandler::templateName(config);
 	int size = m_plots.size();
 	if (size > 1)
 		m_plot->beginMacro(i18n("%1 xy-curves: template \"%2\" loaded", size, name));
@@ -431,7 +421,14 @@ void KDEPlotDock::loadConfigFromTemplate(KConfig& config) {
 
 void KDEPlotDock::saveConfigAsTemplate(KConfig& config) {
 	KConfigGroup group = config.group("KDEPlot");
-	// TODO
+
+	// General
+	group.writeEntry(QLatin1String("kernelType"), static_cast<int>(m_plot->kernelType()));
+	group.writeEntry(QLatin1String("bandwidthType"), static_cast<int>(m_plot->bandwidthType()));
+	group.writeEntry(QLatin1String("bandwidth"), m_plot->bandwidth());
+
+	// properties of the estimation and rug curves
 	// lineWidget->saveConfig(group);
+
 	config.sync();
 }
