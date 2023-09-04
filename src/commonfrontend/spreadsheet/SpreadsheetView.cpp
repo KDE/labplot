@@ -1162,12 +1162,15 @@ int SpreadsheetView::selectedColumnCount(bool full) const {
 }
 
 int SpreadsheetView::selectedRowCount(bool full) const {
-	int count = 0;
-	const int rows = m_spreadsheet->rowCount();
-	for (int i = 0; i < rows; i++)
-		if (isRowSelected(i, full))
-			count++;
-	return count;
+	if (full)
+		return m_tableView->selectionModel()->selectedRows().count();
+	QModelIndexList indexes = m_tableView->selectionModel()->selectedIndexes();
+	QSet<int> set;
+	for (auto& index : indexes) {
+		int row = index.row();
+		set.insert(row);
+	}
+	return set.count();
 }
 
 /*!
@@ -3598,59 +3601,54 @@ void SpreadsheetView::selectionChanged(const QItemSelection& /*selected*/, const
 	auto* selModel = m_tableView->selectionModel();
 	for (int i = 0; i < m_spreadsheet->columnCount(); i++)
 		m_spreadsheet->setColumnSelectedInView(i, selModel->isColumnSelected(i));
+
 	QPair<int, int> selectedRowCol = qMakePair(selectedRowCount(false), selectedColumnCount(false));
+	auto indexes = m_tableView->selectionModel()->selectedIndexes();
+	if (indexes.empty() || indexes.count()==1)
+		return;
+	const auto& columns = m_spreadsheet->children<Column>();
 	int noMaskedValues = 0;
 	int noMissingValues = 0;
 	int noCellsSelected = 0;
-	const auto& columns = selectedColumns(false);
-	for (auto* column : columns) {
-		int index = m_spreadsheet->indexOfChild<Column>(column);
-		for (int row = 0; row < m_spreadsheet->rowCount(); row++) {
-			if (isCellSelected(row, index)) {
-				noCellsSelected++;
-				if (!column->isValid(row))
-					noMissingValues++;
-				if (column->isMasked(row))
-					noMaskedValues++;
-			}
-		}
+	for (const auto& index : indexes) {
+		const int col = index.column();
+		const int row = index.row();
+		noCellsSelected++;
+		auto& column = columns.at(col);
+		if (!column->isValid(row))
+			noMissingValues++;
+		if (column->isMasked(row))
+			noMaskedValues++;
 	}
 
-	QString selectedRowsText = (selectedRowCol.first == 1) ? QString::fromLatin1("row") : QString::fromLatin1("rows");
-	QString selectedColumnsText = (selectedRowCol.second == 1) ? QString::fromLatin1("column") : QString::fromLatin1("columns");
-	QString selectedCellsText = QString::fromLatin1("cells");
-	QString maskedValuesText = (noMaskedValues == 1) ? QString::fromLatin1("masked value")
-		: (noMaskedValues == 0)						 ? QString::fromLatin1("")
-													 : QString::fromLatin1("masked values");
-	QString missingValuesText = (noMissingValues == 1) ? QString::fromLatin1("missing value")
-		: (noMissingValues == 0)					   ? QString::fromLatin1("")
-													   : QString::fromLatin1("missing values");
+	QString selectedRowsText = i18np("row", "rows", selectedRowCol.first);
+	QString selectedColumnsText = i18np("column", "columns", selectedRowCol.second);
+	QString selectedCellsText = i18n("cells");
+	QString maskedValuesText = (noMaskedValues == 1) ? i18n("masked value") : (noMaskedValues == 0) ? QString() : i18n("masked values");
+	QString missingValuesText = (noMissingValues == 1) ? i18n("missing value") : (noMissingValues == 0) ? QString() : i18n("missing values");
+	QString noMaskedValuesText = (!noMaskedValues) ? QString() : i18n(" , ") + i18n("%1", noMaskedValues);
+	QString noMissingValuesText = (!noMissingValues) ? QString() : i18n(", ") + i18n("%1", noMissingValues);
 
 	if (noCellsSelected == selectedRowCol.first * selectedRowCol.second) {
-		QString noMaskedValuesText = (noMaskedValues == 0) ? QString::fromLatin1("") : QString::fromLatin1(" , ") + QString::number(noMaskedValues);
-		QString noMissingValuesText = (noMissingValues == 0) ? QString::fromLatin1("") : QString::fromLatin1(", ") + QString::number(noMissingValues);
-
-		QString resultString = QString::fromLatin1("Selected: %1 %2 , %3 %4%5 %6 %7 %8")
-								   .arg(selectedRowCol.first)
-								   .arg(selectedRowsText)
-								   .arg(selectedRowCol.second)
-								   .arg(selectedColumnsText)
-								   .arg(noMaskedValuesText)
-								   .arg(maskedValuesText)
-								   .arg(noMissingValuesText)
-								   .arg(missingValuesText);
+		QString resultString = i18n("Selected: %1 %2 , %3 %4%5 %6 %7 %8",
+									selectedRowCol.first,
+									selectedRowsText,
+									selectedRowCol.second,
+									selectedColumnsText,
+									noMaskedValuesText,
+									maskedValuesText,
+									noMissingValuesText,
+									missingValuesText);
 
 		Q_EMIT m_spreadsheet->statusInfo(resultString);
 	} else {
-		QString noMaskedValuesText = (noMaskedValues == 0) ? QString::fromLatin1("") : QString::fromLatin1(" , ") + QString::number(noMaskedValues);
-		QString noMissingValuesText = (noMissingValues == 0) ? QString::fromLatin1("") : QString::fromLatin1(", ") + QString::number(noMissingValues);
-		QString resultString = QString::fromLatin1("Selected: %1 %2%3 %4 %5 %6")
-								   .arg(noCellsSelected)
-								   .arg(selectedCellsText)
-								   .arg(noMaskedValuesText)
-								   .arg(maskedValuesText)
-								   .arg(noMissingValuesText)
-								   .arg(missingValuesText);
+		QString resultString = i18n("Selected: %1 %2%3 %4 %5 %6",
+									noCellsSelected,
+									selectedCellsText,
+									noMaskedValuesText,
+									maskedValuesText,
+									noMissingValuesText,
+									missingValuesText);
 
 		Q_EMIT m_spreadsheet->statusInfo(resultString);
 	}
