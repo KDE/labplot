@@ -919,6 +919,8 @@ void CartesianPlotDock::rangeTypeChanged(int index) {
 
 	for (auto* plot : m_plotList)
 		plot->setRangeType(type);
+
+	updatePlotRangeList();
 }
 
 void CartesianPlotDock::niceExtendChanged(bool checked) {
@@ -941,6 +943,7 @@ void CartesianPlotDock::rangePointsChanged(const QString& text) {
 		for (auto* plot : m_plotList)
 			plot->setRangeLastValues(value);
 	}
+	updatePlotRangeList();
 }
 
 void CartesianPlotDock::autoScaleChanged(const Dimension dim, const int rangeIndex, bool state) {
