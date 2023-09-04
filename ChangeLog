@@ -5,6 +5,7 @@ New features:
 		* New visualization types:
 			* Lollipop plot
 			* Q-Q plot
+			* KDE plot
 		* New worksheet theme "Dracula"
 	* [spreadsheet]
 		* Spreadsheet linking - allow to synchronize number of rows across multiple spreadsheets
