@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-09-03 00:41+0000\n"
-"PO-Revision-Date: 2023-09-02 09:14+0100\n"
+"PO-Revision-Date: 2023-09-03 08:00+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -16118,20 +16118,16 @@ msgid "Fixed-length negative lookbehind"
 msgstr "Fikslonga negativa antaŭenrigardo"
 
 #: src/kdefrontend/spreadsheet/SortDialog.cpp:33
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Sort Columns"
+#, kde-format
 msgctxt "@title:window"
 msgid "Sort All Columns"
-msgstr "Ordigi Kolumnojn"
+msgstr "Ordigi Ĉiujn Kolumnojn"
 
 #: src/kdefrontend/spreadsheet/SortDialog.cpp:35
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Flatten Selected Columns"
+#, kde-format
 msgctxt "@title:window"
 msgid "Sort Selected Columns"
-msgstr "Platigi Elektitajn Kolumnojn"
+msgstr "Ordigi Elektitajn Kolumnojn"
 
 #: src/kdefrontend/spreadsheet/SortDialog.cpp:39
 #, kde-format

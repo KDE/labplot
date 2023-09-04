@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-09-03 00:41+0000\n"
-"PO-Revision-Date: 2023-08-29 15:30+0200\n"
+"PO-Revision-Date: 2023-09-03 10:33+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 23.04.3\n"
+"X-Generator: Lokalize 22.12.3\n"
 "X-Accelerator-Marker: &\n"
 
 #, kde-format
@@ -16316,19 +16316,16 @@ msgid "Fixed-length negative lookbehind"
 msgstr "Cerca enrere negativa de longitud fixa"
 
 #: src/kdefrontend/spreadsheet/SortDialog.cpp:33
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Sort Columns"
+#, kde-format
 msgctxt "@title:window"
 msgid "Sort All Columns"
-msgstr "Ordena les columnes"
+msgstr "Ordena totes les columnes"
 
 #: src/kdefrontend/spreadsheet/SortDialog.cpp:35
-#, fuzzy, kde-format
-#| msgid "&Selected Columns"
+#, kde-format
 msgctxt "@title:window"
 msgid "Sort Selected Columns"
-msgstr "Columnes &seleccionades"
+msgstr "Ordena les columnes seleccionades"
 
 #: src/kdefrontend/spreadsheet/SortDialog.cpp:39
 #, kde-format
