@@ -11,7 +11,6 @@
 #include "SpiceFilterTest.h"
 #include "src/backend/datasources/filters/SpiceFilter.h"
 #include "src/backend/spreadsheet/Spreadsheet.h"
-#include <qglobal.h>
 
 #include <data/ltspice/AC/LowPassFilter_AC.raw.h>
 #include <data/ltspice/DCTransfer/DCTransfer.raw.h>
