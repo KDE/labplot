@@ -89,7 +89,7 @@
 #include "kdefrontend/widgets/LabelWidget.h"
 
 #include <DockWidget.h>
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 #include <QStackedWidget>
 #include <QStatusBar>
 #include <QToolBar>

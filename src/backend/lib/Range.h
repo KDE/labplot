@@ -14,10 +14,12 @@
 #include "backend/nsl/nsl_math.h"
 #include "macros.h" //const auto numberLocale = QLocale();
 
+#include <KLocalizedString>
+
 #include <QDateTime>
 #include <QStringList>
+
 #include <cmath>
-#include <klocalizedstring.h>
 
 class QString;
 

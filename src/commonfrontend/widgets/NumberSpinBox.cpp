@@ -10,7 +10,7 @@
 
 #include "backend/lib/macrosWarningStyle.h"
 
-#include "klocalizedstring.h"
+#include <KLocalizedString>
 
 #include <QApplication>
 #include <QDebug>

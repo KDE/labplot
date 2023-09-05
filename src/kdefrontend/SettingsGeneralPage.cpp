@@ -15,7 +15,7 @@
 #include "backend/core/Settings.h"
 
 #include <KConfigGroup>
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 
 /**
  * \brief Page for the 'General' settings of the Labplot settings dialog.
