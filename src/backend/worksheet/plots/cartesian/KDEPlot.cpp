@@ -546,7 +546,7 @@ bool KDEPlot::load(XmlStreamReader* reader, bool preview) {
 				if (d->estimationCurve->load(reader, preview)) {
 					estimationCurveInitialized = true;
 					continue;
-				}else
+				} else
 					return false;
 			}
 
