@@ -3602,14 +3602,14 @@ void SpreadsheetView::selectionChanged(const QItemSelection& /*selected*/, const
 	for (int i = 0; i < m_spreadsheet->columnCount(); i++)
 		m_spreadsheet->setColumnSelectedInView(i, selModel->isColumnSelected(i));
 
-	// determine the number of selected, masked, etc. cells in the current selection and show this information in the status bar.
+	// determine the number of selected cells, columns, missing values and masked values in the current selection and show this information in the status bar.
 	const QModelIndexList& indexes = m_tableView->selectionModel()->selectedIndexes();
 	if (indexes.empty() || indexes.count() == 1)
 		return;
 	QPair<int, int> selectedRowCol = qMakePair(selectedRowCount(false), selectedColumnCount(false));
 	const auto& columns = m_spreadsheet->children<Column>();
-	int noMaskedValues = 0;
-	int noMissingValues = 0;
+	int maskedValuesCount = 0;
+	int missingValuesCount = 0;
 	int noCellsSelected = 0;
 	for (const auto& index : indexes) {
 		const int col = index.column();
@@ -3617,18 +3617,18 @@ void SpreadsheetView::selectionChanged(const QItemSelection& /*selected*/, const
 		noCellsSelected++;
 		auto& column = columns.at(col);
 		if (!column->isValid(row))
-			noMissingValues++;
+			missingValuesCount++;
 		if (column->isMasked(row))
-			noMaskedValues++;
+			maskedValuesCount++;
 	}
 
 	QString selectedRowsText = i18np("row", "rows", selectedRowCol.first);
 	QString selectedColumnsText = i18np("column", "columns", selectedRowCol.second);
 	QString selectedCellsText = i18n("cells");
-	QString maskedValuesText = (noMaskedValues == 1) ? i18n("masked value") : (noMaskedValues == 0) ? QString() : i18n("masked values");
-	QString missingValuesText = (noMissingValues == 1) ? i18n("missing value") : (noMissingValues == 0) ? QString() : i18n("missing values");
-	QString maskedValuesCount = (!noMaskedValues) ? QString() : i18n(" , ") + i18n("%1", noMaskedValues);
-	QString missingValuesCount = (!noMissingValues) ? QString() : i18n(", ") + i18n("%1", noMissingValues);
+	QString maskedValuesText = (maskedValuesCount == 1) ? i18n("masked value") : (!maskedValuesCount) ? QString() : i18n("masked values");
+	QString missingValuesText = (missingValuesCount == 1) ? i18n("missing value") : (!missingValuesCount) ? QString() : i18n("missing values");
+	QString maskedValuesCountText = (!maskedValuesCount) ? QString() : i18n(" , ") + i18n("%1", maskedValuesCount);
+	QString missingValuesCountText = (!missingValuesCount) ? QString() : i18n(", ") + i18n("%1", missingValuesCount);
 
 	QString resultString;
 	if (noCellsSelected == selectedRowCol.first * selectedRowCol.second) {
@@ -3637,14 +3637,19 @@ void SpreadsheetView::selectionChanged(const QItemSelection& /*selected*/, const
 							selectedRowsText,
 							selectedRowCol.second,
 							selectedColumnsText,
-							maskedValuesCount,
+							maskedValuesCountText,
 							maskedValuesText,
-							missingValuesCount,
+							missingValuesCountText,
 							missingValuesText);
 
 	} else {
-		resultString =
-			i18n("Selected: %1 %2%3 %4 %5 %6", noCellsSelected, selectedCellsText, maskedValuesCount, maskedValuesText, missingValuesCount, missingValuesText);
+		resultString = i18n("Selected: %1 %2%3 %4 %5 %6",
+							noCellsSelected,
+							selectedCellsText,
+							maskedValuesCountText,
+							maskedValuesText,
+							missingValuesCountText,
+							missingValuesText);
 	}
 	Q_EMIT m_spreadsheet->statusInfo(resultString);
 }
