@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-09-03 00:41+0000\n"
-"PO-Revision-Date: 2023-08-30 08:04+0200\n"
+"PO-Revision-Date: 2023-09-04 06:04+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -15863,19 +15863,16 @@ msgid "Fixed-length negative lookbehind"
 msgstr "უკან-წინასწარ-წაკითხვის ფიქსირებული რაოდენობა"
 
 #: src/kdefrontend/spreadsheet/SortDialog.cpp:33
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Sort Columns"
+#, kde-format
 msgctxt "@title:window"
 msgid "Sort All Columns"
-msgstr "სვეტების დალაგება"
+msgstr "ყველა სვეტის დალაგება"
 
 #: src/kdefrontend/spreadsheet/SortDialog.cpp:35
-#, fuzzy, kde-format
-#| msgid "&Selected Columns"
+#, kde-format
 msgctxt "@title:window"
 msgid "Sort Selected Columns"
-msgstr "&მონიშნული სვეტები"
+msgstr "მონიშნული სვეტების დალაგება"
 
 #: src/kdefrontend/spreadsheet/SortDialog.cpp:39
 #, kde-format
