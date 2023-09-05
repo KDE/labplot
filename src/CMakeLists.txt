@@ -567,6 +567,7 @@ target_link_libraries( labplot2backendlib
 	${CFITSIO_LIBRARIES}
 	${LIBCERF_LIBRARIES}
 	${MATIO_LIBRARIES}
+	ads::qt${QT_VERSION_MAJOR}advanceddocking
 	)
 target_link_libraries( labplot2lib
 	Qt${QT_MAJOR_VERSION}::Svg
