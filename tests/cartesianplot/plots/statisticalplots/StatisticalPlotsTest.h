@@ -19,6 +19,7 @@ class StatisticalPlotsTest : public CommonTest {
 private Q_SLOTS:
 	// KDE plot
 	void testKDEPlotInit();
+	void testKDEPlotRange();
 
 	// Q-Q plot
 	void testQQPlotInit();

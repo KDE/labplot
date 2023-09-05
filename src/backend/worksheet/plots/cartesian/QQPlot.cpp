@@ -109,13 +109,6 @@ void QQPlot::init() {
 	d->percentilesCurve->setYColumn(d->yPercentilesColumn);
 
 	d->updateDistribution();
-}
-
-void QQPlot::finalizeAdd() {
-	Q_D(QQPlot);
-	WorksheetElement::finalizeAdd();
-	addChild(d->referenceCurve);
-	addChild(d->percentilesCurve);
 
 	// synchronize the names of the internal XYCurves with the name of the current q-q plot
 	// so we have the same name shown on the undo stack
@@ -124,6 +117,13 @@ void QQPlot::finalizeAdd() {
 		d->referenceCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
 		d->percentilesCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
 	});
+}
+
+void QQPlot::finalizeAdd() {
+	Q_D(QQPlot);
+	WorksheetElement::finalizeAdd();
+	addChildFast(d->referenceCurve);
+	addChildFast(d->percentilesCurve);
 }
 
 void QQPlot::initActions() {

@@ -53,6 +53,47 @@ void StatisticalPlotsTest::testKDEPlotInit() {
 	// QCOMPARE(children.size(), 1);
 }
 
+/*!
+ * \brief create a KDE plot for 3 values check the plot ranges.
+ */
+void StatisticalPlotsTest::testKDEPlotRange() {
+	// prepare the data
+	Spreadsheet sheet(QStringLiteral("test"), false);
+	sheet.setColumnCount(1);
+	sheet.setRowCount(100);
+	auto* column = sheet.column(0);
+	column->setValueAt(0, 2.);
+	column->setValueAt(1, 4.);
+	column->setValueAt(2, 6.);
+
+	// prepare the worksheet + plot
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	ws->addChild(p);
+
+	auto* kdePlot = new KDEPlot(QStringLiteral("kdeplot"));
+	kdePlot->setKernelType(nsl_kernel_gauss);
+	kdePlot->setBandwidthType(nsl_kde_bandwidth_custom);
+	kdePlot->setBandwidth(0.3);
+	p->addChild(kdePlot);
+	kdePlot->setDataColumn(column);
+
+	// validate with R via:
+	// data <- c(2,4,6);
+	// kd <- density(data,kernel="gaussian", bw=0.3)
+	// plot(kd, col='blue', lwd=2)
+
+	// check the x-range of the plot which should be [1, 7] (subtract/add 3 sigmas from/to min and max, respectively).
+	const auto& rangeX = p->range(Dimension::X);
+	QCOMPARE(rangeX.start(), 1);
+	QCOMPARE(rangeX.end(), 7);
+
+	// check the y-range of the plot which should be [0, 0.45]
+	const auto& rangeY = p->range(Dimension::Y);
+	QCOMPARE(rangeY.start(), 0.);
+	QCOMPARE(rangeY.end(), 0.45);
+}
+
 // ##############################################################################
 // ############################## Q-Q Plot ######################################
 // ##############################################################################

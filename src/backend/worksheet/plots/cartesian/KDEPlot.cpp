@@ -100,13 +100,6 @@ void KDEPlot::init() {
 	d->rugCurve->line()->setStyle(Qt::NoPen);
 	d->rugCurve->symbol()->setStyle(Symbol::Style::NoSymbols);
 	d->rugCurve->setRugOrientation(WorksheetElement::Orientation::Horizontal);
-}
-
-void KDEPlot::finalizeAdd() {
-	Q_D(KDEPlot);
-	WorksheetElement::finalizeAdd();
-	addChildFast(d->estimationCurve);
-	addChildFast(d->rugCurve);
 
 	// synchronize the names of the internal XYCurves with the name of the current q-q plot
 	// so we have the same name shown on the undo stack
@@ -115,6 +108,13 @@ void KDEPlot::finalizeAdd() {
 		d->estimationCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
 		d->rugCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
 	});
+}
+
+void KDEPlot::finalizeAdd() {
+	Q_D(KDEPlot);
+	WorksheetElement::finalizeAdd();
+	addChildFast(d->estimationCurve);
+	addChildFast(d->rugCurve);
 }
 
 void KDEPlot::initActions() {
@@ -357,9 +357,6 @@ void KDEPlotPrivate::recalc() {
 	QVector<double> yData;
 	xData.resize(count);
 	yData.resize(count);
-	double min = *std::min_element(data.constBegin(), data.constEnd());
-	double max = *std::max_element(data.constBegin(), data.constEnd());
-	double step = (max - min) / count;
 	int n = data.count();
 	const auto& statistics = static_cast<const Column*>(dataColumn)->statistics();
 	const double sigma = statistics.standardDeviation;
@@ -373,6 +370,11 @@ void KDEPlotPrivate::recalc() {
 		h = nsl_kde_bandwidth(n, sigma, iqr, bandwidthType);
 
 	h = std::max(h, 1e-6);
+
+	// calculate KDE for the grid points from min-3*sigma to max+3*sigma
+	const double min = statistics.minimum - 3 * h;
+	const double max = statistics.maximum + 3 * h;
+	const double step = (max - min) / count;
 
 	for (int i = 0; i < count; ++i) {
 		double x = min + i * step;
