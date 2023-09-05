@@ -536,6 +536,7 @@ if (qt${QT_VERSION_MAJOR}advanceddocking_FOUND)
 	get_target_property(QADS_LIBRARIES ads::qt5advanceddocking INTERFACE_LINK_LIBRARIES)
 	MESSAGE (STATUS "QADS Found LINK_LIBRARIES: ${QADS_LIBRARIES} INCLUDES: ${QADS_INCLUDES}")
 	target_include_directories( labplot2backendlib PRIVATE ${QADS_INCLUDES} )
+	target_include_directories( labplot2lib PRIVATE ${QADS_INCLUDES} )
 endif ()
 target_compile_definitions(labplot2backendlib PRIVATE ${LABPLOT_COMPILE_DEFINITIONS})
 target_compile_definitions(labplot2lib PRIVATE ${LABPLOT_COMPILE_DEFINITIONS})
@@ -610,6 +611,7 @@ ENDIF ()
 
 IF (RECENT_CANTOR)
 	# KFX::Service, KFX::Parts is optional but probably required by Cantor
+	target_link_libraries( labplot2backendlib Cantor::cantorlibs KF${KF_MAJOR_VERSION}::Service KF${KF_MAJOR_VERSION}::Parts )
 	target_link_libraries( labplot2lib Cantor::cantorlibs KF${KF_MAJOR_VERSION}::Service KF${KF_MAJOR_VERSION}::Parts )
 ENDIF ()
 
@@ -709,9 +711,7 @@ IF (APPLE AND ${ECM_VERSION} VERSION_GREATER "5.48.0")
 ENDIF ()
 
 add_executable( labplot2 ${LABPLOT_SOURCE} ${qml_QRC} )
-target_link_libraries( labplot2 labplot2lib )
-target_link_libraries( labplot2 labplot2backendlib )
-target_link_libraries( labplot2 labplot2nsllib )
+target_link_libraries( labplot2 labplot2lib labplot2backendlib labplot2nsllib )
 target_compile_definitions(labplot2 PRIVATE ${LABPLOT_COMPILE_DEFINITIONS})
 
 ############## installation ################################
