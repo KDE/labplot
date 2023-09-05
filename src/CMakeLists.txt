@@ -584,6 +584,8 @@ target_link_libraries( labplot2lib
 	KF${KF_MAJOR_VERSION}::KIOWidgets
 	KF${KF_MAJOR_VERSION}::XmlGui
 	KF${KF_MAJOR_VERSION}::I18n
+	KF${KF_MAJOR_VERSION}::Archive	# KFilterDev
+	KF${KF_MAJOR_VERSION}::TextWidgets	# KTextEdit
 	${Poppler_LIBRARIES}
 	ads::qt${QT_VERSION_MAJOR}advanceddocking
 	)
