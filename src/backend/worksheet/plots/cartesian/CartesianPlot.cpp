@@ -730,6 +730,8 @@ QVector<AspectType> CartesianPlot::pasteTypes() const {
 							  AspectType::BarPlot,
 							  AspectType::LollipopPlot,
 							  AspectType::BoxPlot,
+							  AspectType::KDEPlot,
+							  AspectType::QQPlot,
 							  AspectType::Axis,
 							  AspectType::XYEquationCurve,
 							  AspectType::XYConvolutionCurve,
