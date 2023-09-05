@@ -709,7 +709,7 @@ void CartesianPlotDock::updateRangeList(const Dimension dim) {
 		cb->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
 		cb->setFrame(false);
 		// TODO: -> updateLocale()
-		for (const auto& name : RangeT::scaleNames())
+		for (const auto& name : RangeT::scaleNames)
 			cb->addItem(name);
 
 		cb->setCurrentIndex(static_cast<int>(scale));

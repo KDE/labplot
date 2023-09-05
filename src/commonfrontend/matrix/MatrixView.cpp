@@ -37,6 +37,7 @@
 #include <QScrollArea>
 #include <QShortcut>
 #include <QStackedWidget>
+#include <QStandardPaths>
 #include <QTableView>
 #include <QTextStream>
 #include <QThreadPool>

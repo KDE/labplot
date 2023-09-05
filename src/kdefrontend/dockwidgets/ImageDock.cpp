@@ -17,6 +17,10 @@
 #include "kdefrontend/ThemeHandler.h"
 #include "kdefrontend/widgets/LineWidget.h"
 
+#include <KConfig>
+#include <KConfigGroup>
+#include <KLocalizedString>
+
 #include <QCompleter>
 // see https://gitlab.kitware.com/cmake/cmake/-/issues/21609
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
@@ -25,9 +29,6 @@
 #include <QDirModel>
 #endif
 #include <QPageSize>
-
-#include <KConfig>
-#include <KLocalizedString>
 
 /*!
   \class ImageDock

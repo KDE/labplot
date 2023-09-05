@@ -27,12 +27,13 @@
 
 #include "backend/lib/commandtemplates.h"
 
+#include <KConfig>
+#include <KConfigGroup>
+#include <KLocalizedString>
+
 #include <QIcon>
 #include <QUndoCommand>
 #include <QXmlStreamWriter>
-
-#include <KConfigGroup>
-#include <KLocalizedString>
 
 #include <algorithm>
 

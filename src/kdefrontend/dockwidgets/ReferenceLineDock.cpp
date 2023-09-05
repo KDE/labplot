@@ -14,6 +14,7 @@
 #include "kdefrontend/widgets/LineWidget.h"
 
 #include <KConfig>
+#include <KConfigGroup>
 #include <KLocalizedString>
 
 ReferenceLineDock::ReferenceLineDock(QWidget* parent)

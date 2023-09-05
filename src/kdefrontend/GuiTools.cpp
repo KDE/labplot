@@ -12,7 +12,8 @@
 #include "backend/core/Settings.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 
-#include <KI18n/KLocalizedString>
+#include <KConfigGroup>
+#include <KLocalizedString>
 
 #include <QApplication>
 #include <QColor>

@@ -14,6 +14,7 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 
 #include <KLocalizedString>
+#include <QDateTime>
 #include <QFile>
 
 ///////////// macros ///////////////////////////////////////////////

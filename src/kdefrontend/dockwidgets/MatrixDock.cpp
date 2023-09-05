@@ -13,6 +13,7 @@
 #include "kdefrontend/TemplateHandler.h"
 
 #include <KConfig>
+#include <KConfigGroup>
 
 #include <QDir>
 

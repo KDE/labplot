@@ -154,7 +154,6 @@ if (Qt5Mqtt_FOUND)
 	list(APPEND GUI_SOURCES ${KDEFRONTEND_DIR}/datasources/MQTTConnectionManagerDialog.cpp)
 	list(APPEND GUI_SOURCES ${KDEFRONTEND_DIR}/datasources/MQTTErrorWidget.cpp)
 	list(APPEND GUI_SOURCES ${KDEFRONTEND_DIR}/datasources/MQTTSubscriptionWidget.cpp)
-	list(APPEND GUI_SOURCES ${KDEFRONTEND_DIR}/widgets/MQTTWillSettingsWidget.cpp)
 endif()
 
 if (APPLE)
@@ -494,10 +493,12 @@ ELSE ()
 	set(CANTOR_SOURCES "")
 ENDIF ()
 
+set(BACKEND_TOOLS_SOURCES
+	${TOOLS_DIR}/ImageTools.cpp
+)
 set(TOOLS_SOURCES
 	${TOOLS_DIR}/ColorMapsManager.cpp
 	${TOOLS_DIR}/EquationHighlighter.cpp
-	${TOOLS_DIR}/ImageTools.cpp
 	${TOOLS_DIR}/TeXRenderer.cpp
 )
 
@@ -522,8 +523,11 @@ add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50700)
 #add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50F00)
 
 # static library
-add_library( labplot2lib STATIC ${LABPLOT_SRCS} ${BACKEND_SOURCES} ${NSL_SOURCES} ${CANTOR_SOURCES} ${DATASOURCES_SOURCES} ${COMMONFRONTEND_SOURCES} ${TOOLS_SOURCES} ${GENERATED_SOURCES} ${QTMOC_HDRS} )
+add_library( labplot2nsllib STATIC ${NSL_SOURCES} )
+add_library( labplot2backendlib STATIC ${BACKEND_SOURCES} ${UI_SOURCES} ${BACKEND_TOOLS_SOURCES} ${GENERATED_SOURCES} )
+add_library( labplot2lib STATIC ${LABPLOT_SRCS} ${CANTOR_SOURCES} ${DATASOURCES_SOURCES} ${COMMONFRONTEND_SOURCES} ${TOOLS_SOURCES} ${QTMOC_HDRS} )
 # set_property(TARGET ${objlib} PROPERTY POSITION_INDEPENDENT_CODE 1)
+target_include_directories(labplot2backendlib PUBLIC ${COMMONFRONTEND_DIR}/widgets) # so that the MOC finds numberSpinbox.h
 target_include_directories(labplot2lib PUBLIC ${COMMONFRONTEND_DIR}/widgets) # so that the MOC finds numberSpinbox.h
 
 # add system QADS include path
@@ -531,49 +535,63 @@ if (qt${QT_VERSION_MAJOR}advanceddocking_FOUND)
 	get_target_property(QADS_INCLUDES ads::qt5advanceddocking INTERFACE_INCLUDE_DIRECTORIES)
 	get_target_property(QADS_LIBRARIES ads::qt5advanceddocking INTERFACE_LINK_LIBRARIES)
 	MESSAGE (STATUS "QADS Found LINK_LIBRARIES: ${QADS_LIBRARIES} INCLUDES: ${QADS_INCLUDES}")
-	target_include_directories( labplot2lib PRIVATE ${QADS_INCLUDES} )
+	target_include_directories( labplot2backendlib PRIVATE ${QADS_INCLUDES} )
 endif ()
+target_compile_definitions(labplot2backendlib PRIVATE ${LABPLOT_COMPILE_DEFINITIONS})
 target_compile_definitions(labplot2lib PRIVATE ${LABPLOT_COMPILE_DEFINITIONS})
 
-target_link_libraries( labplot2lib
-	Qt${QT_MAJOR_VERSION}::Svg
+target_link_libraries( labplot2nsllib
 	Qt${QT_MAJOR_VERSION}::Core
-	Qt${QT_MAJOR_VERSION}::Network
-	Qt${QT_MAJOR_VERSION}::PrintSupport
-	Qt${QT_MAJOR_VERSION}::Sql
-# 	Qt${QT_MAJOR_VERSION}::Qml
-# 	Qt${QT_MAJOR_VERSION}::Quick
-# 	Qt${QT_MAJOR_VERSION}::QuickWidgets
-	KF${KF_MAJOR_VERSION}::Archive
-	KF${KF_MAJOR_VERSION}::Completion
-	KF${KF_MAJOR_VERSION}::ConfigCore
-	KF${KF_MAJOR_VERSION}::Crash
+	Qt${QT_MAJOR_VERSION}::Widgets	# QApplication
+)
+target_link_libraries( labplot2backendlib
+	Qt${QT_MAJOR_VERSION}::Core
+	Qt${QT_MAJOR_VERSION}::Gui	# QColor
+	Qt${QT_MAJOR_VERSION}::Widgets	# QApplication
+	Qt${QT_MAJOR_VERSION}::Network	# QLocalSocket
+	Qt${QT_MAJOR_VERSION}::Xml	# QDomElement (Cantor)
+	Qt${QT_MAJOR_VERSION}::PrintSupport	# QPrintDialog
+	KF${KF_MAJOR_VERSION}::ConfigCore	# KConfigGroup
 	KF${KF_MAJOR_VERSION}::I18n
-	KF${KF_MAJOR_VERSION}::IconThemes
-	KF${KF_MAJOR_VERSION}::KIOCore
-	KF${KF_MAJOR_VERSION}::KIOFileWidgets
-	KF${KF_MAJOR_VERSION}::KIOWidgets
-	KF${KF_MAJOR_VERSION}::TextWidgets
-	KF${KF_MAJOR_VERSION}::XmlGui
+	KF${KF_MAJOR_VERSION}::ConfigWidgets	# KStandardAction
+	KF${KF_MAJOR_VERSION}::Archive	# KFilterDev
+	KF${KF_MAJOR_VERSION}::TextWidgets	# KTextEdit
+	${ZLIB_LIBRARIES}
+	${LZ4_LIBRARIES}
 	${GSL_LIBRARIES}
 	${GSL_CBLAS_LIBRARIES}
-	${Poppler_LIBRARIES}
 	${HDF5_LIBRARIES}
 	${FFTW3_LIBRARIES}
 	${netCDF_LIBRARIES}
 	${CFITSIO_LIBRARIES}
 	${LIBCERF_LIBRARIES}
-	${LZ4_LIBRARIES}
 	${MATIO_LIBRARIES}
-	${ZLIB_LIBRARIES}
+	)
+target_link_libraries( labplot2lib
+	Qt${QT_MAJOR_VERSION}::Svg
+	Qt${QT_MAJOR_VERSION}::Sql
+	Qt${QT_MAJOR_VERSION}::PrintSupport	# QPrinter
+# 	Qt${QT_MAJOR_VERSION}::Qml
+# 	Qt${QT_MAJOR_VERSION}::Quick
+# 	Qt${QT_MAJOR_VERSION}::QuickWidgets
+	KF${KF_MAJOR_VERSION}::Completion
+	KF${KF_MAJOR_VERSION}::Crash
+	KF${KF_MAJOR_VERSION}::IconThemes
+	KF${KF_MAJOR_VERSION}::KIOCore
+	KF${KF_MAJOR_VERSION}::KIOFileWidgets
+	KF${KF_MAJOR_VERSION}::KIOWidgets
+	KF${KF_MAJOR_VERSION}::XmlGui
+	${Poppler_LIBRARIES}
 	ads::qt${QT_VERSION_MAJOR}advanceddocking
 	)
 
 
 IF (Qt${QT_MAJOR_VERSION}SerialPort_FOUND)
+	target_link_libraries( labplot2backendlib Qt${QT_MAJOR_VERSION}::SerialPort )
 	target_link_libraries( labplot2lib Qt${QT_MAJOR_VERSION}::SerialPort )
 ENDIF ()
 IF (Qt${QT_MAJOR_VERSION}Mqtt_FOUND)
+	target_link_libraries( labplot2backendlib Qt${QT_MAJOR_VERSION}::Mqtt )
 	target_link_libraries( labplot2lib Qt${QT_MAJOR_VERSION}::Mqtt )
 ENDIF ()
 IF (KF${KF_MAJOR_VERSION}SyntaxHighlighting_FOUND)
@@ -598,42 +616,47 @@ ENDIF ()
 IF (ENABLE_READSTAT)
 	# build before using
 	IF (BUILD_READSTAT)
-		add_dependencies( labplot2lib 3rdparty_readstat )
+		add_dependencies( labplot2backendlib 3rdparty_readstat )
 	ENDIF ()
 	# link system readstat with iconv
 	IF (READSTAT_FOUND)
 		FIND_LIBRARY ( ICONV_LIBRARIES NAMES iconv libiconv libconv-2 )
 		IF (ICONV_LIBRARIES)
-			target_link_libraries ( labplot2lib ${ICONV_LIBRARIES} )
+			target_link_libraries ( labplot2backendlib ${ICONV_LIBRARIES} )
 		ENDIF ()
 	ENDIF ()
-        target_link_libraries( labplot2lib ${READSTAT_LIBRARIES} ${ZLIB_LIBRARIES} )
+        target_link_libraries( labplot2backendlib ${READSTAT_LIBRARIES} ${ZLIB_LIBRARIES} )
 ENDIF ()
 
 IF (ENABLE_EXCEL)
         # build before use
         IF (BUILD_EXCEL)
+                target_include_directories( labplot2backendlib PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/QXlsx/header" )
+                add_dependencies( labplot2backendlib QXlsx )
                 target_include_directories( labplot2lib PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/QXlsx/header" )
                 add_dependencies( labplot2lib QXlsx )
         ENDIF ()
 
         IF (QXLSX_FOUND)
+                target_include_directories( labplot2backendlib PRIVATE ${QXLSX_INCLUDE_DIR} )
                 target_include_directories( labplot2lib PRIVATE ${QXLSX_INCLUDE_DIR} )
         ENDIF ()
 
 	IF (QXLSX_FOUND OR BUILD_EXCEL)
-		target_link_libraries( labplot2lib QXlsx )
+		target_link_libraries( labplot2backendlib QXlsx )
         ENDIF ()
 ENDIF ()
 
 IF (ENABLE_LIBORIGIN)
 	IF (LIBORIGIN_FOUND)
 		# if system headers are missing: use the provided
+		target_include_directories( labplot2backendlib PRIVATE ${LIBORIGIN_INCLUDE_DIR} "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/liborigin" )
+		target_link_libraries( labplot2backendlib ${LIBORIGIN_LIBRARIES} )
 		target_include_directories( labplot2lib PRIVATE ${LIBORIGIN_INCLUDE_DIR} "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/liborigin" )
-		target_link_libraries( labplot2lib ${LIBORIGIN_LIBRARIES} )
 	ELSE () # own version
+		target_include_directories( labplot2backendlib PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/liborigin" )
+		target_link_libraries( labplot2backendlib liborigin-static )
 		target_include_directories( labplot2lib PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/liborigin" )
-		target_link_libraries( labplot2lib liborigin-static )
 	ENDIF()
 ENDIF ()
 IF (WIN32)
@@ -687,6 +710,8 @@ ENDIF ()
 
 add_executable( labplot2 ${LABPLOT_SOURCE} ${qml_QRC} )
 target_link_libraries( labplot2 labplot2lib )
+target_link_libraries( labplot2 labplot2backendlib )
+target_link_libraries( labplot2 labplot2nsllib )
 target_compile_definitions(labplot2 PRIVATE ${LABPLOT_COMPILE_DEFINITIONS})
 
 ############## installation ################################
