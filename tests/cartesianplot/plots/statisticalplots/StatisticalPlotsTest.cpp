@@ -54,6 +54,26 @@ void StatisticalPlotsTest::testKDEPlotInit() {
 }
 
 /*!
+ * \brief create and add a new KDEPlot, duplicate it and check the number of children
+ */
+void StatisticalPlotsTest::testKDEPlotDuplicate() {
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	project.addChild(ws);
+
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	ws->addChild(p);
+
+	auto* kdePlot = new KDEPlot(QStringLiteral("kdeplot"));
+	p->addChild(kdePlot);
+
+	kdePlot->duplicate();
+
+	auto children = p->children<KDEPlot>();
+	QCOMPARE(children.size(), 2);
+}
+
+/*!
  * \brief create a KDE plot for 3 values check the plot ranges.
  */
 void StatisticalPlotsTest::testKDEPlotRange() {
@@ -124,6 +144,26 @@ void StatisticalPlotsTest::testQQPlotInit() {
 	// project.undoStack()->redo();
 	// children = p->children<QQPlot>();
 	// QCOMPARE(children.size(), 1);
+}
+
+/*!
+ * \brief create and add a new QQPlot, duplicate it and check the number of children
+ */
+void StatisticalPlotsTest::testQQPlotDuplicate() {
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	project.addChild(ws);
+
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	ws->addChild(p);
+
+	auto* qqPlot = new QQPlot(QStringLiteral("qqplot"));
+	p->addChild(qqPlot);
+
+	qqPlot->duplicate();
+
+	auto children = p->children<QQPlot>();
+	QCOMPARE(children.size(), 2);
 }
 
 /*!

@@ -19,10 +19,12 @@ class StatisticalPlotsTest : public CommonTest {
 private Q_SLOTS:
 	// KDE plot
 	void testKDEPlotInit();
+	void testKDEPlotDuplicate();
 	void testKDEPlotRange();
 
 	// Q-Q plot
 	void testQQPlotInit();
+	void testQQPlotDuplicate();
 	void testQQPlotRange();
 };
 
