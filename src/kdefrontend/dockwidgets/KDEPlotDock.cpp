@@ -250,7 +250,7 @@ void KDEPlotDock::dataColumnChanged(const QModelIndex& index) {
 void KDEPlotDock::kernelTypeChanged(int index) {
 	const auto type = static_cast<nsl_kernel_type>(ui.cbKernelType->itemData(index).toInt());
 
-	CONDITIONAL_LOCK_RETURN
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* plot : m_plots)
 		plot->setKernelType(type);
@@ -263,14 +263,14 @@ void KDEPlotDock::bandwidthTypeChanged(int index) {
 	ui.lBandwidth->setVisible(custom);
 	ui.sbBandwidth->setVisible(custom);
 
-	CONDITIONAL_LOCK_RETURN
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* plot : m_plots)
 		plot->setBandwidthType(type);
 }
 
 void KDEPlotDock::bandwidthChanged(double value) {
-	CONDITIONAL_LOCK_RETURN
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* plot : m_plots)
 		plot->setBandwidth(value);
@@ -321,29 +321,29 @@ void KDEPlotDock::rugOffsetChanged(double value) {
 //*************************************************************
 // General-Tab
 void KDEPlotDock::plotDataColumnChanged(const AbstractColumn* column) {
-	CONDITIONAL_LOCK_RETURN
+	CONDITIONAL_LOCK_RETURN;
 	cbDataColumn->setColumn(column, m_plot->dataColumnPath());
 }
 
 void KDEPlotDock::plotKernelTypeChanged(nsl_kernel_type type) {
-	CONDITIONAL_LOCK_RETURN
+	CONDITIONAL_LOCK_RETURN;
 	int index = ui.cbKernelType->findData(static_cast<int>(type));
 	ui.cbKernelType->setCurrentIndex(index);
 }
 
 void KDEPlotDock::plotBandwidthTypeChanged(nsl_kde_bandwidth_type type) {
-	CONDITIONAL_LOCK_RETURN
+	CONDITIONAL_LOCK_RETURN;
 	int index = ui.cbBandwidthType->findData(static_cast<int>(type));
 	ui.cbBandwidthType->setCurrentIndex(index);
 }
 
 void KDEPlotDock::plotBandwidthChanged(double value) {
-	CONDITIONAL_LOCK_RETURN
+	CONDITIONAL_LOCK_RETURN;
 	ui.sbBandwidth->setValue(value);
 }
 
 void KDEPlotDock::plotVisibilityChanged(bool on) {
-	CONDITIONAL_LOCK_RETURN
+	CONDITIONAL_LOCK_RETURN;
 	ui.chkVisible->setChecked(on);
 }
 

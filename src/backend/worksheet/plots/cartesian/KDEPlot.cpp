@@ -27,11 +27,9 @@
 #include "backend/nsl/nsl_kde.h"
 #include "backend/nsl/nsl_sf_kernel.h"
 
-extern "C" {
 #include <gsl/gsl_cdf.h>
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_statistics.h>
-}
 
 #include <QGraphicsSceneContextMenuEvent>
 #include <QMenu>
@@ -364,12 +362,18 @@ void KDEPlotPrivate::recalc() {
 
 	// bandwidth
 	double h;
-	if (bandwidthType == nsl_kde_bandwidth_custom)
-		h = bandwidth;
-	else
+	if (bandwidthType == nsl_kde_bandwidth_custom) {
+		if (bandwidth != 0)
+			h = bandwidth;
+		else {
+			// invalid smoothing bandwidth parameter
+			xEstimationColumn->setValues(xData);
+			yEstimationColumn->setValues(yData);
+			Q_EMIT q->dataChanged();
+			return;
+		}
+	} else
 		h = nsl_kde_bandwidth(n, sigma, iqr, bandwidthType);
-
-	h = std::max(h, 1e-6);
 
 	// calculate KDE for the grid points from min-3*sigma to max+3*sigma
 	const double min = statistics.minimum - 3 * h;
@@ -460,7 +464,7 @@ void KDEPlotPrivate::setHover(bool on) {
 		return; // don't update if state not changed
 
 	m_hovered = on;
-	on ? Q_EMIT q->hovered() : emit q->unhovered();
+	on ? Q_EMIT q->hovered() : Q_EMIT q->unhovered();
 	update();
 }
 
