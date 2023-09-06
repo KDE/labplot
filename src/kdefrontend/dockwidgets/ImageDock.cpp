@@ -128,27 +128,6 @@ void ImageDock::setImages(QList<Image*> list) {
 
 	updateLocale();
 
-	// if there are more than one image in the list, disable the name and comment field in the tab "general"
-	if (list.size() == 1) {
-		ui.lName->setEnabled(true);
-		ui.leName->setEnabled(true);
-		ui.lComment->setEnabled(true);
-		ui.teComment->setEnabled(true);
-
-		ui.leName->setText(m_image->name());
-		ui.teComment->setText(m_image->comment());
-	} else {
-		ui.lName->setEnabled(false);
-		ui.leName->setEnabled(false);
-		ui.lComment->setEnabled(false);
-		ui.teComment->setEnabled(false);
-
-		ui.leName->setText(QString());
-		ui.teComment->setText(QString());
-	}
-	ui.leName->setStyleSheet(QString());
-	ui.leName->setToolTip(QString());
-
 	QList<Line*> lines;
 	for (auto* image : m_imageList)
 		lines << image->borderLine();

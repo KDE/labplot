@@ -79,23 +79,6 @@ void SpreadsheetDock::setSpreadsheets(const QList<Spreadsheet*> list) {
 		}
 	}
 
-	if (list.size() == 1) {
-		ui.leName->setEnabled(true);
-		ui.teComment->setEnabled(true);
-
-		ui.leName->setText(m_spreadsheet->name());
-		ui.teComment->setText(m_spreadsheet->comment());
-	} else {
-		// disable the fields "Name" and "Comment" if there are more than one spreadsheet
-		ui.leName->setEnabled(false);
-		ui.teComment->setEnabled(false);
-
-		ui.leName->setText(QString());
-		ui.teComment->setText(QString());
-	}
-	ui.leName->setStyleSheet(QString());
-	ui.leName->setToolTip(QString());
-
 	const QList<AspectType> topLevelClasses = {AspectType::Spreadsheet};
 // needed for buggy compiler
 #if __cplusplus < 201103L

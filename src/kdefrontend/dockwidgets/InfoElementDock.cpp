@@ -93,23 +93,6 @@ void InfoElementDock::setInfoElements(QList<InfoElement*> list) {
 	ui->lwCurves->clear();
 	ui->cbConnectToCurve->clear();
 
-	// if there are more than one info element in the list, disable the name and comment fields
-	if (list.size() == 1) {
-		ui->lName->setEnabled(true);
-		ui->leName->setEnabled(true);
-		ui->lComment->setEnabled(true);
-		ui->teComment->setEnabled(true);
-		ui->leName->setText(m_element->name());
-		ui->teComment->setText(m_element->comment());
-	} else {
-		ui->lName->setEnabled(false);
-		ui->leName->setEnabled(false);
-		ui->lComment->setEnabled(false);
-		ui->teComment->setEnabled(false);
-		ui->leName->setText(QString());
-		ui->teComment->setText(QString());
-	}
-
 	ui->chbVisible->setChecked(m_element->isVisible());
 
 	// disable if not all worksheetelements do not have the same parent (different CartesianPlots),
