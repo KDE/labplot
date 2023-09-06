@@ -2631,6 +2631,8 @@ bool CartesianPlot::scaleAuto(const Dimension dim, int index, bool fullRange, bo
 		} else
 			r.extend(r.size() * d->autoScaleOffsetFactor);
 
+		Q_EMIT rangeChanged(dim, index, r);
+
 		if (!suppressRetransformScale)
 			d->retransformScale(dim, index);
 	}
@@ -3365,8 +3367,6 @@ void CartesianPlotPrivate::rangeChanged() {
 			q->scaleAuto(Dimension::X, xIndex, false);
 		else if (autoScale(Dimension::Y, yIndex))
 			q->scaleAuto(Dimension::Y, yIndex, false);
-		Q_EMIT q->rangeChanged(Dimension::X, xIndex, xRanges[xIndex].range);
-		Q_EMIT q->rangeChanged(Dimension::Y, yIndex, yRanges[yIndex].range);
 	}
 	q->WorksheetElementContainer::retransform();
 }
