@@ -21,6 +21,7 @@
 #include "matrixcommands.h"
 
 #include <KConfig>
+#include <KConfigGroup>
 #include <KLocalizedString>
 
 #include <QHeaderView>

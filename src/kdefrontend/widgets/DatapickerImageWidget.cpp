@@ -17,6 +17,9 @@
 #include "kdefrontend/GuiTools.h"
 #include "kdefrontend/widgets/SymbolWidget.h"
 
+#include <KConfigGroup>
+#include <KLocalizedString>
+
 #include <QCompleter>
 #include <QDir>
 // see https://gitlab.kitware.com/cmake/cmake/-/issues/21609
@@ -27,9 +30,7 @@
 #endif
 #include <QGraphicsScene>
 #include <QPainter>
-
-#include <KConfigGroup>
-#include <KLocalizedString>
+#include <QStandardPaths>
 
 #include <cmath>
 

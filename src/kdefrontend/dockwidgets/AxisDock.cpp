@@ -20,6 +20,7 @@
 #include "kdefrontend/widgets/LabelWidget.h"
 #include "kdefrontend/widgets/LineWidget.h"
 
+#include <KConfig>
 #include <KLineEdit>
 #include <KLocalizedString>
 #include <KMessageBox>
@@ -248,7 +249,7 @@ void AxisDock::init() {
 	ui.cbRangeType->setToolTip(msg);
 
 	// scales
-	for (const auto& name : RangeT::scaleNames())
+	for (const auto& name : RangeT::scaleNames)
 		ui.cbScale->addItem(name);
 
 	ui.cbOrientation->addItem(i18n("Horizontal"));
@@ -475,7 +476,7 @@ void AxisDock::updateLocale() {
 
 	// scales
 	ui.cbScale->clear();
-	for (const auto& name : RangeT::scaleNames())
+	for (const auto& name : RangeT::scaleNames)
 		ui.cbScale->addItem(name);
 
 	labelWidget->updateLocale();

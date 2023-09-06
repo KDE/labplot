@@ -8,14 +8,14 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-#include <QRegularExpression>
-
 #include "backend/gsl/ExpressionParser.h"
+#include "backend/gsl/parser.h"
 #include "backend/lib/macros.h"
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
-#include "backend/gsl/parser.h"
+#include <QRegularExpression>
+
 #include <gsl/gsl_const_mksa.h>
 #include <gsl/gsl_const_num.h>
 #include <gsl/gsl_errno.h>

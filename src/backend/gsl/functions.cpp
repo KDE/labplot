@@ -1,12 +1,22 @@
-#include "parser.h"
+/*
+	File                 : functions.cpp
+	Project              : LabPlot
+	Description          : definition of functions
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2014 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2014-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #include "backend/nsl/nsl_sf_basic.h"
+#include "parser.h"
+
+#include <KLocalizedString>
+
 #include <gsl/gsl_cdf.h>
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_randist.h>
 #include <gsl/gsl_sf.h>
-
-#include <klocalizedstring.h>
 
 #ifdef _MSC_VER
 /* avoid intrinsics */

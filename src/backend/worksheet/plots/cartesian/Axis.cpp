@@ -26,6 +26,7 @@
 #include <gsl/gsl_math.h>
 
 #include <KConfig>
+#include <KConfigGroup>
 #include <KLocalizedString>
 
 #include <QGraphicsSceneContextMenuEvent>

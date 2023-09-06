@@ -4,7 +4,7 @@
 #include <gsl/gsl_const_num.h>
 #include <gsl/gsl_math.h>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 QString constantGroupsToString(ConstantGroups group) {
 	switch (group) {

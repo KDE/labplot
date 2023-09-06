@@ -24,6 +24,9 @@
 #include "backend/worksheet/plots/cartesian/CustomPoint.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 
+#include <KConfig>
+#include <KConfigGroup>
+
 #include <QAction>
 #include <QDateTime>
 #include <QGraphicsSceneMouseEvent>

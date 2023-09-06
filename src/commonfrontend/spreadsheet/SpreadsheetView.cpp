@@ -50,6 +50,7 @@
 #include "3rdparty/kdmactouchbar/src/kdmactouchbar.h"
 #endif
 
+#include <KConfigGroup>
 #include <KLocalizedString>
 #include <KMessageBox>
 
