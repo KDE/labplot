@@ -3345,6 +3345,12 @@ QVector<AbstractCoordinateSystem*> CartesianPlotPrivate::coordinateSystems() con
 	return q->m_coordinateSystems;
 }
 
+/*!
+ * \brief CartesianPlotPrivate::rangeChanged
+ * This function will be called if the range shall be updated, because some other parameters (like the datarange type, datarange points)
+ * changed. In this case the ranges must be updated if autoscale is turned on
+ * At the end signals for all ranges are send out that they changed.
+ */
 void CartesianPlotPrivate::rangeChanged() {
 	DEBUG(Q_FUNC_INFO)
 	for (const auto* cSystem : q->m_coordinateSystems) {
@@ -3359,6 +3365,8 @@ void CartesianPlotPrivate::rangeChanged() {
 			q->scaleAuto(Dimension::X, xIndex, false);
 		else if (autoScale(Dimension::Y, yIndex))
 			q->scaleAuto(Dimension::Y, yIndex, false);
+		Q_EMIT q->rangeChanged(Dimension::X, xIndex, xRanges[xIndex].range);
+		Q_EMIT q->rangeChanged(Dimension::Y, yIndex, yRanges[yIndex].range);
 	}
 	q->WorksheetElementContainer::retransform();
 }
