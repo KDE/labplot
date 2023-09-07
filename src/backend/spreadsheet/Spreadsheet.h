@@ -105,6 +105,8 @@ public:
 public Q_SLOTS:
 	void appendRows(int);
 	void appendRow();
+	void removeEmptyRows();
+	void maskEmptyRows();
 	void appendColumns(int);
 	void appendColumn();
 	void prependColumns(int);
@@ -129,6 +131,7 @@ public Q_SLOTS:
 private:
 	void init();
 	void initConnectionsLinking(const Spreadsheet* sender, const Spreadsheet* receiver);
+	QVector<int> rowsWithMissingValues() const;
 	Q_DECLARE_PRIVATE(Spreadsheet)
 
 	SpreadsheetPrivate* const d_ptr;

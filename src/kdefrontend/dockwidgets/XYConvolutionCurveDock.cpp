@@ -9,8 +9,6 @@
 */
 
 #include "XYConvolutionCurveDock.h"
-#include "backend/core/AspectTreeModel.h"
-#include "backend/core/Project.h"
 #include "backend/worksheet/plots/cartesian/XYConvolutionCurve.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 
@@ -202,7 +200,6 @@ void XYConvolutionCurveDock::setCurves(QList<XYCurve*> list) {
 	m_curve = list.first();
 	setAspects(list);
 	m_convolutionCurve = static_cast<XYConvolutionCurve*>(m_curve);
-	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
 	this->setModel();
 	m_convolutionData = m_convolutionCurve->convolutionData();
 

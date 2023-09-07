@@ -15,7 +15,7 @@
 #include "backend/matrix/Matrix.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 #include <QStringList>
 #include <QTreeWidgetItem>
 #include <QVector>
@@ -234,14 +234,6 @@ void ExcelFilter::setCurrentRange(const QString& range) {
 
 void ExcelFilter::setCurrentSheet(const QString& sheet) {
 	d->currentSheet = sheet;
-}
-
-void ExcelFilter::loadFilterSettings(const QString& filterName) {
-	Q_UNUSED(filterName)
-}
-
-void ExcelFilter::saveFilterSettings(const QString& filterName) const {
-	Q_UNUSED(filterName)
 }
 
 // ##############################################################################

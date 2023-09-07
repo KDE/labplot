@@ -455,9 +455,8 @@ void CartesianPlotLegendPrivate::retransform() {
 	float legendHeight = layoutTopMargin + layoutBottomMargin; // margins
 	legendHeight += rowCount * h; // height of the rows
 	legendHeight += (rowCount - 1) * layoutVerticalSpacing; // spacing between the rows
-	if (title->isVisible() && !title->text().text.isEmpty()) {
-		legendHeight += title->graphicsItem()->boundingRect().height(); // legend title
-	}
+	if (title->isVisible() && !title->text().text.isEmpty())
+		legendHeight += title->graphicsItem()->boundingRect().height(); // legend titl
 
 	rect.setX(-legendWidth / 2);
 	rect.setY(-legendHeight / 2);
@@ -813,7 +812,9 @@ bool CartesianPlotLegendPrivate::translatePainter(QPainter* painter, int& row, i
 
 			row = 0;
 			painter->restore();
-			int deltaX = lineSymbolWidth + layoutHorizontalSpacing + maxColumnTextWidths.at(col); // the width of the current columns
+
+			double deltaX =
+				lineSymbolWidth + layoutHorizontalSpacing + maxColumnTextWidths.at(col - 1); // width of the current column (subtract 1 because of ++col above)
 			deltaX += 2 * layoutHorizontalSpacing; // spacing between two columns
 			painter->translate(deltaX, 0);
 			painter->save();
@@ -821,7 +822,8 @@ bool CartesianPlotLegendPrivate::translatePainter(QPainter* painter, int& row, i
 	} else { // row major order
 		++col;
 		if (col != columnCount) {
-			int deltaX = lineSymbolWidth + layoutHorizontalSpacing + maxColumnTextWidths.at(col); // the width of the current columns
+			double deltaX =
+				lineSymbolWidth + layoutHorizontalSpacing + maxColumnTextWidths.at(col - 1); // width of the current column (subtract 1 because of ++col above)
 			deltaX += 2 * layoutHorizontalSpacing; // spacing between two columns
 			painter->translate(deltaX, 0);
 		} else {
@@ -912,7 +914,6 @@ bool CartesianPlotLegend::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
@@ -938,7 +939,7 @@ bool CartesianPlotLegend::load(XmlStreamReader* reader, bool preview) {
 			if (Project::xmlVersion() < 6) {
 				str = attribs.value(QStringLiteral("visible")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs(QStringLiteral("visible")).toString());
+					reader->raiseMissingAttributeWarning(QStringLiteral("visible"));
 				else
 					d->setVisible(str.toInt());
 			}
@@ -952,27 +953,43 @@ bool CartesianPlotLegend::load(XmlStreamReader* reader, bool preview) {
 
 				str = attribs.value(QStringLiteral("x")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs(QStringLiteral("x")).toString());
+					reader->raiseMissingAttributeWarning(QStringLiteral("x"));
 				else
 					d->position.point.setX(str.toDouble());
 
 				str = attribs.value(QStringLiteral("y")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs(QStringLiteral("y")).toString());
+					reader->raiseMissingAttributeWarning(QStringLiteral("y"));
 				else
 					d->position.point.setY(str.toDouble());
 
 				str = attribs.value(QStringLiteral("horizontalPosition")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs(QStringLiteral("horizontalPosition")).toString());
-				else
-					d->position.horizontalPosition = (WorksheetElement::HorizontalPosition)str.toInt();
+					reader->raiseMissingAttributeWarning(QStringLiteral("horizontalPosition"));
+				else {
+					const auto pos = (WorksheetElement::HorizontalPosition)str.toInt();
+					if (pos == WorksheetElement::HorizontalPosition::Custom)
+						d->position.horizontalPosition = WorksheetElement::HorizontalPosition::Center;
+					else
+						d->position.horizontalPosition = pos;
+				}
 
 				str = attribs.value(QStringLiteral("verticalPosition")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs(QStringLiteral("verticalPosition")).toString());
-				else
-					d->position.verticalPosition = (WorksheetElement::VerticalPosition)str.toInt();
+					reader->raiseMissingAttributeWarning(QStringLiteral("verticalPosition"));
+				else {
+					const auto pos = (WorksheetElement::VerticalPosition)str.toInt();
+					if (pos == WorksheetElement::VerticalPosition::Custom)
+						d->position.verticalPosition = WorksheetElement::VerticalPosition::Center;
+					else
+						d->position.verticalPosition = pos;
+				}
+
+				// in the old format the order was reversed, multiple by -1 here
+				d->position.point.setY(-d->position.point.y());
+
+				d->horizontalAlignment = WorksheetElement::HorizontalAlignment::Center;
+				d->verticalAlignment = WorksheetElement::VerticalAlignment::Center;
 
 				QGRAPHICSITEM_READ_DOUBLE_VALUE("rotation", Rotation);
 			}
@@ -997,6 +1014,10 @@ bool CartesianPlotLegend::load(XmlStreamReader* reader, bool preview) {
 			READ_DOUBLE_VALUE("verticalSpacing", layoutVerticalSpacing);
 			READ_DOUBLE_VALUE("horizontalSpacing", layoutHorizontalSpacing);
 			READ_INT_VALUE("columnCount", layoutColumnCount, int);
+		} else { // unknown element
+			reader->raiseUnknownElementWarning();
+			if (!reader->skipToEndElement())
+				return false;
 		}
 	}
 

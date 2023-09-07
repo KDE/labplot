@@ -10,8 +10,8 @@
 */
 
 #include "XYCurveDock.h"
-#include "backend/core/AspectTreeModel.h"
 #include "backend/core/Project.h"
+#include "backend/core/Settings.h"
 #include "backend/core/column/Column.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "backend/core/datatypes/Double2StringFilter.h"
@@ -29,7 +29,6 @@
 #include <KConfig>
 #include <KConfigGroup>
 #include <KLocalizedString>
-#include <KSharedConfig>
 
 /*!
   \class XYCurveDock
@@ -84,7 +83,7 @@ XYCurveDock::XYCurveDock(QWidget* parent)
 	layout->insertWidget(0, backgroundWidget);
 
 	// Tab "Error Bars"
-	const KConfigGroup group = KSharedConfig::openConfig()->group(QStringLiteral("Settings_General"));
+	const KConfigGroup group = Settings::group(QStringLiteral("Settings_General"));
 	if (group.readEntry("GUMTerms", false)) {
 		ui.tabWidget->setTabText(ui.tabWidget->indexOf(ui.tabErrorBars), i18n("Uncertainty Bars"));
 		ui.lErrorBarX->setText(i18n("X Uncertainty"));
@@ -169,7 +168,7 @@ XYCurveDock::XYCurveDock(QWidget* parent)
 	layout = new QHBoxLayout(frame);
 	layout->setContentsMargins(0, 11, 0, 11);
 
-	auto* templateHandler = new TemplateHandler(this, TemplateHandler::ClassName::XYCurve);
+	auto* templateHandler = new TemplateHandler(this, QLatin1String("XYCurve"));
 	layout->addWidget(templateHandler);
 	connect(templateHandler, &TemplateHandler::loadConfigRequested, this, &XYCurveDock::loadConfigFromTemplate);
 	connect(templateHandler, &TemplateHandler::saveConfigRequested, this, &XYCurveDock::saveConfigAsTemplate);
@@ -181,10 +180,7 @@ XYCurveDock::XYCurveDock(QWidget* parent)
 	init();
 }
 
-XYCurveDock::~XYCurveDock() {
-	if (m_aspectTreeModel)
-		delete m_aspectTreeModel;
-}
+XYCurveDock::~XYCurveDock() = default;
 
 void XYCurveDock::setupGeneral() {
 	auto* generalTab = new QWidget(ui.tabGeneral);
@@ -394,8 +390,9 @@ QList<AspectType> XYCurveDock::defaultColumnTopLevelClasses() {
 }
 
 void XYCurveDock::setModel() {
-	m_aspectTreeModel->enablePlottableColumnsOnly(true);
-	m_aspectTreeModel->enableShowPlotDesignation(true);
+	auto* model = aspectModel();
+	model->enablePlottableColumnsOnly(true);
+	model->enableShowPlotDesignation(true);
 
 	QList<AspectType> list = defaultColumnTopLevelClasses();
 	list.append(AspectType::XYFitCurve);
@@ -427,17 +424,17 @@ void XYCurveDock::setModel() {
 	else
 		list = {AspectType::Column};
 
-	m_aspectTreeModel->setSelectableAspects(list);
+	model->setSelectableAspects(list);
 
 	if (cbXColumn && cbYColumn) {
-		cbXColumn->setModel(m_aspectTreeModel);
-		cbYColumn->setModel(m_aspectTreeModel);
+		cbXColumn->setModel(model);
+		cbYColumn->setModel(model);
 	}
 
-	cbXErrorMinusColumn->setModel(m_aspectTreeModel);
-	cbXErrorPlusColumn->setModel(m_aspectTreeModel);
-	cbYErrorMinusColumn->setModel(m_aspectTreeModel);
-	cbYErrorPlusColumn->setModel(m_aspectTreeModel);
+	cbXErrorMinusColumn->setModel(model);
+	cbXErrorPlusColumn->setModel(model);
+	cbYErrorMinusColumn->setModel(model);
+	cbYErrorPlusColumn->setModel(model);
 
 	// for value labels we need a dedicated model since we also want to allow
 	// to select text columns and we don't want to call enablePlottableColumnsOnly().
@@ -476,7 +473,6 @@ void XYCurveDock::setCurves(QList<XYCurve*> list) {
 	m_curve = list.first();
 	setAspects(list);
 	Q_ASSERT(m_curve);
-	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
 	setModel();
 	initGeneralTab();
 	initTabs();
@@ -506,24 +502,6 @@ void XYCurveDock::setSymbols(QList<XYCurve*> curves) {
 }
 
 void XYCurveDock::initGeneralTab() {
-	DEBUG(Q_FUNC_INFO);
-	// if there is more than one curve in the list, disable the content in the tab "general"
-	if (m_curvesList.size() == 1) {
-		uiGeneralTab.lName->setEnabled(true);
-		uiGeneralTab.leName->setEnabled(true);
-		uiGeneralTab.lComment->setEnabled(true);
-		uiGeneralTab.teComment->setEnabled(true);
-		uiGeneralTab.leName->setText(m_curve->name());
-		uiGeneralTab.teComment->setText(m_curve->comment());
-	} else {
-		uiGeneralTab.lName->setEnabled(false);
-		uiGeneralTab.leName->setEnabled(false);
-		uiGeneralTab.lComment->setEnabled(false);
-		uiGeneralTab.teComment->setEnabled(false);
-		uiGeneralTab.leName->setText(QString());
-		uiGeneralTab.teComment->setText(QString());
-	}
-
 	// show the properties of the first curve
 	cbXColumn->setColumn(m_curve->xColumn(), m_curve->xColumnPath());
 	cbYColumn->setColumn(m_curve->yColumn(), m_curve->yColumnPath());
@@ -539,7 +517,6 @@ void XYCurveDock::initGeneralTab() {
 	connect(m_curve, &WorksheetElement::plotRangeListChanged, this, &XYCurveDock::updatePlotRanges);
 	connect(m_curve, &XYCurve::legendVisibleChanged, this, &XYCurveDock::curveLegendVisibleChanged);
 	connect(m_curve, &WorksheetElement::visibleChanged, this, &XYCurveDock::curveVisibilityChanged);
-	DEBUG(Q_FUNC_INFO << " DONE");
 }
 
 void XYCurveDock::initTabs() {
@@ -1297,14 +1274,7 @@ void XYCurveDock::load() {
 }
 
 void XYCurveDock::loadConfigFromTemplate(KConfig& config) {
-	// extract the name of the template from the file name
-	QString name;
-	int index = config.name().lastIndexOf(QLatin1String("/"));
-	if (index != -1)
-		name = config.name().right(config.name().size() - index - 1);
-	else
-		name = config.name();
-
+	auto name = TemplateHandler::templateName(config);
 	int size = m_curvesList.size();
 	if (size > 1)
 		m_curve->beginMacro(i18n("%1 xy-curves: template \"%2\" loaded", size, name));

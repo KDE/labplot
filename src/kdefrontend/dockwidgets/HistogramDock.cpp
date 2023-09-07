@@ -4,15 +4,14 @@
 	Description          : widget for Histogram properties
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2016 Anu Mittal <anu22mittal@gmail.com>
-	SPDX-FileCopyrightText: 2018-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2018-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2021-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "HistogramDock.h"
-#include "backend/core/AspectTreeModel.h"
-#include "backend/core/Project.h"
+#include "backend/core/Settings.h"
 #include "backend/core/column/Column.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "backend/core/datatypes/Double2StringFilter.h"
@@ -78,7 +77,7 @@ HistogramDock::HistogramDock(QWidget* parent)
 	layout->insertWidget(0, backgroundWidget);
 
 	// Tab "Error Bars"
-	const KConfigGroup group = KSharedConfig::openConfig()->group(QStringLiteral("Settings_General"));
+	const KConfigGroup group = Settings::group(QStringLiteral("Settings_General"));
 	if (group.readEntry("GUMTerms", false)) {
 		ui.tabWidget->setTabText(ui.tabWidget->indexOf(ui.tabErrorBars), i18n("Uncertainty Bars"));
 		ui.lErrorBar->setText(i18n("X Uncertainty"));
@@ -146,7 +145,7 @@ HistogramDock::HistogramDock(QWidget* parent)
 	layout = new QHBoxLayout(frame);
 	layout->setContentsMargins(0, 11, 0, 11);
 
-	auto* templateHandler = new TemplateHandler(this, TemplateHandler::ClassName::Histogram);
+	auto* templateHandler = new TemplateHandler(this, QLatin1String("Histogram"));
 	layout->addWidget(templateHandler);
 	connect(templateHandler, &TemplateHandler::loadConfigRequested, this, &HistogramDock::loadConfigFromTemplate);
 	connect(templateHandler, &TemplateHandler::saveConfigRequested, this, &HistogramDock::saveConfigAsTemplate);
@@ -159,10 +158,7 @@ HistogramDock::HistogramDock(QWidget* parent)
 	init();
 }
 
-HistogramDock::~HistogramDock() {
-	if (m_aspectTreeModel)
-		delete m_aspectTreeModel;
-}
+HistogramDock::~HistogramDock() = default;
 
 void HistogramDock::init() {
 	// General
@@ -191,7 +187,7 @@ void HistogramDock::init() {
 	ui.cbNormalization->addItem(i18n("Probability Density"));
 
 	// Error-bars
-	const KConfigGroup group = KSharedConfig::openConfig()->group(QStringLiteral("Settings_General"));
+	const KConfigGroup group = Settings::group(QStringLiteral("Settings_General"));
 	if (group.readEntry("GUMTerms", false)) {
 		ui.cbErrorType->addItem(i18n("No Uncertainties"));
 		ui.cbErrorType->addItem(i18n("Poisson variance, sqrt(N)"));
@@ -206,8 +202,9 @@ void HistogramDock::init() {
 }
 
 void HistogramDock::setModel() {
-	m_aspectTreeModel->enablePlottableColumnsOnly(true);
-	m_aspectTreeModel->enableShowPlotDesignation(true);
+	auto* model = aspectModel();
+	model->enablePlottableColumnsOnly(true);
+	model->enableShowPlotDesignation(true);
 
 	QList<AspectType> list{AspectType::Folder,
 						   AspectType::Workbook,
@@ -227,11 +224,11 @@ void HistogramDock::setModel() {
 	cbErrorMinusColumn->setTopLevelClasses(list);
 
 	list = {AspectType::Column};
-	m_aspectTreeModel->setSelectableAspects(list);
+	model->setSelectableAspects(list);
 
-	cbDataColumn->setModel(m_aspectTreeModel);
-	cbErrorPlusColumn->setModel(m_aspectTreeModel);
-	cbErrorMinusColumn->setModel(m_aspectTreeModel);
+	cbDataColumn->setModel(model);
+	cbErrorPlusColumn->setModel(model);
+	cbErrorMinusColumn->setModel(model);
 }
 
 void HistogramDock::setCurves(QList<Histogram*> list) {
@@ -240,7 +237,6 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 	m_curve = list.first();
 	setAspects(list);
 	Q_ASSERT(m_curve);
-	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
 	setModel();
 
 	// initialize widgets for common properties
@@ -264,37 +260,16 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 
 	// if there are more than one curve in the list, disable the content in the tab "general"
 	if (m_curvesList.size() == 1) {
-		ui.lName->setEnabled(true);
-		ui.leName->setEnabled(true);
-		ui.lComment->setEnabled(true);
-		ui.teComment->setEnabled(true);
-
-		ui.lXColumn->setEnabled(true);
 		cbDataColumn->setEnabled(true);
-
 		cbDataColumn->setColumn(m_curve->dataColumn(), m_curve->dataColumnPath());
 		cbErrorPlusColumn->setColumn(m_curve->errorPlusColumn(), m_curve->errorPlusColumnPath());
 		cbErrorMinusColumn->setColumn(m_curve->errorMinusColumn(), m_curve->errorMinusColumnPath());
-		ui.leName->setText(m_curve->name());
-		ui.teComment->setText(m_curve->comment());
 	} else {
-		ui.lName->setEnabled(false);
-		ui.leName->setEnabled(false);
-		ui.lComment->setEnabled(false);
-		ui.teComment->setEnabled(false);
-
-		ui.lXColumn->setEnabled(false);
 		cbDataColumn->setEnabled(false);
 		cbDataColumn->setCurrentModelIndex(QModelIndex());
 		cbErrorPlusColumn->setCurrentModelIndex(QModelIndex());
 		cbErrorMinusColumn->setCurrentModelIndex(QModelIndex());
-
-		ui.leName->setText(QString());
-		ui.teComment->setText(QString());
 	}
-
-	ui.leName->setStyleSheet(QString());
-	ui.leName->setToolTip(QString());
 
 	// show the properties of the first curve
 	const auto numberLocale = QLocale();
@@ -759,14 +734,7 @@ void HistogramDock::loadConfig(KConfig& config) {
 }
 
 void HistogramDock::loadConfigFromTemplate(KConfig& config) {
-	// extract the name of the template from the file name
-	QString name;
-	int index = config.name().lastIndexOf(QLatin1String("/"));
-	if (index != -1)
-		name = config.name().right(config.name().size() - index - 1);
-	else
-		name = config.name();
-
+	auto name = TemplateHandler::templateName(config);
 	int size = m_curvesList.size();
 	if (size > 1)
 		m_curve->beginMacro(i18n("%1 histograms: template \"%2\" loaded", size, name));

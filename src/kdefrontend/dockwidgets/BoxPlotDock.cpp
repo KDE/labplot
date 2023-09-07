@@ -9,8 +9,6 @@
 
 #include "BoxPlotDock.h"
 #include "backend/core/AbstractColumn.h"
-#include "backend/core/AspectTreeModel.h"
-#include "backend/core/Project.h"
 #include "backend/lib/macros.h"
 #include "backend/worksheet/Worksheet.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
@@ -160,7 +158,7 @@ BoxPlotDock::BoxPlotDock(QWidget* parent)
 	auto* layout = new QHBoxLayout(frame);
 	layout->setContentsMargins(0, 11, 0, 11);
 
-	auto* templateHandler = new TemplateHandler(this, TemplateHandler::ClassName::Worksheet);
+	auto* templateHandler = new TemplateHandler(this, QLatin1String("BoxPlot"));
 	layout->addWidget(templateHandler);
 	connect(templateHandler, &TemplateHandler::loadConfigRequested, this, &BoxPlotDock::loadConfigFromTemplate);
 	connect(templateHandler, &TemplateHandler::saveConfigRequested, this, &BoxPlotDock::saveConfigAsTemplate);
@@ -175,31 +173,7 @@ void BoxPlotDock::setBoxPlots(QList<BoxPlot*> list) {
 	m_boxPlot = list.first();
 	setAspects(list);
 	Q_ASSERT(m_boxPlot);
-	m_aspectTreeModel = new AspectTreeModel(m_boxPlot->project());
 	setModel();
-
-	// if there is more than one point in the list, disable the comment and name widgets in "general"
-	if (list.size() == 1) {
-		ui.lName->setEnabled(true);
-		ui.leName->setEnabled(true);
-		ui.lComment->setEnabled(true);
-		ui.teComment->setEnabled(true);
-		ui.leName->setText(m_boxPlot->name());
-		ui.teComment->setText(m_boxPlot->comment());
-
-		ui.lDataColumn->setEnabled(true);
-	} else {
-		ui.lName->setEnabled(false);
-		ui.leName->setEnabled(false);
-		ui.lComment->setEnabled(false);
-		ui.teComment->setEnabled(false);
-		ui.leName->setText(QString());
-		ui.teComment->setText(QString());
-
-		ui.lDataColumn->setEnabled(false);
-	}
-	ui.leName->setStyleSheet(QString());
-	ui.leName->setToolTip(QString());
 
 	QList<Background*> backgrounds;
 	QList<Line*> borderLines;
@@ -256,11 +230,12 @@ void BoxPlotDock::setBoxPlots(QList<BoxPlot*> list) {
 }
 
 void BoxPlotDock::setModel() {
-	m_aspectTreeModel->enablePlottableColumnsOnly(true);
-	m_aspectTreeModel->enableShowPlotDesignation(true);
+	auto* model = aspectModel();
+	model->enablePlottableColumnsOnly(true);
+	model->enableShowPlotDesignation(true);
 
 	QList<AspectType> list{AspectType::Column};
-	m_aspectTreeModel->setSelectableAspects(list);
+	model->setSelectableAspects(list);
 }
 
 /*
@@ -355,7 +330,7 @@ void BoxPlotDock::addDataColumn() {
 										AspectType::XYSmoothCurve,
 										AspectType::CantorWorksheet};
 	cb->setTopLevelClasses(list);
-	cb->setModel(m_aspectTreeModel);
+	cb->setModel(aspectModel());
 	connect(cb, &TreeViewComboBox::currentModelIndexChanged, this, &BoxPlotDock::dataColumnChanged);
 
 	int index = m_dataComboBoxes.size();
@@ -753,14 +728,7 @@ void BoxPlotDock::loadConfig(KConfig& config) {
 }
 
 void BoxPlotDock::loadConfigFromTemplate(KConfig& config) {
-	// extract the name of the template from the file name
-	QString name;
-	int index = config.name().lastIndexOf(QLatin1Char('/'));
-	if (index != -1)
-		name = config.name().right(config.name().size() - index - 1);
-	else
-		name = config.name();
-
+	auto name = TemplateHandler::templateName(config);
 	int size = m_boxPlots.size();
 	if (size > 1)
 		m_boxPlot->beginMacro(i18n("%1 box plots: template \"%2\" loaded", size, name));

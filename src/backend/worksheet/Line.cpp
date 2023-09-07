@@ -19,6 +19,7 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 
+#include <KConfigGroup>
 #include <KLocalizedString>
 
 Line::Line(const QString& name)
@@ -221,9 +222,7 @@ bool Line::load(XmlStreamReader* reader, bool preview) {
 		return true;
 
 	Q_D(Line);
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QString str;
-
 	auto attribs = reader->attributes();
 
 	if (d->histogramLineTypeAvailable)

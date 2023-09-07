@@ -11,6 +11,7 @@
 
 #include "CartesianPlotDock.h"
 #include "backend/core/Project.h"
+#include "backend/core/Settings.h"
 #include "backend/core/column/Column.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
 #include "kdefrontend/widgets/BackgroundWidget.h"
@@ -214,7 +215,7 @@ CartesianPlotDock::CartesianPlotDock(QWidget* parent)
 	connect(m_themeHandler, &ThemeHandler::info, this, &CartesianPlotDock::info);
 
 	// templates for plot properties
-	auto* templateHandler = new TemplateHandler(this, TemplateHandler::ClassName::CartesianPlot);
+	auto* templateHandler = new TemplateHandler(this, QLatin1String("CartesianPlot"));
 	layout->addWidget(templateHandler);
 	connect(templateHandler, &TemplateHandler::loadConfigRequested, this, &CartesianPlotDock::loadConfigFromTemplate);
 	connect(templateHandler, &TemplateHandler::saveConfigRequested, this, &CartesianPlotDock::saveConfigAsTemplate);
@@ -374,25 +375,6 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list) {
 
 	labelWidget->setLabels(labels);
 
-	// if there is more than one plot in the list, disable the name and comment fields in the tab "general"
-	if (list.size() == 1) {
-		ui.lName->setEnabled(true);
-		ui.leName->setEnabled(true);
-		ui.lComment->setEnabled(true);
-		ui.teComment->setEnabled(true);
-
-		ui.leName->setText(m_plot->name());
-		ui.teComment->setText(m_plot->comment());
-	} else {
-		ui.lName->setEnabled(false);
-		ui.leName->setEnabled(false);
-		ui.lComment->setEnabled(false);
-		ui.teComment->setEnabled(false);
-
-		ui.leName->setText(QString());
-		ui.teComment->setText(QString());
-	}
-
 	symmetricPaddingChanged(m_plot->symmetricPadding());
 
 	ui.leName->setStyleSheet(QString());
@@ -542,7 +524,7 @@ void CartesianPlotDock::updateLocale() {
 }
 
 void CartesianPlotDock::updateUnits() {
-	const KConfigGroup group = KSharedConfig::openConfig()->group(QStringLiteral("Settings_General"));
+	const KConfigGroup group = Settings::group(QStringLiteral("Settings_General"));
 	BaseDock::Units units = (BaseDock::Units)group.readEntry("Units", static_cast<int>(Units::Metric));
 	if (units == m_units)
 		return;
@@ -708,7 +690,7 @@ void CartesianPlotDock::updateRangeList(const Dimension dim) {
 		cb->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
 		cb->setFrame(false);
 		// TODO: -> updateLocale()
-		for (const auto& name : RangeT::scaleNames())
+		for (const auto& name : RangeT::scaleNames)
 			cb->addItem(name);
 
 		cb->setCurrentIndex(static_cast<int>(scale));
@@ -1805,14 +1787,7 @@ void CartesianPlotDock::plotBorderCornerRadiusChanged(double value) {
 //******************** SETTINGS *******************************
 //*************************************************************
 void CartesianPlotDock::loadConfigFromTemplate(KConfig& config) {
-	// extract the name of the template from the file name
-	QString name;
-	int index = config.name().lastIndexOf(QLatin1Char('/'));
-	if (index != -1)
-		name = config.name().right(config.name().size() - index - 1);
-	else
-		name = config.name();
-
+	auto name = TemplateHandler::templateName(config);
 	int size = m_plotList.size();
 	if (size > 1)
 		m_plot->beginMacro(i18n("%1 cartesian plots: template \"%2\" loaded", size, name));

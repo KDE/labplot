@@ -457,18 +457,17 @@ bool WorksheetElement::load(XmlStreamReader* reader, bool preview) {
 		return true;
 
 	Q_D(WorksheetElement);
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	auto attribs = reader->attributes();
 
 	auto str = attribs.value(QStringLiteral("x")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs(QStringLiteral("x")).toString());
+		reader->raiseMissingAttributeWarning(QStringLiteral("x"));
 	else
 		d->position.point.setX(str.toDouble());
 
 	str = attribs.value(QStringLiteral("y")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs(QStringLiteral("y")).toString());
+		reader->raiseMissingAttributeWarning(QStringLiteral("y"));
 	else
 		d->position.point.setY(str.toDouble());
 
@@ -510,7 +509,7 @@ bool WorksheetElement::load(XmlStreamReader* reader, bool preview) {
 	} else {
 		str = attribs.value(QStringLiteral("rotationAngle")).toString();
 		if (str.isEmpty())
-			reader->raiseWarning(attributeWarning.subs(QStringLiteral("rotationAngle")).toString());
+			reader->raiseMissingAttributeWarning(QStringLiteral("rotationAngle"));
 		else
 			d->setRotation(-1 * str.toDouble());
 	}
@@ -518,7 +517,7 @@ bool WorksheetElement::load(XmlStreamReader* reader, bool preview) {
 
 	str = attribs.value(QStringLiteral("visible")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs(QStringLiteral("visible")).toString());
+		reader->raiseMissingAttributeWarning(QStringLiteral("visible"));
 	else
 		d->setVisible(str.toInt());
 
@@ -526,13 +525,13 @@ bool WorksheetElement::load(XmlStreamReader* reader, bool preview) {
 
 	str = attribs.value(QStringLiteral("logicalPosX")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs(QStringLiteral("logicalPosX")).toString());
+		reader->raiseMissingAttributeWarning(QStringLiteral("logicalPosX"));
 	else
 		d->positionLogical.setX(str.toDouble());
 
 	str = attribs.value(QStringLiteral("logicalPosY")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs(QStringLiteral("logicalPosY")).toString());
+		reader->raiseMissingAttributeWarning(QStringLiteral("logicalPosY"));
 	else
 		d->positionLogical.setY(str.toDouble());
 

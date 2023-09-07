@@ -34,6 +34,8 @@ public:
 	bool failedCASMissing() const;
 
 	void raiseWarning(const QString&);
+	void raiseMissingAttributeWarning(const QString&);
+	void raiseUnknownElementWarning();
 	void raiseMissingCASWarning(const QString&);
 	void raiseError(const QString&);
 

@@ -4,7 +4,7 @@
 	Description          : import file data widget
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2009-2017 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
-	SPDX-FileCopyrightText: 2009-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2009-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2017-2018 Fabian Kristof <fkristofszabolcs@gmail.com>
 	SPDX-FileCopyrightText: 2018-2019 Kovacs Ferencz <kferike98@gmail.com>
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -37,12 +37,15 @@ class MatioOptionsWidget;
 class NetCDFOptionsWidget;
 class OdsOptionsWidget;
 class ROOTOptionsWidget;
+class TemplateHandler;
 
 class QTableWidget;
 class QCompleter;
 class QTimer;
 class QTreeWidgetItem;
 class QStringList;
+
+class KConfig;
 class KUrlComboBox;
 
 class ImportFileWidget : public QWidget {
@@ -118,6 +121,7 @@ private:
 	bool m_importValid{false};
 	bool m_liveDataSource;
 	bool m_suppressRefresh{false};
+	TemplateHandler* m_templateHandler{nullptr};
 
 Q_SIGNALS:
 	void enableImportToMatrix(bool enable);
@@ -136,8 +140,6 @@ private Q_SLOTS:
 	void readingTypeChanged(int);
 	void excelFirstRowAsColNamesChanged(bool checked);
 
-	void saveFilter();
-	void manageFilters();
 	void hidePropertyWidgets();
 	void filterChanged(int);
 	void selectFile();
@@ -145,8 +147,11 @@ private Q_SLOTS:
 	void showFileInfo();
 	void refreshPreview();
 	void updateStartRow(int);
-
 	void enableDataPortionSelection(bool);
+
+	// save/load template
+	void loadConfigFromTemplate(KConfig&);
+	void saveConfigAsTemplate(KConfig&);
 
 	friend class HDF5OptionsWidget; // to access refreshPreview()
 	friend class MatioOptionsWidget; // to access refreshPreview() and others

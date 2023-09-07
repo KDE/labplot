@@ -10,6 +10,7 @@
 #include "ImportProjectDialog.h"
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/Project.h"
+#include "backend/core/Settings.h"
 #include "backend/datasources/projects/LabPlotProjectParser.h"
 #ifdef HAVE_LIBORIGIN
 #include "backend/datasources/projects/OriginProjectParser.h"
@@ -20,7 +21,7 @@
 
 #include <KLocalizedString>
 #include <KMessageBox>
-#include <KSharedConfig>
+
 #include <KUrlComboBox>
 #include <KWindowConfig>
 #include <kcoreaddons_version.h>
@@ -132,7 +133,7 @@ ImportProjectDialog::ImportProjectDialog(MainWin* parent, ProjectType type)
 
 	// restore saved settings if available
 	create(); // ensure there's a window created
-	KConfigGroup conf(KSharedConfig::openConfig(), "ImportProjectDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("ImportProjectDialog"));
 	if (conf.exists()) {
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
 		resize(windowHandle()->size()); // workaround for QTBUG-40584
@@ -162,7 +163,7 @@ ImportProjectDialog::ImportProjectDialog(MainWin* parent, ProjectType type)
 
 ImportProjectDialog::~ImportProjectDialog() {
 	// save current settings
-	KConfigGroup conf(KSharedConfig::openConfig(), "ImportProjectDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("ImportProjectDialog"));
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 
 	QString file;
@@ -366,7 +367,7 @@ void ImportProjectDialog::selectionChanged(const QItemSelection& selected, const
 	opens a file dialog and lets the user select the project file.
 */
 void ImportProjectDialog::selectFile() {
-	KConfigGroup conf(KSharedConfig::openConfig(), "ImportProjectDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("ImportProjectDialog"));
 
 	QString title;
 	QString lastDir;

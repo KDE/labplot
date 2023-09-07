@@ -19,6 +19,7 @@
 #include <QImageReader>
 #include <QLocale>
 #include <QProcess>
+#include <QStandardPaths>
 
 bool AbstractFileFilter::isNan(const QString& s) {
 	const static QStringList nanStrings{QStringLiteral("NA"),

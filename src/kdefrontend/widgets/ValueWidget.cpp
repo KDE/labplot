@@ -1,10 +1,10 @@
 /*
-	File                 : ValueWidget.cpp
-	Project              : LabPlot
-	Description          : values settings widget
-	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2022 Alexander Semke <alexander.semke@web.de>
-	SPDX-License-Identifier: GPL-2.0-or-later
+								File                 : ValueWidget.cpp
+								Project              : LabPlot
+								Description          : values settings widget
+								--------------------------------------------------------------------
+								SPDX-FileCopyrightText: 2022 Alexander Semke
+   <alexander.semke@web.de> SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "ValueWidget.h"
@@ -16,14 +16,14 @@
 
 /*!
 	\class ValueWidget
-	\brief Widget for editing the properties of a Value object, mostly used in an appropriate dock widget.
+	\brief Widget for editing the properties of a
+   Value object, mostly used in an appropriate dock widget.
 
 	\ingroup kdefrontend
  */
 ValueWidget::ValueWidget(QWidget* parent)
 	: QWidget(parent) {
 	ui.setupUi(this);
-
 	auto* gridLayout = static_cast<QGridLayout*>(layout());
 	cbColumn = new TreeViewComboBox(this);
 	gridLayout->addWidget(cbColumn, 2, 2, 1, 1);
@@ -83,6 +83,11 @@ void ValueWidget::setValues(const QList<Value*>& values) {
 	m_aspectTreeModel->enablePlottableColumnsOnly(true);
 	m_aspectTreeModel->enableShowPlotDesignation(true);
 
+	// add center value if position is available
+	if (m_value->centerPositionAvailable())
+		if (!ui.cbPosition->contains(i18n("Center")))
+			ui.cbPosition->addItem(i18n("Center"));
+
 	QList<AspectType> list{AspectType::Folder,
 						   AspectType::Workbook,
 						   AspectType::Datapicker,
@@ -137,9 +142,10 @@ void ValueWidget::typeChanged(int index) {
 }
 
 /*!
-  depending on the currently selected values column type (column mode) updates the widgets for the values column format,
-  shows/hides the allowed widgets, fills the corresponding combobox with the possible entries.
-  Called when the values column was changed.
+  depending on the currently selected values column type (column mode) updates
+  the widgets for the values column format, shows/hides the allowed widgets,
+  fills the corresponding combobox with the possible entries. Called when the
+  values column was changed.
 */
 void ValueWidget::updateWidgets() {
 	const auto type = Value::Type(ui.cbType->currentIndex());

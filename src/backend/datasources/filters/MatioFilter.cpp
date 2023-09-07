@@ -247,19 +247,6 @@ void MatioFilter::write(const QString& fileName, AbstractDataSource* dataSource)
 }
 
 ///////////////////////////////////////////////////////////////////////
-/*!
-  loads the predefined filter settings for \c filterName
-*/
-void MatioFilter::loadFilterSettings(const QString& /*filterName*/) {
-}
-
-/*!
-  saves the current settings as a new filter with the name \c filterName
-*/
-void MatioFilter::saveFilterSettings(const QString& /*filterName*/) const {
-}
-
-///////////////////////////////////////////////////////////////////////
 
 void MatioFilter::setCurrentVarName(const QString& name) {
 	d->currentVarName = name;
@@ -1267,7 +1254,5 @@ void MatioFilter::save(QXmlStreamWriter* writer) const {
   Loads from XML.
 */
 bool MatioFilter::load(XmlStreamReader*) {
-	// 	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
-	// 	QXmlStreamAttributes attribs = reader->attributes();
 	return true;
 }

@@ -9,12 +9,17 @@
 */
 
 #include "ImageDock.h"
+#include "backend/core/Settings.h"
 #include "backend/worksheet/Image.h"
 #include "backend/worksheet/Worksheet.h"
 #include "kdefrontend/GuiTools.h"
 #include "kdefrontend/TemplateHandler.h"
 #include "kdefrontend/ThemeHandler.h"
 #include "kdefrontend/widgets/LineWidget.h"
+
+#include <KConfig>
+#include <KConfigGroup>
+#include <KLocalizedString>
 
 #include <QCompleter>
 // see https://gitlab.kitware.com/cmake/cmake/-/issues/21609
@@ -24,9 +29,6 @@
 #include <QDirModel>
 #endif
 #include <QPageSize>
-
-#include <KConfig>
-#include <KLocalizedString>
 
 /*!
   \class ImageDock
@@ -126,27 +128,6 @@ void ImageDock::setImages(QList<Image*> list) {
 
 	updateLocale();
 
-	// if there are more than one image in the list, disable the name and comment field in the tab "general"
-	if (list.size() == 1) {
-		ui.lName->setEnabled(true);
-		ui.leName->setEnabled(true);
-		ui.lComment->setEnabled(true);
-		ui.teComment->setEnabled(true);
-
-		ui.leName->setText(m_image->name());
-		ui.teComment->setText(m_image->comment());
-	} else {
-		ui.lName->setEnabled(false);
-		ui.leName->setEnabled(false);
-		ui.lComment->setEnabled(false);
-		ui.teComment->setEnabled(false);
-
-		ui.leName->setText(QString());
-		ui.teComment->setText(QString());
-	}
-	ui.leName->setStyleSheet(QString());
-	ui.leName->setToolTip(QString());
-
 	QList<Line*> lines;
 	for (auto* image : m_imageList)
 		lines << image->borderLine();
@@ -191,7 +172,7 @@ void ImageDock::updateLocale() {
 }
 
 void ImageDock::updateUnits() {
-	const KConfigGroup group = KSharedConfig::openConfig()->group(QStringLiteral("Settings_General"));
+	const KConfigGroup group = Settings::group(QStringLiteral("Settings_General"));
 	BaseDock::Units units = (BaseDock::Units)group.readEntry("Units", static_cast<int>(Units::Metric));
 	if (units == m_units)
 		return;

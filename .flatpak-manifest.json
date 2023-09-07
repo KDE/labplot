@@ -278,8 +278,8 @@
             "sources": [
                 {
                     "type": "git",
-                    "url": "https://github.com/Murmele/dbc_parser_cpp.git",
-                    "tag": "ca69d0dd08a03fc0210820a4f81bfd217ad25722"
+                    "url": "https://github.com/LinuxDevon/dbc_parser_cpp.git",
+                    "tag": "0f3b22b3fe124976a86a85fcd1bfdd55c20ca428"
                 }
             ]
         },

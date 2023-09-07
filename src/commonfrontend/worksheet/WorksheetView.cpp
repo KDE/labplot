@@ -12,6 +12,7 @@
 #include "backend/core/AbstractAspect.h"
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/Project.h"
+#include "backend/core/Settings.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/trace.h"
 #include "backend/worksheet/Background.h"
@@ -2521,7 +2522,7 @@ Worksheet::CartesianPlotActionMode WorksheetView::getCartesianPlotActionMode() {
 
 void WorksheetView::presenterMode() {
 #ifndef SDK
-	const auto& group = KSharedConfig::openConfig()->group("Settings_Worksheet");
+	const auto& group = Settings::group(QStringLiteral("Settings_Worksheet"));
 	const bool interactive = group.readEntry("PresenterModeInteractive", false);
 	auto* presenterWidget = new PresenterWidget(m_worksheet, interactive);
 	presenterWidget->showFullScreen();

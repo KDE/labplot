@@ -10,8 +10,6 @@
 */
 
 #include "XYDifferentiationCurveDock.h"
-#include "backend/core/AspectTreeModel.h"
-#include "backend/core/Project.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/XYDifferentiationCurve.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
@@ -193,7 +191,6 @@ void XYDifferentiationCurveDock::setCurves(QList<XYCurve*> list) {
 	m_curve = list.first();
 	setAspects(list);
 	m_differentiationCurve = static_cast<XYDifferentiationCurve*>(m_curve);
-	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
 	this->setModel();
 	m_differentiationData = m_differentiationCurve->differentiationData();
 

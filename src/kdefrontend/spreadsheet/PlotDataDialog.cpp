@@ -11,6 +11,7 @@
 #include "PlotDataDialog.h"
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/Project.h"
+#include "backend/core/Settings.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/Range.h"
 #include "backend/spreadsheet/Spreadsheet.h"
@@ -42,7 +43,7 @@
 #include <QWindow>
 
 #include <KConfigGroup>
-#include <KSharedConfig>
+
 #include <KWindowConfig>
 
 #include "ui_plotdatawidget.h"
@@ -143,7 +144,7 @@ PlotDataDialog::PlotDataDialog(Spreadsheet* s, PlotType type, QWidget* parent)
 
 	// restore saved settings if available
 	create(); // ensure there's a window created
-	KConfigGroup conf(KSharedConfig::openConfig(), "PlotDataDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("PlotDataDialog"));
 	if (conf.exists()) {
 		int index = conf.readEntry("CurvePlacement", 0);
 		if (index == 2)
@@ -166,7 +167,7 @@ PlotDataDialog::PlotDataDialog(Spreadsheet* s, PlotType type, QWidget* parent)
 
 PlotDataDialog::~PlotDataDialog() {
 	// save current settings
-	KConfigGroup conf(KSharedConfig::openConfig(), "PlotDataDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("PlotDataDialog"));
 	int index = 0;
 	if (ui->rbCurvePlacementAllInOnePlotArea->isChecked())
 		index = 1;
@@ -868,7 +869,7 @@ void PlotDataDialog::setAxesTitles(CartesianPlot* plot, const QString& name) con
 			count = m_columnComboBoxes.count(); // all box plots in one single plot
 
 		// set the range of the plot and the number of ticks manuall.
-		// the n-th box plot is positioned at x=n and and has the width=0.5 in logical coordinatates.
+		// the n-th box plot is positioned at x=n and has the width=0.5 in logical coordinatates.
 		// manually set the range to (0.5, n+0.5) and ajdust the number of ticks starting at 0.5
 		// to make sure we have every tick precisely under the middle of the box plot
 		const auto xIndex = plot->coordinateSystem(boxPlot->coordinateSystemIndex())->index(Dimension::X);

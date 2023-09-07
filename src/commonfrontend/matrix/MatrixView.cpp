@@ -37,6 +37,7 @@
 #include <QScrollArea>
 #include <QShortcut>
 #include <QStackedWidget>
+#include <QStandardPaths>
 #include <QTableView>
 #include <QTextStream>
 #include <QThreadPool>
@@ -785,7 +786,7 @@ public:
 			for (int col = 0; col < m_image.width(); ++col) {
 				const double value = (data->operator[](col))[row];
 				if (!std::isnan(value) && !std::isinf(value)) {
-					int index = (value - m_min) / range;
+					const int index = range != 0 ? (value - m_min) / range : 0;
 					QColor color;
 					if (index < m_colors.count())
 						color = m_colors.at(index);

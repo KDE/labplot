@@ -9,6 +9,7 @@
 */
 
 #include "CartesianPlotLegendDock.h"
+#include "backend/core/Settings.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/PlotArea.h"
 #include "kdefrontend/GuiTools.h"
@@ -100,7 +101,7 @@ CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget* parent)
 	auto* layout = new QHBoxLayout(frame);
 	layout->setContentsMargins(0, 11, 0, 11);
 
-	auto* templateHandler = new TemplateHandler(this, TemplateHandler::ClassName::CartesianPlotLegend);
+	auto* templateHandler = new TemplateHandler(this, QLatin1String("CartesianPlotLegend"));
 	layout->addWidget(templateHandler);
 	connect(templateHandler, &TemplateHandler::loadConfigRequested, this, &CartesianPlotLegendDock::loadConfigFromTemplate);
 	connect(templateHandler, &TemplateHandler::saveConfigRequested, this, &CartesianPlotLegendDock::saveConfigAsTemplate);
@@ -120,27 +121,6 @@ void CartesianPlotLegendDock::setLegends(QList<CartesianPlotLegend*> list) {
 	m_legendList = list;
 	m_legend = list.first();
 	setAspects(list);
-
-	// if there is more than one legend in the list, disable the tab "general"
-	if (list.size() == 1) {
-		ui.lName->setEnabled(true);
-		ui.leName->setEnabled(true);
-		ui.lComment->setEnabled(true);
-		ui.teComment->setEnabled(true);
-
-		ui.leName->setText(m_legend->name());
-		ui.teComment->setText(m_legend->comment());
-	} else {
-		ui.lName->setEnabled(false);
-		ui.leName->setEnabled(false);
-		ui.lComment->setEnabled(false);
-		ui.teComment->setEnabled(false);
-
-		ui.leName->setText(QString());
-		ui.teComment->setText(QString());
-	}
-	ui.leName->setStyleSheet(QString());
-	ui.leName->setToolTip(QString());
 
 	// show the properties of the first curve
 	this->load();
@@ -198,7 +178,7 @@ void CartesianPlotLegendDock::updateLocale() {
 }
 
 void CartesianPlotLegendDock::updateUnits() {
-	const KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
+	const KConfigGroup group = Settings::group(QStringLiteral("Settings_General"));
 	BaseDock::Units units = (BaseDock::Units)group.readEntry("Units", static_cast<int>(Units::Metric));
 	if (units == m_units)
 		return;
@@ -707,14 +687,7 @@ void CartesianPlotLegendDock::load() {
 }
 
 void CartesianPlotLegendDock::loadConfigFromTemplate(KConfig& config) {
-	// extract the name of the template from the file name
-	QString name;
-	int index = config.name().lastIndexOf(QLatin1String("/"));
-	if (index != -1)
-		name = config.name().right(config.name().size() - index - 1);
-	else
-		name = config.name();
-
+	auto name = TemplateHandler::templateName(config);
 	int size = m_legendList.size();
 	if (size > 1)
 		m_legend->beginMacro(i18n("%1 cartesian plot legends: template \"%2\" loaded", size, name));

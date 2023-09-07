@@ -9,8 +9,10 @@
 */
 
 #include "backend/core/AbstractPart.h"
+#include "backend/core/Settings.h"
 #include "commonfrontend/core/ContentDockWidget.h"
 
+#include <DockManager.h>
 #include <QMenu>
 #include <QStyle>
 
@@ -47,10 +49,23 @@ AbstractPart::~AbstractPart() {
  */
 ContentDockWidget* AbstractPart::dockWidget() const {
 #ifndef SDK
-	if (!m_dockWidget)
+	if (!m_dockWidget) {
 		m_dockWidget = new ContentDockWidget(const_cast<AbstractPart*>(this));
+		connect(m_dockWidget, &ads::CDockWidget::closed, [this] {
+			const bool deleteOnClose = Settings::readDockPosBehaviour() == Settings::DockPosBehaviour::AboveLastActive;
+			if (deleteOnClose && !m_suppressDeletion) {
+				m_dockWidget->dockManager()->removeDockWidget(m_dockWidget);
+				m_dockWidget = nullptr;
+				deleteView();
+			}
+		});
+	}
 #endif
 	return m_dockWidget;
+}
+
+void AbstractPart::suppressDeletion(bool suppress) {
+	m_suppressDeletion = suppress;
 }
 
 bool AbstractPart::hasMdiSubWindow() const {
@@ -75,7 +90,6 @@ void AbstractPart::deleteView() const {
 	if (m_partView) {
 		delete m_partView;
 		m_partView = nullptr;
-		m_dockWidget = nullptr;
 	}
 }
 

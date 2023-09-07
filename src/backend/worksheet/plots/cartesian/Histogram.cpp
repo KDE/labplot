@@ -19,6 +19,7 @@
 #include "HistogramPrivate.h"
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/Folder.h"
+#include "backend/core/Settings.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
@@ -39,7 +40,6 @@
 #include <KConfig>
 #include <KConfigGroup>
 #include <KLocalizedString>
-#include <KSharedConfig>
 
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_histogram.h>
@@ -111,6 +111,7 @@ void Histogram::init() {
 	d->value = new Value(QString());
 	addChild(d->value);
 	d->value->setHidden(true);
+	d->value->setcenterPositionAvailable(true);
 	d->value->init(group);
 	connect(d->value, &Value::updatePixmapRequested, [=] {
 		d->updatePixmap();
@@ -160,7 +161,6 @@ void Histogram::init() {
 	d->rugLength = group.readEntry("RugLength", Worksheet::convertToSceneUnits(5, Worksheet::Unit::Point));
 	d->rugWidth = group.readEntry("RugWidth", 0.0);
 	d->rugOffset = group.readEntry("RugOffset", 0.0);
-
 	this->initActions();
 }
 
@@ -1328,6 +1328,32 @@ void HistogramPrivate::updateValues() {
 			valuesPoints.append(tempPoint);
 		}
 		break;
+	case Value::Center: {
+		QVector<qreal> listBarWidth;
+		for (int i = 0, j = 0; i < linesUnclipped.size(); i += 3, j++) {
+			auto& columnBarLines = linesUnclipped.at(i);
+			if ((int)(visiblePoints.size()) == j)
+				break;
+			if (visiblePoints.at(j) == true)
+				listBarWidth.append(columnBarLines.length());
+		}
+		if (orientation == Histogram::Vertical)
+			for (int i = 0; i < valuesStrings.size(); i++) {
+				w = fm.boundingRect(valuesStrings.at(i)).width();
+				tempPoint.setX(pointsScene.at(i).x() - w / 2);
+				tempPoint.setY(pointsScene.at(i).y() + listBarWidth.at(i) / 2 - valuesDistance + h / 2 + w / 2);
+				valuesPoints.append(tempPoint);
+			}
+		else {
+			for (int i = 0; i < valuesStrings.size(); i++) {
+				w = fm.boundingRect(valuesStrings.at(i)).width();
+				tempPoint.setX(pointsScene.at(i).x() - listBarWidth.at(i) / 2 - valuesDistance + h / 2 - w / 2 - 2);
+				tempPoint.setY(pointsScene.at(i).y() + w / 2);
+				valuesPoints.append(tempPoint);
+			}
+		}
+		break;
+	}
 	}
 
 	QTransform trafo;
@@ -1691,7 +1717,7 @@ void HistogramPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 	painter->setBrush(Qt::NoBrush);
 	painter->setRenderHint(QPainter::SmoothPixmapTransform, true);
 
-	if (KSharedConfig::openConfig()->group("Settings_Worksheet").readEntry<bool>("DoubleBuffering", true))
+	if (Settings::group(QStringLiteral("Settings_Worksheet")).readEntry<bool>("DoubleBuffering", true))
 		painter->drawPixmap(boundingRectangle.topLeft(), m_pixmap); // draw the cached pixmap (fast)
 	else
 		draw(painter); // draw directly again (slow)
@@ -1846,7 +1872,6 @@ bool Histogram::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
@@ -1879,7 +1904,7 @@ bool Histogram::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value(QStringLiteral("visible")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("visible")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("visible"));
 			else
 				d->setVisible(str.toInt());
 		} else if (!preview && reader->name() == QLatin1String("line")) {
@@ -1904,6 +1929,10 @@ bool Histogram::load(XmlStreamReader* reader, bool preview) {
 			READ_DOUBLE_VALUE("rugLength", rugLength);
 			READ_DOUBLE_VALUE("rugWidth", rugWidth);
 			READ_DOUBLE_VALUE("rugOffset", rugOffset);
+		} else { // unknown element
+			reader->raiseUnknownElementWarning();
+			if (!reader->skipToEndElement())
+				return false;
 		}
 	}
 	return true;

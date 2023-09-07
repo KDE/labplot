@@ -14,6 +14,7 @@
 #include "kdefrontend/widgets/LineWidget.h"
 
 #include <KConfig>
+#include <KConfigGroup>
 #include <KLocalizedString>
 
 ReferenceLineDock::ReferenceLineDock(QWidget* parent)
@@ -46,7 +47,7 @@ ReferenceLineDock::ReferenceLineDock(QWidget* parent)
 	auto* hlayout = new QHBoxLayout(frame);
 	hlayout->setContentsMargins(0, 11, 0, 11);
 
-	auto* templateHandler = new TemplateHandler(this, TemplateHandler::ClassName::ReferenceLine);
+	auto* templateHandler = new TemplateHandler(this, QLatin1String("ReferenceLine"));
 	hlayout->addWidget(templateHandler);
 	connect(templateHandler, &TemplateHandler::loadConfigRequested, this, &ReferenceLineDock::loadConfigFromTemplate);
 	connect(templateHandler, &TemplateHandler::saveConfigRequested, this, &ReferenceLineDock::saveConfigAsTemplate);
@@ -61,25 +62,6 @@ void ReferenceLineDock::setReferenceLines(QList<ReferenceLine*> list) {
 	m_line = list.first();
 	setAspects(list);
 	Q_ASSERT(m_line);
-
-	// if there is more than one point in the list, disable the comment and name widgets in "general"
-	if (list.size() == 1) {
-		ui.lName->setEnabled(true);
-		ui.leName->setEnabled(true);
-		ui.lComment->setEnabled(true);
-		ui.teComment->setEnabled(true);
-		ui.leName->setText(m_line->name());
-		ui.teComment->setText(m_line->comment());
-	} else {
-		ui.lName->setEnabled(false);
-		ui.leName->setEnabled(false);
-		ui.lComment->setEnabled(false);
-		ui.teComment->setEnabled(false);
-		ui.leName->setText(QString());
-		ui.teComment->setText(QString());
-	}
-	ui.leName->setStyleSheet(QString());
-	ui.leName->setToolTip(QString());
 
 	// show the properties of the first reference line
 	this->load();
@@ -250,14 +232,7 @@ void ReferenceLineDock::load() {
 }
 
 void ReferenceLineDock::loadConfigFromTemplate(KConfig& config) {
-	// extract the name of the template from the file name
-	QString name;
-	int index = config.name().lastIndexOf(QLatin1String("/"));
-	if (index != -1)
-		name = config.name().right(config.name().size() - index - 1);
-	else
-		name = config.name();
-
+	auto name = TemplateHandler::templateName(config);
 	int size = m_linesList.size();
 	if (size > 1)
 		m_line->beginMacro(i18n("%1 reference lines: template \"%2\" loaded", size, name));

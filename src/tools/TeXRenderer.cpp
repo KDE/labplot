@@ -9,12 +9,12 @@
 */
 
 #include "TeXRenderer.h"
+#include "backend/core/Settings.h"
 #include "backend/lib/macros.h"
 #include "kdefrontend/GuiTools.h"
 
 #include <KConfigGroup>
 #include <KLocalizedString>
-#include <KSharedConfig>
 
 #include <QColor>
 #include <QDir>
@@ -85,7 +85,7 @@ QByteArray TeXRenderer::renderImageLaTeX(const QString& teXString, Result* res, 
 	}
 
 	// determine latex engine to be used
-	const auto& group = KSharedConfig::openConfig()->group("Settings_Worksheet");
+	const auto& group = Settings::group(QStringLiteral("Settings_Worksheet"));
 	const auto& engine = group.readEntry("LaTeXEngine", "pdflatex");
 
 	// create latex code
@@ -322,7 +322,7 @@ QByteArray TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, 
 }
 
 bool TeXRenderer::enabled() {
-	KConfigGroup group = KSharedConfig::openConfig()->group("Settings_Worksheet");
+	KConfigGroup group = Settings::group(QStringLiteral("Settings_Worksheet"));
 	QString engine = group.readEntry("LaTeXEngine", "");
 	if (engine.isEmpty()) {
 		// empty string was found in the settings (either the settings never saved or no tex engine was available during the last save)

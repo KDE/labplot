@@ -11,6 +11,7 @@
 
 #include "SpreadsheetView.h"
 #include "backend/core/Project.h"
+#include "backend/core/Settings.h"
 #include "backend/core/column/Column.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "backend/core/datatypes/Double2StringFilter.h"
@@ -49,6 +50,7 @@
 #include "3rdparty/kdmactouchbar/src/kdmactouchbar.h"
 #endif
 
+#include <KConfigGroup>
 #include <KLocalizedString>
 #include <KMessageBox>
 
@@ -138,7 +140,7 @@ SpreadsheetView::SpreadsheetView(Spreadsheet* spreadsheet, bool readOnly)
 		resize(w + 50, h);
 	}
 
-	KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Spreadsheet"));
+	KConfigGroup group = Settings::group(QStringLiteral("Spreadsheet"));
 	showComments(group.readEntry(QLatin1String("ShowComments"), false));
 }
 
@@ -292,7 +294,6 @@ void SpreadsheetView::initActions() {
 	action_toggle_comments = new QAction(QIcon::fromTheme(QStringLiteral("document-properties")), i18n("Show Comments"), this);
 	action_clear_spreadsheet = new QAction(QIcon::fromTheme(QStringLiteral("edit-clear")), i18n("Clear Spreadsheet"), this);
 	action_clear_masks = new QAction(QIcon::fromTheme(QStringLiteral("format-remove-node")), i18n("Clear Masks"), this);
-	action_sort_spreadsheet = new QAction(QIcon::fromTheme(QStringLiteral("view-sort-ascending")), i18n("&Sort Spreadsheet"), this);
 	action_go_to_cell = new QAction(QIcon::fromTheme(QStringLiteral("go-jump")), i18n("&Go to Cell..."), this);
 	action_search = new QAction(QIcon::fromTheme(QStringLiteral("edit-find")), i18n("&Search"), this);
 	action_search->setShortcut(QKeySequence::Find);
@@ -310,7 +311,7 @@ void SpreadsheetView::initActions() {
 	action_insert_column_right = new QAction(QIcon::fromTheme(QStringLiteral("edit-table-insert-column-right")), i18n("Insert Column Right"), this);
 	action_insert_columns_left = new QAction(QIcon::fromTheme(QStringLiteral("edit-table-insert-column-left")), i18n("Insert Multiple Columns Left"), this);
 	action_insert_columns_right = new QAction(QIcon::fromTheme(QStringLiteral("edit-table-insert-column-right")), i18n("Insert Multiple Columns Right"), this);
-	action_remove_columns = new QAction(QIcon::fromTheme(QStringLiteral("edit-table-delete-column")), i18n("Remove Columns"), this);
+	action_remove_columns = new QAction(QIcon::fromTheme(QStringLiteral("edit-table-delete-column")), i18n("Remove Selected Column(s)"), this);
 	action_clear_columns = new QAction(QIcon::fromTheme(QStringLiteral("edit-clear")), i18n("Clear Content"), this);
 	action_freeze_columns = new QAction(i18n("Freeze Column"), this);
 
@@ -354,8 +355,9 @@ void SpreadsheetView::initActions() {
 	action_multiply_value->setData(AddSubtractValueDialog::Multiply);
 	action_divide_value = new QAction(i18n("Divide"), this);
 	action_divide_value->setData(AddSubtractValueDialog::Divide);
-	action_drop_values = new QAction(QIcon::fromTheme(QStringLiteral("delete-table-row")), i18n("Drop"), this);
-	action_mask_values = new QAction(QIcon::fromTheme(QStringLiteral("hide_table_row")), i18n("Mask"), this);
+	action_drop_values = new QAction(QIcon::fromTheme(QStringLiteral("delete-table-row")), i18n("Drop Values"), this);
+	action_mask_values = new QAction(QIcon::fromTheme(QStringLiteral("hide_table_row")), i18n("Mask Values"), this);
+
 	action_reverse_columns = new QAction(QIcon::fromTheme(QStringLiteral("reverse")), i18n("Reverse"), this);
 	// 	action_join_columns = new QAction(QIcon::fromTheme(QString()), i18n("Join"), this);
 
@@ -437,9 +439,12 @@ void SpreadsheetView::initActions() {
 	ladderAction->setData(InverseSquared);
 
 	// sort and statistics
-	action_sort_columns = new QAction(QIcon::fromTheme(QString()), i18n("&Selected Columns"), this);
-	action_sort_asc_column = new QAction(QIcon::fromTheme(QStringLiteral("view-sort-ascending")), i18n("&Ascending"), this);
-	action_sort_desc_column = new QAction(QIcon::fromTheme(QStringLiteral("view-sort-descending")), i18n("&Descending"), this);
+	action_sort = new QAction(QIcon::fromTheme(QStringLiteral("view-sort")), i18n("&Sort..."), this);
+	action_sort->setToolTip(i18n("Sort multiple columns together"));
+	action_sort_asc = new QAction(QIcon::fromTheme(QStringLiteral("view-sort-ascending")), i18n("Sort &Ascending"), this);
+	action_sort_asc->setToolTip(i18n("Sort the selected columns separately in ascending order"));
+	action_sort_desc = new QAction(QIcon::fromTheme(QStringLiteral("view-sort-descending")), i18n("Sort &Descending"), this);
+	action_sort_desc->setToolTip(i18n("Sort the selected columns separately in descending order"));
 	action_statistics_columns = new QAction(QIcon::fromTheme(QStringLiteral("view-statistics")), i18n("Column Statistics..."), this);
 
 	// conditional formatting
@@ -453,8 +458,10 @@ void SpreadsheetView::initActions() {
 	// action_insert_row_below->setShortcut(Qt::Key_Insert);
 	action_insert_rows_above = new QAction(QIcon::fromTheme(QStringLiteral("edit-table-insert-row-above")), i18n("Insert Multiple Rows Above"), this);
 	action_insert_rows_below = new QAction(QIcon::fromTheme(QStringLiteral("edit-table-insert-row-below")), i18n("Insert Multiple Rows Below"), this);
-	action_remove_rows = new QAction(QIcon::fromTheme(QStringLiteral("edit-table-delete-row")), i18n("Remo&ve Rows"), this);
+	action_remove_rows = new QAction(QIcon::fromTheme(QStringLiteral("edit-table-delete-row")), i18n("Remo&ve Selected Row(s)"), this);
 	action_clear_rows = new QAction(QIcon::fromTheme(QStringLiteral("edit-clear")), i18n("Clea&r Content"), this);
+	action_remove_missing_value_rows = new QAction(QIcon::fromTheme(QStringLiteral("delete-table-row")), i18n("Remove Rows With Missing Values"), this);
+	action_mask_missing_value_rows = new QAction(QIcon::fromTheme(QStringLiteral("hide_table_row")), i18n("Mask Rows With Missing Values"), this);
 	action_statistics_rows = new QAction(QIcon::fromTheme(QStringLiteral("view-statistics")), i18n("Row Statisti&cs"), this);
 
 	// plot data action
@@ -718,14 +725,11 @@ void SpreadsheetView::initMenus() {
 		m_columnMenu->addMenu(m_columnManipulateDataMenu);
 		m_columnMenu->addSeparator();
 
-		m_columnSortMenu = new QMenu(i18n("Sort"), this);
-		m_columnSortMenu->setIcon(QIcon::fromTheme(QStringLiteral("view-sort-ascending")));
-		m_columnSortMenu->addAction(action_sort_asc_column);
-		m_columnSortMenu->addAction(action_sort_desc_column);
-		m_columnSortMenu->addAction(action_sort_columns);
+		m_columnMenu->addAction(action_sort);
+		m_columnMenu->addAction(action_sort_asc);
+		m_columnMenu->addAction(action_sort_desc);
 		m_columnMenu->addSeparator();
-		m_columnMenu->addMenu(m_columnSortMenu);
-		m_columnMenu->addSeparator();
+
 		m_columnMenu->addMenu(m_formattingMenu);
 		m_columnMenu->addSeparator();
 
@@ -737,8 +741,10 @@ void SpreadsheetView::initMenus() {
 		m_columnMenu->addSeparator();
 		m_columnMenu->addAction(action_remove_columns);
 		m_columnMenu->addAction(action_clear_columns);
-	}
-	{
+		m_columnMenu->addSeparator();
+		m_columnMenu->addAction(action_remove_missing_value_rows);
+		m_columnMenu->addAction(action_mask_missing_value_rows);
+	} else {
 		m_columnMenu->addSeparator();
 		m_columnMenu->addMenu(m_formattingMenu);
 	}
@@ -764,7 +770,7 @@ void SpreadsheetView::initMenus() {
 	if (!m_readOnly) {
 		m_spreadsheetMenu->addAction(action_clear_spreadsheet);
 		m_spreadsheetMenu->addAction(action_clear_masks);
-		m_spreadsheetMenu->addAction(action_sort_spreadsheet);
+		m_spreadsheetMenu->addAction(action_sort);
 	}
 	m_spreadsheetMenu->addSeparator();
 	m_spreadsheetMenu->addMenu(m_formattingMenu);
@@ -797,6 +803,10 @@ void SpreadsheetView::initMenus() {
 
 		m_rowMenu->addAction(action_remove_rows);
 		m_rowMenu->addAction(action_clear_rows);
+		m_rowMenu->addSeparator();
+
+		m_rowMenu->addAction(action_remove_missing_value_rows);
+		m_rowMenu->addAction(action_mask_missing_value_rows);
 	}
 	m_rowMenu->addSeparator();
 	m_rowMenu->addAction(action_statistics_rows);
@@ -821,7 +831,6 @@ void SpreadsheetView::connectActions() {
 	connect(action_select_all, &QAction::triggered, m_tableView, &QTableView::selectAll);
 	connect(action_clear_spreadsheet, &QAction::triggered, m_spreadsheet, QOverload<>::of(&Spreadsheet::clear));
 	connect(action_clear_masks, &QAction::triggered, m_spreadsheet, &Spreadsheet::clearMasks);
-	connect(action_sort_spreadsheet, &QAction::triggered, this, &SpreadsheetView::sortSpreadsheet);
 	connect(action_go_to_cell, &QAction::triggered, this, static_cast<void (SpreadsheetView::*)()>(&SpreadsheetView::goToCell));
 	connect(action_search, &QAction::triggered, this, &SpreadsheetView::searchReplace);
 	connect(action_search_replace, &QAction::triggered, this, &SpreadsheetView::searchReplace);
@@ -864,9 +873,9 @@ void SpreadsheetView::connectActions() {
 	// 	connect(action_normalize_selection, &QAction::triggered, this, &SpreadsheetView::normalizeSelection);
 
 	// sort
-	connect(action_sort_columns, &QAction::triggered, this, &SpreadsheetView::sortSelectedColumns);
-	connect(action_sort_asc_column, &QAction::triggered, this, &SpreadsheetView::sortColumnAscending);
-	connect(action_sort_desc_column, &QAction::triggered, this, &SpreadsheetView::sortColumnDescending);
+	connect(action_sort, &QAction::triggered, this, &SpreadsheetView::sortCustom);
+	connect(action_sort_asc, &QAction::triggered, this, &SpreadsheetView::sortAscending);
+	connect(action_sort_desc, &QAction::triggered, this, &SpreadsheetView::sortDescending);
 
 	// conditional formatting
 	connect(action_formatting_heatmap, &QAction::triggered, this, &SpreadsheetView::formatHeatmap);
@@ -883,6 +892,8 @@ void SpreadsheetView::connectActions() {
 	connect(action_insert_rows_below, &QAction::triggered, this, static_cast<void (SpreadsheetView::*)()>(&SpreadsheetView::insertRowsBelow));
 	connect(action_remove_rows, &QAction::triggered, this, &SpreadsheetView::removeSelectedRows);
 	connect(action_clear_rows, &QAction::triggered, this, &SpreadsheetView::clearSelectedRows);
+	connect(action_remove_missing_value_rows, &QAction::triggered, m_spreadsheet, &Spreadsheet::removeEmptyRows);
+	connect(action_mask_missing_value_rows, &QAction::triggered, m_spreadsheet, &Spreadsheet::maskEmptyRows);
 	connect(action_statistics_rows, &QAction::triggered, this, &SpreadsheetView::showRowStatistics);
 	connect(action_toggle_comments, &QAction::triggered, this, &SpreadsheetView::toggleComments);
 
@@ -918,8 +929,9 @@ void SpreadsheetView::fillToolBar(QToolBar* toolBar) {
 	// toolBar->addAction(action_statistics_columns);
 	if (!m_readOnly) {
 		toolBar->addSeparator();
-		toolBar->addAction(action_sort_asc_column);
-		toolBar->addAction(action_sort_desc_column);
+		toolBar->addAction(action_sort);
+		toolBar->addAction(action_sort_asc);
+		toolBar->addAction(action_sort_desc);
 	}
 }
 
@@ -961,7 +973,7 @@ void SpreadsheetView::createContextMenu(QMenu* menu) {
 	if (!m_readOnly) {
 		menu->insertAction(firstAction, action_clear_spreadsheet);
 		menu->insertAction(firstAction, action_clear_masks);
-		menu->insertAction(firstAction, action_sort_spreadsheet);
+		menu->insertAction(firstAction, action_sort);
 		menu->insertSeparator(firstAction);
 	}
 
@@ -1006,15 +1018,15 @@ void SpreadsheetView::fillColumnContextMenu(QMenu* menu, Column* column) {
 			menu->insertMenu(firstAction, m_columnGenerateDataMenu);
 			menu->insertSeparator(firstAction);
 		}
+
 		if (numeric || datetime) {
 			menu->insertMenu(firstAction, m_columnManipulateDataMenu);
 			menu->insertSeparator(firstAction);
 		}
 
-		menu->insertMenu(firstAction, m_columnSortMenu);
-		action_sort_asc_column->setVisible(true);
-		action_sort_desc_column->setVisible(true);
-		action_sort_columns->setVisible(false);
+		menu->insertAction(firstAction, action_sort);
+		menu->insertAction(firstAction, action_sort_asc);
+		menu->insertAction(firstAction, action_sort_desc);
 
 		checkColumnMenus(numeric, datetime, text, hasValues);
 	}
@@ -1148,6 +1160,17 @@ int SpreadsheetView::selectedColumnCount(bool full) const {
 		if (isColumnSelected(i, full))
 			count++;
 	return count;
+}
+
+int SpreadsheetView::selectedRowCount(bool full) const {
+	if (full)
+		return m_tableView->selectionModel()->selectedRows().count();
+	const auto& indexes = m_tableView->selectionModel()->selectedIndexes();
+	QSet<int> set;
+	for (auto& index : indexes)
+		set.insert(index.row());
+
+	return set.count();
 }
 
 /*!
@@ -1361,17 +1384,6 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 				}
 			}
 
-			const auto& columns = selectedColumns();
-			if (columns.size() == 1) {
-				action_sort_columns->setVisible(false);
-				action_sort_asc_column->setVisible(true);
-				action_sort_desc_column->setVisible(true);
-			} else {
-				action_sort_columns->setVisible(true);
-				action_sort_asc_column->setVisible(false);
-				action_sort_desc_column->setVisible(false);
-			}
-
 			// check whether we have non-numeric columns selected and deactivate actions for numeric columns
 			bool numeric = true;
 			bool plottable = true;
@@ -1380,6 +1392,7 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 			bool hasValues = false;
 			bool hasFormat = false;
 			bool enoughValues = false; // enough for statistics (> 1)
+			const auto& columns = selectedColumns();
 
 			for (const auto* col : columns) {
 				if (!col->isNumeric()) {
@@ -1508,18 +1521,11 @@ void SpreadsheetView::checkSpreadsheetMenu() {
 	const auto& columns = m_spreadsheet->children<Column>();
 
 	const bool cellsAvail = m_spreadsheet->columnCount() > 0 && m_spreadsheet->rowCount() > 0;
-	bool hasValues = false;
-	for (const auto* col : columns) {
-		if (col->hasValues()) {
-			hasValues = true;
-			break;
-		}
-	}
+	bool hasValues = this->hasValues(columns);
 	m_plotDataMenu->setEnabled(hasValues);
 	m_selectionMenu->setEnabled(hasValues);
 	action_select_all->setEnabled(hasValues);
 	action_clear_spreadsheet->setEnabled(hasValues);
-	action_sort_spreadsheet->setEnabled(hasValues);
 	action_statistics_all_columns->setEnabled(hasValues);
 	action_go_to_cell->setEnabled(cellsAvail);
 
@@ -1601,9 +1607,6 @@ void SpreadsheetView::checkColumnMenus(bool numeric, bool datetime, bool text, b
 	action_mask_values->setEnabled(numeric || text || datetime);
 	m_columnNormalizeMenu->setEnabled(numeric);
 	m_columnLadderOfPowersMenu->setEnabled(numeric);
-
-	// sort is possible for all data types if values are available
-	m_columnSortMenu->setEnabled(hasValues);
 
 	if (isColumnSelected(0, true)) {
 		action_freeze_columns->setVisible(true);
@@ -1751,7 +1754,7 @@ void SpreadsheetView::pasteIntoSelection() {
 	QVector<QStringList> cellTexts;
 
 	try {
-		QString input_str = QLatin1String(mime_data->data(QStringLiteral("text/plain"))).trimmed();
+		QString input_str = QString::fromUtf8(mime_data->data(QStringLiteral("text/plain"))).trimmed();
 		QString separator;
 		if (input_str.indexOf(QLatin1String("\r\n")) != -1)
 			separator = QLatin1String("\r\n");
@@ -1769,7 +1772,7 @@ void SpreadsheetView::pasteIntoSelection() {
 		const auto numberLocale = QLocale();
 		// TEST ' ' as group separator:
 		// numberLocale = QLocale(QLocale::French, QLocale::France);
-		const KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
+		const KConfigGroup group = Settings::group(QStringLiteral("Settings_General"));
 		for (int i = 0; i < input_row_count; i++) {
 			if (hasTabs)
 				cellTexts.append(input_rows.at(i).split(QLatin1Char('\t')));
@@ -2412,13 +2415,6 @@ void SpreadsheetView::fillSelectedCellsWithConstValues() {
 	m_spreadsheet->endMacro();
 }
 
-/*!
-	Open the sort dialog for all columns.
-*/
-void SpreadsheetView::sortSpreadsheet() {
-	sortDialog(m_spreadsheet->children<Column>());
-}
-
 void SpreadsheetView::formatHeatmap() {
 	auto columns = selectedColumns();
 	if (columns.isEmpty())
@@ -2569,7 +2565,7 @@ void SpreadsheetView::insertColumnsRight(int count) {
 			}
 		} else {
 			// no columns available anymore -> resize the spreadsheet and the new column to the default size
-			KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Spreadsheet"));
+			KConfigGroup group = Settings::group(QStringLiteral("Spreadsheet"));
 			const int rows = group.readEntry(QLatin1String("RowCount"), 100);
 			m_spreadsheet->setRowCount(rows);
 
@@ -3126,9 +3122,6 @@ void SpreadsheetView::normalizeSelection() {
 	RESET_CURSOR;
 }
 */
-void SpreadsheetView::sortSelectedColumns() {
-	sortDialog(selectedColumns());
-}
 
 void SpreadsheetView::showAllColumnsStatistics() {
 	showColumnStatistics(true);
@@ -3465,46 +3458,94 @@ void SpreadsheetView::showSearchReplace(bool replace) {
 	});
 }
 
-//! Open the sort dialog for the given columns
-void SpreadsheetView::sortDialog(const QVector<Column*>& cols) {
-	if (cols.isEmpty())
+/*!
+ * sorts the selected columns separately of each other in ascending order.
+ */
+void SpreadsheetView::sortAscending() {
+	const auto& cols = selectedColumns();
+	if (cols.isEmpty() || !hasValues(cols))
 		return;
 
 	for (auto* col : cols)
 		col->setSuppressDataChangedSignal(true);
+	m_spreadsheet->sortColumns(nullptr, cols, true);
+	for (auto* col : cols) {
+		col->setSuppressDataChangedSignal(false);
+		col->setChanged();
+	}
+}
 
-	auto* dlg = new SortDialog();
+/*!
+ * sorts the selected columns separately of each other in descending order.
+ */
+void SpreadsheetView::sortDescending() {
+	const auto& cols = selectedColumns();
+	if (cols.isEmpty() || !hasValues(cols))
+		return;
+
+	for (auto* col : cols)
+		col->setSuppressDataChangedSignal(true);
+	m_spreadsheet->sortColumns(nullptr, cols, false);
+	for (auto* col : cols) {
+		col->setSuppressDataChangedSignal(false);
+		col->setChanged();
+	}
+}
+
+/*!
+ * custom sort of all or selected columns in the spreadsheet together by allowing
+ * to specify the "sort by"-column(s) in the SortDialog.
+ */
+void SpreadsheetView::sortCustom() {
+	const auto& cols = selectedColumns();
+	QVector<Column*> columnsToSort;
+	Column* leadingColumn{nullptr};
+
+	bool sortAll{true};
+	if (cols.size() == 0)
+		// no columns selected, the function is being called from the spreadsheet context menu,
+		// sort all columns
+		columnsToSort = m_spreadsheet->children<Column>();
+	else if (cols.size() == 1) {
+		// one single column selected, sort the whole spreadsheet (all columns)
+		// with the current selected column being the leading column
+		columnsToSort = m_spreadsheet->children<Column>();
+		leadingColumn = cols.constFirst();
+	} else {
+		columnsToSort = cols;
+		sortAll = (cols.size() == m_spreadsheet->columnCount());
+	}
+
+	// don't do any sort if there are no values yet in the columns
+	if (!hasValues(columnsToSort))
+		return;
+
+	for (auto* col : columnsToSort)
+		col->setSuppressDataChangedSignal(true);
+
+	auto* dlg = new SortDialog(this, sortAll);
 	connect(dlg, &SortDialog::sort, m_spreadsheet, &Spreadsheet::sortColumns);
-	dlg->setColumns(cols);
+	dlg->setColumns(columnsToSort, leadingColumn);
+
 	int rc = dlg->exec();
 
-	for (auto* col : cols) {
+	for (auto* col : columnsToSort) {
 		col->setSuppressDataChangedSignal(false);
 		if (rc == QDialog::Accepted)
 			col->setChanged();
 	}
 }
 
-void SpreadsheetView::sortColumnAscending() {
-	QVector<Column*> cols = selectedColumns();
-	for (auto* col : cols)
-		col->setSuppressDataChangedSignal(true);
-	m_spreadsheet->sortColumns(cols.first(), cols, true);
-	for (auto* col : cols) {
-		col->setSuppressDataChangedSignal(false);
-		col->setChanged();
+bool SpreadsheetView::hasValues(const QVector<Column*> cols) {
+	bool hasValues = false;
+	for (const auto* col : cols) {
+		if (col->hasValues()) {
+			hasValues = true;
+			break;
+		}
 	}
-}
 
-void SpreadsheetView::sortColumnDescending() {
-	QVector<Column*> cols = selectedColumns();
-	for (auto* col : cols)
-		col->setSuppressDataChangedSignal(true);
-	m_spreadsheet->sortColumns(cols.first(), cols, false);
-	for (auto* col : cols) {
-		col->setSuppressDataChangedSignal(false);
-		col->setChanged();
-	}
+	return hasValues;
 }
 
 /*!
@@ -3560,6 +3601,57 @@ void SpreadsheetView::selectionChanged(const QItemSelection& /*selected*/, const
 	auto* selModel = m_tableView->selectionModel();
 	for (int i = 0; i < m_spreadsheet->columnCount(); i++)
 		m_spreadsheet->setColumnSelectedInView(i, selModel->isColumnSelected(i));
+
+	// determine the number of selected cells, columns, missing values and masked values in the current selection and show this information in the status bar.
+	const auto& indexes = m_tableView->selectionModel()->selectedIndexes();
+	if (indexes.empty() || indexes.count() == 1)
+		return;
+	QPair<int, int> selectedRowCol = qMakePair(selectedRowCount(false), selectedColumnCount(false));
+	const auto& columns = m_spreadsheet->children<Column>();
+	int maskedValuesCount = 0;
+	int missingValuesCount = 0;
+	int selectedCellsCount = 0;
+	for (const auto& index : indexes) {
+		const int col = index.column();
+		const int row = index.row();
+		selectedCellsCount++;
+		auto& column = columns.at(col);
+		if (!column->isValid(row))
+			missingValuesCount++;
+		if (column->isMasked(row))
+			maskedValuesCount++;
+	}
+
+	QString selectedRowsText = i18np("row", "rows", selectedRowCol.first);
+	QString selectedColumnsText = i18np("column", "columns", selectedRowCol.second);
+	QString selectedCellsText = i18n("cells");
+	QString maskedValuesText = (maskedValuesCount == 1) ? i18n("masked value") : (!maskedValuesCount) ? QString() : i18n("masked values");
+	QString missingValuesText = (missingValuesCount == 1) ? i18n("missing value") : (!missingValuesCount) ? QString() : i18n("missing values");
+	QString maskedValuesCountText = (!maskedValuesCount) ? QString() : i18n(" , ") + i18n("%1", maskedValuesCount);
+	QString missingValuesCountText = (!missingValuesCount) ? QString() : i18n(", ") + i18n("%1", missingValuesCount);
+
+	QString resultString;
+	if (selectedCellsCount == selectedRowCol.first * selectedRowCol.second)
+		resultString = i18n("Selected: %1 %2 , %3 %4%5 %6 %7 %8",
+							selectedRowCol.first,
+							selectedRowsText,
+							selectedRowCol.second,
+							selectedColumnsText,
+							maskedValuesCountText,
+							maskedValuesText,
+							missingValuesCountText,
+							missingValuesText);
+
+	else
+		resultString = i18n("Selected: %1 %2%3 %4 %5 %6",
+							selectedCellsCount,
+							selectedCellsText,
+							maskedValuesCountText,
+							maskedValuesText,
+							missingValuesCountText,
+							missingValuesText);
+
+	Q_EMIT m_spreadsheet->statusInfo(resultString);
 }
 
 bool SpreadsheetView::exportView() {

@@ -44,7 +44,7 @@ SpreadsheetDock::SpreadsheetDock(QWidget* parent)
 	connect(ui.cbLinkingEnabled, &QCheckBox::toggled, this, &SpreadsheetDock::linkingChanged);
 	connect(ui.cbLinkedSpreadsheet, &TreeViewComboBox::currentModelIndexChanged, this, &SpreadsheetDock::linkedSpreadsheetChanged);
 
-	auto* templateHandler = new TemplateHandler(this, TemplateHandler::ClassName::Spreadsheet);
+	auto* templateHandler = new TemplateHandler(this, QLatin1String("Spreadsheet"));
 	ui.gridLayout->addWidget(templateHandler, 16, 0, 1, 4);
 	templateHandler->show();
 	connect(templateHandler, &TemplateHandler::loadConfigRequested, this, &SpreadsheetDock::loadConfigFromTemplate);
@@ -78,23 +78,6 @@ void SpreadsheetDock::setSpreadsheets(const QList<Spreadsheet*> list) {
 			break;
 		}
 	}
-
-	if (list.size() == 1) {
-		ui.leName->setEnabled(true);
-		ui.teComment->setEnabled(true);
-
-		ui.leName->setText(m_spreadsheet->name());
-		ui.teComment->setText(m_spreadsheet->comment());
-	} else {
-		// disable the fields "Name" and "Comment" if there are more than one spreadsheet
-		ui.leName->setEnabled(false);
-		ui.teComment->setEnabled(false);
-
-		ui.leName->setText(QString());
-		ui.teComment->setText(QString());
-	}
-	ui.leName->setStyleSheet(QString());
-	ui.leName->setToolTip(QString());
 
 	const QList<AspectType> topLevelClasses = {AspectType::Spreadsheet};
 // needed for buggy compiler
@@ -235,14 +218,7 @@ void SpreadsheetDock::load() {
 }
 
 void SpreadsheetDock::loadConfigFromTemplate(KConfig& config) {
-	// extract the name of the template from the file name
-	QString name;
-	const int index = config.name().lastIndexOf(QLatin1Char('/'));
-	if (index != -1)
-		name = config.name().right(config.name().size() - index - 1);
-	else
-		name = config.name();
-
+	auto name = TemplateHandler::templateName(config);
 	const int size = m_spreadsheetList.size();
 	if (size > 1)
 		m_spreadsheet->beginMacro(i18n("%1 spreadsheets: template \"%2\" loaded", size, name));

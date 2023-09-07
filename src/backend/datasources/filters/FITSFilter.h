@@ -11,7 +11,7 @@
 
 #include "backend/datasources/filters/AbstractFileFilter.h"
 
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 
 #include <QTableWidget>
 #include <QTreeWidget>
@@ -84,9 +84,6 @@ public:
 	static QStringList mandatoryImageExtensionKeywords();
 	static QStringList mandatoryTableExtensionKeywords();
 	static QStringList units();
-
-	void loadFilterSettings(const QString&) override;
-	void saveFilterSettings(const QString&) const override;
 
 	void setStartRow(const int);
 	int startRow() const;

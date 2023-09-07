@@ -10,16 +10,18 @@
 */
 
 #include "backend/spreadsheet/SpreadsheetModel.h"
+#include "backend/core/Settings.h"
 #include "backend/core/datatypes/Double2StringFilter.h"
 #include "backend/lib/macros.h"
 #include "backend/lib/trace.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 
+#include <KConfigGroup>
+#include <KLocalizedString>
+
 #include <QBrush>
 #include <QIcon>
 #include <QPalette>
-
-#include <KLocalizedString>
 
 /*!
 	\class SpreadsheetModel
@@ -500,7 +502,7 @@ void SpreadsheetModel::updateHorizontalHeader(bool sendSignal) {
 	while (m_horizontal_header_data.size() > column_count)
 		m_horizontal_header_data.removeLast();
 
-	KConfigGroup group = KSharedConfig::openConfig()->group("Settings_Spreadsheet");
+	KConfigGroup group = Settings::group(QStringLiteral("Settings_Spreadsheet"));
 	bool showColumnType = group.readEntry(QLatin1String("ShowColumnType"), true);
 	bool showPlotDesignation = group.readEntry(QLatin1String("ShowPlotDesignation"), true);
 
