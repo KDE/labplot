@@ -99,14 +99,6 @@ void OdsFilter::parse(const QString& fileName, QTreeWidgetItem* root) {
 	d->parse(fileName, root);
 }
 
-void OdsFilter::loadFilterSettings(const QString& filterName) {
-	Q_UNUSED(filterName)
-}
-
-void OdsFilter::saveFilterSettings(const QString& filterName) const {
-	Q_UNUSED(filterName)
-}
-
 //##############################################################################
 //##################  Serialization/Deserialization  ###########################
 //##############################################################################
