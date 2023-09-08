@@ -27,6 +27,7 @@ Bug fixes:
 	* Fix plot range field not being updated (Issue #603)
 	* Fix wrong axis tick type used (Issue #571)
 	* Fix wrong infoelement position when removing active curve (Issue #666)
+	* Fix copying Elements (Issue #622)
 
 Internal:
 	* Switch from C++11 to C++17
