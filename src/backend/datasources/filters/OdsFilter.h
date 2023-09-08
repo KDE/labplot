@@ -13,7 +13,7 @@
 
 #include <QObject>
 
-#include <memory>
+//#include <memory>
 
 #ifdef HAVE_ORCUS
 //#include "3rdparty/QXlsx/header/xlsxdocument.h"
@@ -28,10 +28,10 @@ public:
 	explicit OdsFilter();
 	virtual ~OdsFilter() override;
 	static QString fileInfoString(const QString& fileName);
+	QVector<QStringList> preview(const QString& sheetName, int lines);
 	/*	static QStringList sheets(const QString& fileName, bool* ok = nullptr);
 		static bool isValidCellReference(const QString& cellRefString);
 
-		QVector<QStringList> previewForCurrentDataRegion(int lines, bool* okToMatrix);
 		QStringList sheets() const;
 
 		void setExportAsNewSheet(const bool);
@@ -56,16 +56,16 @@ public:
 
 	virtual void save(QXmlStreamWriter*) const override;
 	virtual bool load(XmlStreamReader*) override;
-	/*
-		void setStartRow(const int);
-		int startRow() const;
-		void setEndRow(const int);
-		int endRow() const;
-		void setStartColumn(const int);
-		int startColumn() const;
-		void setEndColumn(const int);
-		int endColumn() const;
-	*/
+
+	void setStartRow(const int);
+	int startRow() const;
+	void setEndRow(const int);
+	int endRow() const;
+	void setStartColumn(const int);
+	int startColumn() const;
+	void setEndColumn(const int);
+	int endColumn() const;
+
 private:
 	std::unique_ptr<OdsFilterPrivate> const d;
 	friend class OdsFilterPrivate;

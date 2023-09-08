@@ -57,7 +57,7 @@ public:
 #endif
 private:
 #ifdef HAVE_EXCEL
-	QXlsx::Document* m_document = nullptr;
+	QXlsx::Document* m_document{nullptr};
 #endif
 	QString m_fileName;
 };

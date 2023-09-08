@@ -743,7 +743,28 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 	}
 	case AbstractFileFilter::FileType::Ods: {
 		DEBUG(Q_FUNC_INFO << ", ODS");
+
+		if (!m_currentFilter)
+			m_currentFilter.reset(new OdsFilter);
+
+		auto filter = static_cast<OdsFilter*>(m_currentFilter.get());
+		filter->setStartRow(ui.sbStartRow->value());
+		filter->setEndRow(ui.sbEndRow->value());
+		filter->setStartColumn(ui.sbStartColumn->value());
+		filter->setEndColumn(ui.sbEndColumn->value());
+		// filter->setFirstRowAsColumnNames(ui.chbOdsFirstRowAsColName->isChecked());
+
 		// TODO
+		/*const auto& sern = selectedExcelRegionNames();
+		if (!sern.isEmpty()) {
+			const auto& firstRegion = sern.last();
+			const auto& nameSplit = firstRegion.split(QLatin1Char('!'));
+			const auto& sheet = nameSplit[0];
+			const auto& range = nameSplit[1];
+			filter->setCurrentRange(range);
+			filter->setCurrentSheet(sheet);
+		}*/
+
 		break;
 	}
 	case AbstractFileFilter::FileType::Image: {
