@@ -38,6 +38,38 @@
 	{ }
 #endif
 
+#define DEBUG_DUMP_PAINTER_PATH 1
+
+#if DEBUG_DUMP_PAINTER_PATH == 0
+#define DUMP_PAINTER_PATH(path)                                                                                                                                \
+	do {                                                                                                                                                       \
+		DEBUG("Dump QPainterPath");                                                                                                                            \
+		if (path.isEmpty())                                                                                                                                    \
+			DEBUG("\tPath is empty");                                                                                                                          \
+		for (int i = 0; i < path.elementCount(); i++) {                                                                                                        \
+			const auto& element = path.elementAt(i);                                                                                                           \
+			QString type;                                                                                                                                      \
+			switch (element.type) {                                                                                                                            \
+			case QPainterPath::MoveToElement:                                                                                                                  \
+				type = QStringLiteral("MoveToElement");                                                                                                        \
+				break;                                                                                                                                         \
+			case QPainterPath::LineToElement:                                                                                                                  \
+				type = QStringLiteral("LineToElement");                                                                                                        \
+				break;                                                                                                                                         \
+			case QPainterPath::CurveToElement:                                                                                                                 \
+				type = QStringLiteral("CurveToElement");                                                                                                       \
+				break;                                                                                                                                         \
+			case QPainterPath::CurveToDataElement:                                                                                                             \
+				type = QStringLiteral("CurveToDataElement");                                                                                                   \
+				break;                                                                                                                                         \
+			}                                                                                                                                                  \
+			DEBUG("\tQPainterPathElement: " << type.toStdString() << " (" << element.x << "," << element.y << ")");                                            \
+		}                                                                                                                                                      \
+	} while (false);
+#else
+#define DUMP_PAINTER_PATH(path)
+#endif
+
 #define DEBUG_TEXTLABEL_BOUNDING_RECT 0
 #define DEBUG_TEXTLABEL_GLUEPOINTS 0
 #define DEBUG_AXIS_BOUNDING_RECT 0

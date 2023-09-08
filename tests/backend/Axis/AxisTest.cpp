@@ -120,12 +120,12 @@ void AxisTest::axisLine() {
 
 		auto element = linePath.elementAt(0);
 		QCOMPARE(element.type, QPainterPath::MoveToElement);
-		QCOMPARE(element.x, dataRect.center().x());
-		QCOMPARE(element.y, dataRect.bottom());
+		QCOMPARE(element.x, bottomLeft.x());
+		QCOMPARE(element.y, bottomLeft.y());
 		element = linePath.elementAt(1);
 		QCOMPARE(element.type, QPainterPath::LineToElement);
-		QCOMPARE(element.x, dataRect.center().x());
-		QCOMPARE(element.y, dataRect.top());
+		QCOMPARE(element.x, topLeft.x());
+		QCOMPARE(element.y, topLeft.y());
 	}
 }
 

@@ -834,11 +834,18 @@ void Project::retransformElements(AbstractAspect* aspect) {
 		QVector<CartesianPlot*> plots;
 		if (aspect->type() == AspectType::CartesianPlot)
 			plots << static_cast<CartesianPlot*>(aspect);
-		else if (aspect->inherits(AspectType::XYCurve) || aspect->type() == AspectType::Histogram)
+		else if (dynamic_cast<Plot*>(aspect))
 			plots << static_cast<CartesianPlot*>(aspect->parentAspect());
 
 		for (auto* plot : plots)
 			plot->retransform();
+
+		if (plots.isEmpty()) {
+			// Retransform aspect it self if not done above
+			auto* e = dynamic_cast<WorksheetElement*>(aspect);
+			if (e)
+				e->retransform();
+		}
 	}
 
 #ifndef SDK
