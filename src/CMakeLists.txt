@@ -612,7 +612,7 @@ IF (Discount_FOUND)
 	target_link_libraries( labplot2lib Discount::Lib )
 ENDIF ()
 IF (Orcus_FOUND)
-	target_link_libraries( labplot2lib ${Orcus_LIBRARIES} )
+	target_link_libraries( labplot2lib ${Orcus_LIBRARIES} ${Ixion_LIBRARY} )
 ENDIF ()
 # TODO: KF6::NewStuff not found even though KF6NewStuff_FOUND
 IF (KF5NewStuff_FOUND)

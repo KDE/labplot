@@ -212,9 +212,9 @@ QVector<QStringList> OdsFilterPrivate::preview(const QString& sheetName, int lin
 
 	auto index = m_document.get_sheet_index(sheetName.toStdString());
 	if (index >= 0) {
-		// ixion::abs_address_t pos(index, 0, 0);
-		// double value = model.get_numeric_value(pos);
-		//DEBUG(Q_FUNC_INFO << ", first value = " << value)
+		ixion::abs_address_t pos(index, 0, 0);
+		double value = model.get_numeric_value(pos);
+		DEBUG(Q_FUNC_INFO << ", first value = " << value)
 	}
 #endif
 

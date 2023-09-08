@@ -34,6 +34,11 @@ else ()
     )
     set(Orcus_LIBRARIES ${Orcus_LIBRARY} ${Orcus_parser_LIBRARY} ${Orcus_spreadsheet_LIBRARY})
 
+    find_library (Ixion_LIBRARY
+        NAMES ixion ixion-0.17
+	HINTS ${PC_IXION_LIBRARY_DIRS}
+        PATH_SUFFIXES orcus
+    )
     find_path (Orcus_INCLUDE_DIR
         NAMES orcus/orcus_ods.hpp
         HINTS ${PC_ORCUS_INCLUDE_DIRS}
@@ -49,9 +54,9 @@ else ()
     find_package_handle_standard_args (Orcus DEFAULT_MSG Orcus_LIBRARIES Orcus_INCLUDE_DIR Ixion_INCLUDE_DIR)
 endif ()
 
-mark_as_advanced(Orcus_INCLUDE_DIR Orcus_LIBRARY Orcus_parser_LIBRARY Orcus_spreadsheet_LIBRARY Orcus_LIBRARIES Ixion_INCLUDE_DIR)
+mark_as_advanced(Orcus_INCLUDE_DIR Ixion_INCLUDE_DIR Orcus_LIBRARY Orcus_parser_LIBRARY Orcus_spreadsheet_LIBRARY Orcus_LIBRARIES Ixion_LIBRARY)
 
 if (Orcus_FOUND)
    add_library(Orcus UNKNOWN IMPORTED)
-   set_target_properties(Orcus PROPERTIES INTERFACE_INCLUDE_DIRECTORIES ${Orcus_INCLUDE_DIR} IMPORTED_LOCATION "${Orcus_LIBRARIES}")
+   set_target_properties(Orcus PROPERTIES INTERFACE_INCLUDE_DIRECTORIES ${Orcus_INCLUDE_DIR} IMPORTED_LOCATION "${Orcus_LIBRARIES} ${Ixion_LIBRARY}")
 endif()
