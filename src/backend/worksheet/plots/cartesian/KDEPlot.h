@@ -65,6 +65,7 @@ public:
 	bool minMax(const CartesianCoordinateSystem::Dimension dim, const Range<int>& indexRange, Range<double>& r, bool includeErrorBars = true) const override;
 	double minimum(CartesianCoordinateSystem::Dimension) const override;
 	double maximum(CartesianCoordinateSystem::Dimension) const override;
+	int gridPointsCount() const;
 	bool hasData() const override;
 
 	typedef KDEPlotPrivate Private;

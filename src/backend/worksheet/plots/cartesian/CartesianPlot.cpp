@@ -2735,7 +2735,8 @@ void CartesianPlot::calculateDataRange(const Dimension dim, const int index, boo
 
 			curve->minMax(dim, indexRange, range, true);
 		} else if (plot->type() == AspectType::KDEPlot) {
-			Range<int> indexRange{0, 199};
+			const int count = static_cast<const KDEPlot*>(plot)->gridPointsCount() - 1;
+			Range<int> indexRange{0, count};
 			plot->minMax(dim, indexRange, range, true);
 		} else if (plot->type() == AspectType::QQPlot) {
 			Range<int> indexRange{0, 99};

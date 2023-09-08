@@ -222,6 +222,15 @@ bool KDEPlot::hasData() const {
 	return (d->dataColumn != nullptr);
 }
 
+/*!
+ * returns the the number of equaly spaced points at which the density is to be evaluated,
+ * which also corresponds to the number of data points in the xy-curve used internally.
+ */
+int KDEPlot::gridPointsCount() const {
+	Q_D(const KDEPlot);
+	return d->gridPointsCount;
+}
+
 //##############################################################################
 //#################  setter methods and undo commands ##########################
 //##############################################################################
@@ -349,12 +358,12 @@ void KDEPlotPrivate::recalc() {
 	QVector<double> data;
 	copyValidData(data);
 
-	// calculate 200 points to plot
-	int count = 200;
+	// calculate the estimation curve for the number
+	// of equaly spaced points determined by gridPoints
 	QVector<double> xData;
 	QVector<double> yData;
-	xData.resize(count);
-	yData.resize(count);
+	xData.resize(gridPointsCount);
+	yData.resize(gridPointsCount);
 	int n = data.count();
 	const auto& statistics = static_cast<const Column*>(dataColumn)->statistics();
 	const double sigma = statistics.standardDeviation;
@@ -378,9 +387,9 @@ void KDEPlotPrivate::recalc() {
 	// calculate KDE for the grid points from min-3*sigma to max+3*sigma
 	const double min = statistics.minimum - 3 * h;
 	const double max = statistics.maximum + 3 * h;
-	const double step = (max - min) / count;
+	const double step = (max - min) / gridPointsCount;
 
-	for (int i = 0; i < count; ++i) {
+	for (int i = 0; i < gridPointsCount; ++i) {
 		double x = min + i * step;
 		xData[i] = x;
 		yData[i] = nsl_kde(data.data(), x, kernelType, h, n);
