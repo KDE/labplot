@@ -20,7 +20,6 @@
 #include <QVector>
 
 #ifdef HAVE_ORCUS
-#include <orcus/orcus_ods.hpp>
 #include <orcus/spreadsheet/factory.hpp>
 #include <orcus/spreadsheet/sheet.hpp>
 

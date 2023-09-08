@@ -13,6 +13,7 @@
 #include "backend/datasources/filters/AbstractFileFilter.h"
 
 #ifdef HAVE_ORCUS
+#include <orcus/orcus_ods.hpp>
 #include <orcus/spreadsheet/document.hpp>
 #endif
 
