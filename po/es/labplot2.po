@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-09-07 00:41+0000\n"
-"PO-Revision-Date: 2023-09-03 20:13+0200\n"
+"PO-Revision-Date: 2023-09-07 11:30+0200\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -10169,76 +10169,69 @@ msgid "%1: clear selected cells"
 msgstr "%1: borrar celdas seleccionadas"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3625
-#, fuzzy, kde-format
-#| msgid "Arrow"
+#, kde-format
 msgid "row"
 msgid_plural "rows"
-msgstr[0] "Flecha"
-msgstr[1] "Flecha"
+msgstr[0] "fila"
+msgstr[1] "filas"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3626
-#, fuzzy, kde-format
-#| msgid "Column"
+#, kde-format
 msgid "column"
 msgid_plural "columns"
-msgstr[0] "Columna"
-msgstr[1] "Columna"
+msgstr[0] "columna"
+msgstr[1] "columnas"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3627
 #, kde-format
 msgid "cells"
-msgstr ""
+msgstr "celdas"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3628
-#, fuzzy, kde-format
-#| msgid "Mask values"
+#, kde-format
 msgid "masked value"
-msgstr "Enmascarar valores"
+msgstr "valor enmascarado"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3628
-#, fuzzy, kde-format
-#| msgid "Mask values"
+#, kde-format
 msgid "masked values"
-msgstr "Enmascarar valores"
+msgstr "valores enmascarados"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3629
-#, fuzzy, kde-format
-#| msgid "bin values"
+#, kde-format
 msgid "missing value"
-msgstr "valores del intervalo"
+msgstr "valor ausente"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3629
-#, fuzzy, kde-format
-#| msgid "bin values"
+#, kde-format
 msgid "missing values"
-msgstr "valores del intervalo"
+msgstr "valores ausentes"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3630
 #, kde-format
 msgid " , "
-msgstr ""
+msgstr " , "
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3630
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3631
-#, fuzzy, kde-format
-#| msgid "1"
+#, kde-format
 msgid "%1"
-msgstr "1"
+msgstr "%1"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3631
 #, kde-format
 msgid ", "
-msgstr ""
+msgstr ", "
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3635
 #, kde-format
 msgid "Selected: %1 %2 , %3 %4%5 %6 %7 %8"
-msgstr ""
+msgstr "Seleccionado: %1 %2 , %3 %4%5 %6 %7 %8"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3646
 #, kde-format
 msgid "Selected: %1 %2%3 %4 %5 %6"
-msgstr ""
+msgstr "Seleccionado: %1 %2%3 %4 %5 %6"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3719
 #, kde-format

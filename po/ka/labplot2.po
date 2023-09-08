@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-09-07 00:41+0000\n"
-"PO-Revision-Date: 2023-09-04 06:04+0200\n"
+"PO-Revision-Date: 2023-09-07 03:45+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -10100,16 +10100,14 @@ msgid "%1: clear selected cells"
 msgstr "%1: მონიშნული უჯრედების გასუფთავება"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3625
-#, fuzzy, kde-format
-#| msgid "Arrow"
+#, kde-format
 msgid "row"
 msgid_plural "rows"
-msgstr[0] "ისარი"
-msgstr[1] "ისარი"
+msgstr[0] "მწკრივი"
+msgstr[1] "მწკრივი"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3626
-#, fuzzy, kde-format
-#| msgid "Column"
+#, kde-format
 msgid "column"
 msgid_plural "columns"
 msgstr[0] "სვეტი"
@@ -10118,31 +10116,27 @@ msgstr[1] "სვეტი"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3627
 #, kde-format
 msgid "cells"
-msgstr ""
+msgstr "უჯრედები"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3628
-#, fuzzy, kde-format
-#| msgid "Mask Values"
+#, kde-format
 msgid "masked value"
-msgstr "მნიშვნელობების შენიღბვა"
+msgstr "შენიღბული მნიშვნელობა"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3628
-#, fuzzy, kde-format
-#| msgid "Mask Values"
+#, kde-format
 msgid "masked values"
-msgstr "მნიშვნელობების შენიღბვა"
+msgstr "შენიღბული მნიშვნელობები"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3629
-#, fuzzy, kde-format
-#| msgid "bin values"
+#, kde-format
 msgid "missing value"
-msgstr "შემთხვევითი მნშვნელობები"
+msgstr "ნაკლული მნიშვნელობა"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3629
-#, fuzzy, kde-format
-#| msgid "bin values"
+#, kde-format
 msgid "missing values"
-msgstr "შემთხვევითი მნშვნელობები"
+msgstr "ნაკლული მნიშვნელობები"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3630
 #, kde-format
@@ -10151,10 +10145,9 @@ msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3630
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3631
-#, fuzzy, kde-format
-#| msgid "1"
+#, kde-format
 msgid "%1"
-msgstr "1"
+msgstr "%1"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3631
 #, kde-format
