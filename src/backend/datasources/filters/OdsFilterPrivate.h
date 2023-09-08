@@ -13,7 +13,6 @@
 #include "backend/datasources/filters/AbstractFileFilter.h"
 
 #ifdef HAVE_ORCUS
-#include <orcus/orcus_ods.hpp>
 #include <orcus/spreadsheet/document.hpp>
 #endif
 
@@ -62,7 +61,7 @@ public:
 	#endif
 */
 private:
-#ifdef HAVE_EXCEL
+#ifdef HAVE_ORCUS
 	orcus::spreadsheet::range_size_t ss{1048576, 16384};
 	orcus::spreadsheet::document m_document{ss};
 #endif
