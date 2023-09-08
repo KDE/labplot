@@ -502,24 +502,6 @@ void XYCurveDock::setSymbols(QList<XYCurve*> curves) {
 }
 
 void XYCurveDock::initGeneralTab() {
-	DEBUG(Q_FUNC_INFO);
-	// if there is more than one curve in the list, disable the content in the tab "general"
-	if (m_curvesList.size() == 1) {
-		uiGeneralTab.lName->setEnabled(true);
-		uiGeneralTab.leName->setEnabled(true);
-		uiGeneralTab.lComment->setEnabled(true);
-		uiGeneralTab.teComment->setEnabled(true);
-		uiGeneralTab.leName->setText(m_curve->name());
-		uiGeneralTab.teComment->setText(m_curve->comment());
-	} else {
-		uiGeneralTab.lName->setEnabled(false);
-		uiGeneralTab.leName->setEnabled(false);
-		uiGeneralTab.lComment->setEnabled(false);
-		uiGeneralTab.teComment->setEnabled(false);
-		uiGeneralTab.leName->setText(QString());
-		uiGeneralTab.teComment->setText(QString());
-	}
-
 	// show the properties of the first curve
 	cbXColumn->setColumn(m_curve->xColumn(), m_curve->xColumnPath());
 	cbYColumn->setColumn(m_curve->yColumn(), m_curve->yColumnPath());
@@ -535,7 +517,6 @@ void XYCurveDock::initGeneralTab() {
 	connect(m_curve, &WorksheetElement::plotRangeListChanged, this, &XYCurveDock::updatePlotRanges);
 	connect(m_curve, &XYCurve::legendVisibleChanged, this, &XYCurveDock::curveLegendVisibleChanged);
 	connect(m_curve, &WorksheetElement::visibleChanged, this, &XYCurveDock::curveVisibilityChanged);
-	DEBUG(Q_FUNC_INFO << " DONE");
 }
 
 void XYCurveDock::initTabs() {

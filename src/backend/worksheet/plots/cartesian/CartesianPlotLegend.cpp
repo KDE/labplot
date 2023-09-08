@@ -966,14 +966,30 @@ bool CartesianPlotLegend::load(XmlStreamReader* reader, bool preview) {
 				str = attribs.value(QStringLiteral("horizontalPosition")).toString();
 				if (str.isEmpty())
 					reader->raiseMissingAttributeWarning(QStringLiteral("horizontalPosition"));
-				else
-					d->position.horizontalPosition = (WorksheetElement::HorizontalPosition)str.toInt();
+				else {
+					const auto pos = (WorksheetElement::HorizontalPosition)str.toInt();
+					if (pos == WorksheetElement::HorizontalPosition::Custom)
+						d->position.horizontalPosition = WorksheetElement::HorizontalPosition::Center;
+					else
+						d->position.horizontalPosition = pos;
+				}
 
 				str = attribs.value(QStringLiteral("verticalPosition")).toString();
 				if (str.isEmpty())
 					reader->raiseMissingAttributeWarning(QStringLiteral("verticalPosition"));
-				else
-					d->position.verticalPosition = (WorksheetElement::VerticalPosition)str.toInt();
+				else {
+					const auto pos = (WorksheetElement::VerticalPosition)str.toInt();
+					if (pos == WorksheetElement::VerticalPosition::Custom)
+						d->position.verticalPosition = WorksheetElement::VerticalPosition::Center;
+					else
+						d->position.verticalPosition = pos;
+				}
+
+				// in the old format the order was reversed, multiple by -1 here
+				d->position.point.setY(-d->position.point.y());
+
+				d->horizontalAlignment = WorksheetElement::HorizontalAlignment::Center;
+				d->verticalAlignment = WorksheetElement::VerticalAlignment::Center;
 
 				QGRAPHICSITEM_READ_DOUBLE_VALUE("rotation", Rotation);
 			}

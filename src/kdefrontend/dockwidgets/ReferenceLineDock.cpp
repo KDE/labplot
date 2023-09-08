@@ -63,25 +63,6 @@ void ReferenceLineDock::setReferenceLines(QList<ReferenceLine*> list) {
 	setAspects(list);
 	Q_ASSERT(m_line);
 
-	// if there is more than one point in the list, disable the comment and name widgets in "general"
-	if (list.size() == 1) {
-		ui.lName->setEnabled(true);
-		ui.leName->setEnabled(true);
-		ui.lComment->setEnabled(true);
-		ui.teComment->setEnabled(true);
-		ui.leName->setText(m_line->name());
-		ui.teComment->setText(m_line->comment());
-	} else {
-		ui.lName->setEnabled(false);
-		ui.leName->setEnabled(false);
-		ui.lComment->setEnabled(false);
-		ui.teComment->setEnabled(false);
-		ui.leName->setText(QString());
-		ui.teComment->setText(QString());
-	}
-	ui.leName->setStyleSheet(QString());
-	ui.leName->setToolTip(QString());
-
 	// show the properties of the first reference line
 	this->load();
 

@@ -72,23 +72,6 @@ void MatrixDock::setMatrices(QList<Matrix*> list) {
 	m_matrix = list.first();
 	setAspects(list);
 
-	if (list.size() == 1) {
-		ui.leName->setEnabled(true);
-		ui.teComment->setEnabled(true);
-
-		ui.leName->setText(m_matrix->name());
-		ui.teComment->setText(m_matrix->comment());
-	} else {
-		// disable these fields if there is more than one matrix
-		ui.leName->setEnabled(false);
-		ui.teComment->setEnabled(false);
-
-		ui.leName->setText(QString());
-		ui.teComment->setText(QString());
-	}
-	ui.leName->setStyleSheet(QString());
-	ui.leName->setToolTip(QString());
-
 	// show the properties of the first Matrix in the list, if there are >1 matrixs
 	this->load();
 

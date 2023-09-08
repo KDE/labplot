@@ -181,6 +181,26 @@ AspectTreeModel* BaseDock::aspectModel() {
 	return m_aspectModel;
 }
 
+/*!
+ * shows the name and the description of the first selecte aspect,
+ * disables the fields "Name" and "Comment" if there are more than one aspects selected.
+ */
+void BaseDock::updateNameDescriptionWidgets() {
+	if (m_aspects.size() == 1) {
+		m_leName->setEnabled(true);
+		m_teComment->setEnabled(true);
+		m_leName->setText(m_aspect->name());
+		m_teComment->setText(m_aspect->comment());
+	} else {
+		m_leName->setEnabled(false);
+		m_teComment->setEnabled(false);
+		m_leName->setText(QString());
+		m_teComment->setText(QString());
+	}
+	m_leName->setStyleSheet(QString());
+	m_leName->setToolTip(QString());
+}
+
 void BaseDock::spinBoxCalculateMinMax(QDoubleSpinBox* spinbox, Range<double> range, double newValue) {
 	double min, max;
 	if (range.start() > range.end()) {
