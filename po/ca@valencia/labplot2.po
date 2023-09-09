@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-09-07 00:41+0000\n"
-"PO-Revision-Date: 2023-08-29 15:30+0200\n"
+"PO-Revision-Date: 2023-09-06 11:47+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 23.04.3\n"
+"X-Generator: Lokalize 22.12.3\n"
 "X-Accelerator-Marker: &\n"
 
 #, kde-format
@@ -10263,76 +10263,69 @@ msgid "%1: clear selected cells"
 msgstr "%1: neteja les cel·les seleccionades"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3625
-#, fuzzy, kde-format
-#| msgid "Arrow"
+#, kde-format
 msgid "row"
 msgid_plural "rows"
-msgstr[0] "Fletxa"
-msgstr[1] "Fletxa"
+msgstr[0] "fila"
+msgstr[1] "files"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3626
-#, fuzzy, kde-format
-#| msgid "Column"
+#, kde-format
 msgid "column"
 msgid_plural "columns"
-msgstr[0] "Columna"
-msgstr[1] "Columna"
+msgstr[0] "columna"
+msgstr[1] "columnes"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3627
 #, kde-format
 msgid "cells"
-msgstr ""
+msgstr "cel·les"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3628
-#, fuzzy, kde-format
-#| msgid "%1: mask values"
+#, kde-format
 msgid "masked value"
-msgstr "%1: valors de l'emmascarament"
+msgstr "valor emmascarat"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3628
-#, fuzzy, kde-format
-#| msgid "%1: mask values"
+#, kde-format
 msgid "masked values"
-msgstr "%1: valors de l'emmascarament"
+msgstr "valors emmascarats"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3629
-#, fuzzy, kde-format
-#| msgid "bin values"
+#, kde-format
 msgid "missing value"
-msgstr "valors dels compartiments"
+msgstr "valor que falta"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3629
-#, fuzzy, kde-format
-#| msgid "bin values"
+#, kde-format
 msgid "missing values"
-msgstr "valors dels compartiments"
+msgstr "valors que falten"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3630
 #, kde-format
 msgid " , "
-msgstr ""
+msgstr " , "
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3630
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3631
-#, fuzzy, kde-format
-#| msgid "1"
+#, kde-format
 msgid "%1"
-msgstr "1"
+msgstr "%1"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3631
 #, kde-format
 msgid ", "
-msgstr ""
+msgstr ", "
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3635
 #, kde-format
 msgid "Selected: %1 %2 , %3 %4%5 %6 %7 %8"
-msgstr ""
+msgstr "Seleccionat: %1 %2 , %3 %4%5 %6 %7 %8"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3646
 #, kde-format
 msgid "Selected: %1 %2%3 %4 %5 %6"
-msgstr ""
+msgstr "Seleccionat: %1 %2%3 %4 %5 %6"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3719
 #, kde-format
@@ -16380,20 +16373,16 @@ msgid "Fixed-length negative lookbehind"
 msgstr "Busca arrere negativa de llargària fixa"
 
 #: src/kdefrontend/spreadsheet/SortDialog.cpp:33
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Sort Columns"
+#, kde-format
 msgctxt "@title:window"
 msgid "Sort All Columns"
-msgstr "Ordena les columnes"
+msgstr "Ordena totes les columnes"
 
 #: src/kdefrontend/spreadsheet/SortDialog.cpp:35
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Flatten Selected Columns"
+#, kde-format
 msgctxt "@title:window"
 msgid "Sort Selected Columns"
-msgstr "Aplanar les columnes seleccionades"
+msgstr "Ordena les columnes seleccionades"
 
 #: src/kdefrontend/spreadsheet/SortDialog.cpp:39
 #, kde-format
@@ -21595,14 +21584,14 @@ msgstr "Busca només en la selecció"
 #: src/kdefrontend/ui/spreadsheet/searchwidget.ui:91
 #, kde-format
 msgid "Jump to next match"
-msgstr "Salta a la coincidència següent"
+msgstr "Salta fins a la coincidència següent"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbFindPrev)
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:208
 #: src/kdefrontend/ui/spreadsheet/searchwidget.ui:105
 #, kde-format
 msgid "Jump to previous match"
-msgstr "Salta a la coincidència anterior"
+msgstr "Salta fins a la coincidència anterior"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bReplaceNext)
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:222
@@ -22540,6 +22529,3 @@ msgstr "El procés «convert» ha fallat, codi d'eixida ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "No s'ha pogut obrir el fitxer:"
-
-#~ msgid "Inverse"
-#~ msgstr "Invers"
