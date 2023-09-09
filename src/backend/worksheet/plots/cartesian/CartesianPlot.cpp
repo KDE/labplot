@@ -2735,11 +2735,12 @@ void CartesianPlot::calculateDataRange(const Dimension dim, const int index, boo
 
 			curve->minMax(dim, indexRange, range, true);
 		} else if (plot->type() == AspectType::KDEPlot) {
-			const int count = static_cast<const KDEPlot*>(plot)->gridPointsCount() - 1;
-			Range<int> indexRange{0, count};
+			const int minIndex = 0;
+			const int maxIndex = static_cast<const KDEPlot*>(plot)->gridPointsCount() - 1;
+			Range<int> indexRange{minIndex, maxIndex};
 			plot->minMax(dim, indexRange, range, true);
 		} else if (plot->type() == AspectType::QQPlot) {
-			Range<int> indexRange{0, 99};
+			Range<int> indexRange{0, 99}; // 100 percentile values are calculated, max index is 99
 			plot->minMax(dim, indexRange, range, true);
 		} else {
 			range.setStart(plot->minimum(dim));

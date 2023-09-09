@@ -68,7 +68,7 @@ public:
 	int layoutColumnCount{1};
 
 private:
-	QList<WorksheetElement*> m_curves; // list containing all visible curves
+	QList<Plot*> m_plots; // list containing all visible plots/curves
 	QStringList m_names;
 
 	bool translatePainter(QPainter*, int& row, int& col, int height);

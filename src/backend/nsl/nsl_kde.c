@@ -63,6 +63,9 @@ double nsl_kde_bandwidth(int n, double sigma, double iqr, nsl_kde_bandwidth_type
 		break;
 	}
 
+	// return a small value to avoid division by zero by the caller,
+	// should actually never happen since it's only relevant for
+	// the case nsl_kde_bandwidth_custom which has to be handled by the caller anyway.
 	return 1e-6;
 }
 
@@ -76,6 +79,9 @@ double nsl_kde_bandwidth_from_data(double* data, int n, nsl_kde_bandwidth_type t
 		break;
 	}
 
+	// return a small value to avoid division by zero by the caller,
+	// should actually never happen since it's only relevant for
+	// the case nsl_kde_bandwidth_custom which has to be handled by the caller anyway.
 	return 1e-6;
 }
 
