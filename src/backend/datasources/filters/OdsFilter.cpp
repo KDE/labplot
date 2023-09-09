@@ -14,7 +14,7 @@
 #include "backend/matrix/Matrix.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 #include <QStringList>
 #include <QTreeWidgetItem>
 #include <QVector>
@@ -206,15 +206,45 @@ QVector<QStringList> OdsFilterPrivate::preview(const QString& sheetName, int lin
 	QVector<QStringList> dataString;
 #ifdef HAVE_ORCUS
 
-	// TODO: get sheet by name and read lines of data into dataString
-	// auto* sheet = m_document.get_sheet(sheetName.toStdString());
-	const auto& model = m_document.get_model_context();
+	// get sheet index by name and read lines of data into dataString
+	auto* sheet = m_document.get_sheet(sheetName.toStdString());
+	const auto index = sheet->get_index();
+	if (index != ixion::invalid_sheet) {
+		const auto ranges = sheet->get_data_range();
+		DEBUG(Q_FUNC_INFO << ", data range: col " << ranges.first.column << ".." << ranges.last.column << ", row " << ranges.first.row << ".."
+						  << ranges.last.row)
+		// TODO: std::string get_sheet_name(sheet_t sheet
+		// TODO: rc_size_t get_sheet_size()	-> whole size?
+		const auto& model = m_document.get_model_context();
 
-	auto index = m_document.get_sheet_index(sheetName.toStdString());
-	if (index >= 0) {
-		ixion::abs_address_t pos(index, 0, 0);
-		double value = model.get_numeric_value(pos);
-		DEBUG(Q_FUNC_INFO << ", first value = " << value)
+		const int maxCols = 50;
+		for (ixion::row_t row = ranges.first.row; row < std::min(lines + ranges.first.row, ranges.last.row + 1); row++) {
+			DEBUG(Q_FUNC_INFO << ", row " << row)
+			for (ixion::col_t col = ranges.first.column; col < std::min(maxCols + ranges.first.column, ranges.last.column + 1); col++) {
+				ixion::abs_address_t pos(index, row, col);
+
+				auto type = model.get_celltype(pos);
+				switch (type) {
+				case ixion::celltype_t::string: {
+					auto value = model.get_string_value(pos);
+					DEBUG(Q_FUNC_INFO << " " << value)
+					break;
+				}
+				case ixion::celltype_t::numeric: {
+					double value = model.get_numeric_value(pos);
+					DEBUG(Q_FUNC_INFO << " " << value)
+					break;
+				}
+				case ixion::celltype_t::unknown:
+				case ixion::celltype_t::formula:
+					// formula_result formula = model.get_formula_result(pos);
+				case ixion::celltype_t::boolean:
+				case ixion::celltype_t::empty:
+					// TODO
+					break;
+				}
+			}
+		}
 	}
 #endif
 
