@@ -5,6 +5,7 @@ New features:
 		* New visualization types:
 			* Lollipop plot
 			* Q-Q plot
+			* KDE plot
 		* New worksheet theme "Dracula"
 	* [spreadsheet]
 		* Spreadsheet linking - allow to synchronize number of rows across multiple spreadsheets
@@ -16,6 +17,7 @@ New features:
 		* Export to PDF
 	* [import]
 		* Templates for ASCII and Binary import filters - allow to save and load current filter settings
+		* Addeded seaborn's datasets to the collection of datasets
 
 Performance improvements:
 	* Make baseline removal much faster by using Eigen3 library (optional dependency)
