@@ -255,6 +255,7 @@ void OdsFilterPrivate::parse(const QString& fileName, QTreeWidgetItem* parentIte
 	DEBUG(Q_FUNC_INFO)
 
 #ifdef HAVE_ORCUS
+	m_document.clear();
 	spreadsheet::import_factory factory{m_document};
 	orcus_ods loader(&factory);
 
