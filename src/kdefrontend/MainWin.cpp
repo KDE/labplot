@@ -686,10 +686,6 @@ void MainWin::initActions() {
 	actionCollection()->addAction(QLatin1String("new_notes"), m_newNotesAction);
 	connect(m_newNotesAction, &QAction::triggered, this, &MainWin::newNotes);
 
-	// 	m_newScriptAction = new QAction(QIcon::fromTheme(QLatin1String("insert-text")),i18n("Note/Script"),this);
-	// 	actionCollection()->addAction(QLatin1String("new_script"), m_newScriptAction);
-	// 	connect(m_newScriptAction, &QAction::triggered,SLOT(newScript()));
-
 	m_newFolderAction = new QAction(QIcon::fromTheme(QLatin1String("folder-new")), i18n("Folder"), this);
 	m_newFolderAction->setWhatsThis(i18n("Creates a new folder to collect sheets and other elements"));
 	actionCollection()->addAction(QLatin1String("new_folder"), m_newFolderAction);
@@ -2640,9 +2636,9 @@ void MainWin::handleSettingsChanges() {
 		}
 	}
 
-	bool showWelcomeScreen = group.readEntry<bool>(QLatin1String("ShowWelcomeScreen"), true);
-	if (m_showWelcomeScreen != showWelcomeScreen)
-		m_showWelcomeScreen = showWelcomeScreen;
+	// bool showWelcomeScreen = group.readEntry<bool>(QLatin1String("ShowWelcomeScreen"), true);
+	// if (m_showWelcomeScreen != showWelcomeScreen)
+	// 	m_showWelcomeScreen = showWelcomeScreen;
 }
 
 void MainWin::openDatasetExample() {

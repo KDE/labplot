@@ -3,11 +3,7 @@
 	Project              : LabPlot
 	Description          : Main window of the application
 	--------------------------------------------------------------------
-<<<<<<< HEAD
-	SPDX-FileCopyrightText: 2011-2022 Alexander Semke <alexander.semke@web.de>
-=======
 	SPDX-FileCopyrightText: 2011-2023 Alexander Semke <alexander.semke@web.de>
->>>>>>> master
 	SPDX-FileCopyrightText: 2008-2018 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -27,34 +23,19 @@ class Folder;
 class ProjectExplorer;
 class Project;
 class Worksheet;
-class Note;
-class Workbook;
-class Datapicker;
 class Spreadsheet;
-class Matrix;
 class GuiObserver;
 class CursorDock;
 class ContentDockWidget;
 class MemoryWidget;
-class CartesianPlot;
-class InfoElementDialog;
-
-#ifdef HAVE_CANTOR_LIBS
-class CantorWorksheet;
-#endif
-
-class ImportDatasetWidget;
-class TreeModel;
 // class WelcomeScreenHelper;
 
 class QDockWidget;
 class QDragEnterEvent;
 class QDropEvent;
-class QMdiArea;
-class QMdiSubWindow;
 class QStackedWidget;
 class QToolButton;
-class QQuickWidget;
+// class QQuickWidget;
 
 class KColorSchemeManager;
 class KHamburgerMenu;
@@ -115,14 +96,12 @@ private:
 	bool m_projectClosing{false};
 	bool m_autoSaveActive{false};
 	QTimer m_autoSaveTimer;
-	bool m_showWelcomeScreen{false};
-	bool m_saveWelcomeScreen{true};
+	// bool m_showWelcomeScreen{false};
+	// bool m_saveWelcomeScreen{true};
 	int undoStackIndexLastSave{0};
 	MemoryWidget* m_memoryInfoWidget{nullptr};
-	QMdiSubWindow* m_welcomeWindow{nullptr};
-	QQuickWidget* m_welcomeWidget{nullptr};
-	// 	WelcomeScreenHelper* m_welcomeScreenHelper{nullptr};
-	ImportDatasetWidget* m_importDatasetWidget{nullptr};
+	// QQuickWidget* m_welcomeWidget{nullptr};
+	// WelcomeScreenHelper* m_welcomeScreenHelper{nullptr};
 	QString m_lastOpenFileFilter;
 	const Worksheet* m_lastWorksheet{nullptr};
 	const Spreadsheet* m_lastSpreadsheet{nullptr};
@@ -161,8 +140,6 @@ private:
 	QAction* m_newWorksheetAction;
 	QAction* m_newNotesAction;
 	QAction* m_newLiveDataSourceAction;
-	QAction* m_newSqlDataSourceAction;
-	QAction* m_newScriptAction;
 	QAction* m_newProjectAction;
 	QAction* m_openProjectAction;
 	QAction* m_historyAction;
@@ -260,7 +237,7 @@ private Q_SLOTS:
 
 	// Cantor
 #ifdef HAVE_CANTOR_LIBS
-	void newCantorWorksheet(QAction* action);
+	void newCantorWorksheet(QAction*);
 	void cantorSettingsDialog();
 #endif
 
@@ -271,7 +248,6 @@ private Q_SLOTS:
 	void newWorksheet();
 	void newNotes();
 	void newDatapicker();
-	// TODO: void newScript();
 	void newLiveDataSource();
 
 	void createContextMenu(QMenu*) const;
