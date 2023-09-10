@@ -2677,7 +2677,7 @@ void AxisPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*opt
 		painter->setPen(line->pen());
 		painter->drawPath(linePath);
 
-		DUMP_PAINTER_PATH(linePath);
+		// DUMP_PAINTER_PATH(linePath);
 
 		// draw the arrow
 		if (arrowType != Axis::ArrowType::NoArrow) {

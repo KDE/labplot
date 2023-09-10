@@ -837,11 +837,12 @@ void Project::retransformElements(AbstractAspect* aspect) {
 		else if (dynamic_cast<Plot*>(aspect))
 			plots << static_cast<CartesianPlot*>(aspect->parentAspect());
 
-		for (auto* plot : plots)
-			plot->retransform();
-
-		if (plots.isEmpty()) {
-			// Retransform aspect it self if not done above
+		if (!plots.isEmpty()) {
+			for (auto* plot : plots)
+				plot->retransform();
+		} else {
+			// worksheet element is being copied alone without its parent plot object
+			// so the plot retransform is not called above. we need to call it for the aspect.
 			auto* e = dynamic_cast<WorksheetElement*>(aspect);
 			if (e)
 				e->retransform();
