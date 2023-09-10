@@ -475,6 +475,7 @@ void AsciiFilterTest::testHeader11() {
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/column_names.txt"));
 
 	filter.setSeparatingCharacter(QStringLiteral(" "));
+	filter.setHeaderEnabled(true);
 	filter.setHeaderLine(1);
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
@@ -487,6 +488,7 @@ void AsciiFilterTest::testHeader11() {
 	AsciiFilter filter2; // create a new filter so we go through the prepare logic from scratch for the 2nd file
 	const QString& fileName2 = QFINDTESTDATA(QLatin1String("data/column_names_reversed.txt"));
 	filter2.setSeparatingCharacter(QStringLiteral(" "));
+	filter.setHeaderEnabled(true);
 	filter2.setHeaderLine(1);
 	filter2.readDataFromFile(fileName2, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
@@ -515,7 +517,7 @@ void AsciiFilterTest::testHeader11a() {
 	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("B"));
 
 	AsciiFilter filter2;
-
+	filter2.setHeaderEnabled(false);
 	filter2.setSeparatingCharacter(QStringLiteral(" "));
 	filter2.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
