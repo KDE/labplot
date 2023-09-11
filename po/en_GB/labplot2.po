@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-10 00:42+0000\n"
+"POT-Creation-Date: 2023-09-11 00:42+0000\n"
 "PO-Revision-Date: 2023-06-17 12:24+0100\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English\n"
@@ -778,7 +778,7 @@ msgstr "no project element found"
 msgid "no valid XML document found"
 msgstr "no valid XML document found"
 
-#: src/backend/core/Project.cpp:1170
+#: src/backend/core/Project.cpp:1178
 #, kde-format
 msgid "Invalid project modification time. Using current time."
 msgstr "Invalid project modification time. Using current time."

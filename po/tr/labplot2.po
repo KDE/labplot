@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-10 00:42+0000\n"
-"PO-Revision-Date: 2023-09-06 12:30+0300\n"
+"POT-Creation-Date: 2023-09-11 00:42+0000\n"
+"PO-Revision-Date: 2023-09-10 10:35+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -780,7 +780,7 @@ msgstr "proje ögesi bulunamadı"
 msgid "no valid XML document found"
 msgstr "geçerli XML belgesi bulunamadı"
 
-#: src/backend/core/Project.cpp:1170
+#: src/backend/core/Project.cpp:1178
 #, kde-format
 msgid "Invalid project modification time. Using current time."
 msgstr "Geçersiz proje değiştirme zamanı. Geçerli zaman kullanılıyor."
@@ -8102,22 +8102,19 @@ msgstr ""
 "daha büyük olmalı."
 
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:255
-#, fuzzy, kde-format
-#| msgid "%1: set range type"
+#, kde-format
 msgid "%1: set kernel type"
-msgstr "%1: Erim türünü ayarla"
+msgstr "%1: Çekirdek türünü ayarla"
 
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:262
-#, fuzzy, kde-format
-#| msgid "%1: set bin width"
+#, kde-format
 msgid "%1: set bandwidth type"
-msgstr "%1: Kova genişliğini ayarla"
+msgstr "%1: Bant genişliği türünü ayarla"
 
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:269
-#, fuzzy, kde-format
-#| msgid "%1: set bin width"
+#, kde-format
 msgid "%1: set bandwidth"
-msgstr "%1: Kova genişliğini ayarla"
+msgstr "%1: Bant genişliğini ayarla"
 
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:278
 #, kde-format
@@ -12941,7 +12938,7 @@ msgstr "%1: \"%2\" eğrisi kaldırıldı"
 #: src/kdefrontend/dockwidgets/KDEPlotDock.cpp:214
 #, kde-format
 msgid "Silverman"
-msgstr ""
+msgstr "Silverman"
 
 #: src/kdefrontend/dockwidgets/KDEPlotDock.cpp:413
 #: src/kdefrontend/dockwidgets/QQPlotDock.cpp:319
@@ -13695,8 +13692,7 @@ msgid "Properties: Box Plot"
 msgstr "Özellikler: Kutu Çizim"
 
 #: src/kdefrontend/GuiObserver.cpp:377
-#, fuzzy, kde-format
-#| msgid "KDE Plot"
+#, kde-format
 msgctxt "@title:window"
 msgid "KDE Plot"
 msgstr "KDE Çizimi"
@@ -19438,17 +19434,15 @@ msgstr "Bağlantı Çizgisi"
 
 #. i18n: ectx: property (text), widget (QLabel, lKernelType)
 #: src/kdefrontend/ui/dockwidgets/kdeplotdock.ui:43
-#, fuzzy, kde-format
-#| msgid "Kernel: "
+#, kde-format
 msgid "Kernel:"
-msgstr "Çekirdek: "
+msgstr "Çekirdek:"
 
 #. i18n: ectx: property (text), widget (QLabel, lBandwidthType)
 #: src/kdefrontend/ui/dockwidgets/kdeplotdock.ui:79
-#, fuzzy, kde-format
-#| msgid "Bin Width:"
+#, kde-format
 msgid "Bandwidth:"
-msgstr "Kutu Genişliği:"
+msgstr "Bant genişliği:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPlotRange)
 #: src/kdefrontend/ui/dockwidgets/kdeplotdock.ui:180
@@ -19460,10 +19454,9 @@ msgstr "Çizim erimi:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabKDE)
 #: src/kdefrontend/ui/dockwidgets/kdeplotdock.ui:204
-#, fuzzy, kde-format
-#| msgid "Animations"
+#, kde-format
 msgid "Estimation"
-msgstr "Canlandırmalar"
+msgstr "Tahmin"
 
 #. i18n: ectx: property (text), widget (QLabel, lErrorBarsCapSize)
 #: src/kdefrontend/ui/dockwidgets/linewidget.ui:150

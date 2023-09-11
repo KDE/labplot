@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-10 00:42+0000\n"
-"PO-Revision-Date: 2023-09-06 11:47+0200\n"
+"POT-Creation-Date: 2023-09-11 00:42+0000\n"
+"PO-Revision-Date: 2023-09-10 14:48+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -778,7 +778,7 @@ msgstr "geen projectelement gevonden"
 msgid "no valid XML document found"
 msgstr "geen geldig XML-document gevonden"
 
-#: src/backend/core/Project.cpp:1170
+#: src/backend/core/Project.cpp:1178
 #, kde-format
 msgid "Invalid project modification time. Using current time."
 msgstr "Tijd van wijziging project is ongeldig. Huidige tijd wordt gebruikt."
@@ -8107,22 +8107,19 @@ msgstr ""
 "zijn dan de min waarde."
 
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:255
-#, fuzzy, kde-format
-#| msgid "%1: set range type"
+#, kde-format
 msgid "%1: set kernel type"
-msgstr "%1: bereiktype instellen"
+msgstr "%1: type kernel instellen"
 
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:262
-#, fuzzy, kde-format
-#| msgid "%1: set bin width"
+#, kde-format
 msgid "%1: set bandwidth type"
-msgstr "%1: klassenbreedte instellen"
+msgstr "%1: type bandbreedte instellen"
 
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:269
-#, fuzzy, kde-format
-#| msgid "%1: set bin width"
+#, kde-format
 msgid "%1: set bandwidth"
-msgstr "%1: klassenbreedte instellen"
+msgstr "%1: bandbreedte instellen"
 
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:278
 #, kde-format
@@ -12955,7 +12952,7 @@ msgstr "%1: kromme \"%2\" verwijderd"
 #: src/kdefrontend/dockwidgets/KDEPlotDock.cpp:214
 #, kde-format
 msgid "Silverman"
-msgstr ""
+msgstr "Silverman"
 
 #: src/kdefrontend/dockwidgets/KDEPlotDock.cpp:413
 #: src/kdefrontend/dockwidgets/QQPlotDock.cpp:319
@@ -13710,8 +13707,7 @@ msgid "Properties: Box Plot"
 msgstr "Eigenschappen: blokgrafiek"
 
 #: src/kdefrontend/GuiObserver.cpp:377
-#, fuzzy, kde-format
-#| msgid "KDE Plot"
+#, kde-format
 msgctxt "@title:window"
 msgid "KDE Plot"
 msgstr "KDE Plot"
@@ -19463,17 +19459,15 @@ msgstr "Verbindingslijn"
 
 #. i18n: ectx: property (text), widget (QLabel, lKernelType)
 #: src/kdefrontend/ui/dockwidgets/kdeplotdock.ui:43
-#, fuzzy, kde-format
-#| msgid "Kernel: "
+#, kde-format
 msgid "Kernel:"
-msgstr "Kernel: "
+msgstr "Kernel:"
 
 #. i18n: ectx: property (text), widget (QLabel, lBandwidthType)
 #: src/kdefrontend/ui/dockwidgets/kdeplotdock.ui:79
-#, fuzzy, kde-format
-#| msgid "Bin Width:"
+#, kde-format
 msgid "Bandwidth:"
-msgstr "Klassebreedte:"
+msgstr "Bandbreedte:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPlotRange)
 #: src/kdefrontend/ui/dockwidgets/kdeplotdock.ui:180
@@ -19485,10 +19479,9 @@ msgstr "Plotbereik:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabKDE)
 #: src/kdefrontend/ui/dockwidgets/kdeplotdock.ui:204
-#, fuzzy, kde-format
-#| msgid "Animations"
+#, kde-format
 msgid "Estimation"
-msgstr "Animaties"
+msgstr "Schatting"
 
 #. i18n: ectx: property (text), widget (QLabel, lErrorBarsCapSize)
 #: src/kdefrontend/ui/dockwidgets/linewidget.ui:150

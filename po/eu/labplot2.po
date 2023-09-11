@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-10 00:42+0000\n"
-"PO-Revision-Date: 2023-09-09 10:43+0200\n"
+"POT-Creation-Date: 2023-09-11 00:42+0000\n"
+"PO-Revision-Date: 2023-09-10 14:13+0200\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
 "Language: eu\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 23.08.0\n"
+"X-Generator: Lokalize 23.04.0\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -785,7 +785,7 @@ msgstr "ez da proiektu elementurik aurkitu"
 msgid "no valid XML document found"
 msgstr "ez da baliodun XML dokumenturik aurkitu"
 
-#: src/backend/core/Project.cpp:1170
+#: src/backend/core/Project.cpp:1178
 #, kde-format
 msgid "Invalid project modification time. Using current time."
 msgstr "Proiektuaren aldatze-ordu baliogabea. Uneko ordua erabiliko da."
@@ -20607,15 +20607,13 @@ msgstr "Testua:"
 
 #. i18n: ectx: property (text), widget (QLabel, lHorizontalAlignment)
 #: src/kdefrontend/ui/labelwidget.ui:289
-#, fuzzy, kde-format
-#| msgid "Hor. align.:"
+#, kde-format
 msgid "Hor. Alignment:"
-msgstr "Lerrok. hor.:"
+msgstr "Lerrokatze hor.:"
 
 #. i18n: ectx: property (text), widget (QLabel, lBackgroundColor)
 #: src/kdefrontend/ui/labelwidget.ui:312
-#, fuzzy, kde-format
-#| msgid "Background color:"
+#, kde-format
 msgid "Background Color:"
 msgstr "Atzeko planoaren kolorea:"
 
@@ -20633,10 +20631,9 @@ msgstr "Letra-tipo nagusia:"
 
 #. i18n: ectx: property (text), widget (QLabel, lVerticalAlignment)
 #: src/kdefrontend/ui/labelwidget.ui:552
-#, fuzzy, kde-format
-#| msgid "Vert. align.:"
+#, kde-format
 msgid "Vert. Alignment:"
-msgstr "Lerrok. bert.:"
+msgstr "Lerrokatze bert.:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lOffsetX)
 #. i18n: ectx: property (toolTip), widget (QLabel, lOffsetY)
@@ -20649,7 +20646,7 @@ msgstr "Distantzia ardatz-marketako etiketetara"
 #: src/kdefrontend/ui/labelwidget.ui:651
 #, kde-format
 msgid "Offset X:"
-msgstr "X desplazamendua:"
+msgstr "X jatorri-aldaketa:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbShowPlaceholderText)
 #: src/kdefrontend/ui/labelwidget.ui:729
@@ -20661,7 +20658,7 @@ msgstr "Erakutsi leku-marka testua (editagarria)"
 #: src/kdefrontend/ui/labelwidget.ui:739
 #, kde-format
 msgid "Offset Y:"
-msgstr "Y desplazamendua:"
+msgstr "Y jatorri-aldaketa:"
 
 #. i18n: ectx: property (text), widget (QLabel, lY)
 #: src/kdefrontend/ui/matrix/matrixfunctionwidget.ui:116
@@ -20903,7 +20900,7 @@ msgstr "Instalatutako txantiloiak:"
 #: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:149
 #, kde-format
 msgid "Preview:"
-msgstr "Aurreikusi:"
+msgstr "Aurreikuspegi:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLocation)
 #: src/kdefrontend/ui/PlotTemplateDialog.ui:102
@@ -20951,7 +20948,7 @@ msgstr "Zenbakien aukerak:"
 #: src/kdefrontend/ui/settingsgeneralpage.ui:118
 #, kde-format
 msgid "Auto-save:"
-msgstr "Auto-gorde:"
+msgstr "Gorde automatikoki:"
 
 #. i18n: ectx: property (text), widget (QLabel, lTitleBar)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:128
@@ -20975,7 +20972,7 @@ msgstr "Abioa:"
 #: src/kdefrontend/ui/settingsgeneralpage.ui:171
 #, kde-format
 msgid "Include trailing zeroes after dot"
-msgstr "Ez ipini puntuaren ondorengo amaierako zeroak"
+msgstr "Sartu komaren ondorengo amaierako zeroak"
 
 #. i18n: ectx: property (text), widget (QLabel, lUnits)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:194
@@ -20996,7 +20993,7 @@ msgid ""
 "<html><head/><body><p>Save projects in a compatible format that can be "
 "opened in LabPlot versions older than 2.9.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Gorde proiektua LabPlot-ekin ireki daitekeen, 2.9 "
+"<html><head/><body><p>Gorde proiektuak «LabPlot»ekin ireki daitekeen, 2.9 "
 "bertsioa baino zaharragoarekin bateragarria den formatu batean.</p></body></"
 "html>"
 
@@ -21008,28 +21005,24 @@ msgstr "Gorde formatu bateragarrian"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkGUMTerms)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:231
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Random number distributions as defined in <a href="
-#| "\"https://www.gnu.org/software/gsl/doc/html/randist.html\"><span style=\" "
-#| "text-decoration: underline; color:#2980b9;\">GSL documentation</span></"
-#| "a></p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>Use terms compliant with the <a href=\"http://www.bipm."
 "org/utils/common/documents/jcgm/JCGM_100_2008_E.pdf\"><span style=\" text-"
 "decoration: underline; color:#2980b9;\">Guide to the Expression of "
 "Uncertainty in Measurement (GUM)</span></a></p></body></html>"
 msgstr ""
-"<html><head/><body><p>Auzazko zenbakien distribuzioa, <a href=\"https://www."
-"gnu.org/software/gsl/doc/html/randist.html\"><span style=\" text-decoration: "
-"underline; color:#2980b9;\">GSL dokumentazioan</span></a> definitu bezala</"
-"p></body></html>"
+"<html><head/><body><p>Erabili <a href=\"http://www.bipm.org/utils/common/"
+"documents/jcgm/JCGM_100_2008_E.pdf\"><span style=\" text-decoration: "
+"underline; color:#2980b9;\">Neurketan ziurgabetasuna adierazteko gidarekin "
+"(GUM: «Guide to the Expression of Uncertainty in Measurement»)</span> "
+"etorkorrak diren terminoak</a></p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkGUMTerms)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:234
 #, kde-format
 msgid "GUM compliant"
-msgstr ""
+msgstr "GUMekin etorkorra"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:241
@@ -21097,13 +21090,13 @@ msgstr "Berrespena eskatu berrabiatzean"
 #: src/kdefrontend/ui/settingsprintingpage.ui:16
 #, kde-format
 msgid "Auto-Save"
-msgstr "Auto-gorde"
+msgstr "Gorde automatikoki"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/kdefrontend/ui/settingsprintingpage.ui:22
 #, kde-format
 msgid "TODO"
-msgstr "EGITEKO"
+msgstr "ZEREGINA"
 
 #. i18n: ectx: property (text), widget (QLabel, lAppearance)
 #: src/kdefrontend/ui/settingsspreadsheetpage.ui:23
@@ -21115,7 +21108,7 @@ msgstr "Goiburua"
 #: src/kdefrontend/ui/settingsspreadsheetpage.ui:30
 #, kde-format
 msgid "Show column type"
-msgstr "Erakutsi zutabe mota"
+msgstr "Erakutsi zutabe-mota"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowPlotDesignation)
 #: src/kdefrontend/ui/settingsspreadsheetpage.ui:37
@@ -21163,26 +21156,25 @@ msgstr "Tipografia-ezarpeneko motorra:"
 #: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:42
 #, kde-format
 msgid "Add:"
-msgstr ""
+msgstr "Gehitu:"
 
 #. i18n: ectx: property (text), widget (QLabel, lTimeValueStart)
 #: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:78
-#, fuzzy, kde-format
+#, kde-format
 msgid "Start Time:"
-msgstr "Hasi"
+msgstr "Hasierako ordua: "
 
 #. i18n: ectx: property (text), widget (QLabel, lValueEnd)
 #: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:91
-#, fuzzy, kde-format
-#| msgid "Value:"
+#, kde-format
 msgid "End Value:"
-msgstr "Balioa:"
+msgstr "Azken balioa:"
 
 #. i18n: ectx: property (text), widget (QLabel, lBaselineParameter1)
 #: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:136
-#, fuzzy, kde-format
+#, kde-format
 msgid "Smoothness (Power of 10):"
-msgstr "Leundu"
+msgstr "Leuntasuna (10en berretura):"
 
 #. i18n: ectx: property (text), widget (QLabel, lBaselineParameter2)
 #: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:162
@@ -21193,23 +21185,21 @@ msgstr "Orientazioa:"
 
 #. i18n: ectx: property (text), widget (QLabel, lValueStart)
 #: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:175
-#, fuzzy, kde-format
-#| msgid "Start value"
+#, kde-format
 msgid "Start Value:"
-msgstr "Hasierako balioa"
+msgstr "Hasierako balioa:"
 
 #. i18n: ectx: property (text), widget (QLabel, lBaselineParameter3)
 #: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:257
-#, fuzzy, kde-format
+#, kde-format
 msgid "Iterations:"
 msgstr "Iterazioak:"
 
 #. i18n: ectx: property (text), widget (QLabel, lTimeValueEnd)
 #: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:308
-#, fuzzy, kde-format
-#| msgid "Date and Time"
+#, kde-format
 msgid "End Time:"
-msgstr "Data eta ordua"
+msgstr "Amaierako ordua: "
 
 #. i18n: ectx: property (text), widget (QLabel, lNumeric)
 #: src/kdefrontend/ui/spreadsheet/dropvalueswidget.ui:47
@@ -21253,14 +21243,13 @@ msgstr "Data/Ordu balioak"
 #: src/kdefrontend/ui/spreadsheet/equidistantvalueswidget.ui:17
 #, kde-format
 msgid "Fix:"
-msgstr "Zuzendu:"
+msgstr "Konpondu:"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, leFileName)
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:36
-#, fuzzy, kde-format
-#| msgid "Specify the name of the file to import."
+#, kde-format
 msgid "Specify the name of the file to export."
-msgstr "Zehaztu inportatu beharreko fitxategiaren izena."
+msgstr "Zehaztu esportatu beharreko fitxategiaren izena."
 
 #. i18n: ectx: property (text), widget (QLabel, lExportHeader)
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:81

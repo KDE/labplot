@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-10 00:42+0000\n"
-"PO-Revision-Date: 2023-09-06 11:47+0200\n"
+"POT-Creation-Date: 2023-09-11 00:42+0000\n"
+"PO-Revision-Date: 2023-09-10 10:12+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -791,7 +791,7 @@ msgstr "no s'ha trobat cap element de projecte"
 msgid "no valid XML document found"
 msgstr "s'ha trobat un document XML no vàlid"
 
-#: src/backend/core/Project.cpp:1170
+#: src/backend/core/Project.cpp:1178
 #, kde-format
 msgid "Invalid project modification time. Using current time."
 msgstr "Hora de modificació del projecte no vàlida. S'usarà l'hora actual."
@@ -8202,22 +8202,19 @@ msgstr ""
 "que el valor mínim."
 
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:255
-#, fuzzy, kde-format
-#| msgid "%1: set range type"
+#, kde-format
 msgid "%1: set kernel type"
-msgstr "%1: estableix el tipus d'interval"
+msgstr "%1: estableix el tipus de nucli"
 
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:262
-#, fuzzy, kde-format
-#| msgid "%1: set bin width"
+#, kde-format
 msgid "%1: set bandwidth type"
-msgstr "%1: estableix l'amplada del compartiment"
+msgstr "%1: estableix el tipus d'amplada de banda"
 
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:269
-#, fuzzy, kde-format
-#| msgid "%1: set bin width"
+#, kde-format
 msgid "%1: set bandwidth"
-msgstr "%1: estableix l'amplada del compartiment"
+msgstr "%1: estableix l'amplada de banda"
 
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:278
 #, kde-format
@@ -13093,7 +13090,7 @@ msgstr "%1: s'ha eliminat la corba «%2»"
 #: src/kdefrontend/dockwidgets/KDEPlotDock.cpp:214
 #, kde-format
 msgid "Silverman"
-msgstr ""
+msgstr "Silverman"
 
 #: src/kdefrontend/dockwidgets/KDEPlotDock.cpp:413
 #: src/kdefrontend/dockwidgets/QQPlotDock.cpp:319
@@ -13854,8 +13851,7 @@ msgid "Properties: Box Plot"
 msgstr "Propietats: Diagrama de caixes"
 
 #: src/kdefrontend/GuiObserver.cpp:377
-#, fuzzy, kde-format
-#| msgid "KDE Plot"
+#, kde-format
 msgctxt "@title:window"
 msgid "KDE Plot"
 msgstr "Diagrama del KDE"
@@ -19639,17 +19635,15 @@ msgstr "Línia de connexió"
 
 #. i18n: ectx: property (text), widget (QLabel, lKernelType)
 #: src/kdefrontend/ui/dockwidgets/kdeplotdock.ui:43
-#, fuzzy, kde-format
-#| msgid "Kernel: "
+#, kde-format
 msgid "Kernel:"
-msgstr "Nucli: "
+msgstr "Nucli:"
 
 #. i18n: ectx: property (text), widget (QLabel, lBandwidthType)
 #: src/kdefrontend/ui/dockwidgets/kdeplotdock.ui:79
-#, fuzzy, kde-format
-#| msgid "Bin Width:"
+#, kde-format
 msgid "Bandwidth:"
-msgstr "Amplada del compartiment:"
+msgstr "Amplada de banda:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPlotRange)
 #: src/kdefrontend/ui/dockwidgets/kdeplotdock.ui:180
@@ -19661,10 +19655,9 @@ msgstr "Interval del diagrama:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabKDE)
 #: src/kdefrontend/ui/dockwidgets/kdeplotdock.ui:204
-#, fuzzy, kde-format
-#| msgid "Animations"
+#, kde-format
 msgid "Estimation"
-msgstr "Animacions"
+msgstr "Estimació"
 
 #. i18n: ectx: property (text), widget (QLabel, lErrorBarsCapSize)
 #: src/kdefrontend/ui/dockwidgets/linewidget.ui:150
