@@ -20,6 +20,7 @@
 #include "kdefrontend/widgets/LabelWidget.h"
 #include "kdefrontend/widgets/LineWidget.h"
 
+#include <KConfig>
 #include <KLineEdit>
 #include <KLocalizedString>
 #include <KMessageBox>
@@ -248,7 +249,7 @@ void AxisDock::init() {
 	ui.cbRangeType->setToolTip(msg);
 
 	// scales
-	for (const auto& name : RangeT::scaleNames())
+	for (const auto& name : RangeT::scaleNames)
 		ui.cbScale->addItem(name);
 
 	ui.cbOrientation->addItem(i18n("Horizontal"));
@@ -345,28 +346,14 @@ void AxisDock::setAxes(QList<Axis*> list) {
 
 	// if there are more than one axis in the list, disable the tab "general"
 	if (list.size() == 1) {
-		ui.lName->setEnabled(true);
-		ui.leName->setEnabled(true);
-		ui.lComment->setEnabled(true);
-		ui.teComment->setEnabled(true);
-		ui.leName->setText(m_axis->name());
-		ui.teComment->setText(m_axis->comment());
 		this->setModelIndexFromColumn(cbMajorTicksColumn, m_axis->majorTicksColumn());
 		this->setModelIndexFromColumn(cbMinorTicksColumn, m_axis->minorTicksColumn());
 		this->setModelIndexFromColumn(cbLabelsTextColumn, m_axis->labelsTextColumn());
 	} else {
-		ui.lName->setEnabled(false);
-		ui.leName->setEnabled(false);
-		ui.lComment->setEnabled(false);
-		ui.teComment->setEnabled(false);
-		ui.leName->setText(QString());
-		ui.teComment->setText(QString());
 		cbMajorTicksColumn->setCurrentModelIndex(QModelIndex());
 		cbMinorTicksColumn->setCurrentModelIndex(QModelIndex());
 		cbLabelsTextColumn->setCurrentModelIndex(QModelIndex());
 	}
-	ui.leName->setStyleSheet(QString());
-	ui.leName->setToolTip(QString());
 
 	// show the properties of the first axis
 	this->load();
@@ -475,7 +462,7 @@ void AxisDock::updateLocale() {
 
 	// scales
 	ui.cbScale->clear();
-	for (const auto& name : RangeT::scaleNames())
+	for (const auto& name : RangeT::scaleNames)
 		ui.cbScale->addItem(name);
 
 	labelWidget->updateLocale();

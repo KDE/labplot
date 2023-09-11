@@ -375,25 +375,6 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list) {
 
 	labelWidget->setLabels(labels);
 
-	// if there is more than one plot in the list, disable the name and comment fields in the tab "general"
-	if (list.size() == 1) {
-		ui.lName->setEnabled(true);
-		ui.leName->setEnabled(true);
-		ui.lComment->setEnabled(true);
-		ui.teComment->setEnabled(true);
-
-		ui.leName->setText(m_plot->name());
-		ui.teComment->setText(m_plot->comment());
-	} else {
-		ui.lName->setEnabled(false);
-		ui.leName->setEnabled(false);
-		ui.lComment->setEnabled(false);
-		ui.teComment->setEnabled(false);
-
-		ui.leName->setText(QString());
-		ui.teComment->setText(QString());
-	}
-
 	symmetricPaddingChanged(m_plot->symmetricPadding());
 
 	ui.leName->setStyleSheet(QString());
@@ -709,7 +690,7 @@ void CartesianPlotDock::updateRangeList(const Dimension dim) {
 		cb->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
 		cb->setFrame(false);
 		// TODO: -> updateLocale()
-		for (const auto& name : RangeT::scaleNames())
+		for (const auto& name : RangeT::scaleNames)
 			cb->addItem(name);
 
 		cb->setCurrentIndex(static_cast<int>(scale));

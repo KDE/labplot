@@ -301,27 +301,6 @@ void LabelWidget::setLabels(QList<TextLabel*> labels) {
 	ui.lComment->setVisible(visible);
 	ui.teComment->setVisible(visible);
 
-	if (visible) {
-		// if there is more than one point in the list, disable the comment and name widgets in "general"
-		if (labels.size() == 1) {
-			ui.lName->setEnabled(true);
-			ui.leName->setEnabled(true);
-			ui.lComment->setEnabled(true);
-			ui.teComment->setEnabled(true);
-			ui.leName->setText(m_label->name());
-			ui.teComment->setText(m_label->comment());
-		} else {
-			ui.lName->setEnabled(false);
-			ui.leName->setEnabled(false);
-			ui.lComment->setEnabled(false);
-			ui.teComment->setEnabled(false);
-			ui.leName->setText(QString());
-			ui.teComment->setText(QString());
-		}
-		ui.leName->setStyleSheet(QString());
-		ui.leName->setToolTip(QString());
-	}
-
 	this->load();
 	initConnections();
 	updateBackground();

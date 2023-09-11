@@ -8,6 +8,6 @@ IF (ENABLE_LIBORIGIN)
 		target_include_directories( ProjectImportTest PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/liborigin" )
 	ENDIF()
 ENDIF ()
-target_link_libraries(ProjectImportTest labplot2lib labplot2test)
+target_link_libraries(ProjectImportTest labplot2backendlib labplot2lib labplot2nsllib labplot2test)
 
 add_test(NAME ProjectImportTest COMMAND ProjectImportTest)

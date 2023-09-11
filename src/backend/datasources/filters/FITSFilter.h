@@ -11,7 +11,7 @@
 
 #include "backend/datasources/filters/AbstractFileFilter.h"
 
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 
 #include <QTableWidget>
 #include <QTreeWidget>

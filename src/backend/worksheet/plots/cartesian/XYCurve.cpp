@@ -35,13 +35,14 @@
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "tools/ImageTools.h"
 
+#include <KConfig>
+#include <KConfigGroup>
+#include <KLocalizedString>
+
 #include <QDesktopWidget>
 #include <QGraphicsSceneContextMenuEvent>
 #include <QMenu>
 #include <QPainter>
-
-#include <KConfig>
-#include <KLocalizedString>
 
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_math.h>

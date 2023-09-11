@@ -15,12 +15,12 @@
 #include "backend/matrix/Matrix.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 
-#include <utility>
-
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 #include <QStringList>
 #include <QTreeWidgetItem>
 #include <QVector>
+
+#include <utility>
 
 ExcelFilter::ExcelFilter()
 	: AbstractFileFilter(FileType::Excel)

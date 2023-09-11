@@ -23,7 +23,7 @@
 #endif
 
 #include <KConfigGroup>
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 #include <KMessageBox>
 
 #include <KWindowConfig>

@@ -23,6 +23,7 @@
 #include <KLocalizedString>
 #include <QFile>
 #include <QProcess>
+#include <QStandardPaths>
 #include <QTreeWidgetItem>
 
 ///////////// macros ///////////////////////////////////////////////

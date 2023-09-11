@@ -43,6 +43,7 @@
 #include "backend/worksheet/plots/cartesian/BoxPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
 #include "backend/worksheet/plots/cartesian/CustomPoint.h"
+#include "backend/worksheet/plots/cartesian/KDEPlot.h"
 #include "backend/worksheet/plots/cartesian/LollipopPlot.h"
 #include "backend/worksheet/plots/cartesian/QQPlot.h"
 #include "backend/worksheet/plots/cartesian/ReferenceLine.h"
@@ -348,6 +349,7 @@ void CartesianPlot::initActions() {
 	// statistical plots
 	addHistogramAction = new QAction(QIcon::fromTheme(QStringLiteral("view-object-histogram-linear")), i18n("Histogram"), this);
 	addBoxPlotAction = new QAction(BoxPlot::staticIcon(), i18n("Box Plot"), this);
+	addKDEPlotAction = new QAction(i18n("KDE Plot"), this);
 	addQQPlotAction = new QAction(i18n("Q-Q Plot"), this);
 
 	// bar plots
@@ -404,6 +406,9 @@ void CartesianPlot::initActions() {
 	});
 	connect(addQQPlotAction, &QAction::triggered, this, [=]() {
 		addChild(new QQPlot(i18n("Q-Q Plot")));
+	});
+	connect(addKDEPlotAction, &QAction::triggered, this, [=]() {
+		addChild(new KDEPlot(i18n("KDE Plot")));
 	});
 
 	// analysis curves
@@ -533,6 +538,7 @@ void CartesianPlot::initMenus() {
 	auto* addNewStatisticalPlotsMenu = new QMenu(i18n("Statistical Plots"));
 	addNewStatisticalPlotsMenu->addAction(addHistogramAction);
 	addNewStatisticalPlotsMenu->addAction(addBoxPlotAction);
+	addNewStatisticalPlotsMenu->addAction(addKDEPlotAction);
 	addNewStatisticalPlotsMenu->addAction(addQQPlotAction);
 	m_addNewMenu->addMenu(addNewStatisticalPlotsMenu);
 
@@ -724,6 +730,8 @@ QVector<AspectType> CartesianPlot::pasteTypes() const {
 							  AspectType::BarPlot,
 							  AspectType::LollipopPlot,
 							  AspectType::BoxPlot,
+							  AspectType::KDEPlot,
+							  AspectType::QQPlot,
 							  AspectType::Axis,
 							  AspectType::XYEquationCurve,
 							  AspectType::XYConvolutionCurve,
@@ -2728,8 +2736,13 @@ void CartesianPlot::calculateDataRange(const Dimension dim, const int index, boo
 			DEBUG(Q_FUNC_INFO << ", index range = " << indexRange.toStdString())
 
 			curve->minMax(dim, indexRange, range, true);
+		} else if (plot->type() == AspectType::KDEPlot) {
+			const int minIndex = 0;
+			const int maxIndex = static_cast<const KDEPlot*>(plot)->gridPointsCount() - 1;
+			Range<int> indexRange{minIndex, maxIndex};
+			plot->minMax(dim, indexRange, range, true);
 		} else if (plot->type() == AspectType::QQPlot) {
-			Range<int> indexRange{0, 99};
+			Range<int> indexRange{0, 99}; // 100 percentile values are calculated, max index is 99
 			plot->minMax(dim, indexRange, range, true);
 		} else {
 			range.setStart(plot->minimum(dim));
@@ -5200,6 +5213,13 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				delete plot;
 				return false;
 			}
+		} else if (reader->name() == QLatin1String("KDEPlot")) {
+			auto* plot = new KDEPlot(QStringLiteral("KDE Plot"));
+			plot->setIsLoading(true);
+			if (plot->load(reader, preview))
+				addChildFast(plot);
+			else
+				return false;
 		} else { // unknown element
 			if (!preview)
 				reader->raiseUnknownElementWarning();

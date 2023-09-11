@@ -18,6 +18,7 @@ class CartesianCoordinateSystem;
 class Line;
 class Symbol;
 class Value;
+class KConfigGroup;
 
 typedef QVector<QPointF> Points;
 

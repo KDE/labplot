@@ -17,6 +17,9 @@
 #include "kdefrontend/GuiTools.h"
 #include "kdefrontend/widgets/SymbolWidget.h"
 
+#include <KConfigGroup>
+#include <KLocalizedString>
+
 #include <QCompleter>
 #include <QDir>
 // see https://gitlab.kitware.com/cmake/cmake/-/issues/21609
@@ -27,9 +30,7 @@
 #endif
 #include <QGraphicsScene>
 #include <QPainter>
-
-#include <KConfigGroup>
-#include <KLocalizedString>
+#include <QStandardPaths>
 
 #include <cmath>
 
@@ -273,19 +274,8 @@ void DatapickerImageWidget::setImages(QList<DatapickerImage*> list) {
 	setAspects(list);
 
 	if (list.size() == 1) {
-		ui.lName->setEnabled(true);
-		ui.leName->setEnabled(true);
-		ui.lComment->setEnabled(true);
-		ui.teComment->setEnabled(true);
 		ui.leName->setText(m_image->parentAspect()->name());
 		ui.teComment->setText(m_image->parentAspect()->comment());
-	} else {
-		ui.lName->setEnabled(false);
-		ui.leName->setEnabled(false);
-		ui.lComment->setEnabled(false);
-		ui.teComment->setEnabled(false);
-		ui.leName->setText(QString());
-		ui.teComment->setText(QString());
 	}
 
 	this->load();
