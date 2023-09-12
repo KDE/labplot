@@ -224,7 +224,7 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 		AbstractFileFilter::FileType fileType = m_importFileWidget->currentFileType();
 		// multiple data sets/variables for special types
 		if (fileType == AbstractFileFilter::FileType::HDF5 || fileType == AbstractFileFilter::FileType::NETCDF || fileType == AbstractFileFilter::FileType::ROOT
-			|| fileType == AbstractFileFilter::FileType::MATIO || fileType == AbstractFileFilter::FileType::Excel
+			|| fileType == AbstractFileFilter::FileType::MATIO || fileType == AbstractFileFilter::FileType::XLSX
 			|| fileType == AbstractFileFilter::FileType::VECTOR_BLF) {
 			QStringList names;
 			if (fileType == AbstractFileFilter::FileType::HDF5)
@@ -237,8 +237,8 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 				names = m_importFileWidget->selectedROOTNames();
 			else if (fileType == AbstractFileFilter::FileType::MATIO)
 				names = m_importFileWidget->selectedMatioNames();
-			else if (fileType == AbstractFileFilter::FileType::Excel)
-				names = m_importFileWidget->selectedExcelRegionNames();
+			else if (fileType == AbstractFileFilter::FileType::XLSX)
+				names = m_importFileWidget->selectedXLSXRegionNames();
 			// TODO: Ods regions
 
 			int nrNames = names.size(), offset = sheets.size();
@@ -302,12 +302,12 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 					static_cast<NetCDFFilter*>(filter)->setCurrentVarName(names.at(i));
 				else if (fileType == AbstractFileFilter::FileType::MATIO)
 					static_cast<MatioFilter*>(filter)->setCurrentVarName(names.at(i));
-				else if (fileType == AbstractFileFilter::FileType::Excel) {
+				else if (fileType == AbstractFileFilter::FileType::XLSX) {
 					const auto& nameSplit = names[i].split(QLatin1Char('!'));
 					const auto& sheet = nameSplit[0];
 					const auto& range = nameSplit[1];
-					static_cast<ExcelFilter*>(filter)->setCurrentSheet(sheet);
-					static_cast<ExcelFilter*>(filter)->setCurrentRange(range);
+					static_cast<XLSXFilter*>(filter)->setCurrentSheet(sheet);
+					static_cast<XLSXFilter*>(filter)->setCurrentRange(range);
 				} else
 					static_cast<ROOTFilter*>(filter)->setCurrentObject(names.at(i));
 

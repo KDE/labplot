@@ -51,7 +51,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/datasources/DatasetMetadataManagerDialog.cpp
 	${KDEFRONTEND_DIR}/datasources/DatasetMetadataManagerWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/OdsOptionsWidget.cpp
-	${KDEFRONTEND_DIR}/datasources/ExcelOptionsWidget.cpp
+	${KDEFRONTEND_DIR}/datasources/XLSXOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/HDF5OptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/ImageOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/ImportDatasetWidget.cpp
@@ -198,7 +198,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/datasources/fitsoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/jsonoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/odsoptionswidget.ui
-	${KDEFRONTEND_DIR}/ui/datasources/exceloptionswidget.ui
+	${KDEFRONTEND_DIR}/ui/datasources/xlsxoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/aspectdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/axisdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/backgroundwidget.ui
@@ -338,7 +338,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/datasources/filters/AbstractFileFilter.cpp
 	${BACKEND_DIR}/datasources/filters/AsciiFilter.cpp
 	${BACKEND_DIR}/datasources/filters/BinaryFilter.cpp
-	${BACKEND_DIR}/datasources/filters/ExcelFilter.cpp
+	${BACKEND_DIR}/datasources/filters/XLSXFilter.cpp
 	${BACKEND_DIR}/datasources/filters/FITSFilter.cpp
 	${BACKEND_DIR}/datasources/filters/HDF5Filter.cpp
 	${BACKEND_DIR}/datasources/filters/ImageFilter.cpp
@@ -643,9 +643,9 @@ IF (ENABLE_READSTAT)
         target_link_libraries( labplot2backendlib ${READSTAT_LIBRARIES} ${ZLIB_LIBRARIES} )
 ENDIF ()
 
-IF (ENABLE_EXCEL)
+IF (ENABLE_XLSX)
         # build before use
-        IF (BUILD_EXCEL)
+	IF (BUILD_QXLSX)
                 target_include_directories( labplot2backendlib PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/QXlsx/header" )
                 add_dependencies( labplot2backendlib QXlsx )
                 target_include_directories( labplot2lib PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/QXlsx/header" )
@@ -657,7 +657,7 @@ IF (ENABLE_EXCEL)
                 target_include_directories( labplot2lib PRIVATE ${QXLSX_INCLUDE_DIR} )
         ENDIF ()
 
-	IF (QXLSX_FOUND OR BUILD_EXCEL)
+	IF (QXLSX_FOUND OR BUILD_QXLSX)
 		target_link_libraries( labplot2backendlib QXlsx )
         ENDIF ()
 ENDIF ()

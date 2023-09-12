@@ -155,9 +155,9 @@ AbstractFileFilter::FileType AbstractFileFilter::fileType(const QString& fileNam
 		fileType = FileType::JSON;
 	} else if (SpiceFilter::isSpiceFile(fileName))
 		fileType = FileType::Spice;
-#ifdef HAVE_EXCEL // before ASCII, because XLSX is XML and XML is ASCII
+#ifdef HAVE_QXLSX // before ASCII, because XLSX is XML and XML is ASCII
 	else if (fileInfo.contains(QLatin1String("Microsoft Excel")) || fileName.endsWith(QLatin1String("xlsx"), Qt::CaseInsensitive))
-		fileType = FileType::Excel;
+		fileType = FileType::XLSX;
 #endif
 #ifdef HAVE_ORCUS // before ASCII, because ODS is XML and XML is ASCII
 	else if (fileInfo.contains(QLatin1String("OpenDocument Spreadsheet")) || fileName.endsWith(QLatin1String("ods"), Qt::CaseInsensitive))
@@ -220,6 +220,7 @@ AbstractFileFilter::FileType AbstractFileFilter::fileType(const QString& fileNam
   returns the list of all supported data file formats
 */
 QStringList AbstractFileFilter::fileTypes() {
+	// TODO: Used by what? #ifdef HAVE_QXLSX?
 	return (QStringList() << i18n("ASCII Data") << i18n("Binary Data") << i18n("Image") << i18n("Excel") << i18n("Hierarchical Data Format 5 (HDF5)")
 						  << i18n("Network Common Data Format (NetCDF)") << i18n("Flexible Image Transport System Data Format (FITS)") << i18n("JSON Data")
 						  << i18n("ROOT (CERN) Histograms") << i18n("Spice") << i18n("SAS, Stata or SPSS"));

@@ -1,40 +1,40 @@
 /*
-	File                 : ExcelFilter.h
+	File                 : XLSXFilter.h
 	Project              : LabPlot
-	Description          : Excel I/O-filter
+	Description          : XLSX I/O-filter
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2021 Fabian Kristof (fkristofszabolcs@gmail.com)
 	SPDX-FileCopyrightText: 2022-2023 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-#ifndef EXCELFILTER_H
-#define EXCELFILTER_H
+#ifndef XLSXFILTER_H
+#define XLSXFILTER_H
 #include "backend/datasources/filters/AbstractFileFilter.h"
 
 #include <QObject>
 
 #include <memory>
 
-#ifdef HAVE_EXCEL
+#ifdef HAVE_QXLSX
 #include "xlsxcellrange.h"
 #include "xlsxcellreference.h"
 #include "xlsxdocument.h"
 #endif
 
-class ExcelFilterPrivate;
+class XLSXFilterPrivate;
 class QTreeWidgetItem;
 
-class ExcelFilter : public AbstractFileFilter {
+class XLSXFilter : public AbstractFileFilter {
 	Q_OBJECT
 public:
-	explicit ExcelFilter();
-	virtual ~ExcelFilter() override;
+	explicit XLSXFilter();
+	virtual ~XLSXFilter() override;
 	static QString fileInfoString(const QString& fileName);
 	static QStringList sheets(const QString& fileName, bool* ok = nullptr);
 	static bool isValidCellReference(const QString& cellRefString);
 
-#ifdef HAVE_EXCEL
+#ifdef HAVE_QXLSX
 	QVector<QStringList> previewForDataRegion(const QString& sheet, const QXlsx::CellRange& region, bool* okToMatrix, int lines);
 #endif
 	QVector<QStringList> previewForCurrentDataRegion(int lines, bool* okToMatrix);
@@ -48,9 +48,9 @@ public:
 	void setColumnNamesAsFirstRow(bool);
 
 	void parse(const QString& fileName, QTreeWidgetItem* root);
-	static QString convertFromNumberToExcelColumn(int n);
+	static QString convertFromNumberToXLSXColumn(int n);
 
-#ifdef HAVE_EXCEL
+#ifdef HAVE_QXLSX
 	QVector<QXlsx::CellRange> dataRegions(const QString& fileName, const QString& sheetName);
 	QXlsx::CellRange dimension() const;
 #endif
@@ -73,8 +73,8 @@ public:
 	int endColumn() const;
 
 private:
-	std::unique_ptr<ExcelFilterPrivate> const d;
-	friend class ExcelFilterPrivate;
+	std::unique_ptr<XLSXFilterPrivate> const d;
+	friend class XLSXFilterPrivate;
 };
 
-#endif // EXCELFILTER_H
+#endif // XLSXFILTER_H

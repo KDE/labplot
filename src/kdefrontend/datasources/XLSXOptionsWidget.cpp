@@ -1,19 +1,19 @@
 /*
-	File                 : ExcelOptionsWidget.cpp
+	File                 : XLSXOptionsWidget.cpp
 	Project              : LabPlot
-	Description          : Widget providing options for the import of Excel (xlsx) data
+	Description          : Widget providing options for the import of XLSX (Excel) data
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2021 Fabian Kristof (fkristofszabolcs@gmail.com)
 	SPDX-FileCopyrightText: 2022-2023 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-#include "ExcelOptionsWidget.h"
+#include "XLSXOptionsWidget.h"
 #include "backend/lib/macros.h"
-#include "src/backend/datasources/filters/ExcelFilter.h"
+#include "src/backend/datasources/filters/XLSXFilter.h"
 #include "src/kdefrontend/datasources/ImportFileWidget.h"
 
-#ifdef HAVE_EXCEL
+#ifdef HAVE_QXLSX
 #include "xlsxcellrange.h"
 #endif
 
@@ -24,7 +24,7 @@
 #include <QTreeWidgetItem>
 #include <QVector>
 
-ExcelOptionsWidget::ExcelOptionsWidget(QWidget* parent, ImportFileWidget* fileWidget)
+XLSXOptionsWidget::XLSXOptionsWidget(QWidget* parent, ImportFileWidget* fileWidget)
 	: QWidget(parent)
 	, m_fileWidget(fileWidget) {
 	ui.setupUi(parent);
@@ -36,13 +36,13 @@ ExcelOptionsWidget::ExcelOptionsWidget(QWidget* parent, ImportFileWidget* fileWi
 	ui.bRefreshPreview->setIcon(QIcon::fromTheme(QStringLiteral("view-refresh")));
 	ui.twPreview->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
-	connect(ui.twDataRegions, &QTreeWidget::itemSelectionChanged, this, &ExcelOptionsWidget::dataRegionSelectionChanged);
+	connect(ui.twDataRegions, &QTreeWidget::itemSelectionChanged, this, &XLSXOptionsWidget::dataRegionSelectionChanged);
 }
 
-ExcelOptionsWidget::~ExcelOptionsWidget() {
+XLSXOptionsWidget::~XLSXOptionsWidget() {
 }
 
-void ExcelOptionsWidget::updateContent(ExcelFilter* filter, const QString& fileName) {
+void XLSXOptionsWidget::updateContent(XLSXFilter* filter, const QString& fileName) {
 	DEBUG(Q_FUNC_INFO)
 	ui.twDataRegions->clear();
 	auto* rootItem = ui.twDataRegions->invisibleRootItem();
@@ -65,9 +65,9 @@ void ExcelOptionsWidget::updateContent(ExcelFilter* filter, const QString& fileN
 	}
 }
 
-void ExcelOptionsWidget::dataRegionSelectionChanged() {
+void XLSXOptionsWidget::dataRegionSelectionChanged() {
 	DEBUG(Q_FUNC_INFO)
-#ifdef HAVE_EXCEL
+#ifdef HAVE_QXLSX
 	WAIT_CURSOR;
 
 	const auto& selectedItems = ui.twDataRegions->selectedItems();
@@ -88,7 +88,7 @@ void ExcelOptionsWidget::dataRegionSelectionChanged() {
 	int column = ui.twDataRegions->currentColumn();
 	int row = ui.twDataRegions->currentIndex().row();
 	const auto& selectedRegionText = item->text(column);
-	auto* const filter = static_cast<ExcelFilter*>(m_fileWidget->currentFileFilter());
+	auto* const filter = static_cast<XLSXFilter*>(m_fileWidget->currentFileFilter());
 
 	selectedRegion = selectedRegionText;
 	// if sheet name is selected maybe show full sheet?
@@ -112,7 +112,7 @@ void ExcelOptionsWidget::dataRegionSelectionChanged() {
 		// QDEBUG("PREVIEW:" << importedStrings)
 
 		// enable the first row as column names option only if the data contains more than 1 row
-		m_fileWidget->enableExcelFirstRowAsColNames(importedStrings.size() > 1);
+		m_fileWidget->enableXLSXFirstRowAsColNames(importedStrings.size() > 1);
 
 		emit m_fileWidget->enableImportToMatrix(regionCanBeImportedToMatrix);
 
@@ -126,7 +126,7 @@ void ExcelOptionsWidget::dataRegionSelectionChanged() {
 
 		const auto rows = importedStrings.size();
 		ui.twPreview->clear();
-		const bool firstRowAsHeader = m_fileWidget->excelUseFirstRowAsColNames();
+		const bool firstRowAsHeader = m_fileWidget->xlsxUseFirstRowAsColNames();
 		DEBUG("first row as header enabled = " << firstRowAsHeader)
 		ui.twPreview->setRowCount(rows - firstRowAsHeader);
 
@@ -147,7 +147,7 @@ void ExcelOptionsWidget::dataRegionSelectionChanged() {
 					continue; // data used as header
 				} else {
 					for (int col = 0; col < colCount; ++col) {
-						auto colName = ExcelFilter::convertFromNumberToExcelColumn(selectedRegion.firstColumn() + col);
+						auto colName = XLSXFilter::convertFromNumberToXLSXColumn(selectedRegion.firstColumn() + col);
 						// DEBUG("COLUMN " << col + 1 << " NAME = " << STDSTRING(colName))
 						//  TODO: show column modes?
 						// auto* item = new QTableWidgetItem(colName + QStringLiteral(" {") + QLatin1String(ENUM_TO_STRING(AbstractColumn, ColumnMode,
@@ -174,7 +174,7 @@ void ExcelOptionsWidget::dataRegionSelectionChanged() {
 #endif
 }
 
-QStringList ExcelOptionsWidget::selectedExcelRegionNames() const {
+QStringList XLSXOptionsWidget::selectedXLSXRegionNames() const {
 	const auto& items = ui.twDataRegions->selectedItems();
 	DEBUG(Q_FUNC_INFO << ", selected items = " << items.size())
 
@@ -190,6 +190,6 @@ QStringList ExcelOptionsWidget::selectedExcelRegionNames() const {
 	return names;
 }
 
-QVector<QStringList> ExcelOptionsWidget::previewString() const {
+QVector<QStringList> XLSXOptionsWidget::previewString() const {
 	return m_previewString;
 }

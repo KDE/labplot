@@ -14,7 +14,6 @@
 #include "AsciiOptionsWidget.h"
 #include "BinaryOptionsWidget.h"
 #include "CANOptionsWidget.h"
-#include "ExcelOptionsWidget.h"
 #include "FITSOptionsWidget.h"
 #include "HDF5OptionsWidget.h"
 #include "ImageOptionsWidget.h"
@@ -23,6 +22,7 @@
 #include "NetCDFOptionsWidget.h"
 #include "OdsOptionsWidget.h"
 #include "ROOTOptionsWidget.h"
+#include "XLSXOptionsWidget.h"
 #include "backend/core/Settings.h"
 #include "backend/datasources/filters/filters.h"
 #include "backend/lib/macros.h"
@@ -93,13 +93,13 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 {
 	ui.setupUi(this);
 
-	// add supported file types
+	// add supported file types	(see also ExportSpreadsheetDialog.cpp)
 	if (!liveDataSource) {
 		ui.cbFileType->addItem(i18n("ASCII data"), static_cast<int>(AbstractFileFilter::FileType::Ascii));
 		ui.cbFileType->addItem(i18n("Binary data"), static_cast<int>(AbstractFileFilter::FileType::Binary));
 		ui.cbFileType->addItem(i18n("Image"), static_cast<int>(AbstractFileFilter::FileType::Image));
-#ifdef HAVE_EXCEL
-		ui.cbFileType->addItem(i18n("Excel 2007+ (XSLX)"), static_cast<int>(AbstractFileFilter::FileType::Excel));
+#ifdef HAVE_QXLSX
+		ui.cbFileType->addItem(i18n("Excel 2007+ (XSLX)"), static_cast<int>(AbstractFileFilter::FileType::XLSX));
 #endif
 #ifdef HAVE_ORCUS
 		ui.cbFileType->addItem(i18n("OpenDocument Spreadsheet (ODS)"), static_cast<int>(AbstractFileFilter::FileType::Ods));
@@ -228,8 +228,8 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 	ui.sbKeepNValues->setToolTip(info);
 
 	info = i18n("Enable to use the first row of the selected data region for the column names of the spreadsheet.");
-	ui.lExcelFirstRowAsColNames->setToolTip(info);
-	ui.chbExcelFirstRowAsColName->setToolTip(info);
+	ui.lXLSXFirstRowAsColNames->setToolTip(info);
+	ui.chbXLSXFirstRowAsColName->setToolTip(info);
 #ifdef HAVE_MQTT
 	ui.cbSourceType->addItem(QStringLiteral("MQTT"));
 	m_configPath = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).constFirst() + QStringLiteral("MQTT_connections");
@@ -308,7 +308,7 @@ void ImportFileWidget::loadSettings() {
 		m_cbDBCFileName->setUrl(QUrl(m_dbcFileName));
 
 	ui.sbPreviewLines->setValue(conf.readEntry("PreviewLines", 100));
-	ui.chbExcelFirstRowAsColName->setCheckState((Qt::CheckState)conf.readEntry("ExcelFirstLineAsColNames", (int)Qt::CheckState::Unchecked));
+	ui.chbXLSXFirstRowAsColName->setCheckState((Qt::CheckState)conf.readEntry("ExcelFirstLineAsColNames", (int)Qt::CheckState::Unchecked));
 
 	// live data related settings
 	ui.cbBaudRate->setCurrentIndex(conf.readEntry("BaudRate", 13)); // index for bautrate 19200b/s
@@ -388,7 +388,7 @@ ImportFileWidget::~ImportFileWidget() {
 	conf.writeEntry("LastImportedDBCFile", m_cbDBCFileName->currentText());
 	conf.writeXdgListEntry("LastImportedDBCFiles", m_cbDBCFileName->urls());
 	conf.writeEntry("PreviewLines", ui.sbPreviewLines->value());
-	conf.writeEntry("ExcelFirstLineAsColNames", ui.chbExcelFirstRowAsColName->isChecked());
+	conf.writeEntry("ExcelFirstLineAsColNames", ui.chbXLSXFirstRowAsColName->isChecked());
 
 	// live data related settings
 	conf.writeEntry("SourceType", (int)currentSourceType());
@@ -482,12 +482,12 @@ void ImportFileWidget::dataContainerChanged(AbstractAspect* aspect) {
 	updateHeaderOptions();
 }
 
-void ImportFileWidget::enableExcelFirstRowAsColNames(bool enable) {
-	ui.chbExcelFirstRowAsColName->setEnabled(enable);
+void ImportFileWidget::enableXLSXFirstRowAsColNames(bool enable) {
+	ui.chbXLSXFirstRowAsColName->setEnabled(enable);
 }
 
 /*!
- *  update header specific options that are available for some filter types (ASCII and Excel)
+ *  update header specific options that are available for some filter types (ASCII and XLSX)
  *  and for some target data containers (Spreadsheet) only
  */
 void ImportFileWidget::updateHeaderOptions() {
@@ -501,10 +501,10 @@ void ImportFileWidget::updateHeaderOptions() {
 	if (m_asciiOptionsWidget)
 		m_asciiOptionsWidget->showAsciiHeaderOptions(visible);
 
-	// handle Excel
-	visible = (fileType == AbstractFileFilter::FileType::Excel) && spreadsheet;
-	ui.lExcelFirstRowAsColNames->setVisible(visible);
-	ui.chbExcelFirstRowAsColName->setVisible(visible);
+	// handle XLSX or ODS
+	visible = (fileType == AbstractFileFilter::FileType::XLSX || fileType == AbstractFileFilter::FileType::Ods) && spreadsheet;
+	ui.lXLSXFirstRowAsColNames->setVisible(visible);
+	ui.chbXLSXFirstRowAsColName->setVisible(visible);
 }
 
 void ImportFileWidget::showJsonModel(bool b) {
@@ -561,8 +561,8 @@ QString ImportFileWidget::selectedObject() const {
 		const QStringList& names = m_matioOptionsWidget->selectedNames();
 		if (names.size())
 			name += QLatin1Char('/') + names.first();
-	} else if (format == AbstractFileFilter::FileType::Excel) {
-		const auto& names = m_excelOptionsWidget->selectedExcelRegionNames();
+	} else if (format == AbstractFileFilter::FileType::XLSX) {
+		const auto& names = m_xlsxOptionsWidget->selectedXLSXRegionNames();
 		if (names.size()) {
 			name += QLatin1Char('/') + names.first();
 		}
@@ -716,20 +716,20 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 
 		break;
 	}
-	case AbstractFileFilter::FileType::Excel: {
-		DEBUG(Q_FUNC_INFO << ", Excel");
+	case AbstractFileFilter::FileType::XLSX: {
+		DEBUG(Q_FUNC_INFO << ", XLSX");
 
 		if (!m_currentFilter)
-			m_currentFilter.reset(new ExcelFilter);
+			m_currentFilter.reset(new XLSXFilter);
 
-		auto filter = static_cast<ExcelFilter*>(m_currentFilter.get());
+		auto filter = static_cast<XLSXFilter*>(m_currentFilter.get());
 		filter->setStartRow(ui.sbStartRow->value());
 		filter->setEndRow(ui.sbEndRow->value());
 		filter->setStartColumn(ui.sbStartColumn->value());
 		filter->setEndColumn(ui.sbEndColumn->value());
-		filter->setFirstRowAsColumnNames(ui.chbExcelFirstRowAsColName->isChecked());
+		filter->setFirstRowAsColumnNames(ui.chbXLSXFirstRowAsColName->isChecked());
 
-		const auto& sern = selectedExcelRegionNames();
+		const auto& sern = selectedXLSXRegionNames();
 		if (!sern.isEmpty()) {
 			const auto& firstRegion = sern.last();
 			const auto& nameSplit = firstRegion.split(QLatin1Char('!'));
@@ -752,10 +752,10 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 		filter->setEndRow(ui.sbEndRow->value());
 		filter->setStartColumn(ui.sbStartColumn->value());
 		filter->setEndColumn(ui.sbEndColumn->value());
-		// filter->setFirstRowAsColumnNames(ui.chbOdsFirstRowAsColName->isChecked());
+		// TODO: filter->setFirstRowAsColumnNames(ui.chbXLSXFirstRowAsColName->isChecked());
 
 		// TODO
-		/*const auto& sern = selectedExcelRegionNames();
+		/*const auto& sern = selectedXLSXRegionNames();
 		if (!sern.isEmpty()) {
 			const auto& firstRegion = sern.last();
 			const auto& nameSplit = firstRegion.split(QLatin1Char('!'));
@@ -1185,7 +1185,7 @@ void ImportFileWidget::fileTypeChanged(int /*index*/) {
 	case AbstractFileFilter::FileType::NETCDF:
 	case AbstractFileFilter::FileType::FITS:
 	case AbstractFileFilter::FileType::MATIO:
-	case AbstractFileFilter::FileType::Excel:
+	case AbstractFileFilter::FileType::XLSX:
 	case AbstractFileFilter::FileType::Ods:
 		ui.lFilter->hide();
 		ui.cbFilter->hide();
@@ -1226,7 +1226,7 @@ void ImportFileWidget::fileTypeChanged(int /*index*/) {
 		break;
 	}
 
-	// update header specific options that are available for some filter types (ASCII and Excel)
+	// update header specific options that are available for some filter types (ASCII and XLSX)
 	// and for some target data containers (Spreadsheet) only
 	updateHeaderOptions();
 
@@ -1308,17 +1308,17 @@ void ImportFileWidget::initOptionsWidget() {
 		}
 		ui.swOptions->setCurrentWidget(m_imageOptionsWidget->parentWidget());
 		break;
-	case AbstractFileFilter::FileType::Excel:
-		if (!m_excelOptionsWidget) {
-			QWidget* excelw = new QWidget();
-			m_excelOptionsWidget = std::unique_ptr<ExcelOptionsWidget>(new ExcelOptionsWidget(excelw, this));
-			ui.swOptions->addWidget(excelw);
-			connect(dynamic_cast<ExcelOptionsWidget*>(m_excelOptionsWidget.get()),
-					&ExcelOptionsWidget::enableDataPortionSelection,
+	case AbstractFileFilter::FileType::XLSX:
+		if (!m_xlsxOptionsWidget) {
+			QWidget* xlsxw = new QWidget();
+			m_xlsxOptionsWidget = std::unique_ptr<XLSXOptionsWidget>(new XLSXOptionsWidget(xlsxw, this));
+			ui.swOptions->addWidget(xlsxw);
+			connect(dynamic_cast<XLSXOptionsWidget*>(m_xlsxOptionsWidget.get()),
+					&XLSXOptionsWidget::enableDataPortionSelection,
 					this,
 					&ImportFileWidget::enableDataPortionSelection);
 		}
-		ui.swOptions->setCurrentWidget(m_excelOptionsWidget->parentWidget());
+		ui.swOptions->setCurrentWidget(m_xlsxOptionsWidget->parentWidget());
 		break;
 	case AbstractFileFilter::FileType::Ods:
 		if (!m_odsOptionsWidget) {
@@ -1427,12 +1427,12 @@ const QStringList ImportFileWidget::selectedROOTNames() const {
 	return m_rootOptionsWidget->selectedNames();
 }
 
-const QStringList ImportFileWidget::selectedExcelRegionNames() const {
-	return m_excelOptionsWidget->selectedExcelRegionNames();
+const QStringList ImportFileWidget::selectedXLSXRegionNames() const {
+	return m_xlsxOptionsWidget->selectedXLSXRegionNames();
 }
 
-bool ImportFileWidget::excelUseFirstRowAsColNames() const {
-	return ui.chbExcelFirstRowAsColName->isChecked();
+bool ImportFileWidget::xlsxUseFirstRowAsColNames() const {
+	return ui.chbXLSXFirstRowAsColName->isChecked();
 }
 
 /*!
@@ -1517,8 +1517,8 @@ QString ImportFileWidget::fileInfoString(const QString& name) const {
 		case AbstractFileFilter::FileType::Binary:
 			infoStrings << BinaryFilter::fileInfoString(fileName);
 			break;
-		case AbstractFileFilter::FileType::Excel:
-			infoStrings << ExcelFilter::fileInfoString(fileName);
+		case AbstractFileFilter::FileType::XLSX:
+			infoStrings << XLSXFilter::fileInfoString(fileName);
 			break;
 		case AbstractFileFilter::FileType::Ods:
 			infoStrings << OdsFilter::fileInfoString(fileName);
@@ -1738,9 +1738,9 @@ void ImportFileWidget::refreshPreview() {
 		importedStrings = filter->preview(file, lines);
 		break;
 	}
-	case AbstractFileFilter::FileType::Excel: {
-		importedStrings = m_excelOptionsWidget->previewString();
-		// Nothing else to do. Excel has it's own preview table
+	case AbstractFileFilter::FileType::XLSX: {
+		importedStrings = m_xlsxOptionsWidget->previewString();
+		// Nothing else to do. XLSX has it's own preview table
 		break;
 	}
 	case AbstractFileFilter::FileType::Ods:
@@ -1899,8 +1899,8 @@ void ImportFileWidget::refreshPreview() {
 				}
 			}
 
-			// Excel has special h/vheader, don't overwrite the preview table
-			if (fileType != AbstractFileFilter::FileType::Excel) {
+			// XLSX has special h/vheader, don't overwrite the preview table
+			if (fileType != AbstractFileFilter::FileType::XLSX) {
 				// set header if columnMode available
 				for (int i = 0; i < std::min(tmpTableWidget->columnCount(), columnModes.size()); ++i) {
 					QString columnName = QString::number(i + 1);
@@ -1970,9 +1970,9 @@ void ImportFileWidget::updateContent(const QString& fileName) {
 		case AbstractFileFilter::FileType::MATIO:
 			m_matioOptionsWidget->updateContent(static_cast<MatioFilter*>(filter), fileName);
 			break;
-		case AbstractFileFilter::FileType::Excel:
-#ifdef HAVE_EXCEL
-			m_excelOptionsWidget->updateContent(reinterpret_cast<ExcelFilter*>(filter), fileName);
+		case AbstractFileFilter::FileType::XLSX:
+#ifdef HAVE_QXLSX
+			m_xlsxOptionsWidget->updateContent(reinterpret_cast<XLSXFilter*>(filter), fileName);
 #endif
 			break;
 		case AbstractFileFilter::FileType::Ods:
@@ -2029,7 +2029,7 @@ void ImportFileWidget::readingTypeChanged(int idx) {
 	}
 }
 
-void ImportFileWidget::excelFirstRowAsColNamesChanged(bool checked) {
+void ImportFileWidget::xlsxFirstRowAsColNamesChanged(bool checked) {
 	if (checked) {
 		if (ui.sbStartRow->value() == 1)
 			ui.sbStartRow->setValue(2);

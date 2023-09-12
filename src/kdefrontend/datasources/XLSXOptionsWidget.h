@@ -1,16 +1,16 @@
 /*
-	File                 : ExcelOptionsWidget.h
+	File                 : XLSXOptionsWidget.h
 	Project              : LabPlot
-	Description          : Widget providing options for the import of Excel (xlsx) data
+	Description          : Widget providing options for the import of XLSX (Excel) data
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2021 Fabian Kristof (fkristofszabolcs@gmail.com)
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-#ifndef EXCELOPTIONSWIDGET_H
-#define EXCELOPTIONSWIDGET_H
+#ifndef XLSXOPTIONSWIDGET_H
+#define XLSXOPTIONSWIDGET_H
 
-#include "ui_exceloptionswidget.h"
+#include "ui_xlsxoptionswidget.h"
 
 #include <QMap>
 #include <QPair>
@@ -18,23 +18,23 @@
 #include <QVector>
 #include <QWidget>
 
-class ExcelFilter;
+class XLSXFilter;
 class ImportFileWidget;
 
 class QStringList;
 
-class ExcelOptionsWidget : public QWidget {
+class XLSXOptionsWidget : public QWidget {
 	Q_OBJECT
 
 public:
-	explicit ExcelOptionsWidget(QWidget*, ImportFileWidget*);
-	~ExcelOptionsWidget();
+	explicit XLSXOptionsWidget(QWidget*, ImportFileWidget*);
+	~XLSXOptionsWidget();
 
-	void updateContent(ExcelFilter* filter, const QString& fileName);
+	void updateContent(XLSXFilter* filter, const QString& fileName);
 	QTableWidget* previewWidget() const {
 		return ui.twPreview;
 	}
-	QStringList selectedExcelRegionNames() const;
+	QStringList selectedXLSXRegionNames() const;
 	QVector<QStringList> previewString() const;
 Q_SIGNALS:
 	void enableDataPortionSelection(bool enable);
@@ -45,9 +45,9 @@ private Q_SLOTS:
 
 private:
 	QMap<QPair<QString, int>, bool> m_regionIsPossibleToImportToMatrix;
-	Ui::ExcelOptionsWidget ui;
+	Ui::XLSXOptionsWidget ui;
 	ImportFileWidget* m_fileWidget{nullptr};
 	QVector<QStringList> m_previewString;
 };
 
-#endif // EXCELOPTIONSWIDGET_H
+#endif // XLSXOPTIONSWIDGET_H

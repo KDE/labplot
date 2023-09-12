@@ -18,8 +18,8 @@
 #include "backend/core/datatypes/SimpleCopyThroughFilter.h"
 #include "backend/core/datatypes/String2DateTimeFilter.h"
 #include "backend/core/datatypes/String2DoubleFilter.h"
-#include "backend/datasources/filters/ExcelFilter.h"
 #include "backend/datasources/filters/FITSFilter.h"
+#include "backend/datasources/filters/XLSXFilter.h"
 #include "backend/lib/macros.h"
 #include "backend/lib/trace.h"
 #include "backend/spreadsheet/Spreadsheet.h"
@@ -3699,8 +3699,8 @@ bool SpreadsheetView::exportView() {
 #endif
 			break;
 		}
-		case ExportSpreadsheetDialog::Format::Excel:
-			exportToExcel(path, exportHeader);
+		case ExportSpreadsheetDialog::Format::XLSX:
+			exportToXLSX(path, exportHeader);
 			break;
 		case ExportSpreadsheetDialog::Format::SQLite:
 			exportToSQLite(path);
@@ -4291,8 +4291,8 @@ void SpreadsheetView::exportToFits(const QString& fileName, const int exportTo, 
 	delete filter;
 }
 
-void SpreadsheetView::exportToExcel(const QString& fileName, const bool exportHeader) const {
-	auto* filter = new ExcelFilter;
+void SpreadsheetView::exportToXLSX(const QString& fileName, const bool exportHeader) const {
+	auto* filter = new XLSXFilter;
 
 	DEBUG("EXPORT HEADER = " << exportHeader)
 	filter->setColumnNamesAsFirstRow(exportHeader);

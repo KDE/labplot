@@ -395,7 +395,7 @@ QIcon LiveDataSource::icon() const {
 	// TODO: missing icons
 	case AbstractFileFilter::FileType::HDF5:
 	case AbstractFileFilter::FileType::NETCDF:
-	case AbstractFileFilter::FileType::Excel:
+	case AbstractFileFilter::FileType::XLSX:
 	case AbstractFileFilter::FileType::VECTOR_BLF:
 		break;
 	case AbstractFileFilter::FileType::FITS:
@@ -589,7 +589,7 @@ void LiveDataSource::read() {
 			m_filter->readDataFromFile(m_fileName, this);
 			break;
 		// TODO: other types not implemented yet
-		case AbstractFileFilter::FileType::Excel:
+		case AbstractFileFilter::FileType::XLSX:
 		case AbstractFileFilter::FileType::Image:
 		case AbstractFileFilter::FileType::HDF5:
 		case AbstractFileFilter::FileType::VECTOR_BLF:

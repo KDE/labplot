@@ -108,7 +108,7 @@ void OdsOptionsWidget::dataRegionSelectionChanged() {
 		m_previewString = importedStrings;
 
 		ui.twPreview->clear();
-		const bool firstRowAsHeader = m_fileWidget->excelUseFirstRowAsColNames();
+		const bool firstRowAsHeader = m_fileWidget->xlsxUseFirstRowAsColNames();
 		DEBUG("first row as header enabled = " << firstRowAsHeader)
 		ui.twPreview->setRowCount(rows - firstRowAsHeader);
 

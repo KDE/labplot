@@ -88,7 +88,7 @@ private:
 	void exportToFile(const QString&, bool, const QString&, QLocale::Language) const;
 	void exportToLaTeX(const QString&, bool exportHeaders, bool gridLines, bool captions, bool latexHeaders, bool skipEmptyRows, bool exportEntire) const;
 	void exportToFits(const QString& path, int exportTo, bool commentsAsUnits) const;
-	void exportToExcel(const QString& path, bool exportHeaders) const;
+	void exportToXLSX(const QString& path, bool exportHeaders) const;
 	void exportToSQLite(const QString& path) const;
 	int maxRowToExport() const;
 	bool hasValues(const QVector<Column*>);

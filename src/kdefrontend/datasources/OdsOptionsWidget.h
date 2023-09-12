@@ -1,5 +1,5 @@
 /*
-	File                 : ExcelOptionsWidget.h
+	File                 : OdsOptionsWidget.h
 	Project              : LabPlot
 	Description          : Widget providing options for the import of Open Document Spreadsheet (ods) data
 	--------------------------------------------------------------------

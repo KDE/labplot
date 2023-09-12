@@ -38,12 +38,12 @@ public:
 		void setSheetToAppendTo(const QString& sheetName);
 		void setOverwriteData(const bool);
 		void setDataExportStartPos(const QString&);
-		void setFirstRowAsColumnNames(const bool);
 	*/
+	void setFirstRowAsColumnNames(const bool);
 	void parse(const QString& fileName, QTreeWidgetItem* root);
 	/*	static QString convertFromNumberToExcelColumn(int n);
 
-	#ifdef HAVE_EXCEL
+	#ifdef HAVE_QXLSX
 		QVector<QXlsx::CellRange> dataRegions(const QString& fileName, const QString& sheetName);
 		QXlsx::CellRange dimension() const;
 	#endif

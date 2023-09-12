@@ -30,7 +30,7 @@ public:
 	void parse(const QString& fileName, QTreeWidgetItem* root);
 	/*	QStringList sheets() const;
 
-	#ifdef HAVE_EXCEL
+	#ifdef HAVE_QXLSX
 		void readDataRegion(const QXlsx::CellRange& region, AbstractDataSource*, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace);
 		QVector<QXlsx::CellRange> dataRegions(const QString& fileName, const QString& sheetName);
 		QXlsx::CellRange cellContainedInRegions(const QXlsx::CellReference& cell, const QVector<QXlsx::CellRange>& regions) const;
@@ -55,7 +55,7 @@ public:
 	int endColumn{-1};
 	/*	QString currentSheet;
 
-	#ifdef HAVE_EXCEL
+	#ifdef HAVE_QXLSX
 		QXlsx::CellRange currentRange;
 		QXlsx::CellReference dataExportStartCell;
 	#endif
