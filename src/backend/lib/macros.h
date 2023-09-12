@@ -44,7 +44,11 @@
 
 struct Lock {
 	inline explicit Lock(bool& variable)
-		: variable(variable = true) {
+		: variable(variable) {
+		// Make sure it is not already locked
+		// somewhere else
+		assert(!variable);
+		this->variable = true;
 	}
 
 	inline ~Lock() {

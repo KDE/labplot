@@ -17,6 +17,7 @@ class AxisTest : public CommonTest {
 	Q_OBJECT
 
 private Q_SLOTS:
+	void axisLine();
 	void majorTicksAutoNumberEnableDisable();
 	void minorTicksAutoNumberEnableDisable();
 	void majorTicksStartValue();

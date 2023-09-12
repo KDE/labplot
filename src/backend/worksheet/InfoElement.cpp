@@ -5,7 +5,7 @@
 						   show their values
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2020 Martin Marmsoler <martin.marmsoler@gmail.com>
-	SPDX-FileCopyrightText: 2020-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2020-2023 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -143,12 +143,17 @@ void InfoElement::init() {
 	m_setTextLabelText = false;
 	addChild(m_title);
 
+	// use the line properties of axis line also for the info element lines
+	KConfig config;
+	const auto& group = config.group("Axis");
+
 	// lines
 	Q_D(InfoElement);
 	d->verticalLine = new Line(QString());
 	d->verticalLine->setHidden(true);
 	d->verticalLine->setPrefix(QStringLiteral("VerticalLine"));
 	addChild(d->verticalLine);
+	d->verticalLine->init(group);
 	connect(d->verticalLine, &Line::updatePixmapRequested, [=] {
 		d->update();
 	});
@@ -160,16 +165,13 @@ void InfoElement::init() {
 	d->connectionLine->setHidden(true);
 	d->connectionLine->setPrefix(QStringLiteral("ConnectionLine"));
 	addChild(d->connectionLine);
+	d->connectionLine->init(group);
 	connect(d->connectionLine, &Line::updatePixmapRequested, [=] {
 		d->update();
 	});
 	connect(d->connectionLine, &Line::updateRequested, [=] {
 		d->updateConnectionLine();
 	});
-
-	// use the color for the axis line from the theme also for info element's lines
-	KConfig config;
-	InfoElement::loadThemeConfig(config);
 }
 
 void InfoElement::initActions() {

@@ -907,7 +907,6 @@ void CartesianPlotDock::niceExtendChanged(bool checked) {
 
 	for (auto* plot : m_plotList)
 		plot->setNiceExtend(checked);
-	updatePlotRangeList();
 }
 
 void CartesianPlotDock::rangePointsChanged(const QString& text) {
@@ -1680,13 +1679,26 @@ void CartesianPlotDock::plotMaxChanged(const Dimension dim, int xRangeIndex, dou
 
 void CartesianPlotDock::plotRangeChanged(const Dimension dim, int index, Range<double> range) {
 	DEBUG(Q_FUNC_INFO << ", " << CartesianCoordinateSystem::dimensionToString(dim).toStdString() << " range = " << range.toStdString())
-	CONDITIONAL_LOCK_RETURN;
 
-	CELLWIDGET(dim, index, TwRangesColumn::Min, NumberSpinBox, setValue(range.start()));
-	CELLWIDGET(dim, index, TwRangesColumn::Min, UTCDateTimeEdit, setMSecsSinceEpochUTC(range.start()));
-	CELLWIDGET(dim, index, TwRangesColumn::Max, NumberSpinBox, setValue(range.end()));
-	CELLWIDGET(dim, index, TwRangesColumn::Max, UTCDateTimeEdit, setMSecsSinceEpochUTC(range.end()));
-
+	// The ranges can change on multiple ways
+	// - setting autoscale
+	// - setting min/max
+	// - but also when changing datarange type or the datarange points.
+	// If the datarange type/points changes, CONDITIONAL_LOCK_RETURN locks already and then the ranges would not update.
+	// To update also in those cases the cells will be updated all the time regardless of the m_initializing member state
+	if (m_initializing) {
+		CELLWIDGET(dim, index, TwRangesColumn::Min, NumberSpinBox, setValue(range.start()));
+		CELLWIDGET(dim, index, TwRangesColumn::Min, UTCDateTimeEdit, setMSecsSinceEpochUTC(range.start()));
+		CELLWIDGET(dim, index, TwRangesColumn::Max, NumberSpinBox, setValue(range.end()));
+		CELLWIDGET(dim, index, TwRangesColumn::Max, UTCDateTimeEdit, setMSecsSinceEpochUTC(range.end()));
+	} else {
+		// Must be copied, because the Lock would otherwise be in it's own space and therefore it would not make any sense
+		CONDITIONAL_LOCK_RETURN;
+		CELLWIDGET(dim, index, TwRangesColumn::Min, NumberSpinBox, setValue(range.start()));
+		CELLWIDGET(dim, index, TwRangesColumn::Min, UTCDateTimeEdit, setMSecsSinceEpochUTC(range.start()));
+		CELLWIDGET(dim, index, TwRangesColumn::Max, NumberSpinBox, setValue(range.end()));
+		CELLWIDGET(dim, index, TwRangesColumn::Max, UTCDateTimeEdit, setMSecsSinceEpochUTC(range.end()));
+	}
 	updatePlotRangeList();
 }
 

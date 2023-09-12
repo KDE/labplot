@@ -366,7 +366,6 @@ Q_SIGNALS:
 	void rectChanged(QRectF&);
 	void autoScaleChanged(const Dimension, int xRangeIndex, bool);
 	void rangeChanged(const Dimension, int, Range<double>);
-	void yRangeChanged(int yRangeIndex, Range<double>);
 	void minChanged(const Dimension, int rangeIndex, double);
 	void maxChanged(const Dimension, int rangeIndex, double);
 	void scaleChanged(const Dimension, int rangeIndex, RangeT::Scale);
