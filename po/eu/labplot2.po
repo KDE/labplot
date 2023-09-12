@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-07-10 02:40+0000\n"
-"PO-Revision-Date: 2023-09-10 14:13+0200\n"
+"PO-Revision-Date: 2023-09-11 23:30+0200\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
 "Language: eu\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 23.04.0\n"
+"X-Generator: Lokalize 23.08.0\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -5046,17 +5046,17 @@ msgstr ""
 #: src/backend/gsl/ExpressionParser.cpp:1198
 #, kde-format
 msgid "Force of 1 gram weight"
-msgstr ""
+msgstr "Gramo 1eko pisuaren indarra"
 
 #: src/backend/gsl/ExpressionParser.cpp:1201
 #, kde-format
 msgid "Force of 1 pound weight"
-msgstr ""
+msgstr "Libra 1eko pisuaren indarra"
 
 #: src/backend/gsl/ExpressionParser.cpp:1204
 #, kde-format
 msgid "Force of 1 kilopound weight"
-msgstr ""
+msgstr "Kilolibra 1keko pisuaren indarra"
 
 #: src/backend/gsl/ExpressionParser.cpp:1207
 #, kde-format
@@ -18156,7 +18156,7 @@ msgstr "Formatua"
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:348
 #, kde-format
 msgid "Start"
-msgstr "Hasi"
+msgstr "Hasiera"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twYRanges)
 #. i18n: ectx: property (text), widget (QTableWidget, twXRanges)
@@ -18164,7 +18164,7 @@ msgstr "Hasi"
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:353
 #, kde-format
 msgid "End"
-msgstr "Bukatu"
+msgstr "Bukaera"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twYRanges)
 #. i18n: ectx: property (text), widget (QTableWidget, twXRanges)
@@ -18195,7 +18195,7 @@ msgstr "<html><head/><body><p>Gehitu x barruti berri bat</p></body></html>"
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:278
 #, kde-format
 msgid "Remove the current selected x range"
-msgstr "kendu unean hautatutako x barrutia"
+msgstr "Kendu unean hautatutako x barrutia"
 
 #. i18n: ectx: property (text), widget (QToolButton, tbRemoveXRange)
 #. i18n: ectx: property (text), widget (QToolButton, tbAddPlotRange)
@@ -18245,10 +18245,9 @@ msgstr "kendu unean hautatutako y barrutia"
 
 #. i18n: ectx: property (text), widget (QLabel, lNiceExtend)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:512
-#, fuzzy, kde-format
-#| msgid "Extend"
+#, kde-format
 msgid "Extend:"
-msgstr "Hedatu"
+msgstr "Hedatu:"
 
 #. i18n: ectx: property (suffix), widget (NumberSpinBox, sbTop)
 #. i18n: ectx: property (suffix), widget (NumberSpinBox, sbPaddingHorizontal)
@@ -18323,7 +18322,7 @@ msgstr "Betegarria"
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:643
 #, kde-format
 msgid "Symmetric:"
-msgstr "Geometrikoa:"
+msgstr "Simetrikoa:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPaddingVerticalDown)
 #. i18n: ectx: property (text), widget (QLabel, lBottomMargin)
@@ -18394,9 +18393,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1028
-#, fuzzy, kde-format
+#, kde-format
 msgid "Y-Range"
-msgstr "Orange"
+msgstr "Y-barrutia"
 
 #. i18n: ectx: property (text), widget (QLabel, lFrom)
 #. i18n: ectx: property (text), widget (QLabel, lXBreakStart)
@@ -18422,10 +18421,9 @@ msgstr "Grafikaren &area..."
 
 #. i18n: ectx: property (text), widget (QLabel, lBorderCornerRadius)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1402
-#, fuzzy, kde-format
-#| msgid "Corner radius:"
+#, kde-format
 msgid "Corner Radius:"
-msgstr "Izkinako erradioa:"
+msgstr "Izkinaren erradioa:"
 
 #. i18n: ectx: property (text), widget (QLabel, lHorizontalAlignment)
 #. i18n: ectx: property (text), widget (QLabel, label)
@@ -18467,7 +18465,7 @@ msgstr "Lerroa+Ikurraren zabalera:"
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:531
 #, kde-format
 msgid "Corner radius:"
-msgstr "Izkinako erradioa:"
+msgstr "Izkinaren erradioa:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDateTimeFormat)
 #. i18n: ectx: property (text), widget (QLabel, lValuesDateTimeFormat)
@@ -18495,9 +18493,9 @@ msgstr "Zenbakizkoa:"
 
 #. i18n: ectx: property (text), widget (QLabel, lType)
 #: src/kdefrontend/ui/dockwidgets/columndock.ui:241
-#, fuzzy, kde-format
+#, kde-format
 msgid "Data Type:"
-msgstr "Data mota:"
+msgstr "Datu-mota:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPlotDesignation)
 #: src/kdefrontend/ui/dockwidgets/columndock.ui:315
@@ -18533,7 +18531,7 @@ msgstr "Kurtsorea 2"
 #: src/kdefrontend/ui/labelwidget.ui:83 src/kdefrontend/ui/labelwidget.ui:353
 #, kde-format
 msgid "Horizontal position relative to label's parent"
-msgstr ""
+msgstr "Etiketaren gurasoarekiko kokapen erlatiboa"
 
 #. i18n: ectx: property (text), widget (QLabel, lMinimum)
 #. i18n: ectx: property (text), widget (QLabel, lMinDateTime)
@@ -18651,14 +18649,14 @@ msgstr "Datuak, -:"
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:45
 #, kde-format
 msgid "Specify the name of the image file"
-msgstr "Zehaztu irudi fitxategiaren izena"
+msgstr "Zehaztu irudi-fitxategiaren izena"
 
 #. i18n: ectx: property (text), widget (QLabel, lPositionYLogical)
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:114
 #: src/kdefrontend/ui/labelwidget.ui:702
-#, fuzzy, kde-format
+#, kde-format
 msgid "Y:"
-msgstr "Y"
+msgstr "Y:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPositionY)
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:170
@@ -18687,15 +18685,14 @@ msgstr "Lerrok. bert.:"
 #. i18n: ectx: property (text), widget (QLabel, lPositionXLogical)
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:340
 #: src/kdefrontend/ui/labelwidget.ui:166
-#, fuzzy, kde-format
+#, kde-format
 msgid "X:"
-msgstr "X"
+msgstr "X:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbBindLogicalPos)
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:428
 #: src/kdefrontend/ui/labelwidget.ui:752
-#, fuzzy, kde-format
-#| msgid "Logical coordinates"
+#, kde-format
 msgid "Logical Coordinates"
 msgstr "Koordenatu logikoak"
 
@@ -18754,7 +18751,7 @@ msgstr ""
 #: src/kdefrontend/ui/settingsgeneralpage.ui:211
 #, kde-format
 msgid "Interval:"
-msgstr "Bitartea:"
+msgstr "Tartea:"
 
 #. i18n: ectx: property (text), widget (QPushButton, bUpdateNow)
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:78
@@ -18766,7 +18763,7 @@ msgstr "Eguneratu orain"
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:189
 #, kde-format
 msgid "Topics"
-msgstr "Gaiak:"
+msgstr "Gaiak"
 
 #. i18n: ectx: property (text), widget (QLabel, lUpdate)
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:251
@@ -18796,9 +18793,9 @@ msgstr "Errenkadak:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMapping)
 #: src/kdefrontend/ui/dockwidgets/matrixdock.ui:160
-#, fuzzy, kde-format
+#, kde-format
 msgid "Mapping"
-msgstr "%1 mapatzen"
+msgstr "Mapatzea"
 
 #. i18n: ectx: property (text), widget (QLabel, lXStart)
 #: src/kdefrontend/ui/dockwidgets/matrixdock.ui:167
@@ -18850,9 +18847,9 @@ msgstr "Ezarpenak:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: src/kdefrontend/ui/dockwidgets/projectdock.ui:147
-#, fuzzy, kde-format
+#, kde-format
 msgid "Modified:"
-msgstr "Aldatze-data:"
+msgstr "Aldatua:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSaveCalculations)
 #: src/kdefrontend/ui/dockwidgets/projectdock.ui:154
@@ -18864,8 +18861,7 @@ msgstr "Gorde kalkuluak:"
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/kdefrontend/ui/dockwidgets/projectdock.ui:174
 #: src/kdefrontend/ui/worksheet/exportworksheetwidget.ui:49
-#, fuzzy, kde-format
-#| msgid "File name:"
+#, kde-format
 msgid "File Name:"
 msgstr "Fitxategi-izena:"
 
@@ -18883,9 +18879,9 @@ msgstr "Egilea:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: src/kdefrontend/ui/dockwidgets/projectdock.ui:238
-#, fuzzy, kde-format
+#, kde-format
 msgid "Created:"
-msgstr "Sortze-data:"
+msgstr "Sorrera:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPlotRange)
 #: src/kdefrontend/ui/dockwidgets/referencerangedock.ui:46
@@ -18912,8 +18908,7 @@ msgstr "Amaierako errenkada:"
 
 #. i18n: ectx: property (text), widget (QLabel, lShowComments)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:161
-#, fuzzy, kde-format
-#| msgid "Column comments:"
+#, kde-format
 msgid "Column Comments:"
 msgstr "Zutabeetako iruzkinak:"
 
@@ -18929,7 +18924,7 @@ msgstr "Distantzia:"
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:66
 #, kde-format
 msgid "Page:"
-msgstr "Orria:"
+msgstr "Orrialdea:"
 
 #. i18n: ectx: property (text), widget (QLabel, lScaleContent)
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:164
@@ -18948,7 +18943,7 @@ msgstr ""
 #: src/kdefrontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:259
 #, kde-format
 msgid "Sampling Interval:"
-msgstr ""
+msgstr "Laginketa tartea:"
 
 #. i18n: ectx: property (text), widget (QLabel, lXColumn)
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:134
@@ -18964,10 +18959,9 @@ msgstr ""
 #: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:115
 #: src/kdefrontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:83
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:74
-#, fuzzy, kde-format
-#| msgid "x-Data:"
+#, kde-format
 msgid "X-Data:"
-msgstr "x-datuak:"
+msgstr "X-datuak:"
 
 #. i18n: ectx: property (text), widget (QLabel, lY2Column)
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:144
@@ -19048,15 +19042,15 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, lConvolution)
 #: src/kdefrontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:96
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:506
-#, fuzzy, kde-format
+#, kde-format
 msgid "Correlation"
 msgstr "Korrelazioa"
 
 #. i18n: ectx: property (text), widget (QLabel, lNormalize)
 #: src/kdefrontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:103
-#, fuzzy, kde-format
+#, kde-format
 msgid "Normalize:"
-msgstr "Normalizatu"
+msgstr "Normalizatzea:"
 
 #. i18n: ectx: property (text), widget (QLabel, lY2Column)
 #: src/kdefrontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:110
@@ -19080,7 +19074,7 @@ msgstr ""
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:123
 #, kde-format
 msgid "Drop lines"
-msgstr ""
+msgstr "Proiekzio lerroak"
 
 #. i18n: ectx: property (text), widget (QLabel, lLineInterpolationPointsCount)
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:133
@@ -19108,15 +19102,15 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lErrorBarY)
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:690
-#, fuzzy, kde-format
+#, kde-format
 msgid "Y Error"
-msgstr "Errorea"
+msgstr "Y errorea"
 
 #. i18n: ectx: property (text), widget (QLabel, lErrorBarX)
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:720
-#, fuzzy, kde-format
+#, kde-format
 msgid "X Error"
-msgstr "Errorea"
+msgstr "X errorea"
 
 #. i18n: ectx: property (text), widget (QLabel, lYColumn)
 #: src/kdefrontend/ui/dockwidgets/xycurvedockgeneraltab.ui:107
@@ -19130,10 +19124,9 @@ msgstr "Errorea"
 #: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:122
 #: src/kdefrontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:90
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:114
-#, fuzzy, kde-format
-#| msgid "x-Data:"
+#, kde-format
 msgid "Y-Data:"
-msgstr "x-datuak:"
+msgstr "Y-datuak:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSimplification)
 #: src/kdefrontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:243
@@ -19151,10 +19144,9 @@ msgstr "Aukera:"
 
 #. i18n: ectx: property (text), widget (QLabel, lAccuracyOrder)
 #: src/kdefrontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:203
-#, fuzzy, kde-format
-#| msgid "Accuracy order:"
+#, kde-format
 msgid "Accuracy Order:"
-msgstr "Zehaztasun-ordena:"
+msgstr "Doitasun ordena:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDerivative)
 #: src/kdefrontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:233
@@ -19232,16 +19224,15 @@ msgstr "Kategoria:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lXWeight)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:94
-#, kde-format
+#, fuzzy, kde-format
 msgid "Weight for x data"
-msgstr "X datuen pisua"
+msgstr "X datuen ponderazioa"
 
 #. i18n: ectx: property (text), widget (QLabel, lXWeight)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:97
-#, fuzzy, kde-format
-#| msgid "x-Weight:"
+#, kde-format
 msgid "X-Weight:"
-msgstr "x-pisua:"
+msgstr "X-pisua:"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, pbOptions)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:110
@@ -19315,31 +19306,31 @@ msgstr ""
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:290
 #, kde-format
 msgid "Residual mean square"
-msgstr ""
+msgstr "Hondarreko batezbesteko koadratikoa"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:300
 #, kde-format
 msgid "Root mean square deviation (RMSD, SD)"
-msgstr ""
+msgstr "Batez besteko desbideratze koadratikoa (RMSD, SD)"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:310
 #, kde-format
 msgid "Coefficient of determination"
-msgstr ""
+msgstr "Mugatze-koefizientea"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:320
 #, kde-format
 msgid "Adj. coefficient of determination"
-msgstr ""
+msgstr "Doitu mugatze-koefizientea"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:340
 #, kde-format
 msgid "F test"
-msgstr ""
+msgstr "F proba"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:350
@@ -19351,19 +19342,19 @@ msgstr "P > F"
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:360
 #, kde-format
 msgid "Mean absolute error (MAE)"
-msgstr ""
+msgstr "Batez besteko errore absolutua (MAE)"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:370
 #, kde-format
 msgid "Akaike information criterion (AIC)"
-msgstr ""
+msgstr "Akaike informazioaren irizpidea (AIC)"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:380
 #, kde-format
 msgid "Bayesian information criterion (BIC)"
-msgstr ""
+msgstr "Informazio bayesiarraren irizpidea (BIC)"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:394
@@ -19394,13 +19385,13 @@ msgstr "Tolerantzia"
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:466
 #, kde-format
 msgid "Calculation time"
-msgstr "Kalkulu-denbora"
+msgstr "Kalkuluaren denbora"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:476
 #, kde-format
 msgid "Degrees of Freedom"
-msgstr "Askatasun-gradua"
+msgstr "Askatasun graduak"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:496
@@ -19416,10 +19407,9 @@ msgstr "Y datuen pisua"
 
 #. i18n: ectx: property (text), widget (QLabel, lYWeight)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:536
-#, fuzzy, kde-format
-#| msgid "x-Weight:"
+#, kde-format
 msgid "Y-Weight:"
-msgstr "x-pisua:"
+msgstr "Y-pisua:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lDegree)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:546
@@ -19491,7 +19481,7 @@ msgstr ""
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:808
 #, kde-format
 msgid "How to weight the data points"
-msgstr "Datu-puntuak nola pisatu"
+msgstr "Datu-puntuak nola ponderatu"
 
 #. i18n: ectx: property (text), widget (QToolButton, lWeights)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:814
@@ -19527,14 +19517,13 @@ msgstr ""
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1027
 #, kde-format
 msgid "Run"
-msgstr ""
+msgstr "Exekutatu"
 
 #. i18n: ectx: property (text), widget (QLabel, lAlgorithm)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1041
-#, fuzzy, kde-format
-#| msgid "Logarithm"
+#, kde-format
 msgid "Algorithm:"
-msgstr "Logaritmoa"
+msgstr "Algoritmoa:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lEquation)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1118
@@ -19575,10 +19564,9 @@ msgstr "Irteera:"
 
 #. i18n: ectx: property (text), widget (QLabel, lXScale)
 #: src/kdefrontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:222
-#, fuzzy, kde-format
-#| msgid "X axis scale:"
+#, kde-format
 msgid "X-Axis Scale:"
-msgstr "X ardatzaren eskala:"
+msgstr "X-ardatzaren eskala:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbTwoSided)
 #: src/kdefrontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:231
@@ -19656,19 +19644,17 @@ msgstr "Pisua:"
 #: src/kdefrontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:138
 #, kde-format
 msgid "Percentile:"
-msgstr "Pertzentila: "
+msgstr "Pertzentila:"
 
 #. i18n: ectx: property (text), widget (QLabel, lOrder)
 #: src/kdefrontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:145
-#, fuzzy, kde-format
-#| msgid "Polynom order:"
+#, kde-format
 msgid "Polynom Order:"
 msgstr "Polinomioen ordena:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMode)
 #: src/kdefrontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:152
-#, fuzzy, kde-format
-#| msgid "Padding mode:"
+#, kde-format
 msgid "Padding Mode:"
 msgstr "Betegarri modua:"
 
@@ -20272,7 +20258,7 @@ msgstr "Azpi-leihoaren ikusgaitasuna:"
 #: src/kdefrontend/ui/settingsgeneralpage.ui:254
 #, kde-format
 msgid "Terms:"
-msgstr ""
+msgstr "Baldintzak:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkGUMTerms)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:261
