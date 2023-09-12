@@ -205,7 +205,6 @@ void OdsFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSou
 QVector<QStringList> OdsFilterPrivate::preview(const QString& sheetName, int lines) {
 	QVector<QStringList> dataString;
 #ifdef HAVE_ORCUS
-
 	// get sheet index by name and read lines of data into dataString
 	auto* sheet = m_document.get_sheet(sheetName.toStdString());
 	const auto index = sheet->get_index();
@@ -220,6 +219,7 @@ QVector<QStringList> OdsFilterPrivate::preview(const QString& sheetName, int lin
 		const int maxCols = 50;
 		for (ixion::row_t row = ranges.first.row; row < std::min(lines + ranges.first.row, ranges.last.row + 1); row++) {
 			DEBUG(Q_FUNC_INFO << ", row " << row)
+			QStringList line;
 			for (ixion::col_t col = ranges.first.column; col < std::min(maxCols + ranges.first.column, ranges.last.column + 1); col++) {
 				ixion::abs_address_t pos(index, row, col);
 
@@ -228,15 +228,18 @@ QVector<QStringList> OdsFilterPrivate::preview(const QString& sheetName, int lin
 				case ixion::celltype_t::string: {
 					auto value = model.get_string_value(pos);
 					DEBUG(Q_FUNC_INFO << " " << value)
+					line << QString::fromStdString(std::string(value));
 					break;
 				}
 				case ixion::celltype_t::numeric: {
 					double value = model.get_numeric_value(pos);
 					DEBUG(Q_FUNC_INFO << " " << value)
+					line << QLocale().toString(value);
 					break;
 				}
 				case ixion::celltype_t::unknown:
 				case ixion::celltype_t::formula:
+					// TODO: evaluate and append to line
 					// formula_result formula = model.get_formula_result(pos);
 				case ixion::celltype_t::boolean:
 				case ixion::celltype_t::empty:
@@ -244,6 +247,7 @@ QVector<QStringList> OdsFilterPrivate::preview(const QString& sheetName, int lin
 					break;
 				}
 			}
+			dataString << line;
 		}
 	}
 #endif
@@ -253,7 +257,6 @@ QVector<QStringList> OdsFilterPrivate::preview(const QString& sheetName, int lin
 
 void OdsFilterPrivate::parse(const QString& fileName, QTreeWidgetItem* parentItem) {
 	DEBUG(Q_FUNC_INFO)
-
 #ifdef HAVE_ORCUS
 	m_document.clear();
 	spreadsheet::import_factory factory{m_document};

@@ -104,39 +104,33 @@ void OdsOptionsWidget::dataRegionSelectionChanged() {
 	DEBUG(Q_FUNC_INFO << ", sheet name = " << sheetName.toStdString())
 	if (!sheetName.isEmpty()) {
 		const auto importedStrings = filter->preview(sheetName, ui.sbPreviewLines->value());
-	}
-	/*
-	if (!sheetName.isEmpty() && selectedRegion.isValid()) {
-		bool regionCanBeImportedToMatrix = false;
-
-		if (selectedRegion.columnCount() > 100) {
-			const int lastCol = selectedRegion.firstColumn() + 100;
-			selectedRegion.setLastColumn(lastCol);
-		}
-
-		const auto importedStrings = filter->previewForDataRegion(sheetName, selectedRegion, &regionCanBeImportedToMatrix, ui.sbPreviewLines->value());
-		m_previewString = importedStrings;
-		// QDEBUG("PREVIEW:" << importedStrings)
-
-		// enable the first row as column names option only if the data contains more than 1 row
-		m_fileWidget->enableOdsFirstRowAsColNames(importedStrings.size() > 1);
-
-		emit m_fileWidget->enableImportToMatrix(regionCanBeImportedToMatrix);
-
-		// sheet name - item row will identify the region
-		const auto mapVal = qMakePair(sheetName, row);
-		// this region was not currently selected
-		if (m_regionIsPossibleToImportToMatrix.find(mapVal) != m_regionIsPossibleToImportToMatrix.end())
-			m_regionIsPossibleToImportToMatrix.insert(mapVal, regionCanBeImportedToMatrix);
-		else if (!item->isSelected()) // the item was deselected
-			m_regionIsPossibleToImportToMatrix.remove(mapVal);
-
 		const auto rows = importedStrings.size();
+		m_previewString = importedStrings;
+
 		ui.twPreview->clear();
 		const bool firstRowAsHeader = m_fileWidget->excelUseFirstRowAsColNames();
 		DEBUG("first row as header enabled = " << firstRowAsHeader)
 		ui.twPreview->setRowCount(rows - firstRowAsHeader);
 
+		int colCount = 0;
+		const int maxColumns = 50;
+		for (int i = 0; i < rows; ++i) {
+			auto lineString = importedStrings.at(i);
+			colCount = std::min(maxColumns, lineString.size());
+			if (i == 0)
+				ui.twPreview->setColumnCount(colCount);
+
+			auto* item = new QTableWidgetItem(QString::number(i - firstRowAsHeader));
+			ui.twPreview->setVerticalHeaderItem(i - firstRowAsHeader, item);
+
+			for (int j = 0; j < colCount; ++j) {
+				auto* item = new QTableWidgetItem(lineString.at(j));
+				ui.twPreview->setItem(i - firstRowAsHeader, j, item);
+			}
+		}
+		ui.twPreview->resizeColumnsToContents();
+	}
+	/*
 		int colCount = 0;
 		const int maxColumns = 50;
 		for (int i = 0; i < rows; ++i) {
@@ -167,13 +161,6 @@ void OdsOptionsWidget::dataRegionSelectionChanged() {
 				}
 			}
 
-			auto* item = new QTableWidgetItem(QString::number(selectedRegion.firstRow() + i - firstRowAsHeader));
-			ui.twPreview->setVerticalHeaderItem(i - firstRowAsHeader, item);
-
-			for (int j = 0; j < colCount; ++j) {
-				auto* item = new QTableWidgetItem(lineString.at(j));
-				ui.twPreview->setItem(i - firstRowAsHeader, j, item);
-			}
 		}
 		ui.twPreview->resizeColumnsToContents();
 	}

@@ -134,6 +134,7 @@ void ExcelOptionsWidget::dataRegionSelectionChanged() {
 		const int maxColumns = 50;
 		for (int i = 0; i < rows; ++i) {
 			auto lineString = importedStrings.at(i);
+			// TODO: std::min(maxColumns, lineString.size())
 			colCount = lineString.size() > maxColumns ? maxColumns : lineString.size();
 
 			if (i == 0) {
