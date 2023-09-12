@@ -237,13 +237,33 @@ QVector<QStringList> OdsFilterPrivate::preview(const QString& sheetName, int lin
 					line << QLocale().toString(value);
 					break;
 				}
-				case ixion::celltype_t::unknown:
-				case ixion::celltype_t::formula:
-					// TODO: evaluate and append to line
-					// formula_result formula = model.get_formula_result(pos);
-				case ixion::celltype_t::boolean:
+				case ixion::celltype_t::formula: {
+					// read formula result. We can't handle formulas yet (?)
+					auto formula = model.get_formula_result(pos);
+					switch (formula.get_type()) {
+					case ixion::formula_result::result_type::value:
+						line << QLocale().toString(formula.get_value());
+						break;
+					case ixion::formula_result::result_type::string:
+						line << QString::fromStdString(formula.get_string());
+						break;
+					case ixion::formula_result::result_type::error:
+					// TODO: not available in ixion 0.17 ?
+					// case ixion::formula_result::result_type::boolean:
+					case ixion::formula_result::result_type::matrix:
+						// TODO
+						DEBUG(Q_FUNC_INFO << ", formula type error, boolean or matrix not implemented yet.")
+						break;
+					}
+					break;
+				}
 				case ixion::celltype_t::empty:
+					line << QString();
+					break;
+				case ixion::celltype_t::unknown:
+				case ixion::celltype_t::boolean:
 					// TODO
+					DEBUG(Q_FUNC_INFO << ", cell type unknown or boolean not implemented yet.")
 					break;
 				}
 			}
