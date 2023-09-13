@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-12 00:41+0000\n"
+"POT-Creation-Date: 2023-09-13 00:42+0000\n"
 "PO-Revision-Date: 2014-02-10 21:28+0100\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -11698,14 +11698,14 @@ msgid ""
 "installation."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportDatasetWidget.cpp:532
+#: src/kdefrontend/datasources/ImportDatasetWidget.cpp:528
 #, fuzzy, kde-format
 #| msgid "Data, -"
 msgid "Dataset"
 msgstr "Data, -"
 
 #. i18n: ectx: property (text), widget (QLabel, lDescription)
-#: src/kdefrontend/datasources/ImportDatasetWidget.cpp:545
+#: src/kdefrontend/datasources/ImportDatasetWidget.cpp:531
 #: src/kdefrontend/ui/datasources/datasetmetadatamanagerwidget.ui:210
 #, fuzzy, kde-format
 #| msgid "Direction"
