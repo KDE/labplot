@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-07-10 02:40+0000\n"
-"PO-Revision-Date: 2023-09-11 23:30+0200\n"
+"PO-Revision-Date: 2023-09-12 22:03+0200\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
 "Language: eu\n"
@@ -9680,7 +9680,7 @@ msgstr ""
 #: src/kdefrontend/spreadsheet/SortDialog.cpp:35
 #, kde-format
 msgid "Sort"
-msgstr "Ordenatu"
+msgstr "Sailkatu"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1096
 #, kde-format
@@ -15654,7 +15654,7 @@ msgstr "KDE diagrama"
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:141
 #, kde-format
 msgid "Normal Q-Q Plot"
-msgstr ""
+msgstr "Q-Q diagrama arrunta"
 
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:146
 #, fuzzy, kde-format
@@ -15700,12 +15700,12 @@ msgstr "Histograma metatua"
 #: src/kdefrontend/TemplateHandler.cpp:131
 #, kde-format
 msgid "Load"
-msgstr "Zama"
+msgstr "Zamatu"
 
 #: src/kdefrontend/TemplateHandler.cpp:132
 #, kde-format
 msgid "Load properties from a template"
-msgstr "Zama-propietateak txantiloi batetik"
+msgstr "Zamatu propietateak txantiloi batetik"
 
 #: src/kdefrontend/TemplateHandler.cpp:133
 #, kde-format
@@ -16216,10 +16216,9 @@ msgstr "Neurria:"
 #: src/kdefrontend/ui/labelwidget.ui:366 src/kdefrontend/ui/labelwidget.ui:661
 #: src/kdefrontend/ui/labelwidget.ui:677 src/kdefrontend/ui/symbolwidget.ui:293
 #: src/kdefrontend/ui/symbolwidget.ui:309
-#, fuzzy, kde-format
-#| msgid "Binomial random numbers"
+#, kde-format
 msgid "Spinbox for numbers."
-msgstr "Ausazko zenbaki binomialak"
+msgstr "Zenbakietarako biraketa-laukia."
 
 #. i18n: ectx: property (suffix), widget (NumberSpinBox, sbSize)
 #. i18n: ectx: property (suffix), widget (NumberSpinBox, sbBorderWidth)
@@ -16357,10 +16356,9 @@ msgstr "Kapsulatuta:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbFileRelativePath)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:165
-#, fuzzy, kde-format
-#| msgid "Relative Path:"
+#, kde-format
 msgid "Relative Path"
-msgstr "Bide-izen erlatiboa:"
+msgstr "Bide-izen erlatiboa"
 
 #. i18n: ectx: property (text), widget (QLabel, lRotation)
 #. i18n: ectx: property (text), widget (QLabel, lLabelsRotation)
@@ -16419,7 +16417,7 @@ msgstr "Erreferentzia puntuak"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbDatetime)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:382
-#, fuzzy, kde-format
+#, kde-format
 msgid "Datetime"
 msgstr "Data/Ordua"
 
@@ -16510,8 +16508,7 @@ msgstr "Ñabardura:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPlotImageType)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:868
-#, fuzzy, kde-format
-#| msgid "Current image:"
+#, kde-format
 msgid "Current Image:"
 msgstr "Uneko irudia:"
 
@@ -16574,7 +16571,7 @@ msgstr "Kendu kakotxak"
 #: src/kdefrontend/ui/datasources/jsonoptionswidget.ui:30
 #, kde-format
 msgid "Convert NaN to 0"
-msgstr ""
+msgstr "Bihurtu NaN 0"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbHeader)
 #: src/kdefrontend/ui/datasources/asciioptionswidget.ui:205
@@ -16586,7 +16583,7 @@ msgstr ""
 #: src/kdefrontend/ui/datasources/asciioptionswidget.ui:212
 #, kde-format
 msgid "Create Index"
-msgstr "Sortua indizea"
+msgstr "Sortu indizea"
 
 #. i18n: ectx: property (text), widget (QLabel, lDateTimeFormat)
 #: src/kdefrontend/ui/datasources/asciioptionswidget.ui:219
@@ -16602,9 +16599,9 @@ msgstr "Bereizle hamartarra:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSeparatingCharacter)
 #: src/kdefrontend/ui/datasources/asciioptionswidget.ui:233
-#, fuzzy, kde-format
+#, kde-format
 msgid "Column Separator:"
-msgstr "Konexioa"
+msgstr "Zutabe bereizlea:"
 
 #. i18n: ectx: property (text), widget (QLabel, lVectorNames)
 #: src/kdefrontend/ui/datasources/asciioptionswidget.ui:240
@@ -16622,13 +16619,13 @@ msgstr ""
 #: src/kdefrontend/ui/datasources/binaryoptionswidget.ui:24
 #, kde-format
 msgid "The number of vectors in the file"
-msgstr ""
+msgstr "Fitxategiko bektore kopurua"
 
 #. i18n: ectx: property (text), widget (QLabel, lDataType)
 #: src/kdefrontend/ui/datasources/binaryoptionswidget.ui:50
-#, fuzzy, kde-format
+#, kde-format
 msgid "Data type:"
-msgstr "Data mota:"
+msgstr "Datu-motak:"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, sbSkipStartBytes)
 #: src/kdefrontend/ui/datasources/binaryoptionswidget.ui:60
@@ -16644,9 +16641,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lVectors)
 #: src/kdefrontend/ui/datasources/binaryoptionswidget.ui:80
-#, fuzzy, kde-format
+#, kde-format
 msgid "Vectors:"
-msgstr "2 bektore"
+msgstr "Bektoreak:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSkipStartBytes)
 #: src/kdefrontend/ui/datasources/binaryoptionswidget.ui:90
@@ -16656,7 +16653,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lByteOrder)
 #: src/kdefrontend/ui/datasources/binaryoptionswidget.ui:97
-#, fuzzy, kde-format
+#, kde-format
 msgid "Byte order:"
 msgstr "Byte hurrenkera:"
 
@@ -16666,7 +16663,7 @@ msgstr "Byte hurrenkera:"
 #: src/kdefrontend/ui/datasources/jsonoptionswidget.ui:23
 #, kde-format
 msgid "Create index column"
-msgstr ""
+msgstr "Sortu indize-zutabea"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, SettingsNotebookPage)
 #. i18n: ectx: property (windowTitle), widget (QWidget, SampleValuesWidget)
@@ -16690,39 +16687,38 @@ msgstr "Inprimakia"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: src/kdefrontend/ui/datasources/CANOptionsWidget.ui:25
-#, fuzzy, kde-format
-#| msgid "Import from:"
+#, kde-format
 msgid "Import mode:"
-msgstr "Inportatu hemendik:"
+msgstr "Inportatze modua:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbConvertSeconds)
 #: src/kdefrontend/ui/datasources/CANOptionsWidget.ui:32
 #, kde-format
 msgid "Convert time to seconds"
-msgstr ""
+msgstr "Bihurtu denbora segundotara"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: src/kdefrontend/ui/datasources/databasemanagerwidget.ui:33
 #: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:29
-#, fuzzy, kde-format
+#, kde-format
 msgid "Database"
 msgstr "Datu-basea"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCustomConnection)
 #: src/kdefrontend/ui/datasources/databasemanagerwidget.ui:39
-#, fuzzy, kde-format
+#, kde-format
 msgid "enable"
-msgstr "Gaitu"
+msgstr "gaitu"
 
 #. i18n: ectx: property (text), widget (QLabel, lCustomConnection)
 #: src/kdefrontend/ui/datasources/databasemanagerwidget.ui:46
 #, kde-format
 msgid "Connection String:"
-msgstr ""
+msgstr "Konexio katea:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDriver)
 #: src/kdefrontend/ui/datasources/databasemanagerwidget.ui:66
-#, fuzzy, kde-format
+#, kde-format
 msgid "Driver:"
 msgstr "Gidaria:"
 
@@ -16730,7 +16726,7 @@ msgstr "Gidaria:"
 #: src/kdefrontend/ui/datasources/databasemanagerwidget.ui:76
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:219
 #: src/kdefrontend/ui/datasources/mqttconnectionmanagerwidget.ui:58
-#, fuzzy, kde-format
+#, kde-format
 msgid "Host:"
 msgstr "Ostalaria:"
 
@@ -16740,19 +16736,19 @@ msgstr "Ostalaria:"
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:198
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:337
 #: src/kdefrontend/ui/datasources/mqttconnectionmanagerwidget.ui:72
-#, fuzzy, kde-format
+#, kde-format
 msgid "Port:"
 msgstr "Ataka:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbAuthentication)
 #: src/kdefrontend/ui/datasources/databasemanagerwidget.ui:156
-#, fuzzy, kde-format
+#, kde-format
 msgid "Authentication"
 msgstr "Autentifikazioa"
 
 #. i18n: ectx: property (text), widget (QLabel, lUserName)
 #: src/kdefrontend/ui/datasources/databasemanagerwidget.ui:162
-#, fuzzy, kde-format
+#, kde-format
 msgid "User:"
 msgstr "Erabiltzailea:"
 
@@ -16760,7 +16756,7 @@ msgstr "Erabiltzailea:"
 #: src/kdefrontend/ui/datasources/databasemanagerwidget.ui:176
 #: src/kdefrontend/ui/datasources/mqttconnectionmanagerwidget.ui:29
 #: src/kdefrontend/ui/datasources/mqtterrorwidget.ui:40
-#, fuzzy, kde-format
+#, kde-format
 msgid "Password:"
 msgstr "Pasahitza:"
 
@@ -16768,31 +16764,31 @@ msgstr "Pasahitza:"
 #. i18n: ectx: property (text), widget (QPushButton, bTestConnection)
 #: src/kdefrontend/ui/datasources/databasemanagerwidget.ui:263
 #: src/kdefrontend/ui/datasources/mqttconnectionmanagerwidget.ui:168
-#, fuzzy, kde-format
+#, kde-format
 msgid "Test"
-msgstr "Probatu"
+msgstr "Proba"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbColumnDescriptions)
 #: src/kdefrontend/ui/datasources/datasetmetadatamanagerwidget.ui:34
-#, fuzzy, kde-format
+#, kde-format
 msgid "Column Descriptions"
-msgstr "Konexioa"
+msgstr "Zutabe-deskribapenak"
 
 #. i18n: ectx: property (text), widget (QPushButton, bDelete)
 #: src/kdefrontend/ui/datasources/datasetmetadatamanagerwidget.ui:40
-#, fuzzy, kde-format
+#, kde-format
 msgid "Delete Description"
-msgstr "&Ezabatu konexioa"
+msgstr "Ezabatu deskribapena"
 
 #. i18n: ectx: property (text), widget (QPushButton, bNewColumn)
 #: src/kdefrontend/ui/datasources/datasetmetadatamanagerwidget.ui:47
 #, kde-format
 msgid "Add new description"
-msgstr ""
+msgstr "Gehitu deskribapen berria"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbFilter)
 #: src/kdefrontend/ui/datasources/datasetmetadatamanagerwidget.ui:73
-#, fuzzy, kde-format
+#, kde-format
 msgid "Filter Options"
 msgstr "Iragazte aukerak"
 
@@ -16800,7 +16796,7 @@ msgstr "Iragazte aukerak"
 #: src/kdefrontend/ui/datasources/datasetmetadatamanagerwidget.ui:79
 #, kde-format
 msgid "Comment character:"
-msgstr ""
+msgstr "Iruzkin karakterea:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSeparator)
 #. i18n: ectx: property (text), widget (QLabel, lSeparatingCharacter)
@@ -16808,7 +16804,7 @@ msgstr ""
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:138
 #, kde-format
 msgid "Separating string:"
-msgstr ""
+msgstr "Banatzeko katea:"
 
 #. i18n: ectx: property (text), widget (QLabel, lNumberFormat)
 #: src/kdefrontend/ui/datasources/datasetmetadatamanagerwidget.ui:93
@@ -16886,7 +16882,7 @@ msgstr "Bilduma"
 #: src/kdefrontend/ui/datasources/rootoptionswidget.ui:114
 #, kde-format
 msgid "Number of rows to preview:"
-msgstr ""
+msgstr "Aurreikusi beharreko errenkada kopurua:"
 
 #. i18n: ectx: property (text), widget (QPushButton, bRefreshPreview)
 #: src/kdefrontend/ui/datasources/exceloptionswidget.ui:70
@@ -16941,7 +16937,7 @@ msgstr "Errorerik ez"
 #: src/kdefrontend/ui/datasources/ImportErrorDialog.ui:38
 #, kde-format
 msgid "OK"
-msgstr ""
+msgstr "Ados"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbDataSource)
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:44
@@ -16996,19 +16992,19 @@ msgstr ""
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:123
 #, kde-format
 msgid "Network TCP Socket"
-msgstr ""
+msgstr "Sareko TCP hargunea"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbSourceType)
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:128
 #, kde-format
 msgid "Network UDP Socket"
-msgstr ""
+msgstr "Sareko UDP hargunea"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbSourceType)
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:133
 #, kde-format
 msgid "Local Socket"
-msgstr ""
+msgstr "Hargune lokala"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbSourceType)
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:138
@@ -17079,9 +17075,9 @@ msgstr "Sorburua:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDBCDatabase)
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:371
-#, fuzzy, kde-format
+#, kde-format
 msgid "DBC Database"
-msgstr "Datu-basea"
+msgstr "DBC datu-basea"
 
 #. i18n: ectx: property (text), widget (QLabel, lWarningLimitedMessages)
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:547
@@ -17089,6 +17085,7 @@ msgstr "Datu-basea"
 msgid ""
 "Not all variables might be visible, because of limited number of messages"
 msgstr ""
+"Baliteke aldagai guztiak ikusgai ez egotea, mezu kopuru mugatua dela eta"
 
 #. i18n: ectx: property (text), widget (QLabel, lStartRow)
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:567
@@ -17215,7 +17212,7 @@ msgstr "Lagin-neurria:"
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:232
 #, kde-format
 msgid "Periodically"
-msgstr "Periodikoki"
+msgstr "Aldizka"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbUpdateType)
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:829
@@ -17256,7 +17253,7 @@ msgstr "Inportatu beharreko objektuak"
 #: src/kdefrontend/ui/datasources/importprojectwidget.ui:58
 #, kde-format
 msgid "Import unused object"
-msgstr "Inportatu erabili gabeko objektuak"
+msgstr "Inportatu erabili gabeko objektua"
 
 #. i18n: ectx: property (text), widget (QLabel, lCustomFolder)
 #. i18n: ectx: property (text), widget (QLabel, lFolder)
@@ -17270,7 +17267,7 @@ msgstr "Karpeta:"
 #: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:65
 #, kde-format
 msgid "Import from:"
-msgstr "Inportatu hemendik:"
+msgstr "Nondik inportatu:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDecimalSeparator)
 #: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:91
@@ -17391,7 +17388,7 @@ msgstr "Egin aldaketak"
 #: src/kdefrontend/ui/datasources/mqttsubscriptionwidget.ui:92
 #, kde-format
 msgid "Subscribed"
-msgstr ""
+msgstr "Harpidetuta"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbQos)
 #: src/kdefrontend/ui/datasources/mqttsubscriptionwidget.ui:155
@@ -17433,21 +17430,21 @@ msgstr "Azken errenkada:"
 #. i18n: ectx: property (text), widget (QLabel, lStart)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:72
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:272
-#, fuzzy, kde-format
+#, kde-format
 msgid "Start:"
-msgstr "Hasi"
+msgstr "Hasiera:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkShowScaleOffset)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:79
 #, kde-format
 msgid "Show scale and offset beside axis"
-msgstr ""
+msgstr "Erakutsi eskala eta jatorri-aldaketa ardatzaren ondoan"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowScaleOffset)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:82
 #, kde-format
 msgid "Show scale and offset"
-msgstr "Erakutsi eskala eta desplazamendua"
+msgstr "Erakutsi eskala eta jatorri-aldaketa"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbUnityScale)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:129
@@ -17477,7 +17474,7 @@ msgstr "0 .. 1"
 
 #. i18n: ectx: property (text), widget (QLabel, lScale)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:154
-#, fuzzy, kde-format
+#, kde-format
 msgid "Scale:"
 msgstr "Eskala:"
 
@@ -17492,9 +17489,9 @@ msgstr "Desplazamendua:"
 #. i18n: ectx: property (text), widget (QLabel, lEnd)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:194
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:399
-#, fuzzy, kde-format
+#, kde-format
 msgid "End:"
-msgstr "Bukatu:"
+msgstr "Bukaera:"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbOffsetLeft)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:303
@@ -17516,8 +17513,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lScalingFactor)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:378
-#, fuzzy, kde-format
-#| msgid "Scaling factor:"
+#, kde-format
 msgid "Scaling Factor:"
 msgstr "Eskala-faktorea:"
 
@@ -17566,19 +17562,20 @@ msgid ""
 "The opacity ranges from 0 to 100, where 0 is fully transparent and 100 is "
 "fully opaque."
 msgstr ""
+"Opakutasunaren barrutia 0 eta 100 bitartekoa da, non 0 erabat gardena eta "
+"100 erabat opakua esan nahi duen."
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTicks)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:631
-#, fuzzy, kde-format
+#, kde-format
 msgid "Ticks"
-msgstr "Markak"
+msgstr "Tikak"
 
 #. i18n: ectx: property (text), widget (QLabel, lMajorTicks)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:642
-#, fuzzy, kde-format
-#| msgid "Major grid"
+#, kde-format
 msgid "Major Ticks"
-msgstr "Sareta nagusia:"
+msgstr "Tik nagusiak"
 
 #. i18n: ectx: property (text), widget (QLabel, lPosition)
 #. i18n: ectx: property (text), widget (QLabel, lOrientation)
@@ -17626,7 +17623,7 @@ msgstr "Gehikuntza:"
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:760
 #, kde-format
 msgid "1st Tick at:"
-msgstr ""
+msgstr "1. tik hemen:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMajorTickStartValue)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:770
@@ -17646,10 +17643,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lMajorTickStartOffset)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:799
-#, fuzzy, kde-format
-#| msgid "Offset:"
+#, kde-format
 msgid "1st Tick Offset:"
-msgstr "Desplazamendua:"
+msgstr "1. tikaren jatorri-aldaketa:"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbFirstTickData)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:827
@@ -17681,9 +17677,9 @@ msgstr "Etiketa-zutabea:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMinorTicks)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:960
-#, fuzzy, kde-format
+#, kde-format
 msgid "Minor Ticks"
-msgstr "Markak"
+msgstr "Bigarren mailako tikak"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabLabels)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1130
@@ -17697,7 +17693,7 @@ msgstr "Etiketak"
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1173
 #, kde-format
 msgid "Number of digits after the decimal point"
-msgstr ""
+msgstr "Koma hamartarraren ondoko digitu kopurua"
 
 #. i18n: ectx: property (text), widget (QLabel, lPrecision)
 #. i18n: ectx: property (text), widget (QLabel, lLabelsPrecision)
@@ -17716,7 +17712,7 @@ msgstr "Doitasuna:"
 #, kde-format
 msgid ""
 "Automatically determine the optimal number of digits after the decimal point"
-msgstr ""
+msgstr "Automatikoki zehaztu, koma hamartarraren ondoko digitu kopurua optimoa"
 
 #. i18n: ectx: property (text), widget (QLabel, lPosition_2)
 #. i18n: ectx: property (text), widget (QLabel, lPosition)
@@ -17763,7 +17759,7 @@ msgstr "Atzizkia:"
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:813
 #, kde-format
 msgid "Offset:"
-msgstr "Desplazamendua:"
+msgstr "Jatorri-aldaketa:"
 
 #. i18n: ectx: property (text), widget (QLabel, lOpacity)
 #. i18n: ectx: property (text), widget (QLabel, lBorderOpacity)
@@ -17833,14 +17829,13 @@ msgstr "Letra-tipoaren kolorea:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMinorGrid)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1634
-#, fuzzy, kde-format
+#, kde-format
 msgid "Minor Grid"
-msgstr "Atxiki saretari"
+msgstr "Bigarren mailako sareta"
 
 #. i18n: ectx: property (text), widget (QLabel, lMajorGrid)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1646
-#, fuzzy, kde-format
-#| msgid "Major grid"
+#, kde-format
 msgid "Major Grid"
 msgstr "Sareta nagusia:"
 
@@ -17981,9 +17976,9 @@ msgstr "%"
 
 #. i18n: ectx: property (text), widget (QLabel, lWhiskersRangeParameter)
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:43
-#, fuzzy, kde-format
+#, kde-format
 msgid "k:"
-msgstr "%1 K"
+msgstr "k:"
 
 #. i18n: ectx: property (text), widget (QLabel, lNotches)
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:125
@@ -18023,7 +18018,7 @@ msgstr "Mediana"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabSymbol)
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:482
-#, fuzzy, kde-format
+#, kde-format
 msgid "Markers"
 msgstr "Markatzaileak"
 
@@ -19871,7 +19866,7 @@ msgstr "Lerrokatze bert.:"
 #: src/kdefrontend/ui/labelwidget.ui:648 src/kdefrontend/ui/labelwidget.ui:736
 #, kde-format
 msgid "Distance to the axis tick labels"
-msgstr "Distantzia ardatz-marketako etiketetara"
+msgstr "Ardatzeko tik etiketetarako distantzia"
 
 #. i18n: ectx: property (text), widget (QLabel, lOffsetX)
 #: src/kdefrontend/ui/labelwidget.ui:651
