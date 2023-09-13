@@ -2,7 +2,7 @@
     "name": "seaborn",
     "categories": [
         {
-            "name": "misc",
+            "name": "Misc",
             "subcategories": [
                 {
                     "datasets": [
@@ -161,7 +161,7 @@
                             "use_first_row_for_vectorname": true
                         }
                     ],
-                    "name": "misc"
+                    "name": "Misc"
                 }
             ]
         }

@@ -43,7 +43,6 @@ private:
 	void prepareForDataset();
 	void processDataset();
 	void doDownload(const QUrl&);
-	bool isHttpRedirect(QNetworkReply*);
 	QString saveFileName(const QUrl&);
 	bool saveToDisk(const QString& filename, QIODevice*);
 	void markMetadataAsInvalid();
