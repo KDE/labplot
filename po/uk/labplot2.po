@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-12 00:41+0000\n"
+"POT-Creation-Date: 2023-09-13 00:42+0000\n"
 "PO-Revision-Date: 2023-09-10 08:27+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
@@ -11133,13 +11133,13 @@ msgstr ""
 "Не вдалося відкрити файл збірок наборів даних %1. Будь ласка, перевірте, чи "
 "правильно встановлено програму."
 
-#: src/kdefrontend/datasources/ImportDatasetWidget.cpp:532
+#: src/kdefrontend/datasources/ImportDatasetWidget.cpp:528
 #, kde-format
 msgid "Dataset"
 msgstr "Набір даних"
 
 #. i18n: ectx: property (text), widget (QLabel, lDescription)
-#: src/kdefrontend/datasources/ImportDatasetWidget.cpp:545
+#: src/kdefrontend/datasources/ImportDatasetWidget.cpp:531
 #: src/kdefrontend/ui/datasources/datasetmetadatamanagerwidget.ui:210
 #, kde-format
 msgid "Description"

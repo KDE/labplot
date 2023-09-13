@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-12 00:41+0000\n"
-"PO-Revision-Date: 2023-09-10 10:12+0200\n"
+"POT-Creation-Date: 2023-09-13 00:42+0000\n"
+"PO-Revision-Date: 2023-09-11 17:22+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -10341,6 +10341,7 @@ msgstr "valor que manca"
 msgid "missing values"
 msgstr "valors que manquen"
 
+# skip-rule: t-sp_co
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3630
 #, kde-format
 msgid " , "
@@ -10357,6 +10358,7 @@ msgstr "%1"
 msgid ", "
 msgstr ", "
 
+# skip-rule: t-sp_co
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3635
 #, kde-format
 msgid "Selected: %1 %2 , %3 %4%5 %6 %7 %8"
@@ -11153,13 +11155,13 @@ msgstr ""
 "No s'ha pogut obrir el fitxer %1 de col·leccions de conjunt de dades. Si us "
 "plau, comproveu la instal·lació."
 
-#: src/kdefrontend/datasources/ImportDatasetWidget.cpp:532
+#: src/kdefrontend/datasources/ImportDatasetWidget.cpp:528
 #, kde-format
 msgid "Dataset"
 msgstr "Conjunt de dades"
 
 #. i18n: ectx: property (text), widget (QLabel, lDescription)
-#: src/kdefrontend/datasources/ImportDatasetWidget.cpp:545
+#: src/kdefrontend/datasources/ImportDatasetWidget.cpp:531
 #: src/kdefrontend/ui/datasources/datasetmetadatamanagerwidget.ui:210
 #, kde-format
 msgid "Description"

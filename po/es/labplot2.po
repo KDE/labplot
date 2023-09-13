@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-12 00:41+0000\n"
+"POT-Creation-Date: 2023-09-13 00:42+0000\n"
 "PO-Revision-Date: 2023-09-10 19:34+0200\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -11057,13 +11057,13 @@ msgstr ""
 "No se ha podido abrir el archivo de colecciones de conjuntos de datos %1. "
 "Compruebe su instalación."
 
-#: src/kdefrontend/datasources/ImportDatasetWidget.cpp:532
+#: src/kdefrontend/datasources/ImportDatasetWidget.cpp:528
 #, kde-format
 msgid "Dataset"
 msgstr "Conjunto de datos"
 
 #. i18n: ectx: property (text), widget (QLabel, lDescription)
-#: src/kdefrontend/datasources/ImportDatasetWidget.cpp:545
+#: src/kdefrontend/datasources/ImportDatasetWidget.cpp:531
 #: src/kdefrontend/ui/datasources/datasetmetadatamanagerwidget.ui:210
 #, kde-format
 msgid "Description"
