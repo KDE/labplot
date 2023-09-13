@@ -673,18 +673,15 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 		else if (ui.cbFilter->currentIndex() == 1) { //"custom"
 			filter->setAutoModeEnabled(false);
 
+			// set the data portion to import
+			filter->setStartRow(ui.sbStartRow->value());
+			filter->setEndRow(ui.sbEndRow->value());
+			filter->setStartColumn(ui.sbStartColumn->value());
+			filter->setEndColumn(ui.sbEndColumn->value());
+
+			// set the remaining filter settings
 			if (m_asciiOptionsWidget)
 				m_asciiOptionsWidget->applyFilterSettings(filter);
-
-			// set the data portion to import
-			if (ui.sbStartRow->value() != 1)
-				filter->setStartRow(ui.sbStartRow->value());
-			if (ui.sbEndRow->value() != -1)
-				filter->setEndRow(ui.sbEndRow->value());
-			if (ui.sbStartColumn->value() != 1)
-				filter->setStartColumn(ui.sbStartColumn->value());
-			if (ui.sbEndColumn->value() != -1)
-				filter->setEndColumn(ui.sbEndColumn->value());
 		} else {
 			// templates are handled in fileTypeChanged()
 		}
