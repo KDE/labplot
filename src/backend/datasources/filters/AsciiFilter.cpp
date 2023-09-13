@@ -309,6 +309,11 @@ bool AsciiFilter::isHeaderEnabled() const {
 	return d->headerEnabled;
 }
 
+// TODO: this setter modifies also startRow which is not clear for external consumers,
+// the default value of headerLine is 1, same for startRow. if we don't call setHeaderLine(1),
+// assuming the default value is already set to 1 anyway, startRow is kept at 1 and not set to 2
+// and the file is read wrongly. This forces us to always call this funciton, like in
+// DatasetHandler::configureFilter(). -> redesign the APIs.
 void AsciiFilter::setHeaderLine(int line) {
 	d->headerLine = line;
 	DEBUG(Q_FUNC_INFO << ", line = " << line << ", startRow = " << d->startRow)

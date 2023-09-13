@@ -98,8 +98,10 @@ void DatasetHandler::configureFilter() {
 		if (m_object->contains(QLatin1String("remove_quotes")))
 			m_filter->setRemoveQuotesEnabled(m_object->value(QStringLiteral("remove_quotes")).toBool());
 
-		if (m_object->contains(QLatin1String("use_first_row_for_vectorname")))
+		if (m_object->contains(QLatin1String("use_first_row_for_vectorname"))) {
 			m_filter->setHeaderEnabled(m_object->value(QStringLiteral("use_first_row_for_vectorname")).toBool());
+			m_filter->setHeaderLine(1);
+		}
 
 		if (m_object->contains(QLatin1String("number_format")))
 			m_filter->setNumberFormat(QLocale::Language(m_object->value(QStringLiteral("number_format")).toInt()));
