@@ -193,12 +193,12 @@ OdsFilterPrivate::~OdsFilterPrivate() {
 }
 
 void OdsFilterPrivate::write(const QString& fileName, AbstractDataSource* dataSource) {
-	DEBUG(Q_FUNC_INFO)
+	DEBUG(Q_FUNC_INFO << ", not implemented yet!")
 	// TODO
 }
 
 void OdsFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode){
-	DEBUG(Q_FUNC_INFO)
+	DEBUG(Q_FUNC_INFO << ", not implemented yet!")
 	// TODO
 }
 

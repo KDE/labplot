@@ -2690,11 +2690,11 @@ void MainWin::importFileDialog(const QString& fileName) {
 	}
 
 	delete dlg;
-	DEBUG("MainWin::importFileDialog() DONE");
+	DEBUG(Q_FUNC_INFO << " DONE");
 }
 
 void MainWin::importSqlDialog() {
-	DEBUG("MainWin::importSqlDialog()");
+	DEBUG(Q_FUNC_INFO);
 	auto* dlg = new ImportSQLDatabaseDialog(this);
 
 	// select existing container

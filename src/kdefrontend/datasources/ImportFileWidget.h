@@ -71,12 +71,12 @@ public:
 	bool xlsxUseFirstRowAsColNames() const;
 
 	const QStringList selectedXLSXRegionNames() const;
-	const QStringList selectedFITSExtensions() const;
+	const QStringList selectedOdsRegionNames() const;
 	const QStringList selectedHDF5Names() const;
-	const QStringList selectedMatioNames() const;
 	const QStringList selectedNetCDFNames() const;
-	// TODO: const QStringList selectedOdsRegionNames() const;
+	const QStringList selectedFITSExtensions() const;
 	const QStringList selectedROOTNames() const;
+	const QStringList selectedMatioNames() const;
 	//	const QStringList selectedVectorBLFNames() const;
 
 	QString host() const;

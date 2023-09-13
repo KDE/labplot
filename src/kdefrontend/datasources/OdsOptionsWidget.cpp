@@ -51,13 +51,13 @@ void OdsOptionsWidget::updateContent(OdsFilter* filter, const QString& fileName)
 	ui.twDataRegions->insertTopLevelItem(0, rootItem);
 	ui.twDataRegions->expandAll();
 
-	// select first data range
+	// select first sheet
 	if (ui.twDataRegions->selectedItems().isEmpty()) {
 		const auto* tli = ui.twDataRegions->topLevelItem(0);
 		for (int i = 0; i < tli->childCount(); i++) { // sheets
-			const auto* sheet = tli->child(i);
-			if (sheet->childCount() > 0) { // select first range
-				ui.twDataRegions->setCurrentItem(sheet->child(0));
+			auto* sheet = tli->child(i);
+			if (sheet) {
+				ui.twDataRegions->setCurrentItem(sheet);
 				return;
 			}
 		}

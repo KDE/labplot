@@ -179,6 +179,7 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 
 	auto filter = m_importFileWidget->currentFileFilter();
 	if (m_importFileWidget->importValid()) {
+		DEBUG(Q_FUNC_INFO << ", Import VALID!")
 		auto errors = filter->lastErrors();
 		if (errors.isEmpty()) {
 			// Default message, because not all filters implement lastErrors yet
@@ -222,10 +223,10 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 		auto sheets = workbook->children<AbstractAspect>();
 
 		AbstractFileFilter::FileType fileType = m_importFileWidget->currentFileType();
-		// multiple data sets/variables for special types
+		// types supporting multiple data sets/variables
 		if (fileType == AbstractFileFilter::FileType::HDF5 || fileType == AbstractFileFilter::FileType::NETCDF || fileType == AbstractFileFilter::FileType::ROOT
 			|| fileType == AbstractFileFilter::FileType::MATIO || fileType == AbstractFileFilter::FileType::XLSX
-			|| fileType == AbstractFileFilter::FileType::VECTOR_BLF) {
+			|| fileType == AbstractFileFilter::FileType::Ods || fileType == AbstractFileFilter::FileType::VECTOR_BLF) {
 			QStringList names;
 			if (fileType == AbstractFileFilter::FileType::HDF5)
 				names = m_importFileWidget->selectedHDF5Names();
@@ -239,10 +240,11 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 				names = m_importFileWidget->selectedMatioNames();
 			else if (fileType == AbstractFileFilter::FileType::XLSX)
 				names = m_importFileWidget->selectedXLSXRegionNames();
-			// TODO: Ods regions
+			else if (fileType == AbstractFileFilter::FileType::Ods)
+				names = m_importFileWidget->selectedOdsRegionNames();
 
 			int nrNames = names.size(), offset = sheets.size();
-			// QDEBUG(Q_FUNC_INFO << ", selected names: " << names)
+			QDEBUG(Q_FUNC_INFO << ", selected names: " << names)
 
 			// TODO: think about importing multiple sets into one sheet
 
@@ -394,10 +396,10 @@ void ImportFileDialog::checkOkButton() {
 	if (fileName.isEmpty())
 		return;
 
-	DEBUG("Data Source Type: " << ENUM_TO_STRING(LiveDataSource, SourceType, m_importFileWidget->currentSourceType()));
+	DEBUG(Q_FUNC_INFO << ", Data Source Type: " << ENUM_TO_STRING(LiveDataSource, SourceType, m_importFileWidget->currentSourceType()));
 	switch (m_importFileWidget->currentSourceType()) {
 	case LiveDataSource::SourceType::FileOrPipe: {
-		DEBUG("	fileName = " << qPrintable(fileName));
+		DEBUG(Q_FUNC_INFO << ", fileName = " << qPrintable(fileName));
 		const bool enable = QFile::exists(fileName);
 		okButton->setEnabled(enable);
 		if (enable) {

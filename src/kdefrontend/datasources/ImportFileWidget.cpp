@@ -530,24 +530,25 @@ QString ImportFileWidget::dbcFileName() const {
 }
 
 QString ImportFileWidget::selectedObject() const {
+	DEBUG(Q_FUNC_INFO)
 	const QString& path = fileName();
 
 	// determine the file name only
 	QString name = path.right(path.length() - path.lastIndexOf(QLatin1Char('/')) - 1);
 
-	// strip away the extension if available
+	// strip away the extension if existing
 	if (name.indexOf(QLatin1Char('.')) != -1)
 		name = name.left(name.lastIndexOf(QLatin1Char('.')));
 
-	// for multi-dimensional formats like HDF, netCDF and FITS add the currently selected object
+	// for multi-dimensional formats add the currently selected object
 	const auto format = currentFileType();
 	if (format == AbstractFileFilter::FileType::HDF5) {
-		const QStringList& hdf5Names = m_hdf5OptionsWidget->selectedNames();
-		if (hdf5Names.size())
-			name += hdf5Names.first(); // the names of the selected HDF5 objects already have '/'
+		const QStringList& names = m_hdf5OptionsWidget->selectedNames();
+		if (!names.isEmpty())
+			name += names.first(); // the names of the selected HDF5 objects already have '/'
 	} else if (format == AbstractFileFilter::FileType::NETCDF) {
 		const QStringList& names = m_netcdfOptionsWidget->selectedNames();
-		if (names.size())
+		if (!names.isEmpty())
 			name += QLatin1Char('/') + names.first();
 	} else if (format == AbstractFileFilter::FileType::FITS) {
 		const QString& extensionName = m_fitsOptionsWidget->currentExtensionName();
@@ -555,19 +556,22 @@ QString ImportFileWidget::selectedObject() const {
 			name += QLatin1Char('/') + extensionName;
 	} else if (format == AbstractFileFilter::FileType::ROOT) {
 		const QStringList& names = m_rootOptionsWidget->selectedNames();
-		if (names.size())
+		if (!names.isEmpty())
 			name += QLatin1Char('/') + names.first();
 	} else if (format == AbstractFileFilter::FileType::MATIO) {
 		const QStringList& names = m_matioOptionsWidget->selectedNames();
-		if (names.size())
+		if (!names.isEmpty())
 			name += QLatin1Char('/') + names.first();
 	} else if (format == AbstractFileFilter::FileType::XLSX) {
 		const auto& names = m_xlsxOptionsWidget->selectedXLSXRegionNames();
-		if (names.size()) {
+		if (!names.isEmpty())
 			name += QLatin1Char('/') + names.first();
-		}
+	} else if (format == AbstractFileFilter::FileType::Ods) {
+		const auto& names = m_odsOptionsWidget->selectedOdsRegionNames();
+		QDEBUG(Q_FUNC_INFO << ", selected sheet names =")
+		if (!names.isEmpty())
+			name += QLatin1Char('/') + names.first();
 	}
-	// TODO: Ods
 	return name;
 }
 
@@ -729,9 +733,9 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 		filter->setEndColumn(ui.sbEndColumn->value());
 		filter->setFirstRowAsColumnNames(ui.chbXLSXFirstRowAsColName->isChecked());
 
-		const auto& sern = selectedXLSXRegionNames();
-		if (!sern.isEmpty()) {
-			const auto& firstRegion = sern.last();
+		const auto& sxrn = selectedXLSXRegionNames();
+		if (!sxrn.isEmpty()) {
+			const auto& firstRegion = sxrn.last();
 			const auto& nameSplit = firstRegion.split(QLatin1Char('!'));
 			const auto& sheet = nameSplit[0];
 			const auto& range = nameSplit[1];
@@ -755,8 +759,8 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 		// TODO: filter->setFirstRowAsColumnNames(ui.chbXLSXFirstRowAsColName->isChecked());
 
 		// TODO
-		/*const auto& sern = selectedXLSXRegionNames();
-		if (!sern.isEmpty()) {
+		const auto& sxrn = selectedOdsRegionNames();
+		/*if (!sxrn.isEmpty()) {
 			const auto& firstRegion = sern.last();
 			const auto& nameSplit = firstRegion.split(QLatin1Char('!'));
 			const auto& sheet = nameSplit[0];
@@ -1431,6 +1435,10 @@ const QStringList ImportFileWidget::selectedXLSXRegionNames() const {
 	return m_xlsxOptionsWidget->selectedXLSXRegionNames();
 }
 
+const QStringList ImportFileWidget::selectedOdsRegionNames() const {
+	return m_odsOptionsWidget->selectedOdsRegionNames();
+}
+
 bool ImportFileWidget::xlsxUseFirstRowAsColNames() const {
 	return ui.chbXLSXFirstRowAsColName->isChecked();
 }
@@ -1630,7 +1638,7 @@ void ImportFileWidget::refreshPreview() {
 
 		auto filter = static_cast<AsciiFilter*>(currentFileFilter());
 
-		DEBUG("Data Source Type: " << ENUM_TO_STRING(LiveDataSource, SourceType, sourceType));
+		DEBUG(Q_FUNC_INFO << ", Data Source Type: " << ENUM_TO_STRING(LiveDataSource, SourceType, sourceType));
 		switch (sourceType) {
 		case LiveDataSource::SourceType::FileOrPipe: {
 			importedStrings = filter->preview(file, lines);
@@ -1738,11 +1746,10 @@ void ImportFileWidget::refreshPreview() {
 		importedStrings = filter->preview(file, lines);
 		break;
 	}
-	case AbstractFileFilter::FileType::XLSX: {
+	case AbstractFileFilter::FileType::XLSX:
 		importedStrings = m_xlsxOptionsWidget->previewString();
 		// Nothing else to do. XLSX has it's own preview table
 		break;
-	}
 	case AbstractFileFilter::FileType::Ods:
 		importedStrings = m_odsOptionsWidget->previewString();
 		// Nothing else to do. Ods has it's own preview table
@@ -1871,6 +1878,7 @@ void ImportFileWidget::refreshPreview() {
 		break;
 	}
 	}
+	QDEBUG(Q_FUNC_INFO << ", imported strings =" << importedStrings)
 
 	// fill the table widget
 	tmpTableWidget->setRowCount(0);
@@ -1920,6 +1928,7 @@ void ImportFileWidget::refreshPreview() {
 
 		tmpTableWidget->horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
 		m_importValid = false;
+		DEBUG("HERE: import not valid")
 	} else
 		m_importValid = true;
 
