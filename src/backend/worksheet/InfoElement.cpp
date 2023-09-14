@@ -5,7 +5,7 @@
 						   show their values
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2020 Martin Marmsoler <martin.marmsoler@gmail.com>
-	SPDX-FileCopyrightText: 2020-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2020-2023 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -23,6 +23,9 @@
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/CustomPoint.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
+
+#include <KConfig>
+#include <KConfigGroup>
 
 #include <QAction>
 #include <QDateTime>
@@ -140,12 +143,17 @@ void InfoElement::init() {
 	m_setTextLabelText = false;
 	addChild(m_title);
 
+	// use the line properties of axis line also for the info element lines
+	KConfig config;
+	const auto& group = config.group("Axis");
+
 	// lines
 	Q_D(InfoElement);
 	d->verticalLine = new Line(QString());
 	d->verticalLine->setHidden(true);
 	d->verticalLine->setPrefix(QStringLiteral("VerticalLine"));
 	addChild(d->verticalLine);
+	d->verticalLine->init(group);
 	connect(d->verticalLine, &Line::updatePixmapRequested, [=] {
 		d->update();
 	});
@@ -157,16 +165,13 @@ void InfoElement::init() {
 	d->connectionLine->setHidden(true);
 	d->connectionLine->setPrefix(QStringLiteral("ConnectionLine"));
 	addChild(d->connectionLine);
+	d->connectionLine->init(group);
 	connect(d->connectionLine, &Line::updatePixmapRequested, [=] {
 		d->update();
 	});
 	connect(d->connectionLine, &Line::updateRequested, [=] {
 		d->updateConnectionLine();
 	});
-
-	// use the color for the axis line from the theme also for info element's lines
-	KConfig config;
-	InfoElement::loadThemeConfig(config);
 }
 
 void InfoElement::initActions() {
@@ -1160,7 +1165,6 @@ bool InfoElement::load(XmlStreamReader* reader, bool preview) {
 	Q_D(InfoElement);
 
 	QXmlStreamAttributes attribs;
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QString str;
 	QString curvePath;
 
@@ -1182,7 +1186,7 @@ bool InfoElement::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value(QStringLiteral("visible")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("x")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("x"));
 			else
 				setVisible(str.toInt());
 
@@ -1218,6 +1222,10 @@ bool InfoElement::load(XmlStreamReader* reader, bool preview) {
 		} else if (reader->name() == QLatin1String("point")) {
 			attribs = reader->attributes();
 			curvePath = attribs.value(QStringLiteral("curvepath")).toString();
+		} else { // unknown element
+			reader->raiseUnknownElementWarning();
+			if (!reader->skipToEndElement())
+				return false;
 		}
 	}
 

@@ -276,10 +276,8 @@ void XYConvolutionCurve::save(QXmlStreamWriter* writer) const {
 
 //! Load from XML
 bool XYConvolutionCurve::load(XmlStreamReader* reader, bool preview) {
-	DEBUG("XYConvolutionCurve::load()");
 	Q_D(XYConvolutionCurve);
 
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
@@ -323,6 +321,10 @@ bool XYConvolutionCurve::load(XmlStreamReader* reader, bool preview) {
 				d->xColumn = column;
 			else if (column->name() == QLatin1String("y"))
 				d->yColumn = column;
+		} else { // unknown element
+			reader->raiseUnknownElementWarning();
+			if (!reader->skipToEndElement())
+				return false;
 		}
 	}
 

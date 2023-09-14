@@ -35,6 +35,8 @@ private Q_SLOTS:
 	void testCopyPasteSizeChange00();
 	void testCopyPasteSizeChange01();
 
+	void testCopyPasteUtf8();
+
 	// sorting
 	void testSortSingleNumeric1();
 	void testSortSingleNumeric2();
@@ -61,6 +63,10 @@ private Q_SLOTS:
 	void testSortPerformanceNumeric1();
 	void testSortPerformanceNumeric2();
 
+	// drop/mask
+	void testRemoveRowsWithMissingValues();
+	void testMaskRowsWithMissingValues();
+
 	// flattening
 	void testFlatten00();
 	void testFlatten01();
@@ -83,6 +89,9 @@ private Q_SLOTS:
 	void testRemoveRows();
 	void testInsertColumns();
 	void testRemoveColumns();
+
+	void testInsertRowsBegin(); // insert row at the beginning
+	void testRemoveRowsBegin(); // remove first row
 
 	void testInsertRowsSuppressUpdate();
 	void testInsertColumnsSuppressUpdate();

@@ -10,8 +10,6 @@
 */
 
 #include "XYInterpolationCurveDock.h"
-#include "backend/core/AspectTreeModel.h"
-#include "backend/core/Project.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/XYInterpolationCurve.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
@@ -244,7 +242,6 @@ void XYInterpolationCurveDock::setCurves(QList<XYCurve*> list) {
 	m_curve = list.first();
 	setAspects(list);
 	m_interpolationCurve = static_cast<XYInterpolationCurve*>(m_curve);
-	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
 	this->setModel();
 	m_interpolationData = m_interpolationCurve->interpolationData();
 

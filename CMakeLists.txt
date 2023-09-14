@@ -55,7 +55,7 @@ find_package(Qt${QT_MAJOR_VERSION} ${QT_MIN_VERSION} NO_MODULE REQUIRED COMPONEN
 	Test
 )
 
-# building QADS or Xlsx require Qt5GuiPrivate (QADS is required, Xlsx is optional)
+# building QADS or Xlsx requires Qt5GuiPrivate (QADS is required, Xlsx is optional)
 find_package(Qt5Gui ${QT_MIN_VERSION} CONFIG REQUIRED Private)
 
 find_package(KF${KF_MAJOR_VERSION} ${KF_MIN_VERSION} REQUIRED COMPONENTS

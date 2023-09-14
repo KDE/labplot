@@ -2088,7 +2088,7 @@ void FitTest::testNonLinearRat43() {
 	XYFitCurve::FitData fitData = fitCurve.fitData();
 	fitData.modelCategory = nsl_fit_model_custom;
 	XYFitCurve::initFitData(fitData);
-	fitData.model = QStringLiteral("b1/pow(1 + exp(b2-b3*x), 1/b4)");
+	fitData.model = QStringLiteral("b1/pow(1 + exp(b2-b3*x); 1/b4)");
 	fitData.paramNames << QStringLiteral("b1") << QStringLiteral("b2") << QStringLiteral("b3") << QStringLiteral("b4");
 	fitData.eps = 1.e-9;
 	const int np = fitData.paramNames.size();
@@ -2153,7 +2153,7 @@ void FitTest::testNonLinearRat43_2() {
 	XYFitCurve::FitData fitData = fitCurve.fitData();
 	fitData.modelCategory = nsl_fit_model_custom;
 	XYFitCurve::initFitData(fitData);
-	fitData.model = QStringLiteral("b1/pow(1 + exp(b2-b3*x), 1/b4)");
+	fitData.model = QStringLiteral("b1/pow(1 + exp(b2-b3*x); 1/b4)");
 	fitData.paramNames << QStringLiteral("b1") << QStringLiteral("b2") << QStringLiteral("b3") << QStringLiteral("b4");
 	fitData.eps = 1.e-10;
 	const int np = fitData.paramNames.size();
@@ -2218,7 +2218,7 @@ void FitTest::testNonLinearRat43_3() {
 	XYFitCurve::FitData fitData = fitCurve.fitData();
 	fitData.modelCategory = nsl_fit_model_custom;
 	XYFitCurve::initFitData(fitData);
-	fitData.model = QStringLiteral("b1/pow(1 + exp(b2-b3*x), 1/b4)");
+	fitData.model = QStringLiteral("b1/pow(1 + exp(b2-b3*x); 1/b4)");
 	fitData.paramNames << QStringLiteral("b1") << QStringLiteral("b2") << QStringLiteral("b3") << QStringLiteral("b4");
 	// fitData.eps = 1.e-12;
 	const int np = fitData.paramNames.size();

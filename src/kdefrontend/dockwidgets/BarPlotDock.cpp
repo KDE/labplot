@@ -9,8 +9,6 @@
 
 #include "BarPlotDock.h"
 #include "backend/core/AbstractColumn.h"
-#include "backend/core/AspectTreeModel.h"
-#include "backend/core/Project.h"
 #include "backend/lib/macros.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 #include "kdefrontend/GuiTools.h"
@@ -119,7 +117,7 @@ BarPlotDock::BarPlotDock(QWidget* parent)
 	auto* layout = new QHBoxLayout(frame);
 	layout->setContentsMargins(0, 11, 0, 11);
 
-	auto* templateHandler = new TemplateHandler(this, TemplateHandler::ClassName::Worksheet);
+	auto* templateHandler = new TemplateHandler(this, QLatin1String("BarPlot"));
 	layout->addWidget(templateHandler);
 	connect(templateHandler, &TemplateHandler::loadConfigRequested, this, &BarPlotDock::loadConfigFromTemplate);
 	connect(templateHandler, &TemplateHandler::saveConfigRequested, this, &BarPlotDock::saveConfigAsTemplate);
@@ -134,31 +132,7 @@ void BarPlotDock::setBarPlots(QList<BarPlot*> list) {
 	m_barPlot = list.first();
 	setAspects(list);
 	Q_ASSERT(m_barPlot);
-	m_aspectTreeModel = new AspectTreeModel(m_barPlot->project());
 	setModel();
-
-	// if there is more than one point in the list, disable the comment and name widgets in "general"
-	if (list.size() == 1) {
-		ui.lName->setEnabled(true);
-		ui.leName->setEnabled(true);
-		ui.lComment->setEnabled(true);
-		ui.teComment->setEnabled(true);
-		ui.leName->setText(m_barPlot->name());
-		ui.teComment->setText(m_barPlot->comment());
-
-		ui.lDataColumn->setEnabled(true);
-	} else {
-		ui.lName->setEnabled(false);
-		ui.leName->setEnabled(false);
-		ui.lComment->setEnabled(false);
-		ui.teComment->setEnabled(false);
-		ui.leName->setText(QString());
-		ui.teComment->setText(QString());
-
-		ui.lDataColumn->setEnabled(false);
-	}
-	ui.leName->setStyleSheet(QString());
-	ui.leName->setToolTip(QString());
 
 	// backgrounds
 	QList<Background*> backgrounds;
@@ -198,11 +172,12 @@ void BarPlotDock::setBarPlots(QList<BarPlot*> list) {
 }
 
 void BarPlotDock::setModel() {
-	m_aspectTreeModel->enablePlottableColumnsOnly(true);
-	m_aspectTreeModel->enableShowPlotDesignation(true);
+	auto* model = aspectModel();
+	model->enablePlottableColumnsOnly(true);
+	model->enableShowPlotDesignation(true);
 
 	QList<AspectType> list{AspectType::Column};
-	m_aspectTreeModel->setSelectableAspects(list);
+	model->setSelectableAspects(list);
 
 	list = {AspectType::Folder,
 			AspectType::Workbook,
@@ -218,7 +193,7 @@ void BarPlotDock::setModel() {
 			AspectType::CantorWorksheet};
 
 	cbXColumn->setTopLevelClasses(list);
-	cbXColumn->setModel(m_aspectTreeModel);
+	cbXColumn->setModel(model);
 }
 
 /*
@@ -343,7 +318,7 @@ void BarPlotDock::addDataColumn() {
 										AspectType::XYSmoothCurve,
 										AspectType::CantorWorksheet};
 	cb->setTopLevelClasses(list);
-	cb->setModel(m_aspectTreeModel);
+	cb->setModel(aspectModel());
 	connect(cb, &TreeViewComboBox::currentModelIndexChanged, this, &BarPlotDock::dataColumnChanged);
 
 	int index = m_dataComboBoxes.size();
@@ -524,14 +499,7 @@ void BarPlotDock::loadConfig(KConfig& config) {
 }
 
 void BarPlotDock::loadConfigFromTemplate(KConfig& config) {
-	// extract the name of the template from the file name
-	QString name;
-	int index = config.name().lastIndexOf(QLatin1String("/"));
-	if (index != -1)
-		name = config.name().right(config.name().size() - index - 1);
-	else
-		name = config.name();
-
+	auto name = TemplateHandler::templateName(config);
 	int size = m_barPlots.size();
 	if (size > 1)
 		m_barPlot->beginMacro(i18n("%1 bar plots: template \"%2\" loaded", size, name));

@@ -20,6 +20,7 @@
 class AbstractDataSource;
 class XmlStreamReader;
 class QXmlStreamWriter;
+class KConfig;
 
 class AbstractFileFilter : public QObject {
 	Q_OBJECT
@@ -48,9 +49,7 @@ public:
 
 	virtual QStringList lastErrors();
 
-	virtual void loadFilterSettings(const QString& filterName) = 0;
-	virtual void saveFilterSettings(const QString& filterName) const = 0;
-
+	// save/load in the project XML
 	virtual void save(QXmlStreamWriter*) const = 0;
 	virtual bool load(XmlStreamReader*) = 0;
 

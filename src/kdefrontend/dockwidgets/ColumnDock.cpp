@@ -106,24 +106,12 @@ void ColumnDock::setColumns(QList<Column*> list) {
 	bool sameMode = true;
 
 	if (list.size() == 1) {
-		// names and comments of non-editable columns in a file data source can be changed.
+		// names and comments of non-editable columns in a file data source cannot be changed.
 		if (!nonEditable && m_column->parentAspect()->type() == AspectType::LiveDataSource) {
 			ui.leName->setEnabled(false);
 			ui.teComment->setEnabled(false);
-		} else {
-			ui.leName->setEnabled(true);
-			ui.teComment->setEnabled(true);
 		}
-
-		ui.leName->setText(m_column->name());
-		ui.teComment->setText(m_column->comment());
 	} else {
-		ui.leName->setEnabled(false);
-		ui.teComment->setEnabled(false);
-
-		ui.leName->setText(QString());
-		ui.teComment->setText(QString());
-
 		auto mode = m_column->columnMode();
 		for (auto* col : m_columnsList) {
 			if (col->columnMode() != mode) {

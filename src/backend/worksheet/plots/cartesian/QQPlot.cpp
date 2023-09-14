@@ -109,13 +109,6 @@ void QQPlot::init() {
 	d->percentilesCurve->setYColumn(d->yPercentilesColumn);
 
 	d->updateDistribution();
-}
-
-void QQPlot::finalizeAdd() {
-	Q_D(QQPlot);
-	WorksheetElement::finalizeAdd();
-	addChild(d->referenceCurve);
-	addChild(d->percentilesCurve);
 
 	// synchronize the names of the internal XYCurves with the name of the current q-q plot
 	// so we have the same name shown on the undo stack
@@ -124,6 +117,13 @@ void QQPlot::finalizeAdd() {
 		d->referenceCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
 		d->percentilesCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
 	});
+}
+
+void QQPlot::finalizeAdd() {
+	Q_D(QQPlot);
+	WorksheetElement::finalizeAdd();
+	addChildFast(d->referenceCurve);
+	addChildFast(d->percentilesCurve);
 }
 
 void QQPlot::initActions() {
@@ -660,7 +660,6 @@ bool QQPlot::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
@@ -686,7 +685,7 @@ bool QQPlot::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value(QStringLiteral("visible")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("visible")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("visible"));
 			else
 				d->setVisible(str.toInt());
 		} else if (reader->name() == QLatin1String("column")) {
@@ -714,6 +713,10 @@ bool QQPlot::load(XmlStreamReader* reader, bool preview) {
 
 			if (!rc)
 				return false;
+		} else { // unknown element
+			reader->raiseUnknownElementWarning();
+			if (!reader->skipToEndElement())
+				return false;
 		}
 	}
 	return true;
@@ -732,8 +735,6 @@ void QQPlot::loadThemeConfig(const KConfig& config) {
 	const auto* plot = static_cast<const CartesianPlot*>(parentAspect());
 	int index = plot->curveChildIndex(this);
 	const QColor themeColor = plot->themeColorPalette(index);
-
-	QPen p;
 
 	Q_D(QQPlot);
 	d->m_suppressRecalc = true;

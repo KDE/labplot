@@ -32,6 +32,103 @@
 			QCOMPARE(currentTickValues.at(i), expectedTickValues.at(i));                                                                                       \
 	}
 
+void AxisTest::axisLine() {
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	QVERIFY(ws != nullptr);
+	project.addChild(ws);
+
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	QVERIFY(p != nullptr);
+	ws->addChild(p);
+
+	auto axes = p->children<Axis>();
+	QCOMPARE(axes.count(), 2);
+	QCOMPARE(axes.at(0)->name(), QStringLiteral("x"));
+	QCOMPARE(axes.at(1)->name(), QStringLiteral("y"));
+
+	auto* xAxis = axes.at(0);
+	auto* yAxis1 = axes.at(1);
+
+	const auto dataRect = p->dataRect();
+	const auto bottomLeft = dataRect.bottomLeft();
+	const auto topLeft = dataRect.topLeft();
+	const auto bottomRight = dataRect.bottomRight();
+
+	{
+		auto* axis = yAxis1;
+
+		QCOMPARE(axis->offset(), 0);
+		QCOMPARE(axis->position(), Axis::Position::Left);
+
+		const auto& linePath = axis->d_func()->linePath;
+		QCOMPARE(linePath.isEmpty(), false);
+		QCOMPARE(linePath.elementCount(), 2);
+
+		auto element = linePath.elementAt(0);
+		QCOMPARE(element.type, QPainterPath::MoveToElement);
+		QCOMPARE(element.x, bottomLeft.x());
+		QCOMPARE(element.y, bottomLeft.y());
+		element = linePath.elementAt(1);
+		QCOMPARE(element.type, QPainterPath::LineToElement);
+		QCOMPARE(element.x, topLeft.x());
+		QCOMPARE(element.y, topLeft.y());
+	}
+
+	{
+		auto* axis = xAxis;
+
+		QCOMPARE(axis->offset(), 0);
+		QCOMPARE(axis->position(), Axis::Position::Bottom);
+
+		const auto& linePath = axis->d_func()->linePath;
+		QCOMPARE(linePath.isEmpty(), false);
+		QCOMPARE(linePath.elementCount(), 2);
+
+		auto element = linePath.elementAt(0);
+		QCOMPARE(element.type, QPainterPath::MoveToElement);
+		QCOMPARE(element.x, bottomLeft.x());
+		QCOMPARE(element.y, bottomLeft.y());
+		element = linePath.elementAt(1);
+		QCOMPARE(element.type, QPainterPath::LineToElement);
+		QCOMPARE(element.x, bottomRight.x());
+		QCOMPARE(element.y, bottomRight.y());
+	}
+
+	yAxis1->copy();
+	p->paste();
+
+	axes = p->children<Axis>();
+	QCOMPARE(axes.count(), 3);
+	QCOMPARE(axes.at(0)->name(), QStringLiteral("x"));
+	QCOMPARE(axes.at(1)->name(), QStringLiteral("y"));
+	QCOMPARE(axes.at(1), yAxis1);
+	QVERIFY(axes.at(2)->name().startsWith(QLatin1Char('y')));
+
+	auto yAxis2 = axes.at(2);
+
+	{
+		auto* axis = yAxis2;
+
+		QCOMPARE(axis->offset(), 0);
+		QCOMPARE(axis->position(), Axis::Position::Left);
+
+		const auto& linePath = axis->d_func()->linePath;
+		QCOMPARE(linePath.isEmpty(), false);
+		QCOMPARE(linePath.elementCount(), 2);
+
+		auto element = linePath.elementAt(0);
+		QCOMPARE(element.type, QPainterPath::MoveToElement);
+		QCOMPARE(element.x, bottomLeft.x());
+		QCOMPARE(element.y, bottomLeft.y());
+		element = linePath.elementAt(1);
+		QCOMPARE(element.type, QPainterPath::LineToElement);
+		QCOMPARE(element.x, topLeft.x());
+		QCOMPARE(element.y, topLeft.y());
+	}
+}
+
 void AxisTest::majorTicksAutoNumberEnableDisable() {
 	Project project;
 	auto* ws = new Worksheet(QStringLiteral("worksheet"));

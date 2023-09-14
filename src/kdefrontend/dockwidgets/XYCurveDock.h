@@ -19,7 +19,6 @@
 #include "ui_xycurvedock.h"
 #include "ui_xycurvedockgeneraltab.h"
 
-class AspectTreeModel;
 class BackgroundWidget;
 class LineWidget;
 class Column;
@@ -69,7 +68,6 @@ protected:
 	LineWidget* errorBarsLineWidget{nullptr};
 	QList<XYCurve*> m_curvesList;
 	XYCurve* m_curve{nullptr};
-	AspectTreeModel* m_aspectTreeModel{nullptr};
 
 public Q_SLOTS:
 	void visibilityChanged(bool);

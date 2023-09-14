@@ -17,6 +17,7 @@
 class Background;
 class CartesianCoordinateSystem;
 class Spreadsheet;
+class KConfigGroup;
 
 typedef QVector<QPointF> Points;
 

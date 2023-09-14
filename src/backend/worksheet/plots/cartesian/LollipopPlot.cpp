@@ -718,6 +718,8 @@ void LollipopPlotPrivate::updateValues() {
 				m_valuesPoints << QPointF(pointsScene.at(i).x(), pointsScene.at(i).y() + offset);
 		}
 		break;
+	case Value::Center:
+		break;
 	}
 
 	QTransform trafo;
@@ -985,7 +987,6 @@ bool LollipopPlot::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 	bool firstLineRead = false;
@@ -1016,7 +1017,7 @@ bool LollipopPlot::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value(QStringLiteral("visible")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("visible")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("visible"));
 			else
 				d->setVisible(str.toInt());
 		} else if (reader->name() == QLatin1String("column")) {
@@ -1047,7 +1048,7 @@ bool LollipopPlot::load(XmlStreamReader* reader, bool preview) {
 		} else if (!preview && reader->name() == QLatin1String("values")) {
 			d->value->load(reader, preview);
 		} else { // unknown element
-			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
+			reader->raiseUnknownElementWarning();
 			if (!reader->skipToEndElement())
 				return false;
 		}

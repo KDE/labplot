@@ -10,7 +10,6 @@
 */
 
 #include "XYFitCurveDock.h"
-#include "backend/core/AspectTreeModel.h"
 #include "backend/core/Project.h"
 #include "backend/gsl/ExpressionParser.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
@@ -318,12 +317,13 @@ void XYFitCurveDock::setModel() {
 	cbYErrorColumn->setTopLevelClasses(list);
 
 	list = {AspectType::Column};
-	m_aspectTreeModel->setSelectableAspects(list);
+	auto* model = aspectModel();
+	model->setSelectableAspects(list);
 
-	cbXDataColumn->setModel(m_aspectTreeModel);
-	cbYDataColumn->setModel(m_aspectTreeModel);
-	cbXErrorColumn->setModel(m_aspectTreeModel);
-	cbYErrorColumn->setModel(m_aspectTreeModel);
+	cbXDataColumn->setModel(model);
+	cbYDataColumn->setModel(model);
+	cbXErrorColumn->setModel(model);
+	cbYErrorColumn->setModel(model);
 
 	XYCurveDock::setModel();
 }
@@ -337,7 +337,6 @@ void XYFitCurveDock::setCurves(QList<XYCurve*> list) {
 	m_curve = list.first();
 	setAspects(list);
 	m_fitCurve = static_cast<XYFitCurve*>(m_curve);
-	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
 
 	// we need a second model for data source comboboxes which will be dynamically
 	// updated in the slot depending on the current type (spreadsheet, curve or histogram)

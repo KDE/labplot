@@ -39,9 +39,6 @@ public:
 	/// Currently writing to ROOT files is not supported
 	void write(const QString& fileName, AbstractDataSource*) override;
 
-	void loadFilterSettings(const QString&) override;
-	void saveFilterSettings(const QString&) const override;
-
 	/// Internal directory structure in a ROOT file
 	struct Directory {
 		QString name;

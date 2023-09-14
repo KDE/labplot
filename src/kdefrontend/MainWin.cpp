@@ -707,10 +707,6 @@ void MainWin::initActions() {
 	actionCollection()->addAction(QLatin1String("new_notes"), m_newNotesAction);
 	connect(m_newNotesAction, &QAction::triggered, this, &MainWin::newNotes);
 
-	// 	m_newScriptAction = new QAction(QIcon::fromTheme(QLatin1String("insert-text")),i18n("Note/Script"),this);
-	// 	actionCollection()->addAction(QLatin1String("new_script"), m_newScriptAction);
-	// 	connect(m_newScriptAction, &QAction::triggered,SLOT(newScript()));
-
 	m_newFolderAction = new QAction(QIcon::fromTheme(QLatin1String("folder-new")), i18n("Folder"), this);
 	m_newFolderAction->setWhatsThis(i18n("Creates a new folder to collect sheets and other elements"));
 	actionCollection()->addAction(QLatin1String("new_folder"), m_newFolderAction);
@@ -1557,6 +1553,20 @@ void MainWin::openProject(const QString& filename) {
 		KMessageBox::information(this, i18n("The project file %1 is already opened.", filename), i18n("Open Project"));
 		return;
 	}
+
+	// check whether the file can be opened for reading at all before closing the current project
+	// and creating a new project and trying to load
+	QFile file(filename);
+	if (!file.exists()) {
+		KMessageBox::error(this, i18n("The project file %1 doesn't exist.", filename), i18n("Open Project"));
+		return;
+	}
+
+	if (!file.open(QIODevice::ReadOnly)) {
+		KMessageBox::error(this, i18n("Couldn't read the project file %1.", filename), i18n("Open Project"));
+		return;
+	} else
+		file.close();
 
 	// 	if (dynamic_cast<QQuickWidget*>(centralWidget())) {
 	// 		createMdiArea();
@@ -2672,9 +2682,9 @@ void MainWin::handleSettingsChanges() {
 		}
 	}
 
-	bool showWelcomeScreen = group.readEntry<bool>(QLatin1String("ShowWelcomeScreen"), true);
-	if (m_showWelcomeScreen != showWelcomeScreen)
-		m_showWelcomeScreen = showWelcomeScreen;
+	// bool showWelcomeScreen = group.readEntry<bool>(QLatin1String("ShowWelcomeScreen"), true);
+	// if (m_showWelcomeScreen != showWelcomeScreen)
+	// 	m_showWelcomeScreen = showWelcomeScreen;
 }
 
 void MainWin::openDatasetExample() {

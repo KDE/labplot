@@ -13,6 +13,7 @@
 #include "kdefrontend/TemplateHandler.h"
 
 #include <KConfig>
+#include <KConfigGroup>
 
 #include <QDir>
 
@@ -57,7 +58,7 @@ MatrixDock::MatrixDock(QWidget* parent)
 	connect(ui.sbPrecision, QOverload<int>::of(&QSpinBox::valueChanged), this, &MatrixDock::precisionChanged);
 	connect(ui.cbHeader, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &MatrixDock::headerFormatChanged);
 
-	auto* templateHandler = new TemplateHandler(this, TemplateHandler::ClassName::Matrix);
+	auto* templateHandler = new TemplateHandler(this, QLatin1String("Matrix"));
 	ui.gridLayout->addWidget(templateHandler, 22, 0, 1, 4);
 	// templateHandler->show();
 	connect(templateHandler, &TemplateHandler::loadConfigRequested, this, &MatrixDock::loadConfigFromTemplate);
@@ -70,23 +71,6 @@ void MatrixDock::setMatrices(QList<Matrix*> list) {
 	m_matrixList = list;
 	m_matrix = list.first();
 	setAspects(list);
-
-	if (list.size() == 1) {
-		ui.leName->setEnabled(true);
-		ui.teComment->setEnabled(true);
-
-		ui.leName->setText(m_matrix->name());
-		ui.teComment->setText(m_matrix->comment());
-	} else {
-		// disable these fields if there is more than one matrix
-		ui.leName->setEnabled(false);
-		ui.teComment->setEnabled(false);
-
-		ui.leName->setText(QString());
-		ui.teComment->setText(QString());
-	}
-	ui.leName->setStyleSheet(QString());
-	ui.leName->setToolTip(QString());
 
 	// show the properties of the first Matrix in the list, if there are >1 matrixs
 	this->load();
@@ -279,14 +263,7 @@ void MatrixDock::load() {
 }
 
 void MatrixDock::loadConfigFromTemplate(KConfig& config) {
-	// extract the name of the template from the file name
-	QString name;
-	const int index = config.name().lastIndexOf(QLatin1Char('/'));
-	if (index != -1)
-		name = config.name().right(config.name().size() - index - 1);
-	else
-		name = config.name();
-
+	auto name = TemplateHandler::templateName(config);
 	const int size = m_matrixList.size();
 	if (size > 1)
 		m_matrix->beginMacro(i18n("%1 matrices: template \"%2\" loaded", size, name));

@@ -1,12 +1,22 @@
-#include "parser.h"
+/*
+	File                 : functions.cpp
+	Project              : LabPlot
+	Description          : definition of functions
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2014 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2014-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #include "backend/nsl/nsl_sf_basic.h"
+#include "parser.h"
+
+#include <KLocalizedString>
+
 #include <gsl/gsl_cdf.h>
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_randist.h>
 #include <gsl/gsl_sf.h>
-
-#include <klocalizedstring.h>
 
 #ifdef _MSC_VER
 /* avoid intrinsics */
@@ -23,11 +33,18 @@ double ifCondition(const double condition, const double valueIfTrue, const doubl
 double andFunction(const double v1, const double v2);
 double orFunction(const double v1, const double v2);
 double xorFunction(const double v1, const double v2);
+double between(const double x, const double min, const double max);
+double outside(const double x, const double min, const double max);
+double equalEpsilon(const double v1, const double v2, const double epsilon);
+double betweenIncluded(const double x, const double min, const double max);
+double outsideIncluded(const double x, const double min, const double max);
 
 // Parameter function definitions
 QString parameterXE(int parameterIndex);
 QString ifParameterNames(int parameterIndex);
 QString nsl_sf_mathieuParameterNames(int parameterIndex);
+QString betweenOutsideParameterNames(int parameterIndex);
+QString equalEpsilonParameterNames(int parameterIndex);
 
 QString FunctionGroupsToString(FunctionGroups group) {
 	switch (group) {
@@ -36,7 +53,7 @@ QString FunctionGroupsToString(FunctionGroups group) {
 	case FunctionGroups::ComparisonFunctions:
 		return i18n("Comparison Functions");
 	case FunctionGroups::LogicalFunctions:
-		return i18n("Conditions");
+		return i18n("Logical Functions");
 	case FunctionGroups::ColumnStatistics:
 		return i18n("Column Statistics");
 	case FunctionGroups::MovingStatistics:
@@ -219,9 +236,14 @@ struct funs _functions[] = {
 	{i18n("greaterEqualThan"), "greaterEqualThan", (func_t)greaterEqualThan, 2, nullptr, FunctionGroups::ComparisonFunctions},
 	{i18n("lessEqualThan"), "lessEqualThan", (func_t)lessEqualThan, 2, nullptr, FunctionGroups::ComparisonFunctions},
 	{i18n("equal"), "equal", (func_t)equal, 2, nullptr, FunctionGroups::ComparisonFunctions},
+	{i18n("equal with epsilon"), "equalE", (func_t)equalEpsilon, 3, &equalEpsilonParameterNames, FunctionGroups::ComparisonFunctions},
+	{i18n("between with boundaries included"), "between_inc", (func_t)betweenIncluded, 3, &betweenOutsideParameterNames, FunctionGroups::ComparisonFunctions},
+	{i18n("outside with boundaries included"), "outside_inc", (func_t)outsideIncluded, 3, &betweenOutsideParameterNames, FunctionGroups::ComparisonFunctions},
+	{i18n("between with boundaries excluded"), "between", (func_t)between, 3, &betweenOutsideParameterNames, FunctionGroups::ComparisonFunctions},
+	{i18n("outside with boundaries excluded"), "outside", (func_t)outside, 3, &betweenOutsideParameterNames, FunctionGroups::ComparisonFunctions},
 
 	// Logical
-	{i18n("if(condition, ifTrue, ifFalse)"), "if", (func_t)ifCondition, 3, &ifParameterNames, FunctionGroups::LogicalFunctions},
+	{i18n("if(condition; ifTrue; ifFalse)"), "if", (func_t)ifCondition, 3, &ifParameterNames, FunctionGroups::LogicalFunctions},
 	{i18n("and"), "and", (func_t)andFunction, 2, nullptr, FunctionGroups::LogicalFunctions},
 	{i18n("or"), "or", (func_t)orFunction, 2, nullptr, FunctionGroups::LogicalFunctions},
 	{i18n("xor"), "xor", (func_t)xorFunction, 2, nullptr, FunctionGroups::LogicalFunctions},
@@ -444,7 +466,7 @@ struct funs _functions[] = {
 	 FunctionGroups::CoulombFunctions},
 
 	// Dawson Function
-	{i18n("Dawson integral"), "dawson", (func_t)nsl_sf_dawson, 1, nullptr, FunctionGroups::DawsonFunction},
+	{i18n("Dawson's integral D(z) = sqrt(pi)/2 * exp(-z^2) * erfi(z)"), "dawson", (func_t)nsl_sf_dawson, 1, nullptr, FunctionGroups::DawsonFunction},
 
 	// Debye Functions
 	{i18n("First-order Debye function"), "D1", (func_t)gsl_sf_debye_1, 1, nullptr, FunctionGroups::DebyeFunctions},
@@ -1091,6 +1113,36 @@ double xorFunction(const double v1, const double v2) {
 	return 1;
 }
 
+double betweenIncluded(const double x, const double min, const double max) {
+	if (x >= min && x <= max)
+		return 1;
+	return 0;
+}
+
+double outsideIncluded(const double x, const double min, const double max) {
+	if (x <= min || x >= max)
+		return 1;
+	return 0;
+}
+
+double between(const double x, const double min, const double max) {
+	if (x > min && x < max)
+		return 1;
+	return 0;
+}
+
+double outside(const double x, const double min, const double max) {
+	if (x < min || x > max)
+		return 1;
+	return 0;
+}
+
+double equalEpsilon(const double v1, const double v2, const double epsilon) {
+	if (fabs(v2 - v1) <= epsilon)
+		return 1;
+	return 0;
+}
+
 //########################################################################
 //#### Parameter Functions ###############################################
 //########################################################################
@@ -1127,6 +1179,30 @@ QString nsl_sf_mathieuParameterNames(int parameterIndex) {
 		return i18n("q");
 	case 3:
 		return i18n("x");
+	}
+	return i18n("Invalid");
+}
+
+QString betweenOutsideParameterNames(int parameterIndex) {
+	switch (parameterIndex) {
+	case 0:
+		return i18n("x");
+	case 1:
+		return i18n("min");
+	case 2:
+		return i18n("max");
+	}
+	return i18n("Invalid");
+}
+
+QString equalEpsilonParameterNames(int parameterIndex) {
+	switch (parameterIndex) {
+	case 0:
+		return i18n("v1");
+	case 1:
+		return i18n("v2");
+	case 2:
+		return i18n("ep");
 	}
 	return i18n("Invalid");
 }

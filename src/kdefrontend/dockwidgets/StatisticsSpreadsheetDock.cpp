@@ -13,6 +13,9 @@
 #include "backend/spreadsheet/StatisticsSpreadsheet.h"
 #include "kdefrontend/TemplateHandler.h"
 
+#include <KConfig>
+#include <KConfigGroup>
+
 /*!
  \class StatisticsSpreadsheetDock
  \brief Provides a widget for editing which statistical metris of the parent spreadsheet should be shown in the statistics spreadsheet.
@@ -69,7 +72,7 @@ StatisticsSpreadsheetDock::StatisticsSpreadsheetDock(QWidget* parent)
 	connect(ui.cbEntropy, &QCheckBox::toggled, this, &StatisticsSpreadsheetDock::metricChanged);
 
 	// templates
-	auto* templateHandler = new TemplateHandler(this, TemplateHandler::ClassName::Spreadsheet);
+	auto* templateHandler = new TemplateHandler(this, QLatin1String("StatisticsSpreadsheet"));
 	ui.verticalLayout->addWidget(templateHandler);
 	templateHandler->show();
 	connect(templateHandler, &TemplateHandler::loadConfigRequested, this, &StatisticsSpreadsheetDock::loadConfigFromTemplate);

@@ -43,6 +43,7 @@
 #include "backend/worksheet/plots/cartesian/BoxPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
 #include "backend/worksheet/plots/cartesian/CustomPoint.h"
+#include "backend/worksheet/plots/cartesian/KDEPlot.h"
 #include "backend/worksheet/plots/cartesian/LollipopPlot.h"
 #include "backend/worksheet/plots/cartesian/QQPlot.h"
 #include "backend/worksheet/plots/cartesian/ReferenceLine.h"
@@ -348,6 +349,7 @@ void CartesianPlot::initActions() {
 	// statistical plots
 	addHistogramAction = new QAction(QIcon::fromTheme(QStringLiteral("view-object-histogram-linear")), i18n("Histogram"), this);
 	addBoxPlotAction = new QAction(BoxPlot::staticIcon(), i18n("Box Plot"), this);
+	addKDEPlotAction = new QAction(i18n("KDE Plot"), this);
 	addQQPlotAction = new QAction(i18n("Q-Q Plot"), this);
 
 	// bar plots
@@ -404,6 +406,9 @@ void CartesianPlot::initActions() {
 	});
 	connect(addQQPlotAction, &QAction::triggered, this, [=]() {
 		addChild(new QQPlot(i18n("Q-Q Plot")));
+	});
+	connect(addKDEPlotAction, &QAction::triggered, this, [=]() {
+		addChild(new KDEPlot(i18n("KDE Plot")));
 	});
 
 	// analysis curves
@@ -533,6 +538,7 @@ void CartesianPlot::initMenus() {
 	auto* addNewStatisticalPlotsMenu = new QMenu(i18n("Statistical Plots"));
 	addNewStatisticalPlotsMenu->addAction(addHistogramAction);
 	addNewStatisticalPlotsMenu->addAction(addBoxPlotAction);
+	addNewStatisticalPlotsMenu->addAction(addKDEPlotAction);
 	addNewStatisticalPlotsMenu->addAction(addQQPlotAction);
 	m_addNewMenu->addMenu(addNewStatisticalPlotsMenu);
 
@@ -724,6 +730,8 @@ QVector<AspectType> CartesianPlot::pasteTypes() const {
 							  AspectType::BarPlot,
 							  AspectType::LollipopPlot,
 							  AspectType::BoxPlot,
+							  AspectType::KDEPlot,
+							  AspectType::QQPlot,
 							  AspectType::Axis,
 							  AspectType::XYEquationCurve,
 							  AspectType::XYConvolutionCurve,
@@ -2631,6 +2639,8 @@ bool CartesianPlot::scaleAuto(const Dimension dim, int index, bool fullRange, bo
 		} else
 			r.extend(r.size() * d->autoScaleOffsetFactor);
 
+		Q_EMIT rangeChanged(dim, index, r);
+
 		if (!suppressRetransformScale)
 			d->retransformScale(dim, index);
 	}
@@ -2726,8 +2736,13 @@ void CartesianPlot::calculateDataRange(const Dimension dim, const int index, boo
 			DEBUG(Q_FUNC_INFO << ", index range = " << indexRange.toStdString())
 
 			curve->minMax(dim, indexRange, range, true);
+		} else if (plot->type() == AspectType::KDEPlot) {
+			const int minIndex = 0;
+			const int maxIndex = static_cast<const KDEPlot*>(plot)->gridPointsCount() - 1;
+			Range<int> indexRange{minIndex, maxIndex};
+			plot->minMax(dim, indexRange, range, true);
 		} else if (plot->type() == AspectType::QQPlot) {
-			Range<int> indexRange{0, 99};
+			Range<int> indexRange{0, 99}; // 100 percentile values are calculated, max index is 99
 			plot->minMax(dim, indexRange, range, true);
 		} else {
 			range.setStart(plot->minimum(dim));
@@ -3345,6 +3360,12 @@ QVector<AbstractCoordinateSystem*> CartesianPlotPrivate::coordinateSystems() con
 	return q->m_coordinateSystems;
 }
 
+/*!
+ * \brief CartesianPlotPrivate::rangeChanged
+ * This function will be called if the range shall be updated, because some other parameters (like the datarange type, datarange points)
+ * changed. In this case the ranges must be updated if autoscale is turned on
+ * At the end signals for all ranges are send out that they changed.
+ */
 void CartesianPlotPrivate::rangeChanged() {
 	DEBUG(Q_FUNC_INFO)
 	for (const auto* cSystem : q->m_coordinateSystems) {
@@ -4604,7 +4625,6 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 	bool titleLabelRead = false;
@@ -4631,31 +4651,31 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value(QStringLiteral("x")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("x")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("x"));
 			else
 				d->rect.setX(str.toDouble());
 
 			str = attribs.value(QStringLiteral("y")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("y")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("y"));
 			else
 				d->rect.setY(str.toDouble());
 
 			str = attribs.value(QStringLiteral("width")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("width")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("width"));
 			else
 				d->rect.setWidth(str.toDouble());
 
 			str = attribs.value(QStringLiteral("height")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("height")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("height"));
 			else
 				d->rect.setHeight(str.toDouble());
 
 			str = attribs.value(QStringLiteral("visible")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("visible")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("visible"));
 			else
 				d->setVisible(str.toInt());
 		} else if (!preview && reader->name() == QLatin1String("xRanges")) {
@@ -4668,32 +4688,32 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			str = attribs.value(QStringLiteral("autoScale")).toString();
 			QDEBUG(Q_FUNC_INFO << ", str =" << str << ", value = " << str.toInt())
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("autoScale")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("autoScale"));
 			else
 				range.setAutoScale(str.toInt());
 			str = attribs.value(QStringLiteral("start")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("start")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("start"));
 			else
 				range.setStart(str.toDouble());
 			str = attribs.value(QStringLiteral("end")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("end")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("end"));
 			else
 				range.setEnd(str.toDouble());
 			str = attribs.value(QStringLiteral("scale")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("scale")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("scale"));
 			else
 				range.setScale(static_cast<RangeT::Scale>(str.toInt()));
 			str = attribs.value(QStringLiteral("format")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("format")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("format"));
 			else
 				range.setFormat(static_cast<RangeT::Format>(str.toInt()));
 			str = attribs.value(QStringLiteral("dateTimeFormat")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("dateTimeFormat")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("dateTimeFormat"));
 			else
 				range.setDateTimeFormat(str);
 
@@ -4708,32 +4728,32 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			Range<double> range;
 			str = attribs.value(QStringLiteral("autoScale")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("autoScale")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("autoScale"));
 			else
 				range.setAutoScale(str.toInt());
 			str = attribs.value(QStringLiteral("start")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("start")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("start"));
 			else
 				range.setStart(str.toDouble());
 			str = attribs.value(QStringLiteral("end")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("end")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("end"));
 			else
 				range.setEnd(str.toDouble());
 			str = attribs.value(QStringLiteral("scale")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("scale")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("scale"));
 			else
 				range.setScale(static_cast<RangeT::Scale>(str.toInt()));
 			str = attribs.value(QStringLiteral("format")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("format")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("format"));
 			else
 				range.setFormat(static_cast<RangeT::Format>(str.toInt()));
 			str = attribs.value(QStringLiteral("dateTimeFormat")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("dateTimeFormat")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("dateTimeFormat"));
 			else
 				range.setDateTimeFormat(str);
 
@@ -4757,7 +4777,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			} else {
 				str = attribs.value(QStringLiteral("niceExtend")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs(QStringLiteral("niceExtend")).toString());
+					reader->raiseMissingAttributeWarning(QStringLiteral("niceExtend"));
 				else
 					d->niceExtend = str.toInt();
 			}
@@ -4767,14 +4787,14 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			// new style
 			str = attribs.value(QStringLiteral("xIndex")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("xIndex")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("xIndex"));
 			else {
 				CartesianCoordinateSystem* cSystem{new CartesianCoordinateSystem(this)};
 				cSystem->setIndex(Dimension::X, str.toInt());
 
 				str = attribs.value(QStringLiteral("yIndex")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs(QStringLiteral("yIndex")).toString());
+					reader->raiseMissingAttributeWarning(QStringLiteral("yIndex"));
 				else
 					cSystem->setIndex(Dimension::Y, str.toInt());
 
@@ -4785,18 +4805,18 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			if (!hasCoordinateSystems) {
 				str = attribs.value(QStringLiteral("autoScaleX")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs(QStringLiteral("autoScaleX")).toString());
+					reader->raiseMissingAttributeWarning(QStringLiteral("autoScaleX"));
 				else
 					d->xRanges[0].range.setAutoScale(str.toInt());
 				str = attribs.value(QStringLiteral("autoScaleY")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs(QStringLiteral("autoScaleY")).toString());
+					reader->raiseMissingAttributeWarning(QStringLiteral("autoScaleY"));
 				else
 					d->yRanges[0].range.setAutoScale(str.toInt());
 
 				str = attribs.value(QStringLiteral("xMin")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs(QStringLiteral("xMin")).toString());
+					reader->raiseMissingAttributeWarning(QStringLiteral("xMin"));
 				else {
 					d->xRanges[0].range.start() = str.toDouble();
 					d->xRanges[0].prev.start() = d->range(Dimension::X, 0).start();
@@ -4804,7 +4824,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 
 				str = attribs.value(QStringLiteral("xMax")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs(QStringLiteral("xMax")).toString());
+					reader->raiseMissingAttributeWarning(QStringLiteral("xMax"));
 				else {
 					d->xRanges[0].range.end() = str.toDouble();
 					d->xRanges[0].prev.end() = d->range(Dimension::X, 0).end();
@@ -4812,7 +4832,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 
 				str = attribs.value(QStringLiteral("yMin")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs(QStringLiteral("yMin")).toString());
+					reader->raiseMissingAttributeWarning(QStringLiteral("yMin"));
 				else {
 					d->yRanges[0].range.start() = str.toDouble();
 					d->yRanges[0].prev.start() = range(Dimension::Y, 0).start();
@@ -4820,7 +4840,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 
 				str = attribs.value(QStringLiteral("yMax")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs(QStringLiteral("yMax")).toString());
+					reader->raiseMissingAttributeWarning(QStringLiteral("yMax"));
 				else {
 					d->yRanges[0].range.end() = str.toDouble();
 					d->yRanges[0].prev.end() = range(Dimension::Y, 0).end();
@@ -4828,7 +4848,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 
 				str = attribs.value(QStringLiteral("xScale")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs(QStringLiteral("xScale")).toString());
+					reader->raiseMissingAttributeWarning(QStringLiteral("xScale"));
 				else {
 					int scale{str.toInt()};
 					// convert old scale
@@ -4838,7 +4858,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				}
 				str = attribs.value(QStringLiteral("yScale")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs(QStringLiteral("yScale")).toString());
+					reader->raiseMissingAttributeWarning(QStringLiteral("yScale"));
 				else {
 					int scale{str.toInt()};
 					// convert old scale
@@ -4849,12 +4869,12 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 
 				str = attribs.value(QStringLiteral("xRangeFormat")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs(QStringLiteral("xRangeFormat")).toString());
+					reader->raiseMissingAttributeWarning(QStringLiteral("xRangeFormat"));
 				else
 					d->xRanges[0].range.format() = static_cast<RangeT::Format>(str.toInt());
 				str = attribs.value(QStringLiteral("yRangeFormat")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs(QStringLiteral("yRangeFormat")).toString());
+					reader->raiseMissingAttributeWarning(QStringLiteral("yRangeFormat"));
 				else
 					d->yRanges[0].range.format() = static_cast<RangeT::Format>(str.toInt());
 
@@ -4884,25 +4904,25 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			RangeBreak b;
 			str = attribs.value(QStringLiteral("start")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("start")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("start"));
 			else
 				b.range.start() = str.toDouble();
 
 			str = attribs.value(QStringLiteral("end")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("end")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("end"));
 			else
 				b.range.end() = str.toDouble();
 
 			str = attribs.value(QStringLiteral("position")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("position")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("position"));
 			else
 				b.position = str.toDouble();
 
 			str = attribs.value(QStringLiteral("style")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("style")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("style"));
 			else
 				b.style = CartesianPlot::RangeBreakStyle(str.toInt());
 
@@ -4919,25 +4939,25 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			RangeBreak b;
 			str = attribs.value(QStringLiteral("start")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("start")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("start"));
 			else
 				b.range.start() = str.toDouble();
 
 			str = attribs.value(QStringLiteral("end")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("end")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("end"));
 			else
 				b.range.end() = str.toDouble();
 
 			str = attribs.value(QStringLiteral("position")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("position")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("position"));
 			else
 				b.position = str.toDouble();
 
 			str = attribs.value(QStringLiteral("style")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("style")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("style"));
 			else
 				b.style = CartesianPlot::RangeBreakStyle(str.toInt());
 
@@ -4967,11 +4987,12 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 		} else if (!preview && reader->name() == QLatin1String("image")) {
 			auto* image = new Image(QString());
 			image->setIsLoading(true);
-			if (!image->load(reader, preview)) {
+			if (image->load(reader, preview))
+				addChildFast(image);
+			else {
 				delete image;
 				return false;
-			} else
-				addChildFast(image);
+			}
 		} else if (!preview && reader->name() == QLatin1String("infoElement")) {
 			auto* marker = new InfoElement(QStringLiteral("Marker"), this);
 			marker->setIsLoading(true);
@@ -5000,7 +5021,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
-				removeChild(curve);
+				delete curve;
 				return false;
 			}
 		} else if (reader->name() == QLatin1String("xyEquationCurve")) {
@@ -5009,7 +5030,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
-				removeChild(curve);
+				delete curve;
 				return false;
 			}
 		} else if (reader->name() == QLatin1String("xyDataReductionCurve")) {
@@ -5018,7 +5039,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
-				removeChild(curve);
+				delete curve;
 				return false;
 			}
 		} else if (reader->name() == QLatin1String("xyDifferentiationCurve")) {
@@ -5027,7 +5048,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
-				removeChild(curve);
+				delete curve;
 				return false;
 			}
 		} else if (reader->name() == QLatin1String("xyIntegrationCurve")) {
@@ -5036,7 +5057,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
-				removeChild(curve);
+				delete curve;
 				return false;
 			}
 		} else if (reader->name() == QLatin1String("xyInterpolationCurve")) {
@@ -5045,7 +5066,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
-				removeChild(curve);
+				delete curve;
 				return false;
 			}
 		} else if (reader->name() == QLatin1String("xySmoothCurve")) {
@@ -5054,7 +5075,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
-				removeChild(curve);
+				delete curve;
 				return false;
 			}
 		} else if (reader->name() == QLatin1String("xyFitCurve")) {
@@ -5063,7 +5084,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
-				removeChild(curve);
+				delete curve;
 				return false;
 			}
 		} else if (reader->name() == QLatin1String("xyFourierFilterCurve")) {
@@ -5072,7 +5093,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
-				removeChild(curve);
+				delete curve;
 				return false;
 			}
 		} else if (reader->name() == QLatin1String("xyFourierTransformCurve")) {
@@ -5081,7 +5102,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
-				removeChild(curve);
+				delete curve;
 				return false;
 			}
 		} else if (reader->name() == QLatin1String("xyHilbertTransformCurve")) {
@@ -5090,7 +5111,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
-				removeChild(curve);
+				delete curve;
 				return false;
 			}
 		} else if (reader->name() == QLatin1String("xyConvolutionCurve")) {
@@ -5099,7 +5120,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
-				removeChild(curve);
+				delete curve;
 				return false;
 			}
 		} else if (reader->name() == QLatin1String("xyCorrelationCurve")) {
@@ -5108,7 +5129,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
-				removeChild(curve);
+				delete curve;
 				return false;
 			}
 		} else if (!preview && reader->name() == QLatin1String("cartesianPlotLegend")) {
@@ -5153,7 +5174,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			if (boxPlot->load(reader, preview))
 				addChildFast(boxPlot);
 			else {
-				removeChild(boxPlot);
+				delete boxPlot;
 				return false;
 			}
 		} else if (reader->name() == QLatin1String("barPlot")) {
@@ -5162,7 +5183,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			if (barPlot->load(reader, preview))
 				addChildFast(barPlot);
 			else {
-				removeChild(barPlot);
+				delete barPlot;
 				return false;
 			}
 		} else if (reader->name() == QLatin1String("lollipopPlot")) {
@@ -5171,7 +5192,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			if (plot->load(reader, preview))
 				addChildFast(plot);
 			else {
-				removeChild(plot);
+				delete plot;
 				return false;
 			}
 		} else if (reader->name() == QLatin1String("Histogram")) {
@@ -5180,7 +5201,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			if (hist->load(reader, preview))
 				addChildFast(hist);
 			else {
-				removeChild(hist);
+				delete hist;
 				return false;
 			}
 		} else if (reader->name() == QLatin1String("QQPlot")) {
@@ -5189,12 +5210,19 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			if (plot->load(reader, preview))
 				addChildFast(plot);
 			else {
-				removeChild(plot);
+				delete plot;
 				return false;
 			}
+		} else if (reader->name() == QLatin1String("KDEPlot")) {
+			auto* plot = new KDEPlot(QStringLiteral("KDE Plot"));
+			plot->setIsLoading(true);
+			if (plot->load(reader, preview))
+				addChildFast(plot);
+			else
+				return false;
 		} else { // unknown element
 			if (!preview)
-				reader->raiseWarning(i18n("unknown cartesianPlot element '%1'", reader->name().toString()));
+				reader->raiseUnknownElementWarning();
 			if (!reader->skipToEndElement())
 				return false;
 		}

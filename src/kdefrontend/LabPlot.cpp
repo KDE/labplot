@@ -15,6 +15,7 @@
 
 #include <KAboutData>
 #include <KColorSchemeManager>
+#include <KConfigGroup>
 #include <KCrash>
 #include <KLocalizedString>
 #include <KMessageBox>

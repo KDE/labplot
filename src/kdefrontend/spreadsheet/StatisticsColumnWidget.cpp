@@ -23,6 +23,7 @@
 #include "backend/worksheet/plots/cartesian/BoxPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
+#include "backend/worksheet/plots/cartesian/KDEPlot.h"
 #include "backend/worksheet/plots/cartesian/QQPlot.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "backend/worksheet/plots/cartesian/Value.h"
@@ -355,44 +356,13 @@ void StatisticsColumnWidget::showKDEPlot() {
 	histogram->setNormalization(Histogram::ProbabilityDensity);
 	histogram->setDataColumn(m_column);
 
-	// copy the non-nan and not masked values
-	QVector<double> data;
-	copyValidData(data);
+	// add KDE Plot
+	auto* kdePlot = new KDEPlot(QString());
+	plot->addChild(kdePlot);
+	kdePlot->setKernelType(nsl_kernel_gauss);
+	kdePlot->setBandwidthType(nsl_kde_bandwidth_silverman);
+	kdePlot->setDataColumn(m_column);
 
-	// calculate 200 points to plot
-	int count = 200;
-	QVector<double> xData;
-	QVector<double> yData;
-	xData.resize(count);
-	yData.resize(count);
-	double min = *std::min_element(data.constBegin(), data.constEnd());
-	double max = *std::max_element(data.constBegin(), data.constEnd());
-	double step = (max - min) / count;
-	int n = data.count();
-	double h = std::max(nsl_kde_normal_dist_bandwith(data.data(), n), 1e-6);
-	for (int i = 0; i < count; ++i) {
-		double x = min + i * step;
-		xData[i] = x;
-		yData[i] = nsl_kde(data.data(), x, h, n);
-	}
-
-	auto* xColumn = new Column(QStringLiteral("x"));
-	xColumn->setValues(xData);
-
-	auto* yColumn = new Column(QStringLiteral("y"));
-	yColumn->setValues(yData);
-
-	// add KDE curve
-	auto* curve = new XYCurve(QString());
-	curve->setSuppressRetransform(false);
-	plot->addChild(curve);
-	curve->line()->setStyle(Qt::SolidLine);
-	curve->symbol()->setStyle(Symbol::Style::NoSymbols);
-	curve->background()->setPosition(Background::Position::No);
-	curve->setXColumn(xColumn);
-	curve->setYColumn(yColumn);
-
-	curve->setSuppressRetransform(false);
 	plot->retransform();
 	m_kdePlotInitialized = true;
 }

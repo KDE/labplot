@@ -571,6 +571,7 @@ void TextLabelPrivate::updateText() {
 			QTextEdit te(textWrapper.text);
 			te.selectAll();
 			te.setTextColor(fontColor);
+
 			// don't set background color (not used if not inside text)
 			textWrapper.text = te.toHtml();
 		}
@@ -1138,7 +1139,6 @@ bool TextLabel::load(XmlStreamReader* reader, bool preview) {
 		return false;
 
 	Q_D(TextLabel);
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
@@ -1186,7 +1186,7 @@ bool TextLabel::load(XmlStreamReader* reader, bool preview) {
 			d->teXPdfData = QByteArray::fromBase64(content.toLatin1());
 			d->teXImage = GuiTools::imageFromPDFData(d->teXPdfData);
 		} else { // unknown element
-			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
+			reader->raiseUnknownElementWarning();
 			if (!reader->skipToEndElement())
 				return false;
 		}

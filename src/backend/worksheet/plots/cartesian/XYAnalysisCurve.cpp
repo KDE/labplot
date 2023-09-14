@@ -463,7 +463,6 @@ void XYAnalysisCurve::save(QXmlStreamWriter* writer) const {
 bool XYAnalysisCurve::load(XmlStreamReader* reader, bool preview) {
 	Q_D(XYAnalysisCurve);
 
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
@@ -485,6 +484,10 @@ bool XYAnalysisCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_COLUMN(xDataColumn);
 			READ_COLUMN(yDataColumn);
 			READ_COLUMN(y2DataColumn);
+		} else { // unknown element
+			reader->raiseUnknownElementWarning();
+			if (!reader->skipToEndElement())
+				return false;
 		}
 	}
 

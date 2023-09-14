@@ -4,7 +4,7 @@
 	Description          : Processes a dataset's metadata file
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2019 Kovacs Ferencz <kferike98@gmail.com>
-	SPDX-FileCopyrightText: 2019 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2019-2023 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -98,8 +98,10 @@ void DatasetHandler::configureFilter() {
 		if (m_object->contains(QLatin1String("remove_quotes")))
 			m_filter->setRemoveQuotesEnabled(m_object->value(QStringLiteral("remove_quotes")).toBool());
 
-		if (m_object->contains(QLatin1String("use_first_row_for_vectorname")))
+		if (m_object->contains(QLatin1String("use_first_row_for_vectorname"))) {
 			m_filter->setHeaderEnabled(m_object->value(QStringLiteral("use_first_row_for_vectorname")).toBool());
+			m_filter->setHeaderLine(1);
+		}
 
 		if (m_object->contains(QLatin1String("number_format")))
 			m_filter->setNumberFormat(QLocale::Language(m_object->value(QStringLiteral("number_format")).toInt()));
@@ -164,16 +166,17 @@ void DatasetHandler::prepareForDataset() {
  * @param url the download URL of the dataset
  */
 void DatasetHandler::doDownload(const QUrl& url) {
-	DEBUG("Download request");
+	QDEBUG("Download request " << url);
 	QNetworkRequest request(url);
+	request.setAttribute(QNetworkRequest::RedirectPolicyAttribute, true);
 	m_currentDownload = m_downloadManager->get(request);
 	connect(m_currentDownload, &QNetworkReply::downloadProgress, [this](qint64 bytesReceived, qint64 bytesTotal) {
 		double progress;
-		if (bytesTotal == -1)
+		if (bytesTotal <= 0)
 			progress = 0;
 		else
 			progress = 100 * (static_cast<double>(bytesReceived) / static_cast<double>(bytesTotal));
-		qDebug() << "Progress: " << progress;
+
 		Q_EMIT downloadProgress(progress);
 	});
 }
@@ -185,31 +188,20 @@ void DatasetHandler::downloadFinished(QNetworkReply* reply) {
 	DEBUG("Download finished");
 	const QUrl& url = reply->url();
 	if (reply->error()) {
-		qDebug("Download of %s failed: %s\n", url.toEncoded().constData(), qPrintable(reply->errorString()));
+		QMessageBox::critical(nullptr,
+							  i18n("Failed to download the dataset"),
+							  i18n("Failed to download the dataset from %1.\n%2.", url.toDisplayString(), reply->errorString()));
 	} else {
-		if (isHttpRedirect(reply)) {
-			qDebug("Request was redirected.\n");
-		} else {
-			QString filename = saveFileName(url);
-			if (saveToDisk(filename, reply)) {
-				qDebug("Download of %s succeeded (saved to %s)\n", url.toEncoded().constData(), qPrintable(filename));
-				m_fileName = filename;
-				Q_EMIT downloadCompleted();
-			}
+		QString filename = saveFileName(url);
+		if (saveToDisk(filename, reply)) {
+			qDebug("Download of %s succeeded (saved to %s)\n", url.toEncoded().constData(), qPrintable(filename));
+			m_fileName = filename;
+			Q_EMIT downloadCompleted();
 		}
 	}
 
 	m_currentDownload = nullptr;
 	reply->deleteLater();
-}
-
-/**
- * @brief Checks whether the GET request was redirected or not.
- */
-bool DatasetHandler::isHttpRedirect(QNetworkReply* reply) {
-	const int statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
-	// TODO enum/defines for status codes ?
-	return statusCode == 301 || statusCode == 302 || statusCode == 303 || statusCode == 305 || statusCode == 307 || statusCode == 308;
 }
 
 /**
@@ -232,7 +224,9 @@ QString DatasetHandler::saveFileName(const QUrl& url) {
 	QDir downloadDir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + QStringLiteral("/datasets_local/"));
 	if (!downloadDir.exists()) {
 		if (!downloadDir.mkpath(downloadDir.path())) {
-			qDebug() << "Failed to create the directory " << downloadDir.path();
+			QMessageBox::critical(nullptr,
+								  i18n("Failed to save the dataset"),
+								  i18n("Failed to create the directory %1 to save the dataset.", downloadDir.path()));
 			return {};
 		}
 	}
@@ -243,9 +237,8 @@ QString DatasetHandler::saveFileName(const QUrl& url) {
 		if (fileInfo.lastModified().addDays(1) < QDateTime::currentDateTime()) {
 			QFile removeFile(fileName);
 			removeFile.remove();
-		} else {
-			qDebug() << "Dataset file already exists, no need to download it again";
-		}
+		} else
+			DEBUG("Dataset file already exists, no need to download it again.");
 	}
 	return fileName;
 }
@@ -256,7 +249,7 @@ QString DatasetHandler::saveFileName(const QUrl& url) {
 bool DatasetHandler::saveToDisk(const QString& filename, QIODevice* data) {
 	QFile file(filename);
 	if (!file.open(QIODevice::WriteOnly)) {
-		qDebug("Could not open %s for writing: %s\n", qPrintable(filename), qPrintable(file.errorString()));
+		QMessageBox::critical(nullptr, i18n("Failed to save the dataset"), i18n("Couldn't open the file %1 for writing.\n%2", filename, file.errorString()));
 		return false;
 	}
 

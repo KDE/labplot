@@ -10,8 +10,6 @@
 */
 
 #include "XYDataReductionCurveDock.h"
-#include "backend/core/AspectTreeModel.h"
-#include "backend/core/Project.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/XYDataReductionCurve.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
@@ -203,7 +201,6 @@ void XYDataReductionCurveDock::setCurves(QList<XYCurve*> list) {
 	m_curve = list.first();
 	setAspects(list);
 	m_dataReductionCurve = static_cast<XYDataReductionCurve*>(m_curve);
-	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
 	this->setModel();
 	m_dataReductionData = m_dataReductionCurve->dataReductionData();
 

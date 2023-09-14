@@ -21,6 +21,7 @@
 #include "matrixcommands.h"
 
 #include <KConfig>
+#include <KConfigGroup>
 #include <KLocalizedString>
 
 #include <QHeaderView>
@@ -1127,7 +1128,6 @@ bool Matrix::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
@@ -1151,19 +1151,19 @@ bool Matrix::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value(QStringLiteral("mode")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("mode")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("mode"));
 			else
 				d->mode = AbstractColumn::ColumnMode(str.toInt());
 
 			str = attribs.value(QStringLiteral("headerFormat")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("headerFormat")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("headerFormat"));
 			else
 				d->headerFormat = Matrix::HeaderFormat(str.toInt());
 
 			str = attribs.value(QStringLiteral("numericFormat")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("numericFormat")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("numericFormat"));
 			else {
 				QByteArray formatba = str.toLatin1();
 				d->numericFormat = *formatba.data();
@@ -1171,7 +1171,7 @@ bool Matrix::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value(QStringLiteral("precision")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("precision")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("precision"));
 			else
 				d->precision = str.toInt();
 
@@ -1180,37 +1180,37 @@ bool Matrix::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value(QStringLiteral("columns")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("columns")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("columns"));
 			else
 				d->columnCount = str.toInt();
 
 			str = attribs.value(QStringLiteral("rows")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("rows")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("rows"));
 			else
 				d->rowCount = str.toInt();
 
 			str = attribs.value(QStringLiteral("x_start")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("x_start")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("x_start"));
 			else
 				d->xStart = str.toDouble();
 
 			str = attribs.value(QStringLiteral("x_end")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("x_end")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("x_end"));
 			else
 				d->xEnd = str.toDouble();
 
 			str = attribs.value(QStringLiteral("y_start")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("y_start")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("y_start"));
 			else
 				d->yStart = str.toDouble();
 
 			str = attribs.value(QStringLiteral("y_end")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("y_end")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("y_end"));
 			else
 				d->yEnd = str.toDouble();
 		} else if (!preview && reader->name() == QLatin1String("row_heights")) {
@@ -1280,7 +1280,7 @@ bool Matrix::load(XmlStreamReader* reader, bool preview) {
 			}
 			}
 		} else { // unknown element
-			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
+			reader->raiseUnknownElementWarning();
 			if (!reader->skipToEndElement())
 				return false;
 		}

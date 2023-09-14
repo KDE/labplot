@@ -16,11 +16,12 @@
 #include "backend/lib/trace.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 
+#include <KConfigGroup>
+#include <KLocalizedString>
+
 #include <QBrush>
 #include <QIcon>
 #include <QPalette>
-
-#include <KLocalizedString>
 
 /*!
 	\class SpreadsheetModel

@@ -14,6 +14,7 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 
 #include <KLocalizedString>
+#include <QDateTime>
 #include <QFile>
 
 ///////////// macros ///////////////////////////////////////////////
@@ -50,19 +51,6 @@ writes the content of the data source \c dataSource to the file \c fileName.
 void ReadStatFilter::write(const QString& fileName, AbstractDataSource* dataSource) {
 	d->write(fileName, dataSource);
 	// TODO: not implemented yet
-}
-
-///////////////////////////////////////////////////////////////////////
-/*!
-  loads the predefined filter settings for \c filterName
-*/
-void ReadStatFilter::loadFilterSettings(const QString& /*filterName*/) {
-}
-
-/*!
-  saves the current settings as a new filter with the name \c filterName
-*/
-void ReadStatFilter::saveFilterSettings(const QString& /*filterName*/) const {
 }
 
 void ReadStatFilter::setStartRow(const int r) {
@@ -613,7 +601,5 @@ void ReadStatFilter::save(QXmlStreamWriter* writer) const {
   Loads from XML.
 */
 bool ReadStatFilter::load(XmlStreamReader*) {
-	// 	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
-	// 	QXmlStreamAttributes attribs = reader->attributes();
 	return true;
 }

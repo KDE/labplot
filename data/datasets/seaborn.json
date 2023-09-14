@@ -1,0 +1,169 @@
+{
+    "name": "seaborn",
+    "categories": [
+        {
+            "name": "Misc",
+            "subcategories": [
+                {
+                    "datasets": [
+                        {
+                            "description": "One of the example datasets used in the course \"PSYCH 252: Statistical Methods\". <br><br>Source: https://psych252.github.io/",
+                            "url": "https://raw.githubusercontent.com/mwaskom/seaborn-data/master/anagrams.csv",
+                            "filename": "anagrams",
+                            "name": "Anagrams",
+                            "use_first_row_for_vectorname": true
+                        },
+                        {
+                            "description": "Anscombe's quartet comprises four data sets that have nearly identical simple descriptive statistics, yet have very different distributions and appear very different when graphed. Each dataset consists of eleven (x,y) points. They were constructed in 1973 by the statistician Francis Anscombe to demonstrate both the importance of graphing data when analyzing it, and the effect of outliers and other influential observations on statistical properties. He described the article as being intended to counter the impression among statisticians that \"numerical calculations are exact, but graphs are rough.\". <br><br>Source: https://en.wikipedia.org/wiki/Anscombe%27s_quartet",
+                            "url": "https://raw.githubusercontent.com/mwaskom/seaborn-data/master/anscombe.csv",
+                            "filename": "anscombe",
+                            "name": "Anscombe's quartet",
+                            "use_first_row_for_vectorname": true
+                        },
+                        {
+                            "description": "One of the example datasets used in the course \"PSYCH 252: Statistical Methods\". <br><br>Source: https://psych252.github.io/",
+                            "url": "https://raw.githubusercontent.com/mwaskom/seaborn-data/master/attention.csv",
+                            "filename": "attention",
+                            "name": "Attention",
+                            "use_first_row_for_vectorname": true
+                        },
+                        {
+                            "description": "Brane Networks",
+                            "url": "https://raw.githubusercontent.com/mwaskom/seaborn-data/master/brain_networks.csv",
+                            "filename": "brain_networks",
+                            "name": "Brain Networks",
+                            "use_first_row_for_vectorname": true
+                        },
+                        {
+                            "description": "This dataset contains data behind the story \"Dear Mona, Which State Has The Worst Drivers?\". <br><br>Source: http://fivethirtyeight.com/datalab/which-state-has-the-worst-drivers/",
+                            "url": "https://raw.githubusercontent.com/mwaskom/seaborn-data/master/car_crashes.csv",
+                            "filename": "car_crashes",
+                            "name": "FiveThirtyEight Bad Drivers Dataset",
+                            "use_first_row_for_vectorname": true
+                        },
+                        {
+                            "description": "A dataset containing the prices and other attributes of almost 54,000 diamonds. <br><br>Source: https://ggplot2.tidyverse.org/reference/diamonds.html",
+                            "url": "https://raw.githubusercontent.com/mwaskom/seaborn-data/master/diamonds.csv",
+                            "filename": "diamonds",
+                            "name": "Diamonds",
+                            "use_first_row_for_vectorname": true
+                        },
+                        {
+                            "description": "Data taken from the publication \"Roitman, JD and Shadlen, MN (2002), Response of neurons in the lateral intraparietal area during a combined visual discrimination reaction time task, Journal of Neuroscience, Vol. 22(21), 9475-9489\". <br><br>Source: https://shadlenlab.columbia.edu/resources/RoitmanDataCode.html",
+                            "url": "https://github.com/mwaskom/seaborn-data/raw/master/dots.csv",
+                            "filename": "dots",
+                            "name": "Dots",
+                            "use_first_row_for_vectorname": true
+                        },
+                        {
+                            "description": "Dow-Jones Industrial Stock Price Index for United States taken from the National Bureau of Economic Research. <br><br>Source: https://fred.stlouisfed.org/series/M1109BUSM293NNBR",
+                            "url": "https://github.com/mwaskom/seaborn-data/raw/master/dowjones.csv",
+                            "filename": "dowjones",
+                            "name": "Dow-Jones Industrial Stock Price Index for United States",
+                            "use_first_row_for_vectorname": true
+                        },
+                        {
+                            "description": "One of the example datasets used in the course \"PSYCH 252: Statistical Methods\". <br><br>Source: https://psych252.github.io/",
+                            "url": "https://github.com/mwaskom/seaborn-data/raw/master/exercise.csv",
+                            "filename": "exercise",
+                            "name": "Exercise",
+                            "use_first_row_for_vectorname": true
+                        },
+                        {
+                            "description": "Flights.",
+                            "url": "https://github.com/mwaskom/seaborn-data/raw/master/flights.csv",
+                            "filename": "flights",
+                            "name": "Flights",
+                            "use_first_row_for_vectorname": true
+                        },
+                        {
+                            "description": "Data taken from the publication \"Waskom, M.L., Frank, M.C., Wagner, A.D. (In Press). Adaptive engagement of cognitive control in context-dependent decision-making. Cerebral Cortex.\". <br><br>Source: https://github.com/mwaskom/Waskom_CerebCortex_2017",
+                            "url": "https://github.com/mwaskom/seaborn-data/raw/master/fmri.csv",
+                            "filename": "fmri",
+                            "name": "Functional magnetic resonance imaging",
+                            "use_first_row_for_vectorname": true
+                        },
+                        {
+                            "description": "Waiting time between eruptions and the duration of the eruption for the Old Faithful geyser in Yellowstone National Park, Wyoming, USA. <br><br>Source: https://stat.ethz.ch/R-manual/R-devel/library/datasets/html/faithful.html",
+                            "url": "https://github.com/mwaskom/seaborn-data/raw/master/geyser.csv",
+                            "filename": "geyser",
+                            "name": "Old Faithful Geyser Data",
+                            "use_first_row_for_vectorname": true
+                        },
+                        {
+                            "description": "Results of the Glue Benchmark Leaderboard. <br><br>Source: https://gluebenchmark.com/leaderboard/",
+                            "url": "https://github.com/mwaskom/seaborn-data/raw/master/glue.csv",
+                            "filename": "glue",
+                            "name": "Glue Benchmark Leaderboard",
+                            "use_first_row_for_vectorname": true
+                        },
+                        {
+                            "description": "Health financing is reported as the annual per capita health expenditure and is adjusted for inflation and price level differences between countries (measured in 2010 international dollars). <br><br>Source: https://ourworldindata.org/grapher/life-expectancy-vs-health-expenditure",
+                            "url": "https://github.com/mwaskom/seaborn-data/raw/master/healthexp.csv",
+                            "filename": "healthexp",
+                            "name": "Life expectancy vs. health expenditure, 2015",
+                            "use_first_row_for_vectorname": true
+                        },
+                        {
+                            "description": "A small classic dataset from Fisher, 1936. One of the earliest known datasets used for evaluating classification methods. This is one of the earliest datasets used in the literature on classification methods and widely used in statistics and machine learning. The data set contains 3 classes of 50 instances each, where each class refers to a type of iris plant.  One class is linearly separable from the other 2; the latter are not linearly separable from each other. <br><br>Source: https://archive.ics.uci.edu/dataset/53/iris",
+                            "url": "https://github.com/mwaskom/seaborn-data/raw/master/iris.csv",
+                            "filename": "iris",
+                            "name": "Iris",
+                            "use_first_row_for_vectorname": true
+                        },
+                        {
+                            "description": "A dataset for cars and their associated price & features; manufactured between 1970-82 in USA, Europe., and Japan. <br><br>Source: https://data.world/dataman-udit/cars-data",
+                            "url": "https://github.com/mwaskom/seaborn-data/raw/master/mpg.csv",
+                            "filename": "mpg",
+                            "name": "Cars Dataset",
+                            "use_first_row_for_vectorname": true
+                        },
+                        {
+                            "description": "The goal of this dataset is to provide a great dataset for data exploration & visualization, as an alternative to iris. <br><br>Source: https://github.com/allisonhorst/palmerpenguins",
+                            "url": "https://github.com/mwaskom/seaborn-data/raw/master/penguins.csv",
+                            "filename": "penguins",
+                            "name": "Palmer Penguins",
+                            "use_first_row_for_vectorname": true
+                        },
+                        {
+                            "description": "Known planet discoveries beyond our solar system. <br><br>Source: https://exoplanets.nasa.gov/discovery/exoplanet-catalog/",
+                            "url": "https://github.com/mwaskom/seaborn-data/raw/master/planets.csv",
+                            "filename": "planets",
+                            "name": "Planets",
+                            "use_first_row_for_vectorname": true
+                        },
+                        {
+                            "description": "Arctic and Antarctic sea ice data. <br><br>Source: https://nsidc.org/arcticseaicenews/sea-ice-tools/",
+                            "url": "https://github.com/mwaskom/seaborn-data/raw/master/seaice.csv",
+                            "filename": "seaice",
+                            "name": "Arctic and Antarctic sea ice",
+                            "use_first_row_for_vectorname": true
+                        },
+                        {
+                            "description": "TLC Trip Record Data. <br><br>Source: https://www.nyc.gov/site/tlc/about/tlc-trip-record-data.page",
+                            "url": "https://github.com/mwaskom/seaborn-data/raw/master/taxis.csv",
+                            "filename": "taxis",
+                            "name": "TLC Trip Record Data",
+                            "use_first_row_for_vectorname": true
+                        },
+                        {
+                            "description": "One waiter recorded information about each tip he received over a period of a few months working in one restaurant. <br><br>Source: https://rdrr.io/cran/reshape2/man/tips.html",
+                            "url": "https://raw.githubusercontent.com/mwaskom/seaborn-data/master/tips.csv",
+                            "filename": "tips",
+                            "name": "Tipping data.",
+                            "use_first_row_for_vectorname": true
+                        },
+                        {
+                            "description": "Titanic passengers data. <br><br>Source: https://www.kaggle.com/c/titanic/data.",
+                            "url": "https://github.com/mwaskom/seaborn-data/raw/master/titanic.csv",
+                            "filename": "titanic",
+                            "name": "Titanic",
+                            "use_first_row_for_vectorname": true
+                        }
+                    ],
+                    "name": "Misc"
+                }
+            ]
+        }
+    ]
+}

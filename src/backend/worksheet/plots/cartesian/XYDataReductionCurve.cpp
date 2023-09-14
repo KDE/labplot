@@ -266,7 +266,6 @@ void XYDataReductionCurve::save(QXmlStreamWriter* writer) const {
 bool XYDataReductionCurve::load(XmlStreamReader* reader, bool preview) {
 	Q_D(XYDataReductionCurve);
 
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
@@ -310,6 +309,10 @@ bool XYDataReductionCurve::load(XmlStreamReader* reader, bool preview) {
 				d->xColumn = column;
 			else if (column->name() == QLatin1String("y"))
 				d->yColumn = column;
+		} else { // unknown element
+			reader->raiseUnknownElementWarning();
+			if (!reader->skipToEndElement())
+				return false;
 		}
 	}
 
