@@ -32,7 +32,7 @@
 class CorrelationCoefficientTest : public CommonTest {
 	Q_OBJECT
 
-private slots:
+private Q_SLOTS:
 	void pearsonCoefficient_data();
 	void pearsonCoefficient();
 

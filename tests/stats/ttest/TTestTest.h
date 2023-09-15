@@ -32,7 +32,7 @@
 class TTestTest : public CommonTest {
 	Q_OBJECT
 
-private slots:
+private Q_SLOTS:
 	// Two Sample Independent Test
 	void twoSampleIndependent_data();
 	void twoSampleIndependent();

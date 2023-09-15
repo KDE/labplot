@@ -32,7 +32,7 @@
 class AnovaTest : public CommonTest {
 	Q_OBJECT
 
-private slots:
+private Q_SLOTS:
 	void oneWayAnova_data();
 	void oneWayAnova();
 

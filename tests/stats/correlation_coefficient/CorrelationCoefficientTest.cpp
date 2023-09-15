@@ -76,8 +76,8 @@ void CorrelationCoefficientTest::pearsonCoefficient() {
 	QFETCH(double, correlationValue_expected);
 	QFETCH(double, zValue_expected);
 
-	Column* col1 = new Column("col1", AbstractColumn::ColumnMode::Numeric);
-	Column* col2 = new Column("col2", AbstractColumn::ColumnMode::Numeric);
+	Column* col1 = new Column(QStringLiteral("col1"), AbstractColumn::ColumnMode::Double);
+	Column* col2 = new Column(QStringLiteral("col2"), AbstractColumn::ColumnMode::Double);
 
 	col1->replaceValues(0, col1Data);
 	col2->replaceValues(0, col2Data);
@@ -85,7 +85,7 @@ void CorrelationCoefficientTest::pearsonCoefficient() {
 	QVector<Column*> cols;
 	cols << col1 << col2;
 
-	CorrelationCoefficient correlationCoefficientTest("Pearson's R");
+	CorrelationCoefficient correlationCoefficientTest(QStringLiteral("Pearson's R"));
 	correlationCoefficientTest.setColumns(cols);
 
 	CorrelationCoefficient::CorrelationTestType test;
@@ -134,8 +134,8 @@ void CorrelationCoefficientTest::kendallCoefficient_data() {
 	// Second Sample
 	// This sample is taken from:
 	//      https://www.statisticshowto.datasciencecentral.com/kendalls-tau/
-	col1Texts = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"};
-	col2Texts = {"A", "B", "D", "C", "F", "E", "H", "G", "J", "I", "L", "K"};
+	col1Texts = {QLatin1String("A"), QLatin1String("B"), QLatin1String("C"), QLatin1String("D"), QLatin1String("E"), QLatin1String("F"), QLatin1String("G"), QLatin1String("H"), QLatin1String("I"), QLatin1String("J"), QLatin1String("K"), QLatin1String("L")};
+	col2Texts = {QLatin1String("A"), QLatin1String("B"), QLatin1String("D"), QLatin1String("C"), QLatin1String("F"), QLatin1String("E"), QLatin1String("H"), QLatin1String("G"), QLatin1String("J"), QLatin1String("I"), QLatin1String("L"), QLatin1String("K")};
 	col1Values = {};
 	col2Values = {};
 	isDouble = false;
@@ -160,14 +160,14 @@ void CorrelationCoefficientTest::kendallCoefficient() {
 	Column* col2;
 
 	if (isDouble) {
-		col1 = new Column("col1", AbstractColumn::ColumnMode::Numeric);
-		col2 = new Column("col2", AbstractColumn::ColumnMode::Numeric);
+		col1 = new Column(QStringLiteral("col1"), AbstractColumn::ColumnMode::Double);
+		col2 = new Column(QStringLiteral("col2"), AbstractColumn::ColumnMode::Double);
 
 		col1->replaceValues(0, col1Values);
 		col2->replaceValues(0, col2Values);
 	} else {
-		col1 = new Column("col1", AbstractColumn::ColumnMode::Text);
-		col2 = new Column("col2", AbstractColumn::ColumnMode::Text);
+		col1 = new Column(QStringLiteral("col1"), AbstractColumn::ColumnMode::Text);
+		col2 = new Column(QStringLiteral("col2"), AbstractColumn::ColumnMode::Text);
 
 		col1->replaceTexts(0, col1Texts);
 		col2->replaceTexts(0, col2Texts);
@@ -176,7 +176,7 @@ void CorrelationCoefficientTest::kendallCoefficient() {
 	QVector<Column*> cols;
 	cols << col1 << col2;
 
-	CorrelationCoefficient correlationCoefficientTest("Kendall's Tau");
+	CorrelationCoefficient correlationCoefficientTest(QStringLiteral("Kendall's Tau"));
 	correlationCoefficientTest.setColumns(cols);
 
 	CorrelationCoefficient::CorrelationTestType test;
@@ -221,7 +221,6 @@ void CorrelationCoefficientTest::spearmanCoefficient_data() {
 	correlationValue_expected = -0.17575757575;
 
 	QTest::newRow("Second Sample") << col1Data << col2Data << correlationValue_expected;
-
 }
 
 void CorrelationCoefficientTest::spearmanCoefficient() {
@@ -229,8 +228,8 @@ void CorrelationCoefficientTest::spearmanCoefficient() {
 	QFETCH(QVector<double>, col2Data);
 	QFETCH(double, correlationValue_expected);
 
-	Column* col1 = new Column("col1", AbstractColumn::ColumnMode::Numeric);
-	Column* col2 = new Column("col2", AbstractColumn::ColumnMode::Numeric);
+	Column* col1 = new Column(QStringLiteral("col1"), AbstractColumn::ColumnMode::Double);
+	Column* col2 = new Column(QStringLiteral("col2"), AbstractColumn::ColumnMode::Double);
 
 	col1->replaceValues(0, col1Data);
 	col2->replaceValues(0, col2Data);
@@ -238,7 +237,7 @@ void CorrelationCoefficientTest::spearmanCoefficient() {
 	QVector<Column*> cols;
 	cols << col1 << col2;
 
-	CorrelationCoefficient correlationCoefficientTest("Spearman Rank");
+	CorrelationCoefficient correlationCoefficientTest(QStringLiteral("Spearman Rank"));
 	correlationCoefficientTest.setColumns(cols);
 
 	CorrelationCoefficient::CorrelationTestType test;

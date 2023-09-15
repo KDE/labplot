@@ -63,8 +63,8 @@ void TTestTest::twoSampleIndependent() {
 	QFETCH(double, tValue_expected);
 	QFETCH(double, pValue_expected);
 
-	Column* col1 = new Column("col1", AbstractColumn::ColumnMode::Numeric);
-	Column* col2 = new Column("col2", AbstractColumn::ColumnMode::Numeric);
+	Column* col1 = new Column(QStringLiteral("col1"), AbstractColumn::ColumnMode::Double);
+	Column* col2 = new Column(QStringLiteral("col2"), AbstractColumn::ColumnMode::Double);
 
 	col1->replaceValues(0, col1Data);
 	col2->replaceValues(0, col2Data);
@@ -72,7 +72,7 @@ void TTestTest::twoSampleIndependent() {
 	QVector<Column*> cols;
 	cols << col1 << col2;
 
-	HypothesisTest tTest("Two Sample Independent");
+	HypothesisTest tTest(QStringLiteral("Two Sample Independent"));
 	tTest.setColumns(cols);
 
 	int test;
@@ -83,7 +83,7 @@ void TTestTest::twoSampleIndependent() {
 	bool categoricalVariable = true;
 	bool equalVariance = true;
 
-	tTest.performTest(test, categoricalVariable, equalVariance);
+	tTest.test(test, categoricalVariable, equalVariance);
 	double tValue = tTest.statisticValue()[0];
 	double pValue = tTest.pValue()[0];
 
@@ -119,8 +119,8 @@ void TTestTest::twoSamplePaired() {
 	QFETCH(double, tValue_expected);
 	QFETCH(double, pValue_expected);
 
-	Column* col1 = new Column("col1", AbstractColumn::ColumnMode::Numeric);
-	Column* col2 = new Column("col2", AbstractColumn::ColumnMode::Numeric);
+	Column* col1 = new Column(QStringLiteral("col1"), AbstractColumn::ColumnMode::Double);
+	Column* col2 = new Column(QStringLiteral("col2"), AbstractColumn::ColumnMode::Double);
 
 	col1->replaceValues(0, col1Data);
 	col2->replaceValues(0, col2Data);
@@ -128,7 +128,7 @@ void TTestTest::twoSamplePaired() {
 	QVector<Column*> cols;
 	cols << col1 << col2;
 
-	HypothesisTest tTest("Two Sample Paried");
+	HypothesisTest tTest(QStringLiteral("Two Sample Paried"));
 	tTest.setColumns(cols);
 
 	int test;
@@ -136,7 +136,7 @@ void TTestTest::twoSamplePaired() {
 	test |= HypothesisTest::TwoSamplePaired;
 	tTest.setTail(HypothesisTest::Two);
 
-	tTest.performTest(test);
+	tTest.test(test);
 	double tValue = tTest.statisticValue()[0];
 	double pValue = tTest.pValue()[0];
 
@@ -171,13 +171,13 @@ void TTestTest::oneSample() {
 	QFETCH(double, tValue_expected);
 	QFETCH(double, pValue_expected);
 
-	Column* col1 = new Column("col1", AbstractColumn::ColumnMode::Numeric);
+	Column* col1 = new Column(QStringLiteral("col1"), AbstractColumn::ColumnMode::Double);
 	col1->replaceValues(0, col1Data);
 
 	QVector<Column*> cols;
 	cols << col1;
 
-	HypothesisTest tTest("One Sample");
+	HypothesisTest tTest(QStringLiteral("One Sample"));
 	tTest.setColumns(cols);
 	tTest.setPopulationMean(populationMean);
 
@@ -186,7 +186,7 @@ void TTestTest::oneSample() {
 	test |= HypothesisTest::OneSample;
 	tTest.setTail(HypothesisTest::Two);
 
-	tTest.performTest(test);
+	tTest.test(test);
 	double tValue = tTest.statisticValue()[0];
 	double pValue = tTest.pValue()[0];
 

@@ -136,6 +136,14 @@ void CorrelationCoefficient::exportStatTableToSpreadsheet() {
 		}
 }
 
+double CorrelationCoefficient::correlationValue() const {
+	return m_correlationValue;
+}
+
+QList<double> CorrelationCoefficient::statisticValue() const {
+	return m_statisticValue;
+}
+
 /***************************************************************************************************************************
  *                                        Private Implementations
  * ************************************************************************************************************************/

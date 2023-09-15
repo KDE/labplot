@@ -38,11 +38,11 @@ void AnovaTest::oneWayAnova_data() {
 	QTest::addColumn<double>("pValue_expected");
 
 	// First Sample
-	QVector<QString> col1Data = {"1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1",
-								 "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2",
-								 "3", "3", "3", "3", "3", "3", "3", "3", "3", "3", "3", "3", "3", "3", "3", "3", "3", "3", "3", "3",
-								 "4", "4", "4", "4", "4", "4", "4", "4", "4", "4", "4", "4", "4", "4", "4", "4", "4", "4", "4", "4",
-								 "5", "5", "5", "5", "5", "5", "5", "5", "5", "5", "5", "5", "5", "5", "5", "5", "5", "5", "5", "5"
+	QVector<QString> col1Data = {QLatin1String("1"), QLatin1String("1"), QLatin1String("1"), QLatin1String("1"), QLatin1String("1"), QLatin1String("1"), QLatin1String("1"), QLatin1String("1"), QLatin1String("1"), QLatin1String("1"), QLatin1String("1"), QLatin1String("1"), QLatin1String("1"), QLatin1String("1"), QLatin1String("1"), QLatin1String("1"), QLatin1String("1"), QLatin1String("1"), QLatin1String("1"), QLatin1String("1"),
+								 QLatin1String("2"), QLatin1String("2"), QLatin1String("2"), QLatin1String("2"), QLatin1String("2"), QLatin1String("2"), QLatin1String("2"), QLatin1String("2"), QLatin1String("2"), QLatin1String("2"), QLatin1String("2"), QLatin1String("2"), QLatin1String("2"), QLatin1String("2"), QLatin1String("2"), QLatin1String("2"), QLatin1String("2"), QLatin1String("2"), QLatin1String("2"), QLatin1String("2"),
+								 QLatin1String("3"), QLatin1String("3"), QLatin1String("3"), QLatin1String("3"), QLatin1String("3"), QLatin1String("3"), QLatin1String("3"), QLatin1String("3"), QLatin1String("3"), QLatin1String("3"), QLatin1String("3"), QLatin1String("3"), QLatin1String("3"), QLatin1String("3"), QLatin1String("3"), QLatin1String("3"), QLatin1String("3"), QLatin1String("3"), QLatin1String("3"), QLatin1String("3"),
+								 QLatin1String("4"), QLatin1String("4"), QLatin1String("4"), QLatin1String("4"), QLatin1String("4"), QLatin1String("4"), QLatin1String("4"), QLatin1String("4"), QLatin1String("4"), QLatin1String("4"), QLatin1String("4"), QLatin1String("4"), QLatin1String("4"), QLatin1String("4"), QLatin1String("4"), QLatin1String("4"), QLatin1String("4"), QLatin1String("4"), QLatin1String("4"), QLatin1String("4"),
+								 QLatin1String("5"), QLatin1String("5"), QLatin1String("5"), QLatin1String("5"), QLatin1String("5"), QLatin1String("5"), QLatin1String("5"), QLatin1String("5"), QLatin1String("5"), QLatin1String("5"), QLatin1String("5"), QLatin1String("5"), QLatin1String("5"), QLatin1String("5"), QLatin1String("5"), QLatin1String("5"), QLatin1String("5"), QLatin1String("5"), QLatin1String("5"), QLatin1String("5")
 								};
 
 	QVector<double> col2Data = {1, 43, 15, 40, 8, 17, 30, 34, 34, 26, 1, 7, 22, 30, 40, 15, 20, 9, 14, 15,
@@ -63,8 +63,8 @@ void AnovaTest::oneWayAnova() {
 	QFETCH(double, fValue_expected);
 	QFETCH(double, pValue_expected);
 
-	Column* col1 = new Column("col1", AbstractColumn::ColumnMode::Text);
-	Column* col2 = new Column("col2", AbstractColumn::ColumnMode::Numeric);
+	Column* col1 = new Column(QStringLiteral("col1"), AbstractColumn::ColumnMode::Text);
+	Column* col2 = new Column(QStringLiteral("col2"), AbstractColumn::ColumnMode::Double);
 
 	col1->replaceTexts(0, col1Data);
 	col2->replaceValues(0, col2Data);
@@ -72,7 +72,7 @@ void AnovaTest::oneWayAnova() {
 	QVector<Column*> cols;
 	cols << col1 << col2;
 
-	HypothesisTest anovaTest("One Way Anova");
+	HypothesisTest anovaTest(QStringLiteral("One Way Anova"));
 	anovaTest.setColumns(cols);
 
 	int test;
@@ -83,7 +83,7 @@ void AnovaTest::oneWayAnova() {
 	bool categoricalVariable = true;
 	bool equalVariance = true;
 
-	anovaTest.performTest(test, categoricalVariable, equalVariance);
+	anovaTest.test(test, categoricalVariable, equalVariance);
 
 	double fValue = anovaTest.statisticValue()[0];
 	double pValue = anovaTest.pValue()[0];
@@ -109,8 +109,8 @@ void AnovaTest::twoWayAnova_data() {
 
 	// First Sample
 	// This data set is taken from: http://statweb.stanford.edu/~susan/courses/s141/exanova.pdf
-	QVector<QString> col1Data = {"Super", "Super", "Super", "Super", "Super", "Super", "Super", "Super", "Super", "Super", "Super", "Super", "Best", "Best", "Best", "Best", "Best", "Best", "Best", "Best", "Best", "Best", "Best", "Best"};
-	QVector<QString> col2Data = {"cold", "cold", "cold", "cold", "warm", "warm", "warm", "warm", "hot", "hot", "hot", "hot", "cold", "cold", "cold", "cold", "warm", "warm", "warm", "warm", "hot", "hot", "hot", "hot"};
+	QVector<QString> col1Data = {QLatin1String("Super"), QLatin1String("Super"), QLatin1String("Super"), QLatin1String("Super"), QLatin1String("Super"), QLatin1String("Super"), QLatin1String("Super"), QLatin1String("Super"), QLatin1String("Super"), QLatin1String("Super"), QLatin1String("Super"), QLatin1String("Super"), QLatin1String("Best"), QLatin1String("Best"), QLatin1String("Best"), QLatin1String("Best"), QLatin1String("Best"), QLatin1String("Best"), QLatin1String("Best"), QLatin1String("Best"), QLatin1String("Best"), QLatin1String("Best"), QLatin1String("Best"), QLatin1String("Best")};
+	QVector<QString> col2Data = {QLatin1String("cold"), QLatin1String("cold"), QLatin1String("cold"), QLatin1String("cold"), QLatin1String("warm"), QLatin1String("warm"), QLatin1String("warm"), QLatin1String("warm"), QLatin1String("hot"), QLatin1String("hot"), QLatin1String("hot"), QLatin1String("hot"), QLatin1String("cold"), QLatin1String("cold"), QLatin1String("cold"), QLatin1String("cold"), QLatin1String("warm"), QLatin1String("warm"), QLatin1String("warm"), QLatin1String("warm"), QLatin1String("hot"), QLatin1String("hot"), QLatin1String("hot"), QLatin1String("hot")};
 	QVector<double> col3Data = {4, 5, 6, 5, 7, 9, 8, 12, 10, 12, 11, 9, 6, 6, 4, 4, 13, 15, 12, 12, 12, 13, 10, 13};
 	double fCol1Value_expected =  9.80885214008;
 	double fCol2Value_expected = 48.7193579767;
@@ -135,9 +135,9 @@ void AnovaTest::twoWayAnova() {
 	QFETCH(double, pCol1Value_expected);
 	QFETCH(double, pCol2Value_expected);
 
-	Column* col1 = new Column("col1", AbstractColumn::ColumnMode::Text);
-	Column* col2 = new Column("col2", AbstractColumn::ColumnMode::Text);
-	Column* col3 = new Column("col3", AbstractColumn::ColumnMode::Numeric);
+	Column* col1 = new Column(QStringLiteral("col1"), AbstractColumn::ColumnMode::Text);
+	Column* col2 = new Column(QStringLiteral("col2"), AbstractColumn::ColumnMode::Text);
+	Column* col3 = new Column(QStringLiteral("col3"), AbstractColumn::ColumnMode::Double);
 
 	col1->replaceTexts(0, col1Data);
 	col2->replaceTexts(0, col2Data);
@@ -146,7 +146,7 @@ void AnovaTest::twoWayAnova() {
 	QVector<Column*> cols;
 	cols << col1 << col2 << col3;
 
-	HypothesisTest anovaTest("Two Way Anova");
+	HypothesisTest anovaTest(QStringLiteral("Two Way Anova"));
 	anovaTest.setColumns(cols);
 
 	int test;
@@ -154,7 +154,7 @@ void AnovaTest::twoWayAnova() {
 	test |= HypothesisTest::TwoWay;
 	anovaTest.setTail(HypothesisTest::Two);
 
-	anovaTest.performTest(test);
+	anovaTest.test(test);
 	double fCol1Value = anovaTest.statisticValue()[0];
 	double fCol2Value = anovaTest.statisticValue()[1];
 	double fInteractionValue = anovaTest.statisticValue()[2];

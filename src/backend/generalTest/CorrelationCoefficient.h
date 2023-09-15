@@ -35,6 +35,8 @@ public:
 	void setInputStatsTableNRows(int nRows);
 	void setInputStatsTableNCols(int nColumns);
 	void exportStatTableToSpreadsheet();
+	double correlationValue() const;
+	QList<double> statisticValue() const;
 
 private:
 	void performPearson(bool categoricalVariable);

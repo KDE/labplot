@@ -35,9 +35,9 @@
 
 #include <QAbstractItemModel>
 #include <QIcon>
-#include <QSqlQuery>
-#include <QSqlError>
-#include <QSqlRecord>
+#include <QtSql/QSqlQuery>
+#include <QtSql/QSqlError>
+#include <QtSql/QSqlRecord>
 #include <QStandardItemModel>
 
 #include <KConfigGroup>
