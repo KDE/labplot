@@ -18,6 +18,8 @@ New features:
 	* [import]
 		* Templates for ASCII and Binary import filters - allow to save and load current filter settings
 		* Addeded seaborn's datasets to the collection of datasets
+	* [general]
+    	* New application theme "Dracula"
 
 Performance improvements:
 	* Make baseline removal much faster by using Eigen3 library (optional dependency)
