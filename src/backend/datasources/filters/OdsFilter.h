@@ -54,6 +54,9 @@ public:
 	virtual void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, ImportMode = ImportMode::Replace) override;
 	virtual void write(const QString& fileName, AbstractDataSource*) override;
 
+	void setSelectedSheetNames(const QStringList&);
+	const QStringList selectedSheetNames() const;
+
 	virtual void save(QXmlStreamWriter*) const override;
 	virtual bool load(XmlStreamReader*) override;
 

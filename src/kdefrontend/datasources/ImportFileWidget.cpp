@@ -567,7 +567,7 @@ QString ImportFileWidget::selectedObject() const {
 		if (!names.isEmpty())
 			name += QLatin1Char('/') + names.first();
 	} else if (format == AbstractFileFilter::FileType::Ods) {
-		const auto& names = m_odsOptionsWidget->selectedOdsRegionNames();
+		const auto& names = m_odsOptionsWidget->selectedOdsSheetNames();
 		QDEBUG(Q_FUNC_INFO << ", selected sheet names =")
 		if (!names.isEmpty())
 			name += QLatin1Char('/') + names.first();
@@ -758,8 +758,11 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 		filter->setEndColumn(ui.sbEndColumn->value());
 		// TODO: filter->setFirstRowAsColumnNames(ui.chbXLSXFirstRowAsColName->isChecked());
 
+		const auto& sorn = selectedOdsSheetNames();
+		QDEBUG(Q_FUNC_INFO << ", selected sheet names = " << sorn)
+		if (!sorn.isEmpty())
+			filter->setSelectedSheetNames(sorn);
 		// TODO
-		const auto& sxrn = selectedOdsRegionNames();
 		/*if (!sxrn.isEmpty()) {
 			const auto& firstRegion = sern.last();
 			const auto& nameSplit = firstRegion.split(QLatin1Char('!'));
@@ -1435,8 +1438,8 @@ const QStringList ImportFileWidget::selectedXLSXRegionNames() const {
 	return m_xlsxOptionsWidget->selectedXLSXRegionNames();
 }
 
-const QStringList ImportFileWidget::selectedOdsRegionNames() const {
-	return m_odsOptionsWidget->selectedOdsRegionNames();
+const QStringList ImportFileWidget::selectedOdsSheetNames() const {
+	return m_odsOptionsWidget->selectedOdsSheetNames();
 }
 
 bool ImportFileWidget::xlsxUseFirstRowAsColNames() const {

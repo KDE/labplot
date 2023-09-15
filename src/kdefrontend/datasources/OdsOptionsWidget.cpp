@@ -170,9 +170,9 @@ void OdsOptionsWidget::dataRegionSelectionChanged() {
 #endif
 }
 
-QStringList OdsOptionsWidget::selectedOdsRegionNames() const {
+QStringList OdsOptionsWidget::selectedOdsSheetNames() const {
 	const auto& items = ui.twDataRegions->selectedItems();
-	DEBUG(Q_FUNC_INFO << ", selected items = " << items.size())
+	DEBUG(Q_FUNC_INFO << ", number of selected items = " << items.size())
 
 	QStringList names;
 	for (const auto* item : items) {

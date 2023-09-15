@@ -392,11 +392,9 @@ QIcon LiveDataSource::icon() const {
 	case AbstractFileFilter::FileType::Image:
 		icon = QIcon::fromTheme(QStringLiteral("image-x-generic"));
 		break;
-	// TODO: missing icons
-	case AbstractFileFilter::FileType::HDF5:
-	case AbstractFileFilter::FileType::NETCDF:
 	case AbstractFileFilter::FileType::XLSX:
-	case AbstractFileFilter::FileType::VECTOR_BLF:
+	case AbstractFileFilter::FileType::Ods:
+		icon = QIcon::fromTheme(QStringLiteral("x-office-spreadsheet"));
 		break;
 	case AbstractFileFilter::FileType::FITS:
 		icon = QIcon::fromTheme(QStringLiteral("kstars_fitsviewer"));
@@ -413,7 +411,11 @@ QIcon LiveDataSource::icon() const {
 	case AbstractFileFilter::FileType::ROOT:
 		icon = QIcon::fromTheme(QStringLiteral("application-x-root"));
 		break;
+	// TODO: missing icons
 	case AbstractFileFilter::FileType::Spice:
+	case AbstractFileFilter::FileType::HDF5:
+	case AbstractFileFilter::FileType::NETCDF:
+	case AbstractFileFilter::FileType::VECTOR_BLF:
 		break;
 	}
 
@@ -590,6 +592,7 @@ void LiveDataSource::read() {
 			break;
 		// TODO: other types not implemented yet
 		case AbstractFileFilter::FileType::XLSX:
+		case AbstractFileFilter::FileType::Ods:
 		case AbstractFileFilter::FileType::Image:
 		case AbstractFileFilter::FileType::HDF5:
 		case AbstractFileFilter::FileType::VECTOR_BLF:

@@ -34,7 +34,7 @@ public:
 	QTableWidget* previewWidget() const {
 		return ui.twPreview;
 	}
-	QStringList selectedOdsRegionNames() const;
+	QStringList selectedOdsSheetNames() const;
 	QVector<QStringList> previewString() const;
 Q_SIGNALS:
 	void enableDataPortionSelection(bool enable);

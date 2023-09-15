@@ -25,6 +25,7 @@ public:
 	~OdsFilterPrivate();
 
 	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace);
+	void readCurrentSheet(const QString& fileName, AbstractDataSource*, AbstractFileFilter::ImportMode);
 	void write(const QString& fileName, AbstractDataSource*);
 	QVector<QStringList> preview(const QString& sheetName, int lines);
 	void parse(const QString& fileName, QTreeWidgetItem* root);
@@ -49,6 +50,8 @@ public:
 
 		QString sheetToAppendSpreadsheetTo;
 	*/
+	QString currentSheetName;
+	QStringList selectedSheetNames;
 	int startRow{-1};
 	int endRow{-1};
 	int startColumn{-1};

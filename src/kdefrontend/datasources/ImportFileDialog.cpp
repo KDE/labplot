@@ -241,7 +241,7 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 			else if (fileType == AbstractFileFilter::FileType::XLSX)
 				names = m_importFileWidget->selectedXLSXRegionNames();
 			else if (fileType == AbstractFileFilter::FileType::Ods)
-				names = m_importFileWidget->selectedOdsRegionNames();
+				names = m_importFileWidget->selectedOdsSheetNames();
 
 			int nrNames = names.size(), offset = sheets.size();
 			QDEBUG(Q_FUNC_INFO << ", selected names: " << names)

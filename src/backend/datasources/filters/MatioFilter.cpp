@@ -595,9 +595,9 @@ void MatioFilterPrivate::parse(const QString& fileName) {
 	(Not used for preview)
 	Uses the settings defined in the data source.
 */
-void MatioFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode) {
+void MatioFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
 	PERFTRACE(QLatin1String(Q_FUNC_INFO));
-	QVector<QStringList> dataStrings;
+	// QVector<QStringList> dataStrings;
 
 	if (currentVarName.isEmpty()) {
 		DEBUG(Q_FUNC_INFO << ", no variable selected");
@@ -612,8 +612,8 @@ void MatioFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataS
 #endif
 	for (const auto& var : selectedVarNames) {
 		currentVarName = var;
-		readCurrentVar(fileName, dataSource, mode);
-		mode = AbstractFileFilter::ImportMode::Append; // append other vars
+		readCurrentVar(fileName, dataSource, importMode);
+		importMode = AbstractFileFilter::ImportMode::Append; // append other vars
 	}
 #ifdef HAVE_MATIO
 	if (matfp) { // only if opened

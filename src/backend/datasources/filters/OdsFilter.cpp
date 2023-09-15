@@ -94,6 +94,16 @@ void OdsFilter::write(const QString& fileName, AbstractDataSource* dataSource) {
 	d->write(fileName, dataSource);
 }
 
+///////////////////////////////////////////////////////////////////////
+
+void OdsFilter::setSelectedSheetNames(const QStringList& names) {
+	d->currentSheetName = names.first();
+	d->selectedSheetNames = names;
+}
+const QStringList OdsFilter::selectedSheetNames() const {
+	return d->selectedSheetNames;
+}
+
 QVector<QStringList> OdsFilter::preview(const QString& sheetName, int lines) {
 	return d->preview(sheetName, lines);
 }
@@ -197,9 +207,36 @@ void OdsFilterPrivate::write(const QString& fileName, AbstractDataSource* dataSo
 	// TODO
 }
 
-void OdsFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode){
-	DEBUG(Q_FUNC_INFO << ", not implemented yet!")
+void OdsFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
+	DEBUG(Q_FUNC_INFO)
+
+	if (selectedSheetNames.isEmpty()) {
+		DEBUG(Q_FUNC_INFO << ", WARNING: no sheet selected");
+		return;
+	}
+
+	// read data from selected sheets into dataSource using importMode
+	for (const auto& sheetName : selectedSheetNames) {
+		currentSheetName = sheetName.split(QLatin1Char('!')).last();
+		readCurrentSheet(fileName, dataSource, importMode);
+		importMode = AbstractFileFilter::ImportMode::Append; // append other vars
+	}
 	// TODO
+	DEBUG(Q_FUNC_INFO << ", not implemented yet!")
+}
+
+void OdsFilterPrivate::readCurrentSheet(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
+	DEBUG(Q_FUNC_INFO << ", current sheet name = " << currentSheetName.toStdString())
+
+	// get sheet index by name and read lines of data into dataString
+	auto* sheet = m_document.get_sheet(currentSheetName.toStdString());
+	const auto index = sheet->get_index();
+	if (index != ixion::invalid_sheet) {
+		const auto ranges = sheet->get_data_range();
+		// TODO
+	}
+	DEBUG(Q_FUNC_INFO << ", not implemented yet!")
+	// TODO:
 }
 
 QVector<QStringList> OdsFilterPrivate::preview(const QString& sheetName, int lines) {

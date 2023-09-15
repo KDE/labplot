@@ -71,7 +71,7 @@ public:
 	bool xlsxUseFirstRowAsColNames() const;
 
 	const QStringList selectedXLSXRegionNames() const;
-	const QStringList selectedOdsRegionNames() const;
+	const QStringList selectedOdsSheetNames() const;
 	const QStringList selectedHDF5Names() const;
 	const QStringList selectedNetCDFNames() const;
 	const QStringList selectedFITSExtensions() const;
