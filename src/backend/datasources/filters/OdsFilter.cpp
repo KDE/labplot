@@ -228,15 +228,20 @@ void OdsFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSou
 void OdsFilterPrivate::readCurrentSheet(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
 	DEBUG(Q_FUNC_INFO << ", current sheet name = " << currentSheetName.toStdString())
 
+#ifdef HAVE_ORCUS
 	// get sheet index by name and read lines of data into dataString
 	auto* sheet = m_document.get_sheet(currentSheetName.toStdString());
 	const auto index = sheet->get_index();
 	if (index != ixion::invalid_sheet) {
 		const auto ranges = sheet->get_data_range();
 		// TODO
+		DEBUG(Q_FUNC_INFO << ", not implemented yet!")
 	}
-	DEBUG(Q_FUNC_INFO << ", not implemented yet!")
-	// TODO:
+#else
+	Q_UNUSED(fileName)
+	Q_UNUSED(dataSource)
+	Q_UNUSED(importMode)
+#endif
 }
 
 QVector<QStringList> OdsFilterPrivate::preview(const QString& sheetName, int lines) {
@@ -307,6 +312,9 @@ QVector<QStringList> OdsFilterPrivate::preview(const QString& sheetName, int lin
 			dataString << line;
 		}
 	}
+#else
+	Q_UNUSED(sheetName)
+	Q_UNUSED(lines)
 #endif
 
 	return dataString;
