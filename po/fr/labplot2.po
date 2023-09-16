@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-09-14 00:41+0000\n"
-"PO-Revision-Date: 2023-09-12 13:14+0200\n"
+"PO-Revision-Date: 2023-09-14 18:40+0200\n"
 "Last-Translator: Xavier BESNARD <xavier.besnard@neuf.fr>\n"
 "Language-Team: fr\n"
 "Language: fr\n"
@@ -13848,8 +13848,7 @@ msgid "Properties: Box Plot"
 msgstr "Propriétés : tracé en boîte"
 
 #: src/kdefrontend/GuiObserver.cpp:377
-#, fuzzy, kde-format
-#| msgid "KDE Plot"
+#, kde-format
 msgctxt "@title:window"
 msgid "KDE Plot"
 msgstr "Application Plot de KDE"
@@ -21654,10 +21653,9 @@ msgstr "Ordre de recherche"
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbMatchCase)
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:147
 #: src/kdefrontend/ui/spreadsheet/searchwidget.ui:119
-#, fuzzy, kde-format
-#| msgid "Case Sensitive"
+#, kde-format
 msgid "Match case sensitive"
-msgstr "Sensible à la casse"
+msgstr "Correspondance sensible à la casse"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbSelectionOnly)
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:164

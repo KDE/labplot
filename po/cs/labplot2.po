@@ -1031,25 +1031,22 @@ msgid "There is no download URL present in the metadata file!"
 msgstr ""
 
 #: src/backend/datasources/DatasetHandler.cpp:192
-#, fuzzy, kde-format
-#| msgid "Failed to read data."
+#, kde-format
 msgid "Failed to download the dataset"
-msgstr "Čtení dat selhalo."
+msgstr ""
 
 #: src/backend/datasources/DatasetHandler.cpp:193
-#, fuzzy, kde-format
-#| msgid "Failed to open the file '%1'."
+#, kde-format
 msgid ""
 "Failed to download the dataset from %1.\n"
 "%2."
-msgstr "Nepodařilo se otevřít soubor '%1'."
+msgstr ""
 
 #: src/backend/datasources/DatasetHandler.cpp:228
 #: src/backend/datasources/DatasetHandler.cpp:252
-#, fuzzy, kde-format
-#| msgid "Failed to read data."
+#, kde-format
 msgid "Failed to save the dataset"
-msgstr "Čtení dat selhalo."
+msgstr ""
 
 #: src/backend/datasources/DatasetHandler.cpp:229
 #, kde-format
@@ -1057,12 +1054,11 @@ msgid "Failed to create the directory %1 to save the dataset."
 msgstr ""
 
 #: src/backend/datasources/DatasetHandler.cpp:252
-#, fuzzy, kde-format
-#| msgid "Could not open file %1 for reading."
+#, kde-format
 msgid ""
 "Couldn't open the file %1 for writing.\n"
 "%2"
-msgstr "Nelze otevřít soubor %1 pro čtení."
+msgstr ""
 
 #: src/backend/datasources/filters/AbstractFileFilter.cpp:219
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:379
@@ -8110,22 +8106,19 @@ msgstr ""
 "minimální."
 
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:255
-#, fuzzy, kde-format
-#| msgid "%1: set arrow type"
+#, kde-format
 msgid "%1: set kernel type"
-msgstr "%1: nastavit typ šipky"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:262
-#, fuzzy, kde-format
-#| msgid "%1: set arrow type"
+#, kde-format
 msgid "%1: set bandwidth type"
-msgstr "%1: nastavit typ šipky"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:269
-#, fuzzy, kde-format
-#| msgid "%1: set width"
+#, kde-format
 msgid "%1: set bandwidth"
-msgstr "%1: nastavit šířku"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:278
 #, kde-format
@@ -10200,22 +10193,20 @@ msgid "%1: clear selected cells"
 msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3625
-#, fuzzy, kde-format
-#| msgid "Arrow"
+#, kde-format
 msgid "row"
 msgid_plural "rows"
-msgstr[0] "Šipka"
-msgstr[1] "Šipka"
-msgstr[2] "Šipka"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3626
-#, fuzzy, kde-format
-#| msgid "Column"
+#, kde-format
 msgid "column"
 msgid_plural "columns"
-msgstr[0] "Sloupec"
-msgstr[1] "Sloupec"
-msgstr[2] "Sloupec"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3627
 #, kde-format
@@ -10223,16 +10214,14 @@ msgid "cells"
 msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3628
-#, fuzzy, kde-format
-#| msgid "Absolute value"
+#, kde-format
 msgid "masked value"
-msgstr "Absolutní hodnota"
+msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3628
-#, fuzzy, kde-format
-#| msgid "Random Values"
+#, kde-format
 msgid "masked values"
-msgstr "Náhodné hodnoty"
+msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3629
 #, kde-format
@@ -10251,15 +10240,14 @@ msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3630
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3631
-#, fuzzy, kde-format
-#| msgid "1"
+#, kde-format
 msgid "%1"
-msgstr "1"
+msgstr "%1"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3631
 #, kde-format
 msgid ", "
-msgstr ""
+msgstr ", "
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3635
 #, kde-format
@@ -13541,11 +13529,10 @@ msgid "Properties: Box Plot"
 msgstr ""
 
 #: src/kdefrontend/GuiObserver.cpp:377
-#, fuzzy, kde-format
-#| msgid "Plot"
+#, kde-format
 msgctxt "@title:window"
 msgid "KDE Plot"
-msgstr "Vykreslit"
+msgstr ""
 
 #: src/kdefrontend/GuiObserver.cpp:382
 #, kde-format
@@ -16049,20 +16036,16 @@ msgid "Fixed-length negative lookbehind"
 msgstr ""
 
 #: src/kdefrontend/spreadsheet/SortDialog.cpp:33
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Sort Columns"
+#, kde-format
 msgctxt "@title:window"
 msgid "Sort All Columns"
-msgstr "Seřadit sloupce"
+msgstr ""
 
 #: src/kdefrontend/spreadsheet/SortDialog.cpp:35
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Sort Columns"
+#, kde-format
 msgctxt "@title:window"
 msgid "Sort Selected Columns"
-msgstr "Seřadit sloupce"
+msgstr ""
 
 #: src/kdefrontend/spreadsheet/SortDialog.cpp:39
 #, kde-format
@@ -19233,17 +19216,15 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lKernelType)
 #: src/kdefrontend/ui/dockwidgets/kdeplotdock.ui:43
-#, fuzzy, kde-format
-#| msgid "Kernel: "
+#, kde-format
 msgid "Kernel:"
-msgstr "Jádro: "
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lBandwidthType)
 #: src/kdefrontend/ui/dockwidgets/kdeplotdock.ui:79
-#, fuzzy, kde-format
-#| msgid "Line width:"
+#, kde-format
 msgid "Bandwidth:"
-msgstr "Šířka čáry:"
+msgstr "Šířka vlnového pásma:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPlotRange)
 #: src/kdefrontend/ui/dockwidgets/kdeplotdock.ui:180
@@ -19255,10 +19236,9 @@ msgstr "Rozsah zákresu:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabKDE)
 #: src/kdefrontend/ui/dockwidgets/kdeplotdock.ui:204
-#, fuzzy, kde-format
-#| msgid "Animations"
+#, kde-format
 msgid "Estimation"
-msgstr "Animace"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lErrorBarsCapSize)
 #: src/kdefrontend/ui/dockwidgets/linewidget.ui:150
@@ -22176,6 +22156,3 @@ msgstr ""
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Nelze otevřít soubor:"
-
-#~ msgid "Inverse"
-#~ msgstr "Inverzní"

@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-09-14 00:41+0000\n"
-"PO-Revision-Date: 2023-09-11 06:04+0200\n"
+"PO-Revision-Date: 2023-09-15 05:56+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -1030,25 +1030,24 @@ msgid "There is no download URL present in the metadata file!"
 msgstr "მეტამონაცემების ფაილი გადმოწერის ბმულს არ შეიცავს!"
 
 #: src/backend/datasources/DatasetHandler.cpp:192
-#, fuzzy, kde-format
-#| msgid "Failed to read image data"
+#, kde-format
 msgid "Failed to download the dataset"
-msgstr "გამოსახულების მონაცემების წაკითხვს შეცდომა"
+msgstr "მონაცემების სეტის გადმოწერა ჩავარდა"
 
 #: src/backend/datasources/DatasetHandler.cpp:193
-#, fuzzy, kde-format
-#| msgid "Failed to load JSON document. Error: %1."
+#, kde-format
 msgid ""
 "Failed to download the dataset from %1.\n"
 "%2."
-msgstr "JSON დოკუმენტის ჩატვირთვა შეუძლებელია. შეცდომა: %1."
+msgstr ""
+"%1-დან მონაცემების სეტის გადმოწერა ჩავარდა.\n"
+"%2."
 
 #: src/backend/datasources/DatasetHandler.cpp:228
 #: src/backend/datasources/DatasetHandler.cpp:252
-#, fuzzy, kde-format
-#| msgid "Failed to read image data"
+#, kde-format
 msgid "Failed to save the dataset"
-msgstr "გამოსახულების მონაცემების წაკითხვს შეცდომა"
+msgstr "მონაცემების სეტის შენახვა ჩავარდა"
 
 #: src/backend/datasources/DatasetHandler.cpp:229
 #, kde-format
@@ -1056,12 +1055,13 @@ msgid "Failed to create the directory %1 to save the dataset."
 msgstr ""
 
 #: src/backend/datasources/DatasetHandler.cpp:252
-#, fuzzy, kde-format
-#| msgid "Couldn't open the file"
+#, kde-format
 msgid ""
 "Couldn't open the file %1 for writing.\n"
 "%2"
-msgstr "ფაილის გახსნის შეცდომა"
+msgstr ""
+"ფაილის %1 ჩასაწერად გახსნა შეუძლებელია.\n"
+"%2"
 
 #: src/backend/datasources/filters/AbstractFileFilter.cpp:219
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:379
