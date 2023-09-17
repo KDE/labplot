@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-07-10 02:40+0000\n"
-"PO-Revision-Date: 2023-06-24 07:35+0200\n"
+"PO-Revision-Date: 2023-09-16 23:50+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.3.1\n"
+"X-Generator: Poedit 3.3.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -1098,12 +1098,12 @@ msgstr "არასწორი მეტამონაცემების �
 #: src/backend/datasources/DatasetHandler.cpp:68
 #, kde-format
 msgid "The metadata file for the selected dataset is invalid."
-msgstr ""
+msgstr "მონაცემების ფაილი არასწორიამონიშნული მონაცემების სეტისთვის."
 
 #: src/backend/datasources/DatasetHandler.cpp:156
 #, kde-format
 msgid "There is no download URL present in the metadata file!"
-msgstr ""
+msgstr "მეტამონაცემების ფაილი გადმოწერის ბმულს არ შეიცავს!"
 
 #: src/backend/datasources/filters/AbstractFileFilter.cpp:218
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:368
@@ -1368,7 +1368,7 @@ msgstr "სუპერბლოკის ზომა: %1 ბაიტი"
 #: src/backend/datasources/filters/HDF5Filter.cpp:259
 #, kde-format
 msgid "Size of superblock extension: %1 bytes"
-msgstr ""
+msgstr "სუპერბლოკის გაფართოების ზომა: %1 ბაიტი"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:240
 #, kde-format
@@ -2050,7 +2050,7 @@ msgstr "შეკუმშვა: %1"
 #: src/backend/datasources/filters/ReadStatFilter.cpp:177
 #, kde-format
 msgid "Endianess: %1"
-msgstr ""
+msgstr "ბოლოიანობა: %1"
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:179
 #, kde-format
@@ -2120,12 +2120,12 @@ msgstr "TStreamerInfo ჩანაწერის ზომა: %1 ბაიტ�
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:89
 #, kde-format
 msgid "Big Endian not supported. CAN id: %1"
-msgstr ""
+msgstr "მსხვილბოლოიანი მხარდაჭერილი არაა. CAN id: %1"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:92
 #, kde-format
 msgid "Message too long. CAN id: %1"
-msgstr ""
+msgstr "შეტყობინება მეტისმეტად გრძელია. CAN id: %1"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:95
 #, kde-format
@@ -2145,7 +2145,7 @@ msgstr "გადაყვანის გამოთვლა შეუძლ�
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:104
 #, kde-format
 msgid "No dbc parser installed"
-msgstr ""
+msgstr "DBC დამმუშავებელი დაყენებული არაა"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:107
 #, kde-format
@@ -4829,12 +4829,12 @@ msgstr "ატომური მაგნეტრონი"
 #: src/backend/gsl/ExpressionParser.cpp:1060
 #, kde-format
 msgid "Magnetic moment of the electron [absolute value]"
-msgstr ""
+msgstr "ელექტრონის მაგნიტური მომენტი [აბსოლუტური მნიშვნელობა]"
 
 #: src/backend/gsl/ExpressionParser.cpp:1063
 #, kde-format
 msgid "Magnetic moment of the proton"
-msgstr ""
+msgstr "პროტონის მაგნიტური მომენტი"
 
 #: src/backend/gsl/ExpressionParser.cpp:1066
 #, kde-format
@@ -5866,7 +5866,7 @@ msgstr "ოპჰაიმი"
 #: src/backend/nsl/nsl_geom_linesim.c:25
 #, kde-format
 msgid "Lang"
-msgstr ""
+msgstr "ენა"
 
 #: src/backend/nsl/nsl_hilbert.c:18 src/kdefrontend/widgets/LineWidget.cpp:54
 #, kde-format
@@ -12801,7 +12801,7 @@ msgstr "ჰისტოგრამა:"
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:549
 #, kde-format
 msgid "Degree:"
-msgstr ""
+msgstr "გრადუსი:"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:893
 #, kde-format
@@ -13932,7 +13932,7 @@ msgstr "ყველა ფანჯრის დახურვა"
 #: src/kdefrontend/MainWin.cpp:661
 #, kde-format
 msgid "&Tile"
-msgstr ""
+msgstr "&ფილა"
 
 #: src/kdefrontend/MainWin.cpp:662
 #, kde-format
@@ -14825,7 +14825,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Mask Values"
-msgstr ""
+msgstr "მნიშვნელობების შენიღბვა"
 
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:77
 #, kde-format
@@ -14841,7 +14841,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Drop Values"
-msgstr ""
+msgstr "მნიშვნელობის მოცილება"
 
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:945
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:952
@@ -19450,7 +19450,7 @@ msgstr ""
 #: src/kdefrontend/ui/fitoptionswidget.ui:69
 #, kde-format
 msgid "Tolerance:"
-msgstr ""
+msgstr "დაშვება:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, cbUseDataErrors)
 #: src/kdefrontend/ui/fitoptionswidget.ui:76
