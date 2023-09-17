@@ -176,6 +176,10 @@ int OdsFilter::endRow() const {
 	return d->endRow;
 }
 
+void OdsFilter::setCurrentSheetName(const QString& sheetName) {
+	d->currentSheetName = sheetName;
+}
+
 //##############################################################################
 //##################  Serialization/Deserialization  ###########################
 //##############################################################################
@@ -228,15 +232,68 @@ void OdsFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSou
 void OdsFilterPrivate::readCurrentSheet(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
 	DEBUG(Q_FUNC_INFO << ", current sheet name = " << currentSheetName.toStdString())
 
+	if (!dataSource)
+		return;
+
 #ifdef HAVE_ORCUS
-	// get sheet index by name and read lines of data into dataString
+	// get sheet index by name and read data into dataSource
 	auto* sheet = m_document.get_sheet(currentSheetName.toStdString());
-	const auto index = sheet->get_index();
-	if (index != ixion::invalid_sheet) {
-		const auto ranges = sheet->get_data_range();
-		// TODO
-		DEBUG(Q_FUNC_INFO << ", not implemented yet!")
+	const auto sheetIndex = sheet->get_index();
+	if (sheetIndex == ixion::invalid_sheet)
+		return;
+
+	const auto ranges = sheet->get_data_range();
+	DEBUG(Q_FUNC_INFO << ", data range: col " << ranges.first.column << ".." << ranges.last.column << ", row " << ranges.first.row << ".." << ranges.last.row)
+
+	size_t actualRows = ranges.last.row - ranges.first.row + 1, actualCols = ranges.last.column - ranges.first.column + 1;
+	// TODO: handle startRow, startRow, startColumn, endColumn
+
+	// column modes
+	QVector<AbstractColumn::ColumnMode> columnModes;
+	columnModes.resize(actualCols);
+
+	// TODO: set columnModes
+	const auto& model = m_document.get_model_context();
+	for (ixion::col_t col = ranges.first.column; col < ranges.last.column + 1; col++) {
+		ixion::abs_address_t pos(sheetIndex, 0, col); // first row
+
+		auto type = model.get_celltype(pos);
+		switch (type) {
+		case ixion::celltype_t::string:
+			columnModes[col] = AbstractColumn::ColumnMode::Text;
+			break;
+		case ixion::celltype_t::numeric: // TODO: what about integer?
+		case ixion::celltype_t::formula:
+			columnModes[col] = AbstractColumn::ColumnMode::Double;
+			break;
+		case ixion::celltype_t::boolean:
+		case ixion::celltype_t::empty:
+		case ixion::celltype_t::unknown:
+			// TODO
+			break;
+		}
 	}
+
+	QStringList vectorNames;
+	// TODO: use header names?
+	for (size_t i = 0; i < actualCols; i++)
+		vectorNames << QLatin1String("Column ") + QString::number(i + 1);
+
+	std::vector<void*> dataContainer;
+
+	// prepare import
+	int columnOffset = dataSource->prepareImport(dataContainer, importMode, actualRows, actualCols, vectorNames, columnModes);
+
+	// import data
+	for (size_t j = 0; j < actualRows; j++)
+		for (size_t i = 0; i < actualCols; i++) {
+			ixion::abs_address_t pos(sheetIndex, j + 1, i + 1); // starting from 1
+			// TODO: check type
+			double value = model.get_numeric_value(pos);
+			(*static_cast<QVector<double>*>(dataContainer[i]))[j] = value;
+		}
+
+	dataSource->finalizeImport(columnOffset, 1, actualCols, QString(), importMode);
 #else
 	Q_UNUSED(fileName)
 	Q_UNUSED(dataSource)
@@ -249,8 +306,8 @@ QVector<QStringList> OdsFilterPrivate::preview(const QString& sheetName, int lin
 #ifdef HAVE_ORCUS
 	// get sheet index by name and read lines of data into dataString
 	auto* sheet = m_document.get_sheet(sheetName.toStdString());
-	const auto index = sheet->get_index();
-	if (index != ixion::invalid_sheet) {
+	const auto sheetIndex = sheet->get_index();
+	if (sheetIndex != ixion::invalid_sheet) {
 		const auto ranges = sheet->get_data_range();
 		DEBUG(Q_FUNC_INFO << ", data range: col " << ranges.first.column << ".." << ranges.last.column << ", row " << ranges.first.row << ".."
 						  << ranges.last.row)
@@ -263,7 +320,7 @@ QVector<QStringList> OdsFilterPrivate::preview(const QString& sheetName, int lin
 			DEBUG(Q_FUNC_INFO << ", row " << row)
 			QStringList line;
 			for (ixion::col_t col = ranges.first.column; col < std::min(maxCols + ranges.first.column, ranges.last.column + 1); col++) {
-				ixion::abs_address_t pos(index, row, col);
+				ixion::abs_address_t pos(sheetIndex, row, col);
 
 				auto type = model.get_celltype(pos);
 				switch (type) {

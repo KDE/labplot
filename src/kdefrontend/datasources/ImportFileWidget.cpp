@@ -487,7 +487,7 @@ void ImportFileWidget::enableXLSXFirstRowAsColNames(bool enable) {
 }
 
 /*!
- *  update header specific options that are available for some filter types (ASCII and XLSX)
+ *  update header specific options that are available for some filter types (ASCII, XLSX and Ods)
  *  and for some target data containers (Spreadsheet) only
  */
 void ImportFileWidget::updateHeaderOptions() {
@@ -1230,7 +1230,7 @@ void ImportFileWidget::fileTypeChanged(int /*index*/) {
 		break;
 	}
 
-	// update header specific options that are available for some filter types (ASCII and XLSX)
+	// update header specific options that are available for some filter types
 	// and for some target data containers (Spreadsheet) only
 	updateHeaderOptions();
 

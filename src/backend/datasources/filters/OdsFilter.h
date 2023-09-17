@@ -48,9 +48,8 @@ public:
 		QXlsx::CellRange dimension() const;
 	#endif
 		void setCurrentRange(const QString& range);
-
-		void setCurrentSheet(const QString& sheet);
 	*/
+	void setCurrentSheetName(const QString&);
 	virtual void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, ImportMode = ImportMode::Replace) override;
 	virtual void write(const QString& fileName, AbstractDataSource*) override;
 

@@ -54,9 +54,9 @@ public:
 	QVector<QXlsx::CellRange> dataRegions(const QString& fileName, const QString& sheetName);
 	QXlsx::CellRange dimension() const;
 #endif
-	void setCurrentRange(const QString& range);
+	void setCurrentRange(const QString&);
 
-	void setCurrentSheet(const QString& sheet);
+	void setCurrentSheet(const QString&);
 	virtual void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, ImportMode = ImportMode::Replace) override;
 	virtual void write(const QString& fileName, AbstractDataSource*) override;
 

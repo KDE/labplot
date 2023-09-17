@@ -304,6 +304,8 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 					static_cast<NetCDFFilter*>(filter)->setCurrentVarName(names.at(i));
 				else if (fileType == AbstractFileFilter::FileType::MATIO)
 					static_cast<MatioFilter*>(filter)->setCurrentVarName(names.at(i));
+				else if (fileType == AbstractFileFilter::FileType::Ods)
+					static_cast<OdsFilter*>(filter)->setCurrentSheetName(names.at(i));
 				else if (fileType == AbstractFileFilter::FileType::XLSX) {
 					const auto& nameSplit = names[i].split(QLatin1Char('!'));
 					const auto& sheet = nameSplit[0];
