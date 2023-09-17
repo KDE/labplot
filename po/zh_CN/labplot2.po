@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-09-14 00:41+0000\n"
-"PO-Revision-Date: 2023-09-02 02:57\n"
+"PO-Revision-Date: 2023-09-16 10:09\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -1023,10 +1023,9 @@ msgid "There is no download URL present in the metadata file!"
 msgstr ""
 
 #: src/backend/datasources/DatasetHandler.cpp:192
-#, fuzzy, kde-format
-#| msgid "Failed to read data."
+#, kde-format
 msgid "Failed to download the dataset"
-msgstr "读取数据失败。"
+msgstr ""
 
 #: src/backend/datasources/DatasetHandler.cpp:193
 #, kde-format
@@ -1037,10 +1036,9 @@ msgstr ""
 
 #: src/backend/datasources/DatasetHandler.cpp:228
 #: src/backend/datasources/DatasetHandler.cpp:252
-#, fuzzy, kde-format
-#| msgid "Failed to read data."
+#, kde-format
 msgid "Failed to save the dataset"
-msgstr "读取数据失败。"
+msgstr ""
 
 #: src/backend/datasources/DatasetHandler.cpp:229
 #, kde-format
@@ -1048,12 +1046,11 @@ msgid "Failed to create the directory %1 to save the dataset."
 msgstr ""
 
 #: src/backend/datasources/DatasetHandler.cpp:252
-#, fuzzy, kde-format
-#| msgid "Could not open file %1 for reading."
+#, kde-format
 msgid ""
 "Couldn't open the file %1 for writing.\n"
 "%2"
-msgstr "无法以读模式打开文件 %1。"
+msgstr ""
 
 #: src/backend/datasources/filters/AbstractFileFilter.cpp:219
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:379
@@ -8068,10 +8065,9 @@ msgid ""
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:255
-#, fuzzy, kde-format
-#| msgid "%1: set font"
+#, kde-format
 msgid "%1: set kernel type"
-msgstr "%1：设置字体"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:262
 #, kde-format
@@ -8079,10 +8075,9 @@ msgid "%1: set bandwidth type"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:269
-#, fuzzy, kde-format
-#| msgid "%1: set font"
+#, kde-format
 msgid "%1: set bandwidth"
-msgstr "%1：设置字体"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:278
 #, kde-format
@@ -10145,18 +10140,16 @@ msgid "%1: clear selected cells"
 msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3625
-#, fuzzy, kde-format
-#| msgid "Arrow"
+#, kde-format
 msgid "row"
 msgid_plural "rows"
-msgstr[0] "箭头"
+msgstr[0] ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3626
-#, fuzzy, kde-format
-#| msgid "Column"
+#, kde-format
 msgid "column"
 msgid_plural "columns"
-msgstr[0] "列"
+msgstr[0] ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3627
 #, kde-format
@@ -10164,10 +10157,9 @@ msgid "cells"
 msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3628
-#, fuzzy, kde-format
-#| msgid "Start value"
+#, kde-format
 msgid "masked value"
-msgstr "起始值"
+msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3628
 #, kde-format
@@ -10191,10 +10183,9 @@ msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3630
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3631
-#, fuzzy, kde-format
-#| msgid "1"
+#, kde-format
 msgid "%1"
-msgstr "1"
+msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3631
 #, kde-format
@@ -13474,11 +13465,10 @@ msgid "Properties: Box Plot"
 msgstr ""
 
 #: src/kdefrontend/GuiObserver.cpp:377
-#, fuzzy, kde-format
-#| msgid "Plot"
+#, kde-format
 msgctxt "@title:window"
 msgid "KDE Plot"
-msgstr "绘图"
+msgstr ""
 
 #: src/kdefrontend/GuiObserver.cpp:382
 #, kde-format
@@ -15970,11 +15960,10 @@ msgid "Fixed-length negative lookbehind"
 msgstr ""
 
 #: src/kdefrontend/spreadsheet/SortDialog.cpp:33
-#, fuzzy, kde-format
-#| msgid "Columns"
+#, kde-format
 msgctxt "@title:window"
 msgid "Sort All Columns"
-msgstr "列"
+msgstr ""
 
 #: src/kdefrontend/spreadsheet/SortDialog.cpp:35
 #, kde-format
@@ -19157,10 +19146,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lBandwidthType)
 #: src/kdefrontend/ui/dockwidgets/kdeplotdock.ui:79
-#, fuzzy, kde-format
-#| msgid "Line width:"
+#, kde-format
 msgid "Bandwidth:"
-msgstr "线宽："
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lPlotRange)
 #: src/kdefrontend/ui/dockwidgets/kdeplotdock.ui:180
@@ -19172,10 +19160,9 @@ msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabKDE)
 #: src/kdefrontend/ui/dockwidgets/kdeplotdock.ui:204
-#, fuzzy, kde-format
-#| msgid "Position"
+#, kde-format
 msgid "Estimation"
-msgstr "位置"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lErrorBarsCapSize)
 #: src/kdefrontend/ui/dockwidgets/linewidget.ui:150
