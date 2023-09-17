@@ -1224,7 +1224,7 @@ MatioFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource* 
 #else
 	Q_UNUSED(fileName)
 	Q_UNUSED(dataSource)
-	Q_UNUSED(mode)
+	Q_UNUSED(importMode)
 	Q_UNUSED(lines)
 #endif
 
