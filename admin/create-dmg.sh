@@ -36,10 +36,6 @@ macdeployqt $PREFIX/$PNAME.app -verbose=2
 echo "install files"
 # splash
 cp -v kde/share/$NAME/splash.png $INPREFIX/Resources/
-# rc-file
-# Standardlocation (QSP): ~/Library/Application\ Support/kxmlgui5/labplot2/labplot2ui.rc
-# using hardcoded path:
-cp -v kde/share/kxmlgui5/$NAME/${NAME}ui.rc $INPREFIX/Resources/
 # themes
 cp -vr kde/share/$NAME/themes $INPREFIX/Resources/
 # gsl_distros, fit_models, colorchooser
