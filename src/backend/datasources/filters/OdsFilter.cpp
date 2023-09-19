@@ -225,8 +225,6 @@ void OdsFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSou
 		readCurrentSheet(fileName, dataSource, importMode);
 		importMode = AbstractFileFilter::ImportMode::Append; // append other vars
 	}
-	// TODO
-	DEBUG(Q_FUNC_INFO << ", not implemented yet!")
 }
 
 void OdsFilterPrivate::readCurrentSheet(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
@@ -252,24 +250,40 @@ void OdsFilterPrivate::readCurrentSheet(const QString& fileName, AbstractDataSou
 	QVector<AbstractColumn::ColumnMode> columnModes;
 	columnModes.resize(actualCols);
 
-	// TODO: set columnModes
+	// set column modes
 	const auto& model = m_document.get_model_context();
-	for (ixion::col_t col = ranges.first.column; col < ranges.last.column + 1; col++) {
-		ixion::abs_address_t pos(sheetIndex, 0, col); // first row
+	for (size_t col = 0; col < ranges.last.column - ranges.first.column + 1; col++) {
+		ixion::abs_address_t pos(sheetIndex, ranges.first.row, ranges.first.column + col); // check first row
 
 		auto type = model.get_celltype(pos);
 		switch (type) {
 		case ixion::celltype_t::string:
 			columnModes[col] = AbstractColumn::ColumnMode::Text;
 			break;
-		case ixion::celltype_t::numeric: // TODO: what about integer?
-		case ixion::celltype_t::formula:
-			columnModes[col] = AbstractColumn::ColumnMode::Double;
+		case ixion::celltype_t::numeric: // numeric values are always double (can't detect if integer)
+			// default: Double
 			break;
+		case ixion::celltype_t::formula: {
+			auto formula = model.get_formula_result(pos);
+			switch (formula.get_type()) { // conside formula type
+			case ixion::formula_result::result_type::value:
+				columnModes[col] = AbstractColumn::ColumnMode::Double;
+				break;
+			case ixion::formula_result::result_type::string:
+				columnModes[col] = AbstractColumn::ColumnMode::Text;
+				break;
+			case ixion::formula_result::result_type::error:
+			// TODO: not available in ixion 0.17 ?
+			// case ixion::formula_result::result_type::boolean:
+			case ixion::formula_result::result_type::matrix:
+				DEBUG(Q_FUNC_INFO << ", formula type not supported yet.")
+				break;
+			}
+			break;
+		}
 		case ixion::celltype_t::boolean:
 		case ixion::celltype_t::empty:
-		case ixion::celltype_t::unknown:
-			// TODO
+		case ixion::celltype_t::unknown: // default: Double
 			break;
 		}
 	}
@@ -287,10 +301,45 @@ void OdsFilterPrivate::readCurrentSheet(const QString& fileName, AbstractDataSou
 	// import data
 	for (size_t j = 0; j < actualRows; j++)
 		for (size_t i = 0; i < actualCols; i++) {
-			ixion::abs_address_t pos(sheetIndex, j + 1, i + 1); // starting from 1
-			// TODO: check type
-			double value = model.get_numeric_value(pos);
-			(*static_cast<QVector<double>*>(dataContainer[i]))[j] = value;
+			ixion::abs_address_t pos(sheetIndex, ranges.first.row + j, ranges.first.column + i);
+
+			auto type = model.get_celltype(pos);
+			switch (type) {
+			case ixion::celltype_t::numeric: {
+				double value = model.get_numeric_value(pos);
+				(*static_cast<QVector<double>*>(dataContainer[i]))[j] = value;
+				break;
+			}
+			case ixion::celltype_t::formula: {
+				// read formula result. We can't handle formulas yet (?)
+				auto formula = model.get_formula_result(pos);
+				switch (formula.get_type()) {
+				case ixion::formula_result::result_type::value:
+					(*static_cast<QVector<double>*>(dataContainer[i]))[j] = formula.get_value();
+					break;
+				case ixion::formula_result::result_type::string:
+					(*static_cast<QVector<QString>*>(dataContainer[i]))[j] = QString::fromStdString(formula.get_string());
+					break;
+				case ixion::formula_result::result_type::error:
+				// TODO: not available in ixion 0.17 ?
+				// case ixion::formula_result::result_type::boolean:
+				case ixion::formula_result::result_type::matrix:
+					DEBUG(Q_FUNC_INFO << ", formula type not supported yet.")
+					break;
+				}
+				break;
+			}
+			case ixion::celltype_t::string: {
+				auto value = model.get_string_value(pos);
+				(*static_cast<QVector<QString>*>(dataContainer[i]))[j] = QString::fromStdString(std::string(value));
+				break;
+			}
+			case ixion::celltype_t::empty: // nothing to do
+				break;
+			case ixion::celltype_t::unknown:
+			case ixion::celltype_t::boolean:
+				DEBUG(Q_FUNC_INFO << ", cell type unknown or boolean not supported yet.")
+			}
 		}
 
 	dataSource->finalizeImport(columnOffset, 1, actualCols, QString(), importMode);
