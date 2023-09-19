@@ -223,11 +223,9 @@ void MainWin::initGUI(const QString& fileName) {
 	m_touchBar = new KDMacTouchBar(this);
 	// m_touchBar->setTouchButtonStyle(KDMacTouchBar::IconOnly);
 #endif
-	setupGUI);
 	setUnifiedTitleAndToolBarOnMac(true);
-#else
-	setupGUI();
 #endif
+	setupGUI();
 
 	DEBUG(Q_FUNC_INFO << ", Component name: " << STDSTRING(KXMLGUIClient::componentName()));
 	DEBUG(Q_FUNC_INFO << ", XML file: " << STDSTRING(KXMLGUIClient::xmlFile()) << " (should be \"labplot2ui.rc\")");
