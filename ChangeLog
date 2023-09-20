@@ -17,6 +17,7 @@ New features:
 		* Export to PDF
 	* [import]
 		* Templates for ASCII and Binary import filters - allow to save and load current filter settings
+		* Support data import from ODS files
 		* Addeded seaborn's datasets to the collection of datasets
 	* [general]
     	* New application theme "Dracula"
