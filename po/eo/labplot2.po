@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-09-14 00:41+0000\n"
-"PO-Revision-Date: 2023-09-09 09:06+0100\n"
+"PO-Revision-Date: 2023-09-19 07:51+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -1037,39 +1037,38 @@ msgid "There is no download URL present in the metadata file!"
 msgstr "Ne ekzistas elŝuta URL en la metadatuma dosiero!"
 
 #: src/backend/datasources/DatasetHandler.cpp:192
-#, fuzzy, kde-format
-#| msgid "Failed to connect to the database '%1'."
+#, kde-format
 msgid "Failed to download the dataset"
-msgstr "Malsukcesis konekti al la datumbazo '%1'."
+msgstr "Malsukcesis elŝuti la datumaron"
 
 #: src/backend/datasources/DatasetHandler.cpp:193
-#, fuzzy, kde-format
-#| msgid "Failed to connect to the database '%1'."
+#, kde-format
 msgid ""
 "Failed to download the dataset from %1.\n"
 "%2."
-msgstr "Malsukcesis konekti al la datumbazo '%1'."
+msgstr ""
+"Malsukcesis elŝuti la datumaron el %1.\n"
+"%2."
 
 #: src/backend/datasources/DatasetHandler.cpp:228
 #: src/backend/datasources/DatasetHandler.cpp:252
-#, fuzzy, kde-format
-#| msgid "Failed to read image data"
+#, kde-format
 msgid "Failed to save the dataset"
-msgstr "Malsukcesis legi bildajn datumojn"
+msgstr "Malsukcesis konservi la datumaron"
 
 #: src/backend/datasources/DatasetHandler.cpp:229
-#, fuzzy, kde-format
-#| msgid "Failed to create table in the SQLite database %1."
+#, kde-format
 msgid "Failed to create the directory %1 to save the dataset."
-msgstr "Malsukcesis krei tabelon en la datumbazo SQLite %1."
+msgstr "Malsukcesis krei la dosieron %1 por konservi la datumaron."
 
 #: src/backend/datasources/DatasetHandler.cpp:252
-#, fuzzy, kde-format
-#| msgid "Couldn't open the file '%1' for writing."
+#, kde-format
 msgid ""
 "Couldn't open the file %1 for writing.\n"
 "%2"
-msgstr "Ne eblis malfermi la dosieron '%1' por skribado."
+msgstr ""
+"Ne eblis malfermi la dosieron %1 por skribado.\n"
+"%2"
 
 #: src/backend/datasources/filters/AbstractFileFilter.cpp:219
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:379
@@ -21428,8 +21427,8 @@ msgid ""
 msgstr ""
 "<html><head/><body><p>Hazardaj nombrodistribuoj kiel difinite en <a href="
 "\"https://www.gnu.org/software/gsl/doc/html/randist.html\"><span style=\" "
-"text-decoration: substreko; koloro:#2980b9;\">GSL-dokumentado</span></a></"
-"p></body></html>"
+"text-decoration: underline; color:#2980b9;\">GSL-dokumentado</span></a></p></"
+"body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lSeed)
 #: src/kdefrontend/ui/spreadsheet/randomvalueswidget.ui:156
