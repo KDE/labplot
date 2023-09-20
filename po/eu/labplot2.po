@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-09-14 00:41+0000\n"
-"PO-Revision-Date: 2023-09-12 22:08+0200\n"
+"PO-Revision-Date: 2023-09-19 23:30+0200\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
 "Language: eu\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 23.08.0\n"
+"X-Generator: Lokalize 23.08.1\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -1042,38 +1042,38 @@ msgid "There is no download URL present in the metadata file!"
 msgstr "Metadatu fitxategian ez dago zama-jaisteko URLrik!"
 
 #: src/backend/datasources/DatasetHandler.cpp:192
-#, fuzzy, kde-format
-#| msgid "Failed to read image data"
+#, kde-format
 msgid "Failed to download the dataset"
-msgstr "Irudiaren datuak irakurtzea huts egin du"
+msgstr "Datu-multzoa zama-jaistea huts egin du"
 
 #: src/backend/datasources/DatasetHandler.cpp:193
-#, fuzzy, kde-format
-#| msgid "Failed to load JSON document. Error: %1."
+#, kde-format
 msgid ""
 "Failed to download the dataset from %1.\n"
 "%2."
-msgstr "JSON dokumentua zamatzea huts egin du. Errorea: %1."
+msgstr ""
+"%1(e)tik datu-multzoa zama-jaistea huts egin du.\n"
+" %2"
 
 #: src/backend/datasources/DatasetHandler.cpp:228
 #: src/backend/datasources/DatasetHandler.cpp:252
-#, fuzzy, kde-format
-#| msgid "Failed to read image data"
+#, kde-format
 msgid "Failed to save the dataset"
-msgstr "Irudiaren datuak irakurtzea huts egin du"
+msgstr "Datu-multzoa gordetzea huts egin du"
 
 #: src/backend/datasources/DatasetHandler.cpp:229
 #, kde-format
 msgid "Failed to create the directory %1 to save the dataset."
-msgstr ""
+msgstr "Datu-multzoa gordetzeko %1 direktorioa sortzea huts egin du."
 
 #: src/backend/datasources/DatasetHandler.cpp:252
-#, fuzzy, kde-format
-#| msgid "Couldn't open the file '%1' for writing."
+#, kde-format
 msgid ""
 "Couldn't open the file %1 for writing.\n"
 "%2"
-msgstr "Ezin izan du '%1' fitxategia irakurtzeko ireki."
+msgstr ""
+"Ezin izan du '%1' fitxategia irakurtzeko ireki.\n"
+"%2"
 
 #: src/backend/datasources/filters/AbstractFileFilter.cpp:219
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:379
@@ -1326,20 +1326,20 @@ msgid "Number of all objects: %1"
 msgstr "Objektu guztien kopurua: %1"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:222
-#, fuzzy, kde-format
+#, kde-format
 msgid "Version of superblock: %1"
-msgstr "Superblokearen bertsioa: %1"
+msgstr "Super-blokearen bertsioa: %1"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:224
-#, fuzzy, kde-format
+#, kde-format
 msgid "Size of superblock: %1 bytes"
-msgstr "Superblokearen neurria: %1 byte"
+msgstr "Super-blokearen neurria: %1 byte"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:226
 #: src/backend/datasources/filters/HDF5Filter.cpp:247
-#, fuzzy, kde-format
+#, kde-format
 msgid "Size of superblock extension: %1 bytes"
-msgstr "Superbloke hedapenen neurria: %1 byte"
+msgstr "Super-bloke hedapenen neurria: %1 byte"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:228
 #, kde-format
@@ -1425,7 +1425,7 @@ msgid "Adaptive cache minimum size: %1 bytes"
 msgstr "Cache moldakorraren gutxieneko neurria: %1 byte"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:279
-#, fuzzy, kde-format
+#, kde-format
 msgid "Metadata cache hit rate: %1"
 msgstr "Metadatuen cachean arrakasta-emaria: %1"
 
@@ -1435,7 +1435,7 @@ msgid "Current cache maximum size: %1 bytes"
 msgstr "Cachearen uneko gehienezko neurria: %1 byte"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:288
-#, fuzzy, kde-format
+#, kde-format
 msgid "Current cache minimum clean size: %1 bytes"
 msgstr "Cachearen uneko gutxieneko neurria garbia: %1 byte"
 
@@ -1515,12 +1515,12 @@ msgstr "%1 maila oraindik ez da onartzen"
 #: src/kdefrontend/datasources/HDF5OptionsWidget.cpp:75
 #, kde-format
 msgid "data set"
-msgstr "datu multzoa"
+msgstr "datu-multzoa"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:1376
 #, kde-format
 msgid "symbolic link"
-msgstr "Esteka sinbolikoa"
+msgstr "esteka sinbolikoa"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:1376
 #, kde-format
@@ -1530,7 +1530,7 @@ msgstr "esteka %1(e)ra"
 #: src/backend/datasources/filters/HDF5Filter.cpp:1389
 #, kde-format
 msgid "hard link"
-msgstr "Esteka trinkoa"
+msgstr "esteka trinkoa"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:1453
 #, kde-format
@@ -1545,43 +1545,43 @@ msgstr "Ez da datu-multzorik hautatu"
 #: src/backend/datasources/filters/HDF5Filter.cpp:1582
 #, kde-format
 msgid "rank 0 not implemented yet for type %1"
-msgstr ""
+msgstr "0 maila, %1 motarako, oraindik inplementatu gabe"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:1716
 #: src/backend/datasources/filters/HDF5Filter.cpp:1855
 #, kde-format
 msgid "unsupported integer type for rank 1"
-msgstr ""
+msgstr "1 mailarako euskarririk ez duen oso mota"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:1730
 #, kde-format
 msgid "unsupported float type for rank 1"
-msgstr ""
+msgstr "1 mailarako euskarririk ez duen koma higikorreko mota"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:1872
 #, kde-format
 msgid "rank 1 not implemented yet for type %1"
-msgstr ""
+msgstr "1 maila, %1 motarako, oraindik inplementatu gabe"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:2000
 #, kde-format
 msgid "unsupported integer type for rank 2"
-msgstr ""
+msgstr "2 mailarako euskarririk ez duen oso mota"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:2014
 #, kde-format
 msgid "unsupported float type for rank 2"
-msgstr ""
+msgstr "2 mailarako euskarririk ez duen koma higikorreko mota"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:2078
 #, kde-format
 msgid "rank 2 not implemented yet for type %1"
-msgstr ""
+msgstr "2 maila, %1 motarako, oraindik inplementatu gabe"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:2088
 #, kde-format
 msgid "rank %1 not implemented yet for type %2"
-msgstr ""
+msgstr "%1 maila, %2 motarako, oraindik inplementatu gabe"
 
 #: src/backend/datasources/filters/ImageFilter.cpp:36
 #, kde-format
@@ -1618,7 +1618,7 @@ msgstr "Fitxategi hutsa"
 #: src/backend/datasources/filters/JsonFilter.cpp:198
 #, kde-format
 msgid "Parse error: %1 at offset %2"
-msgstr ""
+msgstr "Sintaxi analisiaren errorea: %1, %2 jatorri-aldaketan"
 
 #: src/backend/datasources/filters/JsonFilter.cpp:201
 #, kde-format
@@ -1727,7 +1727,7 @@ msgstr "Karakterea"
 #: src/backend/datasources/filters/MatioFilter.cpp:381
 #, kde-format
 msgid "Sparse"
-msgstr "Eskas"
+msgstr "Sakabanatua"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:385
 #: src/backend/datasources/filters/MatioFilter.cpp:427
@@ -1840,9 +1840,9 @@ msgid "String"
 msgstr "Katea"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:451
-#, kde-format
+#, fuzzy, kde-format
 msgid "Array"
-msgstr ""
+msgstr "Taula"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:636
 #: src/backend/datasources/filters/NetCDFFilter.cpp:691
@@ -1879,7 +1879,7 @@ msgstr "Egiturak ez dauka eremurik"
 #: src/backend/datasources/filters/MatioFilter.cpp:1214
 #, kde-format
 msgid "Not implemented yet"
-msgstr "Oraindik ez da inplementatu"
+msgstr "Oraindik inplementatu gabe"
 
 #: src/backend/datasources/filters/NetCDFFilter.cpp:213
 #, kde-format
@@ -1889,7 +1889,7 @@ msgstr "Errorea fitxategia irekitzean"
 #: src/backend/datasources/filters/NetCDFFilter.cpp:222
 #, kde-format
 msgid "Number of global attributes: %1"
-msgstr "Atributu orokor kopurua: %1"
+msgstr "Atributu global kopurua: %1"
 
 #: src/backend/datasources/filters/NetCDFFilter.cpp:224
 #, kde-format
@@ -1911,17 +1911,17 @@ msgstr "Formatuaren bertsioa: %1"
 #: src/backend/datasources/filters/NetCDFFilter.cpp:235
 #, kde-format
 msgid "Using library version %1"
-msgstr "%1 bertsioko liburua erabiliz"
+msgstr "%1 bertsioko liburutegia erabiliz"
 
 #: src/backend/datasources/filters/NetCDFFilter.cpp:260
 #, kde-format
 msgid "ncdump not found."
-msgstr "ncdump ez du aurkitu."
+msgstr "«ncdump» ez du aurkitu."
 
 #: src/backend/datasources/filters/NetCDFFilter.cpp:453
 #, kde-format
 msgid "global attribute"
-msgstr "atributu orokorra"
+msgstr "atributu globala"
 
 #: src/backend/datasources/filters/NetCDFFilter.cpp:457
 #, kde-format
@@ -2050,7 +2050,7 @@ msgstr "64 bit: %1"
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:518
 #, kde-format
 msgid "Attribute '%1' missing or empty, default value is used"
-msgstr "'%1 atributua falta da edo hutsik dago, balio lehenetsia erabiliko da"
+msgstr "'%1' atributua falta da edo hutsik dago, balio lehenetsia erabiliko da"
 
 #: src/backend/datasources/filters/ROOTFilter.cpp:149
 #, kde-format
@@ -2105,25 +2105,22 @@ msgstr ""
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:92
 #, kde-format
 msgid "Message too long. CAN id: %1"
-msgstr ""
+msgstr "Mezu luzeegia. CAN ID: %1"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:95
-#, fuzzy, kde-format
-#| msgid "Unknown"
+#, kde-format
 msgid "Unknown id: %1"
-msgstr "Ezezaguna"
+msgstr "ID ezezaguna: %1"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:98
-#, fuzzy, kde-format
-#| msgid "Invalid metadata file"
+#, kde-format
 msgid "Invalid blf file"
-msgstr "Meta-datuen fitxategi baliogabea"
+msgstr "«blf» fitxategi baliogabea"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:101
-#, fuzzy, kde-format
-#| msgid "File format version: %1"
+#, kde-format
 msgid "Unable to calculate conversion: %1"
-msgstr "Fitxategi formatuaren bertsioa: %1"
+msgstr "Ez da bihurketa kalkulatzeko gai: %1"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:104
 #, kde-format
@@ -2131,33 +2128,29 @@ msgid "No dbc parser installed"
 msgstr ""
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:107
-#, fuzzy, kde-format
-#| msgid "Invalid metadata file"
+#, kde-format
 msgid "Invalid dbc file"
-msgstr "Meta-datuen fitxategi baliogabea"
+msgstr "«dbc» fitxategi baliogabea"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:110
-#, fuzzy, kde-format
-#| msgid "Unknown"
+#, kde-format
 msgid "Unknown error"
-msgstr "Ezezaguna"
+msgstr "Errore ezezaguna"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:351
-#, fuzzy, kde-format
-#| msgid "Time"
+#, kde-format
 msgid "Time_s"
-msgstr "Ordua"
+msgstr "Ordua_s"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:353
-#, fuzzy, kde-format
-#| msgid "Time"
+#, kde-format
 msgid "Time_ns"
-msgstr "Ordua"
+msgstr "Ordua_ns"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:355
 #, kde-format
 msgid "Time_10µs"
-msgstr ""
+msgstr "Ordua_10µs"
 
 #: src/backend/datasources/LiveDataSource.cpp:434
 #: src/backend/datasources/MQTTTopic.cpp:142
@@ -2187,7 +2180,7 @@ msgstr "Gailua irekitzea huts egin du."
 msgid ""
 "Failed to open the device. Please check your permissions on this device."
 msgstr ""
-"Gailua irekitzea huts egin du. Mesedez, behatu gailu horretan dituzun "
+"Gailua irekitzea huts egin du. Mesedez, egiaztatu gailu horretan dituzun "
 "baimenak."
 
 #: src/backend/datasources/LiveDataSource.cpp:717
@@ -2273,7 +2266,7 @@ msgstr "Abiadura eta nautika unitateak"
 #: src/backend/gsl/constants.cpp:26
 #, kde-format
 msgid "Printers Units"
-msgstr "Inprimatze-unitateak"
+msgstr "Inprimagailuen unitateak"
 
 #: src/backend/gsl/constants.cpp:28
 #, kde-format
@@ -2316,10 +2309,9 @@ msgid "Force and Energy"
 msgstr "Indarra eta energia"
 
 #: src/backend/gsl/constants.cpp:46
-#, fuzzy, kde-format
-#| msgid "Constants"
+#, kde-format
 msgid "Unknown Constant"
-msgstr "Konstanteak"
+msgstr "Konstantea ezezaguna"
 
 #. i18n("Mathematical constants"));
 #: src/backend/gsl/constants.cpp:55
@@ -2351,22 +2343,22 @@ msgstr "Hutsarekiko iragazkortasuna"
 #: src/backend/gsl/constants.cpp:62
 #, kde-format
 msgid "Vacuum permittivity"
-msgstr "Hutsaren permitibitatea"
+msgstr "Hutsarekiko permitibitatea"
 
 #: src/backend/gsl/constants.cpp:63
 #, kde-format
 msgid "Planck constant"
-msgstr "Plancken konstantea"
+msgstr "«Planck»en konstantea"
 
 #: src/backend/gsl/constants.cpp:64
 #, kde-format
 msgid "Reduced Planck constant"
-msgstr "Planck-en konstante murriztua"
+msgstr "«Planck»en konstante murriztua"
 
 #: src/backend/gsl/constants.cpp:65
 #, kde-format
 msgid "Avogadro constant"
-msgstr "Avogadroren konstantea"
+msgstr "«Avogadro»ren konstantea"
 
 #: src/backend/gsl/constants.cpp:66
 #, kde-format
@@ -2376,7 +2368,7 @@ msgstr "Faraday"
 #: src/backend/gsl/constants.cpp:67
 #, kde-format
 msgid "Boltzmann constant"
-msgstr "Boltzmannen konstantea"
+msgstr "«Boltzmann»en konstantea"
 
 #: src/backend/gsl/constants.cpp:68
 #, kde-format
@@ -2391,7 +2383,7 @@ msgstr "Gasaren bolumen estandarra"
 #: src/backend/gsl/constants.cpp:70
 #, kde-format
 msgid "Stefan-Boltzmann constant"
-msgstr "Stefan-Boltzmannen konstantea"
+msgstr "«Stefan-Boltzmann»en konstantea"
 
 #: src/backend/gsl/constants.cpp:71
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:475
@@ -2476,12 +2468,12 @@ msgstr "Egitura mehe elektromagnetikoaren konstantea"
 #: src/backend/gsl/constants.cpp:90
 #, kde-format
 msgid "Rydberg constant"
-msgstr "Rydbergen konstantea"
+msgstr "«Rydberg»en konstantea"
 
 #: src/backend/gsl/constants.cpp:91
 #, kde-format
 msgid "Bohr radius"
-msgstr "Bohrren erradioa"
+msgstr "«Bohr»ren erradioa"
 
 #: src/backend/gsl/constants.cpp:92
 #, kde-format
@@ -2496,7 +2488,7 @@ msgstr "Barn 1eko azalera"
 #: src/backend/gsl/constants.cpp:94
 #, kde-format
 msgid "Bohr Magneton"
-msgstr "Bohrren magnetoia"
+msgstr "«Bohr»ren magnetoia"
 
 #: src/backend/gsl/constants.cpp:95
 #, kde-format
@@ -2516,12 +2508,12 @@ msgstr "Protoiaren momentu magnetikoa"
 #: src/backend/gsl/constants.cpp:102
 #, kde-format
 msgid "Thomson cross section"
-msgstr "Thomsonen zeharkako sekzioa"
+msgstr "«Thomson»en zeharkako sekzioa"
 
 #: src/backend/gsl/constants.cpp:103
 #, kde-format
 msgid "Electric dipole moment of 1 Debye"
-msgstr "1 Debye-ren momentu dipolo elektrikoa"
+msgstr "Debye 1en momentu dipolo-elektrikoa"
 
 #. i18n("Measurement of Time"));
 #: src/backend/gsl/constants.cpp:106
@@ -2641,7 +2633,7 @@ msgstr "Kanadako galoi 1en bolumena"
 #: src/backend/gsl/constants.cpp:136
 #, kde-format
 msgid "Volume of 1 UK gallon"
-msgstr "EBko galoi 1en bolumena"
+msgstr "Erresuma Batuko galoi 1en bolumena"
 
 #: src/backend/gsl/constants.cpp:137
 #, kde-format
