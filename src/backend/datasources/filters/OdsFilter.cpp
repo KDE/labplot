@@ -234,6 +234,15 @@ void OdsFilterPrivate::readCurrentSheet(const QString& fileName, AbstractDataSou
 		return;
 
 #ifdef HAVE_ORCUS
+	DEBUG(Q_FUNC_INFO << ", sheet count = " << m_document.get_sheet_count())
+	if (m_document.get_sheet_count() == 0) { // not loaded yet
+		m_document.clear();
+		spreadsheet::import_factory factory{m_document};
+		orcus_ods loader(&factory);
+
+		loader.read_file(fileName.toStdString());
+	}
+
 	// get sheet index by name and read data into dataSource
 	auto* sheet = m_document.get_sheet(currentSheetName.toStdString());
 	const auto sheetIndex = sheet->get_index();
@@ -252,7 +261,7 @@ void OdsFilterPrivate::readCurrentSheet(const QString& fileName, AbstractDataSou
 
 	// set column modes
 	const auto& model = m_document.get_model_context();
-	for (size_t col = 0; col < ranges.last.column - ranges.first.column + 1; col++) {
+	for (int col = 0; col < ranges.last.column - ranges.first.column + 1; col++) {
 		ixion::abs_address_t pos(sheetIndex, ranges.first.row, ranges.first.column + col); // check first row
 
 		auto type = model.get_celltype(pos);
