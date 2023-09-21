@@ -236,6 +236,7 @@ void OdsFilterPrivate::readCurrentSheet(const QString& fileName, AbstractDataSou
 #ifdef HAVE_ORCUS
 	DEBUG(Q_FUNC_INFO << ", sheet count = " << m_document.get_sheet_count())
 	if (m_document.get_sheet_count() == 0) { // not loaded yet
+		DEBUG(Q_FUNC_INFO << ", load file" << fileName.toStdString())
 		m_document.clear();
 		spreadsheet::import_factory factory{m_document};
 		orcus_ods loader(&factory);
@@ -324,9 +325,15 @@ void OdsFilterPrivate::readCurrentSheet(const QString& fileName, AbstractDataSou
 				auto formula = model.get_formula_result(pos);
 				switch (formula.get_type()) {
 				case ixion::formula_result::result_type::value:
-					(*static_cast<QVector<double>*>(dataContainer[i]))[j] = formula.get_value();
+					DEBUG(Q_FUNC_INFO << ", value formula found")
+					// text column may have value-type formula
+					if (columnModes[i] == AbstractColumn::ColumnMode::Double)
+						(*static_cast<QVector<double>*>(dataContainer[i]))[j] = formula.get_value();
+					else if (columnModes[i] == AbstractColumn::ColumnMode::Text)
+						(*static_cast<QVector<QString>*>(dataContainer[i]))[j] = QLocale().toString(formula.get_value());
 					break;
 				case ixion::formula_result::result_type::string:
+					DEBUG(Q_FUNC_INFO << ", string formula found")
 					(*static_cast<QVector<QString>*>(dataContainer[i]))[j] = QString::fromStdString(formula.get_string());
 					break;
 				case ixion::formula_result::result_type::error:
@@ -369,8 +376,6 @@ QVector<QStringList> OdsFilterPrivate::preview(const QString& sheetName, int lin
 		const auto ranges = sheet->get_data_range();
 		DEBUG(Q_FUNC_INFO << ", data range: col " << ranges.first.column << ".." << ranges.last.column << ", row " << ranges.first.row << ".."
 						  << ranges.last.row)
-		// TODO: std::string get_sheet_name(sheet_t sheet
-		// TODO: rc_size_t get_sheet_size()	-> whole size?
 		const auto& model = m_document.get_model_context();
 
 		const int maxCols = 50;
@@ -408,7 +413,6 @@ QVector<QStringList> OdsFilterPrivate::preview(const QString& sheetName, int lin
 					// TODO: not available in ixion 0.17 ?
 					// case ixion::formula_result::result_type::boolean:
 					case ixion::formula_result::result_type::matrix:
-						// TODO
 						DEBUG(Q_FUNC_INFO << ", formula type error, boolean or matrix not implemented yet.")
 						break;
 					}
@@ -419,7 +423,6 @@ QVector<QStringList> OdsFilterPrivate::preview(const QString& sheetName, int lin
 					break;
 				case ixion::celltype_t::unknown:
 				case ixion::celltype_t::boolean:
-					// TODO
 					DEBUG(Q_FUNC_INFO << ", cell type unknown or boolean not implemented yet.")
 					break;
 				}
