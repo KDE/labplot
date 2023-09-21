@@ -74,15 +74,15 @@ void OdsFilterTest::importFile3SheetsRangesFormula() {
 	QCOMPARE(spreadsheet.column(0)->textAt(0), QLatin1String("A"));
 	QCOMPARE(spreadsheet.column(0)->textAt(1), QLatin1String("B"));
 	QCOMPARE(spreadsheet.column(0)->textAt(2), QLatin1String("C"));
-	QCOMPARE(spreadsheet.column(0)->textAt(3), QLatin1String("0"));	// formula
+	QCOMPARE(spreadsheet.column(0)->textAt(3), QLatin1String("0")); // formula
 	QCOMPARE(spreadsheet.column(1)->valueAt(0), 2.2);
 	QCOMPARE(spreadsheet.column(1)->valueAt(1), 1.1);
 	QCOMPARE(spreadsheet.column(1)->valueAt(2), 3.3);
-	QCOMPARE(spreadsheet.column(1)->valueAt(3), 6.6);	// formula
+	QCOMPARE(spreadsheet.column(1)->valueAt(3), 6.6); // formula
 	QCOMPARE(spreadsheet.column(2)->valueAt(0), 42);
 	QCOMPARE(spreadsheet.column(2)->valueAt(1), 23);
 	QCOMPARE(spreadsheet.column(2)->valueAt(2), 5);
-	QCOMPARE(spreadsheet.column(2)->valueAt(3), 70);	// formula
+	QCOMPARE(spreadsheet.column(2)->valueAt(3), 70); // formula
 }
 
 QTEST_MAIN(OdsFilterTest)
