@@ -236,7 +236,7 @@ void OdsFilterPrivate::readCurrentSheet(const QString& fileName, AbstractDataSou
 #ifdef HAVE_ORCUS
 	DEBUG(Q_FUNC_INFO << ", sheet count = " << m_document.get_sheet_count())
 	if (m_document.get_sheet_count() == 0) { // not loaded yet
-		DEBUG(Q_FUNC_INFO << ", load file" << fileName.toStdString())
+		DEBUG(Q_FUNC_INFO << ", loading file " << fileName.toStdString())
 		m_document.clear();
 		spreadsheet::import_factory factory{m_document};
 		orcus_ods loader(&factory);
@@ -246,6 +246,11 @@ void OdsFilterPrivate::readCurrentSheet(const QString& fileName, AbstractDataSou
 
 	// get sheet index by name and read data into dataSource
 	auto* sheet = m_document.get_sheet(currentSheetName.toStdString());
+	if (!sheet) {
+		DEBUG(Q_FUNC_INFO << ", sheet not found: " << currentSheetName.toStdString())
+		return;
+	}
+
 	const auto sheetIndex = sheet->get_index();
 	if (sheetIndex == ixion::invalid_sheet)
 		return;
@@ -371,6 +376,11 @@ QVector<QStringList> OdsFilterPrivate::preview(const QString& sheetName, int lin
 #ifdef HAVE_ORCUS
 	// get sheet index by name and read lines of data into dataString
 	auto* sheet = m_document.get_sheet(sheetName.toStdString());
+	if (!sheet) {
+		DEBUG(Q_FUNC_INFO << ", sheet not found: " << sheetName.toStdString())
+		return dataString;
+	}
+
 	const auto sheetIndex = sheet->get_index();
 	if (sheetIndex != ixion::invalid_sheet) {
 		const auto ranges = sheet->get_data_range();
