@@ -59,13 +59,13 @@ public:
 	virtual void save(QXmlStreamWriter*) const override;
 	virtual bool load(XmlStreamReader*) override;
 
-	void setStartRow(const int);
+	void setStartRow(int);
 	int startRow() const;
-	void setEndRow(const int);
+	void setEndRow(int);
 	int endRow() const;
-	void setStartColumn(const int);
+	void setStartColumn(int);
 	int startColumn() const;
-	void setEndColumn(const int);
+	void setEndColumn(int);
 	int endColumn() const;
 
 private:
