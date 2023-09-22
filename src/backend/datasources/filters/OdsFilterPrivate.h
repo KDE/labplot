@@ -37,11 +37,8 @@ public:
 		QXlsx::CellRange cellContainedInRegions(const QXlsx::CellReference& cell, const QVector<QXlsx::CellRange>& regions) const;
 		bool dataRangeCanBeExportedToMatrix(const QXlsx::CellRange& range) const;
 		bool isColumnNumericInRange(const int column, const QXlsx::CellRange& range) const;
-
-		QXlsx::CellRange dimension() const;
 	#endif
 	*/
-	const OdsFilter* q;
 	/*
 		bool exportDataSourceAsNewSheet{true};
 		bool columnNamesAsFirstRow{true};
@@ -56,19 +53,12 @@ public:
 	int endRow{-1};
 	int startColumn{-1};
 	int endColumn{-1};
-	/*	QString currentSheet;
 
-	#ifdef HAVE_QXLSX
-		QXlsx::CellRange currentRange;
-		QXlsx::CellReference dataExportStartCell;
-	#endif
-*/
 private:
 #ifdef HAVE_ORCUS
-	orcus::spreadsheet::range_size_t ss{1048576, 16384};
-	orcus::spreadsheet::document m_document{ss};
+	orcus::spreadsheet::range_size_t m_ss{1048576, 16384};
+	orcus::spreadsheet::document m_document{m_ss};
 #endif
-	//	QString m_fileName;
 };
 
 #endif

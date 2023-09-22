@@ -95,11 +95,10 @@ public:
 	QVector<QStringList> preview(const QString& fileName, int lines);
 	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace);
 	void write(const QString& fileName, AbstractDataSource*);
+
 	static QStringList m_varNames;
 	static QVector<AbstractColumn::ColumnMode> m_columnModes;
 	static QVector<QStringList> m_dataStrings;
-
-	const ReadStatFilter* q;
 
 	static int m_startRow;
 	static int m_endRow;
@@ -107,8 +106,6 @@ public:
 	static int m_endColumn;
 
 private:
-	// int m_status;
-
 	static int m_varCount; // nr of cols (vars)
 	static int m_rowCount; // nr of rows
 	static QStringList m_lineString;

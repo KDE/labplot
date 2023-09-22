@@ -13,8 +13,6 @@
 
 #include <QObject>
 
-//#include <memory>
-
 #ifdef HAVE_ORCUS
 //#include "3rdparty/QXlsx/header/xlsxdocument.h"
 #endif
@@ -41,14 +39,6 @@ public:
 	*/
 	void setFirstRowAsColumnNames(const bool);
 	void parse(const QString& fileName, QTreeWidgetItem* root);
-	/*	static QString convertFromNumberToExcelColumn(int n);
-
-	#ifdef HAVE_QXLSX
-		QVector<QXlsx::CellRange> dataRegions(const QString& fileName, const QString& sheetName);
-		QXlsx::CellRange dimension() const;
-	#endif
-		void setCurrentRange(const QString& range);
-	*/
 	void setCurrentSheetName(const QString&);
 	virtual void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, ImportMode = ImportMode::Replace) override;
 	virtual void write(const QString& fileName, AbstractDataSource*) override;
@@ -70,6 +60,7 @@ public:
 
 private:
 	std::unique_ptr<OdsFilterPrivate> const d;
+
 	friend class OdsFilterPrivate;
 };
 

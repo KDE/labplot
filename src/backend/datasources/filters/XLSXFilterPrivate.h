@@ -36,7 +36,7 @@ public:
 
 	QXlsx::CellRange dimension() const;
 #endif
-	const XLSXFilter* q;
+	// const XLSXFilter* q;
 
 	bool exportDataSourceAsNewSheet{true};
 	bool firstRowAsColumnNames{false}; // import first row as column names

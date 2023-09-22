@@ -60,6 +60,7 @@ public:
 
 private:
 	std::unique_ptr<MatioFilterPrivate> const d;
+
 	friend class MatioFilterPrivate;
 };
 

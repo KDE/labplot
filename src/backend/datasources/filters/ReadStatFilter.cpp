@@ -409,8 +409,7 @@ int ReadStatFilterPrivate::getValueLabels(const char* val_label, readstat_value_
 }
 #endif
 
-ReadStatFilterPrivate::ReadStatFilterPrivate(ReadStatFilter* owner)
-	: q(owner) {
+ReadStatFilterPrivate::ReadStatFilterPrivate(ReadStatFilter*) {
 }
 
 #ifdef HAVE_READSTAT

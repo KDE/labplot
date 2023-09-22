@@ -27,9 +27,6 @@
 //#include <ixion/address.hpp>
 #include <ixion/model_context.hpp>
 
-//#include <iostream>
-//#include <cstdlib>
-
 using namespace orcus;
 #endif
 
@@ -199,8 +196,7 @@ bool OdsFilter::load(XmlStreamReader*) {
 //################### Private implementation ##########################
 //#####################################################################
 
-OdsFilterPrivate::OdsFilterPrivate(OdsFilter* owner)
-	: q(owner) {
+OdsFilterPrivate::OdsFilterPrivate(OdsFilter*) {
 }
 
 OdsFilterPrivate::~OdsFilterPrivate() {
@@ -389,7 +385,9 @@ QVector<QStringList> OdsFilterPrivate::preview(const QString& sheetName, int lin
 		const auto& model = m_document.get_model_context();
 
 		const int maxCols = 50;
-		for (ixion::row_t row = ranges.first.row; row < std::min(lines + ranges.first.row, ranges.last.row + 1); row++) {
+		DEBUG(Q_FUNC_INFO << ", start/end row = " << startRow << " " << endRow)
+		const int actualStartRow = ranges.first.row + startRow - 1;
+		for (ixion::row_t row = actualStartRow; row < std::min(lines + actualStartRow, ranges.last.row + 1); row++) {
 			DEBUG(Q_FUNC_INFO << ", row " << row)
 			QStringList line;
 			for (ixion::col_t col = ranges.first.column; col < std::min(maxCols + ranges.first.column, ranges.last.column + 1); col++) {
@@ -423,6 +421,7 @@ QVector<QStringList> OdsFilterPrivate::preview(const QString& sheetName, int lin
 					// TODO: not available in ixion 0.17 ?
 					// case ixion::formula_result::result_type::boolean:
 					case ixion::formula_result::result_type::matrix:
+						line << QString();
 						DEBUG(Q_FUNC_INFO << ", formula type error, boolean or matrix not implemented yet.")
 						break;
 					}
@@ -433,6 +432,7 @@ QVector<QStringList> OdsFilterPrivate::preview(const QString& sheetName, int lin
 					break;
 				case ixion::celltype_t::unknown:
 				case ixion::celltype_t::boolean:
+					line << QString();
 					DEBUG(Q_FUNC_INFO << ", cell type unknown or boolean not implemented yet.")
 					break;
 				}

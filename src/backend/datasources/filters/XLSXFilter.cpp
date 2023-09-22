@@ -255,8 +255,7 @@ bool XLSXFilter::load(XmlStreamReader*) {
 // ################### Private implementation ##########################
 // #####################################################################
 
-XLSXFilterPrivate::XLSXFilterPrivate(XLSXFilter* owner)
-	: q(owner) {
+XLSXFilterPrivate::XLSXFilterPrivate(XLSXFilter*) {
 }
 
 XLSXFilterPrivate::~XLSXFilterPrivate() {
