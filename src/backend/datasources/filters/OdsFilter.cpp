@@ -248,14 +248,28 @@ void OdsFilterPrivate::readCurrentSheet(const QString& fileName, AbstractDataSou
 	}
 
 	const auto sheetIndex = sheet->get_index();
-	if (sheetIndex == ixion::invalid_sheet)
+	if (sheetIndex == ixion::invalid_sheet) {
+		DEBUG(Q_FUNC_INFO << ", invalid sheet")
 		return;
+	}
 
 	const auto ranges = sheet->get_data_range();
 	DEBUG(Q_FUNC_INFO << ", data range: col " << ranges.first.column << ".." << ranges.last.column << ", row " << ranges.first.row << ".." << ranges.last.row)
-
-	size_t actualRows = ranges.last.row - ranges.first.row + 1, actualCols = ranges.last.column - ranges.first.column + 1;
-	// TODO: handle startRow, startRow, startColumn, endColumn
+	if (endRow == -1)
+		endRow = ranges.last.row; // actual last row
+	size_t actualRows = ranges.last.row - ranges.first.row + 1;
+	if ((size_t)startRow > actualRows)
+		startRow = 1; // start from the begining
+	DEBUG(Q_FUNC_INFO << ", start/end row = " << startRow << " " << endRow)
+	DEBUG(Q_FUNC_INFO << ", start/end col = " << startColumn << " " << endColumn)
+	actualRows = std::min(actualRows - startRow, (size_t)(endRow - startRow)) + 1;
+	// TODO: handle startColumn, endColumn
+	size_t actualCols = ranges.last.column - ranges.first.column + 1;
+	DEBUG(Q_FUNC_INFO << ", actual rows/cols = " << actualRows)
+	if (actualRows < 1 || actualCols < 1) {
+		DEBUG(Q_FUNC_INFO << ", no actual rows of columns")
+		return;
+	}
 
 	// column modes
 	QVector<AbstractColumn::ColumnMode> columnModes;
@@ -264,7 +278,7 @@ void OdsFilterPrivate::readCurrentSheet(const QString& fileName, AbstractDataSou
 	// set column modes
 	const auto& model = m_document.get_model_context();
 	for (int col = 0; col < ranges.last.column - ranges.first.column + 1; col++) {
-		ixion::abs_address_t pos(sheetIndex, ranges.first.row, ranges.first.column + col); // check first row
+		ixion::abs_address_t pos(sheetIndex, ranges.first.row + startRow - 1, ranges.first.column + col); // check start row
 
 		auto type = model.get_celltype(pos);
 		switch (type) {
@@ -312,7 +326,7 @@ void OdsFilterPrivate::readCurrentSheet(const QString& fileName, AbstractDataSou
 	// import data
 	for (size_t j = 0; j < actualRows; j++)
 		for (size_t i = 0; i < actualCols; i++) {
-			ixion::abs_address_t pos(sheetIndex, ranges.first.row + j, ranges.first.column + i);
+			ixion::abs_address_t pos(sheetIndex, ranges.first.row + j + startRow - 1, ranges.first.column + i);
 
 			auto type = model.get_celltype(pos);
 			switch (type) {
