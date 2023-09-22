@@ -85,4 +85,79 @@ void OdsFilterTest::importFile3SheetsRangesFormula() {
 	QCOMPARE(spreadsheet.column(2)->valueAt(3), 70); // formula
 }
 
+void OdsFilterTest::importFileSheetStartEndRow() {
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/start-end.ods"));
+
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+	OdsFilter filter;
+
+	// check sheet
+	filter.setSelectedSheetNames(QStringList() << QStringLiteral("Sheet2"));
+	filter.readDataFromFile(fileName, &spreadsheet);
+
+	QCOMPARE(spreadsheet.columnCount(), 4);
+	QCOMPARE(spreadsheet.rowCount(), 4);
+
+	// set start/end row and check result
+	filter.setStartRow(2);
+	filter.setEndRow(3);
+	filter.readDataFromFile(fileName, &spreadsheet);
+
+	QCOMPARE(spreadsheet.columnCount(), 4);
+	QCOMPARE(spreadsheet.rowCount(), 2);
+
+	QCOMPARE(spreadsheet.column(0)->valueAt(0), 3);
+	QCOMPARE(spreadsheet.column(0)->valueAt(1), 4);
+	QCOMPARE(spreadsheet.column(1)->valueAt(0), 2.1);
+	QCOMPARE(spreadsheet.column(1)->valueAt(1), 1.9);
+	QCOMPARE(spreadsheet.column(2)->valueAt(0), 1);
+	QCOMPARE(spreadsheet.column(2)->valueAt(1), 42);
+	QCOMPARE(spreadsheet.column(3)->valueAt(0), 12.3);
+	QCOMPARE(spreadsheet.column(3)->valueAt(1), qQNaN());
+
+	// set end row too high
+	filter.setStartRow(2);
+	filter.setEndRow(8);
+	filter.readDataFromFile(fileName, &spreadsheet);
+
+	QCOMPARE(spreadsheet.columnCount(), 4);
+	QCOMPARE(spreadsheet.rowCount(), 3);
+
+	QCOMPARE(spreadsheet.column(0)->valueAt(0), 3);
+	QCOMPARE(spreadsheet.column(0)->valueAt(1), 4);
+	QCOMPARE(spreadsheet.column(0)->valueAt(2), qQNaN());
+	QCOMPARE(spreadsheet.column(1)->valueAt(0), 2.1);
+	QCOMPARE(spreadsheet.column(1)->valueAt(1), 1.9);
+	QCOMPARE(spreadsheet.column(1)->valueAt(2), qQNaN());
+	QCOMPARE(spreadsheet.column(2)->valueAt(0), 1);
+	QCOMPARE(spreadsheet.column(2)->valueAt(1), 42);
+	QCOMPARE(spreadsheet.column(2)->valueAt(2), 46);
+	QCOMPARE(spreadsheet.column(3)->valueAt(0), 12.3);
+	QCOMPARE(spreadsheet.column(3)->valueAt(1), qQNaN());
+	QCOMPARE(spreadsheet.column(3)->valueAt(2), qQNaN());
+
+	// set start row too high
+	filter.setStartRow(8);
+	filter.setEndRow(3);
+	filter.readDataFromFile(fileName, &spreadsheet);
+
+	QCOMPARE(spreadsheet.columnCount(), 4);
+	QCOMPARE(spreadsheet.rowCount(), 3);
+
+	QCOMPARE(spreadsheet.column(0)->valueAt(0), 1);
+	QCOMPARE(spreadsheet.column(0)->valueAt(1), 3);
+	QCOMPARE(spreadsheet.column(0)->valueAt(2), 4);
+	QCOMPARE(spreadsheet.column(1)->valueAt(0), 2.2);
+	QCOMPARE(spreadsheet.column(1)->valueAt(1), 2.1);
+	QCOMPARE(spreadsheet.column(1)->valueAt(2), 1.9);
+	QCOMPARE(spreadsheet.column(2)->valueAt(0), 3);
+	QCOMPARE(spreadsheet.column(2)->valueAt(1), 1);
+	QCOMPARE(spreadsheet.column(2)->valueAt(2), 42);
+	QCOMPARE(spreadsheet.column(3)->valueAt(0), qQNaN());
+	QCOMPARE(spreadsheet.column(3)->valueAt(1), 12.3);
+	QCOMPARE(spreadsheet.column(3)->valueAt(2), qQNaN());
+}
+
+// TODO: test startCol, endCol
+
 QTEST_MAIN(OdsFilterTest)
