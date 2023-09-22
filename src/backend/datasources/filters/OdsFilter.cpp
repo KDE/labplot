@@ -24,7 +24,6 @@
 #include <orcus/spreadsheet/factory.hpp>
 #include <orcus/spreadsheet/sheet.hpp>
 
-//#include <ixion/address.hpp>
 #include <ixion/model_context.hpp>
 
 using namespace orcus;

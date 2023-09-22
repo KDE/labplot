@@ -569,8 +569,9 @@ QString ImportFileWidget::selectedObject() const {
 	} else if (format == AbstractFileFilter::FileType::Ods) {
 		const auto& names = m_odsOptionsWidget->selectedOdsSheetNames();
 		QDEBUG(Q_FUNC_INFO << ", selected sheet names =")
-		if (!names.isEmpty())
-			name += QLatin1Char('/') + names.first();
+		if (!names.isEmpty()) { // name == "start-end", names.first() == "start-end.ods!Sheet2"
+			name += QLatin1Char('!') + names.first().split(QLatin1Char('!')).last();
+		}
 	}
 	return name;
 }
@@ -734,8 +735,8 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 		if (!sxrn.isEmpty()) {
 			const auto& firstRegion = sxrn.last();
 			const auto& nameSplit = firstRegion.split(QLatin1Char('!'));
-			const auto& sheet = nameSplit[0];
-			const auto& range = nameSplit[1];
+			const auto& sheet = nameSplit.at(0);
+			const auto& range = nameSplit.at(1);
 			filter->setCurrentRange(range);
 			filter->setCurrentSheet(sheet);
 		}
@@ -759,15 +760,6 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 		QDEBUG(Q_FUNC_INFO << ", selected sheet names = " << sorn)
 		if (!sorn.isEmpty())
 			filter->setSelectedSheetNames(sorn);
-		// TODO
-		/*if (!sxrn.isEmpty()) {
-			const auto& firstRegion = sern.last();
-			const auto& nameSplit = firstRegion.split(QLatin1Char('!'));
-			const auto& sheet = nameSplit[0];
-			const auto& range = nameSplit[1];
-			filter->setCurrentRange(range);
-			filter->setCurrentSheet(sheet);
-		}*/
 
 		break;
 	}

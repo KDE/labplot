@@ -79,15 +79,7 @@ void OdsOptionsWidget::dataRegionSelectionChanged() {
 
 	auto* item = selectedItems.last();
 	auto* const filter = static_cast<OdsFilter*>(m_fileWidget->currentFileFilter());
-	/* TODO
-		QXlsx::CellRange selectedRegion;
 
-		int column = ui.twDataRegions->currentColumn();
-		int row = ui.twDataRegions->currentIndex().row();
-		const auto& selectedRegionText = item->text(column);
-
-		selectedRegion = selectedRegionText;
-	*/
 	QString sheetName;
 	// if sheet name is selected maybe show full sheet?
 	if (item) {
@@ -138,8 +130,9 @@ QStringList OdsOptionsWidget::selectedOdsSheetNames() const {
 	QStringList names;
 	for (const auto* item : items) {
 		if (item->parent()) { // child of sheet
-			const auto sheetName = item->parent()->text(0);
-			// DEBUG(Q_FUNC_INFO << ", name = " << STDSTRING(sheetName))
+			QString sheetName = item->parent()->text(0);
+			sheetName = sheetName.split(QLatin1Char('/')).last();
+			// DEBUG(Q_FUNC_INFO << ", sheet name = " << STDSTRING(sheetName))
 			names.push_back({sheetName + QLatin1Char('!') + item->text(0)});
 		}
 	}

@@ -265,10 +265,10 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 
 				// rename the available sheets
 				for (int i = 0; i < offset; ++i) {
-					// HDF5 variable names contain the whole path, remove it and keep the name only
+					// HDF5 and Ods names contain the whole path, remove it and keep the name only
 					QString sheetName = names.at(i);
-					if (fileType == AbstractFileFilter::FileType::HDF5)
-						sheetName = names.at(i).mid(names.at(i).lastIndexOf(QLatin1Char('/')) + 1);
+					if (fileType == AbstractFileFilter::FileType::HDF5 || fileType == AbstractFileFilter::FileType::Ods)
+						sheetName = sheetName.split(QLatin1Char('/')).last();
 
 					auto* sheet = sheets.at(i);
 					sheet->setUndoAware(false);
@@ -279,10 +279,10 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 
 			// add additional spreadsheets
 			for (int i = start; i < nrNames; ++i) {
-				// HDF5 variable names contain the whole path, remove it and keep the name only
+				// HDF5 and Ods names contain the whole path, remove it and keep the name only
 				QString sheetName = names.at(i);
-				if (fileType == AbstractFileFilter::FileType::HDF5)
-					sheetName = names.at(i).mid(names.at(i).lastIndexOf(QLatin1Char('/')) + 1);
+				if (fileType == AbstractFileFilter::FileType::HDF5 || fileType == AbstractFileFilter::FileType::Ods)
+					sheetName = sheetName.split(QLatin1Char('/')).last();
 
 				auto* spreadsheet = new Spreadsheet(sheetName);
 				if (mode == AbstractFileFilter::ImportMode::Prepend && !sheets.isEmpty())
@@ -308,8 +308,8 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 					static_cast<OdsFilter*>(filter)->setCurrentSheetName(names.at(i));
 				else if (fileType == AbstractFileFilter::FileType::XLSX) {
 					const auto& nameSplit = names[i].split(QLatin1Char('!'));
-					const auto& sheet = nameSplit[0];
-					const auto& range = nameSplit[1];
+					const auto& sheet = nameSplit.at(0);
+					const auto& range = nameSplit.at(1);
 					static_cast<XLSXFilter*>(filter)->setCurrentSheet(sheet);
 					static_cast<XLSXFilter*>(filter)->setCurrentRange(range);
 				} else
