@@ -15,12 +15,11 @@
 #include <QMap>
 #include <QPair>
 #include <QString>
-#include <QVector>
+//#include <QVector>
 #include <QWidget>
 
 class OdsFilter;
 class ImportFileWidget;
-
 class QStringList;
 
 class OdsOptionsWidget : public QWidget {
@@ -44,9 +43,10 @@ private Q_SLOTS:
 	void dataRegionSelectionChanged();
 
 private:
-	QMap<QPair<QString, int>, bool> m_regionIsPossibleToImportToMatrix;
 	Ui::OdsOptionsWidget ui;
 	ImportFileWidget* m_fileWidget{nullptr};
+	//	std::unique_ptr<ImportFileWidget> m_fileWidget{nullptr};
+	QMap<QPair<QString, int>, bool> m_regionIsPossibleToImportToMatrix;
 	QVector<QStringList> m_previewString;
 };
 

@@ -12,10 +12,6 @@
 #include "src/backend/datasources/filters/OdsFilter.h"
 #include "src/kdefrontend/datasources/ImportFileWidget.h"
 
-#ifdef HAVE_ORCUS
-//#include "xlsxcellrange.h"
-#endif
-
 #include <QAbstractItemModel>
 #include <QHeaderView>
 #include <QIcon>
@@ -130,41 +126,6 @@ void OdsOptionsWidget::dataRegionSelectionChanged() {
 		}
 		ui.twPreview->resizeColumnsToContents();
 	}
-	/*
-		int colCount = 0;
-		const int maxColumns = 50;
-		for (int i = 0; i < rows; ++i) {
-			auto lineString = importedStrings.at(i);
-			colCount = lineString.size() > maxColumns ? maxColumns : lineString.size();
-
-			if (i == 0) {
-				ui.twPreview->setColumnCount(colCount);
-
-				if (firstRowAsHeader) {
-					for (int col = 0; col < colCount; ++col) {
-						auto* item = new QTableWidgetItem(lineString.at(col));
-						ui.twPreview->setHorizontalHeaderItem(col, item);
-					}
-					continue; // data used as header
-				} else {
-					for (int col = 0; col < colCount; ++col) {
-						//TODO: auto colName = OdsFilter::convertFromNumberToOdsColumn(selectedRegion.firstColumn() + col);
-
-						// DEBUG("COLUMN " << col + 1 << " NAME = " << STDSTRING(colName))
-						//  TODO: show column modes?
-						// auto* item = new QTableWidgetItem(colName + QStringLiteral(" {") + QLatin1String(ENUM_TO_STRING(AbstractColumn, ColumnMode,
-						//	filter->columnModes().at(i))) + QStringLiteral("}"));
-
-						//TODO: auto* item = new QTableWidgetItem(colName);
-						// TODO: ui.twPreview->setHorizontalHeaderItem(col, item);
-					}
-				}
-			}
-
-		}
-		ui.twPreview->resizeColumnsToContents();
-	}
-*/
 
 	RESET_CURSOR;
 #endif

@@ -382,9 +382,9 @@ void XLSXFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSo
 		}
 
 		if (startRow > 1) {
-			int rrow = currentRange.firstRow() + startRow - 1;
-			if (rrow <= currentRange.lastRow())
-				currentRange.setFirstRow(rrow);
+			int row = currentRange.firstRow() + startRow - 1;
+			if (row <= currentRange.lastRow())
+				currentRange.setFirstRow(row);
 			else
 				currentRange.setFirstRow(currentRange.lastRow());
 		}
@@ -406,7 +406,6 @@ void XLSXFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSo
 		readDataRegion(currentRange, dataSource, importMode);
 	} else {
 		DEBUG(Q_FUNC_INFO << ", INVALID sheet")
-		// invalid sheet
 	}
 
 #else

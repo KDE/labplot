@@ -44,9 +44,10 @@ private Q_SLOTS:
 	void dataRegionSelectionChanged();
 
 private:
-	QMap<QPair<QString, int>, bool> m_regionIsPossibleToImportToMatrix;
 	Ui::XLSXOptionsWidget ui;
 	ImportFileWidget* m_fileWidget{nullptr};
+	//	std::unique_ptr<ImportFileWidget> m_fileWidget{nullptr};
+	QMap<QPair<QString, int>, bool> m_regionIsPossibleToImportToMatrix;
 	QVector<QStringList> m_previewString;
 };
 
