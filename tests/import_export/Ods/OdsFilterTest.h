@@ -18,6 +18,7 @@ class OdsFilterTest : public CommonTest {
 
 private Q_SLOTS:
 	void importFile3SheetsRangesFormula(); // check types, ranges and formula
-	void importFileSheetStartEndRow(); // check giving start and end row values
+	void importFileSheetStartEndRow(); // check giving start and end row
+	void importFileSheetStartEndColumn(); // check giving start and end column
 };
 #endif

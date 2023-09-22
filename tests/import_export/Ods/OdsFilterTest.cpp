@@ -158,6 +158,69 @@ void OdsFilterTest::importFileSheetStartEndRow() {
 	QCOMPARE(spreadsheet.column(3)->valueAt(2), qQNaN());
 }
 
-// TODO: test startCol, endCol
+void OdsFilterTest::importFileSheetStartEndColumn() {
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/start-end.ods"));
+
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+	OdsFilter filter;
+
+	// check sheet
+	filter.setSelectedSheetNames(QStringList() << QStringLiteral("Sheet2"));
+	filter.readDataFromFile(fileName, &spreadsheet);
+
+	QCOMPARE(spreadsheet.columnCount(), 4);
+	QCOMPARE(spreadsheet.rowCount(), 4);
+
+	// set start/end column and check result
+	filter.setStartColumn(2);
+	filter.setEndColumn(3);
+	filter.readDataFromFile(fileName, &spreadsheet);
+
+	QCOMPARE(spreadsheet.columnCount(), 2);
+	QCOMPARE(spreadsheet.rowCount(), 4);
+
+	QCOMPARE(spreadsheet.column(0)->valueAt(0), 2.2);
+	QCOMPARE(spreadsheet.column(0)->valueAt(1), 2.1);
+	QCOMPARE(spreadsheet.column(0)->valueAt(2), 1.9);
+	QCOMPARE(spreadsheet.column(0)->valueAt(3), qQNaN());
+	QCOMPARE(spreadsheet.column(1)->valueAt(0), 3);
+	QCOMPARE(spreadsheet.column(1)->valueAt(1), 1);
+	QCOMPARE(spreadsheet.column(1)->valueAt(2), 42);
+	QCOMPARE(spreadsheet.column(1)->valueAt(3), 46);
+
+	// set end column too high
+	filter.setStartColumn(2);
+	filter.setEndColumn(7);
+	filter.setStartRow(2);
+	filter.setEndRow(3);
+	filter.readDataFromFile(fileName, &spreadsheet);
+
+	QCOMPARE(spreadsheet.columnCount(), 3);
+	QCOMPARE(spreadsheet.rowCount(), 2);
+
+	QCOMPARE(spreadsheet.column(0)->valueAt(0), 2.1);
+	QCOMPARE(spreadsheet.column(0)->valueAt(1), 1.9);
+	QCOMPARE(spreadsheet.column(1)->valueAt(0), 1);
+	QCOMPARE(spreadsheet.column(1)->valueAt(1), 42);
+	QCOMPARE(spreadsheet.column(2)->valueAt(0), 12.3);
+	QCOMPARE(spreadsheet.column(2)->valueAt(1), qQNaN());
+
+	// set start column too high
+	filter.setStartColumn(6);
+	filter.setEndColumn(3);
+	filter.setStartRow(2);
+	filter.setEndRow(3);
+	filter.readDataFromFile(fileName, &spreadsheet);
+
+	QCOMPARE(spreadsheet.columnCount(), 3);
+	QCOMPARE(spreadsheet.rowCount(), 2);
+
+	QCOMPARE(spreadsheet.column(0)->valueAt(0), 3);
+	QCOMPARE(spreadsheet.column(0)->valueAt(1), 4);
+	QCOMPARE(spreadsheet.column(1)->valueAt(0), 2.1);
+	QCOMPARE(spreadsheet.column(1)->valueAt(1), 1.9);
+	QCOMPARE(spreadsheet.column(2)->valueAt(0), 1);
+	QCOMPARE(spreadsheet.column(2)->valueAt(1), 42);
+}
 
 QTEST_MAIN(OdsFilterTest)
