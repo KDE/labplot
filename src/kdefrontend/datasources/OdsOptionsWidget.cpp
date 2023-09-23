@@ -33,6 +33,7 @@ OdsOptionsWidget::OdsOptionsWidget(QWidget* parent, ImportFileWidget* fileWidget
 	ui.twPreview->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
 	connect(ui.twDataRegions, &QTreeWidget::itemSelectionChanged, this, &OdsOptionsWidget::dataRegionSelectionChanged);
+	connect(ui.bRefreshPreview, &QPushButton::clicked, fileWidget, &ImportFileWidget::refreshPreview);
 }
 
 OdsOptionsWidget::~OdsOptionsWidget() {

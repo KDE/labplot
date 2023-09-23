@@ -1743,8 +1743,8 @@ void ImportFileWidget::refreshPreview() {
 		// Nothing else to do. XLSX has it's own preview table
 		break;
 	case AbstractFileFilter::FileType::Ods:
-		importedStrings = m_odsOptionsWidget->previewString();
-		// Nothing else to do. Ods has it's own preview table
+		// update own preview (Nothing else to do)
+		m_odsOptionsWidget->dataRegionSelectionChanged();
 		break;
 	case AbstractFileFilter::FileType::Image: {
 		ui.tePreview->clear();
@@ -1920,7 +1920,6 @@ void ImportFileWidget::refreshPreview() {
 
 		tmpTableWidget->horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
 		m_importValid = false;
-		DEBUG("HERE: import not valid")
 	} else
 		m_importValid = true;
 

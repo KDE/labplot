@@ -39,7 +39,7 @@ Q_SIGNALS:
 	void enableDataPortionSelection(bool enable);
 	void dataRegionSelectionChangedSignal();
 
-private Q_SLOTS:
+public Q_SLOTS:
 	void dataRegionSelectionChanged();
 
 private:
