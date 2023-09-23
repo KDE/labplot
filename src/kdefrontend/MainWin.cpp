@@ -2688,11 +2688,11 @@ void MainWin::importFileDialog(const QString& fileName) {
 	}
 
 	delete dlg;
-	DEBUG("MainWin::importFileDialog() DONE");
+	DEBUG(Q_FUNC_INFO << " DONE");
 }
 
 void MainWin::importSqlDialog() {
-	DEBUG("MainWin::importSqlDialog()");
+	DEBUG(Q_FUNC_INFO);
 	auto* dlg = new ImportSQLDatabaseDialog(this);
 
 	// select existing container
@@ -2707,11 +2707,11 @@ void MainWin::importSqlDialog() {
 	}
 
 	delete dlg;
-	DEBUG("MainWin::importSqlDialog() DONE");
+	DEBUG(Q_FUNC_INFO << " DONE");
 }
 
 void MainWin::importProjectDialog() {
-	DEBUG("MainWin::importProjectDialog()");
+	DEBUG(Q_FUNC_INFO);
 
 	ImportProjectDialog::ProjectType type;
 	if (QObject::sender() == m_importOpjAction)
