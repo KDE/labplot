@@ -254,17 +254,15 @@ void OdsFilterPrivate::readCurrentSheet(const QString& fileName, AbstractDataSou
 
 	const auto ranges = sheet->get_data_range();
 	DEBUG(Q_FUNC_INFO << ", data range: col " << ranges.first.column << ".." << ranges.last.column << ", row " << ranges.first.row << ".." << ranges.last.row)
-	size_t actualRows = ranges.last.row - ranges.first.row + 1, actualEndRow = endRow;
-	if (endRow == -1)
-		actualEndRow = ranges.last.row + 1; // actual last row
+	size_t actualRows = ranges.last.row - ranges.first.row + 1;
+	size_t actualEndRow = (endRow == -1 ? ranges.last.row + 1 : endRow);
 	if ((size_t)startRow > actualRows)
 		startRow = 1; // start from the begining
 	DEBUG(Q_FUNC_INFO << ", start/end row = " << startRow << " " << endRow)
 	DEBUG(Q_FUNC_INFO << ", start/end col = " << startColumn << " " << endColumn)
 	actualRows = std::min(actualRows - startRow, (size_t)(actualEndRow - startRow)) + 1;
-	size_t actualCols = ranges.last.column - ranges.first.column + 1, actualEndColumn = endColumn;
-	if (endColumn == -1)
-		actualEndColumn = ranges.last.column + 1;
+	size_t actualCols = ranges.last.column - ranges.first.column + 1;
+	size_t actualEndColumn = (endColumn == -1 ? ranges.last.column + 1 : endColumn);
 	if ((size_t)startColumn > actualCols)
 		startColumn = 1; // start from the begining
 	actualCols = std::min(actualCols - startColumn, (size_t)(actualEndColumn - startColumn)) + 1;
@@ -389,74 +387,79 @@ QVector<QStringList> OdsFilterPrivate::preview(const QString& sheetName, int lin
 	QVector<QStringList> dataString;
 #ifdef HAVE_ORCUS
 	// get sheet index by name and read lines of data into dataString
-	auto* sheet = m_document.get_sheet(sheetName.toStdString());
+	const auto* sheet = m_document.get_sheet(sheetName.toStdString());
 	if (!sheet) {
 		DEBUG(Q_FUNC_INFO << ", sheet not found: " << sheetName.toStdString())
 		return dataString;
 	}
 
 	const auto sheetIndex = sheet->get_index();
-	if (sheetIndex != ixion::invalid_sheet) {
-		const auto ranges = sheet->get_data_range();
-		DEBUG(Q_FUNC_INFO << ", data range: col " << ranges.first.column << ".." << ranges.last.column << ", row " << ranges.first.row << ".."
-						  << ranges.last.row)
-		const auto& model = m_document.get_model_context();
+	if (sheetIndex == ixion::invalid_sheet) {
+		DEBUG(Q_FUNC_INFO << ", invalid sheet index " << sheetIndex)
+		return dataString;
+	}
 
-		const int maxCols = 50;
-		DEBUG(Q_FUNC_INFO << ", start/end row = " << startRow << " " << endRow)
-		const int actualStartRow = ranges.first.row + startRow - 1;
-		for (ixion::row_t row = actualStartRow; row < std::min(lines + actualStartRow, ranges.last.row + 1); row++) {
-			DEBUG(Q_FUNC_INFO << ", row " << row)
-			QStringList line;
-			for (ixion::col_t col = ranges.first.column; col < std::min(maxCols + ranges.first.column, ranges.last.column + 1); col++) {
-				ixion::abs_address_t pos(sheetIndex, row, col);
+	const auto ranges = sheet->get_data_range();
+	DEBUG(Q_FUNC_INFO << ", data range: col " << ranges.first.column << ".." << ranges.last.column << ", row " << ranges.first.row << ".." << ranges.last.row)
 
-				auto type = model.get_celltype(pos);
-				switch (type) {
-				case ixion::celltype_t::string: {
-					auto value = model.get_string_value(pos);
-					DEBUG(Q_FUNC_INFO << " " << value)
-					line << QString::fromStdString(std::string(value));
-					break;
-				}
-				case ixion::celltype_t::numeric: {
-					double value = model.get_numeric_value(pos);
-					DEBUG(Q_FUNC_INFO << " " << value)
-					line << QLocale().toString(value);
-					break;
-				}
-				case ixion::celltype_t::formula: {
-					// read formula result. We can't handle formulas yet (?)
-					auto formula = model.get_formula_result(pos);
-					switch (formula.get_type()) {
-					case ixion::formula_result::result_type::value:
-						line << QLocale().toString(formula.get_value());
-						break;
-					case ixion::formula_result::result_type::string:
-						line << QString::fromStdString(formula.get_string());
-						break;
-					case ixion::formula_result::result_type::error:
-					// TODO: not available in ixion 0.17 ?
-					// case ixion::formula_result::result_type::boolean:
-					case ixion::formula_result::result_type::matrix:
-						line << QString();
-						DEBUG(Q_FUNC_INFO << ", formula type error, boolean or matrix not implemented yet.")
-						break;
-					}
-					break;
-				}
-				case ixion::celltype_t::empty:
-					line << QString();
-					break;
-				case ixion::celltype_t::unknown:
-				case ixion::celltype_t::boolean:
-					line << QString();
-					DEBUG(Q_FUNC_INFO << ", cell type unknown or boolean not implemented yet.")
-					break;
-				}
+	const int maxCols = 50;
+	DEBUG(Q_FUNC_INFO << ", start/end row = " << startRow << " " << endRow)
+	int actualStartRow = (startRow > (ranges.last.row - ranges.first.row + 1) ? ranges.first.row : ranges.first.row + startRow - 1);
+	const int actualEndRow = (endRow == -1 ? ranges.last.row : std::min(ranges.last.row, ranges.first.row + endRow - 1));
+
+	const auto& model = m_document.get_model_context();
+	for (ixion::row_t row = actualStartRow; row <= std::min(actualEndRow, actualStartRow + lines); row++) {
+		DEBUG(Q_FUNC_INFO << ", row " << row)
+		QStringList line;
+		// TODO: handle startColumn and endColumn
+		for (ixion::col_t col = ranges.first.column; col < std::min(maxCols + ranges.first.column, ranges.last.column + 1); col++) {
+			ixion::abs_address_t pos(sheetIndex, row, col);
+
+			auto type = model.get_celltype(pos);
+			switch (type) {
+			case ixion::celltype_t::string: {
+				auto value = model.get_string_value(pos);
+				DEBUG(Q_FUNC_INFO << " " << value)
+				line << QString::fromStdString(std::string(value));
+				break;
 			}
-			dataString << line;
+			case ixion::celltype_t::numeric: {
+				double value = model.get_numeric_value(pos);
+				DEBUG(Q_FUNC_INFO << " " << value)
+				line << QLocale().toString(value);
+				break;
+			}
+			case ixion::celltype_t::formula: {
+				// read formula result. We can't handle formulas yet (?)
+				auto formula = model.get_formula_result(pos);
+				switch (formula.get_type()) {
+				case ixion::formula_result::result_type::value:
+					line << QLocale().toString(formula.get_value());
+					break;
+				case ixion::formula_result::result_type::string:
+					line << QString::fromStdString(formula.get_string());
+					break;
+				case ixion::formula_result::result_type::error:
+				// TODO: not available in ixion 0.17 ?
+				// case ixion::formula_result::result_type::boolean:
+				case ixion::formula_result::result_type::matrix:
+					line << QString();
+					DEBUG(Q_FUNC_INFO << ", formula type error, boolean or matrix not implemented yet.")
+					break;
+				}
+				break;
+			}
+			case ixion::celltype_t::empty:
+				line << QString();
+				break;
+			case ixion::celltype_t::unknown:
+			case ixion::celltype_t::boolean:
+				line << QString();
+				DEBUG(Q_FUNC_INFO << ", cell type unknown or boolean not implemented yet.")
+				break;
+			}
 		}
+		dataString << line;
 	}
 #else
 	Q_UNUSED(sheetName)
