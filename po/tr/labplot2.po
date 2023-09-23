@@ -1037,39 +1037,38 @@ msgid "There is no download URL present in the metadata file!"
 msgstr "Üst veri dosyasında bir indirme URL'si yok!"
 
 #: src/backend/datasources/DatasetHandler.cpp:192
-#, fuzzy, kde-format
-#| msgid "Failed to connect to the database '%1'."
+#, kde-format
 msgid "Failed to download the dataset"
-msgstr "'%1' veritabanına bağlanırken hata oluştu."
+msgstr "Veri kümesi indirilemedi"
 
 #: src/backend/datasources/DatasetHandler.cpp:193
-#, fuzzy, kde-format
-#| msgid "Failed to connect to the database '%1'."
+#, kde-format
 msgid ""
 "Failed to download the dataset from %1.\n"
 "%2."
-msgstr "'%1' veritabanına bağlanırken hata oluştu."
+msgstr ""
+"%1 konumundan veri kümesi indirilemedi.\n"
+"%2."
 
 #: src/backend/datasources/DatasetHandler.cpp:228
 #: src/backend/datasources/DatasetHandler.cpp:252
-#, fuzzy, kde-format
-#| msgid "Failed to read image data"
+#, kde-format
 msgid "Failed to save the dataset"
-msgstr "Görsel verisi okunamadı"
+msgstr "Veri kümesi kaydedilemedi"
 
 #: src/backend/datasources/DatasetHandler.cpp:229
-#, fuzzy, kde-format
-#| msgid "Failed to create table in the SQLite database %1."
+#, kde-format
 msgid "Failed to create the directory %1 to save the dataset."
-msgstr "%1 SQLite veritabanında tablo oluşturulamadı.."
+msgstr "Veri kümesini kaydetmek üzere %1 dizini oluşturulamadı."
 
 #: src/backend/datasources/DatasetHandler.cpp:252
-#, fuzzy, kde-format
-#| msgid "Couldn't open the file '%1' for writing."
+#, kde-format
 msgid ""
 "Couldn't open the file %1 for writing.\n"
 "%2"
-msgstr "'%1' dosyası yazma için açılamadı."
+msgstr ""
+"%1 dosyası yazmak için açılamadı.\n"
+"%2"
 
 #: src/backend/datasources/filters/AbstractFileFilter.cpp:219
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:379
@@ -22442,266 +22441,3 @@ msgstr "dönüştürme süreci başarısız, çıkış kodu ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Dosya açılamadı:"
-
-#~ msgid "Inverse"
-#~ msgstr "Ters"
-
-#~ msgid "Conditions"
-#~ msgstr "Koşullar"
-
-#~ msgid "Dawson integral"
-#~ msgstr "Dawson integrali"
-
-#~ msgid "&Sort Spreadsheet"
-#~ msgstr "Hesap Tablosunu &Sırala"
-
-#~ msgid "Sort columns:"
-#~ msgstr "Sütunları sırala:"
-
-#~ msgid "Separately"
-#~ msgstr "Ayrı"
-
-#~ msgid "Together"
-#~ msgstr "Birlikte"
-
-#~ msgid "Leading column:"
-#~ msgstr "Başlangıç sütunu:"
-
-#~ msgid "Save Filter Settings as"
-#~ msgstr "Süzgeç Ayarlarını Farklı Kaydet"
-
-#~ msgid "Filter name:"
-#~ msgstr "Süzgeç adı:"
-
-#~ msgid "new filter"
-#~ msgstr "yeni süzgeç"
-
-#~ msgid "Save the current filter settings"
-#~ msgstr "Geçerli süzgeç ayarlarını kaydet"
-
-#~ msgid "Manage filters"
-#~ msgstr "Süzgeçleri yönet"
-
-#~ msgid "unknown cartesianPlot element '%1'"
-#~ msgstr "bilinmeyen cartesianPlot elemanı '%1'"
-
-#~ msgid "Remove Columns"
-#~ msgstr "Sütunları Kaldır"
-
-#~ msgid "Drop"
-#~ msgstr "Bırak"
-
-#~ msgid "Mask"
-#~ msgstr "Maskele"
-
-#~ msgid "xy-Curve from a Formula"
-#~ msgstr "Bir Formülden xy Eğrisi"
-
-#~ msgid "Data Operation"
-#~ msgstr "Veri İşlemi"
-
-#~ msgid "Auto/Cross Correlation"
-#~ msgstr "Otomatik/Çapraz Bağlılık"
-
-#~ msgid "Convolution/Deconvolution"
-#~ msgstr "Evrişim/Ters Evrişim"
-
-#~ msgid "Data Manipulation"
-#~ msgstr "Veri Manipülasyonu"
-
-#~ msgid "%1: Add curve to %2 plots"
-#~ msgstr "%1: %2 çizime eğri ekle"
-
-#~ msgid "&Analysis"
-#~ msgstr "Ç&özümleme"
-
-#~ msgid "%1: set line pen"
-#~ msgstr "%1: Çizgi kalemini ayarla"
-
-#~ msgid "End Search"
-#~ msgstr "Aramayı Bitir"
-
-#~ msgid "Point Separation:"
-#~ msgstr "Nokta Ayrımı:"
-
-#~ msgid "Reference Points"
-#~ msgstr "Başvuru Noktaları"
-
-#~ msgid "%1: set axis scale"
-#~ msgstr "%1: Eksen ölçeğini ayarla"
-
-#~ msgid "No Data"
-#~ msgstr "Veri Yok"
-
-#~ msgid "&Restore"
-#~ msgstr "&Geri Yükle"
-
-#~ msgid "Mi&nimize"
-#~ msgstr "Kü&çült"
-
-#~ msgid "Ma&ximize"
-#~ msgstr "Bü&yüt"
-
-#~ msgctxt "@title:window"
-#~ msgid "Spreadsheet"
-#~ msgstr "Hesap Tablosu"
-
-#~ msgctxt "@title:window"
-#~ msgid "Column"
-#~ msgstr "Sütun"
-
-#~ msgctxt "@title:window"
-#~ msgid "Matrix"
-#~ msgstr "Matris"
-
-#~ msgctxt "@title:window"
-#~ msgid "Worksheet"
-#~ msgstr "Çalışma Sayfası"
-
-#~ msgctxt "@title:window"
-#~ msgid "Plot Area"
-#~ msgstr "Çizim Alanı"
-
-#~ msgctxt "@title:window"
-#~ msgid "Legend"
-#~ msgstr "Gösterge"
-
-#~ msgctxt "@title:window"
-#~ msgid "Axis"
-#~ msgstr "Eksen"
-
-#~ msgctxt "@title:window"
-#~ msgid "XY-Curve"
-#~ msgstr "XY Eğrisi"
-
-#~ msgctxt "@title:window"
-#~ msgid "Data Reduction"
-#~ msgstr "Veri İndirgeme"
-
-#~ msgctxt "@title:window"
-#~ msgid "Differentiation"
-#~ msgstr "Türev Alma"
-
-#~ msgctxt "@title:window"
-#~ msgid "Integration"
-#~ msgstr "Tümleştirme"
-
-#~ msgctxt "@title:window"
-#~ msgid "Interpolation"
-#~ msgstr "Aradeğerleme"
-
-#~ msgctxt "@title:window"
-#~ msgid "Smoothing"
-#~ msgstr "Yumuşatma"
-
-#~ msgctxt "@title:window"
-#~ msgid "Fit"
-#~ msgstr "Sığdır"
-
-#~ msgctxt "@title:window"
-#~ msgid "Fourier Transform"
-#~ msgstr "Fourier Dönüşümü"
-
-#~ msgctxt "@title:window"
-#~ msgid "Hilbert Transform"
-#~ msgstr "Hilbert Dönüşümü"
-
-#~ msgctxt "@title:window"
-#~ msgid "Fourier Filter"
-#~ msgstr "Fourier Süzgeci"
-
-#~ msgctxt "@title:window"
-#~ msgid "Convolution/Deconvolution"
-#~ msgstr "Evrişim/Ters Evrişim"
-
-#~ msgctxt "@title:window"
-#~ msgid "Auto-/Cross-Correlation"
-#~ msgstr "Otomatik/Çapraz Korelasyon"
-
-#~ msgctxt "@title:window"
-#~ msgid "Histogram"
-#~ msgstr "Histogram"
-
-#~ msgctxt "@title:window"
-#~ msgid "Bar Plot"
-#~ msgstr "Çubuk Çizimi"
-
-#~ msgctxt "@title:window"
-#~ msgid "Box Plot"
-#~ msgstr "Kutu Çizimi"
-
-#~ msgctxt "@title:window"
-#~ msgid "Text Label"
-#~ msgstr "Metin Etiketi"
-
-#~ msgctxt "@title:window"
-#~ msgid "Image"
-#~ msgstr "Görsel"
-
-#~ msgctxt "@title:window"
-#~ msgid "Custom Point"
-#~ msgstr "Özel Nokta"
-
-#~ msgctxt "@title:window"
-#~ msgid "Reference Line"
-#~ msgstr "Başvuru Çizgisi"
-
-#~ msgctxt "@title:window"
-#~ msgid "Project"
-#~ msgstr "Proje"
-
-#~ msgctxt "@title:window"
-#~ msgid "Notebook"
-#~ msgstr "Defter"
-
-#~ msgctxt "@title:window"
-#~ msgid "Notes"
-#~ msgstr "Notlar"
-
-#~ msgctxt "@title:window"
-#~ msgid "Info Element"
-#~ msgstr "Bilgi Ögesi"
-
-#~ msgctxt "@title:window"
-#~ msgid "Folder"
-#~ msgstr "Klasör"
-
-#~ msgctxt "@title:window"
-#~ msgid "Workbook"
-#~ msgstr "Çalışma Kitabı"
-
-#~ msgid "&Tile"
-#~ msgstr "&Döşe"
-
-#~ msgid "Tile the windows"
-#~ msgstr "Pencereleri döşe"
-
-#~ msgid "&Cascade"
-#~ msgstr "&Basamakla"
-
-#~ msgid "Cascade the windows"
-#~ msgstr "Pencerleri basamaklandır"
-
-#~ msgid "Sub-window View"
-#~ msgstr "Alt Pencere Görünümü"
-
-#~ msgid "Tabbed View"
-#~ msgstr "Sekmeli Görünüm"
-
-#~ msgid "Show Windows of the Current Folder Only"
-#~ msgstr "Yalnızca Geçerli Klasörün Pencerelerini Göster"
-
-#~ msgid "Show Windows of the Current Folder and its Subfolders Only"
-#~ msgstr "Yalnızca Geçerli Klasörün ve Alt Klasörlerinin Pencerelerini Göster"
-
-#~ msgid "Show all Windows"
-#~ msgstr "Tüm Pencereleri Göster"
-
-#~ msgid "Tab position:"
-#~ msgstr "Sekme konumu:"
-
-#~ msgid "Interface:"
-#~ msgstr "Arayüz:"
-
-#~ msgid "Sub-window visibility:"
-#~ msgstr "Alt pencere görünürlüğü:"

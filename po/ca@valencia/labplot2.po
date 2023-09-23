@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-09-14 00:41+0000\n"
-"PO-Revision-Date: 2023-09-11 17:22+0200\n"
+"PO-Revision-Date: 2023-09-18 11:45+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -1048,39 +1048,39 @@ msgid "There is no download URL present in the metadata file!"
 msgstr "No hi ha present un URL de baixada en el fitxer de metadades!"
 
 #: src/backend/datasources/DatasetHandler.cpp:192
-#, fuzzy, kde-format
-#| msgid "Failed to connect to the database '%1'."
+#, kde-format
 msgid "Failed to download the dataset"
-msgstr "No s'ha pogut connectar amb la base de dades «%1»."
+msgstr "No s'ha pogut baixar el conjunt de dades"
 
 #: src/backend/datasources/DatasetHandler.cpp:193
-#, fuzzy, kde-format
-#| msgid "Failed to connect to the database '%1'."
+#, kde-format
 msgid ""
 "Failed to download the dataset from %1.\n"
 "%2."
-msgstr "No s'ha pogut connectar amb la base de dades «%1»."
+msgstr ""
+"No s'ha pogut baixar el conjunt de dades des de %1.\n"
+"%2."
 
 #: src/backend/datasources/DatasetHandler.cpp:228
 #: src/backend/datasources/DatasetHandler.cpp:252
-#, fuzzy, kde-format
-#| msgid "Failed to read image data"
+#, kde-format
 msgid "Failed to save the dataset"
-msgstr "No s'ha pogut llegir les dades de la imatge"
+msgstr "No s'ha pogut guardar el conjunt de dades"
 
 #: src/backend/datasources/DatasetHandler.cpp:229
-#, fuzzy, kde-format
-#| msgid "Failed to create table in the SQLite database %1."
+#, kde-format
 msgid "Failed to create the directory %1 to save the dataset."
-msgstr "No s'ha pogut crear la taula en la base de dades SQLite %1."
+msgstr ""
+"No s'ha pogut crear el directori %1 per a guardar-hi el conjunt de dades."
 
 #: src/backend/datasources/DatasetHandler.cpp:252
-#, fuzzy, kde-format
-#| msgid "Couldn't open the file '%1' for writing."
+#, kde-format
 msgid ""
 "Couldn't open the file %1 for writing.\n"
 "%2"
-msgstr "No s'ha pogut obrir el fitxer «%1» per a escriptura."
+msgstr ""
+"No s'ha pogut obrir el fitxer %1 per a escriptura.\n"
+"%2"
 
 #: src/backend/datasources/filters/AbstractFileFilter.cpp:219
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:379
@@ -2599,7 +2599,7 @@ msgstr "Llargària d'1 milla nàutica"
 #: src/backend/gsl/constants.cpp:122
 #, kde-format
 msgid "Length of 1 fathom"
-msgstr "Llargària d'1 fathom"
+msgstr "Llargària d'1 braça"
 
 #: src/backend/gsl/constants.cpp:123
 #, kde-format

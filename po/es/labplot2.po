@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-09-14 00:41+0000\n"
-"PO-Revision-Date: 2023-09-10 19:34+0200\n"
+"PO-Revision-Date: 2023-09-14 04:44+0200\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -1039,39 +1039,39 @@ msgid "There is no download URL present in the metadata file!"
 msgstr "No hay un URL de descarga en el archivo de metadatos."
 
 #: src/backend/datasources/DatasetHandler.cpp:192
-#, fuzzy, kde-format
-#| msgid "Failed to connect to the database '%1'."
+#, kde-format
 msgid "Failed to download the dataset"
-msgstr "Ha fallado al conectarse a la base de datos «%1»."
+msgstr "Ha fallado la descarga del conjunto de datos"
 
 #: src/backend/datasources/DatasetHandler.cpp:193
-#, fuzzy, kde-format
-#| msgid "Failed to connect to the database '%1'."
+#, kde-format
 msgid ""
 "Failed to download the dataset from %1.\n"
 "%2."
-msgstr "Ha fallado al conectarse a la base de datos «%1»."
+msgstr ""
+"Ha fallado la descarga del conjunto de datos de %1.\n"
+"%2"
 
 #: src/backend/datasources/DatasetHandler.cpp:228
 #: src/backend/datasources/DatasetHandler.cpp:252
-#, fuzzy, kde-format
-#| msgid "Failed to read image data"
+#, kde-format
 msgid "Failed to save the dataset"
-msgstr "Ha fallado la lectura de datos de la imagen"
+msgstr "No se ha podido guardar el conjunto de datos"
 
 #: src/backend/datasources/DatasetHandler.cpp:229
-#, fuzzy, kde-format
-#| msgid "Failed to create table in the SQLite database %1."
+#, kde-format
 msgid "Failed to create the directory %1 to save the dataset."
-msgstr "Ha fallado al crear la tabla en la base de datos SQLite %1."
+msgstr ""
+"Ha fallado la creación del directorio %1 para guardar el conjunto de datos."
 
 #: src/backend/datasources/DatasetHandler.cpp:252
-#, fuzzy, kde-format
-#| msgid "Couldn't open the file '%1' for writing."
+#, kde-format
 msgid ""
 "Couldn't open the file %1 for writing.\n"
 "%2"
-msgstr "No se ha podido abrir el archivo «%1» para escritura."
+msgstr ""
+"No se ha podido abrir el archivo %1 para escritura.\n"
+"%2"
 
 #: src/backend/datasources/filters/AbstractFileFilter.cpp:219
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:379
