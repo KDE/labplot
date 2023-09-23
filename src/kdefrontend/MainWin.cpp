@@ -223,11 +223,9 @@ void MainWin::initGUI(const QString& fileName) {
 	m_touchBar = new KDMacTouchBar(this);
 	// m_touchBar->setTouchButtonStyle(KDMacTouchBar::IconOnly);
 #endif
-	setupGUI(Default, QLatin1String("/Applications/labplot2.app/Contents/Resources/labplot2ui.rc"));
 	setUnifiedTitleAndToolBarOnMac(true);
-#else
-	setupGUI(Default, KXMLGUIClient::xmlFile()); // should be "labplot2ui.rc"
 #endif
+	setupGUI();
 
 	DEBUG(Q_FUNC_INFO << ", Component name: " << STDSTRING(KXMLGUIClient::componentName()));
 	DEBUG(Q_FUNC_INFO << ", XML file: " << STDSTRING(KXMLGUIClient::xmlFile()) << " (should be \"labplot2ui.rc\")");
@@ -2709,11 +2707,11 @@ void MainWin::importSqlDialog() {
 	}
 
 	delete dlg;
-	DEBUG("MainWin::importSqlDialog() DONE");
+	DEBUG(Q_FUNC_INFO << " DONE");
 }
 
 void MainWin::importProjectDialog() {
-	DEBUG("MainWin::importProjectDialog()");
+	DEBUG(Q_FUNC_INFO);
 
 	ImportProjectDialog::ProjectType type;
 	if (QObject::sender() == m_importOpjAction)

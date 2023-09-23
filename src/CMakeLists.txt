@@ -149,6 +149,8 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/widgets/FITSHeaderEditAddUnitDialog.cpp
 	${KDEFRONTEND_DIR}/widgets/FITSHeaderEditDialog.cpp
 	${KDEFRONTEND_DIR}/widgets/ResizableTextEdit.cpp
+
+	${KDEFRONTEND_DIR}/labplot2.qrc
 )
 
 if (Qt5Mqtt_FOUND)
@@ -729,7 +731,6 @@ target_compile_definitions(labplot2 PRIVATE ${LABPLOT_COMPILE_DEFINITIONS})
 
 ############## installation ################################
 install( TARGETS labplot2 ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
-install( FILES ${KDEFRONTEND_DIR}/labplot2ui.rc DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/${PROJECT_NAME} )
 install( FILES ${KDEFRONTEND_DIR}/splash.png ${KDEFRONTEND_DIR}/labplot2.ico ${CMAKE_CURRENT_SOURCE_DIR}/../icons/application-x-labplot2.ico DESTINATION ${KDE_INSTALL_DATADIR}/${PROJECT_NAME} )
 install( FILES org.kde.labplot2.desktop DESTINATION ${KDE_INSTALL_APPDIR} )
 install( FILES labplot2.xml DESTINATION ${KDE_INSTALL_MIMEDIR} )
