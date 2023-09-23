@@ -404,15 +404,17 @@ QVector<QStringList> OdsFilterPrivate::preview(const QString& sheetName, int lin
 
 	const int maxCols = 50;
 	DEBUG(Q_FUNC_INFO << ", start/end row = " << startRow << " " << endRow)
+	DEBUG(Q_FUNC_INFO << ", start/end col = " << startColumn << " " << endColumn)
 	int actualStartRow = (startRow > (ranges.last.row - ranges.first.row + 1) ? ranges.first.row : ranges.first.row + startRow - 1);
 	const int actualEndRow = (endRow == -1 ? ranges.last.row : std::min(ranges.last.row, ranges.first.row + endRow - 1));
+	int actualStartCol = (startColumn > (ranges.last.column - ranges.first.column + 1) ? ranges.first.column : ranges.first.column + startColumn - 1);
+	const int actualEndCol = (endColumn == -1 ? ranges.last.column : std::min(ranges.last.column, ranges.first.column + endColumn - 1));
 
 	const auto& model = m_document.get_model_context();
 	for (ixion::row_t row = actualStartRow; row <= std::min(actualEndRow, actualStartRow + lines); row++) {
 		DEBUG(Q_FUNC_INFO << ", row " << row)
 		QStringList line;
-		// TODO: handle startColumn and endColumn
-		for (ixion::col_t col = ranges.first.column; col < std::min(maxCols + ranges.first.column, ranges.last.column + 1); col++) {
+		for (ixion::col_t col = actualStartCol; col <= std::min(actualEndCol, actualStartCol + maxCols); col++) {
 			ixion::abs_address_t pos(sheetIndex, row, col);
 
 			auto type = model.get_celltype(pos);
