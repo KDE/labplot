@@ -1746,7 +1746,9 @@ void ImportFileWidget::refreshPreview() {
 		break;
 	case AbstractFileFilter::FileType::Ods:
 		// update own preview (Nothing else to do)
-		m_odsOptionsWidget->dataRegionSelectionChanged();
+		m_odsOptionsWidget->sheetSelectionChanged();
+		// TODO: needed for import (why?)
+		importedStrings = m_odsOptionsWidget->previewString();
 		break;
 	case AbstractFileFilter::FileType::Image: {
 		ui.tePreview->clear();

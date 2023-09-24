@@ -25,7 +25,7 @@ OdsOptionsWidget::OdsOptionsWidget(QWidget* parent, ImportFileWidget* fileWidget
 	ui.bRefreshPreview->setIcon(QIcon::fromTheme(QStringLiteral("view-refresh")));
 	ui.twPreview->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
-	connect(ui.twDataRegions, &QTreeWidget::itemSelectionChanged, this, &OdsOptionsWidget::dataRegionSelectionChanged);
+	connect(ui.twDataRegions, &QTreeWidget::itemSelectionChanged, this, &OdsOptionsWidget::sheetSelectionChanged);
 	connect(ui.bRefreshPreview, &QPushButton::clicked, fileWidget, &ImportFileWidget::refreshPreview);
 }
 
@@ -54,7 +54,7 @@ void OdsOptionsWidget::updateContent(OdsFilter* filter, const QString& fileName)
 	}
 }
 
-void OdsOptionsWidget::dataRegionSelectionChanged() {
+void OdsOptionsWidget::sheetSelectionChanged() {
 	DEBUG(Q_FUNC_INFO)
 #ifdef HAVE_ORCUS
 	WAIT_CURSOR;
