@@ -27,11 +27,7 @@ public:
 	virtual ~OdsFilter() override;
 	static QString fileInfoString(const QString& fileName);
 	QVector<QStringList> preview(const QString& sheetName, int lines);
-	/*	static QStringList sheets(const QString& fileName, bool* ok = nullptr);
-		static bool isValidCellReference(const QString& cellRefString);
-
-		QStringList sheets() const;
-
+	/*
 		void setExportAsNewSheet(const bool);
 		void setSheetToAppendTo(const QString& sheetName);
 		void setOverwriteData(const bool);

@@ -27,9 +27,8 @@
 using namespace orcus;
 #endif
 
-#include <utility>
-
-//TODO: read column header from first row?
+// TODO:
+// * read column header from first row?
 OdsFilter::OdsFilter()
 	: AbstractFileFilter(FileType::Ods)
 	, d(new OdsFilterPrivate(this)) {
@@ -40,8 +39,6 @@ OdsFilter::~OdsFilter() {
 
 QString OdsFilter::fileInfoString(const QString& fileName) {
 #ifdef HAVE_ORCUS
-	// OdsFilter filter;
-
 	spreadsheet::range_size_t ss{1048576, 16384};
 	spreadsheet::document doc{ss};
 	spreadsheet::import_factory factory{doc};
@@ -50,7 +47,6 @@ QString OdsFilter::fileInfoString(const QString& fileName) {
 	loader.read_file(fileName.toStdString());
 
 	const size_t nrSheets = doc.get_sheet_count();
-	// const auto sheetSize = doc.get_sheet_size();
 	auto dt = doc.get_origin_date();
 
 	QString info(i18n("Sheet count: %1", QString::number(nrSheets)));
@@ -401,7 +397,7 @@ QVector<QStringList> OdsFilterPrivate::preview(const QString& sheetName, int lin
 	const auto ranges = sheet->get_data_range();
 	DEBUG(Q_FUNC_INFO << ", data range: col " << ranges.first.column << ".." << ranges.last.column << ", row " << ranges.first.row << ".." << ranges.last.row)
 
-	const int maxCols = 50;
+	const int maxCols = 100;
 	DEBUG(Q_FUNC_INFO << ", start/end row = " << startRow << " " << endRow)
 	DEBUG(Q_FUNC_INFO << ", start/end col = " << startColumn << " " << endColumn)
 	int actualStartRow = (startRow > (ranges.last.row - ranges.first.row + 1) ? ranges.first.row : ranges.first.row + startRow - 1);
