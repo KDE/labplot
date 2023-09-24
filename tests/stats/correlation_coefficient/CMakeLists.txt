@@ -1,3 +1,0 @@
-add_executable (correlationcoefficienttest CorrelationCoefficientTest.cpp ../../CommonTest.cpp)
-target_link_libraries(correlationcoefficienttest labplot2backendlib labplot2lib labplot2nsllib labplot2test)
-add_test(NAME correlationcoefficienttest COMMAND correlationcoefficienttest)

@@ -21,7 +21,7 @@ class AxisDock;
 class InfoElementDock;
 class NoteDock;
 class CartesianPlotDock;
-class CorrelationCoefficientDock;
+class CorrelationDock;
 class HistogramDock;
 class HypothesisTestDock;
 class BarPlotDock;
@@ -126,7 +126,7 @@ private:
 	XYCorrelationCurveDock* m_xyCorrelationCurveDock{nullptr};
 
     HypothesisTestDock* m_hypothesisTestDock{nullptr};
-    CorrelationCoefficientDock* m_correlationCoefficientDock{nullptr};
+    CorrelationDock* m_correlationDock{nullptr};
 	PivotTableDock* m_pivotTableDock{nullptr};
 
 #ifdef HAVE_CANTOR_LIBS

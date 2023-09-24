@@ -32,8 +32,8 @@
 #include "backend/note/Note.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 
-#include "backend/generalTest/HypothesisTest.h"
-#include "backend/generalTest/CorrelationCoefficient.h"
+#include "backend/statistics/HypothesisTest.h"
+#include "backend/statistics/Correlation.h"
 #include "backend/pivot/PivotTable.h"
 
 #ifdef HAVE_MQTT
@@ -664,16 +664,6 @@ void MainWin::initActions() {
 	m_newDatapickerAction->setWhatsThis(i18n("Creates a data extractor for getting data from a picture"));
 	actionCollection()->addAction(QLatin1String("new_datapicker"), m_newDatapickerAction);
 	connect(m_newDatapickerAction, &QAction::triggered, this, &MainWin::newDatapicker);
-
-	m_newHypothesisTestAction = new QAction(QIcon::fromTheme(QLatin1String("labplot-spreadsheet-new")), i18n("Hypothesis Test 2"), this);
-	m_newHypothesisTestAction->setWhatsThis(i18n("Creates windows for hypothesis testing"));
-	actionCollection()->addAction(QLatin1String("new_hypothesis_test"), m_newHypothesisTestAction);
-	connect(m_newHypothesisTestAction, &QAction::triggered, this, &MainWin::newHypothesisTest);
-
-	m_newCorrelationCoefficientAction = new QAction(QIcon::fromTheme(QLatin1String("labplot-spreadsheet-new")), i18n("Correlation Coefficient"), this);
-	m_newCorrelationCoefficientAction->setWhatsThis(i18n("Creates windows for finding Correlation Coefficient"));
-	actionCollection()->addAction(QLatin1String("new_correlation_coeffient"), m_newCorrelationCoefficientAction);
-	connect(m_newCorrelationCoefficientAction, &QAction::triggered, this, &MainWin::newCorrelationCoefficient);
 
 	m_newSpreadsheetAction = new QAction(QIcon::fromTheme(QLatin1String("labplot-spreadsheet-new")), i18n("Spreadsheet"), this);
 	// 	m_newSpreadsheetAction->setShortcut(Qt::CTRL+Qt::Key_Equal);
@@ -2033,22 +2023,6 @@ void MainWin::newWorkbook() {
 void MainWin::newDatapicker() {
 	auto* datapicker = new Datapicker(i18n("Data Extractor"));
 	this->addAspectToProject(datapicker);
-}
-
-/*!
-    adds a new Hypothesis Test window to the project.
-*/
-void MainWin::newHypothesisTest() {
-    HypothesisTest* hypothesisTest = new HypothesisTest(i18n("HypothesisTest"));
-    this->addAspectToProject(hypothesisTest);
-}
-
-/*!
-    adds a new Correlation Coefficient window to the project.
-*/
-void MainWin::newCorrelationCoefficient() {
-    CorrelationCoefficient* correlationCoefficient = new CorrelationCoefficient(i18n("CorrelationCoefficient"));
-    this->addAspectToProject(correlationCoefficient);
 }
 
 /*!

@@ -1,5 +1,5 @@
 ﻿/*
-	File                 : CorrelationCoefficient.cpp
+	File                 : CorrelationDock.cpp
 	Project              : LabPlot
 	Description          : Dock for Correlation Coefficients/Tests
 	--------------------------------------------------------------------
@@ -8,8 +8,8 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-#include "CorrelationCoefficientDock.h"
-#include "backend/generalTest/CorrelationCoefficient.h"
+#include "CorrelationDock.h"
+#include "backend/statistics/Correlation.h"
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/Project.h"
 #include "backend/spreadsheet/Spreadsheet.h"
@@ -21,11 +21,11 @@
 #include <KLocalizedString>
 
 /*!
-  \class CorrelationCoefficientDock
+  \class CorrelationDock
   \brief Provides a dock (widget) for correlation testing:
   \ingroup kdefrontend
 */
-CorrelationCoefficientDock::CorrelationCoefficientDock(QWidget* parent) : BaseDock(parent) {
+CorrelationDock::CorrelationDock(QWidget* parent) : BaseDock(parent) {
 	ui.setupUi(this);
 	m_leName = ui.leName;
 	m_teComment = ui.teComment;
@@ -34,10 +34,10 @@ CorrelationCoefficientDock::CorrelationCoefficientDock(QWidget* parent) : BaseDo
 	cbSpreadsheet = new TreeViewComboBox;
 	ui.gridLayout->addWidget(cbSpreadsheet, 4, 1, 1, 3);
 
-	ui.cbTest->addItem(i18n("Pearson r"), CorrelationCoefficient::Pearson);
-	ui.cbTest->addItem(i18n("Kendall"), CorrelationCoefficient::Kendall);
-	ui.cbTest->addItem(i18n("Spearman"), CorrelationCoefficient::Spearman);
-	ui.cbTest->addItem(i18n("Chi Square"), CorrelationCoefficient::ChiSquare);
+	ui.cbMethod->addItem(i18n("Pearson r"), Correlation::Pearson);
+	ui.cbMethod->addItem(i18n("Kendall"), Correlation::Kendall);
+	ui.cbMethod->addItem(i18n("Spearman"), Correlation::Spearman);
+	ui.cbMethod->addItem(i18n("Chi Square"), Correlation::ChiSquare);
 
 	ui.leNRows->setText(QLatin1String("2"));
 	ui.leNColumns->setText(QLatin1String("2"));
@@ -64,25 +64,25 @@ CorrelationCoefficientDock::CorrelationCoefficientDock(QWidget* parent) : BaseDo
 	ui.pbPerformTest->setEnabled(false);
 	ui.pbPerformTest->setIcon(QIcon::fromTheme(QLatin1String("run-build")));
 
-	connect(cbSpreadsheet, &TreeViewComboBox::currentModelIndexChanged, this, &CorrelationCoefficientDock::spreadsheetChanged);
-	connect(ui.cbTest, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CorrelationCoefficientDock::methodChanged);
-	connect(ui.chbCategorical, &QCheckBox::stateChanged, this, &CorrelationCoefficientDock::changeCbCol2Label);
-	connect(ui.chbCalculateStats, &QCheckBox::stateChanged, this, &CorrelationCoefficientDock::chbColumnStatsStateChanged);
-	connect(ui.leNRows, &QLineEdit::textChanged, this, &CorrelationCoefficientDock::leNRowsChanged);
-	connect(ui.leNColumns, &QLineEdit::textChanged, this, &CorrelationCoefficientDock::leNColumnsChanged);
-	connect(ui.pbExportToSpreadsheet, &QPushButton::clicked, this, &CorrelationCoefficientDock::exportStatsTableToSpreadsheet);
-	connect(ui.pbPerformTest, &QPushButton::clicked, this, &CorrelationCoefficientDock::recalculate);
-	connect(ui.cbCol1, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CorrelationCoefficientDock::col1IndexChanged);
+	connect(cbSpreadsheet, &TreeViewComboBox::currentModelIndexChanged, this, &CorrelationDock::spreadsheetChanged);
+	connect(ui.cbMethod, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CorrelationDock::methodChanged);
+	connect(ui.chbCategorical, &QCheckBox::stateChanged, this, &CorrelationDock::changeCbCol2Label);
+	connect(ui.chbCalculateStats, &QCheckBox::stateChanged, this, &CorrelationDock::chbColumnStatsStateChanged);
+	connect(ui.leNRows, &QLineEdit::textChanged, this, &CorrelationDock::leNRowsChanged);
+	connect(ui.leNColumns, &QLineEdit::textChanged, this, &CorrelationDock::leNColumnsChanged);
+	connect(ui.pbExportToSpreadsheet, &QPushButton::clicked, this, &CorrelationDock::exportStatsTableToSpreadsheet);
+	connect(ui.pbPerformTest, &QPushButton::clicked, this, &CorrelationDock::recalculate);
+	connect(ui.cbCol1, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CorrelationDock::col1IndexChanged);
 
 }
 
-void CorrelationCoefficientDock::setCorrelationCoefficient(CorrelationCoefficient* coefficient) {
+void CorrelationDock::setCorrelation(Correlation* coefficient) {
 	Lock lock(m_initializing);
-	m_coefficient = coefficient;
+	m_correlation = coefficient;
 	//setAspects(list);
 
 	//show all available spreadsheets in the combo box
-	m_aspectTreeModel = new AspectTreeModel(m_coefficient->project());
+	m_aspectTreeModel = new AspectTreeModel(m_correlation->project());
 
 	QList<AspectType> list{AspectType::Folder, AspectType::Workbook,
 	                       AspectType::Spreadsheet, AspectType::LiveDataSource};
@@ -94,45 +94,45 @@ void CorrelationCoefficientDock::setCorrelationCoefficient(CorrelationCoefficien
 	cbSpreadsheet->setModel(m_aspectTreeModel);
 
 	//show the properties of the correlation
-	ui.leName->setText(m_coefficient->name());
-	ui.teComment->setText(m_coefficient->comment());
-	setModelIndexFromAspect(cbSpreadsheet, m_coefficient->dataSourceSpreadsheet());
-	setColumnsComboBoxModel(m_coefficient->dataSourceSpreadsheet());
+	ui.leName->setText(m_correlation->name());
+	ui.teComment->setText(m_correlation->comment());
+	setModelIndexFromAspect(cbSpreadsheet, m_correlation->dataSourceSpreadsheet());
+	setColumnsComboBoxModel(m_correlation->dataSourceSpreadsheet());
 
 	methodChanged();
 
-	connect(m_coefficient, &CorrelationCoefficient::aspectDescriptionChanged, this, &CorrelationCoefficientDock::aspectDescriptionChanged);
+	connect(m_correlation, &Correlation::aspectDescriptionChanged, this, &CorrelationDock::aspectDescriptionChanged);
 }
 
 ////*************************************************************
-////****** SLOTs for changes triggered in CorrelationCoefficientDock *******
+////****** SLOTs for changes triggered in CorrelationDock *******
 ////*************************************************************
-void CorrelationCoefficientDock::spreadsheetChanged(const QModelIndex& index) {
+void CorrelationDock::spreadsheetChanged(const QModelIndex& index) {
 	//QDEBUG("in spreadsheetChanged");
 	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 	Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(aspect);
 	setColumnsComboBoxModel(spreadsheet);
-	m_coefficient->setDataSourceSpreadsheet(spreadsheet);
+	m_correlation->setDataSourceSpreadsheet(spreadsheet);
 }
 
-void CorrelationCoefficientDock::col1IndexChanged(int index) {
+void CorrelationDock::col1IndexChanged(int index) {
 	if (index < 0) return;
 	changeCbCol2Label();
 }
 
-void CorrelationCoefficientDock::methodChanged() {
-	const auto method = static_cast<CorrelationCoefficient::Method>(ui.cbTest->currentData().toInt());
+void CorrelationDock::methodChanged() {
+	const auto method = static_cast<Correlation::Method>(ui.cbMethod->currentData().toInt());
 
-	ui.lCalculateStats->setVisible(method == CorrelationCoefficient::ChiSquare);
-	ui.chbCalculateStats->setVisible(method == CorrelationCoefficient::ChiSquare);
+	ui.lCalculateStats->setVisible(method == Correlation::ChiSquare);
+	ui.chbCalculateStats->setVisible(method == Correlation::ChiSquare);
 
-	if (method != CorrelationCoefficient::ChiSquare)
+	if (method != Correlation::ChiSquare)
 		ui.chbCalculateStats->setChecked(true);
 
 	chbColumnStatsStateChanged();
 }
 
-void CorrelationCoefficientDock::recalculate()  {
+void CorrelationDock::recalculate()  {
 	if (ui.chbCategorical->isChecked() && ui.cbCol1->count() == 0)
 		return;
 
@@ -140,31 +140,31 @@ void CorrelationCoefficientDock::recalculate()  {
 	cols << reinterpret_cast<Column*>(ui.cbCol1->currentData().toLongLong());
 	cols << reinterpret_cast<Column*>(ui.cbCol2->currentData().toLongLong());
 
-	auto method = static_cast<CorrelationCoefficient::Method>(ui.cbTest->currentData().toInt());
+	auto method = static_cast<Correlation::Method>(ui.cbMethod->currentData().toInt());
 
-	if (method == CorrelationCoefficient::ChiSquare)
+	if (method == Correlation::ChiSquare)
 		cols << reinterpret_cast<Column*>(ui.cbCol3->currentData().toLongLong());
 
-	m_coefficient->setColumns(cols);
-	m_coefficient->performTest(method, ui.chbCategorical->isChecked(), ui.chbCalculateStats->isChecked());
+	m_correlation->setColumns(cols);
+	m_correlation->performTest(method, ui.chbCategorical->isChecked(), ui.chbCalculateStats->isChecked());
 }
 
-void CorrelationCoefficientDock::setModelIndexFromAspect(TreeViewComboBox* cb, const AbstractAspect* aspect) {
+void CorrelationDock::setModelIndexFromAspect(TreeViewComboBox* cb, const AbstractAspect* aspect) {
 	if (aspect)
 		cb->setCurrentModelIndex(m_aspectTreeModel->modelIndexOfAspect(aspect));
 	else
 		cb->setCurrentModelIndex(QModelIndex());
 }
 
-void CorrelationCoefficientDock::changeCbCol2Label() {
+void CorrelationDock::changeCbCol2Label() {
 	if (ui.cbCol1->count() == 0) return;
 
 	QString selected_text = ui.cbCol1->currentText();
-	Column* col1 = m_coefficient->dataSourceSpreadsheet()->column(selected_text);
+	Column* col1 = m_correlation->dataSourceSpreadsheet()->column(selected_text);
 
-	auto method = static_cast<CorrelationCoefficient::Method>(ui.cbTest->currentData().toInt());
+	auto method = static_cast<Correlation::Method>(ui.cbMethod->currentData().toInt());
 
-	if (method == (CorrelationCoefficient::Kendall | CorrelationCoefficient::Spearman) ||
+	if (method == (Correlation::Kendall | Correlation::Spearman) ||
 			(!ui.chbCategorical->isChecked() && col1->isNumeric())) {
 		ui.lCol2->setText( i18n("Independent Var. 2"));
 		ui.chbCategorical->setChecked(false);
@@ -179,20 +179,20 @@ void CorrelationCoefficientDock::changeCbCol2Label() {
 	}
 }
 
-void CorrelationCoefficientDock::chbColumnStatsStateChanged() {
+void CorrelationDock::chbColumnStatsStateChanged() {
 	bool chbChecked = ui.chbCalculateStats->isChecked();
-	auto method = static_cast<CorrelationCoefficient::Method>(ui.cbTest->currentData().toInt());
+	auto method = static_cast<Correlation::Method>(ui.cbMethod->currentData().toInt());
 
 	ui.lVariables->setVisible(chbChecked);
 	ui.lCol1->setVisible(chbChecked);
 	ui.cbCol1->setVisible(chbChecked);
 	ui.lCol2->setVisible(chbChecked);
 	ui.cbCol2->setVisible(chbChecked);
-	ui.lCol3->setVisible(chbChecked && method == CorrelationCoefficient::ChiSquare);
-	ui.cbCol3->setVisible(chbChecked && method == CorrelationCoefficient::ChiSquare);
+	ui.lCol3->setVisible(chbChecked && method == Correlation::ChiSquare);
+	ui.cbCol3->setVisible(chbChecked && method == Correlation::ChiSquare);
 
-	ui.lCategorical->setVisible(chbChecked && method == CorrelationCoefficient::Pearson);
-	ui.chbCategorical->setVisible(chbChecked && method == CorrelationCoefficient::Pearson);
+	ui.lCategorical->setVisible(chbChecked && method == Correlation::Pearson);
+	ui.chbCategorical->setVisible(chbChecked && method == Correlation::Pearson);
 
 	ui.lNRows->setVisible(!chbChecked);
 	ui.leNRows->setVisible(!chbChecked);
@@ -207,26 +207,26 @@ void CorrelationCoefficientDock::chbColumnStatsStateChanged() {
 	} else
 		ui.pbPerformTest->setEnabled(true);
 
-	if (m_coefficient != nullptr)
-		m_coefficient->initInputStatsTable(method, chbChecked, ui.leNRows->text().toInt(), ui.leNColumns->text().toInt());
+	if (m_correlation != nullptr)
+		m_correlation->initInputStatsTable(method, chbChecked, ui.leNRows->text().toInt(), ui.leNColumns->text().toInt());
 }
 
-void CorrelationCoefficientDock::leNRowsChanged() {
-	if (m_coefficient != nullptr)
-		m_coefficient->setInputStatsTableNRows(ui.leNRows->text().toInt());
+void CorrelationDock::leNRowsChanged() {
+	if (m_correlation != nullptr)
+		m_correlation->setInputStatsTableNRows(ui.leNRows->text().toInt());
 }
 
-void CorrelationCoefficientDock::leNColumnsChanged() {
-	if (m_coefficient != nullptr)
-		m_coefficient->setInputStatsTableNCols(ui.leNColumns->text().toInt());
+void CorrelationDock::leNColumnsChanged() {
+	if (m_correlation != nullptr)
+		m_correlation->setInputStatsTableNCols(ui.leNColumns->text().toInt());
 }
 
-void CorrelationCoefficientDock::exportStatsTableToSpreadsheet() {
+void CorrelationDock::exportStatsTableToSpreadsheet() {
 	if (ui.chbCalculateStats->isVisible() && !ui.chbCalculateStats->isChecked())
-		m_coefficient->exportStatTableToSpreadsheet();
+		m_correlation->exportStatTableToSpreadsheet();
 }
 
-void CorrelationCoefficientDock::setColumnsComboBoxModel(Spreadsheet* spreadsheet) {
+void CorrelationDock::setColumnsComboBoxModel(Spreadsheet* spreadsheet) {
 	m_onlyValuesCols.clear();
 	m_twoCategoricalCols.clear();
 	m_multiCategoricalCols.clear();
@@ -249,15 +249,15 @@ void CorrelationCoefficientDock::setColumnsComboBoxModel(Spreadsheet* spreadshee
 	methodChanged();
 }
 
-void CorrelationCoefficientDock::setColumnsComboBoxView() {
+void CorrelationDock::setColumnsComboBoxView() {
 	ui.cbCol1->clear();
 	ui.cbCol2->clear();
 	ui.cbCol3->clear();
 
 	QList<Column*>::iterator i;
-	const auto method = static_cast<CorrelationCoefficient::Method>(ui.cbTest->currentData().toInt());
+	const auto method = static_cast<Correlation::Method>(ui.cbMethod->currentData().toInt());
 	switch (method) {
-	case (CorrelationCoefficient::Pearson): {
+	case (Correlation::Pearson): {
 		for (i = m_onlyValuesCols.begin(); i != m_onlyValuesCols.end(); i++) {
 			ui.cbCol1->addItem( (*i)->name(), qint64(*i));
 			ui.cbCol2->addItem( (*i)->name(), qint64(*i));
@@ -266,7 +266,7 @@ void CorrelationCoefficientDock::setColumnsComboBoxView() {
 			ui.cbCol1->addItem( (*i)->name(), qint64(*i));
 		break;
 	}
-	case CorrelationCoefficient::Kendall: {
+	case Correlation::Kendall: {
 		for (i = m_onlyValuesCols.begin(); i != m_onlyValuesCols.end(); i++) {
 			ui.cbCol1->addItem( (*i)->name(), qint64(*i));
 			ui.cbCol2->addItem( (*i)->name(), qint64(*i));
@@ -281,7 +281,7 @@ void CorrelationCoefficientDock::setColumnsComboBoxView() {
 		}
 		break;
 	}
-	case CorrelationCoefficient::Spearman: {
+	case Correlation::Spearman: {
 		for (i = m_onlyValuesCols.begin(); i != m_onlyValuesCols.end(); i++) {
 			ui.cbCol1->addItem( (*i)->name(), qint64(*i));
 			ui.cbCol2->addItem( (*i)->name(), qint64(*i));
@@ -290,7 +290,7 @@ void CorrelationCoefficientDock::setColumnsComboBoxView() {
 			ui.cbCol1->addItem( (*i)->name(), qint64(*i));
 		break;
 	}
-	case CorrelationCoefficient::ChiSquare: {
+	case Correlation::ChiSquare: {
 		for (i = m_twoCategoricalCols.begin(); i != m_twoCategoricalCols.end(); i++) {
 			ui.cbCol1->addItem( (*i)->name(), qint64(*i));
 			ui.cbCol2->addItem( (*i)->name(), qint64(*i));
@@ -307,14 +307,14 @@ void CorrelationCoefficientDock::setColumnsComboBoxView() {
 	}
 }
 
-bool CorrelationCoefficientDock::nonEmptySelectedColumns() {
+bool CorrelationDock::nonEmptySelectedColumns() {
 	if ((ui.cbCol1->isVisible() && ui.cbCol1->count() < 1) ||
 			(ui.cbCol2->isVisible() && ui.cbCol2->count() < 1))
 		return false;
 	return true;
 }
 
-void CorrelationCoefficientDock::countPartitions(Column *column, int &np, int &total_rows) {
+void CorrelationDock::countPartitions(Column *column, int &np, int &total_rows) {
 	total_rows = column->rowCount();
 	np = 0;
 	QString cell_value;

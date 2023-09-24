@@ -30,7 +30,7 @@
 #define GENERALTEST_H
 
 #include "backend/core/AbstractPart.h"
-#include "kdefrontend/generalTest/GeneralTestView.h"
+#include "kdefrontend/statistics/GeneralTestView.h"
 
 class Spreadsheet;
 class QString;

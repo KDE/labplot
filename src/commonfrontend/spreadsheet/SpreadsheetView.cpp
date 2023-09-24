@@ -23,8 +23,8 @@
 #include "backend/lib/macros.h"
 #include "backend/lib/trace.h"
 #include "backend/pivot/PivotTable.h"
-#include "backend/generalTest/HypothesisTest.h"
-#include "backend/generalTest/CorrelationCoefficient.h"
+#include "backend/statistics/HypothesisTest.h"
+#include "backend/statistics/Correlation.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/spreadsheet/SpreadsheetModel.h"
 #include "backend/spreadsheet/StatisticsSpreadsheet.h"
@@ -867,9 +867,9 @@ void SpreadsheetView::connectActions() {
 		m_spreadsheet->parentAspect()->addChild(test);
 	});
     connect(action_statistics_correlation_bivariate, &QAction::triggered, this, [=] {
-		auto* coefficient = new CorrelationCoefficient(i18n("Correlation Coefficient for %1", m_spreadsheet->name()));
-		coefficient->setDataSourceSpreadsheet(m_spreadsheet);
-		m_spreadsheet->parentAspect()->addChild(coefficient);
+		auto* correlation = new Correlation(i18n("Correlation Coefficient for %1", m_spreadsheet->name()));
+		correlation->setDataSourceSpreadsheet(m_spreadsheet);
+		m_spreadsheet->parentAspect()->addChild(correlation);
 	});
 
 	connect(action_insert_column_left, &QAction::triggered, this, &SpreadsheetView::insertColumnLeft);

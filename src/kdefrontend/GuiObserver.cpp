@@ -14,8 +14,8 @@
 #include "backend/core/AbstractAspect.h"
 #include "backend/core/AspectTreeModel.h"
 #include "backend/datasources/LiveDataSource.h"
-#include "backend/generalTest/HypothesisTest.h"
-#include "backend/generalTest/CorrelationCoefficient.h"
+#include "backend/statistics/HypothesisTest.h"
+#include "backend/statistics/Correlation.h"
 #include "backend/matrix/Matrix.h"
 #include "backend/pivot/PivotTable.h"
 #include "backend/spreadsheet/Spreadsheet.h"
@@ -56,7 +56,7 @@
 #include "kdefrontend/dockwidgets/CartesianPlotDock.h"
 #include "kdefrontend/dockwidgets/CartesianPlotLegendDock.h"
 #include "kdefrontend/dockwidgets/ColumnDock.h"
-#include "kdefrontend/dockwidgets/CorrelationCoefficientDock.h"
+#include "kdefrontend/dockwidgets/CorrelationDock.h"
 #include "kdefrontend/dockwidgets/CursorDock.h"
 #include "kdefrontend/dockwidgets/CustomPointDock.h"
 #include "kdefrontend/dockwidgets/HistogramDock.h"
@@ -496,10 +496,10 @@ void GuiObserver::selectedAspectsChanged(const QList<AbstractAspect*>& selectedA
 		raiseDock(m_hypothesisTestDock, m_mainWindow->stackedWidget);
 		m_hypothesisTestDock->setHypothesisTest(static_cast<HypothesisTest*>(selectedAspects.first()));
 		break;
-	case AspectType::CorrelationCoefficient:
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Correlation Coefficient"));
-		raiseDock(m_correlationCoefficientDock, m_mainWindow->stackedWidget);
-		m_correlationCoefficientDock->setCorrelationCoefficient(static_cast<CorrelationCoefficient*>(selectedAspects.first()));
+	case AspectType::Correlation:
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Correlation"));
+		raiseDock(m_correlationDock, m_mainWindow->stackedWidget);
+		m_correlationDock->setCorrelation(static_cast<Correlation*>(selectedAspects.first()));
 		break;
 	case AspectType::AbstractAspect:
 	case AspectType::AbstractColumn:

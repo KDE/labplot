@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>CorrelationCoefficientDock</class>
- <widget class="QWidget" name="CorrelationCoefficientDock">
+ <class>CorrelationDock</class>
+ <widget class="QWidget" name="CorrelationDock">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>449</width>
-    <height>877</height>
+    <height>846</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -244,7 +244,7 @@
     <widget class="QLineEdit" name="leName"/>
    </item>
    <item row="16" column="0">
-    <widget class="QLabel" name="lTest">
+    <widget class="QLabel" name="lMethod">
      <property name="text">
       <string>Coefficient</string>
      </property>
@@ -342,7 +342,7 @@
     </widget>
    </item>
    <item row="16" column="1" colspan="3">
-    <widget class="QComboBox" name="cbTest">
+    <widget class="QComboBox" name="cbMethod">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
        <horstretch>0</horstretch>

@@ -1,5 +1,5 @@
 /***************************************************************************
-    File                 : CorrelationCoefficientTest.h
+    File                 : CorrelationTest.h
     Project              : LabPlot
     Description          : Unit Testing for Correlation Coefficients
     --------------------------------------------------------------------
@@ -24,12 +24,12 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#ifndef CORRELATIONCOEFFICIENTTEST_H
-#define CORRELATIONCOEFFICIENTTEST_H
+#ifndef CORRELATIONTEST_H
+#define CORRELATIONTEST_H
 
 #include <../../CommonTest.h>
 
-class CorrelationCoefficientTest : public CommonTest {
+class CorrelationTest : public CommonTest {
 	Q_OBJECT
 
 private Q_SLOTS:
@@ -42,4 +42,4 @@ private Q_SLOTS:
 	void spearmanCoefficient_data();
 	void spearmanCoefficient();
 };
-#endif // CORRELATIONCOEFFICIENTTEST_H
+#endif // CORRELATIONTEST_H

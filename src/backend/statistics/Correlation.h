@@ -1,24 +1,24 @@
 ﻿/*
-	File                 : CorrelationCoefficient.h
+	File                 : Correlation.h
 	Project              : LabPlot
-	Description          : Correlation Coefficients/Tests
+	Description          : Bivariate Correlation Coefficients
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2019  Devanshu Agarwal(agarwaldevanshu8@gmail.com)
 	SPDX-FileCopyrightText: 2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-#ifndef CORRELATIONCOEFFICIENT_H
-#define CORRELATIONCOEFFICIENT_H
+#ifndef CORRELATION_H
+#define CORRELATION_H
 
 #include "GeneralTest.h"
 
-class CorrelationCoefficient : public GeneralTest {
+class Correlation : public GeneralTest {
 	Q_OBJECT
 
 public:
-	explicit CorrelationCoefficient(const QString& name);
-	~CorrelationCoefficient() override;
+	explicit Correlation(const QString& name);
+	~Correlation() override;
 
 	enum Method {Pearson, Spearman, Kendall, ChiSquare};
 
@@ -44,4 +44,4 @@ private:
 	QList<double> m_pValue;
 };
 
-#endif // CORRELATIONCOEFFICIENT_H
+#endif // CORRELATION_H

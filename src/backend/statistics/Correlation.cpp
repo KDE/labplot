@@ -1,5 +1,5 @@
 /*
-	File                 : CorrelationCoefficient.cpp
+	File                 : Correlation.cpp
 	Project              : LabPlot
 	Description          : Correlation Coefficients/Tests
 	--------------------------------------------------------------------
@@ -8,10 +8,10 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-#include "CorrelationCoefficient.h"
+#include "Correlation.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/lib/macros.h"
-#include "backend/generalTest/MyTableModel.h"
+#include "backend/statistics/MyTableModel.h"
 
 #include <QLabel>
 #include <KLocalizedString>
@@ -24,13 +24,13 @@ extern "C" {
 #include "backend/nsl/nsl_stats.h"
 }
 
-CorrelationCoefficient::CorrelationCoefficient(const QString& name) : GeneralTest(name, AspectType::CorrelationCoefficient) {
+Correlation::Correlation(const QString& name) : GeneralTest(name, AspectType::Correlation) {
 }
 
-CorrelationCoefficient::~CorrelationCoefficient() {
+Correlation::~Correlation() {
 }
 
-void CorrelationCoefficient::performTest(Method method, bool categoricalVariable, bool calculateStats) {
+void Correlation::performTest(Method method, bool categoricalVariable, bool calculateStats) {
 	m_correlationValue = 0;
 	m_statisticValue.clear();
 	m_pValue.clear();
@@ -39,21 +39,21 @@ void CorrelationCoefficient::performTest(Method method, bool categoricalVariable
 		m_resultLine[i]->clear();
 
 	switch (method) {
-	case CorrelationCoefficient::Pearson: {
+	case Correlation::Pearson: {
 		m_currTestName = QLatin1String("<h2>") + i18n("Pearson's r Correlation Test") + QLatin1String("</h2>");
 		performPearson(categoricalVariable);
 		break;
 	}
-	case CorrelationCoefficient::Kendall:
+	case Correlation::Kendall:
 		m_currTestName = QLatin1String("<h2>") + i18n("Kendall's Rank Correlation Test") + QLatin1String("</h2>");
 		performKendall();
 		break;
-	case CorrelationCoefficient::Spearman: {
+	case Correlation::Spearman: {
 		m_currTestName = QLatin1String("<h2>") + i18n("Spearman Correlation Coefficient Test") + QLatin1String("</h2>");
 		performSpearman();
 		break;
 	}
-	case CorrelationCoefficient::ChiSquare:
+	case Correlation::ChiSquare:
 		m_currTestName = QLatin1String("<h2>") + i18n("Chi Square Independence Test") + QLatin1String("</h2>");
 		performChiSquareIndpendence(calculateStats);
 		break;
@@ -62,7 +62,7 @@ void CorrelationCoefficient::performTest(Method method, bool categoricalVariable
 	emit changed();
 }
 
-void CorrelationCoefficient::initInputStatsTable(int test, bool calculateStats, int nRows, int nColumns) {
+void Correlation::initInputStatsTable(int test, bool calculateStats, int nRows, int nColumns) {
 	m_inputStatsTableModel->clear();
 
 	if (!calculateStats) {
@@ -79,7 +79,7 @@ void CorrelationCoefficient::initInputStatsTable(int test, bool calculateStats, 
 	emit changed();
 }
 
-void CorrelationCoefficient::setInputStatsTableNRows(int nRows) {
+void Correlation::setInputStatsTableNRows(int nRows) {
 	int nRows_old = m_inputStatsTableModel->rowCount();
 	m_inputStatsTableModel->setRowCount(nRows + 1);
 
@@ -87,7 +87,7 @@ void CorrelationCoefficient::setInputStatsTableNRows(int nRows) {
 		m_inputStatsTableModel->setData(m_inputStatsTableModel->index(i, 0), i18n("Row %1", i));
 }
 
-void CorrelationCoefficient::setInputStatsTableNCols(int nColumns) {
+void Correlation::setInputStatsTableNCols(int nColumns) {
 	int nColumns_old = m_inputStatsTableModel->columnCount();
 	m_inputStatsTableModel->setColumnCount(nColumns + 1);
 
@@ -95,7 +95,7 @@ void CorrelationCoefficient::setInputStatsTableNCols(int nColumns) {
 		m_inputStatsTableModel->setData(m_inputStatsTableModel->index(0, i), i18n("Column %1", i));
 }
 
-void CorrelationCoefficient::exportStatTableToSpreadsheet() {
+void Correlation::exportStatTableToSpreadsheet() {
 	if (m_dataSourceSpreadsheet == nullptr)
 		return;
 
@@ -132,11 +132,11 @@ void CorrelationCoefficient::exportStatTableToSpreadsheet() {
 		}
 }
 
-double CorrelationCoefficient::correlationValue() const {
+double Correlation::correlationValue() const {
 	return m_correlationValue;
 }
 
-QList<double> CorrelationCoefficient::statisticValue() const {
+QList<double> Correlation::statisticValue() const {
 	return m_statisticValue;
 }
 
@@ -156,7 +156,7 @@ QList<double> CorrelationCoefficient::statisticValue() const {
 //TODO: support for col1 is categorical.
 //TODO: add tooltip for correlation value result
 //TODO: find p value
-void CorrelationCoefficient::performPearson(bool categoricalVariable) {
+void Correlation::performPearson(bool categoricalVariable) {
 	if (m_columns.count() != 2) {
 		printError(i18n("Select only 2 columns"));
 		return;
@@ -237,7 +237,7 @@ void CorrelationCoefficient::performPearson(bool categoricalVariable) {
 // TODO: add tooltips.
 // TODO: Compute tauB for ties.
 // TODO: find P Value from Z Value
-void CorrelationCoefficient::performKendall() {
+void Correlation::performKendall() {
 	if (m_columns.count() != 2) {
 		printError(i18n("Select only 2 columns "));
 		return;
@@ -310,7 +310,7 @@ void CorrelationCoefficient::performKendall() {
 /***********************************************Spearman ******************************************************************/
 // All formulaes and symbols are taken from : https://www.statisticshowto.datasciencecentral.com/spearman-rank-correlation-definition-calculate/
 
-void CorrelationCoefficient::performSpearman() {
+void Correlation::performSpearman() {
 	if (m_columns.count() != 2) {
 		printError(i18n("Select only 2 columns "));
 		return;
@@ -370,7 +370,7 @@ void CorrelationCoefficient::performSpearman() {
 /***********************************************Chi Square Test for Indpendence******************************************************************/
 
 // TODO: Find P value from chi square test statistic:
-void CorrelationCoefficient::performChiSquareIndpendence(bool calculateStats) {
+void Correlation::performChiSquareIndpendence(bool calculateStats) {
 	int rowCount;
 	int columnCount;
 
@@ -540,7 +540,7 @@ void CorrelationCoefficient::performChiSquareIndpendence(bool calculateStats) {
 
 /***********************************************Helper Functions******************************************************************/
 
-int CorrelationCoefficient::findDiscordants(int *ranks, int start, int end) {
+int Correlation::findDiscordants(int *ranks, int start, int end) {
 	if (start >= end)
 		return 0;
 
@@ -586,7 +586,7 @@ int CorrelationCoefficient::findDiscordants(int *ranks, int start, int end) {
 	return leftDiscordants + rightDiscordants + mergeDiscordants;
 }
 
-void CorrelationCoefficient::convertToRanks(const Column* col, int N, QMap<double, int> &ranks) {
+void Correlation::convertToRanks(const Column* col, int N, QMap<double, int> &ranks) {
 	if (col->isNumeric())
 		return;
 

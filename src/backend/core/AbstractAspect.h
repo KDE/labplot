@@ -97,7 +97,7 @@ enum class AspectType : quint64 {
 	Worksheet = 0x0420020,
 	PivotTable = 0x0420040,
 	HypothesisTest = 0x0420080,
-	CorrelationCoefficient = 0x0420100,
+	Correlation = 0x0420100,
 
 	AbstractColumn = 0x1000000,
 	Column = 0x1000001,
@@ -257,6 +257,14 @@ public:
 			return QStringLiteral("MQTTClient");
 		case AspectType::MQTTSubscription:
 			return QStringLiteral("MQTTSubscription");
+
+		// statistics
+		case AspectType::HypothesisTest:
+			return QStringLiteral("HypothesisTest");
+		case AspectType::Correlation:
+			return QStringLiteral("Correlation");
+		case AspectType::PivotTable:
+			return QStringLiteral("PivotTable");
 		}
 
 		return {};

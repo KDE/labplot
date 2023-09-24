@@ -134,8 +134,6 @@ private:
 	QAction* m_exportAction;
 	QAction* m_closeAction;
 	QAction* m_newFolderAction;
-    QAction* m_newHypothesisTestAction;
-    QAction* m_newCorrelationCoefficientAction;
 	QAction* m_newWorkbookAction;
 	QAction* m_newSpreadsheetAction;
 	QAction* m_newMatrixAction;
@@ -245,8 +243,6 @@ private Q_SLOTS:
 #endif
 
 	void newFolder();
-    void newHypothesisTest();
-    void newCorrelationCoefficient();
 	void newWorkbook();
 	void newSpreadsheet();
 	void newMatrix();

@@ -27,10 +27,10 @@
  ***************************************************************************/
 
 #include "GeneralTestView.h"
-#include "backend/generalTest/GeneralTest.h"
+#include "backend/statistics/GeneralTest.h"
 #include "backend/lib/macros.h"
 #include "backend/lib/trace.h"
-#include "backend/generalTest/MyTextEdit.h"
+#include "backend/statistics/MyTextEdit.h"
 
 #include <QFile>
 #include <QVBoxLayout>

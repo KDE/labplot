@@ -1,5 +1,5 @@
 /*
-	File                 : CorrelationCoefficient.h
+	File                 : CorrelationDock.h
 	Project              : LabPlot
 	Description          : Dock for Correlation Coefficients/Tests
 	--------------------------------------------------------------------
@@ -8,29 +8,29 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-#ifndef CORRELATIONCOEFFICIENTDOCK_H
-#define CORRELATIONCOEFFICIENTDOCK_H
+#ifndef CORRELATIONDOCK_H
+#define CORRELATIONDOCK_H
 
 #include "kdefrontend/dockwidgets/BaseDock.h"
-#include "ui_correlationcoefficientdock.h"
+#include "ui_correlationdock.h"
 
 class Column;
 class Spreadsheet;
 class AspectTreeModel;
-class CorrelationCoefficient;
+class Correlation;
 class TreeViewComboBox;
 
-class CorrelationCoefficientDock : public BaseDock {
+class CorrelationDock : public BaseDock {
 	Q_OBJECT
 
 public:
-	explicit CorrelationCoefficientDock(QWidget*);
-	void setCorrelationCoefficient(CorrelationCoefficient*);
+	explicit CorrelationDock(QWidget*);
+	void setCorrelation(Correlation*);
 
 private:
-	Ui::CorrelationCoefficientDock ui;
+	Ui::CorrelationDock ui;
 	TreeViewComboBox* cbSpreadsheet{nullptr};
-	CorrelationCoefficient* m_coefficient{nullptr};
+	Correlation* m_correlation{nullptr};
 	AspectTreeModel* m_aspectTreeModel{nullptr};
 	QList<Column*> m_onlyValuesCols;
 	QList<Column*> m_twoCategoricalCols;
@@ -44,7 +44,7 @@ private:
 	bool nonEmptySelectedColumns();
 
 private Q_SLOTS:
-	//SLOTs for changes triggered in CorrelationCoefficientDock
+	//SLOTs for changes triggered in CorrelationDock
 	void methodChanged();
 	void spreadsheetChanged(const QModelIndex&);
 	void col1IndexChanged(int);

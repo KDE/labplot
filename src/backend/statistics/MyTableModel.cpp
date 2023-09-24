@@ -26,7 +26,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "backend/generalTest/MyTableModel.h"
+#include "backend/statistics/MyTableModel.h"
 
 #include <QStandardItemModel>
 

@@ -27,12 +27,12 @@
  ***************************************************************************/
 
 #include "GeneralTest.h"
-#include "kdefrontend/generalTest/GeneralTestView.h"
+#include "kdefrontend/statistics/GeneralTestView.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/macros.h"
 #include "backend/lib/XmlStreamReader.h"
-#include "backend/generalTest/MyTableModel.h"
+#include "backend/statistics/MyTableModel.h"
 
 #include <QLabel>
 #include <QVBoxLayout>

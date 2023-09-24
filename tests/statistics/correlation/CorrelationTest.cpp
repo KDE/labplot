@@ -1,5 +1,5 @@
 /***************************************************************************
-    File                 : CorrelationCoefficientTest.cpp
+    File                 : CorrelationTest.cpp
     Project              : LabPlot
     Description          : Unit Testing for Correlation Coefficient
     --------------------------------------------------------------------
@@ -25,13 +25,13 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "CorrelationCoefficientTest.h"
-#include "backend/generalTest/CorrelationCoefficient.h"
+#include "CorrelationTest.h"
+#include "backend/statistics/Correlation.h"
 
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/column/Column.h"
 
-void CorrelationCoefficientTest::pearsonCoefficient_data() {
+void CorrelationTest::pearsonCoefficient_data() {
 	QTest::addColumn<QVector<double>>("col1Data");
 	QTest::addColumn<QVector<double>>("col2Data");
 	QTest::addColumn<double>("correlationValue_expected");
@@ -70,7 +70,7 @@ void CorrelationCoefficientTest::pearsonCoefficient_data() {
 	QTest::newRow("Sample 3") << col1Data << col2Data << correlationValue_expected << zValue_expected;
 }
 
-void CorrelationCoefficientTest::pearsonCoefficient() {
+void CorrelationTest::pearsonCoefficient() {
 	QFETCH(QVector<double>, col1Data);
 	QFETCH(QVector<double>, col2Data);
 	QFETCH(double, correlationValue_expected);
@@ -107,7 +107,7 @@ void CorrelationCoefficientTest::pearsonCoefficient() {
 	FuzzyCompare(zValue, zValue_expected);
 }
 
-void CorrelationCoefficientTest::kendallCoefficient_data() {
+void CorrelationTest::kendallCoefficient_data() {
 	QTest::addColumn<QVector<double>>("col1Values");
 	QTest::addColumn<QVector<double>>("col2Values");
 	QTest::addColumn<QVector<QString>>("col1Texts");
@@ -147,7 +147,7 @@ void CorrelationCoefficientTest::kendallCoefficient_data() {
 	QTest::newRow("Second Sample") << col1Values << col2Values << col1Texts << col2Texts << isDouble << correlationValue_expected << zValue_expected;
 }
 
-void CorrelationCoefficientTest::kendallCoefficient() {
+void CorrelationTest::kendallCoefficient() {
 	QFETCH(QVector<double>, col1Values);
 	QFETCH(QVector<double>, col2Values);
 	QFETCH(QVector<QString>, col1Texts);
@@ -197,7 +197,7 @@ void CorrelationCoefficientTest::kendallCoefficient() {
 	FuzzyCompare(zValue, zValue_expected, 1.e-7);
 }
 
-void CorrelationCoefficientTest::spearmanCoefficient_data() {
+void CorrelationTest::spearmanCoefficient_data() {
 	QTest::addColumn<QVector<double>>("col1Data");
 	QTest::addColumn<QVector<double>>("col2Data");
 	QTest::addColumn<double>("correlationValue_expected");
@@ -223,7 +223,7 @@ void CorrelationCoefficientTest::spearmanCoefficient_data() {
 	QTest::newRow("Second Sample") << col1Data << col2Data << correlationValue_expected;
 }
 
-void CorrelationCoefficientTest::spearmanCoefficient() {
+void CorrelationTest::spearmanCoefficient() {
 	QFETCH(QVector<double>, col1Data);
 	QFETCH(QVector<double>, col2Data);
 	QFETCH(double, correlationValue_expected);
@@ -255,4 +255,4 @@ void CorrelationCoefficientTest::spearmanCoefficient() {
 	FuzzyCompare(correlationValue, correlationValue_expected, 1.e-5);
 }
 
-QTEST_MAIN(CorrelationCoefficientTest)
+QTEST_MAIN(CorrelationTest)

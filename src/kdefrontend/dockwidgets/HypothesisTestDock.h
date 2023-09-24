@@ -12,7 +12,7 @@
 #define HYPOTHESISTESTDOCK_H
 
 #include "kdefrontend/dockwidgets/BaseDock.h"
-#include "backend/generalTest/HypothesisTest.h"
+#include "backend/statistics/HypothesisTest.h"
 #include "ui_hypothesistestdock.h"
 
 class AbstractAspect;

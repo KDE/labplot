@@ -26,7 +26,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "backend/generalTest/MyTextEdit.h"
+#include "backend/statistics/MyTextEdit.h"
 #include "backend/lib/macros.h"
 
 #include <QTextEdit>

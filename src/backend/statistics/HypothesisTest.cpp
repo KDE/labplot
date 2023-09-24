@@ -10,7 +10,7 @@
 
 #include "HypothesisTest.h"
 #include "backend/core/column/Column.h"
-#include "backend/generalTest/MyTableModel.h"
+#include "backend/statistics/MyTableModel.h"
 #include "backend/lib/macros.h"
 #include "backend/nsl/nsl_stats.h"
 
