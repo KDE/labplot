@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-14 00:41+0000\n"
+"POT-Creation-Date: 2023-09-24 00:40+0000\n"
 "PO-Revision-Date: 2023-09-14 08:03+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -394,13 +394,13 @@ msgstr "Vh%1"
 msgid "Import Data"
 msgstr "Uvoz podatkov"
 
-#: src/backend/core/AbstractPart.cpp:111 src/kdefrontend/MainWin.cpp:701
-#: src/kdefrontend/MainWin.cpp:710
+#: src/backend/core/AbstractPart.cpp:111 src/kdefrontend/MainWin.cpp:699
+#: src/kdefrontend/MainWin.cpp:708
 #, kde-format
 msgid "From File..."
 msgstr "Iz datoteke..."
 
-#: src/backend/core/AbstractPart.cpp:113 src/kdefrontend/MainWin.cpp:717
+#: src/backend/core/AbstractPart.cpp:113 src/kdefrontend/MainWin.cpp:715
 #, kde-format
 msgid "From SQL Database..."
 msgstr "Iz zbirke podatkov SQL..."
@@ -427,7 +427,7 @@ msgstr "Natisni"
 msgid "Print Preview"
 msgstr "Predogled tiskanja"
 
-#: src/backend/core/AbstractPart.cpp:131 src/kdefrontend/MainWin.cpp:784
+#: src/backend/core/AbstractPart.cpp:131 src/kdefrontend/MainWin.cpp:782
 #, kde-format
 msgid "&Close"
 msgstr "&Zapri"
@@ -1811,7 +1811,7 @@ msgstr "Neznano"
 #: src/backend/datasources/filters/MatioFilter.cpp:435
 #: src/commonfrontend/workbook/WorkbookView.cpp:53
 #: src/commonfrontend/workbook/WorkbookView.cpp:160
-#: src/kdefrontend/MainWin.cpp:672 src/kdefrontend/MainWin.cpp:2041
+#: src/kdefrontend/MainWin.cpp:670 src/kdefrontend/MainWin.cpp:2039
 #, kde-format
 msgid "Matrix"
 msgstr "Matrika"
@@ -7712,7 +7712,7 @@ msgstr "Funkcija napake"
 #: src/commonfrontend/workbook/WorkbookView.cpp:135
 #: src/commonfrontend/worksheet/WorksheetView.cpp:287
 #: src/commonfrontend/worksheet/WorksheetView.cpp:419
-#: src/kdefrontend/MainWin.cpp:889
+#: src/kdefrontend/MainWin.cpp:887
 #, kde-format
 msgid "Add New"
 msgstr "Dodaj novo"
@@ -10438,8 +10438,8 @@ msgstr ""
 #: src/kdefrontend/dockwidgets/XYIntegrationCurveDock.cpp:56
 #: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:58
 #: src/kdefrontend/dockwidgets/XYSmoothCurveDock.cpp:52
-#: src/kdefrontend/labplot2ui.rc:28 src/kdefrontend/MainWin.cpp:666
-#: src/kdefrontend/MainWin.cpp:2023 src/kdefrontend/SettingsDialog.cpp:68
+#: src/kdefrontend/labplot2ui.rc:28 src/kdefrontend/MainWin.cpp:664
+#: src/kdefrontend/MainWin.cpp:2021 src/kdefrontend/SettingsDialog.cpp:68
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:237
 #, kde-format
 msgid "Spreadsheet"
@@ -10614,7 +10614,7 @@ msgstr "Izberite x-področje in ga približajte"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
 #: src/commonfrontend/worksheet/WorksheetView.cpp:344
-#: src/kdefrontend/MainWin.cpp:2498
+#: src/kdefrontend/MainWin.cpp:2496
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1426
 #, kde-format
 msgid "Cursor"
@@ -11799,7 +11799,7 @@ msgid "Open LabPlot Project"
 msgstr "Odpri projekt LabPlot"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:380
-#: src/kdefrontend/MainWin.cpp:1492
+#: src/kdefrontend/MainWin.cpp:1490
 #, kde-format
 msgid "LabPlot Projects (%1)"
 msgstr "Projekti LabPlot (%1)"
@@ -11811,7 +11811,7 @@ msgid "Open Origin Project"
 msgstr "Odpri projekt Origin"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:386
-#: src/kdefrontend/MainWin.cpp:1497
+#: src/kdefrontend/MainWin.cpp:1495
 #, kde-format
 msgid "Origin Projects (%1)"
 msgstr "Projekti Origin (%1)"
@@ -12092,7 +12092,7 @@ msgstr ""
 
 #: src/kdefrontend/datasources/MQTTSubscriptionWidget.cpp:856
 #: src/kdefrontend/datasources/MQTTSubscriptionWidget.cpp:858
-#: src/kdefrontend/MainWin.cpp:2811
+#: src/kdefrontend/MainWin.cpp:2809
 #, kde-format
 msgid "Warning"
 msgstr "Opozorilo"
@@ -13639,7 +13639,7 @@ msgid ""
 msgstr ""
 "Datoteke zbirk primerov %1 ni bilo mogoče odpreti. Preverite namestitev."
 
-#: src/kdefrontend/GuiObserver.cpp:191 src/kdefrontend/MainWin.cpp:1439
+#: src/kdefrontend/GuiObserver.cpp:191 src/kdefrontend/MainWin.cpp:1437
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties"
@@ -14400,15 +14400,15 @@ msgid "Failed to Open"
 msgstr "Odpiranje ni uspelo"
 
 #. i18n: ectx: ToolBar (worksheet_toolbar)
-#: src/kdefrontend/labplot2ui.rc:20 src/kdefrontend/MainWin.cpp:678
-#: src/kdefrontend/MainWin.cpp:2059 src/kdefrontend/SettingsDialog.cpp:63
+#: src/kdefrontend/labplot2ui.rc:20 src/kdefrontend/MainWin.cpp:676
+#: src/kdefrontend/MainWin.cpp:2057 src/kdefrontend/SettingsDialog.cpp:63
 #, kde-format
 msgid "Worksheet"
 msgstr "Delovni list"
 
 #. i18n: ectx: ToolBar (datapicker_toolbar)
-#: src/kdefrontend/labplot2ui.rc:24 src/kdefrontend/MainWin.cpp:661
-#: src/kdefrontend/MainWin.cpp:2015
+#: src/kdefrontend/labplot2ui.rc:24 src/kdefrontend/MainWin.cpp:659
+#: src/kdefrontend/MainWin.cpp:2013
 #, kde-format
 msgid "Data Extractor"
 msgstr "Izvlečnik podatkov"
@@ -14513,344 +14513,344 @@ msgctxt "%1 is the LabPlot version"
 msgid "Welcome to LabPlot %1"
 msgstr "Dobrodošli v LabPlot %1"
 
-#: src/kdefrontend/MainWin.cpp:272
+#: src/kdefrontend/MainWin.cpp:270
 #, kde-format
 msgid "GUI configuration file not found"
 msgstr "Prilagoditvene datoteke GUI ni bilo mogoče najti"
 
-#: src/kdefrontend/MainWin.cpp:273
+#: src/kdefrontend/MainWin.cpp:271
 #, kde-format
 msgid "%1 file was not found. Please check your installation."
 msgstr "Datoteke %1 ni mogoče najti. Preverite namestitev."
 
-#: src/kdefrontend/MainWin.cpp:638
+#: src/kdefrontend/MainWin.cpp:636
 #, kde-format
 msgid "&Open Example"
 msgstr "&Odpri primer"
 
-#: src/kdefrontend/MainWin.cpp:656 src/kdefrontend/MainWin.cpp:2007
+#: src/kdefrontend/MainWin.cpp:654 src/kdefrontend/MainWin.cpp:2005
 #, kde-format
 msgid "Workbook"
 msgstr "Delovni zvezek"
 
-#: src/kdefrontend/MainWin.cpp:658
+#: src/kdefrontend/MainWin.cpp:656
 #, kde-format
 msgid "Creates a new workbook for collection spreadsheets, matrices and plots"
 msgstr "Ustvari nov delovni zvezek za preglednice, matrike in grafikone zbirke"
 
-#: src/kdefrontend/MainWin.cpp:662
+#: src/kdefrontend/MainWin.cpp:660
 #, kde-format
 msgid "Creates a data extractor for getting data from a picture"
 msgstr "Ustvari izvlečnik podatkov za pridobivanje podatkov iz slike"
 
-#: src/kdefrontend/MainWin.cpp:668
+#: src/kdefrontend/MainWin.cpp:666
 #, kde-format
 msgid "Creates a new spreadsheet for data editing"
 msgstr "Ustvari novo preglednico za urejanje podatkov"
 
-#: src/kdefrontend/MainWin.cpp:674
+#: src/kdefrontend/MainWin.cpp:672
 #, kde-format
 msgid "Creates a new matrix for data editing"
 msgstr "Ustvari novo matriko za urejanje podatkov"
 
-#: src/kdefrontend/MainWin.cpp:680
+#: src/kdefrontend/MainWin.cpp:678
 #, kde-format
 msgid "Creates a new worksheet for data plotting"
 msgstr "Ustvari nov delovni list za urejanje podatkov"
 
-#: src/kdefrontend/MainWin.cpp:684 src/kdefrontend/MainWin.cpp:2067
+#: src/kdefrontend/MainWin.cpp:682 src/kdefrontend/MainWin.cpp:2065
 #, kde-format
 msgid "Note"
 msgstr "Opomba"
 
-#: src/kdefrontend/MainWin.cpp:685
+#: src/kdefrontend/MainWin.cpp:683
 #, kde-format
 msgid "Creates a new note for arbitrary text"
 msgstr "Ustvari novo opombo za poljubno besedilo"
 
-#: src/kdefrontend/MainWin.cpp:689 src/kdefrontend/MainWin.cpp:1999
+#: src/kdefrontend/MainWin.cpp:687 src/kdefrontend/MainWin.cpp:1997
 #, kde-format
 msgid "Folder"
 msgstr "Mapa"
 
-#: src/kdefrontend/MainWin.cpp:690
+#: src/kdefrontend/MainWin.cpp:688
 #, kde-format
 msgid "Creates a new folder to collect sheets and other elements"
 msgstr "Ustvari novo mapo za zbiranje delovnih listov in drugih elementov"
 
-#: src/kdefrontend/MainWin.cpp:695
+#: src/kdefrontend/MainWin.cpp:693
 #, kde-format
 msgid "Live Data Source..."
 msgstr "Vir podatkov v živo ..."
 
-#: src/kdefrontend/MainWin.cpp:696
+#: src/kdefrontend/MainWin.cpp:694
 #, kde-format
 msgid "Creates a live data source to read data from a real time device"
 msgstr ""
 "Ustvari vir podatkov v živo za branje podatkov iz naprave v realnem času"
 
-#: src/kdefrontend/MainWin.cpp:703 src/kdefrontend/MainWin.cpp:712
+#: src/kdefrontend/MainWin.cpp:701 src/kdefrontend/MainWin.cpp:710
 #, kde-format
 msgid "Import data from a regular file"
 msgstr "Uvozi podatke iz navadne datoteke"
 
-#: src/kdefrontend/MainWin.cpp:718
+#: src/kdefrontend/MainWin.cpp:716
 #, kde-format
 msgid "Import data from a SQL database"
 msgstr "Uvozi podatke iz zbirke podatkov SQL"
 
-#: src/kdefrontend/MainWin.cpp:722
+#: src/kdefrontend/MainWin.cpp:720
 #, kde-format
 msgid "From Dataset Collection..."
 msgstr "Iz zbirke množic podatkov ..."
 
-#: src/kdefrontend/MainWin.cpp:723
+#: src/kdefrontend/MainWin.cpp:721
 #, kde-format
 msgid "Imports data from an online dataset"
 msgstr "Uvozi podatke iz spletnega nabora podatkov"
 
-#: src/kdefrontend/MainWin.cpp:727
+#: src/kdefrontend/MainWin.cpp:725
 #, kde-format
 msgid "LabPlot Project..."
 msgstr "Projekt LabPlot ..."
 
-#: src/kdefrontend/MainWin.cpp:728
+#: src/kdefrontend/MainWin.cpp:726
 #, kde-format
 msgid "Import a project from a LabPlot project file (.lml)"
 msgstr "Uvozi projekt iz projektne datoteke LabPlot (.lml)"
 
-#: src/kdefrontend/MainWin.cpp:733
+#: src/kdefrontend/MainWin.cpp:731
 #, kde-format
 msgid "Origin Project (OPJ)..."
 msgstr "Projekt Origin (OPJ) ..."
 
-#: src/kdefrontend/MainWin.cpp:734
+#: src/kdefrontend/MainWin.cpp:732
 #, kde-format
 msgid "Import a project from an OriginLab Origin project file (.opj)"
 msgstr "Uvozi projekt iz projektne datoteke OriginLab Origin (.opj)"
 
-#: src/kdefrontend/MainWin.cpp:739
+#: src/kdefrontend/MainWin.cpp:737
 #, kde-format
 msgid "Export..."
 msgstr "Izvozi ..."
 
-#: src/kdefrontend/MainWin.cpp:740
+#: src/kdefrontend/MainWin.cpp:738
 #, kde-format
 msgid "Export selected element"
 msgstr "Izvozi izbrani element"
 
-#: src/kdefrontend/MainWin.cpp:746
+#: src/kdefrontend/MainWin.cpp:744
 #, kde-format
 msgid "Color Maps Browser"
 msgstr "Brskalnik barvnih palet"
 
-#: src/kdefrontend/MainWin.cpp:747
+#: src/kdefrontend/MainWin.cpp:745
 #, kde-format
 msgid "Open dialog to browse through the available color maps."
 msgstr "Odprite pogovorno okno za brskanje po razpoložljivih barvnih paletah."
 
-#: src/kdefrontend/MainWin.cpp:756
+#: src/kdefrontend/MainWin.cpp:754
 #, kde-format
 msgid "FITS Metadata Editor..."
 msgstr "Urejevalnik metapodatkov FITS ..."
 
-#: src/kdefrontend/MainWin.cpp:757
+#: src/kdefrontend/MainWin.cpp:755
 #, kde-format
 msgid "Open editor to edit FITS meta data"
 msgstr "Odpre urejevalnik za urejanje metapodatkov FITS"
 
-#: src/kdefrontend/MainWin.cpp:766
+#: src/kdefrontend/MainWin.cpp:764
 #, kde-format
 msgid "Undo/Redo History..."
 msgstr "Zgodovina razveljavitev/ponovitev ..."
 
-#: src/kdefrontend/MainWin.cpp:786
+#: src/kdefrontend/MainWin.cpp:784
 #, kde-format
 msgid "Close the active window"
 msgstr "Zapri aktivno okno"
 
-#: src/kdefrontend/MainWin.cpp:789
+#: src/kdefrontend/MainWin.cpp:787
 #, kde-format
 msgid "Close &All"
 msgstr "&Zapri vse"
 
-#: src/kdefrontend/MainWin.cpp:790
+#: src/kdefrontend/MainWin.cpp:788
 #, kde-format
 msgid "Close all the windows"
 msgstr "Zaprite vsa okna"
 
-#: src/kdefrontend/MainWin.cpp:793
+#: src/kdefrontend/MainWin.cpp:791
 #, kde-format
 msgid "Ne&xt"
 msgstr "Na&slednji"
 
-#: src/kdefrontend/MainWin.cpp:795
+#: src/kdefrontend/MainWin.cpp:793
 #, kde-format
 msgid "Move the focus to the next window"
 msgstr "Premakni pozornost na naslednje okno"
 
-#: src/kdefrontend/MainWin.cpp:798
+#: src/kdefrontend/MainWin.cpp:796
 #, kde-format
 msgid "Pre&vious"
 msgstr "Pre&jšnji"
 
-#: src/kdefrontend/MainWin.cpp:800
+#: src/kdefrontend/MainWin.cpp:798
 #, kde-format
 msgid "Move the focus to the previous window"
 msgstr "Premakni pozornost na prejšnje okno"
 
-#: src/kdefrontend/MainWin.cpp:807
+#: src/kdefrontend/MainWin.cpp:805
 #, kde-format
 msgid "Current &Folder Only"
 msgstr "Samo trenutna &mapa"
 
-#: src/kdefrontend/MainWin.cpp:812
+#: src/kdefrontend/MainWin.cpp:810
 #, kde-format
 msgid "Current Folder and &Subfolders"
 msgstr "Trenutna mapa in &podmape"
 
-#: src/kdefrontend/MainWin.cpp:816
+#: src/kdefrontend/MainWin.cpp:814
 #, kde-format
 msgid "&All"
 msgstr "&Vse"
 
-#: src/kdefrontend/MainWin.cpp:838
+#: src/kdefrontend/MainWin.cpp:836
 #, kde-format
 msgid "Show Memory Usage"
 msgstr "Pokaži uporabo pomnilnika"
 
-#: src/kdefrontend/MainWin.cpp:846
+#: src/kdefrontend/MainWin.cpp:844
 #, kde-format
 msgid "Project Explorer"
 msgstr "Raziskovalec projektov"
 
-#: src/kdefrontend/MainWin.cpp:851
+#: src/kdefrontend/MainWin.cpp:849
 #, kde-format
 msgid "Properties Explorer"
 msgstr "Raziskovalec lastnosti"
 
-#: src/kdefrontend/MainWin.cpp:914
+#: src/kdefrontend/MainWin.cpp:912
 #, kde-format
 msgid "Window Visibility"
 msgstr "Vidnost okna"
 
-#: src/kdefrontend/MainWin.cpp:938
+#: src/kdefrontend/MainWin.cpp:936
 #, kde-format
 msgid "Color Scheme"
 msgstr "Barvna shema"
 
-#: src/kdefrontend/MainWin.cpp:985
+#: src/kdefrontend/MainWin.cpp:983
 #, kde-format
 msgid "Configure CAS..."
 msgstr "Prilagodi CAS ..."
 
-#: src/kdefrontend/MainWin.cpp:1021 src/kdefrontend/MainWin.cpp:1035
+#: src/kdefrontend/MainWin.cpp:1019 src/kdefrontend/MainWin.cpp:1033
 #, kde-format
 msgid "The current project %1 has been modified. Do you want to save it?"
 msgstr "Trenutni projekt %1 je bil spremenjen. Ali ga želite shraniti?"
 
-#: src/kdefrontend/MainWin.cpp:1022 src/kdefrontend/MainWin.cpp:1036
+#: src/kdefrontend/MainWin.cpp:1020 src/kdefrontend/MainWin.cpp:1034
 #, kde-format
 msgid "Save Project"
 msgstr "Shrani projekt"
 
-#: src/kdefrontend/MainWin.cpp:1426
+#: src/kdefrontend/MainWin.cpp:1424
 #, kde-format
 msgctxt "@title:window"
 msgid "Project Explorer"
 msgstr "Raziskovalec projektov"
 
-#: src/kdefrontend/MainWin.cpp:1483
+#: src/kdefrontend/MainWin.cpp:1481
 #, kde-format
 msgid "%1: created"
 msgstr "%1: ustvarjeno"
 
-#: src/kdefrontend/MainWin.cpp:1503
+#: src/kdefrontend/MainWin.cpp:1501
 #, kde-format
 msgid "Cantor Projects (*.cws)"
 msgstr "Projekti Cantor (*.cws)"
 
-#: src/kdefrontend/MainWin.cpp:1504
+#: src/kdefrontend/MainWin.cpp:1502
 #, kde-format
 msgid "Jupyter Notebooks (*.ipynb)"
 msgstr "Zvezki Jupyter (*.ipynb)"
 
-#: src/kdefrontend/MainWin.cpp:1511
+#: src/kdefrontend/MainWin.cpp:1509
 #, kde-format
 msgid "All supported files (%1)"
 msgstr "Vse podprte datoteke (%1)"
 
-#: src/kdefrontend/MainWin.cpp:1515
+#: src/kdefrontend/MainWin.cpp:1513
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Project"
 msgstr "Odpri projekt"
 
-#: src/kdefrontend/MainWin.cpp:1532
+#: src/kdefrontend/MainWin.cpp:1530
 #, kde-format
 msgid "The project file %1 is already opened."
 msgstr "Projektna datoteka %1 je že odprta."
 
-#: src/kdefrontend/MainWin.cpp:1532 src/kdefrontend/MainWin.cpp:1540
-#: src/kdefrontend/MainWin.cpp:1545
+#: src/kdefrontend/MainWin.cpp:1530 src/kdefrontend/MainWin.cpp:1538
+#: src/kdefrontend/MainWin.cpp:1543
 #, kde-format
 msgid "Open Project"
 msgstr "Odpri projekt"
 
-#: src/kdefrontend/MainWin.cpp:1540
+#: src/kdefrontend/MainWin.cpp:1538
 #, kde-format
 msgid "The project file %1 doesn't exist."
 msgstr "Projektna datoteka %1 ne obstaja."
 
-#: src/kdefrontend/MainWin.cpp:1545
+#: src/kdefrontend/MainWin.cpp:1543
 #, kde-format
 msgid "Couldn't read the project file %1."
 msgstr "Ni bilo mogoče prebrati projektne datoteka %1."
 
-#: src/kdefrontend/MainWin.cpp:1559
+#: src/kdefrontend/MainWin.cpp:1557
 #, kde-format
 msgid "Loading %1..."
 msgstr "Nalaganje %1 ..."
 
-#: src/kdefrontend/MainWin.cpp:1609 src/kdefrontend/MainWin.cpp:1613
-#: src/kdefrontend/MainWin.cpp:1618 src/kdefrontend/MainWin.cpp:1623
-#: src/kdefrontend/MainWin.cpp:1627 src/kdefrontend/MainWin.cpp:1674
-#: src/kdefrontend/MainWin.cpp:1679 src/kdefrontend/MainWin.cpp:1684
-#: src/kdefrontend/MainWin.cpp:1690
+#: src/kdefrontend/MainWin.cpp:1607 src/kdefrontend/MainWin.cpp:1611
+#: src/kdefrontend/MainWin.cpp:1616 src/kdefrontend/MainWin.cpp:1621
+#: src/kdefrontend/MainWin.cpp:1625 src/kdefrontend/MainWin.cpp:1672
+#: src/kdefrontend/MainWin.cpp:1677 src/kdefrontend/MainWin.cpp:1682
+#: src/kdefrontend/MainWin.cpp:1688
 #, kde-format
 msgid "Failed to open project"
 msgstr "Odpiranje projekta ni uspelo"
 
-#: src/kdefrontend/MainWin.cpp:1609 src/kdefrontend/MainWin.cpp:1618
-#: src/kdefrontend/MainWin.cpp:1623 src/kdefrontend/MainWin.cpp:1674
-#: src/kdefrontend/MainWin.cpp:1679 src/kdefrontend/MainWin.cpp:1684
+#: src/kdefrontend/MainWin.cpp:1607 src/kdefrontend/MainWin.cpp:1616
+#: src/kdefrontend/MainWin.cpp:1621 src/kdefrontend/MainWin.cpp:1672
+#: src/kdefrontend/MainWin.cpp:1677 src/kdefrontend/MainWin.cpp:1682
 #, kde-format
 msgid "Failed to process the content of the file '%1'."
 msgstr "Obdelava vsebine datoteke »%1« ni uspela."
 
-#: src/kdefrontend/MainWin.cpp:1613 src/kdefrontend/MainWin.cpp:1627
-#: src/kdefrontend/MainWin.cpp:1690
+#: src/kdefrontend/MainWin.cpp:1611 src/kdefrontend/MainWin.cpp:1625
+#: src/kdefrontend/MainWin.cpp:1688
 #, kde-format
 msgid "Failed to open the file '%1'."
 msgstr "Odpiranje datoteke »%1« ni uspelo."
 
-#: src/kdefrontend/MainWin.cpp:1704
+#: src/kdefrontend/MainWin.cpp:1702
 #, kde-format
 msgid "%1: opened"
 msgstr "%1: odprto"
 
-#: src/kdefrontend/MainWin.cpp:1714
+#: src/kdefrontend/MainWin.cpp:1712
 #, kde-format
 msgid "Project successfully opened (in %1 seconds)."
 msgstr "Projekt se je uspešno odprl (v %1 s)."
 
-#: src/kdefrontend/MainWin.cpp:1810
+#: src/kdefrontend/MainWin.cpp:1808
 #, kde-format
 msgctxt "@title:window"
 msgid "Save Project As"
 msgstr "Shrani projekt kot"
 
-#: src/kdefrontend/MainWin.cpp:1812
+#: src/kdefrontend/MainWin.cpp:1810
 #, kde-format
 msgid ""
 "LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 "
@@ -14859,73 +14859,73 @@ msgstr ""
 "Projekti LabPlot (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 "
 "*.LML.XZ)"
 
-#: src/kdefrontend/MainWin.cpp:1838
+#: src/kdefrontend/MainWin.cpp:1836
 #, kde-format
 msgid "Couldn't open the temporary file for writing."
 msgstr "Začasne datoteke za pisanje ni bilo mogoče odpreti."
 
-#: src/kdefrontend/MainWin.cpp:1893
+#: src/kdefrontend/MainWin.cpp:1891
 #, kde-format
 msgid "Project saved"
 msgstr "Projekt shranjen"
 
-#: src/kdefrontend/MainWin.cpp:1909
+#: src/kdefrontend/MainWin.cpp:1907
 #, kde-format
 msgid "Couldn't save the file '%1'."
 msgstr "Datoteke »%1« ni bilo mogoče shraniti."
 
-#: src/kdefrontend/MainWin.cpp:1914
+#: src/kdefrontend/MainWin.cpp:1912
 #, kde-format
 msgid "Couldn't open the file '%1' for writing."
 msgstr "Datoteke »%1« ni bilo mogoče odpreti za pisanje."
 
-#: src/kdefrontend/MainWin.cpp:1959
+#: src/kdefrontend/MainWin.cpp:1957
 #, kde-format
 msgid "Changed"
 msgstr "Spremenjeno"
 
-#: src/kdefrontend/MainWin.cpp:1974 src/kdefrontend/MainWin.cpp:1986
+#: src/kdefrontend/MainWin.cpp:1972 src/kdefrontend/MainWin.cpp:1984
 #, kde-format
 msgid "Preparing printing of %1"
 msgstr "Priprava tiskanja %1"
 
-#: src/kdefrontend/MainWin.cpp:1976 src/kdefrontend/MainWin.cpp:1988
+#: src/kdefrontend/MainWin.cpp:1974 src/kdefrontend/MainWin.cpp:1986
 #, kde-format
 msgid "%1 printed"
 msgstr "%1 natisnjeno"
 
-#: src/kdefrontend/MainWin.cpp:2744
+#: src/kdefrontend/MainWin.cpp:2742
 #: src/kdefrontend/welcomescreen/WelcomeScreenHelper.cpp:115
 #, kde-format
 msgid "Dataset%1"
 msgstr "Nabor podatkov%1"
 
-#: src/kdefrontend/MainWin.cpp:2774
+#: src/kdefrontend/MainWin.cpp:2772
 #, kde-format
 msgid "%1 exported"
 msgstr "%1 izvoženo"
 
-#: src/kdefrontend/MainWin.cpp:2781
+#: src/kdefrontend/MainWin.cpp:2779
 #, kde-format
 msgid "FITS files saved"
 msgstr "Datoteke FITS shranjene"
 
-#: src/kdefrontend/MainWin.cpp:2793
+#: src/kdefrontend/MainWin.cpp:2791
 #, kde-format
 msgid "MQTT Client%1"
 msgstr "Odjemalec MQTT%1"
 
-#: src/kdefrontend/MainWin.cpp:2811
+#: src/kdefrontend/MainWin.cpp:2809
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
 msgstr "S tem gostiteljem že obstaja MQTTClient!"
 
-#: src/kdefrontend/MainWin.cpp:2815
+#: src/kdefrontend/MainWin.cpp:2813
 #, kde-format
 msgid "Live data source%1"
 msgstr "Vir podatkov v živo%1"
 
-#: src/kdefrontend/MainWin.cpp:2859
+#: src/kdefrontend/MainWin.cpp:2857
 #, kde-format
 msgid "No Cantor backends found. Please install the ones you want to use."
 msgstr ""
