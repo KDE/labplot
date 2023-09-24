@@ -631,8 +631,12 @@ QVector<QStringList> XLSXFilterPrivate::previewForDataRegion(const QString& shee
 			*okToMatrix = true;
 
 		const auto& documentRegion = m_document->dimension();
-		DEBUG(Q_FUNC_INFO << ", start/end row = " << startRow << " " << endRow)
 		if (region.lastRow() <= documentRegion.lastRow() && region.lastColumn() <= documentRegion.lastColumn()) {
+			DEBUG(Q_FUNC_INFO << ", region first/last row = " << region.firstRow() << " " << region.lastRow())
+			DEBUG(Q_FUNC_INFO << ", region first/last column = " << region.firstColumn() << " " << region.lastColumn())
+			DEBUG(Q_FUNC_INFO << ", start/end row = " << startRow << " " << endRow)
+			DEBUG(Q_FUNC_INFO << ", start/end col = " << startColumn << " " << endColumn)
+			// TODO: handle start/end row/column
 			const int rows = std::min(lines, region.lastRow());
 			for (int row = region.firstRow(); row <= rows; ++row) {
 				QStringList line;
