@@ -20,17 +20,9 @@ public:
 	explicit CorrelationCoefficient(const QString& name);
 	~CorrelationCoefficient() override;
 
-	enum CorrelationTestType{
-	//Type
-		Pearson = 0x01,
-		Spearman = 0x02,
-		Kendall = 0x04,
-		ChiSquare = 0x08,
-	//Subtype
-		IndependenceTest = 0x10
-	};
+	enum Method {Pearson, Spearman, Kendall, ChiSquare};
 
-	void performTest(int test, bool categoricalVariable = false, bool calculateStats = true);
+	void performTest(Method, bool categoricalVariable = false, bool calculateStats = true);
 	void initInputStatsTable(int test, bool calculateStats, int nRows, int nColumns);
 	void setInputStatsTableNRows(int nRows);
 	void setInputStatsTableNCols(int nColumns);

@@ -30,7 +30,7 @@ CorrelationCoefficient::CorrelationCoefficient(const QString& name) : GeneralTes
 CorrelationCoefficient::~CorrelationCoefficient() {
 }
 
-void CorrelationCoefficient::performTest(int test, bool categoricalVariable, bool calculateStats) {
+void CorrelationCoefficient::performTest(Method method, bool categoricalVariable, bool calculateStats) {
 	m_correlationValue = 0;
 	m_statisticValue.clear();
 	m_pValue.clear();
@@ -38,7 +38,7 @@ void CorrelationCoefficient::performTest(int test, bool categoricalVariable, boo
 	for (int i = 0; i < RESULTLINESCOUNT; i++)
 		m_resultLine[i]->clear();
 
-	switch (testType(test)) {
+	switch (method) {
 	case CorrelationCoefficient::Pearson: {
 		m_currTestName = QLatin1String("<h2>") + i18n("Pearson's r Correlation Test") + QLatin1String("</h2>");
 		performPearson(categoricalVariable);
@@ -54,10 +54,8 @@ void CorrelationCoefficient::performTest(int test, bool categoricalVariable, boo
 		break;
 	}
 	case CorrelationCoefficient::ChiSquare:
-		if (testSubtype(test) == CorrelationCoefficient::IndependenceTest) {
-			m_currTestName = QLatin1String("<h2>") + i18n("Chi Square Independence Test") + QLatin1String("</h2>");
-			performChiSquareIndpendence(calculateStats);
-		}
+		m_currTestName = QLatin1String("<h2>") + i18n("Chi Square Independence Test") + QLatin1String("</h2>");
+		performChiSquareIndpendence(calculateStats);
 		break;
 	}
 
@@ -68,10 +66,8 @@ void CorrelationCoefficient::initInputStatsTable(int test, bool calculateStats, 
 	m_inputStatsTableModel->clear();
 
 	if (!calculateStats) {
-		if (testSubtype(test) == IndependenceTest) {
-			m_inputStatsTableModel->setRowCount(nRows + 1);
-			m_inputStatsTableModel->setColumnCount(nColumns + 1);
-		}
+		m_inputStatsTableModel->setRowCount(nRows + 1);
+		m_inputStatsTableModel->setColumnCount(nColumns + 1);
 	}
 
 	for (int i = 1; i < nRows + 1; i++)

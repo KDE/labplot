@@ -88,7 +88,7 @@ void CorrelationCoefficientTest::pearsonCoefficient() {
 	CorrelationCoefficient correlationCoefficientTest(QStringLiteral("Pearson's R"));
 	correlationCoefficientTest.setColumns(cols);
 
-	CorrelationCoefficient::CorrelationTestType test;
+	CorrelationCoefficient::Method test;
 	test = CorrelationCoefficient::Pearson;
 
 	bool categoricalVariable = false;
@@ -179,8 +179,8 @@ void CorrelationCoefficientTest::kendallCoefficient() {
 	CorrelationCoefficient correlationCoefficientTest(QStringLiteral("Kendall's Tau"));
 	correlationCoefficientTest.setColumns(cols);
 
-	CorrelationCoefficient::CorrelationTestType test;
-	test = CorrelationCoefficient::CorrelationTestType::Kendall;
+	CorrelationCoefficient::Method test;
+	test = CorrelationCoefficient::Method::Kendall;
 
 	bool categoricalVariable = false;
 	correlationCoefficientTest.performTest(test, categoricalVariable);
@@ -240,7 +240,7 @@ void CorrelationCoefficientTest::spearmanCoefficient() {
 	CorrelationCoefficient correlationCoefficientTest(QStringLiteral("Spearman Rank"));
 	correlationCoefficientTest.setColumns(cols);
 
-	CorrelationCoefficient::CorrelationTestType test;
+	CorrelationCoefficient::Method test;
 	test = CorrelationCoefficient::Spearman;
 
 	bool categoricalVariable = false;

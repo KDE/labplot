@@ -311,7 +311,7 @@ void SpreadsheetView::initActions() {
 
 	action_pivot_table = new QAction(QIcon::fromTheme(QLatin1String("table")), i18n("Pivot Table"), this);
 	action_do_hypothesis_test = new QAction(i18n("Hypothesis Test"), this);
-	action_find_correlation_coefficient = new QAction(i18n("Correlation Coefficient"), this);
+	action_statistics_correlation_bivariate = new QAction(i18n("Bivariate"), this);
 
 	// column related actions
 	action_insert_column_left = new QAction(QIcon::fromTheme(QStringLiteral("edit-table-insert-column-left")), i18n("Insert Column Left"), this);
@@ -625,6 +625,15 @@ void SpreadsheetView::initMenus() {
 	m_analyzePlotMenu->addAction(addDataReductionAction);
 	m_columnMenu->addMenu(m_analyzePlotMenu);
 
+	// statistical analysis
+	m_statisticalAnalysisMenu = new QMenu(i18n("Statistical Analysis"), this);
+	auto* correlationMenu = new QMenu(i18n("Correlation"), this);
+	correlationMenu->addAction(action_statistics_correlation_bivariate);
+	m_statisticalAnalysisMenu->addMenu(correlationMenu);
+
+	// auto* hyphotesisTestMenu = new QMenu(i18n("Hypothesis Test"), this);
+	m_statisticalAnalysisMenu->addAction(action_do_hypothesis_test);
+
 	m_columnSetAsMenu = new QMenu(i18n("Set Column As"), this);
 	m_columnMenu->addSeparator();
 	m_columnSetAsMenu->addAction(action_set_as_x);
@@ -770,8 +779,7 @@ void SpreadsheetView::initMenus() {
 	m_spreadsheetMenu = new QMenu(this);
 	m_spreadsheetMenu->addMenu(m_plotDataMenu);
 	m_spreadsheetMenu->addMenu(m_analyzePlotMenu);
-    m_spreadsheetMenu->addAction(action_do_hypothesis_test);
-    m_spreadsheetMenu->addAction(action_find_correlation_coefficient);
+	m_spreadsheetMenu->addMenu(m_statisticalAnalysisMenu);
     m_spreadsheetMenu->addSeparator();
 	m_spreadsheetMenu->addAction(action_pivot_table);
 	m_spreadsheetMenu->addSeparator();
@@ -845,9 +853,24 @@ void SpreadsheetView::connectActions() {
 	connect(action_go_to_cell, &QAction::triggered, this, static_cast<void (SpreadsheetView::*)()>(&SpreadsheetView::goToCell));
 	connect(action_search, &QAction::triggered, this, &SpreadsheetView::searchReplace);
 	connect(action_search_replace, &QAction::triggered, this, &SpreadsheetView::searchReplace);
-	connect(action_pivot_table, &QAction::triggered, this, &SpreadsheetView::createPivotTable);
-    connect(action_do_hypothesis_test, &QAction::triggered, this, &SpreadsheetView::doHypothesisTest);
-    connect(action_find_correlation_coefficient, &QAction::triggered, this, &SpreadsheetView::findCorrelationCoefficient);
+
+	// statistics
+	connect(action_pivot_table, &QAction::triggered, this, [=] {
+		auto* pivot = new PivotTable(i18n("Pivot Table for %1", m_spreadsheet->name()));
+		pivot->setDataSourceType(PivotTable::DataSourceSpreadsheet);
+		pivot->setDataSourceSpreadsheet(m_spreadsheet);
+		m_spreadsheet->parentAspect()->addChild(pivot);
+	});
+    connect(action_do_hypothesis_test, &QAction::triggered, this, [=] {
+		auto* test = new HypothesisTest(i18n("Hypothesis Test for %1", m_spreadsheet->name()));
+		test->setDataSourceSpreadsheet(m_spreadsheet);
+		m_spreadsheet->parentAspect()->addChild(test);
+	});
+    connect(action_statistics_correlation_bivariate, &QAction::triggered, this, [=] {
+		auto* coefficient = new CorrelationCoefficient(i18n("Correlation Coefficient for %1", m_spreadsheet->name()));
+		coefficient->setDataSourceSpreadsheet(m_spreadsheet);
+		m_spreadsheet->parentAspect()->addChild(coefficient);
+	});
 
 	connect(action_insert_column_left, &QAction::triggered, this, &SpreadsheetView::insertColumnLeft);
 	connect(action_insert_column_right, &QAction::triggered, this, &SpreadsheetView::insertColumnRight);
@@ -1096,25 +1119,6 @@ void SpreadsheetView::goToCell(int row, int col) {
 	QModelIndex index = m_model->index(row, col);
 	m_tableView->scrollTo(index);
 	m_tableView->setCurrentIndex(index);
-}
-
-void SpreadsheetView::createPivotTable() {
-	auto* pivot = new PivotTable(i18n("Pivot Table for %1", m_spreadsheet->name()));
-	pivot->setDataSourceType(PivotTable::DataSourceSpreadsheet);
-	pivot->setDataSourceSpreadsheet(m_spreadsheet);
-	m_spreadsheet->parentAspect()->addChild(pivot);
-}
-
-void SpreadsheetView::doHypothesisTest() {
-	auto* hypothesis_test = new HypothesisTest(i18n("Hypothesis Test for %1", m_spreadsheet->name()));
-	hypothesis_test->setDataSourceSpreadsheet(m_spreadsheet);
-	m_spreadsheet->parentAspect()->addChild(hypothesis_test);
-}
-
-void SpreadsheetView::findCorrelationCoefficient() {
-	auto* correlation_coefficient = new CorrelationCoefficient(i18n("Correlation Coefficient for %1", m_spreadsheet->name()));
-	correlation_coefficient->setDataSourceSpreadsheet(m_spreadsheet);
-	m_spreadsheet->parentAspect()->addChild(correlation_coefficient);
 }
 
 void SpreadsheetView::selectCell(int row, int col) {

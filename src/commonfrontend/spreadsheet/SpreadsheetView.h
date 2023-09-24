@@ -148,7 +148,7 @@ private:
 	QAction* action_statistics_spreadsheet{nullptr};
 	QAction* action_pivot_table{nullptr};
     QAction* action_do_hypothesis_test{nullptr};
-    QAction* action_find_correlation_coefficient{nullptr};
+    QAction* action_statistics_correlation_bivariate{nullptr};
 
 	// column related actions
 	QAction* action_insert_column_left{nullptr};
@@ -225,6 +225,7 @@ private:
 	QMenu* m_spreadsheetMenu{nullptr};
 	QMenu* m_plotDataMenu{nullptr};
 	QMenu* m_analyzePlotMenu{nullptr};
+	QMenu* m_statisticalAnalysisMenu{nullptr};
 
 	bool m_suppressResize{false};
 
@@ -253,9 +254,6 @@ private Q_SLOTS:
 	void goToNextColumn();
 	void goToPreviousColumn();
 	void goToCell();
-	void createPivotTable();
-    void doHypothesisTest();
-    void findCorrelationCoefficient();
 	void formatHeatmap();
 	void removeFormat();
 

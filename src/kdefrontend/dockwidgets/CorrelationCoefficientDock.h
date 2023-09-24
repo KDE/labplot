@@ -32,7 +32,6 @@ private:
 	TreeViewComboBox* cbSpreadsheet{nullptr};
 	CorrelationCoefficient* m_coefficient{nullptr};
 	AspectTreeModel* m_aspectTreeModel{nullptr};
-	int m_test = 0;
 	QList<Column*> m_onlyValuesCols;
 	QList<Column*> m_twoCategoricalCols;
 	QList<Column*> m_multiCategoricalCols;
@@ -44,21 +43,18 @@ private:
 	void setColumnsComboBoxView();
 	bool nonEmptySelectedColumns();
 
-	int testType(int test);
-	int testSubType(int test);
-
 private Q_SLOTS:
 	//SLOTs for changes triggered in CorrelationCoefficientDock
-	void showTestType();
-	void showCorrelationCoefficient();
-	void findCorrelationCoefficient();
+	void methodChanged();
 	void spreadsheetChanged(const QModelIndex&);
-	void col1IndexChanged(int index);
+	void col1IndexChanged(int);
 	void changeCbCol2Label();
 	void chbColumnStatsStateChanged();
 	void leNRowsChanged();
 	void leNColumnsChanged();
+
 	void exportStatsTableToSpreadsheet();
+	void recalculate();
 
 	//SLOTs for changes triggered in CorrelationCoefficient
 };
