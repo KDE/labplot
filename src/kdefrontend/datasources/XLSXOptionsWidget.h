@@ -4,6 +4,7 @@
 	Description          : Widget providing options for the import of XLSX (Excel) data
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2021 Fabian Kristof (fkristofszabolcs@gmail.com)
+	SPDX-FileCopyrightText: 2023 Stefan Gerlach (stefan.gerlach@uni.kn)
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -14,14 +15,9 @@
 
 #include <QMap>
 #include <QPair>
-#include <QString>
-#include <QVector>
-#include <QWidget>
 
 class XLSXFilter;
 class ImportFileWidget;
-
-class QStringList;
 
 class XLSXOptionsWidget : public QWidget {
 	Q_OBJECT
@@ -40,7 +36,7 @@ Q_SIGNALS:
 	void enableDataPortionSelection(bool enable);
 	void dataRegionSelectionChangedSignal();
 
-private Q_SLOTS:
+public Q_SLOTS:
 	void dataRegionSelectionChanged();
 
 private:

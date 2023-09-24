@@ -17,13 +17,6 @@
 #include "xlsxcellrange.h"
 #endif
 
-#include <QAbstractItemModel>
-#include <QHeaderView>
-#include <QIcon>
-#include <QTreeWidget>
-#include <QTreeWidgetItem>
-#include <QVector>
-
 XLSXOptionsWidget::XLSXOptionsWidget(QWidget* parent, ImportFileWidget* fileWidget)
 	: QWidget(parent)
 	, m_fileWidget(fileWidget) {
@@ -37,6 +30,7 @@ XLSXOptionsWidget::XLSXOptionsWidget(QWidget* parent, ImportFileWidget* fileWidg
 	ui.twPreview->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
 	connect(ui.twDataRegions, &QTreeWidget::itemSelectionChanged, this, &XLSXOptionsWidget::dataRegionSelectionChanged);
+	connect(ui.bRefreshPreview, &QPushButton::clicked, fileWidget, &ImportFileWidget::refreshPreview);
 }
 
 XLSXOptionsWidget::~XLSXOptionsWidget() {

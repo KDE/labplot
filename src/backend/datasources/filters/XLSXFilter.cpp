@@ -631,6 +631,7 @@ QVector<QStringList> XLSXFilterPrivate::previewForDataRegion(const QString& shee
 			*okToMatrix = true;
 
 		const auto& documentRegion = m_document->dimension();
+		DEBUG(Q_FUNC_INFO << ", start/end row = " << startRow << " " << endRow)
 		if (region.lastRow() <= documentRegion.lastRow() && region.lastColumn() <= documentRegion.lastColumn()) {
 			const int rows = std::min(lines, region.lastRow());
 			for (int row = region.firstRow(); row <= rows; ++row) {
@@ -639,11 +640,23 @@ QVector<QStringList> XLSXFilterPrivate::previewForDataRegion(const QString& shee
 					// see https://github.com/QtExcel/QXlsx/wiki for read() vs. cellAt()->value()
 					const auto val = m_document->read(row, col);
 					if (val.isValid())
-						QDEBUG("value =" << val << ", type =" << val.type() << ", user type =" << QVariant::typeToName(val.userType()))
+						QDEBUG("value =" << val)
+					// Excel: double is always QString
+					// OO: can always convert to Double
+
 					// correctly read values and show with locale
-					if (val.canConvert(QMetaType::Double))
+					if (val.type() == QVariant::Double)
 						line << QLocale().toString(val.toDouble());
-					else if (val.canConvert(QMetaType::QDateTime)) {
+					else if (val.type() == QVariant::String) {
+						QString valueString = val.toString();
+
+						bool ok; // check if double value
+						double value = valueString.toDouble(&ok);
+						if (ok)
+							line << QLocale().toString(value);
+						else
+							line << valueString;
+					} else if (val.canConvert(QMetaType::QDateTime)) {
 						QDateTime dt = val.toDateTime();
 						// TODO: use certain date/datetime format?
 						if (dt.time() == QTime(0, 0)) // just a date
@@ -654,8 +667,10 @@ QVector<QStringList> XLSXFilterPrivate::previewForDataRegion(const QString& shee
 						QTime t = val.toTime();
 						// TODO: use certain time format?
 						line << t.toString();
-					} else
-						line << val.toString();
+					} else {
+						QString valueString = val.toString();
+						line << valueString;
+					}
 				}
 				infoString << line;
 			}

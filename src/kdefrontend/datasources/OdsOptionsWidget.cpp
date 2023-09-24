@@ -12,13 +12,6 @@
 #include "src/backend/datasources/filters/OdsFilter.h"
 #include "src/kdefrontend/datasources/ImportFileWidget.h"
 
-#include <QAbstractItemModel>
-#include <QHeaderView>
-#include <QIcon>
-#include <QTreeWidget>
-#include <QTreeWidgetItem>
-#include <QVector>
-
 OdsOptionsWidget::OdsOptionsWidget(QWidget* parent, ImportFileWidget* fileWidget)
 	: QWidget(parent)
 	, m_fileWidget(fileWidget) {

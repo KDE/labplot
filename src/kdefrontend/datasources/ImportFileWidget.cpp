@@ -1739,8 +1739,9 @@ void ImportFileWidget::refreshPreview() {
 		break;
 	}
 	case AbstractFileFilter::FileType::XLSX:
+		// update own preview (Nothing else to do)
 		importedStrings = m_xlsxOptionsWidget->previewString();
-		// Nothing else to do. XLSX has it's own preview table
+		// m_xlsxOptionsWidget->dataRegionSelectionChanged();
 		break;
 	case AbstractFileFilter::FileType::Ods:
 		// update own preview (Nothing else to do)

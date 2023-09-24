@@ -14,13 +14,9 @@
 
 #include <QMap>
 #include <QPair>
-#include <QString>
-//#include <QVector>
-#include <QWidget>
 
 class OdsFilter;
 class ImportFileWidget;
-class QStringList;
 
 class OdsOptionsWidget : public QWidget {
 	Q_OBJECT
