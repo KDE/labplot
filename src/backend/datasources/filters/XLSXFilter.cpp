@@ -16,11 +16,7 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 
 #include <KLocalizedString>
-#include <QStringList>
 #include <QTreeWidgetItem>
-#include <QVector>
-
-#include <utility>
 
 XLSXFilter::XLSXFilter()
 	: AbstractFileFilter(FileType::XLSX)

@@ -15,9 +15,7 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 
 #include <KLocalizedString>
-#include <QStringList>
 #include <QTreeWidgetItem>
-#include <QVector>
 
 #ifdef HAVE_ORCUS
 #include <orcus/orcus_ods.hpp>
@@ -31,6 +29,7 @@ using namespace orcus;
 
 #include <utility>
 
+//TODO: read column header from first row?
 OdsFilter::OdsFilter()
 	: AbstractFileFilter(FileType::Ods)
 	, d(new OdsFilterPrivate(this)) {
