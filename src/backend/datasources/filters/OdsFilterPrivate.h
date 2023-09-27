@@ -53,6 +53,7 @@ public:
 	int endRow{-1};
 	int startColumn{1};
 	int endColumn{-1};
+	int firstColumn{1}; // actual start column (including range)
 
 private:
 #ifdef HAVE_ORCUS

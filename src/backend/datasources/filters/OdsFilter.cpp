@@ -135,6 +135,11 @@ int OdsFilter::endColumn() const {
 	return d->endColumn;
 }
 
+/* actual start column (including range) */
+int OdsFilter::firstColumn() const {
+	return d->firstColumn;
+}
+
 /*!
  * \brief Sets the startRow to \a row
  * \param row the row to be set
@@ -311,9 +316,9 @@ void OdsFilterPrivate::readCurrentSheet(const QString& fileName, AbstractDataSou
 	}
 
 	QStringList vectorNames;
-	// TODO: use header names?
-	for (size_t i = 0; i < actualCols; i++)
-		vectorNames << QLatin1String("Column ") + QString::number(i + 1);
+	// TODO: use first line as header option
+	for (size_t col = 0; col < actualCols; col++)
+		vectorNames << AbstractFileFilter::convertFromNumberToColumn(ranges.first.column + col);
 
 	std::vector<void*> dataContainer;
 
@@ -403,6 +408,7 @@ QVector<QStringList> OdsFilterPrivate::preview(const QString& sheetName, int lin
 	int actualStartRow = (startRow > (ranges.last.row - ranges.first.row + 1) ? ranges.first.row : ranges.first.row + startRow - 1);
 	const int actualEndRow = (endRow == -1 ? ranges.last.row : std::min(ranges.last.row, ranges.first.row + endRow - 1));
 	int actualStartCol = (startColumn > (ranges.last.column - ranges.first.column + 1) ? ranges.first.column : ranges.first.column + startColumn - 1);
+	firstColumn = actualStartCol;
 	const int actualEndCol = (endColumn == -1 ? ranges.last.column : std::min(ranges.last.column, ranges.first.column + endColumn - 1));
 
 	const auto& model = m_document.get_model_context();

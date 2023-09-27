@@ -437,7 +437,7 @@ void XLSXFilterPrivate::readDataRegion(const QXlsx::CellRange& region, AbstractD
 			if (firstRowAsColumnNames)
 				columnNames.push_back(m_document->read(regionToRead.firstRow() - 1, col).toString());
 			else
-				columnNames.push_back(XLSXFilter::convertFromNumberToXLSXColumn(col));
+				columnNames.push_back(AbstractFileFilter::convertFromNumberToColumn(col));
 		}
 
 		spreadsheet->setUndoAware(false);
@@ -793,32 +793,3 @@ QXlsx::Cell::CellType XLSXFilterPrivate::columnTypeInRange(const int column, con
 	return QXlsx::Cell::CellType::StringType;
 }
 #endif
-
-QString XLSXFilter::convertFromNumberToXLSXColumn(int n) {
-	// main code from https://www.geeksforgeeks.org/find-excel-column-name-given-number/
-	// Function to print XLSX column name for a given column number
-
-	char str[1000]; // To store result (XLSX column name)
-	int i = 0; // To store current index in str which is result
-
-	while (n > 0) {
-		// Find remainder
-		int rem = n % 26;
-
-		// If remainder is 0, then a 'Z' must be there in output
-		if (rem == 0) {
-			str[i++] = 'Z';
-			n = (n / 26) - 1;
-		} else // If remainder is non-zero
-		{
-			str[i++] = (rem - 1) + 'A';
-			n = n / 26;
-		}
-	}
-	str[i] = '\0';
-
-	// Reverse the string and print result
-	std::reverse(str, str + strlen(str));
-
-	return QLatin1String(str);
-}

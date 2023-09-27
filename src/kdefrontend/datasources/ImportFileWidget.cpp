@@ -1888,23 +1888,23 @@ void ImportFileWidget::refreshPreview() {
 			item->setText(importedStrings[0][0]);
 			tmpTableWidget->setItem(0, 0, item);
 		} else {
-			const int rows = std::max(importedStrings.size(), 1);
+			const int rowCount = std::max(importedStrings.size(), 1);
 			const int maxColumns = 300;
-			tmpTableWidget->setRowCount(rows);
+			tmpTableWidget->setRowCount(rowCount);
 
-			for (int i = 0; i < rows; ++i) {
-				const int cols = importedStrings.at(i).size() > maxColumns ? maxColumns : importedStrings[i].size();
-				if (cols > tmpTableWidget->columnCount())
-					tmpTableWidget->setColumnCount(cols);
+			for (int row = 0; row < rowCount; ++row) {
+				const int colCount = importedStrings.at(row).size() > maxColumns ? maxColumns : importedStrings.at(row).size();
+				if (colCount > tmpTableWidget->columnCount())
+					tmpTableWidget->setColumnCount(colCount);
 
-				for (int j = 0; j < cols; ++j) {
-					auto* item = new QTableWidgetItem(importedStrings[i][j]);
-					tmpTableWidget->setItem(i, j, item);
+				for (int col = 0; col < colCount; ++col) {
+					auto* item = new QTableWidgetItem(importedStrings[row][col]);
+					tmpTableWidget->setItem(row, col, item);
 				}
 			}
 
-			// XLSX has special h/vheader, don't overwrite the preview table
-			if (fileType != AbstractFileFilter::FileType::XLSX) {
+			// XLSX and Ods has special h/vheader, don't overwrite the preview table
+			if (fileType != AbstractFileFilter::FileType::XLSX && fileType != AbstractFileFilter::FileType::Ods) {
 				// set header if columnMode available
 				for (int i = 0; i < std::min(tmpTableWidget->columnCount(), columnModes.size()); ++i) {
 					QString columnName = QString::number(i + 1);

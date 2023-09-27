@@ -48,7 +48,6 @@ public:
 	void setColumnNamesAsFirstRow(bool);
 
 	void parse(const QString& fileName, QTreeWidgetItem* root);
-	static QString convertFromNumberToXLSXColumn(int n);
 
 #ifdef HAVE_QXLSX
 	QVector<QXlsx::CellRange> dataRegions(const QString& fileName, const QString& sheetName);

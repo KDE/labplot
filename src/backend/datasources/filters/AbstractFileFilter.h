@@ -43,6 +43,7 @@ public:
 	static QStringList numberFormats();
 	static AbstractFileFilter::FileType fileType(const QString&);
 	static QStringList fileTypes();
+	static QString convertFromNumberToColumn(int n);
 
 	virtual void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, ImportMode = ImportMode::Replace) = 0;
 	virtual void write(const QString& fileName, AbstractDataSource*) = 0;

@@ -86,28 +86,37 @@ void OdsOptionsWidget::sheetSelectionChanged() {
 	DEBUG(Q_FUNC_INFO << ", sheet name = " << sheetName.toStdString())
 	if (!sheetName.isEmpty()) {
 		const auto importedStrings = filter->preview(sheetName, ui.sbPreviewLines->value());
-		const auto rows = importedStrings.size();
+		const auto rowCount = importedStrings.size();
 		m_previewString = importedStrings;
 
 		ui.twPreview->clear();
 		const bool firstRowAsHeader = m_fileWidget->xlsxUseFirstRowAsColNames();
 		DEBUG("first row as header enabled = " << firstRowAsHeader)
-		ui.twPreview->setRowCount(rows - firstRowAsHeader);
+		ui.twPreview->setRowCount(rowCount - firstRowAsHeader);
 
 		int colCount = 0;
-		const int maxColumns = 50;
-		for (int i = 0; i < rows; ++i) {
-			auto lineString = importedStrings.at(i);
+		const int maxColumns = 100;
+		for (int row = 0; row < rowCount; ++row) {
+			auto lineString = importedStrings.at(row);
 			colCount = std::min(maxColumns, lineString.size());
-			if (i == 0)
+			if (row == 0) {
 				ui.twPreview->setColumnCount(colCount);
 
-			auto* item = new QTableWidgetItem(QString::number(i - firstRowAsHeader));
-			ui.twPreview->setVerticalHeaderItem(i - firstRowAsHeader, item);
+				// set column header
+				for (int col = 0; col < colCount; ++col) {
+					auto colName = AbstractFileFilter::convertFromNumberToColumn(col + filter->firstColumn());
+					auto* item = new QTableWidgetItem(colName);
 
-			for (int j = 0; j < colCount; ++j) {
-				auto* item = new QTableWidgetItem(lineString.at(j));
-				ui.twPreview->setItem(i - firstRowAsHeader, j, item);
+					ui.twPreview->setHorizontalHeaderItem(col, item);
+				}
+			}
+
+			auto* item = new QTableWidgetItem(QString::number(row - firstRowAsHeader + 1));
+			ui.twPreview->setVerticalHeaderItem(row - firstRowAsHeader, item);
+
+			for (int col = 0; col < colCount; ++col) {
+				auto* item = new QTableWidgetItem(lineString.at(col));
+				ui.twPreview->setItem(row - firstRowAsHeader, col, item);
 			}
 		}
 		ui.twPreview->resizeColumnsToContents();

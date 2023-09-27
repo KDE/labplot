@@ -118,19 +118,19 @@ void XLSXOptionsWidget::dataRegionSelectionChanged() {
 		else if (!item->isSelected()) // the item was deselected
 			m_regionIsPossibleToImportToMatrix.remove(mapVal);
 
-		const auto rows = importedStrings.size();
+		const auto rowCount = importedStrings.size();
 		ui.twPreview->clear();
 		const bool firstRowAsHeader = m_fileWidget->xlsxUseFirstRowAsColNames();
 		DEBUG("first row as header enabled = " << firstRowAsHeader)
-		ui.twPreview->setRowCount(rows - firstRowAsHeader);
+		ui.twPreview->setRowCount(rowCount - firstRowAsHeader);
 
 		int colCount = 0;
-		const int maxColumns = 50;
-		for (int i = 0; i < rows; ++i) {
-			auto lineString = importedStrings.at(i);
+		const int maxColumns = 100;
+		for (int row = 0; row < rowCount; ++row) {
+			auto lineString = importedStrings.at(row);
 			colCount = std::min(maxColumns, lineString.size());
 
-			if (i == 0) {
+			if (row == 0) {
 				ui.twPreview->setColumnCount(colCount);
 
 				if (firstRowAsHeader) {
@@ -141,7 +141,7 @@ void XLSXOptionsWidget::dataRegionSelectionChanged() {
 					continue; // data used as header
 				} else {
 					for (int col = 0; col < colCount; ++col) {
-						auto colName = XLSXFilter::convertFromNumberToXLSXColumn(selectedRegion.firstColumn() + col);
+						auto colName = AbstractFileFilter::convertFromNumberToColumn(selectedRegion.firstColumn() + col);
 						// DEBUG("COLUMN " << col + 1 << " NAME = " << STDSTRING(colName))
 						//  TODO: show column modes?
 						// auto* item = new QTableWidgetItem(colName + QStringLiteral(" {") + QLatin1String(ENUM_TO_STRING(AbstractColumn, ColumnMode,
@@ -153,12 +153,12 @@ void XLSXOptionsWidget::dataRegionSelectionChanged() {
 				}
 			}
 
-			auto* item = new QTableWidgetItem(QString::number(selectedRegion.firstRow() + i - firstRowAsHeader));
-			ui.twPreview->setVerticalHeaderItem(i - firstRowAsHeader, item);
+			auto* item = new QTableWidgetItem(QString::number(selectedRegion.firstRow() + row - firstRowAsHeader));
+			ui.twPreview->setVerticalHeaderItem(row - firstRowAsHeader, item);
 
-			for (int j = 0; j < colCount; ++j) {
-				auto* item = new QTableWidgetItem(lineString.at(j));
-				ui.twPreview->setItem(i - firstRowAsHeader, j, item);
+			for (int col = 0; col < colCount; ++col) {
+				auto* item = new QTableWidgetItem(lineString.at(col));
+				ui.twPreview->setItem(row - firstRowAsHeader, col, item);
 			}
 		}
 		ui.twPreview->resizeColumnsToContents();

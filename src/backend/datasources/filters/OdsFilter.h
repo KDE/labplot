@@ -53,6 +53,7 @@ public:
 	int startColumn() const;
 	void setEndColumn(int);
 	int endColumn() const;
+	int firstColumn() const;
 
 private:
 	std::unique_ptr<OdsFilterPrivate> const d;

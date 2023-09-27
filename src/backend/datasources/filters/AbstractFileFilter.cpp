@@ -225,3 +225,32 @@ QStringList AbstractFileFilter::fileTypes() {
 						  << i18n("Network Common Data Format (NetCDF)") << i18n("Flexible Image Transport System Data Format (FITS)") << i18n("JSON Data")
 						  << i18n("ROOT (CERN) Histograms") << i18n("Spice") << i18n("SAS, Stata or SPSS"));
 }
+
+QString AbstractFileFilter::convertFromNumberToColumn(int n) {
+	// main code from https://www.geeksforgeeks.org/find-excel-column-name-given-number/
+	// Function to print column name for a given column number
+
+	char str[1000]; // To store result (column name)
+	int i = 0; // To store current index in str which is result
+
+	while (n > 0) {
+		// Find remainder
+		int rem = n % 26;
+
+		// If remainder is 0, then a 'Z' must be there in output
+		if (rem == 0) {
+			str[i++] = 'Z';
+			n = (n / 26) - 1;
+		} else // If remainder is non-zero
+		{
+			str[i++] = (rem - 1) + 'A';
+			n = n / 26;
+		}
+	}
+	str[i] = '\0';
+
+	// Reverse the string and print result
+	std::reverse(str, str + strlen(str));
+
+	return QLatin1String(str);
+}
