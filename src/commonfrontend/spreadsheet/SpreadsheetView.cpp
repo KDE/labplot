@@ -219,6 +219,7 @@ void SpreadsheetView::init() {
 	set the column sizes to the saved values or resize to content if no size was saved yet
 */
 void SpreadsheetView::resizeHeader() {
+	DEBUG(Q_FUNC_INFO)
 	const auto& columns = m_spreadsheet->children<Column>();
 
 	QFontMetrics fontMetrics(m_horizontalHeader->font());
@@ -226,7 +227,7 @@ void SpreadsheetView::resizeHeader() {
 	int headerOffset = style->pixelMetric(QStyle::PM_SmallIconSize, nullptr, m_horizontalHeader); // icon size
 	headerOffset += 3 * style->pixelMetric(QStyle::PM_HeaderMargin, nullptr, m_horizontalHeader); // two margins plus the margin between icon and text
 
-	int i = 0;
+	int c = 0;
 	for (auto col : columns) {
 		if (col->width() == 0) {
 			// No width was saved yet, resize to fit the content:
@@ -239,14 +240,14 @@ void SpreadsheetView::resizeHeader() {
 			// since in many cases we deal with much lower number of columns during the import, we apply the more precise method with
 			// resizeColumnToContents() if the number of columns is smaller than 50.
 			if (columns.count() > 50) {
-				int width = headerOffset + fontMetrics.horizontalAdvance(m_model->headerData(i, Qt::Horizontal, Qt::DisplayRole).toString());
-				m_tableView->setColumnWidth(i, width);
+				int width = headerOffset + fontMetrics.horizontalAdvance(m_model->headerData(c, Qt::Horizontal, Qt::DisplayRole).toString());
+				m_tableView->setColumnWidth(c, width);
 			} else
-				m_tableView->resizeColumnToContents(i);
+				m_tableView->resizeColumnToContents(c);
 		} else
-			m_tableView->setColumnWidth(i, col->width());
+			m_tableView->setColumnWidth(c, col->width());
 
-		i++;
+		c++;
 	}
 }
 

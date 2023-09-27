@@ -327,32 +327,38 @@ void OdsFilterPrivate::readCurrentSheet(const QString& fileName, AbstractDataSou
 	int columnOffset = dataSource->prepareImport(dataContainer, importMode, actualRows, actualCols, vectorNames, columnModes);
 
 	// import data
-	for (size_t j = 0; j < actualRows; j++)
-		for (size_t i = 0; i < actualCols; i++) {
-			ixion::abs_address_t pos(sheetIndex, ranges.first.row + j + startRow - 1, ranges.first.column + i + startColumn - 1);
+	for (size_t row = 0; row < actualRows; row++) {
+		for (size_t col = 0; col < actualCols; col++) {
+			ixion::abs_address_t pos(sheetIndex, ranges.first.row + row + startRow - 1, ranges.first.column + col + startColumn - 1);
 
 			auto type = model.get_celltype(pos);
 			switch (type) {
 			case ixion::celltype_t::numeric: {
 				double value = model.get_numeric_value(pos);
-				(*static_cast<QVector<double>*>(dataContainer[i]))[j] = value;
+				// column mode may be non-numeric
+				if (columnModes.at(col) == AbstractColumn::ColumnMode::Double)
+					(*static_cast<QVector<double>*>(dataContainer[col]))[row] = value;
+				else if (columnModes.at(col) == AbstractColumn::ColumnMode::Text)
+					(*static_cast<QVector<QString>*>(dataContainer[col]))[row] = QLocale().toString(value);
 				break;
 			}
 			case ixion::celltype_t::formula: {
 				// read formula result. We can't handle formulas yet (?)
 				auto formula = model.get_formula_result(pos);
 				switch (formula.get_type()) {
-				case ixion::formula_result::result_type::value:
+				case ixion::formula_result::result_type::value: {
 					DEBUG(Q_FUNC_INFO << ", value formula found")
+					auto value = formula.get_value();
 					// text column may have value-type formula
-					if (columnModes[i] == AbstractColumn::ColumnMode::Double)
-						(*static_cast<QVector<double>*>(dataContainer[i]))[j] = formula.get_value();
-					else if (columnModes[i] == AbstractColumn::ColumnMode::Text)
-						(*static_cast<QVector<QString>*>(dataContainer[i]))[j] = QLocale().toString(formula.get_value());
+					if (columnModes.at(col) == AbstractColumn::ColumnMode::Double)
+						(*static_cast<QVector<double>*>(dataContainer[col]))[row] = value;
+					else if (columnModes.at(col) == AbstractColumn::ColumnMode::Text)
+						(*static_cast<QVector<QString>*>(dataContainer[col]))[row] = QLocale().toString(value);
 					break;
+				}
 				case ixion::formula_result::result_type::string:
 					DEBUG(Q_FUNC_INFO << ", string formula found")
-					(*static_cast<QVector<QString>*>(dataContainer[i]))[j] = QString::fromStdString(formula.get_string());
+					(*static_cast<QVector<QString>*>(dataContainer[col]))[row] = QString::fromStdString(formula.get_string());
 					break;
 				case ixion::formula_result::result_type::error:
 				// TODO: not available in ixion 0.17 ?
@@ -365,7 +371,7 @@ void OdsFilterPrivate::readCurrentSheet(const QString& fileName, AbstractDataSou
 			}
 			case ixion::celltype_t::string: {
 				auto value = model.get_string_value(pos);
-				(*static_cast<QVector<QString>*>(dataContainer[i]))[j] = QString::fromStdString(std::string(value));
+				(*static_cast<QVector<QString>*>(dataContainer[col]))[row] = QString::fromStdString(std::string(value));
 				break;
 			}
 			case ixion::celltype_t::empty: // nothing to do
@@ -375,6 +381,7 @@ void OdsFilterPrivate::readCurrentSheet(const QString& fileName, AbstractDataSou
 				DEBUG(Q_FUNC_INFO << ", cell type unknown or boolean not supported yet.")
 			}
 		}
+	}
 
 	dataSource->finalizeImport(columnOffset, 1, actualCols, QString(), importMode);
 #else

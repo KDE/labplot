@@ -1508,10 +1508,10 @@ void Spreadsheet::finalizeImport(size_t columnOffset,
 
 	// set the comments for each of the columns if datasource is a spreadsheet
 	const int rows = rowCount();
-	for (size_t n = startColumn; n <= endColumn; n++) {
-		// DEBUG(Q_FUNC_INFO << ", column " << columnOffset + n - startColumn);
-		Column* column = this->column((int)(columnOffset + n - startColumn));
-		// DEBUG(Q_FUNC_INFO << ", type " << static_cast<int>(column->columnMode()));
+	for (size_t col = startColumn; col <= endColumn; col++) {
+		// DEBUG(Q_FUNC_INFO << ", column " << columnOffset + col - startColumn);
+		Column* column = this->column((int)(columnOffset + col - startColumn));
+		// DEBUG(Q_FUNC_INFO << ", type " << ENUM_TO_STRING(AbstractColumn, ColumnMode, column->columnMode()))
 
 		QString comment;
 		switch (column->columnMode()) {
@@ -1567,6 +1567,7 @@ void Spreadsheet::finalizeImport(size_t columnOffset,
 	if (m_partView != nullptr && m_view != nullptr)
 		m_view->resizeHeader();
 #endif
+
 	// row count most probably changed after the import, notify the dock widget.
 	// no need to notify about the column count change, this is already done by add/removeChild signals
 	Q_EMIT rowCountChanged(rowCount());
