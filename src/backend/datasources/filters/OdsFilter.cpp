@@ -223,7 +223,7 @@ void OdsFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSou
 }
 
 void OdsFilterPrivate::readCurrentSheet(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
-	DEBUG(Q_FUNC_INFO << ", current sheet name = " << currentSheetName.toStdString())
+	DEBUG(Q_FUNC_INFO << ", current sheet name = " << currentSheetName.toStdString() << ", first row as column names = " << firstRowAsColumnNames)
 
 	if (!dataSource)
 		return;

@@ -42,13 +42,13 @@ public:
 	/*
 		bool exportDataSourceAsNewSheet{true};
 		bool columnNamesAsFirstRow{true};
-		bool firstRowAsColumnNames{false};
 		bool overwriteExportData{true};
 
 		QString sheetToAppendSpreadsheetTo;
 	*/
 	QString currentSheetName;
 	QStringList selectedSheetNames;
+	bool firstRowAsColumnNames{false};
 	int startRow{1};
 	int endRow{-1};
 	int startColumn{1};

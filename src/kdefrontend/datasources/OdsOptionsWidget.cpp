@@ -103,11 +103,18 @@ void OdsOptionsWidget::sheetSelectionChanged() {
 				ui.twPreview->setColumnCount(colCount);
 
 				// set column header
-				for (int col = 0; col < colCount; ++col) {
-					auto colName = AbstractFileFilter::convertFromNumberToColumn(col + filter->firstColumn());
-					auto* item = new QTableWidgetItem(colName);
+				if (firstRowAsHeader) {
+					for (int col = 0; col < colCount; ++col) {
+						auto* item = new QTableWidgetItem(lineString.at(col));
+						ui.twPreview->setHorizontalHeaderItem(col, item);
+					}
+				} else {
+					for (int col = 0; col < colCount; ++col) {
+						auto colName = AbstractFileFilter::convertFromNumberToColumn(col + filter->firstColumn());
+						auto* item = new QTableWidgetItem(colName);
 
-					ui.twPreview->setHorizontalHeaderItem(col, item);
+						ui.twPreview->setHorizontalHeaderItem(col, item);
+					}
 				}
 			}
 
