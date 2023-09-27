@@ -239,7 +239,7 @@ void OdsFilterPrivate::readCurrentSheet(const QString& fileName, AbstractDataSou
 		loader.read_file(fileName.toStdString());
 	}
 
-	// get sheet index by name and read data into dataSource
+	// get sheet index from name and read data into dataSource
 	auto* sheet = m_document.get_sheet(currentSheetName.toStdString());
 	if (!sheet) {
 		DEBUG(Q_FUNC_INFO << ", sheet not found: " << currentSheetName.toStdString())
@@ -280,7 +280,8 @@ void OdsFilterPrivate::readCurrentSheet(const QString& fileName, AbstractDataSou
 	// set column modes
 	const auto& model = m_document.get_model_context();
 	for (size_t col = 0; col < actualCols; col++) {
-		ixion::abs_address_t pos(sheetIndex, ranges.first.row + startRow - 1, ranges.first.column + col); // check start row
+		// check start row
+		ixion::abs_address_t pos(sheetIndex, ranges.first.row + startRow - 1, ranges.first.column + startColumn - 1 + col);
 
 		auto type = model.get_celltype(pos);
 		switch (type) {
@@ -318,7 +319,7 @@ void OdsFilterPrivate::readCurrentSheet(const QString& fileName, AbstractDataSou
 	QStringList vectorNames;
 	// TODO: use first line as header option
 	for (size_t col = 0; col < actualCols; col++)
-		vectorNames << AbstractFileFilter::convertFromNumberToColumn(ranges.first.column + col);
+		vectorNames << AbstractFileFilter::convertFromNumberToColumn(ranges.first.column + startColumn - 1 + col);
 
 	std::vector<void*> dataContainer;
 
