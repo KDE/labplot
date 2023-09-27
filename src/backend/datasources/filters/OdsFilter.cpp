@@ -28,7 +28,8 @@ using namespace orcus;
 #endif
 
 // TODO:
-// * read column header from first row?
+// * import to matrix
+// * export data
 OdsFilter::OdsFilter()
 	: AbstractFileFilter(FileType::Ods)
 	, d(new OdsFilterPrivate(this)) {

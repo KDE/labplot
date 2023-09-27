@@ -20,5 +20,6 @@ private Q_SLOTS:
 	void importFile3SheetsRangesFormula(); // check types, ranges and formula
 	void importFileSheetStartEndRow(); // check giving start and end row
 	void importFileSheetStartEndColumn(); // check giving start and end column
+	void importFileSheetWithHeader(); // check importing header from first row
 };
 #endif
