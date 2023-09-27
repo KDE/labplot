@@ -67,8 +67,7 @@ public:
 	QString dbcFileName() const;
 	QString selectedObject() const;
 	bool importValid() const;
-	// used from XLSX and ODS
-	bool xlsxUseFirstRowAsColNames() const;
+	bool useFirstRowAsColNames() const; // use by XLSX and ODS
 
 	const QStringList selectedXLSXRegionNames() const;
 	const QStringList selectedOdsSheetNames() const;
@@ -95,7 +94,7 @@ private:
 	void initSlots();
 	QString fileInfoString(const QString&) const;
 	void showJsonModel(bool);
-	void enableXLSXFirstRowAsColNames(bool enable);
+	void enableFirstRowAsColNames(bool enable); // used by XLSX and Ods
 	void updateHeaderOptions();
 
 	std::unique_ptr<AsciiOptionsWidget> m_asciiOptionsWidget;
@@ -139,7 +138,7 @@ private Q_SLOTS:
 	void sourceTypeChanged(int);
 	void updateTypeChanged(int);
 	void readingTypeChanged(int);
-	void xlsxFirstRowAsColNamesChanged(bool checked);
+	void firstRowAsColNamesChanged(bool checked);
 
 	void hidePropertyWidgets();
 	void filterChanged(int);

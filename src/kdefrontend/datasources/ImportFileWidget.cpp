@@ -228,8 +228,8 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 	ui.sbKeepNValues->setToolTip(info);
 
 	info = i18n("Enable to use the first row of the selected data region for the column names of the spreadsheet.");
-	ui.lXLSXFirstRowAsColNames->setToolTip(info);
-	ui.chbXLSXFirstRowAsColName->setToolTip(info);
+	ui.lFirstRowAsColNames->setToolTip(info);
+	ui.chbFirstRowAsColName->setToolTip(info);
 #ifdef HAVE_MQTT
 	ui.cbSourceType->addItem(QStringLiteral("MQTT"));
 	m_configPath = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).constFirst() + QStringLiteral("MQTT_connections");
@@ -308,7 +308,7 @@ void ImportFileWidget::loadSettings() {
 		m_cbDBCFileName->setUrl(QUrl(m_dbcFileName));
 
 	ui.sbPreviewLines->setValue(conf.readEntry("PreviewLines", 100));
-	ui.chbXLSXFirstRowAsColName->setCheckState((Qt::CheckState)conf.readEntry("ExcelFirstLineAsColNames", (int)Qt::CheckState::Unchecked));
+	ui.chbFirstRowAsColName->setCheckState((Qt::CheckState)conf.readEntry("ExcelFirstLineAsColNames", (int)Qt::CheckState::Unchecked));
 
 	// live data related settings
 	ui.cbBaudRate->setCurrentIndex(conf.readEntry("BaudRate", 13)); // index for bautrate 19200b/s
@@ -388,7 +388,7 @@ ImportFileWidget::~ImportFileWidget() {
 	conf.writeEntry("LastImportedDBCFile", m_cbDBCFileName->currentText());
 	conf.writeXdgListEntry("LastImportedDBCFiles", m_cbDBCFileName->urls());
 	conf.writeEntry("PreviewLines", ui.sbPreviewLines->value());
-	conf.writeEntry("ExcelFirstLineAsColNames", ui.chbXLSXFirstRowAsColName->isChecked());
+	conf.writeEntry("ExcelFirstLineAsColNames", ui.chbFirstRowAsColName->isChecked());
 
 	// live data related settings
 	conf.writeEntry("SourceType", (int)currentSourceType());
@@ -482,8 +482,8 @@ void ImportFileWidget::dataContainerChanged(AbstractAspect* aspect) {
 	updateHeaderOptions();
 }
 
-void ImportFileWidget::enableXLSXFirstRowAsColNames(bool enable) {
-	ui.chbXLSXFirstRowAsColName->setEnabled(enable);
+void ImportFileWidget::enableFirstRowAsColNames(bool enable) {
+	ui.chbFirstRowAsColName->setEnabled(enable);
 }
 
 /*!
@@ -503,8 +503,8 @@ void ImportFileWidget::updateHeaderOptions() {
 
 	// handle XLSX or ODS
 	visible = (fileType == AbstractFileFilter::FileType::XLSX || fileType == AbstractFileFilter::FileType::Ods) && spreadsheet;
-	ui.lXLSXFirstRowAsColNames->setVisible(visible);
-	ui.chbXLSXFirstRowAsColName->setVisible(visible);
+	ui.lFirstRowAsColNames->setVisible(visible);
+	ui.chbFirstRowAsColName->setVisible(visible);
 }
 
 void ImportFileWidget::showJsonModel(bool b) {
@@ -729,7 +729,7 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 		filter->setEndRow(ui.sbEndRow->value());
 		filter->setStartColumn(ui.sbStartColumn->value());
 		filter->setEndColumn(ui.sbEndColumn->value());
-		filter->setFirstRowAsColumnNames(ui.chbXLSXFirstRowAsColName->isChecked());
+		filter->setFirstRowAsColumnNames(ui.chbFirstRowAsColName->isChecked());
 
 		const auto& sxrn = selectedXLSXRegionNames();
 		if (!sxrn.isEmpty()) {
@@ -754,7 +754,7 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 		filter->setEndRow(ui.sbEndRow->value());
 		filter->setStartColumn(ui.sbStartColumn->value());
 		filter->setEndColumn(ui.sbEndColumn->value());
-		// TODO: filter->setFirstRowAsColumnNames(ui.chbXLSXFirstRowAsColName->isChecked());
+		filter->setFirstRowAsColumnNames(ui.chbFirstRowAsColName->isChecked());
 
 		const auto& sorn = selectedOdsSheetNames();
 		QDEBUG(Q_FUNC_INFO << ", selected sheet names = " << sorn)
@@ -1431,8 +1431,8 @@ const QStringList ImportFileWidget::selectedOdsSheetNames() const {
 	return m_odsOptionsWidget->selectedOdsSheetNames();
 }
 
-bool ImportFileWidget::xlsxUseFirstRowAsColNames() const {
-	return ui.chbXLSXFirstRowAsColName->isChecked();
+bool ImportFileWidget::useFirstRowAsColNames() const {
+	return ui.chbFirstRowAsColName->isChecked();
 }
 
 /*!
@@ -2033,7 +2033,7 @@ void ImportFileWidget::readingTypeChanged(int idx) {
 	}
 }
 
-void ImportFileWidget::xlsxFirstRowAsColNamesChanged(bool checked) {
+void ImportFileWidget::firstRowAsColNamesChanged(bool checked) {
 	if (checked) {
 		if (ui.sbStartRow->value() == 1)
 			ui.sbStartRow->setValue(2);

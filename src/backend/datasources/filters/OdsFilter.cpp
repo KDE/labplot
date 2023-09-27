@@ -95,6 +95,10 @@ const QStringList OdsFilter::selectedSheetNames() const {
 	return d->selectedSheetNames;
 }
 
+void OdsFilter::setFirstRowAsColumnNames(const bool b) {
+	d->firstRowAsColumnNames = b;
+}
+
 QVector<QStringList> OdsFilter::preview(const QString& sheetName, int lines) {
 	return d->preview(sheetName, lines);
 }
@@ -252,8 +256,10 @@ void OdsFilterPrivate::readCurrentSheet(const QString& fileName, AbstractDataSou
 		return;
 	}
 
-	const auto ranges = sheet->get_data_range();
+	auto ranges = sheet->get_data_range();
 	DEBUG(Q_FUNC_INFO << ", data range: col " << ranges.first.column << ".." << ranges.last.column << ", row " << ranges.first.row << ".." << ranges.last.row)
+	if (firstRowAsColumnNames) // skip first row
+		ranges.first.row++;
 	size_t actualRows = ranges.last.row - ranges.first.row + 1;
 	size_t actualEndRow = (endRow == -1 ? ranges.last.row + 1 : endRow);
 	if ((size_t)startRow > actualRows)
@@ -261,6 +267,7 @@ void OdsFilterPrivate::readCurrentSheet(const QString& fileName, AbstractDataSou
 	DEBUG(Q_FUNC_INFO << ", start/end row = " << startRow << " " << endRow)
 	DEBUG(Q_FUNC_INFO << ", start/end col = " << startColumn << " " << endColumn)
 	actualRows = std::min(actualRows - startRow, (size_t)(actualEndRow - startRow)) + 1;
+
 	size_t actualCols = ranges.last.column - ranges.first.column + 1;
 	size_t actualEndColumn = (endColumn == -1 ? ranges.last.column + 1 : endColumn);
 	if ((size_t)startColumn > actualCols)
@@ -317,9 +324,55 @@ void OdsFilterPrivate::readCurrentSheet(const QString& fileName, AbstractDataSou
 	}
 
 	QStringList vectorNames;
-	// TODO: use first line as header option
-	for (size_t col = 0; col < actualCols; col++)
-		vectorNames << AbstractFileFilter::convertFromNumberToColumn(ranges.first.column + startColumn - 1 + col);
+	if (firstRowAsColumnNames) {
+		for (size_t col = 0; col < actualCols; col++) {
+			ixion::abs_address_t pos(sheetIndex, ranges.first.row - 1 + startRow - 1, ranges.first.column + startColumn - 1 + col);
+
+			auto type = model.get_celltype(pos);
+			switch (type) {
+			case ixion::celltype_t::string: {
+				auto value = model.get_string_value(pos);
+				vectorNames << QString::fromStdString(std::string(value));
+				break;
+			}
+			case ixion::celltype_t::numeric: {
+				double value = model.get_numeric_value(pos);
+				vectorNames << QLocale().toString(value);
+				break;
+			}
+			case ixion::celltype_t::formula: {
+				auto formula = model.get_formula_result(pos);
+				switch (formula.get_type()) {
+				case ixion::formula_result::result_type::value: {
+					auto value = formula.get_value();
+					vectorNames << QLocale().toString(value);
+					break;
+				}
+				case ixion::formula_result::result_type::string:
+					vectorNames << QString::fromStdString(formula.get_string());
+					break;
+				case ixion::formula_result::result_type::error:
+				// TODO: not available in ixion 0.17 ?
+				// case ixion::formula_result::result_type::boolean:
+				case ixion::formula_result::result_type::matrix:
+					vectorNames << AbstractFileFilter::convertFromNumberToColumn(ranges.first.column + startColumn - 1 + col);
+					;
+					break;
+				}
+				// TODO
+				break;
+			}
+			case ixion::celltype_t::empty:
+			case ixion::celltype_t::unknown:
+			case ixion::celltype_t::boolean:
+				vectorNames << AbstractFileFilter::convertFromNumberToColumn(ranges.first.column + startColumn - 1 + col);
+				;
+			}
+		}
+	} else {
+		for (size_t col = 0; col < actualCols; col++)
+			vectorNames << AbstractFileFilter::convertFromNumberToColumn(ranges.first.column + startColumn - 1 + col);
+	}
 
 	std::vector<void*> dataContainer;
 

@@ -90,7 +90,7 @@ void OdsOptionsWidget::sheetSelectionChanged() {
 		m_previewString = importedStrings;
 
 		ui.twPreview->clear();
-		const bool firstRowAsHeader = m_fileWidget->xlsxUseFirstRowAsColNames();
+		const bool firstRowAsHeader = m_fileWidget->useFirstRowAsColNames();
 		DEBUG("first row as header enabled = " << firstRowAsHeader)
 		ui.twPreview->setRowCount(rowCount - firstRowAsHeader);
 

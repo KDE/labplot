@@ -106,7 +106,7 @@ void XLSXOptionsWidget::dataRegionSelectionChanged() {
 		// QDEBUG("PREVIEW:" << importedStrings)
 
 		// enable the first row as column names option only if the data contains more than 1 row
-		m_fileWidget->enableXLSXFirstRowAsColNames(importedStrings.size() > 1);
+		m_fileWidget->enableFirstRowAsColNames(importedStrings.size() > 1);
 
 		emit m_fileWidget->enableImportToMatrix(regionCanBeImportedToMatrix);
 
@@ -120,7 +120,7 @@ void XLSXOptionsWidget::dataRegionSelectionChanged() {
 
 		const auto rowCount = importedStrings.size();
 		ui.twPreview->clear();
-		const bool firstRowAsHeader = m_fileWidget->xlsxUseFirstRowAsColNames();
+		const bool firstRowAsHeader = m_fileWidget->useFirstRowAsColNames();
 		DEBUG("first row as header enabled = " << firstRowAsHeader)
 		ui.twPreview->setRowCount(rowCount - firstRowAsHeader);
 
