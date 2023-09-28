@@ -29,7 +29,7 @@ using namespace orcus;
 
 // TODO:
 // * import to matrix
-// * export data
+// * export data when Orcus support is stable
 OdsFilter::OdsFilter()
 	: AbstractFileFilter(FileType::Ods)
 	, d(new OdsFilterPrivate(this)) {
@@ -207,8 +207,9 @@ OdsFilterPrivate::~OdsFilterPrivate() {
 }
 
 void OdsFilterPrivate::write(const QString& fileName, AbstractDataSource* dataSource) {
+	DEBUG(Q_FUNC_INFO << ", file name = " << fileName.toStdString())
+	// TODO: "The export functionality of the orcus library is highly experimental."
 	DEBUG(Q_FUNC_INFO << ", not implemented yet!")
-	// TODO
 }
 
 void OdsFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {

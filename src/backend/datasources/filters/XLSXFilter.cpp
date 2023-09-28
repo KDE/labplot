@@ -311,10 +311,10 @@ void XLSXFilterPrivate::write(const QString& fileName, AbstractDataSource* dataS
 	}
 
 	if (auto* const spreadsheet = dynamic_cast<Spreadsheet*>(dataSource)) {
-		const int columns = spreadsheet->columnCount();
-		const int rows = spreadsheet->rowCount();
+		const int columnCount = spreadsheet->columnCount();
+		const int rowCount = spreadsheet->rowCount();
 
-		for (int col = 0; col < columns; ++col) {
+		for (int col = 0; col < columnCount; ++col) {
 			const auto* const column = spreadsheet->column(col);
 			const int actualCol = startCol + col;
 
@@ -323,7 +323,7 @@ void XLSXFilterPrivate::write(const QString& fileName, AbstractDataSource* dataS
 					// failed to write column name
 				}
 			}
-			for (int row = 0; row < rows; ++row) {
+			for (int row = 0; row < rowCount; ++row) {
 				const int actualRow = columnNamesAsFirstRow ? startRow + row + 1 : startRow + row;
 				const QString text = column->asStringColumn()->textAt(row);
 
