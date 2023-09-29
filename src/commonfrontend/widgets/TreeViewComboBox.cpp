@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Provides a QTreeView in a QComboBox
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2008-2016 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2008-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2008 Tilman Benkert <thzs@gmx.net>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -97,6 +97,7 @@ void TreeViewComboBox::setModel(AspectTreeModel* model) {
 */
 void TreeViewComboBox::setCurrentModelIndex(const QModelIndex& index) {
 	m_treeView->setCurrentIndex(index);
+	setToolTip(m_model->data(index, Qt::ToolTipRole).toString());
 	QComboBox::setItemText(0, index.data().toString());
 }
 
@@ -187,7 +188,7 @@ void TreeViewComboBox::setInvalid(bool invalid, const QString& tooltip) {
 		setToolTip(tooltip);
 	} else {
 		setPalette(qApp->palette());
-		setToolTip(QString());
+		setToolTip(m_model->data(currentModelIndex(), Qt::ToolTipRole).toString());
 	}
 }
 
@@ -221,6 +222,7 @@ void TreeViewComboBox::treeViewIndexActivated(const QModelIndex& index) {
 	if (index.internalPointer()) {
 		QComboBox::setCurrentIndex(0);
 		QComboBox::setItemText(0, index.data().toString());
+		setToolTip(m_model->data(index, Qt::ToolTipRole).toString());
 		Q_EMIT currentModelIndexChanged(index);
 		m_groupBox->hide();
 		return;
