@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-24 00:40+0000\n"
+"POT-Creation-Date: 2023-09-30 00:39+0000\n"
 "PO-Revision-Date: 2023-09-20 18:03+0200\n"
 "Last-Translator: Xavier BESNARD <xavier.besnard@neuf.fr>\n"
 "Language-Team: fr\n"
@@ -10420,7 +10420,7 @@ msgstr "Saisie d'une valeur non valable. Valeur valable : %1"
 msgid "Search/Filter text"
 msgstr "Chercher/filtrer un texte"
 
-#: src/commonfrontend/widgets/TreeViewComboBox.cpp:338
+#: src/commonfrontend/widgets/TreeViewComboBox.cpp:340
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:143
 #, kde-format
 msgid ""
