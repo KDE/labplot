@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-24 00:40+0000\n"
+"POT-Creation-Date: 2023-09-30 00:39+0000\n"
 "PO-Revision-Date: 2014-03-25 11:30+0800\n"
 "Last-Translator: Franklin Weng <franklin at goodhorse dot idv dot tw>\n"
 "Language-Team: Chinese Traditional <kde-tw@googlegroups.com>\n"
@@ -10643,7 +10643,7 @@ msgstr "數值"
 msgid "Search/Filter text"
 msgstr ""
 
-#: src/commonfrontend/widgets/TreeViewComboBox.cpp:338
+#: src/commonfrontend/widgets/TreeViewComboBox.cpp:340
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:143
 #, kde-format
 msgid ""

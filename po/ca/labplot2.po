@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-24 00:40+0000\n"
+"POT-Creation-Date: 2023-09-30 00:39+0000\n"
 "PO-Revision-Date: 2023-09-18 11:45+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -10464,7 +10464,7 @@ msgstr "S'ha introduït un valor no vàlid. Valor vàlid: %1"
 msgid "Search/Filter text"
 msgstr "Text a cercar/filtrar"
 
-#: src/commonfrontend/widgets/TreeViewComboBox.cpp:338
+#: src/commonfrontend/widgets/TreeViewComboBox.cpp:340
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:143
 #, kde-format
 msgid ""

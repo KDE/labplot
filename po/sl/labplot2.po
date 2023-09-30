@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-24 00:40+0000\n"
+"POT-Creation-Date: 2023-09-30 00:39+0000\n"
 "PO-Revision-Date: 2023-09-14 08:03+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -10413,7 +10413,7 @@ msgstr "Vnesena neveljavna vrednost. Veljavna vrednost: %1"
 msgid "Search/Filter text"
 msgstr "Besedilo za iskanje/filtriranje"
 
-#: src/commonfrontend/widgets/TreeViewComboBox.cpp:338
+#: src/commonfrontend/widgets/TreeViewComboBox.cpp:340
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:143
 #, kde-format
 msgid ""
