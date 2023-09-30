@@ -66,7 +66,8 @@ FunctionValuesDialog::FunctionValuesDialog(Spreadsheet* s, QWidget* parent)
 	ui.bAddVariable->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
 	ui.bAddVariable->setToolTip(i18n("Add new variable"));
 
-	ui.chkAutoUpdate->setToolTip(i18n("Automatically update the calculated values on changes in the variable columns"));
+	ui.chkAutoUpdate->setToolTip(i18n("Automatically update the calculated values in the target column on changes in the variable columns"));
+	ui.chkAutoResize->setToolTip(i18n("Automatically resize the target column to fit the size of the variable columns"));
 
 	auto* btnBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
 	ui.verticalLayout->addWidget(btnBox);
@@ -390,9 +391,10 @@ void FunctionValuesDialog::generate() {
 	// set the new values and store the expression, variable names and used data columns
 	const QString& expression{ui.teEquation->toPlainText()};
 	bool autoUpdate{(ui.chkAutoUpdate->checkState() == Qt::Checked)};
+	bool autoResize{(ui.chkAutoResize->checkState() == Qt::Checked)};
 	for (auto* col : m_columns) {
 		col->setColumnMode(AbstractColumn::ColumnMode::Double);
-		col->setFormula(expression, variableNames, variableColumns, autoUpdate);
+		col->setFormula(expression, variableNames, variableColumns, autoUpdate, autoResize);
 		col->updateFormula();
 	}
 	m_spreadsheet->endMacro();

@@ -73,7 +73,7 @@ public:
 	AbstractSimpleFilter* outputFilter() const;
 	ColumnStringIO* asStringColumn() const;
 
-	void setFormula(const QString& formula, const QStringList& variableNames, const QVector<Column*>& columns, bool autoUpdate);
+	void setFormula(const QString& formula, const QStringList& variableNames, const QVector<Column*>& columns, bool autoUpdate, bool autoResize);
 	QString formula() const;
 	struct FormulaData {
 #if (QT_VERSION < QT_VERSION_CHECK(5, 14, 0)) // required to use in QVector

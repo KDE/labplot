@@ -147,6 +147,7 @@ public:
 									   QStringList variableNames,
 									   QVector<Column*> columns,
 									   bool autoUpdate,
+									   bool autoResize,
 									   QUndoCommand* parent = nullptr);
 
 	void redo() override;
@@ -158,10 +159,12 @@ private:
 	QStringList m_variableNames;
 	QVector<Column*> m_variableColumns;
 	bool m_autoUpdate{false};
+	bool m_autoResize{false};
 	QString m_newFormula;
 	QStringList m_newVariableNames;
 	QVector<Column*> m_newVariableColumns;
 	bool m_newAutoUpdate{false};
+	bool m_newAutoResize{false};
 	bool m_copied{false};
 };
 

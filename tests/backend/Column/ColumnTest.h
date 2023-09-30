@@ -40,6 +40,12 @@ private Q_SLOTS:
 	void statisticsBigInt(); // big ints
 	void statisticsText();
 
+	// generation of column values via a formula
+	void testFormulaAutoUpdateEnabled();
+	void testFormulaAutoUpdateDisabled();
+	void testFormulaAutoResizeEnabled();
+	void testFormulaAutoResizeDisabled();
+
 	// dictionary related tests for text columns
 	void testDictionaryIndex();
 	void testTextFrequencies();

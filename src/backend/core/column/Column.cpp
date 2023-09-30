@@ -567,8 +567,8 @@ bool Column::formulaAutoUpdate() const {
 /**
  * \brief Sets the formula used to generate column values
  */
-void Column::setFormula(const QString& formula, const QStringList& variableNames, const QVector<Column*>& columns, bool autoUpdate) {
-	exec(new ColumnSetGlobalFormulaCmd(d, formula, variableNames, columns, autoUpdate));
+void Column::setFormula(const QString& formula, const QStringList& variableNames, const QVector<Column*>& columns, bool autoUpdate, bool autoResize) {
+	exec(new ColumnSetGlobalFormulaCmd(d, formula, variableNames, columns, autoUpdate, autoResize));
 }
 
 /*!
@@ -1059,6 +1059,7 @@ void Column::save(QXmlStreamWriter* writer) const {
 	if (!formula().isEmpty()) {
 		writer->writeStartElement(QStringLiteral("formula"));
 		writer->writeAttribute(QStringLiteral("autoUpdate"), QString::number(d->formulaAutoUpdate()));
+		writer->writeAttribute(QStringLiteral("autoResize"), QString::number(d->formulaAutoResize()));
 		writer->writeTextElement(QStringLiteral("text"), formula());
 
 		QStringList formulaVariableNames;
@@ -1492,6 +1493,11 @@ bool Column::XmlReadFormula(XmlStreamReader* reader) {
 	if (reader->attributes().hasAttribute(QStringLiteral("autoUpdate")))
 		autoUpdate = reader->attributes().value(QStringLiteral("autoUpdate")).toInt();
 
+	// read the autoResize attribute if available (older project files created with <2.11 don't have it)
+	bool autoResize = false;
+	if (reader->attributes().hasAttribute(QStringLiteral("autoResize")))
+		autoResize = reader->attributes().value(QStringLiteral("autoResize")).toInt();
+
 	while (reader->readNext()) {
 		if (reader->isEndElement())
 			break;
@@ -1517,7 +1523,7 @@ bool Column::XmlReadFormula(XmlStreamReader* reader) {
 		}
 	}
 
-	d->setFormula(formula, variableNames, columnPathes, autoUpdate);
+	d->setFormula(formula, variableNames, columnPathes, autoUpdate, autoResize);
 
 	return true;
 }
