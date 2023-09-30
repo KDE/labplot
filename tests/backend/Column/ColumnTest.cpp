@@ -498,7 +498,7 @@ void ColumnTest::testFormulaAutoUpdateEnabled() {
 	targetColumn.setIntegers({3, 2, 1});
 
 	// evaluatue 2*x and check the generated values in the target column
-	targetColumn.setColumnMode(AbstractColumn::ColumnMode::Double);
+	targetColumn.setColumnMode(AbstractColumn::ColumnMode::Double); // should happen automatically in Column::setFormula()
 	targetColumn.setFormula(QStringLiteral("2*x"),
 							QStringList{QStringLiteral("x")},
 							QVector{&sourceColumn},
