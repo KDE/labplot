@@ -135,8 +135,6 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/widgets/FITSHeaderEditAddUnitDialog.cpp
 	${KDEFRONTEND_DIR}/widgets/FITSHeaderEditDialog.cpp
 	${KDEFRONTEND_DIR}/widgets/ResizableTextEdit.cpp
-
-	${KDEFRONTEND_DIR}/labplot2.qrc
 )
 
 if (Qt5Mqtt_FOUND)
@@ -151,6 +149,9 @@ if (APPLE)
   list(APPEND GUI_SOURCES ${KDEFRONTEND_DIR}/worksheet/PresenterWidget_mac.mm)
 endif()
 
+set(GUI_QRC
+	${KDEFRONTEND_DIR}/labplot2.qrc
+)
 
 set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/colormapswidget.ui
@@ -652,8 +653,9 @@ IF (APPLE AND ${ECM_VERSION} VERSION_GREATER "5.48.0")
 	ecm_add_app_icon(LABPLOT_SOURCE ICONS ${LML_ICONS} OUTFILE_BASENAME LML_ICONS)
 ENDIF ()
 
-add_executable( labplot2 ${LABPLOT_SOURCE} ${qml_QRC} )
-target_link_libraries( labplot2 labplot2lib )
+add_executable( labplot2 ${LABPLOT_SOURCE} ${GUI_QRC} ${qml_QRC} )
+target_link_libraries( labplot2 labplot2lib labplot2backendlib labplot2nsllib )
+target_compile_definitions(labplot2 PRIVATE ${LABPLOT_COMPILE_DEFINITIONS})
 
 if (APPLE) # Apple app package
     set_target_properties(labplot2 PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist)
