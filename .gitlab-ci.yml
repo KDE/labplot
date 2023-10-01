@@ -27,7 +27,7 @@ variables:
 ## Tumbleweed full (Debug)
 
 # only added extra-cmake-args (disable READSTAT unitl fixed)
-freebsd_qt515:
+.freebsd_qt515:
   stage: build
   tags:
     - FreeBSD
