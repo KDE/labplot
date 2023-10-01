@@ -339,10 +339,20 @@ void MainWin::initGUI(const QString& fileName) {
 					openProject(path);
 				break;
 			}
+			case LoadOnStart::NewProjectNotebook: {
+				newProject();
+#ifdef HAVE_CANTOR_LIBS
+				const auto& backend = group.readEntry(QLatin1String("LoadOnStartNotebook"), QString());
+				if (Cantor::Backend::listAvailableBackends().indexOf(backend) != -1)
+					addAspectToProject(new CantorWorksheet(backend));
+#endif
+				break;
+			}
 			case LoadOnStart::Nothing:
 			case LoadOnStart::WelcomeScreen:
 				break;
 			}
+
 			updateGUIOnProjectChanges();
 			if (m_project)
 				m_project->setChanged(false); // the project was initialized on startup, nothing has changed from user's perspective

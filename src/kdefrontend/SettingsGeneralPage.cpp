@@ -3,16 +3,18 @@
 	Project              : LabPlot
 	Description          : general settings page
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2008-2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2008-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2020-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "SettingsGeneralPage.h"
+#ifdef HAVE_CANTOR_LIBS
+#include <cantor/backend.h>
+#endif
+#include "backend/core/Settings.h"
 #include "backend/lib/macros.h"
 #include "kdefrontend/MainWin.h" // LoadOnStart
-
-#include "backend/core/Settings.h"
 
 #include <KConfigGroup>
 #include <KLocalizedString>
@@ -26,6 +28,8 @@ SettingsGeneralPage::SettingsGeneralPage(QWidget* parent)
 	ui.sbAutoSaveInterval->setSuffix(i18n("min."));
 	retranslateUi();
 
+	connect(ui.cbLoadOnStart, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsGeneralPage::loadOnStartChanged);
+	connect(ui.cbLoadOnStartNotebook, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsGeneralPage::changed);
 	connect(ui.cbDockWindowPositionReopen, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsGeneralPage::changed);
 	connect(ui.cbLoadOnStart, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsGeneralPage::changed);
 	connect(ui.cbTitleBar, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsGeneralPage::changed);
@@ -37,6 +41,13 @@ SettingsGeneralPage::SettingsGeneralPage(QWidget* parent)
 	connect(ui.chkIncludeTrailingZeroesAfterDot, &QCheckBox::toggled, this, &SettingsGeneralPage::changed);
 	connect(ui.chkAutoSave, &QCheckBox::toggled, this, &SettingsGeneralPage::autoSaveChanged);
 	connect(ui.chkCompatible, &QCheckBox::toggled, this, &SettingsGeneralPage::changed);
+
+#ifdef HAVE_CANTOR_LIBS
+	for (auto* backend : Cantor::Backend::availableBackends()) {
+		if (backend->isEnabled())
+			ui.cbLoadOnStartNotebook->addItem(QIcon::fromTheme(backend->icon()), backend->name());
+	}
+#endif
 
 	loadSettings();
 	autoSaveChanged(ui.chkAutoSave->isChecked());
@@ -90,6 +101,7 @@ void SettingsGeneralPage::applySettings() {
 
 	KConfigGroup group = Settings::settingsGeneral();
 	group.writeEntry(QLatin1String("LoadOnStart"), ui.cbLoadOnStart->currentData().toInt());
+	group.writeEntry(QLatin1String("LoadOnStartNotebook"), ui.cbLoadOnStartNotebook->currentText());
 	group.writeEntry(QLatin1String("TitleBar"), ui.cbTitleBar->currentIndex());
 	group.writeEntry(QLatin1String("Units"), ui.cbUnits->currentIndex());
 	if (ui.cbDecimalSeparator->currentIndex() == static_cast<int>(DecimalSeparator::Automatic)) // need to overwrite previous setting
@@ -128,9 +140,23 @@ void SettingsGeneralPage::restoreDefaults() {
 
 void SettingsGeneralPage::loadSettings() {
 	const KConfigGroup group = Settings::group(QStringLiteral("Settings_General"));
+
 	auto loadOnStart = group.readEntry(QLatin1String("LoadOnStart"), static_cast<int>(MainWin::LoadOnStart::NewProject));
 	ui.cbLoadOnStart->setCurrentIndex(ui.cbLoadOnStart->findData(loadOnStart));
+	loadOnStartChanged(); // call it to update notebook related widgets also if the current index above was not changed (true for index=0)
+
+#ifdef HAVE_CANTOR_LIBS
+	const auto& backendName = group.readEntry(QLatin1String("LoadOnStartNotebook"), QString());
+	int index = ui.cbLoadOnStartNotebook->findText(backendName);
+	if (index == -1 && ui.cbLoadOnStartNotebook->count() > 0)
+		ui.cbLoadOnStartNotebook->setCurrentIndex(0); // select the first available backend if not backend was select yet
+	else
+		ui.cbLoadOnStartNotebook->setCurrentIndex(index);
+#endif
+
 	ui.cbTitleBar->setCurrentIndex(group.readEntry(QLatin1String("TitleBar"), 0));
+	ui.cbDockWindowPositionReopen->setCurrentIndex(ui.cbDockWindowPositionReopen->findData(static_cast<int>(Settings::readDockPosBehaviour())));
+
 	ui.cbUnits->setCurrentIndex(group.readEntry(QLatin1String("Units"), 0));
 	// must be done, because locale.language() will return the default locale if AnyLanguage is passed
 	const auto l = static_cast<QLocale::Language>(group.readEntry(QLatin1String("DecimalSeparatorLocale"), static_cast<int>(QLocale::Language::AnyLanguage)));
@@ -148,11 +174,10 @@ void SettingsGeneralPage::loadSettings() {
 		ui.chkOmitLeadingZeroInExponent->setChecked(true);
 	if (numberOptions & QLocale::IncludeTrailingZeroesAfterDot)
 		ui.chkIncludeTrailingZeroesAfterDot->setChecked(true);
+
 	ui.chkAutoSave->setChecked(group.readEntry<bool>(QLatin1String("AutoSave"), false));
 	ui.sbAutoSaveInterval->setValue(group.readEntry(QLatin1String("AutoSaveInterval"), 0));
 	ui.chkCompatible->setChecked(group.readEntry<bool>(QLatin1String("CompatibleSave"), false));
-
-	ui.cbDockWindowPositionReopen->setCurrentIndex(ui.cbDockWindowPositionReopen->findData(static_cast<int>(Settings::readDockPosBehaviour())));
 }
 
 void SettingsGeneralPage::retranslateUi() {
@@ -161,10 +186,19 @@ void SettingsGeneralPage::retranslateUi() {
 	ui.cbLoadOnStart->addItem(i18n("Create New Empty Project"), static_cast<int>(MainWin::LoadOnStart::NewProject));
 	ui.cbLoadOnStart->addItem(i18n("Create New Project with Worksheet"), static_cast<int>(MainWin::LoadOnStart::NewProjectWorksheet));
 	ui.cbLoadOnStart->addItem(i18n("Create New Project with Spreadsheet"), static_cast<int>(MainWin::LoadOnStart::NewProjectSpreadsheet));
+#ifdef HAVE_CANTOR_LIBS
+	ui.cbLoadOnStart->addItem(i18n("Create New Project with Notebook"), static_cast<int>(MainWin::LoadOnStart::NewProjectNotebook));
+#endif
 	ui.cbLoadOnStart->addItem(i18n("Load Last Used Project"), static_cast<int>(MainWin::LoadOnStart::LastProject));
 	// 	ui.cbLoadOnStart->addItem(i18n("Show Welcome Screen"));
 
-	ui.cbDockWindowPositionReopen->setToolTip(i18n("Controls the behavior of where the dock widgets are placed after being re-opened."));
+	QString msg = i18n("Notebook type to create automatically on startup");
+	ui.lLoadOnStartNotebook->setToolTip(msg);
+	ui.cbLoadOnStartNotebook->setToolTip(msg);
+
+	msg = i18n("Controls the behavior of where the dock widgets are placed after being re-opened");
+	ui.lDockWindowPositionReopen->setToolTip(msg);
+	ui.cbDockWindowPositionReopen->setToolTip(msg);
 	ui.cbDockWindowPositionReopen->clear();
 	ui.cbDockWindowPositionReopen->addItem(i18n("Original Position"), static_cast<int>(Settings::DockPosBehaviour::OriginalPos));
 	ui.cbDockWindowPositionReopen->addItem(i18n("On top of the last active Dock Widget"), static_cast<int>(Settings::DockPosBehaviour::AboveLastActive));
@@ -183,13 +217,21 @@ void SettingsGeneralPage::retranslateUi() {
 	ui.cbDecimalSeparator->addItem(i18n("Automatic"));
 }
 
-void SettingsGeneralPage::changed() {
-	m_changed = true;
-	Q_EMIT settingsChanged();
+void SettingsGeneralPage::loadOnStartChanged() {
+	const auto loadOnStart = static_cast<MainWin::LoadOnStart>(ui.cbLoadOnStart->currentData().toInt());
+	const bool visible = (loadOnStart == MainWin::LoadOnStart::NewProjectNotebook);
+	ui.lLoadOnStartNotebook->setVisible(visible);
+	ui.cbLoadOnStartNotebook->setVisible(visible);
+	changed();
 }
 
 void SettingsGeneralPage::autoSaveChanged(bool state) {
 	ui.lAutoSaveInterval->setVisible(state);
 	ui.sbAutoSaveInterval->setVisible(state);
 	changed();
+}
+
+void SettingsGeneralPage::changed() {
+	m_changed = true;
+	Q_EMIT settingsChanged();
 }

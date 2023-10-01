@@ -1,5 +1,8 @@
 -----2.11.0 () -----
 New features:
+	* [general]
+		* New application theme "Dracula"
+		* New option in the application settings to run a selected CAS engine at startup
 	* [worksheet]
 		* Add possibility to use column labels as axis ticks
 		* New visualization types:
@@ -18,8 +21,6 @@ New features:
 	* [import]
 		* Templates for ASCII and Binary import filters - allow to save and load current filter settings
 		* Addeded seaborn's datasets to the collection of datasets
-	* [general]
-    	* New application theme "Dracula"
 
 Performance improvements:
 	* Make baseline removal much faster by using Eigen3 library (optional dependency)
