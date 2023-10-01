@@ -18,6 +18,7 @@ New features:
 		* Allow to sort the whole spreadsheet even if one single column was selected, use it rather as the key sort column
 	* [notebook]
 		* Export to PDF
+		* "Configure CAS" in the menu to create a new notebook to directly allow the user to enable new backends in case not done yet
 	* [import]
 		* Templates for ASCII and Binary import filters - allow to save and load current filter settings
 		* Addeded seaborn's datasets to the collection of datasets

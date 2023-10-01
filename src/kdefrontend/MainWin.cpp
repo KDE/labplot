@@ -861,6 +861,15 @@ void MainWin::initActions() {
 		}
 	});
 	this->addAction(m_searchAction);
+
+#ifdef HAVE_CANTOR_LIBS
+	// configure CAS backends
+	m_configureCASAction = new QAction(QIcon::fromTheme(QLatin1String("cantor")), i18n("Configure CAS..."), this);
+	m_configureCASAction->setWhatsThis(i18n("Opens the settings for Computer Algebra Systems to modify the available systems or to enable new ones"));
+	m_configureCASAction->setMenuRole(QAction::NoRole); // prevent macOS Qt heuristics to select this action for preferences
+	actionCollection()->addAction(QLatin1String("configure_cas"), m_configureCASAction);
+	connect(m_configureCASAction, &QAction::triggered, this, &MainWin::cantorSettingsDialog);
+#endif
 }
 
 void MainWin::initMenus() {
@@ -971,19 +980,17 @@ void MainWin::initMenus() {
 
 				auto* action = new QAction(QIcon::fromTheme(backend->icon()), backend->name(), this);
 				action->setData(backend->name());
+				action->setWhatsThis(i18n("Creates a new %1 notebook", backend->name()));
+				connect(action, &QAction::triggered, this, &MainWin::newCantorWorksheet);
 				newBackendActions << action;
 				menu->addAction(action);
 			}
 
-			connect(menu, &QMenu::triggered, this, &MainWin::newCantorWorksheet);
 			plugActionList(QLatin1String("backends_list"), newBackendActions);
 		}
 
-		auto* action = new QAction(QIcon::fromTheme(QLatin1String("cantor")), i18n("Configure CAS..."), this);
-		connect(action, &QAction::triggered, this, &MainWin::cantorSettingsDialog);
-		action->setMenuRole(QAction::NoRole); // prevent macOS Qt heuristics to select this action for preferences
 		if (settingsMenu)
-			settingsMenu->addAction(action);
+			settingsMenu->addAction(m_configureCASAction);
 	}
 #else
 	delete this->guiFactory()->container(QStringLiteral("notebook"), this);
@@ -2082,7 +2089,8 @@ Spreadsheet* MainWin::activeSpreadsheet() const {
 /*
 	adds a new Cantor Spreadsheet to the project.
 */
-void MainWin::newCantorWorksheet(QAction* action) {
+void MainWin::newCantorWorksheet() {
+	auto* action = static_cast<QAction*>(QObject::sender());
 	auto* cantorworksheet = new CantorWorksheet(action->data().toString());
 	this->addAspectToProject(cantorworksheet);
 }

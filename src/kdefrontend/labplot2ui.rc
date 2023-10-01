@@ -19,6 +19,8 @@
 <Separator/>
 <Menu name="new_notebook"><text>&amp;Notebook</text>
 	<ActionList name="backends_list" />
+	<Separator/>
+	<Action name="configure_cas" />
 </Menu>
 <Separator/>
 <Action name="export" />
@@ -60,6 +62,8 @@
 	<Separator/>
 	<Menu name="new_notebook"><text>&amp;Notebook</text>
 	    <ActionList name="backends_list" />
+		<Separator/>
+		<Action name="configure_cas" />
 	</Menu>
 </Menu>
 <Separator/>

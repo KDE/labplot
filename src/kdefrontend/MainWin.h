@@ -157,6 +157,7 @@ private:
 	KToggleAction* m_toggleStatusBarAction;
 	QAction* m_toggleMemoryInfoAction;
 	KToggleFullScreenAction* m_toggleFullScreenAction;
+	QAction* m_configureCASAction;
 
 	// window visibility
 	QAction* m_visibilityFolderAction;
@@ -237,7 +238,7 @@ private Q_SLOTS:
 
 	// Cantor
 #ifdef HAVE_CANTOR_LIBS
-	void newCantorWorksheet(QAction*);
+	void newCantorWorksheet();
 	void cantorSettingsDialog();
 #endif
 
