@@ -14,7 +14,6 @@
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/AbstractPart.h"
 #include "backend/datasources/filters/AbstractFileFilter.h"
-#include <QVector>
 
 class AbstractDataSource : public AbstractPart {
 	Q_OBJECT

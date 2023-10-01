@@ -1496,7 +1496,7 @@ void Spreadsheet::finalizeImport(size_t columnOffset,
 	QVector<CartesianPlot*> plots;
 	if (importMode == AbstractFileFilter::ImportMode::Replace) {
 		for (size_t n = startColumn; n <= endColumn; n++) {
-			Column* column = this->column((int)(columnOffset + n - startColumn));
+			auto* column = this->column((int)(columnOffset + n - startColumn));
 			if (column)
 				column->addUsedInPlots(plots);
 		}
@@ -1560,11 +1560,11 @@ void Spreadsheet::finalizeImport(size_t columnOffset,
 	for (int i = 0; i < childCount<Column>(); i++)
 		child<Column>(i)->setUndoAware(true);
 
-	if (m_model != nullptr)
+	if (m_model)
 		m_model->suppressSignals(false);
 
 #ifndef SDK
-	if (m_partView != nullptr && m_view != nullptr)
+	if (m_partView && m_view)
 		m_view->resizeHeader();
 #endif
 

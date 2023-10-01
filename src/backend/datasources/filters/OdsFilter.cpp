@@ -30,6 +30,7 @@ using namespace orcus;
 // TODO:
 // * import to matrix
 // * export data when Orcus support is stable
+// * datetime support?
 OdsFilter::OdsFilter()
 	: AbstractFileFilter(FileType::Ods)
 	, d(new OdsFilterPrivate(this)) {
@@ -206,8 +207,8 @@ OdsFilterPrivate::OdsFilterPrivate(OdsFilter*) {
 OdsFilterPrivate::~OdsFilterPrivate() {
 }
 
-void OdsFilterPrivate::write(const QString& fileName, AbstractDataSource* dataSource) {
-	DEBUG(Q_FUNC_INFO << ", file name = " << fileName.toStdString())
+void OdsFilterPrivate::write(const QString& /*fileName*/, AbstractDataSource* /*dataSource*/) {
+	DEBUG(Q_FUNC_INFO)
 	// TODO: "The export functionality of the orcus library is highly experimental."
 	DEBUG(Q_FUNC_INFO << ", not implemented yet!")
 }
@@ -221,10 +222,12 @@ void OdsFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSou
 	}
 
 	// read data from selected sheets into dataSource using importMode
+	// QDEBUG(Q_FUNC_INFO << ", Reading sheets" << selectedSheetNames)
 	for (const auto& sheetName : selectedSheetNames) {
+		// DEBUG(Q_FUNC_INFO << ", sheet" << sheetName.toStdString())
 		currentSheetName = sheetName.split(QLatin1Char('!')).last();
 		readCurrentSheet(fileName, dataSource, importMode);
-		importMode = AbstractFileFilter::ImportMode::Append; // append other vars
+		importMode = AbstractFileFilter::ImportMode::Append; // columns of other sheets are appended
 	}
 }
 
@@ -380,6 +383,7 @@ void OdsFilterPrivate::readCurrentSheet(const QString& fileName, AbstractDataSou
 
 	// prepare import
 	int columnOffset = dataSource->prepareImport(dataContainer, importMode, actualRows, actualCols, vectorNames, columnModes);
+	DEBUG(Q_FUNC_INFO << ", column offset = " << columnOffset)
 
 	// import data
 	for (size_t row = 0; row < actualRows; row++) {

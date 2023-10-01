@@ -757,7 +757,7 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 		filter->setFirstRowAsColumnNames(ui.chbFirstRowAsColName->isChecked());
 
 		const auto& sorn = selectedOdsSheetNames();
-		QDEBUG(Q_FUNC_INFO << ", selected sheet names = " << sorn)
+		QDEBUG(Q_FUNC_INFO << ", selected Ods sheet names = " << sorn)
 		if (!sorn.isEmpty())
 			filter->setSelectedSheetNames(sorn);
 

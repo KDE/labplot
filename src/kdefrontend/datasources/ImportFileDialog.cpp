@@ -345,6 +345,7 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 
 	RESET_CURSOR;
 	statusBar->removeWidget(progressBar);
+	DEBUG(Q_FUNC_INFO << ", DONE")
 }
 
 void ImportFileDialog::toggleOptions() {
