@@ -971,22 +971,7 @@ void MainWin::initMenus() {
 			menu->setIcon(QIcon::fromTheme(QLatin1String("cantor")));
 			m_newMenu->addSeparator();
 			m_newMenu->addMenu(menu);
-
-			unplugActionList(QLatin1String("backends_list"));
-			QList<QAction*> newBackendActions;
-			for (auto* backend : Cantor::Backend::availableBackends()) {
-				if (!backend->isEnabled())
-					continue;
-
-				auto* action = new QAction(QIcon::fromTheme(backend->icon()), backend->name(), this);
-				action->setData(backend->name());
-				action->setWhatsThis(i18n("Creates a new %1 notebook", backend->name()));
-				connect(action, &QAction::triggered, this, &MainWin::newCantorWorksheet);
-				newBackendActions << action;
-				menu->addAction(action);
-			}
-
-			plugActionList(QLatin1String("backends_list"), newBackendActions);
+			updateNotebookActions();
 		}
 
 		if (settingsMenu)
@@ -2841,14 +2826,43 @@ void MainWin::settingsDialog() {
 #ifdef HAVE_CANTOR_LIBS
 void MainWin::cantorSettingsDialog() {
 	static auto* emptyConfig = new KCoreConfigSkeleton();
-	auto* cantorDialog = new KConfigDialog(this, QLatin1String("Cantor Settings"), emptyConfig);
+	auto* dlg = new KConfigDialog(this, QLatin1String("Cantor Settings"), emptyConfig);
 	for (auto* backend : Cantor::Backend::availableBackends())
 		if (backend->config()) // It has something to configure, so add it to the dialog
-			cantorDialog->addPage(backend->settingsWidget(cantorDialog), backend->config(), backend->name(), backend->icon());
-	cantorDialog->show();
+			dlg->addPage(backend->settingsWidget(dlg), backend->config(), backend->name(), backend->icon());
+
+	// in case the settings were modified (we only need paths), update the "add new notebook" actions
+	// to get the new list of available backend systems in the menu
+	connect(dlg, &KConfigDialog::settingsChanged, this, [=]() {
+		updateNotebookActions();
+	});
+
+	dlg->show();
 
 	DEBUG(Q_FUNC_INFO << ", found " << Cantor::Backend::availableBackends().size() << " backends")
 	if (Cantor::Backend::availableBackends().size() == 0)
 		KMessageBox::error(nullptr, i18n("No Cantor backends found. Please install the ones you want to use."));
+}
+
+void MainWin::updateNotebookActions() {
+	auto* menu = static_cast<QMenu*>(factory()->container(QLatin1String("new_notebook"), this));
+	unplugActionList(QLatin1String("backends_list"));
+	QList<QAction*> newBackendActions;
+	menu->clear();
+	for (auto* backend : Cantor::Backend::availableBackends()) {
+		if (!backend->isEnabled())
+			continue;
+
+		auto* action = new QAction(QIcon::fromTheme(backend->icon()), backend->name(), this);
+		action->setData(backend->name());
+		action->setWhatsThis(i18n("Creates a new %1 notebook", backend->name()));
+		connect(action, &QAction::triggered, this, &MainWin::newCantorWorksheet);
+		newBackendActions << action;
+		menu->addAction(action);
+	}
+
+	plugActionList(QLatin1String("backends_list"), newBackendActions);
+	menu->addSeparator();
+	menu->addAction(m_configureCASAction);
 }
 #endif

@@ -240,6 +240,7 @@ private Q_SLOTS:
 #ifdef HAVE_CANTOR_LIBS
 	void newCantorWorksheet();
 	void cantorSettingsDialog();
+	void updateNotebookActions();
 #endif
 
 	void newFolder();

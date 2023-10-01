@@ -19,6 +19,7 @@ New features:
 	* [notebook]
 		* Export to PDF
 		* "Configure CAS" in the menu to create a new notebook to directly allow the user to enable new backends in case not done yet
+		* In case the correct path to a CAS like Maxima, etc. was configured, allow to use it without restarting LabPlot
 	* [import]
 		* Templates for ASCII and Binary import filters - allow to save and load current filter settings
 		* Addeded seaborn's datasets to the collection of datasets
