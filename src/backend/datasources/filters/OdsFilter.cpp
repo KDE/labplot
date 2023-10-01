@@ -28,7 +28,8 @@ using namespace orcus;
 #endif
 
 // TODO:
-// * import to matrix
+// * import to matrix: crash with text column (Sheet3)
+// * improve import to workbook (no double import)
 // * export data when Orcus support is stable
 // * datetime support?
 OdsFilter::OdsFilter()
