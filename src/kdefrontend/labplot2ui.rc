@@ -7,11 +7,19 @@
 <Action name="toggle_project_explorer_dock"/>
 <Action name="toggle_properties_explorer_dock"/>
 <Separator/>
+<Action name="new_folder" />
 <Action name="new_workbook" />
 <Action name="new_spreadsheet" />
 <Action name="new_matrix" />
 <Action name="new_worksheet" />
+<Action name="new_notes" />
 <Action name="new_datapicker" />
+<Separator/>
+<Action name="new_live_datasource" />
+<Separator/>
+<Menu name="new_notebook"><text>&amp;Notebook</text>
+	<ActionList name="backends_list" />
+</Menu>
 <Separator/>
 <Action name="export" />
 </ToolBar>
@@ -40,17 +48,15 @@
 <Menu name="file" ><text>&amp;File</text>
 <Action name="file_example_open" />
 <Menu name="new"><text>&amp;Add New</text>
+	<Action name="new_folder" />
 	<Action name="new_workbook" />
 	<Action name="new_spreadsheet" />
 	<Action name="new_matrix" />
 	<Action name="new_worksheet" />
 	<Action name="new_notes" />
 	<Action name="new_datapicker" />
-	<Action name="new_script" />
-	<Action name="new_folder" />
 	<Separator/>
 	<Action name="new_live_datasource" />
-	<Action name="new_database_datasource" />
 	<Separator/>
 	<Menu name="new_notebook"><text>&amp;Notebook</text>
 	    <ActionList name="backends_list" />

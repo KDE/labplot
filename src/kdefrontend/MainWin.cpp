@@ -268,7 +268,6 @@ void MainWin::initGUI(const QString& fileName) {
 	tbImport->setDefaultAction(m_importFileAction);
 	auto* lastAction = mainToolBar->actions().at(mainToolBar->actions().count() - 1);
 	mainToolBar->insertWidget(lastAction, tbImport);
-	qobject_cast<QMenu*>(factory()->container(QLatin1String("import"), this))->setIcon(QIcon::fromTheme(QLatin1String("document-import")));
 
 	// hamburger menu
 #if KCOREADDONS_VERSION >= QT_VERSION_CHECK(5, 81, 0)
@@ -686,7 +685,7 @@ void MainWin::initActions() {
 	connect(m_newFolderAction, &QAction::triggered, this, &MainWin::newFolder);
 
 	//"New file datasources"
-	m_newLiveDataSourceAction = new QAction(QIcon::fromTheme(QLatin1String("application-octet-stream")), i18n("Live Data Source..."), this);
+	m_newLiveDataSourceAction = new QAction(QIcon::fromTheme(QLatin1String("edit-text-frame-update")), i18n("Live Data Source..."), this);
 	m_newLiveDataSourceAction->setWhatsThis(i18n("Creates a live data source to read data from a real time device"));
 	actionCollection()->addAction(QLatin1String("new_live_datasource"), m_newLiveDataSourceAction);
 	connect(m_newLiveDataSourceAction, &QAction::triggered, this, &MainWin::newLiveDataSource);
@@ -904,6 +903,10 @@ void MainWin::initMenus() {
 	m_importMenu->addAction(m_importOpjAction);
 #endif
 
+	// icon for the menu "import" in the main menu created via the rc file
+	menu = qobject_cast<QMenu*>(factory()->container(QLatin1String("import"), this));
+	menu->setIcon(QIcon::fromTheme(QLatin1String("document-import")));
+
 	// menu subwindow visibility policy
 	m_visibilityMenu = new QMenu(i18n("Window Visibility"), this);
 	m_visibilityMenu->setIcon(QIcon::fromTheme(QLatin1String("window-duplicate")));
@@ -956,8 +959,8 @@ void MainWin::initMenus() {
 	if (!backendNames.isEmpty()) {
 		auto* menu = dynamic_cast<QMenu*>(factory()->container(QLatin1String("new_notebook"), this));
 		if (menu) {
+			menu->setIcon(QIcon::fromTheme(QLatin1String("cantor")));
 			m_newMenu->addSeparator();
-			menu->setIcon(QIcon::fromTheme(QLatin1String("archive-insert")));
 			m_newMenu->addMenu(menu);
 
 			unplugActionList(QLatin1String("backends_list"));
