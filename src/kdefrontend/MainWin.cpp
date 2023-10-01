@@ -1162,7 +1162,7 @@ void MainWin::updateGUI() {
 	if (m_closing || m_projectClosing)
 		return;
 
-	// reset the touchbar
+		// reset the touchbar
 #ifdef HAVE_TOUCHBAR
 	m_touchBar->clear();
 
