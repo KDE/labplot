@@ -232,10 +232,23 @@ void PlotDataDialog::processColumns() {
 
 	if (m_plotType == PlotType::XYCurve && xColumnName.isEmpty()) {
 		// no X-column was selected -> look for the first non-selected X-column left to the first selected column
-		const int index = m_spreadsheet->indexOfChild<Column>(selectedColumns.first()) - 1;
-		if (index >= 0) {
-			for (int i = index; i >= 0; --i) {
-				auto* column = m_spreadsheet->column(i);
+		const auto& columns = m_spreadsheet->children<Column>();
+		const int index = columns.indexOf(selectedColumns.first()) - 1;
+		for (int i = index; i >= 0; --i) {
+			auto* column = columns.at(i);
+			if (column->plotDesignation() == AbstractColumn::PlotDesignation::X && column->isPlottable()) {
+				xColumnName = column->name();
+				m_columns.prepend(column);
+				columnNames.prepend(xColumnName);
+				break;
+			}
+		}
+
+		if (xColumnName.isEmpty()) {
+			// no X-column was found left to the first selected column -> look right to the last selected column
+			const int index = columns.indexOf(selectedColumns.last()) + 1;
+			for (int i = index; i < m_spreadsheet->columnCount(); ++i) {
+				auto* column = columns.at(i);
 				if (column->plotDesignation() == AbstractColumn::PlotDesignation::X && column->isPlottable()) {
 					xColumnName = column->name();
 					m_columns.prepend(column);
