@@ -2856,6 +2856,7 @@ void MainWin::updateNotebookActions() {
 		auto* action = new QAction(QIcon::fromTheme(backend->icon()), backend->name(), this);
 		action->setData(backend->name());
 		action->setWhatsThis(i18n("Creates a new %1 notebook", backend->name()));
+		actionCollection()->addAction(QLatin1String("notebook_") + backend->name(), action);
 		connect(action, &QAction::triggered, this, &MainWin::newCantorWorksheet);
 		newBackendActions << action;
 		menu->addAction(action);

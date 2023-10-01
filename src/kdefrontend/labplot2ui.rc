@@ -14,14 +14,13 @@
 <Action name="new_worksheet" />
 <Action name="new_notes" />
 <Action name="new_datapicker" />
-<Separator/>
 <Action name="new_live_datasource" />
 <Separator/>
-<Menu name="new_notebook"><text>&amp;Notebook</text>
+<!--<Menu name="new_notebook"><text>&amp;Notebook</text>
 	<ActionList name="backends_list" />
 	<Separator/>
 	<Action name="configure_cas" />
-</Menu>
+</Menu>-->
 <Separator/>
 <Action name="export" />
 </ToolBar>
@@ -57,7 +56,6 @@
 	<Action name="new_worksheet" />
 	<Action name="new_notes" />
 	<Action name="new_datapicker" />
-	<Separator/>
 	<Action name="new_live_datasource" />
 	<Separator/>
 	<Menu name="new_notebook"><text>&amp;Notebook</text>
@@ -67,7 +65,7 @@
 	</Menu>
 </Menu>
 <Separator/>
-<Menu name="import"><text>Import Data</text>
+<Menu name="import"><text>Import</text>
 	<Action name="import_file" />
 	<Action name="import_sql" />
     <Action name="import_dataset_datasource" />

@@ -41,6 +41,23 @@ ConstantsWidget::ConstantsWidget(QWidget* parent)
 		ui.leFilter->setFocus();
 		this->groupChanged(0);
 	});
+
+	// set the minimum size to show the longest constant name without any horizontal scroll bar
+	const QStringList& names = m_expressionParser->constantsNames();
+	QString maxName;
+	int maxLength = 0;
+	for (const auto& name : names) {
+		int length = name.length();
+		if (length > maxLength) {
+			maxLength = length;
+			maxName = name;
+		}
+	}
+
+	QFont font;
+	QFontMetrics fm(font);
+	const int width = fm.horizontalAdvance(maxName) + layout()->margin() * 2 + qApp->style()->pixelMetric(QStyle::PM_ScrollBarExtent);
+	setMinimumWidth(width);
 }
 
 /*!
