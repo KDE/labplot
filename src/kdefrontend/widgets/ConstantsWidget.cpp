@@ -48,7 +48,7 @@ ConstantsWidget::ConstantsWidget(QWidget* parent)
 	int maxLength = 0;
 	for (const auto& name : names) {
 		int length = name.length();
-		if ( length > maxLength) {
+		if (length > maxLength) {
 			maxLength = length;
 			maxName = name;
 		}
