@@ -69,7 +69,7 @@ public:
 	void addAspectToProject(AbstractAspect*);
 	static void updateLocale();
 
-	enum class LoadOnStart { Nothing, NewProject, NewProjectWorksheet, NewProjectSpreadsheet, LastProject, WelcomeScreen };
+	enum class LoadOnStart { Nothing, NewProject, NewProjectWorksheet, NewProjectSpreadsheet, LastProject, WelcomeScreen, NewProjectNotebook };
 	enum class TitleBarMode { ShowFilePath, ShowFileName, ShowProjectName };
 
 #ifdef HAVE_KUSERFEEDBACK
@@ -157,6 +157,7 @@ private:
 	KToggleAction* m_toggleStatusBarAction;
 	QAction* m_toggleMemoryInfoAction;
 	KToggleFullScreenAction* m_toggleFullScreenAction;
+	QAction* m_configureCASAction;
 
 	// window visibility
 	QAction* m_visibilityFolderAction;
@@ -237,8 +238,9 @@ private Q_SLOTS:
 
 	// Cantor
 #ifdef HAVE_CANTOR_LIBS
-	void newCantorWorksheet(QAction*);
+	void newCantorWorksheet();
 	void cantorSettingsDialog();
+	void updateNotebookActions();
 #endif
 
 	void newFolder();

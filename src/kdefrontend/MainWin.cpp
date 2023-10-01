@@ -227,9 +227,6 @@ void MainWin::initGUI(const QString& fileName) {
 #endif
 	setupGUI();
 
-	DEBUG(Q_FUNC_INFO << ", Component name: " << STDSTRING(KXMLGUIClient::componentName()));
-	DEBUG(Q_FUNC_INFO << ", XML file: " << STDSTRING(KXMLGUIClient::xmlFile()) << " (should be \"labplot2ui.rc\")");
-
 	// all toolbars created via the KXMLGUI framework are locked on default:
 	//  * on the very first program start, unlock all toolbars
 	//  * on later program starts, set stored lock status
@@ -265,24 +262,12 @@ void MainWin::initGUI(const QString& fileName) {
 	initMenus();
 
 	auto* mainToolBar = qobject_cast<QToolBar*>(factory()->container(QLatin1String("main_toolbar"), this));
-	if (!mainToolBar) {
-		QMessageBox::critical(this,
-							  i18n("GUI configuration file not found"),
-							  i18n("%1 file was not found. Please check your installation.", KXMLGUIClient::xmlFile()));
-		// TODO: the application is not really usable if the rc file was not found. We should quit the application. The following line crashes
-		// the application because of the splash screen. We need to find another solution.
-		// 		QMetaObject::invokeMethod(this, "close", Qt::QueuedConnection); //call close as soon as we enter the eventloop
-		// 		return;
-	} else {
-		auto* tbImport = new QToolButton(mainToolBar);
-		tbImport->setPopupMode(QToolButton::MenuButtonPopup);
-		tbImport->setMenu(m_importMenu);
-		tbImport->setDefaultAction(m_importFileAction);
-		auto* lastAction = mainToolBar->actions().at(mainToolBar->actions().count() - 1);
-		mainToolBar->insertWidget(lastAction, tbImport);
-
-		qobject_cast<QMenu*>(factory()->container(QLatin1String("import"), this))->setIcon(QIcon::fromTheme(QLatin1String("document-import")));
-	}
+	auto* tbImport = new QToolButton(mainToolBar);
+	tbImport->setPopupMode(QToolButton::MenuButtonPopup);
+	tbImport->setMenu(m_importMenu);
+	tbImport->setDefaultAction(m_importFileAction);
+	auto* lastAction = mainToolBar->actions().at(mainToolBar->actions().count() - 1);
+	mainToolBar->insertWidget(lastAction, tbImport);
 
 	// hamburger menu
 #if KCOREADDONS_VERSION >= QT_VERSION_CHECK(5, 81, 0)
@@ -353,10 +338,20 @@ void MainWin::initGUI(const QString& fileName) {
 					openProject(path);
 				break;
 			}
+			case LoadOnStart::NewProjectNotebook: {
+				newProject();
+#ifdef HAVE_CANTOR_LIBS
+				const auto& backend = group.readEntry(QLatin1String("LoadOnStartNotebook"), QString());
+				if (Cantor::Backend::listAvailableBackends().indexOf(backend) != -1)
+					addAspectToProject(new CantorWorksheet(backend));
+#endif
+				break;
+			}
 			case LoadOnStart::Nothing:
 			case LoadOnStart::WelcomeScreen:
 				break;
 			}
+
 			updateGUIOnProjectChanges();
 			if (m_project)
 				m_project->setChanged(false); // the project was initialized on startup, nothing has changed from user's perspective
@@ -690,7 +685,7 @@ void MainWin::initActions() {
 	connect(m_newFolderAction, &QAction::triggered, this, &MainWin::newFolder);
 
 	//"New file datasources"
-	m_newLiveDataSourceAction = new QAction(QIcon::fromTheme(QLatin1String("application-octet-stream")), i18n("Live Data Source..."), this);
+	m_newLiveDataSourceAction = new QAction(QIcon::fromTheme(QLatin1String("edit-text-frame-update")), i18n("Live Data Source..."), this);
 	m_newLiveDataSourceAction->setWhatsThis(i18n("Creates a live data source to read data from a real time device"));
 	actionCollection()->addAction(QLatin1String("new_live_datasource"), m_newLiveDataSourceAction);
 	connect(m_newLiveDataSourceAction, &QAction::triggered, this, &MainWin::newLiveDataSource);
@@ -866,6 +861,15 @@ void MainWin::initActions() {
 		}
 	});
 	this->addAction(m_searchAction);
+
+#ifdef HAVE_CANTOR_LIBS
+	// configure CAS backends
+	m_configureCASAction = new QAction(QIcon::fromTheme(QLatin1String("cantor")), i18n("Configure CAS..."), this);
+	m_configureCASAction->setWhatsThis(i18n("Opens the settings for Computer Algebra Systems to modify the available systems or to enable new ones"));
+	m_configureCASAction->setMenuRole(QAction::NoRole); // prevent macOS Qt heuristics to select this action for preferences
+	actionCollection()->addAction(QLatin1String("configure_cas"), m_configureCASAction);
+	connect(m_configureCASAction, &QAction::triggered, this, &MainWin::cantorSettingsDialog);
+#endif
 }
 
 void MainWin::initMenus() {
@@ -907,6 +911,10 @@ void MainWin::initMenus() {
 #ifdef HAVE_LIBORIGIN
 	m_importMenu->addAction(m_importOpjAction);
 #endif
+
+	// icon for the menu "import" in the main menu created via the rc file
+	menu = qobject_cast<QMenu*>(factory()->container(QLatin1String("import"), this));
+	menu->setIcon(QIcon::fromTheme(QLatin1String("document-import")));
 
 	// menu subwindow visibility policy
 	m_visibilityMenu = new QMenu(i18n("Window Visibility"), this);
@@ -960,31 +968,14 @@ void MainWin::initMenus() {
 	if (!backendNames.isEmpty()) {
 		auto* menu = dynamic_cast<QMenu*>(factory()->container(QLatin1String("new_notebook"), this));
 		if (menu) {
+			menu->setIcon(QIcon::fromTheme(QLatin1String("cantor")));
 			m_newMenu->addSeparator();
-			menu->setIcon(QIcon::fromTheme(QLatin1String("archive-insert")));
 			m_newMenu->addMenu(menu);
-
-			unplugActionList(QLatin1String("backends_list"));
-			QList<QAction*> newBackendActions;
-			for (auto* backend : Cantor::Backend::availableBackends()) {
-				if (!backend->isEnabled())
-					continue;
-
-				auto* action = new QAction(QIcon::fromTheme(backend->icon()), backend->name(), this);
-				action->setData(backend->name());
-				newBackendActions << action;
-				menu->addAction(action);
-			}
-
-			connect(menu, &QMenu::triggered, this, &MainWin::newCantorWorksheet);
-			plugActionList(QLatin1String("backends_list"), newBackendActions);
+			updateNotebookActions();
 		}
 
-		auto* action = new QAction(QIcon::fromTheme(QLatin1String("cantor")), i18n("Configure CAS..."), this);
-		connect(action, &QAction::triggered, this, &MainWin::cantorSettingsDialog);
-		action->setMenuRole(QAction::NoRole); // prevent macOS Qt heuristics to select this action for preferences
 		if (settingsMenu)
-			settingsMenu->addAction(action);
+			settingsMenu->addAction(m_configureCASAction);
 	}
 #else
 	delete this->guiFactory()->container(QStringLiteral("notebook"), this);
@@ -1054,13 +1045,6 @@ void MainWin::updateGUIOnProjectChanges(const QByteArray& windowState) {
 	if (m_closing)
 		return;
 
-	KXMLGUIFactory* factory = this->guiFactory();
-	if (factory->container(QLatin1String("worksheet"), this) == nullptr) {
-		// no worksheet menu found, most probably labplot2ui.rc
-		// was not properly installed -> return here in order not to crash
-		return;
-	}
-
 	// disable all menus if there is no project
 	bool hasProject = (m_project != nullptr);
 	m_saveAction->setEnabled(hasProject);
@@ -1099,6 +1083,7 @@ void MainWin::updateGUIOnProjectChanges(const QByteArray& windowState) {
 		m_exportAction->setEnabled(false);
 	}
 
+	auto* factory = this->guiFactory();
 	if (!m_DockManager || !m_DockManager->focusedDockWidget()) {
 		factory->container(QLatin1String("spreadsheet"), this)->setEnabled(false);
 		factory->container(QLatin1String("matrix"), this)->setEnabled(false);
@@ -1172,14 +1157,7 @@ void MainWin::updateGUI() {
 	if (m_closing || m_projectClosing)
 		return;
 
-	KXMLGUIFactory* factory = this->guiFactory();
-	if (factory->container(QLatin1String("worksheet"), this) == nullptr) {
-		// no worksheet menu found, most probably labplot2ui.rc
-		// was not properly installed -> return here in order not to crash
-		return;
-	}
-
-	// reset the touchbar
+		// reset the touchbar
 #ifdef HAVE_TOUCHBAR
 	m_touchBar->clear();
 
@@ -1188,6 +1166,7 @@ void MainWin::updateGUI() {
 	m_touchBar->addSeparator();
 #endif
 
+	auto* factory = this->guiFactory();
 	if (!m_DockManager || !m_DockManager->focusedDockWidget()) {
 		factory->container(QLatin1String("spreadsheet"), this)->setEnabled(false);
 		factory->container(QLatin1String("matrix"), this)->setEnabled(false);
@@ -2095,7 +2074,8 @@ Spreadsheet* MainWin::activeSpreadsheet() const {
 /*
 	adds a new Cantor Spreadsheet to the project.
 */
-void MainWin::newCantorWorksheet(QAction* action) {
+void MainWin::newCantorWorksheet() {
+	auto* action = static_cast<QAction*>(QObject::sender());
 	auto* cantorworksheet = new CantorWorksheet(action->data().toString());
 	this->addAspectToProject(cantorworksheet);
 }
@@ -2846,14 +2826,43 @@ void MainWin::settingsDialog() {
 #ifdef HAVE_CANTOR_LIBS
 void MainWin::cantorSettingsDialog() {
 	static auto* emptyConfig = new KCoreConfigSkeleton();
-	auto* cantorDialog = new KConfigDialog(this, QLatin1String("Cantor Settings"), emptyConfig);
+	auto* dlg = new KConfigDialog(this, QLatin1String("Cantor Settings"), emptyConfig);
 	for (auto* backend : Cantor::Backend::availableBackends())
 		if (backend->config()) // It has something to configure, so add it to the dialog
-			cantorDialog->addPage(backend->settingsWidget(cantorDialog), backend->config(), backend->name(), backend->icon());
-	cantorDialog->show();
+			dlg->addPage(backend->settingsWidget(dlg), backend->config(), backend->name(), backend->icon());
+
+	// in case the settings were modified (we only need paths), update the "add new notebook" actions
+	// to get the new list of available backend systems in the menu
+	connect(dlg, &KConfigDialog::settingsChanged, this, [=]() {
+		updateNotebookActions();
+	});
+
+	dlg->show();
 
 	DEBUG(Q_FUNC_INFO << ", found " << Cantor::Backend::availableBackends().size() << " backends")
 	if (Cantor::Backend::availableBackends().size() == 0)
 		KMessageBox::error(nullptr, i18n("No Cantor backends found. Please install the ones you want to use."));
+}
+
+void MainWin::updateNotebookActions() {
+	auto* menu = static_cast<QMenu*>(factory()->container(QLatin1String("new_notebook"), this));
+	unplugActionList(QLatin1String("backends_list"));
+	QList<QAction*> newBackendActions;
+	menu->clear();
+	for (auto* backend : Cantor::Backend::availableBackends()) {
+		if (!backend->isEnabled())
+			continue;
+
+		auto* action = new QAction(QIcon::fromTheme(backend->icon()), backend->name(), this);
+		action->setData(backend->name());
+		action->setWhatsThis(i18n("Creates a new %1 notebook", backend->name()));
+		connect(action, &QAction::triggered, this, &MainWin::newCantorWorksheet);
+		newBackendActions << action;
+		menu->addAction(action);
+	}
+
+	plugActionList(QLatin1String("backends_list"), newBackendActions);
+	menu->addSeparator();
+	menu->addAction(m_configureCASAction);
 }
 #endif

@@ -766,7 +766,7 @@ msgstr "%1: a precisión cambiou"
 #: src/backend/core/Project.cpp:621 src/backend/core/Project.cpp:655
 #, kde-format
 msgid "Sorry. Could not open file for reading."
-msgstr "Non se puido abrir o ficheiro para lectura."
+msgstr "Non foi posíbel abrir o ficheiro para lectura."
 
 #: src/backend/core/Project.cpp:632 src/backend/core/Project.cpp:662
 #, kde-format
@@ -1253,7 +1253,7 @@ msgstr "valor %1"
 #: src/backend/datasources/filters/BinaryFilter.cpp:274
 #, kde-format
 msgid "could not open device"
-msgstr "non se puido abrir o dispositivo"
+msgstr "non foi posíbel abrir o dispositivo"
 
 #: src/backend/datasources/filters/BinaryFilter.cpp:282
 #, kde-format
@@ -2060,12 +2060,12 @@ msgstr "Omitir bytes:"
 #: src/backend/datasources/filters/QJsonModel.cpp:200
 #, kde-format
 msgid "Failed to load JSON document"
-msgstr "Non se puido cargar o documento JSON"
+msgstr "Non foi posíbel cargar o documento JSON"
 
 #: src/backend/datasources/filters/QJsonModel.cpp:200
 #, kde-format
 msgid "Failed to load JSON document. Error: %1."
-msgstr "Non se puido cargar o documento JSON. Erro: %1."
+msgstr "Non foi posíbel cargar o documento JSON. Erro: %1."
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:124
 #, kde-format
@@ -2262,14 +2262,14 @@ msgstr "Erro do porto serie"
 #: src/backend/datasources/LiveDataSource.cpp:711
 #, kde-format
 msgid "Failed to open the device."
-msgstr "Non se puido abrir o dispositivo."
+msgstr "Non foi posíbel abrir o dispositivo."
 
 #: src/backend/datasources/LiveDataSource.cpp:714
 #, kde-format
 msgid ""
 "Failed to open the device. Please check your permissions on this device."
 msgstr ""
-"Non se puido abrir o dispositivo. Revise os seus permisos no dispositivo."
+"Non foi posíbel abrir o dispositivo. Revise os seus permisos no dispositivo."
 
 #: src/backend/datasources/LiveDataSource.cpp:717
 #, kde-format
@@ -2284,12 +2284,12 @@ msgstr "O dispositivo non está aberto."
 #: src/backend/datasources/LiveDataSource.cpp:723
 #, kde-format
 msgid "Failed to read data."
-msgstr "Non se puideron ler os datos."
+msgstr "Non foi posíbel ler os datos."
 
 #: src/backend/datasources/LiveDataSource.cpp:726
 #, kde-format
 msgid "Failed to read data. The device is removed."
-msgstr "Non se puideron ler os datos. Retirouse o dispositivo."
+msgstr "Non foi posíbel ler os datos. Retirouse o dispositivo."
 
 #: src/backend/datasources/LiveDataSource.cpp:729
 #, kde-format
@@ -2983,7 +2983,7 @@ msgstr "A factorización fallou"
 #: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:434
 #, kde-format
 msgid "Failed to allocate memory"
-msgstr "Non se puido asignar memoria"
+msgstr "Non foi posíbel asignar memoria"
 
 #: src/backend/gsl/errors.h:40
 #, kde-format
@@ -3013,7 +3013,7 @@ msgstr "Indicouse unha tolerancia incorrecta"
 #: src/backend/gsl/errors.h:50
 #, kde-format
 msgid "Failed to reach the specified tolerance"
-msgstr "Non se puido acadar a tolerancia indicada"
+msgstr "Non foi posíbel acadar a tolerancia indicada"
 
 #: src/backend/gsl/errors.h:52
 #, kde-format
@@ -10798,17 +10798,17 @@ msgstr "Imprimir a folla de cálculo"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4324
 #, kde-format
 msgid "Couldn't create the SQLite database %1."
-msgstr "Non se puido crear a base de datos de SQLite %1."
+msgstr "Non foi posíbel crear a base de datos de SQLite %1."
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4356
 #, kde-format
 msgid "Failed to create table in the SQLite database %1."
-msgstr "Non se puido crear a táboa na base de datos de SQLite %1."
+msgstr "Non foi posíbel crear a táboa na base de datos de SQLite %1."
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4409
 #, kde-format
 msgid "Failed to insert values into the table."
-msgstr "Non se puideron inserir valores na táboa."
+msgstr "Non foi posíbel inserir valores na táboa."
 
 #: src/commonfrontend/widgets/MemoryWidget.cpp:26
 #, kde-format
@@ -11536,7 +11536,7 @@ msgstr "A conexión fallou"
 #: src/kdefrontend/datasources/DatabaseManagerWidget.cpp:535
 #, kde-format
 msgid "Failed to connect to the database '%1'."
-msgstr "Non se puido conectar á base de datos «%1»."
+msgstr "Non foi posíbel conectar á base de datos «%1»."
 
 #: src/kdefrontend/datasources/DatabaseManagerWidget.cpp:531
 #: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:655
@@ -11802,7 +11802,7 @@ msgstr "Pechar o diálogo e importar os datos."
 #, kde-format
 msgid "Cannot import into a matrix since the data contains non-numerical data."
 msgstr ""
-"Non se pode importar a matriz dado que os datos inclúen valores non "
+"Non é posíbel importar a matriz dado que os datos inclúen valores non "
 "numéricos."
 
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:381
@@ -11851,7 +11851,7 @@ msgstr "Non se puido conectar ao sócket UDP fornecido."
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:516
 #, kde-format
 msgid "Could not connect to the provided serial port."
-msgstr "Non se puido conectar ao porto serie fornecido."
+msgstr "Non foi posíbel conectar ao porto serie fornecido."
 
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:522
 #, kde-format
@@ -12069,7 +12069,7 @@ msgstr "Información do ficheiro"
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1433
 #, kde-format
 msgid "cannot open"
-msgstr "non se pode abrir"
+msgstr "non é posíbel abrir"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1438
 #, kde-format
@@ -12161,7 +12161,7 @@ msgstr "Contido:"
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1511
 #, kde-format
 msgid "Could not open file %1 for reading."
-msgstr "Non se puido abrir o ficheiro %1 para lectura."
+msgstr "Non foi posíbel abrir o ficheiro %1 para lectura."
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1671
 #, kde-format
@@ -12379,22 +12379,22 @@ msgstr "Xestionar as conexións"
 msgid ""
 "Couldn't find the database file '%1'. Please check the connection settings."
 msgstr ""
-"Non se puido atopar o ficheiro de base de datos «%1». Revise a configuración "
-"da conexión."
+"Non foi posíbel atopar o ficheiro de base de datos «%1». Revise a "
+"configuración da conexión."
 
 #: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:272
 #, kde-format
 msgid ""
 "Failed to connect to the database '%1'. Please check the connection settings."
 msgstr ""
-"Non se puido conectar á base de datos «%1». Revise a configuración da "
+"Non foi posíbel conectar á base de datos «%1». Revise a configuración da "
 "conexión."
 
 #: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:327
 #: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:436
 #, kde-format
 msgid "Unable to Execute Query"
-msgstr "Non se pode executar a consulta"
+msgstr "Non é posíbel executar a consulta"
 
 #: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:404
 #, fuzzy, kde-format
@@ -12578,7 +12578,7 @@ msgstr "Conectouse correctamente ao repartidor «%1:%2»."
 #: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:668
 #, kde-format
 msgid "Failed to connect to the broker '%1:%2'."
-msgstr "Non se puido conectar ao repartidor «%1:%2»."
+msgstr "Non foi posíbel conectar ao repartidor «%1:%2»."
 
 #: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:682
 #, kde-format
@@ -13634,12 +13634,12 @@ msgstr "Deter a lectura"
 #: src/kdefrontend/dockwidgets/LiveDataDock.cpp:677
 #, kde-format
 msgid "Couldn't subscribe"
-msgstr "Non se puido subscribir"
+msgstr "Non foi posíbel subscribir"
 
 #: src/kdefrontend/dockwidgets/LiveDataDock.cpp:677
 #, kde-format
 msgid "Couldn't subscribe to all available topics. Something went wrong"
-msgstr "Non se puido subscribir a todos os temas dispoñíbeis. Algo foi mal"
+msgstr "Non foi posíbel subscribir a todos os temas dispoñíbeis. Algo foi mal"
 
 #: src/kdefrontend/dockwidgets/LollipopPlotDock.cpp:477
 #, fuzzy, kde-format
@@ -15002,13 +15002,13 @@ msgid ""
 "Could not open file '%1'. Click 'Continue' to proceed starting or 'Cancel' "
 "to exit the application."
 msgstr ""
-"Non se puido abrir o ficheiro «%1». Prema «Continuar» para continuar o "
+"Non foi posíbel abrir o ficheiro «%1». Prema «Continuar» para continuar o "
 "inicio ou «Cancelar» para saír da aplicación."
 
 #: src/kdefrontend/LabPlot.cpp:154
 #, kde-format
 msgid "Failed to Open"
-msgstr "Non se puido abrir"
+msgstr "Non foi posíbel abrir"
 
 #. i18n: ectx: ToolBar (worksheet_toolbar)
 #: src/kdefrontend/labplot2ui.rc:20 src/kdefrontend/MainWin.cpp:676
@@ -15505,7 +15505,7 @@ msgstr ""
 #: src/kdefrontend/MainWin.cpp:1836
 #, kde-format
 msgid "Couldn't open the temporary file for writing."
-msgstr "Non se puido abrir o ficheiro temporal para escribir."
+msgstr "Non foi posíbel abrir o ficheiro temporal para escribir."
 
 #: src/kdefrontend/MainWin.cpp:1891
 #, kde-format
@@ -15515,12 +15515,12 @@ msgstr "Gardouse o proxecto"
 #: src/kdefrontend/MainWin.cpp:1907
 #, kde-format
 msgid "Couldn't save the file '%1'."
-msgstr "Non se puido gardar o ficheiro «%1»."
+msgstr "Non foi posíbel gardar o ficheiro «%1»."
 
 #: src/kdefrontend/MainWin.cpp:1912
 #, kde-format
 msgid "Couldn't open the file '%1' for writing."
-msgstr "Non se puido abrir o ficheiro temporal «%1» para escribir."
+msgstr "Non foi posíbel abrir o ficheiro temporal «%1» para escribir."
 
 #: src/kdefrontend/MainWin.cpp:1957
 #, fuzzy, kde-format
@@ -22944,14 +22944,14 @@ msgstr "Indicar o comentario"
 #, kde-format
 msgid "Cannot add new keyword without key, would you like to try again?"
 msgstr ""
-"Non se pode engadir unha nova palabra clave sen unha clave, quere intentalo "
-"de novo?"
+"Non é posíbel engadir unha nova palabra clave sen unha clave, quere "
+"intentalo de novo?"
 
 #: src/kdefrontend/widgets/FITSHeaderEditNewKeywordDialog.cpp:89
 #: src/kdefrontend/widgets/FITSHeaderEditNewKeywordDialog.cpp:93
 #, kde-format
 msgid "Cannot add empty key"
-msgstr "Non se pode engadir unha clave baleira"
+msgstr "Non é posíbel engadir unha clave baleira"
 
 #: src/kdefrontend/widgets/FITSHeaderEditWidget.cpp:47
 #, kde-format
@@ -22983,7 +22983,7 @@ msgstr "Abrir un ficheiro FITS"
 #: src/kdefrontend/widgets/FITSHeaderEditWidget.cpp:208
 #, kde-format
 msgid "Cannot open file, file already opened."
-msgstr "Non se pode abrir o ficheiro, xa está aberto."
+msgstr "Non é posíbel abrir o ficheiro, xa está aberto."
 
 #: src/kdefrontend/widgets/FITSHeaderEditWidget.cpp:208
 #, kde-format
@@ -23009,19 +23009,19 @@ msgstr "Engadir unha unidade"
 #: src/kdefrontend/widgets/FITSHeaderEditWidget.cpp:328
 #, kde-format
 msgid "Cannot add keyword, keyword already added"
-msgstr "Non se pode engadir a palabra clave, xa se engadira"
+msgstr "Non é posíbel engadir a palabra clave, xa se engadira"
 
 #: src/kdefrontend/widgets/FITSHeaderEditWidget.cpp:321
 #: src/kdefrontend/widgets/FITSHeaderEditWidget.cpp:328
 #: src/kdefrontend/widgets/FITSHeaderEditWidget.cpp:335
 #, kde-format
 msgid "Cannot Add Keyword"
-msgstr "Non se pode engadir a palabra clave"
+msgstr "Non é posíbel engadir a palabra clave"
 
 #: src/kdefrontend/widgets/FITSHeaderEditWidget.cpp:335
 #, kde-format
 msgid "Cannot add mandatory keyword, they are already present"
-msgstr "Non se pode engadir a palabra clave obrigatoria, xa existe"
+msgstr "Non é posíbel engadir a palabra clave obrigatoria, xa existe"
 
 #: src/kdefrontend/widgets/FITSHeaderEditWidget.cpp:380
 #: src/kdefrontend/widgets/FITSHeaderEditWidget.cpp:385
@@ -23038,7 +23038,7 @@ msgstr "Confirmar a eliminación"
 #: src/kdefrontend/widgets/FITSHeaderEditWidget.cpp:404
 #, kde-format
 msgid "Cannot remove mandatory keyword."
-msgstr "Non se pode retirar a palabra clave obrigatoria."
+msgstr "Non é posíbel retirar a palabra clave obrigatoria."
 
 #: src/kdefrontend/widgets/FITSHeaderEditWidget.cpp:404
 #, kde-format

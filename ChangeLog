@@ -1,5 +1,8 @@
 -----2.11.0 () -----
 New features:
+	* [general]
+		* New application theme "Dracula"
+		* New option in the application settings to run a selected CAS engine at startup
 	* [worksheet]
 		* Add possibility to use column labels as axis ticks
 		* New visualization types:
@@ -15,12 +18,12 @@ New features:
 		* Allow to sort the whole spreadsheet even if one single column was selected, use it rather as the key sort column
 	* [notebook]
 		* Export to PDF
+		* "Configure CAS" in the menu to create a new notebook to directly allow the user to enable new backends in case not done yet
+		* In case the correct path to a CAS like Maxima, etc. was configured, allow to use it without restarting LabPlot
 	* [import]
 		* Templates for ASCII and Binary import filters - allow to save and load current filter settings
 		* Support data import from ODS files
 		* Addeded seaborn's datasets to the collection of datasets
-	* [general]
-    	* New application theme "Dracula"
 
 Performance improvements:
 	* Make baseline removal much faster by using Eigen3 library (optional dependency)
