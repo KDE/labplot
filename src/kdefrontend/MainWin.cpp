@@ -227,9 +227,6 @@ void MainWin::initGUI(const QString& fileName) {
 #endif
 	setupGUI();
 
-	DEBUG(Q_FUNC_INFO << ", Component name: " << STDSTRING(KXMLGUIClient::componentName()));
-	DEBUG(Q_FUNC_INFO << ", XML file: " << STDSTRING(KXMLGUIClient::xmlFile()) << " (should be \"labplot2ui.rc\")");
-
 	// all toolbars created via the KXMLGUI framework are locked on default:
 	//  * on the very first program start, unlock all toolbars
 	//  * on later program starts, set stored lock status
@@ -265,24 +262,13 @@ void MainWin::initGUI(const QString& fileName) {
 	initMenus();
 
 	auto* mainToolBar = qobject_cast<QToolBar*>(factory()->container(QLatin1String("main_toolbar"), this));
-	if (!mainToolBar) {
-		QMessageBox::critical(this,
-							  i18n("GUI configuration file not found"),
-							  i18n("%1 file was not found. Please check your installation.", KXMLGUIClient::xmlFile()));
-		// TODO: the application is not really usable if the rc file was not found. We should quit the application. The following line crashes
-		// the application because of the splash screen. We need to find another solution.
-		// 		QMetaObject::invokeMethod(this, "close", Qt::QueuedConnection); //call close as soon as we enter the eventloop
-		// 		return;
-	} else {
-		auto* tbImport = new QToolButton(mainToolBar);
-		tbImport->setPopupMode(QToolButton::MenuButtonPopup);
-		tbImport->setMenu(m_importMenu);
-		tbImport->setDefaultAction(m_importFileAction);
-		auto* lastAction = mainToolBar->actions().at(mainToolBar->actions().count() - 1);
-		mainToolBar->insertWidget(lastAction, tbImport);
-
-		qobject_cast<QMenu*>(factory()->container(QLatin1String("import"), this))->setIcon(QIcon::fromTheme(QLatin1String("document-import")));
-	}
+	auto* tbImport = new QToolButton(mainToolBar);
+	tbImport->setPopupMode(QToolButton::MenuButtonPopup);
+	tbImport->setMenu(m_importMenu);
+	tbImport->setDefaultAction(m_importFileAction);
+	auto* lastAction = mainToolBar->actions().at(mainToolBar->actions().count() - 1);
+	mainToolBar->insertWidget(lastAction, tbImport);
+	qobject_cast<QMenu*>(factory()->container(QLatin1String("import"), this))->setIcon(QIcon::fromTheme(QLatin1String("document-import")));
 
 	// hamburger menu
 #if KCOREADDONS_VERSION >= QT_VERSION_CHECK(5, 81, 0)
@@ -1054,13 +1040,6 @@ void MainWin::updateGUIOnProjectChanges(const QByteArray& windowState) {
 	if (m_closing)
 		return;
 
-	KXMLGUIFactory* factory = this->guiFactory();
-	if (factory->container(QLatin1String("worksheet"), this) == nullptr) {
-		// no worksheet menu found, most probably labplot2ui.rc
-		// was not properly installed -> return here in order not to crash
-		return;
-	}
-
 	// disable all menus if there is no project
 	bool hasProject = (m_project != nullptr);
 	m_saveAction->setEnabled(hasProject);
@@ -1099,6 +1078,7 @@ void MainWin::updateGUIOnProjectChanges(const QByteArray& windowState) {
 		m_exportAction->setEnabled(false);
 	}
 
+	auto* factory = this->guiFactory();
 	if (!m_DockManager || !m_DockManager->focusedDockWidget()) {
 		factory->container(QLatin1String("spreadsheet"), this)->setEnabled(false);
 		factory->container(QLatin1String("matrix"), this)->setEnabled(false);
@@ -1172,13 +1152,6 @@ void MainWin::updateGUI() {
 	if (m_closing || m_projectClosing)
 		return;
 
-	KXMLGUIFactory* factory = this->guiFactory();
-	if (factory->container(QLatin1String("worksheet"), this) == nullptr) {
-		// no worksheet menu found, most probably labplot2ui.rc
-		// was not properly installed -> return here in order not to crash
-		return;
-	}
-
 	// reset the touchbar
 #ifdef HAVE_TOUCHBAR
 	m_touchBar->clear();
@@ -1188,6 +1161,7 @@ void MainWin::updateGUI() {
 	m_touchBar->addSeparator();
 #endif
 
+	auto* factory = this->guiFactory();
 	if (!m_DockManager || !m_DockManager->focusedDockWidget()) {
 		factory->container(QLatin1String("spreadsheet"), this)->setEnabled(false);
 		factory->container(QLatin1String("matrix"), this)->setEnabled(false);
