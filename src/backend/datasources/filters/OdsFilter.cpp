@@ -28,8 +28,7 @@ using namespace orcus;
 #endif
 
 // TODO:
-// * import to matrix: crash with text column (Sheet3)
-// * improve import to workbook (no double import)
+// * improve import to workbook (multiple imports)
 // * export data when Orcus support is stable
 // * datetime support?
 OdsFilter::OdsFilter()
@@ -290,42 +289,44 @@ void OdsFilterPrivate::readCurrentSheet(const QString& fileName, AbstractDataSou
 	QVector<AbstractColumn::ColumnMode> columnModes;
 	columnModes.resize(actualCols);
 
-	// set column modes
+	// set column modes (only for spreadsheet, matrix uses default: Double)
 	const auto& model = m_document.get_model_context();
-	for (size_t col = 0; col < actualCols; col++) {
-		// check start row
-		ixion::abs_address_t pos(sheetIndex, ranges.first.row + startRow - 1, ranges.first.column + startColumn - 1 + col);
+	if (dynamic_cast<Spreadsheet*>(dataSource)) {
+		for (size_t col = 0; col < actualCols; col++) {
+			// check start row
+			ixion::abs_address_t pos(sheetIndex, ranges.first.row + startRow - 1, ranges.first.column + startColumn - 1 + col);
 
-		auto type = model.get_celltype(pos);
-		switch (type) {
-		case ixion::celltype_t::string:
-			columnModes[col] = AbstractColumn::ColumnMode::Text;
-			break;
-		case ixion::celltype_t::numeric: // numeric values are always double (can't detect if integer)
-			// default: Double
-			break;
-		case ixion::celltype_t::formula: {
-			auto formula = model.get_formula_result(pos);
-			switch (formula.get_type()) { // conside formula type
-			case ixion::formula_result::result_type::value:
-				columnModes[col] = AbstractColumn::ColumnMode::Double;
-				break;
-			case ixion::formula_result::result_type::string:
+			auto type = model.get_celltype(pos);
+			switch (type) {
+			case ixion::celltype_t::string:
 				columnModes[col] = AbstractColumn::ColumnMode::Text;
 				break;
-			case ixion::formula_result::result_type::error:
-			// TODO: not available in ixion 0.17 ?
-			// case ixion::formula_result::result_type::boolean:
-			case ixion::formula_result::result_type::matrix:
-				DEBUG(Q_FUNC_INFO << ", formula type not supported yet.")
+			case ixion::celltype_t::numeric: // numeric values are always double (can't detect if integer)
+				// default: Double
+				break;
+			case ixion::celltype_t::formula: {
+				auto formula = model.get_formula_result(pos);
+				switch (formula.get_type()) { // conside formula type
+				case ixion::formula_result::result_type::value:
+					columnModes[col] = AbstractColumn::ColumnMode::Double;
+					break;
+				case ixion::formula_result::result_type::string:
+					columnModes[col] = AbstractColumn::ColumnMode::Text;
+					break;
+				case ixion::formula_result::result_type::error:
+				// TODO: not available in ixion 0.17 ?
+				// case ixion::formula_result::result_type::boolean:
+				case ixion::formula_result::result_type::matrix:
+					DEBUG(Q_FUNC_INFO << ", formula type not supported yet.")
+					break;
+				}
 				break;
 			}
-			break;
-		}
-		case ixion::celltype_t::boolean:
-		case ixion::celltype_t::empty:
-		case ixion::celltype_t::unknown: // default: Double
-			break;
+			case ixion::celltype_t::boolean:
+			case ixion::celltype_t::empty:
+			case ixion::celltype_t::unknown: // default: Double
+				break;
+			}
 		}
 	}
 
@@ -418,7 +419,11 @@ void OdsFilterPrivate::readCurrentSheet(const QString& fileName, AbstractDataSou
 				}
 				case ixion::formula_result::result_type::string:
 					DEBUG(Q_FUNC_INFO << ", string formula found")
-					(*static_cast<QVector<QString>*>(dataContainer[col]))[row] = QString::fromStdString(formula.get_string());
+					// column mode may be numeric
+					if (columnModes.at(col) == AbstractColumn::ColumnMode::Double)
+						(*static_cast<QVector<double>*>(dataContainer[col]))[row] = formula.get_value();
+					else if (columnModes.at(col) == AbstractColumn::ColumnMode::Text)
+						(*static_cast<QVector<QString>*>(dataContainer[col]))[row] = QString::fromStdString(formula.get_string());
 					break;
 				case ixion::formula_result::result_type::error:
 				// TODO: not available in ixion 0.17 ?
@@ -430,8 +435,11 @@ void OdsFilterPrivate::readCurrentSheet(const QString& fileName, AbstractDataSou
 				break;
 			}
 			case ixion::celltype_t::string: {
-				auto value = model.get_string_value(pos);
-				(*static_cast<QVector<QString>*>(dataContainer[col]))[row] = QString::fromStdString(std::string(value));
+				// column mode may be numeric
+				if (columnModes.at(col) == AbstractColumn::ColumnMode::Double)
+					(*static_cast<QVector<double>*>(dataContainer[col]))[row] = model.get_numeric_value(pos);
+				else if (columnModes.at(col) == AbstractColumn::ColumnMode::Text)
+					(*static_cast<QVector<QString>*>(dataContainer[col]))[row] = QString::fromStdString(std::string(model.get_string_value(pos)));
 				break;
 			}
 			case ixion::celltype_t::empty: // nothing to do
