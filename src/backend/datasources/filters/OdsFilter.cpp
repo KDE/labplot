@@ -28,7 +28,6 @@ using namespace orcus;
 #endif
 
 // TODO:
-// * improve import to workbook (multiple imports)
 // * export data when Orcus support is stable
 // * datetime support?
 OdsFilter::OdsFilter()
