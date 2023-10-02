@@ -11,6 +11,7 @@
 #include "OdsFilterTest.h"
 #include "backend/core/Workbook.h"
 #include "backend/datasources/filters/OdsFilter.h"
+#include "backend/matrix/Matrix.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 
 void OdsFilterTest::importFile3SheetsRangesFormula() {
@@ -138,6 +139,34 @@ void OdsFilterTest::importFile3SheetsWorkbook() {
 	QCOMPARE(spreadsheet2->column(2)->valueAt(1), 1);
 	QCOMPARE(spreadsheet2->column(3)->valueAt(0), qQNaN());
 	QCOMPARE(spreadsheet2->column(3)->valueAt(1), 12.3);
+}
+
+void OdsFilterTest::importFileMatrix() {
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/ranges-formula.ods"));
+
+	Matrix matrix(QStringLiteral("test"), false);
+	OdsFilter filter;
+
+	// sheet 3
+	filter.setSelectedSheetNames(QStringList() << QStringLiteral("Sheet3"));
+	filter.readDataFromFile(fileName, &matrix);
+
+	QCOMPARE(matrix.columnCount(), 3);
+	QCOMPARE(matrix.rowCount(), 4);
+
+	// first text column is set to 0 (only numeric values are read)
+	QCOMPARE(matrix.cell<double>(0, 0), 0.);
+	QCOMPARE(matrix.cell<double>(0, 1), 2.2);
+	QCOMPARE(matrix.cell<double>(0, 2), 42);
+	QCOMPARE(matrix.cell<double>(1, 0), 0.);
+	QCOMPARE(matrix.cell<double>(1, 1), 1.1);
+	QCOMPARE(matrix.cell<double>(1, 2), 23);
+	QCOMPARE(matrix.cell<double>(2, 0), 0.);
+	QCOMPARE(matrix.cell<double>(2, 1), 3.3);
+	QCOMPARE(matrix.cell<double>(2, 2), 5);
+	QCOMPARE(matrix.cell<double>(3, 0), 0.);
+	QCOMPARE(matrix.cell<double>(3, 1), 6.6);
+	QCOMPARE(matrix.cell<double>(3, 2), 70);
 }
 
 void OdsFilterTest::importFileSheetStartEndRow() {
