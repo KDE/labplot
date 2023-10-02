@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-30 00:39+0000\n"
+"POT-Creation-Date: 2023-10-02 00:39+0000\n"
 "PO-Revision-Date: 2023-06-04 23:26+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -414,20 +414,19 @@ msgctxt "default labels of filter input ports"
 msgid "In%1"
 msgstr ""
 
-#. i18n: ectx: Menu (import)
-#: src/backend/core/AbstractPart.cpp:110 src/kdefrontend/labplot2ui.rc:60
+#: src/backend/core/AbstractPart.cpp:110
 #, fuzzy, kde-format
 #| msgid "Import To"
 msgid "Import Data"
 msgstr "Tuo kohteeseen"
 
-#: src/backend/core/AbstractPart.cpp:111 src/kdefrontend/MainWin.cpp:699
-#: src/kdefrontend/MainWin.cpp:708
+#: src/backend/core/AbstractPart.cpp:111 src/kdefrontend/MainWin.cpp:694
+#: src/kdefrontend/MainWin.cpp:703
 #, kde-format
 msgid "From File..."
 msgstr "Tiedostosta…"
 
-#: src/backend/core/AbstractPart.cpp:113 src/kdefrontend/MainWin.cpp:715
+#: src/backend/core/AbstractPart.cpp:113 src/kdefrontend/MainWin.cpp:710
 #, kde-format
 msgid "From SQL Database..."
 msgstr ""
@@ -454,7 +453,7 @@ msgstr "Tulosta"
 msgid "Print Preview"
 msgstr "Tulostuksen esikatselu"
 
-#: src/backend/core/AbstractPart.cpp:131 src/kdefrontend/MainWin.cpp:782
+#: src/backend/core/AbstractPart.cpp:131 src/kdefrontend/MainWin.cpp:777
 #, kde-format
 msgid "&Close"
 msgstr "&Sulje"
@@ -886,9 +885,9 @@ msgstr "tuntematon elementti ”%1”"
 #. i18n: ectx: property (text), widget (QRadioButton, rbJitter)
 #: src/backend/datapicker/DatapickerCurve.cpp:176
 #: src/commonfrontend/matrix/MatrixView.cpp:130
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:333
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:372
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:380
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:346
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:385
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:393
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:59
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:550
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:224
@@ -1934,7 +1933,7 @@ msgstr "tuntematon"
 #: src/backend/datasources/filters/MatioFilter.cpp:435
 #: src/commonfrontend/workbook/WorkbookView.cpp:53
 #: src/commonfrontend/workbook/WorkbookView.cpp:160
-#: src/kdefrontend/MainWin.cpp:670 src/kdefrontend/MainWin.cpp:2039
+#: src/kdefrontend/MainWin.cpp:665 src/kdefrontend/MainWin.cpp:2018
 #, kde-format
 msgid "Matrix"
 msgstr "Matriisi"
@@ -6102,7 +6101,7 @@ msgid "Raw"
 msgstr "raaka"
 
 #: src/backend/nsl/nsl_dft.c:29 src/backend/nsl/nsl_filter.c:23
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:856
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:869
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:224
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:322
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:483
@@ -7882,7 +7881,7 @@ msgstr "Histogrammi"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:351
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:402
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:472
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:535
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:548
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:144
 #, kde-format
 msgid "Box Plot"
@@ -7910,7 +7909,7 @@ msgstr "LabPlot2"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:356
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:394
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:474
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:537
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:550
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:147
 #, kde-format
 msgid "Bar Plot"
@@ -8131,7 +8130,7 @@ msgstr "Virhefunktio"
 #: src/commonfrontend/workbook/WorkbookView.cpp:135
 #: src/commonfrontend/worksheet/WorksheetView.cpp:287
 #: src/commonfrontend/worksheet/WorksheetView.cpp:419
-#: src/kdefrontend/MainWin.cpp:887
+#: src/kdefrontend/MainWin.cpp:891
 #, kde-format
 msgid "Add New"
 msgstr "Lisää uusi"
@@ -8293,7 +8292,7 @@ msgid "%1: reduce '%2'"
 msgstr "%1: poista %2."
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1737
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:650
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:663
 #, fuzzy, kde-format
 #| msgid "Do nothing"
 msgid "Reduction of '%1'"
@@ -8312,7 +8311,7 @@ msgid "%1: differentiate '%2'"
 msgstr "Suunta"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1756
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:653
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:666
 #, fuzzy, kde-format
 #| msgid "Drawing &order"
 msgid "Derivative of '%1'"
@@ -8331,7 +8330,7 @@ msgid "%1: integrate '%2'"
 msgstr "Suunta"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1775
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:656
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:669
 #, fuzzy, kde-format
 #| msgid "Drawing &order"
 msgid "Integral of '%1'"
@@ -8350,7 +8349,7 @@ msgid "%1: interpolate '%2'"
 msgstr "Suunta"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1794
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:659
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:672
 #, fuzzy, kde-format
 #| msgid "iterations"
 msgid "Interpolation of '%1'"
@@ -8369,7 +8368,7 @@ msgid "%1: smooth '%2'"
 msgstr "%1: lisää %2."
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1813
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:662
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:675
 #, fuzzy, kde-format
 #| msgid "Do nothing"
 msgid "Smoothing of '%1'"
@@ -8388,7 +8387,7 @@ msgid "%1: fit to '%2'"
 msgstr "Suunta"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1832
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:675
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:688
 #, fuzzy, kde-format
 #| msgid "Drawing &order"
 msgid "Fit to '%1'"
@@ -11047,8 +11046,8 @@ msgstr ""
 #: src/kdefrontend/dockwidgets/XYIntegrationCurveDock.cpp:56
 #: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:58
 #: src/kdefrontend/dockwidgets/XYSmoothCurveDock.cpp:52
-#: src/kdefrontend/labplot2ui.rc:28 src/kdefrontend/MainWin.cpp:664
-#: src/kdefrontend/MainWin.cpp:2021 src/kdefrontend/SettingsDialog.cpp:68
+#: src/kdefrontend/labplot2ui.rc:37 src/kdefrontend/MainWin.cpp:659
+#: src/kdefrontend/MainWin.cpp:2000 src/kdefrontend/SettingsDialog.cpp:68
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:237
 #, kde-format
 msgid "Spreadsheet"
@@ -11229,7 +11228,7 @@ msgstr "Valitse x-alue ja lähennä"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
 #: src/commonfrontend/worksheet/WorksheetView.cpp:344
-#: src/kdefrontend/MainWin.cpp:2496
+#: src/kdefrontend/MainWin.cpp:2476
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1426
 #, kde-format
 msgid "Cursor"
@@ -12130,7 +12129,7 @@ msgid "Data format && preview"
 msgstr "Datan muoto"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1198
-#: src/kdefrontend/SettingsGeneralPage.cpp:183
+#: src/kdefrontend/SettingsGeneralPage.cpp:217
 #, kde-format
 msgid "Automatic"
 msgstr "Automaattinen"
@@ -12397,7 +12396,7 @@ msgid "Open LabPlot Project"
 msgstr "Avaa projekti"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:380
-#: src/kdefrontend/MainWin.cpp:1490
+#: src/kdefrontend/MainWin.cpp:1469
 #, fuzzy, kde-format
 #| msgid "Close Project"
 msgid "LabPlot Projects (%1)"
@@ -12411,7 +12410,7 @@ msgid "Open Origin Project"
 msgstr "Avaa projekti"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:386
-#: src/kdefrontend/MainWin.cpp:1495
+#: src/kdefrontend/MainWin.cpp:1474
 #, fuzzy, kde-format
 #| msgid "Open project"
 msgid "Origin Projects (%1)"
@@ -12657,7 +12656,7 @@ msgstr ""
 
 #: src/kdefrontend/datasources/MQTTSubscriptionWidget.cpp:856
 #: src/kdefrontend/datasources/MQTTSubscriptionWidget.cpp:858
-#: src/kdefrontend/MainWin.cpp:2809
+#: src/kdefrontend/MainWin.cpp:2789
 #, kde-format
 msgid "Warning"
 msgstr "Varoitus"
@@ -14286,7 +14285,7 @@ msgid ""
 "installation."
 msgstr ""
 
-#: src/kdefrontend/GuiObserver.cpp:191 src/kdefrontend/MainWin.cpp:1437
+#: src/kdefrontend/GuiObserver.cpp:191 src/kdefrontend/MainWin.cpp:1416
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties"
@@ -15111,106 +15110,113 @@ msgstr ""
 msgid "Failed to Open"
 msgstr "Avaaminen epäonnistui"
 
+#. i18n: ectx: Menu (new_notebook)
+#. i18n: ectx: Menu (notebook)
+#: src/kdefrontend/labplot2ui.rc:19 src/kdefrontend/labplot2ui.rc:61
+#: src/kdefrontend/labplot2ui.rc:87
+#, fuzzy, kde-format
+#| msgid "Notes"
+msgid "&Notebook"
+msgstr "Huomautukset"
+
 #. i18n: ectx: ToolBar (worksheet_toolbar)
-#: src/kdefrontend/labplot2ui.rc:20 src/kdefrontend/MainWin.cpp:676
-#: src/kdefrontend/MainWin.cpp:2057 src/kdefrontend/SettingsDialog.cpp:63
+#: src/kdefrontend/labplot2ui.rc:29 src/kdefrontend/MainWin.cpp:671
+#: src/kdefrontend/MainWin.cpp:2036 src/kdefrontend/SettingsDialog.cpp:63
 #, kde-format
 msgid "Worksheet"
 msgstr "Työvihko"
 
 #. i18n: ectx: ToolBar (datapicker_toolbar)
-#: src/kdefrontend/labplot2ui.rc:24 src/kdefrontend/MainWin.cpp:659
-#: src/kdefrontend/MainWin.cpp:2013
+#: src/kdefrontend/labplot2ui.rc:33 src/kdefrontend/MainWin.cpp:654
+#: src/kdefrontend/MainWin.cpp:1992
 #, fuzzy, kde-format
 #| msgid "Data format"
 msgid "Data Extractor"
 msgstr "Datan muoto"
 
 #. i18n: ectx: ToolBar (notebook_toolbar)
-#: src/kdefrontend/labplot2ui.rc:32 src/kdefrontend/SettingsDialog.cpp:74
+#: src/kdefrontend/labplot2ui.rc:41 src/kdefrontend/SettingsDialog.cpp:74
 #, fuzzy, kde-format
 #| msgid "Note"
 msgid "Notebook"
 msgstr "Huomautus"
 
 #. i18n: ectx: ToolBar (cartesian_plot_toolbar)
-#: src/kdefrontend/labplot2ui.rc:36
+#: src/kdefrontend/labplot2ui.rc:45
 #, kde-format
 msgid "CartesianPlot"
 msgstr ""
 
 #. i18n: ectx: Menu (file)
-#: src/kdefrontend/labplot2ui.rc:40
+#: src/kdefrontend/labplot2ui.rc:49
 #, kde-format
 msgid "&File"
 msgstr "&Tiedosto"
 
 #. i18n: ectx: Menu (new)
-#: src/kdefrontend/labplot2ui.rc:42
+#: src/kdefrontend/labplot2ui.rc:51
 #, fuzzy, kde-format
 #| msgid "Add new"
 msgid "&Add New"
 msgstr "Lisää uusi"
 
-#. i18n: ectx: Menu (new_notebook)
-#. i18n: ectx: Menu (notebook)
-#: src/kdefrontend/labplot2ui.rc:55 src/kdefrontend/labplot2ui.rc:79
-#, fuzzy, kde-format
-#| msgid "Notes"
-msgid "&Notebook"
-msgstr "Huomautukset"
+#. i18n: ectx: Menu (import)
+#: src/kdefrontend/labplot2ui.rc:68
+#, kde-format
+msgid "Import"
+msgstr "Tuo"
 
 #. i18n: ectx: Menu (edit)
-#: src/kdefrontend/labplot2ui.rc:71
+#: src/kdefrontend/labplot2ui.rc:79
 #, kde-format
 msgid "&Edit"
 msgstr "&Muokkaa"
 
 #. i18n: ectx: Menu (spreadsheet)
-#: src/kdefrontend/labplot2ui.rc:76
+#: src/kdefrontend/labplot2ui.rc:84
 #, kde-format
 msgid "&Spreadsheet"
 msgstr "&Laskentataulukko"
 
 #. i18n: ectx: Menu (matrix)
-#: src/kdefrontend/labplot2ui.rc:77
+#: src/kdefrontend/labplot2ui.rc:85
 #, kde-format
 msgid "&Matrix"
 msgstr "&Matriisi"
 
 #. i18n: ectx: Menu (worksheet)
-#: src/kdefrontend/labplot2ui.rc:78
+#: src/kdefrontend/labplot2ui.rc:86
 #, kde-format
 msgid "&Worksheet"
 msgstr "Työ&vihko"
 
 #. i18n: ectx: Menu (datapicker)
-#: src/kdefrontend/labplot2ui.rc:80
+#: src/kdefrontend/labplot2ui.rc:88
 #, fuzzy, kde-format
 #| msgid "Data format"
 msgid "&Data Extractor"
 msgstr "Datan muoto"
 
 #. i18n: ectx: Menu (drawing)
-#: src/kdefrontend/labplot2ui.rc:81
+#: src/kdefrontend/labplot2ui.rc:89
 #, kde-format
 msgid "&Drawing"
 msgstr "&Piirustus"
 
 #. i18n: ectx: Menu (script)
-#: src/kdefrontend/labplot2ui.rc:82
+#: src/kdefrontend/labplot2ui.rc:90
 #, kde-format
 msgid "&Script"
 msgstr "&Skripti"
 
 #. i18n: ectx: Menu (tools)
-#: src/kdefrontend/labplot2ui.rc:83
+#: src/kdefrontend/labplot2ui.rc:91
 #, kde-format
 msgid "&Tools"
 msgstr "T&yökalut"
 
 #. i18n: ectx: Menu (windows)
-#: src/kdefrontend/labplot2ui.rc:87
+#: src/kdefrontend/labplot2ui.rc:95
 #, kde-format
 msgid "&Windows"
 msgstr "&Ikkunat"
@@ -15228,360 +15234,356 @@ msgctxt "%1 is the LabPlot version"
 msgid "Welcome to LabPlot %1"
 msgstr "Tervetuloa Labplotin versioon %1"
 
-#: src/kdefrontend/MainWin.cpp:270
-#, fuzzy, kde-format
-#| msgid "no fileDataSource element found"
-msgid "GUI configuration file not found"
-msgstr "fileDataSource-elementtiä ei löytynyt"
-
-#: src/kdefrontend/MainWin.cpp:271
-#, kde-format
-msgid "%1 file was not found. Please check your installation."
-msgstr ""
-
-#: src/kdefrontend/MainWin.cpp:636
+#: src/kdefrontend/MainWin.cpp:631
 #, fuzzy, kde-format
 #| msgid "Open File"
 msgid "&Open Example"
 msgstr "Avaa tiedosto"
 
-#: src/kdefrontend/MainWin.cpp:654 src/kdefrontend/MainWin.cpp:2005
+#: src/kdefrontend/MainWin.cpp:649 src/kdefrontend/MainWin.cpp:1984
 #, kde-format
 msgid "Workbook"
 msgstr "Työvihko"
 
-#: src/kdefrontend/MainWin.cpp:656
+#: src/kdefrontend/MainWin.cpp:651
 #, kde-format
 msgid "Creates a new workbook for collection spreadsheets, matrices and plots"
 msgstr "Luo laskentataulukoille, matriiseille ja kaavioille uuden työvihkon"
 
-#: src/kdefrontend/MainWin.cpp:660
+#: src/kdefrontend/MainWin.cpp:655
 #, kde-format
 msgid "Creates a data extractor for getting data from a picture"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:666
+#: src/kdefrontend/MainWin.cpp:661
 #, kde-format
 msgid "Creates a new spreadsheet for data editing"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:672
+#: src/kdefrontend/MainWin.cpp:667
 #, kde-format
 msgid "Creates a new matrix for data editing"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:678
+#: src/kdefrontend/MainWin.cpp:673
 #, kde-format
 msgid "Creates a new worksheet for data plotting"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:682 src/kdefrontend/MainWin.cpp:2065
+#: src/kdefrontend/MainWin.cpp:677 src/kdefrontend/MainWin.cpp:2044
 #, kde-format
 msgid "Note"
 msgstr "Huomautus"
 
-#: src/kdefrontend/MainWin.cpp:683
+#: src/kdefrontend/MainWin.cpp:678
 #, kde-format
 msgid "Creates a new note for arbitrary text"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:687 src/kdefrontend/MainWin.cpp:1997
+#: src/kdefrontend/MainWin.cpp:682 src/kdefrontend/MainWin.cpp:1976
 #, kde-format
 msgid "Folder"
 msgstr "Kansio"
 
-#: src/kdefrontend/MainWin.cpp:688
+#: src/kdefrontend/MainWin.cpp:683
 #, kde-format
 msgid "Creates a new folder to collect sheets and other elements"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:693
+#: src/kdefrontend/MainWin.cpp:688
 #, fuzzy, kde-format
 #| msgid "File Data Source"
 msgid "Live Data Source..."
 msgstr "Tiedostodatalähde"
 
-#: src/kdefrontend/MainWin.cpp:694
+#: src/kdefrontend/MainWin.cpp:689
 #, kde-format
 msgid "Creates a live data source to read data from a real time device"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:701 src/kdefrontend/MainWin.cpp:710
+#: src/kdefrontend/MainWin.cpp:696 src/kdefrontend/MainWin.cpp:705
 #, kde-format
 msgid "Import data from a regular file"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:716
+#: src/kdefrontend/MainWin.cpp:711
 #, kde-format
 msgid "Import data from a SQL database"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:720
+#: src/kdefrontend/MainWin.cpp:715
 #, fuzzy, kde-format
 #| msgid "Connection:"
 msgid "From Dataset Collection..."
 msgstr "Yhteys:"
 
-#: src/kdefrontend/MainWin.cpp:721
+#: src/kdefrontend/MainWin.cpp:716
 #, fuzzy, kde-format
 #| msgid "Import To"
 msgid "Imports data from an online dataset"
 msgstr "Tuo kohteeseen"
 
-#: src/kdefrontend/MainWin.cpp:725
+#: src/kdefrontend/MainWin.cpp:720
 #, fuzzy, kde-format
 #| msgid "LabPlot Project"
 msgid "LabPlot Project..."
 msgstr "LabPlot-projekti"
 
-#: src/kdefrontend/MainWin.cpp:726
+#: src/kdefrontend/MainWin.cpp:721
 #, kde-format
 msgid "Import a project from a LabPlot project file (.lml)"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:731
+#: src/kdefrontend/MainWin.cpp:726
 #, fuzzy, kde-format
 #| msgid "Open project"
 msgid "Origin Project (OPJ)..."
 msgstr "Avaa projekti"
 
-#: src/kdefrontend/MainWin.cpp:732
+#: src/kdefrontend/MainWin.cpp:727
 #, kde-format
 msgid "Import a project from an OriginLab Origin project file (.opj)"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:737
+#: src/kdefrontend/MainWin.cpp:732
 #, kde-format
 msgid "Export..."
 msgstr "Vie…"
 
-#: src/kdefrontend/MainWin.cpp:738
+#: src/kdefrontend/MainWin.cpp:733
 #, kde-format
 msgid "Export selected element"
 msgstr "Vie valittu alkio"
 
-#: src/kdefrontend/MainWin.cpp:744
+#: src/kdefrontend/MainWin.cpp:739
 #, kde-format
 msgid "Color Maps Browser"
 msgstr "Värikarttaselain"
 
-#: src/kdefrontend/MainWin.cpp:745
+#: src/kdefrontend/MainWin.cpp:740
 #, kde-format
 msgid "Open dialog to browse through the available color maps."
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:754
+#: src/kdefrontend/MainWin.cpp:749
 #, kde-format
 msgid "FITS Metadata Editor..."
 msgstr "FITS-metatietomuokkain…"
 
-#: src/kdefrontend/MainWin.cpp:755
+#: src/kdefrontend/MainWin.cpp:750
 #, kde-format
 msgid "Open editor to edit FITS meta data"
 msgstr "Avaa FITS-metatiedot muokkaimeen"
 
-#: src/kdefrontend/MainWin.cpp:764
+#: src/kdefrontend/MainWin.cpp:759
 #, fuzzy, kde-format
 #| msgid "Undo/Redo History"
 msgid "Undo/Redo History..."
 msgstr "Toimintohistoria"
 
-#: src/kdefrontend/MainWin.cpp:784
+#: src/kdefrontend/MainWin.cpp:779
 #, kde-format
 msgid "Close the active window"
 msgstr "Sulje aktiivinen ikkuna"
 
-#: src/kdefrontend/MainWin.cpp:787
+#: src/kdefrontend/MainWin.cpp:782
 #, kde-format
 msgid "Close &All"
 msgstr "Sulje k&aikki"
 
-#: src/kdefrontend/MainWin.cpp:788
+#: src/kdefrontend/MainWin.cpp:783
 #, kde-format
 msgid "Close all the windows"
 msgstr "Sulje kaikki ikkunat"
 
-#: src/kdefrontend/MainWin.cpp:791
+#: src/kdefrontend/MainWin.cpp:786
 #, kde-format
 msgid "Ne&xt"
 msgstr "&Seuraava"
 
-#: src/kdefrontend/MainWin.cpp:793
+#: src/kdefrontend/MainWin.cpp:788
 #, kde-format
 msgid "Move the focus to the next window"
 msgstr "Siirrä kohdistus seuraavaan ikkunaan"
 
-#: src/kdefrontend/MainWin.cpp:796
+#: src/kdefrontend/MainWin.cpp:791
 #, kde-format
 msgid "Pre&vious"
 msgstr "E&dellinen"
 
-#: src/kdefrontend/MainWin.cpp:798
+#: src/kdefrontend/MainWin.cpp:793
 #, kde-format
 msgid "Move the focus to the previous window"
 msgstr "Siirrä kohdistus edelliseen ikkunaan"
 
-#: src/kdefrontend/MainWin.cpp:805
+#: src/kdefrontend/MainWin.cpp:800
 #, kde-format
 msgid "Current &Folder Only"
 msgstr "&Vain nykyinen kansio"
 
-#: src/kdefrontend/MainWin.cpp:810
+#: src/kdefrontend/MainWin.cpp:805
 #, kde-format
 msgid "Current Folder and &Subfolders"
 msgstr "Nykyinen kansio &alikansioineen"
 
-#: src/kdefrontend/MainWin.cpp:814
+#: src/kdefrontend/MainWin.cpp:809
 #, kde-format
 msgid "&All"
 msgstr "K&aikki"
 
-#: src/kdefrontend/MainWin.cpp:836
+#: src/kdefrontend/MainWin.cpp:831
 #, fuzzy, kde-format
 #| msgid "Show memory info:"
 msgid "Show Memory Usage"
 msgstr "Näytä muistitiedot:"
 
-#: src/kdefrontend/MainWin.cpp:844
+#: src/kdefrontend/MainWin.cpp:839
 #, kde-format
 msgid "Project Explorer"
 msgstr "Projektiselain"
 
-#: src/kdefrontend/MainWin.cpp:849
+#: src/kdefrontend/MainWin.cpp:844
 #, kde-format
 msgid "Properties Explorer"
 msgstr "Ominaisuusselain"
 
-#: src/kdefrontend/MainWin.cpp:912
+#: src/kdefrontend/MainWin.cpp:867
+#, kde-format
+msgid "Configure CAS..."
+msgstr "CAS-asetukset…"
+
+#: src/kdefrontend/MainWin.cpp:868
+#, kde-format
+msgid ""
+"Opens the settings for Computer Algebra Systems to modify the available "
+"systems or to enable new ones"
+msgstr ""
+
+#: src/kdefrontend/MainWin.cpp:920
 #, fuzzy, kde-format
 #| msgid "Window Visibility Policy"
 msgid "Window Visibility"
 msgstr "Ikkunoiden näkyvyyskäytäntö"
 
-#: src/kdefrontend/MainWin.cpp:936
+#: src/kdefrontend/MainWin.cpp:944
 #, kde-format
 msgid "Color Scheme"
 msgstr "Väriteema"
 
-#: src/kdefrontend/MainWin.cpp:983
-#, kde-format
-msgid "Configure CAS..."
-msgstr "CAS-asetukset…"
-
-#: src/kdefrontend/MainWin.cpp:1019 src/kdefrontend/MainWin.cpp:1033
+#: src/kdefrontend/MainWin.cpp:1010 src/kdefrontend/MainWin.cpp:1024
 #, kde-format
 msgid "The current project %1 has been modified. Do you want to save it?"
 msgstr "Nykyistä projektia %1 on muutettu. Haluatko tallentaa sen?"
 
-#: src/kdefrontend/MainWin.cpp:1020 src/kdefrontend/MainWin.cpp:1034
+#: src/kdefrontend/MainWin.cpp:1011 src/kdefrontend/MainWin.cpp:1025
 #, kde-format
 msgid "Save Project"
 msgstr "Tallenna projekti"
 
-#: src/kdefrontend/MainWin.cpp:1424
+#: src/kdefrontend/MainWin.cpp:1403
 #, kde-format
 msgctxt "@title:window"
 msgid "Project Explorer"
 msgstr "Projektiselain"
 
-#: src/kdefrontend/MainWin.cpp:1481
+#: src/kdefrontend/MainWin.cpp:1460
 #, kde-format
 msgid "%1: created"
 msgstr "%1: luotu"
 
-#: src/kdefrontend/MainWin.cpp:1501
+#: src/kdefrontend/MainWin.cpp:1480
 #, fuzzy, kde-format
 #| msgid "Close Project"
 msgid "Cantor Projects (*.cws)"
 msgstr "Sulje projekti"
 
-#: src/kdefrontend/MainWin.cpp:1502
+#: src/kdefrontend/MainWin.cpp:1481
 #, kde-format
 msgid "Jupyter Notebooks (*.ipynb)"
 msgstr "Jupyter-muistikirjat (*.ipynb)"
 
-#: src/kdefrontend/MainWin.cpp:1509
+#: src/kdefrontend/MainWin.cpp:1488
 #, kde-format
 msgid "All supported files (%1)"
 msgstr "Kaikki tuetut tiedostot (%1)"
 
-#: src/kdefrontend/MainWin.cpp:1513
+#: src/kdefrontend/MainWin.cpp:1492
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Project"
 msgstr "Avaa projekti"
 
-#: src/kdefrontend/MainWin.cpp:1530
+#: src/kdefrontend/MainWin.cpp:1509
 #, kde-format
 msgid "The project file %1 is already opened."
 msgstr "Projektitiedosto %1 on jo avattu."
 
-#: src/kdefrontend/MainWin.cpp:1530 src/kdefrontend/MainWin.cpp:1538
-#: src/kdefrontend/MainWin.cpp:1543
+#: src/kdefrontend/MainWin.cpp:1509 src/kdefrontend/MainWin.cpp:1517
+#: src/kdefrontend/MainWin.cpp:1522
 #, kde-format
 msgid "Open Project"
 msgstr "Avaa projekti"
 
-#: src/kdefrontend/MainWin.cpp:1538
+#: src/kdefrontend/MainWin.cpp:1517
 #, fuzzy, kde-format
 #| msgid "The project file %1 is already opened."
 msgid "The project file %1 doesn't exist."
 msgstr "Projektitiedosto %1 on jo avattu."
 
-#: src/kdefrontend/MainWin.cpp:1543
+#: src/kdefrontend/MainWin.cpp:1522
 #, fuzzy, kde-format
 #| msgid "Couldn't save the file '%1'."
 msgid "Couldn't read the project file %1."
 msgstr "Ei voitu tallentaa tiedostoa ”%1”."
 
-#: src/kdefrontend/MainWin.cpp:1557
+#: src/kdefrontend/MainWin.cpp:1536
 #, kde-format
 msgid "Loading %1..."
 msgstr "Ladataan: %1…"
 
-#: src/kdefrontend/MainWin.cpp:1607 src/kdefrontend/MainWin.cpp:1611
-#: src/kdefrontend/MainWin.cpp:1616 src/kdefrontend/MainWin.cpp:1621
-#: src/kdefrontend/MainWin.cpp:1625 src/kdefrontend/MainWin.cpp:1672
-#: src/kdefrontend/MainWin.cpp:1677 src/kdefrontend/MainWin.cpp:1682
-#: src/kdefrontend/MainWin.cpp:1688
+#: src/kdefrontend/MainWin.cpp:1586 src/kdefrontend/MainWin.cpp:1590
+#: src/kdefrontend/MainWin.cpp:1595 src/kdefrontend/MainWin.cpp:1600
+#: src/kdefrontend/MainWin.cpp:1604 src/kdefrontend/MainWin.cpp:1651
+#: src/kdefrontend/MainWin.cpp:1656 src/kdefrontend/MainWin.cpp:1661
+#: src/kdefrontend/MainWin.cpp:1667
 #, fuzzy, kde-format
 #| msgid "Failed to Open"
 msgid "Failed to open project"
 msgstr "Avaaminen epäonnistui"
 
-#: src/kdefrontend/MainWin.cpp:1607 src/kdefrontend/MainWin.cpp:1616
-#: src/kdefrontend/MainWin.cpp:1621 src/kdefrontend/MainWin.cpp:1672
-#: src/kdefrontend/MainWin.cpp:1677 src/kdefrontend/MainWin.cpp:1682
+#: src/kdefrontend/MainWin.cpp:1586 src/kdefrontend/MainWin.cpp:1595
+#: src/kdefrontend/MainWin.cpp:1600 src/kdefrontend/MainWin.cpp:1651
+#: src/kdefrontend/MainWin.cpp:1656 src/kdefrontend/MainWin.cpp:1661
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to process the content of the file '%1'."
 msgstr "Avaaminen epäonnistui"
 
-#: src/kdefrontend/MainWin.cpp:1611 src/kdefrontend/MainWin.cpp:1625
-#: src/kdefrontend/MainWin.cpp:1688
+#: src/kdefrontend/MainWin.cpp:1590 src/kdefrontend/MainWin.cpp:1604
+#: src/kdefrontend/MainWin.cpp:1667
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to open the file '%1'."
 msgstr "Avaaminen epäonnistui"
 
-#: src/kdefrontend/MainWin.cpp:1702
+#: src/kdefrontend/MainWin.cpp:1681
 #, kde-format
 msgid "%1: opened"
 msgstr "%1: avattu"
 
-#: src/kdefrontend/MainWin.cpp:1712
+#: src/kdefrontend/MainWin.cpp:1691
 #, kde-format
 msgid "Project successfully opened (in %1 seconds)."
 msgstr "Projektin avaus onnistui (%1 sekunnissa)"
 
-#: src/kdefrontend/MainWin.cpp:1808
+#: src/kdefrontend/MainWin.cpp:1787
 #, fuzzy, kde-format
 #| msgid "Save Project As"
 msgctxt "@title:window"
 msgid "Save Project As"
 msgstr "Tallenna projekti nimellä"
 
-#: src/kdefrontend/MainWin.cpp:1810
+#: src/kdefrontend/MainWin.cpp:1789
 #, kde-format
 msgid ""
 "LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 "
@@ -15590,80 +15592,85 @@ msgstr ""
 "LabPlot-projektit (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML."
 "BZ2 *.LML.XZ)"
 
-#: src/kdefrontend/MainWin.cpp:1836
+#: src/kdefrontend/MainWin.cpp:1815
 #, fuzzy, kde-format
 #| msgid "Sorry. Could not open file for writing."
 msgid "Couldn't open the temporary file for writing."
 msgstr "Tiedostoa ei valitettavasti voitu avata kirjoitettavaksi."
 
-#: src/kdefrontend/MainWin.cpp:1891
+#: src/kdefrontend/MainWin.cpp:1870
 #, kde-format
 msgid "Project saved"
 msgstr "Projekti tallennettu"
 
-#: src/kdefrontend/MainWin.cpp:1907
+#: src/kdefrontend/MainWin.cpp:1886
 #, kde-format
 msgid "Couldn't save the file '%1'."
 msgstr "Ei voitu tallentaa tiedostoa ”%1”."
 
-#: src/kdefrontend/MainWin.cpp:1912
+#: src/kdefrontend/MainWin.cpp:1891
 #, fuzzy, kde-format
 #| msgid "Could not open file %1 for reading."
 msgid "Couldn't open the file '%1' for writing."
 msgstr "Ei voitu avata tiedostoa %1 luettavaksi."
 
-#: src/kdefrontend/MainWin.cpp:1957
+#: src/kdefrontend/MainWin.cpp:1936
 #, kde-format
 msgid "Changed"
 msgstr "Muutettu"
 
-#: src/kdefrontend/MainWin.cpp:1972 src/kdefrontend/MainWin.cpp:1984
+#: src/kdefrontend/MainWin.cpp:1951 src/kdefrontend/MainWin.cpp:1963
 #, kde-format
 msgid "Preparing printing of %1"
 msgstr "Valmistellaan tulostusta: %1"
 
-#: src/kdefrontend/MainWin.cpp:1974 src/kdefrontend/MainWin.cpp:1986
+#: src/kdefrontend/MainWin.cpp:1953 src/kdefrontend/MainWin.cpp:1965
 #, kde-format
 msgid "%1 printed"
 msgstr "%1 tulostettu"
 
-#: src/kdefrontend/MainWin.cpp:2742
+#: src/kdefrontend/MainWin.cpp:2722
 #: src/kdefrontend/welcomescreen/WelcomeScreenHelper.cpp:115
 #, fuzzy, kde-format
 #| msgid "Dataset"
 msgid "Dataset%1"
 msgstr "Datajoukko"
 
-#: src/kdefrontend/MainWin.cpp:2772
+#: src/kdefrontend/MainWin.cpp:2752
 #, kde-format
 msgid "%1 exported"
 msgstr "%1 viety"
 
-#: src/kdefrontend/MainWin.cpp:2779
+#: src/kdefrontend/MainWin.cpp:2759
 #, kde-format
 msgid "FITS files saved"
 msgstr "FITS-tiedostot tallennettu"
 
-#: src/kdefrontend/MainWin.cpp:2791
+#: src/kdefrontend/MainWin.cpp:2771
 #, kde-format
 msgid "MQTT Client%1"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2809
+#: src/kdefrontend/MainWin.cpp:2789
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2813
+#: src/kdefrontend/MainWin.cpp:2793
 #, fuzzy, kde-format
 #| msgid "File data source"
 msgid "Live data source%1"
 msgstr "Tiedostodatalähde"
 
-#: src/kdefrontend/MainWin.cpp:2857
+#: src/kdefrontend/MainWin.cpp:2844
 #, kde-format
 msgid "No Cantor backends found. Please install the ones you want to use."
 msgstr "Cantor-taustajärjestelmiä ei löytynyt. Asenna haluamasi."
+
+#: src/kdefrontend/MainWin.cpp:2858
+#, kde-format
+msgid "Creates a new %1 notebook"
+msgstr ""
 
 #: src/kdefrontend/matrix/MatrixFunctionDialog.cpp:45
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:43
@@ -15885,7 +15892,7 @@ msgstr "Asetukset    [muutettu]"
 
 #. i18n: ectx: property (text), widget (QLabel, lMin)
 #. i18n: ectx: property (text), widget (QLabel, lMinDateTime)
-#: src/kdefrontend/SettingsGeneralPage.cpp:26
+#: src/kdefrontend/SettingsGeneralPage.cpp:28
 #: src/kdefrontend/ui/spreadsheet/dropvalueswidget.ui:54
 #: src/kdefrontend/ui/spreadsheet/dropvalueswidget.ui:241
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:317
@@ -15894,93 +15901,104 @@ msgstr "Asetukset    [muutettu]"
 msgid "min."
 msgstr "min"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:160
+#: src/kdefrontend/SettingsGeneralPage.cpp:185
 #, kde-format
 msgid "Do Nothing"
 msgstr "Älä tee mitään"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:161
+#: src/kdefrontend/SettingsGeneralPage.cpp:186
 #, fuzzy, kde-format
 #| msgid "Create new empty project"
 msgid "Create New Empty Project"
 msgstr "Luo uusi tyhjä projekti"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:162
+#: src/kdefrontend/SettingsGeneralPage.cpp:187
 #, kde-format
 msgid "Create New Project with Worksheet"
 msgstr "Luo uusi projekti työvihkolla"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:163
+#: src/kdefrontend/SettingsGeneralPage.cpp:188
 #, fuzzy, kde-format
 #| msgid "Create new project with worksheet"
 msgid "Create New Project with Spreadsheet"
 msgstr "Luo uusi projekti laskentataulukolla"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:164
+#: src/kdefrontend/SettingsGeneralPage.cpp:190
+#, fuzzy, kde-format
+#| msgid "Create New Project with Worksheet"
+msgid "Create New Project with Notebook"
+msgstr "Luo uusi projekti työvihkolla"
+
+#: src/kdefrontend/SettingsGeneralPage.cpp:192
 #, fuzzy, kde-format
 #| msgid "Load last used project"
 msgid "Load Last Used Project"
 msgstr "Avaa viimeksi käytetty projekti"
 
 #. i18n("Show Welcome Screen"));
-#: src/kdefrontend/SettingsGeneralPage.cpp:167
+#: src/kdefrontend/SettingsGeneralPage.cpp:195
+#, kde-format
+msgid "Notebook type to create automatically on startup"
+msgstr ""
+
+#: src/kdefrontend/SettingsGeneralPage.cpp:199
 #, kde-format
 msgid ""
 "Controls the behavior of where the dock widgets are placed after being re-"
-"opened."
+"opened"
 msgstr ""
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:169
+#: src/kdefrontend/SettingsGeneralPage.cpp:203
 #, fuzzy, kde-format
 #| msgid "Original Size"
 msgid "Original Position"
 msgstr "Alkuperäinen koko"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:170
+#: src/kdefrontend/SettingsGeneralPage.cpp:204
 #, kde-format
 msgid "On top of the last active Dock Widget"
 msgstr ""
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:173
+#: src/kdefrontend/SettingsGeneralPage.cpp:207
 #, fuzzy, kde-format
 #| msgid "Show"
 msgid "Show File Path"
 msgstr "Näytä"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:174
+#: src/kdefrontend/SettingsGeneralPage.cpp:208
 #, fuzzy, kde-format
 #| msgid "File name:"
 msgid "Show File Name"
 msgstr "Tiedostonimi:"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:175
+#: src/kdefrontend/SettingsGeneralPage.cpp:209
 #, fuzzy, kde-format
 #| msgid "Project saved"
 msgid "Show Project Name"
 msgstr "Projekti tallennettu"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:177
+#: src/kdefrontend/SettingsGeneralPage.cpp:211
 #, fuzzy, kde-format
 #| msgid "Geometric Distribution"
 msgid "Metric"
 msgstr "Geometrinen jakauma"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:178
+#: src/kdefrontend/SettingsGeneralPage.cpp:212
 #, kde-format
 msgid "Imperial"
 msgstr ""
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:180
+#: src/kdefrontend/SettingsGeneralPage.cpp:214
 #, kde-format
 msgid "Dot (.)"
 msgstr "Piste (.)"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:181
+#: src/kdefrontend/SettingsGeneralPage.cpp:215
 #, kde-format
 msgid "Comma (,)"
 msgstr "Pilkku (,)"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:182
+#: src/kdefrontend/SettingsGeneralPage.cpp:216
 #, kde-format
 msgid "Arabic (٫)"
 msgstr "Arabialainen (٫)"
@@ -16701,20 +16719,20 @@ msgstr "Poista valitut oliot"
 msgid "&Plot"
 msgstr "LabPlot2"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:280
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:293
 #, kde-format
 msgid "Y-data"
 msgstr "y-data"
 
 # pmap: =/gen=LabPlot2:n/
 # pmap: =/elat=LabPlot2:sta/
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:290
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:303
 #, fuzzy, kde-format
 #| msgid "LabPlot2"
 msgid "Add Plot to"
 msgstr "LabPlot2"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:347
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:360
 #, fuzzy, kde-format
 #| msgid "Data type:"
 msgid "Add Histogram to"
@@ -16722,7 +16740,7 @@ msgstr "Tietotyyppi:"
 
 # pmap: =/gen=LabPlot2:n/
 # pmap: =/elat=LabPlot2:sta/
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:349
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:362
 #, fuzzy, kde-format
 #| msgid "LabPlot2"
 msgid "Add Box Plot to"
@@ -16730,56 +16748,56 @@ msgstr "LabPlot2"
 
 # pmap: =/gen=LabPlot2:n/
 # pmap: =/elat=LabPlot2:sta/
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:351
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:364
 #, fuzzy, kde-format
 #| msgid "LabPlot2"
 msgid "Add Bar Plot to"
 msgstr "LabPlot2"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:356
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:369
 #, fuzzy, kde-format
 #| msgid "&All curves in one plot"
 msgid "All histograms in one plot area"
 msgstr "K&aikki käyrät yhdessä kaaviossa"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:357
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:370
 #, fuzzy, kde-format
 #| msgid "One p&lot per curve"
 msgid "One plot area per histogram"
 msgstr "&Yksi kaavio/käyrä"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:358
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:371
 #, fuzzy, kde-format
 #| msgid "Data type:"
 msgid "Add Histograms to"
 msgstr "Tietotyyppi:"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:360
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:373
 #, fuzzy, kde-format
 #| msgid "&All curves in one plot"
 msgid "All box plots in one plot area"
 msgstr "K&aikki käyrät yhdessä kaaviossa"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:361
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:374
 #, kde-format
 msgid "One plot area per box plot"
 msgstr ""
 
 # pmap: =/gen=LabPlot2:n/
 # pmap: =/elat=LabPlot2:sta/
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:362
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:375
 #, fuzzy, kde-format
 #| msgid "LabPlot2"
 msgid "Add Box Plots to"
 msgstr "LabPlot2"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:364
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:377
 #, fuzzy, kde-format
 #| msgid "&All curves in one plot"
 msgid "All bar plots in one plot area"
 msgstr "K&aikki käyrät yhdessä kaaviossa"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:365
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:378
 #, fuzzy, kde-format
 #| msgid "One p&lot per curve"
 msgid "One plot area per bar plot"
@@ -16787,87 +16805,87 @@ msgstr "&Yksi kaavio/käyrä"
 
 # pmap: =/gen=LabPlot2:n/
 # pmap: =/elat=LabPlot2:sta/
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:366
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:379
 #, fuzzy, kde-format
 #| msgid "LabPlot2"
 msgid "Add Bar Plots to"
 msgstr "LabPlot2"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:400
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:411
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:441
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:413
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:424
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:454
 #, fuzzy, kde-format
 #| msgid "Plot Area"
 msgid "Plot Area - %1"
 msgstr "Kaavion alue"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:407
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:436
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:420
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:449
 #, kde-format
 msgid "Worksheet - %1"
 msgstr "Työvihko – %1"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:435
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:448
 #, fuzzy, kde-format
 #| msgid "Plot Area"
 msgid "Plot data from %1"
 msgstr "Kaavion alue"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:571
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:587
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:603
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:584
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:600
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:616
 #, fuzzy, kde-format
 #| msgid "Plot Area"
 msgid "Plot Area %1"
 msgstr "Kaavion alue"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:680
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:693
 #, fuzzy, kde-format
 #| msgid "new filter"
 msgid "Fourier Filter of '%1'"
 msgstr "uusi suodatin"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:934
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:947
 #, fuzzy, kde-format
 #| msgid "Create new project with worksheet"
 msgid "new plot in an existing worksheet"
 msgstr "Luo uusi projekti laskentataulukolla"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:935
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:948
 #, fuzzy, kde-format
 #| msgid "Create new project with worksheet"
 msgid "new plot in a new worksheet"
 msgstr "Luo uusi projekti laskentataulukolla"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:940
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:953
 #, fuzzy, kde-format
 #| msgid "Create new project with worksheet"
 msgid "new plots in an existing worksheet"
 msgstr "Luo uusi projekti laskentataulukolla"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:941
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:954
 #, fuzzy, kde-format
 #| msgid "Create new project with worksheet"
 msgid "new plots in a new worksheet"
 msgstr "Luo uusi projekti laskentataulukolla"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:965
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:978
 #, fuzzy, kde-format
 #| msgid "&Normalize Selection"
 msgid "No data selected to plot."
 msgstr "N&ormalisoi valinta"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:970
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:983
 #, kde-format
 msgid "An already existing plot has to be selected."
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:975
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:988
 #, kde-format
 msgid "An already existing worksheet has to be selected."
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:981
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:994
 #, kde-format
 msgid "Close the dialog and plot the data."
 msgstr ""
@@ -18947,7 +18965,7 @@ msgstr "Tuo kohteeseen"
 #. i18n: ectx: property (text), widget (QLabel, lDecimalSeparator)
 #: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:91
 #: src/kdefrontend/ui/datasources/jsonoptionswidget.ui:76
-#: src/kdefrontend/ui/settingsgeneralpage.ui:34
+#: src/kdefrontend/ui/settingsgeneralpage.ui:40
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:152
 #, fuzzy, kde-format
 #| msgid "Decimal notation"
@@ -20526,7 +20544,7 @@ msgstr "näkymän koko"
 #. i18n: ectx: property (text), widget (QLabel, lAutoSaveInterval)
 #. i18n: ectx: property (text), widget (QLabel, lUpdateInterval)
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:33
-#: src/kdefrontend/ui/settingsgeneralpage.ui:85
+#: src/kdefrontend/ui/settingsgeneralpage.ui:108
 #, kde-format
 msgid "Interval:"
 msgstr "Aikaväli:"
@@ -20715,7 +20733,7 @@ msgstr "Linkki"
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoSave)
 #. i18n: ectx: property (text), widget (QLabel, lLinkingEnabled)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:230
-#: src/kdefrontend/ui/settingsgeneralpage.ui:62
+#: src/kdefrontend/ui/settingsgeneralpage.ui:85
 #, kde-format
 msgid "Enabled"
 msgstr "Käytössä"
@@ -21989,62 +22007,20 @@ msgstr "Yhteiskoko – "
 msgid "Clear"
 msgstr "Tyhjennä"
 
-#. i18n: ectx: property (text), widget (QLabel, lGUMTerms)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:17
-#, kde-format
-msgid "Terms:"
-msgstr ""
-
 #. i18n: ectx: property (text), widget (QLabel, lNumberOptions)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:24
+#: src/kdefrontend/ui/settingsgeneralpage.ui:23
 #, kde-format
 msgid "Number options:"
 msgstr "Numerovalinnat:"
 
-#. i18n: ectx: property (text), widget (QLabel, lAutoSave)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:118
-#, kde-format
-msgid "Auto-save:"
-msgstr "Automaattitallennus:"
-
-#. i18n: ectx: property (text), widget (QLabel, lTitleBar)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:128
-#, kde-format
-msgid "Title Bar:"
-msgstr "Otsikkopalkki:"
-
-#. i18n: ectx: property (text), widget (QCheckBox, chkOmitLeadingZeroInExponent)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:135
-#, kde-format
-msgid "Omit leading zero in exponent"
-msgstr "Ohita eksponentista alkunolla"
-
-#. i18n: ectx: property (text), widget (QLabel, lStartup)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:142
-#, kde-format
-msgid "Startup:"
-msgstr "Käynnistys:"
-
-#. i18n: ectx: property (text), widget (QCheckBox, chkIncludeTrailingZeroesAfterDot)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:171
-#, kde-format
-msgid "Include trailing zeroes after dot"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, lUnits)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:194
-#, kde-format
-msgid "Units:"
-msgstr "Yksiköt:"
-
 #. i18n: ectx: property (text), widget (QCheckBox, chkOmitGroupSeparator)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:214
+#: src/kdefrontend/ui/settingsgeneralpage.ui:30
 #, kde-format
 msgid "Omit group separator"
 msgstr "Ohita ryhmäerotin"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkCompatible)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:221
+#: src/kdefrontend/ui/settingsgeneralpage.ui:47
 #, kde-format
 msgid ""
 "<html><head/><body><p>Save projects in a compatible format that can be "
@@ -22052,13 +22028,19 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCompatible)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:224
+#: src/kdefrontend/ui/settingsgeneralpage.ui:50
 #, kde-format
 msgid "Save in compatible format"
 msgstr "Tallenna yhteensopivaan muotoon"
 
+#. i18n: ectx: property (text), widget (QLabel, lTitleBar)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:57
+#, kde-format
+msgid "Title Bar:"
+msgstr "Otsikkopalkki:"
+
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkGUMTerms)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:231
+#: src/kdefrontend/ui/settingsgeneralpage.ui:144
 #, kde-format
 msgid ""
 "<html><head/><body><p>Use terms compliant with the <a href=\"http://www.bipm."
@@ -22068,19 +22050,62 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkGUMTerms)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:234
+#: src/kdefrontend/ui/settingsgeneralpage.ui:147
 #, kde-format
 msgid "GUM compliant"
 msgstr ""
 
+#. i18n: ectx: property (text), widget (QCheckBox, chkIncludeTrailingZeroesAfterDot)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:154
+#, kde-format
+msgid "Include trailing zeroes after dot"
+msgstr ""
+
 # pmap: =/gen=LabPlot2:n/
 # pmap: =/elat=LabPlot2:sta/
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:241
+#. i18n: ectx: property (text), widget (QLabel, lDockWindowPositionReopen)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:161
 #, fuzzy, kde-format
 #| msgid "LabPlot2"
 msgid "Dock widget placement:"
 msgstr "LabPlot2"
+
+#. i18n: ectx: property (text), widget (QLabel, lAutoSave)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:168
+#, kde-format
+msgid "Auto-save:"
+msgstr "Automaattitallennus:"
+
+#. i18n: ectx: property (text), widget (QLabel, lStartup)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:175
+#, kde-format
+msgid "Startup:"
+msgstr "Käynnistys:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkOmitLeadingZeroInExponent)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:182
+#, kde-format
+msgid "Omit leading zero in exponent"
+msgstr "Ohita eksponentista alkunolla"
+
+#. i18n: ectx: property (text), widget (QLabel, lGUMTerms)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:202
+#, kde-format
+msgid "Terms:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lUnits)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:241
+#, kde-format
+msgid "Units:"
+msgstr "Yksiköt:"
+
+#. i18n: ectx: property (text), widget (QLabel, lLoadOnStartNotebook)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:254
+#, fuzzy, kde-format
+#| msgid "Note"
+msgid "Notebook:"
+msgstr "Huomautus"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode_2)
@@ -23486,6 +23511,11 @@ msgid "Unable to open file:"
 msgstr "Tiedostoa ei voi avata:"
 
 #, fuzzy
+#~| msgid "no fileDataSource element found"
+#~ msgid "GUI configuration file not found"
+#~ msgstr "fileDataSource-elementtiä ei löytynyt"
+
+#, fuzzy
 #~| msgid "Inverse Exponential"
 #~ msgid "Inverse"
 #~ msgstr "Käänteinen eksponentiaalinen"
@@ -24475,9 +24505,6 @@ msgstr "Tiedostoa ei voi avata:"
 #~| msgid "Variables:"
 #~ msgid "Variables: "
 #~ msgstr "Muuttujat:"
-
-#~ msgid "Import"
-#~ msgstr "Tuo"
 
 #, fuzzy
 #~| msgid "%1: set border style"
