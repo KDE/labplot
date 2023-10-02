@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Dialog for generating plots for the spreadsheet data
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2017-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2017-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -32,7 +32,7 @@ class PlotDataDialog : public QDialog {
 	Q_OBJECT
 
 public:
-	enum class PlotType { XYCurve, Histogram, BoxPlot, BarPlot };
+	enum class PlotType { XYCurve, Histogram, BoxPlot, KDEPlot, QQPlot, BarPlot, LollipopPlot };
 
 	explicit PlotDataDialog(Spreadsheet*, PlotType = PlotType::XYCurve, QWidget* parent = nullptr);
 	~PlotDataDialog() override;
@@ -57,12 +57,14 @@ private:
 	void processColumns();
 	void processColumnsForXYCurve(const QStringList& columnNames, const QString& xColumnName);
 	void processColumnsForHistogram(const QStringList&);
+
 	void addCurvesToPlot(CartesianPlot*);
 	void addCurvesToPlots(Worksheet*);
+
 	void addCurve(const QString& name, Column* xColumn, Column* yColumn, CartesianPlot*);
-	void addHistogram(const QString& name, Column* column, CartesianPlot*);
-	void addBoxPlot(const QString& name, const QVector<const AbstractColumn*>&, CartesianPlot*);
-	void addBarPlot(const QString& name, const QVector<const AbstractColumn*>&, CartesianPlot*);
+	void addSingleSourceColumnPlot(const Column* column, CartesianPlot*);
+	void addMultiSourceColumnsPlot(const QVector<const AbstractColumn*>&, CartesianPlot*);
+
 	Column* columnFromName(const QString&) const;
 	void adjustWorksheetSize(Worksheet*) const;
 	void setAxesTitles(CartesianPlot*, const QString& yColumnName = QString()) const;

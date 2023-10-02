@@ -312,7 +312,7 @@ void SpreadsheetView::initActions() {
 	action_insert_column_right = new QAction(QIcon::fromTheme(QStringLiteral("edit-table-insert-column-right")), i18n("Insert Column Right"), this);
 	action_insert_columns_left = new QAction(QIcon::fromTheme(QStringLiteral("edit-table-insert-column-left")), i18n("Insert Multiple Columns Left"), this);
 	action_insert_columns_right = new QAction(QIcon::fromTheme(QStringLiteral("edit-table-insert-column-right")), i18n("Insert Multiple Columns Right"), this);
-	action_remove_columns = new QAction(QIcon::fromTheme(QStringLiteral("edit-table-delete-column")), i18n("Remove Selected Column(s)"), this);
+	action_remove_columns = new QAction(QIcon::fromTheme(QStringLiteral("edit-table-delete-column")), i18n("Delete Selected Column(s)"), this);
 	action_clear_columns = new QAction(QIcon::fromTheme(QStringLiteral("edit-clear")), i18n("Clear Content"), this);
 	action_freeze_columns = new QAction(i18n("Freeze Column"), this);
 
@@ -450,7 +450,7 @@ void SpreadsheetView::initActions() {
 
 	// conditional formatting
 	action_formatting_heatmap = new QAction(QIcon::fromTheme(QStringLiteral("color-management")), i18n("Heatmap"), this);
-	action_formatting_remove = new QAction(QIcon::fromTheme(QStringLiteral("edit-clear")), i18n("Remove"), this);
+	action_formatting_remove = new QAction(QIcon::fromTheme(QStringLiteral("edit-clear")), i18n("Delete"), this);
 
 	// row related actions
 	action_insert_row_above = new QAction(QIcon::fromTheme(QStringLiteral("edit-table-insert-row-above")), i18n("Insert Row Above"), this);
@@ -461,19 +461,9 @@ void SpreadsheetView::initActions() {
 	action_insert_rows_below = new QAction(QIcon::fromTheme(QStringLiteral("edit-table-insert-row-below")), i18n("Insert Multiple Rows Below"), this);
 	action_remove_rows = new QAction(QIcon::fromTheme(QStringLiteral("edit-table-delete-row")), i18n("Remo&ve Selected Row(s)"), this);
 	action_clear_rows = new QAction(QIcon::fromTheme(QStringLiteral("edit-clear")), i18n("Clea&r Content"), this);
-	action_remove_missing_value_rows = new QAction(QIcon::fromTheme(QStringLiteral("delete-table-row")), i18n("Remove Rows With Missing Values"), this);
+	action_remove_missing_value_rows = new QAction(QIcon::fromTheme(QStringLiteral("delete-table-row")), i18n("Delete Rows With Missing Values"), this);
 	action_mask_missing_value_rows = new QAction(QIcon::fromTheme(QStringLiteral("hide_table_row")), i18n("Mask Rows With Missing Values"), this);
 	action_statistics_rows = new QAction(QIcon::fromTheme(QStringLiteral("view-statistics")), i18n("Row Statisti&cs"), this);
-
-	// plot data action
-	action_plot_data_xycurve = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("xy-Curve"), this);
-	action_plot_data_xycurve->setData(static_cast<int>(PlotDataDialog::PlotType::XYCurve));
-	action_plot_data_histogram = new QAction(QIcon::fromTheme(QStringLiteral("view-object-histogram-linear")), i18n("Histogram"), this);
-	action_plot_data_histogram->setData(static_cast<int>(PlotDataDialog::PlotType::Histogram));
-	action_plot_data_boxplot = new QAction(BoxPlot::staticIcon(), i18n("Box Plot"), this);
-	action_plot_data_boxplot->setData(static_cast<int>(PlotDataDialog::PlotType::BoxPlot));
-	action_plot_data_barplot = new QAction(QIcon::fromTheme(QStringLiteral("office-chart-bar")), i18n("Bar Plot"), this);
-	action_plot_data_barplot->setData(static_cast<int>(PlotDataDialog::PlotType::BarPlot));
 
 	// Analyze and plot menu actions
 	addDataReductionAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Reduce Data"), this);
@@ -570,13 +560,44 @@ void SpreadsheetView::initMenus() {
 		// 		m_selectionMenu->addAction(action_normalize_selection);
 	}
 
-	// plot data menu
+	// plot data menu (synchronize with the menu in CartesianPlot)
+	plotDataActionGroup = new QActionGroup(this);
+	connect(plotDataActionGroup, &QActionGroup::triggered, this, &SpreadsheetView::plotData);
 	m_plotDataMenu = new QMenu(i18n("Plot Data"), this);
-	m_plotDataMenu->addAction(action_plot_data_xycurve);
-	m_plotDataMenu->addAction(action_plot_data_histogram);
-	m_plotDataMenu->addAction(action_plot_data_boxplot);
-	m_plotDataMenu->addAction(action_plot_data_barplot);
 
+	auto* action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("xy-curve"), plotDataActionGroup);
+	action->setData(static_cast<int>(PlotDataDialog::PlotType::XYCurve));
+	m_plotDataMenu->addAction(action);
+
+	auto* addNewStatisticalPlotsMenu = new QMenu(i18n("Statistical Plots"));
+	action = new QAction(QIcon::fromTheme(QStringLiteral("view-object-histogram-linear")), i18n("Histogram"), plotDataActionGroup);
+	action->setData(static_cast<int>(PlotDataDialog::PlotType::Histogram));
+	addNewStatisticalPlotsMenu->addAction(action);
+
+	action = new QAction(BoxPlot::staticIcon(), i18n("Box Plot"), plotDataActionGroup);
+	action->setData(static_cast<int>(PlotDataDialog::PlotType::BoxPlot));
+	addNewStatisticalPlotsMenu->addAction(action);
+
+	action = new QAction(i18n("KDE Plot"), plotDataActionGroup);
+	action->setData(static_cast<int>(PlotDataDialog::PlotType::KDEPlot));
+	addNewStatisticalPlotsMenu->addAction(action);
+
+	action = new QAction(i18n("Q-Q Plot"), plotDataActionGroup);
+	action->setData(static_cast<int>(PlotDataDialog::PlotType::QQPlot));
+	addNewStatisticalPlotsMenu->addAction(action);
+	m_plotDataMenu->addMenu(addNewStatisticalPlotsMenu);
+
+	auto* addNewBarPlotsMenu = new QMenu(i18n("Bar Plots"));
+	action = new QAction(QIcon::fromTheme(QStringLiteral("office-chart-bar")), i18n("Bar Plot"), plotDataActionGroup);
+	action->setData(static_cast<int>(PlotDataDialog::PlotType::BarPlot));
+	addNewBarPlotsMenu->addAction(action);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("office-chart-bar")), i18n("Lollipop Plot"), plotDataActionGroup);
+	action->setData(static_cast<int>(PlotDataDialog::PlotType::LollipopPlot));
+	addNewBarPlotsMenu->addAction(action);
+	m_plotDataMenu->addMenu(addNewBarPlotsMenu);
+
+	// conditional formatting
 	m_formattingMenu = new QMenu(i18n("Conditional Formatting"), this);
 	m_formattingMenu->addAction(action_formatting_heatmap);
 	m_formattingMenu->addSeparator();
@@ -898,10 +919,6 @@ void SpreadsheetView::connectActions() {
 	connect(action_statistics_rows, &QAction::triggered, this, &SpreadsheetView::showRowStatistics);
 	connect(action_toggle_comments, &QAction::triggered, this, &SpreadsheetView::toggleComments);
 
-	connect(action_plot_data_xycurve, &QAction::triggered, this, &SpreadsheetView::plotData);
-	connect(action_plot_data_histogram, &QAction::triggered, this, &SpreadsheetView::plotData);
-	connect(action_plot_data_boxplot, &QAction::triggered, this, &SpreadsheetView::plotData);
-	connect(action_plot_data_barplot, &QAction::triggered, this, &SpreadsheetView::plotData);
 	connect(addDataReductionAction, &QAction::triggered, this, &SpreadsheetView::plotAnalysisData);
 	connect(addDifferentiationAction, &QAction::triggered, this, &SpreadsheetView::plotAnalysisData);
 	connect(addIntegrationAction, &QAction::triggered, this, &SpreadsheetView::plotAnalysisData);
@@ -2071,8 +2088,8 @@ void SpreadsheetView::unmaskSelection() {
 	RESET_CURSOR;
 }
 
-void SpreadsheetView::plotData() {
-	const auto* action = dynamic_cast<const QAction*>(QObject::sender());
+void SpreadsheetView::plotData(QAction* action) {
+	// const auto* action = dynamic_cast<const QAction*>(QObject::sender());
 	auto type = static_cast<PlotDataDialog::PlotType>(action->data().toInt());
 	auto* dlg = new PlotDataDialog(m_spreadsheet, type);
 	dlg->exec();

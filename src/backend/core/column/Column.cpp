@@ -260,19 +260,17 @@ QMenu* Column::createContextMenu() {
 		menu->insertSeparator(firstAction);
 	}
 
-	if (hasValues()) {
+	if (hasValues())
 		menu->insertAction(firstAction, m_copyDataAction);
-		menu->insertSeparator(firstAction);
-	}
 
 	// pasting of data is only possible for spreadsheet columns
 	if (parentAspect()->type() == AspectType::Spreadsheet) {
 		const auto* mimeData = QApplication::clipboard()->mimeData();
-		if (mimeData->hasFormat(QStringLiteral("text/plain"))) {
+		if (mimeData->hasFormat(QStringLiteral("text/plain")))
 			menu->insertAction(firstAction, m_pasteDataAction);
-			menu->insertSeparator(firstAction);
-		}
 	}
+
+	menu->insertSeparator(firstAction);
 
 	return menu;
 }

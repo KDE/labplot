@@ -196,10 +196,7 @@ private:
 	QAction* action_statistics_rows{nullptr};
 
 	// analysis and plot data menu actions
-	QAction* action_plot_data_xycurve{nullptr};
-	QAction* action_plot_data_histogram{nullptr};
-	QAction* action_plot_data_boxplot{nullptr};
-	QAction* action_plot_data_barplot{nullptr};
+	QActionGroup* plotDataActionGroup{nullptr};
 	QAction* addDataOperationAction{nullptr};
 	QAction* addDataReductionAction{nullptr};
 	QAction* addDifferentiationAction{nullptr};
@@ -260,7 +257,7 @@ private Q_SLOTS:
 	void unmaskSelection();
 	// 		void recalculateSelectedCells();
 
-	void plotData();
+	void plotData(QAction*);
 	void plotAnalysisData();
 
 	void fillSelectedCellsWithRowNumbers();
