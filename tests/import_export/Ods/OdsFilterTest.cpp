@@ -9,6 +9,7 @@
 */
 
 #include "OdsFilterTest.h"
+#include "backend/core/Workbook.h"
 #include "backend/datasources/filters/OdsFilter.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 
@@ -83,6 +84,60 @@ void OdsFilterTest::importFile3SheetsRangesFormula() {
 	QCOMPARE(spreadsheet.column(2)->valueAt(1), 23);
 	QCOMPARE(spreadsheet.column(2)->valueAt(2), 5);
 	QCOMPARE(spreadsheet.column(2)->valueAt(3), 70); // formula
+}
+
+void OdsFilterTest::importFile3SheetsWorkbook() {
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/ranges-formula.ods"));
+
+	Workbook workbook(QStringLiteral("test"));
+	auto* spreadsheet1 = new Spreadsheet(QStringLiteral("sheet 1"));
+	workbook.addChildFast(spreadsheet1);
+	auto* spreadsheet2 = new Spreadsheet(QStringLiteral("sheet 2"));
+	workbook.addChildFast(spreadsheet2);
+
+	OdsFilter filter;
+
+	// sheet 1
+	filter.setSelectedSheetNames(QStringList() << QStringLiteral("Sheet1"));
+	filter.readDataFromFile(fileName, spreadsheet1);
+
+	QCOMPARE(spreadsheet1->columnCount(), 2);
+	QCOMPARE(spreadsheet1->rowCount(), 5);
+
+	QCOMPARE(spreadsheet1->column(0)->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(spreadsheet1->column(1)->columnMode(), AbstractColumn::ColumnMode::Double);
+
+	QCOMPARE(spreadsheet1->column(0)->valueAt(0), 1);
+	QCOMPARE(spreadsheet1->column(0)->valueAt(1), 2);
+	QCOMPARE(spreadsheet1->column(0)->valueAt(2), 3);
+	QCOMPARE(spreadsheet1->column(0)->valueAt(3), 4);
+	QCOMPARE(spreadsheet1->column(0)->valueAt(4), 5);
+	QCOMPARE(spreadsheet1->column(1)->valueAt(0), 1);
+	QCOMPARE(spreadsheet1->column(1)->valueAt(1), 2.1);
+	QCOMPARE(spreadsheet1->column(1)->valueAt(2), 3.21);
+	QCOMPARE(spreadsheet1->column(1)->valueAt(3), 4.321);
+	QCOMPARE(spreadsheet1->column(1)->valueAt(4), 5.4321);
+
+	// sheet 2
+	filter.setSelectedSheetNames(QStringList() << QStringLiteral("Sheet2"));
+	filter.readDataFromFile(fileName, spreadsheet2);
+
+	QCOMPARE(spreadsheet2->columnCount(), 4);
+	QCOMPARE(spreadsheet2->rowCount(), 2);
+
+	QCOMPARE(spreadsheet2->column(0)->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(spreadsheet2->column(1)->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(spreadsheet2->column(2)->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(spreadsheet2->column(3)->columnMode(), AbstractColumn::ColumnMode::Double);
+
+	QCOMPARE(spreadsheet2->column(0)->valueAt(0), 1);
+	QCOMPARE(spreadsheet2->column(0)->valueAt(1), 3);
+	QCOMPARE(spreadsheet2->column(1)->valueAt(0), 2.2);
+	QCOMPARE(spreadsheet2->column(1)->valueAt(1), 2.1);
+	QCOMPARE(spreadsheet2->column(2)->valueAt(0), 3);
+	QCOMPARE(spreadsheet2->column(2)->valueAt(1), 1);
+	QCOMPARE(spreadsheet2->column(3)->valueAt(0), qQNaN());
+	QCOMPARE(spreadsheet2->column(3)->valueAt(1), 12.3);
 }
 
 void OdsFilterTest::importFileSheetStartEndRow() {
