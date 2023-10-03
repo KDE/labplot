@@ -71,7 +71,6 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent)
 #ifdef HAVE_QXLSX
 	ui->cbFormat->addItem(QStringLiteral("XLSX"), static_cast<int>(Format::XLSX));
 #endif
-	// TODO: Ods
 
 	const QStringList& drivers = QSqlDatabase::drivers();
 	if (drivers.contains(QLatin1String("QSQLITE")) || drivers.contains(QLatin1String("QSQLITE3")))
@@ -358,7 +357,6 @@ void ExportSpreadsheetDialog::selectFile() {
 
 	QString extensions;
 	const Format format = (Format)(ui->cbFormat->itemData(ui->cbFormat->currentIndex()).toInt());
-	// TODO: Ods
 	switch (format) {
 	case Format::ASCII:
 		extensions = i18n("Text files (*.txt *.dat *.csv)");
@@ -399,7 +397,6 @@ void ExportSpreadsheetDialog::selectFile() {
 	called when the output format was changed. Adjusts the extension for the specified file.
  */
 void ExportSpreadsheetDialog::formatChanged(int index) {
-	// TODO: Ods
 	QStringList extensions;
 	extensions << QStringLiteral(".txt") << QStringLiteral(".tex");
 #ifdef HAVE_FITS

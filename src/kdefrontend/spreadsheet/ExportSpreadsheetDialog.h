@@ -48,7 +48,6 @@ public:
 	void setExportTo(const QStringList& to);
 	void setExportToImage(bool possible);
 
-	// TODO: Ods
 	enum class Format { ASCII, LaTeX, FITS, XLSX, SQLite };
 
 	Format format() const;

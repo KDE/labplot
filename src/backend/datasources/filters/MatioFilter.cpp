@@ -596,7 +596,6 @@ void MatioFilterPrivate::parse(const QString& fileName) {
 */
 void MatioFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
 	PERFTRACE(QLatin1String(Q_FUNC_INFO));
-	// QVector<QStringList> dataStrings;
 
 	if (currentVarName.isEmpty()) {
 		DEBUG(Q_FUNC_INFO << ", no variable selected");

@@ -13,10 +13,6 @@
 
 #include <QObject>
 
-#ifdef HAVE_ORCUS
-//#include "3rdparty/QXlsx/header/xlsxdocument.h"
-#endif
-
 class OdsFilterPrivate;
 class QTreeWidgetItem;
 
@@ -27,12 +23,6 @@ public:
 	virtual ~OdsFilter() override;
 	static QString fileInfoString(const QString& fileName);
 	QVector<QStringList> preview(const QString& sheetName, int lines);
-	/*
-		void setExportAsNewSheet(const bool);
-		void setSheetToAppendTo(const QString& sheetName);
-		void setOverwriteData(const bool);
-		void setDataExportStartPos(const QString&);
-	*/
 	void setFirstRowAsColumnNames(const bool);
 	void parse(const QString& fileName, QTreeWidgetItem* root);
 	void setCurrentSheetName(const QString&);

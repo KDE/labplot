@@ -40,10 +40,8 @@ public Q_SLOTS:
 private:
 	Ui::OdsOptionsWidget ui;
 	ImportFileWidget* m_fileWidget{nullptr};
-	//	std::unique_ptr<ImportFileWidget> m_fileWidget{nullptr};
+	// TODO:	use std::unique_ptr<ImportFileWidget> m_fileWidget{nullptr};
 	QVector<QStringList> m_previewString;
-	// TODO:
-	QMap<QPair<QString, int>, bool> m_regionIsPossibleToImportToMatrix;
 };
 
 #endif // ODSOPTIONSWIDGET_H

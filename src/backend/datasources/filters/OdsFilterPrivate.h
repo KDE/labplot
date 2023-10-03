@@ -29,23 +29,6 @@ public:
 	void write(const QString& fileName, AbstractDataSource*);
 	QVector<QStringList> preview(const QString& sheetName, int lines);
 	void parse(const QString& fileName, QTreeWidgetItem* root);
-	/*	QStringList sheets() const;
-
-	#ifdef HAVE_QXLSX
-		void readDataRegion(const QXlsx::CellRange& region, AbstractDataSource*, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace);
-		QVector<QXlsx::CellRange> dataRegions(const QString& fileName, const QString& sheetName);
-		QXlsx::CellRange cellContainedInRegions(const QXlsx::CellReference& cell, const QVector<QXlsx::CellRange>& regions) const;
-		bool dataRangeCanBeExportedToMatrix(const QXlsx::CellRange& range) const;
-		bool isColumnNumericInRange(const int column, const QXlsx::CellRange& range) const;
-	#endif
-	*/
-	/*
-		bool exportDataSourceAsNewSheet{true};
-		bool columnNamesAsFirstRow{true};
-		bool overwriteExportData{true};
-
-		QString sheetToAppendSpreadsheetTo;
-	*/
 	QString currentSheetName;
 	QStringList selectedSheetNames;
 	bool firstRowAsColumnNames{false};

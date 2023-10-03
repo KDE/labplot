@@ -52,12 +52,6 @@ QString OdsFilter::fileInfoString(const QString& fileName) {
 
 	QString info(i18n("Sheet count: %1", QString::number(nrSheets)));
 	info += QStringLiteral("<br>");
-	// info += i18n("Sheet: %1 %2", sheetSize.rows, sheetSize.columns);
-	//  document_config:
-	// info += i18n("Precision: %1", docConfig.output_precision);
-	//  const styles& doc.get_styles()
-	//  const pivot_collection& doc.get_pivot_collection()
-	//  const shared_strings& doc.get_shared_strings()
 
 	for (size_t i = 0; i < nrSheets; ++i) {
 		auto name = doc.get_sheet_name(i);
