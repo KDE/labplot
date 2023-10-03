@@ -31,16 +31,16 @@ include(FeatureSummary)
 # build type: "release", "debug", "debugfull"
 string (TOLOWER "${CMAKE_BUILD_TYPE}" CMAKE_BUILD_TYPE)
 
-# Qt6 not supported yet
-set(QT_VERSION_MAJOR "5")
+# TODO: support both Qt6 and Qt5
+set(QT_VERSION_MAJOR "6")
 set(QT_MAJOR_VERSION ${QT_VERSION_MAJOR})
-#if (QT_MAJOR_VERSION STREQUAL "6")
-#    set(QT_MIN_VERSION "6.4.0")
-#    set(KF_MIN_VERSION "5.240.0")
-#    set(KF_MAJOR_VERSION "6")
-#else()
+if (QT_MAJOR_VERSION STREQUAL "6")
+	set(QT_MIN_VERSION "6.2.2")		# openSUSE 15.4 version
+    set(KF_MIN_VERSION "5.240.0")
+    set(KF_MAJOR_VERSION "6")
+else()
     set(KF_MAJOR_VERSION "5")
-#endif()
+endif()
 
 find_package(Qt${QT_MAJOR_VERSION} ${QT_MIN_VERSION} NO_MODULE REQUIRED COMPONENTS
 	Concurrent
@@ -56,7 +56,7 @@ find_package(Qt${QT_MAJOR_VERSION} ${QT_MIN_VERSION} NO_MODULE REQUIRED COMPONEN
 )
 
 # building QADS or Xlsx requires Qt5GuiPrivate (QADS is required, Xlsx is optional)
-find_package(Qt5Gui ${QT_MIN_VERSION} CONFIG REQUIRED Private)
+find_package(Qt${QT_MAJOR_VERSION}Gui ${QT_MIN_VERSION} CONFIG REQUIRED Private)
 
 find_package(KF${KF_MAJOR_VERSION} ${KF_MIN_VERSION} REQUIRED COMPONENTS
 	Archive
