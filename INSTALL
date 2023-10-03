@@ -24,6 +24,7 @@ optional packages
 	* liborigin version 3 or higher for importing Origin project files (will be build if not available)
 	* Matio for importing binary MATLAB MAT files (including the devel-package, libmatio-devel or similar)
 	* QXlsx for importing Excel xlsx files (will be build if not available)
+	* Orcus for importing ODS (Open Document Spreadsheet) files (including the devel-package, liborcus-devel or similar)
 	* Qt SerialPort to support serial port functionality
 	* Qt MQTT module (https://github.com/qt/qtmqtt) to support reading and plotting of data from MQTT brokers
 	* KUserFeedback to support collecting feedback from users
@@ -55,6 +56,7 @@ To compile LabPlot without optional dependencies even if they are present on the
 -DENABLE_READSTAT=OFF
 -DENABLE_MATIO=OFF
 -DENABLE_MQTT=OFF
+-DENABLE_ORCUS=OFF
 -DENABLE_QTSERIALPORT=OFF
 -DENABLE_LIBORIGIN=OFF
 -DENABLE_TOUCHBAR=OFF
