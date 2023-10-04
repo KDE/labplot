@@ -97,8 +97,10 @@ void TreeViewComboBox::setModel(AspectTreeModel* model) {
 */
 void TreeViewComboBox::setCurrentModelIndex(const QModelIndex& index) {
 	m_treeView->setCurrentIndex(index);
-	setToolTip(m_model->data(index, Qt::ToolTipRole).toString());
-	QComboBox::setItemText(0, index.data().toString());
+	if (index.isValid()) {
+		setToolTip(m_model->data(index, Qt::ToolTipRole).toString());
+		QComboBox::setItemText(0, index.data().toString());
+	}
 }
 
 /*!
