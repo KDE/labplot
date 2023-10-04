@@ -1,14 +1,14 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 #
-# Eloy Cuadra <ecuadra@eloihr.net>, 2014, 2015, 2017, 2019, 2020, 2021, 2022, 2023.
+# SPDX-FileCopyrightText: 2014, 2015, 2017, 2019, 2020, 2021, 2022, 2023 Eloy Cuadra <ecuadra@eloihr.net>
 # Javier Vinal <fjvinal@gmail.com>, 2015, 2016, 2017, 2018, 2019.
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-07-10 02:40+0000\n"
-"PO-Revision-Date: 2023-06-23 22:06+0200\n"
+"PO-Revision-Date: 2023-10-03 14:44+0200\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 23.04.2\n"
+"X-Generator: Lokalize 23.08.1\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -1112,7 +1112,7 @@ msgstr ""
 #: src/backend/datasources/DatasetHandler.cpp:156
 #, kde-format
 msgid "There is no download URL present in the metadata file!"
-msgstr "No hay un URL de descarga en el archivo de metadatos."
+msgstr "No hay ninguna URL de descarga en el archivo de metadatos."
 
 #: src/backend/datasources/filters/AbstractFileFilter.cpp:218
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:368
@@ -2214,8 +2214,8 @@ msgstr "Ha fallado la apertura del dispositivo."
 msgid ""
 "Failed to open the device. Please check your permissions on this device."
 msgstr ""
-"Ha fallado la apertura del dispositivo. Por favor, compruebe sus permisos en "
-"el dispositivo."
+"No se ha podido abrir el dispositivo. Compruebe sus permisos sobre este "
+"dispositivo."
 
 #: src/backend/datasources/LiveDataSource.cpp:717
 #, kde-format
@@ -8496,7 +8496,7 @@ msgstr "%1: tipo de borde cambiado"
 #: src/backend/worksheet/plots/PlotArea.cpp:167
 #, kde-format
 msgid "%1: set plot area corner radius"
-msgstr "%1: definir radio de las esquinas del área de gráficos"
+msgstr "%1: definir radio de las esquinas del área de gráfico"
 
 #: src/backend/worksheet/TextLabel.cpp:307
 #: src/backend/worksheet/TextLabel.cpp:309
@@ -10226,7 +10226,7 @@ msgstr "Desplazar Y hacia abajo"
 #: src/commonfrontend/worksheet/WorksheetView.cpp:1532
 #, kde-format
 msgid "Plot Area"
-msgstr "Área de gráficos"
+msgstr "Área de gráfico"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabLayout_2)
 #. i18n: ectx: attribute (title), widget (QWidget, tabLayout)
@@ -11344,7 +11344,7 @@ msgstr[1] ""
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:236
 #, kde-format
 msgid "Do you want to proceed?"
-msgstr "¿Quiere usted continuar?"
+msgstr "¿Quiere continuar?"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:240
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:242
@@ -11430,16 +11430,16 @@ msgstr "Gestionar conexiones"
 msgid ""
 "Couldn't find the database file '%1'. Please check the connection settings."
 msgstr ""
-"No se ha podido encontrar el archivo de base de datos «%1»:. Por favor, "
-"compruebe las preferencias de conexión."
+"No se ha podido encontrar el archivo de base de datos «%1». Compruebe las "
+"preferencias de conexión."
 
 #: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:270
 #, kde-format
 msgid ""
 "Failed to connect to the database '%1'. Please check the connection settings."
 msgstr ""
-"Ha fallado al conectarse a la base de datos «%1»:. Por favor, compruebe las "
-"preferencias de conexión."
+"No se ha podido conectar a la base de datos «%1». Compruebe las preferencias "
+"de conexión."
 
 #: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:325
 #: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:434
@@ -11575,36 +11575,36 @@ msgstr "Eliminar la conexión MQTT seleccionada"
 #: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:351
 #, kde-format
 msgid "Please set a password."
-msgstr "Por favor, establezca una contraseña."
+msgstr "Defina una contraseña."
 
 #: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:65
 #: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:331
 #, kde-format
 msgid "Please set a username."
-msgstr "Por favor, establezca un usuario."
+msgstr "Defina un nombre de usuario."
 
 #: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:68
 #: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:371
 #, kde-format
 msgid "Please set a client ID."
-msgstr "Por favor, establezca el ID del cliente"
+msgstr "Defina el ID del cliente."
 
 #: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:69
 #: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:171
 #, kde-format
 msgid "Please set a valid host name."
-msgstr "Por favor, establezca un nombre de servidor válido."
+msgstr "Defina un nombre de servidor válido."
 
 #: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:70
 #: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:134
 #, kde-format
 msgid "Please set a valid name."
-msgstr "Por favor, establezca un nombre válido."
+msgstr "Defina un nombre válido."
 
 #: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:159
 #, kde-format
 msgid "Please provide a unique name."
-msgstr "Por favor, proporcione un nombre único."
+msgstr "Proporcione un nombre único."
 
 #: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:189
 #: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:190
@@ -11617,7 +11617,7 @@ msgstr "El nombre de servidor y el puerto deben ser únicos."
 #: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:210
 #, kde-format
 msgid "Please set a valid port."
-msgstr "Por favor, establezca un puerto válido."
+msgstr "Defina un puerto válido."
 
 #: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:654
 #, kde-format
@@ -11679,12 +11679,12 @@ msgstr "Aviso"
 #: src/kdefrontend/datasources/MQTTSubscriptionWidget.cpp:856
 #, kde-format
 msgid "You already subscribed to a topic containing this one"
-msgstr "Usted ya está suscrito a un tema que contiene a este"
+msgstr "Ya está suscrito a un tema que contiene a este"
 
 #: src/kdefrontend/datasources/MQTTSubscriptionWidget.cpp:858
 #, kde-format
 msgid "You already subscribed to this topic"
-msgstr "Usted ya se ha suscrito a este tema"
+msgstr "Ya está suscrito a este tema"
 
 #. i18n: ectx: property (text), widget (QTreeWidget, twTopics)
 #: src/kdefrontend/datasources/MQTTSubscriptionWidget.cpp:1014
@@ -12094,7 +12094,7 @@ msgstr "%1 curvas xy: plantilla «%2» cargada"
 #: src/kdefrontend/dockwidgets/LiveDataDock.cpp:374
 #, kde-format
 msgid "Please choose another name, because this is already in use."
-msgstr "Por favor, elija otro nombre porque este ya está en uso."
+msgstr "Este nombre ya se está usando. Elija otro distinto."
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:50
 #, kde-format
@@ -13113,7 +13113,7 @@ msgid ""
 "cutoff value. Please fix this."
 msgstr ""
 "La amplitud de banda es <= 0 dado que el valor de corte inferior no es menor "
-"que el valor de corte superior. Por favor, corrija esto."
+"que el valor de corte superior. Corrija este problema."
 
 #: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:526
 #, kde-format
@@ -15510,7 +15510,7 @@ msgstr "Añadir diagramas de barras a"
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:437
 #, kde-format
 msgid "Plot Area - %1"
-msgstr "Área de gráficos - %1"
+msgstr "Área de gráfico - %1"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:406
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:432
@@ -15528,7 +15528,7 @@ msgstr "Trazar datos desde %1"
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:596
 #, kde-format
 msgid "Plot Area %1"
-msgstr "Área de gráficos %1"
+msgstr "Área de gráfico %1"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:673
 #, kde-format
@@ -21235,7 +21235,7 @@ msgstr "No se puede añadir la palabra clave obligatoria, ya están presentes"
 #: src/kdefrontend/widgets/FITSHeaderEditWidget.cpp:384
 #, kde-format
 msgid "Are you sure you want to delete the keyword '%1'?"
-msgstr "¿Está usted seguro de querer borrar la palabra clave «%1»?"
+msgstr "¿Seguro que quiere borrar la palabra clave «%1»?"
 
 #: src/kdefrontend/widgets/FITSHeaderEditWidget.cpp:380
 #: src/kdefrontend/widgets/FITSHeaderEditWidget.cpp:384
