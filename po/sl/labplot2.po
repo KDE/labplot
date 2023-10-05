@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-04 00:39+0000\n"
-"PO-Revision-Date: 2023-10-03 09:36+0200\n"
+"POT-Creation-Date: 2023-10-05 00:39+0000\n"
+"PO-Revision-Date: 2023-10-04 06:41+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -10411,7 +10411,7 @@ msgstr "Vnesena neveljavna vrednost. Veljavna vrednost: %1"
 msgid "Search/Filter text"
 msgstr "Besedilo za iskanje/filtriranje"
 
-#: src/commonfrontend/widgets/TreeViewComboBox.cpp:340
+#: src/commonfrontend/widgets/TreeViewComboBox.cpp:342
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:143
 #, kde-format
 msgid ""
@@ -11361,11 +11361,9 @@ msgid "Excel 2007+ (XSLX)"
 msgstr "Excel 2007+ (XSLX)"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:105
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Plot Spreadsheet Data"
+#, kde-format
 msgid "OpenDocument Spreadsheet (ODS)"
-msgstr "Izris podatkov preglednice"
+msgstr "Odpri dokument preglednice (ODS)"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:114
 #, kde-format
@@ -12125,10 +12123,9 @@ msgid "Values"
 msgstr "Vrednosti"
 
 #: src/kdefrontend/datasources/OdsOptionsWidget.cpp:19
-#, fuzzy, kde-format
-#| msgid "Datasets"
+#, kde-format
 msgid "Data sheets"
-msgstr "Množice podatkov"
+msgstr "Podatkovni listi"
 
 #: src/kdefrontend/datasources/ROOTOptionsWidget.cpp:24
 #, kde-format

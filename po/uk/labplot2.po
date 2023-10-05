@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-04 00:39+0000\n"
-"PO-Revision-Date: 2023-10-03 08:18+0300\n"
+"POT-Creation-Date: 2023-10-05 00:39+0000\n"
+"PO-Revision-Date: 2023-10-04 09:07+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
@@ -10441,7 +10441,7 @@ msgstr "Введено некоректне значення. Коректне �
 msgid "Search/Filter text"
 msgstr "Пошук або фільтрування тексту"
 
-#: src/commonfrontend/widgets/TreeViewComboBox.cpp:340
+#: src/commonfrontend/widgets/TreeViewComboBox.cpp:342
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:143
 #, kde-format
 msgid ""
@@ -11399,11 +11399,9 @@ msgid "Excel 2007+ (XSLX)"
 msgstr "Excel 2007+ (XSLX)"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:105
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Plot Spreadsheet Data"
+#, kde-format
 msgid "OpenDocument Spreadsheet (ODS)"
-msgstr "Креслення даних з електронної таблиці"
+msgstr "Електронна таблиця OpenDocument (ODS)"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:114
 #, kde-format
@@ -12167,10 +12165,9 @@ msgid "Values"
 msgstr "Значення"
 
 #: src/kdefrontend/datasources/OdsOptionsWidget.cpp:19
-#, fuzzy, kde-format
-#| msgid "Datasets"
+#, kde-format
 msgid "Data sheets"
-msgstr "Бази даних"
+msgstr "Таблиці даних"
 
 #: src/kdefrontend/datasources/ROOTOptionsWidget.cpp:24
 #, kde-format

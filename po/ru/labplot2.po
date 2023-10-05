@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-04 00:39+0000\n"
+"POT-Creation-Date: 2023-10-05 00:39+0000\n"
 "PO-Revision-Date: 2022-09-26 17:25+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -10803,7 +10803,7 @@ msgstr "недопустимое значение строки"
 msgid "Search/Filter text"
 msgstr "Текст для поиска/фильтра"
 
-#: src/commonfrontend/widgets/TreeViewComboBox.cpp:340
+#: src/commonfrontend/widgets/TreeViewComboBox.cpp:342
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:143
 #, kde-format
 msgid ""

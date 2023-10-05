@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-04 00:39+0000\n"
+"POT-Creation-Date: 2023-10-05 00:39+0000\n"
 "PO-Revision-Date: 2023-08-25 12:41+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
@@ -10325,7 +10325,7 @@ msgstr ""
 msgid "Search/Filter text"
 msgstr ""
 
-#: src/commonfrontend/widgets/TreeViewComboBox.cpp:340
+#: src/commonfrontend/widgets/TreeViewComboBox.cpp:342
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:143
 #, kde-format
 msgid ""

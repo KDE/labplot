@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-04 00:39+0000\n"
-"PO-Revision-Date: 2023-10-03 11:52+0200\n"
+"POT-Creation-Date: 2023-10-05 00:39+0000\n"
+"PO-Revision-Date: 2023-10-04 09:32+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -10462,7 +10462,7 @@ msgstr "S'ha introduït un valor no vàlid. Valor vàlid: %1"
 msgid "Search/Filter text"
 msgstr "Text que s'ha de buscar/filtrar"
 
-#: src/commonfrontend/widgets/TreeViewComboBox.cpp:340
+#: src/commonfrontend/widgets/TreeViewComboBox.cpp:342
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:143
 #, kde-format
 msgid ""
@@ -11418,11 +11418,9 @@ msgid "Excel 2007+ (XSLX)"
 msgstr "Excel 2007+ (XSLX)"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:105
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Plot Spreadsheet Data"
+#, kde-format
 msgid "OpenDocument Spreadsheet (ODS)"
-msgstr "Diagrama amb les dades del full de càlcul"
+msgstr "Full de càlcul OpenDocument (ODS)"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:114
 #, kde-format
@@ -12188,10 +12186,9 @@ msgid "Values"
 msgstr "Valors"
 
 #: src/kdefrontend/datasources/OdsOptionsWidget.cpp:19
-#, fuzzy, kde-format
-#| msgid "Datasets"
+#, kde-format
 msgid "Data sheets"
-msgstr "Conjunts de dades"
+msgstr "Fulls de dades"
 
 #: src/kdefrontend/datasources/ROOTOptionsWidget.cpp:24
 #, kde-format
