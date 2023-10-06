@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-10-05 00:39+0000\n"
-"PO-Revision-Date: 2023-10-02 22:10+0200\n"
+"PO-Revision-Date: 2023-10-05 20:15+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
@@ -9750,8 +9750,7 @@ msgid "Insert Multiple Columns Right"
 msgstr "Infoga flera kolumner till höger"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:315
-#, fuzzy, kde-format
-#| msgid "Remove Selected Column(s)"
+#, kde-format
 msgid "Delete Selected Column(s)"
 msgstr "Ta bort markerad(e) kolumn(er)"
 
@@ -9939,8 +9938,7 @@ msgid "Remo&ve Selected Row(s)"
 msgstr "Ta bort &markerad(e) rad(er)"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:464
-#, fuzzy, kde-format
-#| msgid "Remove Rows With Missing Values"
+#, kde-format
 msgid "Delete Rows With Missing Values"
 msgstr "Ta bort rader med saknade värden"
 
@@ -11302,11 +11300,9 @@ msgid "Excel 2007+ (XSLX)"
 msgstr "Excel 2007+ (XSLX)"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:105
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Plot Spreadsheet Data"
+#, kde-format
 msgid "OpenDocument Spreadsheet (ODS)"
-msgstr "Rita kalkylarkets data"
+msgstr "OpenDocument kalkylark (ODS)"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:114
 #, kde-format
@@ -12062,10 +12058,9 @@ msgid "Values"
 msgstr "Värden"
 
 #: src/kdefrontend/datasources/OdsOptionsWidget.cpp:19
-#, fuzzy, kde-format
-#| msgid "Datasets"
+#, kde-format
 msgid "Data sheets"
-msgstr "Datamängder"
+msgstr "Datablad"
 
 #: src/kdefrontend/datasources/ROOTOptionsWidget.cpp:24
 #, kde-format
@@ -15955,10 +15950,9 @@ msgid "No data selected to plot."
 msgstr "Ingen datamängd vald att rita upp."
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:1018
-#, fuzzy, kde-format
-#| msgid "An already existing plot has to be selected."
+#, kde-format
 msgid "An already existing plot area has to be selected."
-msgstr "Ett befintligt diagram måste markeras."
+msgstr "Ett befintligt diagramområde måste markeras."
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:1023
 #, kde-format
