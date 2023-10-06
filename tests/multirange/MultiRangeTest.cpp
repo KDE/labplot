@@ -964,6 +964,7 @@ void MultiRangeTest::mouseWheelXAxisApplyToAllX() {
 
 	QGraphicsSceneWheelEvent event;
 	event.setDelta(10);
+	event.setPos(QPointF(p1->dataRect().center().x(), p1->dataRect().center().y()));
 	p1->d_func()->wheelEvent(&event);
 
 	QCOMPARE(counter, 1);
@@ -1021,6 +1022,7 @@ void MultiRangeTest::mouseWheelTanCurveApplyToAllX() {
 
 	QGraphicsSceneWheelEvent event;
 	event.setDelta(10);
+	event.setPos(QPointF(p1->dataRect().center().x(), p1->dataRect().center().y()));
 	p1->d_func()->wheelEvent(&event);
 
 	QCOMPARE(counter, 1);
@@ -1071,6 +1073,7 @@ void MultiRangeTest::mouseWheelXAxisApplyToSelected() {
 
 	QGraphicsSceneWheelEvent event;
 	event.setDelta(10);
+	event.setPos(QPointF(p1->dataRect().center().x(), p1->dataRect().center().y()));
 	p1->d_func()->wheelEvent(&event);
 
 	QCOMPARE(counter, 1);

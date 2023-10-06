@@ -493,8 +493,8 @@ public:
 				//                                                              Expected new end:       7.5             10
 				const double pos = start + (end - start) * relZoomPosScene; // Number at pos scene     9               5             9
 				this->start() += (pos - start) * (1 - factor); // 4.5             2.5           0
-				this->end() -=
-					(end - pos) * (1 - factor); // 9.5             7.5          relZoomPos at number    0.9 (fine)      0.5 (fine)           (Number at pos scene - start) / (end - start)
+				this->end() -= (end - pos) * (1 - factor); // 9.5             7.5          relZoomPos at number    0.9 (fine)      0.5 (fine)           (Number
+														   // at pos scene - start) / (end - start)
 			}
 			break;
 		}
