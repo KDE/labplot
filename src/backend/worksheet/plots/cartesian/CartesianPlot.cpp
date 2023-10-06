@@ -2780,30 +2780,30 @@ void CartesianPlot::retransformScale(Dimension dim, int index) {
 
 // zoom
 
-void CartesianPlot::zoomIn(int xIndex, int yIndex) {
+void CartesianPlot::zoomIn(int xIndex, int yIndex, const QPointF& sceneRelPos) {
 	setUndoAware(false);
 	enableAutoScale(Dimension::X, xIndex, false);
 	enableAutoScale(Dimension::Y, yIndex, false);
 	setUndoAware(true);
 	setRangeDirty(Dimension::X, xIndex, true);
 	setRangeDirty(Dimension::Y, yIndex, true);
-	zoom(xIndex, Dimension::X, true); // zoom in x
-	zoom(yIndex, Dimension::Y, true); // zoom in y
+	zoom(xIndex, Dimension::X, true, sceneRelPos.x()); // zoom in x
+	zoom(yIndex, Dimension::Y, true, sceneRelPos.y()); // zoom in y
 
 	Q_D(CartesianPlot);
 	d->retransformScales(xIndex, yIndex);
 	WorksheetElementContainer::retransform();
 }
 
-void CartesianPlot::zoomOut(int xIndex, int yIndex) {
+void CartesianPlot::zoomOut(int xIndex, int yIndex, const QPointF& sceneRelPos) {
 	setUndoAware(false);
 	enableAutoScale(Dimension::X, xIndex, false);
 	enableAutoScale(Dimension::Y, yIndex, false);
 	setUndoAware(true);
 	setRangeDirty(Dimension::X, xIndex, true);
 	setRangeDirty(Dimension::Y, yIndex, true);
-	zoom(xIndex, Dimension::X, false); // zoom out x
-	zoom(yIndex, Dimension::Y, false); // zoom out y
+	zoom(xIndex, Dimension::X, false, sceneRelPos.x()); // zoom out x
+	zoom(yIndex, Dimension::Y, false, sceneRelPos.y()); // zoom out y
 
 	Q_D(CartesianPlot);
 	d->retransformScales(xIndex, yIndex);
@@ -2826,7 +2826,7 @@ void CartesianPlot::zoomOutY(int index) {
 	zoomInOut(index, Dimension::Y, false);
 }
 
-void CartesianPlot::zoomInOut(const int index, const Dimension dim, const bool zoomIn) {
+void CartesianPlot::zoomInOut(const int index, const Dimension dim, const bool zoomIn, const double relScenePosRange) {
 	Dimension dim_other = Dimension::Y;
 	if (dim == Dimension::Y)
 		dim_other = Dimension::X;
@@ -2835,7 +2835,7 @@ void CartesianPlot::zoomInOut(const int index, const Dimension dim, const bool z
 	enableAutoScale(dim, index, false);
 	setUndoAware(true);
 	setRangeDirty(dim_other, index, true);
-	zoom(index, dim, zoomIn);
+	zoom(index, dim, zoomIn, relScenePosRange);
 
 	bool retrans = false;
 	for (int i = 0; i < m_coordinateSystems.count(); i++) {
@@ -2867,7 +2867,7 @@ void CartesianPlot::zoomInOut(const int index, const Dimension dim, const bool z
  * @param x if set to \true the x-range is modified, the y-range for \c false
  * @param in the "zoom in" is performed if set to \c \true, "zoom out" for \c false
  */
-void CartesianPlot::zoom(int index, const Dimension dim, bool zoom_in) {
+void CartesianPlot::zoom(int index, const Dimension dim, bool zoom_in, const double relPosSceneRange) {
 	Q_D(CartesianPlot);
 
 	Range<double> range;
@@ -2877,7 +2877,7 @@ void CartesianPlot::zoom(int index, const Dimension dim, bool zoom_in) {
 			int idx = coordinateSystem(i)->index(dim);
 			if (zoomedIndices.contains(idx))
 				continue;
-			zoom(idx, dim, zoom_in);
+			zoom(idx, dim, zoom_in, relPosSceneRange);
 			zoomedIndices.append(idx);
 		}
 		return;
@@ -2887,66 +2887,7 @@ void CartesianPlot::zoom(int index, const Dimension dim, bool zoom_in) {
 	double factor = m_zoomFactor;
 	if (zoom_in)
 		factor = 1. / factor;
-
-	const double start{range.start()}, end{range.end()};
-	switch (range.scale()) {
-	case RangeT::Scale::Linear: {
-		range.extend(range.size() * (factor - 1.) / 2.);
-		break;
-	}
-	case RangeT::Scale::Log10: {
-		if (start == 0 || end / start <= 0)
-			break;
-		const double diff = log10(end / start) * (factor - 1.);
-		const double extend = pow(10, diff / 2.);
-		range.end() *= extend;
-		range.start() /= extend;
-		break;
-	}
-	case RangeT::Scale::Log2: {
-		if (start == 0 || end / start <= 0)
-			break;
-		const double diff = log2(end / start) * (factor - 1.);
-		const double extend = exp2(diff / 2.);
-		range.end() *= extend;
-		range.start() /= extend;
-		break;
-	}
-	case RangeT::Scale::Ln: {
-		if (start == 0 || end / start <= 0)
-			break;
-		const double diff = log(end / start) * (factor - 1.);
-		const double extend = exp(diff / 2.);
-		range.end() *= extend;
-		range.start() /= extend;
-		break;
-	}
-	case RangeT::Scale::Sqrt: {
-		if (start < 0 || end < 0)
-			break;
-		const double diff = (sqrt(end) - sqrt(start)) * (factor - 1.);
-		range.extend(diff * diff / 4.);
-		break;
-	}
-	case RangeT::Scale::Square: {
-		const double diff = (end * end - start * start) * (factor - 1.);
-		range.extend(sqrt(std::abs(diff / 2.)));
-		break;
-	}
-	case RangeT::Scale::Inverse: {
-		const double diff = (1. / start - 1. / end) * (factor - 1.);
-		range.extend(1. / std::abs(diff / 2.));
-		break;
-	}
-	}
-
-	// make nice again
-	if (d->niceExtend) {
-		if (zoom_in)
-			range.niceShrink();
-		else
-			range.niceExtend();
-	}
+	range.zoom(factor, d->niceExtend, relPosSceneRange);
 
 	if (range.finite())
 		d->setRange(dim, index, range);
@@ -3080,9 +3021,9 @@ void CartesianPlot::cursor() {
 	d->retransformScales(-1, -1); // TODO: needed to retransform all scales?
 }
 
-void CartesianPlot::wheelEvent(int delta, int xIndex, int yIndex, bool considerDimension, Dimension dim) {
+void CartesianPlot::wheelEvent(const QPointF& sceneRelPos, int delta, int xIndex, int yIndex, bool considerDimension, Dimension dim) {
 	Q_D(CartesianPlot);
-	d->wheelEvent(delta, xIndex, yIndex, considerDimension, dim);
+	d->wheelEvent(sceneRelPos, delta, xIndex, yIndex, considerDimension, dim);
 }
 
 void CartesianPlot::mousePressZoomSelectionMode(QPointF logicPos, int cSystemIndex) {
@@ -4110,6 +4051,20 @@ void CartesianPlotPrivate::wheelEvent(QGraphicsSceneWheelEvent* event) {
 		yIndex = coordinateSystem(cSystemIndex)->index(Dimension::Y);
 	}
 
+	const auto pos = event->pos();
+	const auto posLogical = coordinateSystem(0)->mapLogicalToScene({pos});
+	const double xSceneRelPos = (pos.x() - dataRect.left()) / dataRect.width();
+	// if (xSceneRelPos < 0)
+	// 	xSceneRelPos = 0;
+	// if (xSceneRelPos > 1)
+	//	xSceneRelPos = 1;
+	const double ySceneRelPos = (dataRect.bottom() - pos.y()) / dataRect.height();
+	// if (ySceneRelPos < 0)
+	//	ySceneRelPos = 0;
+	// if (ySceneRelPos > 1)
+	//	ySceneRelPos = 1;
+	const QPointF sceneRelPos(xSceneRelPos, ySceneRelPos);
+
 	bool considerDimension = false;
 	Dimension dim = Dimension::X;
 	if (w && w->type() == AspectType::Axis) {
@@ -4119,27 +4074,27 @@ void CartesianPlotPrivate::wheelEvent(QGraphicsSceneWheelEvent* event) {
 			dim = Dimension::Y;
 	}
 
-	emit q->wheelEventSignal(event->delta(), xIndex, yIndex, considerDimension, dim);
+	emit q->wheelEventSignal(sceneRelPos, event->delta(), xIndex, yIndex, considerDimension, dim);
 }
 
-void CartesianPlotPrivate::wheelEvent(int delta, int xIndex, int yIndex, bool considerDimension, Dimension dim) {
+void CartesianPlotPrivate::wheelEvent(const QPointF& sceneRelPos, int delta, int xIndex, int yIndex, bool considerDimension, Dimension dim) {
 	if (considerDimension) {
 		// Only one dimension
 		switch (dim) {
 		case Dimension::X:
-			q->zoomInOut(xIndex, dim, delta > 0);
+			q->zoomInOut(xIndex, dim, delta > 0, sceneRelPos.x());
 			break;
 		case Dimension::Y:
-			q->zoomInOut(yIndex, dim, delta > 0);
+			q->zoomInOut(yIndex, dim, delta > 0, sceneRelPos.y());
 			break;
 		}
 		return;
 	}
 
 	if (delta > 0)
-		q->zoomIn(xIndex, yIndex);
+		q->zoomIn(xIndex, yIndex, sceneRelPos);
 	else
-		q->zoomOut(xIndex, yIndex);
+		q->zoomOut(xIndex, yIndex, sceneRelPos);
 }
 
 void CartesianPlotPrivate::keyPressEvent(QKeyEvent* event) {

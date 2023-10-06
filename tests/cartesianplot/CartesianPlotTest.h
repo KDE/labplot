@@ -51,5 +51,11 @@ private Q_SLOTS:
 	void invalidcSystem();
 
 	void autoScaleFitCurveCalculation();
+
+	void wheelEventCenterAxes();
+	void wheelEventNotCenter();
+
+	void wheelEventOutsideTopLeft();
+	void wheelEventOutsideBottomRight();
 };
 #endif

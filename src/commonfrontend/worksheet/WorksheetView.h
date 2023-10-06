@@ -283,8 +283,9 @@ Q_SIGNALS:
 	void statusInfo(const QString&);
 	void propertiesExplorerRequested();
 
-	friend RetransformTest;
+	friend class RetransformTest;
 	friend class MultiRangeTest;
+	friend class CartesianPlotTest;
 };
 
 #endif

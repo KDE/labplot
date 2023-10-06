@@ -473,6 +473,86 @@ public:
 	}
 	// TODO: touches(), merge(), subtract(), split(), etc. (see Interval)
 
+	/*!
+	 * TODO: implement zooming depending on the relZoomPosScene also for non linear scales!
+	 */
+	void zoom(const double factor, const bool nice, const double relZoomPosScene = 0.5) {
+		const double start{this->start()}, end{this->end()};
+		switch (scale()) {
+		case RangeT::Scale::Linear: {
+			if (relZoomPosScene == 0.5)
+				extend(size() * (factor - 1.) / 2.);
+			else {
+				// zoom and shift in one step
+				//                                                              Example:		        Example 1      Example 2        Example 3
+				//                                                              Start                   0               0             4.5
+				//                                                              End                     10              10            9.5
+				//                                                              factor:                 0.5             0.5           2
+				//                                                              relZoomPosScene:        0.9             0.5           0.9
+				//                                                              Expected new start:     2.5             0
+				//                                                              Expected new end:       7.5             10
+				const double pos = start + (end - start) * relZoomPosScene; // Number at pos scene     9               5             9
+				this->start() += (pos - start) * (1 - factor); // 4.5             2.5           0
+				this->end() -=
+					(end - pos) * (1 - factor); // 9.5             7.5          relZoomPos at number    0.9 (fine)      0.5 (fine)           (Number at pos scene - start) / (end - start)
+			}
+			break;
+		}
+		case RangeT::Scale::Log10: {
+			if (start == 0 || end / start <= 0)
+				break;
+			const double diff = log10(end / start) * (factor - 1.);
+			const double extend = pow(10, diff / 2.);
+			this->end() *= extend;
+			this->start() /= extend;
+			break;
+		}
+		case RangeT::Scale::Log2: {
+			if (start == 0 || end / start <= 0)
+				break;
+			const double diff = log2(end / start) * (factor - 1.);
+			const double extend = exp2(diff / 2.);
+			this->end() *= extend;
+			this->start() /= extend;
+			break;
+		}
+		case RangeT::Scale::Ln: {
+			if (start == 0 || end / start <= 0)
+				break;
+			const double diff = log(end / start) * (factor - 1.);
+			const double extend = exp(diff / 2.);
+			this->end() *= extend;
+			this->start() /= extend;
+			break;
+		}
+		case RangeT::Scale::Sqrt: {
+			if (start < 0 || end < 0)
+				break;
+			const double diff = (sqrt(end) - sqrt(start)) * (factor - 1.);
+			extend(diff * diff / 4.);
+			break;
+		}
+		case RangeT::Scale::Square: {
+			const double diff = (end * end - start * start) * (factor - 1.);
+			extend(sqrt(std::abs(diff / 2.)));
+			break;
+		}
+		case RangeT::Scale::Inverse: {
+			const double diff = (1. / start - 1. / end) * (factor - 1.);
+			extend(1. / std::abs(diff / 2.));
+			break;
+		}
+		}
+
+		// make nice again
+		if (nice) {
+			if (factor < 1) // zoomIn
+				niceShrink();
+			else
+				niceExtend();
+		}
+	}
+
 private:
 	T m_start{0}; // start value
 	T m_end{1}; // end value

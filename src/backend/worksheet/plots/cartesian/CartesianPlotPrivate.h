@@ -33,7 +33,7 @@ public:
 	void rangeChanged();
 	void niceExtendChanged();
 	void rangeFormatChanged(const Dimension dim);
-	void wheelEvent(int delta, int xIndex, int yIndex, bool considerDimension, Dimension dim);
+	void wheelEvent(const QPointF& sceneRelPos, int delta, int xIndex, int yIndex, bool considerDimension, Dimension dim);
 	void mouseMoveZoomSelectionMode(QPointF logicalPos, int cSystemIndex);
 	void mouseMoveSelectionMode(QPointF logicalStart, QPointF logicalEnd);
 	void mouseMoveCursorMode(int cursorNumber, QPointF logicalPos);
@@ -334,6 +334,7 @@ private:
 	QStaticText m_cursor1Text{QStringLiteral("2")};
 
 	friend class MultiRangeTest;
+	friend class CartesianPlotTest;
 };
 
 #endif

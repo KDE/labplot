@@ -950,13 +950,17 @@ void MultiRangeTest::mouseWheelXAxisApplyToAllX() {
 	view->m_selectedElement = horAxisP1;
 
 	int counter = 0;
-	connect(p1, &CartesianPlot::wheelEventSignal, [&counter](int delta, int xIndex, int /*yIndex*/, bool considerDimension, Dimension dim) {
-		QCOMPARE(delta, 10);
-		QCOMPARE(xIndex, 0); // x Range of horAxisP1
-		QCOMPARE(considerDimension, true);
-		QCOMPARE(dim, Dimension::X);
-		counter++;
-	});
+	connect(p1,
+			&CartesianPlot::wheelEventSignal,
+			[&counter](const QPointF& relScenePos, int delta, int xIndex, int /*yIndex*/, bool considerDimension, Dimension dim) {
+				QCOMPARE(delta, 10);
+				QCOMPARE(xIndex, 0); // x Range of horAxisP1
+				QCOMPARE(relScenePos.x(), 0.5);
+				QCOMPARE(relScenePos.y(), 0.5);
+				QCOMPARE(considerDimension, true);
+				QCOMPARE(dim, Dimension::X);
+				counter++;
+			});
 
 	QGraphicsSceneWheelEvent event;
 	event.setDelta(10);
@@ -1002,14 +1006,18 @@ void MultiRangeTest::mouseWheelTanCurveApplyToAllX() {
 	view->m_selectedElement = tanCurve;
 
 	int counter = 0;
-	connect(p1, &CartesianPlot::wheelEventSignal, [&counter](int delta, int xIndex, int yIndex, bool considerDimension, Dimension dim) {
-		Q_UNUSED(yIndex);
-		Q_UNUSED(dim);
-		QCOMPARE(delta, 10);
-		QCOMPARE(xIndex, 0); // tan curve has xIndex 0
-		QCOMPARE(considerDimension, false);
-		counter++;
-	});
+	connect(p1,
+			&CartesianPlot::wheelEventSignal,
+			[&counter](const QPointF& relScenePos, int delta, int xIndex, int yIndex, bool considerDimension, Dimension dim) {
+				Q_UNUSED(yIndex);
+				Q_UNUSED(dim);
+				QCOMPARE(relScenePos.x(), 0.5);
+				QCOMPARE(relScenePos.y(), 0.5);
+				QCOMPARE(delta, 10);
+				QCOMPARE(xIndex, 0); // tan curve has xIndex 0
+				QCOMPARE(considerDimension, false);
+				counter++;
+			});
 
 	QGraphicsSceneWheelEvent event;
 	event.setDelta(10);
@@ -1050,13 +1058,16 @@ void MultiRangeTest::mouseWheelXAxisApplyToSelected() {
 	view->m_selectedElement = horAxisP1;
 
 	int counter = 0;
-	connect(p1, &CartesianPlot::wheelEventSignal, [&counter](int delta, int xIndex, int /*yIndex*/, bool considerDimension, Dimension dim) {
-		QCOMPARE(delta, 10);
-		QCOMPARE(xIndex, 0); // x Range of horAxisP1
-		QCOMPARE(considerDimension, true);
-		QCOMPARE(dim, Dimension::X);
-		counter++;
-	});
+	connect(p1,
+			&CartesianPlot::wheelEventSignal,
+			[&counter](const QPointF& sceneRelPos, int delta, int xIndex, int /*yIndex*/, bool considerDimension, Dimension dim) {
+				Q_UNUSED(sceneRelPos);
+				QCOMPARE(delta, 10);
+				QCOMPARE(xIndex, 0); // x Range of horAxisP1
+				QCOMPARE(considerDimension, true);
+				QCOMPARE(dim, Dimension::X);
+				counter++;
+			});
 
 	QGraphicsSceneWheelEvent event;
 	event.setDelta(10);

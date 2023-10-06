@@ -29,6 +29,11 @@ private Q_SLOTS:
 	void testNiceExtendLn();
 	void testTickCountLn();
 
+	void zoomInOutIncreasingLinearRangeCenter();
+	void zoomInOutDecreasingLinearRangeCenter();
+	void zoomInOutIncreasingLinearRangeNotCenter();
+	void zoomInOutDecreasingLinearRangeNotCenter();
+
 	//	void testPerformance();
 };
 
