@@ -480,7 +480,7 @@ public:
 		const double start{this->start()}, end{this->end()};
 		switch (scale()) {
 		case RangeT::Scale::Linear: {
-			if (relZoomPosScene == 0.5)
+			if (relZoomPosScene == 0.5 || nice)
 				extend(size() * (factor - 1.) / 2.);
 			else {
 				// zoom and shift in one step
