@@ -926,7 +926,8 @@ void PlotDataDialog::setAxesTitles(CartesianPlot* plot, const QString& name) con
 
 		for (auto* axis : axes) {
 			if (axis->orientation() != orientation) {
-				axis->setMajorTicksNumber(count + 1);
+				axis->setMajorTicksType(Axis::TicksType::Spacing);
+				axis->setMajorTicksSpacing(1.);
 				axis->setMajorTickStartOffset(0.5);
 				axis->setMinorTicksNumber(0);
 			}
