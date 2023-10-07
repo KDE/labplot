@@ -81,6 +81,7 @@ private Q_SLOTS:
 
 	// datetime data
 	void testDateTime00();
+	void testDateTime01();
 	void testDateTimeHex();
 
 	// matrix import
