@@ -174,42 +174,46 @@ bool FunctionValuesDialog::validVariableName(QLineEdit* le) {
 }
 
 void FunctionValuesDialog::checkValues() {
-	// initialize valid button with true value
-	bool isValid = true;
-	if (!ui.teEquation->isValid()) { // check whether the formula syntax is correct
-		DEBUG(Q_FUNC_INFO << ", syntax incorrect")
-		isValid = false;
+	if (ui.teEquation->toPlainText().simplified().isEmpty()) {
+		m_okButton->setToolTip(i18n("Empty formula expression"));
+		m_okButton->setEnabled(false);
+		return;
 	}
 
-	// check whether for the variables where a name was provided also a column was selected
-	for (int i = 0; i < m_variableDataColumns.size() && isValid == true; ++i) {
-		auto varName = m_variableLineEdits.at(i)->text();
-		DEBUG(Q_FUNC_INFO << ", variable " << i + 1)
+	// check whether the formula syntax is correct
+	if (!ui.teEquation->isValid()) {
+		m_okButton->setToolTip(i18n("Incorrect formula syntax"));
+		m_okButton->setEnabled(false);
+		return;
+	}
+
+	// check the variables
+	for (int i = 0; i < m_variableDataColumns.size(); ++i) {
+		const auto& varName = m_variableLineEdits.at(i)->text();
+
 		// ignore empty
 		if (varName.isEmpty())
 			continue;
+
+		// checke whether a valid column was provided for the variable
 		auto* cb = m_variableDataColumns.at(i);
 		auto* aspect = static_cast<AbstractAspect*>(cb->currentModelIndex().internalPointer());
-		if (!aspect || !validVariableName(m_variableLineEdits.at(i))) {
-			isValid = false;
-			break;
+		if (!aspect) {
+			m_okButton->setToolTip(i18n("Select a valid column"));
+			m_okButton->setEnabled(false);
+			return;
 		}
 
-		// TODO: why is the column check disabled?
-		/*		Column* column = dynamic_cast<Column*>(aspect);
-				DEBUG("row count = " << (static_cast<QVector<double>* >(column->data()))->size());
-				if (!column || column->rowCount() < 1) {
-					m_okButton->setEnabled(false);
-					//Warning: x column is empty
-					return;
-				}
-		*/
+		// check whether the variable name is correct
+		if (!validVariableName(m_variableLineEdits.at(i))) {
+			m_okButton->setToolTip(i18n("Variable name can contain letters, digits and '_' only and should start with a letter"));
+			m_okButton->setEnabled(false);
+			return;
+		}
+
 	}
-	if (isValid)
-		m_okButton->setToolTip(i18n("Generate function values"));
-	else
-		m_okButton->setToolTip(i18n("Variable name can contain letters, digits and '_' only and should start with a letter"));
-	m_okButton->setEnabled(isValid);
+	m_okButton->setToolTip(i18n("Generate function values"));
+	m_okButton->setEnabled(true);
 }
 
 void FunctionValuesDialog::showConstants() {
