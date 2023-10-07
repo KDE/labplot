@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-10-05 00:39+0000\n"
-"PO-Revision-Date: 2023-08-28 23:58+0200\n"
+"PO-Revision-Date: 2023-10-01 16:21+0200\n"
 "Last-Translator: Stefan Gerlach <stefan.gerlach@uni.kn>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
@@ -1046,39 +1046,39 @@ msgid "There is no download URL present in the metadata file!"
 msgstr "Es gibt keine Dowload-URL in der Metadatendatei!"
 
 #: src/backend/datasources/DatasetHandler.cpp:192
-#, fuzzy, kde-format
-#| msgid "Failed to connect to the database '%1'."
+#, kde-format
 msgid "Failed to download the dataset"
-msgstr "Verbindung zu Datenbank '%1' fehlgeschlagen."
+msgstr "Download des Datensatzes fehlgeschlagen"
 
 #: src/backend/datasources/DatasetHandler.cpp:193
-#, fuzzy, kde-format
-#| msgid "Failed to connect to the database '%1'."
+#, kde-format
 msgid ""
 "Failed to download the dataset from %1.\n"
 "%2."
-msgstr "Verbindung zu Datenbank '%1' fehlgeschlagen."
+msgstr ""
+"Download des Datensatzes von %1 fehlgeschlagen.\n"
+"%2."
 
 #: src/backend/datasources/DatasetHandler.cpp:228
 #: src/backend/datasources/DatasetHandler.cpp:252
-#, fuzzy, kde-format
-#| msgid "Failed to read image data"
+#, kde-format
 msgid "Failed to save the dataset"
-msgstr "Einlesen der Bilddaten nicht möglich"
+msgstr "Speichern des Datensatzes nicht möglich"
 
 #: src/backend/datasources/DatasetHandler.cpp:229
-#, fuzzy, kde-format
-#| msgid "Failed to create table in the SQLite database %1."
+#, kde-format
 msgid "Failed to create the directory %1 to save the dataset."
-msgstr "Erzeugung einer Tabelle in der SQLite-Datenbank '%1' fehlgeschlagen."
+msgstr ""
+"Anlegen des Verzeichnisses %1 zum Speichern des Datensatzes fehlgeschlagen."
 
 #: src/backend/datasources/DatasetHandler.cpp:252
-#, fuzzy, kde-format
-#| msgid "Couldn't open the file '%1' for writing."
+#, kde-format
 msgid ""
 "Couldn't open the file %1 for writing.\n"
 "%2"
-msgstr "Die Datei '%1' kann nicht zum Schreiben geöffnet werden."
+msgstr ""
+"Die Datei %1 kann nicht zum Schreiben geöffnet werden.\n"
+"%2"
 
 #: src/backend/datasources/filters/AbstractFileFilter.cpp:224
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:379
@@ -3032,10 +3032,9 @@ msgid "Comparison Functions"
 msgstr "Vergleich-Funktionen"
 
 #: src/backend/gsl/functions.cpp:56
-#, fuzzy, kde-format
-#| msgid "Logistic Function"
+#, kde-format
 msgid "Logical Functions"
-msgstr "Logistische Funktion"
+msgstr "Logische Funktionen"
 
 #: src/backend/gsl/functions.cpp:58
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:28
@@ -3426,34 +3425,32 @@ msgstr "gleich"
 #: src/backend/gsl/functions.cpp:239
 #, kde-format
 msgid "equal with epsilon"
-msgstr ""
+msgstr "gleich mit epsilon"
 
 #: src/backend/gsl/functions.cpp:240
 #, kde-format
 msgid "between with boundaries included"
-msgstr ""
+msgstr "Dazwischen mit Grenzen"
 
 #: src/backend/gsl/functions.cpp:241
 #, kde-format
 msgid "outside with boundaries included"
-msgstr ""
+msgstr "Außerhalb mit Grenzen"
 
 #: src/backend/gsl/functions.cpp:242
 #, kde-format
 msgid "between with boundaries excluded"
-msgstr ""
+msgstr "Dazwischen ohne Grenzen"
 
 #: src/backend/gsl/functions.cpp:243
-#, fuzzy, kde-format
-#| msgid "Not inside of the bounding rect"
+#, kde-format
 msgid "outside with boundaries excluded"
-msgstr "Nicht innerhalb des Grenzbereichs"
+msgstr "Außerhalb ohne Genzen"
 
 #: src/backend/gsl/functions.cpp:246
-#, fuzzy, kde-format
-#| msgid "if(condition, ifTrue, ifFalse)"
+#, kde-format
 msgid "if(condition; ifTrue; ifFalse)"
-msgstr "if(Bedingung,Wenn Wahr, Wenn Falsch)"
+msgstr "if(Bedingung,WennWahr, WennFalsch)"
 
 #. i18n: ectx: property (text), widget (QLabel, lAnd)
 #. i18n: ectx: property (text), widget (QLabel, lAndDateTime)
@@ -5361,33 +5358,29 @@ msgid "x"
 msgstr "x"
 
 #: src/backend/gsl/functions.cpp:1191
-#, fuzzy, kde-format
-#| msgid "min."
+#, kde-format
 msgid "min"
-msgstr "Min."
+msgstr "min"
 
 #: src/backend/gsl/functions.cpp:1193
-#, fuzzy, kde-format
-#| msgid "max."
+#, kde-format
 msgid "max"
-msgstr "max."
+msgstr "max"
 
 #: src/backend/gsl/functions.cpp:1201
-#, fuzzy, kde-format
-#| msgid "1"
+#, kde-format
 msgid "v1"
-msgstr "1"
+msgstr "v1"
 
 #: src/backend/gsl/functions.cpp:1203
-#, fuzzy, kde-format
-#| msgid "2"
+#, kde-format
 msgid "v2"
-msgstr "2"
+msgstr "v2"
 
 #: src/backend/gsl/functions.cpp:1205
 #, kde-format
 msgid "ep"
-msgstr ""
+msgstr "ep"
 
 #: src/backend/lib/Range.h:49 src/backend/nsl/nsl_interp.c:14
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:455
@@ -6507,13 +6500,12 @@ msgstr "Tricube"
 #: src/backend/spreadsheet/Spreadsheet.cpp:293
 #, kde-format
 msgid "%1: remove rows with missing values"
-msgstr ""
+msgstr "%1: Reihen mit fehlenden Werten entfernen"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:311
-#, fuzzy, kde-format
-#| msgid "%1: fill matrix with function values"
+#, kde-format
 msgid "%1: mask rows with missing values"
-msgstr "%1: Matrix mit Funktionswerten füllen"
+msgstr " %1: Reihen mit fehlenden Werten maskieren"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:423
 #, kde-format
@@ -8178,22 +8170,19 @@ msgstr ""
 "der Minimalwert sein."
 
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:255
-#, fuzzy, kde-format
-#| msgid "%1: set range type"
+#, kde-format
 msgid "%1: set kernel type"
-msgstr "%1: Typ des Bereichs festlegen"
+msgstr "%1: Kerneltyp festlegen"
 
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:262
-#, fuzzy, kde-format
-#| msgid "%1: set bin width"
+#, kde-format
 msgid "%1: set bandwidth type"
-msgstr "%1: Binbreite festlegen"
+msgstr "%1: Typ der Bandbreite festlegen"
 
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:269
-#, fuzzy, kde-format
-#| msgid "%1: set bin width"
+#, kde-format
 msgid "%1: set bandwidth"
-msgstr "%1: Binbreite festlegen"
+msgstr "%1: Bandbreite festlegen"
 
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:278
 #, kde-format
@@ -9815,16 +9804,12 @@ msgid "Divide"
 msgstr "Dividieren"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:359
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Drop Values"
+#, kde-format
 msgid "Drop Values"
 msgstr "Werte überspringen"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:360
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Mask Values"
+#, kde-format
 msgid "Mask Values"
 msgstr "Werte maskieren"
 
@@ -9916,40 +9901,34 @@ msgid "Rescale to [a, b]"
 msgstr "Skaliere auf [a, b]"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:443
-#, fuzzy, kde-format
-#| msgid "&Sort"
+#, kde-format
 msgid "&Sort..."
-msgstr "&Sortieren"
+msgstr "&Sortieren..."
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:444
-#, fuzzy, kde-format
-#| msgid "Insert Multiple Columns Left"
+#, kde-format
 msgid "Sort multiple columns together"
-msgstr "Mehrere Spalten links einfügen"
+msgstr "Mehrere Spalten zusammen sortieren"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:445
-#, fuzzy, kde-format
-#| msgid "&Ascending"
+#, kde-format
 msgid "Sort &Ascending"
-msgstr "&Aufsteigend"
+msgstr "&Aufsteigend Sortieren"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:446
-#, fuzzy, kde-format
-#| msgid "Flatten selected columns relative to:"
+#, kde-format
 msgid "Sort the selected columns separately in ascending order"
-msgstr "Ausgewählte Spalten abgleichen relativ zu:"
+msgstr "Ausgewählte Spalten separat in aufsteigender Reihenfolge sortieren"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:447
-#, fuzzy, kde-format
-#| msgid "&Descending"
+#, kde-format
 msgid "Sort &Descending"
-msgstr "Absteigen&d"
+msgstr "Absteigen&d Sortieren"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:448
-#, fuzzy, kde-format
-#| msgid "Flatten selected columns relative to:"
+#, kde-format
 msgid "Sort the selected columns separately in descending order"
-msgstr "Ausgewählte Spalten abgleichen relativ zu:"
+msgstr "Ausgewählte Spalten separat in absteigender Reihenfolge sortieren"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:452
 #, kde-format
@@ -9977,10 +9956,9 @@ msgid "Insert Multiple Rows Below"
 msgstr "Mehrere Zeilen unterhalb einfügen"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:462
-#, fuzzy, kde-format
-#| msgid "Remo&ve Selected Rows"
+#, kde-format
 msgid "Remo&ve Selected Row(s)"
-msgstr "Ausgewählte Zeilen entfernen"
+msgstr "Ausgewählte Zeile(n) entfernen"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:464
 #, fuzzy, kde-format
@@ -9991,7 +9969,7 @@ msgstr "%1: Matrix mit Funktionswerten füllen"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:465
 #, kde-format
 msgid "Mask Rows With Missing Values"
-msgstr ""
+msgstr "Maskiere Reihen mit fehlenden Werten"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:466
 #, kde-format
@@ -10272,79 +10250,69 @@ msgid "%1: clear selected cells"
 msgstr "%1: Ausgewählte Zellen löschen"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3643
-#, fuzzy, kde-format
-#| msgid "Arrow"
+#, kde-format
 msgid "row"
 msgid_plural "rows"
-msgstr[0] "Pfeil"
-msgstr[1] "Pfeil"
+msgstr[0] "Reihe"
+msgstr[1] "Reihen"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3644
-#, fuzzy, kde-format
-#| msgid "Column"
+#, kde-format
 msgid "column"
 msgid_plural "columns"
 msgstr[0] "Spalte"
-msgstr[1] "Spalte"
+msgstr[1] "Spalten"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3645
 #, kde-format
 msgid "cells"
-msgstr ""
+msgstr "Zellen"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3646
-#, fuzzy, kde-format
-#| msgid "Mask values"
+#, kde-format
 msgid "masked value"
-msgstr "Werte maskieren"
+msgstr "Maskierte Werte"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3646
-#, fuzzy, kde-format
-#| msgid "Mask values"
+#, kde-format
 msgid "masked values"
-msgstr "Werte maskieren"
+msgstr "Maskierte Werte"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3647
-#, fuzzy, kde-format
-#| msgid "bin values"
+#, kde-format
 msgid "missing value"
-msgstr "Binwerte"
+msgstr "Fehlender Wert"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3647
-#, fuzzy, kde-format
-#| msgid "bin values"
+#, kde-format
 msgid "missing values"
-msgstr "Binwerte"
+msgstr "Fehlende Werte"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3648
-#, fuzzy, kde-format
-#| msgid " ( "
+#, kde-format
 msgid " , "
-msgstr " ( "
+msgstr " , "
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3648
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3649
-#, fuzzy, kde-format
-#| msgid "1"
+#, kde-format
 msgid "%1"
-msgstr "1"
+msgstr "%1"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3649
-#, fuzzy, kde-format
-#| msgctxt "postfix for XML warning messages"
-#| msgid " "
+#, kde-format
 msgid ", "
-msgstr " "
+msgstr ", "
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3653
 #, kde-format
 msgid "Selected: %1 %2 , %3 %4%5 %6 %7 %8"
-msgstr ""
+msgstr "Ausgewählt: %1 %2, %3 %4%5 %6 %7 %8"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3664
 #, kde-format
 msgid "Selected: %1 %2%3 %4 %5 %6"
-msgstr ""
+msgstr "Ausgewählt: %1 %2%3 %4 %5 %6"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3737
 #, kde-format
@@ -13011,7 +12979,7 @@ msgstr "%1: Kurve \"%2\" entfernt"
 #: src/kdefrontend/dockwidgets/KDEPlotDock.cpp:214
 #, kde-format
 msgid "Silverman"
-msgstr ""
+msgstr "Silverman"
 
 #: src/kdefrontend/dockwidgets/KDEPlotDock.cpp:413
 #: src/kdefrontend/dockwidgets/QQPlotDock.cpp:319
@@ -13768,11 +13736,10 @@ msgid "Properties: Box Plot"
 msgstr "Eigenschaften: Boxplot"
 
 #: src/kdefrontend/GuiObserver.cpp:377
-#, fuzzy, kde-format
-#| msgid "KDE Plot"
+#, kde-format
 msgctxt "@title:window"
 msgid "KDE Plot"
-msgstr "KDE-Plot"
+msgstr "KDE Plot"
 
 #: src/kdefrontend/GuiObserver.cpp:382
 #, kde-format
@@ -14772,16 +14739,14 @@ msgid "Open Project"
 msgstr "Projekt öffnen"
 
 #: src/kdefrontend/MainWin.cpp:1517
-#, fuzzy, kde-format
-#| msgid "The provided file doesn't exist."
+#, kde-format
 msgid "The project file %1 doesn't exist."
-msgstr "Die angegebene Datei existiert nicht."
+msgstr "Die Projektdatei %1 existiert nicht."
 
 #: src/kdefrontend/MainWin.cpp:1522
-#, fuzzy, kde-format
-#| msgid "Couldn't save the file '%1'."
+#, kde-format
 msgid "Couldn't read the project file %1."
-msgstr "Die Datei '%1' konnte nicht gespeichert werden."
+msgstr "Die Projektdatei '%1' konnte nicht gelesen werden."
 
 #: src/kdefrontend/MainWin.cpp:1536
 #, kde-format
@@ -15845,15 +15810,12 @@ msgstr ""
 "Sie bitte einen anderen Namen."
 
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:167
-#, fuzzy, kde-format
-#| msgid ""
-#| "Provided variable name is already reserved for a name of a constant. "
-#| "Please use another name."
+#, kde-format
 msgid ""
 "Provided variable name starts with a digit or contains special character."
 msgstr ""
-"Der angegebene Variablenname ist bereits als Konstante reserviert. Verwenden "
-"Sie bitte einen anderen Namen."
+"Der angegebene Variablenname beginnt mit einer Ziffer oder enthält spezielle "
+"Zeichen."
 
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:211
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:258
@@ -15862,6 +15824,8 @@ msgid ""
 "Variable name can contain letters, digits and '_' only and should start with "
 "a letter"
 msgstr ""
+"Variablennamen können nur Buchstaben, Ziffern und '_' enthalten and sollten "
+"mit einem Buchstaben beginnen"
 
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:302
 #, kde-format
@@ -16295,19 +16259,16 @@ msgid "Fixed-length negative lookbehind"
 msgstr "Negative Rückwärtsreferenz mit fester Länge"
 
 #: src/kdefrontend/spreadsheet/SortDialog.cpp:33
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Sort Columns"
+#, kde-format
 msgctxt "@title:window"
 msgid "Sort All Columns"
-msgstr "Spalten sortieren"
+msgstr "Alle Spalten sortieren"
 
 #: src/kdefrontend/spreadsheet/SortDialog.cpp:35
-#, fuzzy, kde-format
-#| msgid "&Selected Columns"
+#, kde-format
 msgctxt "@title:window"
 msgid "Sort Selected Columns"
-msgstr "Ausgewählte &Spalten"
+msgstr "Ausgewählte Spalten Sortieren"
 
 #: src/kdefrontend/spreadsheet/SortDialog.cpp:39
 #, kde-format
@@ -19481,17 +19442,15 @@ msgstr "Verbindungslinie"
 
 #. i18n: ectx: property (text), widget (QLabel, lKernelType)
 #: src/kdefrontend/ui/dockwidgets/kdeplotdock.ui:43
-#, fuzzy, kde-format
-#| msgid "Kernel: "
+#, kde-format
 msgid "Kernel:"
-msgstr "Kernel: "
+msgstr "Kernel:"
 
 #. i18n: ectx: property (text), widget (QLabel, lBandwidthType)
 #: src/kdefrontend/ui/dockwidgets/kdeplotdock.ui:79
-#, fuzzy, kde-format
-#| msgid "Bin Width:"
+#, kde-format
 msgid "Bandwidth:"
-msgstr "Binbreite:"
+msgstr "Bandbreite:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPlotRange)
 #: src/kdefrontend/ui/dockwidgets/kdeplotdock.ui:180
@@ -19503,10 +19462,9 @@ msgstr "Plotbereich:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabKDE)
 #: src/kdefrontend/ui/dockwidgets/kdeplotdock.ui:204
-#, fuzzy, kde-format
-#| msgid "Animations"
+#, kde-format
 msgid "Estimation"
-msgstr "Animationen"
+msgstr "Schätzung"
 
 #. i18n: ectx: property (text), widget (QLabel, lErrorBarsCapSize)
 #: src/kdefrontend/ui/dockwidgets/linewidget.ui:150
@@ -21582,10 +21540,9 @@ msgstr "Umschalten zur erweiterten Suchen-und-Ersetzen-Leiste"
 
 #. i18n: ectx: property (text), widget (QLabel, lColumns)
 #: src/kdefrontend/ui/spreadsheet/sortdialogwidget.ui:17
-#, fuzzy, kde-format
-#| msgid "Sort"
+#, kde-format
 msgid "Sort by"
-msgstr "Sortieren"
+msgstr "Sortieren nach"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbOrdering)
 #: src/kdefrontend/ui/spreadsheet/sortdialogwidget.ui:64
