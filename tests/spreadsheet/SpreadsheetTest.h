@@ -82,8 +82,8 @@ private Q_SLOTS:
 	void testSearchExtended03();
 	void testSearchFindAll();
 
-	void testSearchReplace00();
-	void testSearchReplace01();
+	void testSearchReplaceNumeric();
+	void testSearchReplaceText();
 	void testSearchReplaceAll();
 
 	// size changes
