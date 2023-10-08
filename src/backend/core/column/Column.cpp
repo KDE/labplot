@@ -29,6 +29,7 @@
 
 #include <KLocalizedString>
 
+#include <QActionGroup>
 #include <QClipboard>
 #include <QFont>
 #include <QFontMetrics>

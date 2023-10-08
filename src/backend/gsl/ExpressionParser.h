@@ -15,8 +15,6 @@
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
 #include <QVector>
 
-class QStringList;
-
 class ExpressionParser {
 public:
 	static ExpressionParser* getInstance();

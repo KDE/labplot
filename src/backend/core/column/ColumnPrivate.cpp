@@ -22,6 +22,8 @@
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_statistics.h>
 
+#include <QRegularExpression>
+
 #include <array>
 #include <unordered_map>
 

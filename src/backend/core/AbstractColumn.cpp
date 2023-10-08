@@ -485,7 +485,7 @@ QVector<Interval<int>> AbstractColumn::maskedIntervals() const {
  * \brief Clear all masking information
  */
 void AbstractColumn::clearMasks() {
-	exec(new AbstractColumnClearMasksCmd(d), "maskingAboutToChange", "maskingChanged", Q_ARG(const AbstractColumn*, this));
+	exec(new AbstractColumnClearMasksCmd(d), "maskingAboutToChange", "maskingChanged", QArgument<const AbstractColumn* >("const AbstractColumn*", this));
 }
 
 /**
@@ -495,7 +495,7 @@ void AbstractColumn::clearMasks() {
  * \param mask true: mask, false: unmask
  */
 void AbstractColumn::setMasked(const Interval<int>& i, bool mask) {
-	exec(new AbstractColumnSetMaskedCmd(d, i, mask), "maskingAboutToChange", "maskingChanged", Q_ARG(const AbstractColumn*, this));
+	exec(new AbstractColumnSetMaskedCmd(d, i, mask), "maskingAboutToChange", "maskingChanged", QArgument<const AbstractColumn* >("const AbstractColumn*", this));
 }
 
 /**
