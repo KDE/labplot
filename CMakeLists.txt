@@ -9,9 +9,22 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-# see also -DQT_DISABLE_DEPRECATED_BEFORE in src/CMakeLists.txt
-set(QT_MIN_VERSION "5.10.0")
-set(KF_MIN_VERSION "5.16.0")
+# TODO: support both Qt6 and Qt5
+find_package(QT NAMES Qt6 COMPONENTS Core Gui REQUIRED)
+MESSAGE (STATUS "Found Qt version ${QT_VERSION_MAJOR}")
+#set(QT_VERSION_MAJOR "6")
+set(QT_MAJOR_VERSION ${QT_VERSION_MAJOR})
+if (QT_MAJOR_VERSION EQUAL 6)
+    set(QT_MIN_VERSION "6.2.2")		# openSUSE 15.4 version
+    set(KF_MIN_VERSION "5.240.0")
+    set(KF_MAJOR_VERSION "6")
+else()
+    set(KF_MAJOR_VERSION "5")
+    # see also -DQT_DISABLE_DEPRECATED_BEFORE in src/CMakeLists.txt
+    set(QT_MIN_VERSION "5.10.0")
+    set(KF_MIN_VERSION "5.16.0")
+endif()
+
 set(APPLE_SUPPRESS_X11_WARNING ON)
 
 find_package(ECM ${KF_MIN_VERSION} REQUIRED NO_MODULE)
@@ -31,17 +44,6 @@ include(FeatureSummary)
 # build type: "release", "debug", "debugfull"
 string (TOLOWER "${CMAKE_BUILD_TYPE}" CMAKE_BUILD_TYPE)
 
-# TODO: support both Qt6 and Qt5
-set(QT_VERSION_MAJOR "6")
-set(QT_MAJOR_VERSION ${QT_VERSION_MAJOR})
-if (QT_MAJOR_VERSION STREQUAL "6")
-	set(QT_MIN_VERSION "6.2.2")		# openSUSE 15.4 version
-    set(KF_MIN_VERSION "5.240.0")
-    set(KF_MAJOR_VERSION "6")
-else()
-    set(KF_MAJOR_VERSION "5")
-endif()
-
 find_package(Qt${QT_MAJOR_VERSION} ${QT_MIN_VERSION} NO_MODULE REQUIRED COMPONENTS
 	Concurrent
 	Gui
@@ -55,7 +57,7 @@ find_package(Qt${QT_MAJOR_VERSION} ${QT_MIN_VERSION} NO_MODULE REQUIRED COMPONEN
 	Test
 )
 
-# building QADS or Xlsx requires Qt5GuiPrivate (QADS is required, Xlsx is optional)
+# building QADS or Xlsx requires Qt${QT_VERSION_MAJOR}GuiPrivate (QADS is required, Xlsx is optional)
 find_package(Qt${QT_MAJOR_VERSION}Gui ${QT_MIN_VERSION} CONFIG REQUIRED Private)
 
 find_package(KF${KF_MAJOR_VERSION} ${KF_MIN_VERSION} REQUIRED COMPONENTS
@@ -100,8 +102,12 @@ ELSE ()
 	MESSAGE (STATUS "KF SyntaxHighlighting not found")
 ENDIF ()
 
-find_package(KUserFeedback)
-IF (KUserFeedback_FOUND)
+if (QT_MAJOR_VERSION EQUAL 6)
+	find_package(KUserFeedbackQt6)
+else ()
+	find_package(KUserFeedback)
+endif ()
+IF (KUserFeedback_FOUND OR KUserFeedbackQt6_FOUND)
 	MESSAGE (STATUS "Found KUserFeedback")
 	add_definitions (-DHAVE_KUSERFEEDBACK)
 ELSE ()
@@ -251,7 +257,12 @@ add_definitions (-DGIT_COMMIT=\"${GIT_COMMIT}\")
 
 
 ### Options ######################################
-option(ENABLE_CANTOR "Build with Cantor support" ON)
+# Cantor does not support Qt6 yet
+if (QT_MAJOR_VERSION STREQUAL "6")
+	option(ENABLE_CANTOR "Build with Cantor support" OFF)
+else()
+	option(ENABLE_CANTOR "Build with Cantor support" ON)
+endif()
 option(ENABLE_FFTW "Build with FFTW support" ON)
 option(ENABLE_HDF5 "Build with HDF5 support" ON)
 option(ENABLE_NETCDF "Build with NetCDF support" ON)
@@ -288,7 +299,7 @@ ENDIF ()
 ### GSL (required) ###############################
 FIND_PACKAGE(GSL REQUIRED)
 
-FIND_PACKAGE(Poppler "0.62.0" COMPONENTS Qt5)
+FIND_PACKAGE(Poppler "0.62.0" COMPONENTS Qt${QT_MAJOR_VERSION})
 IF (Poppler_FOUND)
 	include_directories(${Poppler_INCLUDE_DIRS})
 	# MESSAGE (STATUS "Poppler libraries: ${Poppler_LIBRARIES}")
@@ -403,11 +414,11 @@ ENDIF ()
 IF (ENABLE_MQTT)
 # ATTENTION: unit test uses qWaitFor() which needs Qt >= 5.10
 # avoid warning for the moment using QUIET
-	find_package(Qt5Mqtt ${QT_MIN_VERSION} NO_MODULE)
-	SET_PACKAGE_PROPERTIES (Qt5Mqtt PROPERTIES
+	find_package(Qt${QT_VERSION_MAJOR}Mqtt ${QT_MIN_VERSION} NO_MODULE)
+	SET_PACKAGE_PROPERTIES (Qt${QT_VERSION_MAJOR}Mqtt PROPERTIES
 		DESCRIPTION "Qt Module to implement MQTT protocol version 3.1 and 3.1.1"
 		URL "https://github.com/qt/qtmqtt")
-	IF (Qt5Mqtt_FOUND)
+	IF (Qt${QT_VERSION_MAJOR}Mqtt_FOUND)
 		MESSAGE (STATUS "Found MQTT Library")
 		add_definitions (-DHAVE_MQTT)
 	ELSE ()
@@ -419,19 +430,19 @@ ENDIF ()
 
 ### QtSerialPort (optional) ###############################
 IF (ENABLE_QTSERIALPORT)
-	find_package(Qt5SerialPort ${QT_MIN_VERSION} NO_MODULE)
-	SET_PACKAGE_PROPERTIES (Qt5SerialPort PROPERTIES
+	find_package(Qt${QT_MAJOR_VERSION}SerialPort ${QT_MIN_VERSION} NO_MODULE)
+	SET_PACKAGE_PROPERTIES (Qt{QT_MAJOR_VERSION}SerialPort PROPERTIES
 		DESCRIPTION "Qt Serial Port library"
 		URL "https://doc.qt.io/qt-5/qtserialport-index.html"
 		PURPOSE "Support basic functionality of serial ports.")
-	IF (Qt5SerialPort_FOUND)
-		MESSAGE (STATUS "Found Qt5SerialPort Library")
+	IF (Qt${QT_MAJOR_VERSION}SerialPort_FOUND)
+		MESSAGE (STATUS "Found Qt${QT_MAJOR_VERSION}SerialPort Library")
 		add_definitions (-DHAVE_QTSERIALPORT)
 	ELSE ()
-		MESSAGE (STATUS "Qt5SerialPort Library NOT FOUND")
+		MESSAGE (STATUS "Qt${QT_MAJOR_VERSION}SerialPort Library NOT FOUND")
 	ENDIF ()
 ELSE ()
-	MESSAGE (STATUS "Qt5SerialPort Library DISABLED")
+	MESSAGE (STATUS "Qt${QT_MAJOR_VERSION}SerialPort Library DISABLED")
 ENDIF ()
 
 ### FITS (optional) ###############################
@@ -525,13 +536,13 @@ IF (ENABLE_XLSX)
 		MESSAGE (STATUS "QXlsx library FOUND.")
 		add_definitions (-DHAVE_QXLSX)
         ELSE ()
-		if (TARGET Qt5::GuiPrivate)
+		if (TARGET Qt${QT_VERSION_MAJOR}::GuiPrivate)
 			set(BUILD_QXLSX TRUE)
 
 			MESSAGE (STATUS "QXlsx library NOT FOUND. Building own version.")
 			add_definitions (-DHAVE_QXLSX)
 		else ()
-			MESSAGE (STATUS "Missing Qt5::GuiPrivate to build own QXlsx.")
+			MESSAGE (STATUS "Missing Qt${QT_VERSION_MAJOR}::GuiPrivate to build own QXlsx.")
 		endif ()
         ENDIF ()
 ELSE ()

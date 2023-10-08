@@ -9,7 +9,7 @@ endif()
 
 set(INSTALL_EXAMPLEDIR "${INSTALL_EXAMPLESDIR}/plugins/designer")
 
-find_package(Qt5 REQUIRED COMPONENTS Core Gui UiPlugin Widgets)
+find_package(Qt${QT_MAJOR_VERSION} REQUIRED COMPONENTS Core Gui UiPlugin Widgets)
 
 qt_add_plugin(NumberSpinBoxPlugin)
 target_sources(NumberSpinBoxPlugin PRIVATE

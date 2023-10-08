@@ -13,10 +13,10 @@ find_package(qt${QT_VERSION_MAJOR}advanceddocking CONFIG)
 if (NOT qt${QT_VERSION_MAJOR}advanceddocking_FOUND)
     option(LOCAL_QT_ADVANCED_DOCK_DOWNLOAD "Use local build of qt advanced dock downloaded directly from the git repository" OFF)
     option(LOCAL_QT_ADVANCED_DOCK_COPY "Use local build of qt advanced dock copied into the Qt-Advanced-Docking-System subfolder" ON)
-    if (TARGET Qt5::GuiPrivate)
+    if (TARGET Qt${QT_VERSION_MAJOR}::GuiPrivate)
         MESSAGE (STATUS "Building local version of Qt-Advanced-Docking-System.")
     else ()
-	MESSAGE (FATAL_ERROR "Missing Qt5::GuiPrivate to build local version of Qt-Advanced-Docking-System.")
+	MESSAGE (FATAL_ERROR "Missing Qt${QT_VERSION_MAJOR}::GuiPrivate to build local version of Qt-Advanced-Docking-System.")
     endif ()
 endif ()
 
@@ -541,8 +541,8 @@ target_include_directories(labplot2lib PUBLIC ${COMMONFRONTEND_DIR}/widgets) # s
 
 # add system QADS include path
 if (qt${QT_VERSION_MAJOR}advanceddocking_FOUND)
-	get_target_property(QADS_INCLUDES ads::qt5advanceddocking INTERFACE_INCLUDE_DIRECTORIES)
-	get_target_property(QADS_LIBRARIES ads::qt5advanceddocking INTERFACE_LINK_LIBRARIES)
+	get_target_property(QADS_INCLUDES ads::qt${QT_VERSION_MAJOR}advanceddocking INTERFACE_INCLUDE_DIRECTORIES)
+	get_target_property(QADS_LIBRARIES ads::qt${QT_VERSION_MAJOR}advanceddocking INTERFACE_LINK_LIBRARIES)
 	MESSAGE (STATUS "QADS Found LINK_LIBRARIES: ${QADS_LIBRARIES} INCLUDES: ${QADS_INCLUDES}")
 	target_include_directories( labplot2backendlib PRIVATE ${QADS_INCLUDES} )
 	target_include_directories( labplot2lib PRIVATE ${QADS_INCLUDES} )
