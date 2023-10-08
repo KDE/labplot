@@ -1015,17 +1015,18 @@ void SpreadsheetView::fillColumnContextMenu(QMenu* menu, Column* column) {
 	if (!m_selectionMenu)
 		initMenus();
 
-	QAction* firstAction = menu->actions().at(1);
-	// TODO: add these menus and synchronize the behavior with the context menu creation
-	// on the spreadsheet header in eventFilter(),
-	// 		menu->insertMenu(firstAction, m_plotDataMenu);
-	// 		menu->insertMenu(firstAction, m_analyzePlotMenu);
-	// 		menu->insertSeparator(firstAction);
-
 	const bool hasValues = column->hasValues();
 	const bool numeric = column->isNumeric();
 	const bool datetime = (column->columnMode() == AbstractColumn::ColumnMode::DateTime);
 	const bool text = (column->columnMode() == AbstractColumn::ColumnMode::Text);
+	const bool plottable = column->isPlottable();
+
+	QAction* firstAction = menu->actions().at(1);
+	menu->insertMenu(firstAction, m_plotDataMenu);
+	menu->insertMenu(firstAction, m_analyzePlotMenu);
+	menu->insertSeparator(firstAction);
+	m_plotDataMenu->setEnabled(plottable && hasValues);
+	m_analyzePlotMenu->setEnabled(numeric && hasValues);
 
 	if (numeric)
 		menu->insertMenu(firstAction, m_columnSetAsMenu);
