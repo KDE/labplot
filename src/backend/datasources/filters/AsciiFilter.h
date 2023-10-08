@@ -14,7 +14,6 @@
 #include "backend/datasources/filters/AbstractFileFilter.h"
 
 class Spreadsheet;
-class QStringList;
 class QIODevice;
 class AsciiFilterPrivate;
 class QAbstractSocket;

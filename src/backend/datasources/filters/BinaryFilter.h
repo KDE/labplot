@@ -14,7 +14,6 @@
 #include <limits>
 
 class BinaryFilterPrivate;
-class QStringList;
 class QIODevice;
 
 class BinaryFilter : public AbstractFileFilter {

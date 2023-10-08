@@ -11,7 +11,6 @@
 
 #include "backend/datasources/filters/AbstractFileFilter.h"
 
-class QStringList;
 class QTreeWidgetItem;
 class HDF5FilterPrivate;
 

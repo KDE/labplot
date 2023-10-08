@@ -16,7 +16,6 @@
 
 #include <QJsonValue>
 
-class QStringList;
 class QIODevice;
 class QJsonDocument;
 class QJsonModel;

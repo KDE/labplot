@@ -409,7 +409,7 @@ public:
 
 protected:
 	void info(const QString& text) {
-		emit statusInfo(text);
+		Q_EMIT statusInfo(text);
 	}
 
 	// serialization/deserialization

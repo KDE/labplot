@@ -12,7 +12,6 @@
 #include "backend/core/AbstractColumn.h"
 #include "backend/datasources/filters/AbstractFileFilter.h"
 
-class QStringList;
 class SpiceFilterPrivate;
 
 // NgSpice/LtSpice Filter

@@ -16,7 +16,6 @@
 #include <QTableWidget>
 #include <QTreeWidget>
 
-class QStringList;
 class QXmlStreamReader;
 class FITSFilterPrivate;
 class FITSHeaderEditWidget;
