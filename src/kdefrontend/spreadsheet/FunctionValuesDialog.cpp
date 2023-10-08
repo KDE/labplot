@@ -210,8 +210,8 @@ void FunctionValuesDialog::checkValues() {
 			m_okButton->setEnabled(false);
 			return;
 		}
-
 	}
+
 	m_okButton->setToolTip(i18n("Generate function values"));
 	m_okButton->setEnabled(true);
 }
