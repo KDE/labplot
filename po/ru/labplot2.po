@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-05 00:39+0000\n"
+"POT-Creation-Date: 2023-10-08 00:39+0000\n"
 "PO-Revision-Date: 2022-09-26 17:25+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -7741,7 +7741,7 @@ msgstr "информация недоступна"
 # BUGME: please split strings --aspotashev
 #. i18n: ectx: attribute (title), widget (QWidget, tabTitle)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:106
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4975
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4930
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:462
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:543
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:459
@@ -8144,7 +8144,7 @@ msgid "%1: load default theme"
 msgstr "%1: загрузка темы по умолчанию"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1639
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5285
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5240
 #: src/backend/worksheet/Worksheet.cpp:770
 #, kde-format
 msgid "%1: set theme"
@@ -8289,24 +8289,24 @@ msgstr "%1: добавка кривой фильтра Фурье"
 msgid "Text Label"
 msgstr "Текстовая подпись"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3720
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3661
 #, kde-format
 msgid "Not inside of the bounding rect"
 msgstr "За пределами ограничивающего прямоугольника"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3944
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3965
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3885
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3906
 #, kde-format
 msgid "from x=%1 to x=%2"
 msgstr "от x=%1 до x=%2"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3952
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3978
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3893
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3919
 #, kde-format
 msgid "from y=%1 to y=%2"
 msgstr "от y=%1 до y=%2"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3997
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3938
 #, kde-format
 msgid "x=%1"
 msgstr "x=%1"
@@ -16613,23 +16613,23 @@ msgstr "Теоретические квантили"
 msgid "Sample Quantiles"
 msgstr "Квантили выборки"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:1013
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:1014
 #, kde-format
 msgid "No data selected to plot."
 msgstr "Не выбраны данные для построения графика."
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:1018
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:1019
 #, fuzzy, kde-format
 #| msgid "An already existing plot has to be selected."
 msgid "An already existing plot area has to be selected."
 msgstr "Необходимо выбрать существующий график."
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:1023
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:1024
 #, kde-format
 msgid "An already existing worksheet has to be selected."
 msgstr "Необходимо выбрать существующий лист."
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:1029
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:1030
 #, kde-format
 msgid "Close the dialog and plot the data."
 msgstr "Закрыть диалоговое окно и построить график данных."

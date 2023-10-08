@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-05 00:39+0000\n"
+"POT-Creation-Date: 2023-10-08 00:39+0000\n"
 "PO-Revision-Date: 2023-10-05 20:15+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -7409,7 +7409,7 @@ msgstr "ingen information tillgänglig"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTitle)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:106
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4975
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4930
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:462
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:543
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:459
@@ -7797,7 +7797,7 @@ msgid "%1: load default theme"
 msgstr "%1: läs in standardtema"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1639
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5285
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5240
 #: src/backend/worksheet/Worksheet.cpp:770
 #, kde-format
 msgid "%1: set theme"
@@ -7931,24 +7931,24 @@ msgstr "%1: lägg till fourierfilterkurva"
 msgid "Text Label"
 msgstr "Textbeteckning"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3720
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3661
 #, kde-format
 msgid "Not inside of the bounding rect"
 msgstr "Inte inne i omgivande rektangel"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3944
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3965
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3885
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3906
 #, kde-format
 msgid "from x=%1 to x=%2"
 msgstr "från x=%1 till x=%2"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3952
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3978
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3893
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3919
 #, kde-format
 msgid "from y=%1 to y=%2"
 msgstr "från y=%1 till y=%2"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3997
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3938
 #, kde-format
 msgid "x=%1"
 msgstr "x=%1"
@@ -15944,22 +15944,22 @@ msgstr "Teoretiska kvantiler"
 msgid "Sample Quantiles"
 msgstr "Samplingskvantiler"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:1013
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:1014
 #, kde-format
 msgid "No data selected to plot."
 msgstr "Ingen datamängd vald att rita upp."
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:1018
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:1019
 #, kde-format
 msgid "An already existing plot area has to be selected."
 msgstr "Ett befintligt diagramområde måste markeras."
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:1023
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:1024
 #, kde-format
 msgid "An already existing worksheet has to be selected."
 msgstr "Ett befintligt arbetsblad måste markeras."
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:1029
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:1030
 #, kde-format
 msgid "Close the dialog and plot the data."
 msgstr "Stäng dialogrutan och rita upp data."

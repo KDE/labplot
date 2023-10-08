@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-05 00:39+0000\n"
+"POT-Creation-Date: 2023-10-08 00:39+0000\n"
 "PO-Revision-Date: 2023-06-04 23:26+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -7852,7 +7852,7 @@ msgstr "ei tietoa saatavilla"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTitle)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:106
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4975
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4930
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:462
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:543
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:459
@@ -8275,7 +8275,7 @@ msgid "%1: load default theme"
 msgstr "%1: lisää %2."
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1639
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5285
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5240
 #: src/backend/worksheet/Worksheet.cpp:770
 #, fuzzy, kde-format
 #| msgid "%1: set page size"
@@ -8433,24 +8433,24 @@ msgstr "%1: lisää %2."
 msgid "Text Label"
 msgstr "Tekstikenttä"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3720
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3661
 #, kde-format
 msgid "Not inside of the bounding rect"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3944
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3965
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3885
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3906
 #, kde-format
 msgid "from x=%1 to x=%2"
 msgstr "x=%1…x=%2"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3952
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3978
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3893
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3919
 #, kde-format
 msgid "from y=%1 to y=%2"
 msgstr "y=%1…y=%2"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3997
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3938
 #, kde-format
 msgid "x=%1"
 msgstr "x=%1"
@@ -16810,23 +16810,23 @@ msgstr "Piirto&järjestys"
 msgid "Sample Quantiles"
 msgstr "Näytekoko:"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:1013
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:1014
 #, fuzzy, kde-format
 #| msgid "&Normalize Selection"
 msgid "No data selected to plot."
 msgstr "N&ormalisoi valinta"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:1018
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:1019
 #, kde-format
 msgid "An already existing plot area has to be selected."
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:1023
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:1024
 #, kde-format
 msgid "An already existing worksheet has to be selected."
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:1029
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:1030
 #, kde-format
 msgid "Close the dialog and plot the data."
 msgstr ""
