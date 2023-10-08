@@ -904,7 +904,7 @@ void CDockAreaWidget::saveState(QXmlStreamWriter& s) const
 	s.writeStartElement("Area");
 	s.writeAttribute("Tabs", QString::number(d->ContentsLayout->count()));
 	auto CurrentDockWidget = currentDockWidget();
-	QString Name = CurrentDockWidget ? CurrentDockWidget->objectName() : "";
+	QString Name = CurrentDockWidget ? CurrentDockWidget->objectName() : QLatin1String("");
 	s.writeAttribute("Current", Name);
 
 	if (d->AllowedAreas != DefaultAllowedAreas)
@@ -939,7 +939,7 @@ bool CDockAreaWidget::restoreState(CDockingStateReader& s, CDockAreaWidget*& Cre
 	}
 #endif
 
-	QString CurrentDockWidget = s.attributes().value("Current").toString();
+	QString CurrentDockWidget = s.attributes().value(QLatin1String("Current")).toString();
     ADS_PRINT("Restore NodeDockArea Tabs: " << Tabs << " Current: "
             << CurrentDockWidget);
 
@@ -948,13 +948,13 @@ bool CDockAreaWidget::restoreState(CDockingStateReader& s, CDockAreaWidget*& Cre
 	if (!Testing)
 	{
 		DockArea = new CDockAreaWidget(DockManager, Container);
-		const auto AllowedAreasAttribute = s.attributes().value("AllowedAreas");
+		const auto AllowedAreasAttribute = s.attributes().value(QLatin1String("AllowedAreas"));
 		if (!AllowedAreasAttribute.isEmpty())
 		{
 			DockArea->setAllowedAreas((DockWidgetArea)AllowedAreasAttribute.toInt(nullptr, 16));
 		}
 
-		const auto FlagsAttribute = s.attributes().value("Flags");
+		const auto FlagsAttribute = s.attributes().value(QLatin1String("Flags"));
 		if (!FlagsAttribute.isEmpty())
 		{
 			DockArea->setDockAreaFlags((CDockAreaWidget::DockAreaFlags)FlagsAttribute.toInt(nullptr, 16));
@@ -968,13 +968,13 @@ bool CDockAreaWidget::restoreState(CDockingStateReader& s, CDockAreaWidget*& Cre
 			continue;
 		}
 
-		auto ObjectName = s.attributes().value("Name");
+		auto ObjectName = s.attributes().value(QLatin1String("Name"));
 		if (ObjectName.isEmpty())
 		{
 			return false;
 		}
 
-		bool Closed = s.attributes().value("Closed").toInt(&Ok);
+		bool Closed = s.attributes().value(QLatin1String("Closed")).toInt(&Ok);
 		if (!Ok)
 		{
 			return false;

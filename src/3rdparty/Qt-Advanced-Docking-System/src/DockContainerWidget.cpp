@@ -887,7 +887,7 @@ void DockContainerWidgetPrivate::saveChildNodesState(QXmlStreamWriter& s, QWidge
 			s.writeStartElement("Sizes");
 			for (auto Size : Splitter->sizes())
 			{
-				s.writeCharacters(QString::number(Size) + " ");
+				s.writeCharacters(QString::number(Size) + QLatin1String(" "));
 			}
 			s.writeEndElement();
 		s.writeEndElement();
@@ -923,17 +923,17 @@ bool DockContainerWidgetPrivate::restoreSplitter(CDockingStateReader& s,
 	QWidget*& CreatedWidget, bool Testing)
 {
 	bool Ok;
-	QString OrientationStr = s.attributes().value("Orientation").toString();
+	QString OrientationStr = s.attributes().value(QLatin1String("Orientation")).toString();
 
 	// Check if the orientation string is right
-	if (!OrientationStr.startsWith("|") && !OrientationStr.startsWith("-"))
+	if (!OrientationStr.startsWith(QLatin1String("|")) && !OrientationStr.startsWith(QLatin1String("-")))
 	{
 		return false;
 	}
 
 	// The "|" shall indicate a vertical splitter handle which in turn means
 	// a Horizontal orientation of the splitter layout.
-	bool HorizontalSplitter = OrientationStr.startsWith("|");
+	bool HorizontalSplitter = OrientationStr.startsWith(QLatin1String("|"));
 	// In version 0 we had a small bug. The "|" indicated a vertical orientation,
 	// but this is wrong, because only the splitter handle is vertical, the
 	// layout of the splitter is a horizontal layout. We fix this here
@@ -943,7 +943,7 @@ bool DockContainerWidgetPrivate::restoreSplitter(CDockingStateReader& s,
 	}
 
 	int Orientation = HorizontalSplitter ? Qt::Horizontal : Qt::Vertical;
-	int WidgetCount = s.attributes().value("Count").toInt(&Ok);
+	int WidgetCount = s.attributes().value(QLatin1String("Count")).toInt(&Ok);
 	if (!Ok)
 	{
 		return false;
@@ -1062,7 +1062,7 @@ bool DockContainerWidgetPrivate::restoreSideBar(CDockingStateReader& s,
 	}
 
 	bool Ok;
-	auto Area = (ads::SideBarLocation)s.attributes().value("Area").toInt(&Ok);
+	auto Area = (ads::SideBarLocation)s.attributes().value(QLatin1String("Area")).toInt(&Ok);
 	if (!Ok)
 	{
 		return false;
@@ -1070,25 +1070,25 @@ bool DockContainerWidgetPrivate::restoreSideBar(CDockingStateReader& s,
 
 	while (s.readNextStartElement())
 	{
-		if (s.name() != QLatin1String("Widget"))
+		if (s.name() != QLatin1String(QLatin1String("Widget")))
 		{
 			continue;
 		}
 
-		auto Name = s.attributes().value("Name");
+		auto Name = s.attributes().value(QLatin1String("Name"));
 		if (Name.isEmpty())
 		{
 			return false;
 		}
 
 		bool Ok;
-		bool Closed = s.attributes().value("Closed").toInt(&Ok);
+		bool Closed = s.attributes().value(QLatin1String("Closed")).toInt(&Ok);
 		if (!Ok)
 		{
 			return false;
 		}
 
-		int Size = s.attributes().value("Size").toInt(&Ok);
+		int Size = s.attributes().value(QLatin1String("Size")).toInt(&Ok);
 		if (!Ok)
 		{
 			return false;
@@ -1792,7 +1792,7 @@ void CDockContainerWidget::saveState(QXmlStreamWriter& s) const
 //============================================================================
 bool CDockContainerWidget::restoreState(CDockingStateReader& s, bool Testing)
 {
-	bool IsFloating = s.attributes().value("Floating").toInt();
+	bool IsFloating = s.attributes().value(QLatin1String("Floating")).toInt();
     ADS_PRINT("Restore CDockContainerWidget Floating" << IsFloating);
 
 	QWidget* NewRootSplitter {};

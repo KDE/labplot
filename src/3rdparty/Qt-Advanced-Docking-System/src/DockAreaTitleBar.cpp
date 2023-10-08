@@ -234,7 +234,7 @@ void DockAreaTitleBarPrivate::createButtons()
 //============================================================================
 void DockAreaTitleBarPrivate::createAutoHideTitleLabel()
 {
-	AutoHideTitleLabel = new CElidingLabel("");
+	AutoHideTitleLabel = new CElidingLabel(QLatin1String(""));
 	AutoHideTitleLabel->setObjectName("autoHideTitleLabel");
 	Layout->addWidget(AutoHideTitleLabel);
 }
@@ -816,7 +816,7 @@ bool CTitleBarButton::event(QEvent *ev)
 CSpacerWidget::CSpacerWidget(QWidget* Parent /*= 0*/) : Super(Parent)
 {
 	setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-	setStyleSheet("border: none; background: none;");
+	setStyleSheet(QLatin1String("border: none; background: none;"));
 }
 
 } // namespace ads
