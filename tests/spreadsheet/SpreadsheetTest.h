@@ -80,8 +80,10 @@ private Q_SLOTS:
 	void testSearchExtended01();
 	void testSearchExtended02();
 	void testSearchExtended03();
-
 	void testSearchFindAll();
+
+	void testSearchReplace00();
+	void testSearchReplace01();
 	void testSearchReplaceAll();
 
 	// size changes
