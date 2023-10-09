@@ -259,7 +259,7 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
 			: StandardSetterCmd<class_name::Private, value_type>(target, &class_name::Private::field_name, newValue, description, parent) {                    \
 		}                                                                                                                                                      \
 		virtual void finalize() override {                                                                                                                     \
-			emit m_target->q->field_name##Changed(m_target->*m_field);                                                                                         \
+			Q_EMIT m_target->q->field_name##Changed(m_target->*m_field);                                                                                         \
 		}                                                                                                                                                      \
 	};
 
@@ -272,7 +272,7 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
 		}                                                                                                                                                      \
 		virtual void finalize() override {                                                                                                                     \
 			m_target->finalize_method();                                                                                                                       \
-			emit m_target->q->field_name##Changed(m_target->*m_field);                                                                                         \
+			Q_EMIT m_target->q->field_name##Changed(m_target->*m_field);                                                                                         \
 		}                                                                                                                                                      \
 	};
 
@@ -285,8 +285,8 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
 		}                                                                                                                                                      \
 		virtual void finalize() override {                                                                                                                     \
 			m_target->finalize_method();                                                                                                                       \
-			emit m_target->q->field_name##Changed(m_target->*m_field);                                                                                         \
-			emit m_target->q->custom_signal();                                                                                                                 \
+			Q_EMIT m_target->q->field_name##Changed(m_target->*m_field);                                                                                         \
+			Q_EMIT m_target->q->custom_signal();                                                                                                                 \
 		}                                                                                                                                                      \
 	};
 
@@ -299,10 +299,10 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
 		}                                                                                                                                                      \
 		virtual void finalize() override {                                                                                                                     \
 			m_target->finalize_method();                                                                                                                       \
-			emit m_target->q->field_name##Changed(m_target->*m_field);                                                                                         \
+			Q_EMIT m_target->q->field_name##Changed(m_target->*m_field);                                                                                         \
 		}                                                                                                                                                      \
 		virtual void finalizeUndo() override {                                                                                                                 \
-			emit m_target->q->field_name##Changed(m_target->*m_field);                                                                                         \
+			Q_EMIT m_target->q->field_name##Changed(m_target->*m_field);                                                                                         \
 		}                                                                                                                                                      \
 	};
 
@@ -400,7 +400,7 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
 		}                                                                                                                                                      \
 		void finalize() {                                                                                                                                      \
 			m_target->finalize_method();                                                                                                                       \
-			emit m_target->q->field_name##Changed(m_target->field_name());                                                                                     \
+			Q_EMIT m_target->q->field_name##Changed(m_target->field_name());                                                                                     \
 		}                                                                                                                                                      \
                                                                                                                                                                \
 	private:                                                                                                                                                   \

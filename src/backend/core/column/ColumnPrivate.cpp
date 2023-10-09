@@ -1802,13 +1802,13 @@ void ColumnPrivate::updateFormula() {
 										QLatin1String("percentile\\((\\d+[\\.\\,]?\\d+).*%1\\)")}; // percentile(p, x)
 
 		for (auto& m : optionMethodList) {
-			QRegExp rx(m.arg(varName));
-			rx.setMinimal(true); // only match one method call at a time
+			// inverted greedy: only match one method call at a time
+			QRegularExpression rx(m.arg(varName), QRegularExpression::InvertedGreedinessOption);
 
 			int pos = 0;
-			while ((pos = rx.indexIn(formula, pos)) != -1) { // all method calls
-				QDEBUG("method call:" << rx.cap(0))
-				double p = numberLocale.toDouble(rx.cap(1)); // option
+			for (auto match = rx.match(formula, pos) ; match.hasMatch();) {	 // loop over all method calls
+				QDEBUG("method call:" << match.captured(0))
+				double p = numberLocale.toDouble(match.captured(1)); // option
 				DEBUG("p = " << p)
 
 				// scale (quantile: p=0..1, percentile: p=0..100)
@@ -1849,7 +1849,7 @@ void ColumnPrivate::updateFormula() {
 					break;
 				}
 
-				formula.replace(rx.cap(0), numberLocale.toString(value));
+				formula.replace(match.captured(0), numberLocale.toString(value));
 			}
 		}
 
@@ -1862,16 +1862,16 @@ void ColumnPrivate::updateFormula() {
 		// D) advanced replacements
 		QVector<QPair<QString, QString>> advancedReplaceList = {{QStringLiteral("smr\\((.*),.*%1\\)"), QStringLiteral("smmax(%1, %2) - smmin(%1, %2)")}};
 		for (auto& m : advancedReplaceList) {
-			QRegExp rx(m.first.arg(varName));
-			rx.setMinimal(true); // only match one method call at a time
+			// inverted greedy: only match one method call at a time
+			QRegularExpression rx(m.first.arg(varName), QRegularExpression::InvertedGreedinessOption);
 
 			int pos = 0;
-			while ((pos = rx.indexIn(formula, pos)) != -1) { // all method calls
-				QDEBUG("method call:" << rx.cap(0))
-				const int N = numberLocale.toInt(rx.cap(1));
+			for (auto match = rx.match(formula, pos) ; match.hasMatch();) {	 // loop over all method calls
+				QDEBUG("method call:" << match.captured(0))
+				const int N = numberLocale.toInt(match.captured(1));
 				DEBUG("N = " << N)
 
-				formula.replace(rx.cap(0), m.second.arg(QLocale().toString(N)).arg(varName));
+				formula.replace(match.captured(0), m.second.arg(QLocale().toString(N)).arg(varName));
 			}
 		}
 

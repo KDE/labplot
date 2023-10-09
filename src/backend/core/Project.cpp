@@ -43,10 +43,11 @@
 
 #include <KConfig>
 #include <KConfigGroup>
-#include <KFilterDev>
+#include <KCompressionDevice>
 #include <KLocalizedString>
 #include <KMessageBox>
-#include <kcoreaddons_version.h>
+#include <KCoreAddons>
+//#include "kcoreaddons_version.h"
 
 #include <QBuffer>
 #include <QDateTime>
@@ -644,8 +645,8 @@ bool Project::load(const QString& filename, bool preview) {
 			file = new KCompressionDevice(filename, KCompressionDevice::GZip);
 	} else { // opens filename using file ending
 		// DEBUG(Q_FUNC_INFO << ", filename does not end with .lml. Guessing by extension")
-		file = new KFilterDev(filename);
-		DEBUG(Q_FUNC_INFO << ", found compression type " << ((KFilterDev*)file)->compressionType())
+		file = new KCompressionDevice(filename);
+		DEBUG(Q_FUNC_INFO << ", found compression type " << ((KCompressionDevice*)file)->compressionType())
 	}
 
 	if (!file)
