@@ -11,7 +11,6 @@
 #ifndef ASCIIFILTERPRIVATE_H
 #define ASCIIFILTERPRIVATE_H
 
-class KFilterDev;
 class AbstractDataSource;
 class AbstractColumn;
 class AbstractAspect;

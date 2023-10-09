@@ -590,7 +590,7 @@ void Axis::setStart(double min) {
 		range.setStart(min);
 		setRange(range);
 	}
-	emit startChanged(range.start()); // Feedback
+	Q_EMIT startChanged(range.start()); // Feedback
 }
 void Axis::setEnd(double max) {
 	Q_D(Axis);
@@ -600,7 +600,7 @@ void Axis::setEnd(double max) {
 		range.setEnd(max);
 		setRange(range);
 	}
-	emit endChanged(range.end()); // Feedback
+	Q_EMIT endChanged(range.end()); // Feedback
 }
 void Axis::setRange(double min, double max) {
 	Q_D(Axis);
@@ -644,7 +644,7 @@ void Axis::setScalingFactor(qreal scalingFactor) {
 	Q_D(Axis);
 	// TODO: check negative values and log-scales?
 	if (scalingFactor == 0) {
-		emit scalingFactorChanged(d->scalingFactor); // return current scalingfactor as feedback for the spinbox
+		Q_EMIT scalingFactorChanged(d->scalingFactor); // return current scalingfactor as feedback for the spinbox
 		return;
 	}
 	if (scalingFactor != d->scalingFactor)
@@ -762,7 +762,7 @@ void Axis::setMajorTicksSpacing(qreal majorTicksSpacing) {
 		if (range / majorTicksSpacing > 100.)
 			majorTicksSpacing = range / 100.;
 
-		emit majorTicksSpacingChanged(majorTicksSpacing);
+		Q_EMIT majorTicksSpacingChanged(majorTicksSpacing);
 		return;
 	}
 
@@ -852,7 +852,7 @@ void Axis::setMinorTicksSpacing(qreal minorTicksSpacing) {
 		if (numberTicks > 100) // maximum 100 minor ticks
 			minorTicksSpacing = range / (majorTicks - 1) / (100 + 1);
 
-		emit minorTicksIncrementChanged(minorTicksSpacing);
+		Q_EMIT minorTicksIncrementChanged(minorTicksSpacing);
 		return;
 	}
 
@@ -2867,7 +2867,7 @@ void AxisPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 			dim = Dimension::Y;
 		}
 
-		emit q->shiftSignal(delta, dim, cs->index(dim));
+		Q_EMIT q->shiftSignal(delta, dim, cs->index(dim));
 
 		m_panningStart = event->pos();
 	}

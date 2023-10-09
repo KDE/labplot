@@ -71,9 +71,9 @@ void XLSXOptionsWidget::dataRegionSelectionChanged() {
 	}
 
 	if (selectedItems.size() > 1)
-		emit enableDataPortionSelection(false);
+		Q_EMIT enableDataPortionSelection(false);
 	else if (selectedItems.size() == 1)
-		emit enableDataPortionSelection(true);
+		Q_EMIT enableDataPortionSelection(true);
 
 	QXlsx::CellRange selectedRegion;
 	QString sheetName;
@@ -108,7 +108,7 @@ void XLSXOptionsWidget::dataRegionSelectionChanged() {
 		// enable the first row as column names option only if the data contains more than 1 row
 		m_fileWidget->enableFirstRowAsColNames(importedStrings.size() > 1);
 
-		emit m_fileWidget->enableImportToMatrix(regionCanBeImportedToMatrix);
+		Q_EMIT m_fileWidget->enableImportToMatrix(regionCanBeImportedToMatrix);
 
 		// sheet name - item row will identify the region
 		const auto mapVal = qMakePair(sheetName, row);

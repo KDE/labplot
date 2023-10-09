@@ -29,7 +29,7 @@
 #include "backend/datasources/MQTTTopic.h"
 #endif
 
-#include <KFilterDev>
+#include <KCompressionDevice>
 #include <KLocalizedString>
 #include <QDateTime>
 
@@ -175,7 +175,7 @@ QString AsciiFilter::fileInfoString(const QString& fileName) {
 	returns the number of columns in the file \c fileName.
 */
 int AsciiFilter::columnNumber(const QString& fileName, const QString& separator) {
-	KFilterDev device(fileName);
+	KCompressionDevice device(fileName);
 	if (!device.open(QIODevice::ReadOnly)) {
 		DEBUG(Q_FUNC_INFO << ", Could not open file " << STDSTRING(fileName) << " for determining number of columns");
 		return -1;
@@ -195,7 +195,7 @@ int AsciiFilter::columnNumber(const QString& fileName, const QString& separator)
 }
 
 size_t AsciiFilter::lineNumber(const QString& fileName, const size_t maxLines) {
-	KFilterDev device(fileName);
+	KCompressionDevice device(fileName);
 
 	if (!device.open(QIODevice::ReadOnly)) {
 		DEBUG(Q_FUNC_INFO << ", Could not open file " << STDSTRING(fileName) << " to determine number of lines");
@@ -697,7 +697,7 @@ void AsciiFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataS
 	// TODO: redesign the APIs and remove this later
 	readingFile = true;
 	readingFileName = fileName;
-	KFilterDev device(fileName);
+	KCompressionDevice device(fileName);
 	readDataFromDevice(device, dataSource, importMode);
 	readingFile = false;
 }
@@ -1607,7 +1607,7 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 	DEBUG(Q_FUNC_INFO)
 	QVector<QStringList> dataStrings;
 
-	KFilterDev device(fileName);
+	KCompressionDevice device(fileName);
 	const int deviceError = prepareDeviceToRead(device, lines);
 
 	if (deviceError != 0) {

@@ -14,7 +14,7 @@
 #include "backend/datapicker/DatapickerPoint.h"
 #include "backend/worksheet/Worksheet.h"
 
-#include <QDesktopWidget>
+//#include <QDesktopWidget>
 #include <QGraphicsScene>
 #include <QPainter>
 

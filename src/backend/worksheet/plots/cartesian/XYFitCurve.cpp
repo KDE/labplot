@@ -2703,30 +2703,30 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const {
 
 	if (d->fitData.modelCategory == nsl_fit_model_custom) {
 		writer->writeStartElement(QStringLiteral("paramNames"));
-		foreach (const QString& name, d->fitData.paramNames)
+		for (const QString& name : d->fitData.paramNames)
 			writer->writeTextElement(QStringLiteral("name"), name);
 		writer->writeEndElement();
 	}
 
 	writer->writeStartElement(QStringLiteral("paramStartValues"));
-	foreach (const double& value, d->fitData.paramStartValues)
+	for (const double& value : d->fitData.paramStartValues)
 		writer->writeTextElement(QStringLiteral("startValue"), QString::number(value, 'g', 15));
 	writer->writeEndElement();
 
 	// use 16 digits to handle -DBL_MAX
 	writer->writeStartElement(QStringLiteral("paramLowerLimits"));
-	foreach (const double& limit, d->fitData.paramLowerLimits)
+	for (const double& limit : d->fitData.paramLowerLimits)
 		writer->writeTextElement(QStringLiteral("lowerLimit"), QString::number(limit, 'g', 16));
 	writer->writeEndElement();
 
 	// use 16 digits to handle DBL_MAX
 	writer->writeStartElement(QStringLiteral("paramUpperLimits"));
-	foreach (const double& limit, d->fitData.paramUpperLimits)
+	for (const double& limit : d->fitData.paramUpperLimits)
 		writer->writeTextElement(QStringLiteral("upperLimit"), QString::number(limit, 'g', 16));
 	writer->writeEndElement();
 
 	writer->writeStartElement(QStringLiteral("paramFixed"));
-	foreach (const double& fixed, d->fitData.paramFixed)
+	for (const double& fixed : d->fitData.paramFixed)
 		writer->writeTextElement(QStringLiteral("fixed"), QString::number(fixed));
 	writer->writeEndElement();
 
@@ -2757,36 +2757,36 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("solverOutput"), d->fitResult.solverOutput);
 
 	writer->writeStartElement(QStringLiteral("paramValues"));
-	foreach (const double& value, d->fitResult.paramValues)
+	for (const double& value : d->fitResult.paramValues)
 		writer->writeTextElement(QStringLiteral("value"), QString::number(value, 'g', 15));
 	writer->writeEndElement();
 
 	writer->writeStartElement(QStringLiteral("errorValues"));
-	foreach (const double& value, d->fitResult.errorValues)
+	for (const double& value : d->fitResult.errorValues)
 		writer->writeTextElement(QStringLiteral("error"), QString::number(value, 'g', 15));
 	writer->writeEndElement();
 
 	writer->writeStartElement(QStringLiteral("tdist_tValues"));
-	foreach (const double& value, d->fitResult.tdist_tValues)
+	for (const double& value : d->fitResult.tdist_tValues)
 		writer->writeTextElement(QStringLiteral("tdist_t"), QString::number(value, 'g', 15));
 	writer->writeEndElement();
 
 	writer->writeStartElement(QStringLiteral("tdist_pValues"));
-	foreach (const double& value, d->fitResult.tdist_pValues)
+	for (const double& value : d->fitResult.tdist_pValues)
 		writer->writeTextElement(QStringLiteral("tdist_p"), QString::number(value, 'g', 15));
 	writer->writeEndElement();
 
 	writer->writeStartElement(QStringLiteral("tdist_marginValues"));
-	foreach (const double& value, d->fitResult.marginValues)
+	for (const double& value : d->fitResult.marginValues)
 		writer->writeTextElement(QStringLiteral("tdist_margin"), QString::number(value, 'g', 15));
 	writer->writeEndElement();
 	writer->writeStartElement(QStringLiteral("tdist_margin2Values"));
-	foreach (const double& value, d->fitResult.margin2Values)
+	for (const double& value : d->fitResult.margin2Values)
 		writer->writeTextElement(QStringLiteral("tdist_margin2"), QString::number(value, 'g', 15));
 	writer->writeEndElement();
 
 	writer->writeStartElement(QStringLiteral("correlationMatrix"));
-	foreach (const double& value, d->fitResult.correlationMatrix)
+	for (const double& value : d->fitResult.correlationMatrix)
 		writer->writeTextElement(QStringLiteral("correlation"), QString::number(value, 'g', 15));
 	writer->writeEndElement();
 

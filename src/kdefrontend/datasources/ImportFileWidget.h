@@ -43,7 +43,6 @@ class QTableWidget;
 class QCompleter;
 class QTimer;
 class QTreeWidgetItem;
-class QStringList;
 
 class KConfig;
 class KUrlComboBox;

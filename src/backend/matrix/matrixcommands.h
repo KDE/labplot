@@ -61,7 +61,7 @@ public:
 				m_backups.append(m_private_obj->columnCells<T>(m_first + i, 0, last_row));
 		}
 		m_private_obj->removeColumns(m_first, m_count);
-		emit m_private_obj->q->columnCountChanged(m_private_obj->columnCount);
+		Q_EMIT m_private_obj->q->columnCountChanged(m_private_obj->columnCount);
 	}
 	void undo() override {
 		m_private_obj->insertColumns(m_first, m_count);
@@ -70,7 +70,7 @@ public:
 		for (int i = 0; i < m_count; i++)
 			m_private_obj->setColumnCells(m_first + i, 0, last_row, m_backups.at(i));
 
-		emit m_private_obj->q->columnCountChanged(m_private_obj->columnCount);
+		Q_EMIT m_private_obj->q->columnCountChanged(m_private_obj->columnCount);
 	}
 
 private:
@@ -99,14 +99,14 @@ public:
 				m_backups.append(m_private_obj->columnCells<T>(col, m_first, last_row));
 		}
 		m_private_obj->removeRows(m_first, m_count);
-		emit m_private_obj->q->rowCountChanged(m_private_obj->rowCount);
+		Q_EMIT m_private_obj->q->rowCountChanged(m_private_obj->rowCount);
 	}
 	void undo() override {
 		m_private_obj->insertRows(m_first, m_count);
 		int last_row = m_first + m_count - 1;
 		for (int col = 0; col < m_private_obj->columnCount; col++)
 			m_private_obj->setColumnCells(col, m_first, last_row, m_backups.at(col));
-		emit m_private_obj->q->rowCountChanged(m_private_obj->rowCount);
+		Q_EMIT m_private_obj->q->rowCountChanged(m_private_obj->rowCount);
 	}
 
 private:

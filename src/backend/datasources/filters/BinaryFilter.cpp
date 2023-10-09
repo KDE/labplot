@@ -14,7 +14,7 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/macros.h"
 
-#include <KFilterDev>
+#include <KCompressionDevice>
 #include <KLocalizedString>
 #include <QDataStream>
 #include <QtEndian>
@@ -100,7 +100,7 @@ int BinaryFilter::dataSize(BinaryFilter::DataType type) {
   returns the number of rows (length of vectors) in the file \c fileName.
 */
 size_t BinaryFilter::rowNumber(const QString& fileName, const size_t vectors, const BinaryFilter::DataType type, const size_t maxRows) {
-	KFilterDev device(fileName);
+	KCompressionDevice device(fileName);
 	if (!device.open(QIODevice::ReadOnly))
 		return 0;
 
@@ -209,7 +209,7 @@ BinaryFilterPrivate::BinaryFilterPrivate(BinaryFilter* owner)
 void BinaryFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
 	DEBUG(Q_FUNC_INFO);
 
-	KFilterDev device(fileName);
+	KCompressionDevice device(fileName);
 	numRows = BinaryFilter::rowNumber(fileName, vectors, dataType);
 
 	if (!device.open(QIODevice::ReadOnly)) {
@@ -269,7 +269,7 @@ QVector<QStringList> BinaryFilterPrivate::preview(const QString& fileName, int l
 	DEBUG(Q_FUNC_INFO << ", fileName = " << STDSTRING(fileName) << ", lines = " << lines);
 	QVector<QStringList> dataStrings;
 
-	KFilterDev device(fileName);
+	KCompressionDevice device(fileName);
 	if (!device.open(QIODevice::ReadOnly))
 		return dataStrings << (QStringList() << i18n("could not open device"));
 

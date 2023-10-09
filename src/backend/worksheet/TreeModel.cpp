@@ -70,7 +70,7 @@ bool TreeItem::insertColumns(int position, int columns) {
 	for (int column = 0; column < columns; ++column)
 		itemData.insert(position, QVariant());
 
-	foreach (TreeItem* child, childItems)
+	for (auto* child : childItems)
 		child->insertColumns(position, columns);
 
 	return true;
@@ -97,7 +97,7 @@ bool TreeItem::removeColumns(int position, int columns) {
 	for (int column = 0; column < columns; ++column)
 		itemData.remove(position);
 
-	foreach (TreeItem* child, childItems)
+	for (auto* child : childItems)
 		child->removeColumns(position, columns);
 
 	return true;

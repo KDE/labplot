@@ -327,7 +327,7 @@ void ImportProjectDialog::showTopLevelOnly(const QModelIndex& index) {
 	checks whether \c aspect is one of the allowed top level types
 */
 bool ImportProjectDialog::isTopLevel(const AbstractAspect* aspect) const {
-	foreach (AspectType type, m_projectParser->topLevelClasses()) {
+	for (auto type : m_projectParser->topLevelClasses()) {
 		if (aspect->inherits(type))
 			return true;
 	}

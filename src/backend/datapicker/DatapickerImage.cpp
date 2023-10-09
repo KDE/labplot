@@ -24,7 +24,7 @@
 #include "kdefrontend/worksheet/ExportWorksheetDialog.h"
 
 #include <QBuffer>
-#include <QDesktopWidget>
+//#include <QDesktopWidget>
 #include <QDir>
 #include <QFileInfo>
 #include <QGraphicsScene>
@@ -348,7 +348,7 @@ public:
 			// setting relative is only possible if the image is not embedded!
 			m_target->q->setImage(filename, false);
 		}
-		emit m_target->q->relativeFilePathChanged(m_target->*m_field);
+		Q_EMIT m_target->q->relativeFilePathChanged(m_target->*m_field);
 	}
 };
 
@@ -450,7 +450,7 @@ void DatapickerImage::referencePointSelected(const DatapickerPoint* point) {
 	for (int i = 0; i < points.count(); i++) {
 		if (points.at(i) == point) {
 			m_currentRefPoint = i;
-			emit referencePointSelected(i);
+			Q_EMIT referencePointSelected(i);
 			return;
 		}
 	}

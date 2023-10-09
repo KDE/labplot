@@ -1810,7 +1810,7 @@ void HistogramPrivate::setHover(bool on) {
 		return; // don't update if state not changed
 
 	m_hovered = on;
-	on ? Q_EMIT q->hovered() : emit q->unhovered();
+	on ? Q_EMIT q->hovered() : Q_EMIT q->unhovered();
 	update();
 }
 

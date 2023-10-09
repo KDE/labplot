@@ -405,8 +405,8 @@ public:
 	}
 
 	void finalize() const {
-		emit m_target->q->linkingChanged(m_target->linking.linking);
-		emit m_target->q->linkedSpreadsheetChanged(m_target->linking.linkedSpreadsheet);
+		Q_EMIT m_target->q->linkingChanged(m_target->linking.linking);
+		Q_EMIT m_target->q->linkedSpreadsheetChanged(m_target->linking.linkedSpreadsheet);
 	}
 
 private:
@@ -1402,7 +1402,7 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList names, 
 	DEBUG(Q_FUNC_INFO << ", mode = " << ENUM_TO_STRING(AbstractFileFilter, ImportMode, mode) << ", cols = " << cols)
 	// QDEBUG("	column name list = " << colNameList)
 	//  name additional columns
-	emit aboutToResize();
+	Q_EMIT aboutToResize();
 
 	// make sure the column names provided by the user don't have any duplicates
 	QStringList uniqueNames;
@@ -1480,7 +1480,7 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList names, 
 		}
 	}
 
-	emit resizeFinished();
+	Q_EMIT resizeFinished();
 	return columnOffset;
 }
 
