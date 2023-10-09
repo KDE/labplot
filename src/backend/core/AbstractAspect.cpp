@@ -236,7 +236,7 @@ bool AbstractAspect::setName(const QString& value, NameHandling handling, QUndoC
 	exec(new PropertyChangeCommand<QString>(i18n("%1: rename to %2", d->m_name, new_name), &d->m_name, new_name),
 		 "aspectDescriptionAboutToChange",
 		 "aspectDescriptionChanged",
-		 QArgument<const AbstractAspect* >("const AbstractAspect*", this));
+		 QArgument<const AbstractAspect*>("const AbstractAspect*", this));
 	return true;
 }
 
@@ -250,7 +250,7 @@ void AbstractAspect::setComment(const QString& value) {
 	exec(new PropertyChangeCommand<QString>(i18n("%1: change comment", d->m_name), &d->m_comment, value),
 		 "aspectDescriptionAboutToChange",
 		 "aspectDescriptionChanged",
-		 QArgument<const AbstractAspect* >("const AbstractAspect*", this));
+		 QArgument<const AbstractAspect*>("const AbstractAspect*", this));
 }
 
 void AbstractAspect::setCreationTime(const QDateTime& time) {

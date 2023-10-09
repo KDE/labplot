@@ -277,7 +277,7 @@ void AbstractSimpleFilter::inputRowsAboutToBeInserted(const AbstractColumn* /*so
 }
 
 void AbstractSimpleFilter::inputRowsInserted(const AbstractColumn* /*source*/, int before, int /*count*/) {
-	for(const auto& output_range : dependentRows(Interval<int>(before, before)))
+	for (const auto& output_range : dependentRows(Interval<int>(before, before)))
 		Q_EMIT m_output_column->rowsInserted(m_output_column, output_range.start(), output_range.size());
 }
 
