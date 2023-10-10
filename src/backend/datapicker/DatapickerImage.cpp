@@ -24,7 +24,7 @@
 #include "kdefrontend/worksheet/ExportWorksheetDialog.h"
 
 #include <QBuffer>
-//#include <QDesktopWidget>
+// #include <QDesktopWidget>
 #include <QDir>
 #include <QFileInfo>
 #include <QGraphicsScene>
@@ -32,6 +32,7 @@
 #include <QPrintDialog>
 #include <QPrintPreviewDialog>
 #include <QPrinter>
+#include <QScreen>
 
 #include <KConfig>
 #include <KConfigGroup>
@@ -498,8 +499,8 @@ bool DatapickerImagePrivate::uploadImage() {
 		discretize();
 
 		// resize the screen
-		double w = Worksheet::convertToSceneUnits(q->originalPlotImage.width(), Worksheet::Unit::Inch) / QApplication::desktop()->physicalDpiX();
-		double h = Worksheet::convertToSceneUnits(q->originalPlotImage.height(), Worksheet::Unit::Inch) / QApplication::desktop()->physicalDpiX();
+		double w = Worksheet::convertToSceneUnits(q->originalPlotImage.width(), Worksheet::Unit::Inch) / QApplication::primaryScreen()->physicalDotsPerInchX();
+		double h = Worksheet::convertToSceneUnits(q->originalPlotImage.height(), Worksheet::Unit::Inch) / QApplication::primaryScreen()->physicalDotsPerInchY();
 		m_scene->setSceneRect(0, 0, w, h);
 		q->isLoaded = true;
 	}

@@ -56,7 +56,7 @@ SettingsGeneralPage::SettingsGeneralPage(QWidget* parent)
 /* returns decimal separator (as SettingsGeneralPage::DecimalSeparator) of given locale (default: system setting) */
 SettingsGeneralPage::DecimalSeparator SettingsGeneralPage::decimalSeparator(QLocale locale) {
 	DEBUG(Q_FUNC_INFO << ", LOCALE: " << STDSTRING(locale.name()) << ", " << locale.language())
-	QChar decimalPoint = locale.decimalPoint();
+	const auto decimalPoint = locale.decimalPoint();
 	DEBUG(Q_FUNC_INFO << ", SEPARATING CHAR: " << STDSTRING(QString(decimalPoint)))
 	if (decimalPoint == QLatin1Char('.'))
 		return DecimalSeparator::Dot;
@@ -71,7 +71,7 @@ QLocale::Language SettingsGeneralPage::decimalSeparatorLocale() const {
 	DEBUG(Q_FUNC_INFO << ", SYSTEM LOCALE: " << STDSTRING(QLocale().name()) << ':' << QLocale().language())
 	DEBUG(Q_FUNC_INFO << ", SYSTEM SEPARATING CHAR: " << STDSTRING(QString(QLocale().decimalPoint())))
 
-	QChar groupSeparator = QLocale().groupSeparator();
+	const auto groupSeparator = QLocale().groupSeparator();
 	switch (currentIndex) {
 	case static_cast<int>(DecimalSeparator::Dot):
 		if (groupSeparator == QLocale(QLocale::Language::Zarma).groupSeparator()) // \u00a0

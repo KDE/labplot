@@ -21,7 +21,6 @@
 #include <kcoreaddons_version.h>
 
 #include <QCompleter>
-#include <QDesktopWidget>
 // see https://gitlab.kitware.com/cmake/cmake/-/issues/21609
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
 #include <QFileSystemModel>
@@ -30,6 +29,7 @@
 #endif
 #include <QDialogButtonBox>
 #include <QFileDialog>
+#include <QScreen>
 #include <QWindow>
 
 /*!
@@ -83,7 +83,8 @@ ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent)
 	ui->cbExportArea->addItem(i18n("Current Selection"));
 	ui->cbExportArea->addItem(i18n("Complete Worksheet"));
 
-	ui->cbResolution->addItem(i18nc("%1 is the value of DPI of the current screen", "%1 (desktop)", QString::number(QApplication::desktop()->physicalDpiX())));
+	ui->cbResolution->addItem(
+		i18nc("%1 is the value of DPI of the current screen", "%1 (desktop)", QString::number(QApplication::primaryScreen()->physicalDotsPerInchX())));
 	ui->cbResolution->addItem(QLatin1String("100"));
 	ui->cbResolution->addItem(QLatin1String("150"));
 	ui->cbResolution->addItem(QLatin1String("200"));
@@ -186,7 +187,7 @@ bool ExportWorksheetDialog::exportBackground() const {
 
 int ExportWorksheetDialog::exportResolution() const {
 	if (ui->cbResolution->currentIndex() == 0)
-		return QApplication::desktop()->physicalDpiX();
+		return QApplication::primaryScreen()->physicalDotsPerInchX();
 	else
 		return ui->cbResolution->currentText().toInt();
 }

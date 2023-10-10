@@ -462,7 +462,9 @@ bool ColumnPrivate::initDataContainer(bool resize) {
 		try {
 			if (resize)
 				vec->resize(m_rowCount);
-		} catch (std::bad_alloc&) { return false; }
+		} catch (std::bad_alloc&) {
+			return false;
+		}
 		vec->fill(std::numeric_limits<double>::quiet_NaN());
 		m_data = vec;
 		break;
@@ -472,7 +474,9 @@ bool ColumnPrivate::initDataContainer(bool resize) {
 		try {
 			if (resize)
 				vec->resize(m_rowCount);
-		} catch (std::bad_alloc&) { return false; }
+		} catch (std::bad_alloc&) {
+			return false;
+		}
 		m_data = vec;
 		break;
 	}
@@ -481,7 +485,9 @@ bool ColumnPrivate::initDataContainer(bool resize) {
 		try {
 			if (resize)
 				vec->resize(m_rowCount);
-		} catch (std::bad_alloc&) { return false; }
+		} catch (std::bad_alloc&) {
+			return false;
+		}
 		m_data = vec;
 		break;
 	}
@@ -490,7 +496,9 @@ bool ColumnPrivate::initDataContainer(bool resize) {
 		try {
 			if (resize)
 				vec->resize(m_rowCount);
-		} catch (std::bad_alloc&) { return false; }
+		} catch (std::bad_alloc&) {
+			return false;
+		}
 		m_data = vec;
 		break;
 	}
@@ -501,7 +509,9 @@ bool ColumnPrivate::initDataContainer(bool resize) {
 		try {
 			if (resize)
 				vec->resize(m_rowCount);
-		} catch (std::bad_alloc&) { return false; }
+		} catch (std::bad_alloc&) {
+			return false;
+		}
 		m_data = vec;
 		break;
 	}
@@ -1806,7 +1816,7 @@ void ColumnPrivate::updateFormula() {
 			QRegularExpression rx(m.arg(varName), QRegularExpression::InvertedGreedinessOption);
 
 			int pos = 0;
-			for (auto match = rx.match(formula, pos) ; match.hasMatch();) {	 // loop over all method calls
+			for (auto match = rx.match(formula, pos); match.hasMatch();) { // loop over all method calls
 				QDEBUG("method call:" << match.captured(0))
 				double p = numberLocale.toDouble(match.captured(1)); // option
 				DEBUG("p = " << p)
@@ -1866,7 +1876,7 @@ void ColumnPrivate::updateFormula() {
 			QRegularExpression rx(m.first.arg(varName), QRegularExpression::InvertedGreedinessOption);
 
 			int pos = 0;
-			for (auto match = rx.match(formula, pos) ; match.hasMatch();) {	 // loop over all method calls
+			for (auto match = rx.match(formula, pos); match.hasMatch();) { // loop over all method calls
 				QDEBUG("method call:" << match.captured(0))
 				const int N = numberLocale.toInt(match.captured(1));
 				DEBUG("N = " << N)

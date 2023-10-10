@@ -2726,7 +2726,7 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const {
 	writer->writeEndElement();
 
 	writer->writeStartElement(QStringLiteral("paramFixed"));
-	for (const double& fixed : d->fitData.paramFixed)
+	for (const bool& fixed : d->fitData.paramFixed)
 		writer->writeTextElement(QStringLiteral("fixed"), QString::number(fixed));
 	writer->writeEndElement();
 

@@ -24,7 +24,6 @@
 
 #include <QApplication>
 #include <QBuffer>
-#include <QDesktopWidget>
 #include <QGraphicsScene>
 #include <QGraphicsSceneMouseEvent>
 #include <QKeyEvent>
@@ -170,7 +169,7 @@ void TextLabel::init() {
 	}
 	d->updatePosition();
 
-	DEBUG(Q_FUNC_INFO << ", default/run time image resolution: " << d->teXImageResolution << '/' << QApplication::desktop()->physicalDpiX());
+	DEBUG(Q_FUNC_INFO << ", default/run time image resolution: " << d->teXImageResolution << '/' << QApplication::primaryScreen()->physicalDotsPerInchX());
 
 	connect(&d->teXImageFutureWatcher, &QFutureWatcher<QByteArray>::finished, this, &TextLabel::updateTeXImage);
 }
@@ -965,7 +964,7 @@ QPainterPath TextLabelPrivate::shape() const {
 void TextLabelPrivate::recalcShapeAndBoundingRect() {
 	prepareGeometryChange();
 
-	QMatrix matrix;
+	QTransform matrix;
 	labelShape = QPainterPath();
 	if (borderShape != TextLabel::BorderShape::NoBorder) {
 		labelShape.addPath(WorksheetElement::shapeFromPath(borderShapePath, borderPen));

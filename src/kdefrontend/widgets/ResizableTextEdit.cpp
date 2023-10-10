@@ -80,7 +80,7 @@ void GrabBar::mouseMoveEvent(QMouseEvent* e) {
 	e->accept();
 }
 
-void GrabBar::enterEvent(QEvent* e) {
+void GrabBar::enterEvent(QEnterEvent* e) {
 	if (isEnabled()) {
 		if (m_vertResizeOnly)
 			QApplication::setOverrideCursor(QCursor(Qt::SizeVerCursor));

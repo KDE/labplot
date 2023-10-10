@@ -8,6 +8,7 @@
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
+
 #ifndef MAINWIN_H
 #define MAINWIN_H
 
@@ -53,6 +54,7 @@ class CDockWidget;
 #include <KUserFeedbackQt6/Provider>
 #else
 #include <KUserFeedback/Provider>
+#endif
 #endif
 
 #ifdef HAVE_TOUCHBAR

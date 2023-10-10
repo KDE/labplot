@@ -984,7 +984,7 @@ void BarPlotPrivate::updateValues() {
 			return;
 		}
 
-		const int endRow = std::min(m_valuesPointsLogical.size(), valuesColumn->rowCount());
+		const int endRow = std::min(m_valuesPointsLogical.size(), (qsizetype)valuesColumn->rowCount());
 		const auto xColMode = valuesColumn->columnMode();
 		for (int i = 0; i < endRow; ++i) {
 			if (!valuesColumn->isValid(i) || valuesColumn->isMasked(i))

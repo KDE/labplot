@@ -29,6 +29,7 @@
 #include <KConfigGroup>
 #include <KLocalizedString>
 
+#include <QActionGroup>
 #include <QGraphicsSceneContextMenuEvent>
 #include <QMenu>
 #include <QPainter>

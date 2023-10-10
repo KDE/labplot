@@ -1260,7 +1260,7 @@ void HistogramPrivate::updateValues() {
 			return;
 		}
 
-		const int endRow = std::min(pointsLogical.size(), valuesColumn->rowCount());
+		const int endRow = std::min(pointsLogical.size(), static_cast<qsizetype>(valuesColumn->rowCount()));
 		const auto xColMode = valuesColumn->columnMode();
 		for (int i = 0; i < endRow; ++i) {
 			if (!visiblePoints.at(i))

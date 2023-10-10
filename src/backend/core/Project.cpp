@@ -41,13 +41,12 @@
 #endif
 #endif
 
+#include <KCompressionDevice>
 #include <KConfig>
 #include <KConfigGroup>
-#include <KCompressionDevice>
 #include <KLocalizedString>
 #include <KMessageBox>
-#include <KCoreAddons>
-//#include "kcoreaddons_version.h"
+#include <kio_version.h>
 
 #include <QBuffer>
 #include <QDateTime>
@@ -706,7 +705,7 @@ bool Project::load(const QString& filename, bool preview) {
 			"If you modify and save the project, the CAS content will be lost.\n\n"
 			"Do you want to continue?",
 			reader.missingCASWarning());
-#if KCOREADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
+#if KIO_VERSION >= QT_VERSION_CHECK(5, 100, 0)
 		auto status = KMessageBox::warningTwoActions(nullptr, msg, i18n("Missing Support for CAS"), KStandardGuiItem::cont(), KStandardGuiItem::cancel());
 #else
 		auto status = KMessageBox::warningYesNo(nullptr, msg, i18n("Missing Support for CAS"));

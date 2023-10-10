@@ -21,13 +21,14 @@
 #include "backend/worksheet/plots/cartesian/Value.h"
 #include "tools/ImageTools.h"
 
-#include <QGraphicsSceneMouseEvent>
-#include <QMenu>
-#include <QPainter>
-
 #include <KConfig>
 #include <KConfigGroup>
 #include <KLocalizedString>
+
+#include <QActionGroup>
+#include <QGraphicsSceneMouseEvent>
+#include <QMenu>
+#include <QPainter>
 
 /**
  * \class LollipopPlot
@@ -648,7 +649,7 @@ void LollipopPlotPrivate::updateValues() {
 			return;
 		}
 
-		const int endRow = std::min(m_valuesPointsLogical.size(), valuesColumn->rowCount());
+		const int endRow = std::min(m_valuesPointsLogical.size(), (qsizetype)valuesColumn->rowCount());
 		const auto xColMode = valuesColumn->columnMode();
 		for (int i = 0; i < endRow; ++i) {
 			if (!valuesColumn->isValid(i) || valuesColumn->isMasked(i))

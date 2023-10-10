@@ -128,7 +128,7 @@ void XLSXOptionsWidget::dataRegionSelectionChanged() {
 		const int maxColumns = 100;
 		for (int row = 0; row < rowCount; ++row) {
 			auto lineString = importedStrings.at(row);
-			colCount = std::min(maxColumns, lineString.size());
+			colCount = std::min(static_cast<qsizetype>(maxColumns), lineString.size());
 
 			if (row == 0) {
 				ui.twPreview->setColumnCount(colCount);

@@ -39,10 +39,10 @@
 #include <KConfigGroup>
 #include <KLocalizedString>
 
-#include <QDesktopWidget>
 #include <QGraphicsSceneContextMenuEvent>
 #include <QMenu>
 #include <QPainter>
+#include <QScreen>
 
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_math.h>
@@ -934,8 +934,10 @@ void XYCurvePrivate::calculateScenePoints() {
 			const auto dataRect{plot()->dataRect()};
 			// this is the old method considering DPI
 			DEBUG(Q_FUNC_INFO << ", plot->dataRect() width/height = " << dataRect.width() << '/' << dataRect.height());
-			DEBUG(Q_FUNC_INFO << ", logical DPI X/Y = " << QApplication::desktop()->logicalDpiX() << '/' << QApplication::desktop()->logicalDpiY())
-			DEBUG(Q_FUNC_INFO << ", physical DPI X/Y = " << QApplication::desktop()->physicalDpiX() << '/' << QApplication::desktop()->physicalDpiY())
+			DEBUG(Q_FUNC_INFO << ", logical DPI X/Y = " << QApplication::primaryScreen()->logicalDotsPerInchX() << '/'
+							  << QApplication::primaryScreen()->logicalDotsPerInchY())
+			DEBUG(Q_FUNC_INFO << ", physical DPI X/Y = " << QApplication::primaryScreen()->physicalDotsPerInchX() << '/'
+							  << QApplication::primaryScreen()->physicalDotsPerInchY())
 
 			// new method
 			const int numberOfPixelX = dataRect.width();
@@ -1220,7 +1222,7 @@ void XYCurvePrivate::updateLines() {
 		return;
 	}
 
-	int numberOfPoints{m_logicalPoints.size()};
+	int numberOfPoints{static_cast<int>(m_logicalPoints.size())};
 	if (numberOfPoints <= 1) {
 		DEBUG(Q_FUNC_INFO << ", nothing to do, since not enough data points available");
 		recalcShapeAndBoundingRect();
@@ -1630,7 +1632,7 @@ void XYCurvePrivate::updateLines() {
 #ifdef PERFTRACE_CURVES
 		PERFTRACE(QLatin1String(Q_FUNC_INFO) + QStringLiteral(", curve ") + name() + QStringLiteral(", map lines to scene coordinates"));
 #endif
-		emit q->linesUpdated(q, m_lines);
+		Q_EMIT q->linesUpdated(q, m_lines);
 		m_lines = q->cSystem->mapLogicalToScene(m_lines);
 	}
 
@@ -3061,7 +3063,7 @@ void XYCurvePrivate::setHover(bool on) {
 		return; // don't update if state not changed
 
 	m_hovered = on;
-	on ? Q_EMIT q->hovered() : emit q->unhovered();
+	on ? Q_EMIT q->hovered() : Q_EMIT q->unhovered();
 	update();
 }
 

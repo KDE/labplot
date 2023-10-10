@@ -26,7 +26,7 @@ protected:
 	void mousePressEvent(QMouseEvent*) override;
 	void mouseReleaseEvent(QMouseEvent*) override;
 	void mouseMoveEvent(QMouseEvent*) override;
-	void enterEvent(QEvent*) override;
+	void enterEvent(QEnterEvent*) override;
 	void leaveEvent(QEvent*) override;
 
 private:

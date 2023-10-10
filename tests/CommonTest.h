@@ -43,7 +43,7 @@ extern "C" {
 	do {                                                                                                                                                       \
 		QVERIFY(plot);                                                                                                                                         \
 		QVERIFY(plot->coordinateSystemCount() > coordinateSystemIndex);                                                                                        \
-		const auto scales = plot->coordinateSystem(coordinateSystemIndex)->scales(dimension);                                                                  \
+		const auto scales = plot->coordinateSystem(coordinateSystemIndex) -> scales(dimension);                                                                \
 		QCOMPARE(scales.length(), 1);                                                                                                                          \
 		QVERIFY(scales.at(0) != nullptr);                                                                                                                      \
 		CHECK_SCALE(scales.at(0), a_ref, b_ref, c_ref);                                                                                                        \

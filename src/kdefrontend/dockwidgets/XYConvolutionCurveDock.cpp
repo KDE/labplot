@@ -83,7 +83,7 @@ void XYConvolutionCurveDock::setupGeneral() {
 	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme(QStringLiteral("run-build")));
 
 	auto* layout = new QHBoxLayout(ui.tabGeneral);
-	layout->setMargin(0);
+	layout->setContentsMargins(0, 0, 0, 0);
 	layout->addWidget(generalTab);
 
 	DEBUG(Q_FUNC_INFO << ", DONE");

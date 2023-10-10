@@ -58,7 +58,7 @@ void ErrorBarItem::setPosition(QPointF position) {
 }
 
 void ErrorBarItem::setRectSize(qreal size) {
-	QMatrix matrix;
+	QTransform matrix;
 	matrix.scale(size, size);
 	setRect(matrix.mapRect(m_rect));
 }
@@ -400,7 +400,7 @@ QPainterPath DatapickerPointPrivate::shape() const {
 void DatapickerPointPrivate::recalcShapeAndBoundingRect() {
 	prepareGeometryChange();
 
-	QMatrix matrix;
+	QTransform matrix;
 	matrix.scale(size, size);
 	matrix.rotate(-rotationAngle);
 	transformedBoundingRectangle = matrix.mapRect(boundingRectangle);

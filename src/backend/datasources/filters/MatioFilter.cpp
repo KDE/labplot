@@ -160,7 +160,7 @@
 #define MAT_READ_STRUCT(type)                                                                                                                                  \
 	{                                                                                                                                                          \
 		if (fields[i]->isComplex) {                                                                                                                            \
-			auto* complex_data = (mat_complex_split_t*)fields[i]->data;                                                                                        \
+			auto* complex_data = (mat_complex_split_t*)fields[i] -> data;                                                                                      \
 			auto* re = (type*)complex_data->Re;                                                                                                                \
 			auto* im = (type*)complex_data->Im;                                                                                                                \
                                                                                                                                                                \
@@ -190,7 +190,7 @@
 			}                                                                                                                                                  \
 			colIndex++; /* complex uses two columns atm */                                                                                                     \
 		} else { /* real */                                                                                                                                    \
-			auto* data = (type*)fields[i]->data;                                                                                                               \
+			auto* data = (type*)fields[i] -> data;                                                                                                             \
 			DEBUG(Q_FUNC_INFO << "  rank = 2 (" << fields[i]->dims[0] << " x " << fields[i]->dims[1] << ")")                                                   \
 			if (dataSource) {                                                                                                                                  \
 				for (size_t j = 0; j < actualRows; j++)                                                                                                        \

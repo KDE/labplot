@@ -15,6 +15,7 @@
 #include <KConfigGroup>
 #include <KLocalizedString>
 
+#include <QActionGroup>
 #include <QApplication>
 #include <QColor>
 #include <QComboBox>

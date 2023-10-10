@@ -654,7 +654,7 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 
 		DEBUG(Q_FUNC_INFO << ", column " << j << ", name = " << column.name.c_str())
 		QString name(QLatin1String(column.name.c_str()));
-		col->setName(name.replace(QRegExp(QStringLiteral(".*_")), QString()));
+		col->setName(name.replace(QRegularExpression(QStringLiteral(".*_")), QString()));
 
 		if (preview)
 			continue;

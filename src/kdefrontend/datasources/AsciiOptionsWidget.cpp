@@ -197,7 +197,7 @@ void AsciiOptionsWidget::loadConfigFromTemplate(KConfig& config) const {
 	ui.cbCommentCharacter->setCurrentText(group.readEntry("CommentCharacter", "#"));
 	ui.cbSeparatingCharacter->setCurrentText(group.readEntry("SeparatingCharacter", "auto"));
 
-	const QChar decimalSeparator = QLocale().decimalPoint();
+	const auto decimalSeparator = QLocale().decimalPoint();
 	int index = (decimalSeparator == QLatin1Char('.')) ? 0 : 1;
 	ui.cbDecimalSeparator->setCurrentIndex(group.readEntry("DecimalSeparator", index));
 

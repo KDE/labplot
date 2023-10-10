@@ -1309,7 +1309,7 @@ void CartesianPlot::setRange(const Dimension dim, const int index, const Range<d
 
 	if (range.start() == range.end()) {
 		// User entered invalid range
-		emit rangeChanged(dim, index, this->range(dim, index)); // Feedback
+		Q_EMIT rangeChanged(dim, index, this->range(dim, index)); // Feedback
 		return;
 	}
 
@@ -3191,7 +3191,7 @@ void CartesianPlotPrivate::retransformScale(const Dimension dim, int index, bool
 	}
 
 	if (scaleChanged)
-		emit q->scaleRetransformed(q, dim, index);
+		Q_EMIT q->scaleRetransformed(q, dim, index);
 
 	// Set ranges in the axis
 	for (int i = 0; i < q->rangeCount(dim); i++) {
@@ -3494,7 +3494,7 @@ void CartesianPlotPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* even
 	logicalPos = cSystem->mapSceneToLogical(scenePos, AbstractCoordinateSystem::MappingFlag::Limit);
 	calledFromContextMenu = true;
 	auto* menu = q->createContextMenu();
-	emit q->contextMenuRequested(q->AbstractAspect::type(), menu);
+	Q_EMIT q->contextMenuRequested(q->AbstractAspect::type(), menu);
 }
 
 /*!
@@ -4074,7 +4074,7 @@ void CartesianPlotPrivate::wheelEvent(QGraphicsSceneWheelEvent* event) {
 			dim = Dimension::Y;
 	}
 
-	emit q->wheelEventSignal(sceneRelPos, event->delta(), xIndex, yIndex, considerDimension, dim);
+	Q_EMIT q->wheelEventSignal(sceneRelPos, event->delta(), xIndex, yIndex, considerDimension, dim);
 }
 
 void CartesianPlotPrivate::wheelEvent(const QPointF& sceneRelPos, int delta, int xIndex, int yIndex, bool considerDimension, Dimension dim) {

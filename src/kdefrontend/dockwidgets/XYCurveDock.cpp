@@ -190,7 +190,7 @@ void XYCurveDock::setupGeneral() {
 	m_teComment->setFixedHeight(m_leName->height());
 
 	auto* layout = new QHBoxLayout(ui.tabGeneral);
-	layout->setMargin(0);
+	layout->setContentsMargins(0, 0, 0, 0);
 	layout->addWidget(generalTab);
 
 	// Tab "General" (see xycurvedockgeneraltab.ui)

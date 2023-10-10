@@ -502,7 +502,7 @@ public:
 	int mRetransformCalled{0};
 
 #define trackRetransformCalled(suppressed)                                                                                                                     \
-	Q_EMIT q->retransformCalledSignal(q, suppressed);                                                                                                            \
+	Q_EMIT q->retransformCalledSignal(q, suppressed);                                                                                                          \
 	if (!suppressed)                                                                                                                                           \
 		q->mRetransformCalled += 1;
 

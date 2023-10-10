@@ -302,7 +302,7 @@ QPainterPath ImagePrivate::shape() const {
 void ImagePrivate::recalcShapeAndBoundingRect() {
 	prepareGeometryChange();
 
-	QMatrix matrix;
+	QTransform matrix;
 	imageShape = QPainterPath();
 	if (borderLine->pen().style() != Qt::NoPen) {
 		imageShape.addPath(WorksheetElement::shapeFromPath(borderShapePath, borderLine->pen()));

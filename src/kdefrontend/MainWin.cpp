@@ -80,6 +80,7 @@
 #include <KUserFeedback/StartCountSource>
 #include <KUserFeedback/UsageTimeSource>
 #endif
+#endif
 
 #include <DockManager.h>
 
@@ -87,6 +88,7 @@
 #include "3rdparty/kdmactouchbar/src/kdmactouchbar.h"
 #endif
 
+#include <QActionGroup>
 #include <QCloseEvent>
 #include <QDockWidget>
 #include <QElapsedTimer>
@@ -700,7 +702,7 @@ void MainWin::initActions() {
 
 	// Import/Export
 	m_importFileAction = new QAction(QIcon::fromTheme(QLatin1String("document-import")), i18n("From File..."), this);
-	actionCollection()->setDefaultShortcut(m_importFileAction, Qt::CTRL + Qt::SHIFT + Qt::Key_I);
+	actionCollection()->setDefaultShortcut(m_importFileAction, Qt::CTRL | Qt::SHIFT | Qt::Key_I);
 	m_importFileAction->setWhatsThis(i18n("Import data from a regular file"));
 	connect(m_importFileAction, &QAction::triggered, this, [=]() {
 		importFileDialog();
@@ -739,7 +741,7 @@ void MainWin::initActions() {
 
 	m_exportAction = new QAction(QIcon::fromTheme(QLatin1String("document-export")), i18n("Export..."), this);
 	m_exportAction->setWhatsThis(i18n("Export selected element"));
-	actionCollection()->setDefaultShortcut(m_exportAction, Qt::CTRL + Qt::SHIFT + Qt::Key_E);
+	actionCollection()->setDefaultShortcut(m_exportAction, Qt::CTRL | Qt::SHIFT | Qt::Key_E);
 	actionCollection()->addAction(QLatin1String("export"), m_exportAction);
 	connect(m_exportAction, &QAction::triggered, this, &MainWin::exportDialog);
 
