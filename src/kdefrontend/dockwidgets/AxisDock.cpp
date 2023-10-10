@@ -76,6 +76,10 @@ AxisDock::AxisDock(QWidget* parent)
 	dtsbMajorTicksIncrement = new DateTimeSpinBox(ui.tabTicks);
 	gridLayout->addWidget(dtsbMajorTicksIncrement, 5, 2);
 
+	auto layout = ui.tabTicks->findChild<QHBoxLayout*>(QStringLiteral("layoutMajorTickStartOffset"));
+	dtsbMajorTicksDateTimeStartOffset = new DateTimeSpinBox(ui.tabTicks);
+	layout->insertWidget(0, dtsbMajorTicksDateTimeStartOffset);
+
 	cbMajorTicksColumn = new TreeViewComboBox(ui.tabTicks);
 	gridLayout->addWidget(cbMajorTicksColumn, 9, 2);
 
@@ -113,6 +117,8 @@ AxisDock::AxisDock(QWidget* parent)
 		layout->setHorizontalSpacing(2);
 		layout->setVerticalSpacing(2);
 	}
+
+	init();
 
 	//**********************************  Slots **********************************************
 
@@ -162,7 +168,9 @@ AxisDock::AxisDock(QWidget* parent)
 	connect(dtsbMajorTicksIncrement, &DateTimeSpinBox::valueChanged, this, &AxisDock::majorTicksSpacingChanged);
 	connect(ui.cbMajorTicksStartType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AxisDock::majorTicksStartTypeChanged);
 	connect(ui.sbMajorTickStartOffset, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &AxisDock::majorTicksStartOffsetChanged);
+	connect(dtsbMajorTicksDateTimeStartOffset, &DateTimeSpinBox::valueChanged, this, &AxisDock::majorTicksDateTimeStartOffsetChanged);
 	connect(ui.sbMajorTickStartValue, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &AxisDock::majorTicksStartValueChanged);
+	connect(ui.sbMajorTickStartDateTime, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &AxisDock::majorTicksStartDateTimeChanged);
 	connect(ui.tbFirstTickData, &QToolButton::clicked, this, &AxisDock::setTickOffsetData);
 	connect(ui.tbFirstTickAuto, &QToolButton::clicked, this, &AxisDock::setTickOffsetAuto);
 	connect(cbMajorTicksColumn, &TreeViewComboBox::currentModelIndexChanged, this, &AxisDock::majorTicksColumnChanged);
@@ -218,8 +226,6 @@ AxisDock::AxisDock(QWidget* parent)
 	connect(templateHandler, &TemplateHandler::info, this, &AxisDock::info);
 
 	ui.verticalLayout->addWidget(frame);
-
-	init();
 }
 
 AxisDock::~AxisDock() = default;
@@ -917,6 +923,7 @@ void AxisDock::arrowSizeChanged(int value) {
 void AxisDock::majorTicksDirectionChanged(int index) {
 	const auto direction = Axis::TicksDirection(index);
 	const bool b = (direction != Axis::noTicks);
+	const bool numeric = m_axis->isNumeric();
 	ui.cbMajorTicksType->setEnabled(b);
 	ui.cbMajorTicksType->setEnabled(b);
 	ui.cbMajorTicksAutoNumber->setEnabled(b);
@@ -932,8 +939,10 @@ void AxisDock::majorTicksDirectionChanged(int index) {
 	ui.sbMajorTicksSpacingNumeric->setEnabled(b);
 	dtsbMajorTicksIncrement->setEnabled(b);
 	ui.cbMajorTicksStartType->setEnabled(b);
-	ui.sbMajorTickStartValue->setEnabled(b);
-	ui.sbMajorTickStartOffset->setEnabled(b);
+	ui.sbMajorTickStartValue->setEnabled(b && numeric);
+	ui.sbMajorTickStartDateTime->setEnabled(b && !numeric);
+	ui.sbMajorTickStartOffset->setEnabled(b && numeric);
+	dtsbMajorTicksDateTimeStartOffset->setEnabled(b && !numeric);
 	ui.tbFirstTickData->setEnabled(b);
 	ui.tbFirstTickAuto->setEnabled(b);
 	cbMajorTicksColumn->setEnabled(b);
@@ -992,17 +1001,15 @@ void AxisDock::majorTicksTypeChanged(int index) {
 		ui.lMajorTicksStartType->show();
 		ui.cbMajorTicksStartType->show();
 
-		if (m_axis->isNumeric()) {
-			ui.lMajorTicksIncrementDateTime->hide();
-			dtsbMajorTicksIncrement->hide();
-			ui.lMajorTicksSpacingNumeric->show();
-			ui.sbMajorTicksSpacingNumeric->show();
-		} else {
-			ui.lMajorTicksIncrementDateTime->show();
-			dtsbMajorTicksIncrement->show();
-			ui.lMajorTicksSpacingNumeric->hide();
-			ui.sbMajorTicksSpacingNumeric->hide();
-		}
+		const bool numeric = m_axis->isNumeric();
+
+		ui.lMajorTicksSpacingNumeric->setVisible(numeric);
+		ui.sbMajorTicksSpacingNumeric->setVisible(numeric);
+
+		ui.lMajorTicksIncrementDateTime->setVisible(!numeric);
+		dtsbMajorTicksIncrement->setVisible(!numeric);
+		ui.lMajorTicksIncrementDateTime->setVisible(!numeric);
+		dtsbMajorTicksDateTimeStartOffset->setVisible(!numeric);
 
 		ui.lMajorTicksColumn->hide();
 		cbMajorTicksColumn->hide();
@@ -1095,6 +1102,17 @@ void AxisDock::majorTicksStartTypeChanged(int state) {
 		axis->setMajorTicksStartType(type);
 }
 
+void AxisDock::majorTicksDateTimeStartOffsetChanged() {
+	if (m_axis->isNumeric())
+		return;
+	const qint64 value = dtsbMajorTicksDateTimeStartOffset->value();
+	ui.sbMajorTickStartOffset->setClearButtonEnabled(value != 0);
+
+	CONDITIONAL_LOCK_RETURN;
+	for (auto* axis : m_axesList)
+		axis->setMajorTickStartOffset(value);
+}
+
 void AxisDock::majorTicksStartOffsetChanged(double value) {
 	ui.sbMajorTickStartOffset->setClearButtonEnabled(value != 0);
 
@@ -1102,6 +1120,15 @@ void AxisDock::majorTicksStartOffsetChanged(double value) {
 
 	for (auto* axis : m_axesList)
 		axis->setMajorTickStartOffset(value);
+}
+
+void AxisDock::majorTicksStartDateTimeChanged(qint64 value) {
+	ui.sbMajorTickStartValue->setClearButtonEnabled(value != 0);
+
+	CONDITIONAL_RETURN_NO_LOCK;
+
+	for (auto* axis : m_axesList)
+		axis->setMajorTickStartValue(value);
 }
 
 void AxisDock::majorTicksStartValueChanged(double value) {
@@ -1127,6 +1154,7 @@ void AxisDock::setTickOffsetData(bool nice) {
 	const double offset = dataRange.start() - m_axis->range().start();
 
 	ui.sbMajorTickStartOffset->setValue(offset);
+	dtsbMajorTicksDateTimeStartOffset->setValue(offset);
 }
 
 void AxisDock::majorTicksColumnChanged(const QModelIndex& index) {
@@ -1647,10 +1675,12 @@ void AxisDock::axisMajorTicksStartTypeChanged(Axis::TicksStartType type) {
 void AxisDock::axisMajorTicksStartOffsetChanged(qreal value) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.sbMajorTickStartOffset->setValue(value);
+	dtsbMajorTicksDateTimeStartOffset->setValue(value);
 }
 void AxisDock::axisMajorTicksStartValueChanged(qreal value) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.sbMajorTickStartValue->setValue(value);
+	ui.sbMajorTickStartDateTime->setMSecsSinceEpochUTC(value);
 }
 void AxisDock::axisMajorTicksColumnChanged(const AbstractColumn* column) {
 	CONDITIONAL_LOCK_RETURN;
@@ -1771,13 +1801,18 @@ void AxisDock::axisLabelsOpacityChanged(qreal opacity) {
 
 void AxisDock::updateMajorTicksStartType(bool visible) {
 	const bool absoluteValue = (ui.cbMajorTicksStartType->currentIndex() == 0);
+	const bool numeric = m_axis->isNumeric();
 
-	ui.lMajorTickStartOffset->setVisible(visible && !absoluteValue);
-	ui.sbMajorTickStartOffset->setVisible(visible && !absoluteValue);
+	ui.lMajorTickStartOffset->setVisible(visible && !absoluteValue); // for datetime and numeric
+	ui.sbMajorTickStartOffset->setVisible(visible && !absoluteValue && numeric);
+	dtsbMajorTicksDateTimeStartOffset->setVisible(visible && !absoluteValue && !numeric);
 	ui.tbFirstTickData->setVisible(visible && !absoluteValue);
 	ui.tbFirstTickAuto->setVisible(visible && !absoluteValue);
-	ui.sbMajorTickStartValue->setVisible(visible && absoluteValue);
-	ui.lMajorTickStartValue->setVisible(visible && absoluteValue);
+
+	ui.sbMajorTickStartValue->setVisible(visible && absoluteValue && numeric);
+	ui.lMajorTickStartValue->setVisible(visible && absoluteValue && numeric);
+	ui.lMajorTickStartDateTime->setVisible(visible && absoluteValue && !numeric);
+	ui.sbMajorTickStartDateTime->setVisible(visible && absoluteValue && !numeric);
 }
 
 void AxisDock::axisVisibilityChanged(bool on) {
@@ -1942,6 +1977,7 @@ void AxisDock::load() {
 	ui.leLabelsSuffix->setText(m_axis->labelsSuffix());
 	ui.sbLabelsOpacity->setValue(round(m_axis->labelsOpacity() * 100.0));
 
+	majorTicksDirectionChanged(ui.cbMajorTicksDirection->currentIndex());
 	majorTicksTypeChanged(ui.cbMajorTicksType->currentIndex());
 	minorTicksTypeChanged(ui.cbMinorTicksType->currentIndex());
 	labelsTextTypeChanged(ui.cbLabelsTextType->currentIndex());

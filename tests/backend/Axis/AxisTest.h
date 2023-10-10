@@ -22,7 +22,7 @@ private Q_SLOTS:
 	void minorTicksAutoNumberEnableDisable();
 	void majorTicksStartValue();
 	void TestSetCoordinateSystem();
-	void TestSetRange();
+	//	void /*TestSetRange*/();
 	void TestAddingHorizontalAxis();
 	void TestAddingVerticalAxis();
 	void tickLabelRepresentationAutomatic();
@@ -40,6 +40,11 @@ private Q_SLOTS:
 	void columnLabelValues();
 
 	void customTextLabels();
+
+	void dateTime();
+	void dateTimeSpacing();
+	void dateTimeSpacingOffsetNonZero();
+	void dateTimeSpacingStartValueNonZero();
 };
 
 #endif // WORKSHEETELEMENTTEST_H

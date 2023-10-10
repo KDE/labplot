@@ -274,6 +274,7 @@ if (Qt${QT_VERSION_MAJOR}Mqtt_FOUND)
 endif()
 
 set(BACKEND_SOURCES
+	${BACKEND_DIR}/core/Time.cpp
 	${BACKEND_DIR}/core/Folder.cpp
 	${BACKEND_DIR}/core/AbstractAspect.cpp
 	${BACKEND_DIR}/core/AbstractColumn.cpp

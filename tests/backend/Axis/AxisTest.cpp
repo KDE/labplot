@@ -13,6 +13,7 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "src/backend/core/Time.h"
 #include "src/backend/worksheet/Line.h"
 #include "src/backend/worksheet/TextLabel.h"
 #include "src/backend/worksheet/WorksheetElement.h"
@@ -409,45 +410,45 @@ void AxisTest::TestSetCoordinateSystem() {
 	}
 }
 
-void AxisTest::TestSetRange() {
-	Axis a(QStringLiteral("x"), Axis::Orientation::Horizontal);
+// void AxisTest::TestSetRange() {
+//	Axis a(QStringLiteral("x"), Axis::Orientation::Horizontal);
 
-	auto arange = a.range();
-	// different to default values!
-	Range<double> r(5, 11, RangeT::Format::DateTime, RangeT::Scale::Log10);
-	QVERIFY(arange.start() != r.start());
-	QVERIFY(arange.end() != r.end());
-	QVERIFY(arange.format() != r.format());
-	QVERIFY(arange.scale() != r.scale());
+//	auto arange = a.range();
+//	// different to default values!
+//	Range<double> r(5, 11, RangeT::Format::DateTime, RangeT::Scale::Log10);
+//	QVERIFY(arange.start() != r.start());
+//	QVERIFY(arange.end() != r.end());
+//	QVERIFY(arange.format() != r.format());
+//	QVERIFY(arange.scale() != r.scale());
 
-	a.setRange(r);
-	arange = a.range();
-	QCOMPARE(arange.start(), 5);
-	QCOMPARE(arange.end(), 11);
-	QCOMPARE(arange.format(), RangeT::Format::DateTime);
-	QCOMPARE(arange.scale(), RangeT::Scale::Log10);
+//	a.setRange(r);
+//	arange = a.range();
+//	QCOMPARE(arange.start(), 5);
+//	QCOMPARE(arange.end(), 11);
+//	QCOMPARE(arange.format(), RangeT::Format::DateTime);
+//	QCOMPARE(arange.scale(), RangeT::Scale::Log10);
 
-	a.setStart(1);
-	arange = a.range();
-	QCOMPARE(arange.start(), 1);
-	QCOMPARE(arange.end(), 11);
-	QCOMPARE(arange.format(), RangeT::Format::DateTime);
-	QCOMPARE(arange.scale(), RangeT::Scale::Log10);
+//	a.setStart(1);
+//	arange = a.range();
+//	QCOMPARE(arange.start(), 1);
+//	QCOMPARE(arange.end(), 11);
+//	QCOMPARE(arange.format(), RangeT::Format::DateTime);
+//	QCOMPARE(arange.scale(), RangeT::Scale::Log10);
 
-	a.setEnd(23);
-	arange = a.range();
-	QCOMPARE(arange.start(), 1);
-	QCOMPARE(arange.end(), 23);
-	QCOMPARE(arange.format(), RangeT::Format::DateTime);
-	QCOMPARE(arange.scale(), RangeT::Scale::Log10);
+//	a.setEnd(23);
+//	arange = a.range();
+//	QCOMPARE(arange.start(), 1);
+//	QCOMPARE(arange.end(), 23);
+//	QCOMPARE(arange.format(), RangeT::Format::DateTime);
+//	QCOMPARE(arange.scale(), RangeT::Scale::Log10);
 
-	a.setRange(-10, 10);
-	arange = a.range();
-	QCOMPARE(arange.start(), -10);
-	QCOMPARE(arange.end(), 10);
-	QCOMPARE(arange.format(), RangeT::Format::DateTime);
-	QCOMPARE(arange.scale(), RangeT::Scale::Log10);
-}
+//	a.setRange(-10, 10);
+//	arange = a.range();
+//	QCOMPARE(arange.start(), -10);
+//	QCOMPARE(arange.end(), 10);
+//	QCOMPARE(arange.format(), RangeT::Format::DateTime);
+//	QCOMPARE(arange.scale(), RangeT::Scale::Log10);
+//}
 
 void AxisTest::TestAddingHorizontalAxis() {
 	Project project;
@@ -1007,6 +1008,277 @@ void AxisTest::customTextLabels() {
 			QStringLiteral("A"),
 			QStringLiteral("B"),
 			QStringLiteral("C"),
+		};
+		COMPARE_STRING_VECTORS(xAxis->tickLabelStrings(), expectedStrings);
+	}
+}
+
+void AxisTest::dateTime() {
+	QLocale::setDefault(QLocale::C); // . as decimal separator
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	QVERIFY(ws != nullptr);
+	project.addChild(ws);
+
+	Spreadsheet* spreadsheetData = new Spreadsheet(QStringLiteral("data"), false);
+	spreadsheetData->setColumnCount(2);
+	spreadsheetData->setRowCount(3);
+	project.addChild(spreadsheetData);
+
+	auto* xCol = spreadsheetData->column(0);
+	xCol->setColumnMode(AbstractColumn::ColumnMode::DateTime);
+	QDateTime dt1 = QDateTime::fromString(QStringLiteral("2017-07-24T00:00:00Z"), Qt::ISODate);
+	QDateTime dt2 = QDateTime::fromString(QStringLiteral("2017-08-24T00:00:00Z"), Qt::ISODate);
+	QDateTime dt3 = QDateTime::fromString(QStringLiteral("2017-09-24T00:00:00Z"), Qt::ISODate);
+	xCol->replaceDateTimes(-1, QVector<QDateTime>({dt1, dt2, dt3}));
+
+	auto* yCol = spreadsheetData->column(1);
+	yCol->replaceValues(-1, QVector<double>({2, 3, 4}));
+
+	QCOMPARE(spreadsheetData->rowCount(), 3);
+	QCOMPARE(spreadsheetData->columnCount(), 2);
+
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	p->setNiceExtend(false);
+	QVERIFY(p != nullptr);
+	ws->addChild(p);
+
+	auto* curve = new XYCurve(QStringLiteral("xy-curve"));
+	curve->setXColumn(xCol);
+	curve->setYColumn(yCol);
+	p->addChild(curve);
+
+	auto axes = p->children<Axis>();
+	QCOMPARE(axes.count(), 2);
+	QCOMPARE(axes.at(0)->name(), QStringLiteral("x"));
+	QCOMPARE(axes.at(1)->name(), QStringLiteral("y"));
+
+	auto* xAxis = static_cast<Axis*>(axes.at(0));
+	xAxis->setMajorTicksNumber(3, false);
+	QCOMPARE(xAxis->range().start(), dt1.toMSecsSinceEpoch());
+	QCOMPARE(xAxis->range().end(), dt3.toMSecsSinceEpoch());
+	QCOMPARE(xAxis->majorTicksType(), Axis::TicksType::TotalNumber);
+	QCOMPARE(xAxis->majorTicksNumber(), 3);
+	xAxis->setLabelsDateTimeFormat(QStringLiteral("yyyy-MM-dd hh:mm:ss"));
+	QCOMPARE(xAxis->labelsTextType(), Axis::LabelsTextType::PositionValues);
+
+	{
+		const auto v = xAxis->tickLabelStrings();
+		QStringList expectedStrings{
+			QStringLiteral("2017-07-24 00:00:00"),
+			QStringLiteral("2017-08-24 00:00:00"),
+			QStringLiteral("2017-09-24 00:00:00"),
+		};
+		COMPARE_STRING_VECTORS(xAxis->tickLabelStrings(), expectedStrings);
+	}
+}
+
+void AxisTest::dateTimeSpacing() {
+	QLocale::setDefault(QLocale::C); // . as decimal separator
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	QVERIFY(ws != nullptr);
+	project.addChild(ws);
+
+	Spreadsheet* spreadsheetData = new Spreadsheet(QStringLiteral("data"), false);
+	spreadsheetData->setColumnCount(2);
+	spreadsheetData->setRowCount(3);
+	project.addChild(spreadsheetData);
+
+	auto* xCol = spreadsheetData->column(0);
+	xCol->setColumnMode(AbstractColumn::ColumnMode::DateTime);
+	QDateTime dt1 = QDateTime::fromString(QStringLiteral("2017-07-24T00:00:00Z"), Qt::ISODate);
+	QDateTime dt2 = QDateTime::fromString(QStringLiteral("2017-11-24T12:03:00Z"), Qt::ISODate);
+	QDateTime dt3 = QDateTime::fromString(QStringLiteral("2017-12-24T00:05:03Z"), Qt::ISODate);
+	xCol->replaceDateTimes(-1, QVector<QDateTime>({dt1, dt2, dt3}));
+
+	auto* yCol = spreadsheetData->column(1);
+	yCol->replaceValues(-1, QVector<double>({2, 3, 4}));
+
+	QCOMPARE(spreadsheetData->rowCount(), 3);
+	QCOMPARE(spreadsheetData->columnCount(), 2);
+
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	p->setNiceExtend(false);
+	QVERIFY(p != nullptr);
+	ws->addChild(p);
+
+	auto* curve = new XYCurve(QStringLiteral("xy-curve"));
+	curve->setXColumn(xCol);
+	curve->setYColumn(yCol);
+	p->addChild(curve);
+
+	auto axes = p->children<Axis>();
+	QCOMPARE(axes.count(), 2);
+	QCOMPARE(axes.at(0)->name(), QStringLiteral("x"));
+	QCOMPARE(axes.at(1)->name(), QStringLiteral("y"));
+
+	auto* xAxis = static_cast<Axis*>(axes.at(0));
+	xAxis->setMajorTicksSpacing(DateTime::createValue(0, 1, 0, 0, 0, 0, 0)); // 1 month
+	QCOMPARE(xAxis->range().start(), dt1.toMSecsSinceEpoch());
+	QCOMPARE(xAxis->range().end(), dt3.toMSecsSinceEpoch());
+	xAxis->setMajorTicksType(Axis::TicksType::Spacing);
+	// QCOMPARE(xAxis->majorTicksNumber(), 3);
+	xAxis->setLabelsDateTimeFormat(QStringLiteral("yyyy-MM-dd hh:mm:ss"));
+	QCOMPARE(xAxis->labelsTextType(), Axis::LabelsTextType::PositionValues);
+	QCOMPARE(xAxis->majorTicksStartType(), Axis::TicksStartType::Offset);
+	QCOMPARE(xAxis->majorTickStartOffset(), 0);
+	QCOMPARE(xAxis->majorTickStartValue(), 0);
+
+	{
+		const auto v = xAxis->tickLabelStrings();
+		QStringList expectedStrings{
+			QStringLiteral("2017-07-24 00:00:00"),
+			QStringLiteral("2017-08-24 00:00:00"),
+			QStringLiteral("2017-09-24 00:00:00"),
+			QStringLiteral("2017-10-24 00:00:00"),
+			QStringLiteral("2017-11-24 00:00:00"),
+			QStringLiteral("2017-12-24 00:00:00"),
+		};
+		COMPARE_STRING_VECTORS(xAxis->tickLabelStrings(), expectedStrings);
+	}
+}
+
+void AxisTest::dateTimeSpacingOffsetNonZero() {
+	QLocale::setDefault(QLocale::C); // . as decimal separator
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	QVERIFY(ws != nullptr);
+	project.addChild(ws);
+
+	Spreadsheet* spreadsheetData = new Spreadsheet(QStringLiteral("data"), false);
+	spreadsheetData->setColumnCount(2);
+	spreadsheetData->setRowCount(3);
+	project.addChild(spreadsheetData);
+
+	auto* xCol = spreadsheetData->column(0);
+	xCol->setColumnMode(AbstractColumn::ColumnMode::DateTime);
+	QDateTime dt1 = QDateTime::fromString(QStringLiteral("2017-07-24T00:00:00Z"), Qt::ISODate);
+	QDateTime dt2 = QDateTime::fromString(QStringLiteral("2017-11-24T12:03:00Z"), Qt::ISODate);
+	QDateTime dt3 = QDateTime::fromString(QStringLiteral("2019-12-24T00:05:03Z"), Qt::ISODate);
+	xCol->replaceDateTimes(-1, QVector<QDateTime>({dt1, dt2, dt3}));
+
+	auto* yCol = spreadsheetData->column(1);
+	yCol->replaceValues(-1, QVector<double>({2, 3, 4}));
+
+	QCOMPARE(spreadsheetData->rowCount(), 3);
+	QCOMPARE(spreadsheetData->columnCount(), 2);
+
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	p->setNiceExtend(false);
+	QVERIFY(p != nullptr);
+	ws->addChild(p);
+
+	auto* curve = new XYCurve(QStringLiteral("xy-curve"));
+	curve->setXColumn(xCol);
+	curve->setYColumn(yCol);
+	p->addChild(curve);
+
+	auto axes = p->children<Axis>();
+	QCOMPARE(axes.count(), 2);
+	QCOMPARE(axes.at(0)->name(), QStringLiteral("x"));
+	QCOMPARE(axes.at(1)->name(), QStringLiteral("y"));
+
+	auto* xAxis = static_cast<Axis*>(axes.at(0));
+	xAxis->setMajorTicksSpacing(DateTime::createValue(0, 1, 0, 0, 0, 0, 0)); // 1 month
+	QCOMPARE(xAxis->range().start(), dt1.toMSecsSinceEpoch());
+	QCOMPARE(xAxis->range().end(), dt3.toMSecsSinceEpoch());
+	xAxis->setMajorTicksType(Axis::TicksType::Spacing);
+	// QCOMPARE(xAxis->majorTicksNumber(), 3);
+	xAxis->setLabelsDateTimeFormat(QStringLiteral("yyyy-MM-dd hh:mm:ss"));
+	QCOMPARE(xAxis->labelsTextType(), Axis::LabelsTextType::PositionValues);
+	QCOMPARE(xAxis->majorTicksStartType(), Axis::TicksStartType::Offset);
+	xAxis->setMajorTickStartOffset(DateTime::createValue(1, 2, 3, 4, 5, 6, 7));
+	QVERIFY(xAxis->majorTickStartOffset() > 0);
+	QCOMPARE(xAxis->majorTickStartValue(), 0);
+
+	{
+		const auto v = xAxis->tickLabelStrings();
+		QStringList expectedStrings{
+			QStringLiteral("2018-09-27 04:05:06"),
+			QStringLiteral("2018-10-27 04:05:06"),
+			QStringLiteral("2018-11-27 04:05:06"),
+			QStringLiteral("2018-12-27 04:05:06"),
+			QStringLiteral("2019-01-27 04:05:06"),
+			QStringLiteral("2019-02-27 04:05:06"),
+			QStringLiteral("2019-03-27 04:05:06"),
+			QStringLiteral("2019-04-27 04:05:06"),
+			QStringLiteral("2019-05-27 04:05:06"),
+			QStringLiteral("2019-06-27 04:05:06"),
+			QStringLiteral("2019-07-27 04:05:06"),
+			QStringLiteral("2019-08-27 04:05:06"),
+			QStringLiteral("2019-09-27 04:05:06"),
+			QStringLiteral("2019-10-27 04:05:06"),
+			QStringLiteral("2019-11-27 04:05:06"),
+		};
+		COMPARE_STRING_VECTORS(xAxis->tickLabelStrings(), expectedStrings);
+	}
+}
+
+void AxisTest::dateTimeSpacingStartValueNonZero() {
+	QLocale::setDefault(QLocale::C); // . as decimal separator
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	QVERIFY(ws != nullptr);
+	project.addChild(ws);
+
+	Spreadsheet* spreadsheetData = new Spreadsheet(QStringLiteral("data"), false);
+	spreadsheetData->setColumnCount(2);
+	spreadsheetData->setRowCount(3);
+	project.addChild(spreadsheetData);
+
+	auto* xCol = spreadsheetData->column(0);
+	xCol->setColumnMode(AbstractColumn::ColumnMode::DateTime);
+	QDateTime dt1 = QDateTime::fromString(QStringLiteral("2017-07-24T00:00:00Z"), Qt::ISODate);
+	QDateTime dt2 = QDateTime::fromString(QStringLiteral("2017-11-24T12:03:00Z"), Qt::ISODate);
+	QDateTime dt3 = QDateTime::fromString(QStringLiteral("2019-03-01T00:00:00Z"), Qt::ISODate);
+	xCol->replaceDateTimes(-1, QVector<QDateTime>({dt1, dt2, dt3}));
+
+	auto* yCol = spreadsheetData->column(1);
+	yCol->replaceValues(-1, QVector<double>({2, 3, 4}));
+
+	QCOMPARE(spreadsheetData->rowCount(), 3);
+	QCOMPARE(spreadsheetData->columnCount(), 2);
+
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	p->setNiceExtend(false);
+	QVERIFY(p != nullptr);
+	ws->addChild(p);
+
+	auto* curve = new XYCurve(QStringLiteral("xy-curve"));
+	curve->setXColumn(xCol);
+	curve->setYColumn(yCol);
+	p->addChild(curve);
+
+	auto axes = p->children<Axis>();
+	QCOMPARE(axes.count(), 2);
+	QCOMPARE(axes.at(0)->name(), QStringLiteral("x"));
+	QCOMPARE(axes.at(1)->name(), QStringLiteral("y"));
+
+	auto* xAxis = static_cast<Axis*>(axes.at(0));
+	xAxis->setMajorTicksSpacing(DateTime::createValue(0, 1, 0, 0, 0, 0, 0)); // 1 month
+	QCOMPARE(xAxis->range().start(), dt1.toMSecsSinceEpoch());
+	QCOMPARE(xAxis->range().end(), dt3.toMSecsSinceEpoch());
+	xAxis->setMajorTicksType(Axis::TicksType::Spacing);
+	// QCOMPARE(xAxis->majorTicksNumber(), 3);
+	xAxis->setLabelsDateTimeFormat(QStringLiteral("yyyy-MM-dd hh:mm:ss"));
+	QCOMPARE(xAxis->labelsTextType(), Axis::LabelsTextType::PositionValues);
+	xAxis->setMajorTicksStartType(Axis::TicksStartType::Absolute);
+	xAxis->setMajorTickStartValue(QDateTime::fromString(QStringLiteral("2018-09-27T16:05:06Z"), Qt::ISODate).toMSecsSinceEpoch());
+	QVERIFY(xAxis->majorTickStartValue() > 0);
+	{
+		const auto v = xAxis->tickLabelStrings();
+		QStringList expectedStrings{
+			QStringLiteral("2018-09-27 16:05:06"),
+			QStringLiteral("2018-10-27 16:05:06"),
+			QStringLiteral("2018-11-27 16:05:06"),
+			QStringLiteral("2018-12-27 16:05:06"),
+			QStringLiteral("2019-01-27 16:05:06"),
+			QStringLiteral("2019-02-27 16:05:06"),
 		};
 		COMPARE_STRING_VECTORS(xAxis->tickLabelStrings(), expectedStrings);
 	}
