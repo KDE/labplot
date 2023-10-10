@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-10-09 00:39+0000\n"
-"PO-Revision-Date: 2023-09-20 18:03+0200\n"
+"PO-Revision-Date: 2023-10-08 21:25+0200\n"
 "Last-Translator: Xavier BESNARD <xavier.besnard@neuf.fr>\n"
 "Language-Team: fr\n"
 "Language: fr\n"
@@ -12156,10 +12156,9 @@ msgid "Values"
 msgstr "Valeurs"
 
 #: src/kdefrontend/datasources/OdsOptionsWidget.cpp:19
-#, fuzzy, kde-format
-#| msgid "Datasets"
+#, kde-format
 msgid "Data sheets"
-msgstr "Ensembles de données"
+msgstr "Feuilles de données"
 
 #: src/kdefrontend/datasources/ROOTOptionsWidget.cpp:24
 #, kde-format
@@ -14806,6 +14805,8 @@ msgid ""
 "Opens the settings for Computer Algebra Systems to modify the available "
 "systems or to enable new ones"
 msgstr ""
+"Ouvre les paramètres pour les systèmes d'algèbre sur ordinateur pour "
+"modifier les systèmes disponibles ou pour en activer de nouveaux"
 
 #: src/kdefrontend/MainWin.cpp:920
 #, kde-format
@@ -21188,10 +21189,9 @@ msgstr "Unités :"
 
 #. i18n: ectx: property (text), widget (QLabel, lLoadOnStartNotebook)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:254
-#, fuzzy, kde-format
-#| msgid "Notebook"
+#, kde-format
 msgid "Notebook:"
-msgstr "Cahier de notes"
+msgstr "Cahier de notes :"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode_2)
