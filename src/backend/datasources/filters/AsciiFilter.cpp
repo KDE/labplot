@@ -983,7 +983,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 		if (keepNValues == 0) {
 			DEBUG("	keep All values");
 			if (readingType != LiveDataSource::ReadingType::TillEnd)
-				m_actualRows += std::min(newData.size(), static_cast<qsizetype>(spreadsheet->sampleSize()));
+				m_actualRows += std::min(static_cast<qsizetype>(newData.size()), static_cast<qsizetype>(spreadsheet->sampleSize()));
 			else {
 				// we don't increase it if we reread the whole file, we reset it
 				if (!(spreadsheet->readingType() == LiveDataSource::ReadingType::WholeFile))
