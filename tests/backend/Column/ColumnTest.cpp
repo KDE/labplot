@@ -1040,4 +1040,23 @@ void ColumnTest::testRemoveRow() {
 	QCOMPARE(rowsRemovedCounter, 3);
 }
 
+void ColumnTest::testFormula() {
+	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
+	c1.resizeTo(3);
+	QCOMPARE(c1.rowCount(), 3);
+	c1.replaceValues(-1, {1., 2., 3.});
+
+	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
+	c2.resizeTo(7);
+	QCOMPARE(c2.rowCount(), 7);
+	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17.});
+
+	c2.setFormula(QStringLiteral("mean(x)"), {QStringLiteral("x")}, {&c1}, true);
+	c2.updateFormula();
+	QCOMPARE(c2.rowCount(), 7);
+	for (int i = 0; i < c2.rowCount(); i++) {
+		QCOMPARE(c2.valueAt(i), 2.);
+	}
+}
+
 QTEST_MAIN(ColumnTest)

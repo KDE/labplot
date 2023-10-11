@@ -1905,7 +1905,8 @@ void ColumnPrivate::updateFormula() {
 		// TODO: maybe it's better to not extend the spreadsheet (see #31)
 
 		auto* spreadsheet = static_cast<Spreadsheet*>(m_owner->parentAspect());
-		if (spreadsheet->rowCount() < maxRowCount)
+		// In the tests spreadsheet might not exist, because directly the column was created
+		if (spreadsheet && spreadsheet->rowCount() < maxRowCount)
 			spreadsheet->setRowCount(maxRowCount);
 
 		// create new vector for storing the calculated values
@@ -1921,11 +1922,12 @@ void ColumnPrivate::updateFormula() {
 		replaceValues(-1, new_data);
 
 		// initialize remaining rows with NAN
-		int remainingRows = rowCount() - maxRowCount;
-		if (remainingRows > 0) {
-			QVector<double> emptyRows(remainingRows, NAN);
-			replaceValues(maxRowCount, emptyRows);
-		}
+		// This will be done already in evaluateCartesian()
+		// int remainingRows = rowCount() - maxRowCount;
+		// if (remainingRows > 0) {
+		//	QVector<double> emptyRows(remainingRows, NAN);
+		//	replaceValues(maxRowCount, emptyRows);
+		//}
 	} else { // not valid
 		QVector<double> new_data(rowCount(), NAN);
 		replaceValues(-1, new_data);

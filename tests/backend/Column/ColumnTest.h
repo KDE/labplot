@@ -57,6 +57,8 @@ private Q_SLOTS:
 
 	void testInsertRow();
 	void testRemoveRow();
+
+	void testFormula();
 };
 
 #endif // COLUMNTEST_H
