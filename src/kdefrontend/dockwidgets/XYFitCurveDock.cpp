@@ -26,7 +26,6 @@
 #include <KMessageWidget>
 
 #include <QClipboard>
-#include <QDesktopWidget>
 #include <QMenu>
 #include <QStandardItemModel>
 #include <QStandardPaths>
@@ -182,7 +181,7 @@ void XYFitCurveDock::setupGeneral() {
 	uiGeneralTab.twGoodness->item(5, 0)->setText(UTF8_QSTRING("χ²-") + i18n("test") + UTF8_QSTRING(" (P > χ²)"));
 
 	auto* layout = new QHBoxLayout(ui.tabGeneral);
-	layout->setMargin(0);
+	layout->setContentsMargins(0, 0, 0, 0);
 	layout->addWidget(generalTab);
 
 	// Slots

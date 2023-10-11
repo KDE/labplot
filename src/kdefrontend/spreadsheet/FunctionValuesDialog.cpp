@@ -256,7 +256,7 @@ void FunctionValuesDialog::insertConstant(const QString& constantsName) const {
 
 void FunctionValuesDialog::addVariable() {
 	auto* layout{ui.gridLayoutVariables};
-	int row{m_variableLineEdits.size()};
+	auto row{m_variableLineEdits.size()};
 	// text field for the variable name
 	auto* le{new QLineEdit};
 	le->setToolTip(i18n("Variable name can contain letters, digits and '_' only and should start with a letter"));

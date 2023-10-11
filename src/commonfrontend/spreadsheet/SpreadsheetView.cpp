@@ -55,9 +55,11 @@
 #include <KMessageBox>
 
 #include <QAbstractSlider>
+#include <QActionGroup>
 #include <QApplication>
 #include <QClipboard>
 #include <QDate>
+#include <QFile>
 #include <QInputDialog>
 #include <QKeyEvent>
 #include <QMenu>
@@ -4050,10 +4052,10 @@ void SpreadsheetView::exportToLaTeX(const QString& path,
 		yearidx -= 3;
 
 	bool ok;
-	texVersionOutput.midRef(yearidx, 4).toInt(&ok);
+	texVersionOutput.mid(yearidx, 4).toInt(&ok);
 	int version = -1;
 	if (ok)
-		version = texVersionOutput.midRef(yearidx, 4).toInt(&ok);
+		version = texVersionOutput.mid(yearidx, 4).toInt(&ok);
 
 	if (latexHeaders) {
 		out << QLatin1String("\\documentclass[11pt,a4paper]{article} \n");

@@ -30,8 +30,8 @@
 
 #include <QCompleter>
 #include <QDir>
-#include <QDirModel>
 #include <QFileDialog>
+#include <QFileSystemModel>
 #include <QInputDialog>
 #include <QIntValidator>
 #include <QLocalSocket>
@@ -1888,7 +1888,7 @@ void ImportFileWidget::refreshPreview() {
 			item->setText(importedStrings[0][0]);
 			tmpTableWidget->setItem(0, 0, item);
 		} else {
-			const int rowCount = std::max(importedStrings.size(), 1);
+			const int rowCount = std::max(importedStrings.size(), (qsizetype)1);
 			const int maxColumns = 300;
 			tmpTableWidget->setRowCount(rowCount);
 
@@ -1906,7 +1906,7 @@ void ImportFileWidget::refreshPreview() {
 			// XLSX and Ods has special h/vheader, don't overwrite the preview table
 			if (fileType != AbstractFileFilter::FileType::XLSX && fileType != AbstractFileFilter::FileType::Ods) {
 				// set header if columnMode available
-				for (int i = 0; i < std::min(tmpTableWidget->columnCount(), columnModes.size()); ++i) {
+				for (int i = 0; i < std::min(static_cast<qsizetype>(tmpTableWidget->columnCount()), columnModes.size()); ++i) {
 					QString columnName = QString::number(i + 1);
 					if (i < vectorNameList.size())
 						columnName = vectorNameList.at(i);

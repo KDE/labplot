@@ -239,11 +239,13 @@ void ImportProjectDialog::importTo(QStatusBar* statusBar) const {
 #if KCOREADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
 		auto status =
 			KMessageBox::warningTwoActions(nullptr, msg, i18n("Override existing objects?"), KStandardGuiItem::overwrite(), KStandardGuiItem::cancel());
+		if (status == KMessageBox::SecondaryAction)
+			return;
 #else
 		auto status = KMessageBox::warningYesNo(nullptr, msg, i18n("Override existing objects?"));
-#endif
 		if (status == KMessageBox::No)
 			return;
+#endif
 	}
 
 	// show a progress bar in the status bar

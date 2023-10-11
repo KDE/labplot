@@ -1492,15 +1492,16 @@ void WorksheetView::deleteElement() {
 		i18np("Delete selected object", "Delete selected objects", m_selectedItems.size()),
 		KStandardGuiItem::del(),
 		KStandardGuiItem::cancel());
+	if (status == KMessageBox::SecondaryAction)
+		return;
 #else
 	auto status = KMessageBox::warningYesNo(
 		this,
 		i18np("Do you really want to delete the selected object?", "Do you really want to delete the selected %1 objects?", m_selectedItems.size()),
 		i18np("Delete selected object", "Delete selected objects", m_selectedItems.size()));
-#endif
-
 	if (status == KMessageBox::No)
 		return;
+#endif
 
 	m_suppressSelectionChangedEvent = true;
 	m_worksheet->beginMacro(i18n("%1: Remove selected worksheet elements.", m_worksheet->name()));

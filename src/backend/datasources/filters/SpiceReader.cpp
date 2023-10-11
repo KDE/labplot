@@ -11,7 +11,7 @@
 #include "backend/lib/macros.h"
 
 #include <QDataStream>
-#include <QTextCodec>
+#include <QStringDecoder>
 
 #include <cmath>
 
@@ -34,7 +34,7 @@ void SpiceFileReader::init() {
 			return;
 		mNgspice = false;
 		mInfoString += convertLTSpiceBinary(l + mFile.read(1)); // because of utf16 end of line "\n 0x00" the 0x00 must be flushed
-		stream.setCodec(QTextCodec::codecForMib(1015));
+		stream.setEncoding(QStringConverter::Utf16);
 		pos++;
 	} else // title: removed trailing '\r' and '\n'
 		addInfoStringLine(QLatin1String(l).trimmed());
@@ -218,7 +218,7 @@ int SpiceFileReader::readData(std::vector<void*>& data, int skipLines, int maxLi
 	} else { // Ascii
 		QTextStream stream(&mFile);
 		if (!mNgspice)
-			stream.setCodec(QTextCodec::codecForMib(1015));
+			stream.setEncoding(QStringConverter::Utf16);
 
 		for (int s = 0; s < skipLines; s++) {
 			for (int i = 0; i < mVariables.count(); i++)
@@ -271,7 +271,8 @@ QString SpiceFileReader::convertLTSpiceBinary(const QByteArray& s) {
 	// (1015 is UTF-16, 1014 is UTF-16LE, 1013 is UTF-16BE, 106 is UTF-8)
 	// https://stackoverflow.com/questions/14131127/qbytearray-to-qstring
 
-	return QTextCodec::codecForMib(1015)->toUnicode(s);
+	auto toUtf16 = QStringDecoder(QStringDecoder::Utf8);
+	return toUtf16(s);
 }
 
 SpiceFileReader::PlotMode SpiceFileReader::plotNameToPlotMode(const QString& name) {

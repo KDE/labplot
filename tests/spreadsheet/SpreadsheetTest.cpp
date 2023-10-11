@@ -1160,9 +1160,7 @@ void SpreadsheetTest::testSortPerformanceNumeric1() {
 	col->replaceValues(0, xData);
 
 	// sort
-	QBENCHMARK {
-		sheet.sortColumns(nullptr, {col}, true);
-	}
+	QBENCHMARK { sheet.sortColumns(nullptr, {col}, true); }
 }
 
 /*
@@ -1192,9 +1190,7 @@ void SpreadsheetTest::testSortPerformanceNumeric2() {
 	col1->replaceInteger(0, yData);
 
 	// sort
-	QBENCHMARK {
-		sheet.sortColumns(col0, {col0, col1}, true);
-	}
+	QBENCHMARK { sheet.sortColumns(col0, {col0, col1}, true); }
 }
 
 // **********************************************************

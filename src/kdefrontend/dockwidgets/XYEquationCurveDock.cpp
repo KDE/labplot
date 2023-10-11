@@ -59,7 +59,7 @@ void XYEquationCurveDock::setupGeneral() {
 	}
 
 	auto* layout = new QHBoxLayout(ui.tabGeneral);
-	layout->setMargin(0);
+	layout->setContentsMargins(0, 0, 0, 0);
 	layout->addWidget(generalTab);
 
 	uiGeneralTab.tbConstants1->setIcon(QIcon::fromTheme(QStringLiteral("labplot-format-text-symbol")));

@@ -917,12 +917,13 @@ void ProjectExplorer::deleteSelected() {
 												 i18np("Delete selected object", "Delete selected objects", aspects.size()),
 												 KStandardGuiItem::del(),
 												 KStandardGuiItem::cancel());
+	if (status == KMessageBox::SecondaryAction)
+		return;
 #else
 	auto status = KMessageBox::warningYesNo(this, msg, i18np("Delete selected object", "Delete selected objects", aspects.size()));
-#endif
-
 	if (status == KMessageBox::No)
 		return;
+#endif
 
 	m_project->beginMacro(i18np("Project Explorer: delete %1 selected object", "Project Explorer: delete %1 selected objects", items.size() / 4));
 

@@ -65,7 +65,7 @@
 #include "kdefrontend/widgets/LabelWidget.h"
 
 #ifdef HAVE_KUSERFEEDBACK
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 #include <KUserFeedbackQt6/ApplicationVersionSource>
 #include <KUserFeedbackQt6/PlatformInfoSource>
 #include <KUserFeedbackQt6/QtVersionSource>

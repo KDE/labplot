@@ -599,7 +599,6 @@ target_link_libraries( labplot2lib
 	ads::qt${QT_VERSION_MAJOR}advanceddocking
 	)
 
-
 IF (Qt${QT_MAJOR_VERSION}SerialPort_FOUND)
 	target_link_libraries( labplot2backendlib Qt${QT_MAJOR_VERSION}::SerialPort )
 	target_link_libraries( labplot2lib Qt${QT_MAJOR_VERSION}::SerialPort )

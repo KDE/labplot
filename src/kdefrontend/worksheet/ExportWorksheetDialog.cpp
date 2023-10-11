@@ -209,10 +209,11 @@ void ExportWorksheetDialog::okClicked() {
 													 i18n("Export"),
 													 KStandardGuiItem::overwrite(),
 													 KStandardGuiItem::cancel());
+		if (status == KMessageBox::SecondaryAction)
 #else
 		int status = KMessageBox::questionYesNo(this, i18n("The file already exists. Do you really want to overwrite it?"), i18n("Export"));
-#endif
 		if (status == KMessageBox::No)
+#endif
 			return;
 	}
 

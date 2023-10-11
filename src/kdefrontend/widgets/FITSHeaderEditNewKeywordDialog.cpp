@@ -89,11 +89,13 @@ int FITSHeaderEditNewKeywordDialog::okClicked() {
 													 i18n("Cannot add empty key"),
 													 KStandardGuiItem::ok(),
 													 KStandardGuiItem::cancel());
+		if (status == KMessageBox::SecondaryAction)
+			return QMessageBox::Cancel;
 #else
 		auto status = KMessageBox::warningYesNo(this, i18n("Cannot add new keyword without key, would you like to try again?"), i18n("Cannot add empty key"));
-#endif
 		if (status == KMessageBox::No)
 			return QMessageBox::Cancel;
+#endif
 		return status;
 	}
 }

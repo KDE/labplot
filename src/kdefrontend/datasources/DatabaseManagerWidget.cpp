@@ -353,14 +353,15 @@ void DatabaseManagerWidget::deleteConnection() {
 												  i18n("Delete Connection"),
 												  KStandardGuiItem::del(),
 												  KStandardGuiItem::cancel());
+	if (status != KMessageBox::PrimaryAction)
+		return;
 #else
 	auto status = KMessageBox::questionYesNo(this,
 											 i18n("Do you really want to delete the connection '%1'?", ui.lwConnections->currentItem()->text()),
 											 i18n("Delete Connection"));
-#endif
-
 	if (status != KMessageBox::Yes)
 		return;
+#endif
 
 	// remove the current selected connection
 	int row = ui.lwConnections->currentRow();
@@ -573,7 +574,7 @@ QString DatabaseManagerWidget::uniqueName() {
 	if (last_non_digit >= 0 && base[last_non_digit].category() != QChar::Separator_Space)
 		base.append(QStringLiteral(" "));
 
-	int new_nr = name.rightRef(name.size() - base.size()).toInt();
+	int new_nr = name.right(name.size() - base.size()).toInt();
 	QString new_name;
 	do
 		new_name = base + QString::number(++new_nr);
