@@ -1888,7 +1888,11 @@ void ImportFileWidget::refreshPreview() {
 			item->setText(importedStrings[0][0]);
 			tmpTableWidget->setItem(0, 0, item);
 		} else {
-			const int rowCount = std::max(importedStrings.size(), (qsizetype)1);
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+			const int rowCount = std::max(importedStrings.size(), static_cast<qsizetype>(1));
+#else
+			const int rowCount = std::max(importedStrings.size(), 1);
+#endif
 			const int maxColumns = 300;
 			tmpTableWidget->setRowCount(rowCount);
 
@@ -1906,7 +1910,11 @@ void ImportFileWidget::refreshPreview() {
 			// XLSX and Ods has special h/vheader, don't overwrite the preview table
 			if (fileType != AbstractFileFilter::FileType::XLSX && fileType != AbstractFileFilter::FileType::Ods) {
 				// set header if columnMode available
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 				for (int i = 0; i < std::min(static_cast<qsizetype>(tmpTableWidget->columnCount()), columnModes.size()); ++i) {
+#else
+				for (int i = 0; i < std::min(tmpTableWidget->columnCount(), columnModes.size()); ++i) {
+#endif
 					QString columnName = QString::number(i + 1);
 					if (i < vectorNameList.size())
 						columnName = vectorNameList.at(i);

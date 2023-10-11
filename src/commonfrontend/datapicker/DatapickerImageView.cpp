@@ -27,6 +27,7 @@
 #include <QMessageBox>
 #include <QMimeData>
 #include <QPrinter>
+#include <QScreen>
 #include <QSvgGenerator>
 #include <QTimeLine>
 #include <QToolBar>
