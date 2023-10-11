@@ -280,7 +280,6 @@ int SpiceFileReader::readData(std::vector<void*>& data, int skipLines, int maxLi
 }
 
 QString SpiceFileReader::convertLTSpiceBinary(const QByteArray& s) {
-
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 	auto toUtf16 = QStringDecoder(QStringDecoder::Utf8);
 	return toUtf16(s);

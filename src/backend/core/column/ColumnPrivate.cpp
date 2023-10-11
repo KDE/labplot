@@ -1806,7 +1806,8 @@ void ColumnPrivate::updateFormula() {
 			QRegularExpression rx(m.arg(varName), QRegularExpression::InvertedGreedinessOption);
 
 			int pos = 0;
-			for (auto match = rx.match(formula, pos); match.hasMatch();) { // loop over all method calls
+			auto match = rx.match(formula, pos);
+			while (match.hasMatch()) { // loop over all method calls
 				QDEBUG("method call:" << match.captured(0))
 				double p = numberLocale.toDouble(match.captured(1)); // option
 				DEBUG("p = " << p)
@@ -1850,6 +1851,9 @@ void ColumnPrivate::updateFormula() {
 				}
 
 				formula.replace(match.captured(0), numberLocale.toString(value));
+
+				pos = match.capturedStart(1);
+				match = rx.match(formula, pos);
 			}
 		}
 
@@ -1866,12 +1870,16 @@ void ColumnPrivate::updateFormula() {
 			QRegularExpression rx(m.first.arg(varName), QRegularExpression::InvertedGreedinessOption);
 
 			int pos = 0;
-			for (auto match = rx.match(formula, pos); match.hasMatch();) { // loop over all method calls
+			auto match = rx.match(formula, pos);
+			while (match.hasMatch()) { // loop over all method calls
 				QDEBUG("method call:" << match.captured(0))
 				const int N = numberLocale.toInt(match.captured(1));
 				DEBUG("N = " << N)
 
 				formula.replace(match.captured(0), m.second.arg(QLocale().toString(N)).arg(varName));
+
+				pos = match.capturedStart(1);
+				match = rx.match(formula, pos);
 			}
 		}
 
