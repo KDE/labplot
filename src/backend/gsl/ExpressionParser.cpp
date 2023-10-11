@@ -479,7 +479,6 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList&
 				// QDEBUG("g(x,..) =" << g)
 				assign_symbol("i", i + 1); // row number i = 1 .. minSize
 				const int index = parse(qPrintable(f), qPrintable(numberLocale.name()));
-				constExpression = variablesFoundCounter() == 0;
 				// DEBUG("INDEX = " << index)
 				pos = match.capturedStart(1);
 
@@ -591,6 +590,9 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList&
 			// DEBUG("Parsing with locale failed. Using en_US.")
 			y = parse(qPrintable(tmpExpr), "en_US");
 		}
+
+		if (parse_errors() == 0)
+			constExpression = variablesFoundCounter() == 0;
 		// continue with next value
 		// if (parse_errors() > 0)
 		//	return false;
@@ -602,8 +604,10 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList&
 	}
 
 	// if the y-vector is longer than the x-vector(s), set all exceeding elements to NaN
-	for (int i = minSize; i < yVector->size(); ++i)
-		(*yVector)[i] = NAN;
+	if (!constExpression) {
+		for (int i = minSize; i < yVector->size(); ++i)
+			(*yVector)[i] = NAN;
+	}
 
 	return true;
 }

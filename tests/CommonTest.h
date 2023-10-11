@@ -73,18 +73,18 @@
 	}
 
 #define COMPARE_DOUBLE_VECTORS_AT_LEAST_LENGTH(res, ref)                                                                                                       \
-	do {																																					\
-	QVERIFY(res.length() >= ref.length());                                                                                                                     \
-	for (int i = 0; i < ref.length(); i++)                                                                                                                     \
-		QVERIFY2(qFuzzyCompare(res.at(i), ref.at(i)),                                                                                                          \
-				 qPrintable(QStringLiteral("i=") + QString::number(i) + QStringLiteral(", res=") + QString::number(res.at(i)) + QStringLiteral(", ref=")       \
-							+ QString::number(ref.at(i)))); \
+	do {                                                                                                                                                       \
+		QVERIFY(res.length() >= ref.length());                                                                                                                 \
+		for (int i = 0; i < ref.length(); i++)                                                                                                                 \
+			QVERIFY2(qFuzzyCompare(res.at(i), ref.at(i)),                                                                                                      \
+					 qPrintable(QStringLiteral("i=") + QString::number(i) + QStringLiteral(", res=") + QString::number(res.at(i)) + QStringLiteral(", ref=")   \
+								+ QString::number(ref.at(i))));                                                                                                \
 	} while (false)
 
 #define COMPARE_DOUBLE_VECTORS(res, ref)                                                                                                                       \
-	do {\
-	QCOMPARE(res.length(), ref.length());                                                                                                                      \
-	COMPARE_DOUBLE_VECTORS_AT_LEAST_LENGTH(res, ref);\
+	do {                                                                                                                                                       \
+		QCOMPARE(res.length(), ref.length());                                                                                                                  \
+		COMPARE_DOUBLE_VECTORS_AT_LEAST_LENGTH(res, ref);                                                                                                      \
 	} while (false)
 
 #define COMPARE_STRING_VECTORS(res, ref)                                                                                                                       \
