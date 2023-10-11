@@ -410,45 +410,63 @@ void AxisTest::TestSetCoordinateSystem() {
 	}
 }
 
-// void AxisTest::TestSetRange() {
-//	Axis a(QStringLiteral("x"), Axis::Orientation::Horizontal);
+void AxisTest::TestSetRange() {
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	QVERIFY(ws != nullptr);
+	project.addChild(ws);
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axes are created
+	QVERIFY(p != nullptr);
+	ws->addChild(p);
+	auto axes = p->children<Axis>();
+	QCOMPARE(axes.count(), 2);
+	auto xAxis = axes.at(0);
+	QCOMPARE(xAxis->name(), QStringLiteral("x"));
 
-//	auto arange = a.range();
-//	// different to default values!
-//	Range<double> r(5, 11, RangeT::Format::DateTime, RangeT::Scale::Log10);
-//	QVERIFY(arange.start() != r.start());
-//	QVERIFY(arange.end() != r.end());
-//	QVERIFY(arange.format() != r.format());
-//	QVERIFY(arange.scale() != r.scale());
+	// This does not work anymore, because isNumeric() is depending on the
+	// CoordinateSystem which is not available when using creating the object
+	// TODO: find a way to sync AxisPrivate::Range with the CartesianPlotRange
+	// (Not only the start/end, but also the format and the scale!)
+	// Then this can be used again
+	// Axis xAxis(QStringLiteral("x"), Axis::Orientation::Horizontal);
 
-//	a.setRange(r);
-//	arange = a.range();
-//	QCOMPARE(arange.start(), 5);
-//	QCOMPARE(arange.end(), 11);
-//	QCOMPARE(arange.format(), RangeT::Format::DateTime);
-//	QCOMPARE(arange.scale(), RangeT::Scale::Log10);
+	auto arange = xAxis->range();
+	// different to default values!
+	Range<double> r(5, 11, RangeT::Format::DateTime, RangeT::Scale::Log10);
+	QVERIFY(arange.start() != r.start());
+	QVERIFY(arange.end() != r.end());
+	QVERIFY(arange.format() != r.format());
+	QVERIFY(arange.scale() != r.scale());
 
-//	a.setStart(1);
-//	arange = a.range();
-//	QCOMPARE(arange.start(), 1);
-//	QCOMPARE(arange.end(), 11);
-//	QCOMPARE(arange.format(), RangeT::Format::DateTime);
-//	QCOMPARE(arange.scale(), RangeT::Scale::Log10);
+	xAxis->setRange(r);
+	arange = xAxis->range();
+	QCOMPARE(arange.start(), 5);
+	QCOMPARE(arange.end(), 11);
+	QCOMPARE(arange.format(), RangeT::Format::DateTime);
+	QCOMPARE(arange.scale(), RangeT::Scale::Log10);
 
-//	a.setEnd(23);
-//	arange = a.range();
-//	QCOMPARE(arange.start(), 1);
-//	QCOMPARE(arange.end(), 23);
-//	QCOMPARE(arange.format(), RangeT::Format::DateTime);
-//	QCOMPARE(arange.scale(), RangeT::Scale::Log10);
+	xAxis->setStart(1);
+	arange = xAxis->range();
+	QCOMPARE(arange.start(), 1);
+	QCOMPARE(arange.end(), 11);
+	QCOMPARE(arange.format(), RangeT::Format::DateTime);
+	QCOMPARE(arange.scale(), RangeT::Scale::Log10);
 
-//	a.setRange(-10, 10);
-//	arange = a.range();
-//	QCOMPARE(arange.start(), -10);
-//	QCOMPARE(arange.end(), 10);
-//	QCOMPARE(arange.format(), RangeT::Format::DateTime);
-//	QCOMPARE(arange.scale(), RangeT::Scale::Log10);
-//}
+	xAxis->setEnd(23);
+	arange = xAxis->range();
+	QCOMPARE(arange.start(), 1);
+	QCOMPARE(arange.end(), 23);
+	QCOMPARE(arange.format(), RangeT::Format::DateTime);
+	QCOMPARE(arange.scale(), RangeT::Scale::Log10);
+
+	xAxis->setRange(-10, 10);
+	arange = xAxis->range();
+	QCOMPARE(arange.start(), -10);
+	QCOMPARE(arange.end(), 10);
+	QCOMPARE(arange.format(), RangeT::Format::DateTime);
+	QCOMPARE(arange.scale(), RangeT::Scale::Log10);
+}
 
 void AxisTest::TestAddingHorizontalAxis() {
 	Project project;
@@ -1460,8 +1478,6 @@ void AxisTest::numericSpacingOffsetNonZero() {
 	{
 		const auto v = xAxis->tickLabelStrings();
 		QStringList expectedStrings{
-			QStringLiteral("1.2"),
-			QStringLiteral("1.7"),
 			QStringLiteral("2.2"),
 			QStringLiteral("2.7"),
 			QStringLiteral("3.2"),
@@ -1522,12 +1538,12 @@ void AxisTest::numericSpacingStartValueNonZero() {
 	xAxis->setMajorTickStartValue(1.7);
 	QVERIFY(xAxis->majorTickStartValue() > 0);
 	{
-		const auto v = xAxis->tickLabelStrings();
 		QStringList expectedStrings{
-			QStringLiteral("2.6"),
-			QStringLiteral("3.4"),
-			QStringLiteral("4.1"),
-			QStringLiteral("4.8"),
+			QStringLiteral("1.7"),
+			QStringLiteral("2.4"),
+			QStringLiteral("3.1"),
+			QStringLiteral("3.8"),
+			QStringLiteral("4.5"),
 		};
 		COMPARE_STRING_VECTORS(xAxis->tickLabelStrings(), expectedStrings);
 	}

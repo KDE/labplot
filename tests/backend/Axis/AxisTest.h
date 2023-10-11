@@ -22,7 +22,7 @@ private Q_SLOTS:
 	void minorTicksAutoNumberEnableDisable();
 	void majorTicksStartValue();
 	void TestSetCoordinateSystem();
-	//	void /*TestSetRange*/();
+	void TestSetRange();
 	void TestAddingHorizontalAxis();
 	void TestAddingVerticalAxis();
 	void tickLabelRepresentationAutomatic();
