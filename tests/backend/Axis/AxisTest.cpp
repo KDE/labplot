@@ -1033,7 +1033,7 @@ void AxisTest::dateTime() {
 	xCol->replaceDateTimes(-1, QVector<QDateTime>({dt1, dt2, dt3}));
 
 	auto* yCol = spreadsheetData->column(1);
-	yCol->replaceValues(-1, QVector<double>({2, 3, 4}));
+	yCol->replaceValues(-1, QVector<double>({2., 3., 4.}));
 
 	QCOMPARE(spreadsheetData->rowCount(), 3);
 	QCOMPARE(spreadsheetData->columnCount(), 2);
@@ -1094,7 +1094,7 @@ void AxisTest::dateTimeSpacing() {
 	xCol->replaceDateTimes(-1, QVector<QDateTime>({dt1, dt2, dt3}));
 
 	auto* yCol = spreadsheetData->column(1);
-	yCol->replaceValues(-1, QVector<double>({2, 3, 4}));
+	yCol->replaceValues(-1, QVector<double>({2., 3., 4.}));
 
 	QCOMPARE(spreadsheetData->rowCount(), 3);
 	QCOMPARE(spreadsheetData->columnCount(), 2);
@@ -1161,7 +1161,7 @@ void AxisTest::dateTimeSpacingOffsetNonZero() {
 	xCol->replaceDateTimes(-1, QVector<QDateTime>({dt1, dt2, dt3}));
 
 	auto* yCol = spreadsheetData->column(1);
-	yCol->replaceValues(-1, QVector<double>({2, 3, 4}));
+	yCol->replaceValues(-1, QVector<double>({2., 3., 4.}));
 
 	QCOMPARE(spreadsheetData->rowCount(), 3);
 	QCOMPARE(spreadsheetData->columnCount(), 2);
@@ -1238,7 +1238,7 @@ void AxisTest::dateTimeSpacingStartValueNonZero() {
 	xCol->replaceDateTimes(-1, QVector<QDateTime>({dt1, dt2, dt3}));
 
 	auto* yCol = spreadsheetData->column(1);
-	yCol->replaceValues(-1, QVector<double>({2, 3, 4}));
+	yCol->replaceValues(-1, QVector<double>({2., 3., 4.}));
 
 	QCOMPARE(spreadsheetData->rowCount(), 3);
 	QCOMPARE(spreadsheetData->columnCount(), 2);
@@ -1298,10 +1298,10 @@ void AxisTest::numeric() {
 
 	auto* xCol = spreadsheetData->column(0);
 	xCol->setColumnMode(AbstractColumn::ColumnMode::Double);
-	xCol->replaceValues(-1, QVector<double>({1, 2, 5}));
+	xCol->replaceValues(-1, QVector<double>({1., 2., 5.}));
 
 	auto* yCol = spreadsheetData->column(1);
-	yCol->replaceValues(-1, QVector<double>({2, 3, 4}));
+	yCol->replaceValues(-1, QVector<double>({2., 3., 4.}));
 
 	QCOMPARE(spreadsheetData->rowCount(), 3);
 	QCOMPARE(spreadsheetData->columnCount(), 2);
@@ -1324,8 +1324,8 @@ void AxisTest::numeric() {
 
 	auto* xAxis = static_cast<Axis*>(axes.at(0));
 	xAxis->setMajorTicksNumber(3, false);
-	QCOMPARE(xAxis->range().start(), 1);
-	QCOMPARE(xAxis->range().end(), 5);
+	QCOMPARE(xAxis->range().start(), 1.);
+	QCOMPARE(xAxis->range().end(), 5.);
 	QCOMPARE(xAxis->majorTicksType(), Axis::TicksType::TotalNumber);
 	QCOMPARE(xAxis->majorTicksNumber(), 3);
 	QCOMPARE(xAxis->labelsTextType(), Axis::LabelsTextType::PositionValues);
@@ -1355,10 +1355,10 @@ void AxisTest::numericSpacing() {
 
 	auto* xCol = spreadsheetData->column(0);
 	xCol->setColumnMode(AbstractColumn::ColumnMode::Double);
-	xCol->replaceValues(-1, QVector<double>({1, 2, 5}));
+	xCol->replaceValues(-1, QVector<double>({1., 2., 5.}));
 
 	auto* yCol = spreadsheetData->column(1);
-	yCol->replaceValues(-1, QVector<double>({2, 3, 4}));
+	yCol->replaceValues(-1, QVector<double>({2., 3., 4.}));
 
 	QCOMPARE(spreadsheetData->rowCount(), 3);
 	QCOMPARE(spreadsheetData->columnCount(), 2);
@@ -1381,14 +1381,14 @@ void AxisTest::numericSpacing() {
 
 	auto* xAxis = static_cast<Axis*>(axes.at(0));
 	xAxis->setMajorTicksSpacing(0.5);
-	QCOMPARE(xAxis->range().start(), 1);
-	QCOMPARE(xAxis->range().end(), 5);
+	QCOMPARE(xAxis->range().start(), 1.);
+	QCOMPARE(xAxis->range().end(), 5.);
 	xAxis->setMajorTicksType(Axis::TicksType::Spacing);
 	// QCOMPARE(xAxis->majorTicksNumber(), 3);
 	QCOMPARE(xAxis->labelsTextType(), Axis::LabelsTextType::PositionValues);
 	QCOMPARE(xAxis->majorTicksStartType(), Axis::TicksStartType::Offset);
-	QCOMPARE(xAxis->majorTickStartOffset(), 0);
-	QCOMPARE(xAxis->majorTickStartValue(), 0);
+	QCOMPARE(xAxis->majorTickStartOffset(), 0.);
+	QCOMPARE(xAxis->majorTickStartValue(), 0.);
 
 	{
 		const auto v = xAxis->tickLabelStrings();
@@ -1421,10 +1421,10 @@ void AxisTest::numericSpacingOffsetNonZero() {
 
 	auto* xCol = spreadsheetData->column(0);
 	xCol->setColumnMode(AbstractColumn::ColumnMode::Double);
-	xCol->replaceValues(-1, QVector<double>({1, 2, 5}));
+	xCol->replaceValues(-1, QVector<double>({1., 2., 5.}));
 
 	auto* yCol = spreadsheetData->column(1);
-	yCol->replaceValues(-1, QVector<double>({2, 3, 4}));
+	yCol->replaceValues(-1, QVector<double>({2., 3., 4.}));
 
 	QCOMPARE(spreadsheetData->rowCount(), 3);
 	QCOMPARE(spreadsheetData->columnCount(), 2);
@@ -1447,15 +1447,15 @@ void AxisTest::numericSpacingOffsetNonZero() {
 
 	auto* xAxis = static_cast<Axis*>(axes.at(0));
 	xAxis->setMajorTicksSpacing(0.5);
-	QCOMPARE(xAxis->range().start(), 1);
-	QCOMPARE(xAxis->range().end(), 5);
+	QCOMPARE(xAxis->range().start(), 1.);
+	QCOMPARE(xAxis->range().end(), 5.);
 	xAxis->setMajorTicksType(Axis::TicksType::Spacing);
 	// QCOMPARE(xAxis->majorTicksNumber(), 3);
 	QCOMPARE(xAxis->labelsTextType(), Axis::LabelsTextType::PositionValues);
 	QCOMPARE(xAxis->majorTicksStartType(), Axis::TicksStartType::Offset);
 	xAxis->setMajorTickStartOffset(1.2);
 	QVERIFY(xAxis->majorTickStartOffset() > 0);
-	QCOMPARE(xAxis->majorTickStartValue(), 0);
+	QCOMPARE(xAxis->majorTickStartValue(), 0.);
 
 	{
 		const auto v = xAxis->tickLabelStrings();
@@ -1487,10 +1487,10 @@ void AxisTest::numericSpacingStartValueNonZero() {
 
 	auto* xCol = spreadsheetData->column(0);
 	xCol->setColumnMode(AbstractColumn::ColumnMode::Double);
-	xCol->replaceValues(-1, QVector<double>({1, 2, 5}));
+	xCol->replaceValues(-1, QVector<double>({1., 2., 5.}));
 
 	auto* yCol = spreadsheetData->column(1);
-	yCol->replaceValues(-1, QVector<double>({2, 3, 4}));
+	yCol->replaceValues(-1, QVector<double>({2., 3., 4.}));
 
 	QCOMPARE(spreadsheetData->rowCount(), 3);
 	QCOMPARE(spreadsheetData->columnCount(), 2);
@@ -1513,8 +1513,8 @@ void AxisTest::numericSpacingStartValueNonZero() {
 
 	auto* xAxis = static_cast<Axis*>(axes.at(0));
 	xAxis->setMajorTicksSpacing(0.7);
-	QCOMPARE(xAxis->range().start(), 1);
-	QCOMPARE(xAxis->range().end(), 5);
+	QCOMPARE(xAxis->range().start(), 1.);
+	QCOMPARE(xAxis->range().end(), 5.);
 	xAxis->setMajorTicksType(Axis::TicksType::Spacing);
 	// QCOMPARE(xAxis->majorTicksNumber(), 3);
 	QCOMPARE(xAxis->labelsTextType(), Axis::LabelsTextType::PositionValues);
