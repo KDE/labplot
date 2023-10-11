@@ -1324,8 +1324,8 @@ void AxisTest::numeric() {
 
 	auto* xAxis = static_cast<Axis*>(axes.at(0));
 	xAxis->setMajorTicksNumber(3, false);
-	QCOMPARE(xAxis->range().start(), dt1.toMSecsSinceEpoch());
-	QCOMPARE(xAxis->range().end(), dt3.toMSecsSinceEpoch());
+	QCOMPARE(xAxis->range().start(), 1);
+	QCOMPARE(xAxis->range().end(), 5);
 	QCOMPARE(xAxis->majorTicksType(), Axis::TicksType::TotalNumber);
 	QCOMPARE(xAxis->majorTicksNumber(), 3);
 	QCOMPARE(xAxis->labelsTextType(), Axis::LabelsTextType::PositionValues);
@@ -1381,8 +1381,8 @@ void AxisTest::numericSpacing() {
 
 	auto* xAxis = static_cast<Axis*>(axes.at(0));
 	xAxis->setMajorTicksSpacing(0.5);
-	QCOMPARE(xAxis->range().start(), dt1.toMSecsSinceEpoch());
-	QCOMPARE(xAxis->range().end(), dt3.toMSecsSinceEpoch());
+	QCOMPARE(xAxis->range().start(), 1);
+	QCOMPARE(xAxis->range().end(), 5);
 	xAxis->setMajorTicksType(Axis::TicksType::Spacing);
 	// QCOMPARE(xAxis->majorTicksNumber(), 3);
 	QCOMPARE(xAxis->labelsTextType(), Axis::LabelsTextType::PositionValues);
@@ -1447,8 +1447,8 @@ void AxisTest::numericSpacingOffsetNonZero() {
 
 	auto* xAxis = static_cast<Axis*>(axes.at(0));
 	xAxis->setMajorTicksSpacing(0.5);
-	QCOMPARE(xAxis->range().start(), dt1.toMSecsSinceEpoch());
-	QCOMPARE(xAxis->range().end(), dt3.toMSecsSinceEpoch());
+	QCOMPARE(xAxis->range().start(), 1);
+	QCOMPARE(xAxis->range().end(), 5);
 	xAxis->setMajorTicksType(Axis::TicksType::Spacing);
 	// QCOMPARE(xAxis->majorTicksNumber(), 3);
 	QCOMPARE(xAxis->labelsTextType(), Axis::LabelsTextType::PositionValues);
@@ -1513,8 +1513,8 @@ void AxisTest::numericSpacingStartValueNonZero() {
 
 	auto* xAxis = static_cast<Axis*>(axes.at(0));
 	xAxis->setMajorTicksSpacing(0.7);
-	QCOMPARE(xAxis->range().start(), dt1.toMSecsSinceEpoch());
-	QCOMPARE(xAxis->range().end(), dt3.toMSecsSinceEpoch());
+	QCOMPARE(xAxis->range().start(), 1);
+	QCOMPARE(xAxis->range().end(), 5);
 	xAxis->setMajorTicksType(Axis::TicksType::Spacing);
 	// QCOMPARE(xAxis->majorTicksNumber(), 3);
 	QCOMPARE(xAxis->labelsTextType(), Axis::LabelsTextType::PositionValues);
