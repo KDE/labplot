@@ -1939,7 +1939,9 @@ void AxisDock::load() {
 		dtsbMajorTicksIncrement->setValue(value);
 	ui.cbMajorTicksStartType->setCurrentIndex(static_cast<int>(m_axis->majorTicksStartType()));
 	ui.sbMajorTickStartOffset->setValue(m_axis->majorTickStartOffset());
+	dtsbMajorTicksDateTimeStartOffset->setValue(m_axis->majorTickStartOffset());
 	ui.sbMajorTickStartValue->setValue(m_axis->majorTickStartValue());
+	ui.sbMajorTickStartDateTime->setMSecsSinceEpochUTC(m_axis->majorTickStartValue());
 	ui.sbMajorTicksLength->setValue(Worksheet::convertFromSceneUnits(m_axis->majorTicksLength(), Worksheet::Unit::Point));
 
 	// Minor ticks
@@ -2064,8 +2066,12 @@ void AxisDock::loadConfig(KConfig& config) {
 	} else
 		dtsbMajorTicksIncrement->setValue(value);
 	ui.cbMajorTicksStartType->setCurrentIndex(group.readEntry("MajorTicksStartType", (int)m_axis->majorTicksStartType()));
-	ui.sbMajorTickStartOffset->setValue(group.readEntry("MajorTickStartOffset", m_axis->majorTickStartOffset()));
-	ui.sbMajorTickStartValue->setValue(group.readEntry("MajorTickStartValue", m_axis->majorTickStartValue()));
+	const auto majorTickStartOffset = group.readEntry("MajorTickStartOffset", m_axis->majorTickStartOffset());
+	ui.sbMajorTickStartOffset->setValue(majorTickStartOffset);
+	dtsbMajorTicksDateTimeStartOffset->setValue(majorTickStartOffset);
+	const auto majorTickStartValue = group.readEntry("MajorTickStartValue", m_axis->majorTickStartValue());
+	ui.sbMajorTickStartValue->setValue(majorTickStartValue);
+	ui.sbMajorTickStartDateTime->setMSecsSinceEpochUTC(majorTickStartValue);
 	ui.sbMajorTicksLength->setValue(Worksheet::convertFromSceneUnits(group.readEntry("MajorTicksLength", m_axis->majorTicksLength()), Worksheet::Unit::Point));
 	majorTicksLineWidget->loadConfig(group);
 
@@ -2160,8 +2166,13 @@ void AxisDock::saveConfigAsTemplate(KConfig& config) {
 	else
 		group.writeEntry("MajorTicksIncrement", QString::number(dtsbMajorTicksIncrement->value()));
 	group.writeEntry("MajorTicksStartType", ui.cbMajorTicksStartType->currentIndex());
-	group.writeEntry("MajorTickStartOffset", ui.sbMajorTickStartOffset->value());
-	group.writeEntry("MajorTickStartValue", ui.sbMajorTickStartValue->value());
+	if (numeric) {
+		group.writeEntry("MajorTickStartOffset", ui.sbMajorTickStartOffset->value());
+		group.writeEntry("MajorTickStartValue", ui.sbMajorTickStartValue->value());
+	} else {
+		group.writeEntry("MajorTickStartOffset", dtsbMajorTicksDateTimeStartOffset->value());
+		group.writeEntry("MajorTickStartValue", ui.sbMajorTickStartDateTime->dateTime().toMSecsSinceEpoch());
+	}
 	group.writeEntry("MajorTicksLength", Worksheet::convertToSceneUnits(ui.sbMajorTicksLength->value(), Worksheet::Unit::Point));
 	majorTicksLineWidget->saveConfig(group);
 
