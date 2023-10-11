@@ -211,4 +211,68 @@ void ExpressionParserTest::testequalEpsilon() {
 	QCOMPARE(fnct(-5.11, -5.3, 0.2), 1);
 }
 
+void testevaluateCartesian() {
+	constexpr QLatin1String expr = QStringLiteral("x+y");
+	constexpr QStringList vars = {QStringLiteral("x"), QStringLiteral("y")};
+
+	QVector<QVector<double>*> xVectors;
+
+	xVectors << new QVector<double>({1, 2, 3}); // x
+	xVectors << new QVector<double>({4, 5, 6, 9}); // y
+	QVector<double> yVector({101, 123, 345, 239, 1290, 43290, 238, 342, 823, 239});
+	ExpressionParser::evaluateCartesian(expr, vars, xVectors, &yVector);
+
+	QVector<double> ref({5, 7, 9});
+	QCOMPARE(yVector.size(), 10);
+	COMPARE_DOUBLE_VECTORS_AT_LEAST_LENGTH(yVector, ref);
+	QCOMPARE(yVector.at(3), 239);
+	QCOMPARE(yVector.at(4), 1290);
+	QCOMPARE(yVector.at(5), 43290);
+	QCOMPARE(yVector.at(6), 238);
+	QCOMPARE(yVector.at(7), 342);
+	QCOMPARE(yVector.at(8), 823);
+	QCOMPARE(yVector.at(9), 239);
+}
+
+void testevaluateCartesianConstExpr() {
+	constexpr QLatin1String expr = QStringLiteral("mean(x) + mean(y)");
+	constexpr QStringList vars = {QStringLiteral("x"), QStringLiteral("y")};
+
+	QVector<QVector<double>*> xVectors;
+
+	xVectors << new QVector<double>({1, 2, 3}); // x
+	xVectors << new QVector<double>({4, 5, 6, 9}); // y
+	QVector<double> yVector({101, 123, 345, 239, 1290, 43290, 238, 342, 823, 239});
+	ExpressionParser::evaluateCartesian(expr, vars, xVectors, &yVector);
+
+
+	QCOMPARE(yVector.size(), 10);
+	// All yVector rows are filled
+	for (const auto v: yVector)
+		QCOMPARE(v, 2 + 6);
+}
+
+void testevaluateCartesianConstExpr2() {
+	constexpr QLatin1String expr = QStringLiteral("mean(x) + y)");
+	constexpr QStringList vars = {QStringLiteral("x"), QStringLiteral("y")};
+
+	QVector<QVector<double>*> xVectors;
+
+	xVectors << new QVector<double>({1, 2, 3}); // x
+	xVectors << new QVector<double>({4, 5, 6, 9}); // y
+	QVector<double> yVector({101, 123, 345, 239, 1290, 43290, 238, 342, 823, 239});
+	ExpressionParser::evaluateCartesian(expr, vars, xVectors, &yVector);
+
+
+	QVector<double> ref({6, 7, 8, 9}); // mean(x) + y
+	QCOMPARE(yVector.size(), 10);
+	COMPARE_DOUBLE_VECTORS_AT_LEAST_LENGTH(yVector, ref);
+	QCOMPARE(yVector.at(4), 1290);
+	QCOMPARE(yVector.at(5), 43290);
+	QCOMPARE(yVector.at(6), 238);
+	QCOMPARE(yVector.at(7), 342);
+	QCOMPARE(yVector.at(8), 823);
+	QCOMPARE(yVector.at(9), 239);
+}
+
 QTEST_MAIN(ExpressionParserTest)

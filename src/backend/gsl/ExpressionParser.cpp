@@ -463,7 +463,8 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList&
 
 		// assign vars with value from xVectors
 		for (int n = 0; n < vars.size(); ++n) {
-			assign_symbol(qPrintable(vars.at(n)), xVectors.at(n)->at(i));
+			if (!constExpression)
+				assign_symbol(qPrintable(vars.at(n)), xVectors.at(n)->at(i));
 
 			// if expr contains cell(f(i), g(x,..)): replace this with xVectors.at(n)->at(f(i))
 			// inverted greedy: only match one method call at a time
@@ -478,8 +479,7 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList&
 				// QDEBUG("g(x,..) =" << g)
 				assign_symbol("i", i + 1); // row number i = 1 .. minSize
 				const int index = parse(qPrintable(f), qPrintable(numberLocale.name()));
-				if (variableFound == 0)
-					constExpression = true;
+				constExpression = variableFound == 0;
 				// DEBUG("INDEX = " << index)
 				pos = match.capturedStart(1);
 

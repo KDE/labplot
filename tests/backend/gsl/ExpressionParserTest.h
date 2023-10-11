@@ -24,6 +24,9 @@ private Q_SLOTS:
 	void testbetween();
 	void testoutside();
 	void testequalEpsilon();
+
+	void testevaluateCartesian();
+	void testevaluateCartesianConstExpr();
 };
 
 #endif // EXPRESSIONPARSERTEST_H
