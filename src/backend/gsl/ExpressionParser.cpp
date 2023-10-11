@@ -479,7 +479,7 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList&
 				// QDEBUG("g(x,..) =" << g)
 				assign_symbol("i", i + 1); // row number i = 1 .. minSize
 				const int index = parse(qPrintable(f), qPrintable(numberLocale.name()));
-				constExpression = variableFound == 0;
+				constExpression = variablesFoundCounter() == 0;
 				// DEBUG("INDEX = " << index)
 				pos = match.capturedStart(1);
 

@@ -44,7 +44,11 @@ typedef struct param {
 
 int yyerror(param *p, const char *err);
 int yylex(param *p);
-int variableFound = 0;
+int _variablesFoundCounter = 0;
+
+int variablesFoundCounter() {
+	return _variablesFoundCounter;
+}
 
 double res;
 %}
@@ -78,7 +82,7 @@ line:	'\n'
 ;
 
 expr:      NUM       { $$ = $1;                            }
-| VAR                { $$ = $1->value.var; variableFound++;}
+| VAR                { $$ = $1->value.var; _variablesFoundCounter++;}
 | VAR '=' expr       { $$ = $3; $1->value.var = $3;        }
 | FNCT '(' ')'       { $$ = (*($1->value.fnctptr))();      }
 | FNCT '(' expr ')'  { $$ = (*((func_t1)($1->value.fnctptr)))($3); }
@@ -265,7 +269,7 @@ double parse(const char* string, const char* locale) {
 	if (!symbol_table)
 		init_table();
 
-	variableFound = 0;
+	_variablesFoundCounter = 0;
 
 	param p;
 	p.pos = 0;
