@@ -457,7 +457,8 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList&
 	const auto numberLocale = QLocale();
 	DEBUG("Parsing with locale " << qPrintable(numberLocale.name()))
 
-	for (int i = 0; i < minSize; i++) {
+	bool constExpression = false;
+	for (int i = 0; i < minSize || (constExpression && i < yVector->size()); i++) {
 		QString tmpExpr = expr;
 
 		// assign vars with value from xVectors
@@ -477,6 +478,8 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList&
 				// QDEBUG("g(x,..) =" << g)
 				assign_symbol("i", i + 1); // row number i = 1 .. minSize
 				const int index = parse(qPrintable(f), qPrintable(numberLocale.name()));
+				if (variableFound == 0)
+					constExpression = true;
 				// DEBUG("INDEX = " << index)
 				pos = match.capturedStart(1);
 
