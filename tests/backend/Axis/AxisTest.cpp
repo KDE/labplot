@@ -1284,4 +1284,253 @@ void AxisTest::dateTimeSpacingStartValueNonZero() {
 	}
 }
 
+void AxisTest::numeric() {
+	QLocale::setDefault(QLocale::C); // . as decimal separator
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	QVERIFY(ws != nullptr);
+	project.addChild(ws);
+
+	Spreadsheet* spreadsheetData = new Spreadsheet(QStringLiteral("data"), false);
+	spreadsheetData->setColumnCount(2);
+	spreadsheetData->setRowCount(3);
+	project.addChild(spreadsheetData);
+
+	auto* xCol = spreadsheetData->column(0);
+	xCol->setColumnMode(AbstractColumn::ColumnMode::Double);
+	xCol->replaceValues(-1, QVector<double>({1, 2, 5}));
+
+	auto* yCol = spreadsheetData->column(1);
+	yCol->replaceValues(-1, QVector<double>({2, 3, 4}));
+
+	QCOMPARE(spreadsheetData->rowCount(), 3);
+	QCOMPARE(spreadsheetData->columnCount(), 2);
+
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	p->setNiceExtend(false);
+	QVERIFY(p != nullptr);
+	ws->addChild(p);
+
+	auto* curve = new XYCurve(QStringLiteral("xy-curve"));
+	curve->setXColumn(xCol);
+	curve->setYColumn(yCol);
+	p->addChild(curve);
+
+	auto axes = p->children<Axis>();
+	QCOMPARE(axes.count(), 2);
+	QCOMPARE(axes.at(0)->name(), QStringLiteral("x"));
+	QCOMPARE(axes.at(1)->name(), QStringLiteral("y"));
+
+	auto* xAxis = static_cast<Axis*>(axes.at(0));
+	xAxis->setMajorTicksNumber(3, false);
+	QCOMPARE(xAxis->range().start(), dt1.toMSecsSinceEpoch());
+	QCOMPARE(xAxis->range().end(), dt3.toMSecsSinceEpoch());
+	QCOMPARE(xAxis->majorTicksType(), Axis::TicksType::TotalNumber);
+	QCOMPARE(xAxis->majorTicksNumber(), 3);
+	QCOMPARE(xAxis->labelsTextType(), Axis::LabelsTextType::PositionValues);
+
+	{
+		const auto v = xAxis->tickLabelStrings();
+		QStringList expectedStrings{
+			QStringLiteral("1"),
+			QStringLiteral("3"),
+			QStringLiteral("5"),
+		};
+		COMPARE_STRING_VECTORS(xAxis->tickLabelStrings(), expectedStrings);
+	}
+}
+
+void AxisTest::numericSpacing() {
+	QLocale::setDefault(QLocale::C); // . as decimal separator
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	QVERIFY(ws != nullptr);
+	project.addChild(ws);
+
+	Spreadsheet* spreadsheetData = new Spreadsheet(QStringLiteral("data"), false);
+	spreadsheetData->setColumnCount(2);
+	spreadsheetData->setRowCount(3);
+	project.addChild(spreadsheetData);
+
+	auto* xCol = spreadsheetData->column(0);
+	xCol->setColumnMode(AbstractColumn::ColumnMode::Double);
+	xCol->replaceValues(-1, QVector<double>({1, 2, 5}));
+
+	auto* yCol = spreadsheetData->column(1);
+	yCol->replaceValues(-1, QVector<double>({2, 3, 4}));
+
+	QCOMPARE(spreadsheetData->rowCount(), 3);
+	QCOMPARE(spreadsheetData->columnCount(), 2);
+
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	p->setNiceExtend(false);
+	QVERIFY(p != nullptr);
+	ws->addChild(p);
+
+	auto* curve = new XYCurve(QStringLiteral("xy-curve"));
+	curve->setXColumn(xCol);
+	curve->setYColumn(yCol);
+	p->addChild(curve);
+
+	auto axes = p->children<Axis>();
+	QCOMPARE(axes.count(), 2);
+	QCOMPARE(axes.at(0)->name(), QStringLiteral("x"));
+	QCOMPARE(axes.at(1)->name(), QStringLiteral("y"));
+
+	auto* xAxis = static_cast<Axis*>(axes.at(0));
+	xAxis->setMajorTicksSpacing(0.5);
+	QCOMPARE(xAxis->range().start(), dt1.toMSecsSinceEpoch());
+	QCOMPARE(xAxis->range().end(), dt3.toMSecsSinceEpoch());
+	xAxis->setMajorTicksType(Axis::TicksType::Spacing);
+	// QCOMPARE(xAxis->majorTicksNumber(), 3);
+	QCOMPARE(xAxis->labelsTextType(), Axis::LabelsTextType::PositionValues);
+	QCOMPARE(xAxis->majorTicksStartType(), Axis::TicksStartType::Offset);
+	QCOMPARE(xAxis->majorTickStartOffset(), 0);
+	QCOMPARE(xAxis->majorTickStartValue(), 0);
+
+	{
+		const auto v = xAxis->tickLabelStrings();
+		QStringList expectedStrings{
+			QStringLiteral("1.0"),
+			QStringLiteral("1.5"),
+			QStringLiteral("2.0"),
+			QStringLiteral("2.5"),
+			QStringLiteral("3.0"),
+			QStringLiteral("3.5"),
+			QStringLiteral("4.0"),
+			QStringLiteral("4.5"),
+			QStringLiteral("5.0"),
+		};
+		COMPARE_STRING_VECTORS(xAxis->tickLabelStrings(), expectedStrings);
+	}
+}
+
+void AxisTest::numericSpacingOffsetNonZero() {
+	QLocale::setDefault(QLocale::C); // . as decimal separator
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	QVERIFY(ws != nullptr);
+	project.addChild(ws);
+
+	Spreadsheet* spreadsheetData = new Spreadsheet(QStringLiteral("data"), false);
+	spreadsheetData->setColumnCount(2);
+	spreadsheetData->setRowCount(3);
+	project.addChild(spreadsheetData);
+
+	auto* xCol = spreadsheetData->column(0);
+	xCol->setColumnMode(AbstractColumn::ColumnMode::Double);
+	xCol->replaceValues(-1, QVector<double>({1, 2, 5}));
+
+	auto* yCol = spreadsheetData->column(1);
+	yCol->replaceValues(-1, QVector<double>({2, 3, 4}));
+
+	QCOMPARE(spreadsheetData->rowCount(), 3);
+	QCOMPARE(spreadsheetData->columnCount(), 2);
+
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	p->setNiceExtend(false);
+	QVERIFY(p != nullptr);
+	ws->addChild(p);
+
+	auto* curve = new XYCurve(QStringLiteral("xy-curve"));
+	curve->setXColumn(xCol);
+	curve->setYColumn(yCol);
+	p->addChild(curve);
+
+	auto axes = p->children<Axis>();
+	QCOMPARE(axes.count(), 2);
+	QCOMPARE(axes.at(0)->name(), QStringLiteral("x"));
+	QCOMPARE(axes.at(1)->name(), QStringLiteral("y"));
+
+	auto* xAxis = static_cast<Axis*>(axes.at(0));
+	xAxis->setMajorTicksSpacing(0.5);
+	QCOMPARE(xAxis->range().start(), dt1.toMSecsSinceEpoch());
+	QCOMPARE(xAxis->range().end(), dt3.toMSecsSinceEpoch());
+	xAxis->setMajorTicksType(Axis::TicksType::Spacing);
+	// QCOMPARE(xAxis->majorTicksNumber(), 3);
+	QCOMPARE(xAxis->labelsTextType(), Axis::LabelsTextType::PositionValues);
+	QCOMPARE(xAxis->majorTicksStartType(), Axis::TicksStartType::Offset);
+	xAxis->setMajorTickStartOffset(1.2);
+	QVERIFY(xAxis->majorTickStartOffset() > 0);
+	QCOMPARE(xAxis->majorTickStartValue(), 0);
+
+	{
+		const auto v = xAxis->tickLabelStrings();
+		QStringList expectedStrings{
+			QStringLiteral("1.2"),
+			QStringLiteral("1.7"),
+			QStringLiteral("2.2"),
+			QStringLiteral("2.7"),
+			QStringLiteral("3.2"),
+			QStringLiteral("3.7"),
+			QStringLiteral("4.2"),
+			QStringLiteral("4.7"),
+		};
+		COMPARE_STRING_VECTORS(xAxis->tickLabelStrings(), expectedStrings);
+	}
+}
+
+void AxisTest::numericSpacingStartValueNonZero() {
+	QLocale::setDefault(QLocale::C); // . as decimal separator
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	QVERIFY(ws != nullptr);
+	project.addChild(ws);
+
+	Spreadsheet* spreadsheetData = new Spreadsheet(QStringLiteral("data"), false);
+	spreadsheetData->setColumnCount(2);
+	spreadsheetData->setRowCount(3);
+	project.addChild(spreadsheetData);
+
+	auto* xCol = spreadsheetData->column(0);
+	xCol->setColumnMode(AbstractColumn::ColumnMode::Double);
+	xCol->replaceValues(-1, QVector<double>({1, 2, 5}));
+
+	auto* yCol = spreadsheetData->column(1);
+	yCol->replaceValues(-1, QVector<double>({2, 3, 4}));
+
+	QCOMPARE(spreadsheetData->rowCount(), 3);
+	QCOMPARE(spreadsheetData->columnCount(), 2);
+
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	p->setNiceExtend(false);
+	QVERIFY(p != nullptr);
+	ws->addChild(p);
+
+	auto* curve = new XYCurve(QStringLiteral("xy-curve"));
+	curve->setXColumn(xCol);
+	curve->setYColumn(yCol);
+	p->addChild(curve);
+
+	auto axes = p->children<Axis>();
+	QCOMPARE(axes.count(), 2);
+	QCOMPARE(axes.at(0)->name(), QStringLiteral("x"));
+	QCOMPARE(axes.at(1)->name(), QStringLiteral("y"));
+
+	auto* xAxis = static_cast<Axis*>(axes.at(0));
+	xAxis->setMajorTicksSpacing(0.7);
+	QCOMPARE(xAxis->range().start(), dt1.toMSecsSinceEpoch());
+	QCOMPARE(xAxis->range().end(), dt3.toMSecsSinceEpoch());
+	xAxis->setMajorTicksType(Axis::TicksType::Spacing);
+	// QCOMPARE(xAxis->majorTicksNumber(), 3);
+	QCOMPARE(xAxis->labelsTextType(), Axis::LabelsTextType::PositionValues);
+	xAxis->setMajorTicksStartType(Axis::TicksStartType::Absolute);
+	xAxis->setMajorTickStartValue(1.7);
+	QVERIFY(xAxis->majorTickStartValue() > 0);
+	{
+		const auto v = xAxis->tickLabelStrings();
+		QStringList expectedStrings{
+			QStringLiteral("2.6"),
+			QStringLiteral("3.4"),
+			QStringLiteral("4.1"),
+			QStringLiteral("4.8"),
+		};
+		COMPARE_STRING_VECTORS(xAxis->tickLabelStrings(), expectedStrings);
+	}
+}
+
 QTEST_MAIN(AxisTest)

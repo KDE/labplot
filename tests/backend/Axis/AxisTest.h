@@ -45,6 +45,11 @@ private Q_SLOTS:
 	void dateTimeSpacing();
 	void dateTimeSpacingOffsetNonZero();
 	void dateTimeSpacingStartValueNonZero();
+
+	void numeric();
+	void numericSpacing();
+	void numericSpacingOffsetNonZero();
+	void numericSpacingStartValueNonZero();
 };
 
 #endif // WORKSHEETELEMENTTEST_H
