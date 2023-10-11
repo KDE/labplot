@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-10-09 00:39+0000\n"
-"PO-Revision-Date: 2023-09-16 10:09\n"
+"PO-Revision-Date: 2023-10-10 14:29\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -9669,10 +9669,9 @@ msgid "Insert Multiple Columns Right"
 msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:315
-#, fuzzy, kde-format
-#| msgid "Delete Selected"
+#, kde-format
 msgid "Delete Selected Column(s)"
-msgstr "删除选中页面"
+msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:317
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1634
@@ -11820,10 +11819,9 @@ msgid "Values"
 msgstr "数值"
 
 #: src/kdefrontend/datasources/OdsOptionsWidget.cpp:19
-#, fuzzy, kde-format
-#| msgid "data set"
+#, kde-format
 msgid "Data sheets"
-msgstr "数据集"
+msgstr ""
 
 #: src/kdefrontend/datasources/ROOTOptionsWidget.cpp:24
 #, kde-format
@@ -14111,10 +14109,9 @@ msgstr ""
 
 #. i18n: ectx: Menu (import)
 #: src/kdefrontend/labplot2ui.rc:68
-#, fuzzy, kde-format
-#| msgid "Import Data"
+#, kde-format
 msgid "Import"
-msgstr "导入数据"
+msgstr ""
 
 #. i18n: ectx: Menu (edit)
 #: src/kdefrontend/labplot2ui.rc:79
@@ -15525,10 +15522,9 @@ msgid "Incorrect formula syntax"
 msgstr ""
 
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:202
-#, fuzzy, kde-format
-#| msgid "Selection"
+#, kde-format
 msgid "Select a valid column"
-msgstr "已选项目"
+msgstr ""
 
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:209
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:262
@@ -20675,10 +20671,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lLoadOnStartNotebook)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:254
-#, fuzzy, kde-format
-#| msgid "Note"
+#, kde-format
 msgid "Notebook:"
-msgstr "备注"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode_2)

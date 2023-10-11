@@ -9714,10 +9714,9 @@ msgid "Insert Multiple Columns Right"
 msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:315
-#, fuzzy, kde-format
-#| msgid "Delete Selected"
+#, kde-format
 msgid "Delete Selected Column(s)"
-msgstr "Smazat vybrané"
+msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:317
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1634
@@ -11206,10 +11205,9 @@ msgid "Excel 2007+ (XSLX)"
 msgstr ""
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:105
-#, fuzzy, kde-format
-#| msgid "Export Spreadsheet"
+#, kde-format
 msgid "OpenDocument Spreadsheet (ODS)"
-msgstr "Exportovat pracovní sešit"
+msgstr ""
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:114
 #, kde-format
@@ -11884,10 +11882,9 @@ msgid "Values"
 msgstr "Hodnoty"
 
 #: src/kdefrontend/datasources/OdsOptionsWidget.cpp:19
-#, fuzzy, kde-format
-#| msgid "Dataset"
+#, kde-format
 msgid "Data sheets"
-msgstr "Soubor dat"
+msgstr ""
 
 #: src/kdefrontend/datasources/ROOTOptionsWidget.cpp:24
 #, kde-format
@@ -14176,10 +14173,9 @@ msgstr "Přid&at nové"
 
 #. i18n: ectx: Menu (import)
 #: src/kdefrontend/labplot2ui.rc:68
-#, fuzzy, kde-format
-#| msgid "Import to"
+#, kde-format
 msgid "Import"
-msgstr "Importovat do"
+msgstr "Importovat"
 
 #. i18n: ectx: Menu (edit)
 #: src/kdefrontend/labplot2ui.rc:79
@@ -14901,10 +14897,9 @@ msgid "Create New Project with Spreadsheet"
 msgstr "Vytvořit nový projekt se sešitem"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:190
-#, fuzzy, kde-format
-#| msgid "Create New Project with Worksheet"
+#, kde-format
 msgid "Create New Project with Notebook"
-msgstr "Vytvořit nový projekt s pracovním listem"
+msgstr ""
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:192
 #, kde-format
@@ -15585,10 +15580,9 @@ msgid ""
 msgstr ""
 
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:178
-#, fuzzy, kde-format
-#| msgid "Regular Expression"
+#, kde-format
 msgid "Empty formula expression"
-msgstr "Regulární výraz"
+msgstr ""
 
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:185
 #, kde-format
@@ -15596,10 +15590,9 @@ msgid "Incorrect formula syntax"
 msgstr ""
 
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:202
-#, fuzzy, kde-format
-#| msgid "Select and Zoom"
+#, kde-format
 msgid "Select a valid column"
-msgstr "Vybrat a přiblížit"
+msgstr ""
 
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:209
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:262
@@ -20754,10 +20747,9 @@ msgstr "Jednotky:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLoadOnStartNotebook)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:254
-#, fuzzy, kde-format
-#| msgid "Notebook"
+#, kde-format
 msgid "Notebook:"
-msgstr "Poznámkový blok"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode_2)
@@ -22137,9 +22129,3 @@ msgstr ""
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Nelze otevřít soubor:"
-
-#~ msgid "DateTime"
-#~ msgstr "Datum/čas"
-
-#~ msgid "Remove"
-#~ msgstr "Odstranit"

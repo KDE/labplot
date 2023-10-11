@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-10-09 00:39+0000\n"
-"PO-Revision-Date: 2023-10-05 20:15+0200\n"
+"PO-Revision-Date: 2023-10-10 18:51+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
@@ -15822,21 +15822,19 @@ msgstr ""
 "Angivet variabelnamn börjar med en siffra eller innehåller ett specialtecken."
 
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:178
-#, fuzzy, kde-format
-#| msgid "Regular Expression"
+#, kde-format
 msgid "Empty formula expression"
-msgstr "Reguljärt uttryck"
+msgstr "Tomt formeluttryck"
 
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:185
 #, kde-format
 msgid "Incorrect formula syntax"
-msgstr ""
+msgstr "Felaktig formelsyntax"
 
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:202
-#, fuzzy, kde-format
-#| msgid "Select and Zoom"
+#, kde-format
 msgid "Select a valid column"
-msgstr "Markera och zooma"
+msgstr "Markera en giltig kolumn"
 
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:209
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:262
