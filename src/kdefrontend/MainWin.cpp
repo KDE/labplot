@@ -112,6 +112,9 @@
 #include <KActionMenu>
 #include <KColorScheme>
 #include <KColorSchemeManager>
+#if KCONFIGWIDGETS_VERSION >= QT_VERSION_CHECK(5, 107, 0)
+#include <KColorSchemeMenu>
+#endif
 #include <KCompressionDevice>
 #include <KConfigGroup>
 #include <KLocalizedString>
@@ -121,7 +124,7 @@
 #include <KToggleAction>
 #include <KToggleFullScreenAction>
 #include <KToolBar>
-#include <kcoreaddons_version.h>
+#include <kconfigwidgets_version.h>
 #include <kxmlguifactory.h>
 
 #ifdef HAVE_CANTOR_LIBS
@@ -280,7 +283,7 @@ void MainWin::initGUI(const QString& fileName) {
 	mainToolBar->insertWidget(lastAction, tbImport);
 
 	// hamburger menu
-#if KCOREADDONS_VERSION >= QT_VERSION_CHECK(5, 81, 0)
+#if KCONFIGWIDGETS_VERSION >= QT_VERSION_CHECK(5, 81, 0)
 	m_hamburgerMenu = KStandardAction::hamburgerMenu(nullptr, nullptr, actionCollection());
 	toolBar()->addAction(m_hamburgerMenu);
 	m_hamburgerMenu->hideActionsOf(toolBar());
@@ -940,19 +943,23 @@ void MainWin::initMenus() {
 #endif
 
 	// set the action for the current color scheme checked
-	KConfigGroup group = Settings::group(QStringLiteral("Settings_General"));
-#if KCOREADDONS_VERSION >= QT_VERSION_CHECK(5, 67, 0) // KColorSchemeManager has a system default option
+	auto group = Settings::group(QStringLiteral("Settings_General"));
+#if KCONFIGWIDGETS_VERSION >= QT_VERSION_CHECK(5, 67, 0) // KColorSchemeManager has a system default option
 	QString schemeName = group.readEntry("ColorScheme");
 #else
-	KConfigGroup generalGlobalsGroup = KSharedConfig::openConfig(QLatin1String("kdeglobals"))->group("General");
+	auto generalGlobalsGroup = KSharedConfig::openConfig(QLatin1String("kdeglobals"))->group("General");
 	QString defaultSchemeName = generalGlobalsGroup.readEntry("ColorScheme", QStringLiteral("Breeze"));
 	QString schemeName = group.readEntry("ColorScheme", defaultSchemeName);
 #endif
 	// default dark scheme on Windows is not optimal (Breeze dark is better)
 	// we can't find out if light or dark mode is used, so we don't switch to Breeze/Breeze dark here
 	DEBUG(Q_FUNC_INFO << ", Color scheme = " << STDSTRING(schemeName))
-	KActionMenu* schemesMenu = m_schemeManager->createSchemeSelectionMenu(i18n("Color Scheme"), schemeName, this);
-	// since 5.107, use KColorSchemeMenu::createMenu and set the text and check an action manually
+#if KCONFIGWIDGETS_VERSION >= QT_VERSION_CHECK(5, 107, 0) // use KColorSchemeMenu::createMenu and set the text and check an action manually
+	auto* schemesMenu = KColorSchemeMenu::createMenu(m_schemeManager, this);
+	schemesMenu->setText(i18n("Color Scheme"));
+#else
+	auto* schemesMenu = m_schemeManager->createSchemeSelectionMenu(i18n("Color Scheme"), schemeName, this);
+#endif
 	schemesMenu->setIcon(QIcon::fromTheme(QStringLiteral("preferences-desktop-color")));
 	connect(schemesMenu->menu(), &QMenu::triggered, this, &MainWin::colorSchemeChanged);
 
@@ -969,7 +976,7 @@ void MainWin::initMenus() {
 
 	// Cantor backends to menu and context menu
 #ifdef HAVE_CANTOR_LIBS
-	QStringList backendNames = Cantor::Backend::listAvailableBackends();
+	auto backendNames = Cantor::Backend::listAvailableBackends();
 #if !defined(NDEBUG) || defined(Q_OS_WIN) || defined(Q_OS_MACOS)
 	WARN(Q_FUNC_INFO << ", " << backendNames.count() << " Cantor backends available:")
 	for (const auto& b : backendNames)
@@ -1016,7 +1023,7 @@ void MainWin::colorSchemeChanged(QAction* action) {
  */
 bool MainWin::warnModified() {
 	if (m_project->hasChanged()) {
-#if KCOREADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
+#if KCONFIGWIDGETS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
 		int option = KMessageBox::warningTwoActionsCancel(this,
 														  i18n("The current project %1 has been modified. Do you want to save it?", m_project->name()),
 														  i18n("Save Project"),

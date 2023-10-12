@@ -42,7 +42,7 @@ void fillTree(QTreeWidgetItem* node, const ROOTFilter::Directory& dir) {
 		(new QTreeWidgetItem(node, QStringList(content.first)))->setData(0, Qt::UserRole, content.second);
 }
 
-QHash<QStringList, QVector<QStringList>>
+QMultiHash<QStringList, QVector<QStringList>>
 findLeaves(QTreeWidgetItem* node, ROOTFilter* filter, const QString& fileName, const QStringList& path = QStringList{}) {
 	QMultiHash<QStringList, QVector<QStringList>> leaves;
 	if (node->childCount() > 0) {

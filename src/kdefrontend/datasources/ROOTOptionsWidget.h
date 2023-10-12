@@ -46,7 +46,7 @@ private:
 	Ui::ROOTOptionsWidget ui;
 	QTreeWidgetItem* histItem;
 	QTreeWidgetItem* treeItem;
-	QHash<QStringList, QVector<QStringList>> leaves;
+	QMultiHash<QStringList, QVector<QStringList>> leaves;
 
 	ImportFileWidget* m_fileWidget;
 	bool histselected = false;
