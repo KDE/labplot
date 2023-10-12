@@ -4,6 +4,9 @@ INCLUDE_DIRECTORIES(${SRC_DIR} ${GSL_INCLUDE_DIR})
 # shared code
 add_library(labplot2test STATIC CommonTest.cpp analysis/AnalysisTest.cpp nsl/NSLTest.cpp)
 target_link_libraries(labplot2test Qt${QT_MAJOR_VERSION}::Test KF${KF_MAJOR_VERSION}::ConfigCore Qt${QT_MAJOR_VERSION}::Widgets KF${KF_MAJOR_VERSION}::I18n)
+if (KUserFeedback_FOUND AND QT_MAJOR_VERSION EQUAL 6)
+	target_link_libraries( labplot2test KUserFeedbackCoreQt6 KUserFeedbackWidgetsQt6 )
+endif ()
 target_compile_definitions(labplot2test PUBLIC ${LABPLOT_COMPILE_DEFINITIONS})
 
 add_subdirectory(analysis)
