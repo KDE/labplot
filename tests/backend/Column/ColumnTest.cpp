@@ -1059,4 +1059,56 @@ void ColumnTest::testFormula() {
 	}
 }
 
+void ColumnTest::testFormulaCell() {
+	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
+	c1.resizeTo(3);
+	QCOMPARE(c1.rowCount(), 3);
+	c1.replaceValues(-1, {1., 2., 3.});
+
+	auto c3 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
+	c3.resizeTo(3);
+	QCOMPARE(c3.rowCount(), 3);
+	c3.replaceValues(-1, {3., 2., 1.});
+
+	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
+	c2.resizeTo(7);
+	QCOMPARE(c2.rowCount(), 7);
+	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17.});
+
+	c2.setFormula(QStringLiteral("cell(x, y)"), {QStringLiteral("x"), QStringLiteral("y")}, {&c1, &c3}, true);
+	c2.updateFormula();
+	// constExpression is true, but this is not actually true, because
+	// there are some non const replacements before
+	QCOMPARE(c2.rowCount(), 7);
+	QCOMPARE(c2.valueAt(0), 3.);
+	QCOMPARE(c2.valueAt(1), 2.);
+	QCOMPARE(c2.valueAt(2), 1.);
+	QCOMPARE(c2.valueAt(3), NAN);
+	QCOMPARE(c2.valueAt(4), NAN);
+	QCOMPARE(c2.valueAt(5), NAN);
+	QCOMPARE(c2.valueAt(6), NAN);
+}
+
+/*!
+ * index in cell higher than rownumber
+ */
+void ColumnTest::testFormulaCellInvalid() {
+	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
+	c1.resizeTo(3);
+	QCOMPARE(c1.rowCount(), 3);
+	c1.replaceValues(-1, {1., 2., 3.});
+
+	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
+	c2.resizeTo(7);
+	QCOMPARE(c2.rowCount(), 7);
+	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17.});
+
+	c2.setFormula(QStringLiteral("cell(x, 10)"), {QStringLiteral("x")}, {&c1}, true);
+	c2.updateFormula();
+	QCOMPARE(c2.rowCount(), 7);
+	// All invalid
+	for (int i=0; i < c2.rowCount(); i++)
+		QCOMPARE(c2.valueAt(i), NAN);
+}
+
 QTEST_MAIN(ColumnTest)
