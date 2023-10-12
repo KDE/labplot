@@ -47,7 +47,7 @@ typedef struct symbol {
 	struct symbol* next; /* next symbol */
 } symbol;
 
-int variablesFoundCounter();
+int variablesCounter();
 
 void init_table(void); /* initialize symbol table */
 void delete_table(void); /* delete symbol table */

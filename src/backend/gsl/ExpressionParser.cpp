@@ -592,7 +592,7 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList&
 		}
 
 		if (parse_errors() == 0)
-			constExpression = variablesFoundCounter() == 0;
+			constExpression = variablesCounter() == 0;
 		// continue with next value
 		// if (parse_errors() > 0)
 		//	return false;
