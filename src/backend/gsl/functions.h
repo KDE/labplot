@@ -31,6 +31,8 @@ struct funs {
 
 extern struct funs _functions[];
 extern const int _number_functions;
+extern struct funs _special_functions[];
+extern const int _number_specialfunctions;
 
 enum class FunctionGroups : int {
 	StandardMathematicalFunctions,
@@ -99,6 +101,8 @@ enum class FunctionGroups : int {
 	// i18n("Coupling Coefficients")
 	// i18n("Elementary Operations")
 	// i18n("Elliptic Functions (Jacobi)")
+
+	Special,
 
 	//---------------
 	END

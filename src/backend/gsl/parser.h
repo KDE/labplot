@@ -30,11 +30,21 @@ typedef struct parser_var {
 typedef double (*func_t)(void);
 #else
 typedef double (*func_t)();
+typedef double (*func_tPayload)(void*);
 #endif
 typedef double (*func_t1)(double);
 typedef double (*func_t2)(double, double);
 typedef double (*func_t3)(double, double, double);
 typedef double (*func_t4)(double, double, double, double);
+typedef double (*func_t1Payload)(double, void*);
+typedef double (*func_t2Payload)(double, double, void*);
+typedef double (*func_t3Payload)(double, double, double, void*);
+typedef double (*func_t4Payload)(double, double, double, double, void*);
+
+struct special_function_def {
+	funs* funsptr;
+	void* payload;
+};
 
 /* structure for list of symbols */
 typedef struct symbol {
@@ -42,7 +52,8 @@ typedef struct symbol {
 	int type; /* type of symbol: either VAR or FNCT */
 	union {
 		double var; /* value of a VAR */
-		func_t fnctptr; /* value of a FNCT */
+		funs* funsptr; /* value of a FNCT */
+		special_function_def special_function; /* value of SPECFNCT */
 	} value;
 	struct symbol* next; /* next symbol */
 } symbol;

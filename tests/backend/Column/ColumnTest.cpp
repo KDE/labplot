@@ -1063,7 +1063,7 @@ void ColumnTest::testFormulaCell() {
 	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
 	c1.resizeTo(3);
 	QCOMPARE(c1.rowCount(), 3);
-	c1.replaceValues(-1, {1., 2., 3.});
+	c1.replaceValues(-1, {1., 5., -1.});
 
 	auto c3 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
 	c3.resizeTo(3);
@@ -1075,13 +1075,13 @@ void ColumnTest::testFormulaCell() {
 	QCOMPARE(c2.rowCount(), 7);
 	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17.});
 
-	c2.setFormula(QStringLiteral("cell(x, y)"), {QStringLiteral("x"), QStringLiteral("y")}, {&c1, &c3}, true);
+	c2.setFormula(QStringLiteral("cell(y, x)"), {QStringLiteral("x"), QStringLiteral("y")}, {&c1, &c3}, true);
 	c2.updateFormula();
 	// constExpression is true, but this is not actually true, because
 	// there are some non const replacements before
 	QCOMPARE(c2.rowCount(), 7);
-	QCOMPARE(c2.valueAt(0), 3.);
-	QCOMPARE(c2.valueAt(1), 2.);
+	QCOMPARE(c2.valueAt(0), -1.);
+	QCOMPARE(c2.valueAt(1), 5.);
 	QCOMPARE(c2.valueAt(2), 1.);
 	QCOMPARE(c2.valueAt(3), NAN);
 	QCOMPARE(c2.valueAt(4), NAN);
@@ -1103,7 +1103,7 @@ void ColumnTest::testFormulaCellInvalid() {
 	QCOMPARE(c2.rowCount(), 7);
 	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17.});
 
-	c2.setFormula(QStringLiteral("cell(x, 10)"), {QStringLiteral("x")}, {&c1}, true);
+	c2.setFormula(QStringLiteral("cell(10,x)"), {QStringLiteral("x")}, {&c1}, true);
 	c2.updateFormula();
 	QCOMPARE(c2.rowCount(), 7);
 	// All invalid
@@ -1123,7 +1123,7 @@ void ColumnTest::testFormulaCellConstExpression() {
 	QCOMPARE(c2.rowCount(), 7);
 	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17.});
 
-	c2.setFormula(QStringLiteral("cell(x, 2)"), {QStringLiteral("x")}, {&c1}, true);
+	c2.setFormula(QStringLiteral("cell(2, x)"), {QStringLiteral("x")}, {&c1}, true);
 	c2.updateFormula();
 	QCOMPARE(c2.rowCount(), 7);
 	// All invalid
@@ -1147,7 +1147,7 @@ void ColumnTest::testFormulaCellMulti() {
 	QCOMPARE(c2.rowCount(), 7);
 	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17.});
 
-	c2.setFormula(QStringLiteral("cell(x, 2) + cell(y, 1)"), {QStringLiteral("x"), QStringLiteral("y")}, {&c1, &c3}, true);
+	c2.setFormula(QStringLiteral("cell(2, x) + cell(1, y)"), {QStringLiteral("x"), QStringLiteral("y")}, {&c1, &c3}, true);
 	c2.updateFormula();
 	QCOMPARE(c2.rowCount(), 7);
 	for (int i = 0; i < c2.rowCount(); i++)
@@ -1172,7 +1172,7 @@ void ColumnTest::testFormulaCellMultiSemikolon() {
 	QCOMPARE(c2.rowCount(), 7);
 	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17.});
 
-	c2.setFormula(QStringLiteral("cell(x; 2) + cell(y; 1)"), {QStringLiteral("x"), QStringLiteral("y")}, {&c1, &c3}, true);
+	c2.setFormula(QStringLiteral("cell(2; x) + cell(1; y)"), {QStringLiteral("x"), QStringLiteral("y")}, {&c1, &c3}, true);
 	c2.updateFormula();
 	QCOMPARE(c2.rowCount(), 7);
 	for (int i = 0; i < c2.rowCount(); i++)
@@ -1238,7 +1238,7 @@ void ColumnTest::testFormulasma() {
 	QCOMPARE(c2.rowCount(), 7);
 	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17., 18.});
 
-	c2.setFormula(QStringLiteral("sma(x, 3)"), {QStringLiteral("x")}, {&c1}, true);
+	c2.setFormula(QStringLiteral("sma(3, x)"), {QStringLiteral("x")}, {&c1}, true);
 	c2.updateFormula();
 	QCOMPARE(c2.rowCount(), 8);
 	QCOMPARE(c2.valueAt(0), 1.);

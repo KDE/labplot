@@ -38,6 +38,12 @@ void ExpressionParser::initFunctions() {
 		m_functions << QLatin1String(function.name);
 		m_functionsGroupIndex << function.group;
 	}
+	for (int i = 0; i < _number_specialfunctions; i++) {
+		const auto& function = _special_functions[i];
+		m_functionsDescription << function.description;
+		m_functions << QLatin1String(function.name);
+		m_functionsGroupIndex << function.group;
+	}
 }
 
 // TODO: decide whether we want to have i18n here in the backend part of the code
@@ -90,6 +96,10 @@ int ExpressionParser::functionArgumentCount(const QString& functionName) {
 		if (functionName == QLatin1String(_functions[i].name))
 			return _functions[i].argc;
 	}
+	for (int i = 0; i < _number_specialfunctions; i++) {
+		if (functionName == QLatin1String(_special_functions[i].name))
+			return _special_functions[i].argc;
+	}
 
 	// DEBUG(Q_FUNC_INFO << ", Found function " << STDSTRING(functionName) << " at index " << index);
 	// DEBUG(Q_FUNC_INFO << ", function " << STDSTRING(functionName) << " has " << _functions[index].argc << " arguments");
@@ -101,6 +111,27 @@ QString ExpressionParser::parameters(const QString& functionName) {
 		if (functionName == QLatin1String(_functions[i].name)) {
 			int count = _functions[i].argc;
 			QString (*parameterFunction)(int) = _functions[i].parameterFunction;
+
+			if (parameterFunction == nullptr)
+				return QStringLiteral("");
+
+			if (count == 0)
+				return QStringLiteral("()");
+
+			QString parameter = QStringLiteral("(");
+			for (int p = 0; p < count - 1; p++)
+				parameter += (*parameterFunction)(p) + QStringLiteral("; ");
+			parameter += (*parameterFunction)(count - 1);
+			parameter += QStringLiteral(")");
+			return parameter;
+		}
+		// DEBUG(Q_FUNC_INFO << ", Found function " << STDSTRING(functionName) << " at index " << index);
+		// DEBUG(Q_FUNC_INFO << ", function " << STDSTRING(functionName) << " has " << _functions[index].argc << " arguments");
+	}
+	for (int i = 0; i < _number_specialfunctions; i++) {
+		if (functionName == QLatin1String(_special_functions[i].name)) {
+			int count = _special_functions[i].argc;
+			QString (*parameterFunction)(int) = _special_functions[i].parameterFunction;
 
 			if (parameterFunction == nullptr)
 				return QStringLiteral("");
@@ -190,6 +221,10 @@ QString ExpressionParser::functionArgumentString(const QString& functionName, co
 QString ExpressionParser::functionDescription(const QString& function) {
 	for (int index = 0; index < _number_functions; index++) {
 		if (function == QLatin1String(_functions[index].name))
+			return m_functionsDescription.at(index);
+	}
+	for (int index = 0; index < _number_specialfunctions; index++) {
+		if (function == QLatin1String(_special_functions[index].name))
 			return m_functionsDescription.at(index);
 	}
 

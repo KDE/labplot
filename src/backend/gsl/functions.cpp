@@ -180,6 +180,14 @@ QString FunctionGroupsToString(FunctionGroups group) {
 	return i18n("Unknown Function");
 }
 
+struct funs _special_functions[] = {
+	{i18n("cell(index,x)"), "cell", (func_t)nullptr, 0, nullptr, FunctionGroups::Special},
+	{i18n("smmin(x;n)"), "smmin", (func_t)nullptr, 0, nullptr, FunctionGroups::Special},
+	{i18n("smmax(x;n)"), "smmax", (func_t)nullptr, 0, nullptr, FunctionGroups::Special},
+	{i18n("sma(x;n)"), "sma", (func_t)nullptr, 0, nullptr, FunctionGroups::Special},
+};
+const int _number_specialfunctions = sizeof(_special_functions) / sizeof(funs);
+
 /* list of functions (sync with ExpressionParser.cpp!) */
 struct funs _functions[] = {
 	// Standard Mathematical Functions
