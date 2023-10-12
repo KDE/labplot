@@ -46,7 +46,7 @@
 #include <KConfigGroup>
 #include <KLocalizedString>
 #include <KMessageBox>
-#include <kio_version.h>
+#include <kwidgetsaddons_version.h>
 
 #include <QBuffer>
 #include <QDateTime>
@@ -705,12 +705,13 @@ bool Project::load(const QString& filename, bool preview) {
 			"If you modify and save the project, the CAS content will be lost.\n\n"
 			"Do you want to continue?",
 			reader.missingCASWarning());
-#if KIO_VERSION >= QT_VERSION_CHECK(5, 100, 0)
+#if KWIDGETSADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
 		auto status = KMessageBox::warningTwoActions(nullptr, msg, i18n("Missing Support for CAS"), KStandardGuiItem::cont(), KStandardGuiItem::cancel());
+		if (status == KMessageBox::SecondaryAction) {
 #else
 		auto status = KMessageBox::warningYesNo(nullptr, msg, i18n("Missing Support for CAS"));
-#endif
 		if (status == KMessageBox::No) {
+#endif
 			file->close();
 			delete file;
 			return false;

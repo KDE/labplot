@@ -952,6 +952,7 @@ void MainWin::initMenus() {
 	// we can't find out if light or dark mode is used, so we don't switch to Breeze/Breeze dark here
 	DEBUG(Q_FUNC_INFO << ", Color scheme = " << STDSTRING(schemeName))
 	KActionMenu* schemesMenu = m_schemeManager->createSchemeSelectionMenu(i18n("Color Scheme"), schemeName, this);
+	// since 5.107, use KColorSchemeMenu::createMenu and set the text and check an action manually 
 	schemesMenu->setIcon(QIcon::fromTheme(QStringLiteral("preferences-desktop-color")));
 	connect(schemesMenu->menu(), &QMenu::triggered, this, &MainWin::colorSchemeChanged);
 

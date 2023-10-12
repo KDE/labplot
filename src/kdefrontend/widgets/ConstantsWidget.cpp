@@ -56,7 +56,8 @@ ConstantsWidget::ConstantsWidget(QWidget* parent)
 
 	QFont font;
 	QFontMetrics fm(font);
-	const int width = fm.horizontalAdvance(maxName) + layout()->margin() * 2 + qApp->style()->pixelMetric(QStyle::PM_ScrollBarExtent);
+	const auto margins = layout()->contentsMargins();
+	const int width = fm.horizontalAdvance(maxName) + margins.left() + margins.right() + qApp->style()->pixelMetric(QStyle::PM_ScrollBarExtent);
 	setMinimumWidth(width);
 }
 

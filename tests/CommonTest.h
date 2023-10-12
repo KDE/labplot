@@ -13,9 +13,7 @@
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include <QtTest>
 
-extern "C" {
 #include <gsl/gsl_math.h>
-}
 
 ///////////////////////// macros ///////////
 

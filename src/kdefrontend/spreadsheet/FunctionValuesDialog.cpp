@@ -162,7 +162,7 @@ bool FunctionValuesDialog::validVariableName(QLineEdit* le) {
 	} else if (ExpressionParser::getInstance()->functions().indexOf(le->text()) != -1) {
 		SET_WARNING_STYLE(le)
 		le->setToolTip(i18n("Provided variable name is already reserved for a name of a function. Please use another name."));
-	} else if (le->text().contains(QRegExp(QLatin1String("^[0-9]|[^a-zA-Z0-9_]")))) {
+	} else if (le->text().contains(QRegularExpression(QLatin1String("^[0-9]|[^a-zA-Z0-9_]")))) {
 		SET_WARNING_STYLE(le)
 		le->setToolTip(i18n("Provided variable name starts with a digit or contains special character."));
 	} else {
@@ -260,7 +260,7 @@ void FunctionValuesDialog::addVariable() {
 	// text field for the variable name
 	auto* le{new QLineEdit};
 	le->setToolTip(i18n("Variable name can contain letters, digits and '_' only and should start with a letter"));
-	QRegExpValidator* validator = new QRegExpValidator(QRegExp(QLatin1String("[a-zA-Z][a-zA-Z0-9_]*")), le);
+	auto* validator = new QRegularExpressionValidator(QRegularExpression(QLatin1String("[a-zA-Z][a-zA-Z0-9_]*")), le);
 	le->setValidator(validator);
 	// hardcoding size is bad. 40 is enough for three letters
 	le->setMaximumWidth(40);
@@ -316,7 +316,7 @@ void FunctionValuesDialog::addVariable() {
 
 void FunctionValuesDialog::deleteVariable() {
 	QObject* ob{QObject::sender()};
-	const int index{m_variableDeleteButtons.indexOf(qobject_cast<QToolButton*>(ob))};
+	const auto index{m_variableDeleteButtons.indexOf(qobject_cast<QToolButton*>(ob))};
 
 	delete m_variableLineEdits.takeAt(index + 1);
 	delete m_variableLabels.takeAt(index + 1);

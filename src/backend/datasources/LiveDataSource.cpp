@@ -556,10 +556,7 @@ void LiveDataSource::read() {
 			// only connect to readyRead when update is on new data
 			if (m_updateType == UpdateType::NewData)
 				connect(m_serialPort, &QSerialPort::readyRead, this, &LiveDataSource::readyRead);
-			connect(m_serialPort,
-					static_cast<void (QSerialPort::*)(QSerialPort::SerialPortError)>(&QSerialPort::error),
-					this,
-					&LiveDataSource::serialPortError);
+			connect(m_serialPort, &QSerialPort::errorOccurred, this, &LiveDataSource::serialPortError);
 #endif
 			break;
 		case SourceType::MQTT:
@@ -731,12 +728,6 @@ void LiveDataSource::serialPortError(QSerialPort::SerialPortError serialPortErro
 	case QSerialPort::TimeoutError:
 		QMessageBox::critical(nullptr, i18n("Serial Port Error"), i18n("The device timed out."));
 		break;
-#ifndef _MSC_VER
-	// MSVC complains about the usage of deprecated enums, g++ and clang complain about missing enums
-	case QSerialPort::ParityError:
-	case QSerialPort::FramingError:
-	case QSerialPort::BreakConditionError:
-#endif
 	case QSerialPort::WriteError:
 	case QSerialPort::UnsupportedOperationError:
 	case QSerialPort::UnknownError:

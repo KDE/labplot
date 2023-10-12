@@ -450,7 +450,7 @@ const DatasetsMap& ImportDatasetWidget::getDatasetsMap() {
  * @param category the name of the collection
  */
 void ImportDatasetWidget::setCollection(const QString& collection) {
-	ui.cbCollections->setCurrentText(collection + QStringLiteral(" (") + QString(m_model->datasetCount(collection)) + QLatin1Char(')'));
+	ui.cbCollections->setCurrentText(collection + QStringLiteral(" (") + QString::number(m_model->datasetCount(collection)) + QLatin1Char(')'));
 }
 
 /**

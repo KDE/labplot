@@ -364,7 +364,7 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event) {
 				auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 				if (aspect->isDraggable()) {
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-					m_dragStartPos = e->globalPosition();
+					m_dragStartPos = e->globalPosition().toPoint();
 #else
 					m_dragStartPos = e->globalPos();
 #endif

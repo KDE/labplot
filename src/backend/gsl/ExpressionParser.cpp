@@ -465,18 +465,20 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList&
 			assign_symbol(qPrintable(vars.at(n)), xVectors.at(n)->at(i));
 
 			// if expr contains cell(f(i), g(x,..)): replace this with xVectors.at(n)->at(f(i))
-			QRegExp rxcell(QStringLiteral("cell\\((.*),(.*)\\)"));
-			rxcell.setMinimal(true); // only match one method call at a time
+			// inverted greedy: only match one method call at a time
+			QRegularExpression rxcell(QStringLiteral("cell\\((.*),(.*)\\)"), QRegularExpression::InvertedGreedinessOption);
 
 			int pos = 0;
-			while ((pos = rxcell.indexIn(tmpExpr, pos)) != -1) {
-				const QString f = rxcell.cap(1);
-				QString g = rxcell.cap(2);
+			auto match = rxcell.match(tmpExpr, 0);
+			while (match.hasMatch()) {
+				const QString f = match.captured(1);
+				QString g = match.captured(2);
 				// QDEBUG("f(i) =" << f)
 				// QDEBUG("g(x,..) =" << g)
 				assign_symbol("i", i + 1); // row number i = 1 .. minSize
 				const int index = parse(qPrintable(f), qPrintable(numberLocale.name()));
 				// DEBUG("INDEX = " << index)
+				pos = match.capturedStart(1);
 
 				if (index > 0 && index <= xVectors.at(n)->size()) {
 					const QString newg = g.replace(vars.at(n), numberLocale.toString(xVectors.at(n)->at(index - 1)));
@@ -484,21 +486,23 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList&
 					const QString replace = QStringLiteral("cell(") + f + QStringLiteral(",") + newg + QStringLiteral(")");
 					// QDEBUG("MATCH =" << rxcell.cap(0))
 					// QDEBUG("replacement =" << replace)
-					tmpExpr.replace(rxcell.cap(0), replace);
+					tmpExpr.replace(match.captured(0), replace);
 					pos++; // avoid endless loop
 				} else
-					tmpExpr.replace(rxcell.cap(0), numberLocale.toString(NAN));
+					tmpExpr.replace(match.captured(0), numberLocale.toString(NAN));
+
+				match = rxcell.match(tmpExpr, pos);
 			}
 
 			// if expr contains smmin(N, x)
-			QRegExp rxmin(QLatin1String("smmin\\((.*),.*%1\\)").arg(vars.at(n)));
-			rxmin.setMinimal(true); // only match one method call at a time
+			QRegularExpression rxmin(QLatin1String("smmin\\((.*),.*%1\\)").arg(vars.at(n)), QRegularExpression::InvertedGreedinessOption);
 			pos = 0;
-			while ((pos = rxmin.indexIn(tmpExpr, pos)) != -1) {
-				const QString arg = rxmin.cap(1);
+			match = rxmin.match(tmpExpr, 0);
+			while (match.hasMatch()) {
+				const QString arg = match.captured(1);
 				// QDEBUG("ARG = " << arg)
 				//  number of points to consider
-				const int N = numberLocale.toDouble(rxmin.cap(1));
+				const int N = numberLocale.toDouble(match.captured(1));
 				// DEBUG("N = " << N)
 				if (N < 1)
 					continue;
@@ -510,17 +514,20 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList&
 						min = v;
 				}
 
-				tmpExpr.replace(rxmin.cap(0), numberLocale.toString(min));
+				tmpExpr.replace(match.captured(0), numberLocale.toString(min));
+
+				pos = match.capturedStart(1);
+				match = rxmin.match(tmpExpr, pos);
 			}
 			// if expr contains smmax(N, x)
-			QRegExp rxmax(QLatin1String("smmax\\((.*),.*%1\\)").arg(vars.at(n)));
-			rxmax.setMinimal(true); // only match one method call at a time
+			QRegularExpression rxmax(QLatin1String("smmax\\((.*),.*%1\\)").arg(vars.at(n)), QRegularExpression::InvertedGreedinessOption);
 			pos = 0;
-			while ((pos = rxmax.indexIn(tmpExpr, pos)) != -1) {
-				const QString arg = rxmax.cap(1);
+			match = rxmax.match(tmpExpr, 0);
+			while (match.hasMatch()) {
+				const QString arg = match.captured(1);
 				// QDEBUG("ARG = " << arg)
 				//  number of points to consider
-				const int N = numberLocale.toDouble(rxmax.cap(1));
+				const int N = numberLocale.toDouble(match.captured(1));
 				// DEBUG("N = " << N)
 				if (N < 1)
 					continue;
@@ -532,17 +539,20 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList&
 						max = v;
 				}
 
-				tmpExpr.replace(rxmax.cap(0), numberLocale.toString(max));
+				tmpExpr.replace(match.captured(0), numberLocale.toString(max));
+
+				pos = match.capturedStart(1);
+				match = rxmax.match(tmpExpr, pos);
 			}
 			// if expr contains sma(N, x)
-			QRegExp rxsma(QLatin1String("sma\\((.*),.*%1\\)").arg(vars.at(n)));
-			rxsma.setMinimal(true); // only match one method call at a time
+			QRegularExpression rxsma(QLatin1String("sma\\((.*),.*%1\\)").arg(vars.at(n)), QRegularExpression::InvertedGreedinessOption);
 			pos = 0;
-			while ((pos = rxsma.indexIn(tmpExpr, pos)) != -1) {
-				const QString arg = rxsma.cap(1);
+			match = rxsma.match(tmpExpr, 0);
+			while (match.hasMatch()) {
+				const QString arg = match.captured(1);
 				// QDEBUG("ARG = " << arg)
 				//  number of points to consider
-				const int N = numberLocale.toDouble(rxsma.cap(1));
+				const int N = numberLocale.toDouble(match.captured(1));
 				// DEBUG("N = " << N)
 				if (N < 1)
 					continue;
@@ -551,18 +561,25 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList&
 				for (int index = std::max(0, i - N + 1); index <= i; index++)
 					sum += xVectors.at(n)->at(index);
 
-				tmpExpr.replace(rxsma.cap(0), numberLocale.toString(sum / N));
+				tmpExpr.replace(match.captured(0), numberLocale.toString(sum / N));
+
+				pos = match.capturedStart(1);
+				match = rxsma.match(tmpExpr, pos);
 			}
 		}
 
 		// QDEBUG("PRE expression to parse = " << tmpExpr)
 
 		// finally replace all cell() calls with second argument (g)
-		QRegExp rxcellfinal(QLatin1String("cell\\(.*,(.*)\\)"));
-		rxcellfinal.setMinimal(true); // only match one method call at a time
+		QRegularExpression rxcellfinal(QLatin1String("cell\\(.*,(.*)\\)"), QRegularExpression::InvertedGreedinessOption);
 		int pos = 0;
-		while ((pos = rxcellfinal.indexIn(tmpExpr, pos)) != -1)
-			tmpExpr.replace(rxcellfinal.cap(0), rxcellfinal.cap(1));
+		auto match = rxcellfinal.match(tmpExpr, 0);
+		while (match.hasMatch()) {
+			tmpExpr.replace(match.captured(0), match.captured(1));
+
+			pos = match.capturedStart(1);
+			match = rxcellfinal.match(tmpExpr, pos);
+		}
 
 		// QDEBUG("FINAL expression to parse = " << tmpExpr)
 
