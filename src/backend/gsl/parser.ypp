@@ -126,7 +126,7 @@ expr:      NUM       { $$ = $1;                            }
 												}
 | SPECFNCT '(' ')'       { $$ = (*((func_tPayload)($1->value.special_function.funsptr->fnct)))($1->value.special_function.payload);      }
 | SPECFNCT '(' expr ')'  {
-						func_t1Payload* function = (func_t1Payload)($1->value.special_function.funsptr->fnct);
+						func_t1Payload function = (func_t1Payload)($1->value.special_function.funsptr->fnct);
 						if ($1->value.special_function.funsptr->argc != 1)
 							printf("Error: Wrong argument count");
 						else if (function == nullptr)
@@ -135,7 +135,7 @@ expr:      NUM       { $$ = $1;                            }
 							$$ = (*function)($3, $1->value.special_function.payload);
 					}
 | SPECFNCT '(' expr ',' expr ')'  {
-								func_t2Payload* function = (func_t2Payload)($1->value.special_function.funsptr->fnct);
+								func_t2Payload function = (func_t2Payload)($1->value.special_function.funsptr->fnct);
 								if ($1->value.special_function.funsptr->argc != 2)
 									printf("Error: Wrong argument count");
 								else if (function == nullptr)
@@ -144,7 +144,7 @@ expr:      NUM       { $$ = $1;                            }
 									$$ = (*function)($3,$5, $1->value.special_function.payload);
 							}
 | SPECFNCT '(' expr ',' expr ','expr ')'  {
-										func_t3Payload* function = (func_t3Payload)($1->value.special_function.funsptr->fnct);
+										func_t3Payload function = (func_t3Payload)($1->value.special_function.funsptr->fnct);
 										if ($1->value.special_function.funsptr->argc != 3)
 											printf("Error: Wrong argument count");
 										else if (function == nullptr)
