@@ -1190,7 +1190,7 @@ void ColumnTest::testFormulasmmax() {
 	QCOMPARE(c2.rowCount(), 7);
 	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17., 18.});
 
-	c2.setFormula(QStringLiteral("smmin(x, 3)"), {QStringLiteral("x")}, {&c1}, true);
+	c2.setFormula(QStringLiteral("smmax(x, 3)"), {QStringLiteral("x")}, {&c1}, true);
 	c2.updateFormula();
 	QCOMPARE(c2.rowCount(), 8);
 	QCOMPARE(c2.valueAt(0), 1);
@@ -1214,7 +1214,7 @@ void ColumnTest::testFormulasma() {
 	QCOMPARE(c2.rowCount(), 7);
 	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17., 18.});
 
-	c2.setFormula(QStringLiteral("smmin(x, 3)"), {QStringLiteral("x")}, {&c1}, true);
+	c2.setFormula(QStringLiteral("sma(x, 3)"), {QStringLiteral("x")}, {&c1}, true);
 	c2.updateFormula();
 	QCOMPARE(c2.rowCount(), 8);
 	QCOMPARE(c2.valueAt(0), 1.);
