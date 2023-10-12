@@ -484,7 +484,7 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList&
 					const QString newg = g.replace(vars.at(n), numberLocale.toString(xVectors.at(n)->at(index - 1)));
 					// QDEBUG("new g(x,..) =" << newg)
 					const QString replace = QStringLiteral("cell(") + f + QStringLiteral(",") + newg + QStringLiteral(")");
-					// QDEBUG("MATCH =" << rxcell.cap(0))
+					// QDEBUG("MATCH =" << match.captured(0))
 					// QDEBUG("replacement =" << replace)
 					tmpExpr.replace(match.captured(0), replace);
 					pos++; // avoid endless loop
@@ -551,7 +551,7 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList&
 			while (match.hasMatch()) {
 				const QString arg = match.captured(1);
 				// QDEBUG("ARG = " << arg)
-				//  number of points to consider
+				// number of points to consider
 				const int N = numberLocale.toDouble(match.captured(1));
 				// DEBUG("N = " << N)
 				if (N < 1)
@@ -577,7 +577,7 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList&
 		while (match.hasMatch()) {
 			tmpExpr.replace(match.captured(0), match.captured(1));
 
-			pos = match.capturedStart(1);
+			pos = match.capturedStart(0);
 			match = rxcellfinal.match(tmpExpr, pos);
 		}
 
