@@ -124,7 +124,7 @@ expr:      NUM       { $$ = $1;                            }
 													else
 														$$ = (*((func_t4)($1->value.funsptr->fnct)))($3,$5,$7,$9);
 												}
-| SPECFNCT '(' ')'       { $$ = (*((func_t0Payload)($1->value.special_function.funsptr->fnct)))($1->value.special_function.payload);      }
+| SPECFNCT '(' ')'       { $$ = (*((func_tPayload)($1->value.special_function.funsptr->fnct)))($1->value.special_function.payload);      }
 | SPECFNCT '(' expr ')'  {
 						const func_t1Payload* function = (func_t1Payload)($1->value.special_function.funsptr->fnct);
 						if ($1->value.special_function.funsptr->argc != 1)
