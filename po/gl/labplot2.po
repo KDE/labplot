@@ -11730,7 +11730,7 @@ msgstr "Dispoñíbel (%1)"
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:2497
 #, kde-format
 msgid "Wrong username or password"
-msgstr "Nome de usuario ou contrasinal incorrectos"
+msgstr "Nome de usuaria ou contrasinal incorrectos"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:2500
 #, kde-format
@@ -12068,7 +12068,7 @@ msgstr "Defina un contrasinal."
 #: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:331
 #, kde-format
 msgid "Please set a username."
-msgstr "Defina un nome de usuario."
+msgstr "Defina un nome de usuaria."
 
 #: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:68
 #: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:371
@@ -18106,7 +18106,7 @@ msgstr "Identificador de cliente:"
 #: src/kdefrontend/ui/datasources/mqttconnectionmanagerwidget.ui:88
 #, kde-format
 msgid "Username:"
-msgstr "Nome de usuario:"
+msgstr "Nome de usuaria:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbID)
 #: src/kdefrontend/ui/datasources/mqttconnectionmanagerwidget.ui:95
@@ -18136,7 +18136,7 @@ msgstr "Trebello de erro de MQTT"
 #: src/kdefrontend/ui/datasources/mqtterrorwidget.ui:33
 #, kde-format
 msgid "User name:"
-msgstr "Nome de usuario:"
+msgstr "Nome de usuaria:"
 
 #. i18n: ectx: property (text), widget (QPushButton, bChange)
 #: src/kdefrontend/ui/datasources/mqtterrorwidget.ui:53
