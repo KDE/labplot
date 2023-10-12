@@ -59,6 +59,13 @@ private Q_SLOTS:
 	void testRemoveRow();
 
 	void testFormula();
+	void testFormulaCell();
+	void testFormulaCellInvalid();
+	void testFormulaCellSemicolonInvalid();
+	void testFormulaCellMulti();
+	void testFormulasmmin();
+	void testFormulasmmax();
+	void testFormulasma();
 };
 
 #endif // COLUMNTEST_H
