@@ -1111,4 +1111,59 @@ void ColumnTest::testFormulaCellInvalid() {
 		QCOMPARE(c2.valueAt(i), NAN);
 }
 
+void ColumnTest::testFormulaCellSemicolonInvalid() {
+	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
+	c1.resizeTo(3);
+	QCOMPARE(c1.rowCount(), 3);
+	c1.replaceValues(-1, {1., -1., 5.});
+
+	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
+	c2.resizeTo(7);
+	QCOMPARE(c2.rowCount(), 7);
+	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17.});
+
+	c2.setFormula(QStringLiteral("cell(x; 2)"), {QStringLiteral("x")}, {&c1}, true);
+	c2.updateFormula();
+	QCOMPARE(c2.rowCount(), 7);
+	// All invalid
+	for (int i=0; i < c2.rowCount(); i++)
+		QCOMPARE(c2.valueAt(i), -1);
+}
+
+void ColumnTest::testFormulaCellMulti() {
+	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
+	c1.resizeTo(3);
+	QCOMPARE(c1.rowCount(), 3);
+	c1.replaceValues(-1, {1., -1., 5.});
+
+	auto c3 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
+	c3.resizeTo(3);
+	QCOMPARE(c3.rowCount(), 3);
+	c3.replaceValues(-1, {-5., 100., 3});
+
+	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
+	c2.resizeTo(7);
+	QCOMPARE(c2.rowCount(), 7);
+	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17.});
+
+	c2.setFormula(QStringLiteral("cell(x; 2) + cell(y; 1)"), {QStringLiteral("x"), QStringLiteral("y")}, {&c1, &c3}, true);
+	c2.updateFormula();
+	QCOMPARE(c2.rowCount(), 7);
+	// All invalid
+	for (int i=0; i < c2.rowCount(); i++)
+		QCOMPARE(c2.valueAt(i), -6);
+}
+
+void ColumnTest::testFormulasmmin() {
+	
+}
+
+void ColumnTest::testFormulasmmax() {
+	
+}
+
+void ColumnTest::testFormulasma() {
+	
+}
+
 QTEST_MAIN(ColumnTest)
