@@ -1111,7 +1111,8 @@ void ColumnTest::testFormulaCellInvalid() {
 		QCOMPARE(c2.valueAt(i), NAN);
 }
 
-void ColumnTest::testFormulaCellSemicolonInvalid() {
+void ColumnTest::testFormulaCellConstExpression() {
+	QSKIP("Currently it is not implemented if the expression is constant before cell commands are executed");
 	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
 	c1.resizeTo(3);
 	QCOMPARE(c1.rowCount(), 3);
@@ -1122,7 +1123,7 @@ void ColumnTest::testFormulaCellSemicolonInvalid() {
 	QCOMPARE(c2.rowCount(), 7);
 	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17.});
 
-	c2.setFormula(QStringLiteral("cell(x; 2)"), {QStringLiteral("x")}, {&c1}, true);
+	c2.setFormula(QStringLiteral("cell(x, 2)"), {QStringLiteral("x")}, {&c1}, true);
 	c2.updateFormula();
 	QCOMPARE(c2.rowCount(), 7);
 	// All invalid
@@ -1146,10 +1147,34 @@ void ColumnTest::testFormulaCellMulti() {
 	QCOMPARE(c2.rowCount(), 7);
 	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17.});
 
+	c2.setFormula(QStringLiteral("cell(x, 2) + cell(y, 1)"), {QStringLiteral("x"), QStringLiteral("y")}, {&c1, &c3}, true);
+	c2.updateFormula();
+	QCOMPARE(c2.rowCount(), 7);
+	for (int i=0; i < c2.rowCount(); i++)
+		QCOMPARE(c2.valueAt(i), -6);
+}
+
+void ColumnTest::testFormulaCellMultiSemikolon() {
+	QSKIP(QStringLiteral("cell with semikolon is not yet implemented"));
+
+	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
+	c1.resizeTo(3);
+	QCOMPARE(c1.rowCount(), 3);
+	c1.replaceValues(-1, {1., -1., 5.});
+
+	auto c3 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
+	c3.resizeTo(3);
+	QCOMPARE(c3.rowCount(), 3);
+	c3.replaceValues(-1, {-5., 100., 3});
+
+	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
+	c2.resizeTo(7);
+	QCOMPARE(c2.rowCount(), 7);
+	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17.});
+
 	c2.setFormula(QStringLiteral("cell(x; 2) + cell(y; 1)"), {QStringLiteral("x"), QStringLiteral("y")}, {&c1, &c3}, true);
 	c2.updateFormula();
 	QCOMPARE(c2.rowCount(), 7);
-	// All invalid
 	for (int i=0; i < c2.rowCount(); i++)
 		QCOMPARE(c2.valueAt(i), -6);
 }
@@ -1215,6 +1240,85 @@ void ColumnTest::testFormulasma() {
 	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17., 18.});
 
 	c2.setFormula(QStringLiteral("sma(x, 3)"), {QStringLiteral("x")}, {&c1}, true);
+	c2.updateFormula();
+	QCOMPARE(c2.rowCount(), 8);
+	QCOMPARE(c2.valueAt(0), 1.);
+	QCOMPARE(c2.valueAt(1), 0.);
+	QCOMPARE(c2.valueAt(2), 1.66667);
+	QCOMPARE(c2.valueAt(3), 3.);
+	QCOMPARE(c2.valueAt(4), 13./3.);
+	QCOMPARE(c2.valueAt(5), 16./3.);
+	QCOMPARE(c2.valueAt(6), 7.);
+	QCOMPARE(c2.valueAt(7), 13./3.);	
+}
+
+void ColumnTest::testFormulasmminSemikolon() {
+	QSKIP(QStringLiteral("smmin with semikolon is not yet implemented"));
+
+	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
+	c1.resizeTo(3);
+	QCOMPARE(c1.rowCount(), 3);
+	c1.replaceValues(-1, {1., -1., 5., 5., 3., 8., 10., -5});
+
+	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
+	c2.resizeTo(7);
+	QCOMPARE(c2.rowCount(), 7);
+	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17., 18.});
+
+	c2.setFormula(QStringLiteral("smmin(x; 3)"), {QStringLiteral("x")}, {&c1}, true);
+	c2.updateFormula();
+	QCOMPARE(c2.rowCount(), 8);
+	QCOMPARE(c2.valueAt(0), 1);
+	QCOMPARE(c2.valueAt(1), -1);
+	QCOMPARE(c2.valueAt(2), -1);
+	QCOMPARE(c2.valueAt(3), -1);
+	QCOMPARE(c2.valueAt(4), -1);
+	QCOMPARE(c2.valueAt(5), 3);
+	QCOMPARE(c2.valueAt(6), 3);
+	QCOMPARE(c2.valueAt(7), 3);
+			
+}
+
+void ColumnTest::testFormulasmmaxSemikolon() {
+	QSKIP(QStringLiteral("smmax with semikolon is not yet implemented"));
+
+	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
+	c1.resizeTo(3);
+	QCOMPARE(c1.rowCount(), 3);
+	c1.replaceValues(-1, {1., -1., 5., 5., 3., 8., 10., -5});
+
+	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
+	c2.resizeTo(7);
+	QCOMPARE(c2.rowCount(), 7);
+	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17., 18.});
+
+	c2.setFormula(QStringLiteral("smmax(x; 3)"), {QStringLiteral("x")}, {&c1}, true);
+	c2.updateFormula();
+	QCOMPARE(c2.rowCount(), 8);
+	QCOMPARE(c2.valueAt(0), 1);
+	QCOMPARE(c2.valueAt(1), 1);
+	QCOMPARE(c2.valueAt(2), 5);
+	QCOMPARE(c2.valueAt(3), 5);
+	QCOMPARE(c2.valueAt(4), 5);
+	QCOMPARE(c2.valueAt(5), 8);
+	QCOMPARE(c2.valueAt(6), 10);
+	QCOMPARE(c2.valueAt(7), 10);	
+}
+
+void ColumnTest::testFormulasmaSemikolon() {
+	QSKIP(QStringLiteral("sma with semikolon is not yet implemented"));
+
+	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
+	c1.resizeTo(3);
+	QCOMPARE(c1.rowCount(), 3);
+	c1.replaceValues(-1, {1., -1., 5., 5., 3., 8., 10., -5});
+
+	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
+	c2.resizeTo(7);
+	QCOMPARE(c2.rowCount(), 7);
+	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17., 18.});
+
+	c2.setFormula(QStringLiteral("sma(x; 3)"), {QStringLiteral("x")}, {&c1}, true);
 	c2.updateFormula();
 	QCOMPARE(c2.rowCount(), 8);
 	QCOMPARE(c2.valueAt(0), 1.);

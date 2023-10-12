@@ -61,11 +61,16 @@ private Q_SLOTS:
 	void testFormula();
 	void testFormulaCell();
 	void testFormulaCellInvalid();
-	void testFormulaCellSemicolonInvalid();
+	void testFormulaCellConstExpression();
 	void testFormulaCellMulti();
+	void testFormulaCellMultiSemikolon();
 	void testFormulasmmin();
 	void testFormulasmmax();
 	void testFormulasma();
+
+	void testFormulasmminSemikolon();
+	void testFormulasmmaxSemikolon();
+	void testFormulasmaSemikolon();
 };
 
 #endif // COLUMNTEST_H
