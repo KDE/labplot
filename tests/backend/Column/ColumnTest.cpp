@@ -1155,15 +1155,76 @@ void ColumnTest::testFormulaCellMulti() {
 }
 
 void ColumnTest::testFormulasmmin() {
-	
+	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
+	c1.resizeTo(3);
+	QCOMPARE(c1.rowCount(), 3);
+	c1.replaceValues(-1, {1., -1., 5., 5., 3., 8., 10., -5});
+
+	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
+	c2.resizeTo(7);
+	QCOMPARE(c2.rowCount(), 7);
+	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17., 18.});
+
+	c2.setFormula(QStringLiteral("smmin(x, 3)"), {QStringLiteral("x")}, {&c1}, true);
+	c2.updateFormula();
+	QCOMPARE(c2.rowCount(), 8);
+	QCOMPARE(c2.valueAt(0), 1);
+	QCOMPARE(c2.valueAt(1), -1);
+	QCOMPARE(c2.valueAt(2), -1);
+	QCOMPARE(c2.valueAt(3), -1);
+	QCOMPARE(c2.valueAt(4), -1);
+	QCOMPARE(c2.valueAt(5), 3);
+	QCOMPARE(c2.valueAt(6), 3);
+	QCOMPARE(c2.valueAt(7), 3);
+			
 }
 
 void ColumnTest::testFormulasmmax() {
-	
+	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
+	c1.resizeTo(3);
+	QCOMPARE(c1.rowCount(), 3);
+	c1.replaceValues(-1, {1., -1., 5., 5., 3., 8., 10., -5});
+
+	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
+	c2.resizeTo(7);
+	QCOMPARE(c2.rowCount(), 7);
+	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17., 18.});
+
+	c2.setFormula(QStringLiteral("smmin(x, 3)"), {QStringLiteral("x")}, {&c1}, true);
+	c2.updateFormula();
+	QCOMPARE(c2.rowCount(), 8);
+	QCOMPARE(c2.valueAt(0), 1);
+	QCOMPARE(c2.valueAt(1), 1);
+	QCOMPARE(c2.valueAt(2), 5);
+	QCOMPARE(c2.valueAt(3), 5);
+	QCOMPARE(c2.valueAt(4), 5);
+	QCOMPARE(c2.valueAt(5), 8);
+	QCOMPARE(c2.valueAt(6), 10);
+	QCOMPARE(c2.valueAt(7), 10);	
 }
 
 void ColumnTest::testFormulasma() {
-	
+	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
+	c1.resizeTo(3);
+	QCOMPARE(c1.rowCount(), 3);
+	c1.replaceValues(-1, {1., -1., 5., 5., 3., 8., 10., -5});
+
+	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
+	c2.resizeTo(7);
+	QCOMPARE(c2.rowCount(), 7);
+	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17., 18.});
+
+	c2.setFormula(QStringLiteral("smmin(x, 3)"), {QStringLiteral("x")}, {&c1}, true);
+	c2.updateFormula();
+	QCOMPARE(c2.rowCount(), 8);
+	QCOMPARE(c2.valueAt(0), 1.);
+	QCOMPARE(c2.valueAt(1), 0.);
+	QCOMPARE(c2.valueAt(2), 1.66667);
+	QCOMPARE(c2.valueAt(3), 3.);
+	QCOMPARE(c2.valueAt(4), 13./3.);
+	QCOMPARE(c2.valueAt(5), 16./3.);
+	QCOMPARE(c2.valueAt(6), 7.);
+	QCOMPARE(c2.valueAt(7), 13./3.);	
 }
 
 QTEST_MAIN(ColumnTest)
