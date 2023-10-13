@@ -109,7 +109,6 @@
 ///////////////////////////////////////////////////////
 
 class CommonTest : public QObject {
-
 private Q_SLOTS:
 	void initTestCase();
 

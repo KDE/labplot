@@ -13,7 +13,6 @@
 #include <QtTest>
 
 class DatasetsTest : public QObject {
-
 private Q_SLOTS:
 	void initTestCase();
 
