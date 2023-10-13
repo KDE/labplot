@@ -13,6 +13,7 @@
 
 #include <QString>
 #include <gsl/gsl_version.h>
+#include "parserFunctionTypes.h"
 
 enum class FunctionGroups;
 
@@ -22,9 +23,49 @@ struct funs {
 #ifdef _MSC_VER /* MSVC needs void argument */
 	double (*fnct)(void);
 #else
-	double (*fnct)();
+	func_t fnct;
 #endif
 	int argc;
+	QString (*parameterFunction)(int); // can be also a nullptr. Check needed!
+	FunctionGroups group;
+};
+
+struct funs0Payload {
+	QString description;
+	const char* name;
+	func_tPayload fnct;
+	QString (*parameterFunction)(int); // can be also a nullptr. Check needed!
+	FunctionGroups group;
+};
+
+struct funs1Payload {
+	QString description;
+	const char* name;
+	func_t1Payload fnct;
+	QString (*parameterFunction)(int); // can be also a nullptr. Check needed!
+	FunctionGroups group;
+};
+
+struct funs2Payload {
+	QString description;
+	const char* name;
+	func_t2Payload fnct;
+	QString (*parameterFunction)(int); // can be also a nullptr. Check needed!
+	FunctionGroups group;
+};
+
+struct funs3Payload {
+	QString description;
+	const char* name;
+	func_t3Payload fnct;
+	QString (*parameterFunction)(int); // can be also a nullptr. Check needed!
+	FunctionGroups group;
+};
+
+struct funs4Payload {
+	QString description;
+	const char* name;
+	func_t4Payload fnct;
 	QString (*parameterFunction)(int); // can be also a nullptr. Check needed!
 	FunctionGroups group;
 };

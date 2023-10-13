@@ -11,6 +11,7 @@
 #ifndef PARSER_H
 #define PARSER_H
 
+#include "parserFunctionTypes.h"
 #include "constants.h"
 #include "functions.h"
 #include <gsl/gsl_version.h>
@@ -25,25 +26,13 @@ typedef struct parser_var {
 	double value;
 } parser_var;
 
-/* Function types */
-#ifdef _MSC_VER /* MSVC needs void argument */
-typedef double (*func_t)(void);
-#else
-typedef double (*func_t)();
-typedef double (*func_tPayload)(void*);
-#endif
-typedef double (*func_t1)(double);
-typedef double (*func_t2)(double, double);
-typedef double (*func_t3)(double, double, double);
-typedef double (*func_t4)(double, double, double, double);
-typedef double (*func_t1Payload)(double, void*);
-typedef double (*func_t2Payload)(double, double, void*);
-typedef double (*func_t3Payload)(double, double, double, void*);
-typedef double (*func_t4Payload)(double, double, double, double, void*);
+struct Payload {
+	virtual ~Payload() {}
+};
 
 struct special_function_def {
 	funs* funsptr;
-	void* payload;
+	Payload* payload;
 };
 
 /* structure for list of symbols */
@@ -67,5 +56,6 @@ symbol* assign_symbol(const char* symbol_name, double value);
 int remove_symbol(const char* symbol_name);
 double parse(const char* string, const char* locale);
 double parse_with_vars(const char[], const parser_var[], int nvars, const char* locale);
+bool set_specialfunction(const char* function_name, funs* function, Payload* payload);
 
 #endif /*PARSER_H*/
