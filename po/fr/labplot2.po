@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-10-09 00:39+0000\n"
-"PO-Revision-Date: 2023-10-08 21:25+0200\n"
+"PO-Revision-Date: 2023-10-11 14:08+0200\n"
 "Last-Translator: Xavier BESNARD <xavier.besnard@neuf.fr>\n"
 "Language-Team: fr\n"
 "Language: fr\n"
@@ -9818,10 +9818,9 @@ msgid "Insert Multiple Columns Right"
 msgstr "Insérer plusieurs colonnes à droite"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:315
-#, fuzzy, kde-format
-#| msgid "Remove Selected Column(s)"
+#, kde-format
 msgid "Delete Selected Column(s)"
-msgstr "Supprimer les colonnes sélectionnés"
+msgstr "Supprimer la ou les colonnes sélectionnées"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:317
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1634
@@ -10007,8 +10006,7 @@ msgid "Remo&ve Selected Row(s)"
 msgstr "Suppri&mer les lignes sélectionnées"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:464
-#, fuzzy, kde-format
-#| msgid "Remove Rows With Missing Values"
+#, kde-format
 msgid "Delete Rows With Missing Values"
 msgstr "Supprimer les lignes ayant des valeurs absentes"
 
@@ -11382,11 +11380,9 @@ msgid "Excel 2007+ (XSLX)"
 msgstr "Excel 2007+ (XSLX)"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:105
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Plot Spreadsheet Data"
+#, kde-format
 msgid "OpenDocument Spreadsheet (ODS)"
-msgstr "Tracer les données de la feuille de calcul"
+msgstr "Feuille de calcul « OpenDocument » (ods)"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:114
 #, kde-format
@@ -15267,16 +15263,13 @@ msgid "Notebook type to create automatically on startup"
 msgstr ""
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:199
-#, fuzzy, kde-format
-#| msgid ""
-#| "Controls the behavior of where the dock widgets are placed after being re-"
-#| "opened."
+#, kde-format
 msgid ""
 "Controls the behavior of where the dock widgets are placed after being re-"
 "opened"
 msgstr ""
 "Contrôle le comportement de l’emplacement des composants graphiques du dock "
-"après sa ré-ouverture."
+"après sa ré-ouverture"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:203
 #, kde-format
@@ -15964,21 +15957,19 @@ msgstr ""
 "caractère spécial."
 
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:178
-#, fuzzy, kde-format
-#| msgid "Regular Expression"
+#, kde-format
 msgid "Empty formula expression"
-msgstr "Expression rationnelle"
+msgstr "Expression vide de formule"
 
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:185
 #, kde-format
 msgid "Incorrect formula syntax"
-msgstr ""
+msgstr "Syntaxe incorrecte de la formule"
 
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:202
-#, fuzzy, kde-format
-#| msgid "Select and Zoom"
+#, kde-format
 msgid "Select a valid column"
-msgstr "Sélectionner et agrandir"
+msgstr "Sélectionner un colonne valable"
 
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:209
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:262
@@ -16110,8 +16101,7 @@ msgid "No data selected to plot."
 msgstr "Aucune donnée à tracer sélectionnée."
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:1019
-#, fuzzy, kde-format
-#| msgid "An already existing plot has to be selected."
+#, kde-format
 msgid "An already existing plot area has to be selected."
 msgstr "Un tracé déjà existant doit être sélectionné."
 
@@ -21152,10 +21142,9 @@ msgstr "Inclure les zéros superflus après le point"
 
 #. i18n: ectx: property (text), widget (QLabel, lDockWindowPositionReopen)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:161
-#, fuzzy, kde-format
-#| msgid "Box Plot Placement"
+#, kde-format
 msgid "Dock widget placement:"
-msgstr "Placement des tracés en boîte"
+msgstr "Placement du composant graphique de Dock :"
 
 #. i18n: ectx: property (text), widget (QLabel, lAutoSave)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:168

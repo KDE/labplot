@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-10-09 00:39+0000\n"
-"PO-Revision-Date: 2023-10-08 12:21+0100\n"
+"PO-Revision-Date: 2023-10-12 23:26+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -15803,21 +15803,19 @@ msgstr ""
 "Provizata variablonomo komenciĝas per cifero aŭ enhavas specialan signon."
 
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:178
-#, fuzzy, kde-format
-#| msgid "Regular Expression"
+#, kde-format
 msgid "Empty formula expression"
-msgstr "Regula Esprimo"
+msgstr "Malplena formula esprimo"
 
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:185
 #, kde-format
 msgid "Incorrect formula syntax"
-msgstr ""
+msgstr "Nekorekta formulsintakso"
 
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:202
-#, fuzzy, kde-format
-#| msgid "Select and Zoom"
+#, kde-format
 msgid "Select a valid column"
-msgstr "Elekti kaj Zomi"
+msgstr "Elekti validan kolumnon"
 
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:209
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:262
@@ -22403,6 +22401,3 @@ msgstr "konvertprocezo malsukcesis, elirkodo ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Ne eblas malfermi dosieron:"
-
-#~ msgid "DateTime"
-#~ msgstr "DatoHoro"
