@@ -10,6 +10,7 @@
 #include "EquidistantValuesDialog.h"
 #include "backend/core/Settings.h"
 #include "backend/core/column/Column.h"
+#include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "backend/lib/macros.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 
@@ -53,8 +54,16 @@ EquidistantValuesDialog::EquidistantValuesDialog(Spreadsheet* s, QWidget* parent
 	setLayout(layout);
 	setAttribute(Qt::WA_DeleteOnClose);
 
-	ui.cbType->addItem(i18n("Number"));
-	ui.cbType->addItem(i18n("Increment"));
+	ui.cbType->addItem(i18n("Number"), static_cast<int>(Type::FixedNumber));
+	ui.cbType->addItem(i18n("Increment"), static_cast<int>(Type::FixedIncrement));
+
+	ui.cbIncrementDateTimeUnit->addItem(i18n("Years"), static_cast<int>(DateTimeUnit::Year));
+	ui.cbIncrementDateTimeUnit->addItem(i18n("Months"), static_cast<int>(DateTimeUnit::Month));
+	ui.cbIncrementDateTimeUnit->addItem(i18n("Days"), static_cast<int>(DateTimeUnit::Day));
+	ui.cbIncrementDateTimeUnit->addItem(i18n("Hours"), static_cast<int>(DateTimeUnit::Hour));
+	ui.cbIncrementDateTimeUnit->addItem(i18n("Minutes"), static_cast<int>(DateTimeUnit::Minute));
+	ui.cbIncrementDateTimeUnit->addItem(i18n("Seconds"), static_cast<int>(DateTimeUnit::Second));
+	ui.cbIncrementDateTimeUnit->addItem(i18n("Milliseconds"), static_cast<int>(DateTimeUnit::Millisecond));
 
 	ui.leFrom->setClearButtonEnabled(true);
 	ui.leTo->setClearButtonEnabled(true);
@@ -65,6 +74,7 @@ EquidistantValuesDialog::EquidistantValuesDialog(Spreadsheet* s, QWidget* parent
 	ui.leTo->setValidator(new QDoubleValidator(ui.leTo));
 	ui.leIncrement->setValidator(new QDoubleValidator(ui.leIncrement));
 	ui.leNumber->setValidator(new QIntValidator(ui.leNumber));
+	ui.leIncrementDateTime->setValidator(new QIntValidator(ui.leIncrementDateTime));
 
 	connect(ui.cbType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &EquidistantValuesDialog::typeChanged);
 	connect(ui.leFrom, &QLineEdit::textChanged, this, &EquidistantValuesDialog::checkValues);
@@ -73,8 +83,6 @@ EquidistantValuesDialog::EquidistantValuesDialog(Spreadsheet* s, QWidget* parent
 	connect(ui.leIncrement, &QLineEdit::textChanged, this, &EquidistantValuesDialog::checkValues);
 	connect(m_okButton, &QPushButton::clicked, this, &EquidistantValuesDialog::generate);
 
-	// generated data the  default
-	this->typeChanged(0);
 
 	// restore saved settings if available
 	create(); // ensure there's a window created
@@ -86,9 +94,19 @@ EquidistantValuesDialog::EquidistantValuesDialog(Spreadsheet* s, QWidget* parent
 		resize(QSize(300, 0).expandedTo(minimumSize()));
 
 	ui.cbType->setCurrentIndex(conf.readEntry("Type", 0));
+	// this->typeChanged(ui.cbType->currentIndex());
+
+	// settings for numeric
 	ui.leFrom->setText(QString::number(conf.readEntry("From", 1)));
 	ui.leTo->setText(QString::number(conf.readEntry("To", 100)));
 	ui.leIncrement->setText(QLocale().toString(conf.readEntry("Increment", 1.)));
+
+	// settings for datetime
+	qint64 now = QDateTime::currentDateTime().toMSecsSinceEpoch();
+	ui.dteFrom->setMSecsSinceEpochUTC(conf.readEntry("FromDateTime", now));
+	ui.dteTo->setMSecsSinceEpochUTC(conf.readEntry("ToDateTime", now));
+	ui.leIncrementDateTime->setText(QLocale().toString(conf.readEntry("IncrementDateTime", 1)));
+	ui.cbIncrementDateTimeUnit->setCurrentIndex(conf.readEntry("DateTimeUnit", 0));
 }
 
 EquidistantValuesDialog::~EquidistantValuesDialog() {
@@ -97,15 +115,67 @@ EquidistantValuesDialog::~EquidistantValuesDialog() {
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 
 	conf.writeEntry("Type", ui.cbType->currentIndex());
+
+	// settings for numeric
 	const auto numberLocale = QLocale();
 	conf.writeEntry("From", numberLocale.toInt(ui.leFrom->text()));
 	conf.writeEntry("To", numberLocale.toInt(ui.leTo->text()));
 	conf.writeEntry("Increment", numberLocale.toDouble(ui.leIncrement->text()));
+
+	// settings for datetime
+	conf.writeEntry("FromDateTime", ui.dteFrom->dateTime().toMSecsSinceEpoch());
+	conf.writeEntry("ToDateTime", ui.dteTo->dateTime().toMSecsSinceEpoch());
+	conf.writeEntry("IncrementDateTime", numberLocale.toDouble(ui.leIncrement->text()));
+	conf.writeEntry("DateTimeUnit", ui.cbIncrementDateTimeUnit->currentIndex());
 }
 
 void EquidistantValuesDialog::setColumns(const QVector<Column*>& columns) {
 	m_columns = columns;
 	ui.leNumber->setText(QLocale().toString(m_columns.first()->rowCount()));
+
+	for (auto* col : m_columns) {
+		if (col->isNumeric()) {
+			m_hasNumeric = true;
+			break;
+		}
+	}
+
+	QString dateTimeFormat;
+	for (auto* col : m_columns) {
+		if (col->columnMode() == AbstractColumn::ColumnMode::DateTime) {
+			m_hasDateTime = true;
+			auto* filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
+			dateTimeFormat = filter->format();
+			break;
+		}
+	}
+
+	ui.lIncrement->setVisible(m_hasNumeric);
+	ui.leIncrement->setVisible(m_hasNumeric);
+	ui.lFrom->setVisible(m_hasNumeric);
+	ui.leFrom->setVisible(m_hasNumeric);
+	ui.lTo->setVisible(m_hasNumeric);
+	ui.leTo->setVisible(m_hasNumeric);
+
+	ui.lIncrementDateTime->setVisible(m_hasDateTime);
+	ui.leIncrementDateTime->setVisible(m_hasDateTime);
+	ui.cbIncrementDateTimeUnit->setVisible(m_hasDateTime);
+	ui.lFromDateTime->setVisible(m_hasDateTime);
+	ui.dteFrom->setVisible(m_hasDateTime);
+	ui.lToDateTime->setVisible(m_hasDateTime);
+	ui.dteTo->setVisible(m_hasDateTime);
+
+	ui.lNumeric->setVisible(m_hasNumeric && m_hasDateTime);
+	ui.lDateTime->setVisible(m_hasNumeric && m_hasDateTime);
+
+	if (m_hasDateTime) {
+		ui.dteFrom->setDisplayFormat(dateTimeFormat);
+		ui.dteTo->setDisplayFormat(dateTimeFormat);
+	}
+
+	// resize the dialog to have the minimum height
+	layout()->activate();
+	resize(QSize(this->width(), 0).expandedTo(minimumSize()));
 }
 
 void EquidistantValuesDialog::typeChanged(int index) {
@@ -123,75 +193,221 @@ void EquidistantValuesDialog::typeChanged(int index) {
 }
 
 void EquidistantValuesDialog::checkValues() {
-	if (ui.leFrom->text().simplified().isEmpty() || ui.leTo->text().simplified().isEmpty()) {
-		m_okButton->setEnabled(false);
-		return;
-	}
-
+	// check the validness of the user input for numeric values
 	const auto numberLocale = QLocale();
-	if (ui.cbType->currentIndex() == 0) { // INT
-		if (ui.leNumber->text().simplified().isEmpty() || numberLocale.toInt(ui.leNumber->text().simplified()) == 0) {
+	bool ok;
+	if (m_hasNumeric) {
+		const double start = numberLocale.toDouble(ui.leFrom->text(), &ok);
+		if (!ok) {
+			m_okButton->setToolTip(i18n("Invalid start value"));
 			m_okButton->setEnabled(false);
 			return;
 		}
-	} else { // DOUBLE
-		if (ui.leIncrement->text().simplified().isEmpty() || qFuzzyIsNull(numberLocale.toDouble(ui.leIncrement->text().simplified()))) {
+
+		const double end =numberLocale.toDouble(ui.leTo->text(), &ok);
+		if (!ok || end < start) {
+			m_okButton->setToolTip(i18n("Invalid end value, must be bigger than the start value"));
 			m_okButton->setEnabled(false);
 			return;
 		}
 	}
 
+	if (ui.cbType->currentIndex() == 0) { // fixed number
+		// check whether a valid integer value biger than 1 was provided
+		const int number = numberLocale.toDouble(ui.leNumber->text(), &ok);
+		if (!ok || number < 1) {
+			m_okButton->setToolTip(i18n("The number of values to be generated must be bigger than one"));
+			m_okButton->setEnabled(false);
+			return;
+		}
+	} else { // fixed increment
+		if (m_hasNumeric) {
+			const double increment = numberLocale.toDouble(ui.leIncrement->text(), &ok);
+			if (!ok || increment == 0.) {
+				m_okButton->setToolTip(i18n("Invalid numeric increment value, must be bigger than zero"));
+				m_okButton->setEnabled(false);
+				return;
+			}
+		}
+
+		if (m_hasDateTime) {
+			const int increment = numberLocale.toInt(ui.leIncrementDateTime->text(), &ok);
+			if (!ok || increment == 0) {
+				m_okButton->setToolTip(i18n("Invalid Date&Time increment value, must be bigger than zero"));
+				m_okButton->setEnabled(false);
+				return;
+			}
+		}
+	}
+
+	m_okButton->setToolTip(QString());
 	m_okButton->setEnabled(true);
 }
 
 void EquidistantValuesDialog::generate() {
-	const auto numberLocale = QLocale();
-	bool ok;
-	double start = numberLocale.toDouble(ui.leFrom->text(), &ok);
-	if (!ok) {
-		DEBUG("Double value start invalid!")
-		return;
-	}
-	double end = numberLocale.toDouble(ui.leTo->text(), &ok);
-	if (!ok) {
-		DEBUG("Double value end invalid!")
-		return;
-	}
-
-	int number{0};
-	double dist{0};
-	if (ui.cbType->currentIndex() == 0) { // fixed number
-		number = QLocale().toInt(ui.leNumber->text(), &ok);
-		if (ok && number != 1)
-			dist = (end - start) / (number - 1);
-	} else { // fixed increment
-		dist = QLocale().toDouble(ui.leIncrement->text(), &ok);
-		if (ok)
-			number = (end - start) / dist + 1;
-	}
+	QVector<double> newData;
+	QVector<QDateTime> newDataDateTime;
 
 	WAIT_CURSOR;
-	QVector<double> newData;
-	try {
-		newData.resize(number);
-	} catch (std::bad_alloc&) {
+	bool rc = false;
+	if (m_hasNumeric)
+		generateNumericData(newData);
+	if (!rc) {
 		RESET_CURSOR;
-		QMessageBox::critical(this, i18n("Failed to allocate memory"), i18n("Not enough memory to perform this operation."));
+		return;
+	}
+
+	if (m_hasDateTime)
+		generateDateTimeData(newDataDateTime);
+	if (!rc) {
+		RESET_CURSOR;
 		return;
 	}
 
 	m_spreadsheet->beginMacro(
 		i18np("%1: fill column with equidistant numbers", "%1: fill columns with equidistant numbers", m_spreadsheet->name(), m_columns.size()));
 
-	if (m_spreadsheet->rowCount() < number)
-		m_spreadsheet->setRowCount(number);
+	int rowCount = std::max(newData.size(), newDataDateTime.size());
+	if (m_spreadsheet->rowCount() < rowCount)
+		m_spreadsheet->setRowCount(rowCount);
 
-	for (int i = 0; i < number; ++i)
-		newData[i] = start + dist * i;
-
-	for (auto* col : m_columns)
-		col->setValues(newData);
+	for (auto* col : m_columns) {
+		if (col->columnMode() == AbstractColumn::ColumnMode::Double)
+			col->setValues(newData);
+		else if (col->columnMode() == AbstractColumn::ColumnMode::DateTime)
+			col->setDateTimes(newDataDateTime);
+	}
 
 	m_spreadsheet->endMacro();
 	RESET_CURSOR;
+}
+
+bool EquidistantValuesDialog::generateNumericData(QVector<double>& newData) {
+	int number{0};
+	double increment{0};
+
+	// check the validness of the user input for numeric values
+	const auto numberLocale = QLocale();
+	bool ok;
+	const double start = numberLocale.toDouble(ui.leFrom->text(), &ok);
+	if (!ok) {
+		DEBUG("Invalid double value for 'start'!")
+		return false;
+	}
+
+	const double end = numberLocale.toDouble(ui.leTo->text(), &ok);
+	if (!ok) {
+		DEBUG("Invalid double value for 'end'!")
+		return false;
+	}
+
+	// generate equidistant numeric values
+	if (ui.cbType->currentIndex() == 0) { // fixed number
+		number = QLocale().toInt(ui.leNumber->text(), &ok);
+		if (!ok || number == 1) {
+			DEBUG("Invalid integer value for 'number'!")
+			return false;
+		}
+
+		increment = (end - start) / (number - 1);
+	} else { // fixed increment
+		increment = QLocale().toDouble(ui.leIncrement->text(), &ok);
+		if (ok)
+			number = (end - start) / increment + 1;
+	}
+
+	try {
+		newData.resize(number);
+	} catch (std::bad_alloc&) {
+		RESET_CURSOR;
+		QMessageBox::critical(this, i18n("Failed to allocate memory"), i18n("Not enough memory to perform this operation."));
+		return false;
+	}
+
+	for (int i = 0; i < number; ++i)
+		newData[i] = start + increment * i;
+
+	return true;
+}
+
+// generate equidistant datetime values
+bool EquidistantValuesDialog::generateDateTimeData(QVector<QDateTime>& newData) {
+	bool ok;
+	if (ui.cbType->currentIndex() == 0) { // fixed number -> determine the increment
+		const auto startValue = ui.dteFrom->dateTime().toMSecsSinceEpoch();
+		const auto endValue = ui.dteFrom->dateTime().toMSecsSinceEpoch();
+		const int number = QLocale().toInt(ui.leNumber->text(), &ok);
+		int increment = 1;
+		if (number != 1)
+			increment = (endValue - startValue) / (number - 1);
+
+		try {
+			newData.resize(number);
+		} catch (std::bad_alloc&) {
+			RESET_CURSOR;
+			QMessageBox::critical(this, i18n("Failed to allocate memory"), i18n("Not enough memory to perform this operation."));
+			return false;
+		}
+
+		for (int i = 0; i < number; ++i)
+			newData[i] = QDateTime::fromMSecsSinceEpoch(startValue + increment * i, Qt::UTC);
+
+	} else { // fixed increment -> determine the number
+		const auto startValue = ui.dteFrom->dateTime();
+		const auto endValue = ui.dteFrom->dateTime();
+		const auto increment = QLocale().toInt(ui.leIncrementDateTime->text(), &ok);
+		const auto unit = static_cast<DateTimeUnit>(ui.cbIncrementDateTimeUnit->currentData().toInt());
+
+		QDateTime value = startValue;
+		switch (unit) {
+		case DateTimeUnit::Year:
+			while (value < endValue) {
+				newData << value;
+				value = value.addYears(increment);
+			}
+			break;
+		case DateTimeUnit::Month:
+			while (value < endValue) {
+				newData << value;
+				value = value.addMonths(increment);
+			}
+			break;
+		case DateTimeUnit::Day:
+			while (value < endValue) {
+				newData << value;
+				value = value.addDays(increment);
+			}
+			break;
+		case DateTimeUnit::Hour: {
+			const int seconds = increment * 60 * 60;
+			while (value < endValue) {
+				newData << value;
+				value = value.addSecs(seconds);
+			}
+			break;
+		}
+		case DateTimeUnit::Minute: {
+			const int seconds = increment * 60;
+			while (value < endValue) {
+				newData << value;
+				value = value.addSecs(seconds);
+			}
+			break;
+		}
+		case DateTimeUnit::Second:
+			while (value < endValue) {
+				newData << value;
+				value = value.addSecs(increment);
+			}
+			break;
+		case DateTimeUnit::Millisecond:
+			while (value < endValue) {
+				newData << value;
+				value = value.addMSecs(increment);
+			}
+			break;
+		}
+	}
+
+	return true;
 }

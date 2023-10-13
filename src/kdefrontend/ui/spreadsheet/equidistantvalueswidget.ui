@@ -6,62 +6,60 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>271</width>
-    <height>197</height>
+    <width>311</width>
+    <height>437</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
-    <widget class="QLabel" name="label">
+   <item row="12" column="0" colspan="2">
+    <widget class="QLabel" name="lFromDateTime">
      <property name="text">
-      <string>Fix:</string>
+      <string>From:</string>
      </property>
     </widget>
    </item>
-   <item row="0" column="1">
-    <widget class="QComboBox" name="cbType"/>
+   <item row="12" column="2" colspan="2">
+    <widget class="UTCDateTimeEdit" name="dteFrom">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+    </widget>
    </item>
-   <item row="1" column="0">
+   <item row="1" column="0" colspan="2">
     <widget class="QLabel" name="lNumber">
      <property name="text">
       <string>Number:</string>
      </property>
     </widget>
    </item>
-   <item row="1" column="1">
-    <widget class="QLineEdit" name="leNumber"/>
-   </item>
-   <item row="2" column="0">
-    <widget class="QLabel" name="lIncrement">
-     <property name="text">
-      <string>Increment:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="1">
-    <widget class="QLineEdit" name="leIncrement"/>
-   </item>
-   <item row="3" column="0">
+   <item row="5" column="0" colspan="2">
     <widget class="QLabel" name="lFrom">
      <property name="text">
       <string>From:</string>
      </property>
     </widget>
    </item>
-   <item row="3" column="1">
+   <item row="5" column="2" colspan="2">
     <widget class="QLineEdit" name="leFrom"/>
    </item>
    <item row="4" column="0">
+    <widget class="QLabel" name="lIncrement">
+     <property name="text">
+      <string>Increment:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="0">
     <widget class="QLabel" name="lTo">
      <property name="text">
       <string>To:</string>
      </property>
     </widget>
    </item>
-   <item row="4" column="1">
-    <widget class="QLineEdit" name="leTo"/>
-   </item>
-   <item row="5" column="0">
+   <item row="15" column="0" colspan="2">
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -74,8 +72,122 @@
      </property>
     </spacer>
    </item>
+   <item row="0" column="0">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Fix:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="13" column="0">
+    <widget class="QLabel" name="lToDateTime">
+     <property name="text">
+      <string>To:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="2" colspan="2">
+    <widget class="QLineEdit" name="leNumber"/>
+   </item>
+   <item row="13" column="2" colspan="2">
+    <widget class="UTCDateTimeEdit" name="dteTo"/>
+   </item>
+   <item row="3" column="0" colspan="2">
+    <widget class="QLabel" name="lNumeric">
+     <property name="font">
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Numeric</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="2" colspan="2">
+    <widget class="QLineEdit" name="leTo"/>
+   </item>
+   <item row="4" column="2" colspan="2">
+    <widget class="QLineEdit" name="leIncrement"/>
+   </item>
+   <item row="0" column="2" colspan="2">
+    <widget class="QComboBox" name="cbType">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+    </widget>
+   </item>
+   <item row="9" column="0" colspan="2">
+    <widget class="QLabel" name="lDateTime">
+     <property name="font">
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Date &amp; Time</string>
+     </property>
+    </widget>
+   </item>
+   <item row="11" column="0">
+    <widget class="QLabel" name="lIncrementDateTime">
+     <property name="text">
+      <string>Increment:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="11" column="2">
+    <widget class="QLineEdit" name="leIncrementDateTime"/>
+   </item>
+   <item row="11" column="3">
+    <widget class="QComboBox" name="cbIncrementDateTimeUnit"/>
+   </item>
+   <item row="8" column="0" colspan="2">
+    <spacer name="verticalSpacer_2">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Fixed</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>13</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="2" column="0" colspan="2">
+    <spacer name="verticalSpacer_3">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Fixed</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>13</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>UTCDateTimeEdit</class>
+   <extends>QDateTimeEdit</extends>
+   <header>UTCDateTimeEdit.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

@@ -1609,7 +1609,7 @@ void SpreadsheetView::checkColumnMenus(bool numeric, bool datetime, bool text, b
 	m_columnGenerateDataMenu->setEnabled(hasCells);
 	action_fill_row_numbers->setEnabled(numeric);
 	action_fill_const->setEnabled(numeric);
-	action_fill_equidistant->setEnabled(numeric);
+	action_fill_equidistant->setEnabled(numeric || datetime);
 	action_fill_random_nonuniform->setEnabled(numeric);
 	action_fill_function->setEnabled(numeric);
 	action_sample_values->setEnabled(hasValues);
