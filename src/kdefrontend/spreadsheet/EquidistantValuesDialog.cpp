@@ -180,15 +180,26 @@ void EquidistantValuesDialog::setColumns(const QVector<Column*>& columns) {
 
 void EquidistantValuesDialog::typeChanged(int index) {
 	if (index == 0) { // fixed number
-		ui.lIncrement->hide();
-		ui.leIncrement->hide();
 		ui.lNumber->show();
 		ui.leNumber->show();
+		ui.lIncrement->hide();
+		ui.leIncrement->hide();
+		ui.lIncrementDateTime->hide();
+		ui.leIncrementDateTime->hide();
+		ui.cbIncrementDateTimeUnit->hide();
 	} else { // fixed increment
-		ui.lIncrement->show();
-		ui.leIncrement->show();
 		ui.lNumber->hide();
 		ui.leNumber->hide();
+		if (m_hasNumeric) {
+			ui.lIncrement->show();
+			ui.leIncrement->show();
+		}
+		if (m_hasDateTime) {
+			ui.lIncrementDateTime->show();
+			ui.leIncrementDateTime->show();
+			ui.cbIncrementDateTimeUnit->show();
+		}
+
 	}
 }
 
@@ -249,16 +260,16 @@ void EquidistantValuesDialog::generate() {
 	QVector<QDateTime> newDataDateTime;
 
 	WAIT_CURSOR;
-	bool rc = false;
+	bool rc = true;
 	if (m_hasNumeric)
-		generateNumericData(newData);
+		rc = generateNumericData(newData);
 	if (!rc) {
 		RESET_CURSOR;
 		return;
 	}
 
 	if (m_hasDateTime)
-		generateDateTimeData(newDataDateTime);
+		rc = generateDateTimeData(newDataDateTime);
 	if (!rc) {
 		RESET_CURSOR;
 		return;
@@ -354,10 +365,9 @@ bool EquidistantValuesDialog::generateDateTimeData(QVector<QDateTime>& newData) 
 
 	} else { // fixed increment -> determine the number
 		const auto startValue = ui.dteFrom->dateTime();
-		const auto endValue = ui.dteFrom->dateTime();
+		const auto endValue = ui.dteTo->dateTime();
 		const auto increment = QLocale().toInt(ui.leIncrementDateTime->text(), &ok);
 		const auto unit = static_cast<DateTimeUnit>(ui.cbIncrementDateTimeUnit->currentData().toInt());
-
 		QDateTime value = startValue;
 		switch (unit) {
 		case DateTimeUnit::Year:
