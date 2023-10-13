@@ -1187,12 +1187,20 @@ void WorksheetView::dragEnterEvent(QDragEnterEvent* event) {
 
 void WorksheetView::dragMoveEvent(QDragMoveEvent* event) {
 	// only accept drop events if we have a plot under the cursor where we can drop columns onto
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 	bool plot = isPlotAtPos(event->position().toPoint());
+#else
+	bool plot = isPlotAtPos(event->pos());
+#endif
 	event->setAccepted(plot);
 }
 
 void WorksheetView::dropEvent(QDropEvent* event) {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 	CartesianPlot* plot = plotAt(event->position().toPoint());
+#else
+	CartesianPlot* plot = plotAt(event->pos());
+#endif
 	if (!plot)
 		return;
 
