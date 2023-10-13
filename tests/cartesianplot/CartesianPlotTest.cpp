@@ -987,7 +987,7 @@ void CartesianPlotTest::wheelEventCenterAxes() {
 	int signalEmittedCounter = 0;
 	connect(plot,
 			&CartesianPlot::wheelEventSignal,
-			[this, &signalEmittedCounter](const QPointF& sceneRelPos, int delta, int xIndex, int yIndex, bool considerDimension, Dimension dim) {
+			[&signalEmittedCounter](const QPointF& sceneRelPos, int delta, int xIndex, int yIndex, bool considerDimension, Dimension dim) {
 				signalEmittedCounter++;
 				if (signalEmittedCounter == 1) {
 					QCOMPARE(sceneRelPos.x(), 0.5);
@@ -1080,7 +1080,7 @@ void CartesianPlotTest::wheelEventNotCenter() {
 	int signalEmittedCounter = 0;
 	connect(plot,
 			&CartesianPlot::wheelEventSignal,
-			[this, &signalEmittedCounter](const QPointF& sceneRelPos, int delta, int xIndex, int yIndex, bool considerDimension, Dimension dim) {
+			[&signalEmittedCounter](const QPointF& sceneRelPos, int delta, int xIndex, int yIndex, bool considerDimension, Dimension dim) {
 				signalEmittedCounter++;
 				QCOMPARE(sceneRelPos.x(), 0.75);
 				QCOMPARE(sceneRelPos.y(), 0.2);
@@ -1137,7 +1137,7 @@ void CartesianPlotTest::wheelEventOutsideTopLeft() {
 	int signalEmittedCounter = 0;
 	connect(plot,
 			&CartesianPlot::wheelEventSignal,
-			[this, &signalEmittedCounter](const QPointF& sceneRelPos, int delta, int xIndex, int yIndex, bool considerDimension, Dimension dim) {
+			[&signalEmittedCounter](const QPointF& sceneRelPos, int delta, int xIndex, int yIndex, bool considerDimension, Dimension dim) {
 				signalEmittedCounter++;
 				QCOMPARE(sceneRelPos.x(), -0.2);
 				QCOMPARE(sceneRelPos.y(), 1.3);
@@ -1193,7 +1193,7 @@ void CartesianPlotTest::wheelEventOutsideBottomRight() {
 	int signalEmittedCounter = 0;
 	connect(plot,
 			&CartesianPlot::wheelEventSignal,
-			[this, &signalEmittedCounter](const QPointF& sceneRelPos, int delta, int xIndex, int yIndex, bool considerDimension, Dimension dim) {
+			[&signalEmittedCounter](const QPointF& sceneRelPos, int delta, int xIndex, int yIndex, bool considerDimension, Dimension dim) {
 				signalEmittedCounter++;
 				QCOMPARE(sceneRelPos.x(), 1.4);
 				QCOMPARE(sceneRelPos.y(), -0.7);

@@ -7,6 +7,6 @@
 
 add_executable (ExpressionParserTest ExpressionParserTest.cpp)
 
-target_link_libraries(ExpressionParserTest labplot2backendlib labplot2nsllib labplot2test)
+target_link_libraries(ExpressionParserTest labplot2test labplot2backendlib labplot2nsllib)
 
 add_test(NAME ExpressionParserTest COMMAND ExpressionParserTest)

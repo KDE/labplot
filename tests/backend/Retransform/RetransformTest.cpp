@@ -241,9 +241,9 @@ void RetransformTest::TestZoomSelectionAutoscale() {
 	QCOMPARE(c.elementLogCount(false), 0);
 	QVERIFY(c.calledExact(0, false));
 
-	emit plot->mousePressZoomSelectionModeSignal(QPointF(0.2, -150));
-	emit plot->mouseMoveZoomSelectionModeSignal(QPointF(0.6, 100));
-	emit plot->mouseReleaseZoomSelectionModeSignal();
+	Q_EMIT plot->mousePressZoomSelectionModeSignal(QPointF(0.2, -150));
+	Q_EMIT plot->mouseMoveZoomSelectionModeSignal(QPointF(0.6, 100));
+	Q_EMIT plot->mouseReleaseZoomSelectionModeSignal();
 
 	// x and y are called only once
 	QCOMPARE(c.logsXScaleRetransformed.count(), 2); // 2 plots with each one x axis
@@ -396,9 +396,9 @@ void RetransformTest::TestZoomAutoscaleSingleYRange() {
 	view->setCartesianPlotActionMode(Worksheet::CartesianPlotActionMode::ApplyActionToAllX);
 
 	// Zoom selection
-	emit plot->mousePressZoomSelectionModeSignal(QPointF(2, 0));
-	emit plot->mouseMoveZoomSelectionModeSignal(QPointF(3, 100));
-	emit plot->mouseReleaseZoomSelectionModeSignal();
+	Q_EMIT plot->mousePressZoomSelectionModeSignal(QPointF(2, 0));
+	Q_EMIT plot->mouseMoveZoomSelectionModeSignal(QPointF(3, 100));
+	Q_EMIT plot->mouseReleaseZoomSelectionModeSignal();
 
 	CHECK_RANGE(plot, curve1, Dimension::X, 2., 3.);
 	CHECK_RANGE(plot, curve1, Dimension::Y, 1002.2, 1003.3); // Nice Extend applied
@@ -494,9 +494,9 @@ void RetransformTest::TestZoomAutoscaleSingleXRange() {
 	view->setCartesianPlotActionMode(Worksheet::CartesianPlotActionMode::ApplyActionToAllY);
 
 	// Zoom selection
-	emit plot->mousePressZoomSelectionModeSignal(QPointF(0, 2));
-	emit plot->mouseMoveZoomSelectionModeSignal(QPointF(100, 3));
-	emit plot->mouseReleaseZoomSelectionModeSignal();
+	Q_EMIT plot->mousePressZoomSelectionModeSignal(QPointF(0, 2));
+	Q_EMIT plot->mouseMoveZoomSelectionModeSignal(QPointF(100, 3));
+	Q_EMIT plot->mouseReleaseZoomSelectionModeSignal();
 
 	CHECK_RANGE(plot, curve1, Dimension::Y, 2., 3.);
 	CHECK_RANGE(plot, curve1, Dimension::X, 1002.2, 1003.3); // Nice Extend applied
