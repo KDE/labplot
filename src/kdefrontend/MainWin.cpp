@@ -112,6 +112,7 @@
 #include <KActionMenu>
 #include <KColorScheme>
 #include <KColorSchemeManager>
+#include <kconfigwidgets_version.h>
 #if KCONFIGWIDGETS_VERSION >= QT_VERSION_CHECK(5, 107, 0)
 #include <KColorSchemeMenu>
 #endif
@@ -124,7 +125,6 @@
 #include <KToggleAction>
 #include <KToggleFullScreenAction>
 #include <KToolBar>
-#include <kconfigwidgets_version.h>
 #include <kxmlguifactory.h>
 
 #ifdef HAVE_CANTOR_LIBS
