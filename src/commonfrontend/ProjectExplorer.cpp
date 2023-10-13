@@ -444,7 +444,7 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event) {
 				return false;
 
 			// determine the aspect under the cursor
-			QModelIndex index = m_treeView->indexAt(dragMoveEvent->pos());
+			QModelIndex index = m_treeView->indexAt(dragMoveEvent->position().toPoint());
 			if (!index.isValid())
 				return false;
 
@@ -463,7 +463,7 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event) {
 			if (vec.isEmpty())
 				return false;
 
-			QModelIndex index = m_treeView->indexAt(dropEvent->pos());
+			QModelIndex index = m_treeView->indexAt(dropEvent->position().toPoint());
 			if (!index.isValid())
 				return false;
 
