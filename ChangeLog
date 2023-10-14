@@ -38,6 +38,7 @@ Bug fixes:
 
 Internal:
 	* Switch from C++11 to C++17
+	* Support Qt6
 	* Reduce code duplication caused by multiple plot types (Issue #540)
 	* Update included QXlsx to 1.4.6
 	* Build separate libraries for backend, nsl and everything and link
