@@ -270,7 +270,7 @@ option(ENABLE_LIBCERF "Build with libcerf support" ON)
 option(ENABLE_LIBORIGIN "Build with liborigin support" ON)
 option(ENABLE_ROOT "Build with ROOT (CERN) support" ON)
 # PENDING: latest stable 1.1.9 fails with GCC 13
-if (("${CMAKE_C_COMPILER_ID}" MATCHES "GNU" AND CMAKE_C_COMPILER_VERSION VERSION_GREATER 12)
+if ("${CMAKE_C_COMPILER_ID}" MATCHES "GNU" AND CMAKE_C_COMPILER_VERSION VERSION_GREATER 12)
 	option(ENABLE_READSTAT "Build with ReadStat support" OFF)
 else ()
 	option(ENABLE_READSTAT "Build with ReadStat support" ON)
