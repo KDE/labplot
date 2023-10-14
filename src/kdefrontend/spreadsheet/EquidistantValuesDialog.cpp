@@ -225,7 +225,7 @@ void EquidistantValuesDialog::checkValues() {
 			return;
 		}
 
-		const double end =numberLocale.toDouble(ui.leTo->text(), &ok);
+		const double end = numberLocale.toDouble(ui.leTo->text(), &ok);
 		if (!ok || end < start) {
 			m_okButton->setToolTip(i18n("Invalid end value, must be bigger than the start value"));
 			m_okButton->setEnabled(false);
@@ -272,20 +272,28 @@ void EquidistantValuesDialog::checkValues() {
 }
 
 void EquidistantValuesDialog::generate() {
-	QVector<double> newData;
-	QVector<QDateTime> newDataDateTime;
+	QVector<int> newIntData;
+	QVector<qint64> newBigIntData;
+	QVector<double> newDoubleData;
+	QVector<QDateTime> newDateTimeData;
+	bool integerModePossible = false;
 
 	WAIT_CURSOR;
 	bool rc = true;
-	if (m_hasNumeric)
-		rc = generateNumericData(newData);
+	if (m_hasNumeric) {
+		// check whether we have int columns and the input parameters for start, begin, number and increment
+		// allow to work with int values only or whether we need to convert the columns from int to double
+		// TODO:
+
+		rc = generateNumericData(newDoubleData);
+	}
 	if (!rc) {
 		RESET_CURSOR;
 		return;
 	}
 
 	if (m_hasDateTime)
-		rc = generateDateTimeData(newDataDateTime);
+		rc = generateDateTimeData(newDateTimeData);
 	if (!rc) {
 		RESET_CURSOR;
 		return;
@@ -294,15 +302,40 @@ void EquidistantValuesDialog::generate() {
 	m_spreadsheet->beginMacro(
 		i18np("%1: fill column with equidistant numbers", "%1: fill columns with equidistant numbers", m_spreadsheet->name(), m_columns.size()));
 
-	int rowCount = std::max(newData.size(), newDataDateTime.size());
+	int rowCount = std::max(newDoubleData.size(), newDateTimeData.size());
 	if (m_spreadsheet->rowCount() < rowCount)
 		m_spreadsheet->setRowCount(rowCount);
 
 	for (auto* col : m_columns) {
-		if (col->columnMode() == AbstractColumn::ColumnMode::Double)
-			col->setValues(newData);
-		else if (col->columnMode() == AbstractColumn::ColumnMode::DateTime)
-			col->setDateTimes(newDataDateTime);
+		switch (col->columnMode()) {
+		case AbstractColumn::ColumnMode::Double:
+			col->setValues(newDoubleData);
+			break;
+		case AbstractColumn::ColumnMode::Integer: {
+			if (integerModePossible)
+				col->setIntegers(newIntData);
+			else {
+				col->setColumnMode(AbstractColumn::ColumnMode::Double);
+				col->setValues(newDoubleData);
+			}
+		}
+		case AbstractColumn::ColumnMode::BigInt: {
+			if (integerModePossible)
+				col->setBigInts(newBigIntData);
+			else {
+				col->setColumnMode(AbstractColumn::ColumnMode::Double);
+				col->setValues(newDoubleData);
+			}
+		}
+		case AbstractColumn::ColumnMode::DateTime:
+			col->setDateTimes(newDateTimeData);
+			break;
+		case AbstractColumn::ColumnMode::Month:
+		case AbstractColumn::ColumnMode::Day:
+		case AbstractColumn::ColumnMode::Text:
+			// not supported
+			break;
+		}
 	}
 
 	m_spreadsheet->endMacro();

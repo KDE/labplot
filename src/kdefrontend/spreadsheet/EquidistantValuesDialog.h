@@ -21,8 +21,8 @@ class EquidistantValuesDialog : public QDialog {
 	Q_OBJECT
 
 public:
-	enum class Type {FixedNumber, FixedIncrement};
-	enum class DateTimeUnit {Year, Month, Day, Hour, Minute, Second, Millisecond};
+	enum class Type { FixedNumber, FixedIncrement };
+	enum class DateTimeUnit { Year, Month, Day, Hour, Minute, Second, Millisecond };
 
 	explicit EquidistantValuesDialog(Spreadsheet*, QWidget* parent = nullptr);
 	~EquidistantValuesDialog() override;
