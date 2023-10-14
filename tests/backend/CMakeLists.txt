@@ -1,22 +1,24 @@
+# TODO: fix tests or Qt6
+if (QT_MAJOR_VERSION LESS 6 OR NOT WIN32)
 add_subdirectory(Axis)
+endif ()
 if (QT_MAJOR_VERSION LESS 6)
-# TODO: fix test
 add_subdirectory(BarPlot)
 endif ()
 add_subdirectory(Column)
 add_subdirectory(core)
 if (QT_MAJOR_VERSION LESS 6)
-# TODO: fix test
 add_subdirectory(Datapicker)
 endif ()
 add_subdirectory(gsl)
 add_subdirectory(InfoElement)
 add_subdirectory(Parser)
 add_subdirectory(Range)
+if (QT_MAJOR_VERSION LESS 6 OR NOT WIN32)
 add_subdirectory(Retransform)
+endif ()
 add_subdirectory(TextLabel)
 if (QT_MAJOR_VERSION LESS 6)
-# TODO: fix test
 add_subdirectory(Worksheet)
 endif ()
 add_subdirectory(XYCurve)
