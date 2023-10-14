@@ -325,6 +325,7 @@ QImage GuiTools::importPDFFile(const QString& fileName) {
 
 	return image;
 #else
+	Q_UNUSED(fileName)
 	return {};
 #endif
 }
@@ -359,6 +360,8 @@ QImage GuiTools::imageFromPDFData(const QByteArray& data, double zoomFactor) {
 
 	return image;
 #else
+	Q_UNUSED(data)
+	Q_UNUSED(zoomFactor)
 	return {};
 #endif
 }

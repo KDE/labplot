@@ -841,7 +841,7 @@ void WorksheetView::drawBackground(QPainter* painter, const QRectF& rect) {
 	if (!m_worksheet->useViewSize()) {
 		// background
 		KColorScheme scheme(QPalette::Active, KColorScheme::Window);
-		const QColor& color = scheme.background().color();
+		const QColor color = scheme.background().color();
 		if (!scene_rect.contains(rect))
 			painter->fillRect(rect, color);
 
