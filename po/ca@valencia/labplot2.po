@@ -6608,7 +6608,7 @@ msgstr "%1: neteja totes les màscares"
 #: src/backend/spreadsheet/Spreadsheet.cpp:658
 #, kde-format
 msgid "%1: move column %2 from position %3 to %4."
-msgstr "%1: mou la columna %2 des de la posició %3 a la %4."
+msgstr "%1: mou la columna %2 des de la posició %3 cap a la %4."
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:783
 #, kde-format
@@ -8747,7 +8747,7 @@ msgstr "%1: establix les opcions i realitza la correlació"
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:225
 #, kde-format
 msgid "Navigate to \"%1\""
-msgstr "Navega a «%1»"
+msgstr "Navega cap a «%1»"
 
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:397
 #, kde-format
@@ -9035,24 +9035,24 @@ msgstr "&Ordre del dibuix"
 #: src/backend/worksheet/WorksheetElement.cpp:226
 #, kde-format
 msgid "Move &behind"
-msgstr "Mou al da&rrere de"
+msgstr "Mou cap al da&rrere de"
 
 #: src/backend/worksheet/WorksheetElement.cpp:194
 #: src/backend/worksheet/WorksheetElement.cpp:221
 #: src/backend/worksheet/WorksheetElement.cpp:228
 #, kde-format
 msgid "Move in &front of"
-msgstr "Mou al &davant de"
+msgstr "Mou cap al &davant de"
 
 #: src/backend/worksheet/WorksheetElement.cpp:286
 #, kde-format
 msgid "%1: move behind %2."
-msgstr "%1: mou al darrere de %2."
+msgstr "%1: mou cap al darrere de %2."
 
 #: src/backend/worksheet/WorksheetElement.cpp:300
 #, kde-format
 msgid "%1: move in front of %2."
-msgstr "%1: mou al davant de %2."
+msgstr "%1: mou cap al davant de %2."
 
 #: src/backend/worksheet/WorksheetElement.cpp:603
 #, kde-format
@@ -9269,12 +9269,12 @@ msgstr "Corba nova"
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:154
 #, kde-format
 msgid "Shift Left"
-msgstr "Desplaça a l'esquerra"
+msgstr "Desplaça cap a l'esquerra"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:157
 #, kde-format
 msgid "Shift Right"
-msgstr "Desplaça a la dreta"
+msgstr "Desplaça cap a la dreta"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:160
 #, kde-format
@@ -9439,7 +9439,7 @@ msgstr "Neteja el contingut"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:298
 #, kde-format
 msgid "&Go to Cell..."
-msgstr "&Ves a la cel·la..."
+msgstr "&Ves fins a la cel·la..."
 
 #: src/commonfrontend/matrix/MatrixView.cpp:142
 #, kde-format
@@ -9578,7 +9578,7 @@ msgstr "Zoom"
 #: src/commonfrontend/matrix/MatrixView.cpp:587
 #, kde-format
 msgid "Go to Cell"
-msgstr "Ves a la cel·la"
+msgstr "Ves fins a la cel·la"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:583
 #, kde-format
@@ -16036,7 +16036,7 @@ msgstr[1] "%1: òmpliga les columnes amb els valors de la funció"
 #, kde-format
 msgctxt "@title:window"
 msgid "Go to Cell"
-msgstr "Ves a la cel·la"
+msgstr "Ves fins a la cel·la"
 
 #: src/kdefrontend/spreadsheet/GoToDialog.cpp:40
 #, kde-format
@@ -18308,7 +18308,7 @@ msgstr "Inici:"
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:79
 #, kde-format
 msgid "Show scale and offset beside axis"
-msgstr "Mostra l'escala i el desplaçament al costat de l'eix"
+msgstr "Mostra l'escala i el desplaçament en el costat de l'eix"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowScaleOffset)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:82
