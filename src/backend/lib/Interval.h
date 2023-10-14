@@ -169,9 +169,9 @@ public:
 		QVector<Interval<T>>*tmp1, *tmp2;
 		tmp1 = new QVector<Interval<T>>();
 		*tmp1 << *static_cast<Interval<T>*>(this);
-		for (auto i : subtrahend) {
+		for (const auto& i : subtrahend) {
 			tmp2 = new QVector<Interval<T>>();
-			for (auto j : *tmp1)
+			for (const auto& j : *tmp1)
 				*tmp2 << subtract(j, i);
 			delete tmp1;
 			tmp1 = tmp2;

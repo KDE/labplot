@@ -356,6 +356,11 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event) {
 	} else if (obj == m_treeView->viewport()) {
 		if (event->type() == QEvent::MouseButtonPress) {
 			auto* e = static_cast<QMouseEvent*>(event);
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+			const auto position = e->globalPosition().toPoint();
+#else
+			const auto position = e->globalPos();
+#endif
 			if (e->button() == Qt::LeftButton) {
 				QModelIndex index = m_treeView->indexAt(e->pos());
 				if (!index.isValid())
@@ -363,23 +368,19 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event) {
 
 				auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 				if (aspect->isDraggable()) {
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-					m_dragStartPos = e->globalPosition().toPoint();
-#else
-					m_dragStartPos = e->globalPos();
-#endif
+					m_dragStartPos = position;
 					m_dragStarted = false;
 				}
 			}
 		} else if (event->type() == QEvent::MouseMove) {
 			auto* e = static_cast<QMouseEvent*>(event);
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-			if (!m_dragStarted && m_treeView->selectionModel()->selectedIndexes().size() > 0
-				&& (e->globalPosition() - m_dragStartPos).manhattanLength() >= QApplication::startDragDistance()) {
+			const auto position = e->globalPosition().toPoint();
 #else
-			if (!m_dragStarted && m_treeView->selectionModel()->selectedIndexes().size() > 0
-				&& (e->globalPos() - m_dragStartPos).manhattanLength() >= QApplication::startDragDistance()) {
+			const auto position = e->globalPos();
 #endif
+			if (!m_dragStarted && m_treeView->selectionModel()->selectedIndexes().size() > 0
+				&& (position - m_dragStartPos).manhattanLength() >= QApplication::startDragDistance()) {
 				m_dragStarted = true;
 				auto* drag = new QDrag(this);
 				auto* mimeData = new QMimeData;

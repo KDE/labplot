@@ -24,7 +24,6 @@
 #include "kdefrontend/worksheet/ExportWorksheetDialog.h"
 
 #include <QBuffer>
-// #include <QDesktopWidget>
 #include <QDir>
 #include <QFileInfo>
 #include <QGraphicsScene>

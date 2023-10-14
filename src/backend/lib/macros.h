@@ -12,9 +12,6 @@
 #ifndef MACROS_H
 #define MACROS_H
 
-// #include <KConfigGroup>
-// #include <KSharedConfig>
-
 #include <QApplication>
 #include <QMetaEnum>
 
