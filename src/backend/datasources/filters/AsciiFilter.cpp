@@ -2460,7 +2460,11 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, AbstractDataSourc
 		// but only after the preparation step
 		if (keepNValues == 0) {
 			if (readingType != MQTTClient::ReadingType::TillEnd)
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+				m_actualRows += std::min(newData.size(), static_cast<qsizetype>(spreadsheet->mqttClient()->sampleSize()));
+#else
 				m_actualRows += std::min(newData.size(), spreadsheet->mqttClient()->sampleSize());
+#endif
 			else {
 				m_actualRows += newData.size();
 			}

@@ -151,7 +151,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/widgets/ResizableTextEdit.cpp
 )
 
-if (Qt5Mqtt_FOUND)
+if (Qt5Mqtt_FOUND or Qt6Mqtt_FOUND)
 	list(APPEND GUI_SOURCES ${KDEFRONTEND_DIR}/datasources/MQTTConnectionManagerWidget.cpp)
 	list(APPEND GUI_SOURCES ${KDEFRONTEND_DIR}/datasources/MQTTConnectionManagerDialog.cpp)
 	list(APPEND GUI_SOURCES ${KDEFRONTEND_DIR}/datasources/MQTTErrorWidget.cpp)
@@ -266,7 +266,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/fitsheadereditaddunitwidget.ui
 )
 
-if (Qt5Mqtt_FOUND)
+if (Qt5Mqtt_FOUND or Qt6Mqtt_FOUND)
 	list(APPEND UI_SOURCES ${KDEFRONTEND_DIR}/ui/datasources/mqttconnectionmanagerwidget.ui)
 	list(APPEND UI_SOURCES ${KDEFRONTEND_DIR}/ui/datasources/mqtterrorwidget.ui)
 	list(APPEND UI_SOURCES ${KDEFRONTEND_DIR}/ui/datasources/mqttsubscriptionwidget.ui)
@@ -419,7 +419,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/worksheet/plots/cartesian/Value.cpp
 )
 
-if (Qt5Mqtt_FOUND)
+if (Qt5Mqtt_FOUND or Qt6Mqtt_FOUND)
 	list(APPEND BACKEND_SOURCES ${KDEFRONTEND_DIR}/widgets/MQTTWillSettingsWidget.cpp)
 	list(APPEND BACKEND_SOURCES ${BACKEND_DIR}/datasources/MQTTClient.cpp)
 	list(APPEND BACKEND_SOURCES ${BACKEND_DIR}/datasources/MQTTSubscription.cpp)
