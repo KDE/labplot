@@ -45,20 +45,6 @@
    <item row="5" column="2" colspan="2">
     <widget class="QLineEdit" name="leFrom"/>
    </item>
-   <item row="4" column="0">
-    <widget class="QLabel" name="lIncrement">
-     <property name="text">
-      <string>Increment:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="0">
-    <widget class="QLabel" name="lTo">
-     <property name="text">
-      <string>To:</string>
-     </property>
-    </widget>
-   </item>
    <item row="15" column="0" colspan="2">
     <spacer name="verticalSpacer">
      <property name="orientation">
@@ -71,20 +57,6 @@
       </size>
      </property>
     </spacer>
-   </item>
-   <item row="0" column="0">
-    <widget class="QLabel" name="label">
-     <property name="text">
-      <string>Fix:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="13" column="0">
-    <widget class="QLabel" name="lToDateTime">
-     <property name="text">
-      <string>To:</string>
-     </property>
-    </widget>
    </item>
    <item row="1" column="2" colspan="2">
     <widget class="QLineEdit" name="leNumber"/>
@@ -118,26 +90,6 @@
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
-     </property>
-    </widget>
-   </item>
-   <item row="9" column="0" colspan="2">
-    <widget class="QLabel" name="lDateTime">
-     <property name="font">
-      <font>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="text">
-      <string>Date &amp; Time</string>
-     </property>
-    </widget>
-   </item>
-   <item row="11" column="0">
-    <widget class="QLabel" name="lIncrementDateTime">
-     <property name="text">
-      <string>Increment:</string>
      </property>
     </widget>
    </item>
@@ -179,6 +131,54 @@
      </property>
     </spacer>
    </item>
+   <item row="11" column="0" colspan="2">
+    <widget class="QLabel" name="lIncrementDateTime">
+     <property name="text">
+      <string>Increment:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="0" colspan="2">
+    <widget class="QLabel" name="lTo">
+     <property name="text">
+      <string>To:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0" colspan="2">
+    <widget class="QLabel" name="lIncrement">
+     <property name="text">
+      <string>Increment:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0" colspan="2">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Fix:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="9" column="0" colspan="2">
+    <widget class="QLabel" name="lDateTime">
+     <property name="font">
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Date &amp; Time</string>
+     </property>
+    </widget>
+   </item>
+   <item row="13" column="0" colspan="2">
+    <widget class="QLabel" name="lToDateTime">
+     <property name="text">
+      <string>To:</string>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <customwidgets>
@@ -188,6 +188,17 @@
    <header>UTCDateTimeEdit.h</header>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>cbType</tabstop>
+  <tabstop>leNumber</tabstop>
+  <tabstop>leIncrement</tabstop>
+  <tabstop>leFrom</tabstop>
+  <tabstop>leTo</tabstop>
+  <tabstop>leIncrementDateTime</tabstop>
+  <tabstop>cbIncrementDateTimeUnit</tabstop>
+  <tabstop>dteFrom</tabstop>
+  <tabstop>dteTo</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

@@ -83,7 +83,6 @@ EquidistantValuesDialog::EquidistantValuesDialog(Spreadsheet* s, QWidget* parent
 	connect(ui.leIncrement, &QLineEdit::textChanged, this, &EquidistantValuesDialog::checkValues);
 	connect(m_okButton, &QPushButton::clicked, this, &EquidistantValuesDialog::generate);
 
-
 	// restore saved settings if available
 	create(); // ensure there's a window created
 	KConfigGroup conf = Settings::group(QStringLiteral("EquidistantValuesDialog"));
@@ -93,8 +92,8 @@ EquidistantValuesDialog::EquidistantValuesDialog(Spreadsheet* s, QWidget* parent
 	} else
 		resize(QSize(300, 0).expandedTo(minimumSize()));
 
-	ui.cbType->setCurrentIndex(conf.readEntry("Type", 0));
-	// this->typeChanged(ui.cbType->currentIndex());
+	const int type = conf.readEntry("Type", static_cast<int>(Type::FixedNumber));
+	ui.cbType->setCurrentIndex(ui.cbType->findData(type));
 
 	// settings for numeric
 	ui.leFrom->setText(QString::number(conf.readEntry("From", 1)));
@@ -106,7 +105,7 @@ EquidistantValuesDialog::EquidistantValuesDialog(Spreadsheet* s, QWidget* parent
 	ui.dteFrom->setMSecsSinceEpochUTC(conf.readEntry("FromDateTime", now));
 	ui.dteTo->setMSecsSinceEpochUTC(conf.readEntry("ToDateTime", now));
 	ui.leIncrementDateTime->setText(QLocale().toString(conf.readEntry("IncrementDateTime", 1)));
-	ui.cbIncrementDateTimeUnit->setCurrentIndex(conf.readEntry("DateTimeUnit", 0));
+	ui.cbIncrementDateTimeUnit->setCurrentIndex(conf.readEntry("IncrementDateTimeUnit", 0));
 }
 
 EquidistantValuesDialog::~EquidistantValuesDialog() {
@@ -114,7 +113,7 @@ EquidistantValuesDialog::~EquidistantValuesDialog() {
 	KConfigGroup conf = Settings::group(QStringLiteral("EquidistantValuesDialog"));
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 
-	conf.writeEntry("Type", ui.cbType->currentIndex());
+	conf.writeEntry("Type", ui.cbType->itemData(ui.cbType->currentIndex()).toInt());
 
 	// settings for numeric
 	const auto numberLocale = QLocale();
@@ -126,7 +125,7 @@ EquidistantValuesDialog::~EquidistantValuesDialog() {
 	conf.writeEntry("FromDateTime", ui.dteFrom->dateTime().toMSecsSinceEpoch());
 	conf.writeEntry("ToDateTime", ui.dteTo->dateTime().toMSecsSinceEpoch());
 	conf.writeEntry("IncrementDateTime", numberLocale.toDouble(ui.leIncrement->text()));
-	conf.writeEntry("DateTimeUnit", ui.cbIncrementDateTimeUnit->currentIndex());
+	conf.writeEntry("IncrementDateTimeUnit", ui.cbIncrementDateTimeUnit->currentIndex());
 }
 
 void EquidistantValuesDialog::setColumns(const QVector<Column*>& columns) {
@@ -150,6 +149,7 @@ void EquidistantValuesDialog::setColumns(const QVector<Column*>& columns) {
 		}
 	}
 
+	ui.lNumeric->setVisible(m_hasNumeric);
 	ui.lIncrement->setVisible(m_hasNumeric);
 	ui.leIncrement->setVisible(m_hasNumeric);
 	ui.lFrom->setVisible(m_hasNumeric);
@@ -157,6 +157,7 @@ void EquidistantValuesDialog::setColumns(const QVector<Column*>& columns) {
 	ui.lTo->setVisible(m_hasNumeric);
 	ui.leTo->setVisible(m_hasNumeric);
 
+	ui.lDateTime->setVisible(m_hasDateTime);
 	ui.lIncrementDateTime->setVisible(m_hasDateTime);
 	ui.leIncrementDateTime->setVisible(m_hasDateTime);
 	ui.cbIncrementDateTimeUnit->setVisible(m_hasDateTime);
@@ -164,9 +165,6 @@ void EquidistantValuesDialog::setColumns(const QVector<Column*>& columns) {
 	ui.dteFrom->setVisible(m_hasDateTime);
 	ui.lToDateTime->setVisible(m_hasDateTime);
 	ui.dteTo->setVisible(m_hasDateTime);
-
-	ui.lNumeric->setVisible(m_hasNumeric && m_hasDateTime);
-	ui.lDateTime->setVisible(m_hasNumeric && m_hasDateTime);
 
 	if (m_hasDateTime) {
 		ui.dteFrom->setDisplayFormat(dateTimeFormat);
@@ -178,8 +176,14 @@ void EquidistantValuesDialog::setColumns(const QVector<Column*>& columns) {
 	resize(QSize(this->width(), 0).expandedTo(minimumSize()));
 }
 
-void EquidistantValuesDialog::typeChanged(int index) {
-	if (index == 0) { // fixed number
+/*!
+ * \brief called when the method type to generate values (fixed number of fixed increment)
+ * was called. Shows/hides the corresponding widgets depending on the type and on the colomn modes.
+ */
+void EquidistantValuesDialog::typeChanged(int) {
+	const auto type = static_cast<Type>(ui.cbType->currentData().toInt());
+	switch (type) {
+	case Type::FixedNumber: {
 		ui.lNumber->show();
 		ui.leNumber->show();
 		ui.lIncrement->hide();
@@ -187,7 +191,9 @@ void EquidistantValuesDialog::typeChanged(int index) {
 		ui.lIncrementDateTime->hide();
 		ui.leIncrementDateTime->hide();
 		ui.cbIncrementDateTimeUnit->hide();
-	} else { // fixed increment
+		break;
+	}
+	case Type::FixedIncrement: {
 		ui.lNumber->hide();
 		ui.leNumber->hide();
 		if (m_hasNumeric) {
@@ -199,12 +205,16 @@ void EquidistantValuesDialog::typeChanged(int index) {
 			ui.leIncrementDateTime->show();
 			ui.cbIncrementDateTimeUnit->show();
 		}
-
+		break;
+	}
 	}
 }
 
+/*!
+ * \brief Checks the validness of the user input and enables/disables the ok-Button and showw
+ * the tooltip accordingly.
+ */
 void EquidistantValuesDialog::checkValues() {
-	// check the validness of the user input for numeric values
 	const auto numberLocale = QLocale();
 	bool ok;
 	if (m_hasNumeric) {
@@ -223,7 +233,9 @@ void EquidistantValuesDialog::checkValues() {
 		}
 	}
 
-	if (ui.cbType->currentIndex() == 0) { // fixed number
+	const auto type = static_cast<Type>(ui.cbType->currentData().toInt());
+	switch (type) {
+	case Type::FixedNumber: {
 		// check whether a valid integer value biger than 1 was provided
 		const int number = numberLocale.toDouble(ui.leNumber->text(), &ok);
 		if (!ok || number < 1) {
@@ -231,7 +243,9 @@ void EquidistantValuesDialog::checkValues() {
 			m_okButton->setEnabled(false);
 			return;
 		}
-	} else { // fixed increment
+		break;
+	}
+	case Type::FixedIncrement: {
 		if (m_hasNumeric) {
 			const double increment = numberLocale.toDouble(ui.leIncrement->text(), &ok);
 			if (!ok || increment == 0.) {
@@ -249,6 +263,8 @@ void EquidistantValuesDialog::checkValues() {
 				return;
 			}
 		}
+		break;
+	}
 	}
 
 	m_okButton->setToolTip(QString());
@@ -293,6 +309,12 @@ void EquidistantValuesDialog::generate() {
 	RESET_CURSOR;
 }
 
+/*!
+ * \brief Helper function generating equidistand double values based on the user input
+ * \param newData - vector of doubles for the new data to be generated.
+ * \return \c false if the user input was wrong or not enough memory available to create new data,
+ * \c true if the generation of values was successful.
+ */
 bool EquidistantValuesDialog::generateNumericData(QVector<double>& newData) {
 	int number{0};
 	double increment{0};
@@ -312,8 +334,10 @@ bool EquidistantValuesDialog::generateNumericData(QVector<double>& newData) {
 		return false;
 	}
 
-	// generate equidistant numeric values
-	if (ui.cbType->currentIndex() == 0) { // fixed number
+	const auto type = static_cast<Type>(ui.cbType->currentData().toInt());
+	switch (type) {
+	case Type::FixedNumber: {
+		// fixed number -> determine the increment
 		number = QLocale().toInt(ui.leNumber->text(), &ok);
 		if (!ok || number == 1) {
 			DEBUG("Invalid integer value for 'number'!")
@@ -321,10 +345,15 @@ bool EquidistantValuesDialog::generateNumericData(QVector<double>& newData) {
 		}
 
 		increment = (end - start) / (number - 1);
-	} else { // fixed increment
+		break;
+	}
+	case Type::FixedIncrement: {
+		// fixed increment -> determine the number
 		increment = QLocale().toDouble(ui.leIncrement->text(), &ok);
 		if (ok)
 			number = (end - start) / increment + 1;
+		break;
+	}
 	}
 
 	try {
@@ -341,10 +370,18 @@ bool EquidistantValuesDialog::generateNumericData(QVector<double>& newData) {
 	return true;
 }
 
-// generate equidistant datetime values
+/*!
+ * \brief Helper function generating equidistand DateTime values based on the user input
+ * \param newData - vector of QDateTimes for the new data to be generated.
+ * \return \c false if the user input was wrong or not enough memory available to create new data,
+ * \c true if the generation of values was successful.
+ */
 bool EquidistantValuesDialog::generateDateTimeData(QVector<QDateTime>& newData) {
 	bool ok;
-	if (ui.cbType->currentIndex() == 0) { // fixed number -> determine the increment
+	const auto type = static_cast<Type>(ui.cbType->currentData().toInt());
+	switch (type) {
+	case Type::FixedNumber: {
+		// fixed number -> determine the increment
 		const auto startValue = ui.dteFrom->dateTime().toMSecsSinceEpoch();
 		const auto endValue = ui.dteFrom->dateTime().toMSecsSinceEpoch();
 		const int number = QLocale().toInt(ui.leNumber->text(), &ok);
@@ -363,7 +400,10 @@ bool EquidistantValuesDialog::generateDateTimeData(QVector<QDateTime>& newData) 
 		for (int i = 0; i < number; ++i)
 			newData[i] = QDateTime::fromMSecsSinceEpoch(startValue + increment * i, Qt::UTC);
 
-	} else { // fixed increment -> determine the number
+		break;
+	}
+	case Type::FixedIncrement: {
+		// fixed increment -> determine the number
 		const auto startValue = ui.dteFrom->dateTime();
 		const auto endValue = ui.dteTo->dateTime();
 		const auto increment = QLocale().toInt(ui.leIncrementDateTime->text(), &ok);
@@ -417,6 +457,9 @@ bool EquidistantValuesDialog::generateDateTimeData(QVector<QDateTime>& newData) 
 			}
 			break;
 		}
+
+		break;
+	}
 	}
 
 	return true;
