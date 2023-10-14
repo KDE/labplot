@@ -11,17 +11,17 @@ include:
 # finds Qt5 but KF5 is not installed
 #  - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/freebsd-qt6.yml
 # replaced with own target
+#  - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/flatpak.yml
 # Finds Qt6 but KF6 is not installed
 # OLD: Fails readstat (readstat.c:157 function declaration without a prototype is deprecated)
 #  - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/freebsd.yml
-  - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/flatpak.yml
 
 # needed for tests (use "ctest -V" for more output)
 variables:
   QT_TEST_TIMEOUT_FUNCTION: "600"
 
 # test builds (prepend '.' to temporary disable):
-# Ubuntu 22.04 min (Debug)
+## Ubuntu 22.04 min (Debug)
 ## Ubuntu 22.04 full (Release)
 ## Fedora 38 min (Debug)
 ## Fedora 38 full (Release)
@@ -29,7 +29,7 @@ variables:
 ## OS 15.5 full (Debug)
 ## Tumbleweed full (Debug)
 
-# only added extra-cmake-args (disable READSTAT unitl fixed)
+# only added extra-cmake-args (disable READSTAT until fixed)
 .freebsd_qt515:
   stage: build
   tags:
@@ -55,7 +55,7 @@ variables:
 
 ########################################################
 
-ubuntu_22.04_min:
+.ubuntu_22.04_min:
   stage: build
   image: ubuntu:22.04
   only:
