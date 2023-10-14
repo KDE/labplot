@@ -17,6 +17,7 @@ class BarPlotTest : public CommonTest {
 	Q_OBJECT
 
 private Q_SLOTS:
+	void initTestCase();
 	// bar plot
 	void testRange01();
 	void testRange02();

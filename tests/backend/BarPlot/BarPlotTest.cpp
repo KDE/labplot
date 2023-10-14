@@ -15,6 +15,12 @@
 #include "backend/worksheet/plots/cartesian/BarPlot.h"
 #include "backend/worksheet/plots/cartesian/LollipopPlot.h"
 
+void BarPlotTest::initTestCase() {
+	// needed in order to have the signals triggered by SignallingUndoCommand, see LabPlot.cpp
+	qRegisterMetaType<const AbstractAspect*>("const AbstractAspect*");
+	qRegisterMetaType<const AbstractColumn*>("const AbstractColumn*");
+}
+
 /*!
  * \brief one dataset, grouped
  */

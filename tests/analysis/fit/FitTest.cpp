@@ -11,6 +11,8 @@
 
 #include "FitTest.h"
 #include "backend/core/Project.h"
+#include "backend/core/AbstractAspect.h"
+#include "backend/core/AbstractColumn.h"
 #include "backend/core/column/Column.h"
 #include "backend/datasources/filters/AsciiFilter.h"
 #include "backend/spreadsheet/Spreadsheet.h"
@@ -20,6 +22,12 @@
 
 #include "backend/nsl/nsl_sf_stats.h"
 #include "backend/nsl/nsl_stats.h"
+
+void FitTest::initTestCase() {
+	// needed in order to have the signals triggered by SignallingUndoCommand, see LabPlot.cpp
+	qRegisterMetaType<const AbstractAspect*>("const AbstractAspect*");
+	qRegisterMetaType<const AbstractColumn*>("const AbstractColumn*");
+}
 
 // ##############################################################################
 // #################  linear regression with NIST datasets ######################
