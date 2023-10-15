@@ -36,8 +36,10 @@ private:
 	bool m_hasNumeric{false};
 	bool m_hasDateTime{false};
 
-	bool generateNumericData(QVector<double>&);
-	bool generateDateTimeData(QVector<QDateTime>&);
+	bool generateDouble(QVector<double>&, double start, double increment, int number);
+	bool generateInt(QVector<int>&, int start, int increment, int number);
+	bool generateBigInt(QVector<qint64>&, int start, int increment, int number);
+	bool generateDateTime(QVector<QDateTime>&, Type, const QDateTime& start, const QDateTime& end, int number, int increment, DateTimeUnit);
 
 private Q_SLOTS:
 	void generate();

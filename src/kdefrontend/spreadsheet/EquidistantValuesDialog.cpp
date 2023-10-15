@@ -22,6 +22,8 @@
 #include <KLocalizedString>
 #include <KWindowConfig>
 
+#include <cmath>
+
 /*!
 	\class EquidistantValuesDialog
 	\brief Dialog for equidistant values.
@@ -94,6 +96,7 @@ EquidistantValuesDialog::EquidistantValuesDialog(Spreadsheet* s, QWidget* parent
 
 	const int type = conf.readEntry("Type", static_cast<int>(Type::FixedNumber));
 	ui.cbType->setCurrentIndex(ui.cbType->findData(type));
+	typeChanged(ui.cbType->currentIndex());
 
 	// settings for numeric
 	ui.leFrom->setText(QString::number(conf.readEntry("From", 1)));
@@ -281,22 +284,76 @@ void EquidistantValuesDialog::generate() {
 	WAIT_CURSOR;
 	bool rc = true;
 	if (m_hasNumeric) {
-		// check whether we have int columns and the input parameters for start, begin, number and increment
-		// allow to work with int values only or whether we need to convert the columns from int to double
-		// TODO:
+		int number{0};
+		double increment{0};
 
-		rc = generateNumericData(newDoubleData);
-	}
-	if (!rc) {
-		RESET_CURSOR;
-		return;
+		// check the validness of the user input for numeric values
+		const auto numberLocale = QLocale();
+		bool ok;
+		const double start = numberLocale.toDouble(ui.leFrom->text(), &ok);
+		if (!ok) {
+			DEBUG("Invalid double value for 'start'!")
+			RESET_CURSOR;
+			return;
+		}
+
+		const double end = numberLocale.toDouble(ui.leTo->text(), &ok);
+		if (!ok) {
+			DEBUG("Invalid double value for 'end'!")
+			RESET_CURSOR;
+			return;
+		}
+
+		const auto type = static_cast<Type>(ui.cbType->currentData().toInt());
+		switch (type) {
+		case Type::FixedNumber: {
+			// fixed number -> determine the increment
+			number = QLocale().toInt(ui.leNumber->text(), &ok);
+			if (!ok || number == 1) {
+				DEBUG("Invalid integer value for 'number'!")
+				RESET_CURSOR;
+				return;
+			}
+
+			increment = (end - start) / (number - 1);
+			break;
+		}
+		case Type::FixedIncrement: {
+			// fixed increment -> determine the number
+			increment = QLocale().toDouble(ui.leIncrement->text(), &ok);
+			if (ok)
+				number = (end - start) / increment + 1;
+			break;
+		}
+		}
+
+		// check whether we have integer values for the input parameters for start, begin and increment
+		// which would allow to work with int values only or whether we need to convert the columns from int to double
+		if (floor(start) == ceil(start) && floor(end) == ceil(end) && floor(increment) == ceil(increment)) {
+			integerModePossible = true;
+			rc = generateInt(newIntData, start, increment, number);
+		} else
+			rc = generateDouble(newDoubleData, start, increment, number);
+
+		if (!rc) {
+			RESET_CURSOR;
+			return;
+		}
 	}
 
-	if (m_hasDateTime)
-		rc = generateDateTimeData(newDateTimeData);
-	if (!rc) {
-		RESET_CURSOR;
-		return;
+	if (m_hasDateTime) {
+		const auto start = ui.dteFrom->dateTime();
+		const auto end = ui.dteTo->dateTime();
+		bool ok;
+		const int number = QLocale().toInt(ui.leNumber->text(), &ok);
+		const auto increment = QLocale().toInt(ui.leIncrementDateTime->text(), &ok);
+		const auto unit = static_cast<DateTimeUnit>(ui.cbIncrementDateTimeUnit->currentData().toInt());
+		const auto type = static_cast<Type>(ui.cbType->currentData().toInt());
+		rc = generateDateTime(newDateTimeData, type, start, end, number, increment, unit);
+		if (!rc) {
+			RESET_CURSOR;
+			return;
+		}
 	}
 
 	m_spreadsheet->beginMacro(
@@ -318,6 +375,7 @@ void EquidistantValuesDialog::generate() {
 				col->setColumnMode(AbstractColumn::ColumnMode::Double);
 				col->setValues(newDoubleData);
 			}
+			break;
 		}
 		case AbstractColumn::ColumnMode::BigInt: {
 			if (integerModePossible)
@@ -326,6 +384,7 @@ void EquidistantValuesDialog::generate() {
 				col->setColumnMode(AbstractColumn::ColumnMode::Double);
 				col->setValues(newDoubleData);
 			}
+			break;
 		}
 		case AbstractColumn::ColumnMode::DateTime:
 			col->setDateTimes(newDateTimeData);
@@ -343,52 +402,51 @@ void EquidistantValuesDialog::generate() {
 }
 
 /*!
- * \brief Helper function generating equidistand double values based on the user input
+ * \brief Helper function generating equidistant double values based on the user input
  * \param newData - vector of doubles for the new data to be generated.
- * \return \c false if the user input was wrong or not enough memory available to create new data,
- * \c true if the generation of values was successful.
+ * \return returns \c false if not enough memory available to create new data, returns \c true otherwise.
  */
-bool EquidistantValuesDialog::generateNumericData(QVector<double>& newData) {
-	int number{0};
-	double increment{0};
-
-	// check the validness of the user input for numeric values
-	const auto numberLocale = QLocale();
-	bool ok;
-	const double start = numberLocale.toDouble(ui.leFrom->text(), &ok);
-	if (!ok) {
-		DEBUG("Invalid double value for 'start'!")
+bool EquidistantValuesDialog::generateDouble(QVector<double>& newData, double start, double increment, int number) {
+	try {
+		newData.resize(number);
+	} catch (std::bad_alloc&) {
+		RESET_CURSOR;
+		QMessageBox::critical(this, i18n("Failed to allocate memory"), i18n("Not enough memory to perform this operation."));
 		return false;
 	}
 
-	const double end = numberLocale.toDouble(ui.leTo->text(), &ok);
-	if (!ok) {
-		DEBUG("Invalid double value for 'end'!")
+	for (int i = 0; i < number; ++i)
+		newData[i] = start + increment * i;
+
+	return true;
+}
+
+/*!
+ * \brief Helper function generating equidistant integer values based on the user input
+ * \param newData - vector of integers for the new data to be generated.
+ * \return returns \c false if not enough memory available to create new data, returns \c true otherwise.
+ */
+bool EquidistantValuesDialog::generateInt(QVector<int>& newData, int start, int increment, int number) {
+	try {
+		newData.resize(number);
+	} catch (std::bad_alloc&) {
+		RESET_CURSOR;
+		QMessageBox::critical(this, i18n("Failed to allocate memory"), i18n("Not enough memory to perform this operation."));
 		return false;
 	}
 
-	const auto type = static_cast<Type>(ui.cbType->currentData().toInt());
-	switch (type) {
-	case Type::FixedNumber: {
-		// fixed number -> determine the increment
-		number = QLocale().toInt(ui.leNumber->text(), &ok);
-		if (!ok || number == 1) {
-			DEBUG("Invalid integer value for 'number'!")
-			return false;
-		}
+	for (int i = 0; i < number; ++i)
+		newData[i] = start + increment * i;
 
-		increment = (end - start) / (number - 1);
-		break;
-	}
-	case Type::FixedIncrement: {
-		// fixed increment -> determine the number
-		increment = QLocale().toDouble(ui.leIncrement->text(), &ok);
-		if (ok)
-			number = (end - start) / increment + 1;
-		break;
-	}
-	}
+	return true;
+}
 
+/*!
+ * \brief Helper function generating equidistant big integer (aka long, aka int64) values based on the user input
+ * \param newData - vector of int64's for the new data to be generated.
+ * \return returns \c false if not enough memory available to create new data, returns \c true otherwise.
+ */
+bool EquidistantValuesDialog::generateBigInt(QVector<qint64>& newData, int start, int increment, int number) {
 	try {
 		newData.resize(number);
 	} catch (std::bad_alloc&) {
@@ -409,15 +467,13 @@ bool EquidistantValuesDialog::generateNumericData(QVector<double>& newData) {
  * \return \c false if the user input was wrong or not enough memory available to create new data,
  * \c true if the generation of values was successful.
  */
-bool EquidistantValuesDialog::generateDateTimeData(QVector<QDateTime>& newData) {
+bool EquidistantValuesDialog::generateDateTime(QVector<QDateTime>& newData, Type type, const QDateTime& start, const QDateTime& end, int number, int increment, DateTimeUnit unit) {
 	bool ok;
-	const auto type = static_cast<Type>(ui.cbType->currentData().toInt());
+	// const auto type = static_cast<Type>(ui.cbType->currentData().toInt());
 	switch (type) {
 	case Type::FixedNumber: {
-		// fixed number -> determine the increment
-		const auto startValue = ui.dteFrom->dateTime().toMSecsSinceEpoch();
-		const auto endValue = ui.dteFrom->dateTime().toMSecsSinceEpoch();
-		const int number = QLocale().toInt(ui.leNumber->text(), &ok);
+		const auto startValue = start.toMSecsSinceEpoch();
+		const auto endValue = end.toMSecsSinceEpoch();
 		int increment = 1;
 		if (number != 1)
 			increment = (endValue - startValue) / (number - 1);
@@ -436,34 +492,29 @@ bool EquidistantValuesDialog::generateDateTimeData(QVector<QDateTime>& newData) 
 		break;
 	}
 	case Type::FixedIncrement: {
-		// fixed increment -> determine the number
-		const auto startValue = ui.dteFrom->dateTime();
-		const auto endValue = ui.dteTo->dateTime();
-		const auto increment = QLocale().toInt(ui.leIncrementDateTime->text(), &ok);
-		const auto unit = static_cast<DateTimeUnit>(ui.cbIncrementDateTimeUnit->currentData().toInt());
-		QDateTime value = startValue;
+		QDateTime value = start;
 		switch (unit) {
 		case DateTimeUnit::Year:
-			while (value < endValue) {
+			while (value < end) {
 				newData << value;
 				value = value.addYears(increment);
 			}
 			break;
 		case DateTimeUnit::Month:
-			while (value < endValue) {
+			while (value < end) {
 				newData << value;
 				value = value.addMonths(increment);
 			}
 			break;
 		case DateTimeUnit::Day:
-			while (value < endValue) {
+			while (value < end) {
 				newData << value;
 				value = value.addDays(increment);
 			}
 			break;
 		case DateTimeUnit::Hour: {
 			const int seconds = increment * 60 * 60;
-			while (value < endValue) {
+			while (value < end) {
 				newData << value;
 				value = value.addSecs(seconds);
 			}
@@ -471,20 +522,20 @@ bool EquidistantValuesDialog::generateDateTimeData(QVector<QDateTime>& newData) 
 		}
 		case DateTimeUnit::Minute: {
 			const int seconds = increment * 60;
-			while (value < endValue) {
+			while (value < end) {
 				newData << value;
 				value = value.addSecs(seconds);
 			}
 			break;
 		}
 		case DateTimeUnit::Second:
-			while (value < endValue) {
+			while (value < end) {
 				newData << value;
 				value = value.addSecs(increment);
 			}
 			break;
 		case DateTimeUnit::Millisecond:
-			while (value < endValue) {
+			while (value < end) {
 				newData << value;
 				value = value.addMSecs(increment);
 			}
