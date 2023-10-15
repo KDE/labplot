@@ -34,6 +34,9 @@ private:
 	Spreadsheet* m_spreadsheet;
 	QPushButton* m_okButton;
 	bool m_hasNumeric{false};
+	bool m_hasDouble{false};
+	bool m_hasInteger{false};
+	bool m_hasBigInteger{false};
 	bool m_hasDateTime{false};
 
 	bool generateDouble(QVector<double>&, double start, double increment, int number);

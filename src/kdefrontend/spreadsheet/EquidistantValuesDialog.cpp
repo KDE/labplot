@@ -134,23 +134,27 @@ EquidistantValuesDialog::~EquidistantValuesDialog() {
 void EquidistantValuesDialog::setColumns(const QVector<Column*>& columns) {
 	m_columns = columns;
 	ui.leNumber->setText(QLocale().toString(m_columns.first()->rowCount()));
-
-	for (auto* col : m_columns) {
-		if (col->isNumeric()) {
-			m_hasNumeric = true;
-			break;
-		}
-	}
-
 	QString dateTimeFormat;
+
 	for (auto* col : m_columns) {
-		if (col->columnMode() == AbstractColumn::ColumnMode::DateTime) {
+		const auto mode = col->columnMode();
+		if (!m_hasDouble && mode == AbstractColumn::ColumnMode::Double)
+			m_hasDouble = true;
+
+		if (!m_hasInteger && mode == AbstractColumn::ColumnMode::Integer)
+			m_hasInteger = true;
+
+		if (!m_hasBigInteger && mode == AbstractColumn::ColumnMode::BigInt)
+			m_hasBigInteger = true;
+
+		if (!m_hasDateTime&& mode == AbstractColumn::ColumnMode::DateTime) {
 			m_hasDateTime = true;
 			auto* filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
 			dateTimeFormat = filter->format();
-			break;
 		}
 	}
+
+	m_hasNumeric = m_hasDouble || m_hasInteger || m_hasBigInteger;
 
 	ui.lNumeric->setVisible(m_hasNumeric);
 	ui.lIncrement->setVisible(m_hasNumeric);
@@ -280,6 +284,8 @@ void EquidistantValuesDialog::generate() {
 	QVector<double> newDoubleData;
 	QVector<QDateTime> newDateTimeData;
 	bool integerModePossible = false;
+	bool bigIntRequired = false;
+
 
 	WAIT_CURSOR;
 	bool rc = true;
@@ -329,15 +335,29 @@ void EquidistantValuesDialog::generate() {
 
 		// check whether we have integer values for the input parameters for start, begin and increment
 		// which would allow to work with int values only or whether we need to convert the columns from int to double
-		if (floor(start) == ceil(start) && floor(end) == ceil(end) && floor(increment) == ceil(increment)) {
-			integerModePossible = true;
-			rc = generateInt(newIntData, start, increment, number);
-		} else
-			rc = generateDouble(newDoubleData, start, increment, number);
+		if (m_hasInteger || m_hasBigInteger) {
+			if (floor(start) == ceil(start) && floor(end) == ceil(end) && floor(increment) == ceil(increment)) {
+				integerModePossible = true;
+				if (start > std::numeric_limits<int>::max() || end > std::numeric_limits<int>::max())
+					bigIntRequired = true;
 
-		if (!rc) {
-			RESET_CURSOR;
-			return;
+				if (m_hasBigInteger || bigIntRequired)
+					rc = generateBigInt(newBigIntData, start, increment, number);
+				else
+					rc = generateInt(newIntData, start, increment, number);
+			}
+
+			if (!rc) {
+				RESET_CURSOR;
+				return;
+			}
+		}
+		if (m_hasDouble || ((m_hasInteger || m_hasBigInteger) && !integerModePossible)) {
+			rc = generateDouble(newDoubleData, start, increment, number);
+			if (!rc) {
+				RESET_CURSOR;
+				return;
+			}
 		}
 	}
 
@@ -369,9 +389,14 @@ void EquidistantValuesDialog::generate() {
 			col->setValues(newDoubleData);
 			break;
 		case AbstractColumn::ColumnMode::Integer: {
-			if (integerModePossible)
-				col->setIntegers(newIntData);
-			else {
+			if (integerModePossible) {
+				if (!bigIntRequired)
+					col->setIntegers(newIntData);
+				else {
+					col->setColumnMode(AbstractColumn::ColumnMode::BigInt);
+					col->setBigInts(newBigIntData);
+				}
+			} else {
 				col->setColumnMode(AbstractColumn::ColumnMode::Double);
 				col->setValues(newDoubleData);
 			}
@@ -467,9 +492,12 @@ bool EquidistantValuesDialog::generateBigInt(QVector<qint64>& newData, int start
  * \return \c false if the user input was wrong or not enough memory available to create new data,
  * \c true if the generation of values was successful.
  */
-bool EquidistantValuesDialog::generateDateTime(QVector<QDateTime>& newData, Type type, const QDateTime& start, const QDateTime& end, int number, int increment, DateTimeUnit unit) {
-	bool ok;
-	// const auto type = static_cast<Type>(ui.cbType->currentData().toInt());
+bool EquidistantValuesDialog::generateDateTime(QVector<QDateTime>& newData,
+											   Type type, const QDateTime& start,
+											   const QDateTime& end,
+											   int number,
+											   int increment,
+											   DateTimeUnit unit) {
 	switch (type) {
 	case Type::FixedNumber: {
 		const auto startValue = start.toMSecsSinceEpoch();
