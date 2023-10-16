@@ -96,14 +96,14 @@ public:
 	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace);
 	void write(const QString& fileName, AbstractDataSource*);
 
-	static QStringList m_varNames;
-	static QVector<AbstractColumn::ColumnMode> m_columnModes;
-	static QVector<QStringList> m_dataStrings;
+	static QStringList varNames;
+	static QVector<AbstractColumn::ColumnMode> columnModes;
+	static QVector<QStringList> dataStrings;
 
-	static int m_startRow;
-	static int m_endRow;
-	static int m_startColumn;
-	static int m_endColumn;
+	static int startRow;
+	static int endRow;
+	static int startColumn;
+	static int endColumn;
 
 private:
 	static int m_varCount; // nr of cols (vars)

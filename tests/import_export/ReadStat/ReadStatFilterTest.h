@@ -17,6 +17,8 @@ class ReadStatFilterTest : public CommonTest {
 	Q_OBJECT
 
 private Q_SLOTS:
+	void initTestCase();
+
 	void testDTAImport();
 	void testSASImport();
 	void testSAVImport();
