@@ -147,7 +147,7 @@ void EquidistantValuesDialog::setColumns(const QVector<Column*>& columns) {
 		if (!m_hasBigInteger && mode == AbstractColumn::ColumnMode::BigInt)
 			m_hasBigInteger = true;
 
-		if (!m_hasDateTime&& mode == AbstractColumn::ColumnMode::DateTime) {
+		if (!m_hasDateTime && mode == AbstractColumn::ColumnMode::DateTime) {
 			m_hasDateTime = true;
 			auto* filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
 			dateTimeFormat = filter->format();
@@ -286,7 +286,6 @@ void EquidistantValuesDialog::generate() {
 	bool integerModePossible = false;
 	bool bigIntRequired = false;
 
-
 	WAIT_CURSOR;
 	bool rc = true;
 	if (m_hasNumeric) {
@@ -379,10 +378,47 @@ void EquidistantValuesDialog::generate() {
 	m_spreadsheet->beginMacro(
 		i18np("%1: fill column with equidistant numbers", "%1: fill columns with equidistant numbers", m_spreadsheet->name(), m_columns.size()));
 
-	int rowCount = std::max(newDoubleData.size(), newDateTimeData.size());
-	if (m_spreadsheet->rowCount() < rowCount)
-		m_spreadsheet->setRowCount(rowCount);
+	// Adjust the sizes of the spreadsheet and of the column data vectors
+	// Note, when numeric and datetime columns are selected, the input parameters are
+	// different which can result into different number of values generated for each type.
+	int maxSize = std::max(newDoubleData.size(), newIntData.size());
+	maxSize = std::max(maxSize, newBigIntData.size());
+	maxSize = std::max(maxSize, newDateTimeData.size());
+	if (m_spreadsheet->rowCount() < maxSize)
+		m_spreadsheet->setRowCount(maxSize);
+	else
+		maxSize = m_spreadsheet->rowCount();
 
+	// make sure all data vectors have the size of the spreadsheet, extend if needed
+	if (m_hasDouble && newDoubleData.size() != maxSize) {
+		const int size = newDoubleData.size();
+		newDoubleData.resize(maxSize);
+		for (int i = 0; i < maxSize - size; ++i)
+			newDoubleData[size + i] = std::numeric_limits<double>::quiet_NaN();
+	}
+
+	if (m_hasInteger && newIntData.size() != maxSize) {
+		const int size = newIntData.size();
+		newIntData.resize(maxSize);
+		for (int i = 0; i < maxSize - size; ++i)
+			newIntData[size + i] = 0;
+	}
+
+	if (m_hasBigInteger && newBigIntData.size() != maxSize) {
+		const int size = newBigIntData.size();
+		newBigIntData.resize(maxSize);
+		for (int i = 0; i < maxSize - size; ++i)
+			newBigIntData[size + i] = 0;
+	}
+
+	if (m_hasDateTime && newDateTimeData.size() != maxSize) {
+		const int size = newDateTimeData.size();
+		newDateTimeData.resize(maxSize);
+		for (int i = 0; i < maxSize - size; ++i)
+			newDateTimeData[size + i] = QDateTime();
+	}
+
+	// set the vectors with the generated data in the columns and adjust the column mode, if needed
 	for (auto* col : m_columns) {
 		switch (col->columnMode()) {
 		case AbstractColumn::ColumnMode::Double:
@@ -493,11 +529,11 @@ bool EquidistantValuesDialog::generateBigInt(QVector<qint64>& newData, int start
  * \c true if the generation of values was successful.
  */
 bool EquidistantValuesDialog::generateDateTime(QVector<QDateTime>& newData,
-											   Type type, const QDateTime& start,
-											   const QDateTime& end,
-											   int number,
-											   int increment,
-											   DateTimeUnit unit) {
+																			Type type, const QDateTime& start,
+																			const QDateTime& end,
+																			int number,
+																			int increment,
+																			DateTimeUnit unit) {
 	switch (type) {
 	case Type::FixedNumber: {
 		const auto startValue = start.toMSecsSinceEpoch();
