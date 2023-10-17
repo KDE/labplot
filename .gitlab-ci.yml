@@ -16,7 +16,7 @@ include:
 
 windows_qt515:
   stage: build
-  image: kdeorg/windows-msvc2019-qt515:latest
+  image: invent-registry.kde.org/sysadmin/ci-images/windows-msvc2019-qt515:latest
   tags:
     - Windows
   variables:
@@ -157,7 +157,7 @@ tumbleweed_full:
 # see https://invent.kde.org/sysadmin/ci-utilities/-/blob/master/gitlab-templates/flatpak.yml
 flatpak:
   stage: deploy
-  image: kdeorg/flatpak-builder:latest
+  image: invent-registry.kde.org/sysadmin/ci-images/flatpak-builder:latest
   only:
 #    - merge_requests
     - master
