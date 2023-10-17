@@ -574,8 +574,10 @@ void BarPlotPrivate::recalc() {
 			break;
 		}
 		case BarPlot::Type::Stacked: {
-			yMax = *std::max_element(barMaxs.constBegin(), barMaxs.constEnd());
-			yMin = *std::min_element(barMins.constBegin(), barMins.constEnd());
+			if (!barMaxs.isEmpty())
+				yMax = *std::max_element(barMaxs.constBegin(), barMaxs.constEnd());
+			if (!barMins.isEmpty())
+				yMin = *std::min_element(barMins.constBegin(), barMins.constEnd());
 			break;
 		}
 		case BarPlot::Type::Stacked_100_Percent: {
