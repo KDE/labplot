@@ -20,6 +20,8 @@ class QPushButton;
 class EquidistantValuesDialog : public QDialog {
 	Q_OBJECT
 
+	friend class SpreadsheetGenerateDataTest;
+
 public:
 	enum class Type { FixedNumber, FixedIncrement };
 	enum class DateTimeUnit { Year, Month, Day, Hour, Minute, Second, Millisecond };
@@ -39,10 +41,22 @@ private:
 	bool m_hasBigInteger{false};
 	bool m_hasDateTime{false};
 
+	void setNumericValue(double, QLineEdit*);
 	bool generateDouble(QVector<double>&, double start, double increment, int number);
 	bool generateInt(QVector<int>&, int start, int increment, int number);
 	bool generateBigInt(QVector<qint64>&, int start, int increment, int number);
 	bool generateDateTime(QVector<QDateTime>&, Type, const QDateTime& start, const QDateTime& end, int number, int increment, DateTimeUnit);
+
+	// functions used in the tests
+	void setType(Type) const;
+	void setNumber(int) const;
+	void setIncrement(double) const;
+	void setIncrementDateTime(int) const;
+	void setIncrementDateTimeUnit(DateTimeUnit);
+	void setFromValue(double) const;
+	void setToValue(double) const;
+	void setFromDateTime(const QDateTime&) const;
+	void setToDateTime(const QDateTime&) const;
 
 private Q_SLOTS:
 	void generate();

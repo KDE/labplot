@@ -97,11 +97,16 @@ EquidistantValuesDialog::EquidistantValuesDialog(Spreadsheet* s, QWidget* parent
 	const int type = conf.readEntry("Type", static_cast<int>(Type::FixedNumber));
 	ui.cbType->setCurrentIndex(ui.cbType->findData(type));
 	typeChanged(ui.cbType->currentIndex());
+	ui.leNumber->setText(QLocale().toString(conf.readEntry("Number", 1)));
 
 	// settings for numeric
-	ui.leFrom->setText(QString::number(conf.readEntry("From", 1)));
-	ui.leTo->setText(QString::number(conf.readEntry("To", 100)));
-	ui.leIncrement->setText(QLocale().toString(conf.readEntry("Increment", 1.)));
+	// all values are saved as doubles, try to show them as int or long first
+	double from = conf.readEntry("From", 1.);
+	double to = conf.readEntry("To", 100.);
+	double increment = conf.readEntry("Increment", 1.);
+	setNumericValue(from, ui.leFrom);
+	setNumericValue(to, ui.leTo);
+	setNumericValue(increment, ui.leIncrement);
 
 	// settings for datetime
 	qint64 now = QDateTime::currentDateTime().toMSecsSinceEpoch();
@@ -115,13 +120,14 @@ EquidistantValuesDialog::~EquidistantValuesDialog() {
 	// save current settings
 	KConfigGroup conf = Settings::group(QStringLiteral("EquidistantValuesDialog"));
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
+	const auto numberLocale = QLocale();
 
 	conf.writeEntry("Type", ui.cbType->itemData(ui.cbType->currentIndex()).toInt());
+	conf.writeEntry("Number", numberLocale.toInt(ui.leNumber->text()));
 
 	// settings for numeric
-	const auto numberLocale = QLocale();
-	conf.writeEntry("From", numberLocale.toInt(ui.leFrom->text()));
-	conf.writeEntry("To", numberLocale.toInt(ui.leTo->text()));
+	conf.writeEntry("From", numberLocale.toDouble(ui.leFrom->text()));
+	conf.writeEntry("To", numberLocale.toDouble(ui.leTo->text()));
 	conf.writeEntry("Increment", numberLocale.toDouble(ui.leIncrement->text()));
 
 	// settings for datetime
@@ -129,6 +135,20 @@ EquidistantValuesDialog::~EquidistantValuesDialog() {
 	conf.writeEntry("ToDateTime", ui.dteTo->dateTime().toMSecsSinceEpoch());
 	conf.writeEntry("IncrementDateTime", numberLocale.toDouble(ui.leIncrement->text()));
 	conf.writeEntry("IncrementDateTimeUnit", ui.cbIncrementDateTimeUnit->currentIndex());
+}
+
+void EquidistantValuesDialog::setNumericValue(double value, QLineEdit* le) {
+	const auto numberLocale = QLocale();
+	if (floor(value) == ceil(value)) {
+		if (value <= std::numeric_limits<int>::max()) {
+			int valueInt = static_cast<int>(value);
+			le->setText(numberLocale.toString(valueInt));
+		} else {
+			qint64 valueInt = static_cast<qint64>(value);
+			le->setText(numberLocale.toString(valueInt));
+		}
+	} else
+		le->setText(numberLocale.toString(value));
 }
 
 void EquidistantValuesDialog::setColumns(const QVector<Column*>& columns) {
@@ -611,4 +631,43 @@ bool EquidistantValuesDialog::generateDateTime(QVector<QDateTime>& newData,
 	}
 
 	return true;
+}
+
+// **********************************************************
+// *********** Helper functions used in the tests ***********
+// **********************************************************
+void EquidistantValuesDialog::setType(Type type) const {
+	ui.cbType->setCurrentIndex(ui.cbType->findData(static_cast<int>(type)));
+}
+
+void EquidistantValuesDialog::setNumber(int value) const {
+	ui.leNumber->setText(QString::number(value));
+}
+
+void EquidistantValuesDialog::setIncrement(double value) const {
+	ui.leIncrement->setText(QString::number(value));
+}
+
+void EquidistantValuesDialog::setIncrementDateTime(int value) const {
+	ui.leIncrementDateTime->setText(QString::number(value));
+}
+
+void EquidistantValuesDialog::setIncrementDateTimeUnit(DateTimeUnit value) {
+	ui.cbIncrementDateTimeUnit->setCurrentIndex(ui.cbIncrementDateTimeUnit->findData(static_cast<int>(value)));
+}
+
+void EquidistantValuesDialog::setFromValue(double value) const {
+	ui.leFrom->setText(QString::number(value));
+}
+
+void EquidistantValuesDialog::setToValue(double value) const {
+	ui.leTo->setText(QString::number(value));
+}
+
+void EquidistantValuesDialog::setFromDateTime(const QDateTime& value) const {
+
+}
+
+void EquidistantValuesDialog::setToDateTime(const QDateTime& value) const {
+
 }
