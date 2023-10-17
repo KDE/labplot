@@ -22,7 +22,7 @@
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_statistics.h>
 
-#include <QRegularExpression>
+#include "functions.h"
 
 #include <array>
 #include <unordered_map>
@@ -1737,6 +1737,113 @@ void ColumnPrivate::setFormulVariableColumn(Column* c) {
 	}
 }
 
+struct PayloadColumn: public Payload {
+	PayloadColumn(const QVector<Column::FormulaData>& data) : formulaData(data) {}
+	const QVector<Column::FormulaData>& formulaData;
+};
+
+#define COLUMN_FUNCTION(function_name, evaluation_function)\
+double column ## function_name(const char* variable, const Payload* payload) { \
+		const auto* p = dynamic_cast<const PayloadColumn*>(payload); \
+		if (!p) { \
+			assert(p); /* Debug build */  \
+			return NAN; \
+		} \
+		for (const auto& formulaData: p->formulaData) { \
+			if (formulaData.variableName().compare(QLatin1String(variable)) == 0) \
+				return formulaData.column()->evaluation_function; \
+		} \
+		return NAN; \
+	}
+
+COLUMN_FUNCTION(Size, statistics().size)
+COLUMN_FUNCTION(Min, minimum())
+COLUMN_FUNCTION(Max, maximum())
+COLUMN_FUNCTION(Mean, statistics().arithmeticMean)
+COLUMN_FUNCTION(Median, statistics().median)
+COLUMN_FUNCTION(Stdev, statistics().standardDeviation)
+COLUMN_FUNCTION(Var, statistics().variance)
+COLUMN_FUNCTION(Gm, statistics().geometricMean)
+COLUMN_FUNCTION(Hm, statistics().harmonicMean)
+COLUMN_FUNCTION(Chm, statistics().contraharmonicMean)
+COLUMN_FUNCTION(StatisticsMode, statistics().mode)
+COLUMN_FUNCTION(Quartile1, statistics().firstQuartile)
+COLUMN_FUNCTION(Quartile3, statistics().thirdQuartile)
+COLUMN_FUNCTION(Iqr, statistics().iqr)
+COLUMN_FUNCTION(Percentile1, statistics().percentile_1)
+COLUMN_FUNCTION(Percentile5, statistics().percentile_5)
+COLUMN_FUNCTION(Percentile10, statistics().percentile_10)
+COLUMN_FUNCTION(Percentile90, statistics().percentile_90)
+COLUMN_FUNCTION(Percentile95, statistics().percentile_95)
+COLUMN_FUNCTION(Percentile99, statistics().percentile_99)
+COLUMN_FUNCTION(Trimean, statistics().trimean)
+COLUMN_FUNCTION(Meandev, statistics().meanDeviation)
+COLUMN_FUNCTION(Meandevmedian, statistics().meanDeviationAroundMedian)
+COLUMN_FUNCTION(Mediandev, statistics().medianDeviation)
+COLUMN_FUNCTION(Skew, statistics().skewness)
+COLUMN_FUNCTION(Kurt, statistics().kurtosis)
+COLUMN_FUNCTION(Entropy, statistics().entropy)
+
+double columnQuantile(double p, const char* variable, const Payload* payload) {
+	const auto* pd = dynamic_cast<const PayloadColumn*>(payload);
+		if (!pd) {
+			assert(pd); // Debug build
+			return NAN;
+	}
+
+	if (p < 0)
+		return NAN;
+
+	const Column* column = nullptr;
+	for (const auto& formulaData: pd->formulaData) {
+		if (formulaData.variableName().compare(QLatin1String(variable)) == 0) {
+			column = formulaData.column();
+			break;
+		}
+	}
+	if (!column)
+		return NAN;
+
+	double value = 0.0;
+	switch (column->columnMode()) { // all types
+	case AbstractColumn::ColumnMode::Double: {
+		auto data = reinterpret_cast<QVector<double>*>(column->data());
+		value = nsl_stats_quantile(data->data(), 1, column->statistics().size, p, nsl_stats_quantile_type7);
+		break;
+	}
+	case AbstractColumn::ColumnMode::Integer: {
+		auto* intData = reinterpret_cast<QVector<int>*>(column->data());
+
+		QVector<double> data = QVector<double>(); // copy data to double
+		data.reserve(column->rowCount());
+		for (auto v : *intData)
+			data << static_cast<double>(v);
+		value = nsl_stats_quantile(data.data(), 1, column->statistics().size, p, nsl_stats_quantile_type7);
+		break;
+	}
+	case AbstractColumn::ColumnMode::BigInt: {
+		auto* bigIntData = reinterpret_cast<QVector<qint64>*>(column->data());
+
+		QVector<double> data = QVector<double>(); // copy data to double
+		data.reserve(column->rowCount());
+		for (auto v : *bigIntData)
+			data << static_cast<double>(v);
+		value = nsl_stats_quantile(data.data(), 1, column->statistics().size, p, nsl_stats_quantile_type7);
+		break;
+	}
+	case AbstractColumn::ColumnMode::DateTime: // not supported yet
+	case AbstractColumn::ColumnMode::Day:
+	case AbstractColumn::ColumnMode::Month:
+	case AbstractColumn::ColumnMode::Text:
+		break;
+	}
+	return value;
+}
+
+double columnPercentile(double p, const char* variable, const Payload* payload) {
+	return columnQuantile(p/100., variable, payload);
+}
+
 /*!
  * \sa FunctionValuesDialog::generate()
  */
@@ -1762,128 +1869,6 @@ void ColumnPrivate::updateFormula() {
 		}
 		auto varName = formulaData.variableName();
 		formulaVariableNames << varName;
-
-		/////// care about special expressions ////////
-		// A) replace statistical values
-		// 	all available statistical methods (see AbstractColumn.h)
-		QVector<QPair<QString, double>> methodList = {{QStringLiteral("size"), static_cast<double>(column->statistics().size)},
-													  {QStringLiteral("min"), column->minimum()},
-													  {QStringLiteral("max"), column->maximum()},
-													  {QStringLiteral("mean"), column->statistics().arithmeticMean},
-													  {QStringLiteral("median"), column->statistics().median},
-													  {QStringLiteral("stdev"), column->statistics().standardDeviation},
-													  {QStringLiteral("var"), column->statistics().variance},
-													  {QStringLiteral("gm"), column->statistics().geometricMean},
-													  {QStringLiteral("hm"), column->statistics().harmonicMean},
-													  {QStringLiteral("chm"), column->statistics().contraharmonicMean},
-													  {QStringLiteral("mode"), column->statistics().mode},
-													  {QStringLiteral("quartile1"), column->statistics().firstQuartile},
-													  {QStringLiteral("quartile3"), column->statistics().thirdQuartile},
-													  {QStringLiteral("iqr"), column->statistics().iqr},
-													  {QStringLiteral("percentile1"), column->statistics().percentile_1},
-													  {QStringLiteral("percentile5"), column->statistics().percentile_5},
-													  {QStringLiteral("percentile10"), column->statistics().percentile_10},
-													  {QStringLiteral("percentile90"), column->statistics().percentile_90},
-													  {QStringLiteral("percentile95"), column->statistics().percentile_95},
-													  {QStringLiteral("percentile99"), column->statistics().percentile_99},
-													  {QStringLiteral("trimean"), column->statistics().trimean},
-													  {QStringLiteral("meandev"), column->statistics().meanDeviation},
-													  {QStringLiteral("meandevmedian"), column->statistics().meanDeviationAroundMedian},
-													  {QStringLiteral("mediandev"), column->statistics().medianDeviation},
-													  {QStringLiteral("skew"), column->statistics().skewness},
-													  {QStringLiteral("kurt"), column->statistics().kurtosis},
-													  {QStringLiteral("entropy"), column->statistics().entropy}};
-
-		for (auto& m : methodList)
-			formula.replace(m.first + QStringLiteral("(%1)").arg(varName), numberLocale.toString(m.second));
-
-		// B) methods with options like method(p, x): get option p and calculate value to replace method
-		QStringList optionMethodList = {QLatin1String("quantile\\((\\d+[\\.\\,]?\\d+).*%1\\)"), // quantile(p, x)
-										QLatin1String("percentile\\((\\d+[\\.\\,]?\\d+).*%1\\)")}; // percentile(p, x)
-
-		for (auto& m : optionMethodList) {
-			// inverted greedy: only match one method call at a time
-			QRegularExpression rx(m.arg(varName), QRegularExpression::InvertedGreedinessOption);
-
-			int pos = 0;
-			auto match = rx.match(formula, pos);
-			while (match.hasMatch()) { // loop over all method calls
-				QDEBUG("method call:" << match.captured(0))
-				double p = numberLocale.toDouble(match.captured(1)); // option
-				DEBUG("p = " << p)
-
-				// scale (quantile: p=0..1, percentile: p=0..100)
-				if (m.startsWith(QLatin1String("percentile")))
-					p /= 100.;
-
-				double value = 0.0;
-				switch (column->columnMode()) { // all types
-				case AbstractColumn::ColumnMode::Double: {
-					auto data = reinterpret_cast<QVector<double>*>(column->data());
-					value = nsl_stats_quantile(data->data(), 1, column->statistics().size, p, nsl_stats_quantile_type7);
-					break;
-				}
-				case AbstractColumn::ColumnMode::Integer: {
-					auto* intData = reinterpret_cast<QVector<int>*>(column->data());
-
-					QVector<double> data = QVector<double>(); // copy data to double
-					data.reserve(column->rowCount());
-					for (auto v : *intData)
-						data << static_cast<double>(v);
-					value = nsl_stats_quantile(data.data(), 1, column->statistics().size, p, nsl_stats_quantile_type7);
-					break;
-				}
-				case AbstractColumn::ColumnMode::BigInt: {
-					auto* bigIntData = reinterpret_cast<QVector<qint64>*>(column->data());
-
-					QVector<double> data = QVector<double>(); // copy data to double
-					data.reserve(column->rowCount());
-					for (auto v : *bigIntData)
-						data << static_cast<double>(v);
-					value = nsl_stats_quantile(data.data(), 1, column->statistics().size, p, nsl_stats_quantile_type7);
-					break;
-				}
-				case AbstractColumn::ColumnMode::DateTime: // not supported yet
-				case AbstractColumn::ColumnMode::Day:
-				case AbstractColumn::ColumnMode::Month:
-				case AbstractColumn::ColumnMode::Text:
-					break;
-				}
-
-				formula.replace(match.captured(0), numberLocale.toString(value));
-
-				pos = match.capturedStart(1);
-				match = rx.match(formula, pos);
-			}
-		}
-
-		// C) simple replacements
-		QVector<QPair<QString, QString>> replaceList = {{QStringLiteral("mr"), QStringLiteral("fabs(cell(i, %1) - cell(i-1, %1))")},
-														{QStringLiteral("ma"), QStringLiteral("(cell(i-1, %1) + cell(i, %1))/2.")}};
-		for (auto& m : replaceList)
-			formula.replace(m.first + QLatin1String("(%1)").arg(varName), m.second.arg(varName));
-
-		// D) advanced replacements
-		QVector<QPair<QString, QString>> advancedReplaceList = {{QStringLiteral("smr\\((.*),.*%1\\)"), QStringLiteral("smmax(%1, %2) - smmin(%1, %2)")}};
-		for (auto& m : advancedReplaceList) {
-			// inverted greedy: only match one method call at a time
-			QRegularExpression rx(m.first.arg(varName), QRegularExpression::InvertedGreedinessOption);
-
-			int pos = 0;
-			auto match = rx.match(formula, pos);
-			while (match.hasMatch()) { // loop over all method calls
-				QDEBUG("method call:" << match.captured(0))
-				const int N = numberLocale.toInt(match.captured(1));
-				DEBUG("N = " << N)
-
-				formula.replace(match.captured(0), m.second.arg(QLocale().toString(N)).arg(varName));
-
-				pos = match.capturedStart(1);
-				match = rx.match(formula, pos);
-			}
-		}
-
-		QDEBUG("FORMULA:" << formula);
 
 		if (column->columnMode() == AbstractColumn::ColumnMode::Integer || column->columnMode() == AbstractColumn::ColumnMode::BigInt) {
 			// convert integers to doubles first
@@ -1914,8 +1899,40 @@ void ColumnPrivate::updateFormula() {
 		//->"clean" the result vector first
 		QVector<double> new_data(rowCount(), NAN);
 
+		PayloadColumn payload(m_formulaData);
+
 		// evaluate the expression for f(x_1, x_2, ...) and write the calculated values into a new vector.
 		auto* parser = ExpressionParser::getInstance();
+		parser->setSpecialFunction1(colfun_size, &columnSize, &payload);
+		parser->setSpecialFunction1(colfun_min, &columnMin, &payload);
+		parser->setSpecialFunction1(colfun_max, &columnMax, &payload);
+		parser->setSpecialFunction1(colfun_mean, &columnMean, &payload);
+		parser->setSpecialFunction1(colfun_median, &columnMedian, &payload);
+		parser->setSpecialFunction1(colfun_stdev, &columnStdev, &payload);
+		parser->setSpecialFunction1(colfun_var, &columnVar, &payload);
+		parser->setSpecialFunction1(colfun_gm, &columnGm, &payload);
+		parser->setSpecialFunction1(colfun_hm, &columnHm, &payload);
+		parser->setSpecialFunction1(colfun_chm, &columnChm, &payload);
+		parser->setSpecialFunction1(colfun_mode, &columnStatisticsMode, &payload);
+		parser->setSpecialFunction1(colfun_quartile1, &columnQuartile1, &payload);
+		parser->setSpecialFunction1(colfun_quartile3, &columnQuartile3, &payload);
+		parser->setSpecialFunction1(colfun_iqr, &columnIqr, &payload);
+		parser->setSpecialFunction1(colfun_percentile1, &columnPercentile1, &payload);
+		parser->setSpecialFunction1(colfun_percentile5, &columnPercentile5, &payload);
+		parser->setSpecialFunction1(colfun_percentile10, &columnPercentile10, &payload);
+		parser->setSpecialFunction1(colfun_percentile90, &columnPercentile90, &payload);
+		parser->setSpecialFunction1(colfun_percentile95, &columnPercentile95, &payload);
+		parser->setSpecialFunction1(colfun_percentile99, &columnPercentile99, &payload);
+		parser->setSpecialFunction1(colfun_trimean, &columnTrimean, &payload);
+		parser->setSpecialFunction1(colfun_meandev, &columnMeandev, &payload);
+		parser->setSpecialFunction1(colfun_meandevmedian, &columnMeandevmedian, &payload);
+		parser->setSpecialFunction1(colfun_mediandev, &columnMediandev, &payload);
+		parser->setSpecialFunction1(colfun_skew, &columnSkew, &payload);
+		parser->setSpecialFunction1(colfun_kurt, &columnKurt, &payload);
+		parser->setSpecialFunction1(colfun_entropy, &columnEntropy, &payload);
+		parser->setSpecialFunction2(colfun_percentile, &columnPercentile, &payload);
+		parser->setSpecialFunction2(colfun_quantile, &columnQuantile, &payload);
+
 		QDEBUG(Q_FUNC_INFO << ", Calling evaluateCartesian(). formula: " << formula << ", var names: " << formulaVariableNames)
 		parser->evaluateCartesian(formula, formulaVariableNames, xVectors, &new_data);
 		DEBUG(Q_FUNC_INFO << ", Calling replaceValues()")

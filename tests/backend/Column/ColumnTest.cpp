@@ -1075,7 +1075,7 @@ void ColumnTest::testFormulaCell() {
 	QCOMPARE(c2.rowCount(), 7);
 	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17.});
 
-	c2.setFormula(QStringLiteral("cell(y, x)"), {QStringLiteral("x"), QStringLiteral("y")}, {&c1, &c3}, true);
+	c2.setFormula(QStringLiteral("cell(y; x)"), {QStringLiteral("x"), QStringLiteral("y")}, {&c1, &c3}, true);
 	c2.updateFormula();
 	// constExpression is true, but this is not actually true, because
 	// there are some non const replacements before
@@ -1112,7 +1112,6 @@ void ColumnTest::testFormulaCellInvalid() {
 }
 
 void ColumnTest::testFormulaCellConstExpression() {
-	QSKIP("Currently it is not implemented if the expression is constant before cell commands are executed");
 	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
 	c1.resizeTo(3);
 	QCOMPARE(c1.rowCount(), 3);
@@ -1327,6 +1326,26 @@ void ColumnTest::testFormulasmaSemikolon() {
 	QCOMPARE(c2.valueAt(5), 16. / 3.);
 	QCOMPARE(c2.valueAt(6), 7.);
 	QCOMPARE(c2.valueAt(7), 13. / 3.);
+}
+
+void ColumnTest::testFormulasMinColumnInvalid() {
+	QSKIP("sma with semikolon is not yet implemented");
+
+	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
+	c1.resizeTo(3);
+	QCOMPARE(c1.rowCount(), 3);
+	c1.replaceValues(-1, {1., -1., 5., 5., 3., 8., 10., -5});
+
+	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
+	c2.resizeTo(7);
+	QCOMPARE(c2.rowCount(), 7);
+	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17., 18.});
+
+	c2.setFormula(QStringLiteral("min()"), {QStringLiteral("x")}, {&c1}, true);
+	c2.updateFormula();
+	// All invalid
+	for (int i = 0; i < c2.rowCount(); i++)
+		QCOMPARE(c2.valueAt(i), NAN);
 }
 
 QTEST_MAIN(ColumnTest)

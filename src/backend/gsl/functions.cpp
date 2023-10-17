@@ -10,6 +10,7 @@
 
 #include "backend/nsl/nsl_sf_basic.h"
 #include "parser.h"
+#include "functions.h"
 
 #include <KLocalizedString>
 
@@ -180,12 +181,92 @@ QString FunctionGroupsToString(FunctionGroups group) {
 	return i18n("Unknown Function");
 }
 
-struct funs _special_functions[] = {
-	{i18n("cell(index,x)"), "cell", (func_t)nullptr, 0, nullptr, FunctionGroups::Special},
-	{i18n("smmin(x;n)"), "smmin", (func_t)nullptr, 0, nullptr, FunctionGroups::Special},
-	{i18n("smmax(x;n)"), "smmax", (func_t)nullptr, 0, nullptr, FunctionGroups::Special},
-	{i18n("sma(x;n)"), "sma", (func_t)nullptr, 0, nullptr, FunctionGroups::Special},
+const char* colfun_size = "size";
+const char* colfun_min = "min";
+const char* colfun_max = "max";
+const char* colfun_mean = "mean";
+const char* colfun_median = "median";
+const char* colfun_stdev = "stdev";
+const char* colfun_var = "var";
+const char* colfun_gm = "gm";
+const char* colfun_hm = "hm";
+const char* colfun_chm = "chm";
+const char* colfun_mode = "mode";
+const char* colfun_quartile1 = "quartile1";
+const char* colfun_quartile3 = "quartile3";
+const char* colfun_iqr = "iqr";
+const char* colfun_percentile1 = "percentile1";
+const char* colfun_percentile5 = "percentile5";
+const char* colfun_percentile10 = "percentile10";
+const char* colfun_percentile90 = "percentile90";
+const char* colfun_percentile95 = "percentile95";
+const char* colfun_percentile99 = "percentile99";
+const char* colfun_trimean = "trimean";
+const char* colfun_meandev = "meandev";
+const char* colfun_meandevmedian = "meandevmedian";
+const char* colfun_mediandev = "mediandev";
+const char* colfun_skew = "skew";
+const char* colfun_kurt = "kurt";
+const char* colfun_entropy = "entropy";
+const char* colfun_quantile = "quantile";
+const char* colfun_percentile = "percentile";
+
+const char* specialfun_cell = "cell";
+const char* specialfun_ma = "ma";
+const char* specialfun_mr = "mr";
+const char* specialfun_smmin = "smmin";
+const char* specialfun_smmax = "smmax";
+const char* specialfun_sma = "sma";
+const char* specialfun_smr = "smr";
+
+
+// Values independend of the row index!!!
+struct funs _const_functions[] = {
+	// Important: When adding function here, implement it also in ColumnPrivate!
+	{i18n("Size"), colfun_size, (func_t)nsl_sf_dummy, 1, nullptr, FunctionGroups::ColumnStatistics},
+	{i18n("Minimum"), colfun_min, (func_t)nsl_sf_dummy, 1, nullptr, FunctionGroups::ColumnStatistics},
+	{i18n("Maximum"), colfun_max, (func_t)nsl_sf_dummy, 1, nullptr, FunctionGroups::ColumnStatistics},
+	{i18n("Arithmetic mean"), colfun_mean, (func_t)nsl_sf_dummy, 1, nullptr, FunctionGroups::ColumnStatistics},
+	{i18n("Median"), colfun_median, (func_t)nsl_sf_dummy, 1, nullptr, FunctionGroups::ColumnStatistics},
+	{i18n("Standard deviation"), colfun_stdev, (func_t)nsl_sf_dummy, 1, nullptr, FunctionGroups::ColumnStatistics},
+	{i18n("Variance"), colfun_var, (func_t)nsl_sf_dummy, 1, nullptr, FunctionGroups::ColumnStatistics},
+	{i18n("Geometric mean"), colfun_gm, (func_t)nsl_sf_dummy, 1, nullptr, FunctionGroups::ColumnStatistics},
+	{i18n("Harmonic mean"), colfun_hm, (func_t)nsl_sf_dummy, 1, nullptr, FunctionGroups::ColumnStatistics},
+	{i18n("Contraharmonic mean"), colfun_chm, (func_t)nsl_sf_dummy, 1, nullptr, FunctionGroups::ColumnStatistics},
+	{i18n("Mode"), colfun_mode, (func_t)nsl_sf_dummy, 1, nullptr, FunctionGroups::ColumnStatistics},
+	{i18n("First quartile"), colfun_quartile1, (func_t)nsl_sf_dummy, 1, nullptr, FunctionGroups::ColumnStatistics},
+	{i18n("Third quartile"), colfun_quartile3, (func_t)nsl_sf_dummy, 1, nullptr, FunctionGroups::ColumnStatistics},
+	{i18n("Interquartile range"), colfun_iqr, (func_t)nsl_sf_dummy, 1, nullptr, FunctionGroups::ColumnStatistics},
+	{i18n("1st percentile"), colfun_percentile1, (func_t)nsl_sf_dummy, 1, nullptr, FunctionGroups::ColumnStatistics},
+	{i18n("5th percentile"), colfun_percentile5, (func_t)nsl_sf_dummy, 1, nullptr, FunctionGroups::ColumnStatistics},
+	{i18n("10th percentile"), colfun_percentile10, (func_t)nsl_sf_dummy, 1, nullptr, FunctionGroups::ColumnStatistics},
+	{i18n("90th percentile"), colfun_percentile90, (func_t)nsl_sf_dummy, 1, nullptr, FunctionGroups::ColumnStatistics},
+	{i18n("95th percentile"), colfun_percentile95, (func_t)nsl_sf_dummy, 1, nullptr, FunctionGroups::ColumnStatistics},
+	{i18n("99th percentile"), colfun_percentile99, (func_t)nsl_sf_dummy, 1, nullptr, FunctionGroups::ColumnStatistics},
+	{i18n("Trimean"), colfun_trimean, (func_t)nsl_sf_dummy, 1, nullptr, FunctionGroups::ColumnStatistics},
+	{i18n("Mean absolute deviation"), colfun_meandev, (func_t)nsl_sf_dummy, 1, nullptr, FunctionGroups::ColumnStatistics},
+	{i18n("Mean absolute deviation around median"), colfun_meandevmedian, (func_t)nsl_sf_dummy, 1, nullptr, FunctionGroups::ColumnStatistics},
+	{i18n("Median absolute deviation"), colfun_mediandev, (func_t)nsl_sf_dummy, 1, nullptr, FunctionGroups::ColumnStatistics},
+	{i18n("Skewness"), colfun_skew, (func_t)nsl_sf_dummy, 1, nullptr, FunctionGroups::ColumnStatistics},
+	{i18n("Kurtosis"), colfun_kurt, (func_t)nsl_sf_dummy, 1, nullptr, FunctionGroups::ColumnStatistics},
+	{i18n("Entropy"), colfun_entropy, (func_t)nsl_sf_dummy, 1, nullptr, FunctionGroups::ColumnStatistics},
+	{i18n("Quantile"), colfun_quantile, (func_t)nsl_sf_dummy2, 2, nullptr, FunctionGroups::ColumnStatistics},
+	{i18n("Percentile"), colfun_percentile, (func_t)nsl_sf_dummy2, 2, nullptr, FunctionGroups::ColumnStatistics},
 };
+const int _number_constfunctions = sizeof(_const_functions) / sizeof(funs);
+
+// Special functions depending on variables
+struct funs _special_functions[] = {
+	// Moving Statistics
+	// Important: when adding new function, implement them in Expressionhandler!
+	{i18n("Cell"), specialfun_cell, (func_t)nsl_sf_dummy2, 2, nullptr, FunctionGroups::MovingStatistics},
+	{i18n("Moving Average"), specialfun_ma, (func_t)nsl_sf_dummy, 1, nullptr, FunctionGroups::MovingStatistics},
+	{i18n("Moving Range"), specialfun_mr, (func_t)nsl_sf_dummy, 1, nullptr, FunctionGroups::MovingStatistics},
+	{i18n("Simple Moving Minimum"), specialfun_smmin, (func_t)nsl_sf_dummy, 2, nullptr, FunctionGroups::MovingStatistics},
+	{i18n("Simple Moving Maximum"), specialfun_smmax, (func_t)nsl_sf_dummy, 2, nullptr, FunctionGroups::MovingStatistics},
+	{i18n("Simple Moving Average"), specialfun_sma, (func_t)nsl_sf_dummy, 2, nullptr, FunctionGroups::MovingStatistics},
+	{i18n("Simple Moving Range"), specialfun_smr, (func_t)nsl_sf_dummy, 2, nullptr, FunctionGroups::MovingStatistics},
+	};
 const int _number_specialfunctions = sizeof(_special_functions) / sizeof(funs);
 
 /* list of functions (sync with ExpressionParser.cpp!) */
@@ -255,46 +336,6 @@ struct funs _functions[] = {
 	{i18n("and"), "and", (func_t)andFunction, 2, nullptr, FunctionGroups::LogicalFunctions},
 	{i18n("or"), "or", (func_t)orFunction, 2, nullptr, FunctionGroups::LogicalFunctions},
 	{i18n("xor"), "xor", (func_t)xorFunction, 2, nullptr, FunctionGroups::LogicalFunctions},
-
-	// Column Statistics
-	{i18n("Size"), "size", (func_t)nsl_sf_dummy, 1, nullptr, FunctionGroups::ColumnStatistics},
-	{i18n("Minimum"), "min", (func_t)nsl_sf_dummy, 1, nullptr, FunctionGroups::ColumnStatistics},
-	{i18n("Maximum"), "max", (func_t)nsl_sf_dummy, 1, nullptr, FunctionGroups::ColumnStatistics},
-	{i18n("Arithmetic mean"), "mean", (func_t)nsl_sf_dummy, 1, nullptr, FunctionGroups::ColumnStatistics},
-	{i18n("Median"), "median", (func_t)nsl_sf_dummy, 1, nullptr, FunctionGroups::ColumnStatistics},
-	{i18n("Standard deviation"), "stdev", (func_t)nsl_sf_dummy, 1, nullptr, FunctionGroups::ColumnStatistics},
-	{i18n("Variance"), "var", (func_t)nsl_sf_dummy, 1, nullptr, FunctionGroups::ColumnStatistics},
-	{i18n("Geometric mean"), "gm", (func_t)nsl_sf_dummy, 1, nullptr, FunctionGroups::ColumnStatistics},
-	{i18n("Harmonic mean"), "hm", (func_t)nsl_sf_dummy, 1, nullptr, FunctionGroups::ColumnStatistics},
-	{i18n("Contraharmonic mean"), "chm", (func_t)nsl_sf_dummy, 1, nullptr, FunctionGroups::ColumnStatistics},
-	{i18n("Mode"), "mode", (func_t)nsl_sf_dummy, 1, nullptr, FunctionGroups::ColumnStatistics},
-	{i18n("First quartile"), "quartile1", (func_t)nsl_sf_dummy, 1, nullptr, FunctionGroups::ColumnStatistics},
-	{i18n("Third quartile"), "quartile3", (func_t)nsl_sf_dummy, 1, nullptr, FunctionGroups::ColumnStatistics},
-	{i18n("Interquartile range"), "iqr", (func_t)nsl_sf_dummy, 1, nullptr, FunctionGroups::ColumnStatistics},
-	{i18n("1st percentile"), "percentile1", (func_t)nsl_sf_dummy, 1, nullptr, FunctionGroups::ColumnStatistics},
-	{i18n("5th percentile"), "percentile5", (func_t)nsl_sf_dummy, 1, nullptr, FunctionGroups::ColumnStatistics},
-	{i18n("10th percentile"), "percentile10", (func_t)nsl_sf_dummy, 1, nullptr, FunctionGroups::ColumnStatistics},
-	{i18n("90th percentile"), "percentile90", (func_t)nsl_sf_dummy, 1, nullptr, FunctionGroups::ColumnStatistics},
-	{i18n("95th percentile"), "percentile95", (func_t)nsl_sf_dummy, 1, nullptr, FunctionGroups::ColumnStatistics},
-	{i18n("99th percentile"), "percentile99", (func_t)nsl_sf_dummy, 1, nullptr, FunctionGroups::ColumnStatistics},
-	{i18n("Trimean"), "trimean", (func_t)nsl_sf_dummy, 1, nullptr, FunctionGroups::ColumnStatistics},
-	{i18n("Mean absolute deviation"), "meandev", (func_t)nsl_sf_dummy, 1, nullptr, FunctionGroups::ColumnStatistics},
-	{i18n("Mean absolute deviation around median"), "meandevmedian", (func_t)nsl_sf_dummy, 1, nullptr, FunctionGroups::ColumnStatistics},
-	{i18n("Median absolute deviation"), "mediandev", (func_t)nsl_sf_dummy, 1, nullptr, FunctionGroups::ColumnStatistics},
-	{i18n("Skewness"), "skew", (func_t)nsl_sf_dummy, 1, nullptr, FunctionGroups::ColumnStatistics},
-	{i18n("Kurtosis"), "kurt", (func_t)nsl_sf_dummy, 1, nullptr, FunctionGroups::ColumnStatistics},
-	{i18n("Entropy"), "entropy", (func_t)nsl_sf_dummy, 1, nullptr, FunctionGroups::ColumnStatistics},
-	{i18n("Quantile"), "quantile", (func_t)nsl_sf_dummy2, 2, nullptr, FunctionGroups::ColumnStatistics},
-	{i18n("Percentile"), "percentile", (func_t)nsl_sf_dummy2, 2, nullptr, FunctionGroups::ColumnStatistics},
-
-	// Moving Statistics
-	{i18n("Cell"), "cell", (func_t)nsl_sf_dummy2, 2, nullptr, FunctionGroups::MovingStatistics},
-	{i18n("Moving Average"), "ma", (func_t)nsl_sf_dummy, 1, nullptr, FunctionGroups::MovingStatistics},
-	{i18n("Moving Range"), "mr", (func_t)nsl_sf_dummy, 1, nullptr, FunctionGroups::MovingStatistics},
-	{i18n("Simple Moving Minimum"), "smmin", (func_t)nsl_sf_dummy, 2, nullptr, FunctionGroups::MovingStatistics},
-	{i18n("Simple Moving Maximum"), "smmax", (func_t)nsl_sf_dummy, 2, nullptr, FunctionGroups::MovingStatistics},
-	{i18n("Simple Moving Average"), "sma", (func_t)nsl_sf_dummy, 2, nullptr, FunctionGroups::MovingStatistics},
-	{i18n("Simple Moving Range"), "smr", (func_t)nsl_sf_dummy, 2, nullptr, FunctionGroups::MovingStatistics},
 
 	// https://www.gnu.org/software/gsl/doc/html/specfunc.html
 	// Airy Functions and Derivatives

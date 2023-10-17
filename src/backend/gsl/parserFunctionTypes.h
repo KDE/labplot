@@ -10,20 +10,22 @@
 #ifndef PARSERFUNCTIONTYPES_H
 #define PARSERFUNCTIONTYPES_H
 
+class Payload;
+
 /* Function types */
 #ifdef _MSC_VER /* MSVC needs void argument */
 typedef double (*func_t)(void);
 #else
 typedef double (*func_t)();
-typedef double (*func_tPayload)(void*);
 #endif
 typedef double (*func_t1)(double);
 typedef double (*func_t2)(double, double);
 typedef double (*func_t3)(double, double, double);
 typedef double (*func_t4)(double, double, double, double);
-typedef double (*func_t1Payload)(double, void*);
-typedef double (*func_t2Payload)(double, double, void*);
-typedef double (*func_t3Payload)(double, double, double, void*);
-typedef double (*func_t4Payload)(double, double, double, double, void*);
+typedef double (*func_tPayload)(const Payload*);
+typedef double (*func_t1Payload)(const char* variable, const Payload*);
+typedef double (*func_t2Payload)(double value1, const char* variable, const Payload*);
+typedef double (*func_t3Payload)(double value1, double value2, const char* variable, const Payload*);
+typedef double (*func_t4Payload)(double value1, double value2, double value3, const char* variable, const Payload*);
 
 #endif /*PARSERFUNCTIONTYPES_H*/

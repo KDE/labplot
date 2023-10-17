@@ -56,6 +56,10 @@ symbol* assign_symbol(const char* symbol_name, double value);
 int remove_symbol(const char* symbol_name);
 double parse(const char* string, const char* locale);
 double parse_with_vars(const char[], const parser_var[], int nvars, const char* locale);
-bool set_specialfunction(const char* function_name, funs* function, Payload* payload);
+bool set_specialfunction0(const char* function_name, func_tPayload function, Payload* payload);
+bool set_specialfunction1(const char* function_name, func_t1Payload function, Payload* payload);
+bool set_specialfunction2(const char* function_name, func_t2Payload function, Payload* payload);
+bool set_specialfunction3(const char* function_name, func_t3Payload function, Payload* payload);
+bool set_specialfunction4(const char* function_name, func_t4Payload function, Payload* payload);
 
 #endif /*PARSER_H*/

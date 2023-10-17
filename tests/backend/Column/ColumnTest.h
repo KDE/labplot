@@ -71,6 +71,8 @@ private Q_SLOTS:
 	void testFormulasmminSemikolon();
 	void testFormulasmmaxSemikolon();
 	void testFormulasmaSemikolon();
+
+	void testFormulasMinColumnInvalid();
 };
 
 #endif // COLUMNTEST_H
