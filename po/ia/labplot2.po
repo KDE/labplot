@@ -1,13 +1,13 @@
-# Copyright (C) YEAR This file is copyright:
+# Copyright (C) 2023 This file is copyright:
 # This file is distributed under the same license as the labplot package.
 #
-# giovanni <g.sora@tiscali.it>, 2023.
+# SPDX-FileCopyrightText: 2023 giovanni <g.sora@tiscali.it>
 msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-10-16 00:39+0000\n"
-"PO-Revision-Date: 2023-08-25 12:41+0200\n"
+"PO-Revision-Date: 2023-10-16 14:16+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 22.12.3\n"
+"X-Generator: Lokalize 23.08.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -3023,10 +3023,9 @@ msgid "Comparison Functions"
 msgstr ""
 
 #: src/backend/gsl/functions.cpp:56
-#, fuzzy, kde-format
-#| msgid "Functions"
+#, kde-format
 msgid "Logical Functions"
-msgstr "Functiones"
+msgstr "Functiones Logic"
 
 #: src/backend/gsl/functions.cpp:58
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:28
@@ -5302,28 +5301,24 @@ msgid "x"
 msgstr "x"
 
 #: src/backend/gsl/functions.cpp:1191
-#, fuzzy, kde-format
-#| msgid "min."
+#, kde-format
 msgid "min"
-msgstr "min."
+msgstr "min"
 
 #: src/backend/gsl/functions.cpp:1193
-#, fuzzy, kde-format
-#| msgid "max."
+#, kde-format
 msgid "max"
-msgstr "max."
+msgstr "max"
 
 #: src/backend/gsl/functions.cpp:1201
-#, fuzzy, kde-format
-#| msgid "1"
+#, kde-format
 msgid "v1"
-msgstr "1"
+msgstr "v1"
 
 #: src/backend/gsl/functions.cpp:1203
-#, fuzzy, kde-format
-#| msgid "2"
+#, kde-format
 msgid "v2"
-msgstr "2"
+msgstr "v2"
 
 #: src/backend/gsl/functions.cpp:1205
 #, kde-format
@@ -10245,10 +10240,9 @@ msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3655
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3656
-#, fuzzy, kde-format
-#| msgid "1"
+#, kde-format
 msgid "%1"
-msgstr "1"
+msgstr "%1"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3656
 #, kde-format
