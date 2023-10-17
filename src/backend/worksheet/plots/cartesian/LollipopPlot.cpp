@@ -225,7 +225,8 @@ void LollipopPlot::setXColumn(const AbstractColumn* column) {
 		if (column) {
 			// update the curve itself on changes
 			connect(column, &AbstractColumn::dataChanged, this, &LollipopPlot::recalc);
-			connect(column->parentAspect(), &AbstractAspect::childAspectAboutToBeRemoved, this, &LollipopPlot::dataColumnAboutToBeRemoved);
+			if (column->parentAspect())
+				connect(column->parentAspect(), &AbstractAspect::childAspectAboutToBeRemoved, this, &LollipopPlot::dataColumnAboutToBeRemoved);
 
 			connect(column, &AbstractColumn::dataChanged, this, &LollipopPlot::dataChanged);
 			// TODO: add disconnect in the undo-function
@@ -245,7 +246,8 @@ void LollipopPlot::setDataColumns(const QVector<const AbstractColumn*> columns) 
 
 			// update the curve itself on changes
 			connect(column, &AbstractColumn::dataChanged, this, &LollipopPlot::recalc);
-			connect(column->parentAspect(), &AbstractAspect::childAspectAboutToBeRemoved, this, &LollipopPlot::dataColumnAboutToBeRemoved);
+			if (column->parentAspect())
+				connect(column->parentAspect(), &AbstractAspect::childAspectAboutToBeRemoved, this, &LollipopPlot::dataColumnAboutToBeRemoved);
 			// TODO: add disconnect in the undo-function
 
 			connect(column, &AbstractColumn::dataChanged, this, &LollipopPlot::dataChanged);
