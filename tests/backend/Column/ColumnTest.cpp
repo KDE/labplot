@@ -1238,9 +1238,9 @@ void ColumnTest::testFormulasma() {
 	c2.setFormula(QStringLiteral("sma(3; x)"), {QStringLiteral("x")}, {&c1}, true);
 	c2.updateFormula();
 	QCOMPARE(c2.rowCount(), 8);
-	VALUES_EQUAL(c2.valueAt(0), 1./3.);
+	VALUES_EQUAL(c2.valueAt(0), 1. / 3.);
 	VALUES_EQUAL(c2.valueAt(1), 0.);
-	VALUES_EQUAL(c2.valueAt(2), 5./3.);
+	VALUES_EQUAL(c2.valueAt(2), 5. / 3.);
 	VALUES_EQUAL(c2.valueAt(3), 3.);
 	VALUES_EQUAL(c2.valueAt(4), 13. / 3.);
 	VALUES_EQUAL(c2.valueAt(5), 16. / 3.);
@@ -1360,7 +1360,7 @@ void ColumnTest::testFormulasStdev() {
 	c2.setFormula(QStringLiteral("stdev(x)"), {QStringLiteral("x")}, {&c1}, true);
 	c2.updateFormula();
 	for (int i = 0; i < c2.rowCount(); i++)
-		VALUES_EQUAL(c2.valueAt(i), 6.2689712074);
+		VALUES_EQUAL(c2.valueAt(i), 6.2689712074); // calculated with octave "std"
 }
 void ColumnTest::testFormulasVar() {
 	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
@@ -1376,7 +1376,7 @@ void ColumnTest::testFormulasVar() {
 	c2.setFormula(QStringLiteral("var(x)"), {QStringLiteral("x")}, {&c1}, true);
 	c2.updateFormula();
 	for (int i = 0; i < c2.rowCount(); i++)
-		VALUES_EQUAL(c2.valueAt(i), 39.3);
+		VALUES_EQUAL(c2.valueAt(i), 39.3); // calculated with octave "var"
 }
 void ColumnTest::testFormulasGm() {
 	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
