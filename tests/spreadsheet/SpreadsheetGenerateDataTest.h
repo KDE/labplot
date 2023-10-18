@@ -17,6 +17,8 @@ class SpreadsheetGenerateDataTest : public CommonTest {
 	Q_OBJECT
 
 private Q_SLOTS:
+	void initTestCase();
+
 	// generation of equidistant values
 
 	// fixed number of values

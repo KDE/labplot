@@ -133,7 +133,7 @@ EquidistantValuesDialog::~EquidistantValuesDialog() {
 	// settings for datetime
 	conf.writeEntry("FromDateTime", ui.dteFrom->dateTime().toMSecsSinceEpoch());
 	conf.writeEntry("ToDateTime", ui.dteTo->dateTime().toMSecsSinceEpoch());
-	conf.writeEntry("IncrementDateTime", numberLocale.toDouble(ui.leIncrement->text()));
+	conf.writeEntry("IncrementDateTime", numberLocale.toDouble(ui.leIncrementDateTime->text()));
 	conf.writeEntry("IncrementDateTimeUnit", ui.cbIncrementDateTimeUnit->currentIndex());
 }
 
@@ -153,7 +153,6 @@ void EquidistantValuesDialog::setNumericValue(double value, QLineEdit* le) {
 
 void EquidistantValuesDialog::setColumns(const QVector<Column*>& columns) {
 	m_columns = columns;
-	ui.leNumber->setText(QLocale().toString(m_columns.first()->rowCount()));
 	QString dateTimeFormat;
 
 	for (auto* col : m_columns) {
@@ -527,7 +526,7 @@ bool EquidistantValuesDialog::generateInt(QVector<int>& newData, int start, int 
  * \param newData - vector of int64's for the new data to be generated.
  * \return returns \c false if not enough memory available to create new data, returns \c true otherwise.
  */
-bool EquidistantValuesDialog::generateBigInt(QVector<qint64>& newData, int start, int increment, int number) {
+bool EquidistantValuesDialog::generateBigInt(QVector<qint64>& newData, qint64 start, qint64 increment, int number) {
 	try {
 		newData.resize(number);
 	} catch (std::bad_alloc&) {
@@ -641,15 +640,15 @@ void EquidistantValuesDialog::setType(Type type) const {
 }
 
 void EquidistantValuesDialog::setNumber(int value) const {
-	ui.leNumber->setText(QString::number(value));
+	ui.leNumber->setText(QLocale().toString(value));
 }
 
 void EquidistantValuesDialog::setIncrement(double value) const {
-	ui.leIncrement->setText(QString::number(value));
+	ui.leIncrement->setText(QLocale().toString(value));
 }
 
 void EquidistantValuesDialog::setIncrementDateTime(int value) const {
-	ui.leIncrementDateTime->setText(QString::number(value));
+	ui.leIncrementDateTime->setText(QLocale().toString(value));
 }
 
 void EquidistantValuesDialog::setIncrementDateTimeUnit(DateTimeUnit value) {
@@ -657,17 +656,17 @@ void EquidistantValuesDialog::setIncrementDateTimeUnit(DateTimeUnit value) {
 }
 
 void EquidistantValuesDialog::setFromValue(double value) const {
-	ui.leFrom->setText(QString::number(value));
+	ui.leFrom->setText(QLocale().toString(value));
 }
 
 void EquidistantValuesDialog::setToValue(double value) const {
-	ui.leTo->setText(QString::number(value));
+	ui.leTo->setText(QLocale().toString(value));
 }
 
-void EquidistantValuesDialog::setFromDateTime(const QDateTime& value) const {
-
+void EquidistantValuesDialog::setFromDateTime(qint64 value) const {
+	ui.dteFrom->setMSecsSinceEpochUTC(value);
 }
 
-void EquidistantValuesDialog::setToDateTime(const QDateTime& value) const {
-
+void EquidistantValuesDialog::setToDateTime(qint64 value) const {
+	ui.dteTo->setMSecsSinceEpochUTC(value);
 }

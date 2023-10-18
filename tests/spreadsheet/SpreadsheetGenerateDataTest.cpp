@@ -10,10 +10,13 @@
 
 #include "SpreadsheetGenerateDataTest.h"
 #include "kdefrontend/spreadsheet/EquidistantValuesDialog.h"
-// #include "backend/lib/macros.h"
 #include "backend/spreadsheet/Spreadsheet.h"
-// #include "commonfrontend/spreadsheet/SpreadsheetView.h"
 
+void SpreadsheetGenerateDataTest::initTestCase() {
+	qRegisterMetaType<const AbstractAspect*>("const AbstractAspect*");
+	qRegisterMetaType<const AbstractColumn*>("const AbstractColumn*");
+	QLocale::setDefault(QLocale(QLocale::C));
+}
 
 //**********************************************************
 //**************** Equidistant values **********************
@@ -107,7 +110,29 @@ void SpreadsheetGenerateDataTest::testFixedNumberDoubleDateTime() {
 
 // fixed increment between the values
 void SpreadsheetGenerateDataTest::testFixedIncrementDouble() {
+	Spreadsheet sheet(QStringLiteral("test"), false);
+	sheet.setColumnCount(1);
+	sheet.setRowCount(1);
+	auto* column = sheet.column(0);
+	column->setColumnMode(AbstractColumn::ColumnMode::Double);
 
+	EquidistantValuesDialog dlg(&sheet);
+	dlg.setColumns(QVector<Column*>{column});
+	dlg.setType(EquidistantValuesDialog::Type::FixedIncrement);
+	dlg.setIncrement(0.2);
+	dlg.setFromValue(1);
+	dlg.setToValue(1.8);
+	dlg.generate();
+
+	// checks
+	QCOMPARE(column->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(sheet.rowCount(), 5);
+	QCOMPARE(column->rowCount(), 5);
+	QCOMPARE(column->valueAt(0), 1.);
+	QCOMPARE(column->valueAt(1), 1.2);
+	QCOMPARE(column->valueAt(2), 1.4);
+	QCOMPARE(column->valueAt(3), 1.6);
+	QCOMPARE(column->valueAt(4), 1.8);
 }
 
 // column mode conversion
@@ -139,7 +164,6 @@ void SpreadsheetGenerateDataTest::testFixedNumberIntToBigInt() {
 }
 
 void SpreadsheetGenerateDataTest::testFixedNumberIntToDouble() {
-	QSKIP("doesn't work");
 	Spreadsheet sheet(QStringLiteral("test"), false);
 	sheet.setColumnCount(1);
 	sheet.setRowCount(1);
