@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-16 00:39+0000\n"
+"POT-Creation-Date: 2023-10-18 00:39+0000\n"
 "PO-Revision-Date: 2023-06-24 01:41+0100\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
@@ -7375,28 +7375,28 @@ msgstr "%1: mudar a opacidade das legendas"
 msgid "%1: set x column"
 msgstr "%1: definir a coluna do X"
 
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:250
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:251
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:465
-#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:240
+#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:241
 #, kde-format
 msgid "%1: set data columns"
 msgstr "%1: definir as colunas de dados"
 
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:271
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:273
 #, kde-format
 msgid "%1: set type"
 msgstr "%1: mudar o tipo"
 
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:278
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:280
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:493
-#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:260
+#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:262
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:206
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:228
 #, kde-format
 msgid "%1: set orientation"
 msgstr "%1: mudar a orientação"
 
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:285
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:287
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:507
 #, kde-format
 msgid "%1: width factor changed"

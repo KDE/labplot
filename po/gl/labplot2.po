@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-16 00:39+0000\n"
+"POT-Creation-Date: 2023-10-18 00:39+0000\n"
 "PO-Revision-Date: 2023-08-06 05:44+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
@@ -7577,23 +7577,23 @@ msgstr "%1: definir a opacidade das etiquetas"
 msgid "%1: set x column"
 msgstr "%1: definir a columna de datos"
 
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:250
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:251
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:465
-#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:240
+#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:241
 #, fuzzy, kde-format
 #| msgid "%1: set data column"
 msgid "%1: set data columns"
 msgstr "%1: definir a columna de datos"
 
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:271
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:273
 #, fuzzy, kde-format
 #| msgid "%1: set arrow type"
 msgid "%1: set type"
 msgstr "%1: definir o tipo da frecha"
 
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:278
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:280
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:493
-#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:260
+#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:262
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:206
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:228
 #, fuzzy, kde-format
@@ -7601,7 +7601,7 @@ msgstr "%1: definir o tipo da frecha"
 msgid "%1: set orientation"
 msgstr "%1: definir a orientación dos eixes"
 
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:285
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:287
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:507
 #, fuzzy, kde-format
 #| msgid "%1: x-start changed"
