@@ -11,9 +11,9 @@
 #ifndef PARSER_H
 #define PARSER_H
 
-#include "parserFunctionTypes.h"
 #include "constants.h"
 #include "functions.h"
+#include "parserFunctionTypes.h"
 #include <gsl/gsl_version.h>
 
 /* uncomment to enable parser specific debugging */
@@ -27,8 +27,11 @@ typedef struct parser_var {
 } parser_var;
 
 struct Payload {
-	Payload(bool constant = false): constant(constant) {}
-	virtual ~Payload() {}
+	Payload(bool constant = false)
+		: constant(constant) {
+	}
+	virtual ~Payload() {
+	}
 	bool constant{false};
 };
 
@@ -64,4 +67,5 @@ bool set_specialfunction2(const char* function_name, func_t2Payload function, Pa
 bool set_specialfunction3(const char* function_name, func_t3Payload function, Payload* payload);
 bool set_specialfunction4(const char* function_name, func_t4Payload function, Payload* payload);
 
+const char* lastErrorMessage();
 #endif /*PARSER_H*/

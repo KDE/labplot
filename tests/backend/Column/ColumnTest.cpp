@@ -1122,7 +1122,7 @@ void ColumnTest::testFormulaCellConstExpression() {
 	QCOMPARE(c2.rowCount(), 7);
 	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17.});
 
-	c2.setFormula(QStringLiteral("cell(2, x)"), {QStringLiteral("x")}, {&c1}, true);
+	c2.setFormula(QStringLiteral("cell(2; x)"), {QStringLiteral("x")}, {&c1}, true);
 	c2.updateFormula();
 	QCOMPARE(c2.rowCount(), 7);
 	// All invalid
@@ -1146,7 +1146,7 @@ void ColumnTest::testFormulaCellMulti() {
 	QCOMPARE(c2.rowCount(), 7);
 	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17.});
 
-	c2.setFormula(QStringLiteral("cell(2, x) + cell(1, y)"), {QStringLiteral("x"), QStringLiteral("y")}, {&c1, &c3}, true);
+	c2.setFormula(QStringLiteral("cell(2; x) + cell(1; y)"), {QStringLiteral("x"), QStringLiteral("y")}, {&c1, &c3}, true);
 	c2.updateFormula();
 	QCOMPARE(c2.rowCount(), 7);
 	for (int i = 0; i < c2.rowCount(); i++)
@@ -1189,8 +1189,9 @@ void ColumnTest::testFormulasmmin() {
 	QCOMPARE(c2.rowCount(), 7);
 	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17., 18.});
 
-	c2.setFormula(QStringLiteral("smmin(x, 3)"), {QStringLiteral("x")}, {&c1}, true);
+	c2.setFormula(QStringLiteral("smmin(x; 3)"), {QStringLiteral("x")}, {&c1}, true);
 	c2.updateFormula();
+	const QLatin1String s(lastErrorMessage());
 	QCOMPARE(c2.rowCount(), 8);
 	QCOMPARE(c2.valueAt(0), 1);
 	QCOMPARE(c2.valueAt(1), -1);
@@ -1213,7 +1214,7 @@ void ColumnTest::testFormulasmmax() {
 	QCOMPARE(c2.rowCount(), 7);
 	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17., 18.});
 
-	c2.setFormula(QStringLiteral("smmax(x, 3)"), {QStringLiteral("x")}, {&c1}, true);
+	c2.setFormula(QStringLiteral("smmax(x; 3)"), {QStringLiteral("x")}, {&c1}, true);
 	c2.updateFormula();
 	QCOMPARE(c2.rowCount(), 8);
 	QCOMPARE(c2.valueAt(0), 1);
@@ -1237,7 +1238,7 @@ void ColumnTest::testFormulasma() {
 	QCOMPARE(c2.rowCount(), 7);
 	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17., 18.});
 
-	c2.setFormula(QStringLiteral("sma(3, x)"), {QStringLiteral("x")}, {&c1}, true);
+	c2.setFormula(QStringLiteral("sma(3; x)"), {QStringLiteral("x")}, {&c1}, true);
 	c2.updateFormula();
 	QCOMPARE(c2.rowCount(), 8);
 	QCOMPARE(c2.valueAt(0), 1.);
@@ -1251,8 +1252,6 @@ void ColumnTest::testFormulasma() {
 }
 
 void ColumnTest::testFormulasmminSemikolon() {
-	QSKIP("smmin with semikolon is not yet implemented");
-
 	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
 	c1.resizeTo(3);
 	QCOMPARE(c1.rowCount(), 3);
@@ -1277,8 +1276,6 @@ void ColumnTest::testFormulasmminSemikolon() {
 }
 
 void ColumnTest::testFormulasmmaxSemikolon() {
-	QSKIP("smmax with semikolon is not yet implemented");
-
 	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
 	c1.resizeTo(3);
 	QCOMPARE(c1.rowCount(), 3);
@@ -1303,8 +1300,6 @@ void ColumnTest::testFormulasmmaxSemikolon() {
 }
 
 void ColumnTest::testFormulasmaSemikolon() {
-	QSKIP("sma with semikolon is not yet implemented");
-
 	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
 	c1.resizeTo(3);
 	QCOMPARE(c1.rowCount(), 3);
@@ -1329,8 +1324,6 @@ void ColumnTest::testFormulasmaSemikolon() {
 }
 
 void ColumnTest::testFormulasMinColumnInvalid() {
-	QSKIP("sma with semikolon is not yet implemented");
-
 	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
 	c1.resizeTo(3);
 	QCOMPARE(c1.rowCount(), 3);
@@ -1346,6 +1339,495 @@ void ColumnTest::testFormulasMinColumnInvalid() {
 	// All invalid
 	for (int i = 0; i < c2.rowCount(); i++)
 		QCOMPARE(c2.valueAt(i), NAN);
+}
+
+void ColumnTest::testFormulasSize() {
+	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
+	c1.resizeTo(3);
+	QCOMPARE(c1.rowCount(), 3);
+	c1.replaceValues(-1, {1., -1., 8., 10., -5});
+
+	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
+	c2.resizeTo(7);
+	QCOMPARE(c2.rowCount(), 7);
+	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17., 18.});
+
+	c2.setFormula(QStringLiteral("size(x)"), {QStringLiteral("x")}, {&c1}, true);
+	c2.updateFormula();
+	for (int i = 0; i < c2.rowCount(); i++)
+		QCOMPARE(c2.valueAt(i), 8.);
+}
+void ColumnTest::testFormulasMin() {
+	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
+	c1.resizeTo(3);
+	QCOMPARE(c1.rowCount(), 3);
+	c1.replaceValues(-1, {1., -1., 8., 10., -5});
+
+	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
+	c2.resizeTo(7);
+	QCOMPARE(c2.rowCount(), 7);
+	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17., 18.});
+
+	c2.setFormula(QStringLiteral("min(x)"), {QStringLiteral("x")}, {&c1}, true);
+	c2.updateFormula();
+	for (int i = 0; i < c2.rowCount(); i++)
+		QCOMPARE(c2.valueAt(i), -5.);
+}
+void ColumnTest::testFormulasMax() {
+	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
+	c1.resizeTo(3);
+	QCOMPARE(c1.rowCount(), 3);
+	c1.replaceValues(-1, {1., -1., 8., 10., -5});
+
+	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
+	c2.resizeTo(7);
+	QCOMPARE(c2.rowCount(), 7);
+	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17., 18.});
+
+	c2.setFormula(QStringLiteral("max(x)"), {QStringLiteral("x")}, {&c1}, true);
+	c2.updateFormula();
+	for (int i = 0; i < c2.rowCount(); i++)
+		QCOMPARE(c2.valueAt(i), 10.);
+}
+void ColumnTest::testFormulasMean() {
+	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
+	c1.resizeTo(3);
+	QCOMPARE(c1.rowCount(), 3);
+	c1.replaceValues(-1, {1., -1., 8., 10., -5});
+
+	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
+	c2.resizeTo(7);
+	QCOMPARE(c2.rowCount(), 7);
+	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17., 18.});
+
+	c2.setFormula(QStringLiteral("mean(x)"), {QStringLiteral("x")}, {&c1}, true);
+	c2.updateFormula();
+	for (int i = 0; i < c2.rowCount(); i++)
+		QCOMPARE(c2.valueAt(i), 13. / 5);
+}
+void ColumnTest::testFormulasMedian() {
+	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
+	c1.resizeTo(3);
+	QCOMPARE(c1.rowCount(), 3);
+	c1.replaceValues(-1, {1., -1., 8., 10., -5});
+
+	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
+	c2.resizeTo(7);
+	QCOMPARE(c2.rowCount(), 7);
+	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17., 18.});
+
+	c2.setFormula(QStringLiteral("median(x)"), {QStringLiteral("x")}, {&c1}, true);
+	c2.updateFormula();
+	for (int i = 0; i < c2.rowCount(); i++)
+		QCOMPARE(c2.valueAt(i), 1.);
+}
+void ColumnTest::testFormulasStdev() {
+	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
+	c1.resizeTo(3);
+	QCOMPARE(c1.rowCount(), 3);
+	c1.replaceValues(-1, {1., -1., 8., 10., -5});
+
+	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
+	c2.resizeTo(7);
+	QCOMPARE(c2.rowCount(), 7);
+	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17., 18.});
+
+	c2.setFormula(QStringLiteral("stdev(x)"), {QStringLiteral("x")}, {&c1}, true);
+	c2.updateFormula();
+	for (int i = 0; i < c2.rowCount(); i++)
+		VALUES_EQUAL(c2.valueAt(i), 6.2689712074);
+}
+void ColumnTest::testFormulasVar() {
+	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
+	c1.resizeTo(3);
+	QCOMPARE(c1.rowCount(), 3);
+	c1.replaceValues(-1, {1., -1., 8., 10., -5});
+
+	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
+	c2.resizeTo(7);
+	QCOMPARE(c2.rowCount(), 7);
+	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17., 18.});
+
+	c2.setFormula(QStringLiteral("var(x)"), {QStringLiteral("x")}, {&c1}, true);
+	c2.updateFormula();
+	for (int i = 0; i < c2.rowCount(); i++)
+		VALUES_EQUAL(c2.valueAt(i), 39.3);
+}
+void ColumnTest::testFormulasGm() {
+	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
+	c1.resizeTo(3);
+	QCOMPARE(c1.rowCount(), 3);
+	c1.replaceValues(-1, {1., -1., 8., 10., -5});
+
+	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
+	c2.resizeTo(7);
+	QCOMPARE(c2.rowCount(), 7);
+	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17., 18.});
+
+	c2.setFormula(QStringLiteral("gm(x)"), {QStringLiteral("x")}, {&c1}, true);
+	c2.updateFormula();
+	QVERIFY(false); // Calculation not validated!
+	for (int i = 0; i < c2.rowCount(); i++)
+		VALUES_EQUAL(c2.valueAt(i), 39.3);
+}
+void ColumnTest::testFormulasHm() {
+	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
+	c1.resizeTo(3);
+	QCOMPARE(c1.rowCount(), 3);
+	c1.replaceValues(-1, {1., -1., 8., 10., -5});
+
+	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
+	c2.resizeTo(7);
+	QCOMPARE(c2.rowCount(), 7);
+	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17., 18.});
+
+	c2.setFormula(QStringLiteral("hm(x)"), {QStringLiteral("x")}, {&c1}, true);
+	c2.updateFormula();
+	QVERIFY(false); // Calculation not validated!
+	for (int i = 0; i < c2.rowCount(); i++)
+		VALUES_EQUAL(c2.valueAt(i), 39.3);
+}
+void ColumnTest::testFormulasChm() {
+	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
+	c1.resizeTo(3);
+	QCOMPARE(c1.rowCount(), 3);
+	c1.replaceValues(-1, {1., -1., 8., 10., -5});
+
+	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
+	c2.resizeTo(7);
+	QCOMPARE(c2.rowCount(), 7);
+	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17., 18.});
+
+	c2.setFormula(QStringLiteral("chm(x)"), {QStringLiteral("x")}, {&c1}, true);
+	c2.updateFormula();
+	QVERIFY(false); // Calculation not validated!
+	for (int i = 0; i < c2.rowCount(); i++)
+		VALUES_EQUAL(c2.valueAt(i), 39.3);
+}
+void ColumnTest::testFormulasStatisticsMode() {
+	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
+	c1.resizeTo(3);
+	QCOMPARE(c1.rowCount(), 3);
+	c1.replaceValues(-1, {1., -1., 8., 10., -5});
+
+	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
+	c2.resizeTo(7);
+	QCOMPARE(c2.rowCount(), 7);
+	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17., 18.});
+
+	c2.setFormula(QStringLiteral("mode(x)"), {QStringLiteral("x")}, {&c1}, true);
+	c2.updateFormula();
+	QVERIFY(false); // Calculation not validated!
+	for (int i = 0; i < c2.rowCount(); i++)
+		VALUES_EQUAL(c2.valueAt(i), 39.3);
+}
+void ColumnTest::testFormulasQuartile1() {
+	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
+	c1.resizeTo(3);
+	QCOMPARE(c1.rowCount(), 3);
+	c1.replaceValues(-1, {1., -1., 8., 10., -5});
+
+	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
+	c2.resizeTo(7);
+	QCOMPARE(c2.rowCount(), 7);
+	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17., 18.});
+
+	c2.setFormula(QStringLiteral("quartile1(x)"), {QStringLiteral("x")}, {&c1}, true);
+	c2.updateFormula();
+	QVERIFY(false); // Calculation not validated!
+	for (int i = 0; i < c2.rowCount(); i++)
+		VALUES_EQUAL(c2.valueAt(i), 39.3);
+}
+void ColumnTest::testFormulasQuartile3() {
+	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
+	c1.resizeTo(3);
+	QCOMPARE(c1.rowCount(), 3);
+	c1.replaceValues(-1, {1., -1., 8., 10., -5});
+
+	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
+	c2.resizeTo(7);
+	QCOMPARE(c2.rowCount(), 7);
+	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17., 18.});
+
+	c2.setFormula(QStringLiteral("quartile3(x)"), {QStringLiteral("x")}, {&c1}, true);
+	c2.updateFormula();
+	QVERIFY(false); // Calculation not validated!
+	for (int i = 0; i < c2.rowCount(); i++)
+		VALUES_EQUAL(c2.valueAt(i), 39.3);
+}
+void ColumnTest::testFormulasIqr() {
+	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
+	c1.resizeTo(3);
+	QCOMPARE(c1.rowCount(), 3);
+	c1.replaceValues(-1, {1., -1., 8., 10., -5});
+
+	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
+	c2.resizeTo(7);
+	QCOMPARE(c2.rowCount(), 7);
+	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17., 18.});
+
+	c2.setFormula(QStringLiteral("iqr(x)"), {QStringLiteral("x")}, {&c1}, true);
+	c2.updateFormula();
+	QVERIFY(false); // Calculation not validated!
+	for (int i = 0; i < c2.rowCount(); i++)
+		VALUES_EQUAL(c2.valueAt(i), 39.3);
+}
+void ColumnTest::testFormulasPercentile1() {
+	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
+	c1.resizeTo(3);
+	QCOMPARE(c1.rowCount(), 3);
+	c1.replaceValues(-1, {1., -1., 8., 10., -5});
+
+	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
+	c2.resizeTo(7);
+	QCOMPARE(c2.rowCount(), 7);
+	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17., 18.});
+
+	c2.setFormula(QStringLiteral("percentile1(x)"), {QStringLiteral("x")}, {&c1}, true);
+	c2.updateFormula();
+	QVERIFY(false); // Calculation not validated!
+	for (int i = 0; i < c2.rowCount(); i++)
+		VALUES_EQUAL(c2.valueAt(i), 39.3);
+}
+void ColumnTest::testFormulasPercentile5() {
+	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
+	c1.resizeTo(3);
+	QCOMPARE(c1.rowCount(), 3);
+	c1.replaceValues(-1, {1., -1., 8., 10., -5});
+
+	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
+	c2.resizeTo(7);
+	QCOMPARE(c2.rowCount(), 7);
+	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17., 18.});
+
+	c2.setFormula(QStringLiteral("percentile5(x)"), {QStringLiteral("x")}, {&c1}, true);
+	c2.updateFormula();
+	QVERIFY(false); // Calculation not validated!
+	for (int i = 0; i < c2.rowCount(); i++)
+		VALUES_EQUAL(c2.valueAt(i), 39.3);
+}
+void ColumnTest::testFormulasPercentile10() {
+	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
+	c1.resizeTo(3);
+	QCOMPARE(c1.rowCount(), 3);
+	c1.replaceValues(-1, {1., -1., 8., 10., -5});
+
+	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
+	c2.resizeTo(7);
+	QCOMPARE(c2.rowCount(), 7);
+	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17., 18.});
+
+	c2.setFormula(QStringLiteral("percentile10(x)"), {QStringLiteral("x")}, {&c1}, true);
+	c2.updateFormula();
+	QVERIFY(false); // Calculation not validated!
+	for (int i = 0; i < c2.rowCount(); i++)
+		VALUES_EQUAL(c2.valueAt(i), 39.3);
+}
+void ColumnTest::testFormulasPercentile90() {
+	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
+	c1.resizeTo(3);
+	QCOMPARE(c1.rowCount(), 3);
+	c1.replaceValues(-1, {1., -1., 8., 10., -5});
+
+	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
+	c2.resizeTo(7);
+	QCOMPARE(c2.rowCount(), 7);
+	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17., 18.});
+
+	c2.setFormula(QStringLiteral("percentile90(x)"), {QStringLiteral("x")}, {&c1}, true);
+	c2.updateFormula();
+	QVERIFY(false); // Calculation not validated!
+	for (int i = 0; i < c2.rowCount(); i++)
+		VALUES_EQUAL(c2.valueAt(i), 39.3);
+}
+void ColumnTest::testFormulasPercentile95() {
+	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
+	c1.resizeTo(3);
+	QCOMPARE(c1.rowCount(), 3);
+	c1.replaceValues(-1, {1., -1., 8., 10., -5});
+
+	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
+	c2.resizeTo(7);
+	QCOMPARE(c2.rowCount(), 7);
+	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17., 18.});
+
+	c2.setFormula(QStringLiteral("percentile95(x)"), {QStringLiteral("x")}, {&c1}, true);
+	c2.updateFormula();
+	QVERIFY(false); // Calculation not validated!
+	for (int i = 0; i < c2.rowCount(); i++)
+		VALUES_EQUAL(c2.valueAt(i), 39.3);
+}
+void ColumnTest::testFormulasPercentile99() {
+	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
+	c1.resizeTo(3);
+	QCOMPARE(c1.rowCount(), 3);
+	c1.replaceValues(-1, {1., -1., 8., 10., -5});
+
+	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
+	c2.resizeTo(7);
+	QCOMPARE(c2.rowCount(), 7);
+	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17., 18.});
+
+	c2.setFormula(QStringLiteral("percentile99(x)"), {QStringLiteral("x")}, {&c1}, true);
+	c2.updateFormula();
+	QVERIFY(false); // Calculation not validated!
+	for (int i = 0; i < c2.rowCount(); i++)
+		VALUES_EQUAL(c2.valueAt(i), 39.3);
+}
+void ColumnTest::testFormulasTrimean() {
+	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
+	c1.resizeTo(3);
+	QCOMPARE(c1.rowCount(), 3);
+	c1.replaceValues(-1, {1., -1., 8., 10., -5});
+
+	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
+	c2.resizeTo(7);
+	QCOMPARE(c2.rowCount(), 7);
+	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17., 18.});
+
+	c2.setFormula(QStringLiteral("trimean(x)"), {QStringLiteral("x")}, {&c1}, true);
+	c2.updateFormula();
+	QVERIFY(false); // Calculation not validated!
+	for (int i = 0; i < c2.rowCount(); i++)
+		VALUES_EQUAL(c2.valueAt(i), 39.3);
+}
+void ColumnTest::testFormulasMeandev() {
+	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
+	c1.resizeTo(3);
+	QCOMPARE(c1.rowCount(), 3);
+	c1.replaceValues(-1, {1., -1., 8., 10., -5});
+
+	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
+	c2.resizeTo(7);
+	QCOMPARE(c2.rowCount(), 7);
+	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17., 18.});
+
+	c2.setFormula(QStringLiteral("meandev(x)"), {QStringLiteral("x")}, {&c1}, true);
+	c2.updateFormula();
+	QVERIFY(false); // Calculation not validated!
+	for (int i = 0; i < c2.rowCount(); i++)
+		VALUES_EQUAL(c2.valueAt(i), 39.3);
+}
+void ColumnTest::testFormulasMeandevmedian() {
+	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
+	c1.resizeTo(3);
+	QCOMPARE(c1.rowCount(), 3);
+	c1.replaceValues(-1, {1., -1., 8., 10., -5});
+
+	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
+	c2.resizeTo(7);
+	QCOMPARE(c2.rowCount(), 7);
+	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17., 18.});
+
+	c2.setFormula(QStringLiteral("meandevmedian(x)"), {QStringLiteral("x")}, {&c1}, true);
+	c2.updateFormula();
+	QVERIFY(false); // Calculation not validated!
+	for (int i = 0; i < c2.rowCount(); i++)
+		VALUES_EQUAL(c2.valueAt(i), 39.3);
+}
+void ColumnTest::testFormulasMediandev() {
+	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
+	c1.resizeTo(3);
+	QCOMPARE(c1.rowCount(), 3);
+	c1.replaceValues(-1, {1., -1., 8., 10., -5});
+
+	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
+	c2.resizeTo(7);
+	QCOMPARE(c2.rowCount(), 7);
+	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17., 18.});
+
+	c2.setFormula(QStringLiteral("mediandev(x)"), {QStringLiteral("x")}, {&c1}, true);
+	c2.updateFormula();
+	QVERIFY(false); // Calculation not validated!
+	for (int i = 0; i < c2.rowCount(); i++)
+		VALUES_EQUAL(c2.valueAt(i), 39.3);
+}
+void ColumnTest::testFormulasSkew() {
+	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
+	c1.resizeTo(3);
+	QCOMPARE(c1.rowCount(), 3);
+	c1.replaceValues(-1, {1., -1., 8., 10., -5});
+
+	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
+	c2.resizeTo(7);
+	QCOMPARE(c2.rowCount(), 7);
+	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17., 18.});
+
+	c2.setFormula(QStringLiteral("skew(x)"), {QStringLiteral("x")}, {&c1}, true);
+	c2.updateFormula();
+	QVERIFY(false); // Calculation not validated!
+	for (int i = 0; i < c2.rowCount(); i++)
+		VALUES_EQUAL(c2.valueAt(i), 39.3);
+}
+void ColumnTest::testFormulasKurt() {
+	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
+	c1.resizeTo(3);
+	QCOMPARE(c1.rowCount(), 3);
+	c1.replaceValues(-1, {1., -1., 8., 10., -5});
+
+	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
+	c2.resizeTo(7);
+	QCOMPARE(c2.rowCount(), 7);
+	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17., 18.});
+
+	c2.setFormula(QStringLiteral("kurt(x)"), {QStringLiteral("x")}, {&c1}, true);
+	c2.updateFormula();
+	QVERIFY(false); // Calculation not validated!
+	for (int i = 0; i < c2.rowCount(); i++)
+		VALUES_EQUAL(c2.valueAt(i), 39.3);
+}
+void ColumnTest::testFormulasEntropy() {
+	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
+	c1.resizeTo(3);
+	QCOMPARE(c1.rowCount(), 3);
+	c1.replaceValues(-1, {1., -1., 8., 10., -5});
+
+	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
+	c2.resizeTo(7);
+	QCOMPARE(c2.rowCount(), 7);
+	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17., 18.});
+
+	c2.setFormula(QStringLiteral("entropy(x)"), {QStringLiteral("x")}, {&c1}, true);
+	c2.updateFormula();
+	QVERIFY(false); // Calculation not validated!
+	for (int i = 0; i < c2.rowCount(); i++)
+		VALUES_EQUAL(c2.valueAt(i), 39.3);
+}
+
+void ColumnTest::testFormulasQuantile() {
+	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
+	c1.resizeTo(3);
+	QCOMPARE(c1.rowCount(), 3);
+	c1.replaceValues(-1, {1., -1., 8., 10., -5});
+
+	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
+	c2.resizeTo(7);
+	QCOMPARE(c2.rowCount(), 7);
+	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17., 18.});
+
+	c2.setFormula(QStringLiteral("quantile(0.1;x)"), {QStringLiteral("x")}, {&c1}, true);
+	c2.updateFormula();
+	QVERIFY(false); // Calculation not validated!
+	for (int i = 0; i < c2.rowCount(); i++)
+		VALUES_EQUAL(c2.valueAt(i), 39.3);
+}
+
+void ColumnTest::testFormulasPercentile() {
+	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
+	c1.resizeTo(3);
+	QCOMPARE(c1.rowCount(), 3);
+	c1.replaceValues(-1, {1., -1., 8., 10., -5});
+
+	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
+	c2.resizeTo(7);
+	QCOMPARE(c2.rowCount(), 7);
+	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17., 18.});
+
+	c2.setFormula(QStringLiteral("percentile(30;x)"), {QStringLiteral("x")}, {&c1}, true);
+	c2.updateFormula();
+	QVERIFY(false); // Calculation not validated!
+	for (int i = 0; i < c2.rowCount(); i++)
+		VALUES_EQUAL(c2.valueAt(i), 39.3);
 }
 
 QTEST_MAIN(ColumnTest)

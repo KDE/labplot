@@ -8,9 +8,9 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
+#include "functions.h"
 #include "backend/nsl/nsl_sf_basic.h"
 #include "parser.h"
-#include "functions.h"
 
 #include <KLocalizedString>
 
@@ -219,7 +219,6 @@ const char* specialfun_smmax = "smmax";
 const char* specialfun_sma = "sma";
 const char* specialfun_smr = "smr";
 
-
 // Special functions depending on variables
 struct funs _special_functions[] = {
 	// Moving Statistics
@@ -233,7 +232,7 @@ struct funs _special_functions[] = {
 	{i18n("Simple Moving Range"), specialfun_smr, (func_t)nsl_sf_dummy, 2, nullptr, FunctionGroups::MovingStatistics},
 
 	// Values independend of the row index!!!
-	// Important: When adding function here, implement it also in ColumnPrivate!
+	// Important: When adding function here, implement it somewhere. For example column functions are implemented in ColumnPrivate!
 	{i18n("Size"), colfun_size, (func_t)nsl_sf_dummy, 1, nullptr, FunctionGroups::ColumnStatistics},
 	{i18n("Minimum"), colfun_min, (func_t)nsl_sf_dummy, 1, nullptr, FunctionGroups::ColumnStatistics},
 	{i18n("Maximum"), colfun_max, (func_t)nsl_sf_dummy, 1, nullptr, FunctionGroups::ColumnStatistics},
@@ -263,7 +262,7 @@ struct funs _special_functions[] = {
 	{i18n("Entropy"), colfun_entropy, (func_t)nsl_sf_dummy, 1, nullptr, FunctionGroups::ColumnStatistics},
 	{i18n("Quantile"), colfun_quantile, (func_t)nsl_sf_dummy2, 2, nullptr, FunctionGroups::ColumnStatistics},
 	{i18n("Percentile"), colfun_percentile, (func_t)nsl_sf_dummy2, 2, nullptr, FunctionGroups::ColumnStatistics},
-	};
+};
 const int _number_specialfunctions = sizeof(_special_functions) / sizeof(funs);
 
 /* list of functions (sync with ExpressionParser.cpp!) */

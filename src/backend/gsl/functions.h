@@ -11,9 +11,9 @@
 #ifndef FUNCTIONS_H
 #define FUNCTIONS_H
 
+#include "parserFunctionTypes.h"
 #include <QString>
 #include <gsl/gsl_version.h>
-#include "parserFunctionTypes.h"
 
 enum class FunctionGroups;
 

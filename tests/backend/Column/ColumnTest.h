@@ -73,6 +73,36 @@ private Q_SLOTS:
 	void testFormulasmaSemikolon();
 
 	void testFormulasMinColumnInvalid();
+
+	void testFormulasSize();
+	void testFormulasMin();
+	void testFormulasMax();
+	void testFormulasMean();
+	void testFormulasMedian();
+	void testFormulasStdev();
+	void testFormulasVar();
+	void testFormulasGm();
+	void testFormulasHm();
+	void testFormulasChm();
+	void testFormulasStatisticsMode();
+	void testFormulasQuartile1();
+	void testFormulasQuartile3();
+	void testFormulasIqr();
+	void testFormulasPercentile1();
+	void testFormulasPercentile5();
+	void testFormulasPercentile10();
+	void testFormulasPercentile90();
+	void testFormulasPercentile95();
+	void testFormulasPercentile99();
+	void testFormulasTrimean();
+	void testFormulasMeandev();
+	void testFormulasMeandevmedian();
+	void testFormulasMediandev();
+	void testFormulasSkew();
+	void testFormulasKurt();
+	void testFormulasEntropy();
+	void testFormulasQuantile();
+	void testFormulasPercentile();
 };
 
 #endif // COLUMNTEST_H

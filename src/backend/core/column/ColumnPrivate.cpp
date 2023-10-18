@@ -1737,23 +1737,26 @@ void ColumnPrivate::setFormulVariableColumn(Column* c) {
 	}
 }
 
-struct PayloadColumn: public Payload {
-	PayloadColumn(const QVector<Column::FormulaData>& data) : Payload(true), formulaData(data) {}
+struct PayloadColumn : public Payload {
+	PayloadColumn(const QVector<Column::FormulaData>& data)
+		: Payload(true)
+		, formulaData(data) {
+	}
 	const QVector<Column::FormulaData>& formulaData;
 };
 
-#define COLUMN_FUNCTION(function_name, evaluation_function)\
-double column ## function_name(const char* variable, const Payload* payload) { \
-		const auto* p = dynamic_cast<const PayloadColumn*>(payload); \
-		if (!p) { \
-			assert(p); /* Debug build */  \
-			return NAN; \
-		} \
-		for (const auto& formulaData: p->formulaData) { \
-			if (formulaData.variableName().compare(QLatin1String(variable)) == 0) \
-				return formulaData.column()->evaluation_function; \
-		} \
-		return NAN; \
+#define COLUMN_FUNCTION(function_name, evaluation_function)                                                                                                    \
+	double column##function_name(const char* variable, const Payload* payload) {                                                                               \
+		const auto* p = dynamic_cast<const PayloadColumn*>(payload);                                                                                           \
+		if (!p) {                                                                                                                                              \
+			assert(p); /* Debug build */                                                                                                                       \
+			return NAN;                                                                                                                                        \
+		}                                                                                                                                                      \
+		for (const auto& formulaData : p->formulaData) {                                                                                                       \
+			if (formulaData.variableName().compare(QLatin1String(variable)) == 0)                                                                              \
+				return formulaData.column()->evaluation_function;                                                                                              \
+		}                                                                                                                                                      \
+		return NAN;                                                                                                                                            \
 	}
 
 // Constant functions, which return always the same value independet of the row index
@@ -1787,16 +1790,16 @@ COLUMN_FUNCTION(Entropy, statistics().entropy)
 
 double columnQuantile(double p, const char* variable, const Payload* payload) {
 	const auto* pd = dynamic_cast<const PayloadColumn*>(payload);
-		if (!pd) {
-			assert(pd); // Debug build
-			return NAN;
+	if (!pd) {
+		assert(pd); // Debug build
+		return NAN;
 	}
 
 	if (p < 0)
 		return NAN;
 
 	const Column* column = nullptr;
-	for (const auto& formulaData: pd->formulaData) {
+	for (const auto& formulaData : pd->formulaData) {
 		if (formulaData.variableName().compare(QLatin1String(variable)) == 0) {
 			column = formulaData.column();
 			break;
@@ -1842,7 +1845,7 @@ double columnQuantile(double p, const char* variable, const Payload* payload) {
 }
 
 double columnPercentile(double p, const char* variable, const Payload* payload) {
-	return columnQuantile(p/100., variable, payload);
+	return columnQuantile(p / 100., variable, payload);
 }
 
 /*!
