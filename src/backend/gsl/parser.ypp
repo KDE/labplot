@@ -62,7 +62,7 @@ symbol *tptr;   /* For returning symbol-table pointers */
 }
 
 %token <dval>  NUM 	/* Simple double precision number */
-%token <tptr> VAR FNCT SPECFNCT CONSTFNCT /* VARiable and FuNCTion and Special functions*/
+%token <tptr> VAR FNCT SPECFNCT /* VARiable and FuNCTion and Special functions*/
 %type  <dval>  expr
 
 %right '='
@@ -86,7 +86,8 @@ expr:      NUM       { $$ = $1;                            }
 | VAR '=' expr       { $$ = $3; $1->value.var = $3; _variablesCounter++;       }
 | SPECFNCT '(' ')'       { $$ = (*((func_tPayload)($1->value.special_function.funsptr->fnct)))($1->value.special_function.payload);      }
 | SPECFNCT '(' VAR ')'  {
-							_variablesCounter++;
+							if (!$1->value.special_function.payload.constant)
+								_variablesCounter++;
 							func_t1Payload function = (func_t1Payload)($1->value.special_function.funsptr->fnct);
 							if ($1->value.special_function.funsptr->argc != 1) {
 								printf("Error: Wrong argument count");
@@ -100,7 +101,8 @@ expr:      NUM       { $$ = $1;                            }
 								$$ = (*function)($3->name, $1->value.special_function.payload);
 						}
 | SPECFNCT '(' expr ';' VAR ')'  {
-									_variablesCounter++;
+									if (!$1->value.special_function.payload.constant)
+										_variablesCounter++;
 									func_t2Payload function = (func_t2Payload)($1->value.special_function.funsptr->fnct);
 									if ($1->value.special_function.funsptr->argc != 2) {
 										printf("Error: Wrong argument count");
@@ -114,7 +116,8 @@ expr:      NUM       { $$ = $1;                            }
 										$$ = (*function)($3 ,$5->name, $1->value.special_function.payload);
 								  }
 | SPECFNCT '(' expr ';' expr ';' VAR ')'  {
-											_variablesCounter++;
+											if (!$1->value.special_function.payload.constant)
+												_variablesCounter++;
 											func_t3Payload function = (func_t3Payload)($1->value.special_function.funsptr->fnct);
 											if ($1->value.special_function.funsptr->argc != 3) {
 												printf("Error: Wrong argument count");
@@ -128,7 +131,8 @@ expr:      NUM       { $$ = $1;                            }
 												$$ = (*function)($3, $5, $7->name, $1->value.special_function.payload);
 										  }
 | SPECFNCT '(' expr ';' expr ';' expr ';' VAR ')'  {
-													_variablesCounter++;
+													if (!$1->value.special_function.payload.constant)
+														_variablesCounter++;
 													func_t4Payload function = (func_t4Payload)($1->value.special_function.funsptr->fnct);
 													if ($1->value.special_function.funsptr->argc != 4) {
 														printf("Error: Wrong argument count");
@@ -141,62 +145,6 @@ expr:      NUM       { $$ = $1;                            }
 													} else
 														$$ = (*function)($3, $5, $7, $9->name, $1->value.special_function.payload);
 												  }
-
-| CONSTFNCT '(' ')'       { $$ = (*((func_tPayload)($1->value.special_function.funsptr->fnct)))($1->value.special_function.payload);      }
-| CONSTFNCT '(' VAR ')'  {
-													func_t1Payload function = (func_t1Payload)($1->value.special_function.funsptr->fnct);
-													if ($1->value.special_function.funsptr->argc != 1) {
-														printf("Error: Wrong argument count");
-														yynerrs++;
-														return 1;
-													} else if (function == nullptr) {
-														printf("No function");
-														yynerrs++;
-														return 2;
-													} else
-														$$ = (*function)($3->name, $1->value.special_function.payload);
-}
-| CONSTFNCT '(' expr ';' VAR ')'  {
-													func_t2Payload function = (func_t2Payload)($1->value.special_function.funsptr->fnct);
-													if ($1->value.special_function.funsptr->argc != 2) {
-														printf("Error: Wrong argument count");
-														yynerrs++;
-														return 1;
-													} else if (function == nullptr) {
-														printf("No function");
-														yynerrs++;
-														return 2;
-													} else
-														$$ = (*function)($3 ,$5->name, $1->value.special_function.payload);
-}
-| CONSTFNCT '(' expr ';' expr ';' VAR ')'  {
-													func_t3Payload function = (func_t3Payload)($1->value.special_function.funsptr->fnct);
-													if ($1->value.special_function.funsptr->argc != 3) {
-														printf("Error: Wrong argument count");
-														yynerrs++;
-														return 1;
-													} else if (function == nullptr) {
-														printf("No function");
-														yynerrs++;
-														return 2;
-													} else
-														$$ = (*function)($3, $5, $7->name, $1->value.special_function.payload);
-}
-| CONSTFNCT '(' expr ';' expr ';' expr ';' VAR ')'  {
-													func_t4Payload function = (func_t4Payload)($1->value.special_function.funsptr->fnct);
-													if ($1->value.special_function.funsptr->argc != 4) {
-														printf("Error: Wrong argument count");
-														yynerrs++;
-														return 1;
-													} else if (function == nullptr) {
-														printf("No function");
-														yynerrs++;
-														return 2;
-													} else
-														$$ = (*function)($3, $5, $7, $9->name, $1->value.special_function.payload);
-}
-
-
 | FNCT '(' ')'       { $$ = (*($1->value.funsptr->fnct))();      }
 | FNCT '(' expr ')'  {  if ($1->value.funsptr->argc != 1) {
 							printf("Error: Wrong argument count");
@@ -368,10 +316,6 @@ void init_table(void) {
 	for (i = 0; i < _number_specialfunctions; i++) {
 		ptr = put_symbol(_special_functions[i].name, SPECFNCT);
 		ptr->value.funsptr = &_special_functions[i];
-	}
-	for (i = 0; i < _number_constfunctions; i++) {
-		ptr = put_symbol(_const_functions[i].name, CONSTFNCT);
-		ptr->value.funsptr = &_const_functions[i];
 	}
 	/* add constants */
 	for (i = 0; i < _number_constants; i++) {

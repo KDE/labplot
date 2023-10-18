@@ -220,8 +220,19 @@ const char* specialfun_sma = "sma";
 const char* specialfun_smr = "smr";
 
 
-// Values independend of the row index!!!
-struct funs _const_functions[] = {
+// Special functions depending on variables
+struct funs _special_functions[] = {
+	// Moving Statistics
+	// Important: when adding new function, implement them in Expressionhandler or somewhere else!
+	{i18n("Cell"), specialfun_cell, (func_t)nsl_sf_dummy2, 2, nullptr, FunctionGroups::MovingStatistics},
+	{i18n("Moving Average"), specialfun_ma, (func_t)nsl_sf_dummy, 1, nullptr, FunctionGroups::MovingStatistics},
+	{i18n("Moving Range"), specialfun_mr, (func_t)nsl_sf_dummy, 1, nullptr, FunctionGroups::MovingStatistics},
+	{i18n("Simple Moving Minimum"), specialfun_smmin, (func_t)nsl_sf_dummy, 2, nullptr, FunctionGroups::MovingStatistics},
+	{i18n("Simple Moving Maximum"), specialfun_smmax, (func_t)nsl_sf_dummy, 2, nullptr, FunctionGroups::MovingStatistics},
+	{i18n("Simple Moving Average"), specialfun_sma, (func_t)nsl_sf_dummy, 2, nullptr, FunctionGroups::MovingStatistics},
+	{i18n("Simple Moving Range"), specialfun_smr, (func_t)nsl_sf_dummy, 2, nullptr, FunctionGroups::MovingStatistics},
+
+	// Values independend of the row index!!!
 	// Important: When adding function here, implement it also in ColumnPrivate!
 	{i18n("Size"), colfun_size, (func_t)nsl_sf_dummy, 1, nullptr, FunctionGroups::ColumnStatistics},
 	{i18n("Minimum"), colfun_min, (func_t)nsl_sf_dummy, 1, nullptr, FunctionGroups::ColumnStatistics},
@@ -252,20 +263,6 @@ struct funs _const_functions[] = {
 	{i18n("Entropy"), colfun_entropy, (func_t)nsl_sf_dummy, 1, nullptr, FunctionGroups::ColumnStatistics},
 	{i18n("Quantile"), colfun_quantile, (func_t)nsl_sf_dummy2, 2, nullptr, FunctionGroups::ColumnStatistics},
 	{i18n("Percentile"), colfun_percentile, (func_t)nsl_sf_dummy2, 2, nullptr, FunctionGroups::ColumnStatistics},
-};
-const int _number_constfunctions = sizeof(_const_functions) / sizeof(funs);
-
-// Special functions depending on variables
-struct funs _special_functions[] = {
-	// Moving Statistics
-	// Important: when adding new function, implement them in Expressionhandler!
-	{i18n("Cell"), specialfun_cell, (func_t)nsl_sf_dummy2, 2, nullptr, FunctionGroups::MovingStatistics},
-	{i18n("Moving Average"), specialfun_ma, (func_t)nsl_sf_dummy, 1, nullptr, FunctionGroups::MovingStatistics},
-	{i18n("Moving Range"), specialfun_mr, (func_t)nsl_sf_dummy, 1, nullptr, FunctionGroups::MovingStatistics},
-	{i18n("Simple Moving Minimum"), specialfun_smmin, (func_t)nsl_sf_dummy, 2, nullptr, FunctionGroups::MovingStatistics},
-	{i18n("Simple Moving Maximum"), specialfun_smmax, (func_t)nsl_sf_dummy, 2, nullptr, FunctionGroups::MovingStatistics},
-	{i18n("Simple Moving Average"), specialfun_sma, (func_t)nsl_sf_dummy, 2, nullptr, FunctionGroups::MovingStatistics},
-	{i18n("Simple Moving Range"), specialfun_smr, (func_t)nsl_sf_dummy, 2, nullptr, FunctionGroups::MovingStatistics},
 	};
 const int _number_specialfunctions = sizeof(_special_functions) / sizeof(funs);
 

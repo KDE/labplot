@@ -1738,7 +1738,7 @@ void ColumnPrivate::setFormulVariableColumn(Column* c) {
 }
 
 struct PayloadColumn: public Payload {
-	PayloadColumn(const QVector<Column::FormulaData>& data) : formulaData(data) {}
+	PayloadColumn(const QVector<Column::FormulaData>& data) : Payload(true), formulaData(data) {}
 	const QVector<Column::FormulaData>& formulaData;
 };
 
@@ -1756,6 +1756,7 @@ double column ## function_name(const char* variable, const Payload* payload) { \
 		return NAN; \
 	}
 
+// Constant functions, which return always the same value independet of the row index
 COLUMN_FUNCTION(Size, statistics().size)
 COLUMN_FUNCTION(Min, minimum())
 COLUMN_FUNCTION(Max, maximum())

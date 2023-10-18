@@ -59,8 +59,6 @@ extern struct funs _functions[];
 extern const int _number_functions;
 extern struct funs _special_functions[];
 extern const int _number_specialfunctions;
-extern struct funs _const_functions[];
-extern const int _number_constfunctions;
 
 enum class FunctionGroups : int {
 	StandardMathematicalFunctions,
