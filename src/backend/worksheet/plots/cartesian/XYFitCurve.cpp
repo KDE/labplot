@@ -1716,8 +1716,8 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			x = xVector[i];
 			assign_symbol("x", x);
 
-			for (unsigned int j = 0; j < np; j++) {
-				for (unsigned int k = 0; k < np; k++) {
+			for (auto j = 0; j < np; j++) {
+				for (auto k = 0; k < np; k++) {
 					if (k != j) {
 						value = nsl_fit_map_bound(gsl_vector_get(paramValues, k), min[k], max[k]);
 						assign_symbol(qPrintable(paramNames->at(k)), value);
@@ -2285,11 +2285,11 @@ void XYFitCurvePrivate::runLevenbergMarquardt(const AbstractColumn* tmpXDataColu
 
 	/////////////////////// GSL >= 2 has a complete new interface! But the old one is still supported. ///////////////////////////
 	// GSL >= 2 : "the 'fdf' field of gsl_multifit_function_fdf is now deprecated and does not need to be specified for nonlinear least squares problems"
-	unsigned int nf = 0; // number of fixed parameter
+	int nf = 0; // number of fixed parameter
 	// size of paramFixed may be smaller than np
 	if (fitData.paramFixed.size() < np)
 		fitData.paramFixed.resize(np);
-	for (unsigned int i = 0; i < np; i++) {
+	for (auto i = 0; i < np; i++) {
 		const bool fixed = fitData.paramFixed.at(i);
 		if (fixed)
 			nf++;
@@ -2299,7 +2299,7 @@ void XYFitCurvePrivate::runLevenbergMarquardt(const AbstractColumn* tmpXDataColu
 	// function to fit
 	gsl_multifit_function_fdf f;
 	DEBUG(Q_FUNC_INFO << ", model = " << STDSTRING(fitData.model));
-	struct data params = {n,
+	struct data params = {static_cast<size_t>(n),
 						  xdata,
 						  ydata,
 						  weight,
@@ -2327,7 +2327,7 @@ void XYFitCurvePrivate::runLevenbergMarquardt(const AbstractColumn* tmpXDataColu
 	double* x_min = fitData.paramLowerLimits.data();
 	double* x_max = fitData.paramUpperLimits.data();
 	DEBUG(Q_FUNC_INFO << ", scale start values if limits are set");
-	for (unsigned int i = 0; i < np; i++)
+	for (auto i = 0; i < np; i++)
 		x_init[i] = nsl_fit_map_unbound(x_init[i], x_min[i], x_max[i]);
 	DEBUG(Q_FUNC_INFO << ",	DONE");
 	auto x = gsl_vector_view_array(x_init, np);
@@ -2487,7 +2487,7 @@ void XYFitCurvePrivate::runLevenbergMarquardt(const AbstractColumn* tmpXDataColu
 	delete[] weight;
 
 	// unscale start parameter
-	for (unsigned int i = 0; i < np; i++)
+	for (auto i = 0; i < np; i++)
 		x_init[i] = nsl_fit_map_bound(x_init[i], x_min[i], x_max[i]);
 
 	// get the covariance matrix
@@ -2540,7 +2540,7 @@ void XYFitCurvePrivate::runLevenbergMarquardt(const AbstractColumn* tmpXDataColu
 	const double cerr = sqrt(fitResult.rms);
 	// CI = 100 * (1 - alpha)
 	const double alpha = 1.0 - fitData.confidenceInterval / 100.;
-	for (unsigned int i = 0; i < np; i++) {
+	for (auto i = 0; i < np; i++) {
 		// scale resulting values if they are bounded
 		fitResult.paramValues[i] = nsl_fit_map_bound(gsl_vector_get(s->x, i), x_min[i], x_max[i]);
 		// use results as start values if desired
@@ -2552,7 +2552,7 @@ void XYFitCurvePrivate::runLevenbergMarquardt(const AbstractColumn* tmpXDataColu
 		fitResult.tdist_tValues[i] = nsl_stats_tdist_t(fitResult.paramValues.at(i), fitResult.errorValues.at(i));
 		fitResult.tdist_pValues[i] = nsl_stats_tdist_p(fitResult.tdist_tValues.at(i), fitResult.dof);
 		fitResult.marginValues[i] = nsl_stats_tdist_margin(alpha, fitResult.dof, fitResult.errorValues.at(i));
-		for (unsigned int j = 0; j <= i; j++)
+		for (auto j = 0; j <= i; j++)
 			fitResult.correlationMatrix << gsl_matrix_get(covar, i, j) / sqrt(gsl_matrix_get(covar, i, i)) / sqrt(gsl_matrix_get(covar, j, j));
 	}
 
