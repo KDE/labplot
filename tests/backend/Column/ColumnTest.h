@@ -68,10 +68,6 @@ private Q_SLOTS:
 	void testFormulasmmax();
 	void testFormulasma();
 
-	void testFormulasmminSemikolon();
-	void testFormulasmmaxSemikolon();
-	void testFormulasmaSemikolon();
-
 	void testFormulasMinColumnInvalid();
 
 	void testFormulasSize();

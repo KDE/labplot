@@ -586,7 +586,7 @@ double sma(double x, const char* variable, const Payload* payload) {
 			const int row = p->row;
 			for (int index = std::max(0, row - N + 1); index <= row; index++)
 				sum += p->xVectors->at(i)->at(index);
-			return sum;
+			return sum / N;
 		}
 	}
 	return NAN;

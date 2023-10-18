@@ -65,6 +65,16 @@ static void notImplementedError(const char* function_name) {
 	snprintf(lastErrorMessage_, sizeof(lastErrorMessage_), "Parsing Error: '%s' not implemented.", function_name);
 }
 
+static void yyerrorFunction(const char* function_name, const char* msg) {
+	snprintf(lastErrorMessage_, sizeof(lastErrorMessage_), "Parsing Error: In function '%s': %s", function_name, msg);
+}
+
+static void yyerror(const char* msg) {
+	snprintf(lastErrorMessage_, sizeof(lastErrorMessage_), "Parsing Error: %s", msg);
+}
+
+
+
 %}
 
 %lex-param {param *p}
@@ -178,6 +188,10 @@ expr:      NUM       { $$ = $1;                            }
 													} else
 														$$ = (*function)($3, $5, $7, $9->name, $1->value.special_function.payload);
 												  }
+| SPECFNCT '(' expr ')'  { yynerrs++; yyerrorFunction($1->name, "Argument must be a variable not an expression");}
+| SPECFNCT '(' expr ';' expr ')'   { yynerrs++; yyerrorFunction($1->name, "Last argument must be a variable not an expression");}
+| SPECFNCT '(' expr ';' expr ';' expr ')'  { yynerrs++; yyerrorFunction($1->name, "Last argument must be a variable not an expression");}
+| SPECFNCT '(' expr ';' expr ';' expr ';' expr ')'  { yynerrs++; yyerrorFunction($1->name, "Last argument must be a variable not an expression");}
 | FNCT '(' ')'       {
 						const int argc = $1->value.funsptr->argc;
 						if (argc != 0) {
