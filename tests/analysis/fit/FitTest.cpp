@@ -23,12 +23,6 @@
 #include "backend/nsl/nsl_sf_stats.h"
 #include "backend/nsl/nsl_stats.h"
 
-void FitTest::initTestCase() {
-	// needed in order to have the signals triggered by SignallingUndoCommand, see LabPlot.cpp
-	qRegisterMetaType<const AbstractAspect*>("const AbstractAspect*");
-	qRegisterMetaType<const AbstractColumn*>("const AbstractColumn*");
-}
-
 // ##############################################################################
 // #################  linear regression with NIST datasets ######################
 // ##############################################################################

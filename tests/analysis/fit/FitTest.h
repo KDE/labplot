@@ -17,7 +17,6 @@ class FitTest : public AnalysisTest {
 	Q_OBJECT
 
 private Q_SLOTS:
-	void initTestCase();
 	// linear regression (see NIST/linear data)
 	void testLinearNorris();
 	void testLinearPontius();
