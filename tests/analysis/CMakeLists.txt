@@ -1,10 +1,7 @@
 add_subdirectory(convolution)
 add_subdirectory(correlation)
 add_subdirectory(differentiation)
-if (QT_MAJOR_VERSION LESS 6)
-# TODO: fix test
 add_subdirectory(fit)
-endif ()
 add_subdirectory(fourier)
 add_subdirectory(hilberttransform)
 add_subdirectory(integration)
