@@ -1708,7 +1708,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		break;
 	case nsl_fit_model_custom:
 		double value;
-		const unsigned int np = paramNames->size();
+		const auto np = paramNames->size();
 		QString func{*(((struct data*)params)->func)};
 
 		const auto numberLocale = QLocale();
@@ -2133,7 +2133,7 @@ void XYFitCurvePrivate::runLevenbergMarquardt(const AbstractColumn* tmpXDataColu
 	// fit settings
 	const unsigned int maxIters = fitData.maxIterations; // maximal number of iterations
 	const double delta = fitData.eps; // fit tolerance
-	const unsigned int np = fitData.paramNames.size(); // number of fit parameters
+	const auto np = fitData.paramNames.size(); // number of fit parameters
 	if (np == 0) {
 		DEBUG(Q_FUNC_INFO << ", WARNING: no parameter found.")
 		fitResult.available = true;
@@ -2217,7 +2217,7 @@ void XYFitCurvePrivate::runLevenbergMarquardt(const AbstractColumn* tmpXDataColu
 	// QDEBUG(Q_FUNC_INFO << ", data: " << ydataVector)
 
 	// number of data points to fit
-	const size_t n = xdataVector.size();
+	const auto n = xdataVector.size();
 	DEBUG(Q_FUNC_INFO << ", number of data points: " << n);
 	if (n == 0) {
 		fitResult.available = true;
@@ -2248,7 +2248,7 @@ void XYFitCurvePrivate::runLevenbergMarquardt(const AbstractColumn* tmpXDataColu
 	DEBUG(Q_FUNC_INFO << ", y error vector size: " << yerrorVector.size());
 	double* weight = new double[n];
 
-	for (size_t i = 0; i < n; i++)
+	for (auto i = 0; i < n; i++)
 		weight[i] = 1.;
 
 	const double minError = 1.e-199; // minimum error for weighting
@@ -2286,8 +2286,11 @@ void XYFitCurvePrivate::runLevenbergMarquardt(const AbstractColumn* tmpXDataColu
 	/////////////////////// GSL >= 2 has a complete new interface! But the old one is still supported. ///////////////////////////
 	// GSL >= 2 : "the 'fdf' field of gsl_multifit_function_fdf is now deprecated and does not need to be specified for nonlinear least squares problems"
 	unsigned int nf = 0; // number of fixed parameter
+	// size of paramFixed may be smaller than np
+	if (fitData.paramFixed.size() < np)
+		fitData.paramFixed.resize(np);
 	for (unsigned int i = 0; i < np; i++) {
-		const bool fixed = fitData.paramFixed.data()[i];
+		const bool fixed = fitData.paramFixed.at(i);
 		if (fixed)
 			nf++;
 		DEBUG("	parameter " << i << " fixed: " << fixed);
@@ -2344,10 +2347,10 @@ void XYFitCurvePrivate::runLevenbergMarquardt(const AbstractColumn* tmpXDataColu
 
 		// update weights for Y-depending weights (using function values from residuals)
 		if (fitData.yWeightsType == nsl_fit_weight_statistical_fit) {
-			for (size_t i = 0; i < n; i++)
+			for (auto i = 0; i < n; i++)
 				weight[i] = 1. / (gsl_vector_get(s->f, i) / sqrt(weight[i]) + ydata[i]); // 1/Y_i
 		} else if (fitData.yWeightsType == nsl_fit_weight_relative_fit) {
-			for (size_t i = 0; i < n; i++)
+			for (auto i = 0; i < n; i++)
 				weight[i] = 1. / gsl_pow_2(gsl_vector_get(s->f, i) / sqrt(weight[i]) + ydata[i]); // 1/Y_i^2
 		}
 
@@ -2388,11 +2391,11 @@ void XYFitCurvePrivate::runLevenbergMarquardt(const AbstractColumn* tmpXDataColu
 			// printf("iter2 = %d\n", iter2);
 
 			// calculate function from residuals
-			for (size_t i = 0; i < n; i++)
+			for (auto i = 0; i < n; i++)
 				fun[i] = gsl_vector_get(s->f, i) * 1. / sqrt(weight[i]) + ydata[i];
 
 			// calculate weight[i]
-			for (size_t i = 0; i < n; i++) {
+			for (auto i = 0; i < n; i++) {
 				// calculate df[i]
 				size_t index = i - 1;
 				if (i == 0)
