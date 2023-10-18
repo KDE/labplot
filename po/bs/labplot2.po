@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-16 00:39+0000\n"
+"POT-Creation-Date: 2023-10-18 00:39+0000\n"
 "PO-Revision-Date: 2015-02-25 20:16+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <kde-i18n-doc@kde.org>\n"
@@ -7757,23 +7757,23 @@ msgstr "%1: postavi prozirnost oznake"
 msgid "%1: set x column"
 msgstr "%1: postavi kolonu vrijednosti"
 
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:250
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:251
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:465
-#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:240
+#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:241
 #, fuzzy, kde-format
 #| msgid "%1: set values column"
 msgid "%1: set data columns"
 msgstr "%1: postavi kolonu vrijednosti"
 
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:271
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:273
 #, fuzzy, kde-format
 #| msgid "%1: set arrow type"
 msgid "%1: set type"
 msgstr "%1: postavi tip strelice"
 
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:278
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:280
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:493
-#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:260
+#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:262
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:206
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:228
 #, fuzzy, kde-format
@@ -7781,7 +7781,7 @@ msgstr "%1: postavi tip strelice"
 msgid "%1: set orientation"
 msgstr "%1: postavi osnu orjentaciju"
 
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:285
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:287
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:507
 #, fuzzy, kde-format
 #| msgid "%1: x-error type changed"

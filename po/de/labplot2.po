@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-16 00:39+0000\n"
-"PO-Revision-Date: 2023-10-01 16:21+0200\n"
+"POT-Creation-Date: 2023-10-18 00:39+0000\n"
+"PO-Revision-Date: 2023-10-14 12:58+0200\n"
 "Last-Translator: Stefan Gerlach <stefan.gerlach@uni.kn>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
@@ -7288,28 +7288,28 @@ msgstr "%1: Deckkraft der Beschriftung festlegen"
 msgid "%1: set x column"
 msgstr "%1: x-Spalte festlegen"
 
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:250
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:251
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:465
-#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:240
+#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:241
 #, kde-format
 msgid "%1: set data columns"
 msgstr "%1: Datenspalten festlegen"
 
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:271
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:273
 #, kde-format
 msgid "%1: set type"
 msgstr "%1: Typ festlegen"
 
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:278
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:280
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:493
-#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:260
+#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:262
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:206
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:228
 #, kde-format
 msgid "%1: set orientation"
 msgstr "%1: Ausrichtung festlegen"
 
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:285
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:287
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:507
 #, kde-format
 msgid "%1: width factor changed"
@@ -9773,10 +9773,9 @@ msgid "Insert Multiple Columns Right"
 msgstr "Mehrere Spalten rechts einfügen"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:317
-#, fuzzy, kde-format
-#| msgid "%1: remove selected column(s)"
+#, kde-format
 msgid "Delete Selected Column(s)"
-msgstr "%1: Ausgewählte Spalte(n) entfernen"
+msgstr "Ausgewählte Spalte(n) entfernen"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:319
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1636
@@ -9962,10 +9961,9 @@ msgid "Remo&ve Selected Row(s)"
 msgstr "Ausgewählte Zeile(n) entfernen"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:466
-#, fuzzy, kde-format
-#| msgid "%1: fill matrix with function values"
+#, kde-format
 msgid "Delete Rows With Missing Values"
-msgstr "%1: Matrix mit Funktionswerten füllen"
+msgstr "Entferne Reihen mit fehlenden Werten"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:467
 #, kde-format
@@ -11306,11 +11304,9 @@ msgid "Excel 2007+ (XSLX)"
 msgstr "Excel 2007+ (XSLX)"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:105
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Plot Spreadsheet Data"
+#, kde-format
 msgid "OpenDocument Spreadsheet (ODS)"
-msgstr "Tabellendaten grafisch darstellen"
+msgstr "OpenDocument Tabelle (ODS)"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:114
 #, kde-format
@@ -12047,8 +12043,7 @@ msgid "Values"
 msgstr "Werte"
 
 #: src/kdefrontend/datasources/OdsOptionsWidget.cpp:19
-#, fuzzy, kde-format
-#| msgid "Datasets"
+#, kde-format
 msgid "Data sheets"
 msgstr "Datensätze"
 
@@ -14675,6 +14670,8 @@ msgid ""
 "Opens the settings for Computer Algebra Systems to modify the available "
 "systems or to enable new ones"
 msgstr ""
+"Öffnet die Einstellungen für Computer Algebra Systeme um die verfügbaren "
+"Systeme zu verändern oder neue zu aktivieren"
 
 #: src/kdefrontend/MainWin.cpp:933
 #, kde-format
@@ -14874,10 +14871,9 @@ msgstr ""
 "Keine Cantor-Backends gefunden. Bitte die gewünschten Backends installieren."
 
 #: src/kdefrontend/MainWin.cpp:2876
-#, fuzzy, kde-format
-#| msgid "Creates a new note for arbitrary text"
+#, kde-format
 msgid "Creates a new %1 notebook"
-msgstr "Erzeugt eine neue Notiz für beliebigen Text"
+msgstr "Erzeugt ein neues %1 Notebook"
 
 #: src/kdefrontend/matrix/MatrixFunctionDialog.cpp:45
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:43
@@ -15117,10 +15113,9 @@ msgid "Create New Project with Spreadsheet"
 msgstr "Neues Projekt mit Tabelle erstellen"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:190
-#, fuzzy, kde-format
-#| msgid "Create New Project with Worksheet"
+#, kde-format
 msgid "Create New Project with Notebook"
-msgstr "Neues Projekt mit Arbeitsblatt erstellen"
+msgstr "Neues Projekt mit Notebook erstellen"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:192
 #, kde-format
@@ -15131,19 +15126,16 @@ msgstr "Zuletzt verwendetes Projekt laden"
 #: src/kdefrontend/SettingsGeneralPage.cpp:195
 #, kde-format
 msgid "Notebook type to create automatically on startup"
-msgstr ""
+msgstr "Typ des Notebooks, welches bei Starten automatisch erzeugt wird"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:199
-#, fuzzy, kde-format
-#| msgid ""
-#| "Controls the behavior of where the dock widgets are placed after being re-"
-#| "opened."
+#, kde-format
 msgid ""
 "Controls the behavior of where the dock widgets are placed after being re-"
 "opened"
 msgstr ""
 "Verwaltet das Verhalten an welcher Stelle Dock Widgets nach dem erneuten "
-"Öffnen platziert werden."
+"Öffnen platziert werden"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:203
 #, kde-format
@@ -15965,10 +15957,9 @@ msgid "No data selected to plot."
 msgstr "Kein Datensatz zum darstellen ausgewählt."
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:1019
-#, fuzzy, kde-format
-#| msgid "An already existing plot has to be selected."
+#, kde-format
 msgid "An already existing plot area has to be selected."
-msgstr "Ein existierender Plot muss ausgewählt sein."
+msgstr "Ein existierender Plotbereich muss ausgewählt sein."
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:1024
 #, kde-format
@@ -21021,10 +21012,9 @@ msgstr "Einheiten:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLoadOnStartNotebook)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:254
-#, fuzzy, kde-format
-#| msgid "Notebook"
+#, kde-format
 msgid "Notebook:"
-msgstr "Notebook"
+msgstr "Notebook:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode_2)
@@ -21238,7 +21228,7 @@ msgstr "Datum/Zeit-Werte"
 #: src/kdefrontend/ui/spreadsheet/equidistantvalueswidget.ui:17
 #, kde-format
 msgid "Fix:"
-msgstr "Fest:"
+msgstr "Fixieren:"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, leFileName)
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:36

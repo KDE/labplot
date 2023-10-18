@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-16 00:39+0000\n"
+"POT-Creation-Date: 2023-10-18 00:39+0000\n"
 "PO-Revision-Date: 2023-06-04 23:26+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -7685,23 +7685,23 @@ msgstr ""
 msgid "%1: set x column"
 msgstr "%1: lisää tyhjiä sarakkeita"
 
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:250
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:251
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:465
-#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:240
+#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:241
 #, fuzzy, kde-format
 #| msgid "%1: insert empty columns"
 msgid "%1: set data columns"
 msgstr "%1: lisää tyhjiä sarakkeita"
 
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:271
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:273
 #, fuzzy, kde-format
 #| msgid "%1: set page size"
 msgid "%1: set type"
 msgstr "%1: aseta sivukoko"
 
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:278
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:280
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:493
-#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:260
+#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:262
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:206
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:228
 #, fuzzy, kde-format
@@ -7709,7 +7709,7 @@ msgstr "%1: aseta sivukoko"
 msgid "%1: set orientation"
 msgstr "%1: aseta sijainti"
 
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:285
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:287
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:507
 #, fuzzy, kde-format
 #| msgid "%1: set numeric format to '%2'"
