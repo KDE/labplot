@@ -18,10 +18,13 @@ void SpreadsheetGenerateDataTest::initTestCase() {
 	QLocale::setDefault(QLocale(QLocale::C));
 }
 
-//**********************************************************
-//**************** Equidistant values **********************
-//**********************************************************
+// **********************************************************
+// **************** Equidistant values **********************
+// **********************************************************
 
+/*!
+ *
+ */
 void SpreadsheetGenerateDataTest::testFixedNumberDouble() {
 	Spreadsheet sheet(QStringLiteral("test"), false);
 	sheet.setColumnCount(1);
@@ -48,6 +51,9 @@ void SpreadsheetGenerateDataTest::testFixedNumberDouble() {
 	QCOMPARE(column->valueAt(4), 5.);
 }
 
+/*!
+ *
+ */
 void SpreadsheetGenerateDataTest::testFixedNumberInt() {
 	Spreadsheet sheet(QStringLiteral("test"), false);
 	sheet.setColumnCount(1);
@@ -74,6 +80,9 @@ void SpreadsheetGenerateDataTest::testFixedNumberInt() {
 	QCOMPARE(column->integerAt(4), 5);
 }
 
+/*!
+ *
+ */
 void SpreadsheetGenerateDataTest::testFixedNumberBigInt() {
 	Spreadsheet sheet(QStringLiteral("test"), false);
 	sheet.setColumnCount(1);
@@ -100,14 +109,50 @@ void SpreadsheetGenerateDataTest::testFixedNumberBigInt() {
 	QCOMPARE(column->bigIntAt(4), 5);
 }
 
+/*!
+ *
+ */
 void SpreadsheetGenerateDataTest::testFixedNumberDateTime() {
+	QSKIP("doesn't work");
+	Spreadsheet sheet(QStringLiteral("test"), false);
+	sheet.setColumnCount(1);
+	sheet.setRowCount(1);
+	auto* column = sheet.column(0);
+	column->setColumnMode(AbstractColumn::ColumnMode::DateTime);
 
+	EquidistantValuesDialog dlg(&sheet);
+	dlg.setColumns(QVector<Column*>{column});
+	dlg.setType(EquidistantValuesDialog::Type::FixedNumber);
+	dlg.setNumber(5);
+
+	auto dateTime = QDateTime::fromString(QLatin1String("2023-05-01"), QLatin1String("yyyy-MM-dd"));
+	// dateTime = dateTime.toTimeSpec(Qt::UTC);
+	dlg.setFromDateTime(dateTime.toMSecsSinceEpoch());
+	dlg.setToDateTime(dateTime.addMonths(4).toMSecsSinceEpoch());
+	dlg.generate();
+
+	// checks
+	// int second = dateTime.time().second(); // current second
+	QCOMPARE(column->columnMode(), AbstractColumn::ColumnMode::DateTime);
+	QCOMPARE(sheet.rowCount(), 5);
+	QCOMPARE(column->rowCount(), 5);
+	QCOMPARE(column->dateTimeAt(0), QDateTime::fromString(QLatin1String("2023-05-01"), QLatin1String("yyyy-MM-dd")));
+	QCOMPARE(column->dateTimeAt(1), QDateTime::fromString(QLatin1String("2023-06-01"), QLatin1String("yyyy-MM-dd")));
+	QCOMPARE(column->dateTimeAt(2), QDateTime::fromString(QLatin1String("2023-07-01"), QLatin1String("yyyy-MM-dd")));
+	QCOMPARE(column->dateTimeAt(3), QDateTime::fromString(QLatin1String("2023-08-01"), QLatin1String("yyyy-MM-dd")));
+	QCOMPARE(column->dateTimeAt(4), QDateTime::fromString(QLatin1String("2023-09-01"), QLatin1String("yyyy-MM-dd")));
 }
 
+/*!
+ *
+ */
 void SpreadsheetGenerateDataTest::testFixedNumberDoubleDateTime() {
 
 }
 
+/*!
+ *
+ */
 // fixed increment between the values
 void SpreadsheetGenerateDataTest::testFixedIncrementDouble() {
 	Spreadsheet sheet(QStringLiteral("test"), false);
@@ -135,9 +180,42 @@ void SpreadsheetGenerateDataTest::testFixedIncrementDouble() {
 	QCOMPARE(column->valueAt(4), 1.8);
 }
 
+/*!
+ *
+ */
+void SpreadsheetGenerateDataTest::testFixedIncrementDateTime() {
+	Spreadsheet sheet(QStringLiteral("test"), false);
+	sheet.setColumnCount(1);
+	sheet.setRowCount(1);
+	auto* column = sheet.column(0);
+	column->setColumnMode(AbstractColumn::ColumnMode::DateTime);
+
+	EquidistantValuesDialog dlg(&sheet);
+	dlg.setColumns(QVector<Column*>{column});
+	dlg.setType(EquidistantValuesDialog::Type::FixedIncrement);
+	dlg.setIncrementDateTimeUnit(EquidistantValuesDialog::DateTimeUnit::Year);
+	auto now = QDateTime::currentDateTime();
+	dlg.setFromDateTime(now.toMSecsSinceEpoch());
+	dlg.setToDateTime(now.addYears(5).toMSecsSinceEpoch());
+	dlg.generate();
+
+	// checks
+	int year = now.date().year(); // current year
+	QCOMPARE(column->columnMode(), AbstractColumn::ColumnMode::DateTime);
+	QCOMPARE(sheet.rowCount(), 5);
+	QCOMPARE(column->rowCount(), 5);
+	QCOMPARE(column->dateTimeAt(0).date().year(), year);
+	QCOMPARE(column->dateTimeAt(1).date().year(), year + 1);
+	QCOMPARE(column->dateTimeAt(2).date().year(), year + 2);
+	QCOMPARE(column->dateTimeAt(3).date().year(), year + 3);
+	QCOMPARE(column->dateTimeAt(4).date().year(), year + 4);
+}
+
 // column mode conversion
+/*!
+ *
+ */
 void SpreadsheetGenerateDataTest::testFixedNumberIntToBigInt() {
-	QSKIP("doesn't work");
 	Spreadsheet sheet(QStringLiteral("test"), false);
 	sheet.setColumnCount(1);
 	sheet.setRowCount(1);
@@ -163,6 +241,9 @@ void SpreadsheetGenerateDataTest::testFixedNumberIntToBigInt() {
 	QCOMPARE(column->bigIntAt(4), 2147483651);
 }
 
+/*!
+ *
+ */
 void SpreadsheetGenerateDataTest::testFixedNumberIntToDouble() {
 	Spreadsheet sheet(QStringLiteral("test"), false);
 	sheet.setColumnCount(1);
@@ -189,8 +270,33 @@ void SpreadsheetGenerateDataTest::testFixedNumberIntToDouble() {
 	QCOMPARE(column->valueAt(4), 1.8);
 }
 
+/*!
+ *
+ */
 void SpreadsheetGenerateDataTest::testFixedNumberBigIntToDouble() {
+	Spreadsheet sheet(QStringLiteral("test"), false);
+	sheet.setColumnCount(1);
+	sheet.setRowCount(1);
+	auto* column = sheet.column(0);
+	column->setColumnMode(AbstractColumn::ColumnMode::BigInt);
 
+	EquidistantValuesDialog dlg(&sheet);
+	dlg.setColumns(QVector<Column*>{column});
+	dlg.setType(EquidistantValuesDialog::Type::FixedNumber);
+	dlg.setNumber(5);
+	dlg.setFromValue(1);
+	dlg.setToValue(1.8);
+	dlg.generate();
+
+	// checks
+	QCOMPARE(column->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(sheet.rowCount(), 5);
+	QCOMPARE(column->rowCount(), 5);
+	QCOMPARE(column->valueAt(0), 1.);
+	QCOMPARE(column->valueAt(1), 1.2);
+	QCOMPARE(column->valueAt(2), 1.4);
+	QCOMPARE(column->valueAt(3), 1.6);
+	QCOMPARE(column->valueAt(4), 1.8);
 }
 
 QTEST_MAIN(SpreadsheetGenerateDataTest)
