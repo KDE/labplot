@@ -58,6 +58,7 @@ EquidistantValuesDialog::EquidistantValuesDialog(Spreadsheet* s, QWidget* parent
 
 	ui.cbType->addItem(i18n("Number"), static_cast<int>(Type::FixedNumber));
 	ui.cbType->addItem(i18n("Increment"), static_cast<int>(Type::FixedIncrement));
+	ui.cbType->addItem(i18n("Number and Increment"), static_cast<int>(Type::FixedNumberIncrement));
 
 	ui.cbIncrementDateTimeUnit->addItem(i18n("Years"), static_cast<int>(DateTimeUnit::Year));
 	ui.cbIncrementDateTimeUnit->addItem(i18n("Months"), static_cast<int>(DateTimeUnit::Month));
@@ -96,7 +97,6 @@ EquidistantValuesDialog::EquidistantValuesDialog(Spreadsheet* s, QWidget* parent
 
 	const int type = conf.readEntry("Type", static_cast<int>(Type::FixedNumber));
 	ui.cbType->setCurrentIndex(ui.cbType->findData(type));
-	typeChanged(ui.cbType->currentIndex());
 	ui.leNumber->setText(QLocale().toString(conf.readEntry("Number", 1)));
 
 	// settings for numeric
@@ -137,7 +137,7 @@ EquidistantValuesDialog::~EquidistantValuesDialog() {
 	conf.writeEntry("IncrementDateTimeUnit", ui.cbIncrementDateTimeUnit->currentIndex());
 }
 
-void EquidistantValuesDialog::setNumericValue(double value, QLineEdit* le) {
+void EquidistantValuesDialog::setNumericValue(double value, QLineEdit* le) const {
 	const auto numberLocale = QLocale();
 	if (floor(value) == ceil(value)) {
 		if (value <= std::numeric_limits<int>::max()) {
@@ -185,17 +185,32 @@ void EquidistantValuesDialog::setColumns(const QVector<Column*>& columns) {
 
 	ui.lDateTime->setVisible(m_hasDateTime);
 	ui.lIncrementDateTime->setVisible(m_hasDateTime);
-	ui.leIncrementDateTime->setVisible(m_hasDateTime);
-	ui.cbIncrementDateTimeUnit->setVisible(m_hasDateTime);
+	ui.frameIncrementDateTime->setVisible(m_hasDateTime);
 	ui.lFromDateTime->setVisible(m_hasDateTime);
 	ui.dteFrom->setVisible(m_hasDateTime);
 	ui.lToDateTime->setVisible(m_hasDateTime);
 	ui.dteTo->setVisible(m_hasDateTime);
 
+	if (m_hasNumeric && m_hasDateTime) {
+		ui.lNumeric->show();
+		ui.lDateTime->show();
+		setWindowTitle(i18nc("@title:window", "Equidistant Numeric and Date&Time Values"));
+	} else {
+		ui.lNumeric->hide();
+		ui.lDateTime->hide();
+		if (m_hasNumeric)
+			setWindowTitle(i18nc("@title:window", "Equidistant Numeric Values"));
+		else
+			setWindowTitle(i18nc("@title:window", "Equidistant Date&Time Values"));
+	}
+
 	if (m_hasDateTime) {
 		ui.dteFrom->setDisplayFormat(dateTimeFormat);
 		ui.dteTo->setDisplayFormat(dateTimeFormat);
 	}
+
+	// call typeChanged() to adjust the visibility of the mode specific widgets to the current type
+	typeChanged(ui.cbType->currentIndex());
 
 	// resize the dialog to have the minimum height
 	layout()->activate();
@@ -208,31 +223,22 @@ void EquidistantValuesDialog::setColumns(const QVector<Column*>& columns) {
  */
 void EquidistantValuesDialog::typeChanged(int) {
 	const auto type = static_cast<Type>(ui.cbType->currentData().toInt());
-	switch (type) {
-	case Type::FixedNumber: {
-		ui.lNumber->show();
-		ui.leNumber->show();
-		ui.lIncrement->hide();
-		ui.leIncrement->hide();
-		ui.lIncrementDateTime->hide();
-		ui.leIncrementDateTime->hide();
-		ui.cbIncrementDateTimeUnit->hide();
-		break;
+
+	ui.lNumber->setVisible(type != Type::FixedIncrement);
+	ui.leNumber->setVisible(type != Type::FixedIncrement);
+
+	if (m_hasNumeric) {
+		ui.lIncrement->setVisible(type != Type::FixedNumber);
+		ui.leIncrement->setVisible(type != Type::FixedNumber);
+		ui.lTo->setVisible(type != Type::FixedNumberIncrement);
+		ui.leTo->setVisible(type != Type::FixedNumberIncrement);
 	}
-	case Type::FixedIncrement: {
-		ui.lNumber->hide();
-		ui.leNumber->hide();
-		if (m_hasNumeric) {
-			ui.lIncrement->show();
-			ui.leIncrement->show();
-		}
-		if (m_hasDateTime) {
-			ui.lIncrementDateTime->show();
-			ui.leIncrementDateTime->show();
-			ui.cbIncrementDateTimeUnit->show();
-		}
-		break;
-	}
+
+	if (m_hasDateTime) {
+		ui.lIncrementDateTime->setVisible(type != Type::FixedNumber);
+		ui.frameIncrementDateTime->setVisible(type != Type::FixedNumber);
+		ui.lToDateTime->setVisible(type != Type::FixedNumberIncrement);
+		ui.dteTo->setVisible(type != Type::FixedNumberIncrement);
 	}
 }
 
@@ -291,6 +297,9 @@ void EquidistantValuesDialog::checkValues() {
 		}
 		break;
 	}
+	case Type::FixedNumberIncrement: {
+		break;
+	}
 	}
 
 	m_okButton->setToolTip(QString());
@@ -347,6 +356,9 @@ void EquidistantValuesDialog::generate() {
 			increment = QLocale().toDouble(ui.leIncrement->text(), &ok);
 			if (ok)
 				number = (end - start) / increment + 1;
+			break;
+		}
+		case Type::FixedNumberIncrement: {
 			break;
 		}
 		}
@@ -627,6 +639,9 @@ bool EquidistantValuesDialog::generateDateTime(QVector<QDateTime>& newData,
 
 		break;
 	}
+	case Type::FixedNumberIncrement: {
+		break;
+	}
 	}
 
 	return true;
@@ -644,7 +659,7 @@ void EquidistantValuesDialog::setNumber(int value) const {
 }
 
 void EquidistantValuesDialog::setIncrement(double value) const {
-	ui.leIncrement->setText(QLocale().toString(value));
+	setNumericValue(value, ui.leIncrement);
 }
 
 void EquidistantValuesDialog::setIncrementDateTime(int value) const {
@@ -656,11 +671,11 @@ void EquidistantValuesDialog::setIncrementDateTimeUnit(DateTimeUnit value) {
 }
 
 void EquidistantValuesDialog::setFromValue(double value) const {
-	ui.leFrom->setText(QLocale().toString(value));
+	setNumericValue(value, ui.leFrom);
 }
 
 void EquidistantValuesDialog::setToValue(double value) const {
-	ui.leTo->setText(QLocale().toString(value));
+	setNumericValue(value, ui.leTo);
 }
 
 void EquidistantValuesDialog::setFromDateTime(qint64 value) const {

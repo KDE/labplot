@@ -30,6 +30,7 @@ private Q_SLOTS:
 
 	// fixed increment between the values
 	void testFixedIncrementDouble();
+	void testFixedIncrementDateTime();
 
 	// column mode conversion
 	void testFixedNumberIntToBigInt();

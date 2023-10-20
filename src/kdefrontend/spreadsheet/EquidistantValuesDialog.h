@@ -23,7 +23,7 @@ class EquidistantValuesDialog : public QDialog {
 	friend class SpreadsheetGenerateDataTest;
 
 public:
-	enum class Type { FixedNumber, FixedIncrement };
+	enum class Type { FixedNumber, FixedIncrement, FixedNumberIncrement };
 	enum class DateTimeUnit { Year, Month, Day, Hour, Minute, Second, Millisecond };
 
 	explicit EquidistantValuesDialog(Spreadsheet*, QWidget* parent = nullptr);
@@ -41,7 +41,7 @@ private:
 	bool m_hasBigInteger{false};
 	bool m_hasDateTime{false};
 
-	void setNumericValue(double, QLineEdit*);
+	void setNumericValue(double, QLineEdit*) const;
 	bool generateDouble(QVector<double>&, double start, double increment, int number);
 	bool generateInt(QVector<int>&, int start, int increment, int number);
 	bool generateBigInt(QVector<qint64>&, qint64 start, qint64 increment, int number);
