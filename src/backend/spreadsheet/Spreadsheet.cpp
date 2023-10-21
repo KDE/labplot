@@ -622,6 +622,7 @@ void Spreadsheet::clear(const QVector<Column*>& columns) {
 		col->setSuppressDataChangedSignal(false);
 		col->setChanged();
 	}
+	exec(parent);
 }
 
 /*!
