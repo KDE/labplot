@@ -1123,23 +1123,14 @@ void DatapickerTest::datapickerDateTime() {
 	QDateTime dt1 = QDateTime::fromString(QLatin1String("2000-12-01 00:00:00:000Z"), QStringLiteral("yyyy-MM-dd hh:mm:ss:zzzt"));
 	QDateTime dt2 = QDateTime::fromString(QLatin1String("2000-12-01 00:00:00:000Z"), QStringLiteral("yyyy-MM-dd hh:mm:ss:zzzt"));
 	QDateTime dt3 = QDateTime::fromString(QLatin1String("2000-12-01 06:00:00:000Z"), QStringLiteral("yyyy-MM-dd hh:mm:ss:zzzt"));
-	WARN("dt1 ms = " << dt1.toMSecsSinceEpoch())
-	WARN("dt3 ms = " << dt3.toMSecsSinceEpoch())
 	w.ui.dtePositionX1->setMSecsSinceEpochUTC(dt1.toMSecsSinceEpoch());
 	w.ui.dtePositionX2->setMSecsSinceEpochUTC(dt2.toMSecsSinceEpoch());
 	w.ui.dtePositionX3->setMSecsSinceEpochUTC(dt3.toMSecsSinceEpoch());
 
 	QCOMPARE(curve->posXColumn()->rowCount(), 1);
 	QCOMPARE(curve->posXColumn()->columnMode(), AbstractColumn::ColumnMode::DateTime);
-	WARN("datetime = " << curve->posXColumn()->dateTimeAt(0).toString().toStdString())
-// TODO: Qt6 has different result
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-	QCOMPARE(curve->posXColumn()->dateTimeAt(0),
-			 QDateTime::fromString(QLatin1String("2000-12-01 04:00:00:000Z"), QStringLiteral("yyyy-MM-dd hh:mm:ss:zzzt"))); // logical coordinates
-#else
 	QCOMPARE(curve->posXColumn()->dateTimeAt(0),
 			 QDateTime::fromString(QLatin1String("2000-12-01 03:00:00:000Z"), QStringLiteral("yyyy-MM-dd hh:mm:ss:zzzt"))); // logical coordinates
-#endif
 	QCOMPARE(curve->posYColumn()->rowCount(), 1);
 	VALUES_EQUAL(curve->posYColumn()->valueAt(0), 6.); // logical coordinates
 }
