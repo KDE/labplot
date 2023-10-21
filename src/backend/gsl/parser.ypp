@@ -109,7 +109,7 @@ expr:      NUM       { $$ = $1;                            }
 | VAR                { $$ = $1->value.var; _variablesCounter++;}
 | VAR '=' expr       { $$ = $3; $1->value.var = $3; _variablesCounter++;       }
 | SPECFNCT '(' ')'       {
-							if (!$1->value.special_function.payload->constant)
+							if (!$1->value.special_function.payload.expired() && !$1->value.special_function.payload.lock()->constant)
 								_variablesCounter++;
 							const func_tPayload function = (func_tPayload)($1->value.special_function.funsptr->fnct);
 							const int argc = $1->value.special_function.funsptr->argc;
@@ -125,7 +125,7 @@ expr:      NUM       { $$ = $1;                            }
 							$$ = (*function)($1->value.special_function.payload);
 						}
 | SPECFNCT '(' VAR ')'  {
-							if (!$1->value.special_function.payload->constant)
+							if (!$1->value.special_function.payload.expired() && !$1->value.special_function.payload.lock()->constant)
 								_variablesCounter++;
 							const func_t1Payload function = (func_t1Payload)($1->value.special_function.funsptr->fnct);
 							const int argc = $1->value.special_function.funsptr->argc;
@@ -141,7 +141,7 @@ expr:      NUM       { $$ = $1;                            }
 								$$ = (*function)($3->name, $1->value.special_function.payload);
 						}
 | SPECFNCT '(' expr ';' VAR ')'  {
-									if (!$1->value.special_function.payload->constant)
+									if (!$1->value.special_function.payload.expired() && !$1->value.special_function.payload.lock()->constant)
 										_variablesCounter++;
 									const func_t2Payload function = (func_t2Payload)($1->value.special_function.funsptr->fnct);
 									const int argc = $1->value.special_function.funsptr->argc;
@@ -157,7 +157,7 @@ expr:      NUM       { $$ = $1;                            }
 										$$ = (*function)($3 ,$5->name, $1->value.special_function.payload);
 								  }
 | SPECFNCT '(' expr ';' expr ';' VAR ')'  {
-											if (!$1->value.special_function.payload->constant)
+											if (!$1->value.special_function.payload.expired() && !$1->value.special_function.payload.lock()->constant)
 												_variablesCounter++;
 											const func_t3Payload function = (func_t3Payload)($1->value.special_function.funsptr->fnct);
 											const int argc = $1->value.special_function.funsptr->argc;
@@ -173,7 +173,7 @@ expr:      NUM       { $$ = $1;                            }
 												$$ = (*function)($3, $5, $7->name, $1->value.special_function.payload);
 										  }
 | SPECFNCT '(' expr ';' expr ';' expr ';' VAR ')'  {
-													if (!$1->value.special_function.payload->constant)
+													if (!$1->value.special_function.payload.expired() && !$1->value.special_function.payload.lock()->constant)
 														_variablesCounter++;
 													const func_t4Payload function = (func_t4Payload)($1->value.special_function.funsptr->fnct);
 													const int argc = $1->value.special_function.funsptr->argc;
@@ -299,11 +299,21 @@ int yyerror(param *p, const char *s) {
 symbol* put_symbol(const char *symbol_name, int symbol_type) {
 /*	pdebug("PARSER: put_symbol(): symbol_name = '%s'\n", symbol_name); */
 
-	symbol *ptr = (symbol *)malloc(sizeof(symbol));
+	symbol *ptr = new symbol;
+	assert(ptr);
 	ptr->name = (char *)malloc(strlen(symbol_name) + 1);
 	strcpy(ptr->name, symbol_name);
 	ptr->type = symbol_type;
-	ptr->value.var = 0;	/* set value to 0 even if fctn */
+	switch (symbol_type) {
+	case VAR: ptr->value.var = 0; break;
+	case FNCT: ptr->value.funsptr = nullptr; break;
+	case SPECFNCT: {
+		special_function_def sfp;
+		ptr->value.special_function = sfp;
+		break;
+	}
+	}
+
 	ptr->next = (symbol *)symbol_table;
 	symbol_table = ptr;
 	
@@ -380,7 +390,11 @@ void init_table(void) {
 	/* add special functions */
 	for (i = 0; i < _number_specialfunctions; i++) {
 		ptr = put_symbol(_special_functions[i].name, SPECFNCT);
-		ptr->value.funsptr = &_special_functions[i];
+
+		special_function_def sfd;
+		ptr->value.special_function = sfd;
+		ptr->value.special_function.funsptr = &_special_functions[i];
+		ptr->value.special_function.payload.reset();
 	}
 	/* add constants */
 	for (i = 0; i < _number_constants; i++) {
@@ -391,7 +405,7 @@ void init_table(void) {
 	pdebug("PARSER: init_table() DONE. sym_table = %p\n", ptr);
 }
 
-bool set_specialfunction0(const char* function_name, func_tPayload function, Payload* payload) {
+bool set_specialfunction0(const char* function_name, func_tPayload function, std::weak_ptr<Payload> payload) {
 	pdebug("PARSER: set_SpecialFunction0()\n");
 
 
@@ -406,7 +420,7 @@ bool set_specialfunction0(const char* function_name, func_tPayload function, Pay
 	return true;
 }
 
-bool set_specialfunction1(const char* function_name, func_t1Payload function, Payload* payload) {
+bool set_specialfunction1(const char* function_name, func_t1Payload function, std::shared_ptr<Payload> payload) {
 	pdebug("PARSER: set_SpecialFunction1()\n");
 
 
@@ -421,7 +435,7 @@ bool set_specialfunction1(const char* function_name, func_t1Payload function, Pa
 	return true;
 }
 
-bool set_specialfunction2(const char* function_name, func_t2Payload function, Payload* payload) {
+bool set_specialfunction2(const char* function_name, func_t2Payload function, std::shared_ptr<Payload> payload) {
 	pdebug("PARSER: set_SpecialFunction2()\n");
 
 
@@ -436,7 +450,7 @@ bool set_specialfunction2(const char* function_name, func_t2Payload function, Pa
 	return true;
 }
 
-bool set_specialfunction3(const char* function_name, func_t3Payload function, Payload* payload) {
+bool set_specialfunction3(const char* function_name, func_t3Payload function, std::shared_ptr<Payload> payload) {
 	pdebug("PARSER: set_SpecialFunction3()\n");
 
 
@@ -451,7 +465,7 @@ bool set_specialfunction3(const char* function_name, func_t3Payload function, Pa
 	return true;
 }
 
-bool set_specialfunction4(const char* function_name, func_t4Payload function, Payload* payload) {
+bool set_specialfunction4(const char* function_name, func_t4Payload function, std::shared_ptr<Payload> payload) {
 	pdebug("PARSER: set_SpecialFunction4()\n");
 
 

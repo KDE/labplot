@@ -15,6 +15,7 @@
 #include "functions.h"
 #include "parserFunctionTypes.h"
 #include <gsl/gsl_version.h>
+#include <memory>
 
 /* uncomment to enable parser specific debugging */
 /* #define PDEBUG 1 */
@@ -36,8 +37,9 @@ struct Payload {
 };
 
 struct special_function_def {
+	special_function_def(): funsptr(nullptr), payload(std::weak_ptr<Payload>()) {}
 	funs* funsptr;
-	Payload* payload;
+	std::weak_ptr<Payload> payload;
 };
 
 /* structure for list of symbols */
@@ -48,6 +50,16 @@ typedef struct symbol {
 		double var; /* value of a VAR */
 		funs* funsptr; /* value of a FNCT */
 		special_function_def special_function; /* value of SPECFNCT */
+
+		~<unnamed union>() {
+			switch (type) {
+			case VAR: break;
+			case FNCT: break;
+			case SPECFNCT:
+				special_function.~special_function_def();
+				break;
+			}
+		}
 	} value;
 	struct symbol* next; /* next symbol */
 } symbol;
@@ -61,11 +73,11 @@ symbol* assign_symbol(const char* symbol_name, double value);
 int remove_symbol(const char* symbol_name);
 double parse(const char* string, const char* locale);
 double parse_with_vars(const char[], const parser_var[], int nvars, const char* locale);
-bool set_specialfunction0(const char* function_name, func_tPayload function, Payload* payload);
-bool set_specialfunction1(const char* function_name, func_t1Payload function, Payload* payload);
-bool set_specialfunction2(const char* function_name, func_t2Payload function, Payload* payload);
-bool set_specialfunction3(const char* function_name, func_t3Payload function, Payload* payload);
-bool set_specialfunction4(const char* function_name, func_t4Payload function, Payload* payload);
+bool set_specialfunction0(const char* function_name, func_tPayload function, std::shared_ptr<Payload> payload);
+bool set_specialfunction1(const char* function_name, func_t1Payload function, std::shared_ptr<Payload> payload);
+bool set_specialfunction2(const char* function_name, func_t2Payload function, std::shared_ptr<Payload> payload);
+bool set_specialfunction3(const char* function_name, func_t3Payload function, std::shared_ptr<Payload> payload);
+bool set_specialfunction4(const char* function_name, func_t4Payload function, std::shared_ptr<Payload> payload);
 
 const char* lastErrorMessage();
 #endif /*PARSER_H*/

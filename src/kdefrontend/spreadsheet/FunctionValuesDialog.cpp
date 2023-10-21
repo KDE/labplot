@@ -162,6 +162,9 @@ bool FunctionValuesDialog::validVariableName(QLineEdit* le) {
 	} else if (ExpressionParser::getInstance()->functions().indexOf(le->text()) != -1) {
 		SET_WARNING_STYLE(le)
 		le->setToolTip(i18n("Provided variable name is already reserved for a name of a function. Please use another name."));
+	} else if (le->text().compare(QLatin1String("i")) == 0) {
+		SET_WARNING_STYLE(le)
+		le->setToolTip(i18n("i is reserved as index of the current processed row."));
 	} else if (le->text().contains(QRegularExpression(QLatin1String("^[0-9]|[^a-zA-Z0-9_]")))) {
 		SET_WARNING_STYLE(le)
 		le->setToolTip(i18n("Provided variable name starts with a digit or contains special character."));

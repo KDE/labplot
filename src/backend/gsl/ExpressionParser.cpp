@@ -269,9 +269,8 @@ bool ExpressionParser::isValid(const QString& expr, const QStringList& vars) {
 	for (const auto& var : vars)
 		assign_symbol(qPrintable(var), 0);
 
-	// cell() supports index i: make i valid
-	if (expr.contains(QLatin1String("cell")))
-		assign_symbol("i", 0);
+	// Row index
+	assign_symbol("i", 0);
 
 	const auto numberLocale = QLocale();
 	DEBUG(Q_FUNC_INFO << ", number locale: " << STDSTRING(numberLocale.name()))
@@ -289,8 +288,6 @@ bool ExpressionParser::isValid(const QString& expr, const QStringList& vars) {
 	/* remove temporarily defined symbols */
 	for (const auto& var : vars)
 		remove_symbol(qPrintable(var));
-	if (expr.contains(QLatin1String("cell")))
-		remove_symbol("i");
 
 	return !(parse_errors() > 0);
 }
@@ -469,6 +466,7 @@ bool ExpressionParser::evaluateCartesian(const QString& expr,
 }
 
 struct PayloadExpressionParser : public Payload {
+	PayloadExpressionParser() {}
 	PayloadExpressionParser(const QStringList* vars, const QVector<QVector<double>*>* xVectors, bool constant = false)
 		: Payload(constant)
 		, vars(vars)
@@ -480,42 +478,46 @@ struct PayloadExpressionParser : public Payload {
 	int row;
 };
 
-double cell(double x, const char* variable, const Payload* payload) {
-	const auto* p = dynamic_cast<const PayloadExpressionParser*>(payload);
+double cell(double x, const char* variable, const std::weak_ptr<Payload> payload) {
+	const auto p = std::dynamic_pointer_cast<PayloadExpressionParser>(payload.lock());
 	if (!p) {
 		assert(p); // Debug build
 		return NAN;
 	}
 
+	const int index = (int)x - 1;
 	for (int i = 0; i < p->vars->length(); i++) {
 		if (p->vars->at(i).compare(QLatin1String(variable)) == 0) {
-			return p->xVectors->at(i)->at((int)x - 1);
+			if (index >= 0 && index < p->xVectors->at(i)->length())
+				return p->xVectors->at(i)->at(index);
+			else
+				break;
 		}
 	}
 
 	return NAN;
 }
 
-double ma(const char* variable, const Payload* payload) {
-	const auto* p = dynamic_cast<const PayloadExpressionParser*>(payload);
+double ma(const char* variable, const std::weak_ptr<Payload> payload) {
+	const auto p = std::dynamic_pointer_cast<PayloadExpressionParser>(payload.lock());
 	if (!p) {
 		assert(p); // Debug build
 		return NAN;
 	}
-	return (cell(p->row, variable, payload) + cell(p->row, variable, payload)) / 2.;
+	return (cell(p->row, variable, payload) + cell(p->row + 1, variable, payload)) / 2.;
 }
 
-double mr(const char* variable, const Payload* payload) {
-	const auto* p = dynamic_cast<const PayloadExpressionParser*>(payload);
+double mr(const char* variable, const std::weak_ptr<Payload> payload) {
+	const auto p = std::dynamic_pointer_cast<PayloadExpressionParser>(payload.lock());
 	if (!p) {
 		assert(p); // Debug build
 		return NAN;
 	}
-	return fabs(cell(p->row, variable, payload) - cell(p->row - 1, variable, payload));
+	return fabs(cell(p->row + 1, variable, payload) - cell(p->row + 1 - 1, variable, payload));
 }
 
-double smmin(double x, const char* variable, const Payload* payload) {
-	const auto* p = dynamic_cast<const PayloadExpressionParser*>(payload);
+double smmin(double x, const char* variable, const std::weak_ptr<Payload> payload) {
+	const auto p = std::dynamic_pointer_cast<PayloadExpressionParser>(payload.lock());
 	if (!p) {
 		assert(p); // Debug build
 		return NAN;
@@ -541,8 +543,8 @@ double smmin(double x, const char* variable, const Payload* payload) {
 	return NAN;
 }
 
-double smmax(double x, const char* variable, const Payload* payload) {
-	const auto* p = dynamic_cast<const PayloadExpressionParser*>(payload);
+double smmax(double x, const char* variable, const std::weak_ptr<Payload> payload) {
+	const auto p = std::dynamic_pointer_cast<PayloadExpressionParser>(payload.lock());
 	if (!p) {
 		assert(p); // Debug build
 		return NAN;
@@ -568,8 +570,8 @@ double smmax(double x, const char* variable, const Payload* payload) {
 	return NAN;
 }
 
-double sma(double x, const char* variable, const Payload* payload) {
-	const auto* p = dynamic_cast<const PayloadExpressionParser*>(payload);
+double sma(double x, const char* variable, const std::weak_ptr<Payload> payload) {
+	const auto p = std::dynamic_pointer_cast<PayloadExpressionParser>(payload.lock());
 	if (!p) {
 		assert(p); // Debug build
 		return NAN;
@@ -592,15 +594,15 @@ double sma(double x, const char* variable, const Payload* payload) {
 	return NAN;
 }
 
-double smr(double x, const char* variable, const Payload* payload) {
+double smr(double x, const char* variable, const std::weak_ptr<Payload> payload) {
 	return smmax(x, variable, payload) - smmin(x, variable, payload);
 }
 
-void ExpressionParser::setSpecialFunction1(const char* function_name, func_t1Payload funct, Payload* payload) {
+void ExpressionParser::setSpecialFunction1(const char* function_name, func_t1Payload funct, std::shared_ptr<Payload> payload) {
 	set_specialfunction1(function_name, funct, payload);
 }
 
-void ExpressionParser::setSpecialFunction2(const char* function_name, func_t2Payload funct, Payload* payload) {
+void ExpressionParser::setSpecialFunction2(const char* function_name, func_t2Payload funct, std::shared_ptr<Payload> payload) {
 	set_specialfunction2(function_name, funct, payload);
 }
 
@@ -627,22 +629,23 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList&
 	const auto numberLocale = QLocale();
 	DEBUG("Parsing with locale " << qPrintable(numberLocale.name()))
 
-	PayloadExpressionParser payload(&vars, &xVectors);
-	PayloadExpressionParser payloadConst(&vars, &xVectors, true);
+	const auto payload = std::make_shared<PayloadExpressionParser>(&vars, &xVectors);
+	const auto payloadConst = std::make_shared<PayloadExpressionParser>(&vars, &xVectors, true);
 
-	set_specialfunction2(specialfun_cell, &cell, &payloadConst);
-	set_specialfunction1(specialfun_ma, &ma, &payload);
-	set_specialfunction1(specialfun_mr, &mr, &payload);
-	set_specialfunction2(specialfun_smmin, &smmin, &payload);
-	set_specialfunction2(specialfun_smmax, &smmax, &payload);
-	set_specialfunction2(specialfun_sma, &sma, &payload);
-	set_specialfunction2(specialfun_smr, &smr, &payload);
+	set_specialfunction2(specialfun_cell, &cell, payloadConst);
+	set_specialfunction1(specialfun_ma, &ma, payload);
+	set_specialfunction1(specialfun_mr, &mr, payload);
+	set_specialfunction2(specialfun_smmin, &smmin, payload);
+	set_specialfunction2(specialfun_smmax, &smmax, payload);
+	set_specialfunction2(specialfun_sma, &sma, payload);
+	set_specialfunction2(specialfun_smr, &smr, payload);
 
 	bool constExpression = false;
 	for (int i = 0; i < minSize || (constExpression && i < yVector->size()); i++) {
 		QString tmpExpr = expr;
 
-		payload.row = i; // all special functions contain pointer to payload so they get this information
+		payload->row = i; // all special functions contain pointer to payload so they get this information
+		assign_symbol("i", i + 1);
 
 		for (int n = 0; n < vars.size(); ++n) {
 			if (!constExpression)

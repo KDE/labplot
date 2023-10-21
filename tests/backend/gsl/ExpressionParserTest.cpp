@@ -275,4 +275,11 @@ void ExpressionParserTest::testevaluateCartesianConstExpr() {
 //	QCOMPARE(yVector.at(9), NAN);
 //}
 
+void ExpressionParserTest::testIsValid() {
+	const QString expr = QStringLiteral("cell(5; x)");
+	const QStringList vars = {QStringLiteral("x")};
+
+	QCOMPARE(ExpressionParser::isValid(expr, vars), true); // should not crash
+}
+
 QTEST_MAIN(ExpressionParserTest)

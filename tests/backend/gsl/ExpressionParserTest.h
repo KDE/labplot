@@ -27,7 +27,9 @@ private Q_SLOTS:
 
 	void testevaluateCartesian();
 	void testevaluateCartesianConstExpr();
-	//	void testevaluateCartesianConstExpr2();
+	//void testevaluateCartesianConstExpr2();
+
+	void testIsValid();
 };
 
 #endif // EXPRESSIONPARSERTEST_H

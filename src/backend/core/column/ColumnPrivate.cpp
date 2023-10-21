@@ -1746,8 +1746,8 @@ struct PayloadColumn : public Payload {
 };
 
 #define COLUMN_FUNCTION(function_name, evaluation_function)                                                                                                    \
-	double column##function_name(const char* variable, const Payload* payload) {                                                                               \
-		const auto* p = dynamic_cast<const PayloadColumn*>(payload);                                                                                           \
+		double column##function_name(const char* variable, const std::weak_ptr<Payload> payload) {                                                                               \
+		const auto p = std::dynamic_pointer_cast<PayloadColumn>(payload.lock());                                                                                           \
 		if (!p) {                                                                                                                                              \
 			assert(p); /* Debug build */                                                                                                                       \
 			return NAN;                                                                                                                                        \
@@ -1788,8 +1788,8 @@ COLUMN_FUNCTION(Skew, statistics().skewness)
 COLUMN_FUNCTION(Kurt, statistics().kurtosis)
 COLUMN_FUNCTION(Entropy, statistics().entropy)
 
-double columnQuantile(double p, const char* variable, const Payload* payload) {
-	const auto* pd = dynamic_cast<const PayloadColumn*>(payload);
+double columnQuantile(double p, const char* variable, const std::weak_ptr<Payload> payload) {
+	const auto pd = std::dynamic_pointer_cast<PayloadColumn>(payload.lock());
 	if (!pd) {
 		assert(pd); // Debug build
 		return NAN;
@@ -1844,7 +1844,7 @@ double columnQuantile(double p, const char* variable, const Payload* payload) {
 	return value;
 }
 
-double columnPercentile(double p, const char* variable, const Payload* payload) {
+double columnPercentile(double p, const char* variable, const std::weak_ptr<Payload> payload) {
 	return columnQuantile(p / 100., variable, payload);
 }
 
@@ -1903,39 +1903,39 @@ void ColumnPrivate::updateFormula() {
 		//->"clean" the result vector first
 		QVector<double> new_data(rowCount(), NAN);
 
-		PayloadColumn payload(m_formulaData);
+		const auto payload = std::make_shared<PayloadColumn>(m_formulaData);
 
 		// evaluate the expression for f(x_1, x_2, ...) and write the calculated values into a new vector.
 		auto* parser = ExpressionParser::getInstance();
-		parser->setSpecialFunction1(colfun_size, &columnSize, &payload);
-		parser->setSpecialFunction1(colfun_min, &columnMin, &payload);
-		parser->setSpecialFunction1(colfun_max, &columnMax, &payload);
-		parser->setSpecialFunction1(colfun_mean, &columnMean, &payload);
-		parser->setSpecialFunction1(colfun_median, &columnMedian, &payload);
-		parser->setSpecialFunction1(colfun_stdev, &columnStdev, &payload);
-		parser->setSpecialFunction1(colfun_var, &columnVar, &payload);
-		parser->setSpecialFunction1(colfun_gm, &columnGm, &payload);
-		parser->setSpecialFunction1(colfun_hm, &columnHm, &payload);
-		parser->setSpecialFunction1(colfun_chm, &columnChm, &payload);
-		parser->setSpecialFunction1(colfun_mode, &columnStatisticsMode, &payload);
-		parser->setSpecialFunction1(colfun_quartile1, &columnQuartile1, &payload);
-		parser->setSpecialFunction1(colfun_quartile3, &columnQuartile3, &payload);
-		parser->setSpecialFunction1(colfun_iqr, &columnIqr, &payload);
-		parser->setSpecialFunction1(colfun_percentile1, &columnPercentile1, &payload);
-		parser->setSpecialFunction1(colfun_percentile5, &columnPercentile5, &payload);
-		parser->setSpecialFunction1(colfun_percentile10, &columnPercentile10, &payload);
-		parser->setSpecialFunction1(colfun_percentile90, &columnPercentile90, &payload);
-		parser->setSpecialFunction1(colfun_percentile95, &columnPercentile95, &payload);
-		parser->setSpecialFunction1(colfun_percentile99, &columnPercentile99, &payload);
-		parser->setSpecialFunction1(colfun_trimean, &columnTrimean, &payload);
-		parser->setSpecialFunction1(colfun_meandev, &columnMeandev, &payload);
-		parser->setSpecialFunction1(colfun_meandevmedian, &columnMeandevmedian, &payload);
-		parser->setSpecialFunction1(colfun_mediandev, &columnMediandev, &payload);
-		parser->setSpecialFunction1(colfun_skew, &columnSkew, &payload);
-		parser->setSpecialFunction1(colfun_kurt, &columnKurt, &payload);
-		parser->setSpecialFunction1(colfun_entropy, &columnEntropy, &payload);
-		parser->setSpecialFunction2(colfun_percentile, &columnPercentile, &payload);
-		parser->setSpecialFunction2(colfun_quantile, &columnQuantile, &payload);
+		parser->setSpecialFunction1(colfun_size, &columnSize, payload);
+		parser->setSpecialFunction1(colfun_min, &columnMin, payload);
+		parser->setSpecialFunction1(colfun_max, &columnMax, payload);
+		parser->setSpecialFunction1(colfun_mean, &columnMean, payload);
+		parser->setSpecialFunction1(colfun_median, &columnMedian, payload);
+		parser->setSpecialFunction1(colfun_stdev, &columnStdev, payload);
+		parser->setSpecialFunction1(colfun_var, &columnVar, payload);
+		parser->setSpecialFunction1(colfun_gm, &columnGm, payload);
+		parser->setSpecialFunction1(colfun_hm, &columnHm, payload);
+		parser->setSpecialFunction1(colfun_chm, &columnChm, payload);
+		parser->setSpecialFunction1(colfun_mode, &columnStatisticsMode, payload);
+		parser->setSpecialFunction1(colfun_quartile1, &columnQuartile1, payload);
+		parser->setSpecialFunction1(colfun_quartile3, &columnQuartile3, payload);
+		parser->setSpecialFunction1(colfun_iqr, &columnIqr, payload);
+		parser->setSpecialFunction1(colfun_percentile1, &columnPercentile1, payload);
+		parser->setSpecialFunction1(colfun_percentile5, &columnPercentile5, payload);
+		parser->setSpecialFunction1(colfun_percentile10, &columnPercentile10, payload);
+		parser->setSpecialFunction1(colfun_percentile90, &columnPercentile90, payload);
+		parser->setSpecialFunction1(colfun_percentile95, &columnPercentile95, payload);
+		parser->setSpecialFunction1(colfun_percentile99, &columnPercentile99, payload);
+		parser->setSpecialFunction1(colfun_trimean, &columnTrimean, payload);
+		parser->setSpecialFunction1(colfun_meandev, &columnMeandev, payload);
+		parser->setSpecialFunction1(colfun_meandevmedian, &columnMeandevmedian, payload);
+		parser->setSpecialFunction1(colfun_mediandev, &columnMediandev, payload);
+		parser->setSpecialFunction1(colfun_skew, &columnSkew, payload);
+		parser->setSpecialFunction1(colfun_kurt, &columnKurt, payload);
+		parser->setSpecialFunction1(colfun_entropy, &columnEntropy, payload);
+		parser->setSpecialFunction2(colfun_percentile, &columnPercentile, payload);
+		parser->setSpecialFunction2(colfun_quantile, &columnQuantile, payload);
 
 		QDEBUG(Q_FUNC_INFO << ", Calling evaluateCartesian(). formula: " << formula << ", var names: " << formulaVariableNames)
 		parser->evaluateCartesian(formula, formulaVariableNames, xVectors, &new_data);
