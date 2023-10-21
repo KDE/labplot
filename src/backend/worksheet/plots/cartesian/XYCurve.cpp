@@ -910,7 +910,7 @@ void XYCurvePrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
 void XYCurvePrivate::calculateScenePoints() {
 	if (!q->plot() || !m_scenePointsDirty || !xColumn)
 		return;
-#ifdef PERFTRACE_CURVES
+#if PERFTRACE_CURVES
 	PERFTRACE(QLatin1String(Q_FUNC_INFO) + QStringLiteral(", curve ") + name());
 #endif
 
@@ -921,7 +921,7 @@ void XYCurvePrivate::calculateScenePoints() {
 	//  TODO: check updateErrorBars() and updateDropLines() and if they aren't available don't calculate this part
 	// if (symbolsStyle != Symbol::Style::NoSymbols || valuesType != XYCurve::NoValues ) {
 	{
-#ifdef PERFTRACE_CURVES
+#if PERFTRACE_CURVES
 		PERFTRACE(QLatin1String(Q_FUNC_INFO) + QStringLiteral(", curve ") + name() + QStringLiteral(", map logical points to scene coordinates"));
 #endif
 
@@ -1210,7 +1210,7 @@ TODO: At the moment also the points which are outside of the scene are added. Th
   lines where both points are outside of the scene
 */
 void XYCurvePrivate::updateLines() {
-#ifdef PERFTRACE_CURVES
+#if PERFTRACE_CURVES
 	PERFTRACE(QLatin1String(Q_FUNC_INFO) + QStringLiteral(", curve ") + name());
 #endif
 	linePath = QPainterPath();
@@ -1238,7 +1238,7 @@ void XYCurvePrivate::updateLines() {
 
 	// calculate the lines connecting the data points
 	{
-#ifdef PERFTRACE_CURVES
+#if PERFTRACE_CURVES
 		PERFTRACE(QLatin1String(Q_FUNC_INFO) + QStringLiteral(", curve ") + name() + QStringLiteral(", calculate the lines connecting the data points"));
 #endif
 
@@ -1333,7 +1333,7 @@ void XYCurvePrivate::updateLines() {
 			case XYCurve::LineType::NoLine:
 				break;
 			case XYCurve::LineType::Line: {
-#ifdef PERFTRACE_CURVES
+#if PERFTRACE_CURVES
 				PERFTRACE(name() + QLatin1String(Q_FUNC_INFO) + QStringLiteral(", find relevant lines"));
 #endif
 				for (int i{startIndex}; i <= endIndex; i++) {
@@ -1629,7 +1629,7 @@ void XYCurvePrivate::updateLines() {
 
 	// map the lines to scene coordinates
 	{
-#ifdef PERFTRACE_CURVES
+#if PERFTRACE_CURVES
 		PERFTRACE(QLatin1String(Q_FUNC_INFO) + QStringLiteral(", curve ") + name() + QStringLiteral(", map lines to scene coordinates"));
 #endif
 		Q_EMIT q->linesUpdated(q, m_lines);
@@ -1637,7 +1637,7 @@ void XYCurvePrivate::updateLines() {
 	}
 
 	{
-#ifdef PERFTRACE_CURVES
+#if PERFTRACE_CURVES
 		PERFTRACE(QLatin1String(Q_FUNC_INFO) + QStringLiteral(", curve ") + name() + QStringLiteral(", calculate new line path"));
 #endif
 		// new line path
@@ -1739,7 +1739,7 @@ void XYCurvePrivate::updateDropLines() {
 }
 
 void XYCurvePrivate::updateSymbols() {
-#ifdef PERFTRACE_CURVES
+#if PERFTRACE_CURVES
 	PERFTRACE(QLatin1String(Q_FUNC_INFO) + QStringLiteral(", curve ") + name());
 #endif
 	symbolsPath = QPainterPath();
@@ -1817,7 +1817,7 @@ void XYCurvePrivate::updateRug() {
   recreates the value strings to be shown and recalculates their draw position.
 */
 void XYCurvePrivate::updateValues() {
-#ifdef PERFTRACE_CURVES
+#if PERFTRACE_CURVES
 	PERFTRACE(QLatin1String(Q_FUNC_INFO) + QLatin1String(", curve ") + name());
 #endif
 	valuesPath = QPainterPath();
@@ -2824,7 +2824,7 @@ void XYCurvePrivate::recalcShapeAndBoundingRect() {
 	if (m_suppressRecalc)
 		return;
 
-#ifdef PERFTRACE_CURVES
+#if PERFTRACE_CURVES
 	PERFTRACE(QLatin1String(Q_FUNC_INFO) + QLatin1String(", curve ") + name());
 #endif
 
@@ -2861,7 +2861,7 @@ void XYCurvePrivate::recalcShapeAndBoundingRect() {
 }
 
 void XYCurvePrivate::draw(QPainter* painter) {
-#ifdef PERFTRACE_CURVES
+#if PERFTRACE_CURVES
 	PERFTRACE(QLatin1String(Q_FUNC_INFO) + QLatin1String(", curve ") + name());
 #endif
 

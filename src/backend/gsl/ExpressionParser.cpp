@@ -11,6 +11,7 @@
 #include "backend/gsl/ExpressionParser.h"
 #include "backend/gsl/parser.h"
 #include "backend/lib/macros.h"
+#include "backend/lib/trace.h"
 
 #include <KLocalizedString>
 
@@ -615,6 +616,9 @@ void ExpressionParser::setSpecialFunction2(const char* function_name, func_t2Pay
 	Data is stored in \c xVectors.
  */
 bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList& vars, const QVector<QVector<double>*>& xVectors, QVector<double>* yVector) {
+#if PERFTRACE_EXPRESSION_PARSER
+	PERFTRACE(QLatin1String(Q_FUNC_INFO));
+#endif
 	DEBUG(Q_FUNC_INFO << ", v5")
 	Q_ASSERT(vars.size() == xVectors.size());
 	gsl_set_error_handler_off();
