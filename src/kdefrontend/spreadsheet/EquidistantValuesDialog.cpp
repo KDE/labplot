@@ -68,11 +68,6 @@ EquidistantValuesDialog::EquidistantValuesDialog(Spreadsheet* s, QWidget* parent
 	ui.cbIncrementDateTimeUnit->addItem(i18n("Seconds"), static_cast<int>(DateTimeUnit::Second));
 	ui.cbIncrementDateTimeUnit->addItem(i18n("Milliseconds"), static_cast<int>(DateTimeUnit::Millisecond));
 
-	ui.leFrom->setClearButtonEnabled(true);
-	ui.leTo->setClearButtonEnabled(true);
-	ui.leIncrement->setClearButtonEnabled(true);
-	ui.leNumber->setClearButtonEnabled(true);
-
 	ui.leFrom->setValidator(new QDoubleValidator(ui.leFrom));
 	ui.leTo->setValidator(new QDoubleValidator(ui.leTo));
 	ui.leIncrement->setValidator(new QDoubleValidator(ui.leIncrement));
@@ -246,10 +241,11 @@ void EquidistantValuesDialog::typeChanged(int) {
  * \brief Checks the validness of the user input and enables/disables the ok-Button and showw
  * the tooltip accordingly.
  */
-void EquidistantValuesDialog::checkValues() {
-	const auto numberLocale = QLocale();
+void EquidistantValuesDialog::checkValues() const {
+
 	bool ok;
 	if (m_hasNumeric) {
+		const auto numberLocale = QLocale();
 		const double start = numberLocale.toDouble(ui.leFrom->text(), &ok);
 		if (!ok) {
 			m_okButton->setToolTip(i18n("Invalid start value"));
@@ -268,42 +264,73 @@ void EquidistantValuesDialog::checkValues() {
 	const auto type = static_cast<Type>(ui.cbType->currentData().toInt());
 	switch (type) {
 	case Type::FixedNumber: {
-		// check whether a valid integer value biger than 1 was provided
-		const int number = numberLocale.toDouble(ui.leNumber->text(), &ok);
-		if (!ok || number < 1) {
-			m_okButton->setToolTip(i18n("The number of values to be generated must be bigger than one"));
-			m_okButton->setEnabled(false);
+		bool valid = checkNumberValue();
+		if (!valid)
 			return;
-		}
 		break;
 	}
 	case Type::FixedIncrement: {
-		if (m_hasNumeric) {
-			const double increment = numberLocale.toDouble(ui.leIncrement->text(), &ok);
-			if (!ok || increment == 0.) {
-				m_okButton->setToolTip(i18n("Invalid numeric increment value, must be bigger than zero"));
-				m_okButton->setEnabled(false);
-				return;
-			}
-		}
-
-		if (m_hasDateTime) {
-			const int increment = numberLocale.toInt(ui.leIncrementDateTime->text(), &ok);
-			if (!ok || increment == 0) {
-				m_okButton->setToolTip(i18n("Invalid Date&Time increment value, must be bigger than zero"));
-				m_okButton->setEnabled(false);
-				return;
-			}
-		}
+		bool valid = checkIncrementValue();
+		if (!valid)
+			return;
 		break;
 	}
 	case Type::FixedNumberIncrement: {
+		bool valid = checkNumberValue();
+		if (!valid)
+			return;
+		valid = checkIncrementValue();
+		if (!valid)
+			return;
 		break;
 	}
 	}
 
 	m_okButton->setToolTip(QString());
 	m_okButton->setEnabled(true);
+}
+
+/*!
+ * checks whether a valid integer value biger than 1 was provided for the parameter 'number'
+ */
+bool EquidistantValuesDialog::checkNumberValue() const {
+	bool ok;
+	const auto numberLocale = QLocale();
+	const int number = numberLocale.toDouble(ui.leNumber->text(), &ok);
+	if (!ok || number < 1) {
+		m_okButton->setToolTip(i18n("The number of values to be generated must be bigger than one"));
+		m_okButton->setEnabled(false);
+		return false;
+	}
+
+	return true;
+}
+
+/*!
+ * checks whether a valid integer value was provided for the parameter 'increment'
+ */
+bool EquidistantValuesDialog::checkIncrementValue() const {
+	bool ok;
+	const auto numberLocale = QLocale();
+	if (m_hasNumeric) {
+		const double increment = numberLocale.toDouble(ui.leIncrement->text(), &ok);
+		if (!ok || increment == 0.) {
+			m_okButton->setToolTip(i18n("Invalid numeric increment value, must be bigger than zero"));
+			m_okButton->setEnabled(false);
+			return false;
+		}
+	}
+
+	if (m_hasDateTime) {
+		const int increment = numberLocale.toInt(ui.leIncrementDateTime->text(), &ok);
+		if (!ok || increment == 0) {
+			m_okButton->setToolTip(i18n("Invalid Date&Time increment value, must be bigger than zero"));
+			m_okButton->setEnabled(false);
+			return false;
+		}
+	}
+
+	return true;
 }
 
 void EquidistantValuesDialog::generate() {
@@ -330,14 +357,17 @@ void EquidistantValuesDialog::generate() {
 			return;
 		}
 
-		const double end = numberLocale.toDouble(ui.leTo->text(), &ok);
-		if (!ok) {
-			DEBUG("Invalid double value for 'end'!")
-			RESET_CURSOR;
-			return;
+		const auto type = static_cast<Type>(ui.cbType->currentData().toInt());
+		double end = 0.;
+		if (type != Type::FixedNumberIncrement) {
+			end = numberLocale.toDouble(ui.leTo->text(), &ok);
+			if (!ok) {
+				DEBUG("Invalid double value for 'end'!")
+				RESET_CURSOR;
+				return;
+			}
 		}
 
-		const auto type = static_cast<Type>(ui.cbType->currentData().toInt());
 		switch (type) {
 		case Type::FixedNumber: {
 			// fixed number -> determine the increment
@@ -359,6 +389,22 @@ void EquidistantValuesDialog::generate() {
 			break;
 		}
 		case Type::FixedNumberIncrement: {
+			// fixed number and increment -> determine the end value
+			number = QLocale().toInt(ui.leNumber->text(), &ok);
+			if (!ok || number == 1) {
+				DEBUG("Invalid integer value for 'number'!")
+				RESET_CURSOR;
+				return;
+			}
+
+			increment = QLocale().toDouble(ui.leIncrement->text(), &ok);
+			if (!ok) {
+				DEBUG("Invalid integer value for 'increment'!")
+				RESET_CURSOR;
+				return;
+			}
+
+			end = start + increment * number;
 			break;
 		}
 		}
@@ -392,13 +438,45 @@ void EquidistantValuesDialog::generate() {
 	}
 
 	if (m_hasDateTime) {
-		const auto start = ui.dteFrom->dateTime();
-		const auto end = ui.dteTo->dateTime();
 		bool ok;
 		const int number = QLocale().toInt(ui.leNumber->text(), &ok);
 		const auto increment = QLocale().toInt(ui.leIncrementDateTime->text(), &ok);
 		const auto unit = static_cast<DateTimeUnit>(ui.cbIncrementDateTimeUnit->currentData().toInt());
 		const auto type = static_cast<Type>(ui.cbType->currentData().toInt());
+		const auto start = ui.dteFrom->dateTime();
+		QDateTime end;
+		if (type != Type::FixedNumberIncrement)
+			end = ui.dteTo->dateTime();
+		else {
+			switch (unit) {
+			case DateTimeUnit::Year:
+				end = start.addYears((number - 1) * increment);
+				break;
+			case DateTimeUnit::Month:
+				end = start.addMonths((number - 1) * increment);
+				break;
+			case DateTimeUnit::Day:
+				end = start.addDays((number - 1) * increment);
+				break;
+			case DateTimeUnit::Hour: {
+				const int seconds = increment * 60 * 60;
+				end = start.addSecs((number - 1) * seconds);
+				break;
+			}
+			case DateTimeUnit::Minute: {
+				const int seconds = increment * 60;
+				end = start.addSecs((number - 1) * seconds);
+				break;
+			}
+			case DateTimeUnit::Second:
+				end = start.addSecs((number - 1) * increment);
+				break;
+			case DateTimeUnit::Millisecond:
+				end = start.addMSecs((number - 1) * increment);
+				break;
+			}
+		}
+
 		rc = generateDateTime(newDateTimeData, type, start, end, number, increment, unit);
 		if (!rc) {
 			RESET_CURSOR;
@@ -586,30 +664,31 @@ bool EquidistantValuesDialog::generateDateTime(QVector<QDateTime>& newData,
 
 		break;
 	}
-	case Type::FixedIncrement: {
+	case Type::FixedIncrement:
+	case Type::FixedNumberIncrement: {
 		QDateTime value = start;
 		switch (unit) {
 		case DateTimeUnit::Year:
-			while (value < end) {
+			while (value <= end) {
 				newData << value;
 				value = value.addYears(increment);
 			}
 			break;
 		case DateTimeUnit::Month:
-			while (value < end) {
+			while (value <= end) {
 				newData << value;
 				value = value.addMonths(increment);
 			}
 			break;
 		case DateTimeUnit::Day:
-			while (value < end) {
+			while (value <= end) {
 				newData << value;
 				value = value.addDays(increment);
 			}
 			break;
 		case DateTimeUnit::Hour: {
 			const int seconds = increment * 60 * 60;
-			while (value < end) {
+			while (value <= end) {
 				newData << value;
 				value = value.addSecs(seconds);
 			}
@@ -617,29 +696,26 @@ bool EquidistantValuesDialog::generateDateTime(QVector<QDateTime>& newData,
 		}
 		case DateTimeUnit::Minute: {
 			const int seconds = increment * 60;
-			while (value < end) {
+			while (value <= end) {
 				newData << value;
 				value = value.addSecs(seconds);
 			}
 			break;
 		}
 		case DateTimeUnit::Second:
-			while (value < end) {
+			while (value <= end) {
 				newData << value;
 				value = value.addSecs(increment);
 			}
 			break;
 		case DateTimeUnit::Millisecond:
-			while (value < end) {
+			while (value <= end) {
 				newData << value;
 				value = value.addMSecs(increment);
 			}
 			break;
 		}
 
-		break;
-	}
-	case Type::FixedNumberIncrement: {
 		break;
 	}
 	}

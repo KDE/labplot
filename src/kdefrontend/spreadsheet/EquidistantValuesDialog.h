@@ -61,7 +61,9 @@ private:
 private Q_SLOTS:
 	void generate();
 	void typeChanged(int);
-	void checkValues();
+	void checkValues() const;
+	bool checkNumberValue() const;
+	bool checkIncrementValue() const;
 };
 
 #endif
