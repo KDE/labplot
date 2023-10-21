@@ -1746,8 +1746,8 @@ struct PayloadColumn : public Payload {
 };
 
 #define COLUMN_FUNCTION(function_name, evaluation_function)                                                                                                    \
-		double column##function_name(const char* variable, const std::weak_ptr<Payload> payload) {                                                                               \
-		const auto p = std::dynamic_pointer_cast<PayloadColumn>(payload.lock());                                                                                           \
+	double column##function_name(const char* variable, const std::weak_ptr<Payload> payload) {                                                                 \
+		const auto p = std::dynamic_pointer_cast<PayloadColumn>(payload.lock());                                                                               \
 		if (!p) {                                                                                                                                              \
 			assert(p); /* Debug build */                                                                                                                       \
 			return NAN;                                                                                                                                        \

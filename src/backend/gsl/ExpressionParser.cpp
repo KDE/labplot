@@ -266,6 +266,8 @@ bool ExpressionParser::isValid(const QString& expr, const QStringList& vars) {
 	QDEBUG(Q_FUNC_INFO << ", expr:" << expr << ", vars:" << vars);
 	gsl_set_error_handler_off();
 
+	Lock l(skipSpecialFunctionEvaluation);
+
 	for (const auto& var : vars)
 		assign_symbol(qPrintable(var), 0);
 
@@ -466,7 +468,8 @@ bool ExpressionParser::evaluateCartesian(const QString& expr,
 }
 
 struct PayloadExpressionParser : public Payload {
-	PayloadExpressionParser() {}
+	PayloadExpressionParser() {
+	}
 	PayloadExpressionParser(const QStringList* vars, const QVector<QVector<double>*>* xVectors, bool constant = false)
 		: Payload(constant)
 		, vars(vars)
@@ -749,4 +752,8 @@ bool ExpressionParser::evaluateParametric(const QString& xexpr,
 	}
 
 	return true;
+}
+
+QString ExpressionParser::errorMessage() const {
+	return QLatin1String(lastErrorMessage());
 }

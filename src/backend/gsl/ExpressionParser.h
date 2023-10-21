@@ -59,6 +59,7 @@ public:
 							int count,
 							QVector<double>* xVector,
 							QVector<double>* yVector);
+	QString errorMessage() const;
 
 	const QStringList& functions();
 	const QStringList& functionsGroups();

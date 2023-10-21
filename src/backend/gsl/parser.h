@@ -16,6 +16,7 @@
 #include "parserFunctionTypes.h"
 #include <gsl/gsl_version.h>
 #include <memory>
+#include <variant>
 
 /* uncomment to enable parser specific debugging */
 /* #define PDEBUG 1 */
@@ -37,7 +38,10 @@ struct Payload {
 };
 
 struct special_function_def {
-	special_function_def(): funsptr(nullptr), payload(std::weak_ptr<Payload>()) {}
+	special_function_def()
+		: funsptr(nullptr)
+		, payload(std::weak_ptr<Payload>()) {
+	}
 	funs* funsptr;
 	std::weak_ptr<Payload> payload;
 };
@@ -46,21 +50,7 @@ struct special_function_def {
 typedef struct symbol {
 	char* name; /* name of symbol */
 	int type; /* type of symbol: either VAR or FNCT */
-	union {
-		double var; /* value of a VAR */
-		funs* funsptr; /* value of a FNCT */
-		special_function_def special_function; /* value of SPECFNCT */
-
-		~<unnamed union>() {
-			switch (type) {
-			case VAR: break;
-			case FNCT: break;
-			case SPECFNCT:
-				special_function.~special_function_def();
-				break;
-			}
-		}
-	} value;
+	std::variant<double, funs*, special_function_def> value;
 	struct symbol* next; /* next symbol */
 } symbol;
 
@@ -78,6 +68,7 @@ bool set_specialfunction1(const char* function_name, func_t1Payload function, st
 bool set_specialfunction2(const char* function_name, func_t2Payload function, std::shared_ptr<Payload> payload);
 bool set_specialfunction3(const char* function_name, func_t3Payload function, std::shared_ptr<Payload> payload);
 bool set_specialfunction4(const char* function_name, func_t4Payload function, std::shared_ptr<Payload> payload);
-
 const char* lastErrorMessage();
+
+extern bool skipSpecialFunctionEvaluation;
 #endif /*PARSER_H*/

@@ -45,32 +45,33 @@ typedef struct param {
 int yyerror(param *p, const char *err);
 int yylex(param *p);
 int _variablesCounter = 0;
+bool skipSpecialFunctionEvaluation = false;
 
 int variablesCounter() {
 	return _variablesCounter;
 }
 
 double res;
-char lastErrorMessage_[256] = "";
+char _lastErrorMessage[256] = "";
 
 const char* lastErrorMessage() {
-	return lastErrorMessage_;
+	return _lastErrorMessage;
 }
 
 static void wrongArgumentNumberMessage(const char* function_name, int provided, int expected) {
-	snprintf(lastErrorMessage_, sizeof(lastErrorMessage_), "Parsing Error: Wrong argument count for %s. Provided: %d, Expected: %d", function_name, provided, expected);
+	snprintf(_lastErrorMessage, sizeof(_lastErrorMessage), "Parsing Error: Wrong argument count for %s. Provided: %d, Expected: %d", function_name, provided, expected);
 }
 
 static void notImplementedError(const char* function_name) {
-	snprintf(lastErrorMessage_, sizeof(lastErrorMessage_), "Parsing Error: '%s' not implemented.", function_name);
+	snprintf(_lastErrorMessage, sizeof(_lastErrorMessage), "Parsing Error: '%s' not implemented.", function_name);
 }
 
 static void yyerrorFunction(const char* function_name, const char* msg) {
-	snprintf(lastErrorMessage_, sizeof(lastErrorMessage_), "Parsing Error: In function '%s': %s", function_name, msg);
+	snprintf(_lastErrorMessage, sizeof(_lastErrorMessage), "Parsing Error: In function '%s': %s", function_name, msg);
 }
 
 static void yyerror(const char* msg) {
-	snprintf(lastErrorMessage_, sizeof(lastErrorMessage_), "Parsing Error: %s", msg);
+	snprintf(_lastErrorMessage, sizeof(_lastErrorMessage), "Parsing Error: %s", msg);
 }
 
 
@@ -106,13 +107,14 @@ line:	'\n'
 ;
 
 expr:      NUM       { $$ = $1;                            }
-| VAR                { $$ = $1->value.var; _variablesCounter++;}
-| VAR '=' expr       { $$ = $3; $1->value.var = $3; _variablesCounter++;       }
+| VAR                { $$ = std::get<double>($1->value); _variablesCounter++;}
+| VAR '=' expr       { $$ = std::get<double>($1->value) = $3; _variablesCounter++;       }
 | SPECFNCT '(' ')'       {
-							if (!$1->value.special_function.payload.expired() && !$1->value.special_function.payload.lock()->constant)
+							const auto& special_function = std::get<special_function_def>($1->value);
+							if (!special_function.payload.expired() && !special_function.payload.lock()->constant)
 								_variablesCounter++;
-							const func_tPayload function = (func_tPayload)($1->value.special_function.funsptr->fnct);
-							const int argc = $1->value.special_function.funsptr->argc;
+							const func_tPayload function = (func_tPayload)(special_function.funsptr->fnct);
+							const int argc = special_function.funsptr->argc;
 							if (argc != 0) {
 								wrongArgumentNumberMessage($1->name, 0, argc);
 								yynerrs++;
@@ -122,13 +124,18 @@ expr:      NUM       { $$ = $1;                            }
 								yynerrs++;
 								return 2;
 							}
-							$$ = (*function)($1->value.special_function.payload);
+							if (!skipSpecialFunctionEvaluation)
+								$$ = (*function)(special_function.payload);
+							else
+								$$ = std::nan("0");
+
 						}
 | SPECFNCT '(' VAR ')'  {
-							if (!$1->value.special_function.payload.expired() && !$1->value.special_function.payload.lock()->constant)
+							const auto& special_function = std::get<special_function_def>($1->value);
+							if (!special_function.payload.expired() && !special_function.payload.lock()->constant)
 								_variablesCounter++;
-							const func_t1Payload function = (func_t1Payload)($1->value.special_function.funsptr->fnct);
-							const int argc = $1->value.special_function.funsptr->argc;
+							const func_t1Payload function = (func_t1Payload)(special_function.funsptr->fnct);
+							const int argc = special_function.funsptr->argc;
 							if (argc != 1) {
 								wrongArgumentNumberMessage($1->name, 1, argc);
 								yynerrs++;
@@ -137,14 +144,18 @@ expr:      NUM       { $$ = $1;                            }
 								notImplementedError($1->name);
 								yynerrs++;
 								return 2;
-							} else
-								$$ = (*function)($3->name, $1->value.special_function.payload);
+							}
+							if (!skipSpecialFunctionEvaluation)
+								$$ = (*function)($3->name, special_function.payload);
+							else
+								$$ = std::nan("0");
 						}
 | SPECFNCT '(' expr ';' VAR ')'  {
-									if (!$1->value.special_function.payload.expired() && !$1->value.special_function.payload.lock()->constant)
+									const auto& special_function = std::get<special_function_def>($1->value);
+									if (!special_function.payload.expired() && !special_function.payload.lock()->constant)
 										_variablesCounter++;
-									const func_t2Payload function = (func_t2Payload)($1->value.special_function.funsptr->fnct);
-									const int argc = $1->value.special_function.funsptr->argc;
+									const func_t2Payload function = (func_t2Payload)(special_function.funsptr->fnct);
+									const int argc = special_function.funsptr->argc;
 									if (argc != 2) {
 										wrongArgumentNumberMessage($1->name, 2, argc);
 										yynerrs++;
@@ -153,14 +164,18 @@ expr:      NUM       { $$ = $1;                            }
 										notImplementedError($1->name);
 										yynerrs++;
 										return 2;
-									} else
-										$$ = (*function)($3 ,$5->name, $1->value.special_function.payload);
+									}
+									if (!skipSpecialFunctionEvaluation)
+										$$ = (*function)($3 ,$5->name, special_function.payload);
+									else
+										$$ = std::nan("0");
 								  }
 | SPECFNCT '(' expr ';' expr ';' VAR ')'  {
-											if (!$1->value.special_function.payload.expired() && !$1->value.special_function.payload.lock()->constant)
+											const auto& special_function = std::get<special_function_def>($1->value);
+											if (!special_function.payload.expired() && !special_function.payload.lock()->constant)
 												_variablesCounter++;
-											const func_t3Payload function = (func_t3Payload)($1->value.special_function.funsptr->fnct);
-											const int argc = $1->value.special_function.funsptr->argc;
+											const func_t3Payload function = (func_t3Payload)(special_function.funsptr->fnct);
+											const int argc = special_function.funsptr->argc;
 											if (argc != 3) {
 												wrongArgumentNumberMessage($1->name, 3, argc);
 												yynerrs++;
@@ -169,14 +184,18 @@ expr:      NUM       { $$ = $1;                            }
 												notImplementedError($1->name);
 												yynerrs++;
 												return 2;
-											} else
-												$$ = (*function)($3, $5, $7->name, $1->value.special_function.payload);
+											}
+											if (!skipSpecialFunctionEvaluation)
+												$$ = (*function)($3, $5, $7->name, special_function.payload);
+											else
+												$$ = std::nan("0");
 										  }
 | SPECFNCT '(' expr ';' expr ';' expr ';' VAR ')'  {
-													if (!$1->value.special_function.payload.expired() && !$1->value.special_function.payload.lock()->constant)
+													const auto& special_function = std::get<special_function_def>($1->value);
+													if (!special_function.payload.expired() && !special_function.payload.lock()->constant)
 														_variablesCounter++;
-													const func_t4Payload function = (func_t4Payload)($1->value.special_function.funsptr->fnct);
-													const int argc = $1->value.special_function.funsptr->argc;
+													const func_t4Payload function = (func_t4Payload)(special_function.funsptr->fnct);
+													const int argc = special_function.funsptr->argc;
 													if (argc != 4) {
 														wrongArgumentNumberMessage($1->name, 4, argc);
 														yynerrs++;
@@ -185,84 +204,95 @@ expr:      NUM       { $$ = $1;                            }
 														notImplementedError($1->name);
 														yynerrs++;
 														return 2;
-													} else
-														$$ = (*function)($3, $5, $7, $9->name, $1->value.special_function.payload);
+													}
+													if (!skipSpecialFunctionEvaluation)
+														$$ = (*function)($3, $5, $7, $9->name, special_function.payload);
+													else
+														$$ = std::nan("0");
 												  }
 | SPECFNCT '(' expr ')'  { yynerrs++; yyerrorFunction($1->name, "Argument must be a variable not an expression");}
 | SPECFNCT '(' expr ';' expr ')'   { yynerrs++; yyerrorFunction($1->name, "Last argument must be a variable not an expression");}
 | SPECFNCT '(' expr ';' expr ';' expr ')'  { yynerrs++; yyerrorFunction($1->name, "Last argument must be a variable not an expression");}
 | SPECFNCT '(' expr ';' expr ';' expr ';' expr ')'  { yynerrs++; yyerrorFunction($1->name, "Last argument must be a variable not an expression");}
 | FNCT '(' ')'       {
-						const int argc = $1->value.funsptr->argc;
+						const funs* function = std::get<funs*>($1->value);
+						const int argc = function->argc;
 						if (argc != 0) {
 							wrongArgumentNumberMessage($1->name, 0, argc);
 							yynerrs++;
 							return 1;
 						} else
-							$$ = (*($1->value.funsptr->fnct))();
+							$$ = (*(function->fnct))();
 						}
 | FNCT '(' expr ')'  {
-						const int argc = $1->value.funsptr->argc;
+						const funs* function = std::get<funs*>($1->value);
+						const int argc = function->argc;
 						if (argc != 1) {
 							wrongArgumentNumberMessage($1->name, 1, argc);
 							yynerrs++;
 							return 1;
 						} else
-							$$ = (*((func_t1)($1->value.funsptr->fnct)))($3);
+							$$ = (*((func_t1)(function->fnct)))($3);
 					}
 | FNCT '(' expr ',' expr ')'  {
-								const int argc = $1->value.funsptr->argc;
+								const funs* function = std::get<funs*>($1->value);
+								const int argc = function->argc;
 								if (argc != 2) {
 									wrongArgumentNumberMessage($1->name, 2, argc);
 									yynerrs++;
 									return 1;
 								} else
-									$$ = (*((func_t2)($1->value.funsptr->fnct)))($3,$5);
+									$$ = (*((func_t2)(function->fnct)))($3,$5);
 							}
 | FNCT '(' expr ',' expr ','expr ')'  {
-										const int argc = $1->value.funsptr->argc;
+										const funs* function = std::get<funs*>($1->value);
+										const int argc = function->argc;
 										if (argc != 3) {
 											wrongArgumentNumberMessage($1->name, 3, argc);
 											yynerrs++;
 											return 1;
 										} else
-											$$ = (*((func_t3)($1->value.funsptr->fnct)))($3,$5,$7);
+											$$ = (*((func_t3)(function->fnct)))($3,$5,$7);
 									}
 | FNCT '(' expr ',' expr ',' expr ','expr ')'  {
-												const int argc = $1->value.funsptr->argc;
+												const funs* function = std::get<funs*>($1->value);
+												const int argc = function->argc;
 												if (argc != 4) {
 														wrongArgumentNumberMessage($1->name, 4, argc);
 														yynerrs++;
 														return 1;
 													} else
-														$$ = (*((func_t4)($1->value.funsptr->fnct)))($3,$5,$7,$9);
+														$$ = (*((func_t4)(function->fnct)))($3,$5,$7,$9);
 												}
 | FNCT '(' expr ';' expr ')'  {
-								const int argc = $1->value.funsptr->argc;
+								const funs* function = std::get<funs*>($1->value);
+								const int argc = function->argc;
 								if (argc != 2) {
 									wrongArgumentNumberMessage($1->name, 2, argc);
 									yynerrs++;
 									return 1;
 								} else
-									$$ = (*((func_t2)($1->value.funsptr->fnct)))($3,$5);
+									$$ = (*((func_t2)(function->fnct)))($3,$5);
 							}
 | FNCT '(' expr ';' expr ';'expr ')'  {
-										const int argc = $1->value.funsptr->argc;
+										const funs* function = std::get<funs*>($1->value);
+										const int argc = function->argc;
 										if (argc != 3) {
 											wrongArgumentNumberMessage($1->name, 3, argc);
 											yynerrs++;
 											return 1;
 										} else
-											$$ = (*((func_t3)($1->value.funsptr->fnct)))($3,$5,$7);
+											$$ = (*((func_t3)(function->fnct)))($3,$5,$7);
 									}
 | FNCT '(' expr ';' expr ';' expr ';'expr ')'  {
-													const int argc = $1->value.funsptr->argc;
+													const funs* function = std::get<funs*>($1->value);
+													const int argc = function->argc;
 													if (argc != 4) {
 														wrongArgumentNumberMessage($1->name, 4, argc);
 														yynerrs++;
 														return 1;
 													} else
-														$$ = (*((func_t4)($1->value.funsptr->fnct)))($3,$5,$7,$9);
+														$$ = (*((func_t4)(function->fnct)))($3,$5,$7,$9);
 												}
 | expr '+' expr      { $$ = $1 + $3;                       }
 | expr '-' expr      { $$ = $1 - $3;                       }
@@ -305,11 +335,11 @@ symbol* put_symbol(const char *symbol_name, int symbol_type) {
 	strcpy(ptr->name, symbol_name);
 	ptr->type = symbol_type;
 	switch (symbol_type) {
-	case VAR: ptr->value.var = 0; break;
-	case FNCT: ptr->value.funsptr = nullptr; break;
+	case VAR: ptr->value = 0.; break;
+	case FNCT: ptr->value = nullptr; break;
 	case SPECFNCT: {
 		special_function_def sfp;
-		ptr->value.special_function = sfp;
+		ptr->value = sfp;
 		break;
 	}
 	}
@@ -329,7 +359,7 @@ int remove_symbol(const char *symbol_name) {
 
 	/* check if head contains symbol */
 	if (ptr && (strcmp(ptr->name, symbol_name) == 0)) {
-		if (ptr->type == VAR && ptr->value.var == 0) {
+		if (ptr->type == VAR && std::get<double>(ptr->value) == 0) {
 			pdebug("PARSER: REMOVING symbol '%s'\n", symbol_name);
 			symbol_table = ptr->next;
 			free(ptr->name);
@@ -346,7 +376,7 @@ int remove_symbol(const char *symbol_name) {
 	}
 
 	/* symbol not found or is not a variable or is not 0 */
-	if (!ptr || ptr->type != VAR || ptr->value.var != 0)
+	if (!ptr || ptr->type != VAR || std::get<double>(ptr->value) != 0)
 		return 1;
 
 	/* remove symbol */
@@ -385,21 +415,20 @@ void init_table(void) {
 	/* add functions */
 	for (i = 0; i < _number_functions; i++) {
 		ptr = put_symbol(_functions[i].name, FNCT);
-		ptr->value.funsptr = &_functions[i];
+		ptr->value = &_functions[i];
 	}
 	/* add special functions */
 	for (i = 0; i < _number_specialfunctions; i++) {
 		ptr = put_symbol(_special_functions[i].name, SPECFNCT);
 
 		special_function_def sfd;
-		ptr->value.special_function = sfd;
-		ptr->value.special_function.funsptr = &_special_functions[i];
-		ptr->value.special_function.payload.reset();
+		sfd.funsptr = &_special_functions[i];
+		ptr->value = sfd;
 	}
 	/* add constants */
 	for (i = 0; i < _number_constants; i++) {
 		ptr = put_symbol(_constants[i].name, VAR);
-		ptr->value.var = _constants[i].value;
+		ptr->value = _constants[i].value;
 	}
 
 	pdebug("PARSER: init_table() DONE. sym_table = %p\n", ptr);
@@ -413,10 +442,10 @@ bool set_specialfunction0(const char* function_name, func_tPayload function, std
 	if (!ptr) // function name not found
 		return false;
 
-	assert(ptr->value.special_function.funsptr->argc == 0);
-	ptr->value.special_function.funsptr->fnct = (func_t)function;
-	ptr->value.special_function.funsptr->name = function_name;
-	ptr->value.special_function.payload = payload;
+	assert(std::get<special_function_def>(ptr->value).funsptr->argc == 0);
+	std::get<special_function_def>(ptr->value).funsptr->fnct = (func_t)function;
+	std::get<special_function_def>(ptr->value).funsptr->name = function_name;
+	std::get<special_function_def>(ptr->value).payload = payload;
 	return true;
 }
 
@@ -427,11 +456,10 @@ bool set_specialfunction1(const char* function_name, func_t1Payload function, st
 	symbol *ptr = get_symbol(function_name);
 	if (!ptr) // function name not found
 		return false;
-
-	assert(ptr->value.special_function.funsptr->argc == 1);
-	ptr->value.special_function.funsptr->fnct = (func_t)function;
-	ptr->value.special_function.funsptr->name = function_name;
-	ptr->value.special_function.payload = payload;
+	assert(std::get<special_function_def>(ptr->value).funsptr->argc == 1);
+	std::get<special_function_def>(ptr->value).funsptr->fnct = (func_t)function;
+	std::get<special_function_def>(ptr->value).funsptr->name = function_name;
+	std::get<special_function_def>(ptr->value).payload = payload;
 	return true;
 }
 
@@ -443,10 +471,10 @@ bool set_specialfunction2(const char* function_name, func_t2Payload function, st
 	if (!ptr) // function name not found
 		return false;
 
-	assert(ptr->value.special_function.funsptr->argc == 2);
-	ptr->value.special_function.funsptr->fnct = (func_t)function;
-	ptr->value.special_function.funsptr->name = function_name;
-	ptr->value.special_function.payload = payload;
+	assert(std::get<special_function_def>(ptr->value).funsptr->argc == 2);
+	std::get<special_function_def>(ptr->value).funsptr->fnct = (func_t)function;
+	std::get<special_function_def>(ptr->value).funsptr->name = function_name;
+	std::get<special_function_def>(ptr->value).payload = payload;
 	return true;
 }
 
@@ -458,10 +486,10 @@ bool set_specialfunction3(const char* function_name, func_t3Payload function, st
 	if (!ptr) // function name not found
 		return false;
 
-	assert(ptr->value.special_function.funsptr->argc == 3);
-	ptr->value.special_function.funsptr->fnct = (func_t)function;
-	ptr->value.special_function.funsptr->name = function_name;
-	ptr->value.special_function.payload = payload;
+	assert(std::get<special_function_def>(ptr->value).funsptr->argc == 3);
+	std::get<special_function_def>(ptr->value).funsptr->fnct = (func_t)function;
+	std::get<special_function_def>(ptr->value).funsptr->name = function_name;
+	std::get<special_function_def>(ptr->value).payload = payload;
 	return true;
 }
 
@@ -473,10 +501,10 @@ bool set_specialfunction4(const char* function_name, func_t4Payload function, st
 	if (!ptr) // function name not found
 		return false;
 
-	assert(ptr->value.special_function.funsptr->argc == 4);
-	ptr->value.special_function.funsptr->fnct = (func_t)function;
-	ptr->value.special_function.funsptr->name = function_name;
-	ptr->value.special_function.payload = payload;
+	assert(std::get<special_function_def>(ptr->value).funsptr->argc == 4);
+	std::get<special_function_def>(ptr->value).funsptr->fnct = (func_t)function;
+	std::get<special_function_def>(ptr->value).funsptr->name = function_name;
+	std::get<special_function_def>(ptr->value).payload = payload;
 	return true;
 }
 
@@ -508,7 +536,7 @@ symbol* assign_symbol(const char* symbol_name, double value) {
 
 	/* do not assign value if symbol already exits as function */
 	if (ptr->type == VAR)
-		ptr->value.var = value;
+		ptr->value = value;
 
 	return ptr;
 }
@@ -536,6 +564,7 @@ double parse(const char* string, const char* locale) {
 		init_table();
 
 	_variablesCounter = 0;
+	_lastErrorMessage[0] = 0;
 
 	param p;
 	p.pos = 0;
