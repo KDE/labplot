@@ -1382,7 +1382,7 @@ void ColumnTest::testFormulasGm() {
 	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
 	c1.resizeTo(3);
 	QCOMPARE(c1.rowCount(), 3);
-	c1.replaceValues(-1, {1., -1., 8., 10., -5});
+	c1.replaceValues(-1, {1., 100., 8., 10., 3});
 
 	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
 	c2.resizeTo(7);
@@ -1391,15 +1391,14 @@ void ColumnTest::testFormulasGm() {
 
 	c2.setFormula(QStringLiteral("gm(x)"), {QStringLiteral("x")}, {&c1}, true);
 	c2.updateFormula();
-	QVERIFY(false); // Calculation not validated!
 	for (int i = 0; i < c2.rowCount(); i++)
-		VALUES_EQUAL(c2.valueAt(i), 39.3);
+		VALUES_EQUAL(c2.valueAt(i), 7.51696); // Calculated with R exp(mean(log(x)))
 }
 void ColumnTest::testFormulasHm() {
 	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
 	c1.resizeTo(3);
 	QCOMPARE(c1.rowCount(), 3);
-	c1.replaceValues(-1, {1., -1., 8., 10., -5});
+	c1.replaceValues(-1, {1., -3., 8., 10., -5});
 
 	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
 	c2.resizeTo(7);
@@ -1408,15 +1407,14 @@ void ColumnTest::testFormulasHm() {
 
 	c2.setFormula(QStringLiteral("hm(x)"), {QStringLiteral("x")}, {&c1}, true);
 	c2.updateFormula();
-	QVERIFY(false); // Calculation not validated!
 	for (int i = 0; i < c2.rowCount(); i++)
-		VALUES_EQUAL(c2.valueAt(i), 39.3);
+		VALUES_EQUAL(c2.valueAt(i), 7.228916); // calculated with R harmonic.mean(x)
 }
 void ColumnTest::testFormulasChm() {
 	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
 	c1.resizeTo(3);
 	QCOMPARE(c1.rowCount(), 3);
-	c1.replaceValues(-1, {1., -1., 8., 10., -5});
+	c1.replaceValues(-1, {1.0, 0.0, 2.0, 5.0});
 
 	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
 	c2.resizeTo(7);
@@ -1425,9 +1423,8 @@ void ColumnTest::testFormulasChm() {
 
 	c2.setFormula(QStringLiteral("chm(x)"), {QStringLiteral("x")}, {&c1}, true);
 	c2.updateFormula();
-	QVERIFY(false); // Calculation not validated!
 	for (int i = 0; i < c2.rowCount(); i++)
-		VALUES_EQUAL(c2.valueAt(i), 39.3);
+		VALUES_EQUAL(c2.valueAt(i), 3.75); // Result used from: statisticsDoubleZero()
 }
 void ColumnTest::testFormulasStatisticsMode() {
 	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
@@ -1442,9 +1439,14 @@ void ColumnTest::testFormulasStatisticsMode() {
 
 	c2.setFormula(QStringLiteral("mode(x)"), {QStringLiteral("x")}, {&c1}, true);
 	c2.updateFormula();
-	QVERIFY(false); // Calculation not validated!
+	// Calculated with R:
+	// Mode <- function(x) {
+	// ux <- unique(x)
+	//	 ux[which.max(tabulate(match(x, ux)))]
+	// }
+	// Mode(x)
 	for (int i = 0; i < c2.rowCount(); i++)
-		VALUES_EQUAL(c2.valueAt(i), 39.3);
+		VALUES_EQUAL(c2.valueAt(i), 1);
 }
 void ColumnTest::testFormulasQuartile1() {
 	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
@@ -1459,9 +1461,8 @@ void ColumnTest::testFormulasQuartile1() {
 
 	c2.setFormula(QStringLiteral("quartile1(x)"), {QStringLiteral("x")}, {&c1}, true);
 	c2.updateFormula();
-	QVERIFY(false); // Calculation not validated!
 	for (int i = 0; i < c2.rowCount(); i++)
-		VALUES_EQUAL(c2.valueAt(i), 39.3);
+		VALUES_EQUAL(c2.valueAt(i), -1); // Calculated with R: summary(x)
 }
 void ColumnTest::testFormulasQuartile3() {
 	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
@@ -1475,10 +1476,8 @@ void ColumnTest::testFormulasQuartile3() {
 	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17., 18.});
 
 	c2.setFormula(QStringLiteral("quartile3(x)"), {QStringLiteral("x")}, {&c1}, true);
-	c2.updateFormula();
-	QVERIFY(false); // Calculation not validated!
 	for (int i = 0; i < c2.rowCount(); i++)
-		VALUES_EQUAL(c2.valueAt(i), 39.3);
+		VALUES_EQUAL(c2.valueAt(i), 8); // Calculated with R: summary(x)
 }
 void ColumnTest::testFormulasIqr() {
 	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
@@ -1493,9 +1492,8 @@ void ColumnTest::testFormulasIqr() {
 
 	c2.setFormula(QStringLiteral("iqr(x)"), {QStringLiteral("x")}, {&c1}, true);
 	c2.updateFormula();
-	QVERIFY(false); // Calculation not validated!
 	for (int i = 0; i < c2.rowCount(); i++)
-		VALUES_EQUAL(c2.valueAt(i), 39.3);
+		VALUES_EQUAL(c2.valueAt(i), 9); // Calculated with R: IQR(x)
 }
 void ColumnTest::testFormulasPercentile1() {
 	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
@@ -1510,9 +1508,8 @@ void ColumnTest::testFormulasPercentile1() {
 
 	c2.setFormula(QStringLiteral("percentile1(x)"), {QStringLiteral("x")}, {&c1}, true);
 	c2.updateFormula();
-	QVERIFY(false); // Calculation not validated!
 	for (int i = 0; i < c2.rowCount(); i++)
-		VALUES_EQUAL(c2.valueAt(i), 39.3);
+		VALUES_EQUAL(c2.valueAt(i), -4.84); // Calculated with R: quantile(x, 1/100)
 }
 void ColumnTest::testFormulasPercentile5() {
 	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
@@ -1527,9 +1524,8 @@ void ColumnTest::testFormulasPercentile5() {
 
 	c2.setFormula(QStringLiteral("percentile5(x)"), {QStringLiteral("x")}, {&c1}, true);
 	c2.updateFormula();
-	QVERIFY(false); // Calculation not validated!
 	for (int i = 0; i < c2.rowCount(); i++)
-		VALUES_EQUAL(c2.valueAt(i), 39.3);
+		VALUES_EQUAL(c2.valueAt(i), -4.2); // Calculated with R: quantile(x, 5/100)
 }
 void ColumnTest::testFormulasPercentile10() {
 	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
@@ -1544,9 +1540,8 @@ void ColumnTest::testFormulasPercentile10() {
 
 	c2.setFormula(QStringLiteral("percentile10(x)"), {QStringLiteral("x")}, {&c1}, true);
 	c2.updateFormula();
-	QVERIFY(false); // Calculation not validated!
 	for (int i = 0; i < c2.rowCount(); i++)
-		VALUES_EQUAL(c2.valueAt(i), 39.3);
+		VALUES_EQUAL(c2.valueAt(i), -3.4); // Calculated with R: quantile(x, 10/100)
 }
 void ColumnTest::testFormulasPercentile90() {
 	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
@@ -1561,9 +1556,8 @@ void ColumnTest::testFormulasPercentile90() {
 
 	c2.setFormula(QStringLiteral("percentile90(x)"), {QStringLiteral("x")}, {&c1}, true);
 	c2.updateFormula();
-	QVERIFY(false); // Calculation not validated!
 	for (int i = 0; i < c2.rowCount(); i++)
-		VALUES_EQUAL(c2.valueAt(i), 39.3);
+		VALUES_EQUAL(c2.valueAt(i), 9.2); // Calculated with R: quantile(x, 90/100)
 }
 void ColumnTest::testFormulasPercentile95() {
 	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
@@ -1578,9 +1572,8 @@ void ColumnTest::testFormulasPercentile95() {
 
 	c2.setFormula(QStringLiteral("percentile95(x)"), {QStringLiteral("x")}, {&c1}, true);
 	c2.updateFormula();
-	QVERIFY(false); // Calculation not validated!
 	for (int i = 0; i < c2.rowCount(); i++)
-		VALUES_EQUAL(c2.valueAt(i), 39.3);
+		VALUES_EQUAL(c2.valueAt(i), 9.6); // Calculated with R: quantile(x, 95/100)
 }
 void ColumnTest::testFormulasPercentile99() {
 	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
@@ -1595,15 +1588,14 @@ void ColumnTest::testFormulasPercentile99() {
 
 	c2.setFormula(QStringLiteral("percentile99(x)"), {QStringLiteral("x")}, {&c1}, true);
 	c2.updateFormula();
-	QVERIFY(false); // Calculation not validated!
 	for (int i = 0; i < c2.rowCount(); i++)
-		VALUES_EQUAL(c2.valueAt(i), 39.3);
+		VALUES_EQUAL(c2.valueAt(i), 9.92); // Calculated with R: quantile(x, 99/100)
 }
 void ColumnTest::testFormulasTrimean() {
 	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
 	c1.resizeTo(3);
 	QCOMPARE(c1.rowCount(), 3);
-	c1.replaceValues(-1, {1., -1., 8., 10., -5});
+	c1.replaceValues(-1, {1.0, 0.0, 2.0, 5.0});
 
 	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
 	c2.resizeTo(7);
@@ -1612,15 +1604,14 @@ void ColumnTest::testFormulasTrimean() {
 
 	c2.setFormula(QStringLiteral("trimean(x)"), {QStringLiteral("x")}, {&c1}, true);
 	c2.updateFormula();
-	QVERIFY(false); // Calculation not validated!
 	for (int i = 0; i < c2.rowCount(); i++)
-		VALUES_EQUAL(c2.valueAt(i), 39.3);
+		VALUES_EQUAL(c2.valueAt(i), 1.625); // Value used from statisticsDoubleZero()
 }
 void ColumnTest::testFormulasMeandev() {
 	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
 	c1.resizeTo(3);
 	QCOMPARE(c1.rowCount(), 3);
-	c1.replaceValues(-1, {1., -1., 8., 10., -5});
+	c1.replaceValues(-1, {1.0, 0.0, 2.0, 5.0});
 
 	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
 	c2.resizeTo(7);
@@ -1629,15 +1620,14 @@ void ColumnTest::testFormulasMeandev() {
 
 	c2.setFormula(QStringLiteral("meandev(x)"), {QStringLiteral("x")}, {&c1}, true);
 	c2.updateFormula();
-	QVERIFY(false); // Calculation not validated!
 	for (int i = 0; i < c2.rowCount(); i++)
-		VALUES_EQUAL(c2.valueAt(i), 39.3);
+		VALUES_EQUAL(c2.valueAt(i), 1.5); // Value used from statisticsDoubleZero()
 }
 void ColumnTest::testFormulasMeandevmedian() {
 	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
 	c1.resizeTo(3);
 	QCOMPARE(c1.rowCount(), 3);
-	c1.replaceValues(-1, {1., -1., 8., 10., -5});
+	c1.replaceValues(-1, {1.0, 0.0, 2.0, 5.0});
 
 	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
 	c2.resizeTo(7);
@@ -1646,15 +1636,14 @@ void ColumnTest::testFormulasMeandevmedian() {
 
 	c2.setFormula(QStringLiteral("meandevmedian(x)"), {QStringLiteral("x")}, {&c1}, true);
 	c2.updateFormula();
-	QVERIFY(false); // Calculation not validated!
 	for (int i = 0; i < c2.rowCount(); i++)
-		VALUES_EQUAL(c2.valueAt(i), 39.3);
+		VALUES_EQUAL(c2.valueAt(i), 1.5); // Value used from statisticsDoubleZero()
 }
 void ColumnTest::testFormulasMediandev() {
 	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
 	c1.resizeTo(3);
 	QCOMPARE(c1.rowCount(), 3);
-	c1.replaceValues(-1, {1., -1., 8., 10., -5});
+	c1.replaceValues(-1, {1.0, 0.0, 2.0, 5.0});
 
 	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
 	c2.resizeTo(7);
@@ -1663,9 +1652,8 @@ void ColumnTest::testFormulasMediandev() {
 
 	c2.setFormula(QStringLiteral("mediandev(x)"), {QStringLiteral("x")}, {&c1}, true);
 	c2.updateFormula();
-	QVERIFY(false); // Calculation not validated!
 	for (int i = 0; i < c2.rowCount(); i++)
-		VALUES_EQUAL(c2.valueAt(i), 39.3);
+		VALUES_EQUAL(c2.valueAt(i), 1.); // Value used from statisticsDoubleZero()
 }
 void ColumnTest::testFormulasSkew() {
 	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
@@ -1680,9 +1668,8 @@ void ColumnTest::testFormulasSkew() {
 
 	c2.setFormula(QStringLiteral("skew(x)"), {QStringLiteral("x")}, {&c1}, true);
 	c2.updateFormula();
-	QVERIFY(false); // Calculation not validated!
 	for (int i = 0; i < c2.rowCount(); i++)
-		VALUES_EQUAL(c2.valueAt(i), 39.3);
+		VALUES_EQUAL(c2.valueAt(i), 0.08277344); // Calculated with R: skewness(x)
 }
 void ColumnTest::testFormulasKurt() {
 	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
@@ -1697,15 +1684,14 @@ void ColumnTest::testFormulasKurt() {
 
 	c2.setFormula(QStringLiteral("kurt(x)"), {QStringLiteral("x")}, {&c1}, true);
 	c2.updateFormula();
-	QVERIFY(false); // Calculation not validated!
 	for (int i = 0; i < c2.rowCount(); i++)
-		VALUES_EQUAL(c2.valueAt(i), 39.3);
+		VALUES_EQUAL(c2.valueAt(i), 1.489103); // Calculated with R: kurtosis(x)
 }
 void ColumnTest::testFormulasEntropy() {
 	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
 	c1.resizeTo(3);
 	QCOMPARE(c1.rowCount(), 3);
-	c1.replaceValues(-1, {1., -1., 8., 10., -5});
+	c1.replaceValues(-1, {1.0, 0.0, 2.0, 5.0});
 
 	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
 	c2.resizeTo(7);
@@ -1714,12 +1700,12 @@ void ColumnTest::testFormulasEntropy() {
 
 	c2.setFormula(QStringLiteral("entropy(x)"), {QStringLiteral("x")}, {&c1}, true);
 	c2.updateFormula();
-	QVERIFY(false); // Calculation not validated!
 	for (int i = 0; i < c2.rowCount(); i++)
-		VALUES_EQUAL(c2.valueAt(i), 39.3);
+		VALUES_EQUAL(c2.valueAt(i), 2.); // Value from statisticsDoubleZero()
 }
 
 void ColumnTest::testFormulasQuantile() {
+	QLocale::setDefault(QLocale::C); // . as decimal separator
 	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
 	c1.resizeTo(3);
 	QCOMPARE(c1.rowCount(), 3);
@@ -1732,9 +1718,8 @@ void ColumnTest::testFormulasQuantile() {
 
 	c2.setFormula(QStringLiteral("quantile(0.1;x)"), {QStringLiteral("x")}, {&c1}, true);
 	c2.updateFormula();
-	QVERIFY(false); // Calculation not validated!
 	for (int i = 0; i < c2.rowCount(); i++)
-		VALUES_EQUAL(c2.valueAt(i), 39.3);
+		VALUES_EQUAL(c2.valueAt(i), -3.4); // Calculated with R: quantile(x, 0.1)
 }
 
 void ColumnTest::testFormulasPercentile() {
@@ -1750,9 +1735,8 @@ void ColumnTest::testFormulasPercentile() {
 
 	c2.setFormula(QStringLiteral("percentile(30;x)"), {QStringLiteral("x")}, {&c1}, true);
 	c2.updateFormula();
-	QVERIFY(false); // Calculation not validated!
 	for (int i = 0; i < c2.rowCount(); i++)
-		VALUES_EQUAL(c2.valueAt(i), 39.3);
+		VALUES_EQUAL(c2.valueAt(i), -0.6); // Calculated with R: quantile(x, 30/100)
 }
 
 QTEST_MAIN(ColumnTest)
