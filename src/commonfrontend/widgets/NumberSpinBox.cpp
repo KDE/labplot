@@ -331,7 +331,7 @@ NumberSpinBox::Errors NumberSpinBox::step(int steps) {
 			while (separator_pos != -1) {
 				if (separator_pos >= cursorPos)
 					separatorsCount++;
-				if (separator_pos + 1 < integerString)
+				if (separator_pos + 1 < integerString.length())
 					separator_pos = integerString.indexOf(groupSeparator, separator_pos + 1);
 				else
 					break;
