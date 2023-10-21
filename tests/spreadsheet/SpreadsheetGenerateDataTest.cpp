@@ -22,8 +22,12 @@ void SpreadsheetGenerateDataTest::initTestCase() {
 // **************** Equidistant values **********************
 // **********************************************************
 
+// **********************************************************
+// ********************* Fixed number ***********************
+// **********************************************************
+
 /*!
- *
+ * generate equidistant double values, total number of values is fixed.
  */
 void SpreadsheetGenerateDataTest::testFixedNumberDouble() {
 	Spreadsheet sheet(QStringLiteral("test"), false);
@@ -52,7 +56,7 @@ void SpreadsheetGenerateDataTest::testFixedNumberDouble() {
 }
 
 /*!
- *
+ * generate equidistant integer values, total number of values is fixed.
  */
 void SpreadsheetGenerateDataTest::testFixedNumberInt() {
 	Spreadsheet sheet(QStringLiteral("test"), false);
@@ -81,7 +85,7 @@ void SpreadsheetGenerateDataTest::testFixedNumberInt() {
 }
 
 /*!
- *
+ * generate equidistant big int values, total number of values is fixed.
  */
 void SpreadsheetGenerateDataTest::testFixedNumberBigInt() {
 	Spreadsheet sheet(QStringLiteral("test"), false);
@@ -110,7 +114,7 @@ void SpreadsheetGenerateDataTest::testFixedNumberBigInt() {
 }
 
 /*!
- *
+ * generate equidistant DateTime values, total number of values is fixed.
  */
 void SpreadsheetGenerateDataTest::testFixedNumberDateTime() {
 	QSKIP("doesn't work");
@@ -126,7 +130,6 @@ void SpreadsheetGenerateDataTest::testFixedNumberDateTime() {
 	dlg.setNumber(5);
 
 	auto dateTime = QDateTime::fromString(QLatin1String("2023-05-01"), QLatin1String("yyyy-MM-dd"));
-	// dateTime = dateTime.toTimeSpec(Qt::UTC);
 	dlg.setFromDateTime(dateTime.toMSecsSinceEpoch());
 	dlg.setToDateTime(dateTime.addMonths(4).toMSecsSinceEpoch());
 	dlg.generate();
@@ -150,10 +153,13 @@ void SpreadsheetGenerateDataTest::testFixedNumberDoubleDateTime() {
 
 }
 
+// **********************************************************
+// ******************** Fixed increment *********************
+// **********************************************************
+
 /*!
- *
+ * generate equidistant double values, the increment is fixed.
  */
-// fixed increment between the values
 void SpreadsheetGenerateDataTest::testFixedIncrementDouble() {
 	Spreadsheet sheet(QStringLiteral("test"), false);
 	sheet.setColumnCount(1);
@@ -181,7 +187,65 @@ void SpreadsheetGenerateDataTest::testFixedIncrementDouble() {
 }
 
 /*!
- *
+ * generate equidistant integer values, the increment is fixed.
+ */
+void SpreadsheetGenerateDataTest::testFixedIncrementInt() {
+	Spreadsheet sheet(QStringLiteral("test"), false);
+	sheet.setColumnCount(1);
+	sheet.setRowCount(1);
+	auto* column = sheet.column(0);
+	column->setColumnMode(AbstractColumn::ColumnMode::Integer);
+
+	EquidistantValuesDialog dlg(&sheet);
+	dlg.setColumns(QVector<Column*>{column});
+	dlg.setType(EquidistantValuesDialog::Type::FixedIncrement);
+	dlg.setIncrement(1);
+	dlg.setFromValue(1);
+	dlg.setToValue(5);
+	dlg.generate();
+
+	// checks
+	QCOMPARE(column->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(sheet.rowCount(), 5);
+	QCOMPARE(column->rowCount(), 5);
+	QCOMPARE(column->integerAt(0), 1);
+	QCOMPARE(column->integerAt(1), 2);
+	QCOMPARE(column->integerAt(2), 3);
+	QCOMPARE(column->integerAt(3), 4);
+	QCOMPARE(column->integerAt(4), 5);
+}
+
+/*!
+ * generate equidistant big int values, the increment is fixed.
+ */
+void SpreadsheetGenerateDataTest::testFixedIncrementBigInt() {
+	Spreadsheet sheet(QStringLiteral("test"), false);
+	sheet.setColumnCount(1);
+	sheet.setRowCount(1);
+	auto* column = sheet.column(0);
+	column->setColumnMode(AbstractColumn::ColumnMode::BigInt);
+
+	EquidistantValuesDialog dlg(&sheet);
+	dlg.setColumns(QVector<Column*>{column});
+	dlg.setType(EquidistantValuesDialog::Type::FixedNumber);
+	dlg.setIncrement(5);
+	dlg.setFromValue(1);
+	dlg.setToValue(5);
+	dlg.generate();
+
+	// checks
+	QCOMPARE(column->columnMode(), AbstractColumn::ColumnMode::BigInt);
+	QCOMPARE(sheet.rowCount(), 5);
+	QCOMPARE(column->rowCount(), 5);
+	QCOMPARE(column->bigIntAt(0), 1);
+	QCOMPARE(column->bigIntAt(1), 2);
+	QCOMPARE(column->bigIntAt(2), 3);
+	QCOMPARE(column->bigIntAt(3), 4);
+	QCOMPARE(column->bigIntAt(4), 5);
+}
+
+/*!
+ * generate equidistant DateTime values, the increment is fixed.
  */
 void SpreadsheetGenerateDataTest::testFixedIncrementDateTime() {
 	Spreadsheet sheet(QStringLiteral("test"), false);
@@ -196,7 +260,7 @@ void SpreadsheetGenerateDataTest::testFixedIncrementDateTime() {
 	dlg.setIncrementDateTimeUnit(EquidistantValuesDialog::DateTimeUnit::Year);
 	auto now = QDateTime::currentDateTime();
 	dlg.setFromDateTime(now.toMSecsSinceEpoch());
-	dlg.setToDateTime(now.addYears(5).toMSecsSinceEpoch());
+	dlg.setToDateTime(now.addYears(4).toMSecsSinceEpoch());
 	dlg.generate();
 
 	// checks
@@ -211,9 +275,135 @@ void SpreadsheetGenerateDataTest::testFixedIncrementDateTime() {
 	QCOMPARE(column->dateTimeAt(4).date().year(), year + 4);
 }
 
-// column mode conversion
+// **********************************************************
+// **************** Fixed number and increment **************
+// **********************************************************
+
 /*!
- *
+ * generate equidistant double values, total number of values and the increment are fixed.
+ */
+void SpreadsheetGenerateDataTest::testFixedNumberIncrementDouble() {
+	Spreadsheet sheet(QStringLiteral("test"), false);
+	sheet.setColumnCount(1);
+	sheet.setRowCount(1);
+	auto* column = sheet.column(0);
+	column->setColumnMode(AbstractColumn::ColumnMode::Double);
+
+	EquidistantValuesDialog dlg(&sheet);
+	dlg.setColumns(QVector<Column*>{column});
+	dlg.setType(EquidistantValuesDialog::Type::FixedNumberIncrement);
+	dlg.setNumber(5);
+	dlg.setIncrement(10);
+	dlg.setFromValue(0.);
+	// dlg.setToValue(5);
+	dlg.generate();
+
+	// checks
+	QCOMPARE(column->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(sheet.rowCount(), 5);
+	QCOMPARE(column->rowCount(), 5);
+	QCOMPARE(column->valueAt(0), 0.);
+	QCOMPARE(column->valueAt(1), 10.);
+	QCOMPARE(column->valueAt(2), 20.);
+	QCOMPARE(column->valueAt(3), 30.);
+	QCOMPARE(column->valueAt(4), 40.);
+}
+
+/*!
+ * generate equidistant integer values, the increment is fixed.
+ */
+void SpreadsheetGenerateDataTest::testFixedNumberIncrementInt() {
+	Spreadsheet sheet(QStringLiteral("test"), false);
+	sheet.setColumnCount(1);
+	sheet.setRowCount(1);
+	auto* column = sheet.column(0);
+	column->setColumnMode(AbstractColumn::ColumnMode::Integer);
+
+	EquidistantValuesDialog dlg(&sheet);
+	dlg.setColumns(QVector<Column*>{column});
+	dlg.setType(EquidistantValuesDialog::Type::FixedNumberIncrement);
+	dlg.setNumber(5);
+	dlg.setIncrement(1);
+	dlg.setFromValue(1);
+	dlg.generate();
+
+	// checks
+	QCOMPARE(column->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(sheet.rowCount(), 5);
+	QCOMPARE(column->rowCount(), 5);
+	QCOMPARE(column->integerAt(0), 1);
+	QCOMPARE(column->integerAt(1), 2);
+	QCOMPARE(column->integerAt(2), 3);
+	QCOMPARE(column->integerAt(3), 4);
+	QCOMPARE(column->integerAt(4), 5);
+}
+
+/*!
+ * generate equidistant big int values, the increment is fixed.
+ */
+void SpreadsheetGenerateDataTest::testFixedNumberIncrementBigInt() {
+	Spreadsheet sheet(QStringLiteral("test"), false);
+	sheet.setColumnCount(1);
+	sheet.setRowCount(1);
+	auto* column = sheet.column(0);
+	column->setColumnMode(AbstractColumn::ColumnMode::BigInt);
+
+	EquidistantValuesDialog dlg(&sheet);
+	dlg.setColumns(QVector<Column*>{column});
+	dlg.setType(EquidistantValuesDialog::Type::FixedNumberIncrement);
+	dlg.setNumber(5);
+	dlg.setIncrement(1);
+	dlg.setFromValue(1);
+	dlg.generate();
+
+	// checks
+	QCOMPARE(column->columnMode(), AbstractColumn::ColumnMode::BigInt);
+	QCOMPARE(sheet.rowCount(), 5);
+	QCOMPARE(column->rowCount(), 5);
+	QCOMPARE(column->bigIntAt(0), 1);
+	QCOMPARE(column->bigIntAt(1), 2);
+	QCOMPARE(column->bigIntAt(2), 3);
+	QCOMPARE(column->bigIntAt(3), 4);
+	QCOMPARE(column->bigIntAt(4), 5);
+}
+
+/*!
+ * generate equidistant DateTime values, the increment is fixed.
+ */
+void SpreadsheetGenerateDataTest::testFixedNumberIncrementDateTime() {
+	Spreadsheet sheet(QStringLiteral("test"), false);
+	sheet.setColumnCount(1);
+	sheet.setRowCount(1);
+	auto* column = sheet.column(0);
+	column->setColumnMode(AbstractColumn::ColumnMode::DateTime);
+
+	EquidistantValuesDialog dlg(&sheet);
+	dlg.setColumns(QVector<Column*>{column});
+	dlg.setType(EquidistantValuesDialog::Type::FixedNumberIncrement);
+	dlg.setNumber(5);
+	dlg.setIncrementDateTimeUnit(EquidistantValuesDialog::DateTimeUnit::Year);
+	auto now = QDateTime::currentDateTime();
+	dlg.setFromDateTime(now.toMSecsSinceEpoch());
+	dlg.generate();
+
+	// checks
+	int year = now.date().year(); // current year
+	QCOMPARE(column->columnMode(), AbstractColumn::ColumnMode::DateTime);
+	QCOMPARE(sheet.rowCount(), 5);
+	QCOMPARE(column->rowCount(), 5);
+	QCOMPARE(column->dateTimeAt(0).date().year(), year);
+	QCOMPARE(column->dateTimeAt(1).date().year(), year + 1);
+	QCOMPARE(column->dateTimeAt(2).date().year(), year + 2);
+	QCOMPARE(column->dateTimeAt(3).date().year(), year + 3);
+	QCOMPARE(column->dateTimeAt(4).date().year(), year + 4);
+}
+
+// **********************************************************
+// ***************** Column mode conversion *****************
+// **********************************************************
+
+/*!
+ * generate equidistant big int values, total number of values is fixed, the initial int column mode needs to be adjusted.
  */
 void SpreadsheetGenerateDataTest::testFixedNumberIntToBigInt() {
 	Spreadsheet sheet(QStringLiteral("test"), false);
@@ -242,7 +432,7 @@ void SpreadsheetGenerateDataTest::testFixedNumberIntToBigInt() {
 }
 
 /*!
- *
+ * generate equidistant double values, total number of values is fixed, the initial int column mode needs to be adjusted.
  */
 void SpreadsheetGenerateDataTest::testFixedNumberIntToDouble() {
 	Spreadsheet sheet(QStringLiteral("test"), false);
@@ -271,7 +461,7 @@ void SpreadsheetGenerateDataTest::testFixedNumberIntToDouble() {
 }
 
 /*!
- *
+ * generate equidistant double values, total number of values is fixed, the initial big int column mode needs to be adjusted.
  */
 void SpreadsheetGenerateDataTest::testFixedNumberBigIntToDouble() {
 	Spreadsheet sheet(QStringLiteral("test"), false);
