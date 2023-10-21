@@ -17,6 +17,7 @@ class NumberSpinBox : public QDoubleSpinBox {
 public:
 	struct NumberProperties {
 		QChar integerSign;
+		bool groupSeparators;
 		int integer;
 		int intergerDigits;
 
