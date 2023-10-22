@@ -8,6 +8,7 @@ class UTCDateTimeEdit : public QDateTimeEdit {
 public:
 	UTCDateTimeEdit(QWidget* parent = nullptr);
 	void setMSecsSinceEpochUTC(qint64);
+	QDateTime dateTime() const;
 
 Q_SIGNALS:
 	void mSecsSinceEpochUTCChanged(qint64);

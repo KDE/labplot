@@ -6,6 +6,12 @@ UTCDateTimeEdit::UTCDateTimeEdit(QWidget* parent)
 	connect(this, &QDateTimeEdit::dateTimeChanged, this, &UTCDateTimeEdit::dateTimeChanged);
 }
 
+QDateTime UTCDateTimeEdit::dateTime() const {
+	QDateTime dt = QDateTimeEdit::dateTime();
+	dt.setTimeSpec(Qt::TimeSpec::UTC);
+	return dt;
+}
+
 void UTCDateTimeEdit::setMSecsSinceEpochUTC(qint64 value) {
 	QDateTimeEdit::setDateTime(QDateTime::fromMSecsSinceEpoch(value, Qt::UTC));
 }
