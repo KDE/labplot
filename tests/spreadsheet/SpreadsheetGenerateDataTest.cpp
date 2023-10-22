@@ -117,7 +117,6 @@ void SpreadsheetGenerateDataTest::testFixedNumberBigInt() {
  * generate equidistant DateTime values, total number of values is fixed.
  */
 void SpreadsheetGenerateDataTest::testFixedNumberDateTime() {
-	QSKIP("doesn't work");
 	Spreadsheet sheet(QStringLiteral("test"), false);
 	sheet.setColumnCount(1);
 	sheet.setRowCount(1);
@@ -129,27 +128,63 @@ void SpreadsheetGenerateDataTest::testFixedNumberDateTime() {
 	dlg.setType(EquidistantValuesDialog::Type::FixedNumber);
 	dlg.setNumber(5);
 
-	auto dateTime = QDateTime::fromString(QLatin1String("2023-05-01"), QLatin1String("yyyy-MM-dd"));
+	auto dateTime = QDateTime::fromString(QStringLiteral("2023-05-01T00:00:00Z"), Qt::ISODate);
 	dlg.setFromDateTime(dateTime.toMSecsSinceEpoch());
-	dlg.setToDateTime(dateTime.addMonths(4).toMSecsSinceEpoch());
+	dlg.setToDateTime(dateTime.addSecs(4).toMSecsSinceEpoch());
 	dlg.generate();
 
 	// checks
-	// int second = dateTime.time().second(); // current second
 	QCOMPARE(column->columnMode(), AbstractColumn::ColumnMode::DateTime);
 	QCOMPARE(sheet.rowCount(), 5);
 	QCOMPARE(column->rowCount(), 5);
-	QCOMPARE(column->dateTimeAt(0), QDateTime::fromString(QLatin1String("2023-05-01"), QLatin1String("yyyy-MM-dd")));
-	QCOMPARE(column->dateTimeAt(1), QDateTime::fromString(QLatin1String("2023-06-01"), QLatin1String("yyyy-MM-dd")));
-	QCOMPARE(column->dateTimeAt(2), QDateTime::fromString(QLatin1String("2023-07-01"), QLatin1String("yyyy-MM-dd")));
-	QCOMPARE(column->dateTimeAt(3), QDateTime::fromString(QLatin1String("2023-08-01"), QLatin1String("yyyy-MM-dd")));
-	QCOMPARE(column->dateTimeAt(4), QDateTime::fromString(QLatin1String("2023-09-01"), QLatin1String("yyyy-MM-dd")));
+	QCOMPARE(column->dateTimeAt(0), QDateTime::fromString(QStringLiteral("2023-05-01T00:00:00Z"), Qt::ISODate));
+	QCOMPARE(column->dateTimeAt(1), QDateTime::fromString(QStringLiteral("2023-05-01T00:00:01Z"), Qt::ISODate));
+	QCOMPARE(column->dateTimeAt(2), QDateTime::fromString(QStringLiteral("2023-05-01T00:00:02Z"), Qt::ISODate));
+	QCOMPARE(column->dateTimeAt(3), QDateTime::fromString(QStringLiteral("2023-05-01T00:00:03Z"), Qt::ISODate));
+	QCOMPARE(column->dateTimeAt(4), QDateTime::fromString(QStringLiteral("2023-05-01T00:00:04Z"), Qt::ISODate));
 }
 
 /*!
- *
+ * two columns (double and datetime) provided, generate equidistant values for both, total number of values is fixed.
  */
 void SpreadsheetGenerateDataTest::testFixedNumberDoubleDateTime() {
+	Spreadsheet sheet(QStringLiteral("test"), false);
+	sheet.setColumnCount(2);
+	sheet.setRowCount(1);
+	auto* column1 = sheet.column(0);
+	column1->setColumnMode(AbstractColumn::ColumnMode::Double);
+	auto* column2 = sheet.column(1);
+	column2->setColumnMode(AbstractColumn::ColumnMode::DateTime);
+
+	EquidistantValuesDialog dlg(&sheet);
+	dlg.setColumns(QVector<Column*>{column1, column2});
+	dlg.setType(EquidistantValuesDialog::Type::FixedNumber);
+	dlg.setNumber(5);
+	dlg.setFromValue(1);
+	dlg.setToValue(5);
+	auto dateTime = QDateTime::fromString(QStringLiteral("2023-05-01T00:00:00Z"), Qt::ISODate);
+	dlg.setFromDateTime(dateTime.toMSecsSinceEpoch());
+	dlg.setToDateTime(dateTime.addSecs(4).toMSecsSinceEpoch());
+	dlg.generate();
+
+	// checks for the numeric column
+	QCOMPARE(column1->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(sheet.rowCount(), 5);
+	QCOMPARE(column1->rowCount(), 5);
+	QCOMPARE(column1->valueAt(0), 1.);
+	QCOMPARE(column1->valueAt(1), 2.);
+	QCOMPARE(column1->valueAt(2), 3.);
+	QCOMPARE(column1->valueAt(3), 4.);
+	QCOMPARE(column1->valueAt(4), 5.);
+
+	// checks for the DateTime column
+	QCOMPARE(column2->columnMode(), AbstractColumn::ColumnMode::DateTime);
+	QCOMPARE(column2->rowCount(), 5);
+	QCOMPARE(column2->dateTimeAt(0), QDateTime::fromString(QStringLiteral("2023-05-01T00:00:00Z"), Qt::ISODate));
+	QCOMPARE(column2->dateTimeAt(1), QDateTime::fromString(QStringLiteral("2023-05-01T00:00:01Z"), Qt::ISODate));
+	QCOMPARE(column2->dateTimeAt(2), QDateTime::fromString(QStringLiteral("2023-05-01T00:00:02Z"), Qt::ISODate));
+	QCOMPARE(column2->dateTimeAt(3), QDateTime::fromString(QStringLiteral("2023-05-01T00:00:03Z"), Qt::ISODate));
+	QCOMPARE(column2->dateTimeAt(4), QDateTime::fromString(QStringLiteral("2023-05-01T00:00:04Z"), Qt::ISODate));
 
 }
 

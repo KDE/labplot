@@ -35,7 +35,6 @@ EquidistantValuesDialog::EquidistantValuesDialog(Spreadsheet* s, QWidget* parent
 	: QDialog(parent)
 	, m_spreadsheet(s) {
 	Q_ASSERT(m_spreadsheet);
-	setWindowTitle(i18nc("@title:window", "Equidistant Values"));
 
 	auto* mainWidget = new QWidget(this);
 	ui.setupUi(mainWidget);
@@ -83,7 +82,7 @@ EquidistantValuesDialog::EquidistantValuesDialog(Spreadsheet* s, QWidget* parent
 
 	// restore saved settings if available
 	create(); // ensure there's a window created
-	KConfigGroup conf = Settings::group(QStringLiteral("EquidistantValuesDialog"));
+	auto conf = Settings::group(QStringLiteral("EquidistantValuesDialog"));
 	if (conf.exists()) {
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
 		resize(windowHandle()->size()); // workaround for QTBUG-40584
@@ -113,7 +112,7 @@ EquidistantValuesDialog::EquidistantValuesDialog(Spreadsheet* s, QWidget* parent
 
 EquidistantValuesDialog::~EquidistantValuesDialog() {
 	// save current settings
-	KConfigGroup conf = Settings::group(QStringLiteral("EquidistantValuesDialog"));
+	auto conf = Settings::group(QStringLiteral("EquidistantValuesDialog"));
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 	const auto numberLocale = QLocale();
 
@@ -242,7 +241,6 @@ void EquidistantValuesDialog::typeChanged(int) {
  * the tooltip accordingly.
  */
 void EquidistantValuesDialog::checkValues() const {
-
 	bool ok;
 	if (m_hasNumeric) {
 		const auto numberLocale = QLocale();
