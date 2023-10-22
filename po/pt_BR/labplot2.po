@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-18 00:39+0000\n"
+"POT-Creation-Date: 2023-10-22 00:39+0000\n"
 "PO-Revision-Date: 2022-07-14 10:06-0300\n"
 "Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
 "Language-Team: Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -5614,7 +5614,7 @@ msgid "%1: set matrix size to %2x%3"
 msgstr "%1: definir o tamanho da matriz para %2x%3"
 
 #: src/backend/matrix/Matrix.cpp:488
-#: src/backend/spreadsheet/Spreadsheet.cpp:666
+#: src/backend/spreadsheet/Spreadsheet.cpp:667
 #, kde-format
 msgid "%1: copy %2"
 msgstr "%1: copiar o %2"
@@ -6763,28 +6763,28 @@ msgstr[1] "%1: remover %2 colunas"
 msgid "%1: clear selected columns"
 msgstr "%1: limpar as colunas selecionadas"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:632
+#: src/backend/spreadsheet/Spreadsheet.cpp:633
 #, kde-format
 msgid "%1: clear all masks"
 msgstr "%1: limpar todas as máscaras"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:658
+#: src/backend/spreadsheet/Spreadsheet.cpp:659
 #, kde-format
 msgid "%1: move column %2 from position %3 to %4."
 msgstr "%1: mover a coluna %2 da posição %3 para a %4."
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:783
+#: src/backend/spreadsheet/Spreadsheet.cpp:784
 #, kde-format
 msgid "%1: sort columns"
 msgstr "%1: ordenar as colunas"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1148
+#: src/backend/spreadsheet/Spreadsheet.cpp:1149
 #, fuzzy, kde-format
 #| msgid "no spreadsheet element found"
 msgid "%1: linked spreadsheet removed"
 msgstr "não foi encontrado nenhum elemento da planilha"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1519
+#: src/backend/spreadsheet/Spreadsheet.cpp:1520
 #, fuzzy, kde-format
 #| msgid "numerical data, %1 element"
 #| msgid_plural "numerical data, %1 elements"
@@ -6793,7 +6793,7 @@ msgid_plural "numerical data, %1 elements"
 msgstr[0] "dados numéricos, %1 elemento"
 msgstr[1] "dados numéricos, %1 elementos"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1522
+#: src/backend/spreadsheet/Spreadsheet.cpp:1523
 #, fuzzy, kde-format
 #| msgid "numerical data, %1 element"
 #| msgid_plural "numerical data, %1 elements"
@@ -6802,7 +6802,7 @@ msgid_plural "integer data, %1 elements"
 msgstr[0] "dados numéricos, %1 elemento"
 msgstr[1] "dados numéricos, %1 elementos"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1525
+#: src/backend/spreadsheet/Spreadsheet.cpp:1526
 #, fuzzy, kde-format
 #| msgid "numerical data, %1 element"
 #| msgid_plural "numerical data, %1 elements"
@@ -6811,7 +6811,7 @@ msgid_plural "big integer data, %1 elements"
 msgstr[0] "dados numéricos, %1 elemento"
 msgstr[1] "dados numéricos, %1 elementos"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1528
+#: src/backend/spreadsheet/Spreadsheet.cpp:1529
 #, fuzzy, kde-format
 #| msgid "numerical data, %1 element"
 #| msgid_plural "numerical data, %1 elements"
@@ -6820,7 +6820,7 @@ msgid_plural "text data, %1 elements"
 msgstr[0] "dados numéricos, %1 elemento"
 msgstr[1] "dados numéricos, %1 elementos"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1531
+#: src/backend/spreadsheet/Spreadsheet.cpp:1532
 #, fuzzy, kde-format
 #| msgid "numerical data, %1 element"
 #| msgid_plural "numerical data, %1 elements"
@@ -6829,7 +6829,7 @@ msgid_plural "month data, %1 elements"
 msgstr[0] "dados numéricos, %1 elemento"
 msgstr[1] "dados numéricos, %1 elementos"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1534
+#: src/backend/spreadsheet/Spreadsheet.cpp:1535
 #, fuzzy, kde-format
 #| msgid "numerical data, %1 element"
 #| msgid_plural "numerical data, %1 elements"
@@ -6838,7 +6838,7 @@ msgid_plural "day data, %1 elements"
 msgstr[0] "dados numéricos, %1 elemento"
 msgstr[1] "dados numéricos, %1 elementos"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1537
+#: src/backend/spreadsheet/Spreadsheet.cpp:1538
 #, fuzzy, kde-format
 #| msgid "numerical data, %1 element"
 #| msgid_plural "numerical data, %1 elements"

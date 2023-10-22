@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-18 00:39+0000\n"
+"POT-Creation-Date: 2023-10-22 00:39+0000\n"
 "PO-Revision-Date: 2023-07-01 07:37+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -5509,7 +5509,7 @@ msgid "%1: set matrix size to %2x%3"
 msgstr "%1: ustaw rozmiar macierzy na %2x%3"
 
 #: src/backend/matrix/Matrix.cpp:488
-#: src/backend/spreadsheet/Spreadsheet.cpp:666
+#: src/backend/spreadsheet/Spreadsheet.cpp:667
 #, kde-format
 msgid "%1: copy %2"
 msgstr "%1: kopiuj %2"
@@ -6579,28 +6579,28 @@ msgstr[2] "%1: usuń %2 kolumn"
 msgid "%1: clear selected columns"
 msgstr "%1: wyczyść wybrane kolumny"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:632
+#: src/backend/spreadsheet/Spreadsheet.cpp:633
 #, kde-format
 msgid "%1: clear all masks"
 msgstr "%1: wyczyść wszystkie maski"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:658
+#: src/backend/spreadsheet/Spreadsheet.cpp:659
 #, kde-format
 msgid "%1: move column %2 from position %3 to %4."
 msgstr "%1: przenieś kolumnę %2 z położenia %3 do %4."
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:783
+#: src/backend/spreadsheet/Spreadsheet.cpp:784
 #, kde-format
 msgid "%1: sort columns"
 msgstr "%1: uszereguj kolumny"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1148
+#: src/backend/spreadsheet/Spreadsheet.cpp:1149
 #, fuzzy, kde-format
 #| msgid "no spreadsheet element found"
 msgid "%1: linked spreadsheet removed"
 msgstr "nie znaleziono elementu arkusza kalkulacyjnego"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1519
+#: src/backend/spreadsheet/Spreadsheet.cpp:1520
 #, kde-format
 msgid "double precision data, %1 element"
 msgid_plural "numerical data, %1 elements"
@@ -6608,7 +6608,7 @@ msgstr[0] "dana o podwójnej precyzji, %1 rzecz"
 msgstr[1] "dane numeryczne, %1 rzeczy"
 msgstr[2] "dane numeryczne, %1 rzeczy"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1522
+#: src/backend/spreadsheet/Spreadsheet.cpp:1523
 #, kde-format
 msgid "integer data, %1 element"
 msgid_plural "integer data, %1 elements"
@@ -6616,7 +6616,7 @@ msgstr[0] "dana liczbowa, %1 element"
 msgstr[1] "dana liczbowa, %1 elementy"
 msgstr[2] "dana liczbowa, %1 elementów"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1525
+#: src/backend/spreadsheet/Spreadsheet.cpp:1526
 #, kde-format
 msgid "big integer data, %1 element"
 msgid_plural "big integer data, %1 elements"
@@ -6624,7 +6624,7 @@ msgstr[0] "duże liczby całkowite, %1 element"
 msgstr[1] "duże liczby całkowite, %1 elementy"
 msgstr[2] "duże liczby całkowite, %1 elementów"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1528
+#: src/backend/spreadsheet/Spreadsheet.cpp:1529
 #, kde-format
 msgid "text data, %1 element"
 msgid_plural "text data, %1 elements"
@@ -6632,7 +6632,7 @@ msgstr[0] "dana tekstowa, %1 element"
 msgstr[1] "dana tekstowa, %1 elementy"
 msgstr[2] "dana tekstowa, %1 elementów"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1531
+#: src/backend/spreadsheet/Spreadsheet.cpp:1532
 #, kde-format
 msgid "month data, %1 element"
 msgid_plural "month data, %1 elements"
@@ -6640,7 +6640,7 @@ msgstr[0] "dana miesiąca, %1 element"
 msgstr[1] "dana miesiąca, %1 elementy"
 msgstr[2] "dana miesiąca, %1 elementów"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1534
+#: src/backend/spreadsheet/Spreadsheet.cpp:1535
 #, kde-format
 msgid "day data, %1 element"
 msgid_plural "day data, %1 elements"
@@ -6648,7 +6648,7 @@ msgstr[0] "dana dnia, %1 element"
 msgstr[1] "dana dnia, %1 elementy"
 msgstr[2] "dana dnia, %1 elementów"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1537
+#: src/backend/spreadsheet/Spreadsheet.cpp:1538
 #, kde-format
 msgid "date and time data, %1 element"
 msgid_plural "date and time data, %1 elements"

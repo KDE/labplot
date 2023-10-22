@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-18 00:39+0000\n"
+"POT-Creation-Date: 2023-10-22 00:39+0000\n"
 "PO-Revision-Date: 2023-10-09 09:40+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -5541,7 +5541,7 @@ msgid "%1: set matrix size to %2x%3"
 msgstr "%1: establix la mida de la matriu a %2x%3"
 
 #: src/backend/matrix/Matrix.cpp:488
-#: src/backend/spreadsheet/Spreadsheet.cpp:666
+#: src/backend/spreadsheet/Spreadsheet.cpp:667
 #, kde-format
 msgid "%1: copy %2"
 msgstr "%1: copia %2"
@@ -6600,69 +6600,69 @@ msgstr[1] "%1: elimina %2 columnes"
 msgid "%1: clear selected columns"
 msgstr "%1: neteja les columnes seleccionades"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:632
+#: src/backend/spreadsheet/Spreadsheet.cpp:633
 #, kde-format
 msgid "%1: clear all masks"
 msgstr "%1: neteja totes les màscares"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:658
+#: src/backend/spreadsheet/Spreadsheet.cpp:659
 #, kde-format
 msgid "%1: move column %2 from position %3 to %4."
 msgstr "%1: mou la columna %2 des de la posició %3 cap a la %4."
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:783
+#: src/backend/spreadsheet/Spreadsheet.cpp:784
 #, kde-format
 msgid "%1: sort columns"
 msgstr "%1: ordena les columnes"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1148
+#: src/backend/spreadsheet/Spreadsheet.cpp:1149
 #, kde-format
 msgid "%1: linked spreadsheet removed"
 msgstr "%1: eliminació del full de càlcul enllaçat"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1519
+#: src/backend/spreadsheet/Spreadsheet.cpp:1520
 #, kde-format
 msgid "double precision data, %1 element"
 msgid_plural "numerical data, %1 elements"
 msgstr[0] "dades de precisió doble, %1 element"
 msgstr[1] "dades de precisió doble, %1 element"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1522
+#: src/backend/spreadsheet/Spreadsheet.cpp:1523
 #, kde-format
 msgid "integer data, %1 element"
 msgid_plural "integer data, %1 elements"
 msgstr[0] "dades de nombre enter, %1 element"
 msgstr[1] "dades de nombre enter, %1 elements"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1525
+#: src/backend/spreadsheet/Spreadsheet.cpp:1526
 #, kde-format
 msgid "big integer data, %1 element"
 msgid_plural "big integer data, %1 elements"
 msgstr[0] "dades de nombre enter gran, %1 element"
 msgstr[1] "dades de nombre enter gran, %1 elements"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1528
+#: src/backend/spreadsheet/Spreadsheet.cpp:1529
 #, kde-format
 msgid "text data, %1 element"
 msgid_plural "text data, %1 elements"
 msgstr[0] "dades de text, %1 element"
 msgstr[1] "dades de text, %1 elements"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1531
+#: src/backend/spreadsheet/Spreadsheet.cpp:1532
 #, kde-format
 msgid "month data, %1 element"
 msgid_plural "month data, %1 elements"
 msgstr[0] "dades del mes, %1 element"
 msgstr[1] "dades del mes, %1 elements"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1534
+#: src/backend/spreadsheet/Spreadsheet.cpp:1535
 #, kde-format
 msgid "day data, %1 element"
 msgid_plural "day data, %1 elements"
 msgstr[0] "dades del dia, %1 element"
 msgstr[1] "dades del dia, %1 elements"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1537
+#: src/backend/spreadsheet/Spreadsheet.cpp:1538
 #, kde-format
 msgid "date and time data, %1 element"
 msgid_plural "date and time data, %1 elements"
