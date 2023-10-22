@@ -489,8 +489,8 @@ void EquidistantValuesDialog::generate() {
 	// Note, when numeric and datetime columns are selected, the input parameters are
 	// different which can result into different number of values generated for each type.
 	int maxSize = std::max(newDoubleData.size(), newIntData.size());
-	maxSize = std::max(maxSize, newBigIntData.size());
-	maxSize = std::max(maxSize, newDateTimeData.size());
+	maxSize = std::max(maxSize, static_cast<int>(newBigIntData.size()));
+	maxSize = std::max(maxSize, static_cast<int>(newDateTimeData.size()));
 	if (m_spreadsheet->rowCount() < maxSize)
 		m_spreadsheet->setRowCount(maxSize);
 	else
