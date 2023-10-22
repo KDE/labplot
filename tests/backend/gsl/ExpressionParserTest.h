@@ -24,6 +24,7 @@ private Q_SLOTS:
 	void testbetween();
 	void testoutside();
 	void testequalEpsilon();
+	void testLog2();
 };
 
 #endif // EXPRESSIONPARSERTEST_H
