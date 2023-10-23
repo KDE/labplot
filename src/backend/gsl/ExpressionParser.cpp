@@ -478,8 +478,8 @@ struct PayloadExpressionParser : public Payload {
 		, xVectors(xVectors) {
 	}
 	const QStringList* vars;
-	const QVector<QVector<double>*>* xVectors;
 	int row;
+	const QVector<QVector<double>*>* xVectors;
 };
 
 double cell(double x, const char* variable, const std::weak_ptr<Payload> payload) {
