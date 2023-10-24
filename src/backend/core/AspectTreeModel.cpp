@@ -67,6 +67,8 @@ AspectTreeModel::AspectTreeModel(AbstractAspect* root, QObject* parent)
 	connect(m_root, &AbstractAspect::childAspectRemoved, this, &AspectTreeModel::aspectRemoved);
 	connect(m_root, &AbstractAspect::aspectHiddenAboutToChange, this, &AspectTreeModel::aspectHiddenAboutToChange);
 	connect(m_root, &AbstractAspect::aspectHiddenChanged, this, &AspectTreeModel::aspectHiddenChanged);
+	connect(m_root, &AbstractAspect::childAspectAboutToBeMoved, this, &AspectTreeModel::aspectAboutToBeMoved);
+	connect(m_root, &AbstractAspect::childAspectMoved, this, &AspectTreeModel::aspectMoved);
 }
 
 /*!
@@ -382,6 +384,20 @@ void AspectTreeModel::aspectRemoved() {
 
 	m_aspectAboutToBeRemovedCalled = false;
 	endRemoveRows();
+}
+
+void AspectTreeModel::aspectAboutToBeMoved(const AbstractAspect* aspect, int destinationRow) {
+	AbstractAspect* parent = aspect->parentAspect();
+	int index = parent->indexOfChild<AbstractAspect>(aspect);
+	const auto& parentIndex = modelIndexOfAspect(parent);
+	m_aspectAboutToBeMovedCalled = true;
+	beginMoveRows(parentIndex, index, index, parentIndex, destinationRow);
+}
+
+void AspectTreeModel::aspectMoved() {
+	Q_ASSERT(m_aspectAboutToBeMovedCalled == true);
+	m_aspectAboutToBeMovedCalled = false;
+	endMoveRows();
 }
 
 void AspectTreeModel::aspectHiddenAboutToChange(const AbstractAspect* aspect) {

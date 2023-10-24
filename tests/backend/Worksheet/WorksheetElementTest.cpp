@@ -22,9 +22,15 @@
 #include "backend/worksheet/plots/cartesian/ReferenceLinePrivate.h"
 #include "backend/worksheet/plots/cartesian/ReferenceRange.h"
 #include "backend/worksheet/plots/cartesian/ReferenceRangePrivate.h"
+#include "commonfrontend/ProjectExplorer.h"
 #include "kdefrontend/dockwidgets/CustomPointDock.h"
 #include "kdefrontend/dockwidgets/ImageDock.h"
 #include "kdefrontend/widgets/LabelWidget.h"
+
+#include <QAction>
+#include <QItemSelectionModel>
+#include <QMenu>
+#include <QTreeView>
 
 void WorksheetElementTest::initTestCase() {
 	// needed in order to have the signals triggered by SignallingUndoCommand, see LabPlot.cpp
@@ -558,6 +564,205 @@ void WorksheetElementTest::referenceLineInverseScaling() {
 
 	QCOMPARE(qAbs(referenceLine->d_func()->length), rect.width());
 	QCOMPARE(referenceLine->d_func()->pos().x(), rect.center().x());
+}
+
+#define DEBUG_ELEMENT_NAMES(aspectVector)                                                                                                                      \
+	do {                                                                                                                                                       \
+		int index = 0;                                                                                                                                         \
+		for (const auto& a : qAsConst(aspectVector)) {                                                                                                         \
+			DEBUG(std::string("Index: ") << index << " , name: " << a->name().toStdString());                                                                  \
+			index++;                                                                                                                                           \
+		}                                                                                                                                                      \
+	} while (false)
+
+void WorksheetElementTest::moveElementBefore() {
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(ws);
+
+	auto* lFirst = new TextLabel(QStringLiteral("first"));
+	ws->addChild(lFirst);
+
+	auto* lSecond = new TextLabel(QStringLiteral("second"));
+	ws->addChild(lSecond);
+
+	auto* lThird = new TextLabel(QStringLiteral("third"));
+	ws->addChild(lThird);
+
+	auto children = ws->children<AbstractAspect>(AbstractAspect::ChildIndexFlag::IncludeHidden);
+
+	// First is background
+	QCOMPARE(children.at(1)->name(), lFirst->name());
+	QCOMPARE(children.at(2)->name(), lSecond->name());
+	QCOMPARE(children.at(3)->name(), lThird->name());
+
+	QAction action;
+	action.setData(2); // behind lSecond
+	lThird->execMoveBehind(&action);
+
+	children = ws->children<AbstractAspect>(AbstractAspect::ChildIndexFlag::IncludeHidden);
+	QCOMPARE(children.at(1)->name(), lFirst->name());
+	QCOMPARE(children.at(2)->name(), lThird->name());
+	QCOMPARE(children.at(3)->name(), lSecond->name());
+
+	lThird->undoStack()->undo();
+
+	children = ws->children<AbstractAspect>(AbstractAspect::ChildIndexFlag::IncludeHidden);
+	QCOMPARE(children.at(1)->name(), lFirst->name());
+	QCOMPARE(children.at(2)->name(), lSecond->name());
+	QCOMPARE(children.at(3)->name(), lThird->name());
+
+	action.setData(1);
+	lThird->execMoveBehind(&action);
+
+	children = ws->children<AbstractAspect>(AbstractAspect::ChildIndexFlag::IncludeHidden);
+	QCOMPARE(children.at(1)->name(), lThird->name());
+	QCOMPARE(children.at(2)->name(), lFirst->name());
+	QCOMPARE(children.at(3)->name(), lSecond->name());
+
+	action.setData(1);
+	lSecond->execMoveBehind(&action);
+
+	children = ws->children<AbstractAspect>(AbstractAspect::ChildIndexFlag::IncludeHidden);
+	QCOMPARE(children.at(1)->name(), lSecond->name());
+	QCOMPARE(children.at(2)->name(), lThird->name());
+	QCOMPARE(children.at(3)->name(), lFirst->name());
+}
+
+void WorksheetElementTest::moveElementAfter() {
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(ws);
+
+	auto* lFirst = new TextLabel(QStringLiteral("first"));
+	ws->addChild(lFirst);
+
+	auto* lSecond = new TextLabel(QStringLiteral("second"));
+	ws->addChild(lSecond);
+
+	auto* lThird = new TextLabel(QStringLiteral("third"));
+	ws->addChild(lThird);
+
+	auto children = ws->children<AbstractAspect>(AbstractAspect::ChildIndexFlag::IncludeHidden);
+
+	// First is background
+	QCOMPARE(children.at(1)->name(), lFirst->name());
+	QCOMPARE(children.at(2)->name(), lSecond->name());
+	QCOMPARE(children.at(3)->name(), lThird->name());
+
+	QAction action;
+	action.setData(3);
+	lFirst->execMoveInFrontOf(&action);
+
+	children = ws->children<AbstractAspect>(AbstractAspect::ChildIndexFlag::IncludeHidden);
+	QCOMPARE(children.at(1)->name(), lSecond->name());
+	QCOMPARE(children.at(2)->name(), lThird->name());
+	QCOMPARE(children.at(3)->name(), lFirst->name());
+
+	lThird->undoStack()->undo();
+
+	children = ws->children<AbstractAspect>(AbstractAspect::ChildIndexFlag::IncludeHidden);
+	QCOMPARE(children.at(1)->name(), lFirst->name());
+	QCOMPARE(children.at(2)->name(), lSecond->name());
+	QCOMPARE(children.at(3)->name(), lThird->name());
+
+	action.setData(400); // higher than maximum, it will be limited automatically
+	lFirst->execMoveInFrontOf(&action);
+
+	children = ws->children<AbstractAspect>(AbstractAspect::ChildIndexFlag::IncludeHidden);
+	QCOMPARE(children.at(1)->name(), lSecond->name());
+	QCOMPARE(children.at(2)->name(), lThird->name());
+	QCOMPARE(children.at(3)->name(), lFirst->name());
+
+	action.setData(2); // in front of lThird
+	lSecond->execMoveInFrontOf(&action);
+
+	children = ws->children<AbstractAspect>(AbstractAspect::ChildIndexFlag::IncludeHidden);
+	QCOMPARE(children.at(1)->name(), lThird->name());
+	QCOMPARE(children.at(2)->name(), lSecond->name());
+	QCOMPARE(children.at(3)->name(), lFirst->name());
+}
+
+void WorksheetElementTest::prepareDrawingMenu() {
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(ws);
+
+	auto* lFirst = new TextLabel(QStringLiteral("first"));
+	ws->addChild(lFirst);
+
+	auto* lSecond = new TextLabel(QStringLiteral("second"));
+	ws->addChild(lSecond);
+
+	auto* lThird = new TextLabel(QStringLiteral("third"));
+	ws->addChild(lThird);
+
+	auto children = ws->children<AbstractAspect>(AbstractAspect::ChildIndexFlag::IncludeHidden);
+
+	// First is background
+	QCOMPARE(children.at(1)->name(), lFirst->name());
+	QCOMPARE(children.at(2)->name(), lSecond->name());
+	QCOMPARE(children.at(3)->name(), lThird->name());
+
+	QAction action;
+	action.setData(1);
+	lThird->execMoveBehind(&action);
+
+	children = ws->children<AbstractAspect>(AbstractAspect::ChildIndexFlag::IncludeHidden);
+	DEBUG_ELEMENT_NAMES(children);
+	lThird->createContextMenu();
+	lThird->prepareDrawingOrderMenu();
+	QCOMPARE(lThird->m_moveBehindMenu->actions().count(), 0);
+
+	QCOMPARE(lThird->m_moveInFrontOfMenu->actions().count(), 2);
+}
+
+void WorksheetElementTest::moveTreeModelInteraction() {
+	Project project;
+	auto* aspectTreeModel = new AspectTreeModel(&project, this);
+
+	std::unique_ptr<ProjectExplorer> projectExplorer = std::make_unique<ProjectExplorer>(nullptr);
+	projectExplorer->setModel(aspectTreeModel);
+	projectExplorer->setProject(&project);
+	projectExplorer->setCurrentAspect(&project);
+
+	auto* ws = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(ws);
+
+	auto* lFirst = new TextLabel(QStringLiteral("first"));
+	ws->addChild(lFirst);
+
+	auto* lSecond = new TextLabel(QStringLiteral("second"));
+	ws->addChild(lSecond);
+
+	auto* lThird = new TextLabel(QStringLiteral("third"));
+	ws->addChild(lThird);
+
+	auto children = ws->children<AbstractAspect>(AbstractAspect::ChildIndexFlag::IncludeHidden);
+
+	// First is background
+	QCOMPARE(children.at(1)->name(), lFirst->name());
+	QCOMPARE(children.at(2)->name(), lSecond->name());
+	QCOMPARE(children.at(3)->name(), lThird->name());
+
+	QAction action;
+	action.setData(1);
+	lThird->execMoveBehind(&action);
+
+	ws->setItemSelectedInView(lFirst->graphicsItem(), false);
+	ws->setItemSelectedInView(lThird->graphicsItem(), true);
+	const auto& indices = projectExplorer->m_treeView->selectionModel()->selectedIndexes();
+	QCOMPARE(indices.length(), 4);
+	const auto& aspectIndex = indices.at(0);
+	const auto* selectedAspect = static_cast<AbstractAspect*>(aspectIndex.internalPointer());
+	QCOMPARE(selectedAspect->name(), lThird->name()); // The selectionModel() got updated correctly
+
+	children = ws->children<AbstractAspect>(AbstractAspect::ChildIndexFlag::IncludeHidden);
+	DEBUG_ELEMENT_NAMES(children);
+	lThird->createContextMenu();
+	lThird->prepareDrawingOrderMenu();
+	QCOMPARE(lThird->m_moveBehindMenu->actions().count(), 0);
+	QCOMPARE(lThird->m_moveInFrontOfMenu->actions().count(), 2);
 }
 
 // TODO: create test with reference range with nonlinear ranges!

@@ -33,13 +33,62 @@ public:
 	}
 };
 
+class AspectChildMoveCmd : public QUndoCommand {
+public:
+	AspectChildMoveCmd(AbstractAspectPrivate* target, AbstractAspect* child, int steps, QUndoCommand* parent = nullptr)
+		: QUndoCommand(parent)
+		, m_target(target)
+		, m_child(child)
+		, m_delta(steps) {
+		setText(i18n("%1: move up", m_target->m_name));
+	}
+
+	virtual ~AspectChildMoveCmd() override {
+	}
+
+	virtual void redo() override {
+		move(m_delta); // move up
+	}
+
+	virtual void undo() override {
+		move(-m_delta); // move down
+	}
+
+	void move(int steps) {
+		// QDEBUG(Q_FUNC_INFO << ", TARGET = " << m_target->q << " CHILD = " << m_child << ", PARENT = " << m_child->parentAspect())
+		const int origIndex = m_target->indexOfChild(m_child);
+		int newIndex = origIndex + steps;
+		if (newIndex > m_target->m_children.count() - 1)
+			newIndex = m_target->m_children.count() - 1;
+		else if (newIndex < 0)
+			newIndex == 0;
+		m_delta = newIndex - origIndex;
+
+		if (m_delta != 0) {
+			Q_EMIT m_target->q->childAspectAboutToBeMoved(
+				m_child,
+				newIndex); // TODO: newIndex is the index of all AbstractAspects including the hidden one. The AspectTreeModel expects the index without!
+
+			m_target->m_children.removeAll(m_child);
+			m_target->m_children.insert(newIndex, m_child);
+
+			Q_EMIT m_target->q->childAspectMoved();
+		}
+	}
+
+protected:
+	AbstractAspectPrivate* m_target{nullptr};
+	AbstractAspect* m_child{nullptr};
+	int m_delta{0};
+};
+
 class AspectChildRemoveCmd : public AspectCommonCmd {
 public:
 	AspectChildRemoveCmd(AbstractAspectPrivate* target, AbstractAspect* child, QUndoCommand* parent = nullptr)
 		: AspectCommonCmd(parent)
 		, m_target(target)
-		, m_child(child)
-		, m_moved(child->isMoved()) {
+		, m_child(child) {
+		Q_ASSERT(!child->isMoved());
 		setText(i18n("%1: remove %2", m_target->m_name, m_child->name()));
 	}
 
@@ -59,13 +108,9 @@ public:
 			nextSibling = m_target->m_children.at(m_target->indexOfChild(m_child) + 1);
 
 		// emit the "about to be removed" signal also for all children columns so the curves can react.
-		// no need to notify when the parent is just being moved (move up, moved down in the project explorer),
-		//(move = delete at the current position + insert at the new position)
-		if (!m_moved) {
-			const auto& columns = m_child->children<Column>(AbstractAspect::ChildIndexFlag::Recursive);
-			for (auto* col : columns)
-				Q_EMIT col->parentAspect()->childAspectAboutToBeRemoved(col);
-		}
+		const auto& columns = m_child->children<Column>(AbstractAspect::ChildIndexFlag::Recursive);
+		for (auto* col : columns)
+			Q_EMIT col->parentAspect()->childAspectAboutToBeRemoved(col);
 
 		// no need to emit signals if the aspect is hidden, the only exceptions is it's a datapicker point
 		// and we need to react on its removal in order to update the data spreadsheet.
@@ -92,17 +137,11 @@ public:
 	void undo() override {
 		Q_ASSERT(m_index != -1); // m_child must be a child of m_target->q
 
-		if (m_moved)
-			m_child->setMoved(true);
-
 		Q_EMIT m_target->q->childAspectAboutToBeAdded(m_target->q, nullptr, m_child);
 		Q_EMIT m_target->q->childAspectAboutToBeAdded(m_target->q, m_index, m_child);
 		m_target->insertChild(m_index, m_child);
 		m_child->finalizeAdd();
 		Q_EMIT m_target->q->childAspectAdded(m_child);
-
-		if (m_moved)
-			m_child->setMoved(false);
 		// 		m_removed = false;
 	}
 
@@ -110,7 +149,6 @@ protected:
 	AbstractAspectPrivate* m_target{nullptr};
 	AbstractAspect* m_child{nullptr};
 	int m_index{-1};
-	bool m_moved{false};
 	// 	bool m_removed{false};
 };
 
