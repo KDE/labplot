@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-23 00:39+0000\n"
-"PO-Revision-Date: 2023-10-09 09:15+0300\n"
+"POT-Creation-Date: 2023-10-24 00:39+0000\n"
+"PO-Revision-Date: 2023-10-23 09:17+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
@@ -4732,10 +4732,9 @@ msgid "Logarithm"
 msgstr "Логарифм"
 
 #: src/backend/gsl/functions.cpp:717
-#, fuzzy, kde-format
-#| msgid "Base 10 logarithm"
+#, kde-format
 msgid "Base 2 logarithm"
-msgstr "Десятковий логарифм"
+msgstr "Двійковий логарифм"
 
 #: src/backend/gsl/functions.cpp:718
 #, kde-format
@@ -10438,7 +10437,7 @@ msgstr "Не введено числа"
 msgid "Unhandled error"
 msgstr "Непридатна до обробки помилка"
 
-#: src/commonfrontend/widgets/NumberSpinBox.cpp:419
+#: src/commonfrontend/widgets/NumberSpinBox.cpp:440
 #, kde-format
 msgid "Invalid value entered. Valid value: %1"
 msgstr "Введено некоректне значення. Коректне значення: %1"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-23 00:39+0000\n"
+"POT-Creation-Date: 2023-10-24 00:39+0000\n"
 "PO-Revision-Date: 2022-09-26 17:25+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -10800,7 +10800,7 @@ msgstr "Генератор случайных чисел"
 msgid "Unhandled error"
 msgstr ""
 
-#: src/commonfrontend/widgets/NumberSpinBox.cpp:419
+#: src/commonfrontend/widgets/NumberSpinBox.cpp:440
 #, fuzzy, kde-format
 msgid "Invalid value entered. Valid value: %1"
 msgstr "недопустимое значение строки"

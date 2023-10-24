@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-23 00:39+0000\n"
+"POT-Creation-Date: 2023-10-24 00:39+0000\n"
 "PO-Revision-Date: 2023-10-16 06:06+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -10293,7 +10293,7 @@ msgstr "რიცხვები არ შეგიყვანიათ"
 msgid "Unhandled error"
 msgstr "დაუმუშავებელი შეცდომა"
 
-#: src/commonfrontend/widgets/NumberSpinBox.cpp:419
+#: src/commonfrontend/widgets/NumberSpinBox.cpp:440
 #, kde-format
 msgid "Invalid value entered. Valid value: %1"
 msgstr "არასწორი რიცხვითი მნიშვნელობა. სწორი მნიშვნელობაა: %1"

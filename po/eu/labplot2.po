@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-23 00:39+0000\n"
+"POT-Creation-Date: 2023-10-24 00:39+0000\n"
 "PO-Revision-Date: 2023-09-19 23:30+0200\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -10455,7 +10455,7 @@ msgstr "Auzazko zenbaki sortzailea"
 msgid "Unhandled error"
 msgstr ""
 
-#: src/commonfrontend/widgets/NumberSpinBox.cpp:419
+#: src/commonfrontend/widgets/NumberSpinBox.cpp:440
 #, fuzzy, kde-format
 #| msgid "Invalid numeric value."
 msgid "Invalid value entered. Valid value: %1"

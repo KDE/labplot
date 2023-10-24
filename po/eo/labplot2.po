@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-23 00:39+0000\n"
-"PO-Revision-Date: 2023-10-12 23:26+0100\n"
+"POT-Creation-Date: 2023-10-24 00:39+0000\n"
+"PO-Revision-Date: 2023-10-23 21:19+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -4685,10 +4685,9 @@ msgid "Logarithm"
 msgstr "Logaritmo"
 
 #: src/backend/gsl/functions.cpp:717
-#, fuzzy, kde-format
-#| msgid "Base 10 logarithm"
+#, kde-format
 msgid "Base 2 logarithm"
-msgstr "Bazo 10-logaritmo"
+msgstr "Bazo 2-logaritmo"
 
 #: src/backend/gsl/functions.cpp:718
 #, kde-format
@@ -10334,7 +10333,7 @@ msgstr "Neniu numero enigita"
 msgid "Unhandled error"
 msgstr "Netraktita eraro"
 
-#: src/commonfrontend/widgets/NumberSpinBox.cpp:419
+#: src/commonfrontend/widgets/NumberSpinBox.cpp:440
 #, kde-format
 msgid "Invalid value entered. Valid value: %1"
 msgstr "Nevalida valoro enigita. Valida valoro: %1"

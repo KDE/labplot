@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-23 00:39+0000\n"
-"PO-Revision-Date: 2023-10-10 18:51+0200\n"
+"POT-Creation-Date: 2023-10-24 00:39+0000\n"
+"PO-Revision-Date: 2023-10-23 21:18+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
@@ -4698,10 +4698,9 @@ msgid "Logarithm"
 msgstr "Logaritm"
 
 #: src/backend/gsl/functions.cpp:717
-#, fuzzy, kde-format
-#| msgid "Base 10 logarithm"
+#, kde-format
 msgid "Base 2 logarithm"
-msgstr "Bas 10-logaritm"
+msgstr "Bas-2 logaritm"
 
 #: src/backend/gsl/functions.cpp:718
 #, kde-format
@@ -10347,7 +10346,7 @@ msgstr "Inget tal inskrivet"
 msgid "Unhandled error"
 msgstr "Ohanterat fel"
 
-#: src/commonfrontend/widgets/NumberSpinBox.cpp:419
+#: src/commonfrontend/widgets/NumberSpinBox.cpp:440
 #, kde-format
 msgid "Invalid value entered. Valid value: %1"
 msgstr "Ogiltigt värde angivet. Giltigt värde: %1"

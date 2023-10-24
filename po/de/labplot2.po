@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-23 00:39+0000\n"
+"POT-Creation-Date: 2023-10-24 00:39+0000\n"
 "PO-Revision-Date: 2023-10-14 12:58+0200\n"
 "Last-Translator: Stefan Gerlach <stefan.gerlach@uni.kn>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -10370,7 +10370,7 @@ msgstr "Keine Zahl eingegeben"
 msgid "Unhandled error"
 msgstr "Unbehandelter Fehler"
 
-#: src/commonfrontend/widgets/NumberSpinBox.cpp:419
+#: src/commonfrontend/widgets/NumberSpinBox.cpp:440
 #, kde-format
 msgid "Invalid value entered. Valid value: %1"
 msgstr "Ungültiger Wert eingegeben. Gültiger Wert: %1"

@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-23 00:39+0000\n"
-"PO-Revision-Date: 2023-10-09 09:40+0200\n"
+"POT-Creation-Date: 2023-10-24 00:39+0000\n"
+"PO-Revision-Date: 2023-10-23 09:53+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -4766,10 +4766,9 @@ msgid "Logarithm"
 msgstr "Logaritme"
 
 #: src/backend/gsl/functions.cpp:717
-#, fuzzy, kde-format
-#| msgid "Base 10 logarithm"
+#, kde-format
 msgid "Base 2 logarithm"
-msgstr "Logaritme en base 10"
+msgstr "Logaritme en base 2"
 
 #: src/backend/gsl/functions.cpp:718
 #, kde-format
@@ -10459,7 +10458,7 @@ msgstr "No s'ha introduït cap nombre"
 msgid "Unhandled error"
 msgstr "Error no gestionat"
 
-#: src/commonfrontend/widgets/NumberSpinBox.cpp:419
+#: src/commonfrontend/widgets/NumberSpinBox.cpp:440
 #, kde-format
 msgid "Invalid value entered. Valid value: %1"
 msgstr "S'ha introduït un valor no vàlid. Valor vàlid: %1"
@@ -22629,72 +22628,3 @@ msgstr "El procés «convert» ha fallat, codi de sortida ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "No s'ha pogut obrir el fitxer:"
-
-#~ msgid "DateTime"
-#~ msgstr "DataHora"
-
-#~ msgid "Remove"
-#~ msgstr "Elimina"
-
-#~ msgid "xy-Curve"
-#~ msgstr "Corba XY"
-
-#~ msgid "Add Histogram to"
-#~ msgstr "Afegeix un histograma a"
-
-# skip-rule: kct-box
-#~ msgid "Add Box Plot to"
-#~ msgstr "Afegeix un diagrama de caixes a"
-
-# skip-rule: kct-box
-#~ msgid "Add Bar Plot to"
-#~ msgstr "Afegeix un diagrama de barres a"
-
-#~ msgid "All histograms in one plot area"
-#~ msgstr "Tots els histogrames en una àrea del diagrama"
-
-#~ msgid "One plot area per histogram"
-#~ msgstr "Una àrea del diagrama per histograma"
-
-#~ msgid "Add Histograms to"
-#~ msgstr "Afegeix histogrames a"
-
-# skip-rule: kct-box
-#~ msgid "All box plots in one plot area"
-#~ msgstr "Tots els diagrames de caixes en una àrea del diagrama"
-
-# skip-rule: kct-box
-#~ msgid "One plot area per box plot"
-#~ msgstr "Una àrea del diagrama de caixes"
-
-# skip-rule: kct-box
-#~ msgid "Add Box Plots to"
-#~ msgstr "Afegeix diagrames de caixes a"
-
-#~ msgid "All bar plots in one plot area"
-#~ msgstr "Tots els diagrames de barres en una àrea del diagrama"
-
-#~ msgid "One plot area per bar plot"
-#~ msgstr "Una àrea del diagrama per diagrama de barres"
-
-# skip-rule: kct-box
-#~ msgid "Add Bar Plots to"
-#~ msgstr "Afegeix diagrames de barres a"
-
-#~ msgid "new plot in an existing worksheet"
-#~ msgstr "diagrama nou en un full de càlcul existent"
-
-#~ msgid "new plot in a new worksheet"
-#~ msgstr "diagrama nou en un full de càlcul nou"
-
-#~ msgid "new plots in an existing worksheet"
-#~ msgstr "diagrames nous en un full de càlcul existent"
-
-#~ msgid "new plots in a new worksheet"
-#~ msgstr "diagrames nous en un full de càlcul nou"
-
-#~ msgid "GUI configuration file not found"
-#~ msgstr "No s'ha trobat cap fitxer de configuració de l'IGU"
-
-#~ msgid "%1 file was not found. Please check your installation."
-#~ msgstr "No s'ha trobat el fitxer %1. Si us plau, comproveu la instal·lació."

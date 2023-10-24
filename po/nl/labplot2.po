@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-23 00:39+0000\n"
-"PO-Revision-Date: 2023-10-09 11:35+0200\n"
+"POT-Creation-Date: 2023-10-24 00:39+0000\n"
+"PO-Revision-Date: 2023-10-23 12:26+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 23.08.1\n"
+"X-Generator: Lokalize 23.08.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -4699,10 +4699,9 @@ msgid "Logarithm"
 msgstr "Logaritme"
 
 #: src/backend/gsl/functions.cpp:717
-#, fuzzy, kde-format
-#| msgid "Base 10 logarithm"
+#, kde-format
 msgid "Base 2 logarithm"
-msgstr "Logaritme grondtal 10"
+msgstr "Logaritme grondtal 2"
 
 #: src/backend/gsl/functions.cpp:718
 #, kde-format
@@ -10349,7 +10348,7 @@ msgstr "Geen getal ingevoerd"
 msgid "Unhandled error"
 msgstr "Niet behandelde fout"
 
-#: src/commonfrontend/widgets/NumberSpinBox.cpp:419
+#: src/commonfrontend/widgets/NumberSpinBox.cpp:440
 #, kde-format
 msgid "Invalid value entered. Valid value: %1"
 msgstr "Ongeldige waarde ingevoerd. Geldige waarde: %1"
