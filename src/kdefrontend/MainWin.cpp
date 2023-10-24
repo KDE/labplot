@@ -82,6 +82,16 @@
 #endif
 #endif
 
+#if HAVE_PURPOSE
+#include <Purpose/AlternativesModel>
+#include <purpose_version.h>
+#if PURPOSE_VERSION >= QT_VERSION_CHECK(5, 104, 0)
+#include <Purpose/Menu>
+#else
+#include <PurposeWidgets/Menu>
+#endif
+#endif
+
 #include <DockManager.h>
 
 #ifdef HAVE_TOUCHBAR
@@ -886,6 +896,17 @@ void MainWin::initActions() {
 }
 
 void MainWin::initMenus() {
+#if HAVE_PURPOSE
+	auto* fileMenu = dynamic_cast<QMenu*>(factory()->container(QLatin1String("file"), this));
+    // m_shareAction = ac->addAction(QStringLiteral("file_share"));
+    m_shareAction->setText(i18n("S&hare"));
+    m_shareAction->setIcon(QIcon::fromTheme(QStringLiteral("document-share")));
+    m_shareAction->setEnabled(false);
+    m_shareMenu = new Purpose::Menu();
+    connect(m_shareMenu, &Purpose::Menu::finished, this, &MainWin::slotShareActionFinished);
+    m_shareAction->setMenu(m_shareMenu);
+#endif
+
 	// add the actions to toggle the status bar and the project and properties explorer widgets to the "View" menu.
 	// this menu is created automatically when the default "full screen" action is created in initActions().
 	auto* menu = dynamic_cast<QMenu*>(factory()->container(QLatin1String("view"), this));
@@ -2512,6 +2533,20 @@ void MainWin::focusCursorDock() {
 		m_DockManager->setDockWidgetFocused(cursorDock);
 	}
 }
+
+#if HAVE_PURPOSE
+void MainWin::shareActionFinished(const QJsonObject& output, int error, const QString& message) {
+	if (error)
+		KMessageBox::error(this, i18n("There was a problem sharing the project: %1", message), i18n("Share"));
+	else {
+		const QString url = output[QStringLiteral("url")].toString();
+		if (url.isEmpty())
+			statusBar->showMessage(i18n("Project shared successfully"));
+		else
+			KMessageBox::information(widget(), i18n("You can find the shared project at: <a href=\"%1\">%1</a>", url), i18n("Share"), QString(), KMessageBox::Notify | KMessageBox::AllowLink);
+	}
+}
+#endif
 
 void MainWin::toggleFullScreen(bool t) {
 	m_toggleFullScreenAction->setFullScreen(this, t);

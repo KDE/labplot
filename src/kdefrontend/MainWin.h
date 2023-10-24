@@ -57,6 +57,12 @@ class CDockWidget;
 #endif
 #endif
 
+#if HAVE_PURPOSE
+namespace Purpose {
+class Menu;
+}
+#endif
+
 #ifdef HAVE_TOUCHBAR
 class KDMacTouchBar;
 #endif
@@ -175,6 +181,11 @@ private:
 	QMenu* m_importMenu{nullptr};
 	KHamburgerMenu* m_hamburgerMenu{nullptr};
 
+#if HAVE_PURPOSE
+	QAction* m_shareAction{nullptr};
+	Purpose::Menu* m_shareMenu{nullptr};
+#endif
+
 	// Docks
 	ads::CDockWidget* cursorDock{nullptr};
 
@@ -284,6 +295,10 @@ private Q_SLOTS:
 	void focusCursorDock();
 
 	void cartesianPlotMouseModeChanged(CartesianPlot::MouseMode);
+
+#if HAVE_PURPOSE
+    void shareActionFinished(const QJsonObject& output, int error, const QString& message);
+#endif
 };
 
 #endif

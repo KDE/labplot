@@ -78,6 +78,7 @@ find_package(KF${KF_MAJOR_VERSION} ${KF_MIN_VERSION} REQUIRED COMPONENTS
 OPTIONAL_COMPONENTS
 	Service
 	Parts
+	Purpose
 	SyntaxHighlighting
 )
 
@@ -95,6 +96,11 @@ ENDIF ()
 IF (NOT KF${KF_MAJOR_VERSION}Parts_FOUND)
 	MESSAGE (STATUS "KF Parts not found")
 ENDIF ()
+
+if (KF${KF_MAJOR_VERSION}Purpose_FOUND)
+	add_definitions (-DHAVE_PURPOSE)
+endif()
+
 IF (KF${KF_MAJOR_VERSION}SyntaxHighlighting_FOUND)
 	add_definitions (-DHAVE_KF5_SYNTAX_HIGHLIGHTING)
 ELSE ()
