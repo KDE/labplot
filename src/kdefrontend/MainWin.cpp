@@ -82,7 +82,7 @@
 #endif
 #endif
 
-#if HAVE_PURPOSE
+#ifdef HAVE_PURPOSE
 #include <Purpose/AlternativesModel>
 #include <purpose_version.h>
 #if PURPOSE_VERSION >= QT_VERSION_CHECK(5, 104, 0)
@@ -90,6 +90,7 @@
 #else
 #include <PurposeWidgets/Menu>
 #endif
+#include <QMimeType>
 #endif
 
 #include <DockManager.h>
@@ -758,6 +759,11 @@ void MainWin::initActions() {
 	actionCollection()->addAction(QLatin1String("export"), m_exportAction);
 	connect(m_exportAction, &QAction::triggered, this, &MainWin::exportDialog);
 
+#if HAVE_PURPOSE
+	m_shareAction = new QAction(QIcon::fromTheme(QLatin1String("document-share")), i18n("Share"), this);
+	actionCollection()->addAction(QLatin1String("share"), m_shareAction);
+#endif
+
 	// Tools
 	auto* action = new QAction(QIcon::fromTheme(QLatin1String("color-management")), i18n("Color Maps Browser"), this);
 	action->setWhatsThis(i18n("Open dialog to browse through the available color maps."));
@@ -897,14 +903,9 @@ void MainWin::initActions() {
 
 void MainWin::initMenus() {
 #if HAVE_PURPOSE
-	auto* fileMenu = dynamic_cast<QMenu*>(factory()->container(QLatin1String("file"), this));
-    // m_shareAction = ac->addAction(QStringLiteral("file_share"));
-    m_shareAction->setText(i18n("S&hare"));
-    m_shareAction->setIcon(QIcon::fromTheme(QStringLiteral("document-share")));
-    m_shareAction->setEnabled(false);
-    m_shareMenu = new Purpose::Menu();
-    connect(m_shareMenu, &Purpose::Menu::finished, this, &MainWin::slotShareActionFinished);
-    m_shareAction->setMenu(m_shareMenu);
+	m_shareMenu = new Purpose::Menu();
+	connect(m_shareMenu, &Purpose::Menu::finished, this, &MainWin::shareActionFinished);
+	m_shareAction->setMenu(m_shareMenu);
 #endif
 
 	// add the actions to toggle the status bar and the project and properties explorer widgets to the "View" menu.
@@ -1096,6 +1097,7 @@ void MainWin::updateGUIOnProjectChanges(const QByteArray& windowState) {
 	m_importOpjAction->setEnabled(hasProject);
 #endif
 	m_importDatasetAction->setEnabled(hasProject);
+	m_shareAction->setEnabled(hasProject);
 	m_newFolderAction->setEnabled(hasProject);
 	m_newWorkbookAction->setEnabled(hasProject);
 	m_newSpreadsheetAction->setEnabled(hasProject);
@@ -1727,6 +1729,14 @@ void MainWin::openProject(const QString& filename) {
 	m_saveAction->setEnabled(false);
 	m_newProjectAction->setEnabled(true);
 
+#if HAVE_PURPOSE
+	if (m_shareAction) {
+		QMimeType mime;
+		m_shareMenu->model()->setInputData(QJsonObject {{QStringLiteral("mimeType"), mime.name()}, {QStringLiteral("urls"), QJsonArray {QUrl::fromLocalFile(filename).toString()}}});
+		m_shareMenu->model()->setPluginType(QStringLiteral("Export"));
+		m_shareMenu->reload();
+	}
+#endif
 	statusBar()->showMessage(i18n("Project successfully opened (in %1 seconds).", (float)timer.elapsed() / 1000));
 
 	KConfigGroup group = Settings::group(QStringLiteral("MainWin"));
@@ -2541,7 +2551,7 @@ void MainWin::shareActionFinished(const QJsonObject& output, int error, const QS
 	else {
 		const QString url = output[QStringLiteral("url")].toString();
 		if (url.isEmpty())
-			statusBar->showMessage(i18n("Project shared successfully"));
+			statusBar()->showMessage(i18n("Project shared successfully"));
 		else
 			KMessageBox::information(widget(), i18n("You can find the shared project at: <a href=\"%1\">%1</a>", url), i18n("Share"), QString(), KMessageBox::Notify | KMessageBox::AllowLink);
 	}

@@ -628,7 +628,7 @@ IF (KF5NewStuff_FOUND)
 	target_link_libraries( labplot2lib KF5::NewStuff )
 ENDIF ()
 IF (KF${KF_MAJOR_VERSION}Purpose_FOUND)
-	target_link_libraries( labplot2lib KF${KF_MAJOR_VERSION}::Purpose )
+	target_link_libraries( labplot2lib KF${KF_MAJOR_VERSION}::PurposeWidgets )
 ENDIF ()
 
 IF (RECENT_CANTOR)
