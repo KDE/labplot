@@ -262,8 +262,8 @@ void SpreadsheetGenerateDataTest::testFixedIncrementBigInt() {
 
 	EquidistantValuesDialog dlg(&sheet);
 	dlg.setColumns(QVector<Column*>{column});
-	dlg.setType(EquidistantValuesDialog::Type::FixedNumber);
-	dlg.setIncrement(5);
+	dlg.setType(EquidistantValuesDialog::Type::FixedIncrement);
+	dlg.setIncrement(1);
 	dlg.setFromValue(1);
 	dlg.setToValue(5);
 	dlg.generate();
