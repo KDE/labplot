@@ -91,7 +91,7 @@ EquidistantValuesDialog::EquidistantValuesDialog(Spreadsheet* s, QWidget* parent
 
 	const int type = conf.readEntry("Type", static_cast<int>(Type::FixedNumber));
 	ui.cbType->setCurrentIndex(ui.cbType->findData(type));
-	ui.leNumber->setText(QLocale().toString(conf.readEntry("Number", 1)));
+	// no need to restore 'Number', it's set to the the spreadsheet size in setColumns()
 
 	// settings for numeric
 	// all values are saved as doubles, try to show them as int or long first
@@ -117,7 +117,7 @@ EquidistantValuesDialog::~EquidistantValuesDialog() {
 	const auto numberLocale = QLocale();
 
 	conf.writeEntry("Type", ui.cbType->itemData(ui.cbType->currentIndex()).toInt());
-	conf.writeEntry("Number", numberLocale.toInt(ui.leNumber->text()));
+	// no need to save&restore 'Number', it's set to the the spreadsheet size in setColumns()
 
 	// settings for numeric
 	conf.writeEntry("From", numberLocale.toDouble(ui.leFrom->text()));
@@ -147,6 +147,7 @@ void EquidistantValuesDialog::setNumericValue(double value, QLineEdit* le) const
 
 void EquidistantValuesDialog::setColumns(const QVector<Column*>& columns) {
 	m_columns = columns;
+	ui.leNumber->setText(QLocale().toString(m_columns.first()->rowCount()));
 	QString dateTimeFormat;
 
 	for (auto* col : m_columns) {
