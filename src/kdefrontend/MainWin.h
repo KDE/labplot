@@ -184,6 +184,7 @@ private:
 #if HAVE_PURPOSE
 	QAction* m_shareAction{nullptr};
 	Purpose::Menu* m_shareMenu{nullptr};
+	void fillShareMenu();
 #endif
 
 	// Docks

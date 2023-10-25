@@ -904,6 +904,7 @@ void MainWin::initActions() {
 void MainWin::initMenus() {
 #if HAVE_PURPOSE
 	m_shareMenu = new Purpose::Menu();
+	m_shareMenu->model()->setPluginType(QStringLiteral("Export"));
 	connect(m_shareMenu, &Purpose::Menu::finished, this, &MainWin::shareActionFinished);
 	m_shareAction->setMenu(m_shareMenu);
 #endif
@@ -1097,7 +1098,9 @@ void MainWin::updateGUIOnProjectChanges(const QByteArray& windowState) {
 	m_importOpjAction->setEnabled(hasProject);
 #endif
 	m_importDatasetAction->setEnabled(hasProject);
+#ifdef HAVE_PURPOSE
 	m_shareAction->setEnabled(hasProject);
+#endif
 	m_newFolderAction->setEnabled(hasProject);
 	m_newWorkbookAction->setEnabled(hasProject);
 	m_newSpreadsheetAction->setEnabled(hasProject);
@@ -1484,6 +1487,9 @@ bool MainWin::newProject() {
 
 	updateGUIOnProjectChanges();
 	m_newProjectAction->setEnabled(false);
+#ifdef HAVE_PURPOSE
+	m_shareAction->setEnabled(false); // sharing is only possible after the project was saved to a file
+#endif
 
 	m_guiObserver = new GuiObserver(this); // initialize after all docks were createad
 	m_guiObserver->selectedAspectsChanged({static_cast<AbstractAspect*>(m_project)}); // Trigger showing properties
@@ -1728,14 +1734,8 @@ void MainWin::openProject(const QString& filename) {
 		updateDockWindowVisibility();
 	m_saveAction->setEnabled(false);
 	m_newProjectAction->setEnabled(true);
-
 #if HAVE_PURPOSE
-	if (m_shareAction) {
-		QMimeType mime;
-		m_shareMenu->model()->setInputData(QJsonObject {{QStringLiteral("mimeType"), mime.name()}, {QStringLiteral("urls"), QJsonArray {QUrl::fromLocalFile(filename).toString()}}});
-		m_shareMenu->model()->setPluginType(QStringLiteral("Export"));
-		m_shareMenu->reload();
-	}
+	fillShareMenu();
 #endif
 	statusBar()->showMessage(i18n("Project successfully opened (in %1 seconds).", (float)timer.elapsed() / 1000));
 
@@ -1942,6 +1942,11 @@ bool MainWin::save(const QString& fileName) {
 	}
 
 	delete file;
+
+#ifdef HAVE_PURPOSE
+	m_shareAction->setEnabled(true); // sharing is possible after the project was saved to a file
+	fillShareMenu();
+#endif
 
 	RESET_CURSOR;
 	return ok;
@@ -2545,6 +2550,16 @@ void MainWin::focusCursorDock() {
 }
 
 #if HAVE_PURPOSE
+void MainWin::fillShareMenu() {
+	if (!m_shareMenu)
+		return;
+
+	m_shareMenu->clear(); // clear the menu, it will be refilled with the new file URL below
+	QMimeType mime;
+	m_shareMenu->model()->setInputData(QJsonObject{{QStringLiteral("mimeType"), mime.name()}, {QStringLiteral("urls"), QJsonArray {QUrl::fromLocalFile(m_project->fileName()).toString()}}});
+	m_shareMenu->reload();
+}
+
 void MainWin::shareActionFinished(const QJsonObject& output, int error, const QString& message) {
 	if (error)
 		KMessageBox::error(this, i18n("There was a problem sharing the project: %1", message), i18n("Share"));
