@@ -57,7 +57,7 @@ class CDockWidget;
 #endif
 #endif
 
-#if HAVE_PURPOSE
+#ifdef HAVE_PURPOSE
 namespace Purpose {
 class Menu;
 }
