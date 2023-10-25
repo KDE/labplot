@@ -705,13 +705,13 @@ void AbstractAspect::remove() {
 void AbstractAspect::moveUp() {
 	auto* parent = parentAspect();
 	if (parent)
-		parent->moveChild(this, 1);
+		parent->moveChild(this, -1);
 }
 
 void AbstractAspect::moveDown() {
 	auto* parent = parentAspect();
 	if (parent)
-		parent->moveChild(this, -1);
+		parent->moveChild(this, 1);
 }
 
 /*!
