@@ -902,7 +902,7 @@ void MainWin::initActions() {
 }
 
 void MainWin::initMenus() {
-#if HAVE_PURPOSE
+#ifdef HAVE_PURPOSE
 	m_shareMenu = new Purpose::Menu();
 	m_shareMenu->model()->setPluginType(QStringLiteral("Export"));
 	connect(m_shareMenu, &Purpose::Menu::finished, this, &MainWin::shareActionFinished);
@@ -1734,7 +1734,7 @@ void MainWin::openProject(const QString& filename) {
 		updateDockWindowVisibility();
 	m_saveAction->setEnabled(false);
 	m_newProjectAction->setEnabled(true);
-#if HAVE_PURPOSE
+#ifdef HAVE_PURPOSE
 	fillShareMenu();
 #endif
 	statusBar()->showMessage(i18n("Project successfully opened (in %1 seconds).", (float)timer.elapsed() / 1000));
@@ -2549,7 +2549,7 @@ void MainWin::focusCursorDock() {
 	}
 }
 
-#if HAVE_PURPOSE
+#ifdef HAVE_PURPOSE
 void MainWin::fillShareMenu() {
 	if (!m_shareMenu)
 		return;

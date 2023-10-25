@@ -181,7 +181,7 @@ private:
 	QMenu* m_importMenu{nullptr};
 	KHamburgerMenu* m_hamburgerMenu{nullptr};
 
-#if HAVE_PURPOSE
+#ifdef HAVE_PURPOSE
 	QAction* m_shareAction{nullptr};
 	Purpose::Menu* m_shareMenu{nullptr};
 	void fillShareMenu();
@@ -297,7 +297,7 @@ private Q_SLOTS:
 
 	void cartesianPlotMouseModeChanged(CartesianPlot::MouseMode);
 
-#if HAVE_PURPOSE
+#ifdef HAVE_PURPOSE
     void shareActionFinished(const QJsonObject& output, int error, const QString& message);
 #endif
 };
