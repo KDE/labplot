@@ -61,7 +61,7 @@ public:
 		if (newIndex > m_target->m_children.count() - 1)
 			newIndex = m_target->m_children.count() - 1;
 		else if (newIndex < 0)
-			newIndex == 0;
+			newIndex = 0;
 		m_delta = newIndex - origIndex;
 
 		if (m_delta != 0) {
