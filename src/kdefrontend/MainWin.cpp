@@ -759,7 +759,7 @@ void MainWin::initActions() {
 	actionCollection()->addAction(QLatin1String("export"), m_exportAction);
 	connect(m_exportAction, &QAction::triggered, this, &MainWin::exportDialog);
 
-#if HAVE_PURPOSE
+#ifdef HAVE_PURPOSE
 	m_shareAction = new QAction(QIcon::fromTheme(QLatin1String("document-share")), i18n("Share"), this);
 	actionCollection()->addAction(QLatin1String("share"), m_shareAction);
 #endif
