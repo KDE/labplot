@@ -18,6 +18,12 @@
 
 #include <QUndoStack>
 
+#define SETUP_C1_C2_COLUMNS(c1Vector, c2Vector) \
+	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double); \
+	c1.replaceValues(-1, c1Vector); \
+	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double); \
+	c2.replaceValues(-1, c2Vector);
+
 void ColumnTest::doubleMinimum() {
 	Column c(QStringLiteral("Double column"), Column::ColumnMode::Double);
 	c.setValues({-1.0, 2.0, 5.0});
@@ -1221,11 +1227,7 @@ void ColumnTest::testFormulasMinColumnInvalid() {
 }
 
 void ColumnTest::testFormulasSize() {
-	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
-	c1.replaceValues(-1, {1., -1., 8., 10., -5});
-
-	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
-	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17., 18.});
+	SETUP_C1_C2_COLUMNS({1., -1., 8., 10., -5}, {11., 12., 13., 14., 15., 16., 17., 18.})
 
 	c2.setFormula(QStringLiteral("size(x)"), {QStringLiteral("x")}, {&c1}, true);
 	c2.updateFormula();
@@ -1233,11 +1235,7 @@ void ColumnTest::testFormulasSize() {
 		VALUES_EQUAL(c2.valueAt(i), 5.);
 }
 void ColumnTest::testFormulasMin() {
-	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
-	c1.replaceValues(-1, {1., -1., 8., 10., -5});
-
-	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
-	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17., 18.});
+	SETUP_C1_C2_COLUMNS({1., -1., 8., 10., -5}, {11., 12., 13., 14., 15., 16., 17., 18.})
 
 	c2.setFormula(QStringLiteral("min(x)"), {QStringLiteral("x")}, {&c1}, true);
 	c2.updateFormula();
@@ -1245,11 +1243,7 @@ void ColumnTest::testFormulasMin() {
 		VALUES_EQUAL(c2.valueAt(i), -5.);
 }
 void ColumnTest::testFormulasMax() {
-	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
-	c1.replaceValues(-1, {1., -1., 8., 10., -5});
-
-	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
-	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17., 18.});
+	SETUP_C1_C2_COLUMNS({1., -1., 8., 10., -5}, {11., 12., 13., 14., 15., 16., 17., 18.})
 
 	c2.setFormula(QStringLiteral("max(x)"), {QStringLiteral("x")}, {&c1}, true);
 	c2.updateFormula();
@@ -1257,11 +1251,7 @@ void ColumnTest::testFormulasMax() {
 		VALUES_EQUAL(c2.valueAt(i), 10.);
 }
 void ColumnTest::testFormulasMean() {
-	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
-	c1.replaceValues(-1, {1., -1., 8., 10., -5});
-
-	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
-	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17., 18.});
+	SETUP_C1_C2_COLUMNS({1., -1., 8., 10., -5}, {11., 12., 13., 14., 15., 16., 17., 18.})
 
 	c2.setFormula(QStringLiteral("mean(x)"), {QStringLiteral("x")}, {&c1}, true);
 	c2.updateFormula();
@@ -1269,11 +1259,7 @@ void ColumnTest::testFormulasMean() {
 		VALUES_EQUAL(c2.valueAt(i), 13. / 5);
 }
 void ColumnTest::testFormulasMedian() {
-	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
-	c1.replaceValues(-1, {1., -1., 8., 10., -5});
-
-	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
-	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17., 18.});
+	SETUP_C1_C2_COLUMNS({1., -1., 8., 10., -5}, {11., 12., 13., 14., 15., 16., 17., 18.})
 
 	c2.setFormula(QStringLiteral("median(x)"), {QStringLiteral("x")}, {&c1}, true);
 	c2.updateFormula();
@@ -1281,11 +1267,7 @@ void ColumnTest::testFormulasMedian() {
 		VALUES_EQUAL(c2.valueAt(i), 1.);
 }
 void ColumnTest::testFormulasStdev() {
-	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
-	c1.replaceValues(-1, {1., -1., 8., 10., -5});
-
-	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
-	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17., 18.});
+	SETUP_C1_C2_COLUMNS({1., -1., 8., 10., -5}, {11., 12., 13., 14., 15., 16., 17., 18.})
 
 	c2.setFormula(QStringLiteral("stdev(x)"), {QStringLiteral("x")}, {&c1}, true);
 	c2.updateFormula();
@@ -1293,11 +1275,7 @@ void ColumnTest::testFormulasStdev() {
 		VALUES_EQUAL(c2.valueAt(i), 6.2689712074); // calculated with octave "std"
 }
 void ColumnTest::testFormulasVar() {
-	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
-	c1.replaceValues(-1, {1., -1., 8., 10., -5});
-
-	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
-	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17., 18.});
+	SETUP_C1_C2_COLUMNS({1., -1., 8., 10., -5}, {11., 12., 13., 14., 15., 16., 17., 18.})
 
 	c2.setFormula(QStringLiteral("var(x)"), {QStringLiteral("x")}, {&c1}, true);
 	c2.updateFormula();
@@ -1305,11 +1283,7 @@ void ColumnTest::testFormulasVar() {
 		VALUES_EQUAL(c2.valueAt(i), 39.3); // calculated with octave "var"
 }
 void ColumnTest::testFormulasGm() {
-	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
-	c1.replaceValues(-1, {1., 100., 8., 10., 3});
-
-	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
-	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17., 18.});
+	SETUP_C1_C2_COLUMNS({1., 100., 8., 10., 3}, {11., 12., 13., 14., 15., 16., 17., 18.})
 
 	c2.setFormula(QStringLiteral("gm(x)"), {QStringLiteral("x")}, {&c1}, true);
 	c2.updateFormula();
@@ -1317,11 +1291,7 @@ void ColumnTest::testFormulasGm() {
 		VALUES_EQUAL(c2.valueAt(i), 7.51696); // Calculated with R exp(mean(log(x)))
 }
 void ColumnTest::testFormulasHm() {
-	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
-	c1.replaceValues(-1, {1., -3., 8., 10., -5});
-
-	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
-	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17., 18.});
+	SETUP_C1_C2_COLUMNS({1., -3., 8., 10., -5}, {11., 12., 13., 14., 15., 16., 17., 18.})
 
 	c2.setFormula(QStringLiteral("hm(x)"), {QStringLiteral("x")}, {&c1}, true);
 	c2.updateFormula();
@@ -1329,11 +1299,7 @@ void ColumnTest::testFormulasHm() {
 		VALUES_EQUAL(c2.valueAt(i), 7.228916); // calculated with R harmonic.mean(x)
 }
 void ColumnTest::testFormulasChm() {
-	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
-	c1.replaceValues(-1, {1.0, 0.0, 2.0, 5.0});
-
-	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
-	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17., 18.});
+	SETUP_C1_C2_COLUMNS({1.0, 0.0, 2.0, 5.0}, {11., 12., 13., 14., 15., 16., 17., 18.})
 
 	c2.setFormula(QStringLiteral("chm(x)"), {QStringLiteral("x")}, {&c1}, true);
 	c2.updateFormula();
@@ -1341,11 +1307,7 @@ void ColumnTest::testFormulasChm() {
 		VALUES_EQUAL(c2.valueAt(i), 3.75); // Result used from: statisticsDoubleZero()
 }
 void ColumnTest::testFormulasStatisticsMode() {
-	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
-	c1.replaceValues(-1, {1., -1., 8., 10., -5});
-
-	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
-	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17., 18.});
+	SETUP_C1_C2_COLUMNS({1., -1., 8., 10., -5}, {11., 12., 13., 14., 15., 16., 17., 18.})
 
 	c2.setFormula(QStringLiteral("mode(x)"), {QStringLiteral("x")}, {&c1}, true);
 	c2.updateFormula();
@@ -1359,11 +1321,7 @@ void ColumnTest::testFormulasStatisticsMode() {
 		VALUES_EQUAL(c2.valueAt(i), 1);
 }
 void ColumnTest::testFormulasQuartile1() {
-	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
-	c1.replaceValues(-1, {1., -1., 8., 10., -5});
-
-	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
-	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17., 18.});
+	SETUP_C1_C2_COLUMNS({1., -1., 8., 10., -5}, {11., 12., 13., 14., 15., 16., 17., 18.})
 
 	c2.setFormula(QStringLiteral("quartile1(x)"), {QStringLiteral("x")}, {&c1}, true);
 	c2.updateFormula();
@@ -1371,22 +1329,14 @@ void ColumnTest::testFormulasQuartile1() {
 		VALUES_EQUAL(c2.valueAt(i), -1); // Calculated with R: summary(x)
 }
 void ColumnTest::testFormulasQuartile3() {
-	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
-	c1.replaceValues(-1, {1., -1., 8., 10., -5});
-
-	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
-	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17., 18.});
+	SETUP_C1_C2_COLUMNS({1., -1., 8., 10., -5}, {11., 12., 13., 14., 15., 16., 17., 18.})
 
 	c2.setFormula(QStringLiteral("quartile3(x)"), {QStringLiteral("x")}, {&c1}, true);
 	for (int i = 0; i < c2.rowCount(); i++)
 		VALUES_EQUAL(c2.valueAt(i), 8); // Calculated with R: summary(x)
 }
 void ColumnTest::testFormulasIqr() {
-	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
-	c1.replaceValues(-1, {1., -1., 8., 10., -5});
-
-	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
-	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17., 18.});
+	SETUP_C1_C2_COLUMNS({1., -1., 8., 10., -5}, {11., 12., 13., 14., 15., 16., 17., 18.})
 
 	c2.setFormula(QStringLiteral("iqr(x)"), {QStringLiteral("x")}, {&c1}, true);
 	c2.updateFormula();
@@ -1394,11 +1344,7 @@ void ColumnTest::testFormulasIqr() {
 		VALUES_EQUAL(c2.valueAt(i), 9); // Calculated with R: IQR(x)
 }
 void ColumnTest::testFormulasPercentile1() {
-	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
-	c1.replaceValues(-1, {1., -1., 8., 10., -5});
-
-	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
-	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17., 18.});
+	SETUP_C1_C2_COLUMNS({1., -1., 8., 10., -5}, {11., 12., 13., 14., 15., 16., 17., 18.})
 
 	c2.setFormula(QStringLiteral("percentile1(x)"), {QStringLiteral("x")}, {&c1}, true);
 	c2.updateFormula();
@@ -1406,11 +1352,7 @@ void ColumnTest::testFormulasPercentile1() {
 		VALUES_EQUAL(c2.valueAt(i), -4.84); // Calculated with R: quantile(x, 1/100)
 }
 void ColumnTest::testFormulasPercentile5() {
-	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
-	c1.replaceValues(-1, {1., -1., 8., 10., -5});
-
-	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
-	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17., 18.});
+	SETUP_C1_C2_COLUMNS({1., -1., 8., 10., -5}, {11., 12., 13., 14., 15., 16., 17., 18.})
 
 	c2.setFormula(QStringLiteral("percentile5(x)"), {QStringLiteral("x")}, {&c1}, true);
 	c2.updateFormula();
@@ -1418,11 +1360,7 @@ void ColumnTest::testFormulasPercentile5() {
 		VALUES_EQUAL(c2.valueAt(i), -4.2); // Calculated with R: quantile(x, 5/100)
 }
 void ColumnTest::testFormulasPercentile10() {
-	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
-	c1.replaceValues(-1, {1., -1., 8., 10., -5});
-
-	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
-	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17., 18.});
+	SETUP_C1_C2_COLUMNS({1., -1., 8., 10., -5}, {11., 12., 13., 14., 15., 16., 17., 18.})
 
 	c2.setFormula(QStringLiteral("percentile10(x)"), {QStringLiteral("x")}, {&c1}, true);
 	c2.updateFormula();
@@ -1430,11 +1368,7 @@ void ColumnTest::testFormulasPercentile10() {
 		VALUES_EQUAL(c2.valueAt(i), -3.4); // Calculated with R: quantile(x, 10/100)
 }
 void ColumnTest::testFormulasPercentile90() {
-	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
-	c1.replaceValues(-1, {1., -1., 8., 10., -5});
-
-	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
-	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17., 18.});
+	SETUP_C1_C2_COLUMNS({1., -1., 8., 10., -5}, {11., 12., 13., 14., 15., 16., 17., 18.})
 
 	c2.setFormula(QStringLiteral("percentile90(x)"), {QStringLiteral("x")}, {&c1}, true);
 	c2.updateFormula();
@@ -1442,11 +1376,7 @@ void ColumnTest::testFormulasPercentile90() {
 		VALUES_EQUAL(c2.valueAt(i), 9.2); // Calculated with R: quantile(x, 90/100)
 }
 void ColumnTest::testFormulasPercentile95() {
-	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
-	c1.replaceValues(-1, {1., -1., 8., 10., -5});
-
-	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
-	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17., 18.});
+	SETUP_C1_C2_COLUMNS({1., -1., 8., 10., -5}, {11., 12., 13., 14., 15., 16., 17., 18.})
 
 	c2.setFormula(QStringLiteral("percentile95(x)"), {QStringLiteral("x")}, {&c1}, true);
 	c2.updateFormula();
@@ -1454,11 +1384,7 @@ void ColumnTest::testFormulasPercentile95() {
 		VALUES_EQUAL(c2.valueAt(i), 9.6); // Calculated with R: quantile(x, 95/100)
 }
 void ColumnTest::testFormulasPercentile99() {
-	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
-	c1.replaceValues(-1, {1., -1., 8., 10., -5});
-
-	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
-	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17., 18.});
+	SETUP_C1_C2_COLUMNS({1., -1., 8., 10., -5}, {11., 12., 13., 14., 15., 16., 17., 18.})
 
 	c2.setFormula(QStringLiteral("percentile99(x)"), {QStringLiteral("x")}, {&c1}, true);
 	c2.updateFormula();
@@ -1466,11 +1392,7 @@ void ColumnTest::testFormulasPercentile99() {
 		VALUES_EQUAL(c2.valueAt(i), 9.92); // Calculated with R: quantile(x, 99/100)
 }
 void ColumnTest::testFormulasTrimean() {
-	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
-	c1.replaceValues(-1, {1.0, 0.0, 2.0, 5.0});
-
-	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
-	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17., 18.});
+	SETUP_C1_C2_COLUMNS({1.0, 0.0, 2.0, 5.0}, {11., 12., 13., 14., 15., 16., 17., 18.})
 
 	c2.setFormula(QStringLiteral("trimean(x)"), {QStringLiteral("x")}, {&c1}, true);
 	c2.updateFormula();
@@ -1478,11 +1400,7 @@ void ColumnTest::testFormulasTrimean() {
 		VALUES_EQUAL(c2.valueAt(i), 1.625); // Value used from statisticsDoubleZero()
 }
 void ColumnTest::testFormulasMeandev() {
-	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
-	c1.replaceValues(-1, {1.0, 0.0, 2.0, 5.0});
-
-	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
-	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17., 18.});
+	SETUP_C1_C2_COLUMNS({1.0, 0.0, 2.0, 5.0}, {11., 12., 13., 14., 15., 16., 17., 18.})
 
 	c2.setFormula(QStringLiteral("meandev(x)"), {QStringLiteral("x")}, {&c1}, true);
 	c2.updateFormula();
@@ -1490,11 +1408,7 @@ void ColumnTest::testFormulasMeandev() {
 		VALUES_EQUAL(c2.valueAt(i), 1.5); // Value used from statisticsDoubleZero()
 }
 void ColumnTest::testFormulasMeandevmedian() {
-	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
-	c1.replaceValues(-1, {1.0, 0.0, 2.0, 5.0});
-
-	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
-	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17., 18.});
+	SETUP_C1_C2_COLUMNS({1.0, 0.0, 2.0, 5.0}, {11., 12., 13., 14., 15., 16., 17., 18.})
 
 	c2.setFormula(QStringLiteral("meandevmedian(x)"), {QStringLiteral("x")}, {&c1}, true);
 	c2.updateFormula();
@@ -1502,11 +1416,7 @@ void ColumnTest::testFormulasMeandevmedian() {
 		VALUES_EQUAL(c2.valueAt(i), 1.5); // Value used from statisticsDoubleZero()
 }
 void ColumnTest::testFormulasMediandev() {
-	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
-	c1.replaceValues(-1, {1.0, 0.0, 2.0, 5.0});
-
-	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
-	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17., 18.});
+	SETUP_C1_C2_COLUMNS({1.0, 0.0, 2.0, 5.0}, {11., 12., 13., 14., 15., 16., 17., 18.})
 
 	c2.setFormula(QStringLiteral("mediandev(x)"), {QStringLiteral("x")}, {&c1}, true);
 	c2.updateFormula();
@@ -1514,11 +1424,7 @@ void ColumnTest::testFormulasMediandev() {
 		VALUES_EQUAL(c2.valueAt(i), 1.); // Value used from statisticsDoubleZero()
 }
 void ColumnTest::testFormulasSkew() {
-	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
-	c1.replaceValues(-1, {1., -1., 8., 10., -5});
-
-	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
-	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17., 18.});
+	SETUP_C1_C2_COLUMNS({1., -1., 8., 10., -5}, {11., 12., 13., 14., 15., 16., 17., 18.})
 
 	c2.setFormula(QStringLiteral("skew(x)"), {QStringLiteral("x")}, {&c1}, true);
 	c2.updateFormula();
@@ -1526,11 +1432,7 @@ void ColumnTest::testFormulasSkew() {
 		VALUES_EQUAL(c2.valueAt(i), 0.08277344); // Calculated with R: skewness(x)
 }
 void ColumnTest::testFormulasKurt() {
-	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
-	c1.replaceValues(-1, {1., -1., 8., 10., -5});
-
-	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
-	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17., 18.});
+	SETUP_C1_C2_COLUMNS({1., -1., 8., 10., -5}, {11., 12., 13., 14., 15., 16., 17., 18.})
 
 	c2.setFormula(QStringLiteral("kurt(x)"), {QStringLiteral("x")}, {&c1}, true);
 	c2.updateFormula();
@@ -1538,11 +1440,7 @@ void ColumnTest::testFormulasKurt() {
 		VALUES_EQUAL(c2.valueAt(i), 1.489103); // Calculated with R: kurtosis(x)
 }
 void ColumnTest::testFormulasEntropy() {
-	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
-	c1.replaceValues(-1, {1.0, 0.0, 2.0, 5.0});
-
-	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
-	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17., 18.});
+	SETUP_C1_C2_COLUMNS({1.0, 0.0, 2.0, 5.0}, {11., 12., 13., 14., 15., 16., 17., 18.})
 
 	c2.setFormula(QStringLiteral("entropy(x)"), {QStringLiteral("x")}, {&c1}, true);
 	c2.updateFormula();
@@ -1552,11 +1450,7 @@ void ColumnTest::testFormulasEntropy() {
 
 void ColumnTest::testFormulasQuantile() {
 	QLocale::setDefault(QLocale::C); // . as decimal separator
-	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
-	c1.replaceValues(-1, {1., -1., 8., 10., -5});
-
-	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
-	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17., 18.});
+	SETUP_C1_C2_COLUMNS({1., -1., 8., 10., -5}}, {11., 12., 13., 14., 15., 16., 17., 18.})
 
 	c2.setFormula(QStringLiteral("quantile(0.1;x)"), {QStringLiteral("x")}, {&c1}, true);
 	c2.updateFormula();
@@ -1565,11 +1459,7 @@ void ColumnTest::testFormulasQuantile() {
 }
 
 void ColumnTest::testFormulasPercentile() {
-	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
-	c1.replaceValues(-1, {1., -1., 8., 10., -5});
-
-	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
-	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17., 18.});
+	SETUP_C1_C2_COLUMNS({1., -1., 8., 10., -5}}, {11., 12., 13., 14., 15., 16., 17., 18.})
 
 	c2.setFormula(QStringLiteral("percentile(30;x)"), {QStringLiteral("x")}, {&c1}, true);
 	c2.updateFormula();
