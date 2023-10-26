@@ -38,39 +38,39 @@ public:
 	AspectChildMoveCmd(AbstractAspectPrivate* target, AbstractAspect* child, int steps, QUndoCommand* parent = nullptr)
 		: QUndoCommand(parent)
 		, m_target(target)
-		, m_child(child)
-		, m_delta(-steps) {
+		, m_child(child) {
 		setText(i18n("%1: move up", m_target->m_name));
-	}
-
-	virtual ~AspectChildMoveCmd() override {
-	}
-
-	virtual void redo() override {
-		move(-m_delta); // move up
-	}
-
-	virtual void undo() override {
-		move(-m_delta); // move down
-	}
-
-	void move(int steps) {
-		// QDEBUG(Q_FUNC_INFO << ", TARGET = " << m_target->q << " CHILD = " << m_child << ", PARENT = " << m_child->parentAspect())
 		const int origIndex = m_target->indexOfChild(m_child);
 		int newIndex = origIndex + steps;
 		if (newIndex > m_target->m_children.count() - 1)
 			newIndex = m_target->m_children.count() - 1;
 		else if (newIndex < 0)
 			newIndex = 0;
-		m_delta = newIndex - origIndex;
+		m_index = newIndex;
+	}
 
-		if (m_delta != 0) {
-			Q_EMIT m_target->q->childAspectAboutToBeMoved(
-				m_child,
-				newIndex); // TODO: newIndex is the index of all AbstractAspects including the hidden one. The AspectTreeModel expects the index without!
+	virtual ~AspectChildMoveCmd() override {
+	}
+
+	virtual void redo() override {
+		move(m_index); // move up
+	}
+
+	virtual void undo() override {
+		move(m_index); // move down
+	}
+
+	void move(int newIndex) {
+		// QDEBUG(Q_FUNC_INFO << ", TARGET = " << m_target->q << " CHILD = " << m_child << ", PARENT = " << m_child->parentAspect())
+		const int origIndex = m_target->indexOfChild(m_child);
+		if (newIndex != origIndex) {
+			// TODO: newIndex is the index of all AbstractAspects including the hidden one. The AspectTreeModel expects the index without!
+			Q_EMIT m_target->q->childAspectAboutToBeMoved(m_child, newIndex);
 
 			m_target->m_children.removeAll(m_child);
 			m_target->m_children.insert(newIndex, m_child);
+
+			m_index = origIndex;
 
 			Q_EMIT m_target->q->childAspectMoved();
 		}
@@ -79,7 +79,7 @@ public:
 protected:
 	AbstractAspectPrivate* m_target{nullptr};
 	AbstractAspect* m_child{nullptr};
-	int m_delta{0};
+	int m_index{-1};
 };
 
 class AspectChildRemoveCmd : public AspectCommonCmd {
