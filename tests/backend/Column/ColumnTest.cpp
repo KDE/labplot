@@ -18,11 +18,17 @@
 
 #include <QUndoStack>
 
-#define SETUP_C1_C2_COLUMNS(c1Vector, c2Vector) \
-	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double); \
-	c1.replaceValues(-1, c1Vector); \
-	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double); \
+#define SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)                                                                                                                \
+	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);                                                                                \
+	c1.replaceValues(-1, c1Vector);                                                                                                                            \
+	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);                                                                             \
 	c2.replaceValues(-1, c2Vector);
+
+#define COLUMN2_SET_FORMULA_AND_EVALUATE(formula, result)                                                                                                      \
+	c2.setFormula(QStringLiteral(formula), {QStringLiteral("x")}, {&c1}, true);                                                                                \
+	c2.updateFormula();                                                                                                                                        \
+	for (int i = 0; i < c2.rowCount(); i++)                                                                                                                    \
+		VALUES_EQUAL(c2.valueAt(i), result);
 
 void ColumnTest::doubleMinimum() {
 	Column c(QStringLiteral("Double column"), Column::ColumnMode::Double);
@@ -1213,258 +1219,182 @@ void ColumnTest::testFormulasma() {
 }
 
 void ColumnTest::testFormulasMinColumnInvalid() {
-	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
-	c1.replaceValues(-1, {1., -1., 5., 5., 3., 8., 10., -5});
-
-	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
-	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17., 18.});
-
-	c2.setFormula(QStringLiteral("min()"), {QStringLiteral("x")}, {&c1}, true);
-	c2.updateFormula();
-	// All invalid
-	for (int i = 0; i < c2.rowCount(); i++)
-		VALUES_EQUAL(c2.valueAt(i), NAN);
+	const QVector<double> c1Vector = {1., -1., 5., 5., 3., 8., 10., -5}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
+	SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)
+	COLUMN2_SET_FORMULA_AND_EVALUATE("min()", NAN) // All invalid
 }
 
 void ColumnTest::testFormulasSize() {
-	SETUP_C1_C2_COLUMNS({1., -1., 8., 10., -5}, {11., 12., 13., 14., 15., 16., 17., 18.})
-
-	c2.setFormula(QStringLiteral("size(x)"), {QStringLiteral("x")}, {&c1}, true);
-	c2.updateFormula();
-	for (int i = 0; i < c2.rowCount(); i++)
-		VALUES_EQUAL(c2.valueAt(i), 5.);
+	const QVector<double> c1Vector = {1., -1., 8., 10., -5}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
+	SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)
+	COLUMN2_SET_FORMULA_AND_EVALUATE("size(x)", 5.)
 }
 void ColumnTest::testFormulasMin() {
-	SETUP_C1_C2_COLUMNS({1., -1., 8., 10., -5}, {11., 12., 13., 14., 15., 16., 17., 18.})
-
-	c2.setFormula(QStringLiteral("min(x)"), {QStringLiteral("x")}, {&c1}, true);
-	c2.updateFormula();
-	for (int i = 0; i < c2.rowCount(); i++)
-		VALUES_EQUAL(c2.valueAt(i), -5.);
+	const QVector<double> c1Vector = {1., -1., 8., 10., -5}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
+	SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)
+	COLUMN2_SET_FORMULA_AND_EVALUATE("min(x)", -5.)
 }
 void ColumnTest::testFormulasMax() {
-	SETUP_C1_C2_COLUMNS({1., -1., 8., 10., -5}, {11., 12., 13., 14., 15., 16., 17., 18.})
-
-	c2.setFormula(QStringLiteral("max(x)"), {QStringLiteral("x")}, {&c1}, true);
-	c2.updateFormula();
-	for (int i = 0; i < c2.rowCount(); i++)
-		VALUES_EQUAL(c2.valueAt(i), 10.);
+	const QVector<double> c1Vector = {1., -1., 8., 10., -5}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
+	SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)
+	COLUMN2_SET_FORMULA_AND_EVALUATE("max(x)", 10.)
 }
 void ColumnTest::testFormulasMean() {
-	SETUP_C1_C2_COLUMNS({1., -1., 8., 10., -5}, {11., 12., 13., 14., 15., 16., 17., 18.})
-
-	c2.setFormula(QStringLiteral("mean(x)"), {QStringLiteral("x")}, {&c1}, true);
-	c2.updateFormula();
-	for (int i = 0; i < c2.rowCount(); i++)
-		VALUES_EQUAL(c2.valueAt(i), 13. / 5);
+	const QVector<double> c1Vector = {1., -1., 8., 10., -5}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
+	SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)
+	COLUMN2_SET_FORMULA_AND_EVALUATE("mean(x)", 13. / 5)
 }
 void ColumnTest::testFormulasMedian() {
-	SETUP_C1_C2_COLUMNS({1., -1., 8., 10., -5}, {11., 12., 13., 14., 15., 16., 17., 18.})
-
-	c2.setFormula(QStringLiteral("median(x)"), {QStringLiteral("x")}, {&c1}, true);
-	c2.updateFormula();
-	for (int i = 0; i < c2.rowCount(); i++)
-		VALUES_EQUAL(c2.valueAt(i), 1.);
+	const QVector<double> c1Vector = {1., -1., 8., 10., -5}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
+	SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)
+	COLUMN2_SET_FORMULA_AND_EVALUATE("median(x)", 1.)
 }
 void ColumnTest::testFormulasStdev() {
-	SETUP_C1_C2_COLUMNS({1., -1., 8., 10., -5}, {11., 12., 13., 14., 15., 16., 17., 18.})
-
-	c2.setFormula(QStringLiteral("stdev(x)"), {QStringLiteral("x")}, {&c1}, true);
-	c2.updateFormula();
-	for (int i = 0; i < c2.rowCount(); i++)
-		VALUES_EQUAL(c2.valueAt(i), 6.2689712074); // calculated with octave "std"
+	const QVector<double> c1Vector = {1., -1., 8., 10., -5}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
+	SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)
+	COLUMN2_SET_FORMULA_AND_EVALUATE("stdev(x)", 6.2689712074) // calculated with octave "std"
 }
 void ColumnTest::testFormulasVar() {
-	SETUP_C1_C2_COLUMNS({1., -1., 8., 10., -5}, {11., 12., 13., 14., 15., 16., 17., 18.})
-
-	c2.setFormula(QStringLiteral("var(x)"), {QStringLiteral("x")}, {&c1}, true);
-	c2.updateFormula();
-	for (int i = 0; i < c2.rowCount(); i++)
-		VALUES_EQUAL(c2.valueAt(i), 39.3); // calculated with octave "var"
+	const QVector<double> c1Vector = {1., -1., 8., 10., -5}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
+	SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)
+	COLUMN2_SET_FORMULA_AND_EVALUATE("stdev(x)", 39.3) // calculated with octave "var"
 }
 void ColumnTest::testFormulasGm() {
-	SETUP_C1_C2_COLUMNS({1., 100., 8., 10., 3}, {11., 12., 13., 14., 15., 16., 17., 18.})
-
-	c2.setFormula(QStringLiteral("gm(x)"), {QStringLiteral("x")}, {&c1}, true);
-	c2.updateFormula();
-	for (int i = 0; i < c2.rowCount(); i++)
-		VALUES_EQUAL(c2.valueAt(i), 7.51696); // Calculated with R exp(mean(log(x)))
+	const QVector<double> c1Vector = {1., 100., 8., 10., 3}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
+	SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)
+	COLUMN2_SET_FORMULA_AND_EVALUATE("gm(x)", 7.51696) // Calculated with R exp(mean(log(x)))
 }
 void ColumnTest::testFormulasHm() {
-	SETUP_C1_C2_COLUMNS({1., -3., 8., 10., -5}, {11., 12., 13., 14., 15., 16., 17., 18.})
-
-	c2.setFormula(QStringLiteral("hm(x)"), {QStringLiteral("x")}, {&c1}, true);
-	c2.updateFormula();
-	for (int i = 0; i < c2.rowCount(); i++)
-		VALUES_EQUAL(c2.valueAt(i), 7.228916); // calculated with R harmonic.mean(x)
+	const QVector<double> c1Vector = {1., -3., 8., 10., -5}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
+	SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)
+	COLUMN2_SET_FORMULA_AND_EVALUATE("hm(x)", 7.228916) // calculated with R harmonic.mean(x)
 }
 void ColumnTest::testFormulasChm() {
-	SETUP_C1_C2_COLUMNS({1.0, 0.0, 2.0, 5.0}, {11., 12., 13., 14., 15., 16., 17., 18.})
-
-	c2.setFormula(QStringLiteral("chm(x)"), {QStringLiteral("x")}, {&c1}, true);
-	c2.updateFormula();
-	for (int i = 0; i < c2.rowCount(); i++)
-		VALUES_EQUAL(c2.valueAt(i), 3.75); // Result used from: statisticsDoubleZero()
+	const QVector<double> c1Vector = {1.0, 0.0, 2.0, 5.0}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
+	SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)
+	COLUMN2_SET_FORMULA_AND_EVALUATE("chm(x)", 3.75) // Result used from: statisticsDoubleZero()
 }
 void ColumnTest::testFormulasStatisticsMode() {
-	SETUP_C1_C2_COLUMNS({1., -1., 8., 10., -5}, {11., 12., 13., 14., 15., 16., 17., 18.})
+	const QVector<double> c1Vector = {1., -1., 8., 10., -5}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
 
-	c2.setFormula(QStringLiteral("mode(x)"), {QStringLiteral("x")}, {&c1}, true);
-	c2.updateFormula();
 	// Calculated with R:
 	// Mode <- function(x) {
 	// ux <- unique(x)
 	//	 ux[which.max(tabulate(match(x, ux)))]
 	// }
 	// Mode(x)
-	for (int i = 0; i < c2.rowCount(); i++)
-		VALUES_EQUAL(c2.valueAt(i), 1);
+	SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)
+	COLUMN2_SET_FORMULA_AND_EVALUATE("chm(x)", 1.)
 }
 void ColumnTest::testFormulasQuartile1() {
-	SETUP_C1_C2_COLUMNS({1., -1., 8., 10., -5}, {11., 12., 13., 14., 15., 16., 17., 18.})
-
-	c2.setFormula(QStringLiteral("quartile1(x)"), {QStringLiteral("x")}, {&c1}, true);
-	c2.updateFormula();
-	for (int i = 0; i < c2.rowCount(); i++)
-		VALUES_EQUAL(c2.valueAt(i), -1); // Calculated with R: summary(x)
+	const QVector<double> c1Vector = {1., -1., 8., 10., -5}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
+	SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)
+	COLUMN2_SET_FORMULA_AND_EVALUATE("quartile1(x)", -1.) // Calculated with R: summary(x)
 }
 void ColumnTest::testFormulasQuartile3() {
-	SETUP_C1_C2_COLUMNS({1., -1., 8., 10., -5}, {11., 12., 13., 14., 15., 16., 17., 18.})
+	const QVector<double> c1Vector = {1., -1., 8., 10., -5}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
 
-	c2.setFormula(QStringLiteral("quartile3(x)"), {QStringLiteral("x")}, {&c1}, true);
-	for (int i = 0; i < c2.rowCount(); i++)
-		VALUES_EQUAL(c2.valueAt(i), 8); // Calculated with R: summary(x)
+	SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)
+	COLUMN2_SET_FORMULA_AND_EVALUATE("quartile3(x)", 8.) // Calculated with R: summary(x)
 }
 void ColumnTest::testFormulasIqr() {
-	SETUP_C1_C2_COLUMNS({1., -1., 8., 10., -5}, {11., 12., 13., 14., 15., 16., 17., 18.})
+	const QVector<double> c1Vector = {1., -1., 8., 10., -5}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
 
-	c2.setFormula(QStringLiteral("iqr(x)"), {QStringLiteral("x")}, {&c1}, true);
-	c2.updateFormula();
-	for (int i = 0; i < c2.rowCount(); i++)
-		VALUES_EQUAL(c2.valueAt(i), 9); // Calculated with R: IQR(x)
+	SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)
+	COLUMN2_SET_FORMULA_AND_EVALUATE("iqr(x)", 9); // Calculated with R: IQR(x)
 }
 void ColumnTest::testFormulasPercentile1() {
-	SETUP_C1_C2_COLUMNS({1., -1., 8., 10., -5}, {11., 12., 13., 14., 15., 16., 17., 18.})
+	const QVector<double> c1Vector = {1., -1., 8., 10., -5}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
 
-	c2.setFormula(QStringLiteral("percentile1(x)"), {QStringLiteral("x")}, {&c1}, true);
-	c2.updateFormula();
-	for (int i = 0; i < c2.rowCount(); i++)
-		VALUES_EQUAL(c2.valueAt(i), -4.84); // Calculated with R: quantile(x, 1/100)
+	SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)
+	COLUMN2_SET_FORMULA_AND_EVALUATE("percentile1(x)", -4.84); // Calculated with R: quantile(x, 1/100)
 }
 void ColumnTest::testFormulasPercentile5() {
-	SETUP_C1_C2_COLUMNS({1., -1., 8., 10., -5}, {11., 12., 13., 14., 15., 16., 17., 18.})
+	const QVector<double> c1Vector = {1., -1., 8., 10., -5}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
 
-	c2.setFormula(QStringLiteral("percentile5(x)"), {QStringLiteral("x")}, {&c1}, true);
-	c2.updateFormula();
-	for (int i = 0; i < c2.rowCount(); i++)
-		VALUES_EQUAL(c2.valueAt(i), -4.2); // Calculated with R: quantile(x, 5/100)
+	SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)
+	COLUMN2_SET_FORMULA_AND_EVALUATE("percentile5(x)", -4.2); // Calculated with R: quantile(x, 5/100)
 }
 void ColumnTest::testFormulasPercentile10() {
-	SETUP_C1_C2_COLUMNS({1., -1., 8., 10., -5}, {11., 12., 13., 14., 15., 16., 17., 18.})
+	const QVector<double> c1Vector = {1., -1., 8., 10., -5}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
 
-	c2.setFormula(QStringLiteral("percentile10(x)"), {QStringLiteral("x")}, {&c1}, true);
-	c2.updateFormula();
-	for (int i = 0; i < c2.rowCount(); i++)
-		VALUES_EQUAL(c2.valueAt(i), -3.4); // Calculated with R: quantile(x, 10/100)
+	SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)
+	COLUMN2_SET_FORMULA_AND_EVALUATE("percentile10(x)", -3.4); // Calculated with R: quantile(x, 10/100)
 }
 void ColumnTest::testFormulasPercentile90() {
-	SETUP_C1_C2_COLUMNS({1., -1., 8., 10., -5}, {11., 12., 13., 14., 15., 16., 17., 18.})
+	const QVector<double> c1Vector = {1., -1., 8., 10., -5}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
 
-	c2.setFormula(QStringLiteral("percentile90(x)"), {QStringLiteral("x")}, {&c1}, true);
-	c2.updateFormula();
-	for (int i = 0; i < c2.rowCount(); i++)
-		VALUES_EQUAL(c2.valueAt(i), 9.2); // Calculated with R: quantile(x, 90/100)
+	SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)
+	COLUMN2_SET_FORMULA_AND_EVALUATE("percentile90(x)", 9.2); // Calculated with R: quantile(x, 90/100)
 }
 void ColumnTest::testFormulasPercentile95() {
-	SETUP_C1_C2_COLUMNS({1., -1., 8., 10., -5}, {11., 12., 13., 14., 15., 16., 17., 18.})
+	const QVector<double> c1Vector = {1., -1., 8., 10., -5}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
 
-	c2.setFormula(QStringLiteral("percentile95(x)"), {QStringLiteral("x")}, {&c1}, true);
-	c2.updateFormula();
-	for (int i = 0; i < c2.rowCount(); i++)
-		VALUES_EQUAL(c2.valueAt(i), 9.6); // Calculated with R: quantile(x, 95/100)
+	SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)
+	COLUMN2_SET_FORMULA_AND_EVALUATE("percentile95(x)", 9.6); // Calculated with R: quantile(x, 95/100)
 }
 void ColumnTest::testFormulasPercentile99() {
-	SETUP_C1_C2_COLUMNS({1., -1., 8., 10., -5}, {11., 12., 13., 14., 15., 16., 17., 18.})
+	const QVector<double> c1Vector = {1., -1., 8., 10., -5}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
 
-	c2.setFormula(QStringLiteral("percentile99(x)"), {QStringLiteral("x")}, {&c1}, true);
-	c2.updateFormula();
-	for (int i = 0; i < c2.rowCount(); i++)
-		VALUES_EQUAL(c2.valueAt(i), 9.92); // Calculated with R: quantile(x, 99/100)
+	SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)
+	COLUMN2_SET_FORMULA_AND_EVALUATE("percentile99(x)", 9.92); // Calculated with R: quantile(x, 99/100)
 }
 void ColumnTest::testFormulasTrimean() {
-	SETUP_C1_C2_COLUMNS({1.0, 0.0, 2.0, 5.0}, {11., 12., 13., 14., 15., 16., 17., 18.})
+	const QVector<double> c1Vector = {1.0, 0.0, 2.0, 5.0}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
 
-	c2.setFormula(QStringLiteral("trimean(x)"), {QStringLiteral("x")}, {&c1}, true);
-	c2.updateFormula();
-	for (int i = 0; i < c2.rowCount(); i++)
-		VALUES_EQUAL(c2.valueAt(i), 1.625); // Value used from statisticsDoubleZero()
+	SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)
+	COLUMN2_SET_FORMULA_AND_EVALUATE("trimean(x)", 1.625); // Value used from statisticsDoubleZero()
 }
 void ColumnTest::testFormulasMeandev() {
-	SETUP_C1_C2_COLUMNS({1.0, 0.0, 2.0, 5.0}, {11., 12., 13., 14., 15., 16., 17., 18.})
+	const QVector<double> c1Vector = {1.0, 0.0, 2.0, 5.0}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
 
-	c2.setFormula(QStringLiteral("meandev(x)"), {QStringLiteral("x")}, {&c1}, true);
-	c2.updateFormula();
-	for (int i = 0; i < c2.rowCount(); i++)
-		VALUES_EQUAL(c2.valueAt(i), 1.5); // Value used from statisticsDoubleZero()
+	SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)
+	COLUMN2_SET_FORMULA_AND_EVALUATE("meandev(x)", 1.5); // Value used from statisticsDoubleZero()
 }
 void ColumnTest::testFormulasMeandevmedian() {
-	SETUP_C1_C2_COLUMNS({1.0, 0.0, 2.0, 5.0}, {11., 12., 13., 14., 15., 16., 17., 18.})
+	const QVector<double> c1Vector = {1.0, 0.0, 2.0, 5.0}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
 
-	c2.setFormula(QStringLiteral("meandevmedian(x)"), {QStringLiteral("x")}, {&c1}, true);
-	c2.updateFormula();
-	for (int i = 0; i < c2.rowCount(); i++)
-		VALUES_EQUAL(c2.valueAt(i), 1.5); // Value used from statisticsDoubleZero()
+	SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)
+	COLUMN2_SET_FORMULA_AND_EVALUATE("meandevmedian(x)", 1.5); // Value used from statisticsDoubleZero()
 }
 void ColumnTest::testFormulasMediandev() {
-	SETUP_C1_C2_COLUMNS({1.0, 0.0, 2.0, 5.0}, {11., 12., 13., 14., 15., 16., 17., 18.})
+	const QVector<double> c1Vector = {1.0, 0.0, 2.0, 5.0}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
 
-	c2.setFormula(QStringLiteral("mediandev(x)"), {QStringLiteral("x")}, {&c1}, true);
-	c2.updateFormula();
-	for (int i = 0; i < c2.rowCount(); i++)
-		VALUES_EQUAL(c2.valueAt(i), 1.); // Value used from statisticsDoubleZero()
+	SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)
+	COLUMN2_SET_FORMULA_AND_EVALUATE("mediandev(x)", 1.); // Value used from statisticsDoubleZero()
 }
 void ColumnTest::testFormulasSkew() {
-	SETUP_C1_C2_COLUMNS({1., -1., 8., 10., -5}, {11., 12., 13., 14., 15., 16., 17., 18.})
+	const QVector<double> c1Vector = {1., -1., 8., 10., -5}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
 
-	c2.setFormula(QStringLiteral("skew(x)"), {QStringLiteral("x")}, {&c1}, true);
-	c2.updateFormula();
-	for (int i = 0; i < c2.rowCount(); i++)
-		VALUES_EQUAL(c2.valueAt(i), 0.08277344); // Calculated with R: skewness(x)
+	SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)
+	COLUMN2_SET_FORMULA_AND_EVALUATE("skew(x)", 0.08277344); // Calculated with R: skewness(x)
 }
 void ColumnTest::testFormulasKurt() {
-	SETUP_C1_C2_COLUMNS({1., -1., 8., 10., -5}, {11., 12., 13., 14., 15., 16., 17., 18.})
+	const QVector<double> c1Vector = {1., -1., 8., 10., -5}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
 
-	c2.setFormula(QStringLiteral("kurt(x)"), {QStringLiteral("x")}, {&c1}, true);
-	c2.updateFormula();
-	for (int i = 0; i < c2.rowCount(); i++)
-		VALUES_EQUAL(c2.valueAt(i), 1.489103); // Calculated with R: kurtosis(x)
+	SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)
+	COLUMN2_SET_FORMULA_AND_EVALUATE("kurt(x)", 1.489103); // Calculated with R: kurtosis(x)
 }
 void ColumnTest::testFormulasEntropy() {
-	SETUP_C1_C2_COLUMNS({1.0, 0.0, 2.0, 5.0}, {11., 12., 13., 14., 15., 16., 17., 18.})
+	const QVector<double> c1Vector = {1.0, 0.0, 2.0, 5.0}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
 
-	c2.setFormula(QStringLiteral("entropy(x)"), {QStringLiteral("x")}, {&c1}, true);
-	c2.updateFormula();
-	for (int i = 0; i < c2.rowCount(); i++)
-		VALUES_EQUAL(c2.valueAt(i), 2.); // Value from statisticsDoubleZero()
+	SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)
+	COLUMN2_SET_FORMULA_AND_EVALUATE("entropy(x)", 2.); // Value from statisticsDoubleZero()
 }
 
 void ColumnTest::testFormulasQuantile() {
 	QLocale::setDefault(QLocale::C); // . as decimal separator
-	SETUP_C1_C2_COLUMNS({1., -1., 8., 10., -5}}, {11., 12., 13., 14., 15., 16., 17., 18.})
+	const QVector<double> c1Vector = {1., -1., 8., 10., -5}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
 
-	c2.setFormula(QStringLiteral("quantile(0.1;x)"), {QStringLiteral("x")}, {&c1}, true);
-	c2.updateFormula();
-	for (int i = 0; i < c2.rowCount(); i++)
-		VALUES_EQUAL(c2.valueAt(i), -3.4); // Calculated with R: quantile(x, 0.1)
+	SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)
+	COLUMN2_SET_FORMULA_AND_EVALUATE("quantile(0.1;x)", -3.4); // Calculated with R: quantile(x, 0.1)
 }
 
 void ColumnTest::testFormulasPercentile() {
-	SETUP_C1_C2_COLUMNS({1., -1., 8., 10., -5}}, {11., 12., 13., 14., 15., 16., 17., 18.})
+	const QVector<double> c1Vector = {1., -1., 8., 10., -5}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
 
-	c2.setFormula(QStringLiteral("percentile(30;x)"), {QStringLiteral("x")}, {&c1}, true);
-	c2.updateFormula();
-	for (int i = 0; i < c2.rowCount(); i++)
-		VALUES_EQUAL(c2.valueAt(i), -0.6); // Calculated with R: quantile(x, 30/100)
+	SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)
+	COLUMN2_SET_FORMULA_AND_EVALUATE("percentile(30;x)", -0.6); // Calculated with R: quantile(x, 30/100)
 }
 
 QTEST_MAIN(ColumnTest)
