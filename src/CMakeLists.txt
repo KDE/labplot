@@ -130,6 +130,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/worksheet/GridDialog.cpp
 	${KDEFRONTEND_DIR}/worksheet/PresenterWidget.cpp
 	${KDEFRONTEND_DIR}/worksheet/SlidingPanel.cpp
+	${KDEFRONTEND_DIR}/worksheet/WorksheetPreviewWidget.cpp
 	${KDEFRONTEND_DIR}/widgets/BackgroundWidget.cpp
 	${KDEFRONTEND_DIR}/widgets/ConstantsWidget.cpp
 	${KDEFRONTEND_DIR}/widgets/ThemesComboBox.cpp
@@ -259,6 +260,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/spreadsheet/searchreplacewidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/sortdialogwidget.ui
 	${KDEFRONTEND_DIR}/ui/worksheet/exportworksheetwidget.ui
+	${KDEFRONTEND_DIR}/ui/worksheet/worksheetpreviewwidget.ui
 	${KDEFRONTEND_DIR}/ui/datapickerimagewidget.ui
 	${KDEFRONTEND_DIR}/ui/datapickercurvewidget.ui
 	${KDEFRONTEND_DIR}/ui/fitsheadereditwidget.ui

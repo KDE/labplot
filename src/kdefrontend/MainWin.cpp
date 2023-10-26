@@ -63,6 +63,7 @@
 #include "kdefrontend/examples/ExamplesDialog.h"
 #include "kdefrontend/widgets/FITSHeaderEditDialog.h"
 #include "kdefrontend/widgets/LabelWidget.h"
+#include "kdefrontend/worksheet/WorksheetPreviewWidget.h"
 
 #ifdef HAVE_KUSERFEEDBACK
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
@@ -390,10 +391,10 @@ void MainWin::initGUI(const QString& fileName) {
 	const KConfigGroup& groupMainWin = Settings::group(QStringLiteral("MainWin"));
 
 	// show memory info
-	m_toggleMemoryInfoAction->setEnabled(statusBar()->isEnabled()); // disable/enable menu with statusbar
+	m_memoryInfoAction->setEnabled(statusBar()->isEnabled()); // disable/enable menu with statusbar
 	bool memoryInfoShown = groupMainWin.readEntry(QLatin1String("ShowMemoryInfo"), true);
 	DEBUG(Q_FUNC_INFO << ", memory info enabled in config: " << memoryInfoShown)
-	m_toggleMemoryInfoAction->setChecked(memoryInfoShown);
+	m_memoryInfoAction->setChecked(memoryInfoShown);
 	if (memoryInfoShown)
 		toggleMemoryInfo();
 
@@ -491,7 +492,7 @@ void MainWin::createADS() {
 	connect(m_closeAllWindowsAction, &QAction::triggered, [this]() {
 		for (auto dock : m_DockManager->dockWidgetsMap()) {
 			// Do not remove them, because it makes no sense
-			if (dock == m_projectExplorerDock || dock == m_propertiesDock)
+			if (dock == m_projectExplorerDock || dock == m_propertiesDock || dock == m_worksheetPreviewDock)
 				continue;
 			m_DockManager->removeDockWidget(dock);
 		}
@@ -515,7 +516,7 @@ void MainWin::activateNextDock() {
 	while (itrForward != m_DockManager->dockWidgetsMap().constEnd()) {
 		auto* dock = itrForward.value();
 		if (focusedFound) {
-			if (dock != m_projectExplorerDock && dock != m_propertiesDock) {
+			if (dock != m_projectExplorerDock && dock != m_propertiesDock && dock != m_worksheetPreviewDock) {
 				dock->toggleView(true);
 				m_DockManager->setDockWidgetFocused(dock);
 				return;
@@ -540,7 +541,7 @@ void MainWin::activateNextDock() {
 	auto itrWrap = m_DockManager->dockWidgetsMap().constBegin();
 	while (itrWrap != m_DockManager->dockWidgetsMap().constEnd()) {
 		auto* dock = itrWrap.value();
-		if (dock != m_projectExplorerDock && dock != m_propertiesDock) {
+		if (dock != m_projectExplorerDock && dock != m_propertiesDock && dock != m_worksheetPreviewDock) {
 			dock->toggleView(true);
 			m_DockManager->setDockWidgetFocused(dock);
 			return;
@@ -560,7 +561,7 @@ void MainWin::activatePreviousDock() {
 		itrForward.previous();
 		auto* dock = itrForward.value();
 		if (focusedFound) {
-			if (dock != m_projectExplorerDock && dock != m_propertiesDock) {
+			if (dock != m_projectExplorerDock && dock != m_propertiesDock && dock != m_worksheetPreviewDock) {
 				dock->toggleView(true);
 				m_DockManager->setDockWidgetFocused(dock);
 				return;
@@ -587,7 +588,7 @@ void MainWin::activatePreviousDock() {
 	while (itrWrap.hasPrevious()) {
 		itrWrap.previous();
 		auto* dock = itrWrap.value();
-		if (dock != m_projectExplorerDock && dock != m_propertiesDock) {
+		if (dock != m_projectExplorerDock && dock != m_propertiesDock&& dock != m_worksheetPreviewDock) {
 			dock->toggleView(true);
 			m_DockManager->setDockWidgetFocused(dock);
 			return;
@@ -602,6 +603,9 @@ void MainWin::dockWidgetRemoved(ads::CDockWidget* w) {
 	} else if (w == m_propertiesDock) {
 		delete m_propertiesDock;
 		m_propertiesDock = nullptr;
+	} else if (w == m_worksheetPreviewDock) {
+		delete m_worksheetPreviewDock;
+		m_worksheetPreviewDock = nullptr;
 	}
 
 	if (w == m_currentAspectDock)
@@ -614,6 +618,8 @@ void MainWin::dockWidgetAboutToBeRemoved(ads::CDockWidget* w) {
 		m_projectExplorer = nullptr;
 	} else if (w == m_propertiesDock)
 		delete m_propertiesDock->widget();
+	else if (w == m_worksheetPreviewDock)
+		delete m_worksheetPreviewDock->widget();
 }
 
 void MainWin::dockFocusChanged(ads::CDockWidget* old, ads::CDockWidget* now) {
@@ -662,7 +668,7 @@ void MainWin::initActions() {
 		delete dlg;
 	});
 
-	m_toggleFullScreenAction = KStandardAction::fullScreen(this, &MainWin::toggleFullScreen, this, actionCollection());
+	m_fullScreenAction = KStandardAction::fullScreen(this, &MainWin::toggleFullScreen, this, actionCollection());
 
 	// QDEBUG(Q_FUNC_INFO << ", preferences action name:" << KStandardAction::name(KStandardAction::Preferences))
 	KStandardAction::preferences(this, &MainWin::settingsDialog, actionCollection());
@@ -850,30 +856,35 @@ void MainWin::initActions() {
 	bool statusBarDisabled = (str == QLatin1String("Disabled"));
 	DEBUG(Q_FUNC_INFO << ", statusBar enabled in config: " << !statusBarDisabled)
 	createStandardStatusBarAction();
-	m_toggleStatusBarAction = KStandardAction::showStatusbar(this, &MainWin::toggleStatusBar, actionCollection());
-	m_toggleStatusBarAction->setChecked(!statusBarDisabled);
+	m_statusBarAction = KStandardAction::showStatusbar(this, &MainWin::toggleStatusBar, actionCollection());
+	m_statusBarAction->setChecked(!statusBarDisabled);
 	statusBar()->setEnabled(!statusBarDisabled); // setVisible() does not work
 
 	KStandardAction::showMenubar(this, &MainWin::toggleMenuBar, actionCollection());
 
 	// show/hide the memory usage widget
-	m_toggleMemoryInfoAction = new QAction(i18n("Show Memory Usage"));
-	m_toggleMemoryInfoAction->setCheckable(true);
-	connect(m_toggleMemoryInfoAction, &QAction::triggered, this, &MainWin::toggleMemoryInfo);
+	m_memoryInfoAction = new QAction(i18n("Show Memory Usage"));
+	m_memoryInfoAction->setCheckable(true);
+	connect(m_memoryInfoAction, &QAction::triggered, this, &MainWin::toggleMemoryInfo);
 
 	// Actions for hiding/showing the dock widgets
 	auto* docksActions = new QActionGroup(this);
 	docksActions->setExclusive(false);
 
-	m_toggleProjectExplorerDockAction = new QAction(QIcon::fromTheme(QLatin1String("view-list-tree")), i18n("Project Explorer"), docksActions);
-	m_toggleProjectExplorerDockAction->setCheckable(true);
-	m_toggleProjectExplorerDockAction->setChecked(true);
-	actionCollection()->addAction(QLatin1String("toggle_project_explorer_dock"), m_toggleProjectExplorerDockAction);
+	m_projectExplorerDockAction = new QAction(QIcon::fromTheme(QLatin1String("view-list-tree")), i18n("Project Explorer"), docksActions);
+	m_projectExplorerDockAction->setCheckable(true);
+	m_projectExplorerDockAction->setChecked(true);
+	actionCollection()->addAction(QLatin1String("toggle_project_explorer_dock"), m_projectExplorerDockAction);
 
-	m_togglePropertiesDockAction = new QAction(QIcon::fromTheme(QLatin1String("view-list-details")), i18n("Properties Explorer"), docksActions);
-	m_togglePropertiesDockAction->setCheckable(true);
-	m_togglePropertiesDockAction->setChecked(true);
-	actionCollection()->addAction(QLatin1String("toggle_properties_explorer_dock"), m_togglePropertiesDockAction);
+	m_propertiesDockAction = new QAction(QIcon::fromTheme(QLatin1String("view-list-details")), i18n("Properties Explorer"), docksActions);
+	m_propertiesDockAction->setCheckable(true);
+	m_propertiesDockAction->setChecked(true);
+	actionCollection()->addAction(QLatin1String("toggle_properties_explorer_dock"), m_propertiesDockAction);
+
+	m_worksheetPreviewAction = new QAction(QIcon::fromTheme(QLatin1String("view-preview")), i18n("Worksheet Preview"), docksActions);
+	m_worksheetPreviewAction->setCheckable(true);
+	m_worksheetPreviewAction->setChecked(true);
+	actionCollection()->addAction(QLatin1String("toggle_worksheet_preview_dock"), m_worksheetPreviewAction);
 
 	connect(docksActions, &QActionGroup::triggered, this, &MainWin::toggleDockWidget);
 
@@ -883,8 +894,8 @@ void MainWin::initActions() {
 	connect(m_searchAction, &QAction::triggered, this, [=]() {
 		if (m_project) {
 			if (!m_projectExplorerDock->isVisible()) {
-				m_toggleProjectExplorerDockAction->setChecked(true);
-				toggleDockWidget(m_toggleProjectExplorerDockAction);
+				m_projectExplorerDockAction->setChecked(true);
+				toggleDockWidget(m_projectExplorerDockAction);
 			}
 			m_projectExplorer->search();
 		}
@@ -914,8 +925,9 @@ void MainWin::initMenus() {
 	auto* menu = dynamic_cast<QMenu*>(factory()->container(QLatin1String("view"), this));
 	if (menu) {
 		menu->addSeparator();
-		menu->addAction(m_toggleProjectExplorerDockAction);
-		menu->addAction(m_togglePropertiesDockAction);
+		menu->addAction(m_projectExplorerDockAction);
+		menu->addAction(m_propertiesDockAction);
+		menu->addAction(m_worksheetPreviewAction);
 	}
 
 	// menu in the main toolbar for adding new aspects
@@ -991,10 +1003,10 @@ void MainWin::initMenus() {
 		auto* action = settingsMenu->insertSeparator(settingsMenu->actions().constFirst());
 		settingsMenu->insertMenu(action, schemesMenu->menu());
 
-		// add m_toggleMemoryInfoAction after the "Show status bar" action
+		// add m_memoryInfoAction after the "Show status bar" action
 		auto actions = settingsMenu->actions();
-		const int index = actions.indexOf(m_toggleStatusBarAction);
-		settingsMenu->insertAction(actions.at(index + 1), m_toggleMemoryInfoAction);
+		const int index = actions.indexOf(m_statusBarAction);
+		settingsMenu->insertAction(actions.at(index + 1), m_memoryInfoAction);
 	}
 
 	// Cantor backends to menu and context menu
@@ -1110,8 +1122,9 @@ void MainWin::updateGUIOnProjectChanges(const QByteArray& windowState) {
 	m_newNotesAction->setEnabled(hasProject);
 	m_newLiveDataSourceAction->setEnabled(hasProject);
 	m_closeAction->setEnabled(hasProject);
-	m_toggleProjectExplorerDockAction->setEnabled(hasProject);
-	m_togglePropertiesDockAction->setEnabled(hasProject);
+	m_projectExplorerDockAction->setEnabled(hasProject);
+	m_propertiesDockAction->setEnabled(hasProject);
+	m_worksheetPreviewAction->setEnabled(hasProject);
 	m_closeWindowAction->setEnabled(hasProject);
 	m_closeAllWindowsAction->setEnabled(hasProject);
 	m_nextWindowAction->setEnabled(hasProject);
@@ -1187,6 +1200,8 @@ void MainWin::updateGUIOnProjectChanges(const QByteArray& windowState) {
 			m_projectExplorerDock->toggleView(true);
 		if (m_propertiesDock)
 			m_propertiesDock->toggleView(true);
+		if (m_worksheetPreviewDock)
+			m_worksheetPreviewDock->toggleView(true);
 	}
 }
 
@@ -1444,6 +1459,7 @@ bool MainWin::newProject() {
 	if (!m_projectExplorer) {
 		group = Settings::group(QStringLiteral("MainWin"));
 
+		// project explorer
 		m_projectExplorerDock = new ads::CDockWidget(i18nc("@title:window", "Project Explorer"));
 		m_projectExplorerDock->setObjectName(QLatin1String("projectexplorer"));
 		m_projectExplorerDock->setWindowTitle(m_projectExplorerDock->windowTitle().replace(QLatin1String("&"), QString()));
@@ -1460,6 +1476,16 @@ bool MainWin::newProject() {
 		m_propertiesDock = new ads::CDockWidget(i18nc("@title:window", "Properties"));
 		m_propertiesDock->setObjectName(QLatin1String("aspect_properties_dock"));
 		m_propertiesDock->setWindowTitle(m_propertiesDock->windowTitle().replace(QLatin1String("&"), QString()));
+
+		// worksheet preview
+		m_worksheetPreviewDock = new ads::CDockWidget(i18nc("@title:window", "Project Explorer"));
+		m_worksheetPreviewDock->setObjectName(QLatin1String("worksheetpreview"));
+		m_worksheetPreviewDock->setWindowTitle(m_worksheetPreviewDock->windowTitle().replace(QLatin1String("&"), QString()));
+		m_worksheetPreviewDock->toggleViewAction()->setText(QLatin1String(""));
+		connect(m_worksheetPreviewDock, &ads::CDockWidget::viewToggled, this, &MainWin::worksheetPreviewDockVisibilityChanged);
+
+		auto* m_worksheetPreviewWidget = new WorksheetPreviewWidget(m_worksheetPreviewDock);
+		m_worksheetPreviewDock->setWidget(m_worksheetPreviewWidget);
 
 		// restore the position of the dock widgets:
 		//"WindowState" doesn't always contain the positions of the dock widgets,
@@ -2416,14 +2442,15 @@ void MainWin::toggleDockWidget(QAction* action) {
 		else
 			m_propertiesDock->toggleView(true);
 		// 			toggleShowWidget(m_propertiesDock, false);
-	}
+	} else if (action->objectName() == QLatin1String("toggle_worksheet_preview_dock"))
+		m_worksheetPreviewDock->toggleView(!m_worksheetPreviewDock->isVisible());
 }
 
 void MainWin::toggleStatusBar(bool checked) {
 	statusBar()->setVisible(checked); // show/hide statusbar
 	statusBar()->setEnabled(checked);
 	// enabled/disable memory info menu with statusbar
-	m_toggleMemoryInfoAction->setEnabled(checked);
+	m_memoryInfoAction->setEnabled(checked);
 }
 
 void MainWin::toggleMemoryInfo() {
@@ -2506,11 +2533,15 @@ void MainWin::toggleShowWidget(QWidget* widget, bool showToRight)
 }
 */
 void MainWin::projectExplorerDockVisibilityChanged(bool visible) {
-	m_toggleProjectExplorerDockAction->setChecked(visible);
+	m_projectExplorerDockAction->setChecked(visible);
 }
 
 void MainWin::propertiesDockVisibilityChanged(bool visible) {
-	m_togglePropertiesDockAction->setChecked(visible);
+	m_propertiesDockAction->setChecked(visible);
+}
+
+void MainWin::worksheetPreviewDockVisibilityChanged(bool visible) {
+	m_worksheetPreviewAction->setChecked(visible);
 }
 
 void MainWin::cursorDockVisibilityChanged(bool visible) {
@@ -2579,7 +2610,7 @@ void MainWin::shareActionFinished(const QJsonObject& output, int error, const QS
 #endif
 
 void MainWin::toggleFullScreen(bool t) {
-	m_toggleFullScreenAction->setFullScreen(this, t);
+	m_fullScreenAction->setFullScreen(this, t);
 }
 
 void MainWin::closeEvent(QCloseEvent* event) {

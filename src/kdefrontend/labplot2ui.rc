@@ -6,6 +6,7 @@
 <text>Project</text>
 <Action name="toggle_project_explorer_dock"/>
 <Action name="toggle_properties_explorer_dock"/>
+<Action name="toggle_worksheet_preview_dock"/>
 <Separator/>
 <Action name="new_folder" />
 <Action name="new_workbook" />
