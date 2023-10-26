@@ -39,7 +39,7 @@ public:
 		: QUndoCommand(parent)
 		, m_target(target)
 		, m_child(child)
-		, m_delta(steps) {
+		, m_delta(-steps) {
 		setText(i18n("%1: move up", m_target->m_name));
 	}
 
@@ -47,7 +47,7 @@ public:
 	}
 
 	virtual void redo() override {
-		move(m_delta); // move up
+		move(-m_delta); // move up
 	}
 
 	virtual void undo() override {
