@@ -9,8 +9,8 @@
 */
 
 #include "SpreadsheetGenerateDataTest.h"
-#include "kdefrontend/spreadsheet/EquidistantValuesDialog.h"
 #include "backend/spreadsheet/Spreadsheet.h"
+#include "kdefrontend/spreadsheet/EquidistantValuesDialog.h"
 
 void SpreadsheetGenerateDataTest::initTestCase() {
 	qRegisterMetaType<const AbstractAspect*>("const AbstractAspect*");
@@ -185,7 +185,6 @@ void SpreadsheetGenerateDataTest::testFixedNumberDoubleDateTime() {
 	QCOMPARE(column2->dateTimeAt(2), QDateTime::fromString(QStringLiteral("2023-05-01T00:00:02Z"), Qt::ISODate));
 	QCOMPARE(column2->dateTimeAt(3), QDateTime::fromString(QStringLiteral("2023-05-01T00:00:03Z"), Qt::ISODate));
 	QCOMPARE(column2->dateTimeAt(4), QDateTime::fromString(QStringLiteral("2023-05-01T00:00:04Z"), Qt::ISODate));
-
 }
 
 // **********************************************************

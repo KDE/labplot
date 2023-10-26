@@ -637,11 +637,12 @@ bool EquidistantValuesDialog::generateBigInt(QVector<qint64>& newData, qint64 st
  * \c true if the generation of values was successful.
  */
 bool EquidistantValuesDialog::generateDateTime(QVector<QDateTime>& newData,
-																			Type type, const QDateTime& start,
-																			const QDateTime& end,
-																			int number,
-																			int increment,
-																			DateTimeUnit unit) {
+											   Type type,
+											   const QDateTime& start,
+											   const QDateTime& end,
+											   int number,
+											   int increment,
+											   DateTimeUnit unit) {
 	switch (type) {
 	case Type::FixedNumber: {
 		const auto startValue = start.toMSecsSinceEpoch();
