@@ -2556,7 +2556,8 @@ void MainWin::fillShareMenu() {
 
 	m_shareMenu->clear(); // clear the menu, it will be refilled with the new file URL below
 	QMimeType mime;
-	m_shareMenu->model()->setInputData(QJsonObject{{QStringLiteral("mimeType"), mime.name()}, {QStringLiteral("urls"), QJsonArray {QUrl::fromLocalFile(m_project->fileName()).toString()}}});
+	m_shareMenu->model()->setInputData(
+		QJsonObject{{QStringLiteral("mimeType"), mime.name()}, {QStringLiteral("urls"), QJsonArray{QUrl::fromLocalFile(m_project->fileName()).toString()}}});
 	m_shareMenu->reload();
 }
 
@@ -2568,7 +2569,11 @@ void MainWin::shareActionFinished(const QJsonObject& output, int error, const QS
 		if (url.isEmpty())
 			statusBar()->showMessage(i18n("Project shared successfully"));
 		else
-			KMessageBox::information(widget(), i18n("You can find the shared project at: <a href=\"%1\">%1</a>", url), i18n("Share"), QString(), KMessageBox::Notify | KMessageBox::AllowLink);
+			KMessageBox::information(widget(),
+									 i18n("You can find the shared project at: <a href=\"%1\">%1</a>", url),
+									 i18n("Share"),
+									 QString(),
+									 KMessageBox::Notify | KMessageBox::AllowLink);
 	}
 }
 #endif

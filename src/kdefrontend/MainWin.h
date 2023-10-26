@@ -298,7 +298,7 @@ private Q_SLOTS:
 	void cartesianPlotMouseModeChanged(CartesianPlot::MouseMode);
 
 #ifdef HAVE_PURPOSE
-    void shareActionFinished(const QJsonObject& output, int error, const QString& message);
+	void shareActionFinished(const QJsonObject& output, int error, const QString& message);
 #endif
 };
 
