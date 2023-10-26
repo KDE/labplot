@@ -627,6 +627,20 @@ void WorksheetElementTest::moveElementBefore() {
 	QCOMPARE(children.at(1)->name(), lSecond->name());
 	QCOMPARE(children.at(2)->name(), lThird->name());
 	QCOMPARE(children.at(3)->name(), lFirst->name());
+
+	lSecond->undoStack()->undo();
+
+	children = ws->children<AbstractAspect>(AbstractAspect::ChildIndexFlag::IncludeHidden);
+	QCOMPARE(children.at(1)->name(), lThird->name());
+	QCOMPARE(children.at(2)->name(), lFirst->name());
+	QCOMPARE(children.at(3)->name(), lSecond->name());
+
+	lSecond->undoStack()->redo();
+
+	children = ws->children<AbstractAspect>(AbstractAspect::ChildIndexFlag::IncludeHidden);
+	QCOMPARE(children.at(1)->name(), lSecond->name());
+	QCOMPARE(children.at(2)->name(), lThird->name());
+	QCOMPARE(children.at(3)->name(), lFirst->name());
 }
 
 void WorksheetElementTest::moveElementAfter() {
@@ -676,6 +690,20 @@ void WorksheetElementTest::moveElementAfter() {
 
 	action.setData(2); // in front of lThird
 	lSecond->execMoveInFrontOf(&action);
+
+	children = ws->children<AbstractAspect>(AbstractAspect::ChildIndexFlag::IncludeHidden);
+	QCOMPARE(children.at(1)->name(), lThird->name());
+	QCOMPARE(children.at(2)->name(), lSecond->name());
+	QCOMPARE(children.at(3)->name(), lFirst->name());
+
+	lSecond->undoStack()->undo();
+
+	children = ws->children<AbstractAspect>(AbstractAspect::ChildIndexFlag::IncludeHidden);
+	QCOMPARE(children.at(1)->name(), lSecond->name());
+	QCOMPARE(children.at(2)->name(), lThird->name());
+	QCOMPARE(children.at(3)->name(), lFirst->name());
+
+	lSecond->undoStack()->redo();
 
 	children = ws->children<AbstractAspect>(AbstractAspect::ChildIndexFlag::IncludeHidden);
 	QCOMPARE(children.at(1)->name(), lThird->name());

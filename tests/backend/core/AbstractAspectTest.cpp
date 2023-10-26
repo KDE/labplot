@@ -227,6 +227,16 @@ void AbstractAspectTest::moveUp() {
 	spreadsheet->moveUp();
 	QCOMPARE(project.child<AbstractAspect>(0), spreadsheet);
 	QCOMPARE(project.child<AbstractAspect>(1), worksheet);
+
+	spreadsheet->undoStack()->undo();
+
+	QCOMPARE(project.child<AbstractAspect>(0), worksheet);
+	QCOMPARE(project.child<AbstractAspect>(1), spreadsheet);
+
+	spreadsheet->undoStack()->redo();
+
+	QCOMPARE(project.child<AbstractAspect>(0), spreadsheet);
+	QCOMPARE(project.child<AbstractAspect>(1), worksheet);
 }
 
 void AbstractAspectTest::moveDown() {
@@ -244,6 +254,16 @@ void AbstractAspectTest::moveDown() {
 
 	// move the worksheet behing the speadsheet and check the order again
 	worksheet->moveDown();
+	QCOMPARE(project.child<AbstractAspect>(0), spreadsheet);
+	QCOMPARE(project.child<AbstractAspect>(1), worksheet);
+
+	spreadsheet->undoStack()->undo();
+
+	QCOMPARE(project.child<AbstractAspect>(0), worksheet);
+	QCOMPARE(project.child<AbstractAspect>(1), spreadsheet);
+
+	spreadsheet->undoStack()->redo();
+
 	QCOMPARE(project.child<AbstractAspect>(0), spreadsheet);
 	QCOMPARE(project.child<AbstractAspect>(1), worksheet);
 }
