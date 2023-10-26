@@ -4650,10 +4650,9 @@ msgid "Logarithm"
 msgstr ""
 
 #: src/backend/gsl/functions.cpp:717
-#, fuzzy, kde-format
-#| msgid "Base 10 logarithm"
+#, kde-format
 msgid "Base 2 logarithm"
-msgstr "Logaritmus o základu  10"
+msgstr ""
 
 #: src/backend/gsl/functions.cpp:718
 #, kde-format

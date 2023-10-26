@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-10-24 00:39+0000\n"
-"PO-Revision-Date: 2023-10-09 09:40+0200\n"
+"PO-Revision-Date: 2023-10-23 09:53+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -2957,7 +2957,7 @@ msgstr "Tolerància especificada no vàlida"
 #: src/backend/gsl/errors.h:50
 #, kde-format
 msgid "Failed to reach the specified tolerance"
-msgstr "Ha fallat arribar a la tolerància especificada"
+msgstr "No s'ha pogut arribar fins a la tolerància especificada"
 
 #: src/backend/gsl/errors.h:52
 #, kde-format
@@ -3032,17 +3032,17 @@ msgstr "Les avaluacions jacobianes no estan millorant la solució"
 #: src/backend/gsl/errors.h:80
 #, kde-format
 msgid "Cannot reach the specified tolerance in F"
-msgstr "No s'ha pogut arribar a la tolerància especificada a F"
+msgstr "No s'ha pogut arribar fins a la tolerància especificada en F"
 
 #: src/backend/gsl/errors.h:82
 #, kde-format
 msgid "Cannot reach the specified tolerance in X"
-msgstr "No s'ha pogut arribar a la tolerància especificada a X"
+msgstr "No s'ha pogut arribar fins a la tolerància especificada en X"
 
 #: src/backend/gsl/errors.h:84
 #, kde-format
 msgid "Cannot reach the specified tolerance in gradient"
-msgstr "No s'ha pogut arribar a la tolerància especificada en el degradat"
+msgstr "No s'ha pogut arribar fins a la tolerància especificada en el degradat"
 
 #: src/backend/gsl/errors.h:86
 #, kde-format
@@ -4765,10 +4765,9 @@ msgid "Logarithm"
 msgstr "Logaritme"
 
 #: src/backend/gsl/functions.cpp:717
-#, fuzzy, kde-format
-#| msgid "Base 10 logarithm"
+#, kde-format
 msgid "Base 2 logarithm"
-msgstr "Logaritme en base 10"
+msgstr "Logaritme en base 2"
 
 #: src/backend/gsl/functions.cpp:718
 #, kde-format
@@ -9285,12 +9284,12 @@ msgstr "Desplaça cap a la dreta"
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:161
 #, kde-format
 msgid "Shift Up"
-msgstr "Desplaça amunt"
+msgstr "Desplaça cap amunt"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:164
 #, kde-format
 msgid "Shift Down"
-msgstr "Desplaça avall"
+msgstr "Desplaça cap avall"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:167
 #: src/commonfrontend/worksheet/WorksheetView.cpp:189
@@ -14256,7 +14255,7 @@ msgid ""
 "Select an item in the list to navigate to the corresponding step."
 msgstr ""
 "Llista de tots els passos/accions realitzats.\n"
-"Seleccioneu un element de la llista per a anar al seu pas corresponent."
+"Seleccioneu un element de la llista per a anar fins al seu pas corresponent."
 
 #: src/kdefrontend/HistoryDialog.cpp:44
 #, kde-format
@@ -14455,7 +14454,7 @@ msgstr "Garvit Khatri"
 #, kde-format
 msgctxt "@info:credit"
 msgid "Porting LabPlot2 to KF5 and Integration with Cantor"
-msgstr "Adaptació del LabPlot2 al KF5 i integració amb Cantor"
+msgstr "Adaptació del LabPlot2 a KF5 i integració amb Cantor"
 
 #: src/kdefrontend/LabPlot.cpp:118
 #, kde-format
