@@ -4,7 +4,7 @@
 	Description          : Tests for Column
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2022 Martin Marmsoler <martin.marmsoler@gmail.com>
-	SPDX-FileCopyrightText: 2022 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2022-2023 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -1119,7 +1119,7 @@ void ColumnTest::testFormulaCellConstExpression() {
 	QCOMPARE(c2.rowCount(), 7);
 	// All invalid
 	for (int i = 0; i < c2.rowCount(); i++)
-		VALUES_EQUAL(c2.valueAt(i), -1);
+		VALUES_EQUAL(c2.valueAt(i), -1.);
 }
 
 void ColumnTest::testFormulaCellMulti() {
@@ -1136,7 +1136,7 @@ void ColumnTest::testFormulaCellMulti() {
 	c2.updateFormula();
 	QCOMPARE(c2.rowCount(), 7);
 	for (int i = 0; i < c2.rowCount(); i++)
-		VALUES_EQUAL(c2.valueAt(i), -6);
+		VALUES_EQUAL(c2.valueAt(i), -6.);
 }
 
 void ColumnTest::testFormulasmmin() {
@@ -1149,14 +1149,14 @@ void ColumnTest::testFormulasmmin() {
 	c2.setFormula(QStringLiteral("smmin(3; x)"), {QStringLiteral("x")}, {&c1}, true);
 	c2.updateFormula();
 	QCOMPARE(c2.rowCount(), 8);
-	VALUES_EQUAL(c2.valueAt(0), 1);
-	VALUES_EQUAL(c2.valueAt(1), -1);
-	VALUES_EQUAL(c2.valueAt(2), -1);
-	VALUES_EQUAL(c2.valueAt(3), -1);
-	VALUES_EQUAL(c2.valueAt(4), 3);
-	VALUES_EQUAL(c2.valueAt(5), 3);
-	VALUES_EQUAL(c2.valueAt(6), 3);
-	VALUES_EQUAL(c2.valueAt(7), -5);
+	VALUES_EQUAL(c2.valueAt(0), 1.);
+	VALUES_EQUAL(c2.valueAt(1), -1.);
+	VALUES_EQUAL(c2.valueAt(2), -1.);
+	VALUES_EQUAL(c2.valueAt(3), -1.);
+	VALUES_EQUAL(c2.valueAt(4), 3.);
+	VALUES_EQUAL(c2.valueAt(5), 3.);
+	VALUES_EQUAL(c2.valueAt(6), 3.);
+	VALUES_EQUAL(c2.valueAt(7), -5.);
 }
 
 void ColumnTest::testFormulasmmax() {
@@ -1223,7 +1223,7 @@ void ColumnTest::testFormulasMax() {
 void ColumnTest::testFormulasMean() {
 	const QVector<double> c1Vector = {1., -1., 8., 10., -5}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
 	SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)
-	COLUMN2_SET_FORMULA_AND_EVALUATE("mean(x)", 13. / 5)
+	COLUMN2_SET_FORMULA_AND_EVALUATE("mean(x)", 13. / 5.)
 }
 void ColumnTest::testFormulasMedian() {
 	const QVector<double> c1Vector = {1., -1., 8., 10., -5}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
@@ -1265,7 +1265,7 @@ void ColumnTest::testFormulasStatisticsMode() {
 	// }
 	// Mode(x)
 	SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)
-	COLUMN2_SET_FORMULA_AND_EVALUATE("mode(x)", qQNaN())
+	COLUMN2_SET_FORMULA_AND_EVALUATE("mode(x)", NAN)
 }
 void ColumnTest::testFormulasQuartile1() {
 	const QVector<double> c1Vector = {1., -1., 8., 10., -5}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
@@ -1282,7 +1282,7 @@ void ColumnTest::testFormulasIqr() {
 	const QVector<double> c1Vector = {1., -1., 8., 10., -5}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
 
 	SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)
-	COLUMN2_SET_FORMULA_AND_EVALUATE("iqr(x)", 9); // Calculated with R: IQR(x)
+	COLUMN2_SET_FORMULA_AND_EVALUATE("iqr(x)", 9.); // Calculated with R: IQR(x)
 }
 void ColumnTest::testFormulasPercentile1() {
 	const QVector<double> c1Vector = {1., -1., 8., 10., -5}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
