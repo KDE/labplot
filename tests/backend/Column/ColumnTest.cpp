@@ -1052,7 +1052,6 @@ void ColumnTest::testRemoveRow() {
 	QCOMPARE(rowsRemovedCounter, 3);
 }
 
-<<<<<<< HEAD
 void ColumnTest::testFormula() {
 	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
 	c1.replaceValues(-1, {1., 2., 3.});
