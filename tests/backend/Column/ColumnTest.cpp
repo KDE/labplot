@@ -1139,25 +1139,6 @@ void ColumnTest::testFormulaCellMulti() {
 		VALUES_EQUAL(c2.valueAt(i), -6);
 }
 
-void ColumnTest::testFormulaCellMultiSemikolon() {
-	QSKIP("cell with semikolon is not yet implemented");
-
-	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
-	c1.replaceValues(-1, {1., -1., 5.});
-
-	auto c3 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
-	c3.replaceValues(-1, {-5., 100., 3});
-
-	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
-	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17.});
-
-	c2.setFormula(QStringLiteral("cell(2; x) + cell(1; y)"), {QStringLiteral("x"), QStringLiteral("y")}, {&c1, &c3}, true);
-	c2.updateFormula();
-	QCOMPARE(c2.rowCount(), 7);
-	for (int i = 0; i < c2.rowCount(); i++)
-		VALUES_EQUAL(c2.valueAt(i), -6);
-}
-
 void ColumnTest::testFormulasmmin() {
 	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
 	c1.replaceValues(-1, {1., -1., 5., 5., 3., 8., 10., -5});

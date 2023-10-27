@@ -63,7 +63,6 @@ private Q_SLOTS:
 	void testFormulaCellInvalid();
 	void testFormulaCellConstExpression();
 	void testFormulaCellMulti();
-	void testFormulaCellMultiSemikolon();
 	void testFormulasmmin();
 	void testFormulasmmax();
 	void testFormulasma();
