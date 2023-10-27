@@ -162,8 +162,8 @@ void ColumnTest::statisticsDouble() {
 	QCOMPARE(stats.meanDeviation, 1.375);
 	QCOMPARE(stats.meanDeviationAroundMedian, 1.25);
 	QCOMPARE(stats.medianDeviation, 0.5);
-	QCOMPARE(stats.skewness, 0.621946425108);
-	QCOMPARE(stats.kurtosis, -1.7913399134667);
+	QCOMPARE(stats.skewness, 0.95754916255356);
+	QCOMPARE(stats.kurtosis, 2.1487290427258);
 	QCOMPARE(stats.entropy, 1.5);
 }
 void ColumnTest::statisticsDoubleNegative() {
@@ -197,8 +197,8 @@ void ColumnTest::statisticsDoubleNegative() {
 	QCOMPARE(stats.meanDeviation, 2.);
 	QCOMPARE(stats.meanDeviationAroundMedian, 2.);
 	QCOMPARE(stats.medianDeviation, 1.5);
-	QCOMPARE(stats.skewness, 0.323969548293623);
-	QCOMPARE(stats.kurtosis, -2.00892857142857);
+	QCOMPARE(stats.skewness, 0.49878374911084);
+	QCOMPARE(stats.kurtosis, 1.7619047619048);
 	QCOMPARE(stats.entropy, 2.);
 }
 void ColumnTest::statisticsDoubleBigNegative() {
@@ -232,8 +232,8 @@ void ColumnTest::statisticsDoubleBigNegative() {
 	QCOMPARE(stats.meanDeviation, 38.375);
 	QCOMPARE(stats.meanDeviationAroundMedian, 26.75);
 	QCOMPARE(stats.medianDeviation, 2.5);
-	QCOMPARE(stats.skewness, -0.746367760881076);
-	QCOMPARE(stats.kurtosis, -1.68988867569211);
+	QCOMPARE(stats.skewness, -1.1491083404244);
+	QCOMPARE(stats.kurtosis, 2.3290867987696);
 	QCOMPARE(stats.entropy, 2.);
 }
 void ColumnTest::statisticsDoubleZero() {
@@ -267,8 +267,8 @@ void ColumnTest::statisticsDoubleZero() {
 	QCOMPARE(stats.meanDeviation, 1.5);
 	QCOMPARE(stats.meanDeviationAroundMedian, 1.5);
 	QCOMPARE(stats.medianDeviation, 1.);
-	QCOMPARE(stats.skewness, 0.446377548104623);
-	QCOMPARE(stats.kurtosis, -1.875);
+	QCOMPARE(stats.skewness, 0.68724319348909);
+	QCOMPARE(stats.kurtosis, 2.);
 	QCOMPARE(stats.entropy, 2.);
 }
 
@@ -303,8 +303,8 @@ void ColumnTest::statisticsInt() {
 	QCOMPARE(stats.meanDeviation, 1.375);
 	QCOMPARE(stats.meanDeviationAroundMedian, 1.25);
 	QCOMPARE(stats.medianDeviation, 0.5);
-	QCOMPARE(stats.skewness, 0.621946425108);
-	QCOMPARE(stats.kurtosis, -1.7913399134667);
+	QCOMPARE(stats.skewness, 0.95754916255356);
+	QCOMPARE(stats.kurtosis, 2.1487290427258);
 	QCOMPARE(stats.entropy, 1.5);
 }
 void ColumnTest::statisticsIntNegative() {
@@ -338,8 +338,8 @@ void ColumnTest::statisticsIntNegative() {
 	QCOMPARE(stats.meanDeviation, 2.);
 	QCOMPARE(stats.meanDeviationAroundMedian, 2.);
 	QCOMPARE(stats.medianDeviation, 1.5);
-	QCOMPARE(stats.skewness, 0.323969548293623);
-	QCOMPARE(stats.kurtosis, -2.00892857142857);
+	QCOMPARE(stats.skewness, 0.49878374911084);
+	QCOMPARE(stats.kurtosis, 1.7619047619048);
 	QCOMPARE(stats.entropy, 2.);
 }
 void ColumnTest::statisticsIntBigNegative() {
@@ -373,8 +373,8 @@ void ColumnTest::statisticsIntBigNegative() {
 	QCOMPARE(stats.meanDeviation, 38.375);
 	QCOMPARE(stats.meanDeviationAroundMedian, 26.75);
 	QCOMPARE(stats.medianDeviation, 2.5);
-	QCOMPARE(stats.skewness, -0.746367760881076);
-	QCOMPARE(stats.kurtosis, -1.68988867569211);
+	QCOMPARE(stats.skewness, -1.1491083404244);
+	QCOMPARE(stats.kurtosis, 2.3290867987696);
 	QCOMPARE(stats.entropy, 2.);
 }
 void ColumnTest::statisticsIntZero() {
@@ -408,8 +408,8 @@ void ColumnTest::statisticsIntZero() {
 	QCOMPARE(stats.meanDeviation, 1.5);
 	QCOMPARE(stats.meanDeviationAroundMedian, 1.5);
 	QCOMPARE(stats.medianDeviation, 1.);
-	QCOMPARE(stats.skewness, 0.446377548104623);
-	QCOMPARE(stats.kurtosis, -1.875);
+	QCOMPARE(stats.skewness, 0.68724319348909);
+	QCOMPARE(stats.kurtosis, 2.);
 	QCOMPARE(stats.entropy, 2.);
 }
 void ColumnTest::statisticsIntOverflow() {
@@ -444,7 +444,7 @@ void ColumnTest::statisticsIntOverflow() {
 	QCOMPARE(stats.meanDeviationAroundMedian, 100000000);
 	QCOMPARE(stats.medianDeviation, 100000000);
 	QCOMPARE(stats.skewness, 0.);
-	QCOMPARE(stats.kurtosis, -2.0775);
+	QCOMPARE(stats.kurtosis, 1.64);
 	QCOMPARE(stats.entropy, 2.);
 }
 void ColumnTest::statisticsBigInt() {
@@ -480,8 +480,8 @@ void ColumnTest::statisticsBigInt() {
 	QCOMPARE(stats.meanDeviation, 5250000000);
 	QCOMPARE(stats.meanDeviationAroundMedian, 5250000000);
 	QCOMPARE(stats.medianDeviation, 5000000000);
-	QCOMPARE(stats.skewness, -0.0683349251790571);
-	QCOMPARE(stats.kurtosis, -1.87918466941373);
+	QCOMPARE(stats.skewness, -0.10520849985915);
+	QCOMPARE(stats.kurtosis, 1.9925605877089);
 	QCOMPARE(stats.entropy, 2.);
 #endif
 }
@@ -1257,7 +1257,7 @@ void ColumnTest::testFormulasStdev() {
 void ColumnTest::testFormulasVar() {
 	const QVector<double> c1Vector = {1., -1., 8., 10., -5}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
 	SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)
-	COLUMN2_SET_FORMULA_AND_EVALUATE("stdev(x)", 39.3) // calculated with octave "var"
+	COLUMN2_SET_FORMULA_AND_EVALUATE("var(x)", 39.3) // calculated with octave "var"
 }
 void ColumnTest::testFormulasGm() {
 	const QVector<double> c1Vector = {1., 100., 8., 10., 3}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
@@ -1284,7 +1284,7 @@ void ColumnTest::testFormulasStatisticsMode() {
 	// }
 	// Mode(x)
 	SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)
-	COLUMN2_SET_FORMULA_AND_EVALUATE("chm(x)", 1.)
+	COLUMN2_SET_FORMULA_AND_EVALUATE("mode(x)", 1.)
 }
 void ColumnTest::testFormulasQuartile1() {
 	const QVector<double> c1Vector = {1., -1., 8., 10., -5}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
@@ -1367,13 +1367,13 @@ void ColumnTest::testFormulasSkew() {
 	const QVector<double> c1Vector = {1., -1., 8., 10., -5}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
 
 	SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)
-	COLUMN2_SET_FORMULA_AND_EVALUATE("skew(x)", 0.08277344); // Calculated with R: skewness(x)
+	COLUMN2_SET_FORMULA_AND_EVALUATE("skew(x)", 0.082773441985478); // Calculated with R: skewness(x)
 }
 void ColumnTest::testFormulasKurt() {
 	const QVector<double> c1Vector = {1., -1., 8., 10., -5}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
 
 	SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)
-	COLUMN2_SET_FORMULA_AND_EVALUATE("kurt(x)", 1.489103); // Calculated with R: kurtosis(x)
+	COLUMN2_SET_FORMULA_AND_EVALUATE("kurt(x)", 1.4891031991143); // Calculated with R: kurtosis(x)
 }
 void ColumnTest::testFormulasEntropy() {
 	const QVector<double> c1Vector = {1.0, 0.0, 2.0, 5.0}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
