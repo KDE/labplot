@@ -2766,6 +2766,8 @@ void ColumnPrivate::calculateStatistics() {
 		centralMoment_r4 += gsl_pow_4(val - statistics.arithmeticMean);
 	}
 
+	double centralMoment_r2 = statistics.variance / notNanCount;
+
 	// normalize
 	statistics.variance = (notNanCount != 1) ? statistics.variance / (notNanCount - 1) : NAN;
 	statistics.meanDeviationAroundMedian = statistics.meanDeviationAroundMedian / notNanCount;
@@ -2779,10 +2781,10 @@ void ColumnPrivate::calculateStatistics() {
 	statistics.medianDeviation = gsl_stats_quantile_from_sorted_data(absoluteMedianList.data(), 1, notNanCount, 0.50);
 
 	// skewness and kurtosis
-	centralMoment_r3 = centralMoment_r3 / notNanCount;
-	centralMoment_r4 = centralMoment_r4 / notNanCount;
-	statistics.skewness = centralMoment_r3 / gsl_pow_3(statistics.standardDeviation);
-	statistics.kurtosis = (centralMoment_r4 / gsl_pow_4(statistics.standardDeviation)) - 3.0;
+	centralMoment_r3 /= notNanCount;
+	centralMoment_r4 /= notNanCount;
+	statistics.skewness = centralMoment_r3 / gsl_pow_2(std::sqrt(centralMoment_r2));
+	statistics.kurtosis = centralMoment_r4 / gsl_pow_2(centralMoment_r2);
 
 	// entropy
 	double entropy = 0.;
