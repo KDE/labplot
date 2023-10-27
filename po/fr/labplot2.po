@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-07-10 02:40+0000\n"
-"PO-Revision-Date: 2023-07-06 21:37+0200\n"
+"PO-Revision-Date: 2023-10-25 14:36+0200\n"
 "Last-Translator: Xavier BESNARD <xavier.besnard@neuf.fr>\n"
 "Language-Team: fr\n"
 "Language: fr\n"
@@ -10511,7 +10511,7 @@ msgstr ""
 #, kde-format
 msgid "Custom column names, space separated. E.g. \"x y\""
 msgstr ""
-"Noms personnalisés de colonne , espacés par un espace, par exemple, « X Y »"
+"Noms personnalisés de colonne, espacés par un espace, par exemple, « X Y »"
 
 #: src/kdefrontend/datasources/BinaryOptionsWidget.cpp:29
 #, kde-format
