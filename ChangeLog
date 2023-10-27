@@ -28,6 +28,7 @@ New features:
 
 Performance improvements:
 	* Make baseline removal much faster by using Eigen3 library (optional dependency)
+	* Refactor formula parsing including better error handling
 
 Bug fixes:
 	* Set mousemode to selection when leaving the plot (Issue #614)
