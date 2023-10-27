@@ -222,7 +222,6 @@ void ExpressionParserTest::testequalEpsilon() {
 	QCOMPARE(fnct(-5.11, -5.3, 0.2), 1);
 }
 
-<<<<<<< HEAD
 void ExpressionParserTest::testevaluateCartesian() {
 	const QString expr = QStringLiteral("x+y");
 	const QStringList vars = {QStringLiteral("x"), QStringLiteral("y")};
