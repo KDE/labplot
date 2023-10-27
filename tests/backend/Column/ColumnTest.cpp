@@ -1052,6 +1052,7 @@ void ColumnTest::testRemoveRow() {
 	QCOMPARE(rowsRemovedCounter, 3);
 }
 
+<<<<<<< HEAD
 void ColumnTest::testFormula() {
 	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
 	c1.replaceValues(-1, {1., 2., 3.});
@@ -1376,6 +1377,62 @@ void ColumnTest::testFormulasPercentile() {
 
 	SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)
 	COLUMN2_SET_FORMULA_AND_EVALUATE("percentile(30;x)", -0.6); // Calculated with R: quantile(x, 30/100)
+}
+
+void ColumnTest::clearContentNoFormula() {
+	Project project;
+	auto* c = new Column(QStringLiteral("Test"), Column::ColumnMode::Double);
+	project.addChild(c);
+	c->resizeTo(100);
+	QCOMPARE(c->rowCount(), 100);
+
+	for (int i = 0; i < c->rowCount(); i++)
+		c->setValueAt(i, i);
+
+	QCOMPARE(c->rowCount(), 100);
+	for (int i = 0; i < c->rowCount(); i++)
+		QCOMPARE(c->valueAt(i), i);
+
+	c->clear();
+
+	QCOMPARE(c->rowCount(), 100);
+	for (int i = 0; i < c->rowCount(); i++)
+		QCOMPARE(c->valueAt(i), NAN);
+}
+
+void ColumnTest::clearContentFormula() {
+	Project project;
+	auto* c = new Column(QStringLiteral("Test"), Column::ColumnMode::Double);
+	project.addChild(c);
+	c->resizeTo(100);
+	QCOMPARE(c->rowCount(), 100);
+
+	for (int i = 0; i < c->rowCount(); i++)
+		c->setValueAt(i, i);
+
+	QCOMPARE(c->rowCount(), 100);
+	for (int i = 0; i < c->rowCount(); i++)
+		QCOMPARE(c->valueAt(i), i);
+
+	c->setFormula(QStringLiteral("x"), {QStringLiteral("zet")}, {c}, true);
+	c->clear();
+
+	QCOMPARE(c->rowCount(), 100);
+	for (int i = 0; i < c->rowCount(); i++)
+		QCOMPARE(c->valueAt(i), NAN);
+
+	QCOMPARE(c->formula().isEmpty(), true);
+
+	c->undoStack()->undo();
+
+	QCOMPARE(c->rowCount(), 100);
+	for (int i = 0; i < c->rowCount(); i++)
+		QCOMPARE(c->valueAt(i), i);
+
+	QCOMPARE(c->formula(), QStringLiteral("x"));
+	QCOMPARE(c->formulaData().count(), 1);
+	QCOMPARE(c->formulaData().at(0).column(), c);
+	QCOMPARE(c->formulaData().at(0).variableName(), QStringLiteral("zet"));
 }
 
 QTEST_MAIN(ColumnTest)

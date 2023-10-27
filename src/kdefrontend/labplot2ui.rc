@@ -74,7 +74,8 @@
 	<Action name="import_opj" />
 </Menu>
 <Action name="export" />
-<Action name="project" />
+<Separator/>
+<Action name="share" />
 </Menu>
 <Menu name="edit"><text>&amp;Edit</text>
 	<Action name="undo" />

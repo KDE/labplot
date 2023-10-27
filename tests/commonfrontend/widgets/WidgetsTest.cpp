@@ -17,6 +17,7 @@
 #include "src/kdefrontend/dockwidgets/CartesianPlotDock.h"
 
 #include <QLineEdit>
+#include <QLocale>
 
 void WidgetsTest::numberSpinBoxProperties() {
 	{
@@ -1173,6 +1174,92 @@ void WidgetsTest::numberSpinBoxDecimalsMinMax() {
 
 	sb.setMinimum(1.289343892e-15);
 	QCOMPARE(sb.minimum(), 1.289343892e-15); // not rounded!
+}
+
+void WidgetsTest::thousandSeparator() {
+	NumberSpinBox sb;
+	sb.setLocale(QLocale(QLocale::German));
+	QCOMPARE(sb.locale().decimalPoint(), QLatin1Char(','));
+	QCOMPARE(sb.locale().groupSeparator(), QLatin1Char('.'));
+
+	sb.setValue(50000);
+	QCOMPARE(sb.text(), QStringLiteral("50.000"));
+
+	sb.lineEdit()->setCursorPosition(0);
+	QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_1, Qt::KeyboardModifier::NoModifier, QStringLiteral("1"));
+	sb.keyPressEvent(&event);
+
+	QCOMPARE(sb.value(), 150000);
+	QCOMPARE(sb.text(), QStringLiteral("150.000"));
+}
+
+void WidgetsTest::thousandSeparatorNegative() {
+	NumberSpinBox sb;
+	sb.setLocale(QLocale(QLocale::German));
+	QCOMPARE(sb.locale().decimalPoint(), QLatin1Char(','));
+	QCOMPARE(sb.locale().groupSeparator(), QLatin1Char('.'));
+
+	sb.setValue(-50000.1);
+	QCOMPARE(sb.text(), QStringLiteral("-50.000,1"));
+
+	sb.lineEdit()->setCursorPosition(0);
+	QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_Delete, Qt::KeyboardModifier::NoModifier);
+	sb.keyPressEvent(&event);
+
+	QCOMPARE(sb.value(), 50000.1);
+	QCOMPARE(sb.text(), QStringLiteral("50.000,1"));
+}
+
+void WidgetsTest::thousandSeparatorScrolling() {
+	NumberSpinBox sb;
+	sb.setLocale(QLocale(QLocale::German));
+	QCOMPARE(sb.locale().decimalPoint(), QLatin1Char(','));
+	QCOMPARE(sb.locale().groupSeparator(), QLatin1Char('.'));
+
+	sb.setValue(90000.1);
+	QCOMPARE(sb.text(), QStringLiteral("90.000,1"));
+
+	sb.lineEdit()->setCursorPosition(1);
+	QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_Up, Qt::KeyboardModifier::NoModifier);
+	sb.keyPressEvent(&event);
+
+	QCOMPARE(sb.value(), 100000.1);
+	QCOMPARE(sb.text(), QStringLiteral("100.000,1"));
+}
+
+void WidgetsTest::thousandSeparatorScrolling2() {
+	NumberSpinBox sb;
+	sb.setLocale(QLocale(QLocale::German));
+	QCOMPARE(sb.locale().decimalPoint(), QLatin1Char(','));
+	QCOMPARE(sb.locale().groupSeparator(), QLatin1Char('.'));
+
+	sb.setValue(24000.1);
+	QCOMPARE(sb.text(), QStringLiteral("24.000,1"));
+
+	sb.lineEdit()->setCursorPosition(2);
+	QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_Up, Qt::KeyboardModifier::NoModifier);
+	sb.keyPressEvent(&event);
+
+	QCOMPARE(sb.value(), 25000.1);
+	QCOMPARE(sb.text(), QStringLiteral("25.000,1"));
+}
+
+void WidgetsTest::thousandSeparatorScrollingSeparatorPosition() {
+	QSKIP("Undecided what to do");
+	NumberSpinBox sb;
+	sb.setLocale(QLocale(QLocale::German));
+	QCOMPARE(sb.locale().decimalPoint(), QLatin1Char(','));
+	QCOMPARE(sb.locale().groupSeparator(), QLatin1Char('.'));
+
+	sb.setValue(50000);
+	QCOMPARE(sb.text(), QStringLiteral("50.000"));
+
+	sb.lineEdit()->setCursorPosition(3);
+	QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_Up, Qt::KeyboardModifier::NoModifier);
+	sb.keyPressEvent(&event);
+
+	QCOMPARE(sb.value(), 50000);
+	QCOMPARE(sb.text(), QStringLiteral("50.000"));
 }
 
 QTEST_MAIN(WidgetsTest)

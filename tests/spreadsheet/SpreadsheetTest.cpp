@@ -3281,4 +3281,48 @@ void SpreadsheetTest::testNaming() {
 	}
 }
 
+void SpreadsheetTest::testClearColumns() {
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+
+	new SpreadsheetModel(sheet);
+
+	sheet->setColumnCount(3);
+	QCOMPARE(sheet->columnCount(), 3);
+	sheet->setRowCount(10);
+
+	auto* c0 = sheet->column(0);
+	auto* c1 = sheet->column(1);
+	auto* c2 = sheet->column(2);
+
+	for (int i = 0; i < 10; i++) {
+		c0->setValueAt(i, i);
+		c1->setValueAt(i, 2. * i + 3.);
+		c2->setValueAt(i, pow(i, 3.));
+	}
+
+	for (int i = 0; i < 10; i++) {
+		QCOMPARE(c0->valueAt(i), i);
+		QCOMPARE(c1->valueAt(i), 2. * i + 3.);
+		QCOMPARE(c2->valueAt(i), pow(i, 3.));
+	}
+
+	sheet->clear({c0, c2});
+
+	for (int i = 0; i < 10; i++) {
+		QCOMPARE(c0->valueAt(i), NAN);
+		QCOMPARE(c1->valueAt(i), 2. * i + 3.);
+		QCOMPARE(c2->valueAt(i), NAN);
+	}
+
+	sheet->undoStack()->undo();
+
+	for (int i = 0; i < 10; i++) {
+		QCOMPARE(c0->valueAt(i), i);
+		QCOMPARE(c1->valueAt(i), 2. * i + 3.);
+		QCOMPARE(c2->valueAt(i), pow(i, 3.));
+	}
+}
+
 QTEST_MAIN(SpreadsheetTest)

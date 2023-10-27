@@ -117,6 +117,8 @@ private Q_SLOTS:
 
 	void testNaming();
 
+	void testClearColumns();
+
 private:
 	Spreadsheet* createSearchReplaceSpreadsheet();
 };

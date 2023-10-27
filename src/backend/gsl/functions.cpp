@@ -759,6 +759,7 @@ struct funs _functions[] = {
 
 	// Logarithm and Related Functions
 	{i18n("Logarithm"), "log", (func_t)gsl_sf_log, 1, nullptr, FunctionGroups::LogarithmAndRelatedFunctions},
+	{i18n("Base 2 logarithm"), "log2", (func_t) static_cast<double (*)(double)>(&log2), 1, nullptr, FunctionGroups::LogarithmAndRelatedFunctions},
 	{i18n("Logarithm of the magnitude"), "logabs", (func_t)gsl_sf_log_abs, 1, nullptr, FunctionGroups::LogarithmAndRelatedFunctions},
 	{QStringLiteral("log(1+x)"), "logp", (func_t)gsl_sf_log_1plusx, 1, nullptr, FunctionGroups::LogarithmAndRelatedFunctions},
 	{QStringLiteral("log(1+x) - x"), "logpm", (func_t)gsl_sf_log_1plusx_mx, 1, nullptr, FunctionGroups::LogarithmAndRelatedFunctions},

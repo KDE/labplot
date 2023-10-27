@@ -11,6 +11,7 @@
 #include "AxisPrivate.h"
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/Project.h"
+#include "backend/core/Time.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
@@ -1416,10 +1417,23 @@ void AxisPrivate::retransformTicks() {
 	double majorTicksIncrement = 0;
 	int tmpMajorTicksNumber = 0;
 	double start{range.start()}, end{range.end()};
-	if (majorTicksStartType == Axis::TicksStartType::Absolute)
+	if (majorTicksStartType == Axis::TicksStartType::Absolute) {
 		start = majorTickStartValue;
-	else if (majorTicksStartType == Axis::TicksStartType::Offset)
-		start += majorTickStartOffset;
+
+	} else if (majorTicksStartType == Axis::TicksStartType::Offset) {
+		if (q->isNumeric())
+			start += majorTickStartOffset;
+		else {
+			auto startDt = QDateTime::fromMSecsSinceEpoch(start, Qt::UTC);
+			startDt.setTimeSpec(Qt::TimeSpec::UTC);
+			const auto& dt = DateTime::dateTime(majorTickStartOffset);
+			startDt = startDt.addYears(dt.year);
+			startDt = startDt.addMonths(dt.month);
+			startDt = startDt.addDays(dt.day);
+			startDt = startDt.addMSecs(DateTime::milliseconds(dt.hour, dt.minute, dt.second, dt.millisecond));
+			start = startDt.toMSecsSinceEpoch();
+		}
+	}
 	QDEBUG(Q_FUNC_INFO << ", ticks type = " << majorTicksType)
 	switch (majorTicksType) {
 	case Axis::TicksType::TotalNumber: // total number of major ticks is given - > determine the increment
@@ -1460,33 +1474,37 @@ void AxisPrivate::retransformTicks() {
 		// the increment of the major ticks is given -> determine the number
 		// TODO: majorTicksSpacing == 0?
 		majorTicksIncrement = majorTicksSpacing * GSL_SIGN(end - start);
-		switch (range.scale()) {
-		case RangeT::Scale::Linear:
-			tmpMajorTicksNumber = std::round(range.size() / majorTicksIncrement + 1);
-			break;
-		case RangeT::Scale::Log10:
-			if (start != 0. && end / start > 0.)
-				tmpMajorTicksNumber = std::round(log10(end / start) / majorTicksIncrement + 1);
-			break;
-		case RangeT::Scale::Log2:
-			if (start != 0. && end / start > 0.)
-				tmpMajorTicksNumber = std::round(log2(end / start) / majorTicksIncrement + 1);
-			break;
-		case RangeT::Scale::Ln:
-			if (start != 0. && end / start > 0.)
-				tmpMajorTicksNumber = std::round(std::log(end / start) / majorTicksIncrement + 1);
-			break;
-		case RangeT::Scale::Sqrt:
-			if (start >= 0. && end >= 0.)
-				tmpMajorTicksNumber = std::round((std::sqrt(end) - std::sqrt(start)) / majorTicksIncrement + 1);
-			break;
-		case RangeT::Scale::Square:
-			tmpMajorTicksNumber = std::round((end * end - start * start) / majorTicksIncrement + 1);
-			break;
-		case RangeT::Scale::Inverse:
-			if (start != 0. && end != 0.)
-				tmpMajorTicksNumber = std::round((1. / start - 1. / end) / majorTicksIncrement + 1);
-			break;
+		if (q->isNumeric() || (!q->isNumeric() && range.scale() != RangeT::Scale::Linear)) {
+			switch (range.scale()) {
+			case RangeT::Scale::Linear:
+				tmpMajorTicksNumber = std::round(range.size() / majorTicksIncrement + 1);
+				break;
+			case RangeT::Scale::Log10:
+				if (start != 0. && end / start > 0.)
+					tmpMajorTicksNumber = std::round(log10(end / start) / majorTicksIncrement + 1);
+				break;
+			case RangeT::Scale::Log2:
+				if (start != 0. && end / start > 0.)
+					tmpMajorTicksNumber = std::round(log2(end / start) / majorTicksIncrement + 1);
+				break;
+			case RangeT::Scale::Ln:
+				if (start != 0. && end / start > 0.)
+					tmpMajorTicksNumber = std::round(std::log(end / start) / majorTicksIncrement + 1);
+				break;
+			case RangeT::Scale::Sqrt:
+				if (start >= 0. && end >= 0.)
+					tmpMajorTicksNumber = std::round((std::sqrt(end) - std::sqrt(start)) / majorTicksIncrement + 1);
+				break;
+			case RangeT::Scale::Square:
+				tmpMajorTicksNumber = std::round((end * end - start * start) / majorTicksIncrement + 1);
+				break;
+			case RangeT::Scale::Inverse:
+				if (start != 0. && end != 0.)
+					tmpMajorTicksNumber = std::round((1. / start - 1. / end) / majorTicksIncrement + 1);
+				break;
+			}
+		} else {
+			// Datetime with linear spacing: Calculation will be done directly where the majorTickPos will be calculated
 		}
 		break;
 	case Axis::TicksType::CustomColumn:
@@ -1557,7 +1575,16 @@ void AxisPrivate::retransformTicks() {
 	bool valid = true;
 	center = q->cSystem->mapLogicalToScene(center, valid);
 
-	for (int iMajor = 0; iMajor < tmpMajorTicksNumber; iMajor++) {
+	const bool dateTimeSpacing = !q->isNumeric() && range.scale() == RangeT::Scale::Linear && majorTicksType == Axis::TicksType::Spacing;
+	DateTime::DateTime dt;
+	QDateTime majorTickPosDateTime;
+	if (dateTimeSpacing) {
+		dt = DateTime::dateTime(majorTicksSpacing);
+		majorTickPosDateTime = QDateTime::fromMSecsSinceEpoch(start, Qt::UTC);
+	}
+	const auto dtValid = majorTickPosDateTime.isValid();
+
+	for (int iMajor = 0; iMajor < tmpMajorTicksNumber || (dateTimeSpacing && dtValid); iMajor++) {
 		//		DEBUG(Q_FUNC_INFO << ", major tick " << iMajor)
 		qreal majorTickPos = 0.0;
 		qreal nextMajorTickPos = 0.0;
@@ -1597,38 +1624,53 @@ void AxisPrivate::retransformTicks() {
 			}
 
 		} else {
-			switch (range.scale()) {
-			case RangeT::Scale::Linear:
-				//				DEBUG(Q_FUNC_INFO << ", start = " << start << ", incr = " << majorTicksIncrement << ", i = " << iMajor)
-				majorTickPos = start + majorTicksIncrement * iMajor;
-				if (std::abs(majorTickPos) < 1.e-15 * majorTicksIncrement) // avoid rounding errors when close to zero
-					majorTickPos = 0;
-				nextMajorTickPos = majorTickPos + majorTicksIncrement;
-				break;
-			case RangeT::Scale::Log10:
-				majorTickPos = start * std::pow(10, majorTicksIncrement * iMajor);
-				nextMajorTickPos = majorTickPos * std::pow(10, majorTicksIncrement);
-				break;
-			case RangeT::Scale::Log2:
-				majorTickPos = start * std::exp2(majorTicksIncrement * iMajor);
-				nextMajorTickPos = majorTickPos * exp2(majorTicksIncrement);
-				break;
-			case RangeT::Scale::Ln:
-				majorTickPos = start * std::exp(majorTicksIncrement * iMajor);
-				nextMajorTickPos = majorTickPos * exp(majorTicksIncrement);
-				break;
-			case RangeT::Scale::Sqrt:
-				majorTickPos = std::pow(std::sqrt(start) + majorTicksIncrement * iMajor, 2);
-				nextMajorTickPos = std::pow(std::sqrt(start) + majorTicksIncrement * (iMajor + 1), 2);
-				break;
-			case RangeT::Scale::Square:
-				majorTickPos = std::sqrt(start * start + majorTicksIncrement * iMajor);
-				nextMajorTickPos = std::sqrt(start * start + majorTicksIncrement * (iMajor + 1));
-				break;
-			case RangeT::Scale::Inverse:
-				majorTickPos = 1. / (1. / start + majorTicksIncrement * iMajor);
-				nextMajorTickPos = 1. / (1. / start + majorTicksIncrement * (iMajor + 1));
-				break;
+			if (!dateTimeSpacing) {
+				switch (range.scale()) {
+				case RangeT::Scale::Linear:
+					//				DEBUG(Q_FUNC_INFO << ", start = " << start << ", incr = " << majorTicksIncrement << ", i = " << iMajor)
+					majorTickPos = start + majorTicksIncrement * iMajor;
+					if (std::abs(majorTickPos) < 1.e-15 * majorTicksIncrement) // avoid rounding errors when close to zero
+						majorTickPos = 0;
+					nextMajorTickPos = majorTickPos + majorTicksIncrement;
+					break;
+				case RangeT::Scale::Log10:
+					majorTickPos = start * std::pow(10, majorTicksIncrement * iMajor);
+					nextMajorTickPos = majorTickPos * std::pow(10, majorTicksIncrement);
+					break;
+				case RangeT::Scale::Log2:
+					majorTickPos = start * std::exp2(majorTicksIncrement * iMajor);
+					nextMajorTickPos = majorTickPos * exp2(majorTicksIncrement);
+					break;
+				case RangeT::Scale::Ln:
+					majorTickPos = start * std::exp(majorTicksIncrement * iMajor);
+					nextMajorTickPos = majorTickPos * exp(majorTicksIncrement);
+					break;
+				case RangeT::Scale::Sqrt:
+					majorTickPos = std::pow(std::sqrt(start) + majorTicksIncrement * iMajor, 2);
+					nextMajorTickPos = std::pow(std::sqrt(start) + majorTicksIncrement * (iMajor + 1), 2);
+					break;
+				case RangeT::Scale::Square:
+					majorTickPos = std::sqrt(start * start + majorTicksIncrement * iMajor);
+					nextMajorTickPos = std::sqrt(start * start + majorTicksIncrement * (iMajor + 1));
+					break;
+				case RangeT::Scale::Inverse:
+					majorTickPos = 1. / (1. / start + majorTicksIncrement * iMajor);
+					nextMajorTickPos = 1. / (1. / start + majorTicksIncrement * (iMajor + 1));
+					break;
+				}
+			} else {
+				// Datetime Linear
+				if (iMajor == 0)
+					majorTickPos = start;
+				else {
+					majorTickPosDateTime = majorTickPosDateTime.addYears(dt.year);
+					majorTickPosDateTime = majorTickPosDateTime.addMonths(dt.month);
+					majorTickPosDateTime = majorTickPosDateTime.addDays(dt.day);
+					majorTickPosDateTime = majorTickPosDateTime.addMSecs(DateTime::milliseconds(dt.hour, dt.minute, dt.second, dt.millisecond));
+					majorTickPos = majorTickPosDateTime.toMSecsSinceEpoch();
+				}
+				if (majorTickPos > end || iMajor > 1000)
+					break; // Finish
 			}
 		}
 

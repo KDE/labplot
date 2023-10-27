@@ -40,6 +40,16 @@ private Q_SLOTS:
 	void columnLabelValues();
 
 	void customTextLabels();
+
+	void dateTime();
+	void dateTimeSpacing();
+	void dateTimeSpacingOffsetNonZero();
+	void dateTimeSpacingStartValueNonZero();
+
+	void numeric();
+	void numericSpacing();
+	void numericSpacingOffsetNonZero();
+	void numericSpacingStartValueNonZero();
 };
 
 #endif // WORKSHEETELEMENTTEST_H

@@ -3,6 +3,7 @@ New features:
 	* [general]
 		* New application theme "Dracula"
 		* New option in the application settings to run a selected CAS engine at startup
+		* Share the project via email, Nextcloud, etc. directly from the main menu
 	* [worksheet]
 		* Add possibility to use column labels as axis ticks
 		* New visualization types:
@@ -17,6 +18,8 @@ New features:
 		* Remove/mask rows with missing values
 		* Allow to sort the whole spreadsheet even if one single column was selected, use it rather as the key sort column
 		* When generating values via a mathematical expression ("generate function values"), allow to use variables in CAS-notebooks as source columns
+		* Generatation of equidistant values: support for Date&Time and integer columns
+		* Generatation of equidistant values: allow to fix the number of values and the increment at the same time
 	* [notebook]
 		* Export to PDF
 		* "Configure CAS" in the menu to create a new notebook to directly allow the user to enable new backends in case not done yet

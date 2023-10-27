@@ -82,6 +82,17 @@
 #endif
 #endif
 
+#ifdef HAVE_PURPOSE
+#include <Purpose/AlternativesModel>
+#include <purpose_version.h>
+#if PURPOSE_VERSION >= QT_VERSION_CHECK(5, 104, 0)
+#include <Purpose/Menu>
+#else
+#include <PurposeWidgets/Menu>
+#endif
+#include <QMimeType>
+#endif
+
 #include <DockManager.h>
 
 #ifdef HAVE_TOUCHBAR
@@ -748,6 +759,11 @@ void MainWin::initActions() {
 	actionCollection()->addAction(QLatin1String("export"), m_exportAction);
 	connect(m_exportAction, &QAction::triggered, this, &MainWin::exportDialog);
 
+#ifdef HAVE_PURPOSE
+	m_shareAction = new QAction(QIcon::fromTheme(QLatin1String("document-share")), i18n("Share"), this);
+	actionCollection()->addAction(QLatin1String("share"), m_shareAction);
+#endif
+
 	// Tools
 	auto* action = new QAction(QIcon::fromTheme(QLatin1String("color-management")), i18n("Color Maps Browser"), this);
 	action->setWhatsThis(i18n("Open dialog to browse through the available color maps."));
@@ -886,6 +902,13 @@ void MainWin::initActions() {
 }
 
 void MainWin::initMenus() {
+#ifdef HAVE_PURPOSE
+	m_shareMenu = new Purpose::Menu();
+	m_shareMenu->model()->setPluginType(QStringLiteral("Export"));
+	connect(m_shareMenu, &Purpose::Menu::finished, this, &MainWin::shareActionFinished);
+	m_shareAction->setMenu(m_shareMenu);
+#endif
+
 	// add the actions to toggle the status bar and the project and properties explorer widgets to the "View" menu.
 	// this menu is created automatically when the default "full screen" action is created in initActions().
 	auto* menu = dynamic_cast<QMenu*>(factory()->container(QLatin1String("view"), this));
@@ -1075,6 +1098,9 @@ void MainWin::updateGUIOnProjectChanges(const QByteArray& windowState) {
 	m_importOpjAction->setEnabled(hasProject);
 #endif
 	m_importDatasetAction->setEnabled(hasProject);
+#ifdef HAVE_PURPOSE
+	m_shareAction->setEnabled(hasProject);
+#endif
 	m_newFolderAction->setEnabled(hasProject);
 	m_newWorkbookAction->setEnabled(hasProject);
 	m_newSpreadsheetAction->setEnabled(hasProject);
@@ -1461,6 +1487,9 @@ bool MainWin::newProject() {
 
 	updateGUIOnProjectChanges();
 	m_newProjectAction->setEnabled(false);
+#ifdef HAVE_PURPOSE
+	m_shareAction->setEnabled(false); // sharing is only possible after the project was saved to a file
+#endif
 
 	m_guiObserver = new GuiObserver(this); // initialize after all docks were createad
 	m_guiObserver->selectedAspectsChanged({static_cast<AbstractAspect*>(m_project)}); // Trigger showing properties
@@ -1705,7 +1734,9 @@ void MainWin::openProject(const QString& filename) {
 		updateDockWindowVisibility();
 	m_saveAction->setEnabled(false);
 	m_newProjectAction->setEnabled(true);
-
+#ifdef HAVE_PURPOSE
+	fillShareMenu();
+#endif
 	statusBar()->showMessage(i18n("Project successfully opened (in %1 seconds).", (float)timer.elapsed() / 1000));
 
 	KConfigGroup group = Settings::group(QStringLiteral("MainWin"));
@@ -1911,6 +1942,11 @@ bool MainWin::save(const QString& fileName) {
 	}
 
 	delete file;
+
+#ifdef HAVE_PURPOSE
+	m_shareAction->setEnabled(true); // sharing is possible after the project was saved to a file
+	fillShareMenu();
+#endif
 
 	RESET_CURSOR;
 	return ok;
@@ -2512,6 +2548,35 @@ void MainWin::focusCursorDock() {
 		m_DockManager->setDockWidgetFocused(cursorDock);
 	}
 }
+
+#ifdef HAVE_PURPOSE
+void MainWin::fillShareMenu() {
+	if (!m_shareMenu)
+		return;
+
+	m_shareMenu->clear(); // clear the menu, it will be refilled with the new file URL below
+	QMimeType mime;
+	m_shareMenu->model()->setInputData(
+		QJsonObject{{QStringLiteral("mimeType"), mime.name()}, {QStringLiteral("urls"), QJsonArray{QUrl::fromLocalFile(m_project->fileName()).toString()}}});
+	m_shareMenu->reload();
+}
+
+void MainWin::shareActionFinished(const QJsonObject& output, int error, const QString& message) {
+	if (error)
+		KMessageBox::error(this, i18n("There was a problem sharing the project: %1", message), i18n("Share"));
+	else {
+		const QString url = output[QStringLiteral("url")].toString();
+		if (url.isEmpty())
+			statusBar()->showMessage(i18n("Project shared successfully"));
+		else
+			KMessageBox::information(widget(),
+									 i18n("You can find the shared project at: <a href=\"%1\">%1</a>", url),
+									 i18n("Share"),
+									 QString(),
+									 KMessageBox::Notify | KMessageBox::AllowLink);
+	}
+}
+#endif
 
 void MainWin::toggleFullScreen(bool t) {
 	m_toggleFullScreenAction->setFullScreen(this, t);

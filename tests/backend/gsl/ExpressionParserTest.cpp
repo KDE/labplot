@@ -3,6 +3,17 @@
 #include "backend/gsl/functions.h"
 
 namespace {
+func_t1 getFunction1(const QString& s) {
+	const QString functionName(s);
+	for (int i = 0; i < _number_functions; i++) {
+		if (functionName == QLatin1String(_functions[i].name)) {
+			if (_functions[i].argc == 1)
+				return (func_t1)_functions[i].fnct;
+		}
+	}
+	return nullptr;
+}
+
 func_t2 getFunction2(const QString& s) {
 	const QString functionName(s);
 	for (int i = 0; i < _number_functions; i++) {
@@ -211,6 +222,7 @@ void ExpressionParserTest::testequalEpsilon() {
 	QCOMPARE(fnct(-5.11, -5.3, 0.2), 1);
 }
 
+<<<<<<< HEAD
 void ExpressionParserTest::testevaluateCartesian() {
 	const QString expr = QStringLiteral("x+y");
 	const QStringList vars = {QStringLiteral("x"), QStringLiteral("y")};
@@ -280,6 +292,14 @@ void ExpressionParserTest::testIsValid() {
 	const QStringList vars = {QStringLiteral("x")};
 
 	QCOMPARE(ExpressionParser::isValid(expr, vars), true); // should not crash
+}
+
+void ExpressionParserTest::testLog2() {
+	auto fnct = getFunction1(QStringLiteral("log2"));
+	QVERIFY(fnct);
+
+	QCOMPARE(fnct(2), 1);
+	QCOMPARE(fnct(10), 3.32192809489);
 }
 
 QTEST_MAIN(ExpressionParserTest)

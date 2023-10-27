@@ -98,6 +98,9 @@ private Q_SLOTS:
 	void testFormulasEntropy();
 	void testFormulasQuantile();
 	void testFormulasPercentile();
+
+	void clearContentNoFormula();
+	void clearContentFormula();
 };
 
 #endif // COLUMNTEST_H
