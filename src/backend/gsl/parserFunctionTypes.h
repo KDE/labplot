@@ -12,7 +12,7 @@
 
 #include <memory>
 
-class Payload;
+struct Payload;
 
 /* Function types */
 #ifdef _MSC_VER /* MSVC needs void argument */
