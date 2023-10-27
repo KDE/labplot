@@ -35,6 +35,7 @@ Bug fixes:
 	* Fix wrong axis tick type used (Issue #571)
 	* Fix wrong infoelement position when removing active curve (Issue #666)
 	* Fix copying Elements (Issue #622)
+	* Fix calculating skewness and kurtosis
 
 Internal:
 	* Switch from C++11 to C++17
