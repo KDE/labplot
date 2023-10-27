@@ -2783,7 +2783,7 @@ void ColumnPrivate::calculateStatistics() {
 	// skewness and kurtosis
 	centralMoment_r3 /= notNanCount;
 	centralMoment_r4 /= notNanCount;
-	statistics.skewness = centralMoment_r3 / gsl_pow_2(std::sqrt(centralMoment_r2));
+	statistics.skewness = centralMoment_r3 / gsl_pow_3(std::sqrt(centralMoment_r2));
 	statistics.kurtosis = centralMoment_r4 / gsl_pow_2(centralMoment_r2);
 
 	// entropy
