@@ -219,6 +219,10 @@ bool Worksheet::exportView() const {
 #endif
 }
 
+void Worksheet::exportView(QPixmap& pixmap) const {
+	m_view->exportToPixmap(pixmap);
+}
+
 bool Worksheet::printView() {
 #ifndef SDK
 	QPrinter printer;

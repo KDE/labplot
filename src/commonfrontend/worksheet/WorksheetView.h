@@ -53,8 +53,8 @@ public:
 
 	void setScene(QGraphicsScene*);
 	void exportToFile(const QString&, const ExportFormat, const ExportArea, const bool, const int);
-	void exportToClipboard(const ExportFormat, const ExportArea, const bool, const int);
 	void exportToClipboard();
+	void exportToPixmap(QPixmap& pixmap);
 	void setIsClosing();
 	void setIsBeingPresented(bool presenting);
 	void setCartesianPlotActionMode(Worksheet::CartesianPlotActionMode);

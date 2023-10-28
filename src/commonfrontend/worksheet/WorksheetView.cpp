@@ -2256,6 +2256,22 @@ void WorksheetView::exportToFile(const QString& path, const ExportFormat format,
 	}
 }
 
+void WorksheetView::exportToPixmap(QPixmap& pixmap) {
+	const auto& sourceRect = scene()->sceneRect();
+	int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Unit::Millimeter);
+	int h = Worksheet::convertFromSceneUnits(sourceRect.height(), Worksheet::Unit::Millimeter);
+	w = w * QApplication::primaryScreen()->physicalDotsPerInchX() / 25.4;
+	h = h * QApplication::primaryScreen()->physicalDotsPerInchX() / 25.4;
+	pixmap = pixmap.scaled(w, h);
+	QRectF targetRect(0, 0, w, h);
+
+	QPainter painter;
+	painter.begin(&pixmap);
+	painter.setRenderHint(QPainter::Antialiasing);
+	exportPaint(&painter, targetRect, sourceRect, true);
+	painter.end();
+}
+
 bool WorksheetView::eventFilter(QObject* /*watched*/, QEvent* event) {
 	if (event->type() == QEvent::KeyPress && m_actionsInitialized) {
 		auto* keyEvent = static_cast<QKeyEvent*>(event);

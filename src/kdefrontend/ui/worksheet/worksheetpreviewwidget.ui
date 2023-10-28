@@ -15,10 +15,7 @@
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <item>
-    <widget class="QListView" name="listView">
-     <property name="flow">
-      <enum>QListView::LeftToRight</enum>
-     </property>
+    <widget class="QListWidget" name="lwPreview">
      <property name="viewMode">
       <enum>QListView::IconMode</enum>
      </property>

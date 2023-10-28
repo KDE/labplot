@@ -14,6 +14,7 @@
 
 class AbstractAspect;
 class Project;
+class Worksheet;
 
 class WorksheetPreviewWidget : public QWidget {
 	Q_OBJECT
@@ -28,9 +29,13 @@ private:
 	Ui::WorksheetPreviewWidget ui;
 	Project* m_project{nullptr};
 
+	void addPreview(const Worksheet*, int row = -1) const;
+	int indexOfWorksheet(const Worksheet*) const;
+
 private Q_SLOTS:
 	void aspectAdded(const AbstractAspect*);
-	void aspectRemoved(const AbstractAspect*);
+	void aspectAboutToBeRemoved(const AbstractAspect*);
+	void updatePreview();
 
 Q_SIGNALS:
 	void currentAspectChanged(AbstractAspect*);

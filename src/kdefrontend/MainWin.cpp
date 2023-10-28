@@ -588,7 +588,7 @@ void MainWin::activatePreviousDock() {
 	while (itrWrap.hasPrevious()) {
 		itrWrap.previous();
 		auto* dock = itrWrap.value();
-		if (dock != m_projectExplorerDock && dock != m_propertiesDock&& dock != m_worksheetPreviewDock) {
+		if (dock != m_projectExplorerDock && dock != m_propertiesDock && dock != m_worksheetPreviewDock) {
 			dock->toggleView(true);
 			m_DockManager->setDockWidgetFocused(dock);
 			return;
@@ -883,7 +883,7 @@ void MainWin::initActions() {
 
 	m_worksheetPreviewAction = new QAction(QIcon::fromTheme(QLatin1String("view-preview")), i18n("Worksheet Preview"), docksActions);
 	m_worksheetPreviewAction->setCheckable(true);
-	m_worksheetPreviewAction->setChecked(true);
+	m_worksheetPreviewAction->setChecked(false);
 	actionCollection()->addAction(QLatin1String("toggle_worksheet_preview_dock"), m_worksheetPreviewAction);
 
 	connect(docksActions, &QActionGroup::triggered, this, &MainWin::toggleDockWidget);
@@ -1478,13 +1478,13 @@ bool MainWin::newProject() {
 		m_propertiesDock->setWindowTitle(m_propertiesDock->windowTitle().replace(QLatin1String("&"), QString()));
 
 		// worksheet preview
-		m_worksheetPreviewDock = new ads::CDockWidget(i18nc("@title:window", "Project Explorer"));
+		m_worksheetPreviewDock = new ads::CDockWidget(i18nc("@title:window", "Preview"));
 		m_worksheetPreviewDock->setObjectName(QLatin1String("worksheetpreview"));
 		m_worksheetPreviewDock->setWindowTitle(m_worksheetPreviewDock->windowTitle().replace(QLatin1String("&"), QString()));
 		m_worksheetPreviewDock->toggleViewAction()->setText(QLatin1String(""));
 		connect(m_worksheetPreviewDock, &ads::CDockWidget::viewToggled, this, &MainWin::worksheetPreviewDockVisibilityChanged);
 
-		auto* m_worksheetPreviewWidget = new WorksheetPreviewWidget(m_worksheetPreviewDock);
+		m_worksheetPreviewWidget = new WorksheetPreviewWidget(m_worksheetPreviewDock);
 		m_worksheetPreviewDock->setWidget(m_worksheetPreviewWidget);
 
 		// restore the position of the dock widgets:
@@ -1510,6 +1510,7 @@ bool MainWin::newProject() {
 	m_projectExplorer->setModel(m_aspectTreeModel);
 	m_projectExplorer->setProject(m_project);
 	m_projectExplorer->setCurrentAspect(m_project);
+	m_worksheetPreviewWidget->setProject(m_project);
 
 	updateGUIOnProjectChanges();
 	m_newProjectAction->setEnabled(false);
@@ -1825,6 +1826,7 @@ bool MainWin::closeProject() {
 	if (!m_closing) {
 		m_projectExplorerDock->toggleView(false);
 		m_propertiesDock->toggleView(false);
+		m_worksheetPreviewDock->toggleView(false);
 		m_currentAspect = nullptr;
 		m_currentFolder = nullptr;
 		updateGUIOnProjectChanges();
