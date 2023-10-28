@@ -3343,8 +3343,6 @@ void SpreadsheetView::removeSelectedRows() {
 	RESET_CURSOR;
 }
 
-
-
 void SpreadsheetView::clearSelectedCells() {
 	// don't try to clear values if the selected cells don't have any values at all
 	bool empty = true;
