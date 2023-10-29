@@ -1292,7 +1292,7 @@ void MultiRangeTest::curveRangeChange() {
 	ws->addChild(plot);
 
 	auto* curve{new XYEquationCurve(QStringLiteral("f(x)"))};
-	curve->setCoordinateSystemIndex(p->defaultCoordinateSystemIndex());
+	curve->setCoordinateSystemIndex(plot->defaultCoordinateSystemIndex());
 	plot->addChild(curve);
 
 	XYEquationCurve::EquationData data;
@@ -1303,8 +1303,8 @@ void MultiRangeTest::curveRangeChange() {
 	curve->setEquationData(data);
 	curve->recalculate();
 
-	CHECK_RANGE(p, curve, Dimension::X, 0., 10.);
-	CHECK_RANGE(p, curve, Dimension::Y, -1., 1.);
+	CHECK_RANGE(plot, curve, Dimension::X, 0., 10.);
+	CHECK_RANGE(plot, curve, Dimension::Y, -1., 1.);
 
 	// Create new cSystem
 	Range<double> yRange;
@@ -1330,12 +1330,13 @@ void MultiRangeTest::curveRangeChange() {
 
 	curve->undoStack()->undo();
 
-	QCOMPARE(curve->coordinateSystemIndex(), 1);
+	QCOMPARE(curve->coordinateSystemIndex(), 0);
 	CHECK_RANGE(plot, curve, Dimension::X, 0., 10.);
 	CHECK_RANGE(plot, curve, Dimension::Y, -1., 1.);
 
 	curve->undoStack()->redo();
 
+	QCOMPARE(curve->coordinateSystemIndex(), 1);
 	CHECK_RANGE(plot, curve, Dimension::X, 0., 10.);
 	CHECK_RANGE(plot, curve, Dimension::Y, 0., 10.);
 }
