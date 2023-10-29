@@ -30,6 +30,7 @@
 #include <QAction>
 #include <QComboBox>
 #include <QGraphicsSceneWheelEvent>
+#include <QUndoStack>
 
 // ##############################################################################
 // #####################  import of LabPlot projects ############################
