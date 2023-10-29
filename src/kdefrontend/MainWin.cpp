@@ -1498,6 +1498,7 @@ bool MainWin::newProject() {
 		// So, we set our default positions first and then read from the saved "WindowState" section
 		m_DockManager->addDockWidget(ads::LeftDockWidgetArea, m_projectExplorerDock);
 		m_DockManager->addDockWidget(ads::RightDockWidgetArea, m_propertiesDock);
+		m_DockManager->addDockWidget(ads::RightDockWidgetArea, m_worksheetPreviewDock, m_projectExplorerDock->dockAreaWidget());
 		if (group.keyList().indexOf(QLatin1String("WindowState")) != -1)
 			restoreState(group.readEntry("WindowState", QByteArray()));
 
