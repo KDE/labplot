@@ -492,7 +492,7 @@ void MainWin::createADS() {
 	connect(m_closeAllWindowsAction, &QAction::triggered, [this]() {
 		for (auto dock : m_DockManager->dockWidgetsMap()) {
 			// Do not remove them, because it makes no sense
-			if (dock == m_projectExplorerDock || dock == m_propertiesDock || dock == m_worksheetPreviewDock)
+			if (specialDock(dock))
 				continue;
 			m_DockManager->removeDockWidget(dock);
 		}
@@ -500,6 +500,10 @@ void MainWin::createADS() {
 
 	connect(m_nextWindowAction, &QAction::triggered, this, &MainWin::activateNextDock);
 	connect(m_prevWindowAction, &QAction::triggered, this, &MainWin::activatePreviousDock);
+}
+
+bool MainWin::specialDock(ads::CDockWidget* dock) {
+	return dock == m_projectExplorerDock || dock == m_propertiesDock || dock == m_worksheetPreviewDock;
 }
 
 void MainWin::changeVisibleAllDocks(bool visible) {
@@ -516,7 +520,7 @@ void MainWin::activateNextDock() {
 	while (itrForward != m_DockManager->dockWidgetsMap().constEnd()) {
 		auto* dock = itrForward.value();
 		if (focusedFound) {
-			if (dock != m_projectExplorerDock && dock != m_propertiesDock && dock != m_worksheetPreviewDock) {
+			if (!specialDock(dock)) {
 				dock->toggleView(true);
 				m_DockManager->setDockWidgetFocused(dock);
 				return;
@@ -541,7 +545,7 @@ void MainWin::activateNextDock() {
 	auto itrWrap = m_DockManager->dockWidgetsMap().constBegin();
 	while (itrWrap != m_DockManager->dockWidgetsMap().constEnd()) {
 		auto* dock = itrWrap.value();
-		if (dock != m_projectExplorerDock && dock != m_propertiesDock && dock != m_worksheetPreviewDock) {
+		if (!specialDock(dock)) {
 			dock->toggleView(true);
 			m_DockManager->setDockWidgetFocused(dock);
 			return;
@@ -561,7 +565,7 @@ void MainWin::activatePreviousDock() {
 		itrForward.previous();
 		auto* dock = itrForward.value();
 		if (focusedFound) {
-			if (dock != m_projectExplorerDock && dock != m_propertiesDock && dock != m_worksheetPreviewDock) {
+			if (!specialDock(dock)) {
 				dock->toggleView(true);
 				m_DockManager->setDockWidgetFocused(dock);
 				return;
@@ -588,7 +592,7 @@ void MainWin::activatePreviousDock() {
 	while (itrWrap.hasPrevious()) {
 		itrWrap.previous();
 		auto* dock = itrWrap.value();
-		if (dock != m_projectExplorerDock && dock != m_propertiesDock && dock != m_worksheetPreviewDock) {
+		if (!specialDock(dock)) {
 			dock->toggleView(true);
 			m_DockManager->setDockWidgetFocused(dock);
 			return;
@@ -1806,7 +1810,7 @@ bool MainWin::closeProject() {
 
 	for (auto dock : m_DockManager->dockWidgetsMap()) {
 		// No need to delete them, because they are used everywhere and can be reused
-		if (dock == m_projectExplorerDock || dock == m_propertiesDock)
+		if (specialDock(dock))
 			continue;
 		m_DockManager->removeDockWidget(dock);
 	}

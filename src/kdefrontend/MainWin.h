@@ -221,6 +221,7 @@ private Q_SLOTS:
 	// 	void resetWelcomeScreen();
 	// void createMdiArea();
 	void createADS();
+	bool specialDock(ads::CDockWidget* dock);
 	void changeVisibleAllDocks(bool);
 	void activateNextDock();
 	void activatePreviousDock();
