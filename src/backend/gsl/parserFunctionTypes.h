@@ -10,24 +10,22 @@
 #ifndef PARSERFUNCTIONTYPES_H
 #define PARSERFUNCTIONTYPES_H
 
+#include <functional>
 #include <memory>
 
 struct Payload;
 
 /* Function types */
-#ifdef _MSC_VER /* MSVC needs void argument */
-typedef double (*func_t)(void);
-#else
-typedef double (*func_t)();
-#endif
-typedef double (*func_t1)(double);
-typedef double (*func_t2)(double, double);
-typedef double (*func_t3)(double, double, double);
-typedef double (*func_t4)(double, double, double, double);
-typedef double (*func_tPayload)(const std::weak_ptr<Payload>);
-typedef double (*func_t1Payload)(const char* variable, const std::weak_ptr<Payload>);
-typedef double (*func_t2Payload)(double value1, const char* variable, const std::weak_ptr<Payload>);
-typedef double (*func_t3Payload)(double value1, double value2, const char* variable, const std::weak_ptr<Payload>);
-typedef double (*func_t4Payload)(double value1, double value2, double value3, const char* variable, const std::weak_ptr<Payload>);
+using func_t = std::function<double(void)>;
+using func_t1 = std::function<double(double)>;
+using func_t2 = std::function<double(double, double)>;
+using func_t3 = std::function<double(double, double, double)>;
+using func_t4 = std::function<double(double, double, double, double)>;
+using func_t5 = std::function<double(double, double, double, double, double)>;
+using func_tPayload = std::function<double(const std::weak_ptr<Payload>)>;
+using func_t1Payload = std::function<double(const char*, const std::weak_ptr<Payload>)>;
+using func_t2Payload = std::function<double(double, const char*, const std::weak_ptr<Payload>)>;
+using func_t3Payload = std::function<double(double, double, const char*, const std::weak_ptr<Payload>)>;
+using func_t4Payload = std::function<double(double, double, double, const char*, const std::weak_ptr<Payload>)>;
 
 #endif /*PARSERFUNCTIONTYPES_H*/

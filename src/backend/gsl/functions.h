@@ -13,20 +13,18 @@
 
 #include "parserFunctionTypes.h"
 #include <QString>
+#include <functional>
 #include <gsl/gsl_version.h>
+#include <variant>
 
 enum class FunctionGroups;
 
 struct funs {
-	QString description;
+	std::function<QString(void)> description;
 	const char* name;
-#ifdef _MSC_VER /* MSVC needs void argument */
-	double (*fnct)(void);
-#else
-	func_t fnct;
-#endif
+	std::variant<func_t, func_t1, func_t2, func_t3, func_t4, func_t5, func_tPayload, func_t1Payload, func_t2Payload, func_t3Payload, func_t4Payload> fnct;
 	int argc;
-	QString (*parameterFunction)(int); // can be also a nullptr. Check needed!
+	std::function<QString(int)> parameterFunction; // can be also a nullptr. Check needed!
 	FunctionGroups group;
 };
 

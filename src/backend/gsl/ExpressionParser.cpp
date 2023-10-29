@@ -9,7 +9,6 @@
 */
 
 #include "backend/gsl/ExpressionParser.h"
-#include "backend/gsl/parser.h"
 #include "backend/lib/macros.h"
 #include "backend/lib/trace.h"
 
@@ -35,13 +34,13 @@ ExpressionParser::ExpressionParser() {
 void ExpressionParser::initFunctions() {
 	for (int i = 0; i < _number_functions; i++) {
 		const auto& function = _functions[i];
-		m_functionsDescription << function.description;
+		m_functionsDescription << function.description();
 		m_functions << QLatin1String(function.name);
 		m_functionsGroupIndex << function.group;
 	}
 	for (int i = 0; i < _number_specialfunctions; i++) {
 		const auto& function = _special_functions[i];
-		m_functionsDescription << function.description;
+		m_functionsDescription << function.description();
 		m_functions << QLatin1String(function.name);
 		m_functionsGroupIndex << function.group;
 	}
@@ -111,7 +110,7 @@ QString ExpressionParser::parameters(const QString& functionName) {
 	for (int i = 0; i < _number_functions; i++) {
 		if (functionName == QLatin1String(_functions[i].name)) {
 			int count = _functions[i].argc;
-			QString (*parameterFunction)(int) = _functions[i].parameterFunction;
+			const auto parameterFunction = _functions[i].parameterFunction;
 
 			if (parameterFunction == nullptr)
 				return QStringLiteral("");
@@ -121,8 +120,8 @@ QString ExpressionParser::parameters(const QString& functionName) {
 
 			QString parameter = QStringLiteral("(");
 			for (int p = 0; p < count - 1; p++)
-				parameter += (*parameterFunction)(p) + QStringLiteral("; ");
-			parameter += (*parameterFunction)(count - 1);
+				parameter += parameterFunction(p) + QStringLiteral("; ");
+			parameter += parameterFunction(count - 1);
 			parameter += QStringLiteral(")");
 			return parameter;
 		}
@@ -132,7 +131,7 @@ QString ExpressionParser::parameters(const QString& functionName) {
 	for (int i = 0; i < _number_specialfunctions; i++) {
 		if (functionName == QLatin1String(_special_functions[i].name)) {
 			int count = _special_functions[i].argc;
-			QString (*parameterFunction)(int) = _special_functions[i].parameterFunction;
+			const auto parameterFunction = _special_functions[i].parameterFunction;
 
 			if (parameterFunction == nullptr)
 				return QStringLiteral("");
@@ -142,8 +141,8 @@ QString ExpressionParser::parameters(const QString& functionName) {
 
 			QString parameter = QStringLiteral("(");
 			for (int p = 0; p < count - 1; p++)
-				parameter += (*parameterFunction)(p) + QStringLiteral("; ");
-			parameter += (*parameterFunction)(count - 1);
+				parameter += parameterFunction(p) + QStringLiteral("; ");
+			parameter += parameterFunction(count - 1);
 			parameter += QStringLiteral(")");
 			return parameter;
 		}
@@ -639,13 +638,13 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList&
 	const auto payload = std::make_shared<PayloadExpressionParser>(&vars, &xVectors);
 	const auto payloadConst = std::make_shared<PayloadExpressionParser>(&vars, &xVectors, true);
 
-	set_specialfunction2(specialfun_cell, &cell, payloadConst);
-	set_specialfunction1(specialfun_ma, &ma, payload);
-	set_specialfunction1(specialfun_mr, &mr, payload);
-	set_specialfunction2(specialfun_smmin, &smmin, payload);
-	set_specialfunction2(specialfun_smmax, &smmax, payload);
-	set_specialfunction2(specialfun_sma, &sma, payload);
-	set_specialfunction2(specialfun_smr, &smr, payload);
+	set_specialfunction2(specialfun_cell, cell, payloadConst);
+	set_specialfunction1(specialfun_ma, ma, payload);
+	set_specialfunction1(specialfun_mr, mr, payload);
+	set_specialfunction2(specialfun_smmin, smmin, payload);
+	set_specialfunction2(specialfun_smmax, smmax, payload);
+	set_specialfunction2(specialfun_sma, sma, payload);
+	set_specialfunction2(specialfun_smr, smr, payload);
 
 	bool constExpression = false;
 	for (int i = 0; i < minSize || (constExpression && i < yVector->size()); i++) {

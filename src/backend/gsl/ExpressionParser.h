@@ -11,6 +11,7 @@
 #ifndef EXPRESSIONPARSER_H
 #define EXPRESSIONPARSER_H
 
+#include "backend/gsl/parser.h"
 #include "backend/lib/Range.h"
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
 #include <QVector>
