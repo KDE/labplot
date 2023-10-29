@@ -106,7 +106,7 @@ public:
 	int coordinateSystemIndex() const {
 		return m_cSystemIndex;
 	}
-	void setCoordinateSystemIndex(int, QUndoCommand *parent = nullptr);
+	void setCoordinateSystemIndex(int, QUndoCommand* parent = nullptr);
 	int coordinateSystemCount() const;
 	QString coordinateSystemInfo(int index) const;
 

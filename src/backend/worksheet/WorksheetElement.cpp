@@ -547,10 +547,12 @@ void WorksheetElement::saveThemeConfig(const KConfig&) {
 
 // coordinate system
 
-class SetCoordinateSystemIndexCmd: public QUndoCommand {
+class SetCoordinateSystemIndexCmd : public QUndoCommand {
 public:
-	SetCoordinateSystemIndexCmd(WorksheetElement* element, int index, QUndoCommand* parent = nullptr): QUndoCommand(parent), m_element(element), m_index(index) {
-
+	SetCoordinateSystemIndexCmd(WorksheetElement* element, int index, QUndoCommand* parent = nullptr)
+		: QUndoCommand(parent)
+		, m_element(element)
+		, m_index(index) {
 	}
 
 	virtual void redo() override {
@@ -576,7 +578,6 @@ private:
 };
 
 void WorksheetElement::setCoordinateSystemIndex(int index, QUndoCommand* parent) {
-
 	// TODO: second condition needed?
 	if (index != m_cSystemIndex && cSystem != nullptr) {
 		auto* command = new SetCoordinateSystemIndexCmd(this, index, parent);
