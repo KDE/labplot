@@ -232,11 +232,7 @@ bool AbstractAspect::setName(const QString& value, NameHandling handling, QUndoC
 			info(i18n(R"(Intended name "%1" was changed to "%2" in order to avoid name collision.)", value, new_name));
 	} else
 		new_name = value;
-
-	exec(new PropertyChangeCommand<QString>(i18n("%1: rename to %2", d->m_name, new_name), &d->m_name, new_name),
-		 "aspectDescriptionAboutToChange",
-		 "aspectDescriptionChanged",
-		 QArgument<const AbstractAspect*>("const AbstractAspect*", this));
+	exec(new AspectNameChangeCmd(this->d, new_name));
 	return true;
 }
 

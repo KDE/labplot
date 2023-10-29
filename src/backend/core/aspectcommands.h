@@ -150,4 +150,29 @@ protected:
 	int m_new_index;
 };
 
+class AspectNameChangeCmd : public QUndoCommand {
+public:
+	AspectNameChangeCmd(AbstractAspectPrivate* aspect, const QString& newName)
+		: m_aspect(aspect)
+		, m_name(newName) {
+		setText(i18n("%1: rename to %2", m_aspect->m_name, newName));
+	}
+
+	void redo() override {
+		Q_EMIT m_aspect->q->aspectDescriptionAboutToChange(m_aspect->q);
+		const QString name = m_aspect->m_name;
+		m_aspect->m_name = m_name;
+		m_name = name;
+		Q_EMIT m_aspect->q->aspectDescriptionChanged(m_aspect->q);
+	}
+
+	void undo() override {
+		redo();
+	}
+
+protected:
+	AbstractAspectPrivate* m_aspect;
+	QString m_name;
+};
+
 #endif

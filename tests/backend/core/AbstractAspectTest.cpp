@@ -15,6 +15,103 @@
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
 
+#include <QUndoStack>
+
+void AbstractAspectTest::name() {
+	Project project;
+
+	const QString initialName = QStringLiteral("Worksheet");
+	const QString secondName = QStringLiteral("New name");
+	const QString thirdName = QStringLiteral("Another new name");
+
+	auto* worksheet = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(worksheet);
+
+	int aspectDescriptionAboutToChangeCounter = 0;
+	connect(&project,
+			&AbstractAspect::aspectDescriptionAboutToChange,
+			[worksheet, &aspectDescriptionAboutToChangeCounter, initialName, secondName, thirdName](const AbstractAspect* aspect) {
+				QCOMPARE(aspect, worksheet);
+				switch (aspectDescriptionAboutToChangeCounter) {
+				case 0: {
+					QCOMPARE(aspect->name(), initialName);
+					break;
+				}
+				case 1: {
+					QCOMPARE(aspect->name(), secondName);
+					break;
+				}
+				case 2: {
+					QCOMPARE(aspect->name(), thirdName);
+					break;
+				}
+				case 3: {
+					QCOMPARE(aspect->name(), secondName);
+					break;
+				}
+				case 4: {
+					QCOMPARE(aspect->name(), initialName);
+					break;
+				}
+				case 5: {
+					QCOMPARE(aspect->name(), secondName);
+					break;
+				}
+				}
+				aspectDescriptionAboutToChangeCounter++;
+			});
+
+	int aspectDescriptionChangedCounter = 0;
+	connect(&project,
+			&AbstractAspect::aspectDescriptionChanged,
+			[worksheet, &aspectDescriptionChangedCounter, initialName, secondName, thirdName](const AbstractAspect* aspect) {
+				QCOMPARE(aspect, worksheet);
+				switch (aspectDescriptionChangedCounter) {
+				case 0: {
+					QCOMPARE(aspect->name(), secondName);
+					break;
+				}
+				case 1: {
+					QCOMPARE(aspect->name(), thirdName);
+					break;
+				}
+				case 2: {
+					QCOMPARE(aspect->name(), secondName);
+					break;
+				}
+				case 3: {
+					QCOMPARE(aspect->name(), initialName);
+					break;
+				}
+				case 4: {
+					QCOMPARE(aspect->name(), secondName);
+					break;
+				}
+				case 5: {
+					QCOMPARE(aspect->name(), thirdName);
+					break;
+				}
+				}
+				aspectDescriptionChangedCounter++;
+			});
+
+	worksheet->setName(secondName);
+	worksheet->setName(thirdName);
+
+	worksheet->undoStack()->undo();
+	QCOMPARE(worksheet->name(), secondName);
+	worksheet->undoStack()->undo();
+	QCOMPARE(worksheet->name(), initialName);
+
+	worksheet->undoStack()->redo();
+	QCOMPARE(worksheet->name(), secondName);
+	worksheet->undoStack()->redo();
+	QCOMPARE(worksheet->name(), thirdName);
+
+	QCOMPARE(aspectDescriptionAboutToChangeCounter, 6);
+	QCOMPARE(aspectDescriptionChangedCounter, 6);
+}
+
 void AbstractAspectTest::copyPaste() {
 	Project project;
 
