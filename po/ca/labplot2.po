@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-10-28 00:39+0000\n"
-"PO-Revision-Date: 2023-10-27 11:34+0200\n"
+"PO-Revision-Date: 2023-10-28 10:33+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -16080,6 +16080,7 @@ msgstr ""
 #, kde-format
 msgid "The variable name 'i' is reserved for the index of the column row."
 msgstr ""
+"El nom de variable «i» està reservat per a l'índex de la fila de columnes."
 
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:170
 #, kde-format

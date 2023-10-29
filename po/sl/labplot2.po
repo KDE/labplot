@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-10-28 00:39+0000\n"
-"PO-Revision-Date: 2023-10-27 11:13+0200\n"
+"PO-Revision-Date: 2023-10-28 09:52+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -15251,7 +15251,7 @@ msgid ""
 "Controls the behavior of where the dock widgets are placed after being re-"
 "opened"
 msgstr ""
-"Nadzoruje vedenje, kamor so postavljeni gradniki dokov, kadar so spet odprti."
+"Nadzoruje vedenje, kamor so postavljeni gradniki dokov, kadar so spet odprti"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:203
 #, kde-format
@@ -15751,7 +15751,7 @@ msgstr "Enako oddaljene vrednosti datuma in časa"
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:250
 #, kde-format
 msgid "Invalid start value"
-msgstr "neveljavna začetna vrednost"
+msgstr "Neveljavna začetna vrednost"
 
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:257
 #, kde-format
@@ -15980,7 +15980,7 @@ msgstr ""
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:167
 #, kde-format
 msgid "The variable name 'i' is reserved for the index of the column row."
-msgstr ""
+msgstr "Ime spremenljivke 'i' je rezervirano za indeks vrstice stolpca."
 
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:170
 #, kde-format

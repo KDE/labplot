@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-10-28 00:39+0000\n"
-"PO-Revision-Date: 2023-10-27 12:33+0200\n"
+"PO-Revision-Date: 2023-10-28 12:42+0200\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -15968,6 +15968,8 @@ msgstr ""
 #, kde-format
 msgid "The variable name 'i' is reserved for the index of the column row."
 msgstr ""
+"El nombre de variable «i» está reservado para el índice de la fila de la "
+"columna."
 
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:170
 #, kde-format
