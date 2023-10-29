@@ -8,7 +8,7 @@ func_t1 getFunction1(const QString& s) {
 	for (int i = 0; i < _number_functions; i++) {
 		if (functionName == QLatin1String(_functions[i].name)) {
 			if (_functions[i].argc == 1)
-				return (func_t1)_functions[i].fnct;
+				return std::get<func_t1>(_functions[i].fnct);
 		}
 	}
 	return nullptr;
@@ -19,7 +19,7 @@ func_t2 getFunction2(const QString& s) {
 	for (int i = 0; i < _number_functions; i++) {
 		if (functionName == QLatin1String(_functions[i].name)) {
 			if (_functions[i].argc == 2)
-				return (func_t2)_functions[i].fnct;
+				return std::get<func_t2>(_functions[i].fnct);
 		}
 	}
 	return nullptr;
@@ -30,7 +30,7 @@ func_t3 getFunction3(const QString& s) {
 	for (int i = 0; i < _number_functions; i++) {
 		if (functionName == QLatin1String(_functions[i].name)) {
 			if (_functions[i].argc == 3)
-				return (func_t3)_functions[i].fnct;
+				return std::get<func_t3>(_functions[i].fnct);
 		}
 	}
 	return nullptr;
