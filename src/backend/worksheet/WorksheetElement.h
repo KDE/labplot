@@ -106,7 +106,7 @@ public:
 	int coordinateSystemIndex() const {
 		return m_cSystemIndex;
 	}
-	void setCoordinateSystemIndex(int);
+	void setCoordinateSystemIndex(int, QUndoCommand *parent = nullptr);
 	int coordinateSystemCount() const;
 	QString coordinateSystemInfo(int index) const;
 
@@ -172,6 +172,7 @@ Q_SIGNALS:
 	void plotRangeListChanged();
 
 	friend class WorksheetElementTest;
+	friend class SetCoordinateSystemIndexCmd;
 };
 
 #endif

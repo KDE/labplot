@@ -9,6 +9,7 @@
 */
 
 #include "backend/worksheet/WorksheetElement.h"
+#include "backend/core/AspectPrivate.h"
 #include "backend/core/Project.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
@@ -546,13 +547,42 @@ void WorksheetElement::saveThemeConfig(const KConfig&) {
 
 // coordinate system
 
-void WorksheetElement::setCoordinateSystemIndex(int index) {
-	m_cSystemIndex = index;
-	if (m_plot)
-		cSystem = dynamic_cast<const CartesianCoordinateSystem*>(m_plot->coordinateSystem(index));
-	else
-		DEBUG(Q_FUNC_INFO << ", WARNING: No plot found. Failed setting csystem index.")
-	Q_EMIT coordinateSystemIndexChanged(m_cSystemIndex);
+class SetCoordinateSystemIndexCmd: public QUndoCommand {
+public:
+	SetCoordinateSystemIndexCmd(WorksheetElement* element, int index, QUndoCommand* parent = nullptr): QUndoCommand(parent), m_element(element), m_index(index) {
+
+	}
+
+	virtual void redo() override {
+		const auto oldIndex = m_element->m_cSystemIndex;
+		m_element->m_cSystemIndex = m_index;
+		if (m_element->plot())
+			m_element->cSystem = dynamic_cast<const CartesianCoordinateSystem*>(m_element->plot()->coordinateSystem(m_index));
+		else
+			DEBUG(Q_FUNC_INFO << ", WARNING: No plot found. Failed setting csystem index.")
+
+		m_index = oldIndex;
+		m_element->retransform();
+		Q_EMIT m_element->coordinateSystemIndexChanged(m_element->m_cSystemIndex);
+	}
+
+	virtual void undo() override {
+		redo();
+	}
+
+private:
+	WorksheetElement* m_element;
+	int m_index;
+};
+
+void WorksheetElement::setCoordinateSystemIndex(int index, QUndoCommand* parent) {
+
+	// TODO: second condition needed?
+	if (index != m_cSystemIndex && cSystem != nullptr) {
+		auto* command = new SetCoordinateSystemIndexCmd(this, index, parent);
+		if (!parent)
+			exec(command);
+	}
 }
 
 int WorksheetElement::coordinateSystemCount() const {
