@@ -462,7 +462,6 @@ void SpreadsheetView::initActions() {
 	action_insert_rows_above = new QAction(QIcon::fromTheme(QStringLiteral("edit-table-insert-row-above")), i18n("Insert Multiple Rows Above"), this);
 	action_insert_rows_below = new QAction(QIcon::fromTheme(QStringLiteral("edit-table-insert-row-below")), i18n("Insert Multiple Rows Below"), this);
 	action_remove_rows = new QAction(QIcon::fromTheme(QStringLiteral("edit-table-delete-row")), i18n("Remo&ve Selected Row(s)"), this);
-	action_clear_rows = new QAction(QIcon::fromTheme(QStringLiteral("edit-clear")), i18n("Clea&r Content"), this);
 	action_remove_missing_value_rows = new QAction(QIcon::fromTheme(QStringLiteral("delete-table-row")), i18n("Delete Rows With Missing Values"), this);
 	action_mask_missing_value_rows = new QAction(QIcon::fromTheme(QStringLiteral("hide_table_row")), i18n("Mask Rows With Missing Values"), this);
 	action_statistics_rows = new QAction(QIcon::fromTheme(QStringLiteral("view-statistics")), i18n("Row Statisti&cs"), this);
@@ -826,7 +825,7 @@ void SpreadsheetView::initMenus() {
 		m_rowMenu->addSeparator();
 
 		m_rowMenu->addAction(action_remove_rows);
-		m_rowMenu->addAction(action_clear_rows);
+		m_rowMenu->addAction(action_clear_selection);
 		m_rowMenu->addSeparator();
 
 		m_rowMenu->addAction(action_remove_missing_value_rows);
@@ -915,7 +914,6 @@ void SpreadsheetView::connectActions() {
 	connect(action_insert_rows_above, &QAction::triggered, this, static_cast<void (SpreadsheetView::*)()>(&SpreadsheetView::insertRowsAbove));
 	connect(action_insert_rows_below, &QAction::triggered, this, static_cast<void (SpreadsheetView::*)()>(&SpreadsheetView::insertRowsBelow));
 	connect(action_remove_rows, &QAction::triggered, this, &SpreadsheetView::removeSelectedRows);
-	connect(action_clear_rows, &QAction::triggered, this, &SpreadsheetView::clearSelectedRows);
 	connect(action_remove_missing_value_rows, &QAction::triggered, m_spreadsheet, &Spreadsheet::removeEmptyRows);
 	connect(action_mask_missing_value_rows, &QAction::triggered, m_spreadsheet, &Spreadsheet::maskEmptyRows);
 	connect(action_statistics_rows, &QAction::triggered, this, &SpreadsheetView::showRowStatistics);
@@ -3345,53 +3343,16 @@ void SpreadsheetView::removeSelectedRows() {
 	RESET_CURSOR;
 }
 
-void SpreadsheetView::clearSelectedRows() {
-	if (firstSelectedRow() < 0)
-		return;
-
-	WAIT_CURSOR;
-	auto* parent = new QUndoCommand(i18n("%1: clear selected rows", m_spreadsheet->name()));
-	for (auto* col : selectedColumns()) {
-		col->setSuppressDataChangedSignal(true);
-		// 		if (formulaModeActive()) {
-		// 			for (const auto& i : selectedRows().intervals())
-		// 				col->setFormula(i, QString());
-		// 		} else {
-		for (const auto& i : selectedRows().intervals()) {
-			if (i.end() == col->rowCount() - 1)
-				col->removeRows(i.start(), i.size(), parent);
-			else {
-				QVector<QString> empties;
-				for (int j = 0; j < i.size(); j++)
-					empties << QString();
-				col->asStringColumn()->replaceTexts(i.start(), empties);
-			}
-		}
-
-		col->setSuppressDataChangedSignal(false);
-		col->setChanged();
-	}
-	RESET_CURSOR;
-
-	// selected rows were deleted but the view selection is still in place -> reset the selection in the view
-	m_tableView->clearSelection();
-}
-
 void SpreadsheetView::clearSelectedCells() {
-	int first = firstSelectedRow();
-	int last = lastSelectedRow();
-	if (first < 0)
-		return;
-
 	// don't try to clear values if the selected cells don't have any values at all
 	bool empty = true;
-	const auto& columns = selectedColumns(false);
-	for (auto* column : columns) {
-		for (int row = last; row >= first; row--) {
-			if (column->isValid(row)) {
-				empty = false;
-				break;
-			}
+
+	const auto& columns = m_spreadsheet->children<Column>();
+	const auto& indexes = m_tableView->selectionModel()->selectedIndexes();
+	for (const auto& index : indexes) {
+		if (columns.at(index.column())->isValid(index.row())) {
+			empty = false;
+			break;
 		}
 		if (!empty)
 			break;
@@ -3415,12 +3376,8 @@ void SpreadsheetView::clearSelectedCells() {
 			// if the whole column is selected, clear directly instead of looping over the rows
 			column->clear();
 		} else {
-			for (int row = last; row >= first; row--) {
-				if (isCellSelected(row, index)) {
-					if (row < column->rowCount())
-						column->asStringColumn()->setTextAt(row, QString());
-				}
-			}
+			for (const auto& index : indexes)
+				columns.at(index.column())->asStringColumn()->setTextAt(index.row(), QString());
 		}
 
 		column->setSuppressDataChangedSignal(false);
@@ -3629,8 +3586,12 @@ void SpreadsheetView::selectionChanged(const QItemSelection& /*selected*/, const
 
 	// determine the number of selected cells, columns, missing values and masked values in the current selection and show this information in the status bar.
 	const auto& indexes = m_tableView->selectionModel()->selectedIndexes();
-	if (indexes.empty() || indexes.count() == 1)
+	QString resultString = QString();
+	if (indexes.empty() || indexes.count() == 1) {
+		Q_EMIT m_spreadsheet->statusInfo(resultString);
 		return;
+	}
+
 	QPair<int, int> selectedRowCol = qMakePair(selectedRowCount(false), selectedColumnCount(false));
 	const auto& columns = m_spreadsheet->children<Column>();
 	int maskedValuesCount = 0;
@@ -3655,7 +3616,6 @@ void SpreadsheetView::selectionChanged(const QItemSelection& /*selected*/, const
 	QString maskedValuesCountText = (!maskedValuesCount) ? QString() : i18n(" , ") + i18n("%1", maskedValuesCount);
 	QString missingValuesCountText = (!missingValuesCount) ? QString() : i18n(", ") + i18n("%1", missingValuesCount);
 
-	QString resultString;
 	if (selectedCellsCount == selectedRowCol.first * selectedRowCol.second)
 		resultString = i18n("Selected: %1 %2 , %3 %4%5 %6 %7 %8",
 							selectedRowCol.first,
