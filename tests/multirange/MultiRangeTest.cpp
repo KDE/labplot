@@ -389,6 +389,131 @@ void MultiRangeTest::zoomInX_SingleRange() {
 	COMPARE_DOUBLE_VECTORS(vertAxis3P1->tickLabelValues(), refValuesAxis3); // on third axis there is no autoscale, because it uses a different range
 }
 
+void MultiRangeTest::zoomInX_SingleRangeDateTimeMonotonicIncrease() {
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	QVERIFY(ws != nullptr);
+	project.addChild(ws);
+
+	auto* view = dynamic_cast<WorksheetView*>(ws->view());
+	QVERIFY(view != nullptr);
+	view->initActions(); /* needed by SET_CARTESIAN_MOUSE_MODE() */
+
+	Spreadsheet* spreadsheetData = new Spreadsheet(QStringLiteral("data"), false);
+	spreadsheetData->setColumnCount(2);
+	spreadsheetData->setRowCount(3);
+	project.addChild(spreadsheetData);
+	auto* xCol = spreadsheetData->column(0);
+	xCol->setColumnMode(AbstractColumn::ColumnMode::DateTime);
+	QDateTime dt1 = QDateTime::fromString(QStringLiteral("2017-07-10T00:00:00Z"), Qt::ISODate);
+	QDateTime dt2 = QDateTime::fromString(QStringLiteral("2017-07-11T00:00:00Z"), Qt::ISODate);
+	QDateTime dt3 = QDateTime::fromString(QStringLiteral("2017-07-12T00:00:00Z"), Qt::ISODate);
+	QDateTime dt4 = QDateTime::fromString(QStringLiteral("2017-07-13T00:00:00Z"), Qt::ISODate);
+	QDateTime dt5 = QDateTime::fromString(QStringLiteral("2017-07-14T00:00:00Z"), Qt::ISODate);
+	QDateTime dt6 = QDateTime::fromString(QStringLiteral("2017-07-15T00:00:00Z"), Qt::ISODate);
+	QDateTime dt7 = QDateTime::fromString(QStringLiteral("2017-07-16T00:00:00Z"), Qt::ISODate);
+	QDateTime dt8 = QDateTime::fromString(QStringLiteral("2017-07-17T00:00:00Z"), Qt::ISODate);
+	QDateTime dt9 = QDateTime::fromString(QStringLiteral("2017-07-18T00:00:00Z"), Qt::ISODate);
+	QDateTime dt10 = QDateTime::fromString(QStringLiteral("2017-07-19T00:00:00Z"), Qt::ISODate);
+	xCol->replaceDateTimes(-1, QVector<QDateTime>({dt1, dt2, dt3, dt4, dt5, dt6, dt7, dt8, dt9, dt10}));
+	auto* yCol = spreadsheetData->column(1);
+	yCol->replaceValues(-1, QVector<double>({2., 3., 4., 5., 6., 7., 8., 9., 10., 11.}));
+
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	p->setNiceExtend(false);
+	QVERIFY(p != nullptr);
+	ws->addChild(p);
+
+	auto* curve = new XYCurve(QStringLiteral("curve"));
+	p->addChild(curve);
+	curve->setXColumn(xCol);
+	curve->setYColumn(yCol);
+
+	CHECK_RANGE(p, curve, Dimension::X, dt1.toMSecsSinceEpoch(), dt10.toMSecsSinceEpoch());
+	CHECK_RANGE(p, curve, Dimension::Y, 2., 11.);
+
+	QCOMPARE(p->rangeCount(Dimension::X), 1);
+	QCOMPARE(p->rangeCount(Dimension::Y), 1);
+	QCOMPARE(p->range(Dimension::Y, 0).autoScale(), true);
+
+	const auto& axes = p->children<Axis>();
+	QCOMPARE(axes.count(), 2);
+	QCOMPARE(axes.at(0)->name(), QStringLiteral("x"));
+	axes.at(0)->setSelected(true);
+	SET_CARTESIAN_MOUSE_MODE(CartesianPlot::MouseMode::ZoomXSelection)
+
+	p->mousePressZoomSelectionMode(QPointF(dt3.toMSecsSinceEpoch(), 3.), 0);
+	p->mouseMoveZoomSelectionMode(QPointF(dt5.toMSecsSinceEpoch(), 3.), 0);
+	p->mouseReleaseZoomSelectionMode(0);
+
+	CHECK_RANGE(p, curve, Dimension::X, dt3.toMSecsSinceEpoch(), dt5.toMSecsSinceEpoch()); // zoom
+	CHECK_RANGE(p, curve, Dimension::Y, 4., 6.); // autoscaled
+}
+
+void MultiRangeTest::zoomInX_SingleRangeDateTimeNonMonotonic() {
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	QVERIFY(ws != nullptr);
+	project.addChild(ws);
+
+	auto* view = dynamic_cast<WorksheetView*>(ws->view());
+	QVERIFY(view != nullptr);
+	view->initActions(); /* needed by SET_CARTESIAN_MOUSE_MODE() */
+
+	Spreadsheet* spreadsheetData = new Spreadsheet(QStringLiteral("data"), false);
+	spreadsheetData->setColumnCount(2);
+	spreadsheetData->setRowCount(3);
+	project.addChild(spreadsheetData);
+	auto* xCol = spreadsheetData->column(0);
+	xCol->setColumnMode(AbstractColumn::ColumnMode::DateTime);
+	QDateTime dt1 = QDateTime::fromString(QStringLiteral("2017-07-10T00:00:00Z"), Qt::ISODate);
+	QDateTime dt2 = QDateTime::fromString(QStringLiteral("2017-07-11T00:00:00Z"), Qt::ISODate);
+	QDateTime dt3 = QDateTime::fromString(QStringLiteral("2017-07-12T00:00:00Z"), Qt::ISODate);
+	QDateTime dt4 = QDateTime::fromString(QStringLiteral("2017-07-15T00:00:00Z"), Qt::ISODate);
+	QDateTime dt5 = QDateTime::fromString(QStringLiteral("2017-07-14T00:00:00Z"), Qt::ISODate); // Nonmonoton
+	QDateTime dt6 = QDateTime::fromString(QStringLiteral("2017-07-15T00:00:00Z"), Qt::ISODate);
+	QDateTime dt7 = QDateTime::fromString(QStringLiteral("2017-07-16T00:00:00Z"), Qt::ISODate);
+	QDateTime dt8 = QDateTime::fromString(QStringLiteral("2017-07-17T00:00:00Z"), Qt::ISODate);
+	QDateTime dt9 = QDateTime::fromString(QStringLiteral("2017-07-18T00:00:00Z"), Qt::ISODate);
+	QDateTime dt10 = QDateTime::fromString(QStringLiteral("2017-07-19T00:00:00Z"), Qt::ISODate);
+	xCol->replaceDateTimes(-1, QVector<QDateTime>({dt1, dt2, dt3, dt4, dt5, dt6, dt7, dt8, dt9, dt10}));
+	auto* yCol = spreadsheetData->column(1);
+	yCol->replaceValues(-1, QVector<double>({2., 3., 4., 5., 6., 7., 8., 9., 10., 11.}));
+
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	p->setNiceExtend(false);
+	QVERIFY(p != nullptr);
+	ws->addChild(p);
+
+	auto* curve = new XYCurve(QStringLiteral("curve"));
+	p->addChild(curve);
+	curve->setXColumn(xCol);
+	curve->setYColumn(yCol);
+
+	CHECK_RANGE(p, curve, Dimension::X, dt1.toMSecsSinceEpoch(), dt10.toMSecsSinceEpoch());
+	CHECK_RANGE(p, curve, Dimension::Y, 2., 11.);
+
+	QCOMPARE(p->rangeCount(Dimension::X), 1);
+	QCOMPARE(p->rangeCount(Dimension::Y), 1);
+	QCOMPARE(p->range(Dimension::Y, 0).autoScale(), true);
+
+	const auto& axes = p->children<Axis>();
+	QCOMPARE(axes.count(), 2);
+	QCOMPARE(axes.at(0)->name(), QStringLiteral("x"));
+	axes.at(0)->setSelected(true);
+	SET_CARTESIAN_MOUSE_MODE(CartesianPlot::MouseMode::ZoomXSelection)
+
+	p->mousePressZoomSelectionMode(QPointF(dt3.toMSecsSinceEpoch(), 3.), 0);
+	p->mouseMoveZoomSelectionMode(QPointF(dt5.addSecs(3600 * 2).toMSecsSinceEpoch(), 3.),
+								  0); // Adding an offset, because the error happens only if the exact time is not hit
+	p->mouseReleaseZoomSelectionMode(0);
+
+	CHECK_RANGE(p, curve, Dimension::X, dt3.toMSecsSinceEpoch(), dt5.addSecs(3600 * 2).toMSecsSinceEpoch()); // zoom
+	CHECK_RANGE(p, curve, Dimension::Y, 4., 6.); // autoscaled
+}
+
 void MultiRangeTest::zoomInX_AllRanges() {
 	LOAD_PROJECT
 	auto refValuesAxis1 = vertAxisP1->tickLabelValues();

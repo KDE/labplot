@@ -2436,7 +2436,7 @@ bool Column::indicesMinMax(double v1, double v2, int& start, int& end) const {
 	case ColumnMode::Day: {
 		qint64 value;
 		qint64 v2int64 = v2;
-		qint64 v1int64 = v2;
+		qint64 v1int64 = v1;
 		for (int i = 0; i < rowCount(); i++) {
 			if (!isValid(i) || isMasked(i))
 				continue;
