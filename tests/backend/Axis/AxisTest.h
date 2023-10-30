@@ -50,6 +50,9 @@ private Q_SLOTS:
 	void numericSpacing();
 	void numericSpacingOffsetNonZero();
 	void numericSpacingStartValueNonZero();
+
+	void customColumnNumeric();
+	void customColumnDateTime();
 };
 
 #endif // WORKSHEETELEMENTTEST_H

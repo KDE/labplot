@@ -2141,14 +2141,21 @@ double ColumnPrivate::valueAt(int index) const {
 	if (!m_data)
 		return NAN;
 
-	if (m_columnMode == AbstractColumn::ColumnMode::Double)
+	switch (m_columnMode) {
+	case AbstractColumn::ColumnMode::Double:
 		return static_cast<QVector<double>*>(m_data)->value(index, NAN);
-	else if (m_columnMode == AbstractColumn::ColumnMode::Integer)
+	case AbstractColumn::ColumnMode::Integer:
 		return static_cast<QVector<int>*>(m_data)->value(index, 0);
-	else if (m_columnMode == AbstractColumn::ColumnMode::BigInt)
+	case AbstractColumn::ColumnMode::BigInt:
 		return static_cast<QVector<qint64>*>(m_data)->value(index, 0);
-	else
-		return NAN;
+	case AbstractColumn::ColumnMode::DateTime:
+		return static_cast<QVector<QDateTime>*>(m_data)->value(index).toMSecsSinceEpoch();
+	case AbstractColumn::ColumnMode::Month: // Fall through
+	case AbstractColumn::ColumnMode::Day: // Fall through
+	case AbstractColumn::ColumnMode::Text: // Fall through
+		break;
+	}
+	return NAN;
 }
 
 /**
