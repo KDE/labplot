@@ -1634,9 +1634,9 @@ void AxisTest::customColumnNumeric() {
 	QVERIFY(p->dataRect().width() > 0.);
 	QVERIFY(p->dataRect().height() > 0.);
 	QCOMPARE(xAxis->d_func()->majorTickPoints.size(), 3);
-	QCOMPARE(xAxis->d_func()->majorTickPoints.at(0).x(), p->dataRect().x() + p->dataRect().width() * (1.7 - 1.) / (5. - 1.));
-	QCOMPARE(xAxis->d_func()->majorTickPoints.at(1).x(), p->dataRect().x() + p->dataRect().width() * (2.2 - 1.) / (5. - 1.));
-	QCOMPARE(xAxis->d_func()->majorTickPoints.at(2).x(), p->dataRect().x() + p->dataRect().width() * (2.5 - 1.) / (5. - 1.));
+	VALUES_EQUAL(xAxis->d_func()->majorTickPoints.at(0).x(), p->dataRect().x() + p->dataRect().width() * (1.7 - 1.) / (5. - 1.));
+	VALUES_EQUAL(xAxis->d_func()->majorTickPoints.at(1).x(), p->dataRect().x() + p->dataRect().width() * (2.2 - 1.) / (5. - 1.));
+	VALUES_EQUAL(xAxis->d_func()->majorTickPoints.at(2).x(), p->dataRect().x() + p->dataRect().width() * (2.5 - 1.) / (5. - 1.));
 }
 
 /*!
@@ -1734,12 +1734,12 @@ void AxisTest::customColumnDateTime() {
 	QVERIFY(p->dataRect().height() > 0.);
 	QCOMPARE(xAxis->d_func()->majorTickPoints.size(), 3);
 	const auto span = dt3.toMSecsSinceEpoch() - dt1.toMSecsSinceEpoch();
-	QCOMPARE(xAxis->d_func()->majorTickPoints.at(0).x(),
-			 p->dataRect().x() + p->dataRect().width() * (dt1Label.toMSecsSinceEpoch() - dt1.toMSecsSinceEpoch()) / span);
-	QCOMPARE(xAxis->d_func()->majorTickPoints.at(1).x(),
-			 p->dataRect().x() + p->dataRect().width() * (dt2Label.toMSecsSinceEpoch() - dt1.toMSecsSinceEpoch()) / span);
-	QCOMPARE(xAxis->d_func()->majorTickPoints.at(2).x(),
-			 p->dataRect().x() + p->dataRect().width() * (dt3Label.toMSecsSinceEpoch() - dt1.toMSecsSinceEpoch()) / span);
+	VALUES_EQUAL(xAxis->d_func()->majorTickPoints.at(0).x(),
+				 p->dataRect().x() + p->dataRect().width() * (dt1Label.toMSecsSinceEpoch() - dt1.toMSecsSinceEpoch()) / span);
+	VALUES_EQUAL(xAxis->d_func()->majorTickPoints.at(1).x(),
+				 p->dataRect().x() + p->dataRect().width() * (dt2Label.toMSecsSinceEpoch() - dt1.toMSecsSinceEpoch()) / span);
+	VALUES_EQUAL(xAxis->d_func()->majorTickPoints.at(2).x(),
+				 p->dataRect().x() + p->dataRect().width() * (dt3Label.toMSecsSinceEpoch() - dt1.toMSecsSinceEpoch()) / span);
 }
 
 QTEST_MAIN(AxisTest)
