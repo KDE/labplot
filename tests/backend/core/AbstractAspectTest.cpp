@@ -14,6 +14,7 @@
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
+#include "backend/core/AspectTreeModel.h"
 
 #include <QUndoStack>
 
@@ -213,6 +214,8 @@ void AbstractAspectTest::saveLoad() {
 void AbstractAspectTest::moveUp() {
 	Project project;
 
+	AspectTreeModel treemodel(&project, this);
+
 	auto* worksheet = new Worksheet(QStringLiteral("Worksheet"));
 	project.addChild(worksheet);
 
@@ -242,6 +245,8 @@ void AbstractAspectTest::moveUp() {
 void AbstractAspectTest::moveDown() {
 	Project project;
 
+	AspectTreeModel treemodel(&project, this);
+
 	auto* worksheet = new Worksheet(QStringLiteral("Worksheet"));
 	project.addChild(worksheet);
 
@@ -266,6 +271,57 @@ void AbstractAspectTest::moveDown() {
 
 	QCOMPARE(project.child<AbstractAspect>(0), spreadsheet);
 	QCOMPARE(project.child<AbstractAspect>(1), worksheet);
+}
+
+/*!
+ * \brief AbstractAspectTest::moveUpDown
+ * Move up/down with a treemodel connected
+ */
+void AbstractAspectTest::moveUpDown() {
+	Project project;
+
+	AspectTreeModel treemodel(&project, this);
+
+	auto* worksheet = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(worksheet);
+
+	auto* spreadsheet = new Spreadsheet(QStringLiteral("Spreadsheet"));
+	project.addChild(spreadsheet);
+
+	auto* spreadsheet2 = new Spreadsheet(QStringLiteral("Spreadsheet2"));
+	project.addChild(spreadsheet2);
+
+		   // check the order of children
+	QCOMPARE(project.child<AbstractAspect>(0), worksheet);
+	QCOMPARE(project.child<AbstractAspect>(1), spreadsheet);
+	QCOMPARE(project.child<AbstractAspect>(2), spreadsheet2);
+
+	spreadsheet2->moveUp();
+	QCOMPARE(project.child<AbstractAspect>(0), worksheet);
+	QCOMPARE(project.child<AbstractAspect>(1), spreadsheet2);
+	QCOMPARE(project.child<AbstractAspect>(2), spreadsheet);
+
+	spreadsheet2->moveUp();
+	QCOMPARE(project.child<AbstractAspect>(0), spreadsheet2);
+	QCOMPARE(project.child<AbstractAspect>(1), worksheet);
+	QCOMPARE(project.child<AbstractAspect>(2), spreadsheet);
+
+	spreadsheet2->moveDown();
+	QCOMPARE(project.child<AbstractAspect>(0), worksheet);
+	QCOMPARE(project.child<AbstractAspect>(1), spreadsheet2);
+	QCOMPARE(project.child<AbstractAspect>(2), spreadsheet);
+
+	spreadsheet->undoStack()->undo();
+
+	QCOMPARE(project.child<AbstractAspect>(0), spreadsheet2);
+	QCOMPARE(project.child<AbstractAspect>(1), worksheet);
+	QCOMPARE(project.child<AbstractAspect>(2), spreadsheet);
+
+	spreadsheet->undoStack()->redo();
+
+	QCOMPARE(project.child<AbstractAspect>(0), worksheet);
+	QCOMPARE(project.child<AbstractAspect>(1), spreadsheet2);
+	QCOMPARE(project.child<AbstractAspect>(2), spreadsheet);
 }
 
 QTEST_MAIN(AbstractAspectTest)

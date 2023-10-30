@@ -64,8 +64,13 @@ public:
 		// QDEBUG(Q_FUNC_INFO << ", TARGET = " << m_target->q << " CHILD = " << m_child << ", PARENT = " << m_child->parentAspect())
 		const int origIndex = m_target->indexOfChild(m_child);
 		if (newIndex != origIndex) {
-			// TODO: newIndex is the index of all AbstractAspects including the hidden one. The AspectTreeModel expects the index without!
-			Q_EMIT m_target->q->childAspectAboutToBeMoved(m_child, newIndex);
+			int nonHiddenIndex = 0;
+			for (int i=0; i < newIndex; i++) {
+				if (!m_target->m_children.at(i)->hidden())
+					nonHiddenIndex ++;
+			}
+
+			Q_EMIT m_target->q->childAspectAboutToBeMoved(m_child, nonHiddenIndex);
 
 			m_target->m_children.removeAll(m_child);
 			m_target->m_children.insert(newIndex, m_child);
