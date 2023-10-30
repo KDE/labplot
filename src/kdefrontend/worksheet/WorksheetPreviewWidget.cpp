@@ -64,6 +64,7 @@ void WorksheetPreviewWidget::addPreview(const Worksheet* w, int row) const {
 	w->exportView(pix);
 	ui.lwPreview->insertItem(row, new QListWidgetItem(QIcon(pix), w->name()));
 
+	connect(w, &Worksheet::aspectDescriptionChanged, this, &WorksheetPreviewWidget::updateText);
 	// TODO: connect(w, &Worksheet::changed, this, &WorksheetPreviewWidget::updatePreview);
 }
 
@@ -75,6 +76,14 @@ void WorksheetPreviewWidget::updatePreview() {
 	QPixmap pix;
 	w->exportView(pix);
 	ui.lwPreview->item(indexOfWorksheet(w))->setIcon(QIcon(pix));
+}
+
+void WorksheetPreviewWidget::updateText() {
+	auto* w = dynamic_cast<Worksheet*>(QObject::sender());
+	if (!w)
+		return;
+
+	ui.lwPreview->item(indexOfWorksheet(w))->setText(w->name());
 }
 
 int WorksheetPreviewWidget::indexOfWorksheet(const Worksheet* w) const {

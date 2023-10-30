@@ -36,6 +36,7 @@ private Q_SLOTS:
 	void aspectAdded(const AbstractAspect*);
 	void aspectAboutToBeRemoved(const AbstractAspect*);
 	void updatePreview();
+	void updateText();
 
 Q_SIGNALS:
 	void currentAspectChanged(AbstractAspect*);
