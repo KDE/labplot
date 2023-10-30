@@ -578,11 +578,14 @@ private:
 };
 
 void WorksheetElement::setCoordinateSystemIndex(int index, QUndoCommand* parent) {
-	// TODO: second condition needed?
-	if (index != m_cSystemIndex && cSystem != nullptr) {
+	if (index != m_cSystemIndex) {
 		auto* command = new SetCoordinateSystemIndexCmd(this, index, parent);
 		if (!parent)
 			exec(command);
+	} else if (!cSystem) {
+		// during load the index will be set,
+		// but the element might not have yet a plot assigned
+		retransform();
 	}
 }
 

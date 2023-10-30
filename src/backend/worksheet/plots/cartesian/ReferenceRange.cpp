@@ -66,7 +66,7 @@ void ReferenceRange::init() {
 	}
 
 	if (plot()) {
-		setCoordinateSystemIndex(plot()->defaultCoordinateSystemIndex());
+		m_cSystemIndex = plot()->defaultCoordinateSystemIndex();
 		d->coordinateBindingEnabled = true;
 		// default position - 10% of the plot width/height positioned around the center
 		auto cs = plot()->coordinateSystem(coordinateSystemIndex());
