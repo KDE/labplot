@@ -585,6 +585,8 @@ void WorksheetElement::setCoordinateSystemIndex(int index, QUndoCommand* parent)
 	} else if (!cSystem) {
 		// during load the index will be set,
 		// but the element might not have yet a plot assigned
+		if (plot())
+			cSystem = dynamic_cast<const CartesianCoordinateSystem*>(plot()->coordinateSystem(index));
 		retransform();
 	}
 }
