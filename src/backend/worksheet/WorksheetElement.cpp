@@ -763,6 +763,12 @@ void WorksheetElementPrivate::updatePosition() {
 	suppressItemChangeEvent = false;
 }
 
+bool WorksheetElementPrivate::sceneEvent(QEvent *event) {
+	if (locked)
+		return false;
+	return QGraphicsItem::sceneEvent(event);
+}
+
 void WorksheetElementPrivate::keyPressEvent(QKeyEvent* event) {
 	const bool keyVertical = event->key() == Qt::Key_Up || event->key() == Qt::Key_Down;
 	const bool keyHorizontal = event->key() == Qt::Key_Left || event->key() == Qt::Key_Right;

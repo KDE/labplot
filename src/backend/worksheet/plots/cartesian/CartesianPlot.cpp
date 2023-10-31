@@ -4250,7 +4250,7 @@ void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 					curve->setHover(false);
 					continue;
 				}
-				if (curve->activatePlot(event->pos())) {
+				if (curve->activatePlot(event->pos()) && !curve->isLocked()) {
 					curve->setHover(true);
 					hovered = true;
 					continue;
