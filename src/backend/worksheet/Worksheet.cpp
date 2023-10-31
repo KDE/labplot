@@ -539,7 +539,7 @@ Worksheet::CartesianPlotActionMode Worksheet::cartesianPlotCursorMode() const {
 	return d->cartesianPlotCursorMode;
 }
 
-bool Worksheet::plotsInteractive() {
+bool Worksheet::plotsInteractive() const {
 	Q_D(const Worksheet);
 	return d->plotsInteractive;
 }
