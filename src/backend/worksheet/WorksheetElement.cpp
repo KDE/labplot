@@ -617,7 +617,7 @@ QString WorksheetElement::coordinateSystemInfo(const int index) const {
 	return {};
 }
 
-BASIC_D_ACCESSOR_IMPL(WorksheetElement, bool, locked, Lock, locked)
+BASIC_D_ACCESSOR_IMPL(WorksheetElement, bool, isLocked, Lock, locked)
 
 /* ============================ getter methods ================= */
 BASIC_SHARED_D_READER_IMPL(WorksheetElement, WorksheetElement::PositionWrapper, position, position)
