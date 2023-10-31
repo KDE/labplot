@@ -149,11 +149,6 @@ bool BarPlot::activatePlot(QPointF mouseScenePos, double maxDist) {
 	return d->activatePlot(mouseScenePos, maxDist);
 }
 
-void BarPlot::(bool on) {
-	Q_D(BarPlot);
-	d->(on);
-}
-
 /* ============================ getter methods ================= */
 // general
 BASIC_SHARED_D_READER_IMPL(BarPlot, QVector<const AbstractColumn*>, dataColumns, dataColumns)

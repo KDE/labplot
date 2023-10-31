@@ -42,7 +42,6 @@ public:
 
 	// reimplemented from Plot
 	bool activatePlot(QPointF mouseScenePos, double maxDist = -1) override;
-	void setHover(bool on) override;
 
 	// general
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, xColumn, XColumn)

@@ -921,10 +921,6 @@ bool CartesianPlot::isPanningActive() const {
 	return d->panningStarted;
 }
 
-bool CartesianPlot::isHovered() const {
-	Q_D(const CartesianPlot);
-	return d->m_hovered;
-}
 bool CartesianPlot::isPrinted() const {
 	Q_D(const CartesianPlot);
 	return d->m_printing;
@@ -2336,9 +2332,10 @@ void CartesianPlot::childHovered() {
 	Q_D(CartesianPlot);
 	bool curveSender = qobject_cast<XYCurve*>(QObject::sender()) != nullptr;
 	if (!d->isSelected()) {
-		if (d->m_hovered)
-			d->m_hovered = false;
-		d->update();
+		if (isHovered())
+			setHover(false);
+		else
+			d->update(); // realy needed?
 	}
 	if (!curveSender) {
 		for (auto curve : children<XYCurve>())

@@ -48,7 +48,7 @@ public:
 	virtual void keyPressEvent(QKeyEvent*) override;
 	virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
 	virtual QVariant itemChange(GraphicsItemChange, const QVariant& value) override;
-	virtual bool sceneEvent(QEvent *event) override;
+	virtual bool sceneEvent(QEvent* event) override;
 	QPointF mapParentToPlotArea(QPointF);
 	QPointF mapPlotAreaToParent(QPointF);
 	void setHover(bool);
@@ -59,7 +59,7 @@ private:
 	virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
 
 protected:
-		bool m_hovered{false};
+	bool m_hovered{false};
 };
 
 #endif

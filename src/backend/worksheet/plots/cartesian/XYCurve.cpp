@@ -258,17 +258,6 @@ bool XYCurve::activatePlot(QPointF mouseScenePos, double maxDist) {
 	return d->activatePlot(mouseScenePos, maxDist);
 }
 
-/*!
- * \brief XYCurve::setHover
- * Will be called in CartesianPlot::hoverMoveEvent()
- * See d->setHover(on) for more documentation
- * \p on
- */
-void XYCurve::setHover(bool on) {
-	Q_D(XYCurve);
-	d->setHover(on);
-}
-
 // ##############################################################################
 // ##########################  getter methods  ##################################
 // ##############################################################################
@@ -2984,7 +2973,7 @@ void XYCurvePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*
 	else
 		draw(painter); // draw directly again (slow)
 
-	if ( && !isSelected() && !q->isPrinting()) {
+	if (isHovered() && !isSelected() && !q->isPrinting()) {
 		if (m_hoverEffectImageIsDirty) {
 			QPixmap pix = m_pixmap;
 			QPainter p(&pix);

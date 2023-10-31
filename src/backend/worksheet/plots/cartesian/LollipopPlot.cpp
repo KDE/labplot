@@ -143,11 +143,6 @@ bool LollipopPlot::activatePlot(QPointF mouseScenePos, double maxDist) {
 	return d->activatePlot(mouseScenePos, maxDist);
 }
 
-void LollipopPlot::setHover(bool on) {
-	Q_D(LollipopPlot);
-	d->setHover(on);
-}
-
 /* ============================ getter methods ================= */
 // general
 BASIC_SHARED_D_READER_IMPL(LollipopPlot, QVector<const AbstractColumn*>, dataColumns, dataColumns)
@@ -307,15 +302,6 @@ bool LollipopPlotPrivate::activatePlot(QPointF mouseScenePos, double /*maxDist*/
 		return false;
 
 	return shape().contains(mouseScenePos);
-}
-
-void LollipopPlotPrivate::setHover(bool on) {
-	if (on == m_hovered)
-		return; // don't update if state not changed
-
-	m_hovered = on;
-	on ? Q_EMIT q->hovered() : Q_EMIT q->unhovered();
-	update();
 }
 
 Line* LollipopPlotPrivate::addLine(const KConfigGroup& group) {

@@ -114,7 +114,6 @@ public:
 	const QColor themeColorPalette(int index) const;
 	void processDropEvent(const QVector<quintptr>&) override;
 	bool isPanningActive() const;
-	bool isHovered() const;
 	bool isPrinted() const;
 	bool isSelected() const;
 

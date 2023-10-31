@@ -174,8 +174,8 @@ void WorksheetElementContainer::handleAspectAdded(const AbstractAspect* aspect) 
 void WorksheetElementContainer::childHovered() {
 	Q_D(WorksheetElementContainer);
 	if (!d->isSelected()) {
-		if (d->m_hovered)
-			d->m_hovered = false;
+		if (isHovered())
+			setHover(false);
 		d->update();
 	}
 }
@@ -183,7 +183,7 @@ void WorksheetElementContainer::childHovered() {
 void WorksheetElementContainer::childUnhovered() {
 	Q_D(WorksheetElementContainer);
 	if (!d->isSelected()) {
-		d->m_hovered = true;
+		setHover(true);
 		d->update();
 	}
 }

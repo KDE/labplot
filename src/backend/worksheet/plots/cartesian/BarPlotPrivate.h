@@ -80,7 +80,6 @@ private:
 
 	void draw(QPainter*);
 
-
 	QRectF m_boundingRectangle;
 	QPainterPath m_barPlotShape;
 

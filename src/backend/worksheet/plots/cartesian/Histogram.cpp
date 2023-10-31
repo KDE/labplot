@@ -273,11 +273,6 @@ bool Histogram::activatePlot(QPointF mouseScenePos, double maxDist) {
 	return d->activatePlot(mouseScenePos, maxDist);
 }
 
-void Histogram::setHover(bool on) {
-	Q_D(Histogram);
-	d->setHover(on);
-}
-
 // ##############################################################################
 // ##########################  getter methods  ##################################
 // ##############################################################################
@@ -1798,19 +1793,6 @@ void HistogramPrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 	event->ignore();
 	setSelected(false);
 	QGraphicsItem::mousePressEvent(event);
-}
-
-/*!
- * Is called in CartesianPlot::hoverMoveEvent where it is determined which curve to hover.
- * \p on
- */
-void HistogramPrivate::setHover(bool on) {
-	if (on == m_hovered)
-		return; // don't update if state not changed
-
-	m_hovered = on;
-	on ? Q_EMIT q->hovered() : Q_EMIT q->unhovered();
-	update();
 }
 
 // ##############################################################################

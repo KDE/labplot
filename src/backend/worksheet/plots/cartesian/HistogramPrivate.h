@@ -44,7 +44,6 @@ public:
 	void recalcShapeAndBoundingRect() override;
 
 	bool activatePlot(QPointF mouseScenePos, double maxDist);
-	void setHover(bool on);
 
 	double xMinimum() const;
 	double xMaximum() const;
@@ -118,7 +117,7 @@ private:
 	QPixmap m_pixmap;
 	QImage m_hoverEffectImage;
 	QImage m_selectionEffectImage;
-	bool EffectImageIsDirty{false};
+	bool m_hoverEffectImageIsDirty{false};
 	bool m_selectionEffectImageIsDirty{false};
 	Column* m_binsColumn{nullptr}; // bin positions/edges
 	Column* m_binValuesColumn{nullptr}; // bin values

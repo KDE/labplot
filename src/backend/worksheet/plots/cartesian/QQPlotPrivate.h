@@ -29,7 +29,6 @@ public:
 	void updateDistribution();
 	void recalcShapeAndBoundingRect() override;
 
-	void setHover(bool on);
 	bool activateCurve(QPointF mouseScenePos, double maxDist);
 
 	QPainterPath curveShape;

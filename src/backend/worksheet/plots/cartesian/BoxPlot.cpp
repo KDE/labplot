@@ -287,11 +287,6 @@ bool BoxPlot::activatePlot(QPointF mouseScenePos, double maxDist) {
 	return d->activatePlot(mouseScenePos, maxDist);
 }
 
-void BoxPlot::setHover(bool on) {
-	Q_D(BoxPlot);
-	d->setHover(on);
-}
-
 /*!
  * creates a new spreadsheet having the data with the positions and the values of the bins.
  * the new spreadsheet is added to the current folder.
@@ -618,15 +613,6 @@ bool BoxPlotPrivate::activatePlot(QPointF mouseScenePos, double /*maxDist*/) {
 		return false;
 
 	return shape().contains(mouseScenePos);
-}
-
-void BoxPlotPrivate::setHover(bool on) {
-	if (on == m_hovered)
-		return; // don't update if state not changed
-
-	m_hovered = on;
-	on ? Q_EMIT q->hovered() : Q_EMIT q->unhovered();
-	update();
 }
 
 Background* BoxPlotPrivate::addBackground(const KConfigGroup& group) {

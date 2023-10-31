@@ -29,7 +29,6 @@ public:
 	virtual bool hasData() const = 0;
 
 	virtual bool activatePlot(QPointF mouseScenePos, double maxDist = -1) = 0;
-	virtual void setHover(bool on) = 0;
 
 	typedef PlotPrivate Private;
 

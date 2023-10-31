@@ -163,11 +163,6 @@ bool QQPlot::activatePlot(QPointF mouseScenePos, double maxDist) {
 	return d->activateCurve(mouseScenePos, maxDist);
 }
 
-void QQPlot::setHover(bool on) {
-	Q_D(QQPlot);
-	d->setHover(on);
-}
-
 void QQPlot::handleResize(double /*horizontalRatio*/, double /*verticalRatio*/, bool /*pageResize*/) {
 	// TODO
 }
@@ -603,19 +598,6 @@ bool QQPlotPrivate::activateCurve(QPointF mouseScenePos, double /*maxDist*/) {
 		return false;
 
 	return curveShape.contains(mouseScenePos);
-}
-
-/*!
- * Is called in CartesianPlot::hoverMoveEvent where it is determined which curve to hover.
- * \p on
- */
-void QQPlotPrivate::setHover(bool on) {
-	if (on == m_hovered)
-		return; // don't update if state not changed
-
-	m_hovered = on;
-	on ? Q_EMIT q->hovered() : Q_EMIT q->unhovered();
-	update();
 }
 
 // ##############################################################################

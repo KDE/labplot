@@ -43,7 +43,6 @@ public:
 	QPainterPath shape() const override;
 
 	bool activatePlot(QPointF mouseScenePos, double maxDist);
-	void setHover(bool on);
 
 	LollipopPlot* const q;
 

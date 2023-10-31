@@ -438,7 +438,7 @@ QPointF WorksheetElement::relativePosToParentPos(PositionWrapper position) const
 }
 
 namespace XML {
-	constexpr auto locked = "locked";
+constexpr QLatin1String locked("locked");
 }
 
 void WorksheetElement::save(QXmlStreamWriter* writer) const {
@@ -455,7 +455,7 @@ void WorksheetElement::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("coordinateBinding"), QString::number(d->coordinateBindingEnabled));
 	writer->writeAttribute(QStringLiteral("logicalPosX"), QString::number(d->positionLogical.x()));
 	writer->writeAttribute(QStringLiteral("logicalPosY"), QString::number(d->positionLogical.y()));
-	writer->writeAttribute(QStringLiteral(XML::locked), QString::number(d->locked));
+	writer->writeAttribute(XML::locked, QString::number(d->locked));
 }
 
 bool WorksheetElement::load(XmlStreamReader* reader, bool preview) {
@@ -541,11 +541,11 @@ bool WorksheetElement::load(XmlStreamReader* reader, bool preview) {
 	else
 		d->positionLogical.setY(str.toDouble());
 
-	str = attribs.value(QStringLiteral(XML::locked)).toString();
+	str = attribs.value(XML::locked).toString();
 	if (str.isEmpty())
-		reader->raiseMissingAttributeWarning(QStringLiteral(XML::locked));
+		reader->raiseMissingAttributeWarning(XML::locked);
 	else
-		setLocked(str.toBool());
+		d->locked = static_cast<bool>(str.toInt());
 
 	return true;
 }
@@ -619,8 +619,8 @@ QString WorksheetElement::coordinateSystemInfo(const int index) const {
 
 BASIC_D_ACCESSOR_IMPL(WorksheetElement, bool, isLocked, Lock, locked)
 
-bool WorksheetElement::isHovered() {
-	Q_D(WorksheetElement);
+bool WorksheetElement::isHovered() const {
+	Q_D(const WorksheetElement);
 	return d->isHovered();
 }
 
@@ -773,7 +773,7 @@ void WorksheetElementPrivate::updatePosition() {
 	suppressItemChangeEvent = false;
 }
 
-bool WorksheetElementPrivate::sceneEvent(QEvent *event) {
+bool WorksheetElementPrivate::sceneEvent(QEvent* event) {
 	if (locked)
 		return false;
 	return QGraphicsItem::sceneEvent(event);
