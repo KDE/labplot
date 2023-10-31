@@ -5,10 +5,11 @@
 include:
   - project: sysadmin/ci-utilities
     file:
-      - /gitlab-templates/linux.yml
-      - /gitlab-templates/windows.yml
-      - /gitlab-templates/linux-qt6.yml
-      - /gitlab-templates/windows-qt6.yml
+      - /gitlab-templates/reuse-lint.yml
+##      - /gitlab-templates/linux.yml
+##      - /gitlab-templates/windows.yml
+##      - /gitlab-templates/linux-qt6.yml
+##      - /gitlab-templates/windows-qt6.yml
 # finds Qt5 but KF5 is not installed:
 #     - /gitlab-templates/freebsd-qt6.yml
 # Finds Qt6 but KF6 is not installed:
