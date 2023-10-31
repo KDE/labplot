@@ -71,6 +71,7 @@ public:
 	BASIC_D_ACCESSOR_DECL(VerticalAlignment, verticalAlignment, VerticalAlignment)
 	BASIC_D_ACCESSOR_DECL(qreal, rotationAngle, RotationAngle)
 	BASIC_D_ACCESSOR_DECL(qreal, scale, Scale)
+	BASIC_D_ACCESSOR_DECL(bool, isLocked, Lock)
 
 	void finalizeAdd() override;
 

@@ -36,6 +36,7 @@ public:
 	bool suppressRetransform{false};
 	WorksheetElement* const q{nullptr};
 	bool insidePlot{true}; // point inside the plot (visible) or not
+	bool locked{false};
 
 	bool swapVisible(bool on);
 	QString name() const;
