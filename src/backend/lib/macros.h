@@ -167,6 +167,7 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
 // replaces CLASS_D_READER_IMPL
 #define BASIC_D_READER_IMPL(classname, type, method, var)                                                                                                      \
 	type classname::method() const {                                                                                                                           \
+		Q_D(const classname);                                                                                                                                  \
 		return d->var;                                                                                                                                         \
 	}
 // replaces CLASS_SHARED_D_READER_IMPL
@@ -178,12 +179,14 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
 
 #define BASIC_D_ACCESSOR_IMPL(classname, type, method, Method, var)                                                                                            \
 	void classname::set##Method(const type value) {                                                                                                            \
+		Q_D(classname);                                                                                                                                        \
 		d->var = value;                                                                                                                                        \
 	}                                                                                                                                                          \
 	BASIC_D_READER_IMPL(classname, type, method, var)
 
 #define CLASS_D_ACCESSOR_IMPL(classname, type, method, Method, var)                                                                                            \
 	void classname::set##Method(const type& value) {                                                                                                           \
+		Q_D(classname);                                                                                                                                        \
 		d->var = value;                                                                                                                                        \
 	}                                                                                                                                                          \
 	BASIC_D_READER_IMPL(classname, type, method, var)

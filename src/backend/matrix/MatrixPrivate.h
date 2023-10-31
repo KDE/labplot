@@ -48,7 +48,7 @@ public:
 	}
 	// get column cells (must be defined in header)
 	template<typename T>
-	QVector<T> columnCells(int col, int first_row, int last_row) {
+	QVector<T> columnCells(int col, int first_row, int last_row) const {
 		Q_ASSERT(first_row >= 0 && first_row < rowCount);
 		Q_ASSERT(last_row >= 0 && last_row < rowCount);
 
@@ -83,7 +83,7 @@ public:
 	}
 	// get row cells (must be defined in header)
 	template<typename T>
-	QVector<T> rowCells(int row, int first_column, int last_column) {
+	QVector<T> rowCells(int row, int first_column, int last_column) const {
 		Q_ASSERT(first_column >= 0 && first_column < columnCount);
 		Q_ASSERT(last_column >= 0 && last_column < columnCount);
 

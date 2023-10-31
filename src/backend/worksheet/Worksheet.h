@@ -75,13 +75,13 @@ public:
 	void setIsClosing();
 	void suppressSelectionChangedEvent(bool);
 
-	CartesianPlotActionMode cartesianPlotActionMode();
+	CartesianPlotActionMode cartesianPlotActionMode() const;
 	void setCartesianPlotActionMode(CartesianPlotActionMode mode);
-	CartesianPlotActionMode cartesianPlotCursorMode();
+	CartesianPlotActionMode cartesianPlotCursorMode() const;
 	void setCartesianPlotCursorMode(CartesianPlotActionMode mode);
 	void setInteractive(bool);
 	void setPlotsInteractive(bool);
-	bool plotsInteractive();
+	bool plotsInteractive() const;
 	int plotCount();
 	CartesianPlot* plot(int index);
 	TreeModel* cursorModel();
@@ -140,7 +140,8 @@ private:
 	WorksheetElement* aspectFromGraphicsItem(const WorksheetElement*, const QGraphicsItem*) const;
 	void loadTheme(const QString&);
 
-	WorksheetPrivate* const d;
+	Q_DECLARE_PRIVATE(Worksheet)
+	WorksheetPrivate* const d_ptr;
 	mutable WorksheetView* m_view{nullptr};
 	friend class WorksheetPrivate;
 
