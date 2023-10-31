@@ -123,6 +123,7 @@ private Q_SLOTS:
 	void borderOpacityChanged(int);
 
 	void visibilityChanged(bool);
+	void lockChanged(bool);
 	void bindingChanged(bool checked);
 	void showPlaceholderTextChanged(bool checked);
 
@@ -146,6 +147,7 @@ private Q_SLOTS:
 	void labelBorderOpacityChanged(float);
 
 	void labelVisibleChanged(bool);
+	void labelLockChanged(bool);
 	void labelCartesianPlotParent(bool on);
 	void labelModeChanged(TextLabel::Mode);
 
