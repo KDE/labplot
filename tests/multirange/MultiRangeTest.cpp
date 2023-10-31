@@ -430,7 +430,7 @@ void MultiRangeTest::zoomInX_SingleRangeDateTimeMonotonicIncrease() {
 	curve->setXColumn(xCol);
 	curve->setYColumn(yCol);
 
-	CHECK_RANGE(p, curve, Dimension::X, dt1.toMSecsSinceEpoch(), dt10.toMSecsSinceEpoch());
+	CHECK_RANGE(p, curve, Dimension::X, (double)dt1.toMSecsSinceEpoch(), (double)dt10.toMSecsSinceEpoch());
 	CHECK_RANGE(p, curve, Dimension::Y, 2., 11.);
 
 	QCOMPARE(p->rangeCount(Dimension::X), 1);
@@ -443,11 +443,11 @@ void MultiRangeTest::zoomInX_SingleRangeDateTimeMonotonicIncrease() {
 	axes.at(0)->setSelected(true);
 	SET_CARTESIAN_MOUSE_MODE(CartesianPlot::MouseMode::ZoomXSelection)
 
-	p->mousePressZoomSelectionMode(QPointF(dt3.toMSecsSinceEpoch(), 3.), 0);
-	p->mouseMoveZoomSelectionMode(QPointF(dt5.toMSecsSinceEpoch(), 3.), 0);
+	p->mousePressZoomSelectionMode(QPointF((double)dt3.toMSecsSinceEpoch(), 3.), 0);
+	p->mouseMoveZoomSelectionMode(QPointF((double)dt5.toMSecsSinceEpoch(), 3.), 0);
 	p->mouseReleaseZoomSelectionMode(0);
 
-	CHECK_RANGE(p, curve, Dimension::X, dt3.toMSecsSinceEpoch(), dt5.toMSecsSinceEpoch()); // zoom
+	CHECK_RANGE(p, curve, Dimension::X, (double)dt3.toMSecsSinceEpoch(), (double)dt5.toMSecsSinceEpoch()); // zoom
 	CHECK_RANGE(p, curve, Dimension::Y, 4., 6.); // autoscaled
 }
 
@@ -492,7 +492,7 @@ void MultiRangeTest::zoomInX_SingleRangeDateTimeNonMonotonic() {
 	curve->setXColumn(xCol);
 	curve->setYColumn(yCol);
 
-	CHECK_RANGE(p, curve, Dimension::X, dt1.toMSecsSinceEpoch(), dt10.toMSecsSinceEpoch());
+	CHECK_RANGE(p, curve, Dimension::X, (double)dt1.toMSecsSinceEpoch(), (double)dt10.toMSecsSinceEpoch());
 	CHECK_RANGE(p, curve, Dimension::Y, 2., 11.);
 
 	QCOMPARE(p->rangeCount(Dimension::X), 1);
@@ -505,12 +505,12 @@ void MultiRangeTest::zoomInX_SingleRangeDateTimeNonMonotonic() {
 	axes.at(0)->setSelected(true);
 	SET_CARTESIAN_MOUSE_MODE(CartesianPlot::MouseMode::ZoomXSelection)
 
-	p->mousePressZoomSelectionMode(QPointF(dt3.toMSecsSinceEpoch(), 3.), 0);
-	p->mouseMoveZoomSelectionMode(QPointF(dt5.addSecs(3600 * 2).toMSecsSinceEpoch(), 3.),
+	p->mousePressZoomSelectionMode(QPointF((double)dt3.toMSecsSinceEpoch(), 3.), 0);
+	p->mouseMoveZoomSelectionMode(QPointF((double)dt5.addSecs(3600 * 2).toMSecsSinceEpoch(), 3.),
 								  0); // Adding an offset, because the error happens only if the exact time is not hit
 	p->mouseReleaseZoomSelectionMode(0);
 
-	CHECK_RANGE(p, curve, Dimension::X, dt3.toMSecsSinceEpoch(), dt5.addSecs(3600 * 2).toMSecsSinceEpoch()); // zoom
+	CHECK_RANGE(p, curve, Dimension::X, (double)dt3.toMSecsSinceEpoch(), (double)dt5.addSecs(3600 * 2).toMSecsSinceEpoch()); // zoom
 	CHECK_RANGE(p, curve, Dimension::Y, 4., 6.); // autoscaled
 }
 
