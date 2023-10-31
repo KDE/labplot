@@ -159,6 +159,7 @@ Q_SIGNALS:
 	void rotationAngleChanged(qreal) const;
 	void rotationChanged(qreal) const;
 	void visibleChanged(bool) const;
+	void lockChanged(bool) const;
 	void coordinateSystemIndexChanged(int) const;
 	void changed();
 	void hoveredChanged(bool) const;

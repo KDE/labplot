@@ -125,6 +125,16 @@ void WorksheetElement::changeVisibility() {
 	this->setVisible(!d->isVisible());
 }
 
+STD_SETTER_CMD_IMPL_S(WorksheetElement, SetLock, bool, lock)
+void WorksheetElement::setLock(bool lock) {
+	Q_D(WorksheetElement);
+	if (lock != d->lock) {
+		if (!lock && isHovered())
+			setHover(false);
+		exec(new WorksheetElementSetLockCmd(d, lock, lock ? ki18n("%1: lock") : ki18n("%1: unlock")));
+	}
+}
+
 STD_SWAP_METHOD_SETTER_CMD_IMPL_F(WorksheetElement, SetVisible, bool, swapVisible, update)
 void WorksheetElement::setVisible(bool on) {
 	Q_D(WorksheetElement);
@@ -455,7 +465,7 @@ void WorksheetElement::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("coordinateBinding"), QString::number(d->coordinateBindingEnabled));
 	writer->writeAttribute(QStringLiteral("logicalPosX"), QString::number(d->positionLogical.x()));
 	writer->writeAttribute(QStringLiteral("logicalPosY"), QString::number(d->positionLogical.y()));
-	writer->writeAttribute(XML::locked, QString::number(d->locked));
+	writer->writeAttribute(XML::locked, QString::number(d->lock));
 }
 
 bool WorksheetElement::load(XmlStreamReader* reader, bool preview) {
@@ -545,7 +555,7 @@ bool WorksheetElement::load(XmlStreamReader* reader, bool preview) {
 	if (str.isEmpty())
 		reader->raiseMissingAttributeWarning(XML::locked);
 	else
-		d->locked = static_cast<bool>(str.toInt());
+		d->lock = static_cast<bool>(str.toInt());
 
 	return true;
 }
@@ -617,8 +627,6 @@ QString WorksheetElement::coordinateSystemInfo(const int index) const {
 	return {};
 }
 
-BASIC_D_ACCESSOR_IMPL(WorksheetElement, bool, isLocked, Lock, locked)
-
 bool WorksheetElement::isHovered() const {
 	Q_D(const WorksheetElement);
 	return d->isHovered();
@@ -640,6 +648,7 @@ BASIC_SHARED_D_READER_IMPL(WorksheetElement,
 						   rotation() * -1) // the rotation is in qgraphicsitem different to the convention used in labplot
 BASIC_SHARED_D_READER_IMPL(WorksheetElement, bool, coordinateBindingEnabled, coordinateBindingEnabled)
 BASIC_SHARED_D_READER_IMPL(WorksheetElement, qreal, scale, scale())
+BASIC_SHARED_D_READER_IMPL(WorksheetElement, bool, isLocked, lock)
 
 /* ============================ setter methods and undo commands ================= */
 STD_SETTER_CMD_IMPL_F_S_SC(WorksheetElement, SetPosition, WorksheetElement::PositionWrapper, position, updatePosition, objectPositionChanged)
@@ -774,8 +783,10 @@ void WorksheetElementPrivate::updatePosition() {
 }
 
 bool WorksheetElementPrivate::sceneEvent(QEvent* event) {
-	if (locked)
+	if (lock) {
+		event->ignore();
 		return false;
+	}
 	return QGraphicsItem::sceneEvent(event);
 }
 
