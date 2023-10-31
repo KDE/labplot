@@ -80,8 +80,8 @@ public:
 	CartesianPlotActionMode cartesianPlotCursorMode();
 	void setCartesianPlotCursorMode(CartesianPlotActionMode mode);
 	void setInteractive(bool);
-	void setPlotsLocked(bool);
-	bool plotsLocked();
+	void setPlotsInteractive(bool);
+	bool plotsInteractive();
 	int plotCount();
 	CartesianPlot* plot(int index);
 	TreeModel* cursorModel();

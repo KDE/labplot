@@ -53,7 +53,7 @@ public:
 	int layoutColumnCount{2};
 	int layoutRowCount{2};
 	QString theme;
-	bool plotsLocked{false};
+	bool plotsInteractive{true};
 	bool updateCompleteCursorModel{true};
 	Worksheet::CartesianPlotActionMode cartesianPlotActionMode{Worksheet::CartesianPlotActionMode::ApplyActionToSelection};
 	Worksheet::CartesianPlotActionMode cartesianPlotCursorMode{Worksheet::CartesianPlotActionMode::ApplyActionToAll};

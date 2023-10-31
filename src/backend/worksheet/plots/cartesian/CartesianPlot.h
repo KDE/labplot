@@ -108,7 +108,7 @@ public:
 	QRectF dataRect() const;
 	void setMouseMode(MouseMode);
 	MouseMode mouseMode() const;
-	BASIC_D_ACCESSOR_DECL(bool, isLocked, Locked)
+	BASIC_D_ACCESSOR_DECL(bool, isInteractive, Interactive)
 	void navigate(int cSystemIndex, NavigationOperation);
 	const QList<QColor>& themeColorPalette() const;
 	const QColor themeColorPalette(int index) const;

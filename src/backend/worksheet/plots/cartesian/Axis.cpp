@@ -2884,7 +2884,7 @@ void AxisPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 
 void AxisPrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 	auto* plot = static_cast<CartesianPlot*>(q->parentAspect());
-	if (!plot->isLocked()) {
+	if (plot->isInteractive()) {
 		m_panningStarted = true;
 		m_panningStart = event->pos();
 	} else

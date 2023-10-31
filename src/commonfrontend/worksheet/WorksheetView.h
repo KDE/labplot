@@ -59,7 +59,7 @@ public:
 	void setIsBeingPresented(bool presenting);
 	void setCartesianPlotActionMode(Worksheet::CartesianPlotActionMode);
 	void setCartesianPlotCursorMode(Worksheet::CartesianPlotActionMode);
-	void setPlotLock(bool lock);
+	void setPlotInteractive(bool);
 	void suppressSelectionChangedEvent(bool);
 	WorksheetElement* selectedElement() const;
 	QList<QGraphicsItem*> selectedItems() const;
@@ -198,7 +198,7 @@ private:
 	QAction* fourTimesMagnificationAction{nullptr};
 	QAction* fiveTimesMagnificationAction{nullptr};
 
-	QAction* plotsLockedAction{nullptr};
+	QAction* plotsInteractiveAction{nullptr};
 	QAction* showPresenterMode{nullptr};
 
 	// Actions for cartesian plots
@@ -259,7 +259,7 @@ private Q_SLOTS:
 	void changeLayout(QAction*);
 	void changeGrid(QAction*);
 	void changeSnapToGrid();
-	void plotsLockedActionChanged(bool checked);
+	void plotsInteractiveActionChanged(bool checked);
 
 	void deselectItem(QGraphicsItem*);
 	void selectionChanged();

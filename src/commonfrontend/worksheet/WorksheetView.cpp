@@ -275,11 +275,11 @@ void WorksheetView::initActions() {
 	connect(showPresenterMode, &QAction::triggered, this, &WorksheetView::presenterMode);
 
 	// worksheet control actions
-	plotsLockedAction = new QAction(QIcon::fromTheme(QStringLiteral("hidemouse")), i18n("Non-interactive Plots"), this);
-	plotsLockedAction->setToolTip(i18n("If activated, plots on the worksheet don't react on drag and mouse wheel events."));
-	plotsLockedAction->setCheckable(true);
-	plotsLockedAction->setChecked(m_worksheet->plotsLocked());
-	connect(plotsLockedAction, &QAction::triggered, this, &WorksheetView::plotsLockedActionChanged);
+	plotsInteractiveAction = new QAction(QIcon::fromTheme(QStringLiteral("hidemouse")), i18n("Interactive Plots"), this);
+	plotsInteractiveAction->setToolTip(i18n("If not activated, plots on the worksheet don't react on drag and mouse wheel events."));
+	plotsInteractiveAction->setCheckable(true);
+	plotsInteractiveAction->setChecked(m_worksheet->plotsInteractive());
+	connect(plotsInteractiveAction, &QAction::triggered, this, &WorksheetView::plotsInteractiveActionChanged);
 
 	// actions for cartesian plots
 
@@ -577,7 +577,7 @@ void WorksheetView::createContextMenu(QMenu* menu) {
 	menu->insertSeparator(firstAction);
 	menu->insertMenu(firstAction, m_themeMenu);
 	menu->insertSeparator(firstAction);
-	menu->insertAction(firstAction, plotsLockedAction);
+	menu->insertAction(firstAction, plotsInteractiveAction);
 	menu->insertSeparator(firstAction);
 	menu->insertMenu(firstAction, m_cartesianPlotMenu);
 	menu->insertSeparator(firstAction);
@@ -682,8 +682,8 @@ void WorksheetView::setCartesianPlotCursorMode(Worksheet::CartesianPlotActionMod
 		cartesianPlotApplyToSelectionCursor->setChecked(true);
 }
 
-void WorksheetView::setPlotLock(bool lock) {
-	plotsLockedAction->setChecked(lock);
+void WorksheetView::setPlotInteractive(bool interactive) {
+	plotsInteractiveAction->setChecked(interactive);
 }
 
 void WorksheetView::drawForeground(QPainter* painter, const QRectF& rect) {
@@ -2436,8 +2436,8 @@ void WorksheetView::cartesianPlotCursorModeChanged(QAction* action) {
 	handleCartesianPlotActions();
 }
 
-void WorksheetView::plotsLockedActionChanged(bool checked) {
-	m_worksheet->setPlotsLocked(checked);
+void WorksheetView::plotsInteractiveActionChanged(bool checked) {
+	m_worksheet->setPlotsInteractive(checked);
 }
 
 void WorksheetView::cartesianPlotMouseModeChanged(QAction* action) {
