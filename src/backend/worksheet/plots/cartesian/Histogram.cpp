@@ -832,6 +832,11 @@ void HistogramPrivate::recalcHistogram() {
 		return;
 	}
 
+	const double xMinOld = xMinimum();
+	const double xMaxOld = xMaximum();
+	const double yMinOld = yMinimum();
+	const double yMaxOld = yMaximum();
+
 	// calculate the number of valid data points
 	int count = 0;
 	for (int row = 0; row < dataColumn->rowCount(); ++row) {
@@ -949,9 +954,20 @@ void HistogramPrivate::recalcHistogram() {
 			DEBUG("Number of bins must be positive integer")
 	}
 
-	// histogram changed because of the actual data changes or because of new bin settings,
-	// Q_EMIT dataChanged() in order to recalculate everything with the new size/shape of the histogram
-	Q_EMIT q->dataChanged();
+	const double xMin = xMinimum();
+	const double xMax = xMaximum();
+	const double yMin = yMinimum();
+	const double yMax = yMaximum();
+
+	// if the size of the plot has changed because of the actual
+	// data changes or because of new plot settings, emit dataChanged()
+	// in order to recalculate the data ranges in the parent plot area
+	// and to retransform all its children.
+	// Just call retransform() to update the plot only if the ranges didn't change.
+	if (xMin != xMinOld || xMax != xMaxOld || yMin != yMinOld || yMax != yMaxOld)
+		Q_EMIT q->dataChanged();
+	else
+		retransform();
 }
 
 void HistogramPrivate::updateType() {

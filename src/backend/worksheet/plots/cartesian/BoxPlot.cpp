@@ -800,6 +800,11 @@ void BoxPlotPrivate::recalc() {
 		// TODO:
 	}
 
+	const double xMinOld = xMin;
+	const double xMaxOld = xMax;
+	const double yMinOld = yMin;
+	const double yMaxOld = yMax;
+
 	// calculate the new min and max values of the box plot
 	// for the current sizes of the box and of the whiskers
 	if (orientation == BoxPlot::Orientation::Vertical) {
@@ -856,11 +861,15 @@ void BoxPlotPrivate::recalc() {
 	for (int i = 0; i < count; ++i)
 		recalc(i);
 
-	// the size of the boxplot changed because of the actual
-	// data changes or because of new boxplot settings.
-	// Q_EMIT dataChanged() in order to recalculate everything
-	// in the parent plot with the new size/shape of the boxplot
-	Q_EMIT q->dataChanged();
+	// if the size of the plot has changed because of the actual
+	// data changes or because of new plot settings, emit dataChanged()
+	// in order to recalculate the data ranges in the parent plot area
+	// and to retransform all its children.
+	// Just call retransform() to update the plot only if the ranges didn't change.
+	if (xMin != xMinOld || xMax != xMaxOld || yMin != yMinOld || yMax != yMaxOld)
+		Q_EMIT q->dataChanged();
+	else
+		retransform();
 }
 
 QPointF BoxPlotPrivate::setOutlierPoint(double pos, double value) {

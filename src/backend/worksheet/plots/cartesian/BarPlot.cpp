@@ -415,6 +415,11 @@ void BarPlotPrivate::recalc() {
 	m_fillPolygons.clear();
 	m_fillPolygons.resize(newSize);
 
+	const double xMinOld = xMin;
+	const double xMaxOld = xMax;
+	const double yMinOld = yMin;
+	const double yMaxOld = yMax;
+
 	// bar properties
 	int diff = newSize - backgrounds.size();
 	if (diff > 0) {
@@ -595,11 +600,15 @@ void BarPlotPrivate::recalc() {
 
 	m_groupGap = m_groupWidth * 0.1; // gap around a group - the gap between two neighbour groups is 2*m_groupGap
 
-	// the size of the bar plots changed because of the actual
-	// data changes or because of new bar plot settings.
-	// Q_EMIT dataChanged() in order to recalculate everything
-	// in the parent plot with the new size/shape of the boxplot
-	Q_EMIT q->dataChanged();
+	// if the size of the plot has changed because of the actual
+	// data changes or because of new plot settings, emit dataChanged()
+	// in order to recalculate the data ranges in the parent plot area
+	// and to retransform all its children.
+	// Just call retransform() to update the plot only if the ranges didn't change.
+	if (xMin != xMinOld || xMax != xMaxOld || yMin != yMinOld || yMax != yMaxOld)
+		Q_EMIT q->dataChanged();
+	else
+		retransform();
 }
 
 void BarPlotPrivate::verticalBarPlot(int columnIndex) {
