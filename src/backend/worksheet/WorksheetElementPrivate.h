@@ -52,7 +52,7 @@ public:
 	QPointF mapParentToPlotArea(QPointF);
 	QPointF mapPlotAreaToParent(QPointF);
 	void setHover(bool);
-	void isHovered() const;
+	bool isHovered() const;
 
 private:
 	virtual void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
