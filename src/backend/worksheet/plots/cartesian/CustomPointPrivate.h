@@ -26,8 +26,6 @@ public:
 	void recalcShapeAndBoundingRect() override;
 	void updateData();
 
-	bool m_hovered{false};
-
 	QPainterPath pointShape;
 
 	QPointF positionScene; // position in scene coordinates
@@ -43,8 +41,6 @@ private:
 	const CartesianPlot* plot();
 	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
 	void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
-	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
-	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
 };
 
 #endif

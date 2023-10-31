@@ -209,20 +209,6 @@ void WorksheetElementContainerPrivate::contextMenuEvent(QGraphicsSceneContextMen
 	menu->exec(event->screenPos());
 }
 
-void WorksheetElementContainerPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
-	if (!isSelected()) {
-		m_hovered = true;
-		update();
-	}
-}
-
-void WorksheetElementContainerPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
-	if (m_hovered) {
-		m_hovered = false;
-		update();
-	}
-}
-
 void WorksheetElementContainerPrivate::prepareGeometryChangeRequested() {
 	prepareGeometryChange(); // this is not const!
 	recalcShapeAndBoundingRect();

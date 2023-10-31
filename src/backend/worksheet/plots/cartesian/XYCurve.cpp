@@ -2984,7 +2984,7 @@ void XYCurvePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*
 	else
 		draw(painter); // draw directly again (slow)
 
-	if (m_hovered && !isSelected() && !q->isPrinting()) {
+	if ( && !isSelected() && !q->isPrinting()) {
 		if (m_hoverEffectImageIsDirty) {
 			QPixmap pix = m_pixmap;
 			QPainter p(&pix);
@@ -3052,19 +3052,6 @@ void XYCurvePrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 	event->ignore();
 	setSelected(false);
 	QGraphicsItem::mousePressEvent(event);
-}
-
-/*!
- * Is called in CartesianPlot::hoverMoveEvent where it is determined which curve to hover.
- * \p on
- */
-void XYCurvePrivate::setHover(bool on) {
-	if (on == m_hovered)
-		return; // don't update if state not changed
-
-	m_hovered = on;
-	on ? Q_EMIT q->hovered() : Q_EMIT q->unhovered();
-	update();
 }
 
 // ##############################################################################

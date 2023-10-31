@@ -531,11 +531,6 @@ bool Axis::isDefault() const {
 	return d->isDefault;
 }
 
-bool Axis::isHovered() const {
-	Q_D(const Axis);
-	return d->isHovered();
-}
-
 bool Axis::isNumeric() const {
 	Q_D(const Axis);
 	const int xIndex{cSystem->index(Dimension::X)}, yIndex{cSystem->index(Dimension::Y)};

@@ -66,8 +66,6 @@ public:
 
 private:
 	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
-	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
-	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
 
 	void recalc(int);
@@ -75,8 +73,6 @@ private:
 	void horizontalPlot(int);
 
 	void draw(QPainter*);
-
-	bool m_hovered{false};
 
 	QRectF m_boundingRectangle;
 	QPainterPath m_shape;

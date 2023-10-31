@@ -149,9 +149,9 @@ bool BarPlot::activatePlot(QPointF mouseScenePos, double maxDist) {
 	return d->activatePlot(mouseScenePos, maxDist);
 }
 
-void BarPlot::setHover(bool on) {
+void BarPlot::(bool on) {
 	Q_D(BarPlot);
-	d->setHover(on);
+	d->(on);
 }
 
 /* ============================ getter methods ================= */
@@ -332,15 +332,6 @@ bool BarPlotPrivate::activatePlot(QPointF mouseScenePos, double /*maxDist*/) {
 		return false;
 
 	return shape().contains(mouseScenePos);
-}
-
-void BarPlotPrivate::setHover(bool on) {
-	if (on == m_hovered)
-		return; // don't update if state not changed
-
-	m_hovered = on;
-	on ? Q_EMIT q->hovered() : Q_EMIT q->unhovered();
-	update();
 }
 
 Background* BarPlotPrivate::addBackground(const KConfigGroup& group) {
@@ -1266,22 +1257,6 @@ void BarPlotPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*
 
 void BarPlotPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
 	q->createContextMenu()->exec(event->screenPos());
-}
-
-void BarPlotPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
-	if (!isSelected()) {
-		m_hovered = true;
-		Q_EMIT q->hovered();
-		update();
-	}
-}
-
-void BarPlotPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
-	if (m_hovered) {
-		m_hovered = false;
-		Q_EMIT q->unhovered();
-		update();
-	}
 }
 
 // ##############################################################################

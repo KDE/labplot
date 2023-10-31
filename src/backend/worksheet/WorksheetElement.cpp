@@ -618,6 +618,12 @@ QString WorksheetElement::coordinateSystemInfo(const int index) const {
 }
 
 BASIC_D_ACCESSOR_IMPL(WorksheetElement, bool, isLocked, Lock, locked)
+BASIC_D_ACCESSOR_IMPL(WorksheetElement, bool, isHovered, Hover, m_hovered)
+
+void WorksheetElement::setHover(bool on) {
+	Q_D(WorksheetElement)
+	d->setHover(on);
+}
 
 /* ============================ getter methods ================= */
 BASIC_SHARED_D_READER_IMPL(WorksheetElement, WorksheetElement::PositionWrapper, position, position)
@@ -917,4 +923,26 @@ QPointF WorksheetElementPrivate::mapPlotAreaToParent(QPointF point) {
 	}
 
 	return point; // don't map if no parent set. Then it's during load
+}
+
+void WorksheetElementPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
+	if (!isSelected())
+		setHover(true);
+}
+
+void WorksheetElementPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
+	setHover(false);
+}
+
+bool WorksheetElementPrivate::isHovered() const {
+	return m_hovered;
+}
+
+void WorksheetElementPrivate::setHover(bool on) {
+	if (on == m_hovered)
+		return; // don't update if state not changed
+
+	m_hovered = on;
+	Q_EMIT q->hoveredChanged(on);
+	update();
 }

@@ -24,7 +24,6 @@ public:
 	void recalcShapeAndBoundingRect() override;
 	void updateOrientation();
 
-	bool m_hovered{false};
 	bool m_visible{true}; // point inside the plot (visible) or not
 
 	QRectF boundingRectangle;
@@ -49,8 +48,6 @@ public:
 
 private:
 	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
-	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
-	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
 
 	bool m_bottomClipped{false};
 	bool m_topClipped{false};

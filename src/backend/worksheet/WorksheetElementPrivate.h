@@ -51,6 +51,15 @@ public:
 	virtual bool sceneEvent(QEvent *event) override;
 	QPointF mapParentToPlotArea(QPointF);
 	QPointF mapPlotAreaToParent(QPointF);
+	void setHover(bool);
+	void isHovered() const;
+
+private:
+	virtual void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
+	virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
+
+protected:
+		bool m_hovered{false};
 };
 
 #endif

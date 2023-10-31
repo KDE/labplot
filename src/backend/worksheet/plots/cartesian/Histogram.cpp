@@ -1761,19 +1761,14 @@ void HistogramPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 
 void HistogramPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
 	const auto* plot = static_cast<const CartesianPlot*>(q->parentAspect());
-	if (plot->mouseMode() == CartesianPlot::MouseMode::Selection && !isSelected()) {
-		m_hovered = true;
-		Q_EMIT q->hovered();
-		update();
-	}
+	if (plot->mouseMode() == CartesianPlot::MouseMode::Selection && !isSelected())
+		setHover(true);
 }
 
 void HistogramPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 	const auto* plot = static_cast<const CartesianPlot*>(q->parentAspect());
 	if (plot->mouseMode() == CartesianPlot::MouseMode::Selection && m_hovered) {
-		m_hovered = false;
-		Q_EMIT q->unhovered();
-		update();
+		setHover(false);
 	}
 }
 

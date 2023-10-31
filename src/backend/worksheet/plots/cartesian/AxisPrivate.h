@@ -42,7 +42,6 @@ public:
 	void updateGrid();
 	bool swapVisible(bool);
 	void recalcShapeAndBoundingRect() override;
-	bool isHovered() const;
 	static QString createScientificRepresentation(const QString& mantissa, const QString& exponent);
 
 	bool isDefault{false};
@@ -157,7 +156,6 @@ private:
 	QRectF boundingRectangle;
 	QPainterPath axisShape;
 
-	bool m_hovered{false};
 	bool m_suppressRecalc{false};
 	bool m_panningStarted{false};
 	QPointF m_panningStart;

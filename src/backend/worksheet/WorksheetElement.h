@@ -72,6 +72,7 @@ public:
 	BASIC_D_ACCESSOR_DECL(qreal, rotationAngle, RotationAngle)
 	BASIC_D_ACCESSOR_DECL(qreal, scale, Scale)
 	BASIC_D_ACCESSOR_DECL(bool, isLocked, Lock)
+	BASIC_D_ACCESSOR_DECL(bool, isHovered, Hover)
 
 	void finalizeAdd() override;
 
@@ -160,6 +161,7 @@ Q_SIGNALS:
 	void visibleChanged(bool) const;
 	void coordinateSystemIndexChanged(int) const;
 	void changed();
+	void hoveredChanged(bool) const;
 
 	void objectPositionChanged(); // Position changed, independend of logical or scene, bot are triggering this
 

@@ -23,8 +23,6 @@ public:
 
 	QRectF boundingRect() const override;
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
-	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
-	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
 
 	void prepareGeometryChangeRequested();
 	void recalcShapeAndBoundingRect() override;
@@ -35,7 +33,6 @@ public:
 	QRectF boundingRectangle;
 	QPainterPath containerShape;
 	QRectF rect;
-	bool m_hovered{false};
 	bool m_printing{false};
 
 Q_SIGNALS:

@@ -115,11 +115,10 @@ public:
 private:
 	gsl_histogram* m_histogram{nullptr};
 	size_t m_bins{0};
-	bool m_hovered{false};
 	QPixmap m_pixmap;
 	QImage m_hoverEffectImage;
 	QImage m_selectionEffectImage;
-	bool m_hoverEffectImageIsDirty{false};
+	bool EffectImageIsDirty{false};
 	bool m_selectionEffectImageIsDirty{false};
 	Column* m_binsColumn{nullptr}; // bin positions/edges
 	Column* m_binValuesColumn{nullptr}; // bin values

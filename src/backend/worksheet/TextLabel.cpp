@@ -1067,22 +1067,6 @@ void TextLabelPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
 		q->createContextMenu()->exec(event->screenPos());
 }
 
-void TextLabelPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
-	if (!isSelected()) {
-		m_hovered = true;
-		Q_EMIT q->hovered();
-		update();
-	}
-}
-
-void TextLabelPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
-	if (m_hovered) {
-		m_hovered = false;
-		Q_EMIT q->unhovered();
-		update();
-	}
-}
-
 // ##############################################################################
 // ##################  Serialization/Deserialization  ###########################
 // ##############################################################################

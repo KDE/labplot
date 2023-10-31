@@ -23,8 +23,6 @@ public:
 	void recalcShapeAndBoundingRect() override;
 	void updateOrientation();
 
-	bool m_hovered{false};
-
 	QRectF boundingRectangle;
 	QPainterPath lineShape;
 
@@ -41,8 +39,6 @@ public:
 
 private:
 	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
-	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
-	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
 };
 
 #endif

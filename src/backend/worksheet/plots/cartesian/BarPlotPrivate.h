@@ -44,7 +44,6 @@ public:
 	QPainterPath shape() const override;
 
 	bool activatePlot(QPointF mouseScenePos, double maxDist);
-	void setHover(bool on);
 
 	BarPlot* const q;
 
@@ -72,8 +71,6 @@ public:
 
 private:
 	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
-	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
-	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
 
 	void recalc(int);
@@ -83,7 +80,6 @@ private:
 
 	void draw(QPainter*);
 
-	bool m_hovered{false};
 
 	QRectF m_boundingRectangle;
 	QPainterPath m_barPlotShape;

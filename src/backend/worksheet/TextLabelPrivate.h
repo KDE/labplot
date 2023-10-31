@@ -64,7 +64,6 @@ public:
 	TextLabel::GluePoint gluePointAt(int index);
 
 	ScaledTextItem* m_textItem{nullptr};
-	bool m_hovered{false};
 
 	QRectF transformedBoundingRectangle; // bounding rectangle of transformed (rotated etc.) text
 	QPainterPath borderShapePath;
@@ -82,8 +81,6 @@ public:
 
 private:
 	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
-	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
-	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
 };
 
 #endif

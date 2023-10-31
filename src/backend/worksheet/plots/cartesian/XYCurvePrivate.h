@@ -59,7 +59,6 @@ public:
 	void updatePixmap();
 
 	bool activatePlot(QPointF mouseScenePos, double maxDist);
-	void setHover(bool on);
 	bool pointLiesNearLine(const QPointF p1, const QPointF p2, const QPointF pos, const double maxDist) const;
 	bool
 	pointLiesNearCurve(const QPointF mouseScenePos, const QPointF curvePosPrevScene, const QPointF curvePosScene, const int index, const double maxDist) const;
@@ -170,7 +169,6 @@ private:
 	QImage m_selectionEffectImage;
 	bool m_hoverEffectImageIsDirty{false};
 	bool m_selectionEffectImageIsDirty{false};
-	bool m_hovered{false};
 	bool m_suppressRecalc{false};
 	QPointF mousePos;
 

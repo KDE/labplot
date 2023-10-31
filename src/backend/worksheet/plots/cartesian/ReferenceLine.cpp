@@ -368,22 +368,6 @@ void ReferenceLinePrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* even
 	q->createContextMenu()->exec(event->screenPos());
 }
 
-void ReferenceLinePrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
-	if (!isSelected()) {
-		m_hovered = true;
-		Q_EMIT q->hovered();
-		update();
-	}
-}
-
-void ReferenceLinePrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
-	if (m_hovered) {
-		m_hovered = false;
-		Q_EMIT q->unhovered();
-		update();
-	}
-}
-
 // ##############################################################################
 // ##################  Serialization/Deserialization  ###########################
 // ##############################################################################

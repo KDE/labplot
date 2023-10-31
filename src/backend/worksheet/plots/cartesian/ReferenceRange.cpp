@@ -628,22 +628,6 @@ void ReferenceRangePrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* eve
 	q->createContextMenu()->exec(event->screenPos());
 }
 
-void ReferenceRangePrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
-	if (!isSelected()) {
-		m_hovered = true;
-		Q_EMIT q->hovered();
-		update();
-	}
-}
-
-void ReferenceRangePrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
-	if (m_hovered) {
-		m_hovered = false;
-		Q_EMIT q->unhovered();
-		update();
-	}
-}
-
 // ##############################################################################
 // ##################  Serialization/Deserialization  ###########################
 // ##############################################################################

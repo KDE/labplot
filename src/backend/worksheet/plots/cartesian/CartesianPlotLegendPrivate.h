@@ -38,8 +38,6 @@ public:
 	QPainterPath shape() const override;
 	virtual void recalcShapeAndBoundingRect() override;
 
-	bool m_hovered{false};
-
 	QRectF rect;
 	QFont labelFont;
 	QColor labelColor;
@@ -74,8 +72,6 @@ private:
 	bool translatePainter(QPainter*, int& row, int& col, int height);
 
 	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
-	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
-	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
 };
 
 #endif
