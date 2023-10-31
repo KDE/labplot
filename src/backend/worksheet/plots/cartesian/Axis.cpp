@@ -2917,10 +2917,6 @@ void AxisPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 	QGraphicsItem::mouseReleaseEvent(event);
 }
 
-bool AxisPrivate::isHovered() const {
-	return m_hovered;
-}
-
 QString AxisPrivate::createScientificRepresentation(const QString& mantissa, const QString& exponent) {
 	return mantissa + QStringLiteral("×10<sup>") + exponent + QStringLiteral("</sup>");
 }

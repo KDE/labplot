@@ -618,7 +618,6 @@ QString WorksheetElement::coordinateSystemInfo(const int index) const {
 }
 
 BASIC_D_ACCESSOR_IMPL(WorksheetElement, bool, isLocked, Lock, locked)
-BASIC_D_ACCESSOR_IMPL(WorksheetElement, bool, isHovered, Hover, m_hovered)
 
 bool WorksheetElement::isHovered() {
 	Q_D(WorksheetElement)
