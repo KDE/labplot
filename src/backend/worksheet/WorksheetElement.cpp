@@ -482,10 +482,6 @@ QPointF WorksheetElement::relativePosToParentPos(PositionWrapper position) const
 	return parentPos;
 }
 
-namespace XML {
-constexpr QLatin1String locked("locked");
-}
-
 void WorksheetElement::save(QXmlStreamWriter* writer) const {
 	Q_D(const WorksheetElement);
 	writer->writeAttribute(QStringLiteral("x"), QString::number(d->position.point.x()));
@@ -500,7 +496,7 @@ void WorksheetElement::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("coordinateBinding"), QString::number(d->coordinateBindingEnabled));
 	writer->writeAttribute(QStringLiteral("logicalPosX"), QString::number(d->positionLogical.x()));
 	writer->writeAttribute(QStringLiteral("logicalPosY"), QString::number(d->positionLogical.y()));
-	writer->writeAttribute(XML::locked, QString::number(d->lock));
+	writer->writeAttribute(QStringLiteral("locked"), QString::number(d->lock));
 }
 
 bool WorksheetElement::load(XmlStreamReader* reader, bool preview) {
@@ -588,7 +584,7 @@ bool WorksheetElement::load(XmlStreamReader* reader, bool preview) {
 
 	str = attribs.value(XML::locked).toString();
 	if (str.isEmpty())
-		reader->raiseMissingAttributeWarning(XML::locked);
+		reader->raiseMissingAttributeWarning(QStringLiteral("locked"));
 	else
 		d->lock = static_cast<bool>(str.toInt());
 
