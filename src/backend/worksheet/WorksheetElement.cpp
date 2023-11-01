@@ -582,7 +582,7 @@ bool WorksheetElement::load(XmlStreamReader* reader, bool preview) {
 	else
 		d->positionLogical.setY(str.toDouble());
 
-	str = attribs.value("locked").toString();
+	str = attribs.value(QStringLiteral("locked")).toString();
 	if (str.isEmpty())
 		reader->raiseMissingAttributeWarning(QStringLiteral("locked"));
 	else
