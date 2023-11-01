@@ -11,18 +11,27 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core)
 MESSAGE (STATUS "Found Qt version ${QT_VERSION_MAJOR}")
+# see also -DQT_DISABLE_DEPRECATED_BEFORE in src/CMakeLists.txt
+set(QT_MIN_VERSION "5.10.0")
 #set(QT_VERSION_MAJOR "6")
-set(QT_MAJOR_VERSION ${QT_VERSION_MAJOR})
-if (QT_MAJOR_VERSION GREATER_EQUAL 6)
+if (QT_VERSION_MAJOR GREATER_EQUAL 6)
     set(KF_MAJOR_VERSION "6")
-    set(QT_MIN_VERSION "6.2.2")		# openSUSE 15.4 version
     set(KF_MIN_VERSION "5.240.0")
-else()
+    find_package(KF${KF_MAJOR_VERSION} ${KF_MIN_VERSION} COMPONENTS XmlGui)
+    if (KF${KF_MAJOR_VERSION}XmlGui_FOUND)
+        set(QT_MIN_VERSION "6.2.2")		# openSUSE 15.4 version
+    else ()
+        MESSAGE (STATUS "KF6 not found! Trying Qt5")
+	find_package(QT NAMES Qt5 REQUIRED COMPONENTS Core)
+	MESSAGE (STATUS "Found Qt version ${QT_VERSION_MAJOR}")
+	set(KF_MAJOR_VERSION "5")
+        set(KF_MIN_VERSION "5.16.0")
+    endif ()
+else ()
     set(KF_MAJOR_VERSION "5")
-    # see also -DQT_DISABLE_DEPRECATED_BEFORE in src/CMakeLists.txt
-    set(QT_MIN_VERSION "5.10.0")
     set(KF_MIN_VERSION "5.16.0")
-endif()
+endif ()
+set(QT_MAJOR_VERSION ${QT_VERSION_MAJOR})
 
 set(APPLE_SUPPRESS_X11_WARNING ON)
 
