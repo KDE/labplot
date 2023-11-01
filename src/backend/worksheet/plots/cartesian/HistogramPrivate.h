@@ -26,7 +26,7 @@ public:
 	~HistogramPrivate() override;
 
 	void retransform() override;
-	void recalcHistogram();
+	void recalc();
 	void updateType();
 	void updateOrientation();
 	void updateLines();

@@ -45,7 +45,7 @@
 #include <gsl/gsl_histogram.h>
 #include <gsl/gsl_spline.h>
 
-CURVE_COLUMN_CONNECT(Histogram, Data, data, recalcHistogram)
+CURVE_COLUMN_CONNECT(Histogram, Data, data, recalc)
 CURVE_COLUMN_CONNECT(Histogram, ErrorPlus, errorPlus, updateErrorBars)
 CURVE_COLUMN_CONNECT(Histogram, ErrorMinus, errorMinus, updateErrorBars)
 
@@ -363,7 +363,7 @@ const AbstractColumn* Histogram::binPDValues() const {
 // ##############################################################################
 
 // General
-CURVE_COLUMN_SETTER_CMD_IMPL_F_S(Histogram, Data, data, recalcHistogram)
+CURVE_COLUMN_SETTER_CMD_IMPL_F_S(Histogram, Data, data, recalc)
 void Histogram::setDataColumn(const AbstractColumn* column) {
 	Q_D(Histogram);
 	if (column != d->dataColumn)
@@ -396,21 +396,21 @@ void Histogram::setNormalization(Histogram::Normalization normalization) {
 		exec(new HistogramSetNormalizationCmd(d, normalization, ki18n("%1: set histogram normalization")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetBinningMethod, Histogram::BinningMethod, binningMethod, recalcHistogram)
+STD_SETTER_CMD_IMPL_F_S(Histogram, SetBinningMethod, Histogram::BinningMethod, binningMethod, recalc)
 void Histogram::setBinningMethod(Histogram::BinningMethod method) {
 	Q_D(Histogram);
 	if (method != d->binningMethod)
 		exec(new HistogramSetBinningMethodCmd(d, method, ki18n("%1: set binning method")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetBinCount, int, binCount, recalcHistogram)
+STD_SETTER_CMD_IMPL_F_S(Histogram, SetBinCount, int, binCount, recalc)
 void Histogram::setBinCount(int count) {
 	Q_D(Histogram);
 	if (count != d->binCount)
 		exec(new HistogramSetBinCountCmd(d, count, ki18n("%1: set bin count")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetBinWidth, double, binWidth, recalcHistogram)
+STD_SETTER_CMD_IMPL_F_S(Histogram, SetBinWidth, double, binWidth, recalc)
 void Histogram::setBinWidth(double width) {
 	Q_D(Histogram);
 	if (width != d->binWidth)
@@ -431,7 +431,7 @@ public:
 		if (m_autoBinRanges) {
 			m_binRangesMinOld = m_private->binRangesMin;
 			m_binRangesMaxOld = m_private->binRangesMax;
-			m_private->q->recalcHistogram();
+			m_private->q->recalc();
 		}
 		Q_EMIT m_private->q->autoBinRangesChanged(m_autoBinRanges);
 	}
@@ -447,7 +447,7 @@ public:
 				m_private->binRangesMax = m_binRangesMaxOld;
 				Q_EMIT m_private->q->binRangesMaxChanged(m_private->binRangesMax);
 			}
-			m_private->recalcHistogram();
+			m_private->recalc();
 		}
 		Q_EMIT m_private->q->autoBinRangesChanged(m_autoBinRangesOld);
 	}
@@ -466,14 +466,14 @@ void Histogram::setAutoBinRanges(bool autoBinRanges) {
 		exec(new HistogramSetAutoBinRangesCmd(d, autoBinRanges));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetBinRangesMin, double, binRangesMin, recalcHistogram)
+STD_SETTER_CMD_IMPL_F_S(Histogram, SetBinRangesMin, double, binRangesMin, recalc)
 void Histogram::setBinRangesMin(double binRangesMin) {
 	Q_D(Histogram);
 	if (binRangesMin != d->binRangesMin)
 		exec(new HistogramSetBinRangesMinCmd(d, binRangesMin, ki18n("%1: set bin ranges start")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetBinRangesMax, double, binRangesMax, recalcHistogram)
+STD_SETTER_CMD_IMPL_F_S(Histogram, SetBinRangesMax, double, binRangesMax, recalc)
 void Histogram::setBinRangesMax(double binRangesMax) {
 	Q_D(Histogram);
 	if (binRangesMax != d->binRangesMax)
@@ -548,9 +548,9 @@ void Histogram::retransform() {
 	d_ptr->retransform();
 }
 
-void Histogram::recalcHistogram() {
+void Histogram::recalc() {
 	D(Histogram);
-	d->recalcHistogram();
+	d->recalc();
 }
 
 // TODO
@@ -814,7 +814,7 @@ void HistogramPrivate::retransform() {
 /*!
  * called when the data was changed. recalculates the histogram.
  */
-void HistogramPrivate::recalcHistogram() {
+void HistogramPrivate::recalc() {
 	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 
 	if (m_histogram) {

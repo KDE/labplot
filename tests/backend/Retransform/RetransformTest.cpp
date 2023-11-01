@@ -17,6 +17,8 @@
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/AxisPrivate.h"
 #include "backend/worksheet/plots/cartesian/BarPlot.h"
+#include "backend/worksheet/plots/cartesian/BoxPlot.h"
+#include "backend/worksheet/plots/cartesian/Histogram.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/XYCurvePrivate.h"
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
@@ -722,9 +724,8 @@ void RetransformTest::TestBarPlotOrientation() {
 	for (const auto& child : children)
 		connect(child, &AbstractAspect::retransformCalledSignal, &c, &RetransformCallCounter::aspectRetransformed);
 
-	for (const auto& plot : project.children(AspectType::CartesianPlot, AbstractAspect::ChildIndexFlag::Recursive)) {
+	for (const auto& plot : project.children(AspectType::CartesianPlot, AbstractAspect::ChildIndexFlag::Recursive))
 		connect(static_cast<CartesianPlot*>(plot), &CartesianPlot::scaleRetransformed, &c, &RetransformCallCounter::retransformScaleCalled);
-	}
 
 	auto barplots = project.children(AspectType::BarPlot, AbstractAspect::ChildIndexFlag::Recursive);
 	QCOMPARE(barplots.length(), 1);
@@ -1682,6 +1683,100 @@ void RetransformTest::TestChangePlotRangeElement3() {
 		QCOMPARE(line.p1().y(), dataRect.bottom());
 		QCOMPARE(line.p2().y(), dataRect.top());
 	}
+}
+// ##############################################################################
+// ####### Tests checking the retransform behavior on plot shape changes  #######
+// ##############################################################################
+/*!
+ * recalculation of plots without changing the min and max values of the data ranges.
+ */
+void RetransformTest::testPlotRecalcNoRetransform() {
+	// prepare the data
+	Spreadsheet sheet(QStringLiteral("test"), false);
+	sheet.setColumnCount(1);
+	sheet.setRowCount(100);
+	auto* column = sheet.column(0);
+	column->setValueAt(0, 2.);
+	column->setValueAt(1, 4.);
+	column->setValueAt(2, 6.);
+	QVector<const AbstractColumn*> dataColumns;
+	dataColumns << column;
+
+	// prepare the worksheet + plots
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	ws->addChild(p);
+
+	auto* barPlot = new BarPlot(QStringLiteral("barPlot"));
+	barPlot->setDataColumns(dataColumns);
+	p->addChild(barPlot);
+
+	auto* boxPlot = new BoxPlot(QStringLiteral("boxPlot"));
+	boxPlot->setDataColumns(dataColumns);
+	p->addChild(boxPlot);
+
+	auto* histPlot = new Histogram(QStringLiteral("histPlot"));
+	histPlot->setDataColumn(column);
+	p->addChild(histPlot);
+
+	// call recalc() in the created plots which is called at runtime when modifying the data
+	// or any plot properties affecting the shape of the plot.
+	// since the data was not changed and no properties were changed affecting plot ranges
+	// like the orientation of a box plot changing min and max values for x and y, etc.,
+	// there shouldn't be any retransform calls in the parent plot area
+	RetransformCallCounter c;
+	barPlot->recalc();
+	boxPlot->recalc();
+	histPlot->recalc();
+
+	QCOMPARE(c.elementLogCount(false), 0);
+	QVERIFY(c.calledExact(0, false));
+	QCOMPARE(c.logsXScaleRetransformed.count(), 0);
+	QCOMPARE(c.logsYScaleRetransformed.count(), 0);
+}
+
+/*!
+ * recalculation of plots with changing the min and max values of the data ranges.
+ */
+void RetransformTest::testPlotRecalcRetransform() {
+	// prepare the data
+	Spreadsheet sheet(QStringLiteral("test"), false);
+	sheet.setColumnCount(1);
+	sheet.setRowCount(100);
+	auto* column = sheet.column(0);
+	column->setValueAt(0, 2.);
+	column->setValueAt(1, 4.);
+	column->setValueAt(2, 6.);
+	QVector<const AbstractColumn*> dataColumns;
+	dataColumns << column;
+
+	// prepare the worksheet + plots
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	ws->addChild(p);
+
+	auto* barPlot = new BarPlot(QStringLiteral("barPlot"));
+	barPlot->setDataColumns(dataColumns);
+	p->addChild(barPlot);
+
+	auto* boxPlot = new BoxPlot(QStringLiteral("boxPlot"));
+	boxPlot->setDataColumns(dataColumns);
+	p->addChild(boxPlot);
+
+	auto* histPlot = new Histogram(QStringLiteral("histPlot"));
+	histPlot->setDataColumn(column);
+	p->addChild(histPlot);
+
+	// modify one of the plots so its min and max values are changed.
+	// this should trigger the recalculation of the data ranges in the parent plot area
+	// and a retransform call for all its children
+	RetransformCallCounter c;
+	histPlot->setOrientation(Histogram::Orientation::Vertical);
+
+	QCOMPARE(c.elementLogCount(false), 3);
+	QVERIFY(c.calledExact(3, false));
+	QCOMPARE(c.logsXScaleRetransformed.count(), 3);
+	QCOMPARE(c.logsYScaleRetransformed.count(), 3);
 }
 
 // ############################################################################################

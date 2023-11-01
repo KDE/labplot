@@ -97,7 +97,7 @@ public:
 
 public Q_SLOTS:
 	void retransform() override;
-	void recalcHistogram();
+	void recalc();
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
 	void createDataSpreadsheet();
 
