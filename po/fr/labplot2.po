@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-31 00:39+0000\n"
-"PO-Revision-Date: 2023-10-25 14:36+0200\n"
+"POT-Creation-Date: 2023-11-01 00:39+0000\n"
+"PO-Revision-Date: 2023-10-30 20:14+0100\n"
 "Last-Translator: Xavier BESNARD <xavier.besnard@neuf.fr>\n"
 "Language-Team: fr\n"
 "Language: fr\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Accelerator-Marker: &\n"
 "X-Environment: kde\n"
-"X-Generator: Lokalize 23.08.1\n"
+"X-Generator: Lokalize 23.08.2\n"
 "X-Text-Markup: kde4\n"
 
 #, kde-format
@@ -4755,10 +4755,9 @@ msgid "Logarithm"
 msgstr "Logarithme"
 
 #: src/backend/gsl/functions.cpp:2380
-#, fuzzy, kde-format
-#| msgid "Base 10 logarithm"
+#, kde-format
 msgid "Base 2 logarithm"
-msgstr "Logarithme en base 10"
+msgstr "Logarithme en base 2"
 
 #: src/backend/gsl/functions.cpp:2388
 #, kde-format
@@ -6753,8 +6752,7 @@ msgid "MeanDeviation"
 msgstr "Écart type standard"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:53
-#, fuzzy, kde-format
-#| msgid "Mean deviation around median"
+#, kde-format
 msgid "MeanDeviationAroundMedian"
 msgstr "Déviation moyenne autour du centre"
 
@@ -10574,14 +10572,18 @@ msgid "Presenter Mode"
 msgstr "Mode « Présentation »"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:278
-#, kde-format
-msgid "Non-interactive Plots"
+#, fuzzy, kde-format
+#| msgid "Non-interactive Plots"
+msgid "Interactive Plots"
 msgstr "Tracés non interactifs"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:279
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "If activated, plots on the worksheet don't react on drag and mouse wheel "
+#| "events."
 msgid ""
-"If activated, plots on the worksheet don't react on drag and mouse wheel "
+"If not activated, plots on the worksheet don't react on drag and mouse wheel "
 "events."
 msgstr ""
 "Si cette option est activée, les tracés sur la feuille de travail ne "
@@ -14714,7 +14716,7 @@ msgstr "Exporter l'élément sélectionné"
 #: src/kdefrontend/MainWin.cpp:2574
 #, kde-format
 msgid "Share"
-msgstr ""
+msgstr "Partager"
 
 #: src/kdefrontend/MainWin.cpp:768
 #, kde-format
@@ -14997,7 +14999,7 @@ msgstr "Projet enregistré"
 #: src/kdefrontend/MainWin.cpp:2573
 #, kde-format
 msgid "You can find the shared project at: <a href=\"%1\">%1</a>"
-msgstr ""
+msgstr "Vous pouvez trouver le projet partagé à : <a href=\"%1\">%1</a>"
 
 #: src/kdefrontend/MainWin.cpp:2805
 #: src/kdefrontend/welcomescreen/WelcomeScreenHelper.cpp:115
@@ -15295,7 +15297,7 @@ msgstr "Charger le dernier projet utilisé"
 #: src/kdefrontend/SettingsGeneralPage.cpp:195
 #, kde-format
 msgid "Notebook type to create automatically on startup"
-msgstr ""
+msgstr "Type « Notebook » à créer automatiquement au démarrage"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:199
 #, kde-format
@@ -15787,7 +15789,7 @@ msgstr "Incrément"
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:62
 #, kde-format
 msgid "Years"
-msgstr ""
+msgstr "Années"
 
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:63
 #, fuzzy, kde-format
@@ -15826,21 +15828,25 @@ msgstr "valeur de début « y » non valable"
 #, kde-format
 msgid "Invalid end value, must be bigger than the start value"
 msgstr ""
+"Valeur finale non valable. Doit être plus grand que la valeur de départ."
 
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:300
 #, kde-format
 msgid "The number of values to be generated must be bigger than one"
-msgstr ""
+msgstr "Le nombre de valeurs à produire doit être plus grand que un"
 
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:317
 #, kde-format
 msgid "Invalid numeric increment value, must be bigger than zero"
 msgstr ""
+"Valeur d'incrément numérique non valable. Doit être plus grand que zéro"
 
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:326
 #, kde-format
 msgid "Invalid Date&Time increment value, must be bigger than zero"
 msgstr ""
+"Valeur d'incrément de temps et de date non valable. Doit être plus grand que "
+"zéro"
 
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:487
 #, kde-format
@@ -16047,7 +16053,7 @@ msgstr ""
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:167
 #, kde-format
 msgid "The variable name 'i' is reserved for the index of the column row."
-msgstr ""
+msgstr "Le nom de variable « i » est réservé à l’index de la ligne de colonne."
 
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:170
 #, kde-format

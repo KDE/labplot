@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: l 10n\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-31 00:39+0000\n"
+"POT-Creation-Date: 2023-11-01 00:39+0000\n"
 "PO-Revision-Date: 2014-06-30 02:02+0000\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: lt\n"
@@ -10483,13 +10483,13 @@ msgstr ""
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:278
 #, kde-format
-msgid "Non-interactive Plots"
+msgid "Interactive Plots"
 msgstr ""
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:279
 #, kde-format
 msgid ""
-"If activated, plots on the worksheet don't react on drag and mouse wheel "
+"If not activated, plots on the worksheet don't react on drag and mouse wheel "
 "events."
 msgstr ""
 

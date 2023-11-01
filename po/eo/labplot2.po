@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-31 00:39+0000\n"
+"POT-Creation-Date: 2023-11-01 00:39+0000\n"
 "PO-Revision-Date: 2023-10-27 19:01+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
@@ -10491,14 +10491,18 @@ msgid "Presenter Mode"
 msgstr "Prezentista Reĝimo"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:278
-#, kde-format
-msgid "Non-interactive Plots"
+#, fuzzy, kde-format
+#| msgid "Non-interactive Plots"
+msgid "Interactive Plots"
 msgstr "Ne-interagaj Diagramigoj"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:279
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "If activated, plots on the worksheet don't react on drag and mouse wheel "
+#| "events."
 msgid ""
-"If activated, plots on the worksheet don't react on drag and mouse wheel "
+"If not activated, plots on the worksheet don't react on drag and mouse wheel "
 "events."
 msgstr ""
 "Se aktivigitaj, diagramigoj sur la laborfolio ne reagas al eventoj de "
