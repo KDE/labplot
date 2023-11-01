@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-31 00:39+0000\n"
+"POT-Creation-Date: 2023-11-01 00:39+0000\n"
 "PO-Revision-Date: 2023-10-28 05:41+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -10503,14 +10503,18 @@ msgid "Presenter Mode"
 msgstr "Sunum Kipi"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:278
-#, kde-format
-msgid "Non-interactive Plots"
+#, fuzzy, kde-format
+#| msgid "Non-interactive Plots"
+msgid "Interactive Plots"
 msgstr "Etkileşimsiz Çizimler"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:279
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "If activated, plots on the worksheet don't react on drag and mouse wheel "
+#| "events."
 msgid ""
-"If activated, plots on the worksheet don't react on drag and mouse wheel "
+"If not activated, plots on the worksheet don't react on drag and mouse wheel "
 "events."
 msgstr ""
 "Etkinleştirilirse çalışma sayfasındaki çizimler sürükleme ve fare tekerleği "

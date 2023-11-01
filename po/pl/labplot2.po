@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-31 00:39+0000\n"
+"POT-Creation-Date: 2023-11-01 00:39+0000\n"
 "PO-Revision-Date: 2023-10-29 09:23+0100\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -10551,14 +10551,18 @@ msgid "Presenter Mode"
 msgstr "Tryb przedstawiania"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:278
-#, kde-format
-msgid "Non-interactive Plots"
+#, fuzzy, kde-format
+#| msgid "Non-interactive Plots"
+msgid "Interactive Plots"
 msgstr "Nieinteraktywne wykresy"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:279
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "If activated, plots on the worksheet don't react on drag and mouse wheel "
+#| "events."
 msgid ""
-"If activated, plots on the worksheet don't react on drag and mouse wheel "
+"If not activated, plots on the worksheet don't react on drag and mouse wheel "
 "events."
 msgstr ""
 "Po włączeniu, wykresy na arkuszu pracy nie reagują na zdarzenia przeciągania "

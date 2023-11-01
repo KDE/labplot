@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-31 00:39+0000\n"
+"POT-Creation-Date: 2023-11-01 00:39+0000\n"
 "PO-Revision-Date: 2023-06-23 15:21+0200\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
@@ -10470,14 +10470,15 @@ msgid "Presenter Mode"
 msgstr ""
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:278
-#, kde-format
-msgid "Non-interactive Plots"
-msgstr ""
+#, fuzzy, kde-format
+#| msgid "Interactive"
+msgid "Interactive Plots"
+msgstr "Interaktivní"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:279
 #, kde-format
 msgid ""
-"If activated, plots on the worksheet don't react on drag and mouse wheel "
+"If not activated, plots on the worksheet don't react on drag and mouse wheel "
 "events."
 msgstr ""
 
@@ -14374,7 +14375,7 @@ msgstr ""
 #: src/kdefrontend/MainWin.cpp:2574
 #, kde-format
 msgid "Share"
-msgstr ""
+msgstr "Sdílet"
 
 #: src/kdefrontend/MainWin.cpp:768
 #, kde-format
@@ -14642,10 +14643,9 @@ msgid "There was a problem sharing the project: %1"
 msgstr ""
 
 #: src/kdefrontend/MainWin.cpp:2570
-#, fuzzy, kde-format
-#| msgid "Project saved"
+#, kde-format
 msgid "Project shared successfully"
-msgstr "Projekt byl uložen"
+msgstr ""
 
 #: src/kdefrontend/MainWin.cpp:2573
 #, kde-format
@@ -15409,21 +15409,19 @@ msgid "Increment"
 msgstr "Zvýšení"
 
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:60
-#, fuzzy, kde-format
-#| msgid "Increment"
+#, kde-format
 msgid "Number and Increment"
-msgstr "Zvýšení"
+msgstr ""
 
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:62
 #, kde-format
 msgid "Years"
-msgstr ""
+msgstr "Roky"
 
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:63
-#, fuzzy, kde-format
-#| msgid "month"
+#, kde-format
 msgid "Months"
-msgstr "měsíc"
+msgstr "Měsíce"
 
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:192
 #, kde-format
@@ -15432,11 +15430,10 @@ msgid "Equidistant Numeric and Date&Time Values"
 msgstr ""
 
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:197
-#, fuzzy, kde-format
-#| msgid "Numeric Values"
+#, kde-format
 msgctxt "@title:window"
 msgid "Equidistant Numeric Values"
-msgstr "Číselné hodnoty"
+msgstr ""
 
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:199
 #, kde-format
@@ -15445,10 +15442,9 @@ msgid "Equidistant Date&Time Values"
 msgstr ""
 
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:250
-#, fuzzy, kde-format
-#| msgid "Start value"
+#, kde-format
 msgid "Invalid start value"
-msgstr "Počáteční hodnota"
+msgstr ""
 
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:257
 #, kde-format
