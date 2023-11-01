@@ -520,11 +520,6 @@ void CartesianPlot::initActions() {
 	connect(addHilbertTransformAction, &QAction::triggered, this, [=]() {
 		addChild(new XYHilbertTransformCurve(i18n("Hilbert Transform")));
 	});
-
-	// visibility action
-	visibilityAction = new QAction(QIcon::fromTheme(QStringLiteral("view-visible")), i18n("Visible"), this);
-	visibilityAction->setCheckable(true);
-	connect(visibilityAction, &QAction::triggered, this, &CartesianPlot::changeVisibility);
 }
 
 void CartesianPlot::initMenus() {
@@ -654,16 +649,12 @@ QMenu* CartesianPlot::createContextMenu() {
 	QMenu* menu = WorksheetElement::createContextMenu();
 	// seems to be a bug, because the tooltips are not shown
 	menu->setToolTipsVisible(true);
-	QAction* firstAction = menu->actions().at(1);
+	QAction* visibilityAction = this->visibilityAction();
 
-	menu->insertMenu(firstAction, m_addNewMenu);
-	menu->insertSeparator(firstAction);
-	menu->insertMenu(firstAction, themeMenu);
-	menu->insertSeparator(firstAction);
-
-	visibilityAction->setChecked(isVisible());
-	menu->insertAction(firstAction, visibilityAction);
-	menu->insertSeparator(firstAction);
+	menu->insertMenu(visibilityAction, m_addNewMenu);
+	menu->insertSeparator(visibilityAction);
+	menu->insertMenu(visibilityAction, themeMenu);
+	menu->insertSeparator(visibilityAction);
 
 	if (children<XYCurve>().isEmpty()) {
 		addInfoElementAction->setEnabled(false);

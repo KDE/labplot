@@ -186,7 +186,6 @@ private:
 				Range<double>& yRange,
 				bool includeErrorBars) const;
 
-	QAction* visibilityAction{nullptr};
 	QAction* navigateToAction{nullptr};
 	bool m_menusInitialized{false};
 

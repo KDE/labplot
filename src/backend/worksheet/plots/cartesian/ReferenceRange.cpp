@@ -116,10 +116,6 @@ QIcon ReferenceRange::icon() const {
 }
 
 void ReferenceRange::initActions() {
-	visibilityAction = new QAction(i18n("Visible"), this);
-	visibilityAction->setCheckable(true);
-	connect(visibilityAction, &QAction::triggered, this, &ReferenceRange::visibilityChangedSlot);
-
 	// Orientation
 	auto* orientationActionGroup = new QActionGroup(this);
 	orientationActionGroup->setExclusive(true);
@@ -169,9 +165,7 @@ QMenu* ReferenceRange::createContextMenu() {
 		initMenus();
 
 	QMenu* menu = WorksheetElement::createContextMenu();
-	QAction* firstAction = menu->actions().at(1); // skip the first action because of the "title-action"
-	visibilityAction->setChecked(isVisible());
-	menu->insertAction(firstAction, visibilityAction);
+	QAction* visibilityAction = this->visibilityAction();
 
 	Q_D(const ReferenceRange);
 
@@ -180,7 +174,7 @@ QMenu* ReferenceRange::createContextMenu() {
 		orientationHorizontalAction->setChecked(true);
 	else
 		orientationVerticalAction->setChecked(true);
-	menu->insertMenu(firstAction, orientationMenu);
+	menu->insertMenu(visibilityAction, orientationMenu);
 
 	// Border line styles
 	const auto& pen = d->line->pen();
@@ -188,8 +182,8 @@ QMenu* ReferenceRange::createContextMenu() {
 	GuiTools::selectPenStyleAction(lineStyleActionGroup, pen.style());
 	GuiTools::selectColorAction(lineColorActionGroup, pen.color());
 
-	menu->insertMenu(firstAction, lineMenu);
-	menu->insertSeparator(firstAction);
+	menu->insertMenu(visibilityAction, lineMenu);
+	menu->insertSeparator(visibilityAction);
 
 	return menu;
 }
@@ -261,11 +255,6 @@ void ReferenceRange::lineStyleChanged(QAction* action) {
 void ReferenceRange::lineColorChanged(QAction* action) {
 	Q_D(const ReferenceRange);
 	d->line->setColor(GuiTools::colorFromAction(lineColorActionGroup, action));
-}
-
-void ReferenceRange::visibilityChangedSlot() {
-	Q_D(const ReferenceRange);
-	this->setVisible(!d->isVisible());
 }
 
 // ##############################################################################

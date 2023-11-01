@@ -93,6 +93,7 @@ public:
 	QPointF align(QPointF, QRectF, HorizontalAlignment, VerticalAlignment, bool positive) const;
 
 	QMenu* createContextMenu() override;
+	QAction* visibilityAction();
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool) override;
@@ -114,6 +115,7 @@ public:
 
 private:
 	void init();
+	QAction* m_visibilityAction{nullptr};
 
 protected:
 	WorksheetElement(const QString&, WorksheetElementPrivate* dd, AspectType);

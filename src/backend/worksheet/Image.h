@@ -58,8 +58,6 @@ private:
 	Q_DECLARE_PRIVATE(Image)
 	void init();
 
-	QAction* visibilityAction{nullptr};
-
 Q_SIGNALS:
 	void fileNameChanged(const QString&);
 	void embeddedChanged(bool);

@@ -193,6 +193,16 @@ QPainterPath WorksheetElement::shapeFromPath(const QPainterPath& path, const QPe
 	return p;
 }
 
+QAction* WorksheetElement::visibilityAction() {
+	if (!m_visibilityAction) {
+		m_visibilityAction = new QAction(QIcon::fromTheme(QStringLiteral("view-visible")), i18n("Visible"), this);
+		m_visibilityAction->setCheckable(true);
+		m_visibilityAction->setChecked(isVisible());
+		connect(m_visibilityAction, &QAction::triggered, this, &WorksheetElement::changeVisibility);
+	}
+	return m_visibilityAction;
+}
+
 QMenu* WorksheetElement::createContextMenu() {
 	if (!m_drawingOrderMenu) {
 		m_drawingOrderMenu = new QMenu(i18n("Drawing &order"));
@@ -212,6 +222,12 @@ QMenu* WorksheetElement::createContextMenu() {
 	}
 
 	QMenu* menu = AbstractAspect::createContextMenu();
+	QAction* firstAction = menu->actions().at(1); // skip the first action because of the "title-action"
+
+	auto* visibilityAction = this->visibilityAction();
+	visibilityAction->setChecked(isVisible());
+	menu->insertAction(firstAction, visibilityAction);
+	menu->insertSeparator(firstAction);
 
 	// add the sub-menu for the drawing order
 

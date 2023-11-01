@@ -74,7 +74,6 @@ private:
 
 	QAction* orientationHorizontalAction{nullptr};
 	QAction* orientationVerticalAction{nullptr};
-	QAction* visibilityAction{nullptr};
 	QMenu* orientationMenu{nullptr};
 
 public Q_SLOTS:
@@ -83,7 +82,6 @@ public Q_SLOTS:
 private Q_SLOTS:
 	// SLOTs for changes triggered via QActions in the context menu
 	void orientationChangedSlot(QAction*);
-	void visibilityChangedSlot();
 	void dataColumnAboutToBeRemoved(const AbstractAspect*);
 
 Q_SIGNALS:

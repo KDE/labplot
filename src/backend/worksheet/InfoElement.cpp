@@ -175,9 +175,6 @@ void InfoElement::init() {
 }
 
 void InfoElement::initActions() {
-	visibilityAction = new QAction(i18n("Visible"), this);
-	visibilityAction->setCheckable(true);
-	connect(visibilityAction, &QAction::triggered, this, &InfoElement::setVisible);
 }
 
 void InfoElement::initMenus() {
@@ -200,13 +197,7 @@ QMenu* InfoElement::createContextMenu() {
 	if (!m_menusInitialized)
 		initMenus();
 
-	QMenu* menu = WorksheetElement::createContextMenu();
-	QAction* firstAction = menu->actions().at(1);
-
-	visibilityAction->setChecked(isVisible());
-	menu->insertAction(firstAction, visibilityAction);
-
-	return menu;
+	return WorksheetElement::createContextMenu();
 }
 
 /*!

@@ -252,10 +252,6 @@ void Axis::init(Orientation orientation) {
  * For some ActionGroups the actual actions are created in \c GuiTool,
  */
 void Axis::initActions() {
-	visibilityAction = new QAction(QIcon::fromTheme(QStringLiteral("view-visible")), i18n("Visible"), this);
-	visibilityAction->setCheckable(true);
-	connect(visibilityAction, &QAction::triggered, this, &Axis::visibilityChangedSlot);
-
 	// Orientation
 	orientationActionGroup = new QActionGroup(this);
 	orientationActionGroup->setExclusive(true);
@@ -309,10 +305,7 @@ QMenu* Axis::createContextMenu() {
 
 	Q_D(const Axis);
 	QMenu* menu = WorksheetElement::createContextMenu();
-	QAction* firstAction = menu->actions().at(1); // skip the first action because of the "title-action"
-
-	visibilityAction->setChecked(isVisible());
-	menu->insertAction(firstAction, visibilityAction);
+	QAction* visibilityAction = this->visibilityAction();
 
 	// Orientation
 	if (d->orientation == Orientation::Horizontal)
@@ -320,7 +313,7 @@ QMenu* Axis::createContextMenu() {
 	else
 		orientationVerticalAction->setChecked(true);
 
-	menu->insertMenu(firstAction, orientationMenu);
+	menu->insertMenu(visibilityAction, orientationMenu);
 
 	// Line styles
 	GuiTools::updatePenStyles(lineStyleMenu, lineStyleActionGroup, d->line->pen().color());
@@ -328,8 +321,8 @@ QMenu* Axis::createContextMenu() {
 
 	GuiTools::selectColorAction(lineColorActionGroup, d->line->pen().color());
 
-	menu->insertMenu(firstAction, lineMenu);
-	menu->insertSeparator(firstAction);
+	menu->insertMenu(visibilityAction, lineMenu);
+	menu->insertSeparator(visibilityAction);
 
 	return menu;
 }
@@ -1053,11 +1046,6 @@ void Axis::lineStyleChanged(QAction* action) {
 void Axis::lineColorChanged(QAction* action) {
 	Q_D(const Axis);
 	d->line->setColor(GuiTools::colorFromAction(lineColorActionGroup, action));
-}
-
-void Axis::visibilityChangedSlot() {
-	Q_D(const Axis);
-	this->setVisible(!d->isVisible());
 }
 
 // #####################################################################

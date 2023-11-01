@@ -86,9 +86,6 @@ void CustomPoint::init() {
 }
 
 void CustomPoint::initActions() {
-	visibilityAction = new QAction(i18n("Visible"), this);
-	visibilityAction->setCheckable(true);
-	connect(visibilityAction, &QAction::triggered, this, &CustomPoint::changeVisibility);
 }
 
 /*!
@@ -104,13 +101,8 @@ QMenu* CustomPoint::createContextMenu() {
 	if (parentAspect()->type() == AspectType::InfoElement)
 		return nullptr;
 
-	QMenu* menu = WorksheetElement::createContextMenu();
-	QAction* firstAction = menu->actions().at(1); // skip the first action because of the "title-action"
-	visibilityAction->setChecked(isVisible());
-	menu->insertAction(firstAction, visibilityAction);
-	menu->insertSeparator(firstAction);
-
-	return menu;
+	return WorksheetElement::createContextMenu();
+	;
 }
 
 QGraphicsItem* CustomPoint::graphicsItem() const {

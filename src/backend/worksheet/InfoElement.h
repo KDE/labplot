@@ -111,9 +111,6 @@ private:
 	 */
 	bool m_curveGetsMoved{false};
 
-	// Actions
-	QAction* visibilityAction;
-
 	void init();
 	void initActions();
 	void initMenus();

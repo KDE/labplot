@@ -115,25 +115,9 @@ void KDEPlot::finalizeAdd() {
 	addChildFast(d->rugCurve);
 }
 
-void KDEPlot::initActions() {
-	visibilityAction = new QAction(QIcon::fromTheme(QStringLiteral("view-visible")), i18n("Visible"), this);
-	visibilityAction->setCheckable(true);
-	connect(visibilityAction, &QAction::triggered, this, &KDEPlot::changeVisibility);
-}
-
 QMenu* KDEPlot::createContextMenu() {
-	if (!visibilityAction)
-		initActions();
-
-	QMenu* menu = WorksheetElement::createContextMenu();
-	QAction* firstAction = menu->actions().at(1); // skip the first action because of the "title-action"
-	visibilityAction->setChecked(isVisible());
-	menu->insertAction(firstAction, visibilityAction);
-
-	menu->insertSeparator(visibilityAction);
-	menu->insertSeparator(firstAction);
-
-	return menu;
+	return WorksheetElement::createContextMenu();
+	;
 }
 
 /*!

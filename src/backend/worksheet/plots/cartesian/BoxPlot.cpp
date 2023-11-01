@@ -216,10 +216,6 @@ QIcon BoxPlot::staticIcon() {
 }
 
 void BoxPlot::initActions() {
-	visibilityAction = new QAction(QIcon::fromTheme(QStringLiteral("view-visible")), i18n("Visible"), this);
-	visibilityAction->setCheckable(true);
-	connect(visibilityAction, &QAction::triggered, this, &BoxPlot::visibilityChangedSlot);
-
 	// Orientation
 	auto* orientationActionGroup = new QActionGroup(this);
 	orientationActionGroup->setExclusive(true);
@@ -247,11 +243,7 @@ QMenu* BoxPlot::createContextMenu() {
 		initMenus();
 
 	QMenu* menu = WorksheetElement::createContextMenu();
-	QAction* firstAction = menu->actions().at(1); // skip the first action because of the "title-action"
-
-	// Visibility
-	visibilityAction->setChecked(isVisible());
-	menu->insertAction(firstAction, visibilityAction);
+	QAction* visibilityAction = this->visibilityAction();
 
 	// Orientation
 	Q_D(const BoxPlot);
@@ -259,8 +251,8 @@ QMenu* BoxPlot::createContextMenu() {
 		orientationHorizontalAction->setChecked(true);
 	else
 		orientationVerticalAction->setChecked(true);
-	menu->insertMenu(firstAction, orientationMenu);
-	menu->insertSeparator(firstAction);
+	menu->insertMenu(visibilityAction, orientationMenu);
+	menu->insertSeparator(visibilityAction);
 
 	return menu;
 }
@@ -591,11 +583,6 @@ void BoxPlot::orientationChangedSlot(QAction* action) {
 		this->setOrientation(Axis::Orientation::Horizontal);
 	else
 		this->setOrientation(Axis::Orientation::Vertical);
-}
-
-void BoxPlot::visibilityChangedSlot() {
-	Q_D(const BoxPlot);
-	this->setVisible(!d->isVisible());
 }
 
 // ##############################################################################

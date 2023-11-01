@@ -51,8 +51,6 @@ private:
 	void init();
 	void initActions();
 
-	QAction* visibilityAction;
-
 Q_SIGNALS:
 	friend class CustomPointSetPositionCmd;
 };

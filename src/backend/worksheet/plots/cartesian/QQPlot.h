@@ -83,10 +83,8 @@ protected:
 private:
 	Q_DECLARE_PRIVATE(QQPlot)
 	void init();
-	void initActions();
 	void connectDataColumn(const AbstractColumn*);
 
-	QAction* visibilityAction{nullptr};
 	QAction* navigateToAction{nullptr};
 	bool m_menusInitialized{false};
 

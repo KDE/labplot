@@ -128,8 +128,6 @@ private:
 	void connectErrorPlusColumn(const AbstractColumn*);
 	void connectErrorMinusColumn(const AbstractColumn*);
 
-	QAction* visibilityAction{nullptr};
-
 Q_SIGNALS:
 	// General-Tab
 	void dataDataChanged();

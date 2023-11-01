@@ -245,23 +245,6 @@ QIcon TextLabel::icon() const {
 	}
 }
 
-QMenu* TextLabel::createContextMenu() {
-	QMenu* menu = WorksheetElement::createContextMenu();
-	QAction* firstAction = menu->actions().at(1); // skip the first action because of the "title-action"
-
-	if (!visibilityAction) {
-		visibilityAction = new QAction(i18n("Visible"), this);
-		visibilityAction->setCheckable(true);
-		connect(visibilityAction, &QAction::triggered, this, &TextLabel::changeVisibility);
-	}
-
-	visibilityAction->setChecked(isVisible());
-	menu->insertAction(firstAction, visibilityAction);
-	menu->insertSeparator(firstAction);
-
-	return menu;
-}
-
 /* ============================ getter methods ================= */
 BASIC_SHARED_D_READER_IMPL(TextLabel, TextLabel::TextWrapper, text, textWrapper)
 BASIC_SHARED_D_READER_IMPL(TextLabel, QColor, fontColor, fontColor)

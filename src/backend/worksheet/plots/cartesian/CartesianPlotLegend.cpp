@@ -133,20 +133,10 @@ void CartesianPlotLegend::init() {
 }
 
 void CartesianPlotLegend::initActions() {
-	visibilityAction = new QAction(QIcon::fromTheme(QStringLiteral("view-visible")), i18n("Visible"), this);
-	visibilityAction->setCheckable(true);
-	connect(visibilityAction, &QAction::triggered, this, &CartesianPlotLegend::visibilityChangedSlot);
 }
 
 QMenu* CartesianPlotLegend::createContextMenu() {
-	QMenu* menu = WorksheetElement::createContextMenu();
-	QAction* firstAction = menu->actions().at(1); // skip the first action because of the "title-action"
-
-	visibilityAction->setChecked(isVisible());
-	menu->insertAction(firstAction, visibilityAction);
-	menu->insertSeparator(firstAction);
-
-	return menu;
+	return WorksheetElement::createContextMenu();
 }
 
 /*!
@@ -307,14 +297,6 @@ void CartesianPlotLegend::setLayoutColumnCount(int count) {
 // ##############################################################################
 // #################################  SLOTS  ####################################
 // ##############################################################################
-
-// ##############################################################################
-// ######  SLOTs for changes triggered via QActions in the context menu  ########
-// ##############################################################################
-void CartesianPlotLegend::visibilityChangedSlot() {
-	Q_D(const CartesianPlotLegend);
-	this->setVisible(!d->isVisible());
-}
 
 // ##############################################################################
 // ######################### Private implementation #############################

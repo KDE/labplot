@@ -97,7 +97,6 @@ public:
 
 	Type type() const;
 	QIcon icon() const override;
-	QMenu* createContextMenu() override;
 	QGraphicsItem* graphicsItem() const override;
 	void setParentGraphicsItem(QGraphicsItem*);
 
@@ -152,7 +151,6 @@ private:
 	void init();
 
 	Type m_type;
-	QAction* visibilityAction{nullptr};
 
 Q_SIGNALS:
 	void textWrapperChanged(const TextLabel::TextWrapper&);
