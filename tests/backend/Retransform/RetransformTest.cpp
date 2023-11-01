@@ -18,8 +18,8 @@
 #include "backend/worksheet/plots/cartesian/AxisPrivate.h"
 #include "backend/worksheet/plots/cartesian/BarPlot.h"
 #include "backend/worksheet/plots/cartesian/BoxPlot.h"
-#include "backend/worksheet/plots/cartesian/Histogram.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "backend/worksheet/plots/cartesian/Histogram.h"
 #include "backend/worksheet/plots/cartesian/XYCurvePrivate.h"
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
 #include "commonfrontend/worksheet/WorksheetView.h"
@@ -1750,28 +1750,35 @@ void RetransformTest::testPlotRecalcRetransform() {
 	QVector<const AbstractColumn*> dataColumns;
 	dataColumns << column;
 
+	RetransformCallCounter c;
+
 	// prepare the worksheet + plots
 	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	auto* p = new CartesianPlot(QStringLiteral("plot"));
 	ws->addChild(p);
+	c.aspectAdded(p);
 
 	auto* barPlot = new BarPlot(QStringLiteral("barPlot"));
 	barPlot->setDataColumns(dataColumns);
 	p->addChild(barPlot);
+	c.aspectAdded(barPlot);
 
 	auto* boxPlot = new BoxPlot(QStringLiteral("boxPlot"));
 	boxPlot->setDataColumns(dataColumns);
 	p->addChild(boxPlot);
+	c.aspectAdded(boxPlot);
 
 	auto* histPlot = new Histogram(QStringLiteral("histPlot"));
 	histPlot->setDataColumn(column);
 	p->addChild(histPlot);
+	c.aspectAdded(histPlot);
 
 	// modify one of the plots so its min and max values are changed.
 	// this should trigger the recalculation of the data ranges in the parent plot area
 	// and a retransform call for all its children
-	RetransformCallCounter c;
-	histPlot->setOrientation(Histogram::Orientation::Vertical);
+
+	QCOMPARE(histPlot->orientation(), Histogram::Orientation::Vertical);
+	histPlot->setOrientation(Histogram::Orientation::Horizontal);
 
 	QCOMPARE(c.elementLogCount(false), 3);
 	QVERIFY(c.calledExact(3, false));
