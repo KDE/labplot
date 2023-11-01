@@ -57,5 +57,8 @@ private Q_SLOTS:
 
 	void wheelEventOutsideTopLeft();
 	void wheelEventOutsideBottomRight();
+
+	void spreadsheetRemoveRows();
+	void spreadsheetInsertRows();
 };
 #endif

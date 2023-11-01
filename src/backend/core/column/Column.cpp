@@ -479,9 +479,9 @@ void Column::handleRowInsertion(int before, int count, QUndoCommand* parent) {
 void Column::handleRowRemoval(int first, int count, QUndoCommand* parent) {
 	Q_ASSERT(parent);
 	AbstractColumn::handleRowRemoval(first, count, parent);
-	new ColumnRemoveRowsCmd(d, first, count, parent);
-	if (!m_suppressDataChangedSignal)
-		Q_EMIT dataChanged(this);
+	auto* command = new ColumnRemoveRowsCmd(d, first, count, parent);
+	if (!parent)
+		exec(command);
 }
 
 /**

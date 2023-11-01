@@ -1213,4 +1213,123 @@ void CartesianPlotTest::wheelEventOutsideBottomRight() {
 	QCOMPARE(signalEmittedCounter, 1);
 }
 
+void CartesianPlotTest::spreadsheetRemoveRows() {
+	Project project;
+
+	auto* worksheet = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(worksheet);
+
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
+	worksheet->addChild(plot);
+	plot->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	plot->setNiceExtend(false);
+
+	auto* sheet = new Spreadsheet(QStringLiteral("data"), false);
+	project.addChild(sheet);
+	sheet->setColumnCount(2);
+
+	const auto& columns = sheet->children<Column>();
+	QCOMPARE(columns.count(), 2);
+	Column* xColumn = columns.at(0);
+	Column* yColumn = columns.at(1);
+
+	xColumn->replaceValues(-1,
+						   {
+							   1.,
+							   2.,
+							   3.,
+							   4.,
+							   5.,
+						   });
+	yColumn->replaceValues(-1,
+						   {
+							   0.,
+							   4.,
+							   6.,
+							   8.,
+							   10.,
+						   });
+
+	auto* curve = new XYCurve(QStringLiteral("curve"));
+	plot->addChild(curve);
+	curve->setXColumn(xColumn);
+	curve->setYColumn(yColumn);
+
+	CHECK_RANGE(plot, curve, Dimension::X, 1., 5.);
+	CHECK_RANGE(plot, curve, Dimension::Y, 0., 10.);
+
+	sheet->removeRows(4, 1);
+
+	CHECK_RANGE(plot, curve, Dimension::X, 1., 4.);
+	CHECK_RANGE(plot, curve, Dimension::Y, 0., 8.);
+
+	sheet->undoStack()->undo();
+
+	CHECK_RANGE(plot, curve, Dimension::X, 1., 5.);
+	CHECK_RANGE(plot, curve, Dimension::Y, 0., 10.);
+}
+
+void CartesianPlotTest::spreadsheetInsertRows() {
+	Project project;
+
+	auto* worksheet = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(worksheet);
+
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
+	worksheet->addChild(plot);
+	plot->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	plot->setNiceExtend(false);
+
+	auto* sheet = new Spreadsheet(QStringLiteral("data"), false);
+	project.addChild(sheet);
+	sheet->setColumnCount(2);
+
+	const auto& columns = sheet->children<Column>();
+	QCOMPARE(columns.count(), 2);
+	Column* xColumn = columns.at(0);
+	Column* yColumn = columns.at(1);
+
+	xColumn->replaceValues(-1,
+						   {
+							   1.,
+							   2.,
+							   3.,
+							   4.,
+							   5.,
+						   });
+	yColumn->replaceValues(-1,
+						   {
+							   0.,
+							   4.,
+							   6.,
+							   8.,
+							   10.,
+						   });
+
+	auto* curve = new XYCurve(QStringLiteral("curve"));
+	plot->addChild(curve);
+	curve->setXColumn(xColumn);
+	curve->setYColumn(yColumn);
+
+	CHECK_RANGE(plot, curve, Dimension::X, 1., 5.);
+	CHECK_RANGE(plot, curve, Dimension::Y, 0., 10.);
+
+	sheet->insertRows(4, 1);
+	QCOMPARE(xColumn->rowCount(), 6);
+	QCOMPARE(yColumn->rowCount(), 6);
+
+	xColumn->replaceValues(5, {13});
+	yColumn->replaceValues(5, {25});
+
+	CHECK_RANGE(plot, curve, Dimension::X, 1., 13.);
+	CHECK_RANGE(plot, curve, Dimension::Y, 0., 25.);
+
+	sheet->undoStack()->undo(); // xColumn replace values
+	sheet->undoStack()->undo(); // yColumn replace values
+	sheet->undoStack()->undo(); // spreadsheet insertRows
+
+	CHECK_RANGE(plot, curve, Dimension::X, 1., 5.);
+	CHECK_RANGE(plot, curve, Dimension::Y, 0., 10.);
+}
+
 QTEST_MAIN(CartesianPlotTest)
