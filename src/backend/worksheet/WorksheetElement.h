@@ -94,6 +94,7 @@ public:
 
 	QMenu* createContextMenu() override;
 	QAction* visibilityAction();
+	QAction* lockingAction();
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool) override;
@@ -116,6 +117,7 @@ public:
 private:
 	void init();
 	QAction* m_visibilityAction{nullptr};
+	QAction* m_lockingAction{nullptr};
 
 protected:
 	WorksheetElement(const QString&, WorksheetElementPrivate* dd, AspectType);
@@ -141,6 +143,7 @@ private:
 
 protected Q_SLOTS:
 	void changeVisibility();
+	void changeLocking();
 
 private Q_SLOTS:
 	void prepareDrawingOrderMenu();

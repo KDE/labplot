@@ -125,6 +125,11 @@ void WorksheetElement::changeVisibility() {
 	this->setVisible(!d->isVisible());
 }
 
+void WorksheetElement::changeLocking() {
+	Q_D(const WorksheetElement);
+	this->setLock(!isLocked());
+}
+
 STD_SETTER_CMD_IMPL_S(WorksheetElement, SetLock, bool, lock)
 void WorksheetElement::setLock(bool lock) {
 	Q_D(WorksheetElement);
@@ -197,10 +202,18 @@ QAction* WorksheetElement::visibilityAction() {
 	if (!m_visibilityAction) {
 		m_visibilityAction = new QAction(QIcon::fromTheme(QStringLiteral("view-visible")), i18n("Visible"), this);
 		m_visibilityAction->setCheckable(true);
-		m_visibilityAction->setChecked(isVisible());
 		connect(m_visibilityAction, &QAction::triggered, this, &WorksheetElement::changeVisibility);
 	}
 	return m_visibilityAction;
+}
+
+QAction* WorksheetElement::lockingAction() {
+	if (!m_lockingAction) {
+		m_lockingAction = new QAction(QIcon::fromTheme(QStringLiteral("hidemouse")), i18n("Locking"), this);
+		m_lockingAction->setCheckable(true);
+		connect(m_lockingAction, &QAction::triggered, this, &WorksheetElement::changeLocking);
+	}
+	return m_lockingAction;
 }
 
 QMenu* WorksheetElement::createContextMenu() {
@@ -228,6 +241,12 @@ QMenu* WorksheetElement::createContextMenu() {
 	visibilityAction->setChecked(isVisible());
 	menu->insertAction(firstAction, visibilityAction);
 	menu->insertSeparator(firstAction);
+	auto* lockingAction = this->lockingAction();
+	menu->insertAction(firstAction, lockingAction);
+	menu->insertSeparator(firstAction);
+
+	visibilityAction->setChecked(isVisible());
+	lockingAction->setChecked(isLocked());
 
 	// add the sub-menu for the drawing order
 
