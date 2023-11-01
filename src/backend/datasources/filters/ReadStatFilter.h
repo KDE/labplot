@@ -10,13 +10,11 @@
 #define READSTATFILTER_H
 
 #include "backend/datasources/filters/AbstractFileFilter.h"
-// #include <QTreeWidgetItem>
 
 #ifdef HAVE_READSTAT
 #include <readstat.h>
 #endif
 
-// class QStringList;
 class ReadStatFilterPrivate;
 
 class ReadStatFilter : public AbstractFileFilter {
