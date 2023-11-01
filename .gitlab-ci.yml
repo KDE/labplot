@@ -17,9 +17,11 @@ include:
 # replaced with own target for correct module name:
 #      - /gitlab-templates/flatpak.yml
 # supposed to run manual:
-      - /gitlab-templates/craft-windows-x86-64.yml
 #      - /gitlab-templates/craft-appimage.yml
+#      - /gitlab-templates/craft-windows-x86-64.yml
 #      - /gitlab-templates/craft-windows-mingw64.yml
+      - /gitlab-templates/craft-macos-x86-64.yml
+      - /gitlab-templates/craft-macos-arm64.yml
 
 # needed for tests (use "ctest -V" for more output)
 variables:
