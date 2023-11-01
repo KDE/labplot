@@ -391,7 +391,7 @@ void AspectTreeModel::aspectAboutToBeMoved(const AbstractAspect* aspect, int des
 	int index = parent->indexOfChild<AbstractAspect>(aspect);
 	const auto& parentIndex = modelIndexOfAspect(parent);
 	m_aspectAboutToBeMovedCalled = true;
-	beginMoveRows(parentIndex, index, index, parentIndex, destinationRow);
+	Q_ASSERT(beginMoveRows(parentIndex, index, index, parentIndex, destinationRow));
 }
 
 void AspectTreeModel::aspectMoved() {

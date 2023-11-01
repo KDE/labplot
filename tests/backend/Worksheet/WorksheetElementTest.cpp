@@ -577,6 +577,9 @@ void WorksheetElementTest::referenceLineInverseScaling() {
 
 void WorksheetElementTest::moveElementBefore() {
 	Project project;
+
+	AspectTreeModel treemodel(&project, this);
+
 	auto* ws = new Worksheet(QStringLiteral("Worksheet"));
 	project.addChild(ws);
 
@@ -645,6 +648,9 @@ void WorksheetElementTest::moveElementBefore() {
 
 void WorksheetElementTest::moveElementAfter() {
 	Project project;
+
+	AspectTreeModel treemodel(&project, this);
+
 	auto* ws = new Worksheet(QStringLiteral("Worksheet"));
 	project.addChild(ws);
 
@@ -747,10 +753,10 @@ void WorksheetElementTest::prepareDrawingMenu() {
 
 void WorksheetElementTest::moveTreeModelInteraction() {
 	Project project;
-	auto* aspectTreeModel = new AspectTreeModel(&project, this);
+	AspectTreeModel aspectTreeModel(&project, this);
 
 	std::unique_ptr<ProjectExplorer> projectExplorer = std::make_unique<ProjectExplorer>(nullptr);
-	projectExplorer->setModel(aspectTreeModel);
+	projectExplorer->setModel(&aspectTreeModel);
 	projectExplorer->setProject(&project);
 	projectExplorer->setCurrentAspect(&project);
 

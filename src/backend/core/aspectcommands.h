@@ -61,14 +61,20 @@ public:
 	}
 
 	void move(int newIndex) {
-		// QDEBUG(Q_FUNC_INFO << ", TARGET = " << m_target->q << " CHILD = " << m_child << ", PARENT = " << m_child->parentAspect())
+		// First child (index 0): Most behind child
+		// Last child: Most front child
 		const int origIndex = m_target->indexOfChild(m_child);
 		if (newIndex != origIndex) {
 			int nonHiddenIndex = 0;
-			for (int i=0; i < newIndex; i++) {
+			for (int i = 0; i < newIndex; i++) {
 				if (!m_target->m_children.at(i)->hidden())
-					nonHiddenIndex ++;
+					nonHiddenIndex++;
 			}
+
+			// According to qt documentation
+			// https://doc.qt.io/qt-5/qabstractitemmodel.html#beginMoveRows
+			if (newIndex > origIndex)
+				nonHiddenIndex++;
 
 			Q_EMIT m_target->q->childAspectAboutToBeMoved(m_child, nonHiddenIndex);
 

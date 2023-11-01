@@ -9,12 +9,12 @@
 */
 
 #include "AbstractAspectTest.h"
+#include "backend/core/AspectTreeModel.h"
 #include "backend/core/Project.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
-#include "backend/core/AspectTreeModel.h"
 
 #include <QUndoStack>
 
@@ -291,7 +291,7 @@ void AbstractAspectTest::moveUpDown() {
 	auto* spreadsheet2 = new Spreadsheet(QStringLiteral("Spreadsheet2"));
 	project.addChild(spreadsheet2);
 
-		   // check the order of children
+	// check the order of children
 	QCOMPARE(project.child<AbstractAspect>(0), worksheet);
 	QCOMPARE(project.child<AbstractAspect>(1), spreadsheet);
 	QCOMPARE(project.child<AbstractAspect>(2), spreadsheet2);
