@@ -774,7 +774,7 @@ const AbstractColumn* HistogramPrivate::binPDValues() {
 */
 void HistogramPrivate::retransform() {
 	const bool suppressed = suppressRetransform || q->isLoading();
-	trackRetransformCalled(suppressed);
+	Q_EMIT trackRetransformCalled(suppressed);
 	if (suppressed)
 		return;
 

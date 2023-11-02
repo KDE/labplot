@@ -713,7 +713,9 @@ void BoxPlotPrivate::adjustPropertiesContainers() {
   triggers the update of lines, drop lines, symbols etc.
 */
 void BoxPlotPrivate::retransform() {
-	if (suppressRetransform || !isVisible() || q->isLoading())
+	const bool suppressed = suppressRetransform || !isVisible() || q->isLoading();
+	Q_EMIT trackRetransformCalled(suppressed);
+	if (suppressed)
 		return;
 
 	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
