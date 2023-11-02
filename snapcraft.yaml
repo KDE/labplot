@@ -158,10 +158,10 @@ parts:
         - gettext
         - libpoppler-dev
         - libpoppler-qt5-dev
-        - liborigin2-dev
+        - liborigin-dev
         - libreadstat-dev
         - libmatio-dev
-        - discount
+        - libmarkdown2-dev
         - libfast5-dev
         stage-packages:
         - kio
@@ -207,7 +207,7 @@ parts:
         - libwebp7
         - libwind0-heimdal
         - liblz4-1
-        - liborigin2-1v5
+        - liborigin
         - libreadstat1
         - libmatio11
         - discount
@@ -219,7 +219,7 @@ parts:
         - "-DENABLE_TESTING=OFF"
         - "-DBUILD_TESTING=OFF"
         - "-DKDE_SKIP_TEST_SETTINGS=ON"
-        - "-DCMAKE_FIND_ROOT_PATH=$CRAFT_STAGE\\;/snap/kf5-5-111-qt-5-15-11-core22-sdk/current;\\/usr;"
+        - "-DCMAKE_FIND_ROOT_PATH=$CRAFT_STAGE\\;/snap/kf5-5-111-qt-5-15-11-core22-sdk/current\\;/usr"
         - "-DKDE_INSTALL_PLUGINDIR=/usr/lib/$CRAFT_ARCH_TRIPLET/qt5/plugins/"
         prime:
         - "-usr/lib/*/cmake/*"
