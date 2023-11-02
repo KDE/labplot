@@ -209,7 +209,7 @@ clang_format:
 
 # see https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/linux.yml
 cppcheck:
-  stage: test
+  stage: build
   image: invent-registry.kde.org/sysadmin/ci-images/suse-qt515:latest
   tags:
     - Linux
