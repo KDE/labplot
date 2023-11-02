@@ -138,7 +138,7 @@ parts:
     labplot:
         after:
         - kde-neon
-        - patches
+        - qxlsx
         parse-info:
         - usr/share/metainfo/org.kde.labplot2.appdata.xml
         plugin: cmake
@@ -235,7 +235,7 @@ parts:
         build-environment: *id005
         override-pull: |
             craftctl default
-              for file in ${CRAFT_PROJECT_DIR}/snap/patches/*
+              for file in ${CRAFT_PROJECT_DIR}/snap/local/patches/*
               do
                 patch -i $file -p 1
               done
