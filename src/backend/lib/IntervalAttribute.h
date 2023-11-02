@@ -154,7 +154,7 @@ public:
 
 	void setValue(const Interval<int>& i, bool value = true) {
 		if (value) {
-			foreach (const Interval<int>& iv, m_intervals)
+			for (const auto& iv : m_intervals)
 				if (iv.contains(i))
 					return;
 
@@ -169,14 +169,14 @@ public:
 	}
 
 	bool isSet(int row) const {
-		foreach (Interval<int> iv, m_intervals)
+		for (const auto& iv : m_intervals)
 			if (iv.contains(row))
 				return true;
 		return false;
 	}
 
 	bool isSet(const Interval<int>& i) const {
-		foreach (Interval<int> iv, m_intervals)
+		for (const auto& iv : m_intervals)
 			if (iv.contains(i))
 				return true;
 		return false;

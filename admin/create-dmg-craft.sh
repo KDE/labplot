@@ -33,10 +33,6 @@ macdeployqt $PREFIX/$NAME.app -verbose=2 -libpath=$LIBPATH
 echo "Install files"
 # splash
 cp -v $CRAFTROOT/share/$NAME/splash.png $INPREFIX/Resources/
-# rc-file
-# Standardlocation (QSP): ~/Library/Application\ Support/kxmlgui5/labplot2/labplot2ui.rc
-# using hardcoded path:
-cp -v $CRAFTROOT/share/kxmlgui5/$NAME/${NAME}ui.rc $INPREFIX/Resources/
 # themes
 cp -vr $CRAFTROOT/share/$NAME/themes $INPREFIX/Resources/
 # gsl_distros, fit_models, colorchooser

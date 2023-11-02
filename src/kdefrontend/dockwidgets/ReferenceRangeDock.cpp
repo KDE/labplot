@@ -57,25 +57,6 @@ void ReferenceRangeDock::setReferenceRanges(QList<ReferenceRange*> list) {
 	setAspects(list);
 	Q_ASSERT(m_range);
 
-	// if there is more than one point in the list, disable the comment and name widgets in "general"
-	if (list.size() == 1) {
-		ui.lName->setEnabled(true);
-		ui.leName->setEnabled(true);
-		ui.lComment->setEnabled(true);
-		ui.teComment->setEnabled(true);
-		ui.leName->setText(m_range->name());
-		ui.teComment->setText(m_range->comment());
-	} else {
-		ui.lName->setEnabled(false);
-		ui.leName->setEnabled(false);
-		ui.lComment->setEnabled(false);
-		ui.teComment->setEnabled(false);
-		ui.leName->setText(QString());
-		ui.teComment->setText(QString());
-	}
-	ui.leName->setStyleSheet(QString());
-	ui.leName->setToolTip(QString());
-
 	// initialize widgets for common properties
 	QList<Line*> lines;
 	QList<Background*> backgrounds;

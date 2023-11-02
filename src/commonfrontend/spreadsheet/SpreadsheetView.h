@@ -62,6 +62,7 @@ public:
 	int firstSelectedColumn(bool full = false) const;
 	int lastSelectedColumn(bool full = false) const;
 
+	int selectedRowCount(bool full = true) const;
 	bool isRowSelected(int row, bool full = false) const;
 	int firstSelectedRow(bool full = false) const;
 	int lastSelectedRow(bool full = false) const;
@@ -87,7 +88,7 @@ private:
 	void exportToFile(const QString&, bool, const QString&, QLocale::Language) const;
 	void exportToLaTeX(const QString&, bool exportHeaders, bool gridLines, bool captions, bool latexHeaders, bool skipEmptyRows, bool exportEntire) const;
 	void exportToFits(const QString& path, int exportTo, bool commentsAsUnits) const;
-	void exportToExcel(const QString& path, bool exportHeaders) const;
+	void exportToXLSX(const QString& path, bool exportHeaders) const;
 	void exportToSQLite(const QString& path) const;
 	int maxRowToExport() const;
 	bool hasValues(const QVector<Column*>);
@@ -189,16 +190,12 @@ private:
 	QAction* action_insert_rows_above{nullptr};
 	QAction* action_insert_rows_below{nullptr};
 	QAction* action_remove_rows{nullptr};
-	QAction* action_clear_rows{nullptr};
 	QAction* action_remove_missing_value_rows{nullptr};
 	QAction* action_mask_missing_value_rows{nullptr};
 	QAction* action_statistics_rows{nullptr};
 
 	// analysis and plot data menu actions
-	QAction* action_plot_data_xycurve{nullptr};
-	QAction* action_plot_data_histogram{nullptr};
-	QAction* action_plot_data_boxplot{nullptr};
-	QAction* action_plot_data_barplot{nullptr};
+	QActionGroup* plotDataActionGroup{nullptr};
 	QAction* addDataOperationAction{nullptr};
 	QAction* addDataReductionAction{nullptr};
 	QAction* addDifferentiationAction{nullptr};
@@ -259,7 +256,7 @@ private Q_SLOTS:
 	void unmaskSelection();
 	// 		void recalculateSelectedCells();
 
-	void plotData();
+	void plotData(QAction*);
 	void plotAnalysisData();
 
 	void fillSelectedCellsWithRowNumbers();
@@ -274,7 +271,6 @@ private Q_SLOTS:
 	void insertRowsAbove();
 	void insertRowsBelow();
 	void removeSelectedRows();
-	void clearSelectedRows();
 
 	void insertColumnLeft();
 	void insertColumnRight();

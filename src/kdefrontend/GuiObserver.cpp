@@ -28,6 +28,7 @@
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
 #include "backend/worksheet/plots/cartesian/CustomPoint.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
+#include "backend/worksheet/plots/cartesian/KDEPlot.h"
 #include "backend/worksheet/plots/cartesian/QQPlot.h"
 #include "backend/worksheet/plots/cartesian/ReferenceLine.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
@@ -57,6 +58,7 @@
 #include "kdefrontend/dockwidgets/HistogramDock.h"
 #include "kdefrontend/dockwidgets/ImageDock.h"
 #include "kdefrontend/dockwidgets/InfoElementDock.h"
+#include "kdefrontend/dockwidgets/KDEPlotDock.h"
 #include "kdefrontend/dockwidgets/LiveDataDock.h"
 #include "kdefrontend/dockwidgets/LollipopPlotDock.h"
 #include "kdefrontend/dockwidgets/MatrixDock.h"
@@ -89,7 +91,7 @@
 #include "kdefrontend/widgets/LabelWidget.h"
 
 #include <DockWidget.h>
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 #include <QStackedWidget>
 #include <QStatusBar>
 #include <QToolBar>
@@ -370,6 +372,11 @@ void GuiObserver::selectedAspectsChanged(const QList<AbstractAspect*>& selectedA
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Box Plot"));
 		raiseDock(m_boxPlotDock, m_mainWindow->stackedWidget);
 		m_boxPlotDock->setBoxPlots(castList<BoxPlot>(selectedAspects));
+		break;
+	case AspectType::KDEPlot:
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "KDE Plot"));
+		raiseDock(m_kdePlotDock, m_mainWindow->stackedWidget);
+		m_kdePlotDock->setPlots(castList<KDEPlot>(selectedAspects));
 		break;
 	case AspectType::QQPlot:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Q-Q Plot"));

@@ -144,7 +144,7 @@ void FITSHeaderEditWidget::fillTableSlot(QTreeWidgetItem* item, int col) {
 		if (item->parent() != nullptr) {
 			if (item->parent()->parent() != nullptr) {
 				bool ok;
-				int hduNum = itemText.rightRef(1).toInt(&ok);
+				int hduNum = itemText.right(1).toInt(&ok);
 				selectedExtension = item->parent()->parent()->text(0) + QStringLiteral("[") + QString::number(hduNum - 1) + QStringLiteral("]");
 			}
 		}
@@ -381,10 +381,11 @@ void FITSHeaderEditWidget::removeKeyword() {
 												  i18n("Confirm Deletion"),
 												  KStandardGuiItem::del(),
 												  KStandardGuiItem::cancel());
+	if (status == KMessageBox::PrimaryAction) {
 #else
 	auto status = KMessageBox::questionYesNo(this, i18n("Are you sure you want to delete the keyword '%1'?", key), i18n("Confirm Deletion"));
-#endif
 	if (status == KMessageBox::Yes) {
+#endif
 		bool remove = true;
 		for (const QString& k : mandatoryKeywords()) {
 			if (!k.compare(key)) {

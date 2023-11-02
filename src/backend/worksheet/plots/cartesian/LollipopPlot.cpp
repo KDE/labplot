@@ -21,13 +21,14 @@
 #include "backend/worksheet/plots/cartesian/Value.h"
 #include "tools/ImageTools.h"
 
-#include <QGraphicsSceneMouseEvent>
-#include <QMenu>
-#include <QPainter>
-
 #include <KConfig>
 #include <KConfigGroup>
 #include <KLocalizedString>
+
+#include <QActionGroup>
+#include <QGraphicsSceneMouseEvent>
+#include <QMenu>
+#include <QPainter>
 
 /**
  * \class LollipopPlot
@@ -224,7 +225,8 @@ void LollipopPlot::setXColumn(const AbstractColumn* column) {
 		if (column) {
 			// update the curve itself on changes
 			connect(column, &AbstractColumn::dataChanged, this, &LollipopPlot::recalc);
-			connect(column->parentAspect(), &AbstractAspect::childAspectAboutToBeRemoved, this, &LollipopPlot::dataColumnAboutToBeRemoved);
+			if (column->parentAspect())
+				connect(column->parentAspect(), &AbstractAspect::childAspectAboutToBeRemoved, this, &LollipopPlot::dataColumnAboutToBeRemoved);
 
 			connect(column, &AbstractColumn::dataChanged, this, &LollipopPlot::dataChanged);
 			// TODO: add disconnect in the undo-function
@@ -244,7 +246,8 @@ void LollipopPlot::setDataColumns(const QVector<const AbstractColumn*> columns) 
 
 			// update the curve itself on changes
 			connect(column, &AbstractColumn::dataChanged, this, &LollipopPlot::recalc);
-			connect(column->parentAspect(), &AbstractAspect::childAspectAboutToBeRemoved, this, &LollipopPlot::dataColumnAboutToBeRemoved);
+			if (column->parentAspect())
+				connect(column->parentAspect(), &AbstractAspect::childAspectAboutToBeRemoved, this, &LollipopPlot::dataColumnAboutToBeRemoved);
 			// TODO: add disconnect in the undo-function
 
 			connect(column, &AbstractColumn::dataChanged, this, &LollipopPlot::dataChanged);
@@ -648,7 +651,11 @@ void LollipopPlotPrivate::updateValues() {
 			return;
 		}
 
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+		const int endRow = std::min(m_valuesPointsLogical.size(), static_cast<qsizetype>(valuesColumn->rowCount()));
+#else
 		const int endRow = std::min(m_valuesPointsLogical.size(), valuesColumn->rowCount());
+#endif
 		const auto xColMode = valuesColumn->columnMode();
 		for (int i = 0; i < endRow; ++i) {
 			if (!valuesColumn->isValid(i) || valuesColumn->isMasked(i))

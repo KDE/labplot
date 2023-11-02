@@ -28,7 +28,7 @@ class AbstractFileFilter : public QObject {
 	Q_ENUMS(ImportMode)
 
 public:
-	enum class FileType { Ascii, Binary, Excel, Image, HDF5, NETCDF, FITS, JSON, ROOT, Spice, READSTAT, MATIO, VECTOR_BLF };
+	enum class FileType { Ascii, Binary, XLSX, Ods, Image, HDF5, NETCDF, FITS, JSON, ROOT, Spice, READSTAT, MATIO, VECTOR_BLF };
 	enum class ImportMode { Append, Prepend, Replace };
 
 	explicit AbstractFileFilter(FileType type)
@@ -43,6 +43,7 @@ public:
 	static QStringList numberFormats();
 	static AbstractFileFilter::FileType fileType(const QString&);
 	static QStringList fileTypes();
+	static QString convertFromNumberToColumn(int n);
 
 	virtual void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, ImportMode = ImportMode::Replace) = 0;
 	virtual void write(const QString& fileName, AbstractDataSource*) = 0;

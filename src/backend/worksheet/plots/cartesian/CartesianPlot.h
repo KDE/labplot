@@ -108,7 +108,7 @@ public:
 	QRectF dataRect() const;
 	void setMouseMode(MouseMode);
 	MouseMode mouseMode() const;
-	BASIC_D_ACCESSOR_DECL(bool, isLocked, Locked)
+	BASIC_D_ACCESSOR_DECL(bool, isInteractive, Interactive)
 	void navigate(int cSystemIndex, NavigationOperation);
 	const QList<QColor>& themeColorPalette() const;
 	const QColor themeColorPalette(int index) const;
@@ -129,7 +129,7 @@ public:
 	void finalizeLoad();
 	void loadThemeConfig(const KConfig&) override;
 	void saveTheme(KConfig& config);
-	void wheelEvent(int delta, int xIndex, int yIndex, bool considerDimension, Dimension dim);
+	void wheelEvent(const QPointF& sceneRelPos, int delta, int xIndex, int yIndex, bool considerDimension, Dimension dim);
 	void mousePressZoomSelectionMode(QPointF logicPos, int cSystemIndex);
 	void mousePressCursorMode(int cursorNumber, QPointF logicPos);
 	void mouseMoveZoomSelectionMode(QPointF logicPos, int cSystemIndex);
@@ -218,7 +218,7 @@ private:
 	void initMenus();
 	void setColorPalette(const KConfig&);
 	const XYCurve* currentCurve() const;
-	void zoom(int index, const Dimension, bool in);
+	void zoom(int index, const Dimension, bool in, const double relPosSceneRange);
 	void checkAxisFormat(const int cSystemIndex, const AbstractColumn*, Axis::Orientation);
 	void calculateDataRange(const Dimension, const int index, bool completeRange = true);
 	int curveTotalCount() const;
@@ -238,6 +238,7 @@ private:
 	QAction* addHistogramAction{nullptr};
 	QAction* addBoxPlotAction{nullptr};
 	QAction* addQQPlotAction{nullptr};
+	QAction* addKDEPlotAction{nullptr};
 
 	// bar plots
 	QAction* addBarPlotAction{nullptr};
@@ -320,13 +321,13 @@ public Q_SLOTS:
 	bool scaleAuto(int xIndex = -1, int yIndex = -1, bool fullRange = true, bool suppressRetransformScale = false);
 	bool scaleAuto(const Dimension, int index = -1, bool fullRange = true, bool suppressRetransformScale = false);
 
-	void zoomIn(int xIndex = -1, int yIndex = -1);
-	void zoomOut(int xIndex = -1, int yIndex = -1);
+	void zoomIn(int xIndex = -1, int yIndex = -1, const QPointF& sceneRelPos = QPointF(0.5, 0.5));
+	void zoomOut(int xIndex = -1, int yIndex = -1, const QPointF& sceneRelPos = QPointF(0.5, 0.5));
 	void zoomInX(int index = -1);
 	void zoomOutX(int index = -1);
 	void zoomInY(int index = -1);
 	void zoomOutY(int index = -1);
-	void zoomInOut(const int index, const Dimension dim, const bool zoomIn);
+	void zoomInOut(const int index, const Dimension dim, const bool zoomIn, const double relScenePosRange = 0.5);
 
 	void shiftLeftX(int index = -1);
 	void shiftRightX(int index = -1);
@@ -365,7 +366,6 @@ Q_SIGNALS:
 	void rectChanged(QRectF&);
 	void autoScaleChanged(const Dimension, int xRangeIndex, bool);
 	void rangeChanged(const Dimension, int, Range<double>);
-	void yRangeChanged(int yRangeIndex, Range<double>);
 	void minChanged(const Dimension, int rangeIndex, double);
 	void maxChanged(const Dimension, int rangeIndex, double);
 	void scaleChanged(const Dimension, int rangeIndex, RangeT::Scale);
@@ -385,7 +385,7 @@ Q_SIGNALS:
 	void mouseReleaseZoomSelectionModeSignal();
 	void mouseHoverZoomSelectionModeSignal(QPointF logicalPoint);
 	void mouseHoverOutsideDataRectSignal();
-	void wheelEventSignal(int delta, int xIndex, int yIndex, bool considerDimension, Dimension dim);
+	void wheelEventSignal(const QPointF& sceneRelPos, int delta, int xIndex, int yIndex, bool considerDimension, Dimension dim);
 	void curveNameChanged(const AbstractAspect* curve);
 	void cursorPosChanged(int cursorNumber, double xPos);
 	void curveAdded(const XYCurve*);

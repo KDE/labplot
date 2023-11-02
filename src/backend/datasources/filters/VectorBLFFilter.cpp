@@ -18,7 +18,7 @@
 #include "backend/lib/macros.h"
 #include "backend/lib/trace.h"
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #ifdef HAVE_VECTOR_BLF
 #include <Vector/BLF/Exceptions.h>

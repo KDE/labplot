@@ -20,6 +20,7 @@
 #include <QToolButton>
 #include <QWidgetAction>
 
+#include <QActionGroup>
 #include <QApplication>
 #include <QMouseEvent>
 #include <QTimer>
@@ -45,7 +46,7 @@ TemplateHandler::TemplateHandler(QWidget* parent, const QString& className, bool
 	: QWidget(parent) {
 	auto* horizontalLayout = new QHBoxLayout(this);
 	horizontalLayout->setSpacing(0);
-	horizontalLayout->setMargin(0);
+	horizontalLayout->setContentsMargins(0, 0, 0, 0);
 
 	if (alignRight) {
 		auto* horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);

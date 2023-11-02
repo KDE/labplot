@@ -14,7 +14,6 @@
 #include "backend/datasources/filters/AbstractFileFilter.h"
 
 class ROOTFilterPrivate;
-class QStringList;
 class QIODevice;
 
 /// Manages the importing of histograms from ROOT files

@@ -28,6 +28,8 @@
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegendPrivate.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
+#include "backend/worksheet/plots/cartesian/KDEPlot.h"
+#include "backend/worksheet/plots/cartesian/QQPlot.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 
@@ -367,39 +369,42 @@ void CartesianPlotLegendPrivate::retransform() {
 
 	prepareGeometryChange();
 
-	m_curves.clear();
+	m_plots.clear();
 	m_names.clear();
 
-	const auto& children = plot->children<WorksheetElement>();
-	for (auto* child : children) {
-		auto* curve = dynamic_cast<XYCurve*>(child);
-		if (curve && curve->isVisible() && curve->legendVisible()) {
-			m_curves << curve;
-			m_names << curve->name();
+	const auto& plots = this->plot->children<Plot>();
+	for (auto* plot : plots) {
+		if (!plot->isVisible())
 			continue;
-		}
 
-		if (child->type() == AspectType::Histogram && child->isVisible()) {
-			m_curves << child;
-			m_names << child->name();
-			continue;
-		}
+		// TODO: implement the property "legendVisible" for all plot types and make use of it here
+		auto* curve = dynamic_cast<XYCurve*>(plot);
+		if (curve && !curve->legendVisible())
+			return;
 
-		auto* boxPlot = dynamic_cast<BoxPlot*>(child);
-		if (boxPlot && boxPlot->isVisible()) {
-			m_curves << boxPlot;
+		auto* boxPlot = dynamic_cast<BoxPlot*>(plot);
+		if (boxPlot) {
+			m_plots << boxPlot;
 			const auto& columns = boxPlot->dataColumns();
 			for (auto* column : columns)
 				m_names << column->name();
+
+			continue;
 		}
 
-		auto* barPlot = dynamic_cast<BarPlot*>(child);
-		if (barPlot && barPlot->isVisible()) {
-			m_curves << barPlot;
+		auto* barPlot = dynamic_cast<BarPlot*>(plot);
+		if (barPlot) {
+			m_plots << barPlot;
 			const auto& columns = barPlot->dataColumns();
 			for (auto* column : columns)
 				m_names << column->name();
+
+			continue;
 		}
+
+		m_plots << plot;
+		m_names << plot->name();
+		continue;
 	}
 
 	int namesCount = m_names.count();
@@ -592,12 +597,14 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 
 	int col = 0;
 	int row = 0;
-	for (auto* child : m_curves) {
+	for (auto* plot : m_plots) {
 		// process the curves
-		const auto* curve = dynamic_cast<const XYCurve*>(child);
-		const auto* hist = dynamic_cast<const Histogram*>(child);
-		const auto* boxPlot = dynamic_cast<const BoxPlot*>(child);
-		const auto* barPlot = dynamic_cast<const BarPlot*>(child);
+		const auto* curve = dynamic_cast<const XYCurve*>(plot);
+		const auto* hist = dynamic_cast<const Histogram*>(plot);
+		const auto* boxPlot = dynamic_cast<const BoxPlot*>(plot);
+		const auto* barPlot = dynamic_cast<const BarPlot*>(plot);
+		const auto* kdePlot = dynamic_cast<const KDEPlot*>(plot);
+		const auto* qqPlot = dynamic_cast<const QQPlot*>(plot);
 
 		if (curve) { // draw the legend item for xy-curve
 			// curve's line (painted at the half of the ascent size)
@@ -780,6 +787,57 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 				if (!translatePainter(painter, row, col, h))
 					break;
 			}
+		} else if (kdePlot) {
+			// line
+			const auto* line = kdePlot->estimationCurve()->line();
+			painter->setPen(line->pen());
+			painter->setOpacity(line->opacity());
+			painter->drawLine(0, h / 2, lineSymbolWidth, h / 2);
+
+			// name
+			painter->setPen(QPen(labelColor));
+			painter->setOpacity(1.0);
+			painter->drawText(QPoint(lineSymbolWidth + layoutHorizontalSpacing, h), kdePlot->name());
+
+			if (!translatePainter(painter, row, col, h))
+				break;
+		} else if (qqPlot) {
+			// line
+			const auto* line = qqPlot->line();
+			painter->setPen(line->pen());
+			painter->setOpacity(line->opacity());
+			painter->drawLine(0, h / 2, lineSymbolWidth, h / 2);
+
+			// symbol
+			const auto* symbol = qqPlot->symbol();
+			if (symbol->style() != Symbol::Style::NoSymbols) {
+				painter->setOpacity(symbol->opacity());
+				painter->setBrush(symbol->brush());
+				painter->setPen(symbol->pen());
+
+				QPainterPath path = Symbol::stylePath(symbol->style());
+				QTransform trafo;
+				trafo.scale(symbol->size(), symbol->size());
+				path = trafo.map(path);
+
+				if (symbol->rotationAngle() != 0) {
+					trafo.reset();
+					trafo.rotate(symbol->rotationAngle());
+					path = trafo.map(path);
+				}
+
+				painter->translate(QPointF(lineSymbolWidth / 2, h / 2));
+				painter->drawPath(path);
+				painter->translate(-QPointF(lineSymbolWidth / 2, h / 2));
+			}
+
+			// name
+			painter->setPen(QPen(labelColor));
+			painter->setOpacity(1.0);
+			painter->drawText(QPoint(lineSymbolWidth + layoutHorizontalSpacing, h), qqPlot->name());
+
+			if (!translatePainter(painter, row, col, h))
+				break;
 		}
 	}
 
@@ -966,14 +1024,30 @@ bool CartesianPlotLegend::load(XmlStreamReader* reader, bool preview) {
 				str = attribs.value(QStringLiteral("horizontalPosition")).toString();
 				if (str.isEmpty())
 					reader->raiseMissingAttributeWarning(QStringLiteral("horizontalPosition"));
-				else
-					d->position.horizontalPosition = (WorksheetElement::HorizontalPosition)str.toInt();
+				else {
+					const auto pos = (WorksheetElement::HorizontalPosition)str.toInt();
+					if (pos == WorksheetElement::HorizontalPosition::Custom)
+						d->position.horizontalPosition = WorksheetElement::HorizontalPosition::Center;
+					else
+						d->position.horizontalPosition = pos;
+				}
 
 				str = attribs.value(QStringLiteral("verticalPosition")).toString();
 				if (str.isEmpty())
 					reader->raiseMissingAttributeWarning(QStringLiteral("verticalPosition"));
-				else
-					d->position.verticalPosition = (WorksheetElement::VerticalPosition)str.toInt();
+				else {
+					const auto pos = (WorksheetElement::VerticalPosition)str.toInt();
+					if (pos == WorksheetElement::VerticalPosition::Custom)
+						d->position.verticalPosition = WorksheetElement::VerticalPosition::Center;
+					else
+						d->position.verticalPosition = pos;
+				}
+
+				// in the old format the order was reversed, multiple by -1 here
+				d->position.point.setY(-d->position.point.y());
+
+				d->horizontalAlignment = WorksheetElement::HorizontalAlignment::Center;
+				d->verticalAlignment = WorksheetElement::VerticalAlignment::Center;
 
 				QGRAPHICSITEM_READ_DOUBLE_VALUE("rotation", Rotation);
 			}

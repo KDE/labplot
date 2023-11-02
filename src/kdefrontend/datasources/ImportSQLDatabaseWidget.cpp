@@ -27,6 +27,7 @@
 #include <KSyntaxHighlighting/Theme>
 #endif
 
+#include <QFile>
 #include <QSqlError>
 #include <QSqlQuery>
 #include <QSqlRecord>
@@ -148,7 +149,7 @@ void ImportSQLDatabaseWidget::loadSettings() {
 	importFromChanged(ui.cbImportFrom->currentIndex());
 
 	// TODO: use general setting for decimal separator?
-	const QChar decimalSeparator = QLocale().decimalPoint();
+	const auto decimalSeparator = QLocale().decimalPoint();
 	int index = (decimalSeparator == QLatin1Char('.')) ? 0 : 1;
 	ui.cbDecimalSeparator->setCurrentIndex(config.readEntry("DecimalSeparator", index));
 

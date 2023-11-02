@@ -11,31 +11,54 @@
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="5" column="0">
-    <widget class="QLabel" name="lGUMTerms">
-     <property name="text">
-      <string>Terms:</string>
-     </property>
-    </widget>
+   <item row="4" column="3">
+    <widget class="QComboBox" name="cbUnits"/>
    </item>
-   <item row="6" column="0">
+   <item row="3" column="3">
+    <widget class="QComboBox" name="cbTitleBar"/>
+   </item>
+   <item row="7" column="0">
     <widget class="QLabel" name="lNumberOptions">
      <property name="text">
       <string>Number options:</string>
      </property>
     </widget>
    </item>
-   <item row="4" column="3">
-    <widget class="QComboBox" name="cbDecimalSeparator"/>
+   <item row="7" column="3">
+    <widget class="QCheckBox" name="chkOmitGroupSeparator">
+     <property name="text">
+      <string>Omit group separator</string>
+     </property>
+    </widget>
    </item>
-   <item row="4" column="0">
+   <item row="2" column="3">
+    <widget class="QComboBox" name="cbDockWindowPositionReopen"/>
+   </item>
+   <item row="5" column="0">
     <widget class="QLabel" name="lDecimalSeparator">
      <property name="text">
       <string>Decimal separator:</string>
      </property>
     </widget>
    </item>
-   <item row="10" column="3">
+   <item row="12" column="3">
+    <widget class="QCheckBox" name="chkCompatible">
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Save projects in a compatible format that can be opened in LabPlot versions older than 2.9.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="text">
+      <string>Save in compatible format</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0">
+    <widget class="QLabel" name="lTitleBar">
+     <property name="text">
+      <string>Title Bar:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="11" column="3">
     <widget class="QFrame" name="frame">
      <property name="frameShape">
       <enum>QFrame::NoFrame</enum>
@@ -112,27 +135,37 @@
      </layout>
     </widget>
    </item>
-   <item row="10" column="0">
+   <item row="0" column="3">
+    <widget class="KComboBox" name="cbLoadOnStart"/>
+   </item>
+   <item row="6" column="3">
+    <widget class="QCheckBox" name="chkGUMTerms">
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use terms compliant with the &lt;a href=&quot;http://www.bipm.org/utils/common/documents/jcgm/JCGM_100_2008_E.pdf&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#2980b9;&quot;&gt;Guide to the Expression of Uncertainty in Measurement (GUM)&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="text">
+      <string>GUM compliant</string>
+     </property>
+    </widget>
+   </item>
+   <item row="9" column="3">
+    <widget class="QCheckBox" name="chkIncludeTrailingZeroesAfterDot">
+     <property name="text">
+      <string>Include trailing zeroes after dot</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QLabel" name="lDockWindowPositionReopen">
+     <property name="text">
+      <string>Dock widget placement:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="11" column="0">
     <widget class="QLabel" name="lAutoSave">
      <property name="text">
       <string>Auto-save:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="3">
-    <widget class="QComboBox" name="cbTitleBar"/>
-   </item>
-   <item row="2" column="0">
-    <widget class="QLabel" name="lTitleBar">
-     <property name="text">
-      <string>Title Bar:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="7" column="3">
-    <widget class="QCheckBox" name="chkOmitLeadingZeroInExponent">
-     <property name="text">
-      <string>Omit leading zero in exponent</string>
      </property>
     </widget>
    </item>
@@ -143,8 +176,32 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="3">
-    <widget class="KComboBox" name="cbLoadOnStart"/>
+   <item row="8" column="3">
+    <widget class="QCheckBox" name="chkOmitLeadingZeroInExponent">
+     <property name="text">
+      <string>Omit leading zero in exponent</string>
+     </property>
+    </widget>
+   </item>
+   <item row="12" column="1">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>156</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="6" column="0">
+    <widget class="QLabel" name="lGUMTerms">
+     <property name="text">
+      <string>Terms:</string>
+     </property>
+    </widget>
    </item>
    <item row="0" column="2">
     <spacer>
@@ -162,17 +219,7 @@
      </property>
     </spacer>
    </item>
-   <item row="3" column="3">
-    <widget class="QComboBox" name="cbUnits"/>
-   </item>
-   <item row="8" column="3">
-    <widget class="QCheckBox" name="chkIncludeTrailingZeroesAfterDot">
-     <property name="text">
-      <string>Include trailing zeroes after dot</string>
-     </property>
-    </widget>
-   </item>
-   <item row="9" column="1">
+   <item row="10" column="1">
     <spacer name="verticalSpacer_2">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -188,62 +235,25 @@
      </property>
     </spacer>
    </item>
-   <item row="3" column="0">
+   <item row="4" column="0">
     <widget class="QLabel" name="lUnits">
      <property name="text">
       <string>Units:</string>
      </property>
     </widget>
    </item>
-   <item row="11" column="1">
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>156</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="6" column="3">
-    <widget class="QCheckBox" name="chkOmitGroupSeparator">
-     <property name="text">
-      <string>Omit group separator</string>
-     </property>
-    </widget>
-   </item>
-   <item row="11" column="3">
-    <widget class="QCheckBox" name="chkCompatible">
-     <property name="toolTip">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Save projects in a compatible format that can be opened in LabPlot versions older than 2.9.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-     <property name="text">
-      <string>Save in compatible format</string>
-     </property>
-    </widget>
-   </item>
    <item row="5" column="3">
-    <widget class="QCheckBox" name="chkGUMTerms">
-     <property name="toolTip">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use terms compliant with the &lt;a href=&quot;http://www.bipm.org/utils/common/documents/jcgm/JCGM_100_2008_E.pdf&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#2980b9;&quot;&gt;Guide to the Expression of Uncertainty in Measurement (GUM)&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-     <property name="text">
-      <string>GUM compliant</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0">
-    <widget class="QLabel" name="label">
-     <property name="text">
-      <string>Dock widget placement:</string>
-     </property>
-    </widget>
+    <widget class="QComboBox" name="cbDecimalSeparator"/>
    </item>
    <item row="1" column="3">
-    <widget class="QComboBox" name="cbDockWindowPositionReopen"/>
+    <widget class="QComboBox" name="cbLoadOnStartNotebook"/>
+   </item>
+   <item row="1" column="0">
+    <widget class="QLabel" name="lLoadOnStartNotebook">
+     <property name="text">
+      <string>Notebook:</string>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>

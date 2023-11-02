@@ -13,6 +13,9 @@
 #include "backend/spreadsheet/StatisticsSpreadsheet.h"
 #include "kdefrontend/TemplateHandler.h"
 
+#include <KConfig>
+#include <KConfigGroup>
+
 /*!
  \class StatisticsSpreadsheetDock
  \brief Provides a widget for editing which statistical metris of the parent spreadsheet should be shown in the statistics spreadsheet.

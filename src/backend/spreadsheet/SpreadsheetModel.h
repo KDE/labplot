@@ -15,7 +15,6 @@
 #include "backend/core/AbstractColumn.h"
 #include <QAbstractItemModel>
 
-class QStringList;
 class Column;
 class Spreadsheet;
 class AbstractAspect;

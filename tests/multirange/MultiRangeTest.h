@@ -29,6 +29,8 @@ private Q_SLOTS:
 
 	// zoom tests (including auto scale)
 	void zoomInX_SingleRange();
+	void zoomInX_SingleRangeDateTimeMonotonicIncrease();
+	void zoomInX_SingleRangeDateTimeNonMonotonic();
 	void zoomInX_AllRanges();
 	void zoomInY_SingleRange();
 	void zoomInY_AllRanges();

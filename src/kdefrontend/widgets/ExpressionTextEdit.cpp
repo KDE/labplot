@@ -111,11 +111,15 @@ void ExpressionTextEdit::validateExpression(bool force) {
 	bool textChanged{(text != m_currentExpression) ? true : false};
 
 	if (textChanged || force) {
-		m_isValid = ExpressionParser::getInstance()->isValid(text, m_variables);
-		if (!m_isValid)
+		auto parser = ExpressionParser::getInstance();
+		m_isValid = parser->isValid(text, m_variables);
+		if (!m_isValid) {
+			setToolTip(parser->errorMessage());
 			SET_WARNING_STYLE(this)
-		else
+		} else {
+			setToolTip(QStringLiteral(""));
 			setStyleSheet(QString());
+		}
 
 		m_currentExpression = text;
 	}

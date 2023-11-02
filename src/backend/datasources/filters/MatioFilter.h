@@ -11,7 +11,6 @@
 
 #include "backend/datasources/filters/AbstractFileFilter.h"
 
-class QStringList;
 class MatioFilterPrivate;
 
 // Docu:
@@ -46,13 +45,13 @@ public:
 	QVector<QStringList> varsInfo() const;
 
 	// TODO: -> AbstractFileFilter?
-	void setStartRow(const int);
+	void setStartRow(int);
 	int startRow() const;
-	void setEndRow(const int);
+	void setEndRow(int);
 	int endRow() const;
-	void setStartColumn(const int);
+	void setStartColumn(int);
 	int startColumn() const;
-	void setEndColumn(const int);
+	void setEndColumn(int);
 	int endColumn() const;
 
 	void save(QXmlStreamWriter*) const override;
@@ -60,6 +59,7 @@ public:
 
 private:
 	std::unique_ptr<MatioFilterPrivate> const d;
+
 	friend class MatioFilterPrivate;
 };
 

@@ -80,8 +80,8 @@ public:
 	CartesianPlotActionMode cartesianPlotCursorMode();
 	void setCartesianPlotCursorMode(CartesianPlotActionMode mode);
 	void setInteractive(bool);
-	void setPlotsLocked(bool);
-	bool plotsLocked();
+	void setPlotsInteractive(bool);
+	bool plotsInteractive();
 	int plotCount();
 	CartesianPlot* plot(int index);
 	TreeModel* cursorModel();
@@ -116,7 +116,7 @@ public:
 public Q_SLOTS:
 	void setTheme(const QString&);
 	void cartesianPlotAxisShift(int delta, Dimension dim, int index);
-	void cartesianPlotWheelEvent(int delta, int xIndex, int yIndex, bool considerDimension, Dimension dim);
+	void cartesianPlotWheelEvent(const QPointF& sceneRelPos, int delta, int xIndex, int yIndex, bool considerDimension, Dimension dim);
 	void cartesianPlotMousePressZoomSelectionMode(QPointF logicPos);
 	void cartesianPlotMousePressCursorMode(int cursorNumber, QPointF logicPos);
 	void cartesianPlotMouseMoveZoomSelectionMode(QPointF logicPos);

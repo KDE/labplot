@@ -21,6 +21,7 @@
 #include "backend/lib/commandtemplates.h"
 #include "backend/worksheet/Worksheet.h"
 
+#include <KConfigGroup>
 #include <KLocalizedString>
 
 #include <QFont>

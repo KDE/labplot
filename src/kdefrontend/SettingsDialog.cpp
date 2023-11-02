@@ -23,14 +23,18 @@
 #endif
 
 #include <KConfigGroup>
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 #include <KMessageBox>
 
 #include <KWindowConfig>
 #include <kcoreaddons_version.h>
 
 #ifdef HAVE_KUSERFEEDBACK
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+#include <KUserFeedbackQt6/FeedbackConfigWidget>
+#else
 #include <KUserFeedback/FeedbackConfigWidget>
+#endif
 #endif
 
 #include <QDialogButtonBox>

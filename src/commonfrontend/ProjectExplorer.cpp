@@ -356,6 +356,11 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event) {
 	} else if (obj == m_treeView->viewport()) {
 		if (event->type() == QEvent::MouseButtonPress) {
 			auto* e = static_cast<QMouseEvent*>(event);
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+			const auto position = e->globalPosition().toPoint();
+#else
+			const auto position = e->globalPos();
+#endif
 			if (e->button() == Qt::LeftButton) {
 				QModelIndex index = m_treeView->indexAt(e->pos());
 				if (!index.isValid())
@@ -363,14 +368,19 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event) {
 
 				auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 				if (aspect->isDraggable()) {
-					m_dragStartPos = e->globalPos();
+					m_dragStartPos = position;
 					m_dragStarted = false;
 				}
 			}
 		} else if (event->type() == QEvent::MouseMove) {
 			auto* e = static_cast<QMouseEvent*>(event);
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+			const auto position = e->globalPosition().toPoint();
+#else
+			const auto position = e->globalPos();
+#endif
 			if (!m_dragStarted && m_treeView->selectionModel()->selectedIndexes().size() > 0
-				&& (e->globalPos() - m_dragStartPos).manhattanLength() >= QApplication::startDragDistance()) {
+				&& (position - m_dragStartPos).manhattanLength() >= QApplication::startDragDistance()) {
 				m_dragStarted = true;
 				auto* drag = new QDrag(this);
 				auto* mimeData = new QMimeData;
@@ -434,8 +444,12 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event) {
 			if (!sourceAspect)
 				return false;
 
-			// determine the aspect under the cursor
+				// determine the aspect under the cursor
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+			QModelIndex index = m_treeView->indexAt(dragMoveEvent->position().toPoint());
+#else
 			QModelIndex index = m_treeView->indexAt(dragMoveEvent->pos());
+#endif
 			if (!index.isValid())
 				return false;
 
@@ -454,7 +468,11 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event) {
 			if (vec.isEmpty())
 				return false;
 
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+			QModelIndex index = m_treeView->indexAt(dropEvent->position().toPoint());
+#else
 			QModelIndex index = m_treeView->indexAt(dropEvent->pos());
+#endif
 			if (!index.isValid())
 				return false;
 
@@ -917,12 +935,13 @@ void ProjectExplorer::deleteSelected() {
 												 i18np("Delete selected object", "Delete selected objects", aspects.size()),
 												 KStandardGuiItem::del(),
 												 KStandardGuiItem::cancel());
+	if (status == KMessageBox::SecondaryAction)
+		return;
 #else
 	auto status = KMessageBox::warningYesNo(this, msg, i18np("Delete selected object", "Delete selected objects", aspects.size()));
-#endif
-
 	if (status == KMessageBox::No)
 		return;
+#endif
 
 	m_project->beginMacro(i18np("Project Explorer: delete %1 selected object", "Project Explorer: delete %1 selected objects", items.size() / 4));
 

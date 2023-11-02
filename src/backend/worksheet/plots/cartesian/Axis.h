@@ -294,6 +294,7 @@ Q_SIGNALS:
 	void labelsOpacityChanged(qreal);
 
 	friend class RetransformTest;
+	friend class AxisTest;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Axis::TicksDirection)

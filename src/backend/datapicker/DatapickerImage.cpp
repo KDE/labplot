@@ -24,7 +24,6 @@
 #include "kdefrontend/worksheet/ExportWorksheetDialog.h"
 
 #include <QBuffer>
-#include <QDesktopWidget>
 #include <QDir>
 #include <QFileInfo>
 #include <QGraphicsScene>
@@ -32,6 +31,7 @@
 #include <QPrintDialog>
 #include <QPrintPreviewDialog>
 #include <QPrinter>
+#include <QScreen>
 
 #include <KConfig>
 #include <KConfigGroup>
@@ -348,7 +348,7 @@ public:
 			// setting relative is only possible if the image is not embedded!
 			m_target->q->setImage(filename, false);
 		}
-		emit m_target->q->relativeFilePathChanged(m_target->*m_field);
+		Q_EMIT m_target->q->relativeFilePathChanged(m_target->*m_field);
 	}
 };
 
@@ -450,7 +450,7 @@ void DatapickerImage::referencePointSelected(const DatapickerPoint* point) {
 	for (int i = 0; i < points.count(); i++) {
 		if (points.at(i) == point) {
 			m_currentRefPoint = i;
-			emit referencePointSelected(i);
+			Q_EMIT referencePointSelected(i);
 			return;
 		}
 	}
@@ -498,8 +498,8 @@ bool DatapickerImagePrivate::uploadImage() {
 		discretize();
 
 		// resize the screen
-		double w = Worksheet::convertToSceneUnits(q->originalPlotImage.width(), Worksheet::Unit::Inch) / QApplication::desktop()->physicalDpiX();
-		double h = Worksheet::convertToSceneUnits(q->originalPlotImage.height(), Worksheet::Unit::Inch) / QApplication::desktop()->physicalDpiX();
+		double w = Worksheet::convertToSceneUnits(q->originalPlotImage.width(), Worksheet::Unit::Inch) / QApplication::primaryScreen()->physicalDotsPerInchX();
+		double h = Worksheet::convertToSceneUnits(q->originalPlotImage.height(), Worksheet::Unit::Inch) / QApplication::primaryScreen()->physicalDotsPerInchY();
 		m_scene->setSceneRect(0, 0, w, h);
 		q->isLoaded = true;
 	}

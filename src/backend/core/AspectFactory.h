@@ -23,7 +23,9 @@
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
 #include "backend/worksheet/plots/cartesian/CustomPoint.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
+#include "backend/worksheet/plots/cartesian/KDEPlot.h"
 #include "backend/worksheet/plots/cartesian/LollipopPlot.h"
+#include "backend/worksheet/plots/cartesian/QQPlot.h"
 #include "backend/worksheet/plots/cartesian/ReferenceLine.h"
 #include "backend/worksheet/plots/cartesian/XYConvolutionCurve.h"
 #include "backend/worksheet/plots/cartesian/XYCorrelationCurve.h"
@@ -99,16 +101,24 @@ public:
 			return new XYInterpolationCurve(QString());
 		else if (type == AspectType::XYSmoothCurve)
 			return new XYSmoothCurve(QString());
-		else if (type == AspectType::Histogram)
-			return new Histogram(QString());
-		else if (type == AspectType::BarPlot)
-			return new BarPlot(QString());
-		else if (type == AspectType::BoxPlot)
-			return new BoxPlot(QString());
-		else if (type == AspectType::LollipopPlot)
-			return new LollipopPlot(QString());
 		else if (type == AspectType::CartesianPlotLegend)
 			return new CartesianPlotLegend(QString());
+
+		/* statistical plots */
+		else if (type == AspectType::BoxPlot)
+			return new BoxPlot(QString());
+		else if (type == AspectType::Histogram)
+			return new Histogram(QString());
+		else if (type == AspectType::KDEPlot)
+			return new KDEPlot(QString());
+		else if (type == AspectType::QQPlot)
+			return new QQPlot(QString());
+
+		/* bar plots */
+		else if (type == AspectType::BarPlot)
+			return new BarPlot(QString());
+		else if (type == AspectType::LollipopPlot)
+			return new LollipopPlot(QString());
 
 		/* data containers */
 		else if (type == AspectType::Spreadsheet)

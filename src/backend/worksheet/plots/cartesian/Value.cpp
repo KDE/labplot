@@ -20,6 +20,7 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 
+#include <KConfigGroup>
 #include <KLocalizedString>
 #include <QPainter>
 

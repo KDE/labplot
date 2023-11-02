@@ -22,7 +22,9 @@
 #include "backend/worksheet/plots/cartesian/BoxPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
+#include "backend/worksheet/plots/cartesian/KDEPlot.h"
 #include "backend/worksheet/plots/cartesian/LollipopPlot.h"
+#include "backend/worksheet/plots/cartesian/QQPlot.h"
 #include "backend/worksheet/plots/cartesian/Value.h"
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
 #include "backend/worksheet/plots/cartesian/XYFitCurve.h"
@@ -39,12 +41,12 @@
 #endif
 #endif
 
+#include <KCompressionDevice>
 #include <KConfig>
 #include <KConfigGroup>
-#include <KFilterDev>
 #include <KLocalizedString>
 #include <KMessageBox>
-#include <kcoreaddons_version.h>
+#include <kwidgetsaddons_version.h>
 
 #include <QBuffer>
 #include <QDateTime>
@@ -642,8 +644,8 @@ bool Project::load(const QString& filename, bool preview) {
 			file = new KCompressionDevice(filename, KCompressionDevice::GZip);
 	} else { // opens filename using file ending
 		// DEBUG(Q_FUNC_INFO << ", filename does not end with .lml. Guessing by extension")
-		file = new KFilterDev(filename);
-		DEBUG(Q_FUNC_INFO << ", found compression type " << ((KFilterDev*)file)->compressionType())
+		file = new KCompressionDevice(filename);
+		DEBUG(Q_FUNC_INFO << ", found compression type " << ((KCompressionDevice*)file)->compressionType())
 	}
 
 	if (!file)
@@ -703,12 +705,13 @@ bool Project::load(const QString& filename, bool preview) {
 			"If you modify and save the project, the CAS content will be lost.\n\n"
 			"Do you want to continue?",
 			reader.missingCASWarning());
-#if KCOREADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
+#if KWIDGETSADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
 		auto status = KMessageBox::warningTwoActions(nullptr, msg, i18n("Missing Support for CAS"), KStandardGuiItem::cont(), KStandardGuiItem::cancel());
+		if (status == KMessageBox::SecondaryAction) {
 #else
 		auto status = KMessageBox::warningYesNo(nullptr, msg, i18n("Missing Support for CAS"));
-#endif
 		if (status == KMessageBox::No) {
+#endif
 			file->close();
 			delete file;
 			return false;
@@ -832,11 +835,19 @@ void Project::retransformElements(AbstractAspect* aspect) {
 		QVector<CartesianPlot*> plots;
 		if (aspect->type() == AspectType::CartesianPlot)
 			plots << static_cast<CartesianPlot*>(aspect);
-		else if (aspect->inherits(AspectType::XYCurve) || aspect->type() == AspectType::Histogram)
+		else if (dynamic_cast<Plot*>(aspect))
 			plots << static_cast<CartesianPlot*>(aspect->parentAspect());
 
-		for (auto* plot : plots)
-			plot->retransform();
+		if (!plots.isEmpty()) {
+			for (auto* plot : plots)
+				plot->retransform();
+		} else {
+			// worksheet element is being copied alone without its parent plot object
+			// so the plot retransform is not called above. we need to call it for the aspect.
+			auto* e = dynamic_cast<WorksheetElement*>(aspect);
+			if (e)
+				e->retransform();
+		}
 	}
 
 #ifndef SDK
@@ -984,6 +995,32 @@ void Project::restorePointers(AbstractAspect* aspect, bool preview) {
 		RESTORE_COLUMN_POINTER(value, column, Column);
 		RESTORE_COLUMN_POINTER(hist, errorPlusColumn, ErrorPlusColumn);
 		RESTORE_COLUMN_POINTER(hist, errorMinusColumn, ErrorMinusColumn);
+	}
+
+	// QQ-plots
+	QVector<QQPlot*> qqPlots;
+	if (hasChildren)
+		qqPlots = aspect->children<QQPlot>(ChildIndexFlag::Recursive);
+	else if (aspect->type() == AspectType::QQPlot)
+		qqPlots << static_cast<QQPlot*>(aspect);
+
+	for (auto* plot : qqPlots) {
+		if (!plot)
+			continue;
+		RESTORE_COLUMN_POINTER(plot, dataColumn, DataColumn);
+	}
+
+	// KDE-plots
+	QVector<KDEPlot*> kdePlots;
+	if (hasChildren)
+		kdePlots = aspect->children<KDEPlot>(ChildIndexFlag::Recursive);
+	else if (aspect->type() == AspectType::KDEPlot)
+		kdePlots << static_cast<KDEPlot*>(aspect);
+
+	for (auto* plot : kdePlots) {
+		if (!plot)
+			continue;
+		RESTORE_COLUMN_POINTER(plot, dataColumn, DataColumn);
 	}
 
 	// box plots

@@ -12,8 +12,7 @@
 
 #include <QList>
 #include <QObjectList>
-class QString;
-class QStringList;
+
 class PluginLoader;
 
 class PluginManager {

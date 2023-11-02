@@ -239,11 +239,13 @@ void ImportProjectDialog::importTo(QStatusBar* statusBar) const {
 #if KCOREADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
 		auto status =
 			KMessageBox::warningTwoActions(nullptr, msg, i18n("Override existing objects?"), KStandardGuiItem::overwrite(), KStandardGuiItem::cancel());
+		if (status == KMessageBox::SecondaryAction)
+			return;
 #else
 		auto status = KMessageBox::warningYesNo(nullptr, msg, i18n("Override existing objects?"));
-#endif
 		if (status == KMessageBox::No)
 			return;
+#endif
 	}
 
 	// show a progress bar in the status bar
@@ -327,7 +329,7 @@ void ImportProjectDialog::showTopLevelOnly(const QModelIndex& index) {
 	checks whether \c aspect is one of the allowed top level types
 */
 bool ImportProjectDialog::isTopLevel(const AbstractAspect* aspect) const {
-	foreach (AspectType type, m_projectParser->topLevelClasses()) {
+	for (auto type : m_projectParser->topLevelClasses()) {
 		if (aspect->inherits(type))
 			return true;
 	}

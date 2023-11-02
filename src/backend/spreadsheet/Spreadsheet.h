@@ -71,10 +71,10 @@ public:
 
 	// used from model to inform dock
 	void emitRowCountChanged() {
-		emit rowCountChanged(rowCount());
+		Q_EMIT rowCountChanged(rowCount());
 	}
 	void emitColumnCountChanged() {
-		emit columnCountChanged(columnCount());
+		Q_EMIT columnCountChanged(columnCount());
 	}
 
 	// data import

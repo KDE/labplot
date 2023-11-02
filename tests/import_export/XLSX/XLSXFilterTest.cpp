@@ -1,22 +1,22 @@
 /*
-	File                 : ExcelFilterTest.cpp
+	File                 : XLSXFilterTest.cpp
 	Project              : LabPlot
-	Description          : Tests for the Excel filter
+	Description          : Tests for the XLSX filter
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2022-2023 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-#include "ExcelFilterTest.h"
-#include "backend/datasources/filters/ExcelFilter.h"
+#include "XLSXFilterTest.h"
+#include "backend/datasources/filters/XLSXFilter.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 
-void ExcelFilterTest::importFile2Cols() {
+void XLSXFilterTest::importFile2Cols() {
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/2col.xlsx"));
 
 	Spreadsheet spreadsheet(QStringLiteral("test"), false);
-	ExcelFilter filter;
+	XLSXFilter filter;
 	filter.setCurrentSheet(QStringLiteral("Sheet1"));
 	filter.setCurrentRange(QStringLiteral("A1:B5"));
 	filter.readDataFromFile(fileName, &spreadsheet);
@@ -37,11 +37,11 @@ void ExcelFilterTest::importFile2Cols() {
 	QCOMPARE(spreadsheet.column(1)->valueAt(4), 1);
 }
 
-void ExcelFilterTest::importFile3Cols() {
+void XLSXFilterTest::importFile3Cols() {
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/3col.xlsx"));
 
 	Spreadsheet spreadsheet(QStringLiteral("test"), false);
-	ExcelFilter filter;
+	XLSXFilter filter;
 	filter.setCurrentSheet(QStringLiteral("Sheet1"));
 	filter.setCurrentRange(QStringLiteral("A1:C5"));
 	filter.readDataFromFile(fileName, &spreadsheet);
@@ -67,11 +67,11 @@ void ExcelFilterTest::importFile3Cols() {
 	QCOMPARE(spreadsheet.column(2)->valueAt(4), 50000);
 }
 
-void ExcelFilterTest::importFileEmptyCells() {
+void XLSXFilterTest::importFileEmptyCells() {
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/datatypes-empty.xlsx"));
 
 	Spreadsheet spreadsheet(QStringLiteral("test"), false);
-	ExcelFilter filter;
+	XLSXFilter filter;
 	filter.setCurrentSheet(QStringLiteral("Sheet1"));
 	filter.setCurrentRange(QStringLiteral("A1:F5"));
 	filter.readDataFromFile(fileName, &spreadsheet);
@@ -105,11 +105,11 @@ void ExcelFilterTest::importFileEmptyCells() {
 			QCOMPARE(spreadsheet.column(col)->valueAt(row), 0);
 }
 
-void ExcelFilterTest::importFileDatetime() {
+void XLSXFilterTest::importFileDatetime() {
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/datatypes-excel.xlsx"));
 
 	Spreadsheet spreadsheet(QStringLiteral("test"), false);
-	ExcelFilter filter;
+	XLSXFilter filter;
 	filter.setCurrentSheet(QStringLiteral("Sheet1"));
 	filter.setCurrentRange(QStringLiteral("A1:E4"));
 	filter.readDataFromFile(fileName, &spreadsheet);
@@ -139,4 +139,4 @@ void ExcelFilterTest::importFileDatetime() {
 	QCOMPARE(spreadsheet.column(4)->valueAt(3), 0.01);
 }
 
-QTEST_MAIN(ExcelFilterTest)
+QTEST_MAIN(XLSXFilterTest)

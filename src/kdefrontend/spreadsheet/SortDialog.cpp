@@ -23,12 +23,16 @@
 
 	\ingroup kdefrontend
  */
-SortDialog::SortDialog(QWidget* parent)
+SortDialog::SortDialog(QWidget* parent, bool sortAll)
 	: QDialog(parent) {
 	setWindowIcon(QIcon::fromTheme(QStringLiteral("view-sort-ascending")));
-	setWindowTitle(i18nc("@title:window", "Sort Columns"));
 	setSizeGripEnabled(true);
 	setAttribute(Qt::WA_DeleteOnClose);
+
+	if (sortAll)
+		setWindowTitle(i18nc("@title:window", "Sort All Columns"));
+	else
+		setWindowTitle(i18nc("@title:window", "Sort Selected Columns"));
 
 	ui.setupUi(this);
 

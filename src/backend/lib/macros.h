@@ -12,9 +12,6 @@
 #ifndef MACROS_H
 #define MACROS_H
 
-#include <KConfigGroup>
-#include <KSharedConfig>
-
 #include <QApplication>
 #include <QMetaEnum>
 
@@ -44,7 +41,11 @@
 
 struct Lock {
 	inline explicit Lock(bool& variable)
-		: variable(variable = true) {
+		: variable(variable) {
+		// Make sure it is not already locked
+		// somewhere else
+		assert(!variable);
+		this->variable = true;
 	}
 
 	inline ~Lock() {
@@ -255,7 +256,7 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
 			: StandardSetterCmd<class_name::Private, value_type>(target, &class_name::Private::field_name, newValue, description, parent) {                    \
 		}                                                                                                                                                      \
 		virtual void finalize() override {                                                                                                                     \
-			emit m_target->q->field_name##Changed(m_target->*m_field);                                                                                         \
+			Q_EMIT m_target->q->field_name##Changed(m_target->*m_field);                                                                                       \
 		}                                                                                                                                                      \
 	};
 
@@ -268,7 +269,7 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
 		}                                                                                                                                                      \
 		virtual void finalize() override {                                                                                                                     \
 			m_target->finalize_method();                                                                                                                       \
-			emit m_target->q->field_name##Changed(m_target->*m_field);                                                                                         \
+			Q_EMIT m_target->q->field_name##Changed(m_target->*m_field);                                                                                       \
 		}                                                                                                                                                      \
 	};
 
@@ -281,8 +282,8 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
 		}                                                                                                                                                      \
 		virtual void finalize() override {                                                                                                                     \
 			m_target->finalize_method();                                                                                                                       \
-			emit m_target->q->field_name##Changed(m_target->*m_field);                                                                                         \
-			emit m_target->q->custom_signal();                                                                                                                 \
+			Q_EMIT m_target->q->field_name##Changed(m_target->*m_field);                                                                                       \
+			Q_EMIT m_target->q->custom_signal();                                                                                                               \
 		}                                                                                                                                                      \
 	};
 
@@ -295,10 +296,10 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
 		}                                                                                                                                                      \
 		virtual void finalize() override {                                                                                                                     \
 			m_target->finalize_method();                                                                                                                       \
-			emit m_target->q->field_name##Changed(m_target->*m_field);                                                                                         \
+			Q_EMIT m_target->q->field_name##Changed(m_target->*m_field);                                                                                       \
 		}                                                                                                                                                      \
 		virtual void finalizeUndo() override {                                                                                                                 \
-			emit m_target->q->field_name##Changed(m_target->*m_field);                                                                                         \
+			Q_EMIT m_target->q->field_name##Changed(m_target->*m_field);                                                                                       \
 		}                                                                                                                                                      \
 	};
 
@@ -396,7 +397,7 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
 		}                                                                                                                                                      \
 		void finalize() {                                                                                                                                      \
 			m_target->finalize_method();                                                                                                                       \
-			emit m_target->q->field_name##Changed(m_target->field_name());                                                                                     \
+			Q_EMIT m_target->q->field_name##Changed(m_target->field_name());                                                                                   \
 		}                                                                                                                                                      \
                                                                                                                                                                \
 	private:                                                                                                                                                   \
@@ -520,6 +521,46 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
 		writer->writeAttribute(QStringLiteral("fontItalic"), QString::number(font.italic()));                                                                  \
 	}
 
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0) // uses font.setLegacyWeight(int)
+#define READ_QFONT(font)                                                                                                                                       \
+	{                                                                                                                                                          \
+		str = attribs.value(QStringLiteral("fontFamily")).toString();                                                                                          \
+		if (str.isEmpty())                                                                                                                                     \
+			reader->raiseMissingAttributeWarning(QStringLiteral("fontFamily"));                                                                                \
+		else                                                                                                                                                   \
+			font.setFamily(str);                                                                                                                               \
+                                                                                                                                                               \
+		str = attribs.value(QStringLiteral("fontSize")).toString();                                                                                            \
+		if (str.isEmpty())                                                                                                                                     \
+			reader->raiseMissingAttributeWarning(QStringLiteral("fontSize"));                                                                                  \
+		else {                                                                                                                                                 \
+			int size = str.toInt();                                                                                                                            \
+			if (size != -1)                                                                                                                                    \
+				font.setPixelSize(size);                                                                                                                       \
+		}                                                                                                                                                      \
+                                                                                                                                                               \
+		str = attribs.value(QStringLiteral("fontPointSize")).toString();                                                                                       \
+		if (str.isEmpty())                                                                                                                                     \
+			reader->raiseMissingAttributeWarning(QStringLiteral("fontPointSize"));                                                                             \
+		else {                                                                                                                                                 \
+			int size = str.toInt();                                                                                                                            \
+			if (size != -1)                                                                                                                                    \
+				font.setPointSize(size);                                                                                                                       \
+		}                                                                                                                                                      \
+                                                                                                                                                               \
+		str = attribs.value(QStringLiteral("fontWeight")).toString();                                                                                          \
+		if (str.isEmpty())                                                                                                                                     \
+			reader->raiseMissingAttributeWarning(QStringLiteral("fontWeight"));                                                                                \
+		else                                                                                                                                                   \
+			font.setLegacyWeight(str.toInt());                                                                                                                 \
+                                                                                                                                                               \
+		str = attribs.value(QStringLiteral("fontItalic")).toString();                                                                                          \
+		if (str.isEmpty())                                                                                                                                     \
+			reader->raiseMissingAttributeWarning(QStringLiteral("fontItalic"));                                                                                \
+		else                                                                                                                                                   \
+			font.setItalic(str.toInt());                                                                                                                       \
+	}
+#else
 #define READ_QFONT(font)                                                                                                                                       \
 	{                                                                                                                                                          \
 		str = attribs.value(QStringLiteral("fontFamily")).toString();                                                                                          \
@@ -558,6 +599,7 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
 		else                                                                                                                                                   \
 			font.setItalic(str.toInt());                                                                                                                       \
 	}
+#endif
 
 // QBrush
 #define WRITE_QBRUSH(brush)                                                                                                                                    \

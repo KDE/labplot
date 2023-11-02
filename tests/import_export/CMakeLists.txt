@@ -29,5 +29,8 @@ ENDIF ()
 IF (QXLSX_FOUND OR BUILD_EXCEL)
         add_subdirectory(XLSX)
 ENDIF ()
+IF (ORCUS_FOUND)
+        add_subdirectory(Ods)
+ENDIF ()
 
 add_subdirectory(DATASETS)

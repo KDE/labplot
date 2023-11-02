@@ -392,11 +392,9 @@ QIcon LiveDataSource::icon() const {
 	case AbstractFileFilter::FileType::Image:
 		icon = QIcon::fromTheme(QStringLiteral("image-x-generic"));
 		break;
-	// TODO: missing icons
-	case AbstractFileFilter::FileType::HDF5:
-	case AbstractFileFilter::FileType::NETCDF:
-	case AbstractFileFilter::FileType::Excel:
-	case AbstractFileFilter::FileType::VECTOR_BLF:
+	case AbstractFileFilter::FileType::XLSX:
+	case AbstractFileFilter::FileType::Ods:
+		icon = QIcon::fromTheme(QStringLiteral("x-office-spreadsheet"));
 		break;
 	case AbstractFileFilter::FileType::FITS:
 		icon = QIcon::fromTheme(QStringLiteral("kstars_fitsviewer"));
@@ -413,7 +411,11 @@ QIcon LiveDataSource::icon() const {
 	case AbstractFileFilter::FileType::ROOT:
 		icon = QIcon::fromTheme(QStringLiteral("application-x-root"));
 		break;
+	// TODO: missing icons
 	case AbstractFileFilter::FileType::Spice:
+	case AbstractFileFilter::FileType::HDF5:
+	case AbstractFileFilter::FileType::NETCDF:
+	case AbstractFileFilter::FileType::VECTOR_BLF:
 		break;
 	}
 
@@ -554,10 +556,7 @@ void LiveDataSource::read() {
 			// only connect to readyRead when update is on new data
 			if (m_updateType == UpdateType::NewData)
 				connect(m_serialPort, &QSerialPort::readyRead, this, &LiveDataSource::readyRead);
-			connect(m_serialPort,
-					static_cast<void (QSerialPort::*)(QSerialPort::SerialPortError)>(&QSerialPort::error),
-					this,
-					&LiveDataSource::serialPortError);
+			connect(m_serialPort, &QSerialPort::errorOccurred, this, &LiveDataSource::serialPortError);
 #endif
 			break;
 		case SourceType::MQTT:
@@ -589,7 +588,8 @@ void LiveDataSource::read() {
 			m_filter->readDataFromFile(m_fileName, this);
 			break;
 		// TODO: other types not implemented yet
-		case AbstractFileFilter::FileType::Excel:
+		case AbstractFileFilter::FileType::XLSX:
+		case AbstractFileFilter::FileType::Ods:
 		case AbstractFileFilter::FileType::Image:
 		case AbstractFileFilter::FileType::HDF5:
 		case AbstractFileFilter::FileType::VECTOR_BLF:
@@ -728,12 +728,6 @@ void LiveDataSource::serialPortError(QSerialPort::SerialPortError serialPortErro
 	case QSerialPort::TimeoutError:
 		QMessageBox::critical(nullptr, i18n("Serial Port Error"), i18n("The device timed out."));
 		break;
-#ifndef _MSC_VER
-	// MSVC complains about the usage of deprecated enums, g++ and clang complain about missing enums
-	case QSerialPort::ParityError:
-	case QSerialPort::FramingError:
-	case QSerialPort::BreakConditionError:
-#endif
 	case QSerialPort::WriteError:
 	case QSerialPort::UnsupportedOperationError:
 	case QSerialPort::UnknownError:

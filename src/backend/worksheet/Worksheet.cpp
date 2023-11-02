@@ -288,7 +288,7 @@ void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 		connect(plot, static_cast<void (CartesianPlot::*)(QPen, QString)>(&CartesianPlot::curveLinePenChanged), this, &Worksheet::updateCurveBackground);
 		connect(plot, &CartesianPlot::mouseModeChanged, this, &Worksheet::cartesianPlotMouseModeChangedSlot);
 		auto* p = const_cast<CartesianPlot*>(plot);
-		p->setLocked(d->plotsLocked);
+		p->setInteractive(d->plotsInteractive);
 
 		cursorModelPlotAdded(p->name());
 	}
@@ -527,8 +527,8 @@ Worksheet::CartesianPlotActionMode Worksheet::cartesianPlotCursorMode() {
 	return d->cartesianPlotCursorMode;
 }
 
-bool Worksheet::plotsLocked() {
-	return d->plotsLocked;
+bool Worksheet::plotsInteractive() {
+	return d->plotsInteractive;
 }
 
 void Worksheet::setCartesianPlotActionMode(Worksheet::CartesianPlotActionMode mode) {
@@ -567,14 +567,14 @@ void Worksheet::setInteractive(bool value) {
 	m_view->setInteractive(value);
 }
 
-void Worksheet::setPlotsLocked(bool lock) {
-	if (d->plotsLocked == lock)
+void Worksheet::setPlotsInteractive(bool interactive) {
+	if (d->plotsInteractive == interactive)
 		return;
 
-	d->plotsLocked = lock;
+	d->plotsInteractive = interactive;
 
 	for (auto* plot : children<CartesianPlot>())
-		plot->setLocked(lock);
+		plot->setInteractive(interactive);
 
 	project()->setChanged(true);
 }
@@ -954,34 +954,34 @@ void Worksheet::cartesianPlotAxisShift(int delta, Dimension dim, int index) {
 	}
 }
 
-void Worksheet::cartesianPlotWheelEvent(int delta, int xIndex, int yIndex, bool considerDimension, Dimension dim) {
+void Worksheet::cartesianPlotWheelEvent(const QPointF& sceneRelPos, int delta, int xIndex, int yIndex, bool considerDimension, Dimension dim) {
 	const auto& plots = children<CartesianPlot>(AbstractAspect::ChildIndexFlag::Recursive | AbstractAspect::ChildIndexFlag::IncludeHidden);
 	const auto cursorMode = cartesianPlotActionMode();
 	if (considerDimension) {
 		if ((dim == Dimension::X && (cursorMode == CartesianPlotActionMode::ApplyActionToAllX || cursorMode == CartesianPlotActionMode::ApplyActionToAll))
 			|| (dim == Dimension::Y && (cursorMode == CartesianPlotActionMode::ApplyActionToAllY || cursorMode == CartesianPlotActionMode::ApplyActionToAll))) {
 			for (auto* plot : plots)
-				plot->wheelEvent(delta, -1, -1, considerDimension, dim);
+				plot->wheelEvent(sceneRelPos, delta, -1, -1, considerDimension, dim);
 		} else {
 			auto* plot = static_cast<CartesianPlot*>(QObject::sender());
-			plot->wheelEvent(delta, xIndex, yIndex, considerDimension, dim);
+			plot->wheelEvent(sceneRelPos, delta, xIndex, yIndex, considerDimension, dim);
 		}
 
 	} else {
 		switch (cursorMode) {
 		case CartesianPlotActionMode::ApplyActionToAll: {
 			for (auto* plot : plots)
-				plot->wheelEvent(delta, -1, -1, considerDimension, dim);
+				plot->wheelEvent(sceneRelPos, delta, -1, -1, considerDimension, dim);
 			break;
 		}
 		case CartesianPlotActionMode::ApplyActionToAllX: {
 			auto* plot = static_cast<CartesianPlot*>(QObject::sender());
-			plot->wheelEvent(delta, -1, yIndex, considerDimension, dim);
+			plot->wheelEvent(sceneRelPos, delta, -1, yIndex, considerDimension, dim);
 			for (auto* p : plots) {
 				if (p != plot) {
 					// The yIndex must not be available in the other plots
 					// yIndex does not matter, because considerDimension is true
-					p->wheelEvent(delta, -1, -1, true, Dimension::X);
+					p->wheelEvent(sceneRelPos, delta, -1, -1, true, Dimension::X);
 				}
 			}
 			break;
@@ -989,19 +989,19 @@ void Worksheet::cartesianPlotWheelEvent(int delta, int xIndex, int yIndex, bool 
 		case CartesianPlotActionMode::ApplyActionToAllY: {
 			auto* plot = static_cast<CartesianPlot*>(QObject::sender());
 			// wheelEvent on all y in that plot
-			plot->wheelEvent(delta, xIndex, -1, considerDimension, dim);
+			plot->wheelEvent(sceneRelPos, delta, xIndex, -1, considerDimension, dim);
 			for (auto* p : plots) {
 				if (p != plot) {
 					// The xIndex must not be available in the other plots
 					// xIndex does not matter, because considerDimension is true
-					p->wheelEvent(delta, -1, -1, true, Dimension::Y);
+					p->wheelEvent(sceneRelPos, delta, -1, -1, true, Dimension::Y);
 				}
 			}
 			break;
 		}
 		case CartesianPlotActionMode::ApplyActionToSelection: {
 			auto* plot = static_cast<CartesianPlot*>(QObject::sender());
-			plot->wheelEvent(delta, xIndex, yIndex, considerDimension, dim);
+			plot->wheelEvent(sceneRelPos, delta, xIndex, yIndex, considerDimension, dim);
 			break;
 		}
 		}
@@ -1682,7 +1682,7 @@ void Worksheet::save(QXmlStreamWriter* writer) const {
 
 	// cartesian properties
 	writer->writeStartElement(QStringLiteral("plotProperties"));
-	writer->writeAttribute(QStringLiteral("plotsLocked"), QString::number(d->plotsLocked));
+	writer->writeAttribute(QStringLiteral("plotInteractive"), QString::number(d->plotsInteractive));
 	writer->writeAttribute(QStringLiteral("cartesianPlotActionMode"), QString::number(static_cast<int>(d->cartesianPlotActionMode)));
 	writer->writeAttribute(QStringLiteral("cartesianPlotCursorMode"), QString::number(static_cast<int>(d->cartesianPlotCursorMode)));
 	writer->writeEndElement();
@@ -1765,7 +1765,16 @@ bool Worksheet::load(XmlStreamReader* reader, bool preview) {
 		else if (!preview && reader->name() == QLatin1String("plotProperties")) {
 			attribs = reader->attributes();
 
-			READ_INT_VALUE("plotsLocked", plotsLocked, bool);
+			str = attribs.value(QStringLiteral("plotInteractive")).toString();
+			if (str.isEmpty()) {
+				str = attribs.value(QStringLiteral("plotLocked")).toString();
+				if (str.isEmpty())
+					reader->raiseMissingAttributeWarning(QStringLiteral("plotLocked"));
+				else
+					d->plotsInteractive = !static_cast<bool>(str.toInt());
+			} else
+				d->plotsInteractive = static_cast<bool>(str.toInt());
+
 			READ_INT_VALUE("cartesianPlotActionMode", cartesianPlotActionMode, Worksheet::CartesianPlotActionMode);
 			READ_INT_VALUE("cartesianPlotCursorMode", cartesianPlotCursorMode, Worksheet::CartesianPlotActionMode);
 		} else if (reader->name() == QLatin1String("cartesianPlot")) {

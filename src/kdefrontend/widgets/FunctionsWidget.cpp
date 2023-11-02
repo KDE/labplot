@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : widget for selecting functions
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2014 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2014-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -51,6 +51,24 @@ FunctionsWidget::FunctionsWidget(QWidget* parent)
 		ui.leFilter->setFocus();
 		this->groupChanged(0);
 	});
+
+	// set the minimum size to show the longest funciton description without any horizontal scroll bar
+	const QStringList& names = m_expressionParser->functionsDescriptions();
+	QString maxName;
+	int maxLength = 0;
+	for (const auto& name : names) {
+		int length = name.length();
+		if (length > maxLength) {
+			maxLength = length;
+			maxName = name;
+		}
+	}
+
+	QFont font;
+	QFontMetrics fm(font);
+	const auto margins = layout()->contentsMargins();
+	const int width = fm.horizontalAdvance(maxName) + margins.left() + margins.right() + qApp->style()->pixelMetric(QStyle::PM_ScrollBarExtent);
+	setMinimumWidth(width);
 }
 
 /*!

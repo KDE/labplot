@@ -358,8 +358,7 @@ QString MatioFilter::fileInfoString(const QString& fileName) {
 // ################### Private implementation ##########################
 // #####################################################################
 
-MatioFilterPrivate::MatioFilterPrivate(MatioFilter* owner)
-	: q(owner) {
+MatioFilterPrivate::MatioFilterPrivate(MatioFilter*) {
 }
 
 // helper functions
@@ -595,9 +594,8 @@ void MatioFilterPrivate::parse(const QString& fileName) {
 	(Not used for preview)
 	Uses the settings defined in the data source.
 */
-void MatioFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode) {
+void MatioFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
 	PERFTRACE(QLatin1String(Q_FUNC_INFO));
-	QVector<QStringList> dataStrings;
 
 	if (currentVarName.isEmpty()) {
 		DEBUG(Q_FUNC_INFO << ", no variable selected");
@@ -612,8 +610,8 @@ void MatioFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataS
 #endif
 	for (const auto& var : selectedVarNames) {
 		currentVarName = var;
-		readCurrentVar(fileName, dataSource, mode);
-		mode = AbstractFileFilter::ImportMode::Append; // append other vars
+		readCurrentVar(fileName, dataSource, importMode);
+		importMode = AbstractFileFilter::ImportMode::Append; // append other vars
 	}
 #ifdef HAVE_MATIO
 	if (matfp) { // only if opened
@@ -627,7 +625,7 @@ void MatioFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataS
 	reads the content of the current variable in the file \c fileName to a string (for preview) or to the data source.
 */
 QVector<QStringList>
-MatioFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode, size_t lines) {
+MatioFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, size_t lines) {
 	PERFTRACE(QLatin1String(Q_FUNC_INFO));
 	QVector<QStringList> dataStrings;
 
@@ -878,7 +876,7 @@ MatioFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource* 
 
 		// prepare import
 		if (dataSource)
-			columnOffset = dataSource->prepareImport(dataContainer, mode, actualRows, actualCols, vectorNames, columnModes);
+			columnOffset = dataSource->prepareImport(dataContainer, importMode, actualRows, actualCols, vectorNames, columnModes);
 		DEBUG(Q_FUNC_INFO << ", column offset = " << columnOffset)
 
 		// B: read data
@@ -1220,11 +1218,11 @@ MatioFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource* 
 	}
 
 	if (dataSource)
-		dataSource->finalizeImport(columnOffset, 1, actualCols, QString(), mode);
+		dataSource->finalizeImport(columnOffset, 1, actualCols, QString(), importMode);
 #else
 	Q_UNUSED(fileName)
 	Q_UNUSED(dataSource)
-	Q_UNUSED(mode)
+	Q_UNUSED(importMode)
 	Q_UNUSED(lines)
 #endif
 

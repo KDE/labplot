@@ -161,6 +161,8 @@ private:
 	bool m_suppressRecalc{false};
 	bool m_panningStarted{false};
 	QPointF m_panningStart;
+
+	friend class AxisTest;
 };
 
 #endif

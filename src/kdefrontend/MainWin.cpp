@@ -65,12 +65,32 @@
 #include "kdefrontend/widgets/LabelWidget.h"
 
 #ifdef HAVE_KUSERFEEDBACK
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+#include <KUserFeedbackQt6/ApplicationVersionSource>
+#include <KUserFeedbackQt6/PlatformInfoSource>
+#include <KUserFeedbackQt6/QtVersionSource>
+#include <KUserFeedbackQt6/ScreenInfoSource>
+#include <KUserFeedbackQt6/StartCountSource>
+#include <KUserFeedbackQt6/UsageTimeSource>
+#else
 #include <KUserFeedback/ApplicationVersionSource>
 #include <KUserFeedback/PlatformInfoSource>
 #include <KUserFeedback/QtVersionSource>
 #include <KUserFeedback/ScreenInfoSource>
 #include <KUserFeedback/StartCountSource>
 #include <KUserFeedback/UsageTimeSource>
+#endif
+#endif
+
+#ifdef HAVE_PURPOSE
+#include <Purpose/AlternativesModel>
+#include <purpose_version.h>
+#if PURPOSE_VERSION >= QT_VERSION_CHECK(5, 104, 0)
+#include <Purpose/Menu>
+#else
+#include <PurposeWidgets/Menu>
+#endif
+#include <QMimeType>
 #endif
 
 #include <DockManager.h>
@@ -79,6 +99,7 @@
 #include "3rdparty/kdmactouchbar/src/kdmactouchbar.h"
 #endif
 
+#include <QActionGroup>
 #include <QCloseEvent>
 #include <QDockWidget>
 #include <QElapsedTimer>
@@ -102,6 +123,10 @@
 #include <KActionMenu>
 #include <KColorScheme>
 #include <KColorSchemeManager>
+#include <kconfigwidgets_version.h>
+#if KCONFIGWIDGETS_VERSION >= QT_VERSION_CHECK(5, 107, 0)
+#include <KColorSchemeMenu>
+#endif
 #include <KCompressionDevice>
 #include <KConfigGroup>
 #include <KLocalizedString>
@@ -111,7 +136,6 @@
 #include <KToggleAction>
 #include <KToggleFullScreenAction>
 #include <KToolBar>
-#include <kcoreaddons_version.h>
 #include <kxmlguifactory.h>
 
 #ifdef HAVE_CANTOR_LIBS
@@ -223,14 +247,9 @@ void MainWin::initGUI(const QString& fileName) {
 	m_touchBar = new KDMacTouchBar(this);
 	// m_touchBar->setTouchButtonStyle(KDMacTouchBar::IconOnly);
 #endif
-	setupGUI(Default, QLatin1String("/Applications/labplot2.app/Contents/Resources/labplot2ui.rc"));
 	setUnifiedTitleAndToolBarOnMac(true);
-#else
-	setupGUI(Default, KXMLGUIClient::xmlFile()); // should be "labplot2ui.rc"
 #endif
-
-	DEBUG(Q_FUNC_INFO << ", Component name: " << STDSTRING(KXMLGUIClient::componentName()));
-	DEBUG(Q_FUNC_INFO << ", XML file: " << STDSTRING(KXMLGUIClient::xmlFile()) << " (should be \"labplot2ui.rc\")");
+	setupGUI();
 
 	// all toolbars created via the KXMLGUI framework are locked on default:
 	//  * on the very first program start, unlock all toolbars
@@ -267,27 +286,15 @@ void MainWin::initGUI(const QString& fileName) {
 	initMenus();
 
 	auto* mainToolBar = qobject_cast<QToolBar*>(factory()->container(QLatin1String("main_toolbar"), this));
-	if (!mainToolBar) {
-		QMessageBox::critical(this,
-							  i18n("GUI configuration file not found"),
-							  i18n("%1 file was not found. Please check your installation.", KXMLGUIClient::xmlFile()));
-		// TODO: the application is not really usable if the rc file was not found. We should quit the application. The following line crashes
-		// the application because of the splash screen. We need to find another solution.
-		// 		QMetaObject::invokeMethod(this, "close", Qt::QueuedConnection); //call close as soon as we enter the eventloop
-		// 		return;
-	} else {
-		auto* tbImport = new QToolButton(mainToolBar);
-		tbImport->setPopupMode(QToolButton::MenuButtonPopup);
-		tbImport->setMenu(m_importMenu);
-		tbImport->setDefaultAction(m_importFileAction);
-		auto* lastAction = mainToolBar->actions().at(mainToolBar->actions().count() - 1);
-		mainToolBar->insertWidget(lastAction, tbImport);
-
-		qobject_cast<QMenu*>(factory()->container(QLatin1String("import"), this))->setIcon(QIcon::fromTheme(QLatin1String("document-import")));
-	}
+	auto* tbImport = new QToolButton(mainToolBar);
+	tbImport->setPopupMode(QToolButton::MenuButtonPopup);
+	tbImport->setMenu(m_importMenu);
+	tbImport->setDefaultAction(m_importFileAction);
+	auto* lastAction = mainToolBar->actions().at(mainToolBar->actions().count() - 1);
+	mainToolBar->insertWidget(lastAction, tbImport);
 
 	// hamburger menu
-#if KCOREADDONS_VERSION >= QT_VERSION_CHECK(5, 81, 0)
+#if KCONFIGWIDGETS_VERSION >= QT_VERSION_CHECK(5, 81, 0)
 	m_hamburgerMenu = KStandardAction::hamburgerMenu(nullptr, nullptr, actionCollection());
 	toolBar()->addAction(m_hamburgerMenu);
 	m_hamburgerMenu->hideActionsOf(toolBar());
@@ -355,10 +362,20 @@ void MainWin::initGUI(const QString& fileName) {
 					openProject(path);
 				break;
 			}
+			case LoadOnStart::NewProjectNotebook: {
+				newProject();
+#ifdef HAVE_CANTOR_LIBS
+				const auto& backend = group.readEntry(QLatin1String("LoadOnStartNotebook"), QString());
+				if (Cantor::Backend::listAvailableBackends().indexOf(backend) != -1)
+					addAspectToProject(new CantorWorksheet(backend));
+#endif
+				break;
+			}
 			case LoadOnStart::Nothing:
 			case LoadOnStart::WelcomeScreen:
 				break;
 			}
+
 			updateGUIOnProjectChanges();
 			if (m_project)
 				m_project->setChanged(false); // the project was initialized on startup, nothing has changed from user's perspective
@@ -686,24 +703,20 @@ void MainWin::initActions() {
 	actionCollection()->addAction(QLatin1String("new_notes"), m_newNotesAction);
 	connect(m_newNotesAction, &QAction::triggered, this, &MainWin::newNotes);
 
-	// 	m_newScriptAction = new QAction(QIcon::fromTheme(QLatin1String("insert-text")),i18n("Note/Script"),this);
-	// 	actionCollection()->addAction(QLatin1String("new_script"), m_newScriptAction);
-	// 	connect(m_newScriptAction, &QAction::triggered,SLOT(newScript()));
-
 	m_newFolderAction = new QAction(QIcon::fromTheme(QLatin1String("folder-new")), i18n("Folder"), this);
 	m_newFolderAction->setWhatsThis(i18n("Creates a new folder to collect sheets and other elements"));
 	actionCollection()->addAction(QLatin1String("new_folder"), m_newFolderAction);
 	connect(m_newFolderAction, &QAction::triggered, this, &MainWin::newFolder);
 
 	//"New file datasources"
-	m_newLiveDataSourceAction = new QAction(QIcon::fromTheme(QLatin1String("application-octet-stream")), i18n("Live Data Source..."), this);
+	m_newLiveDataSourceAction = new QAction(QIcon::fromTheme(QLatin1String("edit-text-frame-update")), i18n("Live Data Source..."), this);
 	m_newLiveDataSourceAction->setWhatsThis(i18n("Creates a live data source to read data from a real time device"));
 	actionCollection()->addAction(QLatin1String("new_live_datasource"), m_newLiveDataSourceAction);
 	connect(m_newLiveDataSourceAction, &QAction::triggered, this, &MainWin::newLiveDataSource);
 
 	// Import/Export
 	m_importFileAction = new QAction(QIcon::fromTheme(QLatin1String("document-import")), i18n("From File..."), this);
-	actionCollection()->setDefaultShortcut(m_importFileAction, Qt::CTRL + Qt::SHIFT + Qt::Key_I);
+	actionCollection()->setDefaultShortcut(m_importFileAction, Qt::CTRL | Qt::SHIFT | Qt::Key_I);
 	m_importFileAction->setWhatsThis(i18n("Import data from a regular file"));
 	connect(m_importFileAction, &QAction::triggered, this, [=]() {
 		importFileDialog();
@@ -742,9 +755,14 @@ void MainWin::initActions() {
 
 	m_exportAction = new QAction(QIcon::fromTheme(QLatin1String("document-export")), i18n("Export..."), this);
 	m_exportAction->setWhatsThis(i18n("Export selected element"));
-	actionCollection()->setDefaultShortcut(m_exportAction, Qt::CTRL + Qt::SHIFT + Qt::Key_E);
+	actionCollection()->setDefaultShortcut(m_exportAction, Qt::CTRL | Qt::SHIFT | Qt::Key_E);
 	actionCollection()->addAction(QLatin1String("export"), m_exportAction);
 	connect(m_exportAction, &QAction::triggered, this, &MainWin::exportDialog);
+
+#ifdef HAVE_PURPOSE
+	m_shareAction = new QAction(QIcon::fromTheme(QLatin1String("document-share")), i18n("Share"), this);
+	actionCollection()->addAction(QLatin1String("share"), m_shareAction);
+#endif
 
 	// Tools
 	auto* action = new QAction(QIcon::fromTheme(QLatin1String("color-management")), i18n("Color Maps Browser"), this);
@@ -872,9 +890,25 @@ void MainWin::initActions() {
 		}
 	});
 	this->addAction(m_searchAction);
+
+#ifdef HAVE_CANTOR_LIBS
+	// configure CAS backends
+	m_configureCASAction = new QAction(QIcon::fromTheme(QLatin1String("cantor")), i18n("Configure CAS..."), this);
+	m_configureCASAction->setWhatsThis(i18n("Opens the settings for Computer Algebra Systems to modify the available systems or to enable new ones"));
+	m_configureCASAction->setMenuRole(QAction::NoRole); // prevent macOS Qt heuristics to select this action for preferences
+	actionCollection()->addAction(QLatin1String("configure_cas"), m_configureCASAction);
+	connect(m_configureCASAction, &QAction::triggered, this, &MainWin::cantorSettingsDialog);
+#endif
 }
 
 void MainWin::initMenus() {
+#ifdef HAVE_PURPOSE
+	m_shareMenu = new Purpose::Menu();
+	m_shareMenu->model()->setPluginType(QStringLiteral("Export"));
+	connect(m_shareMenu, &Purpose::Menu::finished, this, &MainWin::shareActionFinished);
+	m_shareAction->setMenu(m_shareMenu);
+#endif
+
 	// add the actions to toggle the status bar and the project and properties explorer widgets to the "View" menu.
 	// this menu is created automatically when the default "full screen" action is created in initActions().
 	auto* menu = dynamic_cast<QMenu*>(factory()->container(QLatin1String("view"), this));
@@ -914,6 +948,10 @@ void MainWin::initMenus() {
 	m_importMenu->addAction(m_importOpjAction);
 #endif
 
+	// icon for the menu "import" in the main menu created via the rc file
+	menu = qobject_cast<QMenu*>(factory()->container(QLatin1String("import"), this));
+	menu->setIcon(QIcon::fromTheme(QLatin1String("document-import")));
+
 	// menu subwindow visibility policy
 	m_visibilityMenu = new QMenu(i18n("Window Visibility"), this);
 	m_visibilityMenu->setIcon(QIcon::fromTheme(QLatin1String("window-duplicate")));
@@ -928,18 +966,23 @@ void MainWin::initMenus() {
 #endif
 
 	// set the action for the current color scheme checked
-	KConfigGroup group = Settings::group(QStringLiteral("Settings_General"));
-#if KCOREADDONS_VERSION >= QT_VERSION_CHECK(5, 67, 0) // KColorSchemeManager has a system default option
+	auto group = Settings::group(QStringLiteral("Settings_General"));
+#if KCONFIGWIDGETS_VERSION >= QT_VERSION_CHECK(5, 67, 0) // KColorSchemeManager has a system default option
 	QString schemeName = group.readEntry("ColorScheme");
 #else
-	KConfigGroup generalGlobalsGroup = KSharedConfig::openConfig(QLatin1String("kdeglobals"))->group("General");
+	auto generalGlobalsGroup = KSharedConfig::openConfig(QLatin1String("kdeglobals"))->group("General");
 	QString defaultSchemeName = generalGlobalsGroup.readEntry("ColorScheme", QStringLiteral("Breeze"));
 	QString schemeName = group.readEntry("ColorScheme", defaultSchemeName);
 #endif
 	// default dark scheme on Windows is not optimal (Breeze dark is better)
 	// we can't find out if light or dark mode is used, so we don't switch to Breeze/Breeze dark here
 	DEBUG(Q_FUNC_INFO << ", Color scheme = " << STDSTRING(schemeName))
-	KActionMenu* schemesMenu = m_schemeManager->createSchemeSelectionMenu(i18n("Color Scheme"), schemeName, this);
+#if KCONFIGWIDGETS_VERSION >= QT_VERSION_CHECK(5, 107, 0) // use KColorSchemeMenu::createMenu and set the text and check an action manually
+	auto* schemesMenu = KColorSchemeMenu::createMenu(m_schemeManager, this);
+	schemesMenu->setText(i18n("Color Scheme"));
+#else
+	auto* schemesMenu = m_schemeManager->createSchemeSelectionMenu(i18n("Color Scheme"), schemeName, this);
+#endif
 	schemesMenu->setIcon(QIcon::fromTheme(QStringLiteral("preferences-desktop-color")));
 	connect(schemesMenu->menu(), &QMenu::triggered, this, &MainWin::colorSchemeChanged);
 
@@ -956,7 +999,7 @@ void MainWin::initMenus() {
 
 	// Cantor backends to menu and context menu
 #ifdef HAVE_CANTOR_LIBS
-	QStringList backendNames = Cantor::Backend::listAvailableBackends();
+	auto backendNames = Cantor::Backend::listAvailableBackends();
 #if !defined(NDEBUG) || defined(Q_OS_WIN) || defined(Q_OS_MACOS)
 	WARN(Q_FUNC_INFO << ", " << backendNames.count() << " Cantor backends available:")
 	for (const auto& b : backendNames)
@@ -966,31 +1009,14 @@ void MainWin::initMenus() {
 	if (!backendNames.isEmpty()) {
 		auto* menu = dynamic_cast<QMenu*>(factory()->container(QLatin1String("new_notebook"), this));
 		if (menu) {
+			menu->setIcon(QIcon::fromTheme(QLatin1String("cantor")));
 			m_newMenu->addSeparator();
-			menu->setIcon(QIcon::fromTheme(QLatin1String("archive-insert")));
 			m_newMenu->addMenu(menu);
-
-			unplugActionList(QLatin1String("backends_list"));
-			QList<QAction*> newBackendActions;
-			for (auto* backend : Cantor::Backend::availableBackends()) {
-				if (!backend->isEnabled())
-					continue;
-
-				auto* action = new QAction(QIcon::fromTheme(backend->icon()), backend->name(), this);
-				action->setData(backend->name());
-				newBackendActions << action;
-				menu->addAction(action);
-			}
-
-			connect(menu, &QMenu::triggered, this, &MainWin::newCantorWorksheet);
-			plugActionList(QLatin1String("backends_list"), newBackendActions);
+			updateNotebookActions();
 		}
 
-		auto* action = new QAction(QIcon::fromTheme(QLatin1String("cantor")), i18n("Configure CAS..."), this);
-		connect(action, &QAction::triggered, this, &MainWin::cantorSettingsDialog);
-		action->setMenuRole(QAction::NoRole); // prevent macOS Qt heuristics to select this action for preferences
 		if (settingsMenu)
-			settingsMenu->addAction(action);
+			settingsMenu->addAction(m_configureCASAction);
 	}
 #else
 	delete this->guiFactory()->container(QStringLiteral("notebook"), this);
@@ -1020,7 +1046,7 @@ void MainWin::colorSchemeChanged(QAction* action) {
  */
 bool MainWin::warnModified() {
 	if (m_project->hasChanged()) {
-#if KCOREADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
+#if KCONFIGWIDGETS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
 		int option = KMessageBox::warningTwoActionsCancel(this,
 														  i18n("The current project %1 has been modified. Do you want to save it?", m_project->name()),
 														  i18n("Save Project"),
@@ -1060,13 +1086,6 @@ void MainWin::updateGUIOnProjectChanges(const QByteArray& windowState) {
 	if (m_closing)
 		return;
 
-	KXMLGUIFactory* factory = this->guiFactory();
-	if (factory->container(QLatin1String("worksheet"), this) == nullptr) {
-		// no worksheet menu found, most probably labplot2ui.rc
-		// was not properly installed -> return here in order not to crash
-		return;
-	}
-
 	// disable all menus if there is no project
 	bool hasProject = (m_project != nullptr);
 	m_saveAction->setEnabled(hasProject);
@@ -1079,6 +1098,9 @@ void MainWin::updateGUIOnProjectChanges(const QByteArray& windowState) {
 	m_importOpjAction->setEnabled(hasProject);
 #endif
 	m_importDatasetAction->setEnabled(hasProject);
+#ifdef HAVE_PURPOSE
+	m_shareAction->setEnabled(hasProject);
+#endif
 	m_newFolderAction->setEnabled(hasProject);
 	m_newWorkbookAction->setEnabled(hasProject);
 	m_newSpreadsheetAction->setEnabled(hasProject);
@@ -1105,6 +1127,7 @@ void MainWin::updateGUIOnProjectChanges(const QByteArray& windowState) {
 		m_exportAction->setEnabled(false);
 	}
 
+	auto* factory = this->guiFactory();
 	if (!m_DockManager || !m_DockManager->focusedDockWidget()) {
 		factory->container(QLatin1String("spreadsheet"), this)->setEnabled(false);
 		factory->container(QLatin1String("matrix"), this)->setEnabled(false);
@@ -1178,14 +1201,7 @@ void MainWin::updateGUI() {
 	if (m_closing || m_projectClosing)
 		return;
 
-	KXMLGUIFactory* factory = this->guiFactory();
-	if (factory->container(QLatin1String("worksheet"), this) == nullptr) {
-		// no worksheet menu found, most probably labplot2ui.rc
-		// was not properly installed -> return here in order not to crash
-		return;
-	}
-
-	// reset the touchbar
+		// reset the touchbar
 #ifdef HAVE_TOUCHBAR
 	m_touchBar->clear();
 
@@ -1194,6 +1210,7 @@ void MainWin::updateGUI() {
 	m_touchBar->addSeparator();
 #endif
 
+	auto* factory = this->guiFactory();
 	if (!m_DockManager || !m_DockManager->focusedDockWidget()) {
 		factory->container(QLatin1String("spreadsheet"), this)->setEnabled(false);
 		factory->container(QLatin1String("matrix"), this)->setEnabled(false);
@@ -1470,6 +1487,9 @@ bool MainWin::newProject() {
 
 	updateGUIOnProjectChanges();
 	m_newProjectAction->setEnabled(false);
+#ifdef HAVE_PURPOSE
+	m_shareAction->setEnabled(false); // sharing is only possible after the project was saved to a file
+#endif
 
 	m_guiObserver = new GuiObserver(this); // initialize after all docks were createad
 	m_guiObserver->selectedAspectsChanged({static_cast<AbstractAspect*>(m_project)}); // Trigger showing properties
@@ -1714,7 +1734,9 @@ void MainWin::openProject(const QString& filename) {
 		updateDockWindowVisibility();
 	m_saveAction->setEnabled(false);
 	m_newProjectAction->setEnabled(true);
-
+#ifdef HAVE_PURPOSE
+	fillShareMenu();
+#endif
 	statusBar()->showMessage(i18n("Project successfully opened (in %1 seconds).", (float)timer.elapsed() / 1000));
 
 	KConfigGroup group = Settings::group(QStringLiteral("MainWin"));
@@ -1921,6 +1943,11 @@ bool MainWin::save(const QString& fileName) {
 
 	delete file;
 
+#ifdef HAVE_PURPOSE
+	m_shareAction->setEnabled(true); // sharing is possible after the project was saved to a file
+	fillShareMenu();
+#endif
+
 	RESET_CURSOR;
 	return ok;
 }
@@ -2101,7 +2128,8 @@ Spreadsheet* MainWin::activeSpreadsheet() const {
 /*
 	adds a new Cantor Spreadsheet to the project.
 */
-void MainWin::newCantorWorksheet(QAction* action) {
+void MainWin::newCantorWorksheet() {
+	auto* action = static_cast<QAction*>(QObject::sender());
 	auto* cantorworksheet = new CantorWorksheet(action->data().toString());
 	this->addAspectToProject(cantorworksheet);
 }
@@ -2521,6 +2549,35 @@ void MainWin::focusCursorDock() {
 	}
 }
 
+#ifdef HAVE_PURPOSE
+void MainWin::fillShareMenu() {
+	if (!m_shareMenu)
+		return;
+
+	m_shareMenu->clear(); // clear the menu, it will be refilled with the new file URL below
+	QMimeType mime;
+	m_shareMenu->model()->setInputData(
+		QJsonObject{{QStringLiteral("mimeType"), mime.name()}, {QStringLiteral("urls"), QJsonArray{QUrl::fromLocalFile(m_project->fileName()).toString()}}});
+	m_shareMenu->reload();
+}
+
+void MainWin::shareActionFinished(const QJsonObject& output, int error, const QString& message) {
+	if (error)
+		KMessageBox::error(this, i18n("There was a problem sharing the project: %1", message), i18n("Share"));
+	else {
+		const QString url = output[QStringLiteral("url")].toString();
+		if (url.isEmpty())
+			statusBar()->showMessage(i18n("Project shared successfully"));
+		else
+			KMessageBox::information(widget(),
+									 i18n("You can find the shared project at: <a href=\"%1\">%1</a>", url),
+									 i18n("Share"),
+									 QString(),
+									 KMessageBox::Notify | KMessageBox::AllowLink);
+	}
+}
+#endif
+
 void MainWin::toggleFullScreen(bool t) {
 	m_toggleFullScreenAction->setFullScreen(this, t);
 }
@@ -2640,9 +2697,9 @@ void MainWin::handleSettingsChanges() {
 		}
 	}
 
-	bool showWelcomeScreen = group.readEntry<bool>(QLatin1String("ShowWelcomeScreen"), true);
-	if (m_showWelcomeScreen != showWelcomeScreen)
-		m_showWelcomeScreen = showWelcomeScreen;
+	// bool showWelcomeScreen = group.readEntry<bool>(QLatin1String("ShowWelcomeScreen"), true);
+	// if (m_showWelcomeScreen != showWelcomeScreen)
+	// 	m_showWelcomeScreen = showWelcomeScreen;
 }
 
 void MainWin::openDatasetExample() {
@@ -2694,11 +2751,11 @@ void MainWin::importFileDialog(const QString& fileName) {
 	}
 
 	delete dlg;
-	DEBUG("MainWin::importFileDialog() DONE");
+	DEBUG(Q_FUNC_INFO << " DONE");
 }
 
 void MainWin::importSqlDialog() {
-	DEBUG("MainWin::importSqlDialog()");
+	DEBUG(Q_FUNC_INFO);
 	auto* dlg = new ImportSQLDatabaseDialog(this);
 
 	// select existing container
@@ -2713,11 +2770,11 @@ void MainWin::importSqlDialog() {
 	}
 
 	delete dlg;
-	DEBUG("MainWin::importSqlDialog() DONE");
+	DEBUG(Q_FUNC_INFO << " DONE");
 }
 
 void MainWin::importProjectDialog() {
-	DEBUG("MainWin::importProjectDialog()");
+	DEBUG(Q_FUNC_INFO);
 
 	ImportProjectDialog::ProjectType type;
 	if (QObject::sender() == m_importOpjAction)
@@ -2852,14 +2909,44 @@ void MainWin::settingsDialog() {
 #ifdef HAVE_CANTOR_LIBS
 void MainWin::cantorSettingsDialog() {
 	static auto* emptyConfig = new KCoreConfigSkeleton();
-	auto* cantorDialog = new KConfigDialog(this, QLatin1String("Cantor Settings"), emptyConfig);
+	auto* dlg = new KConfigDialog(this, QLatin1String("Cantor Settings"), emptyConfig);
 	for (auto* backend : Cantor::Backend::availableBackends())
 		if (backend->config()) // It has something to configure, so add it to the dialog
-			cantorDialog->addPage(backend->settingsWidget(cantorDialog), backend->config(), backend->name(), backend->icon());
-	cantorDialog->show();
+			dlg->addPage(backend->settingsWidget(dlg), backend->config(), backend->name(), backend->icon());
+
+	// in case the settings were modified (we only need paths), update the "add new notebook" actions
+	// to get the new list of available backend systems in the menu
+	connect(dlg, &KConfigDialog::settingsChanged, this, [=]() {
+		updateNotebookActions();
+	});
+
+	dlg->show();
 
 	DEBUG(Q_FUNC_INFO << ", found " << Cantor::Backend::availableBackends().size() << " backends")
 	if (Cantor::Backend::availableBackends().size() == 0)
 		KMessageBox::error(nullptr, i18n("No Cantor backends found. Please install the ones you want to use."));
+}
+
+void MainWin::updateNotebookActions() {
+	auto* menu = static_cast<QMenu*>(factory()->container(QLatin1String("new_notebook"), this));
+	unplugActionList(QLatin1String("backends_list"));
+	QList<QAction*> newBackendActions;
+	menu->clear();
+	for (auto* backend : Cantor::Backend::availableBackends()) {
+		if (!backend->isEnabled())
+			continue;
+
+		auto* action = new QAction(QIcon::fromTheme(backend->icon()), backend->name(), this);
+		action->setData(backend->name());
+		action->setWhatsThis(i18n("Creates a new %1 notebook", backend->name()));
+		actionCollection()->addAction(QLatin1String("notebook_") + backend->name(), action);
+		connect(action, &QAction::triggered, this, &MainWin::newCantorWorksheet);
+		newBackendActions << action;
+		menu->addAction(action);
+	}
+
+	plugActionList(QLatin1String("backends_list"), newBackendActions);
+	menu->addSeparator();
+	menu->addAction(m_configureCASAction);
 }
 #endif

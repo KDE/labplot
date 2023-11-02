@@ -119,15 +119,14 @@ void SearchReplaceWidget::setReplaceEnabled(bool enabled) {
 
 void SearchReplaceWidget::setInitialPattern(AbstractColumn::ColumnMode mode, const QString& pattern) {
 	m_initialColumnMode = mode;
-	m_initialPattern = pattern;
 
 	if (m_searchWidget)
-		uiSearch.cbFind->setCurrentText(m_initialPattern);
+		uiSearch.cbFind->setCurrentText(pattern);
 	else if (m_searchReplaceWidget) {
 		switch (m_initialColumnMode) {
 		case AbstractColumn::ColumnMode::Text:
 			uiSearchReplace.cbDataType->setCurrentIndex(uiSearchReplace.cbDataType->findData((int)DataType::Text));
-			uiSearchReplace.cbValueText->setCurrentText(m_initialPattern);
+			uiSearchReplace.cbValueText->setCurrentText(pattern);
 			break;
 		case AbstractColumn::ColumnMode::Double:
 		case AbstractColumn::ColumnMode::Integer:
@@ -137,7 +136,7 @@ void SearchReplaceWidget::setInitialPattern(AbstractColumn::ColumnMode mode, con
 			bool ok;
 			QLocale().toDouble(pattern, &ok);
 			if (ok)
-				uiSearchReplace.cbValue1->setCurrentText(m_initialPattern);
+				uiSearchReplace.cbValue1->setCurrentText(pattern);
 			else
 				uiSearchReplace.cbValue1->setCurrentText(QString());
 			break;
@@ -145,7 +144,7 @@ void SearchReplaceWidget::setInitialPattern(AbstractColumn::ColumnMode mode, con
 		case AbstractColumn::ColumnMode::Day:
 		case AbstractColumn::ColumnMode::Month:
 			uiSearchReplace.cbDataType->setCurrentIndex(uiSearchReplace.cbDataType->findData((int)DataType::DateTime));
-			auto value = QDateTime::fromString(m_initialPattern, defaultDateTimeFormat);
+			auto value = QDateTime::fromString(pattern, defaultDateTimeFormat);
 			if (value.isValid())
 				uiSearchReplace.dteValue1->setDateTime(value);
 			else
@@ -208,7 +207,7 @@ void SearchReplaceWidget::initSearchReplaceWidget() {
 
 	uiSearchReplace.cbDataType->addItem(i18n("Text"), int(DataType::Text));
 	uiSearchReplace.cbDataType->addItem(i18n("Numeric"), int(DataType::Numeric));
-	uiSearchReplace.cbDataType->addItem(i18n("DateTime"), int(DataType::DateTime));
+	uiSearchReplace.cbDataType->addItem(i18n("Date & Time"), int(DataType::DateTime));
 
 	uiSearchReplace.cbOperatorText->addItem(i18n("Equal To"), int(OperatorText::EqualTo));
 	uiSearchReplace.cbOperatorText->addItem(i18n("Not Equal To"), int(OperatorText::NotEqualTo));
@@ -371,6 +370,22 @@ void SearchReplaceWidget::setTextOperator(OperatorText op) {
 }
 
 void SearchReplaceWidget::setReplaceText(const QString& text) {
+	switch (m_initialColumnMode) {
+	case AbstractColumn::ColumnMode::Text:
+		uiSearchReplace.cbReplaceText->setCurrentText(text);
+		break;
+	case AbstractColumn::ColumnMode::Double:
+	case AbstractColumn::ColumnMode::Integer:
+	case AbstractColumn::ColumnMode::BigInt:
+		uiSearchReplace.cbReplace->setCurrentText(text);
+		break;
+	case AbstractColumn::ColumnMode::DateTime:
+	case AbstractColumn::ColumnMode::Day:
+	case AbstractColumn::ColumnMode::Month:
+		uiSearchReplace.dteReplace->setDateTime(QDateTime::fromString(text, defaultDateTimeFormat));
+		break;
+	}
+
 	uiSearchReplace.cbReplace->setCurrentText(text);
 }
 
@@ -1077,26 +1092,34 @@ void SearchReplaceWidget::findAll() {
 }
 
 void SearchReplaceWidget::replaceNext() {
-	findNext(true /* proceed */, true /* find and replace */);
+	// check the current cell first (no proceed) whether the value matches and needs to be replaced.
+	// if it doesn't match, proceed to the next cell.
+	const bool found = findNext(false /* proceed */, true /* find and replace */);
+	if (!found)
+		findNext(true /* proceed */, true /* find and replace */);
 }
 
 void SearchReplaceWidget::replaceAll() {
 	const auto type = static_cast<DataType>(uiSearchReplace.cbDataType->currentIndex());
 	QString pattern1;
 	QString pattern2;
+	QString replaceValue;
 	switch (type) {
 	case DataType::Text:
 		pattern1 = uiSearchReplace.cbValueText->currentText();
 		addCurrentTextToHistory(uiSearchReplace.cbReplaceText);
+		replaceValue = uiSearchReplace.cbReplaceText->currentText();
 		break;
 	case DataType::Numeric:
 		pattern1 = uiSearchReplace.cbValue1->currentText();
 		pattern2 = uiSearchReplace.cbValue2->currentText();
 		addCurrentTextToHistory(uiSearchReplace.cbReplace);
+		replaceValue = uiSearchReplace.cbReplace->currentText();
 		break;
 	case DataType::DateTime:
 		pattern1 = uiSearchReplace.dteValue1->text();
 		pattern2 = uiSearchReplace.dteValue2->text();
+		replaceValue = uiSearchReplace.dteReplace->text();
 		break;
 	}
 
@@ -1105,7 +1128,6 @@ void SearchReplaceWidget::replaceAll() {
 		return;
 	}
 
-	QString replaceValue = uiSearchReplace.cbReplace->currentText();
 	if (replaceValue.isEmpty())
 		return;
 

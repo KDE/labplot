@@ -109,13 +109,6 @@ void QQPlot::init() {
 	d->percentilesCurve->setYColumn(d->yPercentilesColumn);
 
 	d->updateDistribution();
-}
-
-void QQPlot::finalizeAdd() {
-	Q_D(QQPlot);
-	WorksheetElement::finalizeAdd();
-	addChild(d->referenceCurve);
-	addChild(d->percentilesCurve);
 
 	// synchronize the names of the internal XYCurves with the name of the current q-q plot
 	// so we have the same name shown on the undo stack
@@ -124,6 +117,13 @@ void QQPlot::finalizeAdd() {
 		d->referenceCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
 		d->percentilesCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
 	});
+}
+
+void QQPlot::finalizeAdd() {
+	Q_D(QQPlot);
+	WorksheetElement::finalizeAdd();
+	addChildFast(d->referenceCurve);
+	addChildFast(d->percentilesCurve);
 }
 
 void QQPlot::initActions() {
@@ -181,10 +181,10 @@ void QQPlot::setVisible(bool on) {
 	endMacro();
 }
 
-//##############################################################################
-//##########################  getter methods  ##################################
-//##############################################################################
-// general
+// ##############################################################################
+// ##########################  getter methods  ##################################
+// ##############################################################################
+//  general
 BASIC_SHARED_D_READER_IMPL(QQPlot, const AbstractColumn*, dataColumn, dataColumn)
 BASIC_SHARED_D_READER_IMPL(QQPlot, QString, dataColumnPath, dataColumnPath)
 BASIC_SHARED_D_READER_IMPL(QQPlot, nsl_sf_stats_distribution, distribution, distribution)
@@ -254,9 +254,9 @@ bool QQPlot::hasData() const {
 	return (d->dataColumn != nullptr);
 }
 
-//##############################################################################
-//#################  setter methods and undo commands ##########################
-//##############################################################################
+// ##############################################################################
+// #################  setter methods and undo commands ##########################
+// ##############################################################################
 
 // General
 CURVE_COLUMN_SETTER_CMD_IMPL_F_S(QQPlot, Data, data, recalc)
@@ -278,9 +278,9 @@ void QQPlot::setDistribution(nsl_sf_stats_distribution distribution) {
 		exec(new QQPlotSetDistributionCmd(d, distribution, ki18n("%1: set distribution")));
 }
 
-//##############################################################################
-//#################################  SLOTS  ####################################
-//##############################################################################
+// ##############################################################################
+// #################################  SLOTS  ####################################
+// ##############################################################################
 void QQPlot::retransform() {
 	d_ptr->retransform();
 }
@@ -303,9 +303,9 @@ void QQPlot::dataColumnNameChanged() {
 	setDataColumnPath(d->dataColumn->path());
 }
 
-//##############################################################################
-//######################### Private implementation #############################
-//##############################################################################
+// ##############################################################################
+// ######################### Private implementation #############################
+// ##############################################################################
 QQPlotPrivate::QQPlotPrivate(QQPlot* owner)
 	: PlotPrivate(owner)
 	, q(owner) {
@@ -614,13 +614,13 @@ void QQPlotPrivate::setHover(bool on) {
 		return; // don't update if state not changed
 
 	m_hovered = on;
-	on ? Q_EMIT q->hovered() : emit q->unhovered();
+	on ? Q_EMIT q->hovered() : Q_EMIT q->unhovered();
 	update();
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 //! Save as XML
 void QQPlot::save(QXmlStreamWriter* writer) const {
 	Q_D(const QQPlot);
@@ -722,9 +722,9 @@ bool QQPlot::load(XmlStreamReader* reader, bool preview) {
 	return true;
 }
 
-//##############################################################################
-//#########################  Theme management ##################################
-//##############################################################################
+// ##############################################################################
+// #########################  Theme management ##################################
+// ##############################################################################
 void QQPlot::loadThemeConfig(const KConfig& config) {
 	KConfigGroup group;
 	if (config.hasGroup(QLatin1String("Theme")))
@@ -735,8 +735,6 @@ void QQPlot::loadThemeConfig(const KConfig& config) {
 	const auto* plot = static_cast<const CartesianPlot*>(parentAspect());
 	int index = plot->curveChildIndex(this);
 	const QColor themeColor = plot->themeColorPalette(index);
-
-	QPen p;
 
 	Q_D(QQPlot);
 	d->m_suppressRecalc = true;

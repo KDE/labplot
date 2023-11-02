@@ -179,6 +179,7 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 
 	auto filter = m_importFileWidget->currentFileFilter();
 	if (m_importFileWidget->importValid()) {
+		DEBUG(Q_FUNC_INFO << ", Import VALID!")
 		auto errors = filter->lastErrors();
 		if (errors.isEmpty()) {
 			// Default message, because not all filters implement lastErrors yet
@@ -222,10 +223,10 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 		auto sheets = workbook->children<AbstractAspect>();
 
 		AbstractFileFilter::FileType fileType = m_importFileWidget->currentFileType();
-		// multiple data sets/variables for special types
+		// types supporting multiple data sets/variables
 		if (fileType == AbstractFileFilter::FileType::HDF5 || fileType == AbstractFileFilter::FileType::NETCDF || fileType == AbstractFileFilter::FileType::ROOT
-			|| fileType == AbstractFileFilter::FileType::MATIO || fileType == AbstractFileFilter::FileType::Excel
-			|| fileType == AbstractFileFilter::FileType::VECTOR_BLF) {
+			|| fileType == AbstractFileFilter::FileType::MATIO || fileType == AbstractFileFilter::FileType::XLSX
+			|| fileType == AbstractFileFilter::FileType::Ods || fileType == AbstractFileFilter::FileType::VECTOR_BLF) {
 			QStringList names;
 			if (fileType == AbstractFileFilter::FileType::HDF5)
 				names = m_importFileWidget->selectedHDF5Names();
@@ -237,11 +238,13 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 				names = m_importFileWidget->selectedROOTNames();
 			else if (fileType == AbstractFileFilter::FileType::MATIO)
 				names = m_importFileWidget->selectedMatioNames();
-			else if (fileType == AbstractFileFilter::FileType::Excel)
-				names = m_importFileWidget->selectedExcelRegionNames();
+			else if (fileType == AbstractFileFilter::FileType::XLSX)
+				names = m_importFileWidget->selectedXLSXRegionNames();
+			else if (fileType == AbstractFileFilter::FileType::Ods)
+				names = m_importFileWidget->selectedOdsSheetNames();
 
 			int nrNames = names.size(), offset = sheets.size();
-			// QDEBUG(Q_FUNC_INFO << ", selected names: " << names)
+			QDEBUG(Q_FUNC_INFO << ", selected names: " << names)
 
 			// TODO: think about importing multiple sets into one sheet
 
@@ -262,10 +265,10 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 
 				// rename the available sheets
 				for (int i = 0; i < offset; ++i) {
-					// HDF5 variable names contain the whole path, remove it and keep the name only
+					// HDF5 and Ods names contain the whole path, remove it and keep the name only
 					QString sheetName = names.at(i);
-					if (fileType == AbstractFileFilter::FileType::HDF5)
-						sheetName = names.at(i).mid(names.at(i).lastIndexOf(QLatin1Char('/')) + 1);
+					if (fileType == AbstractFileFilter::FileType::HDF5 || fileType == AbstractFileFilter::FileType::Ods)
+						sheetName = sheetName.split(QLatin1Char('/')).last();
 
 					auto* sheet = sheets.at(i);
 					sheet->setUndoAware(false);
@@ -276,10 +279,10 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 
 			// add additional spreadsheets
 			for (int i = start; i < nrNames; ++i) {
-				// HDF5 variable names contain the whole path, remove it and keep the name only
+				// HDF5 and Ods names contain the whole path, remove it and keep the name only
 				QString sheetName = names.at(i);
-				if (fileType == AbstractFileFilter::FileType::HDF5)
-					sheetName = names.at(i).mid(names.at(i).lastIndexOf(QLatin1Char('/')) + 1);
+				if (fileType == AbstractFileFilter::FileType::HDF5 || fileType == AbstractFileFilter::FileType::Ods)
+					sheetName = sheetName.split(QLatin1Char('/')).last();
 
 				auto* spreadsheet = new Spreadsheet(sheetName);
 				if (mode == AbstractFileFilter::ImportMode::Prepend && !sheets.isEmpty())
@@ -301,12 +304,14 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 					static_cast<NetCDFFilter*>(filter)->setCurrentVarName(names.at(i));
 				else if (fileType == AbstractFileFilter::FileType::MATIO)
 					static_cast<MatioFilter*>(filter)->setCurrentVarName(names.at(i));
-				else if (fileType == AbstractFileFilter::FileType::Excel) {
-					const auto& nameSplit = names[i].split(QLatin1Char('!'));
-					const auto& sheet = nameSplit[0];
-					const auto& range = nameSplit[1];
-					static_cast<ExcelFilter*>(filter)->setCurrentSheet(sheet);
-					static_cast<ExcelFilter*>(filter)->setCurrentRange(range);
+				else if (fileType == AbstractFileFilter::FileType::Ods) // all selected sheets are imported
+					static_cast<OdsFilter*>(filter)->setSelectedSheetNames(QStringList() << names.at(i));
+				else if (fileType == AbstractFileFilter::FileType::XLSX) {
+					const auto& nameSplit = names.at(i).split(QLatin1Char('!'));
+					const auto& sheet = nameSplit.at(0);
+					const auto& range = nameSplit.at(1);
+					static_cast<XLSXFilter*>(filter)->setCurrentSheet(sheet);
+					static_cast<XLSXFilter*>(filter)->setCurrentRange(range);
 				} else
 					static_cast<ROOTFilter*>(filter)->setCurrentObject(names.at(i));
 
@@ -340,6 +345,7 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 
 	RESET_CURSOR;
 	statusBar->removeWidget(progressBar);
+	DEBUG(Q_FUNC_INFO << ", DONE")
 }
 
 void ImportFileDialog::toggleOptions() {
@@ -393,10 +399,10 @@ void ImportFileDialog::checkOkButton() {
 	if (fileName.isEmpty())
 		return;
 
-	DEBUG("Data Source Type: " << ENUM_TO_STRING(LiveDataSource, SourceType, m_importFileWidget->currentSourceType()));
+	DEBUG(Q_FUNC_INFO << ", Data Source Type: " << ENUM_TO_STRING(LiveDataSource, SourceType, m_importFileWidget->currentSourceType()));
 	switch (m_importFileWidget->currentSourceType()) {
 	case LiveDataSource::SourceType::FileOrPipe: {
-		DEBUG("	fileName = " << qPrintable(fileName));
+		DEBUG(Q_FUNC_INFO << ", fileName = " << qPrintable(fileName));
 		const bool enable = QFile::exists(fileName);
 		okButton->setEnabled(enable);
 		if (enable) {

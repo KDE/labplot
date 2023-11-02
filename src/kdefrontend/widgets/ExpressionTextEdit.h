@@ -14,7 +14,7 @@
 #define EXPRESSIONTEXTEDIT_H
 
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
-#include <KTextWidgets/KTextEdit>
+#include <KTextEdit>
 
 class QCompleter;
 class EquationHighlighter;

@@ -68,6 +68,7 @@ private:
 	// own created widgets
 	DateTimeSpinBox* dtsbMajorTicksIncrement{nullptr};
 	DateTimeSpinBox* dtsbMinorTicksIncrement{nullptr};
+	DateTimeSpinBox* dtsbMajorTicksDateTimeStartOffset{nullptr};
 
 	friend class AxisTest;
 
@@ -112,8 +113,10 @@ private Q_SLOTS:
 	void majorTicksSpacingChanged();
 	void majorTicksColumnChanged(const QModelIndex&);
 	void majorTicksStartTypeChanged(int state);
+	void majorTicksDateTimeStartOffsetChanged();
 	void majorTicksStartOffsetChanged(double);
 	void majorTicksStartValueChanged(double);
+	void majorTicksStartDateTimeChanged(qint64 value);
 	void setTickOffsetData(bool nice = false); // set first tick on first data point (if nice: nice value)
 	void setTickOffsetAuto() {
 		setTickOffsetData(true);

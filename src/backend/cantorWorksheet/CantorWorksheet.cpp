@@ -30,6 +30,7 @@
 #include "3rdparty/cantor/panelpluginhandler.h"
 #endif
 
+#include <KConfigGroup>
 #include <KLocalizedString>
 #include <KParts/ReadWritePart>
 #include <KPluginFactory>

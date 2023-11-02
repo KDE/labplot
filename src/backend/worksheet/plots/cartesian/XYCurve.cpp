@@ -35,13 +35,14 @@
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "tools/ImageTools.h"
 
-#include <QDesktopWidget>
+#include <KConfig>
+#include <KConfigGroup>
+#include <KLocalizedString>
+
 #include <QGraphicsSceneContextMenuEvent>
 #include <QMenu>
 #include <QPainter>
-
-#include <KConfig>
-#include <KLocalizedString>
+#include <QScreen>
 
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_math.h>
@@ -909,7 +910,7 @@ void XYCurvePrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
 void XYCurvePrivate::calculateScenePoints() {
 	if (!q->plot() || !m_scenePointsDirty || !xColumn)
 		return;
-#ifdef PERFTRACE_CURVES
+#if PERFTRACE_CURVES
 	PERFTRACE(QLatin1String(Q_FUNC_INFO) + QStringLiteral(", curve ") + name());
 #endif
 
@@ -920,7 +921,7 @@ void XYCurvePrivate::calculateScenePoints() {
 	//  TODO: check updateErrorBars() and updateDropLines() and if they aren't available don't calculate this part
 	// if (symbolsStyle != Symbol::Style::NoSymbols || valuesType != XYCurve::NoValues ) {
 	{
-#ifdef PERFTRACE_CURVES
+#if PERFTRACE_CURVES
 		PERFTRACE(QLatin1String(Q_FUNC_INFO) + QStringLiteral(", curve ") + name() + QStringLiteral(", map logical points to scene coordinates"));
 #endif
 
@@ -933,8 +934,10 @@ void XYCurvePrivate::calculateScenePoints() {
 			const auto dataRect{plot()->dataRect()};
 			// this is the old method considering DPI
 			DEBUG(Q_FUNC_INFO << ", plot->dataRect() width/height = " << dataRect.width() << '/' << dataRect.height());
-			DEBUG(Q_FUNC_INFO << ", logical DPI X/Y = " << QApplication::desktop()->logicalDpiX() << '/' << QApplication::desktop()->logicalDpiY())
-			DEBUG(Q_FUNC_INFO << ", physical DPI X/Y = " << QApplication::desktop()->physicalDpiX() << '/' << QApplication::desktop()->physicalDpiY())
+			DEBUG(Q_FUNC_INFO << ", logical DPI X/Y = " << QApplication::primaryScreen()->logicalDotsPerInchX() << '/'
+							  << QApplication::primaryScreen()->logicalDotsPerInchY())
+			DEBUG(Q_FUNC_INFO << ", physical DPI X/Y = " << QApplication::primaryScreen()->physicalDotsPerInchX() << '/'
+							  << QApplication::primaryScreen()->physicalDotsPerInchY())
 
 			// new method
 			const int numberOfPixelX = dataRect.width();
@@ -1207,7 +1210,7 @@ TODO: At the moment also the points which are outside of the scene are added. Th
   lines where both points are outside of the scene
 */
 void XYCurvePrivate::updateLines() {
-#ifdef PERFTRACE_CURVES
+#if PERFTRACE_CURVES
 	PERFTRACE(QLatin1String(Q_FUNC_INFO) + QStringLiteral(", curve ") + name());
 #endif
 	linePath = QPainterPath();
@@ -1219,7 +1222,7 @@ void XYCurvePrivate::updateLines() {
 		return;
 	}
 
-	int numberOfPoints{m_logicalPoints.size()};
+	int numberOfPoints{static_cast<int>(m_logicalPoints.size())};
 	if (numberOfPoints <= 1) {
 		DEBUG(Q_FUNC_INFO << ", nothing to do, since not enough data points available");
 		recalcShapeAndBoundingRect();
@@ -1235,7 +1238,7 @@ void XYCurvePrivate::updateLines() {
 
 	// calculate the lines connecting the data points
 	{
-#ifdef PERFTRACE_CURVES
+#if PERFTRACE_CURVES
 		PERFTRACE(QLatin1String(Q_FUNC_INFO) + QStringLiteral(", curve ") + name() + QStringLiteral(", calculate the lines connecting the data points"));
 #endif
 
@@ -1330,7 +1333,7 @@ void XYCurvePrivate::updateLines() {
 			case XYCurve::LineType::NoLine:
 				break;
 			case XYCurve::LineType::Line: {
-#ifdef PERFTRACE_CURVES
+#if PERFTRACE_CURVES
 				PERFTRACE(name() + QLatin1String(Q_FUNC_INFO) + QStringLiteral(", find relevant lines"));
 #endif
 				for (int i{startIndex}; i <= endIndex; i++) {
@@ -1626,15 +1629,15 @@ void XYCurvePrivate::updateLines() {
 
 	// map the lines to scene coordinates
 	{
-#ifdef PERFTRACE_CURVES
+#if PERFTRACE_CURVES
 		PERFTRACE(QLatin1String(Q_FUNC_INFO) + QStringLiteral(", curve ") + name() + QStringLiteral(", map lines to scene coordinates"));
 #endif
-		emit q->linesUpdated(q, m_lines);
+		Q_EMIT q->linesUpdated(q, m_lines);
 		m_lines = q->cSystem->mapLogicalToScene(m_lines);
 	}
 
 	{
-#ifdef PERFTRACE_CURVES
+#if PERFTRACE_CURVES
 		PERFTRACE(QLatin1String(Q_FUNC_INFO) + QStringLiteral(", curve ") + name() + QStringLiteral(", calculate new line path"));
 #endif
 		// new line path
@@ -1736,7 +1739,7 @@ void XYCurvePrivate::updateDropLines() {
 }
 
 void XYCurvePrivate::updateSymbols() {
-#ifdef PERFTRACE_CURVES
+#if PERFTRACE_CURVES
 	PERFTRACE(QLatin1String(Q_FUNC_INFO) + QStringLiteral(", curve ") + name());
 #endif
 	symbolsPath = QPainterPath();
@@ -1814,7 +1817,7 @@ void XYCurvePrivate::updateRug() {
   recreates the value strings to be shown and recalculates their draw position.
 */
 void XYCurvePrivate::updateValues() {
-#ifdef PERFTRACE_CURVES
+#if PERFTRACE_CURVES
 	PERFTRACE(QLatin1String(Q_FUNC_INFO) + QLatin1String(", curve ") + name());
 #endif
 	valuesPath = QPainterPath();
@@ -2821,7 +2824,7 @@ void XYCurvePrivate::recalcShapeAndBoundingRect() {
 	if (m_suppressRecalc)
 		return;
 
-#ifdef PERFTRACE_CURVES
+#if PERFTRACE_CURVES
 	PERFTRACE(QLatin1String(Q_FUNC_INFO) + QLatin1String(", curve ") + name());
 #endif
 
@@ -2858,7 +2861,7 @@ void XYCurvePrivate::recalcShapeAndBoundingRect() {
 }
 
 void XYCurvePrivate::draw(QPainter* painter) {
-#ifdef PERFTRACE_CURVES
+#if PERFTRACE_CURVES
 	PERFTRACE(QLatin1String(Q_FUNC_INFO) + QLatin1String(", curve ") + name());
 #endif
 
@@ -3060,7 +3063,7 @@ void XYCurvePrivate::setHover(bool on) {
 		return; // don't update if state not changed
 
 	m_hovered = on;
-	on ? Q_EMIT q->hovered() : emit q->unhovered();
+	on ? Q_EMIT q->hovered() : Q_EMIT q->unhovered();
 	update();
 }
 

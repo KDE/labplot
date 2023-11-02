@@ -474,6 +474,8 @@ void ColumnRemoveRowsCmd::redo() {
 		m_formulas = m_col->formulaAttribute();
 	}
 	m_col->removeRows(m_first, m_count);
+	if (!m_col->m_owner->m_suppressDataChangedSignal)
+		Q_EMIT m_col->m_owner->dataChanged(m_col->m_owner);
 }
 
 /**
@@ -484,6 +486,8 @@ void ColumnRemoveRowsCmd::undo() {
 	m_col->copy(m_backup, 0, m_first, m_data_row_count);
 	m_col->resizeTo(m_old_size);
 	m_col->replaceFormulas(m_formulas);
+	if (!m_col->m_owner->m_suppressDataChangedSignal)
+		Q_EMIT m_col->m_owner->dataChanged(m_col->m_owner);
 }
 
 /** ***************************************************************************

@@ -375,25 +375,6 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list) {
 
 	labelWidget->setLabels(labels);
 
-	// if there is more than one plot in the list, disable the name and comment fields in the tab "general"
-	if (list.size() == 1) {
-		ui.lName->setEnabled(true);
-		ui.leName->setEnabled(true);
-		ui.lComment->setEnabled(true);
-		ui.teComment->setEnabled(true);
-
-		ui.leName->setText(m_plot->name());
-		ui.teComment->setText(m_plot->comment());
-	} else {
-		ui.lName->setEnabled(false);
-		ui.leName->setEnabled(false);
-		ui.lComment->setEnabled(false);
-		ui.teComment->setEnabled(false);
-
-		ui.leName->setText(QString());
-		ui.teComment->setText(QString());
-	}
-
 	symmetricPaddingChanged(m_plot->symmetricPadding());
 
 	ui.leName->setStyleSheet(QString());
@@ -709,7 +690,7 @@ void CartesianPlotDock::updateRangeList(const Dimension dim) {
 		cb->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
 		cb->setFrame(false);
 		// TODO: -> updateLocale()
-		for (const auto& name : RangeT::scaleNames())
+		for (const auto& name : RangeT::scaleNames)
 			cb->addItem(name);
 
 		cb->setCurrentIndex(static_cast<int>(scale));
@@ -926,7 +907,6 @@ void CartesianPlotDock::niceExtendChanged(bool checked) {
 
 	for (auto* plot : m_plotList)
 		plot->setNiceExtend(checked);
-	updatePlotRangeList();
 }
 
 void CartesianPlotDock::rangePointsChanged(const QString& text) {
@@ -1137,13 +1117,14 @@ void CartesianPlotDock::removeRange(const Dimension dim) {
 			QString(),
 			KStandardGuiItem::remove(),
 			KStandardGuiItem::cancel());
+		if (status == KMessageBox::SecondaryAction)
 #else
 		auto status = KMessageBox::warningYesNo(
 			this,
 			i18n("%1 range %2 is used in plot range %3. ", CartesianCoordinateSystem::dimensionToString(dim).toUpper(), currentRow + 1, msg)
 				+ i18n("Really remove it?"));
-#endif
 		if (status == KMessageBox::No)
+#endif
 			return;
 		else {
 			// reset x ranges of cSystems using the range to be removed
@@ -1197,11 +1178,12 @@ void CartesianPlotDock::removePlotRange() {
 											   QString(),
 											   KStandardGuiItem::remove(),
 											   KStandardGuiItem::cancel());
+			if (status == KMessageBox::SecondaryAction)
 #else
 			auto status =
 				KMessageBox::warningYesNo(this, i18n("Plot range %1 is used by element \"%2\". ", currentRow + 1, element->name()) + i18n("Really remove it?"));
-#endif
 			if (status == KMessageBox::No)
+#endif
 				return;
 			else
 				element->setCoordinateSystemIndex(0); // reset
@@ -1699,13 +1681,26 @@ void CartesianPlotDock::plotMaxChanged(const Dimension dim, int xRangeIndex, dou
 
 void CartesianPlotDock::plotRangeChanged(const Dimension dim, int index, Range<double> range) {
 	DEBUG(Q_FUNC_INFO << ", " << CartesianCoordinateSystem::dimensionToString(dim).toStdString() << " range = " << range.toStdString())
-	CONDITIONAL_LOCK_RETURN;
 
-	CELLWIDGET(dim, index, TwRangesColumn::Min, NumberSpinBox, setValue(range.start()));
-	CELLWIDGET(dim, index, TwRangesColumn::Min, UTCDateTimeEdit, setMSecsSinceEpochUTC(range.start()));
-	CELLWIDGET(dim, index, TwRangesColumn::Max, NumberSpinBox, setValue(range.end()));
-	CELLWIDGET(dim, index, TwRangesColumn::Max, UTCDateTimeEdit, setMSecsSinceEpochUTC(range.end()));
-
+	// The ranges can change on multiple ways
+	// - setting autoscale
+	// - setting min/max
+	// - but also when changing datarange type or the datarange points.
+	// If the datarange type/points changes, CONDITIONAL_LOCK_RETURN locks already and then the ranges would not update.
+	// To update also in those cases the cells will be updated all the time regardless of the m_initializing member state
+	if (m_initializing) {
+		CELLWIDGET(dim, index, TwRangesColumn::Min, NumberSpinBox, setValue(range.start()));
+		CELLWIDGET(dim, index, TwRangesColumn::Min, UTCDateTimeEdit, setMSecsSinceEpochUTC(range.start()));
+		CELLWIDGET(dim, index, TwRangesColumn::Max, NumberSpinBox, setValue(range.end()));
+		CELLWIDGET(dim, index, TwRangesColumn::Max, UTCDateTimeEdit, setMSecsSinceEpochUTC(range.end()));
+	} else {
+		// Must be copied, because the Lock would otherwise be in it's own space and therefore it would not make any sense
+		CONDITIONAL_LOCK_RETURN;
+		CELLWIDGET(dim, index, TwRangesColumn::Min, NumberSpinBox, setValue(range.start()));
+		CELLWIDGET(dim, index, TwRangesColumn::Min, UTCDateTimeEdit, setMSecsSinceEpochUTC(range.start()));
+		CELLWIDGET(dim, index, TwRangesColumn::Max, NumberSpinBox, setValue(range.end()));
+		CELLWIDGET(dim, index, TwRangesColumn::Max, UTCDateTimeEdit, setMSecsSinceEpochUTC(range.end()));
+	}
 	updatePlotRangeList();
 }
 

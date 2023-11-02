@@ -175,29 +175,6 @@ void BoxPlotDock::setBoxPlots(QList<BoxPlot*> list) {
 	Q_ASSERT(m_boxPlot);
 	setModel();
 
-	// if there is more than one point in the list, disable the comment and name widgets in "general"
-	if (list.size() == 1) {
-		ui.lName->setEnabled(true);
-		ui.leName->setEnabled(true);
-		ui.lComment->setEnabled(true);
-		ui.teComment->setEnabled(true);
-		ui.leName->setText(m_boxPlot->name());
-		ui.teComment->setText(m_boxPlot->comment());
-
-		ui.lDataColumn->setEnabled(true);
-	} else {
-		ui.lName->setEnabled(false);
-		ui.leName->setEnabled(false);
-		ui.lComment->setEnabled(false);
-		ui.teComment->setEnabled(false);
-		ui.leName->setText(QString());
-		ui.teComment->setText(QString());
-
-		ui.lDataColumn->setEnabled(false);
-	}
-	ui.leName->setStyleSheet(QString());
-	ui.leName->setToolTip(QString());
-
 	QList<Background*> backgrounds;
 	QList<Line*> borderLines;
 	QList<Line*> medianLines;

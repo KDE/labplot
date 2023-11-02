@@ -13,6 +13,7 @@ set(CMAKE_AUTOMOC ON)
 
 include(GNUInstallDirs)
 
+MESSAGE (STATUS "QXLSX Qt version ${QT_VERSION_MAJOR}")
 if(NOT DEFINED QT_VERSION_MAJOR)
     find_package(QT NAMES Qt6 Qt5 COMPONENTS Core Gui REQUIRED)
 endif()

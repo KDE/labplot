@@ -17,6 +17,7 @@ class AxisTest : public CommonTest {
 	Q_OBJECT
 
 private Q_SLOTS:
+	void axisLine();
 	void majorTicksAutoNumberEnableDisable();
 	void minorTicksAutoNumberEnableDisable();
 	void majorTicksStartValue();
@@ -39,6 +40,19 @@ private Q_SLOTS:
 	void columnLabelValues();
 
 	void customTextLabels();
+
+	void dateTime();
+	void dateTimeSpacing();
+	void dateTimeSpacingOffsetNonZero();
+	void dateTimeSpacingStartValueNonZero();
+
+	void numeric();
+	void numericSpacing();
+	void numericSpacingOffsetNonZero();
+	void numericSpacingStartValueNonZero();
+
+	void customColumnNumeric();
+	void customColumnDateTime();
 };
 
 #endif // WORKSHEETELEMENTTEST_H

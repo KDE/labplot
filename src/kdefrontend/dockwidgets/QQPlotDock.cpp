@@ -137,33 +137,15 @@ void QQPlotDock::setPlots(QList<QQPlot*> list) {
 
 	// if there are more then one curve in the list, disable the content in the tab "general"
 	if (m_plots.size() == 1) {
-		ui.lName->setEnabled(true);
-		ui.leName->setEnabled(true);
-		ui.lComment->setEnabled(true);
-		ui.teComment->setEnabled(true);
-
 		ui.lDataColumn->setEnabled(true);
 		cbDataColumn->setEnabled(true);
-
 		cbDataColumn->setColumn(m_plot->dataColumn(), m_plot->dataColumnPath());
-		ui.leName->setText(m_plot->name());
-		ui.teComment->setText(m_plot->comment());
 	} else {
-		ui.lName->setEnabled(false);
-		ui.leName->setEnabled(false);
-		ui.lComment->setEnabled(false);
-		ui.teComment->setEnabled(false);
-
 		ui.lDataColumn->setEnabled(false);
 		cbDataColumn->setEnabled(false);
 		cbDataColumn->setCurrentModelIndex(QModelIndex());
-
-		ui.leName->setText(QString());
-		ui.teComment->setText(QString());
 	}
 
-	ui.leName->setStyleSheet(QString());
-	ui.leName->setToolTip(QString());
 	ui.chkVisible->setChecked(m_plot->isVisible());
 
 	// load the remaining properties
@@ -176,6 +158,8 @@ void QQPlotDock::setPlots(QList<QQPlot*> list) {
 	connect(m_plot, &QQPlot::aspectDescriptionChanged, this, &QQPlotDock::aspectDescriptionChanged);
 	connect(m_plot, &QQPlot::dataColumnChanged, this, &QQPlotDock::plotDataColumnChanged);
 	connect(m_plot, &QQPlot::distributionChanged, this, &QQPlotDock::plotDistributionChanged);
+	connect(m_plot, &WorksheetElement::plotRangeListChanged, this, &QQPlotDock::updatePlotRanges);
+	connect(m_plot, &WorksheetElement::visibleChanged, this, &QQPlotDock::plotVisibilityChanged);
 }
 
 void QQPlotDock::retranslateUi() {
@@ -210,18 +194,7 @@ void QQPlotDock::updateLocale() {
 }
 
 void QQPlotDock::updatePlotRanges() {
-	const int cSystemCount{m_plot->coordinateSystemCount()};
-	const int cSystemIndex{m_plot->coordinateSystemIndex()};
-	DEBUG(Q_FUNC_INFO << ", plot ranges count: " << cSystemCount)
-	DEBUG(Q_FUNC_INFO << ", current plot range: " << cSystemIndex + 1)
-
-	// fill ui.cbPlotRanges
-	ui.cbPlotRanges->clear();
-	for (int i{0}; i < cSystemCount; i++)
-		ui.cbPlotRanges->addItem(QString::number(i + 1) + QLatin1String(" : ") + m_plot->coordinateSystemInfo(i));
-	ui.cbPlotRanges->setCurrentIndex(cSystemIndex);
-	// disable when there is only on plot range
-	ui.cbPlotRanges->setEnabled(cSystemCount == 1 ? false : true);
+	updatePlotRangeList(ui.cbPlotRanges);
 }
 
 //*************************************************************
@@ -302,9 +275,8 @@ void QQPlotDock::visibilityChanged(bool state) {
 //*************************************************************
 // General-Tab
 void QQPlotDock::plotDataColumnChanged(const AbstractColumn* column) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	cbDataColumn->setColumn(column, m_plot->dataColumnPath());
-	m_initializing = false;
 }
 
 void QQPlotDock::plotDistributionChanged(nsl_sf_stats_distribution distribution) {
@@ -314,9 +286,8 @@ void QQPlotDock::plotDistributionChanged(nsl_sf_stats_distribution distribution)
 }
 
 void QQPlotDock::plotVisibilityChanged(bool on) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	ui.chkVisible->setChecked(on);
-	m_initializing = false;
 }
 
 //*************************************************************
@@ -331,16 +302,12 @@ void QQPlotDock::load() {
 void QQPlotDock::loadConfig(KConfig& config) {
 	KConfigGroup group = config.group(QLatin1String("QQPlot"));
 
-	// General
-	// we don't load/save the settings in the general-tab, since they are not style related.
-	// It doesn't make sense to load/save them in the template.
-	// This data is read in QQPlotDock::setCurves().
-
 	// distribution
 	auto dist = group.readEntry(QLatin1String("distribution"), static_cast<int>(m_plot->distribution()));
 	int index = ui.cbDistribution->findData(static_cast<int>(dist));
 	ui.cbDistribution->setCurrentIndex(index);
 
+	// properties of the reference and percentile curves
 	lineWidget->loadConfig(group);
 	symbolWidget->loadConfig(group);
 }
@@ -360,6 +327,11 @@ void QQPlotDock::loadConfigFromTemplate(KConfig& config) {
 
 void QQPlotDock::saveConfigAsTemplate(KConfig& config) {
 	KConfigGroup group = config.group("QQPlot");
+
+	// distribution
+	group.writeEntry(QLatin1String("kernelType"), static_cast<int>(m_plot->distribution()));
+
+	// properties of the reference and percentile curves
 	lineWidget->saveConfig(group);
 	symbolWidget->saveConfig(group);
 	config.sync();

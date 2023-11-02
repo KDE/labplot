@@ -1,19 +1,19 @@
 /*
-	File                 : ExcelFilterTest.h
+	File                 : XLSXFilterTest.h
 	Project              : LabPlot
-	Description          : Tests for the Excel filter
+	Description          : Tests for the XLSX filter
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2022-2023 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
-#ifndef EXCELFILTERTEST_H
-#define EXCELFILTERTEST_H
+#ifndef XLSXFILTERTEST_H
+#define XLSXFILTERTEST_H
 
 #include "../../CommonTest.h"
 #include <QtTest>
 
-class ExcelFilterTest : public CommonTest {
+class XLSXFilterTest : public CommonTest {
 	Q_OBJECT
 
 private Q_SLOTS:

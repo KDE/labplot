@@ -23,5 +23,10 @@
 		"name" : "StatLib",
 		"description" : "<b>StatLib</b> is a datasets archive maintained by Pantelis Vlachos from Carnegie Melon University. This collection also contains the datasets from the book \"Case studies in biometry\", by Nicholas Lange, Louise Ryan and Lynne Billard, David Brillinger, Loveday Conquest, Joel Greenhouse.",
 		"url" : "http://lib.stat.cmu.edu/datasets/csb/"
+	},
+	{
+		"name" : "seaborn",
+		"description" : "<b>seaborn</b> collection is originally provided as a convenient target for the <i>seaborn.load_dataset</i> function to download sample datasets from. Its existence makes it easy to document seaborn without confusing things by spending time loading and munging data. The datasets may change or be removed at any time if they are no longer useful for the seaborn documentation. Some of the datasets have also been modifed from their canonical sources.",
+		"url" : "https://github.com/mwaskom/seaborn-data"
 	}
 ]

@@ -10,6 +10,8 @@
 */
 
 #include "FitTest.h"
+#include "backend/core/AbstractAspect.h"
+#include "backend/core/AbstractColumn.h"
 #include "backend/core/Project.h"
 #include "backend/core/column/Column.h"
 #include "backend/datasources/filters/AsciiFilter.h"

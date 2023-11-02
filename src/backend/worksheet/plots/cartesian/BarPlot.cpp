@@ -235,7 +235,8 @@ void BarPlot::setXColumn(const AbstractColumn* column) {
 		if (column) {
 			// update the curve itself on changes
 			connect(column, &AbstractColumn::dataChanged, this, &BarPlot::recalc);
-			connect(column->parentAspect(), &AbstractAspect::childAspectAboutToBeRemoved, this, &BarPlot::dataColumnAboutToBeRemoved);
+			if (column->parentAspect())
+				connect(column->parentAspect(), &AbstractAspect::childAspectAboutToBeRemoved, this, &BarPlot::dataColumnAboutToBeRemoved);
 
 			connect(column, &AbstractColumn::dataChanged, this, &BarPlot::dataChanged);
 			// TODO: add disconnect in the undo-function
@@ -255,7 +256,8 @@ void BarPlot::setDataColumns(const QVector<const AbstractColumn*> columns) {
 
 			// update the curve itself on changes
 			connect(column, &AbstractColumn::dataChanged, this, &BarPlot::recalc);
-			connect(column->parentAspect(), &AbstractAspect::childAspectAboutToBeRemoved, this, &BarPlot::dataColumnAboutToBeRemoved);
+			if (column->parentAspect())
+				connect(column->parentAspect(), &AbstractAspect::childAspectAboutToBeRemoved, this, &BarPlot::dataColumnAboutToBeRemoved);
 			// TODO: add disconnect in the undo-function
 
 			connect(column, &AbstractColumn::dataChanged, this, &BarPlot::dataChanged);
@@ -572,8 +574,10 @@ void BarPlotPrivate::recalc() {
 			break;
 		}
 		case BarPlot::Type::Stacked: {
-			yMax = *std::max_element(barMaxs.constBegin(), barMaxs.constEnd());
-			yMin = *std::min_element(barMins.constBegin(), barMins.constEnd());
+			if (!barMaxs.isEmpty())
+				yMax = *std::max_element(barMaxs.constBegin(), barMaxs.constEnd());
+			if (!barMins.isEmpty())
+				yMin = *std::min_element(barMins.constBegin(), barMins.constEnd());
 			break;
 		}
 		case BarPlot::Type::Stacked_100_Percent: {
@@ -984,7 +988,11 @@ void BarPlotPrivate::updateValues() {
 			return;
 		}
 
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+		const int endRow = std::min(m_valuesPointsLogical.size(), static_cast<qsizetype>(valuesColumn->rowCount()));
+#else
 		const int endRow = std::min(m_valuesPointsLogical.size(), valuesColumn->rowCount());
+#endif
 		const auto xColMode = valuesColumn->columnMode();
 		for (int i = 0; i < endRow; ++i) {
 			if (!valuesColumn->isValid(i) || valuesColumn->isMasked(i))

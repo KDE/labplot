@@ -58,6 +58,8 @@ public:
 		// delete the potentially available model, will be re-created if needed for the newly set aspects
 		delete m_aspectModel;
 		m_aspectModel = nullptr;
+
+		updateNameDescriptionWidgets();
 	}
 
 	void disconnectAspect(const AbstractAspect* a) {
@@ -83,6 +85,7 @@ private:
 	AbstractAspect* m_aspect{nullptr};
 	QList<AbstractAspect*> m_aspects;
 	AspectTreeModel* m_aspectModel{nullptr};
+	void updateNameDescriptionWidgets();
 
 protected Q_SLOTS:
 	void nameChanged();

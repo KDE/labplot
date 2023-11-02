@@ -16,6 +16,7 @@
 
 #include <KLocalizedString>
 #include <QProcess>
+#include <QStandardPaths>
 
 ///////////// macros ///////////////////////////////////////////////
 
