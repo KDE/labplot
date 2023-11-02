@@ -1706,8 +1706,13 @@ void RetransformTest::testPlotRecalcNoRetransform() {
 	RetransformCallCounter c;
 	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
 	ws->addChild(p);
 	c.aspectAdded(p);
+	const auto& axes = p->children<Axis>();
+	QCOMPARE(axes.count(), 2);
+	c.aspectAdded(axes.at(0));
+	c.aspectAdded(axes.at(1));
 
 	auto* barPlot = new BarPlot(QStringLiteral("barPlot"));
 	barPlot->setDataColumns(dataColumns);
@@ -1731,13 +1736,39 @@ void RetransformTest::testPlotRecalcNoRetransform() {
 	// there shouldn't be any retransform calls in the parent plot area
 	c.resetRetransformCount();
 	barPlot->recalc();
+	{
+		QCOMPARE(c.elementLogCount(false), 1); // only barplot
+		const auto stat = c.statistic(false);
+		QCOMPARE(stat.contains(barPlot->path()), true);
+		QVERIFY(c.calledExact(1, false));
+		QCOMPARE(c.logsXScaleRetransformed.count(), 0);
+		QCOMPARE(c.logsYScaleRetransformed.count(), 0);
+	}
+
+	c.resetRetransformCount();
+
 	boxPlot->recalc();
+	{
+		QCOMPARE(c.elementLogCount(false), 1); // only boxPlot
+		const auto stat = c.statistic(false);
+		QCOMPARE(stat.contains(boxPlot->path()), true);
+		QVERIFY(c.calledExact(1, false));
+		QCOMPARE(c.logsXScaleRetransformed.count(), 0);
+		QCOMPARE(c.logsYScaleRetransformed.count(), 0);
+	}
+
+	c.resetRetransformCount();
+
 	histPlot->recalc();
 
-	QCOMPARE(c.elementLogCount(false), 1);
-	QVERIFY(c.calledExact(1, false));
-	QCOMPARE(c.logsXScaleRetransformed.count(), 0);
-	QCOMPARE(c.logsYScaleRetransformed.count(), 0);
+	{
+		QCOMPARE(c.elementLogCount(false), 1); // only histPlot
+		const auto stat = c.statistic(false);
+		QCOMPARE(stat.contains(histPlot->path()), true);
+		QVERIFY(c.calledExact(1, false));
+		QCOMPARE(c.logsXScaleRetransformed.count(), 0);
+		QCOMPARE(c.logsYScaleRetransformed.count(), 0);
+	}
 }
 
 /*!
@@ -1760,8 +1791,13 @@ void RetransformTest::testPlotRecalcRetransform() {
 	// prepare the worksheet + plots
 	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
 	ws->addChild(p);
 	c.aspectAdded(p);
+	const auto& axes = p->children<Axis>();
+	QCOMPARE(axes.count(), 2);
+	c.aspectAdded(axes.at(0));
+	c.aspectAdded(axes.at(1));
 
 	auto* barPlot = new BarPlot(QStringLiteral("barPlot"));
 	barPlot->setDataColumns(dataColumns);
@@ -1778,16 +1814,24 @@ void RetransformTest::testPlotRecalcRetransform() {
 	p->addChild(histPlot);
 	c.aspectAdded(histPlot);
 
+	c.resetRetransformCount();
+
 	// modify one of the plots so its min and max values are changed.
 	// this should trigger the recalculation of the data ranges in the parent plot area
 	// and a retransform call for all its children
 	QCOMPARE(histPlot->orientation(), Histogram::Orientation::Vertical);
 	histPlot->setOrientation(Histogram::Orientation::Horizontal);
 
-	QCOMPARE(c.elementLogCount(false), 1);
+	const auto stat = c.statistic(false);
+	QCOMPARE(stat.count(), 5); // barPlot, boxPlot, histPlot, xAxis and yAxis are inside
+	QCOMPARE(stat.contains(barPlot->path()), true);
+	QCOMPARE(stat.contains(boxPlot->path()), true);
+	QCOMPARE(stat.contains(histPlot->path()), true);
+	QCOMPARE(stat.contains(axes.at(0)->path()), true);
+	QCOMPARE(stat.contains(axes.at(0)->path()), true);
 	QVERIFY(c.calledExact(1, false));
-	QCOMPARE(c.logsXScaleRetransformed.count(), 3);
-	QCOMPARE(c.logsYScaleRetransformed.count(), 2);
+	QCOMPARE(c.logsXScaleRetransformed.count(), 1);
+	QCOMPARE(c.logsYScaleRetransformed.count(), 1); // TODO: check this value!
 }
 
 // ############################################################################################
