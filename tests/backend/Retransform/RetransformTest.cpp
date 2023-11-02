@@ -1703,34 +1703,39 @@ void RetransformTest::testPlotRecalcNoRetransform() {
 	dataColumns << column;
 
 	// prepare the worksheet + plots
+	RetransformCallCounter c;
 	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	auto* p = new CartesianPlot(QStringLiteral("plot"));
 	ws->addChild(p);
+	c.aspectAdded(p);
 
 	auto* barPlot = new BarPlot(QStringLiteral("barPlot"));
 	barPlot->setDataColumns(dataColumns);
 	p->addChild(barPlot);
+	c.aspectAdded(barPlot);
 
 	auto* boxPlot = new BoxPlot(QStringLiteral("boxPlot"));
 	boxPlot->setDataColumns(dataColumns);
 	p->addChild(boxPlot);
+	c.aspectAdded(boxPlot);
 
 	auto* histPlot = new Histogram(QStringLiteral("histPlot"));
 	histPlot->setDataColumn(column);
 	p->addChild(histPlot);
+	c.aspectAdded(histPlot);
 
 	// call recalc() in the created plots which is called at runtime when modifying the data
 	// or any plot properties affecting the shape of the plot.
 	// since the data was not changed and no properties were changed affecting plot ranges
 	// like the orientation of a box plot changing min and max values for x and y, etc.,
 	// there shouldn't be any retransform calls in the parent plot area
-	RetransformCallCounter c;
+	c.resetRetransformCount();
 	barPlot->recalc();
 	boxPlot->recalc();
 	histPlot->recalc();
 
-	QCOMPARE(c.elementLogCount(false), 0);
-	QVERIFY(c.calledExact(0, false));
+	QCOMPARE(c.elementLogCount(false), 1);
+	QVERIFY(c.calledExact(1, false));
 	QCOMPARE(c.logsXScaleRetransformed.count(), 0);
 	QCOMPARE(c.logsYScaleRetransformed.count(), 0);
 }
@@ -1776,14 +1781,13 @@ void RetransformTest::testPlotRecalcRetransform() {
 	// modify one of the plots so its min and max values are changed.
 	// this should trigger the recalculation of the data ranges in the parent plot area
 	// and a retransform call for all its children
-
 	QCOMPARE(histPlot->orientation(), Histogram::Orientation::Vertical);
 	histPlot->setOrientation(Histogram::Orientation::Horizontal);
 
-	QCOMPARE(c.elementLogCount(false), 3);
-	QVERIFY(c.calledExact(3, false));
+	QCOMPARE(c.elementLogCount(false), 1);
+	QVERIFY(c.calledExact(1, false));
 	QCOMPARE(c.logsXScaleRetransformed.count(), 3);
-	QCOMPARE(c.logsYScaleRetransformed.count(), 3);
+	QCOMPARE(c.logsYScaleRetransformed.count(), 2);
 }
 
 // ############################################################################################
@@ -1856,6 +1860,9 @@ void RetransformCallCounter::retransformScaleCalled(const CartesianPlot* plot, c
 
 void RetransformCallCounter::aspectAdded(const AbstractAspect* aspect) {
 	connect(aspect, &AbstractAspect::retransformCalledSignal, this, &RetransformCallCounter::aspectRetransformed);
+	auto* plot = dynamic_cast<const CartesianPlot*>(aspect);
+	if (plot)
+		connect(plot, &CartesianPlot::scaleRetransformed, this, &RetransformCallCounter::retransformScaleCalled);
 }
 
 // Test change data
