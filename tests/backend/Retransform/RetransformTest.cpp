@@ -1794,6 +1794,15 @@ void RetransformTest::testPlotRecalcRetransform() {
 // ############################################################################################
 // ############################################################################################
 
+/*!
+ * \brief RetransformCallCounter::statistic
+ * Returns a statistic how often retransform was called for a specific element
+ * They key is the path of the element and the value is the value how often
+ * retransform was called
+ * \param includeSuppressed. If true all retransforms even the suppressed once will
+ * be counted. If false only the retransforms which are really executed are counted
+ * \return
+ */
 QHash<QString, int> RetransformCallCounter::statistic(bool includeSuppressed) {
 	QHash<QString, int> result;
 	for (auto& log : logsRetransformed) {
@@ -1809,10 +1818,23 @@ QHash<QString, int> RetransformCallCounter::statistic(bool includeSuppressed) {
 	return result;
 }
 
+/*!
+ * \brief RetransformCallCounter::elementLogCount
+ * Counts the number of different elements which got at least one retransform
+ * \param includeSuppressed
+ * \return
+ */
 int RetransformCallCounter::elementLogCount(bool includeSuppressed) {
 	return statistic(includeSuppressed).count();
 }
 
+/*!
+ * \brief RetransformCallCounter::calledExact
+ * Checks if all elements are retransformed \p requiredCallCount times
+ * \param requiredCallCount
+ * \param includeSuppressed
+ * \return True if all elements are retransformed \p requiredCallCount times, else false
+ */
 bool RetransformCallCounter::calledExact(int requiredCallCount, bool includeSuppressed) {
 	const auto& result = statistic(includeSuppressed);
 	QHash<QString, int>::const_iterator i;
@@ -1825,6 +1847,12 @@ bool RetransformCallCounter::calledExact(int requiredCallCount, bool includeSupp
 	return true;
 }
 
+/*!
+ * \brief RetransformCallCounter::callCount
+ * Returns the call count of a specific element defined by \p path
+ * \param path The path of the element element->path()
+ * \return
+ */
 int RetransformCallCounter::callCount(const QString& path) {
 	const auto& result = statistic(false);
 	if (!result.contains(path))
@@ -1833,20 +1861,47 @@ int RetransformCallCounter::callCount(const QString& path) {
 	return result.value(path);
 }
 
+/*!
+ * \brief RetransformCallCounter::callCount
+ * Returns the number of retransform called for a specific object. This counter contains
+ * all retransforms from the beginning when the object was created and not yet connected
+ * to the RetransformCallCounter object. This is usefull when checking the retransform
+ * counts during loading of a project or during creation of an aspect
+ * \param aspect
+ * \return
+ */
 int RetransformCallCounter::callCount(const AbstractAspect* aspect) {
 	return aspect->retransformCalled();
 }
 
+/*!
+ * \brief RetransformCallCounter::resetRetransformCount
+ * Reset all counters
+ */
 void RetransformCallCounter::resetRetransformCount() {
 	logsRetransformed.clear();
 	logsXScaleRetransformed.clear();
 	logsYScaleRetransformed.clear();
 }
 
+/*!
+ * \brief RetransformCallCounter::aspectRetransformed
+ * Slot called whenever an aspects retransform was called after RetransformCallCounter::aspectAdded()
+ * was called on the object.
+ * \param sender
+ * \param suppressed
+ */
 void RetransformCallCounter::aspectRetransformed(const AbstractAspect* sender, bool suppressed) {
 	logsRetransformed.append({sender, suppressed});
 }
 
+/*!
+ * \brief RetransformCallCounter::retransformScaleCalled
+ * Slot called whenever an aspects retransformScale was called after RetransformCallCounter::aspectAdded()
+ * was called on the object.
+ * \param sender
+ * \param suppressed
+ */
 void RetransformCallCounter::retransformScaleCalled(const CartesianPlot* plot, const Dimension dim, int index) {
 	switch (dim) {
 	case Dimension::X:
@@ -1858,6 +1913,11 @@ void RetransformCallCounter::retransformScaleCalled(const CartesianPlot* plot, c
 	}
 }
 
+/*!
+ * \brief RetransformCallCounter::aspectAdded
+ * Connect RetransformCallCounter to the aspects signals to count the retransform calls
+ * \param aspect
+ */
 void RetransformCallCounter::aspectAdded(const AbstractAspect* aspect) {
 	connect(aspect, &AbstractAspect::retransformCalledSignal, this, &RetransformCallCounter::aspectRetransformed);
 	auto* plot = dynamic_cast<const CartesianPlot*>(aspect);
