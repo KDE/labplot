@@ -198,7 +198,7 @@ variables:
 #########################################################
 
 clang_format:
-  stage: check
+  stage: test
   image: debian:testing
   before_script:
     - apt-get update
@@ -209,7 +209,7 @@ clang_format:
 
 # see https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/linux.yml
 cppcheck:
-  stage: check
+  stage: test
   image: invent-registry.kde.org/sysadmin/ci-images/suse-qt515:latest
   tags:
     - Linux
