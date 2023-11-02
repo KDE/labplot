@@ -65,6 +65,62 @@
 
 using Dimension = CartesianCoordinateSystem::Dimension;
 
+namespace {
+enum Action {
+
+	New = 0x1000,
+	NewTextLabel = 0x1001,
+	NewCustomPoint = 0x1002,
+	NewReferenceRange = 0x1003,
+	NewReferenceLine = 0x1004,
+	NewImage = 0x1005,
+
+	NavigateNextCurve = 0x2001,
+	NavigatePrevCurve = 0x2002,
+
+	Move = 0x4000,
+	MoveLeft = 0x4001,
+	MoveRight = 0x4002,
+	MoveUp = 0x4003,
+	MoveDown = 0x4004,
+
+	Abort = 0x8000,
+
+};
+
+Action evaluateKeys(int key, Qt::KeyboardModifiers modifiers) {
+	if (key == Qt::Key_N)
+		return Action::NavigateNextCurve;
+	else if (key == Qt::Key_P)
+		return Action::NavigatePrevCurve;
+	else if (key == Qt::Key_T)
+		return Action::NewTextLabel;
+	else if (key == Qt::Key_R)
+		return Action::NewReferenceRange;
+	else if (key == Qt::Key_L)
+		return Action::NewReferenceLine;
+	else if (key == Qt::Key_I)
+		return Action::NewImage;
+	else if (key == Qt::Key_N)
+		return Action::NavigateNextCurve;
+	else if (key == Qt::Key_P)
+		return Action::NavigatePrevCurve;
+	else if (key == Qt::Key_M)
+		return Action::NewCustomPoint;
+	else if (key == Qt::Key_Escape)
+		return Action::Abort;
+	else if (key == Qt::Key_Left)
+		return Action::MoveLeft;
+	else if (key == Qt::Key_Right)
+		return Action::MoveRight;
+	else if (key == Qt::Key_Up)
+		return Action::MoveUp;
+	else if (key == Qt::Key_Down)
+		return Action::MoveDown;
+	return Action::Abort;
+}
+}
+
 /**
  * \class CartesianPlot
  * \brief A xy-plot.
@@ -4086,37 +4142,58 @@ void CartesianPlotPrivate::wheelEvent(const QPointF& sceneRelPos, int delta, int
 }
 
 void CartesianPlotPrivate::keyPressEvent(QKeyEvent* event) {
-	auto key = event->key();
-	if (key == Qt::Key_Escape) {
+	const auto key = event->key();
+	const bool ctrl = event->modifiers() & Qt::KeyboardModifier::ControlModifier;
+	//	const bool shift = event->modifiers() & Qt::KeyboardModifier::ShiftModifier;
+	//	const bool alt = event->modifiers() & Qt::KeyboardModifier::AltModifier;
+	Action a = evaluateKeys(key, event->modifiers());
+
+	if (a == Action::Abort) {
 		m_selectionBandIsShown = false;
-	} else if (key == Qt::Key_Left || key == Qt::Key_Right || key == Qt::Key_Up || key == Qt::Key_Down) {
+	} else if (a & Action::Move) {
 		const auto* worksheet = static_cast<const Worksheet*>(q->parentAspect());
 		if (worksheet->layout() == Worksheet::Layout::NoLayout) {
 			// no layout is active -> use arrow keys to move the plot on the worksheet
 			const int delta = 5;
 			QRectF rect = q->rect();
 
-			if (key == Qt::Key_Left) {
+			if (a == Action::MoveLeft) {
 				rect.setX(rect.x() - delta);
 				rect.setWidth(rect.width() - delta);
-			} else if (key == Qt::Key_Right) {
+			} else if (a == Action::MoveRight) {
 				rect.setX(rect.x() + delta);
 				rect.setWidth(rect.width() + delta);
-			} else if (key == Qt::Key_Up) {
+			} else if (a == Action::MoveUp) {
 				rect.setY(rect.y() - delta);
 				rect.setHeight(rect.height() - delta);
-			} else if (key == Qt::Key_Down) {
+			} else if (a == Action::MoveDown) {
 				rect.setY(rect.y() + delta);
 				rect.setHeight(rect.height() + delta);
 			}
 
 			q->setRect(rect);
 		}
-	} else if (key == Qt::Key_N) // (key == Qt::Key_Tab)
+	} else if (a == Action::NavigateNextCurve) // (key == Qt::Key_Tab)
 		navigateNextPrevCurve();
-	else if (key == Qt::Key_P) // (key == Qt::SHIFT + Qt::Key_Tab)
+	else if (a == Action::NavigatePrevCurve) // (key == Qt::SHIFT + Qt::Key_Tab)
 		navigateNextPrevCurve(false /*next*/);
-
+	else if (a & Action::New) {
+		const auto* cSystem{defaultCoordinateSystem()};
+		if (cSystem->isValid()) {
+			logicalPos = cSystem->mapSceneToLogical(scenePos, AbstractCoordinateSystem::MappingFlag::Limit);
+			calledFromContextMenu = true;
+		}
+		if (a == Action::NewTextLabel)
+			q->addTextLabel();
+		else if (a == Action::NewReferenceLine)
+			q->addReferenceLine();
+		else if (a == Action::NewReferenceRange)
+			q->addReferenceRange();
+		else if (a == Action::NewCustomPoint)
+			q->addCustomPoint();
+		else if (a == Action::NewImage)
+			q->addImage();
+	}
 	QGraphicsItem::keyPressEvent(event);
 }
 
@@ -4172,6 +4249,7 @@ void CartesianPlotPrivate::navigateNextPrevCurve(bool next) const {
 
 void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 	QPointF point = event->pos();
+	scenePos = point;
 	QString info;
 	const auto* cSystem{defaultCoordinateSystem()};
 	auto* w = static_cast<Worksheet*>(q->parent(AspectType::Worksheet))->currentSelection();
