@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-02 00:39+0000\n"
-"PO-Revision-Date: 2023-11-01 10:15+0100\n"
+"PO-Revision-Date: 2023-11-02 11:03+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -3591,22 +3591,19 @@ msgid "Percentile"
 msgstr "Percentiel"
 
 #: src/backend/gsl/functions.cpp:273
-#, fuzzy, kde-format
-#| msgid "pseudo-random integer [0,RAND_MAX]"
+#, kde-format
 msgid "pseudo-random integer [0, RAND_MAX]"
-msgstr "pseudo-random geheel getal [0,RAND_MAX]"
+msgstr "pseudo-random geheel getal [0, RAND_MAX]"
 
 #: src/backend/gsl/functions.cpp:274
-#, fuzzy, kde-format
-#| msgid "nonlinear additive feedback rng [0,RAND_MAX]"
+#, kde-format
 msgid "nonlinear additive feedback rng [0, RAND_MAX]"
-msgstr "niet-lineaire additieve terugkoppeling rng [0,RAND_MAX]"
+msgstr "niet-lineaire additieve terugkoppeling rng [0, RAND_MAX]"
 
 #: src/backend/gsl/functions.cpp:275
-#, fuzzy, kde-format
-#| msgid "nonlinear additive feedback rng [0,1]"
+#, kde-format
 msgid "nonlinear additive feedback rng [0, 1]"
-msgstr "niet-lineaire additieve terugkoppeling rng [0,1]"
+msgstr "niet-lineaire additieve terugkoppeling rng [0, 1]"
 
 #: src/backend/gsl/functions.cpp:276
 #, kde-format
@@ -4722,40 +4719,34 @@ msgid "Logarithm of the magnitude"
 msgstr "Logaritme van de macht"
 
 #: src/backend/gsl/functions.cpp:566
-#, fuzzy, kde-format
-#| msgid "Characteristic values a_n(q) of the Mathieu functions ce_n(q,x)"
+#, kde-format
 msgid "Characteristic values a_n(q) of the Mathieu functions ce_n(q, x)"
-msgstr "Karakteristieke waarden a_n(q) van de Mathieu functies ce_n(q,x)"
+msgstr "Karakteristieke waarden a_n(q) van de Mathieu functies ce_n(q, x)"
 
 #: src/backend/gsl/functions.cpp:567
-#, fuzzy, kde-format
-#| msgid "Characteristic values b_n(q) of the Mathieu functions se_n(q,x)"
+#, kde-format
 msgid "Characteristic values b_n(q) of the Mathieu functions se_n(q, x)"
-msgstr "Karakteristieke waarden b_n(q) van de Mathieu functies se_n(q,x)"
+msgstr "Karakteristieke waarden b_n(q) van de Mathieu functies se_n(q, x)"
 
 #: src/backend/gsl/functions.cpp:568
-#, fuzzy, kde-format
-#| msgid "Angular Mathieu functions ce_n(q,x)"
+#, kde-format
 msgid "Angular Mathieu functions ce_n(q, x)"
-msgstr "Angulaire Mathieu functies ce_n(q,x)"
+msgstr "Angulaire Mathieu functies ce_n(q, x)"
 
 #: src/backend/gsl/functions.cpp:569
-#, fuzzy, kde-format
-#| msgid "Angular Mathieu functions se_n(q,x)"
+#, kde-format
 msgid "Angular Mathieu functions se_n(q, x)"
-msgstr "Angulaire Mathieu functies se_n(q,x)"
+msgstr "Angulaire Mathieu functies se_n(q, x)"
 
 #: src/backend/gsl/functions.cpp:570
-#, fuzzy, kde-format
-#| msgid "Radial j-th kind Mathieu functions Mc_n^{(j)}(q,x)"
+#, kde-format
 msgid "Radial j-th kind Mathieu functions Mc_n^{(j)}(q, x)"
-msgstr "Radiale Mathieu functies Mc_n^{(j)}(q,x) van de j-de soort"
+msgstr "Radiale Mathieu functies Mc_n^{(j)}(q, x) van de j-de soort"
 
 #: src/backend/gsl/functions.cpp:571
-#, fuzzy, kde-format
-#| msgid "Radial j-th kind Mathieu functions Ms_n^{(j)}(q,x)"
+#, kde-format
 msgid "Radial j-th kind Mathieu functions Ms_n^{(j)}(q, x)"
-msgstr "Radiale Mathieu functies Ms_n^{(j)}(q,x) van de j-de soort"
+msgstr "Radiale Mathieu functies Ms_n^{(j)}(q, x) van de j-de soort"
 
 #: src/backend/gsl/functions.cpp:575
 #, kde-format
@@ -4951,16 +4942,14 @@ msgid "Three component hypotenuse function"
 msgstr "Hypotenusa-functie met drie componenten"
 
 #: src/backend/gsl/functions.cpp:626
-#, fuzzy, kde-format
-#| msgid "restrict to [-pi,pi]"
+#, kde-format
 msgid "restrict to [-pi, pi]"
-msgstr "beperken tot [-pi,pi]"
+msgstr "beperken tot [-pi, pi]"
 
 #: src/backend/gsl/functions.cpp:627
-#, fuzzy, kde-format
-#| msgid "restrict to [0,2 pi]"
+#, kde-format
 msgid "restrict to [0, 2 pi]"
-msgstr "beperken tot [0,2 pi]"
+msgstr "beperken tot [0, 2 pi]"
 
 #: src/backend/gsl/functions.cpp:630
 #, kde-format

@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-02 00:39+0000\n"
-"PO-Revision-Date: 2023-11-01 08:48+0100\n"
+"PO-Revision-Date: 2023-11-02 10:17+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -3601,22 +3601,19 @@ msgid "Percentile"
 msgstr "Percentil"
 
 #: src/backend/gsl/functions.cpp:273
-#, fuzzy, kde-format
-#| msgid "pseudo-random integer [0,RAND_MAX]"
+#, kde-format
 msgid "pseudo-random integer [0, RAND_MAX]"
-msgstr "psevdonaključno število [0,RAND_MAX]"
+msgstr "psevdonaključno celo število [0,RAND_MAX]"
 
 #: src/backend/gsl/functions.cpp:274
-#, fuzzy, kde-format
-#| msgid "nonlinear additive feedback rng [0,RAND_MAX]"
+#, kde-format
 msgid "nonlinear additive feedback rng [0, RAND_MAX]"
-msgstr "povratne informacije o nelinearnih dodatkih rng [0,RAND_MAX]"
+msgstr "nelinearna aditivna povratna zveza rng [0,RAND_MAX]"
 
 #: src/backend/gsl/functions.cpp:275
-#, fuzzy, kde-format
-#| msgid "nonlinear additive feedback rng [0,1]"
+#, kde-format
 msgid "nonlinear additive feedback rng [0, 1]"
-msgstr "povratne informacije o nelinearnih dodatkih rng [0,1]"
+msgstr "nelinearna aditivna povratna zveza rng [0,1]"
 
 #: src/backend/gsl/functions.cpp:276
 #, kde-format
@@ -4732,38 +4729,32 @@ msgid "Logarithm of the magnitude"
 msgstr "Logaritem magnitude"
 
 #: src/backend/gsl/functions.cpp:566
-#, fuzzy, kde-format
-#| msgid "Characteristic values a_n(q) of the Mathieu functions ce_n(q,x)"
+#, kde-format
 msgid "Characteristic values a_n(q) of the Mathieu functions ce_n(q, x)"
-msgstr "Značilne vrednosti a_n(q) Mathieujevih funkcij ce_n(q,x)"
+msgstr "Značilne vrednosti a_n(q) Mathieujevih funkcij ce_n(q, x)"
 
 #: src/backend/gsl/functions.cpp:567
-#, fuzzy, kde-format
-#| msgid "Characteristic values b_n(q) of the Mathieu functions se_n(q,x)"
+#, kde-format
 msgid "Characteristic values b_n(q) of the Mathieu functions se_n(q, x)"
-msgstr "Značilne vrednosti b_n(q) Mathieujevih funkcij se_n(q,x)"
+msgstr "Značilne vrednosti b_n(q) Mathieujevih funkcij se_n(q, x)"
 
 #: src/backend/gsl/functions.cpp:568
-#, fuzzy, kde-format
-#| msgid "Angular Mathieu functions ce_n(q,x)"
+#, kde-format
 msgid "Angular Mathieu functions ce_n(q, x)"
 msgstr "Kotne Mathieujeve funkcije ce_n(q,x)"
 
 #: src/backend/gsl/functions.cpp:569
-#, fuzzy, kde-format
-#| msgid "Angular Mathieu functions se_n(q,x)"
+#, kde-format
 msgid "Angular Mathieu functions se_n(q, x)"
 msgstr "Kotne Mathieujeve funkcije se_n(q,x)"
 
 #: src/backend/gsl/functions.cpp:570
-#, fuzzy, kde-format
-#| msgid "Radial j-th kind Mathieu functions Mc_n^{(j)}(q,x)"
+#, kde-format
 msgid "Radial j-th kind Mathieu functions Mc_n^{(j)}(q, x)"
 msgstr "Radialne Mathieujeve funkcije j-te vrste Mc_n^{(j)}(q,x)"
 
 #: src/backend/gsl/functions.cpp:571
-#, fuzzy, kde-format
-#| msgid "Radial j-th kind Mathieu functions Ms_n^{(j)}(q,x)"
+#, kde-format
 msgid "Radial j-th kind Mathieu functions Ms_n^{(j)}(q, x)"
 msgstr "Radialne Mathieujeve funkcije j-te vrste Ms_n^{(j)}(q,x)"
 
@@ -4961,14 +4952,12 @@ msgid "Three component hypotenuse function"
 msgstr "Trikomponentna funkcija hipotenuze"
 
 #: src/backend/gsl/functions.cpp:626
-#, fuzzy, kde-format
-#| msgid "restrict to [-pi,pi]"
+#, kde-format
 msgid "restrict to [-pi, pi]"
 msgstr "omeji na [-pi,pi]"
 
 #: src/backend/gsl/functions.cpp:627
-#, fuzzy, kde-format
-#| msgid "restrict to [0,2 pi]"
+#, kde-format
 msgid "restrict to [0, 2 pi]"
 msgstr "omeji na [0,2 pi]"
 

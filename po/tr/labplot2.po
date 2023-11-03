@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-02 00:39+0000\n"
-"PO-Revision-Date: 2023-11-01 06:18+0300\n"
+"PO-Revision-Date: 2023-11-02 12:28+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -3595,22 +3595,19 @@ msgid "Percentile"
 msgstr "Persantil"
 
 #: src/backend/gsl/functions.cpp:273
-#, fuzzy, kde-format
-#| msgid "pseudo-random integer [0,RAND_MAX]"
+#, kde-format
 msgid "pseudo-random integer [0, RAND_MAX]"
-msgstr "sözde rastgele tam sayı [0_RAND_MAX]"
+msgstr "sözde rastgele tamsayı [0, RAND_MAX]"
 
 #: src/backend/gsl/functions.cpp:274
-#, fuzzy, kde-format
-#| msgid "nonlinear additive feedback rng [0,RAND_MAX]"
+#, kde-format
 msgid "nonlinear additive feedback rng [0, RAND_MAX]"
-msgstr "doğrusal olmayan ek geri besleme aralığı [0,RAND_MAX]"
+msgstr "doğrusal olmayan ek geri besleme aralığı [0, RAND_MAX]"
 
 #: src/backend/gsl/functions.cpp:275
-#, fuzzy, kde-format
-#| msgid "nonlinear additive feedback rng [0,1]"
+#, kde-format
 msgid "nonlinear additive feedback rng [0, 1]"
-msgstr "doğrusal olmayan ek geri besleme aralığı [0,1]"
+msgstr "doğrusal olmayan ek geri besleme aralığı [0, 1]"
 
 #: src/backend/gsl/functions.cpp:276
 #, kde-format
@@ -4719,40 +4716,34 @@ msgid "Logarithm of the magnitude"
 msgstr "Büyüklüğün logaritması"
 
 #: src/backend/gsl/functions.cpp:566
-#, fuzzy, kde-format
-#| msgid "Characteristic values a_n(q) of the Mathieu functions ce_n(q,x)"
+#, kde-format
 msgid "Characteristic values a_n(q) of the Mathieu functions ce_n(q, x)"
-msgstr "Mathieu işlevleri ce_n(q,x)'in a_n(q) karakteristik değerleri"
+msgstr "Mathieu işlevleri ce_n(q, x)'in a_n(q) karakteristik değerleri"
 
 #: src/backend/gsl/functions.cpp:567
-#, fuzzy, kde-format
-#| msgid "Characteristic values b_n(q) of the Mathieu functions se_n(q,x)"
+#, kde-format
 msgid "Characteristic values b_n(q) of the Mathieu functions se_n(q, x)"
-msgstr "Mathieu işlevleri se_n(q,x)'in b_n(q) karakteristik değerleri"
+msgstr "Mathieu işlevleri se_n(q, x)'in b_n(q) karakteristik değerleri"
 
 #: src/backend/gsl/functions.cpp:568
-#, fuzzy, kde-format
-#| msgid "Angular Mathieu functions ce_n(q,x)"
+#, kde-format
 msgid "Angular Mathieu functions ce_n(q, x)"
-msgstr "Açısal Mathieu işlevleri ce_n(q,x)"
+msgstr "Açısal Mathieu işlevleri ce_n(q, x)"
 
 #: src/backend/gsl/functions.cpp:569
-#, fuzzy, kde-format
-#| msgid "Angular Mathieu functions se_n(q,x)"
+#, kde-format
 msgid "Angular Mathieu functions se_n(q, x)"
-msgstr "Açısal Mathieu işlevleri se_n(q,x)"
+msgstr "Açısal Mathieu işlevleri se_n(q, x)"
 
 #: src/backend/gsl/functions.cpp:570
-#, fuzzy, kde-format
-#| msgid "Radial j-th kind Mathieu functions Mc_n^{(j)}(q,x)"
+#, kde-format
 msgid "Radial j-th kind Mathieu functions Mc_n^{(j)}(q, x)"
-msgstr "Radyal j. tür Mathieu işlevleri Mc_n^{(j)}(q,x)"
+msgstr "Radyal j. tür Mathieu işlevleri Mc_n^{(j)}(q, x)"
 
 #: src/backend/gsl/functions.cpp:571
-#, fuzzy, kde-format
-#| msgid "Radial j-th kind Mathieu functions Ms_n^{(j)}(q,x)"
+#, kde-format
 msgid "Radial j-th kind Mathieu functions Ms_n^{(j)}(q, x)"
-msgstr "Radyal j. tür Mathieu işlevleri Ms_n^{(j)}(q,x)"
+msgstr "Radyal j. tür Mathieu işlevleri Ms_n^{(j)}(q, x)"
 
 #: src/backend/gsl/functions.cpp:575
 #, kde-format
@@ -4948,16 +4939,14 @@ msgid "Three component hypotenuse function"
 msgstr "Üç bileşen hipotenüs işlevi"
 
 #: src/backend/gsl/functions.cpp:626
-#, fuzzy, kde-format
-#| msgid "restrict to [-pi,pi]"
+#, kde-format
 msgid "restrict to [-pi, pi]"
-msgstr "[-pi,pi] ile sınırlı"
+msgstr "[-pi, pi] ile sınırlı"
 
 #: src/backend/gsl/functions.cpp:627
-#, fuzzy, kde-format
-#| msgid "restrict to [0,2 pi]"
+#, kde-format
 msgid "restrict to [0, 2 pi]"
-msgstr "[0,2 pi] ile sınırlı"
+msgstr "[0, 2 pi] ile sınırlı"
 
 #: src/backend/gsl/functions.cpp:630
 #, kde-format

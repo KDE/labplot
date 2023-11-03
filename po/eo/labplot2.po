@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-02 00:39+0000\n"
-"PO-Revision-Date: 2023-10-27 19:01+0100\n"
+"PO-Revision-Date: 2023-11-02 20:18+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -3594,22 +3594,19 @@ msgid "Percentile"
 msgstr "Percentilo"
 
 #: src/backend/gsl/functions.cpp:273
-#, fuzzy, kde-format
-#| msgid "pseudo-random integer [0,RAND_MAX]"
+#, kde-format
 msgid "pseudo-random integer [0, RAND_MAX]"
-msgstr "pseŭdo-hazarda entjero [0,RAND_MAX]"
+msgstr "pseŭdo-hazarda entjero [0, RAND_MAX]"
 
 #: src/backend/gsl/functions.cpp:274
-#, fuzzy, kde-format
-#| msgid "nonlinear additive feedback rng [0,RAND_MAX]"
+#, kde-format
 msgid "nonlinear additive feedback rng [0, RAND_MAX]"
-msgstr "nelinia aldona sugesto rng [0,RAND_MAX]"
+msgstr "nelinia aldona sugesto rng [0, RAND_MAX]"
 
 #: src/backend/gsl/functions.cpp:275
-#, fuzzy, kde-format
-#| msgid "nonlinear additive feedback rng [0,1]"
+#, kde-format
 msgid "nonlinear additive feedback rng [0, 1]"
-msgstr "nelinia aldona retrosciigo rng [0,1]"
+msgstr "nelinia aldona retrokupla rng [0, 1]"
 
 #: src/backend/gsl/functions.cpp:276
 #, kde-format
@@ -4708,40 +4705,34 @@ msgid "Logarithm of the magnitude"
 msgstr "Logaritmo de la grando"
 
 #: src/backend/gsl/functions.cpp:566
-#, fuzzy, kde-format
-#| msgid "Characteristic values a_n(q) of the Mathieu functions ce_n(q,x)"
+#, kde-format
 msgid "Characteristic values a_n(q) of the Mathieu functions ce_n(q, x)"
-msgstr "Karakterizaj valoroj a_n(q) de la Mathieu-funkcioj ce_n(q,x)"
+msgstr "Karakterizaj valoroj a_n(q) de la Mathieu-funkcioj ce_n(q, x)"
 
 #: src/backend/gsl/functions.cpp:567
-#, fuzzy, kde-format
-#| msgid "Characteristic values b_n(q) of the Mathieu functions se_n(q,x)"
+#, kde-format
 msgid "Characteristic values b_n(q) of the Mathieu functions se_n(q, x)"
-msgstr "Karakterizaj valoroj b_n(q) de la Mathieu-funkcioj se_n(q,x)"
+msgstr "Karakterizaj valoroj b_n(q) de la Mathieu-funkcioj se_n(q, x)"
 
 #: src/backend/gsl/functions.cpp:568
-#, fuzzy, kde-format
-#| msgid "Angular Mathieu functions ce_n(q,x)"
+#, kde-format
 msgid "Angular Mathieu functions ce_n(q, x)"
-msgstr "Angula Mathieu-funkcioj ce_n(q,x)"
+msgstr "Angulaj Mathieu-funkcioj ce_n(q, x)"
 
 #: src/backend/gsl/functions.cpp:569
-#, fuzzy, kde-format
-#| msgid "Angular Mathieu functions se_n(q,x)"
+#, kde-format
 msgid "Angular Mathieu functions se_n(q, x)"
-msgstr "Angula Mathieu-funkcioj se_n(q,x)"
+msgstr "Angulaj Mathieu-funkcioj se_n(q, x)"
 
 #: src/backend/gsl/functions.cpp:570
-#, fuzzy, kde-format
-#| msgid "Radial j-th kind Mathieu functions Mc_n^{(j)}(q,x)"
+#, kde-format
 msgid "Radial j-th kind Mathieu functions Mc_n^{(j)}(q, x)"
-msgstr "Radiala j-a speco Mathieu-funkcioj Mc_n^{(j)}(q,x)"
+msgstr "Radialaj Mathieu-funkcioj de j-a speco Mc_n^{(j)}(q, x)"
 
 #: src/backend/gsl/functions.cpp:571
-#, fuzzy, kde-format
-#| msgid "Radial j-th kind Mathieu functions Ms_n^{(j)}(q,x)"
+#, kde-format
 msgid "Radial j-th kind Mathieu functions Ms_n^{(j)}(q, x)"
-msgstr "Radiala j-a speco Mathieu-funkcioj Ms_n^{(j)}(q,x)"
+msgstr "Radialaj Mathieu-funkcioj de j-a speco Ms_n^{(j)}(q, x)"
 
 #: src/backend/gsl/functions.cpp:575
 #, kde-format
@@ -4937,16 +4928,14 @@ msgid "Three component hypotenuse function"
 msgstr "Trikomponenta hipotenuza funkcio"
 
 #: src/backend/gsl/functions.cpp:626
-#, fuzzy, kde-format
-#| msgid "restrict to [-pi,pi]"
+#, kde-format
 msgid "restrict to [-pi, pi]"
-msgstr "limigi al [-pi,pi]"
+msgstr "limigi al [-pi, pi]"
 
 #: src/backend/gsl/functions.cpp:627
-#, fuzzy, kde-format
-#| msgid "restrict to [0,2 pi]"
+#, kde-format
 msgid "restrict to [0, 2 pi]"
-msgstr "limigi al [0,2 pi]"
+msgstr "limigi al [0, 2 pi]"
 
 #: src/backend/gsl/functions.cpp:630
 #, kde-format
@@ -10502,21 +10491,17 @@ msgid "Presenter Mode"
 msgstr "Prezentista Reĝimo"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:278
-#, fuzzy, kde-format
-#| msgid "Non-interactive Plots"
+#, kde-format
 msgid "Interactive Plots"
-msgstr "Ne-interagaj Diagramigoj"
+msgstr "Interagaj Diagramigoj"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:279
-#, fuzzy, kde-format
-#| msgid ""
-#| "If activated, plots on the worksheet don't react on drag and mouse wheel "
-#| "events."
+#, kde-format
 msgid ""
 "If not activated, plots on the worksheet don't react on drag and mouse wheel "
 "events."
 msgstr ""
-"Se aktivigitaj, diagramigoj sur la laborfolio ne reagas al eventoj de "
+"Se ne aktivigita, diagramigoj sur la laborfolio ne reagas al eventoj de "
 "trenrado kaj musrado."
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:296
@@ -15900,7 +15885,7 @@ msgstr ""
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:167
 #, kde-format
 msgid "The variable name 'i' is reserved for the index of the column row."
-msgstr ""
+msgstr "La variablonomo 'i' estas rezervita por la indekso de la kolumna vico."
 
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:170
 #, kde-format
@@ -22516,10 +22501,3 @@ msgstr "konvertprocezo malsukcesis, elirkodo ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Ne eblas malfermi dosieron:"
-
-#~ msgid "%1: clear selected rows"
-#~ msgstr "%1: forigi elektitajn vicojn"
-
-#~ msgctxt "@title:window"
-#~ msgid "Equidistant Values"
-#~ msgstr "Ekvidistancaj Valoroj"

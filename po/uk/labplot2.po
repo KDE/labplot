@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-02 00:39+0000\n"
-"PO-Revision-Date: 2023-11-01 08:05+0200\n"
+"PO-Revision-Date: 2023-11-02 09:32+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
@@ -3615,22 +3615,19 @@ msgid "Percentile"
 msgstr "Процентиль"
 
 #: src/backend/gsl/functions.cpp:273
-#, fuzzy, kde-format
-#| msgid "pseudo-random integer [0,RAND_MAX]"
+#, kde-format
 msgid "pseudo-random integer [0, RAND_MAX]"
-msgstr "псевдовипадкове ціле число у проміжку [0,RAND_MAX]"
+msgstr "псевдовипадкове ціле число у проміжку [0, RAND_MAX]"
 
 #: src/backend/gsl/functions.cpp:274
-#, fuzzy, kde-format
-#| msgid "nonlinear additive feedback rng [0,RAND_MAX]"
+#, kde-format
 msgid "nonlinear additive feedback rng [0, RAND_MAX]"
 msgstr ""
 "Псевдовипадкове число за алгоритмом нелінійного адитивного відгуку у [0, "
 "RAND_MAX]"
 
 #: src/backend/gsl/functions.cpp:275
-#, fuzzy, kde-format
-#| msgid "nonlinear additive feedback rng [0,1]"
+#, kde-format
 msgid "nonlinear additive feedback rng [0, 1]"
 msgstr ""
 "Псевдовипадкове число за алгоритмом нелінійного адитивного відгуку у [0, 1]"
@@ -4755,40 +4752,34 @@ msgid "Logarithm of the magnitude"
 msgstr "Логарифм амплітуди"
 
 #: src/backend/gsl/functions.cpp:566
-#, fuzzy, kde-format
-#| msgid "Characteristic values a_n(q) of the Mathieu functions ce_n(q,x)"
+#, kde-format
 msgid "Characteristic values a_n(q) of the Mathieu functions ce_n(q, x)"
-msgstr "Характеристичні значення a_n(q) функцій Матьє ce_n(q,x)"
+msgstr "Характеристичні значення a_n(q) функцій Матьє ce_n(q, x)"
 
 #: src/backend/gsl/functions.cpp:567
-#, fuzzy, kde-format
-#| msgid "Characteristic values b_n(q) of the Mathieu functions se_n(q,x)"
+#, kde-format
 msgid "Characteristic values b_n(q) of the Mathieu functions se_n(q, x)"
-msgstr "Характеристичні значення b_n(q) функцій Матьє se_n(q,x)"
+msgstr "Характеристичні значення b_n(q) функцій Матьє se_n(q, x)"
 
 #: src/backend/gsl/functions.cpp:568
-#, fuzzy, kde-format
-#| msgid "Angular Mathieu functions ce_n(q,x)"
+#, kde-format
 msgid "Angular Mathieu functions ce_n(q, x)"
-msgstr "Кутові функції Матьє ce_n(q,x)"
+msgstr "Кутові функції Матьє ce_n(q, x)"
 
 #: src/backend/gsl/functions.cpp:569
-#, fuzzy, kde-format
-#| msgid "Angular Mathieu functions se_n(q,x)"
+#, kde-format
 msgid "Angular Mathieu functions se_n(q, x)"
-msgstr "Кутові функції Матьє se_n(q,x)"
+msgstr "Кутові функції Матьє se_n(q, x)"
 
 #: src/backend/gsl/functions.cpp:570
-#, fuzzy, kde-format
-#| msgid "Radial j-th kind Mathieu functions Mc_n^{(j)}(q,x)"
+#, kde-format
 msgid "Radial j-th kind Mathieu functions Mc_n^{(j)}(q, x)"
-msgstr "Радіальні функції Матьє j-го типу Mc_n^{(j)}(q,x)"
+msgstr "Радіальні функції Матьє j-го типу Mc_n^{(j)}(q, x)"
 
 #: src/backend/gsl/functions.cpp:571
-#, fuzzy, kde-format
-#| msgid "Radial j-th kind Mathieu functions Ms_n^{(j)}(q,x)"
+#, kde-format
 msgid "Radial j-th kind Mathieu functions Ms_n^{(j)}(q, x)"
-msgstr "Радіальні функції Матьє j-го типу Ms_n^{(j)}(q,x)"
+msgstr "Радіальні функції Матьє j-го типу Ms_n^{(j)}(q, x)"
 
 #: src/backend/gsl/functions.cpp:575
 #, kde-format
@@ -4984,14 +4975,12 @@ msgid "Three component hypotenuse function"
 msgstr "Функція довжини гіпотенузи з трьома компонентами"
 
 #: src/backend/gsl/functions.cpp:626
-#, fuzzy, kde-format
-#| msgid "restrict to [-pi,pi]"
+#, kde-format
 msgid "restrict to [-pi, pi]"
 msgstr "у межах [-π, π]"
 
 #: src/backend/gsl/functions.cpp:627
-#, fuzzy, kde-format
-#| msgid "restrict to [0,2 pi]"
+#, kde-format
 msgid "restrict to [0, 2 pi]"
 msgstr "у межах [0, 2π]"
 

@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-02 00:39+0000\n"
-"PO-Revision-Date: 2023-11-01 11:07+0100\n"
+"PO-Revision-Date: 2023-11-02 09:53+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -3641,25 +3641,23 @@ msgid "Percentile"
 msgstr "Percentil"
 
 #: src/backend/gsl/functions.cpp:273
-#, fuzzy, kde-format
-#| msgid "pseudo-random integer [0,RAND_MAX]"
+#, kde-format
 msgid "pseudo-random integer [0, RAND_MAX]"
-msgstr "Enter pseudoaleatori [0,RAND_MAX]"
+msgstr "enter pseudoaleatori [0, RAND_MAX]"
 
 #: src/backend/gsl/functions.cpp:274
-#, fuzzy, kde-format
-#| msgid "nonlinear additive feedback rng [0,RAND_MAX]"
+#, kde-format
 msgid "nonlinear additive feedback rng [0, RAND_MAX]"
 msgstr ""
-"generació de nombres aleatoris no lineals amb retroalimentació additiva [0,"
+"generació de nombres aleatoris no lineals amb retroalimentació additiva [0, "
 "MAX_RAND]"
 
 #: src/backend/gsl/functions.cpp:275
-#, fuzzy, kde-format
-#| msgid "nonlinear additive feedback rng [0,1]"
+#, kde-format
 msgid "nonlinear additive feedback rng [0, 1]"
 msgstr ""
-"generació de nombres aleatoris no lineals amb retroalimentació additiva [0,1]"
+"generació de nombres aleatoris no lineals amb retroalimentació additiva [0, "
+"1]"
 
 #: src/backend/gsl/functions.cpp:276
 #, kde-format
@@ -4789,40 +4787,34 @@ msgid "Logarithm of the magnitude"
 msgstr "Logaritme de la magnitud"
 
 #: src/backend/gsl/functions.cpp:566
-#, fuzzy, kde-format
-#| msgid "Characteristic values a_n(q) of the Mathieu functions ce_n(q,x)"
+#, kde-format
 msgid "Characteristic values a_n(q) of the Mathieu functions ce_n(q, x)"
-msgstr "Valors característics a_n(q) de les funcions de Mathieu ce_n(q,x)"
+msgstr "Valors característics a_n(q) de les funcions de Mathieu ce_n(q, x)"
 
 #: src/backend/gsl/functions.cpp:567
-#, fuzzy, kde-format
-#| msgid "Characteristic values b_n(q) of the Mathieu functions se_n(q,x)"
+#, kde-format
 msgid "Characteristic values b_n(q) of the Mathieu functions se_n(q, x)"
-msgstr "Valors característics b_n(q) de les funcions de Mathieu se_n(q,x)"
+msgstr "Valors característics b_n(q) de les funcions de Mathieu se_n(q, x)"
 
 #: src/backend/gsl/functions.cpp:568
-#, fuzzy, kde-format
-#| msgid "Angular Mathieu functions ce_n(q,x)"
+#, kde-format
 msgid "Angular Mathieu functions ce_n(q, x)"
-msgstr "Funcions angulars de Mathieu ce_n(q,x)"
+msgstr "Funcions angulars de Mathieu ce_n(q, x)"
 
 #: src/backend/gsl/functions.cpp:569
-#, fuzzy, kde-format
-#| msgid "Angular Mathieu functions se_n(q,x)"
+#, kde-format
 msgid "Angular Mathieu functions se_n(q, x)"
-msgstr "Funcions angulars de Mathieu se_n(q,x)"
+msgstr "Funcions angulars de Mathieu se_n(q, x)"
 
 #: src/backend/gsl/functions.cpp:570
-#, fuzzy, kde-format
-#| msgid "Radial j-th kind Mathieu functions Mc_n^{(j)}(q,x)"
+#, kde-format
 msgid "Radial j-th kind Mathieu functions Mc_n^{(j)}(q, x)"
-msgstr "Funcions radials de classe j-èsima de Mathieu Mc_n^{(j)}(q,x)"
+msgstr "Funcions radials de classe j-èsima de Mathieu Mc_n^{(j)}(q, x)"
 
 #: src/backend/gsl/functions.cpp:571
-#, fuzzy, kde-format
-#| msgid "Radial j-th kind Mathieu functions Ms_n^{(j)}(q,x)"
+#, kde-format
 msgid "Radial j-th kind Mathieu functions Ms_n^{(j)}(q, x)"
-msgstr "Funcions radials de classe j-èsima de Mathieu Ms_n^{(j)}(q,x)"
+msgstr "Funcions radials de classe j-èsima de Mathieu Ms_n^{(j)}(q, x)"
 
 #: src/backend/gsl/functions.cpp:575
 #, kde-format
@@ -5022,16 +5014,14 @@ msgid "Three component hypotenuse function"
 msgstr "Funció hipotenusa de tres components"
 
 #: src/backend/gsl/functions.cpp:626
-#, fuzzy, kde-format
-#| msgid "restrict to [-pi,pi]"
+#, kde-format
 msgid "restrict to [-pi, pi]"
-msgstr "restringeix a [-pi,pi]"
+msgstr "restringeix a [-pi, pi]"
 
 #: src/backend/gsl/functions.cpp:627
-#, fuzzy, kde-format
-#| msgid "restrict to [0,2 pi]"
+#, kde-format
 msgid "restrict to [0, 2 pi]"
-msgstr "restringeix a [0,2 pi]"
+msgstr "restringeix a [0, 2 pi]"
 
 #: src/backend/gsl/functions.cpp:630
 #, kde-format
