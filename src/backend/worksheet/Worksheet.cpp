@@ -325,6 +325,8 @@ void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 			}
 		}
 	}
+
+	Q_EMIT changed();
 }
 
 void Worksheet::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
@@ -1652,6 +1654,8 @@ void WorksheetPrivate::updateLayout(bool undoable) {
 			}
 		}
 	}
+
+	Q_EMIT q->changed();
 }
 
 void WorksheetPrivate::setContainerRect(WorksheetElementContainer* elem, double x, double y, double h, double w, bool undoable) {

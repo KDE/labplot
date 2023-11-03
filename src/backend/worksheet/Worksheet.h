@@ -178,6 +178,7 @@ Q_SIGNALS:
 	void layoutRowCountChanged(int);
 	void layoutColumnCountChanged(int);
 
+	void changed();
 	void themeChanged(const QString&);
 };
 

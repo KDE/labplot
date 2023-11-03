@@ -12,15 +12,28 @@
 #include "backend/core/Project.h"
 #include "backend/worksheet/Worksheet.h"
 
+#include <QScreen>
+
 /*!
   \class WorksheetPreviewWidget
   \brief A widget showing the preview of all worksheets in the project.
 
   \ingroup kdefrontend
 */
-WorksheetPreviewWidget::WorksheetPreviewWidget(QWidget* parent) {
-	ui.setupUi(parent);
+WorksheetPreviewWidget::WorksheetPreviewWidget(QWidget* parent) : QWidget(parent) {
+	auto* layout = new QVBoxLayout(this);
+	layout->setSpacing(0);
+	layout->setContentsMargins(0, 0, 0, 0);
 
+	QWidget* widget = new QWidget(this);
+	ui.setupUi(widget);
+	layout->addWidget(widget);
+
+	connect(ui.lwPreview, &QListWidget::currentRowChanged, this, &WorksheetPreviewWidget::currentChanged);
+
+	// make the icon 6x6cm big
+	static const int themeIconSize = std::ceil(6.0 / 2.54 * QApplication::primaryScreen()->physicalDotsPerInchX());
+	ui.lwPreview->setIconSize(QSize(themeIconSize, themeIconSize));
 }
 
 WorksheetPreviewWidget::~WorksheetPreviewWidget() {
@@ -51,6 +64,12 @@ void WorksheetPreviewWidget::aspectAdded(const AbstractAspect* aspect) {
 	addPreview(w, indexOfWorksheet(w));
 }
 
+void WorksheetPreviewWidget::currentChanged(int index) {
+	const auto& worksheets = m_project->children<Worksheet>(AbstractAspect::ChildIndexFlag::Recursive);
+	const auto* worksheet = worksheets.at(index);
+	m_project->requestNavigateTo(worksheet->path());
+}
+
 void WorksheetPreviewWidget::aspectAboutToBeRemoved(const AbstractAspect* aspect) {
 	const auto* w = dynamic_cast<const Worksheet*>(aspect);
 	if (!w)
@@ -60,12 +79,12 @@ void WorksheetPreviewWidget::aspectAboutToBeRemoved(const AbstractAspect* aspect
 }
 
 void WorksheetPreviewWidget::addPreview(const Worksheet* w, int row) const {
-	QPixmap pix;
+	QPixmap pix(10, 10);
 	w->exportView(pix);
 	ui.lwPreview->insertItem(row, new QListWidgetItem(QIcon(pix), w->name()));
 
 	connect(w, &Worksheet::aspectDescriptionChanged, this, &WorksheetPreviewWidget::updateText);
-	// TODO: connect(w, &Worksheet::changed, this, &WorksheetPreviewWidget::updatePreview);
+	connect(w, &Worksheet::changed, this, &WorksheetPreviewWidget::updatePreview);
 }
 
 void WorksheetPreviewWidget::updatePreview() {
@@ -73,7 +92,7 @@ void WorksheetPreviewWidget::updatePreview() {
 	if (!w)
 		return;
 
-	QPixmap pix;
+	QPixmap pix(10,10);
 	w->exportView(pix);
 	ui.lwPreview->item(indexOfWorksheet(w))->setIcon(QIcon(pix));
 }

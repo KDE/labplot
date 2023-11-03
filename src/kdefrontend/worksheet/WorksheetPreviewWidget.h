@@ -33,6 +33,7 @@ private:
 	int indexOfWorksheet(const Worksheet*) const;
 
 private Q_SLOTS:
+	void currentChanged(int);
 	void aspectAdded(const AbstractAspect*);
 	void aspectAboutToBeRemoved(const AbstractAspect*);
 	void updatePreview();
