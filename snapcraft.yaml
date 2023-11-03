@@ -28,7 +28,7 @@ apps:
         - network-bind
         - cups
         command-chain:
-        - $SNAP/snap/local/launchers/tmpdir
+        - bin/tmpdir
         - snap/command-chain/desktop-launch
 assumes:
 - snapd2.58.3
@@ -103,6 +103,11 @@ parts:
             XDG_CONFIG_HOME: $CRAFT_STAGE/etc/xdg:/snap/kf5-5-111-qt-5-15-11-core22-sdk/current/etc/xdg:/etc/xdg${XDG_CONFIG_HOME:+:$XDG_CONFIG_HOME}
         - &id004
             CRAFT_CMAKE_ARGS: -DCMAKE_FIND_ROOT_PATH=/snap/kf5-5-111-qt-5-15-11-core22-sdk/current${CRAFT_CMAKE_ARGS:+:$CRAFT_CMAKE_ARGS}
+    launchers:
+        source: snap/local/launchers
+        plugin: dump
+        organize:
+            '*': bin/
     qxlsx:
         plugin: cmake
         source: https://github.com/QtExcel/QXlsx.git
