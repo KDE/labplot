@@ -265,6 +265,7 @@ void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 	d->m_scene->addItem(item);
 
 	connect(aspect, &AbstractAspect::contextMenuRequested, this, &Worksheet::childContextMenuRequested);
+	connect(addedElement, &WorksheetElement::changed, this, &Worksheet::changed);
 
 	// for containers, connect to visilibity changes and update the layout accordingly
 	if (dynamic_cast<const WorksheetElementContainer*>(addedElement))
@@ -1894,4 +1895,6 @@ void Worksheet::loadTheme(const QString& theme) {
 		child->loadThemeConfig(*config);
 
 	delete config;
+
+	Q_EMIT changed();
 }

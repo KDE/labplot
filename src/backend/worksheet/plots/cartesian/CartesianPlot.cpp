@@ -5236,6 +5236,8 @@ void CartesianPlot::loadThemeConfig(const KConfig& config) {
 		child->loadThemeConfig(config);
 
 	d->update(this->rect());
+
+	Q_EMIT changed();
 }
 
 void CartesianPlot::saveTheme(KConfig& config) {

@@ -887,7 +887,7 @@ void MainWin::initActions() {
 
 	m_worksheetPreviewAction = new QAction(QIcon::fromTheme(QLatin1String("view-preview")), i18n("Worksheet Preview"), docksActions);
 	m_worksheetPreviewAction->setCheckable(true);
-	m_worksheetPreviewAction->setChecked(false);
+	m_worksheetPreviewAction->setChecked(true);
 	actionCollection()->addAction(QLatin1String("toggle_worksheet_preview_dock"), m_worksheetPreviewAction);
 
 	connect(docksActions, &QActionGroup::triggered, this, &MainWin::toggleDockWidget);
