@@ -445,6 +445,7 @@ void CartesianPlotLegendPrivate::updatePosition() {
 	suppressRetransform = true;
 	title->retransform();
 	suppressRetransform = false;
+	Q_EMIT q->changed();
 }
 
 /*!

@@ -1482,7 +1482,7 @@ bool MainWin::newProject() {
 		m_propertiesDock->setWindowTitle(m_propertiesDock->windowTitle().replace(QLatin1String("&"), QString()));
 
 		// worksheet preview
-		m_worksheetPreviewDock = new ads::CDockWidget(i18nc("@title:window", "Preview"));
+		m_worksheetPreviewDock = new ads::CDockWidget(i18nc("@title:window", "Worksheet Preview"));
 		m_worksheetPreviewDock->setObjectName(QLatin1String("worksheetpreview"));
 		m_worksheetPreviewDock->setWindowTitle(m_worksheetPreviewDock->windowTitle().replace(QLatin1String("&"), QString()));
 		m_worksheetPreviewDock->toggleViewAction()->setText(QLatin1String(""));

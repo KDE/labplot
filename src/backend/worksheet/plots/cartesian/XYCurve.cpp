@@ -2902,6 +2902,7 @@ void XYCurvePrivate::updatePixmap() {
 	m_pixmap = pixmap;
 
 	update();
+	Q_EMIT q->changed();
 }
 
 QVariant XYCurvePrivate::itemChange(GraphicsItemChange change, const QVariant& value) {

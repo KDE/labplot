@@ -158,6 +158,7 @@ void WorksheetElementContainer::handleAspectAdded(const AbstractAspect* aspect) 
 	if (element && (aspect->parentAspect() == this)) {
 		connect(element, &WorksheetElement::hovered, this, &WorksheetElementContainer::childHovered);
 		connect(element, &WorksheetElement::unhovered, this, &WorksheetElementContainer::childUnhovered);
+		connect(element, &WorksheetElement::changed, this, &WorksheetElementContainer::changed);
 		element->graphicsItem()->setParentItem(d);
 
 		qreal zVal = 0;
