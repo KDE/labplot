@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-02 00:39+0000\n"
-"PO-Revision-Date: 2023-10-17 12:04+0200\n"
+"PO-Revision-Date: 2023-10-30 23:59+0100\n"
 "Last-Translator: Stefan Gerlach <stefan.gerlach@uni.kn>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 21.12.3\n"
+"X-Generator: Lokalize 22.12.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -4734,10 +4734,9 @@ msgid "Logarithm"
 msgstr "Logarithmus"
 
 #: src/backend/gsl/functions.cpp:559
-#, fuzzy, kde-format
-#| msgid "Base 10 logarithm"
+#, kde-format
 msgid "Base 2 logarithm"
-msgstr "Dekadischer Logarithmus"
+msgstr "Basis-2 Logarithmus"
 
 #: src/backend/gsl/functions.cpp:560
 #, kde-format
@@ -14600,7 +14599,7 @@ msgstr "Ausgewähltes Element exportieren"
 #: src/kdefrontend/MainWin.cpp:2574
 #, kde-format
 msgid "Share"
-msgstr ""
+msgstr "Teilen"
 
 #: src/kdefrontend/MainWin.cpp:768
 #, kde-format
@@ -14867,21 +14866,19 @@ msgid "%1 printed"
 msgstr "%1 gedruckt"
 
 #: src/kdefrontend/MainWin.cpp:2566
-#, fuzzy, kde-format
-#| msgid "The following problems occurred when loading the project file:\n"
+#, kde-format
 msgid "There was a problem sharing the project: %1"
-msgstr "Die folgenden Probleme sind beim Laden der Projektdatei aufgetreten:\n"
+msgstr "Es gab ein Problem beim Teilen des Projektes: %1"
 
 #: src/kdefrontend/MainWin.cpp:2570
-#, fuzzy, kde-format
-#| msgid "Project saved"
+#, kde-format
 msgid "Project shared successfully"
-msgstr "Das Projekt wurde gespeichert"
+msgstr "Projekt erfolgreich geteilt"
 
 #: src/kdefrontend/MainWin.cpp:2573
 #, kde-format
 msgid "You can find the shared project at: <a href=\"%1\">%1</a>"
-msgstr ""
+msgstr "Das geteilte Projekt findet sich unter: <a href=\"%1\">%1</a>"
 
 #: src/kdefrontend/MainWin.cpp:2805
 #: src/kdefrontend/welcomescreen/WelcomeScreenHelper.cpp:115
@@ -15647,68 +15644,62 @@ msgid "Increment"
 msgstr "Schrittweite"
 
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:60
-#, fuzzy, kde-format
-#| msgid "Increment"
+#, kde-format
 msgid "Number and Increment"
-msgstr "Schrittweite"
+msgstr "Anzahl und Schrittweite"
 
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:62
 #, kde-format
 msgid "Years"
-msgstr ""
+msgstr "Jahre"
 
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:63
-#, fuzzy, kde-format
-#| msgid "month"
+#, kde-format
 msgid "Months"
-msgstr "Monat"
+msgstr "Monate"
 
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:192
-#, fuzzy, kde-format
-#| msgid "Equidistant Values"
+#, kde-format
 msgctxt "@title:window"
 msgid "Equidistant Numeric and Date&Time Values"
-msgstr "Äquidistante Werte"
+msgstr "Äquidistante Zahlen- und Datum&Zeitwerte"
 
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:197
-#, fuzzy, kde-format
-#| msgid "Equidistant Values"
+#, kde-format
 msgctxt "@title:window"
 msgid "Equidistant Numeric Values"
-msgstr "Äquidistante Werte"
+msgstr "Äquidistante Zahlenwerte"
 
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:199
-#, fuzzy, kde-format
-#| msgid "Equidistant Values"
+#, kde-format
 msgctxt "@title:window"
 msgid "Equidistant Date&Time Values"
-msgstr "Äquidistante Werte"
+msgstr "Äquidistante Datum&Zeit Werte"
 
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:250
-#, fuzzy, kde-format
-#| msgid "invalid row value"
+#, kde-format
 msgid "Invalid start value"
-msgstr "Ungültiger Zeilenwert"
+msgstr "Ungültiger Startwert"
 
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:257
 #, kde-format
 msgid "Invalid end value, must be bigger than the start value"
-msgstr ""
+msgstr "Ungültiger Endwert; muss größer als der Startwert sein"
 
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:300
 #, kde-format
 msgid "The number of values to be generated must be bigger than one"
-msgstr ""
+msgstr "Die Anzahl der generierten Werte muss größer als eins sein"
 
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:317
 #, kde-format
 msgid "Invalid numeric increment value, must be bigger than zero"
-msgstr ""
+msgstr "Ungültiges Inkrement, muss größer als Null sein"
 
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:326
 #, kde-format
 msgid "Invalid Date&Time increment value, must be bigger than zero"
-msgstr ""
+msgstr "Ungültiges Datum&Zeit Inkrement, muss größer als 0 sein"
 
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:487
 #, kde-format
@@ -15916,7 +15907,7 @@ msgstr ""
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:167
 #, kde-format
 msgid "The variable name 'i' is reserved for the index of the column row."
-msgstr ""
+msgstr "Der Variablenname 'i' ist für den Index der Reihe reserviert."
 
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:170
 #, kde-format
