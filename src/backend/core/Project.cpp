@@ -813,6 +813,8 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 		retransformElements(this);
 	}
 
+	Q_EMIT loaded();
+
 	return !reader->hasError();
 }
 

@@ -28,14 +28,18 @@ public:
 private:
 	Ui::WorksheetPreviewWidget ui;
 	Project* m_project{nullptr};
+	bool m_suppressNavigate{false};
 
 	void addPreview(const Worksheet*, int row = -1) const;
 	int indexOfWorksheet(const Worksheet*) const;
 
 private Q_SLOTS:
+	void initPreview();
 	void currentChanged(int);
 	void aspectAdded(const AbstractAspect*);
 	void aspectAboutToBeRemoved(const AbstractAspect*);
+	void aspectSelected(const AbstractAspect*);
+	void aspectDeselected(const AbstractAspect*);
 	void updatePreview();
 	void updateText();
 

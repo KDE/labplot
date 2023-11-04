@@ -96,6 +96,7 @@ Q_SIGNALS:
 	void requestNavigateTo(const QString& path);
 	void closeRequested();
 	void saved() const;
+	void loaded() const;
 
 private:
 	Q_DECLARE_PRIVATE(Project)

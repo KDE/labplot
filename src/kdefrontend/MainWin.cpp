@@ -1818,6 +1818,7 @@ bool MainWin::closeProject() {
 
 	m_projectClosing = true;
 	statusBar()->clearMessage();
+	m_worksheetPreviewWidget->setProject(nullptr); // clear the preview befor deleting the project so we don't need to update it
 	delete m_guiObserver;
 	m_guiObserver = nullptr;
 	delete m_aspectTreeModel;

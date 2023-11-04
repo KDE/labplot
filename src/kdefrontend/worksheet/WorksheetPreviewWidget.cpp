@@ -42,21 +42,35 @@ WorksheetPreviewWidget::~WorksheetPreviewWidget() {
 
 void WorksheetPreviewWidget::setProject(Project* project) {
 	m_project = project;
+
+	// clear the content of the previous project
+	m_suppressNavigate = true;
 	ui.lwPreview->clear();
+	m_suppressNavigate = false;
+
 	if (!m_project)
 		return;
 
+	connect(m_project, &Project::loaded, this, &WorksheetPreviewWidget::initPreview);
 	connect(m_project, &Project::childAspectAdded, this, &WorksheetPreviewWidget::aspectAdded);
 	connect(m_project, &Project::childAspectAboutToBeRemoved, this, &WorksheetPreviewWidget::aspectAboutToBeRemoved);
 	// TODO: handle moving of worksheets
+}
 
-	// add thumbnails for all available worksheets in the project
+/*!
+ * called when the project was completely loaded,
+ * creates thumbnails for all available worksheets in the project.
+ */
+void WorksheetPreviewWidget::initPreview() {
 	const auto& worksheets = m_project->children<Worksheet>(AbstractAspect::ChildIndexFlag::Recursive);
 	for (int i = 0; i < worksheets.size(); ++i)
 		addPreview(worksheets.at(i), i);
 }
 
 void WorksheetPreviewWidget::aspectAdded(const AbstractAspect* aspect) {
+	if (m_project->isLoading())
+		return;
+
 	const auto* w = dynamic_cast<const Worksheet*>(aspect);
 	if (!w)
 		return;
@@ -64,7 +78,36 @@ void WorksheetPreviewWidget::aspectAdded(const AbstractAspect* aspect) {
 	addPreview(w, indexOfWorksheet(w));
 }
 
+void WorksheetPreviewWidget::aspectSelected(const AbstractAspect* aspect) {
+	const auto* w = dynamic_cast<const Worksheet*>(aspect);
+	if (!w)
+		return;
+
+	m_suppressNavigate = true;
+	ui.lwPreview->setCurrentRow(indexOfWorksheet(w));
+	m_suppressNavigate = false;
+}
+
+void WorksheetPreviewWidget::aspectDeselected(const AbstractAspect* aspect) {
+	const auto* w = dynamic_cast<const Worksheet*>(aspect);
+	if (!w)
+		return;
+
+	// when switching between the different worksheets in the project explorer, we don't need
+	// to clear the selection in the preview since it's changed in aspectSelected().
+	// only clear the selection if the deselected worksheet is still being selected in the preview,
+	// this is needed when switching from a worksheet to a non-worksheet aspect in the project explorer.
+	if (ui.lwPreview->currentRow() == indexOfWorksheet(w)) {
+		m_suppressNavigate = true;
+		ui.lwPreview->setCurrentRow(-1);
+		m_suppressNavigate = false;
+	}
+}
+
 void WorksheetPreviewWidget::currentChanged(int index) {
+	if (m_suppressNavigate)
+		return;
+
 	const auto& worksheets = m_project->children<Worksheet>(AbstractAspect::ChildIndexFlag::Recursive);
 	const auto* worksheet = worksheets.at(index);
 	m_project->requestNavigateTo(worksheet->path());
@@ -85,6 +128,8 @@ void WorksheetPreviewWidget::addPreview(const Worksheet* w, int row) const {
 
 	connect(w, &Worksheet::aspectDescriptionChanged, this, &WorksheetPreviewWidget::updateText);
 	connect(w, &Worksheet::changed, this, &WorksheetPreviewWidget::updatePreview);
+	connect(w, &Worksheet::selected, this, &WorksheetPreviewWidget::aspectSelected);
+	connect(w, &Worksheet::deselected, this, &WorksheetPreviewWidget::aspectDeselected);
 }
 
 void WorksheetPreviewWidget::updatePreview() {
