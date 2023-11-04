@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-02 00:39+0000\n"
-"PO-Revision-Date: 2023-10-27 06:07+0200\n"
+"PO-Revision-Date: 2023-11-04 06:38+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.4\n"
+"X-Generator: Poedit 3.3.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -3585,22 +3585,19 @@ msgid "Percentile"
 msgstr "პროცენტული"
 
 #: src/backend/gsl/functions.cpp:273
-#, fuzzy, kde-format
-#| msgid "pseudo-random integer [0,RAND_MAX]"
+#, kde-format
 msgid "pseudo-random integer [0, RAND_MAX]"
-msgstr "ფსევდო-შემთხვევითი მთელი რიცხვი [0,RAND_MAX]"
+msgstr "ფსევდო-შემთხვევითი მთელი რიცხვი [0, RAND_MAX]"
 
 #: src/backend/gsl/functions.cpp:274
-#, fuzzy, kde-format
-#| msgid "nonlinear additive feedback rng [0,RAND_MAX]"
+#, kde-format
 msgid "nonlinear additive feedback rng [0, RAND_MAX]"
-msgstr "არაწრფივი დამატებითი უკუკავშირის შრგ [0,RAND_MAX]"
+msgstr "არაწრფივი დამატებითი უკუკავშირის შრგ [0, RAND_MAX]"
 
 #: src/backend/gsl/functions.cpp:275
-#, fuzzy, kde-format
-#| msgid "nonlinear additive feedback rng [0,1]"
+#, kde-format
 msgid "nonlinear additive feedback rng [0, 1]"
-msgstr "არაწრფივი დამატებითი უკუკავშირის შრგ [0,1]"
+msgstr "არაწრფივი დამატებითი უკუკავშირის შრგ [0, 1]"
 
 #: src/backend/gsl/functions.cpp:276
 #, kde-format
@@ -4686,16 +4683,14 @@ msgid "Characteristic values b_n(q) of the Mathieu functions se_n(q, x)"
 msgstr ""
 
 #: src/backend/gsl/functions.cpp:568
-#, fuzzy, kde-format
-#| msgid "Mathieu Functions"
+#, kde-format
 msgid "Angular Mathieu functions ce_n(q, x)"
-msgstr "მათიეს ფუნქციები"
+msgstr "კუთხური მათიეს ფუნქციები ce_n(q, x)"
 
 #: src/backend/gsl/functions.cpp:569
-#, fuzzy, kde-format
-#| msgid "Mathieu Functions"
+#, kde-format
 msgid "Angular Mathieu functions se_n(q, x)"
-msgstr "მათიეს ფუნქციები"
+msgstr "კუთხური მათიეს ფუნქციები se_n(q, x)"
 
 #: src/backend/gsl/functions.cpp:570
 #, kde-format
@@ -4901,14 +4896,12 @@ msgid "Three component hypotenuse function"
 msgstr ""
 
 #: src/backend/gsl/functions.cpp:626
-#, fuzzy, kde-format
-#| msgid "restrict to [-pi,pi]"
+#, kde-format
 msgid "restrict to [-pi, pi]"
 msgstr "[-pi,pi]-ზე შეზღუდვა"
 
 #: src/backend/gsl/functions.cpp:627
-#, fuzzy, kde-format
-#| msgid "restrict to [0,2 pi]"
+#, kde-format
 msgid "restrict to [0, 2 pi]"
 msgstr "[0,2 pi]-ზე სეზღუდვა"
 
@@ -10455,10 +10448,9 @@ msgid "Presenter Mode"
 msgstr ""
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:278
-#, fuzzy, kde-format
-#| msgid "Interactive"
+#, kde-format
 msgid "Interactive Plots"
-msgstr "ინტერაქტიური"
+msgstr "ინტერაქტიული ნახაზები"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:279
 #, kde-format
@@ -21225,10 +21217,10 @@ msgstr "3:"
 #: src/kdefrontend/ui/spreadsheet/randomvalueswidget.ui:149
 #, kde-format
 msgid ""
-"<html><head/><body><p>Random number distributions as defined in <a href="
-"\"https://www.gnu.org/software/gsl/doc/html/randist.html\"><span style=\" "
-"text-decoration: underline; color:#2980b9;\">GSL documentation</span></a></"
-"p></body></html>"
+"<html><head/><body><p>Random number distributions as defined in <a "
+"href=\"https://www.gnu.org/software/gsl/doc/html/randist.html\"><span "
+"style=\" text-decoration: underline; color:#2980b9;\">GSL documentation</"
+"span></a></p></body></html>"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lSeed)
