@@ -16,6 +16,9 @@ class AbstractAspect;
 class Project;
 class Worksheet;
 
+class QContextMenuEvent;
+class QResizeEvent;
+
 class WorksheetPreviewWidget : public QWidget {
 	Q_OBJECT
 
@@ -32,6 +35,8 @@ private:
 
 	void addPreview(const Worksheet*, int row = -1) const;
 	int indexOfWorksheet(const Worksheet*) const;
+	void contextMenuEvent(QContextMenuEvent*) override;
+	void resizeEvent(QResizeEvent*) override;
 
 private Q_SLOTS:
 	void initPreview();

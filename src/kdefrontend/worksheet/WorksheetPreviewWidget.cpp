@@ -12,6 +12,8 @@
 #include "backend/core/Project.h"
 #include "backend/worksheet/Worksheet.h"
 
+#include <QContextMenuEvent>
+#include <QMenu>
 #include <QScreen>
 
 /*!
@@ -31,8 +33,8 @@ WorksheetPreviewWidget::WorksheetPreviewWidget(QWidget* parent) : QWidget(parent
 
 	connect(ui.lwPreview, &QListWidget::currentRowChanged, this, &WorksheetPreviewWidget::currentChanged);
 
-	// make the icon 6x6cm big
-	static const int themeIconSize = std::ceil(6.0 / 2.54 * QApplication::primaryScreen()->physicalDotsPerInchX());
+	// make the icon 5x5cm big
+	static const int themeIconSize = std::ceil(5.0 / 2.54 * QApplication::primaryScreen()->physicalDotsPerInchX());
 	ui.lwPreview->setIconSize(QSize(themeIconSize, themeIconSize));
 }
 
@@ -153,4 +155,22 @@ void WorksheetPreviewWidget::updateText() {
 int WorksheetPreviewWidget::indexOfWorksheet(const Worksheet* w) const {
 	const auto& worksheets = m_project->children<Worksheet>(AbstractAspect::ChildIndexFlag::Recursive);
 	return worksheets.indexOf(const_cast<Worksheet*>(w));
+}
+
+void WorksheetPreviewWidget::contextMenuEvent(QContextMenuEvent*) {
+	const int index = ui.lwPreview->currentRow();
+	if (index == -1)
+		return;
+
+	const auto& worksheets = m_project->children<Worksheet>(AbstractAspect::ChildIndexFlag::Recursive);
+	auto* worksheet = worksheets.at(index);
+	auto* menu = worksheet->createContextMenu();
+	menu->exec(QCursor::pos());
+}
+
+void WorksheetPreviewWidget::resizeEvent(QResizeEvent*) {
+	if (width() > height())
+		ui.lwPreview->setFlow(QListView::Flow::LeftToRight);
+	else
+		ui.lwPreview->setFlow(QListView::Flow::TopToBottom);
 }
