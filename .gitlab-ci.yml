@@ -207,32 +207,6 @@ clang_format:
     ./cl-fmt.sh
     git diff --exit-code
 
-# see https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/linux.yml
-# needs to be in build stage
-cppcheck:
-  stage: build
-  image: invent-registry.kde.org/sysadmin/ci-images/suse-qt515:latest
-  tags:
-    - Linux
-  interruptible: true
-  before_script:
-    - git clone https://invent.kde.org/sysadmin/ci-utilities
-  script:
-    - python3 -u ci-utilities/run-cppcheck.py --project $CI_PROJECT_NAME --branch $CI_COMMIT_REF_NAME
-  rules:
-    - changes:
-      - "**/*.c"
-      - "**/*.h"
-      - "**/*.cc"
-      - "**/*.hh"
-      - "**/*.cpp"
-      - "**/*.hpp"
-  artifacts:
-    expire_in: 1 week
-    when: on_success
-    reports:
-      codequality: cppcheck.json
-
 # see https://invent.kde.org/sysadmin/ci-utilities/-/blob/master/gitlab-templates/flatpak.yml
 flatpak:
   stage: deploy
