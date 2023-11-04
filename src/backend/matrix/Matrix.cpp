@@ -659,6 +659,7 @@ template QVector<QDateTime> Matrix::rowCells<QDateTime>(int row, int first_colum
 template<typename T>
 void Matrix::setRowCells(int row, int first_column, int last_column, const QVector<T>& values) {
 	WAIT_CURSOR;
+	Q_D(Matrix);
 	exec(new MatrixSetRowCellsCmd<T>(d, row, first_column, last_column, values));
 	RESET_CURSOR;
 }
