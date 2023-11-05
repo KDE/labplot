@@ -2605,7 +2605,7 @@ void AxisPrivate::updateGrid() {
 }
 
 void AxisPrivate::recalcShapeAndBoundingRect() {
-	if (m_suppressRecalc)
+	if (suppressRecalc)
 		return;
 
 	prepareGeometryChange();

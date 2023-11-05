@@ -426,7 +426,7 @@ void KDEPlotPrivate::copyValidData(QVector<double>& data) const {
   recalculates the outer bounds and the shape of the curve.
   */
 void KDEPlotPrivate::recalcShapeAndBoundingRect() {
-	if (m_suppressRecalc)
+	if (suppressRecalc)
 		return;
 
 	prepareGeometryChange();

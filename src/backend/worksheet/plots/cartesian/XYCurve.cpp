@@ -2802,8 +2802,8 @@ void XYCurvePrivate::updateErrorBars() {
   recalculates the outer bounds and the shape of the curve.
 */
 void XYCurvePrivate::recalcShapeAndBoundingRect() {
-	DEBUG(Q_FUNC_INFO << ", m_suppressRecalc = " << m_suppressRecalc);
-	if (m_suppressRecalc)
+	DEBUG(Q_FUNC_INFO << ", suppressRecalc = " << suppressRecalc);
+	if (suppressRecalc)
 		return;
 
 #if PERFTRACE_CURVES
@@ -2915,8 +2915,8 @@ void XYCurvePrivate::draw(QPainter* painter) {
 }
 
 void XYCurvePrivate::updatePixmap() {
-	DEBUG(Q_FUNC_INFO << ", m_suppressRecalc = " << m_suppressRecalc);
-	if (m_suppressRecalc)
+	DEBUG(Q_FUNC_INFO << ", suppressRecalc = " << suppressRecalc);
+	if (suppressRecalc)
 		return;
 
 	m_hoverEffectImageIsDirty = true;

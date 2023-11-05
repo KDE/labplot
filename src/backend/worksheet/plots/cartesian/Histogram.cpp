@@ -1602,7 +1602,7 @@ void HistogramPrivate::updateRug() {
   recalculates the outer bounds and the shape of the curve.
   */
 void HistogramPrivate::recalcShapeAndBoundingRect() {
-	if (m_suppressRecalc)
+	if (suppressRecalc)
 		return;
 
 	prepareGeometryChange();
