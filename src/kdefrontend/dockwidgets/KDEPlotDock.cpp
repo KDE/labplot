@@ -31,6 +31,7 @@ KDEPlotDock::KDEPlotDock(QWidget* parent)
 	: BaseDock(parent)
 	, cbDataColumn(new TreeViewComboBox) {
 	ui.setupUi(this);
+	setPlotRangeCombobox(ui.cbPlotRanges);
 	m_leName = ui.leName;
 	m_teComment = ui.teComment;
 	m_teComment->setFixedHeight(2 * m_leName->height());
@@ -224,7 +225,7 @@ void KDEPlotDock::updateLocale() {
 }
 
 void KDEPlotDock::updatePlotRanges() {
-	updatePlotRangeList(ui.cbPlotRanges);
+	updatePlotRangeList();
 }
 
 //*************************************************************

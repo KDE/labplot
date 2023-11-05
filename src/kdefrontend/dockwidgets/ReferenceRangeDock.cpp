@@ -20,6 +20,7 @@
 ReferenceRangeDock::ReferenceRangeDock(QWidget* parent)
 	: BaseDock(parent) {
 	ui.setupUi(this);
+	setPlotRangeCombobox(ui.cbPlotRanges);
 	m_leName = ui.leName;
 	m_teComment = ui.teComment;
 	m_teComment->setFixedHeight(1.2 * m_leName->height());
@@ -95,7 +96,7 @@ void ReferenceRangeDock::updateLocale() {
 }
 
 void ReferenceRangeDock::updatePlotRanges() {
-	updatePlotRangeList(ui.cbPlotRanges);
+	updatePlotRangeList();
 }
 
 //**********************************************************

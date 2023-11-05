@@ -53,6 +53,7 @@ using Dimension = CartesianCoordinateSystem::Dimension;
 AxisDock::AxisDock(QWidget* parent)
 	: BaseDock(parent) {
 	ui.setupUi(this);
+	setPlotRangeCombobox(ui.cbPlotRanges);
 	m_leName = ui.leName;
 	m_teComment = ui.teComment;
 	m_teComment->setFixedHeight(1.5 * m_leName->height());
@@ -514,7 +515,7 @@ void AxisDock::setModelIndexFromColumn(TreeViewComboBox* cb, const AbstractColum
 }
 
 void AxisDock::updatePlotRanges() {
-	updatePlotRangeList(ui.cbPlotRanges);
+	updatePlotRangeList();
 
 	if (m_axis->coordinateSystemCount() == 0)
 		return;

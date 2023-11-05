@@ -40,6 +40,7 @@ XYSmoothCurveDock::XYSmoothCurveDock(QWidget* parent)
 void XYSmoothCurveDock::setupGeneral() {
 	auto* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
+	setPlotRangeCombobox(uiGeneralTab.cbPlotRanges);
 	m_leName = uiGeneralTab.leName;
 	m_teComment = uiGeneralTab.teComment;
 	m_teComment->setFixedHeight(1.2 * m_leName->height());
@@ -229,7 +230,7 @@ void XYSmoothCurveDock::setCurves(QList<XYCurve*> list) {
 }
 
 void XYSmoothCurveDock::updatePlotRanges() {
-	updatePlotRangeList(uiGeneralTab.cbPlotRanges);
+	updatePlotRangeList();
 }
 
 //*************************************************************

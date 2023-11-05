@@ -185,6 +185,7 @@ XYCurveDock::~XYCurveDock() = default;
 void XYCurveDock::setupGeneral() {
 	auto* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
+	setPlotRangeCombobox(uiGeneralTab.cbPlotRanges);
 	m_leName = uiGeneralTab.leName;
 	m_teComment = uiGeneralTab.teComment;
 	m_teComment->setFixedHeight(m_leName->height());
@@ -586,7 +587,7 @@ void XYCurveDock::updateLocale() {
 }
 
 void XYCurveDock::updatePlotRanges() {
-	updatePlotRangeList(uiGeneralTab.cbPlotRanges);
+	updatePlotRangeList();
 }
 
 //*************************************************************

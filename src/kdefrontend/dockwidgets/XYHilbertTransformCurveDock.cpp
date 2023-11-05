@@ -36,6 +36,7 @@ XYHilbertTransformCurveDock::XYHilbertTransformCurveDock(QWidget* parent)
 void XYHilbertTransformCurveDock::setupGeneral() {
 	auto* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
+	setPlotRangeCombobox(uiGeneralTab.cbPlotRanges);
 	m_leName = uiGeneralTab.leName;
 	m_teComment = uiGeneralTab.teComment;
 	m_teComment->setFixedHeight(1.2 * m_leName->height());
@@ -152,7 +153,7 @@ void XYHilbertTransformCurveDock::setCurves(QList<XYCurve*> list) {
 }
 
 void XYHilbertTransformCurveDock::updatePlotRanges() {
-	updatePlotRangeList(uiGeneralTab.cbPlotRanges);
+	updatePlotRangeList();
 }
 
 //*************************************************************

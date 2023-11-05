@@ -28,6 +28,7 @@ class BaseDock : public QWidget {
 
 public:
 	explicit BaseDock(QWidget* parent);
+	void setPlotRangeCombobox(QComboBox*);
 	~BaseDock();
 
 	enum class Units { Metric, Imperial };
@@ -50,6 +51,9 @@ public:
 
 		m_aspect = aspects.first();
 		connect(m_aspect, &AbstractAspect::childAspectAboutToBeRemoved, this, &BaseDock::disconnectAspect);
+		auto* wse = dynamic_cast<WorksheetElement*>(m_aspect);
+		if (wse)
+			connect(wse, &WorksheetElement::coordinateSystemIndexChanged, this, &BaseDock::updatePlotRangeList);
 		for (auto* aspect : aspects) {
 			if (aspect->inherits(AspectType::AbstractAspect))
 				m_aspects.append(static_cast<AbstractAspect*>(aspect));
@@ -79,13 +83,14 @@ protected:
 	ResizableTextEdit* m_teComment{nullptr};
 	Units m_units{Units::Metric};
 	Worksheet::Unit m_worksheetUnit{Worksheet::Unit::Centimeter};
-	void updatePlotRangeList(QComboBox*); // used in worksheet element docks
+	void updatePlotRangeList(); // used in worksheet element docks
 
 private:
 	AbstractAspect* m_aspect{nullptr};
 	QList<AbstractAspect*> m_aspects;
 	AspectTreeModel* m_aspectModel{nullptr};
 	void updateNameDescriptionWidgets();
+	QComboBox* m_cbPlotRangeList{nullptr};
 
 protected Q_SLOTS:
 	void nameChanged();

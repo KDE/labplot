@@ -32,12 +32,16 @@ BaseDock::BaseDock(QWidget* parent)
 		m_worksheetUnit = Worksheet::Unit::Inch;
 }
 
+void BaseDock::setPlotRangeCombobox(QComboBox* cb) {
+	m_cbPlotRangeList = cb;
+}
+
 BaseDock::~BaseDock() {
 	if (m_aspectModel)
 		delete m_aspectModel;
 }
 
-void BaseDock::updatePlotRangeList(QComboBox* cb) {
+void BaseDock::updatePlotRangeList() {
 	auto* element{static_cast<WorksheetElement*>(m_aspect)};
 	if (!element) {
 		DEBUG(Q_FUNC_INFO << ", WARNING: no worksheet element!")
@@ -53,19 +57,20 @@ void BaseDock::updatePlotRangeList(QComboBox* cb) {
 	DEBUG(Q_FUNC_INFO << ", plot ranges count: " << cSystemCount)
 	DEBUG(Q_FUNC_INFO << ", current plot range: " << cSystemIndex + 1)
 
-	if (!cb) {
+	if (!m_cbPlotRangeList) {
+		assert(false);
 		DEBUG(Q_FUNC_INFO << ", ERROR: no plot range combo box")
 		return;
 	}
 	// fill ui.cbPlotRanges
 	m_suppressPlotRetransform = true;
-	cb->clear();
+	m_cbPlotRangeList->clear();
 	for (int i{0}; i < cSystemCount; i++)
-		cb->addItem(QString::number(i + 1) + QStringLiteral(" : ") + element->coordinateSystemInfo(i));
-	cb->setCurrentIndex(cSystemIndex);
+		m_cbPlotRangeList->addItem(QString::number(i + 1) + QStringLiteral(" : ") + element->coordinateSystemInfo(i));
+	m_cbPlotRangeList->setCurrentIndex(cSystemIndex);
 	m_suppressPlotRetransform = false;
 	// disable when there is only on plot range
-	cb->setEnabled(cSystemCount == 1 ? false : true);
+	m_cbPlotRangeList->setEnabled(cSystemCount == 1 ? false : true);
 }
 
 void BaseDock::plotRangeChanged(int index) {

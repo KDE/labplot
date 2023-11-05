@@ -26,6 +26,7 @@ BarPlotDock::BarPlotDock(QWidget* parent)
 	: BaseDock(parent)
 	, cbXColumn(new TreeViewComboBox) {
 	ui.setupUi(this);
+	setPlotRangeCombobox(ui.cbPlotRanges);
 	m_leName = ui.leName;
 	m_teComment = ui.teComment;
 	m_teComment->setFixedHeight(m_leName->height());
@@ -204,7 +205,7 @@ void BarPlotDock::updateLocale() {
 }
 
 void BarPlotDock::updatePlotRanges() {
-	updatePlotRangeList(ui.cbPlotRanges);
+	updatePlotRangeList();
 }
 
 void BarPlotDock::loadDataColumns() {

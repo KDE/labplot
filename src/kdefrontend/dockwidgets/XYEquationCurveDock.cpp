@@ -47,6 +47,7 @@ XYEquationCurveDock::XYEquationCurveDock(QWidget* parent)
 void XYEquationCurveDock::setupGeneral() {
 	auto* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
+	setPlotRangeCombobox(uiGeneralTab.cbPlotRanges);
 	m_leName = uiGeneralTab.leName;
 	m_teComment = uiGeneralTab.teComment;
 	m_teComment->setFixedHeight(1.2 * m_leName->height());
@@ -142,7 +143,7 @@ void XYEquationCurveDock::setCurves(QList<XYCurve*> list) {
 }
 
 void XYEquationCurveDock::updatePlotRanges() {
-	updatePlotRangeList(uiGeneralTab.cbPlotRanges);
+	updatePlotRangeList();
 }
 
 //*************************************************************
