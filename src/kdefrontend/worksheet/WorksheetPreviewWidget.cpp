@@ -22,7 +22,8 @@
 
   \ingroup kdefrontend
 */
-WorksheetPreviewWidget::WorksheetPreviewWidget(QWidget* parent) : QWidget(parent) {
+WorksheetPreviewWidget::WorksheetPreviewWidget(QWidget* parent)
+	: QWidget(parent) {
 	auto* layout = new QVBoxLayout(this);
 	layout->setSpacing(0);
 	layout->setContentsMargins(0, 0, 0, 0);
@@ -143,7 +144,7 @@ void WorksheetPreviewWidget::updatePreview() {
 	if (!w)
 		return;
 
-	QPixmap pix(10,10);
+	QPixmap pix(10, 10);
 	w->exportView(pix);
 	ui.lwPreview->item(indexOfWorksheet(w))->setIcon(QIcon(pix));
 }
