@@ -1032,14 +1032,6 @@ void TextLabelPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 	return QGraphicsItem::mouseMoveEvent(event);
 }*/
 
-void TextLabelPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
-	// don't show any context menu if the label is hidden which is the case
-	// for example for axis and plot title labels. For such objects the context menu
-	// of their parents, i.e. of axis and plot, is used.
-	if (!q->hidden())
-		q->createContextMenu()->exec(event->screenPos());
-}
-
 // ##############################################################################
 // ##################  Serialization/Deserialization  ###########################
 // ##############################################################################

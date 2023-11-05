@@ -78,9 +78,6 @@ public:
 	// used in the InfoElement (Marker) to attach the line to the label
 	QVector<TextLabel::GluePoint> m_gluePoints;
 	QVector<TextLabel::GluePoint> m_gluePointsTransformed;
-
-private:
-	virtual void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
 };
 
 #endif

@@ -1000,7 +1000,14 @@ void WorksheetElementPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 }
 
 void WorksheetElementPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
-	q->createContextMenu()->exec(event->screenPos());
+	// don't show any context menu if the element is hidden which is the case
+	// for example for axis and plot title labels. For such objects the context menu
+	// of their parents, i.e. of axis and plot, is used.
+	if (!q->hidden()) {
+		auto* menu = q->createContextMenu();
+		if (menu)
+			menu->exec(event->screenPos());
+	}
 }
 
 bool WorksheetElementPrivate::isHovered() const {
