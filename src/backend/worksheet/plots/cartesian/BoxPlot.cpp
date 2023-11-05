@@ -1960,7 +1960,7 @@ void BoxPlot::loadThemeConfig(const KConfig& config) {
 	const QColor themeColor = plot->themeColorPalette(index);
 
 	Q_D(BoxPlot);
-	d->m_suppressRecalc = true;
+	d->suppressRecalc = true;
 
 	// box fillings
 	for (int i = 0; i < d->backgrounds.count(); ++i) {
@@ -2012,6 +2012,6 @@ void BoxPlot::loadThemeConfig(const KConfig& config) {
 		setWhiskersCapSize(0.0);
 	}
 
-	d->m_suppressRecalc = false;
+	d->suppressRecalc = false;
 	d->recalcShapeAndBoundingRect();
 }

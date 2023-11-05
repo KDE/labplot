@@ -37,8 +37,6 @@ public:
 	Line* addMedianLine(const KConfigGroup&);
 	void adjustPropertiesContainers();
 
-	bool m_suppressRecalc{false};
-
 	// reimplemented from QGraphicsItem
 	QRectF boundingRect() const override;
 	QPainterPath shape() const override;

@@ -1038,7 +1038,7 @@ void LollipopPlot::loadThemeConfig(const KConfig& config) {
 	const QColor themeColor = plot->themeColorPalette(index);
 
 	Q_D(LollipopPlot);
-	d->m_suppressRecalc = true;
+	d->suppressRecalc = true;
 
 	// lines
 	for (int i = 0; i < d->lines.count(); ++i) {
@@ -1055,6 +1055,6 @@ void LollipopPlot::loadThemeConfig(const KConfig& config) {
 	// values
 	d->value->loadThemeConfig(group, themeColor);
 
-	d->m_suppressRecalc = false;
+	d->suppressRecalc = false;
 	d->recalcShapeAndBoundingRect();
 }

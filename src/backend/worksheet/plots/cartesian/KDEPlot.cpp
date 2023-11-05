@@ -560,13 +560,13 @@ void KDEPlot::loadThemeConfig(const KConfig& config) {
 	const QColor themeColor = plot->themeColorPalette(index);
 
 	Q_D(KDEPlot);
-	d->m_suppressRecalc = true;
+	d->suppressRecalc = true;
 
 	d->estimationCurve->line()->loadThemeConfig(group, themeColor);
 	d->estimationCurve->background()->loadThemeConfig(group, themeColor);
 	d->rugCurve->symbol()->loadThemeConfig(group, themeColor);
 
-	d->m_suppressRecalc = false;
+	d->suppressRecalc = false;
 	d->recalcShapeAndBoundingRect();
 }
 

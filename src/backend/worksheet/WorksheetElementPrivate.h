@@ -34,6 +34,7 @@ public:
 	QRectF boundingRectangle; // bounding rectangle of the text
 	bool suppressItemChangeEvent{false};
 	bool suppressRetransform{false};
+	bool suppressRecalc{false};
 	WorksheetElement* const q{nullptr};
 	bool insidePlot{true}; // point inside the plot (visible) or not
 	bool lock{false};

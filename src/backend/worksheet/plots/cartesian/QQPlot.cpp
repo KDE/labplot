@@ -702,13 +702,13 @@ void QQPlot::loadThemeConfig(const KConfig& config) {
 	const QColor themeColor = plot->themeColorPalette(index);
 
 	Q_D(QQPlot);
-	d->m_suppressRecalc = true;
+	d->suppressRecalc = true;
 
 	d->referenceCurve->line()->loadThemeConfig(group, themeColor);
 	d->percentilesCurve->line()->setStyle(Qt::NoPen);
 	d->percentilesCurve->symbol()->loadThemeConfig(group, themeColor);
 
-	d->m_suppressRecalc = false;
+	d->suppressRecalc = false;
 	d->recalcShapeAndBoundingRect();
 }
 

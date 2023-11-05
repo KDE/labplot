@@ -1102,9 +1102,9 @@ void AxisPrivate::retransform() {
 		return;
 
 	// 	PERFTRACE(name().toLatin1() + ", AxisPrivate::retransform()");
-	m_suppressRecalc = true;
+	suppressRecalc = true;
 	retransformLine();
-	m_suppressRecalc = false;
+	suppressRecalc = false;
 	recalcShapeAndBoundingRect();
 }
 

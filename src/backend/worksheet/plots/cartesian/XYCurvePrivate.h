@@ -169,7 +169,7 @@ private:
 	QImage m_selectionEffectImage;
 	bool m_hoverEffectImageIsDirty{false};
 	bool m_selectionEffectImageIsDirty{false};
-	bool m_suppressRecalc{false};
+
 	QPointF mousePos;
 
 	friend class RetransformTest;

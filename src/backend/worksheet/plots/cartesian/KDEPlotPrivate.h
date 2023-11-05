@@ -32,7 +32,6 @@ public:
 	bool activateCurve(QPointF mouseScenePos, double maxDist);
 
 	QPainterPath curveShape;
-	bool m_suppressRecalc{false};
 
 	// General
 	const AbstractColumn* dataColumn{nullptr};

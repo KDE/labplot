@@ -1384,7 +1384,7 @@ void BarPlot::loadThemeConfig(const KConfig& config) {
 	const QColor themeColor = plot->themeColorPalette(index);
 
 	Q_D(BarPlot);
-	d->m_suppressRecalc = true;
+	d->suppressRecalc = true;
 
 	// box filling
 	for (int i = 0; i < d->backgrounds.count(); ++i) {
@@ -1401,6 +1401,6 @@ void BarPlot::loadThemeConfig(const KConfig& config) {
 	// Values
 	d->value->loadThemeConfig(group, themeColor);
 
-	d->m_suppressRecalc = false;
+	d->suppressRecalc = false;
 	d->recalcShapeAndBoundingRect();
 }

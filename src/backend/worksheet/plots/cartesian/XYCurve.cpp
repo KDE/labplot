@@ -1008,13 +1008,13 @@ void XYCurvePrivate::retransform() {
 		return;
 	}
 
-	m_suppressRecalc = true;
+	suppressRecalc = true;
 	updateLines();
 	updateDropLines();
 	updateSymbols();
 	updateRug();
 	updateValues();
-	m_suppressRecalc = false;
+	suppressRecalc = false;
 	updateErrorBars();
 }
 
@@ -3242,7 +3242,7 @@ void XYCurve::loadThemeConfig(const KConfig& config) {
 	const QColor themeColor = plot->themeColorPalette(index);
 
 	Q_D(XYCurve);
-	d->m_suppressRecalc = true;
+	d->suppressRecalc = true;
 
 	d->line->loadThemeConfig(group, themeColor);
 	d->dropLine->loadThemeConfig(group, themeColor);
@@ -3263,7 +3263,7 @@ void XYCurve::loadThemeConfig(const KConfig& config) {
 	} else
 		setRugEnabled(false);
 
-	d->m_suppressRecalc = false;
+	d->suppressRecalc = false;
 	d->recalcShapeAndBoundingRect();
 }
 

@@ -36,8 +36,6 @@ public:
 	Symbol* addSymbol(const KConfigGroup&);
 	void addValue(const KConfigGroup&);
 
-	bool m_suppressRecalc{false};
-
 	// reimplemented from QGraphicsItem
 	QRectF boundingRect() const override;
 	QPainterPath shape() const override;

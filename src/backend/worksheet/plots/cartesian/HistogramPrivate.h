@@ -56,8 +56,6 @@ public:
 
 	double getMaximumOccuranceofHistogram() const;
 
-	bool m_suppressRecalc{false};
-
 	// General
 	const AbstractColumn* dataColumn{nullptr};
 	QString dataColumnPath;

@@ -826,12 +826,12 @@ void HistogramPrivate::retransform() {
 		return;
 	}
 
-	m_suppressRecalc = true;
+	suppressRecalc = true;
 	updateLines();
 	updateSymbols();
 	updateErrorBars();
 	updateRug();
-	m_suppressRecalc = false;
+	suppressRecalc = false;
 	updateValues();
 }
 
@@ -1930,7 +1930,7 @@ void Histogram::loadThemeConfig(const KConfig& config) {
 	QPen p;
 
 	Q_D(Histogram);
-	d->m_suppressRecalc = true;
+	d->suppressRecalc = true;
 
 	d->line->loadThemeConfig(group, themeColor);
 	d->symbol->loadThemeConfig(group, themeColor);
@@ -1945,7 +1945,7 @@ void Histogram::loadThemeConfig(const KConfig& config) {
 	} else
 		setRugEnabled(false);
 
-	d->m_suppressRecalc = false;
+	d->suppressRecalc = false;
 	d->recalcShapeAndBoundingRect();
 }
 
