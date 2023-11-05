@@ -56,7 +56,6 @@ private:
 	QPointF sceneDeltaPoint; // delta position from worksheetinfoElementPrivate to the first marker point in scene coords
 	QPointF sceneDeltaTextLabel;
 
-	QRectF m_boundingRectangle; // bounding rectangle of the connection line between CustomPoint and TextLabel
 	QLineF m_connectionLine; // line between CustomPoint and TextLabel
 	QLineF xposLine; // Line which connects all markerpoints, when there are more than 1
 	QPointF oldMousePos;

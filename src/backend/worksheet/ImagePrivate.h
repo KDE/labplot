@@ -35,9 +35,6 @@ public:
 	void scaleImage();
 	void updateBorder();
 
-	bool m_hovered{false};
-
-	QRectF m_boundingRectangle; // bounding rectangle of the text
 	QRectF transformedBoundingRectangle; // bounding rectangle of transformed (rotated etc.) text
 	QPainterPath borderShapePath;
 	QPainterPath imageShape;

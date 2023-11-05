@@ -97,8 +97,6 @@ private:
 	void draw(QPainter*);
 	void drawSymbols(QPainter*, int);
 
-	bool m_hovered{false};
-
 	QVector<QVector<QLineF>> m_boxRect; // QVector<QLineF> contains four lines that are clipped on the plot rectangle
 	QVector<QPolygonF> m_fillPolygon; // polygons used for the filling (clipped versions of the boxes)
 	double m_widthScaleFactor{1.0};

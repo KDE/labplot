@@ -147,8 +147,6 @@ private:
 	QPainterPath arrowPath;
 	QPainterPath majorTicksPath;
 	QPainterPath minorTicksPath;
-	QRectF m_boundingRectangle;
-	QPainterPath axisShape;
 
 	bool m_panningStarted{false};
 	QPointF m_panningStart;
