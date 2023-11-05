@@ -30,7 +30,6 @@ extern "C" {
 #include <gsl/gsl_statistics.h>
 }
 
-#include <QGraphicsSceneContextMenuEvent>
 #include <QMenu>
 #include <QPainter>
 
@@ -126,24 +125,11 @@ void QQPlot::finalizeAdd() {
 	addChildFast(d->percentilesCurve);
 }
 
-QMenu* QQPlot::createContextMenu() {
-	return WorksheetElement::createContextMenu();
-}
-
 /*!
   Returns an icon to be used in the project explorer.
   */
 QIcon QQPlot::icon() const {
 	return QIcon::fromTheme(QStringLiteral("view-object-histogram-linear"));
-}
-
-QGraphicsItem* QQPlot::graphicsItem() const {
-	return d_ptr;
-}
-
-bool QQPlot::activatePlot(QPointF mouseScenePos, double maxDist) {
-	Q_D(QQPlot);
-	return d->activateCurve(mouseScenePos, maxDist);
 }
 
 void QQPlot::handleResize(double /*horizontalRatio*/, double /*verticalRatio*/, bool /*pageResize*/) {
@@ -260,7 +246,8 @@ void QQPlot::setDistribution(nsl_sf_stats_distribution distribution) {
 // #################################  SLOTS  ####################################
 // ##############################################################################
 void QQPlot::retransform() {
-	d_ptr->retransform();
+	D(QQPlot);
+	d->retransform();
 }
 
 void QQPlot::recalc() {
@@ -292,17 +279,6 @@ QQPlotPrivate::QQPlotPrivate(QQPlot* owner)
 }
 
 QQPlotPrivate::~QQPlotPrivate() {
-}
-
-QRectF QQPlotPrivate::boundingRect() const {
-	return boundingRectangle;
-}
-
-/*!
-  Returns the shape of the QQPlot as a QPainterPath in local coordinates
-  */
-QPainterPath QQPlotPrivate::shape() const {
-	return curveShape;
 }
 
 /*!
@@ -569,18 +545,11 @@ void QQPlotPrivate::recalcShapeAndBoundingRect() {
 		return;
 
 	prepareGeometryChange();
-	curveShape = QPainterPath();
-	curveShape.addPath(referenceCurve->graphicsItem()->shape());
-	curveShape.addPath(percentilesCurve->graphicsItem()->shape());
+	m_shape = QPainterPath();
+	m_shape.addPath(referenceCurve->graphicsItem()->shape());
+	m_shape.addPath(percentilesCurve->graphicsItem()->shape());
 
-	boundingRectangle = curveShape.boundingRect();
-}
-
-bool QQPlotPrivate::activateCurve(QPointF mouseScenePos, double /*maxDist*/) {
-	if (!isVisible())
-		return false;
-
-	return curveShape.contains(mouseScenePos);
+	m_boundingRectangle = m_shape.boundingRect();
 }
 
 // ##############################################################################

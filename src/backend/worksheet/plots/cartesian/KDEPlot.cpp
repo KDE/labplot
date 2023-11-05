@@ -31,7 +31,6 @@
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_statistics.h>
 
-#include <QGraphicsSceneContextMenuEvent>
 #include <QMenu>
 #include <QPainter>
 
@@ -115,25 +114,11 @@ void KDEPlot::finalizeAdd() {
 	addChildFast(d->rugCurve);
 }
 
-QMenu* KDEPlot::createContextMenu() {
-	return WorksheetElement::createContextMenu();
-	;
-}
-
 /*!
   Returns an icon to be used in the project explorer.
   */
 QIcon KDEPlot::icon() const {
 	return QIcon::fromTheme(QStringLiteral("view-object-histogram-linear"));
-}
-
-QGraphicsItem* KDEPlot::graphicsItem() const {
-	return d_ptr;
-}
-
-bool KDEPlot::activatePlot(QPointF mouseScenePos, double maxDist) {
-	Q_D(KDEPlot);
-	return d->activateCurve(mouseScenePos, maxDist);
 }
 
 void KDEPlot::handleResize(double /*horizontalRatio*/, double /*verticalRatio*/, bool /*pageResize*/) {
@@ -286,17 +271,6 @@ KDEPlotPrivate::KDEPlotPrivate(KDEPlot* owner)
 KDEPlotPrivate::~KDEPlotPrivate() {
 }
 
-QRectF KDEPlotPrivate::boundingRect() const {
-	return boundingRectangle;
-}
-
-/*!
-  Returns the shape of the KDEPlot as a QPainterPath in local coordinates
-  */
-QPainterPath KDEPlotPrivate::shape() const {
-	return curveShape;
-}
-
 /*!
   called when the size of the plot or its data ranges (manual changes, zooming, etc.) were changed.
   recalculates the position of the scene points to be drawn.
@@ -430,17 +404,10 @@ void KDEPlotPrivate::recalcShapeAndBoundingRect() {
 		return;
 
 	prepareGeometryChange();
-	curveShape = QPainterPath();
-	curveShape.addPath(estimationCurve->graphicsItem()->shape());
-	curveShape.addPath(rugCurve->graphicsItem()->shape());
-	boundingRectangle = curveShape.boundingRect();
-}
-
-bool KDEPlotPrivate::activateCurve(QPointF mouseScenePos, double /*maxDist*/) {
-	if (!isVisible())
-		return false;
-
-	return curveShape.contains(mouseScenePos);
+	m_shape = QPainterPath();
+	m_shape.addPath(estimationCurve->graphicsItem()->shape());
+	m_shape.addPath(rugCurve->graphicsItem()->shape());
+	m_boundingRectangle = m_shape.boundingRect();
 }
 
 // ##############################################################################

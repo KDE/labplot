@@ -119,10 +119,6 @@ QMenu* BarPlot::createContextMenu() {
 	return menu;
 }
 
-QGraphicsItem* BarPlot::graphicsItem() const {
-	return d_ptr;
-}
-
 void BarPlot::retransform() {
 	Q_D(BarPlot);
 	d->retransform();
@@ -134,11 +130,6 @@ void BarPlot::recalc() {
 }
 
 void BarPlot::handleResize(double /*horizontalRatio*/, double /*verticalRatio*/, bool /*pageResize*/) {
-}
-
-bool BarPlot::activatePlot(QPointF mouseScenePos, double maxDist) {
-	Q_D(BarPlot);
-	return d->activatePlot(mouseScenePos, maxDist);
 }
 
 /* ============================ getter methods ================= */
@@ -307,13 +298,6 @@ BarPlotPrivate::BarPlotPrivate(BarPlot* owner)
 	, q(owner) {
 	setFlag(QGraphicsItem::ItemIsSelectable);
 	setAcceptHoverEvents(false);
-}
-
-bool BarPlotPrivate::activatePlot(QPointF mouseScenePos, double /*maxDist*/) {
-	if (!isVisible())
-		return false;
-
-	return shape().contains(mouseScenePos);
 }
 
 Background* BarPlotPrivate::addBackground(const KConfigGroup& group) {
@@ -1084,25 +1068,11 @@ void BarPlotPrivate::updateValues() {
 }
 
 /*!
-	Returns the outer bounds of the item as a rectangle.
- */
-QRectF BarPlotPrivate::boundingRect() const {
-	return m_boundingRectangle;
-}
-
-/*!
-	Returns the shape of this item as a QPainterPath in local coordinates.
-*/
-QPainterPath BarPlotPrivate::shape() const {
-	return m_barPlotShape;
-}
-
-/*!
   recalculates the outer bounds and the shape of the item.
 */
 void BarPlotPrivate::recalcShapeAndBoundingRect() {
 	prepareGeometryChange();
-	m_barPlotShape = QPainterPath();
+	m_shape = QPainterPath();
 
 	int index = 0;
 	for (const auto& columnBarLines : m_barLines) { // loop over the different data columns
@@ -1115,16 +1085,16 @@ void BarPlotPrivate::recalcShapeAndBoundingRect() {
 
 			if (index < borderLines.count()) { // TODO
 				const auto& borderPen = borderLines.at(index)->pen();
-				m_barPlotShape.addPath(WorksheetElement::shapeFromPath(barPath, borderPen));
+				m_shape.addPath(WorksheetElement::shapeFromPath(barPath, borderPen));
 			}
 		}
 		++index;
 	}
 
 	if (value->type() != Value::NoValues)
-		m_barPlotShape.addPath(m_valuesPath);
+		m_shape.addPath(m_valuesPath);
 
-	m_boundingRectangle = m_barPlotShape.boundingRect();
+	m_boundingRectangle = m_shape.boundingRect();
 	updatePixmap();
 }
 
@@ -1235,10 +1205,6 @@ void BarPlotPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*
 		painter->drawImage(m_boundingRectangle.topLeft(), m_selectionEffectImage, m_pixmap.rect());
 		return;
 	}
-}
-
-void BarPlotPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
-	q->createContextMenu()->exec(event->screenPos());
 }
 
 // ##############################################################################

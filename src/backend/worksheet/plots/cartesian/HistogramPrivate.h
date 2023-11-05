@@ -25,9 +25,6 @@ public:
 	explicit HistogramPrivate(Histogram* owner);
 	~HistogramPrivate() override;
 
-	QRectF boundingRect() const override;
-	QPainterPath shape() const override;
-
 	void retransform() override;
 	void recalcHistogram();
 	void updateType();
@@ -42,8 +39,6 @@ public:
 	void updateRug();
 	void updatePixmap();
 	void recalcShapeAndBoundingRect() override;
-
-	bool activatePlot(QPointF mouseScenePos, double maxDist);
 
 	double xMinimum() const;
 	double xMaximum() const;
@@ -94,8 +89,6 @@ public:
 	QPainterPath symbolsPath;
 	QPainterPath valuesPath;
 	QPainterPath errorBarsPath;
-	QRectF boundingRectangle;
-	QPainterPath curveShape;
 	// TODO: use Qt container
 	// TODO: add m_
 	QVector<QLineF> lines;
@@ -115,8 +108,6 @@ private:
 	Column* m_binsColumn{nullptr}; // bin positions/edges
 	Column* m_binValuesColumn{nullptr}; // bin values
 	Column* m_binPDValuesColumn{nullptr}; // bin values in the probability density normalization
-
-	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
 	void mousePressEvent(QGraphicsSceneMouseEvent*) override;
 	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
 	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;

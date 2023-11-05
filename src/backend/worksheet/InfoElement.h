@@ -31,7 +31,7 @@ class InfoElement : public WorksheetElement {
 public:
 	InfoElement(const QString& name, CartesianPlot*);
 	InfoElement(const QString& name, CartesianPlot*, const XYCurve*, double logicalPos);
-	void setParentGraphicsItem(QGraphicsItem* item);
+	virtual void setParentGraphicsItem(QGraphicsItem* item) override;
 	~InfoElement();
 
 	struct MarkerPoints_T {
@@ -66,8 +66,6 @@ public:
 	bool isTextLabel() const;
 	double setMarkerpointPosition(double x);
 	int currentIndex(double new_x, double* found_x = nullptr);
-
-	QGraphicsItem* graphicsItem() const override;
 
 	void retransform() override;
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;

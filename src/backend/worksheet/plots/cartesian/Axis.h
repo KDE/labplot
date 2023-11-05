@@ -99,8 +99,6 @@ public:
 
 	QIcon icon() const override;
 	QMenu* createContextMenu() override;
-
-	QGraphicsItem* graphicsItem() const override;
 	void setZValue(qreal) override;
 
 	void save(QXmlStreamWriter*) const override;

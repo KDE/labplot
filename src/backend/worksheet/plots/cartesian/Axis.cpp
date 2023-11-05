@@ -31,7 +31,7 @@
 #include <KLocalizedString>
 
 #include <QActionGroup>
-#include <QGraphicsSceneContextMenuEvent>
+#include <QGraphicsSceneMouseEvent>
 #include <QMenu>
 #include <QPainter>
 #include <QTextDocument>
@@ -351,10 +351,6 @@ Axis::~Axis() {
 
 	// no need to delete the d-pointer here - it inherits from QGraphicsItem
 	// and is deleted during the cleanup in QGraphicsScene
-}
-
-QGraphicsItem* Axis::graphicsItem() const {
-	return d_ptr;
 }
 
 /*!
@@ -1078,17 +1074,6 @@ bool AxisPrivate::swapVisible(bool on) {
 	Q_EMIT q->changed();
 	Q_EMIT q->visibleChanged(on);
 	return oldValue;
-}
-
-QRectF AxisPrivate::boundingRect() const {
-	return boundingRectangle;
-}
-
-/*!
-  Returns the shape of the XYCurve as a QPainterPath in local coordinates
-*/
-QPainterPath AxisPrivate::shape() const {
-	return axisShape;
 }
 
 /*!
@@ -2611,8 +2596,8 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 	prepareGeometryChange();
 
 	if (linePath.isEmpty()) {
-		axisShape = QPainterPath();
-		boundingRectangle = QRectF();
+		m_shape = QPainterPath();
+		m_boundingRectangle = QRectF();
 		title->setPositionInvalid(true);
 		if (plot())
 			plot()->prepareGeometryChange();
@@ -2622,10 +2607,10 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 	}
 
 	const auto& linePen = line->pen();
-	axisShape = WorksheetElement::shapeFromPath(linePath, linePen);
-	axisShape.addPath(WorksheetElement::shapeFromPath(arrowPath, linePen));
-	axisShape.addPath(WorksheetElement::shapeFromPath(majorTicksPath, majorTicksLine->pen()));
-	axisShape.addPath(WorksheetElement::shapeFromPath(minorTicksPath, minorTicksLine->pen()));
+	m_shape = WorksheetElement::shapeFromPath(linePath, linePen);
+	m_shape.addPath(WorksheetElement::shapeFromPath(arrowPath, linePen));
+	m_shape.addPath(WorksheetElement::shapeFromPath(majorTicksPath, majorTicksLine->pen()));
+	m_shape.addPath(WorksheetElement::shapeFromPath(minorTicksPath, minorTicksLine->pen()));
 
 	QPainterPath tickLabelsPath = QPainterPath();
 	if (labelsPosition != Axis::LabelsPosition::NoLabels) {
@@ -2651,7 +2636,7 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 
 			tickLabelsPath.addPath(WorksheetElement::shapeFromPath(tempPath, linePen));
 		}
-		axisShape.addPath(WorksheetElement::shapeFromPath(tickLabelsPath, QPen()));
+		m_shape.addPath(WorksheetElement::shapeFromPath(tickLabelsPath, QPen()));
 	}
 
 	// add title label, if available
@@ -2677,11 +2662,11 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 					offsetX -= labelsOffset + tickLabelsPath.boundingRect().width();
 				title->setPosition(QPointF(rect.topLeft().x() + offsetX, (rect.topLeft().y() + rect.bottomLeft().y()) / 2. - titleOffsetY));
 			}
-			axisShape.addPath(WorksheetElement::shapeFromPath(title->graphicsItem()->mapToParent(title->graphicsItem()->shape()), linePen));
+			m_shape.addPath(WorksheetElement::shapeFromPath(title->graphicsItem()->mapToParent(title->graphicsItem()->shape()), linePen));
 		}
 	}
 
-	boundingRectangle = axisShape.boundingRect();
+	m_boundingRectangle = m_shape.boundingRect();
 
 	// if the axis goes beyond the current bounding box of the plot (too high offset is used, too long labels etc.)
 	// request a prepareGeometryChange() for the plot in order to properly keep track of geometry changes
@@ -2831,38 +2816,18 @@ void AxisPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*opt
 	// shape and label
 	if (m_hovered && !isSelected() && !q->isPrinting()) {
 		painter->setPen(QPen(QApplication::palette().color(QPalette::Shadow), 2, Qt::SolidLine));
-		painter->drawPath(axisShape);
+		painter->drawPath(m_shape);
 	}
 
 	if (isSelected() && !q->isPrinting()) {
 		painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), 2, Qt::SolidLine));
-		painter->drawPath(axisShape);
+		painter->drawPath(m_shape);
 	}
 
 #if DEBUG_AXIS_BOUNDING_RECT
 	painter->setPen(QColor(Qt::GlobalColor::blue));
 	painter->drawRect(boundingRect());
 #endif
-}
-
-void AxisPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
-	q->createContextMenu()->exec(event->screenPos());
-}
-
-void AxisPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
-	if (!isSelected()) {
-		m_hovered = true;
-		Q_EMIT q->hovered();
-		update(axisShape.boundingRect());
-	}
-}
-
-void AxisPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
-	if (m_hovered) {
-		m_hovered = false;
-		Q_EMIT q->unhovered();
-		update(axisShape.boundingRect());
-	}
 }
 
 void AxisPrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {

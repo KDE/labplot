@@ -178,20 +178,6 @@ void TextLabel::init() {
 // and is deleted during the cleanup in QGraphicsScene
 TextLabel::~TextLabel() = default;
 
-QGraphicsItem* TextLabel::graphicsItem() const {
-	return d_ptr;
-}
-
-/*!
- * \brief TextLabel::setParentGraphicsItem
- * Sets the parent graphicsitem, needed for binding to coord
- * \param item parent graphicsitem
- */
-void TextLabel::setParentGraphicsItem(QGraphicsItem* item) {
-	Q_D(TextLabel);
-	d->setParentItem(item);
-}
-
 void TextLabel::setZoomFactor(double factor) {
 	Q_D(TextLabel);
 	d->setZoomFactor(factor);
@@ -438,7 +424,7 @@ QRectF TextLabelPrivate::size() {
  */
 QPointF TextLabelPrivate::findNearestGluePoint(QPointF scenePoint) {
 	if (m_gluePointsTransformed.isEmpty())
-		return boundingRectangle.center();
+		return m_boundingRectangle.center();
 
 	if (m_gluePointsTransformed.length() == 1)
 		return mapParentToPlotArea(mapToParent(m_gluePointsTransformed.at(0).point));
@@ -470,7 +456,7 @@ TextLabel::GluePoint TextLabelPrivate::gluePointAt(int index) {
 	QString name;
 
 	if (m_gluePointsTransformed.isEmpty() || index > m_gluePointsTransformed.length()) {
-		pos = boundingRectangle.center();
+		pos = m_boundingRectangle.center();
 		name = QLatin1String("center");
 	} else if (index < 0) {
 		pos = m_gluePointsTransformed.at(0).point;
@@ -527,7 +513,7 @@ void TextLabelPrivate::updatePosition() {
 		// the position in scene coordinates was changed, calculate the position in logical coordinates
 		if (q->cSystem) {
 			if (!coordinateBindingEnabled) {
-				QPointF pos = q->align(p, boundingRectangle, horizontalAlignment, verticalAlignment, false);
+				QPointF pos = q->align(p, m_boundingRectangle, horizontalAlignment, verticalAlignment, false);
 				positionLogical = q->cSystem->mapSceneToLogical(pos, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 			}
 			Q_EMIT q->positionLogicalChanged(positionLogical);
@@ -652,10 +638,10 @@ void TextLabelPrivate::updateBoundingRect() {
 	}
 
 	// DEBUG(Q_FUNC_INFO << ", scale factor = " << scaleFactor << ", w/h = " << w << " / " << h)
-	boundingRectangle.setX(-w / 2);
-	boundingRectangle.setY(-h / 2);
-	boundingRectangle.setWidth(w);
-	boundingRectangle.setHeight(h);
+	m_boundingRectangle.setX(-w / 2);
+	m_boundingRectangle.setY(-h / 2);
+	m_boundingRectangle.setWidth(w);
+	m_boundingRectangle.setHeight(h);
 
 	updateBorder();
 }
@@ -683,31 +669,35 @@ void TextLabelPrivate::updateBorder() {
 	switch (borderShape) {
 	case (TextLabel::BorderShape::NoBorder): {
 		m_gluePoints.clear();
-		m_gluePoints.append(GluePoint(QPointF(boundingRectangle.x() + boundingRectangle.width() / 2, boundingRectangle.y()), QStringLiteral("top")));
-		m_gluePoints.append(GluePoint(QPointF(boundingRectangle.x() + boundingRectangle.width(), boundingRectangle.y() + boundingRectangle.height() / 2),
-									  QStringLiteral("right")));
-		m_gluePoints.append(GluePoint(QPointF(boundingRectangle.x() + boundingRectangle.width() / 2, boundingRectangle.y() + boundingRectangle.height()),
-									  QStringLiteral("bottom")));
-		m_gluePoints.append(GluePoint(QPointF(boundingRectangle.x(), boundingRectangle.y() + boundingRectangle.height() / 2), QStringLiteral("left")));
+		m_gluePoints.append(GluePoint(QPointF(m_boundingRectangle.x() + m_boundingRectangle.width() / 2, m_boundingRectangle.y()), QStringLiteral("top")));
+		m_gluePoints.append(
+			GluePoint(QPointF(m_boundingRectangle.x() + m_boundingRectangle.width(), m_boundingRectangle.y() + m_boundingRectangle.height() / 2),
+					  QStringLiteral("right")));
+		m_gluePoints.append(
+			GluePoint(QPointF(m_boundingRectangle.x() + m_boundingRectangle.width() / 2, m_boundingRectangle.y() + m_boundingRectangle.height()),
+					  QStringLiteral("bottom")));
+		m_gluePoints.append(GluePoint(QPointF(m_boundingRectangle.x(), m_boundingRectangle.y() + m_boundingRectangle.height() / 2), QStringLiteral("left")));
 		break;
 	}
 	case (TextLabel::BorderShape::Rect): {
-		borderShapePath.addRect(boundingRectangle);
+		borderShapePath.addRect(m_boundingRectangle);
 
 		m_gluePoints.clear();
-		m_gluePoints.append(GluePoint(QPointF(boundingRectangle.x() + boundingRectangle.width() / 2, boundingRectangle.y()), QStringLiteral("top")));
-		m_gluePoints.append(GluePoint(QPointF(boundingRectangle.x() + boundingRectangle.width(), boundingRectangle.y() + boundingRectangle.height() / 2),
-									  QStringLiteral("right")));
-		m_gluePoints.append(GluePoint(QPointF(boundingRectangle.x() + boundingRectangle.width() / 2, boundingRectangle.y() + boundingRectangle.height()),
-									  QStringLiteral("bottom")));
-		m_gluePoints.append(GluePoint(QPointF(boundingRectangle.x(), boundingRectangle.y() + boundingRectangle.height() / 2), QStringLiteral("left")));
+		m_gluePoints.append(GluePoint(QPointF(m_boundingRectangle.x() + m_boundingRectangle.width() / 2, m_boundingRectangle.y()), QStringLiteral("top")));
+		m_gluePoints.append(
+			GluePoint(QPointF(m_boundingRectangle.x() + m_boundingRectangle.width(), m_boundingRectangle.y() + m_boundingRectangle.height() / 2),
+					  QStringLiteral("right")));
+		m_gluePoints.append(
+			GluePoint(QPointF(m_boundingRectangle.x() + m_boundingRectangle.width() / 2, m_boundingRectangle.y() + m_boundingRectangle.height()),
+					  QStringLiteral("bottom")));
+		m_gluePoints.append(GluePoint(QPointF(m_boundingRectangle.x(), m_boundingRectangle.y() + m_boundingRectangle.height() / 2), QStringLiteral("left")));
 		break;
 	}
 	case (TextLabel::BorderShape::Ellipse): {
-		const double xs = boundingRectangle.x();
-		const double ys = boundingRectangle.y();
-		const double w = boundingRectangle.width();
-		const double h = boundingRectangle.height();
+		const double xs = m_boundingRectangle.x();
+		const double ys = m_boundingRectangle.y();
+		const double w = m_boundingRectangle.width();
+		const double h = m_boundingRectangle.height();
 		const QRectF ellipseRect(xs - 0.1 * w, ys - 0.1 * h, 1.2 * w, 1.2 * h);
 		borderShapePath.addEllipse(ellipseRect);
 
@@ -719,10 +709,10 @@ void TextLabelPrivate::updateBorder() {
 		break;
 	}
 	case (TextLabel::BorderShape::RoundSideRect): {
-		const double xs = boundingRectangle.x();
-		const double ys = boundingRectangle.y();
-		const double w = boundingRectangle.width();
-		const double h = boundingRectangle.height();
+		const double xs = m_boundingRectangle.x();
+		const double ys = m_boundingRectangle.y();
+		const double w = m_boundingRectangle.width();
+		const double h = m_boundingRectangle.height();
 		borderShapePath.moveTo(xs, ys);
 		borderShapePath.lineTo(xs + w, ys);
 		borderShapePath.quadTo(xs + w + h / 2, ys + h / 2, xs + w, ys + h);
@@ -737,10 +727,10 @@ void TextLabelPrivate::updateBorder() {
 		break;
 	}
 	case (TextLabel::BorderShape::RoundCornerRect): {
-		const double xs = boundingRectangle.x();
-		const double ys = boundingRectangle.y();
-		const double w = boundingRectangle.width();
-		const double h = boundingRectangle.height();
+		const double xs = m_boundingRectangle.x();
+		const double ys = m_boundingRectangle.y();
+		const double w = m_boundingRectangle.width();
+		const double h = m_boundingRectangle.height();
 		borderShapePath.moveTo(xs + h * 0.2, ys);
 		borderShapePath.lineTo(xs + w - h * 0.2, ys);
 		borderShapePath.quadTo(xs + w, ys, xs + w, ys + h * 0.2);
@@ -759,10 +749,10 @@ void TextLabelPrivate::updateBorder() {
 		break;
 	}
 	case (TextLabel::BorderShape::InwardsRoundCornerRect): {
-		const double xs = boundingRectangle.x();
-		const double ys = boundingRectangle.y();
-		const double w = boundingRectangle.width();
-		const double h = boundingRectangle.height();
+		const double xs = m_boundingRectangle.x();
+		const double ys = m_boundingRectangle.y();
+		const double w = m_boundingRectangle.width();
+		const double h = m_boundingRectangle.height();
 		borderShapePath.moveTo(xs, ys - 0.3 * h);
 		borderShapePath.lineTo(xs + w, ys - 0.3 * h);
 		borderShapePath.quadTo(xs + w, ys, xs + w + 0.3 * h, ys);
@@ -781,10 +771,10 @@ void TextLabelPrivate::updateBorder() {
 		break;
 	}
 	case (TextLabel::BorderShape::DentedBorderRect): {
-		const double xs = boundingRectangle.x();
-		const double ys = boundingRectangle.y();
-		const double w = boundingRectangle.width();
-		const double h = boundingRectangle.height();
+		const double xs = m_boundingRectangle.x();
+		const double ys = m_boundingRectangle.y();
+		const double w = m_boundingRectangle.width();
+		const double h = m_boundingRectangle.height();
 		borderShapePath.moveTo(xs - 0.2 * h, ys - 0.2 * h);
 		borderShapePath.quadTo(xs + w / 2, ys, xs + w + 0.2 * h, ys - 0.2 * h);
 		borderShapePath.quadTo(xs + w, ys + h / 2, xs + w + 0.2 * h, ys + h + 0.2 * h);
@@ -799,10 +789,10 @@ void TextLabelPrivate::updateBorder() {
 		break;
 	}
 	case (TextLabel::BorderShape::Cuboid): {
-		const double xs = boundingRectangle.x();
-		const double ys = boundingRectangle.y();
-		const double w = boundingRectangle.width();
-		const double h = boundingRectangle.height();
+		const double xs = m_boundingRectangle.x();
+		const double ys = m_boundingRectangle.y();
+		const double w = m_boundingRectangle.width();
+		const double h = m_boundingRectangle.height();
 		borderShapePath.moveTo(xs, ys);
 		borderShapePath.lineTo(xs + w, ys);
 		borderShapePath.lineTo(xs + w, ys + h);
@@ -823,10 +813,10 @@ void TextLabelPrivate::updateBorder() {
 		break;
 	}
 	case (TextLabel::BorderShape::UpPointingRectangle): {
-		const double xs = boundingRectangle.x();
-		const double ys = boundingRectangle.y();
-		const double w = boundingRectangle.width();
-		const double h = boundingRectangle.height();
+		const double xs = m_boundingRectangle.x();
+		const double ys = m_boundingRectangle.y();
+		const double w = m_boundingRectangle.width();
+		const double h = m_boundingRectangle.height();
 		borderShapePath.moveTo(xs + h * 0.2, ys);
 		borderShapePath.lineTo(xs + w / 2 - 0.2 * h, ys);
 		borderShapePath.lineTo(xs + w / 2, ys - 0.2 * h);
@@ -848,10 +838,10 @@ void TextLabelPrivate::updateBorder() {
 		break;
 	}
 	case (TextLabel::BorderShape::DownPointingRectangle): {
-		const double xs = boundingRectangle.x();
-		const double ys = boundingRectangle.y();
-		const double w = boundingRectangle.width();
-		const double h = boundingRectangle.height();
+		const double xs = m_boundingRectangle.x();
+		const double ys = m_boundingRectangle.y();
+		const double w = m_boundingRectangle.width();
+		const double h = m_boundingRectangle.height();
 		borderShapePath.moveTo(xs + h * 0.2, ys);
 		borderShapePath.lineTo(xs + w - h * 0.2, ys);
 		borderShapePath.quadTo(xs + w, ys, xs + w, ys + h * 0.2);
@@ -873,10 +863,10 @@ void TextLabelPrivate::updateBorder() {
 		break;
 	}
 	case (TextLabel::BorderShape::LeftPointingRectangle): {
-		const double xs = boundingRectangle.x();
-		const double ys = boundingRectangle.y();
-		const double w = boundingRectangle.width();
-		const double h = boundingRectangle.height();
+		const double xs = m_boundingRectangle.x();
+		const double ys = m_boundingRectangle.y();
+		const double w = m_boundingRectangle.width();
+		const double h = m_boundingRectangle.height();
 		borderShapePath.moveTo(xs + h * 0.2, ys);
 		borderShapePath.lineTo(xs + w - h * 0.2, ys);
 		borderShapePath.quadTo(xs + w, ys, xs + w, ys + h * 0.2);
@@ -898,10 +888,10 @@ void TextLabelPrivate::updateBorder() {
 		break;
 	}
 	case (TextLabel::BorderShape::RightPointingRectangle): {
-		const double xs = boundingRectangle.x();
-		const double ys = boundingRectangle.y();
-		const double w = boundingRectangle.width();
-		const double h = boundingRectangle.height();
+		const double xs = m_boundingRectangle.x();
+		const double ys = m_boundingRectangle.y();
+		const double w = m_boundingRectangle.width();
+		const double h = m_boundingRectangle.height();
 		borderShapePath.moveTo(xs + h * 0.2, ys);
 		borderShapePath.lineTo(xs + w - h * 0.2, ys);
 		borderShapePath.quadTo(xs + w, ys, xs + w, ys + h * 0.2);
@@ -953,8 +943,8 @@ void TextLabelPrivate::recalcShapeAndBoundingRect() {
 		labelShape.addPath(WorksheetElement::shapeFromPath(borderShapePath, borderPen));
 		transformedBoundingRectangle = matrix.mapRect(labelShape.boundingRect());
 	} else {
-		labelShape.addRect(boundingRectangle);
-		transformedBoundingRectangle = matrix.mapRect(boundingRectangle);
+		labelShape.addRect(m_boundingRectangle);
+		transformedBoundingRectangle = matrix.mapRect(m_boundingRectangle);
 	}
 
 	labelShape = matrix.map(labelShape);
@@ -976,8 +966,8 @@ void TextLabelPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 	switch (textWrapper.mode) {
 	case TextLabel::Mode::LaTeX: {
 		painter->setRenderHint(QPainter::SmoothPixmapTransform);
-		if (boundingRectangle.width() != 0.0 && boundingRectangle.height() != 0.0)
-			painter->drawImage(boundingRectangle, teXImage);
+		if (m_boundingRectangle.width() != 0.0 && m_boundingRectangle.height() != 0.0)
+			painter->drawImage(m_boundingRectangle, teXImage);
 		break;
 	}
 	case TextLabel::Mode::Text:

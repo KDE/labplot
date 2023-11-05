@@ -36,12 +36,6 @@ public:
 	Symbol* addSymbol(const KConfigGroup&);
 	void addValue(const KConfigGroup&);
 
-	// reimplemented from QGraphicsItem
-	QRectF boundingRect() const override;
-	QPainterPath shape() const override;
-
-	bool activatePlot(QPointF mouseScenePos, double maxDist);
-
 	LollipopPlot* const q;
 
 	// General
@@ -62,7 +56,6 @@ public:
 	Value* value{nullptr};
 
 private:
-	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
 
 	void recalc(int);
@@ -70,9 +63,6 @@ private:
 	void horizontalPlot(int);
 
 	void draw(QPainter*);
-
-	QRectF m_boundingRectangle;
-	QPainterPath m_shape;
 
 	QVector<QVector<QLineF>> m_barLines; // QVector<QLineF> contains the lines for each data column
 	QVector<QVector<QPointF>> m_symbolPoints; // QVector<QPointF> contains the positions of symbols for each data column

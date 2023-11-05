@@ -76,7 +76,8 @@ public:
 
 	void finalizeAdd() override;
 
-	virtual QGraphicsItem* graphicsItem() const = 0;
+	virtual QGraphicsItem* graphicsItem() const;
+	virtual void setParentGraphicsItem(QGraphicsItem* item);
 	virtual void setZValue(qreal);
 	virtual void setVisible(bool on);
 	virtual bool isVisible() const;
@@ -92,7 +93,7 @@ public:
 
 	QPointF align(QPointF, QRectF, HorizontalAlignment, VerticalAlignment, bool positive) const;
 
-	QMenu* createContextMenu() override;
+	virtual QMenu* createContextMenu() override;
 	QAction* visibilityAction();
 	QAction* lockingAction();
 

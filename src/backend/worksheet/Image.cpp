@@ -83,10 +83,6 @@ void Image::init() {
 // and is deleted during the cleanup in QGraphicsScene
 Image::~Image() = default;
 
-QGraphicsItem* Image::graphicsItem() const {
-	return d_ptr;
-}
-
 void Image::setParentGraphicsItem(QGraphicsItem* item) {
 	Q_D(Image);
 	d->setParentItem(item);
@@ -114,10 +110,6 @@ void Image::handleResize(double /*horizontalRatio*/, double /*verticalRatio*/, b
 */
 QIcon Image::icon() const {
 	return QIcon::fromTheme(QStringLiteral("viewimage"));
-}
-
-QMenu* Image::createContextMenu() {
-	return WorksheetElement::createContextMenu();
 }
 
 /* ============================ getter methods ================= */
@@ -208,10 +200,10 @@ void ImagePrivate::retransform() {
 
 	int w = imageScaled.width();
 	int h = imageScaled.height();
-	boundingRectangle.setX(-w / 2);
-	boundingRectangle.setY(-h / 2);
-	boundingRectangle.setWidth(w);
-	boundingRectangle.setHeight(h);
+	m_boundingRectangle.setX(-w / 2);
+	m_boundingRectangle.setY(-h / 2);
+	m_boundingRectangle.setWidth(w);
+	m_boundingRectangle.setHeight(h);
 
 	updatePosition(); // needed, because CartesianPlot calls retransform if some operations are done
 	updateBorder();
@@ -265,7 +257,7 @@ void ImagePrivate::scaleImage() {
 
 void ImagePrivate::updateBorder() {
 	borderShapePath = QPainterPath();
-	borderShapePath.addRect(boundingRectangle);
+	borderShapePath.addRect(m_boundingRectangle);
 	recalcShapeAndBoundingRect();
 }
 
@@ -295,8 +287,8 @@ void ImagePrivate::recalcShapeAndBoundingRect() {
 		imageShape.addPath(WorksheetElement::shapeFromPath(borderShapePath, borderLine->pen()));
 		transformedBoundingRectangle = matrix.mapRect(imageShape.boundingRect());
 	} else {
-		imageShape.addRect(boundingRectangle);
-		transformedBoundingRectangle = matrix.mapRect(boundingRectangle);
+		imageShape.addRect(m_boundingRectangle);
+		transformedBoundingRectangle = matrix.mapRect(m_boundingRectangle);
 	}
 
 	imageShape = matrix.map(imageShape);
@@ -309,7 +301,7 @@ void ImagePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*op
 
 	// draw the image
 	painter->setOpacity(opacity);
-	painter->drawImage(boundingRectangle.topLeft(), imageScaled, imageScaled.rect());
+	painter->drawImage(m_boundingRectangle.topLeft(), imageScaled, imageScaled.rect());
 	painter->restore();
 
 	// draw the border
@@ -338,10 +330,6 @@ void ImagePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*op
 
 		painter->drawRect(rect);
 	}
-}
-
-void ImagePrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
-	q->createContextMenu()->exec(event->screenPos());
 }
 
 // ##############################################################################

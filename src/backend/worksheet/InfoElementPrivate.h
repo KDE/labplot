@@ -24,7 +24,6 @@ public:
 	InfoElementPrivate(InfoElement* owner, const XYCurve*);
 
 	// reimplemented from QGraphicsItem
-	QRectF boundingRect() const override;
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
 	void keyPressEvent(QKeyEvent*) override;
 	void mousePressEvent(QGraphicsSceneMouseEvent*) override;
@@ -57,7 +56,7 @@ private:
 	QPointF sceneDeltaPoint; // delta position from worksheetinfoElementPrivate to the first marker point in scene coords
 	QPointF sceneDeltaTextLabel;
 
-	QRectF boundingRectangle; // bounding rectangle of the connection line between CustomPoint and TextLabel
+	QRectF m_boundingRectangle; // bounding rectangle of the connection line between CustomPoint and TextLabel
 	QLineF m_connectionLine; // line between CustomPoint and TextLabel
 	QLineF xposLine; // Line which connects all markerpoints, when there are more than 1
 	QPointF oldMousePos;

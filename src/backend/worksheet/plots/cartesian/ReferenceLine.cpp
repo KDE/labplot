@@ -172,10 +172,6 @@ QMenu* ReferenceLine::createContextMenu() {
 	return menu;
 }
 
-QGraphicsItem* ReferenceLine::graphicsItem() const {
-	return d_ptr;
-}
-
 void ReferenceLine::retransform() {
 	Q_D(ReferenceLine);
 	d->retransform();
@@ -297,26 +293,12 @@ void ReferenceLinePrivate::updateOrientation() {
 }
 
 /*!
-	Returns the outer bounds of the item as a rectangle.
- */
-QRectF ReferenceLinePrivate::boundingRect() const {
-	return boundingRectangle;
-}
-
-/*!
-	Returns the shape of this item as a QPainterPath in local coordinates.
-*/
-QPainterPath ReferenceLinePrivate::shape() const {
-	return lineShape;
-}
-
-/*!
   recalculates the outer bounds and the shape of the item.
 */
 void ReferenceLinePrivate::recalcShapeAndBoundingRect() {
 	prepareGeometryChange();
 
-	lineShape = QPainterPath();
+	m_shape = QPainterPath();
 	if (insidePlot) {
 		QPainterPath path;
 		if (orientation == ReferenceLine::Orientation::Horizontal) {
@@ -326,8 +308,8 @@ void ReferenceLinePrivate::recalcShapeAndBoundingRect() {
 			path.moveTo(0, length / 2);
 			path.lineTo(0, -length / 2);
 		}
-		lineShape.addPath(WorksheetElement::shapeFromPath(path, line->pen()));
-		boundingRectangle = lineShape.boundingRect();
+		m_shape.addPath(WorksheetElement::shapeFromPath(path, line->pen()));
+		m_boundingRectangle = m_shape.boundingRect();
 	}
 }
 
@@ -344,17 +326,13 @@ void ReferenceLinePrivate::paint(QPainter* painter, const QStyleOptionGraphicsIt
 
 	if (m_hovered && !isSelected() && !q->isPrinting()) {
 		painter->setPen(QPen(QApplication::palette().color(QPalette::Shadow), 2, Qt::SolidLine));
-		painter->drawPath(lineShape);
+		painter->drawPath(m_shape);
 	}
 
 	if (isSelected() && !q->isPrinting()) {
 		painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), 2, Qt::SolidLine));
-		painter->drawPath(lineShape);
+		painter->drawPath(m_shape);
 	}
-}
-
-void ReferenceLinePrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
-	q->createContextMenu()->exec(event->screenPos());
 }
 
 // ##############################################################################

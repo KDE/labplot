@@ -226,15 +226,15 @@ void WorksheetElementContainerPrivate::recalcShapeAndBoundingRect() {
 	// 		boundingRectangle |= elem->graphicsItem()->mapRectToParent(elem->graphicsItem()->boundingRect());
 	//
 	qreal penWidth = 2.;
-	boundingRectangle = q->rect();
+	m_boundingRectangle = q->rect();
 	// QDEBUG(Q_FUNC_INFO << ", bound rect = " << boundingRectangle)
-	boundingRectangle = QRectF(-boundingRectangle.width() / 2. - penWidth / 2.,
-							   -boundingRectangle.height() / 2. - penWidth / 2.,
-							   boundingRectangle.width() + penWidth,
-							   boundingRectangle.height() + penWidth);
+	m_boundingRectangle = QRectF(-m_boundingRectangle.width() / 2. - penWidth / 2.,
+								 -m_boundingRectangle.height() / 2. - penWidth / 2.,
+								 m_boundingRectangle.width() + penWidth,
+								 m_boundingRectangle.height() + penWidth);
 
 	QPainterPath path;
-	path.addRect(boundingRectangle);
+	path.addRect(m_boundingRectangle);
 
 	// make the shape somewhat thicker than the hoveredPen to make the selection/hovering box more visible
 	containerShape = QPainterPath();
@@ -243,7 +243,7 @@ void WorksheetElementContainerPrivate::recalcShapeAndBoundingRect() {
 
 // Inherited from QGraphicsItem
 QRectF WorksheetElementContainerPrivate::boundingRect() const {
-	return boundingRectangle;
+	return m_boundingRectangle;
 }
 
 // Inherited from QGraphicsItem

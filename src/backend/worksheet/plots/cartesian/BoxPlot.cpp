@@ -257,10 +257,6 @@ QMenu* BoxPlot::createContextMenu() {
 	return menu;
 }
 
-QGraphicsItem* BoxPlot::graphicsItem() const {
-	return d_ptr;
-}
-
 void BoxPlot::retransform() {
 	Q_D(BoxPlot);
 	d->retransform();
@@ -272,11 +268,6 @@ void BoxPlot::recalc() {
 }
 
 void BoxPlot::handleResize(double /*horizontalRatio*/, double /*verticalRatio*/, bool /*pageResize*/) {
-}
-
-bool BoxPlot::activatePlot(QPointF mouseScenePos, double maxDist) {
-	Q_D(BoxPlot);
-	return d->activatePlot(mouseScenePos, maxDist);
 }
 
 /*!
@@ -593,13 +584,6 @@ BoxPlotPrivate::BoxPlotPrivate(BoxPlot* owner)
 	, q(owner) {
 	setFlag(QGraphicsItem::ItemIsSelectable);
 	setAcceptHoverEvents(false);
-}
-
-bool BoxPlotPrivate::activatePlot(QPointF mouseScenePos, double /*maxDist*/) {
-	if (!isVisible())
-		return false;
-
-	return shape().contains(mouseScenePos);
 }
 
 Background* BoxPlotPrivate::addBackground(const KConfigGroup& group) {
@@ -1404,25 +1388,11 @@ void BoxPlotPrivate::mapSymbolsToScene(int index) {
 }
 
 /*!
-	Returns the outer bounds of the item as a rectangle.
- */
-QRectF BoxPlotPrivate::boundingRect() const {
-	return m_boundingRectangle;
-}
-
-/*!
-	Returns the shape of this item as a QPainterPath in local coordinates.
-*/
-QPainterPath BoxPlotPrivate::shape() const {
-	return m_boxPlotShape;
-}
-
-/*!
   recalculates the outer bounds and the shape of the item.
 */
 void BoxPlotPrivate::recalcShapeAndBoundingRect() {
 	prepareGeometryChange();
-	m_boxPlotShape = QPainterPath();
+	m_shape = QPainterPath();
 
 	for (int i = 0; i < dataColumnsOrdered.size(); ++i) {
 		if (!dataColumnsOrdered.at(i) || static_cast<const Column*>(dataColumnsOrdered.at(i))->statistics().size == 0)
@@ -1433,12 +1403,12 @@ void BoxPlotPrivate::recalcShapeAndBoundingRect() {
 			boxPath.moveTo(line.p1());
 			boxPath.lineTo(line.p2());
 		}
-		m_boxPlotShape.addPath(WorksheetElement::shapeFromPath(boxPath, borderLines.at(i)->pen()));
+		m_shape.addPath(WorksheetElement::shapeFromPath(boxPath, borderLines.at(i)->pen()));
 
-		m_boxPlotShape.addPath(WorksheetElement::shapeFromPath(m_whiskersPath.at(i), whiskersLine->pen()));
-		m_boxPlotShape.addPath(WorksheetElement::shapeFromPath(m_whiskersCapPath.at(i), whiskersCapLine->pen()));
+		m_shape.addPath(WorksheetElement::shapeFromPath(m_whiskersPath.at(i), whiskersLine->pen()));
+		m_shape.addPath(WorksheetElement::shapeFromPath(m_whiskersCapPath.at(i), whiskersCapLine->pen()));
 
-		m_boxPlotShape.addPath(WorksheetElement::shapeFromPath(m_rugPath.at(i), borderLines.at(i)->pen()));
+		m_shape.addPath(WorksheetElement::shapeFromPath(m_rugPath.at(i), borderLines.at(i)->pen()));
 
 		// add symbols outlier, jitter and far out values
 		QPainterPath symbolsPath = QPainterPath();
@@ -1523,10 +1493,10 @@ void BoxPlotPrivate::recalcShapeAndBoundingRect() {
 			}
 		}
 
-		m_boxPlotShape.addPath(symbolsPath);
+		m_shape.addPath(symbolsPath);
 	}
 
-	m_boundingRectangle = m_boxPlotShape.boundingRect();
+	m_boundingRectangle = m_shape.boundingRect();
 	updatePixmap();
 }
 
@@ -1690,26 +1660,6 @@ void BoxPlotPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*
 
 		painter->drawImage(m_boundingRectangle.topLeft(), m_selectionEffectImage, m_pixmap.rect());
 		return;
-	}
-}
-
-void BoxPlotPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
-	q->createContextMenu()->exec(event->screenPos());
-}
-
-void BoxPlotPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
-	if (!isSelected()) {
-		m_hovered = true;
-		Q_EMIT q->hovered();
-		update();
-	}
-}
-
-void BoxPlotPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
-	if (m_hovered) {
-		m_hovered = false;
-		Q_EMIT q->unhovered();
-		update();
 	}
 }
 

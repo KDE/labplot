@@ -22,6 +22,7 @@
 #include <KLocalizedString>
 #include <QGraphicsItem>
 #include <QGraphicsScene>
+#include <QGraphicsSceneContextMenuEvent>
 #include <QKeyEvent>
 #include <QMenu>
 #include <QPen>
@@ -45,7 +46,8 @@ WorksheetElement::WorksheetElement(const QString& name, WorksheetElementPrivate*
 }
 
 void WorksheetElement::init() {
-	d_ptr->setData(0, static_cast<quint64>(type()));
+	Q_D(WorksheetElement);
+	d->setData(0, static_cast<quint64>(type()));
 }
 
 WorksheetElement::~WorksheetElement() {
@@ -76,6 +78,19 @@ void WorksheetElement::finalizeAdd() {
  * \brief Return the graphics item representing this element.
  *
  */
+QGraphicsItem* WorksheetElement::graphicsItem() const {
+	return d_ptr;
+}
+
+/*!
+ * \brief WorksheetElement::setParentGraphicsItem
+ * Sets the parent graphicsitem, needed for binding to coord
+ * \param item parent graphicsitem
+ */
+void WorksheetElement::setParentGraphicsItem(QGraphicsItem* item) {
+	Q_D(WorksheetElement);
+	d->setParentItem(item);
+}
 
 /**
  * \fn void WorksheetElement::setVisible(bool on)
@@ -781,7 +796,11 @@ QString WorksheetElementPrivate::name() const {
 }
 
 QRectF WorksheetElementPrivate::boundingRect() const {
-	return boundingRectangle;
+	return m_boundingRectangle;
+}
+
+QPainterPath WorksheetElementPrivate::shape() const {
+	return m_shape;
 }
 
 void WorksheetElementPrivate::paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*) {
@@ -848,7 +867,7 @@ void WorksheetElementPrivate::keyPressEvent(QKeyEvent* event) {
 			q->setPositionLogical(pLogic); // So it is undoable
 		} else {
 			QPointF point = q->parentPosToRelativePos(pos(), position);
-			point = q->align(point, boundingRectangle, horizontalAlignment, verticalAlignment, false);
+			point = q->align(point, m_boundingRectangle, horizontalAlignment, verticalAlignment, false);
 
 			if (event->key() == Qt::Key_Left) {
 				point.setX(point.x() - delta);
@@ -908,7 +927,7 @@ QVariant WorksheetElementPrivate::itemChange(GraphicsItemChange change, const QV
 		if (coordinateBindingEnabled) {
 			if (!q->cSystem->isValid())
 				return QGraphicsItem::itemChange(change, value);
-			QPointF pos = q->align(newPos, boundingRectangle, horizontalAlignment, verticalAlignment, false);
+			QPointF pos = q->align(newPos, m_boundingRectangle, horizontalAlignment, verticalAlignment, false);
 
 			positionLogical = q->cSystem->mapSceneToLogical(mapParentToPlotArea(pos), AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 			Q_EMIT q->positionLogicalChanged(positionLogical);
@@ -978,6 +997,10 @@ void WorksheetElementPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
 
 void WorksheetElementPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 	setHover(false);
+}
+
+void WorksheetElementPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
+	q->createContextMenu()->exec(event->screenPos());
 }
 
 bool WorksheetElementPrivate::isHovered() const {

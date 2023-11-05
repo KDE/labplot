@@ -21,17 +21,10 @@ public:
 	explicit KDEPlotPrivate(KDEPlot* owner);
 	~KDEPlotPrivate() override;
 
-	QRectF boundingRect() const override;
-	QPainterPath shape() const override;
-
 	void retransform() override;
 	void recalc();
 	void updateDistribution();
 	void recalcShapeAndBoundingRect() override;
-
-	bool activateCurve(QPointF mouseScenePos, double maxDist);
-
-	QPainterPath curveShape;
 
 	// General
 	const AbstractColumn* dataColumn{nullptr};

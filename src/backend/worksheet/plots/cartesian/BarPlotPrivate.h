@@ -37,12 +37,6 @@ public:
 	Line* addBorderLine(const KConfigGroup&);
 	void addValue(const KConfigGroup&);
 
-	// reimplemented from QGraphicsItem
-	QRectF boundingRect() const override;
-	QPainterPath shape() const override;
-
-	bool activatePlot(QPointF mouseScenePos, double maxDist);
-
 	BarPlot* const q;
 
 	// General
@@ -68,7 +62,6 @@ public:
 	Value* value{nullptr};
 
 private:
-	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
 
 	void recalc(int);
@@ -77,9 +70,6 @@ private:
 	void updateFillingRect(int columnIndex, int valueIndex, const QVector<QLineF>&);
 
 	void draw(QPainter*);
-
-	QRectF m_boundingRectangle;
-	QPainterPath m_barPlotShape;
 
 	QVector<QPointF> m_valuesPoints;
 	QVector<QPointF> m_valuesPointsLogical;

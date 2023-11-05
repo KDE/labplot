@@ -80,7 +80,7 @@ public:
 	QVector<TextLabel::GluePoint> m_gluePointsTransformed;
 
 private:
-	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
+	virtual void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
 };
 
 #endif

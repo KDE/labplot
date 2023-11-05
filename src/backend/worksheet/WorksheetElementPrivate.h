@@ -31,7 +31,6 @@ public:
 	bool positionInvalid{false};
 	bool coordinateBindingEnabled{false};
 	QPointF positionLogical;
-	QRectF boundingRectangle; // bounding rectangle of the text
 	bool suppressItemChangeEvent{false};
 	bool suppressRetransform{false};
 	bool suppressRecalc{false};
@@ -44,7 +43,8 @@ public:
 	virtual void retransform() = 0;
 	virtual void recalcShapeAndBoundingRect() = 0;
 	void updatePosition();
-	QRectF boundingRect() const override;
+	virtual QRectF boundingRect() const override;
+	virtual QPainterPath shape() const override;
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
 	virtual void keyPressEvent(QKeyEvent*) override;
 	virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
@@ -58,9 +58,12 @@ public:
 private:
 	virtual void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
 	virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
+	virtual void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
 
 protected:
 	bool m_hovered{false};
+	QRectF m_boundingRectangle; // bounding rectangle of the element
+	QPainterPath m_shape;
 };
 
 #endif

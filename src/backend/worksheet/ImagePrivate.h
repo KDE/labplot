@@ -37,7 +37,7 @@ public:
 
 	bool m_hovered{false};
 
-	QRectF boundingRectangle; // bounding rectangle of the text
+	QRectF m_boundingRectangle; // bounding rectangle of the text
 	QRectF transformedBoundingRectangle; // bounding rectangle of transformed (rotated etc.) text
 	QPainterPath borderShapePath;
 	QPainterPath imageShape;
@@ -48,9 +48,6 @@ public:
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
 
 	Image* const q;
-
-private:
-	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
 };
 
 #endif

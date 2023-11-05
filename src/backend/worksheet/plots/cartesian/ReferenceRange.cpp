@@ -188,10 +188,6 @@ QMenu* ReferenceRange::createContextMenu() {
 	return menu;
 }
 
-QGraphicsItem* ReferenceRange::graphicsItem() const {
-	return d_ptr;
-}
-
 void ReferenceRange::retransform() {
 	Q_D(ReferenceRange);
 	d->retransform();
@@ -446,26 +442,12 @@ void ReferenceRange::updateStartEndPositions() {
 }
 
 /*!
-	Returns the outer bounds of the item as a rectangle.
- */
-QRectF ReferenceRangePrivate::boundingRect() const {
-	return boundingRectangle;
-}
-
-/*!
-	Returns the shape of this item as a QPainterPath in local coordinates.
-*/
-QPainterPath ReferenceRangePrivate::shape() const {
-	return rangeShape;
-}
-
-/*!
   recalculates the outer bounds and the shape of the item.
 */
 void ReferenceRangePrivate::recalcShapeAndBoundingRect() {
 	prepareGeometryChange();
 
-	rangeShape = QPainterPath();
+	m_shape = QPainterPath();
 	if (m_visible) {
 		QPainterPath path;
 
@@ -493,8 +475,8 @@ void ReferenceRangePrivate::recalcShapeAndBoundingRect() {
 			}
 		}
 
-		rangeShape.addPath(WorksheetElement::shapeFromPath(path, line->pen()));
-		boundingRectangle = rangeShape.boundingRect();
+		m_shape.addPath(WorksheetElement::shapeFromPath(path, line->pen()));
+		m_boundingRectangle = m_shape.boundingRect();
 	}
 }
 
@@ -522,16 +504,16 @@ void ReferenceRangePrivate::paint(QPainter* painter, const QStyleOptionGraphicsI
 		painter->setOpacity(line->opacity());
 	}
 
-	painter->drawPath(rangeShape);
+	painter->drawPath(m_shape);
 
 	if (m_hovered && !isSelected() && !q->isPrinting()) {
 		painter->setPen(QPen(QApplication::palette().color(QPalette::Shadow), 2, Qt::SolidLine));
-		painter->drawPath(rangeShape);
+		painter->drawPath(m_shape);
 	}
 
 	if (isSelected() && !q->isPrinting()) {
 		painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), 2, Qt::SolidLine));
-		painter->drawPath(rangeShape);
+		painter->drawPath(m_shape);
 	}
 }
 
@@ -611,10 +593,6 @@ void ReferenceRangePrivate::drawFilling(QPainter* painter) const {
 	} else if (background->type() == Background::Type::Pattern) {
 		painter->setBrush(QBrush(background->firstColor(), background->brushStyle()));
 	}
-}
-
-void ReferenceRangePrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
-	q->createContextMenu()->exec(event->screenPos());
 }
 
 // ##############################################################################

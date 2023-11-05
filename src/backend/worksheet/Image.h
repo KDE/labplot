@@ -28,9 +28,7 @@ public:
 	~Image() override;
 
 	QIcon icon() const override;
-	QMenu* createContextMenu() override;
-	QGraphicsItem* graphicsItem() const override;
-	void setParentGraphicsItem(QGraphicsItem*);
+	virtual void setParentGraphicsItem(QGraphicsItem*) override;
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;

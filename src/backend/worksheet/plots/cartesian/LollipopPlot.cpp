@@ -113,10 +113,6 @@ QMenu* LollipopPlot::createContextMenu() {
 	return menu;
 }
 
-QGraphicsItem* LollipopPlot::graphicsItem() const {
-	return d_ptr;
-}
-
 void LollipopPlot::retransform() {
 	Q_D(LollipopPlot);
 	d->retransform();
@@ -128,11 +124,6 @@ void LollipopPlot::recalc() {
 }
 
 void LollipopPlot::handleResize(double /*horizontalRatio*/, double /*verticalRatio*/, bool /*pageResize*/) {
-}
-
-bool LollipopPlot::activatePlot(QPointF mouseScenePos, double maxDist) {
-	Q_D(LollipopPlot);
-	return d->activatePlot(mouseScenePos, maxDist);
 }
 
 /* ============================ getter methods ================= */
@@ -282,13 +273,6 @@ LollipopPlotPrivate::LollipopPlotPrivate(LollipopPlot* owner)
 	, q(owner) {
 	setFlag(QGraphicsItem::ItemIsSelectable);
 	setAcceptHoverEvents(false);
-}
-
-bool LollipopPlotPrivate::activatePlot(QPointF mouseScenePos, double /*maxDist*/) {
-	if (!isVisible())
-		return false;
-
-	return shape().contains(mouseScenePos);
 }
 
 Line* LollipopPlotPrivate::addLine(const KConfigGroup& group) {
@@ -721,20 +705,6 @@ void LollipopPlotPrivate::updateValues() {
 }
 
 /*!
-	Returns the outer bounds of the item as a rectangle.
- */
-QRectF LollipopPlotPrivate::boundingRect() const {
-	return m_boundingRectangle;
-}
-
-/*!
-	Returns the shape of this item as a QPainterPath in local coordinates.
-*/
-QPainterPath LollipopPlotPrivate::shape() const {
-	return m_shape;
-}
-
-/*!
   recalculates the outer bounds and the shape of the item.
 */
 void LollipopPlotPrivate::recalcShapeAndBoundingRect() {
@@ -893,10 +863,6 @@ void LollipopPlotPrivate::paint(QPainter* painter, const QStyleOptionGraphicsIte
 		painter->drawImage(m_boundingRectangle.topLeft(), m_selectionEffectImage, m_pixmap.rect());
 		return;
 	}
-}
-
-void LollipopPlotPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
-	q->createContextMenu()->exec(event->screenPos());
 }
 
 // ##############################################################################

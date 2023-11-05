@@ -29,14 +29,12 @@ public:
 	~CustomPoint() override;
 
 	QIcon icon() const override;
-	QMenu* createContextMenu() override;
-	QGraphicsItem* graphicsItem() const override;
+	virtual QMenu* createContextMenu() override;
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
 
 	Symbol* symbol() const;
-	void setParentGraphicsItem(QGraphicsItem* item);
 
 	void retransform() override;
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;

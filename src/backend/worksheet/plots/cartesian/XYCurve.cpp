@@ -39,7 +39,7 @@
 #include <KConfigGroup>
 #include <KLocalizedString>
 
-#include <QGraphicsSceneContextMenuEvent>
+#include <QGraphicsSceneMouseEvent>
 #include <QMenu>
 #include <QPainter>
 #include <QScreen>
@@ -233,22 +233,6 @@ QMenu* XYCurve::createContextMenu() {
 */
 QIcon XYCurve::icon() const {
 	return QIcon::fromTheme(QStringLiteral("labplot-xy-curve"));
-}
-
-QGraphicsItem* XYCurve::graphicsItem() const {
-	return d_ptr;
-}
-
-/*!
- * \brief XYCurve::activatePlot
- * Checks if the mousepos distance to the curve is less than @p maxDist
- * \p mouseScenePos
- * \p maxDist Maximum distance the point lies away from the curve
- * \return Returns true if the distance is smaller than maxDist.
- */
-bool XYCurve::activatePlot(QPointF mouseScenePos, double maxDist) {
-	Q_D(XYCurve);
-	return d->activatePlot(mouseScenePos, maxDist);
 }
 
 // ##############################################################################
@@ -870,25 +854,6 @@ XYCurvePrivate::XYCurvePrivate(XYCurve* owner)
 	setAcceptHoverEvents(false);
 }
 
-QRectF XYCurvePrivate::boundingRect() const {
-	return boundingRectangle;
-}
-
-/*!
-  Returns the shape of the XYCurve as a QPainterPath in local coordinates
-*/
-QPainterPath XYCurvePrivate::shape() const {
-	return curveShape;
-}
-
-void XYCurvePrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
-	if (q->activatePlot(event->pos())) {
-		q->createContextMenu()->exec(event->screenPos());
-		return;
-	}
-	QGraphicsItem::contextMenuEvent(event);
-}
-
 void XYCurvePrivate::calculateScenePoints() {
 	if (!q->plot() || !m_scenePointsDirty || !xColumn)
 		return;
@@ -999,7 +964,7 @@ void XYCurvePrivate::retransform() {
 		valuesPath = QPainterPath();
 		errorBarsPath = QPainterPath();
 		rugPath = QPainterPath();
-		curveShape = QPainterPath();
+		m_shape = QPainterPath();
 		m_lines.clear();
 		m_valuePoints.clear();
 		m_valueStrings.clear();
@@ -2811,33 +2776,33 @@ void XYCurvePrivate::recalcShapeAndBoundingRect() {
 #endif
 
 	prepareGeometryChange();
-	curveShape = QPainterPath();
+	m_shape = QPainterPath();
 	if (lineType != XYCurve::LineType::NoLine)
-		curveShape.addPath(WorksheetElement::shapeFromPath(linePath, line->pen()));
+		m_shape.addPath(WorksheetElement::shapeFromPath(linePath, line->pen()));
 
 	if (dropLine->dropLineType() != XYCurve::DropLineType::NoDropLine)
-		curveShape.addPath(WorksheetElement::shapeFromPath(dropLinePath, dropLine->pen()));
+		m_shape.addPath(WorksheetElement::shapeFromPath(dropLinePath, dropLine->pen()));
 
 	if (symbol->style() != Symbol::Style::NoSymbols)
-		curveShape.addPath(symbolsPath);
+		m_shape.addPath(symbolsPath);
 
-	curveShape.addPath(rugPath);
+	m_shape.addPath(rugPath);
 
 	if (valuesType != XYCurve::ValuesType::NoValues)
-		curveShape.addPath(valuesPath);
+		m_shape.addPath(valuesPath);
 
 	if (xErrorType != XYCurve::ErrorType::NoError || yErrorType != XYCurve::ErrorType::NoError)
-		curveShape.addPath(WorksheetElement::shapeFromPath(errorBarsPath, errorBarsLine->pen()));
+		m_shape.addPath(WorksheetElement::shapeFromPath(errorBarsPath, errorBarsLine->pen()));
 
-	boundingRectangle = curveShape.boundingRect();
+	m_boundingRectangle = m_shape.boundingRect();
 
 	for (const auto& pol : qAsConst(m_fillPolygons))
-		boundingRectangle = boundingRectangle.united(pol.boundingRect());
+		m_boundingRectangle = m_boundingRectangle.united(pol.boundingRect());
 
 	// TODO: when the selection is painted, line intersections are visible.
 	// simplified() removes those artifacts but is horrible slow for curves with large number of points.
 	// search for an alternative.
-	// curveShape = curveShape.simplified();
+	// m_shape = m_shape.simplified();
 
 	updatePixmap();
 }
@@ -2921,16 +2886,16 @@ void XYCurvePrivate::updatePixmap() {
 
 	m_hoverEffectImageIsDirty = true;
 	m_selectionEffectImageIsDirty = true;
-	if (boundingRectangle.width() == 0 || boundingRectangle.height() == 0) {
+	if (m_boundingRectangle.width() == 0 || m_boundingRectangle.height() == 0) {
 		DEBUG(Q_FUNC_INFO << ", boundingRectangle.width() or boundingRectangle.height() == 0");
 		m_pixmap = QPixmap();
 		return;
 	}
-	QPixmap pixmap(ceil(boundingRectangle.width()), ceil(boundingRectangle.height()));
+	QPixmap pixmap(ceil(m_boundingRectangle.width()), ceil(m_boundingRectangle.height()));
 	pixmap.fill(Qt::transparent);
 	QPainter painter(&pixmap);
 	painter.setRenderHint(QPainter::Antialiasing, true);
-	painter.translate(-boundingRectangle.topLeft());
+	painter.translate(-m_boundingRectangle.topLeft());
 
 	draw(&painter);
 	painter.end();
@@ -2962,7 +2927,7 @@ void XYCurvePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*
 	painter->setRenderHint(QPainter::SmoothPixmapTransform, true);
 
 	if (!q->isPrinting() && Settings::group(QStringLiteral("Settings_Worksheet")).readEntry<bool>("DoubleBuffering", true))
-		painter->drawPixmap(boundingRectangle.topLeft(), m_pixmap); // draw the cached pixmap (fast)
+		painter->drawPixmap(m_boundingRectangle.topLeft(), m_pixmap); // draw the cached pixmap (fast)
 	else
 		draw(painter); // draw directly again (slow)
 
@@ -2978,7 +2943,7 @@ void XYCurvePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*
 			m_hoverEffectImageIsDirty = false;
 		}
 
-		painter->drawImage(boundingRectangle.topLeft(), m_hoverEffectImage, m_pixmap.rect());
+		painter->drawImage(m_boundingRectangle.topLeft(), m_hoverEffectImage, m_pixmap.rect());
 		return;
 	}
 
@@ -2994,7 +2959,7 @@ void XYCurvePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*
 			m_selectionEffectImageIsDirty = false;
 		}
 
-		painter->drawImage(boundingRectangle.topLeft(), m_selectionEffectImage, m_pixmap.rect());
+		painter->drawImage(m_boundingRectangle.topLeft(), m_selectionEffectImage, m_pixmap.rect());
 	}
 }
 

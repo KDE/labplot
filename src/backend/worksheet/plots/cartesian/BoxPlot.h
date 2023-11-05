@@ -36,15 +36,11 @@ public:
 
 	QIcon icon() const override;
 	static QIcon staticIcon();
-	QMenu* createContextMenu() override;
-	QGraphicsItem* graphicsItem() const override;
+	virtual QMenu* createContextMenu() override;
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
 	void loadThemeConfig(const KConfig&) override;
-
-	// reimplemented from Plot
-	bool activatePlot(QPointF mouseScenePos, double maxDist = -1) override;
 
 	// general
 	BASIC_D_ACCESSOR_DECL(QVector<const AbstractColumn*>, dataColumns, DataColumns)

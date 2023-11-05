@@ -105,10 +105,6 @@ QMenu* CustomPoint::createContextMenu() {
 	;
 }
 
-QGraphicsItem* CustomPoint::graphicsItem() const {
-	return d_ptr;
-}
-
 void CustomPoint::retransform() {
 	DEBUG(Q_FUNC_INFO)
 	Q_D(CustomPoint);
@@ -121,11 +117,6 @@ void CustomPoint::handleResize(double /*horizontalRatio*/, double /*verticalRati
 Symbol* CustomPoint::symbol() const {
 	Q_D(const CustomPoint);
 	return d->symbol;
-}
-
-void CustomPoint::setParentGraphicsItem(QGraphicsItem* item) {
-	Q_D(CustomPoint);
-	d->setParentItem(item);
 }
 
 // ##############################################################################
@@ -158,19 +149,12 @@ void CustomPointPrivate::retransform() {
 }
 
 /*!
-	Returns the shape of this item as a QPainterPath in local coordinates.
-*/
-QPainterPath CustomPointPrivate::shape() const {
-	return pointShape;
-}
-
-/*!
   recalculates the outer bounds and the shape of the item.
 */
 void CustomPointPrivate::recalcShapeAndBoundingRect() {
 	prepareGeometryChange();
 
-	pointShape = QPainterPath();
+	m_shape = QPainterPath();
 	if (insidePlot && symbol->style() != Symbol::Style::NoSymbols) {
 		QPainterPath path = Symbol::stylePath(symbol->style());
 
@@ -184,8 +168,8 @@ void CustomPointPrivate::recalcShapeAndBoundingRect() {
 			path = trafo.map(path);
 		}
 
-		pointShape.addPath(WorksheetElement::shapeFromPath(trafo.map(path), symbol->pen()));
-		boundingRectangle = pointShape.boundingRect();
+		m_shape.addPath(WorksheetElement::shapeFromPath(trafo.map(path), symbol->pen()));
+		m_boundingRectangle = m_shape.boundingRect();
 	}
 }
 
@@ -197,17 +181,17 @@ void CustomPointPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem
 		painter->setOpacity(symbol->opacity());
 		painter->setPen(symbol->pen());
 		painter->setBrush(symbol->brush());
-		painter->drawPath(pointShape);
+		painter->drawPath(m_shape);
 	}
 
 	if (m_hovered && !isSelected() && !q->isPrinting()) {
 		painter->setPen(QPen(QApplication::palette().color(QPalette::Shadow), 2, Qt::SolidLine));
-		painter->drawPath(pointShape);
+		painter->drawPath(m_shape);
 	}
 
 	if (isSelected() && !q->isPrinting()) {
 		painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), 2, Qt::SolidLine));
-		painter->drawPath(pointShape);
+		painter->drawPath(m_shape);
 	}
 }
 
@@ -218,10 +202,6 @@ void CustomPointPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 		return;
 
 	WorksheetElementPrivate::mouseReleaseEvent(event);
-}
-
-void CustomPointPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
-	q->createContextMenu()->exec(event->screenPos());
 }
 
 // ##############################################################################

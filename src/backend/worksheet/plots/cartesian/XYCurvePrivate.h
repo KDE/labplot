@@ -26,9 +26,6 @@ class XYCurvePrivate : public PlotPrivate {
 public:
 	explicit XYCurvePrivate(XYCurve*);
 
-	QRectF boundingRect() const override;
-	QPainterPath shape() const override;
-
 	void retransform() override;
 	void recalcLogicalPoints();
 	void updateLines();
@@ -58,7 +55,7 @@ public:
 	void recalcShapeAndBoundingRect() override;
 	void updatePixmap();
 
-	bool activatePlot(QPointF mouseScenePos, double maxDist);
+	virtual bool activatePlot(QPointF mouseScenePos, double maxDist = -1) override;
 	bool pointLiesNearLine(const QPointF p1, const QPointF p2, const QPointF pos, const double maxDist) const;
 	bool
 	pointLiesNearCurve(const QPointF mouseScenePos, const QPointF curvePosPrevScene, const QPointF curvePosScene, const int index, const double maxDist) const;
@@ -136,7 +133,6 @@ private:
 	CartesianPlot* plot() const {
 		return q->m_plot;
 	} // convenience method
-	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
 	void mousePressEvent(QGraphicsSceneMouseEvent*) override;
 	QVariant itemChange(GraphicsItemChange change, const QVariant& value) override;
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
@@ -151,7 +147,6 @@ private:
 	QPainterPath valuesPath;
 	QPainterPath errorBarsPath;
 	QPainterPath symbolsPath;
-	QPainterPath curveShape;
 	QVector<QLineF> m_lines;
 	QVector<QPointF> m_logicalPoints; // points in logical coordinates
 	QVector<QPointF> m_scenePoints; // points in scene coordinates
