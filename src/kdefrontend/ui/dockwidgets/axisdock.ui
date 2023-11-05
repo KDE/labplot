@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>437</width>
-    <height>912</height>
+    <height>948</height>
    </rect>
   </property>
   <property name="maximumSize">
@@ -29,7 +29,7 @@
       </size>
      </property>
      <property name="currentIndex">
-      <number>3</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tabGeneral">
       <attribute name="title">
@@ -306,7 +306,8 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset theme="align-horizontal-left"/>
+            <iconset theme="align-horizontal-left">
+             <normaloff>.</normaloff>.</iconset>
            </property>
           </widget>
          </item>
@@ -319,7 +320,8 @@
             <string notr="true"/>
            </property>
            <property name="icon">
-            <iconset theme="align-horizontal-center"/>
+            <iconset theme="align-horizontal-center">
+             <normaloff>.</normaloff>.</iconset>
            </property>
           </widget>
          </item>
@@ -332,7 +334,8 @@
             <string notr="true"/>
            </property>
            <property name="icon">
-            <iconset theme="align-horizontal-right"/>
+            <iconset theme="align-horizontal-right">
+             <normaloff>.</normaloff>.</iconset>
            </property>
           </widget>
          </item>
@@ -481,6 +484,7 @@
         <widget class="QLabel" name="lArrow">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -597,6 +601,7 @@
         <widget class="QLabel" name="lLine">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -729,6 +734,7 @@
         <widget class="QLabel" name="lMajorTicks">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -910,7 +916,8 @@
             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Set offset to start ticks at first data point&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
            <property name="icon">
-            <iconset theme="application-vnd.oasis.opendocument.chart"/>
+            <iconset theme="application-vnd.oasis.opendocument.chart">
+             <normaloff>.</normaloff>.</iconset>
            </property>
           </widget>
          </item>
@@ -923,7 +930,8 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset theme="autocorrection"/>
+            <iconset theme="autocorrection">
+             <normaloff>.</normaloff>.</iconset>
            </property>
           </widget>
          </item>
@@ -962,6 +970,7 @@
         <widget class="QLabel" name="lMinorTicks">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1206,6 +1215,7 @@
         <widget class="QLabel" name="lMajorGrid_2">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1264,7 +1274,7 @@
         </widget>
        </item>
        <item row="13" column="2">
-        <widget class="KFontRequester" name="kfrLabelsFont" native="true"/>
+        <widget class="KFontRequester" name="kfrLabelsFont"/>
        </item>
        <item row="4" column="0">
         <spacer name="verticalSpacer_7">
@@ -1389,6 +1399,7 @@
         <widget class="QLabel" name="label_4">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1401,6 +1412,7 @@
         <widget class="QLabel" name="lLabelsBackground">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1493,6 +1505,7 @@
         <widget class="QLabel" name="lLabelsText">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1632,6 +1645,7 @@
         <widget class="QLabel" name="lMinorGrid">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1644,6 +1658,7 @@
         <widget class="QLabel" name="lMajorGrid">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1723,11 +1738,6 @@
    <header>kcombobox.h</header>
   </customwidget>
   <customwidget>
-   <class>UTCDateTimeEdit</class>
-   <extends>QDateTimeEdit</extends>
-   <header>UTCDateTimeEdit.h</header>
-  </customwidget>
-  <customwidget>
    <class>KColorButton</class>
    <extends>QPushButton</extends>
    <header>kcolorbutton.h</header>
@@ -1736,6 +1746,11 @@
    <class>KFontRequester</class>
    <extends>QWidget</extends>
    <header>kfontrequester.h</header>
+  </customwidget>
+  <customwidget>
+   <class>UTCDateTimeEdit</class>
+   <extends>QDateTimeEdit</extends>
+   <header>UTCDateTimeEdit.h</header>
   </customwidget>
   <customwidget>
    <class>NumberSpinBox</class>

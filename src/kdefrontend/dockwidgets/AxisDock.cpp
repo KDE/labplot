@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : axes widget class
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2011-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2012-2021 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -81,23 +81,23 @@ AxisDock::AxisDock(QWidget* parent)
 	layout->insertWidget(0, dtsbMajorTicksDateTimeStartOffset);
 
 	cbMajorTicksColumn = new TreeViewComboBox(ui.tabTicks);
-	gridLayout->addWidget(cbMajorTicksColumn, 9, 2);
+	gridLayout->addWidget(cbMajorTicksColumn, 10, 2);
 
 	cbLabelsTextColumn = new TreeViewComboBox(ui.tabTicks);
-	gridLayout->addWidget(cbLabelsTextColumn, 11, 2);
+	gridLayout->addWidget(cbLabelsTextColumn, 12, 2);
 
 	majorTicksLineWidget = new LineWidget(ui.tabTicks);
-	gridLayout->addWidget(majorTicksLineWidget, 14, 0, 1, 3);
+	gridLayout->addWidget(majorTicksLineWidget, 15, 0, 1, 3);
 
 	// minor ticks
 	dtsbMinorTicksIncrement = new DateTimeSpinBox(ui.tabTicks);
-	gridLayout->addWidget(dtsbMinorTicksIncrement, 21, 2);
+	gridLayout->addWidget(dtsbMinorTicksIncrement, 22, 2);
 
 	cbMinorTicksColumn = new TreeViewComboBox(ui.tabTicks);
-	gridLayout->addWidget(cbMinorTicksColumn, 22, 2);
+	gridLayout->addWidget(cbMinorTicksColumn, 23, 2);
 
 	minorTicksLineWidget = new LineWidget(ui.tabTicks);
-	gridLayout->addWidget(minorTicksLineWidget, 25, 0, 1, 3);
+	gridLayout->addWidget(minorTicksLineWidget, 26, 0, 1, 3);
 
 	// "Grid"-tab
 	gridLayout = qobject_cast<QGridLayout*>(ui.tabGrid->layout());
@@ -1022,7 +1022,6 @@ void AxisDock::majorTicksTypeChanged(int index) {
 		majorTicksSpacingChanged();
 		break;
 	}
-
 	case Axis::TicksType::ColumnLabels:
 		// Fall through
 	case Axis::TicksType::CustomColumn: {
