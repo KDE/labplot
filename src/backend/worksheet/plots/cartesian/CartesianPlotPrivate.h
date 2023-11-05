@@ -307,15 +307,15 @@ Q_SIGNALS:
 
 private:
 	QVariant itemChange(GraphicsItemChange change, const QVariant& value) override;
-	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
-	void mousePressEvent(QGraphicsSceneMouseEvent*) override;
-	void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
-	void mouseMoveEvent(QGraphicsSceneMouseEvent*) override;
-	void wheelEvent(QGraphicsSceneWheelEvent*) override;
-	void keyPressEvent(QKeyEvent*) override;
-	void hoverMoveEvent(QGraphicsSceneHoverEvent*) override;
-	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
-	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
+	virtual void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
+	virtual void mousePressEvent(QGraphicsSceneMouseEvent*) override;
+	virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
+	virtual void mouseMoveEvent(QGraphicsSceneMouseEvent*) override;
+	virtual void wheelEvent(QGraphicsSceneWheelEvent*) override;
+	virtual void keyPressEvent(QKeyEvent*) override;
+	virtual void hoverMoveEvent(QGraphicsSceneHoverEvent*) override;
+	virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
+	virtual void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
 
 	void updateDataRect();
 	CartesianScale* createScale(RangeT::Scale, const Range<double>& sceneRange, const Range<double>& logicalRange);

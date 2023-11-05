@@ -97,7 +97,7 @@ public:
 	static int cSystemIndex(WorksheetElement* e);
 
 	QIcon icon() const override;
-	QMenu* createContextMenu() override;
+	virtual QMenu* createContextMenu() override;
 	QMenu* addNewMenu();
 	QMenu* analysisMenu();
 	QVector<AbstractAspect*> dependsOn() const override;

@@ -24,13 +24,13 @@ public:
 	bool toggleClipping(bool on);
 	bool clippingEnabled() const;
 	void setRect(const QRectF&);
-	void retransform() override{};
+	void retransform() override{}
 
 	// QGraphicsItem's virtual functions
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*) override;
 	QRectF boundingRect() const override;
 	QPainterPath shape() const override;
-	virtual void recalcShapeAndBoundingRect() override{};
+	virtual void recalcShapeAndBoundingRect() override{}
 
 	QRectF rect;
 	Background* background{nullptr};
