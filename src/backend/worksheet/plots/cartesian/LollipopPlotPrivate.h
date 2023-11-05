@@ -84,13 +84,6 @@ private:
 
 	double m_groupWidth{1.0}; // width of a bar group
 	double m_groupGap{0.0}; // gap around a group of bars
-
-	QPixmap m_pixmap;
-	QImage m_hoverEffectImage;
-	QImage m_selectionEffectImage;
-
-	bool m_hoverEffectImageIsDirty{false};
-	bool m_selectionEffectImageIsDirty{false};
 };
 
 #endif

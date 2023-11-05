@@ -142,13 +142,6 @@ private:
 	QVector<Points> m_dataPoints; // positions of the data points in scene coordinates
 	QVector<Points> m_farOutPointsLogical; // positions of the far out values in logical coordinates
 	QVector<Points> m_farOutPoints; // positions of the far out values in scene coordinates
-
-	QPixmap m_pixmap;
-	QImage m_hoverEffectImage;
-	QImage m_selectionEffectImage;
-
-	bool m_hoverEffectImageIsDirty{false};
-	bool m_selectionEffectImageIsDirty{false};
 };
 
 #endif

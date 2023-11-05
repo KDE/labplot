@@ -164,11 +164,6 @@ private:
 	std::vector<int> validPointsIndicesLogical; // original indices in the source columns for valid and non-masked values (size of m_logicalPoints)
 	std::vector<bool> connectedPointsLogical; // true for points connected with the consecutive point (size of m_logicalPoints)
 
-	QPixmap m_pixmap;
-	QImage m_hoverEffectImage;
-	QImage m_selectionEffectImage;
-	bool m_hoverEffectImageIsDirty{false};
-	bool m_selectionEffectImageIsDirty{false};
 
 	QPointF mousePos;
 

@@ -54,11 +54,6 @@ public:
 
 private:
 	bool m_hovered{false};
-	QPixmap m_pixmap;
-	QImage m_hoverEffectImage;
-	QImage m_selectionEffectImage;
-	//	bool m_hoverEffectImageIsDirty{false};
-	//	bool m_selectionEffectImageIsDirty{false};
 
 	void copyValidData(QVector<double>&) const;
 };
