@@ -292,21 +292,20 @@ void SpreadsheetGenerateDataTest::testFixedIncrementDateTime() {
 	dlg.setColumns(QVector<Column*>{column});
 	dlg.setType(EquidistantValuesDialog::Type::FixedIncrement);
 	dlg.setIncrementDateTimeUnit(EquidistantValuesDialog::DateTimeUnit::Year);
-	auto now = QDateTime::currentDateTime();
-	dlg.setFromDateTime(now.toMSecsSinceEpoch());
-	dlg.setToDateTime(now.addYears(4).toMSecsSinceEpoch());
+	auto dateTime = QDateTime::fromString(QStringLiteral("2023-05-01T00:00:00Z"), Qt::ISODate);
+	dlg.setFromDateTime(dateTime.toMSecsSinceEpoch());
+	dlg.setToDateTime(dateTime.addYears(4).toMSecsSinceEpoch());
 	dlg.generate();
 
 	// checks
-	int year = now.date().year(); // current year
 	QCOMPARE(column->columnMode(), AbstractColumn::ColumnMode::DateTime);
 	QCOMPARE(sheet.rowCount(), 5);
 	QCOMPARE(column->rowCount(), 5);
-	QCOMPARE(column->dateTimeAt(0).date().year(), year);
-	QCOMPARE(column->dateTimeAt(1).date().year(), year + 1);
-	QCOMPARE(column->dateTimeAt(2).date().year(), year + 2);
-	QCOMPARE(column->dateTimeAt(3).date().year(), year + 3);
-	QCOMPARE(column->dateTimeAt(4).date().year(), year + 4);
+	QCOMPARE(column->dateTimeAt(0).date().year(), 2023);
+	QCOMPARE(column->dateTimeAt(1).date().year(), 2024);
+	QCOMPARE(column->dateTimeAt(2).date().year(), 2025);
+	QCOMPARE(column->dateTimeAt(3).date().year(), 2026);
+	QCOMPARE(column->dateTimeAt(4).date().year(), 2027);
 }
 
 // **********************************************************
@@ -416,20 +415,19 @@ void SpreadsheetGenerateDataTest::testFixedNumberIncrementDateTime() {
 	dlg.setType(EquidistantValuesDialog::Type::FixedNumberIncrement);
 	dlg.setNumber(5);
 	dlg.setIncrementDateTimeUnit(EquidistantValuesDialog::DateTimeUnit::Year);
-	auto now = QDateTime::currentDateTime();
-	dlg.setFromDateTime(now.toMSecsSinceEpoch());
+	auto dateTime = QDateTime::fromString(QStringLiteral("2023-05-01T00:00:00Z"), Qt::ISODate);
+	dlg.setFromDateTime(dateTime.toMSecsSinceEpoch());
 	dlg.generate();
 
 	// checks
-	int year = now.date().year(); // current year
 	QCOMPARE(column->columnMode(), AbstractColumn::ColumnMode::DateTime);
 	QCOMPARE(sheet.rowCount(), 5);
 	QCOMPARE(column->rowCount(), 5);
-	QCOMPARE(column->dateTimeAt(0).date().year(), year);
-	QCOMPARE(column->dateTimeAt(1).date().year(), year + 1);
-	QCOMPARE(column->dateTimeAt(2).date().year(), year + 2);
-	QCOMPARE(column->dateTimeAt(3).date().year(), year + 3);
-	QCOMPARE(column->dateTimeAt(4).date().year(), year + 4);
+	QCOMPARE(column->dateTimeAt(0).date().year(), 2023);
+	QCOMPARE(column->dateTimeAt(1).date().year(), 2024);
+	QCOMPARE(column->dateTimeAt(2).date().year(), 2025);
+	QCOMPARE(column->dateTimeAt(3).date().year(), 2026);
+	QCOMPARE(column->dateTimeAt(4).date().year(), 2027);
 }
 
 // **********************************************************
