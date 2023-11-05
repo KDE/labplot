@@ -47,10 +47,6 @@ WorksheetElementContainer::WorksheetElementContainer(const QString& name, Worksh
 // and is deleted during the cleanup in QGraphicsScene
 WorksheetElementContainer::~WorksheetElementContainer() = default;
 
-QGraphicsItem* WorksheetElementContainer::graphicsItem() const {
-	return const_cast<QGraphicsItem*>(static_cast<const QGraphicsItem*>(d_ptr));
-}
-
 QRectF WorksheetElementContainer::rect() const {
 	Q_D(const WorksheetElementContainer);
 	return d->rect;
@@ -176,7 +172,8 @@ void WorksheetElementContainer::childHovered() {
 	if (!d->isSelected()) {
 		if (isHovered())
 			setHover(false);
-		d->update();
+		else
+			d->update();
 	}
 }
 
@@ -184,7 +181,6 @@ void WorksheetElementContainer::childUnhovered() {
 	Q_D(WorksheetElementContainer);
 	if (!d->isSelected()) {
 		setHover(true);
-		d->update();
 	}
 }
 
@@ -237,8 +233,8 @@ void WorksheetElementContainerPrivate::recalcShapeAndBoundingRect() {
 	path.addRect(m_boundingRectangle);
 
 	// make the shape somewhat thicker than the hoveredPen to make the selection/hovering box more visible
-	containerShape = QPainterPath();
-	containerShape.addPath(WorksheetElement::shapeFromPath(path, QPen(QBrush(), penWidth)));
+	m_shape = QPainterPath();
+	m_shape.addPath(WorksheetElement::shapeFromPath(path, QPen(QBrush(), penWidth)));
 }
 
 // Inherited from QGraphicsItem
@@ -253,12 +249,12 @@ void WorksheetElementContainerPrivate::paint(QPainter* painter, const QStyleOpti
 
 	if (m_hovered && !isSelected() && !m_printing) {
 		painter->setPen(QPen(QApplication::palette().color(QPalette::Shadow), 2, Qt::SolidLine));
-		painter->drawPath(containerShape);
+		painter->drawPath(m_shape);
 	}
 
 	if (isSelected() && !m_printing) {
 		painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), 2, Qt::SolidLine));
-		painter->drawPath(containerShape);
+		painter->drawPath(m_shape);
 	}
 }
 

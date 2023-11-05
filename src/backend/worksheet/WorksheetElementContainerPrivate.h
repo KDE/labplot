@@ -30,8 +30,6 @@ public:
 	virtual void retransform() override;
 
 	WorksheetElementContainer* q{nullptr};
-	QRectF m_boundingRectangle;
-	QPainterPath containerShape;
 	QRectF rect;
 	bool m_printing{false};
 
