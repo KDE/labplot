@@ -34,13 +34,11 @@ WorksheetPreviewWidget::WorksheetPreviewWidget(QWidget* parent) : QWidget(parent
 	connect(ui.lwPreview, &QListWidget::currentRowChanged, this, &WorksheetPreviewWidget::currentChanged);
 
 	// make the icon 5x5cm big
-	static const int themeIconSize = std::ceil(5.0 / 2.54 * QApplication::primaryScreen()->physicalDotsPerInchX());
-	ui.lwPreview->setIconSize(QSize(themeIconSize, themeIconSize));
+	const int iconSize = std::ceil(5.0 / 2.54 * QApplication::primaryScreen()->physicalDotsPerInchX());
+	ui.lwPreview->setIconSize(QSize(iconSize, iconSize));
 }
 
-WorksheetPreviewWidget::~WorksheetPreviewWidget() {
-
-}
+WorksheetPreviewWidget::~WorksheetPreviewWidget() = default;
 
 void WorksheetPreviewWidget::setProject(Project* project) {
 	m_project = project;
@@ -125,7 +123,13 @@ void WorksheetPreviewWidget::aspectAboutToBeRemoved(const AbstractAspect* aspect
 
 void WorksheetPreviewWidget::addPreview(const Worksheet* w, int row) const {
 	QPixmap pix(10, 10);
-	w->exportView(pix);
+	const bool rc = w->exportView(pix);
+	if (!rc) {
+		// the view is not available yet, show the placeholder preview
+		const auto icon = QIcon::fromTheme(QLatin1String("view-preview"));
+		const int iconSize = std::ceil(5.0 / 2.54 * QApplication::primaryScreen()->physicalDotsPerInchX());
+		pix = icon.pixmap(iconSize, iconSize);
+	}
 	ui.lwPreview->insertItem(row, new QListWidgetItem(QIcon(pix), w->name()));
 
 	connect(w, &Worksheet::aspectDescriptionChanged, this, &WorksheetPreviewWidget::updateText);

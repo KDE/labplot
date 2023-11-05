@@ -172,6 +172,7 @@ QWidget* Worksheet::view() const {
 		connect(m_view, &WorksheetView::propertiesExplorerRequested, this, &Worksheet::propertiesExplorerRequested);
 		connect(this, &Worksheet::cartesianPlotMouseModeChanged, m_view, &WorksheetView::cartesianPlotMouseModeChangedSlot);
 		connect(this, &Worksheet::childContextMenuRequested, m_view, &WorksheetView::childContextMenuRequested);
+		Q_EMIT const_cast<Worksheet*>(this)->changed();
 	}
 	return m_partView;
 }
@@ -219,8 +220,12 @@ bool Worksheet::exportView() const {
 #endif
 }
 
-void Worksheet::exportView(QPixmap& pixmap) const {
+bool Worksheet::exportView(QPixmap& pixmap) const {
+	if (!m_view)
+		return false;
+
 	m_view->exportToPixmap(pixmap);
+	return true;
 }
 
 bool Worksheet::printView() {

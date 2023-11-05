@@ -55,7 +55,7 @@ public:
 	QVector<AspectType> pasteTypes() const override;
 
 	bool exportView() const override;
-	void exportView(QPixmap&) const;
+	bool exportView(QPixmap&) const;
 	bool printView() override;
 	bool printPreview() const override;
 
