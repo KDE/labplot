@@ -53,8 +53,6 @@ public:
 	QQPlot* const q;
 
 private:
-	bool m_hovered{false};
-
 	void copyValidData(QVector<double>&) const;
 };
 
