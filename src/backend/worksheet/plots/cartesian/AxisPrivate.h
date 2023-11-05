@@ -156,7 +156,6 @@ private:
 	QRectF boundingRectangle;
 	QPainterPath axisShape;
 
-
 	bool m_panningStarted{false};
 	QPointF m_panningStart;
 
