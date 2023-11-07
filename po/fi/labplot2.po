@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-06 00:39+0000\n"
-"PO-Revision-Date: 2023-06-04 23:26+0300\n"
+"PO-Revision-Date: 2023-10-30 14:32+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 23.04.1\n"
+"X-Generator: Lokalize 22.12.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -16890,10 +16890,9 @@ msgstr "Lisää kaaviot…"
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:399
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:410
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:440
-#, fuzzy, kde-format
-#| msgid "Plot Area"
+#, kde-format
 msgid "Plot Area - %1"
-msgstr "Kaavion alue"
+msgstr "Kaavion alue – %1"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:406
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:435
@@ -16916,10 +16915,9 @@ msgid "Plot Area %1"
 msgstr "Kaavion alue"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:669
-#, fuzzy, kde-format
-#| msgid "new filter"
+#, kde-format
 msgid "Fourier Filter of '%1'"
-msgstr "uusi suodatin"
+msgstr "”%1” – Fourier-suodatin"
 
 #. i18n: ectx: property (text), widget (QLabel, lDensity)
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:882
@@ -17019,10 +17017,9 @@ msgid ""
 msgstr ""
 
 #: src/kdefrontend/spreadsheet/SampleValuesDialog.cpp:45
-#, fuzzy, kde-format
-#| msgid "Random Values"
+#, kde-format
 msgid "Random"
-msgstr "Satunnaisarvot"
+msgstr "Satunnainen"
 
 #: src/kdefrontend/spreadsheet/SampleValuesDialog.cpp:48
 #, kde-format
@@ -17053,14 +17050,12 @@ msgstr "Näytekoko:"
 #. i18n: ectx: property (text), widget (QLabel, lValue)
 #: src/kdefrontend/spreadsheet/SampleValuesDialog.cpp:103
 #: src/kdefrontend/ui/spreadsheet/samplevalueswidget.ui:30
-#, fuzzy, kde-format
-#| msgid "Period"
+#, kde-format
 msgid "Period:"
-msgstr "Jakso"
+msgstr "Jakso:"
 
 #: src/kdefrontend/spreadsheet/SampleValuesDialog.cpp:105
-#, fuzzy, kde-format
-#| msgid "Sample size:"
+#, kde-format
 msgid "Sample Size:"
 msgstr "Näytekoko:"
 
@@ -17081,20 +17076,18 @@ msgid "Regular Expression"
 msgstr ""
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1089
-#, fuzzy, kde-format
-#| msgid "File info"
+#, kde-format
 msgid "%1 match found"
 msgid_plural "%1 matches found"
-msgstr[0] "Tiedoston tiedot"
-msgstr[1] "Tiedoston tiedot"
+msgstr[0] "Löytyi %1 osuma"
+msgstr[1] "Löytyi %1 osumaa"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1168
-#, fuzzy, kde-format
-#| msgid "Values"
+#, kde-format
 msgid "%1 replacement made"
 msgid_plural "%1 replacements made"
-msgstr[0] "Arvot"
-msgstr[1] "Arvot"
+msgstr[0] "Tehty %1 korvaus"
+msgstr[1] "Tehty %1 korvausta"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1460
 #, kde-format
@@ -17124,10 +17117,9 @@ msgid "One or more occurrences"
 msgstr "Sattui virhe."
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1550
-#, fuzzy, kde-format
-#| msgid "An error occurred."
+#, kde-format
 msgid "Zero or more occurrences"
-msgstr "Sattui virhe."
+msgstr "Nolla tai useampia esiintymiä"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1551
 #, kde-format
@@ -17150,15 +17142,14 @@ msgid "Or"
 msgstr ""
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1562
-#, fuzzy, kde-format
-#| msgid "Comment character:"
+#, kde-format
 msgid "Set of characters"
-msgstr "Kommenttimerkki:"
+msgstr "Merkkijoukko"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1563
 #, kde-format
 msgid "Negative set of characters"
-msgstr ""
+msgstr "Käänteinen merkkijoukko"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1567
 #, kde-format
@@ -17171,16 +17162,14 @@ msgid "Reference"
 msgstr "Viite"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1585
-#, fuzzy, kde-format
-#| msgid "Linear Algebra"
+#, kde-format
 msgid "Line break"
-msgstr "Lineaarialgebra"
+msgstr "Rivinvaihto"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1586
-#, fuzzy, kde-format
-#| msgid "Variable:"
+#, kde-format
 msgid "Tab"
-msgstr "Muuttuja:"
+msgstr "Sarkain"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1589
 #, kde-format
@@ -17218,10 +17207,9 @@ msgid "Word character (alphanumerics plus '_')"
 msgstr ""
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1596
-#, fuzzy, kde-format
-#| msgid "Comment character:"
+#, kde-format
 msgid "Non-word character"
-msgstr "Kommenttimerkki:"
+msgstr "Ei-sanamerkki"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1599
 #, kde-format
@@ -17265,19 +17253,16 @@ msgid "Fixed-length negative lookbehind"
 msgstr ""
 
 #: src/kdefrontend/spreadsheet/SortDialog.cpp:33
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Sort Columns"
+#, kde-format
 msgctxt "@title:window"
 msgid "Sort All Columns"
-msgstr "Lajittele sarakkeet"
+msgstr "Lajittele kaikki sarakkeet"
 
 #: src/kdefrontend/spreadsheet/SortDialog.cpp:35
-#, fuzzy, kde-format
-#| msgid "&Selected Columns"
+#, kde-format
 msgctxt "@title:window"
 msgid "Sort Selected Columns"
-msgstr "&Valitut sarakkeet"
+msgstr "Lajittele valitut sarakkeet"
 
 #: src/kdefrontend/spreadsheet/SortDialog.cpp:39
 #, kde-format
@@ -17369,7 +17354,7 @@ msgstr "Kumulatiivinen histogrammi"
 #: src/kdefrontend/TemplateHandler.cpp:181
 #, kde-format
 msgid "Load"
-msgstr ""
+msgstr "Lataa"
 
 #: src/kdefrontend/TemplateHandler.cpp:182
 #, kde-format
@@ -17389,7 +17374,7 @@ msgstr "Tallenna nykyiset ominaisuudet mallipohjaksi"
 #: src/kdefrontend/TemplateHandler.cpp:185
 #, kde-format
 msgid "Save Default"
-msgstr ""
+msgstr "Tallenna oletukseksi"
 
 #: src/kdefrontend/TemplateHandler.cpp:186
 #, kde-format
@@ -17402,15 +17387,14 @@ msgid "Toolbar Settings"
 msgstr "Työkalurivin asetukset"
 
 #: src/kdefrontend/TemplateHandler.cpp:205
-#, fuzzy, kde-format
-#| msgid "Tab position:"
+#, kde-format
 msgid "Text position"
-msgstr "Välilehden sijainti:"
+msgstr "Tekstin sijainti"
 
 #: src/kdefrontend/TemplateHandler.cpp:207
 #, kde-format
 msgid "Icons only"
-msgstr ""
+msgstr "Vain kuvakkeet"
 
 #: src/kdefrontend/TemplateHandler.cpp:214
 #, kde-format
@@ -17428,10 +17412,9 @@ msgid "Text Under Icons"
 msgstr "Teksti kuvakkeiden alla"
 
 #: src/kdefrontend/TemplateHandler.cpp:268
-#, fuzzy, kde-format
-#| msgid "Load From"
+#, kde-format
 msgid "Load From Template"
-msgstr "Lataa tiedostosta"
+msgstr "Lataa mallipohjasta"
 
 #: src/kdefrontend/TemplateHandler.cpp:288
 #, kde-format
@@ -17439,15 +17422,14 @@ msgid "Template \"%1\" was loaded."
 msgstr "Ladattiin mallipohja ”%1”."
 
 #: src/kdefrontend/TemplateHandler.cpp:293
-#, fuzzy, kde-format
-#| msgid "Save As"
+#, kde-format
 msgid "Save As Template"
-msgstr "Tallenna nimellä"
+msgstr "Tallenna mallipohjaksi"
 
 #: src/kdefrontend/TemplateHandler.cpp:310
 #, kde-format
 msgid "New:"
-msgstr ""
+msgstr "Uusi:"
 
 #: src/kdefrontend/TemplateHandler.cpp:338
 #, kde-format
@@ -17465,10 +17447,9 @@ msgid "New default template was saved."
 msgstr "Uusi oletusmallipohja tallennettiin."
 
 #: src/kdefrontend/ThemeHandler.cpp:141
-#, fuzzy, kde-format
-#| msgid "Theme:"
+#, kde-format
 msgid "Theme '%1'"
-msgstr "Teema:"
+msgstr "Teema ”%1”"
 
 #: src/kdefrontend/ThemeHandler.cpp:142
 #, kde-format
@@ -17501,10 +17482,9 @@ msgstr "Kokoelma:"
 
 #. i18n: ectx: property (text), widget (QLabel, lColormap)
 #: src/kdefrontend/ui/colormapswidget.ui:73
-#, fuzzy, kde-format
-#| msgid "Color map:"
+#, kde-format
 msgid "Colormaps:"
-msgstr "Värikartta:"
+msgstr "Värikartat:"
 
 #. i18n: ectx: property (text), widget (QPushButton, bInsert)
 #: src/kdefrontend/ui/constantswidget.ui:90
@@ -17957,8 +17937,7 @@ msgstr "Anna kuvatiedoston nimi."
 #. i18n: ectx: property (toolTip), widget (QPushButton, bOpen)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:119
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:61
-#, fuzzy, kde-format
-#| msgid "Select the image file"
+#, kde-format
 msgid " Select the image file"
 msgstr "Valitse kuvatiedosto"
 
@@ -17966,26 +17945,23 @@ msgstr "Valitse kuvatiedosto"
 #. i18n: ectx: property (toolTip), widget (QLabel, lPointSeparation)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:137
 #: src/kdefrontend/ui/datapickerimagewidget.ui:779
-#, fuzzy, kde-format
-#| msgid "Number of digits after the decimal point"
+#, kde-format
 msgid "Number of pixels between two neighbor data points"
-msgstr "Numeroita desimaalipisteen jälkeen"
+msgstr "Kuvapisteiden määrä vierekkäisten datapisteiden välillä"
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, sbPointSeparation)
 #. i18n: ectx: property (suffix), widget (QSpinBox, sbMinSegmentLength)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:140
 #: src/kdefrontend/ui/datapickerimagewidget.ui:238
-#, fuzzy, kde-format
-#| msgid "px"
+#, kde-format
 msgid " px"
-msgstr "x"
+msgstr " px"
 
 #. i18n: ectx: property (text), widget (QLabel, lRefPoint)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:155
-#, fuzzy, kde-format
-#| msgid "Preferences"
+#, kde-format
 msgid "References"
-msgstr "Asetukset"
+msgstr "Viitteet"
 
 #. i18n: ectx: property (text), widget (QLabel, lRefPoint2)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:171
@@ -18045,10 +18021,9 @@ msgstr "%1: aseta apuruudukon tyyli"
 
 #. i18n: ectx: property (text), widget (QLabel, lMinSegmentLength)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:248
-#, fuzzy, kde-format
-#| msgid "Length:"
+#, kde-format
 msgid "Min. Length:"
-msgstr "Pituus:"
+msgstr "Väh.pituus:"
 
 #. i18n: ectx: property (text), widget (QLabel, lRefPoint1)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:280
@@ -18094,7 +18069,7 @@ msgstr "y="
 #: src/kdefrontend/ui/datapickerimagewidget.ui:599
 #, kde-format
 msgid "z="
-msgstr ""
+msgstr "z="
 
 #. i18n: ectx: property (text), widget (QLabel, lRefPoint3)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:672
@@ -18112,14 +18087,13 @@ msgstr "Kuva:"
 #: src/kdefrontend/ui/datapickerimagewidget.ui:701
 #, kde-format
 msgid "Embedd"
-msgstr ""
+msgstr "Upotettu"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbFileRelativePath)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:708
-#, fuzzy, kde-format
-#| msgid "Relative scale"
+#, kde-format
 msgid "Relative Path"
-msgstr "Suhteellinen asteikko"
+msgstr "Suhteellinen sijainti"
 
 #. i18n: ectx: property (text), widget (QLabel, lDataType)
 #. i18n: ectx: property (text), widget (QLabel, lUpdateType)
@@ -18171,24 +18145,21 @@ msgstr "Tyyppi:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPointSeparation)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:782
-#, fuzzy, kde-format
-#| msgid "Saturation:"
+#, kde-format
 msgid "Separation:"
-msgstr "Kylläisyys:"
+msgstr "Erottelu:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:812
-#, fuzzy, kde-format
-#| msgid "Date and time"
+#, kde-format
 msgid "Datetime"
-msgstr "Aika ja päiväys"
+msgstr "Päiväys"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tSymbol)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:820
-#, fuzzy, kde-format
-#| msgid "Fitted Points"
+#, kde-format
 msgid "Ref. Points Symbol"
-msgstr "Sovitetut pisteet"
+msgstr "Viitepisteiden symboli"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tEdit)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:847
@@ -18223,8 +18194,7 @@ msgstr "Sävy:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPlotImageType)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:937
-#, fuzzy, kde-format
-#| msgid "Current image:"
+#, kde-format
 msgid "Current Image:"
 msgstr "Nykyinen kuva:"
 
@@ -18242,8 +18212,7 @@ msgstr "Edusta:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: src/kdefrontend/ui/datasources/asciioptionswidget.ui:52
-#, fuzzy, kde-format
-#| msgid "Comment character:"
+#, kde-format
 msgid "Comment Character:"
 msgstr "Kommenttimerkki:"
 
@@ -18267,22 +18236,19 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbSimplifyWhitespaces)
 #: src/kdefrontend/ui/datasources/asciioptionswidget.ui:69
-#, fuzzy, kde-format
-#| msgid "Simplify whitespaces"
+#, kde-format
 msgid "Simplify Whitespaces"
 msgstr "Sievennä tyhjemerkit"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbCreateTimestamp)
 #: src/kdefrontend/ui/datasources/asciioptionswidget.ui:152
-#, fuzzy, kde-format
-#| msgid "Create index column"
+#, kde-format
 msgid "Create Timestamp "
-msgstr "Luo indeksisarake"
+msgstr "Luo aikaleima "
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbRemoveQuotes)
 #: src/kdefrontend/ui/datasources/asciioptionswidget.ui:159
-#, fuzzy, kde-format
-#| msgid "Remove quotes"
+#, kde-format
 msgid "Remove Quotes"
 msgstr "Poista lainausmerkit"
 
@@ -18295,45 +18261,39 @@ msgstr "Muuta NaN → 0"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbHeader)
 #: src/kdefrontend/ui/datasources/asciioptionswidget.ui:205
-#, fuzzy, kde-format
-#| msgid "Dash Line"
+#, kde-format
 msgid "Names at Line:"
-msgstr "Katkoviiva"
+msgstr "Nimet rivillä:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbCreateIndex)
 #: src/kdefrontend/ui/datasources/asciioptionswidget.ui:212
-#, fuzzy, kde-format
-#| msgid "Created"
+#, kde-format
 msgid "Create Index"
-msgstr "Luotu"
+msgstr "Luo indeksi"
 
 #. i18n: ectx: property (text), widget (QLabel, lDateTimeFormat)
 #: src/kdefrontend/ui/datasources/asciioptionswidget.ui:219
-#, fuzzy, kde-format
-#| msgid "Data format"
+#, kde-format
 msgid "DateTime Format:"
-msgstr "Datan muoto"
+msgstr "Päiväysmuoto:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDecimalSeparator)
 #: src/kdefrontend/ui/datasources/asciioptionswidget.ui:226
-#, fuzzy, kde-format
-#| msgid "Decimal notation"
+#, kde-format
 msgid "Decimal Separator:"
-msgstr "Desimaalinen merkintätapa"
+msgstr "Desimaalierotin:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSeparatingCharacter)
 #: src/kdefrontend/ui/datasources/asciioptionswidget.ui:233
-#, fuzzy, kde-format
-#| msgid "Column"
+#, kde-format
 msgid "Column Separator:"
-msgstr "Sarake"
+msgstr "Sarake-erotin:"
 
 #. i18n: ectx: property (text), widget (QLabel, lVectorNames)
 #: src/kdefrontend/ui/datasources/asciioptionswidget.ui:240
-#, fuzzy, kde-format
-#| msgid "Custom grid"
+#, kde-format
 msgid "Custom Names:"
-msgstr "Ruudukon mukautus"
+msgstr "Mukautetut nimet:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSkipBytes)
 #: src/kdefrontend/ui/datasources/binaryoptionswidget.ui:17
@@ -18491,7 +18451,7 @@ msgstr "Todennus"
 #: src/kdefrontend/ui/datasources/databasemanagerwidget.ui:162
 #, kde-format
 msgid "User:"
-msgstr ""
+msgstr "Käyttäjä:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPassword)
 #: src/kdefrontend/ui/datasources/databasemanagerwidget.ui:176
@@ -18507,28 +18467,25 @@ msgstr "Salasana:"
 #: src/kdefrontend/ui/datasources/mqttconnectionmanagerwidget.ui:168
 #, kde-format
 msgid "Test"
-msgstr ""
+msgstr "Kokeile"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbColumnDescriptions)
 #: src/kdefrontend/ui/datasources/datasetmetadatamanagerwidget.ui:34
-#, fuzzy, kde-format
-#| msgid "Column properties"
+#, kde-format
 msgid "Column Descriptions"
-msgstr "Sarakkeen ominaisuudet"
+msgstr "Sarakekuvaukset"
 
 #. i18n: ectx: property (text), widget (QPushButton, bDelete)
 #: src/kdefrontend/ui/datasources/datasetmetadatamanagerwidget.ui:40
-#, fuzzy, kde-format
-#| msgid "Connection:"
+#, kde-format
 msgid "Delete Description"
-msgstr "Yhteys:"
+msgstr "Poista kuvaus"
 
 #. i18n: ectx: property (text), widget (QPushButton, bNewColumn)
 #: src/kdefrontend/ui/datasources/datasetmetadatamanagerwidget.ui:47
-#, fuzzy, kde-format
-#| msgid "Connection:"
+#, kde-format
 msgid "Add new description"
-msgstr "Yhteys:"
+msgstr "Lisää uusi kuvaus"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbFilter)
 #: src/kdefrontend/ui/datasources/datasetmetadatamanagerwidget.ui:73
@@ -18560,10 +18517,9 @@ msgstr "Lukumuoto:"
 #: src/kdefrontend/ui/datasources/datasetmetadatamanagerwidget.ui:100
 #: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:98
 #: src/kdefrontend/ui/datasources/jsonoptionswidget.ui:40
-#, fuzzy, kde-format
-#| msgid "Data format"
+#, kde-format
 msgid "DateTime format:"
-msgstr "Datan muoto"
+msgstr "Päiväysmuoto:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbHeader)
 #: src/kdefrontend/ui/datasources/datasetmetadatamanagerwidget.ui:107
@@ -18585,11 +18541,9 @@ msgstr "Poista lainausmerkit"
 
 #. i18n: ectx: property (text), widget (QLabel, lFileName)
 #: src/kdefrontend/ui/datasources/datasetmetadatamanagerwidget.ui:193
-#, fuzzy, kde-format
-#| msgctxt "NAME OF TRANSLATORS"
-#| msgid "Your names"
+#, kde-format
 msgid "Short name"
-msgstr "Tommi Nieminen"
+msgstr "Lyhyt nimi"
 
 #. i18n: ectx: property (text), widget (QLabel, lDownloadUrl)
 #: src/kdefrontend/ui/datasources/datasetmetadatamanagerwidget.ui:203
@@ -18674,14 +18628,13 @@ msgstr "Tietojoukko:"
 #: src/kdefrontend/ui/datasources/importdatasetwidget.ui:103
 #, kde-format
 msgid "Categories"
-msgstr ""
+msgstr "Luokat"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, ImportErrorDialog)
 #: src/kdefrontend/ui/datasources/ImportErrorDialog.ui:14
-#, fuzzy, kde-format
-#| msgid "Data:"
+#, kde-format
 msgid "Parse Errors"
-msgstr "Data:"
+msgstr "Jäsennysvirheet"
 
 #. i18n: ectx: property (text), widget (QPushButton, pbOk)
 #: src/kdefrontend/ui/datasources/ImportErrorDialog.ui:38
@@ -18769,10 +18722,9 @@ msgstr " Valitse tuotava tiedosto"
 
 #. i18n: ectx: property (text), widget (QLabel, lRelativePath)
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:223
-#, fuzzy, kde-format
-#| msgid "Relative scale"
+#, kde-format
 msgid "Relative Path:"
-msgstr "Suhteellinen asteikko"
+msgstr "Suhteellinen sijainti:"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bFileInfo)
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:275
@@ -18814,10 +18766,9 @@ msgstr "Lähde:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDBCDatabase)
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:342
-#, fuzzy, kde-format
-#| msgid "Database"
+#, kde-format
 msgid "DBC Database"
-msgstr "Tietokanta"
+msgstr "DBC-tietokanta"
 
 #. i18n: ectx: property (text), widget (QLabel, lWarningLimitedMessages)
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:521
@@ -18836,11 +18787,9 @@ msgstr "Alkava rivi:"
 #. i18n: ectx: property (toolTip), widget (QSpinBox, sbEndRow)
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:548
 #: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:291
-#, fuzzy, kde-format
-#| msgid ""
-#| "Specify the number of the end row to import; -1 stands for the last row"
+#, kde-format
 msgid "Specify the end row to import; -1 stands for the last row"
-msgstr "Anna tuonnin lopettavan rivin numero (−1 tarkoittaa viimeistä riviä)"
+msgstr "Määritä viimeinen tuotava rivi (-1 tarkoittaa viimeistä riviä)"
 
 #. i18n: ectx: property (text), widget (QLabel, lStartColumn)
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:564
@@ -18852,18 +18801,16 @@ msgstr "Aloittava sarake:"
 #. i18n: ectx: property (toolTip), widget (QSpinBox, sbStartColumn)
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:571
 #: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:327
-#, fuzzy, kde-format
-#| msgid "Specify the number of the start row to import"
+#, kde-format
 msgid "Specify the start column for import"
-msgstr "Anna tuonnin alkavan rivin numero"
+msgstr "Määritä ensimmäinen tuotava sarake"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, sbStartRow)
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:600
 #: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:252
-#, fuzzy, kde-format
-#| msgid "Specify the number of the start row to import"
+#, kde-format
 msgid "Specify the start row for import"
-msgstr "Anna tuonnin alkavan rivin numero"
+msgstr "Määritä ensimmäinen tuotava rivi"
 
 #. i18n: ectx: property (text), widget (QLabel, lEndColumn)
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:645
@@ -18875,11 +18822,9 @@ msgstr "Lopettava sarake:"
 #. i18n: ectx: property (toolTip), widget (QSpinBox, sbEndColumn)
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:652
 #: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:363
-#, fuzzy, kde-format
-#| msgid ""
-#| "Specify the number of the end row to import; -1 stands for the last row"
+#, kde-format
 msgid "Specify the end column to import; -1 stands for the last column"
-msgstr "Anna tuonnin lopettavan rivin numero (−1 tarkoittaa viimeistä riviä)"
+msgstr "Määritä viimeinen tuotava sarake (-1 tarkoittaa viimeistä saraketta)"
 
 #. i18n: ectx: property (text), widget (QLabel, lEndRow)
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:681
@@ -18890,10 +18835,9 @@ msgstr "Lopettava rivi:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbUpdateOptions)
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:708
-#, fuzzy, kde-format
-#| msgid "Hide Options"
+#, kde-format
 msgid "Update Options"
-msgstr "Piilota asetukset"
+msgstr "Päivitysvalinnat"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbReadingType)
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:715
@@ -18905,10 +18849,9 @@ msgstr ""
 #. i18n: ectx: property (text), item, widget (QComboBox, cbReadingType)
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:720
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:339
-#, fuzzy, kde-format
-#| msgid "image"
+#, kde-format
 msgid "From End"
-msgstr "kuva"
+msgstr "Lopusta"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbReadingType)
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:725
@@ -18940,9 +18883,9 @@ msgstr "Virkistysväli:"
 #. i18n: ectx: property (text), widget (QLabel, lKeepLastValues)
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:764
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:307
-#, fuzzy, kde-format
+#, kde-format
 msgid "Keep last values:"
-msgstr "arvo"
+msgstr "Pidä viimeisimmät arvot:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSampleSize)
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:771
@@ -18954,18 +18897,16 @@ msgstr "Näytekoko:"
 #. i18n: ectx: property (text), item, widget (QComboBox, cbUpdateType)
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:798
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:232
-#, fuzzy, kde-format
-#| msgid "vertical"
+#, kde-format
 msgid "Periodically"
-msgstr "pysty"
+msgstr "Jaksottain"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbUpdateType)
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:803
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:237
-#, fuzzy, kde-format
-#| msgid "Data:"
+#, kde-format
 msgid "On New Data"
-msgstr "Data:"
+msgstr "Uudesta datasta"
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, sbUpdateInterval)
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:817
@@ -19005,56 +18946,50 @@ msgstr "Tuo käyttämättömät oliot"
 #. i18n: ectx: property (text), widget (QLabel, lFolder)
 #: src/kdefrontend/ui/datasources/importprojectwidget.ui:74
 #: src/kdefrontend/ui/PlotTemplateDialog.ui:115
-#, fuzzy, kde-format
-#| msgid "Folder"
+#, kde-format
 msgid "Folder:"
-msgstr "Kansio"
+msgstr "Kansio:"
 
 #. i18n: ectx: property (text), widget (QLabel, lImportFrom)
 #: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:65
-#, fuzzy, kde-format
-#| msgid "Import To"
+#, kde-format
 msgid "Import from:"
-msgstr "Tuo kohteeseen"
+msgstr "Tuo lähteestä:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDecimalSeparator)
 #: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:91
 #: src/kdefrontend/ui/datasources/jsonoptionswidget.ui:76
 #: src/kdefrontend/ui/settingsgeneralpage.ui:40
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:152
-#, fuzzy, kde-format
-#| msgid "Decimal notation"
+#, kde-format
 msgid "Decimal separator:"
-msgstr "Desimaalinen merkintätapa"
+msgstr "Desimaalierotin:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbQuery)
 #: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:137
 #, kde-format
 msgid "Query"
-msgstr ""
+msgstr "Kysely"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbImportObjectNames)
 #: src/kdefrontend/ui/datasources/jsonoptionswidget.ui:99
-#, fuzzy, kde-format
-#| msgid "Load last used project"
+#, kde-format
 msgid "Import object names"
-msgstr "Avaa viimeksi käytetty projekti"
+msgstr "Tuo olioiden nimet"
 
 #. i18n: ectx: property (toolTip), widget (QTableWidget, twContent)
 #. i18n: ectx: property (toolTip), widget (QTreeWidget, twContent)
 #: src/kdefrontend/ui/datasources/matiooptionswidget.ui:23
 #: src/kdefrontend/ui/datasources/netcdfoptionswidget.ui:23
-#, fuzzy, kde-format
-#| msgid "Shows the content of a NetCDF file"
+#, kde-format
 msgid "Shows the content of the selected NetCDF file"
-msgstr "Näyttää NetCDF-tiedoston sisällön"
+msgstr "Näyttää valitun NetCDF-tiedoston sisällön"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twContent)
 #: src/kdefrontend/ui/datasources/matiooptionswidget.ui:27
-#, fuzzy, kde-format
-#| msgid "Variable:"
+#, kde-format
 msgid "Variable"
-msgstr "Muuttuja:"
+msgstr "Muuttuja"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twContent)
 #: src/kdefrontend/ui/datasources/matiooptionswidget.ui:32
@@ -19072,14 +19007,13 @@ msgstr "Ulottuvuudet"
 #: src/kdefrontend/ui/datasources/matiooptionswidget.ui:42
 #, kde-format
 msgid "Class"
-msgstr ""
+msgstr "Luokka"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twContent)
 #: src/kdefrontend/ui/datasources/matiooptionswidget.ui:52
-#, fuzzy, kde-format
-#| msgid "simple"
+#, kde-format
 msgid "Complex"
-msgstr "yksinkertainen"
+msgstr "Kompleksinen"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbConnection)
 #: src/kdefrontend/ui/datasources/mqttconnectionmanagerwidget.ui:23
@@ -19093,7 +19027,7 @@ msgstr "Yhteyksien hallinta"
 #: src/kdefrontend/ui/datasources/mqtterrorwidget.ui:67
 #, kde-format
 msgid "Client ID:"
-msgstr ""
+msgstr "Asiakastunniste:"
 
 #. i18n: ectx: property (text), widget (QLabel, lUsername)
 #: src/kdefrontend/ui/datasources/mqttconnectionmanagerwidget.ui:88
@@ -19163,24 +19097,21 @@ msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QTreeWidget, twContent)
 #: src/kdefrontend/ui/datasources/rootoptionswidget.ui:30
-#, fuzzy, kde-format
-#| msgid "Shows the content of a NetCDF file"
+#, kde-format
 msgid "Shows the content of the selected ROOT file"
-msgstr "Näyttää NetCDF-tiedoston sisällön"
+msgstr "Näyttää valitun ROOT-tiedoston sisällön"
 
 #. i18n: ectx: property (text), widget (QLabel, labelFirst)
 #: src/kdefrontend/ui/datasources/rootoptionswidget.ui:72
-#, fuzzy, kde-format
-#| msgid "First color"
+#, kde-format
 msgid "First row:"
-msgstr "Ensimmäinen väri"
+msgstr "Ensimmäinen rivi:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelLast)
 #: src/kdefrontend/ui/datasources/rootoptionswidget.ui:89
-#, fuzzy, kde-format
-#| msgid "Start row:"
+#, kde-format
 msgid "Last row:"
-msgstr "Alkava rivi:"
+msgstr "Viimeinen rivi:"
 
 #. i18n: ectx: property (text), widget (QLabel, lStartDateTime)
 #. i18n: ectx: property (text), widget (QLabel, lStart)
@@ -19198,10 +19129,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowScaleOffset)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:82
-#, fuzzy, kde-format
-#| msgid "Show all windows"
+#, kde-format
 msgid "Show scale and offset"
-msgstr "Näytä kaikki ikkunat"
+msgstr "Näytä mittakaava ja siirtymä"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbUnityScale)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:129
@@ -19237,8 +19167,7 @@ msgstr "Mittakaava:"
 
 #. i18n: ectx: property (text), widget (QLabel, lZeroOffset)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:177
-#, fuzzy, kde-format
-#| msgid "Zero-offset:"
+#, kde-format
 msgid "Zero Offset:"
 msgstr "Nollasiirtymä:"
 
@@ -19270,10 +19199,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lScalingFactor)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:378
-#, fuzzy, kde-format
-#| msgid "Scaling factor:"
+#, kde-format
 msgid "Scaling Factor:"
-msgstr "Skaalauskerroin:"
+msgstr "Mittakaavakerroin:"
 
 #. i18n: ectx: property (text), widget (QLabel, lAutoScale)
 #. i18n: ectx: property (text), widget (QLabel, lRangeType)
@@ -19344,10 +19272,9 @@ msgstr "Numero:"
 #. i18n: ectx: property (text), widget (QLabel, lMajorTickStartDateTime)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:706
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1133
-#, fuzzy, kde-format
-#| msgid "First color"
+#, kde-format
 msgid "1st Tick Value:"
-msgstr "Ensimmäinen väri"
+msgstr "1. merkin arvo:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMajorTicksSpacingNumeric)
 #. i18n: ectx: property (text), widget (QLabel, lMinorTicksSpacingNumeric)
@@ -19378,17 +19305,15 @@ msgstr "Lisäys:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLabelsTextType)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:756
-#, fuzzy, kde-format
-#| msgid "Number"
+#, kde-format
 msgid "Label Type:"
-msgstr "Numero"
+msgstr "Selitteen tyyppi:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLabelsTextColumn)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:763
-#, fuzzy, kde-format
-#| msgid "Column:"
+#, kde-format
 msgid "Label Column:"
-msgstr "Sarake:"
+msgstr "Selitteen sarake:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPosition)
 #. i18n: ectx: property (text), widget (QLabel, lOrientation)
@@ -19435,8 +19360,7 @@ msgstr "Pituus:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMinorTicks)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:978
-#, fuzzy, kde-format
-#| msgid "Minor ticks"
+#, kde-format
 msgid "Minor Ticks"
 msgstr "Alimerkit"
 
@@ -19450,17 +19374,15 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lMajorTickStartOffset)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1021
-#, fuzzy, kde-format
-#| msgid "Offset:"
+#, kde-format
 msgid "1st Tick Offset:"
-msgstr "Siirtymä:"
+msgstr "1. merkin siirtymä:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMajorTicksStartType)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1090
-#, fuzzy, kde-format
-#| msgid "custom column"
+#, kde-format
 msgid "1st Tick at:"
-msgstr "mukautettu sarake"
+msgstr "1. merkin paikka:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabLabels)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1144
@@ -19609,22 +19531,19 @@ msgstr "Etuliite:"
 #. i18n: ectx: property (text), widget (QLabel, lLabelsColor)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1500
 #: src/kdefrontend/ui/labelwidget.ui:230
-#, fuzzy, kde-format
-#| msgid "First color"
+#, kde-format
 msgid "Font Color:"
-msgstr "Ensimmäinen väri"
+msgstr "Fonttiväri:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMinorGrid)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1653
-#, fuzzy, kde-format
-#| msgid "Minor grid"
+#, kde-format
 msgid "Minor Grid"
 msgstr "Apuruudukko"
 
 #. i18n: ectx: property (text), widget (QLabel, lMajorGrid)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1666
-#, fuzzy, kde-format
-#| msgid "Major grid"
+#, kde-format
 msgid "Major Grid"
 msgstr "Pääruudukko"
 
@@ -19648,10 +19567,9 @@ msgstr "Käytössä:"
 #: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:155
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:219
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:271
-#, fuzzy, kde-format
-#| msgid "First color"
+#, kde-format
 msgid "First color:"
-msgstr "Ensimmäinen väri"
+msgstr "Ensimmäinen väri:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSecondColor)
 #: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:213
@@ -19771,7 +19689,7 @@ msgstr "%"
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:43
 #, kde-format
 msgid "k:"
-msgstr ""
+msgstr "k:"
 
 #. i18n: ectx: property (text), widget (QLabel, lNotches)
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:125
@@ -19781,17 +19699,15 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lOrdering)
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:162
-#, fuzzy, kde-format
-#| msgid "Order:"
+#, kde-format
 msgid "Ordering:"
 msgstr "Järjestys:"
 
 #. i18n: ectx: property (text), widget (QLabel, lVariableWidth)
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:198
-#, fuzzy, kde-format
-#| msgid "Variable:"
+#, kde-format
 msgid "Variable Width:"
-msgstr "Muuttuja:"
+msgstr "Muuttujan leveys:"
 
 #. i18n: ectx: property (text), widget (QLabel, lWhiskersType)
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:225
@@ -19807,16 +19723,15 @@ msgstr "Laatikko"
 
 #. i18n: ectx: property (text), widget (QLabel, lMedianLine)
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:341
-#, fuzzy, kde-format
-#| msgid "StandardDev"
+#, kde-format
 msgid "Median Line"
-msgstr "Keskihajonta"
+msgstr "Mediaaniviiva"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabSymbol)
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:482
 #, kde-format
 msgid "Markers"
-msgstr ""
+msgstr "Merkit"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbOutlier)
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:536
@@ -19832,10 +19747,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbWhiskerEnd)
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:557
-#, fuzzy, kde-format
-#| msgid "Whiskers"
+#, kde-format
 msgid "Whisker End"
-msgstr "Janat"
+msgstr "Viiksen loppu"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkJitteringEnabled)
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:580
@@ -19914,24 +19828,21 @@ msgstr "x-alue:"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twPlotRanges)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:89
-#, fuzzy, kde-format
-#| msgid "orange"
+#, kde-format
 msgid "X Range"
-msgstr "oranssi"
+msgstr "X-alue"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twPlotRanges)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:94
-#, fuzzy, kde-format
-#| msgid "y-Range"
+#, kde-format
 msgid "Y Range"
-msgstr "y-alue:"
+msgstr "Y-alue"
 
 #. i18n: ectx: property (toolTip), widget (QTableWidget, twYRanges)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:173
-#, fuzzy, kde-format
-#| msgid "orange"
+#, kde-format
 msgid "list of y ranges"
-msgstr "oranssi"
+msgstr "y-alueiden luettelo"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twYRanges)
 #. i18n: ectx: property (text), widget (QTableWidget, twXRanges)
@@ -19984,10 +19895,9 @@ msgstr "Mittakaava"
 #: src/kdefrontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:286
 #: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:383
 #: src/kdefrontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:124
-#, fuzzy, kde-format
-#| msgid "Fitted Points"
+#, kde-format
 msgid "Points:"
-msgstr "Sovitetut pisteet"
+msgstr "Pisteet:"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbAddXRange)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:267
@@ -19997,10 +19907,9 @@ msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbRemoveXRange)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:278
-#, fuzzy, kde-format
-#| msgid "Save the current filter settings"
+#, kde-format
 msgid "Remove the current selected x range"
-msgstr "Tallentaa nykyiset suodatinasetukset"
+msgstr "Poista valittu x-alue"
 
 #. i18n: ectx: property (text), widget (QToolButton, tbRemoveXRange)
 #. i18n: ectx: property (text), widget (QToolButton, tbAddPlotRange)
@@ -20014,24 +19923,21 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lRangeType)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:297
-#, fuzzy, kde-format
-#| msgid "Data range"
+#, kde-format
 msgid "Data Range:"
-msgstr "Tietoalue"
+msgstr "Data-alue:"
 
 #. i18n: ectx: property (toolTip), widget (QTableWidget, twXRanges)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:310
-#, fuzzy, kde-format
-#| msgid "Light Orange"
+#, kde-format
 msgid "List of x ranges"
-msgstr "Vaaleanoranssi"
+msgstr "x-alueiden luettelo"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbAddPlotRange)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:407
-#, fuzzy, kde-format
-#| msgid "Add new Spreadsheet"
+#, kde-format
 msgid "Add new plot range"
-msgstr "Lisää uusi laskentataulukko"
+msgstr "Lisää uusi kaavioalue"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbRemovePlotRange)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:421
@@ -20041,17 +19947,15 @@ msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbAddYRange)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:488
-#, fuzzy, kde-format
-#| msgid "Add new variable"
+#, kde-format
 msgid "Add a new y range"
-msgstr "Lisää uusi muuttuja"
+msgstr "Lisää uusi y-alue"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbRemoveYRange)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:499
-#, fuzzy, kde-format
-#| msgid "Save the current filter settings"
+#, kde-format
 msgid "remove the current selected y range"
-msgstr "Tallentaa nykyiset suodatinasetukset"
+msgstr "poista valittu y-alue"
 
 #. i18n: ectx: property (text), widget (QLabel, lNiceExtend)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:512
@@ -20242,8 +20146,7 @@ msgstr "Kaavion alue"
 
 #. i18n: ectx: property (text), widget (QLabel, lBorderCornerRadius)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1402
-#, fuzzy, kde-format
-#| msgid "Corner radius:"
+#, kde-format
 msgid "Corner Radius:"
 msgstr "Kulman säde:"
 
@@ -20264,8 +20167,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:244
-#, fuzzy, kde-format
-#| msgid "Vert. align.:"
+#, kde-format
 msgid "Ver. align.:"
 msgstr "Pystytasaus:"
 
@@ -20296,10 +20198,9 @@ msgstr "Kulman säde:"
 #: src/kdefrontend/ui/dockwidgets/columndock.ui:30
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:237
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:529
-#, fuzzy, kde-format
-#| msgid "Date and Time"
+#, kde-format
 msgid "DateTime:"
-msgstr "Aika ja päiväys"
+msgstr "Päiväys:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLabels)
 #: src/kdefrontend/ui/dockwidgets/columndock.ui:153
@@ -20312,17 +20213,15 @@ msgstr "Merkit:"
 #: src/kdefrontend/ui/dockwidgets/columndock.ui:218
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:201
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:506
-#, fuzzy, kde-format
-#| msgid "Numeric"
+#, kde-format
 msgid "Numeric:"
-msgstr "Numeerinen"
+msgstr "Luku:"
 
 #. i18n: ectx: property (text), widget (QLabel, lType)
 #: src/kdefrontend/ui/dockwidgets/columndock.ui:241
-#, fuzzy, kde-format
-#| msgid "Data Type"
+#, kde-format
 msgid "Data Type:"
-msgstr "Tietotyyppi"
+msgstr "Tietotyyppi:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPlotDesignation)
 #: src/kdefrontend/ui/dockwidgets/columndock.ui:315
@@ -20570,17 +20469,15 @@ msgstr "Kytkösviiva"
 
 #. i18n: ectx: property (text), widget (QLabel, lKernelType)
 #: src/kdefrontend/ui/dockwidgets/kdeplotdock.ui:43
-#, fuzzy, kde-format
-#| msgid "Kernel: "
+#, kde-format
 msgid "Kernel:"
 msgstr "Ydin: "
 
 #. i18n: ectx: property (text), widget (QLabel, lBandwidthType)
 #: src/kdefrontend/ui/dockwidgets/kdeplotdock.ui:79
-#, fuzzy, kde-format
-#| msgid "Line width"
+#, kde-format
 msgid "Bandwidth:"
-msgstr "Viivan leveys"
+msgstr "Kaistanleveys:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPlotRange)
 #: src/kdefrontend/ui/dockwidgets/kdeplotdock.ui:180
@@ -20849,10 +20746,9 @@ msgstr "Näytteenottoväli:"
 #: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:115
 #: src/kdefrontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:83
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:74
-#, fuzzy, kde-format
-#| msgid "x-Data:"
+#, kde-format
 msgid "X-Data:"
-msgstr "x-Data:"
+msgstr "X-data:"
 
 #. i18n: ectx: property (text), widget (QLabel, lY2Column)
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:144
@@ -21458,7 +21354,7 @@ msgstr "Funktio"
 #: src/kdefrontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:34
 #, kde-format
 msgid "Output:"
-msgstr ""
+msgstr "Tulos:"
 
 #. i18n: ectx: property (text), widget (QLabel, lXScale)
 #: src/kdefrontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:222
@@ -21671,10 +21567,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbAutoRange)
 #: src/kdefrontend/ui/fitoptionswidget.ui:144
-#, fuzzy, kde-format
-#| msgid "x-Range:"
+#, kde-format
 msgid "Auto fit range"
-msgstr "x-alue:"
+msgstr "Sovita alue automaattisesti"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, cbAutoEvalRange)
 #: src/kdefrontend/ui/fitoptionswidget.ui:154
@@ -21722,7 +21617,7 @@ msgstr "Yksikkö:"
 #: src/kdefrontend/ui/fitsheadereditnewkeywordwidget.ui:61
 #, kde-format
 msgid "Key:"
-msgstr ""
+msgstr "Avain:"
 
 #. i18n: ectx: property (text), widget (QPushButton, bOpen)
 #: src/kdefrontend/ui/fitsheadereditwidget.ui:56
@@ -22134,10 +22029,9 @@ msgstr ""
 # pmap: =/elat=LabPlot2:sta/
 #. i18n: ectx: property (text), widget (QLabel, lDockWindowPositionReopen)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:161
-#, fuzzy, kde-format
-#| msgid "LabPlot2"
+#, kde-format
 msgid "Dock widget placement:"
-msgstr "LabPlot2"
+msgstr "Telakkasovelman sijoittelu:"
 
 #. i18n: ectx: property (text), widget (QLabel, lAutoSave)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:168

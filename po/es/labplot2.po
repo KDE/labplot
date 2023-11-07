@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-06 00:39+0000\n"
-"PO-Revision-Date: 2023-11-02 01:37+0100\n"
+"PO-Revision-Date: 2023-11-06 17:58+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -3602,22 +3602,19 @@ msgid "Percentile"
 msgstr "Percentil"
 
 #: src/backend/gsl/functions.cpp:273
-#, fuzzy, kde-format
-#| msgid "pseudo-random integer [0,RAND_MAX]"
+#, kde-format
 msgid "pseudo-random integer [0, RAND_MAX]"
-msgstr "entero seudoaleatorio [0,RAND_MAX]"
+msgstr "entero pseudoaleatorio [0, RAND_MAX]"
 
 #: src/backend/gsl/functions.cpp:274
-#, fuzzy, kde-format
-#| msgid "nonlinear additive feedback rng [0,RAND_MAX]"
+#, kde-format
 msgid "nonlinear additive feedback rng [0, RAND_MAX]"
-msgstr "realimentación aditiva no lineal rng [0,RAND_MAX]"
+msgstr "realimentación aditiva no lineal rng [0, RAND_MAX]"
 
 #: src/backend/gsl/functions.cpp:275
-#, fuzzy, kde-format
-#| msgid "nonlinear additive feedback rng [0,1]"
+#, kde-format
 msgid "nonlinear additive feedback rng [0, 1]"
-msgstr "realimentación aditiva no lineal rng [0,1]"
+msgstr "realimentación aditiva no lineal rng [0, 1]"
 
 #: src/backend/gsl/functions.cpp:276
 #, kde-format
@@ -4727,40 +4724,34 @@ msgid "Logarithm of the magnitude"
 msgstr "Logaritmo de la magnitud"
 
 #: src/backend/gsl/functions.cpp:566
-#, fuzzy, kde-format
-#| msgid "Characteristic values a_n(q) of the Mathieu functions ce_n(q,x)"
+#, kde-format
 msgid "Characteristic values a_n(q) of the Mathieu functions ce_n(q, x)"
-msgstr "Valores característicos a_n(q) de las funciones de Mathieu ce_n(q,x)"
+msgstr "Valores característicos a_n(q) de las funciones de Mathieu ce_n(q, x)"
 
 #: src/backend/gsl/functions.cpp:567
-#, fuzzy, kde-format
-#| msgid "Characteristic values b_n(q) of the Mathieu functions se_n(q,x)"
+#, kde-format
 msgid "Characteristic values b_n(q) of the Mathieu functions se_n(q, x)"
-msgstr "Valores característicos b_n(q) de las funciones de Mathieu se_n(q,x)"
+msgstr "Valores característicos b_n(q) de las funciones de Mathieu se_n(q, x)"
 
 #: src/backend/gsl/functions.cpp:568
-#, fuzzy, kde-format
-#| msgid "Angular Mathieu functions ce_n(q,x)"
+#, kde-format
 msgid "Angular Mathieu functions ce_n(q, x)"
-msgstr "Funciones angulares de Mathieu ce_n(q,x)"
+msgstr "Funciones angulares de Mathieu ce_n(q, x)"
 
 #: src/backend/gsl/functions.cpp:569
-#, fuzzy, kde-format
-#| msgid "Angular Mathieu functions se_n(q,x)"
+#, kde-format
 msgid "Angular Mathieu functions se_n(q, x)"
-msgstr "Funciones angulares de Mathieu se_n(q,x)"
+msgstr "Funciones angulares de Mathieu se_n(q, x)"
 
 #: src/backend/gsl/functions.cpp:570
-#, fuzzy, kde-format
-#| msgid "Radial j-th kind Mathieu functions Mc_n^{(j)}(q,x)"
+#, kde-format
 msgid "Radial j-th kind Mathieu functions Mc_n^{(j)}(q, x)"
-msgstr "Funciones radiales de Mathieu de tipo j-th Mc_n^{(j)}(q,x)"
+msgstr "Funciones radiales de Mathieu de tipo j-th Mc_n^{(j)}(q, x)"
 
 #: src/backend/gsl/functions.cpp:571
-#, fuzzy, kde-format
-#| msgid "Radial j-th kind Mathieu functions Ms_n^{(j)}(q,x)"
+#, kde-format
 msgid "Radial j-th kind Mathieu functions Ms_n^{(j)}(q, x)"
-msgstr "Funciones radiales de Mathieu de tipo j-th Ms_n^{(j)}(q,x)"
+msgstr "Funciones radiales de Mathieu de tipo j-th Ms_n^{(j)}(q, x)"
 
 #: src/backend/gsl/functions.cpp:575
 #, kde-format
@@ -4956,16 +4947,14 @@ msgid "Three component hypotenuse function"
 msgstr "Función hipotenusa de tres componentes"
 
 #: src/backend/gsl/functions.cpp:626
-#, fuzzy, kde-format
-#| msgid "restrict to [-pi,pi]"
+#, kde-format
 msgid "restrict to [-pi, pi]"
-msgstr "restringir a [-pi,pi]"
+msgstr "restringir a [-pi, pi]"
 
 #: src/backend/gsl/functions.cpp:627
-#, fuzzy, kde-format
-#| msgid "restrict to [0,2 pi]"
+#, kde-format
 msgid "restrict to [0, 2 pi]"
-msgstr "restringir a [0,2 pi]"
+msgstr "restringir a [0, 2 pi]"
 
 #: src/backend/gsl/functions.cpp:630
 #, kde-format
@@ -5716,7 +5705,7 @@ msgstr "Suavizado triangular"
 #: src/backend/nsl/nsl_conv.c:26
 #, kde-format
 msgid "Pseudo-Gaussian Smooth"
-msgstr "Suavizado seudogaussiano"
+msgstr "Suavizado pseudogaussiano"
 
 #: src/backend/nsl/nsl_conv.c:27
 #, kde-format
@@ -8910,12 +8899,12 @@ msgstr "Curvas"
 #: src/backend/worksheet/WorksheetElement.cpp:154
 #, kde-format
 msgid "%1: lock"
-msgstr ""
+msgstr "%1: bloquear"
 
 #: src/backend/worksheet/WorksheetElement.cpp:154
 #, kde-format
 msgid "%1: unlock"
-msgstr ""
+msgstr "%1: desbloquear"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbVisible)
 #. i18n: ectx: property (text), widget (QCheckBox, chkVisible)
@@ -8953,10 +8942,9 @@ msgid "Visible"
 msgstr "Visible"
 
 #: src/backend/worksheet/WorksheetElement.cpp:227
-#, fuzzy, kde-format
-#| msgid "Linking"
+#, kde-format
 msgid "Locking"
-msgstr "Enlace"
+msgstr "Bloqueo"
 
 #: src/backend/worksheet/WorksheetElement.cpp:236
 #, kde-format
@@ -14747,10 +14735,9 @@ msgid "Properties Explorer"
 msgstr "Explorador de propiedades"
 
 #: src/kdefrontend/MainWin.cpp:888
-#, fuzzy, kde-format
-#| msgid "Worksheet"
+#, kde-format
 msgid "Worksheet Preview"
-msgstr "Hoja de trabajo"
+msgstr "Vista previa de la hoja de trabajo"
 
 #: src/kdefrontend/MainWin.cpp:911
 #, kde-format
@@ -14793,11 +14780,10 @@ msgid "Project Explorer"
 msgstr "Explorador de proyectos"
 
 #: src/kdefrontend/MainWin.cpp:1485
-#, fuzzy, kde-format
-#| msgid "Worksheet"
+#, kde-format
 msgctxt "@title:window"
 msgid "Worksheet Preview"
-msgstr "Hoja de trabajo"
+msgstr "Vista previa de la hoja de trabajo"
 
 #: src/kdefrontend/MainWin.cpp:1539
 #, kde-format
@@ -20845,10 +20831,9 @@ msgstr "Desplazamiento Y:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbLock)
 #: src/kdefrontend/ui/labelwidget.ui:759
-#, fuzzy, kde-format
-#| msgid "Stacked"
+#, kde-format
 msgid "Locked"
-msgstr "Apilado"
+msgstr "Bloqueada"
 
 #. i18n: ectx: property (text), widget (QLabel, lY)
 #: src/kdefrontend/ui/matrix/matrixfunctionwidget.ui:116

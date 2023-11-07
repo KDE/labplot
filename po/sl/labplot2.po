@@ -3,13 +3,13 @@
 # This file is distributed under the same license as the kwave package.
 #
 # Martin Srebotnjak <miles@filmsi.net>, 2021,2022.
-# Matjaž Jeran <matjaz.jeran@amis.net>, 2021, 2022, 2023.
+# SPDX-FileCopyrightText: 2021, 2022, 2023 Matjaž Jeran <matjaz.jeran@amis.net>
 msgid ""
 msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-06 00:39+0000\n"
-"PO-Revision-Date: 2023-11-02 10:17+0100\n"
+"PO-Revision-Date: 2023-11-06 10:06+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
-"X-Generator: Poedit 3.4\n"
+"X-Generator: Lokalize 23.08.1\n"
 "X-Accelerator-Marker: ~\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
@@ -8930,12 +8930,12 @@ msgstr "Krivulje"
 #: src/backend/worksheet/WorksheetElement.cpp:154
 #, kde-format
 msgid "%1: lock"
-msgstr ""
+msgstr "%1: lock"
 
 #: src/backend/worksheet/WorksheetElement.cpp:154
 #, kde-format
 msgid "%1: unlock"
-msgstr ""
+msgstr "%1: unlock"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbVisible)
 #. i18n: ectx: property (text), widget (QCheckBox, chkVisible)
@@ -8973,10 +8973,9 @@ msgid "Visible"
 msgstr "Vidno"
 
 #: src/backend/worksheet/WorksheetElement.cpp:227
-#, fuzzy, kde-format
-#| msgid "Linking"
+#, kde-format
 msgid "Locking"
-msgstr "Povezovanje"
+msgstr "Zaklepanje"
 
 #: src/backend/worksheet/WorksheetElement.cpp:236
 #, kde-format
@@ -14754,10 +14753,9 @@ msgid "Properties Explorer"
 msgstr "Raziskovalec lastnosti"
 
 #: src/kdefrontend/MainWin.cpp:888
-#, fuzzy, kde-format
-#| msgid "Worksheet"
+#, kde-format
 msgid "Worksheet Preview"
-msgstr "Delovni list"
+msgstr "Predogled delovnega lista"
 
 #: src/kdefrontend/MainWin.cpp:911
 #, kde-format
@@ -14800,11 +14798,10 @@ msgid "Project Explorer"
 msgstr "Raziskovalec projektov"
 
 #: src/kdefrontend/MainWin.cpp:1485
-#, fuzzy, kde-format
-#| msgid "Worksheet"
+#, kde-format
 msgctxt "@title:window"
 msgid "Worksheet Preview"
-msgstr "Delovni list"
+msgstr "Predogled delovnega lista"
 
 #: src/kdefrontend/MainWin.cpp:1539
 #, kde-format
@@ -20842,10 +20839,9 @@ msgstr "Odmik Y:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbLock)
 #: src/kdefrontend/ui/labelwidget.ui:759
-#, fuzzy, kde-format
-#| msgid "Stacked"
+#, kde-format
 msgid "Locked"
-msgstr "Naloženo"
+msgstr "Zaklenjeno"
 
 #. i18n: ectx: property (text), widget (QLabel, lY)
 #: src/kdefrontend/ui/matrix/matrixfunctionwidget.ui:116

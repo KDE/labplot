@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-06 00:39+0000\n"
-"PO-Revision-Date: 2023-11-05 17:27+0100\n"
+"PO-Revision-Date: 2023-11-06 10:43+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -14696,10 +14696,9 @@ msgid "Properties Explorer"
 msgstr "Eigenschappen verkenner"
 
 #: src/kdefrontend/MainWin.cpp:888
-#, fuzzy, kde-format
-#| msgid "Worksheet printed"
+#, kde-format
 msgid "Worksheet Preview"
-msgstr "Werkblad afgedrukt"
+msgstr "Werkbladvoorbeeld"
 
 #: src/kdefrontend/MainWin.cpp:911
 #, kde-format
@@ -14742,11 +14741,10 @@ msgid "Project Explorer"
 msgstr "Projectverkenner"
 
 #: src/kdefrontend/MainWin.cpp:1485
-#, fuzzy, kde-format
-#| msgid "Worksheet printed"
+#, kde-format
 msgctxt "@title:window"
 msgid "Worksheet Preview"
-msgstr "Werkblad afgedrukt"
+msgstr "Werkbladvoorbeeld"
 
 #: src/kdefrontend/MainWin.cpp:1539
 #, kde-format

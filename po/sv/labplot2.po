@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-06 00:39+0000\n"
-"PO-Revision-Date: 2023-11-01 07:37+0100\n"
+"PO-Revision-Date: 2023-11-06 21:38+0100\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
@@ -3591,22 +3591,19 @@ msgid "Percentile"
 msgstr "Percentil"
 
 #: src/backend/gsl/functions.cpp:273
-#, fuzzy, kde-format
-#| msgid "pseudo-random integer [0,RAND_MAX]"
+#, kde-format
 msgid "pseudo-random integer [0, RAND_MAX]"
-msgstr "pseudo-slumpmässigt heltal [0,RAND_MAX]"
+msgstr "pseudo-slumpmässigt heltal [0, RAND_MAX]"
 
 #: src/backend/gsl/functions.cpp:274
-#, fuzzy, kde-format
-#| msgid "nonlinear additive feedback rng [0,RAND_MAX]"
+#, kde-format
 msgid "nonlinear additive feedback rng [0, RAND_MAX]"
-msgstr "ickelinjär additivt återkopplad slumptalsgenerator [0,RAND_MAX]"
+msgstr "ickelinjär additivt återkopplad slumptalsgenerator [0, RAND_MAX]"
 
 #: src/backend/gsl/functions.cpp:275
-#, fuzzy, kde-format
-#| msgid "nonlinear additive feedback rng [0,1]"
+#, kde-format
 msgid "nonlinear additive feedback rng [0, 1]"
-msgstr "ickelinjär additivt återkopplad slumptalsgenerator [0,1]"
+msgstr "ickelinjär additivt återkopplad slumptalsgenerator [0, 1]"
 
 #: src/backend/gsl/functions.cpp:276
 #, kde-format
@@ -4721,40 +4718,34 @@ msgid "Logarithm of the magnitude"
 msgstr "Logaritm av magnituden"
 
 #: src/backend/gsl/functions.cpp:566
-#, fuzzy, kde-format
-#| msgid "Characteristic values a_n(q) of the Mathieu functions ce_n(q,x)"
+#, kde-format
 msgid "Characteristic values a_n(q) of the Mathieu functions ce_n(q, x)"
-msgstr "Karakteristiska värden a_n(q) för Mathieu-funktionerna ce_n(q,x)"
+msgstr "Karakteristiska värden a_n(q) för Mathieu-funktionerna ce_n(q, x)"
 
 #: src/backend/gsl/functions.cpp:567
-#, fuzzy, kde-format
-#| msgid "Characteristic values b_n(q) of the Mathieu functions se_n(q,x)"
+#, kde-format
 msgid "Characteristic values b_n(q) of the Mathieu functions se_n(q, x)"
-msgstr "Karakteristiska värden b_n(q) för Mathieu-funktionerna se_n(q,x)"
+msgstr "Karakteristiska värden b_n(q) för Mathieu-funktionerna se_n(q, x)"
 
 #: src/backend/gsl/functions.cpp:568
-#, fuzzy, kde-format
-#| msgid "Angular Mathieu functions ce_n(q,x)"
+#, kde-format
 msgid "Angular Mathieu functions ce_n(q, x)"
-msgstr "Mathieu-vinkelfunktioner ce_n(q,x)"
+msgstr "Mathieu-vinkelfunktioner ce_n(q, x)"
 
 #: src/backend/gsl/functions.cpp:569
-#, fuzzy, kde-format
-#| msgid "Angular Mathieu functions se_n(q,x)"
+#, kde-format
 msgid "Angular Mathieu functions se_n(q, x)"
-msgstr "Mathieu-vinkelfunktioner se_n(q,x)"
+msgstr "Mathieu-vinkelfunktioner se_n(q, x)"
 
 #: src/backend/gsl/functions.cpp:570
-#, fuzzy, kde-format
-#| msgid "Radial j-th kind Mathieu functions Mc_n^{(j)}(q,x)"
+#, kde-format
 msgid "Radial j-th kind Mathieu functions Mc_n^{(j)}(q, x)"
-msgstr "Radiell j:te typ av Mathieu-funktioner Mc_n^{(j)}(q,x)"
+msgstr "Radiell j:te typ av Mathieu-funktioner Mc_n^{(j)}(q, x)"
 
 #: src/backend/gsl/functions.cpp:571
-#, fuzzy, kde-format
-#| msgid "Radial j-th kind Mathieu functions Ms_n^{(j)}(q,x)"
+#, kde-format
 msgid "Radial j-th kind Mathieu functions Ms_n^{(j)}(q, x)"
-msgstr "Radiell j:te typ av Mathieu-funktioner Ms_n^{(j)}(q,x)"
+msgstr "Radiell j:te typ av Mathieu-funktioner Ms_n^{(j)}(q, x)"
 
 #: src/backend/gsl/functions.cpp:575
 #, kde-format
@@ -4950,16 +4941,14 @@ msgid "Three component hypotenuse function"
 msgstr "Hypotenusa-funktion med tre komponenter"
 
 #: src/backend/gsl/functions.cpp:626
-#, fuzzy, kde-format
-#| msgid "restrict to [-pi,pi]"
+#, kde-format
 msgid "restrict to [-pi, pi]"
-msgstr "Begränsa till [-pi,pi]"
+msgstr "begränsa till [-pi, pi]"
 
 #: src/backend/gsl/functions.cpp:627
-#, fuzzy, kde-format
-#| msgid "restrict to [0,2 pi]"
+#, kde-format
 msgid "restrict to [0, 2 pi]"
-msgstr "Begränsa till [0,2 pi]"
+msgstr "begränsa till [0, 2 pi]"
 
 #: src/backend/gsl/functions.cpp:630
 #, kde-format
@@ -8897,12 +8886,12 @@ msgstr "Kurvor"
 #: src/backend/worksheet/WorksheetElement.cpp:154
 #, kde-format
 msgid "%1: lock"
-msgstr ""
+msgstr "%1: lås"
 
 #: src/backend/worksheet/WorksheetElement.cpp:154
 #, kde-format
 msgid "%1: unlock"
-msgstr ""
+msgstr "%1: lås upp"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbVisible)
 #. i18n: ectx: property (text), widget (QCheckBox, chkVisible)
@@ -8940,10 +8929,9 @@ msgid "Visible"
 msgstr "Synlig"
 
 #: src/backend/worksheet/WorksheetElement.cpp:227
-#, fuzzy, kde-format
-#| msgid "Linking"
+#, kde-format
 msgid "Locking"
-msgstr "Länkning"
+msgstr "Låsning"
 
 #: src/backend/worksheet/WorksheetElement.cpp:236
 #, kde-format
@@ -14697,10 +14685,9 @@ msgid "Properties Explorer"
 msgstr "Egenskapsutforskare"
 
 #: src/kdefrontend/MainWin.cpp:888
-#, fuzzy, kde-format
-#| msgid "Worksheet printed"
+#, kde-format
 msgid "Worksheet Preview"
-msgstr "Arbetsblad utskrivet"
+msgstr "Förhandsgranskning av arbetsblad"
 
 #: src/kdefrontend/MainWin.cpp:911
 #, kde-format
@@ -14743,11 +14730,10 @@ msgid "Project Explorer"
 msgstr "Projektutforskare"
 
 #: src/kdefrontend/MainWin.cpp:1485
-#, fuzzy, kde-format
-#| msgid "Worksheet printed"
+#, kde-format
 msgctxt "@title:window"
 msgid "Worksheet Preview"
-msgstr "Arbetsblad utskrivet"
+msgstr "Förhandsgranskning av arbetsblad"
 
 #: src/kdefrontend/MainWin.cpp:1539
 #, kde-format
@@ -20779,10 +20765,9 @@ msgstr "Y-avstånd:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbLock)
 #: src/kdefrontend/ui/labelwidget.ui:759
-#, fuzzy, kde-format
-#| msgid "Stacked"
+#, kde-format
 msgid "Locked"
-msgstr "Överlappande"
+msgstr "Låst"
 
 #. i18n: ectx: property (text), widget (QLabel, lY)
 #: src/kdefrontend/ui/matrix/matrixfunctionwidget.ui:116

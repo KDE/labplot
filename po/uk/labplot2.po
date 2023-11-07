@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-06 00:39+0000\n"
-"PO-Revision-Date: 2023-11-05 16:44+0200\n"
+"PO-Revision-Date: 2023-11-06 08:59+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
@@ -14797,10 +14797,9 @@ msgid "Properties Explorer"
 msgstr "Навігатор властивостями"
 
 #: src/kdefrontend/MainWin.cpp:888
-#, fuzzy, kde-format
-#| msgid "Worksheet"
+#, kde-format
 msgid "Worksheet Preview"
-msgstr "Робочий аркуш"
+msgstr "Перегляд робочого аркуша"
 
 #: src/kdefrontend/MainWin.cpp:911
 #, kde-format
@@ -14843,11 +14842,10 @@ msgid "Project Explorer"
 msgstr "Навігатор проєктом"
 
 #: src/kdefrontend/MainWin.cpp:1485
-#, fuzzy, kde-format
-#| msgid "Worksheet"
+#, kde-format
 msgctxt "@title:window"
 msgid "Worksheet Preview"
-msgstr "Робочий аркуш"
+msgstr "Перегляд робочого аркуша"
 
 #: src/kdefrontend/MainWin.cpp:1539
 #, kde-format
