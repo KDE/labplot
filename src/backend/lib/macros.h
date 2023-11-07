@@ -35,9 +35,9 @@
 	{ }
 #endif
 
-#define DEBUG_TEXTLABEL_BOUNDING_RECT 0
+#define DEBUG_TEXTLABEL_BOUNDING_RECT 1
 #define DEBUG_TEXTLABEL_GLUEPOINTS 0
-#define DEBUG_AXIS_BOUNDING_RECT 0
+#define DEBUG_AXIS_BOUNDING_RECT 1
 
 struct Lock {
 	inline explicit Lock(bool& variable)

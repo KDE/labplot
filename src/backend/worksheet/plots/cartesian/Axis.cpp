@@ -2736,12 +2736,12 @@ void AxisPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*opt
 				painter->rotate(-labelsRotationAngle);
 
 				if (labelsFormat == Axis::LabelsFormat::Decimal || labelsFormat == Axis::LabelsFormat::ScientificE) {
-					painter->save();
-					painter->scale(scale, scale);
 					if (labelsBackgroundType != Axis::LabelsBackgroundType::Transparent) {
 						const QRect& rect = fm.boundingRect(tickLabelStrings.at(i));
 						painter->fillRect(rect, labelsBackgroundColor);
 					}
+					painter->save();
+					painter->scale(scale, scale);
 					painter->drawText(QPoint(0, 0), tickLabelStrings.at(i));
 					painter->restore();
 				} else {
@@ -2754,8 +2754,8 @@ void AxisPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*opt
 						int width = size.width();
 						painter->save();
 						painter->scale(scale, scale);
-						painter->fillRect(0, -height, width, height, labelsBackgroundColor);
 						painter->restore();
+						painter->fillRect(0, -height, width, height, labelsBackgroundColor);
 					}
 					painter->translate(0, -height);
 					painter->save();

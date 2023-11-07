@@ -594,7 +594,7 @@ void CartesianPlotLegendDock::load() {
 	// Format
 	// we need to set the font size in points for KFontRequester
 	QFont font = m_legend->labelFont();
-	font.setPointSizeF(std::round(Worksheet::convertFromSceneUnits(font.pixelSize(), Worksheet::Unit::Point)));
+	//font.setPointSizeF(std::round(Worksheet::convertFromSceneUnits(font.pixelSize(), Worksheet::Unit::Point)));
 	ui.kfrLabelFont->setFont(font);
 
 	ui.kcbLabelColor->setColor(m_legend->labelColor());
@@ -707,7 +707,7 @@ void CartesianPlotLegendDock::loadConfig(KConfig& config) {
 	// Format
 	// we need to set the font size in points for KFontRequester
 	QFont font = m_legend->labelFont();
-	font.setPointSizeF(std::round(Worksheet::convertFromSceneUnits(font.pixelSize(), Worksheet::Unit::Point)));
+	//font.setPointSizeF(std::round(Worksheet::convertFromSceneUnits(font.pixelSize(), Worksheet::Unit::Point)));
 	ui.kfrLabelFont->setFont(group.readEntry("LabelFont", font));
 
 	ui.kcbLabelColor->setColor(group.readEntry("LabelColor", m_legend->labelColor()));
@@ -758,7 +758,7 @@ void CartesianPlotLegendDock::saveConfigAsTemplate(KConfig& config) {
 	// General-tab
 	// Format
 	QFont font = m_legend->labelFont();
-	font.setPointSizeF(Worksheet::convertFromSceneUnits(font.pointSizeF(), Worksheet::Unit::Point));
+	//font.setPointSizeF(Worksheet::convertFromSceneUnits(font.pointSizeF(), Worksheet::Unit::Point));
 	group.writeEntry("LabelFont", font);
 	group.writeEntry("LabelColor", ui.kcbLabelColor->color());
 	group.writeEntry("LabelColumMajorOrder", ui.cbOrder->currentIndex() == 0); // true for "column major", false for "row major"

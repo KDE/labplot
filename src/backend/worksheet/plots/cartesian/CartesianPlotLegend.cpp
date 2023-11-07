@@ -32,6 +32,7 @@
 #include "backend/worksheet/plots/cartesian/QQPlot.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
+#include "backend/worksheet/ScaledTextItem.h"
 
 #include <QKeyEvent>
 #include <QMenu>
@@ -337,6 +338,11 @@ void CartesianPlotLegendPrivate::retransform() {
 	m_plots.clear();
 	m_names.clear();
 
+	while (!m_textItems.isEmpty()) {
+		m_textItems.takeFirst()->deleteLater();
+	}
+	m_textItems.clear();
+
 	const auto& plots = this->plot->children<Plot>();
 	for (auto* plot : plots) {
 		if (!plot->isVisible())
@@ -400,7 +406,16 @@ void CartesianPlotLegendPrivate::retransform() {
 			if (index >= namesCount)
 				break;
 
-			w = fm.boundingRect(m_names.at(index)).width();
+
+			auto* t = new ScaledTextItem(this);
+			t->setScale(Worksheet::convertToSceneUnits(1, Worksheet::Unit::Point));
+			t->setTextInteractionFlags(Qt::NoTextInteraction);
+			t->setFont(labelFont);
+			t->setPlainText(m_names.at(index));
+			t->setPos(0, 0);
+			m_textItems.push_back(t);
+
+			w = t->boundingRect().width();
 			if (w > maxTextWidth)
 				maxTextWidth = w;
 		}

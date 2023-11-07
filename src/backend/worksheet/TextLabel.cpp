@@ -20,6 +20,7 @@
 #include "backend/worksheet/plots/PlotArea.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "backend/worksheet/ScaledTextItem.h"
 #include "kdefrontend/GuiTools.h"
 
 #include <QApplication>
@@ -44,29 +45,6 @@ extern "C" {
 #include <mkdio.h>
 }
 #endif
-
-class ScaledTextItem : public QGraphicsTextItem {
-public:
-	explicit ScaledTextItem(QGraphicsItem* parent = nullptr)
-		: QGraphicsTextItem(parent) {
-	}
-
-protected:
-	void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override {
-#if DEBUG_TEXTLABEL_BOUNDING_RECT
-		painter->setPen(QColor(Qt::GlobalColor::green));
-		painter->drawRect(boundingRect());
-#endif
-
-#if DEBUG_TEXTLABEL_BOUNDING_RECT
-		painter->setPen(QColor(Qt::GlobalColor::black));
-		painter->drawRect(QRectF(-5, -5, 10, 10));
-#endif
-		QGraphicsTextItem::paint(painter, option, widget);
-	}
-
-private:
-};
 
 /**
  * \class TextLabel
