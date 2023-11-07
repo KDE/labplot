@@ -1,8 +1,6 @@
-if (QT_MAJOR_VERSION LESS 6 OR NOT WIN32)
 add_executable (SpreadsheetTest SpreadsheetTest.cpp)
 target_link_libraries(SpreadsheetTest labplot2backendlib labplot2lib labplot2nsllib labplot2test)
 add_test(NAME SpreadsheetTest COMMAND SpreadsheetTest)
-endif ()
 
 add_executable (SpreadsheetFormulaTest SpreadsheetFormulaTest.cpp)
 target_link_libraries(SpreadsheetFormulaTest labplot2backendlib labplot2lib labplot2nsllib labplot2test)
