@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-07-10 02:40+0000\n"
-"PO-Revision-Date: 2023-11-02 01:37+0100\n"
+"PO-Revision-Date: 2023-11-02 17:47+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -5524,7 +5524,7 @@ msgstr "Suavizado triangular"
 #: src/backend/nsl/nsl_conv.c:26
 #, kde-format
 msgid "Pseudo-Gaussian Smooth"
-msgstr "Suavizado seudogaussiano"
+msgstr "Suavizado pseudogaussiano"
 
 #: src/backend/nsl/nsl_conv.c:27
 #, kde-format
