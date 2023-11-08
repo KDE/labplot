@@ -390,7 +390,7 @@ void CartesianPlotLegendPrivate::retransform() {
 	// determine the width of the legend
 	QFontMetrics fm(labelFont);
 	float w;
-	float h = fm.ascent();
+	float h = 0; // fm.ascent();
 
 	float legendWidth = 0;
 
@@ -410,12 +410,15 @@ void CartesianPlotLegendPrivate::retransform() {
 			auto* t = new ScaledTextItem(this);
 			t->setScale(Worksheet::convertToSceneUnits(1, Worksheet::Unit::Point));
 			t->setTextInteractionFlags(Qt::NoTextInteraction);
-			t->setFont(labelFont);
+			auto f = labelFont;
+			f.setStrikeOut(true);
+			t->setFont(f);
 			t->setPlainText(m_names.at(index));
 			t->setPos(0, 0);
 			m_textItems.push_back(t);
 
-			w = t->boundingRect().width();
+			h += t->boundingRect().height();
+			w = fm.boundingRect(m_names.at(index)).width(); // t->boundingRect().width();
 			if (w > maxTextWidth)
 				maxTextWidth = w;
 		}
@@ -441,7 +444,7 @@ void CartesianPlotLegendPrivate::retransform() {
 	legendHeight += rowCount * h; // height of the rows
 	legendHeight += (rowCount - 1) * layoutVerticalSpacing; // spacing between the rows
 	if (title->isVisible() && !title->text().text.isEmpty())
-		legendHeight += title->graphicsItem()->boundingRect().height(); // legend titl
+		legendHeight += title->graphicsItem()->boundingRect().height(); // legend title
 
 	m_boundingRectangle.setX(-legendWidth / 2);
 	m_boundingRectangle.setY(-legendHeight / 2);
@@ -577,7 +580,7 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 		painter->translate(0, title->graphicsItem()->boundingRect().height());
 
 	painter->save();
-	const auto scale = Worksheet::convertToSceneUnits(1, Worksheet::Unit::Point);
+	const auto scale = 1; // Worksheet::convertToSceneUnits(1, Worksheet::Unit::Point);
 	int col = 0;
 	int row = 0;
 	for (auto* plot : m_plots) {
