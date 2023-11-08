@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-06 00:39+0000\n"
-"PO-Revision-Date: 2023-10-30 20:14+0100\n"
+"PO-Revision-Date: 2023-11-06 14:38+0100\n"
 "Last-Translator: Xavier BESNARD <xavier.besnard@neuf.fr>\n"
 "Language-Team: fr\n"
 "Language: fr\n"
@@ -1152,7 +1152,7 @@ msgstr "« Flexible Image Transport System Data Format » (FITS)"
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:119
 #, kde-format
 msgid "JSON Data"
-msgstr "Données JSON"
+msgstr "Données « JSON »"
 
 #: src/backend/datasources/filters/AbstractFileFilter.cpp:226
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:123
@@ -1729,7 +1729,7 @@ msgstr "Vide"
 #: src/backend/gsl/functions.cpp:228
 #, kde-format
 msgid "Cell"
-msgstr "Cell"
+msgstr "Cellule"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:374
 #: src/backend/datasources/filters/MatioFilter.cpp:448
@@ -1745,7 +1745,7 @@ msgstr "Objet"
 #: src/backend/datasources/filters/MatioFilter.cpp:378
 #, kde-format
 msgid "Char"
-msgstr "Carac."
+msgstr "Carac"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:380
 #, kde-format
@@ -2413,7 +2413,7 @@ msgstr "Gaz molaire"
 #: src/backend/gsl/constants.cpp:69
 #, kde-format
 msgid "Standard gas volume"
-msgstr "Volume standard de gas"
+msgstr "Volume standard de gaz"
 
 #: src/backend/gsl/constants.cpp:70
 #, kde-format
@@ -2704,7 +2704,7 @@ msgstr "Masse de une tonne métrique [1000 kg]"
 #: src/backend/gsl/constants.cpp:145
 #, kde-format
 msgid "Mass of 1 UK ton"
-msgstr "Mass de une tonne anglaise"
+msgstr "Masse de une tonne anglaise"
 
 #: src/backend/gsl/constants.cpp:146
 #, kde-format
@@ -2750,7 +2750,7 @@ msgstr "Énergie de 1 unité thermique anglaise"
 #: src/backend/gsl/constants.cpp:156
 #, kde-format
 msgid "Energy of 1 Therm"
-msgstr "Énergie de 1 Therm."
+msgstr "Énergie de 1 Thermie."
 
 #: src/backend/gsl/constants.cpp:157
 #, kde-format
@@ -3114,7 +3114,7 @@ msgstr "Fonctions de Debye"
 #: src/backend/gsl/functions.cpp:75
 #, kde-format
 msgid "Dilogarithm"
-msgstr "Dilogarithme"
+msgstr "Di-logarithme"
 
 #: src/backend/gsl/functions.cpp:77
 #, kde-format
@@ -4178,7 +4178,7 @@ msgstr "Fonction du sixième ordre de Debye"
 #: src/backend/gsl/functions.cpp:407
 #, kde-format
 msgid "Dilogarithm for a real argument"
-msgstr "Dilogarithme pou un argument réel"
+msgstr "Di-logarithme pour un argument réel"
 
 #: src/backend/gsl/functions.cpp:410
 #, kde-format
@@ -4574,7 +4574,7 @@ msgstr "Fonction hypergéométrique 0F1"
 #, kde-format
 msgid "Confluent hypergeometric function 1F1 for integer parameters"
 msgstr ""
-"Fonction 1F1 hypergéométrique et confluente pour les paramètres d'entiers"
+"Fonction « 1F1 » hypergéométrique et confluente pour les paramètres d'entiers"
 
 #: src/backend/gsl/functions.cpp:517
 #, kde-format
@@ -18698,7 +18698,7 @@ msgstr "Nombre de chiffres après la virgule"
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:238
 #, kde-format
 msgid "Precision:"
-msgstr "Precision : "
+msgstr "Précision : "
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkLabelsAutoPrecision)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1194
@@ -19106,7 +19106,7 @@ msgstr "Calculer la feuille de travail"
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:73
 #, kde-format
 msgid "List of plot ranges"
-msgstr "List des intervalles de tracé"
+msgstr "Liste des intervalles de tracé"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twPlotRanges)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:89
@@ -19988,7 +19988,7 @@ msgstr "Redimensionner le contenu :"
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:83
 #, kde-format
 msgid "Norm. Response:"
-msgstr "Réponse Norm :"
+msgstr "Réponse Normale :"
 
 #. i18n: ectx: property (text), widget (QLabel, lSamplingInterval)
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:90
@@ -20126,7 +20126,7 @@ msgstr "Lignes de projection"
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:133
 #, kde-format
 msgid "Interm. points:"
-msgstr "Points interm :"
+msgstr "Points intermédiaires :"
 
 #. i18n: ectx: property (text), widget (QLabel, lLineSkipGaps)
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:140
@@ -21361,7 +21361,7 @@ msgstr "Numéros de ligne"
 #: src/kdefrontend/ui/settingsnotebookpage.ui:54
 #, kde-format
 msgid "LaTeX Typesetting"
-msgstr "Composition pour « LaTex »"
+msgstr "Composition pour « LaTeX »"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAnimations)
 #: src/kdefrontend/ui/settingsnotebookpage.ui:61

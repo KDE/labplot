@@ -8885,12 +8885,12 @@ msgstr "Eğriler"
 #: src/backend/worksheet/WorksheetElement.cpp:154
 #, kde-format
 msgid "%1: lock"
-msgstr ""
+msgstr "%1: Kilitle"
 
 #: src/backend/worksheet/WorksheetElement.cpp:154
 #, kde-format
 msgid "%1: unlock"
-msgstr ""
+msgstr "%1: Kilidi aç"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbVisible)
 #. i18n: ectx: property (text), widget (QCheckBox, chkVisible)
@@ -8928,10 +8928,9 @@ msgid "Visible"
 msgstr "Görünür"
 
 #: src/backend/worksheet/WorksheetElement.cpp:227
-#, fuzzy, kde-format
-#| msgid "Linking"
+#, kde-format
 msgid "Locking"
-msgstr "Bağlantılama"
+msgstr "Kilitleme"
 
 #: src/backend/worksheet/WorksheetElement.cpp:236
 #, kde-format
@@ -14679,10 +14678,9 @@ msgid "Properties Explorer"
 msgstr "Özellikler Tarayıcısı"
 
 #: src/kdefrontend/MainWin.cpp:888
-#, fuzzy, kde-format
-#| msgid "Worksheet"
+#, kde-format
 msgid "Worksheet Preview"
-msgstr "Çalışma Sayfası"
+msgstr "Çalışma Sayfası Önizlemesi"
 
 #: src/kdefrontend/MainWin.cpp:911
 #, kde-format
@@ -14725,11 +14723,10 @@ msgid "Project Explorer"
 msgstr "Proje Tarayıcısı"
 
 #: src/kdefrontend/MainWin.cpp:1485
-#, fuzzy, kde-format
-#| msgid "Worksheet"
+#, kde-format
 msgctxt "@title:window"
 msgid "Worksheet Preview"
-msgstr "Çalışma Sayfası"
+msgstr "Çalışma Sayfası Önizlemesi"
 
 #: src/kdefrontend/MainWin.cpp:1539
 #, kde-format
@@ -20757,10 +20754,9 @@ msgstr "Y Ofseti:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbLock)
 #: src/kdefrontend/ui/labelwidget.ui:759
-#, fuzzy, kde-format
-#| msgid "Stacked"
+#, kde-format
 msgid "Locked"
-msgstr "Yığılmış"
+msgstr "Kilitli"
 
 #. i18n: ectx: property (text), widget (QLabel, lY)
 #: src/kdefrontend/ui/matrix/matrixfunctionwidget.ui:116
@@ -22540,73 +22536,3 @@ msgstr "dönüştürme süreci başarısız, çıkış kodu ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Dosya açılamadı:"
-
-#~ msgid "%1: clear selected rows"
-#~ msgstr "%1: Seçili satırları temizle"
-
-#~ msgctxt "@title:window"
-#~ msgid "Equidistant Values"
-#~ msgstr "Eş Aralıklı Değerler"
-
-#~ msgid "DateTime"
-#~ msgstr "TarihZaman"
-
-#~ msgid "Remove"
-#~ msgstr "Kaldır"
-
-#~ msgid "xy-Curve"
-#~ msgstr "xy Eğrisi"
-
-#~ msgid "Add Histogram to"
-#~ msgstr "Şuraya Histogram Ekle"
-
-#~ msgid "Add Box Plot to"
-#~ msgstr "Şuraya Kutu Çizimi Ekle"
-
-#~ msgid "Add Bar Plot to"
-#~ msgstr "Şuraya Çubuk Çizimi Ekle"
-
-#~ msgid "All histograms in one plot area"
-#~ msgstr "Bir çizim alanındaki tüm histogramlar"
-
-#~ msgid "One plot area per histogram"
-#~ msgstr "Histogram başına bir çizim alanı"
-
-#~ msgid "Add Histograms to"
-#~ msgstr "Şuraya Histogramlar Ekle"
-
-#~ msgid "All box plots in one plot area"
-#~ msgstr "Bir çizim alanındaki tüm kutu çizimleri"
-
-#~ msgid "One plot area per box plot"
-#~ msgstr "Kutu çizimi başına bir çizim alanı"
-
-#~ msgid "Add Box Plots to"
-#~ msgstr "Şuraya Kutu Çizimleri Ekle"
-
-#~ msgid "All bar plots in one plot area"
-#~ msgstr "Bir çizim alanındaki tüm çubuk çizimleri"
-
-#~ msgid "One plot area per bar plot"
-#~ msgstr "Çubuk çizimi başına bir çizim alanı"
-
-#~ msgid "Add Bar Plots to"
-#~ msgstr "Şuraya Çubuk Çizimleri Ekle"
-
-#~ msgid "new plot in an existing worksheet"
-#~ msgstr "yeni çizim var olan bir çalışma sayfasında"
-
-#~ msgid "new plot in a new worksheet"
-#~ msgstr "yeni çizim yeni bir çalışma sayfasında"
-
-#~ msgid "new plots in an existing worksheet"
-#~ msgstr "yeni çizimler var olan bir çalışma sayfasında"
-
-#~ msgid "new plots in a new worksheet"
-#~ msgstr "yeni çizimler yeni bir çalışma sayfasında"
-
-#~ msgid "GUI configuration file not found"
-#~ msgstr "Grafik arabirim yapılandırma dosyası bulunamadı"
-
-#~ msgid "%1 file was not found. Please check your installation."
-#~ msgstr "%1 dosyası bulunamadı. Lütfen kurulumunuzu denetleyin."
