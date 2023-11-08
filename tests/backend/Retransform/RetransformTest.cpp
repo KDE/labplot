@@ -1822,16 +1822,51 @@ void RetransformTest::testPlotRecalcRetransform() {
 	QCOMPARE(histPlot->orientation(), Histogram::Orientation::Vertical);
 	histPlot->setOrientation(Histogram::Orientation::Horizontal);
 
-	const auto stat = c.statistic(false);
-	QCOMPARE(stat.count(), 5); // barPlot, boxPlot, histPlot, xAxis and yAxis are inside
-	QCOMPARE(stat.contains(barPlot->path()), true);
-	QCOMPARE(stat.contains(boxPlot->path()), true);
-	QCOMPARE(stat.contains(histPlot->path()), true);
-	QCOMPARE(stat.contains(axes.at(0)->path()), true);
-	QCOMPARE(stat.contains(axes.at(0)->path()), true);
-	QVERIFY(c.calledExact(1, false));
-	QCOMPARE(c.logsXScaleRetransformed.count(), 1);
-	QCOMPARE(c.logsYScaleRetransformed.count(), 1); // TODO: check this value!
+	{
+		const auto stat = c.statistic(false);
+		QCOMPARE(stat.count(), 5); // barPlot, boxPlot, histPlot, xAxis and yAxis are inside
+		QCOMPARE(stat.contains(barPlot->path()), true);
+		QCOMPARE(stat.contains(boxPlot->path()), true);
+		QCOMPARE(stat.contains(histPlot->path()), true);
+		QCOMPARE(stat.contains(axes.at(0)->path()), true);
+		QCOMPARE(stat.contains(axes.at(1)->path()), true);
+		QVERIFY(c.calledExact(1, false));
+		QCOMPARE(c.logsXScaleRetransformed.count(), 1);
+		QCOMPARE(c.logsYScaleRetransformed.count(), 0); // y range did not change, because boxplot and barplot  are still vertical
+	}
+
+	{
+		c.resetRetransformCount();
+		QCOMPARE(barPlot->orientation(), BarPlot::Orientation::Vertical);
+		barPlot->setOrientation(BarPlot::Orientation::Horizontal);
+		const auto stat = c.statistic(false);
+		QCOMPARE(stat.count(), 5); // barPlot, boxPlot, histPlot, xAxis and yAxis are inside
+		QCOMPARE(stat.contains(barPlot->path()), true);
+		QCOMPARE(stat.contains(boxPlot->path()), true);
+		QCOMPARE(stat.contains(histPlot->path()), true);
+		QCOMPARE(stat.contains(axes.at(0)->path()), true);
+		QCOMPARE(stat.contains(axes.at(1)->path()), true);
+		QVERIFY(c.calledExact(1, false));
+		QCOMPARE(c.logsXScaleRetransformed.count(), 1);
+		QCOMPARE(c.logsYScaleRetransformed.count(), 0); // y range did not change, because boxplot  is still vertical
+	}
+
+	{
+		c.resetRetransformCount();
+		QCOMPARE(boxPlot->orientation(), BoxPlot::Orientation::Vertical);
+		boxPlot->setOrientation(BoxPlot::Orientation::Horizontal);
+
+		const auto stat = c.statistic(false);
+		QCOMPARE(stat.count(), 5); // barPlot, boxPlot, histPlot, xAxis and yAxis are inside
+		QCOMPARE(stat.contains(barPlot->path()), true);
+		QCOMPARE(stat.contains(boxPlot->path()), true);
+		QCOMPARE(stat.contains(histPlot->path()), true);
+		QCOMPARE(stat.contains(axes.at(0)->path()), true);
+		QCOMPARE(stat.contains(axes.at(1)->path()), true);
+		QVERIFY(c.calledExact(1, false));
+		QCOMPARE(c.logsXScaleRetransformed.count(), 1);
+		QCOMPARE(c.logsYScaleRetransformed.count(), 1); // y range changes
+	}
 }
 
 // ############################################################################################
