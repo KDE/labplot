@@ -661,6 +661,8 @@ void WidgetsTest::numberSpinBoxLimit() {
 	sb.keyPressEvent(&event);
 	QCOMPARE(valueChangedCounter, 4);
 	VALUES_EQUAL(sb.value(), 3.);
+
+	sb.disconnect();
 }
 
 void WidgetsTest::numberSpinBoxPrefixSuffix() {
@@ -687,6 +689,8 @@ void WidgetsTest::numberSpinBoxPrefixSuffix() {
 	QCOMPARE(valueChangedCounter, 1);
 	QCOMPARE(sb.value(), 5.02);
 	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("Prefix 5.02 Suffix"));
+
+	sb.disconnect();
 }
 
 void WidgetsTest::numberSpinBoxSuffixFrontToBackSelection() {
@@ -709,6 +713,8 @@ void WidgetsTest::numberSpinBoxSuffixFrontToBackSelection() {
 
 	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("51 cm"));
 	QCOMPARE(counter, 1);
+
+	sb.disconnect();
 }
 
 void WidgetsTest::numberSpinBoxSuffixBackToFrontSelection() {
@@ -731,6 +737,8 @@ void WidgetsTest::numberSpinBoxSuffixBackToFrontSelection() {
 
 	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("51 cm"));
 	QCOMPARE(counter, 1);
+
+	sb.disconnect();
 }
 
 void WidgetsTest::numberSpinBoxSuffixSetCursor() {
@@ -753,6 +761,8 @@ void WidgetsTest::numberSpinBoxSuffixSetCursor() {
 
 	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("51 cm")); // 1 appended
 	QCOMPARE(counter, 1);
+
+	sb.disconnect();
 }
 
 void WidgetsTest::numberSpinBoxPrefixFrontToBackSelection() {
@@ -900,6 +910,8 @@ void WidgetsTest::numberSpinBoxEnterNumber() {
 	QCOMPARE(sb.toolTip(), sb.errorToString(NumberSpinBox::Errors::NoError));
 	QCOMPARE(sb.value(), -5e-3);
 	QCOMPARE(valueChangedCounter, 4);
+
+	sb.disconnect();
 }
 
 // Testing feedback feature
@@ -947,6 +959,8 @@ void WidgetsTest::numberSpinBoxFeedback() {
 	QCOMPARE(lastValue, 8);
 	QCOMPARE(sb.toolTip(), sb.errorToString(NumberSpinBox::Errors::NoError));
 	QCOMPARE(sb.m_waitFeedback, false);
+
+	sb.disconnect();
 }
 
 // set value called directly when valueChanged() is called. This can happen if the other side directly sets another
@@ -970,6 +984,8 @@ void WidgetsTest::numberSpinBoxFeedback2() {
 
 	QCOMPARE(valueChangedCounter, 1);
 	QCOMPARE(sb.toolTip(), i18n("Invalid value entered. Valid value: %1", 5));
+
+	sb.disconnect();
 }
 
 void WidgetsTest::numberSpinBoxFeedbackCursorPosition() {
@@ -999,6 +1015,8 @@ void WidgetsTest::numberSpinBoxFeedbackCursorPosition() {
 	QCOMPARE(sb.lineEdit()->cursorPosition(), 3);
 	QCOMPARE(sb.value(), 5.31);
 	QCOMPARE(sb.toolTip(), QStringLiteral(""));
+
+	sb.disconnect();
 }
 
 void WidgetsTest::numberSpinBoxFeedbackCursorPosition2() {
@@ -1160,6 +1178,8 @@ void WidgetsTest::numberSpinBoxMinimumFeedback() {
 	QCOMPARE(sb.lineEdit()->cursorPosition(), 4);
 	QCOMPARE(valueChangedCounter, 2);
 	QCOMPARE(sb.toolTip(), QString());
+
+	sb.disconnect();
 }
 
 // \brief WidgetsTest::numberSpinBoxDecimalsMinMax
