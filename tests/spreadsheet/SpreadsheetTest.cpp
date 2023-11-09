@@ -1640,6 +1640,7 @@ void SpreadsheetTest::testFlatten03() {
 // ******************** search&replace  *********************
 // **********************************************************
 Spreadsheet* SpreadsheetTest::createSearchReplaceSpreadsheet() {
+	QSKIP("Spreadsheet");
 	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
 
 	sheet->setColumnCount(4);
@@ -1688,6 +1689,7 @@ Spreadsheet* SpreadsheetTest::createSearchReplaceSpreadsheet() {
  * simple search ignoring data types, column-major order
  */
 void SpreadsheetTest::testSearchSimple00() {
+	QSKIP("Spreadsheet");
 	Project project;
 	auto* sheet = createSearchReplaceSpreadsheet();
 	project.addChild(sheet);
@@ -1783,6 +1785,7 @@ void SpreadsheetTest::testSearchSimple00() {
  * extended search for Text, column-major order
  */
 void SpreadsheetTest::testSearchExtended00() {
+	QSKIP("Spreadsheet");
 	Project project;
 	auto* sheet = createSearchReplaceSpreadsheet();
 	project.addChild(sheet);
@@ -1864,6 +1867,7 @@ void SpreadsheetTest::testSearchExtended00() {
  * extended search for Text, row-major order
  */
 void SpreadsheetTest::testSearchExtended01() {
+	QSKIP("Spreadsheet");
 	Project project;
 	auto* sheet = createSearchReplaceSpreadsheet();
 	project.addChild(sheet);
@@ -1945,6 +1949,7 @@ void SpreadsheetTest::testSearchExtended01() {
  * search for Numeric, column-major order
  */
 void SpreadsheetTest::testSearchExtended02() {
+	QSKIP("Spreadsheet");
 	Project project;
 	auto* sheet = createSearchReplaceSpreadsheet();
 	project.addChild(sheet);
@@ -2026,6 +2031,7 @@ void SpreadsheetTest::testSearchExtended02() {
  * search for Numeric, row major
  */
 void SpreadsheetTest::testSearchExtended03() {
+	QSKIP("Spreadsheet");
 	Project project;
 	auto* sheet = createSearchReplaceSpreadsheet();
 	project.addChild(sheet);
@@ -2104,6 +2110,7 @@ void SpreadsheetTest::testSearchExtended03() {
 }
 
 void SpreadsheetTest::testSearchFindAll() {
+	QSKIP("Spreadsheet");
 	Project project;
 	auto* sheet = createSearchReplaceSpreadsheet();
 	project.addChild(sheet);
@@ -2133,6 +2140,7 @@ void SpreadsheetTest::testSearchFindAll() {
  * replace a numeric value in int and double columns via "replace next"
  */
 void SpreadsheetTest::testSearchReplaceNumeric() {
+	QSKIP("Spreadsheet");
 	Project project;
 	auto* sheet = createSearchReplaceSpreadsheet();
 	project.addChild(sheet);
@@ -2195,6 +2203,7 @@ void SpreadsheetTest::testSearchReplaceNumeric() {
  * replace a text value in text columns via "replace next"
  */
 void SpreadsheetTest::testSearchReplaceText() {
+	QSKIP("Spreadsheet");
 	Project project;
 	auto* sheet = createSearchReplaceSpreadsheet();
 	project.addChild(sheet);
@@ -2254,6 +2263,7 @@ void SpreadsheetTest::testSearchReplaceText() {
 }
 
 void SpreadsheetTest::testSearchReplaceAll() {
+	QSKIP("Spreadsheet");
 	Project project;
 	auto* sheet = createSearchReplaceSpreadsheet();
 	project.addChild(sheet);

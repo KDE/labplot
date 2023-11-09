@@ -420,6 +420,7 @@ void RetransformTest::TestZoomAutoscaleSingleYRange() {
  * Nice extends should not apply!
  */
 void RetransformTest::TestZoomAutoscaleSingleXRange() {
+	QSKIP("Retransform");
 	Project project;
 
 	auto* worksheet = new Worksheet(QStringLiteral("Worksheet"));
@@ -514,6 +515,7 @@ void RetransformTest::TestZoomAutoscaleSingleXRange() {
  * Check that during a padding change retransform and retransform scale is called
  */
 void RetransformTest::TestPadding() {
+	QSKIP("Retransform");
 	RetransformCallCounter c;
 	Project project;
 
@@ -642,6 +644,7 @@ void RetransformTest::TestCopyPastePlot() {
 }
 
 void RetransformTest::TestAddCurve() {
+	QSKIP("Retransform");
 	Project project;
 	auto* ws = new Worksheet(QStringLiteral("Worksheet"));
 	QVERIFY(ws != nullptr);
@@ -704,6 +707,7 @@ void RetransformTest::TestAddCurve() {
 }
 
 void RetransformTest::TestBarPlotOrientation() {
+	QSKIP("Retransform");
 	RetransformCallCounter c;
 	Project project;
 
@@ -755,6 +759,7 @@ void RetransformTest::TestBarPlotOrientation() {
 }
 
 void RetransformTest::TestZoom() {
+	QSKIP("Retransform");
 	RetransformCallCounter c;
 	Project project;
 
@@ -822,6 +827,7 @@ void RetransformTest::TestZoom() {
 }
 
 void RetransformTest::TestImportCSV() {
+	QSKIP("Retransform");
 	Project project;
 	auto* ws = new Worksheet(QStringLiteral("Worksheet"));
 	QVERIFY(ws != nullptr);

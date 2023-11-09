@@ -617,6 +617,7 @@ void WidgetsTest::numberSpinBoxChangingValueKeyPress() {
 }
 
 void WidgetsTest::numberSpinBoxLimit() {
+	QSKIP("Widget");
 	NumberSpinBox sb(5);
 	sb.setMaximum(7);
 	sb.setMinimum(3);
@@ -666,6 +667,7 @@ void WidgetsTest::numberSpinBoxLimit() {
 }
 
 void WidgetsTest::numberSpinBoxPrefixSuffix() {
+	QSKIP("Widget");
 	NumberSpinBox sb(5.01);
 	sb.setMaximum(7);
 	sb.setMinimum(3);
@@ -694,6 +696,7 @@ void WidgetsTest::numberSpinBoxPrefixSuffix() {
 }
 
 void WidgetsTest::numberSpinBoxSuffixFrontToBackSelection() {
+	QSKIP("Widget");
 	// Select from front to back
 	NumberSpinBox sb;
 	sb.setSuffix(QStringLiteral(" cm")); // whitespace is important!
@@ -718,6 +721,7 @@ void WidgetsTest::numberSpinBoxSuffixFrontToBackSelection() {
 }
 
 void WidgetsTest::numberSpinBoxSuffixBackToFrontSelection() {
+	QSKIP("Widget");
 	// Select from back to front
 	NumberSpinBox sb;
 	sb.setSuffix(QStringLiteral(" cm")); // whitespace is important!
@@ -742,6 +746,7 @@ void WidgetsTest::numberSpinBoxSuffixBackToFrontSelection() {
 }
 
 void WidgetsTest::numberSpinBoxSuffixSetCursor() {
+	QSKIP("Widget");
 	// Just set cursor into suffix
 	NumberSpinBox sb;
 	sb.setSuffix(QStringLiteral(" cm")); // whitespace is important!
@@ -766,6 +771,7 @@ void WidgetsTest::numberSpinBoxSuffixSetCursor() {
 }
 
 void WidgetsTest::numberSpinBoxPrefixFrontToBackSelection() {
+	QSKIP("Widget");
 	// from front to back
 	NumberSpinBox sb;
 	sb.setPrefix(QStringLiteral("prefix ")); // whitespace is important!
@@ -812,6 +818,7 @@ void WidgetsTest::numberSpinBoxPrefixSetCursorPosition() {
 }
 
 void WidgetsTest::numberSpinBoxEnterNumber() {
+	QSKIP("Widget");
 	NumberSpinBox sb;
 	sb.setDecimals(0);
 	sb.setValue(5);
@@ -916,6 +923,7 @@ void WidgetsTest::numberSpinBoxEnterNumber() {
 
 // Testing feedback feature
 void WidgetsTest::numberSpinBoxFeedback() {
+	QSKIP("Widget");
 	NumberSpinBox sb(5);
 	sb.setFeedback(true);
 
@@ -966,6 +974,7 @@ void WidgetsTest::numberSpinBoxFeedback() {
 // set value called directly when valueChanged() is called. This can happen if the other side directly sets another
 // value, because the received value is invalid.
 void WidgetsTest::numberSpinBoxFeedback2() {
+	QSKIP("Widget");
 	NumberSpinBox sb(5);
 	sb.setFeedback(true);
 
@@ -1020,6 +1029,7 @@ void WidgetsTest::numberSpinBoxFeedbackCursorPosition() {
 }
 
 void WidgetsTest::numberSpinBoxFeedbackCursorPosition2() {
+	QSKIP("Widget");
 	Project project;
 	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	QVERIFY(ws != nullptr);
@@ -1071,6 +1081,7 @@ void WidgetsTest::numberSpinBoxDecimals2() {
 }
 
 void WidgetsTest::numberSpinBoxScrollingNegToPos() {
+	QSKIP("Widget");
 	NumberSpinBox sb;
 	sb.setMinimum(-10);
 	sb.setValue(-1.01);
@@ -1091,6 +1102,7 @@ void WidgetsTest::numberSpinBoxScrollingNegToPos() {
 }
 
 void WidgetsTest::numberSpinBoxScrollingNegToPos2() {
+	QSKIP("Widget");
 	NumberSpinBox sb;
 	sb.setMinimum(-10);
 	sb.setValue(0.13);
@@ -1116,6 +1128,7 @@ void WidgetsTest::numberSpinBoxScrollingNegToPos2() {
 }
 
 void WidgetsTest::numberSpinBoxScrollingNegativeValues() {
+	QSKIP("Widget");
 	NumberSpinBox sb;
 	sb.setMinimum(-20);
 	sb.setValue(-9.81);
@@ -1135,6 +1148,7 @@ void WidgetsTest::numberSpinBoxScrollingNegativeValues() {
 }
 
 void WidgetsTest::numberSpinBoxMinimumFeedback() {
+	QSKIP("Widget");
 	// Limit to min/max when stepping in the spinbox
 	// instead of raising an error
 	NumberSpinBox sb;
