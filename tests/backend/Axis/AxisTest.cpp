@@ -1758,7 +1758,6 @@ void AxisTest::autoScale() {
 	QCOMPARE(axes.count(), 2);
 	QCOMPARE(axes.at(0)->name(), QStringLiteral("x"));
 	QCOMPARE(axes.at(1)->name(), QStringLiteral("y"));
-	// auto* yAxis = static_cast<Axis*>(axes.at(1));
 	auto* xAxis = static_cast<Axis*>(axes.at(0));
 	xAxis->setMajorTicksNumber(4);
 	QCOMPARE(xAxis->scale(), RangeT::Scale::Linear);
@@ -1852,6 +1851,49 @@ void AxisTest::autoScale() {
 			QStringLiteral("3340"),
 			QStringLiteral("6670"),
 			QStringLiteral("10000"),
+		};
+		COMPARE_STRING_VECTORS(xAxis->tickLabelStrings(), expectedStrings);
+	}
+}
+
+void AxisTest::autoScale2() {
+	QLocale::setDefault(QLocale::C); // . as decimal separator
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	QVERIFY(ws != nullptr);
+	project.addChild(ws);
+
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	QVERIFY(p != nullptr);
+	ws->addChild(p);
+
+	auto axes = p->children<Axis>();
+	QCOMPARE(axes.count(), 2);
+	QCOMPARE(axes.at(0)->name(), QStringLiteral("x"));
+	QCOMPARE(axes.at(1)->name(), QStringLiteral("y"));
+	auto* xAxis = static_cast<Axis*>(axes.at(0));
+	xAxis->setMajorTicksNumber(4);
+	QCOMPARE(xAxis->scale(), RangeT::Scale::Linear);
+	QCOMPARE(xAxis->rangeScale(), true);
+
+	auto range = p->range(Dimension::X, 0);
+	range.setStart(0);
+	range.setEnd(1);
+	p->setRange(Dimension::X, 0, range);
+	p->setNiceExtend(false);
+	p->enableAutoScale(Dimension::X, 0, false, true);
+	p->setRangeScale(Dimension::X, 0, RangeT::Scale::Log10); // use different method
+
+	QCOMPARE(xAxis->range(), p->range(Dimension::X, 0));
+	QCOMPARE(xAxis->scale(), RangeT::Scale::Log10);
+
+	{
+		QStringList expectedStrings{
+			QStringLiteral("0.1"),
+			QStringLiteral("0.4"),
+			QStringLiteral("0.7"),
+			QStringLiteral("1"),
 		};
 		COMPARE_STRING_VECTORS(xAxis->tickLabelStrings(), expectedStrings);
 	}

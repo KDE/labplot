@@ -1534,9 +1534,18 @@ void CartesianPlot::setRangeScale(const Dimension dim, const int index, const Ra
 		DEBUG(Q_FUNC_INFO << ", index " << index << " out of range")
 		return;
 	}
-	exec(new CartesianPlotSetScaleIndexCmd(d, dim, scale, index));
-	if (project())
-		project()->setChanged(true);
+
+	auto newRange = range(Dimension::X, index);
+	newRange.setScale(scale);
+	auto r = d->checkRange(newRange);
+	if (index >= 0 && index < rangeCount(dim) && r.finite() && r != d->rangeConst(dim, index)) {
+		if (r == newRange) {
+			exec(new CartesianPlotSetScaleIndexCmd(d, dim, scale, index));
+			if (project())
+				project()->setChanged(true);
+		} else
+			setRange(dim, index, r);
+	}
 }
 
 void CartesianPlot::setXRangeScale(const int index, const RangeT::Scale scale) {

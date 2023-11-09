@@ -55,6 +55,7 @@ private Q_SLOTS:
 	void customColumnDateTime();
 
 	void autoScale();
+	void autoScale2();
 };
 
 #endif // WORKSHEETELEMENTTEST_H
