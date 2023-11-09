@@ -732,7 +732,11 @@ STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorTicksNumber, int, majorTicksNumber, retran
 void Axis::setMajorTicksNumber(int number, bool automatic) {
 	DEBUG(Q_FUNC_INFO << ", number = " << number)
 	Q_D(Axis);
-	if (number != d->majorTicksNumber) {
+	if (number > maxNumberMajorTicks) {
+		// Notifiy the user that the number was invalid
+		Q_EMIT majorTicksNumberChanged(maxNumberMajorTicks);
+		return;
+	} else if (number != d->majorTicksNumber) {
 		auto* parent = new AxisSetMajorTicksNumberCmd(d, number, ki18n("%1: set the total number of the major ticks"));
 		if (!automatic)
 			new AxisSetMajorTicksAutoNumberNoFinalizeCmd(d, false, ki18n("%1: disable major automatic tick numbers"), parent);
