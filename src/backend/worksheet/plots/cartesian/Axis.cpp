@@ -39,6 +39,10 @@
 
 using Dimension = CartesianCoordinateSystem::Dimension;
 
+namespace {
+	constexpr maxNumberMajorTicks = 100;
+} // Anounymous namespace
+
 /**
  * \class AxisGrid
  * \brief Helper class to get the axis grid drawn with the z-Value=0.
@@ -741,12 +745,12 @@ void Axis::setMajorTicksSpacing(qreal majorTicksSpacing) {
 	double range = this->range().length();
 	DEBUG(Q_FUNC_INFO << ", major spacing = " << majorTicksSpacing << ", range = " << range)
 	// fix spacing if incorrect (not set or > 100 ticks)
-	if (majorTicksSpacing == 0. || range / majorTicksSpacing > 100.) {
+	if (majorTicksSpacing == 0. || range / majorTicksSpacing > maxNumberMajorTicks) {
 		if (majorTicksSpacing == 0.)
 			majorTicksSpacing = range / (majorTicksNumber() - 1);
 
-		if (range / majorTicksSpacing > 100.)
-			majorTicksSpacing = range / 100.;
+		if (range / majorTicksSpacing > maxNumberMajorTicks)
+			majorTicksSpacing = range / maxNumberMajorTicks;
 
 		Q_EMIT majorTicksSpacingChanged(majorTicksSpacing);
 		return;
@@ -1637,7 +1641,7 @@ void AxisPrivate::retransformTicks() {
 					majorTickPosDateTime = majorTickPosDateTime.addMSecs(DateTime::milliseconds(dt.hour, dt.minute, dt.second, dt.millisecond));
 					majorTickPos = majorTickPosDateTime.toMSecsSinceEpoch();
 				}
-				if (majorTickPos > end || iMajor > 1000)
+				if (majorTickPos > end || iMajor > maxNumberMajorTicks)
 					break; // Finish
 			}
 		}
