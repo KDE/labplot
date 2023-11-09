@@ -291,6 +291,10 @@ void Background::loadThemeConfig(const KConfigGroup& group) {
 
 void Background::loadThemeConfig(const KConfigGroup& group, const QColor& themeColor) {
 	Q_D(const Background);
+
+	if (d->positionAvailable)
+		setPosition((Position)group.readEntry(d->prefix + QStringLiteral("Position"), static_cast<int>(Position::No)));
+
 	setType((Type)group.readEntry(d->prefix + QStringLiteral("Type"), static_cast<int>(Type::Color)));
 	setColorStyle((ColorStyle)group.readEntry(d->prefix + QStringLiteral("ColorStyle"), static_cast<int>(ColorStyle::SingleColor)));
 	setImageStyle((ImageStyle)group.readEntry(d->prefix + QStringLiteral("ImageStyle"), static_cast<int>(ImageStyle::Scaled)));
@@ -307,6 +311,10 @@ void Background::loadThemeConfig(const KConfigGroup& group, const QColor& themeC
 
 void Background::saveThemeConfig(KConfigGroup& group) const {
 	Q_D(const Background);
+
+	if (d->positionAvailable)
+		group.writeEntry(d->prefix + QStringLiteral("Position"), static_cast<int>(d->position));
+
 	group.writeEntry(d->prefix + QStringLiteral("Type"), static_cast<int>(d->type));
 	group.writeEntry(d->prefix + QStringLiteral("ColorStyle"), static_cast<int>(d->colorStyle));
 	group.writeEntry(d->prefix + QStringLiteral("BrushStyle"), static_cast<int>(d->brushStyle));

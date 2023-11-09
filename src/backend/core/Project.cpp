@@ -41,12 +41,12 @@
 #endif
 #endif
 
+#include <KCompressionDevice>
 #include <KConfig>
 #include <KConfigGroup>
-#include <KFilterDev>
 #include <KLocalizedString>
 #include <KMessageBox>
-#include <kcoreaddons_version.h>
+#include <kwidgetsaddons_version.h>
 
 #include <QBuffer>
 #include <QDateTime>
@@ -91,9 +91,9 @@ int buildXmlVersion = 8;
  * \brief show MDI windows for all Parts in the project simultaneously
  */
 
-class Project::Private {
+class ProjectPrivate {
 public:
-	explicit Private(Project* owner)
+	explicit ProjectPrivate(Project* owner)
 		: modificationTime(QDateTime::currentDateTime())
 		, q(owner) {
 		setVersion(QStringLiteral(LVERSION));
@@ -145,7 +145,7 @@ public:
 		return mXmlVersion;
 	}
 
-	DockVisibility dockVisibility{DockVisibility::folderOnly};
+	Project::DockVisibility dockVisibility{Project::DockVisibility::folderOnly};
 	bool changed{false};
 	bool aspectAddedSignalSuppressed{false};
 
@@ -162,13 +162,14 @@ public:
 	QUndoStack undo_stack;
 };
 
-int Project::Private::m_versionNumber = 0;
-QString Project::Private::versionString = QString();
-int Project::Private::mXmlVersion = buildXmlVersion;
+int ProjectPrivate::m_versionNumber = 0;
+QString ProjectPrivate::versionString = QString();
+int ProjectPrivate::mXmlVersion = buildXmlVersion;
 
 Project::Project()
 	: Folder(i18n("Project"), AspectType::Project)
-	, d(new Private(this)) {
+	, d_ptr(new ProjectPrivate(this)) {
+	Q_D(Project);
 	// load default values for name, comment and author from config
 	KConfig config;
 	KConfigGroup group = config.group("Project");
@@ -193,6 +194,7 @@ Project::Project()
 }
 
 Project::~Project() {
+	Q_D(Project);
 #ifndef SDK
 	// if the project is being closed and the live data sources still continue reading the data,
 	// the dependent objects (columns, etc.), which are already deleted maybe here,  are still being notified about the changes.
@@ -216,19 +218,19 @@ Project::~Project() {
 }
 
 QString Project::version() {
-	return Private::version();
+	return ProjectPrivate::version();
 }
 
 int Project::versionNumber() {
-	return Private::versionNumber();
+	return ProjectPrivate::versionNumber();
 }
 
 int Project::xmlVersion() {
-	return Private::xmlVersion();
+	return ProjectPrivate::xmlVersion();
 }
 
 void Project::setXmlVersion(int version) {
-	Private::mXmlVersion = version;
+	ProjectPrivate::mXmlVersion = version;
 }
 
 int Project::currentBuildXmlVersion() {
@@ -236,7 +238,8 @@ int Project::currentBuildXmlVersion() {
 }
 
 QUndoStack* Project::undoStack() const {
-	return &d->undo_stack;
+	// Q_D(const Project);
+	return &d_ptr->undo_stack;
 }
 
 QMenu* Project::createContextMenu() {
@@ -259,11 +262,13 @@ QMenu* Project::createFolderContextMenu(const Folder* folder) {
 }
 
 void Project::setDockVisibility(DockVisibility visibility) {
+	Q_D(Project);
 	d->dockVisibility = visibility;
 	Q_EMIT mdiWindowVisibilityChanged();
 }
 
 Project::DockVisibility Project::dockVisibility() const {
+	Q_D(const Project);
 	return d->dockVisibility;
 }
 
@@ -275,12 +280,14 @@ BASIC_D_READER_IMPL(Project, bool, saveCalculations, saveCalculations)
 
 STD_SETTER_CMD_IMPL_S(Project, SetAuthor, QString, author)
 void Project::setAuthor(const QString& author) {
+	Q_D(Project);
 	if (author != d->author)
 		exec(new ProjectSetAuthorCmd(d, author, ki18n("%1: set author")));
 }
 
 STD_SETTER_CMD_IMPL_S(Project, SetSaveCalculations, bool, saveCalculations)
 void Project::setSaveCalculations(bool save) {
+	Q_D(Project);
 	if (save != d->saveCalculations)
 		exec(new ProjectSetSaveCalculationsCmd(d, save, ki18n("%1: save calculation changed")));
 }
@@ -289,6 +296,8 @@ void Project::setChanged(const bool value) {
 	if (isLoading())
 		return;
 
+	Q_D(Project);
+
 	d->changed = value;
 
 	if (value)
@@ -296,14 +305,17 @@ void Project::setChanged(const bool value) {
 }
 
 void Project::setSuppressAspectAddedSignal(bool value) {
+	Q_D(Project);
 	d->aspectAddedSignalSuppressed = value;
 }
 
 bool Project::aspectAddedSignalSuppressed() const {
+	Q_D(const Project);
 	return d->aspectAddedSignalSuppressed;
 }
 
 bool Project::hasChanged() const {
+	Q_D(const Project);
 	return d->changed;
 }
 
@@ -331,6 +343,7 @@ void Project::descriptionChanged(const AbstractAspect* aspect) {
 		updateColumnDependencies(boxPlots, column);
 	}
 
+	Q_D(Project);
 	d->changed = true;
 	Q_EMIT changed();
 }
@@ -554,7 +567,8 @@ QVector<quintptr> Project::droppedAspects(const QMimeData* mimeData) {
 // ##################  Serialization/Deserialization  ###########################
 // ##############################################################################
 
-void Project::save(const QPixmap& thumbnail, QXmlStreamWriter* writer) const {
+void Project::save(const QPixmap& thumbnail, QXmlStreamWriter* writer) {
+	Q_D(Project);
 	// set the version and the modification time to the current values
 	d->setVersion(QStringLiteral(LVERSION));
 	d->modificationTime = QDateTime::currentDateTime();
@@ -644,8 +658,8 @@ bool Project::load(const QString& filename, bool preview) {
 			file = new KCompressionDevice(filename, KCompressionDevice::GZip);
 	} else { // opens filename using file ending
 		// DEBUG(Q_FUNC_INFO << ", filename does not end with .lml. Guessing by extension")
-		file = new KFilterDev(filename);
-		DEBUG(Q_FUNC_INFO << ", found compression type " << ((KFilterDev*)file)->compressionType())
+		file = new KCompressionDevice(filename);
+		DEBUG(Q_FUNC_INFO << ", found compression type " << ((KCompressionDevice*)file)->compressionType())
 	}
 
 	if (!file)
@@ -669,10 +683,10 @@ bool Project::load(const QString& filename, bool preview) {
 	// parse XML
 	XmlStreamReader reader(file);
 	setIsLoading(true);
-	Private::mXmlVersion =
+	ProjectPrivate::mXmlVersion =
 		0; // set the version temporarily to 0, the actual project version will be read in the file, if available, and used in load() functions
 	rc = this->load(&reader, preview);
-	Private::mXmlVersion = buildXmlVersion; // set the version back to the current XML version
+	ProjectPrivate::mXmlVersion = buildXmlVersion; // set the version back to the current XML version
 	setIsLoading(false);
 	if (rc == false) {
 		RESET_CURSOR;
@@ -705,12 +719,13 @@ bool Project::load(const QString& filename, bool preview) {
 			"If you modify and save the project, the CAS content will be lost.\n\n"
 			"Do you want to continue?",
 			reader.missingCASWarning());
-#if KCOREADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
+#if KWIDGETSADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
 		auto status = KMessageBox::warningTwoActions(nullptr, msg, i18n("Missing Support for CAS"), KStandardGuiItem::cont(), KStandardGuiItem::cancel());
+		if (status == KMessageBox::SecondaryAction) {
 #else
 		auto status = KMessageBox::warningYesNo(nullptr, msg, i18n("Missing Support for CAS"));
-#endif
 		if (status == KMessageBox::No) {
+#endif
 			file->close();
 			delete file;
 			return false;
@@ -727,6 +742,7 @@ bool Project::load(const QString& filename, bool preview) {
  * \brief Load from XML
  */
 bool Project::load(XmlStreamReader* reader, bool preview) {
+	Q_D(Project);
 	while (!(reader->isStartDocument() || reader->atEnd()))
 		reader->readNext();
 
@@ -796,6 +812,8 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 		restorePointers(this, preview);
 		retransformElements(this);
 	}
+
+	Q_EMIT loaded();
 
 	return !reader->hasError();
 }
@@ -1171,6 +1189,7 @@ void Project::restorePointers(AbstractAspect* aspect, bool preview) {
 }
 
 bool Project::readProjectAttributes(XmlStreamReader* reader) {
+	Q_D(Project);
 	const auto& attribs = reader->attributes();
 	auto str = attribs.value(QStringLiteral("modificationTime")).toString();
 	auto modificationTime = QDateTime::fromString(str, QStringLiteral("yyyy-dd-MM hh:mm:ss:zzz"));

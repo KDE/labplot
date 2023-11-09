@@ -29,6 +29,7 @@
 
 #include <KLocalizedString>
 
+#include <QActionGroup>
 #include <QClipboard>
 #include <QFont>
 #include <QFontMetrics>
@@ -260,19 +261,17 @@ QMenu* Column::createContextMenu() {
 		menu->insertSeparator(firstAction);
 	}
 
-	if (hasValues()) {
+	if (hasValues())
 		menu->insertAction(firstAction, m_copyDataAction);
-		menu->insertSeparator(firstAction);
-	}
 
 	// pasting of data is only possible for spreadsheet columns
 	if (parentAspect()->type() == AspectType::Spreadsheet) {
 		const auto* mimeData = QApplication::clipboard()->mimeData();
-		if (mimeData->hasFormat(QStringLiteral("text/plain"))) {
+		if (mimeData->hasFormat(QStringLiteral("text/plain")))
 			menu->insertAction(firstAction, m_pasteDataAction);
-			menu->insertSeparator(firstAction);
-		}
 	}
+
+	menu->insertSeparator(firstAction);
 
 	return menu;
 }
@@ -480,9 +479,9 @@ void Column::handleRowInsertion(int before, int count, QUndoCommand* parent) {
 void Column::handleRowRemoval(int first, int count, QUndoCommand* parent) {
 	Q_ASSERT(parent);
 	AbstractColumn::handleRowRemoval(first, count, parent);
-	new ColumnRemoveRowsCmd(d, first, count, parent);
-	if (!m_suppressDataChangedSignal)
-		Q_EMIT dataChanged(this);
+	auto* command = new ColumnRemoveRowsCmd(d, first, count, parent);
+	if (!parent)
+		exec(command);
 }
 
 /**
@@ -2443,7 +2442,7 @@ bool Column::indicesMinMax(double v1, double v2, int& start, int& end) const {
 	case ColumnMode::Day: {
 		qint64 value;
 		qint64 v2int64 = v2;
-		qint64 v1int64 = v2;
+		qint64 v1int64 = v1;
 		for (int i = 0; i < rowCount(); i++) {
 			if (!isValid(i) || isMasked(i))
 				continue;

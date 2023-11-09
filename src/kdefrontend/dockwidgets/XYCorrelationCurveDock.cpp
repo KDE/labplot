@@ -45,6 +45,7 @@ XYCorrelationCurveDock::XYCorrelationCurveDock(QWidget* parent)
 void XYCorrelationCurveDock::setupGeneral() {
 	auto* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
+	setPlotRangeCombobox(uiGeneralTab.cbPlotRanges);
 	m_leName = uiGeneralTab.leName;
 	m_teComment = uiGeneralTab.teComment;
 	m_teComment->setFixedHeight(1.2 * m_leName->height());
@@ -78,7 +79,7 @@ void XYCorrelationCurveDock::setupGeneral() {
 	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme(QStringLiteral("run-build")));
 
 	auto* layout = new QHBoxLayout(ui.tabGeneral);
-	layout->setMargin(0);
+	layout->setContentsMargins(0, 0, 0, 0);
 	layout->addWidget(generalTab);
 
 	DEBUG("XYCorrelationCurveDock::setupGeneral() DONE");
@@ -204,7 +205,7 @@ void XYCorrelationCurveDock::setCurves(QList<XYCurve*> list) {
 }
 
 void XYCorrelationCurveDock::updatePlotRanges() {
-	updatePlotRangeList(uiGeneralTab.cbPlotRanges);
+	updatePlotRangeList();
 }
 
 //*************************************************************

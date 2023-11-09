@@ -25,16 +25,13 @@ public:
 	virtual bool minMax(const CartesianCoordinateSystem::Dimension dim, const Range<int>& indexRange, Range<double>& r, bool includeErrorBars = true) const;
 	virtual double minimum(CartesianCoordinateSystem::Dimension dim) const = 0;
 	virtual double maximum(CartesianCoordinateSystem::Dimension dim) const = 0;
-
 	virtual bool hasData() const = 0;
-
-	virtual bool activatePlot(QPointF mouseScenePos, double maxDist = -1) = 0;
-	virtual void setHover(bool on) = 0;
+	bool activatePlot(QPointF mouseScenePos, double maxDist = -1);
 
 	typedef PlotPrivate Private;
 
 private:
-	Q_DECLARE_PRIVATE(WorksheetElement)
+	Q_DECLARE_PRIVATE(Plot)
 
 protected:
 	Plot(const QString&, PlotPrivate* dd, AspectType);

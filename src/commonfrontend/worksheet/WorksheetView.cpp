@@ -39,9 +39,9 @@
 #include <KMessageBox>
 #include <kcoreaddons_version.h>
 
+#include <QActionGroup>
 #include <QApplication>
 #include <QClipboard>
-#include <QDesktopWidget>
 #include <QGraphicsOpacityEffect>
 #include <QImage>
 #include <QMdiArea>
@@ -106,14 +106,14 @@ WorksheetView::WorksheetView(Worksheet* worksheet)
 	if (!m_worksheet->isLoading()) {
 		float w = Worksheet::convertFromSceneUnits(sceneRect().width(), Worksheet::Unit::Inch);
 		float h = Worksheet::convertFromSceneUnits(sceneRect().height(), Worksheet::Unit::Inch);
-		w *= QApplication::desktop()->physicalDpiX();
-		h *= QApplication::desktop()->physicalDpiY();
+		w *= QApplication::primaryScreen()->physicalDotsPerInchX();
+		h *= QApplication::primaryScreen()->physicalDotsPerInchY();
 		resize(w * 1.1, h * 1.1);
 	}
 
 	// rescale to the original size
-	static const qreal hscale = QApplication::desktop()->physicalDpiX() / (Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch));
-	static const qreal vscale = QApplication::desktop()->physicalDpiY() / (Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch));
+	static const qreal hscale = QApplication::primaryScreen()->physicalDotsPerInchX() / (Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch));
+	static const qreal vscale = QApplication::primaryScreen()->physicalDotsPerInchY() / (Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch));
 	setTransform(QTransform::fromScale(hscale, vscale));
 
 	initBasicActions();
@@ -275,11 +275,11 @@ void WorksheetView::initActions() {
 	connect(showPresenterMode, &QAction::triggered, this, &WorksheetView::presenterMode);
 
 	// worksheet control actions
-	plotsLockedAction = new QAction(QIcon::fromTheme(QStringLiteral("hidemouse")), i18n("Non-interactive Plots"), this);
-	plotsLockedAction->setToolTip(i18n("If activated, plots on the worksheet don't react on drag and mouse wheel events."));
-	plotsLockedAction->setCheckable(true);
-	plotsLockedAction->setChecked(m_worksheet->plotsLocked());
-	connect(plotsLockedAction, &QAction::triggered, this, &WorksheetView::plotsLockedActionChanged);
+	plotsInteractiveAction = new QAction(QIcon::fromTheme(QStringLiteral("hidemouse")), i18n("Interactive Plots"), this);
+	plotsInteractiveAction->setToolTip(i18n("If not activated, plots on the worksheet don't react on drag and mouse wheel events."));
+	plotsInteractiveAction->setCheckable(true);
+	plotsInteractiveAction->setChecked(m_worksheet->plotsInteractive());
+	connect(plotsInteractiveAction, &QAction::triggered, this, &WorksheetView::plotsInteractiveActionChanged);
 
 	// actions for cartesian plots
 
@@ -354,11 +354,11 @@ void WorksheetView::initActions() {
 
 	scaleAutoXAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-auto-scale-x")), i18n("Auto Scale X"), cartesianPlotNavigationGroup);
 	scaleAutoXAction->setData(static_cast<int>(CartesianPlot::NavigationOperation::ScaleAutoX));
-	scaleAutoXAction->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_X);
+	scaleAutoXAction->setShortcut(Qt::CTRL | Qt::SHIFT | Qt::Key_X);
 
 	scaleAutoYAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-auto-scale-y")), i18n("Auto Scale Y"), cartesianPlotNavigationGroup);
 	scaleAutoYAction->setData(static_cast<int>(CartesianPlot::NavigationOperation::ScaleAutoY));
-	scaleAutoYAction->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_Y);
+	scaleAutoYAction->setShortcut(Qt::CTRL | Qt::SHIFT | Qt::Key_Y);
 
 	zoomInAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-in")), i18n("Zoom In"), cartesianPlotNavigationGroup);
 	zoomInAction->setData(static_cast<int>(CartesianPlot::NavigationOperation::ZoomIn));
@@ -374,7 +374,7 @@ void WorksheetView::initActions() {
 
 	zoomOutXAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-zoom-out-x")), i18n("Zoom Out X"), cartesianPlotNavigationGroup);
 	zoomOutXAction->setData(static_cast<int>(CartesianPlot::NavigationOperation::ZoomOutX));
-	zoomOutXAction->setShortcut(Qt::SHIFT + Qt::Key_X);
+	zoomOutXAction->setShortcut(Qt::SHIFT | Qt::Key_X);
 
 	zoomInYAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-zoom-in-y")), i18n("Zoom In Y"), cartesianPlotNavigationGroup);
 	zoomInYAction->setData(static_cast<int>(CartesianPlot::NavigationOperation::ZoomInY));
@@ -382,7 +382,7 @@ void WorksheetView::initActions() {
 
 	zoomOutYAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-zoom-out-y")), i18n("Zoom Out Y"), cartesianPlotNavigationGroup);
 	zoomOutYAction->setData(static_cast<int>(CartesianPlot::NavigationOperation::ZoomOutY));
-	zoomOutYAction->setShortcut(Qt::SHIFT + Qt::Key_Y);
+	zoomOutYAction->setShortcut(Qt::SHIFT | Qt::Key_Y);
 
 	shiftLeftXAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-shift-left-x")), i18n("Shift Left X"), cartesianPlotNavigationGroup);
 	shiftLeftXAction->setData(static_cast<int>(CartesianPlot::NavigationOperation::ShiftLeftX));
@@ -577,7 +577,7 @@ void WorksheetView::createContextMenu(QMenu* menu) {
 	menu->insertSeparator(firstAction);
 	menu->insertMenu(firstAction, m_themeMenu);
 	menu->insertSeparator(firstAction);
-	menu->insertAction(firstAction, plotsLockedAction);
+	menu->insertAction(firstAction, plotsInteractiveAction);
 	menu->insertSeparator(firstAction);
 	menu->insertMenu(firstAction, m_cartesianPlotMenu);
 	menu->insertSeparator(firstAction);
@@ -682,8 +682,8 @@ void WorksheetView::setCartesianPlotCursorMode(Worksheet::CartesianPlotActionMod
 		cartesianPlotApplyToSelectionCursor->setChecked(true);
 }
 
-void WorksheetView::setPlotLock(bool lock) {
-	plotsLockedAction->setChecked(lock);
+void WorksheetView::setPlotInteractive(bool interactive) {
+	plotsInteractiveAction->setChecked(interactive);
 }
 
 void WorksheetView::drawForeground(QPainter* painter, const QRectF& rect) {
@@ -841,7 +841,7 @@ void WorksheetView::drawBackground(QPainter* painter, const QRectF& rect) {
 	if (!m_worksheet->useViewSize()) {
 		// background
 		KColorScheme scheme(QPalette::Active, KColorScheme::Window);
-		const QColor& color = scheme.background().color();
+		const QColor color = scheme.background().color();
 		if (!scene_rect.contains(rect))
 			painter->fillRect(rect, color);
 
@@ -1187,12 +1187,20 @@ void WorksheetView::dragEnterEvent(QDragEnterEvent* event) {
 
 void WorksheetView::dragMoveEvent(QDragMoveEvent* event) {
 	// only accept drop events if we have a plot under the cursor where we can drop columns onto
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+	bool plot = isPlotAtPos(event->position().toPoint());
+#else
 	bool plot = isPlotAtPos(event->pos());
+#endif
 	event->setAccepted(plot);
 }
 
 void WorksheetView::dropEvent(QDropEvent* event) {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+	CartesianPlot* plot = plotAt(event->position().toPoint());
+#else
 	CartesianPlot* plot = plotAt(event->pos());
+#endif
 	if (!plot)
 		return;
 
@@ -1226,8 +1234,8 @@ void WorksheetView::useViewSizeChanged(bool useViewSize) {
 
 void WorksheetView::processResize() {
 	if (size() != sceneRect().size()) {
-		static const float hscale = QApplication::desktop()->physicalDpiX() / (Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch));
-		static const float vscale = QApplication::desktop()->physicalDpiY() / (Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch));
+		static const float hscale = QApplication::primaryScreen()->physicalDotsPerInchX() / (Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch));
+		static const float vscale = QApplication::primaryScreen()->physicalDotsPerInchY() / (Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch));
 		m_worksheet->setUndoAware(false);
 		m_worksheet->setPageRect(QRectF(0.0, 0.0, width() / hscale, height() / vscale));
 		m_worksheet->setUndoAware(true);
@@ -1242,8 +1250,8 @@ void WorksheetView::changeZoom(QAction* action) {
 	else if (action == zoomOutViewAction)
 		zoom(-1);
 	else if (action == zoomOriginAction) {
-		static const float hscale = QApplication::desktop()->physicalDpiX() / (Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch));
-		static const float vscale = QApplication::desktop()->physicalDpiY() / (Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch));
+		static const float hscale = QApplication::primaryScreen()->physicalDotsPerInchX() / (Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch));
+		static const float vscale = QApplication::primaryScreen()->physicalDotsPerInchY() / (Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch));
 		setTransform(QTransform::fromScale(hscale, vscale));
 	}
 
@@ -1302,7 +1310,7 @@ void WorksheetView::fitChanged(QAction* action) {
 
 double WorksheetView::zoomFactor() const {
 	double scale = transform().m11();
-	scale *= Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch) / QApplication::desktop()->physicalDpiX();
+	scale *= Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch) / QApplication::primaryScreen()->physicalDotsPerInchX();
 	return scale;
 }
 
@@ -1492,15 +1500,16 @@ void WorksheetView::deleteElement() {
 		i18np("Delete selected object", "Delete selected objects", m_selectedItems.size()),
 		KStandardGuiItem::del(),
 		KStandardGuiItem::cancel());
+	if (status == KMessageBox::SecondaryAction)
+		return;
 #else
 	auto status = KMessageBox::warningYesNo(
 		this,
 		i18np("Do you really want to delete the selected object?", "Do you really want to delete the selected %1 objects?", m_selectedItems.size()),
 		i18np("Delete selected object", "Delete selected objects", m_selectedItems.size()));
-#endif
-
 	if (status == KMessageBox::No)
 		return;
+#endif
 
 	m_suppressSelectionChangedEvent = true;
 	m_worksheet->beginMacro(i18n("%1: Remove selected worksheet elements.", m_worksheet->name()));
@@ -2179,8 +2188,8 @@ void WorksheetView::exportToFile(const QString& path, const ExportFormat format,
 		// 		}
 		int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Unit::Millimeter);
 		int h = Worksheet::convertFromSceneUnits(sourceRect.height(), Worksheet::Unit::Millimeter);
-		w = w * QApplication::desktop()->physicalDpiX() / 25.4;
-		h = h * QApplication::desktop()->physicalDpiY() / 25.4;
+		w = w * QApplication::primaryScreen()->physicalDotsPerInchX() / 25.4;
+		h = h * QApplication::primaryScreen()->physicalDotsPerInchY() / 25.4;
 
 		generator.setSize(QSize(w, h));
 		QRectF targetRect(0, 0, w, h);
@@ -2247,6 +2256,22 @@ void WorksheetView::exportToFile(const QString& path, const ExportFormat format,
 	}
 }
 
+void WorksheetView::exportToPixmap(QPixmap& pixmap) {
+	const auto& sourceRect = scene()->sceneRect();
+	int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Unit::Millimeter);
+	int h = Worksheet::convertFromSceneUnits(sourceRect.height(), Worksheet::Unit::Millimeter);
+	w = w * QApplication::primaryScreen()->physicalDotsPerInchX() / 25.4;
+	h = h * QApplication::primaryScreen()->physicalDotsPerInchX() / 25.4;
+	pixmap = pixmap.scaled(w, h);
+	QRectF targetRect(0, 0, w, h);
+
+	QPainter painter;
+	painter.begin(&pixmap);
+	painter.setRenderHint(QPainter::Antialiasing);
+	exportPaint(&painter, targetRect, sourceRect, true);
+	painter.end();
+}
+
 bool WorksheetView::eventFilter(QObject* /*watched*/, QEvent* event) {
 	if (event->type() == QEvent::KeyPress && m_actionsInitialized) {
 		auto* keyEvent = static_cast<QKeyEvent*>(event);
@@ -2288,8 +2313,8 @@ void WorksheetView::exportToClipboard() {
 
 	int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Unit::Millimeter);
 	int h = Worksheet::convertFromSceneUnits(sourceRect.height(), Worksheet::Unit::Millimeter);
-	w = w * QApplication::desktop()->physicalDpiX() / 25.4;
-	h = h * QApplication::desktop()->physicalDpiY() / 25.4;
+	w = w * QApplication::primaryScreen()->physicalDotsPerInchX() / 25.4;
+	h = h * QApplication::primaryScreen()->physicalDotsPerInchY() / 25.4;
 	QImage image(QSize(w, h), QImage::Format_ARGB32_Premultiplied);
 	image.fill(Qt::transparent);
 	QRectF targetRect(0, 0, w, h);
@@ -2385,12 +2410,12 @@ QList<QGraphicsItem*> WorksheetView::selectedItems() const {
 }
 
 void WorksheetView::registerShortcuts() {
-	selectAllAction->setShortcut(Qt::CTRL + Qt::Key_A);
+	selectAllAction->setShortcut(Qt::CTRL | Qt::Key_A);
 	deleteAction->setShortcut(Qt::Key_Delete);
 	backspaceAction->setShortcut(Qt::Key_Backspace);
-	zoomInViewAction->setShortcut(Qt::CTRL + Qt::Key_Plus);
-	zoomOutViewAction->setShortcut(Qt::CTRL + Qt::Key_Minus);
-	zoomOriginAction->setShortcut(Qt::CTRL + Qt::Key_1);
+	zoomInViewAction->setShortcut(Qt::CTRL | Qt::Key_Plus);
+	zoomOutViewAction->setShortcut(Qt::CTRL | Qt::Key_Minus);
+	zoomOriginAction->setShortcut(Qt::CTRL | Qt::Key_1);
 }
 
 void WorksheetView::unregisterShortcuts() {
@@ -2427,8 +2452,8 @@ void WorksheetView::cartesianPlotCursorModeChanged(QAction* action) {
 	handleCartesianPlotActions();
 }
 
-void WorksheetView::plotsLockedActionChanged(bool checked) {
-	m_worksheet->setPlotsLocked(checked);
+void WorksheetView::plotsInteractiveActionChanged(bool checked) {
+	m_worksheet->setPlotsInteractive(checked);
 }
 
 void WorksheetView::cartesianPlotMouseModeChanged(QAction* action) {

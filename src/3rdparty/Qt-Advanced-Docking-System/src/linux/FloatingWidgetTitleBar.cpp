@@ -80,7 +80,7 @@ void FloatingWidgetTitleBarPrivate::createLayout()
 {
 	TitleLabel = new tTabLabel();
 	TitleLabel->setElideMode(Qt::ElideRight);
-	TitleLabel->setText("DockWidget->windowTitle()");
+	TitleLabel->setText(QLatin1String("DockWidget->windowTitle()"));
 	TitleLabel->setObjectName("floatingTitleLabel");
     TitleLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
 
@@ -229,7 +229,7 @@ void CFloatingWidgetTitleBar::mouseDoubleClickEvent(QMouseEvent *event)
 {
     if (event->buttons() & Qt::LeftButton)
     {
-        emit maximizeRequested();
+        Q_EMIT maximizeRequested();
         event->accept();
     }
     else

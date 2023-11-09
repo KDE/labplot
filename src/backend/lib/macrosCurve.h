@@ -52,7 +52,7 @@
 		}                                                                                                                                                      \
 		virtual void finalize() override {                                                                                                                     \
 			m_target->finalize_method();                                                                                                                       \
-			emit m_target->q->prefix##ColumnChanged(m_target->*m_field);                                                                                       \
+			Q_EMIT m_target->q->prefix##ColumnChanged(m_target->*m_field);                                                                                     \
 		}                                                                                                                                                      \
 		void redo() override {                                                                                                                                 \
 			m_columnOld = m_private->prefix##Column;                                                                                                           \
@@ -68,9 +68,9 @@
 			} else                                                                                                                                             \
 				m_private->q->set##Prefix##ColumnPath(QStringLiteral(""));                                                                                     \
 			finalize();                                                                                                                                        \
-			emit m_private->q->prefix##ColumnChanged(m_column);                                                                                                \
+			Q_EMIT m_private->q->prefix##ColumnChanged(m_column);                                                                                              \
 			/* emit DataChanged() in order to notify the plot about the changes */                                                                             \
-			emit m_private->q->prefix##DataChanged();                                                                                                          \
+			Q_EMIT m_private->q->prefix##DataChanged();                                                                                                        \
 		}                                                                                                                                                      \
 		void undo() override {                                                                                                                                 \
 			if (m_private->prefix##Column)                                                                                                                     \
@@ -82,9 +82,9 @@
 			} else                                                                                                                                             \
 				m_private->q->set##Prefix##ColumnPath(QStringLiteral(""));                                                                                     \
 			finalize();                                                                                                                                        \
-			emit m_private->q->prefix##ColumnChanged(m_columnOld);                                                                                             \
+			Q_EMIT m_private->q->prefix##ColumnChanged(m_columnOld);                                                                                           \
 			/* emit DataChanged() in order to notify the plot about the changes */                                                                             \
-			emit m_private->q->prefix##DataChanged();                                                                                                          \
+			Q_EMIT m_private->q->prefix##DataChanged();                                                                                                        \
 		}                                                                                                                                                      \
                                                                                                                                                                \
 	private:                                                                                                                                                   \

@@ -50,7 +50,7 @@ FunctionValuesDialog::FunctionValuesDialog(Spreadsheet* s, QWidget* parent)
 	ui.teEquation->setMaximumHeight(QLineEdit().sizeHint().height() * 2);
 	ui.teEquation->setFocus();
 
-	m_topLevelClasses = {AspectType::Folder, AspectType::Workbook, AspectType::Spreadsheet, AspectType::Column};
+	m_topLevelClasses = {AspectType::Folder, AspectType::Workbook, AspectType::Spreadsheet, AspectType::CantorWorksheet, AspectType::Column};
 	m_selectableClasses = {AspectType::Column};
 
 // needed for buggy compiler
@@ -163,7 +163,10 @@ bool FunctionValuesDialog::validVariableName(QLineEdit* le) {
 	} else if (ExpressionParser::getInstance()->functions().indexOf(le->text()) != -1) {
 		SET_WARNING_STYLE(le)
 		le->setToolTip(i18n("Provided variable name is already reserved for a name of a function. Please use another name."));
-	} else if (le->text().contains(QRegExp(QLatin1String("^[0-9]|[^a-zA-Z0-9_]")))) {
+	} else if (le->text().compare(QLatin1String("i")) == 0) {
+		SET_WARNING_STYLE(le)
+		le->setToolTip(i18n("The variable name 'i' is reserved for the index of the column row."));
+	} else if (le->text().contains(QRegularExpression(QLatin1String("^[0-9]|[^a-zA-Z0-9_]")))) {
 		SET_WARNING_STYLE(le)
 		le->setToolTip(i18n("Provided variable name starts with a digit or contains special character."));
 	} else {
@@ -175,42 +178,46 @@ bool FunctionValuesDialog::validVariableName(QLineEdit* le) {
 }
 
 void FunctionValuesDialog::checkValues() {
-	// initialize valid button with true value
-	bool isValid = true;
-	if (!ui.teEquation->isValid()) { // check whether the formula syntax is correct
-		DEBUG(Q_FUNC_INFO << ", syntax incorrect")
-		isValid = false;
+	if (ui.teEquation->toPlainText().simplified().isEmpty()) {
+		m_okButton->setToolTip(i18n("Empty formula expression"));
+		m_okButton->setEnabled(false);
+		return;
 	}
 
-	// check whether for the variables where a name was provided also a column was selected
-	for (int i = 0; i < m_variableDataColumns.size() && isValid == true; ++i) {
-		auto varName = m_variableLineEdits.at(i)->text();
-		DEBUG(Q_FUNC_INFO << ", variable " << i + 1)
+	// check whether the formula syntax is correct
+	if (!ui.teEquation->isValid()) {
+		m_okButton->setToolTip(i18n("Incorrect formula syntax"));
+		m_okButton->setEnabled(false);
+		return;
+	}
+
+	// check the variables
+	for (int i = 0; i < m_variableDataColumns.size(); ++i) {
+		const auto& varName = m_variableLineEdits.at(i)->text();
+
 		// ignore empty
 		if (varName.isEmpty())
 			continue;
+
+		// checke whether a valid column was provided for the variable
 		auto* cb = m_variableDataColumns.at(i);
 		auto* aspect = static_cast<AbstractAspect*>(cb->currentModelIndex().internalPointer());
-		if (!aspect || !validVariableName(m_variableLineEdits.at(i))) {
-			isValid = false;
-			break;
+		if (!aspect) {
+			m_okButton->setToolTip(i18n("Select a valid column"));
+			m_okButton->setEnabled(false);
+			return;
 		}
 
-		// TODO: why is the column check disabled?
-		/*		Column* column = dynamic_cast<Column*>(aspect);
-				DEBUG("row count = " << (static_cast<QVector<double>* >(column->data()))->size());
-				if (!column || column->rowCount() < 1) {
-					m_okButton->setEnabled(false);
-					//Warning: x column is empty
-					return;
-				}
-		*/
+		// check whether the variable name is correct
+		if (!validVariableName(m_variableLineEdits.at(i))) {
+			m_okButton->setToolTip(i18n("Variable name can contain letters, digits and '_' only and should start with a letter"));
+			m_okButton->setEnabled(false);
+			return;
+		}
 	}
-	if (isValid)
-		m_okButton->setToolTip(i18n("Generate function values"));
-	else
-		m_okButton->setToolTip(i18n("Variable name can contain letters, digits and '_' only and should start with a letter"));
-	m_okButton->setEnabled(isValid);
+
+	m_okButton->setToolTip(i18n("Generate function values"));
+	m_okButton->setEnabled(true);
 }
 
 void FunctionValuesDialog::showConstants() {
@@ -253,11 +260,11 @@ void FunctionValuesDialog::insertConstant(const QString& constantsName) const {
 
 void FunctionValuesDialog::addVariable() {
 	auto* layout{ui.gridLayoutVariables};
-	int row{m_variableLineEdits.size()};
+	auto row{m_variableLineEdits.size()};
 	// text field for the variable name
 	auto* le{new QLineEdit};
 	le->setToolTip(i18n("Variable name can contain letters, digits and '_' only and should start with a letter"));
-	QRegExpValidator* validator = new QRegExpValidator(QRegExp(QLatin1String("[a-zA-Z][a-zA-Z0-9_]*")), le);
+	auto* validator = new QRegularExpressionValidator(QRegularExpression(QLatin1String("[a-zA-Z][a-zA-Z0-9_]*")), le);
 	le->setValidator(validator);
 	// hardcoding size is bad. 40 is enough for three letters
 	le->setMaximumWidth(40);
@@ -313,7 +320,7 @@ void FunctionValuesDialog::addVariable() {
 
 void FunctionValuesDialog::deleteVariable() {
 	QObject* ob{QObject::sender()};
-	const int index{m_variableDeleteButtons.indexOf(qobject_cast<QToolButton*>(ob))};
+	const auto index{m_variableDeleteButtons.indexOf(qobject_cast<QToolButton*>(ob))};
 
 	delete m_variableLineEdits.takeAt(index + 1);
 	delete m_variableLabels.takeAt(index + 1);

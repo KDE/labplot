@@ -21,13 +21,14 @@
 #include "backend/worksheet/plots/cartesian/Value.h"
 #include "tools/ImageTools.h"
 
-#include <QGraphicsSceneMouseEvent>
-#include <QMenu>
-#include <QPainter>
-
 #include <KConfig>
 #include <KConfigGroup>
 #include <KLocalizedString>
+
+#include <QActionGroup>
+#include <QGraphicsSceneMouseEvent>
+#include <QMenu>
+#include <QPainter>
 
 /**
  * \class LollipopPlot
@@ -71,10 +72,6 @@ QIcon LollipopPlot::icon() const {
 }
 
 void LollipopPlot::initActions() {
-	visibilityAction = new QAction(QIcon::fromTheme(QStringLiteral("view-visible")), i18n("Visible"), this);
-	visibilityAction->setCheckable(true);
-	connect(visibilityAction, &QAction::triggered, this, &LollipopPlot::visibilityChangedSlot);
-
 	// Orientation
 	auto* orientationActionGroup = new QActionGroup(this);
 	orientationActionGroup->setExclusive(true);
@@ -102,11 +99,7 @@ QMenu* LollipopPlot::createContextMenu() {
 		initMenus();
 
 	QMenu* menu = WorksheetElement::createContextMenu();
-	QAction* firstAction = menu->actions().at(1); // skip the first action because of the "title-action"
-
-	// Visibility
-	visibilityAction->setChecked(isVisible());
-	menu->insertAction(firstAction, visibilityAction);
+	QAction* visibilityAction = this->visibilityAction();
 
 	// Orientation
 	Q_D(const LollipopPlot);
@@ -114,14 +107,10 @@ QMenu* LollipopPlot::createContextMenu() {
 		orientationHorizontalAction->setChecked(true);
 	else
 		orientationVerticalAction->setChecked(true);
-	menu->insertMenu(firstAction, orientationMenu);
-	menu->insertSeparator(firstAction);
+	menu->insertMenu(visibilityAction, orientationMenu);
+	menu->insertSeparator(visibilityAction);
 
 	return menu;
-}
-
-QGraphicsItem* LollipopPlot::graphicsItem() const {
-	return d_ptr;
 }
 
 void LollipopPlot::retransform() {
@@ -135,16 +124,6 @@ void LollipopPlot::recalc() {
 }
 
 void LollipopPlot::handleResize(double /*horizontalRatio*/, double /*verticalRatio*/, bool /*pageResize*/) {
-}
-
-bool LollipopPlot::activatePlot(QPointF mouseScenePos, double maxDist) {
-	Q_D(LollipopPlot);
-	return d->activatePlot(mouseScenePos, maxDist);
-}
-
-void LollipopPlot::setHover(bool on) {
-	Q_D(LollipopPlot);
-	d->setHover(on);
 }
 
 /* ============================ getter methods ================= */
@@ -224,7 +203,8 @@ void LollipopPlot::setXColumn(const AbstractColumn* column) {
 		if (column) {
 			// update the curve itself on changes
 			connect(column, &AbstractColumn::dataChanged, this, &LollipopPlot::recalc);
-			connect(column->parentAspect(), &AbstractAspect::childAspectAboutToBeRemoved, this, &LollipopPlot::dataColumnAboutToBeRemoved);
+			if (column->parentAspect())
+				connect(column->parentAspect(), &AbstractAspect::childAspectAboutToBeRemoved, this, &LollipopPlot::dataColumnAboutToBeRemoved);
 
 			connect(column, &AbstractColumn::dataChanged, this, &LollipopPlot::dataChanged);
 			// TODO: add disconnect in the undo-function
@@ -244,7 +224,8 @@ void LollipopPlot::setDataColumns(const QVector<const AbstractColumn*> columns) 
 
 			// update the curve itself on changes
 			connect(column, &AbstractColumn::dataChanged, this, &LollipopPlot::recalc);
-			connect(column->parentAspect(), &AbstractAspect::childAspectAboutToBeRemoved, this, &LollipopPlot::dataColumnAboutToBeRemoved);
+			if (column->parentAspect())
+				connect(column->parentAspect(), &AbstractAspect::childAspectAboutToBeRemoved, this, &LollipopPlot::dataColumnAboutToBeRemoved);
 			// TODO: add disconnect in the undo-function
 
 			connect(column, &AbstractColumn::dataChanged, this, &LollipopPlot::dataChanged);
@@ -284,11 +265,6 @@ void LollipopPlot::orientationChangedSlot(QAction* action) {
 		this->setOrientation(Axis::Orientation::Vertical);
 }
 
-void LollipopPlot::visibilityChangedSlot() {
-	Q_D(const LollipopPlot);
-	this->setVisible(!d->isVisible());
-}
-
 // ##############################################################################
 // ####################### Private implementation ###############################
 // ##############################################################################
@@ -297,22 +273,6 @@ LollipopPlotPrivate::LollipopPlotPrivate(LollipopPlot* owner)
 	, q(owner) {
 	setFlag(QGraphicsItem::ItemIsSelectable);
 	setAcceptHoverEvents(false);
-}
-
-bool LollipopPlotPrivate::activatePlot(QPointF mouseScenePos, double /*maxDist*/) {
-	if (!isVisible())
-		return false;
-
-	return shape().contains(mouseScenePos);
-}
-
-void LollipopPlotPrivate::setHover(bool on) {
-	if (on == m_hovered)
-		return; // don't update if state not changed
-
-	m_hovered = on;
-	on ? Q_EMIT q->hovered() : Q_EMIT q->unhovered();
-	update();
 }
 
 Line* LollipopPlotPrivate::addLine(const KConfigGroup& group) {
@@ -648,7 +608,11 @@ void LollipopPlotPrivate::updateValues() {
 			return;
 		}
 
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+		const int endRow = std::min(m_valuesPointsLogical.size(), static_cast<qsizetype>(valuesColumn->rowCount()));
+#else
 		const int endRow = std::min(m_valuesPointsLogical.size(), valuesColumn->rowCount());
+#endif
 		const auto xColMode = valuesColumn->columnMode();
 		for (int i = 0; i < endRow; ++i) {
 			if (!valuesColumn->isValid(i) || valuesColumn->isMasked(i))
@@ -741,20 +705,6 @@ void LollipopPlotPrivate::updateValues() {
 }
 
 /*!
-	Returns the outer bounds of the item as a rectangle.
- */
-QRectF LollipopPlotPrivate::boundingRect() const {
-	return m_boundingRectangle;
-}
-
-/*!
-	Returns the shape of this item as a QPainterPath in local coordinates.
-*/
-QPainterPath LollipopPlotPrivate::shape() const {
-	return m_shape;
-}
-
-/*!
   recalculates the outer bounds and the shape of the item.
 */
 void LollipopPlotPrivate::recalcShapeAndBoundingRect() {
@@ -836,6 +786,7 @@ void LollipopPlotPrivate::updatePixmap() {
 	m_pixmap = pixmap;
 	m_hoverEffectImageIsDirty = true;
 	m_selectionEffectImageIsDirty = true;
+	Q_EMIT q->changed();
 	update();
 }
 
@@ -912,26 +863,6 @@ void LollipopPlotPrivate::paint(QPainter* painter, const QStyleOptionGraphicsIte
 
 		painter->drawImage(m_boundingRectangle.topLeft(), m_selectionEffectImage, m_pixmap.rect());
 		return;
-	}
-}
-
-void LollipopPlotPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
-	q->createContextMenu()->exec(event->screenPos());
-}
-
-void LollipopPlotPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
-	if (!isSelected()) {
-		m_hovered = true;
-		Q_EMIT q->hovered();
-		update();
-	}
-}
-
-void LollipopPlotPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
-	if (m_hovered) {
-		m_hovered = false;
-		Q_EMIT q->unhovered();
-		update();
 	}
 }
 
@@ -1074,7 +1005,7 @@ void LollipopPlot::loadThemeConfig(const KConfig& config) {
 	const QColor themeColor = plot->themeColorPalette(index);
 
 	Q_D(LollipopPlot);
-	d->m_suppressRecalc = true;
+	d->suppressRecalc = true;
 
 	// lines
 	for (int i = 0; i < d->lines.count(); ++i) {
@@ -1091,6 +1022,6 @@ void LollipopPlot::loadThemeConfig(const KConfig& config) {
 	// values
 	d->value->loadThemeConfig(group, themeColor);
 
-	d->m_suppressRecalc = false;
+	d->suppressRecalc = false;
 	d->recalcShapeAndBoundingRect();
 }

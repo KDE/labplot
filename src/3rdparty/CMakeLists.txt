@@ -51,7 +51,7 @@ IF (BUILD_READSTAT)
 	)
 ENDIF ()
 
-IF (BUILD_EXCEL)
+IF (BUILD_QXLSX)
 	set(BUILD_SHARED_LIBS OFF)
 	add_subdirectory(QXlsx)
 ENDIF ()

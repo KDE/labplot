@@ -8,6 +8,7 @@
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
+
 #ifndef MAINWIN_H
 #define MAINWIN_H
 
@@ -29,6 +30,7 @@ class CursorDock;
 class ContentDockWidget;
 class MemoryWidget;
 // class WelcomeScreenHelper;
+class WorksheetPreviewWidget;
 
 class QDockWidget;
 class QDragEnterEvent;
@@ -49,7 +51,17 @@ class CDockWidget;
 }
 
 #ifdef HAVE_KUSERFEEDBACK
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+#include <KUserFeedbackQt6/Provider>
+#else
 #include <KUserFeedback/Provider>
+#endif
+#endif
+
+#ifdef HAVE_PURPOSE
+namespace Purpose {
+class Menu;
+}
 #endif
 
 #ifdef HAVE_TOUCHBAR
@@ -69,7 +81,7 @@ public:
 	void addAspectToProject(AbstractAspect*);
 	static void updateLocale();
 
-	enum class LoadOnStart { Nothing, NewProject, NewProjectWorksheet, NewProjectSpreadsheet, LastProject, WelcomeScreen };
+	enum class LoadOnStart { Nothing, NewProject, NewProjectWorksheet, NewProjectSpreadsheet, LastProject, WelcomeScreen, NewProjectNotebook };
 	enum class TitleBarMode { ShowFilePath, ShowFileName, ShowProjectName };
 
 #ifdef HAVE_KUSERFEEDBACK
@@ -85,8 +97,10 @@ private:
 	Project* m_project{nullptr};
 	AspectTreeModel* m_aspectTreeModel{nullptr};
 	ProjectExplorer* m_projectExplorer{nullptr};
+	WorksheetPreviewWidget* m_worksheetPreviewWidget{nullptr};
 	ads::CDockWidget* m_projectExplorerDock{nullptr};
 	ads::CDockWidget* m_propertiesDock{nullptr};
+	ads::CDockWidget* m_worksheetPreviewDock{nullptr};
 	AbstractAspect* m_currentAspect{nullptr};
 	ads::CDockWidget* m_currentAspectDock{nullptr};
 	Folder* m_currentFolder{nullptr};
@@ -152,11 +166,13 @@ private:
 	QAction* m_newDatapickerAction;
 
 	// toggling dock widgets, status bar and full screen
-	QAction* m_toggleProjectExplorerDockAction;
-	QAction* m_togglePropertiesDockAction;
-	KToggleAction* m_toggleStatusBarAction;
-	QAction* m_toggleMemoryInfoAction;
-	KToggleFullScreenAction* m_toggleFullScreenAction;
+	QAction* m_projectExplorerDockAction;
+	QAction* m_propertiesDockAction;
+	QAction* m_worksheetPreviewAction;
+	KToggleAction* m_statusBarAction;
+	QAction* m_memoryInfoAction;
+	KToggleFullScreenAction* m_fullScreenAction;
+	QAction* m_configureCASAction;
 
 	// window visibility
 	QAction* m_visibilityFolderAction;
@@ -168,6 +184,12 @@ private:
 	QMenu* m_newMenu{nullptr};
 	QMenu* m_importMenu{nullptr};
 	KHamburgerMenu* m_hamburgerMenu{nullptr};
+
+#ifdef HAVE_PURPOSE
+	QAction* m_shareAction{nullptr};
+	Purpose::Menu* m_shareMenu{nullptr};
+	void fillShareMenu();
+#endif
 
 	// Docks
 	ads::CDockWidget* cursorDock{nullptr};
@@ -199,6 +221,7 @@ private Q_SLOTS:
 	// 	void resetWelcomeScreen();
 	// void createMdiArea();
 	void createADS();
+	bool specialDock(ads::CDockWidget* dock);
 	void changeVisibleAllDocks(bool);
 	void activateNextDock();
 	void activatePreviousDock();
@@ -237,8 +260,9 @@ private Q_SLOTS:
 
 	// Cantor
 #ifdef HAVE_CANTOR_LIBS
-	void newCantorWorksheet(QAction*);
+	void newCantorWorksheet();
 	void cantorSettingsDialog();
+	void updateNotebookActions();
 #endif
 
 	void newFolder();
@@ -271,12 +295,17 @@ private Q_SLOTS:
 	void toggleFullScreen(bool);
 	void projectExplorerDockVisibilityChanged(bool);
 	void propertiesDockVisibilityChanged(bool);
+	void worksheetPreviewDockVisibilityChanged(bool);
 	void cursorDockVisibilityChanged(bool);
 	void propertiesExplorerRequested();
 
 	void focusCursorDock();
 
 	void cartesianPlotMouseModeChanged(CartesianPlot::MouseMode);
+
+#ifdef HAVE_PURPOSE
+	void shareActionFinished(const QJsonObject& output, int error, const QString& message);
+#endif
 };
 
 #endif

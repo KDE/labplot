@@ -405,8 +405,8 @@ public:
 	}
 
 	void finalize() const {
-		emit m_target->q->linkingChanged(m_target->linking.linking);
-		emit m_target->q->linkedSpreadsheetChanged(m_target->linking.linkedSpreadsheet);
+		Q_EMIT m_target->q->linkingChanged(m_target->linking.linking);
+		Q_EMIT m_target->q->linkedSpreadsheetChanged(m_target->linking.linkedSpreadsheet);
 	}
 
 private:
@@ -622,6 +622,7 @@ void Spreadsheet::clear(const QVector<Column*>& columns) {
 		col->setSuppressDataChangedSignal(false);
 		col->setChanged();
 	}
+	exec(parent);
 }
 
 /*!
@@ -1402,7 +1403,7 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList names, 
 	DEBUG(Q_FUNC_INFO << ", mode = " << ENUM_TO_STRING(AbstractFileFilter, ImportMode, mode) << ", cols = " << cols)
 	// QDEBUG("	column name list = " << colNameList)
 	//  name additional columns
-	emit aboutToResize();
+	Q_EMIT aboutToResize();
 
 	// make sure the column names provided by the user don't have any duplicates
 	QStringList uniqueNames;
@@ -1480,7 +1481,7 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList names, 
 		}
 	}
 
-	emit resizeFinished();
+	Q_EMIT resizeFinished();
 	return columnOffset;
 }
 
@@ -1496,7 +1497,7 @@ void Spreadsheet::finalizeImport(size_t columnOffset,
 	QVector<CartesianPlot*> plots;
 	if (importMode == AbstractFileFilter::ImportMode::Replace) {
 		for (size_t n = startColumn; n <= endColumn; n++) {
-			Column* column = this->column((int)(columnOffset + n - startColumn));
+			auto* column = this->column((int)(columnOffset + n - startColumn));
 			if (column)
 				column->addUsedInPlots(plots);
 		}
@@ -1508,10 +1509,10 @@ void Spreadsheet::finalizeImport(size_t columnOffset,
 
 	// set the comments for each of the columns if datasource is a spreadsheet
 	const int rows = rowCount();
-	for (size_t n = startColumn; n <= endColumn; n++) {
-		// DEBUG(Q_FUNC_INFO << ", column " << columnOffset + n - startColumn);
-		Column* column = this->column((int)(columnOffset + n - startColumn));
-		// DEBUG(Q_FUNC_INFO << ", type " << static_cast<int>(column->columnMode()));
+	for (size_t col = startColumn; col <= endColumn; col++) {
+		// DEBUG(Q_FUNC_INFO << ", column " << columnOffset + col - startColumn);
+		Column* column = this->column((int)(columnOffset + col - startColumn));
+		// DEBUG(Q_FUNC_INFO << ", type " << ENUM_TO_STRING(AbstractColumn, ColumnMode, column->columnMode()))
 
 		QString comment;
 		switch (column->columnMode()) {
@@ -1560,13 +1561,14 @@ void Spreadsheet::finalizeImport(size_t columnOffset,
 	for (int i = 0; i < childCount<Column>(); i++)
 		child<Column>(i)->setUndoAware(true);
 
-	if (m_model != nullptr)
+	if (m_model)
 		m_model->suppressSignals(false);
 
 #ifndef SDK
-	if (m_partView != nullptr && m_view != nullptr)
+	if (m_partView && m_view)
 		m_view->resizeHeader();
 #endif
+
 	// row count most probably changed after the import, notify the dock widget.
 	// no need to notify about the column count change, this is already done by add/removeChild signals
 	Q_EMIT rowCountChanged(rowCount());

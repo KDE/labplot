@@ -12,6 +12,8 @@
 #include "backend/lib/trace.h"
 #include "backend/worksheet/Background.h"
 
+#include <QGraphicsSceneContextMenuEvent>
+#include <QMenu>
 #include <QPainter>
 
 /**
@@ -33,12 +35,39 @@ bool Plot::minMax(const CartesianCoordinateSystem::Dimension, const Range<int>&,
 	return false;
 }
 
+/*!
+ * \brief Plot::activatePlot
+ * Checks if the mousepos distance to the plot is less than @p maxDist
+ * \p mouseScenePos
+ * \p maxDist Maximum distance the point lies away from the plot
+ * \return Returns true if the distance is smaller than maxDist.
+ */
+bool Plot::activatePlot(QPointF mouseScenePos, double maxDist) {
+	Q_D(Plot);
+	return d->activatePlot(mouseScenePos, maxDist);
+}
+
 // ##############################################################################
 // ####################### Private implementation ###############################
 // ##############################################################################
 PlotPrivate::PlotPrivate(Plot* owner)
 	: WorksheetElementPrivate(owner)
 	, q(owner) {
+}
+
+bool PlotPrivate::activatePlot(QPointF mouseScenePos, double /*maxDist*/) {
+	if (!isVisible())
+		return false;
+
+	return m_shape.contains(mouseScenePos);
+}
+
+void PlotPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
+	if (q->activatePlot(event->pos())) {
+		q->createContextMenu()->exec(event->screenPos());
+		return;
+	}
+	QGraphicsItem::contextMenuEvent(event);
 }
 
 void PlotPrivate::drawFillingPollygon(const QPolygonF& polygon, QPainter* painter, const Background* background) const {

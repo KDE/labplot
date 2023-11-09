@@ -27,9 +27,6 @@ class AxisPrivate : public WorksheetElementPrivate {
 public:
 	explicit AxisPrivate(Axis*);
 
-	QRectF boundingRect() const override;
-	QPainterPath shape() const override;
-
 	void retransform() override;
 	void retransformRange();
 	void retransformLine();
@@ -42,7 +39,6 @@ public:
 	void updateGrid();
 	bool swapVisible(bool);
 	void recalcShapeAndBoundingRect() override;
-	bool isHovered() const;
 	static QString createScientificRepresentation(const QString& mantissa, const QString& exponent);
 
 	bool isDefault{false};
@@ -138,9 +134,6 @@ private:
 	CartesianPlot* plot() const {
 		return q->m_plot; // convenience method
 	}
-	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
-	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
-	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
 	void mousePressEvent(QGraphicsSceneMouseEvent*) override;
 	void mouseMoveEvent(QGraphicsSceneMouseEvent*) override;
 	void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
@@ -154,11 +147,7 @@ private:
 	QPainterPath arrowPath;
 	QPainterPath majorTicksPath;
 	QPainterPath minorTicksPath;
-	QRectF boundingRectangle;
-	QPainterPath axisShape;
 
-	bool m_hovered{false};
-	bool m_suppressRecalc{false};
 	bool m_panningStarted{false};
 	QPointF m_panningStart;
 

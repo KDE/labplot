@@ -26,6 +26,7 @@
 BoxPlotDock::BoxPlotDock(QWidget* parent)
 	: BaseDock(parent) {
 	ui.setupUi(this);
+	setPlotRangeCombobox(ui.cbPlotRanges);
 	m_leName = ui.leName;
 	m_teComment = ui.teComment;
 	m_teComment->setFixedHeight(m_leName->height());
@@ -250,7 +251,7 @@ void BoxPlotDock::updateLocale() {
 }
 
 void BoxPlotDock::updatePlotRanges() {
-	updatePlotRangeList(ui.cbPlotRanges);
+	updatePlotRangeList();
 }
 
 void BoxPlotDock::loadDataColumns() {

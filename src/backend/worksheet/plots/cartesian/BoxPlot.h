@@ -36,16 +36,11 @@ public:
 
 	QIcon icon() const override;
 	static QIcon staticIcon();
-	QMenu* createContextMenu() override;
-	QGraphicsItem* graphicsItem() const override;
+	virtual QMenu* createContextMenu() override;
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
 	void loadThemeConfig(const KConfig&) override;
-
-	// reimplemented from Plot
-	bool activatePlot(QPointF mouseScenePos, double maxDist = -1) override;
-	void setHover(bool on) override;
 
 	// general
 	BASIC_D_ACCESSOR_DECL(QVector<const AbstractColumn*>, dataColumns, DataColumns)
@@ -103,7 +98,6 @@ private:
 
 	QAction* orientationHorizontalAction{nullptr};
 	QAction* orientationVerticalAction{nullptr};
-	QAction* visibilityAction{nullptr};
 	QMenu* orientationMenu{nullptr};
 
 public Q_SLOTS:
@@ -113,7 +107,6 @@ public Q_SLOTS:
 private Q_SLOTS:
 	// SLOTs for changes triggered via QActions in the context menu
 	void orientationChangedSlot(QAction*);
-	void visibilityChangedSlot();
 
 	void dataColumnAboutToBeRemoved(const AbstractAspect*);
 

@@ -12,7 +12,6 @@
 #include "backend/datasources/filters/AbstractFileFilter.h"
 #include <QTreeWidgetItem>
 
-class QStringList;
 class NetCDFFilterPrivate;
 
 class NetCDFFilter : public AbstractFileFilter {

@@ -19,6 +19,7 @@
 CustomPointDock::CustomPointDock(QWidget* parent)
 	: BaseDock(parent) {
 	ui.setupUi(this);
+	setPlotRangeCombobox(ui.cbPlotRanges);
 	m_leName = ui.leName;
 	m_teComment = ui.teComment;
 	m_teComment->setFixedHeight(m_leName->height());
@@ -136,7 +137,7 @@ void CustomPointDock::updateLocale() {
 }
 
 void CustomPointDock::updatePlotRanges() {
-	updatePlotRangeList(ui.cbPlotRanges);
+	updatePlotRangeList();
 }
 
 //**********************************************************

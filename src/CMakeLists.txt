@@ -13,10 +13,10 @@ find_package(qt${QT_VERSION_MAJOR}advanceddocking CONFIG)
 if (NOT qt${QT_VERSION_MAJOR}advanceddocking_FOUND)
     option(LOCAL_QT_ADVANCED_DOCK_DOWNLOAD "Use local build of qt advanced dock downloaded directly from the git repository" OFF)
     option(LOCAL_QT_ADVANCED_DOCK_COPY "Use local build of qt advanced dock copied into the Qt-Advanced-Docking-System subfolder" ON)
-    if (TARGET Qt5::GuiPrivate)
+    if (TARGET Qt${QT_VERSION_MAJOR}::GuiPrivate)
         MESSAGE (STATUS "Building local version of Qt-Advanced-Docking-System.")
     else ()
-	MESSAGE (FATAL_ERROR "Missing Qt5::GuiPrivate to build local version of Qt-Advanced-Docking-System.")
+	MESSAGE (FATAL_ERROR "Missing Qt${QT_VERSION_MAJOR}::GuiPrivate to build local version of Qt-Advanced-Docking-System.")
     endif ()
 endif ()
 
@@ -50,7 +50,8 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/datasources/DatabaseManagerWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/DatasetMetadataManagerDialog.cpp
 	${KDEFRONTEND_DIR}/datasources/DatasetMetadataManagerWidget.cpp
-	${KDEFRONTEND_DIR}/datasources/ExcelOptionsWidget.cpp
+	${KDEFRONTEND_DIR}/datasources/OdsOptionsWidget.cpp
+	${KDEFRONTEND_DIR}/datasources/XLSXOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/HDF5OptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/ImageOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/ImportDatasetWidget.cpp
@@ -129,6 +130,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/worksheet/GridDialog.cpp
 	${KDEFRONTEND_DIR}/worksheet/PresenterWidget.cpp
 	${KDEFRONTEND_DIR}/worksheet/SlidingPanel.cpp
+	${KDEFRONTEND_DIR}/worksheet/WorksheetPreviewWidget.cpp
 	${KDEFRONTEND_DIR}/widgets/BackgroundWidget.cpp
 	${KDEFRONTEND_DIR}/widgets/ConstantsWidget.cpp
 	${KDEFRONTEND_DIR}/widgets/ThemesComboBox.cpp
@@ -148,11 +150,9 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/widgets/FITSHeaderEditAddUnitDialog.cpp
 	${KDEFRONTEND_DIR}/widgets/FITSHeaderEditDialog.cpp
 	${KDEFRONTEND_DIR}/widgets/ResizableTextEdit.cpp
-
-	${KDEFRONTEND_DIR}/labplot2.qrc
 )
 
-if (Qt5Mqtt_FOUND)
+if (Qt${QT_VERSION_MAJOR}Mqtt_FOUND)
 	list(APPEND GUI_SOURCES ${KDEFRONTEND_DIR}/datasources/MQTTConnectionManagerWidget.cpp)
 	list(APPEND GUI_SOURCES ${KDEFRONTEND_DIR}/datasources/MQTTConnectionManagerDialog.cpp)
 	list(APPEND GUI_SOURCES ${KDEFRONTEND_DIR}/datasources/MQTTErrorWidget.cpp)
@@ -163,6 +163,9 @@ if (APPLE)
   list(APPEND GUI_SOURCES ${KDEFRONTEND_DIR}/worksheet/PresenterWidget_mac.mm)
 endif()
 
+set(GUI_QRC
+	${KDEFRONTEND_DIR}/labplot2.qrc
+)
 
 set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/colormapswidget.ui
@@ -198,7 +201,8 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/datasources/rootoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/fitsoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/jsonoptionswidget.ui
-	${KDEFRONTEND_DIR}/ui/datasources/exceloptionswidget.ui
+	${KDEFRONTEND_DIR}/ui/datasources/odsoptionswidget.ui
+	${KDEFRONTEND_DIR}/ui/datasources/xlsxoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/aspectdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/axisdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/backgroundwidget.ui
@@ -256,6 +260,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/spreadsheet/searchreplacewidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/sortdialogwidget.ui
 	${KDEFRONTEND_DIR}/ui/worksheet/exportworksheetwidget.ui
+	${KDEFRONTEND_DIR}/ui/worksheet/worksheetpreviewwidget.ui
 	${KDEFRONTEND_DIR}/ui/datapickerimagewidget.ui
 	${KDEFRONTEND_DIR}/ui/datapickercurvewidget.ui
 	${KDEFRONTEND_DIR}/ui/fitsheadereditwidget.ui
@@ -263,7 +268,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/fitsheadereditaddunitwidget.ui
 )
 
-if (Qt5Mqtt_FOUND)
+if (Qt${QT_VERSION_MAJOR}Mqtt_FOUND)
 	list(APPEND UI_SOURCES ${KDEFRONTEND_DIR}/ui/datasources/mqttconnectionmanagerwidget.ui)
 	list(APPEND UI_SOURCES ${KDEFRONTEND_DIR}/ui/datasources/mqtterrorwidget.ui)
 	list(APPEND UI_SOURCES ${KDEFRONTEND_DIR}/ui/datasources/mqttsubscriptionwidget.ui)
@@ -271,6 +276,7 @@ if (Qt5Mqtt_FOUND)
 endif()
 
 set(BACKEND_SOURCES
+	${BACKEND_DIR}/core/Time.cpp
 	${BACKEND_DIR}/core/Folder.cpp
 	${BACKEND_DIR}/core/AbstractAspect.cpp
 	${BACKEND_DIR}/core/AbstractColumn.cpp
@@ -338,18 +344,19 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/datasources/filters/AbstractFileFilter.cpp
 	${BACKEND_DIR}/datasources/filters/AsciiFilter.cpp
 	${BACKEND_DIR}/datasources/filters/BinaryFilter.cpp
+	${BACKEND_DIR}/datasources/filters/XLSXFilter.cpp
+	${BACKEND_DIR}/datasources/filters/FITSFilter.cpp
 	${BACKEND_DIR}/datasources/filters/HDF5Filter.cpp
-	${BACKEND_DIR}/datasources/filters/ExcelFilter.cpp
 	${BACKEND_DIR}/datasources/filters/ImageFilter.cpp
 	${BACKEND_DIR}/datasources/filters/JsonFilter.cpp
 	${BACKEND_DIR}/datasources/filters/MatioFilter.cpp
 	${BACKEND_DIR}/datasources/filters/NetCDFFilter.cpp
-	${BACKEND_DIR}/datasources/filters/SpiceReader.cpp
-	${BACKEND_DIR}/datasources/filters/SpiceFilter.cpp
-	${BACKEND_DIR}/datasources/filters/FITSFilter.cpp
+	${BACKEND_DIR}/datasources/filters/OdsFilter.cpp
 	${BACKEND_DIR}/datasources/filters/QJsonModel.cpp
 	${BACKEND_DIR}/datasources/filters/ReadStatFilter.cpp
 	${BACKEND_DIR}/datasources/filters/ROOTFilter.cpp
+	${BACKEND_DIR}/datasources/filters/SpiceReader.cpp
+	${BACKEND_DIR}/datasources/filters/SpiceFilter.cpp
 	${BACKEND_DIR}/datasources/filters/VectorBLFFilter.cpp
 	${BACKEND_DIR}/datasources/filters/CANFilter.cpp
 	${BACKEND_DIR}/datasources/filters/DBCParser.cpp
@@ -415,7 +422,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/worksheet/plots/cartesian/Value.cpp
 )
 
-if (Qt5Mqtt_FOUND)
+if (Qt${QT_VERSION_MAJOR}Mqtt_FOUND)
 	list(APPEND BACKEND_SOURCES ${KDEFRONTEND_DIR}/widgets/MQTTWillSettingsWidget.cpp)
 	list(APPEND BACKEND_SOURCES ${BACKEND_DIR}/datasources/MQTTClient.cpp)
 	list(APPEND BACKEND_SOURCES ${BACKEND_DIR}/datasources/MQTTSubscription.cpp)
@@ -537,8 +544,8 @@ target_include_directories(labplot2lib PUBLIC ${COMMONFRONTEND_DIR}/widgets) # s
 
 # add system QADS include path
 if (qt${QT_VERSION_MAJOR}advanceddocking_FOUND)
-	get_target_property(QADS_INCLUDES ads::qt5advanceddocking INTERFACE_INCLUDE_DIRECTORIES)
-	get_target_property(QADS_LIBRARIES ads::qt5advanceddocking INTERFACE_LINK_LIBRARIES)
+	get_target_property(QADS_INCLUDES ads::qt${QT_VERSION_MAJOR}advanceddocking INTERFACE_INCLUDE_DIRECTORIES)
+	get_target_property(QADS_LIBRARIES ads::qt${QT_VERSION_MAJOR}advanceddocking INTERFACE_LINK_LIBRARIES)
 	MESSAGE (STATUS "QADS Found LINK_LIBRARIES: ${QADS_LIBRARIES} INCLUDES: ${QADS_INCLUDES}")
 	target_include_directories( labplot2backendlib PRIVATE ${QADS_INCLUDES} )
 	target_include_directories( labplot2lib PRIVATE ${QADS_INCLUDES} )
@@ -595,7 +602,6 @@ target_link_libraries( labplot2lib
 	ads::qt${QT_VERSION_MAJOR}advanceddocking
 	)
 
-
 IF (Qt${QT_MAJOR_VERSION}SerialPort_FOUND)
 	target_link_libraries( labplot2backendlib Qt${QT_MAJOR_VERSION}::SerialPort )
 	target_link_libraries( labplot2lib Qt${QT_MAJOR_VERSION}::SerialPort )
@@ -608,14 +614,23 @@ IF (KF${KF_MAJOR_VERSION}SyntaxHighlighting_FOUND)
 	target_link_libraries( labplot2lib KF${KF_MAJOR_VERSION}::SyntaxHighlighting )
 ENDIF ()
 if (KUserFeedback_FOUND)
-    target_link_libraries( labplot2lib KUserFeedbackWidgets )
-endif()
+	target_link_libraries( labplot2lib KUserFeedbackWidgets )
+endif ()
+if (KUserFeedbackQt6_FOUND)
+	target_link_libraries( labplot2lib KUserFeedbackCoreQt6 KUserFeedbackWidgetsQt6 )
+endif ()
 IF (Discount_FOUND)
 	target_link_libraries( labplot2lib Discount::Lib )
+ENDIF ()
+IF (Orcus_FOUND)
+	target_link_libraries( labplot2lib ${Orcus_LIBRARIES} ${Ixion_LIBRARY} )
 ENDIF ()
 # TODO: KF6::NewStuff not found even though KF6NewStuff_FOUND
 IF (KF5NewStuff_FOUND)
 	target_link_libraries( labplot2lib KF5::NewStuff )
+ENDIF ()
+IF (KF${KF_MAJOR_VERSION}Purpose_FOUND)
+	target_link_libraries( labplot2lib KF${KF_MAJOR_VERSION}::PurposeWidgets )
 ENDIF ()
 
 IF (RECENT_CANTOR)
@@ -639,9 +654,9 @@ IF (ENABLE_READSTAT)
         target_link_libraries( labplot2backendlib ${READSTAT_LIBRARIES} ${ZLIB_LIBRARIES} )
 ENDIF ()
 
-IF (ENABLE_EXCEL)
+IF (ENABLE_XLSX)
         # build before use
-        IF (BUILD_EXCEL)
+	IF (BUILD_QXLSX)
                 target_include_directories( labplot2backendlib PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/QXlsx/header" )
                 add_dependencies( labplot2backendlib QXlsx )
                 target_include_directories( labplot2lib PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/QXlsx/header" )
@@ -653,7 +668,7 @@ IF (ENABLE_EXCEL)
                 target_include_directories( labplot2lib PRIVATE ${QXLSX_INCLUDE_DIR} )
         ENDIF ()
 
-	IF (QXLSX_FOUND OR BUILD_EXCEL)
+	IF (QXLSX_FOUND OR BUILD_QXLSX)
 		target_link_libraries( labplot2backendlib QXlsx )
         ENDIF ()
 ENDIF ()
@@ -719,8 +734,11 @@ IF (APPLE AND ${ECM_VERSION} VERSION_GREATER "5.48.0")
 	ecm_add_app_icon(LABPLOT_SOURCE ICONS ${LML_ICONS} OUTFILE_BASENAME LML_ICONS)
 ENDIF ()
 
-add_executable( labplot2 ${LABPLOT_SOURCE} ${qml_QRC} )
+add_executable( labplot2 ${LABPLOT_SOURCE} ${GUI_QRC} ${qml_QRC} )
 target_link_libraries( labplot2 labplot2lib labplot2backendlib labplot2nsllib )
+#if (KUserFeedbackQt6_FOUND)
+#	target_link_libraries( labplot2 KUserFeedbackCoreQt6 KUserFeedbackWidgetsQt6 )
+#endif ()
 target_compile_definitions(labplot2 PRIVATE ${LABPLOT_COMPILE_DEFINITIONS})
 
 ############## installation ################################

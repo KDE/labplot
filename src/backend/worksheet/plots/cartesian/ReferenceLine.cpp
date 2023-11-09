@@ -100,10 +100,6 @@ QIcon ReferenceLine::icon() const {
 }
 
 void ReferenceLine::initActions() {
-	visibilityAction = new QAction(i18n("Visible"), this);
-	visibilityAction->setCheckable(true);
-	connect(visibilityAction, &QAction::triggered, this, &ReferenceLine::visibilityChangedSlot);
-
 	// Orientation
 	auto* orientationActionGroup = new QActionGroup(this);
 	orientationActionGroup->setExclusive(true);
@@ -153,9 +149,7 @@ QMenu* ReferenceLine::createContextMenu() {
 		initMenus();
 
 	QMenu* menu = WorksheetElement::createContextMenu();
-	QAction* firstAction = menu->actions().at(1); // skip the first action because of the "title-action"
-	visibilityAction->setChecked(isVisible());
-	menu->insertAction(firstAction, visibilityAction);
+	QAction* visibilityAction = this->visibilityAction();
 
 	Q_D(const ReferenceLine);
 
@@ -164,7 +158,7 @@ QMenu* ReferenceLine::createContextMenu() {
 		orientationHorizontalAction->setChecked(true);
 	else
 		orientationVerticalAction->setChecked(true);
-	menu->insertMenu(firstAction, orientationMenu);
+	menu->insertMenu(visibilityAction, orientationMenu);
 
 	// Line styles
 	const auto& pen = d->line->pen();
@@ -172,14 +166,10 @@ QMenu* ReferenceLine::createContextMenu() {
 	GuiTools::selectPenStyleAction(lineStyleActionGroup, pen.style());
 	GuiTools::selectColorAction(lineColorActionGroup, pen.color());
 
-	menu->insertMenu(firstAction, lineMenu);
-	menu->insertSeparator(firstAction);
+	menu->insertMenu(visibilityAction, lineMenu);
+	menu->insertSeparator(visibilityAction);
 
 	return menu;
-}
-
-QGraphicsItem* ReferenceLine::graphicsItem() const {
-	return d_ptr;
 }
 
 void ReferenceLine::retransform() {
@@ -224,11 +214,6 @@ void ReferenceLine::lineStyleChanged(QAction* action) {
 void ReferenceLine::lineColorChanged(QAction* action) {
 	Q_D(const ReferenceLine);
 	d->line->setColor(GuiTools::colorFromAction(lineColorActionGroup, action));
-}
-
-void ReferenceLine::visibilityChangedSlot() {
-	Q_D(const ReferenceLine);
-	this->setVisible(!d->isVisible());
 }
 
 // ##############################################################################
@@ -308,26 +293,12 @@ void ReferenceLinePrivate::updateOrientation() {
 }
 
 /*!
-	Returns the outer bounds of the item as a rectangle.
- */
-QRectF ReferenceLinePrivate::boundingRect() const {
-	return boundingRectangle;
-}
-
-/*!
-	Returns the shape of this item as a QPainterPath in local coordinates.
-*/
-QPainterPath ReferenceLinePrivate::shape() const {
-	return lineShape;
-}
-
-/*!
   recalculates the outer bounds and the shape of the item.
 */
 void ReferenceLinePrivate::recalcShapeAndBoundingRect() {
 	prepareGeometryChange();
 
-	lineShape = QPainterPath();
+	m_shape = QPainterPath();
 	if (insidePlot) {
 		QPainterPath path;
 		if (orientation == ReferenceLine::Orientation::Horizontal) {
@@ -337,8 +308,8 @@ void ReferenceLinePrivate::recalcShapeAndBoundingRect() {
 			path.moveTo(0, length / 2);
 			path.lineTo(0, -length / 2);
 		}
-		lineShape.addPath(WorksheetElement::shapeFromPath(path, line->pen()));
-		boundingRectangle = lineShape.boundingRect();
+		m_shape.addPath(WorksheetElement::shapeFromPath(path, line->pen()));
+		m_boundingRectangle = m_shape.boundingRect();
 	}
 }
 
@@ -355,32 +326,12 @@ void ReferenceLinePrivate::paint(QPainter* painter, const QStyleOptionGraphicsIt
 
 	if (m_hovered && !isSelected() && !q->isPrinting()) {
 		painter->setPen(QPen(QApplication::palette().color(QPalette::Shadow), 2, Qt::SolidLine));
-		painter->drawPath(lineShape);
+		painter->drawPath(m_shape);
 	}
 
 	if (isSelected() && !q->isPrinting()) {
 		painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), 2, Qt::SolidLine));
-		painter->drawPath(lineShape);
-	}
-}
-
-void ReferenceLinePrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
-	q->createContextMenu()->exec(event->screenPos());
-}
-
-void ReferenceLinePrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
-	if (!isSelected()) {
-		m_hovered = true;
-		Q_EMIT q->hovered();
-		update();
-	}
-}
-
-void ReferenceLinePrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
-	if (m_hovered) {
-		m_hovered = false;
-		Q_EMIT q->unhovered();
-		update();
+		painter->drawPath(m_shape);
 	}
 }
 

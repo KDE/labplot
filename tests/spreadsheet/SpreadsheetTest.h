@@ -80,8 +80,10 @@ private Q_SLOTS:
 	void testSearchExtended01();
 	void testSearchExtended02();
 	void testSearchExtended03();
-
 	void testSearchFindAll();
+
+	void testSearchReplaceNumeric();
+	void testSearchReplaceText();
 	void testSearchReplaceAll();
 
 	// size changes
@@ -114,6 +116,8 @@ private Q_SLOTS:
 #endif // HAVE_VECTOR_BLF
 
 	void testNaming();
+
+	void testClearColumns();
 
 private:
 	Spreadsheet* createSearchReplaceSpreadsheet();

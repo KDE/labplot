@@ -58,7 +58,7 @@ void ErrorBarItem::setPosition(QPointF position) {
 }
 
 void ErrorBarItem::setRectSize(qreal size) {
-	QMatrix matrix;
+	QTransform matrix;
 	matrix.scale(size, size);
 	setRect(matrix.mapRect(m_rect));
 }
@@ -400,7 +400,7 @@ QPainterPath DatapickerPointPrivate::shape() const {
 void DatapickerPointPrivate::recalcShapeAndBoundingRect() {
 	prepareGeometryChange();
 
-	QMatrix matrix;
+	QTransform matrix;
 	matrix.scale(size, size);
 	matrix.rotate(-rotationAngle);
 	transformedBoundingRectangle = matrix.mapRect(boundingRectangle);
@@ -424,9 +424,9 @@ void DatapickerPointPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 
 QVariant DatapickerPointPrivate::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant& value) {
 	if (change == QGraphicsItem::GraphicsItemChange::ItemSelectedHasChanged && value.toBool())
-		emit q->pointSelected(q);
+		Q_EMIT q->pointSelected(q);
 	else if (change == QGraphicsItem::GraphicsItemChange::ItemPositionChange)
-		emit q->positionChanged(value.toPointF());
+		Q_EMIT q->positionChanged(value.toPointF());
 	return QGraphicsItem::itemChange(change, value);
 }
 

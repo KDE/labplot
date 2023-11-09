@@ -66,7 +66,6 @@ public:
 
 	QIcon icon() const override;
 	QMenu* createContextMenu() override;
-	QGraphicsItem* graphicsItem() const override;
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
 	void loadThemeConfig(const KConfig&) override;
@@ -78,9 +77,6 @@ public:
 	double minimum(CartesianCoordinateSystem::Dimension dim) const override;
 	double maximum(CartesianCoordinateSystem::Dimension dim) const override;
 	bool hasData() const override;
-
-	bool activatePlot(QPointF mouseScenePos, double maxDist = -1) override;
-	void setHover(bool on) override;
 
 	const AbstractColumn* column(CartesianCoordinateSystem::Dimension dim) const;
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, xColumn, XColumn)
@@ -187,7 +183,6 @@ private:
 				Range<double>& yRange,
 				bool includeErrorBars) const;
 
-	QAction* visibilityAction{nullptr};
 	QAction* navigateToAction{nullptr};
 	bool m_menusInitialized{false};
 

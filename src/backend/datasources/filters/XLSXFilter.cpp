@@ -1,52 +1,49 @@
 /*
-	File                 : ExcelFilter.cpp
+	File                 : XLSXFilter.cpp
 	Project              : LabPlot
-	Description          : Excel I/O-filter
+	Description          : XLSX I/O-filter
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2021 Fabian Kristof (fkristofszabolcs@gmail.com)
 	SPDX-FileCopyrightText: 2022-2023 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-#include "backend/datasources/filters/ExcelFilter.h"
+#include "backend/datasources/filters/XLSXFilter.h"
 #include "backend/core/column/Column.h"
 #include "backend/datasources/AbstractDataSource.h"
-#include "backend/datasources/filters/ExcelFilterPrivate.h"
+#include "backend/datasources/filters/XLSXFilterPrivate.h"
 #include "backend/matrix/Matrix.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 
 #include <KLocalizedString>
-#include <QStringList>
 #include <QTreeWidgetItem>
-#include <QVector>
 
-#include <utility>
-
-ExcelFilter::ExcelFilter()
-	: AbstractFileFilter(FileType::Excel)
-	, d(new ExcelFilterPrivate(this)) {
+XLSXFilter::XLSXFilter()
+	: AbstractFileFilter(FileType::XLSX)
+	, d(new XLSXFilterPrivate(this)) {
 }
 
-ExcelFilter::~ExcelFilter() {
+XLSXFilter::~XLSXFilter() {
 }
 
-QString ExcelFilter::fileInfoString(const QString& fileName) {
-#ifdef HAVE_EXCEL
+QString XLSXFilter::fileInfoString(const QString& fileName) {
+#ifdef HAVE_QXLSX
 	QXlsx::Document doc{fileName};
 
-	ExcelFilter filter;
+	XLSXFilter filter;
 
 	QVector<int> rangesPerSheet;
 	for (const auto& sheet : doc.sheetNames())
 		rangesPerSheet.push_back(filter.dataRegions(fileName, sheet).size());
 
 	const QStringList& sheetNames = doc.sheetNames();
-	QString info(i18n("Sheet count: %1", QString::number(sheetNames.size())));
+	const int nrSheets = sheetNames.size();
+	QString info(i18n("Sheet count: %1", QString::number(nrSheets)));
 	info += QLatin1String("<br>");
 	info += i18n("Sheets: ");
 	info += QLatin1String("<br>");
 
-	for (int i = 0; i < sheetNames.size(); ++i) {
+	for (int i = 0; i < nrSheets; ++i) {
 		info += sheetNames.at(i);
 		info += QLatin1String(", ranges count:  ");
 		info += QString::number(rangesPerSheet.at(i));
@@ -61,12 +58,12 @@ QString ExcelFilter::fileInfoString(const QString& fileName) {
 #endif
 }
 
-QStringList ExcelFilter::sheets() const {
+QStringList XLSXFilter::sheets() const {
 	return d->sheets();
 }
 
-QStringList ExcelFilter::sheets(const QString& fileName, bool* ok) {
-#ifdef HAVE_EXCEL
+QStringList XLSXFilter::sheets(const QString& fileName, bool* ok) {
+#ifdef HAVE_QXLSX
 	QXlsx::Document doc{fileName};
 	if (ok)
 		*ok = doc.isLoadPackage();
@@ -78,8 +75,8 @@ QStringList ExcelFilter::sheets(const QString& fileName, bool* ok) {
 #endif
 }
 
-bool ExcelFilter::isValidCellReference(const QString& cellRefString) {
-#ifdef HAVE_EXCEL
+bool XLSXFilter::isValidCellReference(const QString& cellRefString) {
+#ifdef HAVE_QXLSX
 	QXlsx::CellReference ref{cellRefString};
 
 	return ref.isValid();
@@ -89,21 +86,21 @@ bool ExcelFilter::isValidCellReference(const QString& cellRefString) {
 	return false;
 }
 
-void ExcelFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
+void XLSXFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
 	d->readDataFromFile(fileName, dataSource, importMode);
 }
-void ExcelFilter::write(const QString& fileName, AbstractDataSource* dataSource) {
+void XLSXFilter::write(const QString& fileName, AbstractDataSource* dataSource) {
 	d->write(fileName, dataSource);
 }
 
-#ifdef HAVE_EXCEL
-QVector<QStringList> ExcelFilter::previewForDataRegion(const QString& sheet, const QXlsx::CellRange& region, bool* okToMatrix, int lines) {
+#ifdef HAVE_QXLSX
+QVector<QStringList> XLSXFilter::previewForDataRegion(const QString& sheet, const QXlsx::CellRange& region, bool* okToMatrix, int lines) {
 	return d->previewForDataRegion(sheet, region, okToMatrix, lines);
 }
 #endif
 
-QVector<QStringList> ExcelFilter::previewForCurrentDataRegion(int lines, bool* okToMatrix) {
-#ifdef HAVE_EXCEL
+QVector<QStringList> XLSXFilter::previewForCurrentDataRegion(int lines, bool* okToMatrix) {
+#ifdef HAVE_QXLSX
 	return d->previewForDataRegion(d->currentSheet, d->currentRange, okToMatrix, lines);
 #else
 	Q_UNUSED(lines)
@@ -112,27 +109,27 @@ QVector<QStringList> ExcelFilter::previewForCurrentDataRegion(int lines, bool* o
 #endif
 }
 
-void ExcelFilter::setSheetToAppendTo(const QString& sheetName) {
+void XLSXFilter::setSheetToAppendTo(const QString& sheetName) {
 	d->sheetToAppendSpreadsheetTo = sheetName;
 }
 
-void ExcelFilter::setExportAsNewSheet(const bool b) {
+void XLSXFilter::setExportAsNewSheet(const bool b) {
 	d->exportDataSourceAsNewSheet = b;
 }
 
-void ExcelFilter::setOverwriteData(const bool b) {
+void XLSXFilter::setOverwriteData(const bool b) {
 	d->overwriteExportData = b;
 }
 
-void ExcelFilter::setFirstRowAsColumnNames(const bool b) {
+void XLSXFilter::setFirstRowAsColumnNames(const bool b) {
 	d->firstRowAsColumnNames = b;
 }
-void ExcelFilter::setColumnNamesAsFirstRow(const bool b) {
+void XLSXFilter::setColumnNamesAsFirstRow(const bool b) {
 	d->columnNamesAsFirstRow = b;
 }
 
-void ExcelFilter::setDataExportStartPos(const QString& dataStartPos) {
-#ifdef HAVE_EXCEL
+void XLSXFilter::setDataExportStartPos(const QString& dataStartPos) {
+#ifdef HAVE_QXLSX
 	const auto cell = QXlsx::CellReference(dataStartPos);
 	if (cell.isValid()) {
 		d->dataExportStartCell.setColumn(cell.column());
@@ -143,18 +140,18 @@ void ExcelFilter::setDataExportStartPos(const QString& dataStartPos) {
 #endif
 }
 
-#ifdef HAVE_EXCEL
-QVector<QXlsx::CellRange> ExcelFilter::dataRegions(const QString& fileName, const QString& sheetName) {
+#ifdef HAVE_QXLSX
+QVector<QXlsx::CellRange> XLSXFilter::dataRegions(const QString& fileName, const QString& sheetName) {
 	return d->dataRegions(fileName, sheetName);
 }
 #endif
 
-void ExcelFilter::parse(const QString& fileName, QTreeWidgetItem* root) {
+void XLSXFilter::parse(const QString& fileName, QTreeWidgetItem* root) {
 	d->parse(fileName, root);
 }
 
-#ifdef HAVE_EXCEL
-QXlsx::CellRange ExcelFilter::dimension() const {
+#ifdef HAVE_QXLSX
+QXlsx::CellRange XLSXFilter::dimension() const {
 	return d->dimension();
 }
 #endif
@@ -163,7 +160,7 @@ QXlsx::CellRange ExcelFilter::dimension() const {
  * \brief Sets the startColumn to \a column
  * \param column the column to be set
  */
-void ExcelFilter::setStartColumn(const int column) {
+void XLSXFilter::setStartColumn(const int column) {
 	d->startColumn = column;
 }
 
@@ -171,7 +168,7 @@ void ExcelFilter::setStartColumn(const int column) {
  * \brief Returns startColumn
  * \return The startColumn
  */
-int ExcelFilter::startColumn() const {
+int XLSXFilter::startColumn() const {
 	return d->startColumn;
 }
 
@@ -179,7 +176,7 @@ int ExcelFilter::startColumn() const {
  * \brief Sets the endColumn to \a column
  * \param column the column to be set
  */
-void ExcelFilter::setEndColumn(const int column) {
+void XLSXFilter::setEndColumn(const int column) {
 	d->endColumn = column;
 }
 
@@ -187,7 +184,7 @@ void ExcelFilter::setEndColumn(const int column) {
  * \brief Returns endColumn
  * \return The endColumn
  */
-int ExcelFilter::endColumn() const {
+int XLSXFilter::endColumn() const {
 	return d->endColumn;
 }
 
@@ -195,7 +192,7 @@ int ExcelFilter::endColumn() const {
  * \brief Sets the startRow to \a row
  * \param row the row to be set
  */
-void ExcelFilter::setStartRow(const int row) {
+void XLSXFilter::setStartRow(const int row) {
 	d->startRow = row;
 }
 
@@ -203,7 +200,7 @@ void ExcelFilter::setStartRow(const int row) {
  * \brief Returns startRow
  * \return The startRow
  */
-int ExcelFilter::startRow() const {
+int XLSXFilter::startRow() const {
 	return d->startRow;
 }
 
@@ -211,7 +208,7 @@ int ExcelFilter::startRow() const {
  * \brief Sets the endRow to \a row
  * \param row the row to be set
  */
-void ExcelFilter::setEndRow(const int row) {
+void XLSXFilter::setEndRow(const int row) {
 	d->endRow = row;
 }
 
@@ -219,19 +216,19 @@ void ExcelFilter::setEndRow(const int row) {
  * \brief Returns endRow
  * \return The endRow
  */
-int ExcelFilter::endRow() const {
+int XLSXFilter::endRow() const {
 	return d->endRow;
 }
 
-void ExcelFilter::setCurrentRange(const QString& range) {
-#ifdef HAVE_EXCEL
+void XLSXFilter::setCurrentRange(const QString& range) {
+#ifdef HAVE_QXLSX
 	d->currentRange = {range};
 #else
 	Q_UNUSED(range)
 #endif
 }
 
-void ExcelFilter::setCurrentSheet(const QString& sheet) {
+void XLSXFilter::setCurrentSheet(const QString& sheet) {
 	d->currentSheet = sheet;
 }
 
@@ -243,10 +240,10 @@ void ExcelFilter::setCurrentSheet(const QString& sheet) {
   Saves as XML.
 */
 
-void ExcelFilter::save(QXmlStreamWriter*) const {
+void XLSXFilter::save(QXmlStreamWriter*) const {
 }
 
-bool ExcelFilter::load(XmlStreamReader*) {
+bool XLSXFilter::load(XmlStreamReader*) {
 	return true;
 }
 
@@ -254,12 +251,11 @@ bool ExcelFilter::load(XmlStreamReader*) {
 // ################### Private implementation ##########################
 // #####################################################################
 
-ExcelFilterPrivate::ExcelFilterPrivate(ExcelFilter* owner)
-	: q(owner) {
+XLSXFilterPrivate::XLSXFilterPrivate(XLSXFilter*) {
 }
 
-ExcelFilterPrivate::~ExcelFilterPrivate() {
-#ifdef HAVE_EXCEL
+XLSXFilterPrivate::~XLSXFilterPrivate() {
+#ifdef HAVE_QXLSX
 	if (m_document)
 		delete m_document;
 #endif
@@ -268,8 +264,8 @@ ExcelFilterPrivate::~ExcelFilterPrivate() {
 // TODO
 //  alternating row colors?
 //  bold "header" - colum names
-void ExcelFilterPrivate::write(const QString& fileName, AbstractDataSource* dataSource) {
-#ifdef HAVE_EXCEL
+void XLSXFilterPrivate::write(const QString& fileName, AbstractDataSource* dataSource) {
+#ifdef HAVE_QXLSX
 	if (!m_document || fileName.compare(m_fileName)) {
 		// delete m_document;
 		m_document = new QXlsx::Document(fileName);
@@ -315,10 +311,10 @@ void ExcelFilterPrivate::write(const QString& fileName, AbstractDataSource* data
 	}
 
 	if (auto* const spreadsheet = dynamic_cast<Spreadsheet*>(dataSource)) {
-		const int columns = spreadsheet->columnCount();
-		const int rows = spreadsheet->rowCount();
+		const int columnCount = spreadsheet->columnCount();
+		const int rowCount = spreadsheet->rowCount();
 
-		for (int col = 0; col < columns; ++col) {
+		for (int col = 0; col < columnCount; ++col) {
 			const auto* const column = spreadsheet->column(col);
 			const int actualCol = startCol + col;
 
@@ -327,7 +323,7 @@ void ExcelFilterPrivate::write(const QString& fileName, AbstractDataSource* data
 					// failed to write column name
 				}
 			}
-			for (int row = 0; row < rows; ++row) {
+			for (int row = 0; row < rowCount; ++row) {
 				const int actualRow = columnNamesAsFirstRow ? startRow + row + 1 : startRow + row;
 				const QString text = column->asStringColumn()->textAt(row);
 
@@ -365,9 +361,9 @@ void ExcelFilterPrivate::write(const QString& fileName, AbstractDataSource* data
 #endif
 }
 
-void ExcelFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
+void XLSXFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
 	DEBUG(Q_FUNC_INFO)
-#ifdef HAVE_EXCEL
+#ifdef HAVE_QXLSX
 	if (!m_document || fileName.compare(m_fileName)) {
 		delete m_document;
 		m_document = new QXlsx::Document(fileName);
@@ -382,9 +378,9 @@ void ExcelFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataS
 		}
 
 		if (startRow > 1) {
-			int rrow = currentRange.firstRow() + startRow - 1;
-			if (rrow <= currentRange.lastRow())
-				currentRange.setFirstRow(rrow);
+			int row = currentRange.firstRow() + startRow - 1;
+			if (row <= currentRange.lastRow())
+				currentRange.setFirstRow(row);
 			else
 				currentRange.setFirstRow(currentRange.lastRow());
 		}
@@ -406,7 +402,6 @@ void ExcelFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataS
 		readDataRegion(currentRange, dataSource, importMode);
 	} else {
 		DEBUG(Q_FUNC_INFO << ", INVALID sheet")
-		// invalid sheet
 	}
 
 #else
@@ -416,8 +411,8 @@ void ExcelFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataS
 #endif
 }
 
-#ifdef HAVE_EXCEL
-void ExcelFilterPrivate::readDataRegion(const QXlsx::CellRange& region, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
+#ifdef HAVE_QXLSX
+void XLSXFilterPrivate::readDataRegion(const QXlsx::CellRange& region, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
 	DEBUG(Q_FUNC_INFO << ", col/row range = " << region.firstColumn() << " .. " << region.lastColumn() << ", " << region.firstRow() << " .. "
 					  << region.lastRow() << ". first row as column names = " << firstRowAsColumnNames)
 
@@ -442,7 +437,7 @@ void ExcelFilterPrivate::readDataRegion(const QXlsx::CellRange& region, Abstract
 			if (firstRowAsColumnNames)
 				columnNames.push_back(m_document->read(regionToRead.firstRow() - 1, col).toString());
 			else
-				columnNames.push_back(ExcelFilter::convertFromNumberToExcelColumn(col));
+				columnNames.push_back(AbstractFileFilter::convertFromNumberToColumn(col));
 		}
 
 		spreadsheet->setUndoAware(false);
@@ -534,8 +529,8 @@ void ExcelFilterPrivate::readDataRegion(const QXlsx::CellRange& region, Abstract
 }
 #endif
 
-#ifdef HAVE_EXCEL
-QVector<QXlsx::CellRange> ExcelFilterPrivate::dataRegions(const QString& fileName, const QString& sheetName) {
+#ifdef HAVE_QXLSX
+QVector<QXlsx::CellRange> XLSXFilterPrivate::dataRegions(const QString& fileName, const QString& sheetName) {
 	DEBUG(Q_FUNC_INFO << ", sheet = " << STDSTRING(sheetName))
 	QVector<QXlsx::CellRange> regions;
 
@@ -617,8 +612,8 @@ QVector<QXlsx::CellRange> ExcelFilterPrivate::dataRegions(const QString& fileNam
 }
 #endif
 
-#ifdef HAVE_EXCEL
-QVector<QStringList> ExcelFilterPrivate::previewForDataRegion(const QString& sheetName, const QXlsx::CellRange& region, bool* okToMatrix, int lines) {
+#ifdef HAVE_QXLSX
+QVector<QStringList> XLSXFilterPrivate::previewForDataRegion(const QString& sheetName, const QXlsx::CellRange& region, bool* okToMatrix, int lines) {
 	DEBUG(Q_FUNC_INFO << ", sheet name = " << STDSTRING(sheetName))
 	QVector<QStringList> infoString;
 
@@ -633,6 +628,11 @@ QVector<QStringList> ExcelFilterPrivate::previewForDataRegion(const QString& she
 
 		const auto& documentRegion = m_document->dimension();
 		if (region.lastRow() <= documentRegion.lastRow() && region.lastColumn() <= documentRegion.lastColumn()) {
+			DEBUG(Q_FUNC_INFO << ", region first/last row = " << region.firstRow() << " " << region.lastRow())
+			DEBUG(Q_FUNC_INFO << ", region first/last column = " << region.firstColumn() << " " << region.lastColumn())
+			DEBUG(Q_FUNC_INFO << ", start/end row = " << startRow << " " << endRow)
+			DEBUG(Q_FUNC_INFO << ", start/end col = " << startColumn << " " << endColumn)
+			// TODO: handle start/end row/column
 			const int rows = std::min(lines, region.lastRow());
 			for (int row = region.firstRow(); row <= rows; ++row) {
 				QStringList line;
@@ -640,11 +640,23 @@ QVector<QStringList> ExcelFilterPrivate::previewForDataRegion(const QString& she
 					// see https://github.com/QtExcel/QXlsx/wiki for read() vs. cellAt()->value()
 					const auto val = m_document->read(row, col);
 					if (val.isValid())
-						QDEBUG("value =" << val << ", type =" << val.type() << ", user type =" << QVariant::typeToName(val.userType()))
+						QDEBUG("value =" << val)
+					// Excel: double is always QString
+					// OO: can always convert to Double
+
 					// correctly read values and show with locale
-					if (val.canConvert(QMetaType::Double))
+					if (val.type() == QVariant::Double)
 						line << QLocale().toString(val.toDouble());
-					else if (val.canConvert(QMetaType::QDateTime)) {
+					else if (val.type() == QVariant::String) {
+						QString valueString = val.toString();
+
+						bool ok; // check if double value
+						double value = valueString.toDouble(&ok);
+						if (ok)
+							line << QLocale().toString(value);
+						else
+							line << valueString;
+					} else if (val.canConvert(QMetaType::QDateTime)) {
 						QDateTime dt = val.toDateTime();
 						// TODO: use certain date/datetime format?
 						if (dt.time() == QTime(0, 0)) // just a date
@@ -655,8 +667,10 @@ QVector<QStringList> ExcelFilterPrivate::previewForDataRegion(const QString& she
 						QTime t = val.toTime();
 						// TODO: use certain time format?
 						line << t.toString();
-					} else
-						line << val.toString();
+					} else {
+						QString valueString = val.toString();
+						line << valueString;
+					}
 				}
 				infoString << line;
 			}
@@ -667,8 +681,8 @@ QVector<QStringList> ExcelFilterPrivate::previewForDataRegion(const QString& she
 }
 #endif
 
-#ifdef HAVE_EXCEL
-QXlsx::CellRange ExcelFilterPrivate::cellContainedInRegions(const QXlsx::CellReference& cell, const QVector<QXlsx::CellRange>& regions) const {
+#ifdef HAVE_QXLSX
+QXlsx::CellRange XLSXFilterPrivate::cellContainedInRegions(const QXlsx::CellReference& cell, const QVector<QXlsx::CellRange>& regions) const {
 	for (const auto& region : regions) {
 		if (cell.column() >= region.firstColumn() && cell.column() <= region.lastColumn() && cell.row() >= region.firstRow() && cell.row() <= region.lastRow())
 			return region;
@@ -677,9 +691,9 @@ QXlsx::CellRange ExcelFilterPrivate::cellContainedInRegions(const QXlsx::CellRef
 }
 #endif
 
-void ExcelFilterPrivate::parse(const QString& fileName, QTreeWidgetItem* parentItem) {
+void XLSXFilterPrivate::parse(const QString& fileName, QTreeWidgetItem* parentItem) {
 	DEBUG(Q_FUNC_INFO)
-#ifdef HAVE_EXCEL
+#ifdef HAVE_QXLSX
 	m_document = new QXlsx::Document(fileName);
 	m_fileName = fileName;
 
@@ -710,8 +724,8 @@ void ExcelFilterPrivate::parse(const QString& fileName, QTreeWidgetItem* parentI
 #endif
 }
 
-#ifdef HAVE_EXCEL
-bool ExcelFilterPrivate::dataRangeCanBeExportedToMatrix(const QXlsx::CellRange& range) const {
+#ifdef HAVE_QXLSX
+bool XLSXFilterPrivate::dataRangeCanBeExportedToMatrix(const QXlsx::CellRange& range) const {
 	for (int i = range.firstRow(); i <= range.lastRow(); ++i) {
 		for (int j = range.firstColumn(); j <= range.lastColumn(); ++j) {
 			const auto* cell = m_document->cellAt(i, j);
@@ -730,22 +744,22 @@ bool ExcelFilterPrivate::dataRangeCanBeExportedToMatrix(const QXlsx::CellRange& 
 }
 #endif
 
-QStringList ExcelFilterPrivate::sheets() const {
-#ifdef HAVE_EXCEL
+QStringList XLSXFilterPrivate::sheets() const {
+#ifdef HAVE_QXLSX
 	return m_document ? m_document->sheetNames() : QStringList();
 #else
 	return {};
 #endif
 }
 
-#ifdef HAVE_EXCEL
-QXlsx::CellRange ExcelFilterPrivate::dimension() const {
+#ifdef HAVE_QXLSX
+QXlsx::CellRange XLSXFilterPrivate::dimension() const {
 	return m_document ? m_document->dimension() : QXlsx::CellRange();
 }
 #endif
 
-#ifdef HAVE_EXCEL
-QXlsx::Cell::CellType ExcelFilterPrivate::columnTypeInRange(const int column, const QXlsx::CellRange& range) const {
+#ifdef HAVE_QXLSX
+QXlsx::Cell::CellType XLSXFilterPrivate::columnTypeInRange(const int column, const QXlsx::CellRange& range) const {
 	bool numeric = false, datetime = false;
 	if (column >= range.firstColumn() && column <= range.lastColumn()) {
 		for (int row = range.firstRow(); row <= range.lastRow(); ++row) {
@@ -779,32 +793,3 @@ QXlsx::Cell::CellType ExcelFilterPrivate::columnTypeInRange(const int column, co
 	return QXlsx::Cell::CellType::StringType;
 }
 #endif
-
-QString ExcelFilter::convertFromNumberToExcelColumn(int n) {
-	// main code from https://www.geeksforgeeks.org/find-excel-column-name-given-number/
-	// Function to print Excel column name for a given column number
-
-	char str[1000]; // To store result (Excel column name)
-	int i = 0; // To store current index in str which is result
-
-	while (n > 0) {
-		// Find remainder
-		int rem = n % 26;
-
-		// If remainder is 0, then a 'Z' must be there in output
-		if (rem == 0) {
-			str[i++] = 'Z';
-			n = (n / 26) - 1;
-		} else // If remainder is non-zero
-		{
-			str[i++] = (rem - 1) + 'A';
-			n = n / 26;
-		}
-	}
-	str[i] = '\0';
-
-	// Reverse the string and print result
-	std::reverse(str, str + strlen(str));
-
-	return QLatin1String(str);
-}

@@ -301,7 +301,8 @@ private Q_SLOTS:
 	void formulaVariableColumnRemoved(const AbstractAspect*);
 	void formulaVariableColumnAdded(const AbstractAspect*);
 
-	friend ColumnSetGlobalFormulaCmd;
+	friend class ColumnSetGlobalFormulaCmd;
+	friend class ColumnRemoveRowsCmd;
 };
 
 #endif

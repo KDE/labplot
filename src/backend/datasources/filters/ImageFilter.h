@@ -12,7 +12,6 @@
 #include "backend/datasources/filters/AbstractFileFilter.h"
 
 class ImageFilterPrivate;
-class QStringList;
 
 class ImageFilter : public AbstractFileFilter {
 	Q_OBJECT

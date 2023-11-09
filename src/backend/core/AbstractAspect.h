@@ -409,7 +409,7 @@ public:
 
 protected:
 	void info(const QString& text) {
-		emit statusInfo(text);
+		Q_EMIT statusInfo(text);
 	}
 
 	// serialization/deserialization
@@ -502,7 +502,7 @@ public:
 	int mRetransformCalled{0};
 
 #define trackRetransformCalled(suppressed)                                                                                                                     \
-	emit q->retransformCalledSignal(q, suppressed);                                                                                                            \
+	Q_EMIT q->retransformCalledSignal(q, suppressed);                                                                                                          \
 	if (!suppressed)                                                                                                                                           \
 		q->mRetransformCalled += 1;
 

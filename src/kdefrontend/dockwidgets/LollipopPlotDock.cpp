@@ -26,6 +26,7 @@ LollipopPlotDock::LollipopPlotDock(QWidget* parent)
 	: BaseDock(parent)
 	, cbXColumn(new TreeViewComboBox) {
 	ui.setupUi(this);
+	setPlotRangeCombobox(ui.cbPlotRanges);
 	m_leName = ui.leName;
 	m_teComment = ui.teComment;
 	m_teComment->setFixedHeight(m_leName->height());
@@ -190,7 +191,7 @@ void LollipopPlotDock::updateLocale() {
 }
 
 void LollipopPlotDock::updatePlotRanges() {
-	updatePlotRangeList(ui.cbPlotRanges);
+	updatePlotRangeList();
 }
 
 void LollipopPlotDock::loadDataColumns() {

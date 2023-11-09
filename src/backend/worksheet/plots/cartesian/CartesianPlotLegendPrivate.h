@@ -34,13 +34,9 @@ public:
 
 	// QGraphicsItem's virtual functions
 	void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override;
-	QRectF boundingRect() const override;
-	QPainterPath shape() const override;
+	virtual QPainterPath shape() const override;
 	virtual void recalcShapeAndBoundingRect() override;
 
-	bool m_hovered{false};
-
-	QRectF rect;
 	QFont labelFont;
 	QColor labelColor;
 	bool labelColumnMajor{true};
@@ -72,10 +68,6 @@ private:
 	QStringList m_names;
 
 	bool translatePainter(QPainter*, int& row, int& col, int height);
-
-	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
-	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
-	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
 };
 
 #endif

@@ -247,6 +247,7 @@ private Q_SLOTS:
 
 	friend class ColumnPrivate;
 	friend class ColumnStringIO;
+	friend class ColumnRemoveRowsCmd;
 };
 
 #endif

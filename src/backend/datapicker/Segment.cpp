@@ -14,9 +14,10 @@
 #include "backend/datapicker/DatapickerPoint.h"
 #include "backend/worksheet/Worksheet.h"
 
-#include <QDesktopWidget>
 #include <QGraphicsScene>
 #include <QPainter>
+#include <QPalette>
+#include <QScreen>
 
 #include <KLocalizedString>
 
@@ -59,7 +60,7 @@ void Segment::setVisible(bool on) {
 // ####################### Private implementation ###############################
 // ##############################################################################
 SegmentPrivate::SegmentPrivate(Segment* owner)
-	: scaleFactor(Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch) / QApplication::desktop()->physicalDpiX())
+	: scaleFactor(Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch) / QApplication::primaryScreen()->physicalDotsPerInchX())
 	, q(owner) {
 	setFlag(QGraphicsItem::ItemIsSelectable);
 	setFlag(QGraphicsItem::ItemSendsGeometryChanges);
@@ -73,7 +74,7 @@ SegmentPrivate::SegmentPrivate(Segment* owner)
 	calculates the position and the bounding box of the item. Called on geometry or properties changes.
  */
 void SegmentPrivate::retransform() {
-	QMatrix matrix;
+	QTransform matrix;
 	matrix.scale(scaleFactor, scaleFactor);
 	for (auto* line : q->path) {
 		const QLine& scaledLine = matrix.map(*line);

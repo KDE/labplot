@@ -1,12 +1,18 @@
 -----2.11.0 () -----
 New features:
+	* [general]
+		* New application theme "Dracula"
+		* New option in the application settings to run a selected CAS engine at startup
+		* Share the project via email, Nextcloud, etc. directly from the main menu
 	* [worksheet]
+		* Preview panel for all available worksheets in the project
 		* Add possibility to use column labels as axis ticks
 		* New visualization types:
 			* Lollipop plot
 			* Q-Q plot
 			* KDE plot
 		* New worksheet theme "Dracula"
+		* Add possibility to lock elements for unintentional change in the plot
 	* [spreadsheet]
 		* Spreadsheet linking - allow to synchronize number of rows across multiple spreadsheets
 		* Extended search and replace
@@ -14,16 +20,21 @@ New features:
 		* Remove/mask rows with missing values
 		* Allow to sort the whole spreadsheet even if one single column was selected, use it rather as the key sort column
 		* When generating values via a function, allow to control whether the target spreadsheet should be resized to the size of the variable columns
+		* When generating values via a mathematical expression ("generate function values"), allow to use variables in CAS-notebooks as source columns
+		* Generatation of equidistant values: support for Date&Time and integer columns
+		* Generatation of equidistant values: allow to fix the number of values and the increment at the same time
 	* [notebook]
 		* Export to PDF
+		* "Configure CAS" in the menu to create a new notebook to directly allow the user to enable new backends in case not done yet
+		* In case the correct path to a CAS like Maxima, etc. was configured, allow to use it without restarting LabPlot
 	* [import]
 		* Templates for ASCII and Binary import filters - allow to save and load current filter settings
+		* Support data import from ODS (Open Document Spreadsheet) files
 		* Addeded seaborn's datasets to the collection of datasets
-	* [general]
-    	* New application theme "Dracula"
 
 Performance improvements:
 	* Make baseline removal much faster by using Eigen3 library (optional dependency)
+	* Refactor formula parsing including better error handling
 
 Bug fixes:
 	* Set mousemode to selection when leaving the plot (Issue #614)
@@ -31,9 +42,11 @@ Bug fixes:
 	* Fix wrong axis tick type used (Issue #571)
 	* Fix wrong infoelement position when removing active curve (Issue #666)
 	* Fix copying Elements (Issue #622)
+	* Fix calculating skewness and kurtosis
 
 Internal:
 	* Switch from C++11 to C++17
+	* Support Qt6
 	* Reduce code duplication caused by multiple plot types (Issue #540)
 	* Update included QXlsx to 1.4.6
 	* Build separate libraries for backend, nsl and everything and link

@@ -41,6 +41,7 @@ XYFourierFilterCurveDock::XYFourierFilterCurveDock(QWidget* parent)
 void XYFourierFilterCurveDock::setupGeneral() {
 	auto* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
+	setPlotRangeCombobox(uiGeneralTab.cbPlotRanges);
 	m_leName = uiGeneralTab.leName;
 	m_teComment = uiGeneralTab.teComment;
 	m_teComment->setFixedHeight(1.2 * m_leName->height());
@@ -77,7 +78,7 @@ void XYFourierFilterCurveDock::setupGeneral() {
 	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme(QStringLiteral("run-build")));
 
 	auto* layout = new QHBoxLayout(ui.tabGeneral);
-	layout->setMargin(0);
+	layout->setContentsMargins(0, 0, 0, 0);
 	layout->addWidget(generalTab);
 
 	// Slots
@@ -215,7 +216,7 @@ void XYFourierFilterCurveDock::setCurves(QList<XYCurve*> list) {
 }
 
 void XYFourierFilterCurveDock::updatePlotRanges() {
-	updatePlotRangeList(uiGeneralTab.cbPlotRanges);
+	updatePlotRangeList();
 }
 
 //*************************************************************

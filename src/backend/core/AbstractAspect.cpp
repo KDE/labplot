@@ -232,11 +232,7 @@ bool AbstractAspect::setName(const QString& value, NameHandling handling, QUndoC
 			info(i18n(R"(Intended name "%1" was changed to "%2" in order to avoid name collision.)", value, new_name));
 	} else
 		new_name = value;
-
-	exec(new PropertyChangeCommand<QString>(i18n("%1: rename to %2", d->m_name, new_name), &d->m_name, new_name),
-		 "aspectDescriptionAboutToChange",
-		 "aspectDescriptionChanged",
-		 Q_ARG(const AbstractAspect*, this));
+	exec(new AspectNameChangeCmd(this->d, new_name));
 	return true;
 }
 
@@ -250,7 +246,7 @@ void AbstractAspect::setComment(const QString& value) {
 	exec(new PropertyChangeCommand<QString>(i18n("%1: change comment", d->m_name), &d->m_comment, value),
 		 "aspectDescriptionAboutToChange",
 		 "aspectDescriptionChanged",
-		 Q_ARG(const AbstractAspect*, this));
+		 QArgument<const AbstractAspect*>("const AbstractAspect*", this));
 }
 
 void AbstractAspect::setCreationTime(const QDateTime& time) {
@@ -322,6 +318,7 @@ QMenu* AbstractAspect::createContextMenu() {
 	// TODO: activate this again when the functionality is implemented
 	// 	menu->addAction( KStandardAction::cut(this) );
 
+	QAction* actionDuplicate = nullptr;
 	if (!isFixed() && m_type != AspectType::Project && m_type != AspectType::CantorWorksheet) {
 		// copy action:
 		// don't allow to copy fixed aspects
@@ -332,8 +329,8 @@ QMenu* AbstractAspect::createContextMenu() {
 		// duplicate action:
 		// don't allow to duplicate legends in the plots
 		if (m_type != AspectType::CartesianPlotLegend) {
-			auto* actionDuplicate = new QAction(QIcon::fromTheme(QLatin1String("edit-copy")), i18n("Duplicate Here"), this);
-			actionDuplicate->setShortcut(Qt::CTRL + Qt::Key_D);
+			actionDuplicate = new QAction(QIcon::fromTheme(QLatin1String("edit-copy")), i18n("Duplicate Here"), this);
+			actionDuplicate->setShortcut(Qt::CTRL | Qt::Key_D);
 			connect(actionDuplicate, &QAction::triggered, this, &AbstractAspect::duplicate);
 			menu->addAction(actionDuplicate);
 		}
@@ -348,7 +345,10 @@ QMenu* AbstractAspect::createContextMenu() {
 	if (t != AspectType::AbstractAspect && pasteTypes().indexOf(t) != -1) {
 		auto* action = KStandardAction::paste(this);
 		action->setText(i18n("Paste '%1'", name));
-		menu->addAction(action);
+		if (actionDuplicate)
+			menu->insertAction(actionDuplicate, action);
+		else
+			menu->addAction(action);
 		connect(action, &QAction::triggered, this, &AbstractAspect::paste);
 	}
 	menu->addSeparator();
@@ -1170,7 +1170,7 @@ QString AbstractAspect::uniqueNameFor(const QString& name, const QStringList& na
 	if (last_non_digit >= 0 && base[last_non_digit].category() != QChar::Separator_Space)
 		base.append(QLatin1Char(' '));
 
-	int new_nr = name.rightRef(name.size() - base.size()).toInt();
+	int new_nr = QStringView(name).right(name.size() - base.size()).toInt();
 	QString new_name;
 	do
 		new_name = base + QString::number(++new_nr);

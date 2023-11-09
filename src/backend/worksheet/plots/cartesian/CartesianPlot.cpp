@@ -65,6 +65,62 @@
 
 using Dimension = CartesianCoordinateSystem::Dimension;
 
+namespace {
+enum Action {
+
+	New = 0x1000,
+	NewTextLabel = 0x1001,
+	NewCustomPoint = 0x1002,
+	NewReferenceRange = 0x1003,
+	NewReferenceLine = 0x1004,
+	NewImage = 0x1005,
+
+	NavigateNextCurve = 0x2001,
+	NavigatePrevCurve = 0x2002,
+
+	Move = 0x4000,
+	MoveLeft = 0x4001,
+	MoveRight = 0x4002,
+	MoveUp = 0x4003,
+	MoveDown = 0x4004,
+
+	Abort = 0x8000,
+
+};
+
+Action evaluateKeys(int key, Qt::KeyboardModifiers modifiers) {
+	if (key == Qt::Key_N)
+		return Action::NavigateNextCurve;
+	else if (key == Qt::Key_P)
+		return Action::NavigatePrevCurve;
+	else if (key == Qt::Key_T)
+		return Action::NewTextLabel;
+	else if (key == Qt::Key_R)
+		return Action::NewReferenceRange;
+	else if (key == Qt::Key_L)
+		return Action::NewReferenceLine;
+	else if (key == Qt::Key_I)
+		return Action::NewImage;
+	else if (key == Qt::Key_N)
+		return Action::NavigateNextCurve;
+	else if (key == Qt::Key_P)
+		return Action::NavigatePrevCurve;
+	else if (key == Qt::Key_M)
+		return Action::NewCustomPoint;
+	else if (key == Qt::Key_Escape)
+		return Action::Abort;
+	else if (key == Qt::Key_Left)
+		return Action::MoveLeft;
+	else if (key == Qt::Key_Right)
+		return Action::MoveRight;
+	else if (key == Qt::Key_Up)
+		return Action::MoveUp;
+	else if (key == Qt::Key_Down)
+		return Action::MoveDown;
+	return Action::Abort;
+}
+}
+
 /**
  * \class CartesianPlot
  * \brief A xy-plot.
@@ -520,11 +576,6 @@ void CartesianPlot::initActions() {
 	connect(addHilbertTransformAction, &QAction::triggered, this, [=]() {
 		addChild(new XYHilbertTransformCurve(i18n("Hilbert Transform")));
 	});
-
-	// visibility action
-	visibilityAction = new QAction(QIcon::fromTheme(QStringLiteral("view-visible")), i18n("Visible"), this);
-	visibilityAction->setCheckable(true);
-	connect(visibilityAction, &QAction::triggered, this, &CartesianPlot::changeVisibility);
 }
 
 void CartesianPlot::initMenus() {
@@ -654,16 +705,12 @@ QMenu* CartesianPlot::createContextMenu() {
 	QMenu* menu = WorksheetElement::createContextMenu();
 	// seems to be a bug, because the tooltips are not shown
 	menu->setToolTipsVisible(true);
-	QAction* firstAction = menu->actions().at(1);
+	QAction* visibilityAction = this->visibilityAction();
 
-	menu->insertMenu(firstAction, m_addNewMenu);
-	menu->insertSeparator(firstAction);
-	menu->insertMenu(firstAction, themeMenu);
-	menu->insertSeparator(firstAction);
-
-	visibilityAction->setChecked(isVisible());
-	menu->insertAction(firstAction, visibilityAction);
-	menu->insertSeparator(firstAction);
+	menu->insertMenu(visibilityAction, m_addNewMenu);
+	menu->insertSeparator(visibilityAction);
+	menu->insertMenu(visibilityAction, themeMenu);
+	menu->insertSeparator(visibilityAction);
 
 	if (children<XYCurve>().isEmpty()) {
 		addInfoElementAction->setEnabled(false);
@@ -921,10 +968,6 @@ bool CartesianPlot::isPanningActive() const {
 	return d->panningStarted;
 }
 
-bool CartesianPlot::isHovered() const {
-	Q_D(const CartesianPlot);
-	return d->m_hovered;
-}
 bool CartesianPlot::isPrinted() const {
 	Q_D(const CartesianPlot);
 	return d->m_printing;
@@ -1309,7 +1352,7 @@ void CartesianPlot::setRange(const Dimension dim, const int index, const Range<d
 
 	if (range.start() == range.end()) {
 		// User entered invalid range
-		emit rangeChanged(dim, index, this->range(dim, index)); // Feedback
+		Q_EMIT rangeChanged(dim, index, this->range(dim, index)); // Feedback
 		return;
 	}
 
@@ -2336,9 +2379,10 @@ void CartesianPlot::childHovered() {
 	Q_D(CartesianPlot);
 	bool curveSender = qobject_cast<XYCurve*>(QObject::sender()) != nullptr;
 	if (!d->isSelected()) {
-		if (d->m_hovered)
-			d->m_hovered = false;
-		d->update();
+		if (isHovered())
+			setHover(false);
+		else
+			d->update(); // realy needed?
 	}
 	if (!curveSender) {
 		for (auto curve : children<XYCurve>())
@@ -2558,7 +2602,7 @@ void CartesianPlot::setMouseMode(MouseMode mouseMode) {
 	Q_EMIT mouseModeChanged(mouseMode);
 }
 
-BASIC_SHARED_D_ACCESSOR_IMPL(CartesianPlot, bool, isLocked, Locked, locked)
+BASIC_SHARED_D_ACCESSOR_IMPL(CartesianPlot, bool, isInteractive, Interactive, interactive)
 
 // auto scale x axis 'index' when auto scale is enabled (index == -1: all x axes)
 bool CartesianPlot::scaleAuto(const Dimension dim, int index, bool fullRange, bool suppressRetransformScale) {
@@ -2780,30 +2824,30 @@ void CartesianPlot::retransformScale(Dimension dim, int index) {
 
 // zoom
 
-void CartesianPlot::zoomIn(int xIndex, int yIndex) {
+void CartesianPlot::zoomIn(int xIndex, int yIndex, const QPointF& sceneRelPos) {
 	setUndoAware(false);
 	enableAutoScale(Dimension::X, xIndex, false);
 	enableAutoScale(Dimension::Y, yIndex, false);
 	setUndoAware(true);
 	setRangeDirty(Dimension::X, xIndex, true);
 	setRangeDirty(Dimension::Y, yIndex, true);
-	zoom(xIndex, Dimension::X, true); // zoom in x
-	zoom(yIndex, Dimension::Y, true); // zoom in y
+	zoom(xIndex, Dimension::X, true, sceneRelPos.x()); // zoom in x
+	zoom(yIndex, Dimension::Y, true, sceneRelPos.y()); // zoom in y
 
 	Q_D(CartesianPlot);
 	d->retransformScales(xIndex, yIndex);
 	WorksheetElementContainer::retransform();
 }
 
-void CartesianPlot::zoomOut(int xIndex, int yIndex) {
+void CartesianPlot::zoomOut(int xIndex, int yIndex, const QPointF& sceneRelPos) {
 	setUndoAware(false);
 	enableAutoScale(Dimension::X, xIndex, false);
 	enableAutoScale(Dimension::Y, yIndex, false);
 	setUndoAware(true);
 	setRangeDirty(Dimension::X, xIndex, true);
 	setRangeDirty(Dimension::Y, yIndex, true);
-	zoom(xIndex, Dimension::X, false); // zoom out x
-	zoom(yIndex, Dimension::Y, false); // zoom out y
+	zoom(xIndex, Dimension::X, false, sceneRelPos.x()); // zoom out x
+	zoom(yIndex, Dimension::Y, false, sceneRelPos.y()); // zoom out y
 
 	Q_D(CartesianPlot);
 	d->retransformScales(xIndex, yIndex);
@@ -2826,7 +2870,7 @@ void CartesianPlot::zoomOutY(int index) {
 	zoomInOut(index, Dimension::Y, false);
 }
 
-void CartesianPlot::zoomInOut(const int index, const Dimension dim, const bool zoomIn) {
+void CartesianPlot::zoomInOut(const int index, const Dimension dim, const bool zoomIn, const double relScenePosRange) {
 	Dimension dim_other = Dimension::Y;
 	if (dim == Dimension::Y)
 		dim_other = Dimension::X;
@@ -2835,7 +2879,7 @@ void CartesianPlot::zoomInOut(const int index, const Dimension dim, const bool z
 	enableAutoScale(dim, index, false);
 	setUndoAware(true);
 	setRangeDirty(dim_other, index, true);
-	zoom(index, dim, zoomIn);
+	zoom(index, dim, zoomIn, relScenePosRange);
 
 	bool retrans = false;
 	for (int i = 0; i < m_coordinateSystems.count(); i++) {
@@ -2867,7 +2911,7 @@ void CartesianPlot::zoomInOut(const int index, const Dimension dim, const bool z
  * @param x if set to \true the x-range is modified, the y-range for \c false
  * @param in the "zoom in" is performed if set to \c \true, "zoom out" for \c false
  */
-void CartesianPlot::zoom(int index, const Dimension dim, bool zoom_in) {
+void CartesianPlot::zoom(int index, const Dimension dim, bool zoom_in, const double relPosSceneRange) {
 	Q_D(CartesianPlot);
 
 	Range<double> range;
@@ -2877,7 +2921,7 @@ void CartesianPlot::zoom(int index, const Dimension dim, bool zoom_in) {
 			int idx = coordinateSystem(i)->index(dim);
 			if (zoomedIndices.contains(idx))
 				continue;
-			zoom(idx, dim, zoom_in);
+			zoom(idx, dim, zoom_in, relPosSceneRange);
 			zoomedIndices.append(idx);
 		}
 		return;
@@ -2887,66 +2931,7 @@ void CartesianPlot::zoom(int index, const Dimension dim, bool zoom_in) {
 	double factor = m_zoomFactor;
 	if (zoom_in)
 		factor = 1. / factor;
-
-	const double start{range.start()}, end{range.end()};
-	switch (range.scale()) {
-	case RangeT::Scale::Linear: {
-		range.extend(range.size() * (factor - 1.) / 2.);
-		break;
-	}
-	case RangeT::Scale::Log10: {
-		if (start == 0 || end / start <= 0)
-			break;
-		const double diff = log10(end / start) * (factor - 1.);
-		const double extend = pow(10, diff / 2.);
-		range.end() *= extend;
-		range.start() /= extend;
-		break;
-	}
-	case RangeT::Scale::Log2: {
-		if (start == 0 || end / start <= 0)
-			break;
-		const double diff = log2(end / start) * (factor - 1.);
-		const double extend = exp2(diff / 2.);
-		range.end() *= extend;
-		range.start() /= extend;
-		break;
-	}
-	case RangeT::Scale::Ln: {
-		if (start == 0 || end / start <= 0)
-			break;
-		const double diff = log(end / start) * (factor - 1.);
-		const double extend = exp(diff / 2.);
-		range.end() *= extend;
-		range.start() /= extend;
-		break;
-	}
-	case RangeT::Scale::Sqrt: {
-		if (start < 0 || end < 0)
-			break;
-		const double diff = (sqrt(end) - sqrt(start)) * (factor - 1.);
-		range.extend(diff * diff / 4.);
-		break;
-	}
-	case RangeT::Scale::Square: {
-		const double diff = (end * end - start * start) * (factor - 1.);
-		range.extend(sqrt(std::abs(diff / 2.)));
-		break;
-	}
-	case RangeT::Scale::Inverse: {
-		const double diff = (1. / start - 1. / end) * (factor - 1.);
-		range.extend(1. / std::abs(diff / 2.));
-		break;
-	}
-	}
-
-	// make nice again
-	if (d->niceExtend) {
-		if (zoom_in)
-			range.niceShrink();
-		else
-			range.niceExtend();
-	}
+	range.zoom(factor, d->niceExtend, relPosSceneRange);
 
 	if (range.finite())
 		d->setRange(dim, index, range);
@@ -3080,9 +3065,9 @@ void CartesianPlot::cursor() {
 	d->retransformScales(-1, -1); // TODO: needed to retransform all scales?
 }
 
-void CartesianPlot::wheelEvent(int delta, int xIndex, int yIndex, bool considerDimension, Dimension dim) {
+void CartesianPlot::wheelEvent(const QPointF& sceneRelPos, int delta, int xIndex, int yIndex, bool considerDimension, Dimension dim) {
 	Q_D(CartesianPlot);
-	d->wheelEvent(delta, xIndex, yIndex, considerDimension, dim);
+	d->wheelEvent(sceneRelPos, delta, xIndex, yIndex, considerDimension, dim);
 }
 
 void CartesianPlot::mousePressZoomSelectionMode(QPointF logicPos, int cSystemIndex) {
@@ -3250,7 +3235,7 @@ void CartesianPlotPrivate::retransformScale(const Dimension dim, int index, bool
 	}
 
 	if (scaleChanged)
-		emit q->scaleRetransformed(q, dim, index);
+		Q_EMIT q->scaleRetransformed(q, dim, index);
 
 	// Set ranges in the axis
 	for (int i = 0; i < q->rangeCount(dim); i++) {
@@ -3553,7 +3538,7 @@ void CartesianPlotPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* even
 	logicalPos = cSystem->mapSceneToLogical(scenePos, AbstractCoordinateSystem::MappingFlag::Limit);
 	calledFromContextMenu = true;
 	auto* menu = q->createContextMenu();
-	emit q->contextMenuRequested(q->AbstractAspect::type(), menu);
+	Q_EMIT q->contextMenuRequested(q->AbstractAspect::type(), menu);
 }
 
 /*!
@@ -3573,7 +3558,7 @@ void CartesianPlotPrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 	if (index >= 0)
 		cSystem = static_cast<CartesianCoordinateSystem*>(q->m_coordinateSystems.at(index));
 	if (mouseMode == CartesianPlot::MouseMode::Selection) {
-		if (!locked && dataRect.contains(event->pos())) {
+		if (interactive && dataRect.contains(event->pos())) {
 			panningStarted = true;
 			m_panningStart = event->pos();
 			setCursor(Qt::ClosedHandCursor);
@@ -4099,7 +4084,7 @@ void CartesianPlotPrivate::mouseReleaseZoomSelectionMode(int cSystemIndex, bool 
 }
 
 void CartesianPlotPrivate::wheelEvent(QGraphicsSceneWheelEvent* event) {
-	if (locked)
+	if (!interactive)
 		return;
 
 	auto* w = static_cast<Worksheet*>(q->parent(AspectType::Worksheet))->currentSelection();
@@ -4110,6 +4095,20 @@ void CartesianPlotPrivate::wheelEvent(QGraphicsSceneWheelEvent* event) {
 		yIndex = coordinateSystem(cSystemIndex)->index(Dimension::Y);
 	}
 
+	const auto pos = event->pos();
+	const auto posLogical = coordinateSystem(0)->mapLogicalToScene({pos});
+	const double xSceneRelPos = (pos.x() - dataRect.left()) / dataRect.width();
+	// if (xSceneRelPos < 0)
+	// 	xSceneRelPos = 0;
+	// if (xSceneRelPos > 1)
+	//	xSceneRelPos = 1;
+	const double ySceneRelPos = (dataRect.bottom() - pos.y()) / dataRect.height();
+	// if (ySceneRelPos < 0)
+	//	ySceneRelPos = 0;
+	// if (ySceneRelPos > 1)
+	//	ySceneRelPos = 1;
+	const QPointF sceneRelPos(xSceneRelPos, ySceneRelPos);
+
 	bool considerDimension = false;
 	Dimension dim = Dimension::X;
 	if (w && w->type() == AspectType::Axis) {
@@ -4119,61 +4118,82 @@ void CartesianPlotPrivate::wheelEvent(QGraphicsSceneWheelEvent* event) {
 			dim = Dimension::Y;
 	}
 
-	emit q->wheelEventSignal(event->delta(), xIndex, yIndex, considerDimension, dim);
+	Q_EMIT q->wheelEventSignal(sceneRelPos, event->delta(), xIndex, yIndex, considerDimension, dim);
 }
 
-void CartesianPlotPrivate::wheelEvent(int delta, int xIndex, int yIndex, bool considerDimension, Dimension dim) {
+void CartesianPlotPrivate::wheelEvent(const QPointF& sceneRelPos, int delta, int xIndex, int yIndex, bool considerDimension, Dimension dim) {
 	if (considerDimension) {
 		// Only one dimension
 		switch (dim) {
 		case Dimension::X:
-			q->zoomInOut(xIndex, dim, delta > 0);
+			q->zoomInOut(xIndex, dim, delta > 0, sceneRelPos.x());
 			break;
 		case Dimension::Y:
-			q->zoomInOut(yIndex, dim, delta > 0);
+			q->zoomInOut(yIndex, dim, delta > 0, sceneRelPos.y());
 			break;
 		}
 		return;
 	}
 
 	if (delta > 0)
-		q->zoomIn(xIndex, yIndex);
+		q->zoomIn(xIndex, yIndex, sceneRelPos);
 	else
-		q->zoomOut(xIndex, yIndex);
+		q->zoomOut(xIndex, yIndex, sceneRelPos);
 }
 
 void CartesianPlotPrivate::keyPressEvent(QKeyEvent* event) {
-	auto key = event->key();
-	if (key == Qt::Key_Escape) {
+	const auto key = event->key();
+	const bool ctrl = event->modifiers() & Qt::KeyboardModifier::ControlModifier;
+	//	const bool shift = event->modifiers() & Qt::KeyboardModifier::ShiftModifier;
+	//	const bool alt = event->modifiers() & Qt::KeyboardModifier::AltModifier;
+	Action a = evaluateKeys(key, event->modifiers());
+
+	if (a == Action::Abort) {
 		m_selectionBandIsShown = false;
-	} else if (key == Qt::Key_Left || key == Qt::Key_Right || key == Qt::Key_Up || key == Qt::Key_Down) {
+	} else if (a & Action::Move) {
 		const auto* worksheet = static_cast<const Worksheet*>(q->parentAspect());
 		if (worksheet->layout() == Worksheet::Layout::NoLayout) {
 			// no layout is active -> use arrow keys to move the plot on the worksheet
 			const int delta = 5;
 			QRectF rect = q->rect();
 
-			if (key == Qt::Key_Left) {
+			if (a == Action::MoveLeft) {
 				rect.setX(rect.x() - delta);
 				rect.setWidth(rect.width() - delta);
-			} else if (key == Qt::Key_Right) {
+			} else if (a == Action::MoveRight) {
 				rect.setX(rect.x() + delta);
 				rect.setWidth(rect.width() + delta);
-			} else if (key == Qt::Key_Up) {
+			} else if (a == Action::MoveUp) {
 				rect.setY(rect.y() - delta);
 				rect.setHeight(rect.height() - delta);
-			} else if (key == Qt::Key_Down) {
+			} else if (a == Action::MoveDown) {
 				rect.setY(rect.y() + delta);
 				rect.setHeight(rect.height() + delta);
 			}
 
 			q->setRect(rect);
 		}
-	} else if (key == Qt::Key_N) // (key == Qt::Key_Tab)
+	} else if (a == Action::NavigateNextCurve) // (key == Qt::Key_Tab)
 		navigateNextPrevCurve();
-	else if (key == Qt::Key_P) // (key == Qt::SHIFT + Qt::Key_Tab)
+	else if (a == Action::NavigatePrevCurve) // (key == Qt::SHIFT + Qt::Key_Tab)
 		navigateNextPrevCurve(false /*next*/);
-
+	else if (a & Action::New) {
+		const auto* cSystem{defaultCoordinateSystem()};
+		if (cSystem->isValid()) {
+			logicalPos = cSystem->mapSceneToLogical(scenePos, AbstractCoordinateSystem::MappingFlag::Limit);
+			calledFromContextMenu = true;
+		}
+		if (a == Action::NewTextLabel)
+			q->addTextLabel();
+		else if (a == Action::NewReferenceLine)
+			q->addReferenceLine();
+		else if (a == Action::NewReferenceRange)
+			q->addReferenceRange();
+		else if (a == Action::NewCustomPoint)
+			q->addCustomPoint();
+		else if (a == Action::NewImage)
+			q->addImage();
+	}
 	QGraphicsItem::keyPressEvent(event);
 }
 
@@ -4229,6 +4249,7 @@ void CartesianPlotPrivate::navigateNextPrevCurve(bool next) const {
 
 void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 	QPointF point = event->pos();
+	scenePos = point;
 	QString info;
 	const auto* cSystem{defaultCoordinateSystem()};
 	auto* w = static_cast<Worksheet*>(q->parent(AspectType::Worksheet))->currentSelection();
@@ -4295,7 +4316,7 @@ void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 					curve->setHover(false);
 					continue;
 				}
-				if (curve->activatePlot(event->pos())) {
+				if (curve->activatePlot(event->pos()) && !curve->isLocked()) {
 					curve->setHover(true);
 					hovered = true;
 					continue;
@@ -5293,6 +5314,8 @@ void CartesianPlot::loadThemeConfig(const KConfig& config) {
 		child->loadThemeConfig(config);
 
 	d->update(this->rect());
+
+	Q_EMIT changed();
 }
 
 void CartesianPlot::saveTheme(KConfig& config) {

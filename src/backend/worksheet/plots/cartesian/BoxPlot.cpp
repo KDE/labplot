@@ -216,10 +216,6 @@ QIcon BoxPlot::staticIcon() {
 }
 
 void BoxPlot::initActions() {
-	visibilityAction = new QAction(QIcon::fromTheme(QStringLiteral("view-visible")), i18n("Visible"), this);
-	visibilityAction->setCheckable(true);
-	connect(visibilityAction, &QAction::triggered, this, &BoxPlot::visibilityChangedSlot);
-
 	// Orientation
 	auto* orientationActionGroup = new QActionGroup(this);
 	orientationActionGroup->setExclusive(true);
@@ -247,11 +243,7 @@ QMenu* BoxPlot::createContextMenu() {
 		initMenus();
 
 	QMenu* menu = WorksheetElement::createContextMenu();
-	QAction* firstAction = menu->actions().at(1); // skip the first action because of the "title-action"
-
-	// Visibility
-	visibilityAction->setChecked(isVisible());
-	menu->insertAction(firstAction, visibilityAction);
+	QAction* visibilityAction = this->visibilityAction();
 
 	// Orientation
 	Q_D(const BoxPlot);
@@ -259,14 +251,10 @@ QMenu* BoxPlot::createContextMenu() {
 		orientationHorizontalAction->setChecked(true);
 	else
 		orientationVerticalAction->setChecked(true);
-	menu->insertMenu(firstAction, orientationMenu);
-	menu->insertSeparator(firstAction);
+	menu->insertMenu(visibilityAction, orientationMenu);
+	menu->insertSeparator(visibilityAction);
 
 	return menu;
-}
-
-QGraphicsItem* BoxPlot::graphicsItem() const {
-	return d_ptr;
 }
 
 void BoxPlot::retransform() {
@@ -280,16 +268,6 @@ void BoxPlot::recalc() {
 }
 
 void BoxPlot::handleResize(double /*horizontalRatio*/, double /*verticalRatio*/, bool /*pageResize*/) {
-}
-
-bool BoxPlot::activatePlot(QPointF mouseScenePos, double maxDist) {
-	Q_D(BoxPlot);
-	return d->activatePlot(mouseScenePos, maxDist);
-}
-
-void BoxPlot::setHover(bool on) {
-	Q_D(BoxPlot);
-	d->setHover(on);
 }
 
 /*!
@@ -598,11 +576,6 @@ void BoxPlot::orientationChangedSlot(QAction* action) {
 		this->setOrientation(Axis::Orientation::Vertical);
 }
 
-void BoxPlot::visibilityChangedSlot() {
-	Q_D(const BoxPlot);
-	this->setVisible(!d->isVisible());
-}
-
 // ##############################################################################
 // ####################### Private implementation ###############################
 // ##############################################################################
@@ -611,22 +584,6 @@ BoxPlotPrivate::BoxPlotPrivate(BoxPlot* owner)
 	, q(owner) {
 	setFlag(QGraphicsItem::ItemIsSelectable);
 	setAcceptHoverEvents(false);
-}
-
-bool BoxPlotPrivate::activatePlot(QPointF mouseScenePos, double /*maxDist*/) {
-	if (!isVisible())
-		return false;
-
-	return shape().contains(mouseScenePos);
-}
-
-void BoxPlotPrivate::setHover(bool on) {
-	if (on == m_hovered)
-		return; // don't update if state not changed
-
-	m_hovered = on;
-	on ? Q_EMIT q->hovered() : emit q->unhovered();
-	update();
 }
 
 Background* BoxPlotPrivate::addBackground(const KConfigGroup& group) {
@@ -1431,25 +1388,11 @@ void BoxPlotPrivate::mapSymbolsToScene(int index) {
 }
 
 /*!
-	Returns the outer bounds of the item as a rectangle.
- */
-QRectF BoxPlotPrivate::boundingRect() const {
-	return m_boundingRectangle;
-}
-
-/*!
-	Returns the shape of this item as a QPainterPath in local coordinates.
-*/
-QPainterPath BoxPlotPrivate::shape() const {
-	return m_boxPlotShape;
-}
-
-/*!
   recalculates the outer bounds and the shape of the item.
 */
 void BoxPlotPrivate::recalcShapeAndBoundingRect() {
 	prepareGeometryChange();
-	m_boxPlotShape = QPainterPath();
+	m_shape = QPainterPath();
 
 	for (int i = 0; i < dataColumnsOrdered.size(); ++i) {
 		if (!dataColumnsOrdered.at(i) || static_cast<const Column*>(dataColumnsOrdered.at(i))->statistics().size == 0)
@@ -1460,12 +1403,12 @@ void BoxPlotPrivate::recalcShapeAndBoundingRect() {
 			boxPath.moveTo(line.p1());
 			boxPath.lineTo(line.p2());
 		}
-		m_boxPlotShape.addPath(WorksheetElement::shapeFromPath(boxPath, borderLines.at(i)->pen()));
+		m_shape.addPath(WorksheetElement::shapeFromPath(boxPath, borderLines.at(i)->pen()));
 
-		m_boxPlotShape.addPath(WorksheetElement::shapeFromPath(m_whiskersPath.at(i), whiskersLine->pen()));
-		m_boxPlotShape.addPath(WorksheetElement::shapeFromPath(m_whiskersCapPath.at(i), whiskersCapLine->pen()));
+		m_shape.addPath(WorksheetElement::shapeFromPath(m_whiskersPath.at(i), whiskersLine->pen()));
+		m_shape.addPath(WorksheetElement::shapeFromPath(m_whiskersCapPath.at(i), whiskersCapLine->pen()));
 
-		m_boxPlotShape.addPath(WorksheetElement::shapeFromPath(m_rugPath.at(i), borderLines.at(i)->pen()));
+		m_shape.addPath(WorksheetElement::shapeFromPath(m_rugPath.at(i), borderLines.at(i)->pen()));
 
 		// add symbols outlier, jitter and far out values
 		QPainterPath symbolsPath = QPainterPath();
@@ -1550,10 +1493,10 @@ void BoxPlotPrivate::recalcShapeAndBoundingRect() {
 			}
 		}
 
-		m_boxPlotShape.addPath(symbolsPath);
+		m_shape.addPath(symbolsPath);
 	}
 
-	m_boundingRectangle = m_boxPlotShape.boundingRect();
+	m_boundingRectangle = m_shape.boundingRect();
 	updatePixmap();
 }
 
@@ -1577,6 +1520,7 @@ void BoxPlotPrivate::updatePixmap() {
 	m_pixmap = pixmap;
 	m_hoverEffectImageIsDirty = true;
 	m_selectionEffectImageIsDirty = true;
+	Q_EMIT q->changed();
 	update();
 }
 
@@ -1717,26 +1661,6 @@ void BoxPlotPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*
 
 		painter->drawImage(m_boundingRectangle.topLeft(), m_selectionEffectImage, m_pixmap.rect());
 		return;
-	}
-}
-
-void BoxPlotPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
-	q->createContextMenu()->exec(event->screenPos());
-}
-
-void BoxPlotPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
-	if (!isSelected()) {
-		m_hovered = true;
-		Q_EMIT q->hovered();
-		update();
-	}
-}
-
-void BoxPlotPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
-	if (m_hovered) {
-		m_hovered = false;
-		Q_EMIT q->unhovered();
-		update();
 	}
 }
 
@@ -1987,7 +1911,7 @@ void BoxPlot::loadThemeConfig(const KConfig& config) {
 	const QColor themeColor = plot->themeColorPalette(index);
 
 	Q_D(BoxPlot);
-	d->m_suppressRecalc = true;
+	d->suppressRecalc = true;
 
 	// box fillings
 	for (int i = 0; i < d->backgrounds.count(); ++i) {
@@ -2039,6 +1963,6 @@ void BoxPlot::loadThemeConfig(const KConfig& config) {
 		setWhiskersCapSize(0.0);
 	}
 
-	d->m_suppressRecalc = false;
+	d->suppressRecalc = false;
 	d->recalcShapeAndBoundingRect();
 }

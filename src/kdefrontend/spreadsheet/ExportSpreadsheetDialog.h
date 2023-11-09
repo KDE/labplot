@@ -48,7 +48,7 @@ public:
 	void setExportTo(const QStringList& to);
 	void setExportToImage(bool possible);
 
-	enum class Format { ASCII, LaTeX, FITS, Excel, SQLite };
+	enum class Format { ASCII, LaTeX, FITS, XLSX, SQLite };
 
 	Format format() const;
 

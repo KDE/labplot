@@ -267,6 +267,7 @@ LabelWidget::LabelWidget(QWidget* parent)
 	connect(ui.sbOffsetY, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &LabelWidget::offsetYChanged);
 
 	connect(ui.chbVisible, &QCheckBox::clicked, this, &LabelWidget::visibilityChanged);
+	connect(ui.chbLock, &QCheckBox::clicked, this, &LabelWidget::lockChanged);
 	connect(ui.chbBindLogicalPos, &QCheckBox::clicked, this, &LabelWidget::bindingChanged);
 	connect(ui.chbShowPlaceholderText, &QCheckBox::toggled, this, &LabelWidget::showPlaceholderTextChanged);
 
@@ -405,6 +406,7 @@ void LabelWidget::initConnections() {
 	m_connections << connect(m_label, &TextLabel::borderPenChanged, this, &LabelWidget::labelBorderPenChanged);
 	m_connections << connect(m_label, &TextLabel::borderOpacityChanged, this, &LabelWidget::labelBorderOpacityChanged);
 	m_connections << connect(m_label, &TextLabel::visibleChanged, this, &LabelWidget::labelVisibleChanged);
+	m_connections << connect(m_label, &TextLabel::lockChanged, this, &LabelWidget::labelLockChanged);
 
 	if (!m_label->parentAspect()) {
 		QDEBUG(Q_FUNC_INFO << ", LABEL " << m_label << " HAS NO PARENT!")
@@ -1025,6 +1027,12 @@ void LabelWidget::visibilityChanged(bool state) {
 		label->setVisible(state);
 }
 
+void LabelWidget::lockChanged(bool locked) {
+	CONDITIONAL_LOCK_RETURN;
+	for (auto* label : m_labelsList)
+		label->setLock(locked);
+}
+
 // border
 void LabelWidget::borderShapeChanged(int index) {
 	auto shape = (TextLabel::BorderShape)index;
@@ -1275,6 +1283,11 @@ void LabelWidget::labelVisibleChanged(bool on) {
 	ui.chbVisible->setChecked(on);
 }
 
+void LabelWidget::labelLockChanged(bool on) {
+	CONDITIONAL_LOCK_RETURN;
+	ui.chbLock->setChecked(on);
+}
+
 // border
 void LabelWidget::labelBorderShapeChanged(TextLabel::BorderShape shape) {
 	CONDITIONAL_LOCK_RETURN;
@@ -1314,6 +1327,7 @@ void LabelWidget::load() {
 	CONDITIONAL_LOCK_RETURN;
 
 	ui.chbVisible->setChecked(m_label->isVisible());
+	ui.chbLock->setChecked(m_label->isLocked());
 
 	// don't show checkbox if Placeholder feature not used
 	bool allowPlaceholder = m_label->text().allowPlaceholder;

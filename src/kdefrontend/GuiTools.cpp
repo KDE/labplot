@@ -15,6 +15,7 @@
 #include <KConfigGroup>
 #include <KLocalizedString>
 
+#include <QActionGroup>
 #include <QApplication>
 #include <QColor>
 #include <QComboBox>
@@ -26,7 +27,11 @@
 #include <QScreen>
 
 #ifdef HAVE_POPPLER
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+#include <poppler-qt6.h>
+#else
 #include <poppler-qt5.h>
+#endif
 #endif
 
 #include <array>
@@ -324,6 +329,7 @@ QImage GuiTools::importPDFFile(const QString& fileName) {
 
 	return image;
 #else
+	Q_UNUSED(fileName)
 	return {};
 #endif
 }
@@ -358,6 +364,8 @@ QImage GuiTools::imageFromPDFData(const QByteArray& data, double zoomFactor) {
 
 	return image;
 #else
+	Q_UNUSED(data)
+	Q_UNUSED(zoomFactor)
 	return {};
 #endif
 }

@@ -26,7 +26,6 @@
 #include <KMessageWidget>
 
 #include <QClipboard>
-#include <QDesktopWidget>
 #include <QMenu>
 #include <QStandardItemModel>
 #include <QStandardPaths>
@@ -64,6 +63,7 @@ XYFitCurveDock::~XYFitCurveDock() {
 void XYFitCurveDock::setupGeneral() {
 	auto* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
+	setPlotRangeCombobox(uiGeneralTab.cbPlotRanges);
 	m_leName = uiGeneralTab.leName;
 	m_teComment = uiGeneralTab.teComment;
 	m_teComment->setFixedHeight(1.2 * m_leName->height());
@@ -182,7 +182,7 @@ void XYFitCurveDock::setupGeneral() {
 	uiGeneralTab.twGoodness->item(5, 0)->setText(UTF8_QSTRING("χ²-") + i18n("test") + UTF8_QSTRING(" (P > χ²)"));
 
 	auto* layout = new QHBoxLayout(ui.tabGeneral);
-	layout->setMargin(0);
+	layout->setContentsMargins(0, 0, 0, 0);
 	layout->addWidget(generalTab);
 
 	// Slots
@@ -375,7 +375,7 @@ void XYFitCurveDock::setCurves(QList<XYCurve*> list) {
 }
 
 void XYFitCurveDock ::updatePlotRanges() {
-	updatePlotRangeList(uiGeneralTab.cbPlotRanges);
+	updatePlotRangeList();
 }
 
 bool XYFitCurveDock::eventFilter(QObject* obj, QEvent* event) {

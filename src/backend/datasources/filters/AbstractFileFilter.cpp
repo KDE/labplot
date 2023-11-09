@@ -155,9 +155,13 @@ AbstractFileFilter::FileType AbstractFileFilter::fileType(const QString& fileNam
 		fileType = FileType::JSON;
 	} else if (SpiceFilter::isSpiceFile(fileName))
 		fileType = FileType::Spice;
-#ifdef HAVE_EXCEL // before ASCII, because XLSX is XML and XML is ASCII
+#ifdef HAVE_QXLSX // before ASCII, because XLSX is XML and XML is ASCII
 	else if (fileInfo.contains(QLatin1String("Microsoft Excel")) || fileName.endsWith(QLatin1String("xlsx"), Qt::CaseInsensitive))
-		fileType = FileType::Excel;
+		fileType = FileType::XLSX;
+#endif
+#ifdef HAVE_ORCUS // before ASCII, because ODS is XML and XML is ASCII
+	else if (fileInfo.contains(QLatin1String("OpenDocument Spreadsheet")) || fileName.endsWith(QLatin1String("ods"), Qt::CaseInsensitive))
+		fileType = FileType::Ods;
 #endif
 	else if (fileInfo.contains(QLatin1String("ASCII")) || fileName.endsWith(QLatin1String("txt"), Qt::CaseInsensitive)
 			 || fileName.endsWith(QLatin1String("csv"), Qt::CaseInsensitive) || fileName.endsWith(QLatin1String("dat"), Qt::CaseInsensitive)
@@ -216,7 +220,37 @@ AbstractFileFilter::FileType AbstractFileFilter::fileType(const QString& fileNam
   returns the list of all supported data file formats
 */
 QStringList AbstractFileFilter::fileTypes() {
+	// TODO: Used by what? #ifdef HAVE_QXLSX?
 	return (QStringList() << i18n("ASCII Data") << i18n("Binary Data") << i18n("Image") << i18n("Excel") << i18n("Hierarchical Data Format 5 (HDF5)")
 						  << i18n("Network Common Data Format (NetCDF)") << i18n("Flexible Image Transport System Data Format (FITS)") << i18n("JSON Data")
 						  << i18n("ROOT (CERN) Histograms") << i18n("Spice") << i18n("SAS, Stata or SPSS"));
+}
+
+QString AbstractFileFilter::convertFromNumberToColumn(int n) {
+	// main code from https://www.geeksforgeeks.org/find-excel-column-name-given-number/
+	// Function to print column name for a given column number
+
+	char str[1000]; // To store result (column name)
+	int i = 0; // To store current index in str which is result
+
+	while (n > 0) {
+		// Find remainder
+		int rem = n % 26;
+
+		// If remainder is 0, then a 'Z' must be there in output
+		if (rem == 0) {
+			str[i++] = 'Z';
+			n = (n / 26) - 1;
+		} else // If remainder is non-zero
+		{
+			str[i++] = (rem - 1) + 'A';
+			n = n / 26;
+		}
+	}
+	str[i] = '\0';
+
+	// Reverse the string and print result
+	std::reverse(str, str + strlen(str));
+
+	return QLatin1String(str);
 }

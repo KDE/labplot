@@ -206,4 +206,92 @@ void ParserTest::testPerformance2() {
 	}
 }*/
 
+void RangeTest::zoomInOutIncreasingLinearRangeCenter() {
+	Range<double> range(0., 10., RangeT::Format::Numeric, RangeT::Scale::Linear);
+
+	range.zoom(1. / 2, false, 0.5);
+
+	QCOMPARE(range.start(), 2.5);
+	QCOMPARE(range.end(), 7.5);
+
+	range.zoom(2, false, 0.5);
+
+	QCOMPARE(range.start(), 0.);
+	QCOMPARE(range.end(), 10.);
+
+	range.zoom(0.9, false, 0.5);
+	// TODO
+	//	QCOMPARE(range.start(), 10.);
+	//	QCOMPARE(range.end(), 0.);
+	range.zoom(1. / 0.9, false, 0.5);
+	QCOMPARE(range.start(), 0.);
+	QCOMPARE(range.end(), 10.);
+}
+
+void RangeTest::zoomInOutDecreasingLinearRangeCenter() {
+	Range<double> range(10., 0., RangeT::Format::Numeric, RangeT::Scale::Linear);
+
+	range.zoom(1. / 2, false, 0.5);
+
+	QCOMPARE(range.start(), 7.5);
+	QCOMPARE(range.end(), 2.5);
+
+	range.zoom(2., false, 0.5);
+
+	QCOMPARE(range.start(), 10.);
+	QCOMPARE(range.end(), 0.);
+
+	range.zoom(0.9, false, 0.5);
+	// TODO
+	//	QCOMPARE(range.start(), 10.);
+	//	QCOMPARE(range.end(), 0.);
+	range.zoom(1. / 0.9, false, 0.5);
+	QCOMPARE(range.start(), 10.);
+	QCOMPARE(range.end(), 0.);
+}
+
+void RangeTest::zoomInOutIncreasingLinearRangeNotCenter() {
+	Range<double> range(0., 10., RangeT::Format::Numeric, RangeT::Scale::Linear);
+
+	range.zoom(1. / 2, false, 0.9);
+
+	QCOMPARE(range.start(), 4.5);
+	QCOMPARE(range.end(), 9.5);
+
+	range.zoom(2., false, 0.9);
+
+	QCOMPARE(range.start(), 0.);
+	QCOMPARE(range.end(), 10.);
+
+	range.zoom(0.9, false, 0.9);
+	// TODO
+	//	QCOMPARE(range.start(), 10.);
+	//	QCOMPARE(range.end(), 0.);
+	range.zoom(1. / 0.9, false, 0.9);
+	QCOMPARE(range.start(), 0.);
+	QCOMPARE(range.end(), 10.);
+}
+
+void RangeTest::zoomInOutDecreasingLinearRangeNotCenter() {
+	Range<double> range(10., 0., RangeT::Format::Numeric, RangeT::Scale::Linear);
+
+	range.zoom(1. / 2, false, 0.1);
+
+	QCOMPARE(range.start(), 9.5);
+	QCOMPARE(range.end(), 4.5);
+
+	range.zoom(2., false, 0.1);
+
+	QCOMPARE(range.start(), 10.);
+	QCOMPARE(range.end(), 0.);
+
+	range.zoom(0.9, false, 0.1);
+	// TODO
+	//	QCOMPARE(range.start(), 10.);
+	//	QCOMPARE(range.end(), 0.);
+	range.zoom(1. / 0.9, false, 0.1);
+	QCOMPARE(range.start(), 10.);
+	QCOMPARE(range.end(), 0.);
+}
+
 QTEST_MAIN(RangeTest)

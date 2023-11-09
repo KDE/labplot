@@ -53,7 +53,8 @@
  */
 Worksheet::Worksheet(const QString& name, bool loading)
 	: AbstractPart(name, AspectType::Worksheet)
-	, d(new WorksheetPrivate(this)) {
+	, d_ptr(new WorksheetPrivate(this)) {
+	Q_D(Worksheet);
 	connect(this, &Worksheet::childAspectAdded, this, &Worksheet::handleAspectAdded);
 	connect(this, &Worksheet::childAspectAboutToBeRemoved, this, &Worksheet::handleAspectAboutToBeRemoved);
 	connect(this, &Worksheet::childAspectRemoved, this, &Worksheet::handleAspectRemoved);
@@ -70,10 +71,11 @@ Worksheet::Worksheet(const QString& name, bool loading)
 }
 
 Worksheet::~Worksheet() {
-	delete d;
+	delete d_ptr;
 }
 
 void Worksheet::init() {
+	Q_D(Worksheet);
 	KConfig config;
 	KConfigGroup group = config.group("Worksheet");
 
@@ -170,6 +172,7 @@ QWidget* Worksheet::view() const {
 		connect(m_view, &WorksheetView::propertiesExplorerRequested, this, &Worksheet::propertiesExplorerRequested);
 		connect(this, &Worksheet::cartesianPlotMouseModeChanged, m_view, &WorksheetView::cartesianPlotMouseModeChangedSlot);
 		connect(this, &Worksheet::childContextMenuRequested, m_view, &WorksheetView::childContextMenuRequested);
+		Q_EMIT const_cast<Worksheet*>(this)->changed();
 	}
 	return m_partView;
 }
@@ -217,6 +220,14 @@ bool Worksheet::exportView() const {
 #endif
 }
 
+bool Worksheet::exportView(QPixmap& pixmap) const {
+	if (!m_view)
+		return false;
+
+	m_view->exportToPixmap(pixmap);
+	return true;
+}
+
 bool Worksheet::printView() {
 #ifndef SDK
 	QPrinter printer;
@@ -245,6 +256,7 @@ bool Worksheet::printPreview() const {
 
 void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 	DEBUG(Q_FUNC_INFO)
+	Q_D(Worksheet);
 	const auto* addedElement = dynamic_cast<const WorksheetElement*>(aspect);
 	if (!addedElement)
 		return;
@@ -258,6 +270,7 @@ void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 	d->m_scene->addItem(item);
 
 	connect(aspect, &AbstractAspect::contextMenuRequested, this, &Worksheet::childContextMenuRequested);
+	connect(addedElement, &WorksheetElement::changed, this, &Worksheet::changed);
 
 	// for containers, connect to visilibity changes and update the layout accordingly
 	if (dynamic_cast<const WorksheetElementContainer*>(addedElement))
@@ -288,7 +301,7 @@ void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 		connect(plot, static_cast<void (CartesianPlot::*)(QPen, QString)>(&CartesianPlot::curveLinePenChanged), this, &Worksheet::updateCurveBackground);
 		connect(plot, &CartesianPlot::mouseModeChanged, this, &Worksheet::cartesianPlotMouseModeChangedSlot);
 		auto* p = const_cast<CartesianPlot*>(plot);
-		p->setLocked(d->plotsLocked);
+		p->setInteractive(d->plotsInteractive);
 
 		cursorModelPlotAdded(p->name());
 	}
@@ -318,9 +331,12 @@ void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 			}
 		}
 	}
+
+	Q_EMIT changed();
 }
 
 void Worksheet::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
+	Q_D(Worksheet);
 	const auto* removedElement = qobject_cast<const WorksheetElement*>(aspect);
 	if (removedElement) {
 		QGraphicsItem* item = removedElement->graphicsItem();
@@ -331,6 +347,7 @@ void Worksheet::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
 }
 
 void Worksheet::handleAspectRemoved(const AbstractAspect* /*parent*/, const AbstractAspect* /*before*/, const AbstractAspect* child) {
+	Q_D(Worksheet);
 	if (d->layout != Worksheet::Layout::NoLayout)
 		d->updateLayout(false);
 	auto* plot = dynamic_cast<const CartesianPlot*>(child);
@@ -339,10 +356,12 @@ void Worksheet::handleAspectRemoved(const AbstractAspect* /*parent*/, const Abst
 }
 
 QGraphicsScene* Worksheet::scene() const {
+	Q_D(const Worksheet);
 	return d->m_scene;
 }
 
 QRectF Worksheet::pageRect() const {
+	Q_D(const Worksheet);
 	return d->m_scene->sceneRect();
 }
 
@@ -504,6 +523,7 @@ CartesianPlot* Worksheet::plot(int index) {
 }
 
 TreeModel* Worksheet::cursorModel() {
+	Q_D(const Worksheet);
 	return d->cursorData;
 }
 
@@ -512,26 +532,32 @@ void Worksheet::update() {
 }
 
 void Worksheet::setSuppressLayoutUpdate(bool value) {
+	Q_D(Worksheet);
 	d->suppressLayoutUpdate = value;
 }
 
 void Worksheet::updateLayout() {
+	Q_D(Worksheet);
 	d->updateLayout();
 }
 
-Worksheet::CartesianPlotActionMode Worksheet::cartesianPlotActionMode() {
+Worksheet::CartesianPlotActionMode Worksheet::cartesianPlotActionMode() const {
+	Q_D(const Worksheet);
 	return d->cartesianPlotActionMode;
 }
 
-Worksheet::CartesianPlotActionMode Worksheet::cartesianPlotCursorMode() {
+Worksheet::CartesianPlotActionMode Worksheet::cartesianPlotCursorMode() const {
+	Q_D(const Worksheet);
 	return d->cartesianPlotCursorMode;
 }
 
-bool Worksheet::plotsLocked() {
-	return d->plotsLocked;
+bool Worksheet::plotsInteractive() const {
+	Q_D(const Worksheet);
+	return d->plotsInteractive;
 }
 
 void Worksheet::setCartesianPlotActionMode(Worksheet::CartesianPlotActionMode mode) {
+	Q_D(Worksheet);
 	if (d->cartesianPlotActionMode == mode)
 		return;
 
@@ -540,6 +566,7 @@ void Worksheet::setCartesianPlotActionMode(Worksheet::CartesianPlotActionMode mo
 }
 
 void Worksheet::setCartesianPlotCursorMode(Worksheet::CartesianPlotActionMode mode) {
+	Q_D(Worksheet);
 	if (d->cartesianPlotCursorMode == mode)
 		return;
 
@@ -567,14 +594,15 @@ void Worksheet::setInteractive(bool value) {
 	m_view->setInteractive(value);
 }
 
-void Worksheet::setPlotsLocked(bool lock) {
-	if (d->plotsLocked == lock)
+void Worksheet::setPlotsInteractive(bool interactive) {
+	Q_D(Worksheet);
+	if (d->plotsInteractive == interactive)
 		return;
 
-	d->plotsLocked = lock;
+	d->plotsInteractive = interactive;
 
 	for (auto* plot : children<CartesianPlot>())
-		plot->setLocked(lock);
+		plot->setInteractive(interactive);
 
 	project()->setChanged(true);
 }
@@ -603,6 +631,7 @@ BASIC_D_READER_IMPL(Worksheet, Worksheet::ZoomFit, zoomFit, zoomFit)
 
 // background
 Background* Worksheet::background() const {
+	Q_D(const Worksheet);
 	return d->background;
 }
 
@@ -622,16 +651,19 @@ BASIC_D_READER_IMPL(Worksheet, QString, theme, theme)
 /* ============================ setter methods and undo commands for general options  ===================== */
 STD_SETTER_CMD_IMPL_S(Worksheet, SetUseViewSize, bool, useViewSize)
 void Worksheet::setUseViewSize(bool useViewSize) {
+	Q_D(Worksheet);
 	if (useViewSize != d->useViewSize)
 		exec(new WorksheetSetUseViewSizeCmd(d, useViewSize, ki18n("%1: change size type")));
 }
 
 void Worksheet::setZoomFit(ZoomFit zoomFit) {
+	Q_D(Worksheet);
 	d->zoomFit = zoomFit; // No need to undo
 }
 
 STD_SETTER_CMD_IMPL_S(Worksheet, SetScaleContent, bool, scaleContent)
 void Worksheet::setScaleContent(bool scaleContent) {
+	Q_D(Worksheet);
 	if (scaleContent != d->scaleContent)
 		exec(new WorksheetSetScaleContentCmd(d, scaleContent, ki18n("%1: change \"rescale the content\" property")));
 }
@@ -639,6 +671,7 @@ void Worksheet::setScaleContent(bool scaleContent) {
 /* ============================ setter methods and undo commands  for layout options  ================= */
 STD_SETTER_CMD_IMPL_F_S(Worksheet, SetLayout, Worksheet::Layout, layout, updateLayout)
 void Worksheet::setLayout(Worksheet::Layout layout) {
+	Q_D(Worksheet);
 	if (layout != d->layout) {
 		beginMacro(i18n("%1: set layout", name()));
 		exec(new WorksheetSetLayoutCmd(d, layout, ki18n("%1: set layout")));
@@ -648,6 +681,7 @@ void Worksheet::setLayout(Worksheet::Layout layout) {
 
 STD_SETTER_CMD_IMPL_M_F_S(Worksheet, SetLayoutTopMargin, double, layoutTopMargin, updateLayout)
 void Worksheet::setLayoutTopMargin(double margin) {
+	Q_D(Worksheet);
 	if (margin != d->layoutTopMargin) {
 		beginMacro(i18n("%1: set layout top margin", name()));
 		exec(new WorksheetSetLayoutTopMarginCmd(d, margin, ki18n("%1: set layout top margin")));
@@ -657,6 +691,7 @@ void Worksheet::setLayoutTopMargin(double margin) {
 
 STD_SETTER_CMD_IMPL_M_F_S(Worksheet, SetLayoutBottomMargin, double, layoutBottomMargin, updateLayout)
 void Worksheet::setLayoutBottomMargin(double margin) {
+	Q_D(Worksheet);
 	if (margin != d->layoutBottomMargin) {
 		beginMacro(i18n("%1: set layout bottom margin", name()));
 		exec(new WorksheetSetLayoutBottomMarginCmd(d, margin, ki18n("%1: set layout bottom margin")));
@@ -666,6 +701,7 @@ void Worksheet::setLayoutBottomMargin(double margin) {
 
 STD_SETTER_CMD_IMPL_M_F_S(Worksheet, SetLayoutLeftMargin, double, layoutLeftMargin, updateLayout)
 void Worksheet::setLayoutLeftMargin(double margin) {
+	Q_D(Worksheet);
 	if (margin != d->layoutLeftMargin) {
 		beginMacro(i18n("%1: set layout left margin", name()));
 		exec(new WorksheetSetLayoutLeftMarginCmd(d, margin, ki18n("%1: set layout left margin")));
@@ -675,6 +711,7 @@ void Worksheet::setLayoutLeftMargin(double margin) {
 
 STD_SETTER_CMD_IMPL_M_F_S(Worksheet, SetLayoutRightMargin, double, layoutRightMargin, updateLayout)
 void Worksheet::setLayoutRightMargin(double margin) {
+	Q_D(Worksheet);
 	if (margin != d->layoutRightMargin) {
 		beginMacro(i18n("%1: set layout right margin", name()));
 		exec(new WorksheetSetLayoutRightMarginCmd(d, margin, ki18n("%1: set layout right margin")));
@@ -684,6 +721,7 @@ void Worksheet::setLayoutRightMargin(double margin) {
 
 STD_SETTER_CMD_IMPL_M_F_S(Worksheet, SetLayoutVerticalSpacing, double, layoutVerticalSpacing, updateLayout)
 void Worksheet::setLayoutVerticalSpacing(double spacing) {
+	Q_D(Worksheet);
 	if (spacing != d->layoutVerticalSpacing) {
 		beginMacro(i18n("%1: set layout vertical spacing", name()));
 		exec(new WorksheetSetLayoutVerticalSpacingCmd(d, spacing, ki18n("%1: set layout vertical spacing")));
@@ -693,6 +731,7 @@ void Worksheet::setLayoutVerticalSpacing(double spacing) {
 
 STD_SETTER_CMD_IMPL_M_F_S(Worksheet, SetLayoutHorizontalSpacing, double, layoutHorizontalSpacing, updateLayout)
 void Worksheet::setLayoutHorizontalSpacing(double spacing) {
+	Q_D(Worksheet);
 	if (spacing != d->layoutHorizontalSpacing) {
 		beginMacro(i18n("%1: set layout horizontal spacing", name()));
 		exec(new WorksheetSetLayoutHorizontalSpacingCmd(d, spacing, ki18n("%1: set layout horizontal spacing")));
@@ -702,6 +741,7 @@ void Worksheet::setLayoutHorizontalSpacing(double spacing) {
 
 STD_SETTER_CMD_IMPL_M_F_S(Worksheet, SetLayoutRowCount, int, layoutRowCount, updateLayout)
 void Worksheet::setLayoutRowCount(int count) {
+	Q_D(Worksheet);
 	if (count != d->layoutRowCount) {
 		beginMacro(i18n("%1: set layout row count", name()));
 		exec(new WorksheetSetLayoutRowCountCmd(d, count, ki18n("%1: set layout row count")));
@@ -711,6 +751,7 @@ void Worksheet::setLayoutRowCount(int count) {
 
 STD_SETTER_CMD_IMPL_M_F_S(Worksheet, SetLayoutColumnCount, int, layoutColumnCount, updateLayout)
 void Worksheet::setLayoutColumnCount(int count) {
+	Q_D(Worksheet);
 	if (count != d->layoutColumnCount) {
 		beginMacro(i18n("%1: set layout column count", name()));
 		exec(new WorksheetSetLayoutColumnCountCmd(d, count, ki18n("%1: set layout column count")));
@@ -734,6 +775,7 @@ public:
 };
 
 void Worksheet::setPageRect(const QRectF& rect) {
+	Q_D(Worksheet);
 	// don't allow any rectangulars of width/height equal to zero
 	if (qFuzzyCompare(rect.width(), 0.) || qFuzzyCompare(rect.height(), 0.)) {
 		Q_EMIT pageRectChanged(d->pageRect);
@@ -761,6 +803,7 @@ void Worksheet::setPrinting(bool on) const {
 
 STD_SETTER_CMD_IMPL_S(Worksheet, SetTheme, QString, theme)
 void Worksheet::setTheme(const QString& theme) {
+	Q_D(Worksheet);
 	QString info;
 	if (!theme.isEmpty())
 		info = i18n("%1: load theme %2", name(), theme);
@@ -954,34 +997,34 @@ void Worksheet::cartesianPlotAxisShift(int delta, Dimension dim, int index) {
 	}
 }
 
-void Worksheet::cartesianPlotWheelEvent(int delta, int xIndex, int yIndex, bool considerDimension, Dimension dim) {
+void Worksheet::cartesianPlotWheelEvent(const QPointF& sceneRelPos, int delta, int xIndex, int yIndex, bool considerDimension, Dimension dim) {
 	const auto& plots = children<CartesianPlot>(AbstractAspect::ChildIndexFlag::Recursive | AbstractAspect::ChildIndexFlag::IncludeHidden);
 	const auto cursorMode = cartesianPlotActionMode();
 	if (considerDimension) {
 		if ((dim == Dimension::X && (cursorMode == CartesianPlotActionMode::ApplyActionToAllX || cursorMode == CartesianPlotActionMode::ApplyActionToAll))
 			|| (dim == Dimension::Y && (cursorMode == CartesianPlotActionMode::ApplyActionToAllY || cursorMode == CartesianPlotActionMode::ApplyActionToAll))) {
 			for (auto* plot : plots)
-				plot->wheelEvent(delta, -1, -1, considerDimension, dim);
+				plot->wheelEvent(sceneRelPos, delta, -1, -1, considerDimension, dim);
 		} else {
 			auto* plot = static_cast<CartesianPlot*>(QObject::sender());
-			plot->wheelEvent(delta, xIndex, yIndex, considerDimension, dim);
+			plot->wheelEvent(sceneRelPos, delta, xIndex, yIndex, considerDimension, dim);
 		}
 
 	} else {
 		switch (cursorMode) {
 		case CartesianPlotActionMode::ApplyActionToAll: {
 			for (auto* plot : plots)
-				plot->wheelEvent(delta, -1, -1, considerDimension, dim);
+				plot->wheelEvent(sceneRelPos, delta, -1, -1, considerDimension, dim);
 			break;
 		}
 		case CartesianPlotActionMode::ApplyActionToAllX: {
 			auto* plot = static_cast<CartesianPlot*>(QObject::sender());
-			plot->wheelEvent(delta, -1, yIndex, considerDimension, dim);
+			plot->wheelEvent(sceneRelPos, delta, -1, yIndex, considerDimension, dim);
 			for (auto* p : plots) {
 				if (p != plot) {
 					// The yIndex must not be available in the other plots
 					// yIndex does not matter, because considerDimension is true
-					p->wheelEvent(delta, -1, -1, true, Dimension::X);
+					p->wheelEvent(sceneRelPos, delta, -1, -1, true, Dimension::X);
 				}
 			}
 			break;
@@ -989,19 +1032,19 @@ void Worksheet::cartesianPlotWheelEvent(int delta, int xIndex, int yIndex, bool 
 		case CartesianPlotActionMode::ApplyActionToAllY: {
 			auto* plot = static_cast<CartesianPlot*>(QObject::sender());
 			// wheelEvent on all y in that plot
-			plot->wheelEvent(delta, xIndex, -1, considerDimension, dim);
+			plot->wheelEvent(sceneRelPos, delta, xIndex, -1, considerDimension, dim);
 			for (auto* p : plots) {
 				if (p != plot) {
 					// The xIndex must not be available in the other plots
 					// xIndex does not matter, because considerDimension is true
-					p->wheelEvent(delta, -1, -1, true, Dimension::Y);
+					p->wheelEvent(sceneRelPos, delta, -1, -1, true, Dimension::Y);
 				}
 			}
 			break;
 		}
 		case CartesianPlotActionMode::ApplyActionToSelection: {
 			auto* plot = static_cast<CartesianPlot*>(QObject::sender());
-			plot->wheelEvent(delta, xIndex, yIndex, considerDimension, dim);
+			plot->wheelEvent(sceneRelPos, delta, xIndex, yIndex, considerDimension, dim);
 			break;
 		}
 		}
@@ -1084,6 +1127,7 @@ QString dateTimeDiffToString(const QDateTime& dt0, const QDateTime& dt1) {
  * the children() function. It's not checked if the names are the same
  */
 void Worksheet::cursorPosChanged(int cursorNumber, double xPos) {
+	Q_D(const Worksheet);
 	if (d->suppressCursorPosChanged)
 		return;
 
@@ -1231,6 +1275,7 @@ void Worksheet::cursorModelPlotRemoved(const QString& name) {
 }
 
 void Worksheet::cartesianPlotMouseModeChangedSlot(CartesianPlot::MouseMode mode) {
+	Q_D(Worksheet);
 	if (d->updateCompleteCursorModel) {
 		updateCompleteCursorTreeModel();
 		d->updateCompleteCursorModel = false;
@@ -1615,6 +1660,8 @@ void WorksheetPrivate::updateLayout(bool undoable) {
 			}
 		}
 	}
+
+	Q_EMIT q->changed();
 }
 
 void WorksheetPrivate::setContainerRect(WorksheetElementContainer* elem, double x, double y, double h, double w, bool undoable) {
@@ -1642,6 +1689,7 @@ void WorksheetPrivate::setContainerRect(WorksheetElementContainer* elem, double 
 
 //! Save as XML
 void Worksheet::save(QXmlStreamWriter* writer) const {
+	Q_D(const Worksheet);
 	writer->writeStartElement(QStringLiteral("worksheet"));
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
@@ -1682,7 +1730,7 @@ void Worksheet::save(QXmlStreamWriter* writer) const {
 
 	// cartesian properties
 	writer->writeStartElement(QStringLiteral("plotProperties"));
-	writer->writeAttribute(QStringLiteral("plotsLocked"), QString::number(d->plotsLocked));
+	writer->writeAttribute(QStringLiteral("plotInteractive"), QString::number(d->plotsInteractive));
 	writer->writeAttribute(QStringLiteral("cartesianPlotActionMode"), QString::number(static_cast<int>(d->cartesianPlotActionMode)));
 	writer->writeAttribute(QStringLiteral("cartesianPlotCursorMode"), QString::number(static_cast<int>(d->cartesianPlotCursorMode)));
 	writer->writeEndElement();
@@ -1698,6 +1746,8 @@ void Worksheet::save(QXmlStreamWriter* writer) const {
 bool Worksheet::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
+
+	Q_D(Worksheet);
 
 	// clear the theme that was potentially set in init() in order to correctly load here the worksheets without any theme used
 	d->theme.clear();
@@ -1765,7 +1815,16 @@ bool Worksheet::load(XmlStreamReader* reader, bool preview) {
 		else if (!preview && reader->name() == QLatin1String("plotProperties")) {
 			attribs = reader->attributes();
 
-			READ_INT_VALUE("plotsLocked", plotsLocked, bool);
+			str = attribs.value(QStringLiteral("plotInteractive")).toString();
+			if (str.isEmpty()) {
+				str = attribs.value(QStringLiteral("plotLocked")).toString();
+				if (str.isEmpty())
+					reader->raiseMissingAttributeWarning(QStringLiteral("plotLocked"));
+				else
+					d->plotsInteractive = !static_cast<bool>(str.toInt());
+			} else
+				d->plotsInteractive = static_cast<bool>(str.toInt());
+
 			READ_INT_VALUE("cartesianPlotActionMode", cartesianPlotActionMode, Worksheet::CartesianPlotActionMode);
 			READ_INT_VALUE("cartesianPlotCursorMode", cartesianPlotCursorMode, Worksheet::CartesianPlotActionMode);
 		} else if (reader->name() == QLatin1String("cartesianPlot")) {
@@ -1812,6 +1871,7 @@ bool Worksheet::load(XmlStreamReader* reader, bool preview) {
 // #########################  Theme management ##################################
 // ##############################################################################
 void Worksheet::loadTheme(const QString& theme) {
+	Q_D(Worksheet);
 	KConfigGroup group;
 	KConfig* config = nullptr;
 	if (!theme.isEmpty()) {
@@ -1840,4 +1900,6 @@ void Worksheet::loadTheme(const QString& theme) {
 		child->loadThemeConfig(*config);
 
 	delete config;
+
+	Q_EMIT changed();
 }

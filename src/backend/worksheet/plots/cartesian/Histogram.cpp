@@ -33,13 +33,13 @@
 #include "backend/worksheet/plots/cartesian/Value.h"
 #include "tools/ImageTools.h"
 
-#include <QGraphicsSceneContextMenuEvent>
 #include <QMenu>
 #include <QPainter>
 
 #include <KConfig>
 #include <KConfigGroup>
 #include <KLocalizedString>
+#include <QGraphicsSceneMouseEvent>
 
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_histogram.h>
@@ -165,9 +165,6 @@ void Histogram::init() {
 }
 
 void Histogram::initActions() {
-	visibilityAction = new QAction(QIcon::fromTheme(QStringLiteral("view-visible")), i18n("Visible"), this);
-	visibilityAction->setCheckable(true);
-	connect(visibilityAction, &QAction::triggered, this, &Histogram::changeVisibility);
 }
 
 /*!
@@ -200,9 +197,7 @@ void Histogram::createDataSpreadsheet() {
 
 QMenu* Histogram::createContextMenu() {
 	QMenu* menu = WorksheetElement::createContextMenu();
-	QAction* firstAction = menu->actions().at(1); // skip the first action because of the "title-action"
-	visibilityAction->setChecked(isVisible());
-	menu->insertAction(firstAction, visibilityAction);
+	QAction* visibilityAction = this->visibilityAction();
 
 	//"data analysis" menu
 	auto* analysisMenu = new QMenu(i18n("Analysis"));
@@ -252,7 +247,6 @@ QMenu* Histogram::createContextMenu() {
 
 	menu->insertMenu(visibilityAction, analysisMenu);
 	menu->insertSeparator(visibilityAction);
-	menu->insertSeparator(firstAction);
 
 	return menu;
 }
@@ -262,20 +256,6 @@ QMenu* Histogram::createContextMenu() {
   */
 QIcon Histogram::icon() const {
 	return QIcon::fromTheme(QStringLiteral("view-object-histogram-linear"));
-}
-
-QGraphicsItem* Histogram::graphicsItem() const {
-	return d_ptr;
-}
-
-bool Histogram::activatePlot(QPointF mouseScenePos, double maxDist) {
-	Q_D(Histogram);
-	return d->activatePlot(mouseScenePos, maxDist);
-}
-
-void Histogram::setHover(bool on) {
-	Q_D(Histogram);
-	d->setHover(on);
 }
 
 // ##############################################################################
@@ -649,10 +629,6 @@ HistogramPrivate::~HistogramPrivate() {
 		gsl_histogram_free(m_histogram);
 }
 
-QRectF HistogramPrivate::boundingRect() const {
-	return boundingRectangle;
-}
-
 double HistogramPrivate::getMaximumOccuranceofHistogram() const {
 	if (m_histogram) {
 		double yMaxRange = -INFINITY;
@@ -792,17 +768,6 @@ const AbstractColumn* HistogramPrivate::binPDValues() {
 }
 
 /*!
-  Returns the shape of the Histogram as a QPainterPath in local coordinates
-  */
-QPainterPath HistogramPrivate::shape() const {
-	return curveShape;
-}
-
-void HistogramPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
-	q->createContextMenu()->exec(event->screenPos());
-}
-
-/*!
   called when the size of the plot or its data ranges (manual changes, zooming, etc.) were changed.
   recalculates the position of the scene points to be drawn.
   triggers the update of lines, drop lines, symbols etc.
@@ -824,7 +789,7 @@ void HistogramPrivate::retransform() {
 		valuesPath = QPainterPath();
 		errorBarsPath = QPainterPath();
 		rugPath = QPainterPath();
-		curveShape = QPainterPath();
+		m_shape = QPainterPath();
 		lines.clear();
 		linesUnclipped.clear();
 		pointsLogical.clear();
@@ -837,12 +802,12 @@ void HistogramPrivate::retransform() {
 		return;
 	}
 
-	m_suppressRecalc = true;
+	suppressRecalc = true;
 	updateLines();
 	updateSymbols();
 	updateErrorBars();
 	updateRug();
-	m_suppressRecalc = false;
+	suppressRecalc = false;
 	updateValues();
 }
 
@@ -1260,7 +1225,11 @@ void HistogramPrivate::updateValues() {
 			return;
 		}
 
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+		const int endRow = std::min(pointsLogical.size(), static_cast<qsizetype>(valuesColumn->rowCount()));
+#else
 		const int endRow = std::min(pointsLogical.size(), valuesColumn->rowCount());
+#endif
 		const auto xColMode = valuesColumn->columnMode();
 		for (int i = 0; i < endRow; ++i) {
 			if (!visiblePoints.at(i))
@@ -1609,33 +1578,33 @@ void HistogramPrivate::updateRug() {
   recalculates the outer bounds and the shape of the curve.
   */
 void HistogramPrivate::recalcShapeAndBoundingRect() {
-	if (m_suppressRecalc)
+	if (suppressRecalc)
 		return;
 
 	prepareGeometryChange();
-	curveShape = QPainterPath();
+	m_shape = QPainterPath();
 	if (line->histogramLineType() != Histogram::NoLine)
-		curveShape.addPath(WorksheetElement::shapeFromPath(linePath, line->pen()));
+		m_shape.addPath(WorksheetElement::shapeFromPath(linePath, line->pen()));
 
 	if (symbol->style() != Symbol::Style::NoSymbols)
-		curveShape.addPath(symbolsPath);
+		m_shape.addPath(symbolsPath);
 
 	if (value->type() != Value::NoValues)
-		curveShape.addPath(valuesPath);
+		m_shape.addPath(valuesPath);
 
 	if (errorType != Histogram::ErrorType::NoError)
-		curveShape.addPath(WorksheetElement::shapeFromPath(errorBarsPath, errorBarsLine->pen()));
+		m_shape.addPath(WorksheetElement::shapeFromPath(errorBarsPath, errorBarsLine->pen()));
 
-	curveShape.addPath(rugPath);
-	curveShape.addPolygon(fillPolygon);
+	m_shape.addPath(rugPath);
+	m_shape.addPolygon(fillPolygon);
 
-	boundingRectangle = curveShape.boundingRect();
-	boundingRectangle = boundingRectangle.united(fillPolygon.boundingRect());
+	m_boundingRectangle = m_shape.boundingRect();
+	m_boundingRectangle = m_boundingRectangle.united(fillPolygon.boundingRect());
 
 	// TODO: when the selection is painted, line intersections are visible.
 	// simplified() removes those artifacts but is horrible slow for curves with large number of points.
 	// search for an alternative.
-	// curveShape = curveShape.simplified();
+	// m_shape = m_shape.simplified();
 
 	updatePixmap();
 }
@@ -1684,8 +1653,8 @@ void HistogramPrivate::draw(QPainter* painter) {
 }
 
 void HistogramPrivate::updatePixmap() {
-	QPixmap pixmap(boundingRectangle.width(), boundingRectangle.height());
-	if (boundingRectangle.width() == 0. || boundingRectangle.height() == 0.) {
+	QPixmap pixmap(m_boundingRectangle.width(), m_boundingRectangle.height());
+	if (m_boundingRectangle.width() == 0. || m_boundingRectangle.height() == 0.) {
 		m_pixmap = pixmap;
 		m_hoverEffectImageIsDirty = true;
 		m_selectionEffectImageIsDirty = true;
@@ -1694,7 +1663,7 @@ void HistogramPrivate::updatePixmap() {
 	pixmap.fill(Qt::transparent);
 	QPainter painter(&pixmap);
 	painter.setRenderHint(QPainter::Antialiasing, true);
-	painter.translate(-boundingRectangle.topLeft());
+	painter.translate(-m_boundingRectangle.topLeft());
 
 	draw(&painter);
 	painter.end();
@@ -1702,6 +1671,7 @@ void HistogramPrivate::updatePixmap() {
 	m_pixmap = pixmap;
 	m_hoverEffectImageIsDirty = true;
 	m_selectionEffectImageIsDirty = true;
+	Q_EMIT q->changed();
 	update();
 }
 
@@ -1718,7 +1688,7 @@ void HistogramPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 	painter->setRenderHint(QPainter::SmoothPixmapTransform, true);
 
 	if (Settings::group(QStringLiteral("Settings_Worksheet")).readEntry<bool>("DoubleBuffering", true))
-		painter->drawPixmap(boundingRectangle.topLeft(), m_pixmap); // draw the cached pixmap (fast)
+		painter->drawPixmap(m_boundingRectangle.topLeft(), m_pixmap); // draw the cached pixmap (fast)
 	else
 		draw(painter); // draw directly again (slow)
 
@@ -1734,7 +1704,7 @@ void HistogramPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 			m_hoverEffectImageIsDirty = false;
 		}
 
-		painter->drawImage(boundingRectangle.topLeft(), m_hoverEffectImage, m_pixmap.rect());
+		painter->drawImage(m_boundingRectangle.topLeft(), m_hoverEffectImage, m_pixmap.rect());
 		return;
 	}
 
@@ -1750,34 +1720,22 @@ void HistogramPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 			m_selectionEffectImageIsDirty = false;
 		}
 
-		painter->drawImage(boundingRectangle.topLeft(), m_selectionEffectImage, m_pixmap.rect());
+		painter->drawImage(m_boundingRectangle.topLeft(), m_selectionEffectImage, m_pixmap.rect());
 		return;
 	}
 }
 
 void HistogramPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
 	const auto* plot = static_cast<const CartesianPlot*>(q->parentAspect());
-	if (plot->mouseMode() == CartesianPlot::MouseMode::Selection && !isSelected()) {
-		m_hovered = true;
-		Q_EMIT q->hovered();
-		update();
-	}
+	if (plot->mouseMode() == CartesianPlot::MouseMode::Selection && !isSelected())
+		setHover(true);
 }
 
 void HistogramPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 	const auto* plot = static_cast<const CartesianPlot*>(q->parentAspect());
 	if (plot->mouseMode() == CartesianPlot::MouseMode::Selection && m_hovered) {
-		m_hovered = false;
-		Q_EMIT q->unhovered();
-		update();
+		setHover(false);
 	}
-}
-
-bool HistogramPrivate::activatePlot(QPointF mouseScenePos, double /*maxDist*/) {
-	if (!isVisible())
-		return false;
-
-	return curveShape.contains(mouseScenePos);
 }
 
 /*!
@@ -1799,19 +1757,6 @@ void HistogramPrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 	event->ignore();
 	setSelected(false);
 	QGraphicsItem::mousePressEvent(event);
-}
-
-/*!
- * Is called in CartesianPlot::hoverMoveEvent where it is determined which curve to hover.
- * \p on
- */
-void HistogramPrivate::setHover(bool on) {
-	if (on == m_hovered)
-		return; // don't update if state not changed
-
-	m_hovered = on;
-	on ? Q_EMIT q->hovered() : emit q->unhovered();
-	update();
 }
 
 // ##############################################################################
@@ -1955,7 +1900,7 @@ void Histogram::loadThemeConfig(const KConfig& config) {
 	QPen p;
 
 	Q_D(Histogram);
-	d->m_suppressRecalc = true;
+	d->suppressRecalc = true;
 
 	d->line->loadThemeConfig(group, themeColor);
 	d->symbol->loadThemeConfig(group, themeColor);
@@ -1970,7 +1915,7 @@ void Histogram::loadThemeConfig(const KConfig& config) {
 	} else
 		setRugEnabled(false);
 
-	d->m_suppressRecalc = false;
+	d->suppressRecalc = false;
 	d->recalcShapeAndBoundingRect();
 }
 

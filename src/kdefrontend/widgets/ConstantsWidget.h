@@ -14,7 +14,6 @@
 
 #include "ui_constantswidget.h"
 
-class QStringList;
 class ExpressionParser;
 
 class ConstantsWidget : public QWidget {

@@ -210,6 +210,11 @@ QPainterPath PlotAreaPrivate::shape() const {
 	return path;
 }
 
+void PlotAreaPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
+	// Ignore context menu event and forward to next
+	QGraphicsItem::contextMenuEvent(event);
+}
+
 void PlotAreaPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget*) {
 	if (!isVisible())
 		return;

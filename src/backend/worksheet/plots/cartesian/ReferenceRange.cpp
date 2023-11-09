@@ -66,7 +66,8 @@ void ReferenceRange::init() {
 	}
 
 	if (plot()) {
-		setCoordinateSystemIndex(plot()->defaultCoordinateSystemIndex());
+		m_cSystemIndex = plot()->defaultCoordinateSystemIndex();
+		cSystem = plot()->coordinateSystem(m_cSystemIndex);
 		d->coordinateBindingEnabled = true;
 		// default position - 10% of the plot width/height positioned around the center
 		auto cs = plot()->coordinateSystem(coordinateSystemIndex());
@@ -115,10 +116,6 @@ QIcon ReferenceRange::icon() const {
 }
 
 void ReferenceRange::initActions() {
-	visibilityAction = new QAction(i18n("Visible"), this);
-	visibilityAction->setCheckable(true);
-	connect(visibilityAction, &QAction::triggered, this, &ReferenceRange::visibilityChangedSlot);
-
 	// Orientation
 	auto* orientationActionGroup = new QActionGroup(this);
 	orientationActionGroup->setExclusive(true);
@@ -168,9 +165,7 @@ QMenu* ReferenceRange::createContextMenu() {
 		initMenus();
 
 	QMenu* menu = WorksheetElement::createContextMenu();
-	QAction* firstAction = menu->actions().at(1); // skip the first action because of the "title-action"
-	visibilityAction->setChecked(isVisible());
-	menu->insertAction(firstAction, visibilityAction);
+	QAction* visibilityAction = this->visibilityAction();
 
 	Q_D(const ReferenceRange);
 
@@ -179,7 +174,7 @@ QMenu* ReferenceRange::createContextMenu() {
 		orientationHorizontalAction->setChecked(true);
 	else
 		orientationVerticalAction->setChecked(true);
-	menu->insertMenu(firstAction, orientationMenu);
+	menu->insertMenu(visibilityAction, orientationMenu);
 
 	// Border line styles
 	const auto& pen = d->line->pen();
@@ -187,14 +182,10 @@ QMenu* ReferenceRange::createContextMenu() {
 	GuiTools::selectPenStyleAction(lineStyleActionGroup, pen.style());
 	GuiTools::selectColorAction(lineColorActionGroup, pen.color());
 
-	menu->insertMenu(firstAction, lineMenu);
-	menu->insertSeparator(firstAction);
+	menu->insertMenu(visibilityAction, lineMenu);
+	menu->insertSeparator(visibilityAction);
 
 	return menu;
-}
-
-QGraphicsItem* ReferenceRange::graphicsItem() const {
-	return d_ptr;
 }
 
 void ReferenceRange::retransform() {
@@ -260,11 +251,6 @@ void ReferenceRange::lineStyleChanged(QAction* action) {
 void ReferenceRange::lineColorChanged(QAction* action) {
 	Q_D(const ReferenceRange);
 	d->line->setColor(GuiTools::colorFromAction(lineColorActionGroup, action));
-}
-
-void ReferenceRange::visibilityChangedSlot() {
-	Q_D(const ReferenceRange);
-	this->setVisible(!d->isVisible());
 }
 
 // ##############################################################################
@@ -456,26 +442,12 @@ void ReferenceRange::updateStartEndPositions() {
 }
 
 /*!
-	Returns the outer bounds of the item as a rectangle.
- */
-QRectF ReferenceRangePrivate::boundingRect() const {
-	return boundingRectangle;
-}
-
-/*!
-	Returns the shape of this item as a QPainterPath in local coordinates.
-*/
-QPainterPath ReferenceRangePrivate::shape() const {
-	return rangeShape;
-}
-
-/*!
   recalculates the outer bounds and the shape of the item.
 */
 void ReferenceRangePrivate::recalcShapeAndBoundingRect() {
 	prepareGeometryChange();
 
-	rangeShape = QPainterPath();
+	m_shape = QPainterPath();
 	if (m_visible) {
 		QPainterPath path;
 
@@ -503,8 +475,8 @@ void ReferenceRangePrivate::recalcShapeAndBoundingRect() {
 			}
 		}
 
-		rangeShape.addPath(WorksheetElement::shapeFromPath(path, line->pen()));
-		boundingRectangle = rangeShape.boundingRect();
+		m_shape.addPath(WorksheetElement::shapeFromPath(path, line->pen()));
+		m_boundingRectangle = m_shape.boundingRect();
 	}
 }
 
@@ -532,16 +504,16 @@ void ReferenceRangePrivate::paint(QPainter* painter, const QStyleOptionGraphicsI
 		painter->setOpacity(line->opacity());
 	}
 
-	painter->drawPath(rangeShape);
+	painter->drawPath(m_shape);
 
 	if (m_hovered && !isSelected() && !q->isPrinting()) {
 		painter->setPen(QPen(QApplication::palette().color(QPalette::Shadow), 2, Qt::SolidLine));
-		painter->drawPath(rangeShape);
+		painter->drawPath(m_shape);
 	}
 
 	if (isSelected() && !q->isPrinting()) {
 		painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), 2, Qt::SolidLine));
-		painter->drawPath(rangeShape);
+		painter->drawPath(m_shape);
 	}
 }
 
@@ -620,26 +592,6 @@ void ReferenceRangePrivate::drawFilling(QPainter* painter) const {
 		}
 	} else if (background->type() == Background::Type::Pattern) {
 		painter->setBrush(QBrush(background->firstColor(), background->brushStyle()));
-	}
-}
-
-void ReferenceRangePrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
-	q->createContextMenu()->exec(event->screenPos());
-}
-
-void ReferenceRangePrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
-	if (!isSelected()) {
-		m_hovered = true;
-		Q_EMIT q->hovered();
-		update();
-	}
-}
-
-void ReferenceRangePrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
-	if (m_hovered) {
-		m_hovered = false;
-		Q_EMIT q->unhovered();
-		update();
 	}
 }
 

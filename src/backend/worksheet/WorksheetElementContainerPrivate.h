@@ -22,20 +22,15 @@ public:
 	~WorksheetElementContainerPrivate() override = default;
 
 	QRectF boundingRect() const override;
-	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
-	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
-	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
+	virtual void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
 
 	void prepareGeometryChangeRequested();
 	void recalcShapeAndBoundingRect() override;
-	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
+	virtual void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
 	virtual void retransform() override;
 
 	WorksheetElementContainer* q{nullptr};
-	QRectF boundingRectangle;
-	QPainterPath containerShape;
 	QRectF rect;
-	bool m_hovered{false};
 	bool m_printing{false};
 
 Q_SIGNALS:

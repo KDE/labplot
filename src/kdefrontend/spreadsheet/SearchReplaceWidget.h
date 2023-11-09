@@ -43,7 +43,6 @@ private:
 	QWidget* m_searchWidget{nullptr};
 	QWidget* m_searchReplaceWidget{nullptr};
 	AbstractColumn::ColumnMode m_initialColumnMode{AbstractColumn::ColumnMode::Text};
-	QString m_initialPattern;
 	bool m_patternFound{false};
 	bool m_replaceEnabled{false};
 	Spreadsheet* m_spreadsheet{nullptr};

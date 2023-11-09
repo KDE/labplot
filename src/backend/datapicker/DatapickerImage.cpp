@@ -24,7 +24,6 @@
 #include "kdefrontend/worksheet/ExportWorksheetDialog.h"
 
 #include <QBuffer>
-#include <QDesktopWidget>
 #include <QDir>
 #include <QFileInfo>
 #include <QGraphicsScene>
@@ -32,6 +31,7 @@
 #include <QPrintDialog>
 #include <QPrintPreviewDialog>
 #include <QPrinter>
+#include <QScreen>
 
 #include <KConfig>
 #include <KConfigGroup>
@@ -52,8 +52,9 @@ DatapickerImage::DatapickerImage(const QString& name, bool loading)
 	, saturationBins(new int[ImageEditor::colorAttributeMax(ColorAttributes::Saturation) + 1])
 	, valueBins(new int[ImageEditor::colorAttributeMax(ColorAttributes::Value) + 1])
 	, intensityBins(new int[ImageEditor::colorAttributeMax(ColorAttributes::Intensity) + 1])
-	, d(new DatapickerImagePrivate(this))
+	, d_ptr(new DatapickerImagePrivate(this))
 	, m_segments(new Segments(this)) {
+	Q_D(DatapickerImage);
 	if (!loading)
 		init();
 	else {
@@ -76,10 +77,11 @@ DatapickerImage::~DatapickerImage() {
 	delete[] intensityBins;
 	delete[] foregroundBins;
 	delete m_segments;
-	delete d;
+	delete d_ptr;
 }
 
 void DatapickerImage::init() {
+	Q_D(DatapickerImage);
 	KConfig config;
 	KConfigGroup group = config.group("DatapickerImage");
 
@@ -206,14 +208,17 @@ void DatapickerImage::setSegmentsHoverEvent(const bool on) {
 }
 
 QGraphicsScene* DatapickerImage::scene() const {
+	Q_D(const DatapickerImage);
 	return d->m_scene;
 }
 
 QRectF DatapickerImage::pageRect() const {
+	Q_D(const DatapickerImage);
 	return d->m_scene->sceneRect();
 }
 
 void DatapickerImage::setPlotImageType(const DatapickerImage::PlotImageType type) {
+	Q_D(DatapickerImage);
 	d->plotImageType = type;
 	if (d->plotImageType == DatapickerImage::PlotImageType::ProcessedImage)
 		d->discretize();
@@ -221,11 +226,12 @@ void DatapickerImage::setPlotImageType(const DatapickerImage::PlotImageType type
 	Q_EMIT requestUpdate();
 }
 
-int DatapickerImage::currentSelectedReferencePoint() {
+int DatapickerImage::currentSelectedReferencePoint() const {
 	return m_currentRefPoint;
 }
 
-DatapickerImage::PlotImageType DatapickerImage::plotImageType() {
+DatapickerImage::PlotImageType DatapickerImage::plotImageType() const {
+	Q_D(const DatapickerImage);
 	return d->plotImageType;
 }
 
@@ -300,6 +306,7 @@ void DatapickerImage::setImage(const QString& fileName, bool embedded) {
 }
 
 void DatapickerImage::setImage(const QImage& image, const QString& filename, bool embedded) {
+	Q_D(DatapickerImage);
 	if (image != originalPlotImage || filename != fileName() || embedded != this->embedded())
 		exec(new DatapickerImageSetOriginalImageCmd(d, image, filename, embedded, ki18n("%1: upload image")));
 }
@@ -317,7 +324,7 @@ BASIC_D_READER_IMPL(DatapickerImage, int, minSegmentLength, minSegmentLength)
 
 // symbols
 Symbol* DatapickerImage::symbol() const {
-	// 	Q_D(const DatapickerImage);
+	Q_D(const DatapickerImage);
 	return d->symbol;
 }
 
@@ -348,11 +355,12 @@ public:
 			// setting relative is only possible if the image is not embedded!
 			m_target->q->setImage(filename, false);
 		}
-		emit m_target->q->relativeFilePathChanged(m_target->*m_field);
+		Q_EMIT m_target->q->relativeFilePathChanged(m_target->*m_field);
 	}
 };
 
 void DatapickerImage::setRelativeFilePath(bool relative) {
+	Q_D(DatapickerImage);
 	if (relative != d->isRelativeFilePath) {
 		beginMacro(i18n("%1: upload new image", name()));
 		exec(new DatapickerImageSetRelativeFilePathCmd(d, relative, ki18n("%1: upload image")));
@@ -361,6 +369,7 @@ void DatapickerImage::setRelativeFilePath(bool relative) {
 }
 
 void DatapickerImage::setEmbedded(bool embedded) {
+	Q_D(DatapickerImage);
 	if (embedded != d->embedded) {
 		if (embedded)
 			setImage(originalPlotImage, fileName(), true);
@@ -371,24 +380,28 @@ void DatapickerImage::setEmbedded(bool embedded) {
 
 STD_SETTER_CMD_IMPL_S(DatapickerImage, SetRotationAngle, float, rotationAngle)
 void DatapickerImage::setRotationAngle(float angle) {
+	Q_D(DatapickerImage);
 	if (angle != d->rotationAngle)
 		exec(new DatapickerImageSetRotationAngleCmd(d, angle, ki18n("%1: set rotation angle")));
 }
 
 STD_SETTER_CMD_IMPL_S(DatapickerImage, SetAxisPoints, DatapickerImage::ReferencePoints, axisPoints)
 void DatapickerImage::setAxisPoints(const DatapickerImage::ReferencePoints& points) {
+	Q_D(DatapickerImage);
 	if (memcmp(&points, &d->axisPoints, sizeof(points)) != 0) // valgrind: Conditional jump or move depends on uninitialised value(s)
 		exec(new DatapickerImageSetAxisPointsCmd(d, points, ki18n("%1: set Axis points")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(DatapickerImage, SetSettings, DatapickerImage::EditorSettings, settings, discretize)
 void DatapickerImage::setSettings(const DatapickerImage::EditorSettings& editorSettings) {
+	Q_D(DatapickerImage);
 	if (memcmp(&editorSettings, &d->settings, sizeof(editorSettings)) != 0)
 		exec(new DatapickerImageSetSettingsCmd(d, editorSettings, ki18n("%1: set editor settings")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(DatapickerImage, SetMinSegmentLength, int, minSegmentLength, makeSegments)
 void DatapickerImage::setminSegmentLength(const int value) {
+	Q_D(DatapickerImage);
 	if (d->minSegmentLength != value)
 		exec(new DatapickerImageSetMinSegmentLengthCmd(d, value, ki18n("%1: set minimum segment length")));
 	;
@@ -396,6 +409,7 @@ void DatapickerImage::setminSegmentLength(const int value) {
 
 STD_SETTER_CMD_IMPL_F_S(DatapickerImage, SetPointVisibility, bool, pointVisibility, retransform)
 void DatapickerImage::setPointVisibility(const bool on) {
+	Q_D(DatapickerImage);
 	if (on != d->pointVisibility)
 		exec(new DatapickerImageSetPointVisibilityCmd(d, on, on ? ki18n("%1: set visible") : ki18n("%1: set invisible")));
 }
@@ -407,6 +421,7 @@ void DatapickerImage::setPrinting(bool on) const {
 }
 
 void DatapickerImage::setPlotPointsType(const PointsType pointsType) {
+	Q_D(DatapickerImage);
 	if (d->plotPointsType == pointsType)
 		return;
 
@@ -442,6 +457,7 @@ void DatapickerImage::setPlotPointsType(const PointsType pointsType) {
 }
 
 void DatapickerImage::setPointSeparation(const int value) {
+	Q_D(DatapickerImage);
 	d->pointSeparation = value;
 }
 
@@ -450,7 +466,7 @@ void DatapickerImage::referencePointSelected(const DatapickerPoint* point) {
 	for (int i = 0; i < points.count(); i++) {
 		if (points.at(i) == point) {
 			m_currentRefPoint = i;
-			emit referencePointSelected(i);
+			Q_EMIT referencePointSelected(i);
 			return;
 		}
 	}
@@ -498,8 +514,8 @@ bool DatapickerImagePrivate::uploadImage() {
 		discretize();
 
 		// resize the screen
-		double w = Worksheet::convertToSceneUnits(q->originalPlotImage.width(), Worksheet::Unit::Inch) / QApplication::desktop()->physicalDpiX();
-		double h = Worksheet::convertToSceneUnits(q->originalPlotImage.height(), Worksheet::Unit::Inch) / QApplication::desktop()->physicalDpiX();
+		double w = Worksheet::convertToSceneUnits(q->originalPlotImage.width(), Worksheet::Unit::Inch) / QApplication::primaryScreen()->physicalDotsPerInchX();
+		double h = Worksheet::convertToSceneUnits(q->originalPlotImage.height(), Worksheet::Unit::Inch) / QApplication::primaryScreen()->physicalDotsPerInchY();
 		m_scene->setSceneRect(0, 0, w, h);
 		q->isLoaded = true;
 	}
@@ -560,6 +576,7 @@ void DatapickerImagePrivate::updateImage() {
 
 //! Save as XML
 void DatapickerImage::save(QXmlStreamWriter* writer) const {
+	Q_D(const DatapickerImage);
 	writer->writeStartElement(QStringLiteral("datapickerImage"));
 	writeBasicAttributes(writer);
 
@@ -636,6 +653,7 @@ bool DatapickerImage::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
+	Q_D(DatapickerImage);
 	QXmlStreamAttributes attribs;
 	QString str;
 

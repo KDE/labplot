@@ -30,7 +30,6 @@ extern "C" {
 #include <gsl/gsl_statistics.h>
 }
 
-#include <QGraphicsSceneContextMenuEvent>
 #include <QMenu>
 #include <QPainter>
 
@@ -126,46 +125,11 @@ void QQPlot::finalizeAdd() {
 	addChildFast(d->percentilesCurve);
 }
 
-void QQPlot::initActions() {
-	visibilityAction = new QAction(QIcon::fromTheme(QStringLiteral("view-visible")), i18n("Visible"), this);
-	visibilityAction->setCheckable(true);
-	connect(visibilityAction, &QAction::triggered, this, &QQPlot::changeVisibility);
-}
-
-QMenu* QQPlot::createContextMenu() {
-	if (!visibilityAction)
-		initActions();
-
-	QMenu* menu = WorksheetElement::createContextMenu();
-	QAction* firstAction = menu->actions().at(1); // skip the first action because of the "title-action"
-	visibilityAction->setChecked(isVisible());
-	menu->insertAction(firstAction, visibilityAction);
-
-	menu->insertSeparator(visibilityAction);
-	menu->insertSeparator(firstAction);
-
-	return menu;
-}
-
 /*!
   Returns an icon to be used in the project explorer.
   */
 QIcon QQPlot::icon() const {
 	return QIcon::fromTheme(QStringLiteral("view-object-histogram-linear"));
-}
-
-QGraphicsItem* QQPlot::graphicsItem() const {
-	return d_ptr;
-}
-
-bool QQPlot::activatePlot(QPointF mouseScenePos, double maxDist) {
-	Q_D(QQPlot);
-	return d->activateCurve(mouseScenePos, maxDist);
-}
-
-void QQPlot::setHover(bool on) {
-	Q_D(QQPlot);
-	d->setHover(on);
 }
 
 void QQPlot::handleResize(double /*horizontalRatio*/, double /*verticalRatio*/, bool /*pageResize*/) {
@@ -181,10 +145,10 @@ void QQPlot::setVisible(bool on) {
 	endMacro();
 }
 
-//##############################################################################
-//##########################  getter methods  ##################################
-//##############################################################################
-// general
+// ##############################################################################
+// ##########################  getter methods  ##################################
+// ##############################################################################
+//  general
 BASIC_SHARED_D_READER_IMPL(QQPlot, const AbstractColumn*, dataColumn, dataColumn)
 BASIC_SHARED_D_READER_IMPL(QQPlot, QString, dataColumnPath, dataColumnPath)
 BASIC_SHARED_D_READER_IMPL(QQPlot, nsl_sf_stats_distribution, distribution, distribution)
@@ -254,9 +218,9 @@ bool QQPlot::hasData() const {
 	return (d->dataColumn != nullptr);
 }
 
-//##############################################################################
-//#################  setter methods and undo commands ##########################
-//##############################################################################
+// ##############################################################################
+// #################  setter methods and undo commands ##########################
+// ##############################################################################
 
 // General
 CURVE_COLUMN_SETTER_CMD_IMPL_F_S(QQPlot, Data, data, recalc)
@@ -278,11 +242,12 @@ void QQPlot::setDistribution(nsl_sf_stats_distribution distribution) {
 		exec(new QQPlotSetDistributionCmd(d, distribution, ki18n("%1: set distribution")));
 }
 
-//##############################################################################
-//#################################  SLOTS  ####################################
-//##############################################################################
+// ##############################################################################
+// #################################  SLOTS  ####################################
+// ##############################################################################
 void QQPlot::retransform() {
-	d_ptr->retransform();
+	D(QQPlot);
+	d->retransform();
 }
 
 void QQPlot::recalc() {
@@ -303,9 +268,9 @@ void QQPlot::dataColumnNameChanged() {
 	setDataColumnPath(d->dataColumn->path());
 }
 
-//##############################################################################
-//######################### Private implementation #############################
-//##############################################################################
+// ##############################################################################
+// ######################### Private implementation #############################
+// ##############################################################################
 QQPlotPrivate::QQPlotPrivate(QQPlot* owner)
 	: PlotPrivate(owner)
 	, q(owner) {
@@ -314,17 +279,6 @@ QQPlotPrivate::QQPlotPrivate(QQPlot* owner)
 }
 
 QQPlotPrivate::~QQPlotPrivate() {
-}
-
-QRectF QQPlotPrivate::boundingRect() const {
-	return boundingRectangle;
-}
-
-/*!
-  Returns the shape of the QQPlot as a QPainterPath in local coordinates
-  */
-QPainterPath QQPlotPrivate::shape() const {
-	return curveShape;
 }
 
 /*!
@@ -587,40 +541,20 @@ void QQPlotPrivate::copyValidData(QVector<double>& data) const {
   recalculates the outer bounds and the shape of the curve.
   */
 void QQPlotPrivate::recalcShapeAndBoundingRect() {
-	if (m_suppressRecalc)
+	if (suppressRecalc)
 		return;
 
 	prepareGeometryChange();
-	curveShape = QPainterPath();
-	curveShape.addPath(referenceCurve->graphicsItem()->shape());
-	curveShape.addPath(percentilesCurve->graphicsItem()->shape());
+	m_shape = QPainterPath();
+	m_shape.addPath(referenceCurve->graphicsItem()->shape());
+	m_shape.addPath(percentilesCurve->graphicsItem()->shape());
 
-	boundingRectangle = curveShape.boundingRect();
+	m_boundingRectangle = m_shape.boundingRect();
 }
 
-bool QQPlotPrivate::activateCurve(QPointF mouseScenePos, double /*maxDist*/) {
-	if (!isVisible())
-		return false;
-
-	return curveShape.contains(mouseScenePos);
-}
-
-/*!
- * Is called in CartesianPlot::hoverMoveEvent where it is determined which curve to hover.
- * \p on
- */
-void QQPlotPrivate::setHover(bool on) {
-	if (on == m_hovered)
-		return; // don't update if state not changed
-
-	m_hovered = on;
-	on ? Q_EMIT q->hovered() : emit q->unhovered();
-	update();
-}
-
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 //! Save as XML
 void QQPlot::save(QXmlStreamWriter* writer) const {
 	Q_D(const QQPlot);
@@ -722,9 +656,9 @@ bool QQPlot::load(XmlStreamReader* reader, bool preview) {
 	return true;
 }
 
-//##############################################################################
-//#########################  Theme management ##################################
-//##############################################################################
+// ##############################################################################
+// #########################  Theme management ##################################
+// ##############################################################################
 void QQPlot::loadThemeConfig(const KConfig& config) {
 	KConfigGroup group;
 	if (config.hasGroup(QLatin1String("Theme")))
@@ -737,13 +671,13 @@ void QQPlot::loadThemeConfig(const KConfig& config) {
 	const QColor themeColor = plot->themeColorPalette(index);
 
 	Q_D(QQPlot);
-	d->m_suppressRecalc = true;
+	d->suppressRecalc = true;
 
 	d->referenceCurve->line()->loadThemeConfig(group, themeColor);
 	d->percentilesCurve->line()->setStyle(Qt::NoPen);
 	d->percentilesCurve->symbol()->loadThemeConfig(group, themeColor);
 
-	d->m_suppressRecalc = false;
+	d->suppressRecalc = false;
 	d->recalcShapeAndBoundingRect();
 }
 

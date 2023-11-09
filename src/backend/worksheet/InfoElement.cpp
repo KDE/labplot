@@ -175,9 +175,6 @@ void InfoElement::init() {
 }
 
 void InfoElement::initActions() {
-	visibilityAction = new QAction(i18n("Visible"), this);
-	visibilityAction->setCheckable(true);
-	connect(visibilityAction, &QAction::triggered, this, &InfoElement::setVisible);
 }
 
 void InfoElement::initMenus() {
@@ -200,13 +197,7 @@ QMenu* InfoElement::createContextMenu() {
 	if (!m_menusInitialized)
 		initMenus();
 
-	QMenu* menu = WorksheetElement::createContextMenu();
-	QAction* firstAction = menu->actions().at(1);
-
-	visibilityAction->setChecked(isVisible());
-	menu->insertAction(firstAction, visibilityAction);
-
-	return menu;
+	return WorksheetElement::createContextMenu();
 }
 
 /*!
@@ -748,10 +739,6 @@ void InfoElement::setParentGraphicsItem(QGraphicsItem* item) {
 	d->updatePosition();
 }
 
-QGraphicsItem* InfoElement::graphicsItem() const {
-	return d_ptr;
-}
-
 void InfoElement::retransform() {
 	Q_D(InfoElement);
 	d->retransform();
@@ -867,9 +854,9 @@ void InfoElementPrivate::retransform() {
 
 	// new bounding rectangle
 	const QRectF& rect = parentItem()->mapRectFromScene(q->plot()->rect());
-	boundingRectangle = mapFromParent(rect).boundingRect();
+	m_boundingRectangle = mapFromParent(rect).boundingRect();
 	QDEBUG(Q_FUNC_INFO << ", rect = " << rect)
-	QDEBUG(Q_FUNC_INFO << ", bounding rect = " << boundingRectangle)
+	QDEBUG(Q_FUNC_INFO << ", bounding rect = " << m_boundingRectangle)
 
 	// TODO: why do I need to retransform the label and the custompoints?
 	q->m_title->retransform();
@@ -901,7 +888,7 @@ void InfoElementPrivate::retransform() {
 	// connection line
 	const QPointF m_titlePosItemCoords = mapFromParent(m_titlePos); // calculate item coords from scene coords
 	const QPointF pointPosItemCoords = mapFromParent(mapPlotAreaToParent(pointPos)); // calculate item coords from scene coords
-	if (boundingRectangle.contains(m_titlePosItemCoords) && boundingRectangle.contains(pointPosItemCoords))
+	if (m_boundingRectangle.contains(m_titlePosItemCoords) && m_boundingRectangle.contains(pointPosItemCoords))
 		m_connectionLine = QLineF(m_titlePosItemCoords.x(), m_titlePosItemCoords.y(), pointPosItemCoords.x(), pointPosItemCoords.y());
 	else
 		m_connectionLine = QLineF();
@@ -912,7 +899,9 @@ void InfoElementPrivate::retransform() {
 	xposLine = QLineF(pointPosItemCoords.x(), dataRect.bottom(), pointPosItemCoords.x(), dataRect.top());
 	QDEBUG(Q_FUNC_INFO << ", vertical line " << xposLine)
 
-	update(boundingRectangle);
+	m_shape = QPainterPath();
+	m_shape.addRect(m_boundingRectangle);
+	update(m_boundingRectangle);
 
 	q->m_suppressChildPositionChanged = false;
 }
@@ -925,7 +914,7 @@ void InfoElementPrivate::updatePosition() {
  * Repainting to update xposLine
  */
 void InfoElementPrivate::updateVerticalLine() {
-	update(boundingRectangle);
+	update(m_boundingRectangle);
 }
 
 /*!
@@ -947,11 +936,6 @@ bool InfoElementPrivate::changeVisibility(bool on) {
 	}
 	update(boundingRect());
 	return oldValue;
-}
-
-// reimplemented from QGraphicsItem
-QRectF InfoElementPrivate::boundingRect() const {
-	return boundingRectangle;
 }
 
 void InfoElementPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) {

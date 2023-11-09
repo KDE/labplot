@@ -42,7 +42,7 @@ void fillTree(QTreeWidgetItem* node, const ROOTFilter::Directory& dir) {
 		(new QTreeWidgetItem(node, QStringList(content.first)))->setData(0, Qt::UserRole, content.second);
 }
 
-QHash<QStringList, QVector<QStringList>>
+QMultiHash<QStringList, QVector<QStringList>>
 findLeaves(QTreeWidgetItem* node, ROOTFilter* filter, const QString& fileName, const QStringList& path = QStringList{}) {
 	QMultiHash<QStringList, QVector<QStringList>> leaves;
 	if (node->childCount() > 0) {
@@ -122,7 +122,7 @@ void ROOTOptionsWidget::rootObjectSelectionChanged() {
 				if (l.count() > 1) {
 					QString index(l.back());
 					if (index.at(0) == QLatin1Char('[') && index.at(index.size() - 1) == QLatin1Char(']')) {
-						size_t elements = index.midRef(1, index.length() - 2).toUInt(&ok);
+						size_t elements = index.mid(1, index.length() - 2).toUInt(&ok);
 						if (ok) {
 							leaf->setFlags(Qt::ItemIsEnabled);
 							QStringList elname({l.at(l.count() - 2), QString()});

@@ -25,9 +25,6 @@ public:
 	explicit HistogramPrivate(Histogram* owner);
 	~HistogramPrivate() override;
 
-	QRectF boundingRect() const override;
-	QPainterPath shape() const override;
-
 	void retransform() override;
 	void recalcHistogram();
 	void updateType();
@@ -43,9 +40,6 @@ public:
 	void updatePixmap();
 	void recalcShapeAndBoundingRect() override;
 
-	bool activatePlot(QPointF mouseScenePos, double maxDist);
-	void setHover(bool on);
-
 	double xMinimum() const;
 	double xMaximum() const;
 	double yMinimum() const;
@@ -56,8 +50,6 @@ public:
 	const AbstractColumn* binPDValues();
 
 	double getMaximumOccuranceofHistogram() const;
-
-	bool m_suppressRecalc{false};
 
 	// General
 	const AbstractColumn* dataColumn{nullptr};
@@ -97,8 +89,6 @@ public:
 	QPainterPath symbolsPath;
 	QPainterPath valuesPath;
 	QPainterPath errorBarsPath;
-	QRectF boundingRectangle;
-	QPainterPath curveShape;
 	// TODO: use Qt container
 	// TODO: add m_
 	QVector<QLineF> lines;
@@ -115,17 +105,9 @@ public:
 private:
 	gsl_histogram* m_histogram{nullptr};
 	size_t m_bins{0};
-	bool m_hovered{false};
-	QPixmap m_pixmap;
-	QImage m_hoverEffectImage;
-	QImage m_selectionEffectImage;
-	bool m_hoverEffectImageIsDirty{false};
-	bool m_selectionEffectImageIsDirty{false};
 	Column* m_binsColumn{nullptr}; // bin positions/edges
 	Column* m_binValuesColumn{nullptr}; // bin values
 	Column* m_binPDValuesColumn{nullptr}; // bin values in the probability density normalization
-
-	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
 	void mousePressEvent(QGraphicsSceneMouseEvent*) override;
 	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
 	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;

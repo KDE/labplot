@@ -41,7 +41,7 @@
 */
 Matrix::Matrix(int rows, int cols, const QString& name, const AbstractColumn::ColumnMode mode)
 	: AbstractDataSource(name, AspectType::Matrix)
-	, d(new MatrixPrivate(this, mode)) {
+	, d_ptr(new MatrixPrivate(this, mode)) {
 	// set initial number of rows and columns
 	appendColumns(cols);
 	appendRows(rows);
@@ -51,16 +51,17 @@ Matrix::Matrix(int rows, int cols, const QString& name, const AbstractColumn::Co
 
 Matrix::Matrix(const QString& name, bool loading, const AbstractColumn::ColumnMode mode)
 	: AbstractDataSource(name, AspectType::Matrix)
-	, d(new MatrixPrivate(this, mode)) {
+	, d_ptr(new MatrixPrivate(this, mode)) {
 	if (!loading)
 		init();
 }
 
 Matrix::~Matrix() {
-	delete d;
+	delete d_ptr;
 }
 
 void Matrix::init() {
+	Q_D(Matrix);
 	KConfig config;
 	KConfigGroup group = config.group("Matrix");
 
@@ -169,6 +170,7 @@ bool Matrix::printPreview() const {
 // ##########################  getter methods  ##################################
 // ##############################################################################
 void* Matrix::data() const {
+	Q_D(const Matrix);
 	return d->data;
 }
 
@@ -198,6 +200,7 @@ void Matrix::setChanged() {
 // #################  setter methods and undo commands ##########################
 // ##############################################################################
 void Matrix::setRowCount(int count) {
+	Q_D(const Matrix);
 	if (count == d->rowCount)
 		return;
 
@@ -209,6 +212,7 @@ void Matrix::setRowCount(int count) {
 }
 
 void Matrix::setColumnCount(int count) {
+	Q_D(const Matrix);
 	if (count == d->columnCount)
 		return;
 
@@ -221,42 +225,49 @@ void Matrix::setColumnCount(int count) {
 
 STD_SETTER_CMD_IMPL_F_S(Matrix, SetXStart, double, xStart, updateViewHeader)
 void Matrix::setXStart(double xStart) {
+	Q_D(Matrix);
 	if (xStart != d->xStart)
 		exec(new MatrixSetXStartCmd(d, xStart, ki18n("%1: x-start changed")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Matrix, SetXEnd, double, xEnd, updateViewHeader)
 void Matrix::setXEnd(double xEnd) {
+	Q_D(Matrix);
 	if (xEnd != d->xEnd)
 		exec(new MatrixSetXEndCmd(d, xEnd, ki18n("%1: x-end changed")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Matrix, SetYStart, double, yStart, updateViewHeader)
 void Matrix::setYStart(double yStart) {
+	Q_D(Matrix);
 	if (yStart != d->yStart)
 		exec(new MatrixSetYStartCmd(d, yStart, ki18n("%1: y-start changed")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Matrix, SetYEnd, double, yEnd, updateViewHeader)
 void Matrix::setYEnd(double yEnd) {
+	Q_D(Matrix);
 	if (yEnd != d->yEnd)
 		exec(new MatrixSetYEndCmd(d, yEnd, ki18n("%1: y-end changed")));
 }
 
 STD_SETTER_CMD_IMPL_S(Matrix, SetNumericFormat, char, numericFormat)
 void Matrix::setNumericFormat(char format) {
+	Q_D(Matrix);
 	if (format != d->numericFormat)
 		exec(new MatrixSetNumericFormatCmd(d, format, ki18n("%1: numeric format changed")));
 }
 
 STD_SETTER_CMD_IMPL_S(Matrix, SetPrecision, int, precision)
 void Matrix::setPrecision(int precision) {
+	Q_D(Matrix);
 	if (precision != d->precision)
 		exec(new MatrixSetPrecisionCmd(d, precision, ki18n("%1: precision changed")));
 }
 
 // TODO: make this undoable?
 void Matrix::setHeaderFormat(Matrix::HeaderFormat format) {
+	Q_D(Matrix);
 	d->headerFormat = format;
 	m_model->updateHeader();
 
@@ -268,6 +279,7 @@ void Matrix::setHeaderFormat(Matrix::HeaderFormat format) {
 
 // columns
 void Matrix::insertColumns(int before, int count) {
+	Q_D(Matrix);
 	if (count < 1 || before < 0 || before > columnCount())
 		return;
 	WAIT_CURSOR;
@@ -280,6 +292,7 @@ void Matrix::appendColumns(int count) {
 }
 
 void Matrix::removeColumns(int first, int count) {
+	Q_D(Matrix);
 	if (count < 1 || first < 0 || first + count > columnCount())
 		return;
 	WAIT_CURSOR;
@@ -307,6 +320,7 @@ void Matrix::removeColumns(int first, int count) {
 
 void Matrix::clearColumn(int c) {
 	WAIT_CURSOR;
+	Q_D(Matrix);
 	switch (d->mode) {
 	case AbstractColumn::ColumnMode::Double:
 		exec(new MatrixClearColumnCmd<double>(d, c));
@@ -331,6 +345,7 @@ void Matrix::clearColumn(int c) {
 
 // rows
 void Matrix::insertRows(int before, int count) {
+	Q_D(Matrix);
 	if (count < 1 || before < 0 || before > rowCount())
 		return;
 	WAIT_CURSOR;
@@ -346,6 +361,7 @@ void Matrix::removeRows(int first, int count) {
 	if (count < 1 || first < 0 || first + count > rowCount())
 		return;
 	WAIT_CURSOR;
+	Q_D(Matrix);
 	switch (d->mode) {
 	case AbstractColumn::ColumnMode::Double:
 		exec(new MatrixRemoveRowsCmd<double>(d, first, count));
@@ -369,6 +385,7 @@ void Matrix::removeRows(int first, int count) {
 }
 
 void Matrix::clearRow(int r) {
+	Q_D(Matrix);
 	switch (d->mode) {
 	case AbstractColumn::ColumnMode::Double:
 		for (int c = 0; c < columnCount(); ++c)
@@ -398,6 +415,7 @@ void Matrix::clearRow(int r) {
 //! Return the value in the given cell (needs explicit instantiation)
 template<typename T>
 T Matrix::cell(int row, int col) const {
+	Q_D(const Matrix);
 	return d->cell<T>(row, col);
 }
 template double Matrix::cell<double>(int row, int col) const;
@@ -413,6 +431,7 @@ QString Matrix::text(int row, int col) {
 }
 template<>
 QString Matrix::text<double>(int row, int col) {
+	Q_D(const Matrix);
 	return QLocale().toString(cell<double>(row, col), d->numericFormat, d->precision);
 }
 template<>
@@ -426,6 +445,7 @@ template QString Matrix::text<QDateTime>(int row, int col);
 //! Set the value of the cell (needs explicit instantiation)
 template<typename T>
 void Matrix::setCell(int row, int col, T value) {
+	Q_D(Matrix);
 	if (row < 0 || row >= rowCount())
 		return;
 	if (col < 0 || col >= columnCount())
@@ -439,6 +459,7 @@ template void Matrix::setCell<QString>(int row, int col, QString value);
 template void Matrix::setCell<QDateTime>(int row, int col, QDateTime value);
 
 void Matrix::clearCell(int row, int col) {
+	Q_D(Matrix);
 	switch (d->mode) {
 	case AbstractColumn::ColumnMode::Double:
 		exec(new MatrixSetCellValueCmd<double>(d, row, col, 0.0));
@@ -485,6 +506,7 @@ void Matrix::setDimensions(int rows, int cols) {
 
 void Matrix::copy(Matrix* other) {
 	WAIT_CURSOR;
+	Q_D(Matrix);
 	beginMacro(i18n("%1: copy %2", name(), other->name()));
 
 	int rows = other->rowCount();
@@ -545,6 +567,7 @@ void Matrix::duplicate() {
 }
 
 void Matrix::addRows() {
+	Q_D(Matrix);
 	if (!m_view)
 		return;
 	WAIT_CURSOR;
@@ -556,6 +579,7 @@ void Matrix::addRows() {
 }
 
 void Matrix::addColumns() {
+	Q_D(Matrix);
 	if (!m_view)
 		return;
 	WAIT_CURSOR;
@@ -567,10 +591,12 @@ void Matrix::addColumns() {
 }
 
 void Matrix::setCoordinates(double x1, double x2, double y1, double y2) {
+	Q_D(Matrix);
 	exec(new MatrixSetCoordinatesCmd(d, x1, x2, y1, y2));
 }
 
 void Matrix::setFormula(const QString& formula) {
+	Q_D(Matrix);
 	exec(new MatrixSetFormulaCmd(d, formula));
 }
 
@@ -579,6 +605,7 @@ void Matrix::setFormula(const QString& formula) {
  * values that are saved when the matrix is saved. The view
  * has to take care of reading and applying these values */
 void Matrix::setRowHeight(int row, int height) {
+	Q_D(Matrix);
 	d->setRowHeight(row, height);
 }
 
@@ -587,20 +614,24 @@ void Matrix::setRowHeight(int row, int height) {
  * values that are saved when the matrix is saved. The view
  * has to take care of reading and applying these values */
 void Matrix::setColumnWidth(int col, int width) {
+	Q_D(Matrix);
 	d->setColumnWidth(col, width);
 }
 
 int Matrix::rowHeight(int row) const {
+	Q_D(const Matrix);
 	return d->rowHeight(row);
 }
 
 int Matrix::columnWidth(int col) const {
+	Q_D(const Matrix);
 	return d->columnWidth(col);
 }
 
 //! Return the values in the given cells as vector
 template<typename T>
 QVector<T> Matrix::columnCells(int col, int first_row, int last_row) {
+	Q_D(const Matrix);
 	return d->columnCells<T>(col, first_row, last_row);
 }
 
@@ -608,6 +639,7 @@ QVector<T> Matrix::columnCells(int col, int first_row, int last_row) {
 template<typename T>
 void Matrix::setColumnCells(int col, int first_row, int last_row, const QVector<T>& values) {
 	WAIT_CURSOR;
+	Q_D(Matrix);
 	exec(new MatrixSetColumnCellsCmd<T>(d, col, first_row, last_row, values));
 	RESET_CURSOR;
 }
@@ -615,6 +647,7 @@ void Matrix::setColumnCells(int col, int first_row, int last_row, const QVector<
 //! Return the values in the given cells as vector (needs explicit instantiation)
 template<typename T>
 QVector<T> Matrix::rowCells(int row, int first_column, int last_column) {
+	Q_D(const Matrix);
 	return d->rowCells<T>(row, first_column, last_column);
 }
 template QVector<double> Matrix::rowCells<double>(int row, int first_column, int last_column);
@@ -626,13 +659,14 @@ template QVector<QDateTime> Matrix::rowCells<QDateTime>(int row, int first_colum
 template<typename T>
 void Matrix::setRowCells(int row, int first_column, int last_column, const QVector<T>& values) {
 	WAIT_CURSOR;
+	Q_D(Matrix);
 	exec(new MatrixSetRowCellsCmd<T>(d, row, first_column, last_column, values));
 	RESET_CURSOR;
 }
 
 void Matrix::setData(void* data) {
 	bool isEmpty = false;
-
+	Q_D(Matrix);
 	switch (d->mode) {
 	case AbstractColumn::ColumnMode::Double:
 		if (static_cast<QVector<QVector<double>>*>(data)->isEmpty())
@@ -674,6 +708,7 @@ QVector<AspectType> Matrix::dropableOn() const {
 //! Clear the whole matrix (i.e. reset all cells)
 void Matrix::clear() {
 	WAIT_CURSOR;
+	Q_D(Matrix);
 	beginMacro(i18n("%1: clear", name()));
 	switch (d->mode) {
 	case AbstractColumn::ColumnMode::Double:
@@ -700,6 +735,7 @@ void Matrix::clear() {
 
 void Matrix::transpose() {
 	WAIT_CURSOR;
+	Q_D(Matrix);
 	switch (d->mode) {
 	case AbstractColumn::ColumnMode::Double:
 		exec(new MatrixTransposeCmd<double>(d));
@@ -724,6 +760,7 @@ void Matrix::transpose() {
 
 void Matrix::mirrorHorizontally() {
 	WAIT_CURSOR;
+	Q_D(Matrix);
 	switch (d->mode) {
 	case AbstractColumn::ColumnMode::Double:
 		exec(new MatrixMirrorHorizontallyCmd<double>(d));
@@ -748,6 +785,7 @@ void Matrix::mirrorHorizontally() {
 
 void Matrix::mirrorVertically() {
 	WAIT_CURSOR;
+	Q_D(Matrix);
 	switch (d->mode) {
 	case AbstractColumn::ColumnMode::Double:
 		exec(new MatrixMirrorVerticallyCmd<double>(d));
@@ -1025,6 +1063,7 @@ void MatrixPrivate::clearColumn(int col) {
 // ##################  Serialization/Deserialization  ###########################
 // ##############################################################################
 void Matrix::save(QXmlStreamWriter* writer) const {
+	Q_D(const Matrix);
 	DEBUG(Q_FUNC_INFO);
 	writer->writeStartElement(QStringLiteral("matrix"));
 	writeBasicAttributes(writer);
@@ -1128,6 +1167,7 @@ bool Matrix::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
+	Q_D(Matrix);
 	QXmlStreamAttributes attribs;
 	QString str;
 
@@ -1299,6 +1339,7 @@ int Matrix::prepareImport(std::vector<void*>& dataContainer,
 						  QStringList /*colNameList*/,
 						  QVector<AbstractColumn::ColumnMode> columnMode,
 						  bool initializeDataContainer) {
+	Q_D(Matrix);
 	auto newColumnMode = columnMode.at(0); // only first column mode used
 	DEBUG(Q_FUNC_INFO << ", rows = " << actualRows << " cols = " << actualCols << ", mode = " << ENUM_TO_STRING(AbstractFileFilter, ImportMode, mode)
 					  << ", column mode = " << ENUM_TO_STRING(AbstractColumn, ColumnMode, newColumnMode))

@@ -78,10 +78,6 @@ QIcon BarPlot::icon() const {
 }
 
 void BarPlot::initActions() {
-	visibilityAction = new QAction(QIcon::fromTheme(QStringLiteral("view-visible")), i18n("Visible"), this);
-	visibilityAction->setCheckable(true);
-	connect(visibilityAction, &QAction::triggered, this, &BarPlot::visibilityChangedSlot);
-
 	// Orientation
 	auto* orientationActionGroup = new QActionGroup(this);
 	orientationActionGroup->setExclusive(true);
@@ -109,11 +105,7 @@ QMenu* BarPlot::createContextMenu() {
 		initMenus();
 
 	QMenu* menu = WorksheetElement::createContextMenu();
-	QAction* firstAction = menu->actions().at(1); // skip the first action because of the "title-action"
-
-	// Visibility
-	visibilityAction->setChecked(isVisible());
-	menu->insertAction(firstAction, visibilityAction);
+	QAction* visibilityAction = this->visibilityAction();
 
 	// Orientation
 	Q_D(const BarPlot);
@@ -121,14 +113,10 @@ QMenu* BarPlot::createContextMenu() {
 		orientationHorizontalAction->setChecked(true);
 	else
 		orientationVerticalAction->setChecked(true);
-	menu->insertMenu(firstAction, orientationMenu);
-	menu->insertSeparator(firstAction);
+	menu->insertMenu(visibilityAction, orientationMenu);
+	menu->insertSeparator(visibilityAction);
 
 	return menu;
-}
-
-QGraphicsItem* BarPlot::graphicsItem() const {
-	return d_ptr;
 }
 
 void BarPlot::retransform() {
@@ -142,16 +130,6 @@ void BarPlot::recalc() {
 }
 
 void BarPlot::handleResize(double /*horizontalRatio*/, double /*verticalRatio*/, bool /*pageResize*/) {
-}
-
-bool BarPlot::activatePlot(QPointF mouseScenePos, double maxDist) {
-	Q_D(BarPlot);
-	return d->activatePlot(mouseScenePos, maxDist);
-}
-
-void BarPlot::setHover(bool on) {
-	Q_D(BarPlot);
-	d->setHover(on);
 }
 
 /* ============================ getter methods ================= */
@@ -235,7 +213,8 @@ void BarPlot::setXColumn(const AbstractColumn* column) {
 		if (column) {
 			// update the curve itself on changes
 			connect(column, &AbstractColumn::dataChanged, this, &BarPlot::recalc);
-			connect(column->parentAspect(), &AbstractAspect::childAspectAboutToBeRemoved, this, &BarPlot::dataColumnAboutToBeRemoved);
+			if (column->parentAspect())
+				connect(column->parentAspect(), &AbstractAspect::childAspectAboutToBeRemoved, this, &BarPlot::dataColumnAboutToBeRemoved);
 
 			connect(column, &AbstractColumn::dataChanged, this, &BarPlot::dataChanged);
 			// TODO: add disconnect in the undo-function
@@ -255,7 +234,8 @@ void BarPlot::setDataColumns(const QVector<const AbstractColumn*> columns) {
 
 			// update the curve itself on changes
 			connect(column, &AbstractColumn::dataChanged, this, &BarPlot::recalc);
-			connect(column->parentAspect(), &AbstractAspect::childAspectAboutToBeRemoved, this, &BarPlot::dataColumnAboutToBeRemoved);
+			if (column->parentAspect())
+				connect(column->parentAspect(), &AbstractAspect::childAspectAboutToBeRemoved, this, &BarPlot::dataColumnAboutToBeRemoved);
 			// TODO: add disconnect in the undo-function
 
 			connect(column, &AbstractColumn::dataChanged, this, &BarPlot::dataChanged);
@@ -310,11 +290,6 @@ void BarPlot::orientationChangedSlot(QAction* action) {
 		this->setOrientation(Axis::Orientation::Vertical);
 }
 
-void BarPlot::visibilityChangedSlot() {
-	Q_D(const BarPlot);
-	this->setVisible(!d->isVisible());
-}
-
 // ##############################################################################
 // ####################### Private implementation ###############################
 // ##############################################################################
@@ -323,22 +298,6 @@ BarPlotPrivate::BarPlotPrivate(BarPlot* owner)
 	, q(owner) {
 	setFlag(QGraphicsItem::ItemIsSelectable);
 	setAcceptHoverEvents(false);
-}
-
-bool BarPlotPrivate::activatePlot(QPointF mouseScenePos, double /*maxDist*/) {
-	if (!isVisible())
-		return false;
-
-	return shape().contains(mouseScenePos);
-}
-
-void BarPlotPrivate::setHover(bool on) {
-	if (on == m_hovered)
-		return; // don't update if state not changed
-
-	m_hovered = on;
-	on ? Q_EMIT q->hovered() : Q_EMIT q->unhovered();
-	update();
 }
 
 Background* BarPlotPrivate::addBackground(const KConfigGroup& group) {
@@ -572,8 +531,10 @@ void BarPlotPrivate::recalc() {
 			break;
 		}
 		case BarPlot::Type::Stacked: {
-			yMax = *std::max_element(barMaxs.constBegin(), barMaxs.constEnd());
-			yMin = *std::min_element(barMins.constBegin(), barMins.constEnd());
+			if (!barMaxs.isEmpty())
+				yMax = *std::max_element(barMaxs.constBegin(), barMaxs.constEnd());
+			if (!barMins.isEmpty())
+				yMin = *std::min_element(barMins.constBegin(), barMins.constEnd());
 			break;
 		}
 		case BarPlot::Type::Stacked_100_Percent: {
@@ -984,7 +945,11 @@ void BarPlotPrivate::updateValues() {
 			return;
 		}
 
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+		const int endRow = std::min(m_valuesPointsLogical.size(), static_cast<qsizetype>(valuesColumn->rowCount()));
+#else
 		const int endRow = std::min(m_valuesPointsLogical.size(), valuesColumn->rowCount());
+#endif
 		const auto xColMode = valuesColumn->columnMode();
 		for (int i = 0; i < endRow; ++i) {
 			if (!valuesColumn->isValid(i) || valuesColumn->isMasked(i))
@@ -1103,25 +1068,11 @@ void BarPlotPrivate::updateValues() {
 }
 
 /*!
-	Returns the outer bounds of the item as a rectangle.
- */
-QRectF BarPlotPrivate::boundingRect() const {
-	return m_boundingRectangle;
-}
-
-/*!
-	Returns the shape of this item as a QPainterPath in local coordinates.
-*/
-QPainterPath BarPlotPrivate::shape() const {
-	return m_barPlotShape;
-}
-
-/*!
   recalculates the outer bounds and the shape of the item.
 */
 void BarPlotPrivate::recalcShapeAndBoundingRect() {
 	prepareGeometryChange();
-	m_barPlotShape = QPainterPath();
+	m_shape = QPainterPath();
 
 	int index = 0;
 	for (const auto& columnBarLines : m_barLines) { // loop over the different data columns
@@ -1134,16 +1085,16 @@ void BarPlotPrivate::recalcShapeAndBoundingRect() {
 
 			if (index < borderLines.count()) { // TODO
 				const auto& borderPen = borderLines.at(index)->pen();
-				m_barPlotShape.addPath(WorksheetElement::shapeFromPath(barPath, borderPen));
+				m_shape.addPath(WorksheetElement::shapeFromPath(barPath, borderPen));
 			}
 		}
 		++index;
 	}
 
 	if (value->type() != Value::NoValues)
-		m_barPlotShape.addPath(m_valuesPath);
+		m_shape.addPath(m_valuesPath);
 
-	m_boundingRectangle = m_barPlotShape.boundingRect();
+	m_boundingRectangle = m_shape.boundingRect();
 	updatePixmap();
 }
 
@@ -1167,6 +1118,7 @@ void BarPlotPrivate::updatePixmap() {
 	m_pixmap = pixmap;
 	m_hoverEffectImageIsDirty = true;
 	m_selectionEffectImageIsDirty = true;
+	Q_EMIT q->changed();
 	update();
 }
 
@@ -1253,26 +1205,6 @@ void BarPlotPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*
 
 		painter->drawImage(m_boundingRectangle.topLeft(), m_selectionEffectImage, m_pixmap.rect());
 		return;
-	}
-}
-
-void BarPlotPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
-	q->createContextMenu()->exec(event->screenPos());
-}
-
-void BarPlotPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
-	if (!isSelected()) {
-		m_hovered = true;
-		Q_EMIT q->hovered();
-		update();
-	}
-}
-
-void BarPlotPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
-	if (m_hovered) {
-		m_hovered = false;
-		Q_EMIT q->unhovered();
-		update();
 	}
 }
 
@@ -1419,7 +1351,7 @@ void BarPlot::loadThemeConfig(const KConfig& config) {
 	const QColor themeColor = plot->themeColorPalette(index);
 
 	Q_D(BarPlot);
-	d->m_suppressRecalc = true;
+	d->suppressRecalc = true;
 
 	// box filling
 	for (int i = 0; i < d->backgrounds.count(); ++i) {
@@ -1436,6 +1368,6 @@ void BarPlot::loadThemeConfig(const KConfig& config) {
 	// Values
 	d->value->loadThemeConfig(group, themeColor);
 
-	d->m_suppressRecalc = false;
+	d->suppressRecalc = false;
 	d->recalcShapeAndBoundingRect();
 }

@@ -21,6 +21,7 @@ InfoElementDock::InfoElementDock(QWidget* parent)
 	: BaseDock(parent)
 	, ui(new Ui::InfoElementDock) {
 	ui->setupUi(this);
+	setPlotRangeCombobox(ui->cbPlotRanges);
 	m_leName = ui->leName;
 	m_teComment = ui->teComment;
 	m_teComment->setFixedHeight(m_leName->height());
@@ -167,7 +168,7 @@ void InfoElementDock::setInfoElements(QList<InfoElement*> list) {
 }
 
 void InfoElementDock::updatePlotRanges() {
-	updatePlotRangeList(ui->cbPlotRanges);
+	updatePlotRangeList();
 }
 
 //*************************************************************

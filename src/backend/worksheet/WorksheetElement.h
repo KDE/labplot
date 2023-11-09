@@ -71,10 +71,13 @@ public:
 	BASIC_D_ACCESSOR_DECL(VerticalAlignment, verticalAlignment, VerticalAlignment)
 	BASIC_D_ACCESSOR_DECL(qreal, rotationAngle, RotationAngle)
 	BASIC_D_ACCESSOR_DECL(qreal, scale, Scale)
+	BASIC_D_ACCESSOR_DECL(bool, isLocked, Lock)
+	BASIC_D_ACCESSOR_DECL(bool, isHovered, Hover)
 
 	void finalizeAdd() override;
 
-	virtual QGraphicsItem* graphicsItem() const = 0;
+	virtual QGraphicsItem* graphicsItem() const;
+	virtual void setParentGraphicsItem(QGraphicsItem* item);
 	virtual void setZValue(qreal);
 	virtual void setVisible(bool on);
 	virtual bool isVisible() const;
@@ -90,7 +93,9 @@ public:
 
 	QPointF align(QPointF, QRectF, HorizontalAlignment, VerticalAlignment, bool positive) const;
 
-	QMenu* createContextMenu() override;
+	virtual QMenu* createContextMenu() override;
+	QAction* visibilityAction();
+	QAction* lockingAction();
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool) override;
@@ -106,12 +111,14 @@ public:
 	int coordinateSystemIndex() const {
 		return m_cSystemIndex;
 	}
-	void setCoordinateSystemIndex(int);
+	void setCoordinateSystemIndex(int, QUndoCommand* parent = nullptr);
 	int coordinateSystemCount() const;
 	QString coordinateSystemInfo(int index) const;
 
 private:
 	void init();
+	QAction* m_visibilityAction{nullptr};
+	QAction* m_lockingAction{nullptr};
 
 protected:
 	WorksheetElement(const QString&, WorksheetElementPrivate* dd, AspectType);
@@ -137,6 +144,7 @@ private:
 
 protected Q_SLOTS:
 	void changeVisibility();
+	void changeLocking();
 
 private Q_SLOTS:
 	void prepareDrawingOrderMenu();
@@ -157,8 +165,10 @@ Q_SIGNALS:
 	void rotationAngleChanged(qreal) const;
 	void rotationChanged(qreal) const;
 	void visibleChanged(bool) const;
+	void lockChanged(bool) const;
 	void coordinateSystemIndexChanged(int) const;
 	void changed();
+	void hoveredChanged(bool) const;
 
 	void objectPositionChanged(); // Position changed, independend of logical or scene, bot are triggering this
 
@@ -172,6 +182,7 @@ Q_SIGNALS:
 	void plotRangeListChanged();
 
 	friend class WorksheetElementTest;
+	friend class SetCoordinateSystemIndexCmd;
 };
 
 #endif

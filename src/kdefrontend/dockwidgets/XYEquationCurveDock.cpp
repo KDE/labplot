@@ -47,6 +47,7 @@ XYEquationCurveDock::XYEquationCurveDock(QWidget* parent)
 void XYEquationCurveDock::setupGeneral() {
 	auto* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
+	setPlotRangeCombobox(uiGeneralTab.cbPlotRanges);
 	m_leName = uiGeneralTab.leName;
 	m_teComment = uiGeneralTab.teComment;
 	m_teComment->setFixedHeight(1.2 * m_leName->height());
@@ -59,7 +60,7 @@ void XYEquationCurveDock::setupGeneral() {
 	}
 
 	auto* layout = new QHBoxLayout(ui.tabGeneral);
-	layout->setMargin(0);
+	layout->setContentsMargins(0, 0, 0, 0);
 	layout->addWidget(generalTab);
 
 	uiGeneralTab.tbConstants1->setIcon(QIcon::fromTheme(QStringLiteral("labplot-format-text-symbol")));
@@ -142,7 +143,7 @@ void XYEquationCurveDock::setCurves(QList<XYCurve*> list) {
 }
 
 void XYEquationCurveDock::updatePlotRanges() {
-	updatePlotRangeList(uiGeneralTab.cbPlotRanges);
+	updatePlotRangeList();
 }
 
 //*************************************************************

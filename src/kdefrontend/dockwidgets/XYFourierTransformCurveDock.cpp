@@ -36,6 +36,7 @@ XYFourierTransformCurveDock::XYFourierTransformCurveDock(QWidget* parent)
 void XYFourierTransformCurveDock::setupGeneral() {
 	auto* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
+	setPlotRangeCombobox(uiGeneralTab.cbPlotRanges);
 	m_leName = uiGeneralTab.leName;
 	m_teComment = uiGeneralTab.teComment;
 	m_teComment->setFixedHeight(1.2 * m_leName->height());
@@ -61,7 +62,7 @@ void XYFourierTransformCurveDock::setupGeneral() {
 	uiGeneralTab.leMax->setValidator(new QDoubleValidator(uiGeneralTab.leMax));
 
 	auto* layout = new QHBoxLayout(ui.tabGeneral);
-	layout->setMargin(0);
+	layout->setContentsMargins(0, 0, 0, 0);
 	layout->addWidget(generalTab);
 
 	// Slots
@@ -167,7 +168,7 @@ void XYFourierTransformCurveDock::setCurves(QList<XYCurve*> list) {
 }
 
 void XYFourierTransformCurveDock::updatePlotRanges() {
-	updatePlotRangeList(uiGeneralTab.cbPlotRanges);
+	updatePlotRangeList();
 }
 
 //*************************************************************

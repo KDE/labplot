@@ -11,6 +11,7 @@
 #include "AxisPrivate.h"
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/Project.h"
+#include "backend/core/Time.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
@@ -29,7 +30,8 @@
 #include <KConfigGroup>
 #include <KLocalizedString>
 
-#include <QGraphicsSceneContextMenuEvent>
+#include <QActionGroup>
+#include <QGraphicsSceneMouseEvent>
 #include <QMenu>
 #include <QPainter>
 #include <QTextDocument>
@@ -250,10 +252,6 @@ void Axis::init(Orientation orientation) {
  * For some ActionGroups the actual actions are created in \c GuiTool,
  */
 void Axis::initActions() {
-	visibilityAction = new QAction(QIcon::fromTheme(QStringLiteral("view-visible")), i18n("Visible"), this);
-	visibilityAction->setCheckable(true);
-	connect(visibilityAction, &QAction::triggered, this, &Axis::visibilityChangedSlot);
-
 	// Orientation
 	orientationActionGroup = new QActionGroup(this);
 	orientationActionGroup->setExclusive(true);
@@ -307,10 +305,7 @@ QMenu* Axis::createContextMenu() {
 
 	Q_D(const Axis);
 	QMenu* menu = WorksheetElement::createContextMenu();
-	QAction* firstAction = menu->actions().at(1); // skip the first action because of the "title-action"
-
-	visibilityAction->setChecked(isVisible());
-	menu->insertAction(firstAction, visibilityAction);
+	QAction* visibilityAction = this->visibilityAction();
 
 	// Orientation
 	if (d->orientation == Orientation::Horizontal)
@@ -318,7 +313,7 @@ QMenu* Axis::createContextMenu() {
 	else
 		orientationVerticalAction->setChecked(true);
 
-	menu->insertMenu(firstAction, orientationMenu);
+	menu->insertMenu(visibilityAction, orientationMenu);
 
 	// Line styles
 	GuiTools::updatePenStyles(lineStyleMenu, lineStyleActionGroup, d->line->pen().color());
@@ -326,8 +321,8 @@ QMenu* Axis::createContextMenu() {
 
 	GuiTools::selectColorAction(lineColorActionGroup, d->line->pen().color());
 
-	menu->insertMenu(firstAction, lineMenu);
-	menu->insertSeparator(firstAction);
+	menu->insertMenu(visibilityAction, lineMenu);
+	menu->insertSeparator(visibilityAction);
 
 	return menu;
 }
@@ -356,10 +351,6 @@ Axis::~Axis() {
 
 	// no need to delete the d-pointer here - it inherits from QGraphicsItem
 	// and is deleted during the cleanup in QGraphicsScene
-}
-
-QGraphicsItem* Axis::graphicsItem() const {
-	return d_ptr;
 }
 
 /*!
@@ -529,11 +520,6 @@ bool Axis::isDefault() const {
 	return d->isDefault;
 }
 
-bool Axis::isHovered() const {
-	Q_D(const Axis);
-	return d->isHovered();
-}
-
 bool Axis::isNumeric() const {
 	Q_D(const Axis);
 	const int xIndex{cSystem->index(Dimension::X)}, yIndex{cSystem->index(Dimension::Y)};
@@ -590,7 +576,7 @@ void Axis::setStart(double min) {
 		range.setStart(min);
 		setRange(range);
 	}
-	emit startChanged(range.start()); // Feedback
+	Q_EMIT startChanged(range.start()); // Feedback
 }
 void Axis::setEnd(double max) {
 	Q_D(Axis);
@@ -600,7 +586,7 @@ void Axis::setEnd(double max) {
 		range.setEnd(max);
 		setRange(range);
 	}
-	emit endChanged(range.end()); // Feedback
+	Q_EMIT endChanged(range.end()); // Feedback
 }
 void Axis::setRange(double min, double max) {
 	Q_D(Axis);
@@ -644,7 +630,7 @@ void Axis::setScalingFactor(qreal scalingFactor) {
 	Q_D(Axis);
 	// TODO: check negative values and log-scales?
 	if (scalingFactor == 0) {
-		emit scalingFactorChanged(d->scalingFactor); // return current scalingfactor as feedback for the spinbox
+		Q_EMIT scalingFactorChanged(d->scalingFactor); // return current scalingfactor as feedback for the spinbox
 		return;
 	}
 	if (scalingFactor != d->scalingFactor)
@@ -762,7 +748,7 @@ void Axis::setMajorTicksSpacing(qreal majorTicksSpacing) {
 		if (range / majorTicksSpacing > 100.)
 			majorTicksSpacing = range / 100.;
 
-		emit majorTicksSpacingChanged(majorTicksSpacing);
+		Q_EMIT majorTicksSpacingChanged(majorTicksSpacing);
 		return;
 	}
 
@@ -852,7 +838,7 @@ void Axis::setMinorTicksSpacing(qreal minorTicksSpacing) {
 		if (numberTicks > 100) // maximum 100 minor ticks
 			minorTicksSpacing = range / (majorTicks - 1) / (100 + 1);
 
-		emit minorTicksIncrementChanged(minorTicksSpacing);
+		Q_EMIT minorTicksIncrementChanged(minorTicksSpacing);
 		return;
 	}
 
@@ -1058,11 +1044,6 @@ void Axis::lineColorChanged(QAction* action) {
 	d->line->setColor(GuiTools::colorFromAction(lineColorActionGroup, action));
 }
 
-void Axis::visibilityChangedSlot() {
-	Q_D(const Axis);
-	this->setVisible(!d->isVisible());
-}
-
 // #####################################################################
 // ################### Private implementation ##########################
 // #####################################################################
@@ -1095,17 +1076,6 @@ bool AxisPrivate::swapVisible(bool on) {
 	return oldValue;
 }
 
-QRectF AxisPrivate::boundingRect() const {
-	return boundingRectangle;
-}
-
-/*!
-  Returns the shape of the XYCurve as a QPainterPath in local coordinates
-*/
-QPainterPath AxisPrivate::shape() const {
-	return axisShape;
-}
-
 /*!
 	recalculates the position of the axis on the worksheet
  */
@@ -1117,9 +1087,9 @@ void AxisPrivate::retransform() {
 		return;
 
 	// 	PERFTRACE(name().toLatin1() + ", AxisPrivate::retransform()");
-	m_suppressRecalc = true;
+	suppressRecalc = true;
 	retransformLine();
-	m_suppressRecalc = false;
+	suppressRecalc = false;
 	recalcShapeAndBoundingRect();
 }
 
@@ -1415,10 +1385,23 @@ void AxisPrivate::retransformTicks() {
 	double majorTicksIncrement = 0;
 	int tmpMajorTicksNumber = 0;
 	double start{range.start()}, end{range.end()};
-	if (majorTicksStartType == Axis::TicksStartType::Absolute)
+	if (majorTicksStartType == Axis::TicksStartType::Absolute) {
 		start = majorTickStartValue;
-	else if (majorTicksStartType == Axis::TicksStartType::Offset)
-		start += majorTickStartOffset;
+
+	} else if (majorTicksStartType == Axis::TicksStartType::Offset) {
+		if (q->isNumeric())
+			start += majorTickStartOffset;
+		else {
+			auto startDt = QDateTime::fromMSecsSinceEpoch(start, Qt::UTC);
+			startDt.setTimeSpec(Qt::TimeSpec::UTC);
+			const auto& dt = DateTime::dateTime(majorTickStartOffset);
+			startDt = startDt.addYears(dt.year);
+			startDt = startDt.addMonths(dt.month);
+			startDt = startDt.addDays(dt.day);
+			startDt = startDt.addMSecs(DateTime::milliseconds(dt.hour, dt.minute, dt.second, dt.millisecond));
+			start = startDt.toMSecsSinceEpoch();
+		}
+	}
 	QDEBUG(Q_FUNC_INFO << ", ticks type = " << majorTicksType)
 	switch (majorTicksType) {
 	case Axis::TicksType::TotalNumber: // total number of major ticks is given - > determine the increment
@@ -1459,33 +1442,37 @@ void AxisPrivate::retransformTicks() {
 		// the increment of the major ticks is given -> determine the number
 		// TODO: majorTicksSpacing == 0?
 		majorTicksIncrement = majorTicksSpacing * GSL_SIGN(end - start);
-		switch (range.scale()) {
-		case RangeT::Scale::Linear:
-			tmpMajorTicksNumber = std::round(range.size() / majorTicksIncrement + 1);
-			break;
-		case RangeT::Scale::Log10:
-			if (start != 0. && end / start > 0.)
-				tmpMajorTicksNumber = std::round(log10(end / start) / majorTicksIncrement + 1);
-			break;
-		case RangeT::Scale::Log2:
-			if (start != 0. && end / start > 0.)
-				tmpMajorTicksNumber = std::round(log2(end / start) / majorTicksIncrement + 1);
-			break;
-		case RangeT::Scale::Ln:
-			if (start != 0. && end / start > 0.)
-				tmpMajorTicksNumber = std::round(std::log(end / start) / majorTicksIncrement + 1);
-			break;
-		case RangeT::Scale::Sqrt:
-			if (start >= 0. && end >= 0.)
-				tmpMajorTicksNumber = std::round((std::sqrt(end) - std::sqrt(start)) / majorTicksIncrement + 1);
-			break;
-		case RangeT::Scale::Square:
-			tmpMajorTicksNumber = std::round((end * end - start * start) / majorTicksIncrement + 1);
-			break;
-		case RangeT::Scale::Inverse:
-			if (start != 0. && end != 0.)
-				tmpMajorTicksNumber = std::round((1. / start - 1. / end) / majorTicksIncrement + 1);
-			break;
+		if (q->isNumeric() || (!q->isNumeric() && range.scale() != RangeT::Scale::Linear)) {
+			switch (range.scale()) {
+			case RangeT::Scale::Linear:
+				tmpMajorTicksNumber = std::round(range.size() / majorTicksIncrement + 1);
+				break;
+			case RangeT::Scale::Log10:
+				if (start != 0. && end / start > 0.)
+					tmpMajorTicksNumber = std::round(log10(end / start) / majorTicksIncrement + 1);
+				break;
+			case RangeT::Scale::Log2:
+				if (start != 0. && end / start > 0.)
+					tmpMajorTicksNumber = std::round(log2(end / start) / majorTicksIncrement + 1);
+				break;
+			case RangeT::Scale::Ln:
+				if (start != 0. && end / start > 0.)
+					tmpMajorTicksNumber = std::round(std::log(end / start) / majorTicksIncrement + 1);
+				break;
+			case RangeT::Scale::Sqrt:
+				if (start >= 0. && end >= 0.)
+					tmpMajorTicksNumber = std::round((std::sqrt(end) - std::sqrt(start)) / majorTicksIncrement + 1);
+				break;
+			case RangeT::Scale::Square:
+				tmpMajorTicksNumber = std::round((end * end - start * start) / majorTicksIncrement + 1);
+				break;
+			case RangeT::Scale::Inverse:
+				if (start != 0. && end != 0.)
+					tmpMajorTicksNumber = std::round((1. / start - 1. / end) / majorTicksIncrement + 1);
+				break;
+			}
+		} else {
+			// Datetime with linear spacing: Calculation will be done directly where the majorTickPos will be calculated
 		}
 		break;
 	case Axis::TicksType::CustomColumn:
@@ -1556,7 +1543,16 @@ void AxisPrivate::retransformTicks() {
 	bool valid = true;
 	center = q->cSystem->mapLogicalToScene(center, valid);
 
-	for (int iMajor = 0; iMajor < tmpMajorTicksNumber; iMajor++) {
+	const bool dateTimeSpacing = !q->isNumeric() && range.scale() == RangeT::Scale::Linear && majorTicksType == Axis::TicksType::Spacing;
+	DateTime::DateTime dt;
+	QDateTime majorTickPosDateTime;
+	if (dateTimeSpacing) {
+		dt = DateTime::dateTime(majorTicksSpacing);
+		majorTickPosDateTime = QDateTime::fromMSecsSinceEpoch(start, Qt::UTC);
+	}
+	const auto dtValid = majorTickPosDateTime.isValid();
+
+	for (int iMajor = 0; iMajor < tmpMajorTicksNumber || (dateTimeSpacing && dtValid); iMajor++) {
 		//		DEBUG(Q_FUNC_INFO << ", major tick " << iMajor)
 		qreal majorTickPos = 0.0;
 		qreal nextMajorTickPos = 0.0;
@@ -1596,38 +1592,53 @@ void AxisPrivate::retransformTicks() {
 			}
 
 		} else {
-			switch (range.scale()) {
-			case RangeT::Scale::Linear:
-				//				DEBUG(Q_FUNC_INFO << ", start = " << start << ", incr = " << majorTicksIncrement << ", i = " << iMajor)
-				majorTickPos = start + majorTicksIncrement * iMajor;
-				if (std::abs(majorTickPos) < 1.e-15 * majorTicksIncrement) // avoid rounding errors when close to zero
-					majorTickPos = 0;
-				nextMajorTickPos = majorTickPos + majorTicksIncrement;
-				break;
-			case RangeT::Scale::Log10:
-				majorTickPos = start * std::pow(10, majorTicksIncrement * iMajor);
-				nextMajorTickPos = majorTickPos * std::pow(10, majorTicksIncrement);
-				break;
-			case RangeT::Scale::Log2:
-				majorTickPos = start * std::exp2(majorTicksIncrement * iMajor);
-				nextMajorTickPos = majorTickPos * exp2(majorTicksIncrement);
-				break;
-			case RangeT::Scale::Ln:
-				majorTickPos = start * std::exp(majorTicksIncrement * iMajor);
-				nextMajorTickPos = majorTickPos * exp(majorTicksIncrement);
-				break;
-			case RangeT::Scale::Sqrt:
-				majorTickPos = std::pow(std::sqrt(start) + majorTicksIncrement * iMajor, 2);
-				nextMajorTickPos = std::pow(std::sqrt(start) + majorTicksIncrement * (iMajor + 1), 2);
-				break;
-			case RangeT::Scale::Square:
-				majorTickPos = std::sqrt(start * start + majorTicksIncrement * iMajor);
-				nextMajorTickPos = std::sqrt(start * start + majorTicksIncrement * (iMajor + 1));
-				break;
-			case RangeT::Scale::Inverse:
-				majorTickPos = 1. / (1. / start + majorTicksIncrement * iMajor);
-				nextMajorTickPos = 1. / (1. / start + majorTicksIncrement * (iMajor + 1));
-				break;
+			if (!dateTimeSpacing) {
+				switch (range.scale()) {
+				case RangeT::Scale::Linear:
+					//				DEBUG(Q_FUNC_INFO << ", start = " << start << ", incr = " << majorTicksIncrement << ", i = " << iMajor)
+					majorTickPos = start + majorTicksIncrement * iMajor;
+					if (std::abs(majorTickPos) < 1.e-15 * majorTicksIncrement) // avoid rounding errors when close to zero
+						majorTickPos = 0;
+					nextMajorTickPos = majorTickPos + majorTicksIncrement;
+					break;
+				case RangeT::Scale::Log10:
+					majorTickPos = start * std::pow(10, majorTicksIncrement * iMajor);
+					nextMajorTickPos = majorTickPos * std::pow(10, majorTicksIncrement);
+					break;
+				case RangeT::Scale::Log2:
+					majorTickPos = start * std::exp2(majorTicksIncrement * iMajor);
+					nextMajorTickPos = majorTickPos * exp2(majorTicksIncrement);
+					break;
+				case RangeT::Scale::Ln:
+					majorTickPos = start * std::exp(majorTicksIncrement * iMajor);
+					nextMajorTickPos = majorTickPos * exp(majorTicksIncrement);
+					break;
+				case RangeT::Scale::Sqrt:
+					majorTickPos = std::pow(std::sqrt(start) + majorTicksIncrement * iMajor, 2);
+					nextMajorTickPos = std::pow(std::sqrt(start) + majorTicksIncrement * (iMajor + 1), 2);
+					break;
+				case RangeT::Scale::Square:
+					majorTickPos = std::sqrt(start * start + majorTicksIncrement * iMajor);
+					nextMajorTickPos = std::sqrt(start * start + majorTicksIncrement * (iMajor + 1));
+					break;
+				case RangeT::Scale::Inverse:
+					majorTickPos = 1. / (1. / start + majorTicksIncrement * iMajor);
+					nextMajorTickPos = 1. / (1. / start + majorTicksIncrement * (iMajor + 1));
+					break;
+				}
+			} else {
+				// Datetime Linear
+				if (iMajor == 0)
+					majorTickPos = start;
+				else {
+					majorTickPosDateTime = majorTickPosDateTime.addYears(dt.year);
+					majorTickPosDateTime = majorTickPosDateTime.addMonths(dt.month);
+					majorTickPosDateTime = majorTickPosDateTime.addDays(dt.day);
+					majorTickPosDateTime = majorTickPosDateTime.addMSecs(DateTime::milliseconds(dt.hour, dt.minute, dt.second, dt.millisecond));
+					majorTickPos = majorTickPosDateTime.toMSecsSinceEpoch();
+				}
+				if (majorTickPos > end || iMajor > 1000)
+					break; // Finish
 			}
 		}
 
@@ -2579,14 +2590,14 @@ void AxisPrivate::updateGrid() {
 }
 
 void AxisPrivate::recalcShapeAndBoundingRect() {
-	if (m_suppressRecalc)
+	if (suppressRecalc)
 		return;
 
 	prepareGeometryChange();
 
 	if (linePath.isEmpty()) {
-		axisShape = QPainterPath();
-		boundingRectangle = QRectF();
+		m_shape = QPainterPath();
+		m_boundingRectangle = QRectF();
 		title->setPositionInvalid(true);
 		if (plot())
 			plot()->prepareGeometryChange();
@@ -2596,10 +2607,10 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 	}
 
 	const auto& linePen = line->pen();
-	axisShape = WorksheetElement::shapeFromPath(linePath, linePen);
-	axisShape.addPath(WorksheetElement::shapeFromPath(arrowPath, linePen));
-	axisShape.addPath(WorksheetElement::shapeFromPath(majorTicksPath, majorTicksLine->pen()));
-	axisShape.addPath(WorksheetElement::shapeFromPath(minorTicksPath, minorTicksLine->pen()));
+	m_shape = WorksheetElement::shapeFromPath(linePath, linePen);
+	m_shape.addPath(WorksheetElement::shapeFromPath(arrowPath, linePen));
+	m_shape.addPath(WorksheetElement::shapeFromPath(majorTicksPath, majorTicksLine->pen()));
+	m_shape.addPath(WorksheetElement::shapeFromPath(minorTicksPath, minorTicksLine->pen()));
 
 	QPainterPath tickLabelsPath = QPainterPath();
 	if (labelsPosition != Axis::LabelsPosition::NoLabels) {
@@ -2625,7 +2636,7 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 
 			tickLabelsPath.addPath(WorksheetElement::shapeFromPath(tempPath, linePen));
 		}
-		axisShape.addPath(WorksheetElement::shapeFromPath(tickLabelsPath, QPen()));
+		m_shape.addPath(WorksheetElement::shapeFromPath(tickLabelsPath, QPen()));
 	}
 
 	// add title label, if available
@@ -2651,11 +2662,11 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 					offsetX -= labelsOffset + tickLabelsPath.boundingRect().width();
 				title->setPosition(QPointF(rect.topLeft().x() + offsetX, (rect.topLeft().y() + rect.bottomLeft().y()) / 2. - titleOffsetY));
 			}
-			axisShape.addPath(WorksheetElement::shapeFromPath(title->graphicsItem()->mapToParent(title->graphicsItem()->shape()), linePen));
+			m_shape.addPath(WorksheetElement::shapeFromPath(title->graphicsItem()->mapToParent(title->graphicsItem()->shape()), linePen));
 		}
 	}
 
-	boundingRectangle = axisShape.boundingRect();
+	m_boundingRectangle = m_shape.boundingRect();
 
 	// if the axis goes beyond the current bounding box of the plot (too high offset is used, too long labels etc.)
 	// request a prepareGeometryChange() for the plot in order to properly keep track of geometry changes
@@ -2805,12 +2816,12 @@ void AxisPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*opt
 	// shape and label
 	if (m_hovered && !isSelected() && !q->isPrinting()) {
 		painter->setPen(QPen(QApplication::palette().color(QPalette::Shadow), 2, Qt::SolidLine));
-		painter->drawPath(axisShape);
+		painter->drawPath(m_shape);
 	}
 
 	if (isSelected() && !q->isPrinting()) {
 		painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), 2, Qt::SolidLine));
-		painter->drawPath(axisShape);
+		painter->drawPath(m_shape);
 	}
 
 #if DEBUG_AXIS_BOUNDING_RECT
@@ -2819,29 +2830,9 @@ void AxisPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*opt
 #endif
 }
 
-void AxisPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
-	q->createContextMenu()->exec(event->screenPos());
-}
-
-void AxisPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
-	if (!isSelected()) {
-		m_hovered = true;
-		Q_EMIT q->hovered();
-		update(axisShape.boundingRect());
-	}
-}
-
-void AxisPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
-	if (m_hovered) {
-		m_hovered = false;
-		Q_EMIT q->unhovered();
-		update(axisShape.boundingRect());
-	}
-}
-
 void AxisPrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 	auto* plot = static_cast<CartesianPlot*>(q->parentAspect());
-	if (!plot->isLocked()) {
+	if (plot->isInteractive()) {
 		m_panningStarted = true;
 		m_panningStart = event->pos();
 	} else
@@ -2867,7 +2858,7 @@ void AxisPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 			dim = Dimension::Y;
 		}
 
-		emit q->shiftSignal(delta, dim, cs->index(dim));
+		Q_EMIT q->shiftSignal(delta, dim, cs->index(dim));
 
 		m_panningStart = event->pos();
 	}
@@ -2877,10 +2868,6 @@ void AxisPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 	setCursor(Qt::ArrowCursor);
 	m_panningStarted = false;
 	QGraphicsItem::mouseReleaseEvent(event);
-}
-
-bool AxisPrivate::isHovered() const {
-	return m_hovered;
 }
 
 QString AxisPrivate::createScientificRepresentation(const QString& mantissa, const QString& exponent) {

@@ -1708,7 +1708,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		break;
 	case nsl_fit_model_custom:
 		double value;
-		const unsigned int np = paramNames->size();
+		const auto np = paramNames->size();
 		QString func{*(((struct data*)params)->func)};
 
 		const auto numberLocale = QLocale();
@@ -1716,8 +1716,8 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			x = xVector[i];
 			assign_symbol("x", x);
 
-			for (unsigned int j = 0; j < np; j++) {
-				for (unsigned int k = 0; k < np; k++) {
+			for (auto j = 0; j < np; j++) {
+				for (auto k = 0; k < np; k++) {
 					if (k != j) {
 						value = nsl_fit_map_bound(gsl_vector_get(paramValues, k), min[k], max[k]);
 						assign_symbol(qPrintable(paramNames->at(k)), value);
@@ -2133,7 +2133,7 @@ void XYFitCurvePrivate::runLevenbergMarquardt(const AbstractColumn* tmpXDataColu
 	// fit settings
 	const unsigned int maxIters = fitData.maxIterations; // maximal number of iterations
 	const double delta = fitData.eps; // fit tolerance
-	const unsigned int np = fitData.paramNames.size(); // number of fit parameters
+	const auto np = fitData.paramNames.size(); // number of fit parameters
 	if (np == 0) {
 		DEBUG(Q_FUNC_INFO << ", WARNING: no parameter found.")
 		fitResult.available = true;
@@ -2217,7 +2217,7 @@ void XYFitCurvePrivate::runLevenbergMarquardt(const AbstractColumn* tmpXDataColu
 	// QDEBUG(Q_FUNC_INFO << ", data: " << ydataVector)
 
 	// number of data points to fit
-	const size_t n = xdataVector.size();
+	const auto n = xdataVector.size();
 	DEBUG(Q_FUNC_INFO << ", number of data points: " << n);
 	if (n == 0) {
 		fitResult.available = true;
@@ -2248,7 +2248,7 @@ void XYFitCurvePrivate::runLevenbergMarquardt(const AbstractColumn* tmpXDataColu
 	DEBUG(Q_FUNC_INFO << ", y error vector size: " << yerrorVector.size());
 	double* weight = new double[n];
 
-	for (size_t i = 0; i < n; i++)
+	for (auto i = 0; i < n; i++)
 		weight[i] = 1.;
 
 	const double minError = 1.e-199; // minimum error for weighting
@@ -2285,9 +2285,12 @@ void XYFitCurvePrivate::runLevenbergMarquardt(const AbstractColumn* tmpXDataColu
 
 	/////////////////////// GSL >= 2 has a complete new interface! But the old one is still supported. ///////////////////////////
 	// GSL >= 2 : "the 'fdf' field of gsl_multifit_function_fdf is now deprecated and does not need to be specified for nonlinear least squares problems"
-	unsigned int nf = 0; // number of fixed parameter
-	for (unsigned int i = 0; i < np; i++) {
-		const bool fixed = fitData.paramFixed.data()[i];
+	int nf = 0; // number of fixed parameter
+	// size of paramFixed may be smaller than np
+	if (fitData.paramFixed.size() < np)
+		fitData.paramFixed.resize(np);
+	for (auto i = 0; i < np; i++) {
+		const bool fixed = fitData.paramFixed.at(i);
 		if (fixed)
 			nf++;
 		DEBUG("	parameter " << i << " fixed: " << fixed);
@@ -2296,7 +2299,7 @@ void XYFitCurvePrivate::runLevenbergMarquardt(const AbstractColumn* tmpXDataColu
 	// function to fit
 	gsl_multifit_function_fdf f;
 	DEBUG(Q_FUNC_INFO << ", model = " << STDSTRING(fitData.model));
-	struct data params = {n,
+	struct data params = {static_cast<size_t>(n),
 						  xdata,
 						  ydata,
 						  weight,
@@ -2324,7 +2327,7 @@ void XYFitCurvePrivate::runLevenbergMarquardt(const AbstractColumn* tmpXDataColu
 	double* x_min = fitData.paramLowerLimits.data();
 	double* x_max = fitData.paramUpperLimits.data();
 	DEBUG(Q_FUNC_INFO << ", scale start values if limits are set");
-	for (unsigned int i = 0; i < np; i++)
+	for (auto i = 0; i < np; i++)
 		x_init[i] = nsl_fit_map_unbound(x_init[i], x_min[i], x_max[i]);
 	DEBUG(Q_FUNC_INFO << ",	DONE");
 	auto x = gsl_vector_view_array(x_init, np);
@@ -2344,10 +2347,10 @@ void XYFitCurvePrivate::runLevenbergMarquardt(const AbstractColumn* tmpXDataColu
 
 		// update weights for Y-depending weights (using function values from residuals)
 		if (fitData.yWeightsType == nsl_fit_weight_statistical_fit) {
-			for (size_t i = 0; i < n; i++)
+			for (auto i = 0; i < n; i++)
 				weight[i] = 1. / (gsl_vector_get(s->f, i) / sqrt(weight[i]) + ydata[i]); // 1/Y_i
 		} else if (fitData.yWeightsType == nsl_fit_weight_relative_fit) {
-			for (size_t i = 0; i < n; i++)
+			for (auto i = 0; i < n; i++)
 				weight[i] = 1. / gsl_pow_2(gsl_vector_get(s->f, i) / sqrt(weight[i]) + ydata[i]); // 1/Y_i^2
 		}
 
@@ -2388,11 +2391,11 @@ void XYFitCurvePrivate::runLevenbergMarquardt(const AbstractColumn* tmpXDataColu
 			// printf("iter2 = %d\n", iter2);
 
 			// calculate function from residuals
-			for (size_t i = 0; i < n; i++)
+			for (auto i = 0; i < n; i++)
 				fun[i] = gsl_vector_get(s->f, i) * 1. / sqrt(weight[i]) + ydata[i];
 
 			// calculate weight[i]
-			for (size_t i = 0; i < n; i++) {
+			for (auto i = 0; i < n; i++) {
 				// calculate df[i]
 				size_t index = i - 1;
 				if (i == 0)
@@ -2484,7 +2487,7 @@ void XYFitCurvePrivate::runLevenbergMarquardt(const AbstractColumn* tmpXDataColu
 	delete[] weight;
 
 	// unscale start parameter
-	for (unsigned int i = 0; i < np; i++)
+	for (auto i = 0; i < np; i++)
 		x_init[i] = nsl_fit_map_bound(x_init[i], x_min[i], x_max[i]);
 
 	// get the covariance matrix
@@ -2537,7 +2540,7 @@ void XYFitCurvePrivate::runLevenbergMarquardt(const AbstractColumn* tmpXDataColu
 	const double cerr = sqrt(fitResult.rms);
 	// CI = 100 * (1 - alpha)
 	const double alpha = 1.0 - fitData.confidenceInterval / 100.;
-	for (unsigned int i = 0; i < np; i++) {
+	for (auto i = 0; i < np; i++) {
 		// scale resulting values if they are bounded
 		fitResult.paramValues[i] = nsl_fit_map_bound(gsl_vector_get(s->x, i), x_min[i], x_max[i]);
 		// use results as start values if desired
@@ -2549,7 +2552,7 @@ void XYFitCurvePrivate::runLevenbergMarquardt(const AbstractColumn* tmpXDataColu
 		fitResult.tdist_tValues[i] = nsl_stats_tdist_t(fitResult.paramValues.at(i), fitResult.errorValues.at(i));
 		fitResult.tdist_pValues[i] = nsl_stats_tdist_p(fitResult.tdist_tValues.at(i), fitResult.dof);
 		fitResult.marginValues[i] = nsl_stats_tdist_margin(alpha, fitResult.dof, fitResult.errorValues.at(i));
-		for (unsigned int j = 0; j <= i; j++)
+		for (auto j = 0; j <= i; j++)
 			fitResult.correlationMatrix << gsl_matrix_get(covar, i, j) / sqrt(gsl_matrix_get(covar, i, i)) / sqrt(gsl_matrix_get(covar, j, j));
 	}
 
@@ -2703,30 +2706,30 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const {
 
 	if (d->fitData.modelCategory == nsl_fit_model_custom) {
 		writer->writeStartElement(QStringLiteral("paramNames"));
-		foreach (const QString& name, d->fitData.paramNames)
+		for (const QString& name : d->fitData.paramNames)
 			writer->writeTextElement(QStringLiteral("name"), name);
 		writer->writeEndElement();
 	}
 
 	writer->writeStartElement(QStringLiteral("paramStartValues"));
-	foreach (const double& value, d->fitData.paramStartValues)
+	for (const double& value : d->fitData.paramStartValues)
 		writer->writeTextElement(QStringLiteral("startValue"), QString::number(value, 'g', 15));
 	writer->writeEndElement();
 
 	// use 16 digits to handle -DBL_MAX
 	writer->writeStartElement(QStringLiteral("paramLowerLimits"));
-	foreach (const double& limit, d->fitData.paramLowerLimits)
+	for (const double& limit : d->fitData.paramLowerLimits)
 		writer->writeTextElement(QStringLiteral("lowerLimit"), QString::number(limit, 'g', 16));
 	writer->writeEndElement();
 
 	// use 16 digits to handle DBL_MAX
 	writer->writeStartElement(QStringLiteral("paramUpperLimits"));
-	foreach (const double& limit, d->fitData.paramUpperLimits)
+	for (const double& limit : d->fitData.paramUpperLimits)
 		writer->writeTextElement(QStringLiteral("upperLimit"), QString::number(limit, 'g', 16));
 	writer->writeEndElement();
 
 	writer->writeStartElement(QStringLiteral("paramFixed"));
-	foreach (const double& fixed, d->fitData.paramFixed)
+	for (const bool& fixed : d->fitData.paramFixed)
 		writer->writeTextElement(QStringLiteral("fixed"), QString::number(fixed));
 	writer->writeEndElement();
 
@@ -2757,36 +2760,36 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("solverOutput"), d->fitResult.solverOutput);
 
 	writer->writeStartElement(QStringLiteral("paramValues"));
-	foreach (const double& value, d->fitResult.paramValues)
+	for (const double& value : d->fitResult.paramValues)
 		writer->writeTextElement(QStringLiteral("value"), QString::number(value, 'g', 15));
 	writer->writeEndElement();
 
 	writer->writeStartElement(QStringLiteral("errorValues"));
-	foreach (const double& value, d->fitResult.errorValues)
+	for (const double& value : d->fitResult.errorValues)
 		writer->writeTextElement(QStringLiteral("error"), QString::number(value, 'g', 15));
 	writer->writeEndElement();
 
 	writer->writeStartElement(QStringLiteral("tdist_tValues"));
-	foreach (const double& value, d->fitResult.tdist_tValues)
+	for (const double& value : d->fitResult.tdist_tValues)
 		writer->writeTextElement(QStringLiteral("tdist_t"), QString::number(value, 'g', 15));
 	writer->writeEndElement();
 
 	writer->writeStartElement(QStringLiteral("tdist_pValues"));
-	foreach (const double& value, d->fitResult.tdist_pValues)
+	for (const double& value : d->fitResult.tdist_pValues)
 		writer->writeTextElement(QStringLiteral("tdist_p"), QString::number(value, 'g', 15));
 	writer->writeEndElement();
 
 	writer->writeStartElement(QStringLiteral("tdist_marginValues"));
-	foreach (const double& value, d->fitResult.marginValues)
+	for (const double& value : d->fitResult.marginValues)
 		writer->writeTextElement(QStringLiteral("tdist_margin"), QString::number(value, 'g', 15));
 	writer->writeEndElement();
 	writer->writeStartElement(QStringLiteral("tdist_margin2Values"));
-	foreach (const double& value, d->fitResult.margin2Values)
+	for (const double& value : d->fitResult.margin2Values)
 		writer->writeTextElement(QStringLiteral("tdist_margin2"), QString::number(value, 'g', 15));
 	writer->writeEndElement();
 
 	writer->writeStartElement(QStringLiteral("correlationMatrix"));
-	foreach (const double& value, d->fitResult.correlationMatrix)
+	for (const double& value : d->fitResult.correlationMatrix)
 		writer->writeTextElement(QStringLiteral("correlation"), QString::number(value, 'g', 15));
 	writer->writeEndElement();
 

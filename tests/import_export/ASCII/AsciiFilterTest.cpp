@@ -1151,6 +1151,44 @@ void AsciiFilterTest::testDateTime00() {
 	QCOMPARE(spreadsheet.column(1)->valueAt(1), 14.8026);
 }
 
+/*!
+ * same as in the previous test, but with the auto-detection of the datetime format
+ */
+void AsciiFilterTest::testDateTime01() {
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+	AsciiFilter filter;
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/datetime_01.csv"));
+
+	filter.setSeparatingCharacter(QStringLiteral(","));
+	filter.setHeaderEnabled(true);
+	filter.setHeaderLine(1);
+	filter.setDateTimeFormat(QLatin1String()); // auto detect the format
+	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+	// spreadsheet size
+	QCOMPARE(spreadsheet.columnCount(), 2);
+	QCOMPARE(spreadsheet.rowCount(), 2);
+
+	// column names
+	QCOMPARE(spreadsheet.column(0)->name(), QLatin1String("Date"));
+	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("Water Pressure"));
+
+	// data types
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::DateTime);
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Double);
+
+	// values
+	auto value = QDateTime::fromString(QLatin1String("01/01/2019 00:00:00"), QLatin1String("dd/MM/yyyy hh:mm:ss"));
+	value.setTimeSpec(Qt::UTC);
+	QCOMPARE(spreadsheet.column(0)->dateTimeAt(0), value);
+	QCOMPARE(spreadsheet.column(1)->valueAt(0), 14.7982);
+
+	value = QDateTime::fromString(QLatin1String("01/01/2019 00:30:00"), QLatin1String("dd/MM/yyyy hh:mm:ss"));
+	value.setTimeSpec(Qt::UTC);
+	QCOMPARE(spreadsheet.column(0)->dateTimeAt(1), value);
+	QCOMPARE(spreadsheet.column(1)->valueAt(1), 14.8026);
+}
+
 /* read datetime data before big int
  *  TODO: handle hex value
  */

@@ -9,6 +9,7 @@
 */
 
 #include "backend/worksheet/WorksheetElement.h"
+#include "backend/core/AspectPrivate.h"
 #include "backend/core/Project.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
@@ -21,6 +22,7 @@
 #include <KLocalizedString>
 #include <QGraphicsItem>
 #include <QGraphicsScene>
+#include <QGraphicsSceneContextMenuEvent>
 #include <QKeyEvent>
 #include <QMenu>
 #include <QPen>
@@ -44,7 +46,8 @@ WorksheetElement::WorksheetElement(const QString& name, WorksheetElementPrivate*
 }
 
 void WorksheetElement::init() {
-	d_ptr->setData(0, static_cast<quint64>(type()));
+	Q_D(WorksheetElement);
+	d->setData(0, static_cast<quint64>(type()));
 }
 
 WorksheetElement::~WorksheetElement() {
@@ -75,6 +78,19 @@ void WorksheetElement::finalizeAdd() {
  * \brief Return the graphics item representing this element.
  *
  */
+QGraphicsItem* WorksheetElement::graphicsItem() const {
+	return d_ptr;
+}
+
+/*!
+ * \brief WorksheetElement::setParentGraphicsItem
+ * Sets the parent graphicsitem, needed for binding to coord
+ * \param item parent graphicsitem
+ */
+void WorksheetElement::setParentGraphicsItem(QGraphicsItem* item) {
+	Q_D(WorksheetElement);
+	d->setParentItem(item);
+}
 
 /**
  * \fn void WorksheetElement::setVisible(bool on)
@@ -122,6 +138,21 @@ void WorksheetElement::setZValue(qreal value) {
 void WorksheetElement::changeVisibility() {
 	Q_D(const WorksheetElement);
 	this->setVisible(!d->isVisible());
+}
+
+void WorksheetElement::changeLocking() {
+	Q_D(const WorksheetElement);
+	this->setLock(!isLocked());
+}
+
+STD_SETTER_CMD_IMPL_S(WorksheetElement, SetLock, bool, lock)
+void WorksheetElement::setLock(bool lock) {
+	Q_D(WorksheetElement);
+	if (lock != d->lock) {
+		if (!lock && isHovered())
+			setHover(false);
+		exec(new WorksheetElementSetLockCmd(d, lock, lock ? ki18n("%1: lock") : ki18n("%1: unlock")));
+	}
 }
 
 STD_SWAP_METHOD_SETTER_CMD_IMPL_F(WorksheetElement, SetVisible, bool, swapVisible, update)
@@ -182,6 +213,24 @@ QPainterPath WorksheetElement::shapeFromPath(const QPainterPath& path, const QPe
 	return p;
 }
 
+QAction* WorksheetElement::visibilityAction() {
+	if (!m_visibilityAction) {
+		m_visibilityAction = new QAction(QIcon::fromTheme(QStringLiteral("view-visible")), i18n("Visible"), this);
+		m_visibilityAction->setCheckable(true);
+		connect(m_visibilityAction, &QAction::triggered, this, &WorksheetElement::changeVisibility);
+	}
+	return m_visibilityAction;
+}
+
+QAction* WorksheetElement::lockingAction() {
+	if (!m_lockingAction) {
+		m_lockingAction = new QAction(QIcon::fromTheme(QStringLiteral("hidemouse")), i18n("Locking"), this);
+		m_lockingAction->setCheckable(true);
+		connect(m_lockingAction, &QAction::triggered, this, &WorksheetElement::changeLocking);
+	}
+	return m_lockingAction;
+}
+
 QMenu* WorksheetElement::createContextMenu() {
 	if (!m_drawingOrderMenu) {
 		m_drawingOrderMenu = new QMenu(i18n("Drawing &order"));
@@ -201,6 +250,18 @@ QMenu* WorksheetElement::createContextMenu() {
 	}
 
 	QMenu* menu = AbstractAspect::createContextMenu();
+	QAction* firstAction = menu->actions().at(1); // skip the first action because of the "title-action"
+
+	auto* visibilityAction = this->visibilityAction();
+	visibilityAction->setChecked(isVisible());
+	menu->insertAction(firstAction, visibilityAction);
+	menu->insertSeparator(firstAction);
+	auto* lockingAction = this->lockingAction();
+	menu->insertAction(firstAction, lockingAction);
+	menu->insertSeparator(firstAction);
+
+	visibilityAction->setChecked(isVisible());
+	lockingAction->setChecked(isLocked());
 
 	// add the sub-menu for the drawing order
 
@@ -450,6 +511,7 @@ void WorksheetElement::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("coordinateBinding"), QString::number(d->coordinateBindingEnabled));
 	writer->writeAttribute(QStringLiteral("logicalPosX"), QString::number(d->positionLogical.x()));
 	writer->writeAttribute(QStringLiteral("logicalPosY"), QString::number(d->positionLogical.y()));
+	writer->writeAttribute(QStringLiteral("locked"), QString::number(d->lock));
 }
 
 bool WorksheetElement::load(XmlStreamReader* reader, bool preview) {
@@ -535,6 +597,12 @@ bool WorksheetElement::load(XmlStreamReader* reader, bool preview) {
 	else
 		d->positionLogical.setY(str.toDouble());
 
+	str = attribs.value(QStringLiteral("locked")).toString();
+	if (str.isEmpty())
+		reader->raiseMissingAttributeWarning(QStringLiteral("locked"));
+	else
+		d->lock = static_cast<bool>(str.toInt());
+
 	return true;
 }
 
@@ -546,13 +614,48 @@ void WorksheetElement::saveThemeConfig(const KConfig&) {
 
 // coordinate system
 
-void WorksheetElement::setCoordinateSystemIndex(int index) {
-	m_cSystemIndex = index;
-	if (m_plot)
-		cSystem = dynamic_cast<const CartesianCoordinateSystem*>(m_plot->coordinateSystem(index));
-	else
-		DEBUG(Q_FUNC_INFO << ", WARNING: No plot found. Failed setting csystem index.")
-	emit coordinateSystemIndexChanged(m_cSystemIndex);
+class SetCoordinateSystemIndexCmd : public QUndoCommand {
+public:
+	SetCoordinateSystemIndexCmd(WorksheetElement* element, int index, QUndoCommand* parent = nullptr)
+		: QUndoCommand(parent)
+		, m_element(element)
+		, m_index(index) {
+	}
+
+	virtual void redo() override {
+		const auto oldIndex = m_element->m_cSystemIndex;
+		m_element->m_cSystemIndex = m_index;
+		if (m_element->plot())
+			m_element->cSystem = dynamic_cast<const CartesianCoordinateSystem*>(m_element->plot()->coordinateSystem(m_index));
+		else
+			DEBUG(Q_FUNC_INFO << ", WARNING: No plot found. Failed setting csystem index.")
+
+		m_index = oldIndex;
+		m_element->retransform();
+		Q_EMIT m_element->coordinateSystemIndexChanged(m_element->m_cSystemIndex);
+	}
+
+	virtual void undo() override {
+		redo();
+	}
+
+private:
+	WorksheetElement* m_element;
+	int m_index;
+};
+
+void WorksheetElement::setCoordinateSystemIndex(int index, QUndoCommand* parent) {
+	if (index != m_cSystemIndex) {
+		auto* command = new SetCoordinateSystemIndexCmd(this, index, parent);
+		if (!parent)
+			exec(command);
+	} else if (!cSystem) {
+		// during load the index will be set,
+		// but the element might not have yet a plot assigned
+		if (plot())
+			cSystem = dynamic_cast<const CartesianCoordinateSystem*>(plot()->coordinateSystem(index));
+		retransform();
+	}
 }
 
 int WorksheetElement::coordinateSystemCount() const {
@@ -570,6 +673,16 @@ QString WorksheetElement::coordinateSystemInfo(const int index) const {
 	return {};
 }
 
+bool WorksheetElement::isHovered() const {
+	Q_D(const WorksheetElement);
+	return d->isHovered();
+}
+
+void WorksheetElement::setHover(bool on) {
+	Q_D(WorksheetElement);
+	d->setHover(on);
+}
+
 /* ============================ getter methods ================= */
 BASIC_SHARED_D_READER_IMPL(WorksheetElement, WorksheetElement::PositionWrapper, position, position)
 BASIC_SHARED_D_READER_IMPL(WorksheetElement, WorksheetElement::HorizontalAlignment, horizontalAlignment, horizontalAlignment)
@@ -581,6 +694,7 @@ BASIC_SHARED_D_READER_IMPL(WorksheetElement,
 						   rotation() * -1) // the rotation is in qgraphicsitem different to the convention used in labplot
 BASIC_SHARED_D_READER_IMPL(WorksheetElement, bool, coordinateBindingEnabled, coordinateBindingEnabled)
 BASIC_SHARED_D_READER_IMPL(WorksheetElement, qreal, scale, scale())
+BASIC_SHARED_D_READER_IMPL(WorksheetElement, bool, isLocked, lock)
 
 /* ============================ setter methods and undo commands ================= */
 STD_SETTER_CMD_IMPL_F_S_SC(WorksheetElement, SetPosition, WorksheetElement::PositionWrapper, position, updatePosition, objectPositionChanged)
@@ -682,7 +796,11 @@ QString WorksheetElementPrivate::name() const {
 }
 
 QRectF WorksheetElementPrivate::boundingRect() const {
-	return boundingRectangle;
+	return m_boundingRectangle;
+}
+
+QPainterPath WorksheetElementPrivate::shape() const {
+	return m_shape;
 }
 
 void WorksheetElementPrivate::paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*) {
@@ -714,6 +832,14 @@ void WorksheetElementPrivate::updatePosition() {
 	suppressItemChangeEvent = false;
 }
 
+bool WorksheetElementPrivate::sceneEvent(QEvent* event) {
+	if (lock) {
+		event->ignore();
+		return false;
+	}
+	return QGraphicsItem::sceneEvent(event);
+}
+
 void WorksheetElementPrivate::keyPressEvent(QKeyEvent* event) {
 	const bool keyVertical = event->key() == Qt::Key_Up || event->key() == Qt::Key_Down;
 	const bool keyHorizontal = event->key() == Qt::Key_Left || event->key() == Qt::Key_Right;
@@ -741,7 +867,7 @@ void WorksheetElementPrivate::keyPressEvent(QKeyEvent* event) {
 			q->setPositionLogical(pLogic); // So it is undoable
 		} else {
 			QPointF point = q->parentPosToRelativePos(pos(), position);
-			point = q->align(point, boundingRectangle, horizontalAlignment, verticalAlignment, false);
+			point = q->align(point, m_boundingRectangle, horizontalAlignment, verticalAlignment, false);
 
 			if (event->key() == Qt::Key_Left) {
 				point.setX(point.x() - delta);
@@ -801,7 +927,7 @@ QVariant WorksheetElementPrivate::itemChange(GraphicsItemChange change, const QV
 		if (coordinateBindingEnabled) {
 			if (!q->cSystem->isValid())
 				return QGraphicsItem::itemChange(change, value);
-			QPointF pos = q->align(newPos, boundingRectangle, horizontalAlignment, verticalAlignment, false);
+			QPointF pos = q->align(newPos, m_boundingRectangle, horizontalAlignment, verticalAlignment, false);
 
 			positionLogical = q->cSystem->mapSceneToLogical(mapParentToPlotArea(pos), AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 			Q_EMIT q->positionLogicalChanged(positionLogical);
@@ -862,4 +988,37 @@ QPointF WorksheetElementPrivate::mapPlotAreaToParent(QPointF point) {
 	}
 
 	return point; // don't map if no parent set. Then it's during load
+}
+
+void WorksheetElementPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
+	if (!isSelected())
+		setHover(true);
+}
+
+void WorksheetElementPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
+	setHover(false);
+}
+
+void WorksheetElementPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
+	// don't show any context menu if the element is hidden which is the case
+	// for example for axis and plot title labels. For such objects the context menu
+	// of their parents, i.e. of axis and plot, is used.
+	if (!q->hidden()) {
+		auto* menu = q->createContextMenu();
+		if (menu)
+			menu->exec(event->screenPos());
+	}
+}
+
+bool WorksheetElementPrivate::isHovered() const {
+	return m_hovered;
+}
+
+void WorksheetElementPrivate::setHover(bool on) {
+	if (on == m_hovered)
+		return; // don't update if state not changed
+
+	m_hovered = on;
+	Q_EMIT q->hoveredChanged(on);
+	update();
 }

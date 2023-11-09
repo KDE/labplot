@@ -31,7 +31,6 @@
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_statistics.h>
 
-#include <QGraphicsSceneContextMenuEvent>
 #include <QMenu>
 #include <QPainter>
 
@@ -115,46 +114,11 @@ void KDEPlot::finalizeAdd() {
 	addChildFast(d->rugCurve);
 }
 
-void KDEPlot::initActions() {
-	visibilityAction = new QAction(QIcon::fromTheme(QStringLiteral("view-visible")), i18n("Visible"), this);
-	visibilityAction->setCheckable(true);
-	connect(visibilityAction, &QAction::triggered, this, &KDEPlot::changeVisibility);
-}
-
-QMenu* KDEPlot::createContextMenu() {
-	if (!visibilityAction)
-		initActions();
-
-	QMenu* menu = WorksheetElement::createContextMenu();
-	QAction* firstAction = menu->actions().at(1); // skip the first action because of the "title-action"
-	visibilityAction->setChecked(isVisible());
-	menu->insertAction(firstAction, visibilityAction);
-
-	menu->insertSeparator(visibilityAction);
-	menu->insertSeparator(firstAction);
-
-	return menu;
-}
-
 /*!
   Returns an icon to be used in the project explorer.
   */
 QIcon KDEPlot::icon() const {
 	return QIcon::fromTheme(QStringLiteral("view-object-histogram-linear"));
-}
-
-QGraphicsItem* KDEPlot::graphicsItem() const {
-	return d_ptr;
-}
-
-bool KDEPlot::activatePlot(QPointF mouseScenePos, double maxDist) {
-	Q_D(KDEPlot);
-	return d->activateCurve(mouseScenePos, maxDist);
-}
-
-void KDEPlot::setHover(bool on) {
-	Q_D(KDEPlot);
-	d->setHover(on);
 }
 
 void KDEPlot::handleResize(double /*horizontalRatio*/, double /*verticalRatio*/, bool /*pageResize*/) {
@@ -170,10 +134,10 @@ void KDEPlot::setVisible(bool on) {
 	endMacro();
 }
 
-//##############################################################################
-//##########################  getter methods  ##################################
-//##############################################################################
-// general
+// ##############################################################################
+// ##########################  getter methods  ##################################
+// ##############################################################################
+//  general
 BASIC_SHARED_D_READER_IMPL(KDEPlot, const AbstractColumn*, dataColumn, dataColumn)
 BASIC_SHARED_D_READER_IMPL(KDEPlot, QString, dataColumnPath, dataColumnPath)
 BASIC_SHARED_D_READER_IMPL(KDEPlot, nsl_kernel_type, kernelType, kernelType)
@@ -231,9 +195,9 @@ int KDEPlot::gridPointsCount() const {
 	return d->gridPointsCount;
 }
 
-//##############################################################################
-//#################  setter methods and undo commands ##########################
-//##############################################################################
+// ##############################################################################
+// #################  setter methods and undo commands ##########################
+// ##############################################################################
 
 // General
 CURVE_COLUMN_SETTER_CMD_IMPL_F_S(KDEPlot, Data, data, recalc)
@@ -269,9 +233,9 @@ void KDEPlot::setBandwidth(double bandwidth) {
 		exec(new KDEPlotSetBandwidthCmd(d, bandwidth, ki18n("%1: set bandwidth")));
 }
 
-//##############################################################################
-//#################################  SLOTS  ####################################
-//##############################################################################
+// ##############################################################################
+// #################################  SLOTS  ####################################
+// ##############################################################################
 void KDEPlot::retransform() {
 	d_ptr->retransform();
 }
@@ -294,9 +258,9 @@ void KDEPlot::dataColumnNameChanged() {
 	setDataColumnPath(d->dataColumn->path());
 }
 
-//##############################################################################
-//######################### Private implementation #############################
-//##############################################################################
+// ##############################################################################
+// ######################### Private implementation #############################
+// ##############################################################################
 KDEPlotPrivate::KDEPlotPrivate(KDEPlot* owner)
 	: PlotPrivate(owner)
 	, q(owner) {
@@ -305,17 +269,6 @@ KDEPlotPrivate::KDEPlotPrivate(KDEPlot* owner)
 }
 
 KDEPlotPrivate::~KDEPlotPrivate() {
-}
-
-QRectF KDEPlotPrivate::boundingRect() const {
-	return boundingRectangle;
-}
-
-/*!
-  Returns the shape of the KDEPlot as a QPainterPath in local coordinates
-  */
-QPainterPath KDEPlotPrivate::shape() const {
-	return curveShape;
 }
 
 /*!
@@ -447,39 +400,19 @@ void KDEPlotPrivate::copyValidData(QVector<double>& data) const {
   recalculates the outer bounds and the shape of the curve.
   */
 void KDEPlotPrivate::recalcShapeAndBoundingRect() {
-	if (m_suppressRecalc)
+	if (suppressRecalc)
 		return;
 
 	prepareGeometryChange();
-	curveShape = QPainterPath();
-	curveShape.addPath(estimationCurve->graphicsItem()->shape());
-	curveShape.addPath(rugCurve->graphicsItem()->shape());
-	boundingRectangle = curveShape.boundingRect();
+	m_shape = QPainterPath();
+	m_shape.addPath(estimationCurve->graphicsItem()->shape());
+	m_shape.addPath(rugCurve->graphicsItem()->shape());
+	m_boundingRectangle = m_shape.boundingRect();
 }
 
-bool KDEPlotPrivate::activateCurve(QPointF mouseScenePos, double /*maxDist*/) {
-	if (!isVisible())
-		return false;
-
-	return curveShape.contains(mouseScenePos);
-}
-
-/*!
- * Is called in CartesianPlot::hoverMoveEvent where it is determined which curve to hover.
- * \p on
- */
-void KDEPlotPrivate::setHover(bool on) {
-	if (on == m_hovered)
-		return; // don't update if state not changed
-
-	m_hovered = on;
-	on ? Q_EMIT q->hovered() : Q_EMIT q->unhovered();
-	update();
-}
-
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 //! Save as XML
 void KDEPlot::save(QXmlStreamWriter* writer) const {
 	Q_D(const KDEPlot);
@@ -579,9 +512,9 @@ bool KDEPlot::load(XmlStreamReader* reader, bool preview) {
 	return true;
 }
 
-//##############################################################################
-//#########################  Theme management ##################################
-//##############################################################################
+// ##############################################################################
+// #########################  Theme management ##################################
+// ##############################################################################
 void KDEPlot::loadThemeConfig(const KConfig& config) {
 	KConfigGroup group;
 	if (config.hasGroup(QLatin1String("Theme")))
@@ -594,13 +527,13 @@ void KDEPlot::loadThemeConfig(const KConfig& config) {
 	const QColor themeColor = plot->themeColorPalette(index);
 
 	Q_D(KDEPlot);
-	d->m_suppressRecalc = true;
+	d->suppressRecalc = true;
 
 	d->estimationCurve->line()->loadThemeConfig(group, themeColor);
 	d->estimationCurve->background()->loadThemeConfig(group, themeColor);
 	d->rugCurve->symbol()->loadThemeConfig(group, themeColor);
 
-	d->m_suppressRecalc = false;
+	d->suppressRecalc = false;
 	d->recalcShapeAndBoundingRect();
 }
 

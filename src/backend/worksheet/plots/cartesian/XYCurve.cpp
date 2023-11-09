@@ -39,10 +39,10 @@
 #include <KConfigGroup>
 #include <KLocalizedString>
 
-#include <QDesktopWidget>
-#include <QGraphicsSceneContextMenuEvent>
+#include <QGraphicsSceneMouseEvent>
 #include <QMenu>
 #include <QPainter>
+#include <QScreen>
 
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_math.h>
@@ -189,10 +189,6 @@ void XYCurve::init() {
 }
 
 void XYCurve::initActions() {
-	visibilityAction = new QAction(QIcon::fromTheme(QStringLiteral("view-visible")), i18n("Visible"), this);
-	visibilityAction->setCheckable(true);
-	connect(visibilityAction, SIGNAL(triggered(bool)), this, SLOT(changeVisibility()));
-
 	navigateToAction = new QAction(QIcon::fromTheme(QStringLiteral("go-next-view")), QString(), this);
 	connect(navigateToAction, SIGNAL(triggered(bool)), this, SLOT(navigateTo()));
 
@@ -204,15 +200,12 @@ QMenu* XYCurve::createContextMenu() {
 		initActions();
 
 	QMenu* menu = WorksheetElement::createContextMenu();
-	QAction* firstAction = menu->actions().at(1); // skip the first action because of the "title-action"
-	visibilityAction->setChecked(isVisible());
-	menu->insertAction(firstAction, visibilityAction);
+	QAction* visibilityAction = this->visibilityAction(); // skip the first action because of the "title-action", second is visible
 
 	//"data analysis" menu
 	//	auto* plot = static_cast<CartesianPlot*>(parentAspect());
 	menu->insertMenu(visibilityAction, m_plot->analysisMenu());
 	menu->insertSeparator(visibilityAction);
-	menu->insertSeparator(firstAction);
 
 	//"Navigate to spreadsheet"-action, show only if x- or y-columns have data from a spreadsheet
 	AbstractAspect* parentSpreadsheet = nullptr;
@@ -240,33 +233,6 @@ QMenu* XYCurve::createContextMenu() {
 */
 QIcon XYCurve::icon() const {
 	return QIcon::fromTheme(QStringLiteral("labplot-xy-curve"));
-}
-
-QGraphicsItem* XYCurve::graphicsItem() const {
-	return d_ptr;
-}
-
-/*!
- * \brief XYCurve::activatePlot
- * Checks if the mousepos distance to the curve is less than @p maxDist
- * \p mouseScenePos
- * \p maxDist Maximum distance the point lies away from the curve
- * \return Returns true if the distance is smaller than maxDist.
- */
-bool XYCurve::activatePlot(QPointF mouseScenePos, double maxDist) {
-	Q_D(XYCurve);
-	return d->activatePlot(mouseScenePos, maxDist);
-}
-
-/*!
- * \brief XYCurve::setHover
- * Will be called in CartesianPlot::hoverMoveEvent()
- * See d->setHover(on) for more documentation
- * \p on
- */
-void XYCurve::setHover(bool on) {
-	Q_D(XYCurve);
-	d->setHover(on);
 }
 
 // ##############################################################################
@@ -888,29 +854,10 @@ XYCurvePrivate::XYCurvePrivate(XYCurve* owner)
 	setAcceptHoverEvents(false);
 }
 
-QRectF XYCurvePrivate::boundingRect() const {
-	return boundingRectangle;
-}
-
-/*!
-  Returns the shape of the XYCurve as a QPainterPath in local coordinates
-*/
-QPainterPath XYCurvePrivate::shape() const {
-	return curveShape;
-}
-
-void XYCurvePrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
-	if (q->activatePlot(event->pos())) {
-		q->createContextMenu()->exec(event->screenPos());
-		return;
-	}
-	QGraphicsItem::contextMenuEvent(event);
-}
-
 void XYCurvePrivate::calculateScenePoints() {
 	if (!q->plot() || !m_scenePointsDirty || !xColumn)
 		return;
-#ifdef PERFTRACE_CURVES
+#if PERFTRACE_CURVES
 	PERFTRACE(QLatin1String(Q_FUNC_INFO) + QStringLiteral(", curve ") + name());
 #endif
 
@@ -921,7 +868,7 @@ void XYCurvePrivate::calculateScenePoints() {
 	//  TODO: check updateErrorBars() and updateDropLines() and if they aren't available don't calculate this part
 	// if (symbolsStyle != Symbol::Style::NoSymbols || valuesType != XYCurve::NoValues ) {
 	{
-#ifdef PERFTRACE_CURVES
+#if PERFTRACE_CURVES
 		PERFTRACE(QLatin1String(Q_FUNC_INFO) + QStringLiteral(", curve ") + name() + QStringLiteral(", map logical points to scene coordinates"));
 #endif
 
@@ -934,8 +881,10 @@ void XYCurvePrivate::calculateScenePoints() {
 			const auto dataRect{plot()->dataRect()};
 			// this is the old method considering DPI
 			DEBUG(Q_FUNC_INFO << ", plot->dataRect() width/height = " << dataRect.width() << '/' << dataRect.height());
-			DEBUG(Q_FUNC_INFO << ", logical DPI X/Y = " << QApplication::desktop()->logicalDpiX() << '/' << QApplication::desktop()->logicalDpiY())
-			DEBUG(Q_FUNC_INFO << ", physical DPI X/Y = " << QApplication::desktop()->physicalDpiX() << '/' << QApplication::desktop()->physicalDpiY())
+			DEBUG(Q_FUNC_INFO << ", logical DPI X/Y = " << QApplication::primaryScreen()->logicalDotsPerInchX() << '/'
+							  << QApplication::primaryScreen()->logicalDotsPerInchY())
+			DEBUG(Q_FUNC_INFO << ", physical DPI X/Y = " << QApplication::primaryScreen()->physicalDotsPerInchX() << '/'
+							  << QApplication::primaryScreen()->physicalDotsPerInchY())
 
 			// new method
 			const int numberOfPixelX = dataRect.width();
@@ -1015,7 +964,7 @@ void XYCurvePrivate::retransform() {
 		valuesPath = QPainterPath();
 		errorBarsPath = QPainterPath();
 		rugPath = QPainterPath();
-		curveShape = QPainterPath();
+		m_shape = QPainterPath();
 		m_lines.clear();
 		m_valuePoints.clear();
 		m_valueStrings.clear();
@@ -1024,13 +973,13 @@ void XYCurvePrivate::retransform() {
 		return;
 	}
 
-	m_suppressRecalc = true;
+	suppressRecalc = true;
 	updateLines();
 	updateDropLines();
 	updateSymbols();
 	updateRug();
 	updateValues();
-	m_suppressRecalc = false;
+	suppressRecalc = false;
 	updateErrorBars();
 }
 
@@ -1208,7 +1157,7 @@ TODO: At the moment also the points which are outside of the scene are added. Th
   lines where both points are outside of the scene
 */
 void XYCurvePrivate::updateLines() {
-#ifdef PERFTRACE_CURVES
+#if PERFTRACE_CURVES
 	PERFTRACE(QLatin1String(Q_FUNC_INFO) + QStringLiteral(", curve ") + name());
 #endif
 	linePath = QPainterPath();
@@ -1220,7 +1169,7 @@ void XYCurvePrivate::updateLines() {
 		return;
 	}
 
-	int numberOfPoints{m_logicalPoints.size()};
+	int numberOfPoints{static_cast<int>(m_logicalPoints.size())};
 	if (numberOfPoints <= 1) {
 		DEBUG(Q_FUNC_INFO << ", nothing to do, since not enough data points available");
 		recalcShapeAndBoundingRect();
@@ -1236,7 +1185,7 @@ void XYCurvePrivate::updateLines() {
 
 	// calculate the lines connecting the data points
 	{
-#ifdef PERFTRACE_CURVES
+#if PERFTRACE_CURVES
 		PERFTRACE(QLatin1String(Q_FUNC_INFO) + QStringLiteral(", curve ") + name() + QStringLiteral(", calculate the lines connecting the data points"));
 #endif
 
@@ -1331,7 +1280,7 @@ void XYCurvePrivate::updateLines() {
 			case XYCurve::LineType::NoLine:
 				break;
 			case XYCurve::LineType::Line: {
-#ifdef PERFTRACE_CURVES
+#if PERFTRACE_CURVES
 				PERFTRACE(name() + QLatin1String(Q_FUNC_INFO) + QStringLiteral(", find relevant lines"));
 #endif
 				for (int i{startIndex}; i <= endIndex; i++) {
@@ -1627,15 +1576,15 @@ void XYCurvePrivate::updateLines() {
 
 	// map the lines to scene coordinates
 	{
-#ifdef PERFTRACE_CURVES
+#if PERFTRACE_CURVES
 		PERFTRACE(QLatin1String(Q_FUNC_INFO) + QStringLiteral(", curve ") + name() + QStringLiteral(", map lines to scene coordinates"));
 #endif
-		emit q->linesUpdated(q, m_lines);
+		Q_EMIT q->linesUpdated(q, m_lines);
 		m_lines = q->cSystem->mapLogicalToScene(m_lines);
 	}
 
 	{
-#ifdef PERFTRACE_CURVES
+#if PERFTRACE_CURVES
 		PERFTRACE(QLatin1String(Q_FUNC_INFO) + QStringLiteral(", curve ") + name() + QStringLiteral(", calculate new line path"));
 #endif
 		// new line path
@@ -1737,7 +1686,7 @@ void XYCurvePrivate::updateDropLines() {
 }
 
 void XYCurvePrivate::updateSymbols() {
-#ifdef PERFTRACE_CURVES
+#if PERFTRACE_CURVES
 	PERFTRACE(QLatin1String(Q_FUNC_INFO) + QStringLiteral(", curve ") + name());
 #endif
 	symbolsPath = QPainterPath();
@@ -1815,7 +1764,7 @@ void XYCurvePrivate::updateRug() {
   recreates the value strings to be shown and recalculates their draw position.
 */
 void XYCurvePrivate::updateValues() {
-#ifdef PERFTRACE_CURVES
+#if PERFTRACE_CURVES
 	PERFTRACE(QLatin1String(Q_FUNC_INFO) + QLatin1String(", curve ") + name());
 #endif
 	valuesPath = QPainterPath();
@@ -2818,48 +2767,48 @@ void XYCurvePrivate::updateErrorBars() {
   recalculates the outer bounds and the shape of the curve.
 */
 void XYCurvePrivate::recalcShapeAndBoundingRect() {
-	DEBUG(Q_FUNC_INFO << ", m_suppressRecalc = " << m_suppressRecalc);
-	if (m_suppressRecalc)
+	DEBUG(Q_FUNC_INFO << ", suppressRecalc = " << suppressRecalc);
+	if (suppressRecalc)
 		return;
 
-#ifdef PERFTRACE_CURVES
+#if PERFTRACE_CURVES
 	PERFTRACE(QLatin1String(Q_FUNC_INFO) + QLatin1String(", curve ") + name());
 #endif
 
 	prepareGeometryChange();
-	curveShape = QPainterPath();
+	m_shape = QPainterPath();
 	if (lineType != XYCurve::LineType::NoLine)
-		curveShape.addPath(WorksheetElement::shapeFromPath(linePath, line->pen()));
+		m_shape.addPath(WorksheetElement::shapeFromPath(linePath, line->pen()));
 
 	if (dropLine->dropLineType() != XYCurve::DropLineType::NoDropLine)
-		curveShape.addPath(WorksheetElement::shapeFromPath(dropLinePath, dropLine->pen()));
+		m_shape.addPath(WorksheetElement::shapeFromPath(dropLinePath, dropLine->pen()));
 
 	if (symbol->style() != Symbol::Style::NoSymbols)
-		curveShape.addPath(symbolsPath);
+		m_shape.addPath(symbolsPath);
 
-	curveShape.addPath(rugPath);
+	m_shape.addPath(rugPath);
 
 	if (valuesType != XYCurve::ValuesType::NoValues)
-		curveShape.addPath(valuesPath);
+		m_shape.addPath(valuesPath);
 
 	if (xErrorType != XYCurve::ErrorType::NoError || yErrorType != XYCurve::ErrorType::NoError)
-		curveShape.addPath(WorksheetElement::shapeFromPath(errorBarsPath, errorBarsLine->pen()));
+		m_shape.addPath(WorksheetElement::shapeFromPath(errorBarsPath, errorBarsLine->pen()));
 
-	boundingRectangle = curveShape.boundingRect();
+	m_boundingRectangle = m_shape.boundingRect();
 
 	for (const auto& pol : qAsConst(m_fillPolygons))
-		boundingRectangle = boundingRectangle.united(pol.boundingRect());
+		m_boundingRectangle = m_boundingRectangle.united(pol.boundingRect());
 
 	// TODO: when the selection is painted, line intersections are visible.
 	// simplified() removes those artifacts but is horrible slow for curves with large number of points.
 	// search for an alternative.
-	// curveShape = curveShape.simplified();
+	// m_shape = m_shape.simplified();
 
 	updatePixmap();
 }
 
 void XYCurvePrivate::draw(QPainter* painter) {
-#ifdef PERFTRACE_CURVES
+#if PERFTRACE_CURVES
 	PERFTRACE(QLatin1String(Q_FUNC_INFO) + QLatin1String(", curve ") + name());
 #endif
 
@@ -2931,28 +2880,29 @@ void XYCurvePrivate::draw(QPainter* painter) {
 }
 
 void XYCurvePrivate::updatePixmap() {
-	DEBUG(Q_FUNC_INFO << ", m_suppressRecalc = " << m_suppressRecalc);
-	if (m_suppressRecalc)
+	DEBUG(Q_FUNC_INFO << ", suppressRecalc = " << suppressRecalc);
+	if (suppressRecalc)
 		return;
 
 	m_hoverEffectImageIsDirty = true;
 	m_selectionEffectImageIsDirty = true;
-	if (boundingRectangle.width() == 0 || boundingRectangle.height() == 0) {
+	if (m_boundingRectangle.width() == 0 || m_boundingRectangle.height() == 0) {
 		DEBUG(Q_FUNC_INFO << ", boundingRectangle.width() or boundingRectangle.height() == 0");
 		m_pixmap = QPixmap();
 		return;
 	}
-	QPixmap pixmap(ceil(boundingRectangle.width()), ceil(boundingRectangle.height()));
+	QPixmap pixmap(ceil(m_boundingRectangle.width()), ceil(m_boundingRectangle.height()));
 	pixmap.fill(Qt::transparent);
 	QPainter painter(&pixmap);
 	painter.setRenderHint(QPainter::Antialiasing, true);
-	painter.translate(-boundingRectangle.topLeft());
+	painter.translate(-m_boundingRectangle.topLeft());
 
 	draw(&painter);
 	painter.end();
 	m_pixmap = pixmap;
 
 	update();
+	Q_EMIT q->changed();
 }
 
 QVariant XYCurvePrivate::itemChange(GraphicsItemChange change, const QVariant& value) {
@@ -2978,11 +2928,11 @@ void XYCurvePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*
 	painter->setRenderHint(QPainter::SmoothPixmapTransform, true);
 
 	if (!q->isPrinting() && Settings::group(QStringLiteral("Settings_Worksheet")).readEntry<bool>("DoubleBuffering", true))
-		painter->drawPixmap(boundingRectangle.topLeft(), m_pixmap); // draw the cached pixmap (fast)
+		painter->drawPixmap(m_boundingRectangle.topLeft(), m_pixmap); // draw the cached pixmap (fast)
 	else
 		draw(painter); // draw directly again (slow)
 
-	if (m_hovered && !isSelected() && !q->isPrinting()) {
+	if (isHovered() && !isSelected() && !q->isPrinting()) {
 		if (m_hoverEffectImageIsDirty) {
 			QPixmap pix = m_pixmap;
 			QPainter p(&pix);
@@ -2994,7 +2944,7 @@ void XYCurvePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*
 			m_hoverEffectImageIsDirty = false;
 		}
 
-		painter->drawImage(boundingRectangle.topLeft(), m_hoverEffectImage, m_pixmap.rect());
+		painter->drawImage(m_boundingRectangle.topLeft(), m_hoverEffectImage, m_pixmap.rect());
 		return;
 	}
 
@@ -3010,7 +2960,7 @@ void XYCurvePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*
 			m_selectionEffectImageIsDirty = false;
 		}
 
-		painter->drawImage(boundingRectangle.topLeft(), m_selectionEffectImage, m_pixmap.rect());
+		painter->drawImage(m_boundingRectangle.topLeft(), m_selectionEffectImage, m_pixmap.rect());
 	}
 }
 
@@ -3050,19 +3000,6 @@ void XYCurvePrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 	event->ignore();
 	setSelected(false);
 	QGraphicsItem::mousePressEvent(event);
-}
-
-/*!
- * Is called in CartesianPlot::hoverMoveEvent where it is determined which curve to hover.
- * \p on
- */
-void XYCurvePrivate::setHover(bool on) {
-	if (on == m_hovered)
-		return; // don't update if state not changed
-
-	m_hovered = on;
-	on ? Q_EMIT q->hovered() : emit q->unhovered();
-	update();
 }
 
 // ##############################################################################
@@ -3271,7 +3208,7 @@ void XYCurve::loadThemeConfig(const KConfig& config) {
 	const QColor themeColor = plot->themeColorPalette(index);
 
 	Q_D(XYCurve);
-	d->m_suppressRecalc = true;
+	d->suppressRecalc = true;
 
 	d->line->loadThemeConfig(group, themeColor);
 	d->dropLine->loadThemeConfig(group, themeColor);
@@ -3292,7 +3229,7 @@ void XYCurve::loadThemeConfig(const KConfig& config) {
 	} else
 		setRugEnabled(false);
 
-	d->m_suppressRecalc = false;
+	d->suppressRecalc = false;
 	d->recalcShapeAndBoundingRect();
 }
 

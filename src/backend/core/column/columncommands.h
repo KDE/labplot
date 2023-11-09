@@ -21,7 +21,6 @@
 #include <QDateTime>
 #include <QUndoCommand>
 
-class QStringList;
 class AbstractSimpleFilter;
 
 class ColumnSetModeCmd : public QUndoCommand {

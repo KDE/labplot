@@ -1,24 +1,24 @@
 /*
-	File                 : ExcelFilterPrivate.h
+	File                 : XLSXFilterPrivate.h
 	Project              : LabPlot
-	Description          : Excel I/O-filter
+	Description          : XLSX I/O-filter
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2021 Fabian Kristof (fkristofszabolcs@gmail.com)
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-#ifndef EXCELFILTERPRIVATE_H
-#define EXCELFILTERPRIVATE_H
+#ifndef XLSXFILTERPRIVATE_H
+#define XLSXFILTERPRIVATE_H
 
 #include "backend/datasources/filters/AbstractFileFilter.h"
 
-class ExcelFilter;
+class XLSXFilter;
 class QTreeWidgetItem;
 
-class ExcelFilterPrivate {
+class XLSXFilterPrivate {
 public:
-	explicit ExcelFilterPrivate(ExcelFilter*);
-	~ExcelFilterPrivate();
+	explicit XLSXFilterPrivate(XLSXFilter*);
+	~XLSXFilterPrivate();
 
 	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace);
 	void write(const QString& fileName, AbstractDataSource*);
@@ -26,7 +26,7 @@ public:
 	void parse(const QString& fileName, QTreeWidgetItem* root);
 	QStringList sheets() const;
 
-#ifdef HAVE_EXCEL
+#ifdef HAVE_QXLSX
 	void readDataRegion(const QXlsx::CellRange& region, AbstractDataSource*, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace);
 	QVector<QXlsx::CellRange> dataRegions(const QString& fileName, const QString& sheetName);
 	QVector<QStringList> previewForDataRegion(const QString& sheet, const QXlsx::CellRange& region, bool* okToMatrix, int lines);
@@ -36,8 +36,6 @@ public:
 
 	QXlsx::CellRange dimension() const;
 #endif
-	const ExcelFilter* q;
-
 	bool exportDataSourceAsNewSheet{true};
 	bool firstRowAsColumnNames{false}; // import first row as column names
 	bool columnNamesAsFirstRow{true}; // export column names a first row
@@ -45,21 +43,21 @@ public:
 
 	QString sheetToAppendSpreadsheetTo;
 
-	int startRow{-1};
+	int startRow{1};
 	int endRow{-1};
-	int startColumn{-1};
+	int startColumn{1};
 	int endColumn{-1};
 	QString currentSheet;
 
-#ifdef HAVE_EXCEL
+#ifdef HAVE_QXLSX
 	QXlsx::CellRange currentRange;
 	QXlsx::CellReference dataExportStartCell;
 #endif
 private:
-#ifdef HAVE_EXCEL
-	QXlsx::Document* m_document = nullptr;
+#ifdef HAVE_QXLSX
+	QXlsx::Document* m_document{nullptr};
 #endif
 	QString m_fileName;
 };
 
-#endif // EXCELFILTERPRIVATE_H
+#endif // XLSXFILTERPRIVATE_H

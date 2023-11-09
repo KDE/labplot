@@ -33,7 +33,6 @@
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 
-#include <QGraphicsSceneContextMenuEvent>
 #include <QKeyEvent>
 #include <QMenu>
 #include <QPainter>
@@ -133,20 +132,6 @@ void CartesianPlotLegend::init() {
 }
 
 void CartesianPlotLegend::initActions() {
-	visibilityAction = new QAction(QIcon::fromTheme(QStringLiteral("view-visible")), i18n("Visible"), this);
-	visibilityAction->setCheckable(true);
-	connect(visibilityAction, &QAction::triggered, this, &CartesianPlotLegend::visibilityChangedSlot);
-}
-
-QMenu* CartesianPlotLegend::createContextMenu() {
-	QMenu* menu = WorksheetElement::createContextMenu();
-	QAction* firstAction = menu->actions().at(1); // skip the first action because of the "title-action"
-
-	visibilityAction->setChecked(isVisible());
-	menu->insertAction(firstAction, visibilityAction);
-	menu->insertSeparator(firstAction);
-
-	return menu;
 }
 
 /*!
@@ -154,10 +139,6 @@ QMenu* CartesianPlotLegend::createContextMenu() {
 */
 QIcon CartesianPlotLegend::icon() const {
 	return QIcon::fromTheme(QStringLiteral("text-field"));
-}
-
-QGraphicsItem* CartesianPlotLegend::graphicsItem() const {
-	return d_ptr;
 }
 
 void CartesianPlotLegend::retransform() {
@@ -309,14 +290,6 @@ void CartesianPlotLegend::setLayoutColumnCount(int count) {
 // ##############################################################################
 
 // ##############################################################################
-// ######  SLOTs for changes triggered via QActions in the context menu  ########
-// ##############################################################################
-void CartesianPlotLegend::visibilityChangedSlot() {
-	Q_D(const CartesianPlotLegend);
-	this->setVisible(!d->isVisible());
-}
-
-// ##############################################################################
 // ######################### Private implementation #############################
 // ##############################################################################
 CartesianPlotLegendPrivate::CartesianPlotLegendPrivate(CartesianPlotLegend* owner)
@@ -329,23 +302,15 @@ CartesianPlotLegendPrivate::CartesianPlotLegendPrivate(CartesianPlotLegend* owne
 	setAcceptHoverEvents(true);
 }
 
-QRectF CartesianPlotLegendPrivate::boundingRect() const {
-	return rect;
-}
-
-void CartesianPlotLegendPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
-	q->createContextMenu()->exec(event->screenPos());
-}
-
 /*!
   Returns the shape of the CartesianPlotLegend as a QPainterPath in local coordinates
 */
 QPainterPath CartesianPlotLegendPrivate::shape() const {
 	QPainterPath path;
 	if (qFuzzyIsNull(borderCornerRadius))
-		path.addRect(rect);
+		path.addRect(m_boundingRectangle);
 	else
-		path.addRoundedRect(rect, borderCornerRadius, borderCornerRadius);
+		path.addRoundedRect(m_boundingRectangle, borderCornerRadius, borderCornerRadius);
 
 	return path;
 }
@@ -463,10 +428,10 @@ void CartesianPlotLegendPrivate::retransform() {
 	if (title->isVisible() && !title->text().text.isEmpty())
 		legendHeight += title->graphicsItem()->boundingRect().height(); // legend titl
 
-	rect.setX(-legendWidth / 2);
-	rect.setY(-legendHeight / 2);
-	rect.setWidth(legendWidth);
-	rect.setHeight(legendHeight);
+	m_boundingRectangle.setX(-legendWidth / 2);
+	m_boundingRectangle.setY(-legendHeight / 2);
+	m_boundingRectangle.setWidth(legendWidth);
+	m_boundingRectangle.setHeight(legendHeight);
 
 	updatePosition();
 }
@@ -480,6 +445,7 @@ void CartesianPlotLegendPrivate::updatePosition() {
 	suppressRetransform = true;
 	title->retransform();
 	suppressRetransform = false;
+	Q_EMIT q->changed();
 }
 
 /*!
@@ -502,35 +468,35 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 			break;
 		}
 		case Background::ColorStyle::HorizontalLinearGradient: {
-			QLinearGradient linearGrad(rect.topLeft(), rect.topRight());
+			QLinearGradient linearGrad(m_boundingRectangle.topLeft(), m_boundingRectangle.topRight());
 			linearGrad.setColorAt(0, background->firstColor());
 			linearGrad.setColorAt(1, background->secondColor());
 			painter->setBrush(QBrush(linearGrad));
 			break;
 		}
 		case Background::ColorStyle::VerticalLinearGradient: {
-			QLinearGradient linearGrad(rect.topLeft(), rect.bottomLeft());
+			QLinearGradient linearGrad(m_boundingRectangle.topLeft(), m_boundingRectangle.bottomLeft());
 			linearGrad.setColorAt(0, background->firstColor());
 			linearGrad.setColorAt(1, background->secondColor());
 			painter->setBrush(QBrush(linearGrad));
 			break;
 		}
 		case Background::ColorStyle::TopLeftDiagonalLinearGradient: {
-			QLinearGradient linearGrad(rect.topLeft(), rect.bottomRight());
+			QLinearGradient linearGrad(m_boundingRectangle.topLeft(), m_boundingRectangle.bottomRight());
 			linearGrad.setColorAt(0, background->firstColor());
 			linearGrad.setColorAt(1, background->secondColor());
 			painter->setBrush(QBrush(linearGrad));
 			break;
 		}
 		case Background::ColorStyle::BottomLeftDiagonalLinearGradient: {
-			QLinearGradient linearGrad(rect.bottomLeft(), rect.topRight());
+			QLinearGradient linearGrad(m_boundingRectangle.bottomLeft(), m_boundingRectangle.topRight());
 			linearGrad.setColorAt(0, background->firstColor());
 			linearGrad.setColorAt(1, background->secondColor());
 			painter->setBrush(QBrush(linearGrad));
 			break;
 		}
 		case Background::ColorStyle::RadialGradient: {
-			QRadialGradient radialGrad(rect.center(), rect.width() / 2);
+			QRadialGradient radialGrad(m_boundingRectangle.center(), m_boundingRectangle.width() / 2);
 			radialGrad.setColorAt(0, background->firstColor());
 			radialGrad.setColorAt(1, background->secondColor());
 			painter->setBrush(QBrush(radialGrad));
@@ -542,25 +508,27 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 			QPixmap pix(background->fileName());
 			switch (background->imageStyle()) {
 			case Background::ImageStyle::ScaledCropped:
-				pix = pix.scaled(rect.size().toSize(), Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
-				painter->drawPixmap(rect.topLeft(), pix);
+				pix = pix.scaled(m_boundingRectangle.size().toSize(), Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
+				painter->drawPixmap(m_boundingRectangle.topLeft(), pix);
 				break;
 			case Background::ImageStyle::Scaled:
-				pix = pix.scaled(rect.size().toSize(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-				painter->drawPixmap(rect.topLeft(), pix);
+				pix = pix.scaled(m_boundingRectangle.size().toSize(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+				painter->drawPixmap(m_boundingRectangle.topLeft(), pix);
 				break;
 			case Background::ImageStyle::ScaledAspectRatio:
-				pix = pix.scaled(rect.size().toSize(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
-				painter->drawPixmap(rect.topLeft(), pix);
+				pix = pix.scaled(m_boundingRectangle.size().toSize(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+				painter->drawPixmap(m_boundingRectangle.topLeft(), pix);
 				break;
 			case Background::ImageStyle::Centered:
-				painter->drawPixmap(QPointF(rect.center().x() - pix.size().width() / 2, rect.center().y() - pix.size().height() / 2), pix);
+				painter->drawPixmap(
+					QPointF(m_boundingRectangle.center().x() - pix.size().width() / 2, m_boundingRectangle.center().y() - pix.size().height() / 2),
+					pix);
 				break;
 			case Background::ImageStyle::Tiled:
-				painter->drawTiledPixmap(rect, pix);
+				painter->drawTiledPixmap(m_boundingRectangle, pix);
 				break;
 			case Background::ImageStyle::CenterTiled:
-				painter->drawTiledPixmap(rect, pix, QPoint(rect.size().width() / 2, rect.size().height() / 2));
+				painter->drawTiledPixmap(m_boundingRectangle, pix, QPoint(m_boundingRectangle.size().width() / 2, m_boundingRectangle.size().height() / 2));
 			}
 		}
 	} else if (background->type() == Background::Type::Pattern) {
@@ -568,9 +536,9 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 	}
 
 	if (qFuzzyIsNull(borderCornerRadius))
-		painter->drawRect(rect);
+		painter->drawRect(m_boundingRectangle);
 	else
-		painter->drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
+		painter->drawRoundedRect(m_boundingRectangle, borderCornerRadius, borderCornerRadius);
 
 	// draw the border
 	if (borderLine->style() != Qt::NoPen) {
@@ -578,9 +546,9 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 		painter->setBrush(Qt::NoBrush);
 		painter->setOpacity(borderLine->opacity());
 		if (qFuzzyIsNull(borderCornerRadius))
-			painter->drawRect(rect);
+			painter->drawRect(m_boundingRectangle);
 		else
-			painter->drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
+			painter->drawRoundedRect(m_boundingRectangle, borderCornerRadius, borderCornerRadius);
 	}
 
 	// draw curve's line+symbol and the names
@@ -589,7 +557,7 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 	painter->setFont(labelFont);
 
 	// translate to left upper corner of the bounding rect plus the layout offset and the height of the title
-	painter->translate(-rect.width() / 2 + layoutLeftMargin, -rect.height() / 2 + layoutTopMargin);
+	painter->translate(-m_boundingRectangle.width() / 2 + layoutLeftMargin, -m_boundingRectangle.height() / 2 + layoutTopMargin);
 	if (title->isVisible() && !title->text().text.isEmpty())
 		painter->translate(0, title->graphicsItem()->boundingRect().height());
 
@@ -896,22 +864,6 @@ bool CartesianPlotLegendPrivate::translatePainter(QPainter* painter, int& row, i
 	}
 
 	return true;
-}
-
-void CartesianPlotLegendPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
-	if (!isSelected()) {
-		m_hovered = true;
-		Q_EMIT q->hovered();
-		update();
-	}
-}
-
-void CartesianPlotLegendPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
-	if (m_hovered) {
-		m_hovered = false;
-		Q_EMIT q->unhovered();
-		update();
-	}
 }
 
 // ##############################################################################
