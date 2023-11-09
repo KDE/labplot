@@ -40,7 +40,7 @@
 using Dimension = CartesianCoordinateSystem::Dimension;
 
 namespace {
-	constexpr int maxNumberMajorTicks = 100;
+constexpr int maxNumberMajorTicks = 100;
 } // Anounymous namespace
 
 /**
@@ -1645,9 +1645,9 @@ void AxisPrivate::retransformTicks() {
 					majorTickPosDateTime = majorTickPosDateTime.addMSecs(DateTime::milliseconds(dt.hour, dt.minute, dt.second, dt.millisecond));
 					majorTickPos = majorTickPosDateTime.toMSecsSinceEpoch();
 				}
-				if (majorTickPos > end || iMajor > maxNumberMajorTicks)
-					break; // Finish
 			}
+			if (majorTickPos > end || iMajor > maxNumberMajorTicks)
+				break; // Finish
 		}
 
 		qreal xAnchorPoint = 0.0;
