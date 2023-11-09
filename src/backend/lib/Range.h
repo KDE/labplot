@@ -193,10 +193,10 @@ public:
 		m_end += value;
 	}
 	bool operator==(const Range<T>& other) const {
-		return (m_start == other.start() && m_end == other.end());
+		return (m_start == other.start() && m_end == other.end() && m_scale == other.scale());
 	}
 	bool operator!=(const Range<T>& other) const {
-		return (m_start != other.start() || m_end != other.end());
+		return (m_start != other.start() || m_end != other.end() || m_scale != other.scale());
 	}
 	Range<T>& operator+=(const T value) {
 		m_start += value;

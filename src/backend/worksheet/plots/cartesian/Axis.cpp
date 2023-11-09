@@ -408,6 +408,13 @@ BASIC_SHARED_D_READER_IMPL(Axis, Axis::Orientation, orientation, orientation)
 BASIC_SHARED_D_READER_IMPL(Axis, Axis::Position, position, position)
 BASIC_SHARED_D_READER_IMPL(Axis, double, offset, offset)
 BASIC_SHARED_D_READER_IMPL(Axis, Range<double>, range, range)
+BASIC_SHARED_D_READER_IMPL(Axis, bool, rangeScale, rangeScale)
+RangeT::Scale Axis::scale() const {
+	Q_D(const Axis);
+	if (d->rangeScale)
+		return d->range.scale();
+	return d->scale;
+}
 BASIC_SHARED_D_READER_IMPL(Axis, Axis::TicksStartType, majorTicksStartType, majorTicksStartType)
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, majorTickStartOffset, majorTickStartOffset)
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, majorTickStartValue, majorTickStartValue)
@@ -600,11 +607,19 @@ void Axis::setRange(double min, double max) {
 	range.setEnd(max);
 	setRange(range);
 }
-void Axis::setScale(RangeT::Scale scale) {
-	QDEBUG(Q_FUNC_INFO << ", scale = " << scale)
+
+STD_SETTER_CMD_IMPL_F_S(Axis, SetRangeScale, bool, rangeScale, retransformTicks)
+void Axis::setRangeScale(bool rangeScale) {
 	Q_D(Axis);
-	d->range.scale() = scale;
-	retransformTicks();
+	if (rangeScale != d->rangeScale)
+		exec(new AxisSetRangeScaleCmd(d, rangeScale, ki18n("%1: set range scale")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(Axis, SetScale, RangeT::Scale, scale, retransformTicks)
+void Axis::setScale(RangeT::Scale scale) {
+	Q_D(Axis);
+	if (scale != d->scale)
+		exec(new AxisSetScaleCmd(d, scale, ki18n("%1: set scale")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorTicksStartType, Axis::TicksStartType, majorTicksStartType, retransform)
@@ -1135,7 +1150,7 @@ void AxisPrivate::retransformLine() {
 	//	DEBUG(Q_FUNC_INFO << ", x range index check = " << dynamic_cast<const
 	// CartesianCoordinateSystem*>(plot()->coordinateSystem(q->m_cSystemIndex))->index(Dimension::X)
 	//)
-	DEBUG(Q_FUNC_INFO << ", axis range = " << range.toStdString() << " scale = " << ENUM_TO_STRING(RangeT, Scale, range.scale()))
+	DEBUG(Q_FUNC_INFO << ", axis range = " << range.toStdString() << " scale = " << ENUM_TO_STRING(RangeT, Scale, q->scale()))
 
 	if (suppressRetransform)
 		return;
@@ -1414,7 +1429,7 @@ void AxisPrivate::retransformTicks() {
 	switch (majorTicksType) {
 	case Axis::TicksType::TotalNumber: // total number of major ticks is given - > determine the increment
 		tmpMajorTicksNumber = majorTicksNumber;
-		switch (range.scale()) {
+		switch (q->scale()) {
 		case RangeT::Scale::Linear:
 			majorTicksIncrement = range.size();
 			break;
@@ -1450,8 +1465,8 @@ void AxisPrivate::retransformTicks() {
 		// the increment of the major ticks is given -> determine the number
 		// TODO: majorTicksSpacing == 0?
 		majorTicksIncrement = majorTicksSpacing * GSL_SIGN(end - start);
-		if (q->isNumeric() || (!q->isNumeric() && range.scale() != RangeT::Scale::Linear)) {
-			switch (range.scale()) {
+		if (q->isNumeric() || (!q->isNumeric() && q->scale() != RangeT::Scale::Linear)) {
+			switch (q->scale()) {
 			case RangeT::Scale::Linear:
 				tmpMajorTicksNumber = std::round(range.size() / majorTicksIncrement + 1);
 				break;
@@ -1551,7 +1566,7 @@ void AxisPrivate::retransformTicks() {
 	bool valid = true;
 	center = q->cSystem->mapLogicalToScene(center, valid);
 
-	const bool dateTimeSpacing = !q->isNumeric() && range.scale() == RangeT::Scale::Linear && majorTicksType == Axis::TicksType::Spacing;
+	const bool dateTimeSpacing = !q->isNumeric() && q->scale() == RangeT::Scale::Linear && majorTicksType == Axis::TicksType::Spacing;
 	DateTime::DateTime dt;
 	QDateTime majorTickPosDateTime;
 	if (dateTimeSpacing) {
@@ -1601,7 +1616,7 @@ void AxisPrivate::retransformTicks() {
 
 		} else {
 			if (!dateTimeSpacing) {
-				switch (range.scale()) {
+				switch (q->scale()) {
 				case RangeT::Scale::Linear:
 					//				DEBUG(Q_FUNC_INFO << ", start = " << start << ", incr = " << majorTicksIncrement << ", i = " << iMajor)
 					majorTickPos = start + majorTicksIncrement * iMajor;
@@ -1939,7 +1954,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 			QString nullStr = numberLocale.toString(0., 'f', labelsPrecision);
 			for (const auto value : qAsConst(tickLabelValues)) {
 				// toString() does not round: use NSL function
-				if (RangeT::isLogScale(range.scale())) // don't use same precision for all label on log scales
+				if (RangeT::isLogScale(q->scale())) // don't use same precision for all label on log scales
 					str = numberLocale.toString(value, 'f', std::max(labelsPrecision, nsl_math_decimal_places(value) + 1));
 				else
 					str = numberLocale.toString(nsl_math_round_places(value, labelsPrecision), 'f', labelsPrecision);
@@ -2898,9 +2913,11 @@ void Axis::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("rangeType"), QString::number(static_cast<int>(d->rangeType)));
 	writer->writeAttribute(QStringLiteral("orientation"), QString::number(static_cast<int>(d->orientation)));
 	writer->writeAttribute(QStringLiteral("position"), QString::number(static_cast<int>(d->position)));
-	writer->writeAttribute(QStringLiteral("scale"), QString::number(static_cast<int>(d->range.scale())));
+	writer->writeAttribute(QStringLiteral("scale"), QString::number(static_cast<int>(d->scale)));
+	writer->writeAttribute(QStringLiteral("rangeScale"), QString::number(static_cast<int>(d->rangeScale)));
 	writer->writeAttribute(QStringLiteral("offset"), QString::number(d->offset));
 	writer->writeAttribute(QStringLiteral("logicalPosition"), QString::number(d->logicalPosition));
+	writer->writeAttribute(QStringLiteral("scaleRange"), QString::number(static_cast<int>(d->range.scale())));
 	writer->writeAttribute(QStringLiteral("start"), QString::number(d->range.start(), 'g', 12));
 	writer->writeAttribute(QStringLiteral("end"), QString::number(d->range.end(), 'g', 12));
 	writer->writeAttribute(QStringLiteral("majorTicksStartType"), QString::number(static_cast<int>(d->majorTicksStartType)));
@@ -3021,7 +3038,20 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 			if (str.isEmpty())
 				reader->raiseMissingAttributeWarning(QStringLiteral("scale"));
 			else
-				d->range.scale() = static_cast<RangeT::Scale>(str.toInt());
+				d->scale = static_cast<RangeT::Scale>(str.toInt());
+
+			str = attribs.value(QStringLiteral("rangeScale")).toString();
+			if (str.isEmpty())
+				d->rangeScale = false; // backward compatibility
+			else
+				d->rangeScale = static_cast<bool>(str.toInt());
+
+			str = attribs.value(QStringLiteral("scaleRange")).toString();
+			if (str.isEmpty())
+				d->range.scale() = d->scale; // backward compatibility
+			else
+				d->rangeScale = static_cast<bool>(str.toInt());
+
 			READ_DOUBLE_VALUE("offset", offset);
 			READ_DOUBLE_VALUE("logicalPosition", logicalPosition);
 			READ_DOUBLE_VALUE("start", range.start());

@@ -48,7 +48,9 @@ public:
 	Axis::Orientation orientation{Axis::Orientation::Horizontal}; //!< horizontal or vertical
 	Axis::Position position{Axis::Position::Centered}; //!< left, right, bottom, top or custom (usually not changed after creation)
 	double offset{0}; //!< offset from zero in the direction perpendicular to the axis
-	Range<double> range; //!< coordinate range of the axis line (includes scale)
+	Range<double> range; //!< coordinate range of the axis line
+	bool rangeScale{true};
+	RangeT::Scale scale{RangeT::Scale::Linear}; //!< Scale if rangeScale is false
 	Axis::TicksStartType majorTicksStartType{Axis::TicksStartType::Offset};
 	qreal majorTickStartOffset{0};
 	qreal majorTickStartValue{0};

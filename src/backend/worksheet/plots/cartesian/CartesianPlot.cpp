@@ -3257,6 +3257,9 @@ void CartesianPlotPrivate::retransformScale(const Dimension dim, int index, bool
 		for (auto* axis : q->children<Axis>()) {
 			QDEBUG(Q_FUNC_INFO << ", auto-scale axis" << axis->name() << "of scale" << axis->scale())
 			// use ranges of axis
+			auto r = axis->range();
+			r.setScale(rangep.range.scale());
+
 			int axisIndex = q->coordinateSystem(axis->coordinateSystemIndex())->index(dim);
 			if (axis->rangeType() != Axis::RangeType::Auto || axisIndex != i)
 				continue;
@@ -3264,20 +3267,16 @@ void CartesianPlotPrivate::retransformScale(const Dimension dim, int index, bool
 				|| (dim == Dimension::X && axis->orientation() != Axis::Orientation::Horizontal))
 				continue;
 
-			if (!qFuzzyIsNull(deltaMax)) {
-				axis->setUndoAware(false);
-				axis->setSuppressRetransform(true);
-				axis->setEnd(rangep.range.end());
-				axis->setUndoAware(true);
-				axis->setSuppressRetransform(false);
-			}
-			if (!qFuzzyIsNull(deltaMin)) {
-				axis->setUndoAware(false);
-				axis->setSuppressRetransform(true);
-				axis->setStart(rangep.range.start());
-				axis->setUndoAware(true);
-				axis->setSuppressRetransform(false);
-			}
+			if (!qFuzzyIsNull(deltaMax))
+				r.setEnd(rangep.range.end());
+			if (!qFuzzyIsNull(deltaMin))
+				r.setStart(rangep.range.start());
+
+			axis->setUndoAware(false);
+			axis->setSuppressRetransform(true);
+			axis->setRange(r);
+			axis->setUndoAware(true);
+			axis->setSuppressRetransform(false);
 			// TODO;
 			// 			if (axis->position() == Axis::Position::Centered && deltaYMin != 0) {
 			// 				axis->setOffset(axis->offset() + deltaYMin, false);
