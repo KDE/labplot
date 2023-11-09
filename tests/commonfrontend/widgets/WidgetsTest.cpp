@@ -923,7 +923,6 @@ void WidgetsTest::numberSpinBoxEnterNumber() {
 
 // Testing feedback feature
 void WidgetsTest::numberSpinBoxFeedback() {
-	QSKIP("Widget");
 	NumberSpinBox sb(5);
 	sb.setFeedback(true);
 
@@ -974,7 +973,6 @@ void WidgetsTest::numberSpinBoxFeedback() {
 // set value called directly when valueChanged() is called. This can happen if the other side directly sets another
 // value, because the received value is invalid.
 void WidgetsTest::numberSpinBoxFeedback2() {
-	QSKIP("Widget");
 	NumberSpinBox sb(5);
 	sb.setFeedback(true);
 
@@ -1029,7 +1027,6 @@ void WidgetsTest::numberSpinBoxFeedbackCursorPosition() {
 }
 
 void WidgetsTest::numberSpinBoxFeedbackCursorPosition2() {
-	QSKIP("Widget");
 	Project project;
 	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	QVERIFY(ws != nullptr);
@@ -1081,7 +1078,6 @@ void WidgetsTest::numberSpinBoxDecimals2() {
 }
 
 void WidgetsTest::numberSpinBoxScrollingNegToPos() {
-	QSKIP("Widget");
 	NumberSpinBox sb;
 	sb.setMinimum(-10);
 	sb.setValue(-1.01);
@@ -1102,7 +1098,6 @@ void WidgetsTest::numberSpinBoxScrollingNegToPos() {
 }
 
 void WidgetsTest::numberSpinBoxScrollingNegToPos2() {
-	QSKIP("Widget");
 	NumberSpinBox sb;
 	sb.setMinimum(-10);
 	sb.setValue(0.13);
@@ -1128,7 +1123,6 @@ void WidgetsTest::numberSpinBoxScrollingNegToPos2() {
 }
 
 void WidgetsTest::numberSpinBoxScrollingNegativeValues() {
-	QSKIP("Widget");
 	NumberSpinBox sb;
 	sb.setMinimum(-20);
 	sb.setValue(-9.81);
@@ -1148,7 +1142,6 @@ void WidgetsTest::numberSpinBoxScrollingNegativeValues() {
 }
 
 void WidgetsTest::numberSpinBoxMinimumFeedback() {
-	QSKIP("Widget");
 	// Limit to min/max when stepping in the spinbox
 	// instead of raising an error
 	NumberSpinBox sb;

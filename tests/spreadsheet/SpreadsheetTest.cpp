@@ -1640,7 +1640,6 @@ void SpreadsheetTest::testFlatten03() {
 // ******************** search&replace  *********************
 // **********************************************************
 Spreadsheet* SpreadsheetTest::createSearchReplaceSpreadsheet() {
-	QSKIP("Spreadsheet");
 	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
 
 	sheet->setColumnCount(4);
