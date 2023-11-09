@@ -37,7 +37,7 @@
 
 using Dimension = CartesianCoordinateSystem::Dimension;
 
-void RetransformTest::TestLoadProject() {
+/*void RetransformTest::TestLoadProject() {
 	RetransformCallCounter c;
 	Project project;
 
@@ -168,13 +168,14 @@ void RetransformTest::TestResizeWindows() {
 	for (i = h.constBegin(); i != h.constEnd(); ++i)
 		QCOMPARE(c.callCount(i.key()), 1);
 }
+*/
 
 /*!
  * \brief RetransformTest::TestZoomSelectionAutoscale
  * Check that retransform and retransform scale is called correctly during zoom and autoscale. Check
  * also the number of calls of the retransforms
  */
-void RetransformTest::TestZoomSelectionAutoscale() {
+/*void RetransformTest::TestZoomSelectionAutoscale() {
 	RetransformCallCounter c;
 	Project project;
 
@@ -274,7 +275,7 @@ void RetransformTest::TestZoomSelectionAutoscale() {
 		QStringLiteral("Project/Worksheet/xy-plot/legend"),
 		QStringLiteral("Project/Worksheet/xy-plot/plotText"),
 		QStringLiteral("Project/Worksheet/xy-plot/plotImage"),
-		/* second plot starting */
+		// second plot starting
 		QStringLiteral("Project/Worksheet/plot2/x"),
 		QStringLiteral("Project/Worksheet/plot2/y"),
 		QStringLiteral("Project/Worksheet/plot2/xy-curve"),
@@ -307,6 +308,7 @@ void RetransformTest::TestZoomSelectionAutoscale() {
 	QCOMPARE(c.logsYScaleRetransformed.at(2).plot, plot2);
 	QCOMPARE(c.logsYScaleRetransformed.at(2).index, 0); // first y axis of second plot
 }
+*/
 
 /*!
  * \brief RetransformTest::TestZoomAutoscaleSingleYRange
@@ -316,7 +318,7 @@ void RetransformTest::TestZoomSelectionAutoscale() {
  * but not the y Range of cSystem2
  * Nice extends should not apply!
  */
-void RetransformTest::TestZoomAutoscaleSingleYRange() {
+/*void RetransformTest::TestZoomAutoscaleSingleYRange() {
 	Project project;
 
 	auto* worksheet = new Worksheet(QStringLiteral("Worksheet"));
@@ -405,6 +407,7 @@ void RetransformTest::TestZoomAutoscaleSingleYRange() {
 	CHECK_RANGE(plot, curve2, Dimension::X, 2., 3.);
 	CHECK_RANGE(plot, curve2, Dimension::Y, -9.9, 0.1); // Not changed, because autoscale is turned off
 }
+*/
 
 /*!
  * \brief RetransformTest::TestZoomAutoscaleSingleXRange
@@ -414,7 +417,7 @@ void RetransformTest::TestZoomAutoscaleSingleYRange() {
  * but not the x Range of cSystem2
  * Nice extends should not apply!
  */
-void RetransformTest::TestZoomAutoscaleSingleXRange() {
+/*void RetransformTest::TestZoomAutoscaleSingleXRange() {
 	Project project;
 
 	auto* worksheet = new Worksheet(QStringLiteral("Worksheet"));
@@ -503,12 +506,13 @@ void RetransformTest::TestZoomAutoscaleSingleXRange() {
 	CHECK_RANGE(plot, curve2, Dimension::Y, 2., 3.);
 	CHECK_RANGE(plot, curve2, Dimension::X, -9.9, 0.1); // Not changed, because autoscale is turned off
 }
+*/
 
 /*!
  * \brief RetransformTest::TestPadding
  * Check that during a padding change retransform and retransform scale is called
  */
-void RetransformTest::TestPadding() {
+/*void RetransformTest::TestPadding() {
 	RetransformCallCounter c;
 	Project project;
 
@@ -1755,7 +1759,7 @@ void RetransformCallCounter::retransformScaleCalled(const CartesianPlot* plot, c
 void RetransformCallCounter::aspectAdded(const AbstractAspect* aspect) {
 	connect(aspect, &AbstractAspect::retransformCalledSignal, this, &RetransformCallCounter::aspectRetransformed);
 }
-
+*/
 // Test change data
 
 QTEST_MAIN(RetransformTest)

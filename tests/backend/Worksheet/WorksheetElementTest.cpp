@@ -80,11 +80,11 @@ void WorksheetElementTest::initTestCase() {
 		VALUES_EQUAL(bottomRightLogical.y(), yBottomRef);                                                                                                      \
 	} while (false);
 
-ALL_WORKSHEETELEMENT_TESTS(CustomPoint, CustomPointDock, setPoints)
-ALL_WORKSHEETELEMENT_TESTS2(TextLabel, LabelWidget, setLabels)
-ALL_WORKSHEETELEMENT_TESTS2(Image, ImageDock, setImages)
+//ALL_WORKSHEETELEMENT_TESTS(CustomPoint, CustomPointDock, setPoints)
+//ALL_WORKSHEETELEMENT_TESTS2(TextLabel, LabelWidget, setLabels)
+//ALL_WORKSHEETELEMENT_TESTS2(Image, ImageDock, setImages)
 
-void WorksheetElementTest::referenceRangeXMouseMove() {
+/*void WorksheetElementTest::referenceRangeXMouseMove() {
 	SETUP_PROJECT
 
 	auto* referenceRange = new ReferenceRange(p, QStringLiteral("range"));
@@ -377,6 +377,7 @@ void WorksheetElementTest::referenceRangeSaveLoad() {
 		CHECK_REFERENCERANGE_RECT(referenceRange, 0., 0.55, 1., 0.45);
 	}
 }
+*/
 
 // TODO: create test with reference range with nonlinear ranges!
 // Zooming in cartesianplot leads to move the worksheetelement

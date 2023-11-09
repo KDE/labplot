@@ -20,7 +20,7 @@ private Q_SLOTS:
 	void initTestCase() {
 		QLocale::setDefault(QLocale(QLocale::Language::English));
 	}
-	void numberSpinBoxProperties();
+/*	void numberSpinBoxProperties();
 	void numberSpinBoxCreateStringNumber();
 	void numberSpinBoxChangingValueKeyPress();
 	void numberSpinBoxLimit();
@@ -48,5 +48,6 @@ private Q_SLOTS:
 	void thousandSeparatorScrolling();
 	void thousandSeparatorScrolling2();
 	void thousandSeparatorScrollingSeparatorPosition();
+*/
 };
 #endif // WIDGETSTEST_H

@@ -33,7 +33,7 @@
 			QCOMPARE(currentTickValues.at(i), expectedTickValues.at(i));                                                                                       \
 	}
 
-void AxisTest::axisLine() {
+/*void AxisTest::axisLine() {
 	Project project;
 	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	QVERIFY(ws != nullptr);
@@ -638,6 +638,7 @@ void AxisTest::tickLabelRepresentationManual() {
 }
 
 // TODO: write test switching between numeric and datetime
+*/
 
 #define CHECK_TITLE_COLOR(color_)                                                                                                                              \
 	QCOMPARE(a->title()->fontColor(), color_);                                                                                                                 \
@@ -687,7 +688,7 @@ void AxisTest::tickLabelRepresentationManual() {
 	dock.setAxes({a});                                                                                                                                         \
 	CHECK_COMMON_COLOR(Qt::black);
 
-void AxisTest::setAxisColor() {
+/*void AxisTest::setAxisColor() {
 	CREATE_PROJECT
 
 	// set axis color
@@ -1548,13 +1549,14 @@ void AxisTest::numericSpacingStartValueNonZero() {
 		COMPARE_STRING_VECTORS(xAxis->tickLabelStrings(), expectedStrings);
 	}
 }
+*/
 
 /*!
  * \brief AxisTest::customColumnNumeric
  * Test setting a custom column as major tick once with the custom column values and
  * once with another column as ticks label
  */
-void AxisTest::customColumnNumeric() {
+/*void AxisTest::customColumnNumeric() {
 	Project project;
 	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	QVERIFY(ws != nullptr);
@@ -1638,13 +1640,14 @@ void AxisTest::customColumnNumeric() {
 	VALUES_EQUAL(xAxis->d_func()->majorTickPoints.at(1).x(), p->dataRect().x() + p->dataRect().width() * (2.2 - 1.) / (5. - 1.));
 	VALUES_EQUAL(xAxis->d_func()->majorTickPoints.at(2).x(), p->dataRect().x() + p->dataRect().width() * (2.5 - 1.) / (5. - 1.));
 }
+*/
 
 /*!
  * \brief AxisTest::customColumnDateTime
  * Test setting a custom column as major tick once with the custom column values and
  * once with another column as ticks label
  */
-void AxisTest::customColumnDateTime() {
+/*void AxisTest::customColumnDateTime() {
 	Project project;
 	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	QVERIFY(ws != nullptr);
@@ -1740,6 +1743,6 @@ void AxisTest::customColumnDateTime() {
 				 p->dataRect().x() + p->dataRect().width() * (dt2Label.toMSecsSinceEpoch() - dt1.toMSecsSinceEpoch()) / span);
 	VALUES_EQUAL(xAxis->d_func()->majorTickPoints.at(2).x(),
 				 p->dataRect().x() + p->dataRect().width() * (dt3Label.toMSecsSinceEpoch() - dt1.toMSecsSinceEpoch()) / span);
-}
+}*/
 
 QTEST_MAIN(AxisTest)

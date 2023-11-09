@@ -442,7 +442,7 @@ void SpreadsheetTest::testCopyPasteSizeChange01() {
 	QApplication::clipboard()->setText(str);
 
 	SpreadsheetView view(&sheet, false);
-	view.goToCell(1, 1); // havigate to the edge of the spreadsheet
+	view.goToCell(1, 1); // navigate to the edge of the spreadsheet
 	view.pasteIntoSelection();
 
 	// spreadsheet size
