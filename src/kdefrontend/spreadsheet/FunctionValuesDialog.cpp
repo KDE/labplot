@@ -185,7 +185,7 @@ void FunctionValuesDialog::checkValues() {
 
 	// check whether the formula syntax is correct
 	if (!ui.teEquation->isValid()) {
-		m_okButton->setToolTip(i18n("Incorrect formula syntax"));
+		m_okButton->setToolTip(i18n("Incorrect formula syntax: ") + ui.teEquation->errorMessage());
 		m_okButton->setEnabled(false);
 		return;
 	}
