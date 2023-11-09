@@ -20,7 +20,7 @@ private Q_SLOTS:
 	void applyActionToSelection_CurveSelected_ZoomSelection();
 
 	// zoom selection tests
-/*	void zoomXSelection_AllRanges();
+	void zoomXSelection_AllRanges();
 	void zoomXSelection_SingleRange();
 	void zoomYSelection_AllRanges();
 	void zoomYSelection_SingleRange();
@@ -62,6 +62,6 @@ private Q_SLOTS:
 	void axisMouseMoveApplyToSelection();
 
 	void curveRangeChange();
-*/
+
 };
 #endif

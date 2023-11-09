@@ -195,7 +195,8 @@ void MultiRangeTest::applyActionToSelection_CurveSelected_ZoomSelection() {
 
 // ZOOM SELECTION
 
-/*void MultiRangeTest::zoomXSelection_AllRanges() {
+void MultiRangeTest::zoomXSelection_AllRanges() {
+	QSKIP("MultiRange");
 	LOAD_PROJECT
 	auto refValuesAxis1 = vertAxisP1->tickLabelValues();
 	auto refValuesAxis2 = vertAxis2P1->tickLabelValues();
@@ -228,6 +229,7 @@ void MultiRangeTest::applyActionToSelection_CurveSelected_ZoomSelection() {
 }
 
 void MultiRangeTest::zoomXSelection_SingleRange() {
+	QSKIP("MultiRange");
 	LOAD_PROJECT
 	auto refValuesAxis1 = vertAxisP1->tickLabelValues();
 	auto refValuesAxis2 = vertAxis2P1->tickLabelValues();
@@ -253,6 +255,7 @@ void MultiRangeTest::zoomXSelection_SingleRange() {
 }
 
 void MultiRangeTest::zoomYSelection_AllRanges() {
+	QSKIP("MultiRange");
 	LOAD_PROJECT
 	auto refValuesAxis1 = vertAxisP1->tickLabelValues();
 	auto refValuesAxis2 = vertAxis2P1->tickLabelValues();
@@ -281,6 +284,7 @@ void MultiRangeTest::zoomYSelection_AllRanges() {
 }
 
 void MultiRangeTest::zoomYSelection_SingleRange() {
+	QSKIP("MultiRange");
 	LOAD_PROJECT
 	auto refValuesAxis1 = vertAxisP1->tickLabelValues();
 	auto refValuesAxis2 = vertAxis2P1->tickLabelValues();
@@ -334,6 +338,7 @@ void MultiRangeTest::zoomSelection_AllRanges() {
 }
 
 void MultiRangeTest::zoomSelection_SingleRange() {
+	QSKIP("MultiRange");
 	LOAD_PROJECT
 	auto refValuesAxis1 = vertAxisP1->tickLabelValues();
 	auto refValuesAxis2 = vertAxis2P1->tickLabelValues();
@@ -392,6 +397,7 @@ void MultiRangeTest::zoomInX_SingleRange() {
 }
 
 void MultiRangeTest::zoomInX_SingleRangeDateTimeMonotonicIncrease() {
+	QSKIP("MultiRange");
 	Project project;
 	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	QVERIFY(ws != nullptr);
@@ -454,6 +460,7 @@ void MultiRangeTest::zoomInX_SingleRangeDateTimeMonotonicIncrease() {
 }
 
 void MultiRangeTest::zoomInX_SingleRangeDateTimeNonMonotonic() {
+	QSKIP("MultiRange");
 	Project project;
 	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	QVERIFY(ws != nullptr);
@@ -517,6 +524,7 @@ void MultiRangeTest::zoomInX_SingleRangeDateTimeNonMonotonic() {
 }
 
 void MultiRangeTest::zoomInX_AllRanges() {
+	QSKIP("MultiRange");
 	LOAD_PROJECT
 	auto refValuesAxis1 = vertAxisP1->tickLabelValues();
 	auto refValuesAxis2 = vertAxis2P1->tickLabelValues();
@@ -548,6 +556,7 @@ void MultiRangeTest::zoomInX_AllRanges() {
 }
 
 void MultiRangeTest::zoomInY_SingleRange() {
+	QSKIP("MultiRange");
 	LOAD_PROJECT
 	auto refValuesAxis1 = vertAxisP1->tickLabelValues();
 	auto refValuesAxis2 = vertAxis2P1->tickLabelValues();
@@ -578,6 +587,7 @@ void MultiRangeTest::zoomInY_SingleRange() {
 }
 
 void MultiRangeTest::zoomInY_AllRanges() {
+	QSKIP("MultiRange");
 	LOAD_PROJECT
 	auto refValuesAxis1 = vertAxisP1->tickLabelValues();
 	auto refValuesAxis2 = vertAxis2P1->tickLabelValues();
@@ -609,6 +619,7 @@ void MultiRangeTest::zoomInY_AllRanges() {
 }
 
 void MultiRangeTest::zoomOutX_SingleRange() {
+	QSKIP("MultiRange");
 	LOAD_PROJECT
 
 	auto refValuesAxis1 = vertAxisP1->tickLabelValues();
@@ -640,6 +651,7 @@ void MultiRangeTest::zoomOutX_SingleRange() {
 }
 
 void MultiRangeTest::zoomOutX_AllRanges() {
+	QSKIP("MultiRange");
 	LOAD_PROJECT
 
 	auto refValuesAxis1 = vertAxisP1->tickLabelValues();
@@ -671,6 +683,7 @@ void MultiRangeTest::zoomOutX_AllRanges() {
 }
 
 void MultiRangeTest::zoomOutY_SingleRange() {
+	QSKIP("MultiRange");
 	LOAD_PROJECT
 
 	auto refValuesAxis1 = vertAxisP1->tickLabelValues();
@@ -702,6 +715,7 @@ void MultiRangeTest::zoomOutY_SingleRange() {
 }
 
 void MultiRangeTest::zoomOutY_AllRanges() {
+	QSKIP("MultiRange");
 	LOAD_PROJECT
 	auto refValuesAxis1 = vertAxisP1->tickLabelValues();
 	auto refValuesAxis2 = vertAxis2P1->tickLabelValues();
@@ -735,6 +749,7 @@ void MultiRangeTest::zoomOutY_AllRanges() {
 // SHIFT
 
 void MultiRangeTest::shiftLeft_SingleRange() {
+	QSKIP("MultiRange");
 	LOAD_PROJECT
 	auto refValuesAxis1 = vertAxisP1->tickLabelValues();
 	auto refValuesAxis2 = vertAxis2P1->tickLabelValues();
@@ -765,6 +780,7 @@ void MultiRangeTest::shiftLeft_SingleRange() {
 }
 
 void MultiRangeTest::shiftRight_SingleRange() {
+	QSKIP("MultiRange");
 	LOAD_PROJECT
 	auto refValuesAxis1 = vertAxisP1->tickLabelValues();
 	auto refValuesAxis2 = vertAxis2P1->tickLabelValues();
@@ -795,6 +811,7 @@ void MultiRangeTest::shiftRight_SingleRange() {
 }
 
 void MultiRangeTest::shiftLeft_AllRanges() {
+	QSKIP("MultiRange");
 	LOAD_PROJECT
 	auto refValuesAxis1 = vertAxisP1->tickLabelValues();
 	auto refValuesAxis2 = vertAxis2P1->tickLabelValues();
@@ -826,6 +843,7 @@ void MultiRangeTest::shiftLeft_AllRanges() {
 }
 
 void MultiRangeTest::shiftRight_AllRanges() {
+	QSKIP("MultiRange");
 	LOAD_PROJECT
 	auto refValuesAxis1 = vertAxisP1->tickLabelValues();
 	auto refValuesAxis2 = vertAxis2P1->tickLabelValues();
@@ -857,6 +875,7 @@ void MultiRangeTest::shiftRight_AllRanges() {
 }
 
 void MultiRangeTest::shiftUp_SingleRange() {
+	QSKIP("MultiRange");
 	LOAD_PROJECT
 	auto refValuesAxis1 = vertAxisP1->tickLabelValues();
 	auto refValuesAxis2 = vertAxis2P1->tickLabelValues();
@@ -888,6 +907,7 @@ void MultiRangeTest::shiftUp_SingleRange() {
 }
 
 void MultiRangeTest::shiftDown_SingleRange() {
+	QSKIP("MultiRange");
 	LOAD_PROJECT
 	auto refValuesAxis1 = vertAxisP1->tickLabelValues();
 	auto refValuesAxis2 = vertAxis2P1->tickLabelValues();
@@ -921,6 +941,7 @@ void MultiRangeTest::shiftDown_SingleRange() {
 }
 
 void MultiRangeTest::shiftUp_AllRanges() {
+	QSKIP("MultiRange");
 	LOAD_PROJECT
 	auto refValuesAxis1 = vertAxisP1->tickLabelValues();
 	auto refValuesAxis2 = vertAxis2P1->tickLabelValues();
@@ -982,13 +1003,13 @@ void MultiRangeTest::shiftDown_AllRanges() {
 	COMPARE_DOUBLE_VECTORS(vertAxis2P1->tickLabelValues(), refValuesAxis2);
 	QVector<double> ref = {-10, -6, -2, 2, 6};
 	COMPARE_DOUBLE_VECTORS(vertAxis3P1->tickLabelValues(), ref); // vertAxis3 is not autoscaled when loading, after autoscaling the values are different
-}*/
+}
 
-//void MultiRangeTest::autoScaleYAfterZoomInX() {
+void MultiRangeTest::autoScaleYAfterZoomInX() {
 	/* 1) Zoom in X
 	 * 2) Autoscale X
 	 * 3) Check that y also changed! */
-/*	LOAD_PROJECT
+	LOAD_PROJECT
 	auto refValues = horAxisP1->tickLabelValues();
 	horAxisP1->setSelected(true);
 	SET_CARTESIAN_MOUSE_MODE(CartesianPlot::MouseMode::ZoomXSelection)
@@ -1051,14 +1072,14 @@ void MultiRangeTest::baseDockSetAspects_NoPlotRangeChange() {
 	// The coordinatesystem indices shall not change
 	QCOMPARE(sinCurveCSystemIndex, sinCurve->coordinateSystemIndex());
 	QCOMPARE(tanCurveCSystemIndex, tanCurve->coordinateSystemIndex());
-}*/
+}
 
 /*!
  * \brief MultiRangeTest::mouseWheelXAxisApplyToAllX
  * If applied to all x is activated, using the mousewheel on a
  * selected axis should also execute the mousewheel on other plots
  */
-/*void MultiRangeTest::mouseWheelXAxisApplyToAllX() {
+void MultiRangeTest::mouseWheelXAxisApplyToAllX() {
 	LOAD_PROJECT
 
 	QCOMPARE(w->cartesianPlotActionMode(), Worksheet::CartesianPlotActionMode::ApplyActionToAllX);
@@ -1079,8 +1100,8 @@ void MultiRangeTest::baseDockSetAspects_NoPlotRangeChange() {
 	int counter = 0;
 	connect(p1,
 			&CartesianPlot::wheelEventSignal,
-*/ //			[&counter](const QPointF& relScenePos, int delta, int xIndex, int /*yIndex*/, bool considerDimension, Dimension dim) {
-/*				QCOMPARE(delta, 10);
+			[&counter](const QPointF& relScenePos, int delta, int xIndex, int /*yIndex*/, bool considerDimension, Dimension dim) {
+				QCOMPARE(delta, 10);
 				QCOMPARE(xIndex, 0); // x Range of horAxisP1
 				QCOMPARE(relScenePos.x(), 0.5);
 				QCOMPARE(relScenePos.y(), 0.5);
@@ -1106,7 +1127,7 @@ void MultiRangeTest::baseDockSetAspects_NoPlotRangeChange() {
 	CHECK_RANGE(p2, horAxisP1, Dimension::X, 0.1, 0.9);
 	CHECK_RANGE(p2, cosCurve, Dimension::X, 0.1, 0.9);
 	CHECK_RANGE(p2, cosCurve, Dimension::Y, -1., 1.);
-}*/
+}
 
 /*!
  * \brief MultiRangeTest::mouseWheelXAxisApplyToAllX
@@ -1115,7 +1136,7 @@ void MultiRangeTest::baseDockSetAspects_NoPlotRangeChange() {
  * This time the second x axis is used. In the second plot no second x axis is used
  * so check that application does not crash
  */
-/*void MultiRangeTest::mouseWheelTanCurveApplyToAllX() {
+void MultiRangeTest::mouseWheelTanCurveApplyToAllX() {
 	LOAD_PROJECT
 
 	QCOMPARE(w->cartesianPlotActionMode(), Worksheet::CartesianPlotActionMode::ApplyActionToAllX);
@@ -1189,8 +1210,8 @@ void MultiRangeTest::mouseWheelXAxisApplyToSelected() {
 	int counter = 0;
 	connect(p1,
 			&CartesianPlot::wheelEventSignal,
-*/ //			[&counter](const QPointF& sceneRelPos, int delta, int xIndex, int /*yIndex*/, bool considerDimension, Dimension dim) {
-/*				Q_UNUSED(sceneRelPos);
+			[&counter](const QPointF& sceneRelPos, int delta, int xIndex, int /*yIndex*/, bool considerDimension, Dimension dim) {
+				Q_UNUSED(sceneRelPos);
 				QCOMPARE(delta, 10);
 				QCOMPARE(xIndex, 0); // x Range of horAxisP1
 				QCOMPARE(considerDimension, true);
@@ -1274,14 +1295,14 @@ void MultiRangeTest::axisMouseMoveApplyToSelection() {
 	CHECK_RANGE(p2, horAxisP1, Dimension::X, 0., 1.);
 	CHECK_RANGE(p2, cosCurve, Dimension::X, 0., 1.);
 	CHECK_RANGE(p2, cosCurve, Dimension::Y, -1., 1.);
-}*/
+}
 
 /*!
  * \brief MultiRangeTest::curveRangeChange
  * When changing the coordinatesystem of an object like a curve, the
  * curve shall be updated accordingly also for undo/redo
  */
-/*void MultiRangeTest::curveRangeChange() {
+void MultiRangeTest::curveRangeChange() {
 	Project project;
 	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	QVERIFY(ws != nullptr);
@@ -1339,6 +1360,6 @@ void MultiRangeTest::axisMouseMoveApplyToSelection() {
 	QCOMPARE(curve->coordinateSystemIndex(), 1);
 	CHECK_RANGE(plot, curve, Dimension::X, 0., 10.);
 	CHECK_RANGE(plot, curve, Dimension::Y, 0., 10.);
-}*/
+}
 
 QTEST_MAIN(MultiRangeTest)

@@ -38,7 +38,7 @@ class WorksheetElementTest : public CommonTest {
 
 private Q_SLOTS:
 	void initTestCase();
-/*	ALL_WORKSHEET_TESTS_DEFINITION(CustomPoint)
+	ALL_WORKSHEET_TESTS_DEFINITION(CustomPoint)
 	ALL_WORKSHEET_TESTS_DEFINITION(TextLabel)
 	ALL_WORKSHEET_TESTS_DEFINITION(Image)
 
@@ -55,7 +55,7 @@ private Q_SLOTS:
 	void referenceRangeYKeyPressUp();
 
 	void referenceRangeSaveLoad();
-*/
+
 };
 
 #endif // WORKSHEETELEMENTTEST_H

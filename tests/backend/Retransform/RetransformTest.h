@@ -18,7 +18,7 @@ class RetransformTest : public CommonTest {
 
 	// Tests
 private Q_SLOTS:
-/*	void TestLoadProject();
+	void TestLoadProject();
 	void TestLoadProject2();
 	void TestResizeWindows();
 	void TestZoomSelectionAutoscale();
@@ -35,7 +35,6 @@ private Q_SLOTS:
 	void TestChangePlotRangeElement();
 	void TestChangePlotRangeElement2();
 	void TestChangePlotRangeElement3();
-*/
 };
 
 /*!

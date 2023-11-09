@@ -33,7 +33,8 @@
 			QCOMPARE(currentTickValues.at(i), expectedTickValues.at(i));                                                                                       \
 	}
 
-/*void AxisTest::axisLine() {
+void AxisTest::axisLine() {
+	QSKIP("Axis");
 	Project project;
 	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	QVERIFY(ws != nullptr);
@@ -131,6 +132,7 @@
 }
 
 void AxisTest::majorTicksAutoNumberEnableDisable() {
+	QSKIP("Axis");
 	Project project;
 	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	QVERIFY(ws != nullptr);
@@ -231,6 +233,7 @@ void AxisTest::majorTicksAutoNumberEnableDisable() {
 }
 
 void AxisTest::minorTicksAutoNumberEnableDisable() {
+	QSKIP("Axis");
 	Project project;
 	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	QVERIFY(ws != nullptr);
@@ -296,6 +299,7 @@ void AxisTest::minorTicksAutoNumberEnableDisable() {
 }
 
 void AxisTest::majorTicksStartValue() {
+	QSKIP("Axis");
 	Project project;
 	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	QVERIFY(ws != nullptr);
@@ -368,6 +372,7 @@ void AxisTest::majorTicksStartValue() {
 }
 
 void AxisTest::TestSetCoordinateSystem() {
+	QSKIP("Axis");
 	// Test if the range stored in the Axis gets updated when a new coordinatesystemindex is set
 	Project project;
 	auto* ws = new Worksheet(QStringLiteral("worksheet"));
@@ -411,6 +416,7 @@ void AxisTest::TestSetCoordinateSystem() {
 }
 
 void AxisTest::TestSetRange() {
+	QSKIP("Axis");
 	Project project;
 	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	QVERIFY(ws != nullptr);
@@ -469,6 +475,7 @@ void AxisTest::TestSetRange() {
 }
 
 void AxisTest::TestAddingHorizontalAxis() {
+	QSKIP("Axis");
 	Project project;
 	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	QVERIFY(ws != nullptr);
@@ -484,6 +491,7 @@ void AxisTest::TestAddingHorizontalAxis() {
 }
 
 void AxisTest::TestAddingVerticalAxis() {
+	QSKIP("Axis");
 	Project project;
 	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	QVERIFY(ws != nullptr);
@@ -499,6 +507,7 @@ void AxisTest::TestAddingVerticalAxis() {
 }
 
 void AxisTest::tickLabelRepresentationAutomatic() {
+	QSKIP("Axis");
 	QLocale::setDefault(QLocale::C); // . as decimal separator
 	Project project;
 	auto* ws = new Worksheet(QStringLiteral("worksheet"));
@@ -563,6 +572,7 @@ void AxisTest::tickLabelRepresentationAutomatic() {
 }
 
 void AxisTest::tickLabelRepresentationManual() {
+	QSKIP("Axis");
 	QLocale::setDefault(QLocale::English); // . as decimal separator
 	Project project;
 	auto* ws = new Worksheet(QStringLiteral("worksheet"));
@@ -638,7 +648,6 @@ void AxisTest::tickLabelRepresentationManual() {
 }
 
 // TODO: write test switching between numeric and datetime
-*/
 
 #define CHECK_TITLE_COLOR(color_)                                                                                                                              \
 	QCOMPARE(a->title()->fontColor(), color_);                                                                                                                 \
@@ -688,7 +697,8 @@ void AxisTest::tickLabelRepresentationManual() {
 	dock.setAxes({a});                                                                                                                                         \
 	CHECK_COMMON_COLOR(Qt::black);
 
-/*void AxisTest::setAxisColor() {
+void AxisTest::setAxisColor() {
+	QSKIP("Axis");
 	CREATE_PROJECT
 
 	// set axis color
@@ -703,6 +713,7 @@ void AxisTest::tickLabelRepresentationManual() {
 }
 
 void AxisTest::setTitleColor() {
+	QSKIP("Axis");
 	CREATE_PROJECT
 
 	// change title color
@@ -727,6 +738,7 @@ void AxisTest::setTitleColor() {
 }
 
 void AxisTest::setMajorTickColor() {
+	QSKIP("Axis");
 	CREATE_PROJECT
 
 	// change title color
@@ -751,6 +763,7 @@ void AxisTest::setMajorTickColor() {
 }
 
 void AxisTest::setMinorTickColor() {
+	QSKIP("Axis");
 	CREATE_PROJECT
 
 	// change title color
@@ -775,6 +788,7 @@ void AxisTest::setMinorTickColor() {
 }
 
 void AxisTest::setLineColor() {
+	QSKIP("Axis");
 	CREATE_PROJECT
 
 	// change title color
@@ -799,6 +813,7 @@ void AxisTest::setLineColor() {
 }
 
 void AxisTest::setTickLabelColor() {
+	QSKIP("Axis");
 	CREATE_PROJECT
 
 	// change title color
@@ -823,6 +838,7 @@ void AxisTest::setTickLabelColor() {
 }
 
 void AxisTest::automaticTicNumberUpdateDockMajorTicks() {
+	QSKIP("Axis");
 	Project project;
 	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	QVERIFY(ws != nullptr);
@@ -863,6 +879,7 @@ void AxisTest::automaticTicNumberUpdateDockMajorTicks() {
 }
 
 void AxisTest::automaticTicNumberUpdateDockMinorTicks() {
+	QSKIP("Axis");
 	Project project;
 	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	QVERIFY(ws != nullptr);
@@ -1549,14 +1566,13 @@ void AxisTest::numericSpacingStartValueNonZero() {
 		COMPARE_STRING_VECTORS(xAxis->tickLabelStrings(), expectedStrings);
 	}
 }
-*/
 
 /*!
  * \brief AxisTest::customColumnNumeric
  * Test setting a custom column as major tick once with the custom column values and
  * once with another column as ticks label
  */
-/*void AxisTest::customColumnNumeric() {
+void AxisTest::customColumnNumeric() {
 	Project project;
 	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	QVERIFY(ws != nullptr);
@@ -1640,14 +1656,13 @@ void AxisTest::numericSpacingStartValueNonZero() {
 	VALUES_EQUAL(xAxis->d_func()->majorTickPoints.at(1).x(), p->dataRect().x() + p->dataRect().width() * (2.2 - 1.) / (5. - 1.));
 	VALUES_EQUAL(xAxis->d_func()->majorTickPoints.at(2).x(), p->dataRect().x() + p->dataRect().width() * (2.5 - 1.) / (5. - 1.));
 }
-*/
 
 /*!
  * \brief AxisTest::customColumnDateTime
  * Test setting a custom column as major tick once with the custom column values and
  * once with another column as ticks label
  */
-/*void AxisTest::customColumnDateTime() {
+void AxisTest::customColumnDateTime() {
 	Project project;
 	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	QVERIFY(ws != nullptr);
@@ -1743,6 +1758,6 @@ void AxisTest::numericSpacingStartValueNonZero() {
 				 p->dataRect().x() + p->dataRect().width() * (dt2Label.toMSecsSinceEpoch() - dt1.toMSecsSinceEpoch()) / span);
 	VALUES_EQUAL(xAxis->d_func()->majorTickPoints.at(2).x(),
 				 p->dataRect().x() + p->dataRect().width() * (dt3Label.toMSecsSinceEpoch() - dt1.toMSecsSinceEpoch()) / span);
-}*/
+}
 
 QTEST_MAIN(AxisTest)
