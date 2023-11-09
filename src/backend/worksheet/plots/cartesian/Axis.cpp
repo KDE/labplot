@@ -40,7 +40,7 @@
 using Dimension = CartesianCoordinateSystem::Dimension;
 
 namespace {
-	constexpr maxNumberMajorTicks = 100;
+	constexpr int maxNumberMajorTicks = 100;
 } // Anounymous namespace
 
 /**
