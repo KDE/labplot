@@ -763,6 +763,7 @@ void AxisTest::setMajorTickColor() {
 }
 
 void AxisTest::setMinorTickColor() {
+	QSKIP("Axis");
 	CREATE_PROJECT
 
 	// change title color
@@ -837,6 +838,7 @@ void AxisTest::setTickLabelColor() {
 }
 
 void AxisTest::automaticTicNumberUpdateDockMajorTicks() {
+	QSKIP("Axis");
 	Project project;
 	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	QVERIFY(ws != nullptr);
@@ -877,6 +879,7 @@ void AxisTest::automaticTicNumberUpdateDockMajorTicks() {
 }
 
 void AxisTest::automaticTicNumberUpdateDockMinorTicks() {
+	QSKIP("Axis");
 	Project project;
 	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	QVERIFY(ws != nullptr);

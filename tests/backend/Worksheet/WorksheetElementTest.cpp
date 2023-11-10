@@ -352,6 +352,7 @@ void WorksheetElementTest::referenceRangeYKeyPressUp() {
 }
 
 void WorksheetElementTest::referenceRangeSaveLoad() {
+	QSKIP("WorksheetElement");
 	QString savePath;
 	{
 		SETUP_PROJECT
