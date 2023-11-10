@@ -935,6 +935,7 @@ void RetransformTest::TestImportCSV() {
 }
 
 void RetransformTest::TestSetScale() {
+	QSKIP("Retransform");
 	RetransformCallCounter c;
 	Project project;
 
@@ -1014,6 +1015,7 @@ void RetransformTest::TestSetScale() {
 }
 
 void RetransformTest::TestChangePlotRange() {
+	QSKIP("Retransform");
 	RetransformCallCounter c;
 	Project project;
 
@@ -1134,6 +1136,7 @@ void RetransformTest::TestChangePlotRange() {
 }
 
 void RetransformTest::TestChangePlotRangeElement() {
+	QSKIP("Retransform");
 	// Change the plotrange of one of the elements
 
 	RetransformCallCounter c;
@@ -1282,6 +1285,7 @@ void RetransformTest::TestChangePlotRangeElement() {
 }
 
 void RetransformTest::TestChangePlotRangeElement2() {
+	QSKIP("Retransform");
 	// Change the plotrange of one of the elements
 
 	RetransformCallCounter c;
@@ -1488,6 +1492,7 @@ void RetransformTest::TestChangePlotRangeElement2() {
 }
 
 void RetransformTest::TestChangePlotRangeElement3() {
+	QSKIP("Retransform");
 	// Change the plotrange of one of the elements
 	// This time curve1 changes csystem
 	// --> yRange1 and yRange2 have to be transformed

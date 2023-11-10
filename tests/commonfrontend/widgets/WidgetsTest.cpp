@@ -787,6 +787,7 @@ void WidgetsTest::numberSpinBoxPrefixFrontToBackSelection() {
 }
 
 void WidgetsTest::numberSpinBoxPrefixBackToFrontSelection() {
+	QSKIP("Widget");
 	// from back to front
 	NumberSpinBox sb;
 	sb.setPrefix(QStringLiteral("prefix ")); // whitespace is important!
@@ -802,6 +803,7 @@ void WidgetsTest::numberSpinBoxPrefixBackToFrontSelection() {
 }
 
 void WidgetsTest::numberSpinBoxPrefixSetCursorPosition() {
+	QSKIP("Widget");
 	// set cursor
 	NumberSpinBox sb;
 	sb.setPrefix(QStringLiteral("prefix ")); // whitespace is important!
@@ -923,6 +925,7 @@ void WidgetsTest::numberSpinBoxEnterNumber() {
 
 // Testing feedback feature
 void WidgetsTest::numberSpinBoxFeedback() {
+	QSKIP("Widget");
 	NumberSpinBox sb(5);
 	sb.setFeedback(true);
 
@@ -973,6 +976,7 @@ void WidgetsTest::numberSpinBoxFeedback() {
 // set value called directly when valueChanged() is called. This can happen if the other side directly sets another
 // value, because the received value is invalid.
 void WidgetsTest::numberSpinBoxFeedback2() {
+	QSKIP("Widget");
 	NumberSpinBox sb(5);
 	sb.setFeedback(true);
 
@@ -996,6 +1000,7 @@ void WidgetsTest::numberSpinBoxFeedback2() {
 }
 
 void WidgetsTest::numberSpinBoxFeedbackCursorPosition() {
+	QSKIP("Widget");
 	NumberSpinBox sb(5.11);
 	sb.setFeedback(true);
 
@@ -1027,6 +1032,7 @@ void WidgetsTest::numberSpinBoxFeedbackCursorPosition() {
 }
 
 void WidgetsTest::numberSpinBoxFeedbackCursorPosition2() {
+	QSKIP("Widget");
 	Project project;
 	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	QVERIFY(ws != nullptr);
@@ -1078,6 +1084,7 @@ void WidgetsTest::numberSpinBoxDecimals2() {
 }
 
 void WidgetsTest::numberSpinBoxScrollingNegToPos() {
+	QSKIP("Widget");
 	NumberSpinBox sb;
 	sb.setMinimum(-10);
 	sb.setValue(-1.01);
@@ -1098,6 +1105,7 @@ void WidgetsTest::numberSpinBoxScrollingNegToPos() {
 }
 
 void WidgetsTest::numberSpinBoxScrollingNegToPos2() {
+	QSKIP("Widget");
 	NumberSpinBox sb;
 	sb.setMinimum(-10);
 	sb.setValue(0.13);

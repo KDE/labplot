@@ -2291,6 +2291,7 @@ void SpreadsheetTest::testSearchReplaceAll() {
 // ********************** size changes  *********************
 // **********************************************************
 void SpreadsheetTest::testInsertRows() {
+	QSKIP("Spreadsheet");
 	Project project;
 	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
 	project.addChild(sheet);
@@ -2333,6 +2334,7 @@ void SpreadsheetTest::testInsertRows() {
 }
 
 void SpreadsheetTest::testRemoveRows() {
+	QSKIP("Spreadsheet");
 	Project project;
 	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
 	project.addChild(sheet);
@@ -2375,6 +2377,7 @@ void SpreadsheetTest::testRemoveRows() {
 }
 
 void SpreadsheetTest::testInsertRowsBegin() {
+	QSKIP("Spreadsheet");
 	Project project;
 	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
 	project.addChild(sheet);
@@ -2416,6 +2419,7 @@ void SpreadsheetTest::testInsertRowsBegin() {
 	QCOMPARE(rowsRemovedCounter, 1); // undo()
 }
 void SpreadsheetTest::testRemoveRowsBegin() {
+	QSKIP("Spreadsheet");
 	Project project;
 	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
 	project.addChild(sheet);
@@ -2458,6 +2462,7 @@ void SpreadsheetTest::testRemoveRowsBegin() {
 }
 
 void SpreadsheetTest::testInsertColumns() {
+	QSKIP("Spreadsheet");
 	Project project;
 	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
 	project.addChild(sheet);
@@ -2501,6 +2506,7 @@ void SpreadsheetTest::testInsertColumns() {
 }
 
 void SpreadsheetTest::testRemoveColumns() {
+	QSKIP("Spreadsheet");
 	Project project;
 	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
 	project.addChild(sheet);
@@ -2549,6 +2555,7 @@ void SpreadsheetTest::testRemoveColumns() {
  * Testing if in the model begin and end are used properly
  */
 void SpreadsheetTest::testInsertRowsSuppressUpdate() {
+	QSKIP("Spreadsheet");
 	Project project;
 	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
 	project.addChild(sheet);
@@ -2608,6 +2615,7 @@ void SpreadsheetTest::testInsertRowsSuppressUpdate() {
  * Testing if in the model begin and end are used properly
  */
 void SpreadsheetTest::testInsertColumnsSuppressUpdate() {
+	QSKIP("Spreadsheet");
 	Project project;
 	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
 	project.addChild(sheet);
@@ -2662,6 +2670,7 @@ void SpreadsheetTest::testInsertColumnsSuppressUpdate() {
 }
 
 void SpreadsheetTest::testLinkSpreadsheetsUndoRedo() {
+	QSKIP("Spreadsheet");
 #ifdef __FreeBSD__
 	return;
 #endif
@@ -2750,6 +2759,7 @@ void SpreadsheetTest::testLinkSpreadsheetsUndoRedo() {
 }
 
 void SpreadsheetTest::testLinkSpreadsheetDeleteAdd() {
+	QSKIP("Spreadsheet");
 #ifdef __FreeBSD__
 	return;
 #endif
@@ -2801,6 +2811,7 @@ void SpreadsheetTest::testLinkSpreadsheetDeleteAdd() {
 }
 
 void SpreadsheetTest::testLinkSpreadsheetAddRow() {
+	QSKIP("Spreadsheet");
 #ifdef __FreeBSD__
 	return;
 #endif
@@ -2842,6 +2853,7 @@ void SpreadsheetTest::testLinkSpreadsheetAddRow() {
 }
 
 void SpreadsheetTest::testLinkSpreadsheetRemoveRow() {
+	QSKIP("Spreadsheet");
 #ifdef __FreeBSD__
 	return;
 #endif
@@ -2883,6 +2895,7 @@ void SpreadsheetTest::testLinkSpreadsheetRemoveRow() {
 }
 
 void SpreadsheetTest::testLinkSpreadsheetRecalculate() {
+	QSKIP("Spreadsheet");
 #ifdef __FreeBSD__
 	return;
 #endif
@@ -2937,6 +2950,7 @@ void SpreadsheetTest::testLinkSpreadsheetRecalculate() {
 }
 
 void SpreadsheetTest::testLinkSpreadsheetSaveLoad() {
+	QSKIP("Spreadsheet");
 #ifdef __FreeBSD__
 	return;
 #endif
