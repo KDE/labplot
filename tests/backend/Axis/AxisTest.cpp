@@ -838,7 +838,6 @@ void AxisTest::setTickLabelColor() {
 }
 
 void AxisTest::automaticTicNumberUpdateDockMajorTicks() {
-	QSKIP("Axis");
 	Project project;
 	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	QVERIFY(ws != nullptr);
