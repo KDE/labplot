@@ -522,7 +522,7 @@ void Column::clear(QUndoCommand* parent) {
 			parent = command;
 		}
 		new ColumnClearCmd(d, parent);
-		new ColumnSetGlobalFormulaCmd(d, QString(), QStringList(), QVector<Column*>(), false, parent);
+		new ColumnSetGlobalFormulaCmd(d, QString(), QStringList(), QVector<Column*>(), false /* auto update */, true /* auto resize */, parent);
 		if (execute)
 			exec(parent);
 	}

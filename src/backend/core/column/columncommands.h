@@ -158,12 +158,12 @@ private:
 	QStringList m_variableNames;
 	QVector<Column*> m_variableColumns;
 	bool m_autoUpdate{false};
-	bool m_autoResize{false};
+	bool m_autoResize{true};
 	QString m_newFormula;
 	QStringList m_newVariableNames;
 	QVector<Column*> m_newVariableColumns;
 	bool m_newAutoUpdate{false};
-	bool m_newAutoResize{false};
+	bool m_newAutoResize{true};
 	bool m_copied{false};
 };
 

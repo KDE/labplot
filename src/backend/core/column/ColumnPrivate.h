@@ -236,7 +236,7 @@ private:
 	QString m_formula;
 	QVector<Column::FormulaData> m_formulaData;
 	bool m_formulaAutoUpdate{false};
-	bool m_formulaAutoResize{false};
+	bool m_formulaAutoResize{true};
 	IntervalAttribute<QString> m_formulas;
 	AbstractColumn::PlotDesignation m_plotDesignation{AbstractColumn::PlotDesignation::NoDesignation};
 	int m_width{0}; // column width in the view
