@@ -1587,7 +1587,14 @@ void AxisDock::axisScaleChanged(RangeT::Scale scale) {
 }
 
 void AxisDock::updateScale() {
-	ui.cbScale->setEnabled(!m_axis->rangeScale());
+	if (m_axis->rangeScale()) {
+		ui.cbScale->setEnabled(false);
+		ui.cbScale->setToolTip(i18n("Scale is in sync with the plot scale"));
+	}else {
+		ui.cbScale->setEnabled(true);
+		ui.cbScale->setToolTip(i18n("Scale is async with the plot"));
+	}
+	
 }
 
 void AxisDock::axisRangeScaleChanged(bool rangeScale) {
