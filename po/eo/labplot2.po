@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-09 00:39+0000\n"
-"PO-Revision-Date: 2023-11-05 17:03+0100\n"
+"PO-Revision-Date: 2023-11-09 20:45+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -14669,10 +14669,9 @@ msgid "Properties Explorer"
 msgstr "Esploristo de Propraĵoj"
 
 #: src/kdefrontend/MainWin.cpp:888
-#, fuzzy, kde-format
-#| msgid "Worksheet"
+#, kde-format
 msgid "Worksheet Preview"
-msgstr "Laborfolio"
+msgstr "Antaŭrigardo de Laborfolio"
 
 #: src/kdefrontend/MainWin.cpp:911
 #, kde-format
@@ -14715,11 +14714,10 @@ msgid "Project Explorer"
 msgstr "Projekta Esploristo"
 
 #: src/kdefrontend/MainWin.cpp:1485
-#, fuzzy, kde-format
-#| msgid "Worksheet"
+#, kde-format
 msgctxt "@title:window"
 msgid "Worksheet Preview"
-msgstr "Laborfolio"
+msgstr "Antaŭrigardo de Laborfolio"
 
 #: src/kdefrontend/MainWin.cpp:1539
 #, kde-format
