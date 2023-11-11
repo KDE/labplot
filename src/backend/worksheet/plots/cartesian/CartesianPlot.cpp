@@ -3168,7 +3168,7 @@ void CartesianPlotPrivate::retransformScale(const Dimension dim, int index, bool
 	// we have to recalculate the data range and auto scale in case of scale changes
 	if (range(dim, index).scale() != dataRange(dim, index).scale() && autoScale(dim, index)) {
 		q->calculateDataRange(dim, index);
-		q->scaleAuto(dim, index);
+		q->scaleAuto(dim, index, true, true);
 	}
 	auto r = range(dim, index);
 	QDEBUG(Q_FUNC_INFO << CartesianCoordinateSystem::dimensionToString(dim) << "range =" << r.toString() << ", scale =" << r.scale()
