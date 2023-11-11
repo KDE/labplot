@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : parser for Origin projects
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2017 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2017-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2018-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -16,11 +16,13 @@
 #include <OriginFile.h>
 
 class Axis;
+class CartesianPlot;
 class Column;
 class Project;
 class Workbook;
 class Spreadsheet;
 class Matrix;
+class TextLabel;
 class Worksheet;
 class Note;
 class XYCurve;
@@ -46,9 +48,12 @@ private:
 	void loadColumnNumericFormat(const Origin::SpreadColumn& originColumn, Column* column) const;
 	bool loadMatrixWorkbook(Workbook*, bool preview);
 	bool loadMatrix(Matrix*, bool preview, size_t sheetIndex = 0, const QString& mwbName = QString());
+
 	bool loadWorksheet(Worksheet*, bool preview);
+	void loadGraphLayer(const Origin::GraphLayer&, CartesianPlot*, int index, QHash<TextLabel*, QSizeF> textLabelPositions, bool preview) ;
 	void loadAxis(const Origin::GraphAxis&, Axis*, int index, const QString& axisTitle = QString()) const;
 	void loadCurve(const Origin::GraphCurve&, XYCurve*) const;
+
 	bool loadNote(Note*, bool preview);
 	void handleLooseWindows(Folder*, bool preview);
 
