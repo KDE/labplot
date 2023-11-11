@@ -575,7 +575,7 @@ void ColumnTest::testFormulaAutoResizeEnabled() {
 	targetColumn->setColumnMode(AbstractColumn::ColumnMode::Double);
 	targetColumn->setFormula(QStringLiteral("x+y"),
 							QStringList{QStringLiteral("x"), QStringLiteral("y")},
-							QVector{&sourceColumn1, &sourceColumn2},
+							QVector<Column*>({&sourceColumn1, &sourceColumn2}),
 							false /* autoUpdate */,
 							true /* autoResize */);
 	targetColumn->updateFormula();
@@ -601,7 +601,7 @@ void ColumnTest::testFormulaAutoResizeDisabled() {
 	targetColumn.setColumnMode(AbstractColumn::ColumnMode::Double);
 	targetColumn.setFormula(QStringLiteral("x+y"),
 							QStringList{QStringLiteral("x"), QStringLiteral("y")},
-							QVector{&sourceColumn1, &sourceColumn2},
+							QVector<Column*>({&sourceColumn1, &sourceColumn2}),
 							false /* autoUpdate */,
 							false /* autoResize */);
 	targetColumn.updateFormula();
