@@ -119,6 +119,7 @@ void WorksheetPreviewWidget::aspectAboutToBeRemoved(const AbstractAspect* aspect
 	if (!w)
 		return;
 
+	disconnect(w, nullptr, this, nullptr);
 	ui.lwPreview->takeItem(indexOfWorksheet(w));
 }
 

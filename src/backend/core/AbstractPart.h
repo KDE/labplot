@@ -26,6 +26,7 @@ public:
 	void deleteView() const;
 
 	ContentDockWidget* dockWidget() const;
+	bool dockWidgetExists() const;
 	bool hasMdiSubWindow() const;
 
 	QMenu* createContextMenu() override;
