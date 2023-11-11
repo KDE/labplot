@@ -1954,9 +1954,10 @@ void AxisPrivate::retransformTickLabelStrings() {
 			QString nullStr = numberLocale.toString(0., 'f', labelsPrecision);
 			for (const auto value : qAsConst(tickLabelValues)) {
 				// toString() does not round: use NSL function
-				if (RangeT::isLogScale(q->scale())) // don't use same precision for all label on log scales
-					str = numberLocale.toString(value, 'f', std::max(labelsPrecision, nsl_math_decimal_places(value) + 1));
-				else
+				if (RangeT::isLogScale(q->scale())) { // don't use same precision for all label on log scales
+					const int precision = labelsAutoPrecision ? std::max(labelsPrecision, nsl_math_decimal_places(value) + 1) : labelsPrecision;
+					str = numberLocale.toString(value, 'f', precision);
+				} else
 					str = numberLocale.toString(nsl_math_round_places(value, labelsPrecision), 'f', labelsPrecision);
 				if (str == QLatin1String("-") + nullStr)
 					str = nullStr;
