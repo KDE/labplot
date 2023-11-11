@@ -29,6 +29,7 @@
 #define COLUMN2_SET_FORMULA_AND_EVALUATE(formula, result)                                                                                                      \
 	c2.setFormula(QStringLiteral(formula), {QStringLiteral("x")}, QVector<Column*>({&c1}), true);                                                              \
 	c2.updateFormula();                                                                                                                                        \
+	QCOMPARE(c2.rowCount(), 8);                                                                                                                                \
 	for (int i = 0; i < c2.rowCount(); i++)                                                                                                                    \
 		VALUES_EQUAL(c2.valueAt(i), result);
 

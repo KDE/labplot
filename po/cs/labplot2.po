@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-09 00:39+0000\n"
+"POT-Creation-Date: 2023-11-11 00:39+0000\n"
 "PO-Revision-Date: 2023-06-23 15:21+0200\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
@@ -445,7 +445,7 @@ msgstr "nekompatibilní typ filtru"
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:283
 #: src/backend/lib/XmlStreamReader.cpp:104
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1850
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1861
 #, kde-format
 msgid "unknown element '%1'"
 msgstr "neznámý prvek '%1'"
@@ -8070,7 +8070,7 @@ msgstr ""
 msgid "%1: set error column"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:858
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:863
 #, kde-format
 msgid ""
 "Calculation of the histogram not possible. The max value must be bigger than "
@@ -8895,7 +8895,7 @@ msgstr "Viditelné"
 #: src/backend/worksheet/WorksheetElement.cpp:227
 #, kde-format
 msgid "Locking"
-msgstr ""
+msgstr "Zamykání"
 
 #: src/backend/worksheet/WorksheetElement.cpp:236
 #, kde-format
@@ -10470,10 +10470,9 @@ msgid "Presenter Mode"
 msgstr ""
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:278
-#, fuzzy, kde-format
-#| msgid "Interactive"
+#, kde-format
 msgid "Interactive Plots"
-msgstr "Interaktivní"
+msgstr ""
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:279
 #, kde-format
@@ -14468,10 +14467,9 @@ msgid "Properties Explorer"
 msgstr "Prohlížeč vlastností"
 
 #: src/kdefrontend/MainWin.cpp:888
-#, fuzzy, kde-format
-#| msgid "Worksheet"
+#, kde-format
 msgid "Worksheet Preview"
-msgstr "Pracovní list"
+msgstr ""
 
 #: src/kdefrontend/MainWin.cpp:911
 #, kde-format
@@ -14512,11 +14510,10 @@ msgid "Project Explorer"
 msgstr "Prohlížeč projektu"
 
 #: src/kdefrontend/MainWin.cpp:1485
-#, fuzzy, kde-format
-#| msgid "Worksheet"
+#, kde-format
 msgctxt "@title:window"
 msgid "Worksheet Preview"
-msgstr "Pracovní list"
+msgstr ""
 
 #: src/kdefrontend/MainWin.cpp:1539
 #, kde-format
@@ -20501,10 +20498,9 @@ msgstr "Posun Y:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbLock)
 #: src/kdefrontend/ui/labelwidget.ui:759
-#, fuzzy, kde-format
-#| msgid "Stacked"
+#, kde-format
 msgid "Locked"
-msgstr "Skládaný"
+msgstr "Uzamčeno"
 
 #. i18n: ectx: property (text), widget (QLabel, lY)
 #: src/kdefrontend/ui/matrix/matrixfunctionwidget.ui:116

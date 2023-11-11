@@ -997,7 +997,7 @@ void RetransformTest::TestSetScale() {
 		QCOMPARE(c.callCount(s), 1);
 
 	// x and y are called only once
-	QCOMPARE(c.logsXScaleRetransformed.count(), 2); // one plot with 2 x-Axes (both are using the same range so could be 1)
+	QCOMPARE(c.logsXScaleRetransformed.count(), 1);
 	QCOMPARE(c.logsXScaleRetransformed.at(0).plot, plot);
 	QCOMPARE(c.logsXScaleRetransformed.at(0).index, 0);
 	QCOMPARE(c.logsYScaleRetransformed.count(), 0);

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-09 00:39+0000\n"
+"POT-Creation-Date: 2023-11-11 00:39+0000\n"
 "PO-Revision-Date: 2019-07-11 18:46+0200\n"
 "Last-Translator: Matej Mrenica <matejm98mthw@gmail.com>\n"
 "Language-Team: Slovak <kde-i18n-doc@kde.org>\n"
@@ -470,7 +470,7 @@ msgstr ""
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:283
 #: src/backend/lib/XmlStreamReader.cpp:104
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1850
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1861
 #, kde-format
 msgid "unknown element '%1'"
 msgstr "neznámy prvok '%1'"
@@ -8626,7 +8626,7 @@ msgstr ""
 msgid "%1: set error column"
 msgstr "Vložiť stĺpec"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:858
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:863
 #, kde-format
 msgid ""
 "Calculation of the histogram not possible. The max value must be bigger than "

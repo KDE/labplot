@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-09 00:39+0000\n"
+"POT-Creation-Date: 2023-11-11 00:39+0000\n"
 "PO-Revision-Date: 2023-11-09 20:45+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
@@ -444,7 +444,7 @@ msgstr "nekongrua filtrila tipo"
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:283
 #: src/backend/lib/XmlStreamReader.cpp:104
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1850
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1861
 #, kde-format
 msgid "unknown element '%1'"
 msgstr "nekonata elemento '%1'"
@@ -8090,7 +8090,7 @@ msgstr "%1: x-erara tipo ŝanĝiĝis"
 msgid "%1: set error column"
 msgstr "%1: agordi eraran kolumnon"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:858
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:863
 #, kde-format
 msgid ""
 "Calculation of the histogram not possible. The max value must be bigger than "

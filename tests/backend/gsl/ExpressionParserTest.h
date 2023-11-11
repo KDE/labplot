@@ -30,6 +30,7 @@ private Q_SLOTS:
 	// void testevaluateCartesianConstExpr2();
 
 	void testIsValid();
+	void testIsValidStdev();
 	void testLog2();
 };
 

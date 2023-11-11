@@ -39,6 +39,10 @@
 
 using Dimension = CartesianCoordinateSystem::Dimension;
 
+namespace {
+constexpr int maxNumberMajorTicks = 100;
+} // Anounymous namespace
+
 /**
  * \class AxisGrid
  * \brief Helper class to get the axis grid drawn with the z-Value=0.
@@ -728,7 +732,11 @@ STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorTicksNumber, int, majorTicksNumber, retran
 void Axis::setMajorTicksNumber(int number, bool automatic) {
 	DEBUG(Q_FUNC_INFO << ", number = " << number)
 	Q_D(Axis);
-	if (number != d->majorTicksNumber) {
+	if (number > maxNumberMajorTicks) {
+		// Notifiy the user that the number was invalid
+		Q_EMIT majorTicksNumberChanged(maxNumberMajorTicks);
+		return;
+	} else if (number != d->majorTicksNumber) {
 		auto* parent = new AxisSetMajorTicksNumberCmd(d, number, ki18n("%1: set the total number of the major ticks"));
 		if (!automatic)
 			new AxisSetMajorTicksAutoNumberNoFinalizeCmd(d, false, ki18n("%1: disable major automatic tick numbers"), parent);
@@ -741,12 +749,12 @@ void Axis::setMajorTicksSpacing(qreal majorTicksSpacing) {
 	double range = this->range().length();
 	DEBUG(Q_FUNC_INFO << ", major spacing = " << majorTicksSpacing << ", range = " << range)
 	// fix spacing if incorrect (not set or > 100 ticks)
-	if (majorTicksSpacing == 0. || range / majorTicksSpacing > 100.) {
+	if (majorTicksSpacing == 0. || range / majorTicksSpacing > maxNumberMajorTicks) {
 		if (majorTicksSpacing == 0.)
 			majorTicksSpacing = range / (majorTicksNumber() - 1);
 
-		if (range / majorTicksSpacing > 100.)
-			majorTicksSpacing = range / 100.;
+		if (range / majorTicksSpacing > maxNumberMajorTicks)
+			majorTicksSpacing = range / maxNumberMajorTicks;
 
 		Q_EMIT majorTicksSpacingChanged(majorTicksSpacing);
 		return;
@@ -1637,9 +1645,9 @@ void AxisPrivate::retransformTicks() {
 					majorTickPosDateTime = majorTickPosDateTime.addMSecs(DateTime::milliseconds(dt.hour, dt.minute, dt.second, dt.millisecond));
 					majorTickPos = majorTickPosDateTime.toMSecsSinceEpoch();
 				}
-				if (majorTickPos > end || iMajor > 1000)
-					break; // Finish
 			}
+			if (majorTickPos > end || iMajor > maxNumberMajorTicks)
+				break; // Finish
 		}
 
 		qreal xAnchorPoint = 0.0;

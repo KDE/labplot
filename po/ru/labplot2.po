@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-09 00:39+0000\n"
+"POT-Creation-Date: 2023-11-11 00:39+0000\n"
 "PO-Revision-Date: 2022-09-26 17:25+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -469,7 +469,7 @@ msgstr "несовместимый тип фильтра"
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:283
 #: src/backend/lib/XmlStreamReader.cpp:104
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1850
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1861
 #, kde-format
 msgid "unknown element '%1'"
 msgstr "Неизвестный элемент «%1»."
@@ -8474,7 +8474,7 @@ msgstr "%1: изменение типа пределов погрешности 
 msgid "%1: set error column"
 msgstr "%1: задание столбца пределов погрешностей по X"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:858
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:863
 #, fuzzy, kde-format
 #| msgid ""
 #| "Calculation of the histogram not possible. The max value must be bigger "
