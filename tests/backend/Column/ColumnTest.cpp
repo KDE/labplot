@@ -27,7 +27,7 @@
 	c2.replaceValues(-1, c2Vector);
 
 #define COLUMN2_SET_FORMULA_AND_EVALUATE(formula, result)                                                                                                      \
-	c2.setFormula(QStringLiteral(formula), {QStringLiteral("x")}, {&c1}, true);                                                                                \
+	c2.setFormula(QStringLiteral(formula), {QStringLiteral("x")}, QVector<Column*>({&c1}), true);                                                                                \
 	c2.updateFormula();                                                                                                                                        \
 	for (int i = 0; i < c2.rowCount(); i++)                                                                                                                    \
 		VALUES_EQUAL(c2.valueAt(i), result);
@@ -513,7 +513,7 @@ void ColumnTest::testFormulaAutoUpdateEnabled() {
 	targetColumn.setColumnMode(AbstractColumn::ColumnMode::Double); // should happen automatically in Column::setFormula()
 	targetColumn.setFormula(QStringLiteral("2*x"),
 							QStringList{QStringLiteral("x")},
-							QVector{&sourceColumn},
+							QVector<Column*>({&sourceColumn}),
 							true /* autoUpdate */,
 							false /* autoResize */);
 	targetColumn.updateFormula();
@@ -541,7 +541,7 @@ void ColumnTest::testFormulaAutoUpdateDisabled() {
 	targetColumn.setColumnMode(AbstractColumn::ColumnMode::Double);
 	targetColumn.setFormula(QStringLiteral("2*x"),
 							QStringList{QStringLiteral("x")},
-							QVector{&sourceColumn},
+							QVector<Column*>({&sourceColumn}),
 							false /* autoUpdate */,
 							false /* autoResize */);
 	targetColumn.updateFormula();
@@ -1170,7 +1170,7 @@ void ColumnTest::testFormula() {
 	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
 	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17.});
 
-	c2.setFormula(QStringLiteral("mean(x)"), {QStringLiteral("x")}, {&c1}, true);
+	c2.setFormula(QStringLiteral("mean(x)"), {QStringLiteral("x")}, QVector<Column*>({&c1}), true);
 	c2.updateFormula();
 	QCOMPARE(c2.rowCount(), 7);
 	for (int i = 0; i < c2.rowCount(); i++) {
@@ -1188,7 +1188,7 @@ void ColumnTest::testFormulaCell() {
 	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
 	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17.});
 
-	c2.setFormula(QStringLiteral("cell(y; x)"), {QStringLiteral("x"), QStringLiteral("y")}, {&c1, &c3}, true);
+	c2.setFormula(QStringLiteral("cell(y; x)"), {QStringLiteral("x"), QStringLiteral("y")}, QVector<Column*>({&c1, &c3}), true);
 	c2.updateFormula();
 	QCOMPARE(c2.rowCount(), 7);
 	VALUES_EQUAL(c2.valueAt(0), -1.);
@@ -1210,7 +1210,7 @@ void ColumnTest::testFormulaCellInvalid() {
 	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
 	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17.});
 
-	c2.setFormula(QStringLiteral("cell(10,x)"), {QStringLiteral("x")}, {&c1}, true);
+	c2.setFormula(QStringLiteral("cell(10,x)"), {QStringLiteral("x")}, QVector<Column*>({&c1}), true);
 	c2.updateFormula();
 	QCOMPARE(c2.rowCount(), 7);
 	// All invalid
@@ -1225,7 +1225,7 @@ void ColumnTest::testFormulaCellConstExpression() {
 	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
 	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17.});
 
-	c2.setFormula(QStringLiteral("cell(2; x)"), {QStringLiteral("x")}, {&c1}, true);
+	c2.setFormula(QStringLiteral("cell(2; x)"), {QStringLiteral("x")}, QVector<Column*>({&c1}), true);
 	c2.updateFormula();
 	QCOMPARE(c2.rowCount(), 7);
 	// All invalid
@@ -1243,7 +1243,7 @@ void ColumnTest::testFormulaCellMulti() {
 	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
 	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17.});
 
-	c2.setFormula(QStringLiteral("cell(2; x) + cell(1; y)"), {QStringLiteral("x"), QStringLiteral("y")}, {&c1, &c3}, true);
+	c2.setFormula(QStringLiteral("cell(2; x) + cell(1; y)"), {QStringLiteral("x"), QStringLiteral("y")}, QVector<Column*>({&c1, &c3}), true);
 	c2.updateFormula();
 	QCOMPARE(c2.rowCount(), 7);
 	for (int i = 0; i < c2.rowCount(); i++)
@@ -1277,7 +1277,7 @@ void ColumnTest::testFormulasmmax() {
 	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
 	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17., 18.});
 
-	c2.setFormula(QStringLiteral("smmax(3; x)"), {QStringLiteral("x")}, {&c1}, true);
+	c2.setFormula(QStringLiteral("smmax(3; x)"), {QStringLiteral("x")}, QVector<Column*>({&c1}), true);
 	c2.updateFormula();
 	QCOMPARE(c2.rowCount(), 8);
 	VALUES_EQUAL(c2.valueAt(0), 1.);
@@ -1297,7 +1297,7 @@ void ColumnTest::testFormulasma() {
 	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
 	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17., 18.});
 
-	c2.setFormula(QStringLiteral("sma(3; x)"), {QStringLiteral("x")}, {&c1}, true);
+	c2.setFormula(QStringLiteral("sma(3; x)"), {QStringLiteral("x")}, QVector<Column*>({&c1}), true);
 	c2.updateFormula();
 	QCOMPARE(c2.rowCount(), 8);
 	VALUES_EQUAL(c2.valueAt(0), 1. / 3.);
@@ -1524,7 +1524,7 @@ void ColumnTest::clearContentFormula() {
 	for (int i = 0; i < c->rowCount(); i++)
 		QCOMPARE(c->valueAt(i), i);
 
-	c->setFormula(QStringLiteral("x"), {QStringLiteral("zet")}, {c}, true);
+	c->setFormula(QStringLiteral("x"), {QStringLiteral("zet")}, QVector<Column*>({c}), true);
 	c->clear();
 
 	QCOMPARE(c->rowCount(), 100);
