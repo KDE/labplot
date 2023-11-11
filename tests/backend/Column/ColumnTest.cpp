@@ -27,7 +27,7 @@
 	c2.replaceValues(-1, c2Vector);
 
 #define COLUMN2_SET_FORMULA_AND_EVALUATE(formula, result)                                                                                                      \
-	c2.setFormula(QStringLiteral(formula), {QStringLiteral("x")}, QVector<Column*>({&c1}), true);                                                                                \
+	c2.setFormula(QStringLiteral(formula), {QStringLiteral("x")}, QVector<Column*>({&c1}), true);                                                              \
 	c2.updateFormula();                                                                                                                                        \
 	for (int i = 0; i < c2.rowCount(); i++)                                                                                                                    \
 		VALUES_EQUAL(c2.valueAt(i), result);
@@ -574,10 +574,10 @@ void ColumnTest::testFormulaAutoResizeEnabled() {
 	// evaluatue x+y
 	targetColumn->setColumnMode(AbstractColumn::ColumnMode::Double);
 	targetColumn->setFormula(QStringLiteral("x+y"),
-							QStringList{QStringLiteral("x"), QStringLiteral("y")},
-							QVector<Column*>({&sourceColumn1, &sourceColumn2}),
-							false /* autoUpdate */,
-							true /* autoResize */);
+							 QStringList{QStringLiteral("x"), QStringLiteral("y")},
+							 QVector<Column*>({&sourceColumn1, &sourceColumn2}),
+							 false /* autoUpdate */,
+							 true /* autoResize */);
 	targetColumn->updateFormula();
 
 	// check the generated values in the target column which should have been resized

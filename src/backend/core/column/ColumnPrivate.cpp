@@ -1712,7 +1712,11 @@ void ColumnPrivate::connectFormulaColumn(const AbstractColumn* column) {
  * \param variableColumnPaths is used to restore the pointers to columns from pathes
  * after the project was loaded in Project::load().
  */
-void ColumnPrivate::setFormula(const QString& formula, const QStringList& variableNames, const QStringList& variableColumnPaths, bool autoUpdate, bool autoResize) {
+void ColumnPrivate::setFormula(const QString& formula,
+							   const QStringList& variableNames,
+							   const QStringList& variableColumnPaths,
+							   bool autoUpdate,
+							   bool autoResize) {
 	m_formula = formula;
 	m_formulaData.clear();
 	for (int i = 0; i < variableNames.count(); i++)
