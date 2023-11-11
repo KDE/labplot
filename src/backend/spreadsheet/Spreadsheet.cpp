@@ -267,7 +267,7 @@ void Spreadsheet::insertRows(int before, int count, QUndoCommand* parent) {
 	}
 
 	for (auto* col : children<Column>())
-		col->insertRows(before, count, parent);
+		col->insertRows(before, count, command);
 
 	if (execute)
 		exec(command);
