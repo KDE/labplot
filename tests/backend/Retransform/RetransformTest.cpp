@@ -77,6 +77,7 @@ void RetransformTest::TestLoadProject() {
 
 // Problem in this project was that the second axis labels are not loaded. Zooming in/out once shows the correct range
 void RetransformTest::TestLoadProject2() {
+	QLocale::setDefault(QLocale::C); // . as decimal separator
 	RetransformCallCounter c;
 	Project project;
 
