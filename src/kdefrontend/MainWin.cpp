@@ -2231,7 +2231,7 @@ void MainWin::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
 	if (!datapicker)
 		datapicker = dynamic_cast<const Datapicker*>(aspect->parentAspect()->parentAspect());
 
-	if (!workbook && !datapicker) {
+	if (!workbook && !datapicker && part->dockWidgetExists()) {
 		ContentDockWidget* win = part->dockWidget();
 		if (win)
 			m_DockManager->removeDockWidget(win);
