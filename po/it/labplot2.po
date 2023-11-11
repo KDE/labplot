@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-09 00:39+0000\n"
-"PO-Revision-Date: 2023-09-17 16:34+0200\n"
+"POT-Creation-Date: 2023-11-11 00:39+0000\n"
+"PO-Revision-Date: 2023-10-26 23:43+0200\n"
 "Last-Translator: Paolo Zamponi <feus73@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 23.08.0\n"
+"X-Generator: Lokalize 23.08.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -450,7 +450,7 @@ msgstr "tipo di filtro incompatibile"
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:283
 #: src/backend/lib/XmlStreamReader.cpp:104
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1850
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1861
 #, kde-format
 msgid "unknown element '%1'"
 msgstr "elemento sconosciuto «%1»"
@@ -4743,10 +4743,9 @@ msgid "Logarithm"
 msgstr "Logaritmo"
 
 #: src/backend/gsl/functions.cpp:559
-#, fuzzy, kde-format
-#| msgid "Base 10 logarithm"
+#, kde-format
 msgid "Base 2 logarithm"
-msgstr "Logaritmo in base 10"
+msgstr "Logaritmo in base 2"
 
 #: src/backend/gsl/functions.cpp:560
 #, kde-format
@@ -8148,7 +8147,7 @@ msgstr "%1: tipo di errore x modificato"
 msgid "%1: set error column"
 msgstr "%1: imposta la colonna dell'errore"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:858
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:863
 #, kde-format
 msgid ""
 "Calculation of the histogram not possible. The max value must be bigger than "
@@ -9817,10 +9816,9 @@ msgid "Insert Multiple Columns Right"
 msgstr "Inserisci colonne multiple a destra"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:317
-#, fuzzy, kde-format
-#| msgid "Remove Selected Column(s)"
+#, kde-format
 msgid "Delete Selected Column(s)"
-msgstr "Rimuovi le colonne selezionate"
+msgstr "Elimina le colonne selezionate"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:319
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1634
@@ -15287,16 +15285,13 @@ msgid "Notebook type to create automatically on startup"
 msgstr ""
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:199
-#, fuzzy, kde-format
-#| msgid ""
-#| "Controls the behavior of where the dock widgets are placed after being re-"
-#| "opened."
+#, kde-format
 msgid ""
 "Controls the behavior of where the dock widgets are placed after being re-"
 "opened"
 msgstr ""
 "Controlla il comportamento su dove vengono posizionati gli oggetti "
-"agganciabili dopo essere stati riaperti."
+"agganciabili dopo essere stati riaperti"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:203
 #, kde-format
@@ -16057,7 +16052,7 @@ msgstr "Espressione regolare"
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:188
 #, kde-format
 msgid "Incorrect formula syntax"
-msgstr ""
+msgstr "Sintassi della formula non corretta"
 
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:205
 #, fuzzy, kde-format
