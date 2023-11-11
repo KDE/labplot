@@ -1876,6 +1876,8 @@ void AxisTest::autoScale2() {
 	xAxis->setMajorTicksNumber(4);
 	QCOMPARE(xAxis->scale(), RangeT::Scale::Linear);
 	QCOMPARE(xAxis->rangeScale(), true);
+	xAxis->setLabelsAutoPrecision(false);
+	xAxis->setLabelsPrecision(2);
 
 	auto range = p->range(Dimension::X, 0);
 	range.setStart(0);
@@ -1889,11 +1891,12 @@ void AxisTest::autoScale2() {
 	QCOMPARE(xAxis->scale(), RangeT::Scale::Log10);
 
 	{
+		const auto s = xAxis->tickLabelStrings();
 		QStringList expectedStrings{
-			QStringLiteral("0.1"),
-			QStringLiteral("0.4"),
-			QStringLiteral("0.7"),
-			QStringLiteral("1"),
+			QStringLiteral("0.01"),
+			QStringLiteral("0.05"),
+			QStringLiteral("0.22"),
+			QStringLiteral("1.00"),
 		};
 		COMPARE_STRING_VECTORS(xAxis->tickLabelStrings(), expectedStrings);
 	}
