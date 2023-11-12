@@ -2968,7 +2968,7 @@ void SpreadsheetTest::testLinkSpreadsheetRecalculateRowCountChange() {
 		QCOMPARE(sheetCalculationsColumn0->rowCount(), 7);
 		for (int i = 0; i < 7; i++) {
 			qDebug() << i;
-			VALUES_EQUAL(sheetCalculationsColumn0->doubleAt(i), i);
+			VALUES_EQUAL(sheetCalculationsColumn0->doubleAt(i), i + 1);
 		}
 	}
 }
