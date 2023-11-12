@@ -2945,7 +2945,7 @@ void SpreadsheetTest::testLinkSpreadsheetRecalculateRowCountChange() {
 		QCOMPARE(sheetCalculationsColumn0->rowCount(), 7);
 		for (int i = 0; i < 7; i++) {
 			qDebug() << i;
-			VALUES_EQUAL(sheetCalculationsColumn0->doubleAt(i), i + 1);
+			VALUES_EQUAL(sheetCalculationsColumn0->doubleAt(i), i + 1.);
 		}
 	}
 
@@ -2956,9 +2956,9 @@ void SpreadsheetTest::testLinkSpreadsheetRecalculateRowCountChange() {
 		for (int i = 0; i < 8; i++) {
 			qDebug() << i;
 			if (i < 7)
-				VALUES_EQUAL(sheetCalculationsColumn0->doubleAt(i), i + 1);
+				VALUES_EQUAL(sheetCalculationsColumn0->doubleAt(i), i + 1.);
 			else
-				VALUES_EQUAL(sheetCalculationsColumn0->doubleAt(i), 0); // When inserting a row for an integer column, the initial value is zero
+				VALUES_EQUAL(sheetCalculationsColumn0->doubleAt(i), 0.); // When inserting a row for an integer column, the initial value is zero
 		}
 	}
 
@@ -2968,7 +2968,7 @@ void SpreadsheetTest::testLinkSpreadsheetRecalculateRowCountChange() {
 		QCOMPARE(sheetCalculationsColumn0->rowCount(), 7);
 		for (int i = 0; i < 7; i++) {
 			qDebug() << i;
-			VALUES_EQUAL(sheetCalculationsColumn0->doubleAt(i), i + 1);
+			VALUES_EQUAL(sheetCalculationsColumn0->doubleAt(i), i + 1.);
 		}
 	}
 }
