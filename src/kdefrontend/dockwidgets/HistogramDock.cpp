@@ -446,7 +446,7 @@ void HistogramDock::binCountChanged(int value) {
 }
 
 void HistogramDock::binWidthChanged(double width) {
-	CONDITIONAL_LOCK_RETURN;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	for (auto* curve : m_curvesList)
 		curve->setBinWidth(width);
@@ -458,21 +458,21 @@ void HistogramDock::autoBinRangesChanged(bool state) {
 	ui.dteBinRangesMin->setEnabled(!state);
 	ui.dteBinRangesMax->setEnabled(!state);
 
-	CONDITIONAL_LOCK_RETURN;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	for (auto* hist : m_curvesList)
 		hist->setAutoBinRanges(state);
 }
 
 void HistogramDock::binRangesMinChanged(double value) {
-	CONDITIONAL_LOCK_RETURN;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	for (auto* hist : m_curvesList)
 		hist->setBinRangesMin(value);
 }
 
 void HistogramDock::binRangesMaxChanged(double value) {
-	CONDITIONAL_LOCK_RETURN;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	for (auto* hist : m_curvesList)
 		hist->setBinRangesMax(value);
