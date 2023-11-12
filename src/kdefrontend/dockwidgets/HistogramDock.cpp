@@ -105,11 +105,6 @@ HistogramDock::HistogramDock(QWidget* parent)
 		layout->setVerticalSpacing(2);
 	}
 
-	// validators
-	ui.leBinWidth->setValidator(new QDoubleValidator(ui.leBinWidth));
-	ui.leBinRangesMin->setValidator(new QDoubleValidator(ui.leBinRangesMin));
-	ui.leBinRangesMax->setValidator(new QDoubleValidator(ui.leBinRangesMax));
-
 	// Slots
 	// General
 	connect(ui.leName, &QLineEdit::textChanged, this, &HistogramDock::nameChanged);
@@ -121,10 +116,10 @@ HistogramDock::HistogramDock(QWidget* parent)
 	connect(ui.cbNormalization, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &HistogramDock::normalizationChanged);
 	connect(ui.cbBinningMethod, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &HistogramDock::binningMethodChanged);
 	connect(ui.sbBinCount, QOverload<int>::of(&QSpinBox::valueChanged), this, &HistogramDock::binCountChanged);
-	connect(ui.leBinWidth, &QLineEdit::textChanged, this, &HistogramDock::binWidthChanged);
+	connect(ui.sbBinWidth, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &HistogramDock::binWidthChanged);
 	connect(ui.chkAutoBinRanges, &QCheckBox::toggled, this, &HistogramDock::autoBinRangesChanged);
-	connect(ui.leBinRangesMin, &QLineEdit::textChanged, this, &HistogramDock::binRangesMinChanged);
-	connect(ui.leBinRangesMax, &QLineEdit::textChanged, this, &HistogramDock::binRangesMaxChanged);
+	connect(ui.sbBinRangesMin, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &HistogramDock::binRangesMinChanged);
+	connect(ui.sbBinRangesMax, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &HistogramDock::binRangesMaxChanged);
 	connect(ui.dteBinRangesMin, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &HistogramDock::binRangesMinDateTimeChanged);
 	connect(ui.dteBinRangesMax, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &HistogramDock::binRangesMaxDateTimeChanged);
 	connect(ui.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &HistogramDock::plotRangeChanged);
@@ -278,10 +273,10 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 	ui.cbNormalization->setCurrentIndex(m_curve->normalization());
 	ui.cbBinningMethod->setCurrentIndex(m_curve->binningMethod());
 	ui.sbBinCount->setValue(m_curve->binCount());
-	ui.leBinWidth->setText(numberLocale.toString(m_curve->binWidth()));
+	ui.sbBinWidth->setValue(m_curve->binWidth());
 	ui.chkAutoBinRanges->setChecked(m_curve->autoBinRanges());
-	ui.leBinRangesMin->setText(numberLocale.toString(m_curve->binRangesMin()));
-	ui.leBinRangesMax->setText(numberLocale.toString(m_curve->binRangesMax()));
+	ui.sbBinRangesMin->setValue(m_curve->binRangesMin());
+	ui.sbBinRangesMax->setValue(m_curve->binRangesMax());
 	ui.chkVisible->setChecked(m_curve->isVisible());
 
 	// handle numeric vs. datetime widgets
@@ -297,8 +292,8 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 
 	ui.lBinRangesMin->setVisible(numeric);
 	ui.lBinRangesMax->setVisible(numeric);
-	ui.leBinRangesMin->setVisible(numeric);
-	ui.leBinRangesMax->setVisible(numeric);
+	ui.sbBinRangesMin->setVisible(numeric);
+	ui.sbBinRangesMax->setVisible(numeric);
 
 	ui.lBinRangesMinDateTime->setVisible(!numeric);
 	ui.dteBinRangesMin->setVisible(!numeric);
@@ -424,17 +419,17 @@ void HistogramDock::binningMethodChanged(int index) {
 		ui.lBinCount->show();
 		ui.sbBinCount->show();
 		ui.lBinWidth->hide();
-		ui.leBinWidth->hide();
+		ui.sbBinWidth->hide();
 	} else if (binningMethod == Histogram::ByWidth) {
 		ui.lBinCount->hide();
 		ui.sbBinCount->hide();
 		ui.lBinWidth->show();
-		ui.leBinWidth->show();
+		ui.sbBinWidth->show();
 	} else {
 		ui.lBinCount->hide();
 		ui.sbBinCount->hide();
 		ui.lBinWidth->hide();
-		ui.leBinWidth->hide();
+		ui.sbBinWidth->hide();
 	}
 
 	CONDITIONAL_LOCK_RETURN;
@@ -450,20 +445,16 @@ void HistogramDock::binCountChanged(int value) {
 		curve->setBinCount(value);
 }
 
-void HistogramDock::binWidthChanged() {
+void HistogramDock::binWidthChanged(double width) {
 	CONDITIONAL_LOCK_RETURN;
 
-	bool ok;
-	const double width{QLocale().toDouble(ui.leBinWidth->text(), &ok)};
-	if (ok) {
-		for (auto* curve : m_curvesList)
-			curve->setBinWidth(width);
-	}
+	for (auto* curve : m_curvesList)
+		curve->setBinWidth(width);
 }
 
 void HistogramDock::autoBinRangesChanged(bool state) {
-	ui.leBinRangesMin->setEnabled(!state);
-	ui.leBinRangesMax->setEnabled(!state);
+	ui.sbBinRangesMin->setEnabled(!state);
+	ui.sbBinRangesMax->setEnabled(!state);
 	ui.dteBinRangesMin->setEnabled(!state);
 	ui.dteBinRangesMax->setEnabled(!state);
 
@@ -473,26 +464,18 @@ void HistogramDock::autoBinRangesChanged(bool state) {
 		hist->setAutoBinRanges(state);
 }
 
-void HistogramDock::binRangesMinChanged(const QString& value) {
+void HistogramDock::binRangesMinChanged(double value) {
 	CONDITIONAL_LOCK_RETURN;
 
-	bool ok;
-	const double min{QLocale().toDouble(value, &ok)};
-	if (ok) {
-		for (auto* hist : m_curvesList)
-			hist->setBinRangesMin(min);
-	}
+	for (auto* hist : m_curvesList)
+		hist->setBinRangesMin(value);
 }
 
-void HistogramDock::binRangesMaxChanged(const QString& value) {
+void HistogramDock::binRangesMaxChanged(double value) {
 	CONDITIONAL_LOCK_RETURN;
 
-	bool ok;
-	const double max{QLocale().toDouble(value, &ok)};
-	if (ok) {
-		for (auto* hist : m_curvesList)
-			hist->setBinRangesMax(max);
-	}
+	for (auto* hist : m_curvesList)
+		hist->setBinRangesMax(value);
 }
 
 void HistogramDock::binRangesMinDateTimeChanged(qint64 value) {
@@ -633,7 +616,7 @@ void HistogramDock::curveBinCountChanged(int count) {
 
 void HistogramDock::curveBinWidthChanged(double width) {
 	CONDITIONAL_LOCK_RETURN;
-	ui.leBinWidth->setText(QLocale().toString(width));
+	ui.sbBinWidth->setValue(width);
 }
 
 void HistogramDock::curveAutoBinRangesChanged(bool value) {
@@ -643,13 +626,13 @@ void HistogramDock::curveAutoBinRangesChanged(bool value) {
 
 void HistogramDock::curveBinRangesMinChanged(double value) {
 	CONDITIONAL_LOCK_RETURN;
-	ui.leBinRangesMin->setText(QLocale().toString(value));
+	ui.sbBinRangesMin->setValue(value);
 	ui.dteBinRangesMin->setMSecsSinceEpochUTC(value);
 }
 
 void HistogramDock::curveBinRangesMaxChanged(double value) {
 	CONDITIONAL_LOCK_RETURN;
-	ui.leBinRangesMax->setText(QLocale().toString(value));
+	ui.sbBinRangesMax->setValue(value);
 	ui.dteBinRangesMax->setMSecsSinceEpochUTC(value);
 }
 
