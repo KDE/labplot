@@ -124,6 +124,7 @@ public:
 	void setFormulVariableColumnsPath(int index, const QString& path);
 	void setFormulVariableColumn(int index, Column*);
 	bool formulaAutoUpdate() const;
+	bool formulaAutoResize() const;
 
 	QString formula(int) const override;
 	QVector<Interval<int>> formulaIntervals() const override;

@@ -152,6 +152,16 @@ void FunctionValuesDialog::setColumns(const QVector<Column*>& columns) {
 	// Enable if linking is turned on, so the user has to explicit disable recalculation, so it cannot be forgotten
 	ui.chkAutoUpdate->setChecked(firstColumn->formulaAutoUpdate() || m_spreadsheet->linking());
 
+	// auto-resize
+	if (!m_spreadsheet->linking())
+		ui.chkAutoResize->setChecked(firstColumn->formulaAutoResize());
+	else {
+		// linking is active, deactive this option since the size of the target spreadsheet is controlled by the linked spreadsheet
+		ui.chkAutoResize->setChecked(false);
+		ui.chkAutoResize->setEnabled(false);
+		ui.chkAutoResize->setToolTip(i18n("Spreadsheet linking is active. The size of the target spreadsheet is controlled by the linked spreadsheet"));
+	}
+
 	checkValues();
 }
 

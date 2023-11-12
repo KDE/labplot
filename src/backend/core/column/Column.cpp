@@ -563,6 +563,10 @@ bool Column::formulaAutoUpdate() const {
 	return d->formulaAutoUpdate();
 }
 
+bool Column::formulaAutoResize() const {
+	return d->formulaAutoResize();
+}
+
 /**
  * \brief Sets the formula used to generate column values
  */
