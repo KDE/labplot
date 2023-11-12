@@ -249,7 +249,7 @@ void Spreadsheet::removeRows(int first, int count, QUndoCommand* parent) {
 	}
 
 	for (auto* col : children<Column>())
-		col->removeRows(first, count, parent);
+		col->removeRows(first, count, command);
 
 	if (execute)
 		exec(command);
