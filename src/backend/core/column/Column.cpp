@@ -477,8 +477,6 @@ void Column::handleRowInsertion(int before, int count, QUndoCommand* parent) {
 	Q_ASSERT(parent);
 	AbstractColumn::handleRowInsertion(before, count, parent);
 	new ColumnInsertRowsCmd(d, before, count, parent);
-	if (!m_suppressDataChangedSignal)
-		Q_EMIT dataChanged(this);
 }
 
 /**
