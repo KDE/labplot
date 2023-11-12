@@ -2966,6 +2966,62 @@ void SpreadsheetTest::testLinkSpreadsheetSaveLoad() {
 	}
 }
 
+void SpreadsheetTest::testLinkSpreadsheetsModelDockUpdateCheckRemoveRows() {
+#ifdef __FreeBSD__
+	return;
+#endif
+	Project project;
+	auto* sheetData = new Spreadsheet(QStringLiteral("data"), false);
+	project.addChild(sheetData);
+	sheetData->setRowCount(20); // smaller
+
+	auto* sheetCalculations = new Spreadsheet(QStringLiteral("calculations"), false);
+	project.addChild(sheetCalculations);
+	sheetCalculations->setRowCount(100);
+
+	const auto* model = new SpreadsheetModel(sheetCalculations);
+	SpreadsheetDock dock(nullptr);
+	dock.setSpreadsheets({sheetCalculations});
+
+	sheetCalculations->setLinking(true);
+	sheetCalculations->setLinkedSpreadsheet(sheetData);
+
+	QCOMPARE(sheetCalculations->linking(), true);
+	QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetData);
+	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData->path());
+	QCOMPARE(sheetCalculations->rowCount(), 20);
+	QCOMPARE(model->rowCount(), 20);
+	QCOMPARE(dock.ui.sbRowCount->value(), 20);
+}
+
+void SpreadsheetTest::testLinkSpreadsheetsModelDockUpdateCheckInsertRows() {
+#ifdef __FreeBSD__
+	return;
+#endif
+	Project project;
+	auto* sheetData = new Spreadsheet(QStringLiteral("data"), false);
+	project.addChild(sheetData);
+	sheetData->setRowCount(100); // larger
+
+	auto* sheetCalculations = new Spreadsheet(QStringLiteral("calculations"), false);
+	project.addChild(sheetCalculations);
+	sheetCalculations->setRowCount(20);
+
+	const auto* model = new SpreadsheetModel(sheetCalculations);
+	SpreadsheetDock dock(nullptr);
+	dock.setSpreadsheets({sheetCalculations});
+
+	sheetCalculations->setLinking(true);
+	sheetCalculations->setLinkedSpreadsheet(sheetData);
+
+	QCOMPARE(sheetCalculations->linking(), true);
+	QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetData);
+	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData->path());
+	QCOMPARE(sheetCalculations->rowCount(), 100);
+	QCOMPARE(model->rowCount(), 100);
+	QCOMPARE(dock.ui.sbRowCount->value(), 100);
+}
+
 // **********************************************************
 // **************** statistics spreadsheet  *****************
 // **********************************************************
