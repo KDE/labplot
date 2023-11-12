@@ -698,6 +698,36 @@ void ColumnTest::testFormulaAutoResizeDisabled() {
 	QCOMPARE(targetColumn.valueAt(0), 2);
 }
 
+void ColumnTest::testFormulaAutoUpdateEnabledResize() {
+	Column sourceColumn(QStringLiteral("source"), Column::ColumnMode::Integer);
+	sourceColumn.setIntegers({1, 2, 3, 4});
+
+	Column targetColumn(QStringLiteral("target"), Column::ColumnMode::Integer);
+	targetColumn.setIntegers({3, 2, 1});
+
+	// evaluatue 2*x and check the generated values in the target column
+	targetColumn.setColumnMode(AbstractColumn::ColumnMode::Double); // should happen automatically in Column::setFormula()
+	targetColumn.setFormula(QStringLiteral("2*x"),
+							QStringList{QStringLiteral("x")},
+							QVector<Column*>({&sourceColumn}),
+							true /* autoUpdate */,
+							false /* autoResize */);
+	targetColumn.updateFormula();
+	QCOMPARE(targetColumn.rowCount(), 3);
+	QCOMPARE(targetColumn.valueAt(0), 2);
+	QCOMPARE(targetColumn.valueAt(1), 4);
+	QCOMPARE(targetColumn.valueAt(2), 6);
+
+	targetColumn.insertRows(3, 1); // Rowcount of the target changes
+
+	// Values updated
+	QCOMPARE(targetColumn.rowCount(), 4);
+	QCOMPARE(targetColumn.valueAt(0), 2);
+	QCOMPARE(targetColumn.valueAt(1), 4);
+	QCOMPARE(targetColumn.valueAt(2), 6);
+	QCOMPARE(targetColumn.valueAt(3), 8);
+}
+
 void ColumnTest::testDictionaryIndex() {
 	Column c(QStringLiteral("Text column"), Column::ColumnMode::Text);
 	c.setTextAt(0, QStringLiteral("yes"));

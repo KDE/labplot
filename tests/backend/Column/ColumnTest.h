@@ -46,6 +46,7 @@ private Q_SLOTS:
 	void statisticsClearSpreadsheetMasks();
 
 	// generation of column values via a formula
+	void testFormulaAutoUpdateEnabledResize();
 	void testFormulaAutoUpdateEnabled();
 	void testFormulaAutoUpdateDisabled();
 	void testFormulaAutoResizeEnabled();
