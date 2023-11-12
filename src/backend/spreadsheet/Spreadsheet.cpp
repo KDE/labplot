@@ -242,16 +242,11 @@ void Spreadsheet::removeRows(int first, int count, QUndoCommand* parent) {
 		return;
 
 	auto* command = new SpreadsheetSetRowsCountCmd(this, false, first, count, parent);
-	bool execute = false;
-	if (!parent) {
-		execute = true;
-		parent = command;
-	}
 
 	for (auto* col : children<Column>())
 		col->removeRows(first, count, command);
 
-	if (execute)
+	if (!parent)
 		exec(command);
 }
 
@@ -260,16 +255,11 @@ void Spreadsheet::insertRows(int before, int count, QUndoCommand* parent) {
 		return;
 
 	auto* command = new SpreadsheetSetRowsCountCmd(this, true, before, count, parent);
-	bool execute = false;
-	if (!parent) {
-		execute = true;
-		parent = command;
-	}
 
 	for (auto* col : children<Column>())
 		col->insertRows(before, count, command);
 
-	if (execute)
+	if (!parent)
 		exec(command);
 }
 
