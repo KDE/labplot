@@ -103,6 +103,7 @@ private Q_SLOTS:
 	void testLinkSpreadsheetAddRow();
 	void testLinkSpreadsheetRemoveRow();
 	void testLinkSpreadsheetRecalculate();
+	void testLinkSpreadsheetRecalculateRowCountChange();
 	void testLinkSpreadsheetSaveLoad();
 	void testLinkSpreadsheetsModelDockUpdateCheckInsertRows();
 	void testLinkSpreadsheetsModelDockUpdateCheckRemoveRows();

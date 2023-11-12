@@ -2899,6 +2899,80 @@ void SpreadsheetTest::testLinkSpreadsheetRecalculate() {
 	}
 }
 
+void SpreadsheetTest::testLinkSpreadsheetRecalculateRowCountChange() {
+#ifdef __FreeBSD__
+	return;
+#endif
+	Project project;
+	auto* sheetData = new Spreadsheet(QStringLiteral("data"), false);
+	project.addChild(sheetData);
+	sheetData->setColumnCount(2);
+	sheetData->setRowCount(10);
+	auto* sheetDataColumn0 = sheetData->child<Column>(0);
+	sheetDataColumn0->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	sheetDataColumn0->replaceInteger(0, {1, 2, 3, 4, 5, 6, 7, 8, 9, 10});
+	QVERIFY(sheetDataColumn0);
+
+	auto* sheetCalculations = new Spreadsheet(QStringLiteral("calculations"), false);
+	project.addChild(sheetCalculations);
+	sheetCalculations->setColumnCount(1);
+	sheetCalculations->setRowCount(2);
+	auto* sheetCalculationsColumn0 = sheetCalculations->child<Column>(0);
+	QVERIFY(sheetCalculationsColumn0);
+	sheetCalculationsColumn0->setFormula(QStringLiteral("x"), {QStringLiteral("x")}, {sheetDataColumn0}, true, false);
+	sheetCalculationsColumn0->updateFormula();
+
+	{
+		QVector<double> ref{1, 2};
+		QCOMPARE(sheetCalculationsColumn0->rowCount(), 2);
+		for (int i = 0; i < 2; i++)
+			VALUES_EQUAL(sheetCalculationsColumn0->doubleAt(i), ref.at(i));
+	}
+	sheetCalculations->setLinking(true);
+	sheetCalculations->setLinkedSpreadsheet(sheetData);
+
+	QCOMPARE(sheetCalculations->linking(), true);
+	QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetData);
+	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData->path());
+	QCOMPARE(sheetCalculations->rowCount(), 10);
+
+	new SpreadsheetModel(sheetData); // otherwise emitRowCountChanged will not be called
+	sheetData->setRowCount(7);
+	sheetDataColumn0->replaceInteger(0, {1, 2, 3, 4, 5, 6, 7});
+	QCOMPARE(sheetDataColumn0->rowCount(), 7);
+
+	{
+		QCOMPARE(sheetCalculationsColumn0->rowCount(), 7);
+		for (int i = 0; i < 7; i++) {
+			qDebug() << i;
+			VALUES_EQUAL(sheetCalculationsColumn0->doubleAt(i), i + 1);
+		}
+	}
+
+	sheetData->setRowCount(8);
+
+	{
+		QCOMPARE(sheetCalculationsColumn0->rowCount(), 8);
+		for (int i = 0; i < 8; i++) {
+			qDebug() << i;
+			if (i < 7)
+				VALUES_EQUAL(sheetCalculationsColumn0->doubleAt(i), i + 1);
+			else
+				VALUES_EQUAL(sheetCalculationsColumn0->doubleAt(i), 0); // When inserting a row for an integer column, the initial value is zero
+		}
+	}
+
+	sheetData->setRowCount(7);
+
+	{
+		QCOMPARE(sheetCalculationsColumn0->rowCount(), 7);
+		for (int i = 0; i < 7; i++) {
+			qDebug() << i;
+			VALUES_EQUAL(sheetCalculationsColumn0->doubleAt(i), i);
+		}
+	}
+}
+
 void SpreadsheetTest::testLinkSpreadsheetSaveLoad() {
 #ifdef __FreeBSD__
 	return;
