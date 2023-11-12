@@ -159,7 +159,7 @@ void FunctionValuesDialog::setColumns(const QVector<Column*>& columns) {
 		// linking is active, deactive this option since the size of the target spreadsheet is controlled by the linked spreadsheet
 		ui.chkAutoResize->setChecked(false);
 		ui.chkAutoResize->setEnabled(false);
-		ui.chkAutoResize->setToolTip(i18n("Spreadsheet linking is active. The size of the target spreadsheet is controlled by the linked spreadsheet"));
+		ui.chkAutoResize->setToolTip(i18n("Spreadsheet linking is active. The size of the target spreadsheet is controlled by the linked spreadsheet."));
 	}
 
 	checkValues();
