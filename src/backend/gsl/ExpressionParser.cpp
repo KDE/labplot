@@ -221,19 +221,18 @@ QString ExpressionParser::functionArgumentString(const QString& functionName, co
 QString ExpressionParser::functionDescription(const QString& function) {
 	for (int index = 0; index < _number_functions; index++) {
 		if (function == QLatin1String(_functions[index].name))
-			return m_functionsDescription.at(index);
+			return _functions[index].description();
 	}
 	for (int index = 0; index < _number_specialfunctions; index++) {
 		if (function == QLatin1String(_special_functions[index].name))
-			return m_functionsDescription.at(index);
+			return _special_functions[index].description();
 	}
 	return QStringLiteral("");
 }
 QString ExpressionParser::constantDescription(const QString& constant) {
 	for (int index = 0; index < _number_constants; index++) {
 		if (constant == QLatin1String(_constants[index].name))
-			return m_constantsDescription.at(index) + QStringLiteral(" (") + m_constantsValues.at(index) + QStringLiteral(" ") + m_constantsUnits.at(index)
-				+ QStringLiteral(")");
+			return _constants[index].description() + QStringLiteral(" (") + QStringLiteral(_constants[index].value) + QStringLiteral(" ") + QStringLiteral(_constants[index].unit) + QStringLiteral(")");
 	}
 	return QStringLiteral("");
 }

@@ -16,7 +16,7 @@
 enum class ConstantGroups;
 
 struct cons {
-	QString description;
+	std::function<QString(void)> description;
 	const char* name;
 	double value;
 	const char* unit;
