@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-12 00:39+0000\n"
-"PO-Revision-Date: 2023-11-09 20:45+0100\n"
+"POT-Creation-Date: 2023-11-13 00:39+0000\n"
+"PO-Revision-Date: 2023-11-12 08:14+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -600,14 +600,14 @@ msgstr "%1: ŝanĝi kolumnan tipon"
 msgid "%1: clear column"
 msgstr "%1: malplenigi kolumnon"
 
-#: src/backend/core/column/Column.cpp:1554
+#: src/backend/core/column/Column.cpp:1564
 #, kde-format
 msgid "invalid or missing row index"
 msgstr "nevalida aŭ mankanta vicindekso"
 
-#: src/backend/core/column/Column.cpp:1563
-#: src/backend/core/column/Column.cpp:1572
-#: src/backend/core/column/Column.cpp:1581
+#: src/backend/core/column/Column.cpp:1573
+#: src/backend/core/column/Column.cpp:1582
+#: src/backend/core/column/Column.cpp:1591
 #, kde-format
 msgid "invalid row value"
 msgstr "nevalida vicvaloro"
@@ -624,35 +624,35 @@ msgstr "%1: ŝanĝi ĉelvalorojn"
 msgid "%1: set plot designation"
 msgstr "%1: agordi diagramon"
 
-#: src/backend/core/column/columncommands.cpp:694
+#: src/backend/core/column/columncommands.cpp:696
 #: src/backend/matrix/matrixcommands.cpp:86
 #, kde-format
 msgid "%1: set formula"
 msgstr "%1: starigis formulon"
 
-#: src/backend/core/column/columncommands.cpp:761
+#: src/backend/core/column/columncommands.cpp:764
 #, kde-format
 msgid "%1: set cell formula"
 msgstr "%1: starigis ĉelan formulon"
 
-#: src/backend/core/column/columncommands.cpp:803
+#: src/backend/core/column/columncommands.cpp:806
 #, kde-format
 msgid "%1: clear all formulas"
 msgstr "%1: forigi ĉiujn formulojn"
 
-#: src/backend/core/column/columncommands.h:225
+#: src/backend/core/column/columncommands.h:228
 #, kde-format
 msgid "%1: set value for row %2"
 msgstr "%1: agordi valoron por vico %2"
 
-#: src/backend/core/column/columncommands.h:282
+#: src/backend/core/column/columncommands.h:285
 #: src/backend/matrix/matrixcommands.cpp:104
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1149
 #, kde-format
 msgid "%1: replace values"
 msgstr "%1: anstataŭigi valorojn"
 
-#: src/backend/core/column/columncommands.h:284
+#: src/backend/core/column/columncommands.h:287
 #, kde-format
 msgid "%1: replace the values for rows %2 to %3"
 msgstr "%1: anstataŭigi la valorojn por vicoj %2 ĝis %3"
@@ -1680,8 +1680,8 @@ msgid "Number of variables: "
 msgstr "Nombro da variabloj:"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:336
-#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:315
-#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:335
+#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:326
+#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:346
 #, kde-format
 msgid "Variables:"
 msgstr "Variabloj:"
@@ -5464,7 +5464,7 @@ msgid "%1: set matrix size to %2x%3"
 msgstr "%1: agordi matrican grandecon al %2x%3"
 
 #: src/backend/matrix/Matrix.cpp:510
-#: src/backend/spreadsheet/Spreadsheet.cpp:667
+#: src/backend/spreadsheet/Spreadsheet.cpp:657
 #, kde-format
 msgid "%1: copy %2"
 msgstr "%1: kopii %2"
@@ -5484,7 +5484,7 @@ msgstr[0] "%1: aldoni %2 kolumnon"
 msgstr[1] "%1: aldoni %2 kolumnojn"
 
 #: src/backend/matrix/Matrix.cpp:712 src/backend/matrix/matrixcommands.h:126
-#: src/backend/spreadsheet/Spreadsheet.cpp:601
+#: src/backend/spreadsheet/Spreadsheet.cpp:591
 #, kde-format
 msgid "%1: clear"
 msgstr "%1: klara"
@@ -6477,108 +6477,108 @@ msgstr "Tripezo"
 msgid "Tricube"
 msgstr "Trikubo"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:293
+#: src/backend/spreadsheet/Spreadsheet.cpp:283
 #, kde-format
 msgid "%1: remove rows with missing values"
 msgstr "%1: forigi vicojn kun mankantaj valoroj"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:311
+#: src/backend/spreadsheet/Spreadsheet.cpp:301
 #, kde-format
 msgid "%1: mask rows with missing values"
 msgstr "%1: maski vicojn kun mankantaj valoroj"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:423
+#: src/backend/spreadsheet/Spreadsheet.cpp:413
 #, kde-format
 msgid "%1: set linking"
 msgstr "%1: meti ligadon"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:443
+#: src/backend/spreadsheet/Spreadsheet.cpp:433
 #, kde-format
 msgid "%1: set linked spreadsheet"
 msgstr "%1: meti ligitan kalkultabelon"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:498
+#: src/backend/spreadsheet/Spreadsheet.cpp:488
 #, kde-format
 msgid "%1: insert 1 column"
 msgid_plural "%1: insert %2 columns"
 msgstr[0] "%1: enmeti 1 kolumnon"
 msgstr[1] "%1: enmeti %2 kolumnojn"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:500
+#: src/backend/spreadsheet/Spreadsheet.cpp:490
 #, kde-format
 msgid "%1: remove 1 column"
 msgid_plural "%1: remove %2 columns"
 msgstr[0] "%1: forigi 1 kolumnon"
 msgstr[1] "%1: forigi %2 kolumnojn"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:609
+#: src/backend/spreadsheet/Spreadsheet.cpp:599
 #, kde-format
 msgid "%1: clear selected columns"
 msgstr "%1: forigi elektitajn kolumnojn"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:633
+#: src/backend/spreadsheet/Spreadsheet.cpp:623
 #, kde-format
 msgid "%1: clear all masks"
 msgstr "%1: forigi ĉiujn maskojn"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:659
+#: src/backend/spreadsheet/Spreadsheet.cpp:649
 #, kde-format
 msgid "%1: move column %2 from position %3 to %4."
 msgstr "%1: movi kolumnon %2 de pozicio %3 al %4."
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:784
+#: src/backend/spreadsheet/Spreadsheet.cpp:774
 #, kde-format
 msgid "%1: sort columns"
 msgstr "%1: ordigi kolumnojn"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1149
+#: src/backend/spreadsheet/Spreadsheet.cpp:1139
 #, kde-format
 msgid "%1: linked spreadsheet removed"
 msgstr "%1: forigis ligitan kalkultabelon"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1520
+#: src/backend/spreadsheet/Spreadsheet.cpp:1510
 #, kde-format
 msgid "double precision data, %1 element"
 msgid_plural "numerical data, %1 elements"
 msgstr[0] "duoble precizaj datenoj, %1 elemento"
 msgstr[1] "duoble precizaj datenoj, %1 elementoj"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1523
+#: src/backend/spreadsheet/Spreadsheet.cpp:1513
 #, kde-format
 msgid "integer data, %1 element"
 msgid_plural "integer data, %1 elements"
 msgstr[0] "entjeraj datenoj, %1 elemento"
 msgstr[1] "entjeraj datenoj, %1 elementoj"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1526
+#: src/backend/spreadsheet/Spreadsheet.cpp:1516
 #, kde-format
 msgid "big integer data, %1 element"
 msgid_plural "big integer data, %1 elements"
 msgstr[0] "entjeregaj datenoj, %1 elemento"
 msgstr[1] "entjeregaj datenoj, %1 elementoj"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1529
+#: src/backend/spreadsheet/Spreadsheet.cpp:1519
 #, kde-format
 msgid "text data, %1 element"
 msgid_plural "text data, %1 elements"
 msgstr[0] "tekstdatenoj, %1 elemento"
 msgstr[1] "tekstdatenoj, %1 elementoj"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1532
+#: src/backend/spreadsheet/Spreadsheet.cpp:1522
 #, kde-format
 msgid "month data, %1 element"
 msgid_plural "month data, %1 elements"
 msgstr[0] "monataj datenoj, %1 elemento"
 msgstr[1] "monataj datenoj, %1 elementoj"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1535
+#: src/backend/spreadsheet/Spreadsheet.cpp:1525
 #, kde-format
 msgid "day data, %1 element"
 msgid_plural "day data, %1 elements"
 msgstr[0] "tagaj datenoj, %1 elemento"
 msgstr[1] "tagaj datenoj, %1 elementoj"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1538
+#: src/backend/spreadsheet/Spreadsheet.cpp:1528
 #, kde-format
 msgid "date and time data, %1 element"
 msgid_plural "date and time data, %1 elements"
@@ -6602,7 +6602,7 @@ msgstr "nevalida ĉelo (ignorita en ĉiuj operacioj)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbCount)
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:31
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:184
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:179
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:63
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:94
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:100
@@ -6801,7 +6801,7 @@ msgstr "Etikedo"
 #. i18n: ectx: attribute (title), widget (QWidget, tabSymbol)
 #: src/backend/worksheet/InfoElement.cpp:287
 #: src/kdefrontend/ui/dockwidgets/custompointdock.ui:323
-#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:356
+#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:406
 #: src/kdefrontend/ui/dockwidgets/lollipopplotdock.ui:311
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:220
 #: src/kdefrontend/ui/symbolwidget.ui:38
@@ -6892,7 +6892,7 @@ msgstr "%1: starigis malsupran kompletigo"
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:262
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:56
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:53
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:181
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:176
 #: src/kdefrontend/dockwidgets/LollipopPlotDock.cpp:52
 #: src/kdefrontend/dockwidgets/ReferenceLineDock.cpp:28
 #: src/kdefrontend/dockwidgets/ReferenceRangeDock.cpp:28
@@ -6914,7 +6914,7 @@ msgstr "Horizontala"
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:54
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:848
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:852
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:180
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:175
 #: src/kdefrontend/dockwidgets/LollipopPlotDock.cpp:53
 #: src/kdefrontend/dockwidgets/ReferenceLineDock.cpp:29
 #: src/kdefrontend/dockwidgets/ReferenceRangeDock.cpp:29
@@ -10348,7 +10348,7 @@ msgid "Search/Filter text"
 msgstr "Serĉu/Filtril tekston"
 
 #: src/commonfrontend/widgets/TreeViewComboBox.cpp:342
-#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:143
+#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:144
 #, kde-format
 msgid ""
 "The column \"%1\"\n"
@@ -12041,7 +12041,7 @@ msgstr "Disponebla"
 #. i18n: ectx: attribute (title), widget (QWidget, tabValues)
 #: src/kdefrontend/datasources/NetCDFOptionsWidget.cpp:29
 #: src/kdefrontend/ui/dockwidgets/barplotdock.ui:363
-#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:361
+#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:411
 #: src/kdefrontend/ui/dockwidgets/lollipopplotdock.ui:396
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:225
 #, kde-format
@@ -12075,7 +12075,7 @@ msgstr "Malalta Rando"
 
 #. i18n: ectx: property (text), widget (QLabel, lErrorBar)
 #: src/kdefrontend/datasources/ROOTOptionsWidget.cpp:102
-#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:397
+#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:448
 #, kde-format
 msgid "Error"
 msgstr "Eraro"
@@ -12367,7 +12367,7 @@ msgstr "%1 aksoj: ŝablono \"%2\" ŝargita"
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1809
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:695
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:390
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:742
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:725
 #: src/kdefrontend/dockwidgets/KDEPlotDock.cpp:416
 #: src/kdefrontend/dockwidgets/LollipopPlotDock.cpp:480
 #: src/kdefrontend/dockwidgets/MatrixDock.cpp:271
@@ -12571,7 +12571,7 @@ msgstr "Diagramigaj intervaloj:"
 #: src/kdefrontend/ui/dockwidgets/barplotdock.ui:57
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:149
 #: src/kdefrontend/ui/dockwidgets/custompointdock.ui:276
-#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:304
+#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:297
 #: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:194
 #: src/kdefrontend/ui/dockwidgets/lollipopplotdock.ui:98
 #: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:180
@@ -12850,104 +12850,104 @@ msgstr "Necerteco Baroj"
 msgid "X Uncertainty"
 msgstr "X Necerteco"
 
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:166
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:161
 #, kde-format
 msgid "By Number"
 msgstr "Per Nombro"
 
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:167
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:162
 #, kde-format
 msgid "By Width"
 msgstr "Laŭ Larĝo"
 
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:168
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:163
 #, kde-format
 msgid "Square-root"
 msgstr "Kvadrada radiko"
 
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:169
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:164
 #, kde-format
 msgid "Rice"
 msgstr "Rizo"
 
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:170
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:165
 #, kde-format
 msgid "Sturges"
 msgstr "Sturges"
 
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:171
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:166
 #, kde-format
 msgid "Doane"
 msgstr "Doane"
 
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:172
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:167
 #: src/kdefrontend/dockwidgets/KDEPlotDock.cpp:216
 #, kde-format
 msgid "Scott"
 msgstr "Scott"
 
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:175
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:170
 #, kde-format
 msgid "Ordinary Histogram"
 msgstr "Ordinara Histogramo"
 
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:176
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:171
 #, kde-format
 msgid "Cumulative Histogram"
 msgstr "Akumula Histogramo"
 
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:185
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:180
 #, kde-format
 msgid "Probability"
 msgstr "Probableco"
 
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:186
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:181
 #, kde-format
 msgid "Count Density"
 msgstr "Count Density"
 
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:187
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:182
 #, kde-format
 msgid "Probability Density"
 msgstr "Probableca Denso"
 
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:192
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:187
 #, kde-format
 msgid "No Uncertainties"
 msgstr "Neniuj Necertecoj"
 
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:188
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:193
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:198
 #, kde-format
 msgid "Poisson variance, sqrt(N)"
 msgstr "Poisson-varianco, sqrt(N)"
 
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:194
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:189
 #, kde-format
 msgid "Custom Uncertainty Values, symmetric"
 msgstr "Propraj Necertecaj Valoroj, simetriaj"
 
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:195
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:190
 #, kde-format
 msgid "Custom Uncertainty Values, asymmetric"
 msgstr "Propraj Necertecaj Valoroj, nesimetriaj"
 
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:197
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:192
 #, kde-format
 msgid "No Errors"
 msgstr "Neniuj Eraroj"
 
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:199
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:194
 #, kde-format
 msgid "Custom Error Values, symmetric"
 msgstr "Propraj Eraraj Valoroj, simetriaj"
 
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:200
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:195
 #, kde-format
 msgid "Custom Error Values, asymmetric"
 msgstr "Propraj Eraraj Valoroj, nesimetriaj"
 
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:526
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:509
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:938
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:993
 #, kde-format
@@ -12957,17 +12957,17 @@ msgstr "Datumoj, +-:"
 #. i18n: ectx: property (text), widget (QLabel, lXErrorDataPlus)
 #. i18n: ectx: property (text), widget (QLabel, lYErrorDataPlus)
 #. i18n: ectx: property (text), widget (QLabel, lErrorDataPlus)
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:533
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:516
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:945
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1000
-#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:404
+#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:455
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:654
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:661
 #, kde-format
 msgid "Data, +:"
 msgstr "Datumoj, +:"
 
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:740
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:723
 #, kde-format
 msgid "%1 histograms: template \"%2\" loaded"
 msgstr "%1 histogramoj: ŝablono \"%2\" ŝargita"
@@ -14928,14 +14928,14 @@ msgstr[1] "%1 valoroj"
 
 #: src/kdefrontend/matrix/MatrixFunctionDialog.cpp:76
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:46
-#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:77
+#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:78
 #: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:53
 #, kde-format
 msgid "&Generate"
 msgstr "&Generi"
 
 #: src/kdefrontend/matrix/MatrixFunctionDialog.cpp:77
-#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:218
+#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:229
 #, kde-format
 msgid "Generate function values"
 msgstr "Generi funkciovalorojn"
@@ -15869,13 +15869,35 @@ msgid "Add new variable"
 msgstr "Aldoni novan variablon"
 
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:69
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "Automatically update the calculated values on changes in the variable "
+#| "columns"
 msgid ""
-"Automatically update the calculated values on changes in the variable columns"
+"Automatically update the calculated values in the target column on changes "
+"in the variable columns"
 msgstr ""
 "Aŭtomate ĝisdatigi la kalkulitajn valorojn pri ŝanĝoj en la variaj kolumnoj"
 
-#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:161
+#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:70
+#, fuzzy, kde-format
+#| msgid ""
+#| "Automatically update the calculated values on changes in the variable "
+#| "columns"
+msgid ""
+"Automatically resize the target column to fit the size of the variable "
+"columns"
+msgstr ""
+"Aŭtomate ĝisdatigi la kalkulitajn valorojn pri ŝanĝoj en la variaj kolumnoj"
+
+#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:162
+#, kde-format
+msgid ""
+"Spreadsheet linking is active. The size of the target spreadsheet is "
+"controlled by the linked spreadsheet."
+msgstr ""
+
+#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:172
 #, kde-format
 msgid ""
 "Provided variable name is already reserved for a name of a constant. Please "
@@ -15884,7 +15906,7 @@ msgstr ""
 "Provizata variablonomo jam estas rezervita por nomo de konstanto. Bonvolu "
 "uzi alian nomon."
 
-#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:164
+#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:175
 #, kde-format
 msgid ""
 "Provided variable name is already reserved for a name of a function. Please "
@@ -15893,36 +15915,35 @@ msgstr ""
 "Provizata variablonomo jam estas rezervita por nomo de funkcio. Bonvolu uzi "
 "alian nomon."
 
-#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:167
+#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:178
 #, kde-format
 msgid "The variable name 'i' is reserved for the index of the column row."
 msgstr "La variablonomo 'i' estas rezervita por la indekso de la kolumna vico."
 
-#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:170
+#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:181
 #, kde-format
 msgid ""
 "Provided variable name starts with a digit or contains special character."
 msgstr ""
 "Provizata variablonomo komenciĝas per cifero aŭ enhavas specialan signon."
 
-#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:181
+#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:192
 #, kde-format
 msgid "Empty formula expression"
 msgstr "Malplena formula esprimo"
 
-#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:188
-#, fuzzy, kde-format
-#| msgid "Incorrect formula syntax"
+#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:199
+#, kde-format
 msgid "Incorrect formula syntax: "
-msgstr "Nekorekta formulsintakso"
+msgstr "Nekorekta formulsintakso:"
 
-#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:205
+#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:216
 #, kde-format
 msgid "Select a valid column"
 msgstr "Elekti validan kolumnon"
 
-#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:212
-#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:265
+#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:223
+#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:276
 #, kde-format
 msgid ""
 "Variable name can contain letters, digits and '_' only and should start with "
@@ -15931,19 +15952,19 @@ msgstr ""
 "Variablonomo povas enhavi nur literojn, ciferojn kaj '_' kaj devus komenci "
 "per litero"
 
-#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:309
+#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:320
 #, kde-format
 msgid "Delete variable"
 msgstr "Forigi variablon"
 
 #. i18n: ectx: property (text), widget (QLabel, lVariable)
-#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:335
+#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:346
 #: src/kdefrontend/ui/spreadsheet/functionvalueswidget.ui:23
 #, kde-format
 msgid "Variable:"
 msgstr "Variablo:"
 
-#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:381
+#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:392
 #, kde-format
 msgid "%1: fill column with function values"
 msgid_plural "%1: fill columns with function values"
@@ -16629,7 +16650,7 @@ msgstr "Y-erara tipo:"
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:350
 #: src/kdefrontend/ui/dockwidgets/columndock.ui:17
 #: src/kdefrontend/ui/dockwidgets/custompointdock.ui:60
-#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:221
+#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:217
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:353
 #: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:83
 #: src/kdefrontend/ui/dockwidgets/kdeplotdock.ui:151
@@ -16678,7 +16699,7 @@ msgstr "Komento:"
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:257
 #: src/kdefrontend/ui/dockwidgets/columndock.ui:50
 #: src/kdefrontend/ui/dockwidgets/custompointdock.ui:27
-#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:241
+#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:237
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:369
 #: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:147
 #: src/kdefrontend/ui/dockwidgets/kdeplotdock.ui:96
@@ -16731,7 +16752,7 @@ msgstr "Simboloj"
 #. i18n: ectx: attribute (title), widget (QWidget, tabErrorBars_2)
 #. i18n: ectx: attribute (title), widget (QWidget, tabErrorBars)
 #: src/kdefrontend/ui/datapickercurvewidget.ui:191
-#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:386
+#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:436
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:586
 #, kde-format
 msgid "Error Bars"
@@ -16844,6 +16865,9 @@ msgstr "Grandeco:"
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbSamplingInterval)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbPositionStart)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbPositionEnd)
+#. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbBinRangesMin)
+#. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbBinRangesMax)
+#. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbBinWidth)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbLineSymbolWidth)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbLayoutBottomMargin)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbLayoutRightMargin)
@@ -16925,9 +16949,12 @@ msgstr "Grandeco:"
 #: src/kdefrontend/ui/dockwidgets/custompointdock.ui:188
 #: src/kdefrontend/ui/dockwidgets/custompointdock.ui:212
 #: src/kdefrontend/ui/dockwidgets/custompointdock.ui:250
-#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:606
-#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:631
-#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:656
+#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:337
+#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:356
+#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:375
+#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:659
+#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:684
+#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:709
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:145
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:259
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:392
@@ -17004,9 +17031,9 @@ msgstr "Spinkesto por nombroj."
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:869
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:891
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:916
-#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:609
-#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:634
-#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:659
+#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:662
+#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:687
+#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:712
 #: src/kdefrontend/ui/dockwidgets/kdeplotdock.ui:384
 #: src/kdefrontend/ui/dockwidgets/kdeplotdock.ui:416
 #: src/kdefrontend/ui/dockwidgets/kdeplotdock.ui:448
@@ -17213,8 +17240,8 @@ msgstr "Relativa Vojo"
 #: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:59
 #: src/kdefrontend/ui/dockwidgets/barplotdock.ui:34
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1208
-#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:231
-#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:418
+#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:227
+#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:469
 #: src/kdefrontend/ui/dockwidgets/linewidget.ui:106
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:92
 #: src/kdefrontend/ui/dockwidgets/matrixdock.ui:268
@@ -18049,7 +18076,7 @@ msgstr "Importi el:"
 #. i18n: ectx: property (text), widget (QLabel, lDecimalSeparator)
 #: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:91
 #: src/kdefrontend/ui/datasources/jsonoptionswidget.ui:76
-#: src/kdefrontend/ui/settingsgeneralpage.ui:40
+#: src/kdefrontend/ui/settingsgeneralpage.ui:121
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:152
 #, kde-format
 msgid "Decimal separator:"
@@ -18444,7 +18471,7 @@ msgstr ""
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:943
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:992
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:823
-#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:515
+#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:567
 #: src/kdefrontend/ui/dockwidgets/kdeplotdock.ui:365
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:806
 #, kde-format
@@ -18554,7 +18581,7 @@ msgstr "Sufikso:"
 #. i18n: ectx: property (text), widget (QLabel, lLabelsOffset)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1315
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:837
-#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:577
+#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:630
 #: src/kdefrontend/ui/dockwidgets/kdeplotdock.ui:429
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:813
 #, kde-format
@@ -18647,7 +18674,7 @@ msgstr "Grava Krado"
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:787
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1035
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1042
-#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:551
+#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:603
 #: src/kdefrontend/ui/dockwidgets/kdeplotdock.ui:329
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:783
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:346
@@ -18684,7 +18711,7 @@ msgstr "Datumoj:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkVisible)
 #: src/kdefrontend/ui/dockwidgets/barplotdock.ui:80
-#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:311
+#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:304
 #: src/kdefrontend/ui/dockwidgets/lollipopplotdock.ui:56
 #, kde-format
 msgid "visible"
@@ -18762,7 +18789,7 @@ msgstr "Larĝo"
 #. i18n: ectx: attribute (title), widget (QWidget, tabAreaFilling)
 #: src/kdefrontend/ui/dockwidgets/barplotdock.ui:301
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:384
-#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:366
+#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:416
 #: src/kdefrontend/ui/dockwidgets/kdeplotdock.ui:273
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:566
 #: src/kdefrontend/ui/symbolwidget.ui:177
@@ -18867,7 +18894,7 @@ msgstr "Ĉapo"
 #. i18n: ectx: property (text), widget (QLabel, lMargin)
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:768
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:631
-#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:509
+#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:561
 #: src/kdefrontend/ui/dockwidgets/kdeplotdock.ui:310
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:362
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:764
@@ -18877,7 +18904,7 @@ msgstr "Marĝenoj"
 
 #. i18n: ectx: property (text), widget (QLabel, lRug)
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:780
-#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:570
+#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:623
 #: src/kdefrontend/ui/dockwidgets/kdeplotdock.ui:322
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:840
 #, kde-format
@@ -18890,7 +18917,7 @@ msgstr "Tapiŝa Diagramo"
 #. i18n: ectx: property (text), widget (QLabel, lWidth)
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:830
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:554
-#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:558
+#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:610
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:177
 #: src/kdefrontend/ui/dockwidgets/kdeplotdock.ui:397
 #: src/kdefrontend/ui/dockwidgets/linewidget.ui:113
@@ -18941,7 +18968,7 @@ msgstr "listo de y gamoj"
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:343
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:133
 #: src/kdefrontend/ui/dockwidgets/columndock.ui:201
-#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:475
+#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:527
 #: src/kdefrontend/ui/dockwidgets/matrixdock.ui:261
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:210
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:194
@@ -19343,8 +19370,8 @@ msgstr "Horizontala pozicio relative al la patro de etikedo"
 #. i18n: ectx: property (text), widget (QLabel, lMin)
 #. i18n: ectx: property (text), widget (QLabel, lBinRangesMinDateTime)
 #. i18n: ectx: property (text), widget (QLabel, lBinRangesMin)
-#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:77
-#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:164
+#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:74
+#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:159
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:359
 #: src/kdefrontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:247
 #: src/kdefrontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:188
@@ -19367,19 +19394,19 @@ msgid "Minimum:"
 msgstr "Minimumo:"
 
 #. i18n: ectx: property (text), widget (QLabel, lBinning)
-#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:99
+#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:97
 #, kde-format
 msgid "Binning"
 msgstr "Binning"
 
 #. i18n: ectx: property (text), widget (QLabel, lBinCount)
-#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:106
+#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:104
 #, kde-format
 msgid "Bin Count:"
 msgstr "Nombro de rubujoj:"
 
 #. i18n: ectx: property (text), widget (QLabel, lBinRanges)
-#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:211
+#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:207
 #, kde-format
 msgid "Bin Ranges"
 msgstr "Bin Ranges"
@@ -19389,8 +19416,8 @@ msgstr "Bin Ranges"
 #. i18n: ectx: property (text), widget (QLabel, lMaxDateTime)
 #. i18n: ectx: property (text), widget (QLabel, lBinRangesMax)
 #. i18n: ectx: property (text), widget (QLabel, lBinRangesMaxDateTime)
+#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:244
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:251
-#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:258
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:199
 #: src/kdefrontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:283
 #: src/kdefrontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:150
@@ -19413,14 +19440,14 @@ msgid "Maximum:"
 msgstr "Maksimumo:"
 
 #. i18n: ectx: property (text), widget (QLabel, lBinWidth)
-#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:281
+#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:274
 #, kde-format
 msgid "Bin Width:"
 msgstr "Larĝo de la rubujo:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMethod)
 #. i18n: ectx: property (text), widget (QLabel, lBinningMethod)
-#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:318
+#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:311
 #: src/kdefrontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:250
 #: src/kdefrontend/ui/spreadsheet/samplevalueswidget.ui:47
 #, kde-format
@@ -19428,13 +19455,13 @@ msgid "Method:"
 msgstr "Metodo:"
 
 #. i18n: ectx: property (text), widget (QLabel, lNormalization)
-#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:328
+#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:321
 #, kde-format
 msgid "Normalization:"
 msgstr "Normaligo:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabLine)
-#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:336
+#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:386
 #, kde-format
 msgid "Shape"
 msgstr "Formo"
@@ -19442,7 +19469,7 @@ msgstr "Formo"
 #. i18n: ectx: property (text), widget (QLabel, lYErrorDataMinus)
 #. i18n: ectx: property (text), widget (QLabel, lXErrorDataMinus)
 #. i18n: ectx: property (text), widget (QLabel, lErrorDataMinus)
-#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:411
+#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:462
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:697
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:740
 #, kde-format
@@ -19578,7 +19605,7 @@ msgstr "Grando de ĉapo:"
 #. i18n: ectx: property (text), widget (QLabel, lAutoSaveInterval)
 #. i18n: ectx: property (text), widget (QLabel, lUpdateInterval)
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:33
-#: src/kdefrontend/ui/settingsgeneralpage.ui:108
+#: src/kdefrontend/ui/settingsgeneralpage.ui:71
 #, kde-format
 msgid "Interval:"
 msgstr "Intervalo:"
@@ -19763,7 +19790,7 @@ msgstr "Ligado"
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoSave)
 #. i18n: ectx: property (text), widget (QLabel, lLinkingEnabled)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:230
-#: src/kdefrontend/ui/settingsgeneralpage.ui:85
+#: src/kdefrontend/ui/settingsgeneralpage.ui:48
 #, kde-format
 msgid "Enabled"
 msgstr "Ebligita"
@@ -21021,42 +21048,20 @@ msgstr "Tuta grandeco -"
 msgid "Clear"
 msgstr "Klara"
 
-#. i18n: ectx: property (text), widget (QLabel, lNumberOptions)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:23
+#. i18n: ectx: property (text), widget (QLabel, lLoadOnStartNotebook)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:20
 #, kde-format
-msgid "Number options:"
-msgstr "Nombraj elektoj:"
-
-#. i18n: ectx: property (text), widget (QCheckBox, chkOmitGroupSeparator)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:30
-#, kde-format
-msgid "Omit group separator"
-msgstr "Preterlasi grupapartigilon"
-
-#. i18n: ectx: property (toolTip), widget (QCheckBox, chkCompatible)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:47
-#, kde-format
-msgid ""
-"<html><head/><body><p>Save projects in a compatible format that can be "
-"opened in LabPlot versions older than 2.9.</p></body></html>"
-msgstr ""
-"<html><head/><body><p>Konservi projektojn en kongrua formato, kiu povas esti "
-"malfermita en LabPlot-versioj pli malnovaj ol 2.9.</p></body></html>"
-
-#. i18n: ectx: property (text), widget (QCheckBox, chkCompatible)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:50
-#, kde-format
-msgid "Save in compatible format"
-msgstr "Konservi en kongrua formato"
+msgid "Notebook:"
+msgstr "Kajero:"
 
 #. i18n: ectx: property (text), widget (QLabel, lTitleBar)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:57
+#: src/kdefrontend/ui/settingsgeneralpage.ui:104
 #, kde-format
 msgid "Title Bar:"
 msgstr "Titolobaro:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkGUMTerms)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:144
+#: src/kdefrontend/ui/settingsgeneralpage.ui:111
 #, kde-format
 msgid ""
 "<html><head/><body><p>Use terms compliant with the <a href=\"http://www.bipm."
@@ -21070,58 +21075,87 @@ msgstr ""
 "Necerteco en Mezurado (GUM)</span></a></p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkGUMTerms)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:147
+#: src/kdefrontend/ui/settingsgeneralpage.ui:114
 #, kde-format
 msgid "GUM compliant"
 msgstr "GUM konforma"
 
-#. i18n: ectx: property (text), widget (QCheckBox, chkIncludeTrailingZeroesAfterDot)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:154
-#, kde-format
-msgid "Include trailing zeroes after dot"
-msgstr "Inkluzivi finajn nulojn post punkto"
-
-#. i18n: ectx: property (text), widget (QLabel, lDockWindowPositionReopen)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:161
-#, kde-format
-msgid "Dock widget placement:"
-msgstr "Lokigo de doka fenestraĵo:"
-
-#. i18n: ectx: property (text), widget (QLabel, lAutoSave)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:168
-#, kde-format
-msgid "Auto-save:"
-msgstr "Aŭtomate konservado:"
-
-#. i18n: ectx: property (text), widget (QLabel, lStartup)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:175
-#, kde-format
-msgid "Startup:"
-msgstr "Ekfunkciigo:"
-
-#. i18n: ectx: property (text), widget (QCheckBox, chkOmitLeadingZeroInExponent)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:182
-#, kde-format
-msgid "Omit leading zero in exponent"
-msgstr "Preterlasi unuan nul en eksponento"
-
 #. i18n: ectx: property (text), widget (QLabel, lGUMTerms)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:202
+#: src/kdefrontend/ui/settingsgeneralpage.ui:131
 #, kde-format
 msgid "Terms:"
 msgstr "Kondiĉoj:"
 
+#. i18n: ectx: property (text), widget (QCheckBox, chkOmitGroupSeparator)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:138
+#, kde-format
+msgid "Omit group separator"
+msgstr "Preterlasi grupapartigilon"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkIncludeTrailingZeroesAfterDot)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:145
+#, kde-format
+msgid "Include trailing zeroes after dot"
+msgstr "Inkluzivi finajn nulojn post punkto"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkOmitLeadingZeroInExponent)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:152
+#, kde-format
+msgid "Omit leading zero in exponent"
+msgstr "Preterlasi unuan nul en eksponento"
+
 #. i18n: ectx: property (text), widget (QLabel, lUnits)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:241
+#: src/kdefrontend/ui/settingsgeneralpage.ui:162
 #, kde-format
 msgid "Units:"
 msgstr "Unuoj:"
 
-#. i18n: ectx: property (text), widget (QLabel, lLoadOnStartNotebook)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:254
+#. i18n: ectx: property (text), widget (QLabel, lDockWindowPositionReopen)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:172
 #, kde-format
-msgid "Notebook:"
-msgstr "Kajero:"
+msgid "Dock widget placement:"
+msgstr "Lokigo de doka fenestraĵo:"
+
+#. i18n: ectx: property (text), widget (QLabel, lStartup)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:185
+#, kde-format
+msgid "Startup:"
+msgstr "Ekfunkciigo:"
+
+#. i18n: ectx: property (text), widget (QLabel, lNumberOptions)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:208
+#, kde-format
+msgid "Number options:"
+msgstr "Nombraj elektoj:"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, chkCompatible)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:215
+#, kde-format
+msgid ""
+"<html><head/><body><p>Save projects in a compatible format that can be "
+"opened in LabPlot versions older than 2.9.</p></body></html>"
+msgstr ""
+"<html><head/><body><p>Konservi projektojn en kongrua formato, kiu povas esti "
+"malfermita en LabPlot-versioj pli malnovaj ol 2.9.</p></body></html>"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkCompatible)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:218
+#, kde-format
+msgid "Save in compatible format"
+msgstr "Konservi en kongrua formato"
+
+#. i18n: ectx: property (text), widget (QLabel, lAutoSave)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:241
+#, kde-format
+msgid "Auto-save:"
+msgstr "Aŭtomate konservado:"
+
+#. i18n: ectx: property (text), widget (QLabel, lCompatible)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:261
+#, fuzzy, kde-format
+#| msgid "Probability"
+msgid "Compatibility:"
+msgstr "Probableco"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode_2)
@@ -21441,9 +21475,17 @@ msgstr "f(x) ="
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoUpdate)
 #: src/kdefrontend/ui/spreadsheet/functionvalueswidget.ui:155
-#, kde-format
-msgid "auto update"
-msgstr "aŭtomata ĝisdatigo"
+#, fuzzy, kde-format
+#| msgid "auto update: true"
+msgid "auto update the values"
+msgstr "aŭtomata ĝisdatigo: vera"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkAutoResize)
+#: src/kdefrontend/ui/spreadsheet/functionvalueswidget.ui:162
+#, fuzzy, kde-format
+#| msgid "Flatten selected columns"
+msgid "auto resize the column"
+msgstr "Platigi elektitajn kolumnojn"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbCurvePlacement)
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:154
@@ -22521,3 +22563,6 @@ msgstr "konvertprocezo malsukcesis, elirkodo ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Ne eblas malfermi dosieron:"
+
+#~ msgid "auto update"
+#~ msgstr "aŭtomata ĝisdatigo"
