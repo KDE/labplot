@@ -1896,8 +1896,16 @@ void AxisDock::load() {
 	ui.sbPositionLogical->setValue(m_axis->logicalPosition());
 
 	updateScale();
-	ui.cbRangeScale->setChecked(m_axis->rangeScale());
+	const bool rangeScale = m_axis->rangeScale();
+	ui.cbRangeScale->setChecked(rangeScale);
 	ui.cbScale->setCurrentIndex(static_cast<int>(m_axis->scale()));
+	// Changing the scale in the axis for the ticks is deprecated
+	// So show the options only if rangeScale is not turned on.
+	// So the user is once able to enable it and then the dialog
+	// disappears
+	ui.cbRangeScale->setVisible(!rangeScale);
+	ui.cbScale->setVisible(!rangeScale);
+
 	ui.cbRangeType->setCurrentIndex(static_cast<int>(m_axis->rangeType()));
 	ui.sbStart->setValue(m_axis->range().start());
 	ui.sbEnd->setValue(m_axis->range().end());
