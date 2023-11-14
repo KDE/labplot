@@ -226,7 +226,7 @@ const char* specialfun_smr = "smr";
 struct funs _special_functions[] = {
 	// Moving Statistics
 	// Important: when adding new function, implement them in Expressionhandler or somewhere else!
-	{[]() { return i18n("Cell"); }, specialfun_cell, func_t2Payload(), 2, nullptr, FunctionGroups::MovingStatistics},
+	{[]() { return i18n("Cell (index, variable)"); }, specialfun_cell, func_t2Payload(), 2, nullptr, FunctionGroups::MovingStatistics},
 	{[]() { return i18n("Moving Average"); }, specialfun_ma, func_t1Payload(), 1, nullptr, FunctionGroups::MovingStatistics},
 	{[]() { return i18n("Moving Range"); }, specialfun_mr, func_t1Payload(), 1, nullptr, FunctionGroups::MovingStatistics},
 	{[]() { return i18n("Simple Moving Minimum"); }, specialfun_smmin, func_t2Payload(), 2, nullptr, FunctionGroups::MovingStatistics},
