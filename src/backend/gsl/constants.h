@@ -12,6 +12,7 @@
 #define GSL_CONSTANTS_H
 
 #include <QString>
+#include <functional>
 
 enum class ConstantGroups;
 
