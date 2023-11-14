@@ -232,7 +232,7 @@ QString ExpressionParser::functionDescription(const QString& function) {
 QString ExpressionParser::constantDescription(const QString& constant) {
 	for (int index = 0; index < _number_constants; index++) {
 		if (constant == QLatin1String(_constants[index].name))
-			return _constants[index].description() + QStringLiteral(" (") + QStringLiteral(_constants[index].value) + QStringLiteral(" ") + QStringLiteral(_constants[index].unit) + QStringLiteral(")");
+			return QStringLiteral("%1 (%2 %3)").arg(_constants[index].description(), _constants[index].value, _constants[index].unit);
 	}
 	return QStringLiteral("");
 }
