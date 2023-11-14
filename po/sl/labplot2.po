@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-13 00:39+0000\n"
-"PO-Revision-Date: 2023-11-12 10:04+0100\n"
+"PO-Revision-Date: 2023-11-13 09:51+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -15957,28 +15957,22 @@ msgid "Add new variable"
 msgstr "Dodaj novo spremenljivko"
 
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:69
-#, fuzzy, kde-format
-#| msgid ""
-#| "Automatically update the calculated values on changes in the variable "
-#| "columns"
+#, kde-format
 msgid ""
 "Automatically update the calculated values in the target column on changes "
 "in the variable columns"
 msgstr ""
-"Samodejno posodobi izračunane vrednosti pri spremembah v stolpcih "
-"spremenljivk"
+"Samodejno posodobi izračunane vrednosti v ciljnem stolpcu glede na spremembe "
+"v stolpcih spremenljivk"
 
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:70
-#, fuzzy, kde-format
-#| msgid ""
-#| "Automatically update the calculated values on changes in the variable "
-#| "columns"
+#, kde-format
 msgid ""
 "Automatically resize the target column to fit the size of the variable "
 "columns"
 msgstr ""
-"Samodejno posodobi izračunane vrednosti pri spremembah v stolpcih "
-"spremenljivk"
+"Samodejno spremeni velikost ciljnega stolpca, da bo ustrezal velikosti "
+"spremenljivih stolpcev"
 
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:162
 #, kde-format
@@ -15986,6 +15980,8 @@ msgid ""
 "Spreadsheet linking is active. The size of the target spreadsheet is "
 "controlled by the linked spreadsheet."
 msgstr ""
+"Povezovanje preglednic je aktivno. Velikost ciljne preglednice nadzira "
+"povezana preglednica."
 
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:172
 #, kde-format
@@ -16087,7 +16083,7 @@ msgstr "Izriši izbrane podatke"
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:78
 #, kde-format
 msgid "&Plot"
-msgstr "&Izriši"
+msgstr "Izriši"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:299
 #, kde-format
@@ -21248,10 +21244,9 @@ msgstr "Samodejno shrani:"
 
 #. i18n: ectx: property (text), widget (QLabel, lCompatible)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:261
-#, fuzzy, kde-format
-#| msgid "Probability"
+#, kde-format
 msgid "Compatibility:"
-msgstr "Verjetnost"
+msgstr "Kompatibilnost:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode_2)
@@ -21571,17 +21566,15 @@ msgstr "f(x) = "
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoUpdate)
 #: src/kdefrontend/ui/spreadsheet/functionvalueswidget.ui:155
-#, fuzzy, kde-format
-#| msgid "auto update: true"
+#, kde-format
 msgid "auto update the values"
-msgstr "samodejno posodobi: true"
+msgstr "samodejno posodobi vrednosti"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoResize)
 #: src/kdefrontend/ui/spreadsheet/functionvalueswidget.ui:162
-#, fuzzy, kde-format
-#| msgid "Flatten selected columns"
+#, kde-format
 msgid "auto resize the column"
-msgstr "Poravnaj izbrane stolpce"
+msgstr "samodejno spremeni velikost stolpca"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbCurvePlacement)
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:154

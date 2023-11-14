@@ -2,12 +2,13 @@
 # This file is distributed under the same license as the labplot package.
 #
 # SPDX-FileCopyrightText: 2023 giovanni <g.sora@tiscali.it>
+# giovanni <g.sora@tiscali.it>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-13 00:39+0000\n"
-"PO-Revision-Date: 2023-10-16 14:16+0200\n"
+"PO-Revision-Date: 2023-11-13 15:38+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -15,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 23.08.2\n"
+"X-Generator: Lokalize 22.12.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -3592,7 +3593,7 @@ msgstr ""
 #: src/backend/gsl/functions.cpp:267 src/backend/nsl/nsl_smooth.c:21
 #, kde-format
 msgid "Percentile"
-msgstr ""
+msgstr "Percentile"
 
 #: src/backend/gsl/functions.cpp:274
 #, kde-format
@@ -5363,9 +5364,9 @@ msgid "Ln"
 msgstr "Ln"
 
 #: src/backend/lib/Range.h:49
-#, kde-format
+#, fuzzy, kde-format
 msgid "Sqrt"
-msgstr ""
+msgstr "sqrt"
 
 #: src/backend/lib/Range.h:49
 #, kde-format
@@ -5538,9 +5539,9 @@ msgid "Print Note"
 msgstr "Imprime Nota"
 
 #: src/backend/note/Note.cpp:65
-#, kde-format
+#, fuzzy, kde-format
 msgid "Text file (*.txt)"
-msgstr ""
+msgstr "File de texto (*.txt)"
 
 #: src/backend/note/Note.cpp:67
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:384
@@ -6229,9 +6230,9 @@ msgid "Student's t"
 msgstr ""
 
 #: src/backend/nsl/nsl_sf_stats.c:30
-#, kde-format
+#, fuzzy, kde-format
 msgid "Beta"
-msgstr ""
+msgstr "%1 Beta %2"
 
 #: src/backend/nsl/nsl_sf_stats.c:31
 #, kde-format
@@ -8419,9 +8420,9 @@ msgid "latin"
 msgstr "Latino"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:402
-#, kde-format
+#, fuzzy, kde-format
 msgid "david"
-msgstr ""
+msgstr "David"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:404
 #, kde-format
@@ -8847,14 +8848,14 @@ msgid "Curves"
 msgstr ""
 
 #: src/backend/worksheet/WorksheetElement.cpp:154
-#, kde-format
+#, fuzzy, kde-format
 msgid "%1: lock"
-msgstr ""
+msgstr "Bloca"
 
 #: src/backend/worksheet/WorksheetElement.cpp:154
-#, kde-format
+#, fuzzy, kde-format
 msgid "%1: unlock"
-msgstr ""
+msgstr "Disbloca"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbVisible)
 #. i18n: ectx: property (text), widget (QCheckBox, chkVisible)
@@ -8894,7 +8895,7 @@ msgstr "Visibile"
 #: src/backend/worksheet/WorksheetElement.cpp:227
 #, kde-format
 msgid "Locking"
-msgstr ""
+msgstr "Blocante"
 
 #: src/backend/worksheet/WorksheetElement.cpp:236
 #, kde-format
@@ -9145,7 +9146,7 @@ msgstr ""
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:158
 #, kde-format
 msgid "Shift Right"
-msgstr ""
+msgstr "Shift Dextere"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:161
 #, kde-format
@@ -9489,7 +9490,7 @@ msgstr ""
 #: src/commonfrontend/matrix/MatrixView.cpp:932
 #, kde-format
 msgid "%1: remove selected column(s)"
-msgstr ""
+msgstr "%1: Remove Columna(s) Seligite"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:942
 #, kde-format
@@ -9854,10 +9855,9 @@ msgid "Rescale to [a, b]"
 msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:445
-#, fuzzy, kde-format
-#| msgid "Export..."
+#, kde-format
 msgid "&Sort..."
-msgstr "Exporta..."
+msgstr "&Ordina..."
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:446
 #, kde-format
@@ -10198,12 +10198,11 @@ msgid "%1: clear selected cells"
 msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3611
-#, fuzzy, kde-format
-#| msgid "Arrow"
+#, kde-format
 msgid "row"
 msgid_plural "rows"
-msgstr[0] "Flecha"
-msgstr[1] "Flecha"
+msgstr[0] "rango"
+msgstr[1] "rangos"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3612
 #, fuzzy, kde-format
@@ -10211,12 +10210,12 @@ msgstr[1] "Flecha"
 msgid "column"
 msgid_plural "columns"
 msgstr[0] "Columna"
-msgstr[1] "Columna"
+msgstr[1] "Columnas"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3613
-#, kde-format
+#, fuzzy, kde-format
 msgid "cells"
-msgstr ""
+msgstr "Cellas"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3614
 #, fuzzy, kde-format
@@ -10259,14 +10258,14 @@ msgid ", "
 msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3620
-#, kde-format
+#, fuzzy, kde-format
 msgid "Selected: %1 %2 , %3 %4%5 %6 %7 %8"
-msgstr ""
+msgstr "<filename>%1</filename> selectionate"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3631
-#, kde-format
+#, fuzzy, kde-format
 msgid "Selected: %1 %2%3 %4 %5 %6"
-msgstr ""
+msgstr "<filename>%1</filename> selectionate"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3704
 #, kde-format
@@ -12295,17 +12294,17 @@ msgstr ""
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:49
 #, kde-format
 msgid "10/90 percentiles"
-msgstr ""
+msgstr "10/90 percentiles"
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:50
 #, kde-format
 msgid "5/95 percentiles"
-msgstr ""
+msgstr "5/95 percentiles"
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:51
 #, kde-format
 msgid "1/99 percentiles"
-msgstr ""
+msgstr "1/99 percentiles"
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:57
 #, kde-format
@@ -14186,10 +14185,9 @@ msgstr "&Adde nove"
 
 #. i18n: ectx: Menu (import)
 #: src/kdefrontend/labplot2ui.rc:69
-#, fuzzy, kde-format
-#| msgid "Import Data"
+#, kde-format
 msgid "Import"
-msgstr "Importa datos"
+msgstr "Importa"
 
 #. i18n: ectx: Menu (edit)
 #: src/kdefrontend/labplot2ui.rc:81
@@ -14375,9 +14373,9 @@ msgstr ""
 
 #: src/kdefrontend/MainWin.cpp:773 src/kdefrontend/MainWin.cpp:2605
 #: src/kdefrontend/MainWin.cpp:2613
-#, kde-format
+#, fuzzy, kde-format
 msgid "Share"
-msgstr ""
+msgstr "Comparti"
 
 #: src/kdefrontend/MainWin.cpp:778
 #, kde-format
@@ -15378,7 +15376,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Mask Values"
-msgstr ""
+msgstr "Mascara Valores"
 
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:78
 #, kde-format
@@ -15394,7 +15392,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Drop Values"
-msgstr ""
+msgstr "Abandona Valores"
 
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:946
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:953
@@ -15407,12 +15405,12 @@ msgstr ""
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:968
 #, kde-format
 msgid "%1: mask values"
-msgstr ""
+msgstr "%1: Mascara Valores"
 
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:1024
 #, kde-format
 msgid "%1: drop values"
-msgstr ""
+msgstr "%1: Abandona Valores"
 
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:47
 #, kde-format
@@ -15433,13 +15431,12 @@ msgstr "Augmenta"
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:62
 #, kde-format
 msgid "Years"
-msgstr ""
+msgstr "Annos"
 
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:63
-#, fuzzy, kde-format
-#| msgid "month"
+#, kde-format
 msgid "Months"
-msgstr "mense"
+msgstr "Menses"
 
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:192
 #, kde-format
@@ -17961,7 +17958,7 @@ msgstr ""
 #: src/kdefrontend/ui/datasources/mqttsubscriptionwidget.ui:92
 #, kde-format
 msgid "Subscribed"
-msgstr ""
+msgstr "Subscribite"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbQos)
 #: src/kdefrontend/ui/datasources/mqttsubscriptionwidget.ui:155
@@ -19332,17 +19329,15 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lKernelType)
 #: src/kdefrontend/ui/dockwidgets/kdeplotdock.ui:43
-#, fuzzy, kde-format
-#| msgid "Kernel: "
+#, kde-format
 msgid "Kernel:"
 msgstr "Kernel: "
 
 #. i18n: ectx: property (text), widget (QLabel, lBandwidthType)
 #: src/kdefrontend/ui/dockwidgets/kdeplotdock.ui:79
-#, fuzzy, kde-format
-#| msgid "Line width:"
+#, kde-format
 msgid "Bandwidth:"
-msgstr "Largessa de linea:"
+msgstr "Largessa de banda:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPlotRange)
 #: src/kdefrontend/ui/dockwidgets/kdeplotdock.ui:180
@@ -20282,7 +20277,7 @@ msgstr "Peso:"
 #: src/kdefrontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:138
 #, kde-format
 msgid "Percentile:"
-msgstr ""
+msgstr "Percentile:"
 
 #. i18n: ectx: property (text), widget (QLabel, lOrder)
 #: src/kdefrontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:145
@@ -20531,10 +20526,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbLock)
 #: src/kdefrontend/ui/labelwidget.ui:759
-#, fuzzy, kde-format
-#| msgid "Stacked"
+#, kde-format
 msgid "Locked"
-msgstr "Pilate"
+msgstr "Blocate"
 
 #. i18n: ectx: property (text), widget (QLabel, lY)
 #: src/kdefrontend/ui/matrix/matrixfunctionwidget.ui:116
@@ -20907,10 +20901,9 @@ msgstr "Auto Salveguarda:"
 
 #. i18n: ectx: property (text), widget (QLabel, lCompatible)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:261
-#, fuzzy, kde-format
-#| msgid "Probability"
+#, kde-format
 msgid "Compatibility:"
-msgstr "Probabilitate"
+msgstr "Compatibilitate:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode_2)
@@ -21362,7 +21355,7 @@ msgstr ""
 #: src/kdefrontend/ui/spreadsheet/searchwidget.ui:119
 #, kde-format
 msgid "Match case sensitive"
-msgstr ""
+msgstr "Sensibile al differentia inter majusculas e minusculas"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbSelectionOnly)
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:164
@@ -21442,10 +21435,9 @@ msgstr "Passa a la barra de cerca de potentia e reimplaciamento"
 
 #. i18n: ectx: property (text), widget (QLabel, lColumns)
 #: src/kdefrontend/ui/spreadsheet/sortdialogwidget.ui:17
-#, fuzzy, kde-format
-#| msgid "Sort"
+#, kde-format
 msgid "Sort by"
-msgstr "Ordina"
+msgstr "Ordina per"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbOrdering)
 #: src/kdefrontend/ui/spreadsheet/sortdialogwidget.ui:64

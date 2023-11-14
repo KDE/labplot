@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-13 00:39+0000\n"
-"PO-Revision-Date: 2023-11-12 08:14+0100\n"
+"PO-Revision-Date: 2023-11-13 18:53+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -15869,26 +15869,22 @@ msgid "Add new variable"
 msgstr "Aldoni novan variablon"
 
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:69
-#, fuzzy, kde-format
-#| msgid ""
-#| "Automatically update the calculated values on changes in the variable "
-#| "columns"
+#, kde-format
 msgid ""
 "Automatically update the calculated values in the target column on changes "
 "in the variable columns"
 msgstr ""
-"Aŭtomate ĝisdatigi la kalkulitajn valorojn pri ŝanĝoj en la variaj kolumnoj"
+"Aŭtomate ĝisdatigi la kalkulitajn valorojn en la celkolumno je ŝanĝoj en la "
+"variaj kolumnoj"
 
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:70
-#, fuzzy, kde-format
-#| msgid ""
-#| "Automatically update the calculated values on changes in the variable "
-#| "columns"
+#, kde-format
 msgid ""
 "Automatically resize the target column to fit the size of the variable "
 "columns"
 msgstr ""
-"Aŭtomate ĝisdatigi la kalkulitajn valorojn pri ŝanĝoj en la variaj kolumnoj"
+"Aŭtomate aligrandigi la celkolumnon por adapti al grandeco de la variaj "
+"kolumnoj"
 
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:162
 #, kde-format
@@ -15896,6 +15892,8 @@ msgid ""
 "Spreadsheet linking is active. The size of the target spreadsheet is "
 "controlled by the linked spreadsheet."
 msgstr ""
+"Ligado de kalkultabeloj estas aktiva. La grandeco de la cela kalkultabelo "
+"estas regata de la ligita kalkultabelo."
 
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:172
 #, kde-format
@@ -21152,10 +21150,9 @@ msgstr "Aŭtomate konservado:"
 
 #. i18n: ectx: property (text), widget (QLabel, lCompatible)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:261
-#, fuzzy, kde-format
-#| msgid "Probability"
+#, kde-format
 msgid "Compatibility:"
-msgstr "Probableco"
+msgstr "Kongrueco:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode_2)
@@ -21169,13 +21166,13 @@ msgstr "Aspekto"
 #: src/kdefrontend/ui/settingsnotebookpage.ui:33
 #, kde-format
 msgid "Syntax Highlighting"
-msgstr "Sintakso Markigo"
+msgstr "Sintaks-Reliefigo"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSyntaxCompletion)
 #: src/kdefrontend/ui/settingsnotebookpage.ui:40
 #, kde-format
 msgid "Syntax Completion"
-msgstr "Sintakso Kompletigo"
+msgstr "Sintaks-Kompletigo"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkLineNumbers)
 #: src/kdefrontend/ui/settingsnotebookpage.ui:47
@@ -21475,17 +21472,15 @@ msgstr "f(x) ="
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoUpdate)
 #: src/kdefrontend/ui/spreadsheet/functionvalueswidget.ui:155
-#, fuzzy, kde-format
-#| msgid "auto update: true"
+#, kde-format
 msgid "auto update the values"
-msgstr "aŭtomata ĝisdatigo: vera"
+msgstr "aŭtomate ĝisdatigi la valorojn"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoResize)
 #: src/kdefrontend/ui/spreadsheet/functionvalueswidget.ui:162
-#, fuzzy, kde-format
-#| msgid "Flatten selected columns"
+#, kde-format
 msgid "auto resize the column"
-msgstr "Platigi elektitajn kolumnojn"
+msgstr "aŭtomate aligrandigi la kolumnon"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbCurvePlacement)
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:154
@@ -22563,6 +22558,3 @@ msgstr "konvertprocezo malsukcesis, elirkodo ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Ne eblas malfermi dosieron:"
-
-#~ msgid "auto update"
-#~ msgstr "aŭtomata ĝisdatigo"

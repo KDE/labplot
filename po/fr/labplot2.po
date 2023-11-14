@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-13 00:39+0000\n"
-"PO-Revision-Date: 2023-11-06 14:38+0100\n"
+"PO-Revision-Date: 2023-11-12 13:58+0100\n"
 "Last-Translator: Xavier BESNARD <xavier.besnard@neuf.fr>\n"
 "Language-Team: fr\n"
 "Language: fr\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Accelerator-Marker: &\n"
 "X-Environment: kde\n"
-"X-Generator: Lokalize 23.08.2\n"
+"X-Generator: Lokalize 23.08.3\n"
 "X-Text-Markup: kde4\n"
 
 #, kde-format
@@ -3628,8 +3628,7 @@ msgid "Percentile"
 msgstr "Percentile"
 
 #: src/backend/gsl/functions.cpp:274
-#, fuzzy, kde-format
-#| msgid "pseudo-random integer [0,RAND_MAX]"
+#, kde-format
 msgid "pseudo-random integer [0, RAND_MAX]"
 msgstr "Entier pseudo-aléatoire [0, RAND_MAX]"
 
@@ -4768,41 +4767,36 @@ msgid "Logarithm of the magnitude"
 msgstr "Logarithme de la magnitude"
 
 #: src/backend/gsl/functions.cpp:567
-#, fuzzy, kde-format
-#| msgid "Characteristic values a_n(q) of the Mathieu functions ce_n(q,x)"
+#, kde-format
 msgid "Characteristic values a_n(q) of the Mathieu functions ce_n(q, x)"
-msgstr "Les valeurs caractéristiques a_n(q) des fonctions de Mathieu ce_n(q,x)"
+msgstr ""
+"Les valeurs caractéristiques a_n (q) des fonctions de Mathieu ce_n (q,x)"
 
 #: src/backend/gsl/functions.cpp:568
-#, fuzzy, kde-format
-#| msgid "Characteristic values b_n(q) of the Mathieu functions se_n(q,x)"
+#, kde-format
 msgid "Characteristic values b_n(q) of the Mathieu functions se_n(q, x)"
 msgstr ""
 "Les valeurs caractéristiques b_n (q) des fonctions de Mathieu se_n (q,x)"
 
 #: src/backend/gsl/functions.cpp:569
-#, fuzzy, kde-format
-#| msgid "Angular Mathieu functions ce_n(q,x)"
+#, kde-format
 msgid "Angular Mathieu functions ce_n(q, x)"
-msgstr "Fonctions angulaires de Mathieu ce_n (q,x)"
+msgstr "Fonctions angulaires de Mathieu ce_n (q, x)"
 
 #: src/backend/gsl/functions.cpp:570
-#, fuzzy, kde-format
-#| msgid "Angular Mathieu functions se_n(q,x)"
+#, kde-format
 msgid "Angular Mathieu functions se_n(q, x)"
-msgstr "Fonctions angulaires de Mathieu se_n (q,x)"
+msgstr "Fonctions angulaires de Mathieu se_n (q, x)"
 
 #: src/backend/gsl/functions.cpp:571
-#, fuzzy, kde-format
-#| msgid "Radial j-th kind Mathieu functions Mc_n^{(j)}(q,x)"
+#, kde-format
 msgid "Radial j-th kind Mathieu functions Mc_n^{(j)}(q, x)"
-msgstr "Fonctions radiales de type Mathieu d'ordre j Mc_n^{(j)} (q,x)"
+msgstr "Fonctions radiales de type Mathieu d'ordre j Mc_n^{(j)} (q, x)"
 
 #: src/backend/gsl/functions.cpp:572
-#, fuzzy, kde-format
-#| msgid "Radial j-th kind Mathieu functions Ms_n^{(j)}(q,x)"
+#, kde-format
 msgid "Radial j-th kind Mathieu functions Ms_n^{(j)}(q, x)"
-msgstr "Fonctions radiales de type Mathieu d'ordre j Ms_n^{(j)} (q,x)"
+msgstr "Fonctions radiales de type Mathieu d'ordre j Ms_n^{(j)} (q, x)"
 
 #: src/backend/gsl/functions.cpp:576
 #, kde-format
@@ -4998,14 +4992,12 @@ msgid "Three component hypotenuse function"
 msgstr "Trois fonctions de composants d'hypoténuse"
 
 #: src/backend/gsl/functions.cpp:627
-#, fuzzy, kde-format
-#| msgid "restrict to [-pi,pi]"
+#, kde-format
 msgid "restrict to [-pi, pi]"
 msgstr "Restreindre à [-Pi, Pi]"
 
 #: src/backend/gsl/functions.cpp:628
-#, fuzzy, kde-format
-#| msgid "restrict to [0,2 pi]"
+#, kde-format
 msgid "restrict to [0, 2 pi]"
 msgstr "Restreindre à [0, 2 * Pi]"
 
@@ -8959,12 +8951,12 @@ msgstr "Courbes"
 #: src/backend/worksheet/WorksheetElement.cpp:154
 #, kde-format
 msgid "%1: lock"
-msgstr ""
+msgstr "%1 : verrouiller"
 
 #: src/backend/worksheet/WorksheetElement.cpp:154
 #, kde-format
 msgid "%1: unlock"
-msgstr ""
+msgstr "%1 : déverrouiller"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbVisible)
 #. i18n: ectx: property (text), widget (QCheckBox, chkVisible)
@@ -9002,10 +8994,9 @@ msgid "Visible"
 msgstr "Visible"
 
 #: src/backend/worksheet/WorksheetElement.cpp:227
-#, fuzzy, kde-format
-#| msgid "Linking"
+#, kde-format
 msgid "Locking"
-msgstr "Liaison"
+msgstr "Verrouillage"
 
 #: src/backend/worksheet/WorksheetElement.cpp:236
 #, kde-format
@@ -10584,21 +10575,17 @@ msgid "Presenter Mode"
 msgstr "Mode « Présentation »"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:278
-#, fuzzy, kde-format
-#| msgid "Non-interactive Plots"
+#, kde-format
 msgid "Interactive Plots"
-msgstr "Tracés non interactifs"
+msgstr "Tracés interactifs"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:279
-#, fuzzy, kde-format
-#| msgid ""
-#| "If activated, plots on the worksheet don't react on drag and mouse wheel "
-#| "events."
+#, kde-format
 msgid ""
 "If not activated, plots on the worksheet don't react on drag and mouse wheel "
 "events."
 msgstr ""
-"Si cette option est activée, les tracés sur la feuille de travail ne "
+"Si cette option est non activée, les tracés sur la feuille de travail ne "
 "réagissent pas aux évènements de glisser et de molette de la souris."
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:296
@@ -14823,10 +14810,9 @@ msgid "Properties Explorer"
 msgstr "Explorateur de propriétés"
 
 #: src/kdefrontend/MainWin.cpp:888
-#, fuzzy, kde-format
-#| msgid "Worksheet printed"
+#, kde-format
 msgid "Worksheet Preview"
-msgstr "Feuille de travail imprimée"
+msgstr "Aperçu de feuille de travail"
 
 #: src/kdefrontend/MainWin.cpp:911
 #, kde-format
@@ -14869,11 +14855,10 @@ msgid "Project Explorer"
 msgstr "Explorateur de projet"
 
 #: src/kdefrontend/MainWin.cpp:1485
-#, fuzzy, kde-format
-#| msgid "Worksheet printed"
+#, kde-format
 msgctxt "@title:window"
 msgid "Worksheet Preview"
-msgstr "Feuille de travail imprimée"
+msgstr "Aperçu de feuille de travail"
 
 #: src/kdefrontend/MainWin.cpp:1539
 #, kde-format
@@ -15010,16 +14995,14 @@ msgid "%1 printed"
 msgstr "%1 imprimé"
 
 #: src/kdefrontend/MainWin.cpp:2605
-#, fuzzy, kde-format
-#| msgid "The following problems occurred when loading the project:\n"
+#, kde-format
 msgid "There was a problem sharing the project: %1"
-msgstr "Les problèmes suivants sont survenus lors de l'ouverture du projet :\n"
+msgstr "Un problème est survenu lors du partage du projet : %1"
 
 #: src/kdefrontend/MainWin.cpp:2609
-#, fuzzy, kde-format
-#| msgid "Project saved"
+#, kde-format
 msgid "Project shared successfully"
-msgstr "Projet enregistré"
+msgstr "Projet partagé avec succès"
 
 #: src/kdefrontend/MainWin.cpp:2612
 #, kde-format
@@ -15817,10 +15800,9 @@ msgid "Years"
 msgstr "Années"
 
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:63
-#, fuzzy, kde-format
-#| msgid "month"
+#, kde-format
 msgid "Months"
-msgstr "mois"
+msgstr "Mois"
 
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:192
 #, fuzzy, kde-format
@@ -15830,24 +15812,21 @@ msgid "Equidistant Numeric and Date&Time Values"
 msgstr "Valeurs équidistantes"
 
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:197
-#, fuzzy, kde-format
-#| msgid "Equidistant Values"
+#, kde-format
 msgctxt "@title:window"
 msgid "Equidistant Numeric Values"
-msgstr "Valeurs équidistantes"
+msgstr "Valeurs numériques équidistantes"
 
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:199
-#, fuzzy, kde-format
-#| msgid "Equidistant Values"
+#, kde-format
 msgctxt "@title:window"
 msgid "Equidistant Date&Time Values"
-msgstr "Valeurs équidistantes"
+msgstr "Valeurs de dates et de d'heures équidistantes"
 
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:250
-#, fuzzy, kde-format
-#| msgid "invalid y start value"
+#, kde-format
 msgid "Invalid start value"
-msgstr "valeur de début « y » non valable"
+msgstr "Valeur de début non valable"
 
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:257
 #, kde-format
@@ -20980,10 +20959,9 @@ msgstr "Décalage Y :"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbLock)
 #: src/kdefrontend/ui/labelwidget.ui:759
-#, fuzzy, kde-format
-#| msgid "Stacked"
+#, kde-format
 msgid "Locked"
-msgstr "Empilé"
+msgstr "Verrouillé"
 
 #. i18n: ectx: property (text), widget (QLabel, lY)
 #: src/kdefrontend/ui/matrix/matrixfunctionwidget.ui:116

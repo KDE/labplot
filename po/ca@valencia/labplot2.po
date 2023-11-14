@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-13 00:39+0000\n"
-"PO-Revision-Date: 2023-11-12 15:57+0100\n"
+"PO-Revision-Date: 2023-11-13 13:26+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -12087,7 +12087,7 @@ msgstr "Establiu un ID de client."
 #: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:171
 #, kde-format
 msgid "Please set a valid host name."
-msgstr "Establiu un nom de màquina vàlid."
+msgstr "Establiu un nom d'amfitrió vàlid."
 
 #: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:70
 #: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:134
@@ -12106,7 +12106,7 @@ msgstr "Establiu un nom únic."
 #: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:229
 #, kde-format
 msgid "Host name and port must be unique."
-msgstr "El nom de màquina i el port cal que siguen únics."
+msgstr "El nom d'amfitrió i el port cal que siguen únics."
 
 #: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:210
 #, kde-format
@@ -15064,7 +15064,7 @@ msgstr "Client MQTT %1"
 #: src/kdefrontend/MainWin.cpp:2911
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
-msgstr "Ja hi ha un MQTTClient amb esta màquina!"
+msgstr "Ja hi ha un MQTTClient amb este amfitrió!"
 
 #: src/kdefrontend/MainWin.cpp:2915
 #, kde-format
@@ -16055,28 +16055,22 @@ msgid "Add new variable"
 msgstr "Afig una variable nova"
 
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:69
-#, fuzzy, kde-format
-#| msgid ""
-#| "Automatically update the calculated values on changes in the variable "
-#| "columns"
+#, kde-format
 msgid ""
 "Automatically update the calculated values in the target column on changes "
 "in the variable columns"
 msgstr ""
-"Actualitza automàticament els valors calculats segons els canvis de les "
-"columnes variables"
+"Actualitza automàticament els valors calculats en la columna de destinació "
+"segons els canvis en les columnes variables"
 
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:70
-#, fuzzy, kde-format
-#| msgid ""
-#| "Automatically update the calculated values on changes in the variable "
-#| "columns"
+#, kde-format
 msgid ""
 "Automatically resize the target column to fit the size of the variable "
 "columns"
 msgstr ""
-"Actualitza automàticament els valors calculats segons els canvis de les "
-"columnes variables"
+"Canvia automàticament la mida de la columna de destinació per a ajustar la "
+"mida de les columnes variables"
 
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:162
 #, kde-format
@@ -16084,6 +16078,8 @@ msgid ""
 "Spreadsheet linking is active. The size of the target spreadsheet is "
 "controlled by the linked spreadsheet."
 msgstr ""
+"L'enllaçat del full de càlcul està actiu. La mida del full de càlcul de "
+"destinació està controlada pel full de càlcul enllaçat."
 
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:172
 #, kde-format
@@ -21369,10 +21365,9 @@ msgstr "Guarda automàticament:"
 
 #. i18n: ectx: property (text), widget (QLabel, lCompatible)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:261
-#, fuzzy, kde-format
-#| msgid "Probability"
+#, kde-format
 msgid "Compatibility:"
-msgstr "Probabilitat"
+msgstr "Compatibilitat:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode_2)
@@ -21692,17 +21687,15 @@ msgstr "f(x) = "
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoUpdate)
 #: src/kdefrontend/ui/spreadsheet/functionvalueswidget.ui:155
-#, fuzzy, kde-format
-#| msgid "auto update: true"
+#, kde-format
 msgid "auto update the values"
-msgstr "actualització automàtica: cert"
+msgstr "actualització automàtica dels valors"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoResize)
 #: src/kdefrontend/ui/spreadsheet/functionvalueswidget.ui:162
-#, fuzzy, kde-format
-#| msgid "Flatten selected columns"
+#, kde-format
 msgid "auto resize the column"
-msgstr "Aplana les columnes seleccionades"
+msgstr "canvia automàticament la mida de la columna"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbCurvePlacement)
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:154
@@ -22787,6 +22780,3 @@ msgstr "El procés «convert» ha fallat, codi d'eixida ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "No s'ha pogut obrir el fitxer:"
-
-#~ msgid "auto update"
-#~ msgstr "actualització automàtica"

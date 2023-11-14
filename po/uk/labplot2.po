@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-13 00:39+0000\n"
-"PO-Revision-Date: 2023-11-12 09:04+0200\n"
+"PO-Revision-Date: 2023-11-13 17:56+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
@@ -16005,28 +16005,22 @@ msgid "Add new variable"
 msgstr "Додати нову змінну"
 
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:69
-#, fuzzy, kde-format
-#| msgid ""
-#| "Automatically update the calculated values on changes in the variable "
-#| "columns"
+#, kde-format
 msgid ""
 "Automatically update the calculated values in the target column on changes "
 "in the variable columns"
 msgstr ""
-"Автоматично оновлювати обчислені значення у відповідь на зміни у стовпчиках "
-"змінних"
+"Автоматично оновлювати обчислені значення у стовпчику призначення у "
+"відповідь на зміни у стовпчиках змінних"
 
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:70
-#, fuzzy, kde-format
-#| msgid ""
-#| "Automatically update the calculated values on changes in the variable "
-#| "columns"
+#, kde-format
 msgid ""
 "Automatically resize the target column to fit the size of the variable "
 "columns"
 msgstr ""
-"Автоматично оновлювати обчислені значення у відповідь на зміни у стовпчиках "
-"змінних"
+"Автоматично оновлювати розмір стовпчика призначення так, щоб він відповідав "
+"розміру стовпчиків змінних"
 
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:162
 #, kde-format
@@ -16034,6 +16028,8 @@ msgid ""
 "Spreadsheet linking is active. The size of the target spreadsheet is "
 "controlled by the linked spreadsheet."
 msgstr ""
+"Задіяно пов'язування електронних таблиць. Розмір таблиці призначення "
+"керується пов'язаною із нею таблицею."
 
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:172
 #, kde-format
@@ -21307,10 +21303,9 @@ msgstr "Автозбереження:"
 
 #. i18n: ectx: property (text), widget (QLabel, lCompatible)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:261
-#, fuzzy, kde-format
-#| msgid "Probability"
+#, kde-format
 msgid "Compatibility:"
-msgstr "Ймовірність"
+msgstr "Сумісність:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode_2)
@@ -21630,17 +21625,15 @@ msgstr "f(x) = "
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoUpdate)
 #: src/kdefrontend/ui/spreadsheet/functionvalueswidget.ui:155
-#, fuzzy, kde-format
-#| msgid "auto update: true"
+#, kde-format
 msgid "auto update the values"
-msgstr "автооновлення: так"
+msgstr "автоматично оновлювати значення"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoResize)
 #: src/kdefrontend/ui/spreadsheet/functionvalueswidget.ui:162
-#, fuzzy, kde-format
-#| msgid "Flatten selected columns"
+#, kde-format
 msgid "auto resize the column"
-msgstr "Спростити позначені стовпчики"
+msgstr "автоматично змінювати розмір стовпчика"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbCurvePlacement)
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:154

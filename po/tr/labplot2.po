@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-13 00:39+0000\n"
-"PO-Revision-Date: 2023-11-12 05:41+0300\n"
+"PO-Revision-Date: 2023-11-13 05:26+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -15880,28 +15880,22 @@ msgid "Add new variable"
 msgstr "Yeni değişken ekle"
 
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:69
-#, fuzzy, kde-format
-#| msgid ""
-#| "Automatically update the calculated values on changes in the variable "
-#| "columns"
+#, kde-format
 msgid ""
 "Automatically update the calculated values in the target column on changes "
 "in the variable columns"
 msgstr ""
-"Değişken sütunlarındaki değişikliklerde hesaplanan değerleri kendiliğinden "
-"güncelle"
+"Değişken sütunlarındaki değişikliklerde hedef sütunda hesaplanan değerleri "
+"kendiliğinden güncelle"
 
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:70
-#, fuzzy, kde-format
-#| msgid ""
-#| "Automatically update the calculated values on changes in the variable "
-#| "columns"
+#, kde-format
 msgid ""
 "Automatically resize the target column to fit the size of the variable "
 "columns"
 msgstr ""
-"Değişken sütunlarındaki değişikliklerde hesaplanan değerleri kendiliğinden "
-"güncelle"
+"Hedef sütunu değişken sütunlarının boyutuna sığacak biçimde kendiliğinden "
+"yeniden boyutlandır"
 
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:162
 #, kde-format
@@ -15909,6 +15903,8 @@ msgid ""
 "Spreadsheet linking is active. The size of the target spreadsheet is "
 "controlled by the linked spreadsheet."
 msgstr ""
+"Hesap tablosu bağlantılaması etkin. Hedef hesap tablosunun boyutu "
+"bağlantılanan hesap tablosu tarafından denetlenir."
 
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:172
 #, kde-format
@@ -21163,10 +21159,9 @@ msgstr "Otomatik kaydet:"
 
 #. i18n: ectx: property (text), widget (QLabel, lCompatible)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:261
-#, fuzzy, kde-format
-#| msgid "Probability"
+#, kde-format
 msgid "Compatibility:"
-msgstr "Olasılık"
+msgstr "Uyumluluk:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode_2)
@@ -21486,17 +21481,15 @@ msgstr "f(x) = "
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoUpdate)
 #: src/kdefrontend/ui/spreadsheet/functionvalueswidget.ui:155
-#, fuzzy, kde-format
-#| msgid "auto update: true"
+#, kde-format
 msgid "auto update the values"
-msgstr "otomatik güncelle: doğru"
+msgstr "Değerleri kendiliğinden güncelle"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoResize)
 #: src/kdefrontend/ui/spreadsheet/functionvalueswidget.ui:162
-#, fuzzy, kde-format
-#| msgid "Flatten selected columns"
+#, kde-format
 msgid "auto resize the column"
-msgstr "Seçili sütunları düzleştir"
+msgstr "Sütunu kendiliğinden yeniden boyutlandır"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbCurvePlacement)
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:154
