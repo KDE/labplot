@@ -50,7 +50,7 @@ void ExpressionParser::initFunctions() {
 void ExpressionParser::initConstants() {
 	for (int i = 0; i < _number_constants; i++) {
 		const auto& constant = _constants[i];
-		m_constantsDescription << constant.description;
+		m_constantsDescription << constant.description();
 		m_constants << QLatin1String(constant.name);
 		m_constantsValues << QString::number(constant.value, 'g', 15);
 		m_constantsUnits << QLatin1String(constant.unit);
@@ -232,7 +232,7 @@ QString ExpressionParser::functionDescription(const QString& function) {
 QString ExpressionParser::constantDescription(const QString& constant) {
 	for (int index = 0; index < _number_constants; index++) {
 		if (constant == QLatin1String(_constants[index].name))
-			return QStringLiteral("%1 (%2 %3)").arg(_constants[index].description()).arg(_constants[index].value).arg(QStringLiteral(_constants[index].unit));
+			return QStringLiteral("%1 (%2 %3)").arg(_constants[index].description()).arg(_constants[index].value).arg(QLatin1String(_constants[index].unit));
 	}
 	return QStringLiteral("");
 }
