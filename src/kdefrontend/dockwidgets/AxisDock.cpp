@@ -1905,6 +1905,7 @@ void AxisDock::load() {
 	// disappears
 	ui.cbRangeScale->setVisible(!rangeScale);
 	ui.cbScale->setVisible(!rangeScale);
+	ui.lScale->setVisible(!rangeScale);
 
 	ui.cbRangeType->setCurrentIndex(static_cast<int>(m_axis->rangeType()));
 	ui.sbStart->setValue(m_axis->range().start());
