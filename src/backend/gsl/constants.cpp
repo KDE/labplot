@@ -46,6 +46,8 @@ QString constantGroupsToString(ConstantGroups group) {
 	return i18n("Unknown Constant");
 }
 
+// clang-format off
+
 /* sync with ExpressionParser.cpp */
 struct cons _constants[] = {
 	/* Physical constants: https://www.gnu.org/software/gsl/doc/html/const.html */
@@ -185,5 +187,7 @@ struct cons _constants[] = {
 	{[]() { return i18n("SI unit of energy");}, "Joule", GSL_CONST_MKSA_JOULE, "kg m^2 / s^2", ConstantGroups::ForceAndEnergy},
 	{[]() { return i18n("Energy 1 erg");}, "erg", GSL_CONST_MKSA_ERG, "kg m^2 / s^2", ConstantGroups::ForceAndEnergy},
 };
+
+// clang-format on
 
 const int _number_constants = sizeof(_constants) / sizeof(cons);
