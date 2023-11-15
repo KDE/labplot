@@ -20893,10 +20893,9 @@ msgstr "Automatické ukládání:"
 
 #. i18n: ectx: property (text), widget (QLabel, lCompatible)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:261
-#, fuzzy, kde-format
-#| msgid "Probability"
+#, kde-format
 msgid "Compatibility:"
-msgstr "Pravděpodobnost"
+msgstr "Kompatibilita:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode_2)
@@ -21216,10 +21215,9 @@ msgstr "f(x) = "
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoUpdate)
 #: src/kdefrontend/ui/spreadsheet/functionvalueswidget.ui:155
-#, fuzzy, kde-format
-#| msgid "auto update"
+#, kde-format
 msgid "auto update the values"
-msgstr "automaticky aktualizovat"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoResize)
 #: src/kdefrontend/ui/spreadsheet/functionvalueswidget.ui:162
