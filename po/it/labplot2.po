@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-07-10 02:40+0000\n"
-"PO-Revision-Date: 2023-08-12 15:26+0200\n"
+"PO-Revision-Date: 2023-11-14 19:21+0100\n"
 "Last-Translator: Paolo Zamponi <feus73@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 23.08.2\n"
+"X-Generator: Lokalize 23.08.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -8680,7 +8680,7 @@ msgstr "Riavvia il motore"
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:306
 #, kde-format
 msgid "Evaluate Notebook"
-msgstr "Valuta taccuino"
+msgstr "Valuta Notebook"
 
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:79
 #, kde-format
@@ -13411,13 +13411,13 @@ msgstr "Progetto"
 #, kde-format
 msgctxt "@title:window %1 is a Cantor backend"
 msgid "%1 Notebook"
-msgstr "Taccuino %1"
+msgstr "Notebook %1"
 
 #: src/kdefrontend/GuiObserver.cpp:412
 #, kde-format
 msgctxt "@title:window"
 msgid "Notebook"
-msgstr "Taccuino"
+msgstr "Notebook"
 
 #: src/kdefrontend/GuiObserver.cpp:418
 #, kde-format
@@ -13963,7 +13963,7 @@ msgstr "Estrattore di dati"
 #: src/kdefrontend/labplot2ui.rc:32 src/kdefrontend/SettingsDialog.cpp:72
 #, kde-format
 msgid "Notebook"
-msgstr "Taccuino"
+msgstr "Notebook"
 
 #. i18n: ectx: ToolBar (cartesian_plot_toolbar)
 #: src/kdefrontend/labplot2ui.rc:36
@@ -13988,7 +13988,7 @@ msgstr "&Aggiungi nuovo"
 #: src/kdefrontend/labplot2ui.rc:55 src/kdefrontend/labplot2ui.rc:79
 #, kde-format
 msgid "&Notebook"
-msgstr "Taccui&no"
+msgstr "&Notebook"
 
 #. i18n: ectx: Menu (edit)
 #: src/kdefrontend/labplot2ui.rc:71
@@ -14356,7 +14356,7 @@ msgstr "Progetti di Cantor (.cws)"
 #: src/kdefrontend/MainWin.cpp:1376
 #, kde-format
 msgid "Jupyter Notebooks (*.ipynb)"
-msgstr "Notebook Jupyter (.ipynb)"
+msgstr "Jupyter Notebooks (*.ipynb)"
 
 #: src/kdefrontend/MainWin.cpp:1383
 #, kde-format
