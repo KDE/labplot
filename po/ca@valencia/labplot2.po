@@ -6955,7 +6955,7 @@ msgstr "%1: establix la precisió de les etiquetes"
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:918
 #, kde-format
 msgid "%1: set labels datetime format"
-msgstr "%1: establix el format «datahora» de les etiquetes"
+msgstr "%1: establix el format «data i hora» de les etiquetes"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:925
 #, kde-format
@@ -8304,7 +8304,7 @@ msgstr "%1: establix la precisió dels valors"
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:511
 #, kde-format
 msgid "%1: set values datetime format"
-msgstr "%1: establix el format dels valors «datahora»"
+msgstr "%1: establix el format dels valors «data i hora»"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:174
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:518
@@ -10175,7 +10175,7 @@ msgid ""
 "If activated, plots on the worksheet don't react on drag and mouse wheel "
 "events."
 msgstr ""
-"Si està activada, els diagrames del full de treball no reaccionaran als "
+"Si se selecciona, els diagrames del full de treball no reaccionaran als "
 "esdeveniments d'arrossegar ni a la roda del ratolí."
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:284
@@ -10536,15 +10536,15 @@ msgid ""
 "If checked, the specified line in the file will be used to determine the "
 "column names."
 msgstr ""
-"Si està marcada, la línia especificada en el fitxer s'utilitzarà per "
+"Si se selecciona, la línia especificada en el fitxer s'utilitzarà per a "
 "determinar els noms de les columnes."
 
 #: src/kdefrontend/datasources/AsciiOptionsWidget.cpp:108
 #, kde-format
 msgid "Line in the file that should be used to determine the column names."
 msgstr ""
-"La línia del fitxer que s'hauria d'utilitzar per determinar els noms de les "
-"columnes."
+"La línia del fitxer que s'hauria d'utilitzar per a determinar els noms de "
+"les columnes."
 
 #: src/kdefrontend/datasources/AsciiOptionsWidget.cpp:111
 #, kde-format
@@ -10975,7 +10975,7 @@ msgstr "No s'ha pogut connectar amb el sòcol TCP proporcionat. Error: %1."
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:483
 #, kde-format
 msgid "Either the host name or the port number is missing."
-msgstr "Falta el nom de la màquina o el número del port."
+msgstr "Falta el nom de l'amfitrió o el número del port."
 
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:477
 #, kde-format
@@ -11038,8 +11038,8 @@ msgid ""
 "If this option is checked, only the link to the file is stored in the "
 "project file but not its content."
 msgstr ""
-"Si esta opció està marcada, només s'emmagatzemarà l'enllaç cap al fitxer en "
-"el fitxer de projecte, no el seu contingut."
+"Si se selecciona, només s'emmagatzemarà l'enllaç cap al fitxer en el fitxer "
+"de projecte, no el seu contingut."
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:144
 #, kde-format
@@ -11047,8 +11047,8 @@ msgid ""
 "If this option is checked, the relative path of the file (relative to "
 "project's folder) will be saved."
 msgstr ""
-"Si esta opció està marcada, es guardarà el camí relatiu del fitxer (relatiu "
-"a la carpeta del projecte)."
+"Si se selecciona, es guardarà el camí relatiu del fitxer (relatiu a la "
+"carpeta del projecte)."
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:147
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1175
@@ -11128,8 +11128,8 @@ msgid ""
 "Enable to use the first row of the selected data region for the column names "
 "of the spreadsheet."
 msgstr ""
-"Activeu-la per a utilitzar la primera fila de la regió de dades seleccionada "
-"com a noms de columna del full de càlcul."
+"Seleccioneu-la per a utilitzar la primera fila de la regió de dades "
+"seleccionada com a noms de columna del full de càlcul."
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:242
 #, kde-format
@@ -11686,7 +11686,7 @@ msgstr "Establiu un ID de client."
 #: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:171
 #, kde-format
 msgid "Please set a valid host name."
-msgstr "Establiu un nom de màquina vàlid."
+msgstr "Establiu un nom d'amfitrió vàlid."
 
 #: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:70
 #: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:134
@@ -11705,7 +11705,7 @@ msgstr "Establiu un nom únic."
 #: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:229
 #, kde-format
 msgid "Host name and port must be unique."
-msgstr "El nom de màquina i el port cal que siguen únics."
+msgstr "El nom d'amfitrió i el port cal que siguen únics."
 
 #: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:210
 #, kde-format
@@ -12241,8 +12241,8 @@ msgid ""
 "If checked, the box width is made proportional to the square root of the "
 "number of data points."
 msgstr ""
-"Si està marcada, l'amplària del quadro es fa proporcional a l'arrel quadrada "
-"del nombre de punts de dades."
+"Si se selecciona, l'amplària del quadro es farà proporcional a l'arrel "
+"quadrada del nombre de punts de dades."
 
 # skip-rule: kct-box
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:71
@@ -12349,7 +12349,7 @@ msgstr ""
 #, kde-format
 msgid "If checked, automatically extend the plot range to nice values"
 msgstr ""
-"Si està marcada, l'interval del diagrama s'amplia automàticament a valors "
+"Si se selecciona, l'interval del diagrama s'ampliarà automàticament a valors "
 "satisfactoris"
 
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:866
@@ -12776,7 +12776,7 @@ msgid ""
 "Uncheck this option to reduce the size of the project file at costs of the "
 "longer project load times."
 msgstr ""
-"Si està marcada, els resultats dels càlculs en l'anàlisi de corbes es "
+"Si se selecciona, els resultats dels càlculs en l'anàlisi de corbes es "
 "guardaran en el fitxer del projecte.\n"
 "Desmarqueu esta opció per a reduir la mida del fitxer del projecte a canvi "
 "d'un temps més gran en carregar el projecte."
@@ -12797,7 +12797,7 @@ msgid ""
 "If checked, rescale the content of the worksheet on size changes. Otherwise "
 "resize the canvas only."
 msgstr ""
-"Si està marcada, es tornarà a escalar el contingut del full de treball quan "
+"Si se selecciona, es tornarà a escalar el contingut del full de treball quan "
 "es canvie la mida. En cas contrari, només es canviarà la mida del tapís."
 
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:278
@@ -12980,8 +12980,8 @@ msgid ""
 "If checked, connect neighbour points with lines even if there are gaps "
 "(invalid or masked values) between them"
 msgstr ""
-"Si està marcada, connecta els punts veïns amb línies, inclús si hi ha buits "
-"(valors no vàlids o emmascarats) entre ells"
+"Si se selecciona, connectarà els punts veïns amb línies, inclús si hi ha "
+"buits (valors no vàlids o emmascarats) entre ells"
 
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:617
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:618
@@ -12989,7 +12989,7 @@ msgstr ""
 msgid ""
 "If checked, connect data points only for strictly increasing values of X"
 msgstr ""
-"Si està marcada, connecta els punts de dades únicament per als valors "
+"Si se selecciona, connectarà els punts de dades únicament per als valors "
 "estrictament creixents de X"
 
 #: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:70
@@ -13977,7 +13977,7 @@ msgstr "Garvit Khatri"
 #, kde-format
 msgctxt "@info:credit"
 msgid "Porting LabPlot2 to KF5 and Integration with Cantor"
-msgstr "Adaptació del LabPlot2 a KF5 i integració amb Cantor"
+msgstr "Adaptació de LabPlot2 als KF5 i integració amb Cantor"
 
 #: src/kdefrontend/LabPlot.cpp:114
 #, kde-format
@@ -14565,7 +14565,7 @@ msgstr "Client MQTT %1"
 #: src/kdefrontend/MainWin.cpp:2689
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
-msgstr "Ja hi ha un MQTTClient amb esta màquina!"
+msgstr "Ja hi ha un MQTTClient amb este amfitrió!"
 
 #: src/kdefrontend/MainWin.cpp:2693
 #, kde-format
@@ -19999,7 +19999,7 @@ msgstr "Interval d'avaluació automàtica"
 #, kde-format
 msgid "If selected, the resulting fit parameter are set as new start values."
 msgstr ""
-"Si està seleccionada, els paràmetres d'ajust resultants s'establiran com a "
+"Si se selecciona, els paràmetres d'ajust resultants s'establiran com a "
 "valors inicials nous."
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbUseResults)
@@ -20985,7 +20985,7 @@ msgstr "Àrea que s'ha d'exportar:"
 #: src/kdefrontend/ui/worksheet/exportworksheetwidget.ui:126
 #, kde-format
 msgid "Check this option if the worksheet background should be exported."
-msgstr "Marqueu esta opció si s'ha d'exportar el fons del full de treball."
+msgstr "Seleccioneu esta opció si s'ha d'exportar el fons del full de treball."
 
 #. i18n: ectx: property (text), widget (QLabel, lExportBackground)
 #: src/kdefrontend/ui/worksheet/exportworksheetwidget.ui:119
