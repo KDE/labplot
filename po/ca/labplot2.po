@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-16 00:39+0000\n"
-"PO-Revision-Date: 2023-11-13 13:26+0100\n"
+"PO-Revision-Date: 2023-11-16 12:59+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -3366,10 +3366,9 @@ msgid "Unknown Function"
 msgstr "Funció desconeguda"
 
 #: src/backend/gsl/functions.cpp:229
-#, fuzzy, kde-format
-#| msgid "Delete variable"
+#, kde-format
 msgid "Cell (index, variable)"
-msgstr "Suprimeix la variable"
+msgstr "Cel·la (índex, variable)"
 
 #: src/backend/gsl/functions.cpp:230
 #, kde-format

@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-16 00:39+0000\n"
-"PO-Revision-Date: 2023-11-13 18:53+0100\n"
+"PO-Revision-Date: 2023-11-16 20:19+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -3322,10 +3322,9 @@ msgid "Unknown Function"
 msgstr "Nekonata Funkcio"
 
 #: src/backend/gsl/functions.cpp:229
-#, fuzzy, kde-format
-#| msgid "Delete variable"
+#, kde-format
 msgid "Cell (index, variable)"
-msgstr "Forigi variablon"
+msgstr "Ĉelo (indekso, variablo)"
 
 #: src/backend/gsl/functions.cpp:230
 #, kde-format

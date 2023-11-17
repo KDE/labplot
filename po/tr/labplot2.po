@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-16 00:39+0000\n"
-"PO-Revision-Date: 2023-11-13 05:26+0300\n"
+"PO-Revision-Date: 2023-11-16 22:14+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -3323,10 +3323,9 @@ msgid "Unknown Function"
 msgstr "Bilinmeyen İşlev"
 
 #: src/backend/gsl/functions.cpp:229
-#, fuzzy, kde-format
-#| msgid "Delete variable"
+#, kde-format
 msgid "Cell (index, variable)"
-msgstr "Değişkeni sil"
+msgstr "Hücre (indeks, değişken)"
 
 #: src/backend/gsl/functions.cpp:230
 #, kde-format
