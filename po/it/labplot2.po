@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-07-10 02:40+0000\n"
-"PO-Revision-Date: 2023-11-14 19:21+0100\n"
+"PO-Revision-Date: 2023-11-15 08:02+0100\n"
 "Last-Translator: Paolo Zamponi <feus73@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -2186,15 +2186,14 @@ msgid "Time_s"
 msgstr "Tempo"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:352
-#, fuzzy, kde-format
-#| msgid "Time"
+#, kde-format
 msgid "Time_ns"
-msgstr "Tempo"
+msgstr "Tempo_ns"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:354
 #, kde-format
 msgid "Time_10µs"
-msgstr ""
+msgstr "Tempo_10µs"
 
 #: src/backend/datasources/LiveDataSource.cpp:434
 #: src/backend/datasources/MQTTTopic.cpp:142
@@ -20595,7 +20594,7 @@ msgstr "Valori testuali"
 #: src/kdefrontend/ui/spreadsheet/dropvalueswidget.ui:203
 #, kde-format
 msgid "DateTime Values"
-msgstr "Valori data-ora"
+msgstr "Valori data e ora"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/kdefrontend/ui/spreadsheet/equidistantvalueswidget.ui:17
