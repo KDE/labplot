@@ -931,6 +931,9 @@ void WorksheetView::wheelEvent(QWheelEvent* event) {
 		zoom(numSteps);
 	} else
 		QGraphicsView::wheelEvent(event);
+
+	if (m_magnificationWindow && m_magnificationWindow->isVisible())
+		updateMagnificationPixmap(mapToScene(event->pos()));
 }
 
 void WorksheetView::zoom(int numSteps) {
@@ -1042,37 +1045,44 @@ void WorksheetView::mouseMoveEvent(QMouseEvent* event) {
 			scene()->addItem(m_magnificationWindow);
 		}
 
-		m_magnificationWindow->setVisible(false);
-
-		// copy the part of the view to be shown magnified
-		QPointF pos = mapToScene(event->pos());
-		const int size = Worksheet::convertToSceneUnits(2.0, Worksheet::Unit::Centimeter) / transform().m11();
-
-		const QRectF copyRect(pos.x() - size / (2 * magnificationFactor),
-							  pos.y() - size / (2 * magnificationFactor),
-							  size / magnificationFactor,
-							  size / magnificationFactor);
-		QPixmap px = grab(mapFromScene(copyRect).boundingRect());
-		px = px.scaled(size, size, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-
-		// draw the bounding rect
-		QPainter painter(&px);
-		const QPen pen = QPen(Qt::lightGray, 2 / transform().m11());
-		painter.setPen(pen);
-		QRect rect = px.rect();
-		rect.setWidth(rect.width() - pen.widthF() / 2);
-		rect.setHeight(rect.height() - pen.widthF() / 2);
-		painter.drawRect(rect);
-
-		// set the pixmap
-		m_magnificationWindow->setPixmap(px);
-		m_magnificationWindow->setPos(pos.x() - px.width() / 2, pos.y() - px.height() / 2);
-
-		m_magnificationWindow->setVisible(true);
+		updateMagnificationPixmap(mapToScene(event->pos()));
 	} else if (m_magnificationWindow)
 		m_magnificationWindow->setVisible(false);
 
 	QGraphicsView::mouseMoveEvent(event);
+}
+
+/*!
+ * Updates the magnified content of the scene under the cursor that is shown in the magnification window.
+ * \pos is the current position of the cursor in scene coordinates which defines the middle of the magnification window.
+ */
+void WorksheetView::updateMagnificationPixmap(const QPointF& pos) {
+	m_magnificationWindow->setVisible(false);
+
+	// copy the part of the view to be shown magnified
+	const int size = Worksheet::convertToSceneUnits(2.0, Worksheet::Unit::Centimeter) / transform().m11();
+
+	const QRectF copyRect(pos.x() - size / (2 * magnificationFactor),
+							pos.y() - size / (2 * magnificationFactor),
+							size / magnificationFactor,
+							size / magnificationFactor);
+	QPixmap px = grab(mapFromScene(copyRect).boundingRect());
+	px = px.scaled(size, size, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+
+	// draw the bounding rect
+	QPainter painter(&px);
+	const QPen pen = QPen(Qt::darkGray, 2 / transform().m11());
+	painter.setPen(pen);
+	QRect rect = px.rect();
+	rect.setWidth(rect.width() - pen.widthF() / 2);
+	rect.setHeight(rect.height() - pen.widthF() / 2);
+	painter.drawRect(rect);
+
+	// set the pixmap
+	m_magnificationWindow->setPixmap(px);
+	m_magnificationWindow->setPos(pos.x() - px.width() / 2, pos.y() - px.height() / 2);
+
+	m_magnificationWindow->setVisible(true);
 }
 
 void WorksheetView::contextMenuEvent(QContextMenuEvent* e) {
@@ -2329,6 +2339,12 @@ void WorksheetView::exportToClipboard() {
 }
 
 void WorksheetView::exportPaint(QPainter* painter, const QRectF& targetRect, const QRectF& sourceRect, const bool background) {
+	bool magnificationActive = false;
+	if (m_magnificationWindow && m_magnificationWindow->isVisible()) {
+		magnificationActive = true;
+		m_magnificationWindow->setVisible(false);
+	}
+
 	// draw the background
 	m_isPrinting = true;
 	if (background) {
@@ -2343,6 +2359,9 @@ void WorksheetView::exportPaint(QPainter* painter, const QRectF& targetRect, con
 	scene()->render(painter, QRectF(), sourceRect);
 	m_worksheet->setPrinting(false);
 	m_isPrinting = false;
+
+	if (magnificationActive)
+		m_magnificationWindow->setVisible(true);
 }
 
 void WorksheetView::print(QPrinter* printer) {
