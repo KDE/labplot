@@ -286,13 +286,22 @@ void MainWin::initGUI(const QString& fileName) {
 
 	initMenus();
 
+#ifdef HAVE_CANTOR_LIBS
 	auto* mainToolBar = qobject_cast<QToolBar*>(factory()->container(QLatin1String("main_toolbar"), this));
+	auto* tbNotebook = new QToolButton(mainToolBar);
+	tbNotebook->setPopupMode(QToolButton::MenuButtonPopup);
+	tbNotebook->setMenu(m_newNotebookMenu);
+	tbNotebook->setDefaultAction(m_configureCASAction);
+	auto* lastAction = mainToolBar->actions().at(mainToolBar->actions().count() - 2);
+	mainToolBar->insertWidget(lastAction, tbNotebook);
+#endif
+
 	auto* tbImport = new QToolButton(mainToolBar);
 	tbImport->setPopupMode(QToolButton::MenuButtonPopup);
 	tbImport->setMenu(m_importMenu);
 	tbImport->setDefaultAction(m_importFileAction);
-	auto* lastAction = mainToolBar->actions().at(mainToolBar->actions().count() - 1);
-	mainToolBar->insertWidget(lastAction, tbImport);
+	auto* lastAction_ = mainToolBar->actions().at(mainToolBar->actions().count() - 1);
+	mainToolBar->insertWidget(lastAction_, tbImport);
 
 	// hamburger menu
 #if KCONFIGWIDGETS_VERSION >= QT_VERSION_CHECK(5, 81, 0)
@@ -1023,6 +1032,10 @@ void MainWin::initMenus() {
 #endif
 
 	if (!backendNames.isEmpty()) {
+		// sub-menu shown in the main toolbar
+		m_newNotebookMenu = new QMenu(this);
+
+		// sub-menu shown in the main menu bar
 		auto* menu = dynamic_cast<QMenu*>(factory()->container(QLatin1String("new_notebook"), this));
 		if (menu) {
 			menu->setIcon(QIcon::fromTheme(QLatin1String("cantor")));
@@ -1125,6 +1138,8 @@ void MainWin::updateGUIOnProjectChanges(const QByteArray& windowState) {
 	m_newDatapickerAction->setEnabled(hasProject);
 	m_newNotesAction->setEnabled(hasProject);
 	m_newLiveDataSourceAction->setEnabled(hasProject);
+	for (auto* action : m_newNotebookMenu->actions())
+		action->setEnabled(hasProject);
 	m_closeAction->setEnabled(hasProject);
 	m_projectExplorerDockAction->setEnabled(hasProject);
 	m_propertiesDockAction->setEnabled(hasProject);
@@ -2982,10 +2997,15 @@ void MainWin::updateNotebookActions() {
 		connect(action, &QAction::triggered, this, &MainWin::newCantorWorksheet);
 		newBackendActions << action;
 		menu->addAction(action);
+		m_newNotebookMenu->addAction(action);
 	}
 
 	plugActionList(QLatin1String("backends_list"), newBackendActions);
+
 	menu->addSeparator();
 	menu->addAction(m_configureCASAction);
+
+	m_newNotebookMenu->addSeparator();
+	m_newNotebookMenu->addAction(m_configureCASAction);
 }
 #endif
