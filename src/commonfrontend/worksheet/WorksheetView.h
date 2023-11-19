@@ -90,7 +90,7 @@ private:
 	bool eventFilter(QObject* watched, QEvent*) override;
 	void updateLabelsZoom() const;
 	void updateScrollBarPolicy();
-	void updateMagnificationPixmap(const QPointF& pos);
+	void updateMagnificationWindow(const QPointF& pos);
 
 	// events
 	void resizeEvent(QResizeEvent*) override;

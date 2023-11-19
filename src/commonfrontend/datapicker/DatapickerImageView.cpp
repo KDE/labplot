@@ -4,7 +4,7 @@
 	Description          : DatapickerImage view for datapicker
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2015 Ankit Wagadre <wagadre.ankit@gmail.com>
-	SPDX-FileCopyrightText: 2015-2016 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2015-2023 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -718,9 +718,11 @@ void DatapickerImageView::changeSelectedItemsPosition(QAction* action) {
 }
 
 void DatapickerImageView::magnificationChanged(QAction* action) {
-	if (action == noMagnificationAction)
+	if (action == noMagnificationAction) {
 		magnificationFactor = 0;
-	else if (action == twoTimesMagnificationAction)
+		if (m_image->m_magnificationWindow)
+			m_image->m_magnificationWindow->setVisible(false);
+	} else if (action == twoTimesMagnificationAction)
 		magnificationFactor = 2;
 	else if (action == threeTimesMagnificationAction)
 		magnificationFactor = 3;
@@ -784,8 +786,7 @@ void DatapickerImageView::handleImageActions() {
 }
 
 void DatapickerImageView::exportToFile(const QString& path, const WorksheetView::ExportFormat format, const int resolution) {
-	QRectF sourceRect;
-	sourceRect = scene()->sceneRect();
+	QRectF sourceRect = scene()->sceneRect();
 
 	// print
 	if (format == WorksheetView::ExportFormat::PDF) {
@@ -873,6 +874,12 @@ void DatapickerImageView::exportToFile(const QString& path, const WorksheetView:
 }
 
 void DatapickerImageView::exportPaint(QPainter* painter, const QRectF& targetRect, const QRectF& sourceRect) {
+	bool magnificationActive = false;
+	if (m_image->m_magnificationWindow && m_image->m_magnificationWindow->isVisible()) {
+		magnificationActive = true;
+		m_image->m_magnificationWindow->setVisible(false);
+	}
+
 	painter->save();
 	painter->scale(targetRect.width() / sourceRect.width(), targetRect.height() / sourceRect.height());
 	drawBackground(painter, sourceRect);
@@ -880,6 +887,9 @@ void DatapickerImageView::exportPaint(QPainter* painter, const QRectF& targetRec
 	m_image->setPrinting(true);
 	scene()->render(painter, QRectF(), sourceRect);
 	m_image->setPrinting(false);
+
+	if (magnificationActive)
+		m_image->m_magnificationWindow->setVisible(true);
 }
 
 void DatapickerImageView::print(QPrinter* printer) {
@@ -906,9 +916,8 @@ void DatapickerImageView::print(QPrinter* printer) {
 		} else if (m_image->plotImageType() == DatapickerImage::PlotImageType::ProcessedImage) {
 			QImage todraw = m_image->processedPlotImage.scaled(scene_rect.width(), scene_rect.height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 			painter.drawImage(scene_rect.topLeft(), todraw);
-		} else {
+		} else
 			painter.fillRect(scene_rect, Qt::white);
-		}
 	} else {
 		painter.setBrush(QBrush(Qt::gray));
 		painter.drawRect(scene_rect);
@@ -916,9 +925,17 @@ void DatapickerImageView::print(QPrinter* printer) {
 
 	painter.restore();
 	m_image->setPrinting(true);
+	bool magnificationActive = false;
+	if (m_image->m_magnificationWindow && m_image->m_magnificationWindow->isVisible()) {
+		magnificationActive = true;
+		m_image->m_magnificationWindow->setVisible(false);
+	}
 	scene()->render(&painter, QRectF(), scene_rect);
 	m_image->setPrinting(false);
 	painter.end();
+
+	if (magnificationActive)
+		m_image->m_magnificationWindow->setVisible(true);
 }
 
 void DatapickerImageView::updateBackground() {
