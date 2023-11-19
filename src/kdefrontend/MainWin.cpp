@@ -286,8 +286,9 @@ void MainWin::initGUI(const QString& fileName) {
 
 	initMenus();
 
-#ifdef HAVE_CANTOR_LIBS
 	auto* mainToolBar = qobject_cast<QToolBar*>(factory()->container(QLatin1String("main_toolbar"), this));
+
+#ifdef HAVE_CANTOR_LIBS
 	auto* tbNotebook = new QToolButton(mainToolBar);
 	tbNotebook->setPopupMode(QToolButton::MenuButtonPopup);
 	tbNotebook->setMenu(m_newNotebookMenu);
