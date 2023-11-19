@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-18 00:39+0000\n"
-"PO-Revision-Date: 2023-11-14 20:11+0100\n"
+"PO-Revision-Date: 2023-11-17 10:17+0100\n"
 "Last-Translator: Xavier BESNARD <xavier.besnard@neuf.fr>\n"
 "Language-Team: fr\n"
 "Language: fr\n"
@@ -3356,10 +3356,9 @@ msgid "Unknown Function"
 msgstr "Fonction inconnue"
 
 #: src/backend/gsl/functions.cpp:229
-#, fuzzy, kde-format
-#| msgid "Delete variable"
+#, kde-format
 msgid "Cell (index, variable)"
-msgstr "Supprimer la variable"
+msgstr "Cell (index, variable)"
 
 #: src/backend/gsl/functions.cpp:230
 #, kde-format

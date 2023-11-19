@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-18 00:39+0000\n"
-"PO-Revision-Date: 2023-11-14 05:39+0100\n"
+"PO-Revision-Date: 2023-11-18 21:35+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -3313,10 +3313,9 @@ msgid "Unknown Function"
 msgstr "უცნობი ფუნქცია"
 
 #: src/backend/gsl/functions.cpp:229
-#, fuzzy, kde-format
-#| msgid "Delete variable"
+#, kde-format
 msgid "Cell (index, variable)"
-msgstr "ცვლადის წაშლა"
+msgstr "უჯრდი (ინდექსი, ცვლადი)"
 
 #: src/backend/gsl/functions.cpp:230
 #, kde-format
@@ -6972,16 +6971,14 @@ msgid "%1: set axis range"
 msgstr "%1: ღერძის დაპაზონის დაყენება"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:615
-#, fuzzy, kde-format
-#| msgid "%1: set range"
+#, kde-format
 msgid "%1: set range scale"
-msgstr "%1: დიაპაზონის დაყენება"
+msgstr "%1: დიაპაზონის მასშტაბის დაყენება"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:622
-#, fuzzy, kde-format
-#| msgid "%1: set axis scale"
+#, kde-format
 msgid "%1: set scale"
-msgstr "%1: ღერძის მასშტაბის დაყენება"
+msgstr "%1: მასშტაბის დაყენება"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:629
 #, kde-format

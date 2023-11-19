@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-18 00:39+0000\n"
-"PO-Revision-Date: 2023-11-16 20:19+0100\n"
+"PO-Revision-Date: 2023-11-18 21:07+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -7003,16 +7003,14 @@ msgid "%1: set axis range"
 msgstr "%1: agordi aksan gamon"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:615
-#, fuzzy, kde-format
-#| msgid "%1: set range"
+#, kde-format
 msgid "%1: set range scale"
-msgstr "%1: agordi intervalon"
+msgstr "%1: agordi intervalskalon"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:622
-#, fuzzy, kde-format
-#| msgid "%1: set visible"
+#, kde-format
 msgid "%1: set scale"
-msgstr "%1: aro videbla"
+msgstr "%1: fiksi skalon"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:629
 #, kde-format
@@ -12377,12 +12375,12 @@ msgstr "%1 aksoj: agordi koloron"
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:1592
 #, kde-format
 msgid "Scale is in sync with the plot scale"
-msgstr ""
+msgstr "Skalo estas sinkrona kun la grafika skalo"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:1595
 #, kde-format
 msgid "Scale is async with the plot"
-msgstr ""
+msgstr "Skalo estas nesinkrona kun la grafika skalo"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:2050
 #, kde-format

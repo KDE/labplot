@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-18 00:39+0000\n"
-"PO-Revision-Date: 2023-11-16 08:06+0200\n"
+"PO-Revision-Date: 2023-11-18 09:17+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
@@ -7089,16 +7089,14 @@ msgid "%1: set axis range"
 msgstr "%1: встановити діапазон вісі"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:615
-#, fuzzy, kde-format
-#| msgid "%1: set x scale"
+#, kde-format
 msgid "%1: set range scale"
-msgstr "%1: встановити масштаб за x"
+msgstr "%1: встановити масштаб діапазону"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:622
-#, fuzzy, kde-format
-#| msgid "%1: set x scale"
+#, kde-format
 msgid "%1: set scale"
-msgstr "%1: встановити масштаб за x"
+msgstr "%1: встановити масштаб"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:629
 #, kde-format
@@ -12503,12 +12501,12 @@ msgstr "%1, вісі: встановлення кольору"
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:1592
 #, kde-format
 msgid "Scale is in sync with the plot scale"
-msgstr ""
+msgstr "Масштаб синхронізовано із масштабом графіка"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:1595
 #, kde-format
 msgid "Scale is async with the plot"
-msgstr ""
+msgstr "Масштаб не синхронізовано з графіком"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:2050
 #, kde-format

@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-18 00:39+0000\n"
-"PO-Revision-Date: 2023-11-16 22:14+0300\n"
+"PO-Revision-Date: 2023-11-18 14:04+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -7014,16 +7014,14 @@ msgid "%1: set axis range"
 msgstr "%1: Eksen erimini ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:615
-#, fuzzy, kde-format
-#| msgid "%1: set range"
+#, kde-format
 msgid "%1: set range scale"
-msgstr "%1: Erim ayarla"
+msgstr "%1: Erim ölçeğini ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:622
-#, fuzzy, kde-format
-#| msgid "%1: set visible"
+#, kde-format
 msgid "%1: set scale"
-msgstr "%1: Görünürlüğünü ayarla"
+msgstr "%1: Ölçeği ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:629
 #, kde-format
@@ -12390,12 +12388,12 @@ msgstr "%1 eksen: Rengi ayarla"
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:1592
 #, kde-format
 msgid "Scale is in sync with the plot scale"
-msgstr ""
+msgstr "Ölçek, çizim ölçeğiyle eşzamanlı"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:1595
 #, kde-format
 msgid "Scale is async with the plot"
-msgstr ""
+msgstr "Ölçek, çizim ölçeğiyle eşzamanlı değil"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:2050
 #, kde-format

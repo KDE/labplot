@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-18 00:39+0000\n"
-"PO-Revision-Date: 2023-11-16 18:55+0100\n"
+"PO-Revision-Date: 2023-11-18 12:29+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -7018,16 +7018,14 @@ msgid "%1: set axis range"
 msgstr "%1: bereik assen instellen"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:615
-#, fuzzy, kde-format
-#| msgid "%1: set x scale"
+#, kde-format
 msgid "%1: set range scale"
-msgstr "%1: x-schaal instellen"
+msgstr "%1: schaalreeks instellen"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:622
-#, fuzzy, kde-format
-#| msgid "%1: set x scale"
+#, kde-format
 msgid "%1: set scale"
-msgstr "%1: x-schaal instellen"
+msgstr "%1: schaal instellen"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:629
 #, kde-format
@@ -12398,12 +12396,12 @@ msgstr "%1 assen: kleur instellen"
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:1592
 #, kde-format
 msgid "Scale is in sync with the plot scale"
-msgstr ""
+msgstr "Schaal is in synchronisatie met de schaal van de plot"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:1595
 #, kde-format
 msgid "Scale is async with the plot"
-msgstr ""
+msgstr "Schaal is niet in synchronisatie met de plot"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:2050
 #, kde-format

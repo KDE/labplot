@@ -9,15 +9,15 @@ msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-18 00:39+0000\n"
-"PO-Revision-Date: 2023-11-16 13:44+0100\n"
+"PO-Revision-Date: 2023-11-18 09:32+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
-"%100==4 ? 3 : 0);\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100>=3 && n"
+"%100<=4 ? 2 : 3);\n"
 "X-Generator: Poedit 3.4.1\n"
 "X-Accelerator-Marker: ~\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -7057,16 +7057,14 @@ msgid "%1: set axis range"
 msgstr "%1: določi obseg osi"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:615
-#, fuzzy, kde-format
-#| msgid "%1: set range"
+#, kde-format
 msgid "%1: set range scale"
-msgstr "%1: določite obseg"
+msgstr "%1: določi obseg merila"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:622
-#, fuzzy, kde-format
-#| msgid "%1: set axis scale"
+#, kde-format
 msgid "%1: set scale"
-msgstr "%1: nastavi merilo osi"
+msgstr "%1: nastavi merilo"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:629
 #, kde-format
@@ -12461,12 +12459,12 @@ msgstr "%1: osi: nastavite barvo"
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:1592
 #, kde-format
 msgid "Scale is in sync with the plot scale"
-msgstr ""
+msgstr "Merilo je v skladu z merilom slike"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:1595
 #, kde-format
 msgid "Scale is async with the plot"
-msgstr ""
+msgstr "Merilo ni v skladu s sliko"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:2050
 #, kde-format
