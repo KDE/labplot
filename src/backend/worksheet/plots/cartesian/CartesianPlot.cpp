@@ -156,6 +156,7 @@ CartesianPlot::~CartesianPlot() {
 void CartesianPlot::init() {
 	m_coordinateSystems.append(new CartesianCoordinateSystem(this));
 	m_plotArea = new PlotArea(name() + QStringLiteral(" plot area"), this);
+	connect(m_plotArea, &WorksheetElement::changed, this, &WorksheetElement::changed);
 	addChildFast(m_plotArea);
 
 	// title

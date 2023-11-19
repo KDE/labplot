@@ -529,6 +529,7 @@ TreeModel* Worksheet::cursorModel() {
 
 void Worksheet::update() {
 	Q_EMIT requestUpdate();
+	Q_EMIT changed();
 }
 
 void Worksheet::setSuppressLayoutUpdate(bool value) {
