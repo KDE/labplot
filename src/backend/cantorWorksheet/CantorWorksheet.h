@@ -61,7 +61,9 @@ private:
 	mutable CantorWorksheetView* m_view{nullptr};
 	QString m_backendName;
 	QString m_error;
+#ifdef HAVE_CANTOR_LIBS
 	Cantor::Session* m_session{nullptr};
+#endif
 	KParts::ReadWritePart* m_part{nullptr};
 	QList<Cantor::PanelPlugin*> m_plugins;
 	bool m_pluginsLoaded{false};

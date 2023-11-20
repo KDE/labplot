@@ -102,6 +102,7 @@ bool CantorWorksheet::init(QByteArray* content) {
 		connect(m_worksheetAccess, SIGNAL(modified()), this, SLOT(modified()));
 
 		// Cantor's session
+#ifdef HAVE_CANTOR_LIBS
 		m_session = m_worksheetAccess->session();
 		if (m_session) {
 			connect(m_session, &Cantor::Session::statusChanged, this, &CantorWorksheet::statusChanged);
@@ -113,6 +114,7 @@ bool CantorWorksheet::init(QByteArray* content) {
 			connect(m_variableModel, &QAbstractItemModel::rowsAboutToBeRemoved, this, &CantorWorksheet::rowsAboutToBeRemoved);
 			connect(m_variableModel, &QAbstractItemModel::modelReset, this, &CantorWorksheet::modelReset);
 		}
+#endif
 
 		// default settings
 		const KConfigGroup group = Settings::group(QStringLiteral("Settings_Notebook"));
@@ -295,8 +297,10 @@ KParts::ReadWritePart* CantorWorksheet::part() {
 }
 
 QIcon CantorWorksheet::icon() const {
+#ifdef HAVE_CANTOR_LIBS
 	if (m_session)
 		return QIcon::fromTheme(m_session->backend()->icon());
+#endif
 	return {};
 }
 
@@ -308,6 +312,7 @@ QWidget* CantorWorksheet::view() const {
 		// 	connect(m_view, SIGNAL(statusInfo(QString)), this, SIGNAL(statusInfo(QString)));
 
 		// set the current path in the session to the path of the project file
+#ifdef HAVE_CANTOR_LIBS
 		if (m_session) {
 			const Project* project = const_cast<CantorWorksheet*>(this)->project();
 			const QString& fileName = project->fileName();
@@ -316,6 +321,7 @@ QWidget* CantorWorksheet::view() const {
 				m_session->setWorksheetPath(fi.filePath());
 			}
 		}
+#endif
 	}
 	return m_partView;
 }
