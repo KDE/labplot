@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-18 00:39+0000\n"
+"POT-Creation-Date: 2023-11-20 00:39+0000\n"
 "PO-Revision-Date: 2023-10-30 14:32+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -108,7 +108,7 @@ msgstr "Alemmas"
 #: src/backend/core/AbstractAspect.cpp:518
 #: src/backend/core/aspectcommands.h:104
 #: src/backend/datapicker/Datapicker.cpp:217
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2019
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2020
 #, kde-format
 msgid "%1: add %2"
 msgstr ""
@@ -324,7 +324,7 @@ msgstr "iteraatiota"
 #. i18n: ectx: property (text), widget (QLabel, lText)
 #. i18n: ectx: property (text), widget (QLabel, lValuesText)
 #: src/backend/core/AbstractColumn.cpp:228
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:434
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:435
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:91
 #: src/commonfrontend/worksheet/WorksheetView.cpp:216
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:208
@@ -424,13 +424,13 @@ msgstr ""
 msgid "Import Data"
 msgstr "Tuo kohteeseen"
 
-#: src/backend/core/AbstractPart.cpp:115 src/kdefrontend/MainWin.cpp:728
-#: src/kdefrontend/MainWin.cpp:737
+#: src/backend/core/AbstractPart.cpp:115 src/kdefrontend/MainWin.cpp:738
+#: src/kdefrontend/MainWin.cpp:747
 #, kde-format
 msgid "From File..."
 msgstr "Tiedostosta…"
 
-#: src/backend/core/AbstractPart.cpp:117 src/kdefrontend/MainWin.cpp:744
+#: src/backend/core/AbstractPart.cpp:117 src/kdefrontend/MainWin.cpp:754
 #, kde-format
 msgid "From SQL Database..."
 msgstr ""
@@ -457,7 +457,7 @@ msgstr "Tulosta"
 msgid "Print Preview"
 msgstr "Tulostuksen esikatselu"
 
-#: src/backend/core/AbstractPart.cpp:135 src/kdefrontend/MainWin.cpp:816
+#: src/backend/core/AbstractPart.cpp:135 src/kdefrontend/MainWin.cpp:826
 #, kde-format
 msgid "&Close"
 msgstr "&Sulje"
@@ -1165,8 +1165,8 @@ msgid ""
 msgstr "Ei voitu avata tiedostoa %1 luettavaksi."
 
 #: src/backend/datasources/filters/AbstractFileFilter.cpp:224
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:435
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1996
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:436
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1997
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:104
 #: src/commonfrontend/matrix/MatrixView.cpp:135
 #: src/commonfrontend/worksheet/WorksheetView.cpp:217
@@ -1931,7 +1931,7 @@ msgstr "tuntematon"
 #: src/backend/datasources/filters/MatioFilter.cpp:434
 #: src/commonfrontend/workbook/WorkbookView.cpp:53
 #: src/commonfrontend/workbook/WorkbookView.cpp:160
-#: src/kdefrontend/MainWin.cpp:699 src/kdefrontend/MainWin.cpp:2106
+#: src/kdefrontend/MainWin.cpp:709 src/kdefrontend/MainWin.cpp:2122
 #, kde-format
 msgid "Matrix"
 msgstr "Matriisi"
@@ -2570,7 +2570,7 @@ msgid "Stefan-Boltzmann constant"
 msgstr "Stefan-Boltzmannin vakio"
 
 #: src/backend/gsl/constants.cpp:73
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:531
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:532
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:504
 #: src/kdefrontend/dockwidgets/KDEPlotDock.cpp:205
 #, kde-format
@@ -5660,7 +5660,7 @@ msgid "ep"
 msgstr ""
 
 #: src/backend/lib/Range.h:49 src/backend/nsl/nsl_interp.c:14
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:511
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:512
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:484
 #, kde-format
 msgid "Linear"
@@ -6088,7 +6088,7 @@ msgid "Imaginary Part"
 msgstr "Luetaan binaaridataa…"
 
 #: src/backend/nsl/nsl_dft.c:22 src/backend/nsl/nsl_fit.c:26
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:515
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:516
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:488
 #, kde-format
 msgid "Power"
@@ -6265,7 +6265,7 @@ msgid "Statistics (Distributions)"
 msgstr "Logistinen jakauma"
 
 #: src/backend/nsl/nsl_fit.c:24
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:551
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:552
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:524
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1233
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:247
@@ -6307,7 +6307,7 @@ msgid "Gaussian (normal)"
 msgstr "Gauss"
 
 #: src/backend/nsl/nsl_fit.c:31
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:535
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:536
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:508
 #, kde-format
 msgid "Cauchy-Lorentz"
@@ -6341,7 +6341,7 @@ msgid "Inverse Tangent"
 msgstr "Käänteinen eksponentiaalinen"
 
 #: src/backend/nsl/nsl_fit.c:45
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:543
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:544
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:516
 #, kde-format
 msgid "Hyperbolic Tangent"
@@ -6419,8 +6419,8 @@ msgstr "säteittäinen liuku"
 
 #. i18n: ectx: property (text), widget (QLabel, lInterpolation)
 #: src/backend/nsl/nsl_geom_linesim.c:23
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:419
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1842
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:420
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1843
 #: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:259
 #, kde-format
 msgid "Interpolation"
@@ -7839,8 +7839,8 @@ msgid "no info available"
 msgstr "ei tietoa saatavilla"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTitle)
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:162
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5004
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:163
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5005
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:483
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:543
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:459
@@ -7849,19 +7849,19 @@ msgstr "ei tietoa saatavilla"
 msgid "Title"
 msgstr "Otsikko"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:402
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:403
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:569
 #, kde-format
 msgid "xy-curve"
 msgstr "xy-käyrä"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:403
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:404
 #, kde-format
 msgid "xy-curve from a Formula"
 msgstr "xy-käyrä kaavasta"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:406
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:461
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:407
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:462
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:574
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:78
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:141
@@ -7869,8 +7869,8 @@ msgstr "xy-käyrä kaavasta"
 msgid "Histogram"
 msgstr "Histogrammi"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:407
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:458
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:408
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:459
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:578
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:714
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:144
@@ -7880,8 +7880,8 @@ msgstr "Laatikko-janakuvio"
 
 # pmap: =/gen=LabPlot2:n/
 # pmap: =/elat=LabPlot2:sta/
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:408
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:467
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:409
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:468
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:582
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:142
 #, fuzzy, kde-format
@@ -7891,16 +7891,16 @@ msgstr "LabPlot2"
 
 # pmap: =/gen=LabPlot2:n/
 # pmap: =/elat=LabPlot2:sta/
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:409
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:464
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:410
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:465
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:586
 #, fuzzy, kde-format
 #| msgid "LabPlot2"
 msgid "Q-Q Plot"
 msgstr "LabPlot2"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:412
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:450
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:413
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:451
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:592
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:716
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:718
@@ -7909,8 +7909,8 @@ msgstr "LabPlot2"
 msgid "Bar Plot"
 msgstr "Pylväskuvio"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:413
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:453
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:414
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:454
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:596
 #, fuzzy, kde-format
 #| msgid "all plots"
@@ -7918,17 +7918,17 @@ msgid "Lollipop Plot"
 msgstr "kaikki kuvaajat"
 
 #. i18n("Data Operation"), this);
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:416
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:503
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1785
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:417
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:504
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1786
 #, fuzzy, kde-format
 #| msgid "Direction"
 msgid "Data Reduction"
 msgstr "Suunta"
 
 #. i18n: ectx: property (text), widget (QLabel, lDifferentiation)
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:417
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1804
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:418
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1805
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:143
 #: src/kdefrontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:226
 #, kde-format
@@ -7936,8 +7936,8 @@ msgid "Differentiation"
 msgstr "Derivointi"
 
 #. i18n: ectx: property (text), widget (QLabel, lIntegration)
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:418
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1823
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:419
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1824
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:149
 #: src/kdefrontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:243
 #, kde-format
@@ -7945,9 +7945,9 @@ msgid "Integration"
 msgstr "Integrointi"
 
 #. i18n: ectx: property (text), widget (QLabel, lSmooth)
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:420
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:507
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1861
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:421
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:508
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1862
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:481
 #: src/kdefrontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:110
 #, kde-format
@@ -7959,104 +7959,104 @@ msgstr "Tasoita"
 #. dataManipulationMenu->addAction(addDataOperationAction);
 #. dataManipulationMenu->addAction(addDataReductionAction);
 #. Data fit menu
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:421
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:643
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1880
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:422
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:644
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1881
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:612
 #: src/commonfrontend/worksheet/WorksheetView.cpp:174
 #, kde-format
 msgid "Fit"
 msgstr "Sovita"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:422
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:555
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1921
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:423
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:556
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1922
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:528
 #, kde-format
 msgid "Fourier Filter"
 msgstr "Fourier-suodatin"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:423
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:479
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:556
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:574
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:424
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:480
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:557
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:575
 #, kde-format
 msgid "Fourier Transform"
 msgstr "Fourier-muunnos"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:424
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:482
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:557
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:577
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:425
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:483
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:558
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:578
 #, kde-format
 msgid "Hilbert Transform"
 msgstr "Hilbert-muunnos"
 
 #. i18n: ectx: property (text), widget (QLabel, lConvolution)
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:425
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:426
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:312
 #, fuzzy, kde-format
 #| msgid "Connection:"
 msgid "(De-)Convolution"
 msgstr "Yhteys:"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:426
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:488
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:509
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:568
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:427
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:489
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:510
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:569
 #, fuzzy, kde-format
 #| msgid "Connection:"
 msgid "Auto-/Cross-Correlation"
 msgstr "Yhteys:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkLegendVisible)
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:428
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1949
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:429
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1950
 #: src/kdefrontend/ui/dockwidgets/xycurvedockgeneraltab.ui:147
 #, kde-format
 msgid "Legend"
 msgstr "Selitteet"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:432
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:433
 #, kde-format
 msgid "Horizontal Axis"
 msgstr "Vaaka-akseli"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:433
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:434
 #, kde-format
 msgid "Vertical Axis"
 msgstr "Pystyakseli"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:436
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1972
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:437
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1973
 #, fuzzy, kde-format
 #| msgid "Increment"
 msgid "Info Element"
 msgstr "Lisäys"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:437
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2016
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:438
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2017
 #, kde-format
 msgid "Custom Point"
 msgstr "Mukautettu piste"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabReferenceLine)
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:438
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2041
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:439
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2042
 #: src/kdefrontend/ui/dockwidgets/qqplotdock.ui:169
 #, kde-format
 msgid "Reference Line"
 msgstr "Viitejana"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:439
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2054
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:440
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2055
 #, fuzzy, kde-format
 #| msgid "Reference Line"
 msgid "Reference Range"
 msgstr "Viitejana"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:485
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:565
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:486
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:566
 #: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:431
 #: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:436
 #, fuzzy, kde-format
@@ -8064,99 +8064,99 @@ msgstr "Viitejana"
 msgid "Convolution"
 msgstr "Yhteys:"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:504
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:505
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:473
 #, fuzzy, kde-format
 #| msgid "Orientation"
 msgid "Differentiate"
 msgstr "Suunta"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:505
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:506
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:476
 #, kde-format
 msgid "Integrate"
 msgstr "Integroi"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:506
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:507
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:479
 #, kde-format
 msgid "Interpolate"
 msgstr "Interpoloi"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:508
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:509
 #, fuzzy, kde-format
 #| msgid "Connection:"
 msgid "Convolute/Deconvolute"
 msgstr "Yhteys:"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:519
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:520
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:492
 #, fuzzy, kde-format
 #| msgid "Exponential"
 msgid "Exponential (degree 1)"
 msgstr "Eksponentti"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:523
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:524
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:496
 #, fuzzy, kde-format
 #| msgid "Exponential"
 msgid "Exponential (degree 2)"
 msgstr "Eksponentti"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:527
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:528
 #, kde-format
 msgid "Inverse exponential"
 msgstr "Käänteinen eksponentiaalinen"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:539
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:540
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:512
 #, kde-format
 msgid "Arc Tangent"
 msgstr "Arkustangentti"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:547
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:548
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:520
 #, kde-format
 msgid "Error Function"
 msgstr "Virhefunktio"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:584
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:585
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:162
 #: src/commonfrontend/workbook/WorkbookView.cpp:135
 #: src/commonfrontend/worksheet/WorksheetView.cpp:287
 #: src/commonfrontend/worksheet/WorksheetView.cpp:419
-#: src/kdefrontend/MainWin.cpp:943
+#: src/kdefrontend/MainWin.cpp:953
 #, kde-format
 msgid "Add New"
 msgstr "Lisää uusi"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:589
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:590
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:573
 #, fuzzy, kde-format
 #| msgid "Statistics"
 msgid "Statistical Plots"
 msgstr "Tilastot"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:596
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:597
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:591
 #, fuzzy, kde-format
 #| msgid "Bar Plot"
 msgid "Bar Plots"
 msgstr "Pylväskuvio"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:603
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:604
 #, fuzzy, kde-format
 #| msgid "&Analysis"
 msgid "Analysis Curve"
 msgstr "&Analyysi"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:661
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:662
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:203
 #, kde-format
 msgid "Analysis"
 msgstr "Analyysi"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:681
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:682
 #: src/commonfrontend/worksheet/WorksheetView.cpp:530
 #: src/kdefrontend/ThemeHandler.cpp:49 src/kdefrontend/ThemeHandler.cpp:144
 #, fuzzy, kde-format
@@ -8164,281 +8164,281 @@ msgstr "Analyysi"
 msgid "Theme"
 msgstr "Teema:"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1038
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1072
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1039
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1073
 #, fuzzy, kde-format
 #| msgid "%1: change comment"
 msgid "%1: change geometry rect"
 msgstr "%1: muuta kommenttia"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1107
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1108
 #, fuzzy, kde-format
 #| msgid "%1: set page size"
 msgid "%1: set range type"
 msgstr "%1: aseta sivukoko"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1114
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1115
 #, fuzzy, kde-format
 #| msgid "%1: set page size"
 msgid "%1: set nice extend"
 msgstr "%1: aseta sivukoko"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1121
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1128
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1122
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1129
 #, fuzzy, kde-format
 #| msgid "%1: set rotation angle"
 msgid "%1: set range"
 msgstr "%1: aseta kiertokulma"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1139
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1140
 #, fuzzy, kde-format
 #| msgid "%1: set page size"
 msgid "%1: change %2-range %3 format"
 msgstr "%1: aseta sivukoko"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1230
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1231
 #, fuzzy, kde-format
 #| msgid "%1: change column order"
 msgid "%1: change %2-range %3 auto scaling"
 msgstr "%1: aseta sarakejärjestys"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1477
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1478
 #, fuzzy, kde-format
 #| msgid "%1: change column order"
 msgid "%1: change x-range %2 scale"
 msgstr "%1: aseta sarakejärjestys"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1605
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1606
 #, fuzzy, kde-format
 #| msgid "%1: set rotation angle"
 msgid "%1: set default plot range"
 msgstr "%1: aseta kiertokulma"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1623
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1624
 #, kde-format
 msgid "%1: x-range breaking enabled"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1632
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1633
 #, fuzzy, kde-format
 #| msgid "%1: set numeric format to '%2'"
 msgid "%1: x-range breaks changed"
 msgstr "%1: aseta numeeriseksi muodoksi ”%2”"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1641
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1642
 #, kde-format
 msgid "%1: y-range breaking enabled"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1650
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1651
 #, fuzzy, kde-format
 #| msgid "%1: set numeric format to '%2'"
 msgid "%1: y-range breaks changed"
 msgstr "%1: aseta numeeriseksi muodoksi ”%2”"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1664
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1665
 #, fuzzy, kde-format
 #| msgid "Values"
 msgid "%1: Cursor0 enable"
 msgstr "Arvot"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1676
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1677
 #, fuzzy, kde-format
 #| msgid "Values"
 msgid "%1: Cursor1 enable"
 msgstr "Arvot"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1687
-#: src/backend/worksheet/Worksheet.cpp:809
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1688
+#: src/backend/worksheet/Worksheet.cpp:810
 #, fuzzy, kde-format
 #| msgid "%1: add %2."
 msgid "%1: load theme %2"
 msgstr "%1: lisää %2."
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1689
-#: src/backend/worksheet/Worksheet.cpp:811
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1690
+#: src/backend/worksheet/Worksheet.cpp:812
 #, fuzzy, kde-format
 #| msgid "%1: add %2."
 msgid "%1: load default theme"
 msgstr "%1: lisää %2."
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1691
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5314
-#: src/backend/worksheet/Worksheet.cpp:813
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1692
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5315
+#: src/backend/worksheet/Worksheet.cpp:814
 #, fuzzy, kde-format
 #| msgid "%1: set page size"
 msgid "%1: set theme"
 msgstr "%1: aseta sivukoko"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1741
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1742
 #, fuzzy, kde-format
 #| msgid "Orientation"
 msgid "%1: distribution fit to '%2'"
 msgstr "Suunta"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1742
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1743
 #, fuzzy, kde-format
 #| msgid "Distribution:"
 msgid "Distribution Fit to '%1'"
 msgstr "Jakauma:"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1788
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1789
 #, fuzzy, kde-format
 #| msgid "%1: remove %2."
 msgid "%1: reduce '%2'"
 msgstr "%1: poista %2."
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1789
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1790
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:639
 #, fuzzy, kde-format
 #| msgid "Do nothing"
 msgid "Reduction of '%1'"
 msgstr "Älä tee mitään"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1796
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1797
 #, fuzzy, kde-format
 #| msgid "no fileDataSource element found"
 msgid "%1: add data reduction curve"
 msgstr "fileDataSource-elementtiä ei löytynyt"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1807
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1808
 #, fuzzy, kde-format
 #| msgid "Orientation"
 msgid "%1: differentiate '%2'"
 msgstr "Suunta"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1808
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1809
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:642
 #, fuzzy, kde-format
 #| msgid "Drawing &order"
 msgid "Derivative of '%1'"
 msgstr "Piirto&järjestys"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1815
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1816
 #, fuzzy, kde-format
 #| msgid "no fileDataSource element found"
 msgid "%1: add differentiation curve"
 msgstr "fileDataSource-elementtiä ei löytynyt"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1826
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1827
 #, fuzzy, kde-format
 #| msgid "Orientation"
 msgid "%1: integrate '%2'"
 msgstr "Suunta"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1827
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1828
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:645
 #, fuzzy, kde-format
 #| msgid "Drawing &order"
 msgid "Integral of '%1'"
 msgstr "Piirto&järjestys"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1834
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1835
 #, fuzzy, kde-format
 #| msgid "no fileDataSource element found"
 msgid "%1: add integration curve"
 msgstr "fileDataSource-elementtiä ei löytynyt"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1845
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1846
 #, fuzzy, kde-format
 #| msgid "Orientation"
 msgid "%1: interpolate '%2'"
 msgstr "Suunta"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1846
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1847
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:648
 #, fuzzy, kde-format
 #| msgid "iterations"
 msgid "Interpolation of '%1'"
 msgstr "iteraatiota"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1853
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1854
 #, fuzzy, kde-format
 #| msgid "no fileDataSource element found"
 msgid "%1: add interpolation curve"
 msgstr "fileDataSource-elementtiä ei löytynyt"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1864
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1865
 #, fuzzy, kde-format
 #| msgid "%1: add %2."
 msgid "%1: smooth '%2'"
 msgstr "%1: lisää %2."
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1865
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1866
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:651
 #, fuzzy, kde-format
 #| msgid "Do nothing"
 msgid "Smoothing of '%1'"
 msgstr "Älä tee mitään"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1872
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1873
 #, fuzzy, kde-format
 #| msgid "%1: add %2."
 msgid "%1: add smoothing curve"
 msgstr "%1: lisää %2."
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1883
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1884
 #, fuzzy, kde-format
 #| msgid "Orientation"
 msgid "%1: fit to '%2'"
 msgstr "Suunta"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1884
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1885
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:664
 #, fuzzy, kde-format
 #| msgid "Drawing &order"
 msgid "Fit to '%1'"
 msgstr "Piirto&järjestys"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1913
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1914
 #, fuzzy, kde-format
 #| msgid "%1: add %2."
 msgid "%1: add fit curve"
 msgstr "%1: lisää %2."
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1924
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1925
 #, fuzzy, kde-format
 #| msgid "new filter"
 msgid "%1: Fourier filtering of '%2'"
 msgstr "uusi suodatin"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1925
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1926
 #, fuzzy, kde-format
 #| msgid "new filter"
 msgid "Fourier filtering of '%1'"
 msgstr "uusi suodatin"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1929
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1930
 #, fuzzy, kde-format
 #| msgid "%1: add %2."
 msgid "%1: add Fourier filter curve"
 msgstr "%1: lisää %2."
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1979
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1980
 #: src/commonfrontend/worksheet/WorksheetView.cpp:1404
 #: src/commonfrontend/worksheet/WorksheetView.cpp:1405
 #, kde-format
 msgid "Text Label"
 msgstr "Tekstikenttä"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3713
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3714
 #, kde-format
 msgid "Not inside of the bounding rect"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3937
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3958
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3938
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3959
 #, kde-format
 msgid "from x=%1 to x=%2"
 msgstr "x=%1…x=%2"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3945
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3971
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3946
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3972
 #, kde-format
 msgid "from y=%1 to y=%2"
 msgstr "y=%1…y=%2"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3990
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3991
 #, kde-format
 msgid "x=%1"
 msgstr "x=%1"
@@ -8470,50 +8470,50 @@ msgid "%1: set border corner radius"
 msgstr "%1: aseta reunan kulman säde"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:243
-#: src/backend/worksheet/Worksheet.cpp:686
 #: src/backend/worksheet/Worksheet.cpp:687
+#: src/backend/worksheet/Worksheet.cpp:688
 #, kde-format
 msgid "%1: set layout top margin"
 msgstr "%1: aseta asettelun yläreunus"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:250
-#: src/backend/worksheet/Worksheet.cpp:696
 #: src/backend/worksheet/Worksheet.cpp:697
+#: src/backend/worksheet/Worksheet.cpp:698
 #, kde-format
 msgid "%1: set layout bottom margin"
 msgstr "%1: aseta asettelu alareunus"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:257
-#: src/backend/worksheet/Worksheet.cpp:706
 #: src/backend/worksheet/Worksheet.cpp:707
+#: src/backend/worksheet/Worksheet.cpp:708
 #, kde-format
 msgid "%1: set layout left margin"
 msgstr "%1: aseta asettelu vasen reunus"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:264
-#: src/backend/worksheet/Worksheet.cpp:716
 #: src/backend/worksheet/Worksheet.cpp:717
+#: src/backend/worksheet/Worksheet.cpp:718
 #, kde-format
 msgid "%1: set layout right margin"
 msgstr "%1: aseta asettelu oikea reunus"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:271
-#: src/backend/worksheet/Worksheet.cpp:726
 #: src/backend/worksheet/Worksheet.cpp:727
+#: src/backend/worksheet/Worksheet.cpp:728
 #, kde-format
 msgid "%1: set layout vertical spacing"
 msgstr "%1: aseta asettelun pystyvälistys"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:278
-#: src/backend/worksheet/Worksheet.cpp:736
 #: src/backend/worksheet/Worksheet.cpp:737
+#: src/backend/worksheet/Worksheet.cpp:738
 #, kde-format
 msgid "%1: set layout horizontal spacing"
 msgstr "%1: aseta asettelun vaakavälistys"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:285
-#: src/backend/worksheet/Worksheet.cpp:756
 #: src/backend/worksheet/Worksheet.cpp:757
+#: src/backend/worksheet/Worksheet.cpp:758
 #, kde-format
 msgid "%1: set layout column count"
 msgstr "%1: aseta asettelun sarakemäärä"
@@ -9383,17 +9383,17 @@ msgstr ""
 msgid "%1: set options and perform the smooth"
 msgstr ""
 
-#: src/backend/worksheet/plots/PlotArea.cpp:144
+#: src/backend/worksheet/plots/PlotArea.cpp:145
 #, kde-format
 msgid "%1: toggle clipping"
 msgstr ""
 
-#: src/backend/worksheet/plots/PlotArea.cpp:160
+#: src/backend/worksheet/plots/PlotArea.cpp:161
 #, kde-format
 msgid "%1: border type changed"
 msgstr "%1: viivan tyyppi muuttunut"
 
-#: src/backend/worksheet/plots/PlotArea.cpp:167
+#: src/backend/worksheet/plots/PlotArea.cpp:168
 #, kde-format
 msgid "%1: set plot area corner radius"
 msgstr ""
@@ -9436,36 +9436,36 @@ msgctxt "@title:window"
 msgid "Print Worksheet"
 msgstr "Tulosta työvihko"
 
-#: src/backend/worksheet/Worksheet.cpp:656
+#: src/backend/worksheet/Worksheet.cpp:657
 #, kde-format
 msgid "%1: change size type"
 msgstr "%1: muuta koon tyyppiä"
 
-#: src/backend/worksheet/Worksheet.cpp:668
+#: src/backend/worksheet/Worksheet.cpp:669
 #, kde-format
 msgid "%1: change \"rescale the content\" property"
 msgstr ""
 
-#: src/backend/worksheet/Worksheet.cpp:676
 #: src/backend/worksheet/Worksheet.cpp:677
+#: src/backend/worksheet/Worksheet.cpp:678
 #, kde-format
 msgid "%1: set layout"
 msgstr "%1: aseta asettelu"
 
-#: src/backend/worksheet/Worksheet.cpp:746
 #: src/backend/worksheet/Worksheet.cpp:747
+#: src/backend/worksheet/Worksheet.cpp:748
 #, kde-format
 msgid "%1: set layout row count"
 msgstr "%1: aseta asettelun rivimäärä"
 
-#: src/backend/worksheet/Worksheet.cpp:787
 #: src/backend/worksheet/Worksheet.cpp:788
+#: src/backend/worksheet/Worksheet.cpp:789
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:375
 #, kde-format
 msgid "%1: set page size"
 msgstr "%1: aseta sivukoko"
 
-#: src/backend/worksheet/Worksheet.cpp:1532
+#: src/backend/worksheet/Worksheet.cpp:1533
 #, kde-format
 msgid "Curves"
 msgstr "Käyrät"
@@ -11079,8 +11079,8 @@ msgstr ""
 #: src/kdefrontend/dockwidgets/XYIntegrationCurveDock.cpp:57
 #: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:59
 #: src/kdefrontend/dockwidgets/XYSmoothCurveDock.cpp:53
-#: src/kdefrontend/labplot2ui.rc:38 src/kdefrontend/MainWin.cpp:693
-#: src/kdefrontend/MainWin.cpp:2088 src/kdefrontend/SettingsDialog.cpp:72
+#: src/kdefrontend/labplot2ui.rc:32 src/kdefrontend/MainWin.cpp:703
+#: src/kdefrontend/MainWin.cpp:2104 src/kdefrontend/SettingsDialog.cpp:72
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:237
 #, kde-format
 msgid "Spreadsheet"
@@ -11261,7 +11261,7 @@ msgstr "Valitse x-alue ja lähennä"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
 #: src/commonfrontend/worksheet/WorksheetView.cpp:344
-#: src/kdefrontend/MainWin.cpp:2569
+#: src/kdefrontend/MainWin.cpp:2585
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1426
 #, kde-format
 msgid "Cursor"
@@ -12429,7 +12429,7 @@ msgid "Open LabPlot Project"
 msgstr "Avaa projekti"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:382
-#: src/kdefrontend/MainWin.cpp:1548
+#: src/kdefrontend/MainWin.cpp:1564
 #, fuzzy, kde-format
 #| msgid "Close Project"
 msgid "LabPlot Projects (%1)"
@@ -12443,7 +12443,7 @@ msgid "Open Origin Project"
 msgstr "Avaa projekti"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:388
-#: src/kdefrontend/MainWin.cpp:1553
+#: src/kdefrontend/MainWin.cpp:1569
 #, fuzzy, kde-format
 #| msgid "Open project"
 msgid "Origin Projects (%1)"
@@ -12689,7 +12689,7 @@ msgstr ""
 
 #: src/kdefrontend/datasources/MQTTSubscriptionWidget.cpp:856
 #: src/kdefrontend/datasources/MQTTSubscriptionWidget.cpp:858
-#: src/kdefrontend/MainWin.cpp:2911
+#: src/kdefrontend/MainWin.cpp:2927
 #, kde-format
 msgid "Warning"
 msgstr "Varoitus"
@@ -14342,7 +14342,7 @@ msgid ""
 "installation."
 msgstr ""
 
-#: src/kdefrontend/GuiObserver.cpp:191 src/kdefrontend/MainWin.cpp:1480
+#: src/kdefrontend/GuiObserver.cpp:191 src/kdefrontend/MainWin.cpp:1496
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties"
@@ -15167,113 +15167,112 @@ msgstr ""
 msgid "Failed to Open"
 msgstr "Avaaminen epäonnistui"
 
-#. i18n: ectx: Menu (new_notebook)
-#. i18n: ectx: Menu (notebook)
-#: src/kdefrontend/labplot2ui.rc:20 src/kdefrontend/labplot2ui.rc:62
-#: src/kdefrontend/labplot2ui.rc:89
-#, fuzzy, kde-format
-#| msgid "Notes"
-msgid "&Notebook"
-msgstr "Huomautukset"
-
 #. i18n: ectx: ToolBar (worksheet_toolbar)
-#: src/kdefrontend/labplot2ui.rc:30 src/kdefrontend/MainWin.cpp:705
-#: src/kdefrontend/MainWin.cpp:2124 src/kdefrontend/SettingsDialog.cpp:67
+#: src/kdefrontend/labplot2ui.rc:24 src/kdefrontend/MainWin.cpp:715
+#: src/kdefrontend/MainWin.cpp:2140 src/kdefrontend/SettingsDialog.cpp:67
 #, kde-format
 msgid "Worksheet"
 msgstr "Työvihko"
 
 #. i18n: ectx: ToolBar (datapicker_toolbar)
-#: src/kdefrontend/labplot2ui.rc:34 src/kdefrontend/MainWin.cpp:688
-#: src/kdefrontend/MainWin.cpp:2080
+#: src/kdefrontend/labplot2ui.rc:28 src/kdefrontend/MainWin.cpp:698
+#: src/kdefrontend/MainWin.cpp:2096
 #, fuzzy, kde-format
 #| msgid "Data format"
 msgid "Data Extractor"
 msgstr "Datan muoto"
 
 #. i18n: ectx: ToolBar (notebook_toolbar)
-#: src/kdefrontend/labplot2ui.rc:42 src/kdefrontend/SettingsDialog.cpp:78
+#: src/kdefrontend/labplot2ui.rc:36 src/kdefrontend/SettingsDialog.cpp:78
 #, fuzzy, kde-format
 #| msgid "Note"
 msgid "Notebook"
 msgstr "Huomautus"
 
 #. i18n: ectx: ToolBar (cartesian_plot_toolbar)
-#: src/kdefrontend/labplot2ui.rc:46
+#: src/kdefrontend/labplot2ui.rc:40
 #, kde-format
 msgid "CartesianPlot"
 msgstr ""
 
 #. i18n: ectx: Menu (file)
-#: src/kdefrontend/labplot2ui.rc:50
+#: src/kdefrontend/labplot2ui.rc:44
 #, kde-format
 msgid "&File"
 msgstr "&Tiedosto"
 
 #. i18n: ectx: Menu (new)
-#: src/kdefrontend/labplot2ui.rc:52
+#: src/kdefrontend/labplot2ui.rc:46
 #, fuzzy, kde-format
 #| msgid "Add new"
 msgid "&Add New"
 msgstr "Lisää uusi"
 
+#. i18n: ectx: Menu (new_notebook)
+#. i18n: ectx: Menu (notebook)
+#: src/kdefrontend/labplot2ui.rc:56 src/kdefrontend/labplot2ui.rc:83
+#, fuzzy, kde-format
+#| msgid "Notes"
+msgid "&Notebook"
+msgstr "Huomautukset"
+
 #. i18n: ectx: Menu (import)
-#: src/kdefrontend/labplot2ui.rc:69
+#: src/kdefrontend/labplot2ui.rc:63
 #, kde-format
 msgid "Import"
 msgstr "Tuo"
 
 #. i18n: ectx: Menu (edit)
-#: src/kdefrontend/labplot2ui.rc:81
+#: src/kdefrontend/labplot2ui.rc:75
 #, kde-format
 msgid "&Edit"
 msgstr "&Muokkaa"
 
 #. i18n: ectx: Menu (spreadsheet)
-#: src/kdefrontend/labplot2ui.rc:86
+#: src/kdefrontend/labplot2ui.rc:80
 #, kde-format
 msgid "&Spreadsheet"
 msgstr "&Laskentataulukko"
 
 #. i18n: ectx: Menu (matrix)
-#: src/kdefrontend/labplot2ui.rc:87
+#: src/kdefrontend/labplot2ui.rc:81
 #, kde-format
 msgid "&Matrix"
 msgstr "&Matriisi"
 
 #. i18n: ectx: Menu (worksheet)
-#: src/kdefrontend/labplot2ui.rc:88
+#: src/kdefrontend/labplot2ui.rc:82
 #, kde-format
 msgid "&Worksheet"
 msgstr "Työ&vihko"
 
 #. i18n: ectx: Menu (datapicker)
-#: src/kdefrontend/labplot2ui.rc:90
+#: src/kdefrontend/labplot2ui.rc:84
 #, fuzzy, kde-format
 #| msgid "Data format"
 msgid "&Data Extractor"
 msgstr "Datan muoto"
 
 #. i18n: ectx: Menu (drawing)
-#: src/kdefrontend/labplot2ui.rc:91
+#: src/kdefrontend/labplot2ui.rc:85
 #, kde-format
 msgid "&Drawing"
 msgstr "&Piirustus"
 
 #. i18n: ectx: Menu (script)
-#: src/kdefrontend/labplot2ui.rc:92
+#: src/kdefrontend/labplot2ui.rc:86
 #, kde-format
 msgid "&Script"
 msgstr "&Skripti"
 
 #. i18n: ectx: Menu (tools)
-#: src/kdefrontend/labplot2ui.rc:93
+#: src/kdefrontend/labplot2ui.rc:87
 #, kde-format
 msgid "&Tools"
 msgstr "T&yökalut"
 
 #. i18n: ectx: Menu (windows)
-#: src/kdefrontend/labplot2ui.rc:97
+#: src/kdefrontend/labplot2ui.rc:91
 #, kde-format
 msgid "&Windows"
 msgstr "&Ikkunat"
@@ -15291,375 +15290,375 @@ msgctxt "%1 is the LabPlot version"
 msgid "Welcome to LabPlot %1"
 msgstr "Tervetuloa Labplotin versioon %1"
 
-#: src/kdefrontend/MainWin.cpp:665
+#: src/kdefrontend/MainWin.cpp:675
 #, fuzzy, kde-format
 #| msgid "Open File"
 msgid "&Open Example"
 msgstr "Avaa tiedosto"
 
-#: src/kdefrontend/MainWin.cpp:683 src/kdefrontend/MainWin.cpp:2072
+#: src/kdefrontend/MainWin.cpp:693 src/kdefrontend/MainWin.cpp:2088
 #, kde-format
 msgid "Workbook"
 msgstr "Työvihko"
 
-#: src/kdefrontend/MainWin.cpp:685
+#: src/kdefrontend/MainWin.cpp:695
 #, kde-format
 msgid "Creates a new workbook for collection spreadsheets, matrices and plots"
 msgstr "Luo laskentataulukoille, matriiseille ja kaavioille uuden työvihkon"
 
-#: src/kdefrontend/MainWin.cpp:689
+#: src/kdefrontend/MainWin.cpp:699
 #, kde-format
 msgid "Creates a data extractor for getting data from a picture"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:695
+#: src/kdefrontend/MainWin.cpp:705
 #, kde-format
 msgid "Creates a new spreadsheet for data editing"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:701
+#: src/kdefrontend/MainWin.cpp:711
 #, kde-format
 msgid "Creates a new matrix for data editing"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:707
+#: src/kdefrontend/MainWin.cpp:717
 #, kde-format
 msgid "Creates a new worksheet for data plotting"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:711 src/kdefrontend/MainWin.cpp:2132
+#: src/kdefrontend/MainWin.cpp:721 src/kdefrontend/MainWin.cpp:2148
 #, kde-format
 msgid "Note"
 msgstr "Huomautus"
 
-#: src/kdefrontend/MainWin.cpp:712
+#: src/kdefrontend/MainWin.cpp:722
 #, kde-format
 msgid "Creates a new note for arbitrary text"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:716 src/kdefrontend/MainWin.cpp:2064
+#: src/kdefrontend/MainWin.cpp:726 src/kdefrontend/MainWin.cpp:2080
 #, kde-format
 msgid "Folder"
 msgstr "Kansio"
 
-#: src/kdefrontend/MainWin.cpp:717
+#: src/kdefrontend/MainWin.cpp:727
 #, kde-format
 msgid "Creates a new folder to collect sheets and other elements"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:722
+#: src/kdefrontend/MainWin.cpp:732
 #, fuzzy, kde-format
 #| msgid "File Data Source"
 msgid "Live Data Source..."
 msgstr "Tiedostodatalähde"
 
-#: src/kdefrontend/MainWin.cpp:723
+#: src/kdefrontend/MainWin.cpp:733
 #, kde-format
 msgid "Creates a live data source to read data from a real time device"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:730 src/kdefrontend/MainWin.cpp:739
+#: src/kdefrontend/MainWin.cpp:740 src/kdefrontend/MainWin.cpp:749
 #, kde-format
 msgid "Import data from a regular file"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:745
+#: src/kdefrontend/MainWin.cpp:755
 #, kde-format
 msgid "Import data from a SQL database"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:749
+#: src/kdefrontend/MainWin.cpp:759
 #, fuzzy, kde-format
 #| msgid "Connection:"
 msgid "From Dataset Collection..."
 msgstr "Yhteys:"
 
-#: src/kdefrontend/MainWin.cpp:750
+#: src/kdefrontend/MainWin.cpp:760
 #, fuzzy, kde-format
 #| msgid "Import To"
 msgid "Imports data from an online dataset"
 msgstr "Tuo kohteeseen"
 
-#: src/kdefrontend/MainWin.cpp:754
+#: src/kdefrontend/MainWin.cpp:764
 #, fuzzy, kde-format
 #| msgid "LabPlot Project"
 msgid "LabPlot Project..."
 msgstr "LabPlot-projekti"
 
-#: src/kdefrontend/MainWin.cpp:755
+#: src/kdefrontend/MainWin.cpp:765
 #, kde-format
 msgid "Import a project from a LabPlot project file (.lml)"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:760
+#: src/kdefrontend/MainWin.cpp:770
 #, fuzzy, kde-format
 #| msgid "Open project"
 msgid "Origin Project (OPJ)..."
 msgstr "Avaa projekti"
 
-#: src/kdefrontend/MainWin.cpp:761
+#: src/kdefrontend/MainWin.cpp:771
 #, kde-format
 msgid "Import a project from an OriginLab Origin project file (.opj)"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:766
+#: src/kdefrontend/MainWin.cpp:776
 #, kde-format
 msgid "Export..."
 msgstr "Vie…"
 
-#: src/kdefrontend/MainWin.cpp:767
+#: src/kdefrontend/MainWin.cpp:777
 #, kde-format
 msgid "Export selected element"
 msgstr "Vie valittu alkio"
 
-#: src/kdefrontend/MainWin.cpp:773 src/kdefrontend/MainWin.cpp:2605
-#: src/kdefrontend/MainWin.cpp:2613
+#: src/kdefrontend/MainWin.cpp:783 src/kdefrontend/MainWin.cpp:2621
+#: src/kdefrontend/MainWin.cpp:2629
 #, kde-format
 msgid "Share"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:778
+#: src/kdefrontend/MainWin.cpp:788
 #, kde-format
 msgid "Color Maps Browser"
 msgstr "Värikarttaselain"
 
-#: src/kdefrontend/MainWin.cpp:779
+#: src/kdefrontend/MainWin.cpp:789
 #, kde-format
 msgid "Open dialog to browse through the available color maps."
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:788
+#: src/kdefrontend/MainWin.cpp:798
 #, kde-format
 msgid "FITS Metadata Editor..."
 msgstr "FITS-metatietomuokkain…"
 
-#: src/kdefrontend/MainWin.cpp:789
+#: src/kdefrontend/MainWin.cpp:799
 #, kde-format
 msgid "Open editor to edit FITS meta data"
 msgstr "Avaa FITS-metatiedot muokkaimeen"
 
-#: src/kdefrontend/MainWin.cpp:798
+#: src/kdefrontend/MainWin.cpp:808
 #, fuzzy, kde-format
 #| msgid "Undo/Redo History"
 msgid "Undo/Redo History..."
 msgstr "Toimintohistoria"
 
-#: src/kdefrontend/MainWin.cpp:818
+#: src/kdefrontend/MainWin.cpp:828
 #, kde-format
 msgid "Close the active window"
 msgstr "Sulje aktiivinen ikkuna"
 
-#: src/kdefrontend/MainWin.cpp:821
+#: src/kdefrontend/MainWin.cpp:831
 #, kde-format
 msgid "Close &All"
 msgstr "Sulje k&aikki"
 
-#: src/kdefrontend/MainWin.cpp:822
+#: src/kdefrontend/MainWin.cpp:832
 #, kde-format
 msgid "Close all the windows"
 msgstr "Sulje kaikki ikkunat"
 
-#: src/kdefrontend/MainWin.cpp:825
+#: src/kdefrontend/MainWin.cpp:835
 #, kde-format
 msgid "Ne&xt"
 msgstr "&Seuraava"
 
-#: src/kdefrontend/MainWin.cpp:827
+#: src/kdefrontend/MainWin.cpp:837
 #, kde-format
 msgid "Move the focus to the next window"
 msgstr "Siirrä kohdistus seuraavaan ikkunaan"
 
-#: src/kdefrontend/MainWin.cpp:830
+#: src/kdefrontend/MainWin.cpp:840
 #, kde-format
 msgid "Pre&vious"
 msgstr "E&dellinen"
 
-#: src/kdefrontend/MainWin.cpp:832
+#: src/kdefrontend/MainWin.cpp:842
 #, kde-format
 msgid "Move the focus to the previous window"
 msgstr "Siirrä kohdistus edelliseen ikkunaan"
 
-#: src/kdefrontend/MainWin.cpp:839
+#: src/kdefrontend/MainWin.cpp:849
 #, kde-format
 msgid "Current &Folder Only"
 msgstr "&Vain nykyinen kansio"
 
-#: src/kdefrontend/MainWin.cpp:844
+#: src/kdefrontend/MainWin.cpp:854
 #, kde-format
 msgid "Current Folder and &Subfolders"
 msgstr "Nykyinen kansio &alikansioineen"
 
-#: src/kdefrontend/MainWin.cpp:848
+#: src/kdefrontend/MainWin.cpp:858
 #, kde-format
 msgid "&All"
 msgstr "K&aikki"
 
-#: src/kdefrontend/MainWin.cpp:870
+#: src/kdefrontend/MainWin.cpp:880
 #, fuzzy, kde-format
 #| msgid "Show memory info:"
 msgid "Show Memory Usage"
 msgstr "Näytä muistitiedot:"
 
-#: src/kdefrontend/MainWin.cpp:878
+#: src/kdefrontend/MainWin.cpp:888
 #, kde-format
 msgid "Project Explorer"
 msgstr "Projektiselain"
 
-#: src/kdefrontend/MainWin.cpp:883
+#: src/kdefrontend/MainWin.cpp:893
 #, kde-format
 msgid "Properties Explorer"
 msgstr "Ominaisuusselain"
 
-#: src/kdefrontend/MainWin.cpp:888
+#: src/kdefrontend/MainWin.cpp:898
 #, fuzzy, kde-format
 #| msgid "Worksheet printed"
 msgid "Worksheet Preview"
 msgstr "Työkirja tulostettu"
 
-#: src/kdefrontend/MainWin.cpp:911
+#: src/kdefrontend/MainWin.cpp:921
 #, kde-format
 msgid "Configure CAS..."
 msgstr "CAS-asetukset…"
 
-#: src/kdefrontend/MainWin.cpp:912
+#: src/kdefrontend/MainWin.cpp:922
 #, kde-format
 msgid ""
 "Opens the settings for Computer Algebra Systems to modify the available "
 "systems or to enable new ones"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:972
+#: src/kdefrontend/MainWin.cpp:982
 #, fuzzy, kde-format
 #| msgid "Window Visibility Policy"
 msgid "Window Visibility"
 msgstr "Ikkunoiden näkyvyyskäytäntö"
 
-#: src/kdefrontend/MainWin.cpp:998 src/kdefrontend/MainWin.cpp:1000
+#: src/kdefrontend/MainWin.cpp:1008 src/kdefrontend/MainWin.cpp:1010
 #, kde-format
 msgid "Color Scheme"
 msgstr "Väriteema"
 
-#: src/kdefrontend/MainWin.cpp:1067 src/kdefrontend/MainWin.cpp:1081
+#: src/kdefrontend/MainWin.cpp:1081 src/kdefrontend/MainWin.cpp:1095
 #, kde-format
 msgid "The current project %1 has been modified. Do you want to save it?"
 msgstr "Nykyistä projektia %1 on muutettu. Haluatko tallentaa sen?"
 
-#: src/kdefrontend/MainWin.cpp:1068 src/kdefrontend/MainWin.cpp:1082
+#: src/kdefrontend/MainWin.cpp:1082 src/kdefrontend/MainWin.cpp:1096
 #, kde-format
 msgid "Save Project"
 msgstr "Tallenna projekti"
 
-#: src/kdefrontend/MainWin.cpp:1467
+#: src/kdefrontend/MainWin.cpp:1483
 #, kde-format
 msgctxt "@title:window"
 msgid "Project Explorer"
 msgstr "Projektiselain"
 
-#: src/kdefrontend/MainWin.cpp:1485
+#: src/kdefrontend/MainWin.cpp:1501
 #, fuzzy, kde-format
 #| msgid "Worksheet printed"
 msgctxt "@title:window"
 msgid "Worksheet Preview"
 msgstr "Työkirja tulostettu"
 
-#: src/kdefrontend/MainWin.cpp:1539
+#: src/kdefrontend/MainWin.cpp:1555
 #, kde-format
 msgid "%1: created"
 msgstr "%1: luotu"
 
-#: src/kdefrontend/MainWin.cpp:1559
+#: src/kdefrontend/MainWin.cpp:1575
 #, fuzzy, kde-format
 #| msgid "Close Project"
 msgid "Cantor Projects (*.cws)"
 msgstr "Sulje projekti"
 
-#: src/kdefrontend/MainWin.cpp:1560
+#: src/kdefrontend/MainWin.cpp:1576
 #, kde-format
 msgid "Jupyter Notebooks (*.ipynb)"
 msgstr "Jupyter-muistikirjat (*.ipynb)"
 
-#: src/kdefrontend/MainWin.cpp:1567
+#: src/kdefrontend/MainWin.cpp:1583
 #, kde-format
 msgid "All supported files (%1)"
 msgstr "Kaikki tuetut tiedostot (%1)"
 
-#: src/kdefrontend/MainWin.cpp:1571
+#: src/kdefrontend/MainWin.cpp:1587
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Project"
 msgstr "Avaa projekti"
 
-#: src/kdefrontend/MainWin.cpp:1588
+#: src/kdefrontend/MainWin.cpp:1604
 #, kde-format
 msgid "The project file %1 is already opened."
 msgstr "Projektitiedosto %1 on jo avattu."
 
-#: src/kdefrontend/MainWin.cpp:1588 src/kdefrontend/MainWin.cpp:1596
-#: src/kdefrontend/MainWin.cpp:1601
+#: src/kdefrontend/MainWin.cpp:1604 src/kdefrontend/MainWin.cpp:1612
+#: src/kdefrontend/MainWin.cpp:1617
 #, kde-format
 msgid "Open Project"
 msgstr "Avaa projekti"
 
-#: src/kdefrontend/MainWin.cpp:1596
+#: src/kdefrontend/MainWin.cpp:1612
 #, fuzzy, kde-format
 #| msgid "The project file %1 is already opened."
 msgid "The project file %1 doesn't exist."
 msgstr "Projektitiedosto %1 on jo avattu."
 
-#: src/kdefrontend/MainWin.cpp:1601
+#: src/kdefrontend/MainWin.cpp:1617
 #, fuzzy, kde-format
 #| msgid "Couldn't save the file '%1'."
 msgid "Couldn't read the project file %1."
 msgstr "Ei voitu tallentaa tiedostoa ”%1”."
 
-#: src/kdefrontend/MainWin.cpp:1615
+#: src/kdefrontend/MainWin.cpp:1631
 #, kde-format
 msgid "Loading %1..."
 msgstr "Ladataan: %1…"
 
-#: src/kdefrontend/MainWin.cpp:1665 src/kdefrontend/MainWin.cpp:1669
-#: src/kdefrontend/MainWin.cpp:1674 src/kdefrontend/MainWin.cpp:1679
-#: src/kdefrontend/MainWin.cpp:1683 src/kdefrontend/MainWin.cpp:1730
-#: src/kdefrontend/MainWin.cpp:1735 src/kdefrontend/MainWin.cpp:1740
-#: src/kdefrontend/MainWin.cpp:1746
+#: src/kdefrontend/MainWin.cpp:1681 src/kdefrontend/MainWin.cpp:1685
+#: src/kdefrontend/MainWin.cpp:1690 src/kdefrontend/MainWin.cpp:1695
+#: src/kdefrontend/MainWin.cpp:1699 src/kdefrontend/MainWin.cpp:1746
+#: src/kdefrontend/MainWin.cpp:1751 src/kdefrontend/MainWin.cpp:1756
+#: src/kdefrontend/MainWin.cpp:1762
 #, fuzzy, kde-format
 #| msgid "Failed to Open"
 msgid "Failed to open project"
 msgstr "Avaaminen epäonnistui"
 
-#: src/kdefrontend/MainWin.cpp:1665 src/kdefrontend/MainWin.cpp:1674
-#: src/kdefrontend/MainWin.cpp:1679 src/kdefrontend/MainWin.cpp:1730
-#: src/kdefrontend/MainWin.cpp:1735 src/kdefrontend/MainWin.cpp:1740
+#: src/kdefrontend/MainWin.cpp:1681 src/kdefrontend/MainWin.cpp:1690
+#: src/kdefrontend/MainWin.cpp:1695 src/kdefrontend/MainWin.cpp:1746
+#: src/kdefrontend/MainWin.cpp:1751 src/kdefrontend/MainWin.cpp:1756
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to process the content of the file '%1'."
 msgstr "Avaaminen epäonnistui"
 
-#: src/kdefrontend/MainWin.cpp:1669 src/kdefrontend/MainWin.cpp:1683
-#: src/kdefrontend/MainWin.cpp:1746
+#: src/kdefrontend/MainWin.cpp:1685 src/kdefrontend/MainWin.cpp:1699
+#: src/kdefrontend/MainWin.cpp:1762
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to open the file '%1'."
 msgstr "Avaaminen epäonnistui"
 
-#: src/kdefrontend/MainWin.cpp:1760
+#: src/kdefrontend/MainWin.cpp:1776
 #, kde-format
 msgid "%1: opened"
 msgstr "%1: avattu"
 
-#: src/kdefrontend/MainWin.cpp:1772
+#: src/kdefrontend/MainWin.cpp:1788
 #, kde-format
 msgid "Project successfully opened (in %1 seconds)."
 msgstr "Projektin avaus onnistui (%1 sekunnissa)"
 
-#: src/kdefrontend/MainWin.cpp:1870
+#: src/kdefrontend/MainWin.cpp:1886
 #, fuzzy, kde-format
 #| msgid "Save Project As"
 msgctxt "@title:window"
 msgid "Save Project As"
 msgstr "Tallenna projekti nimellä"
 
-#: src/kdefrontend/MainWin.cpp:1872
+#: src/kdefrontend/MainWin.cpp:1888
 #, kde-format
 msgid ""
 "LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 "
@@ -15668,98 +15667,98 @@ msgstr ""
 "LabPlot-projektit (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML."
 "BZ2 *.LML.XZ)"
 
-#: src/kdefrontend/MainWin.cpp:1898
+#: src/kdefrontend/MainWin.cpp:1914
 #, fuzzy, kde-format
 #| msgid "Sorry. Could not open file for writing."
 msgid "Couldn't open the temporary file for writing."
 msgstr "Tiedostoa ei valitettavasti voitu avata kirjoitettavaksi."
 
-#: src/kdefrontend/MainWin.cpp:1953
+#: src/kdefrontend/MainWin.cpp:1969
 #, kde-format
 msgid "Project saved"
 msgstr "Projekti tallennettu"
 
-#: src/kdefrontend/MainWin.cpp:1969
+#: src/kdefrontend/MainWin.cpp:1985
 #, kde-format
 msgid "Couldn't save the file '%1'."
 msgstr "Ei voitu tallentaa tiedostoa ”%1”."
 
-#: src/kdefrontend/MainWin.cpp:1974
+#: src/kdefrontend/MainWin.cpp:1990
 #, fuzzy, kde-format
 #| msgid "Could not open file %1 for reading."
 msgid "Couldn't open the file '%1' for writing."
 msgstr "Ei voitu avata tiedostoa %1 luettavaksi."
 
-#: src/kdefrontend/MainWin.cpp:2024
+#: src/kdefrontend/MainWin.cpp:2040
 #, kde-format
 msgid "Changed"
 msgstr "Muutettu"
 
-#: src/kdefrontend/MainWin.cpp:2039 src/kdefrontend/MainWin.cpp:2051
+#: src/kdefrontend/MainWin.cpp:2055 src/kdefrontend/MainWin.cpp:2067
 #, kde-format
 msgid "Preparing printing of %1"
 msgstr "Valmistellaan tulostusta: %1"
 
-#: src/kdefrontend/MainWin.cpp:2041 src/kdefrontend/MainWin.cpp:2053
+#: src/kdefrontend/MainWin.cpp:2057 src/kdefrontend/MainWin.cpp:2069
 #, kde-format
 msgid "%1 printed"
 msgstr "%1 tulostettu"
 
-#: src/kdefrontend/MainWin.cpp:2605
+#: src/kdefrontend/MainWin.cpp:2621
 #, kde-format
 msgid "There was a problem sharing the project: %1"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2609
+#: src/kdefrontend/MainWin.cpp:2625
 #, fuzzy, kde-format
 #| msgid "Project saved"
 msgid "Project shared successfully"
 msgstr "Projekti tallennettu"
 
-#: src/kdefrontend/MainWin.cpp:2612
+#: src/kdefrontend/MainWin.cpp:2628
 #, kde-format
 msgid "You can find the shared project at: <a href=\"%1\">%1</a>"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2844
+#: src/kdefrontend/MainWin.cpp:2860
 #: src/kdefrontend/welcomescreen/WelcomeScreenHelper.cpp:115
 #, fuzzy, kde-format
 #| msgid "Dataset"
 msgid "Dataset%1"
 msgstr "Datajoukko"
 
-#: src/kdefrontend/MainWin.cpp:2874
+#: src/kdefrontend/MainWin.cpp:2890
 #, kde-format
 msgid "%1 exported"
 msgstr "%1 viety"
 
-#: src/kdefrontend/MainWin.cpp:2881
+#: src/kdefrontend/MainWin.cpp:2897
 #, kde-format
 msgid "FITS files saved"
 msgstr "FITS-tiedostot tallennettu"
 
-#: src/kdefrontend/MainWin.cpp:2893
+#: src/kdefrontend/MainWin.cpp:2909
 #, kde-format
 msgid "MQTT Client%1"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2911
+#: src/kdefrontend/MainWin.cpp:2927
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2915
+#: src/kdefrontend/MainWin.cpp:2931
 #, fuzzy, kde-format
 #| msgid "File data source"
 msgid "Live data source%1"
 msgstr "Tiedostodatalähde"
 
-#: src/kdefrontend/MainWin.cpp:2966
+#: src/kdefrontend/MainWin.cpp:2982
 #, kde-format
 msgid "No Cantor backends found. Please install the ones you want to use."
 msgstr "Cantor-taustajärjestelmiä ei löytynyt. Asenna haluamasi."
 
-#: src/kdefrontend/MainWin.cpp:2980
+#: src/kdefrontend/MainWin.cpp:2996
 #, kde-format
 msgid "Creates a new %1 notebook"
 msgstr ""
