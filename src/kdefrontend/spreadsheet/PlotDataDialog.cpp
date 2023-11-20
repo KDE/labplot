@@ -41,6 +41,7 @@
 #endif
 
 #include <QAction>
+#include <QActionGroup>
 #include <QDialogButtonBox>
 #include <QMenu>
 #include <QPushButton>
