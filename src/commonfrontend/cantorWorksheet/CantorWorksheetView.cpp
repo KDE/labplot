@@ -4,17 +4,21 @@
 	Description          : View class for CantorWorksheet
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2015 Garvit Khatri <garvitdelhi@gmail.com>
-	SPDX-FileCopyrightText: 2016-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2016-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "CantorWorksheetView.h"
 #include "backend/cantorWorksheet/CantorWorksheet.h"
+#include "backend/core/column/Column.h"
+#include "kdefrontend/spreadsheet/PlotDataDialog.h"
+#include "kdefrontend/spreadsheet/StatisticsDialog.h"
 
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QMenu>
 #include <QToolBar>
+#include <QTimer>
 
 #include <KLocalizedString>
 #include <KParts/ReadWritePart>
@@ -269,6 +273,38 @@ void CantorWorksheetView::createContextMenu(QMenu* menu) {
 	menu->insertSeparator(firstAction);
 }
 
+/*!
+ * adds column specific actions in SpreadsheetView to the context menu shown in the project explorer.
+ */
+void CantorWorksheetView::fillColumnContextMenu(QMenu* menu, Column* column) {
+	if (!column)
+		return; // should never happen, since the sender is always a Column
+
+	m_contextMenuColumn = column;
+
+	if (!m_plotDataMenu) {
+		auto* plotDataActionGroup = new QActionGroup(this);
+		connect(plotDataActionGroup, &QActionGroup::triggered, this, &CantorWorksheetView::plotData);
+		m_plotDataMenu = new QMenu(i18n("Plot Data"), this);
+		PlotDataDialog::fillMenu(m_plotDataMenu, plotDataActionGroup);
+
+		m_statisticsAction = new QAction(QIcon::fromTheme(QStringLiteral("view-statistics")), i18n("Variable Statistics..."), this);
+		connect(m_statisticsAction, &QAction::triggered, this, &CantorWorksheetView::showStatistics);
+	}
+
+	const bool hasValues = column->hasValues();
+	const bool plottable = column->isPlottable();
+
+	QAction* firstAction = menu->actions().at(1);
+	menu->insertMenu(firstAction, m_plotDataMenu);
+	menu->insertSeparator(firstAction);
+	m_plotDataMenu->setEnabled(plottable && hasValues);
+
+	menu->insertSeparator(firstAction);
+	menu->insertAction(firstAction, m_statisticsAction);
+	m_statisticsAction->setEnabled(hasValues);
+}
+
 void CantorWorksheetView::fillToolBar(QToolBar* toolbar) {
 	if (!m_part)
 		return;
@@ -307,4 +343,28 @@ void CantorWorksheetView::statusChanged(Cantor::Session::Status status) {
 		m_evaluateWorsheetAction->setIcon(QIcon::fromTheme(QLatin1String("system-run")));
 		Q_EMIT m_worksheet->statusInfo(i18n("Ready"));
 	}
+}
+
+void CantorWorksheetView::plotData(QAction* action) {
+	if (!m_contextMenuColumn)
+		return;
+
+	auto type = static_cast<PlotDataDialog::PlotType>(action->data().toInt());
+	auto* dlg = new PlotDataDialog(m_worksheet, type);
+	dlg->setSelectedColumns(QVector<Column*>({m_contextMenuColumn}));
+	dlg->exec();
+}
+
+void CantorWorksheetView::showStatistics() {
+	if (!m_contextMenuColumn)
+		return;
+
+	QString dlgTitle(i18n("%1: variable statistics", m_contextMenuColumn->name()));
+	auto* dlg = new StatisticsDialog(dlgTitle, QVector<Column*>({m_contextMenuColumn}));
+	dlg->setModal(true);
+	dlg->show();
+	QApplication::processEvents(QEventLoop::AllEvents, 0);
+	QTimer::singleShot(0, this, [=]() {
+		dlg->showStatistics();
+	});
 }

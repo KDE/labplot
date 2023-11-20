@@ -4,11 +4,12 @@
 	Description          : Aspect that manages a column
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2007-2009 Tilman Benkert <thzs@gmx.net>
-	SPDX-FileCopyrightText: 2013-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2013-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2017-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
+#include "backend/cantorWorksheet/CantorWorksheet.h"
 #include "backend/core/column/Column.h"
 #include "backend/core/AbstractSimpleFilter.h"
 #include "backend/core/Project.h"
@@ -142,9 +143,14 @@ QMenu* Column::createContextMenu() {
 	// at the moment it's ok to check to the null pointer for firstAction here.
 	// later, once we have some actions in the menu also for MQTT topics we'll
 	// need to explicitly to dynamic_cast for MQTTTopic
-	if (firstAction && parentAspect()->type() == AspectType::Spreadsheet) {
-		auto* spreadsheet = static_cast<Spreadsheet*>(parentAspect());
-		spreadsheet->fillColumnContextMenu(menu, this);
+	if (firstAction ) {
+		if (parentAspect()->type() == AspectType::Spreadsheet) {
+			auto* spreadsheet = static_cast<Spreadsheet*>(parentAspect());
+			spreadsheet->fillColumnContextMenu(menu, this);
+		} if (parentAspect()->type() == AspectType::CantorWorksheet) {
+			auto* worksheet = static_cast<CantorWorksheet*>(parentAspect());
+			worksheet->fillColumnContextMenu(menu, this);
+		}
 	}
 
 	//"Used in" menu containing all curves where the column is used

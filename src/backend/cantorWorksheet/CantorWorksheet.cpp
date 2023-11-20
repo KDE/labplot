@@ -4,7 +4,7 @@
 	Description          : Aspect providing a Cantor Worksheets for Multiple backends
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2015 Garvit Khatri <garvitdelhi@gmail.com>
-	SPDX-FileCopyrightText: 2016-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2016-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -329,6 +329,11 @@ QMenu* CantorWorksheet::createContextMenu() {
 	Q_ASSERT(menu);
 	Q_EMIT requestProjectContextMenu(menu);
 	return menu;
+}
+
+void CantorWorksheet::fillColumnContextMenu(QMenu* menu, Column* column) {
+	if (m_view)
+		m_view->fillColumnContextMenu(menu, column);
 }
 
 QString CantorWorksheet::backendName() {

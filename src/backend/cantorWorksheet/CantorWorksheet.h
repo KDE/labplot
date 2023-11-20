@@ -4,7 +4,7 @@
 	Description          : Aspect providing a Cantor Worksheets for Multiple backends
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2015 Garvit Khatri <garvitdelhi@gmail.com>
-	SPDX-FileCopyrightText: 2016-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2016-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -23,9 +23,9 @@ namespace KParts {
 class ReadWritePart;
 }
 
+class QAbstractItemModel;
 class CantorWorksheetView;
 class Column;
-class QAbstractItemModel;
 
 class CantorWorksheet : public AbstractPart {
 	Q_OBJECT
@@ -38,6 +38,7 @@ public:
 
 	QWidget* view() const override;
 	QMenu* createContextMenu() override;
+	void fillColumnContextMenu(QMenu*, Column*);
 	QIcon icon() const override;
 
 	bool exportView() const override;
