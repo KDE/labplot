@@ -81,7 +81,9 @@ private Q_SLOTS:
 
 Q_SIGNALS:
 	void requestProjectContextMenu(QMenu*);
+#ifdef HAVE_CANTOR_LIBS
 	void statusChanged(Cantor::Session::Status);
+#endif
 };
 
 #endif // CANTORWORKSHEET_H
