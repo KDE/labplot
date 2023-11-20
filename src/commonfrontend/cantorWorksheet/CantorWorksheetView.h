@@ -12,7 +12,9 @@
 #define CANTORWORKSHEETVIEW_H
 
 #include <QWidget>
+#ifdef HAVE_CANTOR_LIBS
 #include <cantor/session.h>
+#endif
 
 class QActionGroup;
 class QMenu;
