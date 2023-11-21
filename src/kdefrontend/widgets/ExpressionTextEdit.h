@@ -28,6 +28,7 @@ public:
 	void setExpressionType(XYEquationCurve::EquationType);
 	void setVariables(const QStringList&);
 	bool isValid() const;
+	QString errorMessage() const;
 
 protected:
 	void keyPressEvent(QKeyEvent*) override;

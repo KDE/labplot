@@ -83,9 +83,6 @@
          </property>
         </widget>
        </item>
-       <item row="8" column="2">
-        <widget class="KComboBox" name="cbScale"/>
-       </item>
        <item row="21" column="0">
         <spacer name="verticalSpacer">
          <property name="orientation">
@@ -306,8 +303,7 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset theme="align-horizontal-left">
-             <normaloff>.</normaloff>.</iconset>
+            <iconset theme="align-horizontal-left"/>
            </property>
           </widget>
          </item>
@@ -320,8 +316,7 @@
             <string notr="true"/>
            </property>
            <property name="icon">
-            <iconset theme="align-horizontal-center">
-             <normaloff>.</normaloff>.</iconset>
+            <iconset theme="align-horizontal-center"/>
            </property>
           </widget>
          </item>
@@ -334,8 +329,7 @@
             <string notr="true"/>
            </property>
            <property name="icon">
-            <iconset theme="align-horizontal-right">
-             <normaloff>.</normaloff>.</iconset>
+            <iconset theme="align-horizontal-right"/>
            </property>
           </widget>
          </item>
@@ -455,6 +449,33 @@
          </property>
         </widget>
        </item>
+       <item row="8" column="2">
+        <layout class="QHBoxLayout" name="horizontalLayout_5">
+         <item>
+          <widget class="KComboBox" name="cbScale">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="cbRangeScale">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>Auto</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="tabTitle">
@@ -484,7 +505,6 @@
         <widget class="QLabel" name="lArrow">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -601,7 +621,6 @@
         <widget class="QLabel" name="lLine">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -734,7 +753,6 @@
         <widget class="QLabel" name="lMajorTicks">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -916,8 +934,7 @@
             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Set offset to start ticks at first data point&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
            <property name="icon">
-            <iconset theme="application-vnd.oasis.opendocument.chart">
-             <normaloff>.</normaloff>.</iconset>
+            <iconset theme="application-vnd.oasis.opendocument.chart"/>
            </property>
           </widget>
          </item>
@@ -930,8 +947,7 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset theme="autocorrection">
-             <normaloff>.</normaloff>.</iconset>
+            <iconset theme="autocorrection"/>
            </property>
           </widget>
          </item>
@@ -970,7 +986,6 @@
         <widget class="QLabel" name="lMinorTicks">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1215,7 +1230,6 @@
         <widget class="QLabel" name="lMajorGrid_2">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1274,7 +1288,7 @@
         </widget>
        </item>
        <item row="13" column="2">
-        <widget class="KFontRequester" name="kfrLabelsFont"/>
+        <widget class="KFontRequester" name="kfrLabelsFont" native="true"/>
        </item>
        <item row="4" column="0">
         <spacer name="verticalSpacer_7">
@@ -1399,7 +1413,6 @@
         <widget class="QLabel" name="label_4">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1412,7 +1425,6 @@
         <widget class="QLabel" name="lLabelsBackground">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1505,7 +1517,6 @@
         <widget class="QLabel" name="lLabelsText">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1645,7 +1656,6 @@
         <widget class="QLabel" name="lMinorGrid">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1658,7 +1668,6 @@
         <widget class="QLabel" name="lMajorGrid">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>

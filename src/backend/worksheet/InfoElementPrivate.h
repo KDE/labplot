@@ -36,7 +36,7 @@ public:
 	void updateConnectionLine();
 	bool changeVisibility(bool on);
 
-	virtual void recalcShapeAndBoundingRect() override{};
+	virtual bool activate(QPointF mouseScenePos, double maxDist = -1);
 
 	// TextLabel Gluepoint
 	int gluePointIndex{-1}; // negative value means automatic mode
@@ -51,6 +51,12 @@ public:
 	//	CartesianPlot* plot{nullptr};
 
 	InfoElement* const q;
+
+private:
+	void recalcShape();
+	void recalcShapeAndBoundingRect(const QRectF&);
+	virtual void recalcShapeAndBoundingRect() override;
+	virtual void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
 
 private:
 	QPointF sceneDeltaPoint; // delta position from worksheetinfoElementPrivate to the first marker point in scene coords

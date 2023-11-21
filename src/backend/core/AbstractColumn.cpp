@@ -367,17 +367,12 @@ private:
  * \brief Insert some empty (or initialized with invalid values) rows
  */
 void AbstractColumn::insertRows(int before, int count, QUndoCommand* parent) {
-	bool execute = false;
 	auto* command = new ColumnSetRowsCountCmd(this, true, before, count, parent);
-	if (!parent) {
-		execute = true;
-		parent = command;
-	}
 
-	handleRowInsertion(before, count, parent);
+	handleRowInsertion(before, count, command);
 
-	if (execute)
-		exec(parent);
+	if (!parent)
+		exec(command);
 }
 
 void AbstractColumn::handleRowInsertion(int before, int count, QUndoCommand* parent) {
@@ -388,17 +383,12 @@ void AbstractColumn::handleRowInsertion(int before, int count, QUndoCommand* par
  * \brief Remove 'count' rows starting from row 'first'
  */
 void AbstractColumn::removeRows(int first, int count, QUndoCommand* parent) {
-	bool execute = false;
 	auto* command = new ColumnSetRowsCountCmd(this, false, first, count, parent);
-	if (!parent) {
-		execute = true;
-		parent = command;
-	}
 
-	handleRowRemoval(first, count, parent);
+	handleRowRemoval(first, count, command);
 
-	if (execute)
-		exec(parent);
+	if (!parent)
+		exec(command);
 }
 
 void AbstractColumn::handleRowRemoval(int first, int count, QUndoCommand* parent) {

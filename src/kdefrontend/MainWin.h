@@ -183,6 +183,7 @@ private:
 	QMenu* m_visibilityMenu{nullptr};
 	QMenu* m_newMenu{nullptr};
 	QMenu* m_importMenu{nullptr};
+	QMenu* m_newNotebookMenu{nullptr};
 	KHamburgerMenu* m_hamburgerMenu{nullptr};
 
 #ifdef HAVE_PURPOSE

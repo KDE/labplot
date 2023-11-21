@@ -85,6 +85,7 @@ void PlotArea::init() {
 	});
 	connect(d->borderLine, &Line::updateRequested, [=] {
 		d->recalcShapeAndBoundingRect();
+		Q_EMIT changed();
 	});
 
 	d->borderCornerRadius = group.readEntry("BorderCornerRadius", 0.0);
@@ -213,6 +214,11 @@ QPainterPath PlotAreaPrivate::shape() const {
 void PlotAreaPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
 	// Ignore context menu event and forward to next
 	QGraphicsItem::contextMenuEvent(event);
+}
+
+void PlotAreaPrivate::update() {
+	QGraphicsItem::update();
+	Q_EMIT q->changed();
 }
 
 void PlotAreaPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget*) {

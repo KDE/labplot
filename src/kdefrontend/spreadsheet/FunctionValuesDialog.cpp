@@ -66,7 +66,8 @@ FunctionValuesDialog::FunctionValuesDialog(Spreadsheet* s, QWidget* parent)
 	ui.bAddVariable->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
 	ui.bAddVariable->setToolTip(i18n("Add new variable"));
 
-	ui.chkAutoUpdate->setToolTip(i18n("Automatically update the calculated values on changes in the variable columns"));
+	ui.chkAutoUpdate->setToolTip(i18n("Automatically update the calculated values in the target column on changes in the variable columns"));
+	ui.chkAutoResize->setToolTip(i18n("Automatically resize the target column to fit the size of the variable columns"));
 
 	auto* btnBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
 	ui.verticalLayout->addWidget(btnBox);
@@ -151,6 +152,16 @@ void FunctionValuesDialog::setColumns(const QVector<Column*>& columns) {
 	// Enable if linking is turned on, so the user has to explicit disable recalculation, so it cannot be forgotten
 	ui.chkAutoUpdate->setChecked(firstColumn->formulaAutoUpdate() || m_spreadsheet->linking());
 
+	// auto-resize
+	if (!m_spreadsheet->linking())
+		ui.chkAutoResize->setChecked(firstColumn->formulaAutoResize());
+	else {
+		// linking is active, deactive this option since the size of the target spreadsheet is controlled by the linked spreadsheet
+		ui.chkAutoResize->setChecked(false);
+		ui.chkAutoResize->setEnabled(false);
+		ui.chkAutoResize->setToolTip(i18n("Spreadsheet linking is active. The size of the target spreadsheet is controlled by the linked spreadsheet."));
+	}
+
 	checkValues();
 }
 
@@ -185,7 +196,7 @@ void FunctionValuesDialog::checkValues() {
 
 	// check whether the formula syntax is correct
 	if (!ui.teEquation->isValid()) {
-		m_okButton->setToolTip(i18n("Incorrect formula syntax"));
+		m_okButton->setToolTip(i18n("Incorrect formula syntax: ") + ui.teEquation->errorMessage());
 		m_okButton->setEnabled(false);
 		return;
 	}
@@ -397,9 +408,10 @@ void FunctionValuesDialog::generate() {
 	// set the new values and store the expression, variable names and used data columns
 	const QString& expression{ui.teEquation->toPlainText()};
 	bool autoUpdate{(ui.chkAutoUpdate->checkState() == Qt::Checked)};
+	bool autoResize{(ui.chkAutoResize->checkState() == Qt::Checked)};
 	for (auto* col : m_columns) {
 		col->setColumnMode(AbstractColumn::ColumnMode::Double);
-		col->setFormula(expression, variableNames, variableColumns, autoUpdate);
+		col->setFormula(expression, variableNames, variableColumns, autoUpdate, autoResize);
 		col->updateFormula();
 	}
 	m_spreadsheet->endMacro();

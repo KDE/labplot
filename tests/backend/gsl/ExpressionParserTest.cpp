@@ -37,6 +37,20 @@ func_t3 getFunction3(const QString& s) {
 }
 } // anonymous namespace
 
+void ExpressionParserTest::testIsValid() {
+	const QString expr = QStringLiteral("cell(5; x)");
+	const QStringList vars = {QStringLiteral("x")};
+
+	QCOMPARE(ExpressionParser::isValid(expr, vars), true); // should not crash
+}
+
+void ExpressionParserTest::testIsValidStdev() {
+	const QString expr = QStringLiteral("stdev(x)");
+	const QStringList vars = {QStringLiteral("x")};
+
+	QCOMPARE(ExpressionParser::isValid(expr, vars), true);
+}
+
 void ExpressionParserTest::testFunctionArguments1() {
 	const QString functionName(QStringLiteral("rand"));
 	for (int i = 0; i < _number_functions; i++) {
@@ -285,13 +299,6 @@ void ExpressionParserTest::testevaluateCartesianConstExpr() {
 //	QCOMPARE(yVector.at(8), NAN);
 //	QCOMPARE(yVector.at(9), NAN);
 //}
-
-void ExpressionParserTest::testIsValid() {
-	const QString expr = QStringLiteral("cell(5; x)");
-	const QStringList vars = {QStringLiteral("x")};
-
-	QCOMPARE(ExpressionParser::isValid(expr, vars), true); // should not crash
-}
 
 void ExpressionParserTest::testLog2() {
 	auto fnct = getFunction1(QStringLiteral("log2"));

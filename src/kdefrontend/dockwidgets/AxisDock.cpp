@@ -135,6 +135,7 @@ AxisDock::AxisDock(QWidget* parent)
 	connect(ui.sbPosition, QOverload<double>::of(&NumberSpinBox::valueChanged), this, QOverload<double>::of(&AxisDock::positionChanged));
 	connect(ui.sbPositionLogical, QOverload<double>::of(&NumberSpinBox::valueChanged), this, QOverload<double>::of(&AxisDock::logicalPositionChanged));
 	connect(ui.cbScale, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AxisDock::scaleChanged);
+	connect(ui.cbRangeScale, &QCheckBox::toggled, this, &AxisDock::rangeScaleChanged);
 
 	connect(ui.cbRangeType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AxisDock::rangeTypeChanged);
 	connect(ui.sbStart, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &AxisDock::startChanged);
@@ -396,6 +397,7 @@ void AxisDock::initConnections() {
 	connect(m_axis, QOverload<double>::of(&Axis::positionChanged), this, QOverload<double>::of(&AxisDock::axisPositionChanged));
 	connect(m_axis, &Axis::logicalPositionChanged, this, &AxisDock::axisLogicalPositionChanged);
 	connect(m_axis, &Axis::scaleChanged, this, &AxisDock::axisScaleChanged);
+	connect(m_axis, &Axis::rangeScaleChanged, this, &AxisDock::axisRangeScaleChanged);
 	connect(m_axis, &Axis::rangeTypeChanged, this, &AxisDock::axisRangeTypeChanged);
 	connect(m_axis, &Axis::startChanged, this, &AxisDock::axisStartChanged);
 	connect(m_axis, &Axis::endChanged, this, &AxisDock::axisEndChanged);
@@ -709,6 +711,12 @@ void AxisDock::scaleChanged(int index) {
 		if (axis->majorTicksAutoNumber())
 			ui.sbMajorTicksNumber->setValue(axis->majorTicksNumber());
 	}
+}
+
+void AxisDock::rangeScaleChanged(bool set) {
+	CONDITIONAL_LOCK_RETURN;
+	for (auto* axis : m_axesList)
+		axis->setRangeScale(set);
 }
 
 void AxisDock::rangeTypeChanged(int index) {
@@ -1578,6 +1586,23 @@ void AxisDock::axisScaleChanged(RangeT::Scale scale) {
 	ui.cbScale->setCurrentIndex(static_cast<int>(scale));
 }
 
+void AxisDock::updateScale() {
+	if (m_axis->rangeScale()) {
+		ui.cbScale->setEnabled(false);
+		ui.cbScale->setToolTip(i18n("Scale is in sync with the plot scale"));
+	} else {
+		ui.cbScale->setEnabled(true);
+		ui.cbScale->setToolTip(i18n("Scale is async with the plot"));
+	}
+}
+
+void AxisDock::axisRangeScaleChanged(bool rangeScale) {
+	updateScale();
+
+	CONDITIONAL_LOCK_RETURN;
+	ui.cbRangeScale->setChecked(rangeScale);
+}
+
 void AxisDock::axisRangeTypeChanged(Axis::RangeType type) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.cbRangeType->setCurrentIndex(static_cast<int>(type));
@@ -1870,7 +1895,18 @@ void AxisDock::load() {
 	spinBoxCalculateMinMax(ui.sbPositionLogical, logicalRange, m_axis->logicalPosition());
 	ui.sbPositionLogical->setValue(m_axis->logicalPosition());
 
+	updateScale();
+	const bool rangeScale = m_axis->rangeScale();
+	ui.cbRangeScale->setChecked(rangeScale);
 	ui.cbScale->setCurrentIndex(static_cast<int>(m_axis->scale()));
+	// Changing the scale in the axis for the ticks is deprecated
+	// So show the options only if rangeScale is not turned on.
+	// So the user is once able to enable it and then the dialog
+	// disappears
+	ui.cbRangeScale->setVisible(!rangeScale);
+	ui.cbScale->setVisible(!rangeScale);
+	ui.lScale->setVisible(!rangeScale);
+
 	ui.cbRangeType->setCurrentIndex(static_cast<int>(m_axis->rangeType()));
 	ui.sbStart->setValue(m_axis->range().start());
 	ui.sbEnd->setValue(m_axis->range().end());

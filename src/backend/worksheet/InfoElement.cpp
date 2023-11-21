@@ -854,9 +854,9 @@ void InfoElementPrivate::retransform() {
 
 	// new bounding rectangle
 	const QRectF& rect = parentItem()->mapRectFromScene(q->plot()->rect());
-	m_boundingRectangle = mapFromParent(rect).boundingRect();
+	const QRectF& newBoundingRect = mapFromParent(rect).boundingRect();
 	QDEBUG(Q_FUNC_INFO << ", rect = " << rect)
-	QDEBUG(Q_FUNC_INFO << ", bounding rect = " << m_boundingRectangle)
+	QDEBUG(Q_FUNC_INFO << ", bounding rect = " << newBoundingRect)
 
 	// TODO: why do I need to retransform the label and the custompoints?
 	q->m_title->retransform();
@@ -888,7 +888,7 @@ void InfoElementPrivate::retransform() {
 	// connection line
 	const QPointF m_titlePosItemCoords = mapFromParent(m_titlePos); // calculate item coords from scene coords
 	const QPointF pointPosItemCoords = mapFromParent(mapPlotAreaToParent(pointPos)); // calculate item coords from scene coords
-	if (m_boundingRectangle.contains(m_titlePosItemCoords) && m_boundingRectangle.contains(pointPosItemCoords))
+	if (newBoundingRect.contains(m_titlePosItemCoords) && newBoundingRect.contains(pointPosItemCoords))
 		m_connectionLine = QLineF(m_titlePosItemCoords.x(), m_titlePosItemCoords.y(), pointPosItemCoords.x(), pointPosItemCoords.y());
 	else
 		m_connectionLine = QLineF();
@@ -899,9 +899,7 @@ void InfoElementPrivate::retransform() {
 	xposLine = QLineF(pointPosItemCoords.x(), dataRect.bottom(), pointPosItemCoords.x(), dataRect.top());
 	QDEBUG(Q_FUNC_INFO << ", vertical line " << xposLine)
 
-	m_shape = QPainterPath();
-	m_shape.addRect(m_boundingRectangle);
-	update(m_boundingRectangle);
+	recalcShapeAndBoundingRect(newBoundingRect);
 
 	q->m_suppressChildPositionChanged = false;
 }
@@ -914,14 +912,14 @@ void InfoElementPrivate::updatePosition() {
  * Repainting to update xposLine
  */
 void InfoElementPrivate::updateVerticalLine() {
-	update(m_boundingRectangle);
+	recalcShapeAndBoundingRect();
 }
 
 /*!
  * Repainting to updateConnectionLine
  */
 void InfoElementPrivate::updateConnectionLine() {
-	update(boundingRect());
+	recalcShapeAndBoundingRect();
 }
 
 bool InfoElementPrivate::changeVisibility(bool on) {
@@ -1098,6 +1096,52 @@ void InfoElementPrivate::keyPressEvent(QKeyEvent* event) {
 			}
 		}
 	}
+}
+
+bool InfoElementPrivate::activate(QPointF mouseScenePos, double /*maxDist*/) {
+	if (!isVisible())
+		return false;
+
+	return m_shape.contains(mouseScenePos);
+}
+
+void InfoElementPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
+	if (activate(event->pos())) {
+		q->createContextMenu()->exec(event->screenPos());
+		return;
+	}
+	QGraphicsItem::contextMenuEvent(event);
+}
+
+void InfoElementPrivate::recalcShape() {
+	m_shape = QPainterPath();
+
+	if (verticalLine->style() != Qt::PenStyle::NoPen) {
+		QPainterPath path;
+		path.moveTo(xposLine.p1());
+		path.lineTo(xposLine.p2());
+		m_shape.addPath(WorksheetElement::shapeFromPath(path, verticalLine->pen()));
+	}
+
+	if (connectionLine->style() != Qt::PenStyle::NoPen) {
+		QPainterPath path;
+		path.moveTo(m_connectionLine.p1());
+		path.lineTo(m_connectionLine.p2());
+		m_shape.addPath(WorksheetElement::shapeFromPath(path, connectionLine->pen()));
+	}
+}
+
+void InfoElementPrivate::recalcShapeAndBoundingRect(const QRectF& rect) {
+	prepareGeometryChange();
+	m_boundingRectangle = rect;
+	recalcShape();
+	update(m_boundingRectangle);
+}
+
+void InfoElementPrivate::recalcShapeAndBoundingRect() {
+	prepareGeometryChange();
+	recalcShape();
+	update(m_boundingRectangle);
 }
 
 // ##############################################################################

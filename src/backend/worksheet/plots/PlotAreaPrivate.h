@@ -24,6 +24,7 @@ public:
 	bool toggleClipping(bool on);
 	bool clippingEnabled() const;
 	void setRect(const QRectF&);
+	void update();
 	void retransform() override {
 	}
 

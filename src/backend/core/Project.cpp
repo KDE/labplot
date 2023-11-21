@@ -62,7 +62,7 @@ namespace {
 // the project version will compared with this.
 // if you make any compatibilty changes to the xmlfile
 // or the function in labplot, increase this number
-int buildXmlVersion = 8;
+int buildXmlVersion = 9;
 }
 
 /**
@@ -1182,6 +1182,30 @@ void Project::restorePointers(AbstractAspect* aspect, bool preview) {
 		for (Column* c : columns)
 			col->setFormulaVariableColumn(c);
 		col->finalizeLoad();
+	}
+
+	if (hasChildren && Project::xmlVersion() < 9) {
+		const auto& plots = aspect->children<CartesianPlot>(ChildIndexFlag::Recursive);
+		for (const auto* plot : plots) {
+			const auto& axes = plot->children<Axis>(ChildIndexFlag::Recursive);
+			for (auto* axis : axes) {
+				const auto cSystem = plot->coordinateSystem(axis->coordinateSystemIndex());
+				RangeT::Scale scale;
+				switch (axis->orientation()) {
+				case Axis::Orientation::Horizontal:
+					scale = plot->range(Dimension::X, cSystem->index(Dimension::X)).scale();
+					break;
+				case Axis::Orientation::Vertical:
+					scale = plot->range(Dimension::Y, cSystem->index(Dimension::Y)).scale();
+					break;
+				}
+				if (axis->scale() == scale) {
+					axis->setUndoAware(false);
+					axis->setRangeScale(true);
+					axis->setUndoAware(true);
+				}
+			}
+		}
 	}
 
 	if (preview)

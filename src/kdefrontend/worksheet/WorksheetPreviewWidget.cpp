@@ -119,6 +119,7 @@ void WorksheetPreviewWidget::aspectAboutToBeRemoved(const AbstractAspect* aspect
 	if (!w)
 		return;
 
+	disconnect(w, nullptr, this, nullptr);
 	ui.lwPreview->takeItem(indexOfWorksheet(w));
 }
 
@@ -175,7 +176,7 @@ void WorksheetPreviewWidget::contextMenuEvent(QContextMenuEvent*) {
 
 void WorksheetPreviewWidget::resizeEvent(QResizeEvent*) {
 	if (width() > height())
-		ui.lwPreview->setFlow(QListView::Flow::LeftToRight);
-	else
 		ui.lwPreview->setFlow(QListView::Flow::TopToBottom);
+	else
+		ui.lwPreview->setFlow(QListView::Flow::LeftToRight);
 }

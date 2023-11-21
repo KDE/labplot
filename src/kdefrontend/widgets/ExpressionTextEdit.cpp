@@ -65,6 +65,11 @@ bool ExpressionTextEdit::isValid() const {
 	return (!document()->toPlainText().simplified().isEmpty() && m_isValid);
 }
 
+QString ExpressionTextEdit::errorMessage() const {
+	const auto parser = ExpressionParser::getInstance();
+	return parser->errorMessage();
+}
+
 void ExpressionTextEdit::setExpressionType(XYEquationCurve::EquationType type) {
 	m_expressionType = type;
 	m_variables.clear();
