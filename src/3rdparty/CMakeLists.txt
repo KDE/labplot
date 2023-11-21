@@ -74,9 +74,10 @@ if (ENABLE_VECTOR_BLF)
         GIT_REPOSITORY https://github.com/LinuxDevon/dbc_parser_cpp.git
         GIT_TAG 0f3b22b3fe124976a86a85fcd1bfdd55c20ca428 # At least this version is needed!
       )
-      # fix missing variable for fast_float
+      # fix missing variable and keyword for fast_float
       IF (NOT MSVC_FOUND)
           add_definitions (-DFASTFLOAT_VISUAL_STUDIO=0)
+          add_definitions (-D__forceinline=inline)
       ENDIF ()
       # dbc is the root project name
       # https://gitlab.kitware.com/cmake/cmake/-/issues/19854
