@@ -12,7 +12,8 @@ include:
 #      - /gitlab-templates/linux.yml
       - /gitlab-templates/windows.yml
       - /gitlab-templates/linux-qt6.yml
-      - /gitlab-templates/windows-qt6.yml
+## disabled until "kuserfeedback" problem is fixed
+#      - /gitlab-templates/windows-qt6.yml
       - /gitlab-templates/freebsd.yml
 # finds Qt5 but KF5 is not installed
 #      - /gitlab-templates/freebsd-qt6.yml
