@@ -99,6 +99,10 @@ if (ENABLE_VECTOR_BLF)
         GIT_REPOSITORY https://github.com/Murmele/vector_blf.git
         GIT_TAG 2c1a8e649328f2e06ce4d45c6223628bc39fd178
       )
+      # fix missing variable for fast_float
+      IF (NOT MSVC_FOUND)
+          add_definitions (-DFASTFLOAT_VISUAL_STUDIO=0)
+      ENDIF ()
       set(CMAKE_PROJECT_Vector_BLF_INCLUDE "${CMAKE_CURRENT_SOURCE_DIR}/cmake/vector_blf_config.cmake")
       FetchContent_MakeAvailable(vector_blf)
       # headerfiles of the projects are referring to <Vector/BLF/someheader.h> and therefore
