@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-20 00:39+0000\n"
-"PO-Revision-Date: 2023-11-17 10:17+0100\n"
+"PO-Revision-Date: 2023-11-19 17:01+0100\n"
 "Last-Translator: Xavier BESNARD <xavier.besnard@neuf.fr>\n"
 "Language-Team: fr\n"
 "Language: fr\n"
@@ -7068,16 +7068,14 @@ msgid "%1: set axis range"
 msgstr "%1 : définir l'intervalle de l'axe"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:615
-#, fuzzy, kde-format
-#| msgid "%1: set x scale"
+#, kde-format
 msgid "%1: set range scale"
-msgstr "%1 : définir l'échelle X"
+msgstr "%1 : définir l'échelle d'intervalle"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:622
-#, fuzzy, kde-format
-#| msgid "%1: set x scale"
+#, kde-format
 msgid "%1: set scale"
-msgstr "%1 : définir l'échelle X"
+msgstr "%1 : définir l'échelle"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:629
 #, kde-format
@@ -12489,12 +12487,12 @@ msgstr "%1 axes : définir la couleur"
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:1592
 #, kde-format
 msgid "Scale is in sync with the plot scale"
-msgstr ""
+msgstr "L'échelle est synchrone vis-à-vis de l'échelle du tracé"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:1595
 #, kde-format
 msgid "Scale is async with the plot"
-msgstr ""
+msgstr "L'échelle est asynchrone vis-à-vis du tracé"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:2050
 #, kde-format
