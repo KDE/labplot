@@ -561,42 +561,11 @@ void SpreadsheetView::initMenus() {
 		// 		m_selectionMenu->addAction(action_normalize_selection);
 	}
 
-	// plot data menu (synchronize with the menu in CartesianPlot)
+	// plot data menu
 	plotDataActionGroup = new QActionGroup(this);
 	connect(plotDataActionGroup, &QActionGroup::triggered, this, &SpreadsheetView::plotData);
 	m_plotDataMenu = new QMenu(i18n("Plot Data"), this);
-
-	auto* action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("xy-curve"), plotDataActionGroup);
-	action->setData(static_cast<int>(PlotDataDialog::PlotType::XYCurve));
-	m_plotDataMenu->addAction(action);
-
-	auto* addNewStatisticalPlotsMenu = new QMenu(i18n("Statistical Plots"));
-	action = new QAction(QIcon::fromTheme(QStringLiteral("view-object-histogram-linear")), i18n("Histogram"), plotDataActionGroup);
-	action->setData(static_cast<int>(PlotDataDialog::PlotType::Histogram));
-	addNewStatisticalPlotsMenu->addAction(action);
-
-	action = new QAction(BoxPlot::staticIcon(), i18n("Box Plot"), plotDataActionGroup);
-	action->setData(static_cast<int>(PlotDataDialog::PlotType::BoxPlot));
-	addNewStatisticalPlotsMenu->addAction(action);
-
-	action = new QAction(i18n("KDE Plot"), plotDataActionGroup);
-	action->setData(static_cast<int>(PlotDataDialog::PlotType::KDEPlot));
-	addNewStatisticalPlotsMenu->addAction(action);
-
-	action = new QAction(i18n("Q-Q Plot"), plotDataActionGroup);
-	action->setData(static_cast<int>(PlotDataDialog::PlotType::QQPlot));
-	addNewStatisticalPlotsMenu->addAction(action);
-	m_plotDataMenu->addMenu(addNewStatisticalPlotsMenu);
-
-	auto* addNewBarPlotsMenu = new QMenu(i18n("Bar Plots"));
-	action = new QAction(QIcon::fromTheme(QStringLiteral("office-chart-bar")), i18n("Bar Plot"), plotDataActionGroup);
-	action->setData(static_cast<int>(PlotDataDialog::PlotType::BarPlot));
-	addNewBarPlotsMenu->addAction(action);
-
-	action = new QAction(QIcon::fromTheme(QStringLiteral("office-chart-bar")), i18n("Lollipop Plot"), plotDataActionGroup);
-	action->setData(static_cast<int>(PlotDataDialog::PlotType::LollipopPlot));
-	addNewBarPlotsMenu->addAction(action);
-	m_plotDataMenu->addMenu(addNewBarPlotsMenu);
+	PlotDataDialog::fillMenu(m_plotDataMenu, plotDataActionGroup);
 
 	// conditional formatting
 	m_formattingMenu = new QMenu(i18n("Conditional Formatting"), this);
@@ -2094,9 +2063,15 @@ void SpreadsheetView::unmaskSelection() {
 }
 
 void SpreadsheetView::plotData(QAction* action) {
-	// const auto* action = dynamic_cast<const QAction*>(QObject::sender());
 	auto type = static_cast<PlotDataDialog::PlotType>(action->data().toInt());
 	auto* dlg = new PlotDataDialog(m_spreadsheet, type);
+
+	// use all spreadsheet columns if no columns are selected
+	auto columns = selectedColumns(true);
+	if (columns.isEmpty())
+		columns = m_spreadsheet->children<Column>();
+
+	dlg->setSelectedColumns(columns);
 	dlg->exec();
 }
 

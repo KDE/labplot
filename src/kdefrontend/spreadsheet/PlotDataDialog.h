@@ -18,15 +18,16 @@ class PlotDataWidget;
 
 #include <QDialog>
 
-class QComboBox;
 class AbstractAspect;
+class AbstractColumn;
 class AspectTreeModel;
 class CartesianPlot;
-class AbstractColumn;
 class Column;
-class Spreadsheet;
 class TreeViewComboBox;
 class Worksheet;
+
+class QActionGroup;
+class QComboBox;
 
 class PlotDataDialog : public QDialog {
 	Q_OBJECT
@@ -34,15 +35,17 @@ class PlotDataDialog : public QDialog {
 public:
 	enum class PlotType { XYCurve, Histogram, BoxPlot, KDEPlot, QQPlot, BarPlot, LollipopPlot };
 
-	explicit PlotDataDialog(Spreadsheet*, PlotType = PlotType::XYCurve, QWidget* parent = nullptr);
+	explicit PlotDataDialog(AbstractAspect*, PlotType = PlotType::XYCurve, QWidget* parent = nullptr);
 	~PlotDataDialog() override;
 
+	void setSelectedColumns(QVector<Column*>);
 	void setAnalysisAction(XYAnalysisCurve::AnalysisAction);
+	static void fillMenu(QMenu*, QActionGroup*);
 
 private:
 	Ui::PlotDataWidget* ui;
 	QPushButton* m_okButton;
-	Spreadsheet* m_spreadsheet;
+	AbstractAspect* m_parentAspect;
 	TreeViewComboBox* cbExistingPlots;
 	TreeViewComboBox* cbExistingWorksheets;
 	QVector<Column*> m_columns;
@@ -54,7 +57,6 @@ private:
 	bool m_analysisMode{false};
 	AbstractAspect* m_lastAddedCurve{nullptr};
 
-	void processColumns();
 	void processColumnsForXYCurve(const QStringList& columnNames, const QString& xColumnName);
 	void processColumnsForHistogram(const QStringList&);
 

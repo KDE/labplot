@@ -1139,8 +1139,10 @@ void MainWin::updateGUIOnProjectChanges(const QByteArray& windowState) {
 	m_newDatapickerAction->setEnabled(hasProject);
 	m_newNotesAction->setEnabled(hasProject);
 	m_newLiveDataSourceAction->setEnabled(hasProject);
+#ifdef HAVE_CANTOR_LIBS
 	for (auto* action : m_newNotebookMenu->actions())
 		action->setEnabled(hasProject);
+#endif
 	m_closeAction->setEnabled(hasProject);
 	m_projectExplorerDockAction->setEnabled(hasProject);
 	m_propertiesDockAction->setEnabled(hasProject);

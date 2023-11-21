@@ -34,14 +34,16 @@
 #include "backend/worksheet/plots/cartesian/XYIntegrationCurve.h"
 #include "backend/worksheet/plots/cartesian/XYInterpolationCurve.h"
 #include "backend/worksheet/plots/cartesian/XYSmoothCurve.h"
-#include "commonfrontend/spreadsheet/SpreadsheetView.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 
 #ifdef HAVE_MQTT
 #include "backend/datasources/MQTTTopic.h"
 #endif
 
+#include <QAction>
+#include <QActionGroup>
 #include <QDialogButtonBox>
+#include <QMenu>
 #include <QPushButton>
 #include <QWindow>
 
@@ -57,12 +59,12 @@
 
 	\ingroup kdefrontend
  */
-PlotDataDialog::PlotDataDialog(Spreadsheet* s, PlotType type, QWidget* parent)
+PlotDataDialog::PlotDataDialog(AbstractAspect* parentAspect, PlotType type, QWidget* parent)
 	: QDialog(parent)
 	, ui(new Ui::PlotDataWidget())
-	, m_spreadsheet(s)
-	, m_plotsModel(new AspectTreeModel(m_spreadsheet->project()))
-	, m_worksheetsModel(new AspectTreeModel(m_spreadsheet->project()))
+	, m_parentAspect(parentAspect)
+	, m_plotsModel(new AspectTreeModel(m_parentAspect->project()))
+	, m_worksheetsModel(new AspectTreeModel(m_parentAspect->project()))
 	, m_plotType(type) {
 	setAttribute(Qt::WA_DeleteOnClose);
 	setWindowTitle(i18nc("@title:window", "Plot Spreadsheet Data"));
@@ -99,7 +101,7 @@ PlotDataDialog::PlotDataDialog(Spreadsheet* s, PlotType type, QWidget* parent)
 	cbExistingPlots->setModel(m_plotsModel);
 
 	// select the first available plot, if available
-	auto plots = m_spreadsheet->project()->children<CartesianPlot>(AbstractAspect::ChildIndexFlag::Recursive);
+	auto plots = m_parentAspect->project()->children<CartesianPlot>(AbstractAspect::ChildIndexFlag::Recursive);
 	if (!plots.isEmpty()) {
 		const auto* plot = plots.first();
 		cbExistingPlots->setCurrentModelIndex(m_plotsModel->modelIndexOfAspect(plot));
@@ -112,7 +114,7 @@ PlotDataDialog::PlotDataDialog(Spreadsheet* s, PlotType type, QWidget* parent)
 	cbExistingWorksheets->setModel(m_worksheetsModel);
 
 	// select the first available worksheet, if available
-	auto worksheets = m_spreadsheet->project()->children<Worksheet>(AbstractAspect::ChildIndexFlag::Recursive);
+	auto worksheets = m_parentAspect->project()->children<Worksheet>(AbstractAspect::ChildIndexFlag::Recursive);
 	if (!worksheets.isEmpty()) {
 		const auto* worksheet = worksheets.first();
 		cbExistingWorksheets->setCurrentModelIndex(m_worksheetsModel->modelIndexOfAspect(worksheet));
@@ -163,9 +165,6 @@ PlotDataDialog::PlotDataDialog(Spreadsheet* s, PlotType type, QWidget* parent)
 		resize(windowHandle()->size()); // workaround for QTBUG-40584
 	} else
 		resize(QSize(0, 0).expandedTo(minimumSize()));
-
-	processColumns();
-	plotPlacementChanged();
 }
 
 PlotDataDialog::~PlotDataDialog() {
@@ -199,15 +198,43 @@ void PlotDataDialog::setAnalysisAction(XYAnalysisCurve::AnalysisAction action) {
 	ui->chkCreateDataCurve->show();
 }
 
-void PlotDataDialog::processColumns() {
-	// columns to plot
-	auto* view = reinterpret_cast<SpreadsheetView*>(m_spreadsheet->view());
-	auto selectedColumns = view->selectedColumns(true);
+void PlotDataDialog::fillMenu(QMenu* menu, QActionGroup* group) {
+	// synchronize with the menu in CartesianPlot
 
-	// use all spreadsheet columns if no columns are selected
-	if (selectedColumns.isEmpty())
-		selectedColumns = m_spreadsheet->children<Column>();
+	auto* action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("xy-curve"), group);
+	action->setData(static_cast<int>(PlotDataDialog::PlotType::XYCurve));
+	menu->addAction(action);
 
+	auto* addNewStatisticalPlotsMenu = new QMenu(i18n("Statistical Plots"));
+	action = new QAction(QIcon::fromTheme(QStringLiteral("view-object-histogram-linear")), i18n("Histogram"), group);
+	action->setData(static_cast<int>(PlotDataDialog::PlotType::Histogram));
+	addNewStatisticalPlotsMenu->addAction(action);
+
+	action = new QAction(BoxPlot::staticIcon(), i18n("Box Plot"), group);
+	action->setData(static_cast<int>(PlotDataDialog::PlotType::BoxPlot));
+	addNewStatisticalPlotsMenu->addAction(action);
+
+	action = new QAction(i18n("KDE Plot"), group);
+	action->setData(static_cast<int>(PlotDataDialog::PlotType::KDEPlot));
+	addNewStatisticalPlotsMenu->addAction(action);
+
+	action = new QAction(i18n("Q-Q Plot"), group);
+	action->setData(static_cast<int>(PlotDataDialog::PlotType::QQPlot));
+	addNewStatisticalPlotsMenu->addAction(action);
+	menu->addMenu(addNewStatisticalPlotsMenu);
+
+	auto* addNewBarPlotsMenu = new QMenu(i18n("Bar Plots"));
+	action = new QAction(QIcon::fromTheme(QStringLiteral("office-chart-bar")), i18n("Bar Plot"), group);
+	action->setData(static_cast<int>(PlotDataDialog::PlotType::BarPlot));
+	addNewBarPlotsMenu->addAction(action);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("office-chart-bar")), i18n("Lollipop Plot"), group);
+	action->setData(static_cast<int>(PlotDataDialog::PlotType::LollipopPlot));
+	addNewBarPlotsMenu->addAction(action);
+	menu->addMenu(addNewBarPlotsMenu);
+}
+
+void PlotDataDialog::setSelectedColumns(QVector<Column*> selectedColumns) {
 	// skip error and non-plottable columns
 	for (Column* col : selectedColumns) {
 		if ((col->plotDesignation() == AbstractColumn::PlotDesignation::X || col->plotDesignation() == AbstractColumn::PlotDesignation::Y
@@ -235,7 +262,7 @@ void PlotDataDialog::processColumns() {
 
 	if (m_plotType == PlotType::XYCurve && xColumnName.isEmpty()) {
 		// no X-column was selected -> look for the first non-selected X-column left to the first selected column
-		const auto& columns = m_spreadsheet->children<Column>();
+		const auto& columns = m_parentAspect->children<Column>();
 		const int index = columns.indexOf(selectedColumns.first()) - 1;
 		for (int i = index; i >= 0; --i) {
 			auto* column = columns.at(i);
@@ -250,7 +277,7 @@ void PlotDataDialog::processColumns() {
 		if (xColumnName.isEmpty()) {
 			// no X-column was found left to the first selected column -> look right to the last selected column
 			const int index = columns.indexOf(selectedColumns.last()) + 1;
-			for (int i = index; i < m_spreadsheet->columnCount(); ++i) {
+			for (int i = index; i < columns.count(); ++i) {
 				auto* column = columns.at(i);
 				if (column->plotDesignation() == AbstractColumn::PlotDesignation::X && column->isPlottable()) {
 					xColumnName = column->name();
@@ -286,6 +313,8 @@ void PlotDataDialog::processColumns() {
 			height += layout->verticalSpacing(); // one more spacing for the separating line
 	}
 	ui->scrollAreaColumns->setMinimumSize(ui->scrollAreaColumns->width(), height);
+
+	plotPlacementChanged();
 }
 
 void PlotDataDialog::processColumnsForXYCurve(const QStringList& columnNames, const QString& xColumnName) {
@@ -389,25 +418,25 @@ void PlotDataDialog::processColumnsForHistogram(const QStringList& columnNames) 
 
 void PlotDataDialog::plot() {
 	WAIT_CURSOR;
-	m_spreadsheet->project()->setSuppressAspectAddedSignal(true);
+	m_parentAspect->project()->setSuppressAspectAddedSignal(true);
 	m_lastAddedCurve = nullptr;
 
 	if (ui->rbPlotPlacementExistingPlotArea->isChecked()) {
 		// add curves to an existing plot
 		auto* aspect = static_cast<AbstractAspect*>(cbExistingPlots->currentModelIndex().internalPointer());
 		auto* plot = static_cast<CartesianPlot*>(aspect);
-		plot->beginMacro(i18n("Plot Area - %1", m_spreadsheet->name()));
+		plot->beginMacro(i18n("Plot Area - %1", m_parentAspect->name()));
 		addCurvesToPlot(plot);
 		plot->endMacro();
 	} else if (ui->rbPlotPlacementExistingWorksheet->isChecked()) {
 		// add curves to a new plot in an existing worksheet
 		auto* aspect = static_cast<AbstractAspect*>(cbExistingWorksheets->currentModelIndex().internalPointer());
 		auto* worksheet = static_cast<Worksheet*>(aspect);
-		worksheet->beginMacro(i18n("Worksheet - %1", m_spreadsheet->name()));
+		worksheet->beginMacro(i18n("Worksheet - %1", m_parentAspect->name()));
 
 		if (ui->rbCurvePlacementAllInOnePlotArea->isChecked()) {
 			// all curves in one plot
-			auto* plot = new CartesianPlot(i18n("Plot Area - %1", m_spreadsheet->name()));
+			auto* plot = new CartesianPlot(i18n("Plot Area - %1", m_parentAspect->name()));
 			plot->setType(CartesianPlot::Type::FourAxes);
 			worksheet->addChild(plot);
 			if (m_columnComboBoxes.count() == 2)
@@ -422,22 +451,22 @@ void PlotDataDialog::plot() {
 		worksheet->endMacro();
 	} else {
 		// add curves to a new plot(s) in a new worksheet
-		auto* parent = m_spreadsheet->parentAspect();
+		auto* parent = m_parentAspect->parentAspect();
 		if (parent->type() == AspectType::DatapickerCurve)
 			parent = parent->parentAspect()->parentAspect();
 		else if (parent->type() == AspectType::Workbook)
 			parent = parent->parentAspect();
 #ifdef HAVE_MQTT
-		else if (dynamic_cast<MQTTTopic*>(m_spreadsheet))
-			parent = m_spreadsheet->project();
+		else if (dynamic_cast<MQTTTopic*>(m_parentAspect))
+			parent = m_parentAspect->project();
 #endif
-		parent->beginMacro(i18n("Plot data from %1", m_spreadsheet->name()));
-		auto* worksheet = new Worksheet(i18n("Worksheet - %1", m_spreadsheet->name()));
+		parent->beginMacro(i18n("Plot data from %1", m_parentAspect->name()));
+		auto* worksheet = new Worksheet(i18n("Worksheet - %1", m_parentAspect->name()));
 		parent->addChild(worksheet);
 
 		if (ui->rbCurvePlacementAllInOnePlotArea->isChecked()) {
 			// all curves in one plot
-			auto* plot = new CartesianPlot(i18n("Plot Area - %1", m_spreadsheet->name()));
+			auto* plot = new CartesianPlot(i18n("Plot Area - %1", m_parentAspect->name()));
 			plot->setType(CartesianPlot::Type::FourAxes);
 			worksheet->addChild(plot);
 			if (m_columnComboBoxes.count() == 2)
@@ -463,7 +492,7 @@ void PlotDataDialog::plot() {
 
 	// if new curves are created via this dialog, select the parent plot of the last added curve in the project explorer.
 	// if a custom fit is being done, select the last created fit curve independent of the number of created curves.
-	m_spreadsheet->project()->setSuppressAspectAddedSignal(false);
+	m_parentAspect->project()->setSuppressAspectAddedSignal(false);
 	if (m_lastAddedCurve) {
 		QString path;
 		if (!m_analysisMode) {
@@ -475,7 +504,7 @@ void PlotDataDialog::plot() {
 				path = m_lastAddedCurve->parentAspect()->path();
 		}
 
-		Q_EMIT m_spreadsheet->project()->requestNavigateTo(path);
+		Q_EMIT m_parentAspect->project()->requestNavigateTo(path);
 	}
 	RESET_CURSOR;
 }
