@@ -300,15 +300,12 @@ IF (WIN32)	# C++17 needed by Orcus not working with MSVC
 ELSE ()
 	option(ENABLE_ORCUS "Build with Orcus support" ON)
 ENDIF ()
-# TODO: BLF fails with newer clang or gcc
-# and on FreeBSD: error: 'FASTFLOAT_VISUAL_STUDIO' is not defined
-if (("${CMAKE_C_COMPILER_ID}" MATCHES "GNU" AND CMAKE_C_COMPILER_VERSION VERSION_GREATER 12)
-	OR ("${CMAKE_C_COMPILER_ID}" MATCHES "Clang" AND CMAKE_C_COMPILER_VERSION VERSION_GREATER 16)
-	OR "${CMAKE_SYSTEM_NAME}" MATCHES "FreeBSD")
-	option(ENABLE_VECTOR_BLF "Build with Vector BLF file format support" OFF)
-else ()
+# FreeBSD: error: 'FASTFLOAT_VISUAL_STUDIO' is not defined
+#if ("${CMAKE_SYSTEM_NAME}" MATCHES "FreeBSD")
+#	option(ENABLE_VECTOR_BLF "Build with Vector BLF file format support" OFF)
+#else ()
 	option(ENABLE_VECTOR_BLF "Build with Vector BLF file format support" ON)
-endif ()
+#endif ()
 option(ENABLE_EIGEN3 "Build with Eigen3 support" ON)
 IF (APPLE)
 	option(ENABLE_TOUCHBAR "Enable touch bar support on macOS" ON)
