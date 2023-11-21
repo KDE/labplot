@@ -9,8 +9,8 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-#include "backend/cantorWorksheet/CantorWorksheet.h"
 #include "backend/core/column/Column.h"
+#include "backend/cantorWorksheet/CantorWorksheet.h"
 #include "backend/core/AbstractSimpleFilter.h"
 #include "backend/core/Project.h"
 #include "backend/core/column/ColumnPrivate.h"
@@ -143,7 +143,7 @@ QMenu* Column::createContextMenu() {
 	// at the moment it's ok to check to the null pointer for firstAction here.
 	// later, once we have some actions in the menu also for MQTT topics we'll
 	// need to explicitly to dynamic_cast for MQTTTopic
-	if (firstAction ) {
+	if (firstAction) {
 		if (parentAspect()->type() == AspectType::Spreadsheet) {
 			auto* spreadsheet = static_cast<Spreadsheet*>(parentAspect());
 			spreadsheet->fillColumnContextMenu(menu, this);

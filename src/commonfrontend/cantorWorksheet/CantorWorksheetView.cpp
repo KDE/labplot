@@ -17,8 +17,8 @@
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QMenu>
-#include <QToolBar>
 #include <QTimer>
+#include <QToolBar>
 
 #include <KLocalizedString>
 #include <KParts/ReadWritePart>
