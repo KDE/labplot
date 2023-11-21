@@ -147,7 +147,7 @@ QMenu* Column::createContextMenu() {
 		if (parentAspect()->type() == AspectType::Spreadsheet) {
 			auto* spreadsheet = static_cast<Spreadsheet*>(parentAspect());
 			spreadsheet->fillColumnContextMenu(menu, this);
-		} if (parentAspect()->type() == AspectType::CantorWorksheet) {
+		} else if (parentAspect()->type() == AspectType::CantorWorksheet) {
 			auto* worksheet = static_cast<CantorWorksheet*>(parentAspect());
 			worksheet->fillColumnContextMenu(menu, this);
 		}
