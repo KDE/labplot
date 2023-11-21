@@ -148,8 +148,10 @@ QMenu* Column::createContextMenu() {
 			auto* spreadsheet = static_cast<Spreadsheet*>(parentAspect());
 			spreadsheet->fillColumnContextMenu(menu, this);
 		} else if (parentAspect()->type() == AspectType::CantorWorksheet) {
+#ifdef HAVE_CANTOR_LIBS
 			auto* worksheet = static_cast<CantorWorksheet*>(parentAspect());
 			worksheet->fillColumnContextMenu(menu, this);
+#endif
 		}
 	}
 
