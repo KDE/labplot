@@ -62,6 +62,5 @@ private Q_SLOTS:
 	void axisMouseMoveApplyToSelection();
 
 	void curveRangeChange();
-
 };
 #endif

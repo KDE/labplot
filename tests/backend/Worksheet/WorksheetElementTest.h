@@ -55,7 +55,6 @@ private Q_SLOTS:
 	void referenceRangeYKeyPressUp();
 
 	void referenceRangeSaveLoad();
-
 };
 
 #endif // WORKSHEETELEMENTTEST_H
