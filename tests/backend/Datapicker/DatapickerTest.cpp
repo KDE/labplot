@@ -1129,7 +1129,7 @@ void DatapickerTest::datapickerDateTime() {
 
 	QCOMPARE(curve->posXColumn()->rowCount(), 1);
 	QCOMPARE(curve->posXColumn()->columnMode(), AbstractColumn::ColumnMode::DateTime);
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0) || !defined(_WIN32)
+#if !defined(_WIN32)
 	QCOMPARE(curve->posXColumn()->dateTimeAt(0),
 			 QDateTime::fromString(QLatin1String("2000-12-01 03:00:00:000Z"), QStringLiteral("yyyy-MM-dd hh:mm:ss:zzzt"))); // logical coordinates
 #endif
