@@ -8,7 +8,8 @@ include:
     file:
 # fails
 #      - /gitlab-templates/reuse-lint.yml
-      - /gitlab-templates/linux.yml
+# TODO: fails atm due to libpoppler linking
+#      - /gitlab-templates/linux.yml
       - /gitlab-templates/windows.yml
       - /gitlab-templates/linux-qt6.yml
       - /gitlab-templates/windows-qt6.yml
