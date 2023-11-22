@@ -855,11 +855,7 @@ void AxisTest::automaticTicNumberUpdateDockMajorTicks() {
 	auto* yAxis = static_cast<Axis*>(axes.at(1));
 	auto* xAxis = static_cast<Axis*>(axes.at(0));
 
-	// TODO: fails here
-
 	AxisDock dock(nullptr);
-
-	return;
 
 	dock.setAxes({xAxis, yAxis});
 	dock.ui.cbMajorTicksAutoNumber->setChecked(false);
