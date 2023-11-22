@@ -34,7 +34,6 @@
 	}
 
 void AxisTest::axisLine() {
-	QSKIP("Axis");
 	Project project;
 	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	QVERIFY(ws != nullptr);
@@ -132,7 +131,6 @@ void AxisTest::axisLine() {
 }
 
 void AxisTest::majorTicksAutoNumberEnableDisable() {
-	QSKIP("Axis");
 	Project project;
 	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	QVERIFY(ws != nullptr);
@@ -233,7 +231,6 @@ void AxisTest::majorTicksAutoNumberEnableDisable() {
 }
 
 void AxisTest::minorTicksAutoNumberEnableDisable() {
-	QSKIP("Axis");
 	Project project;
 	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	QVERIFY(ws != nullptr);
@@ -299,7 +296,6 @@ void AxisTest::minorTicksAutoNumberEnableDisable() {
 }
 
 void AxisTest::majorTicksStartValue() {
-	QSKIP("Axis");
 	Project project;
 	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	QVERIFY(ws != nullptr);
@@ -372,7 +368,6 @@ void AxisTest::majorTicksStartValue() {
 }
 
 void AxisTest::TestSetCoordinateSystem() {
-	QSKIP("Axis");
 	// Test if the range stored in the Axis gets updated when a new coordinatesystemindex is set
 	Project project;
 	auto* ws = new Worksheet(QStringLiteral("worksheet"));
@@ -416,7 +411,6 @@ void AxisTest::TestSetCoordinateSystem() {
 }
 
 void AxisTest::TestSetRange() {
-	QSKIP("Axis");
 	Project project;
 	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	QVERIFY(ws != nullptr);
@@ -475,7 +469,6 @@ void AxisTest::TestSetRange() {
 }
 
 void AxisTest::TestAddingHorizontalAxis() {
-	QSKIP("Axis");
 	Project project;
 	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	QVERIFY(ws != nullptr);
@@ -491,7 +484,6 @@ void AxisTest::TestAddingHorizontalAxis() {
 }
 
 void AxisTest::TestAddingVerticalAxis() {
-	QSKIP("Axis");
 	Project project;
 	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	QVERIFY(ws != nullptr);
@@ -507,7 +499,6 @@ void AxisTest::TestAddingVerticalAxis() {
 }
 
 void AxisTest::tickLabelRepresentationAutomatic() {
-	QSKIP("Axis");
 	QLocale::setDefault(QLocale::C); // . as decimal separator
 	Project project;
 	auto* ws = new Worksheet(QStringLiteral("worksheet"));
@@ -572,7 +563,6 @@ void AxisTest::tickLabelRepresentationAutomatic() {
 }
 
 void AxisTest::tickLabelRepresentationManual() {
-	QSKIP("Axis");
 	QLocale::setDefault(QLocale::English); // . as decimal separator
 	Project project;
 	auto* ws = new Worksheet(QStringLiteral("worksheet"));
@@ -698,7 +688,6 @@ void AxisTest::tickLabelRepresentationManual() {
 	CHECK_COMMON_COLOR(Qt::black);
 
 void AxisTest::setAxisColor() {
-	QSKIP("Axis");
 	CREATE_PROJECT
 
 	// set axis color
@@ -713,7 +702,6 @@ void AxisTest::setAxisColor() {
 }
 
 void AxisTest::setTitleColor() {
-	QSKIP("Axis");
 	CREATE_PROJECT
 
 	// change title color
@@ -738,7 +726,6 @@ void AxisTest::setTitleColor() {
 }
 
 void AxisTest::setMajorTickColor() {
-	QSKIP("Axis");
 	CREATE_PROJECT
 
 	// change title color
@@ -763,7 +750,6 @@ void AxisTest::setMajorTickColor() {
 }
 
 void AxisTest::setMinorTickColor() {
-	QSKIP("Axis");
 	CREATE_PROJECT
 
 	// change title color
@@ -788,7 +774,6 @@ void AxisTest::setMinorTickColor() {
 }
 
 void AxisTest::setLineColor() {
-	QSKIP("Axis");
 	CREATE_PROJECT
 
 	// change title color
@@ -813,7 +798,6 @@ void AxisTest::setLineColor() {
 }
 
 void AxisTest::setTickLabelColor() {
-	QSKIP("Axis");
 	CREATE_PROJECT
 
 	// change title color
@@ -879,7 +863,6 @@ void AxisTest::automaticTicNumberUpdateDockMajorTicks() {
 }
 
 void AxisTest::automaticTicNumberUpdateDockMinorTicks() {
-	QSKIP("Axis");
 	Project project;
 	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	QVERIFY(ws != nullptr);

@@ -85,7 +85,6 @@ ALL_WORKSHEETELEMENT_TESTS2(TextLabel, LabelWidget, setLabels)
 ALL_WORKSHEETELEMENT_TESTS2(Image, ImageDock, setImages)
 
 void WorksheetElementTest::referenceRangeXMouseMove() {
-	QSKIP("WorksheetElement");
 	SETUP_PROJECT
 
 	auto* referenceRange = new ReferenceRange(p, QStringLiteral("range"));
@@ -129,7 +128,6 @@ void WorksheetElementTest::referenceRangeXMouseMove() {
 }
 
 void WorksheetElementTest::referenceRangeYMouseMove() {
-	QSKIP("WorksheetElement");
 	SETUP_PROJECT
 
 	auto* referenceRange = new ReferenceRange(p, QStringLiteral("range"));
@@ -172,7 +170,6 @@ void WorksheetElementTest::referenceRangeYMouseMove() {
 }
 
 void WorksheetElementTest::referenceRangeXClippingLeftMouse() {
-	QSKIP("WorksheetElement");
 	SETUP_PROJECT
 
 	auto* referenceRange = new ReferenceRange(p, QStringLiteral("range"));
@@ -200,7 +197,6 @@ void WorksheetElementTest::referenceRangeXClippingLeftMouse() {
 }
 
 void WorksheetElementTest::referenceRangeXClippingLeftSetStart() {
-	QSKIP("WorksheetElement");
 	SETUP_PROJECT
 
 	auto* referenceRange = new ReferenceRange(p, QStringLiteral("range"));
@@ -228,7 +224,6 @@ void WorksheetElementTest::referenceRangeXClippingLeftSetStart() {
 }
 
 void WorksheetElementTest::referenceRangeXClippingRightSetEnd() {
-	QSKIP("WorksheetElement");
 	SETUP_PROJECT
 
 	auto* referenceRange = new ReferenceRange(p, QStringLiteral("range"));
@@ -258,7 +253,6 @@ void WorksheetElementTest::referenceRangeXClippingRightSetEnd() {
 }
 
 void WorksheetElementTest::referenceRangeYClippingBottomSetEnd() {
-	QSKIP("WorksheetElement");
 	SETUP_PROJECT
 
 	auto* referenceRange = new ReferenceRange(p, QStringLiteral("range"));
@@ -287,7 +281,6 @@ void WorksheetElementTest::referenceRangeYClippingBottomSetEnd() {
 }
 
 void WorksheetElementTest::referenceRangeYClippingTopSetEnd() {
-	QSKIP("WorksheetElement");
 	SETUP_PROJECT
 
 	auto* referenceRange = new ReferenceRange(p, QStringLiteral("range"));
@@ -316,7 +309,6 @@ void WorksheetElementTest::referenceRangeYClippingTopSetEnd() {
 }
 
 void WorksheetElementTest::referenceRangeYKeyPressUp() {
-	QSKIP("WorksheetElement");
 	SETUP_PROJECT
 
 	auto* referenceRange = new ReferenceRange(p, QStringLiteral("range"));
@@ -352,7 +344,6 @@ void WorksheetElementTest::referenceRangeYKeyPressUp() {
 }
 
 void WorksheetElementTest::referenceRangeSaveLoad() {
-	QSKIP("WorksheetElement");
 	QString savePath;
 	{
 		SETUP_PROJECT

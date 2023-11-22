@@ -40,7 +40,6 @@
 using Dimension = CartesianCoordinateSystem::Dimension;
 
 void RetransformTest::TestLoadProject() {
-	QSKIP("Retransform");
 	RetransformCallCounter c;
 	Project project;
 
@@ -78,7 +77,6 @@ void RetransformTest::TestLoadProject() {
 
 // Problem in this project was that the second axis labels are not loaded. Zooming in/out once shows the correct range
 void RetransformTest::TestLoadProject2() {
-	QSKIP("Retransform");
 	QLocale::setDefault(QLocale::C); // . as decimal separator
 	RetransformCallCounter c;
 	Project project;
@@ -132,7 +130,6 @@ void RetransformTest::TestLoadProject2() {
 }
 
 void RetransformTest::TestResizeWindows() {
-	QSKIP("Retransform");
 	RetransformCallCounter c;
 	Project project;
 	project.load(QFINDTESTDATA(QLatin1String("data/p1.lml")));
@@ -181,7 +178,6 @@ void RetransformTest::TestResizeWindows() {
  * also the number of calls of the retransforms
  */
 void RetransformTest::TestZoomSelectionAutoscale() {
-	QSKIP("Retransform");
 	RetransformCallCounter c;
 	Project project;
 
@@ -324,7 +320,6 @@ void RetransformTest::TestZoomSelectionAutoscale() {
  * Nice extends should not apply!
  */
 void RetransformTest::TestZoomAutoscaleSingleYRange() {
-	QSKIP("Retransform");
 	Project project;
 
 	auto* worksheet = new Worksheet(QStringLiteral("Worksheet"));
@@ -423,7 +418,6 @@ void RetransformTest::TestZoomAutoscaleSingleYRange() {
  * Nice extends should not apply!
  */
 void RetransformTest::TestZoomAutoscaleSingleXRange() {
-	QSKIP("Retransform");
 	Project project;
 
 	auto* worksheet = new Worksheet(QStringLiteral("Worksheet"));
@@ -518,7 +512,6 @@ void RetransformTest::TestZoomAutoscaleSingleXRange() {
  * Check that during a padding change retransform and retransform scale is called
  */
 void RetransformTest::TestPadding() {
-	QSKIP("Retransform");
 	RetransformCallCounter c;
 	Project project;
 
@@ -647,7 +640,6 @@ void RetransformTest::TestCopyPastePlot() {
 }
 
 void RetransformTest::TestAddCurve() {
-	QSKIP("Retransform");
 	Project project;
 	auto* ws = new Worksheet(QStringLiteral("Worksheet"));
 	QVERIFY(ws != nullptr);
@@ -710,7 +702,6 @@ void RetransformTest::TestAddCurve() {
 }
 
 void RetransformTest::TestBarPlotOrientation() {
-	QSKIP("Retransform");
 	RetransformCallCounter c;
 	Project project;
 
@@ -761,7 +752,6 @@ void RetransformTest::TestBarPlotOrientation() {
 }
 
 void RetransformTest::TestZoom() {
-	QSKIP("Retransform");
 	RetransformCallCounter c;
 	Project project;
 
@@ -829,7 +819,6 @@ void RetransformTest::TestZoom() {
 }
 
 void RetransformTest::TestImportCSV() {
-	QSKIP("Retransform");
 	Project project;
 	auto* ws = new Worksheet(QStringLiteral("Worksheet"));
 	QVERIFY(ws != nullptr);
@@ -937,7 +926,6 @@ void RetransformTest::TestImportCSV() {
 }
 
 void RetransformTest::TestSetScale() {
-	QSKIP("Retransform");
 	RetransformCallCounter c;
 	Project project;
 
@@ -1017,7 +1005,6 @@ void RetransformTest::TestSetScale() {
 }
 
 void RetransformTest::TestChangePlotRange() {
-	QSKIP("Retransform");
 	RetransformCallCounter c;
 	Project project;
 
@@ -1138,7 +1125,6 @@ void RetransformTest::TestChangePlotRange() {
 }
 
 void RetransformTest::TestChangePlotRangeElement() {
-	QSKIP("Retransform");
 	// Change the plotrange of one of the elements
 
 	RetransformCallCounter c;
@@ -1287,7 +1273,6 @@ void RetransformTest::TestChangePlotRangeElement() {
 }
 
 void RetransformTest::TestChangePlotRangeElement2() {
-	QSKIP("Retransform");
 	// Change the plotrange of one of the elements
 
 	RetransformCallCounter c;
@@ -1494,7 +1479,6 @@ void RetransformTest::TestChangePlotRangeElement2() {
 }
 
 void RetransformTest::TestChangePlotRangeElement3() {
-	QSKIP("Retransform");
 	// Change the plotrange of one of the elements
 	// This time curve1 changes csystem
 	// --> yRange1 and yRange2 have to be transformed

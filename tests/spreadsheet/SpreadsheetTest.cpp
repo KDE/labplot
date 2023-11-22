@@ -44,7 +44,6 @@
    insert two columns with float values into an empty spreadsheet
 */
 void SpreadsheetTest::testCopyPasteColumnMode00() {
-	QSKIP("Spreadsheet");
 	QLocale::setDefault(QLocale::C); // . as decimal separator
 	Spreadsheet sheet(QStringLiteral("test"), false);
 	sheet.setColumnCount(2);
@@ -76,7 +75,6 @@ void SpreadsheetTest::testCopyPasteColumnMode00() {
    the first column has to be converted to integer column, the second to big integer.
 */
 void SpreadsheetTest::testCopyPasteColumnMode01() {
-	QSKIP("Spreadsheet");
 	Spreadsheet sheet(QStringLiteral("test"), false);
 	sheet.setColumnCount(2);
 	sheet.setRowCount(100);
@@ -108,7 +106,6 @@ void SpreadsheetTest::testCopyPasteColumnMode01() {
    the first column has to be converted to integer column, the second to float.
 */
 void SpreadsheetTest::testCopyPasteColumnMode02() {
-	QSKIP("Spreadsheet");
 	QLocale::setDefault(QLocale::C); // . as decimal separator
 	Spreadsheet sheet(QStringLiteral("test"), false);
 	sheet.setColumnCount(2);
@@ -139,7 +136,6 @@ void SpreadsheetTest::testCopyPasteColumnMode02() {
    Properly handle empty values in the tab separated data.
 */
 void SpreadsheetTest::testCopyPasteColumnMode03() {
-	QSKIP("Spreadsheet");
 	QLocale::setDefault(QLocale::C); // . as decimal separator
 	Spreadsheet sheet(QStringLiteral("test"), false);
 	sheet.setColumnCount(2);
@@ -204,7 +200,6 @@ void SpreadsheetTest::testCopyPasteColumnMode03() {
 	automatically detect the proper format for the datetime columns
  */
 void SpreadsheetTest::testCopyPasteColumnMode04() {
-	QSKIP("Spreadsheet");
 	QLocale::setDefault(QLocale::C); // . as decimal separator
 	Spreadsheet sheet(QStringLiteral("test"), false);
 	sheet.setColumnCount(2);
@@ -242,7 +237,6 @@ void SpreadsheetTest::testCopyPasteColumnMode04() {
 	automatically detect the proper format for the datetime columns, time part only
  */
 void SpreadsheetTest::testCopyPasteColumnMode05() {
-	QSKIP("Spreadsheet");
 	QLocale::setDefault(QLocale::C); // . as decimal separator
 	Spreadsheet sheet(QStringLiteral("test"), false);
 	sheet.setColumnCount(2);
@@ -280,7 +274,6 @@ void SpreadsheetTest::testCopyPasteColumnMode05() {
 	automatically detect the proper format for the datetime columns having the format "yyyy-MM-dd hh:mm:ss"
  */
 void SpreadsheetTest::testCopyPasteColumnMode06() {
-	QSKIP("Spreadsheet");
 	Spreadsheet sheet(QStringLiteral("test"), false);
 	sheet.setColumnCount(2);
 	sheet.setRowCount(100);
@@ -320,7 +313,6 @@ void SpreadsheetTest::testCopyPasteColumnMode06() {
    insert irregular data, new columns should be added appropriately.
 */
 void SpreadsheetTest::testCopyPasteSizeChange00() {
-	QSKIP("Spreadsheet");
 	Project project;
 	Spreadsheet* sheet = new Spreadsheet(QStringLiteral("test"), false);
 	project.addChild(sheet);
@@ -412,7 +404,6 @@ void SpreadsheetTest::testCopyPasteSizeChange00() {
 }
 
 void SpreadsheetTest::testCopyPasteUtf8() {
-	QSKIP("Spreadsheet");
 	Spreadsheet sheet(QStringLiteral("test"), false);
 	sheet.setColumnCount(2);
 	sheet.setRowCount(100);
@@ -440,7 +431,6 @@ void SpreadsheetTest::testCopyPasteUtf8() {
    the spreadsheet has to be extended accordingly
 */
 void SpreadsheetTest::testCopyPasteSizeChange01() {
-	QSKIP("Spreadsheet");
 	QLocale::setDefault(QLocale::C); // . as decimal separator
 	Spreadsheet sheet(QStringLiteral("test"), false);
 	sheet.setColumnCount(2);
@@ -487,7 +477,6 @@ void SpreadsheetTest::testCopyPasteSizeChange01() {
  * check sorting single column of double values with NaN ascending
  */
 void SpreadsheetTest::testSortSingleNumeric1() {
-	QSKIP("Spreadsheet");
 	const QVector<double> xData{0.5, -0.2, GSL_NAN, 2.0, -1.0};
 
 	Spreadsheet sheet(QStringLiteral("test"), false);
@@ -510,7 +499,6 @@ void SpreadsheetTest::testSortSingleNumeric1() {
  * check sorting single column of double values with NaN descending
  */
 void SpreadsheetTest::testSortSingleNumeric2() {
-	QSKIP("Spreadsheet");
 	const QVector<double> xData{0.5, -0.2, GSL_NAN, 2.0, -1.0};
 
 	Spreadsheet sheet(QStringLiteral("test"), false);
@@ -533,7 +521,6 @@ void SpreadsheetTest::testSortSingleNumeric2() {
  * check sorting single column of integer values with empty entries ascending
  */
 void SpreadsheetTest::testSortSingleInteger1() {
-	QSKIP("Spreadsheet");
 	const QVector<int> xData1{4, 5, 2};
 	const QVector<int> xData2{3, 6, -1};
 
@@ -562,7 +549,6 @@ void SpreadsheetTest::testSortSingleInteger1() {
  * check sorting single column of integer values with empty entries ascending
  */
 void SpreadsheetTest::testSortSingleInteger2() {
-	QSKIP("Spreadsheet");
 	const QVector<int> xData1{4, 5, 2};
 	const QVector<int> xData2{3, 6, -1};
 
@@ -591,7 +577,6 @@ void SpreadsheetTest::testSortSingleInteger2() {
  * check sorting single column of big int values with empty entries ascending
  */
 void SpreadsheetTest::testSortSingleBigInt1() {
-	QSKIP("Spreadsheet");
 	const QVector<qint64> xData1{40000000000, 50000000000, 20000000000};
 	const QVector<qint64> xData2{30000000000, 60000000000, -10000000000};
 
@@ -620,7 +605,6 @@ void SpreadsheetTest::testSortSingleBigInt1() {
  * check sorting single column of big int values with empty entries descending
  */
 void SpreadsheetTest::testSortSingleBigInt2() {
-	QSKIP("Spreadsheet");
 	const QVector<qint64> xData1{40000000000, 50000000000, 20000000000};
 	const QVector<qint64> xData2{30000000000, 60000000000, -10000000000};
 
@@ -649,7 +633,6 @@ void SpreadsheetTest::testSortSingleBigInt2() {
  * check sorting single column of text with empty entries ascending
  */
 void SpreadsheetTest::testSortSingleText1() {
-	QSKIP("Spreadsheet");
 	const QVector<QString> xData{QStringLiteral("ben"),
 								 QStringLiteral("amy"),
 								 QStringLiteral("eddy"),
@@ -681,7 +664,6 @@ void SpreadsheetTest::testSortSingleText1() {
  * check sorting single column of text with empty entries descending
  */
 void SpreadsheetTest::testSortSingleText2() {
-	QSKIP("Spreadsheet");
 	const QVector<QString> xData =
 		{QStringLiteral("ben"), QStringLiteral("amy"), QStringLiteral("eddy"), QString(), QStringLiteral("carl"), QStringLiteral("dan")};
 
@@ -709,7 +691,6 @@ void SpreadsheetTest::testSortSingleText2() {
  * check sorting single column of datetimes with invalid entries ascending
  */
 void SpreadsheetTest::testSortSingleDateTime1() {
-	QSKIP("Spreadsheet");
 	const QVector<QDateTime> xData{
 		QDateTime(QDate(2020, 02, 29), QTime(12, 12, 12)),
 		QDateTime(QDate(2020, 02, 28), QTime(12, 12, 12)),
@@ -773,7 +754,6 @@ void SpreadsheetTest::testSortSingleDateTime2() {
  * check sorting double values with NaN ascending as leading column
  */
 void SpreadsheetTest::testSortNumeric1() {
-	QSKIP("Spreadsheet");
 	const QVector<double> xData{0.5, -0.2, GSL_NAN, 2.0, -1.0};
 	const QVector<int> yData{1, 2, 3, 4, 5, 6};
 
@@ -807,7 +787,6 @@ void SpreadsheetTest::testSortNumeric1() {
  * check sorting double values with NaN descending as leading column
  */
 void SpreadsheetTest::testSortNumeric2() {
-	QSKIP("Spreadsheet");
 	const QVector<double> xData{0.5, -0.2, GSL_NAN, 2.0, -1.0};
 	const QVector<int> yData{1, 2, 3, 4, 5, 6, 7};
 
@@ -841,7 +820,6 @@ void SpreadsheetTest::testSortNumeric2() {
  * check sorting integer values with empty entries ascending as leading column
  */
 void SpreadsheetTest::testSortInteger1() {
-	QSKIP("Spreadsheet");
 	const QVector<int> xData1{4, 5, 2};
 	const QVector<int> xData2{3, 6, -1};
 	const QVector<int> yData{1, 2, 3, 4, 5, 6, 7};
@@ -881,7 +859,6 @@ void SpreadsheetTest::testSortInteger1() {
  * check sorting integer values with empty entries descending as leading column
  */
 void SpreadsheetTest::testSortInteger2() {
-	QSKIP("Spreadsheet");
 	const QVector<int> xData1{4, 5, 2};
 	const QVector<int> xData2{3, 6, -1};
 	const QVector<int> yData{1, 2, 3, 4, 5, 6, 7};
@@ -921,7 +898,6 @@ void SpreadsheetTest::testSortInteger2() {
  * check sorting big int values with empty entries ascending as leading column
  */
 void SpreadsheetTest::testSortBigInt1() {
-	QSKIP("Spreadsheet");
 	Spreadsheet sheet(QStringLiteral("test"), false);
 	sheet.setColumnCount(2);
 	sheet.setRowCount(7);
@@ -962,7 +938,6 @@ void SpreadsheetTest::testSortBigInt1() {
  * check sorting big int values with empty entries descending as leading column
  */
 void SpreadsheetTest::testSortBigInt2() {
-	QSKIP("Spreadsheet");
 	Spreadsheet sheet(QStringLiteral("test"), false);
 	sheet.setColumnCount(2);
 	sheet.setRowCount(7);
@@ -1003,7 +978,6 @@ void SpreadsheetTest::testSortBigInt2() {
  * check sorting text with empty entries ascending as leading column
  */
 void SpreadsheetTest::testSortText1() {
-	QSKIP("Spreadsheet");
 	Spreadsheet sheet(QStringLiteral("test"), false);
 	sheet.setColumnCount(2);
 	sheet.setRowCount(8);
@@ -1042,7 +1016,6 @@ void SpreadsheetTest::testSortText1() {
  * check sorting text with empty entries descending as leading column
  */
 void SpreadsheetTest::testSortText2() {
-	QSKIP("Spreadsheet");
 	Spreadsheet sheet(QStringLiteral("test"), false);
 	sheet.setColumnCount(2);
 	sheet.setRowCount(8);
@@ -1081,7 +1054,6 @@ void SpreadsheetTest::testSortText2() {
  * check sorting datetimes with invalid entries ascending as leading column
  */
 void SpreadsheetTest::testSortDateTime1() {
-	QSKIP("Spreadsheet");
 	Spreadsheet sheet(QStringLiteral("test"), false);
 	sheet.setColumnCount(2);
 	sheet.setRowCount(8);
@@ -1125,7 +1097,6 @@ void SpreadsheetTest::testSortDateTime1() {
  * check sorting datetimes with invalid entries descending as leading column
  */
 void SpreadsheetTest::testSortDateTime2() {
-	QSKIP("Spreadsheet");
 	const QVector<QDateTime> xData{
 		QDateTime(QDate(2020, 02, 29), QTime(12, 12, 12)),
 		QDateTime(QDate(2020, 02, 28), QTime(12, 12, 12)),
@@ -1170,7 +1141,6 @@ void SpreadsheetTest::testSortDateTime2() {
  * check performance of sorting double values in single column
  */
 void SpreadsheetTest::testSortPerformanceNumeric1() {
-	QSKIP("Spreadsheet");
 	Spreadsheet sheet(QStringLiteral("test"), false);
 	sheet.setColumnCount(1);
 	sheet.setRowCount(10000);
@@ -1195,7 +1165,6 @@ void SpreadsheetTest::testSortPerformanceNumeric1() {
  * check performance of sorting double values with two columns
  */
 void SpreadsheetTest::testSortPerformanceNumeric2() {
-	QSKIP("Spreadsheet");
 	Spreadsheet sheet(QStringLiteral("test"), false);
 	sheet.setColumnCount(2);
 	sheet.setRowCount(10000);
@@ -1226,7 +1195,6 @@ void SpreadsheetTest::testSortPerformanceNumeric2() {
 // ********************* drop/mask  *************************
 // **********************************************************
 void SpreadsheetTest::testRemoveRowsWithMissingValues() {
-	QSKIP("Spreadsheet");
 	// prepare the spreadsheet
 	Spreadsheet sheet(QStringLiteral("test"), false);
 	sheet.setColumnCount(2);
@@ -1256,7 +1224,6 @@ void SpreadsheetTest::testRemoveRowsWithMissingValues() {
 }
 
 void SpreadsheetTest::testMaskRowsWithMissingValues() {
-	QSKIP("Spreadsheet");
 	// prepare the spreadsheet
 	Spreadsheet sheet(QStringLiteral("test"), false);
 	sheet.setColumnCount(2);
@@ -1295,7 +1262,6 @@ void SpreadsheetTest::testMaskRowsWithMissingValues() {
 // ********************* flattening  ************************
 // **********************************************************
 void SpreadsheetTest::testFlatten00() {
-	QSKIP("Spreadsheet");
 	Project project;
 	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
 	project.addChild(sheet);
@@ -1400,7 +1366,6 @@ void SpreadsheetTest::testFlatten00() {
 
 // test with a missing value in one of the reference columns
 void SpreadsheetTest::testFlatten01() {
-	QSKIP("Spreadsheet");
 	Project project;
 	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
 	project.addChild(sheet);
@@ -1491,7 +1456,6 @@ void SpreadsheetTest::testFlatten01() {
 
 // test with missing values in the reference columns - no result should be produced for these rows
 void SpreadsheetTest::testFlatten02() {
-	QSKIP("Spreadsheet");
 	Project project;
 	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
 	project.addChild(sheet);
@@ -1573,7 +1537,6 @@ void SpreadsheetTest::testFlatten02() {
 
 // test with missing no reference columns
 void SpreadsheetTest::testFlatten03() {
-	QSKIP("Spreadsheet");
 	Project project;
 	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
 	project.addChild(sheet);
@@ -1688,7 +1651,6 @@ Spreadsheet* SpreadsheetTest::createSearchReplaceSpreadsheet() {
  * simple search ignoring data types, column-major order
  */
 void SpreadsheetTest::testSearchSimple00() {
-	QSKIP("Spreadsheet");
 	Project project;
 	auto* sheet = createSearchReplaceSpreadsheet();
 	project.addChild(sheet);
@@ -1784,7 +1746,6 @@ void SpreadsheetTest::testSearchSimple00() {
  * extended search for Text, column-major order
  */
 void SpreadsheetTest::testSearchExtended00() {
-	QSKIP("Spreadsheet");
 	Project project;
 	auto* sheet = createSearchReplaceSpreadsheet();
 	project.addChild(sheet);
@@ -1866,7 +1827,6 @@ void SpreadsheetTest::testSearchExtended00() {
  * extended search for Text, row-major order
  */
 void SpreadsheetTest::testSearchExtended01() {
-	QSKIP("Spreadsheet");
 	Project project;
 	auto* sheet = createSearchReplaceSpreadsheet();
 	project.addChild(sheet);
@@ -1948,7 +1908,6 @@ void SpreadsheetTest::testSearchExtended01() {
  * search for Numeric, column-major order
  */
 void SpreadsheetTest::testSearchExtended02() {
-	QSKIP("Spreadsheet");
 	Project project;
 	auto* sheet = createSearchReplaceSpreadsheet();
 	project.addChild(sheet);
@@ -2030,7 +1989,6 @@ void SpreadsheetTest::testSearchExtended02() {
  * search for Numeric, row major
  */
 void SpreadsheetTest::testSearchExtended03() {
-	QSKIP("Spreadsheet");
 	Project project;
 	auto* sheet = createSearchReplaceSpreadsheet();
 	project.addChild(sheet);
@@ -2109,7 +2067,6 @@ void SpreadsheetTest::testSearchExtended03() {
 }
 
 void SpreadsheetTest::testSearchFindAll() {
-	QSKIP("Spreadsheet");
 	Project project;
 	auto* sheet = createSearchReplaceSpreadsheet();
 	project.addChild(sheet);
@@ -2139,7 +2096,6 @@ void SpreadsheetTest::testSearchFindAll() {
  * replace a numeric value in int and double columns via "replace next"
  */
 void SpreadsheetTest::testSearchReplaceNumeric() {
-	QSKIP("Spreadsheet");
 	Project project;
 	auto* sheet = createSearchReplaceSpreadsheet();
 	project.addChild(sheet);
@@ -2202,7 +2158,6 @@ void SpreadsheetTest::testSearchReplaceNumeric() {
  * replace a text value in text columns via "replace next"
  */
 void SpreadsheetTest::testSearchReplaceText() {
-	QSKIP("Spreadsheet");
 	Project project;
 	auto* sheet = createSearchReplaceSpreadsheet();
 	project.addChild(sheet);
@@ -2262,7 +2217,6 @@ void SpreadsheetTest::testSearchReplaceText() {
 }
 
 void SpreadsheetTest::testSearchReplaceAll() {
-	QSKIP("Spreadsheet");
 	Project project;
 	auto* sheet = createSearchReplaceSpreadsheet();
 	project.addChild(sheet);
@@ -2291,7 +2245,6 @@ void SpreadsheetTest::testSearchReplaceAll() {
 // ********************** size changes  *********************
 // **********************************************************
 void SpreadsheetTest::testInsertRows() {
-	QSKIP("Spreadsheet");
 	Project project;
 	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
 	project.addChild(sheet);
@@ -2334,7 +2287,6 @@ void SpreadsheetTest::testInsertRows() {
 }
 
 void SpreadsheetTest::testRemoveRows() {
-	QSKIP("Spreadsheet");
 	Project project;
 	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
 	project.addChild(sheet);
@@ -2377,7 +2329,6 @@ void SpreadsheetTest::testRemoveRows() {
 }
 
 void SpreadsheetTest::testInsertRowsBegin() {
-	QSKIP("Spreadsheet");
 	Project project;
 	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
 	project.addChild(sheet);
@@ -2419,7 +2370,6 @@ void SpreadsheetTest::testInsertRowsBegin() {
 	QCOMPARE(rowsRemovedCounter, 1); // undo()
 }
 void SpreadsheetTest::testRemoveRowsBegin() {
-	QSKIP("Spreadsheet");
 	Project project;
 	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
 	project.addChild(sheet);
@@ -2462,7 +2412,6 @@ void SpreadsheetTest::testRemoveRowsBegin() {
 }
 
 void SpreadsheetTest::testInsertColumns() {
-	QSKIP("Spreadsheet");
 	Project project;
 	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
 	project.addChild(sheet);
@@ -2506,7 +2455,6 @@ void SpreadsheetTest::testInsertColumns() {
 }
 
 void SpreadsheetTest::testRemoveColumns() {
-	QSKIP("Spreadsheet");
 	Project project;
 	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
 	project.addChild(sheet);
@@ -2555,7 +2503,6 @@ void SpreadsheetTest::testRemoveColumns() {
  * Testing if in the model begin and end are used properly
  */
 void SpreadsheetTest::testInsertRowsSuppressUpdate() {
-	QSKIP("Spreadsheet");
 	Project project;
 	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
 	project.addChild(sheet);
@@ -2615,7 +2562,6 @@ void SpreadsheetTest::testInsertRowsSuppressUpdate() {
  * Testing if in the model begin and end are used properly
  */
 void SpreadsheetTest::testInsertColumnsSuppressUpdate() {
-	QSKIP("Spreadsheet");
 	Project project;
 	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
 	project.addChild(sheet);
@@ -2670,7 +2616,6 @@ void SpreadsheetTest::testInsertColumnsSuppressUpdate() {
 }
 
 void SpreadsheetTest::testLinkSpreadsheetsUndoRedo() {
-	QSKIP("Spreadsheet");
 #ifdef __FreeBSD__
 	return;
 #endif
@@ -2768,7 +2713,6 @@ void SpreadsheetTest::testLinkSpreadsheetsUndoRedo() {
 }
 
 void SpreadsheetTest::testLinkSpreadsheetDeleteAdd() {
-	QSKIP("Spreadsheet");
 #ifdef __FreeBSD__
 	return;
 #endif
@@ -2820,7 +2764,6 @@ void SpreadsheetTest::testLinkSpreadsheetDeleteAdd() {
 }
 
 void SpreadsheetTest::testLinkSpreadsheetAddRow() {
-	QSKIP("Spreadsheet");
 #ifdef __FreeBSD__
 	return;
 #endif
@@ -2862,7 +2805,6 @@ void SpreadsheetTest::testLinkSpreadsheetAddRow() {
 }
 
 void SpreadsheetTest::testLinkSpreadsheetRemoveRow() {
-	QSKIP("Spreadsheet");
 #ifdef __FreeBSD__
 	return;
 #endif
@@ -2904,7 +2846,6 @@ void SpreadsheetTest::testLinkSpreadsheetRemoveRow() {
 }
 
 void SpreadsheetTest::testLinkSpreadsheetRecalculate() {
-	QSKIP("Spreadsheet");
 #ifdef __FreeBSD__
 	return;
 #endif
@@ -2959,7 +2900,6 @@ void SpreadsheetTest::testLinkSpreadsheetRecalculate() {
 }
 
 void SpreadsheetTest::testLinkSpreadsheetSaveLoad() {
-	QSKIP("Spreadsheet");
 #ifdef __FreeBSD__
 	return;
 #endif

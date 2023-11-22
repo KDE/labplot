@@ -617,7 +617,6 @@ void WidgetsTest::numberSpinBoxChangingValueKeyPress() {
 }
 
 void WidgetsTest::numberSpinBoxLimit() {
-	QSKIP("Widget");
 	NumberSpinBox sb(5);
 	sb.setMaximum(7);
 	sb.setMinimum(3);
@@ -662,12 +661,9 @@ void WidgetsTest::numberSpinBoxLimit() {
 	sb.keyPressEvent(&event);
 	QCOMPARE(valueChangedCounter, 4);
 	VALUES_EQUAL(sb.value(), 3.);
-
-	sb.disconnect();
 }
 
 void WidgetsTest::numberSpinBoxPrefixSuffix() {
-	QSKIP("Widget");
 	NumberSpinBox sb(5.01);
 	sb.setMaximum(7);
 	sb.setMinimum(3);
@@ -691,12 +687,9 @@ void WidgetsTest::numberSpinBoxPrefixSuffix() {
 	QCOMPARE(valueChangedCounter, 1);
 	QCOMPARE(sb.value(), 5.02);
 	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("Prefix 5.02 Suffix"));
-
-	sb.disconnect();
 }
 
 void WidgetsTest::numberSpinBoxSuffixFrontToBackSelection() {
-	QSKIP("Widget");
 	// Select from front to back
 	NumberSpinBox sb;
 	sb.setSuffix(QStringLiteral(" cm")); // whitespace is important!
@@ -716,12 +709,9 @@ void WidgetsTest::numberSpinBoxSuffixFrontToBackSelection() {
 
 	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("51 cm"));
 	QCOMPARE(counter, 1);
-
-	sb.disconnect();
 }
 
 void WidgetsTest::numberSpinBoxSuffixBackToFrontSelection() {
-	QSKIP("Widget");
 	// Select from back to front
 	NumberSpinBox sb;
 	sb.setSuffix(QStringLiteral(" cm")); // whitespace is important!
@@ -741,12 +731,9 @@ void WidgetsTest::numberSpinBoxSuffixBackToFrontSelection() {
 
 	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("51 cm"));
 	QCOMPARE(counter, 1);
-
-	sb.disconnect();
 }
 
 void WidgetsTest::numberSpinBoxSuffixSetCursor() {
-	QSKIP("Widget");
 	// Just set cursor into suffix
 	NumberSpinBox sb;
 	sb.setSuffix(QStringLiteral(" cm")); // whitespace is important!
@@ -766,12 +753,9 @@ void WidgetsTest::numberSpinBoxSuffixSetCursor() {
 
 	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("51 cm")); // 1 appended
 	QCOMPARE(counter, 1);
-
-	sb.disconnect();
 }
 
 void WidgetsTest::numberSpinBoxPrefixFrontToBackSelection() {
-	QSKIP("Widget");
 	// from front to back
 	NumberSpinBox sb;
 	sb.setPrefix(QStringLiteral("prefix ")); // whitespace is important!
@@ -787,7 +771,6 @@ void WidgetsTest::numberSpinBoxPrefixFrontToBackSelection() {
 }
 
 void WidgetsTest::numberSpinBoxPrefixBackToFrontSelection() {
-	QSKIP("Widget");
 	// from back to front
 	NumberSpinBox sb;
 	sb.setPrefix(QStringLiteral("prefix ")); // whitespace is important!
@@ -803,7 +786,6 @@ void WidgetsTest::numberSpinBoxPrefixBackToFrontSelection() {
 }
 
 void WidgetsTest::numberSpinBoxPrefixSetCursorPosition() {
-	QSKIP("Widget");
 	// set cursor
 	NumberSpinBox sb;
 	sb.setPrefix(QStringLiteral("prefix ")); // whitespace is important!
@@ -820,7 +802,6 @@ void WidgetsTest::numberSpinBoxPrefixSetCursorPosition() {
 }
 
 void WidgetsTest::numberSpinBoxEnterNumber() {
-	QSKIP("Widget");
 	NumberSpinBox sb;
 	sb.setDecimals(0);
 	sb.setValue(5);
@@ -919,13 +900,10 @@ void WidgetsTest::numberSpinBoxEnterNumber() {
 	QCOMPARE(sb.toolTip(), sb.errorToString(NumberSpinBox::Errors::NoError));
 	QCOMPARE(sb.value(), -5e-3);
 	QCOMPARE(valueChangedCounter, 4);
-
-	sb.disconnect();
 }
 
 // Testing feedback feature
 void WidgetsTest::numberSpinBoxFeedback() {
-	QSKIP("Widget");
 	NumberSpinBox sb(5);
 	sb.setFeedback(true);
 
@@ -969,14 +947,11 @@ void WidgetsTest::numberSpinBoxFeedback() {
 	QCOMPARE(lastValue, 8);
 	QCOMPARE(sb.toolTip(), sb.errorToString(NumberSpinBox::Errors::NoError));
 	QCOMPARE(sb.m_waitFeedback, false);
-
-	sb.disconnect();
 }
 
 // set value called directly when valueChanged() is called. This can happen if the other side directly sets another
 // value, because the received value is invalid.
 void WidgetsTest::numberSpinBoxFeedback2() {
-	QSKIP("Widget");
 	NumberSpinBox sb(5);
 	sb.setFeedback(true);
 
@@ -995,12 +970,9 @@ void WidgetsTest::numberSpinBoxFeedback2() {
 
 	QCOMPARE(valueChangedCounter, 1);
 	QCOMPARE(sb.toolTip(), i18n("Invalid value entered. Valid value: %1", 5));
-
-	sb.disconnect();
 }
 
 void WidgetsTest::numberSpinBoxFeedbackCursorPosition() {
-	QSKIP("Widget");
 	NumberSpinBox sb(5.11);
 	sb.setFeedback(true);
 
@@ -1027,12 +999,9 @@ void WidgetsTest::numberSpinBoxFeedbackCursorPosition() {
 	QCOMPARE(sb.lineEdit()->cursorPosition(), 3);
 	QCOMPARE(sb.value(), 5.31);
 	QCOMPARE(sb.toolTip(), QStringLiteral(""));
-
-	sb.disconnect();
 }
 
 void WidgetsTest::numberSpinBoxFeedbackCursorPosition2() {
-	QSKIP("Widget");
 	Project project;
 	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	QVERIFY(ws != nullptr);
@@ -1084,7 +1053,6 @@ void WidgetsTest::numberSpinBoxDecimals2() {
 }
 
 void WidgetsTest::numberSpinBoxScrollingNegToPos() {
-	QSKIP("Widget");
 	NumberSpinBox sb;
 	sb.setMinimum(-10);
 	sb.setValue(-1.01);
@@ -1105,7 +1073,6 @@ void WidgetsTest::numberSpinBoxScrollingNegToPos() {
 }
 
 void WidgetsTest::numberSpinBoxScrollingNegToPos2() {
-	QSKIP("Widget");
 	NumberSpinBox sb;
 	sb.setMinimum(-10);
 	sb.setValue(0.13);
@@ -1193,8 +1160,6 @@ void WidgetsTest::numberSpinBoxMinimumFeedback() {
 	QCOMPARE(sb.lineEdit()->cursorPosition(), 4);
 	QCOMPARE(valueChangedCounter, 2);
 	QCOMPARE(sb.toolTip(), QString());
-
-	sb.disconnect();
 }
 
 // \brief WidgetsTest::numberSpinBoxDecimalsMinMax
