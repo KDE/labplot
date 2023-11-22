@@ -8,13 +8,13 @@ include:
     file:
 # fails
 #      - /gitlab-templates/reuse-lint.yml
-#      - /gitlab-templates/linux.yml
-#      - /gitlab-templates/windows.yml
-#      - /gitlab-templates/linux-qt6.yml
+      - /gitlab-templates/linux.yml
+      - /gitlab-templates/windows.yml
+      - /gitlab-templates/linux-qt6.yml
       - /gitlab-templates/windows-qt6.yml
-#      - /gitlab-templates/freebsd.yml
+      - /gitlab-templates/freebsd.yml
 # finds Qt5 but KF5 is not installed
-#      - /gitlab-templates/freebsd-qt6.yml
+      - /gitlab-templates/freebsd-qt6.yml
 # replaced with own target for correct module name:
 #      - /gitlab-templates/flatpak.yml
 # supposed to run manual:
