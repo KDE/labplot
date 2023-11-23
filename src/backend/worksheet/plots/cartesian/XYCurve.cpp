@@ -350,7 +350,11 @@ bool XYCurve::hasData() const {
 }
 
 int XYCurve::dataCount(Dimension dim) const {
-	assert(false);
+	Q_D(const XYCurve);
+	if (!hasData())
+		return -1; // No valid data
+
+	return column(dim)->rowCount();
 }
 
 // ##############################################################################
