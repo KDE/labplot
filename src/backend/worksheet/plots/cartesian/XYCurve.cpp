@@ -349,6 +349,10 @@ bool XYCurve::hasData() const {
 	return (d->xColumn != nullptr || d->yColumn != nullptr);
 }
 
+int XYCurve::dataCount(Dimension dim) const {
+	assert(false);
+}
+
 // ##############################################################################
 // #################  setter methods and undo commands ##########################
 // ##############################################################################
@@ -2356,9 +2360,9 @@ bool XYCurve::minMax(const AbstractColumn* column1,
 					 const AbstractColumn* errorMinusColumn,
 					 const Range<int>& indexRange,
 					 Range<double>& range,
-					 bool includeErrorBars) const {
+					 bool includeErrorBars) {
 #ifdef PERFTRACE_AUTOSCALE
-	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
+	PERFTRACE(QLatin1String(Q_FUNC_INFO));
 #endif
 	// when property is increasing or decreasing there is a benefit in finding minimum and maximum
 	// for property == AbstractColumn::Properties::No it must be iterated over all values so it does not matter if this function or the below one is used

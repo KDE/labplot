@@ -307,7 +307,6 @@ public Q_SLOTS:
 	void addSmoothCurve();
 	void addFitCurve();
 	void addFourierFilterCurve();
-	void addHeatmap();
 
 	void addLegend();
 	void addTextLabel();

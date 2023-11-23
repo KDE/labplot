@@ -434,7 +434,7 @@ void HeatmapTest::testFormat() {
 		for (int i = 0; i < 17; i++) {
 			colorVector.push_back(QColor(5, 5, i));
 		}
-		Heatmap::Format format{.start = 0, .end = 10, .name = QStringLiteral("Test"), .colors = colorVector};
+		Heatmap::Format format{0, 10, QStringLiteral("Test"), colorVector};
 
 		QCOMPARE(format.index(-1), 0);
 		QCOMPARE(format.index(0), 0);
@@ -449,7 +449,7 @@ void HeatmapTest::testFormat() {
 		for (int i = 0; i < 17; i++) {
 			colorVector.push_back(QColor(5, 5, i));
 		}
-		Heatmap::Format format{.start = 10., .end = -5., .name = QStringLiteral("Test"), .colors = colorVector};
+		Heatmap::Format format{10., -5., QStringLiteral("Test"), colorVector};
 
 		QCOMPARE(format.index(-6), colorVector.size() - 1);
 		QCOMPARE(format.index(-5), colorVector.size() - 1);
@@ -1031,6 +1031,10 @@ void HeatmapTest::testRepresentationSpreadsheetDrawEmpty() {
 void HeatmapTest::testRepresentationSpreadsheetDrawZeroes() {
 }
 
+/*!
+ * \brief HeatmapTest::testColorAutomatic
+ * Automatic limits set to true
+ */
 void HeatmapTest::testColorAutomatic() {
 	Project project;
 
@@ -1113,13 +1117,13 @@ void HeatmapTest::testColorAutomatic() {
 	// |   X     |   XX    |   XX    |   100 Y
 	hm->setXNumBins(3);
 	hm->setYNumBins(2);
-	QCOMPARE(hm->format().start, 1);
-	QCOMPARE(hm->format().end, 3);
+	QCOMPARE(hm->format().start, 1.);
+	QCOMPARE(hm->format().end, 3.);
 
 	hm->setAutomaticLimits(false);
 
-	QCOMPARE(hm->format().start, 1);
-	QCOMPARE(hm->format().end, 3);
+	QCOMPARE(hm->format().start, 1.);
+	QCOMPARE(hm->format().end, 3.);
 }
 
 void HeatmapTest::testColorManual() {

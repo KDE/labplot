@@ -85,6 +85,7 @@ BASIC_SHARED_D_READER_IMPL(Heatmap, const Matrix*, matrix, matrix)
 BASIC_SHARED_D_READER_IMPL(Heatmap, QString, xColumnPath, xColumnPath)
 BASIC_SHARED_D_READER_IMPL(Heatmap, QString, yColumnPath, yColumnPath)
 BASIC_SHARED_D_READER_IMPL(Heatmap, QString, matrixPath, matrixPath)
+BASIC_SHARED_D_READER_IMPL(Heatmap, bool, automaticLimits, automaticLimits)
 
 // ##############################################################################
 // #################  setter methods and undo commands ##########################

@@ -56,10 +56,6 @@ bool Plot::indicesMinMax(const Dimension dim, double v1, double v2, int& start, 
 	return false;
 }
 
-QGraphicsItem* Plot::graphicsItem() const {
-	return d_ptr;
-}
-
 // ##############################################################################
 // ####################### Private implementation ###############################
 // ##############################################################################

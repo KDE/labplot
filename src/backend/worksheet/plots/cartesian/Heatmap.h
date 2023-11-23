@@ -76,7 +76,7 @@ public:
 	POINTER_D_ACCESSOR_DECL(const Matrix, matrix, Matrix)
 	CLASS_D_ACCESSOR_DECL(QString, matrixPath, MatrixPath)
 
-	BASIC_D_ACCESSOR_DECL(bool, automaticLimits, AutomaticLimits)
+	BASIC_D_ACCESSOR_DECL(bool, automaticLimits, AutomaticLimits) // If true, the limits of format are automatically determined
 	struct Format {
 		double start = 0.0;
 		double end = 1.0;
