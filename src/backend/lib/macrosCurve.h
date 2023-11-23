@@ -117,13 +117,18 @@
 		}                                                                                                                                                      \
 		virtual void finalize() override {                                                                                                                     \
 			emit m_target->q->prefix##ColumnChanged(m_target->*m_field);                                                                                       \
+			emit m_private->q->prefix##ColumnChanged(m_private->prefix##Column);                                                                               \
+			if (m_private->dataSource == class_name::DataSource::Spreadsheet) {                                                                                \
+				/* emit DataChanged() in order to notify the plot about the changes */                                                                         \
+				emit m_private->q->prefix##DataChanged();                                                                                                      \
+			}                                                                                                                                                  \
 		}                                                                                                                                                      \
 		void redo() override {                                                                                                                                 \
-			m_columnOld = m_private->prefix##Column;                                                                                                           \
-			if (m_columnOld) {                                                                                                                                 \
+			const AbstractColumn* columnOld = m_private->prefix##Column;                                                                                       \
+			if (columnOld) {                                                                                                                                   \
 				/* disconnect only when column valid, because otherwise all                                                                                    \
 				 * signals are disconnected */                                                                                                                 \
-				QObject::disconnect(m_columnOld, nullptr, m_private->q, nullptr);                                                                              \
+				QObject::disconnect(columnOld, nullptr, m_private->q, nullptr);                                                                                \
 			}                                                                                                                                                  \
 			m_private->prefix##Column = m_column;                                                                                                              \
 			if (m_column) {                                                                                                                                    \
@@ -133,36 +138,16 @@
 				}                                                                                                                                              \
 			} else                                                                                                                                             \
 				m_private->q->set##Prefix##ColumnPath(QStringLiteral(""));                                                                                     \
+			m_column = columnOld;                                                                                                                              \
 			finalize();                                                                                                                                        \
-			emit m_private->q->prefix##ColumnChanged(m_column);                                                                                                \
-			if (m_private->dataSource == class_name::DataSource::Spreadsheet) {                                                                                \
-				/* emit DataChanged() in order to notify the plot about the changes */                                                                         \
-				emit m_private->q->prefix##DataChanged();                                                                                                      \
-			}                                                                                                                                                  \
 		}                                                                                                                                                      \
 		void undo() override {                                                                                                                                 \
-			if (m_private->prefix##Column)                                                                                                                     \
-				QObject::disconnect(m_private->prefix##Column, nullptr, m_private->q, nullptr);                                                                \
-			m_private->prefix##Column = m_columnOld;                                                                                                           \
-			if (m_columnOld) {                                                                                                                                 \
-				m_private->q->set##Prefix##ColumnPath(m_columnOld->path());                                                                                    \
-				if (m_private->dataSource == class_name::DataSource::Spreadsheet) {                                                                            \
-					CURVE_COLUMN_CONNECT_CALL(m_private->q, m_column, Prefix)                                                                                  \
-				}                                                                                                                                              \
-			} else                                                                                                                                             \
-				m_private->q->set##Prefix##ColumnPath(QStringLiteral(""));                                                                                     \
-			finalize();                                                                                                                                        \
-			emit m_private->q->prefix##ColumnChanged(m_columnOld);                                                                                             \
-			if (m_private->dataSource == class_name::DataSource::Spreadsheet) {                                                                                \
-				/* emit DataChanged() in order to notify the plot about the changes */                                                                         \
-				emit m_private->q->prefix##DataChanged();                                                                                                      \
-			}                                                                                                                                                  \
+			redo();                                                                                                                                            \
 		}                                                                                                                                                      \
                                                                                                                                                                \
 	private:                                                                                                                                                   \
 		class_name::Private* m_private;                                                                                                                        \
 		const AbstractColumn* m_column{nullptr};                                                                                                               \
-		const AbstractColumn* m_columnOld{nullptr};                                                                                                            \
 	};
 
 #endif // MACROSXYCURVE_H
