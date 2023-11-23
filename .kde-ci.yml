@@ -34,6 +34,7 @@ Dependencies:
     'frameworks/ktexteditor': '@latest-kf6'
     'frameworks/kxmlgui': '@latest-kf6'
     'frameworks/knewstuff': '@latest-kf6'
+    'frameworks/kuserfeedback': '@latest-kf6'
 
 Environment:
   KDECI_BUILD: "TRUE"
