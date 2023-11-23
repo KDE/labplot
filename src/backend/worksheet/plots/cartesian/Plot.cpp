@@ -47,6 +47,19 @@ bool Plot::activatePlot(QPointF mouseScenePos, double maxDist) {
 	return d->activatePlot(mouseScenePos, maxDist);
 }
 
+bool Plot::indicesMinMax(const Dimension dim, double v1, double v2, int& start, int& end) const {
+	Q_UNUSED(dim);
+	Q_UNUSED(v1);
+	Q_UNUSED(v2);
+	Q_UNUSED(start);
+	Q_UNUSED(end);
+	return false;
+}
+
+QGraphicsItem* Plot::graphicsItem() const {
+	return d_ptr;
+}
+
 // ##############################################################################
 // ####################### Private implementation ###############################
 // ##############################################################################

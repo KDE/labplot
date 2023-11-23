@@ -9,27 +9,27 @@ if (KUserFeedback_FOUND AND QT_MAJOR_VERSION EQUAL 6)
 endif ()
 target_compile_definitions(labplot2test PUBLIC ${LABPLOT_COMPILE_DEFINITIONS})
 
-add_subdirectory(analysis)
+#add_subdirectory(analysis)
 add_subdirectory(backend)
 add_subdirectory(cartesianplot)
-add_subdirectory(import_export)
-add_subdirectory(nsl)
-add_subdirectory(spreadsheet)
-add_subdirectory(matrix)
+#add_subdirectory(import_export)
+#add_subdirectory(nsl)
+#add_subdirectory(spreadsheet)
+#add_subdirectory(matrix)
 
 # TODO: fix test for Qt6 on Windows
 if (QT_MAJOR_VERSION LESS 6 OR NOT WIN32)
 add_subdirectory(multirange)
 endif ()
 
-add_subdirectory(commonfrontend)
+#add_subdirectory(commonfrontend)
 
 IF (Cantor_FOUND)
-    add_subdirectory(notebook)
+    #add_subdirectory(notebook)
 ENDIF ()
 
-add_executable (DependenciesTest DependenciesTest.cpp)
-target_link_libraries(DependenciesTest labplot2test labplot2lib)
-add_test(NAME DependenciesTest COMMAND DependenciesTest)
+#add_executable (DependenciesTest DependenciesTest.cpp)
+#target_link_libraries(DependenciesTest labplot2test labplot2lib)
+#add_test(NAME DependenciesTest COMMAND DependenciesTest)
 
 

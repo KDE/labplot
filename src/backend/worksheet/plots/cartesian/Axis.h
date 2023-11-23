@@ -22,6 +22,7 @@ class Line;
 class TextLabel;
 class AxisPrivate;
 class AbstractColumn;
+class Heatmap;
 class QActionGroup;
 
 using Dimension = CartesianCoordinateSystem::Dimension;
@@ -175,6 +176,10 @@ public:
 	CLASS_D_ACCESSOR_DECL(QString, labelsPrefix, LabelsPrefix)
 	CLASS_D_ACCESSOR_DECL(QString, labelsSuffix, LabelsSuffix)
 	BASIC_D_ACCESSOR_DECL(qreal, labelsOpacity, LabelsOpacity)
+
+	BASIC_D_ACCESSOR_DECL(double, colorBarWidth, ColorBarWidth)
+	BASIC_D_ACCESSOR_DECL(bool, colorBar, ColorBar)
+	POINTER_D_ACCESSOR_DECL(const Heatmap, heatmap, Heatmap)
 
 	Line* majorGridLine() const;
 	Line* minorGridLine() const;

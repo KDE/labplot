@@ -32,6 +32,7 @@ public:
 	void setAspect(const AbstractAspect*);
 	AbstractAspect* currentAspect() const;
 	void setColumn(const AbstractColumn*, const QString&);
+	void setAspect(const AbstractAspect*, const QString&);
 	QModelIndex currentModelIndex() const;
 
 	void setTopLevelClasses(const QList<AspectType>&);

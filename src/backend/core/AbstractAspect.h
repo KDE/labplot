@@ -60,6 +60,7 @@ enum class AspectType : quint64 {
 	BoxPlot = 0x0210100,
 	QQPlot = 0x0210800,
 	KDEPlot = 0x0210802,
+	Heatmap = 0x021100,
 
 	WorksheetElementContainer = 0x0220000,
 	AbstractPlot = 0x0221000,
@@ -210,6 +211,8 @@ public:
 			return QStringLiteral("QQPlot");
 		case AspectType::KDEPlot:
 			return QStringLiteral("KDEPlot");
+		case AspectType::Heatmap:
+			return QStringLiteral("Heatmap");
 		case AspectType::LollipopPlot:
 			return QStringLiteral("LollipopPlot");
 		case AspectType::AbstractPart:

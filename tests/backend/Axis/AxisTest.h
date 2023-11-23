@@ -45,6 +45,10 @@ private Q_SLOTS:
 	void dateTimeSpacing();
 	void dateTimeSpacingOffsetNonZero();
 	void dateTimeSpacingStartValueNonZero();
+	void colorBar();
+
+	void tickDrawingPosition(); // Check that ticks are positioned correctly without colorbar
+	void tickDrawingPositionColorBar(); // Check that ticks are positioned correctly with colorbar
 
 	void numeric();
 	void numericSpacing();

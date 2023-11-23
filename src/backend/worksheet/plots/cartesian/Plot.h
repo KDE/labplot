@@ -22,9 +22,21 @@ class Plot : public WorksheetElement {
 public:
 	virtual ~Plot();
 
-	virtual bool minMax(const CartesianCoordinateSystem::Dimension dim, const Range<int>& indexRange, Range<double>& r, bool includeErrorBars = true) const;
-	virtual double minimum(CartesianCoordinateSystem::Dimension dim) const = 0;
-	virtual double maximum(CartesianCoordinateSystem::Dimension dim) const = 0;
+	using Dimension = CartesianCoordinateSystem::Dimension;
+	virtual bool minMax(const Dimension dim, const Range<int>& indexRange, Range<double>& r, bool includeErrorBars = true) const;
+	virtual bool indicesMinMax(const Dimension dim, double v1, double v2, int& start, int& end) const;
+	virtual double minimum(Dimension dim) const = 0;
+	virtual double maximum(Dimension dim) const = 0;
+	/*!
+	 * \brief dataCount
+	 * Number of elements in a specific direction
+	 * \param dim
+	 * \return
+	 */
+	virtual int dataCount(Dimension dim) const {
+		assert(false);
+		return 0;
+	}
 	virtual bool hasData() const = 0;
 	bool activatePlot(QPointF mouseScenePos, double maxDist = -1);
 

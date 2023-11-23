@@ -18,6 +18,8 @@
 
 #define D(obj_class) auto* d = static_cast<obj_class##Private*>(d_ptr)
 
+class Matrix;
+class AbstractColumn;
 class CartesianPlot;
 class CartesianCoordinateSystem;
 class WorksheetElementPrivate;
@@ -104,6 +106,10 @@ public:
 
 	static QPainterPath shapeFromPath(const QPainterPath&, const QPen&);
 	virtual void handleResize(double horizontalRatio, double verticalRatio, bool pageResize = false) = 0;
+	// Path is explicit specified, so it must not be recalculated every time when iterating over multiple
+	// WorksheetElements. The path is the same as column->path()
+	virtual void handleColumnAdded(const QString& path, const AbstractColumn*);
+	virtual void handleMatrixAdded(const QString& path, const Matrix*);
 
 	CartesianPlot* plot() const {
 		return m_plot;

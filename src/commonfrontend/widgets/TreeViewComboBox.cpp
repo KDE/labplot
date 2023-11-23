@@ -323,23 +323,27 @@ AbstractAspect* TreeViewComboBox::currentAspect() const {
 	return static_cast<AbstractAspect*>(currentModelIndex().internalPointer());
 }
 
-void TreeViewComboBox::setColumn(const AbstractColumn* column, const QString& path) {
+void TreeViewComboBox::setAspect(const AbstractAspect* aspect, const QString& path) {
 	DEBUG(Q_FUNC_INFO)
-	setAspect(column);
+	setAspect(aspect);
 
-	// don't make the combobox red for initially created curves
-	if (!column && path.isEmpty()) {
+	// don't make the combobox red for initially created elements
+	if (!aspect && path.isEmpty()) {
 		setText(QString());
 		setInvalid(false);
 		return;
 	}
 
-	if (column) {
+	if (aspect) {
 		useCurrentIndexText(true);
 		setInvalid(false);
 	} else {
 		useCurrentIndexText(false);
-		setInvalid(true, i18n("The column \"%1\"\nis not available anymore. It will be automatically used once it is created again.", path));
+		setInvalid(true, i18n("The element \"%1\"\nis not available anymore. It will be automatically used once it is created again.", path));
 	}
 	setText(path.split(QLatin1Char('/')).last());
+}
+
+void TreeViewComboBox::setColumn(const AbstractColumn* column, const QString& path) {
+	setAspect(column, path);
 }

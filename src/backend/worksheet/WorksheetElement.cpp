@@ -497,6 +497,12 @@ QPointF WorksheetElement::relativePosToParentPos(PositionWrapper position) const
 	return parentPos;
 }
 
+void WorksheetElement::handleColumnAdded(const QString& path, const AbstractColumn*) {
+}
+
+void WorksheetElement::handleMatrixAdded(const QString& path, const Matrix*) {
+}
+
 void WorksheetElement::save(QXmlStreamWriter* writer) const {
 	Q_D(const WorksheetElement);
 	writer->writeAttribute(QStringLiteral("x"), QString::number(d->position.point.x()));

@@ -501,6 +501,7 @@ BASIC_SHARED_D_READER_IMPL(Axis, QColor, labelsBackgroundColor, labelsBackground
 BASIC_SHARED_D_READER_IMPL(Axis, QString, labelsPrefix, labelsPrefix)
 BASIC_SHARED_D_READER_IMPL(Axis, QString, labelsSuffix, labelsSuffix)
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, labelsOpacity, labelsOpacity)
+BASIC_SHARED_D_READER_IMPL(Axis, bool, colorBar, colorBar)
 
 // grid
 Line* Axis::majorGridLine() const {
@@ -961,6 +962,7 @@ void Axis::setLabelsTextColumn(const AbstractColumn* column) {
 	if (column != d->labelsTextColumn) {
 		exec(new AxisSetLabelsTextColumnCmd(d, column, ki18n("%1: set labels text column")));
 
+		// TODO: move into Undocommand!
 		if (column) {
 			connect(column, &AbstractColumn::dataChanged, this, &Axis::retransformTicks);
 			connect(column->parentAspect(), &AbstractAspect::childAspectAboutToBeRemoved, this, &Axis::retransformTicks);
@@ -1228,9 +1230,27 @@ void AxisPrivate::retransformLine() {
 		}
 	}
 
-	for (const auto& line : qAsConst(lines)) {
-		linePath.moveTo(line.p1());
-		linePath.lineTo(line.p2());
+	if (colorBar && !lines.isEmpty()) {
+		// Instead of a line, a colorbar is shown
+		assert(lines.size() == 1);
+		const auto line = lines.at(0);
+		switch (orientation) {
+		case Axis::Orientation::Horizontal: {
+			QRectF rect(line.p1().x(), line.p1().y(), line.p2().x() - line.p1().x(), colorBarWidth);
+			linePath.addRect(rect);
+			break;
+		}
+		case Axis::Orientation::Vertical: {
+			QRectF rect(line.p1().x(), line.p1().y(), colorBarWidth, line.p2().y() - line.p1().y());
+			linePath.addRect(rect);
+			break;
+		}
+		}
+	} else {
+		for (const auto& line : qAsConst(lines)) {
+			linePath.moveTo(line.p1());
+			linePath.lineTo(line.p2());
+		}
 	}
 
 	if (linePath.isEmpty()) {
@@ -1240,7 +1260,11 @@ void AxisPrivate::retransformLine() {
 	} else {
 		retransformArrow();
 		retransformTicks();
+		retransformColorBar();
 	}
+}
+
+void AxisPrivate::retransformColorBar() {
 }
 
 void AxisPrivate::retransformArrow() {
@@ -1684,11 +1708,36 @@ void AxisPrivate::retransformTicks() {
 				if (valid) {
 					// for yDirection == -1 start is above end
 					if (anchorPoint.y() >= center.y()) { // below
-						startPoint = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksIn) ? yDirection * majorTicksLength : 0);
-						endPoint = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksOut) ? -yDirection * majorTicksLength : 0);
+						switch (majorTicksDirection) {
+						case Axis::ticksIn: {
+							if (colorBar)
+								anchorPoint.setY(anchorPoint.y() + colorBarWidth);
+							startPoint = anchorPoint + QPointF(0, yDirection * majorTicksLength);
+							endPoint = anchorPoint + QPointF(0, 0);
+							break;
+						}
+						case Axis::ticksOut: {
+							startPoint = anchorPoint + QPointF(0, 0);
+							endPoint = anchorPoint + QPointF(0, -yDirection * majorTicksLength);
+							break;
+						}
+						}
+
 					} else { // above
-						startPoint = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksOut) ? yDirection * majorTicksLength : 0);
-						endPoint = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksIn) ? -yDirection * majorTicksLength : 0);
+						switch (majorTicksDirection) {
+						case Axis::ticksIn: {
+							startPoint = anchorPoint + QPointF(0, 0);
+							endPoint = anchorPoint + QPointF(0, -yDirection * majorTicksLength);
+							break;
+						}
+						case Axis::ticksOut: {
+							if (colorBar)
+								anchorPoint.setY(anchorPoint.y() - colorBarWidth);
+							startPoint = anchorPoint + QPointF(0, yDirection * majorTicksLength);
+							endPoint = anchorPoint + QPointF(0, 0);
+							break;
+						}
+						}
 					}
 				}
 			} else { // vertical
@@ -1700,11 +1749,35 @@ void AxisPrivate::retransformTicks() {
 				if (valid) {
 					// for xDirection == 1 start is right of end
 					if (anchorPoint.x() < center.x()) { // left
-						startPoint = anchorPoint + QPointF((majorTicksDirection & Axis::ticksIn) ? xDirection * majorTicksLength : 0, 0);
-						endPoint = anchorPoint + QPointF((majorTicksDirection & Axis::ticksOut) ? -xDirection * majorTicksLength : 0, 0);
+						switch (majorTicksDirection) {
+						case Axis::ticksIn: {
+							if (colorBar)
+								anchorPoint.setX(anchorPoint.x() + colorBarWidth);
+							startPoint = anchorPoint + QPointF(xDirection * majorTicksLength, 0);
+							endPoint = anchorPoint + QPointF(0, 0);
+							break;
+						}
+						case Axis::ticksOut: {
+							startPoint = anchorPoint + QPointF(0, 0);
+							endPoint = anchorPoint + QPointF(-xDirection * majorTicksLength, 0);
+							break;
+						}
+						}
 					} else { // right
-						startPoint = anchorPoint + QPointF((majorTicksDirection & Axis::ticksOut) ? xDirection * majorTicksLength : 0, 0);
-						endPoint = anchorPoint + QPointF((majorTicksDirection & Axis::ticksIn) ? -xDirection * majorTicksLength : 0, 0);
+						switch (majorTicksDirection) {
+						case Axis::ticksIn: {
+							startPoint = anchorPoint + QPointF(0, 0);
+							endPoint = anchorPoint + QPointF(-xDirection * majorTicksLength, 0);
+							break;
+						}
+						case Axis::ticksOut: {
+							if (colorBar)
+								anchorPoint.setX(anchorPoint.x() + colorBarWidth);
+							startPoint = anchorPoint + QPointF(xDirection * majorTicksLength, 0);
+							endPoint = anchorPoint + QPointF(0, 0);
+							break;
+						}
+						}
 					}
 				}
 			}

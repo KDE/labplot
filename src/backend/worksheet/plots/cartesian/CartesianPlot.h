@@ -230,6 +230,7 @@ private:
 	//"add new" actions
 	QAction* addCurveAction{nullptr};
 	QAction* addEquationCurveAction{nullptr};
+	QAction* addHeatmapAction{nullptr};
 
 	// statistical plots
 	QAction* addHistogramAction{nullptr};
@@ -306,6 +307,7 @@ public Q_SLOTS:
 	void addSmoothCurve();
 	void addFitCurve();
 	void addFourierFilterCurve();
+	void addHeatmap();
 
 	void addLegend();
 	void addTextLabel();
