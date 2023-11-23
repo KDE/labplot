@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-22 00:39+0000\n"
-"PO-Revision-Date: 2023-11-18 14:04+0300\n"
+"PO-Revision-Date: 2023-11-22 14:30+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -9130,10 +9130,9 @@ msgid "Plot Data"
 msgstr "Veriyi Çiz"
 
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:291
-#, fuzzy, kde-format
-#| msgid "Column Statistics..."
+#, kde-format
 msgid "Variable Statistics..."
-msgstr "Sütun İstatistikleri..."
+msgstr "Değişken İstatistikleri..."
 
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:338
 #, kde-format
@@ -9151,10 +9150,9 @@ msgid "Ready"
 msgstr "Hazır"
 
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:362
-#, fuzzy, kde-format
-#| msgid "%1: row statistics"
+#, kde-format
 msgid "%1: variable statistics"
-msgstr "%1: Satır istatistikleri"
+msgstr "%1: Değişken istatistikleri"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:126
 #: src/commonfrontend/matrix/MatrixView.cpp:194

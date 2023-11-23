@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-22 00:39+0000\n"
-"PO-Revision-Date: 2023-11-18 10:36+0100\n"
+"PO-Revision-Date: 2023-11-22 11:58+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -2232,7 +2232,7 @@ msgstr "No s'ha pogut llegir les dades. El dispositiu està extret."
 #: src/backend/datasources/LiveDataSource.cpp:729
 #, kde-format
 msgid "The device timed out."
-msgstr "El dispositiu ha excedit el temps límit."
+msgstr "El dispositiu ha excedit el temps."
 
 #: src/backend/datasources/LiveDataSource.cpp:734
 #, kde-format
@@ -9240,10 +9240,9 @@ msgid "Plot Data"
 msgstr "Dibuixa el diagrama de les dades"
 
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:291
-#, fuzzy, kde-format
-#| msgid "Column Statistics..."
+#, kde-format
 msgid "Variable Statistics..."
-msgstr "Estadístiques de les columnes..."
+msgstr "Estadístiques de les variables..."
 
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:338
 #, kde-format
@@ -9261,10 +9260,9 @@ msgid "Ready"
 msgstr "Llest"
 
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:362
-#, fuzzy, kde-format
-#| msgid "%1: row statistics"
+#, kde-format
 msgid "%1: variable statistics"
-msgstr "%1: estadístiques de les files"
+msgstr "%1: estadístiques de les variables"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:126
 #: src/commonfrontend/matrix/MatrixView.cpp:194
