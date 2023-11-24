@@ -88,7 +88,7 @@ enum Action {
 
 };
 
-Action evaluateKeys(int key, Qt::KeyboardModifiers modifiers) {
+Action evaluateKeys(int key, Qt::KeyboardModifiers) {
 	if (key == Qt::Key_N)
 		return Action::NavigateNextCurve;
 	else if (key == Qt::Key_P)
@@ -2223,8 +2223,11 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 			connect(elem, &WorksheetElement::hovered, this, &CartesianPlot::childHovered);
 	}
 
+	if (isLoading())
+		return;
+
 	auto rangeChanged = false;
-	if (!isLoading() && checkRanges && INRANGE(cSystemIndex, 0, m_coordinateSystems.count())) {
+	if (checkRanges && INRANGE(cSystemIndex, 0, m_coordinateSystems.count())) {
 		auto xIndex = coordinateSystem(cSystemIndex)->index(Dimension::X);
 		auto yIndex = coordinateSystem(cSystemIndex)->index(Dimension::Y);
 		setRangeDirty(Dimension::X, xIndex, true);
@@ -2241,7 +2244,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 			WorksheetElementContainer::retransform();
 	}
 
-	if (!isLoading() && !this->pasted() && !child->pasted() && !child->isMoved()) {
+	if (!this->pasted() && !child->pasted() && !child->isMoved()) {
 		// new child was added which might change the ranges and the axis tick labels.
 		// adjust the plot area padding if the axis label is outside of the plot area
 		if (rangeChanged) {
@@ -4152,7 +4155,7 @@ void CartesianPlotPrivate::wheelEvent(const QPointF& sceneRelPos, int delta, int
 
 void CartesianPlotPrivate::keyPressEvent(QKeyEvent* event) {
 	const auto key = event->key();
-	const bool ctrl = event->modifiers() & Qt::KeyboardModifier::ControlModifier;
+	// const bool ctrl = event->modifiers() & Qt::KeyboardModifier::ControlModifier;
 	//	const bool shift = event->modifiers() & Qt::KeyboardModifier::ShiftModifier;
 	//	const bool alt = event->modifiers() & Qt::KeyboardModifier::AltModifier;
 	Action a = evaluateKeys(key, event->modifiers());
