@@ -830,6 +830,8 @@ void WorksheetElementPrivate::updatePosition() {
 	suppressItemChangeEvent = true;
 	setPos(p);
 	suppressItemChangeEvent = false;
+
+	Q_EMIT q->changed();
 }
 
 bool WorksheetElementPrivate::sceneEvent(QEvent* event) {
