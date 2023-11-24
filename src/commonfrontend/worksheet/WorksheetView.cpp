@@ -98,6 +98,10 @@ WorksheetView::WorksheetView(Worksheet* worksheet)
 	connect(m_worksheet, &Worksheet::childAspectAboutToBeRemoved, this, &WorksheetView::aspectAboutToBeRemoved);
 	connect(m_worksheet, &Worksheet::useViewSizeChanged, this, &WorksheetView::useViewSizeChanged);
 	connect(m_worksheet, &Worksheet::layoutChanged, this, &WorksheetView::layoutChanged);
+	connect(m_worksheet, &Worksheet::changed, this, [=] {
+		if (m_magnificationWindow && m_magnificationWindow->isVisible())
+			updateMagnificationWindow(mapToScene(mapFromGlobal(QCursor::pos())));
+	});
 	connect(scene(), &QGraphicsScene::selectionChanged, this, &WorksheetView::selectionChanged);
 
 	// resize the view to make the complete scene visible.
