@@ -481,7 +481,7 @@ double Heatmap::minimum(Dimension dim) const {
 	case DataSource::Matrix:
 		return minimumMatrix(dim);
 	}
-	assert(false);
+	Q_ASSERT(false);
 	return std::nan("0");
 }
 
@@ -492,7 +492,7 @@ double Heatmap::maximum(Dimension dim) const {
 	case DataSource::Matrix:
 		return maximumMatrix(dim);
 	}
-	assert(false);
+	Q_ASSERT(false);
 	return std::nan("0");
 }
 
@@ -515,7 +515,7 @@ double Heatmap::minimumMatrix(Dimension dim) const {
 		break;
 	}
 	}
-	assert(false);
+	Q_ASSERT(false);
 	return std::nan("0");
 }
 double Heatmap::maximumSpreadsheet(Dimension dim) const {
@@ -537,7 +537,7 @@ double Heatmap::maximumMatrix(Dimension dim) const {
 		break;
 	}
 	}
-	assert(false);
+	Q_ASSERT(false);
 	return std::nan("0");
 }
 
@@ -548,14 +548,29 @@ bool Heatmap::hasData() const {
 		return (d->xColumn != nullptr && d->yColumn != nullptr);
 	case DataSource::Matrix:
 		return (d->matrix != nullptr);
-		return false;
 	}
-	assert(false);
+	Q_ASSERT(false);
 	return false;
 }
 
+int Heatmap::dataCount(Dimension dim) const {
+	Q_D(const Heatmap);
+	if (!hasData())
+		return 0;
+
+	switch (d->dataSource) {
+	case DataSource::Spreadsheet: {
+		return dim == Dimension::X ? d->xColumn->rowCount() : d->yColumn->rowCount();
+	}
+	case DataSource::Matrix:
+		return dim == Dimension::X ? d->matrix->columnCount() : d->matrix->rowCount();
+	}
+	Q_ASSERT(false);
+	return 0;
+}
+
 bool Heatmap::activatePlot(QPointF mouseScenePos, double maxDist) {
-	assert(false); // Not yet implemented
+	Q_ASSERT(false); // Not yet implemented
 	return false;
 }
 
@@ -652,6 +667,7 @@ void HeatmapPrivate::recalcShapeAndBoundingRect() {
 
 void HeatmapPrivate::update() {
 	// TODO: create CalculateScenePoints
+	data.clear();
 	int xNumBins = 0, yNumBins = 0;
 	switch (dataSource) {
 	case Heatmap::DataSource::Spreadsheet:
@@ -680,6 +696,9 @@ void HeatmapPrivate::update() {
 		yNumBins = matrix->rowCount();
 	}
 
+	if (xNumBins == 0 || yNumBins == 0)
+		return;
+
 	// Range<double> xRange;
 	// minMax(Dimension::X, Range<int>(0, xColumn->rowCount(), xRange);
 	// Range<double> yRange;
@@ -692,6 +711,9 @@ void HeatmapPrivate::update() {
 
 	const auto xBinSize = (xMax - xMin) / xNumBins;
 	const auto yBinSize = (yMax - yMin) / yNumBins;
+
+	if (xBinSize == 0 || yBinSize == 0)
+		return;
 
 	// Check which region is visible
 	const auto xPlotRange = q->plot()->range(Dimension::X, q->coordinateSystemIndex());

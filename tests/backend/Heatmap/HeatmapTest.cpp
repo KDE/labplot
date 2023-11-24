@@ -27,6 +27,25 @@
 		QCOMPARE(value, value_);                                                                                                                               \
 	} while (false);
 
+#define CONNECT_DATA_CHANGED                                                                                                                                   \
+	do {                                                                                                                                                       \
+		connect(hm, &Heatmap::dataChanged, [&dataChangedCounter] {                                                                                             \
+			dataChangedCounter++;                                                                                                                              \
+		});                                                                                                                                                    \
+		connect(hm, &Heatmap::xDataChanged, [&dataChangedCounter] {                                                                                            \
+			dataChangedCounter++;                                                                                                                              \
+		});                                                                                                                                                    \
+		connect(hm, &Heatmap::yDataChanged, [&dataChangedCounter] {                                                                                            \
+			dataChangedCounter++;                                                                                                                              \
+		});                                                                                                                                                    \
+	} while (false);
+
+/*!
+ * \brief HeatmapTest::testSetMatrix
+ * Testing setting a matrix
+ * - Testing undo redo
+ * - Testing set of column has no effect
+ */
 void HeatmapTest::testSetMatrix() {
 	Project project;
 
@@ -42,9 +61,7 @@ void HeatmapTest::testSetMatrix() {
 	hm->setDataSource(Heatmap::DataSource::Matrix);
 
 	int dataChangedCounter = 0;
-	connect(hm, &Heatmap::dataChanged, [&dataChangedCounter] {
-		dataChangedCounter++;
-	});
+	CONNECT_DATA_CHANGED;
 
 	auto* spreadsheet = new Spreadsheet(QStringLiteral("Spreadsheet"));
 	auto columns = spreadsheet->children<Column>();
@@ -56,16 +73,16 @@ void HeatmapTest::testSetMatrix() {
 	hm->setXColumn(xColumn);
 	hm->setYColumn(yColumn);
 
-	QCOMPARE(dataChangedCounter, 0);
+	QCOMPARE(dataChangedCounter, 0); // Datasource set to matrix
 	auto* matrix1 = new Matrix(QStringLiteral("Matrix1"));
 	hm->setMatrix(matrix1);
 	QCOMPARE(dataChangedCounter, 1);
 	QCOMPARE(hm->matrix(), matrix1);
 
 	xColumn->setValueAt(0, 5);
-	QCOMPARE(dataChangedCounter, 1);
+	QCOMPARE(dataChangedCounter, 1); // Datasource set to matrix
 	yColumn->setValueAt(0, 3);
-	QCOMPARE(dataChangedCounter, 1);
+	QCOMPARE(dataChangedCounter, 1); // Datasource set to matrix
 
 	auto* matrix2 = new Matrix(QStringLiteral("Matrix2"));
 	hm->setMatrix(matrix2);
@@ -88,6 +105,12 @@ void HeatmapTest::testSetMatrix() {
 	QCOMPARE(dataChangedCounter, 6);
 }
 
+/*!
+ * \brief HeatmapTest::testSetSpreadsheetColumn
+ * Testing setting a column
+ * - Testing undo redo
+ * - Testing set of matrix has no effect
+ */
 void HeatmapTest::testSetSpreadsheetColumn() {
 	Project project;
 
@@ -103,9 +126,7 @@ void HeatmapTest::testSetSpreadsheetColumn() {
 	hm->setDataSource(Heatmap::DataSource::Spreadsheet);
 
 	int dataChangedCounter = 0;
-	connect(hm, &Heatmap::dataChanged, [&dataChangedCounter] {
-		dataChangedCounter++;
-	});
+	CONNECT_DATA_CHANGED;
 
 	auto* spreadsheet = new Spreadsheet(QStringLiteral("Spreadsheet"));
 	auto columns = spreadsheet->children<Column>();
@@ -124,47 +145,53 @@ void HeatmapTest::testSetSpreadsheetColumn() {
 
 	auto* matrix1 = new Matrix(QStringLiteral("Matrix1"));
 	hm->setMatrix(matrix1);
-	QCOMPARE(dataChangedCounter, 2);
+	QCOMPARE(dataChangedCounter, 2); // Datasource set to column
 
 	xColumn->setValueAt(0, 5.);
 	QCOMPARE(dataChangedCounter, 3);
 	yColumn->setValueAt(0, 3.);
-	QCOMPARE(dataChangedCounter, 3);
-
-	hm->undoStack()->undo();
-	QCOMPARE(hm->matrix(), matrix1);
-	QCOMPARE(dataChangedCounter, 3);
-
-	hm->undoStack()->redo();
-	QCOMPARE(hm->matrix(), matrix1);
 	QCOMPARE(dataChangedCounter, 4);
+
+	hm->undoStack()->undo(); // yColumn->setValueAt(0, 3.);
+	QCOMPARE(hm->matrix(), matrix1);
+	QCOMPARE(dataChangedCounter, 5);
+
+	hm->undoStack()->redo(); // xColumn->setValueAt(0, 5.);
+	QCOMPARE(hm->matrix(), matrix1);
+	QCOMPARE(dataChangedCounter, 6);
 
 	spreadsheet = new Spreadsheet(QStringLiteral("Spreadsheet2"));
 	columns = spreadsheet->children<Column>();
 	QCOMPARE(columns.count(), 2);
 
 	auto* xColumn2 = columns.at(0);
-	QCOMPARE(dataChangedCounter, 2);
 	auto* yColumn2 = columns.at(1);
+
+	dataChangedCounter = 0; // reset
 
 	hm->setXColumn(xColumn2);
 	QCOMPARE(hm->xColumn(), xColumn2);
-	QCOMPARE(dataChangedCounter, 5);
+	QCOMPARE(dataChangedCounter, 1);
 	hm->setYColumn(yColumn2);
 	QCOMPARE(hm->yColumn(), yColumn2);
-	QCOMPARE(dataChangedCounter, 6);
+	QCOMPARE(dataChangedCounter, 2);
 
-	hm->undoStack()->undo();
+	hm->undoStack()->undo(); // hm->setYColumn(yColumn2);
 	QCOMPARE(hm->matrix(), nullptr);
-	QCOMPARE(dataChangedCounter, 7);
+	QCOMPARE(dataChangedCounter, 3);
 
 	QCOMPARE(hm->xColumn(), xColumn2);
 	QCOMPARE(hm->yColumn(), yColumn);
 
 	matrix1->setCell(0, 0, 5.);
-	QCOMPARE(dataChangedCounter, 7); // Does not have any effect
+	QCOMPARE(dataChangedCounter, 3); // Does not have any effect
 }
 
+/*!
+ * \brief HeatmapTest::testSetDataSource
+ * Testing to set the datasource
+ * - Undo redo testing
+ */
 void HeatmapTest::testSetDataSource() {
 	Project project;
 
@@ -180,9 +207,7 @@ void HeatmapTest::testSetDataSource() {
 	hm->setDataSource(Heatmap::DataSource::Spreadsheet);
 
 	int dataChangedCounter = 0;
-	connect(hm, &Heatmap::dataChanged, [&dataChangedCounter] {
-		dataChangedCounter++;
-	});
+	CONNECT_DATA_CHANGED;
 
 	auto* spreadsheet = new Spreadsheet(QStringLiteral("Spreadsheet"));
 	auto columns = spreadsheet->children<Column>();
@@ -215,15 +240,21 @@ void HeatmapTest::testSetDataSource() {
 	matrix1->setCell(0, 0, 5.);
 	QCOMPARE(dataChangedCounter, 6);
 
-	hm->undoStack()->undo();
+	hm->undoStack()->undo(); // matrix1->setCell(0, 0, 5.);
 	QCOMPARE(dataChangedCounter, 7);
+	hm->undoStack()->undo(); // hm->setDataSource(Heatmap::DataSource::Matrix);
+	QCOMPARE(dataChangedCounter, 8);
 	QCOMPARE(hm->dataSource(), Heatmap::DataSource::Spreadsheet);
 
-	hm->undoStack()->redo();
-	QCOMPARE(dataChangedCounter, 8);
+	hm->undoStack()->redo(); // hm->setDataSource(Heatmap::DataSource::Matrix);
+	QCOMPARE(dataChangedCounter, 9);
 	QCOMPARE(hm->dataSource(), Heatmap::DataSource::Matrix);
 }
 
+/*!
+ * \brief HeatmapTest::testNumberBins
+ * Testing changing number bins
+ */
 void HeatmapTest::testNumberBins() {
 	Project project;
 
@@ -242,9 +273,7 @@ void HeatmapTest::testNumberBins() {
 	QCOMPARE(hm->yNumBins(), 5);
 
 	int dataChangedCounter = 0;
-	connect(hm, &Heatmap::dataChanged, [&dataChangedCounter] {
-		dataChangedCounter++;
-	});
+	CONNECT_DATA_CHANGED;
 
 	auto* spreadsheet = new Spreadsheet(QStringLiteral("Spreadsheet"));
 	auto columns = spreadsheet->children<Column>();
@@ -337,12 +366,6 @@ void HeatmapTest::testNumberBins() {
 	// |     |  X  |     | XX  |     |   80
 	// |  X  |     |     |     | XX  |   100
 
-	// 3 Bins X
-	// 0        3.3       6.6        10
-	// |---------|---------|---------|   0
-	// |   XX    |   XXX   |   XX    |   50  2 Bins
-	// |   X     |   XX    |   XX    |   100 Y
-
 	QCOMPARE(valueDrawnCounter, 9);
 
 	QCOMPARE(plot->range(Dimension::X, hm->coordinateSystemIndex()).start(), 0);
@@ -350,6 +373,11 @@ void HeatmapTest::testNumberBins() {
 	QCOMPARE(plot->range(Dimension::Y, hm->coordinateSystemIndex()).start(), 0);
 	QCOMPARE(plot->range(Dimension::Y, hm->coordinateSystemIndex()).end(), 100);
 
+	// 3 Bins X
+	// 0        3.3       6.6        10
+	// |---------|---------|---------|   0
+	// |   XX    |   XXX   |   XX    |   50  2 Bins
+	// |   X     |   XX    |   XX    |   100 Y
 	hm->setXNumBins(3);
 
 	valueDrawnCounter = 0;
@@ -381,7 +409,10 @@ void HeatmapTest::testNumberBins() {
 	QCOMPARE(valueDrawnCounter, 6);
 }
 
-void HeatmapTest::indicesMinMax() {
+/*!
+ * \brief HeatmapTest::indicesMinMaxMatrix
+ */
+void HeatmapTest::indicesMinMaxMatrix() {
 	{
 		Heatmap hm(QStringLiteral("Heatmap"));
 		auto* matrix1 = new Matrix(10, 10, QStringLiteral("Matrix1"), AbstractColumn::ColumnMode::Double);
@@ -475,9 +506,7 @@ void HeatmapTest::testRepresentationMatrix() {
 	hm->setDataSource(Heatmap::DataSource::Matrix);
 
 	int dataChangedCounter = 0;
-	connect(hm, &Heatmap::dataChanged, [&dataChangedCounter] {
-		dataChangedCounter++;
-	});
+	CONNECT_DATA_CHANGED;
 
 	auto* matrix = new Matrix(5, 5, QStringLiteral("Matrix1"));
 	hm->setMatrix(matrix);
@@ -682,9 +711,7 @@ void HeatmapTest::testRepresentationSpreadsheet() {
 	QCOMPARE(hm->yNumBins(), 5);
 
 	int dataChangedCounter = 0;
-	connect(hm, &Heatmap::dataChanged, [&dataChangedCounter] {
-		dataChangedCounter++;
-	});
+	CONNECT_DATA_CHANGED;
 
 	auto* spreadsheet = new Spreadsheet(QStringLiteral("Spreadsheet"));
 	auto columns = spreadsheet->children<Column>();
@@ -833,9 +860,7 @@ void HeatmapTest::testRepresentationSpreadsheetDrawEmpty() {
 	QCOMPARE(hm->yNumBins(), 5);
 
 	int dataChangedCounter = 0;
-	connect(hm, &Heatmap::dataChanged, [&dataChangedCounter] {
-		dataChangedCounter++;
-	});
+	CONNECT_DATA_CHANGED;
 
 	auto* spreadsheet = new Spreadsheet(QStringLiteral("Spreadsheet"));
 	auto columns = spreadsheet->children<Column>();
@@ -1155,9 +1180,7 @@ void HeatmapTest::testColorManual() {
 	auto* yColumn = columns.at(1);
 
 	int dataChangedCounter = 0;
-	connect(hm, &Heatmap::dataChanged, [&dataChangedCounter] {
-		dataChangedCounter++;
-	});
+	CONNECT_DATA_CHANGED;
 
 	QCOMPARE(dataChangedCounter, 0);
 	hm->setXColumn(xColumn);

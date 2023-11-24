@@ -36,6 +36,7 @@ public:
 	virtual double maximum(Dimension dim) const override;
 
 	virtual bool hasData() const override;
+	virtual int dataCount(Dimension dim) const override;
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;

@@ -31,11 +31,11 @@ public:
 	 * \brief dataCount
 	 * Number of elements in a specific direction
 	 * \param dim
-	 * \return
+	 * \return Number of data or -1 if the plot is invalid (so it will not be considered for autoscale)
 	 */
 	virtual int dataCount(Dimension dim) const {
-		assert(false);
-		return 0;
+		Q_ASSERT(false);
+		return -1;
 	}
 	virtual bool hasData() const = 0;
 	bool activatePlot(QPointF mouseScenePos, double maxDist = -1);

@@ -37,7 +37,7 @@ private Q_SLOTS:
 
 	void minMaxMatrix();
 
-	void indicesMinMax();
+	void indicesMinMaxMatrix();
 };
 
 #endif // HEATMAPTEST_H
