@@ -1374,17 +1374,73 @@ void AxisPrivate::addArrow(QPointF startPoint, int direction) {
  * \return true if transformation was successful else false
  * Successful means, that the point is inside the coordinate system
  */
-bool AxisPrivate::transformAnchor(QPointF* anchorPoint) {
+bool AxisPrivate::transformAnchor(QPointF& anchorPoint) {
 	QVector<QPointF> points;
-	points.append(*anchorPoint);
+	points.append(anchorPoint);
 	points = q->cSystem->mapLogicalToScene(points);
 
 	if (points.count() != 1) { // point is not mappable or in a coordinate gap
 		return false;
 	} else {
-		*anchorPoint = points.at(0);
+		anchorPoint = points.at(0);
 		return true;
 	}
+}
+
+bool AxisPrivate::calculateTickHorizontal(Axis::TicksDirection tickDirection,
+										  double ticksLength,
+										  double tickStartPos,
+										  double dummyOtherDirPos,
+										  double otherDirAnchorPoint,
+										  double centerValue,
+										  int rangeDirection,
+										  QPointF& anchorPointOut,
+										  QPointF& startPointOut,
+										  QPointF& endPointOut) {
+	bool valid = false;
+	anchorPointOut.setX(tickStartPos);
+	anchorPointOut.setY(dummyOtherDirPos); // set dummy logical point, but it must be within the datarect, otherwise valid will be always false
+	valid = transformAnchor(anchorPointOut);
+	anchorPointOut.setY(otherDirAnchorPoint);
+	if (valid) {
+		// for yDirection == -1 start is above end
+		if (anchorPointOut.y() >= centerValue) { // below
+			startPointOut = anchorPointOut + QPointF(0, (tickDirection & Axis::ticksIn) ? rangeDirection * ticksLength : 0);
+			endPointOut = anchorPointOut + QPointF(0, (tickDirection & Axis::ticksOut) ? -rangeDirection * ticksLength : 0);
+		} else { // above
+			startPointOut = anchorPointOut + QPointF(0, (tickDirection & Axis::ticksOut) ? rangeDirection * ticksLength : 0);
+			endPointOut = anchorPointOut + QPointF(0, (tickDirection & Axis::ticksIn) ? -rangeDirection * ticksLength : 0);
+		}
+	}
+	return valid;
+}
+
+bool AxisPrivate::calculateTickVertical(Axis::TicksDirection tickDirection,
+										double ticksLength,
+										double tickStartPos,
+										double dummyOtherDirPos,
+										double otherDirAnchorPoint,
+										double centerValue,
+										int rangeDirection,
+										QPointF& anchorPointOut,
+										QPointF& startPointOut,
+										QPointF& endPointOut) {
+	bool valid = false;
+	anchorPointOut.setY(tickStartPos);
+	anchorPointOut.setX(dummyOtherDirPos); // set dummy logical point, but it must be within the datarect, otherwise valid will be always false
+	valid = transformAnchor(anchorPointOut);
+	anchorPointOut.setX(otherDirAnchorPoint);
+	if (valid) {
+		// for xDirection == 1 start is right of end
+		if (anchorPointOut.x() < centerValue) { // left
+			startPointOut = anchorPointOut + QPointF((tickDirection & Axis::ticksIn) ? rangeDirection * ticksLength : 0, 0);
+			endPointOut = anchorPointOut + QPointF((tickDirection & Axis::ticksOut) ? -rangeDirection * ticksLength : 0, 0);
+		} else { // right
+			startPointOut = anchorPointOut + QPointF((tickDirection & Axis::ticksOut) ? rangeDirection * ticksLength : 0, 0);
+			endPointOut = anchorPointOut + QPointF((tickDirection & Axis::ticksIn) ? -rangeDirection * ticksLength : 0, 0);
+		}
+	}
+	return valid;
 }
 
 /*!
@@ -1597,6 +1653,7 @@ void AxisPrivate::retransformTicks() {
 		// calculate major tick's position
 		if (majorTicksType == Axis::TicksType::CustomColumnNumber) { // custom column
 			Q_ASSERT(tmpMajorTicksNumber > 0);
+
 			const int spacing = majorTicksColumn->rowCount() / tmpMajorTicksNumber;
 			majorTickRow = iMajor * spacing;
 			if (majorTickRow > majorTicksColumn->rowCount() - 1)
@@ -1690,11 +1747,12 @@ void AxisPrivate::retransformTicks() {
 				break; // Finish
 		}
 
-		qreal xAnchorPoint = 0.0;
-		qreal yAnchorPoint = 0.0;
+		qreal otherDirAnchorPoint = 0.0;
 		if (!lines.isEmpty()) {
-			xAnchorPoint = lines.first().p1().x();
-			yAnchorPoint = lines.first().p1().y();
+			if (orientation == Axis::Orientation::Vertical)
+				otherDirAnchorPoint = lines.first().p1().x();
+			else
+				otherDirAnchorPoint = lines.first().p1().y();
 		}
 
 		QPointF anchorPoint, startPoint, endPoint;
@@ -1702,36 +1760,28 @@ void AxisPrivate::retransformTicks() {
 		if (majorTicksDirection != Axis::noTicks) {
 			if (orientation == Axis::Orientation::Horizontal) {
 				auto startY = q->plot()->range(Dimension::Y, cs->index(Dimension::Y)).start();
-				anchorPoint.setX(majorTickPos);
-				anchorPoint.setY(startY); // set dummy logical point, but it must be within the datarect, otherwise valid will be always false
-				valid = transformAnchor(&anchorPoint);
-				anchorPoint.setY(yAnchorPoint);
-				if (valid) {
-					// for yDirection == -1 start is above end
-					if (anchorPoint.y() >= center.y()) { // below
-						startPoint = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksIn) ? yDirection * majorTicksLength : 0);
-						endPoint = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksOut) ? -yDirection * majorTicksLength : 0);
-					} else { // above
-						startPoint = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksOut) ? yDirection * majorTicksLength : 0);
-						endPoint = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksIn) ? -yDirection * majorTicksLength : 0);
-					}
-				}
+				valid = calculateTickHorizontal(majorTicksDirection,
+												majorTicksLength,
+												majorTickPos,
+												startY,
+												otherDirAnchorPoint,
+												center.y(),
+												yDirection,
+												anchorPoint,
+												startPoint,
+												endPoint);
 			} else { // vertical
 				auto startX = q->plot()->range(Dimension::X, cs->index(Dimension::X)).start();
-				anchorPoint.setY(majorTickPos);
-				anchorPoint.setX(startX); // set dummy logical point, but it must be within the datarect, otherwise valid will be always false
-				valid = transformAnchor(&anchorPoint);
-				anchorPoint.setX(xAnchorPoint);
-				if (valid) {
-					// for xDirection == 1 start is right of end
-					if (anchorPoint.x() < center.x()) { // left
-						startPoint = anchorPoint + QPointF((majorTicksDirection & Axis::ticksIn) ? xDirection * majorTicksLength : 0, 0);
-						endPoint = anchorPoint + QPointF((majorTicksDirection & Axis::ticksOut) ? -xDirection * majorTicksLength : 0, 0);
-					} else { // right
-						startPoint = anchorPoint + QPointF((majorTicksDirection & Axis::ticksOut) ? xDirection * majorTicksLength : 0, 0);
-						endPoint = anchorPoint + QPointF((majorTicksDirection & Axis::ticksIn) ? -xDirection * majorTicksLength : 0, 0);
-					}
-				}
+				valid = calculateTickVertical(majorTicksDirection,
+											  majorTicksLength,
+											  majorTickPos,
+											  startX,
+											  otherDirAnchorPoint,
+											  center.x(),
+											  xDirection,
+											  anchorPoint,
+											  startPoint,
+											  endPoint);
 			}
 
 			const qreal value = scalingFactor * majorTickPos + zeroOffset;
@@ -1842,34 +1892,28 @@ void AxisPrivate::retransformTicks() {
 				// calculate start and end points for minor tick's line (same as major ticks)
 				if (orientation == Axis::Orientation::Horizontal) {
 					auto startY = q->plot()->range(Dimension::Y, cs->index(Dimension::Y)).start();
-					anchorPoint.setX(minorTickPos);
-					anchorPoint.setY(startY);
-					valid = transformAnchor(&anchorPoint);
-					anchorPoint.setY(yAnchorPoint);
-					if (valid) {
-						if (anchorPoint.y() >= center.y()) { // below
-							startPoint = anchorPoint + QPointF(0, (minorTicksDirection & Axis::ticksIn) ? yDirection * minorTicksLength : 0);
-							endPoint = anchorPoint + QPointF(0, (minorTicksDirection & Axis::ticksOut) ? -yDirection * minorTicksLength : 0);
-						} else {
-							startPoint = anchorPoint + QPointF(0, (minorTicksDirection & Axis::ticksOut) ? yDirection * minorTicksLength : 0);
-							endPoint = anchorPoint + QPointF(0, (minorTicksDirection & Axis::ticksIn) ? -yDirection * minorTicksLength : 0);
-						}
-					}
+					valid = calculateTickHorizontal(minorTicksDirection,
+													minorTicksLength,
+													minorTickPos,
+													startY,
+													otherDirAnchorPoint,
+													center.y(),
+													yDirection,
+													anchorPoint,
+													startPoint,
+													endPoint);
 				} else { // vertical
 					auto startX = q->plot()->range(Dimension::X, cs->index(Dimension::X)).start();
-					anchorPoint.setY(minorTickPos);
-					anchorPoint.setX(startX);
-					valid = transformAnchor(&anchorPoint);
-					anchorPoint.setX(xAnchorPoint);
-					if (valid) {
-						if (anchorPoint.x() < center.x()) {
-							startPoint = anchorPoint + QPointF((minorTicksDirection & Axis::ticksIn) ? xDirection * minorTicksLength : 0, 0);
-							endPoint = anchorPoint + QPointF((minorTicksDirection & Axis::ticksOut) ? -xDirection * minorTicksLength : 0, 0);
-						} else {
-							startPoint = anchorPoint + QPointF((minorTicksDirection & Axis::ticksOut) ? xDirection * minorTicksLength : 0, 0);
-							endPoint = anchorPoint + QPointF((minorTicksDirection & Axis::ticksIn) ? -xDirection * minorTicksLength : 0, 0);
-						}
-					}
+					valid = calculateTickVertical(minorTicksDirection,
+												  minorTicksLength,
+												  minorTickPos,
+												  startX,
+												  otherDirAnchorPoint,
+												  center.x(),
+												  xDirection,
+												  anchorPoint,
+												  startPoint,
+												  endPoint);
 				}
 
 				// add minor tick's line to the painter path
