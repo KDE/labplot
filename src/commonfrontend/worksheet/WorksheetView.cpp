@@ -937,7 +937,11 @@ void WorksheetView::wheelEvent(QWheelEvent* event) {
 		QGraphicsView::wheelEvent(event);
 
 	if (m_magnificationWindow && m_magnificationWindow->isVisible())
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+		updateMagnificationWindow(mapToScene(event->position().toPoint()));
+#else
 		updateMagnificationWindow(mapToScene(event->pos()));
+#endif
 }
 
 void WorksheetView::zoom(int numSteps) {
