@@ -44,6 +44,7 @@ Bug fixes:
 	* Fix wrong infoelement position when removing active curve (Issue #666)
 	* Fix copying Elements (Issue #622)
 	* Fix calculating skewness and kurtosis
+	* Support start/end row/column in XLSX import preview
 
 Internal:
 	* Switch from C++11 to C++17
