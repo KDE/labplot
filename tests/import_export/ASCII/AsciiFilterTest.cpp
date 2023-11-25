@@ -19,8 +19,8 @@
 #include <gsl/gsl_rng.h>
 
 void AsciiFilterTest::initTestCase() {
-	//	// needed in order to have the signals triggered by SignallingUndoCommand, see LabPlot.cpp
-	//	//TODO: redesign/remove this
+	// needed in order to have the signals triggered by SignallingUndoCommand, see LabPlot.cpp
+	// TODO: redesign/remove this
 	qRegisterMetaType<const AbstractAspect*>("const AbstractAspect*");
 	qRegisterMetaType<const AbstractColumn*>("const AbstractColumn*");
 }
