@@ -1,5 +1,6 @@
 add_subdirectory(Axis)
 add_subdirectory(BarPlot)
+add_subdirectory(Histogram)
 add_subdirectory(Column)
 add_subdirectory(core)
 add_subdirectory(Datapicker)
