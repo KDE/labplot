@@ -13,6 +13,7 @@
 #include "backend/core/column/Column.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Worksheet.h"
+#include "backend/worksheet/plots/cartesian/Histogram.h"
 #include "backend/worksheet/plots/cartesian/KDEPlot.h"
 #include "backend/worksheet/plots/cartesian/QQPlot.h"
 
@@ -198,6 +199,35 @@ void StatisticalPlotsTest::testQQPlotRange() {
 	const auto& range = p->range(Dimension::X);
 	QCOMPARE(range.start(), -2.5);
 	QCOMPARE(range.end(), 2.5);
+}
+
+void StatisticalPlotsTest::testHistogramColumnRemoved() {
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	project.addChild(ws);
+
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	ws->addChild(p);
+
+	auto* histogram = new Histogram(QStringLiteral("histogram"));
+	p->addChild(histogram);
+
+	auto* c = new Column(QStringLiteral("TestColumn"));
+	project.addChild(c);
+
+	histogram->setDataColumn(c);
+	c->setName(QStringLiteral("NewName"));
+	QCOMPARE(histogram->dataColumnPath(), QStringLiteral("Project/NewName"));
+
+	c->remove();
+
+	QCOMPARE(histogram->dataColumn(), nullptr);
+	QCOMPARE(histogram->dataColumnPath(), QStringLiteral("Project/NewName"));
+
+	c->setName(QStringLiteral("Another new name")); // Shall not lead to a crash
+
+	QCOMPARE(histogram->dataColumn(), nullptr);
+	QCOMPARE(histogram->dataColumnPath(), QStringLiteral("Project/NewName"));
 }
 
 QTEST_MAIN(StatisticalPlotsTest)
