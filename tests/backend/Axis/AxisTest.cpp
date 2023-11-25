@@ -1799,6 +1799,10 @@ void AxisTest::customColumnNumericMaxValues() {
 	}
 }
 
+/*!
+ * \brief AxisTest::customColumnNumericMaxValuesLimitedRange
+ * The range is limited to 100-200 (max Range: 0-1000). But still 20 ticks shall be visible
+ */
 void AxisTest::customColumnNumericMaxValuesLimitedRange() {
 	constexpr int rowCountCustomColumn = 1000;
 
@@ -1891,8 +1895,20 @@ void AxisTest::customColumnNumericMaxValuesLimitedRange() {
 	QVERIFY(p->dataRect().height() > 0.);
 	QCOMPARE(xAxis->d_func()->majorTickPoints.size(), Axis::maxNumberMajorTicksCustomColumn());
 	for (int i = 0; i < Axis::maxNumberMajorTicksCustomColumn(); i++) {
-		const double xVal = ((double)i * rowCountCustomColumn / Axis::maxNumberMajorTicksCustomColumn() - 0.) / (1000. - 0.);
+		const double xVal = (100. + (double)i * (200. - 100.) / Axis::maxNumberMajorTicksCustomColumn()) / (1000. - 0.);
 		VALUES_EQUAL(xAxis->d_func()->majorTickPoints.at(i).x(), p->dataRect().x() + p->dataRect().width() * xVal);
+	}
+
+	r = p->range(Dimension::X, 0);
+	r.setStart(100.);
+	r.setEnd(10.);
+	p->setRange(Dimension::X, 0, r);
+
+	{
+		QStringList expectedStrings;
+		for (int i = 100; i < 110.; i += (110. - 100.) / 10) // maximum 10 labels are visible because not more labels exist in this range
+			expectedStrings.push_back(QStringLiteral("Some text") + QString::number(i));
+		COMPARE_STRING_VECTORS(xAxis->tickLabelStrings(), expectedStrings);
 	}
 }
 
