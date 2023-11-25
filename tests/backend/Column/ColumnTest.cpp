@@ -33,6 +33,13 @@
 	for (int i = 0; i < c2.rowCount(); i++)                                                                                                                    \
 		VALUES_EQUAL(c2.valueAt(i), result);
 
+void ColumnTest::initTestCase() {
+	// needed in order to have the signals triggered by SignallingUndoCommand, see LabPlot.cpp
+	// TODO: redesign/remove this
+	qRegisterMetaType<const AbstractAspect*>("const AbstractAspect*");
+	qRegisterMetaType<const AbstractColumn*>("const AbstractColumn*");
+}
+
 void ColumnTest::doubleMinimum() {
 	Column c(QStringLiteral("Double column"), Column::ColumnMode::Double);
 	c.setValues({-1.0, 2.0, 5.0});
@@ -501,6 +508,85 @@ void ColumnTest::statisticsText() {
 
 	QCOMPARE(stats.size, 5);
 	QCOMPARE(stats.unique, 2);
+}
+
+void ColumnTest::statisticsMaskValues() {
+	Project project;
+	auto* c = new Column(QStringLiteral("Integer column"), Column::ColumnMode::Integer);
+	c->setIntegers({1, 2, 3});
+	project.addChild(c);
+
+	// check the statistics
+	auto& stats1 = c->statistics();
+	QCOMPARE(stats1.size, 3);
+	QCOMPARE(stats1.minimum, 1.);
+	QCOMPARE(stats1.maximum, 3.);
+
+	// mask the last value and check the statistics
+	c->setMasked(2);
+	auto& stats2 = c->statistics();
+	QCOMPARE(stats2.size, 2);
+	QCOMPARE(stats2.minimum, 1.);
+	QCOMPARE(stats2.maximum, 2.);
+
+	// undo the masking change and check the statistics
+	project.undoStack()->undo();
+	auto& stats3 = c->statistics();
+	QCOMPARE(stats3.size, 3);
+	QCOMPARE(stats3.minimum, 1.);
+	QCOMPARE(stats3.maximum, 3.);
+
+	// redo the masking change and check the statistics
+	project.undoStack()->redo();
+	auto& stats4 = c->statistics();
+	QCOMPARE(stats4.size, 2);
+	QCOMPARE(stats4.minimum, 1.);
+	QCOMPARE(stats4.maximum, 2.);
+}
+
+void ColumnTest::statisticsClearSpreadsheetMasks() {
+	Project project;
+
+	auto* spreadsheet = new Spreadsheet(QStringLiteral("spreadsheet"));
+	project.addChild(spreadsheet);
+	spreadsheet->setColumnCount(1);
+	spreadsheet->setRowCount(3);
+	auto* c = spreadsheet->column(0);
+	c->setValues({1., 2., 3.});
+
+	// check the statistics
+	auto& stats1 = c->statistics();
+	QCOMPARE(stats1.size, 3);
+	QCOMPARE(stats1.minimum, 1.);
+	QCOMPARE(stats1.maximum, 3.);
+
+	// mask the last value and check the statistics
+	c->setMasked(2);
+	auto& stats2 = c->statistics();
+	QCOMPARE(stats2.size, 2);
+	QCOMPARE(stats2.minimum, 1.);
+	QCOMPARE(stats2.maximum, 2.);
+
+	// clear the masked values in the spreadsheet
+	spreadsheet->clearMasks();
+	auto& stats3 = c->statistics();
+	QCOMPARE(stats3.size, 3);
+	QCOMPARE(stats3.minimum, 1.);
+	QCOMPARE(stats3.maximum, 3.);
+
+	// undo the "clear masked valus"-change and check the statistics
+	project.undoStack()->undo();
+	auto& stats4 = c->statistics();
+	QCOMPARE(stats4.size, 2);
+	QCOMPARE(stats4.minimum, 1.);
+	QCOMPARE(stats4.maximum, 2.);
+
+	// redo the "clear masked values"-change and check the statistics
+	project.undoStack()->redo();
+	auto& stats5 = c->statistics();
+	QCOMPARE(stats5.size, 3);
+	QCOMPARE(stats5.minimum, 1.);
+	QCOMPARE(stats5.maximum, 3.);
 }
 
 void ColumnTest::testFormulaAutoUpdateEnabled() {

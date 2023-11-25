@@ -5,7 +5,7 @@
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2021 Martin Marmsoler <martin.marmsoler@gmail.com>
 	SPDX-FileCopyrightText: 2022 Stefan Gerlach <stefan.gerlach@uni.kn>
-	SPDX-FileCopyrightText: 2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2022-2023 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -19,6 +19,8 @@ class ColumnTest : public CommonTest {
 	Q_OBJECT
 
 private Q_SLOTS:
+	void initTestCase();
+
 	// ranges
 	void doubleMinimum();
 	void doubleMaximum();
@@ -39,6 +41,9 @@ private Q_SLOTS:
 	void statisticsIntOverflow(); // check overflow of integer
 	void statisticsBigInt(); // big ints
 	void statisticsText();
+
+	void statisticsMaskValues();
+	void statisticsClearSpreadsheetMasks();
 
 	// generation of column values via a formula
 	void testFormulaAutoUpdateEnabled();

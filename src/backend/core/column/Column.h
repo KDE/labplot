@@ -142,7 +142,7 @@ public:
 	void valueLabelsRemoveAll();
 
 	Properties properties() const override;
-	void invalidateProperties();
+	void invalidateProperties() override;
 
 	void setFromColumn(int, AbstractColumn*, int);
 	QString textAt(int) const override;
