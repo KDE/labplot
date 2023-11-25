@@ -837,7 +837,7 @@ void WorksheetElementPrivate::updatePosition() {
 bool WorksheetElementPrivate::sceneEvent(QEvent* event) {
 	if (lock) {
 		event->ignore();
-		return false;
+		return true;
 	}
 	return QGraphicsItem::sceneEvent(event);
 }
