@@ -1069,11 +1069,10 @@ void WorksheetView::updateMagnificationWindow(const QPointF& pos) {
 
 	// copy the part of the view to be shown magnified
 	const int size = Worksheet::convertToSceneUnits(2.0, Worksheet::Unit::Centimeter) / transform().m11();
-
 	const QRectF copyRect(pos.x() - size / (2 * magnificationFactor),
-							pos.y() - size / (2 * magnificationFactor),
-							size / magnificationFactor,
-							size / magnificationFactor);
+						  pos.y() - size / (2 * magnificationFactor),
+						  size / magnificationFactor,
+						  size / magnificationFactor);
 	QPixmap px = grab(mapFromScene(copyRect).boundingRect());
 	px = px.scaled(size, size, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 
@@ -1086,12 +1085,9 @@ void WorksheetView::updateMagnificationWindow(const QPointF& pos) {
 	rect.setHeight(rect.height() - pen.widthF() / 2);
 	painter.drawRect(rect);
 
-	// set the pixmap
+	// set the pixmap and show it again
 	m_magnificationWindow->setPixmap(px);
-
-
 	m_magnificationWindow->setPos(pos.x() - px.width() / 2, pos.y() - px.height() / 2);
-
 	m_magnificationWindow->setVisible(true);
 }
 
