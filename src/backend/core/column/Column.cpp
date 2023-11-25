@@ -1027,6 +1027,18 @@ int Column::valueLabelsCount(double min, double max) const {
 	return d->valueLabelsCount(min, max);
 }
 
+int Column::valueLabelsIndexForValue(double x) const {
+	return d->valueLabelsIndexForValue(x);
+}
+
+double Column::valueLabelsValueAt(int index) const {
+	return d->valueLabelsValueAt(index);
+}
+
+QString Column::valueLabelAt(int index) const {
+	return d->valueLabelAt(index);
+}
+
 const QVector<Column::ValueLabel<double>>* Column::valueLabels() const {
 	return d->valueLabels();
 }

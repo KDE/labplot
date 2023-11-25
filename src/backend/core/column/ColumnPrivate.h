@@ -195,11 +195,12 @@ public:
 		const QVector<Column::ValueLabel<double>>* valueLabels() const;
 		const QVector<Column::ValueLabel<int>>* intValueLabels() const;
 		const QVector<Column::ValueLabel<qint64>>* bigIntValueLabels() const;
-		int indexForValue(double value);
+		int indexForValue(double value) const;
 		double valueAt(int index) const;
 		QDateTime dateTimeAt(int index) const;
 		bool isValid(int index) const;
 		bool isMasked(int index) const;
+		QString labelAt(int index) const;
 
 	private:
 		bool init(AbstractColumn::ColumnMode);
@@ -222,6 +223,9 @@ public:
 	ValueLabels m_labels;
 	int valueLabelsCount() const;
 	int valueLabelsCount(double min, double max) const;
+	int valueLabelsIndexForValue(double value) const;
+	double valueLabelsValueAt(int index) const;
+	QString valueLabelAt(int index) const;
 	void addValueLabel(qint64, const QString&);
 	const QVector<Column::ValueLabel<qint64>>* bigIntValueLabels() const;
 	void addValueLabel(int, const QString&);

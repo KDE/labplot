@@ -203,6 +203,9 @@ public:
 	AbstractColumn::ColumnMode labelsMode() const;
 	int valueLabelsCount() const;
 	int valueLabelsCount(double min, double max) const;
+	int valueLabelsIndexForValue(double x) const;
+	double valueLabelsValueAt(int index) const;
+	QString valueLabelAt(int index) const;
 	void addValueLabel(qint64, const QString&);
 	const QVector<ValueLabel<qint64>>* bigIntValueLabels() const;
 	void addValueLabel(int, const QString&);

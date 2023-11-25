@@ -434,7 +434,7 @@ void ColumnPrivate::ValueLabels::migrateTextTo(AbstractColumn::ColumnMode newMod
 	}
 }
 
-int ColumnPrivate::ValueLabels::indexForValue(double value) {
+int ColumnPrivate::ValueLabels::indexForValue(double value) const {
 	return indexForValueCommon<ValueLabels>(this,
 											value,
 											std::mem_fn(&ValueLabels::mode),
@@ -452,6 +452,28 @@ bool ColumnPrivate::ValueLabels::isValid(int) const {
 
 bool ColumnPrivate::ValueLabels::isMasked(int) const {
 	return false;
+}
+
+QString ColumnPrivate::ValueLabels::labelAt(int index) const {
+	if (!initialized())
+		return QStringLiteral();
+
+	switch (m_mode) {
+	case AbstractColumn::ColumnMode::Double:
+		return cast_vector<double>()->at(index).label;
+	case AbstractColumn::ColumnMode::Integer:
+		return cast_vector<int>()->at(index).label;
+	case AbstractColumn::ColumnMode::BigInt:
+		return cast_vector<qint64>()->at(index).label;
+	case AbstractColumn::ColumnMode::Text:
+		return cast_vector<QString>()->at(index).label;
+	case AbstractColumn::ColumnMode::DateTime:
+	case AbstractColumn::ColumnMode::Month:
+	case AbstractColumn::ColumnMode::Day:
+		return cast_vector<QDateTime>()->at(index).label;
+	}
+	Q_ASSERT(false);
+	return QStringLiteral();
 }
 
 void ColumnPrivate::ValueLabels::migrateDateTimeTo(AbstractColumn::ColumnMode newMode) {
@@ -1925,6 +1947,18 @@ int ColumnPrivate::valueLabelsCount() const {
 
 int ColumnPrivate::valueLabelsCount(double min, double max) const {
 	return m_labels.count(min, max);
+}
+
+int ColumnPrivate::valueLabelsIndexForValue(double value) const {
+	return m_labels.indexForValue(value);
+}
+
+double ColumnPrivate::valueLabelsValueAt(int index) const {
+	return m_labels.valueAt(index);
+}
+
+QString ColumnPrivate::valueLabelAt(int index) const {
+	return m_labels.labelAt(index);
 }
 
 const QVector<Column::ValueLabel<double>>* ColumnPrivate::valueLabels() const {
