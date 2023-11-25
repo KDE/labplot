@@ -25,7 +25,6 @@ public:
 
 	void insertChild(int index, AbstractAspect*);
 	int indexOfChild(const AbstractAspect*) const;
-	int removeChild(AbstractAspect*);
 
 public:
 	QVector<AbstractAspect*> m_children;
