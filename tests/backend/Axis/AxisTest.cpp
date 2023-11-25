@@ -1799,6 +1799,85 @@ void AxisTest::customColumnNumericMaxValues() {
 	}
 }
 
+void AxisTest::customColumnNonMonotonicColumnValues() {
+	constexpr int rowCountCustomColumn = 1000;
+
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	QVERIFY(ws != nullptr);
+	project.addChild(ws);
+	ws->setPageRect(QRectF(0, 0, 300, 300));
+	ws->setLayoutBottomMargin(0);
+	ws->setLayoutTopMargin(0);
+	ws->setLayoutRightMargin(0);
+	ws->setLayoutLeftMargin(0);
+
+	Spreadsheet* spreadsheetData = new Spreadsheet(QStringLiteral("data"), false);
+	spreadsheetData->setColumnCount(2);
+	spreadsheetData->setRowCount(3);
+	project.addChild(spreadsheetData);
+	auto* xCol = spreadsheetData->column(0);
+	xCol->setColumnMode(AbstractColumn::ColumnMode::Double);
+	xCol->replaceValues(-1, QVector<double>({0., 1000.}));
+	auto* yCol = spreadsheetData->column(1);
+	yCol->replaceValues(-1, QVector<double>({0., 1000.}));
+
+	Spreadsheet* spreadsheetLabels = new Spreadsheet(QStringLiteral("labels"), false);
+	spreadsheetLabels->setColumnCount(2);
+	spreadsheetLabels->setRowCount(3);
+	project.addChild(spreadsheetLabels);
+	auto* posCol = spreadsheetLabels->column(0);
+	posCol->setColumnMode(AbstractColumn::ColumnMode::Double);
+	QVector<double> posValues({
+		0., 5., 3., 800., 500., 300., 200., 1., 6., 2., 900., 787., 333., 128., 999., 650., 11., 14., 18., 20., 576., 238., 239.,
+	});
+	for (int i = 100; i < 200; i++)
+		posValues.push_back(i); // Add more posValues which are between 100 and 200
+
+	posCol->replaceValues(-1, posValues);
+	QVERIFY(posCol->rowCount() > Axis::maxNumberMajorTicksCustomColumn());
+
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	p->setNiceExtend(false);
+	QVERIFY(p != nullptr);
+	p->setBottomPadding(0);
+	p->setHorizontalPadding(0);
+	p->setRightPadding(0);
+	p->setVerticalPadding(0);
+	ws->addChild(p);
+
+	auto* curve = new XYCurve(QStringLiteral("xy-curve"));
+	curve->setXColumn(xCol);
+	curve->setYColumn(yCol);
+	p->addChild(curve);
+	p->enableAutoScale(Dimension::X, 0, false);
+	auto r = p->range(Dimension::X, 0);
+	r.setStart(100.);
+	r.setEnd(200.);
+	p->setRange(Dimension::X, 0, r);
+
+	auto axes = p->children<Axis>();
+	QCOMPARE(axes.count(), 2);
+	QCOMPARE(axes.at(0)->name(), QStringLiteral("x"));
+	QCOMPARE(axes.at(1)->name(), QStringLiteral("y"));
+
+	auto* xAxis = static_cast<Axis*>(axes.at(0));
+	QCOMPARE(xAxis->range().start(), 100.);
+	QCOMPARE(xAxis->range().end(), 200.);
+	xAxis->setMajorTicksType(Axis::TicksType::CustomColumnNumber);
+	xAxis->setMajorTicksColumn(posCol);
+	QCOMPARE(xAxis->majorTicksAutoNumber(), true);
+	QCOMPARE(xAxis->labelsTextType(), Axis::LabelsTextType::PositionValues);
+	{
+		QStringList expectedStrings;
+		for (int i = 100; i < 200.; i += (200. - 100.) / Axis::maxNumberMajorTicksCustomColumn())
+			expectedStrings.push_back(QString::number(i));
+
+		COMPARE_STRING_VECTORS(xAxis->tickLabelStrings(), expectedStrings);
+	}
+}
+
 /*!
  * \brief AxisTest::customColumnNumericMaxValuesLimitedRange
  * The range is limited to 100-200 (max Range: 0-1000). But still 20 ticks shall be visible
