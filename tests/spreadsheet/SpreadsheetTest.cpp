@@ -2892,10 +2892,8 @@ void SpreadsheetTest::testLinkSpreadsheetRecalculate() {
 	{
 		QVector<double> ref{4, 6, 7, 4, 2, 10, 6};
 		QCOMPARE(sheetCalculationsColumn0->rowCount(), ref.count());
-		for (int i = 0; i < ref.count(); i++) {
-			qDebug() << i;
+		for (int i = 0; i < ref.count(); i++)
 			VALUES_EQUAL(sheetCalculationsColumn0->doubleAt(i), ref.at(i));
-		}
 	}
 }
 
@@ -2943,10 +2941,8 @@ void SpreadsheetTest::testLinkSpreadsheetRecalculateRowCountChange() {
 
 	{
 		QCOMPARE(sheetCalculationsColumn0->rowCount(), 7);
-		for (int i = 0; i < 7; i++) {
-			qDebug() << i;
+		for (int i = 0; i < 7; i++)
 			VALUES_EQUAL(sheetCalculationsColumn0->doubleAt(i), i + 1.);
-		}
 	}
 
 	sheetData->setRowCount(8);
@@ -2954,7 +2950,6 @@ void SpreadsheetTest::testLinkSpreadsheetRecalculateRowCountChange() {
 	{
 		QCOMPARE(sheetCalculationsColumn0->rowCount(), 8);
 		for (int i = 0; i < 8; i++) {
-			qDebug() << i;
 			if (i < 7)
 				VALUES_EQUAL(sheetCalculationsColumn0->doubleAt(i), i + 1.);
 			else
@@ -2966,10 +2961,8 @@ void SpreadsheetTest::testLinkSpreadsheetRecalculateRowCountChange() {
 
 	{
 		QCOMPARE(sheetCalculationsColumn0->rowCount(), 7);
-		for (int i = 0; i < 7; i++) {
-			qDebug() << i;
+		for (int i = 0; i < 7; i++)
 			VALUES_EQUAL(sheetCalculationsColumn0->doubleAt(i), i + 1.);
-		}
 	}
 }
 
@@ -3378,10 +3371,8 @@ BO_ 541 MSG2: 8 Vector__XXX
 		const auto* sheetCalculationsColumn = sheetCalculations->child<Column>(0);
 		QCOMPARE(sheetCalculationsColumn->formulaData().at(0).column(), sheetDataColumn6);
 		QCOMPARE(sheetCalculationsColumn->rowCount(), ref.count());
-		for (int i = 0; i < ref.count(); i++) {
-			qDebug() << i;
+		for (int i = 0; i < ref.count(); i++)
 			VALUES_EQUAL(sheetCalculationsColumn->doubleAt(i), ref.at(i));
-		}
 	}
 
 	{
@@ -3389,10 +3380,8 @@ BO_ 541 MSG2: 8 Vector__XXX
 		const auto* sheetCalculationsColumn = sheetCalculations->child<Column>(1);
 		QCOMPARE(sheetCalculationsColumn->formulaData().at(0).column(), sheetDataColumn5);
 		QCOMPARE(sheetCalculationsColumn->rowCount(), ref.count());
-		for (int i = 0; i < ref.count(); i++) {
-			qDebug() << i;
+		for (int i = 0; i < ref.count(); i++)
 			VALUES_EQUAL(sheetCalculationsColumn->doubleAt(i), ref.at(i));
-		}
 	}
 }
 #endif // HAVE_VECTOR_BLF
