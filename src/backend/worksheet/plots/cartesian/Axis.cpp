@@ -123,7 +123,8 @@ void Axis::init(Orientation orientation) {
 	d->offset = group.readEntry(QStringLiteral("PositionOffset"), 0);
 	d->range = Range<double>(group.readEntry(QStringLiteral("Start"), 0.), group.readEntry("End", 10.)); // not auto ticked if already set to 1 here!
 	d->range.scale() = (RangeT::Scale)group.readEntry(QStringLiteral("Scale"), static_cast<int>(RangeT::Scale::Linear));
-	d->majorTicksStartType = static_cast<Axis::TicksStartType>(group.readEntry(QStringLiteral("MajorTicksStartType"), static_cast<bool>(Axis::TicksStartType::Offset)));
+	d->majorTicksStartType =
+		static_cast<Axis::TicksStartType>(group.readEntry(QStringLiteral("MajorTicksStartType"), static_cast<bool>(Axis::TicksStartType::Offset)));
 	d->majorTickStartOffset = group.readEntry(QStringLiteral("MajorTickStartOffset"), 0.0);
 	d->majorTickStartValue = group.readEntry(QStringLiteral("MajorTickStartValue"), 0.0);
 	d->scalingFactor = group.readEntry(QStringLiteral("ScalingFactor"), 1.0);
@@ -165,8 +166,8 @@ void Axis::init(Orientation orientation) {
 	d->majorTicksDirection = (Axis::TicksDirection)group.readEntry(QStringLiteral("MajorTicksDirection"), (int)Axis::ticksOut);
 	d->majorTicksType = (TicksType)group.readEntry(QStringLiteral("MajorTicksType"), static_cast<int>(TicksType::TotalNumber));
 	d->majorTicksNumber = group.readEntry(QStringLiteral("MajorTicksNumber"), 11);
-	d->majorTicksSpacing =
-		group.readEntry(QStringLiteral("MajorTicksIncrement"), 0.0); // set to 0, so axisdock determines the value to not have to many labels the first time switched to Spacing
+	d->majorTicksSpacing = group.readEntry(QStringLiteral("MajorTicksIncrement"),
+										   0.0); // set to 0, so axisdock determines the value to not have to many labels the first time switched to Spacing
 	d->majorTicksLength = group.readEntry(QStringLiteral("MajorTicksLength"), Worksheet::convertToSceneUnits(6.0, Worksheet::Unit::Point));
 
 	d->majorTicksLine = new Line(QString());
@@ -213,7 +214,8 @@ void Axis::init(Orientation orientation) {
 	d->labelsFont = group.readEntry(QStringLiteral("LabelsFont"), QFont());
 	d->labelsFont.setPixelSize(Worksheet::convertToSceneUnits(10.0, Worksheet::Unit::Point));
 	d->labelsColor = group.readEntry(QStringLiteral("LabelsFontColor"), QColor(Qt::black));
-	d->labelsBackgroundType = (LabelsBackgroundType)group.readEntry(QStringLiteral("LabelsBackgroundType"), static_cast<int>(LabelsBackgroundType::Transparent));
+	d->labelsBackgroundType =
+		(LabelsBackgroundType)group.readEntry(QStringLiteral("LabelsBackgroundType"), static_cast<int>(LabelsBackgroundType::Transparent));
 	d->labelsBackgroundColor = group.readEntry(QStringLiteral("LabelsBackgroundColor"), QColor(Qt::white));
 	d->labelsPrefix = group.readEntry(QStringLiteral("LabelsPrefix"), QStringLiteral(""));
 	d->labelsSuffix = group.readEntry(QStringLiteral("LabelsSuffix"), QStringLiteral(""));
