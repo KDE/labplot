@@ -1662,4 +1662,50 @@ void ColumnTest::clearContentFormula() {
 	QCOMPARE(c->formulaData().at(0).variableName(), QStringLiteral("zet"));
 }
 
+void ColumnTest::testRowCount() {
+	Column c(QStringLiteral("Test"), Column::ColumnMode::Double);
+	c.replaceValues(-1, {-3., 1., 2., 5., 11.});
+
+	QCOMPARE(c.rowCount(1., 5.), 3);
+}
+
+void ColumnTest::testRowCountDateTime() {
+	Column c(QStringLiteral("Test"), Column::ColumnMode::DateTime);
+	c.replaceDateTimes(-1,
+					   {QDateTime::fromString(QStringLiteral("2018-03-26T02:14:34.000Z"), Qt::DateFormat::ISODateWithMs),
+						QDateTime::fromString(QStringLiteral("2018-03-27T02:14:34.000Z"), Qt::DateFormat::ISODateWithMs),
+						QDateTime::fromString(QStringLiteral("2018-03-28T02:14:34.000Z"), Qt::DateFormat::ISODateWithMs),
+						QDateTime::fromString(QStringLiteral("2018-03-29T02:14:34.000Z"), Qt::DateFormat::ISODateWithMs),
+						QDateTime::fromString(QStringLiteral("2018-03-30T02:14:34.000Z"), Qt::DateFormat::ISODateWithMs),
+						QDateTime::fromString(QStringLiteral("2018-03-31T02:14:34.000Z"), Qt::DateFormat::ISODateWithMs)});
+
+	QCOMPARE(c.rowCount(QDateTime::fromString(QStringLiteral("2018-03-27T02:14:34.000Z"), Qt::DateFormat::ISODateWithMs).toMSecsSinceEpoch(),
+						QDateTime::fromString(QStringLiteral("2018-03-30T02:14:34.000Z"), Qt::DateFormat::ISODateWithMs).toMSecsSinceEpoch()),
+			 4);
+}
+
+void ColumnTest::testRowCountValueLabels() {
+	Column c(QStringLiteral("Test"), Column::ColumnMode::Double);
+	c.addValueLabel(-2., QStringLiteral("Status 1"));
+	c.addValueLabel(-1., QStringLiteral("Status 2"));
+	c.addValueLabel(4., QStringLiteral("Status 3"));
+	c.addValueLabel(5., QStringLiteral("Status 2"));
+	c.addValueLabel(6., QStringLiteral("Status 3"));
+
+	QCOMPARE(c.valueLabelsCount(-1., 5.), 3);
+}
+
+void ColumnTest::testRowCountValueLabelsDateTime() {
+	Column c(QStringLiteral("Test"), Column::ColumnMode::DateTime);
+	c.addValueLabel(QDateTime::fromString(QStringLiteral("2018-03-26T02:14:34.000Z"), Qt::DateFormat::ISODateWithMs), QStringLiteral("Status 1"));
+	c.addValueLabel(QDateTime::fromString(QStringLiteral("2018-03-27T02:14:34.000Z"), Qt::DateFormat::ISODateWithMs), QStringLiteral("Status 2"));
+	c.addValueLabel(QDateTime::fromString(QStringLiteral("2018-03-28T02:14:34.000Z"), Qt::DateFormat::ISODateWithMs), QStringLiteral("Status 3"));
+	c.addValueLabel(QDateTime::fromString(QStringLiteral("2018-03-30T02:14:34.000Z"), Qt::DateFormat::ISODateWithMs), QStringLiteral("Status 4"));
+	c.addValueLabel(QDateTime::fromString(QStringLiteral("2018-03-31T02:14:34.000Z"), Qt::DateFormat::ISODateWithMs), QStringLiteral("Status 5"));
+
+	QCOMPARE(c.valueLabelsCount(QDateTime::fromString(QStringLiteral("2018-03-27T02:14:34.000Z"), Qt::DateFormat::ISODateWithMs).toMSecsSinceEpoch(),
+								QDateTime::fromString(QStringLiteral("2018-03-30T02:14:34.000Z"), Qt::DateFormat::ISODateWithMs).toMSecsSinceEpoch()),
+			 3);
+}
+
 QTEST_MAIN(ColumnTest)

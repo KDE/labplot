@@ -113,6 +113,12 @@ private Q_SLOTS:
 
 	void clearContentNoFormula();
 	void clearContentFormula();
+
+	void testRowCount();
+	void testRowCountDateTime();
+
+	void testRowCountValueLabels();
+	void testRowCountValueLabelsDateTime();
 };
 
 #endif // COLUMNTEST_H
