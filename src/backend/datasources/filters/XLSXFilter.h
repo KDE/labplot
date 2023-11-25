@@ -70,6 +70,7 @@ public:
 	int startColumn() const;
 	void setEndColumn(const int);
 	int endColumn() const;
+	int firstColumn() const;
 
 private:
 	std::unique_ptr<XLSXFilterPrivate> const d;
