@@ -1786,9 +1786,105 @@ void AxisTest::customColumnNumericMaxValues() {
 	xAxis->setLabelsTextColumn(labelsCol);
 	{
 		QStringList expectedStrings;
-		for (int i = 0; i < rowCountCustomColumn; i += rowCountCustomColumn / Axis::maxNumberMajorTicksCustomColumn()) {
+		for (int i = 0; i < rowCountCustomColumn; i += rowCountCustomColumn / Axis::maxNumberMajorTicksCustomColumn())
 			expectedStrings.push_back(QStringLiteral("Some text") + QString::number(i));
-		}
+		COMPARE_STRING_VECTORS(xAxis->tickLabelStrings(), expectedStrings);
+	}
+	QVERIFY(p->dataRect().width() > 0.);
+	QVERIFY(p->dataRect().height() > 0.);
+	QCOMPARE(xAxis->d_func()->majorTickPoints.size(), Axis::maxNumberMajorTicksCustomColumn());
+	for (int i = 0; i < Axis::maxNumberMajorTicksCustomColumn(); i++) {
+		const double xVal = ((double)i * rowCountCustomColumn / Axis::maxNumberMajorTicksCustomColumn() - 0.) / (1000. - 0.);
+		VALUES_EQUAL(xAxis->d_func()->majorTickPoints.at(i).x(), p->dataRect().x() + p->dataRect().width() * xVal);
+	}
+}
+
+void AxisTest::customColumnNumericMaxValuesLimitedRange() {
+	constexpr int rowCountCustomColumn = 1000;
+
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	QVERIFY(ws != nullptr);
+	project.addChild(ws);
+	ws->setPageRect(QRectF(0, 0, 300, 300));
+	ws->setLayoutBottomMargin(0);
+	ws->setLayoutTopMargin(0);
+	ws->setLayoutRightMargin(0);
+	ws->setLayoutLeftMargin(0);
+
+	Spreadsheet* spreadsheetData = new Spreadsheet(QStringLiteral("data"), false);
+	spreadsheetData->setColumnCount(2);
+	spreadsheetData->setRowCount(3);
+	project.addChild(spreadsheetData);
+	auto* xCol = spreadsheetData->column(0);
+	xCol->setColumnMode(AbstractColumn::ColumnMode::Double);
+	xCol->replaceValues(-1, QVector<double>({0., 1000.}));
+	auto* yCol = spreadsheetData->column(1);
+	yCol->replaceValues(-1, QVector<double>({0., 1000.}));
+
+	Spreadsheet* spreadsheetLabels = new Spreadsheet(QStringLiteral("labels"), false);
+	spreadsheetLabels->setColumnCount(2);
+	spreadsheetLabels->setRowCount(3);
+	project.addChild(spreadsheetLabels);
+	auto* posCol = spreadsheetLabels->column(0);
+	posCol->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	QVector<int> posValues;
+	QVector<QString> customLabels;
+	for (int i = 0; i < rowCountCustomColumn; i++) {
+		posValues.push_back(i);
+		customLabels.push_back(QStringLiteral("Some text") + QString::number(i));
+	}
+	posCol->replaceInteger(-1, posValues);
+	auto* labelsCol = spreadsheetLabels->column(1);
+	labelsCol->setColumnMode(AbstractColumn::ColumnMode::Text);
+	labelsCol->replaceTexts(-1, customLabels);
+
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	p->setNiceExtend(false);
+	QVERIFY(p != nullptr);
+	p->setBottomPadding(0);
+	p->setHorizontalPadding(0);
+	p->setRightPadding(0);
+	p->setVerticalPadding(0);
+	ws->addChild(p);
+
+	auto* curve = new XYCurve(QStringLiteral("xy-curve"));
+	curve->setXColumn(xCol);
+	curve->setYColumn(yCol);
+	p->addChild(curve);
+	p->enableAutoScale(Dimension::X, 0, false);
+	auto r = p->range(Dimension::X, 0);
+	r.setStart(100.);
+	r.setEnd(200.);
+	p->setRange(Dimension::X, 0, r);
+
+	auto axes = p->children<Axis>();
+	QCOMPARE(axes.count(), 2);
+	QCOMPARE(axes.at(0)->name(), QStringLiteral("x"));
+	QCOMPARE(axes.at(1)->name(), QStringLiteral("y"));
+
+	auto* xAxis = static_cast<Axis*>(axes.at(0));
+	QCOMPARE(xAxis->range().start(), 100.);
+	QCOMPARE(xAxis->range().end(), 200.);
+	xAxis->setMajorTicksType(Axis::TicksType::CustomColumnNumber);
+	xAxis->setMajorTicksColumn(posCol);
+	QCOMPARE(xAxis->majorTicksAutoNumber(), true);
+	QCOMPARE(xAxis->labelsTextType(), Axis::LabelsTextType::PositionValues);
+	{
+		QStringList expectedStrings;
+		for (int i = 100; i < 200.; i += (200. - 100.) / Axis::maxNumberMajorTicksCustomColumn())
+			expectedStrings.push_back(QString::number(i));
+
+		COMPARE_STRING_VECTORS(xAxis->tickLabelStrings(), expectedStrings);
+	}
+
+	xAxis->setLabelsTextType(Axis::LabelsTextType::CustomValues);
+	xAxis->setLabelsTextColumn(labelsCol);
+	{
+		QStringList expectedStrings;
+		for (int i = 100; i < 200.; i += (200. - 100.) / Axis::maxNumberMajorTicksCustomColumn())
+			expectedStrings.push_back(QStringLiteral("Some text") + QString::number(i));
 		COMPARE_STRING_VECTORS(xAxis->tickLabelStrings(), expectedStrings);
 	}
 	QVERIFY(p->dataRect().width() > 0.);
