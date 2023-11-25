@@ -1594,7 +1594,7 @@ void AxisPrivate::retransformTicks() {
 	case Axis::TicksType::CustomValues:
 		if (majorTicksColumn) {
 			if (majorTicksAutoNumber) {
-				tmpMajorTicksNumber = qMin(_maxNumberMajorTicksCustomColumn, majorTicksColumn->rowCount());
+				tmpMajorTicksNumber = qMin(_maxNumberMajorTicksCustomColumn, majorTicksColumn->rowCount(start, end));
 				Q_EMIT q->majorTicksNumberChanged(tmpMajorTicksNumber);
 			} else
 				tmpMajorTicksNumber = majorTicksNumber;
@@ -1606,7 +1606,7 @@ void AxisPrivate::retransformTicks() {
 	case Axis::TicksType::ColumnLabels:
 		const Column* c = dynamic_cast<const Column*>(majorTicksColumn);
 		if (c && c->valueLabelsInitialized())
-			tmpMajorTicksNumber = qMin(_maxNumberMajorTicksCustomColumn, c->valueLabelsCount());
+			tmpMajorTicksNumber = qMin(_maxNumberMajorTicksCustomColumn, c->valueLabelsCount(start, end));
 		else {
 			retransformTickLabelPositions(); // this calls recalcShapeAndBoundingRect()
 			return;
