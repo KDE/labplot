@@ -66,6 +66,7 @@ public:
 	bool isReadOnly() const override;
 	void resizeTo(int);
 	int rowCount() const override;
+	int rowCount(double min, double max) const override;
 	int availableRowCount(int max = -1) const override;
 	int width() const;
 	void setWidth(const int);
@@ -201,6 +202,7 @@ public:
 	};
 	AbstractColumn::ColumnMode labelsMode() const;
 	int valueLabelsCount() const;
+	int valueLabelsCount(double min, double max) const;
 	void addValueLabel(qint64, const QString&);
 	const QVector<ValueLabel<qint64>>* bigIntValueLabels() const;
 	void addValueLabel(int, const QString&);

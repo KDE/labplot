@@ -706,7 +706,8 @@ void Column::replaceDateTimes(int first, const QVector<QDateTime>& new_values) {
 
 void Column::addValueLabel(const QDateTime& value, const QString& label) {
 	d->addValueLabel(value, label);
-	project()->setChanged(true);
+	if (project())
+		project()->setChanged(true);
 }
 
 void Column::setValues(const QVector<double>& values) {
@@ -1019,6 +1020,10 @@ const QVector<Column::ValueLabel<QDateTime>>* Column::dateTimeValueLabels() cons
 
 int Column::valueLabelsCount() const {
 	return d->valueLabelsCount();
+}
+
+int Column::valueLabelsCount(double min, double max) const {
+	return d->valueLabelsCount(min, max);
 }
 
 const QVector<Column::ValueLabel<double>>* Column::valueLabels() const {
@@ -1652,6 +1657,13 @@ void Column::resizeTo(int rows) {
  */
 int Column::rowCount() const {
 	return d->rowCount();
+}
+
+int Column::rowCount(double min, double max) const {
+	int start, end;
+	if (!indicesMinMax(min, max, start, end))
+		return 0;
+	return abs(start - end) + 1; // +1 because start/end is included
 }
 
 /**

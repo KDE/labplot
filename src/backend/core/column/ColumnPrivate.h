@@ -166,6 +166,7 @@ public:
 		void migrateTextTo(AbstractColumn::ColumnMode newMode);
 		void migrateDateTimeTo(AbstractColumn::ColumnMode newMode);
 		int count() const;
+		int count(double min, double max) const;
 		void add(qint64, const QString&);
 		void add(int, const QString&);
 		void add(double, const QString&);
@@ -213,6 +214,7 @@ public:
 	};
 	ValueLabels m_labels;
 	int valueLabelsCount() const;
+	int valueLabelsCount(double min, double max) const;
 	void addValueLabel(qint64, const QString&);
 	const QVector<Column::ValueLabel<qint64>>* bigIntValueLabels() const;
 	void addValueLabel(int, const QString&);

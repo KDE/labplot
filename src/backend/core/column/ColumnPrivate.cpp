@@ -302,6 +302,56 @@ int ColumnPrivate::ValueLabels::count() const {
 	return 0;
 }
 
+int ColumnPrivate::ValueLabels::count(double min, double max) const {
+	if (!initialized())
+		return 0;
+
+	min = qMin(min, max);
+	max = qMax(min, max);
+
+	int counter = 0;
+	switch (m_mode) {
+	case AbstractColumn::ColumnMode::Double: {
+		const auto* data = cast_vector<double>();
+		for (const auto& d : *data) {
+			if (d.value >= min && d.value <= max)
+				counter++;
+		}
+		break;
+	}
+	case AbstractColumn::ColumnMode::Integer: {
+		const auto* data = cast_vector<int>();
+		for (const auto& d : *data) {
+			if (d.value >= min && d.value <= max)
+				counter++;
+		}
+		break;
+	}
+	case AbstractColumn::ColumnMode::BigInt: {
+		const auto* data = cast_vector<qint64>();
+		for (const auto& d : *data) {
+			if (d.value >= min && d.value <= max)
+				counter++;
+		}
+		break;
+	}
+	case AbstractColumn::ColumnMode::Text:
+		return 0;
+	case AbstractColumn::ColumnMode::DateTime:
+	case AbstractColumn::ColumnMode::Month:
+	case AbstractColumn::ColumnMode::Day: {
+		const auto* data = cast_vector<QDateTime>();
+		for (const auto& d : *data) {
+			const auto value = d.value.toMSecsSinceEpoch();
+			if (value >= min && value <= max)
+				counter++;
+		}
+		break;
+	}
+	}
+	return counter;
+}
+
 void ColumnPrivate::ValueLabels::add(const QString& value, const QString& label) {
 	if (initialized() && m_mode != AbstractColumn::ColumnMode::Text)
 		return;
@@ -1608,6 +1658,10 @@ const QVector<Column::ValueLabel<QDateTime>>* ColumnPrivate::dateTimeValueLabels
 
 int ColumnPrivate::valueLabelsCount() const {
 	return m_labels.count();
+}
+
+int ColumnPrivate::valueLabelsCount(double min, double max) const {
+	return m_labels.count(min, max);
 }
 
 const QVector<Column::ValueLabel<double>>* ColumnPrivate::valueLabels() const {
