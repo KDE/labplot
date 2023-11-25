@@ -194,6 +194,7 @@ public:
 		const QVector<Column::ValueLabel<double>>* valueLabels() const;
 		const QVector<Column::ValueLabel<int>>* intValueLabels() const;
 		const QVector<Column::ValueLabel<qint64>>* bigIntValueLabels() const;
+		int indexForValue(double value);
 
 	private:
 		bool init(AbstractColumn::ColumnMode);
