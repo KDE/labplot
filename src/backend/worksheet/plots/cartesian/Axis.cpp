@@ -1491,6 +1491,11 @@ void AxisPrivate::retransformTicks() {
 		return;
 	}
 
+	if (!q->cSystem) {
+		DEBUG(Q_FUNC_INFO << ", WARNING: axis has no coordinate system!")
+		return;
+	}
+
 	// determine the increment for the major ticks
 	double majorTicksIncrement = 0;
 	int tmpMajorTicksNumber = 0;
@@ -1611,24 +1616,13 @@ void AxisPrivate::retransformTicks() {
 	// minor ticks
 	int tmpMinorTicksNumber = determineMinorTicksNumber();
 
-	if (!q->cSystem) {
-		DEBUG(Q_FUNC_INFO << ", WARNING: axis has no coordinate system!")
-		return;
-	}
 	//	const int xIndex{ q->cSystem->index(Dimension::X) }, yIndex{ q->cSystem->index(Dimension::Y) };
 	DEBUG(Q_FUNC_INFO << ", coordinate system " << q->m_cSystemIndex + 1)
-	//	DEBUG(Q_FUNC_INFO << ", x range " << xIndex + 1)
-	//	DEBUG(Q_FUNC_INFO << ", y range " << yIndex + 1)
-	//	DEBUG(Q_FUNC_INFO << ", x range index check = " << dynamic_cast<const
-	// CartesianCoordinateSystem*>(plot()->coordinateSystem(q->m_cSystemIndex))->index(Dimension::X)
-	//)
 	auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
 	const int xRangeDirection = plot()->range(Dimension::X, cs->index(Dimension::X)).direction();
 	const int yRangeDirection = plot()->range(Dimension::Y, cs->index(Dimension::Y)).direction();
-	//	DEBUG(Q_FUNC_INFO << ", x/y range direction = " << xRangeDirection << "/" << yRangeDirection)
 	const int xDirection = q->cSystem->direction(Dimension::X) * xRangeDirection;
 	const int yDirection = q->cSystem->direction(Dimension::Y) * yRangeDirection;
-	//	DEBUG(Q_FUNC_INFO << ", x/y direction: " << xDirection << "/" << yDirection)
 
 	// calculate the position of the center point in scene coordinates,
 	// will be used later to differentiate between "in" and "out" depending
