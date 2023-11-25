@@ -38,6 +38,7 @@ private Q_SLOTS:
 	void automaticTicNumberUpdateDockMinorTicks();
 
 	void columnLabelValues();
+	void columnLabelValuesMaxValues();
 
 	void customTextLabels();
 
@@ -52,6 +53,7 @@ private Q_SLOTS:
 	void numericSpacingStartValueNonZero();
 
 	void customColumnNumeric();
+	void customColumnNumericMaxValues();
 	void customColumnDateTime();
 
 	void autoScale();

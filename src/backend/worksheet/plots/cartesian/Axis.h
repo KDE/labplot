@@ -42,7 +42,7 @@ public:
 	};
 	Q_DECLARE_FLAGS(TicksDirection, TicksFlags)
 
-	enum class TicksType { TotalNumber, Spacing, CustomColumn, CustomValues, ColumnLabels };
+	enum class TicksType { TotalNumber, Spacing, CustomColumnNumber, CustomValues, ColumnLabels };
 	Q_ENUM(TicksType)
 	enum class ArrowType { NoArrow, SimpleSmall, SimpleBig, FilledSmall, FilledBig, SemiFilledSmall, SemiFilledBig };
 	enum class ArrowPosition { Left, Right, Both };
@@ -175,6 +175,7 @@ public:
 	CLASS_D_ACCESSOR_DECL(QString, labelsPrefix, LabelsPrefix)
 	CLASS_D_ACCESSOR_DECL(QString, labelsSuffix, LabelsSuffix)
 	BASIC_D_ACCESSOR_DECL(qreal, labelsOpacity, LabelsOpacity)
+	static int maxNumberMajorTicksCustomColumn();
 
 	Line* majorGridLine() const;
 	Line* minorGridLine() const;

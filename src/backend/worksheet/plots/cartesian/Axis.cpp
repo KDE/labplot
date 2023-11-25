@@ -16,10 +16,10 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
+#include "backend/lib/trace.h"
 #include "backend/worksheet/Line.h"
 #include "backend/worksheet/TextLabel.h"
 #include "backend/worksheet/Worksheet.h"
-// #include "backend/lib/trace.h"
 #include "kdefrontend/GuiTools.h"
 
 #include "backend/nsl/nsl_math.h"
@@ -41,6 +41,7 @@ using Dimension = CartesianCoordinateSystem::Dimension;
 
 namespace {
 constexpr int maxNumberMajorTicks = 100;
+constexpr int _maxNumberMajorTicksCustomColumn = 20;
 } // Anounymous namespace
 
 /**
@@ -503,6 +504,10 @@ BASIC_SHARED_D_READER_IMPL(Axis, QColor, labelsBackgroundColor, labelsBackground
 BASIC_SHARED_D_READER_IMPL(Axis, QString, labelsPrefix, labelsPrefix)
 BASIC_SHARED_D_READER_IMPL(Axis, QString, labelsSuffix, labelsSuffix)
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, labelsOpacity, labelsOpacity)
+
+int Axis::maxNumberMajorTicksCustomColumn() {
+	return _maxNumberMajorTicksCustomColumn;
+}
 
 // grid
 Line* Axis::majorGridLine() const {
@@ -1386,6 +1391,9 @@ bool AxisPrivate::transformAnchor(QPointF* anchorPoint) {
 	recalculates the position of the axis ticks.
  */
 void AxisPrivate::retransformTicks() {
+#if PERFTRACE_AXIS
+	PERFTRACE(QLatin1String(Q_FUNC_INFO) + QStringLiteral(", axis ") + name());
+#endif
 	// DEBUG(Q_FUNC_INFO << ' ' << STDSTRING(title->name()))
 	if (suppressRetransform)
 		return;
@@ -1500,10 +1508,14 @@ void AxisPrivate::retransformTicks() {
 			// Datetime with linear spacing: Calculation will be done directly where the majorTickPos will be calculated
 		}
 		break;
-	case Axis::TicksType::CustomColumn:
+	case Axis::TicksType::CustomColumnNumber:
 	case Axis::TicksType::CustomValues:
 		if (majorTicksColumn) {
-			tmpMajorTicksNumber = majorTicksColumn->rowCount();
+			if (majorTicksAutoNumber) {
+				tmpMajorTicksNumber = qMin(_maxNumberMajorTicksCustomColumn, majorTicksColumn->rowCount());
+				Q_EMIT q->majorTicksNumberChanged(tmpMajorTicksNumber);
+			} else
+				tmpMajorTicksNumber = majorTicksNumber;
 		} else {
 			retransformTickLabelPositions(); // this calls recalcShapeAndBoundingRect()
 			return;
@@ -1512,7 +1524,7 @@ void AxisPrivate::retransformTicks() {
 	case Axis::TicksType::ColumnLabels:
 		const Column* c = dynamic_cast<const Column*>(majorTicksColumn);
 		if (c && c->valueLabelsInitialized())
-			tmpMajorTicksNumber = c->valueLabelsCount();
+			tmpMajorTicksNumber = qMin(_maxNumberMajorTicksCustomColumn, c->valueLabelsCount());
 		else {
 			retransformTickLabelPositions(); // this calls recalcShapeAndBoundingRect()
 			return;
@@ -1530,7 +1542,7 @@ void AxisPrivate::retransformTicks() {
 		if (majorTicksNumber > 1)
 			tmpMinorTicksNumber /= majorTicksNumber - 1;
 		break;
-	case Axis::TicksType::CustomColumn:
+	case Axis::TicksType::CustomColumnNumber:
 		// Fall through
 	case Axis::TicksType::CustomValues:
 		(minorTicksColumn) ? tmpMinorTicksNumber = minorTicksColumn->rowCount() : tmpMinorTicksNumber = 0;
@@ -1581,34 +1593,41 @@ void AxisPrivate::retransformTicks() {
 		//		DEBUG(Q_FUNC_INFO << ", major tick " << iMajor)
 		qreal majorTickPos = 0.0;
 		qreal nextMajorTickPos = 0.0;
+		int majorTickRow = iMajor; // Used by CustomColumn with CustomLabels and ColumnLabels, but also for CustomLabels with no customColumn
 		// calculate major tick's position
-		if (majorTicksType == Axis::TicksType::CustomColumn) { // custom column
+		if (majorTicksType == Axis::TicksType::CustomColumnNumber) { // custom column
 			if (!majorTicksColumn->isValid(iMajor) || majorTicksColumn->isMasked(iMajor))
 				continue;
-			majorTickPos = majorTicksColumn->valueAt(iMajor);
+			Q_ASSERT(tmpMajorTicksNumber > 0);
+			const int spacing = majorTicksColumn->rowCount() / tmpMajorTicksNumber;
+			majorTickRow = iMajor * spacing;
+			majorTickPos = majorTicksColumn->valueAt(majorTickRow);
 			// set next major tick pos for minor ticks
 			if (iMajor < tmpMajorTicksNumber - 1) {
-				if (majorTicksColumn->isValid(iMajor + 1) && !majorTicksColumn->isMasked(iMajor + 1))
-					nextMajorTickPos = majorTicksColumn->valueAt(iMajor + 1);
+				if (majorTicksColumn->isValid((iMajor + 1) * spacing) && !majorTicksColumn->isMasked((iMajor + 1) * spacing))
+					nextMajorTickPos = majorTicksColumn->valueAt((iMajor + 1) * spacing);
 			} else // last major tick
 				tmpMinorTicksNumber = 0;
 		} else if (majorTicksType == Axis::TicksType::ColumnLabels) {
 			const Column* c = dynamic_cast<const Column*>(majorTicksColumn);
+			Q_ASSERT(tmpMajorTicksNumber > 0);
+			const int spacing = c->valueLabelsCount() / tmpMajorTicksNumber;
+			majorTickRow = iMajor * spacing;
 			if (c) {
 				switch (c->labelsMode()) {
 				case Column::ColumnMode::Double:
-					majorTickPos = c->valueLabels()->at(iMajor).value;
+					majorTickPos = c->valueLabels()->at(majorTickRow).value;
 					break;
 				case Column::ColumnMode::Integer:
-					majorTickPos = c->intValueLabels()->at(iMajor).value;
+					majorTickPos = c->intValueLabels()->at(majorTickRow).value;
 					break;
 				case Column::ColumnMode::BigInt:
-					majorTickPos = c->bigIntValueLabels()->at(iMajor).value;
+					majorTickPos = c->bigIntValueLabels()->at(majorTickRow).value;
 					break;
 				case Column::ColumnMode::Day:
 				case Column::ColumnMode::Month:
 				case Column::ColumnMode::DateTime:
-					majorTickPos = c->dateTimeValueLabels()->at(iMajor).value.toMSecsSinceEpoch();
+					majorTickPos = c->dateTimeValueLabels()->at(majorTickRow).value.toMSecsSinceEpoch();
 					break;
 				case Column::ColumnMode::Text:
 					// TODO
@@ -1715,7 +1734,8 @@ void AxisPrivate::retransformTicks() {
 			//			DEBUG(Q_FUNC_INFO << ", value = " << value << " " << scalingFactor << " " << majorTickPos << " " << zeroOffset)
 
 			// if custom column is used, we can have duplicated values in it and we need only unique values
-			if ((majorTicksType == Axis::TicksType::CustomColumn || majorTicksType == Axis::TicksType::ColumnLabels) && tickLabelValues.indexOf(value) != -1)
+			if ((majorTicksType == Axis::TicksType::CustomColumnNumber || majorTicksType == Axis::TicksType::ColumnLabels)
+				&& tickLabelValues.indexOf(value) != -1)
 				valid = false;
 
 			// add major tick's line to the painter path
@@ -1731,30 +1751,30 @@ void AxisPrivate::retransformTicks() {
 					if (c && c->valueLabelsInitialized()) {
 						switch (c->labelsMode()) {
 						case AbstractColumn::ColumnMode::Double: {
-							if (iMajor < c->valueLabelsCount())
-								tickLabelValuesString << c->valueLabels()->at(iMajor).label;
+							if (majorTickRow < c->valueLabelsCount())
+								tickLabelValuesString << c->valueLabels()->at(majorTickRow).label;
 							break;
 						}
 						case AbstractColumn::ColumnMode::Integer: {
-							if (iMajor < c->valueLabelsCount())
-								tickLabelValuesString << c->intValueLabels()->at(iMajor).label;
+							if (majorTickRow < c->valueLabelsCount())
+								tickLabelValuesString << c->intValueLabels()->at(majorTickRow).label;
 							break;
 						}
 						case AbstractColumn::ColumnMode::BigInt: {
-							if (iMajor < c->valueLabelsCount())
-								tickLabelValuesString << c->bigIntValueLabels()->at(iMajor).label;
+							if (majorTickRow < c->valueLabelsCount())
+								tickLabelValuesString << c->bigIntValueLabels()->at(majorTickRow).label;
 							break;
 						}
 						case AbstractColumn::ColumnMode::DateTime:
 						case AbstractColumn::ColumnMode::Month:
 						case AbstractColumn::ColumnMode::Day: {
-							if (iMajor < c->valueLabelsCount())
-								tickLabelValuesString << c->dateTimeValueLabels()->at(iMajor).label;
+							if (majorTickRow < c->valueLabelsCount())
+								tickLabelValuesString << c->dateTimeValueLabels()->at(majorTickRow).label;
 							break;
 						}
 						case AbstractColumn::ColumnMode::Text: {
-							if (iMajor < c->valueLabelsCount())
-								tickLabelValuesString << c->textValueLabels()->at(iMajor).label;
+							if (majorTickRow < c->valueLabelsCount())
+								tickLabelValuesString << c->textValueLabels()->at(majorTickRow).label;
 							break;
 						}
 						}
@@ -1765,20 +1785,20 @@ void AxisPrivate::retransformTicks() {
 						tickLabelValues << value;
 						break;
 					case Axis::LabelsTextType::CustomValues: {
-						if (labelsTextColumn && iMajor < labelsTextColumn->rowCount()) {
+						if (labelsTextColumn && majorTickRow < labelsTextColumn->rowCount()) {
 							switch (labelsTextColumn->columnMode()) {
 							case AbstractColumn::ColumnMode::Double:
 							case AbstractColumn::ColumnMode::Integer:
 							case AbstractColumn::ColumnMode::BigInt:
-								tickLabelValues << labelsTextColumn->valueAt(iMajor);
+								tickLabelValues << labelsTextColumn->valueAt(majorTickRow);
 								break;
 							case AbstractColumn::ColumnMode::DateTime:
 							case AbstractColumn::ColumnMode::Month:
 							case AbstractColumn::ColumnMode::Day:
-								tickLabelValues << labelsTextColumn->dateTimeAt(iMajor).toMSecsSinceEpoch();
+								tickLabelValues << labelsTextColumn->dateTimeAt(majorTickRow).toMSecsSinceEpoch();
 								break;
 							case AbstractColumn::ColumnMode::Text:
-								tickLabelValuesString << labelsTextColumn->textAt(iMajor);
+								tickLabelValuesString << labelsTextColumn->textAt(majorTickRow);
 								break;
 							}
 						}
@@ -1801,7 +1821,7 @@ void AxisPrivate::retransformTicks() {
 			qreal minorTickPos;
 			for (int iMinor = 0; iMinor < tmpMinorTicksNumber; iMinor++) {
 				// calculate minor tick's position
-				if (minorTicksType != Axis::TicksType::CustomColumn) {
+				if (minorTicksType != Axis::TicksType::CustomColumnNumber) {
 					minorTickPos = majorTickPos + (iMinor + 1) * minorTicksIncrement;
 				} else {
 					if (!minorTicksColumn->isValid(iMinor) || minorTicksColumn->isMasked(iMinor))

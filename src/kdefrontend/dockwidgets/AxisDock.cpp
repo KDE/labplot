@@ -280,7 +280,7 @@ void AxisDock::init() {
 
 	ui.cbMajorTicksType->addItem(i18n("Number"), (int)Axis::TicksType::TotalNumber);
 	ui.cbMajorTicksType->addItem(i18n("Spacing"), (int)Axis::TicksType::Spacing);
-	ui.cbMajorTicksType->addItem(i18n("Custom column"), (int)Axis::TicksType::CustomColumn);
+	ui.cbMajorTicksType->addItem(i18n("Custom column"), (int)Axis::TicksType::CustomColumnNumber);
 	ui.cbMajorTicksType->addItem(i18n("Column labels"), (int)Axis::TicksType::ColumnLabels);
 
 	ui.cbMajorTicksStartType->addItem(i18n("Absolute Value"));
@@ -1028,10 +1028,10 @@ void AxisDock::majorTicksTypeChanged(int index) {
 	}
 	case Axis::TicksType::ColumnLabels:
 		// Fall through
-	case Axis::TicksType::CustomColumn: {
-		ui.lMajorTicksNumber->hide();
-		ui.sbMajorTicksNumber->hide();
-		ui.cbMajorTicksAutoNumber->hide();
+	case Axis::TicksType::CustomColumnNumber: {
+		ui.lMajorTicksNumber->show();
+		ui.sbMajorTicksNumber->show();
+		ui.cbMajorTicksAutoNumber->show();
 		ui.lMajorTicksSpacingNumeric->hide();
 		ui.sbMajorTicksSpacingNumeric->hide();
 		ui.lMajorTicksIncrementDateTime->hide();
