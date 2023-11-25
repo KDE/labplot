@@ -59,10 +59,14 @@ void Image::init() {
 	// geometry
 	d->position.point.setX(group.readEntry(QStringLiteral("PositionXValue"), 0.));
 	d->position.point.setY(group.readEntry(QStringLiteral("PositionYValue"), 0.));
-	d->position.horizontalPosition = (WorksheetElement::HorizontalPosition)group.readEntry(QStringLiteral("PositionX"), (int)WorksheetElement::HorizontalPosition::Center);
-	d->position.verticalPosition = (WorksheetElement::VerticalPosition)group.readEntry(QStringLiteral("PositionY"), (int)WorksheetElement::VerticalPosition::Center);
-	d->horizontalAlignment = (WorksheetElement::HorizontalAlignment)group.readEntry(QStringLiteral("HorizontalAlignment"), (int)WorksheetElement::HorizontalAlignment::Center);
-	d->verticalAlignment = (WorksheetElement::VerticalAlignment)group.readEntry(QStringLiteral("VerticalAlignment"), (int)WorksheetElement::VerticalAlignment::Center);
+	d->position.horizontalPosition =
+		(WorksheetElement::HorizontalPosition)group.readEntry(QStringLiteral("PositionX"), (int)WorksheetElement::HorizontalPosition::Center);
+	d->position.verticalPosition =
+		(WorksheetElement::VerticalPosition)group.readEntry(QStringLiteral("PositionY"), (int)WorksheetElement::VerticalPosition::Center);
+	d->horizontalAlignment =
+		(WorksheetElement::HorizontalAlignment)group.readEntry(QStringLiteral("HorizontalAlignment"), (int)WorksheetElement::HorizontalAlignment::Center);
+	d->verticalAlignment =
+		(WorksheetElement::VerticalAlignment)group.readEntry(QStringLiteral("VerticalAlignment"), (int)WorksheetElement::VerticalAlignment::Center);
 	d->setRotation(group.readEntry(QStringLiteral("Rotation"), d->rotation()));
 
 	// border

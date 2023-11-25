@@ -718,7 +718,8 @@ void BoxPlotDock::loadConfig(KConfig& config) {
 	whiskersLineWidget->loadConfig(group);
 
 	// whiskers cap
-	ui.sbWhiskersCapSize->setValue(Worksheet::convertFromSceneUnits(group.readEntry(QStringLiteral("WhiskersCapSize"), m_boxPlot->whiskersCapSize()), Worksheet::Unit::Point));
+	ui.sbWhiskersCapSize->setValue(
+		Worksheet::convertFromSceneUnits(group.readEntry(QStringLiteral("WhiskersCapSize"), m_boxPlot->whiskersCapSize()), Worksheet::Unit::Point));
 	whiskersCapLineWidget->loadConfig(group);
 
 	// Margin plots

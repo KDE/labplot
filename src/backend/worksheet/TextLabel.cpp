@@ -162,8 +162,10 @@ void TextLabel::init() {
 		d->position.point.setY(group.readEntry(QStringLiteral("PositionYValue"), 0.));
 		d->position.horizontalPosition = (HorizontalPosition)group.readEntry(QStringLiteral("PositionX"), (int)d->position.horizontalPosition);
 		d->position.verticalPosition = (VerticalPosition)group.readEntry(QStringLiteral("PositionY"), (int)d->position.verticalPosition);
-		d->horizontalAlignment = (WorksheetElement::HorizontalAlignment)group.readEntry(QStringLiteral("HorizontalAlignment"), static_cast<int>(d->horizontalAlignment));
-		d->verticalAlignment = (WorksheetElement::VerticalAlignment)group.readEntry(QStringLiteral("VerticalAlignment"), static_cast<int>(d->verticalAlignment));
+		d->horizontalAlignment =
+			(WorksheetElement::HorizontalAlignment)group.readEntry(QStringLiteral("HorizontalAlignment"), static_cast<int>(d->horizontalAlignment));
+		d->verticalAlignment =
+			(WorksheetElement::VerticalAlignment)group.readEntry(QStringLiteral("VerticalAlignment"), static_cast<int>(d->verticalAlignment));
 		if (cSystem && cSystem->isValid())
 			d->positionLogical = cSystem->mapSceneToLogical(d->position.point, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 	}

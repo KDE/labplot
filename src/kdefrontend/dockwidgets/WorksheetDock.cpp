@@ -628,11 +628,14 @@ void WorksheetDock::loadConfig(KConfig& config) {
 
 	// Layout
 	ui.cbLayout->setCurrentIndex(group.readEntry(QStringLiteral("Layout"), (int)m_worksheet->layout()));
-	ui.sbLayoutTopMargin->setValue(Worksheet::convertFromSceneUnits(group.readEntry(QStringLiteral("LayoutTopMargin"), m_worksheet->layoutTopMargin()), m_worksheetUnit));
+	ui.sbLayoutTopMargin->setValue(
+		Worksheet::convertFromSceneUnits(group.readEntry(QStringLiteral("LayoutTopMargin"), m_worksheet->layoutTopMargin()), m_worksheetUnit));
 	ui.sbLayoutBottomMargin->setValue(
 		Worksheet::convertFromSceneUnits(group.readEntry(QStringLiteral("LayoutBottomMargin"), m_worksheet->layoutBottomMargin()), m_worksheetUnit));
-	ui.sbLayoutLeftMargin->setValue(Worksheet::convertFromSceneUnits(group.readEntry(QStringLiteral("LayoutLeftMargin"), m_worksheet->layoutLeftMargin()), m_worksheetUnit));
-	ui.sbLayoutRightMargin->setValue(Worksheet::convertFromSceneUnits(group.readEntry(QStringLiteral("LayoutRightMargin"), m_worksheet->layoutRightMargin()), m_worksheetUnit));
+	ui.sbLayoutLeftMargin->setValue(
+		Worksheet::convertFromSceneUnits(group.readEntry(QStringLiteral("LayoutLeftMargin"), m_worksheet->layoutLeftMargin()), m_worksheetUnit));
+	ui.sbLayoutRightMargin->setValue(
+		Worksheet::convertFromSceneUnits(group.readEntry(QStringLiteral("LayoutRightMargin"), m_worksheet->layoutRightMargin()), m_worksheetUnit));
 	ui.sbLayoutHorizontalSpacing->setValue(
 		Worksheet::convertFromSceneUnits(group.readEntry(QStringLiteral("LayoutHorizontalSpacing"), m_worksheet->layoutHorizontalSpacing()), m_worksheetUnit));
 	ui.sbLayoutVerticalSpacing->setValue(

@@ -1906,8 +1906,10 @@ void CartesianPlotDock::loadConfig(KConfig& config) {
 	// TODO
 
 	// Layout
-	ui.sbPaddingHorizontal->setValue(Worksheet::convertFromSceneUnits(group.readEntry(QStringLiteral("HorizontalPadding"), m_plot->horizontalPadding()), m_worksheetUnit));
-	ui.sbPaddingVertical->setValue(Worksheet::convertFromSceneUnits(group.readEntry(QStringLiteral("VerticalPadding"), m_plot->verticalPadding()), m_worksheetUnit));
+	ui.sbPaddingHorizontal->setValue(
+		Worksheet::convertFromSceneUnits(group.readEntry(QStringLiteral("HorizontalPadding"), m_plot->horizontalPadding()), m_worksheetUnit));
+	ui.sbPaddingVertical->setValue(
+		Worksheet::convertFromSceneUnits(group.readEntry(QStringLiteral("VerticalPadding"), m_plot->verticalPadding()), m_worksheetUnit));
 	ui.sbPaddingRight->setValue(Worksheet::convertFromSceneUnits(group.readEntry(QStringLiteral("RightPadding"), m_plot->rightPadding()), m_worksheetUnit));
 	ui.sbPaddingBottom->setValue(Worksheet::convertFromSceneUnits(group.readEntry(QStringLiteral("BottomPadding"), m_plot->bottomPadding()), m_worksheetUnit));
 	ui.cbPaddingSymmetric->setChecked(group.readEntry(QStringLiteral("SymmetricPadding"), m_plot->symmetricPadding()));
@@ -1923,7 +1925,8 @@ void CartesianPlotDock::loadConfig(KConfig& config) {
 	ui.tbBorderTypeBottom->setChecked(type.testFlag(PlotArea::BorderTypeFlags::BorderBottom));
 
 	borderLineWidget->loadConfig(group);
-	ui.sbBorderCornerRadius->setValue(Worksheet::convertFromSceneUnits(group.readEntry(QStringLiteral("BorderCornerRadius"), plotArea->borderCornerRadius()), m_worksheetUnit));
+	ui.sbBorderCornerRadius->setValue(
+		Worksheet::convertFromSceneUnits(group.readEntry(QStringLiteral("BorderCornerRadius"), plotArea->borderCornerRadius()), m_worksheetUnit));
 }
 
 void CartesianPlotDock::saveConfigAsTemplate(KConfig& config) {

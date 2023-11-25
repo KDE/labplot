@@ -1311,7 +1311,8 @@ void XYCurveDock::loadConfig(KConfig& config) {
 	// Values
 	ui.cbValuesType->setCurrentIndex(group.readEntry(QStringLiteral("ValuesType"), (int)m_curve->valuesType()));
 	ui.cbValuesPosition->setCurrentIndex(group.readEntry(QStringLiteral("ValuesPosition"), (int)m_curve->valuesPosition()));
-	ui.sbValuesDistance->setValue(Worksheet::convertFromSceneUnits(group.readEntry(QStringLiteral("ValuesDistance"), m_curve->valuesDistance()), Worksheet::Unit::Point));
+	ui.sbValuesDistance->setValue(
+		Worksheet::convertFromSceneUnits(group.readEntry(QStringLiteral("ValuesDistance"), m_curve->valuesDistance()), Worksheet::Unit::Point));
 	ui.sbValuesRotation->setValue(group.readEntry(QStringLiteral("ValuesRotation"), m_curve->valuesRotationAngle()));
 	ui.sbValuesOpacity->setValue(round(group.readEntry(QStringLiteral("ValuesOpacity"), m_curve->valuesOpacity()) * 100.0));
 	ui.leValuesPrefix->setText(group.readEntry(QStringLiteral("ValuesPrefix"), m_curve->valuesPrefix()));

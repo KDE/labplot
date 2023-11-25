@@ -2108,7 +2108,8 @@ void AxisDock::loadConfig(KConfig& config) {
 	const auto majorTickStartValue = group.readEntry(QStringLiteral("MajorTickStartValue"), m_axis->majorTickStartValue());
 	ui.sbMajorTickStartValue->setValue(majorTickStartValue);
 	ui.sbMajorTickStartDateTime->setMSecsSinceEpochUTC(majorTickStartValue);
-	ui.sbMajorTicksLength->setValue(Worksheet::convertFromSceneUnits(group.readEntry(QStringLiteral("MajorTicksLength"), m_axis->majorTicksLength()), Worksheet::Unit::Point));
+	ui.sbMajorTicksLength->setValue(
+		Worksheet::convertFromSceneUnits(group.readEntry(QStringLiteral("MajorTicksLength"), m_axis->majorTicksLength()), Worksheet::Unit::Point));
 	majorTicksLineWidget->loadConfig(group);
 
 	// Minor ticks
@@ -2133,7 +2134,8 @@ void AxisDock::loadConfig(KConfig& config) {
 	ui.sbLabelsPrecision->setValue(group.readEntry(QStringLiteral("LabelsPrecision"), (int)m_axis->labelsPrecision()));
 	ui.cbLabelsDateTimeFormat->setCurrentText(group.readEntry(QStringLiteral("LabelsDateTimeFormat"), QStringLiteral("yyyy-MM-dd hh:mm:ss")));
 	ui.cbLabelsPosition->setCurrentIndex(group.readEntry(QStringLiteral("LabelsPosition"), (int)m_axis->labelsPosition()));
-	ui.sbLabelsOffset->setValue(Worksheet::convertFromSceneUnits(group.readEntry(QStringLiteral("LabelsOffset"), m_axis->labelsOffset()), Worksheet::Unit::Point));
+	ui.sbLabelsOffset->setValue(
+		Worksheet::convertFromSceneUnits(group.readEntry(QStringLiteral("LabelsOffset"), m_axis->labelsOffset()), Worksheet::Unit::Point));
 	ui.sbLabelsRotation->setValue(group.readEntry(QStringLiteral("LabelsRotation"), m_axis->labelsRotationAngle()));
 	ui.cbLabelsTextType->setCurrentIndex(group.readEntry(QStringLiteral("LabelsTextType"), (int)m_axis->labelsTextType()));
 
