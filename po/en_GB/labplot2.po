@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-22 00:39+0000\n"
+"POT-Creation-Date: 2023-11-25 00:39+0000\n"
 "PO-Revision-Date: 2023-06-17 12:24+0100\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English\n"
@@ -7432,7 +7432,7 @@ msgstr "no info available"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTitle)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:163
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5005
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5008
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:483
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:543
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:459
@@ -7824,7 +7824,7 @@ msgid "%1: load default theme"
 msgstr "%1: load default theme"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1692
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5315
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5318
 #: src/backend/worksheet/Worksheet.cpp:814
 #, kde-format
 msgid "%1: set theme"
@@ -7958,24 +7958,24 @@ msgstr "%1: add Fourier filter curve"
 msgid "Text Label"
 msgstr "Text Label"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3714
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3717
 #, kde-format
 msgid "Not inside of the bounding rect"
 msgstr "Not inside of the bounding rectangle"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3938
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3959
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3941
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3962
 #, kde-format
 msgid "from x=%1 to x=%2"
 msgstr "from x=%1 to x=%2"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3946
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3972
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3949
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3975
 #, kde-format
 msgid "from y=%1 to y=%2"
 msgstr "from y=%1 to y=%2"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3991
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3994
 #, kde-format
 msgid "x=%1"
 msgstr "x=%1"
