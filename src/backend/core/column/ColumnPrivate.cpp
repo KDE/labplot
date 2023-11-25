@@ -223,6 +223,54 @@ void ColumnPrivate::ValueLabels::deinit() {
 	}
 }
 
+AbstractColumn::ColumnMode ColumnPrivate::ValueLabels::mode() const {
+	return m_mode;
+}
+AbstractColumn::Properties ColumnPrivate::ValueLabels::properties() const {
+	return AbstractColumn::Properties::No; // Performance improvements not yet implemented
+}
+
+double ColumnPrivate::ValueLabels::valueAt(int index) const {
+	if (!initialized())
+		return 0;
+
+	switch (m_mode) {
+	case AbstractColumn::ColumnMode::Double:
+		return cast_vector<double>()->at(index).value;
+	case AbstractColumn::ColumnMode::Integer:
+		return cast_vector<int>()->at(index).value;
+	case AbstractColumn::ColumnMode::BigInt:
+		return cast_vector<qint64>()->at(index).value;
+	case AbstractColumn::ColumnMode::Text:
+		return std::nan("0");
+	case AbstractColumn::ColumnMode::DateTime:
+	case AbstractColumn::ColumnMode::Month:
+	case AbstractColumn::ColumnMode::Day:
+		return cast_vector<QDateTime>()->at(index).value.toMSecsSinceEpoch();
+	}
+	Q_ASSERT(false);
+	return std::nan("0");
+}
+
+QDateTime ColumnPrivate::ValueLabels::dateTimeAt(int index) const {
+	if (!initialized())
+		return QDateTime();
+
+	switch (m_mode) {
+	case AbstractColumn::ColumnMode::Double:
+	case AbstractColumn::ColumnMode::Integer:
+	case AbstractColumn::ColumnMode::BigInt:
+	case AbstractColumn::ColumnMode::Text:
+		return QDateTime();
+	case AbstractColumn::ColumnMode::DateTime:
+	case AbstractColumn::ColumnMode::Month:
+	case AbstractColumn::ColumnMode::Day:
+		return cast_vector<QDateTime>()->at(index).value;
+	}
+	Q_ASSERT(false);
+	return QDateTime();
+}
+
 void ColumnPrivate::ValueLabels::migrateLabels(AbstractColumn::ColumnMode newMode) {
 	switch (mode()) {
 	case AbstractColumn::ColumnMode::Double:
@@ -256,15 +304,15 @@ void ColumnPrivate::ValueLabels::migrateDoubleTo(AbstractColumn::ColumnMode newM
 	case AbstractColumn::ColumnMode::Double:
 		break; // Nothing to do
 	case AbstractColumn::ColumnMode::Integer:
-		for (auto value : vector)
+		for (const auto& value : vector)
 			add((int)value.value, value.label);
 		break;
 	case AbstractColumn::ColumnMode::BigInt:
-		for (auto value : vector)
+		for (const auto& value : vector)
 			add((qint64)value.value, value.label);
 		break;
 	case AbstractColumn::ColumnMode::Text:
-		for (auto value : vector)
+		for (const auto& value : vector)
 			add(QString::number(value.value), value.label);
 		break;
 	case AbstractColumn::ColumnMode::DateTime:
@@ -285,18 +333,18 @@ void ColumnPrivate::ValueLabels::migrateIntTo(AbstractColumn::ColumnMode newMode
 	init(newMode);
 	switch (newMode) {
 	case AbstractColumn::ColumnMode::Double:
-		for (auto value : vector)
+		for (const auto& value : vector)
 			add((double)value.value, value.label);
 		break;
 	case AbstractColumn::ColumnMode::Integer:
 		// nothing to do
 		break;
 	case AbstractColumn::ColumnMode::BigInt:
-		for (auto value : vector)
+		for (const auto& value : vector)
 			add((qint64)value.value, value.label);
 		break;
 	case AbstractColumn::ColumnMode::Text:
-		for (auto value : vector)
+		for (const auto& value : vector)
 			add(QString::number(value.value), value.label);
 		break;
 	case AbstractColumn::ColumnMode::DateTime:
@@ -317,18 +365,18 @@ void ColumnPrivate::ValueLabels::migrateBigIntTo(AbstractColumn::ColumnMode newM
 	init(newMode);
 	switch (newMode) {
 	case AbstractColumn::ColumnMode::Double:
-		for (auto value : vector)
+		for (const auto& value : vector)
 			add((double)value.value, value.label);
 		break;
 	case AbstractColumn::ColumnMode::Integer:
-		for (auto value : vector)
+		for (const auto& value : vector)
 			add((int)value.value, value.label);
 		break;
 	case AbstractColumn::ColumnMode::BigInt:
 		// Nothing to do
 		break;
 	case AbstractColumn::ColumnMode::Text:
-		for (auto value : vector)
+		for (const auto& value : vector)
 			add(QString::number(value.value), value.label);
 		break;
 	case AbstractColumn::ColumnMode::DateTime:
@@ -349,7 +397,7 @@ void ColumnPrivate::ValueLabels::migrateTextTo(AbstractColumn::ColumnMode newMod
 	init(newMode);
 	switch (newMode) {
 	case AbstractColumn::ColumnMode::Double: {
-		for (auto value : vector) {
+		for (const auto& value : vector) {
 			bool ok;
 			double v = value.value.toDouble(&ok);
 			if (ok)
@@ -358,7 +406,7 @@ void ColumnPrivate::ValueLabels::migrateTextTo(AbstractColumn::ColumnMode newMod
 		break;
 	}
 	case AbstractColumn::ColumnMode::Integer: {
-		for (auto value : vector) {
+		for (const auto& value : vector) {
 			bool ok;
 			int v = value.value.toInt(&ok);
 			if (ok)
@@ -367,7 +415,7 @@ void ColumnPrivate::ValueLabels::migrateTextTo(AbstractColumn::ColumnMode newMod
 		break;
 	}
 	case AbstractColumn::ColumnMode::BigInt: {
-		for (auto value : vector) {
+		for (const auto& value : vector) {
 			bool ok;
 			qint64 v = value.value.toLongLong(&ok);
 			if (ok)
@@ -384,6 +432,26 @@ void ColumnPrivate::ValueLabels::migrateTextTo(AbstractColumn::ColumnMode newMod
 		// Not supported
 		break;
 	}
+}
+
+int ColumnPrivate::ValueLabels::indexForValue(double value) {
+	return indexForValueCommon<ValueLabels>(this,
+											value,
+											std::mem_fn(&ValueLabels::mode),
+											std::mem_fn<int() const>(&ValueLabels::count),
+											std::mem_fn(&ValueLabels::valueAt),
+											std::mem_fn(&ValueLabels::dateTimeAt),
+											std::mem_fn(&ValueLabels::properties),
+											std::mem_fn<bool(int) const>(&ValueLabels::isValid),
+											std::mem_fn<bool(int) const>(&ValueLabels::isMasked));
+}
+
+bool ColumnPrivate::ValueLabels::isValid(int) const {
+	return true;
+}
+
+bool ColumnPrivate::ValueLabels::isMasked(int) const {
+	return false;
 }
 
 void ColumnPrivate::ValueLabels::migrateDateTimeTo(AbstractColumn::ColumnMode newMode) {

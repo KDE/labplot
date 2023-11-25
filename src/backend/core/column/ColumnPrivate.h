@@ -176,9 +176,8 @@ public:
 		void add(const QDateTime&, const QString&);
 		void add(const QString&, const QString&);
 		void removeAll();
-		AbstractColumn::ColumnMode mode() const {
-			return m_mode;
-		}
+		AbstractColumn::ColumnMode mode() const;
+		AbstractColumn::Properties properties() const;
 		bool initialized() const {
 			return m_labels != nullptr;
 		}
@@ -197,6 +196,10 @@ public:
 		const QVector<Column::ValueLabel<int>>* intValueLabels() const;
 		const QVector<Column::ValueLabel<qint64>>* bigIntValueLabels() const;
 		int indexForValue(double value);
+		double valueAt(int index) const;
+		QDateTime dateTimeAt(int index) const;
+		bool isValid(int index) const;
+		bool isMasked(int index) const;
 
 	private:
 		bool init(AbstractColumn::ColumnMode);
