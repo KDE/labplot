@@ -165,7 +165,7 @@ private:
 							   QPointF& anchorPointOut,
 							   QPointF& startPointOut,
 							   QPointF& endPointOut);
-	int determineMinorTicksNumber();
+	int determineMinorTicksNumber() const;
 
 	QPainterPath arrowPath;
 	QPainterPath majorTicksPath;
