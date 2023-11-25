@@ -5301,7 +5301,7 @@ void CartesianPlot::loadThemeConfig(const KConfig& config) {
 	Q_D(CartesianPlot);
 
 	QString theme = QString();
-	if (config.hasGroup(QLatin1String("Theme"))) {
+	if (config.hasGroup(QStringLiteral("Theme"))) {
 		theme = config.name();
 
 		// theme path is saved with UNIX dir separator
@@ -5346,16 +5346,16 @@ void CartesianPlot::saveTheme(KConfig& config) {
 
 // Generating colors from 5-color theme palette
 void CartesianPlot::setColorPalette(const KConfig& config) {
-	if (config.hasGroup(QLatin1String("Theme"))) {
-		KConfigGroup group = config.group(QLatin1String("Theme"));
+	if (config.hasGroup(QStringLiteral("Theme"))) {
+		KConfigGroup group = config.group(QStringLiteral("Theme"));
 
 		// read the five colors defining the palette
 		m_themeColorPalette.clear();
-		m_themeColorPalette.append(group.readEntry("ThemePaletteColor1", QColor()));
-		m_themeColorPalette.append(group.readEntry("ThemePaletteColor2", QColor()));
-		m_themeColorPalette.append(group.readEntry("ThemePaletteColor3", QColor()));
-		m_themeColorPalette.append(group.readEntry("ThemePaletteColor4", QColor()));
-		m_themeColorPalette.append(group.readEntry("ThemePaletteColor5", QColor()));
+		m_themeColorPalette.append(group.readEntry(QStringLiteral("ThemePaletteColor1"), QColor()));
+		m_themeColorPalette.append(group.readEntry(QStringLiteral("ThemePaletteColor2"), QColor()));
+		m_themeColorPalette.append(group.readEntry(QStringLiteral("ThemePaletteColor3"), QColor()));
+		m_themeColorPalette.append(group.readEntry(QStringLiteral("ThemePaletteColor4"), QColor()));
+		m_themeColorPalette.append(group.readEntry(QStringLiteral("ThemePaletteColor5"), QColor()));
 	} else {
 		// no theme is available, provide "default colors"
 		m_themeColorPalette.clear();
@@ -5380,8 +5380,8 @@ void CartesianPlot::setColorPalette(const KConfig& config) {
 
 	// use the color of the axis lines as the color for the different mouse cursor lines
 	Q_D(CartesianPlot);
-	const KConfigGroup& group = config.group("Axis");
-	const QColor& color = group.readEntry("LineColor", QColor(Qt::black));
+	const KConfigGroup& group = config.group(QStringLiteral("Axis"));
+	const QColor& color = group.readEntry(QStringLiteral("LineColor"), QColor(Qt::black));
 	d->zoomSelectPen.setColor(color);
 	d->crossHairPen.setColor(color);
 }

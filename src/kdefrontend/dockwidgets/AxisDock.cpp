@@ -2057,43 +2057,43 @@ void AxisDock::loadConfigFromTemplate(KConfig& config) {
 }
 
 void AxisDock::loadConfig(KConfig& config) {
-	KConfigGroup group = config.group("Axis");
+	KConfigGroup group = config.group(QStringLiteral("Axis"));
 
 	// General
-	ui.cbOrientation->setCurrentIndex(group.readEntry("Orientation", (int)m_axis->orientation()));
+	ui.cbOrientation->setCurrentIndex(group.readEntry(QStringLiteral("Orientation"), (int)m_axis->orientation()));
 
-	int index = group.readEntry("Position", (int)m_axis->position());
+	int index = group.readEntry(QStringLiteral("Position"), (int)m_axis->position());
 	if (index > 1)
 		ui.cbPosition->setCurrentIndex(index - 2);
 	else
 		ui.cbPosition->setCurrentIndex(index);
 
-	ui.sbPositionLogical->setValue(group.readEntry("LogicalPosition", m_axis->logicalPosition()));
-	ui.sbPosition->setValue(Worksheet::convertFromSceneUnits(group.readEntry("PositionOffset", m_axis->offset()), m_worksheetUnit));
-	ui.cbScale->setCurrentIndex(group.readEntry("Scale", static_cast<int>(m_axis->scale())));
-	ui.cbRangeType->setCurrentIndex(group.readEntry("RangeType", static_cast<int>(m_axis->rangeType())));
-	ui.sbStart->setValue(group.readEntry("Start", m_axis->range().start()));
-	ui.sbEnd->setValue(group.readEntry("End", m_axis->range().end()));
-	ui.sbZeroOffset->setValue(group.readEntry("ZeroOffset", m_axis->zeroOffset()));
-	ui.sbScalingFactor->setValue(group.readEntry("ScalingFactor", m_axis->scalingFactor()));
-	ui.chkShowScaleOffset->setChecked(group.readEntry("ShowScaleOffset", static_cast<int>(m_axis->showScaleOffset())));
+	ui.sbPositionLogical->setValue(group.readEntry(QStringLiteral("LogicalPosition"), m_axis->logicalPosition()));
+	ui.sbPosition->setValue(Worksheet::convertFromSceneUnits(group.readEntry(QStringLiteral("PositionOffset"), m_axis->offset()), m_worksheetUnit));
+	ui.cbScale->setCurrentIndex(group.readEntry(QStringLiteral("Scale"), static_cast<int>(m_axis->scale())));
+	ui.cbRangeType->setCurrentIndex(group.readEntry(QStringLiteral("RangeType"), static_cast<int>(m_axis->rangeType())));
+	ui.sbStart->setValue(group.readEntry(QStringLiteral("Start"), m_axis->range().start()));
+	ui.sbEnd->setValue(group.readEntry(QStringLiteral("End"), m_axis->range().end()));
+	ui.sbZeroOffset->setValue(group.readEntry(QStringLiteral("ZeroOffset"), m_axis->zeroOffset()));
+	ui.sbScalingFactor->setValue(group.readEntry(QStringLiteral("ScalingFactor"), m_axis->scalingFactor()));
+	ui.chkShowScaleOffset->setChecked(group.readEntry(QStringLiteral("ShowScaleOffset"), static_cast<int>(m_axis->showScaleOffset())));
 
 	// Title
-	KConfigGroup axisLabelGroup = config.group("AxisLabel");
+	KConfigGroup axisLabelGroup = config.group(QStringLiteral("AxisLabel"));
 	labelWidget->loadConfig(axisLabelGroup);
 
 	// Line
 	lineWidget->loadConfig(group);
-	ui.cbArrowType->setCurrentIndex(group.readEntry("ArrowType", (int)m_axis->arrowType()));
-	ui.cbArrowPosition->setCurrentIndex(group.readEntry("ArrowPosition", (int)m_axis->arrowPosition()));
-	ui.sbArrowSize->setValue(Worksheet::convertFromSceneUnits(group.readEntry("ArrowSize", m_axis->arrowSize()), Worksheet::Unit::Point));
+	ui.cbArrowType->setCurrentIndex(group.readEntry(QStringLiteral("ArrowType"), (int)m_axis->arrowType()));
+	ui.cbArrowPosition->setCurrentIndex(group.readEntry(QStringLiteral("ArrowPosition"), (int)m_axis->arrowPosition()));
+	ui.sbArrowSize->setValue(Worksheet::convertFromSceneUnits(group.readEntry(QStringLiteral("ArrowSize"), m_axis->arrowSize()), Worksheet::Unit::Point));
 	updateArrowLineColor(m_axis->line()->color());
 
 	// Major ticks
-	ui.cbMajorTicksDirection->setCurrentIndex(group.readEntry("MajorTicksDirection", (int)m_axis->majorTicksDirection()));
-	ui.cbMajorTicksType->setCurrentIndex(ui.cbMajorTicksType->findData(group.readEntry("MajorTicksType", (int)m_axis->majorTicksType())));
-	ui.sbMajorTicksNumber->setValue(group.readEntry("MajorTicksNumber", m_axis->majorTicksNumber()));
-	auto value{group.readEntry("MajorTicksIncrement", m_axis->majorTicksSpacing())};
+	ui.cbMajorTicksDirection->setCurrentIndex(group.readEntry(QStringLiteral("MajorTicksDirection"), (int)m_axis->majorTicksDirection()));
+	ui.cbMajorTicksType->setCurrentIndex(ui.cbMajorTicksType->findData(group.readEntry(QStringLiteral("MajorTicksType"), (int)m_axis->majorTicksType())));
+	ui.sbMajorTicksNumber->setValue(group.readEntry(QStringLiteral("MajorTicksNumber"), m_axis->majorTicksNumber()));
+	auto value{group.readEntry(QStringLiteral("MajorTicksIncrement"), m_axis->majorTicksSpacing())};
 	bool numeric = m_axis->isNumeric();
 	if (numeric) {
 		ui.sbMajorTicksSpacingNumeric->setDecimals(nsl_math_decimal_places(value) + 1);
@@ -2101,21 +2101,21 @@ void AxisDock::loadConfig(KConfig& config) {
 		ui.sbMajorTicksSpacingNumeric->setSingleStep(value / 10.);
 	} else
 		dtsbMajorTicksIncrement->setValue(value);
-	ui.cbMajorTicksStartType->setCurrentIndex(group.readEntry("MajorTicksStartType", (int)m_axis->majorTicksStartType()));
-	const auto majorTickStartOffset = group.readEntry("MajorTickStartOffset", m_axis->majorTickStartOffset());
+	ui.cbMajorTicksStartType->setCurrentIndex(group.readEntry(QStringLiteral("MajorTicksStartType"), (int)m_axis->majorTicksStartType()));
+	const auto majorTickStartOffset = group.readEntry(QStringLiteral("MajorTickStartOffset"), m_axis->majorTickStartOffset());
 	ui.sbMajorTickStartOffset->setValue(majorTickStartOffset);
 	dtsbMajorTicksDateTimeStartOffset->setValue(majorTickStartOffset);
-	const auto majorTickStartValue = group.readEntry("MajorTickStartValue", m_axis->majorTickStartValue());
+	const auto majorTickStartValue = group.readEntry(QStringLiteral("MajorTickStartValue"), m_axis->majorTickStartValue());
 	ui.sbMajorTickStartValue->setValue(majorTickStartValue);
 	ui.sbMajorTickStartDateTime->setMSecsSinceEpochUTC(majorTickStartValue);
-	ui.sbMajorTicksLength->setValue(Worksheet::convertFromSceneUnits(group.readEntry("MajorTicksLength", m_axis->majorTicksLength()), Worksheet::Unit::Point));
+	ui.sbMajorTicksLength->setValue(Worksheet::convertFromSceneUnits(group.readEntry(QStringLiteral("MajorTicksLength"), m_axis->majorTicksLength()), Worksheet::Unit::Point));
 	majorTicksLineWidget->loadConfig(group);
 
 	// Minor ticks
-	ui.cbMinorTicksDirection->setCurrentIndex(group.readEntry("MinorTicksDirection", (int)m_axis->minorTicksDirection()));
-	ui.cbMinorTicksType->setCurrentIndex(group.readEntry("MinorTicksType", (int)m_axis->minorTicksType()));
-	ui.sbMinorTicksNumber->setValue(group.readEntry("MinorTicksNumber", m_axis->minorTicksNumber()));
-	value = group.readEntry("MinorTicksIncrement", m_axis->minorTicksSpacing());
+	ui.cbMinorTicksDirection->setCurrentIndex(group.readEntry(QStringLiteral("MinorTicksDirection"), (int)m_axis->minorTicksDirection()));
+	ui.cbMinorTicksType->setCurrentIndex(group.readEntry(QStringLiteral("MinorTicksType"), (int)m_axis->minorTicksType()));
+	ui.sbMinorTicksNumber->setValue(group.readEntry(QStringLiteral("MinorTicksNumber"), m_axis->minorTicksNumber()));
+	value = group.readEntry(QStringLiteral("MinorTicksIncrement"), m_axis->minorTicksSpacing());
 	if (numeric)
 		ui.sbMinorTicksSpacingNumeric->setValue(value);
 	else
@@ -2128,26 +2128,26 @@ void AxisDock::loadConfig(KConfig& config) {
 
 	// Tick label
 	ui.cbLabelsFormat->setCurrentIndex(
-		Axis::labelsFormatToIndex((Axis::LabelsFormat)(group.readEntry("LabelsFormat", Axis::labelsFormatToIndex(m_axis->labelsFormat())))));
-	ui.chkLabelsAutoPrecision->setChecked(group.readEntry("LabelsAutoPrecision", (int)m_axis->labelsAutoPrecision()));
-	ui.sbLabelsPrecision->setValue(group.readEntry("LabelsPrecision", (int)m_axis->labelsPrecision()));
-	ui.cbLabelsDateTimeFormat->setCurrentText(group.readEntry("LabelsDateTimeFormat", "yyyy-MM-dd hh:mm:ss"));
-	ui.cbLabelsPosition->setCurrentIndex(group.readEntry("LabelsPosition", (int)m_axis->labelsPosition()));
-	ui.sbLabelsOffset->setValue(Worksheet::convertFromSceneUnits(group.readEntry("LabelsOffset", m_axis->labelsOffset()), Worksheet::Unit::Point));
-	ui.sbLabelsRotation->setValue(group.readEntry("LabelsRotation", m_axis->labelsRotationAngle()));
-	ui.cbLabelsTextType->setCurrentIndex(group.readEntry("LabelsTextType", (int)m_axis->labelsTextType()));
+		Axis::labelsFormatToIndex((Axis::LabelsFormat)(group.readEntry(QStringLiteral("LabelsFormat"), Axis::labelsFormatToIndex(m_axis->labelsFormat())))));
+	ui.chkLabelsAutoPrecision->setChecked(group.readEntry(QStringLiteral("LabelsAutoPrecision"), (int)m_axis->labelsAutoPrecision()));
+	ui.sbLabelsPrecision->setValue(group.readEntry(QStringLiteral("LabelsPrecision"), (int)m_axis->labelsPrecision()));
+	ui.cbLabelsDateTimeFormat->setCurrentText(group.readEntry(QStringLiteral("LabelsDateTimeFormat"), QStringLiteral("yyyy-MM-dd hh:mm:ss")));
+	ui.cbLabelsPosition->setCurrentIndex(group.readEntry(QStringLiteral("LabelsPosition"), (int)m_axis->labelsPosition()));
+	ui.sbLabelsOffset->setValue(Worksheet::convertFromSceneUnits(group.readEntry(QStringLiteral("LabelsOffset"), m_axis->labelsOffset()), Worksheet::Unit::Point));
+	ui.sbLabelsRotation->setValue(group.readEntry(QStringLiteral("LabelsRotation"), m_axis->labelsRotationAngle()));
+	ui.cbLabelsTextType->setCurrentIndex(group.readEntry(QStringLiteral("LabelsTextType"), (int)m_axis->labelsTextType()));
 
 	// we need to set the font size in points for KFontRequester
 	QFont font = m_axis->labelsFont();
 	font.setPointSizeF(round(Worksheet::convertFromSceneUnits(font.pixelSize(), Worksheet::Unit::Point)));
-	ui.kfrLabelsFont->setFont(group.readEntry("LabelsFont", font));
+	ui.kfrLabelsFont->setFont(group.readEntry(QStringLiteral("LabelsFont"), font));
 
-	ui.kcbLabelsFontColor->setColor(group.readEntry("LabelsFontColor", m_axis->labelsColor()));
-	ui.cbLabelsBackgroundType->setCurrentIndex(group.readEntry("LabelsBackgroundType", (int)m_axis->labelsBackgroundType()));
-	ui.kcbLabelsBackgroundColor->setColor(group.readEntry("LabelsBackgroundColor", m_axis->labelsBackgroundColor()));
-	ui.leLabelsPrefix->setText(group.readEntry("LabelsPrefix", m_axis->labelsPrefix()));
-	ui.leLabelsSuffix->setText(group.readEntry("LabelsSuffix", m_axis->labelsSuffix()));
-	ui.sbLabelsOpacity->setValue(round(group.readEntry("LabelsOpacity", m_axis->labelsOpacity()) * 100.0));
+	ui.kcbLabelsFontColor->setColor(group.readEntry(QStringLiteral("LabelsFontColor"), m_axis->labelsColor()));
+	ui.cbLabelsBackgroundType->setCurrentIndex(group.readEntry(QStringLiteral("LabelsBackgroundType"), (int)m_axis->labelsBackgroundType()));
+	ui.kcbLabelsBackgroundColor->setColor(group.readEntry(QStringLiteral("LabelsBackgroundColor"), m_axis->labelsBackgroundColor()));
+	ui.leLabelsPrefix->setText(group.readEntry(QStringLiteral("LabelsPrefix"), m_axis->labelsPrefix()));
+	ui.leLabelsSuffix->setText(group.readEntry(QStringLiteral("LabelsSuffix"), m_axis->labelsSuffix()));
+	ui.sbLabelsOpacity->setValue(round(group.readEntry(QStringLiteral("LabelsOpacity"), m_axis->labelsOpacity()) * 100.0));
 
 	// Grid
 	majorGridLineWidget->loadConfig(group);
@@ -2159,87 +2159,87 @@ void AxisDock::loadConfig(KConfig& config) {
 }
 
 void AxisDock::saveConfigAsTemplate(KConfig& config) {
-	KConfigGroup group = config.group("Axis");
+	KConfigGroup group = config.group(QStringLiteral("Axis"));
 
 	// General
-	group.writeEntry("Orientation", ui.cbOrientation->currentIndex());
+	group.writeEntry(QStringLiteral("Orientation"), ui.cbOrientation->currentIndex());
 
 	if (ui.cbPosition->currentIndex() == 2) {
-		group.writeEntry("Position", static_cast<int>(Axis::Position::Centered));
+		group.writeEntry(QStringLiteral("Position"), static_cast<int>(Axis::Position::Centered));
 	} else if (ui.cbPosition->currentIndex() == 3) {
-		group.writeEntry("Position", static_cast<int>(Axis::Position::Centered));
+		group.writeEntry(QStringLiteral("Position"), static_cast<int>(Axis::Position::Centered));
 	} else {
 		if (ui.cbOrientation->currentIndex() == static_cast<int>(Axis::Orientation::Horizontal))
-			group.writeEntry("Position", ui.cbPosition->currentIndex());
+			group.writeEntry(QStringLiteral("Position"), ui.cbPosition->currentIndex());
 		else
-			group.writeEntry("Position", ui.cbPosition->currentIndex() + 2);
+			group.writeEntry(QStringLiteral("Position"), ui.cbPosition->currentIndex() + 2);
 	}
 
-	group.writeEntry("LogicalPosition", ui.sbPositionLogical->value());
-	group.writeEntry("PositionOffset", Worksheet::convertToSceneUnits(ui.sbPosition->value(), m_worksheetUnit));
-	group.writeEntry("Scale", ui.cbScale->currentIndex());
-	group.writeEntry("RangeType", ui.cbRangeType->currentIndex());
-	group.writeEntry("Start", ui.sbStart->value());
-	group.writeEntry("End", ui.sbEnd->value());
-	group.writeEntry("ZeroOffset", ui.sbZeroOffset->value());
-	group.writeEntry("ScalingFactor", ui.sbScalingFactor->value());
-	group.writeEntry("ShowScaleOffset", ui.chkShowScaleOffset->isChecked());
+	group.writeEntry(QStringLiteral("LogicalPosition"), ui.sbPositionLogical->value());
+	group.writeEntry(QStringLiteral("PositionOffset"), Worksheet::convertToSceneUnits(ui.sbPosition->value(), m_worksheetUnit));
+	group.writeEntry(QStringLiteral("Scale"), ui.cbScale->currentIndex());
+	group.writeEntry(QStringLiteral("RangeType"), ui.cbRangeType->currentIndex());
+	group.writeEntry(QStringLiteral("Start"), ui.sbStart->value());
+	group.writeEntry(QStringLiteral("End"), ui.sbEnd->value());
+	group.writeEntry(QStringLiteral("ZeroOffset"), ui.sbZeroOffset->value());
+	group.writeEntry(QStringLiteral("ScalingFactor"), ui.sbScalingFactor->value());
+	group.writeEntry(QStringLiteral("ShowScaleOffset"), ui.chkShowScaleOffset->isChecked());
 
 	// Title
-	KConfigGroup axisLabelGroup = config.group("AxisLabel");
+	KConfigGroup axisLabelGroup = config.group(QStringLiteral("AxisLabel"));
 	labelWidget->saveConfig(axisLabelGroup);
 
 	// Line
 	lineWidget->saveConfig(group);
 
 	// Major ticks
-	group.writeEntry("MajorTicksDirection", ui.cbMajorTicksDirection->currentIndex());
-	group.writeEntry("MajorTicksType", ui.cbMajorTicksType->itemData(ui.cbMajorTicksType->currentIndex()));
-	group.writeEntry("MajorTicksNumber", ui.sbMajorTicksNumber->value());
+	group.writeEntry(QStringLiteral("MajorTicksDirection"), ui.cbMajorTicksDirection->currentIndex());
+	group.writeEntry(QStringLiteral("MajorTicksType"), ui.cbMajorTicksType->itemData(ui.cbMajorTicksType->currentIndex()));
+	group.writeEntry(QStringLiteral("MajorTicksNumber"), ui.sbMajorTicksNumber->value());
 	bool numeric = m_axis->isNumeric();
 	if (numeric)
-		group.writeEntry("MajorTicksIncrement", QString::number(ui.sbMajorTicksSpacingNumeric->value()));
+		group.writeEntry(QStringLiteral("MajorTicksIncrement"), QString::number(ui.sbMajorTicksSpacingNumeric->value()));
 	else
-		group.writeEntry("MajorTicksIncrement", QString::number(dtsbMajorTicksIncrement->value()));
-	group.writeEntry("MajorTicksStartType", ui.cbMajorTicksStartType->currentIndex());
+		group.writeEntry(QStringLiteral("MajorTicksIncrement"), QString::number(dtsbMajorTicksIncrement->value()));
+	group.writeEntry(QStringLiteral("MajorTicksStartType"), ui.cbMajorTicksStartType->currentIndex());
 	if (numeric) {
-		group.writeEntry("MajorTickStartOffset", ui.sbMajorTickStartOffset->value());
-		group.writeEntry("MajorTickStartValue", ui.sbMajorTickStartValue->value());
+		group.writeEntry(QStringLiteral("MajorTickStartOffset"), ui.sbMajorTickStartOffset->value());
+		group.writeEntry(QStringLiteral("MajorTickStartValue"), ui.sbMajorTickStartValue->value());
 	} else {
-		group.writeEntry("MajorTickStartOffset", dtsbMajorTicksDateTimeStartOffset->value());
-		group.writeEntry("MajorTickStartValue", ui.sbMajorTickStartDateTime->dateTime().toMSecsSinceEpoch());
+		group.writeEntry(QStringLiteral("MajorTickStartOffset"), dtsbMajorTicksDateTimeStartOffset->value());
+		group.writeEntry(QStringLiteral("MajorTickStartValue"), ui.sbMajorTickStartDateTime->dateTime().toMSecsSinceEpoch());
 	}
-	group.writeEntry("MajorTicksLength", Worksheet::convertToSceneUnits(ui.sbMajorTicksLength->value(), Worksheet::Unit::Point));
+	group.writeEntry(QStringLiteral("MajorTicksLength"), Worksheet::convertToSceneUnits(ui.sbMajorTicksLength->value(), Worksheet::Unit::Point));
 	majorTicksLineWidget->saveConfig(group);
 
 	// Minor ticks
-	group.writeEntry("MinorTicksDirection", ui.cbMinorTicksDirection->currentIndex());
-	group.writeEntry("MinorTicksType", ui.cbMinorTicksType->currentIndex());
-	group.writeEntry("MinorTicksNumber", ui.sbMinorTicksNumber->value());
+	group.writeEntry(QStringLiteral("MinorTicksDirection"), ui.cbMinorTicksDirection->currentIndex());
+	group.writeEntry(QStringLiteral("MinorTicksType"), ui.cbMinorTicksType->currentIndex());
+	group.writeEntry(QStringLiteral("MinorTicksNumber"), ui.sbMinorTicksNumber->value());
 	if (numeric)
-		group.writeEntry("MinorTicksIncrement", QString::number(ui.sbMinorTicksSpacingNumeric->value()));
+		group.writeEntry(QStringLiteral("MinorTicksIncrement"), QString::number(ui.sbMinorTicksSpacingNumeric->value()));
 	else
-		group.writeEntry("MinorTicksIncrement", QString::number(dtsbMinorTicksIncrement->value()));
-	group.writeEntry("MinorTicksLength", Worksheet::convertFromSceneUnits(ui.sbMinorTicksLength->value(), Worksheet::Unit::Point));
+		group.writeEntry(QStringLiteral("MinorTicksIncrement"), QString::number(dtsbMinorTicksIncrement->value()));
+	group.writeEntry(QStringLiteral("MinorTicksLength"), Worksheet::convertFromSceneUnits(ui.sbMinorTicksLength->value(), Worksheet::Unit::Point));
 	minorTicksLineWidget->saveConfig(group);
 
 	// Extra ticks
 	//  TODO
 
 	// Tick label
-	group.writeEntry("LabelsFormat", static_cast<int>(Axis::indexToLabelsFormat(ui.cbLabelsFormat->currentIndex())));
-	group.writeEntry("LabelsAutoPrecision", ui.chkLabelsAutoPrecision->isChecked());
-	group.writeEntry("LabelsPrecision", ui.sbLabelsPrecision->value());
-	group.writeEntry("LabelsPosition", ui.cbLabelsPosition->currentIndex());
-	group.writeEntry("LabelsOffset", Worksheet::convertToSceneUnits(ui.sbLabelsOffset->value(), Worksheet::Unit::Point));
-	group.writeEntry("LabelsRotation", ui.sbLabelsRotation->value());
-	group.writeEntry("LabelsFont", ui.kfrLabelsFont->font());
-	group.writeEntry("LabelsFontColor", ui.kcbLabelsFontColor->color());
-	group.writeEntry("LabelsBackgroundType", ui.cbLabelsBackgroundType->currentIndex());
-	group.writeEntry("LabelsBackgroundColor", ui.kcbLabelsBackgroundColor->color());
-	group.writeEntry("LabelsPrefix", ui.leLabelsPrefix->text());
-	group.writeEntry("LabelsSuffix", ui.leLabelsSuffix->text());
-	group.writeEntry("LabelsOpacity", ui.sbLabelsOpacity->value() / 100.);
+	group.writeEntry(QStringLiteral("LabelsFormat"), static_cast<int>(Axis::indexToLabelsFormat(ui.cbLabelsFormat->currentIndex())));
+	group.writeEntry(QStringLiteral("LabelsAutoPrecision"), ui.chkLabelsAutoPrecision->isChecked());
+	group.writeEntry(QStringLiteral("LabelsPrecision"), ui.sbLabelsPrecision->value());
+	group.writeEntry(QStringLiteral("LabelsPosition"), ui.cbLabelsPosition->currentIndex());
+	group.writeEntry(QStringLiteral("LabelsOffset"), Worksheet::convertToSceneUnits(ui.sbLabelsOffset->value(), Worksheet::Unit::Point));
+	group.writeEntry(QStringLiteral("LabelsRotation"), ui.sbLabelsRotation->value());
+	group.writeEntry(QStringLiteral("LabelsFont"), ui.kfrLabelsFont->font());
+	group.writeEntry(QStringLiteral("LabelsFontColor"), ui.kcbLabelsFontColor->color());
+	group.writeEntry(QStringLiteral("LabelsBackgroundType"), ui.cbLabelsBackgroundType->currentIndex());
+	group.writeEntry(QStringLiteral("LabelsBackgroundColor"), ui.kcbLabelsBackgroundColor->color());
+	group.writeEntry(QStringLiteral("LabelsPrefix"), ui.leLabelsPrefix->text());
+	group.writeEntry(QStringLiteral("LabelsSuffix"), ui.leLabelsSuffix->text());
+	group.writeEntry(QStringLiteral("LabelsOpacity"), ui.sbLabelsOpacity->value() / 100.);
 
 	// Grid
 	majorGridLineWidget->saveConfig(group);

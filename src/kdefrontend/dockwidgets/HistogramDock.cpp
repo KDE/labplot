@@ -78,7 +78,7 @@ HistogramDock::HistogramDock(QWidget* parent)
 
 	// Tab "Error Bars"
 	const KConfigGroup group = Settings::group(QStringLiteral("Settings_General"));
-	if (group.readEntry("GUMTerms", false)) {
+	if (group.readEntry(QStringLiteral("GUMTerms"), false)) {
 		ui.tabWidget->setTabText(ui.tabWidget->indexOf(ui.tabErrorBars), i18n("Uncertainty Bars"));
 		ui.lErrorBar->setText(i18n("X Uncertainty"));
 	}
@@ -693,7 +693,7 @@ void HistogramDock::load() {
 }
 
 void HistogramDock::loadConfig(KConfig& config) {
-	KConfigGroup group = config.group(QLatin1String("Histogram"));
+	KConfigGroup group = config.group(QStringLiteral("Histogram"));
 
 	// General
 	// we don't load/save the settings in the general-tab, since they are not style related.
@@ -706,7 +706,7 @@ void HistogramDock::loadConfig(KConfig& config) {
 	backgroundWidget->loadConfig(group);
 
 	// Error bars
-	ui.cbErrorType->setCurrentIndex(group.readEntry("ErrorType", (int)m_curve->errorType()));
+	ui.cbErrorType->setCurrentIndex(group.readEntry(QStringLiteral("ErrorType"), (int)m_curve->errorType()));
 	errorBarsLineWidget->loadConfig(group);
 
 	// Margin plots
@@ -730,13 +730,13 @@ void HistogramDock::loadConfigFromTemplate(KConfig& config) {
 }
 
 void HistogramDock::saveConfigAsTemplate(KConfig& config) {
-	KConfigGroup group = config.group("Histogram");
+	KConfigGroup group = config.group(QStringLiteral("Histogram"));
 
 	lineWidget->saveConfig(group);
 	symbolWidget->saveConfig(group);
 	valueWidget->saveConfig(group);
 	backgroundWidget->saveConfig(group);
-	group.writeEntry("ErrorType", ui.cbErrorType->currentIndex());
+	group.writeEntry(QStringLiteral("ErrorType"), ui.cbErrorType->currentIndex());
 
 	config.sync();
 }

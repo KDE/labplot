@@ -60,16 +60,16 @@ void BoxPlot::init() {
 	Q_D(BoxPlot);
 
 	KConfig config;
-	KConfigGroup group = config.group("BoxPlot");
+	KConfigGroup group = config.group(QStringLiteral("BoxPlot"));
 
 	// general
-	d->ordering = (BoxPlot::Ordering)group.readEntry("Ordering", (int)BoxPlot::Ordering::None);
-	d->whiskersType = (BoxPlot::WhiskersType)group.readEntry("WhiskersType", (int)BoxPlot::WhiskersType::IQR);
-	d->whiskersRangeParameter = group.readEntry("WhiskersIQRParameter", 1.5);
-	d->orientation = (BoxPlot::Orientation)group.readEntry("Orientation", (int)BoxPlot::Orientation::Vertical);
-	d->variableWidth = group.readEntry("VariableWidth", false);
-	d->widthFactor = group.readEntry("WidthFactor", 1.0);
-	d->notchesEnabled = group.readEntry("NotchesEnabled", false);
+	d->ordering = (BoxPlot::Ordering)group.readEntry(QStringLiteral("Ordering"), (int)BoxPlot::Ordering::None);
+	d->whiskersType = (BoxPlot::WhiskersType)group.readEntry(QStringLiteral("WhiskersType"), (int)BoxPlot::WhiskersType::IQR);
+	d->whiskersRangeParameter = group.readEntry(QStringLiteral("WhiskersIQRParameter"), 1.5);
+	d->orientation = (BoxPlot::Orientation)group.readEntry(QStringLiteral("Orientation"), (int)BoxPlot::Orientation::Vertical);
+	d->variableWidth = group.readEntry(QStringLiteral("VariableWidth"), false);
+	d->widthFactor = group.readEntry(QStringLiteral("WidthFactor"), 1.0);
+	d->notchesEnabled = group.readEntry(QStringLiteral("NotchesEnabled"), false);
 
 	// box
 	d->addBackground(group);
@@ -149,11 +149,11 @@ void BoxPlot::init() {
 		d->updatePixmap();
 	});
 
-	d->jitteringEnabled = group.readEntry("JitteringEnabled", true);
+	d->jitteringEnabled = group.readEntry(QStringLiteral("JitteringEnabled"), true);
 
 	// whiskers
 	d->whiskersLine = new Line(QString());
-	d->whiskersLine->setPrefix(QLatin1String("Whiskers"));
+	d->whiskersLine->setPrefix(QStringLiteral("Whiskers"));
 	d->whiskersLine->setCreateXmlElement(false); // whiskers element is created in BoxPlot::save()
 	d->whiskersLine->setHidden(true);
 	addChild(d->whiskersLine);
@@ -165,9 +165,9 @@ void BoxPlot::init() {
 		d->recalcShapeAndBoundingRect();
 	});
 
-	d->whiskersCapSize = group.readEntry("WhiskersCapSize", Worksheet::convertToSceneUnits(5.0, Worksheet::Unit::Point));
+	d->whiskersCapSize = group.readEntry(QStringLiteral("WhiskersCapSize"), Worksheet::convertToSceneUnits(5.0, Worksheet::Unit::Point));
 	d->whiskersCapLine = new Line(QString());
-	d->whiskersCapLine->setPrefix(QLatin1String("WhiskersCap"));
+	d->whiskersCapLine->setPrefix(QStringLiteral("WhiskersCap"));
 	d->whiskersCapLine->setCreateXmlElement(false); // whiskers cap element is created in BoxPlot::save()
 	d->whiskersCapLine->setHidden(true);
 	addChild(d->whiskersCapLine);
@@ -180,10 +180,10 @@ void BoxPlot::init() {
 	});
 
 	// marginal plots (rug, BoxPlot, boxplot)
-	d->rugEnabled = group.readEntry("RugEnabled", false);
-	d->rugLength = group.readEntry("RugLength", Worksheet::convertToSceneUnits(5, Worksheet::Unit::Point));
-	d->rugWidth = group.readEntry("RugWidth", 0.0);
-	d->rugOffset = group.readEntry("RugOffset", 0.0);
+	d->rugEnabled = group.readEntry(QStringLiteral("RugEnabled"), false);
+	d->rugLength = group.readEntry(QStringLiteral("RugLength"), Worksheet::convertToSceneUnits(5, Worksheet::Unit::Point));
+	d->rugWidth = group.readEntry(QStringLiteral("RugWidth"), 0.0);
+	d->rugOffset = group.readEntry(QStringLiteral("RugOffset"), 0.0);
 }
 
 /*!
@@ -221,10 +221,10 @@ void BoxPlot::initActions() {
 	orientationActionGroup->setExclusive(true);
 	connect(orientationActionGroup, &QActionGroup::triggered, this, &BoxPlot::orientationChangedSlot);
 
-	orientationHorizontalAction = new QAction(QIcon::fromTheme(QLatin1String("transform-move-horizontal")), i18n("Horizontal"), orientationActionGroup);
+	orientationHorizontalAction = new QAction(QIcon::fromTheme(QStringLiteral("transform-move-horizontal")), i18n("Horizontal"), orientationActionGroup);
 	orientationHorizontalAction->setCheckable(true);
 
-	orientationVerticalAction = new QAction(QIcon::fromTheme(QLatin1String("transform-move-vertical")), i18n("Vertical"), orientationActionGroup);
+	orientationVerticalAction = new QAction(QIcon::fromTheme(QStringLiteral("transform-move-vertical")), i18n("Vertical"), orientationActionGroup);
 	orientationVerticalAction->setCheckable(true);
 }
 
@@ -233,7 +233,7 @@ void BoxPlot::initMenus() {
 
 	// Orientation
 	orientationMenu = new QMenu(i18n("Orientation"));
-	orientationMenu->setIcon(QIcon::fromTheme(QLatin1String("draw-cross")));
+	orientationMenu->setIcon(QIcon::fromTheme(QStringLiteral("draw-cross")));
 	orientationMenu->addAction(orientationHorizontalAction);
 	orientationMenu->addAction(orientationVerticalAction);
 }
@@ -1873,7 +1873,7 @@ bool BoxPlot::load(XmlStreamReader* reader, bool preview) {
 	int diff = d->dataColumns.size() - d->backgrounds.size();
 	if (diff > 0) {
 		KConfig config;
-		KConfigGroup group = config.group(QLatin1String("XYCurve"));
+		KConfigGroup group = config.group(QStringLiteral("XYCurve"));
 
 		const auto* background = d->backgrounds.constFirst();
 		const auto* borderLine = d->borderLines.constFirst();
@@ -1912,10 +1912,10 @@ bool BoxPlot::load(XmlStreamReader* reader, bool preview) {
 // ##############################################################################
 void BoxPlot::loadThemeConfig(const KConfig& config) {
 	KConfigGroup group;
-	if (config.hasGroup(QLatin1String("Theme")))
-		group = config.group("XYCurve"); // when loading from the theme config, use the same properties as for XYCurve
+	if (config.hasGroup(QStringLiteral("Theme")))
+		group = config.group(QStringLiteral("XYCurve")); // when loading from the theme config, use the same properties as for XYCurve
 	else
-		group = config.group("BoxPlot");
+		group = config.group(QStringLiteral("BoxPlot"));
 
 	const auto* plot = static_cast<const CartesianPlot*>(parentAspect());
 	int index = plot->curveChildIndex(this);

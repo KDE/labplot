@@ -279,46 +279,46 @@ void MatrixDock::loadConfigFromTemplate(KConfig& config) {
 	loads saved matrix properties from \c config.
  */
 void MatrixDock::loadConfig(KConfig& config) {
-	KConfigGroup group = config.group("Matrix");
+	KConfigGroup group = config.group(QStringLiteral("Matrix"));
 
 	// matrix dimensions
-	ui.sbRowCount->setValue(group.readEntry("RowCount", m_matrix->rowCount()));
-	ui.sbColumnCount->setValue(group.readEntry("ColumnCount", m_matrix->columnCount()));
+	ui.sbRowCount->setValue(group.readEntry(QStringLiteral("RowCount"), m_matrix->rowCount()));
+	ui.sbColumnCount->setValue(group.readEntry(QStringLiteral("ColumnCount"), m_matrix->columnCount()));
 
 	// mapping to the logical coordinates
 	const auto numberLocale = QLocale();
-	ui.leXStart->setText(numberLocale.toString(group.readEntry("XStart", m_matrix->xStart())));
-	ui.leXEnd->setText(numberLocale.toString(group.readEntry("XEnd", m_matrix->xEnd())));
-	ui.leYStart->setText(numberLocale.toString(group.readEntry("YStart", m_matrix->yStart())));
-	ui.leYEnd->setText(numberLocale.toString(group.readEntry("YEnd", m_matrix->yEnd())));
+	ui.leXStart->setText(numberLocale.toString(group.readEntry(QStringLiteral("XStart"), m_matrix->xStart())));
+	ui.leXEnd->setText(numberLocale.toString(group.readEntry(QStringLiteral("XEnd"), m_matrix->xEnd())));
+	ui.leYStart->setText(numberLocale.toString(group.readEntry(QStringLiteral("YStart"), m_matrix->yStart())));
+	ui.leYEnd->setText(numberLocale.toString(group.readEntry(QStringLiteral("YEnd"), m_matrix->yEnd())));
 
 	// format
-	ui.cbFormat->setCurrentIndex(ui.cbFormat->findData(group.readEntry("NumericFormat", (int)(m_matrix->numericFormat()))));
-	ui.sbPrecision->setValue(group.readEntry("Precision", m_matrix->precision()));
-	ui.cbHeader->setCurrentIndex(group.readEntry("HeaderFormat", (int)m_matrix->headerFormat()));
+	ui.cbFormat->setCurrentIndex(ui.cbFormat->findData(group.readEntry(QStringLiteral("NumericFormat"), (int)(m_matrix->numericFormat()))));
+	ui.sbPrecision->setValue(group.readEntry(QStringLiteral("Precision"), m_matrix->precision()));
+	ui.cbHeader->setCurrentIndex(group.readEntry(QStringLiteral("HeaderFormat"), (int)m_matrix->headerFormat()));
 }
 
 /*!
 	saves matrix properties to \c config.
  */
 void MatrixDock::saveConfigAsTemplate(KConfig& config) {
-	KConfigGroup group = config.group("Matrix");
+	KConfigGroup group = config.group(QStringLiteral("Matrix"));
 
 	// matrix dimensions
-	group.writeEntry("RowCount", ui.sbRowCount->value());
-	group.writeEntry("ColumnCount", ui.sbColumnCount->value());
+	group.writeEntry(QStringLiteral("RowCount"), ui.sbRowCount->value());
+	group.writeEntry(QStringLiteral("ColumnCount"), ui.sbColumnCount->value());
 
 	// mapping to the logical coordinates
 	const auto numberLocale = QLocale();
-	group.writeEntry("XStart", numberLocale.toDouble(ui.leXStart->text()));
-	group.writeEntry("XEnd", numberLocale.toDouble(ui.leXEnd->text()));
-	group.writeEntry("YStart", numberLocale.toDouble(ui.leYStart->text()));
-	group.writeEntry("YEnd", numberLocale.toDouble(ui.leYEnd->text()));
+	group.writeEntry(QStringLiteral("XStart"), numberLocale.toDouble(ui.leXStart->text()));
+	group.writeEntry(QStringLiteral("XEnd"), numberLocale.toDouble(ui.leXEnd->text()));
+	group.writeEntry(QStringLiteral("YStart"), numberLocale.toDouble(ui.leYStart->text()));
+	group.writeEntry(QStringLiteral("YEnd"), numberLocale.toDouble(ui.leYEnd->text()));
 
 	// format
-	group.writeEntry("NumericFormat", ui.cbFormat->itemData(ui.cbFormat->currentIndex()));
-	group.writeEntry("Precision", ui.sbPrecision->value());
-	group.writeEntry("HeaderFormat", ui.cbHeader->currentIndex());
+	group.writeEntry(QStringLiteral("NumericFormat"), ui.cbFormat->itemData(ui.cbFormat->currentIndex()));
+	group.writeEntry(QStringLiteral("Precision"), ui.sbPrecision->value());
+	group.writeEntry(QStringLiteral("HeaderFormat"), ui.cbHeader->currentIndex());
 
 	config.sync();
 }

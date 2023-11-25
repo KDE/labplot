@@ -65,14 +65,14 @@ void CartesianPlotLegend::init() {
 	Q_D(CartesianPlotLegend);
 
 	KConfig config;
-	KConfigGroup group = config.group("CartesianPlotLegend");
+	KConfigGroup group = config.group(QStringLiteral("CartesianPlotLegend"));
 
-	d->labelFont = group.readEntry("LabelsFont", QFont());
+	d->labelFont = group.readEntry(QStringLiteral("LabelsFont"), QFont());
 	d->labelFont.setPixelSize(Worksheet::convertToSceneUnits(10, Worksheet::Unit::Point));
 
-	d->labelColor = group.readEntry("FontColor", QColor(Qt::black));
+	d->labelColor = group.readEntry(QStringLiteral("FontColor"), QColor(Qt::black));
 	d->labelColumnMajor = true;
-	d->lineSymbolWidth = group.readEntry("LineSymbolWidth", Worksheet::convertToSceneUnits(1, Worksheet::Unit::Centimeter));
+	d->lineSymbolWidth = group.readEntry(QStringLiteral("LineSymbolWidth"), Worksheet::convertToSceneUnits(1, Worksheet::Unit::Centimeter));
 	d->rowCount = 0;
 	d->columnCount = 0;
 
@@ -82,7 +82,7 @@ void CartesianPlotLegend::init() {
 	d->verticalAlignment = WorksheetElement::VerticalAlignment::Top;
 	d->position.point = QPointF(0, 0);
 
-	d->setRotation(group.readEntry("Rotation", 0.0));
+	d->setRotation(group.readEntry(QStringLiteral("Rotation"), 0.0));
 
 	// Title
 	d->title = new TextLabel(this->name(), TextLabel::Type::PlotLegendTitle);
@@ -105,7 +105,7 @@ void CartesianPlotLegend::init() {
 
 	// Border
 	d->borderLine = new Line(QString());
-	d->borderLine->setPrefix(QLatin1String("Border"));
+	d->borderLine->setPrefix(QStringLiteral("Border"));
 	d->borderLine->setCreateXmlElement(false);
 	d->borderLine->setHidden(true);
 	addChild(d->borderLine);
@@ -117,16 +117,16 @@ void CartesianPlotLegend::init() {
 		d->recalcShapeAndBoundingRect();
 	});
 
-	d->borderCornerRadius = group.readEntry("BorderCornerRadius", 0.0);
+	d->borderCornerRadius = group.readEntry(QStringLiteral("BorderCornerRadius"), 0.0);
 
 	// Layout
-	d->layoutTopMargin = group.readEntry("LayoutTopMargin", Worksheet::convertToSceneUnits(0.2, Worksheet::Unit::Centimeter));
-	d->layoutBottomMargin = group.readEntry("LayoutBottomMargin", Worksheet::convertToSceneUnits(0.2, Worksheet::Unit::Centimeter));
-	d->layoutLeftMargin = group.readEntry("LayoutLeftMargin", Worksheet::convertToSceneUnits(0.2, Worksheet::Unit::Centimeter));
-	d->layoutRightMargin = group.readEntry("LayoutRightMargin", Worksheet::convertToSceneUnits(0.2, Worksheet::Unit::Centimeter));
-	d->layoutVerticalSpacing = group.readEntry("LayoutVerticalSpacing", Worksheet::convertToSceneUnits(0.1, Worksheet::Unit::Centimeter));
-	d->layoutHorizontalSpacing = group.readEntry("LayoutHorizontalSpacing", Worksheet::convertToSceneUnits(0.1, Worksheet::Unit::Centimeter));
-	d->layoutColumnCount = group.readEntry("LayoutColumnCount", 1);
+	d->layoutTopMargin = group.readEntry(QStringLiteral("LayoutTopMargin"), Worksheet::convertToSceneUnits(0.2, Worksheet::Unit::Centimeter));
+	d->layoutBottomMargin = group.readEntry(QStringLiteral("LayoutBottomMargin"), Worksheet::convertToSceneUnits(0.2, Worksheet::Unit::Centimeter));
+	d->layoutLeftMargin = group.readEntry(QStringLiteral("LayoutLeftMargin"), Worksheet::convertToSceneUnits(0.2, Worksheet::Unit::Centimeter));
+	d->layoutRightMargin = group.readEntry(QStringLiteral("LayoutRightMargin"), Worksheet::convertToSceneUnits(0.2, Worksheet::Unit::Centimeter));
+	d->layoutVerticalSpacing = group.readEntry(QStringLiteral("LayoutVerticalSpacing"), Worksheet::convertToSceneUnits(0.1, Worksheet::Unit::Centimeter));
+	d->layoutHorizontalSpacing = group.readEntry(QStringLiteral("LayoutHorizontalSpacing"), Worksheet::convertToSceneUnits(0.1, Worksheet::Unit::Centimeter));
+	d->layoutColumnCount = group.readEntry(QStringLiteral("LayoutColumnCount"), 1);
 
 	this->initActions();
 }
@@ -1037,23 +1037,23 @@ void CartesianPlotLegend::loadThemeConfig(const KConfig& config) {
 	KConfigGroup group;
 
 	// for the font color use the value defined in the theme config for Label
-	if (config.hasGroup(QLatin1String("Theme")))
-		group = config.group(QLatin1String("Label"));
+	if (config.hasGroup(QStringLiteral("Theme")))
+		group = config.group(QStringLiteral("Label"));
 	else
-		group = config.group(QLatin1String("CartesianPlotLegend"));
+		group = config.group(QStringLiteral("CartesianPlotLegend"));
 
-	this->setLabelColor(group.readEntry("FontColor", QColor(Qt::black)));
+	this->setLabelColor(group.readEntry(QStringLiteral("FontColor"), QColor(Qt::black)));
 
 	// for other theme dependent settings use the values defined in the theme config for CartesianPlot
-	if (config.hasGroup(QLatin1String("Theme")))
-		group = config.group("CartesianPlot");
+	if (config.hasGroup(QStringLiteral("Theme")))
+		group = config.group(QStringLiteral("CartesianPlot"));
 
 	// background
 	background()->loadThemeConfig(group);
 
 	// border
 	borderLine()->loadThemeConfig(group);
-	this->setBorderCornerRadius(group.readEntry("BorderCornerRadius", 0.0));
+	this->setBorderCornerRadius(group.readEntry(QStringLiteral("BorderCornerRadius"), 0.0));
 
 	title()->loadThemeConfig(config);
 }

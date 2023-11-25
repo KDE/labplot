@@ -484,14 +484,14 @@ void BarPlotDock::load() {
 }
 
 void BarPlotDock::loadConfig(KConfig& config) {
-	KConfigGroup group = config.group(QLatin1String("BarPlot"));
+	KConfigGroup group = config.group(QStringLiteral("BarPlot"));
 
 	// general
-	ui.cbType->setCurrentIndex(group.readEntry("Type", (int)m_barPlot->type()));
-	ui.cbOrientation->setCurrentIndex(group.readEntry("Orientation", (int)m_barPlot->orientation()));
+	ui.cbType->setCurrentIndex(group.readEntry(QStringLiteral("Type"), (int)m_barPlot->type()));
+	ui.cbOrientation->setCurrentIndex(group.readEntry(QStringLiteral("Orientation"), (int)m_barPlot->orientation()));
 
 	// box
-	ui.sbWidthFactor->setValue(round(group.readEntry("WidthFactor", m_barPlot->widthFactor()) * 100));
+	ui.sbWidthFactor->setValue(round(group.readEntry(QStringLiteral("WidthFactor"), m_barPlot->widthFactor()) * 100));
 	backgroundWidget->loadConfig(group);
 	lineWidget->loadConfig(group);
 
@@ -513,14 +513,14 @@ void BarPlotDock::loadConfigFromTemplate(KConfig& config) {
 }
 
 void BarPlotDock::saveConfigAsTemplate(KConfig& config) {
-	KConfigGroup group = config.group("BarPlot");
+	KConfigGroup group = config.group(QStringLiteral("BarPlot"));
 
 	// general
-	group.writeEntry("Type", ui.cbType->currentIndex());
-	group.writeEntry("Orientation", ui.cbOrientation->currentIndex());
+	group.writeEntry(QStringLiteral("Type"), ui.cbType->currentIndex());
+	group.writeEntry(QStringLiteral("Orientation"), ui.cbOrientation->currentIndex());
 
 	// box
-	group.writeEntry("WidthFactor", ui.sbWidthFactor->value() / 100.0);
+	group.writeEntry(QStringLiteral("WidthFactor"), ui.sbWidthFactor->value() / 100.0);
 	backgroundWidget->saveConfig(group);
 	lineWidget->saveConfig(group);
 

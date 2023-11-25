@@ -389,12 +389,12 @@ void CustomPointDock::loadConfigFromTemplate(KConfig& config) {
 	else
 		m_point->beginMacro(i18n("%1: template \"%2\" loaded", m_point->name(), name));
 
-	symbolWidget->loadConfig(config.group("CustomPoint"));
+	symbolWidget->loadConfig(config.group(QStringLiteral("CustomPoint")));
 
 	m_point->endMacro();
 }
 
 void CustomPointDock::saveConfigAsTemplate(KConfig& config) {
-	KConfigGroup group = config.group("CustomPoint");
+	KConfigGroup group = config.group(QStringLiteral("CustomPoint"));
 	symbolWidget->saveConfig(group);
 }

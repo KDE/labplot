@@ -172,19 +172,19 @@ Project::Project()
 	Q_D(Project);
 	// load default values for name, comment and author from config
 	KConfig config;
-	KConfigGroup group = config.group("Project");
+	KConfigGroup group = config.group(QStringLiteral("Project"));
 
 	QString user = qEnvironmentVariable("USER"); // !Windows
 	if (user.isEmpty())
 		user = qEnvironmentVariable("USERNAME"); // Windows
-	d->author = group.readEntry("Author", user);
+	d->author = group.readEntry(QStringLiteral("Author"), user);
 
 	// we don't have direct access to the members name and comment
 	//->temporary disable the undo stack and call the setters
 	setUndoAware(false);
 	setIsLoading(true);
-	setName(group.readEntry("Name", i18n("Project")));
-	setComment(group.readEntry("Comment", QString()));
+	setName(group.readEntry(QStringLiteral("Name"), i18n("Project")));
+	setComment(group.readEntry(QStringLiteral("Comment"), QString()));
 	setUndoAware(true);
 	setIsLoading(false);
 	d->changed = false;

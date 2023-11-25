@@ -145,7 +145,7 @@ void InfoElement::init() {
 
 	// use the line properties of axis line also for the info element lines
 	KConfig config;
-	const auto& group = config.group("Axis");
+	const auto& group = config.group(QStringLiteral("Axis"));
 
 	// lines
 	Q_D(InfoElement);
@@ -1265,9 +1265,9 @@ bool InfoElement::load(XmlStreamReader* reader, bool preview) {
 // ##############################################################################
 void InfoElement::loadThemeConfig(const KConfig& config) {
 	// use the color for the axis line from the theme also for info element's lines
-	const KConfigGroup& group = config.group("Axis");
+	const KConfigGroup& group = config.group(QStringLiteral("Axis"));
 
-	const QColor& themeColor = group.readEntry("LineColor", QColor(Qt::black));
+	const QColor& themeColor = group.readEntry(QStringLiteral("LineColor"), QColor(Qt::black));
 	Q_D(InfoElement);
 	d->verticalLine->loadThemeConfig(group, themeColor);
 	d->connectionLine->loadThemeConfig(group, themeColor);

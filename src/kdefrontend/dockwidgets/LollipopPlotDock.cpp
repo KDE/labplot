@@ -461,10 +461,10 @@ void LollipopPlotDock::load() {
 }
 
 void LollipopPlotDock::loadConfig(KConfig& config) {
-	KConfigGroup group = config.group(QLatin1String("Lollipop"));
+	KConfigGroup group = config.group(QStringLiteral("Lollipop"));
 
 	// general
-	ui.cbOrientation->setCurrentIndex(group.readEntry("Orientation", (int)m_plot->orientation()));
+	ui.cbOrientation->setCurrentIndex(group.readEntry(QStringLiteral("Orientation"), (int)m_plot->orientation()));
 
 	lineWidget->loadConfig(group);
 	symbolWidget->loadConfig(group);
@@ -485,10 +485,10 @@ void LollipopPlotDock::loadConfigFromTemplate(KConfig& config) {
 }
 
 void LollipopPlotDock::saveConfigAsTemplate(KConfig& config) {
-	KConfigGroup group = config.group("Lollipop");
+	KConfigGroup group = config.group(QStringLiteral("Lollipop"));
 
 	// general
-	group.writeEntry("Orientation", ui.cbOrientation->currentIndex());
+	group.writeEntry(QStringLiteral("Orientation"), ui.cbOrientation->currentIndex());
 
 	lineWidget->saveConfig(group);
 	symbolWidget->saveConfig(group);

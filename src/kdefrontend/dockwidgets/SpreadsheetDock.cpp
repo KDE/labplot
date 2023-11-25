@@ -234,22 +234,22 @@ void SpreadsheetDock::loadConfigFromTemplate(KConfig& config) {
 	loads saved spreadsheet properties from \c config.
  */
 void SpreadsheetDock::loadConfig(KConfig& config) {
-	KConfigGroup group = config.group("Spreadsheet");
+	KConfigGroup group = config.group(QStringLiteral("Spreadsheet"));
 
-	ui.sbColumnCount->setValue(group.readEntry("ColumnCount", m_spreadsheet->columnCount()));
-	ui.sbRowCount->setValue(group.readEntry("RowCount", m_spreadsheet->rowCount()));
+	ui.sbColumnCount->setValue(group.readEntry(QStringLiteral("ColumnCount"), m_spreadsheet->columnCount()));
+	ui.sbRowCount->setValue(group.readEntry(QStringLiteral("RowCount"), m_spreadsheet->rowCount()));
 
 	auto* view = static_cast<SpreadsheetView*>(m_spreadsheet->view());
-	ui.cbShowComments->setChecked(group.readEntry("ShowComments", view->areCommentsShown()));
+	ui.cbShowComments->setChecked(group.readEntry(QStringLiteral("ShowComments"), view->areCommentsShown()));
 }
 
 /*!
 	saves spreadsheet properties to \c config.
  */
 void SpreadsheetDock::saveConfigAsTemplate(KConfig& config) {
-	KConfigGroup group = config.group("Spreadsheet");
-	group.writeEntry("ColumnCount", ui.sbColumnCount->value());
-	group.writeEntry("RowCount", ui.sbRowCount->value());
-	group.writeEntry("ShowComments", ui.cbShowComments->isChecked());
+	KConfigGroup group = config.group(QStringLiteral("Spreadsheet"));
+	group.writeEntry(QStringLiteral("ColumnCount"), ui.sbColumnCount->value());
+	group.writeEntry(QStringLiteral("RowCount"), ui.sbRowCount->value());
+	group.writeEntry(QStringLiteral("ShowComments"), ui.cbShowComments->isChecked());
 	config.sync();
 }

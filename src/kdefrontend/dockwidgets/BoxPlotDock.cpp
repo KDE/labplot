@@ -697,28 +697,28 @@ void BoxPlotDock::loadConfig(KConfig& config) {
 	KConfigGroup group = config.group(QStringLiteral("BoxPlot"));
 
 	// general
-	ui.cbOrdering->setCurrentIndex(group.readEntry("Ordering", (int)m_boxPlot->ordering()));
-	ui.cbOrientation->setCurrentIndex(group.readEntry("Orientation", (int)m_boxPlot->orientation()));
-	ui.chkVariableWidth->setChecked(group.readEntry("VariableWidth", m_boxPlot->variableWidth()));
-	ui.chkNotches->setChecked(group.readEntry("NotchesEnabled", m_boxPlot->notchesEnabled()));
+	ui.cbOrdering->setCurrentIndex(group.readEntry(QStringLiteral("Ordering"), (int)m_boxPlot->ordering()));
+	ui.cbOrientation->setCurrentIndex(group.readEntry(QStringLiteral("Orientation"), (int)m_boxPlot->orientation()));
+	ui.chkVariableWidth->setChecked(group.readEntry(QStringLiteral("QStringLiteral(VariableWidth"), m_boxPlot->variableWidth()));
+	ui.chkNotches->setChecked(group.readEntry(QStringLiteral("NotchesEnabled"), m_boxPlot->notchesEnabled()));
 
 	// box
-	ui.sbWidthFactor->setValue(round(group.readEntry("WidthFactor", m_boxPlot->widthFactor()) * 100));
+	ui.sbWidthFactor->setValue(round(group.readEntry(QStringLiteral("WidthFactor"), m_boxPlot->widthFactor()) * 100));
 	backgroundWidget->loadConfig(group);
 	borderLineWidget->loadConfig(group);
 	medianLineWidget->loadConfig(group);
 
 	// symbols
 	symbolCategoryChanged();
-	ui.chkJitteringEnabled->setChecked(group.readEntry("JitteringEnabled", m_boxPlot->jitteringEnabled()));
+	ui.chkJitteringEnabled->setChecked(group.readEntry(QStringLiteral("JitteringEnabled"), m_boxPlot->jitteringEnabled()));
 
 	// whiskers
-	ui.cbWhiskersType->setCurrentIndex(group.readEntry("WhiskersType", (int)m_boxPlot->whiskersType()));
+	ui.cbWhiskersType->setCurrentIndex(group.readEntry(QStringLiteral("WhiskersType"), (int)m_boxPlot->whiskersType()));
 	ui.leWhiskersRangeParameter->setText(QLocale().toString(m_boxPlot->whiskersRangeParameter()));
 	whiskersLineWidget->loadConfig(group);
 
 	// whiskers cap
-	ui.sbWhiskersCapSize->setValue(Worksheet::convertFromSceneUnits(group.readEntry("WhiskersCapSize", m_boxPlot->whiskersCapSize()), Worksheet::Unit::Point));
+	ui.sbWhiskersCapSize->setValue(Worksheet::convertFromSceneUnits(group.readEntry(QStringLiteral("WhiskersCapSize"), m_boxPlot->whiskersCapSize()), Worksheet::Unit::Point));
 	whiskersCapLineWidget->loadConfig(group);
 
 	// Margin plots
@@ -742,31 +742,31 @@ void BoxPlotDock::loadConfigFromTemplate(KConfig& config) {
 }
 
 void BoxPlotDock::saveConfigAsTemplate(KConfig& config) {
-	KConfigGroup group = config.group("BoxPlot");
+	KConfigGroup group = config.group(QStringLiteral("BoxPlot"));
 
 	// general
-	group.writeEntry("Ordering", ui.cbOrdering->currentIndex());
-	group.writeEntry("Orientation", ui.cbOrientation->currentIndex());
-	group.writeEntry("VariableWidth", ui.chkVariableWidth->isChecked());
-	group.writeEntry("NotchesEnabled", ui.chkNotches->isChecked());
+	group.writeEntry(QStringLiteral("Ordering"), ui.cbOrdering->currentIndex());
+	group.writeEntry(QStringLiteral("Orientation"), ui.cbOrientation->currentIndex());
+	group.writeEntry(QStringLiteral("VariableWidth"), ui.chkVariableWidth->isChecked());
+	group.writeEntry(QStringLiteral("NotchesEnabled"), ui.chkNotches->isChecked());
 
 	// box
-	group.writeEntry("WidthFactor", ui.sbWidthFactor->value() / 100.0);
+	group.writeEntry(QStringLiteral("WidthFactor"), ui.sbWidthFactor->value() / 100.0);
 	backgroundWidget->saveConfig(group);
 	borderLineWidget->saveConfig(group);
 	medianLineWidget->saveConfig(group);
 
 	// symbols
 	// TODO: save symbol properties for outliers, etc.?
-	group.writeEntry("JitteringEnabled", ui.chkJitteringEnabled->isChecked());
+	group.writeEntry(QStringLiteral("JitteringEnabled"), ui.chkJitteringEnabled->isChecked());
 
 	// whiskers
-	group.writeEntry("WhiskersType", ui.cbWhiskersType->currentIndex());
-	group.writeEntry("WhiskersRangeParameter", QLocale().toDouble(ui.leWhiskersRangeParameter->text()));
+	group.writeEntry(QStringLiteral("WhiskersType"), ui.cbWhiskersType->currentIndex());
+	group.writeEntry(QStringLiteral("WhiskersRangeParameter"), QLocale().toDouble(ui.leWhiskersRangeParameter->text()));
 	whiskersLineWidget->saveConfig(group);
 
 	// whiskers cap
-	group.writeEntry("WhiskersCapSize", Worksheet::convertToSceneUnits(ui.sbWhiskersCapSize->value(), Worksheet::Unit::Point));
+	group.writeEntry(QStringLiteral("WhiskersCapSize"), Worksheet::convertToSceneUnits(ui.sbWhiskersCapSize->value(), Worksheet::Unit::Point));
 	whiskersCapLineWidget->saveConfig(group);
 
 	config.sync();

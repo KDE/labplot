@@ -30,11 +30,11 @@
 Note::Note(const QString& name)
 	: AbstractPart(name, AspectType::Note) {
 	KConfig config;
-	KConfigGroup group = config.group("Notes");
+	KConfigGroup group = config.group(QStringLiteral("Notes"));
 
-	m_backgroundColor = group.readEntry("BackgroundColor", QColor(Qt::yellow));
-	m_textColor = group.readEntry("TextColor", QColor(Qt::black));
-	m_textFont = group.readEntry("TextFont", QFont());
+	m_backgroundColor = group.readEntry(QStringLiteral("BackgroundColor"), QColor(Qt::yellow));
+	m_textColor = group.readEntry(QStringLiteral("TextColor"), QColor(Qt::black));
+	m_textFont = group.readEntry(QStringLiteral("TextFont"), QFont());
 }
 
 QIcon Note::icon() const {
@@ -69,11 +69,11 @@ bool Note::exportView() const {
 	if (path.isEmpty())
 		return false;
 
-	int pos = path.lastIndexOf(QLatin1String("/"));
+	int pos = path.lastIndexOf(QStringLiteral("/"));
 	if (pos != -1) {
 		QString newDir = path.left(pos);
 		if (newDir != dir)
-			conf.writeEntry("LastDir", newDir);
+			conf.writeEntry(QStringLiteral("LastDir"), newDir);
 	}
 
 	QFile file(path);

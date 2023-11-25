@@ -76,14 +76,14 @@ void XYCurve::init() {
 	Q_D(XYCurve);
 
 	KConfig config;
-	KConfigGroup group = config.group("XYCurve");
+	KConfigGroup group = config.group(QStringLiteral("XYCurve"));
 
-	d->legendVisible = group.readEntry("LegendVisible", true);
+	d->legendVisible = group.readEntry(QStringLiteral("LegendVisible"), true);
 
-	d->lineType = (LineType)group.readEntry("LineType", static_cast<int>(LineType::Line));
-	d->lineIncreasingXOnly = group.readEntry("LineIncreasingXOnly", false);
-	d->lineSkipGaps = group.readEntry("SkipLineGaps", false);
-	d->lineInterpolationPointsCount = group.readEntry("LineInterpolationPointsCount", 1);
+	d->lineType = (LineType)group.readEntry(QStringLiteral("LineType"), static_cast<int>(LineType::Line));
+	d->lineIncreasingXOnly = group.readEntry(QStringLiteral("LineIncreasingXOnly"), false);
+	d->lineSkipGaps = group.readEntry(QStringLiteral("SkipLineGaps"), false);
+	d->lineInterpolationPointsCount = group.readEntry(QStringLiteral("LineInterpolationPointsCount"), 1);
 
 	d->line = new Line(QString());
 	d->line->setCreateXmlElement(false);
@@ -100,7 +100,7 @@ void XYCurve::init() {
 	});
 
 	d->dropLine = new Line(QString());
-	d->dropLine->setPrefix(QLatin1String("DropLine"));
+	d->dropLine->setPrefix(QStringLiteral("DropLine"));
 	d->dropLine->setHidden(true);
 	addChild(d->dropLine);
 	d->dropLine->init(group);
@@ -129,23 +129,23 @@ void XYCurve::init() {
 	});
 
 	// values
-	d->valuesType = (ValuesType)group.readEntry("ValuesType", static_cast<int>(ValuesType::NoValues));
-	d->valuesPosition = (ValuesPosition)group.readEntry("ValuesPosition", static_cast<int>(ValuesPosition::Above));
-	d->valuesDistance = group.readEntry("ValuesDistance", Worksheet::convertToSceneUnits(5, Worksheet::Unit::Point));
-	d->valuesRotationAngle = group.readEntry("ValuesRotation", 0.0);
-	d->valuesOpacity = group.readEntry("ValuesOpacity", 1.0);
-	d->valuesNumericFormat = group.readEntry("ValuesNumericFormat", "f").at(0).toLatin1();
-	d->valuesPrecision = group.readEntry("ValuesNumericFormat", 2);
-	d->valuesDateTimeFormat = group.readEntry("ValuesDateTimeFormat", "yyyy-MM-dd");
-	d->valuesPrefix = group.readEntry("ValuesPrefix", "");
-	d->valuesSuffix = group.readEntry("ValuesSuffix", "");
-	d->valuesFont = group.readEntry("ValuesFont", QFont());
+	d->valuesType = (ValuesType)group.readEntry(QStringLiteral("ValuesType"), static_cast<int>(ValuesType::NoValues));
+	d->valuesPosition = (ValuesPosition)group.readEntry(QStringLiteral("ValuesPosition"), static_cast<int>(ValuesPosition::Above));
+	d->valuesDistance = group.readEntry(QStringLiteral("ValuesDistance"), Worksheet::convertToSceneUnits(5, Worksheet::Unit::Point));
+	d->valuesRotationAngle = group.readEntry(QStringLiteral("ValuesRotation"), 0.0);
+	d->valuesOpacity = group.readEntry(QStringLiteral("ValuesOpacity"), 1.0);
+	d->valuesNumericFormat = group.readEntry(QStringLiteral("ValuesNumericFormat"), QStringLiteral("f")).at(0).toLatin1();
+	d->valuesPrecision = group.readEntry(QStringLiteral("ValuesNumericFormat"), 2);
+	d->valuesDateTimeFormat = group.readEntry(QStringLiteral("ValuesDateTimeFormat"), QStringLiteral("yyyy-MM-dd"));
+	d->valuesPrefix = group.readEntry(QStringLiteral("ValuesPrefix"), QStringLiteral(""));
+	d->valuesSuffix = group.readEntry(QStringLiteral("ValuesSuffix"), QStringLiteral(""));
+	d->valuesFont = group.readEntry(QStringLiteral("ValuesFont"), QFont());
 	d->valuesFont.setPixelSize(Worksheet::convertToSceneUnits(8, Worksheet::Unit::Point));
-	d->valuesColor = group.readEntry("ValuesColor", QColor(Qt::black));
+	d->valuesColor = group.readEntry(QStringLiteral("ValuesColor"), QColor(Qt::black));
 
 	// Background/Filling
 	d->background = new Background(QString());
-	d->background->setPrefix(QLatin1String("Filling"));
+	d->background->setPrefix(QStringLiteral("Filling"));
 	d->background->setPositionAvailable(true);
 	addChild(d->background);
 	d->background->setHidden(true);
@@ -158,10 +158,10 @@ void XYCurve::init() {
 	});
 
 	// error bars
-	d->xErrorType = (ErrorType)group.readEntry("XErrorType", static_cast<int>(ErrorType::NoError));
-	d->yErrorType = (ErrorType)group.readEntry("YErrorType", static_cast<int>(ErrorType::NoError));
+	d->xErrorType = (ErrorType)group.readEntry(QStringLiteral("XErrorType"), static_cast<int>(ErrorType::NoError));
+	d->yErrorType = (ErrorType)group.readEntry(QStringLiteral("YErrorType"), static_cast<int>(ErrorType::NoError));
 	d->errorBarsLine = new Line(QString());
-	d->errorBarsLine->setPrefix(QLatin1String("ErrorBars"));
+	d->errorBarsLine->setPrefix(QStringLiteral("ErrorBars"));
 	d->errorBarsLine->setCreateXmlElement(false); // errorBars element is created in XYCurve::save()
 	d->errorBarsLine->setErrorBarsTypeAvailable(true);
 	d->errorBarsLine->setHidden(true);
@@ -181,11 +181,11 @@ void XYCurve::init() {
 	});
 
 	// marginal plots (rug, histogram, boxplot)
-	d->rugEnabled = group.readEntry("RugEnabled", false);
-	d->rugOrientation = (WorksheetElement::Orientation)group.readEntry("RugOrientation", (int)WorksheetElement::Orientation::Both);
-	d->rugLength = group.readEntry("RugLength", Worksheet::convertToSceneUnits(5, Worksheet::Unit::Point));
-	d->rugWidth = group.readEntry("RugWidth", 0.0);
-	d->rugOffset = group.readEntry("RugOffset", 0.0);
+	d->rugEnabled = group.readEntry(QStringLiteral("RugEnabled"), false);
+	d->rugOrientation = (WorksheetElement::Orientation)group.readEntry(QStringLiteral("RugOrientation"), (int)WorksheetElement::Orientation::Both);
+	d->rugLength = group.readEntry(QStringLiteral("RugLength"), Worksheet::convertToSceneUnits(5, Worksheet::Unit::Point));
+	d->rugWidth = group.readEntry(QStringLiteral("RugWidth"), 0.0);
+	d->rugOffset = group.readEntry(QStringLiteral("RugOffset"), 0.0);
 }
 
 void XYCurve::initActions() {
@@ -3199,7 +3199,7 @@ bool XYCurve::load(XmlStreamReader* reader, bool preview) {
 // #########################  Theme management ##################################
 // ##############################################################################
 void XYCurve::loadThemeConfig(const KConfig& config) {
-	KConfigGroup group = config.group("XYCurve");
+	KConfigGroup group = config.group(QStringLiteral("XYCurve"));
 
 	const auto* plot = dynamic_cast<const CartesianPlot*>(parentAspect());
 	if (!plot)
@@ -3217,8 +3217,8 @@ void XYCurve::loadThemeConfig(const KConfig& config) {
 	d->errorBarsLine->loadThemeConfig(group, themeColor);
 
 	// Values
-	this->setValuesOpacity(group.readEntry("ValuesOpacity", 1.0));
-	this->setValuesColor(group.readEntry("ValuesColor", themeColor));
+	this->setValuesOpacity(group.readEntry(QStringLiteral("ValuesOpacity"), 1.0));
+	this->setValuesColor(group.readEntry(QStringLiteral("ValuesColor"), themeColor));
 
 	// margins
 	if (plot->theme() == QLatin1String("Tufte")) {
@@ -3234,7 +3234,7 @@ void XYCurve::loadThemeConfig(const KConfig& config) {
 }
 
 void XYCurve::saveThemeConfig(const KConfig& config) {
-	KConfigGroup group = config.group("XYCurve");
+	KConfigGroup group = config.group(QStringLiteral("XYCurve"));
 	Q_D(const XYCurve);
 
 	d->line->saveThemeConfig(group);
@@ -3244,13 +3244,13 @@ void XYCurve::saveThemeConfig(const KConfig& config) {
 	d->errorBarsLine->saveThemeConfig(group);
 
 	// Values
-	group.writeEntry("ValuesOpacity", this->valuesOpacity());
-	group.writeEntry("ValuesColor", (QColor)this->valuesColor());
-	group.writeEntry("ValuesFont", this->valuesFont());
+	group.writeEntry(QStringLiteral("ValuesOpacity"), this->valuesOpacity());
+	group.writeEntry(QStringLiteral("ValuesColor"), (QColor)this->valuesColor());
+	group.writeEntry(QStringLiteral("ValuesFont"), this->valuesFont());
 
 	const int index = parentAspect()->indexOfChild<XYCurve>(this);
 	if (index < 5) {
-		KConfigGroup themeGroup = config.group("Theme");
+		KConfigGroup themeGroup = config.group(QStringLiteral("Theme"));
 		for (int i = index; i < 5; i++) {
 			QString s = QStringLiteral("ThemePaletteColor") + QString::number(i + 1);
 			themeGroup.writeEntry(s, (QColor)d->line->pen().color());

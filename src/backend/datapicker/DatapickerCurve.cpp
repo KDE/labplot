@@ -53,18 +53,18 @@ void DatapickerCurve::init() {
 
 	KConfig config;
 	KConfigGroup group;
-	group = config.group("DatapickerCurve");
-	d->pointVisibility = group.readEntry("PointVisibility", true);
+	group = config.group(QStringLiteral("DatapickerCurve"));
+	d->pointVisibility = group.readEntry(QStringLiteral("PointVisibility"), true);
 
 	// error bars
-	d->curveErrorTypes.x = (ErrorType)group.readEntry("CurveErrorType_X", static_cast<int>(ErrorType::NoError));
-	d->curveErrorTypes.y = (ErrorType)group.readEntry("CurveErrorType_Y", static_cast<int>(ErrorType::NoError));
-	d->pointErrorBarSize = group.readEntry("ErrorBarSize", Worksheet::convertToSceneUnits(8, Worksheet::Unit::Point));
-	d->pointErrorBarBrush.setStyle((Qt::BrushStyle)group.readEntry("ErrorBarFillingStyle", (int)Qt::NoBrush));
-	d->pointErrorBarBrush.setColor(group.readEntry("ErrorBarFillingColor", QColor(Qt::black)));
-	d->pointErrorBarPen.setStyle((Qt::PenStyle)group.readEntry("ErrorBarBorderStyle", (int)Qt::SolidLine));
-	d->pointErrorBarPen.setColor(group.readEntry("ErrorBarBorderColor", QColor(Qt::black)));
-	d->pointErrorBarPen.setWidthF(group.readEntry("ErrorBarBorderWidth", Worksheet::convertToSceneUnits(1, Worksheet::Unit::Point)));
+	d->curveErrorTypes.x = (ErrorType)group.readEntry(QStringLiteral("CurveErrorType_X"), static_cast<int>(ErrorType::NoError));
+	d->curveErrorTypes.y = (ErrorType)group.readEntry(QStringLiteral("CurveErrorType_Y"), static_cast<int>(ErrorType::NoError));
+	d->pointErrorBarSize = group.readEntry(QStringLiteral("ErrorBarSize"), Worksheet::convertToSceneUnits(8, Worksheet::Unit::Point));
+	d->pointErrorBarBrush.setStyle((Qt::BrushStyle)group.readEntry(QStringLiteral("ErrorBarFillingStyle"), (int)Qt::NoBrush));
+	d->pointErrorBarBrush.setColor(group.readEntry(QStringLiteral("ErrorBarFillingColor"), QColor(Qt::black)));
+	d->pointErrorBarPen.setStyle((Qt::PenStyle)group.readEntry(QStringLiteral("ErrorBarBorderStyle"), (int)Qt::SolidLine));
+	d->pointErrorBarPen.setColor(group.readEntry(QStringLiteral("ErrorBarBorderColor"), QColor(Qt::black)));
+	d->pointErrorBarPen.setWidthF(group.readEntry(QStringLiteral("ErrorBarBorderWidth"), Worksheet::convertToSceneUnits(1, Worksheet::Unit::Point)));
 
 	// initialize the symbol
 	d->symbol = new Symbol(QString());

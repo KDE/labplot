@@ -67,15 +67,15 @@ void Histogram::init() {
 	Q_D(Histogram);
 
 	KConfig config;
-	KConfigGroup group = config.group("Histogram");
+	KConfigGroup group = config.group(QStringLiteral("Histogram"));
 
-	d->type = (Histogram::Type)group.readEntry("Type", (int)Histogram::Ordinary);
-	d->orientation = (Histogram::Orientation)group.readEntry("Orientation", (int)Histogram::Vertical);
-	d->normalization = (Histogram::Normalization)group.readEntry("Normalization", (int)Histogram::Count);
-	d->binningMethod = (Histogram::BinningMethod)group.readEntry("BinningMethod", (int)Histogram::SquareRoot);
-	d->binCount = group.readEntry("BinCount", 10);
-	d->binWidth = group.readEntry("BinWidth", 1.0);
-	d->autoBinRanges = group.readEntry("AutoBinRanges", true);
+	d->type = (Histogram::Type)group.readEntry(QStringLiteral("Type"), (int)Histogram::Ordinary);
+	d->orientation = (Histogram::Orientation)group.readEntry(QStringLiteral("Orientation"), (int)Histogram::Vertical);
+	d->normalization = (Histogram::Normalization)group.readEntry(QStringLiteral("Normalization"), (int)Histogram::Count);
+	d->binningMethod = (Histogram::BinningMethod)group.readEntry(QStringLiteral("BinningMethod"), (int)Histogram::SquareRoot);
+	d->binCount = group.readEntry(QStringLiteral("BinCount"), 10);
+	d->binWidth = group.readEntry(QStringLiteral("BinWidth"), 1.0);
+	d->autoBinRanges = group.readEntry(QStringLiteral("AutoBinRanges"), true);
 	d->binRangesMin = 0.0;
 	d->binRangesMax = 1.0;
 
@@ -122,7 +122,7 @@ void Histogram::init() {
 
 	// Background/Filling
 	d->background = new Background(QString());
-	d->background->setPrefix(QLatin1String("Filling"));
+	d->background->setPrefix(QStringLiteral("Filling"));
 	d->background->setEnabledAvailable(true);
 	addChild(d->background);
 	d->background->setHidden(true);
@@ -135,9 +135,9 @@ void Histogram::init() {
 	});
 
 	// error bars
-	d->errorType = (Histogram::ErrorType)group.readEntry("ErrorType", (int)Histogram::NoError);
+	d->errorType = (Histogram::ErrorType)group.readEntry(QStringLiteral("ErrorType"), (int)Histogram::NoError);
 	d->errorBarsLine = new Line(QString());
-	d->errorBarsLine->setPrefix(QLatin1String("ErrorBars"));
+	d->errorBarsLine->setPrefix(QStringLiteral("ErrorBars"));
 	d->errorBarsLine->setCreateXmlElement(false); // errorBars element is created in Histogram::save()
 	d->errorBarsLine->setErrorBarsTypeAvailable(true);
 	d->errorBarsLine->setHidden(true);
@@ -157,10 +157,10 @@ void Histogram::init() {
 	});
 
 	// marginal plots (rug, histogram, boxplot)
-	d->rugEnabled = group.readEntry("RugEnabled", false);
-	d->rugLength = group.readEntry("RugLength", Worksheet::convertToSceneUnits(5, Worksheet::Unit::Point));
-	d->rugWidth = group.readEntry("RugWidth", 0.0);
-	d->rugOffset = group.readEntry("RugOffset", 0.0);
+	d->rugEnabled = group.readEntry(QStringLiteral("RugEnabled"), false);
+	d->rugLength = group.readEntry(QStringLiteral("RugLength"), Worksheet::convertToSceneUnits(5, Worksheet::Unit::Point));
+	d->rugWidth = group.readEntry(QStringLiteral("RugWidth"), 0.0);
+	d->rugOffset = group.readEntry(QStringLiteral("RugOffset"), 0.0);
 	this->initActions();
 }
 
@@ -1904,10 +1904,10 @@ bool Histogram::load(XmlStreamReader* reader, bool preview) {
 // ##############################################################################
 void Histogram::loadThemeConfig(const KConfig& config) {
 	KConfigGroup group;
-	if (config.hasGroup(QLatin1String("Theme")))
-		group = config.group("XYCurve"); // when loading from the theme config, use the same properties as for XYCurve
+	if (config.hasGroup(QStringLiteral("Theme")))
+		group = config.group(QStringLiteral("XYCurve")); // when loading from the theme config, use the same properties as for XYCurve
 	else
-		group = config.group("Histogram");
+		group = config.group(QStringLiteral("Histogram"));
 
 	const auto* plot = static_cast<const CartesianPlot*>(parentAspect());
 	int index = plot->curveChildIndex(this);
@@ -1937,7 +1937,7 @@ void Histogram::loadThemeConfig(const KConfig& config) {
 
 void Histogram::saveThemeConfig(const KConfig& config) {
 	Q_D(const Histogram);
-	KConfigGroup group = config.group("Histogram");
+	KConfigGroup group = config.group(QStringLiteral("Histogram"));
 
 	d->line->saveThemeConfig(group);
 	d->symbol->saveThemeConfig(group);
@@ -1947,7 +1947,7 @@ void Histogram::saveThemeConfig(const KConfig& config) {
 
 	int index = parentAspect()->indexOfChild<Histogram>(this);
 	if (index < 5) {
-		KConfigGroup themeGroup = config.group("Theme");
+		KConfigGroup themeGroup = config.group(QStringLiteral("Theme"));
 		for (int i = index; i < 5; i++) {
 			QString s = QStringLiteral("ThemePaletteColor") + QString::number(i + 1);
 			themeGroup.writeEntry(s, d->line->pen().color());

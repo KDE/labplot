@@ -301,10 +301,10 @@ void QQPlotDock::load() {
 }
 
 void QQPlotDock::loadConfig(KConfig& config) {
-	KConfigGroup group = config.group(QLatin1String("QQPlot"));
+	KConfigGroup group = config.group(QStringLiteral("QQPlot"));
 
 	// distribution
-	auto dist = group.readEntry(QLatin1String("distribution"), static_cast<int>(m_plot->distribution()));
+	auto dist = group.readEntry(QStringLiteral("distribution"), static_cast<int>(m_plot->distribution()));
 	int index = ui.cbDistribution->findData(static_cast<int>(dist));
 	ui.cbDistribution->setCurrentIndex(index);
 
@@ -327,10 +327,10 @@ void QQPlotDock::loadConfigFromTemplate(KConfig& config) {
 }
 
 void QQPlotDock::saveConfigAsTemplate(KConfig& config) {
-	KConfigGroup group = config.group("QQPlot");
+	KConfigGroup group = config.group(QStringLiteral("QQPlot"));
 
 	// distribution
-	group.writeEntry(QLatin1String("kernelType"), static_cast<int>(m_plot->distribution()));
+	group.writeEntry(QStringLiteral("kernelType"), static_cast<int>(m_plot->distribution()));
 
 	// properties of the reference and percentile curves
 	lineWidget->saveConfig(group);
