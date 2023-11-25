@@ -27,6 +27,142 @@
 #include <array>
 #include <unordered_map>
 
+namespace {
+template<typename T>
+int indexForValueCommon(const T* obj,
+						double x,
+						const std::function<AbstractColumn::ColumnMode(const T*)> columnMode,
+						const std::function<int(const T*)> rowCount,
+						const std::function<double(const T*, int)> valueAt,
+						const std::function<QDateTime(const T*, int)> dateTimeAt,
+						const std::function<AbstractColumn::Properties(const T*)> properties,
+						const std::function<bool(const T*, int)> isValid,
+						const std::function<bool(const T*, int)> isMasked) {
+	int rc = rowCount(obj);
+	double prevValue = 0;
+	qint64 prevValueDateTime = 0;
+	auto mode = columnMode(obj);
+	auto property = properties(obj);
+	if (property == Column::Properties::MonotonicIncreasing || property == Column::Properties::MonotonicDecreasing) {
+		// bisects the index every time, so it is possible to find the value in log_2(rowCount) steps
+		bool increase = (property != Column::Properties::MonotonicDecreasing);
+
+		int lowerIndex = 0;
+		int higherIndex = rc - 1;
+
+		unsigned int maxSteps = Column::calculateMaxSteps(static_cast<unsigned int>(rc)) + 1;
+
+		switch (mode) {
+		case Column::ColumnMode::Double:
+		case Column::ColumnMode::Integer:
+		case Column::ColumnMode::BigInt:
+			for (unsigned int i = 0; i < maxSteps; i++) { // so no log_2(rowCount) needed
+				int index = lowerIndex + round(static_cast<double>(higherIndex - lowerIndex) / 2);
+				double value = valueAt(obj, index);
+
+				if (higherIndex - lowerIndex < 2) {
+					if (std::abs(valueAt(obj, lowerIndex) - x) < std::abs(valueAt(obj, higherIndex) - x))
+						index = lowerIndex;
+					else
+						index = higherIndex;
+
+					return index;
+				}
+
+				if (value > x && increase)
+					higherIndex = index;
+				else if (value >= x && !increase)
+					lowerIndex = index;
+				else if (value <= x && increase)
+					lowerIndex = index;
+				else if (value < x && !increase)
+					higherIndex = index;
+			}
+			break;
+		case Column::ColumnMode::Text:
+			break;
+		case Column::ColumnMode::DateTime:
+		case Column::ColumnMode::Month:
+		case Column::ColumnMode::Day: {
+			qint64 xInt64 = static_cast<qint64>(x);
+			for (unsigned int i = 0; i < maxSteps; i++) { // so no log_2(rowCount) needed
+				int index = lowerIndex + round(static_cast<double>(higherIndex - lowerIndex) / 2);
+				qint64 value = dateTimeAt(obj, index).toMSecsSinceEpoch();
+
+				if (higherIndex - lowerIndex < 2) {
+					if (std::abs(dateTimeAt(obj, lowerIndex).toMSecsSinceEpoch() - xInt64)
+						< std::abs(dateTimeAt(obj, higherIndex).toMSecsSinceEpoch() - xInt64))
+						index = lowerIndex;
+					else
+						index = higherIndex;
+
+					return index;
+				}
+
+				if (value > xInt64 && increase)
+					higherIndex = index;
+				else if (value >= xInt64 && !increase)
+					lowerIndex = index;
+				else if (value <= xInt64 && increase)
+					lowerIndex = index;
+				else if (value < xInt64 && !increase)
+					higherIndex = index;
+			}
+		}
+		}
+
+	} else if (property == Column::Properties::Constant) {
+		if (rc > 0)
+			return 0;
+		else
+			return -1;
+	} else {
+		// naiv way
+		int index = 0;
+		switch (mode) {
+		case Column::ColumnMode::Double:
+		case Column::ColumnMode::Integer:
+		case Column::ColumnMode::BigInt:
+			for (int row = 0; row < rc; row++) {
+				if (!isValid(obj, row) || isMasked(obj, row))
+					continue;
+				if (row == 0)
+					prevValue = valueAt(obj, row);
+
+				double value = valueAt(obj, row);
+				if (std::abs(value - x) <= std::abs(prevValue - x)) { // <= prevents also that row - 1 become < 0
+					prevValue = value;
+					index = row;
+				}
+			}
+			return index;
+		case Column::ColumnMode::Text:
+			break;
+		case Column::ColumnMode::DateTime:
+		case Column::ColumnMode::Month:
+		case Column::ColumnMode::Day: {
+			qint64 xInt64 = static_cast<qint64>(x);
+			for (int row = 0; row < rc; row++) {
+				if (!isValid(obj, row) || isMasked(obj, row))
+					continue;
+
+				if (row == 0)
+					prevValueDateTime = dateTimeAt(obj, row).toMSecsSinceEpoch();
+
+				qint64 value = dateTimeAt(obj, row).toMSecsSinceEpoch();
+				if (std::abs(value - xInt64) <= std::abs(prevValueDateTime - xInt64)) { // "<=" prevents also that row - 1 become < 0
+					prevValueDateTime = value;
+					index = row;
+				}
+			}
+			return index;
+		}
+		}
+	}
+	return -1;
+}
+} // anonymous namespace
+
 void ColumnPrivate::ValueLabels::setMode(AbstractColumn::ColumnMode mode) {
 	if (!initialized())
 		m_mode = mode;
@@ -1606,6 +1742,18 @@ void ColumnPrivate::removeRows(int first, int count) {
 	}
 
 	invalidate();
+}
+
+int ColumnPrivate::indexForValue(double x) const {
+	return indexForValueCommon<Column>(m_owner,
+									   x,
+									   std::mem_fn(&Column::columnMode),
+									   std::mem_fn<int() const>(&Column::rowCount),
+									   std::mem_fn(&Column::valueAt),
+									   std::mem_fn(&Column::dateTimeAt),
+									   std::mem_fn(&Column::properties),
+									   std::mem_fn<bool(int) const>(&Column::isValid),
+									   std::mem_fn<bool(int) const>(&Column::isMasked));
 }
 
 //! Return the column name
