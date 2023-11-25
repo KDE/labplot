@@ -41,6 +41,7 @@ public:
 	bool copy(const ColumnPrivate*, int source_start, int dest_start, int num_rows);
 
 	int rowCount() const;
+	int rowCount(double min, double max) const;
 	int availableRowCount(int max = -1) const; // valid rows (stops when max rows found)
 	void resizeTo(int);
 

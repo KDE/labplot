@@ -1660,10 +1660,16 @@ int Column::rowCount() const {
 }
 
 int Column::rowCount(double min, double max) const {
-	int start, end;
-	if (!indicesMinMax(min, max, start, end))
-		return 0;
-	return abs(start - end) + 1; // +1 because start/end is included
+	const auto p = properties();
+	if (p == Properties::MonotonicIncreasing || p == Properties::MonotonicDecreasing) {
+		int start, end;
+		if (!indicesMinMax(min, max, start, end))
+			return 0;
+		return abs(start - end) + 1; // +1 because start/end is included
+	} else if (p == Properties::Constant)
+		return rowCount();
+
+	return d->rowCount(min, max);
 }
 
 /**
@@ -2404,10 +2410,17 @@ bool Column::indicesMinMax(double v1, double v2, int& start, int& end) const {
 		case ColumnMode::Integer:
 		case ColumnMode::BigInt:
 		case ColumnMode::Double: {
-			if (start > 0 && valueAt(start - 1) <= v2 && valueAt(start - 1) >= v1)
-				start--;
-			if (end < rowCount() - 1 && valueAt(end + 1) <= v2 && valueAt(end + 1) >= v1)
-				end++;
+			if (property == Properties::MonotonicIncreasing) {
+				if (start > 0 && valueAt(start - 1) <= v2 && valueAt(start - 1) >= v1)
+					start--;
+				if (end < rowCount() - 1 && valueAt(end + 1) <= v2 && valueAt(end + 1) >= v1)
+					end++;
+			} else {
+				if (end > 0 && valueAt(end - 1) <= v2 && valueAt(end - 1) >= v1)
+					end--;
+				if (start < rowCount() - 1 && valueAt(start + 1) <= v2 && valueAt(start + 1) >= v1)
+					start++;
+			}
 
 			break;
 		}
@@ -2417,16 +2430,30 @@ bool Column::indicesMinMax(double v1, double v2, int& start, int& end) const {
 			qint64 v1int64 = v1;
 			qint64 v2int64 = v2;
 			qint64 value;
-			if (start > 0) {
-				value = dateTimeAt(start - 1).toMSecsSinceEpoch();
-				if (value <= v2int64 && value >= v1int64)
-					start--;
-			}
+			if (property == Properties::MonotonicIncreasing) {
+				if (start > 0) {
+					value = dateTimeAt(start - 1).toMSecsSinceEpoch();
+					if (value <= v2int64 && value >= v1int64)
+						start--;
+				}
 
-			if (end > rowCount() - 1) {
-				value = dateTimeAt(end + 1).toMSecsSinceEpoch();
-				if (value <= v2int64 && value >= v1int64)
-					end++;
+				if (end > rowCount() - 1) {
+					value = dateTimeAt(end + 1).toMSecsSinceEpoch();
+					if (value <= v2int64 && value >= v1int64)
+						end++;
+				}
+			} else {
+				if (end > 0) {
+					value = dateTimeAt(end - 1).toMSecsSinceEpoch();
+					if (value <= v2int64 && value >= v1int64)
+						end--;
+				}
+
+				if (start > rowCount() - 1) {
+					value = dateTimeAt(start + 1).toMSecsSinceEpoch();
+					if (value <= v2int64 && value >= v1int64)
+						start++;
+				}
 			}
 			break;
 		}

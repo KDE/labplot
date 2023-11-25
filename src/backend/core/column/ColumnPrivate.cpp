@@ -1384,6 +1384,53 @@ int ColumnPrivate::rowCount() const {
 	return 0;
 }
 
+int ColumnPrivate::rowCount(double min, double max) const {
+	if (!m_data)
+		return m_rowCount;
+
+	int counter = 0;
+	switch (m_columnMode) {
+	case AbstractColumn::ColumnMode::Double: {
+		const auto* data = static_cast<QVector<double>*>(m_data);
+		for (const auto& d : *data) {
+			if (d >= min && d <= max)
+				counter++;
+		}
+		break;
+	}
+	case AbstractColumn::ColumnMode::Integer: {
+		const auto* data = static_cast<QVector<int>*>(m_data);
+		for (const auto& d : *data) {
+			if (d >= min && d <= max)
+				counter++;
+		}
+		break;
+	}
+	case AbstractColumn::ColumnMode::BigInt: {
+		const auto* data = static_cast<QVector<qint64>*>(m_data);
+		for (const auto& d : *data) {
+			if (d >= min && d <= max)
+				counter++;
+		}
+		break;
+	}
+	case AbstractColumn::ColumnMode::DateTime:
+	case AbstractColumn::ColumnMode::Month:
+	case AbstractColumn::ColumnMode::Day: {
+		const auto* data = static_cast<QVector<QDateTime>*>(m_data);
+		for (const auto& d : *data) {
+			const auto value = d.toMSecsSinceEpoch();
+			if (value >= min && value <= max)
+				counter++;
+		}
+		break;
+	}
+	case AbstractColumn::ColumnMode::Text:
+		break;
+	}
+	return counter;
+}
+
 /**
  * \brief Return the number of available rows
  *

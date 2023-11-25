@@ -1662,11 +1662,25 @@ void ColumnTest::clearContentFormula() {
 	QCOMPARE(c->formulaData().at(0).variableName(), QStringLiteral("zet"));
 }
 
-void ColumnTest::testRowCount() {
+void ColumnTest::testRowCountMonotonIncrease() {
 	Column c(QStringLiteral("Test"), Column::ColumnMode::Double);
 	c.replaceValues(-1, {-3., 1., 2., 5., 11.});
 
 	QCOMPARE(c.rowCount(1., 5.), 3);
+}
+
+void ColumnTest::testRowCountMonotonDecrease() {
+	Column c(QStringLiteral("Test"), Column::ColumnMode::Double);
+	c.replaceValues(-1, {11., 9., 3., -4., -154.});
+
+	QCOMPARE(c.rowCount(9., -4.), 3);
+}
+
+void ColumnTest::testRowCountNonMonoton() {
+	Column c(QStringLiteral("Test"), Column::ColumnMode::Double);
+	c.replaceValues(-1, {-3., 1., -5., 5., 11., 9., 100., 2., 4.});
+
+	QCOMPARE(c.rowCount(1., 5.), 4);
 }
 
 void ColumnTest::testRowCountDateTime() {
@@ -1678,6 +1692,23 @@ void ColumnTest::testRowCountDateTime() {
 						QDateTime::fromString(QStringLiteral("2018-03-29T02:14:34.000Z"), Qt::DateFormat::ISODateWithMs),
 						QDateTime::fromString(QStringLiteral("2018-03-30T02:14:34.000Z"), Qt::DateFormat::ISODateWithMs),
 						QDateTime::fromString(QStringLiteral("2018-03-31T02:14:34.000Z"), Qt::DateFormat::ISODateWithMs)});
+
+	QCOMPARE(c.rowCount(QDateTime::fromString(QStringLiteral("2018-03-27T02:14:34.000Z"), Qt::DateFormat::ISODateWithMs).toMSecsSinceEpoch(),
+						QDateTime::fromString(QStringLiteral("2018-03-30T02:14:34.000Z"), Qt::DateFormat::ISODateWithMs).toMSecsSinceEpoch()),
+			 4);
+}
+
+void ColumnTest::testRowCountDateTimeMonotonDecrease() {
+	Column c(QStringLiteral("Test"), Column::ColumnMode::DateTime);
+	c.replaceDateTimes(-1,
+					   {
+						   QDateTime::fromString(QStringLiteral("2018-03-31T02:14:34.000Z"), Qt::DateFormat::ISODateWithMs),
+						   QDateTime::fromString(QStringLiteral("2018-03-30T02:14:34.000Z"), Qt::DateFormat::ISODateWithMs),
+						   QDateTime::fromString(QStringLiteral("2018-03-29T02:14:34.000Z"), Qt::DateFormat::ISODateWithMs),
+						   QDateTime::fromString(QStringLiteral("2018-03-28T02:14:34.000Z"), Qt::DateFormat::ISODateWithMs),
+						   QDateTime::fromString(QStringLiteral("2018-03-27T02:14:34.000Z"), Qt::DateFormat::ISODateWithMs),
+						   QDateTime::fromString(QStringLiteral("2018-03-26T02:14:34.000Z"), Qt::DateFormat::ISODateWithMs),
+					   });
 
 	QCOMPARE(c.rowCount(QDateTime::fromString(QStringLiteral("2018-03-27T02:14:34.000Z"), Qt::DateFormat::ISODateWithMs).toMSecsSinceEpoch(),
 						QDateTime::fromString(QStringLiteral("2018-03-30T02:14:34.000Z"), Qt::DateFormat::ISODateWithMs).toMSecsSinceEpoch()),

@@ -114,8 +114,11 @@ private Q_SLOTS:
 	void clearContentNoFormula();
 	void clearContentFormula();
 
-	void testRowCount();
+	void testRowCountMonotonIncrease();
+	void testRowCountMonotonDecrease();
+	void testRowCountNonMonoton();
 	void testRowCountDateTime();
+	void testRowCountDateTimeMonotonDecrease();
 
 	void testRowCountValueLabels();
 	void testRowCountValueLabelsDateTime();
