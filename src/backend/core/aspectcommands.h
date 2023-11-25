@@ -62,6 +62,7 @@ public:
 		if (!m_child->hidden() || m_child->type() == AspectType::DatapickerPoint)
 			Q_EMIT m_target->q->childAspectAboutToBeRemoved(m_child);
 
+		m_child->disconnect(m_child, nullptr, nullptr, nullptr);
 		m_index = m_target->removeChild(m_child);
 
 		if (!m_child->hidden() || m_child->type() == AspectType::DatapickerPoint)

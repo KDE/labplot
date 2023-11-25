@@ -211,6 +211,7 @@ public:
 	HeatmapFormat& heatmapFormat() const;
 	void setHeatmapFormat(const HeatmapFormat&);
 	void removeFormat();
+	void reset();
 
 Q_SIGNALS:
 	void plotDesignationAboutToChange(const AbstractColumn* source);
@@ -251,8 +252,8 @@ Q_SIGNALS:
 	void maskingAboutToChange(const AbstractColumn* source);
 	void maskingChanged(const AbstractColumn* source);
 	void aboutToBeDestroyed(const AbstractColumn* source);
-	void reset(const AbstractColumn*
-				   source); // this signal is emitted when the column is reused for another purpose. The curves must know that and disconnect all connections
+	void aboutToReset(const AbstractColumn* source); // this signal is emitted when the column is reused for another purpose. The curves must know that and
+													 // disconnect all connections
 
 protected:
 	bool XmlReadMask(XmlStreamReader*);

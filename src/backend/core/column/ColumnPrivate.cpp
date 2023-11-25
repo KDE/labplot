@@ -1703,7 +1703,7 @@ void ColumnPrivate::connectFormulaColumn(const AbstractColumn* column) {
 			QOverload<const AbstractAspect*>::of(&AbstractAspect::childAspectAboutToBeRemoved),
 			this,
 			&ColumnPrivate::formulaVariableColumnRemoved);
-	connect(column, &AbstractColumn::reset, this, &ColumnPrivate::formulaVariableColumnRemoved);
+	connect(column, &AbstractColumn::aboutToReset, this, &ColumnPrivate::formulaVariableColumnRemoved);
 	connect(column->parentAspect(), &AbstractAspect::childAspectAdded, this, &ColumnPrivate::formulaVariableColumnAdded);
 }
 
