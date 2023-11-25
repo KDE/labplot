@@ -1596,11 +1596,13 @@ void AxisPrivate::retransformTicks() {
 		int majorTickRow = iMajor; // Used by CustomColumn with CustomLabels and ColumnLabels, but also for CustomLabels with no customColumn
 		// calculate major tick's position
 		if (majorTicksType == Axis::TicksType::CustomColumnNumber) { // custom column
-			if (!majorTicksColumn->isValid(iMajor) || majorTicksColumn->isMasked(iMajor))
-				continue;
 			Q_ASSERT(tmpMajorTicksNumber > 0);
 			const int spacing = majorTicksColumn->rowCount() / tmpMajorTicksNumber;
 			majorTickRow = iMajor * spacing;
+			if (majorTickRow > majorTicksColumn->rowCount() - 1)
+				break;
+			if (!majorTicksColumn->isValid(majorTickRow) || majorTicksColumn->isMasked(majorTickRow))
+				continue;
 			majorTickPos = majorTicksColumn->valueAt(majorTickRow);
 			// set next major tick pos for minor ticks
 			if (iMajor < tmpMajorTicksNumber - 1) {
@@ -1613,6 +1615,8 @@ void AxisPrivate::retransformTicks() {
 			Q_ASSERT(tmpMajorTicksNumber > 0);
 			const int spacing = c->valueLabelsCount() / tmpMajorTicksNumber;
 			majorTickRow = iMajor * spacing;
+			if (majorTickRow > c->valueLabelsCount() - 1)
+				break;
 			if (c) {
 				switch (c->labelsMode()) {
 				case Column::ColumnMode::Double:
