@@ -1443,6 +1443,27 @@ bool AxisPrivate::calculateTickVertical(Axis::TicksDirection tickDirection,
 	return valid;
 }
 
+int AxisPrivate::determineMinorTicksNumber() const {
+	int tmpMinorTicksNumber = 0;
+	switch (minorTicksType) {
+	case Axis::TicksType::TotalNumber:
+		tmpMinorTicksNumber = minorTicksNumber;
+		break;
+	case Axis::TicksType::Spacing:
+		tmpMinorTicksNumber = range.length() / minorTicksIncrement - 1;
+		if (majorTicksNumber > 1)
+			tmpMinorTicksNumber /= majorTicksNumber - 1;
+		break;
+	case Axis::TicksType::CustomColumnNumber: // Fall through
+	case Axis::TicksType::CustomValues:
+		(minorTicksColumn) ? tmpMinorTicksNumber = minorTicksColumn->rowCount() : tmpMinorTicksNumber = 0;
+		break;
+	case Axis::TicksType::ColumnLabels:
+		break; // not supported
+	}
+	return tmpMinorTicksNumber;
+}
+
 /*!
 	recalculates the position of the axis ticks.
  */
@@ -1588,25 +1609,7 @@ void AxisPrivate::retransformTicks() {
 	}
 
 	// minor ticks
-	int tmpMinorTicksNumber = 0;
-	switch (minorTicksType) {
-	case Axis::TicksType::TotalNumber:
-		tmpMinorTicksNumber = minorTicksNumber;
-		break;
-	case Axis::TicksType::Spacing:
-		tmpMinorTicksNumber = range.length() / minorTicksIncrement - 1;
-		if (majorTicksNumber > 1)
-			tmpMinorTicksNumber /= majorTicksNumber - 1;
-		break;
-	case Axis::TicksType::CustomColumnNumber:
-		// Fall through
-	case Axis::TicksType::CustomValues:
-		(minorTicksColumn) ? tmpMinorTicksNumber = minorTicksColumn->rowCount() : tmpMinorTicksNumber = 0;
-		break;
-	case Axis::TicksType::ColumnLabels:
-		tmpMinorTicksNumber = 0; // not supported
-		break;
-	}
+	int tmpMinorTicksNumber = determineMinorTicksNumber();
 
 	if (!q->cSystem) {
 		DEBUG(Q_FUNC_INFO << ", WARNING: axis has no coordinate system!")
