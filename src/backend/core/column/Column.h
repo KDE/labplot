@@ -138,6 +138,8 @@ public:
 	void setData(void*);
 	bool hasValues() const;
 	bool valueLabelsInitialized() const;
+	double valueLabelsMinimum() const;
+	double valueLabelsMaximum() const;
 	void setLabelsMode(ColumnMode mode);
 	void removeValueLabel(const QString&);
 	void valueLabelsRemoveAll();

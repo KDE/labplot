@@ -174,6 +174,8 @@ bool ColumnPrivate::ValueLabels::init(AbstractColumn::ColumnMode mode) {
 	if (initialized())
 		return false;
 
+	invalidateStatistics();
+
 	m_mode = mode;
 	switch (m_mode) {
 	case AbstractColumn::ColumnMode::Double:
@@ -198,6 +200,7 @@ bool ColumnPrivate::ValueLabels::init(AbstractColumn::ColumnMode mode) {
 }
 
 void ColumnPrivate::ValueLabels::deinit() {
+	invalidateStatistics();
 	if (m_labels) {
 		switch (m_mode) {
 		case AbstractColumn::ColumnMode::Double:
@@ -476,6 +479,39 @@ QString ColumnPrivate::ValueLabels::labelAt(int index) const {
 	return QStringLiteral();
 }
 
+double ColumnPrivate::ValueLabels::minimum() {
+	if (!m_statistics.available)
+		recalculateStatistics();
+	return m_statistics.minimum;
+}
+
+double ColumnPrivate::ValueLabels::maximum() {
+	if (!m_statistics.available)
+		recalculateStatistics();
+	return m_statistics.maximum;
+}
+
+void ColumnPrivate::ValueLabels::recalculateStatistics() {
+	m_statistics.available = false;
+	m_statistics.minimum = INFINITY;
+	m_statistics.maximum = -INFINITY;
+
+	const int rowValuesSize = count();
+	for (int row = 0; row < rowValuesSize; ++row) {
+		const double val = valueAt(row);
+		if (val < m_statistics.minimum)
+			m_statistics.minimum = val;
+		if (val > m_statistics.maximum)
+			m_statistics.maximum = val;
+	}
+
+	m_statistics.available = false;
+}
+
+void ColumnPrivate::ValueLabels::invalidateStatistics() {
+	m_statistics.available = false;
+}
+
 void ColumnPrivate::ValueLabels::migrateDateTimeTo(AbstractColumn::ColumnMode newMode) {
 	if (newMode == AbstractColumn::ColumnMode::DateTime || newMode == AbstractColumn::ColumnMode::Day || newMode == AbstractColumn::ColumnMode::Month)
 		return;
@@ -583,6 +619,7 @@ void ColumnPrivate::ValueLabels::add(const QString& value, const QString& label)
 		return;
 
 	init(AbstractColumn::ColumnMode::Text);
+	invalidateStatistics();
 	cast_vector<QString>()->append({value, label});
 }
 
@@ -592,6 +629,7 @@ void ColumnPrivate::ValueLabels::add(const QDateTime& value, const QString& labe
 		return;
 
 	init(AbstractColumn::ColumnMode::Month);
+	invalidateStatistics();
 	cast_vector<QDateTime>()->append({value, label});
 }
 
@@ -600,6 +638,7 @@ void ColumnPrivate::ValueLabels::add(double value, const QString& label) {
 		return;
 
 	init(AbstractColumn::ColumnMode::Double);
+	invalidateStatistics();
 	cast_vector<double>()->append({value, label});
 }
 
@@ -608,6 +647,7 @@ void ColumnPrivate::ValueLabels::add(int value, const QString& label) {
 		return;
 
 	init(AbstractColumn::ColumnMode::Integer);
+	invalidateStatistics();
 	cast_vector<int>()->append({value, label});
 }
 
@@ -616,6 +656,7 @@ void ColumnPrivate::ValueLabels::add(qint64 value, const QString& label) {
 		return;
 
 	init(AbstractColumn::ColumnMode::BigInt);
+	invalidateStatistics();
 	cast_vector<qint64>()->append({value, label});
 }
 
@@ -631,6 +672,7 @@ void ColumnPrivate::ValueLabels::remove(const QString& key) {
 	if (!initialized())
 		return;
 
+	invalidateStatistics();
 	bool ok;
 	switch (m_mode) {
 	case AbstractColumn::ColumnMode::Double: {
@@ -1931,6 +1973,14 @@ bool ColumnPrivate::valueLabelsInitialized() const {
 
 void ColumnPrivate::removeValueLabel(const QString& key) {
 	m_labels.remove(key);
+}
+
+double ColumnPrivate::valueLabelsMinimum() {
+	return m_labels.minimum();
+}
+
+double ColumnPrivate::valueLabelsMaximum() {
+	return m_labels.maximum();
 }
 
 const QVector<Column::ValueLabel<QString>>* ColumnPrivate::textValueLabels() const {

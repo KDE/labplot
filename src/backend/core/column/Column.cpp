@@ -996,6 +996,14 @@ bool Column::valueLabelsInitialized() const {
 	return d->valueLabelsInitialized();
 }
 
+double Column::valueLabelsMinimum() const {
+	return d->valueLabelsMinimum();
+}
+
+double Column::valueLabelsMaximum() const {
+	return d->valueLabelsMaximum();
+}
+
 void Column::setLabelsMode(ColumnMode mode) {
 	d->setLabelsMode(mode);
 	project()->setChanged(true);

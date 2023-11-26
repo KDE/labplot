@@ -64,6 +64,8 @@ public:
 	void removeValueLabel(const QString&);
 	void setLabelsMode(Column::ColumnMode mode);
 	void valueLabelsRemoveAll();
+	double valueLabelsMinimum();
+	double valueLabelsMaximum();
 
 	AbstractSimpleFilter* inputFilter() const;
 	AbstractSimpleFilter* outputFilter() const;
@@ -190,6 +192,8 @@ public:
 		inline const QVector<Column::ValueLabel<T>>* cast_vector() const {
 			return static_cast<QVector<Column::ValueLabel<T>>*>(m_labels);
 		}
+		double minimum();
+		double maximum();
 		const QVector<Column::ValueLabel<QString>>* textValueLabels() const;
 		const QVector<Column::ValueLabel<QDateTime>>* dateTimeValueLabels() const;
 		const QVector<Column::ValueLabel<double>>* valueLabels() const;
@@ -203,6 +207,8 @@ public:
 		QString labelAt(int index) const;
 
 	private:
+		void invalidateStatistics();
+		void recalculateStatistics();
 		bool init(AbstractColumn::ColumnMode);
 		void deinit();
 
@@ -219,6 +225,12 @@ public:
 	private:
 		AbstractColumn::ColumnMode m_mode{AbstractColumn::ColumnMode::Integer};
 		void* m_labels{nullptr}; // pointer to the container for the value labels(QMap<T, QString>)
+		struct Statistics {
+			bool available{false};
+			double minimum;
+			double maximum;
+		};
+		Statistics m_statistics;
 	};
 	ValueLabels m_labels;
 	int valueLabelsCount() const;
