@@ -1715,8 +1715,18 @@ void AxisPrivate::retransformTicks() {
 			columnIndex = majorTicksColumn->indexForValue(majorTickPos);
 			Q_ASSERT(columnIndex >= 0);
 			majorTickPos = majorTicksColumn->valueAt(columnIndex);
-		} else if ((majorTicksType == Axis::TicksType::CustomColumnNumber || majorTicksType == Axis::TicksType::CustomValues)) {
+
+			const auto columnIndexNextMajor = majorTicksColumn->indexForValue(nextMajorTickPos);
+			Q_ASSERT(columnIndexNextMajor >= 0);
+			nextMajorTickPos = majorTicksColumn->valueAt(columnIndexNextMajor);
+			if (majorTickPos == nextMajorTickPos && iMajor + 1 < tmpMajorTicksNumber)
+				continue; // No need to draw majorTicksPos, because NextMajorTicksPos will completely overlap. Only for the last one
+		} else if ((majorTicksType == Axis::TicksType::CustomColumn || majorTicksType == Axis::TicksType::CustomValues)) {
 			majorTickPos = majorTicksColumn->valueAt(columnIndex);
+			if (majorTicksColumn->rowCount() > columnIndex + 1)
+				nextMajorTickPos = majorTicksColumn->valueAt(columnIndex + 1);
+			else
+				nextMajorTickPos = majorTickPos;
 		} else if (majorTicksType == Axis::TicksType::ColumnLabels) {
 			const Column* c = dynamic_cast<const Column*>(majorTicksColumn);
 			Q_ASSERT(tmpMajorTicksNumber > 0);
