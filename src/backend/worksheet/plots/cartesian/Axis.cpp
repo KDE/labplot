@@ -1709,9 +1709,13 @@ void AxisPrivate::retransformTicks() {
 			break; // Finish
 
 		int columnIndex = iMajor; // iMajor used if for the labels a custom column is used.
-		if (majorTicksType == Axis::TicksType::CustomColumnNumber || majorTicksType == Axis::TicksType::CustomValues) {
+		if ((majorTicksType == Axis::TicksType::CustomColumnNumber || majorTicksType == Axis::TicksType::CustomValues)
+			&& (majorTicksColumn->rowCount() >= _maxNumberMajorTicksCustomColumn && majorTicksAutoNumber)) {
+			// Do not use all values of the column, but just a portion of it
 			columnIndex = majorTicksColumn->indexForValue(majorTickPos);
 			Q_ASSERT(columnIndex >= 0);
+			majorTickPos = majorTicksColumn->valueAt(columnIndex);
+		} else if ((majorTicksType == Axis::TicksType::CustomColumnNumber || majorTicksType == Axis::TicksType::CustomValues)) {
 			majorTickPos = majorTicksColumn->valueAt(columnIndex);
 		} else if (majorTicksType == Axis::TicksType::ColumnLabels) {
 			const Column* c = dynamic_cast<const Column*>(majorTicksColumn);

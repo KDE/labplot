@@ -1000,7 +1000,7 @@ void AxisTest::columnLabelValuesMaxValues() {
 	QCOMPARE(spreadsheet->rowCount(), 2);
 	QCOMPARE(spreadsheet->columnCount(), 2);
 
-	for (int i = 0; i < valueLabelsCount; i++) {
+	for (int i = 0; i <= valueLabelsCount; i++) {
 		yCol->addValueLabel(i, QStringLiteral("Status ") + QString::number(i));
 	}
 
@@ -1738,7 +1738,7 @@ void AxisTest::customColumnNumericMaxValues() {
 	posCol->setColumnMode(AbstractColumn::ColumnMode::Integer);
 	QVector<int> posValues;
 	QVector<QString> customLabels;
-	for (int i = 0; i < rowCountCustomColumn; i++) {
+	for (int i = 0; i <= rowCountCustomColumn; i++) {
 		posValues.push_back(i);
 		customLabels.push_back(QStringLiteral("Some text") + QString::number(i));
 	}
@@ -1787,7 +1787,7 @@ void AxisTest::customColumnNumericMaxValues() {
 	xAxis->setLabelsTextColumn(labelsCol);
 	{
 		QStringList expectedStrings;
-		for (int i = 0; i < rowCountCustomColumn; i += rowCountCustomColumn / (Axis::maxNumberMajorTicksCustomColumn() - 1))
+		for (int i = 0; i <= rowCountCustomColumn; i += rowCountCustomColumn / (Axis::maxNumberMajorTicksCustomColumn() - 1))
 			expectedStrings.push_back(QStringLiteral("Some text") + QString::number(i));
 		COMPARE_STRING_VECTORS(xAxis->tickLabelStrings(), expectedStrings);
 	}
@@ -1975,14 +1975,16 @@ void AxisTest::customColumnNumericMaxValuesLimitedRange() {
 	QVERIFY(p->dataRect().width() > 0.);
 	QVERIFY(p->dataRect().height() > 0.);
 	QCOMPARE(xAxis->d_func()->majorTickPoints.size(), Axis::maxNumberMajorTicksCustomColumn());
-	for (int i = 0; i <= Axis::maxNumberMajorTicksCustomColumn(); i++) {
-		const double xVal = (100. + (double)i * (200. - 100.) / (Axis::maxNumberMajorTicksCustomColumn() - 1)) / (1000. - 0.);
-		VALUES_EQUAL(xAxis->d_func()->majorTickPoints.at(i).x(), p->dataRect().x() + p->dataRect().width() * xVal);
+	for (int i = 0; i < Axis::maxNumberMajorTicksCustomColumn(); i++) {
+		const double xValExpected = (100. + (double)i * (200. - 100.) / (Axis::maxNumberMajorTicksCustomColumn() - 1));
+		const double posExpected = p->dataRect().x() + p->dataRect().width() * (xValExpected - 100.) / (200. - 100.);
+		const double pos = xAxis->d_func()->majorTickPoints.at(i).x();
+		VALUES_EQUAL(pos, posExpected);
 	}
 
 	r = p->range(Dimension::X, 0);
 	r.setStart(100.);
-	r.setEnd(10.);
+	r.setEnd(110.);
 	p->setRange(Dimension::X, 0, r);
 
 	{
