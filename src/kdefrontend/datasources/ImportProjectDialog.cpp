@@ -55,9 +55,9 @@ ImportProjectDialog::ImportProjectDialog(MainWin* parent, ProjectType type)
 
 	m_cbFileName = new KUrlComboBox(KUrlComboBox::Mode::Files, this);
 	m_cbFileName->setMaxItems(7);
-	auto* l = dynamic_cast<QHBoxLayout*>(ui.gbProject->layout());
+	auto* l = dynamic_cast<QGridLayout*>(ui.gbProject->layout());
 	if (l)
-		l->insertWidget(1, m_cbFileName);
+		l->addWidget(m_cbFileName, 0, 2);
 
 	vLayout->addWidget(mainWidget);
 
@@ -146,10 +146,33 @@ ImportProjectDialog::ImportProjectDialog(MainWin* parent, ProjectType type)
 	case ProjectType::LabPlot:
 		file = QStringLiteral("LastImportedLabPlotProject");
 		files = QStringLiteral("LastImportedLabPlotProjects");
+		ui.lOriginGraphLayer->hide();
+		ui.cbOriginGraphLayer->hide();
 		break;
 	case ProjectType::Origin:
 		file = QStringLiteral("LastImportedOriginProject");
 		files = QStringLiteral("LastImportedOriginProjects");
+
+		// add options to control how to read Origin's graph layers - as new plot areas or as new coordinate systems
+		ui.cbOriginGraphLayer->addItem(i18n("As Plot Area"));
+		ui.cbOriginGraphLayer->addItem(i18n("As Coordinate System"));
+
+		// show more info for https://www.originlab.com/doc/Origin-Help/MultiLayer-Graph
+		info = i18n("Specify how to import multi-layered graphs.");
+		ui.lOriginGraphLayer->setToolTip(info);
+		ui.cbOriginGraphLayer->setToolTip(info);
+
+		info = i18n("Multiple layers are used in Origin to either implement multiple plots or multiple axes on the same plot "
+		"(see <a href=\"https://www.originlab.com/doc/Origin-Help/MultiLayer-Graph\">Origin's Documentation</a> for more details)."
+		"LabPlot can process only one type at the same time."
+		"<br><br>"
+		"Specify how to import multi-layered graphs in the selected project:"
+		"<ul>"
+		"<li>As Plot Area - a new plot area is created for every layer.</li>"
+		"<li>As Coordinate System - a new coordinate system (data range) on the same plot area is created for every layer</li>"
+		"</ul>");
+		ui.lOriginGraphLayer->setWhatsThis(info);
+		ui.cbOriginGraphLayer->setWhatsThis(info);
 		break;
 	}
 
@@ -265,8 +288,13 @@ void ImportProjectDialog::importTo(QStatusBar* statusBar) const {
 	connect(m_projectParser, &ProjectParser::completed, progressBar, &QProgressBar::setValue);
 
 #ifdef HAVE_LIBORIGIN
-	if (m_projectType == ProjectType::Origin && ui.chbUnusedObjects->isVisible() && ui.chbUnusedObjects->isChecked())
-		reinterpret_cast<OriginProjectParser*>(m_projectParser)->setImportUnusedObjects(true);
+	if (m_projectType == ProjectType::Origin) {
+		auto* originParser = reinterpret_cast<OriginProjectParser*>(m_projectParser);
+		if (ui.chbUnusedObjects->isVisible() && ui.chbUnusedObjects->isChecked())
+			originParser->setImportUnusedObjects(true);
+
+		originParser->setGraphLayerAsPlotArea(ui.cbOriginGraphLayer->currentIndex() == 0);
+	}
 #endif
 
 	m_projectParser->importTo(targetFolder, selectedPathes);

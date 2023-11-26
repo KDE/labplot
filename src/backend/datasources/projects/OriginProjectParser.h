@@ -37,6 +37,7 @@ public:
 	static QString supportedExtensions();
 	void setImportUnusedObjects(bool);
 	bool hasUnusedObjects();
+	void setGraphLayerAsPlotArea(bool);
 
 protected:
 	bool load(Project*, bool preview) override;
