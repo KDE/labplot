@@ -2575,9 +2575,8 @@ void AxisPrivate::retransformMajorGrid() {
 	DEBUG(Q_FUNC_INFO << ' ' << STDSTRING(title->name()) << ", coordinate system " << cSystemIndex + 1)
 	DEBUG(Q_FUNC_INFO << ", x range " << cSystem->index(Dimension::X) + 1)
 	DEBUG(Q_FUNC_INFO << ", y range " << cSystem->index(Dimension::Y) + 1)
-	auto cs = plot->coordinateSystem(q->coordinateSystemIndex());
-	const auto xRange{plot->range(Dimension::X, cs->index(Dimension::X))};
-	const auto yRange{plot->range(Dimension::Y, cs->index(Dimension::Y))};
+	const auto xRange{plot->range(Dimension::X, cSystem->index(Dimension::X))};
+	const auto yRange{plot->range(Dimension::Y, cSystem->index(Dimension::Y))};
 
 	// TODO:
 	// when iterating over all grid lines, skip the first and the last points for auto scaled axes,
@@ -2654,14 +2653,13 @@ void AxisPrivate::retransformMinorGrid() {
 	DEBUG(Q_FUNC_INFO << ", y range " << cSystem->index(Dimension::Y) + 1)
 
 	QVector<QLineF> lines;
-	auto cs = plot->coordinateSystem(q->coordinateSystemIndex());
 	if (orientation == Axis::Orientation::Horizontal) { // horizontal axis
-		const Range<double> yRange{plot->range(Dimension::Y, cs->index(Dimension::Y))};
+		const Range<double> yRange{plot->range(Dimension::Y, cSystem->index(Dimension::Y))};
 
 		for (const auto& point : logicalMinorTickPoints)
 			lines.append(QLineF(point.x(), yRange.start(), point.x(), yRange.end()));
 	} else { // vertical axis
-		const Range<double> xRange{plot->range(Dimension::X, cs->index(Dimension::X))};
+		const Range<double> xRange{plot->range(Dimension::X, cSystem->index(Dimension::X))};
 
 		for (const auto& point : logicalMinorTickPoints)
 			lines.append(QLineF(xRange.start(), point.y(), xRange.end(), point.y()));
@@ -2812,15 +2810,14 @@ void AxisPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*opt
 
 	// draw tick labels
 	if (labelsPosition != Axis::LabelsPosition::NoLabels) {
-		auto cs = plot->coordinateSystem(q->coordinateSystemIndex());
 		painter->setOpacity(labelsOpacity);
 		painter->setPen(QPen(labelsColor));
 		painter->setFont(labelsFont);
 		QTextDocument doc;
 		doc.setDefaultFont(labelsFont);
 		QFontMetrics fm(labelsFont);
-		auto xRangeFormat{plot->range(Dimension::X, cs->index(Dimension::X)).format()};
-		auto yRangeFormat{plot->range(Dimension::Y, cs->index(Dimension::Y)).format()};
+		auto xRangeFormat{plot->range(Dimension::X, cSystem->index(Dimension::X)).format()};
+		auto yRangeFormat{plot->range(Dimension::Y, cSystem->index(Dimension::Y)).format()};
 		if ((orientation == Axis::Orientation::Horizontal && xRangeFormat == RangeT::Format::Numeric)
 			|| (orientation == Axis::Orientation::Vertical && yRangeFormat == RangeT::Format::Numeric)) {
 			// QDEBUG(Q_FUNC_INFO << ", axis tick label strings: " << tickLabelStrings)
@@ -2879,9 +2876,8 @@ void AxisPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*opt
 			}
 
 			// used to determinde direction (up/down, left/right)
-			auto cs = plot->coordinateSystem(q->coordinateSystemIndex());
-			const qreal middleX = plot->range(Dimension::X, cs->index(Dimension::X)).center();
-			const qreal middleY = plot->range(Dimension::Y, cs->index(Dimension::Y)).center();
+			const qreal middleX = plot->range(Dimension::X, cSystem->index(Dimension::X)).center();
+			const qreal middleY = plot->range(Dimension::Y, cSystem->index(Dimension::Y)).center();
 			QPointF center(middleX, middleY);
 			bool valid = true;
 			center = cSystem->mapLogicalToScene(center, valid);
@@ -2940,7 +2936,6 @@ void AxisPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 	if (m_panningStarted) {
 		Dimension dim = Dimension::X;
 		int delta = 0;
-		auto cs = plot->coordinateSystem(q->coordinateSystemIndex());
 		if (orientation == WorksheetElement::Orientation::Horizontal) {
 			setCursor(Qt::SizeHorCursor);
 			delta = (m_panningStart.x() - event->pos().x());
@@ -2955,7 +2950,7 @@ void AxisPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 			dim = Dimension::Y;
 		}
 
-		Q_EMIT q->shiftSignal(delta, dim, cs->index(dim));
+		Q_EMIT q->shiftSignal(delta, dim, cSystem->index(dim));
 
 		m_panningStart = event->pos();
 	}
