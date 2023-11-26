@@ -505,7 +505,7 @@ void ColumnPrivate::ValueLabels::recalculateStatistics() {
 			m_statistics.maximum = val;
 	}
 
-	m_statistics.available = false;
+	m_statistics.available = true;
 }
 
 void ColumnPrivate::ValueLabels::invalidateStatistics() {
