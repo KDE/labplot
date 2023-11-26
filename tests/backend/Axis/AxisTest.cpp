@@ -1672,7 +1672,7 @@ void AxisTest::customColumnNumeric() {
 	auto* xAxis = static_cast<Axis*>(axes.at(0));
 	QCOMPARE(xAxis->range().start(), 1.);
 	QCOMPARE(xAxis->range().end(), 5.);
-	xAxis->setMajorTicksType(Axis::TicksType::CustomColumnNumber);
+	xAxis->setMajorTicksType(Axis::TicksType::CustomColumn);
 	xAxis->setMajorTicksColumn(posCol);
 	QCOMPARE(xAxis->labelsTextType(), Axis::LabelsTextType::PositionValues);
 	{
@@ -1770,7 +1770,7 @@ void AxisTest::customColumnNumericMaxValues() {
 	auto* xAxis = static_cast<Axis*>(axes.at(0));
 	QCOMPARE(xAxis->range().start(), 0.);
 	QCOMPARE(xAxis->range().end(), 1000.);
-	xAxis->setMajorTicksType(Axis::TicksType::CustomColumnNumber);
+	xAxis->setMajorTicksType(Axis::TicksType::CustomColumn);
 	xAxis->setMajorTicksColumn(posCol);
 	QCOMPARE(xAxis->majorTicksAutoNumber(), true);
 	QCOMPARE(xAxis->labelsTextType(), Axis::LabelsTextType::PositionValues);
@@ -1866,7 +1866,7 @@ void AxisTest::customColumnNonMonotonicColumnValues() {
 	auto* xAxis = static_cast<Axis*>(axes.at(0));
 	QCOMPARE(xAxis->range().start(), 100.);
 	QCOMPARE(xAxis->range().end(), 200.);
-	xAxis->setMajorTicksType(Axis::TicksType::CustomColumnNumber);
+	xAxis->setMajorTicksType(Axis::TicksType::CustomColumn);
 	xAxis->setMajorTicksColumn(posCol);
 	QCOMPARE(xAxis->majorTicksAutoNumber(), true);
 	QCOMPARE(xAxis->labelsTextType(), Axis::LabelsTextType::PositionValues);
@@ -1952,7 +1952,7 @@ void AxisTest::customColumnNumericMaxValuesLimitedRange() {
 	auto* xAxis = static_cast<Axis*>(axes.at(0));
 	QCOMPARE(xAxis->range().start(), 100.);
 	QCOMPARE(xAxis->range().end(), 200.);
-	xAxis->setMajorTicksType(Axis::TicksType::CustomColumnNumber);
+	xAxis->setMajorTicksType(Axis::TicksType::CustomColumn);
 	xAxis->setMajorTicksColumn(posCol);
 	QCOMPARE(xAxis->majorTicksAutoNumber(), true);
 	QCOMPARE(xAxis->labelsTextType(), Axis::LabelsTextType::PositionValues);
@@ -2061,7 +2061,7 @@ void AxisTest::customColumnDateTime() {
 	auto* xAxis = static_cast<Axis*>(axes.at(0));
 	QCOMPARE(xAxis->range().start(), dt1.toMSecsSinceEpoch());
 	QCOMPARE(xAxis->range().end(), dt3.toMSecsSinceEpoch());
-	xAxis->setMajorTicksType(Axis::TicksType::CustomColumnNumber);
+	xAxis->setMajorTicksType(Axis::TicksType::CustomColumn);
 	xAxis->setMajorTicksColumn(posCol);
 
 	QCOMPARE(xAxis->labelsDateTimeFormat(), QStringLiteral("yyyy-MM-dd hh:mm:ss.zzz"));
