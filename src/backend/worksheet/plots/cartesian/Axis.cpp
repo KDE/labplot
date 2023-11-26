@@ -1454,7 +1454,7 @@ int AxisPrivate::determineMinorTicksNumber() const {
 		if (majorTicksNumber > 1)
 			tmpMinorTicksNumber /= majorTicksNumber - 1;
 		break;
-	case Axis::TicksType::CustomColumnNumber: // Fall through
+	case Axis::TicksType::CustomColumn: // Fall through
 	case Axis::TicksType::CustomValues:
 		(minorTicksColumn) ? tmpMinorTicksNumber = minorTicksColumn->rowCount() : tmpMinorTicksNumber = 0;
 		break;
@@ -1518,7 +1518,7 @@ void AxisPrivate::retransformTicks() {
 		}
 	}
 
-	if (majorTicksType == Axis::TicksType::CustomColumnNumber || majorTicksType == Axis::TicksType::CustomValues) {
+	if (majorTicksType == Axis::TicksType::CustomColumn || majorTicksType == Axis::TicksType::CustomValues) {
 		if (majorTicksColumn) {
 			if (majorTicksAutoNumber) {
 				tmpMajorTicksNumber = qMin(_maxNumberMajorTicksCustomColumn, majorTicksColumn->rowCount(start, end));
@@ -1551,7 +1551,7 @@ void AxisPrivate::retransformTicks() {
 		tmpMajorTicksNumber = majorTicksNumber;
 		// fall through
 	case Axis::TicksType::ColumnLabels: // fall through
-	case Axis::TicksType::CustomColumnNumber: // fall through
+	case Axis::TicksType::CustomColumn: // fall through
 	case Axis::TicksType::CustomValues:
 		switch (q->scale()) {
 		case RangeT::Scale::Linear:
@@ -1709,7 +1709,7 @@ void AxisPrivate::retransformTicks() {
 			break; // Finish
 
 		int columnIndex = iMajor; // iMajor used if for the labels a custom column is used.
-		if ((majorTicksType == Axis::TicksType::CustomColumnNumber || majorTicksType == Axis::TicksType::CustomValues)
+		if ((majorTicksType == Axis::TicksType::CustomColumn || majorTicksType == Axis::TicksType::CustomValues)
 			&& (majorTicksColumn->rowCount() >= _maxNumberMajorTicksCustomColumn && majorTicksAutoNumber)) {
 			// Do not use all values of the column, but just a portion of it
 			columnIndex = majorTicksColumn->indexForValue(majorTickPos);
@@ -1767,8 +1767,7 @@ void AxisPrivate::retransformTicks() {
 			//			DEBUG(Q_FUNC_INFO << ", value = " << value << " " << scalingFactor << " " << majorTickPos << " " << zeroOffset)
 
 			// if custom column is used, we can have duplicated values in it and we need only unique values
-			if ((majorTicksType == Axis::TicksType::CustomColumnNumber || majorTicksType == Axis::TicksType::ColumnLabels)
-				&& tickLabelValues.indexOf(value) != -1)
+			if ((majorTicksType == Axis::TicksType::CustomColumn || majorTicksType == Axis::TicksType::ColumnLabels) && tickLabelValues.indexOf(value) != -1)
 				valid = false;
 
 			// add major tick's line to the painter path
@@ -1827,7 +1826,7 @@ void AxisPrivate::retransformTicks() {
 			qreal minorTickPos;
 			for (int iMinor = 0; iMinor < tmpMinorTicksNumber; iMinor++) {
 				// calculate minor tick's position
-				if (minorTicksType != Axis::TicksType::CustomColumnNumber) {
+				if (minorTicksType != Axis::TicksType::CustomColumn) {
 					minorTickPos = majorTickPos + (iMinor + 1) * minorTicksIncrement;
 				} else {
 					if (!minorTicksColumn->isValid(iMinor) || minorTicksColumn->isMasked(iMinor))
