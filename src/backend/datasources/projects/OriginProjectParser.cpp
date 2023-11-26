@@ -59,32 +59,56 @@ void OriginProjectParser::setImportUnusedObjects(bool importUnusedObjects) {
 	m_importUnusedObjects = importUnusedObjects;
 }
 
-bool OriginProjectParser::hasUnusedObjects() {
+void OriginProjectParser::checkContent(bool& hasUnusedObjects, bool& hasMultiLayerGraphs) {
 	m_originFile = new OriginFile(qPrintable(m_projectFileName));
 	if (!m_originFile->parse()) {
 		delete m_originFile;
 		m_originFile = nullptr;
-		return false;
+		hasUnusedObjects = false;
+		hasMultiLayerGraphs = false;
+		return;
 	}
 
+	hasUnusedObjects = this->hasUnusedObjects();
+	hasMultiLayerGraphs = this->hasMultiLayerGraphs();
+
+	delete m_originFile;
+	m_originFile = nullptr;
+}
+
+bool OriginProjectParser::hasUnusedObjects() {
+	if (!m_originFile)
+		return false;
+
 	for (unsigned int i = 0; i < m_originFile->spreadCount(); i++) {
-		const Origin::SpreadSheet& spread = m_originFile->spread(i);
+		const auto& spread = m_originFile->spread(i);
 		if (spread.objectID < 0)
 			return true;
 	}
 	for (unsigned int i = 0; i < m_originFile->excelCount(); i++) {
-		const Origin::Excel& excel = m_originFile->excel(i);
+		const auto& excel = m_originFile->excel(i);
 		if (excel.objectID < 0)
 			return true;
 	}
 	for (unsigned int i = 0; i < m_originFile->matrixCount(); i++) {
-		const Origin::Matrix& originMatrix = m_originFile->matrix(i);
-		if (originMatrix.objectID < 0)
+		const auto& matrix = m_originFile->matrix(i);
+		if (matrix.objectID < 0)
 			return true;
 	}
 
-	delete m_originFile;
-	m_originFile = nullptr;
+	return false;
+}
+
+bool OriginProjectParser::hasMultiLayerGraphs() {
+	if (!m_originFile)
+		return false;
+
+	for (unsigned int i = 0; i < m_originFile->graphCount(); i++) {
+		const auto& graph = m_originFile->graph(i);
+		if (graph.layers.size() > 1)
+			return true;
+	}
+
 	return false;
 }
 
@@ -171,8 +195,8 @@ bool OriginProjectParser::load(Project* project, bool preview) {
 	}
 
 	// Origin project tree and the iterator pointing to the root node
-	const tree<Origin::ProjectNode>* projectTree = m_originFile->project();
-	tree<Origin::ProjectNode>::iterator projectIt = projectTree->begin(projectTree->begin());
+	const auto* projectTree = m_originFile->project();
+	auto projectIt = projectTree->begin(projectTree->begin());
 
 	m_spreadsheetNameList.clear();
 	m_workbookNameList.clear();
@@ -301,7 +325,7 @@ bool OriginProjectParser::loadFolder(Folder* folder, tree<Origin::ProjectNode>::
 	}
 
 	// load folder's children: logic for reading the selected objects only is similar to Folder::readChildAspectElement
-	for (tree<Origin::ProjectNode>::sibling_iterator it = projectTree->begin(baseIt); it != projectTree->end(baseIt); ++it) {
+	for (auto it = projectTree->begin(baseIt); it != projectTree->end(baseIt); ++it) {
 		QString name(QString::fromLatin1(it->name.c_str())); // name of the current child
 		DEBUG("	* folder item name = " << STDSTRING(name))
 
@@ -1072,7 +1096,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 
 		// TODO: if we skip, the curves are not loaded below and we cannot track the dependencies on columns
 		if (preview)
-				continue;
+			continue;
 
 		loadGraphLayer(layer, plot, index, textLabelPositions, preview);
 		++index;
@@ -1103,7 +1127,11 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 	return true;
 }
 
-void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer, CartesianPlot* plot, int index, QHash<TextLabel*, QSizeF> textLabelPositions, bool preview) {
+void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
+										 CartesianPlot* plot,
+										 int index,
+										 QHash<TextLabel*, QSizeF> textLabelPositions,
+										 bool preview) {
 	DEBUG(Q_FUNC_INFO << ", NEW GRAPH LAYER")
 	// TODO: width, height
 
@@ -1414,8 +1442,7 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer, Cartes
 		} break;
 		case 'F': {
 			Origin::Function function;
-			const std::vector<Origin::Function>::difference_type funcIndex =
-				m_originFile->functionIndex(data.right(data.length() - 2).toStdString().c_str());
+			const auto funcIndex = m_originFile->functionIndex(data.right(data.length() - 2).toStdString().c_str());
 			if (funcIndex < 0) {
 				++curveIndex;
 				continue;
