@@ -1482,15 +1482,6 @@ void AxisPrivate::retransformTicks() {
 	tickLabelValues.clear();
 	tickLabelValuesString.clear();
 
-	// if type is tick number and tick number is auto: recalculate in case scale has changed
-	if (majorTicksType == Axis::TicksType::TotalNumber && majorTicksAutoNumber)
-		majorTicksNumber = range.autoTickCount();
-
-	if (majorTicksNumber < 1 || (majorTicksDirection == Axis::noTicks && minorTicksDirection == Axis::noTicks)) {
-		retransformTickLabelPositions(); // this calls recalcShapeAndBoundingRect()
-		return;
-	}
-
 	if (!q->cSystem) {
 		DEBUG(Q_FUNC_INFO << ", WARNING: axis has no coordinate system!")
 		return;
@@ -1518,6 +1509,19 @@ void AxisPrivate::retransformTicks() {
 		}
 	}
 
+	// if type is tick number and tick number is auto: recalculate in case scale has changed
+	if (majorTicksType == Axis::TicksType::TotalNumber && majorTicksAutoNumber) {
+		auto r = range;
+		r.setStart(start);
+		r.setEnd(end);
+		majorTicksNumber = r.autoTickCount();
+	}
+
+	if (majorTicksNumber < 1 || (majorTicksDirection == Axis::noTicks && minorTicksDirection == Axis::noTicks)) {
+		retransformTickLabelPositions(); // this calls recalcShapeAndBoundingRect()
+		return;
+	}
+
 	if (majorTicksType == Axis::TicksType::CustomColumn || majorTicksType == Axis::TicksType::CustomValues) {
 		if (majorTicksColumn) {
 			if (majorTicksAutoNumber) {
@@ -1526,6 +1530,15 @@ void AxisPrivate::retransformTicks() {
 				Q_EMIT q->majorTicksNumberChanged(tmpMajorTicksNumber);
 			} else
 				tmpMajorTicksNumber = majorTicksNumber;
+			// Do the calculation of the new start/end after recalculating majorTicksNumber, otherwise it could happen that the
+			// ticks are really near to each other
+			if (start < end) {
+				start = qMax(start, majorTicksColumn->minimum());
+				end = qMin(end, majorTicksColumn->maximum());
+			} else {
+				end = qMax(end, majorTicksColumn->minimum());
+				start = qMax(start, majorTicksColumn->maximum());
+			}
 		} else {
 			retransformTickLabelPositions(); // this calls recalcShapeAndBoundingRect()
 			return;
@@ -1533,6 +1546,14 @@ void AxisPrivate::retransformTicks() {
 	} else if (majorTicksType == Axis::TicksType::ColumnLabels) {
 		const Column* c = dynamic_cast<const Column*>(majorTicksColumn);
 		if (c && c->valueLabelsInitialized()) {
+			// TODO: implement
+			//			if (start < end) {
+			//				start = qMax(start, c->valueLabelsMinimum());
+			//				end = qMin(end, c->valueLabelsMaximum());
+			//			} else {
+			//				end = qMax(end, c->valueLabelsMinimum());
+			//				start = qMax(start, c->valueLabelsMaximum());
+			//			}
 			if (majorTicksAutoNumber) {
 				tmpMajorTicksNumber = qMin(_maxNumberMajorTicksCustomColumn, c->valueLabelsCount(start, end));
 				majorTicksNumber = tmpMajorTicksNumber;
@@ -1555,7 +1576,7 @@ void AxisPrivate::retransformTicks() {
 	case Axis::TicksType::CustomValues:
 		switch (q->scale()) {
 		case RangeT::Scale::Linear:
-			majorTicksIncrement = range.size();
+			majorTicksIncrement = end - start;
 			break;
 		case RangeT::Scale::Log10:
 			if (start != 0. && end / start > 0.)
@@ -1592,7 +1613,7 @@ void AxisPrivate::retransformTicks() {
 		if (q->isNumeric() || (!q->isNumeric() && q->scale() != RangeT::Scale::Linear)) {
 			switch (q->scale()) {
 			case RangeT::Scale::Linear:
-				tmpMajorTicksNumber = std::round(range.size() / majorTicksIncrement + 1);
+				tmpMajorTicksNumber = std::round((end - start) / majorTicksIncrement + 1);
 				break;
 			case RangeT::Scale::Log10:
 				if (start != 0. && end / start > 0.)

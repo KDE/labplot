@@ -55,6 +55,7 @@ private Q_SLOTS:
 	void customColumnNumeric();
 	void customColumnNumericMaxValues();
 	void customColumnNumericMaxValuesLimitedRange();
+	void customColumnNumericMaxValuesLimitedRangeNotCompleteRange();
 	void customColumnNonMonotonicColumnValues();
 	void customColumnDateTime();
 
