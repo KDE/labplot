@@ -544,8 +544,8 @@ void LollipopPlotPrivate::verticalPlot(int columnIndex) {
 		++valueIndex;
 	}
 
-	m_barLines[columnIndex] = q->cSystem->mapLogicalToScene(barLines);
-	m_symbolPoints[columnIndex] = q->cSystem->mapLogicalToScene(symbolPoints);
+	m_barLines[columnIndex] = cSystem->mapLogicalToScene(barLines);
+	m_symbolPoints[columnIndex] = cSystem->mapLogicalToScene(symbolPoints);
 }
 
 void LollipopPlotPrivate::horizontalPlot(int columnIndex) {
@@ -579,8 +579,8 @@ void LollipopPlotPrivate::horizontalPlot(int columnIndex) {
 		++valueIndex;
 	}
 
-	m_barLines[columnIndex] = q->cSystem->mapLogicalToScene(barLines);
-	m_symbolPoints[columnIndex] = q->cSystem->mapLogicalToScene(symbolPoints);
+	m_barLines[columnIndex] = cSystem->mapLogicalToScene(barLines);
+	m_symbolPoints[columnIndex] = cSystem->mapLogicalToScene(symbolPoints);
 }
 
 void LollipopPlotPrivate::updateValues() {
@@ -596,7 +596,7 @@ void LollipopPlotPrivate::updateValues() {
 	// determine the value string for all points that are currently visible in the plot
 	auto visiblePoints = std::vector<bool>(m_valuesPointsLogical.count(), false);
 	Points pointsScene;
-	q->cSystem->mapLogicalToScene(m_valuesPointsLogical, pointsScene, visiblePoints);
+	cSystem->mapLogicalToScene(m_valuesPointsLogical, pointsScene, visiblePoints);
 	const auto& prefix = value->prefix();
 	const auto& suffix = value->suffix();
 	if (value->type() == Value::BinEntries) {
@@ -889,7 +889,7 @@ void LollipopPlot::save(QXmlStreamWriter* writer) const {
 	// general
 	writer->writeStartElement(QStringLiteral("general"));
 	writer->writeAttribute(QStringLiteral("orientation"), QString::number(static_cast<int>(d->orientation)));
-	writer->writeAttribute(QStringLiteral("plotRangeIndex"), QString::number(m_cSystemIndex));
+	writer->writeAttribute(QStringLiteral("plotRangeIndex"), QString::number(d->cSystemIndex));
 	writer->writeAttribute(QStringLiteral("xMin"), QString::number(d->xMin));
 	writer->writeAttribute(QStringLiteral("xMax"), QString::number(d->xMax));
 	writer->writeAttribute(QStringLiteral("yMin"), QString::number(d->yMin));
@@ -947,7 +947,7 @@ bool LollipopPlot::load(XmlStreamReader* reader, bool preview) {
 			attribs = reader->attributes();
 
 			READ_INT_VALUE("orientation", orientation, LollipopPlot::Orientation);
-			READ_INT_VALUE_DIRECT("plotRangeIndex", m_cSystemIndex, int);
+			READ_INT_VALUE_DIRECT("plotRangeIndex", d->cSystemIndex, int);
 
 			READ_DOUBLE_VALUE("xMin", xMin);
 			READ_DOUBLE_VALUE("xMax", xMax);

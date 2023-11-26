@@ -140,9 +140,6 @@ public:
 	QVector<QString> tickLabelStrings; //!< the actual text of the major tick labels
 
 private:
-	CartesianPlot* plot() const {
-		return q->m_plot; // convenience method
-	}
 	void mousePressEvent(QGraphicsSceneMouseEvent*) override;
 	void mouseMoveEvent(QGraphicsSceneMouseEvent*) override;
 	void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;

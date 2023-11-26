@@ -35,7 +35,6 @@ public:
 	CustomPoint* const q;
 
 private:
-	const CartesianPlot* plot();
 	void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
 };
 

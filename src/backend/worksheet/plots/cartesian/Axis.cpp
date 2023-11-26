@@ -534,9 +534,9 @@ bool Axis::isDefault() const {
 
 bool Axis::isNumeric() const {
 	Q_D(const Axis);
-	const int xIndex{cSystem->index(Dimension::X)}, yIndex{cSystem->index(Dimension::Y)};
-	bool numeric = ((d->orientation == Axis::Orientation::Horizontal && m_plot->xRangeFormat(xIndex) == RangeT::Format::Numeric)
-					|| (d->orientation == Axis::Orientation::Vertical && m_plot->yRangeFormat(yIndex) == RangeT::Format::Numeric));
+	const int xIndex{d->cSystem->index(Dimension::X)}, yIndex{d->cSystem->index(Dimension::Y)};
+	bool numeric = ((d->orientation == Axis::Orientation::Horizontal && d->plot->xRangeFormat(xIndex) == RangeT::Format::Numeric)
+					|| (d->orientation == Axis::Orientation::Vertical && d->plot->yRangeFormat(yIndex) == RangeT::Format::Numeric));
 	return numeric;
 }
 
@@ -1106,7 +1106,7 @@ bool AxisPrivate::swapVisible(bool on) {
  */
 void AxisPrivate::retransform() {
 	DEBUG(Q_FUNC_INFO)
-	const bool suppress = suppressRetransform || !plot() || q->isLoading();
+	const bool suppress = suppressRetransform || !plot || q->isLoading();
 	trackRetransformCalled(suppress);
 	if (suppress)
 		return;
@@ -1122,18 +1122,18 @@ void AxisPrivate::retransformRange() {
 	switch (rangeType) { // also if not changing (like on plot range changes)
 	case Axis::RangeType::Auto: {
 		if (orientation == Axis::Orientation::Horizontal)
-			range = q->m_plot->range(Dimension::X, q->cSystem->index(Dimension::X));
+			range = plot->range(Dimension::X, cSystem->index(Dimension::X));
 		else
-			range = q->m_plot->range(Dimension::Y, q->cSystem->index(Dimension::Y));
+			range = plot->range(Dimension::Y, cSystem->index(Dimension::Y));
 
 		DEBUG(Q_FUNC_INFO << ", new auto range = " << range.toStdString())
 		break;
 	}
 	case Axis::RangeType::AutoData:
 		if (orientation == Axis::Orientation::Horizontal)
-			range = q->m_plot->dataRange(Dimension::X, q->cSystem->index(Dimension::X));
+			range = plot->dataRange(Dimension::X, cSystem->index(Dimension::X));
 		else
-			range = q->m_plot->dataRange(Dimension::Y, q->cSystem->index(Dimension::Y));
+			range = plot->dataRange(Dimension::Y, cSystem->index(Dimension::Y));
 
 		DEBUG(Q_FUNC_INFO << ", new auto data range = " << range.toStdString())
 		break;
@@ -1146,9 +1146,9 @@ void AxisPrivate::retransformRange() {
 }
 
 void AxisPrivate::retransformLine() {
-	DEBUG(Q_FUNC_INFO << ", \"" << STDSTRING(title->name()) << "\", coordinate system " << q->m_cSystemIndex + 1)
-	DEBUG(Q_FUNC_INFO << ", x range is x range " << q->cSystem->index(Dimension::X) + 1)
-	DEBUG(Q_FUNC_INFO << ", y range is y range " << q->cSystem->index(Dimension::Y) + 1)
+	DEBUG(Q_FUNC_INFO << ", \"" << STDSTRING(title->name()) << "\", coordinate system " << cSystemIndex + 1)
+	DEBUG(Q_FUNC_INFO << ", x range is x range " << cSystem->index(Dimension::X) + 1)
+	DEBUG(Q_FUNC_INFO << ", y range is y range " << cSystem->index(Dimension::Y) + 1)
 	//	DEBUG(Q_FUNC_INFO << ", x range index check = " << dynamic_cast<const
 	// CartesianCoordinateSystem*>(plot()->coordinateSystem(q->m_cSystemIndex))->index(Dimension::X)
 	//)
@@ -1167,7 +1167,7 @@ void AxisPrivate::retransformLine() {
 			endPoint = QPointF(range.end(), logicalPosition);
 			lines.append(QLineF(startPoint, endPoint));
 			// QDEBUG(Q_FUNC_INFO << ", Logical LINE = " << lines)
-			lines = q->cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MappingFlag::MarkGaps);
+			lines = cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MappingFlag::MarkGaps);
 		} else {
 			WorksheetElement::PositionWrapper wrapper;
 			if (position == Axis::Position::Top)
@@ -1182,12 +1182,12 @@ void AxisPrivate::retransformLine() {
 
 			Lines ranges{QLineF(QPointF(range.start(), 1.), QPointF(range.end(), 1.))};
 			// y=1 may be outside clip range: suppress clipping. value must be > 0 for log scales
-			const auto sceneRange = q->cSystem->mapLogicalToScene(ranges, CartesianCoordinateSystem::MappingFlag::SuppressPageClipping);
+			const auto sceneRange = cSystem->mapLogicalToScene(ranges, CartesianCoordinateSystem::MappingFlag::SuppressPageClipping);
 			// QDEBUG(Q_FUNC_INFO << ", scene range = " << sceneRange)
 
 			if (sceneRange.size() > 0) {
 				// std::max/std::min: stay inside rect()
-				QRectF rect = q->m_plot->dataRect();
+				QRectF rect = plot->dataRect();
 				startPoint = QPointF(std::max(sceneRange.at(0).x1(), rect.x()), pos.y());
 				endPoint = QPointF(std::min(sceneRange.at(0).x2(), rect.x() + rect.width()), pos.y());
 
@@ -1201,7 +1201,7 @@ void AxisPrivate::retransformLine() {
 			endPoint = QPointF(logicalPosition, range.end());
 			lines.append(QLineF(startPoint, endPoint));
 			// QDEBUG(Q_FUNC_INFO << ", LOGICAL LINES = " << lines)
-			lines = q->cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MappingFlag::MarkGaps);
+			lines = cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MappingFlag::MarkGaps);
 		} else {
 			WorksheetElement::PositionWrapper wrapper;
 			if (position == Axis::Position::Left)
@@ -1216,11 +1216,11 @@ void AxisPrivate::retransformLine() {
 
 			Lines ranges{QLineF(QPointF(1., range.start()), QPointF(1., range.end()))};
 			// x=1 may be outside clip range: suppress clipping. value must be > 0 for log scales
-			const auto sceneRange = q->cSystem->mapLogicalToScene(ranges, CartesianCoordinateSystem::MappingFlag::SuppressPageClipping);
+			const auto sceneRange = cSystem->mapLogicalToScene(ranges, CartesianCoordinateSystem::MappingFlag::SuppressPageClipping);
 			// QDEBUG(Q_FUNC_INFO << ", scene range = " << sceneRange)
 			if (sceneRange.size() > 0) {
 				// std::max/std::min: stay inside rect()
-				QRectF rect = q->m_plot->dataRect();
+				QRectF rect = plot->dataRect();
 				startPoint = QPointF(pos.x(), std::min(sceneRange.at(0).y1(), rect.y() + rect.height()));
 				endPoint = QPointF(pos.x(), std::max(sceneRange.at(0).y2(), rect.y()));
 
@@ -1394,7 +1394,7 @@ void AxisPrivate::addArrow(QPointF startPoint, int direction) {
 bool AxisPrivate::transformAnchor(QPointF* anchorPoint) {
 	QVector<QPointF> points;
 	points.append(*anchorPoint);
-	points = q->cSystem->mapLogicalToScene(points);
+	points = cSystem->mapLogicalToScene(points);
 
 	if (points.count() != 1) { // point is not mappable or in a coordinate gap
 		return false;
@@ -1562,33 +1562,33 @@ void AxisPrivate::retransformTicks() {
 		break;
 	}
 
-	if (!q->cSystem) {
+	if (!cSystem) {
 		DEBUG(Q_FUNC_INFO << ", WARNING: axis has no coordinate system!")
 		return;
 	}
-	//	const int xIndex{ q->cSystem->index(Dimension::X) }, yIndex{ q->cSystem->index(Dimension::Y) };
-	DEBUG(Q_FUNC_INFO << ", coordinate system " << q->m_cSystemIndex + 1)
+	//	const int xIndex{ cSystem->index(Dimension::X) }, yIndex{ cSystem->index(Dimension::Y) };
+	DEBUG(Q_FUNC_INFO << ", coordinate system " << cSystemIndex + 1)
 	//	DEBUG(Q_FUNC_INFO << ", x range " << xIndex + 1)
 	//	DEBUG(Q_FUNC_INFO << ", y range " << yIndex + 1)
 	//	DEBUG(Q_FUNC_INFO << ", x range index check = " << dynamic_cast<const
 	// CartesianCoordinateSystem*>(plot()->coordinateSystem(q->m_cSystemIndex))->index(Dimension::X)
 	//)
-	auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
-	const int xRangeDirection = plot()->range(Dimension::X, cs->index(Dimension::X)).direction();
-	const int yRangeDirection = plot()->range(Dimension::Y, cs->index(Dimension::Y)).direction();
+	auto cs = plot->coordinateSystem(q->coordinateSystemIndex());
+	const int xRangeDirection = plot->range(Dimension::X, cs->index(Dimension::X)).direction();
+	const int yRangeDirection = plot->range(Dimension::Y, cs->index(Dimension::Y)).direction();
 	//	DEBUG(Q_FUNC_INFO << ", x/y range direction = " << xRangeDirection << "/" << yRangeDirection)
-	const int xDirection = q->cSystem->direction(Dimension::X) * xRangeDirection;
-	const int yDirection = q->cSystem->direction(Dimension::Y) * yRangeDirection;
+	const int xDirection = cSystem->direction(Dimension::X) * xRangeDirection;
+	const int yDirection = cSystem->direction(Dimension::Y) * yRangeDirection;
 	//	DEBUG(Q_FUNC_INFO << ", x/y direction: " << xDirection << "/" << yDirection)
 
 	// calculate the position of the center point in scene coordinates,
 	// will be used later to differentiate between "in" and "out" depending
 	// on the position relative to the center.
-	const double middleX = plot()->range(Dimension::X, cs->index(Dimension::X)).center();
-	const double middleY = plot()->range(Dimension::Y, cs->index(Dimension::Y)).center();
+	const double middleX = plot->range(Dimension::X, cs->index(Dimension::X)).center();
+	const double middleY = plot->range(Dimension::Y, cs->index(Dimension::Y)).center();
 	QPointF center(middleX, middleY);
 	bool valid = true;
-	center = q->cSystem->mapLogicalToScene(center, valid);
+	center = cSystem->mapLogicalToScene(center, valid);
 
 	const bool dateTimeSpacing = !q->isNumeric() && q->scale() == RangeT::Scale::Linear && majorTicksType == Axis::TicksType::Spacing;
 	DateTime::DateTime dt;
@@ -1948,7 +1948,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 		return;
 	QDEBUG(Q_FUNC_INFO << ", values = " << tickLabelValues)
 
-	const auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
+	const auto cs = plot->coordinateSystem(q->coordinateSystemIndex());
 
 	// automatically switch from 'decimal' to 'scientific' format for large and small numbers
 	// and back to decimal when the numbers get smaller after the auto-switch
@@ -1992,8 +1992,8 @@ void AxisPrivate::retransformTickLabelStrings() {
 	if (majorTicksType == Axis::TicksType::ColumnLabels)
 		text = true;
 	else if (labelsTextType == Axis::LabelsTextType::PositionValues) {
-		auto xRangeFormat{plot()->range(Dimension::X, cs->index(Dimension::X)).format()};
-		auto yRangeFormat{plot()->range(Dimension::Y, cs->index(Dimension::Y)).format()};
+		auto xRangeFormat{plot->range(Dimension::X, cs->index(Dimension::X)).format()};
+		auto yRangeFormat{plot->range(Dimension::Y, cs->index(Dimension::Y)).format()};
 		numeric = ((orientation == Axis::Orientation::Horizontal && xRangeFormat == RangeT::Format::Numeric)
 				   || (orientation == Axis::Orientation::Vertical && yRangeFormat == RangeT::Format::Numeric));
 
@@ -2395,16 +2395,16 @@ void AxisPrivate::retransformTickLabelPositions() {
 	double width = 0, height = fm.ascent();
 	QPointF pos;
 
-	//	const int xIndex{ q->cSystem->index(Dimension::X) }, yIndex{ q->cSystem->index(Dimension::Y) };
-	DEBUG(Q_FUNC_INFO << ' ' << STDSTRING(title->name()) << ", coordinate system index = " << q->m_cSystemIndex)
+	//	const int xIndex{ cSystem->index(Dimension::X) }, yIndex{ cSystem->index(Dimension::Y) };
+	DEBUG(Q_FUNC_INFO << ' ' << STDSTRING(title->name()) << ", coordinate system index = " << cSystemIndex)
 	//	DEBUG(Q_FUNC_INFO << ", x range " << xIndex+1)
 	//	DEBUG(Q_FUNC_INFO << ", y range " << yIndex+1)
-	auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
-	const double middleX = plot()->range(Dimension::X, cs->index(Dimension::X)).center();
-	const double middleY = plot()->range(Dimension::Y, cs->index(Dimension::Y)).center();
+	auto cs = plot->coordinateSystem(q->coordinateSystemIndex());
+	const double middleX = plot->range(Dimension::X, cs->index(Dimension::X)).center();
+	const double middleY = plot->range(Dimension::Y, cs->index(Dimension::Y)).center();
 	QPointF center(middleX, middleY);
-	//	const int xDirection = q->cSystem->direction(Dimension::X);
-	//	const int yDirection = q->cSystem->direction(Dimension::Y);
+	//	const int xDirection = cSystem->direction(Dimension::X);
+	//	const int yDirection = cSystem->direction(Dimension::Y);
 
 	//	QPointF startPoint, endPoint, anchorPoint;
 
@@ -2414,8 +2414,8 @@ void AxisPrivate::retransformTickLabelPositions() {
 	const double sine = std::sin(qDegreesToRadians(labelsRotationAngle)); // calculate only once
 
 	int size = std::min(majorTickPoints.size(), tickLabelStrings.size());
-	auto xRangeFormat{plot()->range(Dimension::X, cs->index(Dimension::X)).format()};
-	auto yRangeFormat{plot()->range(Dimension::Y, cs->index(Dimension::Y)).format()};
+	auto xRangeFormat{plot->range(Dimension::X, cs->index(Dimension::X)).format()};
+	auto yRangeFormat{plot->range(Dimension::Y, cs->index(Dimension::Y)).format()};
 	for (int i = 0; i < size; i++) {
 		if ((orientation == Axis::Orientation::Horizontal && xRangeFormat == RangeT::Format::Numeric)
 			|| (orientation == Axis::Orientation::Vertical && yRangeFormat == RangeT::Format::Numeric)) {
@@ -2435,11 +2435,11 @@ void AxisPrivate::retransformTickLabelPositions() {
 		QPointF anchorPoint = majorTickPoints.at(i);
 
 		// center align all labels with respect to the end point of the tick line
-		const int xRangeDirection = plot()->range(Dimension::X, cs->index(Dimension::X)).direction();
-		const int yRangeDirection = plot()->range(Dimension::Y, cs->index(Dimension::Y)).direction();
+		const int xRangeDirection = plot->range(Dimension::X, cs->index(Dimension::X)).direction();
+		const int yRangeDirection = plot->range(Dimension::Y, cs->index(Dimension::Y)).direction();
 		//		DEBUG(Q_FUNC_INFO << ", x/y range direction = " << xRangeDirection << "/" << yRangeDirection)
-		const int xDirection = q->cSystem->direction(Dimension::X) * xRangeDirection;
-		const int yDirection = q->cSystem->direction(Dimension::Y) * yRangeDirection;
+		const int xDirection = cSystem->direction(Dimension::X) * xRangeDirection;
+		const int yDirection = cSystem->direction(Dimension::Y) * yRangeDirection;
 		//		DEBUG(Q_FUNC_INFO << ", x/y direction = " << xDirection << "/" << yDirection)
 		QPointF startPoint, endPoint;
 		if (orientation == Axis::Orientation::Horizontal) {
@@ -2565,19 +2565,19 @@ void AxisPrivate::retransformMajorGrid() {
 	// major tick points are already in scene coordinates, convert them back to logical...
 	// TODO: mapping should work without SuppressPageClipping-flag, check float comparisons in the map-function.
 	// Currently, grid lines disappear sometimes without this flag
-	QVector<QPointF> logicalMajorTickPoints = q->cSystem->mapSceneToLogical(majorTickPoints, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+	QVector<QPointF> logicalMajorTickPoints = cSystem->mapSceneToLogical(majorTickPoints, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 	// for (auto p : logicalMajorTickPoints)
 	//	QDEBUG(Q_FUNC_INFO << ", logical major tick: " << QString::number(p.x(), 'g', 12) << " = " << QDateTime::fromMSecsSinceEpoch(p.x(), Qt::UTC))
 
 	if (logicalMajorTickPoints.isEmpty())
 		return;
 
-	DEBUG(Q_FUNC_INFO << ' ' << STDSTRING(title->name()) << ", coordinate system " << q->m_cSystemIndex + 1)
-	DEBUG(Q_FUNC_INFO << ", x range " << q->cSystem->index(Dimension::X) + 1)
-	DEBUG(Q_FUNC_INFO << ", y range " << q->cSystem->index(Dimension::Y) + 1)
-	auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
-	const auto xRange{plot()->range(Dimension::X, cs->index(Dimension::X))};
-	const auto yRange{plot()->range(Dimension::Y, cs->index(Dimension::Y))};
+	DEBUG(Q_FUNC_INFO << ' ' << STDSTRING(title->name()) << ", coordinate system " << cSystemIndex + 1)
+	DEBUG(Q_FUNC_INFO << ", x range " << cSystem->index(Dimension::X) + 1)
+	DEBUG(Q_FUNC_INFO << ", y range " << cSystem->index(Dimension::Y) + 1)
+	auto cs = plot->coordinateSystem(q->coordinateSystemIndex());
+	const auto xRange{plot->range(Dimension::X, cs->index(Dimension::X))};
+	const auto yRange{plot->range(Dimension::Y, cs->index(Dimension::Y))};
 
 	// TODO:
 	// when iterating over all grid lines, skip the first and the last points for auto scaled axes,
@@ -2625,7 +2625,7 @@ void AxisPrivate::retransformMajorGrid() {
 		}
 	}
 
-	lines = q->cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+	lines = cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 	for (const auto& line : lines) {
 		majorGridPath.moveTo(line.p1());
 		majorGridPath.lineTo(line.p2());
@@ -2647,27 +2647,27 @@ void AxisPrivate::retransformMinorGrid() {
 	// minor tick points are already in scene coordinates, convert them back to logical...
 	// TODO: mapping should work without SuppressPageClipping-flag, check float comparisons in the map-function.
 	// Currently, grid lines disappear sometimes without this flag
-	QVector<QPointF> logicalMinorTickPoints = q->cSystem->mapSceneToLogical(minorTickPoints, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+	QVector<QPointF> logicalMinorTickPoints = cSystem->mapSceneToLogical(minorTickPoints, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 
-	DEBUG(Q_FUNC_INFO << ' ' << STDSTRING(title->name()) << ", coordinate system " << q->m_cSystemIndex + 1)
-	DEBUG(Q_FUNC_INFO << ", x range " << q->cSystem->index(Dimension::X) + 1)
-	DEBUG(Q_FUNC_INFO << ", y range " << q->cSystem->index(Dimension::Y) + 1)
+	DEBUG(Q_FUNC_INFO << ' ' << STDSTRING(title->name()) << ", coordinate system " << cSystemIndex + 1)
+	DEBUG(Q_FUNC_INFO << ", x range " << cSystem->index(Dimension::X) + 1)
+	DEBUG(Q_FUNC_INFO << ", y range " << cSystem->index(Dimension::Y) + 1)
 
 	QVector<QLineF> lines;
-	auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
+	auto cs = plot->coordinateSystem(q->coordinateSystemIndex());
 	if (orientation == Axis::Orientation::Horizontal) { // horizontal axis
-		const Range<double> yRange{plot()->range(Dimension::Y, cs->index(Dimension::Y))};
+		const Range<double> yRange{plot->range(Dimension::Y, cs->index(Dimension::Y))};
 
 		for (const auto& point : logicalMinorTickPoints)
 			lines.append(QLineF(point.x(), yRange.start(), point.x(), yRange.end()));
 	} else { // vertical axis
-		const Range<double> xRange{plot()->range(Dimension::X, cs->index(Dimension::X))};
+		const Range<double> xRange{plot->range(Dimension::X, cs->index(Dimension::X))};
 
 		for (const auto& point : logicalMinorTickPoints)
 			lines.append(QLineF(xRange.start(), point.y(), xRange.end(), point.y()));
 	}
 
-	lines = q->cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+	lines = cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 	for (const auto& line : lines) {
 		minorGridPath.moveTo(line.p1());
 		minorGridPath.lineTo(line.p2());
@@ -2696,8 +2696,8 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 		m_shape = QPainterPath();
 		m_boundingRectangle = QRectF();
 		title->setPositionInvalid(true);
-		if (plot())
-			plot()->prepareGeometryChange();
+		if (plot)
+			plot->prepareGeometryChange();
 		return;
 	} else {
 		title->setPositionInvalid(false);
@@ -2767,8 +2767,8 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 
 	// if the axis goes beyond the current bounding box of the plot (too high offset is used, too long labels etc.)
 	// request a prepareGeometryChange() for the plot in order to properly keep track of geometry changes
-	if (plot())
-		plot()->prepareGeometryChange();
+	if (plot)
+		plot->prepareGeometryChange();
 }
 
 /*!
@@ -2812,15 +2812,15 @@ void AxisPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*opt
 
 	// draw tick labels
 	if (labelsPosition != Axis::LabelsPosition::NoLabels) {
-		auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
+		auto cs = plot->coordinateSystem(q->coordinateSystemIndex());
 		painter->setOpacity(labelsOpacity);
 		painter->setPen(QPen(labelsColor));
 		painter->setFont(labelsFont);
 		QTextDocument doc;
 		doc.setDefaultFont(labelsFont);
 		QFontMetrics fm(labelsFont);
-		auto xRangeFormat{plot()->range(Dimension::X, cs->index(Dimension::X)).format()};
-		auto yRangeFormat{plot()->range(Dimension::Y, cs->index(Dimension::Y)).format()};
+		auto xRangeFormat{plot->range(Dimension::X, cs->index(Dimension::X)).format()};
+		auto yRangeFormat{plot->range(Dimension::Y, cs->index(Dimension::Y)).format()};
 		if ((orientation == Axis::Orientation::Horizontal && xRangeFormat == RangeT::Format::Numeric)
 			|| (orientation == Axis::Orientation::Vertical && yRangeFormat == RangeT::Format::Numeric)) {
 			// QDEBUG(Q_FUNC_INFO << ", axis tick label strings: " << tickLabelStrings)
@@ -2879,12 +2879,12 @@ void AxisPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*opt
 			}
 
 			// used to determinde direction (up/down, left/right)
-			auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
-			const qreal middleX = plot()->range(Dimension::X, cs->index(Dimension::X)).center();
-			const qreal middleY = plot()->range(Dimension::Y, cs->index(Dimension::Y)).center();
+			auto cs = plot->coordinateSystem(q->coordinateSystemIndex());
+			const qreal middleX = plot->range(Dimension::X, cs->index(Dimension::X)).center();
+			const qreal middleY = plot->range(Dimension::Y, cs->index(Dimension::Y)).center();
 			QPointF center(middleX, middleY);
 			bool valid = true;
-			center = q->cSystem->mapLogicalToScene(center, valid);
+			center = cSystem->mapLogicalToScene(center, valid);
 
 			QPointF lastTickPoint = tickLabelPoints.at(tickLabelPoints.size() - 1);
 			QPointF labelPosition;
@@ -2940,7 +2940,7 @@ void AxisPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 	if (m_panningStarted) {
 		Dimension dim = Dimension::X;
 		int delta = 0;
-		auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
+		auto cs = plot->coordinateSystem(q->coordinateSystemIndex());
 		if (orientation == WorksheetElement::Orientation::Horizontal) {
 			setCursor(Qt::SizeHorCursor);
 			delta = (m_panningStart.x() - event->pos().x());
@@ -3002,7 +3002,7 @@ void Axis::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("showScaleOffset"), QString::number(d->showScaleOffset));
 	writer->writeAttribute(QStringLiteral("titleOffsetX"), QString::number(d->titleOffsetX));
 	writer->writeAttribute(QStringLiteral("titleOffsetY"), QString::number(d->titleOffsetY));
-	writer->writeAttribute(QStringLiteral("plotRangeIndex"), QString::number(m_cSystemIndex));
+	writer->writeAttribute(QStringLiteral("plotRangeIndex"), QString::number(d->cSystemIndex));
 	writer->writeAttribute(QStringLiteral("visible"), QString::number(d->isVisible()));
 	writer->writeEndElement();
 
@@ -3138,7 +3138,7 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("showScaleOffset", showScaleOffset, bool);
 			READ_DOUBLE_VALUE("titleOffsetX", titleOffsetX);
 			READ_DOUBLE_VALUE("titleOffsetY", titleOffsetY);
-			READ_INT_VALUE_DIRECT("plotRangeIndex", m_cSystemIndex, int);
+			READ_INT_VALUE_DIRECT("plotRangeIndex", d->cSystemIndex, int);
 
 			if (Project::xmlVersion() < 2) {
 				// earlier, offset was only used when the enum  value Custom was used.

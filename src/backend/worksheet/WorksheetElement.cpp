@@ -58,16 +58,17 @@ WorksheetElement::~WorksheetElement() {
 
 void WorksheetElement::finalizeAdd() {
 	DEBUG(Q_FUNC_INFO)
-	if (!m_plot) {
+	Q_D(WorksheetElement);
+	if (!d->plot) {
 		// determine the plot parent which is not neccessarily the parent aspect like for
 		// * child CustomPoint in InfoeElement
 		// * child XYCurves in QQPlot
 		// * etc.
-		m_plot = dynamic_cast<CartesianPlot*>(parent(AspectType::CartesianPlot));
+		d->plot = dynamic_cast<CartesianPlot*>(parent(AspectType::CartesianPlot));
 	}
 
-	if (m_plot) {
-		cSystem = dynamic_cast<const CartesianCoordinateSystem*>(m_plot->coordinateSystem(m_cSystemIndex));
+	if (d->plot) {
+		d->cSystem = dynamic_cast<const CartesianCoordinateSystem*>(d->plot->coordinateSystem(d->cSystemIndex));
 		Q_EMIT plotRangeListChanged();
 	} else
 		DEBUG(Q_FUNC_INFO << ", WARNING: no plot available.")
@@ -512,7 +513,8 @@ void WorksheetElement::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("horizontalAlignment"), QString::number(static_cast<int>(d->horizontalAlignment)));
 	writer->writeAttribute(QStringLiteral("verticalAlignment"), QString::number(static_cast<int>(d->verticalAlignment)));
 	writer->writeAttribute(QStringLiteral("rotationAngle"), QString::number(d->rotation()));
-	writer->writeAttribute(QStringLiteral("plotRangeIndex"), QString::number(m_cSystemIndex));
+	writer->writeAttribute(QStringLiteral("cSystemSource"), QString::number((int)d->coordinateSystemSource));
+	writer->writeAttribute(QStringLiteral("plotRangeIndex"), QString::number(d->cSystemIndex));
 	writer->writeAttribute(QStringLiteral("visible"), QString::number(d->isVisible()));
 	writer->writeAttribute(QStringLiteral("coordinateBinding"), QString::number(d->coordinateBindingEnabled));
 	writer->writeAttribute(QStringLiteral("logicalPosX"), QString::number(d->positionLogical.x()));
@@ -581,7 +583,8 @@ bool WorksheetElement::load(XmlStreamReader* reader, bool preview) {
 		else
 			d->setRotation(-1 * str.toDouble());
 	}
-	READ_INT_VALUE_DIRECT("plotRangeIndex", m_cSystemIndex, int);
+	READ_INT_VALUE_DIRECT("cSystemSource", d->coordinateSystemSource, WorksheetElement::CoordinateSystemSource);
+	READ_INT_VALUE_DIRECT("plotRangeIndex", d->cSystemIndex, int);
 
 	str = attribs.value(QStringLiteral("visible")).toString();
 	if (str.isEmpty())
@@ -629,16 +632,16 @@ public:
 	}
 
 	virtual void redo() override {
-		const auto oldIndex = m_element->m_cSystemIndex;
-		m_element->m_cSystemIndex = m_index;
-		if (m_element->plot())
-			m_element->cSystem = dynamic_cast<const CartesianCoordinateSystem*>(m_element->plot()->coordinateSystem(m_index));
+		const auto oldIndex = m_element->coordinateSystemIndex();
+		m_element->d_func()->cSystemIndex = m_index;
+		if (m_element->coordinateSystemSource() == WorksheetElement::CoordinateSystemSource::Plot && m_element->plot())
+			m_element->d_func()->cSystem = dynamic_cast<const CartesianCoordinateSystem*>(m_element->plot()->coordinateSystem(m_index));
 		else
 			DEBUG(Q_FUNC_INFO << ", WARNING: No plot found. Failed setting csystem index.")
 
 		m_index = oldIndex;
 		m_element->retransform();
-		Q_EMIT m_element->coordinateSystemIndexChanged(m_element->m_cSystemIndex);
+		Q_EMIT m_element->coordinateSystemIndexChanged(m_element->coordinateSystemIndex());
 	}
 
 	virtual void undo() override {
@@ -651,30 +654,31 @@ private:
 };
 
 void WorksheetElement::setCoordinateSystemIndex(int index, QUndoCommand* parent) {
-	if (index != m_cSystemIndex) {
+	Q_D(WorksheetElement);
+	if (index != d->cSystemIndex) {
 		auto* command = new SetCoordinateSystemIndexCmd(this, index, parent);
 		if (!parent)
 			exec(command);
-	} else if (!cSystem) {
+	} else if (!d->cSystem) {
 		// during load the index will be set,
 		// but the element might not have yet a plot assigned
-		if (plot())
-			cSystem = dynamic_cast<const CartesianCoordinateSystem*>(plot()->coordinateSystem(index));
+		if (coordinateSystemSource() == CoordinateSystemSource::Plot && plot())
+			d->cSystem = dynamic_cast<const CartesianCoordinateSystem*>(plot()->coordinateSystem(index));
 		retransform();
 	}
 }
 
 int WorksheetElement::coordinateSystemCount() const {
-	if (m_plot)
-		return m_plot->coordinateSystemCount();
+	if (plot())
+		return plot()->coordinateSystemCount();
 	DEBUG(Q_FUNC_INFO << ", WARNING: no plot set!")
 
 	return 0;
 }
 
 QString WorksheetElement::coordinateSystemInfo(const int index) const {
-	if (m_plot)
-		return m_plot->coordinateSystem(index)->info();
+	if (plot())
+		return plot()->coordinateSystem(index)->info();
 
 	return {};
 }
@@ -702,8 +706,9 @@ BASIC_SHARED_D_READER_IMPL(WorksheetElement, bool, coordinateBindingEnabled, coo
 BASIC_SHARED_D_READER_IMPL(WorksheetElement, qreal, scale, scale())
 BASIC_SHARED_D_READER_IMPL(WorksheetElement, bool, isLocked, lock)
 BASIC_SHARED_D_READER_IMPL(WorksheetElement, WorksheetElement::CoordinateSystemSource, coordinateSystemSource, coordinateSystemSource)
-BASIC_SHARED_D_READER_IMPL(WorksheetElement, const CartesianCoordinateSystem*, coordinateSystem, coordinateSystem)
-
+BASIC_SHARED_D_READER_IMPL(WorksheetElement, int, coordinateSystemIndex, cSystemIndex)
+BASIC_SHARED_D_READER_IMPL(WorksheetElement, CartesianPlot*, plot, plot) // used in the element docks
+BASIC_SHARED_D_READER_IMPL(WorksheetElement, const CartesianCoordinateSystem*, coordinateSystem, cSystem)
 
 /* ============================ setter methods and undo commands ================= */
 STD_SETTER_CMD_IMPL_F_S_SC(WorksheetElement, SetPosition, WorksheetElement::PositionWrapper, position, updatePosition, objectPositionChanged)
@@ -741,7 +746,7 @@ void WorksheetElement::setVerticalAlignment(const WorksheetElement::VerticalAlig
 STD_SETTER_CMD_IMPL_S(WorksheetElement, SetCoordinateBindingEnabled, bool, coordinateBindingEnabled) // do I need a final method?
 bool WorksheetElement::setCoordinateBindingEnabled(bool on) {
 	Q_D(WorksheetElement);
-	if (on && !cSystem)
+	if (on && !d->cSystem)
 		return false;
 	if (on != d->coordinateBindingEnabled) {
 		// Must not be in the Undo Command,
@@ -769,14 +774,16 @@ void WorksheetElement::setCoordinateSystemSource(WorksheetElement::CoordinateSys
 		exec(new WorksheetElementSetCoordinateSystemSourceCmd(d, source, ki18n("%1: set coordinateSystem source")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(WorksheetElement, SetCoordinateSystem, CartesianCoordinateSystem, coordinateSystem, retransform)
-void WorksheetElement::setCoordinateSystem(const CartesianCoordinateSystem* cSystem, QUndoCommand* parent) {
+STD_SETTER_CMD_IMPL_F_S(WorksheetElement, SetCoordinateSystem, const CartesianCoordinateSystem*, cSystem, retransform)
+void WorksheetElement::setCoordinateSystem(const CartesianCoordinateSystem* cSystem, bool undo) {
 	Q_D(WorksheetElement);
-	if (cSystem != d->coordinateSystem) {
+	if (cSystem != d->cSystem) {
 		if (undo)
-			exec(new WorksheetElementSetCoordinateSystemCmd(d, cSystem, ki18n("%1: set coordinateSystem"), parent));
-		else
-			d->coordinateSystem = cSystem;
+			exec(new WorksheetElementSetCoordinateSystemCmd(d, cSystem, ki18n("%1: set coordinateSystem")));
+		else {
+			d->cSystem = cSystem;
+			retransform();
+		}
 	}
 }
 
@@ -835,10 +842,10 @@ void WorksheetElementPrivate::paint(QPainter*, const QStyleOptionGraphicsItem*, 
 
 void WorksheetElementPrivate::updatePosition() {
 	QPointF p;
-	if (coordinateBindingEnabled && q->cSystem) {
+	if (coordinateBindingEnabled && cSystem) {
 		// the position in logical coordinates was changed, calculate the position in scene coordinates
 		// insidePlot will get false if the point lies outside of the datarect
-		p = q->cSystem->mapLogicalToScene(positionLogical, insidePlot, AbstractCoordinateSystem::MappingFlag::SuppressPageClippingVisible);
+		p = cSystem->mapLogicalToScene(positionLogical, insidePlot, AbstractCoordinateSystem::MappingFlag::SuppressPageClippingVisible);
 		position.point = q->parentPosToRelativePos(mapPlotAreaToParent(p), position);
 		Q_EMIT q->positionChanged(position);
 	} else {
@@ -846,8 +853,8 @@ void WorksheetElementPrivate::updatePosition() {
 		p = q->relativePosToParentPos(position);
 
 		// the position in scene coordinates was changed, calculate the position in logical coordinates
-		if (q->cSystem && q->cSystem->isValid()) {
-			positionLogical = q->cSystem->mapSceneToLogical(mapParentToPlotArea(p), AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+		if (cSystem && cSystem->isValid()) {
+			positionLogical = cSystem->mapSceneToLogical(mapParentToPlotArea(p), AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 			Q_EMIT q->positionLogicalChanged(positionLogical);
 		}
 	}
@@ -875,12 +882,12 @@ void WorksheetElementPrivate::keyPressEvent(QKeyEvent* event) {
 		const int delta = 5; // always in scene coordinates
 
 		WorksheetElement::PositionWrapper tempPosition = position;
-		if (coordinateBindingEnabled && q->cSystem) {
-			if (!q->cSystem->isValid())
+		if (coordinateBindingEnabled && cSystem) {
+			if (!cSystem->isValid())
 				return;
 			// the position in logical coordinates was changed, calculate the position in scene coordinates
 			bool visible;
-			QPointF p = q->cSystem->mapLogicalToScene(positionLogical, visible, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+			QPointF p = cSystem->mapLogicalToScene(positionLogical, visible, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 			if (event->key() == Qt::Key_Left) {
 				p.setX(p.x() - delta);
 			} else if (event->key() == Qt::Key_Right) {
@@ -890,7 +897,7 @@ void WorksheetElementPrivate::keyPressEvent(QKeyEvent* event) {
 			} else if (event->key() == Qt::Key_Down) {
 				p.setY(p.y() + delta);
 			}
-			auto pLogic = q->cSystem->mapSceneToLogical(p, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+			auto pLogic = cSystem->mapSceneToLogical(p, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 			q->setPositionLogical(pLogic); // So it is undoable
 		} else {
 			QPointF point = q->parentPosToRelativePos(pos(), position);
@@ -952,11 +959,11 @@ QVariant WorksheetElementPrivate::itemChange(GraphicsItemChange change, const QV
 		// don't use setPosition here, because then all small changes are on the undo stack
 		// setPosition is used then in mouseReleaseEvent
 		if (coordinateBindingEnabled) {
-			if (!q->cSystem->isValid())
+			if (!cSystem->isValid())
 				return QGraphicsItem::itemChange(change, value);
 			QPointF pos = q->align(newPos, m_boundingRectangle, horizontalAlignment, verticalAlignment, false);
 
-			positionLogical = q->cSystem->mapSceneToLogical(mapParentToPlotArea(pos), AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+			positionLogical = cSystem->mapSceneToLogical(mapParentToPlotArea(pos), AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 			Q_EMIT q->positionLogicalChanged(positionLogical);
 			Q_EMIT q->objectPositionChanged();
 		} else {

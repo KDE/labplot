@@ -38,7 +38,8 @@
 
 ReferenceRange::ReferenceRange(CartesianPlot* plot, const QString& name)
 	: WorksheetElement(name, new ReferenceRangePrivate(this), AspectType::ReferenceRange) {
-	m_plot = plot;
+	Q_D(ReferenceRange);
+	d->plot = plot;
 	init();
 }
 
@@ -66,15 +67,15 @@ void ReferenceRange::init() {
 	}
 
 	if (plot()) {
-		m_cSystemIndex = plot()->defaultCoordinateSystemIndex();
-		cSystem = plot()->coordinateSystem(m_cSystemIndex);
+		d->cSystemIndex = plot()->defaultCoordinateSystemIndex();
+		d->cSystem = plot()->coordinateSystem(d->cSystemIndex);
 		d->coordinateBindingEnabled = true;
 		// default position - 10% of the plot width/height positioned around the center
 		auto cs = plot()->coordinateSystem(coordinateSystemIndex());
-		const auto x = m_plot->range(Dimension::X, cs->index(Dimension::X)).center();
-		const auto y = m_plot->range(Dimension::Y, cs->index(Dimension::Y)).center();
-		const auto w = m_plot->range(Dimension::X, cs->index(Dimension::X)).length() * 0.1;
-		const auto h = m_plot->range(Dimension::Y, cs->index(Dimension::Y)).length() * 0.1;
+		const auto x = d->plot->range(Dimension::X, cs->index(Dimension::X)).center();
+		const auto y = d->plot->range(Dimension::Y, cs->index(Dimension::Y)).center();
+		const auto w = d->plot->range(Dimension::X, cs->index(Dimension::X)).length() * 0.1;
+		const auto h = d->plot->range(Dimension::Y, cs->index(Dimension::Y)).length() * 0.1;
 		d->positionLogical = QPointF(x, y);
 		d->positionLogicalStart = QPointF(x - w / 2, y - h / 2);
 		d->positionLogicalEnd = QPointF(x + w / 2, y + h / 2);
@@ -275,13 +276,13 @@ QPointF ReferenceRangePrivate::recalculateRect() {
 	QPointF p1, p2;
 	switch (orientation) {
 	case ReferenceRange::Orientation::Vertical: {
-		const auto yRange{q->m_plot->range(Dimension::Y, cs->index(Dimension::Y))};
+		const auto yRange{plot->range(Dimension::Y, cs->index(Dimension::Y))};
 		p1 = QPointF(positionLogicalStart.x(), yRange.start());
 		p2 = QPointF(positionLogicalEnd.x(), yRange.end());
 		break;
 	}
 	case ReferenceRange::Orientation::Horizontal: {
-		const auto xRange{q->m_plot->range(Dimension::X, cs->index(Dimension::X))};
+		const auto xRange{plot->range(Dimension::X, cs->index(Dimension::X))};
 		p1 = QPointF(xRange.start(), positionLogicalStart.y());
 		p2 = QPointF(xRange.end(), positionLogicalEnd.y());
 		break;
@@ -390,7 +391,7 @@ QPointF ReferenceRangePrivate::recalculateRect() {
 	calculates the position and the bounding box of the item/point. Called on geometry or properties changes.
  */
 void ReferenceRangePrivate::retransform() {
-	if (suppressRetransform || !q->cSystem || q->isLoading())
+	if (suppressRetransform || !cSystem || q->isLoading())
 		return;
 
 	const QPointF newPosScene = recalculateRect();

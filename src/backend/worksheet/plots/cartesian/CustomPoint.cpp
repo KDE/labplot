@@ -42,10 +42,11 @@ using Dimension = CartesianCoordinateSystem::Dimension;
 
 CustomPoint::CustomPoint(CartesianPlot* plot, const QString& name)
 	: WorksheetElement(name, new CustomPointPrivate(this), AspectType::CustomPoint) {
-	m_plot = plot;
-	DEBUG(Q_FUNC_INFO << ", cSystem index = " << m_cSystemIndex)
-	DEBUG(Q_FUNC_INFO << ", plot cSystem count = " << m_plot->coordinateSystemCount())
-	cSystem = dynamic_cast<const CartesianCoordinateSystem*>(m_plot->coordinateSystem(m_cSystemIndex));
+	Q_D(CustomPoint);
+	d->plot = plot;
+	DEBUG(Q_FUNC_INFO << ", cSystem index = " << d->cSystemIndex)
+	DEBUG(Q_FUNC_INFO << ", plot cSystem count = " << plot->coordinateSystemCount())
+	d->cSystem = dynamic_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem(d->cSystemIndex));
 
 	init();
 }
@@ -61,8 +62,8 @@ void CustomPoint::init() {
 	if (plot()) {
 		d->coordinateBindingEnabled = true; // By default on
 		auto cs = plot()->coordinateSystem(plot()->defaultCoordinateSystemIndex());
-		const auto x = m_plot->range(Dimension::X, cs->index(Dimension::X)).center();
-		const auto y = m_plot->range(Dimension::Y, cs->index(Dimension::Y)).center();
+		const auto x = d->plot->range(Dimension::X, cs->index(Dimension::X)).center();
+		const auto y = d->plot->range(Dimension::Y, cs->index(Dimension::Y)).center();
 		DEBUG(Q_FUNC_INFO << ", x/y pos = " << x << " / " << y)
 		d->positionLogical = QPointF(x, y);
 	} else
@@ -130,10 +131,6 @@ CustomPointPrivate::CustomPointPrivate(CustomPoint* owner)
 	setFlag(QGraphicsItem::ItemIsSelectable);
 	setFlag(QGraphicsItem::ItemIsFocusable);
 	setAcceptHoverEvents(true);
-}
-
-const CartesianPlot* CustomPointPrivate::plot() {
-	return q->m_plot;
 }
 
 /*!

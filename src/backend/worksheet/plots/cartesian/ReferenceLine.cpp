@@ -40,7 +40,8 @@ using Dimension = CartesianCoordinateSystem::Dimension;
 
 ReferenceLine::ReferenceLine(CartesianPlot* plot, const QString& name)
 	: WorksheetElement(name, new ReferenceLinePrivate(this), AspectType::ReferenceLine) {
-	m_plot = plot;
+	Q_D(ReferenceLine);
+	d->plot = plot;
 	init();
 }
 
@@ -71,8 +72,8 @@ void ReferenceLine::init() {
 		d->coordinateBindingEnabled = true;
 		// default position
 		auto cs = plot()->coordinateSystem(plot()->defaultCoordinateSystemIndex());
-		const auto x = m_plot->range(Dimension::X, cs->index(Dimension::X)).center();
-		const auto y = m_plot->range(Dimension::Y, cs->index(Dimension::Y)).center();
+		const auto x = d->plot->range(Dimension::X, cs->index(Dimension::X)).center();
+		const auto y = d->plot->range(Dimension::Y, cs->index(Dimension::Y)).center();
 		DEBUG(Q_FUNC_INFO << ", x/y pos = " << x << " / " << y)
 		d->positionLogical = QPointF(x, y);
 	} else
@@ -233,12 +234,12 @@ ReferenceLinePrivate::ReferenceLinePrivate(ReferenceLine* owner)
 	calculates the position and the bounding box of the item/point. Called on geometry or properties changes.
  */
 void ReferenceLinePrivate::retransform() {
-	if (suppressRetransform || !q->cSystem || q->isLoading())
+	if (suppressRetransform || !cSystem || q->isLoading())
 		return;
 
-	auto cs = q->plot()->coordinateSystem(q->coordinateSystemIndex());
-	const auto xRange{q->m_plot->range(Dimension::X, cs->index(Dimension::X))};
-	const auto yRange{q->m_plot->range(Dimension::Y, cs->index(Dimension::Y))};
+	auto cs = plot->coordinateSystem(q->coordinateSystemIndex());
+	const auto xRange{plot->range(Dimension::X, cs->index(Dimension::X))};
+	const auto yRange{plot->range(Dimension::Y, cs->index(Dimension::Y))};
 
 	// calculate the position in the scene coordinates
 	if (orientation == ReferenceLine::Orientation::Vertical)
@@ -249,7 +250,7 @@ void ReferenceLinePrivate::retransform() {
 
 	// position.point contains already the scene position, but here it will be determined,
 	// if the point lies outside of the datarect or not
-	QVector<QPointF> listScene = q->cSystem->mapLogicalToScene(Points() << positionLogical);
+	QVector<QPointF> listScene = cSystem->mapLogicalToScene(Points() << positionLogical);
 	QDEBUG(Q_FUNC_INFO << ", scene list = " << listScene)
 
 	if (!listScene.isEmpty()) {
@@ -262,7 +263,7 @@ void ReferenceLinePrivate::retransform() {
 		else
 			pointsLogical << QPointF(xRange.start(), positionLogical.y()) << QPointF(xRange.end(), positionLogical.y());
 
-		QVector<QPointF> pointsScene = q->cSystem->mapLogicalToScene(pointsLogical);
+		QVector<QPointF> pointsScene = cSystem->mapLogicalToScene(pointsLogical);
 
 		if (pointsScene.size() > 1) {
 			if (orientation == ReferenceLine::Orientation::Vertical)
@@ -391,7 +392,7 @@ bool ReferenceLine::load(XmlStreamReader* reader, bool preview) {
 			d->coordinateBindingEnabled = true;
 
 			READ_INT_VALUE("orientation", orientation, Orientation);
-			READ_INT_VALUE_DIRECT("plotRangeIndex", m_cSystemIndex, int);
+			READ_INT_VALUE_DIRECT("plotRangeIndex", d->cSystemIndex, int);
 
 			str = attribs.value(QStringLiteral("visible")).toString();
 			if (str.isEmpty())

@@ -206,43 +206,43 @@ QMenu* Histogram::createContextMenu() {
 	auto* fitGaussianAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Fit Gaussian (Normal) Distribution"));
 	analysisMenu->addAction(fitGaussianAction);
 	connect(fitGaussianAction, &QAction::triggered, this, [=]() {
-		m_plot->addHistogramFit(this, nsl_sf_stats_gaussian);
+		plot()->addHistogramFit(this, nsl_sf_stats_gaussian);
 	});
 
 	auto* fitExponentialAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Fit Exponential Distribution"));
 	analysisMenu->addAction(fitExponentialAction);
 	connect(fitExponentialAction, &QAction::triggered, this, [=]() {
-		m_plot->addHistogramFit(this, nsl_sf_stats_exponential);
+		plot()->addHistogramFit(this, nsl_sf_stats_exponential);
 	});
 
 	auto* fitLaplaceAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Fit Laplace Distribution"));
 	analysisMenu->addAction(fitLaplaceAction);
 	connect(fitLaplaceAction, &QAction::triggered, this, [=]() {
-		m_plot->addHistogramFit(this, nsl_sf_stats_laplace);
+		plot()->addHistogramFit(this, nsl_sf_stats_laplace);
 	});
 
 	auto* fitCauchyAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Fit Cauchy-Lorentz Distribution"));
 	analysisMenu->addAction(fitCauchyAction);
 	connect(fitCauchyAction, &QAction::triggered, this, [=]() {
-		m_plot->addHistogramFit(this, nsl_sf_stats_cauchy_lorentz);
+		plot()->addHistogramFit(this, nsl_sf_stats_cauchy_lorentz);
 	});
 
 	auto* fitLognormalAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Fit Log-normal Distribution"));
 	analysisMenu->addAction(fitLognormalAction);
 	connect(fitLognormalAction, &QAction::triggered, this, [=]() {
-		m_plot->addHistogramFit(this, nsl_sf_stats_lognormal);
+		plot()->addHistogramFit(this, nsl_sf_stats_lognormal);
 	});
 
 	auto* fitPoissonAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Fit Poisson Distribution"));
 	analysisMenu->addAction(fitPoissonAction);
 	connect(fitPoissonAction, &QAction::triggered, this, [=]() {
-		m_plot->addHistogramFit(this, nsl_sf_stats_poisson);
+		plot()->addHistogramFit(this, nsl_sf_stats_poisson);
 	});
 
 	auto* fitBinomialAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Fit Binomial Distribution"));
 	analysisMenu->addAction(fitBinomialAction);
 	connect(fitBinomialAction, &QAction::triggered, this, [=]() {
-		m_plot->addHistogramFit(this, nsl_sf_stats_binomial);
+		plot()->addHistogramFit(this, nsl_sf_stats_binomial);
 	});
 
 	menu->insertMenu(visibilityAction, analysisMenu);
@@ -1001,10 +1001,10 @@ void HistogramPrivate::updateLines() {
 		horizontalHistogram();
 
 	// map the lines and the symbol positions to the scene coordinates
-	linesUnclipped = q->cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
-	lines = q->cSystem->mapLogicalToScene(lines);
+	linesUnclipped = cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+	lines = cSystem->mapLogicalToScene(lines);
 	visiblePoints = std::vector<bool>(pointsLogical.count(), false);
-	q->cSystem->mapLogicalToScene(pointsLogical, pointsScene, visiblePoints);
+	cSystem->mapLogicalToScene(pointsLogical, pointsScene, visiblePoints);
 
 	// new line path
 	for (const auto& line : lines) {
@@ -1506,7 +1506,7 @@ void HistogramPrivate::updateErrorBars() {
 	}
 
 	// map the error bars to scene coordinates
-	elines = q->cSystem->mapLogicalToScene(elines);
+	elines = cSystem->mapLogicalToScene(elines);
 
 	// new painter path for the error bars
 	for (const auto& line : qAsConst(elines)) {
@@ -1564,7 +1564,7 @@ void HistogramPrivate::updateRug() {
 		}
 
 		// map the points to scene coordinates
-		points = q->cSystem->mapLogicalToScene(points);
+		points = cSystem->mapLogicalToScene(points);
 
 		// path for the vertical rug lines
 		for (const auto& point : qAsConst(points)) {
@@ -1578,7 +1578,7 @@ void HistogramPrivate::updateRug() {
 		}
 
 		// map the points to scene coordinates
-		points = q->cSystem->mapLogicalToScene(points);
+		points = cSystem->mapLogicalToScene(points);
 
 		// path for the horizontal rug lines
 		for (const auto& point : qAsConst(points)) {
@@ -1798,7 +1798,7 @@ void Histogram::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("autoBinRanges"), QString::number(d->autoBinRanges));
 	writer->writeAttribute(QStringLiteral("binRangesMin"), QString::number(d->binRangesMin));
 	writer->writeAttribute(QStringLiteral("binRangesMax"), QString::number(d->binRangesMax));
-	writer->writeAttribute(QStringLiteral("plotRangeIndex"), QString::number(m_cSystemIndex));
+	writer->writeAttribute(QStringLiteral("plotRangeIndex"), QString::number(d->cSystemIndex));
 	writer->writeAttribute(QStringLiteral("visible"), QString::number(d->isVisible()));
 	writer->writeEndElement();
 
@@ -1861,7 +1861,7 @@ bool Histogram::load(XmlStreamReader* reader, bool preview) {
 			READ_DOUBLE_VALUE("binRangesMin", binRangesMin);
 			READ_DOUBLE_VALUE("binRangesMax", binRangesMax);
 
-			READ_INT_VALUE_DIRECT("plotRangeIndex", m_cSystemIndex, int);
+			READ_INT_VALUE_DIRECT("plotRangeIndex", d->cSystemIndex, int);
 
 			str = attribs.value(QStringLiteral("visible")).toString();
 			if (str.isEmpty())

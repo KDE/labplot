@@ -204,7 +204,7 @@ QMenu* XYCurve::createContextMenu() {
 
 	//"data analysis" menu
 	//	auto* plot = static_cast<CartesianPlot*>(parentAspect());
-	menu->insertMenu(visibilityAction, m_plot->analysisMenu());
+	menu->insertMenu(visibilityAction, plot()->analysisMenu());
 	menu->insertSeparator(visibilityAction);
 
 	//"Navigate to spreadsheet"-action, show only if x- or y-columns have data from a spreadsheet
@@ -886,7 +886,7 @@ void XYCurvePrivate::calculateScenePoints() {
 		//	QDEBUG(Q_FUNC_INFO << ", logical points: " << QString::number(p.x(), 'g', 12) << " = " << QDateTime::fromMSecsSinceEpoch(p.x(), Qt::UTC))
 
 		if (numberOfPoints > 0) {
-			const auto dataRect{plot()->dataRect()};
+			const auto dataRect{plot->dataRect()};
 			// this is the old method considering DPI
 			DEBUG(Q_FUNC_INFO << ", plot->dataRect() width/height = " << dataRect.width() << '/' << dataRect.height());
 			DEBUG(Q_FUNC_INFO << ", logical DPI X/Y = " << QApplication::primaryScreen()->logicalDotsPerInchX() << '/'
@@ -913,10 +913,10 @@ void XYCurvePrivate::calculateScenePoints() {
 			int startIndex, endIndex;
 			if (columnProperties == AbstractColumn::Properties::MonotonicDecreasing || columnProperties == AbstractColumn::Properties::MonotonicIncreasing) {
 				DEBUG(Q_FUNC_INFO << ", column monotonic")
-				if (!q->cSystem->isValid())
+				if (!cSystem->isValid())
 					return;
-				double xMin = q->cSystem->mapSceneToLogical(dataRect.topLeft()).x();
-				double xMax = q->cSystem->mapSceneToLogical(dataRect.bottomRight()).x();
+				double xMin = cSystem->mapSceneToLogical(dataRect.topLeft()).x();
+				double xMax = cSystem->mapSceneToLogical(dataRect.bottomRight()).x();
 				DEBUG(Q_FUNC_INFO << ", xMin/xMax = " << xMin << '/' << xMax)
 
 				startIndex = Column::indexForValue(xMin, m_logicalPoints, columnProperties);
@@ -938,7 +938,7 @@ void XYCurvePrivate::calculateScenePoints() {
 			//} // (symbolsStyle != Symbol::NoSymbols || valuesType != XYCurve::NoValues )
 
 			m_pointVisible.resize(numberOfPoints);
-			q->cSystem->mapLogicalToScene(startIndex, endIndex, m_logicalPoints, m_scenePoints, m_pointVisible);
+			cSystem->mapLogicalToScene(startIndex, endIndex, m_logicalPoints, m_scenePoints, m_pointVisible);
 			// for (auto p : m_logicalPoints)
 			//	QDEBUG(Q_FUNC_INFO << ", logical points: " << QString::number(p.x(), 'g', 12) << " = " << QDateTime::fromMSecsSinceEpoch(p.x(), Qt::UTC))
 		}
@@ -953,7 +953,7 @@ void XYCurvePrivate::calculateScenePoints() {
   triggers the update of lines, drop lines, symbols etc.
 */
 void XYCurvePrivate::retransform() {
-	const bool suppressed = !isVisible() || q->isLoading() || suppressRetransform || !plot();
+	const bool suppressed = !isVisible() || q->isLoading() || suppressRetransform || !plot;
 	DEBUG("\n" << Q_FUNC_INFO << ", name = " << STDSTRING(name()) << ", suppressRetransform = " << suppressRetransform);
 	trackRetransformCalled(suppressed);
 	if (suppressed)
@@ -1097,9 +1097,9 @@ void XYCurvePrivate::addLine(QPointF p,
 			x = std::round(p.x() / minDiffX);
 	} else {
 		// for nonlinear scaling the pixel distance must be calculated for every point
-		static const double preCalc = (double)plot()->dataRect().width() / numberOfPixelX;
+		static const double preCalc = (double)plot->dataRect().width() / numberOfPixelX;
 		bool visible;
-		QPointF pScene = q->cSystem->mapLogicalToScene(p, visible, CartesianCoordinateSystem::MappingFlag::SuppressPageClipping);
+		QPointF pScene = cSystem->mapLogicalToScene(p, visible, CartesianCoordinateSystem::MappingFlag::SuppressPageClipping);
 
 		// if the point is not valid, don't create a line
 		if (!visible)
@@ -1107,13 +1107,13 @@ void XYCurvePrivate::addLine(QPointF p,
 
 		// using only the difference between the points is not sufficient, because
 		// p0 is updated always independent if new line added or not
-		const int p1Pixel = std::round((pScene.x() - plot()->dataRect().x()) / preCalc);
+		const int p1Pixel = std::round((pScene.x() - plot->dataRect().x()) / preCalc);
 		pixelDiff = p1Pixel - x;
 
 		addUniqueLine(p, minY, maxY, lastPoint, pixelDiff, m_lines, prevPixelDiffZero);
 
 		if (pixelDiff > 0) // set x to next pixel
-			x = std::round((pScene.x() - plot()->dataRect().x()) / preCalc);
+			x = std::round((pScene.x() - plot->dataRect().x()) / preCalc);
 	}
 }
 
@@ -1184,7 +1184,7 @@ void XYCurvePrivate::updateLines() {
 		return;
 	}
 
-	const QRectF pageRect = plot()->dataRect();
+	const QRectF pageRect = plot->dataRect();
 	// old method using DPI
 	// const double widthDatarectInch = Worksheet::convertFromSceneUnits(plot()->dataRect().width(), Worksheet::Unit::Inch);
 	// float heightDatarectInch = Worksheet::convertFromSceneUnits(plot()->dataRect().height(), Worksheet::Unit::Inch);
@@ -1202,10 +1202,10 @@ void XYCurvePrivate::updateLines() {
 		auto columnProperties = q->xColumn()->properties();
 		if (columnProperties == AbstractColumn::Properties::MonotonicDecreasing || columnProperties == AbstractColumn::Properties::MonotonicIncreasing) {
 			DEBUG(Q_FUNC_INFO << ", monotonic")
-			if (!q->cSystem->isValid())
+			if (!cSystem->isValid())
 				return;
-			const double xMin = q->cSystem->mapSceneToLogical(pageRect.topLeft()).x();
-			const double xMax = q->cSystem->mapSceneToLogical(pageRect.bottomRight()).x();
+			const double xMin = cSystem->mapSceneToLogical(pageRect.topLeft()).x();
+			const double xMax = cSystem->mapSceneToLogical(pageRect.bottomRight()).x();
 
 			startIndex = Column::indexForValue(xMin, m_logicalPoints, columnProperties);
 			endIndex = Column::indexForValue(xMax, m_logicalPoints, columnProperties);
@@ -1231,9 +1231,9 @@ void XYCurvePrivate::updateLines() {
 		QPointF tempPoint1, tempPoint2; // used as temporaryPoints to interpolate datapoints if set
 		if (columnProperties == AbstractColumn::Properties::Constant) {
 			DEBUG(Q_FUNC_INFO << ", CONSTANT column")
-			auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
-			const auto xRange{plot()->range(Dimension::X, cs->index(Dimension::X))};
-			const auto yRange{plot()->range(Dimension::Y, cs->index(Dimension::Y))};
+			auto cs = plot->coordinateSystem(q->coordinateSystemIndex());
+			const auto xRange{plot->range(Dimension::X, cs->index(Dimension::X))};
+			const auto yRange{plot->range(Dimension::Y, cs->index(Dimension::Y))};
 			tempPoint1 = QPointF(xRange.start(), yRange.start());
 			tempPoint2 = QPointF(xRange.start(), yRange.end());
 			m_lines.append(QLineF(tempPoint1, tempPoint2));
@@ -1243,10 +1243,10 @@ void XYCurvePrivate::updateLines() {
 			bool prevPixelDiffZero = false;
 			double minY{INFINITY}, maxY{-INFINITY};
 			QPointF p0, p1;
-			const auto xIndex{q->cSystem->index(Dimension::X)};
-			const auto xRange{plot()->range(Dimension::X, xIndex)};
+			const auto xIndex{cSystem->index(Dimension::X)};
+			const auto xRange{plot->range(Dimension::X, xIndex)};
 			double minDiffX;
-			const RangeT::Scale scale = plot()->xRangeScale(xIndex);
+			const RangeT::Scale scale = plot->xRangeScale(xIndex);
 
 			// setting initial point
 			double xPos = NAN;
@@ -1254,7 +1254,7 @@ void XYCurvePrivate::updateLines() {
 				minDiffX = (xRange.end() - xRange.start()) / numberOfPixelX;
 			else {
 				// For nonlinear x achses, the linear scene coordinates are used
-				minDiffX = plot()->dataRect().width() / numberOfPixelX;
+				minDiffX = plot->dataRect().width() / numberOfPixelX;
 			}
 
 			// determine first point
@@ -1274,10 +1274,10 @@ void XYCurvePrivate::updateLines() {
 						maxY = p0.y();
 					} else {
 						bool visible;
-						QPointF pScene = q->cSystem->mapLogicalToScene(p0, visible, CartesianCoordinateSystem::MappingFlag::SuppressPageClipping);
+						QPointF pScene = cSystem->mapLogicalToScene(p0, visible, CartesianCoordinateSystem::MappingFlag::SuppressPageClipping);
 						if (!visible)
 							continue;
-						xPos = std::round((pScene.x() - plot()->dataRect().x()) / ((double)plot()->dataRect().width() * numberOfPixelX));
+						xPos = std::round((pScene.x() - plot->dataRect().x()) / ((double)plot->dataRect().width() * numberOfPixelX));
 						lastPoint = p0;
 					}
 				}
@@ -1588,7 +1588,7 @@ void XYCurvePrivate::updateLines() {
 		PERFTRACE(QLatin1String(Q_FUNC_INFO) + QStringLiteral(", curve ") + name() + QStringLiteral(", map lines to scene coordinates"));
 #endif
 		Q_EMIT q->linesUpdated(q, m_lines);
-		m_lines = q->cSystem->mapLogicalToScene(m_lines);
+		m_lines = cSystem->mapLogicalToScene(m_lines);
 	}
 
 	{
@@ -1628,9 +1628,9 @@ void XYCurvePrivate::updateDropLines() {
 
 	// calculate drop lines
 	QVector<QLineF> dlines;
-	auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
-	const double xMin = plot()->range(Dimension::X, cs->index(Dimension::X)).start();
-	const double yMin = plot()->range(Dimension::Y, cs->index(Dimension::Y)).start();
+	auto cs = plot->coordinateSystem(q->coordinateSystemIndex());
+	const double xMin = plot->range(Dimension::X, cs->index(Dimension::X)).start();
+	const double yMin = plot->range(Dimension::Y, cs->index(Dimension::Y)).start();
 
 	int i = 0;
 	switch (dropLine->dropLineType()) {
@@ -1682,7 +1682,7 @@ void XYCurvePrivate::updateDropLines() {
 	}
 
 	// map the drop lines to scene coordinates
-	dlines = q->cSystem->mapLogicalToScene(dlines);
+	dlines = cSystem->mapLogicalToScene(dlines);
 
 	// new painter path for the drop lines
 	for (const auto& line : qAsConst(dlines)) {
@@ -1724,15 +1724,15 @@ void XYCurvePrivate::updateSymbols() {
 void XYCurvePrivate::updateRug() {
 	rugPath = QPainterPath();
 
-	if (!rugEnabled || !plot()) {
+	if (!rugEnabled || !plot) {
 		recalcShapeAndBoundingRect();
 		return;
 	}
 
 	QVector<QPointF> points;
-	auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
-	const double xMin = plot()->range(Dimension::X, cs->index(Dimension::X)).start();
-	const double yMin = plot()->range(Dimension::Y, cs->index(Dimension::Y)).start();
+	auto cs = plot->coordinateSystem(q->coordinateSystemIndex());
+	const double xMin = plot->range(Dimension::X, cs->index(Dimension::X)).start();
+	const double yMin = plot->range(Dimension::Y, cs->index(Dimension::Y)).start();
 
 	// vertical rug
 	if (rugOrientation == WorksheetElement::Orientation::Vertical || rugOrientation == WorksheetElement::Orientation::Both) {
@@ -1740,7 +1740,7 @@ void XYCurvePrivate::updateRug() {
 			points << QPointF(xMin, point.y());
 
 		// map the points to scene coordinates
-		points = q->cSystem->mapLogicalToScene(points);
+		points = cSystem->mapLogicalToScene(points);
 
 		// path for the vertical rug lines
 		for (const auto& point : qAsConst(points)) {
@@ -1756,7 +1756,7 @@ void XYCurvePrivate::updateRug() {
 			points << QPointF(point.x(), yMin);
 
 		// map the points to scene coordinates
-		points = q->cSystem->mapLogicalToScene(points);
+		points = cSystem->mapLogicalToScene(points);
 
 		// path for the horizontal rug lines
 		for (const auto& point : qAsConst(points)) {
@@ -1791,12 +1791,12 @@ void XYCurvePrivate::updateValues() {
 
 	// determine the value string for all points that are currently visible in the plot
 	int i{0};
-	auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
+	auto cs = plot->coordinateSystem(q->coordinateSystemIndex());
 	const auto numberLocale = QLocale();
 	switch (valuesType) {
 	case XYCurve::ValuesType::NoValues:
 	case XYCurve::ValuesType::X: {
-		auto xRangeFormat{plot()->range(Dimension::X, cs->index(Dimension::X)).format()};
+		auto xRangeFormat{plot->range(Dimension::X, cs->index(Dimension::X)).format()};
 		int precision = valuesPrecision;
 		if (xColumn->columnMode() == AbstractColumn::ColumnMode::Integer || xColumn->columnMode() == AbstractColumn::ColumnMode::BigInt)
 			precision = 0;
@@ -1813,7 +1813,7 @@ void XYCurvePrivate::updateValues() {
 		break;
 	}
 	case XYCurve::ValuesType::Y: {
-		auto rangeFormat{plot()->range(Dimension::Y, cs->index(Dimension::Y)).format()};
+		auto rangeFormat{plot->range(Dimension::Y, cs->index(Dimension::Y)).format()};
 		int precision = valuesPrecision;
 		if (yColumn->columnMode() == AbstractColumn::ColumnMode::Integer || yColumn->columnMode() == AbstractColumn::ColumnMode::BigInt)
 			precision = 0;
@@ -1831,8 +1831,8 @@ void XYCurvePrivate::updateValues() {
 	}
 	case XYCurve::ValuesType::XY:
 	case XYCurve::ValuesType::XYBracketed: {
-		auto xRangeFormat{plot()->range(Dimension::X, cs->index(Dimension::X)).format()};
-		auto yRangeFormat{plot()->range(Dimension::Y, cs->index(Dimension::Y)).format()};
+		auto xRangeFormat{plot->range(Dimension::X, cs->index(Dimension::X)).format()};
+		auto yRangeFormat{plot->range(Dimension::Y, cs->index(Dimension::Y)).format()};
 
 		int xPrecision = valuesPrecision;
 		if (xColumn->columnMode() == AbstractColumn::ColumnMode::Integer || xColumn->columnMode() == AbstractColumn::ColumnMode::BigInt)
@@ -1876,8 +1876,8 @@ void XYCurvePrivate::updateValues() {
 		auto vColMode{valuesColumn->columnMode()};
 
 		// need to check x range
-		auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
-		auto xRange = plot()->range(Dimension::X, cs->index(Dimension::X));
+		auto cs = plot->coordinateSystem(q->coordinateSystemIndex());
+		auto xRange = plot->range(Dimension::X, cs->index(Dimension::X));
 
 		size_t index = 0; // index of valid points (logicalPoints)
 		for (int i = 0; i < endRow; ++i) {
@@ -2022,7 +2022,7 @@ void XYCurvePrivate::updateFilling() {
 		if (fillLines.isEmpty())
 			return;
 
-		fillLines = q->cSystem->mapLogicalToScene(fillLines);
+		fillLines = cSystem->mapLogicalToScene(fillLines);
 
 		// no lines available (no points) after mapping, nothing to do
 		if (fillLines.isEmpty())
@@ -2041,23 +2041,23 @@ void XYCurvePrivate::updateFilling() {
 	const QPointF& last = m_logicalPoints.at(m_logicalPoints.size() - 1); // last point of the curve, may not be visible currently
 	QPointF edge;
 	double xEnd{0.}, yEnd{0.};
-	auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
-	const auto xRange{plot()->range(Dimension::X, cs->index(Dimension::X))};
-	const auto yRange{plot()->range(Dimension::Y, cs->index(Dimension::Y))};
+	auto cs = plot->coordinateSystem(q->coordinateSystemIndex());
+	const auto xRange{plot->range(Dimension::X, cs->index(Dimension::X))};
+	const auto yRange{plot->range(Dimension::Y, cs->index(Dimension::Y))};
 	const double xMin{xRange.start()}, xMax{xRange.end()};
 	const double yMin{yRange.start()}, yMax{yRange.end()};
 	bool visible;
 	if (fillingPosition == Background::Position::Above) {
-		edge = q->cSystem->mapLogicalToScene(QPointF(xMin, yMin), visible);
+		edge = cSystem->mapLogicalToScene(QPointF(xMin, yMin), visible);
 
 		// start point
 		if (nsl_math_essentially_equal(start.y(), edge.y())) {
 			if (first.x() < xMin)
 				start = edge;
 			else if (first.x() > xMax)
-				start = q->cSystem->mapLogicalToScene(QPointF(xMax, yMin), visible);
+				start = cSystem->mapLogicalToScene(QPointF(xMax, yMin), visible);
 			else
-				start = q->cSystem->mapLogicalToScene(QPointF(first.x(), yMin), visible);
+				start = cSystem->mapLogicalToScene(QPointF(first.x(), yMin), visible);
 		}
 
 		// end point
@@ -2065,24 +2065,24 @@ void XYCurvePrivate::updateFilling() {
 			if (last.x() < xMin)
 				end = edge;
 			else if (last.x() > xMax)
-				end = q->cSystem->mapLogicalToScene(QPointF(xMax, yMin), visible);
+				end = cSystem->mapLogicalToScene(QPointF(xMax, yMin), visible);
 			else
-				end = q->cSystem->mapLogicalToScene(QPointF(last.x(), yMin), visible);
+				end = cSystem->mapLogicalToScene(QPointF(last.x(), yMin), visible);
 		}
 
 		// coordinate at which to close all polygons
-		yEnd = q->cSystem->mapLogicalToScene(QPointF(xMin, yMax), visible).y();
+		yEnd = cSystem->mapLogicalToScene(QPointF(xMin, yMax), visible).y();
 	} else if (fillingPosition == Background::Position::Below) {
-		edge = q->cSystem->mapLogicalToScene(QPointF(xMin, yMax), visible);
+		edge = cSystem->mapLogicalToScene(QPointF(xMin, yMax), visible);
 
 		// start point
 		if (nsl_math_essentially_equal(start.y(), edge.y())) {
 			if (first.x() < xMin)
 				start = edge;
 			else if (first.x() > xMax)
-				start = q->cSystem->mapLogicalToScene(QPointF(xMax, yMax), visible);
+				start = cSystem->mapLogicalToScene(QPointF(xMax, yMax), visible);
 			else
-				start = q->cSystem->mapLogicalToScene(QPointF(first.x(), yMax), visible);
+				start = cSystem->mapLogicalToScene(QPointF(first.x(), yMax), visible);
 		}
 
 		// end point
@@ -2090,15 +2090,15 @@ void XYCurvePrivate::updateFilling() {
 			if (last.x() < xMin)
 				end = edge;
 			else if (last.x() > xMax)
-				end = q->cSystem->mapLogicalToScene(QPointF(xMax, yMax), visible);
+				end = cSystem->mapLogicalToScene(QPointF(xMax, yMax), visible);
 			else
-				end = q->cSystem->mapLogicalToScene(QPointF(last.x(), yMax), visible);
+				end = cSystem->mapLogicalToScene(QPointF(last.x(), yMax), visible);
 		}
 
 		// coordinate at which to close all polygons
-		yEnd = q->cSystem->mapLogicalToScene(QPointF(xMin, yMin), visible).y();
+		yEnd = cSystem->mapLogicalToScene(QPointF(xMin, yMin), visible).y();
 	} else if (fillingPosition == Background::Position::ZeroBaseline) {
-		edge = q->cSystem->mapLogicalToScene(QPointF(xMin, yMax), visible);
+		edge = cSystem->mapLogicalToScene(QPointF(xMin, yMax), visible);
 
 		// start point
 		if (nsl_math_essentially_equal(start.y(), edge.y())) {
@@ -2106,16 +2106,16 @@ void XYCurvePrivate::updateFilling() {
 				if (first.x() < xMin)
 					start = edge;
 				else if (first.x() > xRange.end())
-					start = q->cSystem->mapLogicalToScene(QPointF(xMax, yMax), visible);
+					start = cSystem->mapLogicalToScene(QPointF(xMax, yMax), visible);
 				else
-					start = q->cSystem->mapLogicalToScene(QPointF(first.x(), yMax), visible);
+					start = cSystem->mapLogicalToScene(QPointF(first.x(), yMax), visible);
 			} else {
 				if (first.x() < xMin)
 					start = edge;
 				else if (first.x() > xMax)
-					start = q->cSystem->mapLogicalToScene(QPointF(xMax, yMin), visible);
+					start = cSystem->mapLogicalToScene(QPointF(xMax, yMin), visible);
 				else
-					start = q->cSystem->mapLogicalToScene(QPointF(first.x(), yMin), visible);
+					start = cSystem->mapLogicalToScene(QPointF(first.x(), yMin), visible);
 			}
 		}
 
@@ -2125,31 +2125,31 @@ void XYCurvePrivate::updateFilling() {
 				if (last.x() < xMin)
 					end = edge;
 				else if (last.x() > xMax)
-					end = q->cSystem->mapLogicalToScene(QPointF(xMax, yMax), visible);
+					end = cSystem->mapLogicalToScene(QPointF(xMax, yMax), visible);
 				else
-					end = q->cSystem->mapLogicalToScene(QPointF(last.x(), yMax), visible);
+					end = cSystem->mapLogicalToScene(QPointF(last.x(), yMax), visible);
 			} else {
 				if (last.x() < xMin)
 					end = edge;
 				else if (last.x() > xMax)
-					end = q->cSystem->mapLogicalToScene(QPointF(xMax, yMin), visible);
+					end = cSystem->mapLogicalToScene(QPointF(xMax, yMin), visible);
 				else
-					end = q->cSystem->mapLogicalToScene(QPointF(last.x(), yMin), visible);
+					end = cSystem->mapLogicalToScene(QPointF(last.x(), yMin), visible);
 			}
 		}
 
-		yEnd = q->cSystem->mapLogicalToScene(QPointF(xMin, yMin > 0 ? yMin : 0), visible).y();
+		yEnd = cSystem->mapLogicalToScene(QPointF(xMin, yMin > 0 ? yMin : 0), visible).y();
 	} else if (fillingPosition == Background::Position::Left) {
-		edge = q->cSystem->mapLogicalToScene(QPointF(xMax, yMin), visible);
+		edge = cSystem->mapLogicalToScene(QPointF(xMax, yMin), visible);
 
 		// start point
 		if (nsl_math_essentially_equal(start.x(), edge.x())) {
 			if (first.y() < yMin)
 				start = edge;
 			else if (first.y() > yMax)
-				start = q->cSystem->mapLogicalToScene(QPointF(xMax, yMax), visible);
+				start = cSystem->mapLogicalToScene(QPointF(xMax, yMax), visible);
 			else
-				start = q->cSystem->mapLogicalToScene(QPointF(xMax, first.y()), visible);
+				start = cSystem->mapLogicalToScene(QPointF(xMax, first.y()), visible);
 		}
 
 		// end point
@@ -2157,24 +2157,24 @@ void XYCurvePrivate::updateFilling() {
 			if (last.y() < yMin)
 				end = edge;
 			else if (last.y() > yMax)
-				end = q->cSystem->mapLogicalToScene(QPointF(xMax, yMax), visible);
+				end = cSystem->mapLogicalToScene(QPointF(xMax, yMax), visible);
 			else
-				end = q->cSystem->mapLogicalToScene(QPointF(xMax, last.y()), visible);
+				end = cSystem->mapLogicalToScene(QPointF(xMax, last.y()), visible);
 		}
 
 		// coordinate at which to close all polygons
-		xEnd = q->cSystem->mapLogicalToScene(QPointF(xMin, yMin), visible).x();
+		xEnd = cSystem->mapLogicalToScene(QPointF(xMin, yMin), visible).x();
 	} else { // FillingRight
-		edge = q->cSystem->mapLogicalToScene(QPointF(xMin, yMin), visible);
+		edge = cSystem->mapLogicalToScene(QPointF(xMin, yMin), visible);
 
 		// start point
 		if (nsl_math_essentially_equal(start.x(), edge.x())) {
 			if (first.y() < yMin)
 				start = edge;
 			else if (first.y() > yMax)
-				start = q->cSystem->mapLogicalToScene(QPointF(xMin, yMax), visible);
+				start = cSystem->mapLogicalToScene(QPointF(xMin, yMax), visible);
 			else
-				start = q->cSystem->mapLogicalToScene(QPointF(xMin, first.y()), visible);
+				start = cSystem->mapLogicalToScene(QPointF(xMin, first.y()), visible);
 		}
 
 		// end point
@@ -2182,13 +2182,13 @@ void XYCurvePrivate::updateFilling() {
 			if (last.y() < yMin)
 				end = edge;
 			else if (last.y() > yMax)
-				end = q->cSystem->mapLogicalToScene(QPointF(xMin, yMax), visible);
+				end = cSystem->mapLogicalToScene(QPointF(xMin, yMax), visible);
 			else
-				end = q->cSystem->mapLogicalToScene(QPointF(xMin, last.y()), visible);
+				end = cSystem->mapLogicalToScene(QPointF(xMin, last.y()), visible);
 		}
 
 		// coordinate at which to close all polygons
-		xEnd = q->cSystem->mapLogicalToScene(QPointF(xMax, yMin), visible).x();
+		xEnd = cSystem->mapLogicalToScene(QPointF(xMax, yMin), visible).x();
 	}
 
 	if (start != fillLines.at(0).p1())
@@ -2741,7 +2741,7 @@ void XYCurvePrivate::updateErrorBars() {
 	}
 
 	// map the error bars to scene coordinates
-	elines = q->cSystem->mapLogicalToScene(elines);
+	elines = cSystem->mapLogicalToScene(elines);
 
 	// new painter path for the error bars
 	for (const auto& line : qAsConst(elines)) {
@@ -2752,7 +2752,7 @@ void XYCurvePrivate::updateErrorBars() {
 	// add caps for x error bars
 	const auto errorBarsCapSize = errorBarsLine->errorBarsCapSize();
 	if (!pointsErrorBarAnchorX.isEmpty()) {
-		pointsErrorBarAnchorX = q->cSystem->mapLogicalToScene(pointsErrorBarAnchorX);
+		pointsErrorBarAnchorX = cSystem->mapLogicalToScene(pointsErrorBarAnchorX);
 		for (const auto& point : qAsConst(pointsErrorBarAnchorX)) {
 			errorBarsPath.moveTo(QPointF(point.x(), point.y() - errorBarsCapSize / 2.));
 			errorBarsPath.lineTo(QPointF(point.x(), point.y() + errorBarsCapSize / 2.));
@@ -2761,7 +2761,7 @@ void XYCurvePrivate::updateErrorBars() {
 
 	// add caps for y error bars
 	if (!pointsErrorBarAnchorY.isEmpty()) {
-		pointsErrorBarAnchorY = q->cSystem->mapLogicalToScene(pointsErrorBarAnchorY);
+		pointsErrorBarAnchorY = cSystem->mapLogicalToScene(pointsErrorBarAnchorY);
 		for (const auto& point : qAsConst(pointsErrorBarAnchorY)) {
 			errorBarsPath.moveTo(QPointF(point.x() - errorBarsCapSize / 2., point.y()));
 			errorBarsPath.lineTo(QPointF(point.x() + errorBarsCapSize / 2., point.y()));
@@ -2916,8 +2916,8 @@ void XYCurvePrivate::updatePixmap() {
 QVariant XYCurvePrivate::itemChange(GraphicsItemChange change, const QVariant& value) {
 	// signalize, that the curve was selected. Will be used to create a new InfoElement (Marker)
 	if (change == QGraphicsItem::ItemSelectedChange) {
-		if (value.toBool() && q->cSystem && q->cSystem->isValid()) {
-			Q_EMIT q->selected(q->cSystem->mapSceneToLogical(mousePos).x());
+		if (value.toBool() && cSystem && cSystem->isValid()) {
+			Q_EMIT q->selected(cSystem->mapSceneToLogical(mousePos).x());
 		}
 	}
 	return QGraphicsItem::itemChange(change, value);
@@ -2994,7 +2994,7 @@ void XYCurvePrivate::drawValues(QPainter* painter) {
  * \p event
  */
 void XYCurvePrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
-	if (plot()->mouseMode() != CartesianPlot::MouseMode::Selection) {
+	if (plot->mouseMode() != CartesianPlot::MouseMode::Selection) {
 		event->ignore();
 		return QGraphicsItem::mousePressEvent(event);
 	}
@@ -3037,7 +3037,7 @@ void XYCurve::save(QXmlStreamWriter* writer) const {
 	else
 		writer->writeAttribute(QStringLiteral("yColumn"), d->yColumnPath);
 
-	writer->writeAttribute(QStringLiteral("plotRangeIndex"), QString::number(m_cSystemIndex));
+	writer->writeAttribute(QStringLiteral("plotRangeIndex"), QString::number(d->cSystemIndex));
 	writer->writeAttribute(QStringLiteral("legendVisible"), QString::number(d->legendVisible));
 	writer->writeAttribute(QStringLiteral("visible"), QString::number(d->isVisible()));
 	writer->writeEndElement();
@@ -3132,7 +3132,7 @@ bool XYCurve::load(XmlStreamReader* reader, bool preview) {
 				reader->raiseMissingAttributeWarning(QStringLiteral("visible"));
 			else
 				d->setVisible(str.toInt());
-			READ_INT_VALUE_DIRECT("plotRangeIndex", m_cSystemIndex, int);
+			READ_INT_VALUE_DIRECT("plotRangeIndex", d->cSystemIndex, int);
 		} else if (!preview && reader->name() == QLatin1String("lines")) {
 			attribs = reader->attributes();
 

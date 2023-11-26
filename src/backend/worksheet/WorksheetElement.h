@@ -63,12 +63,15 @@ public:
 
 	typedef WorksheetElementPrivate Private;
 
-	enum class CoordinateSystemSource {Plot, Custom};
+	enum class CoordinateSystemSource { Plot, Custom };
 
-	BASIC_D_ACCESSOR_DEL(CoordinateSystemSource, coordinateSystemSource, CoordinateSystemSource)
+	BASIC_D_ACCESSOR_DECL(CoordinateSystemSource, coordinateSystemSource, CoordinateSystemSource)
 	void setCoordinateSystem(const CartesianCoordinateSystem*, bool undo = true);
 	const CartesianCoordinateSystem* coordinateSystem() const;
 	CLASS_D_ACCESSOR_DECL(PositionWrapper, position, Position)
+	int coordinateSystemIndex() const;
+	void setCoordinateSystemIndex(int, QUndoCommand* parent = nullptr);
+	CartesianPlot* plot() const;
 	bool setCoordinateBindingEnabled(bool);
 	bool coordinateBindingEnabled() const;
 	BASIC_D_ACCESSOR_DECL(QPointF, positionLogical, PositionLogical)
@@ -116,13 +119,6 @@ public:
 	virtual void handleColumnAdded(const QString& path, const AbstractColumn*);
 	virtual void handleMatrixAdded(const QString& path, const Matrix*);
 
-	CartesianPlot* plot() const {
-		return m_plot;
-	} // used in the element docks
-	int coordinateSystemIndex() const {
-		return m_cSystemIndex;
-	}
-	void setCoordinateSystemIndex(int, QUndoCommand* parent = nullptr);
 	int coordinateSystemCount() const;
 	QString coordinateSystemInfo(int index) const;
 
@@ -133,12 +129,6 @@ private:
 
 protected:
 	WorksheetElement(const QString&, WorksheetElementPrivate* dd, AspectType);
-	int m_cSystemIndex{0}; // index of coordinate system used from plot
-	// parent plot if available
-	// not const because of prepareGeometryChange()
-	// normally set in finalizeAdd()
-	CartesianPlot* m_plot{nullptr};
-	const CartesianCoordinateSystem* cSystem{nullptr}; // current cSystem
 
 public Q_SLOTS:
 	virtual void retransform() = 0;
@@ -161,6 +151,9 @@ private Q_SLOTS:
 	void prepareDrawingOrderMenu();
 	void execMoveBehind(QAction*);
 	void execMoveInFrontOf(QAction*);
+	void cSystemChanged(const CartesianCoordinateSystem* cSystem) const {
+		Q_EMIT coordinateSystemChanged(cSystem);
+	}
 
 Q_SIGNALS:
 	friend class AbstractPlotSetHorizontalPaddingCmd;
@@ -196,6 +189,7 @@ Q_SIGNALS:
 
 	friend class WorksheetElementTest;
 	friend class SetCoordinateSystemIndexCmd;
+	friend class WorksheetElementSetCoordinateSystemCmd;
 };
 
 #endif

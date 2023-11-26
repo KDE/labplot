@@ -70,12 +70,13 @@ void WorksheetElementTest::initTestCase() {
 
 #define CHECK_REFERENCERANGE_RECT(referenceRange, xLeftRef, yTopRef, xRightRef, yBottomRef)                                                                    \
 	do {                                                                                                                                                       \
-		QVERIFY(referenceRange->cSystem);                                                                                                                      \
-		QPointF topLeftLogical = referenceRange->cSystem->mapSceneToLogical(referenceRange->d_func()->mapToParent(referenceRange->d_func()->rect.topLeft()));  \
+		QVERIFY(referenceRange->coordinateSystem());                                                                                                           \
+		QPointF topLeftLogical =                                                                                                                               \
+			referenceRange->coordinateSystem()->mapSceneToLogical(referenceRange->d_func()->mapToParent(referenceRange->d_func()->rect.topLeft()));            \
 		VALUES_EQUAL(topLeftLogical.x(), xLeftRef);                                                                                                            \
 		VALUES_EQUAL(topLeftLogical.y(), yTopRef);                                                                                                             \
 		QPointF bottomRightLogical =                                                                                                                           \
-			referenceRange->cSystem->mapSceneToLogical(referenceRange->d_func()->mapToParent(referenceRange->d_func()->rect.bottomRight()));                   \
+			referenceRange->coordinateSystem()->mapSceneToLogical(referenceRange->d_func()->mapToParent(referenceRange->d_func()->rect.bottomRight()));        \
 		VALUES_EQUAL(bottomRightLogical.x(), xRightRef);                                                                                                       \
 		VALUES_EQUAL(bottomRightLogical.y(), yBottomRef);                                                                                                      \
 	} while (false);

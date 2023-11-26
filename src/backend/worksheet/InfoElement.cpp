@@ -37,7 +37,8 @@
 
 InfoElement::InfoElement(const QString& name, CartesianPlot* plot)
 	: WorksheetElement(name, new InfoElementPrivate(this), AspectType::InfoElement) {
-	m_plot = plot;
+	Q_D(InfoElement);
+	d->plot = plot;
 
 	init();
 	setVisible(false);
@@ -46,7 +47,7 @@ InfoElement::InfoElement(const QString& name, CartesianPlot* plot)
 InfoElement::InfoElement(const QString& name, CartesianPlot* p, const XYCurve* curve, double logicalPos)
 	: WorksheetElement(name, new InfoElementPrivate(this, curve), AspectType::InfoElement) {
 	Q_D(InfoElement);
-	m_plot = p;
+	d->plot = p;
 
 	init();
 
@@ -54,7 +55,7 @@ InfoElement::InfoElement(const QString& name, CartesianPlot* p, const XYCurve* c
 
 	if (curve) {
 		d->connectionLineCurveName = curve->name();
-		auto* custompoint = new CustomPoint(m_plot, curve->name());
+		auto* custompoint = new CustomPoint(d->plot, curve->name());
 		custompoint->setFixed(true);
 		custompoint->setCoordinateBindingEnabled(true);
 		custompoint->setCoordinateSystemIndex(curve->coordinateSystemIndex());
@@ -75,7 +76,7 @@ InfoElement::InfoElement(const QString& name, CartesianPlot* p, const XYCurve* c
 			}
 		} else {
 			d->positionLogical = 0;
-			custompoint->setPositionLogical(cSystem->mapSceneToLogical(QPointF(0, 0)));
+			custompoint->setPositionLogical(d->cSystem->mapSceneToLogical(QPointF(0, 0)));
 			DEBUG("Value not found")
 		}
 
@@ -124,7 +125,8 @@ InfoElement::~InfoElement() {
 }
 
 void InfoElement::init() {
-	cSystem = dynamic_cast<const CartesianCoordinateSystem*>(m_plot->coordinateSystem(m_cSystemIndex));
+	Q_D(InfoElement);
+	d->cSystem = dynamic_cast<const CartesianCoordinateSystem*>(d->plot->coordinateSystem(coordinateSystemIndex()));
 
 	initActions();
 	initMenus();
@@ -132,7 +134,7 @@ void InfoElement::init() {
 	connect(this, &InfoElement::childAspectRemoved, this, &InfoElement::childRemoved);
 	connect(this, &InfoElement::childAspectAdded, this, &InfoElement::childAdded);
 
-	m_title = new TextLabel(i18n("Label"), m_plot);
+	m_title = new TextLabel(i18n("Label"), plot());
 	m_title->setHidden(true);
 	TextLabel::TextWrapper text;
 	text.allowPlaceholder = true;
@@ -148,7 +150,6 @@ void InfoElement::init() {
 	const auto& group = config.group("Axis");
 
 	// lines
-	Q_D(InfoElement);
 	d->verticalLine = new Line(QString());
 	d->verticalLine->setHidden(true);
 	d->verticalLine->setPrefix(QStringLiteral("VerticalLine"));
@@ -218,7 +219,7 @@ void InfoElement::addCurve(const XYCurve* curve, CustomPoint* custompoint) {
 
 	if (!custompoint) {
 		m_suppressChildPositionChanged = true;
-		custompoint = new CustomPoint(m_plot, curve->name());
+		custompoint = new CustomPoint(plot(), curve->name());
 		custompoint->setCoordinateBindingEnabled(true);
 		custompoint->setCoordinateSystemIndex(curve->coordinateSystemIndex());
 		addChild(custompoint);
@@ -284,7 +285,7 @@ void InfoElement::addCurvePath(QString& curvePath, CustomPoint* custompoint) {
 	}
 
 	if (!custompoint) {
-		custompoint = new CustomPoint(m_plot, i18n("Symbol"));
+		custompoint = new CustomPoint(plot(), i18n("Symbol"));
 		custompoint->setVisible(false);
 		m_suppressChildPositionChanged = true;
 		custompoint->setCoordinateBindingEnabled(true);
@@ -433,7 +434,7 @@ TextLabel::TextWrapper InfoElement::createTextLabelText() {
 	else if (columnMode == AbstractColumn::ColumnMode::Day || columnMode == AbstractColumn::ColumnMode::Month
 			 || columnMode == AbstractColumn::ColumnMode::DateTime) {
 		const auto& dateTime = QDateTime::fromMSecsSinceEpoch(d->positionLogical, Qt::UTC);
-		xValueStr = dateTime.toString(m_plot->rangeDateTimeFormat(Dimension::X));
+		xValueStr = dateTime.toString(plot()->rangeDateTimeFormat(Dimension::X));
 	}
 
 	if (wrapper.mode == TextLabel::Mode::Text)
@@ -895,7 +896,7 @@ void InfoElementPrivate::retransform() {
 	QDEBUG(Q_FUNC_INFO << ", connection line = " << m_connectionLine)
 
 	// vertical line
-	const QRectF& dataRect = mapFromParent(q->m_plot->dataRect()).boundingRect();
+	const QRectF& dataRect = mapFromParent(plot->dataRect()).boundingRect();
 	xposLine = QLineF(pointPosItemCoords.x(), dataRect.bottom(), pointPosItemCoords.x(), dataRect.top());
 	QDEBUG(Q_FUNC_INFO << ", vertical line " << xposLine)
 
@@ -1020,10 +1021,10 @@ void InfoElementPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 	if (delta == QPointF(0, 0))
 		return;
 
-	if (!q->cSystem->isValid())
+	if (!cSystem->isValid())
 		return;
-	QPointF eventLogicPos = q->cSystem->mapSceneToLogical(eventPos, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
-	QPointF delta_logic = eventLogicPos - q->cSystem->mapSceneToLogical(oldMousePos);
+	QPointF eventLogicPos = cSystem->mapSceneToLogical(eventPos, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+	QPointF delta_logic = eventLogicPos - cSystem->mapSceneToLogical(oldMousePos);
 
 	if (!q->m_title)
 		return;
@@ -1160,7 +1161,7 @@ void InfoElement::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("curve"), d->connectionLineCurveName);
 	writer->writeAttribute(QStringLiteral("gluePointIndex"), QString::number(d->gluePointIndex));
 	writer->writeAttribute(QStringLiteral("markerIndex"), QString::number(d->m_index));
-	writer->writeAttribute(QStringLiteral("plotRangeIndex"), QString::number(m_cSystemIndex));
+	writer->writeAttribute(QStringLiteral("plotRangeIndex"), QString::number(d->cSystemIndex));
 	writer->writeAttribute(QStringLiteral("visible"), QString::number(d->isVisible()));
 	writer->writeEndElement();
 
@@ -1210,7 +1211,7 @@ bool InfoElement::load(XmlStreamReader* reader, bool preview) {
 		} else if (reader->name() == QLatin1String("general")) {
 			attribs = reader->attributes();
 
-			READ_INT_VALUE_DIRECT("plotRangeIndex", m_cSystemIndex, int);
+			READ_INT_VALUE_DIRECT("plotRangeIndex", d->cSystemIndex, int);
 
 			str = attribs.value(QStringLiteral("visible")).toString();
 			if (str.isEmpty())
@@ -1228,7 +1229,7 @@ bool InfoElement::load(XmlStreamReader* reader, bool preview) {
 			d->connectionLine->load(reader, preview);
 		} else if (reader->name() == QLatin1String("textLabel")) {
 			if (!m_title) {
-				m_title = new TextLabel(i18n("Label"), m_plot);
+				m_title = new TextLabel(i18n("Label"), d->plot);
 				m_title->setIsLoading(true);
 				this->addChild(m_title);
 			}
@@ -1238,7 +1239,7 @@ bool InfoElement::load(XmlStreamReader* reader, bool preview) {
 			if (curvePath.isEmpty()) // safety check in case the xml is broken
 				continue;
 
-			auto* point = new CustomPoint(m_plot, QString());
+			auto* point = new CustomPoint(d->plot, QString());
 			point->setIsLoading(true);
 			if (!point->load(reader, preview)) {
 				delete point;

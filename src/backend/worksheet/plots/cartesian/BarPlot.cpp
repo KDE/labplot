@@ -650,7 +650,7 @@ void BarPlotPrivate::verticalBarPlot(int columnIndex) {
 
 			m_valuesPointsLogical << QPointF(x + width / 2, value);
 
-			barLines << q->cSystem->mapLogicalToScene(lines);
+			barLines << cSystem->mapLogicalToScene(lines);
 			updateFillingRect(columnIndex, valueIndex, lines);
 
 			++valueIndex;
@@ -691,7 +691,7 @@ void BarPlotPrivate::verticalBarPlot(int columnIndex) {
 				m_valuesPointsLogical << QPointF(x + width / 2, m_stackedBarNegativeOffsets.at(valueIndex));
 			}
 
-			barLines << q->cSystem->mapLogicalToScene(lines);
+			barLines << cSystem->mapLogicalToScene(lines);
 			updateFillingRect(columnIndex, valueIndex, lines);
 
 			++valueIndex;
@@ -729,7 +729,7 @@ void BarPlotPrivate::verticalBarPlot(int columnIndex) {
 
 			m_valuesPointsLogical << QPointF(x + width / 2, m_stackedBarPositiveOffsets.at(valueIndex));
 
-			barLines << q->cSystem->mapLogicalToScene(lines);
+			barLines << cSystem->mapLogicalToScene(lines);
 			updateFillingRect(columnIndex, valueIndex, lines);
 
 			++valueIndex;
@@ -775,7 +775,7 @@ void BarPlotPrivate::horizontalBarPlot(int columnIndex) {
 
 			m_valuesPointsLogical << QPointF(value, y + width / 2);
 
-			barLines << q->cSystem->mapLogicalToScene(lines);
+			barLines << cSystem->mapLogicalToScene(lines);
 			updateFillingRect(columnIndex, valueIndex, lines);
 
 			++valueIndex;
@@ -815,7 +815,7 @@ void BarPlotPrivate::horizontalBarPlot(int columnIndex) {
 				m_stackedBarNegativeOffsets[valueIndex] += value;
 				m_valuesPointsLogical << QPointF(m_stackedBarNegativeOffsets.at(valueIndex), y + width / 2);
 			}
-			barLines << q->cSystem->mapLogicalToScene(lines);
+			barLines << cSystem->mapLogicalToScene(lines);
 			updateFillingRect(columnIndex, valueIndex, lines);
 
 			++valueIndex;
@@ -851,7 +851,7 @@ void BarPlotPrivate::horizontalBarPlot(int columnIndex) {
 			m_stackedBarPositiveOffsets[valueIndex] += value;
 			m_valuesPointsLogical << QPointF(m_stackedBarPositiveOffsets.at(valueIndex), y + width / 2);
 
-			barLines << q->cSystem->mapLogicalToScene(lines);
+			barLines << cSystem->mapLogicalToScene(lines);
 			updateFillingRect(columnIndex, valueIndex, lines);
 
 			++valueIndex;
@@ -863,7 +863,7 @@ void BarPlotPrivate::horizontalBarPlot(int columnIndex) {
 }
 
 void BarPlotPrivate::updateFillingRect(int columnIndex, int valueIndex, const QVector<QLineF>& lines) {
-	const auto& unclippedLines = q->cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+	const auto& unclippedLines = cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 
 	if (unclippedLines.isEmpty()) {
 		m_fillPolygons[columnIndex][valueIndex] = QPolygonF();
@@ -928,7 +928,7 @@ void BarPlotPrivate::updateValues() {
 	// determine the value string for all points that are currently visible in the plot
 	auto visiblePoints = std::vector<bool>(m_valuesPointsLogical.count(), false);
 	Points pointsScene;
-	q->cSystem->mapLogicalToScene(m_valuesPointsLogical, pointsScene, visiblePoints);
+	cSystem->mapLogicalToScene(m_valuesPointsLogical, pointsScene, visiblePoints);
 	const auto& prefix = value->prefix();
 	const auto& suffix = value->suffix();
 	if (value->type() == Value::BinEntries) {
@@ -1235,7 +1235,7 @@ void BarPlot::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("type"), QString::number(static_cast<int>(d->type)));
 	writer->writeAttribute(QStringLiteral("orientation"), QString::number(static_cast<int>(d->orientation)));
 	writer->writeAttribute(QStringLiteral("widthFactor"), QString::number(d->widthFactor));
-	writer->writeAttribute(QStringLiteral("plotRangeIndex"), QString::number(m_cSystemIndex));
+	writer->writeAttribute(QStringLiteral("plotRangeIndex"), QString::number(d->cSystemIndex));
 	writer->writeAttribute(QStringLiteral("xMin"), QString::number(d->xMin));
 	writer->writeAttribute(QStringLiteral("xMax"), QString::number(d->xMax));
 	writer->writeAttribute(QStringLiteral("yMin"), QString::number(d->yMin));
@@ -1295,7 +1295,7 @@ bool BarPlot::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("type", type, BarPlot::Type);
 			READ_INT_VALUE("orientation", orientation, BarPlot::Orientation);
 			READ_DOUBLE_VALUE("widthFactor", widthFactor);
-			READ_INT_VALUE_DIRECT("plotRangeIndex", m_cSystemIndex, int);
+			READ_INT_VALUE_DIRECT("plotRangeIndex", d->cSystemIndex, int);
 
 			READ_DOUBLE_VALUE("xMin", xMin);
 			READ_DOUBLE_VALUE("xMax", xMax);

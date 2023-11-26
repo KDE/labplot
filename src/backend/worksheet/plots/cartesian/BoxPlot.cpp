@@ -1089,7 +1089,7 @@ void BoxPlotPrivate::verticalBoxPlot(int index) {
 		lines << QLineF(xMinBox, notchMax, xMinBox, yMaxBox);
 	}
 
-	m_boxRect[index] = q->cSystem->mapLogicalToScene(lines);
+	m_boxRect[index] = cSystem->mapLogicalToScene(lines);
 	updateFillingRect(index, lines);
 
 	// median line
@@ -1101,7 +1101,7 @@ void BoxPlotPrivate::verticalBoxPlot(int index) {
 		lines << QLineF(xMinBox + 0.1 * width, median, m_xMaxBox.at(index) - 0.1 * width, median);
 	}
 
-	lines = q->cSystem->mapLogicalToScene(lines);
+	lines = cSystem->mapLogicalToScene(lines);
 	if (!lines.isEmpty())
 		m_medianLine[index] = lines.first();
 
@@ -1109,7 +1109,7 @@ void BoxPlotPrivate::verticalBoxPlot(int index) {
 	lines.clear();
 	lines << QLineF(x, m_yMaxBox.at(index), x, m_whiskerMax.at(index)); // upper whisker
 	lines << QLineF(x, m_yMinBox.at(index), x, m_whiskerMin.at(index)); // lower whisker
-	lines = q->cSystem->mapLogicalToScene(lines);
+	lines = cSystem->mapLogicalToScene(lines);
 	for (const auto& line : qAsConst(lines)) {
 		m_whiskersPath[index].moveTo(line.p1());
 		m_whiskersPath[index].lineTo(line.p2());
@@ -1118,14 +1118,14 @@ void BoxPlotPrivate::verticalBoxPlot(int index) {
 	// whisker caps
 	if (!m_whiskersPath[index].isEmpty()) {
 		bool visible = false;
-		QPointF maxPoint = q->cSystem->mapLogicalToScene(QPointF(x, m_whiskerMax.at(index)), visible);
+		QPointF maxPoint = cSystem->mapLogicalToScene(QPointF(x, m_whiskerMax.at(index)), visible);
 		if (visible) {
 			m_whiskersCapPath[index].moveTo(QPointF(maxPoint.x() - whiskersCapSize / 2., maxPoint.y()));
 			m_whiskersCapPath[index].lineTo(QPointF(maxPoint.x() + whiskersCapSize / 2., maxPoint.y()));
 			m_whiskerEndPointsLogical[index] << QPointF(x, m_whiskerMax.at(index));
 		}
 
-		QPointF minPoint = q->cSystem->mapLogicalToScene(QPointF(x, m_whiskerMin.at(index)), visible);
+		QPointF minPoint = cSystem->mapLogicalToScene(QPointF(x, m_whiskerMin.at(index)), visible);
 		if (visible) {
 			m_whiskersCapPath[index].moveTo(QPointF(minPoint.x() - whiskersCapSize / 2., minPoint.y()));
 			m_whiskersCapPath[index].lineTo(QPointF(minPoint.x() + whiskersCapSize / 2., minPoint.y()));
@@ -1177,7 +1177,7 @@ void BoxPlotPrivate::horizontalBoxPlot(int index) {
 		lines << QLineF(xMinBox, yMinBox, xMinBox, yMaxBox);
 	}
 
-	m_boxRect[index] = q->cSystem->mapLogicalToScene(lines);
+	m_boxRect[index] = cSystem->mapLogicalToScene(lines);
 	updateFillingRect(index, lines);
 
 	// median line
@@ -1189,7 +1189,7 @@ void BoxPlotPrivate::horizontalBoxPlot(int index) {
 		lines << QLineF(median, yMinBox + 0.1 * width, median, yMaxBox - 0.1 * width);
 	}
 
-	lines = q->cSystem->mapLogicalToScene(lines);
+	lines = cSystem->mapLogicalToScene(lines);
 	if (!lines.isEmpty())
 		m_medianLine[index] = lines.first();
 
@@ -1197,7 +1197,7 @@ void BoxPlotPrivate::horizontalBoxPlot(int index) {
 	lines.clear();
 	lines << QLineF(m_xMaxBox.at(index), y, m_whiskerMax.at(index), y); // upper whisker
 	lines << QLineF(m_xMinBox.at(index), y, m_whiskerMin.at(index), y); // lower whisker
-	lines = q->cSystem->mapLogicalToScene(lines);
+	lines = cSystem->mapLogicalToScene(lines);
 	for (const auto& line : qAsConst(lines)) {
 		m_whiskersPath[index].moveTo(line.p1());
 		m_whiskersPath[index].lineTo(line.p2());
@@ -1206,14 +1206,14 @@ void BoxPlotPrivate::horizontalBoxPlot(int index) {
 	// whisker caps
 	if (!m_whiskersPath[index].isEmpty()) {
 		bool visible = false;
-		QPointF maxPoint = q->cSystem->mapLogicalToScene(QPointF(m_whiskerMax.at(index), y), visible);
+		QPointF maxPoint = cSystem->mapLogicalToScene(QPointF(m_whiskerMax.at(index), y), visible);
 		if (visible) {
 			m_whiskersCapPath[index].moveTo(QPointF(maxPoint.x(), maxPoint.y() - whiskersCapSize / 2));
 			m_whiskersCapPath[index].lineTo(QPointF(maxPoint.x(), maxPoint.y() + whiskersCapSize / 2));
 			m_whiskerEndPointsLogical[index] << QPointF(m_whiskerMax.at(index), y);
 		}
 
-		QPointF minPoint = q->cSystem->mapLogicalToScene(QPointF(m_whiskerMin.at(index), y), visible);
+		QPointF minPoint = cSystem->mapLogicalToScene(QPointF(m_whiskerMin.at(index), y), visible);
 		if (visible) {
 			m_whiskersCapPath[index].moveTo(QPointF(minPoint.x(), minPoint.y() - whiskersCapSize / 2));
 			m_whiskersCapPath[index].lineTo(QPointF(minPoint.x(), minPoint.y() + whiskersCapSize / 2));
@@ -1256,7 +1256,7 @@ void BoxPlotPrivate::updateRug() {
 			}
 
 			// map the points to scene coordinates
-			points = q->cSystem->mapLogicalToScene(points);
+			points = cSystem->mapLogicalToScene(points);
 
 			// path for the vertical rug lines
 			for (const auto& point : qAsConst(points)) {
@@ -1270,7 +1270,7 @@ void BoxPlotPrivate::updateRug() {
 			}
 
 			// map the points to scene coordinates
-			points = q->cSystem->mapLogicalToScene(points);
+			points = cSystem->mapLogicalToScene(points);
 
 			// path for the horizontal rug lines
 			for (const auto& point : qAsConst(points)) {
@@ -1286,7 +1286,7 @@ void BoxPlotPrivate::updateRug() {
 }
 
 void BoxPlotPrivate::updateFillingRect(int index, const QVector<QLineF>& lines) {
-	const auto& unclippedLines = q->cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+	const auto& unclippedLines = cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 
 	if (unclippedLines.isEmpty()) {
 		m_fillPolygon[index] = QPolygonF();
@@ -1352,7 +1352,7 @@ void BoxPlotPrivate::mapSymbolsToScene(int index) {
 		std::vector<bool> m_pointVisible;
 		m_pointVisible.resize(size);
 
-		q->cSystem->mapLogicalToScene(startIndex, endIndex, m_outlierPointsLogical[index], m_outlierPoints[index], m_pointVisible);
+		cSystem->mapLogicalToScene(startIndex, endIndex, m_outlierPointsLogical[index], m_outlierPoints[index], m_pointVisible);
 	}
 
 	// data points
@@ -1363,7 +1363,7 @@ void BoxPlotPrivate::mapSymbolsToScene(int index) {
 		std::vector<bool> pointVisible;
 		pointVisible.resize(size);
 
-		q->cSystem->mapLogicalToScene(startIndex, endIndex, m_dataPointsLogical[index], m_dataPoints[index], pointVisible);
+		cSystem->mapLogicalToScene(startIndex, endIndex, m_dataPointsLogical[index], m_dataPoints[index], pointVisible);
 	}
 
 	// far out points
@@ -1374,7 +1374,7 @@ void BoxPlotPrivate::mapSymbolsToScene(int index) {
 		std::vector<bool> pointVisible;
 		pointVisible.resize(size);
 
-		q->cSystem->mapLogicalToScene(startIndex, endIndex, m_farOutPointsLogical[index], m_farOutPoints[index], pointVisible);
+		cSystem->mapLogicalToScene(startIndex, endIndex, m_farOutPointsLogical[index], m_farOutPoints[index], pointVisible);
 	}
 
 	// whisker ends
@@ -1385,16 +1385,16 @@ void BoxPlotPrivate::mapSymbolsToScene(int index) {
 		std::vector<bool> pointVisible;
 		pointVisible.resize(size);
 
-		q->cSystem->mapLogicalToScene(startIndex, endIndex, m_whiskerEndPointsLogical[index], m_whiskerEndPoints[index], pointVisible);
+		cSystem->mapLogicalToScene(startIndex, endIndex, m_whiskerEndPointsLogical[index], m_whiskerEndPoints[index], pointVisible);
 	}
 
 	// mean
 	bool visible;
-	m_meanPoint[index] = q->cSystem->mapLogicalToScene(m_meanPointLogical[index], visible);
+	m_meanPoint[index] = cSystem->mapLogicalToScene(m_meanPointLogical[index], visible);
 	m_meanPointVisible[index] = visible;
 
 	// median
-	m_medianPoint[index] = q->cSystem->mapLogicalToScene(m_medianPointLogical[index], visible);
+	m_medianPoint[index] = cSystem->mapLogicalToScene(m_medianPointLogical[index], visible);
 	m_medianPointVisible[index] = visible;
 }
 
@@ -1694,7 +1694,7 @@ void BoxPlot::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("widthFactor"), QString::number(d->widthFactor));
 	writer->writeAttribute(QStringLiteral("notches"), QString::number(d->notchesEnabled));
 	writer->writeAttribute(QStringLiteral("jitteringEnabled"), QString::number(d->jitteringEnabled));
-	writer->writeAttribute(QStringLiteral("plotRangeIndex"), QString::number(m_cSystemIndex));
+	writer->writeAttribute(QStringLiteral("plotRangeIndex"), QString::number(d->cSystemIndex));
 	writer->writeAttribute(QStringLiteral("xMin"), QString::number(d->xMin));
 	writer->writeAttribute(QStringLiteral("xMax"), QString::number(d->xMax));
 	writer->writeAttribute(QStringLiteral("yMin"), QString::number(d->yMin));
@@ -1781,7 +1781,7 @@ bool BoxPlot::load(XmlStreamReader* reader, bool preview) {
 			READ_DOUBLE_VALUE("widthFactor", widthFactor);
 			READ_INT_VALUE("notches", notchesEnabled, bool);
 			READ_INT_VALUE("jitteringEnabled", jitteringEnabled, bool);
-			READ_INT_VALUE_DIRECT("plotRangeIndex", m_cSystemIndex, int);
+			READ_INT_VALUE_DIRECT("plotRangeIndex", d->cSystemIndex, int);
 
 			READ_DOUBLE_VALUE("xMin", xMin);
 			READ_DOUBLE_VALUE("xMax", xMax);

@@ -93,8 +93,9 @@ TextLabel::TextLabel(const QString& name, TextLabelPrivate* dd, Type type)
 TextLabel::TextLabel(const QString& name, CartesianPlot* plot, Type type)
 	: WorksheetElement(name, new TextLabelPrivate(this), AspectType::TextLabel)
 	, m_type(type) {
-	m_plot = plot;
-	cSystem = dynamic_cast<const CartesianCoordinateSystem*>(m_plot->coordinateSystem(m_cSystemIndex));
+	Q_D(TextLabel);
+	d->plot = plot;
+	d->cSystem = dynamic_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem(coordinateSystemIndex()));
 	init();
 }
 
@@ -164,8 +165,8 @@ void TextLabel::init() {
 		d->position.verticalPosition = (VerticalPosition)group.readEntry("PositionY", (int)d->position.verticalPosition);
 		d->horizontalAlignment = (WorksheetElement::HorizontalAlignment)group.readEntry("HorizontalAlignment", static_cast<int>(d->horizontalAlignment));
 		d->verticalAlignment = (WorksheetElement::VerticalAlignment)group.readEntry("VerticalAlignment", static_cast<int>(d->verticalAlignment));
-		if (cSystem && cSystem->isValid())
-			d->positionLogical = cSystem->mapSceneToLogical(d->position.point, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+		if (d->cSystem && d->cSystem->isValid())
+			d->positionLogical = d->cSystem->mapSceneToLogical(d->position.point, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 	}
 	d->updatePosition();
 
@@ -511,10 +512,10 @@ void TextLabelPrivate::updatePosition() {
 		Q_EMIT q->positionChanged(position);
 
 		// the position in scene coordinates was changed, calculate the position in logical coordinates
-		if (q->cSystem) {
+		if (cSystem) {
 			if (!coordinateBindingEnabled) {
 				QPointF pos = q->align(p, m_boundingRectangle, horizontalAlignment, verticalAlignment, false);
-				positionLogical = q->cSystem->mapSceneToLogical(pos, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+				positionLogical = cSystem->mapSceneToLogical(pos, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 			}
 			Q_EMIT q->positionLogicalChanged(positionLogical);
 		}
@@ -1028,7 +1029,7 @@ void TextLabelPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 /*
 void TextLabelPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 	if(coordinateBinding)
-		positionLogical = q->cSystem->mapSceneToLogical(mapParentToPlotArea(pos()), AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+		positionLogical = cSystem->mapSceneToLogical(mapParentToPlotArea(pos()), AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 	return QGraphicsItem::mouseMoveEvent(event);
 }*/
 

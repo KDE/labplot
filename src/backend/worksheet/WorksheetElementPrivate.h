@@ -39,6 +39,13 @@ public:
 	bool insidePlot{true}; // point inside the plot (visible) or not
 	bool lock{false};
 
+	int cSystemIndex{0}; // index of coordinate system used from plot
+	// parent plot if available
+	// not const because of prepareGeometryChange()
+	// normally set in finalizeAdd()
+	CartesianPlot* plot{nullptr};
+	const CartesianCoordinateSystem* cSystem{nullptr}; // current cSystem
+
 	bool swapVisible(bool on);
 	QString name() const;
 	virtual void retransform() = 0;
