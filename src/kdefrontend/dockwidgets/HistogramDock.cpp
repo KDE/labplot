@@ -44,7 +44,8 @@ HistogramDock::HistogramDock(QWidget* parent)
 	: BaseDock(parent)
 	, cbDataColumn(new TreeViewComboBox) {
 	ui.setupUi(this);
-	setBaseWidgets(ui.leName, ui.teComment, 2);
+	setBaseWidgets(ui.leName, ui.teComment);
+
 	// Tab "General"
 	auto* gridLayout = qobject_cast<QGridLayout*>(ui.tabGeneral->layout());
 	gridLayout->addWidget(cbDataColumn, 3, 2, 1, 1);

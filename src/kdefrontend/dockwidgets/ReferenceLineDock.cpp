@@ -21,7 +21,7 @@ ReferenceLineDock::ReferenceLineDock(QWidget* parent)
 	: BaseDock(parent) {
 	ui.setupUi(this);
 	setPlotRangeCombobox(ui.cbPlotRanges);
-	setBaseWidgets(ui.leName, ui.teComment, 1.2);
+	setBaseWidgets(ui.leName, ui.teComment);
 
 	ui.cbOrientation->addItem(i18n("Horizontal"));
 	ui.cbOrientation->addItem(i18n("Vertical"));

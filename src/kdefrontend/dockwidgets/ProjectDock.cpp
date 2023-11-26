@@ -23,7 +23,7 @@
 ProjectDock::ProjectDock(QWidget* parent)
 	: BaseDock(parent) {
 	ui.setupUi(this);
-	setBaseWidgets(ui.leName, ui.teComment, 1.2);
+	setBaseWidgets(ui.leName, ui.teComment);
 
 	QString msg = i18n(
 		"If checked, the results of the calculations in the analysis curves will be saved in the project file.\n"

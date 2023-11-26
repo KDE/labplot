@@ -76,7 +76,7 @@ public:
 		return m_aspect;
 	}
 
-	void setBaseWidgets(QLineEdit* nameLabel, ResizableTextEdit* commentLabel, double commentHeightFactorNameLabel = 1.0);
+	void setBaseWidgets(QLineEdit* nameLabel, ResizableTextEdit* commentLabel, double commentHeightFactorNameLabel = 1.2);
 
 	AspectTreeModel* aspectModel();
 

@@ -36,8 +36,7 @@ LiveDataDock::LiveDataDock(QWidget* parent)
 #endif
 {
 	ui.setupUi(this);
-	setBaseWidgets(ui.leName, nullptr);
-	// leComment = // not available
+	setBaseWidgets(ui.leName, ui.teComment);
 
 	ui.bUpdateNow->setIcon(QIcon::fromTheme(QLatin1String("view-refresh")));
 

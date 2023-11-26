@@ -26,7 +26,7 @@
 MatrixDock::MatrixDock(QWidget* parent)
 	: BaseDock(parent) {
 	ui.setupUi(this);
-	setBaseWidgets(ui.leName, ui.teComment, 1.2);
+	setBaseWidgets(ui.leName, ui.teComment);
 
 	ui.cbFormat->addItem(i18n("Decimal"), QVariant('f'));
 	ui.cbFormat->addItem(i18n("Scientific (e)"), QVariant('e'));

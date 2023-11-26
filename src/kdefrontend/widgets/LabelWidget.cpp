@@ -89,7 +89,7 @@ LabelWidget::LabelWidget(QWidget* parent)
 	: BaseDock(parent)
 	, m_dateTimeMenu(new QMenu(this)) {
 	ui.setupUi(this);
-	setBaseWidgets(ui.leName, ui.teComment, 1.5);
+	setBaseWidgets(ui.leName, ui.teComment);
 
 	// set the minimum size of the text edit widget to one row of a QLabel
 	ui.teLabel->setMinimumHeight(ui.lName->height());

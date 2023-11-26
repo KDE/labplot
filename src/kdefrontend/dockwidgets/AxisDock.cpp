@@ -54,7 +54,7 @@ AxisDock::AxisDock(QWidget* parent)
 	: BaseDock(parent) {
 	ui.setupUi(this);
 	setPlotRangeCombobox(ui.cbPlotRanges);
-	setBaseWidgets(ui.leName, ui.teComment, 1.5);
+	setBaseWidgets(ui.leName, ui.teComment);
 
 	//"Title"-tab
 	auto* hboxLayout = new QHBoxLayout(ui.tabTitle);

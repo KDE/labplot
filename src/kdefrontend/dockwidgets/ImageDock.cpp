@@ -40,7 +40,7 @@
 ImageDock::ImageDock(QWidget* parent)
 	: BaseDock(parent) {
 	ui.setupUi(this);
-	setBaseWidgets(ui.leName, ui.teComment, 1.2);
+	setBaseWidgets(ui.leName, ui.teComment);
 
 	ui.bOpen->setIcon(QIcon::fromTheme(QStringLiteral("document-open")));
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))

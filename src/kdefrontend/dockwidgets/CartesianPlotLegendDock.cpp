@@ -29,7 +29,7 @@
 CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget* parent)
 	: BaseDock(parent) {
 	ui.setupUi(this);
-	setBaseWidgets(ui.leName, ui.teComment, 1.2);
+	setBaseWidgets(ui.leName, ui.teComment);
 
 	//"Title"-tab
 	auto hboxLayout = new QHBoxLayout(ui.tabTitle);

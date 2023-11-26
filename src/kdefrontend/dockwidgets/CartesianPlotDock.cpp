@@ -101,7 +101,7 @@ using Dimension = CartesianCoordinateSystem::Dimension;
 CartesianPlotDock::CartesianPlotDock(QWidget* parent)
 	: BaseDock(parent) {
 	ui.setupUi(this);
-	setBaseWidgets(ui.leName, ui.teComment, 2);
+	setBaseWidgets(ui.leName, ui.teComment);
 
 	//"General"-tab
 	ui.twXRanges->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);

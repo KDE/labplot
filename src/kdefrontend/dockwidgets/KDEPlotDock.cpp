@@ -32,7 +32,7 @@ KDEPlotDock::KDEPlotDock(QWidget* parent)
 	, cbDataColumn(new TreeViewComboBox) {
 	ui.setupUi(this);
 	setPlotRangeCombobox(ui.cbPlotRanges);
-	setBaseWidgets(ui.leName, ui.teComment, 2);
+	setBaseWidgets(ui.leName, ui.teComment);
 
 	// Tab "General"
 	auto* gridLayout = qobject_cast<QGridLayout*>(ui.tabGeneral->layout());
