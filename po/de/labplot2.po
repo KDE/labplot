@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-07-10 02:40+0000\n"
-"PO-Revision-Date: 2023-10-14 12:58+0200\n"
+"PO-Revision-Date: 2023-11-22 22:50+0100\n"
 "Last-Translator: Stefan Gerlach <stefan.gerlach@uni.kn>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
@@ -2729,7 +2729,7 @@ msgstr "Logarithmische Verteilung"
 #: src/backend/gsl/ExpressionParser.cpp:117
 #, kde-format
 msgid "pseudo-random integer [0,RAND_MAX]"
-msgstr "Ganzzahlige Zufallszahl [0,RAND_MAX]"
+msgstr "Ganzzahlige Zufallszahl [0, RAND_MAX]"
 
 #: src/backend/gsl/ExpressionParser.cpp:118
 #, kde-format
@@ -4008,12 +4008,12 @@ msgstr "Logarithmus des Betrags"
 #: src/backend/gsl/ExpressionParser.cpp:528
 #, kde-format
 msgid "Characteristic values a_n(q) of the Mathieu functions ce_n(q,x)"
-msgstr "Characteristische Werte a_n(q) der Mathieu-Funktionen ce_n(q,x)"
+msgstr "Charakteristische Werte a_n(q) der Mathieu-Funktionen ce_n(q,x)"
 
 #: src/backend/gsl/ExpressionParser.cpp:529
 #, kde-format
 msgid "Characteristic values b_n(q) of the Mathieu functions se_n(q,x)"
-msgstr "Characteristische Werte b_n(q) der Mathieu-Funktionen se_n(q,x)"
+msgstr "Charakteristische Werte b_n(q) der Mathieu-Funktionen se_n(q,x)"
 
 #: src/backend/gsl/ExpressionParser.cpp:530
 #, kde-format
