@@ -62,7 +62,7 @@ namespace {
 // the project version will compared with this.
 // if you make any compatibilty changes to the xmlfile
 // or the function in labplot, increase this number
-int buildXmlVersion = 8;
+int buildXmlVersion = 9;
 }
 
 /**
@@ -172,19 +172,19 @@ Project::Project()
 	Q_D(Project);
 	// load default values for name, comment and author from config
 	KConfig config;
-	KConfigGroup group = config.group("Project");
+	KConfigGroup group = config.group(QStringLiteral("Project"));
 
 	QString user = qEnvironmentVariable("USER"); // !Windows
 	if (user.isEmpty())
 		user = qEnvironmentVariable("USERNAME"); // Windows
-	d->author = group.readEntry("Author", user);
+	d->author = group.readEntry(QStringLiteral("Author"), user);
 
 	// we don't have direct access to the members name and comment
 	//->temporary disable the undo stack and call the setters
 	setUndoAware(false);
 	setIsLoading(true);
-	setName(group.readEntry("Name", i18n("Project")));
-	setComment(group.readEntry("Comment", QString()));
+	setName(group.readEntry(QStringLiteral("Name"), i18n("Project")));
+	setComment(group.readEntry(QStringLiteral("Comment"), QString()));
 	setUndoAware(true);
 	setIsLoading(false);
 	d->changed = false;
@@ -1182,6 +1182,30 @@ void Project::restorePointers(AbstractAspect* aspect, bool preview) {
 		for (Column* c : columns)
 			col->setFormulaVariableColumn(c);
 		col->finalizeLoad();
+	}
+
+	if (hasChildren && Project::xmlVersion() < 9) {
+		const auto& plots = aspect->children<CartesianPlot>(ChildIndexFlag::Recursive);
+		for (const auto* plot : plots) {
+			const auto& axes = plot->children<Axis>(ChildIndexFlag::Recursive);
+			for (auto* axis : axes) {
+				const auto cSystem = plot->coordinateSystem(axis->coordinateSystemIndex());
+				RangeT::Scale scale;
+				switch (axis->orientation()) {
+				case Axis::Orientation::Horizontal:
+					scale = plot->range(Dimension::X, cSystem->index(Dimension::X)).scale();
+					break;
+				case Axis::Orientation::Vertical:
+					scale = plot->range(Dimension::Y, cSystem->index(Dimension::Y)).scale();
+					break;
+				}
+				if (axis->scale() == scale) {
+					axis->setUndoAware(false);
+					axis->setRangeScale(true);
+					axis->setUndoAware(true);
+				}
+			}
+		}
 	}
 
 	if (preview)

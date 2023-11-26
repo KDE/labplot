@@ -60,7 +60,7 @@ void QQPlot::init() {
 	// setUndoAware(false);
 
 	KConfig config;
-	KConfigGroup group = config.group("QQPlot");
+	KConfigGroup group = config.group(QStringLiteral("QQPlot"));
 	// reference curve - line conneting two central quantiles Q1 and Q3
 	d->referenceCurve = new XYCurve(QString());
 	d->referenceCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
@@ -661,10 +661,10 @@ bool QQPlot::load(XmlStreamReader* reader, bool preview) {
 // ##############################################################################
 void QQPlot::loadThemeConfig(const KConfig& config) {
 	KConfigGroup group;
-	if (config.hasGroup(QLatin1String("Theme")))
-		group = config.group("XYCurve"); // when loading from the theme config, use the same properties as for XYCurve
+	if (config.hasGroup(QStringLiteral("Theme")))
+		group = config.group(QStringLiteral("XYCurve")); // when loading from the theme config, use the same properties as for XYCurve
 	else
-		group = config.group("QQPlot");
+		group = config.group(QStringLiteral("QQPlot"));
 
 	const auto* plot = static_cast<const CartesianPlot*>(parentAspect());
 	int index = plot->curveChildIndex(this);
@@ -683,7 +683,7 @@ void QQPlot::loadThemeConfig(const KConfig& config) {
 
 void QQPlot::saveThemeConfig(const KConfig& config) {
 	Q_D(const QQPlot);
-	KConfigGroup group = config.group("QQPlot");
+	KConfigGroup group = config.group(QStringLiteral("QQPlot"));
 	d->referenceCurve->line()->saveThemeConfig(group);
 	d->percentilesCurve->symbol()->saveThemeConfig(group);
 }

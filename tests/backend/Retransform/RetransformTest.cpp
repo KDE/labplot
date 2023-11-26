@@ -77,6 +77,7 @@ void RetransformTest::TestLoadProject() {
 
 // Problem in this project was that the second axis labels are not loaded. Zooming in/out once shows the correct range
 void RetransformTest::TestLoadProject2() {
+	QLocale::setDefault(QLocale::C); // . as decimal separator
 	RetransformCallCounter c;
 	Project project;
 
@@ -276,7 +277,7 @@ void RetransformTest::TestZoomSelectionAutoscale() {
 		QStringLiteral("Project/Worksheet/xy-plot/legend"),
 		QStringLiteral("Project/Worksheet/xy-plot/plotText"),
 		QStringLiteral("Project/Worksheet/xy-plot/plotImage"),
-		/* second plot starting */
+		// second plot starting
 		QStringLiteral("Project/Worksheet/plot2/x"),
 		QStringLiteral("Project/Worksheet/plot2/y"),
 		QStringLiteral("Project/Worksheet/plot2/xy-curve"),

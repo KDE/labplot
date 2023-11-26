@@ -83,28 +83,28 @@ DatapickerImage::~DatapickerImage() {
 void DatapickerImage::init() {
 	Q_D(DatapickerImage);
 	KConfig config;
-	KConfigGroup group = config.group("DatapickerImage");
+	KConfigGroup group = config.group(QStringLiteral("DatapickerImage"));
 
 	// general properties
-	d->fileName = group.readEntry("FileName", QString());
-	d->rotationAngle = group.readEntry("RotationAngle", 0.0);
-	d->minSegmentLength = group.readEntry("MinSegmentLength", 30);
-	d->pointSeparation = group.readEntry("PointSeparation", 30);
-	d->axisPoints.type = static_cast<GraphType>(group.readEntry("GraphType", static_cast<int>(GraphType::Linear)));
-	d->axisPoints.ternaryScale = group.readEntry("TernaryScale", 1);
+	d->fileName = group.readEntry(QStringLiteral("FileName"), QString());
+	d->rotationAngle = group.readEntry(QStringLiteral("RotationAngle"), 0.0);
+	d->minSegmentLength = group.readEntry(QStringLiteral("MinSegmentLength"), 30);
+	d->pointSeparation = group.readEntry(QStringLiteral("PointSeparation"), 30);
+	d->axisPoints.type = static_cast<GraphType>(group.readEntry(QStringLiteral("GraphType"), static_cast<int>(GraphType::Linear)));
+	d->axisPoints.ternaryScale = group.readEntry(QStringLiteral("TernaryScale"), 1);
 
 	// edit image settings
 	d->plotImageType = DatapickerImage::PlotImageType::OriginalImage;
-	d->settings.foregroundThresholdHigh = group.readEntry("ForegroundThresholdHigh", d->settings.foregroundThresholdHigh);
-	d->settings.foregroundThresholdLow = group.readEntry("ForegroundThresholdLow", d->settings.foregroundThresholdLow);
-	d->settings.hueThresholdHigh = group.readEntry("HueThresholdHigh", d->settings.hueThresholdHigh);
-	d->settings.hueThresholdLow = group.readEntry("HueThresholdLow", d->settings.hueThresholdLow);
-	d->settings.intensityThresholdHigh = group.readEntry("IntensityThresholdHigh", d->settings.intensityThresholdHigh);
-	d->settings.intensityThresholdLow = group.readEntry("IntensityThresholdLow", d->settings.intensityThresholdLow);
-	d->settings.saturationThresholdHigh = group.readEntry("SaturationThresholdHigh", d->settings.saturationThresholdHigh);
-	d->settings.saturationThresholdLow = group.readEntry("SaturationThresholdLow", d->settings.saturationThresholdLow);
-	d->settings.valueThresholdHigh = group.readEntry("ValueThresholdHigh", d->settings.valueThresholdHigh);
-	d->settings.valueThresholdLow = group.readEntry("ValueThresholdLow", d->settings.valueThresholdLow);
+	d->settings.foregroundThresholdHigh = group.readEntry(QStringLiteral("ForegroundThresholdHigh"), d->settings.foregroundThresholdHigh);
+	d->settings.foregroundThresholdLow = group.readEntry(QStringLiteral("ForegroundThresholdLow"), d->settings.foregroundThresholdLow);
+	d->settings.hueThresholdHigh = group.readEntry(QStringLiteral("HueThresholdHigh"), d->settings.hueThresholdHigh);
+	d->settings.hueThresholdLow = group.readEntry(QStringLiteral("HueThresholdLow"), d->settings.hueThresholdLow);
+	d->settings.intensityThresholdHigh = group.readEntry(QStringLiteral("IntensityThresholdHigh"), d->settings.intensityThresholdHigh);
+	d->settings.intensityThresholdLow = group.readEntry(QStringLiteral("IntensityThresholdLow"), d->settings.intensityThresholdLow);
+	d->settings.saturationThresholdHigh = group.readEntry(QStringLiteral("SaturationThresholdHigh"), d->settings.saturationThresholdHigh);
+	d->settings.saturationThresholdLow = group.readEntry(QStringLiteral("SaturationThresholdLow"), d->settings.saturationThresholdLow);
+	d->settings.valueThresholdHigh = group.readEntry(QStringLiteral("ValueThresholdHigh"), d->settings.valueThresholdHigh);
+	d->settings.valueThresholdLow = group.readEntry(QStringLiteral("ValueThresholdLow"), d->settings.valueThresholdLow);
 
 	// reference point symbol properties
 	d->symbol = new Symbol(QString());
@@ -117,7 +117,7 @@ void DatapickerImage::init() {
 		d->retransform();
 	});
 	d->symbol->init(group);
-	d->pointVisibility = group.readEntry("PointVisibility", true);
+	d->pointVisibility = group.readEntry(QStringLiteral("PointVisibility"), true);
 }
 
 /*!

@@ -399,7 +399,7 @@ void MultiRangeTest::zoomInX_SingleRangeDateTimeMonotonicIncrease() {
 
 	auto* view = dynamic_cast<WorksheetView*>(ws->view());
 	QVERIFY(view != nullptr);
-	view->initActions(); /* needed by SET_CARTESIAN_MOUSE_MODE() */
+	view->initActions(); // needed by SET_CARTESIAN_MOUSE_MODE()
 
 	Spreadsheet* spreadsheetData = new Spreadsheet(QStringLiteral("data"), false);
 	spreadsheetData->setColumnCount(2);
@@ -461,7 +461,7 @@ void MultiRangeTest::zoomInX_SingleRangeDateTimeNonMonotonic() {
 
 	auto* view = dynamic_cast<WorksheetView*>(ws->view());
 	QVERIFY(view != nullptr);
-	view->initActions(); /* needed by SET_CARTESIAN_MOUSE_MODE() */
+	view->initActions(); // needed by SET_CARTESIAN_MOUSE_MODE()
 
 	Spreadsheet* spreadsheetData = new Spreadsheet(QStringLiteral("data"), false);
 	spreadsheetData->setColumnCount(2);

@@ -104,6 +104,8 @@ private Q_SLOTS:
 	void testLinkSpreadsheetRemoveRow();
 	void testLinkSpreadsheetRecalculate();
 	void testLinkSpreadsheetSaveLoad();
+	void testLinkSpreadsheetsModelDockUpdateCheckInsertRows();
+	void testLinkSpreadsheetsModelDockUpdateCheckRemoveRows();
 
 	// statistics spreadsheet
 	void testStatisticsSpreadsheetToggle();

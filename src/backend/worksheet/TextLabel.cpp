@@ -135,35 +135,37 @@ void TextLabel::init() {
 		d->position.verticalPosition = WorksheetElement::VerticalPosition::Center;
 	}
 
-	KConfigGroup conf = Settings::group(QLatin1String("Settings_Worksheet"));
-	const auto& engine = conf.readEntry(QLatin1String("LaTeXEngine"), "");
+	KConfigGroup conf = Settings::group(QStringLiteral("Settings_Worksheet"));
+	const auto& engine = conf.readEntry(QStringLiteral("LaTeXEngine"), "");
 	if (engine == QLatin1String("lualatex"))
-		d->teXFont.setFamily(QLatin1String("Latin Modern Roman"));
+		d->teXFont.setFamily(QStringLiteral("Latin Modern Roman"));
 
 	// read settings from config if group exists
 	if (group.isValid()) {
 		// properties common to all types
-		d->textWrapper.mode = static_cast<TextLabel::Mode>(group.readEntry("Mode", static_cast<int>(d->textWrapper.mode)));
-		d->teXFont.setFamily(group.readEntry("TeXFontFamily", d->teXFont.family()));
-		d->teXFont.setPointSize(group.readEntry("TeXFontSize", d->teXFont.pointSize()));
-		d->fontColor = group.readEntry("TeXFontColor", d->fontColor);
-		d->backgroundColor = group.readEntry("TeXBackgroundColor", d->backgroundColor);
-		d->setRotation(group.readEntry("Rotation", d->rotation()));
+		d->textWrapper.mode = static_cast<TextLabel::Mode>(group.readEntry(QStringLiteral("Mode"), static_cast<int>(d->textWrapper.mode)));
+		d->teXFont.setFamily(group.readEntry(QStringLiteral("TeXFontFamily"), d->teXFont.family()));
+		d->teXFont.setPointSize(group.readEntry(QStringLiteral("TeXFontSize"), d->teXFont.pointSize()));
+		d->fontColor = group.readEntry(QStringLiteral("TeXFontColor"), d->fontColor);
+		d->backgroundColor = group.readEntry(QStringLiteral("TeXBackgroundColor"), d->backgroundColor);
+		d->setRotation(group.readEntry(QStringLiteral("Rotation"), d->rotation()));
 
 		// border
-		d->borderShape = (TextLabel::BorderShape)group.readEntry("BorderShape", (int)d->borderShape);
-		d->borderPen = QPen(group.readEntry("BorderColor", d->borderPen.color()),
-							group.readEntry("BorderWidth", d->borderPen.width()),
-							(Qt::PenStyle)group.readEntry("BorderStyle", (int)(d->borderPen.style())));
-		d->borderOpacity = group.readEntry("BorderOpacity", d->borderOpacity);
+		d->borderShape = (TextLabel::BorderShape)group.readEntry(QStringLiteral("BorderShape"), (int)d->borderShape);
+		d->borderPen = QPen(group.readEntry(QStringLiteral("BorderColor"), d->borderPen.color()),
+							group.readEntry(QStringLiteral("BorderWidth"), d->borderPen.width()),
+							(Qt::PenStyle)group.readEntry(QStringLiteral("BorderStyle"), (int)(d->borderPen.style())));
+		d->borderOpacity = group.readEntry(QStringLiteral("BorderOpacity"), d->borderOpacity);
 
 		// position and alignment relevant properties
-		d->position.point.setX(group.readEntry("PositionXValue", 0.));
-		d->position.point.setY(group.readEntry("PositionYValue", 0.));
-		d->position.horizontalPosition = (HorizontalPosition)group.readEntry("PositionX", (int)d->position.horizontalPosition);
-		d->position.verticalPosition = (VerticalPosition)group.readEntry("PositionY", (int)d->position.verticalPosition);
-		d->horizontalAlignment = (WorksheetElement::HorizontalAlignment)group.readEntry("HorizontalAlignment", static_cast<int>(d->horizontalAlignment));
-		d->verticalAlignment = (WorksheetElement::VerticalAlignment)group.readEntry("VerticalAlignment", static_cast<int>(d->verticalAlignment));
+		d->position.point.setX(group.readEntry(QStringLiteral("PositionXValue"), 0.));
+		d->position.point.setY(group.readEntry(QStringLiteral("PositionYValue"), 0.));
+		d->position.horizontalPosition = (HorizontalPosition)group.readEntry(QStringLiteral("PositionX"), (int)d->position.horizontalPosition);
+		d->position.verticalPosition = (VerticalPosition)group.readEntry(QStringLiteral("PositionY"), (int)d->position.verticalPosition);
+		d->horizontalAlignment =
+			(WorksheetElement::HorizontalAlignment)group.readEntry(QStringLiteral("HorizontalAlignment"), static_cast<int>(d->horizontalAlignment));
+		d->verticalAlignment =
+			(WorksheetElement::VerticalAlignment)group.readEntry(QStringLiteral("VerticalAlignment"), static_cast<int>(d->verticalAlignment));
 		if (cSystem && cSystem->isValid())
 			d->positionLogical = cSystem->mapSceneToLogical(d->position.point, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 	}
@@ -219,14 +221,14 @@ void TextLabel::handleResize(double horizontalRatio, double verticalRatio, bool 
 QIcon TextLabel::icon() const {
 	switch (text().mode) {
 	case Mode::Markdown:
-		return QIcon::fromTheme(QLatin1String("text-x-markdown"));
+		return QIcon::fromTheme(QStringLiteral("text-x-markdown"));
 		break;
 	case Mode::LaTeX:
-		return QIcon::fromTheme(QLatin1String("text-x-tex"));
+		return QIcon::fromTheme(QStringLiteral("text-x-tex"));
 		break;
 	case Mode::Text:
 	default:
-		return QIcon::fromTheme(QLatin1String("draw-text"));
+		return QIcon::fromTheme(QStringLiteral("draw-text"));
 		// return QIcon::fromTheme(QLatin1String("text-x-plain"));
 	}
 }
@@ -1164,10 +1166,10 @@ void TextLabel::loadThemeConfig(const KConfig& config) {
 	DEBUG(Q_FUNC_INFO << ", label = " << STDSTRING(name()))
 	Q_D(TextLabel);
 
-	KConfigGroup group = config.group("Label");
+	KConfigGroup group = config.group(QStringLiteral("Label"));
 	// TODO: dark mode support?
-	d->fontColor = group.readEntry("FontColor", QColor(Qt::black)); // used when it's latex text
-	d->backgroundColor = group.readEntry("BackgroundColor", QColor(Qt::white)); // used when it's latex text
+	d->fontColor = group.readEntry(QStringLiteral("FontColor"), QColor(Qt::black)); // used when it's latex text
+	d->backgroundColor = group.readEntry(QStringLiteral("BackgroundColor"), QColor(Qt::white)); // used when it's latex text
 
 	if (d->textWrapper.mode == TextLabel::Mode::Text && !d->textWrapper.text.isEmpty()) {
 		// TODO: Replace QTextEdit by QTextDocument, because this does not contain the graphical stuff.
@@ -1199,17 +1201,17 @@ void TextLabel::loadThemeConfig(const KConfig& config) {
 	backgroundColorChanged(d->backgroundColor);
 	fontColorChanged(d->fontColor);
 
-	group = config.group("CartesianPlot");
+	group = config.group(QStringLiteral("CartesianPlot"));
 	QPen pen = this->borderPen();
-	pen.setColor(group.readEntry("BorderColor", pen.color()));
-	pen.setStyle((Qt::PenStyle)(group.readEntry("BorderStyle", (int)pen.style())));
-	pen.setWidthF(group.readEntry("BorderWidth", pen.widthF()));
+	pen.setColor(group.readEntry(QStringLiteral("BorderColor"), pen.color()));
+	pen.setStyle((Qt::PenStyle)(group.readEntry(QStringLiteral("BorderStyle"), (int)pen.style())));
+	pen.setWidthF(group.readEntry(QStringLiteral("BorderWidth"), pen.widthF()));
 	this->setBorderPen(pen);
-	this->setBorderOpacity(group.readEntry("BorderOpacity", this->borderOpacity()));
+	this->setBorderOpacity(group.readEntry(QStringLiteral("BorderOpacity"), this->borderOpacity()));
 }
 
 void TextLabel::saveThemeConfig(const KConfig& config) {
-	KConfigGroup group = config.group("Label");
+	KConfigGroup group = config.group(QStringLiteral("Label"));
 	// TODO
 	// 	group.writeEntry("TeXFontColor", (QColor) this->fontColor());
 }

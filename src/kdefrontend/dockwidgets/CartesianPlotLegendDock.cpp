@@ -700,7 +700,7 @@ void CartesianPlotLegendDock::loadConfigFromTemplate(KConfig& config) {
 }
 
 void CartesianPlotLegendDock::loadConfig(KConfig& config) {
-	KConfigGroup group = config.group("CartesianPlotLegend");
+	KConfigGroup group = config.group(QStringLiteral("CartesianPlotLegend"));
 
 	// General-tab
 
@@ -708,89 +708,97 @@ void CartesianPlotLegendDock::loadConfig(KConfig& config) {
 	// we need to set the font size in points for KFontRequester
 	QFont font = m_legend->labelFont();
 	font.setPointSizeF(std::round(Worksheet::convertFromSceneUnits(font.pixelSize(), Worksheet::Unit::Point)));
-	ui.kfrLabelFont->setFont(group.readEntry("LabelFont", font));
+	ui.kfrLabelFont->setFont(group.readEntry(QStringLiteral("LabelFont"), font));
 
-	ui.kcbLabelColor->setColor(group.readEntry("LabelColor", m_legend->labelColor()));
+	ui.kcbLabelColor->setColor(group.readEntry(QStringLiteral("LabelColor"), m_legend->labelColor()));
 
-	bool columnMajor = group.readEntry("LabelColumMajor", m_legend->labelColumnMajor());
+	bool columnMajor = group.readEntry(QStringLiteral("LabelColumMajor"), m_legend->labelColumnMajor());
 	if (columnMajor)
 		ui.cbOrder->setCurrentIndex(0); // column major
 	else
 		ui.cbOrder->setCurrentIndex(1); // row major
 
-	ui.sbLineSymbolWidth->setValue(group.readEntry("LineSymbolWidth", Worksheet::convertFromSceneUnits(m_legend->lineSymbolWidth(), m_worksheetUnit)));
+	ui.sbLineSymbolWidth->setValue(
+		group.readEntry(QStringLiteral("LineSymbolWidth"), Worksheet::convertFromSceneUnits(m_legend->lineSymbolWidth(), m_worksheetUnit)));
 
 	// Geometry
-	ui.cbPositionX->setCurrentIndex(group.readEntry("PositionX", (int)m_legend->position().horizontalPosition));
-	ui.sbPositionX->setValue(Worksheet::convertFromSceneUnits(group.readEntry("PositionXValue", m_legend->position().point.x()), m_worksheetUnit));
-	ui.cbPositionY->setCurrentIndex(group.readEntry("PositionY", (int)m_legend->position().verticalPosition));
-	ui.sbPositionY->setValue(Worksheet::convertFromSceneUnits(group.readEntry("PositionYValue", m_legend->position().point.y()), m_worksheetUnit));
-	ui.sbRotation->setValue(group.readEntry("Rotation", (int)m_legend->rotationAngle()));
+	ui.cbPositionX->setCurrentIndex(group.readEntry(QStringLiteral("PositionX"), (int)m_legend->position().horizontalPosition));
+	ui.sbPositionX->setValue(
+		Worksheet::convertFromSceneUnits(group.readEntry(QStringLiteral("PositionXValue"), m_legend->position().point.x()), m_worksheetUnit));
+	ui.cbPositionY->setCurrentIndex(group.readEntry(QStringLiteral("PositionY"), (int)m_legend->position().verticalPosition));
+	ui.sbPositionY->setValue(
+		Worksheet::convertFromSceneUnits(group.readEntry(QStringLiteral("PositionYValue"), m_legend->position().point.y()), m_worksheetUnit));
+	ui.sbRotation->setValue(group.readEntry(QStringLiteral("Rotation"), (int)m_legend->rotationAngle()));
 
-	ui.chkVisible->setChecked(group.readEntry("Visible", m_legend->isVisible()));
+	ui.chkVisible->setChecked(group.readEntry(QStringLiteral("Visible"), m_legend->isVisible()));
 
 	// Background-tab
 	backgroundWidget->loadConfig(group);
 
 	// Border
 	borderLineWidget->loadConfig(group);
-	ui.sbBorderCornerRadius->setValue(Worksheet::convertFromSceneUnits(group.readEntry("BorderCornerRadius", m_legend->borderCornerRadius()), m_worksheetUnit));
+	ui.sbBorderCornerRadius->setValue(
+		Worksheet::convertFromSceneUnits(group.readEntry(QStringLiteral("BorderCornerRadius"), m_legend->borderCornerRadius()), m_worksheetUnit));
 
 	// Layout
-	ui.sbLayoutTopMargin->setValue(group.readEntry("LayoutTopMargin", Worksheet::convertFromSceneUnits(m_legend->layoutTopMargin(), m_worksheetUnit)));
-	ui.sbLayoutBottomMargin->setValue(group.readEntry("LayoutBottomMargin", Worksheet::convertFromSceneUnits(m_legend->layoutBottomMargin(), m_worksheetUnit)));
-	ui.sbLayoutLeftMargin->setValue(group.readEntry("LayoutLeftMargin", Worksheet::convertFromSceneUnits(m_legend->layoutLeftMargin(), m_worksheetUnit)));
-	ui.sbLayoutRightMargin->setValue(group.readEntry("LayoutRightMargin", Worksheet::convertFromSceneUnits(m_legend->layoutRightMargin(), m_worksheetUnit)));
+	ui.sbLayoutTopMargin->setValue(
+		group.readEntry(QStringLiteral("LayoutTopMargin"), Worksheet::convertFromSceneUnits(m_legend->layoutTopMargin(), m_worksheetUnit)));
+	ui.sbLayoutBottomMargin->setValue(
+		group.readEntry(QStringLiteral("LayoutBottomMargin"), Worksheet::convertFromSceneUnits(m_legend->layoutBottomMargin(), m_worksheetUnit)));
+	ui.sbLayoutLeftMargin->setValue(
+		group.readEntry(QStringLiteral("LayoutLeftMargin"), Worksheet::convertFromSceneUnits(m_legend->layoutLeftMargin(), m_worksheetUnit)));
+	ui.sbLayoutRightMargin->setValue(
+		group.readEntry(QStringLiteral("LayoutRightMargin"), Worksheet::convertFromSceneUnits(m_legend->layoutRightMargin(), m_worksheetUnit)));
 	ui.sbLayoutHorizontalSpacing->setValue(
-		group.readEntry("LayoutHorizontalSpacing", Worksheet::convertFromSceneUnits(m_legend->layoutHorizontalSpacing(), m_worksheetUnit)));
+		group.readEntry(QStringLiteral("LayoutHorizontalSpacing"), Worksheet::convertFromSceneUnits(m_legend->layoutHorizontalSpacing(), m_worksheetUnit)));
 	ui.sbLayoutVerticalSpacing->setValue(
-		group.readEntry("LayoutVerticalSpacing", Worksheet::convertFromSceneUnits(m_legend->layoutVerticalSpacing(), m_worksheetUnit)));
-	ui.sbLayoutColumnCount->setValue(group.readEntry("LayoutColumnCount", m_legend->layoutColumnCount()));
+		group.readEntry(QStringLiteral("LayoutVerticalSpacing"), Worksheet::convertFromSceneUnits(m_legend->layoutVerticalSpacing(), m_worksheetUnit)));
+	ui.sbLayoutColumnCount->setValue(group.readEntry(QStringLiteral("LayoutColumnCount"), m_legend->layoutColumnCount()));
 
 	// Title
-	group = config.group("PlotLegend");
+	group = config.group(QStringLiteral("PlotLegend"));
 	labelWidget->loadConfig(group);
 }
 
 void CartesianPlotLegendDock::saveConfigAsTemplate(KConfig& config) {
-	KConfigGroup group = config.group("CartesianPlotLegend");
+	KConfigGroup group = config.group(QStringLiteral("CartesianPlotLegend"));
 
 	// General-tab
 	// Format
 	QFont font = m_legend->labelFont();
 	font.setPointSizeF(Worksheet::convertFromSceneUnits(font.pointSizeF(), Worksheet::Unit::Point));
-	group.writeEntry("LabelFont", font);
-	group.writeEntry("LabelColor", ui.kcbLabelColor->color());
-	group.writeEntry("LabelColumMajorOrder", ui.cbOrder->currentIndex() == 0); // true for "column major", false for "row major"
-	group.writeEntry("LineSymbolWidth", Worksheet::convertToSceneUnits(ui.sbLineSymbolWidth->value(), m_worksheetUnit));
+	group.writeEntry(QStringLiteral("LabelFont"), font);
+	group.writeEntry(QStringLiteral("LabelColor"), ui.kcbLabelColor->color());
+	group.writeEntry(QStringLiteral("LabelColumMajorOrder"), ui.cbOrder->currentIndex() == 0); // true for "column major", false for "row major"
+	group.writeEntry(QStringLiteral("LineSymbolWidth"), Worksheet::convertToSceneUnits(ui.sbLineSymbolWidth->value(), m_worksheetUnit));
 
 	// Geometry
-	group.writeEntry("PositionX", ui.cbPositionX->currentIndex());
-	group.writeEntry("PositionXValue", Worksheet::convertToSceneUnits(ui.sbPositionX->value(), m_worksheetUnit));
-	group.writeEntry("PositionY", ui.cbPositionY->currentIndex());
-	group.writeEntry("PositionYValue", Worksheet::convertToSceneUnits(ui.sbPositionY->value(), m_worksheetUnit));
-	group.writeEntry("Rotation", ui.sbRotation->value());
+	group.writeEntry(QStringLiteral("PositionX"), ui.cbPositionX->currentIndex());
+	group.writeEntry(QStringLiteral("PositionXValue"), Worksheet::convertToSceneUnits(ui.sbPositionX->value(), m_worksheetUnit));
+	group.writeEntry(QStringLiteral("PositionY"), ui.cbPositionY->currentIndex());
+	group.writeEntry(QStringLiteral("PositionYValue"), Worksheet::convertToSceneUnits(ui.sbPositionY->value(), m_worksheetUnit));
+	group.writeEntry(QStringLiteral("Rotation"), ui.sbRotation->value());
 
-	group.writeEntry("Visible", ui.chkVisible->isChecked());
+	group.writeEntry(QStringLiteral("Visible"), ui.chkVisible->isChecked());
 
 	// Background
 	backgroundWidget->saveConfig(group);
 
 	// Border
 	borderLineWidget->saveConfig(group);
-	group.writeEntry("BorderCornerRadius", Worksheet::convertToSceneUnits(ui.sbBorderCornerRadius->value(), m_worksheetUnit));
+	group.writeEntry(QStringLiteral("BorderCornerRadius"), Worksheet::convertToSceneUnits(ui.sbBorderCornerRadius->value(), m_worksheetUnit));
 
 	// Layout
-	group.writeEntry("LayoutTopMargin", Worksheet::convertToSceneUnits(ui.sbLayoutTopMargin->value(), m_worksheetUnit));
-	group.writeEntry("LayoutBottomMargin", Worksheet::convertToSceneUnits(ui.sbLayoutBottomMargin->value(), m_worksheetUnit));
-	group.writeEntry("LayoutLeftMargin", Worksheet::convertToSceneUnits(ui.sbLayoutLeftMargin->value(), m_worksheetUnit));
-	group.writeEntry("LayoutRightMargin", Worksheet::convertToSceneUnits(ui.sbLayoutRightMargin->value(), m_worksheetUnit));
-	group.writeEntry("LayoutVerticalSpacing", Worksheet::convertToSceneUnits(ui.sbLayoutVerticalSpacing->value(), m_worksheetUnit));
-	group.writeEntry("LayoutHorizontalSpacing", Worksheet::convertToSceneUnits(ui.sbLayoutHorizontalSpacing->value(), m_worksheetUnit));
-	group.writeEntry("LayoutColumnCount", ui.sbLayoutColumnCount->value());
+	group.writeEntry(QStringLiteral("LayoutTopMargin"), Worksheet::convertToSceneUnits(ui.sbLayoutTopMargin->value(), m_worksheetUnit));
+	group.writeEntry(QStringLiteral("LayoutBottomMargin"), Worksheet::convertToSceneUnits(ui.sbLayoutBottomMargin->value(), m_worksheetUnit));
+	group.writeEntry(QStringLiteral("LayoutLeftMargin"), Worksheet::convertToSceneUnits(ui.sbLayoutLeftMargin->value(), m_worksheetUnit));
+	group.writeEntry(QStringLiteral("LayoutRightMargin"), Worksheet::convertToSceneUnits(ui.sbLayoutRightMargin->value(), m_worksheetUnit));
+	group.writeEntry(QStringLiteral("LayoutVerticalSpacing"), Worksheet::convertToSceneUnits(ui.sbLayoutVerticalSpacing->value(), m_worksheetUnit));
+	group.writeEntry(QStringLiteral("LayoutHorizontalSpacing"), Worksheet::convertToSceneUnits(ui.sbLayoutHorizontalSpacing->value(), m_worksheetUnit));
+	group.writeEntry(QStringLiteral("LayoutColumnCount"), ui.sbLayoutColumnCount->value());
 
 	// Title
-	group = config.group("PlotLegend");
+	group = config.group(QStringLiteral("PlotLegend"));
 	labelWidget->saveConfig(group);
 
 	config.sync();

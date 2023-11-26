@@ -1640,13 +1640,18 @@ bool ColumnPrivate::formulaAutoUpdate() const {
 	return m_formulaAutoUpdate;
 }
 
+bool ColumnPrivate::formulaAutoResize() const {
+	return m_formulaAutoResize;
+}
+
 /**
  * \brief Sets the formula used to generate column values
  */
-void ColumnPrivate::setFormula(const QString& formula, const QVector<Column::FormulaData>& formulaData, bool autoUpdate) {
+void ColumnPrivate::setFormula(const QString& formula, const QVector<Column::FormulaData>& formulaData, bool autoUpdate, bool autoResize) {
 	m_formula = formula;
 	m_formulaData = formulaData; // TODO: disconnecting everything?
 	m_formulaAutoUpdate = autoUpdate;
+	m_formulaAutoResize = autoResize;
 
 	for (auto& connection : m_connectionsUpdateFormula)
 		if (static_cast<bool>(connection))
@@ -1707,13 +1712,18 @@ void ColumnPrivate::connectFormulaColumn(const AbstractColumn* column) {
  * \param variableColumnPaths is used to restore the pointers to columns from pathes
  * after the project was loaded in Project::load().
  */
-void ColumnPrivate::setFormula(const QString& formula, const QStringList& variableNames, const QStringList& variableColumnPaths, bool autoUpdate) {
+void ColumnPrivate::setFormula(const QString& formula,
+							   const QStringList& variableNames,
+							   const QStringList& variableColumnPaths,
+							   bool autoUpdate,
+							   bool autoResize) {
 	m_formula = formula;
 	m_formulaData.clear();
 	for (int i = 0; i < variableNames.count(); i++)
 		m_formulaData.append(Column::FormulaData(variableNames.at(i), variableColumnPaths.at(i)));
 
 	m_formulaAutoUpdate = autoUpdate;
+	m_formulaAutoResize = autoResize;
 }
 
 void ColumnPrivate::setFormulVariableColumnsPath(int index, const QString& path) {
@@ -1891,12 +1901,13 @@ void ColumnPrivate::updateFormula() {
 	if (valid) {
 		// resize the spreadsheet if one of the data vectors from
 		// other spreadsheet(s) has more elements than the parent spreadsheet
-		// TODO: maybe it's better to not extend the spreadsheet (see #31)
-
-		auto* spreadsheet = static_cast<Spreadsheet*>(m_owner->parentAspect());
-		// In the tests spreadsheet might not exist, because directly the column was created
-		if (spreadsheet && spreadsheet->rowCount() < maxRowCount)
-			spreadsheet->setRowCount(maxRowCount);
+		// and if the option "auto resize" is activated
+		if (m_formulaAutoResize && rowCount() < maxRowCount) {
+			auto* spreadsheet = static_cast<Spreadsheet*>(m_owner->parentAspect());
+			// In the tests spreadsheet might not exist, because directly the column was created
+			if (spreadsheet)
+				spreadsheet->setRowCount(maxRowCount);
+		}
 
 		// create new vector for storing the calculated values
 		// the vectors with the variable data can be smaller then the result vector. So, not all values in the result vector might get initialized.

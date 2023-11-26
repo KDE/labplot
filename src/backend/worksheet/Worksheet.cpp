@@ -77,33 +77,33 @@ Worksheet::~Worksheet() {
 void Worksheet::init() {
 	Q_D(Worksheet);
 	KConfig config;
-	KConfigGroup group = config.group("Worksheet");
+	auto group = config.group(QStringLiteral("Worksheet"));
 
 	// size
-	d->scaleContent = group.readEntry("ScaleContent", false);
-	d->useViewSize = group.readEntry("UseViewSize", false);
+	d->scaleContent = group.readEntry(QStringLiteral("ScaleContent"), false);
+	d->useViewSize = group.readEntry(QStringLiteral("UseViewSize"), false);
 	d->pageRect.setX(0);
 	d->pageRect.setY(0);
-	d->pageRect.setWidth(group.readEntry("Width", 1000));
-	d->pageRect.setHeight(group.readEntry("Height", 1000));
+	d->pageRect.setWidth(group.readEntry(QStringLiteral("Width"), 1000));
+	d->pageRect.setHeight(group.readEntry(QStringLiteral("Height"), 1000));
 	d->m_scene->setSceneRect(d->pageRect);
 
 	// background
 	d->background->init(group);
 
 	// layout
-	d->layout = (Layout)group.readEntry("Layout", static_cast<int>(Layout::VerticalLayout));
-	d->layoutTopMargin = group.readEntry("LayoutTopMargin", convertToSceneUnits(0.5, Unit::Centimeter));
-	d->layoutBottomMargin = group.readEntry("LayoutBottomMargin", convertToSceneUnits(0.5, Unit::Centimeter));
-	d->layoutLeftMargin = group.readEntry("LayoutLeftMargin", convertToSceneUnits(0.5, Unit::Centimeter));
-	d->layoutRightMargin = group.readEntry("LayoutRightMargin", convertToSceneUnits(0.5, Unit::Centimeter));
-	d->layoutVerticalSpacing = group.readEntry("LayoutVerticalSpacing", convertToSceneUnits(0.5, Unit::Centimeter));
-	d->layoutHorizontalSpacing = group.readEntry("LayoutHorizontalSpacing", convertToSceneUnits(0.5, Unit::Centimeter));
-	d->layoutRowCount = group.readEntry("LayoutRowCount", 2);
-	d->layoutColumnCount = group.readEntry("LayoutColumnCount", 2);
+	d->layout = (Layout)group.readEntry(QStringLiteral("Layout"), static_cast<int>(Layout::VerticalLayout));
+	d->layoutTopMargin = group.readEntry(QStringLiteral("LayoutTopMargin"), convertToSceneUnits(0.5, Unit::Centimeter));
+	d->layoutBottomMargin = group.readEntry(QStringLiteral("LayoutBottomMargin"), convertToSceneUnits(0.5, Unit::Centimeter));
+	d->layoutLeftMargin = group.readEntry(QStringLiteral("LayoutLeftMargin"), convertToSceneUnits(0.5, Unit::Centimeter));
+	d->layoutRightMargin = group.readEntry(QStringLiteral("LayoutRightMargin"), convertToSceneUnits(0.5, Unit::Centimeter));
+	d->layoutVerticalSpacing = group.readEntry(QStringLiteral("LayoutVerticalSpacing"), convertToSceneUnits(0.5, Unit::Centimeter));
+	d->layoutHorizontalSpacing = group.readEntry(QStringLiteral("LayoutHorizontalSpacing"), convertToSceneUnits(0.5, Unit::Centimeter));
+	d->layoutRowCount = group.readEntry(QStringLiteral("LayoutRowCount"), 2);
+	d->layoutColumnCount = group.readEntry(QStringLiteral("LayoutColumnCount"), 2);
 
 	// default theme
-	KConfigGroup settings = Settings::group(QStringLiteral("Settings_Worksheet"));
+	auto settings = Settings::group(QStringLiteral("Settings_Worksheet"));
 	d->theme = settings.readEntry(QStringLiteral("Theme"), QString());
 	loadTheme(d->theme);
 }
@@ -529,6 +529,7 @@ TreeModel* Worksheet::cursorModel() {
 
 void Worksheet::update() {
 	Q_EMIT requestUpdate();
+	Q_EMIT changed();
 }
 
 void Worksheet::setSuppressLayoutUpdate(bool value) {
@@ -1879,7 +1880,7 @@ void Worksheet::loadTheme(const QString& theme) {
 		config = new KConfig(ThemeHandler::themeFilePath(theme), KConfig::SimpleConfig);
 
 		// apply the same background color for Worksheet as for the CartesianPlot
-		group = config->group("CartesianPlot");
+		group = config->group(QStringLiteral("CartesianPlot"));
 
 		// load the theme for all the children
 		const auto& children = this->children<WorksheetElement>(ChildIndexFlag::IncludeHidden);
@@ -1888,7 +1889,7 @@ void Worksheet::loadTheme(const QString& theme) {
 	} else {
 		// load default values
 		config = new KConfig();
-		group = config->group("Worksheet");
+		group = config->group(QStringLiteral("Worksheet"));
 	}
 
 	// load background properties

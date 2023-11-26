@@ -130,13 +130,13 @@ void DatapickerPoint::init() {
 
 	KConfig config;
 	KConfigGroup group;
-	group = config.group("DatapickerPoint");
-	d->position.setX(group.readEntry("PositionXValue", Worksheet::convertToSceneUnits(1, Worksheet::Unit::Centimeter)));
-	d->position.setY(group.readEntry("PositionYValue", Worksheet::convertToSceneUnits(1, Worksheet::Unit::Centimeter)));
-	d->plusDeltaXPos = group.readEntry("PlusDeltaXPos", QPointF(30, 0));
-	d->minusDeltaXPos = group.readEntry("MinusDeltaXPos", QPointF(-30, 0));
-	d->plusDeltaYPos = group.readEntry("PlusDeltaYPos", QPointF(0, -30));
-	d->minusDeltaYPos = group.readEntry("MinusDeltaYPos", QPointF(0, 30));
+	group = config.group(QStringLiteral("DatapickerPoint"));
+	d->position.setX(group.readEntry(QStringLiteral("PositionXValue"), Worksheet::convertToSceneUnits(1, Worksheet::Unit::Centimeter)));
+	d->position.setY(group.readEntry(QStringLiteral("PositionYValue"), Worksheet::convertToSceneUnits(1, Worksheet::Unit::Centimeter)));
+	d->plusDeltaXPos = group.readEntry(QStringLiteral("PlusDeltaXPos"), QPointF(30, 0));
+	d->minusDeltaXPos = group.readEntry(QStringLiteral("MinusDeltaXPos"), QPointF(-30, 0));
+	d->plusDeltaYPos = group.readEntry(QStringLiteral("PlusDeltaYPos"), QPointF(0, -30));
+	d->minusDeltaYPos = group.readEntry(QStringLiteral("MinusDeltaYPos"), QPointF(0, 30));
 }
 
 void DatapickerPoint::initErrorBar(DatapickerCurve::Errors errors) {
@@ -504,13 +504,13 @@ bool DatapickerPoint::load(XmlStreamReader* reader, bool preview) {
 
 	while (!reader->atEnd()) {
 		reader->readNext();
-		if (reader->isEndElement() && reader->name() == QLatin1String("datapickerPoint"))
+		if (reader->isEndElement() && reader->name() == QStringLiteral("datapickerPoint"))
 			break;
 
 		if (!reader->isStartElement())
 			continue;
 
-		if (!preview && reader->name() == QLatin1String("geometry")) {
+		if (!preview && reader->name() == QStringLiteral("geometry")) {
 			attribs = reader->attributes();
 
 			str = attribs.value(QStringLiteral("x")).toString();
@@ -524,7 +524,7 @@ bool DatapickerPoint::load(XmlStreamReader* reader, bool preview) {
 				reader->raiseMissingAttributeWarning(QStringLiteral("y"));
 			else
 				d->position.setY(str.toDouble());
-		} else if (!preview && reader->name() == QLatin1String("errorBar")) {
+		} else if (!preview && reader->name() == QStringLiteral("errorBar")) {
 			attribs = reader->attributes();
 
 			str = attribs.value(QStringLiteral("plusDeltaXPos_x")).toString();

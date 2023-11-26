@@ -59,7 +59,7 @@ void KDEPlot::init() {
 	Q_D(KDEPlot);
 
 	KConfig config;
-	KConfigGroup group = config.group("KDEPlot");
+	KConfigGroup group = config.group(QStringLiteral("KDEPlot"));
 
 	// general
 	d->kernelType = static_cast<nsl_kernel_type>(group.readEntry(QStringLiteral("kernelType"), static_cast<int>(nsl_kernel_gauss)));
@@ -517,10 +517,10 @@ bool KDEPlot::load(XmlStreamReader* reader, bool preview) {
 // ##############################################################################
 void KDEPlot::loadThemeConfig(const KConfig& config) {
 	KConfigGroup group;
-	if (config.hasGroup(QLatin1String("Theme")))
-		group = config.group("XYCurve"); // when loading from the theme config, use the same properties as for XYCurve
+	if (config.hasGroup(QStringLiteral("Theme")))
+		group = config.group(QStringLiteral("XYCurve")); // when loading from the theme config, use the same properties as for XYCurve
 	else
-		group = config.group("KDEPlot");
+		group = config.group(QStringLiteral("KDEPlot"));
 
 	const auto* plot = static_cast<const CartesianPlot*>(parentAspect());
 	int index = plot->curveChildIndex(this);
@@ -539,6 +539,6 @@ void KDEPlot::loadThemeConfig(const KConfig& config) {
 
 void KDEPlot::saveThemeConfig(const KConfig& config) {
 	Q_D(const KDEPlot);
-	KConfigGroup group = config.group("KDEPlot");
+	KConfigGroup group = config.group(QStringLiteral("KDEPlot"));
 	// TODO
 }

@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Tests for the ascii filter
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2017 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2017-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -17,6 +17,13 @@
 
 #include <gsl/gsl_randist.h>
 #include <gsl/gsl_rng.h>
+
+void AsciiFilterTest::initTestCase() {
+	// needed in order to have the signals triggered by SignallingUndoCommand, see LabPlot.cpp
+	// TODO: redesign/remove this
+	qRegisterMetaType<const AbstractAspect*>("const AbstractAspect*");
+	qRegisterMetaType<const AbstractColumn*>("const AbstractColumn*");
+}
 
 // ##############################################################################
 // #################  handling of empty and sparse files ########################

@@ -80,7 +80,7 @@ void CustomPoint::init() {
 		d->update();
 	});
 	KConfig config;
-	d->symbol->init(config.group("CustomPoint"));
+	d->symbol->init(config.group(QStringLiteral("CustomPoint")));
 
 	initActions();
 }

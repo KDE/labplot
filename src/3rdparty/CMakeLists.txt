@@ -74,6 +74,11 @@ if (ENABLE_VECTOR_BLF)
         GIT_REPOSITORY https://github.com/LinuxDevon/dbc_parser_cpp.git
         GIT_TAG 0f3b22b3fe124976a86a85fcd1bfdd55c20ca428 # At least this version is needed!
       )
+      # fix missing variable and keyword for fast_float
+      IF (NOT MSVC_FOUND)
+          add_definitions (-DFASTFLOAT_VISUAL_STUDIO=0)
+          add_definitions (-D__forceinline=inline)
+      ENDIF ()
       # dbc is the root project name
       # https://gitlab.kitware.com/cmake/cmake/-/issues/19854
       set(CMAKE_PROJECT_dbc_INCLUDE "${CMAKE_CURRENT_SOURCE_DIR}/cmake/dbc_database_parser_disableTests.cmake")
@@ -97,7 +102,7 @@ if (ENABLE_VECTOR_BLF)
         #GIT_REPOSITORY https://github.com/Technica-Engineering/vector_blf.git
         #GIT_TAG 02f0a2fe1f7915da1e24025869b98f6d15de937b
         GIT_REPOSITORY https://github.com/Murmele/vector_blf.git
-        GIT_TAG b7a419c4d8edbf495ab309b57a380a2444ee2730
+        GIT_TAG 2c1a8e649328f2e06ce4d45c6223628bc39fd178
       )
       set(CMAKE_PROJECT_Vector_BLF_INCLUDE "${CMAKE_CURRENT_SOURCE_DIR}/cmake/vector_blf_config.cmake")
       FetchContent_MakeAvailable(vector_blf)

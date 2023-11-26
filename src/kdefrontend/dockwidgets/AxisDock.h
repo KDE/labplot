@@ -62,6 +62,7 @@ private:
 	void updatePositionText(Axis::Orientation);
 	void updateLabelsPosition(Axis::LabelsPosition);
 	void updateAxisColor();
+	void updateScale();
 
 	void setOffset(double);
 
@@ -84,6 +85,7 @@ private Q_SLOTS:
 	void positionChanged(double value);
 	void logicalPositionChanged(double value);
 	void scaleChanged(int);
+	void rangeScaleChanged(bool);
 	void rangeTypeChanged(int);
 	void startChanged(double);
 	void endChanged(double);
@@ -160,6 +162,7 @@ private Q_SLOTS:
 	void axisPositionChanged(double);
 	void axisLogicalPositionChanged(double);
 	void axisScaleChanged(RangeT::Scale);
+	void axisRangeScaleChanged(bool);
 	void axisRangeTypeChanged(Axis::RangeType);
 	void axisStartChanged(double);
 	void axisEndChanged(double);

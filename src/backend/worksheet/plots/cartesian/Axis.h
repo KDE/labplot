@@ -109,11 +109,9 @@ public:
 	BASIC_D_ACCESSOR_DECL(RangeType, rangeType, RangeType)
 	BASIC_D_ACCESSOR_DECL(Orientation, orientation, Orientation)
 	BASIC_D_ACCESSOR_DECL(Position, position, Position)
-	BASIC_D_ACCESSOR_DECL(Range<double>, range, Range) // range contains scale
-	void setScale(RangeT::Scale scale);
-	RangeT::Scale scale() {
-		return range().scale();
-	}
+	BASIC_D_ACCESSOR_DECL(Range<double>, range, Range)
+	BASIC_D_ACCESSOR_DECL(bool, rangeScale, RangeScale) // if true, the scale of the range will be used
+	BASIC_D_ACCESSOR_DECL(RangeT::Scale, scale, Scale)
 	void setStart(const double);
 	void setEnd(const double);
 	void setRange(const double, const double);
@@ -230,6 +228,7 @@ Q_SIGNALS:
 	void positionChanged(Position);
 	void positionChanged(double);
 	void scaleChanged(RangeT::Scale);
+	void rangeScaleChanged(bool);
 	void startChanged(double);
 	void rangeTypeChanged(RangeType);
 	void endChanged(double);

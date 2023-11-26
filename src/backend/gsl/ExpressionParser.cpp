@@ -50,7 +50,7 @@ void ExpressionParser::initFunctions() {
 void ExpressionParser::initConstants() {
 	for (int i = 0; i < _number_constants; i++) {
 		const auto& constant = _constants[i];
-		m_constantsDescription << constant.description;
+		m_constantsDescription << constant.description();
 		m_constants << QLatin1String(constant.name);
 		m_constantsValues << QString::number(constant.value, 'g', 15);
 		m_constantsUnits << QLatin1String(constant.unit);
@@ -221,19 +221,18 @@ QString ExpressionParser::functionArgumentString(const QString& functionName, co
 QString ExpressionParser::functionDescription(const QString& function) {
 	for (int index = 0; index < _number_functions; index++) {
 		if (function == QLatin1String(_functions[index].name))
-			return m_functionsDescription.at(index);
+			return _functions[index].description();
 	}
 	for (int index = 0; index < _number_specialfunctions; index++) {
 		if (function == QLatin1String(_special_functions[index].name))
-			return m_functionsDescription.at(index);
+			return _special_functions[index].description();
 	}
 	return QStringLiteral("");
 }
 QString ExpressionParser::constantDescription(const QString& constant) {
 	for (int index = 0; index < _number_constants; index++) {
 		if (constant == QLatin1String(_constants[index].name))
-			return m_constantsDescription.at(index) + QStringLiteral(" (") + m_constantsValues.at(index) + QStringLiteral(" ") + m_constantsUnits.at(index)
-				+ QStringLiteral(")");
+			return QStringLiteral("%1 (%2 %3)").arg(_constants[index].description()).arg(_constants[index].value).arg(QLatin1String(_constants[index].unit));
 	}
 	return QStringLiteral("");
 }

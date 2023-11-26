@@ -33,8 +33,6 @@
 #include <QRandomGenerator>
 #endif
 
-#include <gsl/gsl_math.h>
-
 //**********************************************************
 //****************** Copy&Paste tests **********************
 //**********************************************************
@@ -444,7 +442,7 @@ void SpreadsheetTest::testCopyPasteSizeChange01() {
 	QApplication::clipboard()->setText(str);
 
 	SpreadsheetView view(&sheet, false);
-	view.goToCell(1, 1); // havigate to the edge of the spreadsheet
+	view.goToCell(1, 1); // navigate to the edge of the spreadsheet
 	view.pasteIntoSelection();
 
 	// spreadsheet size
@@ -2639,6 +2637,7 @@ void SpreadsheetTest::testLinkSpreadsheetsUndoRedo() {
 
 	SpreadsheetDock dock(nullptr);
 	dock.setSpreadsheets({sheetCalculations});
+	auto* modelSheetCalculations = new SpreadsheetModel(sheetCalculations);
 
 	QCOMPARE(dock.ui.cbLinkingEnabled->isChecked(), false);
 	QCOMPARE(dock.ui.cbLinkedSpreadsheet->isVisible(), false);
@@ -2654,6 +2653,7 @@ void SpreadsheetTest::testLinkSpreadsheetsUndoRedo() {
 	QCOMPARE(sheetCalculations->linkedSpreadsheet(), nullptr);
 	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), QLatin1String());
 	QCOMPARE(sheetCalculations->rowCount(), 2);
+	QCOMPARE(modelSheetCalculations->rowCount(), 2);
 
 	const auto index = dock.m_aspectTreeModel->modelIndexOfAspect(sheetData);
 	QCOMPARE(index.isValid(), true);
@@ -2663,6 +2663,7 @@ void SpreadsheetTest::testLinkSpreadsheetsUndoRedo() {
 	QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetData);
 	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData->path());
 	QCOMPARE(sheetCalculations->rowCount(), 10);
+	QCOMPARE(modelSheetCalculations->rowCount(), 10);
 
 	sheetCalculations->setLinkedSpreadsheet(sheetData2);
 
@@ -2670,6 +2671,7 @@ void SpreadsheetTest::testLinkSpreadsheetsUndoRedo() {
 	QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetData2);
 	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData2->path());
 	QCOMPARE(sheetCalculations->rowCount(), 100);
+	QCOMPARE(modelSheetCalculations->rowCount(), 100);
 
 	sheetCalculations->undoStack()->undo();
 
@@ -2677,6 +2679,7 @@ void SpreadsheetTest::testLinkSpreadsheetsUndoRedo() {
 	QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetData);
 	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData->path());
 	QCOMPARE(sheetCalculations->rowCount(), 10);
+	QCOMPARE(modelSheetCalculations->rowCount(), 10);
 
 	sheetCalculations->undoStack()->redo();
 
@@ -2684,12 +2687,14 @@ void SpreadsheetTest::testLinkSpreadsheetsUndoRedo() {
 	QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetData2);
 	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData2->path());
 	QCOMPARE(sheetCalculations->rowCount(), 100);
+	QCOMPARE(modelSheetCalculations->rowCount(), 100);
 
 	sheetCalculations->undoStack()->undo(); // first undo
 	QCOMPARE(sheetCalculations->linking(), true);
 	QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetData);
 	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData->path());
 	QCOMPARE(sheetCalculations->rowCount(), 10);
+	QCOMPARE(modelSheetCalculations->rowCount(), 10);
 
 	sheetCalculations->undoStack()->undo();
 
@@ -2697,12 +2702,14 @@ void SpreadsheetTest::testLinkSpreadsheetsUndoRedo() {
 	QCOMPARE(sheetCalculations->linkedSpreadsheet(), nullptr); // No linked spreadsheet anymore
 	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), QLatin1String());
 	QCOMPARE(sheetCalculations->rowCount(), 2); // Go back to original row count
+	QCOMPARE(modelSheetCalculations->rowCount(), 2);
 
 	sheetCalculations->undoStack()->undo();
 	QCOMPARE(sheetCalculations->linking(), false);
 	QCOMPARE(sheetCalculations->linkedSpreadsheet(), nullptr);
 	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), QLatin1String());
 	QCOMPARE(sheetCalculations->rowCount(), 2);
+	QCOMPARE(modelSheetCalculations->rowCount(), 2);
 }
 
 void SpreadsheetTest::testLinkSpreadsheetDeleteAdd() {
@@ -2955,6 +2962,62 @@ void SpreadsheetTest::testLinkSpreadsheetSaveLoad() {
 		QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData->path());
 		QCOMPARE(sheetCalculations->rowCount(), 11);
 	}
+}
+
+void SpreadsheetTest::testLinkSpreadsheetsModelDockUpdateCheckRemoveRows() {
+#ifdef __FreeBSD__
+	return;
+#endif
+	Project project;
+	auto* sheetData = new Spreadsheet(QStringLiteral("data"), false);
+	project.addChild(sheetData);
+	sheetData->setRowCount(20); // smaller
+
+	auto* sheetCalculations = new Spreadsheet(QStringLiteral("calculations"), false);
+	project.addChild(sheetCalculations);
+	sheetCalculations->setRowCount(100);
+
+	const auto* model = new SpreadsheetModel(sheetCalculations);
+	SpreadsheetDock dock(nullptr);
+	dock.setSpreadsheets({sheetCalculations});
+
+	sheetCalculations->setLinking(true);
+	sheetCalculations->setLinkedSpreadsheet(sheetData);
+
+	QCOMPARE(sheetCalculations->linking(), true);
+	QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetData);
+	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData->path());
+	QCOMPARE(sheetCalculations->rowCount(), 20);
+	QCOMPARE(model->rowCount(), 20);
+	QCOMPARE(dock.ui.sbRowCount->value(), 20);
+}
+
+void SpreadsheetTest::testLinkSpreadsheetsModelDockUpdateCheckInsertRows() {
+#ifdef __FreeBSD__
+	return;
+#endif
+	Project project;
+	auto* sheetData = new Spreadsheet(QStringLiteral("data"), false);
+	project.addChild(sheetData);
+	sheetData->setRowCount(100); // larger
+
+	auto* sheetCalculations = new Spreadsheet(QStringLiteral("calculations"), false);
+	project.addChild(sheetCalculations);
+	sheetCalculations->setRowCount(20);
+
+	const auto* model = new SpreadsheetModel(sheetCalculations);
+	SpreadsheetDock dock(nullptr);
+	dock.setSpreadsheets({sheetCalculations});
+
+	sheetCalculations->setLinking(true);
+	sheetCalculations->setLinkedSpreadsheet(sheetData);
+
+	QCOMPARE(sheetCalculations->linking(), true);
+	QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetData);
+	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData->path());
+	QCOMPARE(sheetCalculations->rowCount(), 100);
+	QCOMPARE(model->rowCount(), 100);
+	QCOMPARE(dock.ui.sbRowCount->value(), 100);
 }
 
 // **********************************************************

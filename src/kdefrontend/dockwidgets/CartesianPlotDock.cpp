@@ -1891,7 +1891,7 @@ void CartesianPlotDock::load() {
 }
 
 void CartesianPlotDock::loadConfig(KConfig& config) {
-	KConfigGroup group = config.group("CartesianPlot");
+	KConfigGroup group = config.group(QStringLiteral("CartesianPlot"));
 
 	// General
 	// we don't load/save the settings in the general-tab, since they are not style related.
@@ -1899,59 +1899,62 @@ void CartesianPlotDock::loadConfig(KConfig& config) {
 	// This data is read in CartesianPlotDock::setPlots().
 
 	// Title
-	KConfigGroup plotTitleGroup = config.group("CartesianPlotTitle");
+	KConfigGroup plotTitleGroup = config.group(QStringLiteral("CartesianPlotTitle"));
 	labelWidget->loadConfig(plotTitleGroup);
 
 	// Scale breakings
 	// TODO
 
 	// Layout
-	ui.sbPaddingHorizontal->setValue(Worksheet::convertFromSceneUnits(group.readEntry("HorizontalPadding", m_plot->horizontalPadding()), m_worksheetUnit));
-	ui.sbPaddingVertical->setValue(Worksheet::convertFromSceneUnits(group.readEntry("VerticalPadding", m_plot->verticalPadding()), m_worksheetUnit));
-	ui.sbPaddingRight->setValue(Worksheet::convertFromSceneUnits(group.readEntry("RightPadding", m_plot->rightPadding()), m_worksheetUnit));
-	ui.sbPaddingBottom->setValue(Worksheet::convertFromSceneUnits(group.readEntry("BottomPadding", m_plot->bottomPadding()), m_worksheetUnit));
-	ui.cbPaddingSymmetric->setChecked(group.readEntry("SymmetricPadding", m_plot->symmetricPadding()));
+	ui.sbPaddingHorizontal->setValue(
+		Worksheet::convertFromSceneUnits(group.readEntry(QStringLiteral("HorizontalPadding"), m_plot->horizontalPadding()), m_worksheetUnit));
+	ui.sbPaddingVertical->setValue(
+		Worksheet::convertFromSceneUnits(group.readEntry(QStringLiteral("VerticalPadding"), m_plot->verticalPadding()), m_worksheetUnit));
+	ui.sbPaddingRight->setValue(Worksheet::convertFromSceneUnits(group.readEntry(QStringLiteral("RightPadding"), m_plot->rightPadding()), m_worksheetUnit));
+	ui.sbPaddingBottom->setValue(Worksheet::convertFromSceneUnits(group.readEntry(QStringLiteral("BottomPadding"), m_plot->bottomPadding()), m_worksheetUnit));
+	ui.cbPaddingSymmetric->setChecked(group.readEntry(QStringLiteral("SymmetricPadding"), m_plot->symmetricPadding()));
 
 	// Area
 	backgroundWidget->loadConfig(group);
 
 	const auto* plotArea = m_plot->plotArea();
-	auto type = static_cast<PlotArea::BorderType>(group.readEntry("BorderType", static_cast<int>(plotArea->borderType())));
+	auto type = static_cast<PlotArea::BorderType>(group.readEntry(QStringLiteral("BorderType"), static_cast<int>(plotArea->borderType())));
 	ui.tbBorderTypeLeft->setChecked(type.testFlag(PlotArea::BorderTypeFlags::BorderLeft));
 	ui.tbBorderTypeRight->setChecked(type.testFlag(PlotArea::BorderTypeFlags::BorderRight));
 	ui.tbBorderTypeTop->setChecked(type.testFlag(PlotArea::BorderTypeFlags::BorderTop));
 	ui.tbBorderTypeBottom->setChecked(type.testFlag(PlotArea::BorderTypeFlags::BorderBottom));
 
 	borderLineWidget->loadConfig(group);
-	ui.sbBorderCornerRadius->setValue(Worksheet::convertFromSceneUnits(group.readEntry("BorderCornerRadius", plotArea->borderCornerRadius()), m_worksheetUnit));
+	ui.sbBorderCornerRadius->setValue(
+		Worksheet::convertFromSceneUnits(group.readEntry(QStringLiteral("BorderCornerRadius"), plotArea->borderCornerRadius()), m_worksheetUnit));
 }
 
 void CartesianPlotDock::saveConfigAsTemplate(KConfig& config) {
-	KConfigGroup group = config.group("CartesianPlot");
+	KConfigGroup group = config.group(QStringLiteral("CartesianPlot"));
 
 	// General
 	// we don't load/save the settings in the general-tab, since they are not style related.
 	// It doesn't make sense to load/save them in the template.
 
 	// Title
-	KConfigGroup plotTitleGroup = config.group("CartesianPlotTitle");
+	KConfigGroup plotTitleGroup = config.group(QStringLiteral("CartesianPlotTitle"));
 	labelWidget->saveConfig(plotTitleGroup);
 
 	// Layout
-	group.writeEntry("HorizontalPadding", m_plot->horizontalPadding());
-	group.writeEntry("VerticalPadding", m_plot->verticalPadding());
-	group.writeEntry("RightPadding", m_plot->rightPadding());
-	group.writeEntry("BottomPadding", m_plot->bottomPadding());
-	group.writeEntry("SymmetricPadding", m_plot->symmetricPadding());
+	group.writeEntry(QStringLiteral("HorizontalPadding"), m_plot->horizontalPadding());
+	group.writeEntry(QStringLiteral("VerticalPadding"), m_plot->verticalPadding());
+	group.writeEntry(QStringLiteral("RightPadding"), m_plot->rightPadding());
+	group.writeEntry(QStringLiteral("BottomPadding"), m_plot->bottomPadding());
+	group.writeEntry(QStringLiteral("SymmetricPadding"), m_plot->symmetricPadding());
 
 	// Scale breakings
 	// TODO
 
 	// Area
 	backgroundWidget->saveConfig(group);
-	group.writeEntry("BorderType", static_cast<int>(m_plot->plotArea()->borderType()));
+	group.writeEntry(QStringLiteral("BorderType"), static_cast<int>(m_plot->plotArea()->borderType()));
 	borderLineWidget->saveConfig(group);
-	group.writeEntry("BorderCornerRadius", m_plot->plotArea()->borderCornerRadius());
+	group.writeEntry(QStringLiteral("BorderCornerRadius"), m_plot->plotArea()->borderCornerRadius());
 
 	config.sync();
 }

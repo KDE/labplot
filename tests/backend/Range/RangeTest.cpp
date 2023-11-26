@@ -85,15 +85,16 @@ void RangeTest::testTickCount() {
 }
 
 void RangeTest::testLimits() {
-	QVector<QPair<Range<double>, Range<double>>> tests{{{0, 1, RangeT::Format::Numeric, RangeT::Scale::Log10}, {0.1, 1.}},
-													   {{-1, 0, RangeT::Format::Numeric, RangeT::Scale::Log10}, {1., 10.}},
-													   {{0, 1, RangeT::Format::Numeric, RangeT::Scale::Log2}, {0.5, 1.}},
-													   {{-1, 0, RangeT::Format::Numeric, RangeT::Scale::Log2}, {1., 2.}},
-													   {{0, 1, RangeT::Format::Numeric, RangeT::Scale::Ln}, {1 / M_E, 1.}},
-													   {{-1, 0, RangeT::Format::Numeric, RangeT::Scale::Ln}, {1., M_E}},
-													   {{-1, 0, RangeT::Format::Numeric, RangeT::Scale::Sqrt}, {0., 1.}},
-													   {{-1, 0, RangeT::Format::Numeric, RangeT::Scale::Square}, {0., 1.}},
-													   {{-1, 0, RangeT::Format::Numeric, RangeT::Scale::Inverse}, {0., 1.}}};
+	using Format = RangeT::Format;
+	QVector<QPair<Range<double>, Range<double>>> tests{{{0, 1, Format::Numeric, RangeT::Scale::Log10}, {0.1, 1., Format::Numeric, RangeT::Scale::Log10}},
+													   {{-1, 0, Format::Numeric, RangeT::Scale::Log10}, {1., 10., Format::Numeric, RangeT::Scale::Log10}},
+													   {{0, 1, Format::Numeric, RangeT::Scale::Log2}, {0.5, 1., Format::Numeric, RangeT::Scale::Log2}},
+													   {{-1, 0, Format::Numeric, RangeT::Scale::Log2}, {1., 2., Format::Numeric, RangeT::Scale::Log2}},
+													   {{0, 1, Format::Numeric, RangeT::Scale::Ln}, {1 / M_E, 1., Format::Numeric, RangeT::Scale::Ln}},
+													   {{-1, 0, Format::Numeric, RangeT::Scale::Ln}, {1., M_E, Format::Numeric, RangeT::Scale::Ln}},
+													   {{-1, 0, Format::Numeric, RangeT::Scale::Sqrt}, {0., 1., Format::Numeric, RangeT::Scale::Sqrt}},
+													   {{-1, 0, Format::Numeric, RangeT::Scale::Square}, {0., 1., Format::Numeric, RangeT::Scale::Square}},
+													   {{-1, 0, Format::Numeric, RangeT::Scale::Inverse}, {0., 1., Format::Numeric, RangeT::Scale::Inverse}}};
 
 	for (auto& test : tests) {
 		test.first.fixLimits();
@@ -110,6 +111,7 @@ void RangeTest::testNiceExtendLog10() {
 
 	for (auto& test : tests) {
 		test.first.setScale(RangeT::Scale::Log10);
+		test.second.setScale(RangeT::Scale::Log10);
 		DEBUG(Q_FUNC_INFO << ", " << test.first.toStdString())
 		test.first.niceExtend();
 		WARN(std::setprecision(19) << test.first.start() << " == " << test.second.start())
@@ -118,6 +120,7 @@ void RangeTest::testNiceExtendLog10() {
 	}
 	for (auto& test : tests2) {
 		test.first.setScale(RangeT::Scale::Log10);
+		test.second.setScale(RangeT::Scale::Log10);
 		DEBUG(Q_FUNC_INFO << ", " << test.first.toStdString())
 		test.first.niceExtend();
 		// WARN(std::setprecision(19) << test.first.start() << " == " << test.second.start())
@@ -141,6 +144,7 @@ void RangeTest::testNiceExtendLog2() {
 
 	for (auto& test : tests) {
 		test.first.setScale(RangeT::Scale::Log2);
+		test.second.setScale(RangeT::Scale::Log2);
 		DEBUG(Q_FUNC_INFO << ", " << test.first.toStdString())
 		test.first.niceExtend();
 		WARN(std::setprecision(19) << test.first.start() << " == " << test.second.start())
@@ -162,6 +166,7 @@ void RangeTest::testNiceExtendLn() {
 
 	for (auto& test : tests) {
 		test.first.setScale(RangeT::Scale::Ln);
+		test.second.setScale(RangeT::Scale::Ln);
 		DEBUG(Q_FUNC_INFO << ", " << test.first.toStdString())
 		test.first.niceExtend();
 		WARN(std::setprecision(19) << test.first.start() << " == " << test.second.start())

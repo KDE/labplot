@@ -240,7 +240,7 @@ void ReferenceLineDock::loadConfigFromTemplate(KConfig& config) {
 	else
 		m_line->beginMacro(i18n("%1: template \"%2\" loaded", m_line->name(), name));
 
-	lineWidget->loadConfig(config.group("ReferenceLine"));
+	lineWidget->loadConfig(config.group(QStringLiteral("ReferenceLine")));
 
 	m_line->endMacro();
 }

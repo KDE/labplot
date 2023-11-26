@@ -53,10 +53,10 @@ void LollipopPlot::init() {
 	Q_D(LollipopPlot);
 
 	KConfig config;
-	const auto& group = config.group("LollipopPlot");
+	const auto& group = config.group(QStringLiteral("LollipopPlot"));
 
 	// general
-	d->orientation = (LollipopPlot::Orientation)group.readEntry("Orientation", (int)LollipopPlot::Orientation::Vertical);
+	d->orientation = (LollipopPlot::Orientation)group.readEntry(QStringLiteral("Orientation"), (int)LollipopPlot::Orientation::Vertical);
 
 	// initial line, symbol and value objects that will be available even if not data column was set yet
 	d->addLine(group);
@@ -68,7 +68,7 @@ void LollipopPlot::init() {
 	Returns an icon to be used in the project explorer.
 */
 QIcon LollipopPlot::icon() const {
-	return QIcon::fromTheme(QLatin1String("office-chart-bar"));
+	return QIcon::fromTheme(QStringLiteral("office-chart-bar"));
 }
 
 void LollipopPlot::initActions() {
@@ -77,10 +77,10 @@ void LollipopPlot::initActions() {
 	orientationActionGroup->setExclusive(true);
 	connect(orientationActionGroup, &QActionGroup::triggered, this, &LollipopPlot::orientationChangedSlot);
 
-	orientationHorizontalAction = new QAction(QIcon::fromTheme(QLatin1String("transform-move-horizontal")), i18n("Horizontal"), orientationActionGroup);
+	orientationHorizontalAction = new QAction(QIcon::fromTheme(QStringLiteral("transform-move-horizontal")), i18n("Horizontal"), orientationActionGroup);
 	orientationHorizontalAction->setCheckable(true);
 
-	orientationVerticalAction = new QAction(QIcon::fromTheme(QLatin1String("transform-move-vertical")), i18n("Vertical"), orientationActionGroup);
+	orientationVerticalAction = new QAction(QIcon::fromTheme(QStringLiteral("transform-move-vertical")), i18n("Vertical"), orientationActionGroup);
 	orientationVerticalAction->setCheckable(true);
 }
 
@@ -89,7 +89,7 @@ void LollipopPlot::initMenus() {
 
 	// Orientation
 	orientationMenu = new QMenu(i18n("Orientation"));
-	orientationMenu->setIcon(QIcon::fromTheme(QLatin1String("draw-cross")));
+	orientationMenu->setIcon(QIcon::fromTheme(QStringLiteral("draw-cross")));
 	orientationMenu->addAction(orientationHorizontalAction);
 	orientationMenu->addAction(orientationVerticalAction);
 }
@@ -1004,10 +1004,10 @@ bool LollipopPlot::load(XmlStreamReader* reader, bool preview) {
 // ##############################################################################
 void LollipopPlot::loadThemeConfig(const KConfig& config) {
 	KConfigGroup group;
-	if (config.hasGroup(QLatin1String("Theme")))
-		group = config.group("XYCurve"); // when loading from the theme config, use the same properties as for XYCurve
+	if (config.hasGroup(QStringLiteral("Theme")))
+		group = config.group(QStringLiteral("XYCurve")); // when loading from the theme config, use the same properties as for XYCurve
 	else
-		group = config.group("LollipopPlot");
+		group = config.group(QStringLiteral("LollipopPlot"));
 
 	const auto* plot = static_cast<const CartesianPlot*>(parentAspect());
 	int index = plot->curveChildIndex(this);

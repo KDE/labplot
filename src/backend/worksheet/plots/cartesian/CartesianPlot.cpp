@@ -88,7 +88,7 @@ enum Action {
 
 };
 
-Action evaluateKeys(int key, Qt::KeyboardModifiers modifiers) {
+Action evaluateKeys(int key, Qt::KeyboardModifiers) {
 	if (key == Qt::Key_N)
 		return Action::NavigateNextCurve;
 	else if (key == Qt::Key_P)
@@ -156,6 +156,7 @@ CartesianPlot::~CartesianPlot() {
 void CartesianPlot::init() {
 	m_coordinateSystems.append(new CartesianCoordinateSystem(this));
 	m_plotArea = new PlotArea(name() + QStringLiteral(" plot area"), this);
+	connect(m_plotArea, &WorksheetElement::changed, this, &WorksheetElement::changed);
 	addChildFast(m_plotArea);
 
 	// title
@@ -1534,9 +1535,18 @@ void CartesianPlot::setRangeScale(const Dimension dim, const int index, const Ra
 		DEBUG(Q_FUNC_INFO << ", index " << index << " out of range")
 		return;
 	}
-	exec(new CartesianPlotSetScaleIndexCmd(d, dim, scale, index));
-	if (project())
-		project()->setChanged(true);
+
+	auto newRange = range(Dimension::X, index);
+	newRange.setScale(scale);
+	auto r = d->checkRange(newRange);
+	if (index >= 0 && index < rangeCount(dim) && r.finite() && r != d->rangeConst(dim, index)) {
+		if (r == newRange) {
+			exec(new CartesianPlotSetScaleIndexCmd(d, dim, scale, index));
+			if (project())
+				project()->setChanged(true);
+		} else
+			setRange(dim, index, r);
+	}
 }
 
 void CartesianPlot::setXRangeScale(const int index, const RangeT::Scale scale) {
@@ -2213,8 +2223,11 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 			connect(elem, &WorksheetElement::hovered, this, &CartesianPlot::childHovered);
 	}
 
+	if (isLoading())
+		return;
+
 	auto rangeChanged = false;
-	if (!isLoading() && checkRanges && INRANGE(cSystemIndex, 0, m_coordinateSystems.count())) {
+	if (checkRanges && INRANGE(cSystemIndex, 0, m_coordinateSystems.count())) {
 		auto xIndex = coordinateSystem(cSystemIndex)->index(Dimension::X);
 		auto yIndex = coordinateSystem(cSystemIndex)->index(Dimension::Y);
 		setRangeDirty(Dimension::X, xIndex, true);
@@ -2231,7 +2244,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 			WorksheetElementContainer::retransform();
 	}
 
-	if (!isLoading() && !this->pasted() && !child->pasted() && !child->isMoved()) {
+	if (!this->pasted() && !child->pasted() && !child->isMoved()) {
 		// new child was added which might change the ranges and the axis tick labels.
 		// adjust the plot area padding if the axis label is outside of the plot area
 		if (rangeChanged) {
@@ -3257,6 +3270,9 @@ void CartesianPlotPrivate::retransformScale(const Dimension dim, int index, bool
 		for (auto* axis : q->children<Axis>()) {
 			QDEBUG(Q_FUNC_INFO << ", auto-scale axis" << axis->name() << "of scale" << axis->scale())
 			// use ranges of axis
+			auto r = axis->range();
+			r.setScale(rangep.range.scale());
+
 			int axisIndex = q->coordinateSystem(axis->coordinateSystemIndex())->index(dim);
 			if (axis->rangeType() != Axis::RangeType::Auto || axisIndex != i)
 				continue;
@@ -3264,20 +3280,16 @@ void CartesianPlotPrivate::retransformScale(const Dimension dim, int index, bool
 				|| (dim == Dimension::X && axis->orientation() != Axis::Orientation::Horizontal))
 				continue;
 
-			if (!qFuzzyIsNull(deltaMax)) {
-				axis->setUndoAware(false);
-				axis->setSuppressRetransform(true);
-				axis->setEnd(rangep.range.end());
-				axis->setUndoAware(true);
-				axis->setSuppressRetransform(false);
-			}
-			if (!qFuzzyIsNull(deltaMin)) {
-				axis->setUndoAware(false);
-				axis->setSuppressRetransform(true);
-				axis->setStart(rangep.range.start());
-				axis->setUndoAware(true);
-				axis->setSuppressRetransform(false);
-			}
+			if (!qFuzzyIsNull(deltaMax))
+				r.setEnd(rangep.range.end());
+			if (!qFuzzyIsNull(deltaMin))
+				r.setStart(rangep.range.start());
+
+			axis->setUndoAware(false);
+			axis->setSuppressRetransform(true);
+			axis->setRange(r);
+			axis->setUndoAware(true);
+			axis->setSuppressRetransform(false);
 			// TODO;
 			// 			if (axis->position() == Axis::Position::Centered && deltaYMin != 0) {
 			// 				axis->setOffset(axis->offset() + deltaYMin, false);
@@ -4143,7 +4155,7 @@ void CartesianPlotPrivate::wheelEvent(const QPointF& sceneRelPos, int delta, int
 
 void CartesianPlotPrivate::keyPressEvent(QKeyEvent* event) {
 	const auto key = event->key();
-	const bool ctrl = event->modifiers() & Qt::KeyboardModifier::ControlModifier;
+	// const bool ctrl = event->modifiers() & Qt::KeyboardModifier::ControlModifier;
 	//	const bool shift = event->modifiers() & Qt::KeyboardModifier::ShiftModifier;
 	//	const bool alt = event->modifiers() & Qt::KeyboardModifier::AltModifier;
 	Action a = evaluateKeys(key, event->modifiers());
@@ -5289,7 +5301,7 @@ void CartesianPlot::loadThemeConfig(const KConfig& config) {
 	Q_D(CartesianPlot);
 
 	QString theme = QString();
-	if (config.hasGroup(QLatin1String("Theme"))) {
+	if (config.hasGroup(QStringLiteral("Theme"))) {
 		theme = config.name();
 
 		// theme path is saved with UNIX dir separator
@@ -5334,16 +5346,16 @@ void CartesianPlot::saveTheme(KConfig& config) {
 
 // Generating colors from 5-color theme palette
 void CartesianPlot::setColorPalette(const KConfig& config) {
-	if (config.hasGroup(QLatin1String("Theme"))) {
-		KConfigGroup group = config.group(QLatin1String("Theme"));
+	if (config.hasGroup(QStringLiteral("Theme"))) {
+		KConfigGroup group = config.group(QStringLiteral("Theme"));
 
 		// read the five colors defining the palette
 		m_themeColorPalette.clear();
-		m_themeColorPalette.append(group.readEntry("ThemePaletteColor1", QColor()));
-		m_themeColorPalette.append(group.readEntry("ThemePaletteColor2", QColor()));
-		m_themeColorPalette.append(group.readEntry("ThemePaletteColor3", QColor()));
-		m_themeColorPalette.append(group.readEntry("ThemePaletteColor4", QColor()));
-		m_themeColorPalette.append(group.readEntry("ThemePaletteColor5", QColor()));
+		m_themeColorPalette.append(group.readEntry(QStringLiteral("ThemePaletteColor1"), QColor()));
+		m_themeColorPalette.append(group.readEntry(QStringLiteral("ThemePaletteColor2"), QColor()));
+		m_themeColorPalette.append(group.readEntry(QStringLiteral("ThemePaletteColor3"), QColor()));
+		m_themeColorPalette.append(group.readEntry(QStringLiteral("ThemePaletteColor4"), QColor()));
+		m_themeColorPalette.append(group.readEntry(QStringLiteral("ThemePaletteColor5"), QColor()));
 	} else {
 		// no theme is available, provide "default colors"
 		m_themeColorPalette.clear();
@@ -5368,8 +5380,8 @@ void CartesianPlot::setColorPalette(const KConfig& config) {
 
 	// use the color of the axis lines as the color for the different mouse cursor lines
 	Q_D(CartesianPlot);
-	const KConfigGroup& group = config.group("Axis");
-	const QColor& color = group.readEntry("LineColor", QColor(Qt::black));
+	const KConfigGroup& group = config.group(QStringLiteral("Axis"));
+	const QColor& color = group.readEntry(QStringLiteral("LineColor"), QColor(Qt::black));
 	d->zoomSelectPen.setColor(color);
 	d->crossHairPen.setColor(color);
 }

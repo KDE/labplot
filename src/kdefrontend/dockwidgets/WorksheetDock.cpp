@@ -154,7 +154,7 @@ void WorksheetDock::updateLocale() {
 
 void WorksheetDock::updateUnits() {
 	const KConfigGroup group = Settings::group(QStringLiteral("Settings_General"));
-	BaseDock::Units units = (BaseDock::Units)group.readEntry("Units", static_cast<int>(Units::Metric));
+	BaseDock::Units units = (BaseDock::Units)group.readEntry(QStringLiteral("Units"), static_cast<int>(Units::Metric));
 	if (units == m_units)
 		return;
 
@@ -612,13 +612,13 @@ void WorksheetDock::loadConfigFromTemplate(KConfig& config) {
 }
 
 void WorksheetDock::loadConfig(KConfig& config) {
-	KConfigGroup group = config.group("Worksheet");
+	KConfigGroup group = config.group(QStringLiteral("Worksheet"));
 
 	// Geometry
-	ui.chScaleContent->setChecked(group.readEntry("ScaleContent", false));
-	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(group.readEntry("Width", m_worksheet->pageRect().width()), m_worksheetUnit));
-	ui.sbHeight->setValue(Worksheet::convertFromSceneUnits(group.readEntry("Height", m_worksheet->pageRect().height()), m_worksheetUnit));
-	if (group.readEntry("UseViewSize", false))
+	ui.chScaleContent->setChecked(group.readEntry(QStringLiteral("ScaleContent"), false));
+	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(group.readEntry(QStringLiteral("Width"), m_worksheet->pageRect().width()), m_worksheetUnit));
+	ui.sbHeight->setValue(Worksheet::convertFromSceneUnits(group.readEntry(QStringLiteral("Height"), m_worksheet->pageRect().height()), m_worksheetUnit));
+	if (group.readEntry(QStringLiteral("UseViewSize"), false))
 		ui.cbSizeType->setCurrentIndex(0);
 	else
 		updatePaperSize();
@@ -627,43 +627,46 @@ void WorksheetDock::loadConfig(KConfig& config) {
 	backgroundWidget->loadConfig(group);
 
 	// Layout
-	ui.cbLayout->setCurrentIndex(group.readEntry("Layout", (int)m_worksheet->layout()));
-	ui.sbLayoutTopMargin->setValue(Worksheet::convertFromSceneUnits(group.readEntry("LayoutTopMargin", m_worksheet->layoutTopMargin()), m_worksheetUnit));
+	ui.cbLayout->setCurrentIndex(group.readEntry(QStringLiteral("Layout"), (int)m_worksheet->layout()));
+	ui.sbLayoutTopMargin->setValue(
+		Worksheet::convertFromSceneUnits(group.readEntry(QStringLiteral("LayoutTopMargin"), m_worksheet->layoutTopMargin()), m_worksheetUnit));
 	ui.sbLayoutBottomMargin->setValue(
-		Worksheet::convertFromSceneUnits(group.readEntry("LayoutBottomMargin", m_worksheet->layoutBottomMargin()), m_worksheetUnit));
-	ui.sbLayoutLeftMargin->setValue(Worksheet::convertFromSceneUnits(group.readEntry("LayoutLeftMargin", m_worksheet->layoutLeftMargin()), m_worksheetUnit));
-	ui.sbLayoutRightMargin->setValue(Worksheet::convertFromSceneUnits(group.readEntry("LayoutRightMargin", m_worksheet->layoutRightMargin()), m_worksheetUnit));
+		Worksheet::convertFromSceneUnits(group.readEntry(QStringLiteral("LayoutBottomMargin"), m_worksheet->layoutBottomMargin()), m_worksheetUnit));
+	ui.sbLayoutLeftMargin->setValue(
+		Worksheet::convertFromSceneUnits(group.readEntry(QStringLiteral("LayoutLeftMargin"), m_worksheet->layoutLeftMargin()), m_worksheetUnit));
+	ui.sbLayoutRightMargin->setValue(
+		Worksheet::convertFromSceneUnits(group.readEntry(QStringLiteral("LayoutRightMargin"), m_worksheet->layoutRightMargin()), m_worksheetUnit));
 	ui.sbLayoutHorizontalSpacing->setValue(
-		Worksheet::convertFromSceneUnits(group.readEntry("LayoutHorizontalSpacing", m_worksheet->layoutHorizontalSpacing()), m_worksheetUnit));
+		Worksheet::convertFromSceneUnits(group.readEntry(QStringLiteral("LayoutHorizontalSpacing"), m_worksheet->layoutHorizontalSpacing()), m_worksheetUnit));
 	ui.sbLayoutVerticalSpacing->setValue(
-		Worksheet::convertFromSceneUnits(group.readEntry("LayoutVerticalSpacing", m_worksheet->layoutVerticalSpacing()), m_worksheetUnit));
+		Worksheet::convertFromSceneUnits(group.readEntry(QStringLiteral("LayoutVerticalSpacing"), m_worksheet->layoutVerticalSpacing()), m_worksheetUnit));
 
-	ui.sbLayoutRowCount->setValue(group.readEntry("LayoutRowCount", m_worksheet->layoutRowCount()));
-	ui.sbLayoutColumnCount->setValue(group.readEntry("LayoutColumnCount", m_worksheet->layoutColumnCount()));
+	ui.sbLayoutRowCount->setValue(group.readEntry(QStringLiteral("LayoutRowCount"), m_worksheet->layoutRowCount()));
+	ui.sbLayoutColumnCount->setValue(group.readEntry(QStringLiteral("LayoutColumnCount"), m_worksheet->layoutColumnCount()));
 }
 
 void WorksheetDock::saveConfigAsTemplate(KConfig& config) {
-	KConfigGroup group = config.group("Worksheet");
+	KConfigGroup group = config.group(QStringLiteral("Worksheet"));
 
 	// General
-	group.writeEntry("ScaleContent", ui.chScaleContent->isChecked());
-	group.writeEntry("UseViewSize", ui.cbSizeType->currentIndex() == 0);
-	group.writeEntry("Width", Worksheet::convertToSceneUnits(ui.sbWidth->value(), m_worksheetUnit));
-	group.writeEntry("Height", Worksheet::convertToSceneUnits(ui.sbHeight->value(), m_worksheetUnit));
+	group.writeEntry(QStringLiteral("ScaleContent"), ui.chScaleContent->isChecked());
+	group.writeEntry(QStringLiteral("UseViewSize"), ui.cbSizeType->currentIndex() == 0);
+	group.writeEntry(QStringLiteral("Width"), Worksheet::convertToSceneUnits(ui.sbWidth->value(), m_worksheetUnit));
+	group.writeEntry(QStringLiteral("Height"), Worksheet::convertToSceneUnits(ui.sbHeight->value(), m_worksheetUnit));
 
 	// Background
 	backgroundWidget->saveConfig(group);
 
 	// Layout
-	group.writeEntry("Layout", ui.cbLayout->currentIndex());
-	group.writeEntry("LayoutTopMargin", Worksheet::convertToSceneUnits(ui.sbLayoutTopMargin->value(), m_worksheetUnit));
-	group.writeEntry("LayoutBottomMargin", Worksheet::convertToSceneUnits(ui.sbLayoutBottomMargin->value(), m_worksheetUnit));
-	group.writeEntry("LayoutLeftMargin", Worksheet::convertToSceneUnits(ui.sbLayoutLeftMargin->value(), m_worksheetUnit));
-	group.writeEntry("LayoutRightMargin", Worksheet::convertToSceneUnits(ui.sbLayoutRightMargin->value(), m_worksheetUnit));
-	group.writeEntry("LayoutVerticalSpacing", Worksheet::convertToSceneUnits(ui.sbLayoutVerticalSpacing->value(), m_worksheetUnit));
-	group.writeEntry("LayoutHorizontalSpacing", Worksheet::convertToSceneUnits(ui.sbLayoutHorizontalSpacing->value(), m_worksheetUnit));
-	group.writeEntry("LayoutRowCount", ui.sbLayoutRowCount->value());
-	group.writeEntry("LayoutColumnCount", ui.sbLayoutColumnCount->value());
+	group.writeEntry(QStringLiteral("Layout"), ui.cbLayout->currentIndex());
+	group.writeEntry(QStringLiteral("LayoutTopMargin"), Worksheet::convertToSceneUnits(ui.sbLayoutTopMargin->value(), m_worksheetUnit));
+	group.writeEntry(QStringLiteral("LayoutBottomMargin"), Worksheet::convertToSceneUnits(ui.sbLayoutBottomMargin->value(), m_worksheetUnit));
+	group.writeEntry(QStringLiteral("LayoutLeftMargin"), Worksheet::convertToSceneUnits(ui.sbLayoutLeftMargin->value(), m_worksheetUnit));
+	group.writeEntry(QStringLiteral("LayoutRightMargin"), Worksheet::convertToSceneUnits(ui.sbLayoutRightMargin->value(), m_worksheetUnit));
+	group.writeEntry(QStringLiteral("LayoutVerticalSpacing"), Worksheet::convertToSceneUnits(ui.sbLayoutVerticalSpacing->value(), m_worksheetUnit));
+	group.writeEntry(QStringLiteral("LayoutHorizontalSpacing"), Worksheet::convertToSceneUnits(ui.sbLayoutHorizontalSpacing->value(), m_worksheetUnit));
+	group.writeEntry(QStringLiteral("LayoutRowCount"), ui.sbLayoutRowCount->value());
+	group.writeEntry(QStringLiteral("LayoutColumnCount"), ui.sbLayoutColumnCount->value());
 
 	config.sync();
 }

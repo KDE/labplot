@@ -19,6 +19,7 @@ New features:
 		* Column statistics spreadsheet - child spreadsheet showing various statistical properties of the parent spreadsheet
 		* Remove/mask rows with missing values
 		* Allow to sort the whole spreadsheet even if one single column was selected, use it rather as the key sort column
+		* When generating values via a function, allow to control whether the target spreadsheet should be resized to the size of the variable columns
 		* When generating values via a mathematical expression ("generate function values"), allow to use variables in CAS-notebooks as source columns
 		* Generatation of equidistant values: support for Date&Time and integer columns
 		* Generatation of equidistant values: allow to fix the number of values and the increment at the same time
@@ -26,6 +27,7 @@ New features:
 		* Export to PDF
 		* "Configure CAS" in the menu to create a new notebook to directly allow the user to enable new backends in case not done yet
 		* In case the correct path to a CAS like Maxima, etc. was configured, allow to use it without restarting LabPlot
+		* Allow to show variable statistics and to plot data from the context menu in the project explorer similarly to spreadsheet columns
 	* [import]
 		* Templates for ASCII and Binary import filters - allow to save and load current filter settings
 		* Support data import from ODS (Open Document Spreadsheet) files

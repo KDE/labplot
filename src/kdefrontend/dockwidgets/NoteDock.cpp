@@ -82,16 +82,16 @@ void NoteDock::textFontChanged(const QFont& font) {
 //************************* Settings **************************
 //*************************************************************
 void NoteDock::loadConfigFromTemplate(KConfig& config) {
-	KConfigGroup group = config.group("Notes");
-	ui.kcbBgColor->setColor(group.readEntry("BackgroundColor", m_notes->backgroundColor()));
-	ui.kcbTextColor->setColor(group.readEntry("TextColor", m_notes->textColor()));
-	ui.kfrTextFont->setFont(group.readEntry("TextColor", m_notes->textFont()));
+	KConfigGroup group = config.group(QStringLiteral("Notes"));
+	ui.kcbBgColor->setColor(group.readEntry(QStringLiteral("BackgroundColor"), m_notes->backgroundColor()));
+	ui.kcbTextColor->setColor(group.readEntry(QStringLiteral("TextColor"), m_notes->textColor()));
+	ui.kfrTextFont->setFont(group.readEntry(QStringLiteral("TextColor"), m_notes->textFont()));
 }
 
 void NoteDock::saveConfigAsTemplate(KConfig& config) {
-	KConfigGroup group = config.group("Notes");
+	KConfigGroup group = config.group(QStringLiteral("Notes"));
 
-	group.writeEntry("BackgroundColor", ui.kcbBgColor->color());
-	group.writeEntry("TextColor", ui.kcbTextColor->color());
-	group.writeEntry("TextFont", ui.kfrTextFont->font());
+	group.writeEntry(QStringLiteral("BackgroundColor"), ui.kcbBgColor->color());
+	group.writeEntry(QStringLiteral("TextColor"), ui.kcbTextColor->color());
+	group.writeEntry(QStringLiteral("TextFont"), ui.kfrTextFont->font());
 }

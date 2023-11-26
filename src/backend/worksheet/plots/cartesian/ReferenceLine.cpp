@@ -52,9 +52,9 @@ void ReferenceLine::init() {
 	Q_D(ReferenceLine);
 
 	KConfig config;
-	KConfigGroup group = config.group("ReferenceLine");
+	KConfigGroup group = config.group(QStringLiteral("ReferenceLine"));
 
-	d->orientation = (Orientation)group.readEntry("Orientation", static_cast<int>(Orientation::Vertical));
+	d->orientation = (Orientation)group.readEntry(QStringLiteral("Orientation"), static_cast<int>(Orientation::Vertical));
 	switch (d->orientation) {
 	case WorksheetElement::Orientation::Horizontal:
 		d->position.positionLimit = WorksheetElement::PositionLimit::Y;
@@ -96,7 +96,7 @@ void ReferenceLine::init() {
 	Returns an icon to be used in the project explorer.
 */
 QIcon ReferenceLine::icon() const {
-	return QIcon::fromTheme(QLatin1String("draw-line"));
+	return QIcon::fromTheme(QStringLiteral("draw-line"));
 }
 
 void ReferenceLine::initActions() {
@@ -105,10 +105,10 @@ void ReferenceLine::initActions() {
 	orientationActionGroup->setExclusive(true);
 	connect(orientationActionGroup, &QActionGroup::triggered, this, &ReferenceLine::orientationChangedSlot);
 
-	orientationHorizontalAction = new QAction(QIcon::fromTheme(QLatin1String("labplot-axis-horizontal")), i18n("Horizontal"), orientationActionGroup);
+	orientationHorizontalAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-axis-horizontal")), i18n("Horizontal"), orientationActionGroup);
 	orientationHorizontalAction->setCheckable(true);
 
-	orientationVerticalAction = new QAction(QIcon::fromTheme(QLatin1String("labplot-axis-vertical")), i18n("Vertical"), orientationActionGroup);
+	orientationVerticalAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-axis-vertical")), i18n("Vertical"), orientationActionGroup);
 	orientationVerticalAction->setCheckable(true);
 
 	// Line
@@ -126,20 +126,20 @@ void ReferenceLine::initMenus() {
 
 	// Orientation
 	orientationMenu = new QMenu(i18n("Orientation"));
-	orientationMenu->setIcon(QIcon::fromTheme(QLatin1String("labplot-axis-horizontal")));
+	orientationMenu->setIcon(QIcon::fromTheme(QStringLiteral("labplot-axis-horizontal")));
 	orientationMenu->addAction(orientationHorizontalAction);
 	orientationMenu->addAction(orientationVerticalAction);
 
 	// Line
 	lineMenu = new QMenu(i18n("Line"));
-	lineMenu->setIcon(QIcon::fromTheme(QLatin1String("draw-line")));
+	lineMenu->setIcon(QIcon::fromTheme(QStringLiteral("draw-line")));
 	lineStyleMenu = new QMenu(i18n("Style"), lineMenu);
-	lineStyleMenu->setIcon(QIcon::fromTheme(QLatin1String("object-stroke-style")));
-	lineMenu->setIcon(QIcon::fromTheme(QLatin1String("draw-line")));
+	lineStyleMenu->setIcon(QIcon::fromTheme(QStringLiteral("object-stroke-style")));
+	lineMenu->setIcon(QIcon::fromTheme(QStringLiteral("draw-line")));
 	lineMenu->addMenu(lineStyleMenu);
 
 	lineColorMenu = new QMenu(i18n("Color"), lineMenu);
-	lineColorMenu->setIcon(QIcon::fromTheme(QLatin1String("fill-color")));
+	lineColorMenu->setIcon(QIcon::fromTheme(QStringLiteral("fill-color")));
 	GuiTools::fillColorMenu(lineColorMenu, lineColorActionGroup);
 	lineMenu->addMenu(lineColorMenu);
 }
@@ -421,6 +421,6 @@ void ReferenceLine::loadThemeConfig(const KConfig& config) {
 	Q_D(ReferenceLine);
 
 	// for the properties of the line read the properties of the axis line
-	const KConfigGroup& group = config.group("Axis");
+	const KConfigGroup& group = config.group(QStringLiteral("Axis"));
 	d->line->loadThemeConfig(group);
 }

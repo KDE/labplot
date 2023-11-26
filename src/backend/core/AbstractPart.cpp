@@ -64,6 +64,10 @@ ContentDockWidget* AbstractPart::dockWidget() const {
 	return m_dockWidget;
 }
 
+bool AbstractPart::dockWidgetExists() const {
+	return m_dockWidget != nullptr;
+}
+
 void AbstractPart::suppressDeletion(bool suppress) {
 	m_suppressDeletion = suppress;
 }

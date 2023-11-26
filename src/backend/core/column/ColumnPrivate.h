@@ -78,8 +78,9 @@ public:
 	void setFormulVariableColumn(int index, Column* column);
 	void setFormulVariableColumn(Column*);
 	bool formulaAutoUpdate() const;
-	void setFormula(const QString& formula, const QVector<Column::FormulaData>& formulaData, bool autoUpdate);
-	void setFormula(const QString& formula, const QStringList& variableNames, const QStringList& variableColumnPaths, bool autoUpdate);
+	bool formulaAutoResize() const;
+	void setFormula(const QString& formula, const QVector<Column::FormulaData>& formulaData, bool autoUpdate, bool autoResize);
+	void setFormula(const QString& formula, const QStringList& variableNames, const QStringList& variableColumnPaths, bool autoUpdate, bool autoResize);
 	void updateFormula();
 
 	// cell formulas
@@ -235,6 +236,7 @@ private:
 	QString m_formula;
 	QVector<Column::FormulaData> m_formulaData;
 	bool m_formulaAutoUpdate{false};
+	bool m_formulaAutoResize{true};
 	IntervalAttribute<QString> m_formulas;
 	AbstractColumn::PlotDesignation m_plotDesignation{AbstractColumn::PlotDesignation::NoDesignation};
 	int m_width{0}; // column width in the view

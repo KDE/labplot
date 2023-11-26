@@ -7,6 +7,8 @@
 #include <libdbc/dbc.hpp>
 #endif
 
+#include <vector>
+
 class QString;
 
 class DbcParser {

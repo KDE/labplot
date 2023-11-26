@@ -84,7 +84,7 @@ XYCurveDock::XYCurveDock(QWidget* parent)
 
 	// Tab "Error Bars"
 	const KConfigGroup group = Settings::group(QStringLiteral("Settings_General"));
-	if (group.readEntry("GUMTerms", false)) {
+	if (group.readEntry(QStringLiteral("GUMTerms"), false)) {
 		ui.tabWidget->setTabText(ui.tabWidget->indexOf(ui.tabErrorBars), i18n("Uncertainty Bars"));
 		ui.lErrorBarX->setText(i18n("X Uncertainty"));
 		ui.lErrorBarY->setText(i18n("Y Uncertainty"));
@@ -1288,7 +1288,7 @@ void XYCurveDock::loadConfigFromTemplate(KConfig& config) {
 }
 
 void XYCurveDock::loadConfig(KConfig& config) {
-	KConfigGroup group = config.group("XYCurve");
+	KConfigGroup group = config.group(QStringLiteral("XYCurve"));
 
 	// General
 	// we don't load/save the settings in the general-tab, since they are not style related.
@@ -1298,9 +1298,9 @@ void XYCurveDock::loadConfig(KConfig& config) {
 	// Line
 	bool xyCurve = (m_curve->type() == AspectType::XYCurve);
 	if (xyCurve) {
-		ui.cbLineType->setCurrentIndex(group.readEntry("LineType", (int)m_curve->lineType()));
-		ui.chkLineSkipGaps->setChecked(group.readEntry("LineSkipGaps", m_curve->lineSkipGaps()));
-		ui.sbLineInterpolationPointsCount->setValue(group.readEntry("LineInterpolationPointsCount", m_curve->lineInterpolationPointsCount()));
+		ui.cbLineType->setCurrentIndex(group.readEntry(QStringLiteral("LineType"), (int)m_curve->lineType()));
+		ui.chkLineSkipGaps->setChecked(group.readEntry(QStringLiteral("LineSkipGaps"), m_curve->lineSkipGaps()));
+		ui.sbLineInterpolationPointsCount->setValue(group.readEntry(QStringLiteral("LineInterpolationPointsCount"), m_curve->lineInterpolationPointsCount()));
 	}
 	lineWidget->loadConfig(group);
 	dropLineWidget->loadConfig(group);
@@ -1309,31 +1309,32 @@ void XYCurveDock::loadConfig(KConfig& config) {
 	symbolWidget->loadConfig(group);
 
 	// Values
-	ui.cbValuesType->setCurrentIndex(group.readEntry("ValuesType", (int)m_curve->valuesType()));
-	ui.cbValuesPosition->setCurrentIndex(group.readEntry("ValuesPosition", (int)m_curve->valuesPosition()));
-	ui.sbValuesDistance->setValue(Worksheet::convertFromSceneUnits(group.readEntry("ValuesDistance", m_curve->valuesDistance()), Worksheet::Unit::Point));
-	ui.sbValuesRotation->setValue(group.readEntry("ValuesRotation", m_curve->valuesRotationAngle()));
-	ui.sbValuesOpacity->setValue(round(group.readEntry("ValuesOpacity", m_curve->valuesOpacity()) * 100.0));
-	ui.leValuesPrefix->setText(group.readEntry("ValuesPrefix", m_curve->valuesPrefix()));
-	ui.leValuesSuffix->setText(group.readEntry("ValuesSuffix", m_curve->valuesSuffix()));
+	ui.cbValuesType->setCurrentIndex(group.readEntry(QStringLiteral("ValuesType"), (int)m_curve->valuesType()));
+	ui.cbValuesPosition->setCurrentIndex(group.readEntry(QStringLiteral("ValuesPosition"), (int)m_curve->valuesPosition()));
+	ui.sbValuesDistance->setValue(
+		Worksheet::convertFromSceneUnits(group.readEntry(QStringLiteral("ValuesDistance"), m_curve->valuesDistance()), Worksheet::Unit::Point));
+	ui.sbValuesRotation->setValue(group.readEntry(QStringLiteral("ValuesRotation"), m_curve->valuesRotationAngle()));
+	ui.sbValuesOpacity->setValue(round(group.readEntry(QStringLiteral("ValuesOpacity"), m_curve->valuesOpacity()) * 100.0));
+	ui.leValuesPrefix->setText(group.readEntry(QStringLiteral("ValuesPrefix"), m_curve->valuesPrefix()));
+	ui.leValuesSuffix->setText(group.readEntry(QStringLiteral("ValuesSuffix"), m_curve->valuesSuffix()));
 	QFont valuesFont = m_curve->valuesFont();
 	valuesFont.setPointSizeF(round(Worksheet::convertFromSceneUnits(valuesFont.pixelSize(), Worksheet::Unit::Point)));
-	ui.kfrValuesFont->setFont(group.readEntry("ValuesFont", valuesFont));
-	ui.kcbValuesColor->setColor(group.readEntry("ValuesColor", m_curve->valuesColor()));
+	ui.kfrValuesFont->setFont(group.readEntry(QStringLiteral("ValuesFont"), valuesFont));
+	ui.kcbValuesColor->setColor(group.readEntry(QStringLiteral("ValuesColor"), m_curve->valuesColor()));
 
 	// Filling
 	backgroundWidget->loadConfig(group);
 
 	// Error bars
 	if (xyCurve) {
-		ui.cbXErrorType->setCurrentIndex(group.readEntry("XErrorType", (int)m_curve->xErrorType()));
-		ui.cbYErrorType->setCurrentIndex(group.readEntry("YErrorType", (int)m_curve->yErrorType()));
+		ui.cbXErrorType->setCurrentIndex(group.readEntry(QStringLiteral("XErrorType"), (int)m_curve->xErrorType()));
+		ui.cbYErrorType->setCurrentIndex(group.readEntry(QStringLiteral("YErrorType"), (int)m_curve->yErrorType()));
 		errorBarsLineWidget->loadConfig(group);
 	}
 }
 
 void XYCurveDock::saveConfigAsTemplate(KConfig& config) {
-	KConfigGroup group = config.group("XYCurve");
+	KConfigGroup group = config.group(QStringLiteral("XYCurve"));
 
 	// General
 	// we don't load/save the settings in the general-tab, since they are not style related.
@@ -1341,9 +1342,9 @@ void XYCurveDock::saveConfigAsTemplate(KConfig& config) {
 
 	bool xyCurve = (m_curve->type() == AspectType::XYCurve);
 	if (xyCurve) {
-		group.writeEntry("LineType", ui.cbLineType->currentIndex());
-		group.writeEntry("LineSkipGaps", ui.chkLineSkipGaps->isChecked());
-		group.writeEntry("LineInterpolationPointsCount", ui.sbLineInterpolationPointsCount->value());
+		group.writeEntry(QStringLiteral("LineType"), ui.cbLineType->currentIndex());
+		group.writeEntry(QStringLiteral("LineSkipGaps"), ui.chkLineSkipGaps->isChecked());
+		group.writeEntry(QStringLiteral("LineInterpolationPointsCount"), ui.sbLineInterpolationPointsCount->value());
 	}
 
 	lineWidget->saveConfig(group);
@@ -1353,26 +1354,26 @@ void XYCurveDock::saveConfigAsTemplate(KConfig& config) {
 	symbolWidget->saveConfig(group);
 
 	// Values
-	group.writeEntry("ValuesType", ui.cbValuesType->currentIndex());
-	group.writeEntry("ValuesPosition", ui.cbValuesPosition->currentIndex());
-	group.writeEntry("ValuesDistance", Worksheet::convertToSceneUnits(ui.sbValuesDistance->value(), Worksheet::Unit::Point));
-	group.writeEntry("ValuesRotation", ui.sbValuesRotation->value());
-	group.writeEntry("ValuesOpacity", ui.sbValuesOpacity->value() / 100.0);
-	group.writeEntry("valuesNumericFormat", ui.cbValuesNumericFormat->currentText());
-	group.writeEntry("valuesPrecision", ui.sbValuesPrecision->value());
-	group.writeEntry("valuesDateTimeFormat", ui.cbValuesDateTimeFormat->currentText());
-	group.writeEntry("ValuesPrefix", ui.leValuesPrefix->text());
-	group.writeEntry("ValuesSuffix", ui.leValuesSuffix->text());
-	group.writeEntry("ValuesFont", ui.kfrValuesFont->font());
-	group.writeEntry("ValuesColor", ui.kcbValuesColor->color());
+	group.writeEntry(QStringLiteral("ValuesType"), ui.cbValuesType->currentIndex());
+	group.writeEntry(QStringLiteral("ValuesPosition"), ui.cbValuesPosition->currentIndex());
+	group.writeEntry(QStringLiteral("ValuesDistance"), Worksheet::convertToSceneUnits(ui.sbValuesDistance->value(), Worksheet::Unit::Point));
+	group.writeEntry(QStringLiteral("ValuesRotation"), ui.sbValuesRotation->value());
+	group.writeEntry(QStringLiteral("ValuesOpacity"), ui.sbValuesOpacity->value() / 100.0);
+	group.writeEntry(QStringLiteral("valuesNumericFormat"), ui.cbValuesNumericFormat->currentText());
+	group.writeEntry(QStringLiteral("valuesPrecision"), ui.sbValuesPrecision->value());
+	group.writeEntry(QStringLiteral("valuesDateTimeFormat"), ui.cbValuesDateTimeFormat->currentText());
+	group.writeEntry(QStringLiteral("ValuesPrefix"), ui.leValuesPrefix->text());
+	group.writeEntry(QStringLiteral("ValuesSuffix"), ui.leValuesSuffix->text());
+	group.writeEntry(QStringLiteral("ValuesFont"), ui.kfrValuesFont->font());
+	group.writeEntry(QStringLiteral("ValuesColor"), ui.kcbValuesColor->color());
 
 	// Filling
 	backgroundWidget->saveConfig(group);
 
 	// Error bars
 	if (xyCurve) {
-		group.writeEntry("XErrorType", ui.cbXErrorType->currentIndex());
-		group.writeEntry("YErrorType", ui.cbYErrorType->currentIndex());
+		group.writeEntry(QStringLiteral("XErrorType"), ui.cbXErrorType->currentIndex());
+		group.writeEntry(QStringLiteral("YErrorType"), ui.cbYErrorType->currentIndex());
 		errorBarsLineWidget->saveConfig(group);
 	}
 

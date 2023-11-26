@@ -390,18 +390,18 @@ void KDEPlotDock::load() {
 }
 
 void KDEPlotDock::loadConfig(KConfig& config) {
-	KConfigGroup group = config.group(QLatin1String("KDEPlot"));
+	KConfigGroup group = config.group(QStringLiteral("KDEPlot"));
 
 	// general
-	auto kernelType = group.readEntry(QLatin1String("kernelType"), static_cast<int>(m_plot->kernelType()));
+	auto kernelType = group.readEntry(QStringLiteral("kernelType"), static_cast<int>(m_plot->kernelType()));
 	int index = ui.cbKernelType->findData(kernelType);
 	ui.cbKernelType->setCurrentIndex(index);
 
-	auto bandwidthType = group.readEntry(QLatin1String("bandwidthType"), static_cast<int>(m_plot->bandwidthType()));
+	auto bandwidthType = group.readEntry(QStringLiteral("bandwidthType"), static_cast<int>(m_plot->bandwidthType()));
 	index = ui.cbBandwidthType->findData(bandwidthType);
 	ui.cbBandwidthType->setCurrentIndex(index);
 
-	ui.sbBandwidth->setValue(group.readEntry(QLatin1String("bandwidth"), m_plot->bandwidth()));
+	ui.sbBandwidth->setValue(group.readEntry(QStringLiteral("bandwidth"), m_plot->bandwidth()));
 
 	// properties of the estimation and margin curves
 	// lineWidget->loadConfig(group);
@@ -421,12 +421,12 @@ void KDEPlotDock::loadConfigFromTemplate(KConfig& config) {
 }
 
 void KDEPlotDock::saveConfigAsTemplate(KConfig& config) {
-	KConfigGroup group = config.group("KDEPlot");
+	KConfigGroup group = config.group(QStringLiteral("KDEPlot"));
 
 	// General
-	group.writeEntry(QLatin1String("kernelType"), static_cast<int>(m_plot->kernelType()));
-	group.writeEntry(QLatin1String("bandwidthType"), static_cast<int>(m_plot->bandwidthType()));
-	group.writeEntry(QLatin1String("bandwidth"), m_plot->bandwidth());
+	group.writeEntry(QStringLiteral("kernelType"), static_cast<int>(m_plot->kernelType()));
+	group.writeEntry(QStringLiteral("bandwidthType"), static_cast<int>(m_plot->bandwidthType()));
+	group.writeEntry(QStringLiteral("bandwidth"), m_plot->bandwidth());
 
 	// properties of the estimation and rug curves
 	// lineWidget->saveConfig(group);

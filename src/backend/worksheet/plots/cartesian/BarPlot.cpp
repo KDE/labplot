@@ -55,12 +55,12 @@ void BarPlot::init() {
 	Q_D(BarPlot);
 
 	KConfig config;
-	const auto& group = config.group("BarPlot");
+	const auto& group = config.group(QStringLiteral("BarPlot"));
 
 	// general
-	d->type = (BarPlot::Type)group.readEntry("Type", (int)BarPlot::Type::Grouped);
-	d->orientation = (BarPlot::Orientation)group.readEntry("Orientation", (int)BarPlot::Orientation::Vertical);
-	d->widthFactor = group.readEntry("WidthFactor", 1.0);
+	d->type = (BarPlot::Type)group.readEntry(QStringLiteral("Type"), (int)BarPlot::Type::Grouped);
+	d->orientation = (BarPlot::Orientation)group.readEntry(QStringLiteral("Orientation"), (int)BarPlot::Orientation::Vertical);
+	d->widthFactor = group.readEntry(QStringLiteral("WidthFactor"), 1.0);
 
 	// initial background and border line objects that will be available even if not data column was set yet
 	d->addBackground(group);
@@ -74,7 +74,7 @@ void BarPlot::init() {
 	Returns an icon to be used in the project explorer.
 */
 QIcon BarPlot::icon() const {
-	return QIcon::fromTheme(QLatin1String("office-chart-bar"));
+	return QIcon::fromTheme(QStringLiteral("office-chart-bar"));
 }
 
 void BarPlot::initActions() {
@@ -83,10 +83,10 @@ void BarPlot::initActions() {
 	orientationActionGroup->setExclusive(true);
 	connect(orientationActionGroup, &QActionGroup::triggered, this, &BarPlot::orientationChangedSlot);
 
-	orientationHorizontalAction = new QAction(QIcon::fromTheme(QLatin1String("transform-move-horizontal")), i18n("Horizontal"), orientationActionGroup);
+	orientationHorizontalAction = new QAction(QIcon::fromTheme(QStringLiteral("transform-move-horizontal")), i18n("Horizontal"), orientationActionGroup);
 	orientationHorizontalAction->setCheckable(true);
 
-	orientationVerticalAction = new QAction(QIcon::fromTheme(QLatin1String("transform-move-vertical")), i18n("Vertical"), orientationActionGroup);
+	orientationVerticalAction = new QAction(QIcon::fromTheme(QStringLiteral("transform-move-vertical")), i18n("Vertical"), orientationActionGroup);
 	orientationVerticalAction->setCheckable(true);
 }
 
@@ -95,7 +95,7 @@ void BarPlot::initMenus() {
 
 	// Orientation
 	orientationMenu = new QMenu(i18n("Orientation"));
-	orientationMenu->setIcon(QIcon::fromTheme(QLatin1String("draw-cross")));
+	orientationMenu->setIcon(QIcon::fromTheme(QStringLiteral("draw-cross")));
 	orientationMenu->addAction(orientationHorizontalAction);
 	orientationMenu->addAction(orientationVerticalAction);
 }
@@ -1352,10 +1352,10 @@ bool BarPlot::load(XmlStreamReader* reader, bool preview) {
 // ##############################################################################
 void BarPlot::loadThemeConfig(const KConfig& config) {
 	KConfigGroup group;
-	if (config.hasGroup(QLatin1String("Theme")))
-		group = config.group("XYCurve"); // when loading from the theme config, use the same properties as for XYCurve
+	if (config.hasGroup(QStringLiteral("Theme")))
+		group = config.group(QStringLiteral("XYCurve")); // when loading from the theme config, use the same properties as for XYCurve
 	else
-		group = config.group("BarPlot");
+		group = config.group(QStringLiteral("BarPlot"));
 
 	const auto* plot = static_cast<const CartesianPlot*>(parentAspect());
 	int index = plot->curveChildIndex(this);

@@ -51,23 +51,27 @@ void Image::init() {
 	Q_D(Image);
 
 	KConfig config;
-	KConfigGroup group = config.group("Image");
+	KConfigGroup group = config.group(QStringLiteral("Image"));
 
-	d->embedded = group.readEntry("embedded", true);
-	d->opacity = group.readEntry("opacity", d->opacity);
+	d->embedded = group.readEntry(QStringLiteral("embedded"), true);
+	d->opacity = group.readEntry(QStringLiteral("opacity"), d->opacity);
 
 	// geometry
-	d->position.point.setX(group.readEntry("PositionXValue", 0.));
-	d->position.point.setY(group.readEntry("PositionYValue", 0.));
-	d->position.horizontalPosition = (WorksheetElement::HorizontalPosition)group.readEntry("PositionX", (int)WorksheetElement::HorizontalPosition::Center);
-	d->position.verticalPosition = (WorksheetElement::VerticalPosition)group.readEntry("PositionY", (int)WorksheetElement::VerticalPosition::Center);
-	d->horizontalAlignment = (WorksheetElement::HorizontalAlignment)group.readEntry("HorizontalAlignment", (int)WorksheetElement::HorizontalAlignment::Center);
-	d->verticalAlignment = (WorksheetElement::VerticalAlignment)group.readEntry("VerticalAlignment", (int)WorksheetElement::VerticalAlignment::Center);
-	d->setRotation(group.readEntry("Rotation", d->rotation()));
+	d->position.point.setX(group.readEntry(QStringLiteral("PositionXValue"), 0.));
+	d->position.point.setY(group.readEntry(QStringLiteral("PositionYValue"), 0.));
+	d->position.horizontalPosition =
+		(WorksheetElement::HorizontalPosition)group.readEntry(QStringLiteral("PositionX"), (int)WorksheetElement::HorizontalPosition::Center);
+	d->position.verticalPosition =
+		(WorksheetElement::VerticalPosition)group.readEntry(QStringLiteral("PositionY"), (int)WorksheetElement::VerticalPosition::Center);
+	d->horizontalAlignment =
+		(WorksheetElement::HorizontalAlignment)group.readEntry(QStringLiteral("HorizontalAlignment"), (int)WorksheetElement::HorizontalAlignment::Center);
+	d->verticalAlignment =
+		(WorksheetElement::VerticalAlignment)group.readEntry(QStringLiteral("VerticalAlignment"), (int)WorksheetElement::VerticalAlignment::Center);
+	d->setRotation(group.readEntry(QStringLiteral("Rotation"), d->rotation()));
 
 	// border
 	d->borderLine = new Line(QString());
-	d->borderLine->setPrefix(QLatin1String("Border"));
+	d->borderLine->setPrefix(QStringLiteral("Border"));
 	d->borderLine->setHidden(true);
 	addChild(d->borderLine);
 	d->borderLine->init(group);
@@ -440,12 +444,12 @@ bool Image::load(XmlStreamReader* reader, bool preview) {
 // ##############################################################################
 void Image::loadThemeConfig(const KConfig& config) {
 	Q_D(Image);
-	const auto& group = config.group("CartesianPlot");
+	const auto& group = config.group(QStringLiteral("CartesianPlot"));
 	d->borderLine->loadThemeConfig(group);
 }
 
 void Image::saveThemeConfig(const KConfig& config) {
 	Q_D(Image);
-	KConfigGroup group = config.group("Image");
+	KConfigGroup group = config.group(QStringLiteral("Image"));
 	d->borderLine->saveThemeConfig(group);
 }
