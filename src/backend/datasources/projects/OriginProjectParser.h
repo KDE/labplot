@@ -39,7 +39,7 @@ public:
 	bool hasUnusedObjects();
 
 protected:
-	bool load(Project*, bool) override;
+	bool load(Project*, bool preview) override;
 
 private:
 	bool loadFolder(Folder*, tree<Origin::ProjectNode>::iterator, bool preview);
@@ -78,6 +78,7 @@ private:
 	QStringList m_worksheetNameList;
 	QStringList m_noteNameList;
 	bool m_importUnusedObjects{false};
+	bool m_graphLayerAsPlotArea{true};
 
 	friend class ProjectImportTest;
 };
