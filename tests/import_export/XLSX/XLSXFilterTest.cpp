@@ -67,6 +67,135 @@ void XLSXFilterTest::importFile3Cols() {
 	QCOMPARE(spreadsheet.column(2)->valueAt(4), 50000);
 }
 
+void XLSXFilterTest::importFile3ColsStartEndRow() {
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/3col.xlsx"));
+
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+	XLSXFilter filter;
+	filter.setCurrentSheet(QStringLiteral("Sheet1"));
+	filter.setCurrentRange(QStringLiteral("A1:C5"));
+	// set start/end row and check result
+	filter.setStartRow(2);
+	filter.setEndRow(3);
+	filter.readDataFromFile(fileName, &spreadsheet);
+
+	QCOMPARE(spreadsheet.columnCount(), 3);
+	QCOMPARE(spreadsheet.rowCount(), 2);
+
+	// WARN(spreadsheet.column(0)->valueAt(0))
+	QCOMPARE(spreadsheet.column(0)->valueAt(0), 2.2);
+	QCOMPARE(spreadsheet.column(0)->valueAt(1), 3.3);
+	QCOMPARE(spreadsheet.column(1)->valueAt(0), 16);
+	QCOMPARE(spreadsheet.column(1)->valueAt(1), 9);
+	QCOMPARE(spreadsheet.column(2)->valueAt(0), 20);
+	QCOMPARE(spreadsheet.column(2)->valueAt(1), 300);
+
+	// set end row too high
+	filter.setCurrentRange(QStringLiteral("A1:C5"));
+	filter.setStartRow(2);
+	filter.setEndRow(8);
+	filter.readDataFromFile(fileName, &spreadsheet);
+
+	QCOMPARE(spreadsheet.columnCount(), 3);
+	QCOMPARE(spreadsheet.rowCount(), 4);
+
+	QCOMPARE(spreadsheet.column(0)->valueAt(0), 2.2);
+	QCOMPARE(spreadsheet.column(0)->valueAt(1), 3.3);
+	QCOMPARE(spreadsheet.column(0)->valueAt(2), 4.4);
+	QCOMPARE(spreadsheet.column(0)->valueAt(3), 5.5);
+	QCOMPARE(spreadsheet.column(1)->valueAt(0), 16);
+	QCOMPARE(spreadsheet.column(1)->valueAt(1), 9);
+	QCOMPARE(spreadsheet.column(1)->valueAt(2), 4);
+	QCOMPARE(spreadsheet.column(1)->valueAt(3), 1);
+	QCOMPARE(spreadsheet.column(2)->valueAt(0), 20);
+	QCOMPARE(spreadsheet.column(2)->valueAt(1), 300);
+	QCOMPARE(spreadsheet.column(2)->valueAt(2), 4000);
+	QCOMPARE(spreadsheet.column(2)->valueAt(3), 50000);
+
+	// set start row too high
+	filter.setCurrentRange(QStringLiteral("A1:C5"));
+	filter.setStartRow(8);
+	filter.setEndRow(3);
+	filter.readDataFromFile(fileName, &spreadsheet);
+
+	QCOMPARE(spreadsheet.columnCount(), 3);
+	QCOMPARE(spreadsheet.rowCount(), 3);
+
+	QCOMPARE(spreadsheet.column(0)->valueAt(0), 1.1);
+	QCOMPARE(spreadsheet.column(0)->valueAt(1), 2.2);
+	QCOMPARE(spreadsheet.column(0)->valueAt(2), 3.3);
+	QCOMPARE(spreadsheet.column(1)->valueAt(0), 25);
+	QCOMPARE(spreadsheet.column(1)->valueAt(1), 16);
+	QCOMPARE(spreadsheet.column(1)->valueAt(2), 9);
+	QCOMPARE(spreadsheet.column(2)->valueAt(0), 1);
+	QCOMPARE(spreadsheet.column(2)->valueAt(1), 20);
+	QCOMPARE(spreadsheet.column(2)->valueAt(2), 300);
+}
+
+void XLSXFilterTest::importFile3ColsStartEndColumn() {
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/3col.xlsx"));
+
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+	XLSXFilter filter;
+	filter.setCurrentSheet(QStringLiteral("Sheet1"));
+	filter.setCurrentRange(QStringLiteral("A1:C5"));
+	// set start/end row and check result
+	filter.setStartColumn(2);
+	filter.setEndColumn(3);
+	filter.readDataFromFile(fileName, &spreadsheet);
+
+	QCOMPARE(spreadsheet.columnCount(), 2);
+	QCOMPARE(spreadsheet.rowCount(), 5);
+
+	QCOMPARE(spreadsheet.column(0)->valueAt(0), 25);
+	QCOMPARE(spreadsheet.column(0)->valueAt(1), 16);
+	QCOMPARE(spreadsheet.column(0)->valueAt(2), 9);
+	QCOMPARE(spreadsheet.column(0)->valueAt(3), 4);
+	QCOMPARE(spreadsheet.column(0)->valueAt(4), 1);
+	QCOMPARE(spreadsheet.column(1)->valueAt(0), 1);
+	QCOMPARE(spreadsheet.column(1)->valueAt(1), 20);
+	QCOMPARE(spreadsheet.column(1)->valueAt(2), 300);
+	QCOMPARE(spreadsheet.column(1)->valueAt(3), 4000);
+	QCOMPARE(spreadsheet.column(1)->valueAt(4), 50000);
+
+	// set end column too high
+	filter.setCurrentRange(QStringLiteral("A1:C5"));
+	filter.setStartColumn(2);
+	filter.setEndColumn(7);
+	filter.readDataFromFile(fileName, &spreadsheet);
+
+	QCOMPARE(spreadsheet.columnCount(), 2);
+	QCOMPARE(spreadsheet.rowCount(), 5);
+
+	QCOMPARE(spreadsheet.column(0)->valueAt(0), 25);
+	QCOMPARE(spreadsheet.column(0)->valueAt(1), 16);
+	QCOMPARE(spreadsheet.column(0)->valueAt(2), 9);
+	QCOMPARE(spreadsheet.column(0)->valueAt(3), 4);
+	QCOMPARE(spreadsheet.column(0)->valueAt(4), 1);
+	QCOMPARE(spreadsheet.column(1)->valueAt(0), 1);
+	QCOMPARE(spreadsheet.column(1)->valueAt(1), 20);
+	QCOMPARE(spreadsheet.column(1)->valueAt(2), 300);
+	QCOMPARE(spreadsheet.column(1)->valueAt(3), 4000);
+	QCOMPARE(spreadsheet.column(1)->valueAt(4), 50000);
+
+	// set start column too high
+	filter.setCurrentRange(QStringLiteral("A1:C5"));
+	filter.setStartColumn(6);
+	filter.setEndColumn(2);
+	filter.readDataFromFile(fileName, &spreadsheet);
+
+	QCOMPARE(spreadsheet.column(0)->valueAt(0), 1.1);
+	QCOMPARE(spreadsheet.column(0)->valueAt(1), 2.2);
+	QCOMPARE(spreadsheet.column(0)->valueAt(2), 3.3);
+	QCOMPARE(spreadsheet.column(0)->valueAt(3), 4.4);
+	QCOMPARE(spreadsheet.column(0)->valueAt(4), 5.5);
+	QCOMPARE(spreadsheet.column(1)->valueAt(0), 25);
+	QCOMPARE(spreadsheet.column(1)->valueAt(1), 16);
+	QCOMPARE(spreadsheet.column(1)->valueAt(2), 9);
+	QCOMPARE(spreadsheet.column(1)->valueAt(3), 4);
+	QCOMPARE(spreadsheet.column(1)->valueAt(4), 1);
+}
+
 void XLSXFilterTest::importFileEmptyCells() {
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/datatypes-empty.xlsx"));
 
