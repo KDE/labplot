@@ -22,6 +22,7 @@ public:
 
 	void redo() override;
 	void undo() override;
+	void finalize() const;
 
 private:
 	AbstractColumnPrivate* m_col;
@@ -36,6 +37,7 @@ public:
 
 	void redo() override;
 	void undo() override;
+	void finalize() const;
 
 private:
 	AbstractColumnPrivate* m_col;
