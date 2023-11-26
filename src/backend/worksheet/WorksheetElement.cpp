@@ -141,7 +141,6 @@ void WorksheetElement::changeVisibility() {
 }
 
 void WorksheetElement::changeLocking() {
-	Q_D(const WorksheetElement);
 	this->setLock(!isLocked());
 }
 
@@ -307,7 +306,7 @@ QMenu* WorksheetElement::createContextMenu() {
 }
 
 void WorksheetElement::prepareDrawingOrderMenu() {
-	const AbstractAspect* parent = parentAspect();
+	const auto* parent = parentAspect();
 	const int index = parent->indexOfChild<WorksheetElement>(this);
 	const auto& children = parent->children<WorksheetElement>();
 
@@ -340,10 +339,10 @@ void WorksheetElement::prepareDrawingOrderMenu() {
 
 void WorksheetElement::execMoveInFrontOf(QAction* action) {
 	Q_EMIT moveBegin();
-	AbstractAspect* parent = parentAspect();
+	auto* parent = parentAspect();
 	int index = action->data().toInt();
-	AbstractAspect* sibling1 = parent->child<WorksheetElement>(index);
-	AbstractAspect* sibling2 = parent->child<WorksheetElement>(index + 1);
+	auto* sibling1 = parent->child<WorksheetElement>(index);
+	auto* sibling2 = parent->child<WorksheetElement>(index + 1);
 	beginMacro(i18n("%1: move behind %2.", name(), sibling1->name()));
 	setMoved(true);
 	remove();
@@ -355,9 +354,9 @@ void WorksheetElement::execMoveInFrontOf(QAction* action) {
 
 void WorksheetElement::execMoveBehind(QAction* action) {
 	Q_EMIT moveBegin();
-	AbstractAspect* parent = parentAspect();
+	auto* parent = parentAspect();
 	int index = action->data().toInt();
-	AbstractAspect* sibling = parent->child<WorksheetElement>(index);
+	auto* sibling = parent->child<WorksheetElement>(index);
 	beginMacro(i18n("%1: move in front of %2.", name(), sibling->name()));
 	setMoved(true);
 	remove();
@@ -409,7 +408,7 @@ QPointF WorksheetElement::align(QPointF pos, QRectF rect, HorizontalAlignment ho
 
 QRectF WorksheetElement::parentRect() const {
 	QRectF rect;
-	auto parent = parentAspect();
+	auto* parent = parentAspect();
 	if (parent && parent->type() == AspectType::CartesianPlot && plot()) {
 		if (type() != AspectType::Axis)
 			rect = plot()->graphicsItem()->mapRectFromScene(plot()->rect());

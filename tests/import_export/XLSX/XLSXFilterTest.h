@@ -19,6 +19,8 @@ class XLSXFilterTest : public CommonTest {
 private Q_SLOTS:
 	void importFile2Cols();
 	void importFile3Cols();
+	void importFile3ColsStartEndRow();
+	void importFile3ColsStartEndColumn();
 	void importFileEmptyCells();
 	void importFileDatetime();
 };

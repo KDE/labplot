@@ -188,6 +188,11 @@ int XLSXFilter::endColumn() const {
 	return d->endColumn;
 }
 
+/* actual start column (including range) */
+int XLSXFilter::firstColumn() const {
+	return d->firstColumn;
+}
+
 /*!
  * \brief Sets the startRow to \a row
  * \param row the row to be set
@@ -372,31 +377,27 @@ void XLSXFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSo
 
 	if (m_document->selectSheet(currentSheet)) {
 		if (endRow != -1) {
-			int row = currentRange.firstRow() + endRow - 1;
-			if (row <= currentRange.lastRow())
-				currentRange.setLastRow(row);
+			int lastRow = currentRange.firstRow() + endRow - 1;
+			if (lastRow <= currentRange.lastRow())
+				currentRange.setLastRow(lastRow);
 		}
 
 		if (startRow > 1) {
-			int row = currentRange.firstRow() + startRow - 1;
-			if (row <= currentRange.lastRow())
-				currentRange.setFirstRow(row);
-			else
-				currentRange.setFirstRow(currentRange.lastRow());
+			int firstRow = currentRange.firstRow() + startRow - 1;
+			if (firstRow <= currentRange.lastRow())
+				currentRange.setFirstRow(firstRow);
 		}
 
 		if (endColumn != -1) {
-			int col = currentRange.firstColumn() + endColumn - 1;
-			if (col <= currentRange.lastColumn())
-				currentRange.setLastColumn(col);
+			int lastCol = currentRange.firstColumn() + endColumn - 1;
+			if (lastCol <= currentRange.lastColumn())
+				currentRange.setLastColumn(lastCol);
 		}
 
 		if (startColumn > 1) {
-			int col = currentRange.firstColumn() + startColumn - 1;
-			if (col <= currentRange.lastColumn())
-				currentRange.setFirstColumn(col);
-			else
-				currentRange.setFirstColumn(currentRange.lastColumn());
+			int firstCol = currentRange.firstColumn() + startColumn - 1;
+			if (firstCol <= currentRange.lastColumn())
+				currentRange.setFirstColumn(firstCol);
 		}
 
 		readDataRegion(currentRange, dataSource, importMode);
@@ -632,11 +633,25 @@ QVector<QStringList> XLSXFilterPrivate::previewForDataRegion(const QString& shee
 			DEBUG(Q_FUNC_INFO << ", region first/last column = " << region.firstColumn() << " " << region.lastColumn())
 			DEBUG(Q_FUNC_INFO << ", start/end row = " << startRow << " " << endRow)
 			DEBUG(Q_FUNC_INFO << ", start/end col = " << startColumn << " " << endColumn)
-			// TODO: handle start/end row/column
-			const int rows = std::min(lines, region.lastRow());
-			for (int row = region.firstRow(); row <= rows; ++row) {
+
+			int rows = region.lastRow() - region.firstRow() + 1;
+			if (startRow > rows) // if startRow is bigger than available rows -> show all
+				startRow = 1;
+			if (endRow == -1 || endRow < startRow || endRow > rows)
+				endRow = rows;
+			int cols = region.lastColumn() - region.firstColumn() + 1;
+			if (startColumn > cols) // if startColumn is bigger than available columns -> show all
+				startColumn = 1;
+			if (endColumn == -1 || endColumn < startColumn || endColumn > cols)
+				endColumn = cols;
+			firstColumn = startColumn;
+
+			const int maxCols = 100;
+			rows = std::min(lines, endRow);
+			cols = std::min(maxCols, endColumn);
+			for (int row = region.firstRow() + startRow - 1; row < region.firstRow() + rows; ++row) {
 				QStringList line;
-				for (int col = region.firstColumn(); col <= region.lastColumn(); ++col) {
+				for (int col = region.firstColumn() + startColumn - 1; col < region.firstColumn() + cols; ++col) {
 					// see https://github.com/QtExcel/QXlsx/wiki for read() vs. cellAt()->value()
 					const auto val = m_document->read(row, col);
 					if (val.isValid())

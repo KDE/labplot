@@ -77,7 +77,7 @@ Worksheet::~Worksheet() {
 void Worksheet::init() {
 	Q_D(Worksheet);
 	KConfig config;
-	KConfigGroup group = config.group(QStringLiteral("Worksheet"));
+	auto group = config.group(QStringLiteral("Worksheet"));
 
 	// size
 	d->scaleContent = group.readEntry(QStringLiteral("ScaleContent"), false);
@@ -103,7 +103,7 @@ void Worksheet::init() {
 	d->layoutColumnCount = group.readEntry(QStringLiteral("LayoutColumnCount"), 2);
 
 	// default theme
-	KConfigGroup settings = Settings::group(QStringLiteral("Settings_Worksheet"));
+	auto settings = Settings::group(QStringLiteral("Settings_Worksheet"));
 	d->theme = settings.readEntry(QStringLiteral("Theme"), QString());
 	loadTheme(d->theme);
 }
