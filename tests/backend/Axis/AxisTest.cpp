@@ -1027,7 +1027,7 @@ void AxisTest::columnLabelValuesMaxValues() {
 
 		const auto v = yAxis->tickLabelStrings();
 		QStringList expectedStrings;
-		for (int i = 0; i < valueLabelsCount; i += valueLabelsCount / Axis::maxNumberMajorTicksCustomColumn())
+		for (int i = 0; i <= valueLabelsCount; i += valueLabelsCount / (Axis::maxNumberMajorTicksCustomColumn() - 1))
 			expectedStrings.push_back(QStringLiteral("Status ") + QString::number(i));
 
 		COMPARE_STRING_VECTORS(yAxis->tickLabelStrings(), expectedStrings);
@@ -1775,8 +1775,9 @@ void AxisTest::customColumnNumericMaxValues() {
 	QCOMPARE(xAxis->majorTicksAutoNumber(), true);
 	QCOMPARE(xAxis->labelsTextType(), Axis::LabelsTextType::PositionValues);
 	{
+		const auto v = xAxis->tickLabelStrings();
 		QStringList expectedStrings;
-		for (int i = 0; i < rowCountCustomColumn; i += rowCountCustomColumn / Axis::maxNumberMajorTicksCustomColumn())
+		for (int i = 0; i <= rowCountCustomColumn; i += rowCountCustomColumn / (Axis::maxNumberMajorTicksCustomColumn() - 1))
 			expectedStrings.push_back(QString::number(i));
 
 		COMPARE_STRING_VECTORS(xAxis->tickLabelStrings(), expectedStrings);
@@ -1786,7 +1787,7 @@ void AxisTest::customColumnNumericMaxValues() {
 	xAxis->setLabelsTextColumn(labelsCol);
 	{
 		QStringList expectedStrings;
-		for (int i = 0; i < rowCountCustomColumn; i += rowCountCustomColumn / Axis::maxNumberMajorTicksCustomColumn())
+		for (int i = 0; i < rowCountCustomColumn; i += rowCountCustomColumn / (Axis::maxNumberMajorTicksCustomColumn() - 1))
 			expectedStrings.push_back(QStringLiteral("Some text") + QString::number(i));
 		COMPARE_STRING_VECTORS(xAxis->tickLabelStrings(), expectedStrings);
 	}
@@ -1794,7 +1795,7 @@ void AxisTest::customColumnNumericMaxValues() {
 	QVERIFY(p->dataRect().height() > 0.);
 	QCOMPARE(xAxis->d_func()->majorTickPoints.size(), Axis::maxNumberMajorTicksCustomColumn());
 	for (int i = 0; i < Axis::maxNumberMajorTicksCustomColumn(); i++) {
-		const double xVal = ((double)i * rowCountCustomColumn / Axis::maxNumberMajorTicksCustomColumn() - 0.) / (1000. - 0.);
+		const double xVal = ((double)i * rowCountCustomColumn / (Axis::maxNumberMajorTicksCustomColumn() - 1) - 0.) / (1000. - 0.);
 		VALUES_EQUAL(xAxis->d_func()->majorTickPoints.at(i).x(), p->dataRect().x() + p->dataRect().width() * xVal);
 	}
 }
@@ -1870,8 +1871,9 @@ void AxisTest::customColumnNonMonotonicColumnValues() {
 	QCOMPARE(xAxis->majorTicksAutoNumber(), true);
 	QCOMPARE(xAxis->labelsTextType(), Axis::LabelsTextType::PositionValues);
 	{
+		const auto v = xAxis->tickLabelStrings();
 		QStringList expectedStrings;
-		for (int i = 100; i < 200.; i += (200. - 100.) / Axis::maxNumberMajorTicksCustomColumn())
+		for (int i = 100; i <= 200.; i += (200. - 100.) / (Axis::maxNumberMajorTicksCustomColumn() - 1))
 			expectedStrings.push_back(QString::number(i));
 
 		COMPARE_STRING_VECTORS(xAxis->tickLabelStrings(), expectedStrings);
@@ -1956,7 +1958,7 @@ void AxisTest::customColumnNumericMaxValuesLimitedRange() {
 	QCOMPARE(xAxis->labelsTextType(), Axis::LabelsTextType::PositionValues);
 	{
 		QStringList expectedStrings;
-		for (int i = 100; i < 200.; i += (200. - 100.) / Axis::maxNumberMajorTicksCustomColumn())
+		for (int i = 100; i <= 200.; i += (200. - 100.) / (Axis::maxNumberMajorTicksCustomColumn() - 1))
 			expectedStrings.push_back(QString::number(i));
 
 		COMPARE_STRING_VECTORS(xAxis->tickLabelStrings(), expectedStrings);
@@ -1966,15 +1968,15 @@ void AxisTest::customColumnNumericMaxValuesLimitedRange() {
 	xAxis->setLabelsTextColumn(labelsCol);
 	{
 		QStringList expectedStrings;
-		for (int i = 100; i < 200.; i += (200. - 100.) / Axis::maxNumberMajorTicksCustomColumn())
+		for (int i = 100; i <= 200.; i += (200. - 100.) / (Axis::maxNumberMajorTicksCustomColumn() - 1))
 			expectedStrings.push_back(QStringLiteral("Some text") + QString::number(i));
 		COMPARE_STRING_VECTORS(xAxis->tickLabelStrings(), expectedStrings);
 	}
 	QVERIFY(p->dataRect().width() > 0.);
 	QVERIFY(p->dataRect().height() > 0.);
 	QCOMPARE(xAxis->d_func()->majorTickPoints.size(), Axis::maxNumberMajorTicksCustomColumn());
-	for (int i = 0; i < Axis::maxNumberMajorTicksCustomColumn(); i++) {
-		const double xVal = (100. + (double)i * (200. - 100.) / Axis::maxNumberMajorTicksCustomColumn()) / (1000. - 0.);
+	for (int i = 0; i <= Axis::maxNumberMajorTicksCustomColumn(); i++) {
+		const double xVal = (100. + (double)i * (200. - 100.) / (Axis::maxNumberMajorTicksCustomColumn() - 1)) / (1000. - 0.);
 		VALUES_EQUAL(xAxis->d_func()->majorTickPoints.at(i).x(), p->dataRect().x() + p->dataRect().width() * xVal);
 	}
 
@@ -1985,7 +1987,7 @@ void AxisTest::customColumnNumericMaxValuesLimitedRange() {
 
 	{
 		QStringList expectedStrings;
-		for (int i = 100; i < 110.; i += (110. - 100.) / 10) // maximum 10 labels are visible because not more labels exist in this range
+		for (int i = 100; i <= 110.; i += (110. - 100.) / 10) // maximum 10 labels are visible because not more labels exist in this range
 			expectedStrings.push_back(QStringLiteral("Some text") + QString::number(i));
 		COMPARE_STRING_VECTORS(xAxis->tickLabelStrings(), expectedStrings);
 	}
