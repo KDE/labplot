@@ -11,6 +11,8 @@
 #ifndef SPREADSHEETVIEW_H
 #define SPREADSHEETVIEW_H
 
+#include <QTableWidget>
+#include <QVBoxLayout>
 #include <QWidget>
 
 #include "backend/core/AbstractColumn.h"
@@ -85,6 +87,7 @@ protected:
 private:
 	void init();
 	void initActions();
+	void initHeader(QVBoxLayout*);
 	void initMenus();
 	void connectActions();
 	bool formulaModeActive() const;
@@ -120,6 +123,8 @@ private:
 	void checkSpreadsheetSelectionMenu();
 	void checkColumnMenus(const QVector<Column*>&);
 	void showSearchReplace(bool replace);
+	// for header data
+	QTableWidget tableWidget;
 
 	// selection related actions
 	QAction* action_cut_selection{nullptr};

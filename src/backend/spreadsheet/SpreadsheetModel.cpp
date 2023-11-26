@@ -215,8 +215,10 @@ QVariant SpreadsheetModel::headerData(int section, Qt::Orientation orientation, 
 		case Qt::EditRole:
 			return m_horizontal_header_data.at(section);
 		case Qt::DecorationRole:
-			return m_spreadsheet->child<Column>(section)->icon();
+			// Assuming the icon is associated with the sparkline
+			return m_spreadsheet->child<Column>(section)->sparkLine();
 		case static_cast<int>(CustomDataRole::CommentRole):
+			// Return the comment associated with the column
 			return m_spreadsheet->child<Column>(section)->comment();
 		}
 		break;

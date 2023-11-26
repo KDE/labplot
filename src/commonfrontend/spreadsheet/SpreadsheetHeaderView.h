@@ -17,7 +17,9 @@ class SpreadsheetCommentsHeaderView : public QHeaderView {
 	Q_OBJECT
 
 public:
-	explicit SpreadsheetCommentsHeaderView(QWidget* parent = nullptr);
+	explicit SpreadsheetCommentsHeaderView(QWidget* parent = nullptr)
+		: QHeaderView(Qt::Horizontal, parent) {
+	}
 	~SpreadsheetCommentsHeaderView() override;
 
 	void setModel(QAbstractItemModel*) override;
@@ -27,10 +29,14 @@ public:
 class SpreadsheetSparkLineHeaderView : public QHeaderView {
 	Q_OBJECT
 public:
-	explicit SpreadsheetSparkLineHeaderView(QWidget* parent = nullptr);
+	explicit SpreadsheetSparkLineHeaderView(QWidget* parent = nullptr)
+		: QHeaderView(Qt::Horizontal, parent) {
+	}
 	~SpreadsheetSparkLineHeaderView() override;
+
 	void setModel(QAbstractItemModel*) override;
 	friend class SpreadsheetHeaderView; // access to paintSection (protected)
+
 };
 
 class SpreadsheetHeaderView : public QHeaderView {
@@ -42,6 +48,8 @@ public:
 
 	void setModel(QAbstractItemModel*) override;
 	QSize sizeHint() const override;
+	void addSlaveHeader(QHeaderView* slaveHeader);
+	void resizeEvent(QResizeEvent* event) override;
 
 	void showComments(bool on = true);
 	bool areCommentsShown() const;

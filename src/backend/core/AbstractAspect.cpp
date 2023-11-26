@@ -240,6 +240,10 @@ QString AbstractAspect::comment() const {
 	return d->m_comment;
 }
 
+QString AbstractAspect::sparkLine() const {
+	return d->m_name;
+}
+
 void AbstractAspect::setComment(const QString& value) {
 	if (value == d->m_comment)
 		return;

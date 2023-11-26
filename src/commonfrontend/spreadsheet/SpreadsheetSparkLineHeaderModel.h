@@ -12,11 +12,11 @@
 #include <QAbstractTableModel>
 #include <backend/spreadsheet/SpreadsheetModel.h>
 
-class SpreadsheetSparkLineHeaderModel : public QAbstractTableModel {
+class SpreadsheetSparkLinesHeaderModel : public QAbstractTableModel {
 	Q_OBJECT
 
 public:
-	explicit SpreadsheetSparkLineHeaderModel(SpreadsheetModel*, QObject* parent = nullptr);
+	explicit SpreadsheetSparkLinesHeaderModel(SpreadsheetModel*, QObject* parent = nullptr);
 
 	Qt::ItemFlags flags(const QModelIndex&) const override;
 	QVariant data(const QModelIndex& index, int role) const override;

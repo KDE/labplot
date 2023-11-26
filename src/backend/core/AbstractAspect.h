@@ -263,6 +263,7 @@ public:
 	QUuid uuid() const;
 	void setSuppressWriteUuid(bool);
 	QString comment() const;
+	QString sparkLine() const;
 	void setCreationTime(const QDateTime&);
 	QDateTime creationTime() const;
 	virtual Project* project();

@@ -479,8 +479,11 @@ ENDIF ()
 set(COMMONFRONTEND_SOURCES
 	${COMMONFRONTEND_DIR}/matrix/MatrixView.cpp
 	${COMMONFRONTEND_DIR}/note/NoteView.cpp
+        ${COMMONFRONTEND_DIR}/spreadsheet/TwoHeaderWidget.cpp
+
 	${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetCommentsHeaderModel.cpp
 	${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetHeaderView.cpp
+        ${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetSparkLineHeaderModel.cpp
 	${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetItemDelegate.cpp
 	${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetView.cpp
 	${COMMONFRONTEND_DIR}/workbook/WorkbookView.cpp
@@ -740,9 +743,9 @@ IF (APPLE AND ${ECM_VERSION} VERSION_GREATER "5.48.0")
 ENDIF ()
 
 add_executable( labplot2 ${LABPLOT_SOURCE} ${GUI_QRC} ${qml_QRC}
-    commonfrontend/spreadsheet/SpreadsheetSparkLineHeaderModel.h
-    commonfrontend/spreadsheet/SpreadsheetSparkLineHeaderModel.cpp )
+)
 target_link_libraries( labplot2 labplot2lib labplot2backendlib labplot2nsllib )
+
 #if (KUserFeedbackQt6_FOUND)
 #	target_link_libraries( labplot2 KUserFeedbackCoreQt6 KUserFeedbackWidgetsQt6 )
 #endif ()
