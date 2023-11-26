@@ -94,29 +94,29 @@ void BaseDock::plotRangeChanged(int index) {
 		DEBUG(Q_FUNC_INFO << ", using default index " << index)
 	}
 
-	const int xIndexNew = plot->coordinateSystem(index)->index(Dimension::X);
-	const int yIndexNew = plot->coordinateSystem(index)->index(Dimension::Y);
+	const auto xRangeNew = plot->coordinateSystem(index)->range(Dimension::X);
+	const auto yRangeNew = plot->coordinateSystem(index)->range(Dimension::Y);
 
 	bool xIndexNewDifferent = false;
 	bool yIndexNewDifferent = false;
-	QVector<int> xRangesChanged;
-	QVector<int> yRangesChanged;
+	QVector<std::shared_ptr<const Range<double>>> xRangesChanged;
+	QVector<std::shared_ptr<const Range<double>>> yRangesChanged;
 	for (auto aspect : m_aspects) {
 		auto* e{static_cast<WorksheetElement*>(aspect)};
 		if (index != e->coordinateSystemIndex()) {
-			const auto* elementOldCSystem = plot->coordinateSystem(e->coordinateSystemIndex());
-			const auto xIndexOld = elementOldCSystem->index(Dimension::X);
-			const auto yIndexOld = elementOldCSystem->index(Dimension::Y);
+			const auto* elementOldCSystem = e->coordinateSystem();
+			const auto xRangeOld = elementOldCSystem->range(Dimension::X);
+			const auto yRangeOld = elementOldCSystem->range(Dimension::Y);
 			// If indices are same, the range will not change, so do not track those
-			if (xIndexOld != xIndexNew) {
+			if (xRangeOld != xRangeNew) {
 				xIndexNewDifferent = true;
-				if (!xRangesChanged.contains(xIndexOld))
-					xRangesChanged.append(xIndexOld);
+				if (!xRangesChanged.contains(xRangeOld))
+					xRangesChanged.append(xRangeOld);
 			}
-			if (yIndexOld != yIndexNew) {
+			if (yRangeOld != yRangeNew) {
 				yIndexNewDifferent = true;
-				if (!yRangesChanged.contains(yIndexOld))
-					yRangesChanged.append(yIndexOld);
+				if (!yRangesChanged.contains(yRangeOld))
+					yRangesChanged.append(yRangeOld);
 			}
 			e->setSuppressRetransform(true);
 			e->setCoordinateSystemIndex(index);
@@ -128,20 +128,20 @@ void BaseDock::plotRangeChanged(int index) {
 	}
 
 	// Retransform all changed indices and the new indices
-	if (!xRangesChanged.contains(xIndexNew) && xIndexNewDifferent)
-		xRangesChanged.append(xIndexNew);
-	for (const int index : xRangesChanged) {
-		plot->setRangeDirty(Dimension::X, index, true);
-		if (plot->autoScale(Dimension::X, index))
-			plot->scaleAuto(Dimension::X, index);
+	if (!xRangesChanged.contains(xRangeNew) && xIndexNewDifferent)
+		xRangesChanged.append(xRangeNew);
+	for (const auto& r : xRangesChanged) {
+		plot->setRangeDirty(Dimension::X, r, true);
+		if (plot->autoScale(Dimension::X, r))
+			plot->scaleAuto(Dimension::X, r);
 	}
 
-	if (!yRangesChanged.contains(yIndexNew) && yIndexNewDifferent)
-		yRangesChanged.append(yIndexNew);
-	for (const int index : yRangesChanged) {
-		plot->setRangeDirty(Dimension::Y, index, true);
-		if (plot->autoScale(Dimension::Y, index))
-			plot->scaleAuto(Dimension::Y, index);
+	if (!yRangesChanged.contains(yRangeNew) && yIndexNewDifferent)
+		yRangesChanged.append(yRangeNew);
+	for (const auto& r : yRangesChanged) {
+		plot->setRangeDirty(Dimension::Y, r, true);
+		if (plot->autoScale(Dimension::Y, r))
+			plot->scaleAuto(Dimension::Y, r);
 	}
 
 	plot->WorksheetElementContainer::retransform();

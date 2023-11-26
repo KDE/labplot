@@ -16,6 +16,7 @@
 class CartesianCoordinateSystemPrivate;
 class CartesianCoordinateSystemSetScalePropertiesCmd;
 class CartesianPlot;
+class RichRange;
 
 class CartesianCoordinateSystem : public AbstractCoordinateSystem {
 	Q_ENUMS(Dimension)
@@ -48,8 +49,8 @@ public:
 	int direction(const Dimension) const;
 	bool setScales(const Dimension, const QVector<CartesianScale*>&);
 	QVector<CartesianScale*> scales(const Dimension) const;
-	int index(const Dimension) const;
-	void setIndex(const Dimension, const int);
+	std::shared_ptr<const Range<double> > range(const Dimension) const;
+	void setRange(const Dimension, const std::shared_ptr<const Range<double>>);
 
 	QString info() const override;
 

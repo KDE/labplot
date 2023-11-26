@@ -12,6 +12,14 @@
 #ifndef CARTESIANCOORDINATESYSTEMPRIVATE_H
 #define CARTESIANCOORDINATESYSTEMPRIVATE_H
 
+#include <memory>
+#include <QVector>
+
+class CartesianCoordinateSystem;
+class CartesianPlot;
+class CartesianScale;
+class Range;
+
 class CartesianCoordinateSystemPrivate {
 public:
 	explicit CartesianCoordinateSystemPrivate(CartesianCoordinateSystem* owner);
@@ -22,6 +30,7 @@ public:
 	QVector<CartesianScale*> xScales;
 	QVector<CartesianScale*> yScales;
 	int xIndex{0}, yIndex{0}; // indices of x/y plot ranges used here
+	const std::shared_ptr<const Range<double>> xRange{nullptr}, yRange{nullptr};
 };
 
 #endif

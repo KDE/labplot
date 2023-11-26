@@ -1193,10 +1193,10 @@ void Project::restorePointers(AbstractAspect* aspect, bool preview) {
 				RangeT::Scale scale;
 				switch (axis->orientation()) {
 				case Axis::Orientation::Horizontal:
-					scale = plot->range(Dimension::X, cSystem->index(Dimension::X)).scale();
+					scale = cSystem->range(Dimension::X).scale();
 					break;
 				case Axis::Orientation::Vertical:
-					scale = plot->range(Dimension::Y, cSystem->index(Dimension::Y)).scale();
+					scale = cSystem->range(Dimension::Y).scale();
 					break;
 				}
 				if (axis->scale() == scale) {

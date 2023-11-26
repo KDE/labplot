@@ -670,14 +670,24 @@ int CartesianCoordinateSystem::index(const Dimension dim) const {
 	return 0;
 }
 
-void CartesianCoordinateSystem::setIndex(const Dimension dim, const int index) {
+std::shared_ptr<const Range<double>> CartesianCoordinateSystem::range(const Dimension dim) const {
 	switch (dim) {
 	case Dimension::X:
-		d->xIndex = index;
+		return d->xRange;
+	case Dimension::Y:
+		return d->yRange;
+	}
+	return nullptr;
+}
+
+void CartesianCoordinateSystem::setRange(const Dimension dim, const std::shared_ptr<const Range<double> > range) {
+	switch (dim) {
+	case Dimension::X:
+		d->xRange = range;
 		d->xScales.clear();
 		break;
 	case Dimension::Y:
-		d->yIndex = index;
+		d->yRange = range;
 		d->yScales.clear();
 		break;
 	}

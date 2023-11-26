@@ -274,7 +274,7 @@ public:
 	CartesianPlot* const q;
 	int defaultCoordinateSystemIndex{0};
 
-	QVector<RichRange> xRanges{{}}, yRanges{{}}; // at least one range must exist.
+	QVector<std::shared_ptr<RichRange>> xRanges{new RichRange()}, yRanges{new RichRange()}; // at least one range must exist.
 	bool niceExtend{true};
 	CartesianCoordinateSystem* coordinateSystem(int index) const;
 	QVector<AbstractCoordinateSystem*> coordinateSystems() const;
