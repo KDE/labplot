@@ -88,6 +88,10 @@ bool OriginProjectParser::hasUnusedObjects() {
 	return false;
 }
 
+void OriginProjectParser::setGraphLayerAsPlotArea(bool value) {
+	m_graphLayerAsPlotArea = value;
+}
+
 QString OriginProjectParser::supportedExtensions() {
 	// TODO add opju later when liborigin supports it
 	static const QString extensions = QStringLiteral("*.opj *.OPJ");
@@ -1061,7 +1065,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 		// 1. interpreting every layer as a new plot
 		// 2. interpreting every layer as a new coordinate system in the same and single plot and no plot was created yet
 		if (m_graphLayerAsPlotArea || (!m_graphLayerAsPlotArea && !plot)) {
-			plot = new CartesianPlot(i18n("Plot%1", QString::number(index)));
+			plot = new CartesianPlot(i18n("Plot%1", QString::number(index + 1)));
 			worksheet->addChildFast(plot);
 			plot->setIsLoading(true);
 		}
