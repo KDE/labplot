@@ -1047,8 +1047,9 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 
 	// TODO: do we need changes on the worksheet layout?
 
-	// add plots
-	int index = 0;
+	// process Origin's graph layers - add new plot areas or new coordinate system in the same plot area, depending on the global setting
+	// https://www.originlab.com/doc/Origin-Help/MultiLayer-Graph
+	int index = 0; // index of the graph layer
 	CartesianPlot* plot = nullptr;
 	for (const auto& layer : graph.layers) {
 		if (layer.is3D()) {
@@ -1056,7 +1057,10 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 			break;
 		}
 
-		if (!plot) {
+		// create a new plot if we're
+		// 1. interpreting every layer as a new plot
+		// 2. interpreting every layer as a new coordinate system in the same and single plot and no plot was created yet
+		if (m_graphLayerAsPlotArea || (!m_graphLayerAsPlotArea && !plot)) {
 			plot = new CartesianPlot(i18n("Plot%1", QString::number(index)));
 			worksheet->addChildFast(plot);
 			plot->setIsLoading(true);
@@ -1116,18 +1120,27 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer, Cartes
 	const Origin::GraphAxis& originXAxis = layer.xAxis;
 	const Origin::GraphAxis& originYAxis = layer.yAxis;
 
-	// TODO
 	Range<double> xRange(originXAxis.min, originXAxis.max);
 	Range<double> yRange(originYAxis.min, originYAxis.max);
 	xRange.setAutoScale(false);
 	yRange.setAutoScale(false);
-	if (index != 0) {
-		plot->addXRange();
-		plot->addYRange();
-		plot->addCoordinateSystem();
+
+	if (m_graphLayerAsPlotArea) {
+		// graph layer is read as a new plot area -> set the ranges for default coordinate system
+		plot->setRangeDefault(Dimension::X, xRange);
+		plot->setRangeDefault(Dimension::Y, yRange);
+	} else {
+		// graph layer is read as a new coordinate system in the same plot area
+		// -> create a new coordinate systems and set the ranges for it
+		// TODO
+		if (index != 0) {
+			plot->addXRange();
+			plot->addYRange();
+			plot->addCoordinateSystem();
+		}
+		plot->setRange(Dimension::X, index, xRange);
+		plot->setRange(Dimension::Y, index, yRange);
 	}
-	plot->setRange(Dimension::X, index, xRange);
-	plot->setRange(Dimension::Y, index, yRange);
 
 	// scales
 	switch (originXAxis.scale) {
