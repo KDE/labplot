@@ -32,9 +32,7 @@ KDEPlotDock::KDEPlotDock(QWidget* parent)
 	, cbDataColumn(new TreeViewComboBox) {
 	ui.setupUi(this);
 	setPlotRangeCombobox(ui.cbPlotRanges);
-	m_leName = ui.leName;
-	m_teComment = ui.teComment;
-	m_teComment->setFixedHeight(2 * m_leName->height());
+	setBaseWidgets(ui.leName, ui.teComment, 2);
 
 	// Tab "General"
 	auto* gridLayout = qobject_cast<QGridLayout*>(ui.tabGeneral->layout());
@@ -61,8 +59,6 @@ KDEPlotDock::KDEPlotDock(QWidget* parent)
 
 	// Slots
 	// General
-	connect(ui.leName, &QLineEdit::textChanged, this, &KDEPlotDock::nameChanged);
-	connect(ui.teComment, &QTextEdit::textChanged, this, &KDEPlotDock::commentChanged);
 	connect(cbDataColumn, &TreeViewComboBox::currentModelIndexChanged, this, &KDEPlotDock::dataColumnChanged);
 	connect(ui.cbKernelType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &KDEPlotDock::kernelTypeChanged);
 	connect(ui.cbBandwidthType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &KDEPlotDock::bandwidthTypeChanged);
@@ -183,7 +179,6 @@ void KDEPlotDock::setPlots(QList<KDEPlot*> list) {
 
 	// Slots
 	// General-tab
-	connect(m_plot, &KDEPlot::aspectDescriptionChanged, this, &KDEPlotDock::aspectDescriptionChanged);
 	connect(m_plot, &KDEPlot::dataColumnChanged, this, &KDEPlotDock::plotDataColumnChanged);
 	connect(m_plot, &KDEPlot::kernelTypeChanged, this, &KDEPlotDock::plotKernelTypeChanged);
 	connect(m_plot, &KDEPlot::bandwidthTypeChanged, this, &KDEPlotDock::plotBandwidthTypeChanged);

@@ -20,14 +20,10 @@ CantorWorksheetDock::CantorWorksheetDock(QWidget* parent)
 	: BaseDock(parent) {
 	ui.setupUi(this);
 	// 	ui.tabWidget->setMovable(true); //don't allow to move tabs until we properly keep track of the help panel's position
-	m_leName = ui.leName;
-	m_teComment = ui.teComment;
-	m_teComment->setFixedHeight(m_leName->height());
+	setBaseWidgets(ui.leName, ui.teComment);
 
 	// SLOTs
 	// General
-	connect(ui.leName, &QLineEdit::textChanged, this, &CantorWorksheetDock::nameChanged);
-	connect(ui.teComment, &QTextEdit::textChanged, this, &CantorWorksheetDock::commentChanged);
 	connect(ui.bEvaluate, &QPushButton::pressed, this, &CantorWorksheetDock::evaluateWorksheet);
 	connect(ui.bRestart, &QPushButton::pressed, this, &CantorWorksheetDock::restartBackend);
 }
@@ -89,9 +85,6 @@ void CantorWorksheetDock::setCantorWorksheets(QList<CantorWorksheet*> list) {
 		ui.bEvaluate->hide();
 		ui.bRestart->hide();
 	}
-
-	// SIGNALs/SLOTs
-	connect(m_worksheet, &AbstractAspect::aspectDescriptionChanged, this, &CantorWorksheetDock::aspectDescriptionChanged);
 }
 
 //*************************************************************

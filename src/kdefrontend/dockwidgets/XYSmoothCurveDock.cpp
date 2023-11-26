@@ -41,9 +41,7 @@ void XYSmoothCurveDock::setupGeneral() {
 	auto* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
 	setPlotRangeCombobox(uiGeneralTab.cbPlotRanges);
-	m_leName = uiGeneralTab.leName;
-	m_teComment = uiGeneralTab.teComment;
-	m_teComment->setFixedHeight(1.2 * m_leName->height());
+	setBaseWidgets(uiGeneralTab.leName, uiGeneralTab.teComment, 1.2);
 
 	auto* gridLayout = static_cast<QGridLayout*>(generalTab->layout());
 	gridLayout->setContentsMargins(2, 2, 2, 2);
@@ -79,8 +77,6 @@ void XYSmoothCurveDock::setupGeneral() {
 	layout->addWidget(generalTab);
 
 	// Slots
-	connect(uiGeneralTab.leName, &QLineEdit::textChanged, this, &XYSmoothCurveDock::nameChanged);
-	connect(uiGeneralTab.teComment, &QTextEdit::textChanged, this, &XYSmoothCurveDock::commentChanged);
 	connect(uiGeneralTab.chkVisible, &QCheckBox::clicked, this, &XYSmoothCurveDock::visibilityChanged);
 	connect(uiGeneralTab.cbDataSourceType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYSmoothCurveDock::dataSourceTypeChanged);
 	connect(uiGeneralTab.cbAutoRange, &QCheckBox::clicked, this, &XYSmoothCurveDock::autoRangeChanged);
@@ -180,7 +176,6 @@ void XYSmoothCurveDock::initGeneralTab() {
 	uiGeneralTab.chkVisible->setChecked(m_curve->isVisible());
 
 	// Slots
-	connect(m_smoothCurve, &XYSmoothCurve::aspectDescriptionChanged, this, &XYSmoothCurveDock::aspectDescriptionChanged);
 	connect(m_smoothCurve, &XYSmoothCurve::dataSourceTypeChanged, this, &XYSmoothCurveDock::curveDataSourceTypeChanged);
 	connect(m_smoothCurve, &XYSmoothCurve::dataSourceCurveChanged, this, &XYSmoothCurveDock::curveDataSourceCurveChanged);
 	connect(m_smoothCurve, &XYSmoothCurve::xDataColumnChanged, this, &XYSmoothCurveDock::curveXDataColumnChanged);

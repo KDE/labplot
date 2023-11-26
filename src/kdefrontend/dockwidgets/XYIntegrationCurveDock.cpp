@@ -45,9 +45,7 @@ void XYIntegrationCurveDock::setupGeneral() {
 	auto* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
 	setPlotRangeCombobox(uiGeneralTab.cbPlotRanges);
-	m_leName = uiGeneralTab.leName;
-	m_teComment = uiGeneralTab.teComment;
-	m_teComment->setFixedHeight(1.2 * m_leName->height());
+	setBaseWidgets(uiGeneralTab.leName, uiGeneralTab.teComment, 1.2);
 
 	auto* gridLayout = static_cast<QGridLayout*>(generalTab->layout());
 	gridLayout->setContentsMargins(2, 2, 2, 2);
@@ -77,8 +75,6 @@ void XYIntegrationCurveDock::setupGeneral() {
 	layout->addWidget(generalTab);
 
 	// Slots
-	connect(uiGeneralTab.leName, &QLineEdit::textChanged, this, &XYIntegrationCurveDock::nameChanged);
-	connect(uiGeneralTab.teComment, &QTextEdit::textChanged, this, &XYIntegrationCurveDock::commentChanged);
 	connect(uiGeneralTab.chkVisible, &QCheckBox::clicked, this, &XYIntegrationCurveDock::visibilityChanged);
 	connect(uiGeneralTab.cbDataSourceType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYIntegrationCurveDock::dataSourceTypeChanged);
 	connect(uiGeneralTab.cbAutoRange, &QCheckBox::clicked, this, &XYIntegrationCurveDock::autoRangeChanged);
@@ -163,7 +159,6 @@ void XYIntegrationCurveDock::initGeneralTab() {
 	uiGeneralTab.chkVisible->setChecked(m_curve->isVisible());
 
 	// Slots
-	connect(m_integrationCurve, &XYIntegrationCurve::aspectDescriptionChanged, this, &XYIntegrationCurveDock::aspectDescriptionChanged);
 	connect(m_integrationCurve, &XYIntegrationCurve::dataSourceTypeChanged, this, &XYIntegrationCurveDock::curveDataSourceTypeChanged);
 	connect(m_integrationCurve, &XYIntegrationCurve::dataSourceCurveChanged, this, &XYIntegrationCurveDock::curveDataSourceCurveChanged);
 	connect(m_integrationCurve, &XYIntegrationCurve::xDataColumnChanged, this, &XYIntegrationCurveDock::curveXDataColumnChanged);

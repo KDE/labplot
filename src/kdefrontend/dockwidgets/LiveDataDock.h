@@ -51,7 +51,6 @@ private:
 	void continueReading();
 
 private Q_SLOTS:
-	void nameChanged(const QString&);
 	void updateTypeChanged(int);
 	void readingTypeChanged(int);
 	void sampleSizeChanged(int);

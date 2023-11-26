@@ -101,9 +101,7 @@ using Dimension = CartesianCoordinateSystem::Dimension;
 CartesianPlotDock::CartesianPlotDock(QWidget* parent)
 	: BaseDock(parent) {
 	ui.setupUi(this);
-	m_leName = ui.leName;
-	m_teComment = ui.teComment;
-	m_teComment->setFixedHeight(2 * m_leName->height());
+	setBaseWidgets(ui.leName, ui.teComment, 2);
 
 	//"General"-tab
 	ui.twXRanges->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
@@ -159,8 +157,6 @@ CartesianPlotDock::CartesianPlotDock(QWidget* parent)
 
 	// SIGNAL/SLOT
 	// General
-	connect(ui.leName, &QLineEdit::textChanged, this, &CartesianPlotDock::nameChanged);
-	connect(ui.teComment, &QTextEdit::textChanged, this, &CartesianPlotDock::commentChanged);
 	connect(ui.chkVisible, &QCheckBox::clicked, this, &CartesianPlotDock::visibilityChanged);
 	connect(ui.cbRangeType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CartesianPlotDock::rangeTypeChanged);
 	connect(ui.cbNiceExtend, &QCheckBox::clicked, this, &CartesianPlotDock::niceExtendChanged);
@@ -404,7 +400,6 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list) {
 	}
 
 	// SIGNALs/SLOTs
-	connect(m_plot, &CartesianPlot::aspectDescriptionChanged, this, &CartesianPlotDock::aspectDescriptionChanged);
 	connect(m_plot, &CartesianPlot::rectChanged, this, &CartesianPlotDock::plotRectChanged);
 	connect(m_plot, &CartesianPlot::rangeTypeChanged, this, &CartesianPlotDock::plotRangeTypeChanged);
 	connect(m_plot, &CartesianPlot::rangeFirstValuesChanged, this, &CartesianPlotDock::plotRangeFirstValuesChanged);

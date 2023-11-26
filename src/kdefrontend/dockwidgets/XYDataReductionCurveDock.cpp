@@ -45,9 +45,7 @@ void XYDataReductionCurveDock::setupGeneral() {
 	auto* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
 	setPlotRangeCombobox(uiGeneralTab.cbPlotRanges);
-	m_leName = uiGeneralTab.leName;
-	m_teComment = uiGeneralTab.teComment;
-	m_teComment->setFixedHeight(1.2 * m_leName->height());
+	setBaseWidgets(uiGeneralTab.leName, uiGeneralTab.teComment, 1.2);
 
 	auto* gridLayout = static_cast<QGridLayout*>(generalTab->layout());
 	gridLayout->setContentsMargins(2, 2, 2, 2);
@@ -175,7 +173,6 @@ void XYDataReductionCurveDock::initGeneralTab() {
 	uiGeneralTab.chkVisible->setChecked(m_curve->isVisible());
 
 	// Slots
-	connect(m_dataReductionCurve, &XYDataReductionCurve::aspectDescriptionChanged, this, &XYDataReductionCurveDock::aspectDescriptionChanged);
 	connect(m_dataReductionCurve, &XYDataReductionCurve::dataSourceTypeChanged, this, &XYDataReductionCurveDock::curveDataSourceTypeChanged);
 	connect(m_dataReductionCurve, &XYDataReductionCurve::dataSourceCurveChanged, this, &XYDataReductionCurveDock::curveDataSourceCurveChanged);
 	connect(m_dataReductionCurve, &XYDataReductionCurve::xDataColumnChanged, this, &XYDataReductionCurveDock::curveXDataColumnChanged);

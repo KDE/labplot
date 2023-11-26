@@ -22,12 +22,7 @@
 AspectDock::AspectDock(QWidget* parent)
 	: BaseDock(parent) {
 	ui.setupUi(this);
-	m_leName = ui.leName;
-	m_teComment = ui.teComment;
-	ui.teComment->setFixedHeight(1.2 * ui.leName->height());
-
-	connect(ui.leName, &QLineEdit::textChanged, this, &AspectDock::nameChanged);
-	connect(ui.teComment, &QTextEdit::textChanged, this, &AspectDock::commentChanged);
+	setBaseWidgets(ui.leName, ui.teComment, 1.2);
 }
 
 void AspectDock::setAspects(QList<AbstractAspect*> list) {
@@ -49,7 +44,6 @@ void AspectDock::setAspects(QList<AbstractAspect*> list) {
 	}
 
 	// slots
-	connect(aspect(), &AbstractColumn::aspectDescriptionChanged, this, &AspectDock::aspectDescriptionChanged);
 }
 
 //*************************************************************

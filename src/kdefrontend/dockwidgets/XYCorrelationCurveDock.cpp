@@ -46,9 +46,7 @@ void XYCorrelationCurveDock::setupGeneral() {
 	auto* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
 	setPlotRangeCombobox(uiGeneralTab.cbPlotRanges);
-	m_leName = uiGeneralTab.leName;
-	m_teComment = uiGeneralTab.teComment;
-	m_teComment->setFixedHeight(1.2 * m_leName->height());
+	setBaseWidgets(uiGeneralTab.leName, uiGeneralTab.teComment, 1.2);
 
 	auto* gridLayout = static_cast<QGridLayout*>(generalTab->layout());
 	gridLayout->setContentsMargins(2, 2, 2, 2);
@@ -85,8 +83,6 @@ void XYCorrelationCurveDock::setupGeneral() {
 	DEBUG("XYCorrelationCurveDock::setupGeneral() DONE");
 
 	// Slots
-	connect(uiGeneralTab.leName, &QLineEdit::textChanged, this, &XYCorrelationCurveDock::nameChanged);
-	connect(uiGeneralTab.teComment, &QTextEdit::textChanged, this, &XYCorrelationCurveDock::commentChanged);
 	connect(uiGeneralTab.chkVisible, &QCheckBox::clicked, this, &XYCorrelationCurveDock::visibilityChanged);
 	connect(uiGeneralTab.cbDataSourceType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYCorrelationCurveDock::dataSourceTypeChanged);
 	connect(uiGeneralTab.sbSamplingInterval, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &XYCorrelationCurveDock::samplingIntervalChanged);
@@ -155,7 +151,6 @@ void XYCorrelationCurveDock::initGeneralTab() {
 	uiGeneralTab.chkVisible->setChecked(m_curve->isVisible());
 
 	// Slots
-	connect(m_correlationCurve, &XYCorrelationCurve::aspectDescriptionChanged, this, &XYCorrelationCurveDock::aspectDescriptionChanged);
 	connect(m_correlationCurve, &XYCorrelationCurve::dataSourceTypeChanged, this, &XYCorrelationCurveDock::curveDataSourceTypeChanged);
 	connect(m_correlationCurve, &XYCorrelationCurve::dataSourceCurveChanged, this, &XYCorrelationCurveDock::curveDataSourceCurveChanged);
 	connect(m_correlationCurve, &XYCorrelationCurve::xDataColumnChanged, this, &XYCorrelationCurveDock::curveXDataColumnChanged);

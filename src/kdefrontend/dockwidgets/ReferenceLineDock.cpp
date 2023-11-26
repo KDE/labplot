@@ -21,9 +21,7 @@ ReferenceLineDock::ReferenceLineDock(QWidget* parent)
 	: BaseDock(parent) {
 	ui.setupUi(this);
 	setPlotRangeCombobox(ui.cbPlotRanges);
-	m_leName = ui.leName;
-	m_teComment = ui.teComment;
-	m_teComment->setFixedHeight(1.2 * m_leName->height());
+	setBaseWidgets(ui.leName, ui.teComment, 1.2);
 
 	ui.cbOrientation->addItem(i18n("Horizontal"));
 	ui.cbOrientation->addItem(i18n("Vertical"));
@@ -34,9 +32,6 @@ ReferenceLineDock::ReferenceLineDock(QWidget* parent)
 
 	// SLOTS
 	// General
-	connect(ui.leName, &QLineEdit::textChanged, this, &ReferenceLineDock::nameChanged);
-	connect(ui.teComment, &QTextEdit::textChanged, this, &ReferenceLineDock::commentChanged);
-
 	connect(ui.cbOrientation, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ReferenceLineDock::orientationChanged);
 	connect(ui.sbPosition, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &ReferenceLineDock::positionLogicalChanged);
 	connect(ui.dtePosition, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &ReferenceLineDock::positionLogicalDateTimeChanged);
@@ -75,7 +70,6 @@ void ReferenceLineDock::setReferenceLines(QList<ReferenceLine*> list) {
 	updatePlotRanges();
 
 	// SIGNALs/SLOTs
-	connect(m_line, &AbstractAspect::aspectDescriptionChanged, this, &ReferenceLineDock::aspectDescriptionChanged);
 	connect(m_line, &WorksheetElement::plotRangeListChanged, this, &ReferenceLineDock::updatePlotRanges);
 	connect(m_line, &ReferenceLine::visibleChanged, this, &ReferenceLineDock::lineVisibilityChanged);
 

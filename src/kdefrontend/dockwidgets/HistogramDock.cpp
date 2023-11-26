@@ -44,10 +44,7 @@ HistogramDock::HistogramDock(QWidget* parent)
 	: BaseDock(parent)
 	, cbDataColumn(new TreeViewComboBox) {
 	ui.setupUi(this);
-	m_leName = ui.leName;
-	m_teComment = ui.teComment;
-	m_teComment->setFixedHeight(2 * m_leName->height());
-
+	setBaseWidgets(ui.leName, ui.teComment, 2);
 	// Tab "General"
 	auto* gridLayout = qobject_cast<QGridLayout*>(ui.tabGeneral->layout());
 	gridLayout->addWidget(cbDataColumn, 3, 2, 1, 1);
@@ -107,8 +104,6 @@ HistogramDock::HistogramDock(QWidget* parent)
 
 	// Slots
 	// General
-	connect(ui.leName, &QLineEdit::textChanged, this, &HistogramDock::nameChanged);
-	connect(ui.teComment, &QTextEdit::textChanged, this, &HistogramDock::commentChanged);
 	connect(ui.chkVisible, &QCheckBox::clicked, this, &HistogramDock::visibilityChanged);
 	connect(cbDataColumn, &TreeViewComboBox::currentModelIndexChanged, this, &HistogramDock::dataColumnChanged);
 	connect(ui.cbType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &HistogramDock::typeChanged);
@@ -307,7 +302,6 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 
 	// Slots
 	// General-tab
-	connect(m_curve, &Histogram::aspectDescriptionChanged, this, &HistogramDock::aspectDescriptionChanged);
 	connect(m_curve, &Histogram::dataColumnChanged, this, &HistogramDock::curveDataColumnChanged);
 	connect(m_curve, &Histogram::typeChanged, this, &HistogramDock::curveTypeChanged);
 	connect(m_curve, &Histogram::orientationChanged, this, &HistogramDock::curveOrientationChanged);

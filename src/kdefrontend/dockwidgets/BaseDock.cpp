@@ -41,6 +41,20 @@ BaseDock::~BaseDock() {
 		delete m_aspectModel;
 }
 
+void BaseDock::setBaseWidgets(QLineEdit* nameLabel, ResizableTextEdit* commentLabel, double commentHeightFactorNameLabel) {
+	if (m_leName)
+		disconnect(m_leName, nullptr, this, nullptr);
+	if (m_teComment)
+		disconnect(m_teComment, nullptr, this, nullptr);
+	m_leName = nameLabel;
+	m_teComment = commentLabel;
+	if (m_teComment) { // Some docks don't have a comment field (Livedata for example)
+		m_teComment->setFixedHeight(commentHeightFactorNameLabel * m_leName->height());
+		connect(m_teComment, &QTextEdit::textChanged, this, &BaseDock::commentChanged);
+	}
+	connect(m_leName, &QLineEdit::textChanged, this, &BaseDock::nameChanged);
+}
+
 void BaseDock::updatePlotRangeList() {
 	auto* element{static_cast<WorksheetElement*>(m_aspect)};
 	if (!element) {
@@ -152,6 +166,12 @@ void BaseDock::nameChanged() {
 	if (m_initializing || !m_aspect)
 		return;
 
+	if (!m_leName) {
+		DEBUG("BaseDock: m_leName not initialized");
+		Q_ASSERT(false);
+		return;
+	}
+
 	if (!m_aspect->setName(m_leName->text(), AbstractAspect::NameHandling::UniqueRequired)) {
 		SET_WARNING_STYLE(m_leName)
 		m_leName->setToolTip(i18n("Please choose another name, because this is already in use."));
@@ -165,6 +185,12 @@ void BaseDock::commentChanged() {
 	if (m_initializing || !m_aspect)
 		return;
 
+	if (!m_teComment) {
+		DEBUG("BaseDock: m_teComment not initialized");
+		Q_ASSERT(false);
+		return;
+	}
+
 	m_aspect->setComment(m_teComment->text());
 }
 
@@ -172,11 +198,24 @@ void BaseDock::aspectDescriptionChanged(const AbstractAspect* aspect) {
 	if (m_aspect != aspect)
 		return;
 
+	if (!m_leName) {
+		DEBUG("BaseDock: m_leName not initialized");
+		Q_ASSERT(false);
+		return;
+	}
+
 	CONDITIONAL_LOCK_RETURN;
 	if (aspect->name() != m_leName->text())
 		m_leName->setText(aspect->name());
-	else if (aspect->comment() != m_teComment->text())
-		m_teComment->document()->setPlainText(aspect->comment());
+	else {
+		if (!m_teComment) {
+			DEBUG("BaseDock: m_teComment not initialized");
+			Q_ASSERT(false);
+			return;
+		}
+		if (aspect->comment() != m_teComment->text())
+			m_teComment->document()->setPlainText(aspect->comment());
+	}
 }
 
 AspectTreeModel* BaseDock::aspectModel() {

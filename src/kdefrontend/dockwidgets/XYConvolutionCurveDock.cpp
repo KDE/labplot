@@ -44,9 +44,7 @@ void XYConvolutionCurveDock::setupGeneral() {
 	auto* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
 	setPlotRangeCombobox(uiGeneralTab.cbPlotRanges);
-	m_leName = uiGeneralTab.leName;
-	m_teComment = uiGeneralTab.teComment;
-	m_teComment->setFixedHeight(1.2 * m_leName->height());
+	setBaseWidgets(uiGeneralTab.leName, uiGeneralTab.teComment, 1.2);
 
 	auto* gridLayout = static_cast<QGridLayout*>(generalTab->layout());
 	gridLayout->setContentsMargins(2, 2, 2, 2);
@@ -90,8 +88,6 @@ void XYConvolutionCurveDock::setupGeneral() {
 	DEBUG(Q_FUNC_INFO << ", DONE");
 
 	// Slots
-	connect(uiGeneralTab.leName, &QLineEdit::textChanged, this, &XYConvolutionCurveDock::nameChanged);
-	connect(uiGeneralTab.teComment, &QTextEdit::textChanged, this, &XYConvolutionCurveDock::commentChanged);
 	// TODO	connect(uiGeneralTab.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYConvolutionCurveDock::plotRangeChanged );
 	connect(uiGeneralTab.chkVisible, &QCheckBox::clicked, this, &XYConvolutionCurveDock::visibilityChanged);
 	connect(uiGeneralTab.cbDataSourceType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYConvolutionCurveDock::dataSourceTypeChanged);
@@ -170,7 +166,6 @@ void XYConvolutionCurveDock::initGeneralTab() {
 	uiGeneralTab.chkVisible->setChecked(m_curve->isVisible());
 
 	// Slots
-	connect(m_convolutionCurve, &XYConvolutionCurve::aspectDescriptionChanged, this, &XYConvolutionCurveDock::aspectDescriptionChanged);
 	connect(m_convolutionCurve, &XYConvolutionCurve::dataSourceTypeChanged, this, &XYConvolutionCurveDock::curveDataSourceTypeChanged);
 	connect(m_convolutionCurve, &XYConvolutionCurve::dataSourceCurveChanged, this, &XYConvolutionCurveDock::curveDataSourceCurveChanged);
 	connect(m_convolutionCurve, &XYConvolutionCurve::xDataColumnChanged, this, &XYConvolutionCurveDock::curveXDataColumnChanged);

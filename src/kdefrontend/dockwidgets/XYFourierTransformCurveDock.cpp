@@ -37,9 +37,7 @@ void XYFourierTransformCurveDock::setupGeneral() {
 	auto* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
 	setPlotRangeCombobox(uiGeneralTab.cbPlotRanges);
-	m_leName = uiGeneralTab.leName;
-	m_teComment = uiGeneralTab.teComment;
-	m_teComment->setFixedHeight(1.2 * m_leName->height());
+	setBaseWidgets(uiGeneralTab.leName, uiGeneralTab.teComment, 1.2);
 
 	auto* gridLayout = static_cast<QGridLayout*>(generalTab->layout());
 	gridLayout->setContentsMargins(2, 2, 2, 2);
@@ -66,8 +64,6 @@ void XYFourierTransformCurveDock::setupGeneral() {
 	layout->addWidget(generalTab);
 
 	// Slots
-	connect(uiGeneralTab.leName, &QLineEdit::textChanged, this, &XYFourierTransformCurveDock::nameChanged);
-	connect(uiGeneralTab.teComment, &QTextEdit::textChanged, this, &XYFourierTransformCurveDock::commentChanged);
 	connect(uiGeneralTab.chkVisible, &QCheckBox::clicked, this, &XYFourierTransformCurveDock::visibilityChanged);
 	connect(uiGeneralTab.cbAutoRange, &QCheckBox::clicked, this, &XYFourierTransformCurveDock::autoRangeChanged);
 	connect(uiGeneralTab.leMin, &QLineEdit::textChanged, this, &XYFourierTransformCurveDock::xRangeMinChanged);
@@ -131,7 +127,6 @@ void XYFourierTransformCurveDock::initGeneralTab() {
 	uiGeneralTab.chkVisible->setChecked(m_curve->isVisible());
 
 	// Slots
-	connect(m_transformCurve, &XYFourierTransformCurve::aspectDescriptionChanged, this, &XYFourierTransformCurveDock::aspectDescriptionChanged);
 	connect(m_transformCurve, &XYFourierTransformCurve::xDataColumnChanged, this, &XYFourierTransformCurveDock::curveXDataColumnChanged);
 	connect(m_transformCurve, &XYFourierTransformCurve::yDataColumnChanged, this, &XYFourierTransformCurveDock::curveYDataColumnChanged);
 	connect(m_transformCurve, &XYFourierTransformCurve::transformDataChanged, this, &XYFourierTransformCurveDock::curveTransformDataChanged);

@@ -64,9 +64,7 @@ void XYFitCurveDock::setupGeneral() {
 	auto* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
 	setPlotRangeCombobox(uiGeneralTab.cbPlotRanges);
-	m_leName = uiGeneralTab.leName;
-	m_teComment = uiGeneralTab.teComment;
-	m_teComment->setFixedHeight(1.2 * m_leName->height());
+	setBaseWidgets(uiGeneralTab.leName, uiGeneralTab.teComment, 1.2);
 
 	auto* gridLayout = static_cast<QGridLayout*>(generalTab->layout());
 	gridLayout->setContentsMargins(2, 2, 2, 2);
@@ -186,8 +184,6 @@ void XYFitCurveDock::setupGeneral() {
 	layout->addWidget(generalTab);
 
 	// Slots
-	connect(uiGeneralTab.leName, &QLineEdit::textChanged, this, &XYFitCurveDock::nameChanged);
-	connect(uiGeneralTab.teComment, &QTextEdit::textChanged, this, &XYFitCurveDock::commentChanged);
 	connect(uiGeneralTab.chkVisible, &QCheckBox::clicked, this, &XYFitCurveDock::visibilityChanged);
 	connect(uiGeneralTab.cbDataSourceType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFitCurveDock::dataSourceTypeChanged);
 	connect(uiGeneralTab.lWeights, &QPushButton::clicked, this, &XYFitCurveDock::showWeightsOptions);
@@ -281,7 +277,6 @@ void XYFitCurveDock::initGeneralTab() {
 	uiGeneralTab.chkVisible->setChecked(m_curve->isVisible());
 
 	// Slots
-	connect(m_fitCurve, &XYFitCurve::aspectDescriptionChanged, this, &XYFitCurveDock::aspectDescriptionChanged);
 	connect(m_fitCurve, &XYFitCurve::dataSourceTypeChanged, this, &XYFitCurveDock::curveDataSourceTypeChanged);
 	connect(m_fitCurve, &XYFitCurve::dataSourceCurveChanged, this, &XYFitCurveDock::curveDataSourceCurveChanged);
 	connect(m_fitCurve, &XYFitCurve::dataSourceHistogramChanged, this, &XYFitCurveDock::curveDataSourceHistogramChanged);

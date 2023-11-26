@@ -27,9 +27,7 @@ BarPlotDock::BarPlotDock(QWidget* parent)
 	, cbXColumn(new TreeViewComboBox) {
 	ui.setupUi(this);
 	setPlotRangeCombobox(ui.cbPlotRanges);
-	m_leName = ui.leName;
-	m_teComment = ui.teComment;
-	m_teComment->setFixedHeight(m_leName->height());
+	setBaseWidgets(ui.leName, ui.teComment);
 
 	// Tab "General"
 
@@ -99,8 +97,6 @@ BarPlotDock::BarPlotDock(QWidget* parent)
 
 	// SLOTS
 	// Tab "General"
-	connect(ui.leName, &QLineEdit::textChanged, this, &BarPlotDock::nameChanged);
-	connect(ui.teComment, &QTextEdit::textChanged, this, &BarPlotDock::commentChanged);
 	connect(cbXColumn, &TreeViewComboBox::currentModelIndexChanged, this, &BarPlotDock::xColumnChanged);
 	connect(ui.bRemoveXColumn, &QPushButton::clicked, this, &BarPlotDock::removeXColumn);
 	connect(m_buttonNew, &QPushButton::clicked, this, &BarPlotDock::addDataColumn);
@@ -162,7 +158,6 @@ void BarPlotDock::setBarPlots(QList<BarPlot*> list) {
 
 	// SIGNALs/SLOTs
 	// general
-	connect(m_barPlot, &AbstractAspect::aspectDescriptionChanged, this, &BarPlotDock::aspectDescriptionChanged);
 	connect(m_barPlot, &WorksheetElement::plotRangeListChanged, this, &BarPlotDock::updatePlotRanges);
 	connect(m_barPlot, &BarPlot::visibleChanged, this, &BarPlotDock::plotVisibilityChanged);
 	connect(m_barPlot, &BarPlot::typeChanged, this, &BarPlotDock::plotTypeChanged);

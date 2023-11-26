@@ -54,9 +54,7 @@ AxisDock::AxisDock(QWidget* parent)
 	: BaseDock(parent) {
 	ui.setupUi(this);
 	setPlotRangeCombobox(ui.cbPlotRanges);
-	m_leName = ui.leName;
-	m_teComment = ui.teComment;
-	m_teComment->setFixedHeight(1.5 * m_leName->height());
+	setBaseWidgets(ui.leName, ui.teComment, 1.5);
 
 	//"Title"-tab
 	auto* hboxLayout = new QHBoxLayout(ui.tabTitle);
@@ -124,8 +122,6 @@ AxisDock::AxisDock(QWidget* parent)
 	//**********************************  Slots **********************************************
 
 	//"General"-tab
-	connect(ui.leName, &QLineEdit::textChanged, this, &AxisDock::nameChanged);
-	connect(ui.teComment, &QTextEdit::textChanged, this, &AxisDock::commentChanged);
 	connect(ui.chkVisible, &QCheckBox::clicked, this, &AxisDock::visibilityChanged);
 
 	connect(ui.kcbAxisColor, &KColorButton::changed, this, &AxisDock::colorChanged);
@@ -391,7 +387,6 @@ void AxisDock::setAxes(QList<Axis*> list) {
 
 void AxisDock::initConnections() {
 	// general
-	connect(m_axis, &Axis::aspectDescriptionChanged, this, &AxisDock::aspectDescriptionChanged);
 	connect(m_axis, &Axis::orientationChanged, this, QOverload<Axis::Orientation>::of(&AxisDock::axisOrientationChanged));
 	connect(m_axis, QOverload<Axis::Position>::of(&Axis::positionChanged), this, QOverload<Axis::Position>::of(&AxisDock::axisPositionChanged));
 	connect(m_axis, QOverload<double>::of(&Axis::positionChanged), this, QOverload<double>::of(&AxisDock::axisPositionChanged));
