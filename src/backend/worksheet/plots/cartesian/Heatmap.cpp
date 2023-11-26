@@ -999,7 +999,7 @@ void Heatmap::save(QXmlStreamWriter* writer) const {
 	else
 		writer->writeAttribute(XML::matrix, d->matrixPath);
 
-	writer->writeAttribute(QStringLiteral("plotRangeIndex"), QString::number(m_cSystemIndex));
+	writer->writeAttribute(QStringLiteral("plotRangeIndex"), QString::number(d->cSystemIndex));
 	writer->writeAttribute(QStringLiteral("numBinsEqual"), QString::number(d->numBinsEqual));
 	writer->writeAttribute(XML::xNumBins, QString::number(d->xNumBins));
 	writer->writeAttribute(XML::yNumBins, QString::number(d->yNumBins));
@@ -1062,7 +1062,7 @@ bool Heatmap::load(XmlStreamReader* reader, bool preview) {
 				reader->raiseWarning(attributeWarning.subs(QStringLiteral("visible")).toString());
 			else
 				d->setVisible(str.toInt());
-			READ_INT_VALUE_DIRECT("plotRangeIndex", m_cSystemIndex, int);
+			READ_INT_VALUE_DIRECT("plotRangeIndex", d->cSystemIndex, int);
 		} else if (!preview && reader->name() == XML::formatColors) {
 			attribs = reader->attributes();
 			int index = 0;
