@@ -35,8 +35,9 @@ public:
 
 	static bool isOriginProject(const QString& fileName);
 	static QString supportedExtensions();
+
+	void checkContent(bool& hasUnusedObjects, bool& hasMultiLayers);
 	void setImportUnusedObjects(bool);
-	bool hasUnusedObjects();
 	void setGraphLayerAsPlotArea(bool);
 
 protected:
@@ -51,12 +52,15 @@ private:
 	bool loadMatrix(Matrix*, bool preview, size_t sheetIndex = 0, const QString& mwbName = QString());
 
 	bool loadWorksheet(Worksheet*, bool preview);
-	void loadGraphLayer(const Origin::GraphLayer&, CartesianPlot*, int index, QHash<TextLabel*, QSizeF> textLabelPositions, bool preview) ;
+	void loadGraphLayer(const Origin::GraphLayer&, CartesianPlot*, int index, QHash<TextLabel*, QSizeF> textLabelPositions, bool preview);
 	void loadAxis(const Origin::GraphAxis&, Axis*, int index, const QString& axisTitle = QString()) const;
 	void loadCurve(const Origin::GraphCurve&, XYCurve*) const;
 
 	bool loadNote(Note*, bool preview);
 	void handleLooseWindows(Folder*, bool preview);
+
+	bool hasUnusedObjects();
+	bool hasMultiLayerGraphs();
 
 	unsigned int findSpreadsheetByName(const QString&);
 	unsigned int findMatrixByName(const QString&);
