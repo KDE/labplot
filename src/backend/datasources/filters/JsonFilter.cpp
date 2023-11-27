@@ -17,7 +17,7 @@
 #include "backend/lib/trace.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 
-#include <KFilterDev>
+#include <KCompressionDevice>
 #include <KLocalizedString>
 
 #include <QDataStream>
@@ -72,19 +72,6 @@ writes the content of the data source \c dataSource to the file \c fileName.
 */
 void JsonFilter::write(const QString& fileName, AbstractDataSource* dataSource) {
 	d->write(fileName, dataSource);
-}
-
-///////////////////////////////////////////////////////////////////////
-/*!
-loads the predefined filter settings for \c filterName
-*/
-void JsonFilter::loadFilterSettings(const QString& /*filterName*/) {
-}
-
-/*!
-saves the current settings as a new filter with the name \c filterName
-*/
-void JsonFilter::saveFilterSettings(const QString& /*filterName*/) const {
 }
 
 /*!
@@ -196,7 +183,7 @@ int JsonFilter::endColumn() const {
 QString JsonFilter::fileInfoString(const QString& fileName) {
 	DEBUG(Q_FUNC_INFO);
 
-	KFilterDev device(fileName);
+	KCompressionDevice device(fileName);
 
 	if (!device.open(QIODevice::ReadOnly))
 		return i18n("Open device failed");
@@ -515,7 +502,7 @@ bool JsonFilterPrivate::prepareDocumentToRead() {
 reads the content of the file \c fileName to the data source \c dataSource. Uses the settings defined in the data source.
 */
 void JsonFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
-	KFilterDev device(fileName);
+	KCompressionDevice device(fileName);
 	readDataFromDevice(device, dataSource, importMode);
 }
 
@@ -639,7 +626,7 @@ generates the preview for the file \c fileName.
 */
 QVector<QStringList> JsonFilterPrivate::preview(const QString& fileName, int lines) {
 	if (!m_prepared) {
-		KFilterDev device(fileName);
+		KCompressionDevice device(fileName);
 		return preview(device, lines);
 	} else
 		return preview(lines);
@@ -773,7 +760,6 @@ void JsonFilter::save(QXmlStreamWriter* writer) const {
 Loads from XML.
 */
 bool JsonFilter::load(XmlStreamReader* reader) {
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs = reader->attributes();
 	QString str;
 
@@ -790,7 +776,7 @@ bool JsonFilter::load(XmlStreamReader* reader) {
 
 	QStringList list = attribs.value(QStringLiteral("modelRows")).toString().split(QLatin1Char(';'));
 	if (list.isEmpty())
-		reader->raiseWarning(attributeWarning.subs(QStringLiteral("'modelRows'")).toString());
+		reader->raiseMissingAttributeWarning(QStringLiteral("'modelRows'"));
 	else {
 		d->modelRows = QVector<int>();
 		for (auto& it : list)

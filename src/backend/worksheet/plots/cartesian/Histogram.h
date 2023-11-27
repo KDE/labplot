@@ -4,14 +4,13 @@
 	Description          : Histogram
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2016 Anu Mittal <anu22mittal@gmail.com>
-	SPDX-FileCopyrightText: 2018-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2018-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef HISTOGRAM_H
 #define HISTOGRAM_H
 
-#include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/Plot.h"
 
 class AbstractColumn;
@@ -48,14 +47,10 @@ public:
 
 	QIcon icon() const override;
 	QMenu* createContextMenu() override;
-	QGraphicsItem* graphicsItem() const override;
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
 	void loadThemeConfig(const KConfig&) override;
 	void saveThemeConfig(const KConfig&) override;
-
-	bool activatePlot(QPointF mouseScenePos, double maxDist = -1) override;
-	void setHover(bool on) override;
 
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, dataColumn, DataColumn)
 	CLASS_D_ACCESSOR_DECL(QString, dataColumnPath, DataColumnPath)
@@ -89,8 +84,9 @@ public:
 	BASIC_D_ACCESSOR_DECL(double, rugLength, RugLength)
 	BASIC_D_ACCESSOR_DECL(double, rugWidth, RugWidth)
 
-	double minimum(CartesianCoordinateSystem::Dimension dim) const;
-	double maximum(CartesianCoordinateSystem::Dimension dim) const;
+	double minimum(CartesianCoordinateSystem::Dimension) const override;
+	double maximum(CartesianCoordinateSystem::Dimension) const override;
+	bool hasData() const override;
 
 	const AbstractColumn* bins() const;
 	const AbstractColumn* binValues() const;
@@ -101,7 +97,7 @@ public:
 
 public Q_SLOTS:
 	void retransform() override;
-	void recalcHistogram();
+	void recalc();
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
 	void createDataSpreadsheet();
 
@@ -128,8 +124,6 @@ private:
 	void connectDataColumn(const AbstractColumn*);
 	void connectErrorPlusColumn(const AbstractColumn*);
 	void connectErrorMinusColumn(const AbstractColumn*);
-
-	QAction* visibilityAction{nullptr};
 
 Q_SIGNALS:
 	// General-Tab

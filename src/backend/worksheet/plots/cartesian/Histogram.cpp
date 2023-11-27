@@ -19,6 +19,7 @@
 #include "HistogramPrivate.h"
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/Folder.h"
+#include "backend/core/Settings.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
@@ -32,22 +33,19 @@
 #include "backend/worksheet/plots/cartesian/Value.h"
 #include "tools/ImageTools.h"
 
-#include <QGraphicsSceneContextMenuEvent>
 #include <QMenu>
 #include <QPainter>
 
 #include <KConfig>
 #include <KConfigGroup>
 #include <KLocalizedString>
-#include <KSharedConfig>
+#include <QGraphicsSceneMouseEvent>
 
-extern "C" {
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_histogram.h>
 #include <gsl/gsl_spline.h>
-}
 
-CURVE_COLUMN_CONNECT(Histogram, Data, data, recalcHistogram)
+CURVE_COLUMN_CONNECT(Histogram, Data, data, recalc)
 CURVE_COLUMN_CONNECT(Histogram, ErrorPlus, errorPlus, updateErrorBars)
 CURVE_COLUMN_CONNECT(Histogram, ErrorMinus, errorMinus, updateErrorBars)
 
@@ -69,15 +67,15 @@ void Histogram::init() {
 	Q_D(Histogram);
 
 	KConfig config;
-	KConfigGroup group = config.group("Histogram");
+	KConfigGroup group = config.group(QStringLiteral("Histogram"));
 
-	d->type = (Histogram::Type)group.readEntry("Type", (int)Histogram::Ordinary);
-	d->orientation = (Histogram::Orientation)group.readEntry("Orientation", (int)Histogram::Vertical);
-	d->normalization = (Histogram::Normalization)group.readEntry("Normalization", (int)Histogram::Count);
-	d->binningMethod = (Histogram::BinningMethod)group.readEntry("BinningMethod", (int)Histogram::SquareRoot);
-	d->binCount = group.readEntry("BinCount", 10);
-	d->binWidth = group.readEntry("BinWidth", 1.0);
-	d->autoBinRanges = group.readEntry("AutoBinRanges", true);
+	d->type = (Histogram::Type)group.readEntry(QStringLiteral("Type"), (int)Histogram::Ordinary);
+	d->orientation = (Histogram::Orientation)group.readEntry(QStringLiteral("Orientation"), (int)Histogram::Vertical);
+	d->normalization = (Histogram::Normalization)group.readEntry(QStringLiteral("Normalization"), (int)Histogram::Count);
+	d->binningMethod = (Histogram::BinningMethod)group.readEntry(QStringLiteral("BinningMethod"), (int)Histogram::SquareRoot);
+	d->binCount = group.readEntry(QStringLiteral("BinCount"), 10);
+	d->binWidth = group.readEntry(QStringLiteral("BinWidth"), 1.0);
+	d->autoBinRanges = group.readEntry(QStringLiteral("AutoBinRanges"), true);
 	d->binRangesMin = 0.0;
 	d->binRangesMax = 1.0;
 
@@ -113,6 +111,7 @@ void Histogram::init() {
 	d->value = new Value(QString());
 	addChild(d->value);
 	d->value->setHidden(true);
+	d->value->setcenterPositionAvailable(true);
 	d->value->init(group);
 	connect(d->value, &Value::updatePixmapRequested, [=] {
 		d->updatePixmap();
@@ -123,7 +122,7 @@ void Histogram::init() {
 
 	// Background/Filling
 	d->background = new Background(QString());
-	d->background->setPrefix(QLatin1String("Filling"));
+	d->background->setPrefix(QStringLiteral("Filling"));
 	d->background->setEnabledAvailable(true);
 	addChild(d->background);
 	d->background->setHidden(true);
@@ -136,9 +135,9 @@ void Histogram::init() {
 	});
 
 	// error bars
-	d->errorType = (Histogram::ErrorType)group.readEntry("ErrorType", (int)Histogram::NoError);
+	d->errorType = (Histogram::ErrorType)group.readEntry(QStringLiteral("ErrorType"), (int)Histogram::NoError);
 	d->errorBarsLine = new Line(QString());
-	d->errorBarsLine->setPrefix(QLatin1String("ErrorBars"));
+	d->errorBarsLine->setPrefix(QStringLiteral("ErrorBars"));
 	d->errorBarsLine->setCreateXmlElement(false); // errorBars element is created in Histogram::save()
 	d->errorBarsLine->setErrorBarsTypeAvailable(true);
 	d->errorBarsLine->setHidden(true);
@@ -158,18 +157,14 @@ void Histogram::init() {
 	});
 
 	// marginal plots (rug, histogram, boxplot)
-	d->rugEnabled = group.readEntry("RugEnabled", false);
-	d->rugLength = group.readEntry("RugLength", Worksheet::convertToSceneUnits(5, Worksheet::Unit::Point));
-	d->rugWidth = group.readEntry("RugWidth", 0.0);
-	d->rugOffset = group.readEntry("RugOffset", 0.0);
-
+	d->rugEnabled = group.readEntry(QStringLiteral("RugEnabled"), false);
+	d->rugLength = group.readEntry(QStringLiteral("RugLength"), Worksheet::convertToSceneUnits(5, Worksheet::Unit::Point));
+	d->rugWidth = group.readEntry(QStringLiteral("RugWidth"), 0.0);
+	d->rugOffset = group.readEntry(QStringLiteral("RugOffset"), 0.0);
 	this->initActions();
 }
 
 void Histogram::initActions() {
-	visibilityAction = new QAction(QIcon::fromTheme(QStringLiteral("view-visible")), i18n("Visible"), this);
-	visibilityAction->setCheckable(true);
-	connect(visibilityAction, &QAction::triggered, this, &Histogram::changeVisibility);
 }
 
 /*!
@@ -202,9 +197,7 @@ void Histogram::createDataSpreadsheet() {
 
 QMenu* Histogram::createContextMenu() {
 	QMenu* menu = WorksheetElement::createContextMenu();
-	QAction* firstAction = menu->actions().at(1); // skip the first action because of the "title-action"
-	visibilityAction->setChecked(isVisible());
-	menu->insertAction(firstAction, visibilityAction);
+	QAction* visibilityAction = this->visibilityAction();
 
 	//"data analysis" menu
 	auto* analysisMenu = new QMenu(i18n("Analysis"));
@@ -254,7 +247,6 @@ QMenu* Histogram::createContextMenu() {
 
 	menu->insertMenu(visibilityAction, analysisMenu);
 	menu->insertSeparator(visibilityAction);
-	menu->insertSeparator(firstAction);
 
 	return menu;
 }
@@ -264,20 +256,6 @@ QMenu* Histogram::createContextMenu() {
   */
 QIcon Histogram::icon() const {
 	return QIcon::fromTheme(QStringLiteral("view-object-histogram-linear"));
-}
-
-QGraphicsItem* Histogram::graphicsItem() const {
-	return d_ptr;
-}
-
-bool Histogram::activatePlot(QPointF mouseScenePos, double maxDist) {
-	Q_D(Histogram);
-	return d->activatePlot(mouseScenePos, maxDist);
-}
-
-void Histogram::setHover(bool on) {
-	Q_D(Histogram);
-	d->setHover(on);
 }
 
 // ##############################################################################
@@ -360,6 +338,11 @@ double Histogram::maximum(const Dimension dim) const {
 	return NAN;
 }
 
+bool Histogram::hasData() const {
+	Q_D(const Histogram);
+	return (d->dataColumn != nullptr);
+}
+
 const AbstractColumn* Histogram::bins() const {
 	D(Histogram);
 	return d->bins();
@@ -380,7 +363,7 @@ const AbstractColumn* Histogram::binPDValues() const {
 // ##############################################################################
 
 // General
-CURVE_COLUMN_SETTER_CMD_IMPL_F_S(Histogram, Data, data, recalcHistogram)
+CURVE_COLUMN_SETTER_CMD_IMPL_F_S(Histogram, Data, data, recalc)
 void Histogram::setDataColumn(const AbstractColumn* column) {
 	Q_D(Histogram);
 	if (column != d->dataColumn)
@@ -413,21 +396,21 @@ void Histogram::setNormalization(Histogram::Normalization normalization) {
 		exec(new HistogramSetNormalizationCmd(d, normalization, ki18n("%1: set histogram normalization")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetBinningMethod, Histogram::BinningMethod, binningMethod, recalcHistogram)
+STD_SETTER_CMD_IMPL_F_S(Histogram, SetBinningMethod, Histogram::BinningMethod, binningMethod, recalc)
 void Histogram::setBinningMethod(Histogram::BinningMethod method) {
 	Q_D(Histogram);
 	if (method != d->binningMethod)
 		exec(new HistogramSetBinningMethodCmd(d, method, ki18n("%1: set binning method")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetBinCount, int, binCount, recalcHistogram)
+STD_SETTER_CMD_IMPL_F_S(Histogram, SetBinCount, int, binCount, recalc)
 void Histogram::setBinCount(int count) {
 	Q_D(Histogram);
 	if (count != d->binCount)
 		exec(new HistogramSetBinCountCmd(d, count, ki18n("%1: set bin count")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetBinWidth, double, binWidth, recalcHistogram)
+STD_SETTER_CMD_IMPL_F_S(Histogram, SetBinWidth, double, binWidth, recalc)
 void Histogram::setBinWidth(double width) {
 	Q_D(Histogram);
 	if (width != d->binWidth)
@@ -448,7 +431,7 @@ public:
 		if (m_autoBinRanges) {
 			m_binRangesMinOld = m_private->binRangesMin;
 			m_binRangesMaxOld = m_private->binRangesMax;
-			m_private->q->recalcHistogram();
+			m_private->q->recalc();
 		}
 		Q_EMIT m_private->q->autoBinRangesChanged(m_autoBinRanges);
 	}
@@ -464,7 +447,7 @@ public:
 				m_private->binRangesMax = m_binRangesMaxOld;
 				Q_EMIT m_private->q->binRangesMaxChanged(m_private->binRangesMax);
 			}
-			m_private->recalcHistogram();
+			m_private->recalc();
 		}
 		Q_EMIT m_private->q->autoBinRangesChanged(m_autoBinRangesOld);
 	}
@@ -483,14 +466,14 @@ void Histogram::setAutoBinRanges(bool autoBinRanges) {
 		exec(new HistogramSetAutoBinRangesCmd(d, autoBinRanges));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetBinRangesMin, double, binRangesMin, recalcHistogram)
+STD_SETTER_CMD_IMPL_F_S(Histogram, SetBinRangesMin, double, binRangesMin, recalc)
 void Histogram::setBinRangesMin(double binRangesMin) {
 	Q_D(Histogram);
 	if (binRangesMin != d->binRangesMin)
 		exec(new HistogramSetBinRangesMinCmd(d, binRangesMin, ki18n("%1: set bin ranges start")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetBinRangesMax, double, binRangesMax, recalcHistogram)
+STD_SETTER_CMD_IMPL_F_S(Histogram, SetBinRangesMax, double, binRangesMax, recalc)
 void Histogram::setBinRangesMax(double binRangesMax) {
 	Q_D(Histogram);
 	if (binRangesMax != d->binRangesMax)
@@ -565,9 +548,9 @@ void Histogram::retransform() {
 	d_ptr->retransform();
 }
 
-void Histogram::recalcHistogram() {
+void Histogram::recalc() {
 	D(Histogram);
-	d->recalcHistogram();
+	d->recalc();
 }
 
 // TODO
@@ -644,10 +627,6 @@ HistogramPrivate::HistogramPrivate(Histogram* owner)
 HistogramPrivate::~HistogramPrivate() {
 	if (m_histogram)
 		gsl_histogram_free(m_histogram);
-}
-
-QRectF HistogramPrivate::boundingRect() const {
-	return boundingRectangle;
 }
 
 double HistogramPrivate::getMaximumOccuranceofHistogram() const {
@@ -789,24 +768,13 @@ const AbstractColumn* HistogramPrivate::binPDValues() {
 }
 
 /*!
-  Returns the shape of the Histogram as a QPainterPath in local coordinates
-  */
-QPainterPath HistogramPrivate::shape() const {
-	return curveShape;
-}
-
-void HistogramPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
-	q->createContextMenu()->exec(event->screenPos());
-}
-
-/*!
   called when the size of the plot or its data ranges (manual changes, zooming, etc.) were changed.
   recalculates the position of the scene points to be drawn.
   triggers the update of lines, drop lines, symbols etc.
 */
 void HistogramPrivate::retransform() {
 	const bool suppressed = suppressRetransform || q->isLoading();
-	trackRetransformCalled(suppressed);
+	Q_EMIT trackRetransformCalled(suppressed);
 	if (suppressed)
 		return;
 
@@ -821,7 +789,7 @@ void HistogramPrivate::retransform() {
 		valuesPath = QPainterPath();
 		errorBarsPath = QPainterPath();
 		rugPath = QPainterPath();
-		curveShape = QPainterPath();
+		m_shape = QPainterPath();
 		lines.clear();
 		linesUnclipped.clear();
 		pointsLogical.clear();
@@ -834,19 +802,19 @@ void HistogramPrivate::retransform() {
 		return;
 	}
 
-	m_suppressRecalc = true;
+	suppressRecalc = true;
 	updateLines();
 	updateSymbols();
 	updateErrorBars();
 	updateRug();
-	m_suppressRecalc = false;
+	suppressRecalc = false;
 	updateValues();
 }
 
 /*!
  * called when the data was changed. recalculates the histogram.
  */
-void HistogramPrivate::recalcHistogram() {
+void HistogramPrivate::recalc() {
 	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 
 	if (m_histogram) {
@@ -863,6 +831,11 @@ void HistogramPrivate::recalcHistogram() {
 		retransform();
 		return;
 	}
+
+	const double xMinOld = xMinimum();
+	const double xMaxOld = xMaximum();
+	const double yMinOld = yMinimum();
+	const double yMaxOld = yMaximum();
 
 	// calculate the number of valid data points
 	int count = 0;
@@ -981,9 +954,20 @@ void HistogramPrivate::recalcHistogram() {
 			DEBUG("Number of bins must be positive integer")
 	}
 
-	// histogram changed because of the actual data changes or because of new bin settings,
-	// Q_EMIT dataChanged() in order to recalculate everything with the new size/shape of the histogram
-	Q_EMIT q->dataChanged();
+	const double xMin = xMinimum();
+	const double xMax = xMaximum();
+	const double yMin = yMinimum();
+	const double yMax = yMaximum();
+
+	// if the size of the plot has changed because of the actual
+	// data changes or because of new plot settings, emit dataChanged()
+	// in order to recalculate the data ranges in the parent plot area
+	// and to retransform all its children.
+	// Just call retransform() to update the plot only if the ranges didn't change.
+	if (xMin != xMinOld || xMax != xMaxOld || yMin != yMinOld || yMax != yMaxOld)
+		Q_EMIT q->dataChanged();
+	else
+		retransform();
 }
 
 void HistogramPrivate::updateType() {
@@ -1257,7 +1241,11 @@ void HistogramPrivate::updateValues() {
 			return;
 		}
 
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+		const int endRow = std::min(pointsLogical.size(), static_cast<qsizetype>(valuesColumn->rowCount()));
+#else
 		const int endRow = std::min(pointsLogical.size(), valuesColumn->rowCount());
+#endif
 		const auto xColMode = valuesColumn->columnMode();
 		for (int i = 0; i < endRow; ++i) {
 			if (!visiblePoints.at(i))
@@ -1325,6 +1313,32 @@ void HistogramPrivate::updateValues() {
 			valuesPoints.append(tempPoint);
 		}
 		break;
+	case Value::Center: {
+		QVector<qreal> listBarWidth;
+		for (int i = 0, j = 0; i < linesUnclipped.size(); i += 3, j++) {
+			auto& columnBarLines = linesUnclipped.at(i);
+			if ((int)(visiblePoints.size()) == j)
+				break;
+			if (visiblePoints.at(j) == true)
+				listBarWidth.append(columnBarLines.length());
+		}
+		if (orientation == Histogram::Vertical)
+			for (int i = 0; i < valuesStrings.size(); i++) {
+				w = fm.boundingRect(valuesStrings.at(i)).width();
+				tempPoint.setX(pointsScene.at(i).x() - w / 2);
+				tempPoint.setY(pointsScene.at(i).y() + listBarWidth.at(i) / 2 - valuesDistance + h / 2 + w / 2);
+				valuesPoints.append(tempPoint);
+			}
+		else {
+			for (int i = 0; i < valuesStrings.size(); i++) {
+				w = fm.boundingRect(valuesStrings.at(i)).width();
+				tempPoint.setX(pointsScene.at(i).x() - listBarWidth.at(i) / 2 - valuesDistance + h / 2 - w / 2 - 2);
+				tempPoint.setY(pointsScene.at(i).y() + w / 2);
+				valuesPoints.append(tempPoint);
+			}
+		}
+		break;
+	}
 	}
 
 	QTransform trafo;
@@ -1580,33 +1594,33 @@ void HistogramPrivate::updateRug() {
   recalculates the outer bounds and the shape of the curve.
   */
 void HistogramPrivate::recalcShapeAndBoundingRect() {
-	if (m_suppressRecalc)
+	if (suppressRecalc)
 		return;
 
 	prepareGeometryChange();
-	curveShape = QPainterPath();
+	m_shape = QPainterPath();
 	if (line->histogramLineType() != Histogram::NoLine)
-		curveShape.addPath(WorksheetElement::shapeFromPath(linePath, line->pen()));
+		m_shape.addPath(WorksheetElement::shapeFromPath(linePath, line->pen()));
 
 	if (symbol->style() != Symbol::Style::NoSymbols)
-		curveShape.addPath(symbolsPath);
+		m_shape.addPath(symbolsPath);
 
 	if (value->type() != Value::NoValues)
-		curveShape.addPath(valuesPath);
+		m_shape.addPath(valuesPath);
 
 	if (errorType != Histogram::ErrorType::NoError)
-		curveShape.addPath(WorksheetElement::shapeFromPath(errorBarsPath, errorBarsLine->pen()));
+		m_shape.addPath(WorksheetElement::shapeFromPath(errorBarsPath, errorBarsLine->pen()));
 
-	curveShape.addPath(rugPath);
-	curveShape.addPolygon(fillPolygon);
+	m_shape.addPath(rugPath);
+	m_shape.addPolygon(fillPolygon);
 
-	boundingRectangle = curveShape.boundingRect();
-	boundingRectangle = boundingRectangle.united(fillPolygon.boundingRect());
+	m_boundingRectangle = m_shape.boundingRect();
+	m_boundingRectangle = m_boundingRectangle.united(fillPolygon.boundingRect());
 
 	// TODO: when the selection is painted, line intersections are visible.
 	// simplified() removes those artifacts but is horrible slow for curves with large number of points.
 	// search for an alternative.
-	// curveShape = curveShape.simplified();
+	// m_shape = m_shape.simplified();
 
 	updatePixmap();
 }
@@ -1626,7 +1640,7 @@ void HistogramPrivate::draw(QPainter* painter) {
 	if (background->enabled()) {
 		painter->setOpacity(background->opacity());
 		painter->setPen(Qt::NoPen);
-		drawFilling(painter);
+		drawFillingPollygon(fillPolygon, painter, background);
 	}
 
 	// draw symbols
@@ -1655,8 +1669,8 @@ void HistogramPrivate::draw(QPainter* painter) {
 }
 
 void HistogramPrivate::updatePixmap() {
-	QPixmap pixmap(boundingRectangle.width(), boundingRectangle.height());
-	if (boundingRectangle.width() == 0. || boundingRectangle.height() == 0.) {
+	QPixmap pixmap(m_boundingRectangle.width(), m_boundingRectangle.height());
+	if (m_boundingRectangle.width() == 0. || m_boundingRectangle.height() == 0.) {
 		m_pixmap = pixmap;
 		m_hoverEffectImageIsDirty = true;
 		m_selectionEffectImageIsDirty = true;
@@ -1665,7 +1679,7 @@ void HistogramPrivate::updatePixmap() {
 	pixmap.fill(Qt::transparent);
 	QPainter painter(&pixmap);
 	painter.setRenderHint(QPainter::Antialiasing, true);
-	painter.translate(-boundingRectangle.topLeft());
+	painter.translate(-m_boundingRectangle.topLeft());
 
 	draw(&painter);
 	painter.end();
@@ -1673,6 +1687,7 @@ void HistogramPrivate::updatePixmap() {
 	m_pixmap = pixmap;
 	m_hoverEffectImageIsDirty = true;
 	m_selectionEffectImageIsDirty = true;
+	Q_EMIT q->changed();
 	update();
 }
 
@@ -1688,8 +1703,8 @@ void HistogramPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 	painter->setBrush(Qt::NoBrush);
 	painter->setRenderHint(QPainter::SmoothPixmapTransform, true);
 
-	if (KSharedConfig::openConfig()->group("Settings_Worksheet").readEntry<bool>("DoubleBuffering", true))
-		painter->drawPixmap(boundingRectangle.topLeft(), m_pixmap); // draw the cached pixmap (fast)
+	if (Settings::group(QStringLiteral("Settings_Worksheet")).readEntry<bool>("DoubleBuffering", true))
+		painter->drawPixmap(m_boundingRectangle.topLeft(), m_pixmap); // draw the cached pixmap (fast)
 	else
 		draw(painter); // draw directly again (slow)
 
@@ -1705,7 +1720,7 @@ void HistogramPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 			m_hoverEffectImageIsDirty = false;
 		}
 
-		painter->drawImage(boundingRectangle.topLeft(), m_hoverEffectImage, m_pixmap.rect());
+		painter->drawImage(m_boundingRectangle.topLeft(), m_hoverEffectImage, m_pixmap.rect());
 		return;
 	}
 
@@ -1721,121 +1736,22 @@ void HistogramPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 			m_selectionEffectImageIsDirty = false;
 		}
 
-		painter->drawImage(boundingRectangle.topLeft(), m_selectionEffectImage, m_pixmap.rect());
+		painter->drawImage(m_boundingRectangle.topLeft(), m_selectionEffectImage, m_pixmap.rect());
 		return;
 	}
 }
 
-void HistogramPrivate::drawFilling(QPainter* painter) {
-	const QRectF& rect = fillPolygon.boundingRect();
-	if (background->type() == Background::Type::Color) {
-		switch (background->colorStyle()) {
-		case Background::ColorStyle::SingleColor: {
-			painter->setBrush(QBrush(background->firstColor()));
-			break;
-		}
-		case Background::ColorStyle::HorizontalLinearGradient: {
-			QLinearGradient linearGrad(rect.topLeft(), rect.topRight());
-			linearGrad.setColorAt(0, background->firstColor());
-			linearGrad.setColorAt(1, background->secondColor());
-			painter->setBrush(QBrush(linearGrad));
-			break;
-		}
-		case Background::ColorStyle::VerticalLinearGradient: {
-			QLinearGradient linearGrad(rect.topLeft(), rect.bottomLeft());
-			linearGrad.setColorAt(0, background->firstColor());
-			linearGrad.setColorAt(1, background->secondColor());
-			painter->setBrush(QBrush(linearGrad));
-			break;
-		}
-		case Background::ColorStyle::TopLeftDiagonalLinearGradient: {
-			QLinearGradient linearGrad(rect.topLeft(), rect.bottomRight());
-			linearGrad.setColorAt(0, background->firstColor());
-			linearGrad.setColorAt(1, background->secondColor());
-			painter->setBrush(QBrush(linearGrad));
-			break;
-		}
-		case Background::ColorStyle::BottomLeftDiagonalLinearGradient: {
-			QLinearGradient linearGrad(rect.bottomLeft(), rect.topRight());
-			linearGrad.setColorAt(0, background->firstColor());
-			linearGrad.setColorAt(1, background->secondColor());
-			painter->setBrush(QBrush(linearGrad));
-			break;
-		}
-		case Background::ColorStyle::RadialGradient: {
-			QRadialGradient radialGrad(rect.center(), rect.width() / 2);
-			radialGrad.setColorAt(0, background->firstColor());
-			radialGrad.setColorAt(1, background->secondColor());
-			painter->setBrush(QBrush(radialGrad));
-			break;
-		}
-		}
-	} else if (background->type() == Background::Type::Image) {
-		if (!background->fileName().trimmed().isEmpty()) {
-			QPixmap pix(background->fileName());
-			switch (background->imageStyle()) {
-			case Background::ImageStyle::ScaledCropped:
-				pix = pix.scaled(rect.size().toSize(), Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
-				painter->setBrush(QBrush(pix));
-				painter->setBrushOrigin(pix.size().width() / 2, pix.size().height() / 2);
-				break;
-			case Background::ImageStyle::Scaled:
-				pix = pix.scaled(rect.size().toSize(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-				painter->setBrush(QBrush(pix));
-				painter->setBrushOrigin(pix.size().width() / 2, pix.size().height() / 2);
-				break;
-			case Background::ImageStyle::ScaledAspectRatio:
-				pix = pix.scaled(rect.size().toSize(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
-				painter->setBrush(QBrush(pix));
-				painter->setBrushOrigin(pix.size().width() / 2, pix.size().height() / 2);
-				break;
-			case Background::ImageStyle::Centered: {
-				QPixmap backpix(rect.size().toSize());
-				backpix.fill();
-				QPainter p(&backpix);
-				p.drawPixmap(QPointF(0, 0), pix);
-				p.end();
-				painter->setBrush(QBrush(backpix));
-				painter->setBrushOrigin(-pix.size().width() / 2, -pix.size().height() / 2);
-				break;
-			}
-			case Background::ImageStyle::Tiled:
-				painter->setBrush(QBrush(pix));
-				break;
-			case Background::ImageStyle::CenterTiled:
-				painter->setBrush(QBrush(pix));
-				painter->setBrushOrigin(pix.size().width() / 2, pix.size().height() / 2);
-			}
-		}
-	} else if (background->type() == Background::Type::Pattern)
-		painter->setBrush(QBrush(background->firstColor(), background->brushStyle()));
-
-	painter->drawPolygon(fillPolygon);
-}
-
 void HistogramPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
 	const auto* plot = static_cast<const CartesianPlot*>(q->parentAspect());
-	if (plot->mouseMode() == CartesianPlot::MouseMode::Selection && !isSelected()) {
-		m_hovered = true;
-		Q_EMIT q->hovered();
-		update();
-	}
+	if (plot->mouseMode() == CartesianPlot::MouseMode::Selection && !isSelected())
+		setHover(true);
 }
 
 void HistogramPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 	const auto* plot = static_cast<const CartesianPlot*>(q->parentAspect());
 	if (plot->mouseMode() == CartesianPlot::MouseMode::Selection && m_hovered) {
-		m_hovered = false;
-		Q_EMIT q->unhovered();
-		update();
+		setHover(false);
 	}
-}
-
-bool HistogramPrivate::activatePlot(QPointF mouseScenePos, double /*maxDist*/) {
-	if (!isVisible())
-		return false;
-
-	return curveShape.contains(mouseScenePos);
 }
 
 /*!
@@ -1857,19 +1773,6 @@ void HistogramPrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 	event->ignore();
 	setSelected(false);
 	QGraphicsItem::mousePressEvent(event);
-}
-
-/*!
- * Is called in CartesianPlot::hoverMoveEvent where it is determined which curve to hover.
- * \p on
- */
-void HistogramPrivate::setHover(bool on) {
-	if (on == m_hovered)
-		return; // don't update if state not changed
-
-	m_hovered = on;
-	on ? Q_EMIT q->hovered() : emit q->unhovered();
-	update();
 }
 
 // ##############################################################################
@@ -1930,7 +1833,6 @@ bool Histogram::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
@@ -1963,7 +1865,7 @@ bool Histogram::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value(QStringLiteral("visible")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("visible")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("visible"));
 			else
 				d->setVisible(str.toInt());
 		} else if (!preview && reader->name() == QLatin1String("line")) {
@@ -1988,6 +1890,10 @@ bool Histogram::load(XmlStreamReader* reader, bool preview) {
 			READ_DOUBLE_VALUE("rugLength", rugLength);
 			READ_DOUBLE_VALUE("rugWidth", rugWidth);
 			READ_DOUBLE_VALUE("rugOffset", rugOffset);
+		} else { // unknown element
+			reader->raiseUnknownElementWarning();
+			if (!reader->skipToEndElement())
+				return false;
 		}
 	}
 	return true;
@@ -1998,10 +1904,10 @@ bool Histogram::load(XmlStreamReader* reader, bool preview) {
 // ##############################################################################
 void Histogram::loadThemeConfig(const KConfig& config) {
 	KConfigGroup group;
-	if (config.hasGroup(QLatin1String("Theme")))
-		group = config.group("XYCurve"); // when loading from the theme config, use the same properties as for XYCurve
+	if (config.hasGroup(QStringLiteral("Theme")))
+		group = config.group(QStringLiteral("XYCurve")); // when loading from the theme config, use the same properties as for XYCurve
 	else
-		group = config.group("Histogram");
+		group = config.group(QStringLiteral("Histogram"));
 
 	const auto* plot = static_cast<const CartesianPlot*>(parentAspect());
 	int index = plot->curveChildIndex(this);
@@ -2010,7 +1916,7 @@ void Histogram::loadThemeConfig(const KConfig& config) {
 	QPen p;
 
 	Q_D(Histogram);
-	d->m_suppressRecalc = true;
+	d->suppressRecalc = true;
 
 	d->line->loadThemeConfig(group, themeColor);
 	d->symbol->loadThemeConfig(group, themeColor);
@@ -2025,13 +1931,13 @@ void Histogram::loadThemeConfig(const KConfig& config) {
 	} else
 		setRugEnabled(false);
 
-	d->m_suppressRecalc = false;
+	d->suppressRecalc = false;
 	d->recalcShapeAndBoundingRect();
 }
 
 void Histogram::saveThemeConfig(const KConfig& config) {
 	Q_D(const Histogram);
-	KConfigGroup group = config.group("Histogram");
+	KConfigGroup group = config.group(QStringLiteral("Histogram"));
 
 	d->line->saveThemeConfig(group);
 	d->symbol->saveThemeConfig(group);
@@ -2041,7 +1947,7 @@ void Histogram::saveThemeConfig(const KConfig& config) {
 
 	int index = parentAspect()->indexOfChild<Histogram>(this);
 	if (index < 5) {
-		KConfigGroup themeGroup = config.group("Theme");
+		KConfigGroup themeGroup = config.group(QStringLiteral("Theme"));
 		for (int i = index; i < 5; i++) {
 			QString s = QStringLiteral("ThemePaletteColor") + QString::number(i + 1);
 			themeGroup.writeEntry(s, d->line->pen().color());

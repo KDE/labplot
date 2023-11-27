@@ -14,7 +14,6 @@
 #include <limits>
 
 class BinaryFilterPrivate;
-class QStringList;
 class QIODevice;
 
 class BinaryFilter : public AbstractFileFilter {
@@ -39,9 +38,6 @@ public:
 	void readDataFromFile(const QString& fileName, AbstractDataSource*, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace) override;
 	void write(const QString& fileName, AbstractDataSource*) override;
 	QVector<QStringList> preview(const QString& fileName, int lines);
-
-	void loadFilterSettings(const QString&) override;
-	void saveFilterSettings(const QString&) const override;
 
 	void setVectors(const size_t);
 	size_t vectors() const;

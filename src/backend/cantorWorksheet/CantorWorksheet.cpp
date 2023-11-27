@@ -4,7 +4,7 @@
 	Description          : Aspect providing a Cantor Worksheets for Multiple backends
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2015 Garvit Khatri <garvitdelhi@gmail.com>
-	SPDX-FileCopyrightText: 2016-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2016-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -12,6 +12,7 @@
 #include "CantorWorksheet.h"
 #include "VariableParser.h"
 #include "backend/core/Project.h"
+#include "backend/core/Settings.h"
 #include "backend/core/column/Column.h"
 #include "backend/core/column/ColumnPrivate.h"
 #include "backend/lib/XmlStreamReader.h"
@@ -29,6 +30,7 @@
 #include "3rdparty/cantor/panelpluginhandler.h"
 #endif
 
+#include <KConfigGroup>
 #include <KLocalizedString>
 #include <KParts/ReadWritePart>
 #include <KPluginFactory>
@@ -100,6 +102,7 @@ bool CantorWorksheet::init(QByteArray* content) {
 		connect(m_worksheetAccess, SIGNAL(modified()), this, SLOT(modified()));
 
 		// Cantor's session
+#ifdef HAVE_CANTOR_LIBS
 		m_session = m_worksheetAccess->session();
 		if (m_session) {
 			connect(m_session, &Cantor::Session::statusChanged, this, &CantorWorksheet::statusChanged);
@@ -111,9 +114,10 @@ bool CantorWorksheet::init(QByteArray* content) {
 			connect(m_variableModel, &QAbstractItemModel::rowsAboutToBeRemoved, this, &CantorWorksheet::rowsAboutToBeRemoved);
 			connect(m_variableModel, &QAbstractItemModel::modelReset, this, &CantorWorksheet::modelReset);
 		}
+#endif
 
 		// default settings
-		const KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_Notebook"));
+		const KConfigGroup group = Settings::group(QStringLiteral("Settings_Notebook"));
 
 		// TODO: right now we don't have the direct accces to Cantor's worksheet and to all its public methods
 		// and we need to go through the actions provided in cantor_part.
@@ -293,8 +297,10 @@ KParts::ReadWritePart* CantorWorksheet::part() {
 }
 
 QIcon CantorWorksheet::icon() const {
+#ifdef HAVE_CANTOR_LIBS
 	if (m_session)
 		return QIcon::fromTheme(m_session->backend()->icon());
+#endif
 	return {};
 }
 
@@ -306,6 +312,7 @@ QWidget* CantorWorksheet::view() const {
 		// 	connect(m_view, SIGNAL(statusInfo(QString)), this, SIGNAL(statusInfo(QString)));
 
 		// set the current path in the session to the path of the project file
+#ifdef HAVE_CANTOR_LIBS
 		if (m_session) {
 			const Project* project = const_cast<CantorWorksheet*>(this)->project();
 			const QString& fileName = project->fileName();
@@ -314,6 +321,7 @@ QWidget* CantorWorksheet::view() const {
 				m_session->setWorksheetPath(fi.filePath());
 			}
 		}
+#endif
 	}
 	return m_partView;
 }
@@ -329,13 +337,25 @@ QMenu* CantorWorksheet::createContextMenu() {
 	return menu;
 }
 
+void CantorWorksheet::fillColumnContextMenu(QMenu* menu, Column* column) {
+	if (m_view)
+		m_view->fillColumnContextMenu(menu, column);
+}
+
 QString CantorWorksheet::backendName() {
 	return this->m_backendName;
 }
 
-// TODO
 bool CantorWorksheet::exportView() const {
-	return false;
+	// TODO: file_export_pdf exists starting with Cantor 23.12,
+	// remove this check later once 23.12 is the minimal
+	// supported version of Cantor.
+	auto* action = m_part->action("file_export_pdf");
+	if (action) {
+		action->trigger();
+		return true;
+	} else
+		return false;
 }
 
 bool CantorWorksheet::printView() {
@@ -394,7 +414,6 @@ bool CantorWorksheet::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	bool rc = false;
 
@@ -414,13 +433,13 @@ bool CantorWorksheet::load(XmlStreamReader* reader, bool preview) {
 
 			m_backendName = attribs.value(QStringLiteral("backend_name")).toString().trimmed();
 			if (m_backendName.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("backend_name")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("backend_name"));
 		} else if (!preview && reader->name() == QLatin1String("worksheet")) {
 			attribs = reader->attributes();
 
 			QString str = attribs.value(QStringLiteral("content")).toString().trimmed();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("content")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("content"));
 
 			QByteArray content = QByteArray::fromBase64(str.toLatin1());
 			rc = init(&content);
@@ -445,7 +464,7 @@ bool CantorWorksheet::load(XmlStreamReader* reader, bool preview) {
 			column->setFixed(true);
 			addChild(column);
 		} else { // unknown element
-			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
+			reader->raiseUnknownElementWarning();
 			if (!reader->skipToEndElement())
 				return false;
 		}

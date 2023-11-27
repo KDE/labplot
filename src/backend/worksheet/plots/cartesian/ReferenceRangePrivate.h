@@ -24,11 +24,7 @@ public:
 	void recalcShapeAndBoundingRect() override;
 	void updateOrientation();
 
-	bool m_hovered{false};
 	bool m_visible{true}; // point inside the plot (visible) or not
-
-	QRectF boundingRectangle;
-	QPainterPath rangeShape;
 
 	ReferenceRange::Orientation orientation{ReferenceRange::Orientation::Horizontal};
 	QPointF positionLogicalStart;
@@ -39,8 +35,6 @@ public:
 	Background* background{nullptr};
 
 	// reimplemented from QGraphicsItem
-	QRectF boundingRect() const override;
-	QPainterPath shape() const override;
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
 	void drawFilling(QPainter*) const;
 	QPointF recalculateRect();
@@ -48,10 +42,6 @@ public:
 	ReferenceRange* const q;
 
 private:
-	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
-	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
-	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
-
 	bool m_bottomClipped{false};
 	bool m_topClipped{false};
 	bool m_leftClipped{false};

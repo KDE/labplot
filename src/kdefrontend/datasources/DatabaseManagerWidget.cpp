@@ -8,6 +8,7 @@
 */
 
 #include "DatabaseManagerWidget.h"
+#include "backend/core/Settings.h"
 #include "backend/lib/macros.h"
 #include "kdefrontend/GuiTools.h"
 
@@ -15,7 +16,7 @@
 #include <KConfigGroup>
 #include <KLocalizedString>
 #include <KMessageBox>
-#include <KSharedConfig>
+
 #include <kcoreaddons_version.h>
 
 #ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
@@ -180,8 +181,8 @@ void DatabaseManagerWidget::driverChanged() {
 		if (!m_highlighter) {
 			m_highlighter = new KSyntaxHighlighting::SyntaxHighlighter(ui.teCustomConnection->document());
 			m_highlighter->setDefinition(m_repository.definitionForName(QStringLiteral("INI Files")));
-			m_highlighter->setTheme(DARKMODE ? m_repository.defaultTheme(KSyntaxHighlighting::Repository::DarkTheme)
-											 : m_repository.defaultTheme(KSyntaxHighlighting::Repository::LightTheme));
+			m_highlighter->setTheme(GuiTools::isDarkMode() ? m_repository.defaultTheme(KSyntaxHighlighting::Repository::DarkTheme)
+														   : m_repository.defaultTheme(KSyntaxHighlighting::Repository::LightTheme));
 		}
 #endif
 	} else {
@@ -207,7 +208,7 @@ void DatabaseManagerWidget::driverChanged() {
 }
 
 void DatabaseManagerWidget::selectFile() {
-	KConfigGroup conf(KSharedConfig::openConfig(), QStringLiteral("DatabaseManagerWidget"));
+	KConfigGroup conf = Settings::group(QStringLiteral("DatabaseManagerWidget"));
 	QString dir = conf.readEntry(QStringLiteral("LastDir"), "");
 	QString path = QFileDialog::getOpenFileName(this, i18nc("@title:window", "Select the Database File"), dir);
 	if (path.isEmpty())
@@ -352,14 +353,15 @@ void DatabaseManagerWidget::deleteConnection() {
 												  i18n("Delete Connection"),
 												  KStandardGuiItem::del(),
 												  KStandardGuiItem::cancel());
+	if (status != KMessageBox::PrimaryAction)
+		return;
 #else
 	auto status = KMessageBox::questionYesNo(this,
 											 i18n("Do you really want to delete the connection '%1'?", ui.lwConnections->currentItem()->text()),
 											 i18n("Delete Connection"));
-#endif
-
 	if (status != KMessageBox::Yes)
 		return;
+#endif
 
 	// remove the current selected connection
 	int row = ui.lwConnections->currentRow();
@@ -572,7 +574,7 @@ QString DatabaseManagerWidget::uniqueName() {
 	if (last_non_digit >= 0 && base[last_non_digit].category() != QChar::Separator_Space)
 		base.append(QStringLiteral(" "));
 
-	int new_nr = name.rightRef(name.size() - base.size()).toInt();
+	int new_nr = name.right(name.size() - base.size()).toInt();
 	QString new_name;
 	do
 		new_name = base + QString::number(++new_nr);

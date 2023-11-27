@@ -8,13 +8,14 @@
 */
 
 #include "ColorMapsDialog.h"
+#include "backend/core/Settings.h"
 #include "kdefrontend/colormaps/ColorMapsWidget.h"
 
 #include <QDialogButtonBox>
 #include <QWindow>
 
 #include <KConfigGroup>
-#include <KSharedConfig>
+
 #include <KWindowConfig>
 
 /*!
@@ -44,7 +45,7 @@ ColorMapsDialog::ColorMapsDialog(QWidget* parent)
 
 	QApplication::processEvents(QEventLoop::AllEvents, 0);
 
-	KConfigGroup conf(KSharedConfig::openConfig(), "ColorMapsDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("ColorMapsDialog"));
 	if (conf.exists()) {
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
 		resize(windowHandle()->size());
@@ -53,7 +54,7 @@ ColorMapsDialog::ColorMapsDialog(QWidget* parent)
 }
 
 ColorMapsDialog::~ColorMapsDialog() {
-	KConfigGroup conf(KSharedConfig::openConfig(), "ColorMapsDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("ColorMapsDialog"));
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 

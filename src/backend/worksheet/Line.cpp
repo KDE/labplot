@@ -19,6 +19,7 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 
+#include <KConfigGroup>
 #include <KLocalizedString>
 
 Line::Line(const QString& name)
@@ -150,7 +151,7 @@ STD_SETTER_CMD_IMPL_F_S(Line, SetColor, QColor, color, update)
 void Line::setColor(const QColor& color) {
 	Q_D(Line);
 	if (color != d->color)
-		exec(new LineSetColorCmd(d, color, ki18n("%1: set line pen")));
+		exec(new LineSetColorCmd(d, color, ki18n("%1: set line color")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Line, SetOpacity, double, opacity, updatePixmap)
@@ -221,9 +222,7 @@ bool Line::load(XmlStreamReader* reader, bool preview) {
 		return true;
 
 	Q_D(Line);
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QString str;
-
 	auto attribs = reader->attributes();
 
 	if (d->histogramLineTypeAvailable)

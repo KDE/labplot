@@ -52,9 +52,9 @@ void ReferenceLine::init() {
 	Q_D(ReferenceLine);
 
 	KConfig config;
-	KConfigGroup group = config.group("ReferenceLine");
+	KConfigGroup group = config.group(QStringLiteral("ReferenceLine"));
 
-	d->orientation = (Orientation)group.readEntry("Orientation", static_cast<int>(Orientation::Vertical));
+	d->orientation = (Orientation)group.readEntry(QStringLiteral("Orientation"), static_cast<int>(Orientation::Vertical));
 	switch (d->orientation) {
 	case WorksheetElement::Orientation::Horizontal:
 		d->position.positionLimit = WorksheetElement::PositionLimit::Y;
@@ -83,6 +83,7 @@ void ReferenceLine::init() {
 	d->line = new Line(QString());
 	d->line->setHidden(true);
 	addChild(d->line);
+	d->line->init(group);
 	connect(d->line, &Line::updatePixmapRequested, [=] {
 		d->update();
 	});
@@ -95,23 +96,19 @@ void ReferenceLine::init() {
 	Returns an icon to be used in the project explorer.
 */
 QIcon ReferenceLine::icon() const {
-	return QIcon::fromTheme(QLatin1String("draw-line"));
+	return QIcon::fromTheme(QStringLiteral("draw-line"));
 }
 
 void ReferenceLine::initActions() {
-	visibilityAction = new QAction(i18n("Visible"), this);
-	visibilityAction->setCheckable(true);
-	connect(visibilityAction, &QAction::triggered, this, &ReferenceLine::visibilityChangedSlot);
-
 	// Orientation
 	auto* orientationActionGroup = new QActionGroup(this);
 	orientationActionGroup->setExclusive(true);
 	connect(orientationActionGroup, &QActionGroup::triggered, this, &ReferenceLine::orientationChangedSlot);
 
-	orientationHorizontalAction = new QAction(QIcon::fromTheme(QLatin1String("labplot-axis-horizontal")), i18n("Horizontal"), orientationActionGroup);
+	orientationHorizontalAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-axis-horizontal")), i18n("Horizontal"), orientationActionGroup);
 	orientationHorizontalAction->setCheckable(true);
 
-	orientationVerticalAction = new QAction(QIcon::fromTheme(QLatin1String("labplot-axis-vertical")), i18n("Vertical"), orientationActionGroup);
+	orientationVerticalAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-axis-vertical")), i18n("Vertical"), orientationActionGroup);
 	orientationVerticalAction->setCheckable(true);
 
 	// Line
@@ -129,20 +126,20 @@ void ReferenceLine::initMenus() {
 
 	// Orientation
 	orientationMenu = new QMenu(i18n("Orientation"));
-	orientationMenu->setIcon(QIcon::fromTheme(QLatin1String("labplot-axis-horizontal")));
+	orientationMenu->setIcon(QIcon::fromTheme(QStringLiteral("labplot-axis-horizontal")));
 	orientationMenu->addAction(orientationHorizontalAction);
 	orientationMenu->addAction(orientationVerticalAction);
 
 	// Line
 	lineMenu = new QMenu(i18n("Line"));
-	lineMenu->setIcon(QIcon::fromTheme(QLatin1String("draw-line")));
+	lineMenu->setIcon(QIcon::fromTheme(QStringLiteral("draw-line")));
 	lineStyleMenu = new QMenu(i18n("Style"), lineMenu);
-	lineStyleMenu->setIcon(QIcon::fromTheme(QLatin1String("object-stroke-style")));
-	lineMenu->setIcon(QIcon::fromTheme(QLatin1String("draw-line")));
+	lineStyleMenu->setIcon(QIcon::fromTheme(QStringLiteral("object-stroke-style")));
+	lineMenu->setIcon(QIcon::fromTheme(QStringLiteral("draw-line")));
 	lineMenu->addMenu(lineStyleMenu);
 
 	lineColorMenu = new QMenu(i18n("Color"), lineMenu);
-	lineColorMenu->setIcon(QIcon::fromTheme(QLatin1String("fill-color")));
+	lineColorMenu->setIcon(QIcon::fromTheme(QStringLiteral("fill-color")));
 	GuiTools::fillColorMenu(lineColorMenu, lineColorActionGroup);
 	lineMenu->addMenu(lineColorMenu);
 }
@@ -152,9 +149,7 @@ QMenu* ReferenceLine::createContextMenu() {
 		initMenus();
 
 	QMenu* menu = WorksheetElement::createContextMenu();
-	QAction* firstAction = menu->actions().at(1); // skip the first action because of the "title-action"
-	visibilityAction->setChecked(isVisible());
-	menu->insertAction(firstAction, visibilityAction);
+	QAction* visibilityAction = this->visibilityAction();
 
 	Q_D(const ReferenceLine);
 
@@ -163,7 +158,7 @@ QMenu* ReferenceLine::createContextMenu() {
 		orientationHorizontalAction->setChecked(true);
 	else
 		orientationVerticalAction->setChecked(true);
-	menu->insertMenu(firstAction, orientationMenu);
+	menu->insertMenu(visibilityAction, orientationMenu);
 
 	// Line styles
 	const auto& pen = d->line->pen();
@@ -171,14 +166,10 @@ QMenu* ReferenceLine::createContextMenu() {
 	GuiTools::selectPenStyleAction(lineStyleActionGroup, pen.style());
 	GuiTools::selectColorAction(lineColorActionGroup, pen.color());
 
-	menu->insertMenu(firstAction, lineMenu);
-	menu->insertSeparator(firstAction);
+	menu->insertMenu(visibilityAction, lineMenu);
+	menu->insertSeparator(visibilityAction);
 
 	return menu;
-}
-
-QGraphicsItem* ReferenceLine::graphicsItem() const {
-	return d_ptr;
 }
 
 void ReferenceLine::retransform() {
@@ -223,11 +214,6 @@ void ReferenceLine::lineStyleChanged(QAction* action) {
 void ReferenceLine::lineColorChanged(QAction* action) {
 	Q_D(const ReferenceLine);
 	d->line->setColor(GuiTools::colorFromAction(lineColorActionGroup, action));
-}
-
-void ReferenceLine::visibilityChangedSlot() {
-	Q_D(const ReferenceLine);
-	this->setVisible(!d->isVisible());
 }
 
 // ##############################################################################
@@ -307,26 +293,12 @@ void ReferenceLinePrivate::updateOrientation() {
 }
 
 /*!
-	Returns the outer bounds of the item as a rectangle.
- */
-QRectF ReferenceLinePrivate::boundingRect() const {
-	return boundingRectangle;
-}
-
-/*!
-	Returns the shape of this item as a QPainterPath in local coordinates.
-*/
-QPainterPath ReferenceLinePrivate::shape() const {
-	return lineShape;
-}
-
-/*!
   recalculates the outer bounds and the shape of the item.
 */
 void ReferenceLinePrivate::recalcShapeAndBoundingRect() {
 	prepareGeometryChange();
 
-	lineShape = QPainterPath();
+	m_shape = QPainterPath();
 	if (insidePlot) {
 		QPainterPath path;
 		if (orientation == ReferenceLine::Orientation::Horizontal) {
@@ -336,8 +308,8 @@ void ReferenceLinePrivate::recalcShapeAndBoundingRect() {
 			path.moveTo(0, length / 2);
 			path.lineTo(0, -length / 2);
 		}
-		lineShape.addPath(WorksheetElement::shapeFromPath(path, line->pen()));
-		boundingRectangle = lineShape.boundingRect();
+		m_shape.addPath(WorksheetElement::shapeFromPath(path, line->pen()));
+		m_boundingRectangle = m_shape.boundingRect();
 	}
 }
 
@@ -354,32 +326,12 @@ void ReferenceLinePrivate::paint(QPainter* painter, const QStyleOptionGraphicsIt
 
 	if (m_hovered && !isSelected() && !q->isPrinting()) {
 		painter->setPen(QPen(QApplication::palette().color(QPalette::Shadow), 2, Qt::SolidLine));
-		painter->drawPath(lineShape);
+		painter->drawPath(m_shape);
 	}
 
 	if (isSelected() && !q->isPrinting()) {
 		painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), 2, Qt::SolidLine));
-		painter->drawPath(lineShape);
-	}
-}
-
-void ReferenceLinePrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
-	q->createContextMenu()->exec(event->screenPos());
-}
-
-void ReferenceLinePrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
-	if (!isSelected()) {
-		m_hovered = true;
-		Q_EMIT q->hovered();
-		update();
-	}
-}
-
-void ReferenceLinePrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
-	if (m_hovered) {
-		m_hovered = false;
-		Q_EMIT q->unhovered();
-		update();
+		painter->drawPath(m_shape);
 	}
 }
 
@@ -411,7 +363,6 @@ bool ReferenceLine::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
@@ -432,7 +383,7 @@ bool ReferenceLine::load(XmlStreamReader* reader, bool preview) {
 			attribs = reader->attributes();
 			auto str = attribs.value(QStringLiteral("position")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("position")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("position"));
 			else {
 				d->positionLogical.setX(str.toDouble());
 				d->positionLogical.setY(str.toDouble());
@@ -444,7 +395,7 @@ bool ReferenceLine::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value(QStringLiteral("visible")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("visible")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("visible"));
 			else
 				d->setVisible(str.toInt());
 		} else if (!preview && reader->name() == QLatin1String("geometry")) {
@@ -455,7 +406,7 @@ bool ReferenceLine::load(XmlStreamReader* reader, bool preview) {
 		} else if (!preview && reader->name() == QLatin1String("line")) {
 			d->line->load(reader, preview);
 		} else { // unknown element
-			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
+			reader->raiseUnknownElementWarning();
 			if (!reader->skipToEndElement())
 				return false;
 		}
@@ -470,6 +421,6 @@ void ReferenceLine::loadThemeConfig(const KConfig& config) {
 	Q_D(ReferenceLine);
 
 	// for the properties of the line read the properties of the axis line
-	const KConfigGroup& group = config.group("Axis");
+	const KConfigGroup& group = config.group(QStringLiteral("Axis"));
 	d->line->loadThemeConfig(group);
 }

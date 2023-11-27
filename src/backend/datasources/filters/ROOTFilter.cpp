@@ -43,12 +43,6 @@ void ROOTFilter::write(const QString& fileName, AbstractDataSource* dataSource) 
 	d->write(fileName, dataSource);
 }
 
-void ROOTFilter::loadFilterSettings(const QString& /*filterName*/) {
-}
-
-void ROOTFilter::saveFilterSettings(const QString& /*filterName*/) const {
-}
-
 void ROOTFilter::setCurrentObject(const QString& object) {
 	d->currentObject = object;
 }
@@ -281,7 +275,7 @@ void ROOTFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSo
 			QString lastelement = l.back();
 			bool isArray = false;
 			if (lastelement.at(0) == QLatin1Char('[') && lastelement.at(lastelement.size() - 1) == QLatin1Char(']')) {
-				lastelement.midRef(1, lastelement.length() - 2).toUInt(&isArray);
+				lastelement.mid(1, lastelement.length() - 2).toUInt(&isArray);
 			}
 			if (!isArray || l.count() == 2)
 				headers << l.join(isArray ? QString() : QLatin1String(":"));
@@ -304,7 +298,7 @@ void ROOTFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSo
 			QString lastelement = l.back(), leaf = l.front();
 			bool isArray = false;
 			if (lastelement.at(0) == QLatin1Char('[') && lastelement.at(lastelement.size() - 1) == QLatin1Char(']')) {
-				element = lastelement.midRef(1, lastelement.length() - 2).toUInt(&isArray);
+				element = lastelement.mid(1, lastelement.length() - 2).toUInt(&isArray);
 				if (!isArray)
 					element = 0;
 				if (l.count() > 2)
@@ -451,7 +445,7 @@ QVector<QStringList> ROOTFilterPrivate::previewCurrentObject(const QString& file
 			QString lastelement = l.back(), leaf = l.front();
 			bool isArray = false;
 			if (lastelement.at(0) == QLatin1Char('[') && lastelement.at(lastelement.size() - 1) == QLatin1Char(']')) {
-				element = lastelement.midRef(1, lastelement.length() - 2).toUInt(&isArray);
+				element = lastelement.mid(1, lastelement.length() - 2).toUInt(&isArray);
 				if (!isArray)
 					element = 0;
 				if (l.count() > 2)

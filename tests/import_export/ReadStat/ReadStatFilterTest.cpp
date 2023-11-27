@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Tests for the ReadStat I/O-filter.
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2021-2023 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -13,6 +13,12 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 
 #include <KLocalizedString>
+
+void ReadStatFilterTest::initTestCase() {
+	// needed in order to have the signals triggered by SignallingUndoCommand, see LabPlot.cpp
+	qRegisterMetaType<const AbstractAspect*>("const AbstractAspect*");
+	qRegisterMetaType<const AbstractColumn*>("const AbstractColumn*");
+}
 
 void ReadStatFilterTest::testDTAImport() {
 	Spreadsheet spreadsheet(QStringLiteral("test"), false);

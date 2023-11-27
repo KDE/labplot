@@ -78,10 +78,10 @@ public:
 	void setPrinting(bool) const;
 	void setSelectedInView(const bool);
 	void setSegmentsHoverEvent(const bool);
-	int currentSelectedReferencePoint();
+	int currentSelectedReferencePoint() const;
 
 	void setPlotImageType(const DatapickerImage::PlotImageType);
-	DatapickerImage::PlotImageType plotImageType();
+	DatapickerImage::PlotImageType plotImageType() const;
 	void setImage(const QImage&, const QString& filename, bool embedded);
 	void setImage(const QString&, bool embedded);
 
@@ -121,7 +121,9 @@ public Q_SLOTS:
 private:
 	void init();
 
-	DatapickerImagePrivate* const d;
+	Q_DECLARE_PRIVATE(DatapickerImage)
+	DatapickerImagePrivate* const d_ptr;
+
 	mutable DatapickerImageView* m_view{nullptr};
 	friend class DatapickerImagePrivate;
 	Segments* m_segments;

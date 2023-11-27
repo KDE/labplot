@@ -9,18 +9,18 @@
 */
 
 #include "ExportWorksheetDialog.h"
+#include "backend/core/Settings.h"
 #include "commonfrontend/worksheet/WorksheetView.h"
 #include "kdefrontend/GuiTools.h"
 #include "ui_exportworksheetwidget.h"
 
 #include <KLocalizedString>
 #include <KMessageBox>
-#include <KSharedConfig>
+
 #include <KWindowConfig>
 #include <kcoreaddons_version.h>
 
 #include <QCompleter>
-#include <QDesktopWidget>
 // see https://gitlab.kitware.com/cmake/cmake/-/issues/21609
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
 #include <QFileSystemModel>
@@ -29,6 +29,7 @@
 #endif
 #include <QDialogButtonBox>
 #include <QFileDialog>
+#include <QScreen>
 #include <QWindow>
 
 /*!
@@ -82,7 +83,8 @@ ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent)
 	ui->cbExportArea->addItem(i18n("Current Selection"));
 	ui->cbExportArea->addItem(i18n("Complete Worksheet"));
 
-	ui->cbResolution->addItem(i18nc("%1 is the value of DPI of the current screen", "%1 (desktop)", QString::number(QApplication::desktop()->physicalDpiX())));
+	ui->cbResolution->addItem(
+		i18nc("%1 is the value of DPI of the current screen", "%1 (desktop)", QString::number(QApplication::primaryScreen()->physicalDotsPerInchX())));
 	ui->cbResolution->addItem(QLatin1String("100"));
 	ui->cbResolution->addItem(QLatin1String("150"));
 	ui->cbResolution->addItem(QLatin1String("200"));
@@ -101,7 +103,7 @@ ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent)
 	setWindowIcon(QIcon::fromTheme(QLatin1String("document-export-database")));
 
 	// restore saved settings if available
-	KConfigGroup conf(KSharedConfig::openConfig(), "ExportWorksheetDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("ExportWorksheetDialog"));
 	ui->cbFormat->setCurrentIndex(conf.readEntry("Format", 0));
 	ui->cbExportTo->setCurrentIndex(conf.readEntry("ExportTo", 0));
 	ui->cbExportArea->setCurrentIndex(conf.readEntry("Area", 0));
@@ -121,7 +123,7 @@ ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent)
 
 ExportWorksheetDialog::~ExportWorksheetDialog() {
 	// save current settings
-	KConfigGroup conf(KSharedConfig::openConfig(), "ExportWorksheetDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("ExportWorksheetDialog"));
 	conf.writeEntry("Format", ui->cbFormat->currentIndex());
 	conf.writeEntry("ExportTo", ui->cbExportTo->currentIndex());
 	conf.writeEntry("Area", ui->cbExportArea->currentIndex());
@@ -147,7 +149,7 @@ void ExportWorksheetDialog::setProjectFileName(const QString& name) {
 void ExportWorksheetDialog::setFileName(const QString& name) {
 	if (m_projectPath.isEmpty()) {
 		// no project folder is available (yet), use the last used directory in this dialog
-		KConfigGroup conf(KSharedConfig::openConfig(), "ExportWorksheetDialog");
+		KConfigGroup conf = Settings::group(QStringLiteral("ExportWorksheetDialog"));
 		QString dir = conf.readEntry("LastDir", "");
 		if (dir.isEmpty())
 			dir = QDir::homePath();
@@ -185,7 +187,7 @@ bool ExportWorksheetDialog::exportBackground() const {
 
 int ExportWorksheetDialog::exportResolution() const {
 	if (ui->cbResolution->currentIndex() == 0)
-		return QApplication::desktop()->physicalDpiX();
+		return QApplication::primaryScreen()->physicalDotsPerInchX();
 	else
 		return ui->cbResolution->currentText().toInt();
 }
@@ -207,14 +209,15 @@ void ExportWorksheetDialog::okClicked() {
 													 i18n("Export"),
 													 KStandardGuiItem::overwrite(),
 													 KStandardGuiItem::cancel());
+		if (status == KMessageBox::SecondaryAction)
 #else
 		int status = KMessageBox::questionYesNo(this, i18n("The file already exists. Do you really want to overwrite it?"), i18n("Export"));
-#endif
 		if (status == KMessageBox::No)
+#endif
 			return;
 	}
 
-	KConfigGroup conf(KSharedConfig::openConfig(), "ExportWorksheetDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("ExportWorksheetDialog"));
 	const auto& path = ui->leFileName->text();
 	if (!path.isEmpty()) {
 		QString dir = conf.readEntry("LastDir", "");
@@ -246,7 +249,7 @@ void ExportWorksheetDialog::toggleOptions() {
 	opens a file dialog and lets the user select the file.
 */
 void ExportWorksheetDialog::selectFile() {
-	KConfigGroup conf(KSharedConfig::openConfig(), "ExportWorksheetDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("ExportWorksheetDialog"));
 	const QString dir = conf.readEntry("LastDir", "");
 
 	DEBUG(Q_FUNC_INFO << ", format" << ui->cbFormat->currentIndex())

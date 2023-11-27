@@ -28,7 +28,7 @@
 	void class_name::connect##Prefix##Column(const AbstractColumn* column) {                                                                                   \
 		connect(column->parentAspect(), &AbstractAspect::childAspectAboutToBeRemoved, this, &class_name::prefix##ColumnAboutToBeRemoved);                      \
 		/* When the column is reused with different name, the curve should be informed to disconnect */                                                        \
-		connect(column, &AbstractColumn::reset, this, &class_name::prefix##ColumnAboutToBeRemoved);                                                            \
+		connect(column, &AbstractColumn::aboutToReset, this, &class_name::prefix##ColumnAboutToBeRemoved);                                                     \
 		connect(column, &AbstractAspect::aspectDescriptionChanged, this, &class_name::prefix##ColumnNameChanged);                                              \
 		/* after the curve was updated, emit the signal to update the plot ranges */                                                                           \
 		connect(column, &AbstractColumn::dataChanged, this, &class_name::recalc_func); /* must be before DataChanged*/                                         \
@@ -52,7 +52,7 @@
 		}                                                                                                                                                      \
 		virtual void finalize() override {                                                                                                                     \
 			m_target->finalize_method();                                                                                                                       \
-			emit m_target->q->prefix##ColumnChanged(m_target->*m_field);                                                                                       \
+			Q_EMIT m_target->q->prefix##ColumnChanged(m_target->*m_field);                                                                                     \
 		}                                                                                                                                                      \
 		void redo() override {                                                                                                                                 \
 			m_columnOld = m_private->prefix##Column;                                                                                                           \
@@ -68,9 +68,9 @@
 			} else                                                                                                                                             \
 				m_private->q->set##Prefix##ColumnPath(QStringLiteral(""));                                                                                     \
 			finalize();                                                                                                                                        \
-			emit m_private->q->prefix##ColumnChanged(m_column);                                                                                                \
+			Q_EMIT m_private->q->prefix##ColumnChanged(m_column);                                                                                              \
 			/* emit DataChanged() in order to notify the plot about the changes */                                                                             \
-			emit m_private->q->prefix##DataChanged();                                                                                                          \
+			Q_EMIT m_private->q->prefix##DataChanged();                                                                                                        \
 		}                                                                                                                                                      \
 		void undo() override {                                                                                                                                 \
 			if (m_private->prefix##Column)                                                                                                                     \
@@ -82,9 +82,9 @@
 			} else                                                                                                                                             \
 				m_private->q->set##Prefix##ColumnPath(QStringLiteral(""));                                                                                     \
 			finalize();                                                                                                                                        \
-			emit m_private->q->prefix##ColumnChanged(m_columnOld);                                                                                             \
+			Q_EMIT m_private->q->prefix##ColumnChanged(m_columnOld);                                                                                           \
 			/* emit DataChanged() in order to notify the plot about the changes */                                                                             \
-			emit m_private->q->prefix##DataChanged();                                                                                                          \
+			Q_EMIT m_private->q->prefix##DataChanged();                                                                                                        \
 		}                                                                                                                                                      \
                                                                                                                                                                \
 	private:                                                                                                                                                   \

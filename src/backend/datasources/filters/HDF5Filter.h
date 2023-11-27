@@ -11,7 +11,6 @@
 
 #include "backend/datasources/filters/AbstractFileFilter.h"
 
-class QStringList;
 class QTreeWidgetItem;
 class HDF5FilterPrivate;
 
@@ -34,9 +33,6 @@ public:
 											AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace,
 											int lines = -1);
 	void write(const QString& fileName, AbstractDataSource*) override;
-
-	void loadFilterSettings(const QString&) override;
-	void saveFilterSettings(const QString&) const override;
 
 	void setCurrentDataSetName(const QString&);
 	const QString currentDataSetName() const;

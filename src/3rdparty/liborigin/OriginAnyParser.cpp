@@ -128,7 +128,7 @@ bool OriginAnyParser::parse()
 
     for (unsigned int i = 0; i < spreadSheets.size(); ++i) {
         if (spreadSheets[i].sheets > 1) {
-            LOG_PRINT(logfile, "		CONVERT SPREADSHEET \"%s\" to EXCEL\n",
+            LOG_PRINT(logfile, "		CONVERT SPREADSHEET \"%s\" to XLSX\n",
                       spreadSheets[i].name.c_str());
             convertSpreadToExcel(i);
             --i;

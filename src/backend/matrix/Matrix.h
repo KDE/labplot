@@ -148,7 +148,9 @@ Q_SIGNALS:
 private:
 	void init();
 
-	MatrixPrivate* const d;
+	Q_DECLARE_PRIVATE(Matrix)
+	MatrixPrivate* const d_ptr;
+
 	mutable MatrixModel* m_model{nullptr};
 	mutable MatrixView* m_view{nullptr};
 

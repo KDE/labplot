@@ -9,8 +9,6 @@
 */
 
 #include "XYEquationCurveDock.h"
-#include "backend/core/AspectTreeModel.h"
-#include "backend/core/Project.h"
 #include "backend/gsl/ExpressionParser.h"
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
 #include "kdefrontend/widgets/ConstantsWidget.h"
@@ -49,9 +47,8 @@ XYEquationCurveDock::XYEquationCurveDock(QWidget* parent)
 void XYEquationCurveDock::setupGeneral() {
 	auto* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
-	m_leName = uiGeneralTab.leName;
-	m_teComment = uiGeneralTab.teComment;
-	m_teComment->setFixedHeight(1.2 * m_leName->height());
+	setPlotRangeCombobox(uiGeneralTab.cbPlotRanges);
+	setBaseWidgets(uiGeneralTab.leName, uiGeneralTab.teComment);
 
 	auto* gridLayout = dynamic_cast<QGridLayout*>(generalTab->layout());
 	if (gridLayout) {
@@ -61,7 +58,7 @@ void XYEquationCurveDock::setupGeneral() {
 	}
 
 	auto* layout = new QHBoxLayout(ui.tabGeneral);
-	layout->setMargin(0);
+	layout->setContentsMargins(0, 0, 0, 0);
 	layout->addWidget(generalTab);
 
 	uiGeneralTab.tbConstants1->setIcon(QIcon::fromTheme(QStringLiteral("labplot-format-text-symbol")));
@@ -85,8 +82,6 @@ void XYEquationCurveDock::setupGeneral() {
 	uiGeneralTab.teMax->setMaximumHeight(uiGeneralTab.leName->sizeHint().height());
 
 	// Slots
-	connect(uiGeneralTab.leName, &QLineEdit::textChanged, this, &XYEquationCurveDock::nameChanged);
-	connect(uiGeneralTab.teComment, &QTextEdit::textChanged, this, &XYEquationCurveDock::commentChanged);
 	connect(uiGeneralTab.chkVisible, &QCheckBox::clicked, this, &XYEquationCurveDock::visibilityChanged);
 	connect(uiGeneralTab.cbType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYEquationCurveDock::typeChanged);
 	connect(uiGeneralTab.teEquation1, &ExpressionTextEdit::expressionChanged, this, &XYEquationCurveDock::enableRecalculate);
@@ -103,25 +98,6 @@ void XYEquationCurveDock::setupGeneral() {
 }
 
 void XYEquationCurveDock::initGeneralTab() {
-	// if there are more than one curve in the list, disable the tab "general"
-	if (m_curvesList.size() == 1) {
-		uiGeneralTab.lName->setEnabled(true);
-		uiGeneralTab.leName->setEnabled(true);
-		uiGeneralTab.lComment->setEnabled(true);
-		uiGeneralTab.teComment->setEnabled(true);
-
-		uiGeneralTab.leName->setText(m_curve->name());
-		uiGeneralTab.teComment->setText(m_curve->comment());
-	} else {
-		uiGeneralTab.lName->setEnabled(false);
-		uiGeneralTab.leName->setEnabled(false);
-		uiGeneralTab.lComment->setEnabled(false);
-		uiGeneralTab.teComment->setEnabled(false);
-
-		uiGeneralTab.leName->setText(QString());
-		uiGeneralTab.teComment->setText(QString());
-	}
-
 	// show the properties of the first curve
 	const auto* equationCurve = static_cast<const XYEquationCurve*>(m_curve);
 	Q_ASSERT(equationCurve);
@@ -137,7 +113,6 @@ void XYEquationCurveDock::initGeneralTab() {
 	uiGeneralTab.chkVisible->setChecked(m_curve->isVisible());
 
 	// Slots
-	connect(m_equationCurve, &XYEquationCurve::aspectDescriptionChanged, this, &XYEquationCurveDock::aspectDescriptionChanged);
 	connect(m_equationCurve, &XYEquationCurve::equationDataChanged, this, &XYEquationCurveDock::curveEquationDataChanged);
 	connect(m_equationCurve, &WorksheetElement::plotRangeListChanged, this, &XYEquationCurveDock::updatePlotRanges);
 }
@@ -152,7 +127,6 @@ void XYEquationCurveDock::setCurves(QList<XYCurve*> list) {
 	setAspects(list);
 	m_equationCurve = static_cast<XYEquationCurve*>(m_curve);
 	Q_ASSERT(m_equationCurve);
-	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
 	XYCurveDock::setModel();
 	initGeneralTab();
 	initTabs();
@@ -164,7 +138,7 @@ void XYEquationCurveDock::setCurves(QList<XYCurve*> list) {
 }
 
 void XYEquationCurveDock::updatePlotRanges() {
-	updatePlotRangeList(uiGeneralTab.cbPlotRanges);
+	updatePlotRangeList();
 }
 
 //*************************************************************

@@ -11,7 +11,6 @@
 #include "SpiceFilterTest.h"
 #include "src/backend/datasources/filters/SpiceFilter.h"
 #include "src/backend/spreadsheet/Spreadsheet.h"
-#include <qglobal.h>
 
 #include <data/ltspice/AC/LowPassFilter_AC.raw.h>
 #include <data/ltspice/DCTransfer/DCTransfer.raw.h>
@@ -89,7 +88,6 @@ const QString ltspicePath = QStringLiteral("data/ltspice"); // relative path
 
 void SpiceFilterTest::initTestCase() {
 	// needed in order to have the signals triggered by SignallingUndoCommand, see LabPlot.cpp
-	// TODO: redesign/remove this
 	qRegisterMetaType<const AbstractAspect*>("const AbstractAspect*");
 	qRegisterMetaType<const AbstractColumn*>("const AbstractColumn*");
 }

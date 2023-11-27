@@ -24,9 +24,9 @@ public:
 	explicit ContentDockWidget(AbstractPart*);
 	~ContentDockWidget() override;
 	AbstractPart* part() const;
+	void suppressDeletion(bool);
 
 private:
-	void closeEvent(QCloseEvent*) override;
 	AbstractPart* m_part;
 	bool m_closing{false};
 

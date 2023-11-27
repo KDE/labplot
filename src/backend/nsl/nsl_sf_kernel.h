@@ -12,6 +12,18 @@
 
 /* see https://en.wikipedia.org/wiki/Kernel_%28statistics%29 */
 
+#define NSL_SF_KERNEL_TYPE_COUNT 9
+typedef enum {
+	nsl_kernel_uniform,
+	nsl_kernel_triangular,
+	nsl_kernel_parabolic,
+	nsl_kernel_quartic,
+	nsl_kernel_triweight,
+	nsl_kernel_tricube,
+	nsl_kernel_cosine,
+	nsl_kernel_gauss
+} nsl_kernel_type;
+
 /* kernel on [-1:1] */
 /* uniform */
 double nsl_sf_kernel_uniform(double u);

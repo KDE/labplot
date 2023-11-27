@@ -23,7 +23,9 @@
 #include <KLocalizedString>
 
 #include <QAction>
+#include <QActionGroup>
 #include <QClipboard>
+#include <QFile>
 #include <QHeaderView>
 #include <QIcon>
 #include <QInputDialog>
@@ -37,6 +39,7 @@
 #include <QScrollArea>
 #include <QShortcut>
 #include <QStackedWidget>
+#include <QStandardPaths>
 #include <QTableView>
 #include <QTextStream>
 #include <QThreadPool>
@@ -785,7 +788,7 @@ public:
 			for (int col = 0; col < m_image.width(); ++col) {
 				const double value = (data->operator[](col))[row];
 				if (!std::isnan(value) && !std::isinf(value)) {
-					int index = (value - m_min) / range;
+					const int index = range != 0 ? (value - m_min) / range : 0;
 					QColor color;
 					if (index < m_colors.count())
 						color = m_colors.at(index);
@@ -1305,10 +1308,10 @@ void MatrixView::exportToLaTeX(const QString& path,
 		yearidx -= 3;
 
 	bool ok;
-	texVersionOutput.midRef(yearidx, 4).toInt(&ok);
+	texVersionOutput.mid(yearidx, 4).toInt(&ok);
 	int version = -1;
 	if (ok)
-		version = texVersionOutput.midRef(yearidx, 4).toInt(&ok);
+		version = texVersionOutput.mid(yearidx, 4).toInt(&ok);
 
 	if (latexHeaders) {
 		out << QLatin1String("\\documentclass[11pt,a4paper]{article} \n");

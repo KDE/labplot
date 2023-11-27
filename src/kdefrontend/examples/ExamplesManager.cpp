@@ -23,7 +23,7 @@
 #include <QStandardPaths>
 #include <QXmlStreamReader>
 
-#include <KFilterDev>
+#include <KCompressionDevice>
 #include <KLocalizedString>
 
 ExamplesManager* ExamplesManager::m_instance{nullptr};

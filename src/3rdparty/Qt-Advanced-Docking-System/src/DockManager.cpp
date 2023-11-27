@@ -189,13 +189,13 @@ void DockManagerPrivate::loadStylesheet()
 {
 	initResource();
 	QString Result;
-	QString FileName = ":ads/stylesheets/";
+	QString FileName = QLatin1String(":ads/stylesheets/");
 	FileName += CDockManager::testConfigFlag(CDockManager::FocusHighlighting)
-		? "focus_highlighting" : "default";
+		? QLatin1String("focus_highlighting") : QLatin1String("default");
 #if defined(Q_OS_UNIX) && !defined(Q_OS_MACOS)
-    FileName += "_linux";
+    FileName += QLatin1String("_linux");
 #endif
-    FileName += ".css";
+    FileName += QLatin1String(".css");
 	QFile StyleSheetFile(FileName);
 	StyleSheetFile.open(QIODevice::ReadOnly);
 	QTextStream StyleSheetStream(&StyleSheetFile);
@@ -260,21 +260,21 @@ bool DockManagerPrivate::restoreStateFromXml(const QByteArray &state,  int versi
     {
     	return false;
     }
-    ADS_PRINT(s.attributes().value("Version"));
+    ADS_PRINT(s.attributes().value(QLatin1String("Version")));
     bool ok;
-    int v = s.attributes().value("Version").toInt(&ok);
+    int v = s.attributes().value(QLatin1String("Version")).toInt(&ok);
     if (!ok || v > CurrentVersion)
     {
     	return false;
     }
     s.setFileVersion(v);
 
-    ADS_PRINT(s.attributes().value("UserVersion"));
+    ADS_PRINT(s.attributes().value(QLatin1String("UserVersion")));
     // Older files do not support UserVersion but we still want to load them so
     // we first test if the attribute exists
-    if (!s.attributes().value("UserVersion").isEmpty())
+    if (!s.attributes().value(QLatin1String("UserVersion")).isEmpty())
     {
-		v = s.attributes().value("UserVersion").toInt(&ok);
+		v = s.attributes().value(QLatin1String("UserVersion")).toInt(&ok);
 		if (!ok || v != version)
 		{
 			return false;
@@ -283,13 +283,13 @@ bool DockManagerPrivate::restoreStateFromXml(const QByteArray &state,  int versi
 
     bool Result = true;
 #ifdef ADS_DEBUG_PRINT
-    int  DockContainers = s.attributes().value("Containers").toInt();
+    int  DockContainers = s.attributes().value(QLatin1String("Containers")).toInt();
 #endif
     ADS_PRINT(DockContainers);
 
     if (CentralWidget)
     {
-		const auto CentralWidgetAttribute = s.attributes().value("CentralWidget");
+		const auto CentralWidgetAttribute = s.attributes().value(QLatin1String("CentralWidget"));
 		// If we have a central widget but a state without central widget, then
 		// something is wrong.
 		if (CentralWidgetAttribute.isEmpty())

@@ -20,9 +20,8 @@
 ReferenceRangeDock::ReferenceRangeDock(QWidget* parent)
 	: BaseDock(parent) {
 	ui.setupUi(this);
-	m_leName = ui.leName;
-	m_teComment = ui.teComment;
-	m_teComment->setFixedHeight(1.2 * m_leName->height());
+	setPlotRangeCombobox(ui.cbPlotRanges);
+	setBaseWidgets(ui.leName, ui.teComment, 1.2);
 
 	ui.cbOrientation->addItem(i18n("Horizontal"));
 	ui.cbOrientation->addItem(i18n("Vertical"));
@@ -38,9 +37,6 @@ ReferenceRangeDock::ReferenceRangeDock(QWidget* parent)
 
 	// SLOTS
 	// General
-	connect(ui.leName, &QLineEdit::textChanged, this, &ReferenceRangeDock::nameChanged);
-	connect(ui.teComment, &QTextEdit::textChanged, this, &ReferenceRangeDock::commentChanged);
-
 	connect(ui.cbOrientation, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ReferenceRangeDock::orientationChanged);
 	connect(ui.sbPositionStart, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &ReferenceRangeDock::positionLogicalStartChanged);
 	connect(ui.sbPositionEnd, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &ReferenceRangeDock::positionLogicalEndChanged);
@@ -56,25 +52,6 @@ void ReferenceRangeDock::setReferenceRanges(QList<ReferenceRange*> list) {
 	m_range = list.first();
 	setAspects(list);
 	Q_ASSERT(m_range);
-
-	// if there is more than one point in the list, disable the comment and name widgets in "general"
-	if (list.size() == 1) {
-		ui.lName->setEnabled(true);
-		ui.leName->setEnabled(true);
-		ui.lComment->setEnabled(true);
-		ui.teComment->setEnabled(true);
-		ui.leName->setText(m_range->name());
-		ui.teComment->setText(m_range->comment());
-	} else {
-		ui.lName->setEnabled(false);
-		ui.leName->setEnabled(false);
-		ui.lComment->setEnabled(false);
-		ui.teComment->setEnabled(false);
-		ui.leName->setText(QString());
-		ui.teComment->setText(QString());
-	}
-	ui.leName->setStyleSheet(QString());
-	ui.leName->setToolTip(QString());
 
 	// initialize widgets for common properties
 	QList<Line*> lines;
@@ -92,7 +69,6 @@ void ReferenceRangeDock::setReferenceRanges(QList<ReferenceRange*> list) {
 	updatePlotRanges();
 
 	// SIGNALs/SLOTs
-	connect(m_range, &AbstractAspect::aspectDescriptionChanged, this, &ReferenceRangeDock::aspectDescriptionChanged);
 	connect(m_range, &WorksheetElement::plotRangeListChanged, this, &ReferenceRangeDock::updatePlotRanges);
 	connect(m_range, &ReferenceRange::visibleChanged, this, &ReferenceRangeDock::rangeVisibilityChanged);
 
@@ -114,7 +90,7 @@ void ReferenceRangeDock::updateLocale() {
 }
 
 void ReferenceRangeDock::updatePlotRanges() {
-	updatePlotRangeList(ui.cbPlotRanges);
+	updatePlotRangeList();
 }
 
 //**********************************************************
@@ -298,4 +274,6 @@ void ReferenceRangeDock::load() {
 			ui.dtePositionEnd->setMSecsSinceEpochUTC(m_range->positionLogicalEnd().x());
 		}
 	}
+
+	ui.chkVisible->setChecked(m_range->isVisible());
 }

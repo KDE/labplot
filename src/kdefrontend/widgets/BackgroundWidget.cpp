@@ -90,6 +90,9 @@ void BackgroundWidget::adjustLayout() {
 		return;
 
 	auto* parentWidget = parentGridLayout->itemAtPosition(0, 0)->widget();
+	if (!parentWidget)
+		return;
+
 	auto* gridLayout = static_cast<QGridLayout*>(layout());
 	auto* widget = gridLayout->itemAtPosition(2, 0)->widget(); // use the third line, the first two are optional and not always visible
 

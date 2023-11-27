@@ -11,7 +11,11 @@
 #define NSL_COMPLEX_H
 
 #ifdef _MSC_VER
+#ifdef __cplusplus
+#include <complex>
+#else
 #include <complex.h>
+#endif
 #define COMPLEX _Dcomplex
 #else
 

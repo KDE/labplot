@@ -5,7 +5,6 @@
 
 #include <QtGlobal>
 #include <QStringList>
-#include <QSharedPointer>
 
 #include "xlsxabstractsheet.h"
 
@@ -16,7 +15,7 @@ class DocumentPrivate;
 class ChartsheetPrivate;
 class Chart;
 
-class Chartsheet : public AbstractSheet
+class QXLSX_EXPORT Chartsheet : public AbstractSheet
 {
     Q_DECLARE_PRIVATE(Chartsheet)
 

@@ -17,6 +17,7 @@ class AbstractAspectTest : public CommonTest {
 	Q_OBJECT
 
 private Q_SLOTS:
+	void name();
 	void copyPaste();
 	void saveLoad();
 

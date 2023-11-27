@@ -9,6 +9,29 @@ class ExpressionParserTest : public CommonTest {
 private Q_SLOTS:
 	void testFunctionArguments1();
 	void testFunctionArguments2();
+	void testUniques();
+	void testgreaterThan();
+	void testgreaterEqualThan();
+	void testlessThan();
+	void testlessEqualThan();
+	void testequal();
+	void testifCondition();
+	void testandFunction();
+	void testorFunction();
+	void testxorFunction();
+	void testbetweenIncluded();
+	void testoutsideIncluded();
+	void testbetween();
+	void testoutside();
+	void testequalEpsilon();
+
+	void testevaluateCartesian();
+	void testevaluateCartesianConstExpr();
+	// void testevaluateCartesianConstExpr2();
+
+	void testIsValid();
+	void testIsValidStdev();
+	void testLog2();
 };
 
 #endif // EXPRESSIONPARSERTEST_H

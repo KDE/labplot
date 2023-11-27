@@ -152,7 +152,17 @@
    <item>
     <widget class="QCheckBox" name="chkAutoUpdate">
      <property name="text">
-      <string>auto update</string>
+      <string>auto update the values</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="chkAutoResize">
+     <property name="text">
+      <string>auto resize the column</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
      </property>
     </widget>
    </item>

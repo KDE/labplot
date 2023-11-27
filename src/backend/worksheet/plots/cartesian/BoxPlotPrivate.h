@@ -17,6 +17,7 @@
 class Background;
 class CartesianCoordinateSystem;
 class Spreadsheet;
+class KConfigGroup;
 
 typedef QVector<QPointF> Points;
 
@@ -35,14 +36,6 @@ public:
 	Line* addBorderLine(const KConfigGroup&);
 	Line* addMedianLine(const KConfigGroup&);
 	void adjustPropertiesContainers();
-
-	bool m_suppressRecalc{false};
-
-	// reimplemented from QGraphicsItem
-	QRectF boundingRect() const override;
-	QPainterPath shape() const override;
-
-	bool activatePlot(QPointF mouseScenePos, double maxDist);
 	void setHover(bool on);
 
 	BoxPlot* const q;
@@ -92,9 +85,6 @@ public:
 	QPainterPath rugPath;
 
 private:
-	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
-	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
-	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
 
 	void recalc(int);
@@ -105,13 +95,7 @@ private:
 	void updateFillingRect(int index, const QVector<QLineF>&);
 
 	void draw(QPainter*);
-	void drawFilling(QPainter*, int);
 	void drawSymbols(QPainter*, int);
-
-	bool m_hovered{false};
-
-	QRectF m_boundingRectangle;
-	QPainterPath m_boxPlotShape;
 
 	QVector<QVector<QLineF>> m_boxRect; // QVector<QLineF> contains four lines that are clipped on the plot rectangle
 	QVector<QPolygonF> m_fillPolygon; // polygons used for the filling (clipped versions of the boxes)
@@ -144,13 +128,6 @@ private:
 	QVector<Points> m_dataPoints; // positions of the data points in scene coordinates
 	QVector<Points> m_farOutPointsLogical; // positions of the far out values in logical coordinates
 	QVector<Points> m_farOutPoints; // positions of the far out values in scene coordinates
-
-	QPixmap m_pixmap;
-	QImage m_hoverEffectImage;
-	QImage m_selectionEffectImage;
-
-	bool m_hoverEffectImageIsDirty{false};
-	bool m_selectionEffectImageIsDirty{false};
 };
 
 #endif

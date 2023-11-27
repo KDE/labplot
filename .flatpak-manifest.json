@@ -49,7 +49,7 @@
         },
         {
             "name": "poppler",
-            "config-opts": [ "-DENABLE_TESTING=OFF", "-DENABLE_UNSTABLE_API_ABI_HEADERS=ON", "-DENABLE_CPP=OFF", "-DENABLE_GLIB=OFF", "-DENABLE_GOBJECT_INTROSPECTION=OFF", "-DENABLE_UTILS=OFF" ],
+            "config-opts": [ "-DENABLE_TESTING=OFF", "-DENABLE_UNSTABLE_API_ABI_HEADERS=ON", "-DENABLE_CPP=OFF", "-DENABLE_GLIB=OFF", "-DENABLE_GOBJECT_INTROSPECTION=OFF", "-DENABLE_UTILS=OFF", "-DENABLE_QT6=OFF" ],
             "buildsystem": "cmake-ninja",
             "builddir": true,
             "sources": [ { "type": "git", "url": "git://anongit.freedesktop.org/poppler/poppler.git", "branch": "master" } ],
@@ -92,7 +92,7 @@
         {
             "name": "analitza",
             "buildsystem": "cmake-ninja",
-            "sources": [ { "type": "git", "url": "https://invent.kde.org/kde/analitza.git" } ]
+            "sources": [ { "type": "git", "url": "https://invent.kde.org/kde/analitza.git", "tag": "v23.08.1" } ]
         },
         {
             "name": "gsl",
@@ -198,13 +198,9 @@
             "name": "readstat",
             "sources": [
                 {
-                    "type": "git",
-                    "url": "https://github.com/WizardMac/ReadStat.git",
-                    "tag": "v1.1.9",
-                    "x-checker-data": {
-                        "type": "git",
-                        "tag-pattern": "^v([\\d.]+)$"
-                    }
+                    "type": "archive",
+                    "url": "https://github.com/WizardMac/ReadStat/archive/v1.1.9.tar.gz",
+                    "sha256": "89af7c785a7ae3d9a7af6e64a69028829a429f66a14b1b913be22816dc07ddca"
                 }
             ]
         },
@@ -220,6 +216,44 @@
                     "type": "git",
                     "url": "https://github.com/githubuser0xFFFF/Qt-Advanced-Docking-System.git",
                     "commit": "a940fc29c6d1fbcb5ee1e2fecf86f20bb86a7fb6"
+                }
+            ]
+        },
+	{
+            "name": "discount",
+            "buildsystem": "simple",
+            "build-commands": [
+                "./configure.sh --prefix=/app --enable-all-features --with-fenced-code --shared",
+                "sed -e 's|/sbin/ldconfig|/sbin/ldconfig -n|' -i librarian.sh",
+                "make install"
+            ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://github.com/Orc/discount/archive/v2.2.7c.tar.gz",
+                    "sha256": "5c5139f1f88e83de86169bee3fde4ebd0e1b0798643dc9065b73dc19dbce07b3",
+                    "x-checker-data": {
+                        "type": "anitya",
+                        "project-id": 12139,
+                        "stable-only": true,
+                        "url-template": "https://github.com/Orc/discount/archive/v$version.tar.gz"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "matio",
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://github.com/tbeu/matio/archive/v1.5.23.tar.gz",
+                    "sha256": "5f25c53e698d06b3119e3a4d0536e1da89983dbb7b0a845270663be02ec95978",
+                    "x-checker-data": {
+                        "type": "anitya",
+                        "project-id": 1893,
+                        "stable-only": true,
+                        "url-template": "https://github.com/tbeu/matio/archive/v$version.tar.gz"
+                    }
                 }
             ]
         },
@@ -244,8 +278,8 @@
             "sources": [
                 {
                     "type": "git",
-                    "url": "https://github.com/Murmele/dbc_parser_cpp.git",
-                    "tag": "ca69d0dd08a03fc0210820a4f81bfd217ad25722"
+                    "url": "https://github.com/LinuxDevon/dbc_parser_cpp.git",
+                    "tag": "0f3b22b3fe124976a86a85fcd1bfdd55c20ca428"
                 }
             ]
         },

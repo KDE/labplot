@@ -12,6 +12,7 @@
 #include "BoxPlotPrivate.h"
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/Folder.h"
+#include "backend/core/Settings.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
@@ -23,6 +24,7 @@
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
+#include "kdefrontend/GuiTools.h"
 #include "tools/ImageTools.h"
 
 #include <QActionGroup>
@@ -58,16 +60,16 @@ void BoxPlot::init() {
 	Q_D(BoxPlot);
 
 	KConfig config;
-	KConfigGroup group = config.group("BoxPlot");
+	KConfigGroup group = config.group(QStringLiteral("BoxPlot"));
 
 	// general
-	d->ordering = (BoxPlot::Ordering)group.readEntry("Ordering", (int)BoxPlot::Ordering::None);
-	d->whiskersType = (BoxPlot::WhiskersType)group.readEntry("WhiskersType", (int)BoxPlot::WhiskersType::IQR);
-	d->whiskersRangeParameter = group.readEntry("WhiskersIQRParameter", 1.5);
-	d->orientation = (BoxPlot::Orientation)group.readEntry("Orientation", (int)BoxPlot::Orientation::Vertical);
-	d->variableWidth = group.readEntry("VariableWidth", false);
-	d->widthFactor = group.readEntry("WidthFactor", 1.0);
-	d->notchesEnabled = group.readEntry("NotchesEnabled", false);
+	d->ordering = (BoxPlot::Ordering)group.readEntry(QStringLiteral("Ordering"), (int)BoxPlot::Ordering::None);
+	d->whiskersType = (BoxPlot::WhiskersType)group.readEntry(QStringLiteral("WhiskersType"), (int)BoxPlot::WhiskersType::IQR);
+	d->whiskersRangeParameter = group.readEntry(QStringLiteral("WhiskersIQRParameter"), 1.5);
+	d->orientation = (BoxPlot::Orientation)group.readEntry(QStringLiteral("Orientation"), (int)BoxPlot::Orientation::Vertical);
+	d->variableWidth = group.readEntry(QStringLiteral("VariableWidth"), false);
+	d->widthFactor = group.readEntry(QStringLiteral("WidthFactor"), 1.0);
+	d->notchesEnabled = group.readEntry(QStringLiteral("NotchesEnabled"), false);
 
 	// box
 	d->addBackground(group);
@@ -147,11 +149,11 @@ void BoxPlot::init() {
 		d->updatePixmap();
 	});
 
-	d->jitteringEnabled = group.readEntry("JitteringEnabled", true);
+	d->jitteringEnabled = group.readEntry(QStringLiteral("JitteringEnabled"), true);
 
 	// whiskers
 	d->whiskersLine = new Line(QString());
-	d->whiskersLine->setPrefix(QLatin1String("Whiskers"));
+	d->whiskersLine->setPrefix(QStringLiteral("Whiskers"));
 	d->whiskersLine->setCreateXmlElement(false); // whiskers element is created in BoxPlot::save()
 	d->whiskersLine->setHidden(true);
 	addChild(d->whiskersLine);
@@ -163,9 +165,9 @@ void BoxPlot::init() {
 		d->recalcShapeAndBoundingRect();
 	});
 
-	d->whiskersCapSize = group.readEntry("WhiskersCapSize", Worksheet::convertToSceneUnits(5.0, Worksheet::Unit::Point));
+	d->whiskersCapSize = group.readEntry(QStringLiteral("WhiskersCapSize"), Worksheet::convertToSceneUnits(5.0, Worksheet::Unit::Point));
 	d->whiskersCapLine = new Line(QString());
-	d->whiskersCapLine->setPrefix(QLatin1String("WhiskersCap"));
+	d->whiskersCapLine->setPrefix(QStringLiteral("WhiskersCap"));
 	d->whiskersCapLine->setCreateXmlElement(false); // whiskers cap element is created in BoxPlot::save()
 	d->whiskersCapLine->setHidden(true);
 	addChild(d->whiskersCapLine);
@@ -178,10 +180,10 @@ void BoxPlot::init() {
 	});
 
 	// marginal plots (rug, BoxPlot, boxplot)
-	d->rugEnabled = group.readEntry("RugEnabled", false);
-	d->rugLength = group.readEntry("RugLength", Worksheet::convertToSceneUnits(5, Worksheet::Unit::Point));
-	d->rugWidth = group.readEntry("RugWidth", 0.0);
-	d->rugOffset = group.readEntry("RugOffset", 0.0);
+	d->rugEnabled = group.readEntry(QStringLiteral("RugEnabled"), false);
+	d->rugLength = group.readEntry(QStringLiteral("RugLength"), Worksheet::convertToSceneUnits(5, Worksheet::Unit::Point));
+	d->rugWidth = group.readEntry(QStringLiteral("RugWidth"), 0.0);
+	d->rugOffset = group.readEntry(QStringLiteral("RugOffset"), 0.0);
 }
 
 /*!
@@ -199,7 +201,7 @@ QIcon BoxPlot::staticIcon() {
 	QPixmap pm(iconSize, iconSize);
 
 	QPen pen(Qt::SolidLine);
-	pen.setColor(DARKMODE ? Qt::white : Qt::black);
+	pen.setColor(GuiTools::isDarkMode() ? Qt::white : Qt::black);
 	pen.setWidthF(0.0);
 
 	pm.fill(Qt::transparent);
@@ -214,19 +216,15 @@ QIcon BoxPlot::staticIcon() {
 }
 
 void BoxPlot::initActions() {
-	visibilityAction = new QAction(QIcon::fromTheme(QStringLiteral("view-visible")), i18n("Visible"), this);
-	visibilityAction->setCheckable(true);
-	connect(visibilityAction, &QAction::triggered, this, &BoxPlot::visibilityChangedSlot);
-
 	// Orientation
 	auto* orientationActionGroup = new QActionGroup(this);
 	orientationActionGroup->setExclusive(true);
 	connect(orientationActionGroup, &QActionGroup::triggered, this, &BoxPlot::orientationChangedSlot);
 
-	orientationHorizontalAction = new QAction(QIcon::fromTheme(QLatin1String("transform-move-horizontal")), i18n("Horizontal"), orientationActionGroup);
+	orientationHorizontalAction = new QAction(QIcon::fromTheme(QStringLiteral("transform-move-horizontal")), i18n("Horizontal"), orientationActionGroup);
 	orientationHorizontalAction->setCheckable(true);
 
-	orientationVerticalAction = new QAction(QIcon::fromTheme(QLatin1String("transform-move-vertical")), i18n("Vertical"), orientationActionGroup);
+	orientationVerticalAction = new QAction(QIcon::fromTheme(QStringLiteral("transform-move-vertical")), i18n("Vertical"), orientationActionGroup);
 	orientationVerticalAction->setCheckable(true);
 }
 
@@ -235,7 +233,7 @@ void BoxPlot::initMenus() {
 
 	// Orientation
 	orientationMenu = new QMenu(i18n("Orientation"));
-	orientationMenu->setIcon(QIcon::fromTheme(QLatin1String("draw-cross")));
+	orientationMenu->setIcon(QIcon::fromTheme(QStringLiteral("draw-cross")));
 	orientationMenu->addAction(orientationHorizontalAction);
 	orientationMenu->addAction(orientationVerticalAction);
 }
@@ -245,11 +243,7 @@ QMenu* BoxPlot::createContextMenu() {
 		initMenus();
 
 	QMenu* menu = WorksheetElement::createContextMenu();
-	QAction* firstAction = menu->actions().at(1); // skip the first action because of the "title-action"
-
-	// Visibility
-	visibilityAction->setChecked(isVisible());
-	menu->insertAction(firstAction, visibilityAction);
+	QAction* visibilityAction = this->visibilityAction();
 
 	// Orientation
 	Q_D(const BoxPlot);
@@ -257,14 +251,10 @@ QMenu* BoxPlot::createContextMenu() {
 		orientationHorizontalAction->setChecked(true);
 	else
 		orientationVerticalAction->setChecked(true);
-	menu->insertMenu(firstAction, orientationMenu);
-	menu->insertSeparator(firstAction);
+	menu->insertMenu(visibilityAction, orientationMenu);
+	menu->insertSeparator(visibilityAction);
 
 	return menu;
-}
-
-QGraphicsItem* BoxPlot::graphicsItem() const {
-	return d_ptr;
 }
 
 void BoxPlot::retransform() {
@@ -278,16 +268,6 @@ void BoxPlot::recalc() {
 }
 
 void BoxPlot::handleResize(double /*horizontalRatio*/, double /*verticalRatio*/, bool /*pageResize*/) {
-}
-
-bool BoxPlot::activatePlot(QPointF mouseScenePos, double maxDist) {
-	Q_D(BoxPlot);
-	return d->activatePlot(mouseScenePos, maxDist);
-}
-
-void BoxPlot::setHover(bool on) {
-	Q_D(BoxPlot);
-	d->setHover(on);
 }
 
 /*!
@@ -448,6 +428,11 @@ double BoxPlot::maximum(const Dimension dim) const {
 	return NAN;
 }
 
+bool BoxPlot::hasData() const {
+	Q_D(const BoxPlot);
+	return !d->dataColumns.isEmpty();
+}
+
 /* ============================ setter methods and undo commands ================= */
 
 // General
@@ -465,6 +450,7 @@ void BoxPlot::setDataColumns(const QVector<const AbstractColumn*> columns) {
 
 			// update the curve itself on changes
 			connect(column, &AbstractColumn::dataChanged, this, &BoxPlot::recalc);
+			connect(column, &AbstractAspect::aspectDescriptionChanged, this, &Plot::updateLegendRequested);
 			connect(column->parentAspect(), &AbstractAspect::childAspectAboutToBeRemoved, this, &BoxPlot::dataColumnAboutToBeRemoved);
 			// TODO: add disconnect in the undo-function
 		}
@@ -590,11 +576,6 @@ void BoxPlot::orientationChangedSlot(QAction* action) {
 		this->setOrientation(Axis::Orientation::Vertical);
 }
 
-void BoxPlot::visibilityChangedSlot() {
-	Q_D(const BoxPlot);
-	this->setVisible(!d->isVisible());
-}
-
 // ##############################################################################
 // ####################### Private implementation ###############################
 // ##############################################################################
@@ -603,22 +584,6 @@ BoxPlotPrivate::BoxPlotPrivate(BoxPlot* owner)
 	, q(owner) {
 	setFlag(QGraphicsItem::ItemIsSelectable);
 	setAcceptHoverEvents(false);
-}
-
-bool BoxPlotPrivate::activatePlot(QPointF mouseScenePos, double /*maxDist*/) {
-	if (!isVisible())
-		return false;
-
-	return shape().contains(mouseScenePos);
-}
-
-void BoxPlotPrivate::setHover(bool on) {
-	if (on == m_hovered)
-		return; // don't update if state not changed
-
-	m_hovered = on;
-	on ? Q_EMIT q->hovered() : emit q->unhovered();
-	update();
 }
 
 Background* BoxPlotPrivate::addBackground(const KConfigGroup& group) {
@@ -748,7 +713,9 @@ void BoxPlotPrivate::adjustPropertiesContainers() {
   triggers the update of lines, drop lines, symbols etc.
 */
 void BoxPlotPrivate::retransform() {
-	if (suppressRetransform || !isVisible() || q->isLoading())
+	const bool suppressed = suppressRetransform || !isVisible() || q->isLoading();
+	Q_EMIT trackRetransformCalled(suppressed);
+	if (suppressed)
 		return;
 
 	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
@@ -835,6 +802,11 @@ void BoxPlotPrivate::recalc() {
 		// TODO:
 	}
 
+	const double xMinOld = xMin;
+	const double xMaxOld = xMax;
+	const double yMinOld = yMin;
+	const double yMaxOld = yMax;
+
 	// calculate the new min and max values of the box plot
 	// for the current sizes of the box and of the whiskers
 	if (orientation == BoxPlot::Orientation::Vertical) {
@@ -891,11 +863,15 @@ void BoxPlotPrivate::recalc() {
 	for (int i = 0; i < count; ++i)
 		recalc(i);
 
-	// the size of the boxplot changed because of the actual
-	// data changes or because of new boxplot settings.
-	// Q_EMIT dataChanged() in order to recalculate everything
-	// in the parent plot with the new size/shape of the boxplot
-	Q_EMIT q->dataChanged();
+	// if the size of the plot has changed because of the actual
+	// data changes or because of new plot settings, emit dataChanged()
+	// in order to recalculate the data ranges in the parent plot area
+	// and to retransform all its children.
+	// Just call retransform() to update the plot only if the ranges didn't change.
+	if (xMin != xMinOld || xMax != xMaxOld || yMin != yMinOld || yMax != yMaxOld)
+		Q_EMIT q->dataChanged();
+	else
+		retransform();
 }
 
 QPointF BoxPlotPrivate::setOutlierPoint(double pos, double value) {
@@ -1423,25 +1399,11 @@ void BoxPlotPrivate::mapSymbolsToScene(int index) {
 }
 
 /*!
-	Returns the outer bounds of the item as a rectangle.
- */
-QRectF BoxPlotPrivate::boundingRect() const {
-	return m_boundingRectangle;
-}
-
-/*!
-	Returns the shape of this item as a QPainterPath in local coordinates.
-*/
-QPainterPath BoxPlotPrivate::shape() const {
-	return m_boxPlotShape;
-}
-
-/*!
   recalculates the outer bounds and the shape of the item.
 */
 void BoxPlotPrivate::recalcShapeAndBoundingRect() {
 	prepareGeometryChange();
-	m_boxPlotShape = QPainterPath();
+	m_shape = QPainterPath();
 
 	for (int i = 0; i < dataColumnsOrdered.size(); ++i) {
 		if (!dataColumnsOrdered.at(i) || static_cast<const Column*>(dataColumnsOrdered.at(i))->statistics().size == 0)
@@ -1452,12 +1414,12 @@ void BoxPlotPrivate::recalcShapeAndBoundingRect() {
 			boxPath.moveTo(line.p1());
 			boxPath.lineTo(line.p2());
 		}
-		m_boxPlotShape.addPath(WorksheetElement::shapeFromPath(boxPath, borderLines.at(i)->pen()));
+		m_shape.addPath(WorksheetElement::shapeFromPath(boxPath, borderLines.at(i)->pen()));
 
-		m_boxPlotShape.addPath(WorksheetElement::shapeFromPath(m_whiskersPath.at(i), whiskersLine->pen()));
-		m_boxPlotShape.addPath(WorksheetElement::shapeFromPath(m_whiskersCapPath.at(i), whiskersCapLine->pen()));
+		m_shape.addPath(WorksheetElement::shapeFromPath(m_whiskersPath.at(i), whiskersLine->pen()));
+		m_shape.addPath(WorksheetElement::shapeFromPath(m_whiskersCapPath.at(i), whiskersCapLine->pen()));
 
-		m_boxPlotShape.addPath(WorksheetElement::shapeFromPath(m_rugPath.at(i), borderLines.at(i)->pen()));
+		m_shape.addPath(WorksheetElement::shapeFromPath(m_rugPath.at(i), borderLines.at(i)->pen()));
 
 		// add symbols outlier, jitter and far out values
 		QPainterPath symbolsPath = QPainterPath();
@@ -1542,10 +1504,10 @@ void BoxPlotPrivate::recalcShapeAndBoundingRect() {
 			}
 		}
 
-		m_boxPlotShape.addPath(symbolsPath);
+		m_shape.addPath(symbolsPath);
 	}
 
-	m_boundingRectangle = m_boxPlotShape.boundingRect();
+	m_boundingRectangle = m_shape.boundingRect();
 	updatePixmap();
 }
 
@@ -1569,6 +1531,7 @@ void BoxPlotPrivate::updatePixmap() {
 	m_pixmap = pixmap;
 	m_hoverEffectImageIsDirty = true;
 	m_selectionEffectImageIsDirty = true;
+	Q_EMIT q->changed();
 	update();
 }
 
@@ -1585,10 +1548,12 @@ void BoxPlotPrivate::draw(QPainter* painter) {
 
 		if (!m_boxRect.at(i).isEmpty()) {
 			// draw the box filling
-			if (backgrounds.at(i)->enabled()) {
+			const auto* background = backgrounds.at(i);
+			if (background->enabled()) {
 				painter->setOpacity(backgrounds.at(i)->opacity());
 				painter->setPen(Qt::NoPen);
-				drawFilling(painter, i);
+				const QPolygonF& polygon = m_fillPolygon.at(i);
+				drawFillingPollygon(polygon, painter, background);
 			}
 
 			// draw the border
@@ -1664,98 +1629,6 @@ void BoxPlotPrivate::drawSymbols(QPainter* painter, int index) {
 	symbolWhiskerEnd->draw(painter, m_whiskerEndPoints.at(index));
 }
 
-void BoxPlotPrivate::drawFilling(QPainter* painter, int index) {
-	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
-
-	const QPolygonF& polygon = m_fillPolygon.at(index);
-	const QRectF& rect = polygon.boundingRect();
-
-	const auto* background = backgrounds.at(index);
-	if (background->type() == Background::Type::Color) {
-		switch (background->colorStyle()) {
-		case Background::ColorStyle::SingleColor: {
-			painter->setBrush(QBrush(background->firstColor()));
-			break;
-		}
-		case Background::ColorStyle::HorizontalLinearGradient: {
-			QLinearGradient linearGrad(rect.topLeft(), rect.topRight());
-			linearGrad.setColorAt(0, background->firstColor());
-			linearGrad.setColorAt(1, background->secondColor());
-			painter->setBrush(QBrush(linearGrad));
-			break;
-		}
-		case Background::ColorStyle::VerticalLinearGradient: {
-			QLinearGradient linearGrad(rect.topLeft(), rect.bottomLeft());
-			linearGrad.setColorAt(0, background->firstColor());
-			linearGrad.setColorAt(1, background->secondColor());
-			painter->setBrush(QBrush(linearGrad));
-			break;
-		}
-		case Background::ColorStyle::TopLeftDiagonalLinearGradient: {
-			QLinearGradient linearGrad(rect.topLeft(), rect.bottomRight());
-			linearGrad.setColorAt(0, background->firstColor());
-			linearGrad.setColorAt(1, background->secondColor());
-			painter->setBrush(QBrush(linearGrad));
-			break;
-		}
-		case Background::ColorStyle::BottomLeftDiagonalLinearGradient: {
-			QLinearGradient linearGrad(rect.bottomLeft(), rect.topRight());
-			linearGrad.setColorAt(0, background->firstColor());
-			linearGrad.setColorAt(1, background->secondColor());
-			painter->setBrush(QBrush(linearGrad));
-			break;
-		}
-		case Background::ColorStyle::RadialGradient: {
-			QRadialGradient radialGrad(rect.center(), rect.width() / 2);
-			radialGrad.setColorAt(0, background->firstColor());
-			radialGrad.setColorAt(1, background->secondColor());
-			painter->setBrush(QBrush(radialGrad));
-			break;
-		}
-		}
-	} else if (background->type() == Background::Type::Image) {
-		if (!background->fileName().trimmed().isEmpty()) {
-			QPixmap pix(background->fileName());
-			switch (background->imageStyle()) {
-			case Background::ImageStyle::ScaledCropped:
-				pix = pix.scaled(rect.size().toSize(), Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
-				painter->setBrush(QBrush(pix));
-				painter->setBrushOrigin(pix.size().width() / 2, pix.size().height() / 2);
-				break;
-			case Background::ImageStyle::Scaled:
-				pix = pix.scaled(rect.size().toSize(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-				painter->setBrush(QBrush(pix));
-				painter->setBrushOrigin(pix.size().width() / 2, pix.size().height() / 2);
-				break;
-			case Background::ImageStyle::ScaledAspectRatio:
-				pix = pix.scaled(rect.size().toSize(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
-				painter->setBrush(QBrush(pix));
-				painter->setBrushOrigin(pix.size().width() / 2, pix.size().height() / 2);
-				break;
-			case Background::ImageStyle::Centered: {
-				QPixmap backpix(rect.size().toSize());
-				backpix.fill();
-				QPainter p(&backpix);
-				p.drawPixmap(QPointF(0, 0), pix);
-				p.end();
-				painter->setBrush(QBrush(backpix));
-				painter->setBrushOrigin(-pix.size().width() / 2, -pix.size().height() / 2);
-				break;
-			}
-			case Background::ImageStyle::Tiled:
-				painter->setBrush(QBrush(pix));
-				break;
-			case Background::ImageStyle::CenterTiled:
-				painter->setBrush(QBrush(pix));
-				painter->setBrushOrigin(pix.size().width() / 2, pix.size().height() / 2);
-			}
-		}
-	} else if (background->type() == Background::Type::Pattern)
-		painter->setBrush(QBrush(background->firstColor(), background->brushStyle()));
-
-	painter->drawPolygon(polygon);
-}
-
 void BoxPlotPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget*) {
 	if (!isVisible())
 		return;
@@ -1764,7 +1637,7 @@ void BoxPlotPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*
 	painter->setBrush(Qt::NoBrush);
 	painter->setRenderHint(QPainter::SmoothPixmapTransform, true);
 
-	if (KSharedConfig::openConfig()->group("Settings_Worksheet").readEntry<bool>("DoubleBuffering", true))
+	if (Settings::group(QStringLiteral("Settings_Worksheet")).readEntry<bool>("DoubleBuffering", true))
 		painter->drawPixmap(m_boundingRectangle.topLeft(), m_pixmap); // draw the cached pixmap (fast)
 	else
 		draw(painter); // draw directly again (slow)
@@ -1802,26 +1675,6 @@ void BoxPlotPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*
 	}
 }
 
-void BoxPlotPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
-	q->createContextMenu()->exec(event->screenPos());
-}
-
-void BoxPlotPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
-	if (!isSelected()) {
-		m_hovered = true;
-		Q_EMIT q->hovered();
-		update();
-	}
-}
-
-void BoxPlotPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
-	if (m_hovered) {
-		m_hovered = false;
-		Q_EMIT q->unhovered();
-		update();
-	}
-}
-
 // ##############################################################################
 // ##################  Serialization/Deserialization  ###########################
 // ##############################################################################
@@ -1846,6 +1699,7 @@ void BoxPlot::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("xMax"), QString::number(d->xMax));
 	writer->writeAttribute(QStringLiteral("yMin"), QString::number(d->yMin));
 	writer->writeAttribute(QStringLiteral("yMax"), QString::number(d->yMax));
+	writer->writeAttribute(QStringLiteral("visible"), QString::number(d->isVisible()));
 	for (auto* column : d->dataColumns) {
 		writer->writeStartElement(QStringLiteral("column"));
 		writer->writeAttribute(QStringLiteral("path"), column->path());
@@ -1901,7 +1755,6 @@ bool BoxPlot::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 	bool firstBackgroundRead = false;
@@ -1934,6 +1787,12 @@ bool BoxPlot::load(XmlStreamReader* reader, bool preview) {
 			READ_DOUBLE_VALUE("xMax", xMax);
 			READ_DOUBLE_VALUE("yMin", yMin);
 			READ_DOUBLE_VALUE("yMax", yMax);
+
+			str = attribs.value(QStringLiteral("visible")).toString();
+			if (str.isEmpty())
+				reader->raiseMissingAttributeWarning(QStringLiteral("visible"));
+			else
+				d->setVisible(str.toInt());
 		} else if (reader->name() == QLatin1String("column")) {
 			attribs = reader->attributes();
 
@@ -2014,7 +1873,7 @@ bool BoxPlot::load(XmlStreamReader* reader, bool preview) {
 	int diff = d->dataColumns.size() - d->backgrounds.size();
 	if (diff > 0) {
 		KConfig config;
-		KConfigGroup group = config.group(QLatin1String("XYCurve"));
+		KConfigGroup group = config.group(QStringLiteral("XYCurve"));
 
 		const auto* background = d->backgrounds.constFirst();
 		const auto* borderLine = d->borderLines.constFirst();
@@ -2053,17 +1912,17 @@ bool BoxPlot::load(XmlStreamReader* reader, bool preview) {
 // ##############################################################################
 void BoxPlot::loadThemeConfig(const KConfig& config) {
 	KConfigGroup group;
-	if (config.hasGroup(QLatin1String("Theme")))
-		group = config.group("XYCurve"); // when loading from the theme config, use the same properties as for XYCurve
+	if (config.hasGroup(QStringLiteral("Theme")))
+		group = config.group(QStringLiteral("XYCurve")); // when loading from the theme config, use the same properties as for XYCurve
 	else
-		group = config.group("BoxPlot");
+		group = config.group(QStringLiteral("BoxPlot"));
 
 	const auto* plot = static_cast<const CartesianPlot*>(parentAspect());
 	int index = plot->curveChildIndex(this);
 	const QColor themeColor = plot->themeColorPalette(index);
 
 	Q_D(BoxPlot);
-	d->m_suppressRecalc = true;
+	d->suppressRecalc = true;
 
 	// box fillings
 	for (int i = 0; i < d->backgrounds.count(); ++i) {
@@ -2115,6 +1974,6 @@ void BoxPlot::loadThemeConfig(const KConfig& config) {
 		setWhiskersCapSize(0.0);
 	}
 
-	d->m_suppressRecalc = false;
+	d->suppressRecalc = false;
 	d->recalcShapeAndBoundingRect();
 }

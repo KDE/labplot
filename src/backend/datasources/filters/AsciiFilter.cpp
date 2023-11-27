@@ -29,7 +29,7 @@
 #include "backend/datasources/MQTTTopic.h"
 #endif
 
-#include <KFilterDev>
+#include <KCompressionDevice>
 #include <KLocalizedString>
 #include <QDateTime>
 
@@ -125,18 +125,6 @@ void AsciiFilter::write(const QString& fileName, AbstractDataSource* dataSource)
 }
 
 /*!
-  loads the predefined filter settings for \c filterName
-*/
-void AsciiFilter::loadFilterSettings(const QString& /*filterName*/) {
-}
-
-/*!
-  saves the current settings as a new filter with the name \c filterName
-*/
-void AsciiFilter::saveFilterSettings(const QString& /*filterName*/) const {
-}
-
-/*!
   returns the list with the names of all saved
   (system wide or user defined) filter settings.
 */
@@ -187,7 +175,7 @@ QString AsciiFilter::fileInfoString(const QString& fileName) {
 	returns the number of columns in the file \c fileName.
 */
 int AsciiFilter::columnNumber(const QString& fileName, const QString& separator) {
-	KFilterDev device(fileName);
+	KCompressionDevice device(fileName);
 	if (!device.open(QIODevice::ReadOnly)) {
 		DEBUG(Q_FUNC_INFO << ", Could not open file " << STDSTRING(fileName) << " for determining number of columns");
 		return -1;
@@ -207,7 +195,7 @@ int AsciiFilter::columnNumber(const QString& fileName, const QString& separator)
 }
 
 size_t AsciiFilter::lineNumber(const QString& fileName, const size_t maxLines) {
-	KFilterDev device(fileName);
+	KCompressionDevice device(fileName);
 
 	if (!device.open(QIODevice::ReadOnly)) {
 		DEBUG(Q_FUNC_INFO << ", Could not open file " << STDSTRING(fileName) << " to determine number of lines");
@@ -321,6 +309,15 @@ bool AsciiFilter::isHeaderEnabled() const {
 	return d->headerEnabled;
 }
 
+// TODO: this setter modifies also startRow which is not clear for external consumers,
+// the default value of headerLine is 1, same for startRow. if we don't call setHeaderLine(1),
+// assuming the default value is already set to 1 anyway, startRow is kept at 1 and not set to 2
+// and the file is read wrongly. This forces us to always call this function, like in
+// DatasetHandler::configureFilter() or to call it after setStartRow() was called like in
+// ImportFileWidget::currentFileFilter().
+// We shouldn't be dependent on the order of these calls and there shouldn't be any reason
+// to call this function to set the default value again.
+// -> redesign the APIs.
 void AsciiFilter::setHeaderLine(int line) {
 	d->headerLine = line;
 	DEBUG(Q_FUNC_INFO << ", line = " << line << ", startRow = " << d->startRow)
@@ -700,7 +697,7 @@ void AsciiFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataS
 	// TODO: redesign the APIs and remove this later
 	readingFile = true;
 	readingFileName = fileName;
-	KFilterDev device(fileName);
+	KCompressionDevice device(fileName);
 	readDataFromDevice(device, dataSource, importMode);
 	readingFile = false;
 }
@@ -986,7 +983,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 		if (keepNValues == 0) {
 			DEBUG("	keep All values");
 			if (readingType != LiveDataSource::ReadingType::TillEnd)
-				m_actualRows += std::min(newData.size(), spreadsheet->sampleSize());
+				m_actualRows += std::min(static_cast<qsizetype>(newData.size()), static_cast<qsizetype>(spreadsheet->sampleSize()));
 			else {
 				// we don't increase it if we reread the whole file, we reset it
 				if (!(spreadsheet->readingType() == LiveDataSource::ReadingType::WholeFile))
@@ -1610,7 +1607,7 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 	DEBUG(Q_FUNC_INFO)
 	QVector<QStringList> dataStrings;
 
-	KFilterDev device(fileName);
+	KCompressionDevice device(fileName);
 	const int deviceError = prepareDeviceToRead(device, lines);
 
 	if (deviceError != 0) {
@@ -2002,7 +1999,6 @@ void AsciiFilter::save(QXmlStreamWriter* writer) const {
   Loads from XML.
 */
 bool AsciiFilter::load(XmlStreamReader* reader) {
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs = reader->attributes();
 	QString str;
 
@@ -2464,7 +2460,11 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, AbstractDataSourc
 		// but only after the preparation step
 		if (keepNValues == 0) {
 			if (readingType != MQTTClient::ReadingType::TillEnd)
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+				m_actualRows += std::min(newData.size(), static_cast<qsizetype>(spreadsheet->mqttClient()->sampleSize()));
+#else
 				m_actualRows += std::min(newData.size(), spreadsheet->mqttClient()->sampleSize());
+#endif
 			else {
 				m_actualRows += newData.size();
 			}

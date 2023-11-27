@@ -99,6 +99,8 @@ void DbcParser::getSignals(const QVector<uint32_t> ids, PrefixType p, SuffixType
 	}
 #else
 	Q_UNUSED(ids)
+	Q_UNUSED(p)
+	Q_UNUSED(s)
 	Q_UNUSED(idIndex)
 	Q_UNUSED(out)
 #endif

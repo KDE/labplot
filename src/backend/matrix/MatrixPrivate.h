@@ -12,9 +12,6 @@
 #ifndef MATRIXPRIVATE_H
 #define MATRIXPRIVATE_H
 
-template<class T>
-class QVector;
-
 class MatrixPrivate {
 public:
 	explicit MatrixPrivate(Matrix*, AbstractColumn::ColumnMode);
@@ -47,11 +44,11 @@ public:
 		static_cast<QVector<QVector<T>>*>(data)->operator[](col)[row] = value;
 
 		if (!suppressDataChange)
-			emit q->dataChanged(row, col, row, col);
+			Q_EMIT q->dataChanged(row, col, row, col);
 	}
 	// get column cells (must be defined in header)
 	template<typename T>
-	QVector<T> columnCells(int col, int first_row, int last_row) {
+	QVector<T> columnCells(int col, int first_row, int last_row) const {
 		Q_ASSERT(first_row >= 0 && first_row < rowCount);
 		Q_ASSERT(last_row >= 0 && last_row < rowCount);
 
@@ -74,7 +71,7 @@ public:
 			static_cast<QVector<QVector<T>>*>(data)->operator[](col) = values;
 			static_cast<QVector<QVector<T>>*>(data)->operator[](col).resize(rowCount); // values may be larger
 			if (!suppressDataChange)
-				emit q->dataChanged(first_row, col, last_row, col);
+				Q_EMIT q->dataChanged(first_row, col, last_row, col);
 			return;
 		}
 
@@ -82,11 +79,11 @@ public:
 			static_cast<QVector<QVector<T>>*>(data)->operator[](col)[i] = values.at(i - first_row);
 
 		if (!suppressDataChange)
-			emit q->dataChanged(first_row, col, last_row, col);
+			Q_EMIT q->dataChanged(first_row, col, last_row, col);
 	}
 	// get row cells (must be defined in header)
 	template<typename T>
-	QVector<T> rowCells(int row, int first_column, int last_column) {
+	QVector<T> rowCells(int row, int first_column, int last_column) const {
 		Q_ASSERT(first_column >= 0 && first_column < columnCount);
 		Q_ASSERT(last_column >= 0 && last_column < columnCount);
 
@@ -105,7 +102,7 @@ public:
 		for (int i = first_column; i <= last_column; i++)
 			static_cast<QVector<QVector<T>>*>(data)->operator[](i)[row] = values.at(i - first_column);
 		if (!suppressDataChange)
-			emit q->dataChanged(row, first_column, row, last_column);
+			Q_EMIT q->dataChanged(row, first_column, row, last_column);
 	}
 
 	void clearColumn(int col);
@@ -125,7 +122,7 @@ public:
 
 	void updateViewHeader();
 	void emitDataChanged(int top, int left, int bottom, int right) {
-		emit q->dataChanged(top, left, bottom, right);
+		Q_EMIT q->dataChanged(top, left, bottom, right);
 	}
 
 	Matrix* q;

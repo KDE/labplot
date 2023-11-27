@@ -496,7 +496,7 @@ public:
     CDockAreaWidget* setCentralWidget(CDockWidget* widget);
 
     /**
-	 * Adds a toggle view action to the the internal view menu.
+	 * Adds a toggle view action to the internal view menu.
 	 * You can either manage the insertion of the toggle view actions in your
 	 * application or you can add the actions to the internal view menu and
 	 * then simply insert the menu object into your.

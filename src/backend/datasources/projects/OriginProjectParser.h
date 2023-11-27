@@ -11,9 +11,9 @@
 #ifndef ORIGINPROJECTPARSER_H
 #define ORIGINPROJECTPARSER_H
 
-#include "OriginFile.h"
 #include "backend/datasources/projects/ProjectParser.h"
 #include "backend/worksheet/Background.h"
+#include <OriginFile.h>
 
 class Axis;
 class Column;

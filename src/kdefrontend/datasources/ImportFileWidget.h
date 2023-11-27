@@ -4,7 +4,7 @@
 	Description          : import file data widget
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2009-2017 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
-	SPDX-FileCopyrightText: 2009-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2009-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2017-2018 Fabian Kristof <fkristofszabolcs@gmail.com>
 	SPDX-FileCopyrightText: 2018-2019 Kovacs Ferencz <kferike98@gmail.com>
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -28,19 +28,23 @@ class AbstractFileFilter;
 class AsciiOptionsWidget;
 class BinaryOptionsWidget;
 class CANOptionsWidget;
+class XLSXOptionsWidget;
+class FITSOptionsWidget;
 class HDF5OptionsWidget;
 class ImageOptionsWidget;
-class MatioOptionsWidget;
-class ExcelOptionsWidget;
-class NetCDFOptionsWidget;
-class FITSOptionsWidget;
 class JsonOptionsWidget;
+class MatioOptionsWidget;
+class NetCDFOptionsWidget;
+class OdsOptionsWidget;
 class ROOTOptionsWidget;
+class TemplateHandler;
+
 class QTableWidget;
 class QCompleter;
 class QTimer;
 class QTreeWidgetItem;
-class QStringList;
+
+class KConfig;
 class KUrlComboBox;
 
 class ImportFileWidget : public QWidget {
@@ -62,14 +66,16 @@ public:
 	QString dbcFileName() const;
 	QString selectedObject() const;
 	bool importValid() const;
-	bool excelUseFirstRowAsColNames() const;
+	bool useFirstRowAsColNames() const; // use by XLSX and ODS
+
+	const QStringList selectedXLSXRegionNames() const;
+	const QStringList selectedOdsSheetNames() const;
 	const QStringList selectedHDF5Names() const;
-	//	const QStringList selectedVectorBLFNames() const;
 	const QStringList selectedNetCDFNames() const;
-	const QStringList selectedMatioNames() const;
 	const QStringList selectedFITSExtensions() const;
 	const QStringList selectedROOTNames() const;
-	const QStringList selectedExcelRegionNames() const;
+	const QStringList selectedMatioNames() const;
+	//	const QStringList selectedVectorBLFNames() const;
 
 	QString host() const;
 	QString port() const;
@@ -87,14 +93,15 @@ private:
 	void initSlots();
 	QString fileInfoString(const QString&) const;
 	void showJsonModel(bool);
-	void enableExcelFirstRowAsColNames(bool enable);
+	void enableFirstRowAsColNames(bool enable); // used by XLSX and Ods
 	void updateHeaderOptions();
 
 	std::unique_ptr<AsciiOptionsWidget> m_asciiOptionsWidget;
 	std::unique_ptr<BinaryOptionsWidget> m_binaryOptionsWidget;
 	std::unique_ptr<HDF5OptionsWidget> m_hdf5OptionsWidget;
 	std::unique_ptr<ImageOptionsWidget> m_imageOptionsWidget;
-	std::unique_ptr<ExcelOptionsWidget> m_excelOptionsWidget;
+	std::unique_ptr<OdsOptionsWidget> m_odsOptionsWidget;
+	std::unique_ptr<XLSXOptionsWidget> m_xlsxOptionsWidget;
 	std::unique_ptr<NetCDFOptionsWidget> m_netcdfOptionsWidget;
 	std::unique_ptr<CANOptionsWidget> m_canOptionsWidget;
 	std::unique_ptr<MatioOptionsWidget> m_matioOptionsWidget;
@@ -113,6 +120,7 @@ private:
 	bool m_importValid{false};
 	bool m_liveDataSource;
 	bool m_suppressRefresh{false};
+	TemplateHandler* m_templateHandler{nullptr};
 
 Q_SIGNALS:
 	void enableImportToMatrix(bool enable);
@@ -129,10 +137,8 @@ private Q_SLOTS:
 	void sourceTypeChanged(int);
 	void updateTypeChanged(int);
 	void readingTypeChanged(int);
-	void excelFirstRowAsColNamesChanged(bool checked);
+	void firstRowAsColNamesChanged(bool checked);
 
-	void saveFilter();
-	void manageFilters();
 	void hidePropertyWidgets();
 	void filterChanged(int);
 	void selectFile();
@@ -140,8 +146,11 @@ private Q_SLOTS:
 	void showFileInfo();
 	void refreshPreview();
 	void updateStartRow(int);
-
 	void enableDataPortionSelection(bool);
+
+	// save/load template
+	void loadConfigFromTemplate(KConfig&);
+	void saveConfigAsTemplate(KConfig&);
 
 	friend class HDF5OptionsWidget; // to access refreshPreview()
 	friend class MatioOptionsWidget; // to access refreshPreview() and others
@@ -149,7 +158,8 @@ private Q_SLOTS:
 	friend class FITSOptionsWidget;
 	friend class JsonOptionsWidget;
 	friend class ROOTOptionsWidget; // to access refreshPreview() and others
-	friend class ExcelOptionsWidget; // to access refreshPreview()
+	friend class OdsOptionsWidget; // to access refreshPreview()
+	friend class XLSXOptionsWidget; // to access refreshPreview()
 
 #ifdef HAVE_MQTT
 private:

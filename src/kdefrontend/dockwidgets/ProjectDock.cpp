@@ -23,9 +23,7 @@
 ProjectDock::ProjectDock(QWidget* parent)
 	: BaseDock(parent) {
 	ui.setupUi(this);
-	m_leName = ui.leName;
-	m_teComment = ui.teComment;
-	m_teComment->setFixedHeight(1.2 * m_leName->height());
+	setBaseWidgets(ui.leName, ui.teComment);
 
 	QString msg = i18n(
 		"If checked, the results of the calculations in the analysis curves will be saved in the project file.\n"
@@ -35,9 +33,7 @@ ProjectDock::ProjectDock(QWidget* parent)
 	ui.chkSaveCalculations->setToolTip(msg);
 
 	// SLOTS
-	connect(ui.leName, &QLineEdit::textChanged, this, &ProjectDock::nameChanged);
 	connect(ui.leAuthor, &QLineEdit::textChanged, this, &ProjectDock::authorChanged);
-	connect(ui.teComment, &QTextEdit::textChanged, this, &ProjectDock::commentChanged);
 	connect(ui.chkSaveCalculations, &QCheckBox::toggled, this, &ProjectDock::saveCalculationsChanged);
 }
 
@@ -73,7 +69,6 @@ void ProjectDock::setProject(Project* project) {
 	ui.chkSaveCalculations->setVisible(visible);
 	ui.chkSaveCalculations->setChecked(project->saveCalculations());
 
-	connect(m_project, &Project::aspectDescriptionChanged, this, &ProjectDock::aspectDescriptionChanged);
 	connect(m_project, &Project::authorChanged, this, &ProjectDock::projectAuthorChanged);
 	connect(m_project, &Project::saveCalculationsChanged, this, &ProjectDock::projectSaveCalculationsChanged);
 }

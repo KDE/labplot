@@ -80,12 +80,6 @@ QList<FITSFilter::Keyword> FITSFilter::chduKeywords(const QString& fileName) {
 	return d->chduKeywords(fileName);
 }
 
-void FITSFilter::loadFilterSettings(const QString& /*fileName*/) {
-}
-
-void FITSFilter::saveFilterSettings(const QString& /*fileName*/) const {
-}
-
 /*!
  * \brief contains the {StandardKeywords \ MandatoryKeywords} keywords
  * \return A list of keywords

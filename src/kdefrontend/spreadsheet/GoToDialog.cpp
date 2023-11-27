@@ -8,6 +8,7 @@
 */
 
 #include "GoToDialog.h"
+#include "backend/core/Settings.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/macros.h"
 #include "backend/spreadsheet/Spreadsheet.h"
@@ -59,7 +60,7 @@ GoToDialog::GoToDialog(QWidget* parent)
 	layout->addWidget(btnBox, 2, 1);
 
 	// restore saved settings if available
-	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("GoToDialog"));
+	KConfigGroup conf = Settings::group(QLatin1String("GoToDialog"));
 
 	create(); // ensure there's a window created
 	if (conf.exists()) {
@@ -71,7 +72,7 @@ GoToDialog::GoToDialog(QWidget* parent)
 
 GoToDialog::~GoToDialog() {
 	// save the current settings
-	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("GoToDialog"));
+	KConfigGroup conf = Settings::group(QLatin1String("GoToDialog"));
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 

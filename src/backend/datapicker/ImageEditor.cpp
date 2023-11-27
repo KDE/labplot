@@ -13,9 +13,7 @@
 #include <QMutex>
 #include <QThreadPool>
 
-extern "C" {
 #include <gsl/gsl_math.h>
-}
 
 static const QRgb white = QColor(Qt::white).rgb();
 static const QRgb black = QColor(Qt::black).rgb();

@@ -5,7 +5,7 @@
 						   show their values
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2020 Martin Marmsoler <martin.marmsoler@gmail.com>
-	SPDX-FileCopyrightText: 2020-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2020-2023 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -24,6 +24,9 @@
 #include "backend/worksheet/plots/cartesian/CustomPoint.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 
+#include <KConfig>
+#include <KConfigGroup>
+
 #include <QAction>
 #include <QDateTime>
 #include <QGraphicsSceneMouseEvent>
@@ -40,7 +43,7 @@ InfoElement::InfoElement(const QString& name, CartesianPlot* plot)
 	setVisible(false);
 }
 
-InfoElement::InfoElement(const QString& name, CartesianPlot* p, const XYCurve* curve, double pos)
+InfoElement::InfoElement(const QString& name, CartesianPlot* p, const XYCurve* curve, double logicalPos)
 	: WorksheetElement(name, new InfoElementPrivate(this, curve), AspectType::InfoElement) {
 	Q_D(InfoElement);
 	m_plot = p;
@@ -56,14 +59,14 @@ InfoElement::InfoElement(const QString& name, CartesianPlot* p, const XYCurve* c
 		custompoint->setCoordinateBindingEnabled(true);
 		custompoint->setCoordinateSystemIndex(curve->coordinateSystemIndex());
 		addChild(custompoint);
-		InfoElement::MarkerPoints_T markerpoint(custompoint, custompoint->path(), curve, curve->path());
+		InfoElement::MarkerPoints_T markerpoint(custompoint, curve, curve->path());
 		markerpoints.append(markerpoint);
 
 		// setpos after label was created
 		if (curve->xColumn() && curve->yColumn()) {
 			bool valueFound;
 			double xpos;
-			double y = curve->y(pos, xpos, valueFound);
+			double y = curve->y(logicalPos, xpos, valueFound);
 			if (valueFound) {
 				d->positionLogical = xpos;
 				d->m_index = curve->xColumn()->indexForValue(xpos);
@@ -140,12 +143,17 @@ void InfoElement::init() {
 	m_setTextLabelText = false;
 	addChild(m_title);
 
+	// use the line properties of axis line also for the info element lines
+	KConfig config;
+	const auto& group = config.group(QStringLiteral("Axis"));
+
 	// lines
 	Q_D(InfoElement);
 	d->verticalLine = new Line(QString());
 	d->verticalLine->setHidden(true);
 	d->verticalLine->setPrefix(QStringLiteral("VerticalLine"));
 	addChild(d->verticalLine);
+	d->verticalLine->init(group);
 	connect(d->verticalLine, &Line::updatePixmapRequested, [=] {
 		d->update();
 	});
@@ -157,22 +165,16 @@ void InfoElement::init() {
 	d->connectionLine->setHidden(true);
 	d->connectionLine->setPrefix(QStringLiteral("ConnectionLine"));
 	addChild(d->connectionLine);
+	d->connectionLine->init(group);
 	connect(d->connectionLine, &Line::updatePixmapRequested, [=] {
 		d->update();
 	});
 	connect(d->connectionLine, &Line::updateRequested, [=] {
 		d->updateConnectionLine();
 	});
-
-	// use the color for the axis line from the theme also for info element's lines
-	KConfig config;
-	InfoElement::loadThemeConfig(config);
 }
 
 void InfoElement::initActions() {
-	visibilityAction = new QAction(i18n("Visible"), this);
-	visibilityAction->setCheckable(true);
-	connect(visibilityAction, &QAction::triggered, this, &InfoElement::setVisible);
 }
 
 void InfoElement::initMenus() {
@@ -195,13 +197,7 @@ QMenu* InfoElement::createContextMenu() {
 	if (!m_menusInitialized)
 		initMenus();
 
-	QMenu* menu = WorksheetElement::createContextMenu();
-	QAction* firstAction = menu->actions().at(1);
-
-	visibilityAction->setChecked(isVisible());
-	menu->insertAction(firstAction, visibilityAction);
-
-	return menu;
+	return WorksheetElement::createContextMenu();
 }
 
 /*!
@@ -251,7 +247,7 @@ void InfoElement::addCurve(const XYCurve* curve, CustomPoint* custompoint) {
 	if (d->m_index < 0 && curve->xColumn())
 		d->m_index = curve->xColumn()->indexForValue(custompoint->positionLogical().x());
 
-	struct MarkerPoints_T markerpoint = {custompoint, custompoint->path(), curve, curve->path()};
+	struct MarkerPoints_T markerpoint = {custompoint, curve, curve->path()};
 	markerpoints.append(markerpoint);
 
 	if (markerpoints.count() == 1) // first point
@@ -296,7 +292,7 @@ void InfoElement::addCurvePath(QString& curvePath, CustomPoint* custompoint) {
 		addChild(custompoint);
 	}
 
-	struct MarkerPoints_T markerpoint = {custompoint, custompoint->path(), nullptr, curvePath};
+	struct MarkerPoints_T markerpoint = {custompoint, nullptr, curvePath};
 	markerpoints.append(markerpoint);
 }
 
@@ -346,6 +342,11 @@ void InfoElement::removeCurve(const XYCurve* curve) {
 			removeChild(mp.customPoint);
 		}
 	}
+
+	setUndoAware(false);
+	if (curve->name() == connectionLineCurveName())
+		setConnectionLineCurveName(markerpoints.count() > 0 ? markerpoints.at(0).curve->name() : QStringLiteral());
+	setUndoAware(true);
 
 	m_title->setUndoAware(false);
 	m_title->setText(createTextLabelText());
@@ -738,10 +739,6 @@ void InfoElement::setParentGraphicsItem(QGraphicsItem* item) {
 	d->updatePosition();
 }
 
-QGraphicsItem* InfoElement::graphicsItem() const {
-	return d_ptr;
-}
-
 void InfoElement::retransform() {
 	Q_D(InfoElement);
 	d->retransform();
@@ -857,9 +854,9 @@ void InfoElementPrivate::retransform() {
 
 	// new bounding rectangle
 	const QRectF& rect = parentItem()->mapRectFromScene(q->plot()->rect());
-	boundingRectangle = mapFromParent(rect).boundingRect();
+	const QRectF& newBoundingRect = mapFromParent(rect).boundingRect();
 	QDEBUG(Q_FUNC_INFO << ", rect = " << rect)
-	QDEBUG(Q_FUNC_INFO << ", bounding rect = " << boundingRectangle)
+	QDEBUG(Q_FUNC_INFO << ", bounding rect = " << newBoundingRect)
 
 	// TODO: why do I need to retransform the label and the custompoints?
 	q->m_title->retransform();
@@ -891,7 +888,7 @@ void InfoElementPrivate::retransform() {
 	// connection line
 	const QPointF m_titlePosItemCoords = mapFromParent(m_titlePos); // calculate item coords from scene coords
 	const QPointF pointPosItemCoords = mapFromParent(mapPlotAreaToParent(pointPos)); // calculate item coords from scene coords
-	if (boundingRectangle.contains(m_titlePosItemCoords) && boundingRectangle.contains(pointPosItemCoords))
+	if (newBoundingRect.contains(m_titlePosItemCoords) && newBoundingRect.contains(pointPosItemCoords))
 		m_connectionLine = QLineF(m_titlePosItemCoords.x(), m_titlePosItemCoords.y(), pointPosItemCoords.x(), pointPosItemCoords.y());
 	else
 		m_connectionLine = QLineF();
@@ -902,7 +899,7 @@ void InfoElementPrivate::retransform() {
 	xposLine = QLineF(pointPosItemCoords.x(), dataRect.bottom(), pointPosItemCoords.x(), dataRect.top());
 	QDEBUG(Q_FUNC_INFO << ", vertical line " << xposLine)
 
-	update(boundingRectangle);
+	recalcShapeAndBoundingRect(newBoundingRect);
 
 	q->m_suppressChildPositionChanged = false;
 }
@@ -915,14 +912,14 @@ void InfoElementPrivate::updatePosition() {
  * Repainting to update xposLine
  */
 void InfoElementPrivate::updateVerticalLine() {
-	update(boundingRectangle);
+	recalcShapeAndBoundingRect();
 }
 
 /*!
  * Repainting to updateConnectionLine
  */
 void InfoElementPrivate::updateConnectionLine() {
-	update(boundingRect());
+	recalcShapeAndBoundingRect();
 }
 
 bool InfoElementPrivate::changeVisibility(bool on) {
@@ -937,11 +934,6 @@ bool InfoElementPrivate::changeVisibility(bool on) {
 	}
 	update(boundingRect());
 	return oldValue;
-}
-
-// reimplemented from QGraphicsItem
-QRectF InfoElementPrivate::boundingRect() const {
-	return boundingRectangle;
 }
 
 void InfoElementPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) {
@@ -1106,6 +1098,52 @@ void InfoElementPrivate::keyPressEvent(QKeyEvent* event) {
 	}
 }
 
+bool InfoElementPrivate::activate(QPointF mouseScenePos, double /*maxDist*/) {
+	if (!isVisible())
+		return false;
+
+	return m_shape.contains(mouseScenePos);
+}
+
+void InfoElementPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
+	if (activate(event->pos())) {
+		q->createContextMenu()->exec(event->screenPos());
+		return;
+	}
+	QGraphicsItem::contextMenuEvent(event);
+}
+
+void InfoElementPrivate::recalcShape() {
+	m_shape = QPainterPath();
+
+	if (verticalLine->style() != Qt::PenStyle::NoPen) {
+		QPainterPath path;
+		path.moveTo(xposLine.p1());
+		path.lineTo(xposLine.p2());
+		m_shape.addPath(WorksheetElement::shapeFromPath(path, verticalLine->pen()));
+	}
+
+	if (connectionLine->style() != Qt::PenStyle::NoPen) {
+		QPainterPath path;
+		path.moveTo(m_connectionLine.p1());
+		path.lineTo(m_connectionLine.p2());
+		m_shape.addPath(WorksheetElement::shapeFromPath(path, connectionLine->pen()));
+	}
+}
+
+void InfoElementPrivate::recalcShapeAndBoundingRect(const QRectF& rect) {
+	prepareGeometryChange();
+	m_boundingRectangle = rect;
+	recalcShape();
+	update(m_boundingRectangle);
+}
+
+void InfoElementPrivate::recalcShapeAndBoundingRect() {
+	prepareGeometryChange();
+	recalcShape();
+	update(m_boundingRectangle);
+}
+
 // ##############################################################################
 // ##################  Serialization/Deserialization  ###########################
 // ##############################################################################
@@ -1155,7 +1193,6 @@ bool InfoElement::load(XmlStreamReader* reader, bool preview) {
 	Q_D(InfoElement);
 
 	QXmlStreamAttributes attribs;
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QString str;
 	QString curvePath;
 
@@ -1177,7 +1214,7 @@ bool InfoElement::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value(QStringLiteral("visible")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("x")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("x"));
 			else
 				setVisible(str.toInt());
 
@@ -1213,6 +1250,10 @@ bool InfoElement::load(XmlStreamReader* reader, bool preview) {
 		} else if (reader->name() == QLatin1String("point")) {
 			attribs = reader->attributes();
 			curvePath = attribs.value(QStringLiteral("curvepath")).toString();
+		} else { // unknown element
+			reader->raiseUnknownElementWarning();
+			if (!reader->skipToEndElement())
+				return false;
 		}
 	}
 
@@ -1224,9 +1265,9 @@ bool InfoElement::load(XmlStreamReader* reader, bool preview) {
 // ##############################################################################
 void InfoElement::loadThemeConfig(const KConfig& config) {
 	// use the color for the axis line from the theme also for info element's lines
-	const KConfigGroup& group = config.group("Axis");
+	const KConfigGroup& group = config.group(QStringLiteral("Axis"));
 
-	const QColor& themeColor = group.readEntry("LineColor", QColor(Qt::black));
+	const QColor& themeColor = group.readEntry(QStringLiteral("LineColor"), QColor(Qt::black));
 	Q_D(InfoElement);
 	d->verticalLine->loadThemeConfig(group, themeColor);
 	d->connectionLine->loadThemeConfig(group, themeColor);

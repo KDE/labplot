@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Aspect providing a spreadsheet table with column logic
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2010-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2010-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2006-2008 Tilman Benkert <thzs@gmx.net>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -19,6 +19,7 @@ class AbstractFileFilter;
 class SpreadsheetView;
 class SpreadsheetModel;
 class SpreadsheetPrivate;
+class StatisticsSpreadsheet;
 
 class Spreadsheet : public AbstractDataSource {
 	Q_OBJECT
@@ -31,6 +32,7 @@ public:
 	QMenu* createContextMenu() override;
 	void fillColumnContextMenu(QMenu*, Column*);
 	QWidget* view() const override;
+	StatisticsSpreadsheet* statisticsSpreadsheet() const;
 
 	bool exportView() const override;
 	bool printView() override;
@@ -69,10 +71,10 @@ public:
 
 	// used from model to inform dock
 	void emitRowCountChanged() {
-		emit rowCountChanged(rowCount());
+		Q_EMIT rowCountChanged(rowCount());
 	}
 	void emitColumnCountChanged() {
-		emit columnCountChanged(columnCount());
+		Q_EMIT columnCountChanged(columnCount());
 	}
 
 	// data import
@@ -103,6 +105,8 @@ public:
 public Q_SLOTS:
 	void appendRows(int);
 	void appendRow();
+	void removeEmptyRows();
+	void maskEmptyRows();
 	void appendColumns(int);
 	void appendColumn();
 	void prependColumns(int);
@@ -122,9 +126,12 @@ public Q_SLOTS:
 	void moveColumn(int from, int to);
 	void sortColumns(Column* leading, const QVector<Column*>&, bool ascending);
 
+	void toggleStatisticsSpreadsheet(bool);
+
 private:
 	void init();
 	void initConnectionsLinking(const Spreadsheet* sender, const Spreadsheet* receiver);
+	QVector<int> rowsWithMissingValues() const;
 	Q_DECLARE_PRIVATE(Spreadsheet)
 
 	SpreadsheetPrivate* const d_ptr;

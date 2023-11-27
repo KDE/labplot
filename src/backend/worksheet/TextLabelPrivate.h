@@ -14,13 +14,11 @@
 #include "src/backend/worksheet/TextLabel.h"
 #include "src/backend/worksheet/WorksheetElementPrivate.h"
 #include "tools/TeXRenderer.h"
-#include <QDesktopWidget>
 #include <QFutureWatcher>
+#include <QScreen>
 #include <QStaticText>
 
-extern "C" {
 #include <gsl/gsl_const_cgs.h>
-}
 
 class QGraphicsSceneHoverEvent;
 class CartesianPlot;
@@ -34,8 +32,9 @@ public:
 	explicit TextLabelPrivate(TextLabel*);
 
 	double zoomFactor{-1.0};
-	int teXImageResolution{QApplication::desktop()->physicalDpiX()};
-	double teXImageScaleFactor{Worksheet::convertToSceneUnits(GSL_CONST_CGS_INCH / QApplication::desktop()->physicalDpiX(), Worksheet::Unit::Centimeter)};
+	int teXImageResolution{static_cast<int>(QApplication::primaryScreen()->physicalDotsPerInchX())};
+	double teXImageScaleFactor{
+		Worksheet::convertToSceneUnits(GSL_CONST_CGS_INCH / QApplication::primaryScreen()->physicalDotsPerInchX(), Worksheet::Unit::Centimeter)};
 
 	TextLabel::TextWrapper textWrapper;
 	QFont teXFont{QStringLiteral("Computer Modern"), 12}; // reasonable default font and size
@@ -65,7 +64,6 @@ public:
 	TextLabel::GluePoint gluePointAt(int index);
 
 	ScaledTextItem* m_textItem{nullptr};
-	bool m_hovered{false};
 
 	QRectF transformedBoundingRectangle; // bounding rectangle of transformed (rotated etc.) text
 	QPainterPath borderShapePath;
@@ -80,11 +78,6 @@ public:
 	// used in the InfoElement (Marker) to attach the line to the label
 	QVector<TextLabel::GluePoint> m_gluePoints;
 	QVector<TextLabel::GluePoint> m_gluePointsTransformed;
-
-private:
-	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
-	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
-	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
 };
 
 #endif

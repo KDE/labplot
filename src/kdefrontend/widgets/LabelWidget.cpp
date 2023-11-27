@@ -9,7 +9,7 @@
 */
 
 #include "LabelWidget.h"
-#include "backend/lib/macros.h"
+#include "backend/core/Settings.h"
 #include "backend/worksheet/Background.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/PlotArea.h"
@@ -89,9 +89,7 @@ LabelWidget::LabelWidget(QWidget* parent)
 	: BaseDock(parent)
 	, m_dateTimeMenu(new QMenu(this)) {
 	ui.setupUi(this);
-	m_leName = ui.leName;
-	m_teComment = ui.teComment;
-	m_teComment->setFixedHeight(1.5 * m_leName->height());
+	setBaseWidgets(ui.leName, ui.teComment);
 
 	// set the minimum size of the text edit widget to one row of a QLabel
 	ui.teLabel->setMinimumHeight(ui.lName->height());
@@ -103,7 +101,7 @@ LabelWidget::LabelWidget(QWidget* parent)
 		l->setVerticalSpacing(2);
 	}
 
-	const KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
+	const KConfigGroup group = Settings::group(QStringLiteral("Settings_General"));
 	m_units = (BaseDock::Units)group.readEntry("Units", (int)BaseDock::Units::Metric);
 	if (m_units == BaseDock::Units::Imperial)
 		m_worksheetUnit = Worksheet::Unit::Inch;
@@ -217,8 +215,8 @@ LabelWidget::LabelWidget(QWidget* parent)
 
 #ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
 	m_highlighter = new KSyntaxHighlighting::SyntaxHighlighter(ui.teLabel->document());
-	m_highlighter->setTheme(DARKMODE ? m_repository.defaultTheme(KSyntaxHighlighting::Repository::DarkTheme)
-									 : m_repository.defaultTheme(KSyntaxHighlighting::Repository::LightTheme));
+	m_highlighter->setTheme(GuiTools::isDarkMode() ? m_repository.defaultTheme(KSyntaxHighlighting::Repository::DarkTheme)
+												   : m_repository.defaultTheme(KSyntaxHighlighting::Repository::LightTheme));
 #endif
 
 	m_messageWidget = new KMessageWidget(this);
@@ -229,8 +227,6 @@ LabelWidget::LabelWidget(QWidget* parent)
 	m_messageWidget->hide(); // will be shown later once there is a latex render result
 
 	// SLOTS
-	connect(ui.leName, &QLineEdit::textChanged, this, &LabelWidget::nameChanged);
-	connect(ui.teComment, &QTextEdit::textChanged, this, &LabelWidget::commentChanged);
 
 	// text properties
 	connect(ui.cbMode, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &LabelWidget::modeChanged);
@@ -267,6 +263,7 @@ LabelWidget::LabelWidget(QWidget* parent)
 	connect(ui.sbOffsetY, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &LabelWidget::offsetYChanged);
 
 	connect(ui.chbVisible, &QCheckBox::clicked, this, &LabelWidget::visibilityChanged);
+	connect(ui.chbLock, &QCheckBox::clicked, this, &LabelWidget::lockChanged);
 	connect(ui.chbBindLogicalPos, &QCheckBox::clicked, this, &LabelWidget::bindingChanged);
 	connect(ui.chbShowPlaceholderText, &QCheckBox::toggled, this, &LabelWidget::showPlaceholderTextChanged);
 
@@ -300,27 +297,6 @@ void LabelWidget::setLabels(QList<TextLabel*> labels) {
 	ui.leName->setVisible(visible);
 	ui.lComment->setVisible(visible);
 	ui.teComment->setVisible(visible);
-
-	if (visible) {
-		// if there is more than one point in the list, disable the comment and name widgets in "general"
-		if (labels.size() == 1) {
-			ui.lName->setEnabled(true);
-			ui.leName->setEnabled(true);
-			ui.lComment->setEnabled(true);
-			ui.teComment->setEnabled(true);
-			ui.leName->setText(m_label->name());
-			ui.teComment->setText(m_label->comment());
-		} else {
-			ui.lName->setEnabled(false);
-			ui.leName->setEnabled(false);
-			ui.lComment->setEnabled(false);
-			ui.teComment->setEnabled(false);
-			ui.leName->setText(QString());
-			ui.teComment->setText(QString());
-		}
-		ui.leName->setStyleSheet(QString());
-		ui.leName->setToolTip(QString());
-	}
 
 	this->load();
 	initConnections();
@@ -426,6 +402,7 @@ void LabelWidget::initConnections() {
 	m_connections << connect(m_label, &TextLabel::borderPenChanged, this, &LabelWidget::labelBorderPenChanged);
 	m_connections << connect(m_label, &TextLabel::borderOpacityChanged, this, &LabelWidget::labelBorderOpacityChanged);
 	m_connections << connect(m_label, &TextLabel::visibleChanged, this, &LabelWidget::labelVisibleChanged);
+	m_connections << connect(m_label, &TextLabel::lockChanged, this, &LabelWidget::labelLockChanged);
 
 	if (!m_label->parentAspect()) {
 		QDEBUG(Q_FUNC_INFO << ", LABEL " << m_label << " HAS NO PARENT!")
@@ -513,7 +490,7 @@ void LabelWidget::setBorderAvailable(bool b) {
 }
 
 void LabelWidget::updateUnits() {
-	const KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
+	const KConfigGroup group = Settings::group(QStringLiteral("Settings_General"));
 	BaseDock::Units units = (BaseDock::Units)group.readEntry("Units", (int)BaseDock::Units::Metric);
 	if (units == m_units)
 		return;
@@ -1046,6 +1023,12 @@ void LabelWidget::visibilityChanged(bool state) {
 		label->setVisible(state);
 }
 
+void LabelWidget::lockChanged(bool locked) {
+	CONDITIONAL_LOCK_RETURN;
+	for (auto* label : m_labelsList)
+		label->setLock(locked);
+}
+
 // border
 void LabelWidget::borderShapeChanged(int index) {
 	auto shape = (TextLabel::BorderShape)index;
@@ -1296,6 +1279,11 @@ void LabelWidget::labelVisibleChanged(bool on) {
 	ui.chbVisible->setChecked(on);
 }
 
+void LabelWidget::labelLockChanged(bool on) {
+	CONDITIONAL_LOCK_RETURN;
+	ui.chbLock->setChecked(on);
+}
+
 // border
 void LabelWidget::labelBorderShapeChanged(TextLabel::BorderShape shape) {
 	CONDITIONAL_LOCK_RETURN;
@@ -1335,6 +1323,7 @@ void LabelWidget::load() {
 	CONDITIONAL_LOCK_RETURN;
 
 	ui.chbVisible->setChecked(m_label->isVisible());
+	ui.chbLock->setChecked(m_label->isLocked());
 
 	// don't show checkbox if Placeholder feature not used
 	bool allowPlaceholder = m_label->text().allowPlaceholder;
@@ -1501,7 +1490,7 @@ void LabelWidget::updateMode(TextLabel::Mode mode) {
 		else
 			m_highlighter->setDefinition(m_repository.definitionForName(QLatin1String("Markdown")));
 #endif
-		KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("Settings_Worksheet"));
+		KConfigGroup conf = Settings::group(QLatin1String("Settings_Worksheet"));
 		QString engine = conf.readEntry(QLatin1String("LaTeXEngine"), "");
 		if (engine == QLatin1String("xelatex") || engine == QLatin1String("lualatex")) {
 			ui.lFontTeX->setVisible(true);

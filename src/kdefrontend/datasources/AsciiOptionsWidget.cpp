@@ -9,13 +9,13 @@
 */
 
 #include "AsciiOptionsWidget.h"
+#include "backend/core/Settings.h"
 #include "backend/datasources/filters/AbstractFileFilter.h"
 #include "backend/datasources/filters/AsciiFilter.h"
 #include "backend/lib/macros.h"
 
 #include <KConfigGroup>
 #include <KLocalizedString>
-#include <KSharedConfig>
 
 /*!
 \class AsciiOptionsWidget
@@ -178,42 +178,56 @@ void AsciiOptionsWidget::setSeparatingCharacter(QLatin1Char character) {
 	ui.cbSeparatingCharacter->setCurrentItem(QString(character));
 }
 
+// ##############################################################################
+// ########################## Template handling   ##############################
+// ##############################################################################
 void AsciiOptionsWidget::loadSettings() const {
-	KConfigGroup conf(KSharedConfig::openConfig(), "ImportAscii");
-
-	ui.cbCommentCharacter->setCurrentText(conf.readEntry("CommentCharacter", "#"));
-	ui.cbSeparatingCharacter->setCurrentText(conf.readEntry("SeparatingCharacter", "auto"));
-
-	// TODO: use general setting for decimal separator?
-	const QChar decimalSeparator = QLocale().decimalPoint();
-	int index = (decimalSeparator == QLatin1Char('.')) ? 0 : 1;
-	ui.cbDecimalSeparator->setCurrentIndex(conf.readEntry("DecimalSeparator", index));
-
-	ui.cbDateTimeFormat->setCurrentText(conf.readEntry("DateTimeFormat", "yyyy-MM-dd hh:mm:ss.zzz"));
-	ui.chbCreateIndex->setChecked(conf.readEntry("CreateIndex", false));
-	ui.chbCreateTimestamp->setChecked(conf.readEntry("CreateTimestamp", true));
-	ui.chbSimplifyWhitespaces->setChecked(conf.readEntry("SimplifyWhitespaces", true));
-	ui.chbConvertNaNToZero->setChecked(conf.readEntry("ConvertNaNToZero", false));
-	ui.chbRemoveQuotes->setChecked(conf.readEntry("RemoveQuotes", false));
-	ui.chbSkipEmptyParts->setChecked(conf.readEntry("SkipEmptyParts", false));
-	ui.chbHeader->setChecked(conf.readEntry("UseFirstRow", true));
-	headerChanged(ui.chbHeader->isChecked()); // call this to update the status of the SpinBox for the header line
-	ui.kleVectorNames->setText(conf.readEntry("Names", ""));
+	auto config = KConfig();
+	loadConfigFromTemplate(config);
 }
 
-void AsciiOptionsWidget::saveSettings() {
-	KConfigGroup conf(KSharedConfig::openConfig(), "ImportAscii");
+void AsciiOptionsWidget::saveSettings() const {
+	auto config = KConfig();
+	saveConfigAsTemplate(config);
+}
 
-	conf.writeEntry("CommentCharacter", ui.cbCommentCharacter->currentText());
-	conf.writeEntry("SeparatingCharacter", ui.cbSeparatingCharacter->currentText());
-	conf.writeEntry("DecimalSeparator", ui.cbDecimalSeparator->currentIndex());
-	conf.writeEntry("DateTimeFormat", ui.cbDateTimeFormat->currentText());
-	conf.writeEntry("CreateIndex", ui.chbCreateIndex->isChecked());
-	conf.writeEntry("CreateTimestamp", ui.chbCreateTimestamp->isChecked());
-	conf.writeEntry("SimplifyWhitespaces", ui.chbSimplifyWhitespaces->isChecked());
-	conf.writeEntry("ConvertNaNToZero", ui.chbConvertNaNToZero->isChecked());
-	conf.writeEntry("RemoveQuotes", ui.chbRemoveQuotes->isChecked());
-	conf.writeEntry("SkipEmptyParts", ui.chbSkipEmptyParts->isChecked());
-	conf.writeEntry("UseFirstRow", ui.chbHeader->isChecked());
-	conf.writeEntry("Names", ui.kleVectorNames->text());
+void AsciiOptionsWidget::loadConfigFromTemplate(KConfig& config) const {
+	auto group = config.group(QStringLiteral("ImportAscii"));
+
+	ui.cbCommentCharacter->setCurrentText(group.readEntry("CommentCharacter", "#"));
+	ui.cbSeparatingCharacter->setCurrentText(group.readEntry("SeparatingCharacter", "auto"));
+
+	const auto decimalSeparator = QLocale().decimalPoint();
+	int index = (decimalSeparator == QLatin1Char('.')) ? 0 : 1;
+	ui.cbDecimalSeparator->setCurrentIndex(group.readEntry("DecimalSeparator", index));
+
+	ui.cbDateTimeFormat->setCurrentText(group.readEntry("DateTimeFormat", "yyyy-MM-dd hh:mm:ss.zzz"));
+	ui.chbCreateIndex->setChecked(group.readEntry("CreateIndex", false));
+	ui.chbCreateTimestamp->setChecked(group.readEntry("CreateTimestamp", true));
+	ui.chbSimplifyWhitespaces->setChecked(group.readEntry("SimplifyWhitespaces", true));
+	ui.chbConvertNaNToZero->setChecked(group.readEntry("ConvertNaNToZero", false));
+	ui.chbRemoveQuotes->setChecked(group.readEntry("RemoveQuotes", false));
+	ui.chbSkipEmptyParts->setChecked(group.readEntry("SkipEmptyParts", false));
+	ui.chbHeader->setChecked(group.readEntry("UseFirstRow", true)); // header enabled - yes/no
+	headerChanged(ui.chbHeader->isChecked()); // call this to update the status of the SpinBox for the header line
+	ui.sbHeaderLine->setValue(group.readEntry(QLatin1String("HeaderLine"), 1));
+	ui.kleVectorNames->setText(group.readEntry("Names", ""));
+}
+
+void AsciiOptionsWidget::saveConfigAsTemplate(KConfig& config) const {
+	auto group = config.group(QStringLiteral("ImportAscii"));
+
+	group.writeEntry("CommentCharacter", ui.cbCommentCharacter->currentText());
+	group.writeEntry("SeparatingCharacter", ui.cbSeparatingCharacter->currentText());
+	group.writeEntry("DecimalSeparator", ui.cbDecimalSeparator->currentIndex());
+	group.writeEntry("DateTimeFormat", ui.cbDateTimeFormat->currentText());
+	group.writeEntry("CreateIndex", ui.chbCreateIndex->isChecked());
+	group.writeEntry("CreateTimestamp", ui.chbCreateTimestamp->isChecked());
+	group.writeEntry("SimplifyWhitespaces", ui.chbSimplifyWhitespaces->isChecked());
+	group.writeEntry("ConvertNaNToZero", ui.chbConvertNaNToZero->isChecked());
+	group.writeEntry("RemoveQuotes", ui.chbRemoveQuotes->isChecked());
+	group.writeEntry("SkipEmptyParts", ui.chbSkipEmptyParts->isChecked());
+	group.writeEntry("UseFirstRow", ui.chbHeader->isChecked()); // header enabled - yes/no
+	group.writeEntry(QLatin1String("HeaderLine"), ui.sbHeaderLine->value());
+	group.writeEntry("Names", ui.kleVectorNames->text());
 }

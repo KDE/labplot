@@ -12,11 +12,8 @@
 #ifndef INTERVAL_H
 #define INTERVAL_H
 
-#include <QVector>
-
-extern "C" {
 #include "backend/nsl/nsl_math.h"
-}
+#include <QVector>
 
 template<class T>
 class Interval;
@@ -172,9 +169,9 @@ public:
 		QVector<Interval<T>>*tmp1, *tmp2;
 		tmp1 = new QVector<Interval<T>>();
 		*tmp1 << *static_cast<Interval<T>*>(this);
-		foreach (Interval<T> i, subtrahend) {
+		for (const auto& i : subtrahend) {
 			tmp2 = new QVector<Interval<T>>();
-			foreach (Interval<T> j, *tmp1)
+			for (const auto& j : *tmp1)
 				*tmp2 << subtract(j, i);
 			delete tmp1;
 			tmp1 = tmp2;

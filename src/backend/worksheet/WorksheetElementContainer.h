@@ -23,8 +23,6 @@ public:
 	WorksheetElementContainer(const QString&, AspectType);
 	~WorksheetElementContainer() override;
 
-	QGraphicsItem* graphicsItem() const override;
-
 	void setVisible(bool) override;
 	bool isFullyVisible() const override;
 	void setPrinting(bool) override;

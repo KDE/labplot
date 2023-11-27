@@ -1,17 +1,36 @@
-project(labplot2)
-set(LABPLOT_VERSION 2.10.0)
-
 cmake_minimum_required (VERSION 3.17.0 FATAL_ERROR)
+project(labplot2)
+set(LABPLOT_VERSION 2.10.1)
+
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS OFF)
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core)
+MESSAGE (STATUS "Found Qt version ${QT_VERSION_MAJOR}")
 # see also -DQT_DISABLE_DEPRECATED_BEFORE in src/CMakeLists.txt
 set(QT_MIN_VERSION "5.10.0")
+set(KF_MAJOR_VERSION "5")
 set(KF_MIN_VERSION "5.16.0")
+#set(QT_VERSION_MAJOR "6")
+if (QT_VERSION_MAJOR GREATER_EQUAL 6)
+    set(KF_MIN_VERSION "5.240.0")
+    find_package(ECM ${KF_MIN_VERSION} NO_MODULE)
+    if (ECM_FOUND)
+        set(KF_MAJOR_VERSION "6")
+        set(QT_MIN_VERSION "6.2.2")		# openSUSE 15.4 version
+    else ()
+        MESSAGE (STATUS "KF6 not found! Trying Qt5")
+	find_package(QT NAMES Qt5 REQUIRED COMPONENTS Core)
+	MESSAGE (STATUS "Found Qt version ${QT_VERSION_MAJOR}")
+        set(KF_MIN_VERSION "5.16.0")
+    endif ()
+endif ()
+set(QT_MAJOR_VERSION ${QT_VERSION_MAJOR})
+
 set(APPLE_SUPPRESS_X11_WARNING ON)
 
 find_package(ECM ${KF_MIN_VERSION} REQUIRED NO_MODULE)
@@ -31,17 +50,6 @@ include(FeatureSummary)
 # build type: "release", "debug", "debugfull"
 string (TOLOWER "${CMAKE_BUILD_TYPE}" CMAKE_BUILD_TYPE)
 
-# Qt6 not supported yet
-set(QT_VERSION_MAJOR "5")
-set(QT_MAJOR_VERSION ${QT_VERSION_MAJOR})
-#if (QT_MAJOR_VERSION STREQUAL "6")
-#    set(QT_MIN_VERSION "6.4.0")
-#    set(KF_MIN_VERSION "5.240.0")
-#    set(KF_MAJOR_VERSION "6")
-#else()
-    set(KF_MAJOR_VERSION "5")
-#endif()
-
 find_package(Qt${QT_MAJOR_VERSION} ${QT_MIN_VERSION} NO_MODULE REQUIRED COMPONENTS
 	Concurrent
 	Gui
@@ -55,8 +63,8 @@ find_package(Qt${QT_MAJOR_VERSION} ${QT_MIN_VERSION} NO_MODULE REQUIRED COMPONEN
 	Test
 )
 
-# building QADS or Xlsx require Qt5GuiPrivate (QADS is required, Xlsx is optional)
-find_package(Qt5Gui ${QT_MIN_VERSION} CONFIG REQUIRED Private)
+# building QADS or Xlsx requires Qt${QT_VERSION_MAJOR}GuiPrivate (QADS is required, Xlsx is optional)
+find_package(Qt${QT_MAJOR_VERSION}Gui ${QT_MIN_VERSION} CONFIG REQUIRED Private)
 
 find_package(KF${KF_MAJOR_VERSION} ${KF_MIN_VERSION} REQUIRED COMPONENTS
 	Archive
@@ -77,6 +85,7 @@ find_package(KF${KF_MAJOR_VERSION} ${KF_MIN_VERSION} REQUIRED COMPONENTS
 OPTIONAL_COMPONENTS
 	Service
 	Parts
+	Purpose
 	SyntaxHighlighting
 )
 
@@ -94,14 +103,23 @@ ENDIF ()
 IF (NOT KF${KF_MAJOR_VERSION}Parts_FOUND)
 	MESSAGE (STATUS "KF Parts not found")
 ENDIF ()
+
+if (KF${KF_MAJOR_VERSION}Purpose_FOUND)
+	add_definitions (-DHAVE_PURPOSE)
+endif()
+
 IF (KF${KF_MAJOR_VERSION}SyntaxHighlighting_FOUND)
 	add_definitions (-DHAVE_KF5_SYNTAX_HIGHLIGHTING)
 ELSE ()
 	MESSAGE (STATUS "KF SyntaxHighlighting not found")
 ENDIF ()
 
-find_package(KUserFeedback)
-IF (KUserFeedback_FOUND)
+if (QT_MAJOR_VERSION GREATER_EQUAL 6)
+	find_package(KUserFeedbackQt6)
+else ()
+	find_package(KUserFeedback)
+endif ()
+IF (KUserFeedback_FOUND OR KUserFeedbackQt6_FOUND)
 	MESSAGE (STATUS "Found KUserFeedback")
 	add_definitions (-DHAVE_KUSERFEEDBACK)
 ELSE ()
@@ -121,7 +139,7 @@ set (GENERIC_FLAGS "-Wall -Wextra -Wundef -Wpointer-arith -Wunreachable-code -Wu
 set (GENERIC_GNU_FLAGS "${COMPILER_OPTIMIZATION_FLAG} -Wcast-align -Wswitch-enum -fvisibility=default -pedantic")
 set (GENERIC_C_FLAGS "${GENERIC_FLAGS} -fno-exceptions")
 # liborigin needs exceptions
-set (GENERIC_CXX_FLAGS "${GENERIC_FLAGS} -fexceptions -std=c++11")
+set (GENERIC_CXX_FLAGS "${GENERIC_FLAGS} -fexceptions -std=c++17")
 
 if ("${CMAKE_C_COMPILER_ID}" MATCHES "GNU")
 	message(STATUS "GNU C compiler ${CMAKE_C_COMPILER_VERSION} detected, adding compile flags")
@@ -142,10 +160,11 @@ elseif ("${CMAKE_C_COMPILER_ID}" MATCHES "PGI")
 # " x" postfix to work around a bug in CMake that causes "MSVC" to translate to something completely different
 elseif (("${CMAKE_C_COMPILER_ID} x" MATCHES "MSVC") OR MSVC)
 	message(STATUS "MSVC C compiler detected, adding compile flags")
+	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -W3")
 	if (CMAKE_BUILD_TYPE STREQUAL Debug)
-		set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Od -W3")
+		set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Od")
 	else ()
-		set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O2 -W3")
+		set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O2")
 	endif ()
 	set(MSVC_FOUND TRUE)
 else ()
@@ -171,10 +190,11 @@ elseif ("${CMAKE_CXX_COMPILER_ID}" MATCHES "PGI")
 elseif (("${CMAKE_CXX_COMPILER_ID} x" MATCHES "MSVC") OR MSVC)
 	message(STATUS "MSVC C++ compiler detected, adding compile flags")
 	# -D_ALLOW_KEYWORD_MACROS for "#define private public" in MultiRangeTest.cpp
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -W3 -DPSAPI_VERSION=1 /Zc:externC-")
 	if(CMAKE_BUILD_TYPE STREQUAL Debug)
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Od -W3 -DPSAPI_VERSION=1")
+		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Od")
 	else()
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2 -W3 -DPSAPI_VERSION=1")
+		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2")
 	endif()
 	set(MSVC_FOUND TRUE)
 else ()
@@ -226,7 +246,7 @@ if (CMAKE_VERSION VERSION_GREATER "3.5")
       message(STATUS "Clang-tidy supported, found and enabled: ${CLANG_TIDY_EXE}")
       set(CLANG_TIDY_CHECKS "modernize-*,-modernize-use-trailing-return-type,clang-analyzer-*,-clang-analyzer-cplusplus*")
       #set(CLANG_TIDY_CHECKS "-*,modernize-*,clang-analyzer-*")
-      # -extra-arg=--std=c++11
+      # -extra-arg=--std=c++17
       set(CMAKE_CXX_CLANG_TIDY "${CLANG_TIDY_EXE};-checks=${CLANG_TIDY_CHECKS};-header-filter='${CMAKE_SOURCE_DIR}/*'"
         CACHE STRING "" FORCE)
     else()
@@ -249,7 +269,12 @@ add_definitions (-DGIT_COMMIT=\"${GIT_COMMIT}\")
 
 
 ### Options ######################################
-option(ENABLE_CANTOR "Build with Cantor support" ON)
+# Cantor does not support Qt6 yet
+if (QT_MAJOR_VERSION GREATER_EQUAL 6)
+	option(ENABLE_CANTOR "Build with Cantor support" OFF)
+else ()
+	option(ENABLE_CANTOR "Build with Cantor support" ON)
+endif ()
 option(ENABLE_FFTW "Build with FFTW support" ON)
 option(ENABLE_HDF5 "Build with HDF5 support" ON)
 option(ENABLE_NETCDF "Build with NetCDF support" ON)
@@ -257,15 +282,26 @@ option(ENABLE_FITS "Build with FITS support" ON)
 option(ENABLE_LIBCERF "Build with libcerf support" ON)
 option(ENABLE_LIBORIGIN "Build with liborigin support" ON)
 option(ENABLE_ROOT "Build with ROOT (CERN) support" ON)
-option(ENABLE_READSTAT "Build with ReadStat support" ON)
+# PENDING: latest stable 1.1.9 fails with GCC 13
+if ("${CMAKE_C_COMPILER_ID}" MATCHES "GNU" AND CMAKE_C_COMPILER_VERSION VERSION_GREATER 12)
+	option(ENABLE_READSTAT "Build with ReadStat support" OFF)
+else ()
+	option(ENABLE_READSTAT "Build with ReadStat support" ON)
+endif ()
 option(ENABLE_MATIO "Build with Matio support" ON)
 option(ENABLE_TESTS "Build with tests" ON)
 option(ENABLE_MQTT "Build with MQTT support" ON)
 option(ENABLE_QTSERIALPORT "Build with QtSerialPort support" ON)
 option(ENABLE_DISCOUNT "Build with Discount support" ON)
 option(ENABLE_REPRODUCIBLE "Enable reproducible builds" OFF)
-option(ENABLE_EXCEL "Build with Excel (xlsx) support" ON)
+option(ENABLE_XLSX "Build with XLSX (Excel) support" ON)
+IF (WIN32)	# C++17 needed by Orcus not working with MSVC
+	option(ENABLE_ORCUS "Build with Orcus support" OFF)
+ELSE ()
+	option(ENABLE_ORCUS "Build with Orcus support" ON)
+ENDIF ()
 option(ENABLE_VECTOR_BLF "Build with Vector BLF file format support" ON)
+option(ENABLE_EIGEN3 "Build with Eigen3 support" ON)
 IF (APPLE)
 	option(ENABLE_TOUCHBAR "Enable touch bar support on macOS" ON)
 ENDIF ()
@@ -280,14 +316,13 @@ ENDIF ()
 ### GSL (required) ###############################
 FIND_PACKAGE(GSL REQUIRED)
 
-FIND_PACKAGE(Poppler "0.62.0" COMPONENTS Qt5)
-IF (Poppler_FOUND)
+FIND_PACKAGE(Poppler "0.62.0" COMPONENTS Qt${QT_MAJOR_VERSION})
+# TODO: support Poppler-Qt6
+IF (Poppler_FOUND AND (QT_MAJOR_VERSION LESS 6))
 	include_directories(${Poppler_INCLUDE_DIRS})
 	# MESSAGE (STATUS "Poppler libraries: ${Poppler_LIBRARIES}")
 	add_definitions (-DHAVE_POPPLER)
 ENDIF ()
-
-
 
 ### liborigin (included) ###############################
 IF (ENABLE_LIBORIGIN)
@@ -325,7 +360,8 @@ IF (ENABLE_CANTOR)
 	ELSE ()
 		MESSAGE (STATUS "Cantor Library NOT FOUND")
 	ENDIF ()
-	ELSE ()
+ELSE ()
+		add_definitions (-DCANTOR_DISABLED)
 		MESSAGE (STATUS "Cantor Library DISABLED")
 ENDIF ()
 
@@ -343,29 +379,30 @@ ENDIF ()
 
 ### HDF5 (optional) ##############################
 IF (ENABLE_HDF5)
-FIND_PACKAGE(HDF5 COMPONENTS C)
-SET_PACKAGE_PROPERTIES (HDF5 PROPERTIES
-	DESCRIPTION "Reading and writing self describing array data"
-	URL "https://www.hdfgroup.org/solutions/hdf5/"
-)
-IF (HDF5_FOUND)
-	add_definitions (-DHAVE_HDF5)
-	IF (MSVC_FOUND)
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DH5_BUILT_AS_DYNAMIC_LIB")
+	FIND_PACKAGE(HDF5 COMPONENTS C)
+	SET_PACKAGE_PROPERTIES (HDF5 PROPERTIES
+		DESCRIPTION "Reading and writing self describing array data"
+		URL "https://www.hdfgroup.org/solutions/hdf5/"
+	)
+	IF (HDF5_FOUND)
+		add_definitions (-DHAVE_HDF5)
+		IF (MSVC_FOUND)
+			set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DH5_BUILT_AS_DYNAMIC_LIB")
+		ENDIF ()
+		IF (HDF5_VERSION VERSION_GREATER "1.9")
+			add_definitions (-DHAVE_AT_LEAST_HDF5_1_10_0)
+		ENDIF ()
+		IF (HDF5_VERSION VERSION_GREATER "1.10.0.1")
+			add_definitions (-DHAVE_AT_LEAST_HDF5_1_10_0)
+			add_definitions (-DHAVE_AT_LEAST_HDF5_1_10_1)
+		ENDIF ()
+		include_directories (${HDF5_INCLUDE_DIRS})
+	ELSE ()
+		MESSAGE (STATUS "Hierarchical Data Format (HDF5) Library NOT FOUND")
+		SET(HDF5_LIBRARIES "")
 	ENDIF ()
-	IF (HDF5_VERSION VERSION_GREATER "1.9")
-		add_definitions (-DHAVE_AT_LEAST_HDF5_1_10_0)
-	ENDIF ()
-	IF (HDF5_VERSION VERSION_GREATER "1.10.0.1")
-		add_definitions (-DHAVE_AT_LEAST_HDF5_1_10_0)
-		add_definitions (-DHAVE_AT_LEAST_HDF5_1_10_1)
-	ENDIF ()
-	include_directories (${HDF5_INCLUDE_DIRS})
 ELSE ()
-	MESSAGE (STATUS "Hierarchical Data Format (HDF5) Library NOT FOUND")
-	SET(HDF5_LIBRARIES "")
-ENDIF ()
-ELSE ()
+	add_definitions (-DHDF5_DISABLED)
 	MESSAGE (STATUS "Hierarchical Data Format (HDF5) Library DISABLED")
 ENDIF ()
 
@@ -387,6 +424,7 @@ IF (ENABLE_NETCDF)
 		MESSAGE (STATUS "Network Common Data Format (NetCDF) Library NOT FOUND")
 	ENDIF ()
 ELSE ()
+	add_definitions (-DNETCDF_DISABLED)
 	MESSAGE (STATUS "Network Common Data Format (NetCDF) Library DISABLED")
 ENDIF ()
 
@@ -394,11 +432,11 @@ ENDIF ()
 IF (ENABLE_MQTT)
 # ATTENTION: unit test uses qWaitFor() which needs Qt >= 5.10
 # avoid warning for the moment using QUIET
-	find_package(Qt5Mqtt ${QT_MIN_VERSION} NO_MODULE)
-	SET_PACKAGE_PROPERTIES (Qt5Mqtt PROPERTIES
+	find_package(Qt${QT_VERSION_MAJOR}Mqtt ${QT_MIN_VERSION} NO_MODULE)
+	SET_PACKAGE_PROPERTIES (Qt${QT_VERSION_MAJOR}Mqtt PROPERTIES
 		DESCRIPTION "Qt Module to implement MQTT protocol version 3.1 and 3.1.1"
 		URL "https://github.com/qt/qtmqtt")
-	IF (Qt5Mqtt_FOUND)
+	IF (Qt${QT_VERSION_MAJOR}Mqtt_FOUND)
 		MESSAGE (STATUS "Found MQTT Library")
 		add_definitions (-DHAVE_MQTT)
 	ELSE ()
@@ -410,19 +448,19 @@ ENDIF ()
 
 ### QtSerialPort (optional) ###############################
 IF (ENABLE_QTSERIALPORT)
-	find_package(Qt5SerialPort ${QT_MIN_VERSION} NO_MODULE)
-	SET_PACKAGE_PROPERTIES (Qt5SerialPort PROPERTIES
+	find_package(Qt${QT_MAJOR_VERSION}SerialPort ${QT_MIN_VERSION} NO_MODULE)
+	SET_PACKAGE_PROPERTIES (Qt{QT_MAJOR_VERSION}SerialPort PROPERTIES
 		DESCRIPTION "Qt Serial Port library"
 		URL "https://doc.qt.io/qt-5/qtserialport-index.html"
 		PURPOSE "Support basic functionality of serial ports.")
-	IF (Qt5SerialPort_FOUND)
-		MESSAGE (STATUS "Found Qt5SerialPort Library")
+	IF (Qt${QT_MAJOR_VERSION}SerialPort_FOUND)
+		MESSAGE (STATUS "Found Qt${QT_MAJOR_VERSION}SerialPort Library")
 		add_definitions (-DHAVE_QTSERIALPORT)
 	ELSE ()
-		MESSAGE (STATUS "Qt5SerialPort Library NOT FOUND")
+		MESSAGE (STATUS "Qt${QT_MAJOR_VERSION}SerialPort Library NOT FOUND")
 	ENDIF ()
 ELSE ()
-	MESSAGE (STATUS "Qt5SerialPort Library DISABLED")
+	MESSAGE (STATUS "Qt${QT_MAJOR_VERSION}SerialPort Library DISABLED")
 ENDIF ()
 
 ### FITS (optional) ###############################
@@ -439,6 +477,7 @@ IF (ENABLE_FITS)
 		MESSAGE (STATUS "Flexible Image Transport System Data Format (FITS) Library NOT FOUND")
 	ENDIF ()
 ELSE ()
+	add_definitions (-FITS_DISABLED)
 	MESSAGE (STATUS "Flexible Image Transport System Data Format (FITS) Library DISABLED")
 ENDIF ()
 
@@ -476,6 +515,7 @@ IF (ENABLE_ROOT)
 		MESSAGE (STATUS "ZIP libraries ZLIB or LZ4 (needed for ROOT importer) NOT FOUND")
 	ENDIF ()
 ELSE ()
+	add_definitions (-DROOT_DISABLED)
 	MESSAGE (STATUS "ROOT (CERN) importer DISABLED")
 ENDIF ()
 
@@ -496,6 +536,8 @@ IF (ENABLE_READSTAT)
 			set(READSTAT_LIBRARIES ${CMAKE_BINARY_DIR}/src/3rdparty/install/lib/libreadstat.a)
 		ENDIF ()
 		include_directories (${CMAKE_BINARY_DIR}/src/3rdparty/install/include)
+		# in case the target is not installed yet: use source dir
+		include_directories (${CMAKE_BINARY_DIR}/src/3rdparty/readstat/src/readstat/src)
 	ENDIF ()
 	IF (READSTAT_FOUND OR BUILD_READSTAT)	# found or build
 		add_definitions (-DHAVE_READSTAT)
@@ -503,28 +545,29 @@ IF (ENABLE_READSTAT)
 		SET(READSTAT_LIBRARIES "")
 	ENDIF ()
 ELSE ()
+	add_definitions (-DREADSTAT_DISABLED)
 	MESSAGE (STATUS "ReadStat support DISABLED")
 ENDIF ()
 
-### Excel (optional) #############################
-IF (ENABLE_EXCEL)
+### XLSX (Excel) (optional) #############################
+IF (ENABLE_XLSX)
         FIND_PACKAGE (QXlsx)
         IF (QXLSX_FOUND)
 		MESSAGE (STATUS "QXlsx library FOUND.")
-                add_definitions (-DHAVE_EXCEL)
+		add_definitions (-DHAVE_QXLSX)
         ELSE ()
-		if (TARGET Qt5::GuiPrivate)
-			set(BUILD_EXCEL TRUE)
+		if (TARGET Qt${QT_VERSION_MAJOR}::GuiPrivate)
+			set(BUILD_QXLSX TRUE)
 
 			MESSAGE (STATUS "QXlsx library NOT FOUND. Building own version.")
-			add_definitions (-DHAVE_EXCEL)
+			add_definitions (-DHAVE_QXLSX)
 		else ()
-			MESSAGE (STATUS "Missing Qt5::GuiPrivate to build own QXlsx.")
+			MESSAGE (STATUS "Missing Qt${QT_VERSION_MAJOR}::GuiPrivate to build own QXlsx.")
 		endif ()
         ENDIF ()
-
 ELSE ()
-        MESSAGE (STATUS "Excel support DISABLED")
+	add_definitions (-DXLSX_DISABLED)
+	MESSAGE (STATUS "XLSX support DISABLED")
 ENDIF ()
 
 ###  Matio (optional) ##############################################
@@ -536,6 +579,7 @@ IF (ENABLE_MATIO)
 		MESSAGE (STATUS "Matio library NOT FOUND.")
 	ENDIF ()
 ELSE ()
+	add_definitions (-DMATIO_DISABLED)
 	MESSAGE (STATUS "Matio support DISABLED")
 ENDIF ()
 
@@ -549,7 +593,7 @@ IF (ENABLE_DISCOUNT)
 	IF (Discount_FOUND)
 		add_definitions (-DHAVE_DISCOUNT)
 		MESSAGE (STATUS "Found Markdown Library Discount ${Discount_VERSION}")
-		IF (${Discount_VERSION} AND ${Discount_VERSION} VERSION_GREATER "2.99")
+		IF (DEFINED Discount_VERSION AND ${Discount_VERSION} VERSION_GREATER "2.99")
 			add_definitions (-DHAVE_DISCOUNT3)
 		ENDIF ()
 	ELSE ()
@@ -557,6 +601,38 @@ IF (ENABLE_DISCOUNT)
 	ENDIF ()
 ELSE ()
 	MESSAGE (STATUS "Discount DISABLED")
+ENDIF ()
+
+### Orcus (optional) #############################
+IF (ENABLE_ORCUS)
+	FIND_PACKAGE(Orcus)
+	SET_PACKAGE_PROPERTIES (Orcus PROPERTIES
+		DESCRIPTION "a library that provides a collection of standalone file processing filters"
+		URL "https://gitlab.com/orcus/orcus"
+		TYPE OPTIONAL)
+	IF (Orcus_FOUND)
+		add_definitions (-DHAVE_ORCUS)
+		include_directories(${Orcus_INCLUDE_DIR} ${Ixion_INCLUDE_DIR})
+		MESSAGE (STATUS "Found Orcus/Ixion: ${Orcus_INCLUDE_DIR} ${Ixion_INCLUDE_DIR}, ${Orcus_LIBRARIES} ${Ixion_LIBRARY}")
+	ELSE ()
+		MESSAGE (STATUS "Orcus library NOT FOUND.")
+	ENDIF ()
+ELSE ()
+	MESSAGE (STATUS "Orcus (ODS) DISABLED")
+ENDIF ()
+
+### Eigen (optional) #############################
+IF (ENABLE_EIGEN3)
+	FIND_PACKAGE (Eigen3)
+	IF (EIGEN3_FOUND)
+		MESSAGE (STATUS "Found Eigen3 library version ${EIGEN3_VERSION_STRING}")
+		add_definitions (-DHAVE_EIGEN3)
+		include_directories (${EIGEN3_INCLUDE_DIR})
+	ELSE ()
+		MESSAGE (STATUS "Eigen3 library NOT FOUND.")
+	ENDIF ()
+ELSE ()
+	MESSAGE (STATUS "Eigen3 support DISABLED")
 ENDIF ()
 
 ### Touch bar on macOS (optional) #############################

@@ -20,6 +20,7 @@
 class AbstractDataSource;
 class XmlStreamReader;
 class QXmlStreamWriter;
+class KConfig;
 
 class AbstractFileFilter : public QObject {
 	Q_OBJECT
@@ -27,7 +28,7 @@ class AbstractFileFilter : public QObject {
 	Q_ENUMS(ImportMode)
 
 public:
-	enum class FileType { Ascii, Binary, Excel, Image, HDF5, NETCDF, FITS, JSON, ROOT, Spice, READSTAT, MATIO, VECTOR_BLF };
+	enum class FileType { Ascii, Binary, XLSX, Ods, Image, HDF5, NETCDF, FITS, JSON, ROOT, Spice, READSTAT, MATIO, VECTOR_BLF };
 	enum class ImportMode { Append, Prepend, Replace };
 
 	explicit AbstractFileFilter(FileType type)
@@ -42,15 +43,14 @@ public:
 	static QStringList numberFormats();
 	static AbstractFileFilter::FileType fileType(const QString&);
 	static QStringList fileTypes();
+	static QString convertFromNumberToColumn(int n);
 
 	virtual void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, ImportMode = ImportMode::Replace) = 0;
 	virtual void write(const QString& fileName, AbstractDataSource*) = 0;
 
 	virtual QStringList lastErrors();
 
-	virtual void loadFilterSettings(const QString& filterName) = 0;
-	virtual void saveFilterSettings(const QString& filterName) const = 0;
-
+	// save/load in the project XML
 	virtual void save(QXmlStreamWriter*) const = 0;
 	virtual bool load(XmlStreamReader*) = 0;
 

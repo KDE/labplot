@@ -26,25 +26,17 @@ public:
 	void recalcShapeAndBoundingRect() override;
 	void updateData();
 
-	bool m_hovered{false};
-
-	QPainterPath pointShape;
-
 	QPointF positionScene; // position in scene coordinates
 	Symbol* symbol{nullptr};
 
 	// reimplemented from QGraphicsItem
-	QPainterPath shape() const override;
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
 
 	CustomPoint* const q;
 
 private:
 	const CartesianPlot* plot();
-	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
 	void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
-	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
-	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
 };
 
 #endif

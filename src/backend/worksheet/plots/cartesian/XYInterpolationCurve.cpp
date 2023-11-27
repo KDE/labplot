@@ -27,9 +27,9 @@
 extern "C" {
 #include "backend/nsl/nsl_diff.h"
 #include "backend/nsl/nsl_int.h"
+}
 #include <gsl/gsl_interp.h>
 #include <gsl/gsl_spline.h>
-}
 
 #include <QElapsedTimer>
 #include <QIcon>
@@ -426,7 +426,6 @@ void XYInterpolationCurve::save(QXmlStreamWriter* writer) const {
 bool XYInterpolationCurve::load(XmlStreamReader* reader, bool preview) {
 	Q_D(XYInterpolationCurve);
 
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
@@ -470,6 +469,10 @@ bool XYInterpolationCurve::load(XmlStreamReader* reader, bool preview) {
 				d->xColumn = column;
 			else if (column->name() == QLatin1String("y"))
 				d->yColumn = column;
+		} else { // unknown element
+			reader->raiseUnknownElementWarning();
+			if (!reader->skipToEndElement())
+				return false;
 		}
 	}
 

@@ -1,6 +1,6 @@
 add_executable (WidgetsTest WidgetsTest.cpp)
 
-target_link_libraries(WidgetsTest labplot2lib labplot2test)
+target_link_libraries(WidgetsTest labplot2backendlib labplot2lib labplot2nsllib labplot2test)
 
 add_test(NAME WidgetsTest COMMAND WidgetsTest)
 

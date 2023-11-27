@@ -24,8 +24,8 @@
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
 
-extern "C" {
 #include <gsl/gsl_sf_pow_int.h>
+extern "C" {
 #ifdef HAVE_FFTW3
 #include <fftw3.h>
 #endif
@@ -292,7 +292,6 @@ void XYFourierFilterCurve::save(QXmlStreamWriter* writer) const {
 bool XYFourierFilterCurve::load(XmlStreamReader* reader, bool preview) {
 	Q_D(XYFourierFilterCurve);
 
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
@@ -336,6 +335,10 @@ bool XYFourierFilterCurve::load(XmlStreamReader* reader, bool preview) {
 				d->xColumn = column;
 			else if (column->name() == QLatin1String("y"))
 				d->yColumn = column;
+		} else { // unknown element
+			reader->raiseUnknownElementWarning();
+			if (!reader->skipToEndElement())
+				return false;
 		}
 	}
 

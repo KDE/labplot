@@ -28,9 +28,7 @@ public:
 	~Image() override;
 
 	QIcon icon() const override;
-	QMenu* createContextMenu() override;
-	QGraphicsItem* graphicsItem() const override;
-	void setParentGraphicsItem(QGraphicsItem*);
+	virtual void setParentGraphicsItem(QGraphicsItem*) override;
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
@@ -57,8 +55,6 @@ protected:
 private:
 	Q_DECLARE_PRIVATE(Image)
 	void init();
-
-	QAction* visibilityAction{nullptr};
 
 Q_SIGNALS:
 	void fileNameChanged(const QString&);

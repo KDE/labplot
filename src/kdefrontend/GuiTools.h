@@ -21,6 +21,8 @@ class QAction;
 
 class GuiTools {
 public:
+	static bool isDarkMode();
+
 	static void updateBrushStyles(QComboBox*, const QColor&);
 	static void updatePenStyles(QComboBox*, const QColor&);
 	static void updatePenStyles(QMenu*, QActionGroup*, const QColor&);

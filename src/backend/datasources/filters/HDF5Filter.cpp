@@ -23,6 +23,7 @@
 #include <KLocalizedString>
 #include <QFile>
 #include <QProcess>
+#include <QStandardPaths>
 #include <QTreeWidgetItem>
 
 ///////////// macros ///////////////////////////////////////////////
@@ -111,19 +112,6 @@ writes the content of the data source \c dataSource to the file \c fileName.
 */
 void HDF5Filter::write(const QString& fileName, AbstractDataSource* dataSource) {
 	d->write(fileName, dataSource);
-}
-
-///////////////////////////////////////////////////////////////////////
-/*!
-  loads the predefined filter settings for \c filterName
-*/
-void HDF5Filter::loadFilterSettings(const QString& /*filterName*/) {
-}
-
-/*!
-  saves the current settings as a new filter with the name \c filterName
-*/
-void HDF5Filter::saveFilterSettings(const QString& /*filterName*/) const {
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -2165,7 +2153,5 @@ void HDF5Filter::save(QXmlStreamWriter* writer) const {
   Loads from XML.
 */
 bool HDF5Filter::load(XmlStreamReader*) {
-	// 	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
-	// 	QXmlStreamAttributes attribs = reader->attributes();
 	return true;
 }

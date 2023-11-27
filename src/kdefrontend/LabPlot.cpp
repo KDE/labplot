@@ -10,10 +10,12 @@
 
 #include "MainWin.h"
 #include "backend/core/AbstractColumn.h"
+#include "backend/core/Settings.h"
 #include "backend/lib/macros.h"
 
 #include <KAboutData>
 #include <KColorSchemeManager>
+#include <KConfigGroup>
 #include <KCrash>
 #include <KLocalizedString>
 #include <KMessageBox>
@@ -76,8 +78,10 @@ const QString getSystemInfo() {
 }
 
 int main(int argc, char* argv[]) {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 	QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 	QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
+#endif
 	QApplication app(argc, argv);
 	KLocalizedString::setApplicationDomain("labplot2");
 	KCrash::initialize();
@@ -207,7 +211,7 @@ int main(int argc, char* argv[]) {
 		WARN("	" << STDSTRING(path))
 #endif
 
-	const auto& group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
+	const auto& group = Settings::group(QStringLiteral("Settings_General"));
 #if KCOREADDONS_VERSION >= QT_VERSION_CHECK(5, 67, 0) // KColorSchemeManager has a system default option
 	QString schemeName = group.readEntry("ColorScheme");
 #else

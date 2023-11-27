@@ -19,7 +19,7 @@
 #include <KConfigGroup>
 #include <KLocalizedString>
 #include <KMessageBox>
-#include <KSharedConfig>
+
 #include <kcoreaddons_version.h>
 
 /*!
@@ -416,13 +416,15 @@ void MQTTConnectionManagerWidget::deleteConnection() {
 												  i18n("Delete Connection"),
 												  KStandardGuiItem::del(),
 												  KStandardGuiItem::cancel());
+	if (status != KMessageBox::PrimaryAction)
+		return;
 #else
 	auto status = KMessageBox::questionYesNo(this,
 											 i18n("Do you really want to delete the connection '%1'?", ui.lwConnections->currentItem()->text()),
 											 i18n("Delete Connection"));
-#endif
 	if (status != KMessageBox::Yes)
 		return;
+#endif
 
 	// remove the current selected connection
 	m_connections.removeAt(ui.lwConnections->currentRow());
@@ -599,7 +601,7 @@ QString MQTTConnectionManagerWidget::uniqueName() {
 	if (lastNonDigit >= 0 && base[lastNonDigit].category() != QChar::Separator_Space)
 		base.append(QLatin1Char(' '));
 
-	int newNr = name.rightRef(name.size() - base.size()).toInt();
+	int newNr = name.right(name.size() - base.size()).toInt();
 	QString newName;
 	do
 		newName = base + QString::number(++newNr);

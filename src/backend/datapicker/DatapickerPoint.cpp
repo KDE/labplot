@@ -58,7 +58,7 @@ void ErrorBarItem::setPosition(QPointF position) {
 }
 
 void ErrorBarItem::setRectSize(qreal size) {
-	QMatrix matrix;
+	QTransform matrix;
 	matrix.scale(size, size);
 	setRect(matrix.mapRect(m_rect));
 }
@@ -130,13 +130,13 @@ void DatapickerPoint::init() {
 
 	KConfig config;
 	KConfigGroup group;
-	group = config.group("DatapickerPoint");
-	d->position.setX(group.readEntry("PositionXValue", Worksheet::convertToSceneUnits(1, Worksheet::Unit::Centimeter)));
-	d->position.setY(group.readEntry("PositionYValue", Worksheet::convertToSceneUnits(1, Worksheet::Unit::Centimeter)));
-	d->plusDeltaXPos = group.readEntry("PlusDeltaXPos", QPointF(30, 0));
-	d->minusDeltaXPos = group.readEntry("MinusDeltaXPos", QPointF(-30, 0));
-	d->plusDeltaYPos = group.readEntry("PlusDeltaYPos", QPointF(0, -30));
-	d->minusDeltaYPos = group.readEntry("MinusDeltaYPos", QPointF(0, 30));
+	group = config.group(QStringLiteral("DatapickerPoint"));
+	d->position.setX(group.readEntry(QStringLiteral("PositionXValue"), Worksheet::convertToSceneUnits(1, Worksheet::Unit::Centimeter)));
+	d->position.setY(group.readEntry(QStringLiteral("PositionYValue"), Worksheet::convertToSceneUnits(1, Worksheet::Unit::Centimeter)));
+	d->plusDeltaXPos = group.readEntry(QStringLiteral("PlusDeltaXPos"), QPointF(30, 0));
+	d->minusDeltaXPos = group.readEntry(QStringLiteral("MinusDeltaXPos"), QPointF(-30, 0));
+	d->plusDeltaYPos = group.readEntry(QStringLiteral("PlusDeltaYPos"), QPointF(0, -30));
+	d->minusDeltaYPos = group.readEntry(QStringLiteral("MinusDeltaYPos"), QPointF(0, 30));
 }
 
 void DatapickerPoint::initErrorBar(DatapickerCurve::Errors errors) {
@@ -400,7 +400,7 @@ QPainterPath DatapickerPointPrivate::shape() const {
 void DatapickerPointPrivate::recalcShapeAndBoundingRect() {
 	prepareGeometryChange();
 
-	QMatrix matrix;
+	QTransform matrix;
 	matrix.scale(size, size);
 	matrix.rotate(-rotationAngle);
 	transformedBoundingRectangle = matrix.mapRect(boundingRectangle);
@@ -424,9 +424,9 @@ void DatapickerPointPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 
 QVariant DatapickerPointPrivate::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant& value) {
 	if (change == QGraphicsItem::GraphicsItemChange::ItemSelectedHasChanged && value.toBool())
-		emit q->pointSelected(q);
+		Q_EMIT q->pointSelected(q);
 	else if (change == QGraphicsItem::GraphicsItemChange::ItemPositionChange)
-		emit q->positionChanged(value.toPointF());
+		Q_EMIT q->positionChanged(value.toPointF());
 	return QGraphicsItem::itemChange(change, value);
 }
 
@@ -499,84 +499,83 @@ bool DatapickerPoint::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
 	while (!reader->atEnd()) {
 		reader->readNext();
-		if (reader->isEndElement() && reader->name() == QLatin1String("datapickerPoint"))
+		if (reader->isEndElement() && reader->name() == QStringLiteral("datapickerPoint"))
 			break;
 
 		if (!reader->isStartElement())
 			continue;
 
-		if (!preview && reader->name() == QLatin1String("geometry")) {
+		if (!preview && reader->name() == QStringLiteral("geometry")) {
 			attribs = reader->attributes();
 
 			str = attribs.value(QStringLiteral("x")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("x")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("x"));
 			else
 				d->position.setX(str.toDouble());
 
 			str = attribs.value(QStringLiteral("y")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("y")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("y"));
 			else
 				d->position.setY(str.toDouble());
-		} else if (!preview && reader->name() == QLatin1String("errorBar")) {
+		} else if (!preview && reader->name() == QStringLiteral("errorBar")) {
 			attribs = reader->attributes();
 
 			str = attribs.value(QStringLiteral("plusDeltaXPos_x")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("plusDeltaXPos_x")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("plusDeltaXPos_x"));
 			else
 				d->plusDeltaXPos.setX(str.toDouble());
 
 			str = attribs.value(QStringLiteral("plusDeltaXPos_y")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("plusDeltaXPos_y")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("plusDeltaXPos_y"));
 			else
 				d->plusDeltaXPos.setY(str.toDouble());
 
 			str = attribs.value(QStringLiteral("minusDeltaXPos_x")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("minusDeltaXPos_x")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("minusDeltaXPos_x"));
 			else
 				d->minusDeltaXPos.setX(str.toDouble());
 
 			str = attribs.value(QStringLiteral("minusDeltaXPos_y")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("minusDeltaXPos_y")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("minusDeltaXPos_y"));
 			else
 				d->minusDeltaXPos.setY(str.toDouble());
 
 			str = attribs.value(QStringLiteral("plusDeltaYPos_x")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("plusDeltaYPos_x")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("plusDeltaYPos_x"));
 			else
 				d->plusDeltaYPos.setX(str.toDouble());
 
 			str = attribs.value(QStringLiteral("plusDeltaYPos_y")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("plusDeltaYPos_y")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("plusDeltaYPos_y"));
 			else
 				d->plusDeltaYPos.setY(str.toDouble());
 
 			str = attribs.value(QStringLiteral("minusDeltaYPos_x")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("minusDeltaYPos_x")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("minusDeltaYPos_x"));
 			else
 				d->minusDeltaYPos.setX(str.toDouble());
 
 			str = attribs.value(QStringLiteral("minusDeltaYPos_y")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("minusDeltaYPos_y")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("minusDeltaYPos_y"));
 			else
 				d->minusDeltaYPos.setY(str.toDouble());
 		} else { // unknown element
-			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
+			reader->raiseUnknownElementWarning();
 			if (!reader->skipToEndElement())
 				return false;
 		}

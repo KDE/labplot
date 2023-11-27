@@ -73,7 +73,7 @@ public:
 	AbstractSimpleFilter* outputFilter() const;
 	ColumnStringIO* asStringColumn() const;
 
-	void setFormula(const QString& formula, const QStringList& variableNames, const QVector<Column*>& columns, bool autoUpdate);
+	void setFormula(const QString& formula, const QStringList& variableNames, const QVector<Column*>& columns, bool autoUpdate = false, bool autoResize = true);
 	QString formula() const;
 	struct FormulaData {
 #if (QT_VERSION < QT_VERSION_CHECK(5, 14, 0)) // required to use in QVector
@@ -124,6 +124,7 @@ public:
 	void setFormulVariableColumnsPath(int index, const QString& path);
 	void setFormulVariableColumn(int index, Column*);
 	bool formulaAutoUpdate() const;
+	bool formulaAutoResize() const;
 
 	QString formula(int) const override;
 	QVector<Interval<int>> formulaIntervals() const override;
@@ -141,7 +142,7 @@ public:
 	void valueLabelsRemoveAll();
 
 	Properties properties() const override;
-	void invalidateProperties();
+	void invalidateProperties() override;
 
 	void setFromColumn(int, AbstractColumn*, int);
 	QString textAt(int) const override;
@@ -247,6 +248,8 @@ private Q_SLOTS:
 
 	friend class ColumnPrivate;
 	friend class ColumnStringIO;
+	friend class ColumnRemoveRowsCmd;
+	friend class ColumnInsertRowsCmd;
 };
 
 #endif

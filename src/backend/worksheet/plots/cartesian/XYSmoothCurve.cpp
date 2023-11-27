@@ -30,9 +30,9 @@
 
 extern "C" {
 #include "backend/nsl/nsl_sf_kernel.h"
+}
 #include "backend/nsl/nsl_stats.h"
 #include <gsl/gsl_math.h> // gsl_pow_*
-}
 
 XYSmoothCurve::XYSmoothCurve(const QString& name)
 	: XYAnalysisCurve(name, new XYSmoothCurvePrivate(this), AspectType::XYSmoothCurve) {
@@ -268,7 +268,6 @@ void XYSmoothCurve::save(QXmlStreamWriter* writer) const {
 bool XYSmoothCurve::load(XmlStreamReader* reader, bool preview) {
 	Q_D(XYSmoothCurve);
 
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
@@ -314,6 +313,10 @@ bool XYSmoothCurve::load(XmlStreamReader* reader, bool preview) {
 				d->yColumn = column;
 			else
 				d->roughColumn = column;
+		} else { // unknown element
+			reader->raiseUnknownElementWarning();
+			if (!reader->skipToEndElement())
+				return false;
 		}
 	}
 

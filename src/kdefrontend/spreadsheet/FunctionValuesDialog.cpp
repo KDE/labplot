@@ -11,6 +11,7 @@
 #include "FunctionValuesDialog.h"
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/Project.h"
+#include "backend/core/Settings.h"
 #include "backend/core/column/Column.h"
 #include "backend/gsl/ExpressionParser.h"
 #include "backend/lib/macros.h"
@@ -26,7 +27,7 @@
 #include <QWindow>
 
 #include <KLocalizedString>
-#include <KSharedConfig>
+
 #include <KWindowConfig>
 
 /*!
@@ -49,7 +50,7 @@ FunctionValuesDialog::FunctionValuesDialog(Spreadsheet* s, QWidget* parent)
 	ui.teEquation->setMaximumHeight(QLineEdit().sizeHint().height() * 2);
 	ui.teEquation->setFocus();
 
-	m_topLevelClasses = {AspectType::Folder, AspectType::Workbook, AspectType::Spreadsheet, AspectType::Column};
+	m_topLevelClasses = {AspectType::Folder, AspectType::Workbook, AspectType::Spreadsheet, AspectType::CantorWorksheet, AspectType::Column};
 	m_selectableClasses = {AspectType::Column};
 
 // needed for buggy compiler
@@ -65,7 +66,8 @@ FunctionValuesDialog::FunctionValuesDialog(Spreadsheet* s, QWidget* parent)
 	ui.bAddVariable->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
 	ui.bAddVariable->setToolTip(i18n("Add new variable"));
 
-	ui.chkAutoUpdate->setToolTip(i18n("Automatically update the calculated values on changes in the variable columns"));
+	ui.chkAutoUpdate->setToolTip(i18n("Automatically update the calculated values in the target column on changes in the variable columns"));
+	ui.chkAutoResize->setToolTip(i18n("Automatically resize the target column to fit the size of the variable columns"));
 
 	auto* btnBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
 	ui.verticalLayout->addWidget(btnBox);
@@ -74,7 +76,6 @@ FunctionValuesDialog::FunctionValuesDialog(Spreadsheet* s, QWidget* parent)
 	connect(btnBox, &QDialogButtonBox::accepted, this, &FunctionValuesDialog::accept);
 	connect(btnBox, &QDialogButtonBox::rejected, this, &FunctionValuesDialog::reject);
 	m_okButton->setText(i18n("&Generate"));
-	m_okButton->setToolTip(i18n("Generate function values"));
 
 	connect(ui.bAddVariable, &QPushButton::pressed, this, &FunctionValuesDialog::addVariable);
 	connect(ui.teEquation, &ExpressionTextEdit::expressionChanged, this, &FunctionValuesDialog::checkValues);
@@ -84,7 +85,7 @@ FunctionValuesDialog::FunctionValuesDialog(Spreadsheet* s, QWidget* parent)
 
 	// restore saved settings if available
 	create(); // ensure there's a window created
-	KConfigGroup conf(KSharedConfig::openConfig(), "FunctionValuesDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("FunctionValuesDialog"));
 	if (conf.exists()) {
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
 		resize(windowHandle()->size()); // workaround for QTBUG-40584
@@ -93,7 +94,7 @@ FunctionValuesDialog::FunctionValuesDialog(Spreadsheet* s, QWidget* parent)
 }
 
 FunctionValuesDialog::~FunctionValuesDialog() {
-	KConfigGroup conf(KSharedConfig::openConfig(), "FunctionValuesDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("FunctionValuesDialog"));
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 
@@ -103,7 +104,6 @@ void FunctionValuesDialog::setColumns(const QVector<Column*>& columns) {
 
 	// formula expression
 	ui.teEquation->setPlainText(firstColumn->formula());
-
 	// variables
 	const auto& formulaData = firstColumn->formulaData();
 	if (formulaData.isEmpty()) { // no formula was used for this column -> add the first variable "x"
@@ -152,6 +152,16 @@ void FunctionValuesDialog::setColumns(const QVector<Column*>& columns) {
 	// Enable if linking is turned on, so the user has to explicit disable recalculation, so it cannot be forgotten
 	ui.chkAutoUpdate->setChecked(firstColumn->formulaAutoUpdate() || m_spreadsheet->linking());
 
+	// auto-resize
+	if (!m_spreadsheet->linking())
+		ui.chkAutoResize->setChecked(firstColumn->formulaAutoResize());
+	else {
+		// linking is active, deactive this option since the size of the target spreadsheet is controlled by the linked spreadsheet
+		ui.chkAutoResize->setChecked(false);
+		ui.chkAutoResize->setEnabled(false);
+		ui.chkAutoResize->setToolTip(i18n("Spreadsheet linking is active. The size of the target spreadsheet is controlled by the linked spreadsheet."));
+	}
+
 	checkValues();
 }
 
@@ -163,48 +173,60 @@ bool FunctionValuesDialog::validVariableName(QLineEdit* le) {
 	} else if (ExpressionParser::getInstance()->functions().indexOf(le->text()) != -1) {
 		SET_WARNING_STYLE(le)
 		le->setToolTip(i18n("Provided variable name is already reserved for a name of a function. Please use another name."));
+	} else if (le->text().compare(QLatin1String("i")) == 0) {
+		SET_WARNING_STYLE(le)
+		le->setToolTip(i18n("The variable name 'i' is reserved for the index of the column row."));
+	} else if (le->text().contains(QRegularExpression(QLatin1String("^[0-9]|[^a-zA-Z0-9_]")))) {
+		SET_WARNING_STYLE(le)
+		le->setToolTip(i18n("Provided variable name starts with a digit or contains special character."));
 	} else {
 		le->setStyleSheet(QString());
 		le->setToolTip(QString());
 		isValid = true;
 	}
-
 	return isValid;
 }
 
 void FunctionValuesDialog::checkValues() {
-	if (!ui.teEquation->isValid()) { // check whether the formula syntax is correct
-		DEBUG(Q_FUNC_INFO << ", syntax incorrect")
+	if (ui.teEquation->toPlainText().simplified().isEmpty()) {
+		m_okButton->setToolTip(i18n("Empty formula expression"));
 		m_okButton->setEnabled(false);
 		return;
 	}
 
-	// check whether for the variables where a name was provided also a column was selected
+	// check whether the formula syntax is correct
+	if (!ui.teEquation->isValid()) {
+		m_okButton->setToolTip(i18n("Incorrect formula syntax: ") + ui.teEquation->errorMessage());
+		m_okButton->setEnabled(false);
+		return;
+	}
+
+	// check the variables
 	for (int i = 0; i < m_variableDataColumns.size(); ++i) {
-		auto varName = m_variableLineEdits.at(i)->text().simplified();
-		DEBUG(Q_FUNC_INFO << ", variable " << i + 1)
-		// ignore empty or not used variables
-		if (varName.isEmpty() || !ui.teEquation->toPlainText().contains(varName))
+		const auto& varName = m_variableLineEdits.at(i)->text();
+
+		// ignore empty
+		if (varName.isEmpty())
 			continue;
 
+		// checke whether a valid column was provided for the variable
 		auto* cb = m_variableDataColumns.at(i);
 		auto* aspect = static_cast<AbstractAspect*>(cb->currentModelIndex().internalPointer());
-		if (!aspect || !validVariableName(m_variableLineEdits.at(i))) {
+		if (!aspect) {
+			m_okButton->setToolTip(i18n("Select a valid column"));
 			m_okButton->setEnabled(false);
 			return;
 		}
 
-		// TODO: why is the column check disabled?
-		/*		Column* column = dynamic_cast<Column*>(aspect);
-				DEBUG("row count = " << (static_cast<QVector<double>* >(column->data()))->size());
-				if (!column || column->rowCount() < 1) {
-					m_okButton->setEnabled(false);
-					//Warning: x column is empty
-					return;
-				}
-		*/
+		// check whether the variable name is correct
+		if (!validVariableName(m_variableLineEdits.at(i))) {
+			m_okButton->setToolTip(i18n("Variable name can contain letters, digits and '_' only and should start with a letter"));
+			m_okButton->setEnabled(false);
+			return;
+		}
 	}
 
+	m_okButton->setToolTip(i18n("Generate function values"));
 	m_okButton->setEnabled(true);
 }
 
@@ -248,16 +270,17 @@ void FunctionValuesDialog::insertConstant(const QString& constantsName) const {
 
 void FunctionValuesDialog::addVariable() {
 	auto* layout{ui.gridLayoutVariables};
-	int row{m_variableLineEdits.size()};
-
+	auto row{m_variableLineEdits.size()};
 	// text field for the variable name
-	auto* le{new QLineEdit()};
+	auto* le{new QLineEdit};
+	le->setToolTip(i18n("Variable name can contain letters, digits and '_' only and should start with a letter"));
+	auto* validator = new QRegularExpressionValidator(QRegularExpression(QLatin1String("[a-zA-Z][a-zA-Z0-9_]*")), le);
+	le->setValidator(validator);
 	// hardcoding size is bad. 40 is enough for three letters
 	le->setMaximumWidth(40);
 	connect(le, &QLineEdit::textChanged, this, &FunctionValuesDialog::variableNameChanged);
 	layout->addWidget(le, row, 0, 1, 1);
 	m_variableLineEdits << le;
-
 	auto* l{new QLabel(QStringLiteral("="))};
 	layout->addWidget(l, row, 1, 1, 1);
 	m_variableLabels << l;
@@ -307,7 +330,7 @@ void FunctionValuesDialog::addVariable() {
 
 void FunctionValuesDialog::deleteVariable() {
 	QObject* ob{QObject::sender()};
-	const int index{m_variableDeleteButtons.indexOf(qobject_cast<QToolButton*>(ob))};
+	const auto index{m_variableDeleteButtons.indexOf(qobject_cast<QToolButton*>(ob))};
 
 	delete m_variableLineEdits.takeAt(index + 1);
 	delete m_variableLabels.takeAt(index + 1);
@@ -385,12 +408,12 @@ void FunctionValuesDialog::generate() {
 	// set the new values and store the expression, variable names and used data columns
 	const QString& expression{ui.teEquation->toPlainText()};
 	bool autoUpdate{(ui.chkAutoUpdate->checkState() == Qt::Checked)};
+	bool autoResize{(ui.chkAutoResize->checkState() == Qt::Checked)};
 	for (auto* col : m_columns) {
 		col->setColumnMode(AbstractColumn::ColumnMode::Double);
-		col->setFormula(expression, variableNames, variableColumns, autoUpdate);
+		col->setFormula(expression, variableNames, variableColumns, autoUpdate, autoResize);
 		col->updateFormula();
 	}
-
 	m_spreadsheet->endMacro();
 	RESET_CURSOR;
 }

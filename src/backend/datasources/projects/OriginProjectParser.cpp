@@ -10,7 +10,6 @@
 */
 
 #include "backend/datasources/projects/OriginProjectParser.h"
-#include "OriginFile.h"
 #include "backend/core/Project.h"
 #include "backend/core/Workbook.h"
 #include "backend/core/column/Column.h"
@@ -655,7 +654,7 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 
 		DEBUG(Q_FUNC_INFO << ", column " << j << ", name = " << column.name.c_str())
 		QString name(QLatin1String(column.name.c_str()));
-		col->setName(name.replace(QRegExp(QStringLiteral(".*_")), QString()));
+		col->setName(name.replace(QRegularExpression(QStringLiteral(".*_")), QString()));
 
 		if (preview)
 			continue;

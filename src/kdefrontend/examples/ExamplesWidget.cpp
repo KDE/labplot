@@ -8,6 +8,7 @@
 */
 
 #include "kdefrontend/examples/ExamplesWidget.h"
+#include "backend/core/Settings.h"
 #include "backend/lib/macros.h"
 #include "kdefrontend/examples/ExamplesManager.h"
 
@@ -63,7 +64,7 @@ ExamplesWidget::ExamplesWidget(QWidget* parent)
 	connect(ui.lwExamples, &QListWidget::itemSelectionChanged, this, &ExamplesWidget::exampleChanged);
 
 	// select the last used collection
-	KConfigGroup conf(KSharedConfig::openConfig(), "ExamplesWidget");
+	KConfigGroup conf = Settings::group(QStringLiteral("ExamplesWidget"));
 	const QString& collection = conf.readEntry("Collection", QString());
 	if (collection.isEmpty())
 		ui.cbCollections->setCurrentIndex(0);
@@ -88,7 +89,7 @@ ExamplesWidget::ExamplesWidget(QWidget* parent)
 
 ExamplesWidget::~ExamplesWidget() {
 	// save the selected collection
-	KConfigGroup conf(KSharedConfig::openConfig(), "ExamplesWidget");
+	KConfigGroup conf = Settings::group(QStringLiteral("ExamplesWidget"));
 	conf.writeEntry("Collection", ui.cbCollections->currentText());
 	conf.writeEntry("ViewIndex", ui.stackedWidget->currentIndex());
 	if (ui.lwExamples->currentItem())

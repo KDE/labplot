@@ -683,7 +683,7 @@ void addUniqueLine01(QPointF p, double& minY, double& maxY, QPointF& lastPoint, 
 			if (maxY != minY)
 				lines.append(QLineF(lastPoint.x(), minY, lastPoint.x(), maxY));
 			lines.append(QLineF(lastPoint, p));
-		} else if (!isnan(lastPoint.x()) && !isnan(lastPoint.y()))
+		} else if (!std::isnan(lastPoint.x()) && !std::isnan(lastPoint.y()))
 			lines.append(QLineF(lastPoint, p));
 		prevPixelDiffZero = false;
 		minY = p.y();
@@ -709,7 +709,7 @@ void addUniqueLine_double_vector(double* p,
 			if (maxY != minY)
 				lines.append(QLineF(lastPoint.x(), minY, lastPoint.x(), maxY));
 			lines.append(QLineF(lastPoint, QPointF(p[0], p[1])));
-		} else if (!isnan(lastPoint.x()) && !isnan(lastPoint.y()))
+		} else if (!std::isnan(lastPoint.x()) && !std::isnan(lastPoint.y()))
 			lines.append(QLineF(lastPoint, QPointF(p[0], p[1])));
 		prevPixelDiffZero = false;
 		minY = p[1];
@@ -737,7 +737,7 @@ void addUniqueLine_double_vector_last_point_vector(double* p,
 			if (maxY != minY)
 				lines.append(QLineF(lastPoint[0], minY, lastPoint[0], maxY));
 			lines.append(QLineF(QPointF(lastPoint[0], lastPoint[1]), QPointF(p[0], p[1])));
-		} else if (!isnan(lastPoint[0]) && !isnan(lastPoint[1]))
+		} else if (!std::isnan(lastPoint[0]) && !std::isnan(lastPoint[1]))
 			lines.append(QLineF(QPointF(lastPoint[0], lastPoint[1]), QPointF(p[0], p[1])));
 		prevPixelDiffZero = false;
 		minY = p[1];
@@ -779,7 +779,7 @@ void addUniqueLine_double_vector_last_point_vector_lines_vector(double* p,
 			numberLines++;
 			// lines.append(QLineF(QPointF(lastPoint[0], lastPoint[1]), QPointF(p[0],
 			// p[1])));
-		} else if (!isnan(lastPoint[0]) && !isnan(lastPoint[1])) {
+		} else if (!std::isnan(lastPoint[0]) && !std::isnan(lastPoint[1])) {
 			// lines.append(QLineF(QPointF(lastPoint[0], lastPoint[1]), QPointF(p[0],
 			// p[1])));
 			lines[4 * numberLines] = lastPoint[0];
@@ -828,7 +828,7 @@ void addUniqueLine_double_vector_last_point_vector_lines_vector_add4(double* p,
 			numberLines += 4;
 			// lines.append(QLineF(QPointF(lastPoint[0], lastPoint[1]), QPointF(p[0],
 			// p[1])));
-		} else if (!isnan(lastPoint[0]) && !isnan(lastPoint[1])) {
+		} else if (!std::isnan(lastPoint[0]) && !std::isnan(lastPoint[1])) {
 			// lines.append(QLineF(QPointF(lastPoint[0], lastPoint[1]), QPointF(p[0],
 			// p[1])));
 			lines[numberLines] = lastPoint[0];
@@ -876,7 +876,7 @@ void addUniqueLine_double_vector_last_point_vector_lines_vector_add4_dont_copy_l
 			numberLines += 4;
 			// lines.append(QLineF(QPointF(lastPoint[0], lastPoint[1]), QPointF(p[0],
 			// p[1])));
-		} else if (!isnan((*lastPoint)[0]) && !isnan((*lastPoint)[1])) {
+		} else if (!std::isnan((*lastPoint)[0]) && !std::isnan((*lastPoint)[1])) {
 			// lines.append(QLineF(QPointF(lastPoint[0], lastPoint[1]), QPointF(p[0],
 			// p[1])));
 			lines[numberLines] = (*lastPoint)[0];

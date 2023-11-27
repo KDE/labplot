@@ -11,8 +11,8 @@
 
 #include "CartesianPlotDock.h"
 #include "backend/core/Project.h"
+#include "backend/core/Settings.h"
 #include "backend/core/column/Column.h"
-#include "backend/lib/macros.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
 #include "kdefrontend/widgets/BackgroundWidget.h"
 #include "kdefrontend/widgets/LineWidget.h"
@@ -101,9 +101,7 @@ using Dimension = CartesianCoordinateSystem::Dimension;
 CartesianPlotDock::CartesianPlotDock(QWidget* parent)
 	: BaseDock(parent) {
 	ui.setupUi(this);
-	m_leName = ui.leName;
-	m_teComment = ui.teComment;
-	m_teComment->setFixedHeight(2 * m_leName->height());
+	setBaseWidgets(ui.leName, ui.teComment);
 
 	//"General"-tab
 	ui.twXRanges->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
@@ -159,8 +157,6 @@ CartesianPlotDock::CartesianPlotDock(QWidget* parent)
 
 	// SIGNAL/SLOT
 	// General
-	connect(ui.leName, &QLineEdit::textChanged, this, &CartesianPlotDock::nameChanged);
-	connect(ui.teComment, &QTextEdit::textChanged, this, &CartesianPlotDock::commentChanged);
 	connect(ui.chkVisible, &QCheckBox::clicked, this, &CartesianPlotDock::visibilityChanged);
 	connect(ui.cbRangeType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CartesianPlotDock::rangeTypeChanged);
 	connect(ui.cbNiceExtend, &QCheckBox::clicked, this, &CartesianPlotDock::niceExtendChanged);
@@ -215,7 +211,7 @@ CartesianPlotDock::CartesianPlotDock(QWidget* parent)
 	connect(m_themeHandler, &ThemeHandler::info, this, &CartesianPlotDock::info);
 
 	// templates for plot properties
-	auto* templateHandler = new TemplateHandler(this, TemplateHandler::ClassName::CartesianPlot);
+	auto* templateHandler = new TemplateHandler(this, QLatin1String("CartesianPlot"));
 	layout->addWidget(templateHandler);
 	connect(templateHandler, &TemplateHandler::loadConfigRequested, this, &CartesianPlotDock::loadConfigFromTemplate);
 	connect(templateHandler, &TemplateHandler::saveConfigRequested, this, &CartesianPlotDock::saveConfigAsTemplate);
@@ -248,7 +244,7 @@ void CartesianPlotDock::init() {
 	QPixmap pm(iconSize, iconSize);
 
 	QPen pen(Qt::SolidPattern);
-	const QColor& color = DARKMODE ? Qt::white : Qt::black;
+	const QColor& color = GuiTools::isDarkMode() ? Qt::white : Qt::black;
 	pen.setColor(color);
 
 	// left
@@ -375,25 +371,6 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list) {
 
 	labelWidget->setLabels(labels);
 
-	// if there is more than one plot in the list, disable the name and comment fields in the tab "general"
-	if (list.size() == 1) {
-		ui.lName->setEnabled(true);
-		ui.leName->setEnabled(true);
-		ui.lComment->setEnabled(true);
-		ui.teComment->setEnabled(true);
-
-		ui.leName->setText(m_plot->name());
-		ui.teComment->setText(m_plot->comment());
-	} else {
-		ui.lName->setEnabled(false);
-		ui.leName->setEnabled(false);
-		ui.lComment->setEnabled(false);
-		ui.teComment->setEnabled(false);
-
-		ui.leName->setText(QString());
-		ui.teComment->setText(QString());
-	}
-
 	symmetricPaddingChanged(m_plot->symmetricPadding());
 
 	ui.leName->setStyleSheet(QString());
@@ -423,7 +400,6 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list) {
 	}
 
 	// SIGNALs/SLOTs
-	connect(m_plot, &CartesianPlot::aspectDescriptionChanged, this, &CartesianPlotDock::aspectDescriptionChanged);
 	connect(m_plot, &CartesianPlot::rectChanged, this, &CartesianPlotDock::plotRectChanged);
 	connect(m_plot, &CartesianPlot::rangeTypeChanged, this, &CartesianPlotDock::plotRangeTypeChanged);
 	connect(m_plot, &CartesianPlot::rangeFirstValuesChanged, this, &CartesianPlotDock::plotRangeFirstValuesChanged);
@@ -543,7 +519,7 @@ void CartesianPlotDock::updateLocale() {
 }
 
 void CartesianPlotDock::updateUnits() {
-	const KConfigGroup group = KSharedConfig::openConfig()->group(QStringLiteral("Settings_General"));
+	const KConfigGroup group = Settings::group(QStringLiteral("Settings_General"));
 	BaseDock::Units units = (BaseDock::Units)group.readEntry("Units", static_cast<int>(Units::Metric));
 	if (units == m_units)
 		return;
@@ -614,11 +590,11 @@ void CartesianPlotDock::updateRangeList(const Dimension dim) {
 		break;
 	}
 
-	tw->horizontalHeader()->setSectionResizeMode(0, QHeaderView::ResizeMode::ResizeToContents); // Autoscale
-	tw->horizontalHeader()->setSectionResizeMode(1, QHeaderView::ResizeMode::ResizeToContents); // Format
-	tw->horizontalHeader()->setSectionResizeMode(2, QHeaderView::ResizeMode::Stretch); // Start
-	tw->horizontalHeader()->setSectionResizeMode(3, QHeaderView::ResizeMode::Stretch); // End
-	tw->horizontalHeader()->setSectionResizeMode(4, QHeaderView::ResizeMode::ResizeToContents); // Scale
+	tw->horizontalHeader()->setSectionResizeMode(TwRangesColumn::Automatic, QHeaderView::ResizeMode::ResizeToContents);
+	tw->horizontalHeader()->setSectionResizeMode(TwRangesColumn::Format, QHeaderView::ResizeMode::ResizeToContents);
+	tw->horizontalHeader()->setSectionResizeMode(TwRangesColumn::Min, QHeaderView::ResizeMode::Stretch);
+	tw->horizontalHeader()->setSectionResizeMode(TwRangesColumn::Max, QHeaderView::ResizeMode::Stretch);
+	tw->horizontalHeader()->setSectionResizeMode(TwRangesColumn::Scale, QHeaderView::ResizeMode::ResizeToContents);
 	tw->horizontalHeader()->setStretchLastSection(false);
 
 	const int rangeCount = m_plot->rangeCount(dim);
@@ -709,7 +685,7 @@ void CartesianPlotDock::updateRangeList(const Dimension dim) {
 		cb->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
 		cb->setFrame(false);
 		// TODO: -> updateLocale()
-		for (const auto& name : RangeT::scaleNames())
+		for (const auto& name : RangeT::scaleNames)
 			cb->addItem(name);
 
 		cb->setCurrentIndex(static_cast<int>(scale));
@@ -926,7 +902,6 @@ void CartesianPlotDock::niceExtendChanged(bool checked) {
 
 	for (auto* plot : m_plotList)
 		plot->setNiceExtend(checked);
-	updatePlotRangeList();
 }
 
 void CartesianPlotDock::rangePointsChanged(const QString& text) {
@@ -1047,6 +1022,7 @@ void CartesianPlotDock::scaleChanged(const QObject* sender, const Dimension dim,
 	const auto scale{static_cast<RangeT::Scale>(index)};
 	for (auto* plot : m_plotList)
 		plot->setRangeScale(dim, rangeIndex, scale);
+	updateRangeList(dim);
 }
 
 void CartesianPlotDock::rangeFormatChanged(const QObject* sender, const Dimension dim, int index) {
@@ -1136,13 +1112,14 @@ void CartesianPlotDock::removeRange(const Dimension dim) {
 			QString(),
 			KStandardGuiItem::remove(),
 			KStandardGuiItem::cancel());
+		if (status == KMessageBox::SecondaryAction)
 #else
 		auto status = KMessageBox::warningYesNo(
 			this,
 			i18n("%1 range %2 is used in plot range %3. ", CartesianCoordinateSystem::dimensionToString(dim).toUpper(), currentRow + 1, msg)
 				+ i18n("Really remove it?"));
-#endif
 		if (status == KMessageBox::No)
+#endif
 			return;
 		else {
 			// reset x ranges of cSystems using the range to be removed
@@ -1196,11 +1173,12 @@ void CartesianPlotDock::removePlotRange() {
 											   QString(),
 											   KStandardGuiItem::remove(),
 											   KStandardGuiItem::cancel());
+			if (status == KMessageBox::SecondaryAction)
 #else
 			auto status =
 				KMessageBox::warningYesNo(this, i18n("Plot range %1 is used by element \"%2\". ", currentRow + 1, element->name()) + i18n("Really remove it?"));
-#endif
 			if (status == KMessageBox::No)
+#endif
 				return;
 			else
 				element->setCoordinateSystemIndex(0); // reset
@@ -1682,6 +1660,8 @@ void CartesianPlotDock::plotMinChanged(const Dimension dim, int xRangeIndex, dou
 
 	CELLWIDGET(dim, xRangeIndex, TwRangesColumn::Min, NumberSpinBox, setValue(value));
 	CELLWIDGET(dim, xRangeIndex, TwRangesColumn::Min, UTCDateTimeEdit, setMSecsSinceEpochUTC(value));
+
+	updatePlotRangeList();
 }
 
 void CartesianPlotDock::plotMaxChanged(const Dimension dim, int xRangeIndex, double value) {
@@ -1690,16 +1670,33 @@ void CartesianPlotDock::plotMaxChanged(const Dimension dim, int xRangeIndex, dou
 
 	CELLWIDGET(dim, xRangeIndex, TwRangesColumn::Max, NumberSpinBox, setValue(value));
 	CELLWIDGET(dim, xRangeIndex, TwRangesColumn::Max, UTCDateTimeEdit, setMSecsSinceEpochUTC(value));
+
+	updatePlotRangeList();
 }
 
 void CartesianPlotDock::plotRangeChanged(const Dimension dim, int index, Range<double> range) {
 	DEBUG(Q_FUNC_INFO << ", " << CartesianCoordinateSystem::dimensionToString(dim).toStdString() << " range = " << range.toStdString())
-	CONDITIONAL_LOCK_RETURN;
 
-	CELLWIDGET(dim, index, TwRangesColumn::Min, NumberSpinBox, setValue(range.start()));
-	CELLWIDGET(dim, index, TwRangesColumn::Min, UTCDateTimeEdit, setMSecsSinceEpochUTC(range.start()));
-	CELLWIDGET(dim, index, TwRangesColumn::Max, NumberSpinBox, setValue(range.end()));
-	CELLWIDGET(dim, index, TwRangesColumn::Max, UTCDateTimeEdit, setMSecsSinceEpochUTC(range.end()));
+	// The ranges can change on multiple ways
+	// - setting autoscale
+	// - setting min/max
+	// - but also when changing datarange type or the datarange points.
+	// If the datarange type/points changes, CONDITIONAL_LOCK_RETURN locks already and then the ranges would not update.
+	// To update also in those cases the cells will be updated all the time regardless of the m_initializing member state
+	if (m_initializing) {
+		CELLWIDGET(dim, index, TwRangesColumn::Min, NumberSpinBox, setValue(range.start()));
+		CELLWIDGET(dim, index, TwRangesColumn::Min, UTCDateTimeEdit, setMSecsSinceEpochUTC(range.start()));
+		CELLWIDGET(dim, index, TwRangesColumn::Max, NumberSpinBox, setValue(range.end()));
+		CELLWIDGET(dim, index, TwRangesColumn::Max, UTCDateTimeEdit, setMSecsSinceEpochUTC(range.end()));
+	} else {
+		// Must be copied, because the Lock would otherwise be in it's own space and therefore it would not make any sense
+		CONDITIONAL_LOCK_RETURN;
+		CELLWIDGET(dim, index, TwRangesColumn::Min, NumberSpinBox, setValue(range.start()));
+		CELLWIDGET(dim, index, TwRangesColumn::Min, UTCDateTimeEdit, setMSecsSinceEpochUTC(range.start()));
+		CELLWIDGET(dim, index, TwRangesColumn::Max, NumberSpinBox, setValue(range.end()));
+		CELLWIDGET(dim, index, TwRangesColumn::Max, UTCDateTimeEdit, setMSecsSinceEpochUTC(range.end()));
+	}
+	updatePlotRangeList();
 }
 
 void CartesianPlotDock::plotScaleChanged(const Dimension dim, int rangeIndex, RangeT::Scale scale) {
@@ -1712,6 +1709,8 @@ void CartesianPlotDock::plotRangeFormatChanged(const Dimension dim, int rangeInd
 	DEBUG(Q_FUNC_INFO << ", format = " << ENUM_TO_STRING(RangeT, Format, format))
 	CONDITIONAL_LOCK_RETURN;
 	CELLWIDGET(dim, rangeIndex, TwRangesColumn::Format, QComboBox, setCurrentIndex(static_cast<int>(format)));
+
+	updatePlotRangeList();
 }
 
 // plot range
@@ -1797,14 +1796,7 @@ void CartesianPlotDock::plotBorderCornerRadiusChanged(double value) {
 //******************** SETTINGS *******************************
 //*************************************************************
 void CartesianPlotDock::loadConfigFromTemplate(KConfig& config) {
-	// extract the name of the template from the file name
-	QString name;
-	int index = config.name().lastIndexOf(QLatin1Char('/'));
-	if (index != -1)
-		name = config.name().right(config.name().size() - index - 1);
-	else
-		name = config.name();
-
+	auto name = TemplateHandler::templateName(config);
 	int size = m_plotList.size();
 	if (size > 1)
 		m_plot->beginMacro(i18n("%1 cartesian plots: template \"%2\" loaded", size, name));
@@ -1894,7 +1886,7 @@ void CartesianPlotDock::load() {
 }
 
 void CartesianPlotDock::loadConfig(KConfig& config) {
-	KConfigGroup group = config.group("CartesianPlot");
+	KConfigGroup group = config.group(QStringLiteral("CartesianPlot"));
 
 	// General
 	// we don't load/save the settings in the general-tab, since they are not style related.
@@ -1902,59 +1894,62 @@ void CartesianPlotDock::loadConfig(KConfig& config) {
 	// This data is read in CartesianPlotDock::setPlots().
 
 	// Title
-	KConfigGroup plotTitleGroup = config.group("CartesianPlotTitle");
+	KConfigGroup plotTitleGroup = config.group(QStringLiteral("CartesianPlotTitle"));
 	labelWidget->loadConfig(plotTitleGroup);
 
 	// Scale breakings
 	// TODO
 
 	// Layout
-	ui.sbPaddingHorizontal->setValue(Worksheet::convertFromSceneUnits(group.readEntry("HorizontalPadding", m_plot->horizontalPadding()), m_worksheetUnit));
-	ui.sbPaddingVertical->setValue(Worksheet::convertFromSceneUnits(group.readEntry("VerticalPadding", m_plot->verticalPadding()), m_worksheetUnit));
-	ui.sbPaddingRight->setValue(Worksheet::convertFromSceneUnits(group.readEntry("RightPadding", m_plot->rightPadding()), m_worksheetUnit));
-	ui.sbPaddingBottom->setValue(Worksheet::convertFromSceneUnits(group.readEntry("BottomPadding", m_plot->bottomPadding()), m_worksheetUnit));
-	ui.cbPaddingSymmetric->setChecked(group.readEntry("SymmetricPadding", m_plot->symmetricPadding()));
+	ui.sbPaddingHorizontal->setValue(
+		Worksheet::convertFromSceneUnits(group.readEntry(QStringLiteral("HorizontalPadding"), m_plot->horizontalPadding()), m_worksheetUnit));
+	ui.sbPaddingVertical->setValue(
+		Worksheet::convertFromSceneUnits(group.readEntry(QStringLiteral("VerticalPadding"), m_plot->verticalPadding()), m_worksheetUnit));
+	ui.sbPaddingRight->setValue(Worksheet::convertFromSceneUnits(group.readEntry(QStringLiteral("RightPadding"), m_plot->rightPadding()), m_worksheetUnit));
+	ui.sbPaddingBottom->setValue(Worksheet::convertFromSceneUnits(group.readEntry(QStringLiteral("BottomPadding"), m_plot->bottomPadding()), m_worksheetUnit));
+	ui.cbPaddingSymmetric->setChecked(group.readEntry(QStringLiteral("SymmetricPadding"), m_plot->symmetricPadding()));
 
 	// Area
 	backgroundWidget->loadConfig(group);
 
 	const auto* plotArea = m_plot->plotArea();
-	auto type = static_cast<PlotArea::BorderType>(group.readEntry("BorderType", static_cast<int>(plotArea->borderType())));
+	auto type = static_cast<PlotArea::BorderType>(group.readEntry(QStringLiteral("BorderType"), static_cast<int>(plotArea->borderType())));
 	ui.tbBorderTypeLeft->setChecked(type.testFlag(PlotArea::BorderTypeFlags::BorderLeft));
 	ui.tbBorderTypeRight->setChecked(type.testFlag(PlotArea::BorderTypeFlags::BorderRight));
 	ui.tbBorderTypeTop->setChecked(type.testFlag(PlotArea::BorderTypeFlags::BorderTop));
 	ui.tbBorderTypeBottom->setChecked(type.testFlag(PlotArea::BorderTypeFlags::BorderBottom));
 
 	borderLineWidget->loadConfig(group);
-	ui.sbBorderCornerRadius->setValue(Worksheet::convertFromSceneUnits(group.readEntry("BorderCornerRadius", plotArea->borderCornerRadius()), m_worksheetUnit));
+	ui.sbBorderCornerRadius->setValue(
+		Worksheet::convertFromSceneUnits(group.readEntry(QStringLiteral("BorderCornerRadius"), plotArea->borderCornerRadius()), m_worksheetUnit));
 }
 
 void CartesianPlotDock::saveConfigAsTemplate(KConfig& config) {
-	KConfigGroup group = config.group("CartesianPlot");
+	KConfigGroup group = config.group(QStringLiteral("CartesianPlot"));
 
 	// General
 	// we don't load/save the settings in the general-tab, since they are not style related.
 	// It doesn't make sense to load/save them in the template.
 
 	// Title
-	KConfigGroup plotTitleGroup = config.group("CartesianPlotTitle");
+	KConfigGroup plotTitleGroup = config.group(QStringLiteral("CartesianPlotTitle"));
 	labelWidget->saveConfig(plotTitleGroup);
 
 	// Layout
-	group.writeEntry("HorizontalPadding", m_plot->horizontalPadding());
-	group.writeEntry("VerticalPadding", m_plot->verticalPadding());
-	group.writeEntry("RightPadding", m_plot->rightPadding());
-	group.writeEntry("BottomPadding", m_plot->bottomPadding());
-	group.writeEntry("SymmetricPadding", m_plot->symmetricPadding());
+	group.writeEntry(QStringLiteral("HorizontalPadding"), m_plot->horizontalPadding());
+	group.writeEntry(QStringLiteral("VerticalPadding"), m_plot->verticalPadding());
+	group.writeEntry(QStringLiteral("RightPadding"), m_plot->rightPadding());
+	group.writeEntry(QStringLiteral("BottomPadding"), m_plot->bottomPadding());
+	group.writeEntry(QStringLiteral("SymmetricPadding"), m_plot->symmetricPadding());
 
 	// Scale breakings
 	// TODO
 
 	// Area
 	backgroundWidget->saveConfig(group);
-	group.writeEntry("BorderType", static_cast<int>(m_plot->plotArea()->borderType()));
+	group.writeEntry(QStringLiteral("BorderType"), static_cast<int>(m_plot->plotArea()->borderType()));
 	borderLineWidget->saveConfig(group);
-	group.writeEntry("BorderCornerRadius", m_plot->plotArea()->borderCornerRadius());
+	group.writeEntry(QStringLiteral("BorderCornerRadius"), m_plot->plotArea()->borderCornerRadius());
 
 	config.sync();
 }

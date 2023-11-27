@@ -16,6 +16,7 @@
 
 #include <KLocalizedString>
 #include <QProcess>
+#include <QStandardPaths>
 
 ///////////// macros ///////////////////////////////////////////////
 
@@ -155,19 +156,6 @@ writes the content of the data source \c dataSource to the file \c fileName.
 void NetCDFFilter::write(const QString& fileName, AbstractDataSource* dataSource) {
 	d->write(fileName, dataSource);
 	// 	emit()
-}
-
-///////////////////////////////////////////////////////////////////////
-/*!
-  loads the predefined filter settings for \c filterName
-*/
-void NetCDFFilter::loadFilterSettings(const QString& /*filterName*/) {
-}
-
-/*!
-  saves the current settings as a new filter with the name \c filterName
-*/
-void NetCDFFilter::saveFilterSettings(const QString& /*filterName*/) const {
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -1133,7 +1121,5 @@ void NetCDFFilter::save(QXmlStreamWriter* writer) const {
   Loads from XML.
 */
 bool NetCDFFilter::load(XmlStreamReader*) {
-	// 	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
-	// 	QXmlStreamAttributes attribs = reader->attributes();
 	return true;
 }

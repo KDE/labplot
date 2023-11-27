@@ -12,7 +12,6 @@
 #include "backend/datasources/filters/AbstractFileFilter.h"
 #include <QTreeWidgetItem>
 
-class QStringList;
 class NetCDFFilterPrivate;
 
 class NetCDFFilter : public AbstractFileFilter {
@@ -34,9 +33,6 @@ public:
 										AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace,
 										int lines = -1);
 	void write(const QString& fileName, AbstractDataSource*) override;
-
-	void loadFilterSettings(const QString&) override;
-	void saveFilterSettings(const QString&) const override;
 
 	void setCurrentVarName(const QString&);
 	const QString currentVarName() const;

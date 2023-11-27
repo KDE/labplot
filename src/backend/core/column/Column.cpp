@@ -4,12 +4,13 @@
 	Description          : Aspect that manages a column
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2007-2009 Tilman Benkert <thzs@gmx.net>
-	SPDX-FileCopyrightText: 2013-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2013-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2017-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "backend/core/column/Column.h"
+#include "backend/cantorWorksheet/CantorWorksheet.h"
 #include "backend/core/AbstractSimpleFilter.h"
 #include "backend/core/Project.h"
 #include "backend/core/column/ColumnPrivate.h"
@@ -29,6 +30,7 @@
 
 #include <KLocalizedString>
 
+#include <QActionGroup>
 #include <QClipboard>
 #include <QFont>
 #include <QFontMetrics>
@@ -110,6 +112,9 @@ Column::~Column() {
 }
 
 QMenu* Column::createContextMenu() {
+	if (parentAspect()->type() == AspectType::StatisticsSpreadsheet)
+		return nullptr;
+
 	// initialize the actions if not done yet
 	if (!m_copyDataAction) {
 		m_copyDataAction = new QAction(QIcon::fromTheme(QStringLiteral("edit-copy")), i18n("Copy Data"), this);
@@ -138,9 +143,16 @@ QMenu* Column::createContextMenu() {
 	// at the moment it's ok to check to the null pointer for firstAction here.
 	// later, once we have some actions in the menu also for MQTT topics we'll
 	// need to explicitly to dynamic_cast for MQTTTopic
-	if (firstAction && parentAspect()->type() == AspectType::Spreadsheet) {
-		auto* spreadsheet = static_cast<Spreadsheet*>(parentAspect());
-		spreadsheet->fillColumnContextMenu(menu, this);
+	if (firstAction) {
+		if (parentAspect()->type() == AspectType::Spreadsheet) {
+			auto* spreadsheet = static_cast<Spreadsheet*>(parentAspect());
+			spreadsheet->fillColumnContextMenu(menu, this);
+		} else if (parentAspect()->type() == AspectType::CantorWorksheet) {
+#ifdef HAVE_CANTOR_LIBS
+			auto* worksheet = static_cast<CantorWorksheet*>(parentAspect());
+			worksheet->fillColumnContextMenu(menu, this);
+#endif
+		}
 	}
 
 	//"Used in" menu containing all curves where the column is used
@@ -257,19 +269,17 @@ QMenu* Column::createContextMenu() {
 		menu->insertSeparator(firstAction);
 	}
 
-	if (hasValues()) {
+	if (hasValues())
 		menu->insertAction(firstAction, m_copyDataAction);
-		menu->insertSeparator(firstAction);
-	}
 
 	// pasting of data is only possible for spreadsheet columns
 	if (parentAspect()->type() == AspectType::Spreadsheet) {
 		const auto* mimeData = QApplication::clipboard()->mimeData();
-		if (mimeData->hasFormat(QStringLiteral("text/plain"))) {
+		if (mimeData->hasFormat(QStringLiteral("text/plain")))
 			menu->insertAction(firstAction, m_pasteDataAction);
-			menu->insertSeparator(firstAction);
-		}
 	}
+
+	menu->insertSeparator(firstAction);
 
 	return menu;
 }
@@ -467,8 +477,6 @@ void Column::handleRowInsertion(int before, int count, QUndoCommand* parent) {
 	Q_ASSERT(parent);
 	AbstractColumn::handleRowInsertion(before, count, parent);
 	new ColumnInsertRowsCmd(d, before, count, parent);
-	if (!m_suppressDataChangedSignal)
-		Q_EMIT dataChanged(this);
 }
 
 /**
@@ -477,9 +485,9 @@ void Column::handleRowInsertion(int before, int count, QUndoCommand* parent) {
 void Column::handleRowRemoval(int first, int count, QUndoCommand* parent) {
 	Q_ASSERT(parent);
 	AbstractColumn::handleRowRemoval(first, count, parent);
-	new ColumnRemoveRowsCmd(d, first, count, parent);
-	if (!m_suppressDataChangedSignal)
-		Q_EMIT dataChanged(this);
+	auto* command = new ColumnRemoveRowsCmd(d, first, count, parent);
+	if (!parent)
+		exec(command);
 }
 
 /**
@@ -520,7 +528,7 @@ void Column::clear(QUndoCommand* parent) {
 			parent = command;
 		}
 		new ColumnClearCmd(d, parent);
-		new ColumnSetGlobalFormulaCmd(d, QString(), QStringList(), QVector<Column*>(), false, parent);
+		new ColumnSetGlobalFormulaCmd(d, QString(), QStringList(), QVector<Column*>(), false /* auto update */, true /* auto resize */, parent);
 		if (execute)
 			exec(parent);
 	}
@@ -561,11 +569,15 @@ bool Column::formulaAutoUpdate() const {
 	return d->formulaAutoUpdate();
 }
 
+bool Column::formulaAutoResize() const {
+	return d->formulaAutoResize();
+}
+
 /**
  * \brief Sets the formula used to generate column values
  */
-void Column::setFormula(const QString& formula, const QStringList& variableNames, const QVector<Column*>& columns, bool autoUpdate) {
-	exec(new ColumnSetGlobalFormulaCmd(d, formula, variableNames, columns, autoUpdate));
+void Column::setFormula(const QString& formula, const QStringList& variableNames, const QVector<Column*>& columns, bool autoUpdate, bool autoResize) {
+	exec(new ColumnSetGlobalFormulaCmd(d, formula, variableNames, columns, autoUpdate, autoResize));
 }
 
 /*!
@@ -1056,6 +1068,7 @@ void Column::save(QXmlStreamWriter* writer) const {
 	if (!formula().isEmpty()) {
 		writer->writeStartElement(QStringLiteral("formula"));
 		writer->writeAttribute(QStringLiteral("autoUpdate"), QString::number(d->formulaAutoUpdate()));
+		writer->writeAttribute(QStringLiteral("autoResize"), QString::number(d->formulaAutoResize()));
 		writer->writeTextElement(QStringLiteral("text"), formula());
 
 		QStringList formulaVariableNames;
@@ -1276,30 +1289,29 @@ bool Column::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs = reader->attributes();
 
 	QString str = attribs.value(QStringLiteral("rows")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs(QStringLiteral("rows")).toString());
+		reader->raiseMissingAttributeWarning(QStringLiteral("rows"));
 	else
 		d->resizeTo(str.toInt());
 
 	str = attribs.value(QStringLiteral("designation")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs(QStringLiteral("designation")).toString());
+		reader->raiseMissingAttributeWarning(QStringLiteral("designation"));
 	else
 		d->setPlotDesignation(AbstractColumn::PlotDesignation(str.toInt()));
 
 	str = attribs.value(QStringLiteral("mode")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs(QStringLiteral("mode")).toString());
+		reader->raiseMissingAttributeWarning(QStringLiteral("mode"));
 	else
 		setColumnModeFast(AbstractColumn::ColumnMode(str.toInt()));
 
 	str = attribs.value(QStringLiteral("width")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs(QStringLiteral("width")).toString());
+		reader->raiseMissingAttributeWarning(QStringLiteral("width"));
 	else
 		d->setWidth(str.toInt());
 
@@ -1331,25 +1343,25 @@ bool Column::load(XmlStreamReader* reader, bool preview) {
 				auto& format = heatmapFormat();
 				str = attribs.value(QStringLiteral("min")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs(QStringLiteral("min")).toString());
+					reader->raiseMissingAttributeWarning(QStringLiteral("min"));
 				else
 					format.min = str.toDouble();
 
 				str = attribs.value(QStringLiteral("max")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs(QStringLiteral("max")).toString());
+					reader->raiseMissingAttributeWarning(QStringLiteral("max"));
 				else
 					format.max = str.toDouble();
 
 				str = attribs.value(QStringLiteral("name")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs(QStringLiteral("name")).toString());
+					reader->raiseMissingAttributeWarning(QStringLiteral("name"));
 				else
 					format.name = str;
 
 				str = attribs.value(QStringLiteral("type")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs(QStringLiteral("max")).toString());
+					reader->raiseMissingAttributeWarning(QStringLiteral("max"));
 				else
 					format.type = static_cast<Formatting>(str.toInt());
 
@@ -1406,7 +1418,7 @@ bool Column::load(XmlStreamReader* reader, bool preview) {
 				}
 				}
 			} else { // unknown element
-				reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
+				reader->raiseUnknownElementWarning();
 				if (!reader->skipToEndElement())
 					return false;
 			}
@@ -1490,6 +1502,11 @@ bool Column::XmlReadFormula(XmlStreamReader* reader) {
 	if (reader->attributes().hasAttribute(QStringLiteral("autoUpdate")))
 		autoUpdate = reader->attributes().value(QStringLiteral("autoUpdate")).toInt();
 
+	// read the autoResize attribute if available (older project files created with <2.11 don't have it)
+	bool autoResize = false;
+	if (reader->attributes().hasAttribute(QStringLiteral("autoResize")))
+		autoResize = reader->attributes().value(QStringLiteral("autoResize")).toInt();
+
 	while (reader->readNext()) {
 		if (reader->isEndElement())
 			break;
@@ -1515,7 +1532,7 @@ bool Column::XmlReadFormula(XmlStreamReader* reader) {
 		}
 	}
 
-	d->setFormula(formula, variableNames, columnPathes, autoUpdate);
+	d->setFormula(formula, variableNames, columnPathes, autoUpdate, autoResize);
 
 	return true;
 }
@@ -2435,7 +2452,7 @@ bool Column::indicesMinMax(double v1, double v2, int& start, int& end) const {
 	case ColumnMode::Day: {
 		qint64 value;
 		qint64 v2int64 = v2;
-		qint64 v1int64 = v2;
+		qint64 v1int64 = v1;
 		for (int i = 0; i < rowCount(); i++) {
 			if (!isValid(i) || isMasked(i))
 				continue;

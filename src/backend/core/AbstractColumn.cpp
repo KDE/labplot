@@ -10,13 +10,14 @@
 
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/AbstractColumnPrivate.h"
+#include "backend/core/Settings.h"
 #include "backend/core/abstractcolumncommands.h"
 #include "backend/lib/SignallingUndoCommand.h"
 #include "backend/lib/XmlStreamReader.h"
 
 #include <KConfigGroup>
 #include <KLocalizedString>
-#include <KSharedConfig>
+
 #include <QDateTime>
 #include <QIcon>
 
@@ -151,7 +152,7 @@ QString AbstractColumn::timeUnitString(TimeUnit unit) {
 QString AbstractColumn::plotDesignationString(PlotDesignation d, bool withBrackets) {
 	QString s;
 
-	const KConfigGroup group = KSharedConfig::openConfig()->group(QStringLiteral("Settings_General"));
+	const KConfigGroup group = Settings::group(QStringLiteral("Settings_General"));
 	switch (d) {
 	case PlotDesignation::NoDesignation:
 		s = i18n("None");
@@ -366,17 +367,12 @@ private:
  * \brief Insert some empty (or initialized with invalid values) rows
  */
 void AbstractColumn::insertRows(int before, int count, QUndoCommand* parent) {
-	bool execute = false;
 	auto* command = new ColumnSetRowsCountCmd(this, true, before, count, parent);
-	if (!parent) {
-		execute = true;
-		parent = command;
-	}
 
-	handleRowInsertion(before, count, parent);
+	handleRowInsertion(before, count, command);
 
-	if (execute)
-		exec(parent);
+	if (!parent)
+		exec(command);
 }
 
 void AbstractColumn::handleRowInsertion(int before, int count, QUndoCommand* parent) {
@@ -387,17 +383,12 @@ void AbstractColumn::handleRowInsertion(int before, int count, QUndoCommand* par
  * \brief Remove 'count' rows starting from row 'first'
  */
 void AbstractColumn::removeRows(int first, int count, QUndoCommand* parent) {
-	bool execute = false;
 	auto* command = new ColumnSetRowsCountCmd(this, false, first, count, parent);
-	if (!parent) {
-		execute = true;
-		parent = command;
-	}
 
-	handleRowRemoval(first, count, parent);
+	handleRowRemoval(first, count, command);
 
-	if (execute)
-		exec(parent);
+	if (!parent)
+		exec(command);
 }
 
 void AbstractColumn::handleRowRemoval(int first, int count, QUndoCommand* parent) {
@@ -484,7 +475,7 @@ QVector<Interval<int>> AbstractColumn::maskedIntervals() const {
  * \brief Clear all masking information
  */
 void AbstractColumn::clearMasks() {
-	exec(new AbstractColumnClearMasksCmd(d), "maskingAboutToChange", "maskingChanged", Q_ARG(const AbstractColumn*, this));
+	exec(new AbstractColumnClearMasksCmd(d), "maskingAboutToChange", "maskingChanged", QArgument<const AbstractColumn*>("const AbstractColumn*", this));
 }
 
 /**
@@ -494,7 +485,7 @@ void AbstractColumn::clearMasks() {
  * \param mask true: mask, false: unmask
  */
 void AbstractColumn::setMasked(const Interval<int>& i, bool mask) {
-	exec(new AbstractColumnSetMaskedCmd(d, i, mask), "maskingAboutToChange", "maskingChanged", Q_ARG(const AbstractColumn*, this));
+	exec(new AbstractColumnSetMaskedCmd(d, i, mask), "maskingAboutToChange", "maskingChanged", QArgument<const AbstractColumn*>("const AbstractColumn*", this));
 }
 
 /**
@@ -573,6 +564,11 @@ void AbstractColumn::setHeatmapFormat(const AbstractColumn::HeatmapFormat& forma
 
 void AbstractColumn::removeFormat() {
 	exec(new AbstractColumnRemoveHeatmapFormatCmd(d));
+}
+
+void AbstractColumn::reset() {
+	disconnect(this, nullptr, nullptr, nullptr);
+	Q_EMIT aboutToReset(this);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

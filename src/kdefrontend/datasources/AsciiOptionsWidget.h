@@ -14,6 +14,7 @@
 #include "ui_asciioptionswidget.h"
 
 class AsciiFilter;
+class KConfig;
 
 class AsciiOptionsWidget : public QWidget {
 	Q_OBJECT
@@ -24,8 +25,13 @@ public:
 	void showTimestampOptions(bool);
 	void applyFilterSettings(AsciiFilter*) const;
 	void setSeparatingCharacter(QLatin1Char);
+
 	void loadSettings() const;
-	void saveSettings();
+	void saveSettings() const;
+
+	// save/load template
+	void loadConfigFromTemplate(KConfig&) const;
+	void saveConfigAsTemplate(KConfig&) const;
 
 public Q_SLOTS:
 	void headerChanged(bool) const;

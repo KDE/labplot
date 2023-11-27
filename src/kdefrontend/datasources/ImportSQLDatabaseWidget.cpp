@@ -11,20 +11,23 @@
 #include "ImportSQLDatabaseWidget.h"
 #include "DatabaseManagerDialog.h"
 #include "DatabaseManagerWidget.h"
+#include "backend/core/Settings.h"
 #include "backend/datasources/AbstractDataSource.h"
 #include "backend/lib/macros.h"
+#include "kdefrontend/GuiTools.h"
 
 #include <KConfig>
 #include <KConfigGroup>
 #include <KLocalizedString>
 #include <KMessageBox>
-#include <KSharedConfig>
+
 #ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
 #include <KSyntaxHighlighting/Definition>
 #include <KSyntaxHighlighting/SyntaxHighlighter>
 #include <KSyntaxHighlighting/Theme>
 #endif
 
+#include <QFile>
 #include <QSqlError>
 #include <QSqlQuery>
 #include <QSqlRecord>
@@ -117,8 +120,8 @@ ImportSQLDatabaseWidget::ImportSQLDatabaseWidget(QWidget* parent)
 #ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
 	m_highlighter = new KSyntaxHighlighting::SyntaxHighlighter(ui.teQuery->document());
 	m_highlighter->setDefinition(m_repository.definitionForName(QStringLiteral("SQL")));
-	m_highlighter->setTheme(DARKMODE ? m_repository.defaultTheme(KSyntaxHighlighting::Repository::DarkTheme)
-									 : m_repository.defaultTheme(KSyntaxHighlighting::Repository::LightTheme));
+	m_highlighter->setTheme(GuiTools::isDarkMode() ? m_repository.defaultTheme(KSyntaxHighlighting::Repository::DarkTheme)
+												   : m_repository.defaultTheme(KSyntaxHighlighting::Repository::LightTheme));
 #endif
 
 	m_configPath = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).constFirst() + QStringLiteral("sql_connections");
@@ -140,13 +143,13 @@ void ImportSQLDatabaseWidget::loadSettings() {
 	readConnections();
 
 	// load last used connection and other settings
-	KConfigGroup config(KSharedConfig::openConfig(), "ImportSQLDatabaseWidget");
+	KConfigGroup config = Settings::group(QStringLiteral("ImportSQLDatabaseWidget"));
 	ui.cbConnection->setCurrentIndex(ui.cbConnection->findText(config.readEntry("Connection", "")));
 	ui.cbImportFrom->setCurrentIndex(config.readEntry("ImportFrom", 0));
 	importFromChanged(ui.cbImportFrom->currentIndex());
 
 	// TODO: use general setting for decimal separator?
-	const QChar decimalSeparator = QLocale().decimalPoint();
+	const auto decimalSeparator = QLocale().decimalPoint();
 	int index = (decimalSeparator == QLatin1Char('.')) ? 0 : 1;
 	ui.cbDecimalSeparator->setCurrentIndex(config.readEntry("DecimalSeparator", index));
 
@@ -164,7 +167,7 @@ void ImportSQLDatabaseWidget::loadSettings() {
 
 ImportSQLDatabaseWidget::~ImportSQLDatabaseWidget() {
 	// save current settings
-	KConfigGroup config(KSharedConfig::openConfig(), "ImportSQLDatabaseWidget");
+	KConfigGroup config = Settings::group(QStringLiteral("ImportSQLDatabaseWidget"));
 	config.writeEntry("Connection", ui.cbConnection->currentText());
 	config.writeEntry("ImportFrom", ui.cbImportFrom->currentIndex());
 	config.writeEntry("DecimalSeparator", ui.cbDecimalSeparator->currentIndex());

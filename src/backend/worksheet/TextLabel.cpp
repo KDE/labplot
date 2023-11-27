@@ -14,6 +14,7 @@
 #include "TextLabelPrivate.h"
 #include "Worksheet.h"
 #include "backend/core/Project.h"
+#include "backend/core/Settings.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/worksheet/plots/PlotArea.h"
@@ -23,7 +24,6 @@
 
 #include <QApplication>
 #include <QBuffer>
-#include <QDesktopWidget>
 #include <QGraphicsScene>
 #include <QGraphicsSceneMouseEvent>
 #include <QKeyEvent>
@@ -135,41 +135,43 @@ void TextLabel::init() {
 		d->position.verticalPosition = WorksheetElement::VerticalPosition::Center;
 	}
 
-	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("Settings_Worksheet"));
-	const auto& engine = conf.readEntry(QLatin1String("LaTeXEngine"), "");
+	KConfigGroup conf = Settings::group(QStringLiteral("Settings_Worksheet"));
+	const auto& engine = conf.readEntry(QStringLiteral("LaTeXEngine"), "");
 	if (engine == QLatin1String("lualatex"))
-		d->teXFont.setFamily(QLatin1String("Latin Modern Roman"));
+		d->teXFont.setFamily(QStringLiteral("Latin Modern Roman"));
 
 	// read settings from config if group exists
 	if (group.isValid()) {
 		// properties common to all types
-		d->textWrapper.mode = static_cast<TextLabel::Mode>(group.readEntry("Mode", static_cast<int>(d->textWrapper.mode)));
-		d->teXFont.setFamily(group.readEntry("TeXFontFamily", d->teXFont.family()));
-		d->teXFont.setPointSize(group.readEntry("TeXFontSize", d->teXFont.pointSize()));
-		d->fontColor = group.readEntry("TeXFontColor", d->fontColor);
-		d->backgroundColor = group.readEntry("TeXBackgroundColor", d->backgroundColor);
-		d->setRotation(group.readEntry("Rotation", d->rotation()));
+		d->textWrapper.mode = static_cast<TextLabel::Mode>(group.readEntry(QStringLiteral("Mode"), static_cast<int>(d->textWrapper.mode)));
+		d->teXFont.setFamily(group.readEntry(QStringLiteral("TeXFontFamily"), d->teXFont.family()));
+		d->teXFont.setPointSize(group.readEntry(QStringLiteral("TeXFontSize"), d->teXFont.pointSize()));
+		d->fontColor = group.readEntry(QStringLiteral("TeXFontColor"), d->fontColor);
+		d->backgroundColor = group.readEntry(QStringLiteral("TeXBackgroundColor"), d->backgroundColor);
+		d->setRotation(group.readEntry(QStringLiteral("Rotation"), d->rotation()));
 
 		// border
-		d->borderShape = (TextLabel::BorderShape)group.readEntry("BorderShape", (int)d->borderShape);
-		d->borderPen = QPen(group.readEntry("BorderColor", d->borderPen.color()),
-							group.readEntry("BorderWidth", d->borderPen.width()),
-							(Qt::PenStyle)group.readEntry("BorderStyle", (int)(d->borderPen.style())));
-		d->borderOpacity = group.readEntry("BorderOpacity", d->borderOpacity);
+		d->borderShape = (TextLabel::BorderShape)group.readEntry(QStringLiteral("BorderShape"), (int)d->borderShape);
+		d->borderPen = QPen(group.readEntry(QStringLiteral("BorderColor"), d->borderPen.color()),
+							group.readEntry(QStringLiteral("BorderWidth"), d->borderPen.width()),
+							(Qt::PenStyle)group.readEntry(QStringLiteral("BorderStyle"), (int)(d->borderPen.style())));
+		d->borderOpacity = group.readEntry(QStringLiteral("BorderOpacity"), d->borderOpacity);
 
 		// position and alignment relevant properties
-		d->position.point.setX(group.readEntry("PositionXValue", 0.));
-		d->position.point.setY(group.readEntry("PositionYValue", 0.));
-		d->position.horizontalPosition = (HorizontalPosition)group.readEntry("PositionX", (int)d->position.horizontalPosition);
-		d->position.verticalPosition = (VerticalPosition)group.readEntry("PositionY", (int)d->position.verticalPosition);
-		d->horizontalAlignment = (WorksheetElement::HorizontalAlignment)group.readEntry("HorizontalAlignment", static_cast<int>(d->horizontalAlignment));
-		d->verticalAlignment = (WorksheetElement::VerticalAlignment)group.readEntry("VerticalAlignment", static_cast<int>(d->verticalAlignment));
+		d->position.point.setX(group.readEntry(QStringLiteral("PositionXValue"), 0.));
+		d->position.point.setY(group.readEntry(QStringLiteral("PositionYValue"), 0.));
+		d->position.horizontalPosition = (HorizontalPosition)group.readEntry(QStringLiteral("PositionX"), (int)d->position.horizontalPosition);
+		d->position.verticalPosition = (VerticalPosition)group.readEntry(QStringLiteral("PositionY"), (int)d->position.verticalPosition);
+		d->horizontalAlignment =
+			(WorksheetElement::HorizontalAlignment)group.readEntry(QStringLiteral("HorizontalAlignment"), static_cast<int>(d->horizontalAlignment));
+		d->verticalAlignment =
+			(WorksheetElement::VerticalAlignment)group.readEntry(QStringLiteral("VerticalAlignment"), static_cast<int>(d->verticalAlignment));
 		if (cSystem && cSystem->isValid())
 			d->positionLogical = cSystem->mapSceneToLogical(d->position.point, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 	}
 	d->updatePosition();
 
-	DEBUG(Q_FUNC_INFO << ", default/run time image resolution: " << d->teXImageResolution << '/' << QApplication::desktop()->physicalDpiX());
+	DEBUG(Q_FUNC_INFO << ", default/run time image resolution: " << d->teXImageResolution << '/' << QApplication::primaryScreen()->physicalDotsPerInchX());
 
 	connect(&d->teXImageFutureWatcher, &QFutureWatcher<QByteArray>::finished, this, &TextLabel::updateTeXImage);
 }
@@ -177,20 +179,6 @@ void TextLabel::init() {
 // no need to delete the d-pointer here - it inherits from QGraphicsItem
 // and is deleted during the cleanup in QGraphicsScene
 TextLabel::~TextLabel() = default;
-
-QGraphicsItem* TextLabel::graphicsItem() const {
-	return d_ptr;
-}
-
-/*!
- * \brief TextLabel::setParentGraphicsItem
- * Sets the parent graphicsitem, needed for binding to coord
- * \param item parent graphicsitem
- */
-void TextLabel::setParentGraphicsItem(QGraphicsItem* item) {
-	Q_D(TextLabel);
-	d->setParentItem(item);
-}
 
 void TextLabel::setZoomFactor(double factor) {
 	Q_D(TextLabel);
@@ -233,33 +221,16 @@ void TextLabel::handleResize(double horizontalRatio, double verticalRatio, bool 
 QIcon TextLabel::icon() const {
 	switch (text().mode) {
 	case Mode::Markdown:
-		return QIcon::fromTheme(QLatin1String("text-x-markdown"));
+		return QIcon::fromTheme(QStringLiteral("text-x-markdown"));
 		break;
 	case Mode::LaTeX:
-		return QIcon::fromTheme(QLatin1String("text-x-tex"));
+		return QIcon::fromTheme(QStringLiteral("text-x-tex"));
 		break;
 	case Mode::Text:
 	default:
-		return QIcon::fromTheme(QLatin1String("draw-text"));
+		return QIcon::fromTheme(QStringLiteral("draw-text"));
 		// return QIcon::fromTheme(QLatin1String("text-x-plain"));
 	}
-}
-
-QMenu* TextLabel::createContextMenu() {
-	QMenu* menu = WorksheetElement::createContextMenu();
-	QAction* firstAction = menu->actions().at(1); // skip the first action because of the "title-action"
-
-	if (!visibilityAction) {
-		visibilityAction = new QAction(i18n("Visible"), this);
-		visibilityAction->setCheckable(true);
-		connect(visibilityAction, &QAction::triggered, this, &TextLabel::changeVisibility);
-	}
-
-	visibilityAction->setChecked(isVisible());
-	menu->insertAction(firstAction, visibilityAction);
-	menu->insertSeparator(firstAction);
-
-	return menu;
 }
 
 /* ============================ getter methods ================= */
@@ -455,7 +426,7 @@ QRectF TextLabelPrivate::size() {
  */
 QPointF TextLabelPrivate::findNearestGluePoint(QPointF scenePoint) {
 	if (m_gluePointsTransformed.isEmpty())
-		return boundingRectangle.center();
+		return m_boundingRectangle.center();
 
 	if (m_gluePointsTransformed.length() == 1)
 		return mapParentToPlotArea(mapToParent(m_gluePointsTransformed.at(0).point));
@@ -487,7 +458,7 @@ TextLabel::GluePoint TextLabelPrivate::gluePointAt(int index) {
 	QString name;
 
 	if (m_gluePointsTransformed.isEmpty() || index > m_gluePointsTransformed.length()) {
-		pos = boundingRectangle.center();
+		pos = m_boundingRectangle.center();
 		name = QLatin1String("center");
 	} else if (index < 0) {
 		pos = m_gluePointsTransformed.at(0).point;
@@ -544,7 +515,7 @@ void TextLabelPrivate::updatePosition() {
 		// the position in scene coordinates was changed, calculate the position in logical coordinates
 		if (q->cSystem) {
 			if (!coordinateBindingEnabled) {
-				QPointF pos = q->align(p, boundingRectangle, horizontalAlignment, verticalAlignment, false);
+				QPointF pos = q->align(p, m_boundingRectangle, horizontalAlignment, verticalAlignment, false);
 				positionLogical = q->cSystem->mapSceneToLogical(pos, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 			}
 			Q_EMIT q->positionLogicalChanged(positionLogical);
@@ -570,6 +541,7 @@ void TextLabelPrivate::updateText() {
 			QTextEdit te(textWrapper.text);
 			te.selectAll();
 			te.setTextColor(fontColor);
+
 			// don't set background color (not used if not inside text)
 			textWrapper.text = te.toHtml();
 		}
@@ -668,10 +640,10 @@ void TextLabelPrivate::updateBoundingRect() {
 	}
 
 	// DEBUG(Q_FUNC_INFO << ", scale factor = " << scaleFactor << ", w/h = " << w << " / " << h)
-	boundingRectangle.setX(-w / 2);
-	boundingRectangle.setY(-h / 2);
-	boundingRectangle.setWidth(w);
-	boundingRectangle.setHeight(h);
+	m_boundingRectangle.setX(-w / 2);
+	m_boundingRectangle.setY(-h / 2);
+	m_boundingRectangle.setWidth(w);
+	m_boundingRectangle.setHeight(h);
 
 	updateBorder();
 }
@@ -699,31 +671,35 @@ void TextLabelPrivate::updateBorder() {
 	switch (borderShape) {
 	case (TextLabel::BorderShape::NoBorder): {
 		m_gluePoints.clear();
-		m_gluePoints.append(GluePoint(QPointF(boundingRectangle.x() + boundingRectangle.width() / 2, boundingRectangle.y()), QStringLiteral("top")));
-		m_gluePoints.append(GluePoint(QPointF(boundingRectangle.x() + boundingRectangle.width(), boundingRectangle.y() + boundingRectangle.height() / 2),
-									  QStringLiteral("right")));
-		m_gluePoints.append(GluePoint(QPointF(boundingRectangle.x() + boundingRectangle.width() / 2, boundingRectangle.y() + boundingRectangle.height()),
-									  QStringLiteral("bottom")));
-		m_gluePoints.append(GluePoint(QPointF(boundingRectangle.x(), boundingRectangle.y() + boundingRectangle.height() / 2), QStringLiteral("left")));
+		m_gluePoints.append(GluePoint(QPointF(m_boundingRectangle.x() + m_boundingRectangle.width() / 2, m_boundingRectangle.y()), QStringLiteral("top")));
+		m_gluePoints.append(
+			GluePoint(QPointF(m_boundingRectangle.x() + m_boundingRectangle.width(), m_boundingRectangle.y() + m_boundingRectangle.height() / 2),
+					  QStringLiteral("right")));
+		m_gluePoints.append(
+			GluePoint(QPointF(m_boundingRectangle.x() + m_boundingRectangle.width() / 2, m_boundingRectangle.y() + m_boundingRectangle.height()),
+					  QStringLiteral("bottom")));
+		m_gluePoints.append(GluePoint(QPointF(m_boundingRectangle.x(), m_boundingRectangle.y() + m_boundingRectangle.height() / 2), QStringLiteral("left")));
 		break;
 	}
 	case (TextLabel::BorderShape::Rect): {
-		borderShapePath.addRect(boundingRectangle);
+		borderShapePath.addRect(m_boundingRectangle);
 
 		m_gluePoints.clear();
-		m_gluePoints.append(GluePoint(QPointF(boundingRectangle.x() + boundingRectangle.width() / 2, boundingRectangle.y()), QStringLiteral("top")));
-		m_gluePoints.append(GluePoint(QPointF(boundingRectangle.x() + boundingRectangle.width(), boundingRectangle.y() + boundingRectangle.height() / 2),
-									  QStringLiteral("right")));
-		m_gluePoints.append(GluePoint(QPointF(boundingRectangle.x() + boundingRectangle.width() / 2, boundingRectangle.y() + boundingRectangle.height()),
-									  QStringLiteral("bottom")));
-		m_gluePoints.append(GluePoint(QPointF(boundingRectangle.x(), boundingRectangle.y() + boundingRectangle.height() / 2), QStringLiteral("left")));
+		m_gluePoints.append(GluePoint(QPointF(m_boundingRectangle.x() + m_boundingRectangle.width() / 2, m_boundingRectangle.y()), QStringLiteral("top")));
+		m_gluePoints.append(
+			GluePoint(QPointF(m_boundingRectangle.x() + m_boundingRectangle.width(), m_boundingRectangle.y() + m_boundingRectangle.height() / 2),
+					  QStringLiteral("right")));
+		m_gluePoints.append(
+			GluePoint(QPointF(m_boundingRectangle.x() + m_boundingRectangle.width() / 2, m_boundingRectangle.y() + m_boundingRectangle.height()),
+					  QStringLiteral("bottom")));
+		m_gluePoints.append(GluePoint(QPointF(m_boundingRectangle.x(), m_boundingRectangle.y() + m_boundingRectangle.height() / 2), QStringLiteral("left")));
 		break;
 	}
 	case (TextLabel::BorderShape::Ellipse): {
-		const double xs = boundingRectangle.x();
-		const double ys = boundingRectangle.y();
-		const double w = boundingRectangle.width();
-		const double h = boundingRectangle.height();
+		const double xs = m_boundingRectangle.x();
+		const double ys = m_boundingRectangle.y();
+		const double w = m_boundingRectangle.width();
+		const double h = m_boundingRectangle.height();
 		const QRectF ellipseRect(xs - 0.1 * w, ys - 0.1 * h, 1.2 * w, 1.2 * h);
 		borderShapePath.addEllipse(ellipseRect);
 
@@ -735,10 +711,10 @@ void TextLabelPrivate::updateBorder() {
 		break;
 	}
 	case (TextLabel::BorderShape::RoundSideRect): {
-		const double xs = boundingRectangle.x();
-		const double ys = boundingRectangle.y();
-		const double w = boundingRectangle.width();
-		const double h = boundingRectangle.height();
+		const double xs = m_boundingRectangle.x();
+		const double ys = m_boundingRectangle.y();
+		const double w = m_boundingRectangle.width();
+		const double h = m_boundingRectangle.height();
 		borderShapePath.moveTo(xs, ys);
 		borderShapePath.lineTo(xs + w, ys);
 		borderShapePath.quadTo(xs + w + h / 2, ys + h / 2, xs + w, ys + h);
@@ -753,10 +729,10 @@ void TextLabelPrivate::updateBorder() {
 		break;
 	}
 	case (TextLabel::BorderShape::RoundCornerRect): {
-		const double xs = boundingRectangle.x();
-		const double ys = boundingRectangle.y();
-		const double w = boundingRectangle.width();
-		const double h = boundingRectangle.height();
+		const double xs = m_boundingRectangle.x();
+		const double ys = m_boundingRectangle.y();
+		const double w = m_boundingRectangle.width();
+		const double h = m_boundingRectangle.height();
 		borderShapePath.moveTo(xs + h * 0.2, ys);
 		borderShapePath.lineTo(xs + w - h * 0.2, ys);
 		borderShapePath.quadTo(xs + w, ys, xs + w, ys + h * 0.2);
@@ -775,10 +751,10 @@ void TextLabelPrivate::updateBorder() {
 		break;
 	}
 	case (TextLabel::BorderShape::InwardsRoundCornerRect): {
-		const double xs = boundingRectangle.x();
-		const double ys = boundingRectangle.y();
-		const double w = boundingRectangle.width();
-		const double h = boundingRectangle.height();
+		const double xs = m_boundingRectangle.x();
+		const double ys = m_boundingRectangle.y();
+		const double w = m_boundingRectangle.width();
+		const double h = m_boundingRectangle.height();
 		borderShapePath.moveTo(xs, ys - 0.3 * h);
 		borderShapePath.lineTo(xs + w, ys - 0.3 * h);
 		borderShapePath.quadTo(xs + w, ys, xs + w + 0.3 * h, ys);
@@ -797,10 +773,10 @@ void TextLabelPrivate::updateBorder() {
 		break;
 	}
 	case (TextLabel::BorderShape::DentedBorderRect): {
-		const double xs = boundingRectangle.x();
-		const double ys = boundingRectangle.y();
-		const double w = boundingRectangle.width();
-		const double h = boundingRectangle.height();
+		const double xs = m_boundingRectangle.x();
+		const double ys = m_boundingRectangle.y();
+		const double w = m_boundingRectangle.width();
+		const double h = m_boundingRectangle.height();
 		borderShapePath.moveTo(xs - 0.2 * h, ys - 0.2 * h);
 		borderShapePath.quadTo(xs + w / 2, ys, xs + w + 0.2 * h, ys - 0.2 * h);
 		borderShapePath.quadTo(xs + w, ys + h / 2, xs + w + 0.2 * h, ys + h + 0.2 * h);
@@ -815,10 +791,10 @@ void TextLabelPrivate::updateBorder() {
 		break;
 	}
 	case (TextLabel::BorderShape::Cuboid): {
-		const double xs = boundingRectangle.x();
-		const double ys = boundingRectangle.y();
-		const double w = boundingRectangle.width();
-		const double h = boundingRectangle.height();
+		const double xs = m_boundingRectangle.x();
+		const double ys = m_boundingRectangle.y();
+		const double w = m_boundingRectangle.width();
+		const double h = m_boundingRectangle.height();
 		borderShapePath.moveTo(xs, ys);
 		borderShapePath.lineTo(xs + w, ys);
 		borderShapePath.lineTo(xs + w, ys + h);
@@ -839,10 +815,10 @@ void TextLabelPrivate::updateBorder() {
 		break;
 	}
 	case (TextLabel::BorderShape::UpPointingRectangle): {
-		const double xs = boundingRectangle.x();
-		const double ys = boundingRectangle.y();
-		const double w = boundingRectangle.width();
-		const double h = boundingRectangle.height();
+		const double xs = m_boundingRectangle.x();
+		const double ys = m_boundingRectangle.y();
+		const double w = m_boundingRectangle.width();
+		const double h = m_boundingRectangle.height();
 		borderShapePath.moveTo(xs + h * 0.2, ys);
 		borderShapePath.lineTo(xs + w / 2 - 0.2 * h, ys);
 		borderShapePath.lineTo(xs + w / 2, ys - 0.2 * h);
@@ -864,10 +840,10 @@ void TextLabelPrivate::updateBorder() {
 		break;
 	}
 	case (TextLabel::BorderShape::DownPointingRectangle): {
-		const double xs = boundingRectangle.x();
-		const double ys = boundingRectangle.y();
-		const double w = boundingRectangle.width();
-		const double h = boundingRectangle.height();
+		const double xs = m_boundingRectangle.x();
+		const double ys = m_boundingRectangle.y();
+		const double w = m_boundingRectangle.width();
+		const double h = m_boundingRectangle.height();
 		borderShapePath.moveTo(xs + h * 0.2, ys);
 		borderShapePath.lineTo(xs + w - h * 0.2, ys);
 		borderShapePath.quadTo(xs + w, ys, xs + w, ys + h * 0.2);
@@ -889,10 +865,10 @@ void TextLabelPrivate::updateBorder() {
 		break;
 	}
 	case (TextLabel::BorderShape::LeftPointingRectangle): {
-		const double xs = boundingRectangle.x();
-		const double ys = boundingRectangle.y();
-		const double w = boundingRectangle.width();
-		const double h = boundingRectangle.height();
+		const double xs = m_boundingRectangle.x();
+		const double ys = m_boundingRectangle.y();
+		const double w = m_boundingRectangle.width();
+		const double h = m_boundingRectangle.height();
 		borderShapePath.moveTo(xs + h * 0.2, ys);
 		borderShapePath.lineTo(xs + w - h * 0.2, ys);
 		borderShapePath.quadTo(xs + w, ys, xs + w, ys + h * 0.2);
@@ -914,10 +890,10 @@ void TextLabelPrivate::updateBorder() {
 		break;
 	}
 	case (TextLabel::BorderShape::RightPointingRectangle): {
-		const double xs = boundingRectangle.x();
-		const double ys = boundingRectangle.y();
-		const double w = boundingRectangle.width();
-		const double h = boundingRectangle.height();
+		const double xs = m_boundingRectangle.x();
+		const double ys = m_boundingRectangle.y();
+		const double w = m_boundingRectangle.width();
+		const double h = m_boundingRectangle.height();
 		borderShapePath.moveTo(xs + h * 0.2, ys);
 		borderShapePath.lineTo(xs + w - h * 0.2, ys);
 		borderShapePath.quadTo(xs + w, ys, xs + w, ys + h * 0.2);
@@ -963,14 +939,14 @@ QPainterPath TextLabelPrivate::shape() const {
 void TextLabelPrivate::recalcShapeAndBoundingRect() {
 	prepareGeometryChange();
 
-	QMatrix matrix;
+	QTransform matrix;
 	labelShape = QPainterPath();
 	if (borderShape != TextLabel::BorderShape::NoBorder) {
 		labelShape.addPath(WorksheetElement::shapeFromPath(borderShapePath, borderPen));
 		transformedBoundingRectangle = matrix.mapRect(labelShape.boundingRect());
 	} else {
-		labelShape.addRect(boundingRectangle);
-		transformedBoundingRectangle = matrix.mapRect(boundingRectangle);
+		labelShape.addRect(m_boundingRectangle);
+		transformedBoundingRectangle = matrix.mapRect(m_boundingRectangle);
 	}
 
 	labelShape = matrix.map(labelShape);
@@ -992,8 +968,8 @@ void TextLabelPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 	switch (textWrapper.mode) {
 	case TextLabel::Mode::LaTeX: {
 		painter->setRenderHint(QPainter::SmoothPixmapTransform);
-		if (boundingRectangle.width() != 0.0 && boundingRectangle.height() != 0.0)
-			painter->drawImage(boundingRectangle, teXImage);
+		if (m_boundingRectangle.width() != 0.0 && m_boundingRectangle.height() != 0.0)
+			painter->drawImage(m_boundingRectangle, teXImage);
 		break;
 	}
 	case TextLabel::Mode::Text:
@@ -1058,30 +1034,6 @@ void TextLabelPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 	return QGraphicsItem::mouseMoveEvent(event);
 }*/
 
-void TextLabelPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
-	// don't show any context menu if the label is hidden which is the case
-	// for example for axis and plot title labels. For such objects the context menu
-	// of their parents, i.e. of axis and plot, is used.
-	if (!q->hidden())
-		q->createContextMenu()->exec(event->screenPos());
-}
-
-void TextLabelPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
-	if (!isSelected()) {
-		m_hovered = true;
-		Q_EMIT q->hovered();
-		update();
-	}
-}
-
-void TextLabelPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
-	if (m_hovered) {
-		m_hovered = false;
-		Q_EMIT q->unhovered();
-		update();
-	}
-}
-
 // ##############################################################################
 // ##################  Serialization/Deserialization  ###########################
 // ##############################################################################
@@ -1137,7 +1089,6 @@ bool TextLabel::load(XmlStreamReader* reader, bool preview) {
 		return false;
 
 	Q_D(TextLabel);
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
@@ -1185,7 +1136,7 @@ bool TextLabel::load(XmlStreamReader* reader, bool preview) {
 			d->teXPdfData = QByteArray::fromBase64(content.toLatin1());
 			d->teXImage = GuiTools::imageFromPDFData(d->teXPdfData);
 		} else { // unknown element
-			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
+			reader->raiseUnknownElementWarning();
 			if (!reader->skipToEndElement())
 				return false;
 		}
@@ -1215,10 +1166,10 @@ void TextLabel::loadThemeConfig(const KConfig& config) {
 	DEBUG(Q_FUNC_INFO << ", label = " << STDSTRING(name()))
 	Q_D(TextLabel);
 
-	KConfigGroup group = config.group("Label");
+	KConfigGroup group = config.group(QStringLiteral("Label"));
 	// TODO: dark mode support?
-	d->fontColor = group.readEntry("FontColor", QColor(Qt::black)); // used when it's latex text
-	d->backgroundColor = group.readEntry("BackgroundColor", QColor(Qt::white)); // used when it's latex text
+	d->fontColor = group.readEntry(QStringLiteral("FontColor"), QColor(Qt::black)); // used when it's latex text
+	d->backgroundColor = group.readEntry(QStringLiteral("BackgroundColor"), QColor(Qt::white)); // used when it's latex text
 
 	if (d->textWrapper.mode == TextLabel::Mode::Text && !d->textWrapper.text.isEmpty()) {
 		// TODO: Replace QTextEdit by QTextDocument, because this does not contain the graphical stuff.
@@ -1250,17 +1201,17 @@ void TextLabel::loadThemeConfig(const KConfig& config) {
 	backgroundColorChanged(d->backgroundColor);
 	fontColorChanged(d->fontColor);
 
-	group = config.group("CartesianPlot");
+	group = config.group(QStringLiteral("CartesianPlot"));
 	QPen pen = this->borderPen();
-	pen.setColor(group.readEntry("BorderColor", pen.color()));
-	pen.setStyle((Qt::PenStyle)(group.readEntry("BorderStyle", (int)pen.style())));
-	pen.setWidthF(group.readEntry("BorderWidth", pen.widthF()));
+	pen.setColor(group.readEntry(QStringLiteral("BorderColor"), pen.color()));
+	pen.setStyle((Qt::PenStyle)(group.readEntry(QStringLiteral("BorderStyle"), (int)pen.style())));
+	pen.setWidthF(group.readEntry(QStringLiteral("BorderWidth"), pen.widthF()));
 	this->setBorderPen(pen);
-	this->setBorderOpacity(group.readEntry("BorderOpacity", this->borderOpacity()));
+	this->setBorderOpacity(group.readEntry(QStringLiteral("BorderOpacity"), this->borderOpacity()));
 }
 
 void TextLabel::saveThemeConfig(const KConfig& config) {
-	KConfigGroup group = config.group("Label");
+	KConfigGroup group = config.group(QStringLiteral("Label"));
 	// TODO
 	// 	group.writeEntry("TeXFontColor", (QColor) this->fontColor());
 }

@@ -20,8 +20,6 @@
 #include <string>
 #include <vector>
 
-class QString;
-class QStringList;
 class AbstractDataSource;
 class AbstractColumn;
 

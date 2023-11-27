@@ -17,6 +17,9 @@
 #include "kdefrontend/GuiTools.h"
 #include "kdefrontend/widgets/SymbolWidget.h"
 
+#include <KConfigGroup>
+#include <KLocalizedString>
+
 #include <QCompleter>
 #include <QDir>
 // see https://gitlab.kitware.com/cmake/cmake/-/issues/21609
@@ -27,10 +30,7 @@
 #endif
 #include <QGraphicsScene>
 #include <QPainter>
-
-#include <KConfigGroup>
-#include <KLocalizedString>
-#include <KSharedConfig>
+#include <QStandardPaths>
 
 #include <cmath>
 
@@ -113,9 +113,7 @@ DatapickerImageWidget::DatapickerImageWidget(QWidget* parent)
 	: BaseDock(parent)
 	, m_image(nullptr) {
 	ui.setupUi(this);
-	m_leName = ui.leName;
-	m_teComment = ui.teComment;
-	m_teComment->setFixedHeight(m_leName->height());
+	setBaseWidgets(ui.leName, ui.teComment);
 
 	//"General"-tab
 	ui.leFileName->setClearButtonEnabled(true);
@@ -271,22 +269,16 @@ void DatapickerImageWidget::setImages(QList<DatapickerImage*> list) {
 	CONDITIONAL_LOCK_RETURN;
 	m_imagesList = list;
 	m_image = list.first();
-	setAspects(list);
+
+	// Set parents as aspects, because their name will be changed
+	QList<AbstractAspect*> datapickers;
+	for (const auto* l : list)
+		datapickers.push_back(l->parentAspect());
+	setAspects(datapickers);
 
 	if (list.size() == 1) {
-		ui.lName->setEnabled(true);
-		ui.leName->setEnabled(true);
-		ui.lComment->setEnabled(true);
-		ui.teComment->setEnabled(true);
 		ui.leName->setText(m_image->parentAspect()->name());
 		ui.teComment->setText(m_image->parentAspect()->comment());
-	} else {
-		ui.lName->setEnabled(false);
-		ui.leName->setEnabled(false);
-		ui.lComment->setEnabled(false);
-		ui.teComment->setEnabled(false);
-		ui.leName->setText(QString());
-		ui.teComment->setText(QString());
 	}
 
 	this->load();
@@ -297,7 +289,6 @@ void DatapickerImageWidget::setImages(QList<DatapickerImage*> list) {
 
 	symbolWidget->setSymbols(symbols);
 
-	connect(m_image->parentAspect(), &AbstractAspect::aspectDescriptionChanged, this, &DatapickerImageWidget::aspectDescriptionChanged);
 	connect(m_image, &DatapickerImage::fileNameChanged, this, &DatapickerImageWidget::imageFileNameChanged);
 	connect(m_image, &DatapickerImage::embeddedChanged, this, &DatapickerImageWidget::imageEmbeddedChanged);
 	connect(m_image, &DatapickerImage::rotationAngleChanged, this, &DatapickerImageWidget::imageRotationAngleChanged);

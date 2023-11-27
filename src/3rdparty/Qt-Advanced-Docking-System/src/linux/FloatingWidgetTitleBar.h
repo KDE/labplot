@@ -94,7 +94,7 @@ public:
 	 */
     void setMaximizedIcon(bool maximized);
 
-signals:
+Q_SIGNALS:
 	/**
 	 * This signal is emitted, if the close button is clicked.
 	 */

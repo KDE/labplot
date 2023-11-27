@@ -10,6 +10,17 @@
 #ifndef NSL_MATH_H
 #define NSL_MATH_H
 
+#undef __BEGIN_DECLS
+#undef __END_DECLS
+#ifdef __cplusplus
+#define __BEGIN_DECLS extern "C" {
+#define __END_DECLS }
+#else
+#define __BEGIN_DECLS /* empty */
+#define __END_DECLS /* empty */
+#endif
+__BEGIN_DECLS
+
 #include <stdbool.h>
 
 #define M_PI_180 (M_PI / 180.)
@@ -65,5 +76,7 @@ double nsl_math_round_precision(double value, int p);
  * p <= 0 : power of x
  */
 double nsl_math_round_basex(double value, int p, double base);
+
+__END_DECLS
 
 #endif /* NSL_MATH_H */

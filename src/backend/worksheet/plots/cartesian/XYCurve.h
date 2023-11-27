@@ -66,25 +66,17 @@ public:
 
 	QIcon icon() const override;
 	QMenu* createContextMenu() override;
-	QGraphicsItem* graphicsItem() const override;
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
 	void loadThemeConfig(const KConfig&) override;
 	void saveThemeConfig(const KConfig&) override;
 	double y(double x, bool& valueFound) const;
 	QDateTime yDateTime(double x, bool& valueFound) const;
-	bool minMax(const AbstractColumn* column1,
-				const AbstractColumn* column2,
-				const ErrorType errorType,
-				const AbstractColumn* errorPlusColumn,
-				const AbstractColumn* errorMinusColumn,
-				const Range<int>& indexRange,
-				Range<double>& yRange,
-				bool includeErrorBars) const;
-	bool minMax(const CartesianCoordinateSystem::Dimension dim, const Range<int>& indexRange, Range<double>& r, bool includeErrorBars = true) const;
 
-	bool activatePlot(QPointF mouseScenePos, double maxDist = -1) override;
-	void setHover(bool on) override;
+	bool minMax(const CartesianCoordinateSystem::Dimension dim, const Range<int>& indexRange, Range<double>& r, bool includeErrorBars = true) const override;
+	double minimum(CartesianCoordinateSystem::Dimension dim) const override;
+	double maximum(CartesianCoordinateSystem::Dimension dim) const override;
+	bool hasData() const override;
 
 	const AbstractColumn* column(CartesianCoordinateSystem::Dimension dim) const;
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, xColumn, XColumn)
@@ -182,7 +174,15 @@ private:
 	void connectYErrorMinusColumn(const AbstractColumn*);
 	void connectValuesColumn(const AbstractColumn*);
 
-	QAction* visibilityAction{nullptr};
+	bool minMax(const AbstractColumn* column1,
+				const AbstractColumn* column2,
+				const ErrorType errorType,
+				const AbstractColumn* errorPlusColumn,
+				const AbstractColumn* errorMinusColumn,
+				const Range<int>& indexRange,
+				Range<double>& yRange,
+				bool includeErrorBars) const;
+
 	QAction* navigateToAction{nullptr};
 	bool m_menusInitialized{false};
 

@@ -10,7 +10,7 @@
 
 #include "backend/lib/macrosWarningStyle.h"
 
-#include "klocalizedstring.h"
+#include <KLocalizedString>
 
 #include <QApplication>
 #include <QDebug>
@@ -136,8 +136,10 @@ void NumberSpinBox::decreaseValue() {
  * \return
  */
 bool NumberSpinBox::properties(const QString& v_str, NumberProperties& p) const {
-	p.fractionPos = v_str.indexOf(locale().decimalPoint());
+	const auto decimalpoint = locale().decimalPoint();
+	p.fractionPos = v_str.indexOf(decimalpoint);
 	p.exponentPos = v_str.indexOf(QLatin1Char('e'), p.fractionPos > 0 ? p.fractionPos : 0, Qt::CaseInsensitive);
+	p.groupSeparators = v_str.indexOf(locale().groupSeparator()) != -1 ? true : false;
 	const auto number_length = v_str.length();
 
 	bool ok;
@@ -150,10 +152,10 @@ bool NumberSpinBox::properties(const QString& v_str, NumberProperties& p) const 
 	if (p.fractionPos >= 0) {
 		p.fraction = true;
 		const auto integer_str = v_str.mid(!p.integerSign.isNull(), p.fractionPos - !p.integerSign.isNull());
-		p.integer = integer_str.toInt(&ok);
+		p.integer = locale().toInt(integer_str, &ok);
 		if (!ok)
 			return false;
-		p.intergerDigits = integer_str.length();
+		p.intergerDigits = integer_str.length() - p.groupSeparators;
 
 		QString fraction_str;
 		if (number_length - 1 > p.fractionPos) {
@@ -165,16 +167,16 @@ bool NumberSpinBox::properties(const QString& v_str, NumberProperties& p) const 
 		p.fractionDigits = fraction_str.length();
 	} else if (p.exponentPos > 0) {
 		const auto integer_str = v_str.mid(!p.integerSign.isNull(), p.exponentPos - !p.integerSign.isNull());
-		p.integer = integer_str.toInt(&ok);
+		p.integer = locale().toInt(integer_str, &ok);
 		if (!ok)
 			return false;
-		p.intergerDigits = integer_str.length();
+		p.intergerDigits = integer_str.length() - p.groupSeparators;
 	} else {
 		const auto integer_str = v_str.mid(!p.integerSign.isNull(), number_length - !p.integerSign.isNull());
-		p.integer = integer_str.toInt(&ok);
+		p.integer = locale().toInt(integer_str, &ok);
 		if (!ok)
 			return false;
-		p.intergerDigits = integer_str.length();
+		p.intergerDigits = integer_str.length() - p.groupSeparators;
 	}
 
 	if (p.exponentPos > 0) {
@@ -206,7 +208,10 @@ QString NumberSpinBox::createStringNumber(double integerFraction, int exponent, 
 		if (p.fractionDigits == 0)
 			number.append(locale().decimalPoint());
 	} else {
-		number = QStringLiteral("%1").arg(int(integerFraction));
+		if (p.groupSeparators)
+			number = locale().toString(int(integerFraction));
+		else
+			number = QStringLiteral("%1").arg(int(integerFraction));
 	}
 
 	if (p.exponentLetter != QChar::Null) {
@@ -279,7 +284,7 @@ NumberSpinBox::Errors NumberSpinBox::step(int steps) {
 
 	NumberProperties p;
 	bool ok;
-	double origValue = locale().toDouble(v_str, &ok);
+	const double origValue = locale().toDouble(v_str, &ok);
 	if (!ok)
 		return Errors::Invalid;
 	if (!properties(v_str, p))
@@ -301,7 +306,8 @@ NumberSpinBox::Errors NumberSpinBox::step(int steps) {
 
 	const auto& l = v_str.split(QLatin1Char('e'), Qt::KeepEmptyParts, Qt::CaseInsensitive);
 
-	double integerFraction = locale().toDouble(l.at(0));
+	const auto& integerString = l.at(0);
+	double integerFraction = locale().toDouble(integerString);
 	int exponent = 0;
 	if (l.length() > 1)
 		exponent = l.at(1).toInt();
@@ -316,7 +322,22 @@ NumberSpinBox::Errors NumberSpinBox::step(int steps) {
 			initial = exponentialIndex;
 		else
 			initial = end;
-		increase = steps * std::pow(10, initial - cursorPos);
+		if (!p.groupSeparators)
+			increase = steps * std::pow(10, initial - cursorPos);
+		else {
+			const auto groupSeparator = locale().groupSeparator();
+			int separatorsCount = 0;
+			int separator_pos = integerString.indexOf(groupSeparator);
+			while (separator_pos != -1) {
+				if (separator_pos >= cursorPos)
+					separatorsCount++;
+				if (separator_pos + 1 < integerString.length())
+					separator_pos = integerString.indexOf(groupSeparator, separator_pos + 1);
+				else
+					break;
+			}
+			increase = steps * std::pow(10, initial - cursorPos - separatorsCount);
+		}
 
 		// from 0.1 with step -1 the desired result shall be -1.1 not -0.9
 		if ((integerFraction > 0 && integerFraction + increase > 0) || (integerFraction < 0 && integerFraction + increase < 0))
@@ -475,8 +496,7 @@ QAbstractSpinBox::StepEnabled NumberSpinBox::stepEnabled() const {
 void NumberSpinBox::valueChanged() {
 	if (m_feedback)
 		m_waitFeedback = true;
-	qDebug() << "Value: " << value();
-	emit valueChanged(value());
+	Q_EMIT valueChanged(value());
 	m_waitFeedback = false;
 }
 

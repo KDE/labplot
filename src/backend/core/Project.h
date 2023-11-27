@@ -22,6 +22,7 @@ class XYCurve;
 class QMimeData;
 class QString;
 class Spreadsheet;
+class ProjectPrivate;
 
 class Project : public Folder {
 	Q_OBJECT
@@ -61,7 +62,7 @@ public:
 	void setSuppressAspectAddedSignal(bool);
 	bool aspectAddedSignalSuppressed() const;
 
-	void save(const QPixmap&, QXmlStreamWriter*) const;
+	void save(const QPixmap&, QXmlStreamWriter*);
 	bool load(XmlStreamReader*, bool preview) override;
 	bool load(const QString&, bool preview = false);
 	static void restorePointers(AbstractAspect*, bool preview = false);
@@ -77,7 +78,7 @@ public:
 	static void setXmlVersion(int version);
 	static int currentBuildXmlVersion();
 
-	class Private;
+	typedef ProjectPrivate Private;
 
 public Q_SLOTS:
 	void descriptionChanged(const AbstractAspect*);
@@ -95,9 +96,11 @@ Q_SIGNALS:
 	void requestNavigateTo(const QString& path);
 	void closeRequested();
 	void saved() const;
+	void loaded() const;
 
 private:
-	Private* d;
+	Q_DECLARE_PRIVATE(Project)
+	ProjectPrivate* const d_ptr;
 	void updateColumnDependencies(const QVector<XYCurve*>&, const AbstractColumn*) const;
 	void updateColumnDependencies(const QVector<Histogram*>&, const AbstractColumn*) const;
 	void updateColumnDependencies(const QVector<BoxPlot*>& boxPlots, const AbstractColumn* column) const;

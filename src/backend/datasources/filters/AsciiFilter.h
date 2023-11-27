@@ -14,7 +14,6 @@
 #include "backend/datasources/filters/AbstractFileFilter.h"
 
 class Spreadsheet;
-class QStringList;
 class QIODevice;
 class AsciiFilterPrivate;
 class QAbstractSocket;
@@ -49,9 +48,6 @@ public:
 
 	QVector<QStringList> preview(const QString& fileName, int lines);
 	QVector<QStringList> preview(QIODevice& device);
-
-	void loadFilterSettings(const QString&) override;
-	void saveFilterSettings(const QString&) const override;
 
 #ifdef HAVE_MQTT
 	QVector<QStringList> preview(const QString& message);

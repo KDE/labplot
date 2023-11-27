@@ -27,9 +27,6 @@ class AxisPrivate : public WorksheetElementPrivate {
 public:
 	explicit AxisPrivate(Axis*);
 
-	QRectF boundingRect() const override;
-	QPainterPath shape() const override;
-
 	void retransform() override;
 	void retransformRange();
 	void retransformLine();
@@ -42,7 +39,6 @@ public:
 	void updateGrid();
 	bool swapVisible(bool);
 	void recalcShapeAndBoundingRect() override;
-	bool isHovered() const;
 	static QString createScientificRepresentation(const QString& mantissa, const QString& exponent);
 
 	bool isDefault{false};
@@ -52,7 +48,9 @@ public:
 	Axis::Orientation orientation{Axis::Orientation::Horizontal}; //!< horizontal or vertical
 	Axis::Position position{Axis::Position::Centered}; //!< left, right, bottom, top or custom (usually not changed after creation)
 	double offset{0}; //!< offset from zero in the direction perpendicular to the axis
-	Range<double> range; //!< coordinate range of the axis line (includes scale)
+	Range<double> range; //!< coordinate range of the axis line
+	bool rangeScale{true};
+	RangeT::Scale scale{RangeT::Scale::Linear}; //!< Scale if rangeScale is false
 	Axis::TicksStartType majorTicksStartType{Axis::TicksStartType::Offset};
 	qreal majorTickStartOffset{0};
 	qreal majorTickStartValue{0};
@@ -138,9 +136,6 @@ private:
 	CartesianPlot* plot() const {
 		return q->m_plot; // convenience method
 	}
-	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
-	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
-	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
 	void mousePressEvent(QGraphicsSceneMouseEvent*) override;
 	void mouseMoveEvent(QGraphicsSceneMouseEvent*) override;
 	void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
@@ -154,13 +149,11 @@ private:
 	QPainterPath arrowPath;
 	QPainterPath majorTicksPath;
 	QPainterPath minorTicksPath;
-	QRectF boundingRectangle;
-	QPainterPath axisShape;
 
-	bool m_hovered{false};
-	bool m_suppressRecalc{false};
 	bool m_panningStarted{false};
 	QPointF m_panningStart;
+
+	friend class AxisTest;
 };
 
 #endif

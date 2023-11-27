@@ -16,19 +16,25 @@
 #include "SettingsSpreadsheetPage.h"
 #include "SettingsWorksheetPage.h"
 
+#include "backend/core/Settings.h"
+
 #ifdef HAVE_CANTOR_LIBS
 #include "SettingsNotebookPage.h"
 #endif
 
 #include <KConfigGroup>
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 #include <KMessageBox>
-#include <KSharedConfig>
+
 #include <KWindowConfig>
 #include <kcoreaddons_version.h>
 
 #ifdef HAVE_KUSERFEEDBACK
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+#include <KUserFeedbackQt6/FeedbackConfigWidget>
+#else
 #include <KUserFeedback/FeedbackConfigWidget>
+#endif
 #endif
 
 #include <QDialogButtonBox>
@@ -54,7 +60,7 @@ SettingsDialog::SettingsDialog(QWidget* parent)
 
 	m_generalPage = new SettingsGeneralPage(this);
 	KPageWidgetItem* generalFrame = addPage(m_generalPage, i18n("General"));
-	generalFrame->setIcon(QIcon::fromTheme(QLatin1String("system-run")));
+	generalFrame->setIcon(QIcon::fromTheme(QLatin1String("settings-configure")));
 	connect(m_generalPage, &SettingsGeneralPage::settingsChanged, this, &SettingsDialog::changed);
 
 	m_worksheetPage = new SettingsWorksheetPage(this);
@@ -95,7 +101,7 @@ SettingsDialog::SettingsDialog(QWidget* parent)
 
 	// restore saved settings if available
 	create(); // ensure there's a window created
-	KConfigGroup conf(KSharedConfig::openConfig(), "SettingsDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("SettingsDialog"));
 	if (conf.exists()) {
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
 		resize(windowHandle()->size()); // workaround for QTBUG-40584
@@ -104,7 +110,7 @@ SettingsDialog::SettingsDialog(QWidget* parent)
 }
 
 SettingsDialog::~SettingsDialog() {
-	KConfigGroup dialogConfig = KSharedConfig::openConfig()->group("SettingsDialog");
+	KConfigGroup dialogConfig = Settings::group(QStringLiteral("SettingsDialog"));
 	KWindowConfig::saveWindowSize(windowHandle(), dialogConfig);
 }
 
@@ -144,7 +150,7 @@ void SettingsDialog::applySettings() {
 	m_notebookPage->applySettings();
 #endif
 
-	KSharedConfig::openConfig()->sync();
+	Settings::sync();
 
 #ifdef HAVE_KUSERFEEDBACK
 	auto* mainWin = static_cast<MainWin*>(parent());

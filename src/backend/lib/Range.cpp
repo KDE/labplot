@@ -9,7 +9,7 @@
 
 #include "Range.h"
 
-const QStringList& RangeT::scaleNames() {
+/*const QStringList& RangeT::scaleNames() {
 	static const QStringList names = {i18n("Linear"), i18n("Log10"), i18n("Log2"), i18n("Ln"), i18n("Sqrt"), i18n("Square"), i18n("Inverse")};
 	return names;
-}
+}*/

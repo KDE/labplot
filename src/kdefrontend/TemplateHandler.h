@@ -21,18 +21,23 @@ class TemplateHandler : public QWidget {
 	Q_OBJECT
 
 public:
-	enum class ClassName { Spreadsheet, Matrix, Worksheet, CartesianPlot, CartesianPlotLegend, Histogram, XYCurve, Axis, CustomPoint, ReferenceLine };
+	TemplateHandler(QWidget* parent, const QString& className, bool alignRight = true);
+	void setClassName(const QString&);
 
-	TemplateHandler(QWidget* parent, ClassName);
 	void setToolButtonStyle(Qt::ToolButtonStyle);
+	void setSaveDefaultAvailable(bool);
+	void setLoadAvailable(bool);
+
+	KConfig config(const QString& name);
+	static QString templateName(const KConfig&);
+	QStringList templateNames() const;
 
 private:
 	void retranslateUi();
 	bool eventFilter(QObject*, QEvent*) override;
 
 	QString m_dirName;
-	ClassName m_className;
-	QList<QString> m_subDirNames;
+	QString m_className;
 
 	QMenu* m_textPositionMenu{nullptr};
 	QToolButton* m_tbLoad;

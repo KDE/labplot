@@ -9,8 +9,6 @@
 
 #include "BarPlotDock.h"
 #include "backend/core/AbstractColumn.h"
-#include "backend/core/AspectTreeModel.h"
-#include "backend/core/Project.h"
 #include "backend/lib/macros.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 #include "kdefrontend/GuiTools.h"
@@ -28,9 +26,8 @@ BarPlotDock::BarPlotDock(QWidget* parent)
 	: BaseDock(parent)
 	, cbXColumn(new TreeViewComboBox) {
 	ui.setupUi(this);
-	m_leName = ui.leName;
-	m_teComment = ui.teComment;
-	m_teComment->setFixedHeight(m_leName->height());
+	setPlotRangeCombobox(ui.cbPlotRanges);
+	setBaseWidgets(ui.leName, ui.teComment);
 
 	// Tab "General"
 
@@ -100,8 +97,6 @@ BarPlotDock::BarPlotDock(QWidget* parent)
 
 	// SLOTS
 	// Tab "General"
-	connect(ui.leName, &QLineEdit::textChanged, this, &BarPlotDock::nameChanged);
-	connect(ui.teComment, &QTextEdit::textChanged, this, &BarPlotDock::commentChanged);
 	connect(cbXColumn, &TreeViewComboBox::currentModelIndexChanged, this, &BarPlotDock::xColumnChanged);
 	connect(ui.bRemoveXColumn, &QPushButton::clicked, this, &BarPlotDock::removeXColumn);
 	connect(m_buttonNew, &QPushButton::clicked, this, &BarPlotDock::addDataColumn);
@@ -119,7 +114,7 @@ BarPlotDock::BarPlotDock(QWidget* parent)
 	auto* layout = new QHBoxLayout(frame);
 	layout->setContentsMargins(0, 11, 0, 11);
 
-	auto* templateHandler = new TemplateHandler(this, TemplateHandler::ClassName::Worksheet);
+	auto* templateHandler = new TemplateHandler(this, QLatin1String("BarPlot"));
 	layout->addWidget(templateHandler);
 	connect(templateHandler, &TemplateHandler::loadConfigRequested, this, &BarPlotDock::loadConfigFromTemplate);
 	connect(templateHandler, &TemplateHandler::saveConfigRequested, this, &BarPlotDock::saveConfigAsTemplate);
@@ -134,31 +129,7 @@ void BarPlotDock::setBarPlots(QList<BarPlot*> list) {
 	m_barPlot = list.first();
 	setAspects(list);
 	Q_ASSERT(m_barPlot);
-	m_aspectTreeModel = new AspectTreeModel(m_barPlot->project());
 	setModel();
-
-	// if there is more than one point in the list, disable the comment and name widgets in "general"
-	if (list.size() == 1) {
-		ui.lName->setEnabled(true);
-		ui.leName->setEnabled(true);
-		ui.lComment->setEnabled(true);
-		ui.teComment->setEnabled(true);
-		ui.leName->setText(m_barPlot->name());
-		ui.teComment->setText(m_barPlot->comment());
-
-		ui.lDataColumn->setEnabled(true);
-	} else {
-		ui.lName->setEnabled(false);
-		ui.leName->setEnabled(false);
-		ui.lComment->setEnabled(false);
-		ui.teComment->setEnabled(false);
-		ui.leName->setText(QString());
-		ui.teComment->setText(QString());
-
-		ui.lDataColumn->setEnabled(false);
-	}
-	ui.leName->setStyleSheet(QString());
-	ui.leName->setToolTip(QString());
 
 	// backgrounds
 	QList<Background*> backgrounds;
@@ -187,7 +158,6 @@ void BarPlotDock::setBarPlots(QList<BarPlot*> list) {
 
 	// SIGNALs/SLOTs
 	// general
-	connect(m_barPlot, &AbstractAspect::aspectDescriptionChanged, this, &BarPlotDock::aspectDescriptionChanged);
 	connect(m_barPlot, &WorksheetElement::plotRangeListChanged, this, &BarPlotDock::updatePlotRanges);
 	connect(m_barPlot, &BarPlot::visibleChanged, this, &BarPlotDock::plotVisibilityChanged);
 	connect(m_barPlot, &BarPlot::typeChanged, this, &BarPlotDock::plotTypeChanged);
@@ -198,11 +168,12 @@ void BarPlotDock::setBarPlots(QList<BarPlot*> list) {
 }
 
 void BarPlotDock::setModel() {
-	m_aspectTreeModel->enablePlottableColumnsOnly(true);
-	m_aspectTreeModel->enableShowPlotDesignation(true);
+	auto* model = aspectModel();
+	model->enablePlottableColumnsOnly(true);
+	model->enableShowPlotDesignation(true);
 
 	QList<AspectType> list{AspectType::Column};
-	m_aspectTreeModel->setSelectableAspects(list);
+	model->setSelectableAspects(list);
 
 	list = {AspectType::Folder,
 			AspectType::Workbook,
@@ -218,7 +189,7 @@ void BarPlotDock::setModel() {
 			AspectType::CantorWorksheet};
 
 	cbXColumn->setTopLevelClasses(list);
-	cbXColumn->setModel(m_aspectTreeModel);
+	cbXColumn->setModel(model);
 }
 
 /*
@@ -229,7 +200,7 @@ void BarPlotDock::updateLocale() {
 }
 
 void BarPlotDock::updatePlotRanges() {
-	updatePlotRangeList(ui.cbPlotRanges);
+	updatePlotRangeList();
 }
 
 void BarPlotDock::loadDataColumns() {
@@ -343,7 +314,7 @@ void BarPlotDock::addDataColumn() {
 										AspectType::XYSmoothCurve,
 										AspectType::CantorWorksheet};
 	cb->setTopLevelClasses(list);
-	cb->setModel(m_aspectTreeModel);
+	cb->setModel(aspectModel());
 	connect(cb, &TreeViewComboBox::currentModelIndexChanged, this, &BarPlotDock::dataColumnChanged);
 
 	int index = m_dataComboBoxes.size();
@@ -508,14 +479,14 @@ void BarPlotDock::load() {
 }
 
 void BarPlotDock::loadConfig(KConfig& config) {
-	KConfigGroup group = config.group(QLatin1String("BarPlot"));
+	KConfigGroup group = config.group(QStringLiteral("BarPlot"));
 
 	// general
-	ui.cbType->setCurrentIndex(group.readEntry("Type", (int)m_barPlot->type()));
-	ui.cbOrientation->setCurrentIndex(group.readEntry("Orientation", (int)m_barPlot->orientation()));
+	ui.cbType->setCurrentIndex(group.readEntry(QStringLiteral("Type"), (int)m_barPlot->type()));
+	ui.cbOrientation->setCurrentIndex(group.readEntry(QStringLiteral("Orientation"), (int)m_barPlot->orientation()));
 
 	// box
-	ui.sbWidthFactor->setValue(round(group.readEntry("WidthFactor", m_barPlot->widthFactor()) * 100));
+	ui.sbWidthFactor->setValue(round(group.readEntry(QStringLiteral("WidthFactor"), m_barPlot->widthFactor()) * 100));
 	backgroundWidget->loadConfig(group);
 	lineWidget->loadConfig(group);
 
@@ -524,17 +495,10 @@ void BarPlotDock::loadConfig(KConfig& config) {
 }
 
 void BarPlotDock::loadConfigFromTemplate(KConfig& config) {
-	// extract the name of the template from the file name
-	QString name;
-	int index = config.name().lastIndexOf(QLatin1String("/"));
-	if (index != -1)
-		name = config.name().right(config.name().size() - index - 1);
-	else
-		name = config.name();
-
+	auto name = TemplateHandler::templateName(config);
 	int size = m_barPlots.size();
 	if (size > 1)
-		m_barPlot->beginMacro(i18n("%1 xy-curves: template \"%2\" loaded", size, name));
+		m_barPlot->beginMacro(i18n("%1 bar plots: template \"%2\" loaded", size, name));
 	else
 		m_barPlot->beginMacro(i18n("%1: template \"%2\" loaded", m_barPlot->name(), name));
 
@@ -544,14 +508,14 @@ void BarPlotDock::loadConfigFromTemplate(KConfig& config) {
 }
 
 void BarPlotDock::saveConfigAsTemplate(KConfig& config) {
-	KConfigGroup group = config.group("BarPlot");
+	KConfigGroup group = config.group(QStringLiteral("BarPlot"));
 
 	// general
-	group.writeEntry("Type", ui.cbType->currentIndex());
-	group.writeEntry("Orientation", ui.cbOrientation->currentIndex());
+	group.writeEntry(QStringLiteral("Type"), ui.cbType->currentIndex());
+	group.writeEntry(QStringLiteral("Orientation"), ui.cbOrientation->currentIndex());
 
 	// box
-	group.writeEntry("WidthFactor", ui.sbWidthFactor->value() / 100.0);
+	group.writeEntry(QStringLiteral("WidthFactor"), ui.sbWidthFactor->value() / 100.0);
 	backgroundWidget->saveConfig(group);
 	lineWidget->saveConfig(group);
 

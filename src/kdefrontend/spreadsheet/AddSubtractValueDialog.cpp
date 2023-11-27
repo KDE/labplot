@@ -10,6 +10,7 @@
 
 #include "AddSubtractValueDialog.h"
 #include "backend/core/Project.h"
+#include "backend/core/Settings.h"
 #include "backend/core/column/Column.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "backend/lib/macros.h"
@@ -26,9 +27,7 @@
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 
-extern "C" {
 #include "backend/nsl/nsl_baseline.h"
-}
 
 #include <KLocalizedString>
 #include <KMessageBox>
@@ -212,34 +211,35 @@ void AddSubtractValueDialog::init() {
 
 	// restore saved settings if available
 	create(); // ensure there's a window created
-	KConfigGroup conf(KSharedConfig::openConfig(), "AddSubtractValueDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("AddSubtractValueDialog"));
+
+	// baseline subtraction specific parameters
+	const auto numberLocale = QLocale();
+	ui.sbBaselineParameter1->setValue(conf.readEntry(QStringLiteral("BaselineParameter1"), 6));
+	ui.leBaselineParameter2->setText(numberLocale.toString(conf.readEntry(QStringLiteral("BaselineParameter2"), 0.1)));
+	ui.sbBaselineParameter3->setValue(conf.readEntry(QStringLiteral("BaselineParameter3"), 10));
+
+	int typeIndex = ui.cbType->findData(conf.readEntry("Type", 0));
+	if (typeIndex != -1)
+		ui.cbType->setCurrentIndex(typeIndex);
+	else
+		ui.cbType->setCurrentIndex(0);
+
+	if (m_operation == Add || m_operation == Subtract || m_operation == SubtractBaseline) {
+		ui.chbPreview->setChecked(conf.readEntry("Preview", false));
+		ui.framePreview->setVisible(ui.chbPreview->isChecked());
+		updateSpacer(!ui.chbPreview->isChecked());
+	} else {
+		ui.framePreview->hide();
+		updateSpacer(true);
+	}
+
 	if (conf.exists()) {
-		// baseline subtraction specific parameters
-		const auto numberLocale = QLocale();
-		ui.sbBaselineParameter1->setValue(conf.readEntry(QStringLiteral("BaselineParameter1"), 6));
-		ui.leBaselineParameter2->setText(numberLocale.toString(conf.readEntry(QStringLiteral("BaselineParameter2"), 0.1)));
-		ui.sbBaselineParameter3->setValue(conf.readEntry(QStringLiteral("BaselineParameter3"), 10));
-
-		int typeIndex = ui.cbType->findData(conf.readEntry("Type", 0));
-		if (typeIndex != -1)
-			ui.cbType->setCurrentIndex(typeIndex);
-		else
-			ui.cbType->setCurrentIndex(0);
-
-		if (m_operation == Add || m_operation == Subtract || m_operation == SubtractBaseline) {
-			ui.chbPreview->setChecked(conf.readEntry("Preview", false));
-			ui.framePreview->setVisible(ui.chbPreview->isChecked());
-			updateSpacer(!ui.chbPreview->isChecked());
-		} else {
-			ui.framePreview->hide();
-			updateSpacer(true);
-		}
-
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
 		resize(windowHandle()->size()); // workaround for QTBUG-40584
 	} else {
 		updateSpacer(true);
-		resize(QSize(300, 0).expandedTo(minimumSize()));
+		resize(QSize(400, 0).expandedTo(minimumSize()));
 	}
 
 	if (m_operation == SubtractBaseline) {
@@ -286,7 +286,7 @@ void AddSubtractValueDialog::init() {
 AddSubtractValueDialog::~AddSubtractValueDialog() {
 	delete m_project;
 
-	KConfigGroup conf(KSharedConfig::openConfig(), QStringLiteral("AddSubtractValueDialog"));
+	KConfigGroup conf = Settings::group(QStringLiteral("AddSubtractValueDialog"));
 	conf.writeEntry(QStringLiteral("Type"), ui.cbType->currentData().toInt());
 	conf.writeEntry(QStringLiteral("Preview"), ui.chbPreview->isChecked());
 
@@ -482,7 +482,6 @@ void AddSubtractValueDialog::initPreview() {
 	const double padding = Worksheet::convertToSceneUnits(0.5, Worksheet::Unit::Centimeter);
 	plot->setRightPadding(padding);
 	plot->setVerticalPadding(padding);
-	plot->setBottomPadding(padding);
 	plot->plotArea()->borderLine()->setStyle(Qt::NoPen);
 	m_previewPlotTitle = plot->title();
 
@@ -534,7 +533,6 @@ void AddSubtractValueDialog::initPreview() {
 	m_curveOrigin->setXColumn(xColumn);
 	m_curveOrigin->setYColumn(yColumn);
 	plot->addChild(m_curveOrigin);
-	m_curveOrigin->line()->setWidth(0.);
 
 	// add the curve for the data to be subtracted
 	m_curveBaseline = new XYCurve(i18n("baseline"));
@@ -543,7 +541,6 @@ void AddSubtractValueDialog::initPreview() {
 	m_curveBaseline->setXColumn(m_xColumnBaseline);
 	m_curveBaseline->setYColumn(m_yColumnBaseline);
 	plot->addChild(m_curveBaseline);
-	m_curveBaseline->line()->setWidth(0.);
 
 	// add the curve for the result data
 	m_curveResult = new XYCurve(i18n("result"));
@@ -551,7 +548,6 @@ void AddSubtractValueDialog::initPreview() {
 	m_yColumnResult = new Column(QLatin1String("yResult"), yColumn->columnMode());
 	m_curveResult->setYColumn(m_yColumnResult);
 	plot->addChild(m_curveResult);
-	m_curveResult->line()->setWidth(0.);
 
 	plot->addLegend();
 	// ws->setTheme(QLatin1String("Tufte"));
@@ -713,6 +709,16 @@ void AddSubtractValueDialog::generateForColumns() {
 }
 
 void AddSubtractValueDialog::generateForColumn(Column* col, int colIndex) {
+	// in case the result was already calculated for the first column for the preview,
+	// no need to calculate it again, re-use the already available result
+	if (colIndex == 0 && !m_previewDirty) {
+		// for the baseline subraction the mode has to be Double, set it if not the case yet
+		if (m_operation == SubtractBaseline && col->columnMode() != AbstractColumn::ColumnMode::Double)
+			col->setColumnMode(AbstractColumn::ColumnMode::Double);
+		col->copy(m_yColumnResult);
+		return;
+	}
+
 	const auto mode = col->columnMode();
 	const int rows = m_spreadsheet->rowCount();
 

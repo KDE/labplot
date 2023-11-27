@@ -30,20 +30,18 @@ class InfoElement : public WorksheetElement {
 
 public:
 	InfoElement(const QString& name, CartesianPlot*);
-	InfoElement(const QString& name, CartesianPlot*, const XYCurve*, double pos);
-	void setParentGraphicsItem(QGraphicsItem* item);
+	InfoElement(const QString& name, CartesianPlot*, const XYCurve*, double logicalPos);
+	virtual void setParentGraphicsItem(QGraphicsItem* item) override;
 	~InfoElement();
 
 	struct MarkerPoints_T {
 		MarkerPoints_T() = default;
-		MarkerPoints_T(CustomPoint* custompoint, QString customPointPath, const XYCurve* curve, QString curvePath)
+		MarkerPoints_T(CustomPoint* custompoint, const XYCurve* curve, QString curvePath)
 			: customPoint(custompoint)
-			, customPointPath(customPointPath)
 			, curve(curve)
 			, curvePath(curvePath) {
 		}
 		CustomPoint* customPoint{nullptr};
-		QString customPointPath;
 		const XYCurve* curve{nullptr};
 		QString curvePath;
 	};
@@ -68,8 +66,6 @@ public:
 	bool isTextLabel() const;
 	double setMarkerpointPosition(double x);
 	int currentIndex(double new_x, double* found_x = nullptr);
-
-	QGraphicsItem* graphicsItem() const override;
 
 	void retransform() override;
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
@@ -112,9 +108,6 @@ private:
 	 * add. Because of single thread it makes no problems.
 	 */
 	bool m_curveGetsMoved{false};
-
-	// Actions
-	QAction* visibilityAction;
 
 	void init();
 	void initActions();

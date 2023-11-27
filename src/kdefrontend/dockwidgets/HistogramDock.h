@@ -16,7 +16,6 @@
 #include "kdefrontend/dockwidgets/BaseDock.h"
 #include "ui_histogramdock.h"
 
-class AspectTreeModel;
 class BackgroundWidget;
 class LineWidget;
 class SymbolWidget;
@@ -53,7 +52,6 @@ protected:
 
 	QList<Histogram*> m_curvesList;
 	Histogram* m_curve{nullptr};
-	AspectTreeModel* m_aspectTreeModel{nullptr};
 
 	virtual void setModel();
 
@@ -71,10 +69,10 @@ private Q_SLOTS:
 	void normalizationChanged(int);
 	void binningMethodChanged(int);
 	void binCountChanged(int);
-	void binWidthChanged();
+	void binWidthChanged(double);
 	void autoBinRangesChanged(bool);
-	void binRangesMinChanged(const QString&);
-	void binRangesMaxChanged(const QString&);
+	void binRangesMinChanged(double);
+	void binRangesMaxChanged(double);
 	void binRangesMinDateTimeChanged(qint64);
 	void binRangesMaxDateTimeChanged(qint64);
 

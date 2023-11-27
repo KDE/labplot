@@ -47,10 +47,6 @@ WorksheetElementContainer::WorksheetElementContainer(const QString& name, Worksh
 // and is deleted during the cleanup in QGraphicsScene
 WorksheetElementContainer::~WorksheetElementContainer() = default;
 
-QGraphicsItem* WorksheetElementContainer::graphicsItem() const {
-	return const_cast<QGraphicsItem*>(static_cast<const QGraphicsItem*>(d_ptr));
-}
-
 QRectF WorksheetElementContainer::rect() const {
 	Q_D(const WorksheetElementContainer);
 	return d->rect;
@@ -130,6 +126,8 @@ void WorksheetElementContainer::retransform() {
 
 	if (m_resizeItem)
 		m_resizeItem->setRect(rect());
+
+	Q_EMIT changed();
 }
 
 /*!
@@ -160,6 +158,7 @@ void WorksheetElementContainer::handleAspectAdded(const AbstractAspect* aspect) 
 	if (element && (aspect->parentAspect() == this)) {
 		connect(element, &WorksheetElement::hovered, this, &WorksheetElementContainer::childHovered);
 		connect(element, &WorksheetElement::unhovered, this, &WorksheetElementContainer::childUnhovered);
+		connect(element, &WorksheetElement::changed, this, &WorksheetElementContainer::changed);
 		element->graphicsItem()->setParentItem(d);
 
 		qreal zVal = 0;
@@ -174,17 +173,17 @@ void WorksheetElementContainer::handleAspectAdded(const AbstractAspect* aspect) 
 void WorksheetElementContainer::childHovered() {
 	Q_D(WorksheetElementContainer);
 	if (!d->isSelected()) {
-		if (d->m_hovered)
-			d->m_hovered = false;
-		d->update();
+		if (isHovered())
+			setHover(false);
+		else
+			d->update();
 	}
 }
 
 void WorksheetElementContainer::childUnhovered() {
 	Q_D(WorksheetElementContainer);
 	if (!d->isSelected()) {
-		d->m_hovered = true;
-		d->update();
+		setHover(true);
 	}
 }
 
@@ -209,20 +208,6 @@ void WorksheetElementContainerPrivate::contextMenuEvent(QGraphicsSceneContextMen
 	menu->exec(event->screenPos());
 }
 
-void WorksheetElementContainerPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
-	if (!isSelected()) {
-		m_hovered = true;
-		update();
-	}
-}
-
-void WorksheetElementContainerPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
-	if (m_hovered) {
-		m_hovered = false;
-		update();
-	}
-}
-
 void WorksheetElementContainerPrivate::prepareGeometryChangeRequested() {
 	prepareGeometryChange(); // this is not const!
 	recalcShapeAndBoundingRect();
@@ -240,24 +225,24 @@ void WorksheetElementContainerPrivate::recalcShapeAndBoundingRect() {
 	// 		boundingRectangle |= elem->graphicsItem()->mapRectToParent(elem->graphicsItem()->boundingRect());
 	//
 	qreal penWidth = 2.;
-	boundingRectangle = q->rect();
+	m_boundingRectangle = q->rect();
 	// QDEBUG(Q_FUNC_INFO << ", bound rect = " << boundingRectangle)
-	boundingRectangle = QRectF(-boundingRectangle.width() / 2. - penWidth / 2.,
-							   -boundingRectangle.height() / 2. - penWidth / 2.,
-							   boundingRectangle.width() + penWidth,
-							   boundingRectangle.height() + penWidth);
+	m_boundingRectangle = QRectF(-m_boundingRectangle.width() / 2. - penWidth / 2.,
+								 -m_boundingRectangle.height() / 2. - penWidth / 2.,
+								 m_boundingRectangle.width() + penWidth,
+								 m_boundingRectangle.height() + penWidth);
 
 	QPainterPath path;
-	path.addRect(boundingRectangle);
+	path.addRect(m_boundingRectangle);
 
 	// make the shape somewhat thicker than the hoveredPen to make the selection/hovering box more visible
-	containerShape = QPainterPath();
-	containerShape.addPath(WorksheetElement::shapeFromPath(path, QPen(QBrush(), penWidth)));
+	m_shape = QPainterPath();
+	m_shape.addPath(WorksheetElement::shapeFromPath(path, QPen(QBrush(), penWidth)));
 }
 
 // Inherited from QGraphicsItem
 QRectF WorksheetElementContainerPrivate::boundingRect() const {
-	return boundingRectangle;
+	return m_boundingRectangle;
 }
 
 // Inherited from QGraphicsItem
@@ -267,12 +252,12 @@ void WorksheetElementContainerPrivate::paint(QPainter* painter, const QStyleOpti
 
 	if (m_hovered && !isSelected() && !m_printing) {
 		painter->setPen(QPen(QApplication::palette().color(QPalette::Shadow), 2, Qt::SolidLine));
-		painter->drawPath(containerShape);
+		painter->drawPath(m_shape);
 	}
 
 	if (isSelected() && !m_printing) {
 		painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), 2, Qt::SolidLine));
-		painter->drawPath(containerShape);
+		painter->drawPath(m_shape);
 	}
 }
 

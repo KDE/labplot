@@ -10,15 +10,15 @@
 
 #include "JsonOptionsWidget.h"
 #include "ImportFileWidget.h"
+#include "backend/core/Settings.h"
 #include "backend/datasources/filters/AbstractFileFilter.h"
 #include "backend/datasources/filters/JsonFilter.h"
 #include "backend/datasources/filters/QJsonModel.h"
 #include "backend/lib/trace.h"
 
+#include <KCompressionDevice>
 #include <KConfigGroup>
-#include <KFilterDev>
 #include <KLocalizedString>
-#include <KSharedConfig>
 
 /*!
 \class JsonOptionsWidget
@@ -73,9 +73,9 @@ void JsonOptionsWidget::clearModel() {
 }
 
 void JsonOptionsWidget::loadSettings() const {
-	KConfigGroup conf(KSharedConfig::openConfig(), "ImportJson");
+	KConfigGroup conf = Settings::group(QStringLiteral("ImportJson"));
 
-	const QChar decimalSeparator = QLocale().decimalPoint();
+	const auto decimalSeparator = QLocale().decimalPoint();
 	int index = (decimalSeparator == QLatin1Char('.')) ? 0 : 1;
 	ui.cbDecimalSeparator->setCurrentIndex(conf.readEntry("DecimalSeparator", index));
 
@@ -86,7 +86,7 @@ void JsonOptionsWidget::loadSettings() const {
 }
 
 void JsonOptionsWidget::saveSettings() {
-	KConfigGroup conf(KSharedConfig::openConfig(), "ImportJson");
+	KConfigGroup conf = Settings::group(QStringLiteral("ImportJson"));
 
 	conf.writeEntry("DecimalSeparator", ui.cbDecimalSeparator->currentIndex());
 	conf.writeEntry("DateTimeFormat", ui.cbDateTimeFormat->currentText());
@@ -102,7 +102,7 @@ void JsonOptionsWidget::loadDocument(const QString& filename) {
 	else
 		m_filename = filename;
 
-	KFilterDev device(m_filename);
+	KCompressionDevice device(m_filename);
 	m_model->clear();
 	if (!device.open(QIODevice::ReadOnly) || (device.atEnd() && !device.isSequential()) || // empty file
 		!m_model->loadJson(device.readAll()))

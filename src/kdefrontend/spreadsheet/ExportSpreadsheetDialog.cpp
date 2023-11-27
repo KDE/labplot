@@ -9,6 +9,7 @@
 */
 
 #include "ExportSpreadsheetDialog.h"
+#include "backend/core/Settings.h"
 #include "backend/datasources/filters/AbstractFileFilter.h"
 #include "backend/datasources/filters/AsciiFilter.h"
 #include "kdefrontend/GuiTools.h"
@@ -17,7 +18,7 @@
 #include <KConfigGroup>
 #include <KLocalizedString>
 #include <KMessageBox>
-#include <KSharedConfig>
+
 #include <KWindowConfig>
 #include <kcoreaddons_version.h>
 
@@ -61,13 +62,14 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent)
 	ui->leFileName->setCompleter(new QCompleter(new QDirModel, this));
 #endif
 
+	// supported formats. see also ImportFileWidget.cpp
 	ui->cbFormat->addItem(QStringLiteral("ASCII"), static_cast<int>(Format::ASCII));
 	ui->cbFormat->addItem(QStringLiteral("LaTeX"), static_cast<int>(Format::LaTeX));
 #ifdef HAVE_FITS
 	ui->cbFormat->addItem(QStringLiteral("FITS"), static_cast<int>(Format::FITS));
 #endif
-#ifdef HAVE_EXCEL
-	ui->cbFormat->addItem(QStringLiteral("Excel 2007+"), static_cast<int>(Format::Excel));
+#ifdef HAVE_QXLSX
+	ui->cbFormat->addItem(QStringLiteral("XLSX"), static_cast<int>(Format::XLSX));
 #endif
 
 	const QStringList& drivers = QSqlDatabase::drivers();
@@ -103,14 +105,14 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent)
 	setWindowIcon(QIcon::fromTheme(QStringLiteral("document-export-database")));
 
 	// restore saved settings if available
-	KConfigGroup conf(KSharedConfig::openConfig(), "ExportSpreadsheetDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("ExportSpreadsheetDialog"));
 	KWindowConfig::restoreWindowSize(windowHandle(), conf);
 	ui->cbFormat->setCurrentIndex(conf.readEntry("Format", 0));
 	ui->chkExportHeader->setChecked(conf.readEntry("Header", true));
 	ui->cbSeparator->setCurrentItem(conf.readEntry("Separator", "TAB"));
 
 	// TODO: use general setting for decimal separator?
-	const QChar decimalSeparator = QLocale().decimalPoint();
+	const auto decimalSeparator = QLocale().decimalPoint();
 	int index = (decimalSeparator == QLatin1Char('.')) ? 0 : 1;
 	ui->cbDecimalSeparator->setCurrentIndex(conf.readEntry("DecimalSeparator", index));
 
@@ -137,7 +139,7 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent)
 
 ExportSpreadsheetDialog::~ExportSpreadsheetDialog() {
 	// save current settings
-	KConfigGroup conf(KSharedConfig::openConfig(), "ExportSpreadsheetDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("ExportSpreadsheetDialog"));
 	conf.writeEntry("Format", ui->cbFormat->currentIndex());
 	conf.writeEntry("Header", ui->chkExportHeader->isChecked());
 	conf.writeEntry("Separator", ui->cbSeparator->currentText());
@@ -171,11 +173,11 @@ void ExportSpreadsheetDialog::setProjectFileName(const QString& name) {
 void ExportSpreadsheetDialog::setFileName(const QString& name) {
 	if (m_projectPath.isEmpty()) {
 		// no project folder is available (yet), use the last used directory in this dialog
-		KConfigGroup conf(KSharedConfig::openConfig(), "ExportSpreadsheetDialog");
+		KConfigGroup conf = Settings::group(QStringLiteral("ExportSpreadsheetDialog"));
 		QString dir = conf.readEntry("LastDir", "");
 		if (dir.isEmpty()) { // use project dir as fallback
-			KConfigGroup conf2(KSharedConfig::openConfig(), "MainWin");
-			dir = conf2.readEntry("LastOpenDir", "");
+			KConfigGroup confMainWin = Settings::group(QStringLiteral("MainWin"));
+			dir = confMainWin.readEntry("LastOpenDir", "");
 			if (dir.isEmpty())
 				dir = QDir::homePath();
 		}
@@ -308,13 +310,14 @@ void ExportSpreadsheetDialog::okClicked() {
 														 i18n("Export"),
 														 KStandardGuiItem::overwrite(),
 														 KStandardGuiItem::cancel());
+			if (status == KMessageBox::SecondaryAction)
 #else
 			int status = KMessageBox::questionYesNo(this, i18n("The file already exists. Do you really want to overwrite it?"), i18n("Export"));
-#endif
 			if (status == KMessageBox::No)
+#endif
 				return;
 		}
-	KConfigGroup conf(KSharedConfig::openConfig(), "ExportSpreadsheetDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("ExportSpreadsheetDialog"));
 	conf.writeEntry("Format", ui->cbFormat->currentIndex());
 	conf.writeEntry("Header", ui->chkExportHeader->isChecked());
 	conf.writeEntry("Separator", ui->cbSeparator->currentText());
@@ -350,7 +353,7 @@ void ExportSpreadsheetDialog::toggleOptions() {
 	opens a file dialog and lets the user select the file.
 */
 void ExportSpreadsheetDialog::selectFile() {
-	KConfigGroup conf(KSharedConfig::openConfig(), "ExportSpreadsheetDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("ExportSpreadsheetDialog"));
 	QString dir = conf.readEntry("LastDir", "");
 
 	QString extensions;
@@ -370,7 +373,7 @@ void ExportSpreadsheetDialog::selectFile() {
 	case Format::FITS:
 		extensions = i18n("FITS files (*.fits *.fit *.fts)");
 		break;
-	case Format::Excel:
+	case Format::XLSX:
 		extensions = i18n("Excel 2007+ (*.xlsx)");
 		break;
 	case Format::SQLite:
@@ -400,7 +403,7 @@ void ExportSpreadsheetDialog::formatChanged(int index) {
 #ifdef HAVE_FITS
 	extensions << QStringLiteral(".fits");
 #endif
-#ifdef HAVE_EXCEL
+#ifdef HAVE_QXLSX
 	extensions << QStringLiteral(".xlsx");
 #endif
 	extensions << QStringLiteral(".db");
@@ -512,7 +515,7 @@ void ExportSpreadsheetDialog::formatChanged(int index) {
 		ui->chkColumnsAsUnits->hide();
 
 		break;
-	case Format::Excel:
+	case Format::XLSX:
 		ui->cbSeparator->hide();
 		ui->lSeparator->hide();
 		ui->lDecimalSeparator->hide();

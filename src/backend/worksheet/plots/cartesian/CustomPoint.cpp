@@ -80,15 +80,12 @@ void CustomPoint::init() {
 		d->update();
 	});
 	KConfig config;
-	d->symbol->init(config.group("CustomPoint"));
+	d->symbol->init(config.group(QStringLiteral("CustomPoint")));
 
 	initActions();
 }
 
 void CustomPoint::initActions() {
-	visibilityAction = new QAction(i18n("Visible"), this);
-	visibilityAction->setCheckable(true);
-	connect(visibilityAction, &QAction::triggered, this, &CustomPoint::changeVisibility);
 }
 
 /*!
@@ -104,17 +101,8 @@ QMenu* CustomPoint::createContextMenu() {
 	if (parentAspect()->type() == AspectType::InfoElement)
 		return nullptr;
 
-	QMenu* menu = WorksheetElement::createContextMenu();
-	QAction* firstAction = menu->actions().at(1); // skip the first action because of the "title-action"
-	visibilityAction->setChecked(isVisible());
-	menu->insertAction(firstAction, visibilityAction);
-	menu->insertSeparator(firstAction);
-
-	return menu;
-}
-
-QGraphicsItem* CustomPoint::graphicsItem() const {
-	return d_ptr;
+	return WorksheetElement::createContextMenu();
+	;
 }
 
 void CustomPoint::retransform() {
@@ -129,11 +117,6 @@ void CustomPoint::handleResize(double /*horizontalRatio*/, double /*verticalRati
 Symbol* CustomPoint::symbol() const {
 	Q_D(const CustomPoint);
 	return d->symbol;
-}
-
-void CustomPoint::setParentGraphicsItem(QGraphicsItem* item) {
-	Q_D(CustomPoint);
-	d->setParentItem(item);
 }
 
 // ##############################################################################
@@ -166,19 +149,12 @@ void CustomPointPrivate::retransform() {
 }
 
 /*!
-	Returns the shape of this item as a QPainterPath in local coordinates.
-*/
-QPainterPath CustomPointPrivate::shape() const {
-	return pointShape;
-}
-
-/*!
   recalculates the outer bounds and the shape of the item.
 */
 void CustomPointPrivate::recalcShapeAndBoundingRect() {
 	prepareGeometryChange();
 
-	pointShape = QPainterPath();
+	m_shape = QPainterPath();
 	if (insidePlot && symbol->style() != Symbol::Style::NoSymbols) {
 		QPainterPath path = Symbol::stylePath(symbol->style());
 
@@ -192,8 +168,8 @@ void CustomPointPrivate::recalcShapeAndBoundingRect() {
 			path = trafo.map(path);
 		}
 
-		pointShape.addPath(WorksheetElement::shapeFromPath(trafo.map(path), symbol->pen()));
-		boundingRectangle = pointShape.boundingRect();
+		m_shape.addPath(WorksheetElement::shapeFromPath(trafo.map(path), symbol->pen()));
+		m_boundingRectangle = m_shape.boundingRect();
 	}
 }
 
@@ -205,17 +181,17 @@ void CustomPointPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem
 		painter->setOpacity(symbol->opacity());
 		painter->setPen(symbol->pen());
 		painter->setBrush(symbol->brush());
-		painter->drawPath(pointShape);
+		painter->drawPath(m_shape);
 	}
 
 	if (m_hovered && !isSelected() && !q->isPrinting()) {
 		painter->setPen(QPen(QApplication::palette().color(QPalette::Shadow), 2, Qt::SolidLine));
-		painter->drawPath(pointShape);
+		painter->drawPath(m_shape);
 	}
 
 	if (isSelected() && !q->isPrinting()) {
 		painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), 2, Qt::SolidLine));
-		painter->drawPath(pointShape);
+		painter->drawPath(m_shape);
 	}
 }
 
@@ -226,26 +202,6 @@ void CustomPointPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 		return;
 
 	WorksheetElementPrivate::mouseReleaseEvent(event);
-}
-
-void CustomPointPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
-	q->createContextMenu()->exec(event->screenPos());
-}
-
-void CustomPointPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
-	if (!isSelected()) {
-		m_hovered = true;
-		Q_EMIT q->hovered();
-		update();
-	}
-}
-
-void CustomPointPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
-	if (m_hovered) {
-		m_hovered = false;
-		Q_EMIT q->unhovered();
-		update();
-	}
 }
 
 // ##############################################################################
@@ -276,7 +232,6 @@ bool CustomPoint::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
@@ -302,7 +257,7 @@ bool CustomPoint::load(XmlStreamReader* reader, bool preview) {
 		} else if (!preview && reader->name() == QLatin1String("symbol")) {
 			d->symbol->load(reader, preview);
 		} else { // unknown element
-			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
+			reader->raiseUnknownElementWarning();
 			if (!reader->skipToEndElement())
 				return false;
 		}

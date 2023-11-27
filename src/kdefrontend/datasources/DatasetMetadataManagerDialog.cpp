@@ -8,11 +8,12 @@
 */
 
 #include "src/kdefrontend/datasources/DatasetMetadataManagerDialog.h"
+#include "backend/core/Settings.h"
 #include "src/kdefrontend/datasources/DatasetMetadataManagerWidget.h"
 
 #include <KConfigGroup>
 #include <KLocalizedString>
-#include <KSharedConfig>
+
 #include <KWindowConfig>
 #include <QDialogButtonBox>
 #include <QPushButton>
@@ -46,7 +47,7 @@ DatasetMetadataManagerDialog::DatasetMetadataManagerDialog(QWidget* parent, cons
 
 	// restore saved settings if available
 	create(); // ensure there's a window created
-	KConfigGroup conf(KSharedConfig::openConfig(), "DatasetMetadataManagerDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("DatasetMetadataManagerDialog"));
 	if (conf.exists()) {
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
 		resize(windowHandle()->size()); // workaround for QTBUG-40584
@@ -59,7 +60,7 @@ DatasetMetadataManagerDialog::DatasetMetadataManagerDialog(QWidget* parent, cons
 
 DatasetMetadataManagerDialog::~DatasetMetadataManagerDialog() {
 	// save current settings
-	KConfigGroup conf(KSharedConfig::openConfig(), "DatasetMetadataManagerDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("DatasetMetadataManagerDialog"));
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 

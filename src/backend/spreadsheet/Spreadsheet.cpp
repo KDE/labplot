@@ -13,6 +13,7 @@
 #include "Spreadsheet.h"
 #include "SpreadsheetModel.h"
 #include "SpreadsheetPrivate.h"
+#include "StatisticsSpreadsheet.h"
 #include "backend/core/AbstractAspect.h"
 #include "backend/core/AspectPrivate.h"
 #include "backend/core/column/ColumnStringIO.h"
@@ -26,13 +27,13 @@
 
 #include "backend/lib/commandtemplates.h"
 
+#include <KConfig>
+#include <KConfigGroup>
+#include <KLocalizedString>
+
 #include <QIcon>
 #include <QUndoCommand>
 #include <QXmlStreamWriter>
-
-#include <KConfigGroup>
-#include <KLocalizedString>
-#include <KSharedConfig>
 
 #include <algorithm>
 
@@ -101,7 +102,8 @@ SpreadsheetModel* Spreadsheet::model() const {
 QWidget* Spreadsheet::view() const {
 #ifndef SDK
 	if (!m_partView) {
-		bool readOnly = (this->parentAspect()->type() == AspectType::DatapickerCurve);
+		auto type = this->parentAspect()->type();
+		bool readOnly = (type == AspectType::Spreadsheet || type == AspectType::DatapickerCurve);
 		m_view = new SpreadsheetView(const_cast<Spreadsheet*>(this), readOnly);
 		m_partView = m_view;
 	}
@@ -135,23 +137,30 @@ bool Spreadsheet::printPreview() const {
 #endif
 }
 
+StatisticsSpreadsheet* Spreadsheet::statisticsSpreadsheet() const {
+	Q_D(const Spreadsheet);
+	return d->statisticsSpreadsheet;
+}
+
 /*!
  * \brief Called when the application settings were changed.
  *  adjusts the appearence of the spreadsheet header.
  */
 void Spreadsheet::updateHorizontalHeader() {
 #ifndef SDK
-	const QString& oldHeader = m_model->headerData(0, Qt::Horizontal, Qt::DisplayRole).toString();
-	m_model->updateHorizontalHeader();
-	const QString& newHeader = m_model->headerData(0, Qt::Horizontal, Qt::DisplayRole).toString();
+	if (m_model) {
+		const QString& oldHeader = m_model->headerData(0, Qt::Horizontal, Qt::DisplayRole).toString();
+		m_model->updateHorizontalHeader();
+		const QString& newHeader = m_model->headerData(0, Qt::Horizontal, Qt::DisplayRole).toString();
 
-	// if the header name of the first column has changed (column mode to be shown, etc.),
-	// reset the column widths and request the view to adjuste the column sizes to the  content
-	if (oldHeader != newHeader && m_view) {
-		const auto& columns = children<Column>();
-		for (auto col : columns)
-			col->setWidth(0);
-		m_view->resizeHeader();
+		// if the header name of the first column has changed (column mode to be shown, etc.),
+		// reset the column widths and request the view to adjuste the column sizes to the  content
+		if (oldHeader != newHeader && m_view) {
+			const auto& columns = children<Column>();
+			for (auto col : columns)
+				col->setWidth(0);
+			m_view->resizeHeader();
+		}
 	}
 #endif
 }
@@ -198,9 +207,9 @@ public:
 		QUndoCommand::redo();
 
 		if (m_insert)
-			Q_EMIT m_spreadsheet->rowsInserted(m_last + 1);
+			Q_EMIT m_spreadsheet->rowsInserted(m_spreadsheet->rowCount());
 		else
-			Q_EMIT m_spreadsheet->rowsRemoved(m_first);
+			Q_EMIT m_spreadsheet->rowsRemoved(m_spreadsheet->rowCount());
 		RESET_CURSOR;
 		m_spreadsheet->emitRowCountChanged();
 	}
@@ -214,9 +223,9 @@ public:
 		QUndoCommand::undo();
 
 		if (m_insert)
-			Q_EMIT m_spreadsheet->rowsRemoved(m_first);
+			Q_EMIT m_spreadsheet->rowsRemoved(m_spreadsheet->rowCount());
 		else
-			Q_EMIT m_spreadsheet->rowsInserted(m_last + 1);
+			Q_EMIT m_spreadsheet->rowsInserted(m_spreadsheet->rowCount());
 		RESET_CURSOR;
 		m_spreadsheet->emitRowCountChanged();
 	}
@@ -233,16 +242,11 @@ void Spreadsheet::removeRows(int first, int count, QUndoCommand* parent) {
 		return;
 
 	auto* command = new SpreadsheetSetRowsCountCmd(this, false, first, count, parent);
-	bool execute = false;
-	if (!parent) {
-		execute = true;
-		parent = command;
-	}
 
 	for (auto* col : children<Column>())
-		col->removeRows(first, count, parent);
+		col->removeRows(first, count, command);
 
-	if (execute)
+	if (!parent)
 		exec(command);
 }
 
@@ -251,16 +255,11 @@ void Spreadsheet::insertRows(int before, int count, QUndoCommand* parent) {
 		return;
 
 	auto* command = new SpreadsheetSetRowsCountCmd(this, true, before, count, parent);
-	bool execute = false;
-	if (!parent) {
-		execute = true;
-		parent = command;
-	}
 
 	for (auto* col : children<Column>())
-		col->insertRows(before, count, parent);
+		col->insertRows(before, count, command);
 
-	if (execute)
+	if (!parent)
 		exec(command);
 }
 
@@ -270,6 +269,63 @@ void Spreadsheet::appendRows(int count) {
 
 void Spreadsheet::appendRow() {
 	insertRows(rowCount(), 1);
+}
+
+/*!
+ * removes all rows in the spreadsheet if the value in one of the columns is missing/empty.
+ */
+void Spreadsheet::removeEmptyRows() {
+	const auto& rows = rowsWithMissingValues();
+	if (rows.isEmpty())
+		return;
+
+	WAIT_CURSOR;
+	beginMacro(i18n("%1: remove rows with missing values", name()));
+
+	for (int row = rows.count() - 1; row >= 0; --row)
+		removeRows(rows.at(row), 1);
+
+	endMacro();
+	RESET_CURSOR;
+}
+
+/*!
+ * masks all rows in the spreadsheet if the value in one of the columns is missing/empty.
+ */
+void Spreadsheet::maskEmptyRows() {
+	const auto& rows = rowsWithMissingValues();
+	if (rows.isEmpty())
+		return;
+
+	WAIT_CURSOR;
+	beginMacro(i18n("%1: mask rows with missing values", name()));
+
+	const auto& columns = children<Column>();
+	for (int row : rows) {
+		for (const auto& col : columns)
+			col->setMasked(row);
+	}
+
+	endMacro();
+	RESET_CURSOR;
+}
+
+/*!
+ * returns the list of all rows having at least one missing/empty value.
+ */
+QVector<int> Spreadsheet::rowsWithMissingValues() const {
+	QVector<int> rows;
+	const auto& columns = children<Column>();
+	for (int row = 0; row < rowCount(); ++row) {
+		for (const auto& col : columns) {
+			if (col->asStringColumn()->textAt(row).isEmpty()) {
+				rows << row;
+				break;
+			}
+		}
+	}
+
+	return rows;
 }
 
 void Spreadsheet::appendColumns(int count) {
@@ -339,8 +395,8 @@ public:
 	}
 
 	void finalize() const {
-		emit m_target->q->linkingChanged(m_target->linking.linking);
-		emit m_target->q->linkedSpreadsheetChanged(m_target->linking.linkedSpreadsheet);
+		Q_EMIT m_target->q->linkingChanged(m_target->linking.linking);
+		Q_EMIT m_target->q->linkedSpreadsheetChanged(m_target->linking.linkedSpreadsheet);
 	}
 
 private:
@@ -556,6 +612,7 @@ void Spreadsheet::clear(const QVector<Column*>& columns) {
 		col->setSuppressDataChangedSignal(false);
 		col->setChanged();
 	}
+	exec(parent);
 }
 
 /*!
@@ -576,7 +633,8 @@ void Spreadsheet::clearMasks() {
 QMenu* Spreadsheet::createContextMenu() {
 	QMenu* menu = AbstractPart::createContextMenu();
 	Q_ASSERT(menu);
-	Q_EMIT requestProjectContextMenu(menu);
+	if (type() != AspectType::StatisticsSpreadsheet)
+		Q_EMIT requestProjectContextMenu(menu);
 	return menu;
 }
 
@@ -1118,6 +1176,25 @@ QVector<AspectType> Spreadsheet::dropableOn() const {
 	return vec;
 }
 
+void Spreadsheet::toggleStatisticsSpreadsheet(bool on) {
+	Q_D(Spreadsheet);
+	if (on) {
+		if (d->statisticsSpreadsheet)
+			return;
+
+		d->statisticsSpreadsheet = new StatisticsSpreadsheet(this);
+		addChild(d->statisticsSpreadsheet);
+	} else {
+		if (!d->statisticsSpreadsheet)
+			return;
+
+		setUndoAware(false);
+		removeChild(d->statisticsSpreadsheet);
+		setUndoAware(true);
+		d->statisticsSpreadsheet = nullptr;
+	}
+}
+
 // ##############################################################################
 // ##################  Serialization/Deserialization  ###########################
 // ##############################################################################
@@ -1140,6 +1217,10 @@ void Spreadsheet::save(QXmlStreamWriter* writer) const {
 	for (auto* column : columns)
 		column->save(writer);
 
+	// statistics spreadsheet, if available
+	if (d->statisticsSpreadsheet)
+		d->statisticsSpreadsheet->save(writer);
+
 	writer->writeEndElement(); // "spreadsheet"
 }
 
@@ -1151,7 +1232,6 @@ bool Spreadsheet::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
-	const KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QString str;
 	QXmlStreamAttributes attribs;
 
@@ -1170,7 +1250,7 @@ bool Spreadsheet::load(XmlStreamReader* reader, bool preview) {
 				attribs = reader->attributes();
 				str = attribs.value(QStringLiteral("enabled")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs(QStringLiteral("enabled")).toString());
+					reader->raiseMissingAttributeWarning(QStringLiteral("enabled"));
 				else
 					d->linking.linking = static_cast<bool>(str.toInt());
 
@@ -1185,8 +1265,15 @@ bool Spreadsheet::load(XmlStreamReader* reader, bool preview) {
 					return false;
 				}
 				addChildFast(column);
+			} else if (reader->name() == QLatin1String("statisticsSpreadsheet")) {
+				d->statisticsSpreadsheet = new StatisticsSpreadsheet(this, true);
+				if (!d->statisticsSpreadsheet->load(reader, preview)) {
+					delete d->statisticsSpreadsheet;
+					d->statisticsSpreadsheet = nullptr;
+				} else
+					addChildFast(d->statisticsSpreadsheet);
 			} else { // unknown element
-				reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
+				reader->raiseUnknownElementWarning();
 				if (!reader->skipToEndElement())
 					return false;
 			}
@@ -1216,11 +1303,16 @@ int Spreadsheet::prepareImport(std::vector<void*>& dataContainer,
 
 	// make the available columns undo unaware before we resize and rename them below,
 	// the same will be done for new columns in this->resize().
-	auto columns = children<Column>();
-	for (auto* column : qAsConst(columns))
-		column->setUndoAware(false);
+	{
+		const auto& columns = children<Column>();
+		for (auto* column : qAsConst(columns))
+			column->setUndoAware(false);
+	}
 
 	columnOffset = this->resize(importMode, colNameList, actualCols);
+	if (initializeContainer)
+		dataContainer.resize(actualCols);
+	const auto& columns = children<Column>(); // Get new children because of the resize it might be different
 
 	// resize the spreadsheet
 	if (importMode == AbstractFileFilter::ImportMode::Replace) {
@@ -1234,11 +1326,6 @@ int Spreadsheet::prepareImport(std::vector<void*>& dataContainer,
 	if (columnMode.size() < actualCols) {
 		DEBUG(Q_FUNC_INFO << ", columnMode[] size is too small! Giving up.");
 		return -1;
-	}
-
-	if (initializeContainer) {
-		dataContainer.resize(actualCols);
-		columns = children<Column>();
 	}
 
 	for (int n = 0; n < actualCols; n++) {
@@ -1306,7 +1393,7 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList names, 
 	DEBUG(Q_FUNC_INFO << ", mode = " << ENUM_TO_STRING(AbstractFileFilter, ImportMode, mode) << ", cols = " << cols)
 	// QDEBUG("	column name list = " << colNameList)
 	//  name additional columns
-	emit aboutToResize();
+	Q_EMIT aboutToResize();
 
 	// make sure the column names provided by the user don't have any duplicates
 	QStringList uniqueNames;
@@ -1377,14 +1464,14 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList names, 
 		int index = 0;
 		for (auto* column : columns) {
 			column->setSuppressDataChangedSignal(true);
-			Q_EMIT column->reset(column);
+			column->reset();
 			column->setName(uniqueNames.at(index), AbstractAspect::NameHandling::UniqueNotRequired);
 			column->aspectDescriptionChanged(column);
 			++index;
 		}
 	}
 
-	emit resizeFinished();
+	Q_EMIT resizeFinished();
 	return columnOffset;
 }
 
@@ -1400,7 +1487,7 @@ void Spreadsheet::finalizeImport(size_t columnOffset,
 	QVector<CartesianPlot*> plots;
 	if (importMode == AbstractFileFilter::ImportMode::Replace) {
 		for (size_t n = startColumn; n <= endColumn; n++) {
-			Column* column = this->column((int)(columnOffset + n - startColumn));
+			auto* column = this->column((int)(columnOffset + n - startColumn));
 			if (column)
 				column->addUsedInPlots(plots);
 		}
@@ -1412,10 +1499,10 @@ void Spreadsheet::finalizeImport(size_t columnOffset,
 
 	// set the comments for each of the columns if datasource is a spreadsheet
 	const int rows = rowCount();
-	for (size_t n = startColumn; n <= endColumn; n++) {
-		// DEBUG(Q_FUNC_INFO << ", column " << columnOffset + n - startColumn);
-		Column* column = this->column((int)(columnOffset + n - startColumn));
-		// DEBUG(Q_FUNC_INFO << ", type " << static_cast<int>(column->columnMode()));
+	for (size_t col = startColumn; col <= endColumn; col++) {
+		// DEBUG(Q_FUNC_INFO << ", column " << columnOffset + col - startColumn);
+		Column* column = this->column((int)(columnOffset + col - startColumn));
+		// DEBUG(Q_FUNC_INFO << ", type " << ENUM_TO_STRING(AbstractColumn, ColumnMode, column->columnMode()))
 
 		QString comment;
 		switch (column->columnMode()) {
@@ -1464,13 +1551,14 @@ void Spreadsheet::finalizeImport(size_t columnOffset,
 	for (int i = 0; i < childCount<Column>(); i++)
 		child<Column>(i)->setUndoAware(true);
 
-	if (m_model != nullptr)
+	if (m_model)
 		m_model->suppressSignals(false);
 
 #ifndef SDK
-	if (m_partView != nullptr && m_view != nullptr)
+	if (m_partView && m_view)
 		m_view->resizeHeader();
 #endif
+
 	// row count most probably changed after the import, notify the dock widget.
 	// no need to notify about the column count change, this is already done by add/removeChild signals
 	Q_EMIT rowCountChanged(rowCount());

@@ -8,6 +8,7 @@
 */
 
 #include "BatchEditValueLabelsDialog.h"
+#include "backend/core/Settings.h"
 #include "backend/core/column/Column.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "backend/lib/macros.h"
@@ -20,7 +21,7 @@
 #include <QWindow>
 
 #include <KLocalizedString>
-#include <KSharedConfig>
+
 #include <KWindowConfig>
 
 /*!
@@ -48,7 +49,7 @@ BatchEditValueLabelsDialog::BatchEditValueLabelsDialog(QWidget* parent)
 	layout->addWidget(btnBox);
 
 	// restore saved settings if available
-	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("BatchEditValueLabelsDialog"));
+	KConfigGroup conf = Settings::group(QLatin1String("BatchEditValueLabelsDialog"));
 
 	create(); // ensure there's a window created
 	if (conf.exists()) {
@@ -60,7 +61,7 @@ BatchEditValueLabelsDialog::BatchEditValueLabelsDialog(QWidget* parent)
 
 BatchEditValueLabelsDialog::~BatchEditValueLabelsDialog() {
 	// save the current settings
-	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("BatchEditValueLabelsDialog"));
+	KConfigGroup conf = Settings::group(QLatin1String("BatchEditValueLabelsDialog"));
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 

@@ -10,10 +10,8 @@
 */
 
 #include "XYFitCurveDock.h"
-#include "backend/core/AspectTreeModel.h"
 #include "backend/core/Project.h"
 #include "backend/gsl/ExpressionParser.h"
-#include "backend/lib/macros.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
@@ -23,14 +21,11 @@
 #include "kdefrontend/widgets/FitParametersWidget.h"
 #include "kdefrontend/widgets/FunctionsWidget.h"
 
-extern "C" {
 #include "backend/nsl/nsl_sf_stats.h"
-}
 
 #include <KMessageWidget>
 
 #include <QClipboard>
-#include <QDesktopWidget>
 #include <QMenu>
 #include <QStandardItemModel>
 #include <QStandardPaths>
@@ -68,9 +63,8 @@ XYFitCurveDock::~XYFitCurveDock() {
 void XYFitCurveDock::setupGeneral() {
 	auto* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
-	m_leName = uiGeneralTab.leName;
-	m_teComment = uiGeneralTab.teComment;
-	m_teComment->setFixedHeight(1.2 * m_leName->height());
+	setPlotRangeCombobox(uiGeneralTab.cbPlotRanges);
+	setBaseWidgets(uiGeneralTab.leName, uiGeneralTab.teComment);
 
 	auto* gridLayout = static_cast<QGridLayout*>(generalTab->layout());
 	gridLayout->setContentsMargins(2, 2, 2, 2);
@@ -186,12 +180,10 @@ void XYFitCurveDock::setupGeneral() {
 	uiGeneralTab.twGoodness->item(5, 0)->setText(UTF8_QSTRING("χ²-") + i18n("test") + UTF8_QSTRING(" (P > χ²)"));
 
 	auto* layout = new QHBoxLayout(ui.tabGeneral);
-	layout->setMargin(0);
+	layout->setContentsMargins(0, 0, 0, 0);
 	layout->addWidget(generalTab);
 
 	// Slots
-	connect(uiGeneralTab.leName, &QLineEdit::textChanged, this, &XYFitCurveDock::nameChanged);
-	connect(uiGeneralTab.teComment, &QTextEdit::textChanged, this, &XYFitCurveDock::commentChanged);
 	connect(uiGeneralTab.chkVisible, &QCheckBox::clicked, this, &XYFitCurveDock::visibilityChanged);
 	connect(uiGeneralTab.cbDataSourceType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFitCurveDock::dataSourceTypeChanged);
 	connect(uiGeneralTab.lWeights, &QPushButton::clicked, this, &XYFitCurveDock::showWeightsOptions);
@@ -285,7 +277,6 @@ void XYFitCurveDock::initGeneralTab() {
 	uiGeneralTab.chkVisible->setChecked(m_curve->isVisible());
 
 	// Slots
-	connect(m_fitCurve, &XYFitCurve::aspectDescriptionChanged, this, &XYFitCurveDock::aspectDescriptionChanged);
 	connect(m_fitCurve, &XYFitCurve::dataSourceTypeChanged, this, &XYFitCurveDock::curveDataSourceTypeChanged);
 	connect(m_fitCurve, &XYFitCurve::dataSourceCurveChanged, this, &XYFitCurveDock::curveDataSourceCurveChanged);
 	connect(m_fitCurve, &XYFitCurve::dataSourceHistogramChanged, this, &XYFitCurveDock::curveDataSourceHistogramChanged);
@@ -321,12 +312,13 @@ void XYFitCurveDock::setModel() {
 	cbYErrorColumn->setTopLevelClasses(list);
 
 	list = {AspectType::Column};
-	m_aspectTreeModel->setSelectableAspects(list);
+	auto* model = aspectModel();
+	model->setSelectableAspects(list);
 
-	cbXDataColumn->setModel(m_aspectTreeModel);
-	cbYDataColumn->setModel(m_aspectTreeModel);
-	cbXErrorColumn->setModel(m_aspectTreeModel);
-	cbYErrorColumn->setModel(m_aspectTreeModel);
+	cbXDataColumn->setModel(model);
+	cbYDataColumn->setModel(model);
+	cbXErrorColumn->setModel(model);
+	cbYErrorColumn->setModel(model);
 
 	XYCurveDock::setModel();
 }
@@ -340,7 +332,6 @@ void XYFitCurveDock::setCurves(QList<XYCurve*> list) {
 	m_curve = list.first();
 	setAspects(list);
 	m_fitCurve = static_cast<XYFitCurve*>(m_curve);
-	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
 
 	// we need a second model for data source comboboxes which will be dynamically
 	// updated in the slot depending on the current type (spreadsheet, curve or histogram)
@@ -379,7 +370,7 @@ void XYFitCurveDock::setCurves(QList<XYCurve*> list) {
 }
 
 void XYFitCurveDock ::updatePlotRanges() {
-	updatePlotRangeList(uiGeneralTab.cbPlotRanges);
+	updatePlotRangeList();
 }
 
 bool XYFitCurveDock::eventFilter(QObject* obj, QEvent* event) {
@@ -1007,7 +998,7 @@ void XYFitCurveDock::updateModelEquation() {
 		QImage image = GuiTools::importPDFFile(file);
 
 		// use system palette for background
-		if (DARKMODE) {
+		if (GuiTools::isDarkMode()) {
 			// invert image if in dark mode
 			image.invertPixels();
 

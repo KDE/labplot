@@ -11,6 +11,7 @@
 #ifndef BARPLOTPRIVATE_H
 #define BARPLOTPRIVATE_H
 
+#include "backend/worksheet/plots/cartesian/BarPlot.h"
 #include "backend/worksheet/plots/cartesian/PlotPrivate.h"
 #include <QPen>
 
@@ -18,6 +19,7 @@ class Background;
 class Line;
 class CartesianCoordinateSystem;
 class Value;
+class KConfigGroup;
 
 typedef QVector<QPointF> Points;
 
@@ -34,15 +36,6 @@ public:
 	Background* addBackground(const KConfigGroup&);
 	Line* addBorderLine(const KConfigGroup&);
 	void addValue(const KConfigGroup&);
-
-	bool m_suppressRecalc{false};
-
-	// reimplemented from QGraphicsItem
-	QRectF boundingRect() const override;
-	QPainterPath shape() const override;
-
-	bool activatePlot(QPointF mouseScenePos, double maxDist);
-	void setHover(bool on);
 
 	BarPlot* const q;
 
@@ -69,9 +62,6 @@ public:
 	Value* value{nullptr};
 
 private:
-	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
-	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
-	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
 
 	void recalc(int);
@@ -80,12 +70,6 @@ private:
 	void updateFillingRect(int columnIndex, int valueIndex, const QVector<QLineF>&);
 
 	void draw(QPainter*);
-	void drawFilling(QPainter*, int columnIndex, int valueIndex);
-
-	bool m_hovered{false};
-
-	QRectF m_boundingRectangle;
-	QPainterPath m_barPlotShape;
 
 	QVector<QPointF> m_valuesPoints;
 	QVector<QPointF> m_valuesPointsLogical;
@@ -100,13 +84,6 @@ private:
 	double m_widthScaleFactor{1.0};
 	double m_groupWidth{1.0}; // width of a bar group
 	double m_groupGap{0.0}; // gap around a group of bars
-
-	QPixmap m_pixmap;
-	QImage m_hoverEffectImage;
-	QImage m_selectionEffectImage;
-
-	bool m_hoverEffectImageIsDirty{false};
-	bool m_selectionEffectImageIsDirty{false};
 };
 
 #endif

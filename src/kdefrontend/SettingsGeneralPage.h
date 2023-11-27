@@ -35,6 +35,7 @@ private:
 	void retranslateUi();
 
 private Q_SLOTS:
+	void loadOnStartChanged();
 	void autoSaveChanged(bool);
 	void changed();
 

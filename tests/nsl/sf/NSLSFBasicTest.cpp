@@ -10,9 +10,7 @@
 
 #include "NSLSFBasicTest.h"
 
-extern "C" {
 #include "backend/nsl/nsl_sf_basic.h"
-}
 
 // ##############################################################################
 // #################  log2() tests

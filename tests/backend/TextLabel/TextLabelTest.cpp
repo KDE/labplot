@@ -34,9 +34,9 @@ QColor getColorFromHTMLText(const QString& text, const QString& colortype) {
 	// QCOMPARE(matchColor.capturedTexts().count(), 1);
 	QString color = matchColor.capturedTexts().at(0).split(colortype + QStringLiteral(":#")).at(1);
 
-	int r = color.leftRef(2).toInt(nullptr, 16);
-	int g = color.midRef(2, 2).toInt(nullptr, 16);
-	int b = color.midRef(4, 2).toInt(nullptr, 16);
+	int r = color.left(2).toInt(nullptr, 16);
+	int g = color.mid(2, 2).toInt(nullptr, 16);
+	int b = color.mid(4, 2).toInt(nullptr, 16);
 
 	QColor c(r, g, b);
 	return c;

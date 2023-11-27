@@ -23,7 +23,6 @@ public:
 	explicit LineWidget(QWidget*);
 
 	void setLines(const QList<Line*>&);
-	void adjustLayout();
 	void setEnabled(bool);
 	void updateLocale();
 
@@ -41,6 +40,7 @@ private:
 	QString m_prefix;
 
 	void showEvent(QShowEvent*) override;
+	void adjustLayout();
 
 private Q_SLOTS:
 	// SLOTs for changes triggered in LineWidget

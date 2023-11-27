@@ -18,7 +18,7 @@
 #include "backend/lib/macros.h"
 #include "backend/lib/trace.h"
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #ifdef HAVE_VECTOR_BLF
 #include <Vector/BLF/Exceptions.h>
@@ -389,7 +389,5 @@ void VectorBLFFilter::save(QXmlStreamWriter* writer) const {
   Loads from XML.
 */
 bool VectorBLFFilter::load(XmlStreamReader*) {
-	// 	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
-	// 	QXmlStreamAttributes attribs = reader->attributes();
 	return true;
 }
