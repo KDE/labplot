@@ -2127,7 +2127,7 @@ void WorksheetView::handleAxisSelected(const Axis* a) {
 
 // check whether we have cartesian plots selected and activate/deactivate
 void WorksheetView::handleCartesianPlotActions() {
-	if (!m_menusInitialized)
+	if (!m_actionsInitialized)
 		return;
 
 	if (m_mouseMode != MouseMode::Selection)
@@ -2191,10 +2191,13 @@ void WorksheetView::handleCartesianPlotActions() {
 		scaleAutoYAction->setEnabled(false);
 	}
 
-	tbCartesianPlotAddNew->setEnabled(plot);
 	cartesianPlotAddNewAction->setEnabled(plot);
-	m_cartesianPlotZoomMenu->setEnabled(m_selectedElement);
-	m_cartesianPlotMouseModeMenu->setEnabled(plot);
+
+	if (m_menusInitialized) {
+		tbCartesianPlotAddNew->setEnabled(plot);
+		m_cartesianPlotZoomMenu->setEnabled(m_selectedElement);
+		m_cartesianPlotMouseModeMenu->setEnabled(plot);
+	}
 }
 
 void WorksheetView::exportToFile(const QString& path, const ExportFormat format, const ExportArea area, const bool background, const int resolution) {
