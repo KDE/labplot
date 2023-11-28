@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-27 00:39+0000\n"
+"POT-Creation-Date: 2023-11-28 00:38+0000\n"
 "PO-Revision-Date: 2023-11-22 11:58+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -605,20 +605,20 @@ msgstr "Càlculs"
 msgid "%1: change column type"
 msgstr "%1: canvia el tipus de la columna"
 
-#: src/backend/core/column/Column.cpp:526
-#: src/backend/core/column/columncommands.cpp:569
+#: src/backend/core/column/Column.cpp:524
+#: src/backend/core/column/columncommands.cpp:580
 #, kde-format
 msgid "%1: clear column"
 msgstr "%1: neteja la columna"
 
-#: src/backend/core/column/Column.cpp:1572
+#: src/backend/core/column/Column.cpp:1570
 #, kde-format
 msgid "invalid or missing row index"
 msgstr "manca l'índex de la fila, o no és vàlid"
 
-#: src/backend/core/column/Column.cpp:1581
-#: src/backend/core/column/Column.cpp:1590
-#: src/backend/core/column/Column.cpp:1599
+#: src/backend/core/column/Column.cpp:1579
+#: src/backend/core/column/Column.cpp:1588
+#: src/backend/core/column/Column.cpp:1597
 #, kde-format
 msgid "invalid row value"
 msgstr "valor de la fila no vàlid"
@@ -629,41 +629,41 @@ msgstr "valor de la fila no vàlid"
 msgid "%1: change cell values"
 msgstr "%1: canvia els valors de les cel·les"
 
-#: src/backend/core/column/columncommands.cpp:520
+#: src/backend/core/column/columncommands.cpp:531
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2654
 #, kde-format
 msgid "%1: set plot designation"
 msgstr "%1: estableix la designació del diagrama"
 
-#: src/backend/core/column/columncommands.cpp:696
+#: src/backend/core/column/columncommands.cpp:707
 #: src/backend/matrix/matrixcommands.cpp:86
 #, kde-format
 msgid "%1: set formula"
 msgstr "%1: estableix una fórmula"
 
-#: src/backend/core/column/columncommands.cpp:764
+#: src/backend/core/column/columncommands.cpp:775
 #, kde-format
 msgid "%1: set cell formula"
 msgstr "%1: estableix la fórmula de la cel·la"
 
-#: src/backend/core/column/columncommands.cpp:806
+#: src/backend/core/column/columncommands.cpp:817
 #, kde-format
 msgid "%1: clear all formulas"
 msgstr "%1: neteja totes les fórmules"
 
-#: src/backend/core/column/columncommands.h:228
+#: src/backend/core/column/columncommands.h:230
 #, kde-format
 msgid "%1: set value for row %2"
 msgstr "%1: estableix el valor per a la fila %2"
 
-#: src/backend/core/column/columncommands.h:285
+#: src/backend/core/column/columncommands.h:287
 #: src/backend/matrix/matrixcommands.cpp:104
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1149
 #, kde-format
 msgid "%1: replace values"
 msgstr "%1: substitueix els valors"
 
-#: src/backend/core/column/columncommands.h:287
+#: src/backend/core/column/columncommands.h:289
 #, kde-format
 msgid "%1: replace the values for rows %2 to %3"
 msgstr "%1: substitueix els valors de les columnes %2 a %3"

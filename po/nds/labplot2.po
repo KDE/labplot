@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-27 00:39+0000\n"
+"POT-Creation-Date: 2023-11-28 00:38+0000\n"
 "PO-Revision-Date: 2014-03-19 20:12+0100\n"
 "Last-Translator: Manfred Wiese <m.j.wiese@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -594,20 +594,20 @@ msgstr "Statistik"
 msgid "%1: change column type"
 msgstr ""
 
-#: src/backend/core/column/Column.cpp:526
-#: src/backend/core/column/columncommands.cpp:569
+#: src/backend/core/column/Column.cpp:524
+#: src/backend/core/column/columncommands.cpp:580
 #, kde-format
 msgid "%1: clear column"
 msgstr ""
 
-#: src/backend/core/column/Column.cpp:1572
+#: src/backend/core/column/Column.cpp:1570
 #, kde-format
 msgid "invalid or missing row index"
 msgstr ""
 
-#: src/backend/core/column/Column.cpp:1581
-#: src/backend/core/column/Column.cpp:1590
-#: src/backend/core/column/Column.cpp:1599
+#: src/backend/core/column/Column.cpp:1579
+#: src/backend/core/column/Column.cpp:1588
+#: src/backend/core/column/Column.cpp:1597
 #, kde-format
 msgid "invalid row value"
 msgstr ""
@@ -618,41 +618,41 @@ msgstr ""
 msgid "%1: change cell values"
 msgstr ""
 
-#: src/backend/core/column/columncommands.cpp:520
+#: src/backend/core/column/columncommands.cpp:531
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2654
 #, kde-format
 msgid "%1: set plot designation"
 msgstr ""
 
-#: src/backend/core/column/columncommands.cpp:696
+#: src/backend/core/column/columncommands.cpp:707
 #: src/backend/matrix/matrixcommands.cpp:86
 #, kde-format
 msgid "%1: set formula"
 msgstr ""
 
-#: src/backend/core/column/columncommands.cpp:764
+#: src/backend/core/column/columncommands.cpp:775
 #, kde-format
 msgid "%1: set cell formula"
 msgstr ""
 
-#: src/backend/core/column/columncommands.cpp:806
+#: src/backend/core/column/columncommands.cpp:817
 #, kde-format
 msgid "%1: clear all formulas"
 msgstr ""
 
-#: src/backend/core/column/columncommands.h:228
+#: src/backend/core/column/columncommands.h:230
 #, kde-format
 msgid "%1: set value for row %2"
 msgstr ""
 
-#: src/backend/core/column/columncommands.h:285
+#: src/backend/core/column/columncommands.h:287
 #: src/backend/matrix/matrixcommands.cpp:104
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1149
 #, kde-format
 msgid "%1: replace values"
 msgstr ""
 
-#: src/backend/core/column/columncommands.h:287
+#: src/backend/core/column/columncommands.h:289
 #, kde-format
 msgid "%1: replace the values for rows %2 to %3"
 msgstr ""

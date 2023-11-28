@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-27 00:39+0000\n"
+"POT-Creation-Date: 2023-11-28 00:38+0000\n"
 "PO-Revision-Date: 2023-11-26 01:21+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -595,20 +595,20 @@ msgstr "Hesaplamalar"
 msgid "%1: change column type"
 msgstr "%1: Sütun türünü değiştir"
 
-#: src/backend/core/column/Column.cpp:526
-#: src/backend/core/column/columncommands.cpp:569
+#: src/backend/core/column/Column.cpp:524
+#: src/backend/core/column/columncommands.cpp:580
 #, kde-format
 msgid "%1: clear column"
 msgstr "%1: Sütunu temizle"
 
-#: src/backend/core/column/Column.cpp:1572
+#: src/backend/core/column/Column.cpp:1570
 #, kde-format
 msgid "invalid or missing row index"
 msgstr "eksik veya geçersiz satır indeksi"
 
-#: src/backend/core/column/Column.cpp:1581
-#: src/backend/core/column/Column.cpp:1590
-#: src/backend/core/column/Column.cpp:1599
+#: src/backend/core/column/Column.cpp:1579
+#: src/backend/core/column/Column.cpp:1588
+#: src/backend/core/column/Column.cpp:1597
 #, kde-format
 msgid "invalid row value"
 msgstr "geçersiz satır değeri"
@@ -619,41 +619,41 @@ msgstr "geçersiz satır değeri"
 msgid "%1: change cell values"
 msgstr "%1: Hücre değerlerini değiştir"
 
-#: src/backend/core/column/columncommands.cpp:520
+#: src/backend/core/column/columncommands.cpp:531
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2654
 #, kde-format
 msgid "%1: set plot designation"
 msgstr "%1: Çizim gösterimini ayarla"
 
-#: src/backend/core/column/columncommands.cpp:696
+#: src/backend/core/column/columncommands.cpp:707
 #: src/backend/matrix/matrixcommands.cpp:86
 #, kde-format
 msgid "%1: set formula"
 msgstr "%1: Formül ayarla"
 
-#: src/backend/core/column/columncommands.cpp:764
+#: src/backend/core/column/columncommands.cpp:775
 #, kde-format
 msgid "%1: set cell formula"
 msgstr "%1: Hücre formülü ayarla"
 
-#: src/backend/core/column/columncommands.cpp:806
+#: src/backend/core/column/columncommands.cpp:817
 #, kde-format
 msgid "%1: clear all formulas"
 msgstr "%1: Tüm formülleri temizle"
 
-#: src/backend/core/column/columncommands.h:228
+#: src/backend/core/column/columncommands.h:230
 #, kde-format
 msgid "%1: set value for row %2"
 msgstr "%1: %2 satırı için değer ayarla"
 
-#: src/backend/core/column/columncommands.h:285
+#: src/backend/core/column/columncommands.h:287
 #: src/backend/matrix/matrixcommands.cpp:104
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1149
 #, kde-format
 msgid "%1: replace values"
 msgstr "%1: Değerleri değiştir"
 
-#: src/backend/core/column/columncommands.h:287
+#: src/backend/core/column/columncommands.h:289
 #, kde-format
 msgid "%1: replace the values for rows %2 to %3"
 msgstr "%1: %2 ile %3 arasındaki satırların değerlerini değiştir"

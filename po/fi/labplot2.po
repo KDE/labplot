@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-27 00:39+0000\n"
+"POT-Creation-Date: 2023-11-28 00:38+0000\n"
 "PO-Revision-Date: 2023-10-30 14:32+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -640,20 +640,20 @@ msgstr "Puun asetukset"
 msgid "%1: change column type"
 msgstr "%1: muuta sarakkeen tyyppiä"
 
-#: src/backend/core/column/Column.cpp:526
-#: src/backend/core/column/columncommands.cpp:569
+#: src/backend/core/column/Column.cpp:524
+#: src/backend/core/column/columncommands.cpp:580
 #, kde-format
 msgid "%1: clear column"
 msgstr "%1: tyhjennä sarake"
 
-#: src/backend/core/column/Column.cpp:1572
+#: src/backend/core/column/Column.cpp:1570
 #, kde-format
 msgid "invalid or missing row index"
 msgstr "virheellinen tai puuttuva rivin indeksi"
 
-#: src/backend/core/column/Column.cpp:1581
-#: src/backend/core/column/Column.cpp:1590
-#: src/backend/core/column/Column.cpp:1599
+#: src/backend/core/column/Column.cpp:1579
+#: src/backend/core/column/Column.cpp:1588
+#: src/backend/core/column/Column.cpp:1597
 #, kde-format
 msgid "invalid row value"
 msgstr "virheellinen rivin arvo"
@@ -664,34 +664,34 @@ msgstr "virheellinen rivin arvo"
 msgid "%1: change cell values"
 msgstr "%1: muuta solujen arvoja"
 
-#: src/backend/core/column/columncommands.cpp:520
+#: src/backend/core/column/columncommands.cpp:531
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2654
 #, kde-format
 msgid "%1: set plot designation"
 msgstr ""
 
-#: src/backend/core/column/columncommands.cpp:696
+#: src/backend/core/column/columncommands.cpp:707
 #: src/backend/matrix/matrixcommands.cpp:86
 #, kde-format
 msgid "%1: set formula"
 msgstr "%1: aseta kaava"
 
-#: src/backend/core/column/columncommands.cpp:764
+#: src/backend/core/column/columncommands.cpp:775
 #, kde-format
 msgid "%1: set cell formula"
 msgstr "%1: aseta solun kaava"
 
-#: src/backend/core/column/columncommands.cpp:806
+#: src/backend/core/column/columncommands.cpp:817
 #, kde-format
 msgid "%1: clear all formulas"
 msgstr "%1: tyhjennä kaikki kaavat"
 
-#: src/backend/core/column/columncommands.h:228
+#: src/backend/core/column/columncommands.h:230
 #, kde-format
 msgid "%1: set value for row %2"
 msgstr "%1: aseta rivin %2 arvo"
 
-#: src/backend/core/column/columncommands.h:285
+#: src/backend/core/column/columncommands.h:287
 #: src/backend/matrix/matrixcommands.cpp:104
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1149
 #, fuzzy, kde-format
@@ -699,7 +699,7 @@ msgstr "%1: aseta rivin %2 arvo"
 msgid "%1: replace values"
 msgstr "Arvot"
 
-#: src/backend/core/column/columncommands.h:287
+#: src/backend/core/column/columncommands.h:289
 #, kde-format
 msgid "%1: replace the values for rows %2 to %3"
 msgstr "%1: korvaa arvot riveillä %2–%3"
