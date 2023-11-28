@@ -4,6 +4,7 @@
 	Description          : Sliding panel shown in the presenter widget
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2016 Fabian Kristof <fkristofszabolcs@gmail.com>
+	SPDX-FileCopyrightText: 2016-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 #include "SlidingPanel.h"
@@ -18,14 +19,14 @@
 #include <QScreen>
 #include <QSize>
 #include <QTimeLine>
-#include <QToolButton>
+#include <QToolBar>
 
 #include <KLocalizedString>
 
 SlidingPanel::SlidingPanel(const QRect& screenRect, Position position, QWidget* parent)
 	: QFrame(parent)
-	, m_pos(position)
 	, m_screenRect(screenRect)
+	, m_pos(position)
 	, m_timeLine(new QTimeLine(600, this)) {
 	setAttribute(Qt::WA_DeleteOnClose);
 	connect(m_timeLine, &QTimeLine::valueChanged, this, &SlidingPanel::movePanel);
@@ -113,88 +114,34 @@ QSize SlidingPanelTop::sizeHint() const {
 
 // ####################################################################################################
 SlidingPanelBottom::SlidingPanelBottom(const QRect& screenRect, WorksheetView* view, QWidget* parent)
-	: SlidingPanel(screenRect, SlidingPanel::Position::Bottom, parent) {
-	m_hlayout = new QHBoxLayout;
+	: SlidingPanel(screenRect, SlidingPanel::Position::Bottom, parent)
+	, m_toolBar(new QToolBar(this)) {
 
-	addButtonToLayout(CartesianPlot::NavigationOperation::ScaleAuto, m_hlayout, view);
-	addButtonToLayout(CartesianPlot::NavigationOperation::ScaleAutoX, m_hlayout, view);
-	addButtonToLayout(CartesianPlot::NavigationOperation::ScaleAutoY, m_hlayout, view);
-	addButtonToLayout(CartesianPlot::NavigationOperation::ZoomIn, m_hlayout, view);
-	addButtonToLayout(CartesianPlot::NavigationOperation::ZoomOut, m_hlayout, view);
-	addButtonToLayout(CartesianPlot::NavigationOperation::ZoomInX, m_hlayout, view);
-	addButtonToLayout(CartesianPlot::NavigationOperation::ZoomOutX, m_hlayout, view);
-	addButtonToLayout(CartesianPlot::NavigationOperation::ZoomInY, m_hlayout, view);
-	addButtonToLayout(CartesianPlot::NavigationOperation::ZoomOutY, m_hlayout, view);
-	addButtonToLayout(CartesianPlot::NavigationOperation::ShiftLeftX, m_hlayout, view);
-	addButtonToLayout(CartesianPlot::NavigationOperation::ShiftRightX, m_hlayout, view);
-	addButtonToLayout(CartesianPlot::NavigationOperation::ShiftUpY, m_hlayout, view);
-	addButtonToLayout(CartesianPlot::NavigationOperation::ShiftDownY, m_hlayout, view);
+	auto* layout = new QHBoxLayout();
+	layout->setContentsMargins(0, 0, 0, 0);
+	setLayout(layout);
 
-	setLayout(m_hlayout);
+	view->fillCartesianPlotNavigationToolBar(m_toolBar);
+	layout->addWidget(m_toolBar);
 
 	QPalette pal(palette());
 	pal.setColor(QPalette::Window, Qt::gray);
 	setAutoFillBackground(true);
 	setPalette(pal);
 
-	move(screenRect.width() / 2 - m_hlayout->sizeHint().width() / 2, screenRect.bottom());
+	move(screenRect.width() / 2 - m_toolBar->sizeHint().width() / 2, screenRect.bottom());
 	raise();
 	show();
 }
 
-class ToolButton : public QToolButton {
-public:
-	ToolButton(QWidget* parent = nullptr)
-		: QToolButton(parent) {
-	}
-	void setDefaultAction(QAction* action) {
-		if (action) {
-			connect(action, &QAction::changed, this, &ToolButton::actionChanged);
-			connect(action, &QAction::triggered, this, &ToolButton::actionChanged);
-		}
-		QToolButton::setDefaultAction(action);
-
-		// Works fine, triggers actionChanged
-		action->setVisible(false);
-		action->setVisible(true);
-		action->setChecked(false);
-		action->setChecked(true);
-		action->setEnabled(false);
-		action->setEnabled(true);
-
-		emit action->changed();
-	}
-
-	void actionChanged() {
-		// TODO: for some reason it will not be called when action changes properties!
-		// To trigger that
-		// setCheckable(action->isCheckable());
-		// setChecked(action->isChecked());
-		// setEnabled(action->isEnabled());
-		// will be executed
-		QToolButton::setDefaultAction(defaultAction());
-	}
-};
-
-void SlidingPanelBottom::addButtonToLayout(CartesianPlot::NavigationOperation op, QBoxLayout* layout, WorksheetView* view) {
-	auto* button = new ToolButton(this);
-	button->setDefaultAction(view->action(op));
-	m_sizeHintHeight = qMax(m_sizeHintHeight, button->sizeHint().height());
-	layout->addWidget(button);
-}
-
 bool SlidingPanelBottom::insideRect(QPoint screenPos) {
 	QRect rect = this->rect();
-	rect.moveTo(screen()->geometry().width() / 2 - m_hlayout->sizeHint().width() / 2, screen()->geometry().bottom() - rect.height());
+	rect.moveTo(screen()->geometry().width() / 2 - m_toolBar->sizeHint().width() / 2, screen()->geometry().bottom() - rect.height());
 	// Last part is a hack, because contains seems to be failing here
 	const bool inside = rect.contains(screenPos) || screenPos.y() >= screen()->geometry().bottom();
 	return inside;
 }
 
 QSize SlidingPanelBottom::sizeHint() const {
-	QSize sh;
-	sh.setWidth(m_hlayout->sizeHint().width());
-	sh.setHeight(m_sizeHintHeight + layout()->contentsMargins().top() + layout()->contentsMargins().bottom());
-
-	return sh;
+	return m_toolBar->sizeHint();
 }

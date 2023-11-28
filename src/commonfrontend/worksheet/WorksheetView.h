@@ -239,6 +239,7 @@ public Q_SLOTS:
 	void fillTouchBar(KDMacTouchBar*);
 #endif
 	void fillCartesianPlotToolBar(QToolBar*);
+	void fillCartesianPlotNavigationToolBar(QToolBar*) const;
 	void print(QPrinter*);
 	void selectItem(QGraphicsItem*);
 	void presenterMode();

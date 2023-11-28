@@ -677,6 +677,13 @@ void WorksheetView::fillCartesianPlotToolBar(QToolBar* toolBar) {
 	toolBar->addAction(cartesianPlotZoomYSelectionModeAction);
 	toolBar->addAction(cartesianPlotCursorModeAction);
 	toolBar->addSeparator();
+	fillCartesianPlotNavigationToolBar(toolBar);
+	toolBar->addSeparator();
+
+	handleCartesianPlotActions();
+}
+
+void WorksheetView::fillCartesianPlotNavigationToolBar(QToolBar* toolBar) const {
 	toolBar->addAction(scaleAutoAction);
 	toolBar->addAction(scaleAutoXAction);
 	toolBar->addAction(scaleAutoYAction);
@@ -690,9 +697,6 @@ void WorksheetView::fillCartesianPlotToolBar(QToolBar* toolBar) {
 	toolBar->addAction(shiftRightXAction);
 	toolBar->addAction(shiftUpYAction);
 	toolBar->addAction(shiftDownYAction);
-	toolBar->addSeparator();
-
-	handleCartesianPlotActions();
 }
 
 void WorksheetView::setScene(QGraphicsScene* scene) {
