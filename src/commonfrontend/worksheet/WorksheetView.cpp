@@ -2598,7 +2598,7 @@ void WorksheetView::cartesianPlotNavigationChanged(QAction* action) {
 	}
 }
 
-Worksheet::CartesianPlotActionMode WorksheetView::getCartesianPlotActionMode() {
+Worksheet::CartesianPlotActionMode WorksheetView::getCartesianPlotActionMode() const {
 	return m_worksheet->cartesianPlotActionMode();
 }
 

@@ -66,7 +66,7 @@ public:
 	double zoomFactor() const;
 	void processResize();
 
-	Worksheet::CartesianPlotActionMode getCartesianPlotActionMode();
+	Worksheet::CartesianPlotActionMode getCartesianPlotActionMode() const;
 	void registerShortcuts();
 	void unregisterShortcuts();
 	void initActions();
