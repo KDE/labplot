@@ -318,6 +318,18 @@ void WorksheetView::initActions() {
 	setCartesianPlotCursorMode(m_worksheet->cartesianPlotCursorMode());
 	connect(plotActionCursorGroup, &QActionGroup::triggered, this, &WorksheetView::cartesianPlotCursorModeChanged);
 
+	initPlotNavigationActions();
+
+	// set some default values
+	selectionModeAction->setChecked(true);
+	handleCartesianPlotActions();
+	currentZoomAction = zoomInViewAction;
+	currentMagnificationAction = noMagnificationAction;
+
+	m_actionsInitialized = true;
+}
+
+void WorksheetView::initPlotNavigationActions() {
 	auto* plotMouseModeActionGroup = new QActionGroup(this);
 	plotMouseModeActionGroup->setExclusive(true);
 	cartesianPlotSelectionModeAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-cursor-arrow")), i18n("Select and Edit"), plotMouseModeActionGroup);
@@ -399,13 +411,7 @@ void WorksheetView::initActions() {
 
 	connect(cartesianPlotNavigationGroup, &QActionGroup::triggered, this, &WorksheetView::cartesianPlotNavigationChanged);
 
-	// set some default values
-	selectionModeAction->setChecked(true);
-	handleCartesianPlotActions();
-	currentZoomAction = zoomInViewAction;
-	currentMagnificationAction = noMagnificationAction;
-
-	m_actionsInitialized = true;
+	m_plotActionsInitialized = true;
 }
 
 void WorksheetView::initMenus() {
@@ -1739,8 +1745,10 @@ void WorksheetView::selectionChanged() {
 }
 
 void WorksheetView::handleCartesianPlotSelected(CartesianPlot* plot) {
-	tbCartesianPlotAddNew->setMenu(plot->addNewMenu()); // update the tool button shown in the toolbar
-	cartesianPlotAddNewAction->setMenu(plot->addNewMenu()); // update the action shown in the main menu
+	if (tbCartesianPlotAddNew) { // not available in the presenter mode
+		tbCartesianPlotAddNew->setMenu(plot->addNewMenu()); // update the tool button shown in the toolbar
+		cartesianPlotAddNewAction->setMenu(plot->addNewMenu()); // update the action shown in the main menu
+	}
 
 	/* Action to All: action is applied to all ranges
 	 *	- Applied to all plots and all ranges
@@ -1836,7 +1844,8 @@ void WorksheetView::handleCartesianPlotSelected(CartesianPlot* plot) {
 	}
 
 	cartesianPlotSelectionModeAction->setEnabled(true);
-	cartesianPlotCursorModeAction->setEnabled(true);
+	if (cartesianPlotCursorModeAction) // not available in the presenter mode
+		cartesianPlotCursorModeAction->setEnabled(true);
 }
 
 void WorksheetView::handleReferenceRangeSelected() {
@@ -2093,7 +2102,7 @@ void WorksheetView::handleAxisSelected(const Axis* a) {
 
 // check whether we have cartesian plots selected and activate/deactivate
 void WorksheetView::handleCartesianPlotActions() {
-	if (!m_actionsInitialized)
+	if (!m_plotActionsInitialized)
 		return;
 
 	if (m_mouseMode != MouseMode::Selection)
@@ -2157,9 +2166,10 @@ void WorksheetView::handleCartesianPlotActions() {
 		scaleAutoYAction->setEnabled(false);
 	}
 
-	cartesianPlotAddNewAction->setEnabled(plot);
+	if (cartesianPlotAddNewAction) // not available in the presenter mode
+		cartesianPlotAddNewAction->setEnabled(plot);
 
-	if (m_menusInitialized) {
+	if (m_menusInitialized) { // not available in the presenter mode
 		tbCartesianPlotAddNew->setEnabled(plot);
 		m_cartesianPlotZoomMenu->setEnabled(m_selectedElement);
 		m_cartesianPlotMouseModeMenu->setEnabled(plot);

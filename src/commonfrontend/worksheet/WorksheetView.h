@@ -70,6 +70,7 @@ public:
 	void registerShortcuts();
 	void unregisterShortcuts();
 	void initActions();
+	void initPlotNavigationActions();
 
 private:
 	void initBasicActions();
@@ -126,6 +127,7 @@ private:
 	bool m_isClosing{false};
 	bool m_isPrinting{false};
 	bool m_actionsInitialized{false};
+	bool m_plotActionsInitialized{false};
 	bool m_menusInitialized{false};
 	int m_numScheduledScalings{0};
 	bool m_suppressMouseModeChange{false};

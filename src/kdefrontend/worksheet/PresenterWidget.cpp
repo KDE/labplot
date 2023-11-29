@@ -14,7 +14,6 @@
 #include <QKeyEvent>
 #include <QPushButton>
 #include <QScreen>
-#include <QTimeLine>
 
 PresenterWidget::PresenterWidget(Worksheet* worksheet, QScreen* screen, bool interactive, QWidget* parent)
 	: QWidget(parent)
@@ -28,7 +27,7 @@ PresenterWidget::PresenterWidget(Worksheet* worksheet, QScreen* screen, bool int
 	m_view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	m_view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	m_view->setContextMenuPolicy(Qt::NoContextMenu);
-	m_view->initActions(); // init the actions so we can also navigate in the plots
+	m_view->initPlotNavigationActions(); // init the relevant actions so we can also navigate in the plots in the presenter mode
 
 	const QRect& screenSize = screen->geometry();
 	m_view->setGeometry(screenSize); // use the full screen size for the view

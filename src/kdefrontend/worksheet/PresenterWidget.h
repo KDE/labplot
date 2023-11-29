@@ -12,9 +12,6 @@
 
 #include <QWidget>
 
-class QLabel;
-class QTimeLine;
-class QPushButton;
 class SlidingPanelTop;
 class SlidingPanelBottom;
 class WorksheetView;
