@@ -116,7 +116,6 @@ QSize SlidingPanelTop::sizeHint() const {
 SlidingPanelBottom::SlidingPanelBottom(const QRect& screenRect, WorksheetView* view, QWidget* parent)
 	: SlidingPanel(screenRect, SlidingPanel::Position::Bottom, parent)
 	, m_toolBar(new QToolBar(this)) {
-
 	auto* layout = new QHBoxLayout();
 	layout->setContentsMargins(0, 0, 0, 0);
 	setLayout(layout);

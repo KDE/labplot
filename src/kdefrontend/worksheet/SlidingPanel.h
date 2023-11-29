@@ -10,8 +10,6 @@
 #ifndef SLIDINGPANEL_H
 #define SLIDINGPANEL_H
 
-#include "src/backend/worksheet/plots/cartesian/CartesianPlot.h"
-
 #include <QFrame>
 
 class WorksheetView;

@@ -288,7 +288,6 @@ Q_SIGNALS:
 	friend class RetransformTest;
 	friend class MultiRangeTest;
 	friend class CartesianPlotTest;
-	friend class SlidingPanelBottom;
 };
 
 #endif
