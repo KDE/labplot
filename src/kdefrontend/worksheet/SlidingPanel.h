@@ -65,14 +65,17 @@ private:
 
 class SlidingPanelBottom : public SlidingPanel {
 	Q_OBJECT
+
 public:
 	explicit SlidingPanelBottom(const QRect& screenRect, WorksheetView* view, QWidget* parent);
 	virtual bool insideRect(QPoint screenPos) override;
+	bool isFixed() const;
 
 private:
 	QSize sizeHint() const override;
 
 	int m_sizeHintHeight{0};
+	bool m_fixed{false};
 	QToolBar* m_toolBar{nullptr};
 };
 

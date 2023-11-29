@@ -62,7 +62,7 @@ bool PresenterWidget::eventFilter(QObject* /*watched*/, QEvent* event) {
 		else if (visible && !m_panel->insideRect(QCursor::pos()))
 			m_panel->slideHide();
 
-		if (m_navigationPanel) {
+		if (m_navigationPanel && !m_navigationPanel->isFixed()) {
 			visible = m_navigationPanel->y() < screen()->geometry().bottom();
 			if (!visible && m_navigationPanel->insideRect(QCursor::pos()))
 				m_navigationPanel->slideHide();
