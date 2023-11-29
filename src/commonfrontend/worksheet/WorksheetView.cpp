@@ -322,7 +322,6 @@ void WorksheetView::initActions() {
 
 	// set some default values
 	selectionModeAction->setChecked(true);
-	handleCartesianPlotActions();
 	currentZoomAction = zoomInViewAction;
 	currentMagnificationAction = noMagnificationAction;
 
@@ -412,6 +411,8 @@ void WorksheetView::initPlotNavigationActions() {
 	connect(cartesianPlotNavigationGroup, &QActionGroup::triggered, this, &WorksheetView::cartesianPlotNavigationChanged);
 
 	m_plotActionsInitialized = true;
+
+	handleCartesianPlotActions();
 }
 
 void WorksheetView::initMenus() {
