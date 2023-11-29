@@ -74,7 +74,6 @@ public:
 private:
 	void initBasicActions();
 	void initMenus();
-	QAction* action(CartesianPlot::NavigationOperation);
 	void drawForeground(QPainter*, const QRectF&) override;
 	void drawBackground(QPainter*, const QRectF&) override;
 	void drawBackgroundItems(QPainter*, const QRectF&);
