@@ -12,6 +12,7 @@
   <name xml:lang="de">LabPlot</name>
   <name xml:lang="el">LabPlot</name>
   <name xml:lang="en-GB">LabPlot</name>
+  <name xml:lang="eo">LabPlot</name>
   <name xml:lang="es">LabPlot</name>
   <name xml:lang="et">LabPlot</name>
   <name xml:lang="eu">LabPlot</name>
@@ -41,6 +42,7 @@
   <summary xml:lang="ca-valencia">Visualització i anàlisi de dades interactius</summary>
   <summary xml:lang="de">Interaktive Datenvisualisierung und -analyse</summary>
   <summary xml:lang="en-GB">Interactive Data Visualisation and Analysis</summary>
+  <summary xml:lang="eo">Interaga Datuma Bildigo kaj Analizo</summary>
   <summary xml:lang="es">Visualización y análisis de datos interactivo</summary>
   <summary xml:lang="eu">Datuen irudikatze eta analisi elkarreragilea</summary>
   <summary xml:lang="fi">Vuorovaikutteinen tiedon visualisointi ja analyysi</summary>
@@ -126,6 +128,7 @@
       <caption xml:lang="cs">Základní vizualizace dat</caption>
       <caption xml:lang="de">Einfache Visualisierung von Daten</caption>
       <caption xml:lang="en-GB">Basic visualisation of data</caption>
+      <caption xml:lang="eo">Baza bildigo de datumoj</caption>
       <caption xml:lang="es">Visualización básica de datos</caption>
       <caption xml:lang="eu">Datuen oinarrizko irudikatzea</caption>
       <caption xml:lang="fi">Tiedon perusvisualisointi</caption>
@@ -152,6 +155,7 @@
       <caption xml:lang="cs">Základní vizualizace dat</caption>
       <caption xml:lang="de">Einfache Visualisierung von Daten</caption>
       <caption xml:lang="en-GB">Basic visualisation of data</caption>
+      <caption xml:lang="eo">Baza bildigo de datumoj</caption>
       <caption xml:lang="es">Visualización básica de datos</caption>
       <caption xml:lang="eu">Datuen oinarrizko irudikatzea</caption>
       <caption xml:lang="fi">Tiedon perusvisualisointi</caption>
@@ -177,6 +181,7 @@
       <caption xml:lang="ca-valencia">Disposició avançada de diagrames i imatges</caption>
       <caption xml:lang="de">Fortgeschrittenes Layout von Plots und Bildern</caption>
       <caption xml:lang="en-GB">Advanced layouts of plots and images</caption>
+      <caption xml:lang="eo">Altnivela aranĝo de diagramoj kaj bildoj</caption>
       <caption xml:lang="es">Diseño avanzado de gráficos e imágenes</caption>
       <caption xml:lang="eu">Irudien eta trazuen antolamendu aurreratua</caption>
       <caption xml:lang="fi">Kaavioiden ja kuvioiden edistynyt asettelu</caption>
@@ -203,6 +208,7 @@
       <caption xml:lang="cs">Motivy</caption>
       <caption xml:lang="de">Farbmotive</caption>
       <caption xml:lang="en-GB">Theming</caption>
+      <caption xml:lang="eo">Etosigo</caption>
       <caption xml:lang="es">Temas</caption>
       <caption xml:lang="eu">Gaiak aldatzea</caption>
       <caption xml:lang="fi">Teemoitus</caption>
@@ -228,6 +234,7 @@
       <caption xml:lang="ca-valencia">Visualització de funcions matemàtiques</caption>
       <caption xml:lang="de">Visualisierung von mathematischen Funktionen</caption>
       <caption xml:lang="en-GB">Visualisation of mathematical functions</caption>
+      <caption xml:lang="eo">Bildigo de matematikaj funkcioj</caption>
       <caption xml:lang="es">Visualización de funciones matemáticas</caption>
       <caption xml:lang="eu">Funtzio matematikoak irudikatzea</caption>
       <caption xml:lang="fi">Matemaattisten funktioiden visualisointi</caption>
@@ -253,6 +260,7 @@
       <caption xml:lang="ca-valencia">Ajust de models predefinits o personalitzats a les dades</caption>
       <caption xml:lang="de">Anpassung von Daten mit vordefinierten oder eigenen Modellen</caption>
       <caption xml:lang="en-GB">Fit pre-defined or custom models to the data</caption>
+      <caption xml:lang="eo">Adaptu antaŭdifinitajn aŭ kutimajn modelojn al la datumoj</caption>
       <caption xml:lang="es">Ajuste de modelos predefinidos o personalizados a los datos</caption>
       <caption xml:lang="eu">Datuei aurrez definitutako edo neurrira egindako ereduak egokitu</caption>
       <caption xml:lang="fi">Sovita tietoon ennalta-asetettuja ja mukautettuja malleja</caption>
@@ -277,6 +285,7 @@
       <caption xml:lang="ca-valencia">Suavitza les dades amb l'ajuda de diversos mètodes de suavitzat</caption>
       <caption xml:lang="de">Glättung von Daten mithilfe verschiedener Glättungsmethoden</caption>
       <caption xml:lang="en-GB">Smooth the data with the help of various smoothing methods</caption>
+      <caption xml:lang="eo">Glatigu la datumojn helpe de diversaj glatigaj metodoj</caption>
       <caption xml:lang="es">Suavizar los datos con la ayuda de diversos métodos de suavizado</caption>
       <caption xml:lang="eu">Datuak leundu, leuntzeko hainbat metodoen laguntzarekin</caption>
       <caption xml:lang="fi">Tasoita tietoja eri tasoitusmenetelmillä</caption>
@@ -326,6 +335,7 @@
       <caption xml:lang="cs">Analýza signálu</caption>
       <caption xml:lang="de">Signalanalyse</caption>
       <caption xml:lang="en-GB">Signal analysis</caption>
+      <caption xml:lang="eo">Analizo de signalo</caption>
       <caption xml:lang="es">Análisis de señales</caption>
       <caption xml:lang="eu">Seinaleen analisia</caption>
       <caption xml:lang="fi">Signaalianalyysi</caption>
@@ -351,6 +361,7 @@
       <caption xml:lang="ca-valencia">Diagrama Herzsprung-Russel en LabPlot</caption>
       <caption xml:lang="de">Herzsprung-Russel-Diagramm in LabPlot</caption>
       <caption xml:lang="en-GB">Herzsprung-Russel diagram in LabPlot</caption>
+      <caption xml:lang="eo">Hertzsprung-Russell diagramo en LabPlot</caption>
       <caption xml:lang="es">Diagrama de Herzsprung-Russel en LabPlot</caption>
       <caption xml:lang="eu">Herzsprung-Russel diagrama LabPlot-en</caption>
       <caption xml:lang="fi">Herzsprung-Russel-diagrammi LabPlotissa</caption>
@@ -376,6 +387,7 @@
       <caption xml:lang="ca-valencia">Visualització de dades calculades en una sessió interactiva de Maxima</caption>
       <caption xml:lang="de">Visualisierung von Daten, die interaktiv in einer Maxima-Sitzung berechnet werden</caption>
       <caption xml:lang="en-GB">Visualisation of data calculated in an interactive Maxima session</caption>
+      <caption xml:lang="eo">Bildigo de datumoj kalkulitaj en interaga sesio de Maxima</caption>
       <caption xml:lang="es">Visualización de datos calculados en una sesión interactiva de Maxima</caption>
       <caption xml:lang="eu">Maxima saio elkarreragile batean kalkulatuta datuen irudikapena</caption>
       <caption xml:lang="fi">Vuorovaikutteisessa Maxima-istunnossa lasketun tiedon visualisointi</caption>
