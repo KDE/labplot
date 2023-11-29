@@ -670,20 +670,21 @@ void WorksheetView::fillTouchBar(KDMacTouchBar* touchBar) {
 void WorksheetView::fillCartesianPlotToolBar(QToolBar* toolBar) {
 	toolBar->addWidget(tbCartesianPlotAddNew);
 	toolBar->addSeparator();
-	toolBar->addAction(cartesianPlotSelectionModeAction);
-	toolBar->addAction(cartesianPlotCrosshairModeAction);
-	toolBar->addAction(cartesianPlotZoomSelectionModeAction);
-	toolBar->addAction(cartesianPlotZoomXSelectionModeAction);
-	toolBar->addAction(cartesianPlotZoomYSelectionModeAction);
-	toolBar->addAction(cartesianPlotCursorModeAction);
-	toolBar->addSeparator();
 	fillCartesianPlotNavigationToolBar(toolBar);
 	toolBar->addSeparator();
 
 	handleCartesianPlotActions();
 }
 
-void WorksheetView::fillCartesianPlotNavigationToolBar(QToolBar* toolBar) const {
+void WorksheetView::fillCartesianPlotNavigationToolBar(QToolBar* toolBar, bool enableCursor) const {
+	toolBar->addAction(cartesianPlotSelectionModeAction);
+	toolBar->addAction(cartesianPlotCrosshairModeAction);
+	toolBar->addAction(cartesianPlotZoomSelectionModeAction);
+	toolBar->addAction(cartesianPlotZoomXSelectionModeAction);
+	toolBar->addAction(cartesianPlotZoomYSelectionModeAction);
+	if (enableCursor)
+		toolBar->addAction(cartesianPlotCursorModeAction);
+	toolBar->addSeparator();
 	toolBar->addAction(scaleAutoAction);
 	toolBar->addAction(scaleAutoXAction);
 	toolBar->addAction(scaleAutoYAction);

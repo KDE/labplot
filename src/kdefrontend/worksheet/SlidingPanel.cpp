@@ -121,7 +121,7 @@ SlidingPanelBottom::SlidingPanelBottom(const QRect& screenRect, WorksheetView* v
 	layout->setContentsMargins(0, 0, 0, 0);
 	setLayout(layout);
 
-	view->fillCartesianPlotNavigationToolBar(m_toolBar);
+	view->fillCartesianPlotNavigationToolBar(m_toolBar, false /* disable cursor action */);
 	layout->addWidget(m_toolBar);
 
 	QPalette pal(palette());
