@@ -71,6 +71,8 @@ void Line::init(const KConfigGroup& group) {
 	d->pen.setStyle(d->style);
 	d->pen.setColor(d->color);
 	d->pen.setWidthF(d->width);
+	d->pen.setCapStyle(Qt::FlatCap);
+	d->pen.setJoinStyle(Qt::MiterJoin);
 	d->opacity = group.readEntry(d->prefix + QStringLiteral("Opacity"), 1.0);
 }
 
