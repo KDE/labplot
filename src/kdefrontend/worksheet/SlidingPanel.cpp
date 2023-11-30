@@ -65,10 +65,10 @@ void SlidingPanel::movePanel(qreal value) {
 }
 
 bool SlidingPanel::insideRect(QPoint screenPos) {
-    const auto leftTop = mapToGlobal(QPoint(rect().left(), rect().top()));
-    const auto rightBottom = mapToGlobal(QPoint(rect().right(), rect().bottom()));
-    const auto globalRect = QRect(leftTop.x(), leftTop.y(), rightBottom.x(), rightBottom.y() );
-    return globalRect.contains(mapToGlobal(screenPos));
+	const auto leftTop = mapToGlobal(QPoint(rect().left(), rect().top()));
+	const auto rightBottom = mapToGlobal(QPoint(rect().right(), rect().bottom()));
+	const auto globalRect = QRect(leftTop.x(), leftTop.y(), rightBottom.x(), rightBottom.y() );
+	return globalRect.contains(mapToGlobal(screenPos));
 }
 
 // ####################################################################################################
