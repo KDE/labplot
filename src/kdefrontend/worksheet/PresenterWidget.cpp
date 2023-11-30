@@ -16,7 +16,6 @@
 #include <QKeyEvent>
 #include <QPushButton>
 #include <QScreen>
-#include <QTimer>
 
 PresenterWidget::PresenterWidget(Worksheet* worksheet, QScreen* screen, bool interactive, QWidget* parent)
 	: QWidget(parent)
@@ -46,12 +45,7 @@ PresenterWidget::PresenterWidget(Worksheet* worksheet, QScreen* screen, bool int
 	if (interactive) {
 		m_navigationPanel = new SlidingPanelBottom(screenSize, m_view, this);
 		const auto group = Settings::group(QStringLiteral("PresenterWidget"));
-		const bool fixed = group.readEntry("PresenterWidgetNavigationPanelFixed", false);
-		m_navigationPanel->setFixed(fixed);
-		if (fixed)
-			QTimer::singleShot(0, this, [=]() {
-				m_navigationPanel->slideShow();
-			});
+		m_navigationPanel->setFixed(group.readEntry("PresenterWidgetNavigationPanelFixed", false));
 	}
 }
 

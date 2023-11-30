@@ -138,7 +138,7 @@ SlidingPanelBottom::SlidingPanelBottom(const QRect& screenRect, WorksheetView* v
 	setAutoFillBackground(true);
 	setPalette(pal);
 
-	move(screenRect.width() / 2 - m_toolBar->sizeHint().width() / 2, screenRect.bottom());
+	move(screenRect.width() / 2 - m_toolBar->sizeHint().width() / 2, screenRect.bottom() -  m_toolBar->sizeHint().height());
 	raise();
 	show();
 }
