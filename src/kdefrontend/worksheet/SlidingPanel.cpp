@@ -64,6 +64,13 @@ void SlidingPanel::movePanel(qreal value) {
 	raise();
 }
 
+bool SlidingPanel::insideRect(QPoint screenPos) {
+    const auto leftTop = mapToGlobal(QPoint(rect().left(), rect().top()));
+    const auto rightBottom = mapToGlobal(QPoint(rect().right(), rect().bottom()));
+    const auto globalRect = QRect(leftTop.x(), leftTop.y(), rightBottom.x(), rightBottom.y() );
+    return globalRect.contains(mapToGlobal(screenPos));
+}
+
 // ####################################################################################################
 
 SlidingPanelTop::SlidingPanelTop(const QRect& screenRect, const QString& worksheetName, QWidget* parent)
@@ -94,10 +101,6 @@ SlidingPanelTop::SlidingPanelTop(const QRect& screenRect, const QString& workshe
 	move(0, 0);
 	raise();
 	show();
-}
-
-bool SlidingPanelTop::insideRect(QPoint screenPos) {
-	return rect().contains(screenPos);
 }
 
 QPushButton* SlidingPanelTop::quitButton() const {
@@ -138,7 +141,7 @@ SlidingPanelBottom::SlidingPanelBottom(const QRect& screenRect, WorksheetView* v
 	setAutoFillBackground(true);
 	setPalette(pal);
 
-	move(screenRect.width() / 2 - m_toolBar->sizeHint().width() / 2, screenRect.bottom() -  m_toolBar->sizeHint().height());
+	move(screenRect.width() / 2 - m_toolBar->sizeHint().width() / 2, screenRect.bottom() - m_toolBar->sizeHint().height());
 	raise();
 	show();
 }
@@ -151,6 +154,7 @@ bool SlidingPanelBottom::isFixed() const {
 	return m_fixed;
 }
 
+// TODO: why is SlidingPanel::insideRect() not enough?
 bool SlidingPanelBottom::insideRect(QPoint screenPos) {
 	QRect rect = this->rect();
 	rect.moveTo(screen()->geometry().width() / 2 - m_toolBar->sizeHint().width() / 2, screen()->geometry().bottom() - rect.height());

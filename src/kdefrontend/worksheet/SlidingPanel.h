@@ -32,7 +32,7 @@ public:
 	~SlidingPanel() override;
 	void slideShow();
 	void slideHide();
-	virtual bool insideRect(QPoint screenPos) = 0;
+	virtual bool insideRect(QPoint screenPos);
 
 public Q_SLOTS:
 	virtual void movePanel(qreal);
@@ -52,7 +52,6 @@ class SlidingPanelTop : public SlidingPanel {
 	Q_OBJECT
 public:
 	explicit SlidingPanelTop(const QRect& screenRect, const QString& worksheetName, QWidget* parent);
-	virtual bool insideRect(QPoint screenPos) override;
 
 public:
 	QPushButton* quitButton() const;

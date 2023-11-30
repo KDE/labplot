@@ -68,16 +68,17 @@ PresenterWidget::~PresenterWidget() {
 bool PresenterWidget::eventFilter(QObject* /*watched*/, QEvent* event) {
 	if (event->type() == QEvent::MouseMove) {
 		bool visible = m_panel->y() == 0;
-		if (!visible && m_panel->insideRect(QCursor::pos()))
+		const auto pos = QCursor::pos();
+		if (!visible && m_panel->insideRect(pos))
 			m_panel->slideShow();
-		else if (visible && !m_panel->insideRect(QCursor::pos()))
+		else if (visible && !m_panel->insideRect(pos))
 			m_panel->slideHide();
 
 		if (m_navigationPanel && !m_navigationPanel->isFixed()) {
 			visible = m_navigationPanel->y() < screen()->geometry().bottom();
-			if (!visible && m_navigationPanel->insideRect(QCursor::pos()))
+			if (!visible && m_navigationPanel->insideRect(pos))
 				m_navigationPanel->slideHide();
-			else if (visible && !m_navigationPanel->insideRect(QCursor::pos()))
+			else if (visible && !m_navigationPanel->insideRect(pos))
 				m_navigationPanel->slideShow();
 		}
 	}
