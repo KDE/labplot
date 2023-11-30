@@ -25,9 +25,9 @@ public:
 	~PresenterWidget() override;
 
 private:
-	Worksheet* m_worksheet;
-	WorksheetView* m_view;
-	SlidingPanelTop* m_panel;
+	Worksheet* m_worksheet{nullptr};
+	WorksheetView* m_view{nullptr};
+	SlidingPanelTop* m_panel{nullptr};
 	SlidingPanelBottom* m_navigationPanel{nullptr};
 	void startTimeline();
 

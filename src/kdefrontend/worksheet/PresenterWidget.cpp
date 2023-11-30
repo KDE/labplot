@@ -9,11 +9,14 @@
 */
 #include "PresenterWidget.h"
 #include "SlidingPanel.h"
+#include "backend/core/Settings.h"
 #include "commonfrontend/worksheet/WorksheetView.h"
 
+#include <KConfigGroup>
 #include <QKeyEvent>
 #include <QPushButton>
 #include <QScreen>
+#include <QTimer>
 
 PresenterWidget::PresenterWidget(Worksheet* worksheet, QScreen* screen, bool interactive, QWidget* parent)
 	: QWidget(parent)
@@ -40,8 +43,16 @@ PresenterWidget::PresenterWidget(Worksheet* worksheet, QScreen* screen, bool int
 		close();
 	});
 
-	if (interactive)
+	if (interactive) {
 		m_navigationPanel = new SlidingPanelBottom(screenSize, m_view, this);
+		const auto group = Settings::group(QStringLiteral("PresenterWidget"));
+		const bool fixed = group.readEntry("PresenterWidgetNavigationPanelFixed", false);
+		m_navigationPanel->setFixed(fixed);
+		if (fixed)
+			QTimer::singleShot(0, this, [=]() {
+				m_navigationPanel->slideShow();
+			});
+	}
 }
 
 PresenterWidget::~PresenterWidget() {
@@ -52,6 +63,12 @@ PresenterWidget::~PresenterWidget() {
 	// resize the original view once more to make sure it has the proper scaling after the presenter was closed.
 	if (m_worksheet->useViewSize())
 		static_cast<WorksheetView*>(m_worksheet->view())->processResize();
+
+	if (m_navigationPanel) {
+		// save current settings for the navigation panel
+		auto group = Settings::group(QStringLiteral("PresenterWidget"));
+		group.writeEntry("PresenterWidgetNavigationPanelFixed", m_navigationPanel->isFixed());
+	}
 }
 
 bool PresenterWidget::eventFilter(QObject* /*watched*/, QEvent* event) {

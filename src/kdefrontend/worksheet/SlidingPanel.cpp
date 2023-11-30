@@ -126,7 +126,9 @@ SlidingPanelBottom::SlidingPanelBottom(const QRect& screenRect, WorksheetView* v
 	m_toolBar->addSeparator();
 	auto* pinAction = new QAction(QIcon::fromTheme(QStringLiteral("pin")), i18n("Pin the navigation panel"));
 	pinAction->setCheckable(true);
-	connect(pinAction, &QAction::toggled, this, [=](bool toggled) { m_fixed = toggled;} );
+	connect(pinAction, &QAction::toggled, this, [=](bool toggled) {
+		m_fixed = toggled;
+	});
 	m_toolBar->addAction(pinAction);
 
 	layout->addWidget(m_toolBar);
@@ -139,6 +141,10 @@ SlidingPanelBottom::SlidingPanelBottom(const QRect& screenRect, WorksheetView* v
 	move(screenRect.width() / 2 - m_toolBar->sizeHint().width() / 2, screenRect.bottom());
 	raise();
 	show();
+}
+
+void SlidingPanelBottom::setFixed(bool fixed) {
+	m_fixed = fixed;
 }
 
 bool SlidingPanelBottom::isFixed() const {
