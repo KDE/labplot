@@ -23,6 +23,180 @@
 #include <QUndoStack>
 
 // ##############################################################################
+// ############################## Histogram #####################################
+// ##############################################################################
+/*!
+ * \brief create and add a new Histogram, undo and redo this step
+ */
+void StatisticalPlotsTest::testHistogramInit() {
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	project.addChild(ws);
+
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	ws->addChild(p);
+
+	auto* histogram = new Histogram(QStringLiteral("histogram"));
+	p->addChild(histogram);
+
+	auto children = p->children<Histogram>();
+
+	QCOMPARE(children.size(), 1);
+
+	project.undoStack()->undo();
+	children = p->children<Histogram>();
+	QCOMPARE(children.size(), 0);
+
+	project.undoStack()->redo();
+	children = p->children<Histogram>();
+	QCOMPARE(children.size(), 1);
+}
+
+/*!
+ * \brief create and add a new Histogram, duplicate it and check the number of children
+ */
+void StatisticalPlotsTest::testHistogramDuplicate() {
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	project.addChild(ws);
+
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	ws->addChild(p);
+
+	auto* histogram = new Histogram(QStringLiteral("kdeplot"));
+	p->addChild(histogram);
+
+	histogram->duplicate();
+
+	auto children = p->children<Histogram>();
+	QCOMPARE(children.size(), 2);
+}
+
+/*!
+ * \brief create a Histogram for 3 values check the plot ranges.
+ */
+void StatisticalPlotsTest::testHistogramRangeBinningTypeChanged() {
+	// prepare the data
+	Spreadsheet sheet(QStringLiteral("test"), false);
+	sheet.setColumnCount(1);
+	sheet.setRowCount(100);
+	auto* column = sheet.column(0);
+	column->setValueAt(0, 1.);
+	column->setValueAt(1, 2.);
+	column->setValueAt(2, 3.);
+
+	// prepare the worksheet + plot
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	ws->addChild(p);
+
+	auto* histogram = new Histogram(QStringLiteral("kdeplot"));
+	histogram->setBinningMethod(Histogram::BinningMethod::ByNumber);
+	histogram->setBinCount(3);
+	histogram->setDataColumn(column);
+	p->addChild(histogram);
+
+	// the x-range is defined by the min and max values in the data [1, 3]
+	// because of the bin count 3 we have one value in every bin and the y-range is [0,1]
+	const auto& rangeX = p->range(Dimension::X);
+	const auto& rangeY = p->range(Dimension::Y);
+	QCOMPARE(rangeX.start(), 1);
+	QCOMPARE(rangeX.end(), 3);
+	QCOMPARE(rangeY.start(), 0);
+	QCOMPARE(rangeY.end(), 1);
+
+	// set the bin number to 1, the values 1 and 2 fall into the same bin
+	histogram->setBinCount(1);
+	QCOMPARE(rangeX.start(), 1);
+	QCOMPARE(rangeX.end(), 3);
+	QCOMPARE(rangeY.start(), 0);
+	QCOMPARE(rangeY.end(), 2);
+}
+
+/*!
+ * \brief create a Histogram for 3 values check the plot ranges after a row was removed in the source spreadsheet.
+ */
+void StatisticalPlotsTest::testHistogramRangeRowsChanged() {
+	Project project;
+
+	// prepare the data
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	sheet->setColumnCount(1);
+	sheet->setRowCount(3);
+	project.addChild(sheet);
+	auto* column = sheet->column(0);
+	column->setValueAt(0, 1.);
+	column->setValueAt(1, 2.);
+	column->setValueAt(2, 3.);
+
+	// worksheet
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	project.addChild(ws);
+
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	ws->addChild(p);
+
+	auto* histogram = new Histogram(QStringLiteral("kdeplot"));
+	histogram->setBinningMethod(Histogram::BinningMethod::ByNumber);
+	histogram->setBinCount(3);
+	histogram->setDataColumn(column);
+	p->addChild(histogram);
+
+	// remove the last row and check the ranges, the x-range should become [1,2]
+	sheet->setRowCount(2);
+	const auto& rangeX = p->range(Dimension::X);
+	const auto& rangeY = p->range(Dimension::Y);
+	QCOMPARE(rangeX.start(), 1);
+	QCOMPARE(rangeX.end(), 2);
+	QCOMPARE(rangeY.start(), 0);
+	QCOMPARE(rangeY.end(), 1);
+
+	// undo the row removal and check again, the x-range should become [1,3] again
+	project.undoStack()->undo();
+	QCOMPARE(rangeX.start(), 1);
+	QCOMPARE(rangeX.end(), 3);
+	QCOMPARE(rangeY.start(), 0);
+	QCOMPARE(rangeY.end(), 1);
+
+	// add more (empty) rows in the spreadsheet, the ranges should be unchanged
+	sheet->setRowCount(5);
+	QCOMPARE(rangeX.start(), 1);
+	QCOMPARE(rangeX.end(), 3);
+	QCOMPARE(rangeY.start(), 0);
+	QCOMPARE(rangeY.end(), 1);
+}
+
+void StatisticalPlotsTest::testHistogramColumnRemoved() {
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	project.addChild(ws);
+
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	ws->addChild(p);
+
+	auto* histogram = new Histogram(QStringLiteral("histogram"));
+	p->addChild(histogram);
+
+	auto* c = new Column(QStringLiteral("TestColumn"));
+	project.addChild(c);
+
+	histogram->setDataColumn(c);
+	c->setName(QStringLiteral("NewName"));
+	QCOMPARE(histogram->dataColumnPath(), QStringLiteral("Project/NewName"));
+
+	c->remove();
+
+	QCOMPARE(histogram->dataColumn(), nullptr);
+	QCOMPARE(histogram->dataColumnPath(), QStringLiteral("Project/NewName"));
+
+	c->setName(QStringLiteral("Another new name")); // Shall not lead to a crash
+
+	QCOMPARE(histogram->dataColumn(), nullptr);
+	QCOMPARE(histogram->dataColumnPath(), QStringLiteral("Project/NewName"));
+}
+
+
+// ##############################################################################
 // ############################## KDE Plot ######################################
 // ##############################################################################
 
@@ -199,35 +373,6 @@ void StatisticalPlotsTest::testQQPlotRange() {
 	const auto& range = p->range(Dimension::X);
 	QCOMPARE(range.start(), -2.5);
 	QCOMPARE(range.end(), 2.5);
-}
-
-void StatisticalPlotsTest::testHistogramColumnRemoved() {
-	Project project;
-	auto* ws = new Worksheet(QStringLiteral("worksheet"));
-	project.addChild(ws);
-
-	auto* p = new CartesianPlot(QStringLiteral("plot"));
-	ws->addChild(p);
-
-	auto* histogram = new Histogram(QStringLiteral("histogram"));
-	p->addChild(histogram);
-
-	auto* c = new Column(QStringLiteral("TestColumn"));
-	project.addChild(c);
-
-	histogram->setDataColumn(c);
-	c->setName(QStringLiteral("NewName"));
-	QCOMPARE(histogram->dataColumnPath(), QStringLiteral("Project/NewName"));
-
-	c->remove();
-
-	QCOMPARE(histogram->dataColumn(), nullptr);
-	QCOMPARE(histogram->dataColumnPath(), QStringLiteral("Project/NewName"));
-
-	c->setName(QStringLiteral("Another new name")); // Shall not lead to a crash
-
-	QCOMPARE(histogram->dataColumn(), nullptr);
-	QCOMPARE(histogram->dataColumnPath(), QStringLiteral("Project/NewName"));
 }
 
 QTEST_MAIN(StatisticalPlotsTest)
