@@ -148,6 +148,7 @@ SlidingPanelBottom::SlidingPanelBottom(const QRect& screenRect, WorksheetView* v
 
 void SlidingPanelBottom::setFixed(bool fixed) {
 	m_fixed = fixed;
+	// TODO: change state of the pinAction
 }
 
 bool SlidingPanelBottom::isFixed() const {
