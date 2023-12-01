@@ -195,7 +195,6 @@ void StatisticalPlotsTest::testHistogramColumnRemoved() {
 	QCOMPARE(histogram->dataColumnPath(), QStringLiteral("Project/NewName"));
 }
 
-
 // ##############################################################################
 // ############################## KDE Plot ######################################
 // ##############################################################################

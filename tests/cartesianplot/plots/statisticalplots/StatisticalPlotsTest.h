@@ -33,7 +33,6 @@ private Q_SLOTS:
 	void testQQPlotInit();
 	void testQQPlotDuplicate();
 	void testQQPlotRange();
-
 };
 
 #endif
