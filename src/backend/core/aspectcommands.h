@@ -17,10 +17,26 @@
 #include <KLocalizedString>
 #include <QUndoCommand>
 
-class AspectChildRemoveCmd : public QUndoCommand {
+class AspectCommonCmd : public QUndoCommand {
+public:
+	AspectCommonCmd(QUndoCommand* parent = nullptr)
+		: QUndoCommand(parent) {
+	}
+	int removeChild(AbstractAspectPrivate* parent, AbstractAspect* child) {
+		int index = parent->indexOfChild(child);
+		Q_ASSERT(index != -1);
+		parent->m_children.removeAll(child);
+		QObject::disconnect(child, nullptr, nullptr, nullptr);
+		child->setParentAspect(nullptr);
+		// QDEBUG(Q_FUNC_INFO << " DONE. CHILD = " << child)
+		return index;
+	}
+};
+
+class AspectChildRemoveCmd : public AspectCommonCmd {
 public:
 	AspectChildRemoveCmd(AbstractAspectPrivate* target, AbstractAspect* child, QUndoCommand* parent = nullptr)
-		: QUndoCommand(parent)
+		: AspectCommonCmd(parent)
 		, m_target(target)
 		, m_child(child)
 		, m_moved(child->isMoved()) {
@@ -61,8 +77,9 @@ public:
 		// we have a better solution.
 		if (!m_child->hidden() || m_child->type() == AspectType::DatapickerPoint)
 			Q_EMIT m_target->q->childAspectAboutToBeRemoved(m_child);
+		Q_EMIT m_child->aspectAboutToBeRemoved(m_child);
 
-		m_index = m_target->removeChild(m_child);
+		m_index = removeChild(m_target, m_child);
 
 		if (!m_child->hidden() || m_child->type() == AspectType::DatapickerPoint)
 			Q_EMIT m_target->q->childAspectRemoved(m_target->q, nextSibling, m_child);
@@ -115,10 +132,15 @@ public:
 	}
 };
 
-class AspectChildReparentCmd : public QUndoCommand {
+class AspectChildReparentCmd : public AspectCommonCmd {
 public:
-	AspectChildReparentCmd(AbstractAspectPrivate* target, AbstractAspectPrivate* new_parent, AbstractAspect* child, int new_index)
-		: m_target(target)
+	AspectChildReparentCmd(AbstractAspectPrivate* target,
+						   AbstractAspectPrivate* new_parent,
+						   AbstractAspect* child,
+						   int new_index,
+						   QUndoCommand* parent = nullptr)
+		: AspectCommonCmd(parent)
+		, m_target(target)
 		, m_new_parent(new_parent)
 		, m_child(child)
 		, m_new_index(new_index) {
@@ -128,7 +150,7 @@ public:
 	// calling redo transfers ownership of m_child to the new parent aspect
 	void redo() override {
 		Q_EMIT m_child->childAspectAboutToBeRemoved(m_child);
-		m_index = m_target->removeChild(m_child);
+		m_index = removeChild(m_target, m_child);
 		m_new_parent->insertChild(m_new_index, m_child);
 		Q_EMIT m_child->childAspectAdded(m_child);
 	}
@@ -137,7 +159,7 @@ public:
 	void undo() override {
 		Q_ASSERT(m_index != -1);
 		Q_EMIT m_child->childAspectAboutToBeRemoved(m_child);
-		m_new_parent->removeChild(m_child);
+		removeChild(m_new_parent, m_child);
 		m_target->insertChild(m_index, m_child);
 		Q_EMIT m_child->childAspectAdded(m_child);
 	}
@@ -150,10 +172,11 @@ protected:
 	int m_new_index;
 };
 
-class AspectNameChangeCmd : public QUndoCommand {
+class AspectNameChangeCmd : public AspectCommonCmd {
 public:
-	AspectNameChangeCmd(AbstractAspectPrivate* aspect, const QString& newName)
-		: m_aspect(aspect)
+	AspectNameChangeCmd(AbstractAspectPrivate* aspect, const QString& newName, QUndoCommand* parent = nullptr)
+		: AspectCommonCmd(parent)
+		, m_aspect(aspect)
 		, m_name(newName) {
 		setText(i18n("%1: rename to %2", m_aspect->m_name, newName));
 	}

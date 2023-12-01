@@ -1464,7 +1464,7 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList names, 
 		int index = 0;
 		for (auto* column : columns) {
 			column->setSuppressDataChangedSignal(true);
-			Q_EMIT column->reset(column);
+			column->reset();
 			column->setName(uniqueNames.at(index), AbstractAspect::NameHandling::UniqueNotRequired);
 			column->aspectDescriptionChanged(column);
 			++index;

@@ -51,6 +51,7 @@ public:
 
 		m_aspect = aspects.first();
 		connect(m_aspect, &AbstractAspect::childAspectAboutToBeRemoved, this, &BaseDock::disconnectAspect);
+		connect(m_aspect, &AbstractAspect::aspectDescriptionChanged, this, &BaseDock::aspectDescriptionChanged);
 		auto* wse = dynamic_cast<WorksheetElement*>(m_aspect);
 		if (wse)
 			connect(wse, &WorksheetElement::coordinateSystemIndexChanged, this, &BaseDock::updatePlotRangeList);
@@ -75,12 +76,12 @@ public:
 		return m_aspect;
 	}
 
+	void setBaseWidgets(QLineEdit* nameLabel, ResizableTextEdit* commentLabel, double commentHeightFactorNameLabel = 1.2);
+
 	AspectTreeModel* aspectModel();
 
 protected:
 	bool m_initializing{false};
-	QLineEdit* m_leName{nullptr};
-	ResizableTextEdit* m_teComment{nullptr};
 	Units m_units{Units::Metric};
 	Worksheet::Unit m_worksheetUnit{Worksheet::Unit::Centimeter};
 	void updatePlotRangeList(); // used in worksheet element docks
@@ -91,6 +92,8 @@ private:
 	AspectTreeModel* m_aspectModel{nullptr};
 	void updateNameDescriptionWidgets();
 	QComboBox* m_cbPlotRangeList{nullptr};
+	QLineEdit* m_leName{nullptr};
+	ResizableTextEdit* m_teComment{nullptr};
 
 protected Q_SLOTS:
 	void nameChanged();

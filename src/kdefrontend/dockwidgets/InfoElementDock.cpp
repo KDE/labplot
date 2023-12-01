@@ -22,9 +22,7 @@ InfoElementDock::InfoElementDock(QWidget* parent)
 	, ui(new Ui::InfoElementDock) {
 	ui->setupUi(this);
 	setPlotRangeCombobox(ui->cbPlotRanges);
-	m_leName = ui->leName;
-	m_teComment = ui->teComment;
-	m_teComment->setFixedHeight(m_leName->height());
+	setBaseWidgets(ui->leName, ui->teComment);
 
 	//"Title"-tab
 	auto* hboxLayout = new QHBoxLayout(ui->tabTitle);
@@ -49,8 +47,6 @@ InfoElementDock::InfoElementDock(QWidget* parent)
 
 	//**********************************  Slots **********************************************
 	// general
-	connect(ui->leName, &QLineEdit::textChanged, this, &InfoElementDock::nameChanged);
-	connect(ui->teComment, &QTextEdit::textChanged, this, &InfoElementDock::commentChanged);
 	connect(ui->sbPosition, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &InfoElementDock::positionChanged);
 	connect(ui->dateTimeEditPosition, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &InfoElementDock::positionDateTimeChanged);
 	connect(ui->cbConnectToCurve, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &InfoElementDock::curveChanged);
@@ -157,7 +153,6 @@ void InfoElementDock::setInfoElements(QList<InfoElement*> list) {
 	updatePlotRanges(); // needed when loading project
 
 	// general
-	connect(m_element, &InfoElement::aspectDescriptionChanged, this, &InfoElementDock::aspectDescriptionChanged);
 	connect(m_element, &InfoElement::positionLogicalChanged, this, &InfoElementDock::elementPositionChanged);
 	connect(m_element, &InfoElement::gluePointIndexChanged, this, &InfoElementDock::elementGluePointIndexChanged);
 	connect(m_element, &InfoElement::connectionLineCurveNameChanged, this, &InfoElementDock::elementConnectionLineCurveChanged);

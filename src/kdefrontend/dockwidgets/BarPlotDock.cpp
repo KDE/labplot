@@ -27,9 +27,7 @@ BarPlotDock::BarPlotDock(QWidget* parent)
 	, cbXColumn(new TreeViewComboBox) {
 	ui.setupUi(this);
 	setPlotRangeCombobox(ui.cbPlotRanges);
-	m_leName = ui.leName;
-	m_teComment = ui.teComment;
-	m_teComment->setFixedHeight(m_leName->height());
+	setBaseWidgets(ui.leName, ui.teComment);
 
 	// Tab "General"
 
@@ -99,8 +97,6 @@ BarPlotDock::BarPlotDock(QWidget* parent)
 
 	// SLOTS
 	// Tab "General"
-	connect(ui.leName, &QLineEdit::textChanged, this, &BarPlotDock::nameChanged);
-	connect(ui.teComment, &QTextEdit::textChanged, this, &BarPlotDock::commentChanged);
 	connect(cbXColumn, &TreeViewComboBox::currentModelIndexChanged, this, &BarPlotDock::xColumnChanged);
 	connect(ui.bRemoveXColumn, &QPushButton::clicked, this, &BarPlotDock::removeXColumn);
 	connect(m_buttonNew, &QPushButton::clicked, this, &BarPlotDock::addDataColumn);
@@ -132,6 +128,7 @@ void BarPlotDock::setBarPlots(QList<BarPlot*> list) {
 	m_barPlots = list;
 	m_barPlot = list.first();
 	setAspects(list);
+
 	Q_ASSERT(m_barPlot);
 	setModel();
 
@@ -162,7 +159,6 @@ void BarPlotDock::setBarPlots(QList<BarPlot*> list) {
 
 	// SIGNALs/SLOTs
 	// general
-	connect(m_barPlot, &AbstractAspect::aspectDescriptionChanged, this, &BarPlotDock::aspectDescriptionChanged);
 	connect(m_barPlot, &WorksheetElement::plotRangeListChanged, this, &BarPlotDock::updatePlotRanges);
 	connect(m_barPlot, &BarPlot::visibleChanged, this, &BarPlotDock::plotVisibilityChanged);
 	connect(m_barPlot, &BarPlot::typeChanged, this, &BarPlotDock::plotTypeChanged);
@@ -228,8 +224,11 @@ void BarPlotDock::loadDataColumns() {
 		}
 
 		// show the columns in the comboboxes
-		for (int i = 0; i < count; ++i)
+		auto* model = aspectModel();
+		for (int i = 0; i < count; ++i) {
+			m_dataComboBoxes.at(i)->setModel(model); // the model might have changed in-between, reset the current model
 			m_dataComboBoxes.at(i)->setAspect(m_barPlot->dataColumns().at(i));
+		}
 
 		// show columns names in the combobox for the selection of the bar to be modified
 		for (int i = 0; i < count; ++i)
@@ -304,7 +303,7 @@ void BarPlotDock::removeXColumn() {
 }
 
 void BarPlotDock::addDataColumn() {
-	auto* cb = new TreeViewComboBox;
+	auto* cb = new TreeViewComboBox(this);
 
 	static const QList<AspectType> list{AspectType::Folder,
 										AspectType::Workbook,

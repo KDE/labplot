@@ -40,9 +40,7 @@
 ImageDock::ImageDock(QWidget* parent)
 	: BaseDock(parent) {
 	ui.setupUi(this);
-	m_leName = ui.leName;
-	m_teComment = ui.teComment;
-	m_teComment->setFixedHeight(1.2 * m_leName->height());
+	setBaseWidgets(ui.leName, ui.teComment);
 
 	ui.bOpen->setIcon(QIcon::fromTheme(QStringLiteral("document-open")));
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
@@ -90,9 +88,7 @@ ImageDock::ImageDock(QWidget* parent)
 
 	// SLOTs
 	// General
-	connect(ui.leName, &QLineEdit::textChanged, this, &ImageDock::nameChanged);
 	connect(ui.chbEmbedded, &QCheckBox::clicked, this, &ImageDock::embeddedChanged);
-	connect(ui.teComment, &QTextEdit::textChanged, this, &ImageDock::commentChanged);
 	connect(ui.bOpen, &QPushButton::clicked, this, &ImageDock::selectFile);
 	connect(ui.leFileName, &QLineEdit::returnPressed, this, &ImageDock::fileNameChanged);
 	connect(ui.leFileName, &QLineEdit::textChanged, this, &ImageDock::fileNameChanged);
@@ -139,7 +135,6 @@ void ImageDock::setImages(QList<Image*> list) {
 
 	// init connections
 	// General
-	connect(m_image, &Image::aspectDescriptionChanged, this, &ImageDock::aspectDescriptionChanged);
 	connect(m_image, &Image::fileNameChanged, this, &ImageDock::imageFileNameChanged);
 	connect(m_image, &Image::embeddedChanged, this, &ImageDock::imageEmbeddedChanged);
 	connect(m_image, &Image::opacityChanged, this, &ImageDock::imageOpacityChanged);

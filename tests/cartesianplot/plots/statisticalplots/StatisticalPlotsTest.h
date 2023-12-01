@@ -17,6 +17,13 @@ class StatisticalPlotsTest : public CommonTest {
 	Q_OBJECT
 
 private Q_SLOTS:
+	// Histogram
+	void testHistogramInit();
+	void testHistogramDuplicate();
+	void testHistogramRangeBinningTypeChanged();
+	void testHistogramRangeRowsChanged();
+	void testHistogramColumnRemoved();
+
 	// KDE plot
 	void testKDEPlotInit();
 	void testKDEPlotDuplicate();

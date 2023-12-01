@@ -36,12 +36,10 @@ LiveDataDock::LiveDataDock(QWidget* parent)
 #endif
 {
 	ui.setupUi(this);
-	m_leName = ui.leName;
-	// leComment = // not available
+	setBaseWidgets(ui.leName, ui.teComment);
 
 	ui.bUpdateNow->setIcon(QIcon::fromTheme(QLatin1String("view-refresh")));
 
-	connect(ui.leName, &QLineEdit::textChanged, this, &LiveDataDock::nameChanged);
 	connect(ui.bPausePlayReading, &QPushButton::clicked, this, &LiveDataDock::pauseContinueReading);
 	connect(ui.bUpdateNow, &QPushButton::clicked, this, &LiveDataDock::updateNow);
 	connect(ui.sbUpdateInterval, QOverload<int>::of(&QSpinBox::valueChanged), this, &LiveDataDock::updateIntervalChanged);
@@ -128,6 +126,7 @@ void LiveDataDock::setMQTTClient(MQTTClient* const client) {
 	if (ui.cbReadingType->currentIndex() == static_cast<int>(LiveDataSource::ReadingType::WholeFile))
 		ui.cbReadingType->setCurrentIndex(static_cast<int>(LiveDataSource::ReadingType::TillEnd));
 
+	setAspects(QList<AbstractAspect*>({client}));
 	m_mqttClient = client; // updates may be applied from now on
 
 	// show MQTT connected options
@@ -331,6 +330,7 @@ void LiveDataDock::setLiveDataSource(LiveDataSource* const source) {
 	m_subscriptionWidget->hide();
 	m_subscriptionWidget->hide();
 #endif
+	setAspects(QList<AbstractAspect*>({source}));
 	m_liveDataSource = source; // updates may be applied from now on
 }
 
@@ -357,27 +357,6 @@ void LiveDataDock::updateNow() {
 	else if (m_mqttClient)
 		m_mqttClient->updateNow();
 #endif
-}
-
-void LiveDataDock::nameChanged(const QString& name) {
-	if (m_liveDataSource) {
-		if (!m_liveDataSource->setName(name, AbstractAspect::NameHandling::UniqueRequired)) {
-			SET_WARNING_STYLE(m_leName)
-			ui.leName->setToolTip(i18n("Please choose another name, because this is already in use."));
-			return;
-		}
-	}
-#ifdef HAVE_MQTT
-	else if (m_mqttClient) {
-		if (!m_mqttClient->setName(name, AbstractAspect::NameHandling::UniqueRequired)) {
-			SET_WARNING_STYLE(m_leName)
-			ui.leName->setToolTip(i18n("Please choose another name, because this is already in use."));
-			return;
-		}
-	}
-#endif
-	ui.leName->setStyleSheet(QString());
-	ui.leName->setToolTip(QString());
 }
 
 /*!

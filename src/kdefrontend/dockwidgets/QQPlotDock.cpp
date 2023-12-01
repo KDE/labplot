@@ -34,9 +34,7 @@ QQPlotDock::QQPlotDock(QWidget* parent)
 	, cbDataColumn(new TreeViewComboBox) {
 	ui.setupUi(this);
 	setPlotRangeCombobox(ui.cbPlotRanges);
-	m_leName = ui.leName;
-	m_teComment = ui.teComment;
-	m_teComment->setFixedHeight(2 * m_leName->height());
+	setBaseWidgets(ui.leName, ui.teComment);
 
 	// Tab "General"
 	auto* gridLayout = qobject_cast<QGridLayout*>(ui.tabGeneral->layout());
@@ -66,8 +64,6 @@ QQPlotDock::QQPlotDock(QWidget* parent)
 
 	// Slots
 	// General
-	connect(ui.leName, &QLineEdit::textChanged, this, &QQPlotDock::nameChanged);
-	connect(ui.teComment, &QTextEdit::textChanged, this, &QQPlotDock::commentChanged);
 	connect(ui.chkVisible, &QCheckBox::clicked, this, &QQPlotDock::visibilityChanged);
 	connect(cbDataColumn, &TreeViewComboBox::currentModelIndexChanged, this, &QQPlotDock::dataColumnChanged);
 	connect(ui.cbDistribution, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &QQPlotDock::distributionChanged);
@@ -156,7 +152,6 @@ void QQPlotDock::setPlots(QList<QQPlot*> list) {
 
 	// Slots
 	// General-tab
-	connect(m_plot, &QQPlot::aspectDescriptionChanged, this, &QQPlotDock::aspectDescriptionChanged);
 	connect(m_plot, &QQPlot::dataColumnChanged, this, &QQPlotDock::plotDataColumnChanged);
 	connect(m_plot, &QQPlot::distributionChanged, this, &QQPlotDock::plotDistributionChanged);
 	connect(m_plot, &WorksheetElement::plotRangeListChanged, this, &QQPlotDock::updatePlotRanges);

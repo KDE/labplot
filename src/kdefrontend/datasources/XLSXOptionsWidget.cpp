@@ -145,7 +145,7 @@ void XLSXOptionsWidget::dataRegionSelectionChanged() {
 					continue; // data used as header
 				} else {
 					for (int col = 0; col < colCount; ++col) {
-						auto colName = AbstractFileFilter::convertFromNumberToColumn(selectedRegion.firstColumn() + col);
+						auto colName = AbstractFileFilter::convertFromNumberToColumn(col + filter->firstColumn());
 						// DEBUG("COLUMN " << col + 1 << " NAME = " << STDSTRING(colName))
 						//  TODO: show column modes?
 						// auto* item = new QTableWidgetItem(colName + QStringLiteral(" {") + QLatin1String(ENUM_TO_STRING(AbstractColumn, ColumnMode,

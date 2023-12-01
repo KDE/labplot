@@ -1703,7 +1703,7 @@ void ColumnPrivate::connectFormulaColumn(const AbstractColumn* column) {
 			QOverload<const AbstractAspect*>::of(&AbstractAspect::childAspectAboutToBeRemoved),
 			this,
 			&ColumnPrivate::formulaVariableColumnRemoved);
-	connect(column, &AbstractColumn::reset, this, &ColumnPrivate::formulaVariableColumnRemoved);
+	connect(column, &AbstractColumn::aboutToReset, this, &ColumnPrivate::formulaVariableColumnRemoved);
 	connect(column->parentAspect(), &AbstractAspect::childAspectAdded, this, &ColumnPrivate::formulaVariableColumnAdded);
 }
 
@@ -1862,10 +1862,11 @@ double columnPercentile(double p, const char* variable, const std::weak_ptr<Payl
  * \sa FunctionValuesDialog::generate()
  */
 void ColumnPrivate::updateFormula() {
+	if (m_formula.isEmpty())
+		return;
 	DEBUG(Q_FUNC_INFO)
 	// determine variable names and the data vectors of the specified columns
 	QVector<QVector<double>*> xVectors;
-	QString formula = m_formula;
 
 	bool valid = true;
 	QStringList formulaVariableNames;
@@ -1948,8 +1949,8 @@ void ColumnPrivate::updateFormula() {
 		parser->setSpecialFunction2(colfun_percentile, columnPercentile, payload);
 		parser->setSpecialFunction2(colfun_quantile, columnQuantile, payload);
 
-		QDEBUG(Q_FUNC_INFO << ", Calling evaluateCartesian(). formula: " << formula << ", var names: " << formulaVariableNames)
-		parser->evaluateCartesian(formula, formulaVariableNames, xVectors, &new_data);
+		QDEBUG(Q_FUNC_INFO << ", Calling evaluateCartesian(). formula: " << m_formula << ", var names: " << formulaVariableNames)
+		parser->evaluateCartesian(m_formula, formulaVariableNames, xVectors, &new_data);
 		DEBUG(Q_FUNC_INFO << ", Calling replaceValues()")
 		replaceValues(-1, new_data);
 

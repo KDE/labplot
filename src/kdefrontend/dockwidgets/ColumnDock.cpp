@@ -36,9 +36,7 @@
 ColumnDock::ColumnDock(QWidget* parent)
 	: BaseDock(parent) {
 	ui.setupUi(this);
-	m_leName = ui.leName;
-	m_teComment = ui.teComment;
-	m_teComment->setFixedHeight(m_leName->height());
+	setBaseWidgets(ui.leName, ui.teComment);
 
 	// add formats for numeric values
 	ui.cbNumericFormat->addItem(i18n("Decimal"), QVariant('f'));
@@ -56,8 +54,6 @@ ColumnDock::ColumnDock(QWidget* parent)
 	ui.twLabels->horizontalHeader()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
 	ui.twLabels->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
 
-	connect(ui.leName, &QLineEdit::textChanged, this, &ColumnDock::nameChanged);
-	connect(ui.teComment, &QTextEdit::textChanged, this, &ColumnDock::commentChanged);
 	connect(ui.cbType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ColumnDock::typeChanged);
 	connect(ui.cbNumericFormat, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ColumnDock::numericFormatChanged);
 	connect(ui.sbPrecision, QOverload<int>::of(&QSpinBox::valueChanged), this, &ColumnDock::precisionChanged);
@@ -154,7 +150,6 @@ void ColumnDock::setColumns(QList<Column*> list) {
 	}
 
 	// slots
-	connect(m_column, &AbstractColumn::aspectDescriptionChanged, this, &ColumnDock::aspectDescriptionChanged);
 	connect(m_column, &AbstractColumn::modeChanged, this, &ColumnDock::columnModeChanged);
 	connect(m_column->outputFilter(), &AbstractSimpleFilter::formatChanged, this, &ColumnDock::columnFormatChanged);
 	connect(m_column->outputFilter(), &AbstractSimpleFilter::digitsChanged, this, &ColumnDock::columnPrecisionChanged);

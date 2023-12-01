@@ -31,9 +31,7 @@
 WorksheetDock::WorksheetDock(QWidget* parent)
 	: BaseDock(parent) {
 	ui.setupUi(this);
-	m_leName = ui.leName;
-	m_teComment = ui.teComment;
-	m_teComment->setFixedHeight(m_leName->height());
+	setBaseWidgets(ui.leName, ui.teComment);
 
 	// Background-tab
 	auto* layout = static_cast<QHBoxLayout*>(ui.tabBackground->layout());
@@ -63,8 +61,6 @@ WorksheetDock::WorksheetDock(QWidget* parent)
 
 	// SLOTs
 	// General
-	connect(ui.leName, &QLineEdit::textChanged, this, &WorksheetDock::nameChanged);
-	connect(ui.teComment, &QTextEdit::textChanged, this, &WorksheetDock::commentChanged);
 	connect(ui.cbSizeType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &WorksheetDock::sizeTypeChanged);
 	connect(ui.cbPage, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &WorksheetDock::pageChanged);
 	connect(ui.sbWidth, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &WorksheetDock::sizeChanged);

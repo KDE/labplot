@@ -27,9 +27,7 @@ BoxPlotDock::BoxPlotDock(QWidget* parent)
 	: BaseDock(parent) {
 	ui.setupUi(this);
 	setPlotRangeCombobox(ui.cbPlotRanges);
-	m_leName = ui.leName;
-	m_teComment = ui.teComment;
-	m_teComment->setFixedHeight(m_leName->height());
+	setBaseWidgets(ui.leName, ui.teComment);
 
 	// Tab "General"
 	m_buttonNew = new QPushButton();
@@ -121,8 +119,6 @@ BoxPlotDock::BoxPlotDock(QWidget* parent)
 
 	// SLOTS
 	// Tab "General"
-	connect(ui.leName, &QLineEdit::textChanged, this, &BoxPlotDock::nameChanged);
-	connect(ui.teComment, &QTextEdit::textChanged, this, &BoxPlotDock::commentChanged);
 	connect(ui.cbOrdering, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BoxPlotDock::orderingChanged);
 	connect(ui.cbOrientation, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BoxPlotDock::orientationChanged);
 	connect(ui.chkVariableWidth, &QCheckBox::toggled, this, &BoxPlotDock::variableWidthChanged);
@@ -274,8 +270,11 @@ void BoxPlotDock::loadDataColumns() {
 		}
 
 		// show the columns in the comboboxes
-		for (int i = 0; i < count; ++i)
+		auto* model = aspectModel();
+		for (int i = 0; i < count; ++i) {
+			m_dataComboBoxes.at(i)->setModel(model); // the model might have changed in-between, reset the current model
 			m_dataComboBoxes.at(i)->setAspect(m_boxPlot->dataColumns().at(i));
+		}
 
 		// show columns names in the combobox for the selection of the box to be modified
 		for (int i = 0; i < count; ++i)
@@ -316,7 +315,7 @@ void BoxPlotDock::setDataColumns() const {
 //*** SLOTs for changes triggered in BoxPlotDock *****
 //**********************************************************
 void BoxPlotDock::addDataColumn() {
-	auto* cb = new TreeViewComboBox;
+	auto* cb = new TreeViewComboBox(this);
 
 	static const QList<AspectType> list{AspectType::Folder,
 										AspectType::Workbook,

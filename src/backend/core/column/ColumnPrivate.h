@@ -303,6 +303,7 @@ private Q_SLOTS:
 
 	friend class ColumnSetGlobalFormulaCmd;
 	friend class ColumnRemoveRowsCmd;
+	friend class ColumnInsertRowsCmd;
 };
 
 #endif

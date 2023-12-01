@@ -24,9 +24,7 @@
 DatapickerCurveWidget::DatapickerCurveWidget(QWidget* parent)
 	: BaseDock(parent) {
 	ui.setupUi(this);
-	m_leName = ui.leName;
-	m_teComment = ui.teComment;
-	m_teComment->setFixedHeight(m_leName->height());
+	setBaseWidgets(ui.leName, ui.teComment);
 
 	ui.cbXErrorType->addItem(i18n("No Error"));
 	ui.cbXErrorType->addItem(i18n("Symmetric"));
@@ -55,8 +53,6 @@ DatapickerCurveWidget::DatapickerCurveWidget(QWidget* parent)
 	DatapickerCurveWidget::updateLocale();
 
 	// General
-	connect(ui.leName, &QLineEdit::textChanged, this, &DatapickerCurveWidget::nameChanged);
-	connect(ui.teComment, &QTextEdit::textChanged, this, &DatapickerCurveWidget::commentChanged);
 	connect(ui.cbXErrorType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &DatapickerCurveWidget::xErrorTypeChanged);
 	connect(ui.cbYErrorType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &DatapickerCurveWidget::yErrorTypeChanged);
 	connect(ui.chkVisible, &QCheckBox::clicked, this, &DatapickerCurveWidget::visibilityChanged);

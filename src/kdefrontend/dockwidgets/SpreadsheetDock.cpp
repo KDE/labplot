@@ -32,12 +32,8 @@
 SpreadsheetDock::SpreadsheetDock(QWidget* parent)
 	: BaseDock(parent) {
 	ui.setupUi(this);
-	m_leName = ui.leName;
-	m_teComment = ui.teComment;
-	ui.teComment->setFixedHeight(1.2 * ui.leName->height());
+	setBaseWidgets(ui.leName, ui.teComment);
 
-	connect(ui.leName, &QLineEdit::textChanged, this, &SpreadsheetDock::nameChanged);
-	connect(ui.teComment, &QTextEdit::textChanged, this, &SpreadsheetDock::commentChanged);
 	connect(ui.sbColumnCount, QOverload<int>::of(&QSpinBox::valueChanged), this, &SpreadsheetDock::columnCountChanged);
 	connect(ui.sbRowCount, QOverload<int>::of(&QSpinBox::valueChanged), this, &SpreadsheetDock::rowCountChanged);
 	connect(ui.cbShowComments, &QCheckBox::toggled, this, &SpreadsheetDock::commentsShownChanged);
@@ -103,7 +99,6 @@ void SpreadsheetDock::setSpreadsheets(const QList<Spreadsheet*> list) {
 	this->load();
 
 	// undo functions
-	connect(m_spreadsheet, &AbstractAspect::aspectDescriptionChanged, this, &SpreadsheetDock::aspectDescriptionChanged);
 	connect(m_spreadsheet, &Spreadsheet::rowCountChanged, this, &SpreadsheetDock::spreadsheetRowCountChanged);
 	connect(m_spreadsheet, &Spreadsheet::columnCountChanged, this, &SpreadsheetDock::spreadsheetColumnCountChanged);
 	connect(m_spreadsheet, &Spreadsheet::linkingChanged, this, &SpreadsheetDock::spreadsheetLinkingChanged);

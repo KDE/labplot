@@ -89,9 +89,7 @@ LabelWidget::LabelWidget(QWidget* parent)
 	: BaseDock(parent)
 	, m_dateTimeMenu(new QMenu(this)) {
 	ui.setupUi(this);
-	m_leName = ui.leName;
-	m_teComment = ui.teComment;
-	m_teComment->setFixedHeight(1.5 * m_leName->height());
+	setBaseWidgets(ui.leName, ui.teComment);
 
 	// set the minimum size of the text edit widget to one row of a QLabel
 	ui.teLabel->setMinimumHeight(ui.lName->height());
@@ -229,8 +227,6 @@ LabelWidget::LabelWidget(QWidget* parent)
 	m_messageWidget->hide(); // will be shown later once there is a latex render result
 
 	// SLOTS
-	connect(ui.leName, &QLineEdit::textChanged, this, &LabelWidget::nameChanged);
-	connect(ui.teComment, &QTextEdit::textChanged, this, &LabelWidget::commentChanged);
 
 	// text properties
 	connect(ui.cbMode, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &LabelWidget::modeChanged);

@@ -26,9 +26,7 @@
 MatrixDock::MatrixDock(QWidget* parent)
 	: BaseDock(parent) {
 	ui.setupUi(this);
-	m_leName = ui.leName;
-	m_teComment = ui.teComment;
-	m_teComment->setFixedHeight(1.2 * m_leName->height());
+	setBaseWidgets(ui.leName, ui.teComment);
 
 	ui.cbFormat->addItem(i18n("Decimal"), QVariant('f'));
 	ui.cbFormat->addItem(i18n("Scientific (e)"), QVariant('e'));
@@ -46,8 +44,6 @@ MatrixDock::MatrixDock(QWidget* parent)
 	ui.leYStart->setValidator(new QDoubleValidator(ui.leYStart));
 	ui.leYEnd->setValidator(new QDoubleValidator(ui.leYEnd));
 
-	connect(ui.leName, &QLineEdit::textChanged, this, &MatrixDock::nameChanged);
-	connect(ui.teComment, &QTextEdit::textChanged, this, &MatrixDock::commentChanged);
 	connect(ui.sbColumnCount, QOverload<int>::of(&QSpinBox::valueChanged), this, &MatrixDock::columnCountChanged);
 	connect(ui.sbRowCount, QOverload<int>::of(&QSpinBox::valueChanged), this, &MatrixDock::rowCountChanged);
 	connect(ui.leXStart, &QLineEdit::textChanged, this, &MatrixDock::xStartChanged);
@@ -76,7 +72,6 @@ void MatrixDock::setMatrices(QList<Matrix*> list) {
 	this->load();
 
 	// undo functions
-	connect(m_matrix, &Matrix::aspectDescriptionChanged, this, &MatrixDock::aspectDescriptionChanged);
 
 	connect(m_matrix, &Matrix::rowCountChanged, this, &MatrixDock::matrixRowCountChanged);
 	connect(m_matrix, &Matrix::columnCountChanged, this, &MatrixDock::matrixColumnCountChanged);

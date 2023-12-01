@@ -27,9 +27,7 @@ LollipopPlotDock::LollipopPlotDock(QWidget* parent)
 	, cbXColumn(new TreeViewComboBox) {
 	ui.setupUi(this);
 	setPlotRangeCombobox(ui.cbPlotRanges);
-	m_leName = ui.leName;
-	m_teComment = ui.teComment;
-	m_teComment->setFixedHeight(m_leName->height());
+	setBaseWidgets(ui.leName, ui.teComment);
 
 	// Tab "General"
 
@@ -87,8 +85,6 @@ LollipopPlotDock::LollipopPlotDock(QWidget* parent)
 
 	// SLOTS
 	// Tab "General"
-	connect(ui.leName, &QLineEdit::textChanged, this, &LollipopPlotDock::nameChanged);
-	connect(ui.teComment, &QTextEdit::textChanged, this, &LollipopPlotDock::commentChanged);
 	connect(cbXColumn, &TreeViewComboBox::currentModelIndexChanged, this, &LollipopPlotDock::xColumnChanged);
 	connect(ui.bRemoveXColumn, &QPushButton::clicked, this, &LollipopPlotDock::removeXColumn);
 	connect(m_buttonNew, &QPushButton::clicked, this, &LollipopPlotDock::addDataColumn);
@@ -151,7 +147,6 @@ void LollipopPlotDock::setPlots(QList<LollipopPlot*> list) {
 
 	// SIGNALs/SLOTs
 	// general
-	connect(m_plot, &AbstractAspect::aspectDescriptionChanged, this, &LollipopPlotDock::aspectDescriptionChanged);
 	connect(m_plot, &WorksheetElement::plotRangeListChanged, this, &LollipopPlotDock::updatePlotRanges);
 	connect(m_plot, &LollipopPlot::visibleChanged, this, &LollipopPlotDock::plotVisibilityChanged);
 	connect(m_plot, &LollipopPlot::xColumnChanged, this, &LollipopPlotDock::plotXColumnChanged);
@@ -215,8 +210,11 @@ void LollipopPlotDock::loadDataColumns() {
 		}
 
 		// show the columns in the comboboxes
-		for (int i = 0; i < count; ++i)
+		auto* model = aspectModel();
+		for (int i = 0; i < count; ++i) {
+			m_dataComboBoxes.at(i)->setModel(model); // the model might have changed in-between, re-set the current model
 			m_dataComboBoxes.at(i)->setAspect(m_plot->dataColumns().at(i));
+		}
 
 		// show columns names in the combobox for the selection of the bar to be modified
 		for (int i = 0; i < count; ++i)
@@ -297,7 +295,7 @@ void LollipopPlotDock::removeXColumn() {
 }
 
 void LollipopPlotDock::addDataColumn() {
-	auto* cb = new TreeViewComboBox;
+	auto* cb = new TreeViewComboBox(this);
 
 	static const QList<AspectType> list{AspectType::Folder,
 										AspectType::Workbook,

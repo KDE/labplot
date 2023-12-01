@@ -1231,15 +1231,3 @@ int AbstractAspectPrivate::indexOfChild(const AbstractAspect* child) const {
 
 	return -1;
 }
-
-int AbstractAspectPrivate::removeChild(AbstractAspect* child) {
-	// QDEBUG(Q_FUNC_INFO << " CHILD = " << child << ", PARENT =" << child->parentAspect())
-	int index = indexOfChild(child);
-	Q_ASSERT(index != -1);
-	child->aspectAboutToBeRemoved(child);
-	m_children.removeAll(child);
-	QObject::disconnect(child, nullptr, q, nullptr);
-	child->setParentAspect(nullptr);
-	// QDEBUG(Q_FUNC_INFO << " DONE. CHILD = " << child)
-	return index;
-}
