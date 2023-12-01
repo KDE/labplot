@@ -63,6 +63,7 @@ public:
 	double minimum(CartesianCoordinateSystem::Dimension) const override;
 	double maximum(CartesianCoordinateSystem::Dimension) const override;
 	bool hasData() const override;
+	QColor color() const override;
 
 	typedef BarPlotPrivate Private;
 

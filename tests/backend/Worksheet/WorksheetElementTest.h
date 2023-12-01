@@ -1,7 +1,7 @@
 /*
-	File                 : WorksheetTest.h
+	File                 : WorksheetElementTest.h
 	Project              : LabPlot
-	Description          : Tests for Worksheets and positioning them on the plot
+	Description          : Tests for WorksheetElements and positioning them on the plot
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2023 Martin Marmsoler <martin.marmsoler@gmail.com>
 

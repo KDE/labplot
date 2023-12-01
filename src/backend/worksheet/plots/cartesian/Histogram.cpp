@@ -343,6 +343,11 @@ bool Histogram::hasData() const {
 	return (d->dataColumn != nullptr);
 }
 
+QColor Histogram::color() const {
+	Q_D(const Histogram);
+	return QColor();
+}
+
 const AbstractColumn* Histogram::bins() const {
 	D(Histogram);
 	return d->bins();

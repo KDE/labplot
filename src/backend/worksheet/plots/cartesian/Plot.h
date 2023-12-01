@@ -27,6 +27,8 @@ public:
 	virtual double maximum(CartesianCoordinateSystem::Dimension dim) const = 0;
 	virtual bool hasData() const = 0;
 	bool activatePlot(QPointF mouseScenePos, double maxDist = -1);
+	virtual QColor color() const = 0; // Color of the plot. If the plot consists multiple colors, return the main Color (This is used in the cursor dock as
+									  // background color for example)
 
 	typedef PlotPrivate Private;
 
@@ -39,7 +41,7 @@ protected:
 
 Q_SIGNALS:
 	void dataChanged(); // emitted when the data to be plotted was changed to re-adjust the parent plot area
-	void updateLegendRequested();
+	void appearanceChanged();
 };
 
 #endif

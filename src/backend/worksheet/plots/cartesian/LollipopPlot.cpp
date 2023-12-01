@@ -185,6 +185,11 @@ bool LollipopPlot::hasData() const {
 	return !d->dataColumns.isEmpty();
 }
 
+QColor LollipopPlot::color() const {
+	Q_D(const LollipopPlot);
+	return QColor();
+}
+
 // values
 Value* LollipopPlot::value() const {
 	Q_D(const LollipopPlot);
@@ -284,12 +289,12 @@ Line* LollipopPlotPrivate::addLine(const KConfigGroup& group) {
 
 	q->connect(line, &Line::updatePixmapRequested, [=] {
 		updatePixmap();
-		Q_EMIT q->updateLegendRequested();
+		Q_EMIT q->appearanceChanged();
 	});
 
 	q->connect(line, &Line::updateRequested, [=] {
 		recalcShapeAndBoundingRect();
-		Q_EMIT q->updateLegendRequested();
+		Q_EMIT q->appearanceChanged();
 	});
 
 	lines << line;
@@ -307,7 +312,7 @@ Symbol* LollipopPlotPrivate::addSymbol(const KConfigGroup& group) {
 
 	q->connect(symbol, &Symbol::updateRequested, [=] {
 		updatePixmap();
-		Q_EMIT q->updateLegendRequested();
+		Q_EMIT q->appearanceChanged();
 	});
 
 	symbols << symbol;

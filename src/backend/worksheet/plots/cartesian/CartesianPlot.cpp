@@ -2116,7 +2116,8 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 	if (plot) {
 		connect(plot, &WorksheetElement::visibleChanged, this, &CartesianPlot::curveVisibilityChanged);
 		connect(plot, &WorksheetElement::aspectDescriptionChanged, this, &CartesianPlot::updateLegend);
-		connect(plot, &Plot::updateLegendRequested, this, &CartesianPlot::updateLegend);
+		connect(plot, &Plot::appearanceChanged, this, &CartesianPlot::updateLegend);
+		connect(plot, &Plot::appearanceChanged, this, QOverload<>::of(&CartesianPlot::plotColorChanged)); // forward to Worksheet to update CursorDock
 
 		connect(plot, &Plot::dataChanged, [this, elem] {
 			this->dataChanged(const_cast<WorksheetElement*>(elem));
@@ -2570,9 +2571,9 @@ void CartesianPlot::curveVisibilityChanged() {
 	Q_EMIT curveVisibilityChangedSignal();
 }
 
-void CartesianPlot::curveLinePenChanged(QPen pen) {
-	const auto* curve = qobject_cast<const XYCurve*>(QObject::sender());
-	Q_EMIT curveLinePenChanged(pen, curve->name());
+void CartesianPlot::plotColorChanged() {
+	const auto* curve = qobject_cast<const Plot*>(QObject::sender());
+	Q_EMIT plotColorChanged(curve->color(), curve->name());
 }
 
 void CartesianPlot::setMouseMode(MouseMode mouseMode) {

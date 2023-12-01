@@ -77,6 +77,7 @@ public:
 	double minimum(CartesianCoordinateSystem::Dimension dim) const override;
 	double maximum(CartesianCoordinateSystem::Dimension dim) const override;
 	bool hasData() const override;
+	QColor color() const override;
 
 	const AbstractColumn* column(CartesianCoordinateSystem::Dimension dim) const;
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, xColumn, XColumn)

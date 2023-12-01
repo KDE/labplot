@@ -186,6 +186,10 @@ bool KDEPlot::hasData() const {
 	return (d->dataColumn != nullptr);
 }
 
+QColor KDEPlot::color() const {
+	Q_D(const KDEPlot);
+	return QColor();
+}
 /*!
  * returns the the number of equaly spaced points at which the density is to be evaluated,
  * which also corresponds to the number of data points in the xy-curve used internally.
