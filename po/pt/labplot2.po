@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-28 00:38+0000\n"
+"POT-Creation-Date: 2023-12-01 00:38+0000\n"
 "PO-Revision-Date: 2023-06-24 01:41+0100\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
@@ -6961,43 +6961,43 @@ msgstr "%1: mudar o índice do ponto de colagem"
 msgid "%1: set connectionline curve name"
 msgstr "%1: mudar o nome da curva da linha de ligação"
 
-#: src/backend/worksheet/Line.cpp:107
+#: src/backend/worksheet/Line.cpp:109
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:395
 #, kde-format
 msgid "%1: line type changed"
 msgstr "%1: o tipo de linha foi modificado"
 
-#: src/backend/worksheet/Line.cpp:119
+#: src/backend/worksheet/Line.cpp:121
 #, kde-format
 msgid "%1: set error bar cap size"
 msgstr "%1: mudar o tamanho do extremo da barra de erros"
 
-#: src/backend/worksheet/Line.cpp:126
+#: src/backend/worksheet/Line.cpp:128
 #, kde-format
 msgid "%1: error bar type changed"
 msgstr "%1: o tipo da barra de erros foi modificado"
 
-#: src/backend/worksheet/Line.cpp:133
+#: src/backend/worksheet/Line.cpp:135
 #, kde-format
 msgid "%1: drop line type changed"
 msgstr "%1: o tipo de linha foi modificado"
 
-#: src/backend/worksheet/Line.cpp:140
+#: src/backend/worksheet/Line.cpp:142
 #, kde-format
 msgid "%1: set line style"
 msgstr "%1: mudar o estilo da linha"
 
-#: src/backend/worksheet/Line.cpp:147
+#: src/backend/worksheet/Line.cpp:149
 #, kde-format
 msgid "%1: set line width"
 msgstr "%1: mudar a espessura da linha"
 
-#: src/backend/worksheet/Line.cpp:154
+#: src/backend/worksheet/Line.cpp:156
 #, kde-format
 msgid "%1: set line color"
 msgstr "%1: mudar a cor da linha"
 
-#: src/backend/worksheet/Line.cpp:161
+#: src/backend/worksheet/Line.cpp:163
 #, kde-format
 msgid "%1: set line opacity"
 msgstr "%1: mudar a opacidade da linha"

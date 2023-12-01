@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-28 00:38+0000\n"
+"POT-Creation-Date: 2023-12-01 00:38+0000\n"
 "PO-Revision-Date: 2023-11-22 21:12+0100\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -6838,43 +6838,43 @@ msgstr "%1: ställ in fästpunkters index"
 msgid "%1: set connectionline curve name"
 msgstr "%1: ställ in sammanbindningskurvans namn"
 
-#: src/backend/worksheet/Line.cpp:107
+#: src/backend/worksheet/Line.cpp:109
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:395
 #, kde-format
 msgid "%1: line type changed"
 msgstr "%1: linjetyp ändrad"
 
-#: src/backend/worksheet/Line.cpp:119
+#: src/backend/worksheet/Line.cpp:121
 #, kde-format
 msgid "%1: set error bar cap size"
 msgstr "%1: ställ in felstapelns ändstorlek"
 
-#: src/backend/worksheet/Line.cpp:126
+#: src/backend/worksheet/Line.cpp:128
 #, kde-format
 msgid "%1: error bar type changed"
 msgstr "%1: felstapelns typ ändrad"
 
-#: src/backend/worksheet/Line.cpp:133
+#: src/backend/worksheet/Line.cpp:135
 #, kde-format
 msgid "%1: drop line type changed"
 msgstr "%1: markeringslinjernas typ ändrades"
 
-#: src/backend/worksheet/Line.cpp:140
+#: src/backend/worksheet/Line.cpp:142
 #, kde-format
 msgid "%1: set line style"
 msgstr "%1: ställ in linjestil"
 
-#: src/backend/worksheet/Line.cpp:147
+#: src/backend/worksheet/Line.cpp:149
 #, kde-format
 msgid "%1: set line width"
 msgstr "%1: ställ in linjebredd"
 
-#: src/backend/worksheet/Line.cpp:154
+#: src/backend/worksheet/Line.cpp:156
 #, kde-format
 msgid "%1: set line color"
 msgstr "%1: ställ in linjefärg"
 
-#: src/backend/worksheet/Line.cpp:161
+#: src/backend/worksheet/Line.cpp:163
 #, kde-format
 msgid "%1: set line opacity"
 msgstr "%1: ställ in linjens ogenomskinlighet"

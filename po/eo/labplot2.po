@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-28 00:38+0000\n"
+"POT-Creation-Date: 2023-12-01 00:38+0000\n"
 "PO-Revision-Date: 2023-11-25 20:11+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
@@ -6825,43 +6825,43 @@ msgstr "%1: starigis glupunkton-indekson"
 msgid "%1: set connectionline curve name"
 msgstr "%1: agordi la nomon de la liglinia kurbo"
 
-#: src/backend/worksheet/Line.cpp:107
+#: src/backend/worksheet/Line.cpp:109
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:395
 #, kde-format
 msgid "%1: line type changed"
 msgstr "%1: liniotipo ŝanĝita"
 
-#: src/backend/worksheet/Line.cpp:119
+#: src/backend/worksheet/Line.cpp:121
 #, kde-format
 msgid "%1: set error bar cap size"
 msgstr "%1: agordi erarbretan limgrandon"
 
-#: src/backend/worksheet/Line.cpp:126
+#: src/backend/worksheet/Line.cpp:128
 #, kde-format
 msgid "%1: error bar type changed"
 msgstr "%1: tipo de erarbreto ŝanĝita"
 
-#: src/backend/worksheet/Line.cpp:133
+#: src/backend/worksheet/Line.cpp:135
 #, kde-format
 msgid "%1: drop line type changed"
 msgstr "%1: gutlinia tipo ŝanĝiĝis"
 
-#: src/backend/worksheet/Line.cpp:140
+#: src/backend/worksheet/Line.cpp:142
 #, kde-format
 msgid "%1: set line style"
 msgstr "%1: starigis liniostilon"
 
-#: src/backend/worksheet/Line.cpp:147
+#: src/backend/worksheet/Line.cpp:149
 #, kde-format
 msgid "%1: set line width"
 msgstr "%1: agordi liniolarĝon"
 
-#: src/backend/worksheet/Line.cpp:154
+#: src/backend/worksheet/Line.cpp:156
 #, kde-format
 msgid "%1: set line color"
 msgstr "%1: agordi liniokoloron"
 
-#: src/backend/worksheet/Line.cpp:161
+#: src/backend/worksheet/Line.cpp:163
 #, kde-format
 msgid "%1: set line opacity"
 msgstr "%1: agordi linion opakecon"

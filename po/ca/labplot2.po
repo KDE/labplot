@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-28 00:38+0000\n"
+"POT-Creation-Date: 2023-12-01 00:38+0000\n"
 "PO-Revision-Date: 2023-11-22 11:58+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -6927,43 +6927,43 @@ msgstr "%1: estableix l'índex dels punts d'adhesió"
 msgid "%1: set connectionline curve name"
 msgstr "%1: estableix el nom de la corba de la línia de connexió"
 
-#: src/backend/worksheet/Line.cpp:107
+#: src/backend/worksheet/Line.cpp:109
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:395
 #, kde-format
 msgid "%1: line type changed"
 msgstr "%1: s'ha canviat el tipus de línia"
 
-#: src/backend/worksheet/Line.cpp:119
+#: src/backend/worksheet/Line.cpp:121
 #, kde-format
 msgid "%1: set error bar cap size"
 msgstr "%1: estableix la mida de l'extrem de la barra d'errors"
 
-#: src/backend/worksheet/Line.cpp:126
+#: src/backend/worksheet/Line.cpp:128
 #, kde-format
 msgid "%1: error bar type changed"
 msgstr "%1: s'ha canviat el tipus de la barra d'errors"
 
-#: src/backend/worksheet/Line.cpp:133
+#: src/backend/worksheet/Line.cpp:135
 #, kde-format
 msgid "%1: drop line type changed"
 msgstr "%1: s'ha canviat el tipus de derivació de la línia"
 
-#: src/backend/worksheet/Line.cpp:140
+#: src/backend/worksheet/Line.cpp:142
 #, kde-format
 msgid "%1: set line style"
 msgstr "%1: estableix l'estil de la línia"
 
-#: src/backend/worksheet/Line.cpp:147
+#: src/backend/worksheet/Line.cpp:149
 #, kde-format
 msgid "%1: set line width"
 msgstr "%1: estableix l'amplada de la línia"
 
-#: src/backend/worksheet/Line.cpp:154
+#: src/backend/worksheet/Line.cpp:156
 #, kde-format
 msgid "%1: set line color"
 msgstr "%1: estableix el color de la línia"
 
-#: src/backend/worksheet/Line.cpp:161
+#: src/backend/worksheet/Line.cpp:163
 #, kde-format
 msgid "%1: set line opacity"
 msgstr "%1: estableix l'opacitat de la línia"
