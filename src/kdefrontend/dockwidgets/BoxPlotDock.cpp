@@ -270,8 +270,11 @@ void BoxPlotDock::loadDataColumns() {
 		}
 
 		// show the columns in the comboboxes
-		for (int i = 0; i < count; ++i)
+		auto* model = aspectModel();
+		for (int i = 0; i < count; ++i) {
+			m_dataComboBoxes.at(i)->setModel(model); // the model might have changed in-between, reset the current model
 			m_dataComboBoxes.at(i)->setAspect(m_boxPlot->dataColumns().at(i));
+		}
 
 		// show columns names in the combobox for the selection of the box to be modified
 		for (int i = 0; i < count; ++i)
@@ -312,7 +315,7 @@ void BoxPlotDock::setDataColumns() const {
 //*** SLOTs for changes triggered in BoxPlotDock *****
 //**********************************************************
 void BoxPlotDock::addDataColumn() {
-	auto* cb = new TreeViewComboBox;
+	auto* cb = new TreeViewComboBox(this);
 
 	static const QList<AspectType> list{AspectType::Folder,
 										AspectType::Workbook,
