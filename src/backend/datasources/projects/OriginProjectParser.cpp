@@ -1080,6 +1080,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 	int index = 0; // index of the graph layer
 	CartesianPlot* plot = nullptr;
 	for (const auto& layer : graph.layers) {
+		DEBUG("GraphLayer " << index + 1)
 		if (layer.is3D()) {
 			// TODO: add an "UnsupportedAspect" here since we don't support 3D yet
 			break;
@@ -1136,7 +1137,7 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 	// TODO: width, height
 
 	// background color
-	const Origin::Color& regColor = layer.backgroundColor;
+	const auto& regColor = layer.backgroundColor;
 	if (regColor.type == Origin::Color::None)
 		plot->plotArea()->background()->setOpacity(0);
 	else
@@ -1149,8 +1150,8 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 		plot->plotArea()->borderLine()->setStyle(Qt::SolidLine);
 
 	// ranges
-	const Origin::GraphAxis& originXAxis = layer.xAxis;
-	const Origin::GraphAxis& originYAxis = layer.yAxis;
+	const auto& originXAxis = layer.xAxis;
+	const auto& originYAxis = layer.yAxis;
 
 	Range<double> xRange(originXAxis.min, originXAxis.max);
 	Range<double> yRange(originYAxis.min, originYAxis.max);
@@ -1283,7 +1284,7 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 	// TODO
 
 	// add legend if available
-	const Origin::TextBox& originLegend = layer.legend;
+	const auto& originLegend = layer.legend;
 	const QString& legendText = QString::fromLatin1(originLegend.text.c_str());
 	DEBUG(Q_FUNC_INFO << ", legend text = \"" << STDSTRING(legendText) << "\"");
 	if (!originLegend.text.empty()) {
