@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-07-10 02:40+0000\n"
-"PO-Revision-Date: 2023-08-25 12:46+0200\n"
+"PO-Revision-Date: 2023-11-30 10:35+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -5196,7 +5196,7 @@ msgstr "Ln"
 #: src/backend/lib/Range.cpp:13
 #, kde-format
 msgid "Sqrt"
-msgstr ""
+msgstr "Sqrt"
 
 #: src/backend/lib/Range.cpp:13
 #, kde-format
@@ -6053,7 +6053,7 @@ msgstr ""
 #: src/backend/nsl/nsl_sf_stats.c:30
 #, kde-format
 msgid "Beta"
-msgstr ""
+msgstr "Beta"
 
 #: src/backend/nsl/nsl_sf_stats.c:31
 #, kde-format
@@ -8092,7 +8092,7 @@ msgstr "Latino"
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:391
 #, kde-format
 msgid "david"
-msgstr ""
+msgstr "david"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:393
 #, kde-format
@@ -8760,7 +8760,7 @@ msgstr ""
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:157
 #, kde-format
 msgid "Shift Right"
-msgstr ""
+msgstr "Shift Dextere"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:160
 #, kde-format
@@ -11128,7 +11128,7 @@ msgstr ""
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:440
 #, kde-format
 msgid "Add new folder"
-msgstr ""
+msgstr "Adde nove dossier"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:106
 #, kde-format
@@ -13122,13 +13122,13 @@ msgstr "Projecto"
 #, kde-format
 msgctxt "@title:window %1 is a Cantor backend"
 msgid "%1 Notebook"
-msgstr ""
+msgstr "%1 Notebook (quaderno)"
 
 #: src/kdefrontend/GuiObserver.cpp:412
 #, kde-format
 msgctxt "@title:window"
 msgid "Notebook"
-msgstr ""
+msgstr " Notebook (quaderno)"
 
 #: src/kdefrontend/GuiObserver.cpp:418
 #, kde-format
@@ -13666,7 +13666,7 @@ msgstr ""
 #: src/kdefrontend/labplot2ui.rc:32 src/kdefrontend/SettingsDialog.cpp:72
 #, kde-format
 msgid "Notebook"
-msgstr ""
+msgstr " Notebook (quaderno)"
 
 #. i18n: ectx: ToolBar (cartesian_plot_toolbar)
 #: src/kdefrontend/labplot2ui.rc:36
@@ -13691,7 +13691,7 @@ msgstr "&Adde nove"
 #: src/kdefrontend/labplot2ui.rc:55 src/kdefrontend/labplot2ui.rc:79
 #, kde-format
 msgid "&Notebook"
-msgstr ""
+msgstr "&Notebook (quaderno)"
 
 #. i18n: ectx: Menu (edit)
 #: src/kdefrontend/labplot2ui.rc:71
@@ -15336,7 +15336,7 @@ msgstr ""
 #: src/kdefrontend/spreadsheet/SampleValuesDialog.cpp:63
 #, kde-format
 msgid "&Sample"
-msgstr ""
+msgstr "E&xemplo"
 
 #: src/kdefrontend/spreadsheet/SampleValuesDialog.cpp:64
 #, kde-format
@@ -15425,7 +15425,7 @@ msgstr "Vista de insimul"
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:140
 #, kde-format
 msgid "KDE Plot"
-msgstr ""
+msgstr "KDE Plot (Tracia)"
 
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:141
 #, kde-format
@@ -17152,7 +17152,7 @@ msgstr ""
 #: src/kdefrontend/ui/datasources/mqttsubscriptionwidget.ui:92
 #, kde-format
 msgid "Subscribed"
-msgstr ""
+msgstr "Subscribite"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbQos)
 #: src/kdefrontend/ui/datasources/mqttsubscriptionwidget.ui:155
