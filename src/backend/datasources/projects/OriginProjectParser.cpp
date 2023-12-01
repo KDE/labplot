@@ -1077,10 +1077,10 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 
 	// process Origin's graph layers - add new plot areas or new coordinate system in the same plot area, depending on the global setting
 	// https://www.originlab.com/doc/Origin-Help/MultiLayer-Graph
-	int index = 0; // index of the graph layer
+	int layerIndex = 0; // index of the graph layer
 	CartesianPlot* plot = nullptr;
 	for (const auto& layer : graph.layers) {
-		DEBUG("GraphLayer " << index + 1)
+		DEBUG(Q_FUNC_INFO << ", Graph Layer " << layerIndex + 1)
 		if (layer.is3D()) {
 			// TODO: add an "UnsupportedAspect" here since we don't support 3D yet
 			break;
@@ -1089,8 +1089,9 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 		// create a new plot if we're
 		// 1. interpreting every layer as a new plot
 		// 2. interpreting every layer as a new coordinate system in the same and single plot and no plot was created yet
+		DEBUG(Q_FUNC_INFO << ", layer as plot area = " << m_graphLayerAsPlotArea)
 		if (m_graphLayerAsPlotArea || (!m_graphLayerAsPlotArea && !plot)) {
-			plot = new CartesianPlot(i18n("Plot%1", QString::number(index + 1)));
+			plot = new CartesianPlot(i18n("Plot%1", QString::number(layerIndex + 1)));
 			worksheet->addChildFast(plot);
 			plot->setIsLoading(true);
 		}
@@ -1099,8 +1100,8 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 		if (preview)
 			continue;
 
-		loadGraphLayer(layer, plot, index, textLabelPositions, preview);
-		++index;
+		loadGraphLayer(layer, plot, layerIndex, textLabelPositions, preview);
+		++layerIndex;
 	}
 
 	if (!preview) {
@@ -1130,7 +1131,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 
 void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 										 CartesianPlot* plot,
-										 int index,
+										 int layerIndex,
 										 QHash<TextLabel*, QSizeF> textLabelPositions,
 										 bool preview) {
 	DEBUG(Q_FUNC_INFO << ", NEW GRAPH LAYER")
@@ -1162,17 +1163,19 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 		// graph layer is read as a new plot area -> set the ranges for default coordinate system
 		plot->setRangeDefault(Dimension::X, xRange);
 		plot->setRangeDefault(Dimension::Y, yRange);
-	} else {
-		// graph layer is read as a new coordinate system in the same plot area
+	} else { // graph layer is read as a new coordinate system in the same plot area
+		DEBUG(Q_FUNC_INFO << ", new coordinate system. layer index = " << layerIndex)
 		// -> create a new coordinate systems and set the ranges for it
-		// TODO
-		if (index != 0) {
+		if (layerIndex > 0) {
 			plot->addXRange();
 			plot->addYRange();
 			plot->addCoordinateSystem();
+			// set new ranges for new coordinate system
+			plot->setCoordinateSystemRangeIndex(layerIndex, Dimension::X, layerIndex);
+			plot->setCoordinateSystemRangeIndex(layerIndex, Dimension::Y, layerIndex);
 		}
-		plot->setRange(Dimension::X, index, xRange);
-		plot->setRange(Dimension::Y, index, yRange);
+		plot->setRange(Dimension::X, layerIndex, xRange);
+		plot->setRange(Dimension::Y, layerIndex, yRange);
 	}
 
 	// scales
@@ -1227,8 +1230,50 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 	}
 
 	// axes
-	if (layer.curves.size()) {
-		Origin::GraphCurve originCurve = layer.curves[0];
+	DEBUG(Q_FUNC_INFO << ", layer.curves.size() = " << layer.curves.size())
+	if (layer.curves.empty()) { // no curves, just axes
+		// x bottom
+		if (!originXAxis.formatAxis[0].hidden) {
+			Axis* axis = new Axis(QStringLiteral("x"), Axis::Orientation::Horizontal);
+			axis->setSuppressRetransform(true);
+			axis->setPosition(Axis::Position::Bottom);
+			plot->addChildFast(axis);
+			loadAxis(originXAxis, axis, 0, QLatin1String("y axis")); // TODO: set title
+			axis->setCoordinateSystemIndex(layerIndex);
+			axis->setSuppressRetransform(false);
+		}
+		// x top
+		if (!originXAxis.formatAxis[1].hidden) {
+			Axis* axis = new Axis(QStringLiteral("x top"), Axis::Orientation::Horizontal);
+			axis->setPosition(Axis::Position::Top);
+			axis->setSuppressRetransform(true);
+			plot->addChildFast(axis);
+			loadAxis(originXAxis, axis, 1, QLatin1String("y axis")); // TODO: set title
+			axis->setCoordinateSystemIndex(layerIndex);
+			axis->setSuppressRetransform(false);
+		}
+		// y left
+		if (!originYAxis.formatAxis[0].hidden) {
+			Axis* axis = new Axis(QStringLiteral("y"), Axis::Orientation::Vertical);
+			axis->setSuppressRetransform(true);
+			axis->setPosition(Axis::Position::Left);
+			plot->addChildFast(axis);
+			loadAxis(originYAxis, axis, 0, QLatin1String("y axis")); // TODO: set title
+			axis->setCoordinateSystemIndex(layerIndex);
+			axis->setSuppressRetransform(false);
+		}
+		// y right
+		if (!originYAxis.formatAxis[1].hidden) {
+			Axis* axis = new Axis(QStringLiteral("y right"), Axis::Orientation::Vertical);
+			axis->setSuppressRetransform(true);
+			axis->setPosition(Axis::Position::Right);
+			plot->addChildFast(axis);
+			loadAxis(originYAxis, axis, 1, QLatin1String("y axis")); // TODO: set title
+			axis->setCoordinateSystemIndex(layerIndex);
+			axis->setSuppressRetransform(false);
+		}
+	} else {
+		auto originCurve = layer.curves.at(0);
 		QString xColumnName = QString::fromLatin1(originCurve.xColumnName.c_str());
 		// TODO: "Partikelgrö"
 		DEBUG("	xColumnName = " << STDSTRING(xColumnName));
@@ -1246,7 +1291,6 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 			loadAxis(originXAxis, axis, 0, xColumnName);
 			axis->setSuppressRetransform(false);
 		}
-
 		// x top
 		if (!originXAxis.formatAxis[1].hidden) {
 			Axis* axis = new Axis(QStringLiteral("x top"), Axis::Orientation::Horizontal);
@@ -1256,7 +1300,6 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 			loadAxis(originXAxis, axis, 1, xColumnName);
 			axis->setSuppressRetransform(false);
 		}
-
 		// y left
 		if (!originYAxis.formatAxis[0].hidden) {
 			Axis* axis = new Axis(QStringLiteral("y"), Axis::Orientation::Vertical);
@@ -1266,7 +1309,6 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 			loadAxis(originYAxis, axis, 0, yColumnName);
 			axis->setSuppressRetransform(false);
 		}
-
 		// y right
 		if (!originYAxis.formatAxis[1].hidden) {
 			Axis* axis = new Axis(QStringLiteral("y right"), Axis::Orientation::Vertical);
@@ -1276,8 +1318,6 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 			loadAxis(originYAxis, axis, 1, yColumnName);
 			axis->setSuppressRetransform(false);
 		}
-	} else {
-		// TODO: ?
 	}
 
 	// range breaks
