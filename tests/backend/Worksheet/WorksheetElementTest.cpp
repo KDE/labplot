@@ -18,6 +18,8 @@
 #include "backend/worksheet/TextLabel.h"
 #include "backend/worksheet/TextLabelPrivate.h"
 #include "backend/worksheet/plots/cartesian/CustomPoint.h"
+#include "backend/worksheet/plots/cartesian/ReferenceLine.h"
+#include "backend/worksheet/plots/cartesian/ReferenceLinePrivate.h"
 #include "backend/worksheet/plots/cartesian/ReferenceRange.h"
 #include "backend/worksheet/plots/cartesian/ReferenceRangePrivate.h"
 #include "kdefrontend/dockwidgets/CustomPointDock.h"
@@ -376,6 +378,186 @@ void WorksheetElementTest::referenceRangeSaveLoad() {
 		QCOMPARE(referenceRange->positionLogicalEnd().y(), 0.55);
 		CHECK_REFERENCERANGE_RECT(referenceRange, 0., 0.55, 1., 0.45);
 	}
+}
+
+void WorksheetElementTest::referenceLineLinearScaling() {
+	Project project;
+
+	auto* worksheet = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(worksheet);
+
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
+	worksheet->addChild(plot);
+	plot->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	plot->setNiceExtend(true);
+
+	const auto& axes = plot->children<Axis>();
+	QCOMPARE(axes.length(), 2);
+	QCOMPARE(axes.at(0)->name(), QStringLiteral("x"));
+	QCOMPARE(axes.at(1)->name(), QStringLiteral("y"));
+	auto* xAxis = axes.at(0);
+
+	CHECK_RANGE(plot, xAxis, Dimension::X, 0., 1.);
+	CHECK_RANGE(plot, xAxis, Dimension::Y, 0., 1.);
+
+	plot->setRangeScale(Dimension::X, 0, RangeT::Scale::Linear);
+
+	CHECK_RANGE(plot, xAxis, Dimension::X, 0., 1.);
+	CHECK_RANGE(plot, xAxis, Dimension::Y, 0., 1.);
+
+	auto* referenceLine = new ReferenceLine(plot, QStringLiteral("TestLine"));
+	referenceLine->setOrientation(ReferenceLine::Orientation::Horizontal);
+	plot->addChild(referenceLine);
+	referenceLine->retransform();
+
+	const auto& rect = plot->dataRect();
+
+	QCOMPARE(qAbs(referenceLine->d_func()->length), rect.width());
+	QCOMPARE(referenceLine->d_func()->pos().x(), rect.center().x());
+}
+
+void WorksheetElementTest::referenceLineLog10Scaling() {
+	Project project;
+
+	auto* worksheet = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(worksheet);
+
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
+	worksheet->addChild(plot);
+	plot->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	plot->setNiceExtend(true);
+
+	const auto& axes = plot->children<Axis>();
+	QCOMPARE(axes.length(), 2);
+	QCOMPARE(axes.at(0)->name(), QStringLiteral("x"));
+	QCOMPARE(axes.at(1)->name(), QStringLiteral("y"));
+	auto* xAxis = axes.at(0);
+
+	CHECK_RANGE(plot, xAxis, Dimension::X, 0., 1.);
+	CHECK_RANGE(plot, xAxis, Dimension::Y, 0., 1.);
+
+	plot->setRangeScale(Dimension::X, 0, RangeT::Scale::Log10);
+
+	CHECK_RANGE(plot, xAxis, Dimension::X, 0.01, 1.);
+	CHECK_RANGE(plot, xAxis, Dimension::Y, 0., 1.);
+
+	auto* referenceLine = new ReferenceLine(plot, QStringLiteral("TestLine"));
+	referenceLine->setOrientation(ReferenceLine::Orientation::Horizontal);
+	plot->addChild(referenceLine);
+	referenceLine->retransform();
+
+	const auto& rect = plot->dataRect();
+
+	QCOMPARE(qAbs(referenceLine->d_func()->length), rect.width());
+	QCOMPARE(referenceLine->d_func()->pos().x(), rect.center().x());
+}
+
+void WorksheetElementTest::referenceLineSquareScaling() {
+	Project project;
+
+	auto* worksheet = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(worksheet);
+
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
+	worksheet->addChild(plot);
+	plot->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	plot->setNiceExtend(true);
+
+	const auto& axes = plot->children<Axis>();
+	QCOMPARE(axes.length(), 2);
+	QCOMPARE(axes.at(0)->name(), QStringLiteral("x"));
+	QCOMPARE(axes.at(1)->name(), QStringLiteral("y"));
+	auto* xAxis = axes.at(0);
+
+	CHECK_RANGE(plot, xAxis, Dimension::X, 0., 1.);
+	CHECK_RANGE(plot, xAxis, Dimension::Y, 0., 1.);
+
+	plot->setRangeScale(Dimension::X, 0, RangeT::Scale::Square);
+
+	CHECK_RANGE(plot, xAxis, Dimension::X, 0.01, 1.);
+	CHECK_RANGE(plot, xAxis, Dimension::Y, 0., 1.);
+
+	auto* referenceLine = new ReferenceLine(plot, QStringLiteral("TestLine"));
+	referenceLine->setOrientation(ReferenceLine::Orientation::Horizontal);
+	plot->addChild(referenceLine);
+	referenceLine->retransform();
+
+	const auto& rect = plot->dataRect();
+
+	QCOMPARE(qAbs(referenceLine->d_func()->length), rect.width());
+	QCOMPARE(referenceLine->d_func()->pos().x(), rect.center().x());
+}
+
+void WorksheetElementTest::referenceLineSqrtScaling() {
+	Project project;
+
+	auto* worksheet = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(worksheet);
+
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
+	worksheet->addChild(plot);
+	plot->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	plot->setNiceExtend(true);
+
+	const auto& axes = plot->children<Axis>();
+	QCOMPARE(axes.length(), 2);
+	QCOMPARE(axes.at(0)->name(), QStringLiteral("x"));
+	QCOMPARE(axes.at(1)->name(), QStringLiteral("y"));
+	auto* xAxis = axes.at(0);
+
+	CHECK_RANGE(plot, xAxis, Dimension::X, 0., 1.);
+	CHECK_RANGE(plot, xAxis, Dimension::Y, 0., 1.);
+
+	plot->setRangeScale(Dimension::X, 0, RangeT::Scale::Sqrt);
+
+	CHECK_RANGE(plot, xAxis, Dimension::X, 0., 1.);
+	CHECK_RANGE(plot, xAxis, Dimension::Y, 0., 1.);
+
+	auto* referenceLine = new ReferenceLine(plot, QStringLiteral("TestLine"));
+	referenceLine->setOrientation(ReferenceLine::Orientation::Horizontal);
+	plot->addChild(referenceLine);
+	referenceLine->retransform();
+
+	const auto& rect = plot->dataRect();
+
+	QCOMPARE(qAbs(referenceLine->d_func()->length), rect.width());
+	QCOMPARE(referenceLine->d_func()->pos().x(), rect.center().x());
+}
+
+void WorksheetElementTest::referenceLineInverseScaling() {
+	Project project;
+
+	auto* worksheet = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(worksheet);
+
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
+	worksheet->addChild(plot);
+	plot->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	plot->setNiceExtend(true);
+
+	const auto& axes = plot->children<Axis>();
+	QCOMPARE(axes.length(), 2);
+	QCOMPARE(axes.at(0)->name(), QStringLiteral("x"));
+	QCOMPARE(axes.at(1)->name(), QStringLiteral("y"));
+	auto* xAxis = axes.at(0);
+
+	CHECK_RANGE(plot, xAxis, Dimension::X, 0., 1.);
+	CHECK_RANGE(plot, xAxis, Dimension::Y, 0., 1.);
+
+	plot->setRangeScale(Dimension::X, 0, RangeT::Scale::Sqrt);
+
+	CHECK_RANGE(plot, xAxis, Dimension::X, 0.0, 1.);
+	CHECK_RANGE(plot, xAxis, Dimension::Y, 0., 1.);
+
+	auto* referenceLine = new ReferenceLine(plot, QStringLiteral("TestLine"));
+	referenceLine->setOrientation(ReferenceLine::Orientation::Horizontal);
+	plot->addChild(referenceLine);
+	referenceLine->retransform();
+
+	const auto& rect = plot->dataRect();
+
+	QCOMPARE(qAbs(referenceLine->d_func()->length), rect.width());
+	QCOMPARE(referenceLine->d_func()->pos().x(), rect.center().x());
 }
 
 // TODO: create test with reference range with nonlinear ranges!

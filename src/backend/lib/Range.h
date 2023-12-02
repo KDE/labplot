@@ -153,7 +153,23 @@ public:
 		return qAbs(m_end - m_start);
 	}
 	T center() const {
-		return (m_start + m_end) / 2;
+		switch (m_scale) {
+		case Scale::Linear:
+			return (m_start + m_end) / 2.;
+		case Scale::Log10:
+			return std::pow(10., log10(m_end * m_start) / 2.);
+		case Scale::Log2:
+			return std::pow(2., log2(m_end * m_start) / 2.);
+		case Scale::Ln:
+			return std::exp(log(m_end * m_start) / 2.);
+		case Scale::Sqrt:
+			return std::pow((std::sqrt(m_end) + std::sqrt(m_start)) / 2., 2.);
+		case Scale::Square:
+			return std::sqrt((std::pow(m_end, 2.) + std::pow(m_start, 2.)) / 2.);
+		case Scale::Inverse:
+			return 1. / ((1. / m_end + 1. / m_start) / 2.);
+		}
+		return T();
 	}
 	// calculate step size from number of steps
 	T stepSize(const int steps) const {
