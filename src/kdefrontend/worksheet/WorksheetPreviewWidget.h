@@ -11,6 +11,7 @@
 #define WORKSHEETPREVIEWWIDGET_H
 
 #include "ui_worksheetpreviewwidget.h"
+#include <QSet>
 
 class AbstractAspect;
 class Project;
@@ -32,20 +33,25 @@ private:
 	Ui::WorksheetPreviewWidget ui;
 	Project* m_project{nullptr};
 	bool m_suppressNavigate{false};
+	QSet<const Worksheet*> m_dirtyPreviews;
 
 	void addPreview(const Worksheet*, int row = -1) const;
+	void updatePreview(const Worksheet*);
 	int indexOfWorksheet(const Worksheet*) const;
+
 	void contextMenuEvent(QContextMenuEvent*) override;
 	void resizeEvent(QResizeEvent*) override;
+	void showEvent(QShowEvent*) override;
 
 private Q_SLOTS:
 	void initPreview();
 	void currentChanged(int);
+
 	void aspectAdded(const AbstractAspect*);
 	void aspectAboutToBeRemoved(const AbstractAspect*);
 	void aspectSelected(const AbstractAspect*);
 	void aspectDeselected(const AbstractAspect*);
-	void updatePreview();
+	void changed();
 	void updateText();
 
 Q_SIGNALS:

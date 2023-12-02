@@ -54,8 +54,6 @@ void WorksheetPreviewWidget::setProject(Project* project) {
 
 	connect(m_project, &Project::loaded, this, &WorksheetPreviewWidget::initPreview);
 	connect(m_project, &Project::childAspectAdded, this, &WorksheetPreviewWidget::aspectAdded);
-	connect(m_project, &Project::childAspectAboutToBeRemoved, this, &WorksheetPreviewWidget::aspectAboutToBeRemoved);
-	// TODO: handle moving of worksheets
 }
 
 /*!
@@ -66,6 +64,42 @@ void WorksheetPreviewWidget::initPreview() {
 	const auto& worksheets = m_project->children<Worksheet>(AbstractAspect::ChildIndexFlag::Recursive);
 	for (int i = 0; i < worksheets.size(); ++i)
 		addPreview(worksheets.at(i), i);
+}
+
+void WorksheetPreviewWidget::addPreview(const Worksheet* w, int row) const {
+	QPixmap pix(10, 10);
+	const bool rc = w->exportView(pix);
+	if (!rc) {
+		// the view is not available yet, show the placeholder preview
+		const auto icon = QIcon::fromTheme(QLatin1String("view-preview"));
+		const int iconSize = std::ceil(5.0 / 2.54 * QApplication::primaryScreen()->physicalDotsPerInchX());
+		pix = icon.pixmap(iconSize, iconSize);
+	}
+	ui.lwPreview->insertItem(row, new QListWidgetItem(QIcon(pix), w->name()));
+
+	connect(w, &Worksheet::aspectDescriptionChanged, this, &WorksheetPreviewWidget::updateText);
+	connect(w, &Worksheet::changed, this, &WorksheetPreviewWidget::changed);
+	connect(w, &Worksheet::selected, this, &WorksheetPreviewWidget::aspectSelected);
+	connect(w, &Worksheet::deselected, this, &WorksheetPreviewWidget::aspectDeselected);
+	connect(w, &Worksheet::aspectAboutToBeRemoved, this, &WorksheetPreviewWidget::aspectAboutToBeRemoved);
+	// TODO: handle moving of worksheets
+}
+
+//*************************************************************
+//**************************** SLOTs *************************
+//*************************************************************
+
+/*!
+ * called when the current item in the list view was changed,
+ * triggers the navigation to the corresponding worksheet.
+ */
+void WorksheetPreviewWidget::currentChanged(int index) {
+	if (m_suppressNavigate)
+		return;
+
+	const auto& worksheets = m_project->children<Worksheet>(AbstractAspect::ChildIndexFlag::Recursive);
+	const auto* worksheet = worksheets.at(index);
+	m_project->requestNavigateTo(worksheet->path());
 }
 
 void WorksheetPreviewWidget::aspectAdded(const AbstractAspect* aspect) {
@@ -105,15 +139,6 @@ void WorksheetPreviewWidget::aspectDeselected(const AbstractAspect* aspect) {
 	}
 }
 
-void WorksheetPreviewWidget::currentChanged(int index) {
-	if (m_suppressNavigate)
-		return;
-
-	const auto& worksheets = m_project->children<Worksheet>(AbstractAspect::ChildIndexFlag::Recursive);
-	const auto* worksheet = worksheets.at(index);
-	m_project->requestNavigateTo(worksheet->path());
-}
-
 void WorksheetPreviewWidget::aspectAboutToBeRemoved(const AbstractAspect* aspect) {
 	const auto* w = dynamic_cast<const Worksheet*>(aspect);
 	if (!w)
@@ -121,33 +146,26 @@ void WorksheetPreviewWidget::aspectAboutToBeRemoved(const AbstractAspect* aspect
 
 	disconnect(w, nullptr, this, nullptr);
 	ui.lwPreview->takeItem(indexOfWorksheet(w));
+	m_dirtyPreviews.remove(w);
 }
 
-void WorksheetPreviewWidget::addPreview(const Worksheet* w, int row) const {
-	QPixmap pix(10, 10);
-	const bool rc = w->exportView(pix);
-	if (!rc) {
-		// the view is not available yet, show the placeholder preview
-		const auto icon = QIcon::fromTheme(QLatin1String("view-preview"));
-		const int iconSize = std::ceil(5.0 / 2.54 * QApplication::primaryScreen()->physicalDotsPerInchX());
-		pix = icon.pixmap(iconSize, iconSize);
-	}
-	ui.lwPreview->insertItem(row, new QListWidgetItem(QIcon(pix), w->name()));
-
-	connect(w, &Worksheet::aspectDescriptionChanged, this, &WorksheetPreviewWidget::updateText);
-	connect(w, &Worksheet::changed, this, &WorksheetPreviewWidget::updatePreview);
-	connect(w, &Worksheet::selected, this, &WorksheetPreviewWidget::aspectSelected);
-	connect(w, &Worksheet::deselected, this, &WorksheetPreviewWidget::aspectDeselected);
-}
-
-void WorksheetPreviewWidget::updatePreview() {
-	auto* w = dynamic_cast<Worksheet*>(QObject::sender());
+/*!
+ * called if one of the worksheets was changed/modified
+ */
+void WorksheetPreviewWidget::changed() {
+	const auto* w = dynamic_cast<Worksheet*>(QObject::sender());
 	if (!w)
 		return;
 
-	QPixmap pix(10, 10);
-	w->exportView(pix);
-	ui.lwPreview->item(indexOfWorksheet(w))->setIcon(QIcon(pix));
+	// don't update the preview if the preview widget was hidden,
+	// delay the update to the point when the widget becomes visible again
+	if (!isVisible()) {
+		if (!m_dirtyPreviews.contains(w))
+			m_dirtyPreviews << w;
+		return;
+	}
+
+	updatePreview(w);
 }
 
 void WorksheetPreviewWidget::updateText() {
@@ -156,6 +174,18 @@ void WorksheetPreviewWidget::updateText() {
 		return;
 
 	ui.lwPreview->item(indexOfWorksheet(w))->setText(w->name());
+}
+
+//*************************************************************
+//*************** helper functions and events *****************
+//*************************************************************
+void WorksheetPreviewWidget::updatePreview(const Worksheet* w) {
+	if (!w)
+		return;
+
+	QPixmap pix(10, 10);
+	w->exportView(pix);
+	ui.lwPreview->item(indexOfWorksheet(w))->setIcon(QIcon(pix));
 }
 
 int WorksheetPreviewWidget::indexOfWorksheet(const Worksheet* w) const {
@@ -179,4 +209,14 @@ void WorksheetPreviewWidget::resizeEvent(QResizeEvent*) {
 		ui.lwPreview->setFlow(QListView::Flow::TopToBottom);
 	else
 		ui.lwPreview->setFlow(QListView::Flow::LeftToRight);
+}
+
+void WorksheetPreviewWidget::showEvent(QShowEvent* event) {
+	// in case there were worksheets modified while the preview widget was hidden,
+	// update the previews for them prior to showing the widget
+	for (auto* w : m_dirtyPreviews)
+		updatePreview(w);
+
+	m_dirtyPreviews.clear();
+	QWidget::showEvent(event);
 }
