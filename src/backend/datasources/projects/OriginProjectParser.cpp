@@ -1239,7 +1239,8 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 			plot->addChildFast(axis);
 
 			loadAxis(originXAxis, axis, 0, QLatin1String("X Axis Title"));
-			axis->setCoordinateSystemIndex(layerIndex);
+			if (!m_graphLayerAsPlotArea)
+				axis->setCoordinateSystemIndex(layerIndex);
 			axis->setSuppressRetransform(false);
 		}
 		// x top
@@ -1250,7 +1251,8 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 			plot->addChildFast(axis);
 
 			loadAxis(originXAxis, axis, 1, QLatin1String("X Axis Title"));
-			axis->setCoordinateSystemIndex(layerIndex);
+			if (!m_graphLayerAsPlotArea)
+				axis->setCoordinateSystemIndex(layerIndex);
 			axis->setSuppressRetransform(false);
 		}
 		// y left
@@ -1261,7 +1263,8 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 			plot->addChildFast(axis);
 
 			loadAxis(originYAxis, axis, 0, QLatin1String("Y Axis Title"));
-			axis->setCoordinateSystemIndex(layerIndex);
+			if (!m_graphLayerAsPlotArea)
+				axis->setCoordinateSystemIndex(layerIndex);
 			axis->setSuppressRetransform(false);
 		}
 		// y right
@@ -1272,7 +1275,8 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 			plot->addChildFast(axis);
 
 			loadAxis(originYAxis, axis, 1, QLatin1String("Y Axis Title"));
-			axis->setCoordinateSystemIndex(layerIndex);
+			if (!m_graphLayerAsPlotArea)
+				axis->setCoordinateSystemIndex(layerIndex);
 			axis->setSuppressRetransform(false);
 		}
 	} else {
