@@ -1238,9 +1238,7 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 			axis->setPosition(Axis::Position::Bottom);
 			plot->addChildFast(axis);
 
-			QString axisTitle = QString::fromStdString(originXAxis.formatAxis[0].label.text);
-			axisTitle.replace(QLatin1String("%(?X)"), QLatin1String("X Axis Title"));
-			loadAxis(originXAxis, axis, 0, axisTitle);
+			loadAxis(originXAxis, axis, 0, QLatin1String("X Axis Title"));
 			axis->setCoordinateSystemIndex(layerIndex);
 			axis->setSuppressRetransform(false);
 		}
@@ -1251,9 +1249,7 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 			axis->setSuppressRetransform(true);
 			plot->addChildFast(axis);
 
-			QString axisTitle = QString::fromStdString(originXAxis.formatAxis[1].label.text);
-			axisTitle.replace(QLatin1String("%(?X)"), QLatin1String("X Axis Title"));
-			loadAxis(originXAxis, axis, 1, axisTitle);
+			loadAxis(originXAxis, axis, 1, QLatin1String("X Axis Title"));
 			axis->setCoordinateSystemIndex(layerIndex);
 			axis->setSuppressRetransform(false);
 		}
@@ -1264,9 +1260,7 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 			axis->setPosition(Axis::Position::Left);
 			plot->addChildFast(axis);
 
-			QString axisTitle = QString::fromStdString(originYAxis.formatAxis[0].label.text);
-			axisTitle.replace(QLatin1String("%(?Y)"), QLatin1String("Y Axis Title"));
-			loadAxis(originYAxis, axis, 0, axisTitle);
+			loadAxis(originYAxis, axis, 0, QLatin1String("Y Axis Title"));
 			axis->setCoordinateSystemIndex(layerIndex);
 			axis->setSuppressRetransform(false);
 		}
@@ -1277,9 +1271,7 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 			axis->setPosition(Axis::Position::Right);
 			plot->addChildFast(axis);
 
-			QString axisTitle = QString::fromStdString(originYAxis.formatAxis[1].label.text);
-			axisTitle.replace(QLatin1String("%(?Y)"), QLatin1String("Y Axis Title"));
-			loadAxis(originYAxis, axis, 1, axisTitle);
+			loadAxis(originYAxis, axis, 1, QLatin1String("Y Axis Title"));
 			axis->setCoordinateSystemIndex(layerIndex);
 			axis->setSuppressRetransform(false);
 		}
@@ -1539,7 +1531,7 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 
 /*
  * sets the axis properties (format and ticks) as defined in \c originAxis in \c axis,
- * \c index being 0 or 1 for "top" and "bottom" or "left" and "right" for horizontal or vertical axes, respectively.
+ * \c index being 0 or 1 for "bottom" and "top" or "left" and "right" for horizontal or vertical axes, respectively.
  */
 void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* axis, int index, const QString& axisTitle) const {
 	// 	int axisPosition;
@@ -1558,8 +1550,10 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 	// ticks
 	axis->setMajorTicksType(Axis::TicksType::Spacing);
 	axis->setMajorTicksSpacing(originAxis.step);
-	DEBUG(Q_FUNC_INFO << ", anchor = " << originAxis.anchor)
+	DEBUG(Q_FUNC_INFO << ", index = " << index)
+	DEBUG(Q_FUNC_INFO << ", position = " << originAxis.position)
 	// TODO: set offset from step and anchor (not currently available in liborigin)
+	DEBUG(Q_FUNC_INFO << ", anchor = " << originAxis.anchor)
 	axis->setMajorTickStartOffset(0.0);
 	axis->setMinorTicksType(Axis::TicksType::TotalNumber);
 	axis->setMinorTicksNumber(originAxis.minorTicks);
@@ -1696,7 +1690,10 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 		color.type = Origin::Color::ColorType::Regular;
 		color.regular = tickAxis.color;
 		axis->setLabelsColor(OriginProjectParser::color(color));
-		// TODO: how to set labels position (top vs. bottom)?
+		if (index == 0) // left
+			axis->setLabelsPosition(Axis::LabelsPosition::Out);
+		else // right
+			axis->setLabelsPosition(Axis::LabelsPosition::In);
 	} else {
 		axis->setLabelsPosition(Axis::LabelsPosition::NoLabels);
 	}
