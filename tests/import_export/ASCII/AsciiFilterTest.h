@@ -100,6 +100,8 @@ private Q_SLOTS:
 
 	void testStartRow2();
 
+	void testCreateIndex();
+
 private:
 	QString benchDataFileName;
 	const size_t lines = 1e6;

@@ -593,6 +593,41 @@ void AsciiFilterTest::testHeaderEnabledHeaderLine() {
 	VALUES_EQUAL(spreadsheet.column(3)->valueAt(1), 100.3);
 }
 
+void AsciiFilterTest::testHeaderEnabledStartRowEqualHeaderRow() {
+	QStringList fileContent = {
+		QStringLiteral("header1,header with spaces 2,header 3,header4"),
+		QStringLiteral("0,1.5,1.6,10.3"),
+		QStringLiteral("1.2,5.8,6.3,100.3"),
+	};
+	QString savePath;
+	SAVE_FILE("testHeaderEnabledHeaderLine", fileContent);
+
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+	AsciiFilter filter;
+	filter.setHeaderEnabled(true);
+	filter.setHeaderLine(1); // TODO: is this parameter relative?
+	filter.setStartRow(1); // StartRow equal header line
+
+	filter.readDataFromFile(savePath, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+	QCOMPARE(spreadsheet.columnCount(), 4);
+	QCOMPARE(spreadsheet.column(0)->name(), QLatin1String("header1"));
+	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("header with spaces 2"));
+	QCOMPARE(spreadsheet.column(2)->name(), QLatin1String("header 3"));
+	QCOMPARE(spreadsheet.column(3)->name(), QLatin1String("header4"));
+	QCOMPARE(spreadsheet.rowCount(), 2);
+
+	VALUES_EQUAL(spreadsheet.column(0)->valueAt(0), 0.0);
+	VALUES_EQUAL(spreadsheet.column(1)->valueAt(0), 1.5);
+	VALUES_EQUAL(spreadsheet.column(2)->valueAt(0), 1.6);
+	VALUES_EQUAL(spreadsheet.column(3)->valueAt(0), 10.3);
+
+	VALUES_EQUAL(spreadsheet.column(0)->valueAt(1), 1.2);
+	VALUES_EQUAL(spreadsheet.column(1)->valueAt(1), 5.8);
+	VALUES_EQUAL(spreadsheet.column(2)->valueAt(1), 6.3);
+	VALUES_EQUAL(spreadsheet.column(3)->valueAt(1), 100.3);
+}
+
 // ##############################################################################
 // #####################  handling of different read ranges #####################
 // ##############################################################################
@@ -1412,6 +1447,37 @@ void AsciiFilterTest::benchDoubleImport() {
 void AsciiFilterTest::benchDoubleImport_cleanup() {
 	DEBUG("REMOVE DATA FILE " << STDSTRING(benchDataFileName))
 	QFile::remove(benchDataFileName);
+}
+
+void AsciiFilterTest::testCreateIndex() {
+	QStringList fileContent = {
+		QStringLiteral("header1,header with spaces 2,header 3,header4"),
+		QStringLiteral("0,1.5,1.6,10.3"),
+		QStringLiteral("1.2,5.8,6.3,100.3"),
+	};
+	QString savePath;
+	SAVE_FILE("testStartRowSkipRow", fileContent);
+
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+	AsciiFilter filter;
+	filter.setHeaderEnabled(true);
+	filter.setHeaderLine(1);
+	filter.setStartRow(2); // skipping the test row
+
+	filter.readDataFromFile(savePath, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+	QCOMPARE(spreadsheet.columnCount(), 4);
+	QCOMPARE(spreadsheet.rowCount(), 2);
+
+	VALUES_EQUAL(spreadsheet.column(0)->valueAt(0), 0.0);
+	VALUES_EQUAL(spreadsheet.column(1)->valueAt(0), 1.5);
+	VALUES_EQUAL(spreadsheet.column(2)->valueAt(0), 1.6);
+	VALUES_EQUAL(spreadsheet.column(3)->valueAt(0), 10.3);
+
+	VALUES_EQUAL(spreadsheet.column(0)->valueAt(1), 1.2);
+	VALUES_EQUAL(spreadsheet.column(1)->valueAt(1), 5.8);
+	VALUES_EQUAL(spreadsheet.column(2)->valueAt(1), 6.3);
+	VALUES_EQUAL(spreadsheet.column(3)->valueAt(1), 100.3);
 }
 
 QTEST_MAIN(AsciiFilterTest)
