@@ -392,6 +392,38 @@ void AsciiFilterTest::testHeaderEnabledStartRow() {
 	QCOMPARE(spreadsheet.column(2)->valueAt(2), 0.3433);
 }
 
+void AsciiFilterTest::testStartRow2() {
+	QStringList fileContent = {
+		QStringLiteral("header1,header with spaces 2,header 3,header4"),
+		QStringLiteral("test1,test2,test3,test4"), // skipping this row
+		QStringLiteral("0,1.5,1.6,10.3"),
+		QStringLiteral("1.2,5.8,6.3,100.3"),
+	};
+	QString savePath;
+	SAVE_FILE("testStartRowSkipRow", fileContent);
+
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+	AsciiFilter filter;
+	filter.setHeaderEnabled(true);
+	filter.setHeaderLine(1);
+	filter.setStartRow(3); // skipping the test row
+
+	filter.readDataFromFile(savePath, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+	QCOMPARE(spreadsheet.columnCount(), 4);
+	QCOMPARE(spreadsheet.rowCount(), 2);
+
+	VALUES_EQUAL(spreadsheet.column(0)->valueAt(0), 0.0);
+	VALUES_EQUAL(spreadsheet.column(1)->valueAt(0), 1.5);
+	VALUES_EQUAL(spreadsheet.column(2)->valueAt(0), 1.6);
+	VALUES_EQUAL(spreadsheet.column(3)->valueAt(0), 10.3);
+
+	VALUES_EQUAL(spreadsheet.column(0)->valueAt(1), 1.2);
+	VALUES_EQUAL(spreadsheet.column(1)->valueAt(1), 5.8);
+	VALUES_EQUAL(spreadsheet.column(2)->valueAt(1), 6.3);
+	VALUES_EQUAL(spreadsheet.column(3)->valueAt(1), 100.3);
+}
+
 /*!
  * the header contains spaces in the column names, values are tab separated.
  * when using "auto" for the separator characters, the tab character has to
@@ -1380,38 +1412,6 @@ void AsciiFilterTest::benchDoubleImport() {
 void AsciiFilterTest::benchDoubleImport_cleanup() {
 	DEBUG("REMOVE DATA FILE " << STDSTRING(benchDataFileName))
 	QFile::remove(benchDataFileName);
-}
-
-void AsciiFilterTest::testStartRow2() {
-	QStringList fileContent = {
-		QStringLiteral("header1,header with spaces 2,header 3,header4"),
-		QStringLiteral("test1,test2,test3,test4"), // skipping this row
-		QStringLiteral("0,1.5,1.6,10.3"),
-		QStringLiteral("1.2,5.8,6.3,100.3"),
-	};
-	QString savePath;
-	SAVE_FILE("testStartRowSkipRow", fileContent);
-
-	Spreadsheet spreadsheet(QStringLiteral("test"), false);
-	AsciiFilter filter;
-	filter.setHeaderEnabled(true);
-	filter.setHeaderLine(1);
-	filter.setStartRow(2); // skipping the test row
-
-	filter.readDataFromFile(savePath, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
-
-	QCOMPARE(spreadsheet.columnCount(), 4);
-	QCOMPARE(spreadsheet.rowCount(), 2);
-
-	VALUES_EQUAL(spreadsheet.column(0)->valueAt(0), 0.0);
-	VALUES_EQUAL(spreadsheet.column(1)->valueAt(0), 1.5);
-	VALUES_EQUAL(spreadsheet.column(2)->valueAt(0), 1.6);
-	VALUES_EQUAL(spreadsheet.column(3)->valueAt(0), 10.3);
-
-	VALUES_EQUAL(spreadsheet.column(0)->valueAt(1), 1.2);
-	VALUES_EQUAL(spreadsheet.column(1)->valueAt(1), 5.8);
-	VALUES_EQUAL(spreadsheet.column(2)->valueAt(1), 6.3);
-	VALUES_EQUAL(spreadsheet.column(3)->valueAt(1), 100.3);
 }
 
 QTEST_MAIN(AsciiFilterTest)
