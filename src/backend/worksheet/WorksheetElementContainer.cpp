@@ -126,8 +126,6 @@ void WorksheetElementContainer::retransform() {
 
 	if (m_resizeItem)
 		m_resizeItem->setRect(rect());
-
-	Q_EMIT changed();
 }
 
 /*!

@@ -331,8 +331,6 @@ void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 			}
 		}
 	}
-
-	Q_EMIT changed();
 }
 
 void Worksheet::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
