@@ -55,6 +55,12 @@ private Q_SLOTS:
 	void referenceRangeYKeyPressUp();
 
 	void referenceRangeSaveLoad();
+
+	void referenceLineLinearScaling();
+	void referenceLineLog10Scaling();
+	void referenceLineSquareScaling();
+	void referenceLineSqrtScaling();
+	void referenceLineInverseScaling();
 };
 
 #endif // WORKSHEETELEMENTTEST_H
