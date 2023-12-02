@@ -10,6 +10,7 @@
 
 #include "WorksheetPreviewWidget.h"
 #include "backend/core/Project.h"
+#include "backend/lib/trace.h"
 #include "backend/worksheet/Worksheet.h"
 
 #include <QContextMenuEvent>
@@ -183,6 +184,7 @@ void WorksheetPreviewWidget::updatePreview(const Worksheet* w) {
 	if (!w)
 		return;
 
+	PERFTRACE(QStringLiteral("WorksheetPreviewWidget::updatePreview ") + w->name());
 	QPixmap pix(10, 10);
 	w->exportView(pix);
 	ui.lwPreview->item(indexOfWorksheet(w))->setIcon(QIcon(pix));

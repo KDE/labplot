@@ -2285,7 +2285,7 @@ void WorksheetView::exportToPixmap(QPixmap& pixmap) {
 	QPainter painter;
 	painter.begin(&pixmap);
 	painter.setRenderHint(QPainter::Antialiasing);
-	exportPaint(&painter, targetRect, sourceRect, true);
+	exportPaint(&painter, targetRect, sourceRect, true /* export background */, true /* export selection */);
 	painter.end();
 }
 
@@ -2345,7 +2345,8 @@ void WorksheetView::exportToClipboard() {
 	QApplication::clipboard()->setImage(image, QClipboard::Clipboard);
 }
 
-void WorksheetView::exportPaint(QPainter* painter, const QRectF& targetRect, const QRectF& sourceRect, const bool background) {
+void WorksheetView::exportPaint(QPainter* painter, const QRectF& targetRect, const QRectF& sourceRect, const bool background, const bool selection) {
+	// hide the magnification window, shouldn't be exported
 	bool magnificationActive = false;
 	if (m_magnificationWindow && m_magnificationWindow->isVisible()) {
 		magnificationActive = true;
@@ -2362,11 +2363,14 @@ void WorksheetView::exportPaint(QPainter* painter, const QRectF& targetRect, con
 	}
 
 	// draw the scene items
-	m_worksheet->setPrinting(true);
+	if (!selection) // if no selection effects have to be exported, set the printing flag to suppress it in the paint()'s of the children
+		m_worksheet->setPrinting(true);
 	scene()->render(painter, QRectF(), sourceRect);
-	m_worksheet->setPrinting(false);
+	if (!selection)
+		m_worksheet->setPrinting(false);
 	m_isPrinting = false;
 
+	// show the magnification window if it was active before
 	if (magnificationActive)
 		m_magnificationWindow->setVisible(true);
 }

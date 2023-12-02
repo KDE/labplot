@@ -79,7 +79,7 @@ private:
 	void drawBackgroundItems(QPainter*, const QRectF&);
 	bool isPlotAtPos(QPoint) const;
 	CartesianPlot* plotAt(QPoint) const;
-	void exportPaint(QPainter* painter, const QRectF& targetRect, const QRectF& sourceRect, const bool);
+	void exportPaint(QPainter* painter, const QRectF& targetRect, const QRectF& sourceRect, const bool background, const bool selection = false);
 	void cartesianPlotAdd(CartesianPlot*, QAction*);
 	void handleAxisSelected(const Axis*);
 	void handleCartesianPlotSelected(CartesianPlot*);
