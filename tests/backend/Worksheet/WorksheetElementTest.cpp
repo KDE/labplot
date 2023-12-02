@@ -402,7 +402,7 @@ void WorksheetElementTest::referenceLineLinearScaling() {
 
 	plot->setRangeScale(Dimension::X, 0, RangeT::Scale::Linear);
 
-	CHECK_RANGE(plot, xAxis, Dimension::X, 0, 1.);
+	CHECK_RANGE(plot, xAxis, Dimension::X, 0., 1.);
 	CHECK_RANGE(plot, xAxis, Dimension::Y, 0., 1.);
 
 	auto* referenceLine = new ReferenceLine(plot, QStringLiteral("TestLine"));
@@ -510,7 +510,7 @@ void WorksheetElementTest::referenceLineSqrtScaling() {
 
 	plot->setRangeScale(Dimension::X, 0, RangeT::Scale::Sqrt);
 
-	CHECK_RANGE(plot, xAxis, Dimension::X, 0, 1.);
+	CHECK_RANGE(plot, xAxis, Dimension::X, 0., 1.);
 	CHECK_RANGE(plot, xAxis, Dimension::Y, 0., 1.);
 
 	auto* referenceLine = new ReferenceLine(plot, QStringLiteral("TestLine"));
