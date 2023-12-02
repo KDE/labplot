@@ -4,7 +4,7 @@
 	Description          : parser for Origin projects
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2017-2018 Alexander Semke <alexander.semke@web.de>
-	SPDX-FileCopyrightText: 2017-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2017-2023 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -1159,13 +1159,12 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 	xRange.setAutoScale(false);
 	yRange.setAutoScale(false);
 
-	if (m_graphLayerAsPlotArea) {
-		// graph layer is read as a new plot area -> set the ranges for default coordinate system
+	if (m_graphLayerAsPlotArea) { // graph layer is read as a new plot area
+		// set the ranges for default coordinate system
 		plot->setRangeDefault(Dimension::X, xRange);
 		plot->setRangeDefault(Dimension::Y, yRange);
 	} else { // graph layer is read as a new coordinate system in the same plot area
-		DEBUG(Q_FUNC_INFO << ", new coordinate system. layer index = " << layerIndex)
-		// -> create a new coordinate systems and set the ranges for it
+		// create a new coordinate systems and set the ranges for it
 		if (layerIndex > 0) {
 			plot->addXRange();
 			plot->addYRange();
@@ -1238,7 +1237,10 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 			axis->setSuppressRetransform(true);
 			axis->setPosition(Axis::Position::Bottom);
 			plot->addChildFast(axis);
-			loadAxis(originXAxis, axis, 0, QLatin1String("y axis")); // TODO: set title
+
+			QString axisTitle = QString::fromStdString(originXAxis.formatAxis[0].label.text);
+			axisTitle.replace(QLatin1String("%(?X)"), QLatin1String("X Axis Title"));
+			loadAxis(originXAxis, axis, 0, axisTitle);
 			axis->setCoordinateSystemIndex(layerIndex);
 			axis->setSuppressRetransform(false);
 		}
@@ -1248,7 +1250,10 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 			axis->setPosition(Axis::Position::Top);
 			axis->setSuppressRetransform(true);
 			plot->addChildFast(axis);
-			loadAxis(originXAxis, axis, 1, QLatin1String("y axis")); // TODO: set title
+
+			QString axisTitle = QString::fromStdString(originXAxis.formatAxis[1].label.text);
+			axisTitle.replace(QLatin1String("%(?X)"), QLatin1String("X Axis Title"));
+			loadAxis(originXAxis, axis, 1, axisTitle);
 			axis->setCoordinateSystemIndex(layerIndex);
 			axis->setSuppressRetransform(false);
 		}
@@ -1258,7 +1263,10 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 			axis->setSuppressRetransform(true);
 			axis->setPosition(Axis::Position::Left);
 			plot->addChildFast(axis);
-			loadAxis(originYAxis, axis, 0, QLatin1String("y axis")); // TODO: set title
+
+			QString axisTitle = QString::fromStdString(originYAxis.formatAxis[0].label.text);
+			axisTitle.replace(QLatin1String("%(?Y)"), QLatin1String("Y Axis Title"));
+			loadAxis(originYAxis, axis, 0, axisTitle);
 			axis->setCoordinateSystemIndex(layerIndex);
 			axis->setSuppressRetransform(false);
 		}
@@ -1268,7 +1276,10 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 			axis->setSuppressRetransform(true);
 			axis->setPosition(Axis::Position::Right);
 			plot->addChildFast(axis);
-			loadAxis(originYAxis, axis, 1, QLatin1String("y axis")); // TODO: set title
+
+			QString axisTitle = QString::fromStdString(originYAxis.formatAxis[1].label.text);
+			axisTitle.replace(QLatin1String("%(?Y)"), QLatin1String("Y Axis Title"));
+			loadAxis(originYAxis, axis, 1, axisTitle);
 			axis->setCoordinateSystemIndex(layerIndex);
 			axis->setSuppressRetransform(false);
 		}
