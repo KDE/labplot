@@ -116,9 +116,10 @@ QSize SlidingPanelTop::sizeHint() const {
 }
 
 // ####################################################################################################
-SlidingPanelBottom::SlidingPanelBottom(const QRect& screenRect, WorksheetView* view, QWidget* parent)
+SlidingPanelBottom::SlidingPanelBottom(const QRect& screenRect, WorksheetView* view, bool fixed, QWidget* parent)
 	: SlidingPanel(screenRect, SlidingPanel::Position::Bottom, parent)
-	, m_toolBar(new QToolBar(this)) {
+	, m_toolBar(new QToolBar(this))
+	, m_fixed(fixed) {
 	auto* layout = new QHBoxLayout();
 	layout->setContentsMargins(0, 0, 0, 0);
 	setLayout(layout);
@@ -129,6 +130,7 @@ SlidingPanelBottom::SlidingPanelBottom(const QRect& screenRect, WorksheetView* v
 	m_toolBar->addSeparator();
 	auto* pinAction = new QAction(QIcon::fromTheme(QStringLiteral("pin")), i18n("Pin the navigation panel"));
 	pinAction->setCheckable(true);
+	pinAction->setChecked(m_fixed);
 	connect(pinAction, &QAction::toggled, this, [=](bool toggled) {
 		m_fixed = toggled;
 	});
@@ -144,11 +146,6 @@ SlidingPanelBottom::SlidingPanelBottom(const QRect& screenRect, WorksheetView* v
 	move(screenRect.width() / 2 - m_toolBar->sizeHint().width() / 2, screenRect.bottom() - m_toolBar->sizeHint().height());
 	raise();
 	show();
-}
-
-void SlidingPanelBottom::setFixed(bool fixed) {
-	m_fixed = fixed;
-	// TODO: change state of the pinAction
 }
 
 bool SlidingPanelBottom::isFixed() const {

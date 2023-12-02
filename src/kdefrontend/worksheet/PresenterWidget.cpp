@@ -43,9 +43,9 @@ PresenterWidget::PresenterWidget(Worksheet* worksheet, QScreen* screen, bool int
 	});
 
 	if (interactive) {
-		m_navigationPanel = new SlidingPanelBottom(screenSize, m_view, this);
 		const auto group = Settings::group(QStringLiteral("PresenterWidget"));
-		m_navigationPanel->setFixed(group.readEntry("PresenterWidgetNavigationPanelFixed", false));
+		const auto fixed = group.readEntry("PresenterWidgetNavigationPanelFixed", false);
+		m_navigationPanel = new SlidingPanelBottom(screenSize, m_view, fixed, this);
 	}
 }
 

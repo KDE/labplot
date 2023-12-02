@@ -66,10 +66,9 @@ class SlidingPanelBottom : public SlidingPanel {
 	Q_OBJECT
 
 public:
-	explicit SlidingPanelBottom(const QRect& screenRect, WorksheetView* view, QWidget* parent);
+	explicit SlidingPanelBottom(const QRect& screenRect, WorksheetView* view, bool fixed, QWidget* parent);
 	virtual bool insideRect(QPoint screenPos) override;
 
-	void setFixed(bool);
 	bool isFixed() const;
 
 private:
