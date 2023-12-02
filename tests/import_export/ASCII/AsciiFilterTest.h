@@ -27,24 +27,25 @@ private Q_SLOTS:
 
 	void testEmptyLines01();
 
+	// Might happen, that not all columns are filled
 	void testSparseFile01();
 	void testSparseFile02();
 	void testSparseFile03();
 
 	// header handling
-	void testHeader01();
-	void testHeader02();
-	void testHeader03();
-	void testHeader04();
-	void testHeader05();
-	void testHeader06();
-	void testHeader07();
-	void testHeader07a();
-	void testHeader08();
-	void testHeader09();
-	void testHeader10();
-	void testHeader11();
-	void testHeader11a();
+	void testHeaderDisabled();
+	void testHeaderDisabledNoHeaderNames();
+	void testHeaderEnabled();
+	void testHeaderDisabledImportDefaultNameColumn2();
+	void testHeaderDisabled2ColumnsImported3HeaderNames();
+	void testHeaderEnabledCommenCharacter();
+	void testHeaderEnabledStartRow();
+	void testHeaderEnabledSpaces();
+	void testHeaderDisabledDuplicateName();
+	void testHeaderEnabledDuplicateName();
+	void testHeaderEnabledColumnNaming();
+	void testHeaderEnabledColumnNaming2();
+	void testHeaderEnabledHeaderLine();
 
 	// read ranges
 	void testColumnRange00();
@@ -96,6 +97,8 @@ private Q_SLOTS:
 	// see https://stackoverflow.com/questions/36916962/qtest-executes-test-case-twic
 	void benchDoubleImport();
 	void benchDoubleImport_cleanup(); // delete data
+
+	void testStartRow2();
 
 private:
 	QString benchDataFileName;
