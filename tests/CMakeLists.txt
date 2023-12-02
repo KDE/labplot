@@ -23,8 +23,12 @@ IF (Cantor_FOUND)
     add_subdirectory(notebook)
 ENDIF ()
 
-add_executable (DependenciesTest DependenciesTest.cpp)
-target_link_libraries(DependenciesTest labplot2test labplot2lib)
-add_test(NAME DependenciesTest COMMAND DependenciesTest)
+
+option(ENABLE_TEST_DEPENDENCIES "Enable Dependencies Tests" ON)
+if (ENABLE_TEST_DEPENDENCIES)
+    add_executable (DependenciesTest DependenciesTest.cpp)
+    target_link_libraries(DependenciesTest labplot2test labplot2lib)
+    add_test(NAME DependenciesTest COMMAND DependenciesTest)
+endif()
 
 
