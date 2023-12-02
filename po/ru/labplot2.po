@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-01 00:38+0000\n"
+"POT-Creation-Date: 2023-12-02 00:38+0000\n"
 "PO-Revision-Date: 2023-11-13 14:41+0300\n"
 "Last-Translator: Sergey Kazorin <translation-team@basealt.ru>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -12705,14 +12705,14 @@ msgid "%1 axes: template \"%2\" loaded"
 msgstr "Оси (%1): загрузка шаблона «%2»"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:2047
-#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:503
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:734
+#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:507
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:737
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1804
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:690
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:385
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:720
 #: src/kdefrontend/dockwidgets/KDEPlotDock.cpp:411
-#: src/kdefrontend/dockwidgets/LollipopPlotDock.cpp:475
+#: src/kdefrontend/dockwidgets/LollipopPlotDock.cpp:478
 #: src/kdefrontend/dockwidgets/MatrixDock.cpp:266
 #: src/kdefrontend/dockwidgets/QQPlotDock.cpp:317
 #: src/kdefrontend/dockwidgets/ReferenceLineDock.cpp:235
@@ -12759,12 +12759,12 @@ msgstr ""
 
 # BUGME: please split --aspotashev
 #. i18n: ectx: property (text), widget (QLabel, lColumnCount)
-#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:340
-#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:366
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:356
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:381
-#: src/kdefrontend/dockwidgets/LollipopPlotDock.cpp:333
-#: src/kdefrontend/dockwidgets/LollipopPlotDock.cpp:359
+#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:344
+#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:370
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:359
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:384
+#: src/kdefrontend/dockwidgets/LollipopPlotDock.cpp:336
+#: src/kdefrontend/dockwidgets/LollipopPlotDock.cpp:362
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:85
 #: src/kdefrontend/ui/dockwidgets/matrixdock.ui:115
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:197
@@ -12778,9 +12778,9 @@ msgstr "Столбцы:"
 #. i18n: ectx: property (text), widget (QLabel, lMajorTicksColumn)
 #. i18n: ectx: property (text), widget (QLabel, lColumn)
 #. i18n: ectx: property (text), widget (QLabel, lValuesColumn)
-#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:368
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:385
-#: src/kdefrontend/dockwidgets/LollipopPlotDock.cpp:361
+#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:372
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:388
+#: src/kdefrontend/dockwidgets/LollipopPlotDock.cpp:364
 #: src/kdefrontend/spreadsheet/GoToDialog.cpp:49
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:804
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1112
@@ -12791,7 +12791,7 @@ msgstr "Столбцы:"
 msgid "Column:"
 msgstr "Столбец:"
 
-#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:501
+#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:505
 #, fuzzy, kde-format
 msgid "%1 bar plots: template \"%2\" loaded"
 msgstr "Графики в декартовых координатах (%1): загрузка шаблона «%2»"
@@ -12868,7 +12868,7 @@ msgstr ""
 "Укажите коэффициент для контроля ширины ящика в процентах "
 "относительновеличины по умолчанию."
 
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:732
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:735
 #, fuzzy, kde-format
 msgid "%1 box plots: template \"%2\" loaded"
 msgstr "Сохранено в новый шаблон «%1»."
@@ -13383,7 +13383,7 @@ msgstr "Не удалось подписаться"
 msgid "Couldn't subscribe to all available topics. Something went wrong"
 msgstr "Не удалось подписаться на все доступные темы. Произошла ошибка"
 
-#: src/kdefrontend/dockwidgets/LollipopPlotDock.cpp:473
+#: src/kdefrontend/dockwidgets/LollipopPlotDock.cpp:476
 #, fuzzy, kde-format
 msgid "%1 lollipop plots: template \"%2\" loaded"
 msgstr "Сохранено в новый шаблон «%1»."
