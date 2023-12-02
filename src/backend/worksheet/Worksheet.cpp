@@ -93,10 +93,10 @@ void Worksheet::init() {
 
 	// layout
 	d->layout = (Layout)group.readEntry(QStringLiteral("Layout"), static_cast<int>(Layout::VerticalLayout));
-	d->layoutTopMargin = group.readEntry(QStringLiteral("LayoutTopMargin"), convertToSceneUnits(0.5, Unit::Centimeter));
-	d->layoutBottomMargin = group.readEntry(QStringLiteral("LayoutBottomMargin"), convertToSceneUnits(0.5, Unit::Centimeter));
-	d->layoutLeftMargin = group.readEntry(QStringLiteral("LayoutLeftMargin"), convertToSceneUnits(0.5, Unit::Centimeter));
-	d->layoutRightMargin = group.readEntry(QStringLiteral("LayoutRightMargin"), convertToSceneUnits(0.5, Unit::Centimeter));
+	d->layoutTopMargin = group.readEntry(QStringLiteral("LayoutTopMargin"), convertToSceneUnits(0., Unit::Centimeter));
+	d->layoutBottomMargin = group.readEntry(QStringLiteral("LayoutBottomMargin"), convertToSceneUnits(0., Unit::Centimeter));
+	d->layoutLeftMargin = group.readEntry(QStringLiteral("LayoutLeftMargin"), convertToSceneUnits(0., Unit::Centimeter));
+	d->layoutRightMargin = group.readEntry(QStringLiteral("LayoutRightMargin"), convertToSceneUnits(0., Unit::Centimeter));
 	d->layoutVerticalSpacing = group.readEntry(QStringLiteral("LayoutVerticalSpacing"), convertToSceneUnits(0.5, Unit::Centimeter));
 	d->layoutHorizontalSpacing = group.readEntry(QStringLiteral("LayoutHorizontalSpacing"), convertToSceneUnits(0.5, Unit::Centimeter));
 	d->layoutRowCount = group.readEntry(QStringLiteral("LayoutRowCount"), 2);

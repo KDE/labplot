@@ -171,7 +171,6 @@ void CartesianPlot::init() {
 	d->verticalPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter);
 	d->rightPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter);
 	d->bottomPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter);
-	d->symmetricPadding = true;
 
 	// cursor line
 	d->cursorLine = new Line(QString());
@@ -266,6 +265,11 @@ void CartesianPlot::setType(Type type) {
 		axis->setLabelsPosition(Axis::LabelsPosition::NoLabels);
 		axis->setSuppressRetransform(false);
 
+		d->horizontalPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter);
+		d->verticalPadding = Worksheet::convertToSceneUnits(0.5, Worksheet::Unit::Centimeter);
+		d->rightPadding = Worksheet::convertToSceneUnits(0.5, Worksheet::Unit::Centimeter);
+		d->bottomPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter);
+
 		break;
 	}
 	case Type::TwoAxes: {
@@ -292,6 +296,11 @@ void CartesianPlot::setType(Type type) {
 		axis->setMinorTicksNumber(1);
 		axis->setArrowType(Axis::ArrowType::FilledSmall);
 		axis->setSuppressRetransform(false);
+
+		d->horizontalPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter);
+		d->verticalPadding = Worksheet::convertToSceneUnits(0.5, Worksheet::Unit::Centimeter);
+		d->rightPadding = Worksheet::convertToSceneUnits(0.5, Worksheet::Unit::Centimeter);
+		d->bottomPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter);
 
 		break;
 	}
@@ -329,6 +338,11 @@ void CartesianPlot::setType(Type type) {
 		axis->setMinorTicksNumber(1);
 		axis->setArrowType(Axis::ArrowType::FilledSmall);
 		axis->setSuppressRetransform(false);
+
+		d->horizontalPadding = Worksheet::convertToSceneUnits(0.5, Worksheet::Unit::Centimeter);
+		d->verticalPadding = Worksheet::convertToSceneUnits(0.5, Worksheet::Unit::Centimeter);
+		d->rightPadding = Worksheet::convertToSceneUnits(0.5, Worksheet::Unit::Centimeter);
+		d->bottomPadding = Worksheet::convertToSceneUnits(0.5, Worksheet::Unit::Centimeter);
 
 		break;
 	}
@@ -370,6 +384,11 @@ void CartesianPlot::setType(Type type) {
 		axis->setMinorTicksNumber(1);
 		axis->setArrowType(Axis::ArrowType::FilledSmall);
 		axis->setSuppressRetransform(false);
+
+		d->horizontalPadding = Worksheet::convertToSceneUnits(0.5, Worksheet::Unit::Centimeter);
+		d->verticalPadding = Worksheet::convertToSceneUnits(0.5, Worksheet::Unit::Centimeter);
+		d->rightPadding = Worksheet::convertToSceneUnits(0.5, Worksheet::Unit::Centimeter);
+		d->bottomPadding = Worksheet::convertToSceneUnits(0.5, Worksheet::Unit::Centimeter);
 
 		break;
 	}
