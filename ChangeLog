@@ -13,6 +13,7 @@ New features:
 			* KDE plot
 		* New worksheet theme "Dracula"
 		* Add possibility to lock elements for unintentional change in the plot
+		* New panel in the presenter widget to allow the selection, zooming and navigation also in the presenter mode
 	* [spreadsheet]
 		* Spreadsheet linking - allow to synchronize number of rows across multiple spreadsheets
 		* Extended search and replace

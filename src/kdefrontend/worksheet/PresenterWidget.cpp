@@ -9,18 +9,18 @@
 */
 #include "PresenterWidget.h"
 #include "SlidingPanel.h"
+#include "backend/core/Settings.h"
 #include "commonfrontend/worksheet/WorksheetView.h"
 
+#include <KConfigGroup>
 #include <QKeyEvent>
 #include <QPushButton>
 #include <QScreen>
-#include <QTimeLine>
 
-PresenterWidget::PresenterWidget(Worksheet* worksheet, bool interactive, QWidget* parent)
+PresenterWidget::PresenterWidget(Worksheet* worksheet, QScreen* screen, bool interactive, QWidget* parent)
 	: QWidget(parent)
 	, m_worksheet(worksheet)
-	, m_view(new WorksheetView(worksheet))
-	, m_timeLine(new QTimeLine(600)) {
+	, m_view(new WorksheetView(worksheet)) {
 	setAttribute(Qt::WA_DeleteOnClose);
 	setFocus();
 
@@ -29,23 +29,27 @@ PresenterWidget::PresenterWidget(Worksheet* worksheet, bool interactive, QWidget
 	m_view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	m_view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	m_view->setContextMenuPolicy(Qt::NoContextMenu);
-	m_view->initActions(); // init the actions so we can also navigate in the plots
+	m_view->initPlotNavigationActions(); // init the relevant actions so we can also navigate in the plots in the presenter mode
 
-	const QRect& screenSize = screen()->geometry();
+	const QRect& screenSize = screen->geometry();
 	m_view->setGeometry(screenSize); // use the full screen size for the view
 	m_view->show();
 	m_view->setFocus();
 
-	m_panel = new SlidingPanel(this, worksheet->name());
+	m_panel = new SlidingPanelTop(screenSize, worksheet->name(), this);
 	qApp->installEventFilter(this);
-	connect(m_timeLine, &QTimeLine::valueChanged, m_panel, &SlidingPanel::movePanel);
 	connect(m_panel->quitButton(), &QPushButton::clicked, this, [=]() {
 		close();
 	});
+
+	if (interactive) {
+		const auto group = Settings::group(QStringLiteral("PresenterWidget"));
+		const auto fixed = group.readEntry("PresenterWidgetNavigationPanelFixed", false);
+		m_navigationPanel = new SlidingPanelBottom(screenSize, m_view, fixed, this);
+	}
 }
 
 PresenterWidget::~PresenterWidget() {
-	delete m_timeLine;
 	delete m_view;
 
 	// since the temporary view created in the presenter widget is using the same scene underneath,
@@ -53,14 +57,30 @@ PresenterWidget::~PresenterWidget() {
 	// resize the original view once more to make sure it has the proper scaling after the presenter was closed.
 	if (m_worksheet->useViewSize())
 		static_cast<WorksheetView*>(m_worksheet->view())->processResize();
+
+	if (m_navigationPanel) {
+		// save current settings for the navigation panel
+		auto group = Settings::group(QStringLiteral("PresenterWidget"));
+		group.writeEntry("PresenterWidgetNavigationPanelFixed", m_navigationPanel->isFixed());
+	}
 }
 
 bool PresenterWidget::eventFilter(QObject* /*watched*/, QEvent* event) {
 	if (event->type() == QEvent::MouseMove) {
-		if (m_panel->y() != 0 && m_panel->rect().contains(QCursor::pos()))
-			slideDown();
-		else if (m_panel->y() == 0 && !m_panel->rect().contains(QCursor::pos()))
-			slideUp();
+		bool visible = m_panel->y() == 0;
+		const auto pos = QCursor::pos();
+		if (!visible && m_panel->insideRect(pos))
+			m_panel->slideShow();
+		else if (visible && !m_panel->insideRect(pos))
+			m_panel->slideHide();
+
+		if (m_navigationPanel && !m_navigationPanel->isFixed()) {
+			visible = m_navigationPanel->y() < screen()->geometry().bottom();
+			if (!visible && m_navigationPanel->insideRect(pos))
+				m_navigationPanel->slideHide();
+			else if (visible && !m_navigationPanel->insideRect(pos))
+				m_navigationPanel->slideShow();
+		}
 	}
 
 	return false;
@@ -69,21 +89,6 @@ bool PresenterWidget::eventFilter(QObject* /*watched*/, QEvent* event) {
 void PresenterWidget::keyPressEvent(QKeyEvent* event) {
 	if (event->key() == Qt::Key_Escape)
 		close();
-}
-
-void PresenterWidget::slideDown() {
-	m_timeLine->setDirection(QTimeLine::Forward);
-	startTimeline();
-}
-
-void PresenterWidget::slideUp() {
-	m_timeLine->setDirection(QTimeLine::Backward);
-	startTimeline();
-}
-
-void PresenterWidget::startTimeline() {
-	if (m_timeLine->state() != QTimeLine::Running)
-		m_timeLine->start();
 }
 
 void PresenterWidget::focusOutEvent(QFocusEvent* e) {

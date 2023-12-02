@@ -482,8 +482,6 @@ void TextLabelPrivate::retransform() {
 
 	updatePosition(); // needed, because CartesianPlot calls retransform if some operations are done
 	updateBorder();
-
-	Q_EMIT q->changed();
 }
 
 void TextLabelPrivate::setZoomFactor(double factor) {

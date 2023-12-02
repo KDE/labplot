@@ -66,10 +66,11 @@ public:
 	double zoomFactor() const;
 	void processResize();
 
-	Worksheet::CartesianPlotActionMode getCartesianPlotActionMode();
+	Worksheet::CartesianPlotActionMode getCartesianPlotActionMode() const;
 	void registerShortcuts();
 	void unregisterShortcuts();
 	void initActions();
+	void initPlotNavigationActions();
 
 private:
 	void initBasicActions();
@@ -79,7 +80,7 @@ private:
 	void drawBackgroundItems(QPainter*, const QRectF&);
 	bool isPlotAtPos(QPoint) const;
 	CartesianPlot* plotAt(QPoint) const;
-	void exportPaint(QPainter* painter, const QRectF& targetRect, const QRectF& sourceRect, const bool);
+	void exportPaint(QPainter* painter, const QRectF& targetRect, const QRectF& sourceRect, const bool background, const bool selection = false);
 	void cartesianPlotAdd(CartesianPlot*, QAction*);
 	void handleAxisSelected(const Axis*);
 	void handleCartesianPlotSelected(CartesianPlot*);
@@ -126,6 +127,7 @@ private:
 	bool m_isClosing{false};
 	bool m_isPrinting{false};
 	bool m_actionsInitialized{false};
+	bool m_plotActionsInitialized{false};
 	bool m_menusInitialized{false};
 	int m_numScheduledScalings{0};
 	bool m_suppressMouseModeChange{false};
@@ -238,6 +240,7 @@ public Q_SLOTS:
 	void fillTouchBar(KDMacTouchBar*);
 #endif
 	void fillCartesianPlotToolBar(QToolBar*);
+	void fillCartesianPlotNavigationToolBar(QToolBar*, bool enableCursor = true) const;
 	void print(QPrinter*);
 	void selectItem(QGraphicsItem*);
 	void presenterMode();
