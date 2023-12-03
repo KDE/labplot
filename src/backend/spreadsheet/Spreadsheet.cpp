@@ -1324,7 +1324,7 @@ int Spreadsheet::prepareImport(std::vector<void*>& dataContainer,
 	}
 
 	if (columnMode.size() < actualCols) {
-		DEBUG(Q_FUNC_INFO << ", columnMode[] size is too small! Giving up.");
+		QDEBUG(Q_FUNC_INFO << ", columnMode[] size " << columnMode.size() << " is too small, should be " << actualCols << "! Giving up.");
 		return -1;
 	}
 

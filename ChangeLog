@@ -33,6 +33,7 @@ New features:
 	* [import]
 		* Templates for ASCII and Binary import filters - allow to save and load current filter settings
 		* Support data import from ODS (Open Document Spreadsheet) files
+		* When importing tables from SQL databases, allow to specify which data region to read (start/end values for columns and records)
 		* Addeded seaborn's datasets to the collection of datasets
 
 Performance improvements:

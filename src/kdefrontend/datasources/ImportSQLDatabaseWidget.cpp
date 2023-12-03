@@ -444,14 +444,15 @@ void ImportSQLDatabaseWidget::read(AbstractDataSource* dataSource, AbstractFileF
 
 	// determine the number of rows and columns to read
 	int startCol = 0;
-	int endCol = m_cols;
+	int endCol = m_cols - 1;
 	int startRow = 0;
 	int endRow = 0;
 	int actualRows = 0; // actual number of rows in the resultset to be read
-	int actualCols = m_cols; // actual number of rows in the resultset to be read
+	int actualCols = m_cols; // actual number of columns in the resultset to be read
 	QVector<AbstractColumn::ColumnMode> columnModes;
 	QStringList columnNames;
 	if (!customQuery) {
+		// determine the total number of records in the table
 		const QString& tableName = ui.lwTables->currentItem()->text();
 		QSqlQuery countQuery(QStringLiteral("SELECT COUNT(*) FROM ") + tableName);
 		while (countQuery.next())
@@ -465,7 +466,19 @@ void ImportSQLDatabaseWidget::read(AbstractDataSource* dataSource, AbstractFileF
 				endCol = m_cols - 1;
 		}
 
-		actualCols = endCol - startCol;
+		actualCols = endCol - startCol + 1;
+
+		// determine the names and modes for columns to be read
+		if (startCol != 0 && endCol != m_cols - 1) {
+			for (int col = startCol; col <= endCol; ++col) {
+				columnModes << m_columnModes.at(col);
+				columnNames << m_columnNames.at(col);
+			}
+		} else {
+			// all columns are read
+			columnModes = m_columnModes;
+			columnNames = m_columnNames;
+		}
 
 		// rows to read
 		startRow = ui.sbStartRow->value() - 1;
@@ -473,21 +486,17 @@ void ImportSQLDatabaseWidget::read(AbstractDataSource* dataSource, AbstractFileF
 			endRow = ui.sbEndRow->value() - 1;
 			if (endRow >= actualRows)
 				endRow = actualRows - 1;
+
+			actualRows = endRow - startRow + 1;
 		} else
-			endRow = actualRows;
-
-		actualRows = endRow - startRow + 1;
-
-		for (int col = startCol; col < endCol; ++col) {
-			columnModes << m_columnModes.at(col);
-			columnNames << m_columnNames.at(col);
-		}
+			endRow = actualRows - 1; // all rows to be read
 	} else {
 		// custom query, navigate to the last record to get the total number of records in the resultset
 		q.last();
 		actualRows = q.at() + 1;
 		q.first();
 
+		endRow = actualRows - 1; // all rows to be read
 		columnModes = m_columnModes;
 		columnNames = m_columnNames;
 	}
@@ -525,12 +534,16 @@ void ImportSQLDatabaseWidget::read(AbstractDataSource* dataSource, AbstractFileF
 	const qreal progressInterval = 0.01 * actualRows; // update on every 1% only
 	int rowIndex = 0;
 	while (q.next()) {
-		for (int colIndex = startCol; colIndex < endCol; ++colIndex) {
-			if (rowIndex < startRow)
-				continue;
-			if (rowIndex > endRow)
-				break;
+		if (rowIndex < startRow) {
+			++rowIndex;
+			continue;
+		}
 
+		if (rowIndex > endRow)
+			break;
+
+		for (int colIndex = startCol; colIndex < endCol; ++colIndex) {
+			qDebug()<<"col/row " << colIndex << "  " << rowIndex;
 			const auto& valueString = q.value(colIndex).toString();
 			const int col = colIndex - startCol;
 			const int row = rowIndex - startRow;
@@ -569,7 +582,7 @@ void ImportSQLDatabaseWidget::read(AbstractDataSource* dataSource, AbstractFileF
 			}
 		}
 
-		rowIndex++;
+		++rowIndex;
 
 		// ask to update the progress bar only if we have more than 1000 lines and only in 1% steps
 		progressIndex++;
