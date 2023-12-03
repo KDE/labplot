@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-02 00:38+0000\n"
+"POT-Creation-Date: 2023-12-03 00:38+0000\n"
 "PO-Revision-Date: 2015-02-25 20:16+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <kde-i18n-doc@kde.org>\n"
@@ -1050,7 +1050,7 @@ msgid "%1: remove all axis points"
 msgstr "%1: postavi osnu poziciju"
 
 #: src/backend/datapicker/DatapickerImage.cpp:681
-#: src/backend/worksheet/Image.cpp:415
+#: src/backend/worksheet/Image.cpp:413
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to read image data"
@@ -1163,7 +1163,7 @@ msgstr "Ne može se otvoriti fajl %1 za čitanje."
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:108
 #: src/commonfrontend/matrix/MatrixView.cpp:135
 #: src/commonfrontend/worksheet/WorksheetView.cpp:221
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1425
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1437
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:100
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:137
 #, fuzzy, kde-format
@@ -8209,7 +8209,7 @@ msgstr "Funkcije"
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:166
 #: src/commonfrontend/workbook/WorkbookView.cpp:135
 #: src/commonfrontend/worksheet/WorksheetView.cpp:291
-#: src/commonfrontend/worksheet/WorksheetView.cpp:423
+#: src/commonfrontend/worksheet/WorksheetView.cpp:430
 #: src/kdefrontend/MainWin.cpp:953
 #, fuzzy, kde-format
 #| msgid "Add new"
@@ -8244,7 +8244,7 @@ msgid "Analysis"
 msgstr "&Analiza"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:682
-#: src/commonfrontend/worksheet/WorksheetView.cpp:534
+#: src/commonfrontend/worksheet/WorksheetView.cpp:541
 #: src/kdefrontend/ThemeHandler.cpp:49 src/kdefrontend/ThemeHandler.cpp:144
 #, fuzzy, kde-format
 #| msgid "Apply"
@@ -8338,14 +8338,14 @@ msgid "%1: Cursor1 enable"
 msgstr "%1: rotiraj vrijednosti"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1688
-#: src/backend/worksheet/Worksheet.cpp:810
+#: src/backend/worksheet/Worksheet.cpp:808
 #, fuzzy, kde-format
 #| msgid "%1: add %2."
 msgid "%1: load theme %2"
 msgstr "%1: dodaj %2."
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1690
-#: src/backend/worksheet/Worksheet.cpp:812
+#: src/backend/worksheet/Worksheet.cpp:810
 #, fuzzy, kde-format
 #| msgid "%1: add %2."
 msgid "%1: load default theme"
@@ -8353,7 +8353,7 @@ msgstr "%1: dodaj %2."
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1692
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5318
-#: src/backend/worksheet/Worksheet.cpp:814
+#: src/backend/worksheet/Worksheet.cpp:812
 #, fuzzy, kde-format
 #| msgid "%1: set cell value"
 msgid "%1: set theme"
@@ -8507,8 +8507,8 @@ msgid "%1: add Fourier filter curve"
 msgstr "%1: dodaj %2 kolonu"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1980
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1421
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1422
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1433
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1434
 #, fuzzy, kde-format
 #| msgid "text label"
 msgid "Text Label"
@@ -8563,50 +8563,50 @@ msgid "%1: set border corner radius"
 msgstr "%1: postavi ugaoni radijus linije"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:243
-#: src/backend/worksheet/Worksheet.cpp:687
-#: src/backend/worksheet/Worksheet.cpp:688
+#: src/backend/worksheet/Worksheet.cpp:685
+#: src/backend/worksheet/Worksheet.cpp:686
 #, kde-format
 msgid "%1: set layout top margin"
 msgstr "%1: postavi gornju marginu"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:250
-#: src/backend/worksheet/Worksheet.cpp:697
-#: src/backend/worksheet/Worksheet.cpp:698
+#: src/backend/worksheet/Worksheet.cpp:695
+#: src/backend/worksheet/Worksheet.cpp:696
 #, kde-format
 msgid "%1: set layout bottom margin"
 msgstr "%1: postavi donju marginu"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:257
-#: src/backend/worksheet/Worksheet.cpp:707
-#: src/backend/worksheet/Worksheet.cpp:708
+#: src/backend/worksheet/Worksheet.cpp:705
+#: src/backend/worksheet/Worksheet.cpp:706
 #, kde-format
 msgid "%1: set layout left margin"
 msgstr "%1: postavi lijevu marginu"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:264
-#: src/backend/worksheet/Worksheet.cpp:717
-#: src/backend/worksheet/Worksheet.cpp:718
+#: src/backend/worksheet/Worksheet.cpp:715
+#: src/backend/worksheet/Worksheet.cpp:716
 #, kde-format
 msgid "%1: set layout right margin"
 msgstr "%1: postavi desnu marginu"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:271
-#: src/backend/worksheet/Worksheet.cpp:727
-#: src/backend/worksheet/Worksheet.cpp:728
+#: src/backend/worksheet/Worksheet.cpp:725
+#: src/backend/worksheet/Worksheet.cpp:726
 #, kde-format
 msgid "%1: set layout vertical spacing"
 msgstr "%1: postavi vertikalni razmak"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:278
-#: src/backend/worksheet/Worksheet.cpp:737
-#: src/backend/worksheet/Worksheet.cpp:738
+#: src/backend/worksheet/Worksheet.cpp:735
+#: src/backend/worksheet/Worksheet.cpp:736
 #, kde-format
 msgid "%1: set layout horizontal spacing"
 msgstr "%1: postavi horizontalni razmak"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:285
-#: src/backend/worksheet/Worksheet.cpp:757
-#: src/backend/worksheet/Worksheet.cpp:758
+#: src/backend/worksheet/Worksheet.cpp:755
+#: src/backend/worksheet/Worksheet.cpp:756
 #, kde-format
 msgid "%1: set layout column count"
 msgstr "%1: postavi računanje kolone"
@@ -9550,37 +9550,37 @@ msgctxt "@title:window"
 msgid "Print Worksheet"
 msgstr "Ispiši radni list"
 
-#: src/backend/worksheet/Worksheet.cpp:657
+#: src/backend/worksheet/Worksheet.cpp:655
 #, fuzzy, kde-format
 #| msgid "%1: change column type"
 msgid "%1: change size type"
 msgstr "%1: promijeni tip kolone"
 
-#: src/backend/worksheet/Worksheet.cpp:669
+#: src/backend/worksheet/Worksheet.cpp:667
 #, kde-format
 msgid "%1: change \"rescale the content\" property"
 msgstr "%1: promijeni \"reskaliraj sadržaj\" opciju"
 
-#: src/backend/worksheet/Worksheet.cpp:677
-#: src/backend/worksheet/Worksheet.cpp:678
+#: src/backend/worksheet/Worksheet.cpp:675
+#: src/backend/worksheet/Worksheet.cpp:676
 #, kde-format
 msgid "%1: set layout"
 msgstr "%1: postavi raspored"
 
-#: src/backend/worksheet/Worksheet.cpp:747
-#: src/backend/worksheet/Worksheet.cpp:748
+#: src/backend/worksheet/Worksheet.cpp:745
+#: src/backend/worksheet/Worksheet.cpp:746
 #, kde-format
 msgid "%1: set layout row count"
 msgstr "%1: postavi brojač redova za raspored"
 
-#: src/backend/worksheet/Worksheet.cpp:788
-#: src/backend/worksheet/Worksheet.cpp:789
+#: src/backend/worksheet/Worksheet.cpp:786
+#: src/backend/worksheet/Worksheet.cpp:787
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:371
 #, kde-format
 msgid "%1: set page size"
 msgstr "%1: postavi veličinu stranice"
 
-#: src/backend/worksheet/Worksheet.cpp:1533
+#: src/backend/worksheet/Worksheet.cpp:1531
 #, fuzzy, kde-format
 #| msgid "xy-curve"
 msgid "Curves"
@@ -9698,7 +9698,7 @@ msgstr "Otvaranje neuspješno"
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:120
 #: src/commonfrontend/matrix/MatrixView.cpp:192
 #: src/commonfrontend/worksheet/WorksheetView.cpp:145
-#: src/commonfrontend/worksheet/WorksheetView.cpp:367
+#: src/commonfrontend/worksheet/WorksheetView.cpp:378
 #, fuzzy, kde-format
 #| msgid "Zoom in"
 msgid "Zoom In"
@@ -9708,7 +9708,7 @@ msgstr "Uvećaj"
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:123
 #: src/commonfrontend/matrix/MatrixView.cpp:193
 #: src/commonfrontend/worksheet/WorksheetView.cpp:146
-#: src/commonfrontend/worksheet/WorksheetView.cpp:371
+#: src/commonfrontend/worksheet/WorksheetView.cpp:382
 #, fuzzy, kde-format
 #| msgid "Zoom out"
 msgid "Zoom Out"
@@ -9974,8 +9974,8 @@ msgid "5x Magnification"
 msgstr ""
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:213
-#: src/commonfrontend/worksheet/WorksheetView.cpp:431
-#: src/commonfrontend/worksheet/WorksheetView.cpp:482
+#: src/commonfrontend/worksheet/WorksheetView.cpp:438
+#: src/commonfrontend/worksheet/WorksheetView.cpp:489
 #, kde-format
 msgid "Mouse Mode"
 msgstr "Režim miša"
@@ -9992,7 +9992,7 @@ msgid "Move Last Point"
 msgstr ""
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:236
-#: src/commonfrontend/worksheet/WorksheetView.cpp:448
+#: src/commonfrontend/worksheet/WorksheetView.cpp:455
 #, fuzzy, kde-format
 #| msgid "Scientific notation"
 msgid "Magnification"
@@ -10037,7 +10037,7 @@ msgstr "xy-kriva"
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:870
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3862
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3916
-#: src/commonfrontend/worksheet/WorksheetView.cpp:2268
+#: src/commonfrontend/worksheet/WorksheetView.cpp:2287
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to export"
@@ -10046,7 +10046,7 @@ msgstr "Otvaranje neuspješno"
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:870
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3862
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3916
-#: src/commonfrontend/worksheet/WorksheetView.cpp:2268
+#: src/commonfrontend/worksheet/WorksheetView.cpp:2287
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
 msgstr ""
@@ -10244,7 +10244,7 @@ msgid "Header Format"
 msgstr "Format podataka"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:295
-#: src/commonfrontend/worksheet/WorksheetView.cpp:437
+#: src/commonfrontend/worksheet/WorksheetView.cpp:444
 #, kde-format
 msgid "Zoom"
 msgstr "Uvećaj"
@@ -10422,8 +10422,8 @@ msgstr "Da li zaista želite da obrišete odabrani %1 objekat?"
 
 #: src/commonfrontend/ProjectExplorer.cpp:935
 #: src/commonfrontend/ProjectExplorer.cpp:941
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1517
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1526
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1529
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1538
 #, fuzzy, kde-format
 #| msgid "Delete selected objects"
 msgid "Delete selected object"
@@ -11269,7 +11269,7 @@ msgid "Fit to Selection"
 msgstr "Uklopi u selektovano"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:183
-#: src/commonfrontend/worksheet/WorksheetView.cpp:323
+#: src/commonfrontend/worksheet/WorksheetView.cpp:334
 #, kde-format
 msgid "Select and Edit"
 msgstr "Označi i uredi"
@@ -11424,116 +11424,116 @@ msgstr "sva crtanja"
 msgid "All Plot Areas Y"
 msgstr "sva crtanja"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:328
+#: src/commonfrontend/worksheet/WorksheetView.cpp:339
 #, kde-format
 msgid "Crosshair"
 msgstr ""
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:333
+#: src/commonfrontend/worksheet/WorksheetView.cpp:344
 #, fuzzy, kde-format
 #| msgid "Select region and zoom in"
 msgid "Select Region and Zoom In"
 msgstr "Označi područje i uvećaj"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:338
+#: src/commonfrontend/worksheet/WorksheetView.cpp:349
 #, fuzzy, kde-format
 #| msgid "Select x-region and zoom in"
 msgid "Select X-Region and Zoom In"
 msgstr "Označi x-područje i uvećaj"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:343
+#: src/commonfrontend/worksheet/WorksheetView.cpp:354
 #, fuzzy, kde-format
 #| msgid "Select x-region and zoom in"
 msgid "Select Y-Region and Zoom In"
 msgstr "Označi x-područje i uvećaj"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
-#: src/commonfrontend/worksheet/WorksheetView.cpp:348
+#: src/commonfrontend/worksheet/WorksheetView.cpp:359
 #: src/kdefrontend/MainWin.cpp:2587
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1426
 #, kde-format
 msgid "Cursor"
 msgstr ""
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:355
+#: src/commonfrontend/worksheet/WorksheetView.cpp:366
 #, fuzzy, kde-format
 #| msgid "auto scale"
 msgid "Auto Scale"
 msgstr "auto skaliraj"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:359
+#: src/commonfrontend/worksheet/WorksheetView.cpp:370
 #, fuzzy, kde-format
 #| msgid "auto scale X"
 msgid "Auto Scale X"
 msgstr "auto skaliraj X"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:363
+#: src/commonfrontend/worksheet/WorksheetView.cpp:374
 #, fuzzy, kde-format
 #| msgid "auto scale Y"
 msgid "Auto Scale Y"
 msgstr "auto skaliraj Y"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:375
+#: src/commonfrontend/worksheet/WorksheetView.cpp:386
 #, fuzzy, kde-format
 #| msgid "zoom in X"
 msgid "Zoom In X"
 msgstr "uvećaj X"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:379
+#: src/commonfrontend/worksheet/WorksheetView.cpp:390
 #, fuzzy, kde-format
 #| msgid "zoom out X"
 msgid "Zoom Out X"
 msgstr "umanji x"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:383
+#: src/commonfrontend/worksheet/WorksheetView.cpp:394
 #, fuzzy, kde-format
 #| msgid "zoom in Y"
 msgid "Zoom In Y"
 msgstr "uvećaj y"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:387
+#: src/commonfrontend/worksheet/WorksheetView.cpp:398
 #, fuzzy, kde-format
 #| msgid "zoom out Y"
 msgid "Zoom Out Y"
 msgstr "umanji y"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:391
+#: src/commonfrontend/worksheet/WorksheetView.cpp:402
 #, fuzzy, kde-format
 #| msgid "shift left X"
 msgid "Shift Left X"
 msgstr "pomjeri X ulijevo"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:393
+#: src/commonfrontend/worksheet/WorksheetView.cpp:404
 #, fuzzy, kde-format
 #| msgid "shift right X"
 msgid "Shift Right X"
 msgstr "pomjeri X udesno"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:395
+#: src/commonfrontend/worksheet/WorksheetView.cpp:406
 #, fuzzy, kde-format
 #| msgid "shift up Y"
 msgid "Shift Up Y"
 msgstr "pomjeri Y na gore"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:397
+#: src/commonfrontend/worksheet/WorksheetView.cpp:408
 #, fuzzy, kde-format
 #| msgid "shift down Y"
 msgid "Shift Down Y"
 msgstr "pomjeri > na dolje"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:415
-#: src/commonfrontend/worksheet/WorksheetView.cpp:479
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1379
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1386
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1393
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1400
+#: src/commonfrontend/worksheet/WorksheetView.cpp:422
+#: src/commonfrontend/worksheet/WorksheetView.cpp:486
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1391
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1398
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1405
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1412
 #, kde-format
 msgid "Plot Area"
 msgstr "Prostor za Crtanje"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabLayout_2)
 #. i18n: ectx: attribute (title), widget (QWidget, tabLayout)
-#: src/commonfrontend/worksheet/WorksheetView.cpp:456
+#: src/commonfrontend/worksheet/WorksheetView.cpp:463
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:548
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:603
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:265
@@ -11543,32 +11543,32 @@ msgstr "Raspored"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabGrid)
 #. i18n: ectx: property (text), widget (QLabel, lGrid)
-#: src/commonfrontend/worksheet/WorksheetView.cpp:464
+#: src/commonfrontend/worksheet/WorksheetView.cpp:471
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1620
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:441
 #, kde-format
 msgid "Grid"
 msgstr "Meža"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:492
+#: src/commonfrontend/worksheet/WorksheetView.cpp:499
 #, kde-format
 msgid "Zoom/Navigate"
 msgstr "Uvećanje/Navigacija"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:513
+#: src/commonfrontend/worksheet/WorksheetView.cpp:520
 #, fuzzy, kde-format
 #| msgid "Apply actions to"
 msgid "Apply Actions to"
 msgstr "Primijeni akcije na"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:520
+#: src/commonfrontend/worksheet/WorksheetView.cpp:527
 #, fuzzy, kde-format
 #| msgid "Apply actions to"
 msgid "Apply Cursor to"
 msgstr "Primijeni akcije na"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1516
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1525
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1528
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1537
 #, kde-format
 msgid "Do you really want to delete the selected object?"
 msgid_plural "Do you really want to delete the selected %1 objects?"
@@ -11576,7 +11576,7 @@ msgstr[0] "Da li zaista želite da obrišete odabrani %1 objekat?"
 msgstr[1] "Da li zaista želite da obrišete odabrana %1 objekta?"
 msgstr[2] "Da li zaista želite da obrišete odabranih %1 objekata?"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1532
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1544
 #, kde-format
 msgid "%1: Remove selected worksheet elements."
 msgstr "%1: Uklonik odabrane radne elmente."
@@ -24213,11 +24213,16 @@ msgstr "Horizontalni razmaci"
 msgid "Vertical spacing:"
 msgstr "Vertikalni razmaci"
 
-#: src/kdefrontend/worksheet/SlidingPanel.cpp:30
+#: src/kdefrontend/worksheet/SlidingPanel.cpp:86
 #, fuzzy, kde-format
 #| msgid "Orientation"
 msgid "Quit Presentation"
 msgstr "Orijentacija"
+
+#: src/kdefrontend/worksheet/SlidingPanel.cpp:131
+#, kde-format
+msgid "Pin the navigation panel"
+msgstr ""
 
 #: src/tools/ColorMapsManager.cpp:153
 #, kde-format
