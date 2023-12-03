@@ -400,10 +400,12 @@ void ImportSQLDatabaseWidget::refreshPreview() {
 
 void ImportSQLDatabaseWidget::importFromChanged(int index) {
 	if (index == 0) { // import from a table
+		ui.tabWidget->setTabVisible(1, true); // show the "Data Portion" tab
 		ui.gbQuery->hide();
 		ui.lwTables->show();
 		ui.bRefreshPreview->setToolTip(i18n("Refresh the data preview of the selected table"));
 	} else { // import the result set of a custom query
+		ui.tabWidget->setTabVisible(1, false); // hide the "Data Portion" tab, what to import is determine by the custom query
 		ui.gbQuery->show();
 		ui.lwTables->hide();
 		ui.twPreview->clear();
@@ -440,20 +442,63 @@ void ImportSQLDatabaseWidget::read(AbstractDataSource* dataSource, AbstractFileF
 		return;
 	}
 
-	// determine the number of rows/records to read
-	int rows = 0;
+	// determine the number of rows and columns to read
+	int startCol = 0;
+	int endCol = m_cols;
+	int startRow = 0;
+	int endRow = 0;
+	int actualRows = 0; // actual number of rows in the resultset to be read
+	int actualCols = m_cols; // actual number of rows in the resultset to be read
+	QVector<AbstractColumn::ColumnMode> columnModes;
+	QStringList columnNames;
 	if (!customQuery) {
 		const QString& tableName = ui.lwTables->currentItem()->text();
 		QSqlQuery countQuery(QStringLiteral("SELECT COUNT(*) FROM ") + tableName);
 		while (countQuery.next())
-			rows = countQuery.value(0).toInt();
+			actualRows = countQuery.value(0).toInt();
+
+		// columns to read
+		startCol = ui.sbStartColumn->value() - 1;
+		if (ui.sbEndColumn->value() != -1) {
+			endCol = ui.sbEndColumn->value() - 1;
+			if (endCol >= m_cols)
+				endCol = m_cols - 1;
+		}
+
+		actualCols = endCol - startCol;
+
+		// rows to read
+		startRow = ui.sbStartRow->value() - 1;
+		if (ui.sbEndRow->value() != -1) {
+			endRow = ui.sbEndRow->value() - 1;
+			if (endRow >= actualRows)
+				endRow = actualRows - 1;
+		} else
+			endRow = actualRows;
+
+		actualRows = endRow - startRow + 1;
+
+		for (int col = startCol; col < endCol; ++col) {
+			columnModes << m_columnModes.at(col);
+			columnNames << m_columnNames.at(col);
+		}
 	} else {
+		// custom query, navigate to the last record to get the total number of records in the resultset
 		q.last();
-		rows = q.at() + 1;
+		actualRows = q.at() + 1;
 		q.first();
+
+		columnModes = m_columnModes;
+		columnNames = m_columnNames;
 	}
 
-	if (rows == 0) {
+	DEBUG(Q_FUNC_INFO << " start col: " << startCol);
+	DEBUG(Q_FUNC_INFO << " end col: " << endCol);
+	DEBUG(Q_FUNC_INFO << " start row: " << startRow);
+	DEBUG(Q_FUNC_INFO << " end row: " << endRow);
+	QDEBUG(Q_FUNC_INFO << " column names: " << columnNames);
+
+	if (actualRows == 0) {
 		DEBUG("	0 records");
 		RESET_CURSOR;
 		return;
@@ -462,7 +507,7 @@ void ImportSQLDatabaseWidget::read(AbstractDataSource* dataSource, AbstractFileF
 	// pointers to the actual data containers
 	// columnOffset indexes the "start column" in the datasource. Data will be imported starting from this column.
 	std::vector<void*> dataContainer;
-	const int columnOffset = dataSource->prepareImport(dataContainer, importMode, rows, m_cols, m_columnNames, m_columnModes);
+	const int columnOffset = dataSource->prepareImport(dataContainer, importMode, actualRows, actualCols, columnNames, columnModes);
 
 	// number and DateTime formatting
 	const auto& dateTimeFormat = ui.cbDateTimeFormat->currentText();
@@ -477,11 +522,18 @@ void ImportSQLDatabaseWidget::read(AbstractDataSource* dataSource, AbstractFileF
 
 	// read the data
 	int progressIndex = 0;
-	const qreal progressInterval = 0.01 * rows; // update on every 1% only
-	int row = 0;
+	const qreal progressInterval = 0.01 * actualRows; // update on every 1% only
+	int rowIndex = 0;
 	while (q.next()) {
-		for (int col = 0; col < m_cols; ++col) {
-			const auto& valueString = q.value(col).toString();
+		for (int colIndex = startCol; colIndex < endCol; ++colIndex) {
+			if (rowIndex < startRow)
+				continue;
+			if (rowIndex > endRow)
+				break;
+
+			const auto& valueString = q.value(colIndex).toString();
+			const int col = colIndex - startCol;
+			const int row = rowIndex - startRow;
 
 			// set the value depending on the data type
 			switch (m_columnModes.at(col)) {
@@ -517,20 +569,20 @@ void ImportSQLDatabaseWidget::read(AbstractDataSource* dataSource, AbstractFileF
 			}
 		}
 
-		row++;
+		rowIndex++;
 
 		// ask to update the progress bar only if we have more than 1000 lines and only in 1% steps
 		progressIndex++;
-		if (rows > 1000 && progressIndex > progressInterval) {
-			double value = 100. * row / rows;
+		if (actualRows > 1000 && progressIndex > progressInterval) {
+			double value = 100. * rowIndex / actualRows;
 			Q_EMIT completed(static_cast<int>(value));
 			progressIndex = 0;
 			QApplication::processEvents(QEventLoop::AllEvents, 0);
 		}
 	};
-	DEBUG("	Read " << row << " rows");
+	DEBUG("	Read " << rowIndex << " rows");
 
-	dataSource->finalizeImport(columnOffset, 1, m_cols, dateTimeFormat, importMode);
+	dataSource->finalizeImport(columnOffset, 1, actualCols, dateTimeFormat, importMode);
 	RESET_CURSOR;
 }
 
