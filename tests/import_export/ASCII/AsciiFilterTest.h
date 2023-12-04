@@ -99,7 +99,7 @@ private Q_SLOTS:
 
 private:
 	QString benchDataFileName;
-	const size_t lines = 1e6;
+	const size_t lines = 1e5;
 	static const int paths = 5;
 };
 #endif
