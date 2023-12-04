@@ -1166,6 +1166,7 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 	} else { // graph layer is read as a new coordinate system in the same plot area
 		// create a new coordinate systems and set the ranges for it
 		if (layerIndex > 0) {
+			// TODO: check if identical ranges already exists (same min, max, scale, ...)
 			plot->addXRange();
 			plot->addYRange();
 			plot->addCoordinateSystem();
