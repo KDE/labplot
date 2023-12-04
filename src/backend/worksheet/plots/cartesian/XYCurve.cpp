@@ -351,7 +351,11 @@ bool XYCurve::hasData() const {
 
 QColor XYCurve::color() const {
 	Q_D(const XYCurve);
-	return d->line->pen().color();
+	if (d->lineType != XYCurve::LineType::NoLine)
+		return d->line->pen().color();
+	else if (d->symbol->style() != Symbol::Style::NoSymbols)
+		return d->symbol->pen().color();
+	return QColor();
 }
 
 // ##############################################################################

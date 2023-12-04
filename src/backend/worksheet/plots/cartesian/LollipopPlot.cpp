@@ -187,6 +187,10 @@ bool LollipopPlot::hasData() const {
 
 QColor LollipopPlot::color() const {
 	Q_D(const LollipopPlot);
+	if (d->lines.size() > 0 && d->lines.at(0)->style() != Qt::PenStyle::NoPen)
+		return d->lines.at(0)->pen().color();
+	else if (d->symbols.size() > 0 && d->symbols.at(0)->style() != Symbol::Style::NoSymbols)
+		return d->symbols.at(0)->pen().color();
 	return QColor();
 }
 

@@ -197,6 +197,10 @@ bool BarPlot::hasData() const {
 
 QColor BarPlot::color() const {
 	Q_D(const BarPlot);
+	if (d->backgrounds.size() > 0 && d->backgrounds.at(0)->enabled())
+		return d->backgrounds.at(0)->firstColor();
+	else if (d->borderLines.size() > 0 && d->borderLines.at(0)->style() != Qt::PenStyle::NoPen)
+		return d->borderLines.at(0)->pen().color();
 	return QColor();
 }
 

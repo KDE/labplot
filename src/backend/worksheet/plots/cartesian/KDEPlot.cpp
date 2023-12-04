@@ -188,7 +188,7 @@ bool KDEPlot::hasData() const {
 
 QColor KDEPlot::color() const {
 	Q_D(const KDEPlot);
-	return QColor();
+	return d->estimationCurve->color();
 }
 /*!
  * returns the the number of equaly spaced points at which the density is to be evaluated,

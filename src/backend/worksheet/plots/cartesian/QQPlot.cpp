@@ -220,7 +220,7 @@ bool QQPlot::hasData() const {
 
 QColor QQPlot::color() const {
 	Q_D(const QQPlot);
-	return QColor();
+	return d->percentilesCurve->color();
 }
 
 // ##############################################################################
