@@ -218,6 +218,11 @@ bool QQPlot::hasData() const {
 	return (d->dataColumn != nullptr);
 }
 
+QColor QQPlot::color() const {
+	Q_D(const QQPlot);
+	return d->percentilesCurve->color();
+}
+
 // ##############################################################################
 // #################  setter methods and undo commands ##########################
 // ##############################################################################

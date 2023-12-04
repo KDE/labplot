@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-02 00:38+0000\n"
-"PO-Revision-Date: 2023-11-22 11:58+0100\n"
+"POT-Creation-Date: 2023-12-03 00:38+0000\n"
+"PO-Revision-Date: 2023-12-03 11:35+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -991,7 +991,7 @@ msgid "%1: remove all axis points"
 msgstr "%1: elimina tots els punts de l'eix"
 
 #: src/backend/datapicker/DatapickerImage.cpp:681
-#: src/backend/worksheet/Image.cpp:415
+#: src/backend/worksheet/Image.cpp:413
 #, kde-format
 msgid "Failed to read image data"
 msgstr "Ha fallat en llegir les dades de la imatge"
@@ -1097,7 +1097,7 @@ msgstr ""
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:108
 #: src/commonfrontend/matrix/MatrixView.cpp:135
 #: src/commonfrontend/worksheet/WorksheetView.cpp:221
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1425
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1437
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:100
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:137
 #, kde-format
@@ -7755,7 +7755,7 @@ msgstr "Funció d'error"
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:166
 #: src/commonfrontend/workbook/WorkbookView.cpp:135
 #: src/commonfrontend/worksheet/WorksheetView.cpp:291
-#: src/commonfrontend/worksheet/WorksheetView.cpp:423
+#: src/commonfrontend/worksheet/WorksheetView.cpp:430
 #: src/kdefrontend/MainWin.cpp:953
 #, kde-format
 msgid "Add New"
@@ -7786,7 +7786,7 @@ msgid "Analysis"
 msgstr "Anàlisi"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:682
-#: src/commonfrontend/worksheet/WorksheetView.cpp:534
+#: src/commonfrontend/worksheet/WorksheetView.cpp:541
 #: src/kdefrontend/ThemeHandler.cpp:49 src/kdefrontend/ThemeHandler.cpp:144
 #, kde-format
 msgid "Theme"
@@ -7865,20 +7865,20 @@ msgid "%1: Cursor1 enable"
 msgstr "%1: activació del cursor1"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1688
-#: src/backend/worksheet/Worksheet.cpp:810
+#: src/backend/worksheet/Worksheet.cpp:808
 #, kde-format
 msgid "%1: load theme %2"
 msgstr "%1: carrega el tema %2"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1690
-#: src/backend/worksheet/Worksheet.cpp:812
+#: src/backend/worksheet/Worksheet.cpp:810
 #, kde-format
 msgid "%1: load default theme"
 msgstr "%1: carrega el tema predeterminat"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1692
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5318
-#: src/backend/worksheet/Worksheet.cpp:814
+#: src/backend/worksheet/Worksheet.cpp:812
 #, kde-format
 msgid "%1: set theme"
 msgstr "%1: estableix el tema"
@@ -8005,8 +8005,8 @@ msgid "%1: add Fourier filter curve"
 msgstr "%1: afegeix una corba de filtre de Fourier"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1980
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1421
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1422
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1433
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1434
 #, kde-format
 msgid "Text Label"
 msgstr "Etiqueta de text"
@@ -8060,50 +8060,50 @@ msgid "%1: set border corner radius"
 msgstr "%1: estableix el radi de les cantonades de la vora"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:243
-#: src/backend/worksheet/Worksheet.cpp:687
-#: src/backend/worksheet/Worksheet.cpp:688
+#: src/backend/worksheet/Worksheet.cpp:685
+#: src/backend/worksheet/Worksheet.cpp:686
 #, kde-format
 msgid "%1: set layout top margin"
 msgstr "%1: estableix el marge superior de la disposició"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:250
-#: src/backend/worksheet/Worksheet.cpp:697
-#: src/backend/worksheet/Worksheet.cpp:698
+#: src/backend/worksheet/Worksheet.cpp:695
+#: src/backend/worksheet/Worksheet.cpp:696
 #, kde-format
 msgid "%1: set layout bottom margin"
 msgstr "%1: estableix el marge inferior de la disposició"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:257
-#: src/backend/worksheet/Worksheet.cpp:707
-#: src/backend/worksheet/Worksheet.cpp:708
+#: src/backend/worksheet/Worksheet.cpp:705
+#: src/backend/worksheet/Worksheet.cpp:706
 #, kde-format
 msgid "%1: set layout left margin"
 msgstr "%1: estableix el marge esquerre de la disposició"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:264
-#: src/backend/worksheet/Worksheet.cpp:717
-#: src/backend/worksheet/Worksheet.cpp:718
+#: src/backend/worksheet/Worksheet.cpp:715
+#: src/backend/worksheet/Worksheet.cpp:716
 #, kde-format
 msgid "%1: set layout right margin"
 msgstr "%1: estableix el marge dret de la disposició"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:271
-#: src/backend/worksheet/Worksheet.cpp:727
-#: src/backend/worksheet/Worksheet.cpp:728
+#: src/backend/worksheet/Worksheet.cpp:725
+#: src/backend/worksheet/Worksheet.cpp:726
 #, kde-format
 msgid "%1: set layout vertical spacing"
 msgstr "%1: estableix l'espaiat vertical de la disposició"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:278
-#: src/backend/worksheet/Worksheet.cpp:737
-#: src/backend/worksheet/Worksheet.cpp:738
+#: src/backend/worksheet/Worksheet.cpp:735
+#: src/backend/worksheet/Worksheet.cpp:736
 #, kde-format
 msgid "%1: set layout horizontal spacing"
 msgstr "%1: estableix l'espaiat horitzontal de la disposició"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:285
-#: src/backend/worksheet/Worksheet.cpp:757
-#: src/backend/worksheet/Worksheet.cpp:758
+#: src/backend/worksheet/Worksheet.cpp:755
+#: src/backend/worksheet/Worksheet.cpp:756
 #, kde-format
 msgid "%1: set layout column count"
 msgstr "%1: estableix el comptador de columnes de la disposició"
@@ -8973,36 +8973,36 @@ msgctxt "@title:window"
 msgid "Print Worksheet"
 msgstr "Imprimeix el full de treball"
 
-#: src/backend/worksheet/Worksheet.cpp:657
+#: src/backend/worksheet/Worksheet.cpp:655
 #, kde-format
 msgid "%1: change size type"
 msgstr "%1: canvia de tipus de la mida"
 
-#: src/backend/worksheet/Worksheet.cpp:669
+#: src/backend/worksheet/Worksheet.cpp:667
 #, kde-format
 msgid "%1: change \"rescale the content\" property"
 msgstr "%1: canvia la propietat «torna a escalar el contingut»"
 
-#: src/backend/worksheet/Worksheet.cpp:677
-#: src/backend/worksheet/Worksheet.cpp:678
+#: src/backend/worksheet/Worksheet.cpp:675
+#: src/backend/worksheet/Worksheet.cpp:676
 #, kde-format
 msgid "%1: set layout"
 msgstr "%1: estableix la disposició"
 
-#: src/backend/worksheet/Worksheet.cpp:747
-#: src/backend/worksheet/Worksheet.cpp:748
+#: src/backend/worksheet/Worksheet.cpp:745
+#: src/backend/worksheet/Worksheet.cpp:746
 #, kde-format
 msgid "%1: set layout row count"
 msgstr "%1: estableix comptador de files de la disposició"
 
-#: src/backend/worksheet/Worksheet.cpp:788
-#: src/backend/worksheet/Worksheet.cpp:789
+#: src/backend/worksheet/Worksheet.cpp:786
+#: src/backend/worksheet/Worksheet.cpp:787
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:371
 #, kde-format
 msgid "%1: set page size"
 msgstr "%1: estableix la mida de la pàgina"
 
-#: src/backend/worksheet/Worksheet.cpp:1533
+#: src/backend/worksheet/Worksheet.cpp:1531
 #, kde-format
 msgid "Curves"
 msgstr "Corbes"
@@ -9115,7 +9115,7 @@ msgstr "Ha fallat en inicialitzar %1."
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:120
 #: src/commonfrontend/matrix/MatrixView.cpp:192
 #: src/commonfrontend/worksheet/WorksheetView.cpp:145
-#: src/commonfrontend/worksheet/WorksheetView.cpp:367
+#: src/commonfrontend/worksheet/WorksheetView.cpp:378
 #, kde-format
 msgid "Zoom In"
 msgstr "Apropa"
@@ -9124,7 +9124,7 @@ msgstr "Apropa"
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:123
 #: src/commonfrontend/matrix/MatrixView.cpp:193
 #: src/commonfrontend/worksheet/WorksheetView.cpp:146
-#: src/commonfrontend/worksheet/WorksheetView.cpp:371
+#: src/commonfrontend/worksheet/WorksheetView.cpp:382
 #, kde-format
 msgid "Zoom Out"
 msgstr "Allunya"
@@ -9366,8 +9366,8 @@ msgid "5x Magnification"
 msgstr "Augment 5x"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:213
-#: src/commonfrontend/worksheet/WorksheetView.cpp:431
-#: src/commonfrontend/worksheet/WorksheetView.cpp:482
+#: src/commonfrontend/worksheet/WorksheetView.cpp:438
+#: src/commonfrontend/worksheet/WorksheetView.cpp:489
 #, kde-format
 msgid "Mouse Mode"
 msgstr "Mode del ratolí"
@@ -9383,7 +9383,7 @@ msgid "Move Last Point"
 msgstr "Mou el darrer punt"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:236
-#: src/commonfrontend/worksheet/WorksheetView.cpp:448
+#: src/commonfrontend/worksheet/WorksheetView.cpp:455
 #, kde-format
 msgid "Magnification"
 msgstr "Ampliació"
@@ -9423,7 +9423,7 @@ msgstr "Corba"
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:870
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3862
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3916
-#: src/commonfrontend/worksheet/WorksheetView.cpp:2268
+#: src/commonfrontend/worksheet/WorksheetView.cpp:2287
 #, kde-format
 msgid "Failed to export"
 msgstr "Ha fallat en exportar"
@@ -9431,7 +9431,7 @@ msgstr "Ha fallat en exportar"
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:870
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3862
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3916
-#: src/commonfrontend/worksheet/WorksheetView.cpp:2268
+#: src/commonfrontend/worksheet/WorksheetView.cpp:2287
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
 msgstr "Ha fallat en escriure a «%1». Comproveu el camí."
@@ -9618,7 +9618,7 @@ msgid "Header Format"
 msgstr "Format de la capçalera"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:295
-#: src/commonfrontend/worksheet/WorksheetView.cpp:437
+#: src/commonfrontend/worksheet/WorksheetView.cpp:444
 #, kde-format
 msgid "Zoom"
 msgstr "Zoom"
@@ -9782,8 +9782,8 @@ msgstr "Esteu segur que voleu suprimir %1?"
 
 #: src/commonfrontend/ProjectExplorer.cpp:935
 #: src/commonfrontend/ProjectExplorer.cpp:941
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1517
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1526
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1529
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1538
 #, kde-format
 msgid "Delete selected object"
 msgid_plural "Delete selected objects"
@@ -10543,7 +10543,7 @@ msgid "Fit to Selection"
 msgstr "Ajusta a la selecció"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:183
-#: src/commonfrontend/worksheet/WorksheetView.cpp:323
+#: src/commonfrontend/worksheet/WorksheetView.cpp:334
 #, kde-format
 msgid "Select and Edit"
 msgstr "Selecciona i edita"
@@ -10679,102 +10679,102 @@ msgstr "Totes les àrees dels diagrames X"
 msgid "All Plot Areas Y"
 msgstr "Totes les àrees dels diagrames Y"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:328
+#: src/commonfrontend/worksheet/WorksheetView.cpp:339
 #, kde-format
 msgid "Crosshair"
 msgstr "Creu"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:333
+#: src/commonfrontend/worksheet/WorksheetView.cpp:344
 #, kde-format
 msgid "Select Region and Zoom In"
 msgstr "Selecciona una regió i apropa"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:338
+#: src/commonfrontend/worksheet/WorksheetView.cpp:349
 #, kde-format
 msgid "Select X-Region and Zoom In"
 msgstr "Selecciona una regió de X i apropa"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:343
+#: src/commonfrontend/worksheet/WorksheetView.cpp:354
 #, kde-format
 msgid "Select Y-Region and Zoom In"
 msgstr "Selecciona una regió de Y i apropa"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
-#: src/commonfrontend/worksheet/WorksheetView.cpp:348
+#: src/commonfrontend/worksheet/WorksheetView.cpp:359
 #: src/kdefrontend/MainWin.cpp:2587
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1426
 #, kde-format
 msgid "Cursor"
 msgstr "cursor"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:355
+#: src/commonfrontend/worksheet/WorksheetView.cpp:366
 #, kde-format
 msgid "Auto Scale"
 msgstr "Escala automàticament"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:359
+#: src/commonfrontend/worksheet/WorksheetView.cpp:370
 #, kde-format
 msgid "Auto Scale X"
 msgstr "Escala X automàticament"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:363
+#: src/commonfrontend/worksheet/WorksheetView.cpp:374
 #, kde-format
 msgid "Auto Scale Y"
 msgstr "Escala Y automàticament"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:375
+#: src/commonfrontend/worksheet/WorksheetView.cpp:386
 #, kde-format
 msgid "Zoom In X"
 msgstr "Apropa X"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:379
+#: src/commonfrontend/worksheet/WorksheetView.cpp:390
 #, kde-format
 msgid "Zoom Out X"
 msgstr "Allunya X"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:383
+#: src/commonfrontend/worksheet/WorksheetView.cpp:394
 #, kde-format
 msgid "Zoom In Y"
 msgstr "Apropa Y"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:387
+#: src/commonfrontend/worksheet/WorksheetView.cpp:398
 #, kde-format
 msgid "Zoom Out Y"
 msgstr "Allunya Y"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:391
+#: src/commonfrontend/worksheet/WorksheetView.cpp:402
 #, kde-format
 msgid "Shift Left X"
 msgstr "Desplaça X a l'esquerra"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:393
+#: src/commonfrontend/worksheet/WorksheetView.cpp:404
 #, kde-format
 msgid "Shift Right X"
 msgstr "Desplaça X a la dreta"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:395
+#: src/commonfrontend/worksheet/WorksheetView.cpp:406
 #, kde-format
 msgid "Shift Up Y"
 msgstr "Desplaça Y amunt"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:397
+#: src/commonfrontend/worksheet/WorksheetView.cpp:408
 #, kde-format
 msgid "Shift Down Y"
 msgstr "Desplaça Y avall"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:415
-#: src/commonfrontend/worksheet/WorksheetView.cpp:479
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1379
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1386
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1393
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1400
+#: src/commonfrontend/worksheet/WorksheetView.cpp:422
+#: src/commonfrontend/worksheet/WorksheetView.cpp:486
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1391
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1398
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1405
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1412
 #, kde-format
 msgid "Plot Area"
 msgstr "Àrea del diagrama"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabLayout_2)
 #. i18n: ectx: attribute (title), widget (QWidget, tabLayout)
-#: src/commonfrontend/worksheet/WorksheetView.cpp:456
+#: src/commonfrontend/worksheet/WorksheetView.cpp:463
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:548
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:603
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:265
@@ -10784,37 +10784,37 @@ msgstr "Disposició"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabGrid)
 #. i18n: ectx: property (text), widget (QLabel, lGrid)
-#: src/commonfrontend/worksheet/WorksheetView.cpp:464
+#: src/commonfrontend/worksheet/WorksheetView.cpp:471
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1620
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:441
 #, kde-format
 msgid "Grid"
 msgstr "Quadrícula"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:492
+#: src/commonfrontend/worksheet/WorksheetView.cpp:499
 #, kde-format
 msgid "Zoom/Navigate"
 msgstr "Apropa/Navega"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:513
+#: src/commonfrontend/worksheet/WorksheetView.cpp:520
 #, kde-format
 msgid "Apply Actions to"
 msgstr "Aplica les accions a"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:520
+#: src/commonfrontend/worksheet/WorksheetView.cpp:527
 #, kde-format
 msgid "Apply Cursor to"
 msgstr "Aplica el Cursor a"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1516
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1525
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1528
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1537
 #, kde-format
 msgid "Do you really want to delete the selected object?"
 msgid_plural "Do you really want to delete the selected %1 objects?"
 msgstr[0] "Segur que voleu eliminar l'objecte seleccionat?"
 msgstr[1] "Segur que voleu eliminar els %1 objectes seleccionats?"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1532
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1544
 #, kde-format
 msgid "%1: Remove selected worksheet elements."
 msgstr "%1: Elimina els elements del full de treball seleccionat."
@@ -22752,10 +22752,15 @@ msgstr "Espaiat horitzontal:"
 msgid "Vertical spacing:"
 msgstr "Espaiat vertical:"
 
-#: src/kdefrontend/worksheet/SlidingPanel.cpp:30
+#: src/kdefrontend/worksheet/SlidingPanel.cpp:86
 #, kde-format
 msgid "Quit Presentation"
 msgstr "Surt de la presentació"
+
+#: src/kdefrontend/worksheet/SlidingPanel.cpp:131
+#, kde-format
+msgid "Pin the navigation panel"
+msgstr "Fixa el plafó de navegació"
 
 #: src/tools/ColorMapsManager.cpp:153
 #, kde-format

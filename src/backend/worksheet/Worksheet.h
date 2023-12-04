@@ -129,7 +129,7 @@ public Q_SLOTS:
 	void cartesianPlotMouseModeChangedSlot(CartesianPlot::MouseMode);
 
 	// slots needed by the cursor
-	void updateCurveBackground(const QPen&, const QString& curveName);
+	void updateCurveBackground(QColor, const QString& curveName);
 	void updateCompleteCursorTreeModel();
 	void cursorPosChanged(int cursorNumber, double xPos);
 	void curveAdded(const XYCurve* curve);
@@ -180,6 +180,8 @@ Q_SIGNALS:
 
 	void changed();
 	void themeChanged(const QString&);
+
+	friend class WorksheetTest;
 };
 
 #endif

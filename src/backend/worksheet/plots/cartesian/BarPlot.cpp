@@ -195,6 +195,15 @@ bool BarPlot::hasData() const {
 	return !d->dataColumns.isEmpty();
 }
 
+QColor BarPlot::color() const {
+	Q_D(const BarPlot);
+	if (d->backgrounds.size() > 0 && d->backgrounds.at(0)->enabled())
+		return d->backgrounds.at(0)->firstColor();
+	else if (d->borderLines.size() > 0 && d->borderLines.at(0)->style() != Qt::PenStyle::NoPen)
+		return d->borderLines.at(0)->pen().color();
+	return QColor();
+}
+
 // values
 Value* BarPlot::value() const {
 	Q_D(const BarPlot);
@@ -239,7 +248,7 @@ void BarPlot::setDataColumns(const QVector<const AbstractColumn*> columns) {
 			// TODO: add disconnect in the undo-function
 
 			connect(column, &AbstractColumn::dataChanged, this, &BarPlot::dataChanged);
-			connect(column, &AbstractAspect::aspectDescriptionChanged, this, &Plot::updateLegendRequested);
+			connect(column, &AbstractAspect::aspectDescriptionChanged, this, &Plot::appearanceChanged);
 		}
 	}
 }
@@ -312,7 +321,7 @@ Background* BarPlotPrivate::addBackground(const KConfigGroup& group) {
 
 	q->connect(background, &Background::updateRequested, [=] {
 		updatePixmap();
-		Q_EMIT q->updateLegendRequested();
+		Q_EMIT q->appearanceChanged();
 	});
 
 	backgrounds << background;
@@ -330,12 +339,12 @@ Line* BarPlotPrivate::addBorderLine(const KConfigGroup& group) {
 
 	q->connect(line, &Line::updatePixmapRequested, [=] {
 		updatePixmap();
-		Q_EMIT q->updateLegendRequested();
+		Q_EMIT q->appearanceChanged();
 	});
 
 	q->connect(line, &Line::updateRequested, [=] {
 		recalcShapeAndBoundingRect();
-		Q_EMIT q->updateLegendRequested();
+		Q_EMIT q->appearanceChanged();
 	});
 
 	borderLines << line;

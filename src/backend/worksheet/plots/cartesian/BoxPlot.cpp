@@ -433,6 +433,11 @@ bool BoxPlot::hasData() const {
 	return !d->dataColumns.isEmpty();
 }
 
+QColor BoxPlot::color() const {
+	Q_D(const BoxPlot);
+	return QColor();
+}
+
 /* ============================ setter methods and undo commands ================= */
 
 // General
@@ -450,7 +455,7 @@ void BoxPlot::setDataColumns(const QVector<const AbstractColumn*> columns) {
 
 			// update the curve itself on changes
 			connect(column, &AbstractColumn::dataChanged, this, &BoxPlot::recalc);
-			connect(column, &AbstractAspect::aspectDescriptionChanged, this, &Plot::updateLegendRequested);
+			connect(column, &AbstractAspect::aspectDescriptionChanged, this, &Plot::appearanceChanged);
 			connect(column->parentAspect(), &AbstractAspect::childAspectAboutToBeRemoved, this, &BoxPlot::dataColumnAboutToBeRemoved);
 			// TODO: add disconnect in the undo-function
 		}

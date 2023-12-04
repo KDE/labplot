@@ -92,11 +92,11 @@ void XYCurve::init() {
 	d->line->init(group);
 	connect(d->line, &Line::updatePixmapRequested, [=] {
 		d->updatePixmap();
-		Q_EMIT updateLegendRequested();
+		Q_EMIT appearanceChanged();
 	});
 	connect(d->line, &Line::updateRequested, [=] {
 		d->recalcShapeAndBoundingRect();
-		Q_EMIT updateLegendRequested();
+		Q_EMIT appearanceChanged();
 	});
 
 	d->dropLine = new Line(QString());
@@ -121,11 +121,11 @@ void XYCurve::init() {
 	d->symbol->init(group);
 	connect(d->symbol, &Symbol::updateRequested, [=] {
 		d->updateSymbols();
-		Q_EMIT updateLegendRequested();
+		Q_EMIT appearanceChanged();
 	});
 	connect(d->symbol, &Symbol::updatePixmapRequested, [=] {
 		d->updatePixmap();
-		Q_EMIT updateLegendRequested();
+		Q_EMIT appearanceChanged();
 	});
 
 	// values
@@ -347,6 +347,15 @@ double XYCurve::maximum(const Dimension) const {
 bool XYCurve::hasData() const {
 	Q_D(const XYCurve);
 	return (d->xColumn != nullptr || d->yColumn != nullptr);
+}
+
+QColor XYCurve::color() const {
+	Q_D(const XYCurve);
+	if (d->lineType != XYCurve::LineType::NoLine)
+		return d->line->pen().color();
+	else if (d->symbol->style() != Symbol::Style::NoSymbols)
+		return d->symbol->pen().color();
+	return QColor();
 }
 
 // ##############################################################################
