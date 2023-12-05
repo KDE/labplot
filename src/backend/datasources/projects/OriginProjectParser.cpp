@@ -1166,13 +1166,39 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 	} else { // graph layer is read as a new coordinate system in the same plot area
 		// create a new coordinate systems and set the ranges for it
 		if (layerIndex > 0) {
-			// TODO: check if identical ranges already exists (same min, max, scale, ...)
-			plot->addXRange();
-			plot->addYRange();
+			// check if identical range already exists
+			int selectedXRangeIndex = -1;
+			for (int i = 0; i < plot->rangeCount(Dimension::X); i++) {
+				// find identical range (TODO: also compare scales and format?)
+				const auto& range = plot->range(Dimension::X, i);
+				if (range == xRange) {
+					selectedXRangeIndex = i;
+					break;
+				}
+			}
+			int selectedYRangeIndex = -1;
+			for (int i = 0; i < plot->rangeCount(Dimension::Y); i++) {
+				// find identical range (TODO: also compare scales and format?)
+				const auto& range = plot->range(Dimension::Y, i);
+				if (range == yRange) {
+					selectedYRangeIndex = i;
+					break;
+				}
+			}
+
+			if (selectedXRangeIndex < 0) {
+				plot->addXRange();
+				selectedXRangeIndex = plot->rangeCount(Dimension::X) - 1;
+			}
+			if (selectedYRangeIndex < 0) {
+				plot->addYRange();
+				selectedYRangeIndex = plot->rangeCount(Dimension::Y) - 1;
+			}
+
 			plot->addCoordinateSystem();
-			// set new ranges for new coordinate system
-			plot->setCoordinateSystemRangeIndex(layerIndex, Dimension::X, layerIndex);
-			plot->setCoordinateSystemRangeIndex(layerIndex, Dimension::Y, layerIndex);
+			// set ranges for new coordinate system
+			plot->setCoordinateSystemRangeIndex(layerIndex, Dimension::X, selectedXRangeIndex);
+			plot->setCoordinateSystemRangeIndex(layerIndex, Dimension::Y, selectedYRangeIndex);
 		}
 		plot->setRange(Dimension::X, layerIndex, xRange);
 		plot->setRange(Dimension::Y, layerIndex, yRange);
