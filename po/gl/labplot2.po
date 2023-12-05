@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-03 00:38+0000\n"
+"POT-Creation-Date: 2023-12-05 00:38+0000\n"
 "PO-Revision-Date: 2023-08-06 05:44+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
@@ -480,7 +480,7 @@ msgstr "Tipo de filtro incompatíbel"
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:283
 #: src/backend/lib/XmlStreamReader.cpp:104
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1861
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1866
 #, kde-format
 msgid "unknown element '%1'"
 msgstr "elemento descoñecido «%1»"
@@ -2132,7 +2132,7 @@ msgstr ""
 #: src/backend/datasources/MQTTClient.cpp:1200
 #: src/backend/datasources/MQTTTopic.cpp:218
 #: src/backend/lib/XmlStreamReader.cpp:99
-#: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:451
+#: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:455
 #, kde-format
 msgid "Attribute '%1' missing or empty, default value is used"
 msgstr "O atributo «%1» falta ou está baleiro, usarase o valor predeterminado"
@@ -7143,7 +7143,7 @@ msgid "%1: set connectionline curve name"
 msgstr "%1: definir a cor do texto"
 
 #: src/backend/worksheet/Line.cpp:109
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:395
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:404
 #, kde-format
 msgid "%1: line type changed"
 msgstr "%1: cambiou o tipo das liñas"
@@ -7562,30 +7562,30 @@ msgstr "%1: definir o sufixo das etiquetas"
 msgid "%1: set labels opacity"
 msgstr "%1: definir a opacidade das etiquetas"
 
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:211
-#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:201
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:220
+#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:210
 #, fuzzy, kde-format
 #| msgid "%1: set data column"
 msgid "%1: set x column"
 msgstr "%1: definir a columna de datos"
 
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:229
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:443
-#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:219
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:238
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:448
+#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:228
 #, fuzzy, kde-format
 #| msgid "%1: set data column"
 msgid "%1: set data columns"
 msgstr "%1: definir a columna de datos"
 
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:251
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:260
 #, fuzzy, kde-format
 #| msgid "%1: set arrow type"
 msgid "%1: set type"
 msgstr "%1: definir o tipo da frecha"
 
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:258
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:471
-#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:240
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:267
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:476
+#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:249
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:196
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:219
 #, fuzzy, kde-format
@@ -7593,8 +7593,8 @@ msgstr "%1: definir o tipo da frecha"
 msgid "%1: set orientation"
 msgstr "%1: definir a orientación dos eixes"
 
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:265
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:485
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:274
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:490
 #, fuzzy, kde-format
 #| msgid "%1: x-start changed"
 msgid "%1: width factor changed"
@@ -7656,75 +7656,75 @@ msgstr "Constante de Euler"
 msgid "far out points count"
 msgstr "Número de puntos"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:464
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:469
 #, fuzzy, kde-format
 #| msgid "%1: set border"
 msgid "%1: set ordering"
 msgstr "%1: definir o bordo"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:478
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:483
 #, fuzzy, kde-format
 #| msgid "%1: line type changed"
 msgid "%1: variable width changed"
 msgstr "%1: cambiou o tipo das liñas"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:492
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:497
 #, fuzzy, kde-format
 #| msgid "%1: change comment"
 msgid "%1: changed notches"
 msgstr "%1: cambiar o comentario"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:500
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:505
 #, fuzzy, kde-format
 #| msgid "%1: set histogram type"
 msgid "%1: set whiskers type"
 msgstr "%1: definir o tipo de histograma"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:507
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:512
 #, fuzzy, kde-format
 #| msgid "%1: set axis end"
 msgid "%1: set whiskers range parameter"
 msgstr "%1: definir o final do eixe"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:514
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:519
 #, fuzzy, kde-format
 #| msgid "%1: set axis end"
 msgid "%1: set whiskers cap size"
 msgstr "%1: definir o final do eixe"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:522
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:527
 #, fuzzy, kde-format
 #| msgid "%1: filling changed"
 msgid "%1: jitterring changed"
 msgstr "%1: cambiouse o recheo"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:530
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:520
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:615
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:535
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:529
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:624
 #, fuzzy, kde-format
 #| msgid "%1: x-range breaking enabled"
 msgid "%1: change rug enabled"
 msgstr "%1: activouse a interrupción de intervalos en x"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:537
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:527
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:629
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:542
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:536
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:638
 #, fuzzy, kde-format
 #| msgid "%1: change line+symbol width"
 msgid "%1: change rug width"
 msgstr "%1: cambiar a anchura da liña e os seus símbolos"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:544
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:534
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:636
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:549
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:543
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:645
 #, fuzzy, kde-format
 #| msgid "%1: change comment"
 msgid "%1: change rug length"
 msgstr "%1: cambiar o comentario"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:551
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:541
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:643
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:556
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:550
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:652
 #, fuzzy, kde-format
 #| msgid "%1: change comment"
 msgid "%1: change rug offset"
@@ -7738,7 +7738,7 @@ msgstr "Non hai ningunha columna dispoñíbel"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTitle)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:163
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5008
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5009
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:483
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:543
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:459
@@ -8132,21 +8132,21 @@ msgid "%1: Cursor1 enable"
 msgstr "%1: activar de cursor1"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1688
-#: src/backend/worksheet/Worksheet.cpp:808
+#: src/backend/worksheet/Worksheet.cpp:811
 #, kde-format
 msgid "%1: load theme %2"
 msgstr "%1: cargar o tema %2"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1690
-#: src/backend/worksheet/Worksheet.cpp:810
+#: src/backend/worksheet/Worksheet.cpp:813
 #, fuzzy, kde-format
 #| msgid "%1: load theme %2"
 msgid "%1: load default theme"
 msgstr "%1: cargar o tema %2"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1692
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5318
-#: src/backend/worksheet/Worksheet.cpp:812
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5319
+#: src/backend/worksheet/Worksheet.cpp:815
 #, kde-format
 msgid "%1: set theme"
 msgstr "%1: definir o tema"
@@ -8281,24 +8281,24 @@ msgstr "%1: engadir unha curva de filtro de Fourier"
 msgid "Text Label"
 msgstr "Etiqueta de texto"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3717
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3718
 #, kde-format
 msgid "Not inside of the bounding rect"
 msgstr "Non dentro do rectángulo delimitador"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3941
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3962
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3942
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3963
 #, kde-format
 msgid "from x=%1 to x=%2"
 msgstr "de x=%1 a x=%2"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3949
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3975
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3950
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3976
 #, kde-format
 msgid "from y=%1 to y=%2"
 msgstr "de y=%1 a y=%2"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3994
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3995
 #, kde-format
 msgid "x=%1"
 msgstr "x=%1"
@@ -8330,50 +8330,50 @@ msgid "%1: set border corner radius"
 msgstr "%1: definir o raio das esquinas do bordo"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:243
-#: src/backend/worksheet/Worksheet.cpp:685
-#: src/backend/worksheet/Worksheet.cpp:686
+#: src/backend/worksheet/Worksheet.cpp:688
+#: src/backend/worksheet/Worksheet.cpp:689
 #, kde-format
 msgid "%1: set layout top margin"
 msgstr "%1: definir a marxe superior da disposición"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:250
-#: src/backend/worksheet/Worksheet.cpp:695
-#: src/backend/worksheet/Worksheet.cpp:696
+#: src/backend/worksheet/Worksheet.cpp:698
+#: src/backend/worksheet/Worksheet.cpp:699
 #, kde-format
 msgid "%1: set layout bottom margin"
 msgstr "%1: definir a marxe inferior da disposición"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:257
-#: src/backend/worksheet/Worksheet.cpp:705
-#: src/backend/worksheet/Worksheet.cpp:706
+#: src/backend/worksheet/Worksheet.cpp:708
+#: src/backend/worksheet/Worksheet.cpp:709
 #, kde-format
 msgid "%1: set layout left margin"
 msgstr "%1: definir a marxe esquerda da disposición"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:264
-#: src/backend/worksheet/Worksheet.cpp:715
-#: src/backend/worksheet/Worksheet.cpp:716
+#: src/backend/worksheet/Worksheet.cpp:718
+#: src/backend/worksheet/Worksheet.cpp:719
 #, kde-format
 msgid "%1: set layout right margin"
 msgstr "%1: definir a marxe dereita da disposición"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:271
-#: src/backend/worksheet/Worksheet.cpp:725
-#: src/backend/worksheet/Worksheet.cpp:726
+#: src/backend/worksheet/Worksheet.cpp:728
+#: src/backend/worksheet/Worksheet.cpp:729
 #, kde-format
 msgid "%1: set layout vertical spacing"
 msgstr "%1: definir o espazamento vertical da disposición"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:278
-#: src/backend/worksheet/Worksheet.cpp:735
-#: src/backend/worksheet/Worksheet.cpp:736
+#: src/backend/worksheet/Worksheet.cpp:738
+#: src/backend/worksheet/Worksheet.cpp:739
 #, kde-format
 msgid "%1: set layout horizontal spacing"
 msgstr "%1: definir o espazamento horizontal da disposición"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:285
-#: src/backend/worksheet/Worksheet.cpp:755
-#: src/backend/worksheet/Worksheet.cpp:756
+#: src/backend/worksheet/Worksheet.cpp:758
+#: src/backend/worksheet/Worksheet.cpp:759
 #, kde-format
 msgid "%1: set layout column count"
 msgstr "%1: definir o número de columnas da disposición"
@@ -8432,98 +8432,98 @@ msgstr "Distribución de Poisson"
 msgid "Fit Binomial Distribution"
 msgstr "Distribución binomial"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:370
-#: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:207
-#: src/backend/worksheet/plots/cartesian/QQPlot.cpp:230
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:379
+#: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:211
+#: src/backend/worksheet/plots/cartesian/QQPlot.cpp:235
 #, kde-format
 msgid "%1: set data column"
 msgstr "%1: definir a columna de datos"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:382
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:391
 #, kde-format
 msgid "%1: set histogram type"
 msgstr "%1: definir o tipo de histograma"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:389
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:398
 #, kde-format
 msgid "%1: set histogram orientation"
 msgstr "%1: definir a orientación do histograma"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:396
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:405
 #, fuzzy, kde-format
 #| msgid "%1: set histogram orientation"
 msgid "%1: set histogram normalization"
 msgstr "%1: definir a orientación do histograma"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:403
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:412
 #, kde-format
 msgid "%1: set binning method"
 msgstr "%1: definir o método de agrupación en arca"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:410
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:419
 #, kde-format
 msgid "%1: set bin count"
 msgstr "%1: definir o número de arcas"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:417
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:426
 #, kde-format
 msgid "%1: set bin width"
 msgstr "%1: definir a anchura da arca"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:425
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:434
 #, kde-format
 msgid "%1: change auto bin ranges"
 msgstr "%1: cambiar o axuste automático de intervalo da arca"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:473
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:482
 #, kde-format
 msgid "%1: set bin ranges start"
 msgstr "%1: definir o comezo do intervalo da arca"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:480
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:489
 #, kde-format
 msgid "%1: set bin ranges end"
 msgstr "%1: definir o final do intervalo da arca"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:488
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:528
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:497
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:537
 #, kde-format
 msgid "%1: x-error type changed"
 msgstr "%1: cambiou o tipo de erro de x"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:495
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:507
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:504
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:516
 #, fuzzy, kde-format
 #| msgid "%1: set x-error column"
 msgid "%1: set error column"
 msgstr "%1: definir a columna de erro de x"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:863
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:872
 #, kde-format
 msgid ""
 "Calculation of the histogram not possible. The max value must be bigger than "
 "the min value."
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:219
+#: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:223
 #, fuzzy, kde-format
 #| msgid "%1: set range type"
 msgid "%1: set kernel type"
 msgstr "%1: definir o tipo de intervalo"
 
-#: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:226
+#: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:230
 #, fuzzy, kde-format
 #| msgid "%1: set bin width"
 msgid "%1: set bandwidth type"
 msgstr "%1: definir a anchura da arca"
 
-#: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:233
+#: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:237
 #, fuzzy, kde-format
 #| msgid "%1: set bin width"
 msgid "%1: set bandwidth"
 msgstr "%1: definir a anchura da arca"
 
-#: src/backend/worksheet/plots/cartesian/QQPlot.cpp:242
+#: src/backend/worksheet/plots/cartesian/QQPlot.cpp:247
 #, fuzzy, kde-format
 #| msgid "%1: set position"
 msgid "%1: set distribution"
@@ -8920,82 +8920,82 @@ msgid "club"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:108
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:424
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:433
 #, kde-format
 msgid "%1: set values type"
 msgstr "%1: definir o tipo dos valores"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:119
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:431
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:440
 #, kde-format
 msgid "%1: set values column"
 msgstr "%1: definir a columna dos valores"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:131
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:450
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:459
 #, kde-format
 msgid "%1: set values position"
 msgstr "%1: definir a posición dos valores"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:138
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:457
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:466
 #, kde-format
 msgid "%1: set values distance"
 msgstr "%1: definir a distancia dos valores"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:145
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:464
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:473
 #, kde-format
 msgid "%1: rotate values"
 msgstr "%1: rotar os valores"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:152
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:471
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:480
 #, kde-format
 msgid "%1: set values opacity"
 msgstr "%1: definir a opacidade dos valores"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:159
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:478
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:487
 #, fuzzy, kde-format
 #| msgid "%1: set values font"
 msgid "%1: set values numeric format"
 msgstr "%1: definir o tipo de letra dos valores"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:166
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:485
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:494
 #, fuzzy, kde-format
 #| msgid "%1: set labels precision"
 msgid "%1: set values precision"
 msgstr "%1: definir a precisión das etiquetas"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:173
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:492
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:501
 #, fuzzy, kde-format
 #| msgid "%1: set labels datetime format"
 msgid "%1: set values datetime format"
 msgstr "%1: definir o formato de data e hora das etiquetas"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:180
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:499
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:508
 #, kde-format
 msgid "%1: set values prefix"
 msgstr "%1: definir o prefixo dos valores"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:187
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:506
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:515
 #, kde-format
 msgid "%1: set values suffix"
 msgstr "%1: definir o sufixo dos valores"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:194
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:513
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:522
 #, kde-format
 msgid "%1: set values font"
 msgstr "%1: definir o tipo de letra dos valores"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:201
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:520
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:529
 #, kde-format
 msgid "%1: set values color"
 msgstr "%1: definir a cor dos valores"
@@ -9051,77 +9051,77 @@ msgstr "%1: definir as opcións e aplicar a correlación"
 msgid "Navigate to \"%1\""
 msgstr "Navegar ata «%1»"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:363
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:372
 #, kde-format
 msgid "%1: x-data source changed"
 msgstr "%1: a fonte dos datos de x cambiou"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:370
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:379
 #, kde-format
 msgid "%1: y-data source changed"
 msgstr "%1: a fonte dos datos de y cambiou"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:387
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:396
 #, fuzzy, kde-format
 #| msgid "%1 CustomPoints: visibility changed"
 msgid "%1: legend visibility changed"
 msgstr "%1: puntos personalizados: cambiou a visibilidade"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:402
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:411
 #, kde-format
 msgid "%1: set skip line gaps"
 msgstr "%1: definir o salto de espazos entre liñas"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:409
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:418
 #, kde-format
 msgid "%1: set increasing X"
 msgstr "%1: definir X en aumento"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:416
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:425
 #, kde-format
 msgid "%1: set the number of interpolation points"
 msgstr "%1: definir o número de puntos de interpolación"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:535
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:553
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:544
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:562
 #, kde-format
 msgid "%1: set x-error column"
 msgstr "%1: definir a columna de erro de x"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:571
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:580
 #, kde-format
 msgid "%1: y-error type changed"
 msgstr "%1: cambiou o tipo de erro de y"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:578
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:596
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:587
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:605
 #, kde-format
 msgid "%1: set y-error column"
 msgstr "%1: definir a columna de erro de y"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:622
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:631
 #, fuzzy, kde-format
 #| msgid "%1: set axis orientation"
 msgid "%1: set rug orientation"
 msgstr "%1: definir a orientación dos eixes"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1502
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1511
 #, kde-format
 msgid "Error: Akima spline interpolation requires a minimum of 5 points."
 msgstr ""
 "Erro: a interpolación de eixe nervado de Akima require polo menos 5 puntos."
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1504
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1513
 #, kde-format
 msgid "Error: Could not initialize the spline function."
 msgstr "Erro: Non se puido preparar a función de eixe nervado."
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1517
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1526
 #, kde-format
 msgid "x values must be monotonically increasing."
 msgstr "os valores de x deben aumentar de maneira monotónica."
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1520
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1529
 #, kde-format
 msgid "Error: %1"
 msgstr "Erro: %1"
@@ -9294,37 +9294,37 @@ msgctxt "@title:window"
 msgid "Print Worksheet"
 msgstr "Imprimir a folla de traballo"
 
-#: src/backend/worksheet/Worksheet.cpp:655
+#: src/backend/worksheet/Worksheet.cpp:658
 #, fuzzy, kde-format
 #| msgid "%1: change column type"
 msgid "%1: change size type"
 msgstr "%1: cambiar o tipo da columna."
 
-#: src/backend/worksheet/Worksheet.cpp:667
+#: src/backend/worksheet/Worksheet.cpp:670
 #, kde-format
 msgid "%1: change \"rescale the content\" property"
 msgstr "%1: cambiar a propiedade «cambiar a escala do contido»"
 
-#: src/backend/worksheet/Worksheet.cpp:675
-#: src/backend/worksheet/Worksheet.cpp:676
+#: src/backend/worksheet/Worksheet.cpp:678
+#: src/backend/worksheet/Worksheet.cpp:679
 #, kde-format
 msgid "%1: set layout"
 msgstr "%1: definir a disposición"
 
-#: src/backend/worksheet/Worksheet.cpp:745
-#: src/backend/worksheet/Worksheet.cpp:746
+#: src/backend/worksheet/Worksheet.cpp:748
+#: src/backend/worksheet/Worksheet.cpp:749
 #, kde-format
 msgid "%1: set layout row count"
 msgstr "%1: definir o número de filas da disposición"
 
-#: src/backend/worksheet/Worksheet.cpp:786
-#: src/backend/worksheet/Worksheet.cpp:787
+#: src/backend/worksheet/Worksheet.cpp:789
+#: src/backend/worksheet/Worksheet.cpp:790
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:371
 #, kde-format
 msgid "%1: set page size"
 msgstr "%1: definir o tamaño da páxina"
 
-#: src/backend/worksheet/Worksheet.cpp:1531
+#: src/backend/worksheet/Worksheet.cpp:1536
 #, kde-format
 msgid "Curves"
 msgstr "Curvas"
