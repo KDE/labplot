@@ -260,15 +260,15 @@ QDateTime ColumnPrivate::ValueLabels::dateTimeAt(int index) const {
 		return QDateTime();
 
 	switch (m_mode) {
+	case AbstractColumn::ColumnMode::DateTime:
+	case AbstractColumn::ColumnMode::Month:
+	case AbstractColumn::ColumnMode::Day:
+		return cast_vector<QDateTime>()->at(index).value;
 	case AbstractColumn::ColumnMode::Double:
 	case AbstractColumn::ColumnMode::Integer:
 	case AbstractColumn::ColumnMode::BigInt:
 	case AbstractColumn::ColumnMode::Text:
 		return QDateTime();
-	case AbstractColumn::ColumnMode::DateTime:
-	case AbstractColumn::ColumnMode::Month:
-	case AbstractColumn::ColumnMode::Day:
-		return cast_vector<QDateTime>()->at(index).value;
 	}
 	Q_ASSERT(false);
 	return QDateTime();
