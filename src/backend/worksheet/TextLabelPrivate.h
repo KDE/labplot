@@ -39,7 +39,7 @@ public:
 	TextLabel::TextWrapper textWrapper;
 	QFont teXFont{QStringLiteral("Computer Modern"), 12}; // reasonable default font and size
 	QColor fontColor{Qt::black}; // used only by the theme for unformatted text. The text font is in the HTML and so this variable is never set
-	QColor backgroundColor{Qt::white}; // same as fontColor
+	QColor backgroundColor{Qt::transparent}; // same as fontColor
 	QImage teXImage;
 	QByteArray teXPdfData;
 	QFutureWatcher<QByteArray> teXImageFutureWatcher;
