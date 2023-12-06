@@ -73,6 +73,7 @@ private Q_SLOTS:
 Q_SIGNALS:
 	void completed(int);
 	void stateChanged();
+	void error(const QString&);
 };
 
 #endif // IMPORTSQLDATABASEWIDGET_H

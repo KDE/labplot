@@ -26,9 +26,6 @@
 #endif
 
 #include <KLocalizedString>
-#include <KMessageBox>
-#include <KMessageWidget>
-
 #include <KWindowConfig>
 
 #include <QDialogButtonBox>
@@ -551,19 +548,4 @@ void ImportFileDialog::checkOkButton() {
 
 QString ImportFileDialog::selectedObject() const {
 	return m_importFileWidget->selectedObject();
-}
-
-void ImportFileDialog::showErrorMessage(const QString& message) {
-	if (message.isEmpty()) {
-		if (m_messageWidget && m_messageWidget->isVisible())
-			m_messageWidget->close();
-	} else {
-		if (!m_messageWidget) {
-			m_messageWidget = new KMessageWidget(this);
-			m_messageWidget->setMessageType(KMessageWidget::Error);
-			vLayout->insertWidget(vLayout->count() - 1, m_messageWidget);
-		}
-		m_messageWidget->setText(message);
-		m_messageWidget->animatedShow();
-	}
 }

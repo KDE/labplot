@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : import data dialog
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2016-2018 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2016-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -17,6 +17,7 @@ class AspectTreeModel;
 class MainWin;
 class TreeViewComboBox;
 
+class KMessageWidget;
 class QMenu;
 class QAbstractItemModel;
 class QLabel;
@@ -41,7 +42,7 @@ public:
 protected:
 	void setModel();
 
-	QVBoxLayout* vLayout;
+	QVBoxLayout* vLayout{nullptr};
 	QPushButton* okButton{nullptr};
 	QLabel* lPosition{nullptr};
 	QComboBox* cbPosition{nullptr};
@@ -51,9 +52,11 @@ protected:
 	QToolButton* tbNewDataContainer{nullptr};
 	QMenu* m_newDataContainerMenu{nullptr};
 	AspectTreeModel* m_aspectTreeModel;
+	KMessageWidget* m_messageWidget{nullptr};
 
 protected Q_SLOTS:
 	virtual void checkOkButton() = 0;
+	void showErrorMessage(const QString&);
 
 private Q_SLOTS:
 	void newDataContainerMenu();

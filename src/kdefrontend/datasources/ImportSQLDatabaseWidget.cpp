@@ -19,7 +19,6 @@
 #include <KConfig>
 #include <KConfigGroup>
 #include <KLocalizedString>
-#include <KMessageBox>
 
 #ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
 #include <KSyntaxHighlighting/Definition>
@@ -251,7 +250,7 @@ void ImportSQLDatabaseWidget::connectionChanged() {
 	const QString& dbName = group.readEntry("DatabaseName");
 	if (DatabaseManagerWidget::isFileDB(driver)) {
 		if (!QFile::exists(dbName)) {
-			KMessageBox::error(this, i18n("Couldn't find the database file '%1'. Please check the connection settings.", dbName), i18n("Connection Failed"));
+			Q_EMIT error(i18n("Couldn't find the database file '%1'. Please check the connection settings.", dbName));
 			setInvalid();
 			return;
 		} else
@@ -272,10 +271,8 @@ void ImportSQLDatabaseWidget::connectionChanged() {
 	WAIT_CURSOR;
 	if (!m_db.open()) {
 		RESET_CURSOR;
-		KMessageBox::error(this,
-						   i18n("Failed to connect to the database '%1'. Please check the connection settings.", ui.cbConnection->currentText())
-							   + QStringLiteral("\n\n") + m_db.lastError().databaseText(),
-						   i18n("Connection Failed"));
+		Q_EMIT error(i18n("Failed to connect to the database '%1'. Please check the connection settings.", ui.cbConnection->currentText())
+				+ QStringLiteral("\n\n") + m_db.lastError().databaseText());
 		setInvalid();
 		return;
 	}
@@ -292,6 +289,7 @@ void ImportSQLDatabaseWidget::connectionChanged() {
 	// show the last used query
 	ui.teQuery->setText(group.readEntry("Query"));
 
+	Q_EMIT error(QString());
 	RESET_CURSOR;
 }
 
@@ -332,7 +330,9 @@ void ImportSQLDatabaseWidget::refreshPreview() {
 	if (!q.isActive() || !q.next()) { // check if query was successful and got to first record
 		RESET_CURSOR;
 		if (!q.lastError().databaseText().isEmpty())
-			KMessageBox::error(this, q.lastError().databaseText(), i18n("Unable to Execute Query"));
+			Q_EMIT error(i18n("Failed to execute the query for the preview") + QStringLiteral(" \n") +  q.lastError().databaseText());
+		else
+			Q_EMIT error(i18n("Failed to execute the query for the preview"));
 
 		setInvalid();
 		return;
@@ -402,6 +402,7 @@ void ImportSQLDatabaseWidget::refreshPreview() {
 		Q_EMIT stateChanged();
 	}
 
+	Q_EMIT error(QString());
 	RESET_CURSOR;
 }
 
@@ -443,7 +444,9 @@ void ImportSQLDatabaseWidget::read(AbstractDataSource* dataSource, AbstractFileF
 	if (!q.exec() || !q.isActive()) {
 		RESET_CURSOR;
 		if (!q.lastError().databaseText().isEmpty())
-			KMessageBox::error(this, q.lastError().databaseText(), i18n("Unable to Execute Query"));
+			Q_EMIT error(i18n("Failed to execute the query") + QStringLiteral(" \n") +  q.lastError().databaseText());
+		else
+			Q_EMIT error(i18n("Failed to execute the query"));
 
 		setInvalid();
 		return;
@@ -603,6 +606,8 @@ void ImportSQLDatabaseWidget::read(AbstractDataSource* dataSource, AbstractFileF
 	DEBUG("	Read " << rowIndex << " rows");
 
 	dataSource->finalizeImport(columnOffset, 1, actualCols, dateTimeFormat, importMode);
+
+	Q_EMIT error(QString());
 	RESET_CURSOR;
 }
 
