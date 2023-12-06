@@ -42,6 +42,7 @@ using Dimension = CartesianCoordinateSystem::Dimension;
 namespace {
 constexpr int maxNumberMajorTicks = 100;
 constexpr int _maxNumberMajorTicksCustomColumn = 21; // Use one more because one will be subtracted below
+constexpr int hoverSelectionEffectPenWidth = 2;
 } // Anounymous namespace
 
 /**
@@ -2746,6 +2747,10 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 	}
 
 	m_boundingRectangle = m_shape.boundingRect();
+	m_shape = QPainterPath();
+	const auto margin = (double)hoverSelectionEffectPenWidth / 2;
+	const auto r = m_boundingRectangle.marginsRemoved(QMarginsF(margin, margin, margin, margin));
+	m_shape.addRect(r); // This is done for performance reasons, because for many ticks, the shape is really complicated and slows down the plot insanely
 
 	// if the axis goes beyond the current bounding box of the plot (too high offset is used, too long labels etc.)
 	// request a prepareGeometryChange() for the plot in order to properly keep track of geometry changes
@@ -2894,12 +2899,12 @@ void AxisPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*opt
 
 	// shape and label
 	if (m_hovered && !isSelected() && !q->isPrinting()) {
-		painter->setPen(QPen(QApplication::palette().color(QPalette::Shadow), 2, Qt::SolidLine));
+		painter->setPen(QPen(QApplication::palette().color(QPalette::Shadow), hoverSelectionEffectPenWidth, Qt::SolidLine));
 		painter->drawPath(m_shape);
 	}
 
 	if (isSelected() && !q->isPrinting()) {
-		painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), 2, Qt::SolidLine));
+		painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), hoverSelectionEffectPenWidth, Qt::SolidLine));
 		painter->drawPath(m_shape);
 	}
 
