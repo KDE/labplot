@@ -140,8 +140,6 @@ private:
 	void mouseMoveEvent(QGraphicsSceneMouseEvent*) override;
 	void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
-	void updatePixmap();
-	void draw(QPainter* painter);
 
 	void addArrow(QPointF point, int direction);
 	int upperLabelsPrecision(int precision, Axis::LabelsFormat);
@@ -175,13 +173,6 @@ private:
 
 	bool m_panningStarted{false};
 	QPointF m_panningStart;
-
-	// Caching
-	QPixmap m_pixmap;
-	QPixmap m_hoverEffectImage;
-	QPixmap m_selectionEffectImage;
-	bool m_hoverEffectImageIsDirty{false};
-	bool m_selectionEffectImageIsDirty{false};
 
 	friend class AxisTest;
 };
