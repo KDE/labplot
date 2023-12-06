@@ -11,6 +11,7 @@
 #include "AxisPrivate.h"
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/Project.h"
+#include "backend/core/Settings.h"
 #include "backend/core/Time.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/XmlStreamReader.h"
@@ -2751,16 +2752,36 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 	// request a prepareGeometryChange() for the plot in order to properly keep track of geometry changes
 	if (plot())
 		plot()->prepareGeometryChange();
+
+	updatePixmap();
 }
 
-/*!
-	paints the content of the axis. Reimplemented from \c QGraphicsItem.
-	\sa QGraphicsItem::paint()
- */
-void AxisPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget*) {
-	if (!isVisible() || linePath.isEmpty())
+void AxisPrivate::updatePixmap() {
+	if (suppressRecalc)
 		return;
 
+	m_hoverEffectImageIsDirty = true;
+	m_selectionEffectImageIsDirty = true;
+	if (m_boundingRectangle.width() == 0 || m_boundingRectangle.height() == 0) {
+		DEBUG(Q_FUNC_INFO << ", boundingRectangle.width() or boundingRectangle.height() == 0");
+		m_pixmap = QPixmap();
+		return;
+	}
+	QPixmap pixmap(ceil(m_boundingRectangle.width()), ceil(m_boundingRectangle.height()));
+	pixmap.fill(Qt::transparent);
+	QPainter painter(&pixmap);
+	painter.setRenderHint(QPainter::Antialiasing, true);
+	painter.translate(-m_boundingRectangle.topLeft());
+
+	draw(&painter);
+	painter.end();
+	m_pixmap = pixmap;
+
+	update();
+	Q_EMIT q->changed();
+}
+
+void AxisPrivate::draw(QPainter* painter) {
 	// draw the line
 	if (line->pen().style() != Qt::NoPen) {
 		painter->setOpacity(line->opacity());
@@ -2891,16 +2912,58 @@ void AxisPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*opt
 			painter->translate(-offsetLabelPoint);
 		}
 	}
+}
+
+/*!
+	paints the content of the axis. Reimplemented from \c QGraphicsItem.
+	\sa QGraphicsItem::paint()
+ */
+void AxisPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget*) {
+	if (!isVisible() || linePath.isEmpty())
+		return;
+#if PERFTRACE_AXIS
+	PERFTRACE(QLatin1String(Q_FUNC_INFO));
+#endif
+
+	// currently this is not needed, because it just makes the plot look worse.
+	if (false && !q->isPrinting() && Settings::group(QStringLiteral("Settings_Worksheet")).readEntry<bool>("DoubleBuffering", true))
+		painter->drawPixmap(m_boundingRectangle.topLeft(), m_pixmap); // draw the cached pixmap (fast)
+	else
+		draw(painter); // draw directly again (slow)
 
 	// shape and label
 	if (m_hovered && !isSelected() && !q->isPrinting()) {
-		painter->setPen(QPen(QApplication::palette().color(QPalette::Shadow), 2, Qt::SolidLine));
-		painter->drawPath(m_shape);
+		if (m_hoverEffectImageIsDirty) {
+			auto pix = QPixmap(m_pixmap.width(), m_pixmap.height());
+			pix.fill(Qt::transparent);
+			QPainter p(&pix);
+			p.setRenderHint(QPainter::Antialiasing, true);
+			p.setRenderHint(QPainter::SmoothPixmapTransform, true);
+			p.translate(-m_boundingRectangle.topLeft());
+			p.setPen(QPen(QApplication::palette().color(QPalette::Shadow), 2, Qt::SolidLine));
+			p.drawPath(m_shape);
+			p.end();
+			m_hoverEffectImage = pix;
+			m_hoverEffectImageIsDirty = false;
+		}
+		painter->drawPixmap(m_boundingRectangle.topLeft(), m_hoverEffectImage, m_pixmap.rect());
 	}
 
 	if (isSelected() && !q->isPrinting()) {
-		painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), 2, Qt::SolidLine));
-		painter->drawPath(m_shape);
+		if (m_selectionEffectImageIsDirty) {
+			auto pix = QPixmap(m_pixmap.width(), m_pixmap.height());
+			pix.fill(Qt::transparent);
+			QPainter p(&pix);
+			p.setRenderHint(QPainter::Antialiasing, true);
+			p.setRenderHint(QPainter::SmoothPixmapTransform, true);
+			p.translate(-m_boundingRectangle.topLeft());
+			p.setPen(QPen(QApplication::palette().color(QPalette::Highlight), 2, Qt::SolidLine));
+			p.drawPath(m_shape);
+			p.end();
+			m_selectionEffectImage = pix;
+			m_selectionEffectImageIsDirty = false;
+		}
+		painter->drawPixmap(m_boundingRectangle.topLeft(), m_selectionEffectImage, m_pixmap.rect());
 	}
 
 #if DEBUG_AXIS_BOUNDING_RECT
