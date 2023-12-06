@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-12-05 00:38+0000\n"
-"PO-Revision-Date: 2023-11-15 08:02+0100\n"
+"PO-Revision-Date: 2023-12-03 18:24+0100\n"
 "Last-Translator: Paolo Zamponi <feus73@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -2149,10 +2149,9 @@ msgid "Unknown error"
 msgstr "Errore sconosciuto"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:351
-#, fuzzy, kde-format
-#| msgid "Time"
+#, kde-format
 msgid "Time_s"
-msgstr "Tempo"
+msgstr "Tempo_s"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:353
 #, kde-format
@@ -3337,10 +3336,9 @@ msgid "Unknown Function"
 msgstr "Funzione sconosciuta"
 
 #: src/backend/gsl/functions.cpp:229
-#, fuzzy, kde-format
-#| msgid "Delete variable"
+#, kde-format
 msgid "Cell (index, variable)"
-msgstr "Cancella variabile"
+msgstr "Cella (indice, variabile)"
 
 #: src/backend/gsl/functions.cpp:230
 #, kde-format
@@ -7055,10 +7053,9 @@ msgid "%1: set range scale"
 msgstr "%1: imposta la scala di x"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:624
-#, fuzzy, kde-format
-#| msgid "%1: set x scale"
+#, kde-format
 msgid "%1: set scale"
-msgstr "%1: imposta la scala di x"
+msgstr "%1: imposta la scala"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:631
 #, kde-format
@@ -9171,10 +9168,9 @@ msgid "Plot Data"
 msgstr "Traccia i dati"
 
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:291
-#, fuzzy, kde-format
-#| msgid "Statisti&cs..."
+#, kde-format
 msgid "Variable Statistics..."
-msgstr "Statisti&che..."
+msgstr "Statistiche sulla variabile..."
 
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:338
 #, kde-format
@@ -9192,10 +9188,9 @@ msgid "Ready"
 msgstr "Pronto"
 
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:362
-#, fuzzy, kde-format
-#| msgid "%1: row statistics"
+#, kde-format
 msgid "%1: variable statistics"
-msgstr "%1: statistiche sulle righe"
+msgstr "%1: statistiche sulla variabile"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:126
 #: src/commonfrontend/matrix/MatrixView.cpp:194
@@ -22660,7 +22655,7 @@ msgstr "Esci dalla presentazione"
 #: src/kdefrontend/worksheet/SlidingPanel.cpp:131
 #, kde-format
 msgid "Pin the navigation panel"
-msgstr ""
+msgstr "Appunta il pannello di navigazione"
 
 #: src/tools/ColorMapsManager.cpp:153
 #, kde-format
