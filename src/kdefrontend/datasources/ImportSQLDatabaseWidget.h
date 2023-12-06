@@ -29,7 +29,7 @@ class ImportSQLDatabaseWidget : public QWidget {
 	Q_OBJECT
 
 public:
-	explicit ImportSQLDatabaseWidget(QWidget*);
+	explicit ImportSQLDatabaseWidget(QWidget* parent = nullptr);
 	~ImportSQLDatabaseWidget() override;
 
 	void read(AbstractDataSource*, AbstractFileFilter::ImportMode importMode = AbstractFileFilter::ImportMode::Replace);
@@ -61,8 +61,10 @@ private:
 	void setInvalid();
 	void setValid();
 
-private Q_SLOTS:
+public Q_SLOTS:
 	void loadSettings();
+
+private Q_SLOTS:
 	void showDatabaseManager();
 	void connectionChanged();
 	void importFromChanged(int);

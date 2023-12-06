@@ -20,7 +20,9 @@ private Q_SLOTS:
 	void initTestCase();
 
 	// import full table
-	void testFullTable();
+	void testFullTableReplace();
+	void testFullTableAppend();
+	void testFullTablePrepend();
 	void testFullTableCustomRowRange();
 	void testFullTableCustomColumnRange();
 	void testFullTableCustomRowColumnRange();

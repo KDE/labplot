@@ -137,6 +137,7 @@ ImportSQLDatabaseWidget::ImportSQLDatabaseWidget(QWidget* parent)
 }
 
 void ImportSQLDatabaseWidget::loadSettings() {
+	DEBUG("ImportSQLDatabaseWidget::loadSettings()");
 	m_initializing = true;
 
 	// read available connections
@@ -145,6 +146,8 @@ void ImportSQLDatabaseWidget::loadSettings() {
 	// load last used connection and other settings
 	KConfigGroup config = Settings::group(QStringLiteral("ImportSQLDatabaseWidget"));
 	ui.cbConnection->setCurrentIndex(ui.cbConnection->findText(config.readEntry("Connection", "")));
+	if (ui.cbConnection->currentIndex() == -1 && ui.cbConnection->count() > 0) // show the first available connection if none was selected yet
+		ui.cbConnection->setCurrentIndex(0);
 	ui.cbImportFrom->setCurrentIndex(config.readEntry("ImportFrom", 0));
 	importFromChanged(ui.cbImportFrom->currentIndex());
 
@@ -319,7 +322,11 @@ void ImportSQLDatabaseWidget::refreshPreview() {
 	}
 
 	QSqlQuery q;
-	q.prepare(currentQuery(true));
+	if (!q.prepare(currentQuery(true))) {
+		RESET_CURSOR;
+		setInvalid();
+		return;
+	}
 	q.setForwardOnly(true);
 	q.exec();
 	if (!q.isActive() || !q.next()) { // check if query was successful and got to first record
@@ -543,7 +550,7 @@ void ImportSQLDatabaseWidget::read(AbstractDataSource* dataSource, AbstractFileF
 			break;
 
 		for (int colIndex = startCol; colIndex < endCol; ++colIndex) {
-			qDebug()<<"col/row " << colIndex << "  " << rowIndex;
+			// qDebug()<<"col/row " << colIndex << "  " << rowIndex;
 			const auto& valueString = q.value(colIndex).toString();
 			const int col = colIndex - startCol;
 			const int row = rowIndex - startRow;
@@ -603,7 +610,11 @@ QString ImportSQLDatabaseWidget::currentQuery(bool preview) {
 	QString query;
 	const bool customQuery = (ui.cbImportFrom->currentIndex() != 0);
 	if (!customQuery) {
-		const QString& tableName = ui.lwTables->currentItem()->text();
+		const auto* item = ui.lwTables->currentItem();
+		if (!item)
+			return query; // no tables available in the database, return an empty string for the query
+
+		const QString& tableName = item->text();
 		if (!preview) {
 			query = QStringLiteral("SELECT * FROM ") + tableName;
 		} else {
