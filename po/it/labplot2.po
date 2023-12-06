@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-07-10 02:40+0000\n"
-"PO-Revision-Date: 2023-11-15 08:02+0100\n"
+"PO-Revision-Date: 2023-12-03 18:24+0100\n"
 "Last-Translator: Paolo Zamponi <feus73@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -2180,10 +2180,9 @@ msgid "Unknown error"
 msgstr "Errore sconosciuto"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:350
-#, fuzzy, kde-format
-#| msgid "Time"
+#, kde-format
 msgid "Time_s"
-msgstr "Tempo"
+msgstr "Tempo_s"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:352
 #, kde-format
