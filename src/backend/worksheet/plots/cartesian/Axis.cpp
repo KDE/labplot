@@ -1730,7 +1730,7 @@ void AxisPrivate::retransformTicks() {
 
 		int columnIndex = iMajor; // iMajor used if for the labels a custom column is used.
 		if ((majorTicksType == Axis::TicksType::CustomColumn || majorTicksType == Axis::TicksType::CustomValues)
-			&& (majorTicksColumn->rowCount() >= _maxNumberMajorTicksCustomColumn && majorTicksAutoNumber)) {
+			&& (majorTicksColumn->rowCount() >= _maxNumberMajorTicksCustomColumn)) {
 			// Do not use all values of the column, but just a portion of it
 			columnIndex = majorTicksColumn->indexForValue(majorTickPos);
 			Q_ASSERT(columnIndex >= 0);
