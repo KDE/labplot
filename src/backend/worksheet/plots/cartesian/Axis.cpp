@@ -2719,10 +2719,14 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 		m_shape.addPath(WorksheetElement::shapeFromPath(tickLabelsPath, QPen()));
 	}
 
+	const auto margin = (double)hoverSelectionEffectPenWidth / 2;
+	const auto axisRect = m_shape.boundingRect().marginsRemoved(QMarginsF(margin, margin, margin, margin));
+
 	// add title label, if available
 	QTextDocument doc; // text may be Html, so check if plain text is empty
 	doc.setHtml(title->text().text);
 	// QDEBUG(Q_FUNC_INFO << ", title text plain: " << doc.toPlainText())
+	QPainterPath titlePath;
 	if (title->isVisible() && !doc.toPlainText().isEmpty()) {
 		const QRectF& titleRect = title->graphicsItem()->boundingRect();
 		if (titleRect.size() != QSizeF(0, 0)) {
@@ -2742,15 +2746,15 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 					offsetX -= labelsOffset + tickLabelsPath.boundingRect().width();
 				title->setPosition(QPointF(rect.topLeft().x() + offsetX, (rect.topLeft().y() + rect.bottomLeft().y()) / 2. - titleOffsetY));
 			}
-			m_shape.addPath(WorksheetElement::shapeFromPath(title->graphicsItem()->mapToParent(title->graphicsItem()->shape()), linePen));
+			titlePath = WorksheetElement::shapeFromPath(title->graphicsItem()->mapToParent(title->graphicsItem()->shape()), linePen);
+			m_shape.addPath(titlePath);
 		}
 	}
 
 	m_boundingRectangle = m_shape.boundingRect();
 	m_shape = QPainterPath();
-	const auto margin = (double)hoverSelectionEffectPenWidth / 2;
-	const auto r = m_boundingRectangle.marginsRemoved(QMarginsF(margin, margin, margin, margin));
-	m_shape.addRect(r); // This is done for performance reasons, because for many ticks, the shape is really complicated and slows down the plot insanely
+	m_shape.addRect(axisRect); // This is done for performance reasons, because for many ticks, the shape is really complicated and slows down the plot insanely
+	m_shape.addPath(titlePath);
 
 	// if the axis goes beyond the current bounding box of the plot (too high offset is used, too long labels etc.)
 	// request a prepareGeometryChange() for the plot in order to properly keep track of geometry changes
