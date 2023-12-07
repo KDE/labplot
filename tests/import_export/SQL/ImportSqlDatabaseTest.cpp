@@ -279,7 +279,28 @@ void ImportSqlDatabaseTest::testFullTableCustomRowColumnRange() {
 // ##################  import the result of a custom query ######################
 // ##############################################################################
 void ImportSqlDatabaseTest::testQuery() {
+	// prepare the target spreadsheet
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 
+	// import the resultset of a custom query
+	ImportSQLDatabaseWidget w;
+	w.loadSettings();
+	w.setQuery(QLatin1String("select title from albums where title like '%best%';"));
+	w.refreshPreview();
+	w.read(&spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+	// check the spreadsheet size and columns names and modes
+	QCOMPARE(spreadsheet.rowCount(), 15);
+	QCOMPARE(spreadsheet.columnCount(), 1);
+
+	QCOMPARE(spreadsheet.column(0)->name(), QLatin1String("Title"));
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Text);
+
+	// first row in the spreadsheet
+	QCOMPARE(spreadsheet.column(0)->textAt(0), QLatin1String("The Best Of Billy Cobham"));
+
+	// last row in the spreadsheet
+	QCOMPARE(spreadsheet.column(0)->textAt(14), QLatin1String("The Best of Beethoven"));
 }
 
 QTEST_MAIN(ImportSqlDatabaseTest)

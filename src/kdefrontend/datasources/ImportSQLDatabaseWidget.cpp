@@ -505,6 +505,7 @@ void ImportSQLDatabaseWidget::read(AbstractDataSource* dataSource, AbstractFileF
 		q.last();
 		actualRows = q.at() + 1;
 		q.first();
+		q.previous(); // navigate in front of the first record so we also read it below in the whie loop
 
 		endRow = actualRows - 1; // all rows to be read
 		columnModes = m_columnModes;
@@ -701,4 +702,9 @@ void ImportSQLDatabaseWidget::setStartColumn(int col) {
 
 void ImportSQLDatabaseWidget::setEndColumn(int col) {
 	ui.sbEndColumn->setValue(col);
+}
+
+void ImportSQLDatabaseWidget::setQuery(const QString& query) {
+	ui.cbImportFrom->setCurrentIndex(1);
+	ui.teQuery->setPlainText(query);
 }

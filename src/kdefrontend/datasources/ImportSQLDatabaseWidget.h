@@ -67,6 +67,7 @@ private:
 	void setEndRow(int);
 	void setStartColumn(int);
 	void setEndColumn(int);
+	void setQuery(const QString&);
 
 public Q_SLOTS:
 	void loadSettings();
