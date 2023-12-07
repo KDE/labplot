@@ -1,9 +1,9 @@
 /*
 	File                 : ImportSQLDatabaseWidget.cpp
 	Project              : LabPlot
-	Description          : SQLDatabase
+	Description          : widget for the import from SQL databases
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2016-2017 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2016-2023 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -60,6 +60,13 @@ private:
 	QString currentQuery(bool preview = false);
 	void setInvalid();
 	void setValid();
+
+	// helper functions for unit tests
+	friend class ImportSqlDatabaseTest;
+	void setStartRow(int);
+	void setEndRow(int);
+	void setStartColumn(int);
+	void setEndColumn(int);
 
 public Q_SLOTS:
 	void loadSettings();

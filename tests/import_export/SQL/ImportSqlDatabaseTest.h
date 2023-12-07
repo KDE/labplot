@@ -24,7 +24,9 @@ private Q_SLOTS:
 	void testFullTableAppend();
 	void testFullTablePrepend();
 	void testFullTableCustomRowRange();
-	void testFullTableCustomColumnRange();
+	void testFullTableCustomColumnRange01();
+	void testFullTableCustomColumnRange02();
+	void testFullTableCustomColumnRange03();
 	void testFullTableCustomRowColumnRange();
 
 	// import the result of a custom query

@@ -1,9 +1,9 @@
 /*
 	File                 : ImportSQLDatabaseWidget.cpp
 	Project              : LabPlot
-	Description          : Datapicker
+	Description          : widget for the import from SQL databases
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2016-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2016-2023 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -552,8 +552,7 @@ void ImportSQLDatabaseWidget::read(AbstractDataSource* dataSource, AbstractFileF
 		if (rowIndex > endRow)
 			break;
 
-		for (int colIndex = startCol; colIndex < endCol; ++colIndex) {
-			// qDebug()<<"col/row " << colIndex << "  " << rowIndex;
+		for (int colIndex = startCol; colIndex <= endCol; ++colIndex) {
 			const auto& valueString = q.value(colIndex).toString();
 			const int col = colIndex - startCol;
 			const int row = rowIndex - startRow;
@@ -686,4 +685,20 @@ void ImportSQLDatabaseWidget::setValid() {
 		m_valid = true;
 		Q_EMIT stateChanged();
 	}
+}
+
+void ImportSQLDatabaseWidget::setStartRow(int row) {
+	ui.sbStartRow->setValue(row);
+}
+
+void ImportSQLDatabaseWidget::setEndRow(int row) {
+	ui.sbEndRow->setValue(row);
+}
+
+void ImportSQLDatabaseWidget::setStartColumn(int col) {
+	ui.sbStartColumn->setValue(col);
+}
+
+void ImportSQLDatabaseWidget::setEndColumn(int col) {
+	ui.sbEndColumn->setValue(col);
 }
