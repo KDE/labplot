@@ -272,7 +272,7 @@ void ImportSQLDatabaseWidget::connectionChanged() {
 	if (!m_db.open()) {
 		RESET_CURSOR;
 		Q_EMIT error(i18n("Failed to connect to the database '%1'. Please check the connection settings.", ui.cbConnection->currentText())
-				+ QStringLiteral("\n\n") + m_db.lastError().databaseText());
+					 + QStringLiteral("\n\n") + m_db.lastError().databaseText());
 		setInvalid();
 		return;
 	}
@@ -330,7 +330,7 @@ void ImportSQLDatabaseWidget::refreshPreview() {
 	if (!q.isActive() || !q.next()) { // check if query was successful and got to first record
 		RESET_CURSOR;
 		if (!q.lastError().databaseText().isEmpty())
-			Q_EMIT error(i18n("Failed to execute the query for the preview") + QStringLiteral(" \n") +  q.lastError().databaseText());
+			Q_EMIT error(i18n("Failed to execute the query for the preview") + QStringLiteral(" \n") + q.lastError().databaseText());
 		else
 			Q_EMIT error(i18n("Failed to execute the query for the preview"));
 
@@ -444,7 +444,7 @@ void ImportSQLDatabaseWidget::read(AbstractDataSource* dataSource, AbstractFileF
 	if (!q.exec() || !q.isActive()) {
 		RESET_CURSOR;
 		if (!q.lastError().databaseText().isEmpty())
-			Q_EMIT error(i18n("Failed to execute the query") + QStringLiteral(" \n") +  q.lastError().databaseText());
+			Q_EMIT error(i18n("Failed to execute the query") + QStringLiteral(" \n") + q.lastError().databaseText());
 		else
 			Q_EMIT error(i18n("Failed to execute the query"));
 
@@ -479,7 +479,7 @@ void ImportSQLDatabaseWidget::read(AbstractDataSource* dataSource, AbstractFileF
 		actualCols = endCol - startCol + 1;
 
 		// determine the names and modes for columns to be read
-		if (startCol != 0 && endCol != m_cols - 1) {
+		if (startCol != 0 || endCol != m_cols - 1) {
 			for (int col = startCol; col <= endCol; ++col) {
 				columnModes << m_columnModes.at(col);
 				columnNames << m_columnNames.at(col);
@@ -558,7 +558,7 @@ void ImportSQLDatabaseWidget::read(AbstractDataSource* dataSource, AbstractFileF
 			const int row = rowIndex - startRow;
 
 			// set the value depending on the data type
-			switch (m_columnModes.at(col)) {
+			switch (columnModes.at(col)) {
 			case AbstractColumn::ColumnMode::Double: {
 				bool isNumber;
 				const double value = numberFormat.toDouble(valueString, &isNumber);

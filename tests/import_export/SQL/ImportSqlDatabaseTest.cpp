@@ -188,7 +188,6 @@ void ImportSqlDatabaseTest::testFullTableCustomColumnRange01() {
  * import the last two columns only
  */
 void ImportSqlDatabaseTest::testFullTableCustomColumnRange02() {
-	QSKIP("fails at the moment");
 	// prepare the target spreadsheet
 	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 
@@ -222,7 +221,6 @@ void ImportSqlDatabaseTest::testFullTableCustomColumnRange02() {
  * import the second column only
  */
 void ImportSqlDatabaseTest::testFullTableCustomColumnRange03() {
-	QSKIP("fails at the moment");
 	// prepare the target spreadsheet
 	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 
@@ -247,8 +245,34 @@ void ImportSqlDatabaseTest::testFullTableCustomColumnRange03() {
 	QCOMPARE(spreadsheet.column(0)->textAt(346), QLatin1String("Koyaanisqatsi (Soundtrack from the Motion Picture)"));
 }
 
+/*!
+ * import the second column only, records from 10 to 20
+ */
 void ImportSqlDatabaseTest::testFullTableCustomRowColumnRange() {
+	// prepare the target spreadsheet
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 
+	// import the records from 10 to 20 from the first table "artists"
+	ImportSQLDatabaseWidget w;
+	w.loadSettings();
+	w.setStartRow(10);
+	w.setEndRow(20);
+	w.setStartColumn(2);
+	w.setEndColumn(2);
+	w.read(&spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+	// check the spreadsheet size and columns names and modes
+	QCOMPARE(spreadsheet.rowCount(), 11);
+	QCOMPARE(spreadsheet.columnCount(), 1);
+
+	QCOMPARE(spreadsheet.column(0)->name(), QLatin1String("Title"));
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Text);
+
+	// first row in the spreadsheet
+	QCOMPARE(spreadsheet.column(0)->textAt(0), QLatin1String("Audioslave"));
+
+	// last row in the spreadsheet
+	QCOMPARE(spreadsheet.column(0)->textAt(10), QLatin1String("The Best Of Buddy Guy - The Millenium Collection"));
 }
 
 // ##############################################################################
