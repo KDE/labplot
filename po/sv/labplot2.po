@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-05 00:38+0000\n"
+"POT-Creation-Date: 2023-12-07 00:38+0000\n"
 "PO-Revision-Date: 2023-11-22 21:12+0100\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -431,12 +431,12 @@ msgstr "Stän&g"
 msgid "Show"
 msgstr "Visa"
 
-#: src/backend/core/AbstractSimpleFilter.cpp:346
+#: src/backend/core/AbstractSimpleFilter.cpp:350
 #, kde-format
 msgid "incompatible filter type"
 msgstr "Inkompatibel filtertyp"
 
-#: src/backend/core/AbstractSimpleFilter.cpp:362
+#: src/backend/core/AbstractSimpleFilter.cpp:366
 #: src/backend/core/Folder.cpp:151 src/backend/core/Project.cpp:799
 #: src/backend/datasources/MQTTClient.cpp:1376
 #: src/backend/datasources/MQTTSubscription.cpp:168
@@ -537,38 +537,38 @@ msgstr "automatisk uppdatering: falsk"
 msgid "The name \"%1\" is already in use. Choose another name."
 msgstr "Namnet \"%1\" används redan. Välj ett annat namn."
 
-#: src/backend/core/column/Column.cpp:120
+#: src/backend/core/column/Column.cpp:121
 #, kde-format
 msgid "Copy Data"
 msgstr "Kopiera data"
 
-#: src/backend/core/column/Column.cpp:123
+#: src/backend/core/column/Column.cpp:124
 #, kde-format
 msgid "Paste Data"
 msgstr "Klistra in data"
 
-#: src/backend/core/column/Column.cpp:159
+#: src/backend/core/column/Column.cpp:160
 #, kde-format
 msgid "Used in"
 msgstr "Använd i"
 
-#: src/backend/core/column/Column.cpp:194
+#: src/backend/core/column/Column.cpp:195
 #, kde-format
 msgid "XY-Curves"
 msgstr "XY-kurvor"
 
-#: src/backend/core/column/Column.cpp:212
+#: src/backend/core/column/Column.cpp:213
 #: src/kdefrontend/datasources/ROOTOptionsWidget.cpp:22
 #, kde-format
 msgid "Histograms"
 msgstr "Histogram"
 
-#: src/backend/core/column/Column.cpp:229
+#: src/backend/core/column/Column.cpp:230
 #, kde-format
 msgid "Axes"
 msgstr "Axlar"
 
-#: src/backend/core/column/Column.cpp:254
+#: src/backend/core/column/Column.cpp:255
 #, kde-format
 msgid "Calculations"
 msgstr "Beräkningar"
@@ -583,7 +583,7 @@ msgstr "Beräkningar"
 #. else	// Cancel
 #. return;
 #. }
-#: src/backend/core/column/Column.cpp:386
+#: src/backend/core/column/Column.cpp:387
 #: src/backend/core/column/columncommands.cpp:89
 #: src/kdefrontend/dockwidgets/ColumnDock.cpp:338
 #: src/kdefrontend/dockwidgets/ColumnDock.cpp:362
@@ -592,20 +592,20 @@ msgstr "Beräkningar"
 msgid "%1: change column type"
 msgstr "%1: ändra kolumntyp"
 
-#: src/backend/core/column/Column.cpp:524
+#: src/backend/core/column/Column.cpp:525
 #: src/backend/core/column/columncommands.cpp:580
 #, kde-format
 msgid "%1: clear column"
 msgstr "%1: rensa kolumn"
 
-#: src/backend/core/column/Column.cpp:1570
+#: src/backend/core/column/Column.cpp:1596
 #, kde-format
 msgid "invalid or missing row index"
 msgstr "ogiltig eller saknad radindex"
 
-#: src/backend/core/column/Column.cpp:1579
-#: src/backend/core/column/Column.cpp:1588
-#: src/backend/core/column/Column.cpp:1597
+#: src/backend/core/column/Column.cpp:1605
+#: src/backend/core/column/Column.cpp:1614
+#: src/backend/core/column/Column.cpp:1623
 #, kde-format
 msgid "invalid row value"
 msgstr "ogiltigt radvärde"
@@ -2327,63 +2327,69 @@ msgstr "Pi"
 msgid "Euler's constant"
 msgstr "Eulers konstant"
 
+#: src/backend/gsl/constants.cpp:60
+#, fuzzy, kde-format
+#| msgid "Number"
+msgid "Not a number"
+msgstr "Nummer"
+
 #. i18n("Fundamental constants"));
-#: src/backend/gsl/constants.cpp:62
+#: src/backend/gsl/constants.cpp:63
 #, kde-format
 msgid "Speed of light"
 msgstr "Ljushastigheten"
 
-#: src/backend/gsl/constants.cpp:63
+#: src/backend/gsl/constants.cpp:64
 #, kde-format
 msgid "Vacuum permeability"
 msgstr "Permeabiliteten i vakuum"
 
-#: src/backend/gsl/constants.cpp:64
+#: src/backend/gsl/constants.cpp:65
 #, kde-format
 msgid "Vacuum permittivity"
 msgstr "Kapacitiviteten i vakuum"
 
-#: src/backend/gsl/constants.cpp:65
+#: src/backend/gsl/constants.cpp:66
 #, kde-format
 msgid "Planck constant"
 msgstr "Plancks konstant"
 
-#: src/backend/gsl/constants.cpp:66
+#: src/backend/gsl/constants.cpp:67
 #, kde-format
 msgid "Reduced Planck constant"
 msgstr "Diracs konstant"
 
-#: src/backend/gsl/constants.cpp:67
+#: src/backend/gsl/constants.cpp:68
 #, kde-format
 msgid "Avogadro constant"
 msgstr "Avogadros konstant"
 
-#: src/backend/gsl/constants.cpp:68
+#: src/backend/gsl/constants.cpp:69
 #, kde-format
 msgid "Faraday"
 msgstr "Faraday"
 
-#: src/backend/gsl/constants.cpp:69
+#: src/backend/gsl/constants.cpp:70
 #, kde-format
 msgid "Boltzmann constant"
 msgstr "Boltzmanns konstant"
 
-#: src/backend/gsl/constants.cpp:70
+#: src/backend/gsl/constants.cpp:71
 #, kde-format
 msgid "Molar gas"
 msgstr "Allmänna gaskonstanten"
 
-#: src/backend/gsl/constants.cpp:71
+#: src/backend/gsl/constants.cpp:72
 #, kde-format
 msgid "Standard gas volume"
 msgstr "Molvolym"
 
-#: src/backend/gsl/constants.cpp:72
+#: src/backend/gsl/constants.cpp:73
 #, kde-format
 msgid "Stefan-Boltzmann constant"
 msgstr "Stefan-Boltzmanns konstant"
 
-#: src/backend/gsl/constants.cpp:73
+#: src/backend/gsl/constants.cpp:74
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:532
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:504
 #: src/kdefrontend/dockwidgets/KDEPlotDock.cpp:200
@@ -2392,450 +2398,450 @@ msgid "Gauss"
 msgstr "Gauss"
 
 #. i18n("Astronomy and Astrophysics"));
-#: src/backend/gsl/constants.cpp:76
+#: src/backend/gsl/constants.cpp:77
 #, kde-format
 msgid "Astronomical unit"
 msgstr "Astronomisk enhet"
 
-#: src/backend/gsl/constants.cpp:77
+#: src/backend/gsl/constants.cpp:78
 #, kde-format
 msgid "Gravitational constant"
 msgstr "Gravitationskonstanten"
 
-#: src/backend/gsl/constants.cpp:78
+#: src/backend/gsl/constants.cpp:79
 #, kde-format
 msgid "Light year"
 msgstr "Ljusår"
 
-#: src/backend/gsl/constants.cpp:79
+#: src/backend/gsl/constants.cpp:80
 #, kde-format
 msgid "Parsec"
 msgstr "Parsec"
 
-#: src/backend/gsl/constants.cpp:80
+#: src/backend/gsl/constants.cpp:81
 #, kde-format
 msgid "Gravitational acceleration"
 msgstr "Tyngdacceleration"
 
-#: src/backend/gsl/constants.cpp:81
+#: src/backend/gsl/constants.cpp:82
 #, kde-format
 msgid "Solar mass"
 msgstr "Solmassa"
 
 #. i18n("Atomic and Nuclear Physics"));
-#: src/backend/gsl/constants.cpp:84
+#: src/backend/gsl/constants.cpp:85
 #, kde-format
 msgid "Charge of the electron"
 msgstr "Elektronens laddning"
 
-#: src/backend/gsl/constants.cpp:85
+#: src/backend/gsl/constants.cpp:86
 #, kde-format
 msgid "Energy of 1 electron volt"
 msgstr "Energi för 1 elektronvolt"
 
-#: src/backend/gsl/constants.cpp:86
+#: src/backend/gsl/constants.cpp:87
 #, kde-format
 msgid "Unified atomic mass"
 msgstr "Atommassenheten"
 
-#: src/backend/gsl/constants.cpp:87
+#: src/backend/gsl/constants.cpp:88
 #, kde-format
 msgid "Mass of the electron"
 msgstr "Elektronens massa"
 
-#: src/backend/gsl/constants.cpp:88
+#: src/backend/gsl/constants.cpp:89
 #, kde-format
 msgid "Mass of the muon"
 msgstr "Muonens massa"
 
-#: src/backend/gsl/constants.cpp:89
+#: src/backend/gsl/constants.cpp:90
 #, kde-format
 msgid "Mass of the proton"
 msgstr "Protonens massa"
 
-#: src/backend/gsl/constants.cpp:90
+#: src/backend/gsl/constants.cpp:91
 #, kde-format
 msgid "Mass of the neutron"
 msgstr "Neutronens massa"
 
-#: src/backend/gsl/constants.cpp:91
+#: src/backend/gsl/constants.cpp:92
 #, kde-format
 msgid "Electromagnetic fine structure constant"
 msgstr "Elektromagnetiska finstrukturkonstanten"
 
-#: src/backend/gsl/constants.cpp:92
+#: src/backend/gsl/constants.cpp:93
 #, kde-format
 msgid "Rydberg constant"
 msgstr "Rydbergs konstant"
 
-#: src/backend/gsl/constants.cpp:93
+#: src/backend/gsl/constants.cpp:94
 #, kde-format
 msgid "Bohr radius"
 msgstr "Bohrradien"
 
-#: src/backend/gsl/constants.cpp:94
+#: src/backend/gsl/constants.cpp:95
 #, kde-format
 msgid "Length of 1 angstrom"
 msgstr "Längd för 1 ångström"
 
-#: src/backend/gsl/constants.cpp:95
+#: src/backend/gsl/constants.cpp:96
 #, kde-format
 msgid "Area of 1 barn"
 msgstr "Area för 1 barn"
 
-#: src/backend/gsl/constants.cpp:96
+#: src/backend/gsl/constants.cpp:97
 #, kde-format
 msgid "Bohr Magneton"
 msgstr "Bohrmagnetonen"
 
-#: src/backend/gsl/constants.cpp:97
+#: src/backend/gsl/constants.cpp:98
 #, kde-format
 msgid "Nuclear Magneton"
 msgstr "Kärnmagnetonen"
 
-#: src/backend/gsl/constants.cpp:98
+#: src/backend/gsl/constants.cpp:99
 #, kde-format
 msgid "Magnetic moment of the electron [absolute value]"
 msgstr "Elektronens magnetiska moment [absolutvärde]"
 
-#: src/backend/gsl/constants.cpp:99
+#: src/backend/gsl/constants.cpp:100
 #, kde-format
 msgid "Magnetic moment of the proton"
 msgstr "Protonens magnetiska moment"
 
-#: src/backend/gsl/constants.cpp:100
+#: src/backend/gsl/constants.cpp:101
 #, kde-format
 msgid "Thomson cross section"
 msgstr "Thomsonträffytan"
 
-#: src/backend/gsl/constants.cpp:101
+#: src/backend/gsl/constants.cpp:102
 #, kde-format
 msgid "Electric dipole moment of 1 Debye"
 msgstr "Elektriska dipolmomentet för 1 Debye"
 
 #. i18n("Measurement of Time"));
-#: src/backend/gsl/constants.cpp:104
+#: src/backend/gsl/constants.cpp:105
 #, kde-format
 msgid "Number of seconds in 1 minute"
 msgstr "Antal sekunder på 1 minut"
 
-#: src/backend/gsl/constants.cpp:105
+#: src/backend/gsl/constants.cpp:106
 #, kde-format
 msgid "Number of seconds in 1 hour"
 msgstr "Antal sekunder på 1 timme"
 
-#: src/backend/gsl/constants.cpp:106
+#: src/backend/gsl/constants.cpp:107
 #, kde-format
 msgid "Number of seconds in 1 day"
 msgstr "Antal sekunder på 1 dag"
 
-#: src/backend/gsl/constants.cpp:107
+#: src/backend/gsl/constants.cpp:108
 #, kde-format
 msgid "Number of seconds in 1 week"
 msgstr "Antal sekunder på 1 vecka"
 
 #. i18n("Imperial Units"));
-#: src/backend/gsl/constants.cpp:110
+#: src/backend/gsl/constants.cpp:111
 #, kde-format
 msgid "Length of 1 inch"
 msgstr "Längd av 1 tum"
 
-#: src/backend/gsl/constants.cpp:111
+#: src/backend/gsl/constants.cpp:112
 #, kde-format
 msgid "Length of 1 foot"
 msgstr "Längd av 1 fot"
 
-#: src/backend/gsl/constants.cpp:112
+#: src/backend/gsl/constants.cpp:113
 #, kde-format
 msgid "Length of 1 yard"
 msgstr "Längd av 1 yard"
 
-#: src/backend/gsl/constants.cpp:113
+#: src/backend/gsl/constants.cpp:114
 #, kde-format
 msgid "Length of 1 mile"
 msgstr "Längd av 1 engelsk mil"
 
-#: src/backend/gsl/constants.cpp:114
+#: src/backend/gsl/constants.cpp:115
 #, kde-format
 msgid "Length of 1/1000th of an inch"
 msgstr "Längd av 1/1000-dels tum"
 
 #. i18n("Speed and Nautical Units"));
-#: src/backend/gsl/constants.cpp:117
+#: src/backend/gsl/constants.cpp:118
 #, kde-format
 msgid "Speed of 1 kilometer per hour"
 msgstr "Hastighet för 1 kilometer i timmen"
 
-#: src/backend/gsl/constants.cpp:118
+#: src/backend/gsl/constants.cpp:119
 #, kde-format
 msgid "Speed of 1 mile per hour"
 msgstr "Hastighet för 1 mile i timmen"
 
-#: src/backend/gsl/constants.cpp:119
+#: src/backend/gsl/constants.cpp:120
 #, kde-format
 msgid "Length of 1 nautical mile"
 msgstr "Längd för 1 sjömil"
 
-#: src/backend/gsl/constants.cpp:120
+#: src/backend/gsl/constants.cpp:121
 #, kde-format
 msgid "Length of 1 fathom"
 msgstr "Längd för 1 famn"
 
-#: src/backend/gsl/constants.cpp:121
+#: src/backend/gsl/constants.cpp:122
 #, kde-format
 msgid "Speed of 1 knot"
 msgstr "Hastighet för 1 knop"
 
 #. i18n("Printers Units"));
-#: src/backend/gsl/constants.cpp:124
+#: src/backend/gsl/constants.cpp:125
 #, kde-format
 msgid "length of 1 printer's point [1/72 inch]"
 msgstr "Längd för 1 amerikansk punkt [1/72 tum]"
 
-#: src/backend/gsl/constants.cpp:125
+#: src/backend/gsl/constants.cpp:126
 #, kde-format
 msgid "length of 1 TeX point [1/72.27 inch]"
 msgstr "Längd för 1 TeX-punkt [1/72.27 tum]"
 
 #. i18n("Volume, Area and Length"));
-#: src/backend/gsl/constants.cpp:128
+#: src/backend/gsl/constants.cpp:129
 #, kde-format
 msgid "Length of 1 micron"
 msgstr "Längd för 1 mikron"
 
-#: src/backend/gsl/constants.cpp:129
+#: src/backend/gsl/constants.cpp:130
 #, kde-format
 msgid "Area of 1 hectare"
 msgstr "Area för 1 hektar"
 
-#: src/backend/gsl/constants.cpp:130
+#: src/backend/gsl/constants.cpp:131
 #, kde-format
 msgid "Area of 1 acre"
 msgstr "Area för 1 tunnland"
 
-#: src/backend/gsl/constants.cpp:131
+#: src/backend/gsl/constants.cpp:132
 #, kde-format
 msgid "Volume of 1 liter"
 msgstr "Volym för 1 liter"
 
-#: src/backend/gsl/constants.cpp:132
+#: src/backend/gsl/constants.cpp:133
 #, kde-format
 msgid "Volume of 1 US gallon"
 msgstr "Volym för 1 amerikansk gallon"
 
-#: src/backend/gsl/constants.cpp:133
+#: src/backend/gsl/constants.cpp:134
 #, kde-format
 msgid "Volume of 1 Canadian gallon"
 msgstr "Volym för 1 kanadensisk gallon"
 
-#: src/backend/gsl/constants.cpp:134
+#: src/backend/gsl/constants.cpp:135
 #, kde-format
 msgid "Volume of 1 UK gallon"
 msgstr "Volym för 1 brittisk gallon"
 
-#: src/backend/gsl/constants.cpp:135
+#: src/backend/gsl/constants.cpp:136
 #, kde-format
 msgid "Volume of 1 quart"
 msgstr "Volym för 1 quart"
 
-#: src/backend/gsl/constants.cpp:136
+#: src/backend/gsl/constants.cpp:137
 #, kde-format
 msgid "Volume of 1 pint"
 msgstr "Volym för 1 pint"
 
 #. i18n("Mass and Weight"));
-#: src/backend/gsl/constants.cpp:139
+#: src/backend/gsl/constants.cpp:140
 #, kde-format
 msgid "Mass of 1 pound"
 msgstr "Massa för 1 pund"
 
-#: src/backend/gsl/constants.cpp:140
+#: src/backend/gsl/constants.cpp:141
 #, kde-format
 msgid "Mass of 1 ounce"
 msgstr "Massa för 1 ounce"
 
-#: src/backend/gsl/constants.cpp:141
+#: src/backend/gsl/constants.cpp:142
 #, kde-format
 msgid "Mass of 1 ton"
 msgstr "Massa för 1 ton"
 
-#: src/backend/gsl/constants.cpp:142
+#: src/backend/gsl/constants.cpp:143
 #, kde-format
 msgid "Mass of 1 metric ton [1000 kg]"
 msgstr "Massa för 1 metriskt ton ([1000 kg]"
 
-#: src/backend/gsl/constants.cpp:143
+#: src/backend/gsl/constants.cpp:144
 #, kde-format
 msgid "Mass of 1 UK ton"
 msgstr "Massa för 1 engelskt ton"
 
-#: src/backend/gsl/constants.cpp:144
+#: src/backend/gsl/constants.cpp:145
 #, kde-format
 msgid "Mass of 1 troy ounce"
 msgstr "Massa för 1 troy ounce"
 
-#: src/backend/gsl/constants.cpp:145
+#: src/backend/gsl/constants.cpp:146
 #, kde-format
 msgid "Mass of 1 carat"
 msgstr "Massa för 1 karat"
 
-#: src/backend/gsl/constants.cpp:146
+#: src/backend/gsl/constants.cpp:147
 #, kde-format
 msgid "Force of 1 gram weight"
 msgstr "Kraft för 1 grams vikt"
 
-#: src/backend/gsl/constants.cpp:147
+#: src/backend/gsl/constants.cpp:148
 #, kde-format
 msgid "Force of 1 pound weight"
 msgstr "Kraft för 1 punds vikt"
 
-#: src/backend/gsl/constants.cpp:148
+#: src/backend/gsl/constants.cpp:149
 #, kde-format
 msgid "Force of 1 kilopound weight"
 msgstr "Kraft för 1 kilopunds vikt"
 
-#: src/backend/gsl/constants.cpp:149
+#: src/backend/gsl/constants.cpp:150
 #, kde-format
 msgid "Force of 1 poundal"
 msgstr "Kraft för 1 poundal"
 
 #. i18n("Thermal Energy and Power"));
-#: src/backend/gsl/constants.cpp:152
+#: src/backend/gsl/constants.cpp:153
 #, kde-format
 msgid "Energy of 1 calorie"
 msgstr "Energi för 1 kalori"
 
-#: src/backend/gsl/constants.cpp:153
+#: src/backend/gsl/constants.cpp:154
 #, kde-format
 msgid "Energy of 1 British Thermal Unit"
 msgstr "Energi för 1 brittisk termisk enhet"
 
-#: src/backend/gsl/constants.cpp:154
+#: src/backend/gsl/constants.cpp:155
 #, kde-format
 msgid "Energy of 1 Therm"
 msgstr "Energi för 1 Therm"
 
-#: src/backend/gsl/constants.cpp:155
+#: src/backend/gsl/constants.cpp:156
 #, kde-format
 msgid "Power of 1 horsepower"
 msgstr "Effekten för 1 hästkraft"
 
 #. i18n("Pressure"));
-#: src/backend/gsl/constants.cpp:158
+#: src/backend/gsl/constants.cpp:159
 #, kde-format
 msgid "Pressure of 1 bar"
 msgstr "Tryck för 1 bar"
 
-#: src/backend/gsl/constants.cpp:159
+#: src/backend/gsl/constants.cpp:160
 #, kde-format
 msgid "Pressure of 1 standard atmosphere"
 msgstr "Tryck för 1 standardatmosfär"
 
-#: src/backend/gsl/constants.cpp:160
+#: src/backend/gsl/constants.cpp:161
 #, kde-format
 msgid "Pressure of 1 torr"
 msgstr "Tryck för 1 torr"
 
-#: src/backend/gsl/constants.cpp:161
+#: src/backend/gsl/constants.cpp:162
 #, kde-format
 msgid "Pressure of 1 meter of mercury"
 msgstr "Tryck för 1 meter kvicksilver"
 
-#: src/backend/gsl/constants.cpp:162
+#: src/backend/gsl/constants.cpp:163
 #, kde-format
 msgid "Pressure of 1 inch of mercury"
 msgstr "Tryck för 1 tum kvicksilver"
 
-#: src/backend/gsl/constants.cpp:163
+#: src/backend/gsl/constants.cpp:164
 #, kde-format
 msgid "Pressure of 1 inch of water"
 msgstr "Tryck för 1 tum vatten"
 
-#: src/backend/gsl/constants.cpp:164
+#: src/backend/gsl/constants.cpp:165
 #, kde-format
 msgid "Pressure of 1 pound per square inch"
 msgstr "Tryck för 1 pund per kvadrattum"
 
 #. i18n("Viscosity"));
-#: src/backend/gsl/constants.cpp:167
+#: src/backend/gsl/constants.cpp:168
 #, kde-format
 msgid "Dynamic viscosity of 1 poise"
 msgstr "Dynamisk viskositet för 1 poise"
 
-#: src/backend/gsl/constants.cpp:168
+#: src/backend/gsl/constants.cpp:169
 #, kde-format
 msgid "Kinematic viscosity of 1 stokes"
 msgstr "Kinematisk viskositet för 1 stokes"
 
 #. i18n("Light and Illumination"));
-#: src/backend/gsl/constants.cpp:171
+#: src/backend/gsl/constants.cpp:172
 #, kde-format
 msgid "Luminance of 1 stilb"
 msgstr "Luminansen för 1 stilb"
 
-#: src/backend/gsl/constants.cpp:172
+#: src/backend/gsl/constants.cpp:173
 #, kde-format
 msgid "Luminous flux of 1 lumen"
 msgstr "Ljusflödet för 1 lumen"
 
-#: src/backend/gsl/constants.cpp:173
+#: src/backend/gsl/constants.cpp:174
 #, kde-format
 msgid "Illuminance of 1 lux"
 msgstr "Illuminans för 1 lux"
 
-#: src/backend/gsl/constants.cpp:174
+#: src/backend/gsl/constants.cpp:175
 #, kde-format
 msgid "Illuminance of 1 phot"
 msgstr "Illuminans för 1 phot"
 
-#: src/backend/gsl/constants.cpp:175
+#: src/backend/gsl/constants.cpp:176
 #, kde-format
 msgid "Illuminance of 1 footcandle"
 msgstr "Illuminans för 1 footcandle"
 
-#: src/backend/gsl/constants.cpp:176
+#: src/backend/gsl/constants.cpp:177
 #, kde-format
 msgid "Luminance of 1 lambert"
 msgstr "Luminans för 1 lambert"
 
-#: src/backend/gsl/constants.cpp:177
+#: src/backend/gsl/constants.cpp:178
 #, kde-format
 msgid "Luminance of 1 footlambert"
 msgstr "Luminans för 1 footlambert"
 
 #. i18n("Radioactivity"));
-#: src/backend/gsl/constants.cpp:180
+#: src/backend/gsl/constants.cpp:181
 #, kde-format
 msgid "Activity of 1 curie"
 msgstr "Aktivitet för 1 curie"
 
-#: src/backend/gsl/constants.cpp:181
+#: src/backend/gsl/constants.cpp:182
 #, kde-format
 msgid "Exposure of 1 roentgen"
 msgstr "Exponering för 1 röntgen"
 
-#: src/backend/gsl/constants.cpp:182
+#: src/backend/gsl/constants.cpp:183
 #, kde-format
 msgid "Absorbed dose of 1 rad"
 msgstr "Absorberad dos för 1 rad"
 
 #. i18n("Force and Energy"));
-#: src/backend/gsl/constants.cpp:185
+#: src/backend/gsl/constants.cpp:186
 #, kde-format
 msgid "SI unit of force"
 msgstr "SI-enhet för kraft"
 
-#: src/backend/gsl/constants.cpp:186
+#: src/backend/gsl/constants.cpp:187
 #, kde-format
 msgid "Force of 1 Dyne"
 msgstr "Kraften för 1 Dyn"
 
-#: src/backend/gsl/constants.cpp:187
+#: src/backend/gsl/constants.cpp:188
 #, kde-format
 msgid "SI unit of energy"
 msgstr "SI-enhet för energi"
 
-#: src/backend/gsl/constants.cpp:188
+#: src/backend/gsl/constants.cpp:189
 #, kde-format
 msgid "Energy 1 erg"
 msgstr "Energi 1 erg"
@@ -6902,7 +6908,7 @@ msgstr "%1: ställ in utfyllnad till höger"
 msgid "%1: set bottom padding"
 msgstr "%1: ställ in utfyllnad under"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:266
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:267
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:86
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:224
 #: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:80
@@ -6922,7 +6928,7 @@ msgstr "Horisontell"
 
 #. i18n("AvgShifted Histogram"));
 #. Orientation
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:269
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:270
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:89
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:227
 #: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:83
@@ -6942,7 +6948,7 @@ msgstr "Horisontell"
 msgid "Vertical"
 msgstr "Vertikal"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:289
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:290
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:97
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:235
 #: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:91
@@ -6957,7 +6963,7 @@ msgstr "Orientering"
 #. i18n: ectx: property (text), widget (QLabel, lEstimationLine)
 #. i18n: ectx: property (text), widget (QLabel, lWhiskersFormat)
 #. i18n: ectx: property (text), widget (QLabel, lLine)
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:295
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:296
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:134
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:219
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:488
@@ -6973,14 +6979,14 @@ msgstr "Orientering"
 msgid "Line"
 msgstr "Linje"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:297
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:298
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:136
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:152
 #, kde-format
 msgid "Style"
 msgstr "Stil"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:302
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:303
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:141
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:157
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:319
@@ -6989,253 +6995,253 @@ msgstr "Stil"
 msgid "Color"
 msgstr "Färg"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:523
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:528
 #, kde-format
 msgid "%1: set axis range type"
 msgstr "%1: ställ in axelintervalltyp"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:548
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:553
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:623
 #, kde-format
 msgid "%1: set axis orientation"
 msgstr "%1: ställ in axelorientering"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:555
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:560
 #, kde-format
 msgid "%1: set axis position"
 msgstr "%1: ställ in axelposition"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:563
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:568
 #, kde-format
 msgid "%1: set axis offset"
 msgstr "%1: ställ in axelavstånd"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:578
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:583
 #, kde-format
 msgid "%1: set axis range"
 msgstr "%1: ställ in axelintervall"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:617
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:622
 #, kde-format
 msgid "%1: set range scale"
 msgstr "%1: ange intervallskala"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:624
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:629
 #, kde-format
 msgid "%1: set scale"
 msgstr "%1: ange skala"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:631
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:636
 #, kde-format
 msgid "%1: set major tick start type"
 msgstr "%1: ställ in huvudgraderingens starttyp"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:638
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:643
 #, kde-format
 msgid "%1: set major tick start offset"
 msgstr "%1: ställ in huvudgraderingens startposition"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:646
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:651
 #, kde-format
 msgid "%1: set major tick start value"
 msgstr "%1: ställ in huvudgraderingens startvärde"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:658
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:663
 #, kde-format
 msgid "%1: set axis scaling factor"
 msgstr "%1: ställ in axelskalfaktor"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:667
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:672
 #, kde-format
 msgid "%1: set axis zero offset"
 msgstr "%1: ställ in axelns nollavstånd"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:673
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:678
 #, kde-format
 msgid "%1: show scale and offset"
 msgstr "%1: visa skala och position"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:680
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:685
 #, kde-format
 msgid "%1: set axis logical position"
 msgstr "%1: ställ in axelns logiska position"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:688
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:695
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:693
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:700
 #, kde-format
 msgid "%1: set title offset"
 msgstr "%1: ställ in titelavstånd"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:703
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:708
 #, kde-format
 msgid "%1: set arrow type"
 msgstr "%1: ställ in piltyp"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:710
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:715
 #, kde-format
 msgid "%1: set arrow position"
 msgstr "%1: ställ in pilposition"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:717
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:722
 #, kde-format
 msgid "%1: set arrow size"
 msgstr "%1: ställ in pilstorlek"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:725
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:730
 #, kde-format
 msgid "%1: set major ticks direction"
 msgstr "%1: ställ in huvudgraderingens riktning"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:732
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:737
 #, kde-format
 msgid "%1: set major ticks type"
 msgstr "%1: ställ in huvudgraderingens typ"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:740
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:745
 #, kde-format
 msgid "%1: enable/disable major automatic tick numbers"
 msgstr "%1: aktivera eller inaktivera automatiska huvudgraderingsnummer"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:742
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:757
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:747
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:762
 #, kde-format
 msgid "%1: set the total number of the major ticks"
 msgstr "%1: ställ in totalt antal huvudgraderingar"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:759
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:841
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:764
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:846
 #, kde-format
 msgid "%1: disable major automatic tick numbers"
 msgstr "%1: inaktivera automatiska huvudgraderingsnummer"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:782
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:787
 #, kde-format
 msgid "%1: set the spacing of the major ticks"
 msgstr "%1: ställ in mellanrummet för huvudgradering"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:789
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:794
 #, kde-format
 msgid "%1: assign major ticks' values"
 msgstr "%1: tilldela huvudgraderingens värden"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:803
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:808
 #, kde-format
 msgid "%1: set major ticks length"
 msgstr "%1: ställ in huvudgraderingens längd"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:811
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:816
 #, kde-format
 msgid "%1: set minor ticks direction"
 msgstr "%1: ställ in undergraderingens riktning"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:818
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:823
 #, kde-format
 msgid "%1: set minor ticks type"
 msgstr "%1: ställ in undergraderingens typ"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:826
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:831
 #, kde-format
 msgid "%1: enable/disable minor automatic tick numbers"
 msgstr "%1: aktivera eller inaktivera automatiska undergraderingsnummer"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:829
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:840
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:834
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:845
 #, kde-format
 msgid "%1: set the total number of the minor ticks"
 msgstr "%1: ställ in totalt antal undergraderingar"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:871
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:876
 #, kde-format
 msgid "%1: set the spacing of the minor ticks"
 msgstr "%1: ställ in mellanrummet för undergraderingar"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:878
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:883
 #, kde-format
 msgid "%1: assign minor ticks' values"
 msgstr "%1: tilldela undergraderingens värden"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:892
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:897
 #, kde-format
 msgid "%1: set minor ticks length"
 msgstr "%1: ställ in undergraderingens längd"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:901
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:906
 #, kde-format
 msgid "%1: set labels format"
 msgstr "%1: ställ in beteckningsformat"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:908
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:913
 #, kde-format
 msgid "%1: set labels format automatic"
 msgstr "%1: ställ in beteckningsformat automatiskt"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:915
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:922
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:920
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:927
 #, kde-format
 msgid "%1: set labels precision"
 msgstr "%1: ställ in beteckningsprecision"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:929
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:934
 #, kde-format
 msgid "%1: set labels datetime format"
 msgstr "%1: ställ in beteckningarnas datum- och tidsformat"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:936
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:941
 #, kde-format
 msgid "%1: set labels position"
 msgstr "%1: ställ in beteckningsposition"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:943
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:948
 #, kde-format
 msgid "%1: set label offset"
 msgstr "%1: ställ in beteckningsavstånd"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:950
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:955
 #, kde-format
 msgid "%1: set label rotation angle"
 msgstr "%1: ställ in beteckningens rotationsvinkel"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:957
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:962
 #, kde-format
 msgid "%1: set labels text type"
 msgstr "%1: ställ in beteckningens texttyp"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:964
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:969
 #, kde-format
 msgid "%1: set labels text column"
 msgstr "%1: ställ in beteckningens textkolumn"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:978
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:983
 #, kde-format
 msgid "%1: set label color"
 msgstr "%1: ställ in beteckningsfärg"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:985
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:990
 #, kde-format
 msgid "%1: set label font"
 msgstr "%1: ställ in beteckningsteckensnitt"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:992
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:997
 #, kde-format
 msgid "%1: set labels background type"
 msgstr "%1: ställ in bakgrundstyp för beteckningar"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:999
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1004
 #, kde-format
 msgid "%1: set label background color"
 msgstr "%1: ställ in bakgrundsfärg för beteckningar"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1006
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1011
 #, kde-format
 msgid "%1: set label prefix"
 msgstr "%1: ställ in beteckningsprefix"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1013
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1018
 #, kde-format
 msgid "%1: set label suffix"
 msgstr "%1: ställ in beteckningssuffix"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1020
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1025
 #, kde-format
 msgid "%1: set labels opacity"
 msgstr "%1: ställ in ogenomskinlighet för beteckningar"
