@@ -16,8 +16,7 @@ include:
       - /gitlab-templates/freebsd.yml
 # finds Qt5 but KF5 is not installed
 #      - /gitlab-templates/freebsd-qt6.yml
-# replaced with own target for correct module name:
-#      - /gitlab-templates/flatpak.yml
+      - /gitlab-templates/flatpak.yml
 # supposed to run manual:
 #      - /gitlab-templates/craft-appimage.yml
 #      - /gitlab-templates/craft-windows-x86-64.yml
@@ -187,28 +186,6 @@ clang_format:
 
 # see https://invent.kde.org/sysadmin/ci-utilities/-/blob/master/gitlab-templates/flatpak.yml
 flatpak:
-  stage: deploy
-  image: invent-registry.kde.org/sysadmin/ci-images/flatpak-builder:latest
-  only:
-#    - merge_requests
-    - master
-  tags:
-    - Linux
   variables:
     KDE_FLATPAK_MODULE_NAME: labplot2
     KDE_FLATPAK_APP_ID: org.kde.${KDE_FLATPAK_MODULE_NAME}
-  interruptible: true
-  before_script:
-    - git clone https://invent.kde.org/sysadmin/ci-utilities.git --depth=1
-  script:
-    - echo ${KDE_FLATPAK_MODULE_NAME}
-    - echo ${KDE_FLATPAK_APP_ID}
-    # Build and install
-    - python3 -u ci-utilities/flatpak-build.py ${KDE_FLATPAK_MODULE_NAME}
-  artifacts:
-    name: Flatpak artifacts
-    expose_as: 'Flatpak Bundle'
-    when: on_success
-    paths:
-      - "${KDE_FLATPAK_MODULE_NAME}.flatpak"
-    expire_in: 7 days
