@@ -96,7 +96,6 @@ ImportProjectDialog::ImportProjectDialog(MainWin* parent, ProjectType type)
 	});
 	connect(ui.bOpen, &QPushButton::clicked, this, &ImportProjectDialog::selectFile);
 	connect(m_bNewFolder, &QPushButton::clicked, this, &ImportProjectDialog::newFolder);
-	connect(ui.chbUnusedObjects, &QCheckBox::toggled, this, &ImportProjectDialog::refreshPreview);
 	connect(m_buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
 	connect(m_buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
@@ -153,9 +152,13 @@ ImportProjectDialog::ImportProjectDialog(MainWin* parent, ProjectType type)
 		file = QStringLiteral("LastImportedOriginProject");
 		files = QStringLiteral("LastImportedOriginProjects");
 
+		ui.chbUnusedObjects->setChecked(conf.readEntry(QStringLiteral("ShowUnusedObjects"), false));
+		connect(ui.chbUnusedObjects, &QCheckBox::toggled, this, &ImportProjectDialog::refreshPreview);
+
 		// add options to control how to read Origin's graph layers - as new plot areas or as new coordinate systems
 		ui.cbGraphLayer->addItem(i18n("As Plot Area"));
 		ui.cbGraphLayer->addItem(i18n("As Coordinate System"));
+		ui.cbGraphLayer->setCurrentIndex(conf.readEntry(QStringLiteral("GraphLayer"), 0));
 
 		// show more info for https://www.originlab.com/doc/Origin-Help/MultiLayer-Graph
 		info = i18n("Specify how to import multi-layered graphs.");
@@ -201,6 +204,8 @@ ImportProjectDialog::~ImportProjectDialog() {
 	case ProjectType::Origin:
 		file = QStringLiteral("LastImportedOriginProject");
 		files = QStringLiteral("LastImportedOriginProjects");
+		conf.writeEntry(QStringLiteral("GraphLayer"), ui.cbGraphLayer->currentIndex());
+		conf.writeEntry(QStringLiteral("ShowUnusedObjects"), ui.chbUnusedObjects->isChecked());
 		break;
 	}
 

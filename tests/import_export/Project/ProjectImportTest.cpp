@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Tests for project imports
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2018 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2018-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -23,7 +23,6 @@
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
-
 // ##############################################################################
 // #####################  import of LabPlot projects ############################
 // ##############################################################################
@@ -650,6 +649,47 @@ void ProjectImportTest::testOrigin_2graphs() {
 	c2 = dynamic_cast<Column*>(s1->child<AbstractAspect>(1));
 	QVERIFY(c2 != nullptr);
 	QCOMPARE(c2->name(), QLatin1String("B"));
+}
+
+void ProjectImportTest::testOriginMultiLayersAsCoordinateSystem() {
+	// import the opj file into LabPlot's project object
+	OriginProjectParser parser;
+	parser.setProjectFileName(QFINDTESTDATA(QLatin1String("data/two_layers_as_two_coordinate_systems.opj")));
+	parser.setGraphLayerAsPlotArea(false); // read every layer as a new coordinate system
+	Project project;
+	parser.importTo(&project, QStringList());
+
+	// check the ranges of the CartesianPlot in the project
+	const auto& plots = project.children<CartesianPlot>(AbstractAspect::ChildIndexFlag::Recursive);
+	QCOMPARE(plots.count(), 1);
+
+	const auto* plot = plots.first();
+	QVERIFY(plot != nullptr);
+
+	// ranges
+	QCOMPARE(plot->rangeCount(Dimension::X), 1);
+	QCOMPARE(plot->rangeCount(Dimension::Y), 2);
+
+	const auto& rangeX = plot->range(Dimension::X, 0);
+	QCOMPARE(rangeX.start(), 0.75);
+	QCOMPARE(rangeX.end(), 4.25);
+	QCOMPARE(rangeX.scale(), RangeT::Scale::Linear);
+	QCOMPARE(rangeX.format(), RangeT::Format::Numeric);
+
+	const auto& rangeY1 = plot->range(Dimension::Y, 0);
+	QCOMPARE(rangeY1.start(), 0.75);
+	QCOMPARE(rangeY1.end(), 4.25);
+	QCOMPARE(rangeY1.scale(), RangeT::Scale::Linear);
+	QCOMPARE(rangeY1.format(), RangeT::Format::Numeric);
+
+	const auto& rangeY2 = plot->range(Dimension::Y, 1);
+	QCOMPARE(rangeY2.start(), 0);
+	QCOMPARE(rangeY2.end(), 10);
+	QCOMPARE(rangeY2.scale(), RangeT::Scale::Linear);
+	QCOMPARE(rangeY2.format(), RangeT::Format::Numeric);
+
+	// coordinate systems
+	QCOMPARE(plot->coordinateSystemCount(), 2);
 }
 
 void ProjectImportTest::testParseOriginTags_data() {

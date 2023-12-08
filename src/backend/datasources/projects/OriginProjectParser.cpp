@@ -1169,7 +1169,6 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 			// check if identical range already exists
 			int selectedXRangeIndex = -1;
 			for (int i = 0; i < plot->rangeCount(Dimension::X); i++) {
-				// find identical range (TODO: also compare scales and format?)
 				const auto& range = plot->range(Dimension::X, i);
 				if (range == xRange) {
 					selectedXRangeIndex = i;
@@ -1178,7 +1177,6 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 			}
 			int selectedYRangeIndex = -1;
 			for (int i = 0; i < plot->rangeCount(Dimension::Y); i++) {
-				// find identical range (TODO: also compare scales and format?)
 				const auto& range = plot->range(Dimension::Y, i);
 				if (range == yRange) {
 					selectedYRangeIndex = i;
