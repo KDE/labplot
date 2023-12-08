@@ -42,6 +42,7 @@ void ImportSqlDatabaseTest::testFullTableReplace() {
 	// import the first table "artists"
 	ImportSQLDatabaseWidget w;
 	w.loadSettings();
+	w.setCustomQuery(false);
 	w.read(&spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
 	// check the spreadsheet size and columns names and modes
@@ -70,6 +71,7 @@ void ImportSqlDatabaseTest::testFullTableAppend() {
 	// import the first table "artists"
 	ImportSQLDatabaseWidget w;
 	w.loadSettings();
+	w.setCustomQuery(false);
 	w.read(&spreadsheet, AbstractFileFilter::ImportMode::Append);
 
 	// check the spreadsheet size and columns names and modes
@@ -100,6 +102,7 @@ void ImportSqlDatabaseTest::testFullTablePrepend() {
 	// import the first table "artists"
 	ImportSQLDatabaseWidget w;
 	w.loadSettings();
+	w.setCustomQuery(false);
 	w.read(&spreadsheet, AbstractFileFilter::ImportMode::Prepend);
 
 	// check the spreadsheet size and columns names and modes
@@ -124,6 +127,7 @@ void ImportSqlDatabaseTest::testFullTableCustomRowRange() {
 	// import the records from 10 to 20 from the first table "artists"
 	ImportSQLDatabaseWidget w;
 	w.loadSettings();
+	w.setCustomQuery(false);
 	w.setStartRow(10);
 	w.setEndRow(20);
 	w.read(&spreadsheet, AbstractFileFilter::ImportMode::Replace);
@@ -161,6 +165,7 @@ void ImportSqlDatabaseTest::testFullTableCustomColumnRange01() {
 	// import the records from 10 to 20 from the first table "artists"
 	ImportSQLDatabaseWidget w;
 	w.loadSettings();
+	w.setCustomQuery(false);
 	w.setStartColumn(1);
 	w.setEndColumn(2);
 	w.read(&spreadsheet, AbstractFileFilter::ImportMode::Replace);
@@ -194,6 +199,7 @@ void ImportSqlDatabaseTest::testFullTableCustomColumnRange02() {
 	// import the records from 10 to 20 from the first table "artists"
 	ImportSQLDatabaseWidget w;
 	w.loadSettings();
+	w.setCustomQuery(false);
 	w.setStartColumn(2);
 	w.setEndColumn(3);
 	w.read(&spreadsheet, AbstractFileFilter::ImportMode::Replace);
@@ -227,6 +233,7 @@ void ImportSqlDatabaseTest::testFullTableCustomColumnRange03() {
 	// import the records from 10 to 20 from the first table "artists"
 	ImportSQLDatabaseWidget w;
 	w.loadSettings();
+	w.setCustomQuery(false);
 	w.setStartColumn(2);
 	w.setEndColumn(2);
 	w.read(&spreadsheet, AbstractFileFilter::ImportMode::Replace);
@@ -255,6 +262,7 @@ void ImportSqlDatabaseTest::testFullTableCustomRowColumnRange() {
 	// import the records from 10 to 20 from the first table "artists"
 	ImportSQLDatabaseWidget w;
 	w.loadSettings();
+	w.setCustomQuery(false);
 	w.setStartRow(10);
 	w.setEndRow(20);
 	w.setStartColumn(2);
@@ -285,6 +293,7 @@ void ImportSqlDatabaseTest::testQuery() {
 	// import the resultset of a custom query
 	ImportSQLDatabaseWidget w;
 	w.loadSettings();
+	w.setCustomQuery(true);
 	w.setQuery(QLatin1String("select title from albums where title like '%best%';"));
 	w.refreshPreview();
 	w.read(&spreadsheet, AbstractFileFilter::ImportMode::Replace);

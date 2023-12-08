@@ -159,7 +159,6 @@ void ImportSQLDatabaseWidget::loadSettings() {
 	QList<int> defaultSizes{100, 100};
 	ui.splitterMain->setSizes(config.readEntry("SplitterMainSizes", defaultSizes));
 	ui.splitterPreview->setSizes(config.readEntry("SplitterPreviewSizes", defaultSizes));
-	// TODO
 
 	m_initializing = false;
 
@@ -176,7 +175,6 @@ ImportSQLDatabaseWidget::~ImportSQLDatabaseWidget() {
 	config.writeEntry("DateTimeFormat", ui.cbDateTimeFormat->currentText());
 	config.writeEntry("SplitterMainSizes", ui.splitterMain->sizes());
 	config.writeEntry("SplitterPreviewSizes", ui.splitterPreview->sizes());
-	// TODO
 }
 
 /*!
@@ -301,7 +299,6 @@ void ImportSQLDatabaseWidget::refreshPreview() {
 
 	WAIT_CURSOR;
 	ui.twPreview->clear();
-
 	bool customQuery = (ui.cbImportFrom->currentIndex() != 0);
 
 	// save the last used custom query
@@ -320,7 +317,7 @@ void ImportSQLDatabaseWidget::refreshPreview() {
 	}
 
 	QSqlQuery q;
-	if (!q.prepare(currentQuery(true))) {
+	if (!q.prepare(query)) {
 		RESET_CURSOR;
 		setInvalid();
 		return;
@@ -372,11 +369,6 @@ void ImportSQLDatabaseWidget::refreshPreview() {
 		item->setTextAlignment(Qt::AlignLeft);
 		item->setIcon(AbstractColumn::modeIcon(mode));
 		ui.twPreview->setHorizontalHeaderItem(i, item);
-
-		// create checked items
-		// 		QTableWidgetItem* itemChecked = new QTableWidgetItem();
-		// 		itemChecked->setCheckState(Qt::Checked);
-		// 		ui.twPreview->setItem(0, i, itemChecked);
 	}
 
 	// preview the data
@@ -427,99 +419,9 @@ void ImportSQLDatabaseWidget::read(AbstractDataSource* dataSource, AbstractFileF
 	if (!dataSource)
 		return;
 
-	WAIT_CURSOR;
-
-	const bool customQuery = (ui.cbImportFrom->currentIndex() != 0);
-
-	// execute the current query (select on a table or a custom query)
+	// execute the current query and determine the start/end rows and columns to read
 	QSqlQuery q;
-
-	// when reading from a table, the total number of rows to be read is determined below
-	// via a SELECT COUNT(*) statement and we don't need to navigate back and forth in the resultset.
-	// So, in this case we can use QSqlQuery::setForwardOnly() to reduce the memory consumption
-	if (!customQuery)
-		q.setForwardOnly(true);
-
-	q.prepare(currentQuery());
-	if (!q.exec() || !q.isActive()) {
-		RESET_CURSOR;
-		if (!q.lastError().databaseText().isEmpty())
-			Q_EMIT error(i18n("Failed to execute the query") + QStringLiteral(" \n") + q.lastError().databaseText());
-		else
-			Q_EMIT error(i18n("Failed to execute the query"));
-
-		setInvalid();
-		return;
-	}
-
-	// determine the number of rows and columns to read
-	int startCol = 0;
-	int endCol = m_cols - 1;
-	int startRow = 0;
-	int endRow = 0;
-	int actualRows = 0; // actual number of rows in the resultset to be read
-	int actualCols = m_cols; // actual number of columns in the resultset to be read
-	QVector<AbstractColumn::ColumnMode> columnModes;
-	QStringList columnNames;
-	if (!customQuery) {
-		// determine the total number of records in the table
-		const QString& tableName = ui.lwTables->currentItem()->text();
-		QSqlQuery countQuery(QStringLiteral("SELECT COUNT(*) FROM ") + tableName);
-		while (countQuery.next())
-			actualRows = countQuery.value(0).toInt();
-
-		// columns to read
-		startCol = ui.sbStartColumn->value() - 1;
-		if (ui.sbEndColumn->value() != -1) {
-			endCol = ui.sbEndColumn->value() - 1;
-			if (endCol >= m_cols)
-				endCol = m_cols - 1;
-		}
-
-		actualCols = endCol - startCol + 1;
-
-		// determine the names and modes for columns to be read
-		if (startCol != 0 || endCol != m_cols - 1) {
-			for (int col = startCol; col <= endCol; ++col) {
-				columnModes << m_columnModes.at(col);
-				columnNames << m_columnNames.at(col);
-			}
-		} else {
-			// all columns are read
-			columnModes = m_columnModes;
-			columnNames = m_columnNames;
-		}
-
-		// rows to read
-		startRow = ui.sbStartRow->value() - 1;
-		if (ui.sbEndRow->value() != -1) {
-			endRow = ui.sbEndRow->value() - 1;
-			if (endRow >= actualRows)
-				endRow = actualRows - 1;
-
-			actualRows = endRow - startRow + 1;
-		} else
-			endRow = actualRows - 1; // all rows to be read
-	} else {
-		// custom query, navigate to the last record to get the total number of records in the resultset
-		q.last();
-		actualRows = q.at() + 1;
-		q.first();
-		q.previous(); // navigate in front of the first record so we also read it below in the whie loop
-
-		endRow = actualRows - 1; // all rows to be read
-		columnModes = m_columnModes;
-		columnNames = m_columnNames;
-	}
-
-	DEBUG(Q_FUNC_INFO << " start col: " << startCol);
-	DEBUG(Q_FUNC_INFO << " end col: " << endCol);
-	DEBUG(Q_FUNC_INFO << " start row: " << startRow);
-	DEBUG(Q_FUNC_INFO << " end row: " << endRow);
-	QDEBUG(Q_FUNC_INFO << " column names: " << columnNames);
-
-	if (actualRows == 0) {
-		DEBUG("	0 records");
+	if (!prepareAndExecute(q) || m_actualRows == 0) {
 		RESET_CURSOR;
 		return;
 	}
@@ -527,7 +429,7 @@ void ImportSQLDatabaseWidget::read(AbstractDataSource* dataSource, AbstractFileF
 	// pointers to the actual data containers
 	// columnOffset indexes the "start column" in the datasource. Data will be imported starting from this column.
 	std::vector<void*> dataContainer;
-	const int columnOffset = dataSource->prepareImport(dataContainer, importMode, actualRows, actualCols, columnNames, columnModes);
+	const int columnOffset = dataSource->prepareImport(dataContainer, importMode, m_actualRows, m_actualCols, m_actualColumnNames, m_actualColumnModes);
 
 	// number and DateTime formatting
 	const auto& dateTimeFormat = ui.cbDateTimeFormat->currentText();
@@ -542,24 +444,24 @@ void ImportSQLDatabaseWidget::read(AbstractDataSource* dataSource, AbstractFileF
 
 	// read the data
 	int progressIndex = 0;
-	const qreal progressInterval = 0.01 * actualRows; // update on every 1% only
+	const qreal progressInterval = 0.01 * m_actualRows; // update on every 1% only
 	int rowIndex = 0;
 	while (q.next()) {
-		if (rowIndex < startRow) {
+		if (rowIndex < m_startRow) {
 			++rowIndex;
 			continue;
 		}
 
-		if (rowIndex > endRow)
+		if (rowIndex > m_endRow)
 			break;
 
-		for (int colIndex = startCol; colIndex <= endCol; ++colIndex) {
+		for (int colIndex = m_startCol; colIndex <= m_endCol; ++colIndex) {
 			const auto& valueString = q.value(colIndex).toString();
-			const int col = colIndex - startCol;
-			const int row = rowIndex - startRow;
+			const int col = colIndex - m_startCol;
+			const int row = rowIndex - m_startRow;
 
 			// set the value depending on the data type
-			switch (columnModes.at(col)) {
+			switch (m_actualColumnModes.at(col)) {
 			case AbstractColumn::ColumnMode::Double: {
 				bool isNumber;
 				const double value = numberFormat.toDouble(valueString, &isNumber);
@@ -596,24 +498,114 @@ void ImportSQLDatabaseWidget::read(AbstractDataSource* dataSource, AbstractFileF
 
 		// ask to update the progress bar only if we have more than 1000 lines and only in 1% steps
 		progressIndex++;
-		if (actualRows > 1000 && progressIndex > progressInterval) {
-			double value = 100. * rowIndex / actualRows;
+		if (m_actualRows > 1000 && progressIndex > progressInterval) {
+			double value = 100. * rowIndex / m_actualRows;
 			Q_EMIT completed(static_cast<int>(value));
 			progressIndex = 0;
 			QApplication::processEvents(QEventLoop::AllEvents, 0);
 		}
-	};
+	}
 	DEBUG("	Read " << rowIndex << " rows");
 
-	dataSource->finalizeImport(columnOffset, 1, actualCols, dateTimeFormat, importMode);
+	dataSource->finalizeImport(columnOffset, 1, m_actualCols, dateTimeFormat, importMode);
 
 	Q_EMIT error(QString());
 	RESET_CURSOR;
 }
 
+bool ImportSQLDatabaseWidget::prepareAndExecute(QSqlQuery& q) {
+	// when reading from a table, the total number of rows to be read is determined below
+	// via a SELECT COUNT(*) statement and we don't need to navigate back and forth in the resultset.
+	// So, in this case we can use QSqlQuery::setForwardOnly() to reduce the memory consumption
+	const bool customQuery = (ui.cbImportFrom->currentIndex() != 0);
+	if (!customQuery)
+		q.setForwardOnly(true);
+
+	WAIT_CURSOR;
+	q.prepare(currentQuery());
+	if (!q.exec() || !q.isActive()) {
+		RESET_CURSOR;
+		if (!q.lastError().databaseText().isEmpty())
+			Q_EMIT error(i18n("Failed to execute the query") + QStringLiteral(" \n") + q.lastError().databaseText());
+		else
+			Q_EMIT error(i18n("Failed to execute the query"));
+
+		setInvalid();
+		return false;
+	}
+
+	// determine the number of rows and columns to read
+	m_cols = q.record().count(); // total number of columns
+	m_actualCols = m_cols; // actual number of columns in the resultset to be read
+	m_actualRows = 0; // actual number of rows in the resultset to be read
+	m_startCol = 0;
+	m_endCol = m_cols - 1;
+	m_startRow = 0;
+	m_endRow = 0;
+	if (!customQuery) {
+		// determine the total number of records in the table
+		const QString& tableName = ui.lwTables->currentItem()->text();
+		QSqlQuery countQuery(QStringLiteral("SELECT COUNT(*) FROM ") + tableName);
+		while (countQuery.next())
+			m_actualRows = countQuery.value(0).toInt();
+
+		// columns to read
+		m_startCol = ui.sbStartColumn->value() - 1;
+		if (ui.sbEndColumn->value() != -1) {
+			m_endCol = ui.sbEndColumn->value() - 1;
+			if (m_endCol >= m_cols)
+				m_endCol = m_cols - 1;
+		}
+
+		m_actualCols = m_endCol - m_startCol + 1;
+
+		// determine the names and modes for columns to be read
+		if (m_startCol != 0 || m_endCol != m_cols - 1) {
+			for (int col = m_startCol; col <= m_endCol; ++col) {
+				m_actualColumnModes << m_columnModes.at(col);
+				m_actualColumnNames << m_columnNames.at(col);
+			}
+		} else {
+			// all columns are read
+			m_actualColumnModes = m_columnModes;
+			m_actualColumnNames = m_columnNames;
+		}
+
+		// rows to read
+		m_startRow = ui.sbStartRow->value() - 1;
+		if (ui.sbEndRow->value() != -1) {
+			m_endRow = ui.sbEndRow->value() - 1;
+			if (m_endRow >= m_actualRows)
+				m_endRow = m_actualRows - 1;
+
+			m_actualRows = m_endRow - m_startRow + 1;
+		} else
+			m_endRow = m_actualRows - 1; // all rows to be read
+	} else {
+		// custom query, navigate to the last record to get the total number of records in the resultset
+		q.last();
+		m_actualRows = q.at() + 1;
+		q.first();
+		q.previous(); // navigate in front of the first record so we also read it below in the whie loop
+
+		m_endRow = m_actualRows - 1; // all rows to be read
+		m_actualColumnModes = m_columnModes;
+		m_actualColumnNames = m_columnNames;
+	}
+
+	DEBUG(Q_FUNC_INFO << " start col: " << m_startCol);
+	DEBUG(Q_FUNC_INFO << " end col: " << m_endCol);
+	DEBUG(Q_FUNC_INFO << " start row: " << m_startRow);
+	DEBUG(Q_FUNC_INFO << " end row: " << m_endRow);
+	QDEBUG(Q_FUNC_INFO << " column names: " << m_actualColumnNames);
+
+	return true;
+}
+
 QString ImportSQLDatabaseWidget::currentQuery(bool preview) {
 	QString query;
 	const bool customQuery = (ui.cbImportFrom->currentIndex() != 0);
+	qDebug()<<"custom query " << customQuery;
 	if (!customQuery) {
 		const auto* item = ui.lwTables->currentItem();
 		if (!item)
@@ -686,6 +678,16 @@ void ImportSQLDatabaseWidget::setValid() {
 		m_valid = true;
 		Q_EMIT stateChanged();
 	}
+}
+
+// ##############################################################################
+// ###################### heper functions for unit tests  #######################
+// ##############################################################################
+void ImportSQLDatabaseWidget::setCustomQuery(bool custom) {
+	if (custom)
+		ui.cbImportFrom->setCurrentIndex(1);
+	else
+		ui.cbImportFrom->setCurrentIndex(0);
 }
 
 void ImportSQLDatabaseWidget::setStartRow(int row) {
