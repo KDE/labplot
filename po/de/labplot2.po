@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-12-07 00:38+0000\n"
-"PO-Revision-Date: 2023-11-22 22:50+0100\n"
+"PO-Revision-Date: 2023-11-26 22:42+0100\n"
 "Last-Translator: Stefan Gerlach <stefan.gerlach@uni.kn>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
@@ -7045,16 +7045,14 @@ msgid "%1: set axis range"
 msgstr "%1: Achsenbereich festlegen"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:622
-#, fuzzy, kde-format
-#| msgid "%1: set x scale"
+#, kde-format
 msgid "%1: set range scale"
-msgstr "%1: X-Skalierung festlegen"
+msgstr "%1: Bereichsskalierung festlegen"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:629
-#, fuzzy, kde-format
-#| msgid "%1: set x scale"
+#, kde-format
 msgid "%1: set scale"
-msgstr "%1: X-Skalierung festlegen"
+msgstr "%1: Skalierung festlegen"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:636
 #, kde-format
@@ -9161,10 +9159,9 @@ msgid "Plot Data"
 msgstr "Daten darstellen"
 
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:291
-#, fuzzy, kde-format
-#| msgid "Statisti&cs..."
+#, kde-format
 msgid "Variable Statistics..."
-msgstr "Statisti&k..."
+msgstr "Variablenstatistik..."
 
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:338
 #, kde-format
@@ -9182,10 +9179,9 @@ msgid "Ready"
 msgstr "Fertig"
 
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:362
-#, fuzzy, kde-format
-#| msgid "%1: row statistics"
+#, kde-format
 msgid "%1: variable statistics"
-msgstr "%1: Reihen-Statistik"
+msgstr "%1: Variablenstatistik"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:126
 #: src/commonfrontend/matrix/MatrixView.cpp:194
@@ -12400,12 +12396,12 @@ msgstr "%1 Achse: Farbe festlegen"
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:1587
 #, kde-format
 msgid "Scale is in sync with the plot scale"
-msgstr ""
+msgstr "Skalierung mit der Plotskalierung synchronisiert"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:1590
 #, kde-format
 msgid "Scale is async with the plot"
-msgstr ""
+msgstr "Skalierung nicht mit dem Plot synchronisiert"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:2045
 #, kde-format

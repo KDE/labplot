@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-12-07 00:38+0000\n"
-"PO-Revision-Date: 2023-12-03 13:09+0100\n"
+"PO-Revision-Date: 2023-12-07 23:17+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -2331,10 +2331,9 @@ msgid "Euler's constant"
 msgstr "Konstanto de Euler"
 
 #: src/backend/gsl/constants.cpp:60
-#, fuzzy, kde-format
-#| msgid "Number"
+#, kde-format
 msgid "Not a number"
-msgstr "Numero"
+msgstr "Ne estas numero"
 
 #. i18n("Fundamental constants"));
 #: src/backend/gsl/constants.cpp:63
