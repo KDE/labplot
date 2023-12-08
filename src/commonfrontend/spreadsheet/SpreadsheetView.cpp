@@ -223,39 +223,39 @@ void SpreadsheetView::init() {
 }
 
 void SpreadsheetView::initHeader(QVBoxLayout* layout) {
-	int noOfCols = m_spreadsheet->children<Column>().count();
-	int noOfRows = m_spreadsheet->rowCount();
+	// int noOfCols = m_spreadsheet->children<Column>().count();
+	// int noOfRows = m_spreadsheet->rowCount();
 
-	tableWidget.setRowCount(noOfRows);
-	tableWidget.setColumnCount(noOfCols);
+	// tableWidget.setRowCount(noOfRows);
+	// tableWidget.setColumnCount(noOfCols);
 
-	// Create some sample data
-	QTableWidgetItem* item;
-	for (int i = 0; i < noOfRows; ++i) {
-		for (int j = 0; j < noOfCols; ++j) {
-			item = new QTableWidgetItem(QLatin1String("Item %1-%2").arg(i + 1).arg(j + 1));
-			tableWidget.setItem(i, j, item);
-		}
-	}
+	// // Create some sample data
+	// QTableWidgetItem* item;
+	// for (int i = 0; i < noOfRows; ++i) {
+	// 	for (int j = 0; j < noOfCols; ++j) {
+	// 		item = new QTableWidgetItem(QLatin1String("Item %1-%2").arg(i + 1).arg(j + 1));
+	// 		tableWidget.setItem(i, j, item);
+	// 	}
+	// }
 
-	// Create the main header
-	SpreadsheetHeaderView* mainHeader = new SpreadsheetHeaderView();
+	// // Create the main header
+	// SpreadsheetHeaderView* mainHeader = new SpreadsheetHeaderView();
 
-	// Create the first horizontal header
-	SpreadsheetCommentsHeaderView* firstHorizontalHeader = new SpreadsheetCommentsHeaderView();
-	mainHeader->addSlaveHeader(firstHorizontalHeader);
-	firstHorizontalHeader->setSectionResizeMode(QHeaderView::Stretch);
+	// // Create the first horizontal header
+	// SpreadsheetCommentsHeaderView* firstHorizontalHeader = new SpreadsheetCommentsHeaderView();
+	// mainHeader->addSlaveHeader(firstHorizontalHeader);
+	// firstHorizontalHeader->setSectionResizeMode(QHeaderView::Stretch);
 
-	// Create the second horizontal header
-	SpreadsheetSparkLineHeaderView* secondHorizontalHeader = new SpreadsheetSparkLineHeaderView();
-	mainHeader->addSlaveHeader(secondHorizontalHeader);
-	secondHorizontalHeader->setSectionResizeMode(QHeaderView::Fixed);
+	// // Create the second horizontal header
+	// SpreadsheetSparkLineHeaderView* secondHorizontalHeader = new SpreadsheetSparkLineHeaderView();
+	// mainHeader->addSlaveHeader(secondHorizontalHeader);
+	// secondHorizontalHeader->setSectionResizeMode(QHeaderView::Fixed);
 
-	// Create a vertical layout
-	layout->addWidget(mainHeader);
-	layout->addWidget(&tableWidget);
-	layout->addWidget(firstHorizontalHeader);
-	layout->addWidget(secondHorizontalHeader);
+	// // Create a vertical layout
+	// layout->addWidget(mainHeader);
+	// layout->addWidget(&tableWidget);
+	// layout->addWidget(firstHorizontalHeader);
+	// layout->addWidget(secondHorizontalHeader);
 }
 
 /*!

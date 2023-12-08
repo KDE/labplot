@@ -49,7 +49,6 @@ public:
 	void setModel(QAbstractItemModel*) override;
 	QSize sizeHint() const override;
 	void addSlaveHeader(QHeaderView* slaveHeader);
-	void resizeEvent(QResizeEvent* event) override;
 
 	void showComments(bool on = true);
 	bool areCommentsShown() const;
@@ -63,8 +62,9 @@ private:
 	bool m_showComments;
 	bool m_showSparkLines;
 
+
 private Q_SLOTS:
-	void refresh();
+	// void refresh();
 	void headerDataChanged(Qt::Orientation, int logicalFirst, int logicalLast);
 
 protected:

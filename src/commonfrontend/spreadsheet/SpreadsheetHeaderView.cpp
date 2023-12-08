@@ -83,29 +83,29 @@ void SpreadsheetSparkLineHeaderView::setModel(QAbstractItemModel* model) {
 SpreadsheetHeaderView::SpreadsheetHeaderView(QWidget* parent)
 	: QHeaderView(Qt::Horizontal, parent) {
 	setDefaultAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+
 	m_commentSlave = new SpreadsheetCommentsHeaderView();
 	m_sparkLineSlave = new SpreadsheetSparkLineHeaderView();
-	m_commentSlave->setDefaultAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-	m_sparkLineSlave->setDefaultAlignment(Qt::AlignLeft | Qt::AlignCenter);
+
+	m_commentSlave->setDefaultAlignment(Qt::AlignTop);
+	m_sparkLineSlave->setDefaultAlignment(Qt::AlignCenter | Qt::AlignVCenter);
+
 	m_showComments = true;
 	m_showSparkLines = true;
+
+	// Set separate models for comment and sparkline headers
+	// m_commentSlave->setModel(new SpreadsheetCommentsHeaderModel(static_cast<SpreadsheetModel*>(model())));
+	// m_sparkLineSlave->setModel(new SpreadsheetCommentsHeaderModel(static_cast<SpreadsheetModel*>(model())));
 }
 
 SpreadsheetHeaderView::~SpreadsheetHeaderView() {
 	delete m_commentSlave;
 	delete m_sparkLineSlave;
 }
-
 QSize SpreadsheetHeaderView::sizeHint() const {
 	QSize masterSize = QHeaderView::sizeHint();
-	QSize sparkLineSize = m_sparkLineSlave->sizeHint();
-	QSize commentSize = m_commentSlave->sizeHint();
-
-	int totalHeight = masterSize.height();
-	if (m_showSparkLines)
-		totalHeight += sparkLineSize.height();
-	if (m_showComments)
-		totalHeight += commentSize.height();
+	int totalHeight =
+		masterSize.height() + (m_showSparkLines ? m_sparkLineSlave->sizeHint().height() : 0) + (m_showComments ? m_commentSlave->sizeHint().height() : 0);
 
 	return QSize(masterSize.width(), totalHeight);
 }
@@ -113,28 +113,56 @@ QSize SpreadsheetHeaderView::sizeHint() const {
 void SpreadsheetHeaderView::setModel(QAbstractItemModel* model) {
 	Q_ASSERT(model->inherits("SpreadsheetModel"));
 	m_commentSlave->setModel(model);
+	m_sparkLineSlave->setModel(model);
 	QHeaderView::setModel(model);
 	connect(model, &QAbstractItemModel::headerDataChanged, this, &SpreadsheetHeaderView::headerDataChanged);
 }
 
 void SpreadsheetHeaderView::paintSection(QPainter* painter, const QRect& rect, int logicalIndex) const {
-	QRect master_rect = rect;
+	if (m_showComments && m_showSparkLines) {
+		QRect master_rect = rect;
 
-	if (m_showComments)
-		master_rect = rect.adjusted(0, 0, 0, -m_commentSlave->sizeHint().height());
+		if (m_showComments && m_showSparkLines) {
+			int totalHeight = m_commentSlave->sizeHint().height() + m_sparkLineSlave->sizeHint().height();
+			master_rect = rect.adjusted(0, 0, 0, -totalHeight);
 
-	QHeaderView::paintSection(painter, master_rect, logicalIndex);
-	if (m_showComments) {
-		QRect slave_comment_rect = rect.adjusted(0, QHeaderView::sizeHint().height(), 0, 0);
-		m_commentSlave->paintSection(painter, slave_comment_rect, logicalIndex);
-	}
-	if (m_showSparkLines)
-		master_rect = rect.adjusted(0, 0, 0, -m_commentSlave->sizeHint().height());
+			QHeaderView::paintSection(painter, master_rect, logicalIndex);
 
-	QHeaderView::paintSection(painter, master_rect, logicalIndex);
-	if (m_showSparkLines) {
-		QRect slave_sparkline_rect = rect.adjusted(0, QHeaderView::sizeHint().height(), 0, 0);
-		m_sparkLineSlave->paintSection(painter, slave_sparkline_rect, logicalIndex);
+			if (m_showComments && rect.height() > QHeaderView::sizeHint().height()) {
+				QRect slave_rect = rect.adjusted(0, m_commentSlave->sizeHint().height(), 0, 0);
+				m_commentSlave->paintSection(painter, slave_rect, logicalIndex);
+			}
+
+			if (m_showSparkLines && rect.height() > QHeaderView::sizeHint().height()) {
+				QRect slave2_rect = rect.adjusted(0, QHeaderView::sizeHint().height() + m_sparkLineSlave->sizeHint().height(), 0, 0);
+				m_sparkLineSlave->paintSection(painter, slave2_rect, logicalIndex);
+			}
+
+			return;
+		}
+
+		if (m_showComments || m_showSparkLines) {
+			if (m_showSparkLines) {
+				master_rect = rect.adjusted(0, 0, 0, -m_commentSlave->sizeHint().height());
+				QHeaderView::paintSection(painter, master_rect, logicalIndex);
+
+				if (m_showSparkLines && rect.height() > QHeaderView::sizeHint().height()) {
+					QRect slave_rect = rect.adjusted(0, QHeaderView::sizeHint().height(), 0, 0);
+					m_commentSlave->paintSection(painter, slave_rect, logicalIndex);
+				}
+				return;
+			}
+			if (m_showSparkLines) {
+				master_rect = rect.adjusted(0, 0, 0, -m_sparkLineSlave->sizeHint().height());
+				QHeaderView::paintSection(painter, master_rect, logicalIndex);
+
+				if (m_showComments && rect.height() > QHeaderView::sizeHint().height()) {
+					QRect slave_rect = rect.adjusted(0, QHeaderView::sizeHint().height(), 0, 0);
+					m_sparkLineSlave->paintSection(painter, slave_rect, logicalIndex);
+				}
+				return;
+			}
+		}
 	}
 }
 
@@ -151,7 +179,7 @@ bool SpreadsheetHeaderView::areCommentsShown() const {
 void SpreadsheetHeaderView::showComments(bool on) {
 	m_showComments = on;
 	DEBUG("Comments" << on);
-	refresh();
+	updateGeometry();
 }
 /*!
   Show or hide (if \c on = \c false) the column spark lines.
@@ -165,41 +193,44 @@ bool SpreadsheetHeaderView::areSparkLinesShown() const {
 void SpreadsheetHeaderView::showSparkLines(bool on) {
 	m_showSparkLines = on;
 	DEBUG("SparkLines" << on);
-	refresh();
+	updateGeometry();
 }
 
 /*!
   adjust geometry and repaint header .
 */
-void SpreadsheetHeaderView::refresh() {
-	// Calculate total width and height
-	int totalWidth = 0;
-	int totalHeight = 0;
+// void SpreadsheetHeaderView::refresh() {
+// 	// Calculate total width and height
+// 	int totalWidth = 0;
+// 	int totalHeight = 0;
 
-	for (int i = 0; i < count(); ++i) {
-		totalWidth += sectionSize(i);
-	}
+// 	for (int i = 0; i < count(); ++i) {
+// 		totalWidth += sectionSize(i);
+// 	}
 
-	// Calculate height of each section
-	int masterHeight = QHeaderView::sizeHint().height();
-	int sparkLineHeight = m_commentSlave->sizeHint().height();
-	int commentHeight = m_commentSlave->sizeHint().height();
+// 	// Calculate height of each section
+// 	int masterHeight = QHeaderView::sizeHint().height();
+// 	int sparkLineHeight = m_sparkLineSlave->sizeHint().height();
+// 	int commentHeight = m_commentSlave->sizeHint().height();
 
-	// Update total height based on visible sections
-	totalHeight = masterHeight + (m_showSparkLines ? commentHeight : 0) + (m_showComments ? commentHeight : 0);
+// 	// Update total height based on visible sections
+// 	totalHeight = masterHeight + (m_showSparkLines ? sparkLineHeight : 0) + (m_showComments ? commentHeight : 0);
 
-	// Update geometry for both slaves
-	m_sparkLineSlave->setGeometry(0, masterHeight + (m_showComments ? commentHeight : 0), totalWidth, commentHeight);
-	m_commentSlave->setGeometry(0, masterHeight, totalWidth, commentHeight);
+// 	// Update geometry for both slaves
+// 	m_sparkLineSlave->setGeometry(0, 0, totalWidth, sparkLineHeight);
+// 	m_commentSlave->setGeometry(0, masterHeight, totalWidth, commentHeight);
 
-	setGeometry(0, 0, totalWidth, totalHeight);
-	DEBUG("Total Height" << totalHeight);
-	DEBUG("Total Width" << totalWidth);
-	DEBUG("SparkLine Height" << sparkLineHeight);
-	DEBUG("Comment Height" << totalHeight);
+// 	// Set viewport margins to create space for the sparkline section
+// 	setViewportMargins(0, 0, 0, (m_showSparkLines ? sparkLineHeight : 0) + (m_showComments ? commentHeight : 0));
 
-	update();
-}
+// 	setGeometry(0, 0, totalWidth, totalHeight);
+// 	DEBUG("Total Height" << totalHeight);
+// 	DEBUG("Total Width" << totalWidth);
+// 	DEBUG("SparkLine Height" << sparkLineHeight);
+// 	DEBUG("Comment Height" << commentHeight);
+
+// 	update();
+// }
 
 /*!
   Reacts to a header data change.
@@ -208,6 +239,5 @@ void SpreadsheetHeaderView::headerDataChanged(Qt::Orientation orientation, int /
 	if (logicalLast < 0)
 		return;
 	if (orientation == Qt::Horizontal)
-		refresh();
+		updateGeometry();
 }
-
