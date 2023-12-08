@@ -64,7 +64,7 @@ private:
 
 
 private Q_SLOTS:
-	// void refresh();
+	void refresh();
 	void headerDataChanged(Qt::Orientation, int logicalFirst, int logicalLast);
 
 protected:

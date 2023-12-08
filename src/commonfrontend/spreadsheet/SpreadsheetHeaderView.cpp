@@ -93,9 +93,7 @@ SpreadsheetHeaderView::SpreadsheetHeaderView(QWidget* parent)
 	m_showComments = true;
 	m_showSparkLines = true;
 
-	// Set separate models for comment and sparkline headers
-	// m_commentSlave->setModel(new SpreadsheetCommentsHeaderModel(static_cast<SpreadsheetModel*>(model())));
-	// m_sparkLineSlave->setModel(new SpreadsheetCommentsHeaderModel(static_cast<SpreadsheetModel*>(model())));
+
 }
 
 SpreadsheetHeaderView::~SpreadsheetHeaderView() {
@@ -119,9 +117,9 @@ void SpreadsheetHeaderView::setModel(QAbstractItemModel* model) {
 }
 
 void SpreadsheetHeaderView::paintSection(QPainter* painter, const QRect& rect, int logicalIndex) const {
-	if (m_showComments && m_showSparkLines) {
-		QRect master_rect = rect;
+	QRect master_rect = rect;
 
+	if (m_showComments && m_showSparkLines) {
 		if (m_showComments && m_showSparkLines) {
 			int totalHeight = m_commentSlave->sizeHint().height() + m_sparkLineSlave->sizeHint().height();
 			master_rect = rect.adjusted(0, 0, 0, -totalHeight);
@@ -140,28 +138,28 @@ void SpreadsheetHeaderView::paintSection(QPainter* painter, const QRect& rect, i
 
 			return;
 		}
+	}
 
-		if (m_showComments || m_showSparkLines) {
-			if (m_showSparkLines) {
-				master_rect = rect.adjusted(0, 0, 0, -m_commentSlave->sizeHint().height());
-				QHeaderView::paintSection(painter, master_rect, logicalIndex);
+	if (m_showComments || m_showSparkLines) {
+		if (m_showComments) {
+			master_rect = rect.adjusted(0, 0, 0, -m_commentSlave->sizeHint().height());
+			QHeaderView::paintSection(painter, master_rect, logicalIndex);
 
-				if (m_showSparkLines && rect.height() > QHeaderView::sizeHint().height()) {
-					QRect slave_rect = rect.adjusted(0, QHeaderView::sizeHint().height(), 0, 0);
-					m_commentSlave->paintSection(painter, slave_rect, logicalIndex);
-				}
-				return;
+			if (m_showComments && rect.height() > QHeaderView::sizeHint().height()) {
+				QRect slave_rect = rect.adjusted(0, QHeaderView::sizeHint().height(), 0, 0);
+				m_commentSlave->paintSection(painter, slave_rect, logicalIndex);
 			}
-			if (m_showSparkLines) {
-				master_rect = rect.adjusted(0, 0, 0, -m_sparkLineSlave->sizeHint().height());
-				QHeaderView::paintSection(painter, master_rect, logicalIndex);
+			return;
+		}
+		if (m_showSparkLines) {
+			master_rect = rect.adjusted(0, 0, 0, -m_sparkLineSlave->sizeHint().height());
+			QHeaderView::paintSection(painter, master_rect, logicalIndex);
 
-				if (m_showComments && rect.height() > QHeaderView::sizeHint().height()) {
-					QRect slave_rect = rect.adjusted(0, QHeaderView::sizeHint().height(), 0, 0);
-					m_sparkLineSlave->paintSection(painter, slave_rect, logicalIndex);
-				}
-				return;
+			if (m_showSparkLines && rect.height() > QHeaderView::sizeHint().height()) {
+				QRect slave_rect = rect.adjusted(0, QHeaderView::sizeHint().height(), 0, 0);
+				m_sparkLineSlave->paintSection(painter, slave_rect, logicalIndex);
 			}
+			return;
 		}
 	}
 }
@@ -178,8 +176,7 @@ bool SpreadsheetHeaderView::areCommentsShown() const {
 */
 void SpreadsheetHeaderView::showComments(bool on) {
 	m_showComments = on;
-	DEBUG("Comments" << on);
-	updateGeometry();
+	refresh();
 }
 /*!
   Show or hide (if \c on = \c false) the column spark lines.
@@ -192,8 +189,7 @@ bool SpreadsheetHeaderView::areSparkLinesShown() const {
 */
 void SpreadsheetHeaderView::showSparkLines(bool on) {
 	m_showSparkLines = on;
-	DEBUG("SparkLines" << on);
-	updateGeometry();
+	refresh();
 }
 
 /*!
@@ -231,6 +227,24 @@ void SpreadsheetHeaderView::showSparkLines(bool on) {
 
 // 	update();
 // }
+void SpreadsheetHeaderView::refresh() {
+	// TODO
+	//  adjust geometry and repaint header (still looking for a more elegant solution)
+	int width = sectionSize(count() - 1);
+	m_commentSlave->setStretchLastSection(true); // ugly hack (flaw in Qt? Does anyone know a better way?)
+	m_commentSlave->updateGeometry();
+	m_commentSlave->setStretchLastSection(false); // ugly hack part 2
+	m_sparkLineSlave->setStretchLastSection(true); // ugly hack (flaw in Qt? Does anyone know a better way?)
+	m_sparkLineSlave->updateGeometry();
+	m_sparkLineSlave->setStretchLastSection(false); // ugly hack part 2
+	setStretchLastSection(true); // ugly hack (flaw in Qt? Does anyone know a better way?)
+	updateGeometry();
+	setStretchLastSection(false); // ugly hack part 2
+	resizeSection(count() - 1, width);
+
+	update();
+}
+
 
 /*!
   Reacts to a header data change.
@@ -239,5 +253,5 @@ void SpreadsheetHeaderView::headerDataChanged(Qt::Orientation orientation, int /
 	if (logicalLast < 0)
 		return;
 	if (orientation == Qt::Horizontal)
-		updateGeometry();
+		refresh();
 }
