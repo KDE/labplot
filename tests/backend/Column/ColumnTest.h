@@ -113,6 +113,15 @@ private Q_SLOTS:
 
 	void clearContentNoFormula();
 	void clearContentFormula();
+
+	void testRowCountMonotonIncrease();
+	void testRowCountMonotonDecrease();
+	void testRowCountNonMonoton();
+	void testRowCountDateTime();
+	void testRowCountDateTimeMonotonDecrease();
+
+	void testRowCountValueLabels();
+	void testRowCountValueLabelsDateTime();
 };
 
 #endif // COLUMNTEST_H

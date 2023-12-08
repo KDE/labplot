@@ -57,6 +57,7 @@ struct cons _constants[] = {
 	{[]() { return i18n("Base of exponentials");}, "e", M_E, "", ConstantGroups::MathematicalConstants},
 	{[]() { return i18n("Pi");}, "pi", M_PI, "", ConstantGroups::MathematicalConstants},
 	{[]() { return i18n("Euler's constant");}, "euler", M_EULER, "", ConstantGroups::MathematicalConstants},
+	{[]() { return i18n("Not a number");}, "nan", std::nan("0"), "", ConstantGroups::MathematicalConstants},
 
 	// FundamentalConstants = addConstantsGroup(i18n("Fundamental constants"));
 	{[]() { return i18n("Speed of light");}, "cL", GSL_CONST_MKSA_SPEED_OF_LIGHT, "m / s", ConstantGroups::FundamentalConstants},

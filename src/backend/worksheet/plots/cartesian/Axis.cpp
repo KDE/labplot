@@ -16,10 +16,10 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
+#include "backend/lib/trace.h"
 #include "backend/worksheet/Line.h"
 #include "backend/worksheet/TextLabel.h"
 #include "backend/worksheet/Worksheet.h"
-// #include "backend/lib/trace.h"
 #include "kdefrontend/GuiTools.h"
 
 #include "backend/nsl/nsl_math.h"
@@ -41,6 +41,7 @@ using Dimension = CartesianCoordinateSystem::Dimension;
 
 namespace {
 constexpr int maxNumberMajorTicks = 100;
+constexpr int _maxNumberMajorTicksCustomColumn = 21; // Use one more because one will be subtracted below
 } // Anounymous namespace
 
 /**
@@ -503,6 +504,10 @@ BASIC_SHARED_D_READER_IMPL(Axis, QColor, labelsBackgroundColor, labelsBackground
 BASIC_SHARED_D_READER_IMPL(Axis, QString, labelsPrefix, labelsPrefix)
 BASIC_SHARED_D_READER_IMPL(Axis, QString, labelsSuffix, labelsSuffix)
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, labelsOpacity, labelsOpacity)
+
+int Axis::maxNumberMajorTicksCustomColumn() {
+	return _maxNumberMajorTicksCustomColumn;
+}
 
 // grid
 Line* Axis::majorGridLine() const {
@@ -1369,23 +1374,103 @@ void AxisPrivate::addArrow(QPointF startPoint, int direction) {
  * \return true if transformation was successful else false
  * Successful means, that the point is inside the coordinate system
  */
-bool AxisPrivate::transformAnchor(QPointF* anchorPoint) {
+bool AxisPrivate::transformAnchor(QPointF& anchorPoint) {
 	QVector<QPointF> points;
-	points.append(*anchorPoint);
+	points.append(anchorPoint);
 	points = q->cSystem->mapLogicalToScene(points);
 
 	if (points.count() != 1) { // point is not mappable or in a coordinate gap
 		return false;
 	} else {
-		*anchorPoint = points.at(0);
+		anchorPoint = points.at(0);
 		return true;
 	}
+}
+
+bool AxisPrivate::calculateTickHorizontal(Axis::TicksDirection tickDirection,
+										  double ticksLength,
+										  double tickStartPos,
+										  double dummyOtherDirPos,
+										  double otherDirAnchorPoint,
+										  double centerValue,
+										  int rangeDirection,
+										  QPointF& anchorPointOut,
+										  QPointF& startPointOut,
+										  QPointF& endPointOut) {
+	bool valid = false;
+	anchorPointOut.setX(tickStartPos);
+	anchorPointOut.setY(dummyOtherDirPos); // set dummy logical point, but it must be within the datarect, otherwise valid will be always false
+	valid = transformAnchor(anchorPointOut);
+	anchorPointOut.setY(otherDirAnchorPoint);
+	if (valid) {
+		// for yDirection == -1 start is above end
+		if (anchorPointOut.y() >= centerValue) { // below
+			startPointOut = anchorPointOut + QPointF(0, (tickDirection & Axis::ticksIn) ? rangeDirection * ticksLength : 0);
+			endPointOut = anchorPointOut + QPointF(0, (tickDirection & Axis::ticksOut) ? -rangeDirection * ticksLength : 0);
+		} else { // above
+			startPointOut = anchorPointOut + QPointF(0, (tickDirection & Axis::ticksOut) ? rangeDirection * ticksLength : 0);
+			endPointOut = anchorPointOut + QPointF(0, (tickDirection & Axis::ticksIn) ? -rangeDirection * ticksLength : 0);
+		}
+	}
+	return valid;
+}
+
+bool AxisPrivate::calculateTickVertical(Axis::TicksDirection tickDirection,
+										double ticksLength,
+										double tickStartPos,
+										double dummyOtherDirPos,
+										double otherDirAnchorPoint,
+										double centerValue,
+										int rangeDirection,
+										QPointF& anchorPointOut,
+										QPointF& startPointOut,
+										QPointF& endPointOut) {
+	bool valid = false;
+	anchorPointOut.setY(tickStartPos);
+	anchorPointOut.setX(dummyOtherDirPos); // set dummy logical point, but it must be within the datarect, otherwise valid will be always false
+	valid = transformAnchor(anchorPointOut);
+	anchorPointOut.setX(otherDirAnchorPoint);
+	if (valid) {
+		// for xDirection == 1 start is right of end
+		if (anchorPointOut.x() < centerValue) { // left
+			startPointOut = anchorPointOut + QPointF((tickDirection & Axis::ticksIn) ? rangeDirection * ticksLength : 0, 0);
+			endPointOut = anchorPointOut + QPointF((tickDirection & Axis::ticksOut) ? -rangeDirection * ticksLength : 0, 0);
+		} else { // right
+			startPointOut = anchorPointOut + QPointF((tickDirection & Axis::ticksOut) ? rangeDirection * ticksLength : 0, 0);
+			endPointOut = anchorPointOut + QPointF((tickDirection & Axis::ticksIn) ? -rangeDirection * ticksLength : 0, 0);
+		}
+	}
+	return valid;
+}
+
+int AxisPrivate::determineMinorTicksNumber() const {
+	int tmpMinorTicksNumber = 0;
+	switch (minorTicksType) {
+	case Axis::TicksType::TotalNumber:
+		tmpMinorTicksNumber = minorTicksNumber;
+		break;
+	case Axis::TicksType::Spacing:
+		tmpMinorTicksNumber = range.length() / minorTicksIncrement - 1;
+		if (majorTicksNumber > 1)
+			tmpMinorTicksNumber /= majorTicksNumber - 1;
+		break;
+	case Axis::TicksType::CustomColumn: // Fall through
+	case Axis::TicksType::CustomValues:
+		(minorTicksColumn) ? tmpMinorTicksNumber = minorTicksColumn->rowCount() : tmpMinorTicksNumber = 0;
+		break;
+	case Axis::TicksType::ColumnLabels:
+		break; // not supported
+	}
+	return tmpMinorTicksNumber;
 }
 
 /*!
 	recalculates the position of the axis ticks.
  */
 void AxisPrivate::retransformTicks() {
+#if PERFTRACE_AXIS
+	PERFTRACE(QLatin1String(Q_FUNC_INFO) + QStringLiteral(", axis ") + name());
+#endif
 	// DEBUG(Q_FUNC_INFO << ' ' << STDSTRING(title->name()))
 	if (suppressRetransform)
 		return;
@@ -1397,12 +1482,8 @@ void AxisPrivate::retransformTicks() {
 	tickLabelValues.clear();
 	tickLabelValuesString.clear();
 
-	// if type is tick number and tick number is auto: recalculate in case scale has changed
-	if (majorTicksType == Axis::TicksType::TotalNumber && majorTicksAutoNumber)
-		majorTicksNumber = range.autoTickCount();
-
-	if (majorTicksNumber < 1 || (majorTicksDirection == Axis::noTicks && minorTicksDirection == Axis::noTicks)) {
-		retransformTickLabelPositions(); // this calls recalcShapeAndBoundingRect()
+	if (!q->cSystem) {
+		DEBUG(Q_FUNC_INFO << ", WARNING: axis has no coordinate system!")
 		return;
 	}
 
@@ -1427,13 +1508,74 @@ void AxisPrivate::retransformTicks() {
 			start = startDt.toMSecsSinceEpoch();
 		}
 	}
+
+	// if type is tick number and tick number is auto: recalculate in case scale has changed
+	if (majorTicksType == Axis::TicksType::TotalNumber && majorTicksAutoNumber) {
+		auto r = range;
+		r.setStart(start);
+		r.setEnd(end);
+		majorTicksNumber = r.autoTickCount();
+	}
+
+	if (majorTicksNumber < 1 || (majorTicksDirection == Axis::noTicks && minorTicksDirection == Axis::noTicks)) {
+		retransformTickLabelPositions(); // this calls recalcShapeAndBoundingRect()
+		return;
+	}
+
+	if (majorTicksType == Axis::TicksType::CustomColumn || majorTicksType == Axis::TicksType::CustomValues) {
+		if (majorTicksColumn) {
+			if (majorTicksAutoNumber) {
+				tmpMajorTicksNumber = qMin(_maxNumberMajorTicksCustomColumn, majorTicksColumn->rowCount(start, end));
+				majorTicksNumber = tmpMajorTicksNumber;
+				Q_EMIT q->majorTicksNumberChanged(tmpMajorTicksNumber);
+			} else
+				tmpMajorTicksNumber = majorTicksNumber;
+			// Do the calculation of the new start/end after recalculating majorTicksNumber, otherwise it could happen that the
+			// ticks are really near to each other
+			if (start < end) {
+				start = qMax(start, majorTicksColumn->minimum());
+				end = qMin(end, majorTicksColumn->maximum());
+			} else {
+				end = qMax(end, majorTicksColumn->minimum());
+				start = qMax(start, majorTicksColumn->maximum());
+			}
+		} else {
+			retransformTickLabelPositions(); // this calls recalcShapeAndBoundingRect()
+			return;
+		}
+	} else if (majorTicksType == Axis::TicksType::ColumnLabels) {
+		const Column* c = dynamic_cast<const Column*>(majorTicksColumn);
+		if (c && c->valueLabelsInitialized()) {
+			if (majorTicksAutoNumber) {
+				tmpMajorTicksNumber = qMin(_maxNumberMajorTicksCustomColumn, c->valueLabelsCount(start, end));
+				majorTicksNumber = tmpMajorTicksNumber;
+				Q_EMIT q->majorTicksNumberChanged(tmpMajorTicksNumber);
+			} else
+				tmpMajorTicksNumber = c->valueLabelsCount(start, end);
+			if (start < end) {
+				start = qMax(start, c->valueLabelsMinimum());
+				end = qMin(end, c->valueLabelsMaximum());
+			} else {
+				end = qMax(end, c->valueLabelsMinimum());
+				start = qMax(start, c->valueLabelsMaximum());
+			}
+		} else {
+			retransformTickLabelPositions(); // this calls recalcShapeAndBoundingRect()
+			return;
+		}
+	}
+
 	QDEBUG(Q_FUNC_INFO << ", ticks type = " << majorTicksType)
 	switch (majorTicksType) {
 	case Axis::TicksType::TotalNumber: // total number of major ticks is given - > determine the increment
 		tmpMajorTicksNumber = majorTicksNumber;
+		// fall through
+	case Axis::TicksType::ColumnLabels: // fall through
+	case Axis::TicksType::CustomColumn: // fall through
+	case Axis::TicksType::CustomValues:
 		switch (q->scale()) {
 		case RangeT::Scale::Linear:
-			majorTicksIncrement = range.size();
+			majorTicksIncrement = end - start;
 			break;
 		case RangeT::Scale::Log10:
 			if (start != 0. && end / start > 0.)
@@ -1459,8 +1601,8 @@ void AxisPrivate::retransformTicks() {
 				majorTicksIncrement = 1. / start - 1. / end;
 			break;
 		}
-		if (majorTicksNumber > 1)
-			majorTicksIncrement /= majorTicksNumber - 1;
+		if (tmpMajorTicksNumber > 1)
+			majorTicksIncrement /= tmpMajorTicksNumber - 1;
 		DEBUG(Q_FUNC_INFO << ", major ticks by number. increment = " << majorTicksIncrement << " number = " << majorTicksNumber)
 		break;
 	case Axis::TicksType::Spacing:
@@ -1470,7 +1612,7 @@ void AxisPrivate::retransformTicks() {
 		if (q->isNumeric() || (!q->isNumeric() && q->scale() != RangeT::Scale::Linear)) {
 			switch (q->scale()) {
 			case RangeT::Scale::Linear:
-				tmpMajorTicksNumber = std::round(range.size() / majorTicksIncrement + 1);
+				tmpMajorTicksNumber = std::round((end - start) / majorTicksIncrement + 1);
 				break;
 			case RangeT::Scale::Log10:
 				if (start != 0. && end / start > 0.)
@@ -1500,64 +1642,18 @@ void AxisPrivate::retransformTicks() {
 			// Datetime with linear spacing: Calculation will be done directly where the majorTickPos will be calculated
 		}
 		break;
-	case Axis::TicksType::CustomColumn:
-	case Axis::TicksType::CustomValues:
-		if (majorTicksColumn) {
-			tmpMajorTicksNumber = majorTicksColumn->rowCount();
-		} else {
-			retransformTickLabelPositions(); // this calls recalcShapeAndBoundingRect()
-			return;
-		}
-		break;
-	case Axis::TicksType::ColumnLabels:
-		const Column* c = dynamic_cast<const Column*>(majorTicksColumn);
-		if (c && c->valueLabelsInitialized())
-			tmpMajorTicksNumber = c->valueLabelsCount();
-		else {
-			retransformTickLabelPositions(); // this calls recalcShapeAndBoundingRect()
-			return;
-		}
 	}
 
 	// minor ticks
-	int tmpMinorTicksNumber = 0;
-	switch (minorTicksType) {
-	case Axis::TicksType::TotalNumber:
-		tmpMinorTicksNumber = minorTicksNumber;
-		break;
-	case Axis::TicksType::Spacing:
-		tmpMinorTicksNumber = range.length() / minorTicksIncrement - 1;
-		if (majorTicksNumber > 1)
-			tmpMinorTicksNumber /= majorTicksNumber - 1;
-		break;
-	case Axis::TicksType::CustomColumn:
-		// Fall through
-	case Axis::TicksType::CustomValues:
-		(minorTicksColumn) ? tmpMinorTicksNumber = minorTicksColumn->rowCount() : tmpMinorTicksNumber = 0;
-		break;
-	case Axis::TicksType::ColumnLabels:
-		tmpMinorTicksNumber = 0; // not supported
-		break;
-	}
+	int tmpMinorTicksNumber = determineMinorTicksNumber();
 
-	if (!q->cSystem) {
-		DEBUG(Q_FUNC_INFO << ", WARNING: axis has no coordinate system!")
-		return;
-	}
 	//	const int xIndex{ q->cSystem->index(Dimension::X) }, yIndex{ q->cSystem->index(Dimension::Y) };
 	DEBUG(Q_FUNC_INFO << ", coordinate system " << q->m_cSystemIndex + 1)
-	//	DEBUG(Q_FUNC_INFO << ", x range " << xIndex + 1)
-	//	DEBUG(Q_FUNC_INFO << ", y range " << yIndex + 1)
-	//	DEBUG(Q_FUNC_INFO << ", x range index check = " << dynamic_cast<const
-	// CartesianCoordinateSystem*>(plot()->coordinateSystem(q->m_cSystemIndex))->index(Dimension::X)
-	//)
 	auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
 	const int xRangeDirection = plot()->range(Dimension::X, cs->index(Dimension::X)).direction();
 	const int yRangeDirection = plot()->range(Dimension::Y, cs->index(Dimension::Y)).direction();
-	//	DEBUG(Q_FUNC_INFO << ", x/y range direction = " << xRangeDirection << "/" << yRangeDirection)
 	const int xDirection = q->cSystem->direction(Dimension::X) * xRangeDirection;
 	const int yDirection = q->cSystem->direction(Dimension::Y) * yRangeDirection;
-	//	DEBUG(Q_FUNC_INFO << ", x/y direction: " << xDirection << "/" << yDirection)
 
 	// calculate the position of the center point in scene coordinates,
 	// will be used later to differentiate between "in" and "out" depending
@@ -1582,96 +1678,90 @@ void AxisPrivate::retransformTicks() {
 		qreal majorTickPos = 0.0;
 		qreal nextMajorTickPos = 0.0;
 		// calculate major tick's position
-		if (majorTicksType == Axis::TicksType::CustomColumn) { // custom column
-			if (!majorTicksColumn->isValid(iMajor) || majorTicksColumn->isMasked(iMajor))
-				continue;
-			majorTickPos = majorTicksColumn->valueAt(iMajor);
-			// set next major tick pos for minor ticks
-			if (iMajor < tmpMajorTicksNumber - 1) {
-				if (majorTicksColumn->isValid(iMajor + 1) && !majorTicksColumn->isMasked(iMajor + 1))
-					nextMajorTickPos = majorTicksColumn->valueAt(iMajor + 1);
-			} else // last major tick
-				tmpMinorTicksNumber = 0;
+
+		if (!dateTimeSpacing) {
+			switch (q->scale()) {
+			case RangeT::Scale::Linear:
+				//				DEBUG(Q_FUNC_INFO << ", start = " << start << ", incr = " << majorTicksIncrement << ", i = " << iMajor)
+				majorTickPos = start + majorTicksIncrement * iMajor;
+				if (std::abs(majorTickPos) < 1.e-15 * majorTicksIncrement) // avoid rounding errors when close to zero
+					majorTickPos = 0;
+				nextMajorTickPos = majorTickPos + majorTicksIncrement;
+				break;
+			case RangeT::Scale::Log10:
+				majorTickPos = start * std::pow(10, majorTicksIncrement * iMajor);
+				nextMajorTickPos = majorTickPos * std::pow(10, majorTicksIncrement);
+				break;
+			case RangeT::Scale::Log2:
+				majorTickPos = start * std::exp2(majorTicksIncrement * iMajor);
+				nextMajorTickPos = majorTickPos * exp2(majorTicksIncrement);
+				break;
+			case RangeT::Scale::Ln:
+				majorTickPos = start * std::exp(majorTicksIncrement * iMajor);
+				nextMajorTickPos = majorTickPos * exp(majorTicksIncrement);
+				break;
+			case RangeT::Scale::Sqrt:
+				majorTickPos = std::pow(std::sqrt(start) + majorTicksIncrement * iMajor, 2);
+				nextMajorTickPos = std::pow(std::sqrt(start) + majorTicksIncrement * (iMajor + 1), 2);
+				break;
+			case RangeT::Scale::Square:
+				majorTickPos = std::sqrt(start * start + majorTicksIncrement * iMajor);
+				nextMajorTickPos = std::sqrt(start * start + majorTicksIncrement * (iMajor + 1));
+				break;
+			case RangeT::Scale::Inverse:
+				majorTickPos = 1. / (1. / start + majorTicksIncrement * iMajor);
+				nextMajorTickPos = 1. / (1. / start + majorTicksIncrement * (iMajor + 1));
+				break;
+			}
+		} else {
+			// Datetime Linear
+			if (iMajor == 0)
+				majorTickPos = start;
+			else {
+				majorTickPosDateTime = majorTickPosDateTime.addYears(dt.year);
+				majorTickPosDateTime = majorTickPosDateTime.addMonths(dt.month);
+				majorTickPosDateTime = majorTickPosDateTime.addDays(dt.day);
+				majorTickPosDateTime = majorTickPosDateTime.addMSecs(DateTime::milliseconds(dt.hour, dt.minute, dt.second, dt.millisecond));
+				majorTickPos = majorTickPosDateTime.toMSecsSinceEpoch();
+			}
+		}
+		if (majorTickPos > end || iMajor > maxNumberMajorTicks)
+			break; // Finish
+
+		int columnIndex = iMajor; // iMajor used if for the labels a custom column is used.
+		if ((majorTicksType == Axis::TicksType::CustomColumn || majorTicksType == Axis::TicksType::CustomValues)
+			&& (majorTicksColumn->rowCount() >= _maxNumberMajorTicksCustomColumn)) {
+			// Do not use all values of the column, but just a portion of it
+			columnIndex = majorTicksColumn->indexForValue(majorTickPos);
+			Q_ASSERT(columnIndex >= 0);
+			majorTickPos = majorTicksColumn->valueAt(columnIndex);
+
+			const auto columnIndexNextMajor = majorTicksColumn->indexForValue(nextMajorTickPos);
+			Q_ASSERT(columnIndexNextMajor >= 0);
+			nextMajorTickPos = majorTicksColumn->valueAt(columnIndexNextMajor);
+			if (majorTickPos == nextMajorTickPos && iMajor + 1 < tmpMajorTicksNumber)
+				continue; // No need to draw majorTicksPos, because NextMajorTicksPos will completely overlap. Only for the last one
+		} else if ((majorTicksType == Axis::TicksType::CustomColumn || majorTicksType == Axis::TicksType::CustomValues)) {
+			majorTickPos = majorTicksColumn->valueAt(columnIndex);
+			if (majorTicksColumn->rowCount() > columnIndex + 1)
+				nextMajorTickPos = majorTicksColumn->valueAt(columnIndex + 1);
+			else
+				nextMajorTickPos = majorTickPos;
 		} else if (majorTicksType == Axis::TicksType::ColumnLabels) {
 			const Column* c = dynamic_cast<const Column*>(majorTicksColumn);
-			if (c) {
-				switch (c->labelsMode()) {
-				case Column::ColumnMode::Double:
-					majorTickPos = c->valueLabels()->at(iMajor).value;
-					break;
-				case Column::ColumnMode::Integer:
-					majorTickPos = c->intValueLabels()->at(iMajor).value;
-					break;
-				case Column::ColumnMode::BigInt:
-					majorTickPos = c->bigIntValueLabels()->at(iMajor).value;
-					break;
-				case Column::ColumnMode::Day:
-				case Column::ColumnMode::Month:
-				case Column::ColumnMode::DateTime:
-					majorTickPos = c->dateTimeValueLabels()->at(iMajor).value.toMSecsSinceEpoch();
-					break;
-				case Column::ColumnMode::Text:
-					// TODO
-					break;
-				}
-			}
-
-		} else {
-			if (!dateTimeSpacing) {
-				switch (q->scale()) {
-				case RangeT::Scale::Linear:
-					//				DEBUG(Q_FUNC_INFO << ", start = " << start << ", incr = " << majorTicksIncrement << ", i = " << iMajor)
-					majorTickPos = start + majorTicksIncrement * iMajor;
-					if (std::abs(majorTickPos) < 1.e-15 * majorTicksIncrement) // avoid rounding errors when close to zero
-						majorTickPos = 0;
-					nextMajorTickPos = majorTickPos + majorTicksIncrement;
-					break;
-				case RangeT::Scale::Log10:
-					majorTickPos = start * std::pow(10, majorTicksIncrement * iMajor);
-					nextMajorTickPos = majorTickPos * std::pow(10, majorTicksIncrement);
-					break;
-				case RangeT::Scale::Log2:
-					majorTickPos = start * std::exp2(majorTicksIncrement * iMajor);
-					nextMajorTickPos = majorTickPos * exp2(majorTicksIncrement);
-					break;
-				case RangeT::Scale::Ln:
-					majorTickPos = start * std::exp(majorTicksIncrement * iMajor);
-					nextMajorTickPos = majorTickPos * exp(majorTicksIncrement);
-					break;
-				case RangeT::Scale::Sqrt:
-					majorTickPos = std::pow(std::sqrt(start) + majorTicksIncrement * iMajor, 2);
-					nextMajorTickPos = std::pow(std::sqrt(start) + majorTicksIncrement * (iMajor + 1), 2);
-					break;
-				case RangeT::Scale::Square:
-					majorTickPos = std::sqrt(start * start + majorTicksIncrement * iMajor);
-					nextMajorTickPos = std::sqrt(start * start + majorTicksIncrement * (iMajor + 1));
-					break;
-				case RangeT::Scale::Inverse:
-					majorTickPos = 1. / (1. / start + majorTicksIncrement * iMajor);
-					nextMajorTickPos = 1. / (1. / start + majorTicksIncrement * (iMajor + 1));
-					break;
-				}
-			} else {
-				// Datetime Linear
-				if (iMajor == 0)
-					majorTickPos = start;
-				else {
-					majorTickPosDateTime = majorTickPosDateTime.addYears(dt.year);
-					majorTickPosDateTime = majorTickPosDateTime.addMonths(dt.month);
-					majorTickPosDateTime = majorTickPosDateTime.addDays(dt.day);
-					majorTickPosDateTime = majorTickPosDateTime.addMSecs(DateTime::milliseconds(dt.hour, dt.minute, dt.second, dt.millisecond));
-					majorTickPos = majorTickPosDateTime.toMSecsSinceEpoch();
-				}
-			}
-			if (majorTickPos > end || iMajor > maxNumberMajorTicks)
-				break; // Finish
+			Q_ASSERT(tmpMajorTicksNumber > 0);
+			Q_ASSERT(c);
+			columnIndex = c->valueLabelsIndexForValue(majorTickPos);
+			Q_ASSERT(columnIndex >= 0);
+			majorTickPos = c->valueLabelsValueAt(columnIndex);
 		}
 
-		qreal xAnchorPoint = 0.0;
-		qreal yAnchorPoint = 0.0;
+		qreal otherDirAnchorPoint = 0.0;
 		if (!lines.isEmpty()) {
-			xAnchorPoint = lines.first().p1().x();
-			yAnchorPoint = lines.first().p1().y();
+			if (orientation == Axis::Orientation::Vertical)
+				otherDirAnchorPoint = lines.first().p1().x();
+			else
+				otherDirAnchorPoint = lines.first().p1().y();
 		}
 
 		QPointF anchorPoint, startPoint, endPoint;
@@ -1679,36 +1769,28 @@ void AxisPrivate::retransformTicks() {
 		if (majorTicksDirection != Axis::noTicks) {
 			if (orientation == Axis::Orientation::Horizontal) {
 				auto startY = q->plot()->range(Dimension::Y, cs->index(Dimension::Y)).start();
-				anchorPoint.setX(majorTickPos);
-				anchorPoint.setY(startY); // set dummy logical point, but it must be within the datarect, otherwise valid will be always false
-				valid = transformAnchor(&anchorPoint);
-				anchorPoint.setY(yAnchorPoint);
-				if (valid) {
-					// for yDirection == -1 start is above end
-					if (anchorPoint.y() >= center.y()) { // below
-						startPoint = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksIn) ? yDirection * majorTicksLength : 0);
-						endPoint = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksOut) ? -yDirection * majorTicksLength : 0);
-					} else { // above
-						startPoint = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksOut) ? yDirection * majorTicksLength : 0);
-						endPoint = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksIn) ? -yDirection * majorTicksLength : 0);
-					}
-				}
+				valid = calculateTickHorizontal(majorTicksDirection,
+												majorTicksLength,
+												majorTickPos,
+												startY,
+												otherDirAnchorPoint,
+												center.y(),
+												yDirection,
+												anchorPoint,
+												startPoint,
+												endPoint);
 			} else { // vertical
 				auto startX = q->plot()->range(Dimension::X, cs->index(Dimension::X)).start();
-				anchorPoint.setY(majorTickPos);
-				anchorPoint.setX(startX); // set dummy logical point, but it must be within the datarect, otherwise valid will be always false
-				valid = transformAnchor(&anchorPoint);
-				anchorPoint.setX(xAnchorPoint);
-				if (valid) {
-					// for xDirection == 1 start is right of end
-					if (anchorPoint.x() < center.x()) { // left
-						startPoint = anchorPoint + QPointF((majorTicksDirection & Axis::ticksIn) ? xDirection * majorTicksLength : 0, 0);
-						endPoint = anchorPoint + QPointF((majorTicksDirection & Axis::ticksOut) ? -xDirection * majorTicksLength : 0, 0);
-					} else { // right
-						startPoint = anchorPoint + QPointF((majorTicksDirection & Axis::ticksOut) ? xDirection * majorTicksLength : 0, 0);
-						endPoint = anchorPoint + QPointF((majorTicksDirection & Axis::ticksIn) ? -xDirection * majorTicksLength : 0, 0);
-					}
-				}
+				valid = calculateTickVertical(majorTicksDirection,
+											  majorTicksLength,
+											  majorTickPos,
+											  startX,
+											  otherDirAnchorPoint,
+											  center.x(),
+											  xDirection,
+											  anchorPoint,
+											  startPoint,
+											  endPoint);
 			}
 
 			const qreal value = scalingFactor * majorTickPos + zeroOffset;
@@ -1729,35 +1811,8 @@ void AxisPrivate::retransformTicks() {
 					const Column* c = dynamic_cast<const Column*>(majorTicksColumn);
 					// majorTicksType == Axis::TicksType::ColumnLabels
 					if (c && c->valueLabelsInitialized()) {
-						switch (c->labelsMode()) {
-						case AbstractColumn::ColumnMode::Double: {
-							if (iMajor < c->valueLabelsCount())
-								tickLabelValuesString << c->valueLabels()->at(iMajor).label;
-							break;
-						}
-						case AbstractColumn::ColumnMode::Integer: {
-							if (iMajor < c->valueLabelsCount())
-								tickLabelValuesString << c->intValueLabels()->at(iMajor).label;
-							break;
-						}
-						case AbstractColumn::ColumnMode::BigInt: {
-							if (iMajor < c->valueLabelsCount())
-								tickLabelValuesString << c->bigIntValueLabels()->at(iMajor).label;
-							break;
-						}
-						case AbstractColumn::ColumnMode::DateTime:
-						case AbstractColumn::ColumnMode::Month:
-						case AbstractColumn::ColumnMode::Day: {
-							if (iMajor < c->valueLabelsCount())
-								tickLabelValuesString << c->dateTimeValueLabels()->at(iMajor).label;
-							break;
-						}
-						case AbstractColumn::ColumnMode::Text: {
-							if (iMajor < c->valueLabelsCount())
-								tickLabelValuesString << c->textValueLabels()->at(iMajor).label;
-							break;
-						}
-						}
+						if (columnIndex < c->valueLabelsCount())
+							tickLabelValuesString << c->valueLabelAt(columnIndex);
 					}
 				} else {
 					switch (labelsTextType) {
@@ -1765,20 +1820,20 @@ void AxisPrivate::retransformTicks() {
 						tickLabelValues << value;
 						break;
 					case Axis::LabelsTextType::CustomValues: {
-						if (labelsTextColumn && iMajor < labelsTextColumn->rowCount()) {
+						if (labelsTextColumn && columnIndex < labelsTextColumn->rowCount()) {
 							switch (labelsTextColumn->columnMode()) {
 							case AbstractColumn::ColumnMode::Double:
 							case AbstractColumn::ColumnMode::Integer:
 							case AbstractColumn::ColumnMode::BigInt:
-								tickLabelValues << labelsTextColumn->valueAt(iMajor);
+								tickLabelValues << labelsTextColumn->valueAt(columnIndex);
 								break;
 							case AbstractColumn::ColumnMode::DateTime:
 							case AbstractColumn::ColumnMode::Month:
 							case AbstractColumn::ColumnMode::Day:
-								tickLabelValues << labelsTextColumn->dateTimeAt(iMajor).toMSecsSinceEpoch();
+								tickLabelValues << labelsTextColumn->dateTimeAt(columnIndex).toMSecsSinceEpoch();
 								break;
 							case AbstractColumn::ColumnMode::Text:
-								tickLabelValuesString << labelsTextColumn->textAt(iMajor);
+								tickLabelValuesString << labelsTextColumn->textAt(columnIndex);
 								break;
 							}
 						}
@@ -1818,34 +1873,28 @@ void AxisPrivate::retransformTicks() {
 				// calculate start and end points for minor tick's line (same as major ticks)
 				if (orientation == Axis::Orientation::Horizontal) {
 					auto startY = q->plot()->range(Dimension::Y, cs->index(Dimension::Y)).start();
-					anchorPoint.setX(minorTickPos);
-					anchorPoint.setY(startY);
-					valid = transformAnchor(&anchorPoint);
-					anchorPoint.setY(yAnchorPoint);
-					if (valid) {
-						if (anchorPoint.y() >= center.y()) { // below
-							startPoint = anchorPoint + QPointF(0, (minorTicksDirection & Axis::ticksIn) ? yDirection * minorTicksLength : 0);
-							endPoint = anchorPoint + QPointF(0, (minorTicksDirection & Axis::ticksOut) ? -yDirection * minorTicksLength : 0);
-						} else {
-							startPoint = anchorPoint + QPointF(0, (minorTicksDirection & Axis::ticksOut) ? yDirection * minorTicksLength : 0);
-							endPoint = anchorPoint + QPointF(0, (minorTicksDirection & Axis::ticksIn) ? -yDirection * minorTicksLength : 0);
-						}
-					}
+					valid = calculateTickHorizontal(minorTicksDirection,
+													minorTicksLength,
+													minorTickPos,
+													startY,
+													otherDirAnchorPoint,
+													center.y(),
+													yDirection,
+													anchorPoint,
+													startPoint,
+													endPoint);
 				} else { // vertical
 					auto startX = q->plot()->range(Dimension::X, cs->index(Dimension::X)).start();
-					anchorPoint.setY(minorTickPos);
-					anchorPoint.setX(startX);
-					valid = transformAnchor(&anchorPoint);
-					anchorPoint.setX(xAnchorPoint);
-					if (valid) {
-						if (anchorPoint.x() < center.x()) {
-							startPoint = anchorPoint + QPointF((minorTicksDirection & Axis::ticksIn) ? xDirection * minorTicksLength : 0, 0);
-							endPoint = anchorPoint + QPointF((minorTicksDirection & Axis::ticksOut) ? -xDirection * minorTicksLength : 0, 0);
-						} else {
-							startPoint = anchorPoint + QPointF((minorTicksDirection & Axis::ticksOut) ? xDirection * minorTicksLength : 0, 0);
-							endPoint = anchorPoint + QPointF((minorTicksDirection & Axis::ticksIn) ? -xDirection * minorTicksLength : 0, 0);
-						}
-					}
+					valid = calculateTickVertical(minorTicksDirection,
+												  minorTicksLength,
+												  minorTickPos,
+												  startX,
+												  otherDirAnchorPoint,
+												  center.x(),
+												  xDirection,
+												  anchorPoint,
+												  startPoint,
+												  endPoint);
 				}
 
 				// add minor tick's line to the painter path

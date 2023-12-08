@@ -40,6 +40,7 @@
 #include <QThreadPool>
 
 #include <array>
+#include <functional>
 
 /**
  * \class Column
@@ -706,7 +707,8 @@ void Column::replaceDateTimes(int first, const QVector<QDateTime>& new_values) {
 
 void Column::addValueLabel(const QDateTime& value, const QString& label) {
 	d->addValueLabel(value, label);
-	project()->setChanged(true);
+	if (project())
+		project()->setChanged(true);
 }
 
 void Column::setValues(const QVector<double>& values) {
@@ -994,6 +996,14 @@ bool Column::valueLabelsInitialized() const {
 	return d->valueLabelsInitialized();
 }
 
+double Column::valueLabelsMinimum() const {
+	return d->valueLabelsMinimum();
+}
+
+double Column::valueLabelsMaximum() const {
+	return d->valueLabelsMaximum();
+}
+
 void Column::setLabelsMode(ColumnMode mode) {
 	d->setLabelsMode(mode);
 	project()->setChanged(true);
@@ -1019,6 +1029,22 @@ const QVector<Column::ValueLabel<QDateTime>>* Column::dateTimeValueLabels() cons
 
 int Column::valueLabelsCount() const {
 	return d->valueLabelsCount();
+}
+
+int Column::valueLabelsCount(double min, double max) const {
+	return d->valueLabelsCount(min, max);
+}
+
+int Column::valueLabelsIndexForValue(double x) const {
+	return d->valueLabelsIndexForValue(x);
+}
+
+double Column::valueLabelsValueAt(int index) const {
+	return d->valueLabelsValueAt(index);
+}
+
+QString Column::valueLabelAt(int index) const {
+	return d->valueLabelAt(index);
 }
 
 const QVector<Column::ValueLabel<double>>* Column::valueLabels() const {
@@ -1654,6 +1680,19 @@ int Column::rowCount() const {
 	return d->rowCount();
 }
 
+int Column::rowCount(double min, double max) const {
+	const auto p = properties();
+	if (p == Properties::MonotonicIncreasing || p == Properties::MonotonicDecreasing) {
+		int start, end;
+		if (!indicesMinMax(min, max, start, end))
+			return 0;
+		return abs(start - end) + 1; // +1 because start/end is included
+	} else if (p == Properties::Constant)
+		return rowCount();
+
+	return d->rowCount(min, max);
+}
+
 /**
  * \brief Return the number of available data rows
  *
@@ -2241,126 +2280,7 @@ int Column::indexForValue(double x, QVector<QLineF>& lines, Properties propertie
 }
 
 int Column::indexForValue(double x) const {
-	double prevValue = 0;
-	qint64 prevValueDateTime = 0;
-	auto mode = columnMode();
-	auto property = properties();
-	if (property == Properties::MonotonicIncreasing || property == Properties::MonotonicDecreasing) {
-		// bisects the index every time, so it is possible to find the value in log_2(rowCount) steps
-		bool increase = (property != Properties::MonotonicDecreasing);
-
-		int lowerIndex = 0;
-		int higherIndex = rowCount() - 1;
-
-		unsigned int maxSteps = calculateMaxSteps(static_cast<unsigned int>(rowCount())) + 1;
-
-		switch (mode) {
-		case ColumnMode::Double:
-		case ColumnMode::Integer:
-		case ColumnMode::BigInt:
-			for (unsigned int i = 0; i < maxSteps; i++) { // so no log_2(rowCount) needed
-				int index = lowerIndex + round(static_cast<double>(higherIndex - lowerIndex) / 2);
-				double value = valueAt(index);
-
-				if (higherIndex - lowerIndex < 2) {
-					if (std::abs(valueAt(lowerIndex) - x) < std::abs(valueAt(higherIndex) - x))
-						index = lowerIndex;
-					else
-						index = higherIndex;
-
-					return index;
-				}
-
-				if (value > x && increase)
-					higherIndex = index;
-				else if (value >= x && !increase)
-					lowerIndex = index;
-				else if (value <= x && increase)
-					lowerIndex = index;
-				else if (value < x && !increase)
-					higherIndex = index;
-			}
-			break;
-		case ColumnMode::Text:
-			break;
-		case ColumnMode::DateTime:
-		case ColumnMode::Month:
-		case ColumnMode::Day: {
-			qint64 xInt64 = static_cast<qint64>(x);
-			for (unsigned int i = 0; i < maxSteps; i++) { // so no log_2(rowCount) needed
-				int index = lowerIndex + round(static_cast<double>(higherIndex - lowerIndex) / 2);
-				qint64 value = dateTimeAt(index).toMSecsSinceEpoch();
-
-				if (higherIndex - lowerIndex < 2) {
-					if (std::abs(dateTimeAt(lowerIndex).toMSecsSinceEpoch() - xInt64) < std::abs(dateTimeAt(higherIndex).toMSecsSinceEpoch() - xInt64))
-						index = lowerIndex;
-					else
-						index = higherIndex;
-
-					return index;
-				}
-
-				if (value > xInt64 && increase)
-					higherIndex = index;
-				else if (value >= xInt64 && !increase)
-					lowerIndex = index;
-				else if (value <= xInt64 && increase)
-					lowerIndex = index;
-				else if (value < xInt64 && !increase)
-					higherIndex = index;
-			}
-		}
-		}
-
-	} else if (property == Properties::Constant) {
-		if (rowCount() > 0)
-			return 0;
-		else
-			return -1;
-	} else {
-		// naiv way
-		int index = 0;
-		switch (mode) {
-		case ColumnMode::Double:
-		case ColumnMode::Integer:
-		case ColumnMode::BigInt:
-			for (int row = 0; row < rowCount(); row++) {
-				if (!isValid(row) || isMasked(row))
-					continue;
-				if (row == 0)
-					prevValue = valueAt(row);
-
-				double value = valueAt(row);
-				if (std::abs(value - x) <= std::abs(prevValue - x)) { // <= prevents also that row - 1 become < 0
-					prevValue = value;
-					index = row;
-				}
-			}
-			return index;
-		case ColumnMode::Text:
-			break;
-		case ColumnMode::DateTime:
-		case ColumnMode::Month:
-		case ColumnMode::Day: {
-			qint64 xInt64 = static_cast<qint64>(x);
-			for (int row = 0; row < rowCount(); row++) {
-				if (!isValid(row) || isMasked(row))
-					continue;
-
-				if (row == 0)
-					prevValueDateTime = dateTimeAt(row).toMSecsSinceEpoch();
-
-				qint64 value = dateTimeAt(row).toMSecsSinceEpoch();
-				if (std::abs(value - xInt64) <= std::abs(prevValueDateTime - xInt64)) { // "<=" prevents also that row - 1 become < 0
-					prevValueDateTime = value;
-					index = row;
-				}
-			}
-			return index;
-		}
-		}
-	}
-	return -1;
+	return d->indexForValue(x);
 }
 
 /*!
@@ -2392,10 +2312,17 @@ bool Column::indicesMinMax(double v1, double v2, int& start, int& end) const {
 		case ColumnMode::Integer:
 		case ColumnMode::BigInt:
 		case ColumnMode::Double: {
-			if (start > 0 && valueAt(start - 1) <= v2 && valueAt(start - 1) >= v1)
-				start--;
-			if (end < rowCount() - 1 && valueAt(end + 1) <= v2 && valueAt(end + 1) >= v1)
-				end++;
+			if (property == Properties::MonotonicIncreasing) {
+				if (start > 0 && valueAt(start - 1) <= v2 && valueAt(start - 1) >= v1)
+					start--;
+				if (end < rowCount() - 1 && valueAt(end + 1) <= v2 && valueAt(end + 1) >= v1)
+					end++;
+			} else {
+				if (end > 0 && valueAt(end - 1) <= v2 && valueAt(end - 1) >= v1)
+					end--;
+				if (start < rowCount() - 1 && valueAt(start + 1) <= v2 && valueAt(start + 1) >= v1)
+					start++;
+			}
 
 			break;
 		}
@@ -2405,16 +2332,30 @@ bool Column::indicesMinMax(double v1, double v2, int& start, int& end) const {
 			qint64 v1int64 = v1;
 			qint64 v2int64 = v2;
 			qint64 value;
-			if (start > 0) {
-				value = dateTimeAt(start - 1).toMSecsSinceEpoch();
-				if (value <= v2int64 && value >= v1int64)
-					start--;
-			}
+			if (property == Properties::MonotonicIncreasing) {
+				if (start > 0) {
+					value = dateTimeAt(start - 1).toMSecsSinceEpoch();
+					if (value <= v2int64 && value >= v1int64)
+						start--;
+				}
 
-			if (end > rowCount() - 1) {
-				value = dateTimeAt(end + 1).toMSecsSinceEpoch();
-				if (value <= v2int64 && value >= v1int64)
-					end++;
+				if (end > rowCount() - 1) {
+					value = dateTimeAt(end + 1).toMSecsSinceEpoch();
+					if (value <= v2int64 && value >= v1int64)
+						end++;
+				}
+			} else {
+				if (end > 0) {
+					value = dateTimeAt(end - 1).toMSecsSinceEpoch();
+					if (value <= v2int64 && value >= v1int64)
+						end--;
+				}
+
+				if (start > rowCount() - 1) {
+					value = dateTimeAt(start + 1).toMSecsSinceEpoch();
+					if (value <= v2int64 && value >= v1int64)
+						start++;
+				}
 			}
 			break;
 		}

@@ -40,7 +40,10 @@ public:
 	bool copy(const ColumnPrivate*);
 	bool copy(const ColumnPrivate*, int source_start, int dest_start, int num_rows);
 
+	int indexForValue(double x) const;
+
 	int rowCount() const;
+	int rowCount(double min, double max) const;
 	int availableRowCount(int max = -1) const; // valid rows (stops when max rows found)
 	void resizeTo(int);
 
@@ -61,6 +64,8 @@ public:
 	void removeValueLabel(const QString&);
 	void setLabelsMode(Column::ColumnMode mode);
 	void valueLabelsRemoveAll();
+	double valueLabelsMinimum();
+	double valueLabelsMaximum();
 
 	AbstractSimpleFilter* inputFilter() const;
 	AbstractSimpleFilter* outputFilter() const;
@@ -166,15 +171,15 @@ public:
 		void migrateTextTo(AbstractColumn::ColumnMode newMode);
 		void migrateDateTimeTo(AbstractColumn::ColumnMode newMode);
 		int count() const;
+		int count(double min, double max) const;
 		void add(qint64, const QString&);
 		void add(int, const QString&);
 		void add(double, const QString&);
 		void add(const QDateTime&, const QString&);
 		void add(const QString&, const QString&);
 		void removeAll();
-		AbstractColumn::ColumnMode mode() const {
-			return m_mode;
-		}
+		AbstractColumn::ColumnMode mode() const;
+		AbstractColumn::Properties properties() const;
 		bool initialized() const {
 			return m_labels != nullptr;
 		}
@@ -187,13 +192,23 @@ public:
 		inline const QVector<Column::ValueLabel<T>>* cast_vector() const {
 			return static_cast<QVector<Column::ValueLabel<T>>*>(m_labels);
 		}
+		double minimum();
+		double maximum();
 		const QVector<Column::ValueLabel<QString>>* textValueLabels() const;
 		const QVector<Column::ValueLabel<QDateTime>>* dateTimeValueLabels() const;
 		const QVector<Column::ValueLabel<double>>* valueLabels() const;
 		const QVector<Column::ValueLabel<int>>* intValueLabels() const;
 		const QVector<Column::ValueLabel<qint64>>* bigIntValueLabels() const;
+		int indexForValue(double value) const;
+		double valueAt(int index) const;
+		QDateTime dateTimeAt(int index) const;
+		bool isValid(int index) const;
+		bool isMasked(int index) const;
+		QString labelAt(int index) const;
 
 	private:
+		void invalidateStatistics();
+		void recalculateStatistics();
 		bool init(AbstractColumn::ColumnMode);
 		void deinit();
 
@@ -210,9 +225,19 @@ public:
 	private:
 		AbstractColumn::ColumnMode m_mode{AbstractColumn::ColumnMode::Integer};
 		void* m_labels{nullptr}; // pointer to the container for the value labels(QMap<T, QString>)
+		struct Statistics {
+			bool available{false};
+			double minimum;
+			double maximum;
+		};
+		Statistics m_statistics;
 	};
 	ValueLabels m_labels;
 	int valueLabelsCount() const;
+	int valueLabelsCount(double min, double max) const;
+	int valueLabelsIndexForValue(double value) const;
+	double valueLabelsValueAt(int index) const;
+	QString valueLabelAt(int index) const;
 	void addValueLabel(qint64, const QString&);
 	const QVector<Column::ValueLabel<qint64>>* bigIntValueLabels() const;
 	void addValueLabel(int, const QString&);

@@ -1029,9 +1029,9 @@ void AxisDock::majorTicksTypeChanged(int index) {
 	case Axis::TicksType::ColumnLabels:
 		// Fall through
 	case Axis::TicksType::CustomColumn: {
-		ui.lMajorTicksNumber->hide();
-		ui.sbMajorTicksNumber->hide();
-		ui.cbMajorTicksAutoNumber->hide();
+		ui.lMajorTicksNumber->show();
+		ui.sbMajorTicksNumber->show();
+		ui.cbMajorTicksAutoNumber->show();
 		ui.lMajorTicksSpacingNumeric->hide();
 		ui.sbMajorTicksSpacingNumeric->hide();
 		ui.lMajorTicksIncrementDateTime->hide();

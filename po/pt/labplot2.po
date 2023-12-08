@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-03 00:38+0000\n"
+"POT-Creation-Date: 2023-12-07 00:38+0000\n"
 "PO-Revision-Date: 2023-06-24 01:41+0100\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
@@ -502,18 +502,18 @@ msgstr "Fe&char"
 msgid "Show"
 msgstr "Mostrar"
 
-#: src/backend/core/AbstractSimpleFilter.cpp:346
+#: src/backend/core/AbstractSimpleFilter.cpp:350
 #, kde-format
 msgid "incompatible filter type"
 msgstr "tipo de filtro incompatível"
 
-#: src/backend/core/AbstractSimpleFilter.cpp:362
+#: src/backend/core/AbstractSimpleFilter.cpp:366
 #: src/backend/core/Folder.cpp:151 src/backend/core/Project.cpp:799
 #: src/backend/datasources/MQTTClient.cpp:1376
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:283
 #: src/backend/lib/XmlStreamReader.cpp:104
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1861
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1866
 #, kde-format
 msgid "unknown element '%1'"
 msgstr "elemento desconhecido '%1'"
@@ -608,38 +608,38 @@ msgstr "actualização automática: falsa"
 msgid "The name \"%1\" is already in use. Choose another name."
 msgstr "O nome \"%1\" já está a ser usado. Escolha outro nome."
 
-#: src/backend/core/column/Column.cpp:120
+#: src/backend/core/column/Column.cpp:121
 #, kde-format
 msgid "Copy Data"
 msgstr "Copiar os Dados"
 
-#: src/backend/core/column/Column.cpp:123
+#: src/backend/core/column/Column.cpp:124
 #, kde-format
 msgid "Paste Data"
 msgstr "Colar os Dados"
 
-#: src/backend/core/column/Column.cpp:159
+#: src/backend/core/column/Column.cpp:160
 #, kde-format
 msgid "Used in"
 msgstr "Usado em"
 
-#: src/backend/core/column/Column.cpp:194
+#: src/backend/core/column/Column.cpp:195
 #, kde-format
 msgid "XY-Curves"
 msgstr "Curvas-XY"
 
-#: src/backend/core/column/Column.cpp:212
+#: src/backend/core/column/Column.cpp:213
 #: src/kdefrontend/datasources/ROOTOptionsWidget.cpp:22
 #, kde-format
 msgid "Histograms"
 msgstr "Histogramas"
 
-#: src/backend/core/column/Column.cpp:229
+#: src/backend/core/column/Column.cpp:230
 #, kde-format
 msgid "Axes"
 msgstr "Eixos"
 
-#: src/backend/core/column/Column.cpp:254
+#: src/backend/core/column/Column.cpp:255
 #, kde-format
 msgid "Calculations"
 msgstr "Cálculos"
@@ -654,7 +654,7 @@ msgstr "Cálculos"
 #. else	// Cancel
 #. return;
 #. }
-#: src/backend/core/column/Column.cpp:386
+#: src/backend/core/column/Column.cpp:387
 #: src/backend/core/column/columncommands.cpp:89
 #: src/kdefrontend/dockwidgets/ColumnDock.cpp:338
 #: src/kdefrontend/dockwidgets/ColumnDock.cpp:362
@@ -663,20 +663,20 @@ msgstr "Cálculos"
 msgid "%1: change column type"
 msgstr "%1: mudar o tipo da coluna"
 
-#: src/backend/core/column/Column.cpp:524
+#: src/backend/core/column/Column.cpp:525
 #: src/backend/core/column/columncommands.cpp:580
 #, kde-format
 msgid "%1: clear column"
 msgstr "%1: limpar a coluna"
 
-#: src/backend/core/column/Column.cpp:1570
+#: src/backend/core/column/Column.cpp:1596
 #, kde-format
 msgid "invalid or missing row index"
 msgstr "índice da linha inválido ou em falta"
 
-#: src/backend/core/column/Column.cpp:1579
-#: src/backend/core/column/Column.cpp:1588
-#: src/backend/core/column/Column.cpp:1597
+#: src/backend/core/column/Column.cpp:1605
+#: src/backend/core/column/Column.cpp:1614
+#: src/backend/core/column/Column.cpp:1623
 #, kde-format
 msgid "invalid row value"
 msgstr "valor da linha inválido"
@@ -2116,7 +2116,7 @@ msgstr "64 'bits': %1"
 #: src/backend/datasources/MQTTClient.cpp:1200
 #: src/backend/datasources/MQTTTopic.cpp:218
 #: src/backend/lib/XmlStreamReader.cpp:99
-#: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:451
+#: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:455
 #, kde-format
 msgid "Attribute '%1' missing or empty, default value is used"
 msgstr ""
@@ -2404,63 +2404,69 @@ msgstr "Pi"
 msgid "Euler's constant"
 msgstr "Constante de Euler"
 
+#: src/backend/gsl/constants.cpp:60
+#, fuzzy, kde-format
+#| msgid "Number"
+msgid "Not a number"
+msgstr "Número"
+
 #. i18n("Fundamental constants"));
-#: src/backend/gsl/constants.cpp:62
+#: src/backend/gsl/constants.cpp:63
 #, kde-format
 msgid "Speed of light"
 msgstr "Velocidade da luz"
 
-#: src/backend/gsl/constants.cpp:63
+#: src/backend/gsl/constants.cpp:64
 #, kde-format
 msgid "Vacuum permeability"
 msgstr "Permeabilidade do vácuo"
 
-#: src/backend/gsl/constants.cpp:64
+#: src/backend/gsl/constants.cpp:65
 #, kde-format
 msgid "Vacuum permittivity"
 msgstr "Permissividade do vácuo"
 
-#: src/backend/gsl/constants.cpp:65
+#: src/backend/gsl/constants.cpp:66
 #, kde-format
 msgid "Planck constant"
 msgstr "Constante de Planck"
 
-#: src/backend/gsl/constants.cpp:66
+#: src/backend/gsl/constants.cpp:67
 #, kde-format
 msgid "Reduced Planck constant"
 msgstr "Constante de Planck reduzida"
 
-#: src/backend/gsl/constants.cpp:67
+#: src/backend/gsl/constants.cpp:68
 #, kde-format
 msgid "Avogadro constant"
 msgstr "Constante de Avogadro"
 
-#: src/backend/gsl/constants.cpp:68
+#: src/backend/gsl/constants.cpp:69
 #, kde-format
 msgid "Faraday"
 msgstr "Faraday"
 
-#: src/backend/gsl/constants.cpp:69
+#: src/backend/gsl/constants.cpp:70
 #, kde-format
 msgid "Boltzmann constant"
 msgstr "Constante de Boltzmann"
 
-#: src/backend/gsl/constants.cpp:70
+#: src/backend/gsl/constants.cpp:71
 #, kde-format
 msgid "Molar gas"
 msgstr "Gás molar"
 
-#: src/backend/gsl/constants.cpp:71
+#: src/backend/gsl/constants.cpp:72
 #, kde-format
 msgid "Standard gas volume"
 msgstr "Volume-padrão do gás"
 
-#: src/backend/gsl/constants.cpp:72
+#: src/backend/gsl/constants.cpp:73
 #, kde-format
 msgid "Stefan-Boltzmann constant"
 msgstr "Constante de Stefan-Boltzmann"
 
-#: src/backend/gsl/constants.cpp:73
+#: src/backend/gsl/constants.cpp:74
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:532
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:504
 #: src/kdefrontend/dockwidgets/KDEPlotDock.cpp:200
@@ -2469,450 +2475,450 @@ msgid "Gauss"
 msgstr "Gauss"
 
 #. i18n("Astronomy and Astrophysics"));
-#: src/backend/gsl/constants.cpp:76
+#: src/backend/gsl/constants.cpp:77
 #, kde-format
 msgid "Astronomical unit"
 msgstr "Unidade astronómica"
 
-#: src/backend/gsl/constants.cpp:77
+#: src/backend/gsl/constants.cpp:78
 #, kde-format
 msgid "Gravitational constant"
 msgstr "Constante gravitacional"
 
-#: src/backend/gsl/constants.cpp:78
+#: src/backend/gsl/constants.cpp:79
 #, kde-format
 msgid "Light year"
 msgstr "Ano-luz"
 
-#: src/backend/gsl/constants.cpp:79
+#: src/backend/gsl/constants.cpp:80
 #, kde-format
 msgid "Parsec"
 msgstr "Parsec"
 
-#: src/backend/gsl/constants.cpp:80
+#: src/backend/gsl/constants.cpp:81
 #, kde-format
 msgid "Gravitational acceleration"
 msgstr "Aceleração gravítica"
 
-#: src/backend/gsl/constants.cpp:81
+#: src/backend/gsl/constants.cpp:82
 #, kde-format
 msgid "Solar mass"
 msgstr "Massa solar"
 
 #. i18n("Atomic and Nuclear Physics"));
-#: src/backend/gsl/constants.cpp:84
+#: src/backend/gsl/constants.cpp:85
 #, kde-format
 msgid "Charge of the electron"
 msgstr "Carga do electrão"
 
-#: src/backend/gsl/constants.cpp:85
+#: src/backend/gsl/constants.cpp:86
 #, kde-format
 msgid "Energy of 1 electron volt"
 msgstr "Energia de 1 electrão-volt"
 
-#: src/backend/gsl/constants.cpp:86
+#: src/backend/gsl/constants.cpp:87
 #, kde-format
 msgid "Unified atomic mass"
 msgstr "Massa atómica unificada"
 
-#: src/backend/gsl/constants.cpp:87
+#: src/backend/gsl/constants.cpp:88
 #, kde-format
 msgid "Mass of the electron"
 msgstr "Massa do electrão"
 
-#: src/backend/gsl/constants.cpp:88
+#: src/backend/gsl/constants.cpp:89
 #, kde-format
 msgid "Mass of the muon"
 msgstr "Massa do muão"
 
-#: src/backend/gsl/constants.cpp:89
+#: src/backend/gsl/constants.cpp:90
 #, kde-format
 msgid "Mass of the proton"
 msgstr "Massa do protão"
 
-#: src/backend/gsl/constants.cpp:90
+#: src/backend/gsl/constants.cpp:91
 #, kde-format
 msgid "Mass of the neutron"
 msgstr "Massa do neutrão"
 
-#: src/backend/gsl/constants.cpp:91
+#: src/backend/gsl/constants.cpp:92
 #, kde-format
 msgid "Electromagnetic fine structure constant"
 msgstr "Constante das estruturas finas electromagnéticas"
 
-#: src/backend/gsl/constants.cpp:92
+#: src/backend/gsl/constants.cpp:93
 #, kde-format
 msgid "Rydberg constant"
 msgstr "Constante de Rydberg"
 
-#: src/backend/gsl/constants.cpp:93
+#: src/backend/gsl/constants.cpp:94
 #, kde-format
 msgid "Bohr radius"
 msgstr "Raio de Bohr"
 
-#: src/backend/gsl/constants.cpp:94
+#: src/backend/gsl/constants.cpp:95
 #, kde-format
 msgid "Length of 1 angstrom"
 msgstr "Comprimento de 1 angstrom"
 
-#: src/backend/gsl/constants.cpp:95
+#: src/backend/gsl/constants.cpp:96
 #, kde-format
 msgid "Area of 1 barn"
 msgstr "Área de 1 barn"
 
-#: src/backend/gsl/constants.cpp:96
+#: src/backend/gsl/constants.cpp:97
 #, kde-format
 msgid "Bohr Magneton"
 msgstr "Magnetão de Bohr"
 
-#: src/backend/gsl/constants.cpp:97
+#: src/backend/gsl/constants.cpp:98
 #, kde-format
 msgid "Nuclear Magneton"
 msgstr "Magnetão Nuclear"
 
-#: src/backend/gsl/constants.cpp:98
+#: src/backend/gsl/constants.cpp:99
 #, kde-format
 msgid "Magnetic moment of the electron [absolute value]"
 msgstr "Momento magnético do electrão [valor absoluto]"
 
-#: src/backend/gsl/constants.cpp:99
+#: src/backend/gsl/constants.cpp:100
 #, kde-format
 msgid "Magnetic moment of the proton"
 msgstr "Momento magnético do protão"
 
-#: src/backend/gsl/constants.cpp:100
+#: src/backend/gsl/constants.cpp:101
 #, kde-format
 msgid "Thomson cross section"
 msgstr "Secção cruzada de Thomson"
 
-#: src/backend/gsl/constants.cpp:101
+#: src/backend/gsl/constants.cpp:102
 #, kde-format
 msgid "Electric dipole moment of 1 Debye"
 msgstr "Momento do dípolo eléctrico de 1 Debye"
 
 #. i18n("Measurement of Time"));
-#: src/backend/gsl/constants.cpp:104
+#: src/backend/gsl/constants.cpp:105
 #, kde-format
 msgid "Number of seconds in 1 minute"
 msgstr "Número de segundos num minuto"
 
-#: src/backend/gsl/constants.cpp:105
+#: src/backend/gsl/constants.cpp:106
 #, kde-format
 msgid "Number of seconds in 1 hour"
 msgstr "Número de segundos numa hora"
 
-#: src/backend/gsl/constants.cpp:106
+#: src/backend/gsl/constants.cpp:107
 #, kde-format
 msgid "Number of seconds in 1 day"
 msgstr "Número de segundos num dia"
 
-#: src/backend/gsl/constants.cpp:107
+#: src/backend/gsl/constants.cpp:108
 #, kde-format
 msgid "Number of seconds in 1 week"
 msgstr "Número de segundos numa semana"
 
 #. i18n("Imperial Units"));
-#: src/backend/gsl/constants.cpp:110
+#: src/backend/gsl/constants.cpp:111
 #, kde-format
 msgid "Length of 1 inch"
 msgstr "Comprimento de 1 polegada"
 
-#: src/backend/gsl/constants.cpp:111
+#: src/backend/gsl/constants.cpp:112
 #, kde-format
 msgid "Length of 1 foot"
 msgstr "Comprimento de 1 pé"
 
-#: src/backend/gsl/constants.cpp:112
+#: src/backend/gsl/constants.cpp:113
 #, kde-format
 msgid "Length of 1 yard"
 msgstr "Comprimento de 1 jarda"
 
-#: src/backend/gsl/constants.cpp:113
+#: src/backend/gsl/constants.cpp:114
 #, kde-format
 msgid "Length of 1 mile"
 msgstr "Comprimento de 1 milha"
 
-#: src/backend/gsl/constants.cpp:114
+#: src/backend/gsl/constants.cpp:115
 #, kde-format
 msgid "Length of 1/1000th of an inch"
 msgstr "Comprimento de 1 milésimo de polegada"
 
 #. i18n("Speed and Nautical Units"));
-#: src/backend/gsl/constants.cpp:117
+#: src/backend/gsl/constants.cpp:118
 #, kde-format
 msgid "Speed of 1 kilometer per hour"
 msgstr "Velocidade de 1 quilómetro por hora"
 
-#: src/backend/gsl/constants.cpp:118
+#: src/backend/gsl/constants.cpp:119
 #, kde-format
 msgid "Speed of 1 mile per hour"
 msgstr "Velocidade de 1 milha por hora"
 
-#: src/backend/gsl/constants.cpp:119
+#: src/backend/gsl/constants.cpp:120
 #, kde-format
 msgid "Length of 1 nautical mile"
 msgstr "Comprimento de 1 milha náutica"
 
-#: src/backend/gsl/constants.cpp:120
+#: src/backend/gsl/constants.cpp:121
 #, kde-format
 msgid "Length of 1 fathom"
 msgstr "Comprimento de 1 fathom"
 
-#: src/backend/gsl/constants.cpp:121
+#: src/backend/gsl/constants.cpp:122
 #, kde-format
 msgid "Speed of 1 knot"
 msgstr "Velocidade de 1 nó"
 
 #. i18n("Printers Units"));
-#: src/backend/gsl/constants.cpp:124
+#: src/backend/gsl/constants.cpp:125
 #, kde-format
 msgid "length of 1 printer's point [1/72 inch]"
 msgstr "Comprimento de 1 ponto da impressora [1/72 de polegada]"
 
-#: src/backend/gsl/constants.cpp:125
+#: src/backend/gsl/constants.cpp:126
 #, kde-format
 msgid "length of 1 TeX point [1/72.27 inch]"
 msgstr "Comprimento de 1 ponto no TeX [1/72,27 de polegada]"
 
 #. i18n("Volume, Area and Length"));
-#: src/backend/gsl/constants.cpp:128
+#: src/backend/gsl/constants.cpp:129
 #, kde-format
 msgid "Length of 1 micron"
 msgstr "Comprimento de 1 mícron"
 
-#: src/backend/gsl/constants.cpp:129
+#: src/backend/gsl/constants.cpp:130
 #, kde-format
 msgid "Area of 1 hectare"
 msgstr "Área de 1 hectare"
 
-#: src/backend/gsl/constants.cpp:130
+#: src/backend/gsl/constants.cpp:131
 #, kde-format
 msgid "Area of 1 acre"
 msgstr "Área de 1 acre"
 
-#: src/backend/gsl/constants.cpp:131
+#: src/backend/gsl/constants.cpp:132
 #, kde-format
 msgid "Volume of 1 liter"
 msgstr "Volume of 1 litro"
 
-#: src/backend/gsl/constants.cpp:132
+#: src/backend/gsl/constants.cpp:133
 #, kde-format
 msgid "Volume of 1 US gallon"
 msgstr "Volume of 1 galão dos EUA"
 
-#: src/backend/gsl/constants.cpp:133
+#: src/backend/gsl/constants.cpp:134
 #, kde-format
 msgid "Volume of 1 Canadian gallon"
 msgstr "Volume of 1 galão do Canadá"
 
-#: src/backend/gsl/constants.cpp:134
+#: src/backend/gsl/constants.cpp:135
 #, kde-format
 msgid "Volume of 1 UK gallon"
 msgstr "Volume of 1 galão britânico"
 
-#: src/backend/gsl/constants.cpp:135
+#: src/backend/gsl/constants.cpp:136
 #, kde-format
 msgid "Volume of 1 quart"
 msgstr "Volume de 1 quartil"
 
-#: src/backend/gsl/constants.cpp:136
+#: src/backend/gsl/constants.cpp:137
 #, kde-format
 msgid "Volume of 1 pint"
 msgstr "Volume de 1 copo"
 
 #. i18n("Mass and Weight"));
-#: src/backend/gsl/constants.cpp:139
+#: src/backend/gsl/constants.cpp:140
 #, kde-format
 msgid "Mass of 1 pound"
 msgstr "Massa de 1 libra"
 
-#: src/backend/gsl/constants.cpp:140
+#: src/backend/gsl/constants.cpp:141
 #, kde-format
 msgid "Mass of 1 ounce"
 msgstr "Massa de 1 onça"
 
-#: src/backend/gsl/constants.cpp:141
+#: src/backend/gsl/constants.cpp:142
 #, kde-format
 msgid "Mass of 1 ton"
 msgstr "Massa de 1 tonelada"
 
-#: src/backend/gsl/constants.cpp:142
+#: src/backend/gsl/constants.cpp:143
 #, kde-format
 msgid "Mass of 1 metric ton [1000 kg]"
 msgstr "Massa de 1 tonelada métrica [1000 kg]"
 
-#: src/backend/gsl/constants.cpp:143
+#: src/backend/gsl/constants.cpp:144
 #, kde-format
 msgid "Mass of 1 UK ton"
 msgstr "Massa de 1 tonelada britânica"
 
-#: src/backend/gsl/constants.cpp:144
+#: src/backend/gsl/constants.cpp:145
 #, kde-format
 msgid "Mass of 1 troy ounce"
 msgstr "Massa de 1 onça monetária"
 
-#: src/backend/gsl/constants.cpp:145
+#: src/backend/gsl/constants.cpp:146
 #, kde-format
 msgid "Mass of 1 carat"
 msgstr "Massa de 1 quilate"
 
-#: src/backend/gsl/constants.cpp:146
+#: src/backend/gsl/constants.cpp:147
 #, kde-format
 msgid "Force of 1 gram weight"
 msgstr "Força do peso de 1 grama"
 
-#: src/backend/gsl/constants.cpp:147
+#: src/backend/gsl/constants.cpp:148
 #, kde-format
 msgid "Force of 1 pound weight"
 msgstr "Força do peso de 1 libra"
 
-#: src/backend/gsl/constants.cpp:148
+#: src/backend/gsl/constants.cpp:149
 #, kde-format
 msgid "Force of 1 kilopound weight"
 msgstr "Força do peso de 1 quilo-libra"
 
-#: src/backend/gsl/constants.cpp:149
+#: src/backend/gsl/constants.cpp:150
 #, kde-format
 msgid "Force of 1 poundal"
 msgstr "Força do peso de 1 quintal de libra"
 
 #. i18n("Thermal Energy and Power"));
-#: src/backend/gsl/constants.cpp:152
+#: src/backend/gsl/constants.cpp:153
 #, kde-format
 msgid "Energy of 1 calorie"
 msgstr "Energia de 1 caloria"
 
-#: src/backend/gsl/constants.cpp:153
+#: src/backend/gsl/constants.cpp:154
 #, kde-format
 msgid "Energy of 1 British Thermal Unit"
 msgstr "Energia de 1 Unidade Térmica Britânica"
 
-#: src/backend/gsl/constants.cpp:154
+#: src/backend/gsl/constants.cpp:155
 #, kde-format
 msgid "Energy of 1 Therm"
 msgstr "Energia de 1 Therm"
 
-#: src/backend/gsl/constants.cpp:155
+#: src/backend/gsl/constants.cpp:156
 #, kde-format
 msgid "Power of 1 horsepower"
 msgstr "Potência de 1 cavalo-vapor"
 
 #. i18n("Pressure"));
-#: src/backend/gsl/constants.cpp:158
+#: src/backend/gsl/constants.cpp:159
 #, kde-format
 msgid "Pressure of 1 bar"
 msgstr "Pressão de 1 bar"
 
-#: src/backend/gsl/constants.cpp:159
+#: src/backend/gsl/constants.cpp:160
 #, kde-format
 msgid "Pressure of 1 standard atmosphere"
 msgstr "Pressão de 1 atmosfera-padrão"
 
-#: src/backend/gsl/constants.cpp:160
+#: src/backend/gsl/constants.cpp:161
 #, kde-format
 msgid "Pressure of 1 torr"
 msgstr "Pressão de 1 torr"
 
-#: src/backend/gsl/constants.cpp:161
+#: src/backend/gsl/constants.cpp:162
 #, kde-format
 msgid "Pressure of 1 meter of mercury"
 msgstr "Pressão de 1 metro de mercúrio"
 
-#: src/backend/gsl/constants.cpp:162
+#: src/backend/gsl/constants.cpp:163
 #, kde-format
 msgid "Pressure of 1 inch of mercury"
 msgstr "Pressão de 1 polegada de mercúrio"
 
-#: src/backend/gsl/constants.cpp:163
+#: src/backend/gsl/constants.cpp:164
 #, kde-format
 msgid "Pressure of 1 inch of water"
 msgstr "Pressão de 1 polegada de água"
 
-#: src/backend/gsl/constants.cpp:164
+#: src/backend/gsl/constants.cpp:165
 #, kde-format
 msgid "Pressure of 1 pound per square inch"
 msgstr "Pressão de 1 libra por polegada quadrada"
 
 #. i18n("Viscosity"));
-#: src/backend/gsl/constants.cpp:167
+#: src/backend/gsl/constants.cpp:168
 #, kde-format
 msgid "Dynamic viscosity of 1 poise"
 msgstr "Viscosidade dinâmica de 1 poise"
 
-#: src/backend/gsl/constants.cpp:168
+#: src/backend/gsl/constants.cpp:169
 #, kde-format
 msgid "Kinematic viscosity of 1 stokes"
 msgstr "Viscosidade cinética de 1 stokes"
 
 #. i18n("Light and Illumination"));
-#: src/backend/gsl/constants.cpp:171
+#: src/backend/gsl/constants.cpp:172
 #, kde-format
 msgid "Luminance of 1 stilb"
 msgstr "Luminância de 1 stilb"
 
-#: src/backend/gsl/constants.cpp:172
+#: src/backend/gsl/constants.cpp:173
 #, kde-format
 msgid "Luminous flux of 1 lumen"
 msgstr "Fluxo luminoso de 1 lúmen"
 
-#: src/backend/gsl/constants.cpp:173
+#: src/backend/gsl/constants.cpp:174
 #, kde-format
 msgid "Illuminance of 1 lux"
 msgstr "Luminosidade de 1 lux"
 
-#: src/backend/gsl/constants.cpp:174
+#: src/backend/gsl/constants.cpp:175
 #, kde-format
 msgid "Illuminance of 1 phot"
 msgstr "Luminosidade de 1 fotão"
 
-#: src/backend/gsl/constants.cpp:175
+#: src/backend/gsl/constants.cpp:176
 #, kde-format
 msgid "Illuminance of 1 footcandle"
 msgstr "Luminosidade de 1 vela"
 
-#: src/backend/gsl/constants.cpp:176
+#: src/backend/gsl/constants.cpp:177
 #, kde-format
 msgid "Luminance of 1 lambert"
 msgstr "Luminância de 1 lambert"
 
-#: src/backend/gsl/constants.cpp:177
+#: src/backend/gsl/constants.cpp:178
 #, kde-format
 msgid "Luminance of 1 footlambert"
 msgstr "Luminância de 1 lambert-pé"
 
 #. i18n("Radioactivity"));
-#: src/backend/gsl/constants.cpp:180
+#: src/backend/gsl/constants.cpp:181
 #, kde-format
 msgid "Activity of 1 curie"
 msgstr "Actividade de 1 curie"
 
-#: src/backend/gsl/constants.cpp:181
+#: src/backend/gsl/constants.cpp:182
 #, kde-format
 msgid "Exposure of 1 roentgen"
 msgstr "Exposição de 1 roentgen"
 
-#: src/backend/gsl/constants.cpp:182
+#: src/backend/gsl/constants.cpp:183
 #, kde-format
 msgid "Absorbed dose of 1 rad"
 msgstr "Dose absorvida de 1 rad"
 
 #. i18n("Force and Energy"));
-#: src/backend/gsl/constants.cpp:185
+#: src/backend/gsl/constants.cpp:186
 #, kde-format
 msgid "SI unit of force"
 msgstr "Unidade SI de força"
 
-#: src/backend/gsl/constants.cpp:186
+#: src/backend/gsl/constants.cpp:187
 #, kde-format
 msgid "Force of 1 Dyne"
 msgstr "Força de 1 Dyne"
 
-#: src/backend/gsl/constants.cpp:187
+#: src/backend/gsl/constants.cpp:188
 #, kde-format
 msgid "SI unit of energy"
 msgstr "Unidade SI de energia"
 
-#: src/backend/gsl/constants.cpp:188
+#: src/backend/gsl/constants.cpp:189
 #, kde-format
 msgid "Energy 1 erg"
 msgstr "Energia de 1 erg"
@@ -6962,7 +6968,7 @@ msgid "%1: set connectionline curve name"
 msgstr "%1: mudar o nome da curva da linha de ligação"
 
 #: src/backend/worksheet/Line.cpp:109
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:395
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:404
 #, kde-format
 msgid "%1: line type changed"
 msgstr "%1: o tipo de linha foi modificado"
@@ -7025,7 +7031,7 @@ msgstr "%1: mudar o preenchimento da direita"
 msgid "%1: set bottom padding"
 msgstr "%1: mudar o preenchimento do fundo"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:266
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:267
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:86
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:224
 #: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:80
@@ -7045,7 +7051,7 @@ msgstr "Horizontal"
 
 #. i18n("AvgShifted Histogram"));
 #. Orientation
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:269
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:270
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:89
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:227
 #: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:83
@@ -7065,7 +7071,7 @@ msgstr "Horizontal"
 msgid "Vertical"
 msgstr "Vertical"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:289
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:290
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:97
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:235
 #: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:91
@@ -7080,7 +7086,7 @@ msgstr "Orientação"
 #. i18n: ectx: property (text), widget (QLabel, lEstimationLine)
 #. i18n: ectx: property (text), widget (QLabel, lWhiskersFormat)
 #. i18n: ectx: property (text), widget (QLabel, lLine)
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:295
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:296
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:134
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:219
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:488
@@ -7096,14 +7102,14 @@ msgstr "Orientação"
 msgid "Line"
 msgstr "Linha"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:297
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:298
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:136
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:152
 #, kde-format
 msgid "Style"
 msgstr "Estilo"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:302
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:303
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:141
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:157
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:319
@@ -7112,288 +7118,288 @@ msgstr "Estilo"
 msgid "Color"
 msgstr "Cor"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:523
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:528
 #, kde-format
 msgid "%1: set axis range type"
 msgstr "%1: mudar o tipo de intervalo do eixo"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:548
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:553
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:623
 #, kde-format
 msgid "%1: set axis orientation"
 msgstr "%1: mudar a orientação do eixo"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:555
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:560
 #, kde-format
 msgid "%1: set axis position"
 msgstr "%1: mudar a posição do eixo"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:563
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:568
 #, kde-format
 msgid "%1: set axis offset"
 msgstr "%1: mudar a posição do eixo"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:578
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:583
 #, kde-format
 msgid "%1: set axis range"
 msgstr "%1: mudar o intervalo do eixo"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:617
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:622
 #, fuzzy, kde-format
 #| msgid "%1: set range"
 msgid "%1: set range scale"
 msgstr "%1: mudar o intervalo"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:624
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:629
 #, fuzzy, kde-format
 #| msgid "%1: set visible"
 msgid "%1: set scale"
 msgstr "%1: mudar para visível"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:631
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:636
 #, kde-format
 msgid "%1: set major tick start type"
 msgstr "%1: mudar o tipo do início dos traços maiores"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:638
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:643
 #, kde-format
 msgid "%1: set major tick start offset"
 msgstr "%1: mudar o deslocamento do início dos traços maiores"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:646
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:651
 #, kde-format
 msgid "%1: set major tick start value"
 msgstr "%1: mudar o valor inicial dos traços maiores"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:658
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:663
 #, kde-format
 msgid "%1: set axis scaling factor"
 msgstr "%1: mudar o factor de escala do eixo"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:667
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:672
 #, kde-format
 msgid "%1: set axis zero offset"
 msgstr "%1: mudar a posição do zero no eixo"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:673
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:678
 #, kde-format
 msgid "%1: show scale and offset"
 msgstr "%1: mudar a escala e a posição"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:680
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:685
 #, kde-format
 msgid "%1: set axis logical position"
 msgstr "%1: mudar a posição lógica do eixo"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:688
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:695
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:693
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:700
 #, kde-format
 msgid "%1: set title offset"
 msgstr "%1: mudar a posição do título"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:703
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:708
 #, kde-format
 msgid "%1: set arrow type"
 msgstr "%1: mudar o tipo de seta"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:710
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:715
 #, kde-format
 msgid "%1: set arrow position"
 msgstr "%1: mudar a posição da seta"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:717
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:722
 #, kde-format
 msgid "%1: set arrow size"
 msgstr "%1: mudar o tamanho da seta"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:725
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:730
 #, kde-format
 msgid "%1: set major ticks direction"
 msgstr "%1: mudar a direcção dos traços maiores"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:732
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:737
 #, kde-format
 msgid "%1: set major ticks type"
 msgstr "%1: mudar o tipo dos traços maiores"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:740
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:745
 #, kde-format
 msgid "%1: enable/disable major automatic tick numbers"
 msgstr "%1: activar/desactivar os números automáticos dos traços maiores"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:742
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:757
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:747
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:762
 #, kde-format
 msgid "%1: set the total number of the major ticks"
 msgstr "%1: mudar o número total dos traços maiores"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:759
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:841
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:764
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:846
 #, kde-format
 msgid "%1: disable major automatic tick numbers"
 msgstr "%1: desactivar os números automáticos dos traços maiores"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:782
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:787
 #, kde-format
 msgid "%1: set the spacing of the major ticks"
 msgstr "%1: mudar o espaço entre os traços maiores"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:789
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:794
 #, kde-format
 msgid "%1: assign major ticks' values"
 msgstr "%1: atribuir os valores aos traços maiores"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:803
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:808
 #, kde-format
 msgid "%1: set major ticks length"
 msgstr "%1: mudar o tamanho dos traços maiores"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:811
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:816
 #, kde-format
 msgid "%1: set minor ticks direction"
 msgstr "%1: mudar a direcção dos traços menores"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:818
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:823
 #, kde-format
 msgid "%1: set minor ticks type"
 msgstr "%1: mudar o tipo dos traços menores"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:826
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:831
 #, kde-format
 msgid "%1: enable/disable minor automatic tick numbers"
 msgstr "%1: activar/desactivar os números automáticos dos traços menores"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:829
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:840
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:834
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:845
 #, kde-format
 msgid "%1: set the total number of the minor ticks"
 msgstr "%1: mudar o número total dos traços menores"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:871
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:876
 #, kde-format
 msgid "%1: set the spacing of the minor ticks"
 msgstr "%1: mudar o espaço entre os traços menores"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:878
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:883
 #, kde-format
 msgid "%1: assign minor ticks' values"
 msgstr "%1: atribuir valores aos traços menores"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:892
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:897
 #, kde-format
 msgid "%1: set minor ticks length"
 msgstr "%1: mudar o tamanho dos traços menores"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:901
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:906
 #, kde-format
 msgid "%1: set labels format"
 msgstr "%1: mudar o formato das legendas"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:908
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:913
 #, kde-format
 msgid "%1: set labels format automatic"
 msgstr "%1: mudar o formato automático das legendas"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:915
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:922
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:920
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:927
 #, kde-format
 msgid "%1: set labels precision"
 msgstr "%1: mudar a precisão das legendas"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:929
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:934
 #, kde-format
 msgid "%1: set labels datetime format"
 msgstr "%1: mudar o formato das datas/horas das legendas"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:936
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:941
 #, kde-format
 msgid "%1: set labels position"
 msgstr "%1: mudar a posição das legendas"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:943
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:948
 #, kde-format
 msgid "%1: set label offset"
 msgstr "%1: mudar a posição adicional das legendas"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:950
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:955
 #, kde-format
 msgid "%1: set label rotation angle"
 msgstr "%1: mudar o ângulo de rotação das legendas"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:957
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:962
 #, kde-format
 msgid "%1: set labels text type"
 msgstr "%1: mudar o tipo de texto da legenda"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:964
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:969
 #, kde-format
 msgid "%1: set labels text column"
 msgstr "%1: mudar a coluna do texto da legenda"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:978
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:983
 #, kde-format
 msgid "%1: set label color"
 msgstr "%1: mudar a cor das legendas"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:985
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:990
 #, kde-format
 msgid "%1: set label font"
 msgstr "%1: mudar o tipo de letra das legendas"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:992
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:997
 #, kde-format
 msgid "%1: set labels background type"
 msgstr "%1: mudar o tipo de fundo das legendas"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:999
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1004
 #, kde-format
 msgid "%1: set label background color"
 msgstr "%1: mudar a cor de fundo das legendas"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1006
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1011
 #, kde-format
 msgid "%1: set label prefix"
 msgstr "%1: mudar o prefixo das legendas"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1013
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1018
 #, kde-format
 msgid "%1: set label suffix"
 msgstr "%1: mudar o sufixo das legendas"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1020
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1025
 #, kde-format
 msgid "%1: set labels opacity"
 msgstr "%1: mudar a opacidade das legendas"
 
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:211
-#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:201
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:220
+#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:210
 #, kde-format
 msgid "%1: set x column"
 msgstr "%1: definir a coluna do X"
 
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:229
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:443
-#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:219
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:238
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:448
+#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:228
 #, kde-format
 msgid "%1: set data columns"
 msgstr "%1: definir as colunas de dados"
 
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:251
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:260
 #, kde-format
 msgid "%1: set type"
 msgstr "%1: mudar o tipo"
 
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:258
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:471
-#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:240
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:267
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:476
+#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:249
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:196
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:219
 #, kde-format
 msgid "%1: set orientation"
 msgstr "%1: mudar a orientação"
 
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:265
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:485
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:274
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:490
 #, kde-format
 msgid "%1: width factor changed"
 msgstr "%1: o factor da largura foi modificado"
@@ -7446,65 +7452,65 @@ msgstr "número de pontos fora da amostra"
 msgid "far out points count"
 msgstr "número de pontos distantes"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:464
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:469
 #, kde-format
 msgid "%1: set ordering"
 msgstr "%1: mudar a ordenação"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:478
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:483
 #, kde-format
 msgid "%1: variable width changed"
 msgstr "%1: a largura variável foi modificada"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:492
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:497
 #, kde-format
 msgid "%1: changed notches"
 msgstr "%1: cortes modificados"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:500
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:505
 #, kde-format
 msgid "%1: set whiskers type"
 msgstr "%1: definir o tipo de recta"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:507
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:512
 #, kde-format
 msgid "%1: set whiskers range parameter"
 msgstr "%1: definir o parâmetro da gama dos traços"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:514
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:519
 #, kde-format
 msgid "%1: set whiskers cap size"
 msgstr "%1: definir o tamanho do extremo da recta"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:522
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:527
 #, kde-format
 msgid "%1: jitterring changed"
 msgstr "%1: desvios modificados"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:530
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:520
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:615
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:535
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:529
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:624
 #, kde-format
 msgid "%1: change rug enabled"
 msgstr "%1: activação da escala em X"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:537
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:527
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:629
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:542
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:536
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:638
 #, kde-format
 msgid "%1: change rug width"
 msgstr "%1: mudar a largura das marcas"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:544
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:534
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:636
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:549
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:543
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:645
 #, kde-format
 msgid "%1: change rug length"
 msgstr "%1: mudar o comprimento das marcas"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:551
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:541
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:643
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:556
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:550
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:652
 #, kde-format
 msgid "%1: change rug offset"
 msgstr "%1: mudar a posição das marcas"
@@ -7516,7 +7522,7 @@ msgstr "Nenhuma informação disponível"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTitle)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:163
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5008
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5009
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:483
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:543
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:459
@@ -7893,20 +7899,20 @@ msgid "%1: Cursor1 enable"
 msgstr "%1: activação do cursor 1"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1688
-#: src/backend/worksheet/Worksheet.cpp:808
+#: src/backend/worksheet/Worksheet.cpp:811
 #, kde-format
 msgid "%1: load theme %2"
 msgstr "%1: carregar o tema %2"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1690
-#: src/backend/worksheet/Worksheet.cpp:810
+#: src/backend/worksheet/Worksheet.cpp:813
 #, kde-format
 msgid "%1: load default theme"
 msgstr "%1: carregar o tema predefinido"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1692
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5318
-#: src/backend/worksheet/Worksheet.cpp:812
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5319
+#: src/backend/worksheet/Worksheet.cpp:815
 #, kde-format
 msgid "%1: set theme"
 msgstr "%1: mudar o tema"
@@ -8039,24 +8045,24 @@ msgstr "%1: adicionar uma curva de filtro de Fourier"
 msgid "Text Label"
 msgstr "Etiqueta Textual"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3717
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3718
 #, kde-format
 msgid "Not inside of the bounding rect"
 msgstr "Não dentro do rectângulo envolvente"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3941
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3962
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3942
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3963
 #, kde-format
 msgid "from x=%1 to x=%2"
 msgstr "de x=%1 até x=%2"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3949
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3975
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3950
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3976
 #, kde-format
 msgid "from y=%1 to y=%2"
 msgstr "de y=%1 até y=%2"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3994
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3995
 #, kde-format
 msgid "x=%1"
 msgstr "x=%1"
@@ -8088,50 +8094,50 @@ msgid "%1: set border corner radius"
 msgstr "%1: mudar o raio dos cantos do contorno"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:243
-#: src/backend/worksheet/Worksheet.cpp:685
-#: src/backend/worksheet/Worksheet.cpp:686
+#: src/backend/worksheet/Worksheet.cpp:688
+#: src/backend/worksheet/Worksheet.cpp:689
 #, kde-format
 msgid "%1: set layout top margin"
 msgstr "%1: mudar a margem superior da disposição"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:250
-#: src/backend/worksheet/Worksheet.cpp:695
-#: src/backend/worksheet/Worksheet.cpp:696
+#: src/backend/worksheet/Worksheet.cpp:698
+#: src/backend/worksheet/Worksheet.cpp:699
 #, kde-format
 msgid "%1: set layout bottom margin"
 msgstr "%1: mudar a margem inferior da disposição"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:257
-#: src/backend/worksheet/Worksheet.cpp:705
-#: src/backend/worksheet/Worksheet.cpp:706
+#: src/backend/worksheet/Worksheet.cpp:708
+#: src/backend/worksheet/Worksheet.cpp:709
 #, kde-format
 msgid "%1: set layout left margin"
 msgstr "%1: mudar a margem esquerda da disposição"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:264
-#: src/backend/worksheet/Worksheet.cpp:715
-#: src/backend/worksheet/Worksheet.cpp:716
+#: src/backend/worksheet/Worksheet.cpp:718
+#: src/backend/worksheet/Worksheet.cpp:719
 #, kde-format
 msgid "%1: set layout right margin"
 msgstr "%1: mudar a margem direita da disposição"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:271
-#: src/backend/worksheet/Worksheet.cpp:725
-#: src/backend/worksheet/Worksheet.cpp:726
+#: src/backend/worksheet/Worksheet.cpp:728
+#: src/backend/worksheet/Worksheet.cpp:729
 #, kde-format
 msgid "%1: set layout vertical spacing"
 msgstr "%1: mudar o espaço vertical da disposição"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:278
-#: src/backend/worksheet/Worksheet.cpp:735
-#: src/backend/worksheet/Worksheet.cpp:736
+#: src/backend/worksheet/Worksheet.cpp:738
+#: src/backend/worksheet/Worksheet.cpp:739
 #, kde-format
 msgid "%1: set layout horizontal spacing"
 msgstr "%1: mudar o espaço horizontal da disposição"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:285
-#: src/backend/worksheet/Worksheet.cpp:755
-#: src/backend/worksheet/Worksheet.cpp:756
+#: src/backend/worksheet/Worksheet.cpp:758
+#: src/backend/worksheet/Worksheet.cpp:759
 #, kde-format
 msgid "%1: set layout column count"
 msgstr "%1: mudar o número de colunas da disposição"
@@ -8181,71 +8187,71 @@ msgstr "Ajuste à Distribuição de Poisson"
 msgid "Fit Binomial Distribution"
 msgstr "Ajuste à Distribuição Binomial"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:370
-#: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:207
-#: src/backend/worksheet/plots/cartesian/QQPlot.cpp:230
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:379
+#: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:211
+#: src/backend/worksheet/plots/cartesian/QQPlot.cpp:235
 #, kde-format
 msgid "%1: set data column"
 msgstr "%1: definir a coluna de dados"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:382
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:391
 #, kde-format
 msgid "%1: set histogram type"
 msgstr "%1: definir o tipo de histograma"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:389
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:398
 #, kde-format
 msgid "%1: set histogram orientation"
 msgstr "%1: atribuir a orientação do histograma"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:396
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:405
 #, kde-format
 msgid "%1: set histogram normalization"
 msgstr "%1: atribuir a normalização do histograma"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:403
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:412
 #, kde-format
 msgid "%1: set binning method"
 msgstr "%1: definir o método de agrupamento"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:410
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:419
 #, kde-format
 msgid "%1: set bin count"
 msgstr "%1: definir o número de grupos"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:417
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:426
 #, kde-format
 msgid "%1: set bin width"
 msgstr "%1: definir a largura do grupo"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:425
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:434
 #, kde-format
 msgid "%1: change auto bin ranges"
 msgstr "%1: mudar os intervalos de agrupamento automáticos"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:473
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:482
 #, kde-format
 msgid "%1: set bin ranges start"
 msgstr "%1: mudar o início dos intervalos de agrupamento"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:480
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:489
 #, kde-format
 msgid "%1: set bin ranges end"
 msgstr "%1: mudar o fim dos intervalos de agrupamento"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:488
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:528
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:497
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:537
 #, kde-format
 msgid "%1: x-error type changed"
 msgstr "%1: o tipo de erro em X foi modificado"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:495
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:507
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:504
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:516
 #, kde-format
 msgid "%1: set error column"
 msgstr "%1: mudar a coluna do erro"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:863
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:872
 #, kde-format
 msgid ""
 "Calculation of the histogram not possible. The max value must be bigger than "
@@ -8254,25 +8260,25 @@ msgstr ""
 "Não é possível o cálculo do histograma. O valor máximo deverá ser superior "
 "ao valor mínimo."
 
-#: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:219
+#: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:223
 #, fuzzy, kde-format
 #| msgid "%1: set range type"
 msgid "%1: set kernel type"
 msgstr "%1: mudar o tipo de intervalo"
 
-#: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:226
+#: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:230
 #, fuzzy, kde-format
 #| msgid "%1: set bin width"
 msgid "%1: set bandwidth type"
 msgstr "%1: definir a largura do grupo"
 
-#: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:233
+#: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:237
 #, fuzzy, kde-format
 #| msgid "%1: set bin width"
 msgid "%1: set bandwidth"
 msgstr "%1: definir a largura do grupo"
 
-#: src/backend/worksheet/plots/cartesian/QQPlot.cpp:242
+#: src/backend/worksheet/plots/cartesian/QQPlot.cpp:247
 #, fuzzy, kde-format
 #| msgid "%1: set position"
 msgid "%1: set distribution"
@@ -8634,79 +8640,79 @@ msgid "club"
 msgstr "paus"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:108
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:424
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:433
 #, kde-format
 msgid "%1: set values type"
 msgstr "%1: mudar o tipo dos valores"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:119
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:431
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:440
 #, kde-format
 msgid "%1: set values column"
 msgstr "%1: mudar a coluna dos valores"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:131
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:450
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:459
 #, kde-format
 msgid "%1: set values position"
 msgstr "%1: mudar a posição dos valores"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:138
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:457
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:466
 #, kde-format
 msgid "%1: set values distance"
 msgstr "%1: mudar a distância dos valores"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:145
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:464
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:473
 #, kde-format
 msgid "%1: rotate values"
 msgstr "%1: rodar os valores"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:152
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:471
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:480
 #, kde-format
 msgid "%1: set values opacity"
 msgstr "%1: mudar a opacidade dos valores"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:159
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:478
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:487
 #, kde-format
 msgid "%1: set values numeric format"
 msgstr "%1: mudar o formato numérico dos valores"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:166
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:485
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:494
 #, kde-format
 msgid "%1: set values precision"
 msgstr "%1: mudar a precisão dos valores"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:173
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:492
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:501
 #, kde-format
 msgid "%1: set values datetime format"
 msgstr "%1: mudar o formato das datas/horas dos valores"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:180
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:499
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:508
 #, kde-format
 msgid "%1: set values prefix"
 msgstr "%1: mudar o prefixo dos valores"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:187
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:506
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:515
 #, kde-format
 msgid "%1: set values suffix"
 msgstr "%1: mudar o sufixo dos valores"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:194
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:513
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:522
 #, kde-format
 msgid "%1: set values font"
 msgstr "%1: mudar o tipo de letra dos valores"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:201
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:520
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:529
 #, kde-format
 msgid "%1: set values color"
 msgstr "%1: mudar a cor dos valores"
@@ -8762,75 +8768,75 @@ msgstr "%1: mudar as opções e efectuar a correlação"
 msgid "Navigate to \"%1\""
 msgstr "Navegar para \"%1\""
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:363
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:372
 #, kde-format
 msgid "%1: x-data source changed"
 msgstr "%1: a fonte de dados em X foi modificada"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:370
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:379
 #, kde-format
 msgid "%1: y-data source changed"
 msgstr "%1: a fonte de dados em Y foi modificada"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:387
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:396
 #, kde-format
 msgid "%1: legend visibility changed"
 msgstr "%1: visibilidade da legenda modificada"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:402
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:411
 #, kde-format
 msgid "%1: set skip line gaps"
 msgstr "%1: definir a omissão das lacunas das linhas"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:409
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:418
 #, kde-format
 msgid "%1: set increasing X"
 msgstr "%1: definir o X ascendente"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:416
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:425
 #, kde-format
 msgid "%1: set the number of interpolation points"
 msgstr "%1: mudar o número de pontos de interpolação"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:535
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:553
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:544
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:562
 #, kde-format
 msgid "%1: set x-error column"
 msgstr "%1: mudar a coluna do erro em X"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:571
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:580
 #, kde-format
 msgid "%1: y-error type changed"
 msgstr "%1: o tipo de erro em Y foi modificado"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:578
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:596
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:587
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:605
 #, kde-format
 msgid "%1: set y-error column"
 msgstr "%1: mudar a coluna do erro em Y"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:622
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:631
 #, kde-format
 msgid "%1: set rug orientation"
 msgstr "%1: mudar a orientação das marcas"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1502
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1511
 #, kde-format
 msgid "Error: Akima spline interpolation requires a minimum of 5 points."
 msgstr ""
 "Erro: a interpolação numa curva Akima precisa de um mínimo de 5 pontos."
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1504
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1513
 #, kde-format
 msgid "Error: Could not initialize the spline function."
 msgstr "Erro: Não foi possível inicializar a função da curva."
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1517
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1526
 #, kde-format
 msgid "x values must be monotonically increasing."
 msgstr "Os valores em X devem ser monotonamente ascendentes."
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1520
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1529
 #, kde-format
 msgid "Error: %1"
 msgstr "Erro: %1"
@@ -8999,36 +9005,36 @@ msgctxt "@title:window"
 msgid "Print Worksheet"
 msgstr "Imprimir a Folha de Trabalho"
 
-#: src/backend/worksheet/Worksheet.cpp:655
+#: src/backend/worksheet/Worksheet.cpp:658
 #, kde-format
 msgid "%1: change size type"
 msgstr "%1: mudar o tipo do tamanho"
 
-#: src/backend/worksheet/Worksheet.cpp:667
+#: src/backend/worksheet/Worksheet.cpp:670
 #, kde-format
 msgid "%1: change \"rescale the content\" property"
 msgstr "%1: mudar a propriedade \"dimensionar o conteúdo\""
 
-#: src/backend/worksheet/Worksheet.cpp:675
-#: src/backend/worksheet/Worksheet.cpp:676
+#: src/backend/worksheet/Worksheet.cpp:678
+#: src/backend/worksheet/Worksheet.cpp:679
 #, kde-format
 msgid "%1: set layout"
 msgstr "%1: mudar a disposição"
 
-#: src/backend/worksheet/Worksheet.cpp:745
-#: src/backend/worksheet/Worksheet.cpp:746
+#: src/backend/worksheet/Worksheet.cpp:748
+#: src/backend/worksheet/Worksheet.cpp:749
 #, kde-format
 msgid "%1: set layout row count"
 msgstr "%1: mudar o número de linhas da disposição"
 
-#: src/backend/worksheet/Worksheet.cpp:786
-#: src/backend/worksheet/Worksheet.cpp:787
+#: src/backend/worksheet/Worksheet.cpp:789
+#: src/backend/worksheet/Worksheet.cpp:790
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:371
 #, kde-format
 msgid "%1: set page size"
 msgstr "%1: mudar o tamanho da página"
 
-#: src/backend/worksheet/Worksheet.cpp:1531
+#: src/backend/worksheet/Worksheet.cpp:1536
 #, kde-format
 msgid "Curves"
 msgstr "Curvas"
