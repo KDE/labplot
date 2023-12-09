@@ -371,7 +371,7 @@ TextLabel::GluePoint TextLabel::gluePointAt(int index) {
 
 int TextLabel::gluePointCount() {
 	Q_D(const TextLabel);
-	return d->m_gluePointsTransformed.length();
+	return d->m_gluePoints.length();
 }
 
 void TextLabel::updateTeXImage() {
@@ -437,18 +437,18 @@ QRectF TextLabelPrivate::size() {
  * \return Nearest point to @param point
  */
 QPointF TextLabelPrivate::findNearestGluePoint(QPointF scenePoint) {
-	if (m_gluePointsTransformed.isEmpty())
+	if (m_gluePoints.isEmpty())
 		return boundingRect().center();
 
-	if (m_gluePointsTransformed.length() == 1)
-		return mapParentToPlotArea(mapToParent(m_gluePointsTransformed.at(0).point));
+	if (m_gluePoints.length() == 1)
+		return mapParentToPlotArea(mapToParent(m_gluePoints.at(0).point));
 
-	QPointF point = mapParentToPlotArea(mapToParent(m_gluePointsTransformed.at(0).point));
+	QPointF point = mapParentToPlotArea(mapToParent(m_gluePoints.at(0).point));
 	QPointF nearestPoint = point;
 	double distance2 = pow(point.x() - scenePoint.x(), 2) + pow(point.y() - scenePoint.y(), 2);
 	// assumption, more than one point available
-	for (int i = 1; i < m_gluePointsTransformed.length(); i++) {
-		point = mapParentToPlotArea(mapToParent(m_gluePointsTransformed.at(i).point));
+	for (int i = 1; i < m_gluePoints.length(); i++) {
+		point = mapParentToPlotArea(mapToParent(m_gluePoints.at(i).point));
 		double distance2_temp = pow(point.x() - scenePoint.x(), 2) + pow(point.y() - scenePoint.y(), 2);
 		if (distance2_temp < distance2) {
 			nearestPoint = point;
@@ -469,15 +469,15 @@ TextLabel::GluePoint TextLabelPrivate::gluePointAt(int index) {
 	QPointF pos;
 	QString name;
 
-	if (m_gluePointsTransformed.isEmpty() || index > m_gluePointsTransformed.length()) {
+	if (m_gluePoints.isEmpty() || index > m_gluePoints.length()) {
 		pos = boundingRect().center();
 		name = QLatin1String("center");
 	} else if (index < 0) {
-		pos = m_gluePointsTransformed.at(0).point;
-		name = m_gluePointsTransformed.at(0).name;
+		pos = m_gluePoints.at(0).point;
+		name = m_gluePoints.at(0).name;
 	} else {
-		pos = m_gluePointsTransformed.at(index).point;
-		name = m_gluePointsTransformed.at(index).name;
+		pos = m_gluePoints.at(index).point;
+		name = m_gluePoints.at(index).name;
 	}
 
 	return {mapParentToPlotArea(mapToParent(pos)), name};
@@ -925,13 +925,6 @@ void TextLabelPrivate::updateBorder() {
 }
 
 /*!
-	Returns the outer bounds of the item as a rectangle.
- */
-QRectF TextLabelPrivate::boundingRect() const {
-	return transformedBoundingRectangle;
-}
-
-/*!
 	Returns the shape of this item as a QPainterPath in local coordinates.
 */
 QPainterPath TextLabelPrivate::shape() const {
@@ -947,17 +940,9 @@ void TextLabelPrivate::recalcShapeAndBoundingRect() {
 	labelShape = QPainterPath();
 	if (borderShape != TextLabel::BorderShape::NoBorder) {
 		labelShape.addPath(WorksheetElement::shapeFromPath(borderShapePath, borderPen));
-		transformedBoundingRectangle = labelShape.boundingRect();
-	} else {
-		const auto& br = m_boundingRectangle;
-		labelShape.addRect(br);
-		transformedBoundingRectangle = br;
-	}
-
-	// rotate gluePoints
-	m_gluePointsTransformed.clear();
-	for (auto& gPoint : m_gluePoints)
-		m_gluePointsTransformed.append(TextLabel::GluePoint(gPoint.point, gPoint.name));
+		m_boundingRectangle = labelShape.boundingRect();
+	} else
+		labelShape.addRect(m_boundingRectangle);
 
 	Q_EMIT q->changed();
 }
@@ -1023,9 +1008,9 @@ void TextLabelPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 	// just for debugging
 	painter->setPen(QColor(Qt::GlobalColor::red));
 	QRectF gluePointRect(0, 0, 10, 10);
-	for (int i = 0; i < m_gluePointsTransformed.length(); i++) {
-		gluePointRect.moveTo(m_gluePointsTransformed[i].point.x() - gluePointRect.width() / 2,
-							 m_gluePointsTransformed[i].point.y() - gluePointRect.height() / 2);
+	for (int i = 0; i < m_gluePoints.length(); i++) {
+		gluePointRect.moveTo(m_gluePoints[i].point.x() - gluePointRect.width() / 2,
+							 m_gluePoints[i].point.y() - gluePointRect.height() / 2);
 		painter->fillRect(gluePointRect, QColor(Qt::GlobalColor::red));
 	}
 #endif
