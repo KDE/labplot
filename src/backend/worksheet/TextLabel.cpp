@@ -647,7 +647,6 @@ void TextLabelPrivate::updateBoundingRect() {
 		w = m_textItem->scaledBoundingRect().width(); // - xShift;
 		h = m_textItem->scaledBoundingRect().height(); // * yScale;
 		m_textItem->setPos(-w / 2, -h / 2);
-		// m_textItem->setPos(QPointF(-w / 2, -h / 2));
 	}
 
 	// DEBUG(Q_FUNC_INFO << ", scale factor = " << scaleFactor << ", w/h = " << w << " / " << h)
