@@ -1485,6 +1485,8 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 				// TODO: curve (legend) does not support HTML text yet.
 				// XYCurve* xyCurve = new XYCurve(curveText);
 				XYCurve* curve = new XYCurve(QString::fromLatin1(originCurve.yColumnName.c_str()));
+				if (!m_graphLayerAsPlotArea)
+					curve->setCoordinateSystemIndex(layerIndex);
 				// DEBUG("CURVE path = " << STDSTRING(data))
 				QString containerName = data.right(data.length() - 2); // strip "E_" or "T_"
 				int sheetIndex = 0; // which sheet? "@..."
@@ -1532,6 +1534,8 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 			function = m_originFile->function(funcIndex);
 
 			auto* xyEqCurve = new XYEquationCurve(QLatin1String(function.name.c_str()));
+			if (!m_graphLayerAsPlotArea)
+				xyEqCurve->setCoordinateSystemIndex(layerIndex);
 			XYEquationCurve::EquationData eqData;
 
 			eqData.count = function.totalPoints;

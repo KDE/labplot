@@ -671,25 +671,31 @@ void ProjectImportTest::testOriginMultiLayersAsCoordinateSystem() {
 	QCOMPARE(plot->rangeCount(Dimension::Y), 2);
 
 	const auto& rangeX = plot->range(Dimension::X, 0);
-	QCOMPARE(rangeX.start(), 0.75);
-	QCOMPARE(rangeX.end(), 4.25);
+	QCOMPARE(rangeX.start(), 1.);
+	QCOMPARE(rangeX.end(), 12.);
 	QCOMPARE(rangeX.scale(), RangeT::Scale::Linear);
 	QCOMPARE(rangeX.format(), RangeT::Format::Numeric);
 
 	const auto& rangeY1 = plot->range(Dimension::Y, 0);
-	QCOMPARE(rangeY1.start(), 0.75);
-	QCOMPARE(rangeY1.end(), 4.25);
+	QCOMPARE(rangeY1.start(), 1.75);
+	QCOMPARE(rangeY1.end(), 5.25);
 	QCOMPARE(rangeY1.scale(), RangeT::Scale::Linear);
 	QCOMPARE(rangeY1.format(), RangeT::Format::Numeric);
 
 	const auto& rangeY2 = plot->range(Dimension::Y, 1);
-	QCOMPARE(rangeY2.start(), 0);
-	QCOMPARE(rangeY2.end(), 10);
+	QCOMPARE(rangeY2.start(), 20);
+	QCOMPARE(rangeY2.end(), 47.5);
 	QCOMPARE(rangeY2.scale(), RangeT::Scale::Linear);
 	QCOMPARE(rangeY2.format(), RangeT::Format::Numeric);
 
 	// coordinate systems
 	QCOMPARE(plot->coordinateSystemCount(), 2);
+
+	// curves, two curves in total, one curve for every layer/coordinate system
+	const auto& curves = plot->children<XYCurve>();
+	QCOMPARE(curves.count(), 2);
+	QCOMPARE(curves.at(0)->coordinateSystemIndex(), 0);
+	QCOMPARE(curves.at(1)->coordinateSystemIndex(), 1);
 }
 
 void ProjectImportTest::testParseOriginTags_data() {
