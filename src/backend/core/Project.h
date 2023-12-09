@@ -97,6 +97,7 @@ Q_SIGNALS:
 	void closeRequested();
 	void saved() const;
 	void loaded() const;
+	void aboutToClose() const;
 
 private:
 	Q_DECLARE_PRIVATE(Project)

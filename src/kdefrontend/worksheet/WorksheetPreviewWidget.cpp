@@ -55,6 +55,16 @@ void WorksheetPreviewWidget::setProject(Project* project) {
 
 	connect(m_project, &Project::loaded, this, &WorksheetPreviewWidget::initPreview);
 	connect(m_project, &Project::childAspectAdded, this, &WorksheetPreviewWidget::aspectAdded);
+	connect(m_project, &Project::aboutToClose, this, &WorksheetPreviewWidget::projectAboutToClose);
+}
+
+void WorksheetPreviewWidget::projectAboutToClose() {
+	m_suppressNavigate = true;
+	ui.lwPreview->clear();
+	m_suppressNavigate = false;
+	m_dirtyPreviews.clear();
+
+	m_project = nullptr;
 }
 
 /*!
@@ -62,6 +72,8 @@ void WorksheetPreviewWidget::setProject(Project* project) {
  * creates thumbnails for all available worksheets in the project.
  */
 void WorksheetPreviewWidget::initPreview() {
+	if (!m_project)
+		return;
 	const auto& worksheets = m_project->children<Worksheet>(AbstractAspect::ChildIndexFlag::Recursive);
 	for (int i = 0; i < worksheets.size(); ++i)
 		addPreview(worksheets.at(i), i);
