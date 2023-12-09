@@ -30,7 +30,8 @@ private Q_SLOTS:
 	void testOrigin_2graphs();
 
 	// multi layers
-	void testOriginMultiLayersAsCoordinateSystem();
+	void testOriginMultiLayersAsPlotAreas();
+	void testOriginMultiLayersAsCoordinateSystems();
 
 	// test tags
 	void testParseOriginTags_data();
