@@ -255,6 +255,14 @@ BASIC_SHARED_D_READER_IMPL(TextLabel, QPen, borderPen, borderPen)
 BASIC_SHARED_D_READER_IMPL(TextLabel, qreal, borderOpacity, borderOpacity)
 
 /* ============================ setter methods and undo commands ================= */
+STD_SETTER_CMD_IMPL_F_S(TextLabel, SetTeXBackgroundColor, QColor, backgroundColor, updateText)
+void TextLabel::setBackgroundColor(const QColor color) {
+	QDEBUG(Q_FUNC_INFO << ", color = " << color)
+	Q_D(TextLabel);
+	if (color != d->backgroundColor)
+		exec(new TextLabelSetTeXBackgroundColorCmd(d, color, ki18n("%1: set background color")));
+}
+
 STD_SETTER_CMD_IMPL_F_S(TextLabel, SetText, TextLabel::TextWrapper, textWrapper, updateText)
 void TextLabel::setText(const TextWrapper& textWrapper) {
 	Q_D(TextLabel);
@@ -288,8 +296,22 @@ void TextLabel::setText(const TextWrapper& textWrapper) {
 			}
 
 			exec(new TextLabelSetTextCmd(d, tw, ki18n("%1: set label text")));
-		} else
-			exec(new TextLabelSetTextCmd(d, textWrapper, ki18n("%1: set label text")));
+		} else {
+			QTextEdit te;
+			te.setHtml(textWrapper.text);
+			te.selectAll();
+			const auto& bgColor = te.textBackgroundColor();
+			QUndoCommand* parent = nullptr;
+			if (bgColor != d->backgroundColor) {
+				parent = new QUndoCommand(ki18n("%1: set label text").subs(name()).toString());
+				new TextLabelSetTeXBackgroundColorCmd(d, bgColor, ki18n("%1: set background color")), parent;
+			}
+			auto* command = new TextLabelSetTextCmd(d, textWrapper, ki18n("%1: set label text"), parent);
+			if (!parent)
+				exec(command);
+			else
+				exec(parent);
+		}
 		// If previously the text was empty, the bounding rect is zero
 		// therefore the alignment did not work properly.
 		// If text is added, the bounding rectangle is updated
@@ -320,14 +342,6 @@ void TextLabel::setFontColor(const QColor color) {
 	Q_D(TextLabel);
 	if (color != d->fontColor)
 		exec(new TextLabelSetTeXFontColorCmd(d, color, ki18n("%1: set font color")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(TextLabel, SetTeXBackgroundColor, QColor, backgroundColor, updateText)
-void TextLabel::setBackgroundColor(const QColor color) {
-	QDEBUG(Q_FUNC_INFO << ", color = " << color)
-	Q_D(TextLabel);
-	if (color != d->backgroundColor)
-		exec(new TextLabelSetTeXBackgroundColorCmd(d, color, ki18n("%1: set background color")));
 }
 
 // Border
@@ -966,6 +980,9 @@ void TextLabelPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 	}
 	}
 	painter->restore();
+
+	// Fill the complete path with the background color
+	painter->fillPath(labelShape, QBrush(backgroundColor));
 
 	// draw the border
 	if (borderShape != TextLabel::BorderShape::NoBorder) {
