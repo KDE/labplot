@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-12-07 00:38+0000\n"
-"PO-Revision-Date: 2023-12-06 14:22+0100\n"
+"PO-Revision-Date: 2023-12-08 08:06+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -2336,10 +2336,9 @@ msgid "Euler's constant"
 msgstr "Constante de Euler"
 
 #: src/backend/gsl/constants.cpp:60
-#, fuzzy, kde-format
-#| msgid "Number"
+#, kde-format
 msgid "Not a number"
-msgstr "Número"
+msgstr "Non é un número"
 
 #. i18n("Fundamental constants"));
 #: src/backend/gsl/constants.cpp:63
