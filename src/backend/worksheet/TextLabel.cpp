@@ -646,8 +646,8 @@ void TextLabelPrivate::updateBoundingRect() {
 		//	yScale = 0.95;
 		w = m_textItem->scaledBoundingRect().width(); // - xShift;
 		h = m_textItem->scaledBoundingRect().height(); // * yScale;
-		m_textItem->setPos(-w/2, -h/2);
-		//m_textItem->setPos(QPointF(-w / 2, -h / 2));
+		m_textItem->setPos(-w / 2, -h / 2);
+		// m_textItem->setPos(QPointF(-w / 2, -h / 2));
 	}
 
 	// DEBUG(Q_FUNC_INFO << ", scale factor = " << scaleFactor << ", w/h = " << w << " / " << h)
@@ -1009,8 +1009,7 @@ void TextLabelPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 	painter->setPen(QColor(Qt::GlobalColor::red));
 	QRectF gluePointRect(0, 0, 10, 10);
 	for (int i = 0; i < m_gluePoints.length(); i++) {
-		gluePointRect.moveTo(m_gluePoints[i].point.x() - gluePointRect.width() / 2,
-							 m_gluePoints[i].point.y() - gluePointRect.height() / 2);
+		gluePointRect.moveTo(m_gluePoints[i].point.x() - gluePointRect.width() / 2, m_gluePoints[i].point.y() - gluePointRect.height() / 2);
 		painter->fillRect(gluePointRect, QColor(Qt::GlobalColor::red));
 	}
 #endif
