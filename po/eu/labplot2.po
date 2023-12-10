@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-07 00:38+0000\n"
+"POT-Creation-Date: 2023-12-10 00:39+0000\n"
 "PO-Revision-Date: 2023-09-19 23:30+0200\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -444,7 +444,7 @@ msgid "incompatible filter type"
 msgstr "Iragazki mota bateraezina"
 
 #: src/backend/core/AbstractSimpleFilter.cpp:366
-#: src/backend/core/Folder.cpp:151 src/backend/core/Project.cpp:799
+#: src/backend/core/Folder.cpp:151 src/backend/core/Project.cpp:800
 #: src/backend/datasources/MQTTClient.cpp:1376
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:283
@@ -714,47 +714,47 @@ msgstr "Ez da oraindik zamatu."
 msgid "Project"
 msgstr "Proiektua"
 
-#: src/backend/core/Project.cpp:250
+#: src/backend/core/Project.cpp:251
 #, kde-format
 msgid "Close"
 msgstr "Itxi"
 
-#: src/backend/core/Project.cpp:285
+#: src/backend/core/Project.cpp:286
 #, kde-format
 msgid "%1: set author"
 msgstr "%1: ezarri egilea"
 
-#: src/backend/core/Project.cpp:292
+#: src/backend/core/Project.cpp:293
 #, fuzzy, kde-format
 msgid "%1: save calculation changed"
 msgstr "%1: gorde aldatutako kalkulua"
 
-#: src/backend/core/Project.cpp:635 src/backend/core/Project.cpp:669
+#: src/backend/core/Project.cpp:636 src/backend/core/Project.cpp:670
 #, kde-format
 msgid "Sorry. Could not open file for reading."
 msgstr "Barkatu. Ezin izan du fitxategia irakurtzeko ireki."
 
-#: src/backend/core/Project.cpp:646 src/backend/core/Project.cpp:676
+#: src/backend/core/Project.cpp:647 src/backend/core/Project.cpp:677
 #, kde-format
 msgid "The project file is empty."
 msgstr "Proiektuaren fitxategia hutsik dago."
 
-#: src/backend/core/Project.cpp:646 src/backend/core/Project.cpp:676
+#: src/backend/core/Project.cpp:647 src/backend/core/Project.cpp:677
 #, kde-format
 msgid "Error opening project"
 msgstr "Errorea proiektua irekitzean"
 
-#: src/backend/core/Project.cpp:695
+#: src/backend/core/Project.cpp:696
 #, kde-format
 msgid "Unknown error when opening the project %1."
 msgstr "Errore ezezaguna %1 proiektua irekitzean."
 
-#: src/backend/core/Project.cpp:696
+#: src/backend/core/Project.cpp:697
 #, kde-format
 msgid "Error when opening the project"
 msgstr "Errorea proiektua irekitzean"
 
-#: src/backend/core/Project.cpp:716
+#: src/backend/core/Project.cpp:717
 #, kde-format
 msgid ""
 "The project has content written with %1. Your installation of LabPlot lacks "
@@ -773,27 +773,27 @@ msgstr ""
 "\n"
 "Jarraitu nahi duzu?"
 
-#: src/backend/core/Project.cpp:723 src/backend/core/Project.cpp:726
+#: src/backend/core/Project.cpp:724 src/backend/core/Project.cpp:727
 #, kde-format
 msgid "Missing Support for CAS"
 msgstr "CASen euskarria falta da"
 
-#: src/backend/core/Project.cpp:757
+#: src/backend/core/Project.cpp:758
 #, kde-format
 msgid "Attribute 'version' is missing."
 msgstr "'bertsioa' atributua falta da."
 
-#: src/backend/core/Project.cpp:806
+#: src/backend/core/Project.cpp:807
 #, kde-format
 msgid "no project element found"
 msgstr "ez da proiektu elementurik aurkitu"
 
-#: src/backend/core/Project.cpp:808
+#: src/backend/core/Project.cpp:809
 #, kde-format
 msgid "no valid XML document found"
 msgstr "ez da baliodun XML dokumenturik aurkitu"
 
-#: src/backend/core/Project.cpp:1221
+#: src/backend/core/Project.cpp:1222
 #, kde-format
 msgid "Invalid project modification time. Using current time."
 msgstr "Proiektuaren aldatze-ordu baliogabea. Uneko ordua erabiliko da."
