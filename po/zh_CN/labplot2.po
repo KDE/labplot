@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-07-10 02:40+0000\n"
-"PO-Revision-Date: 2023-11-25 02:33\n"
+"PO-Revision-Date: 2023-12-09 09:30\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -19889,7 +19889,7 @@ msgstr ""
 #: src/kdefrontend/ui/settingsgeneralpage.ui:73
 #, kde-format
 msgid "Tab position:"
-msgstr "标签位置："
+msgstr "标签页位置："
 
 #. i18n: ectx: property (text), widget (QLabel, lNumberOptions)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:86
