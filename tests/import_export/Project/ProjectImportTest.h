@@ -29,7 +29,8 @@ private Q_SLOTS:
 	void testOrigin_2folder_with_graphs();
 	void testOrigin_2graphs();
 
-	// multi layers
+	// signgle/multi graph layers
+	void testOriginSingleLayerTwoAxes();
 	void testOriginMultiLayersAsPlotAreas();
 	void testOriginMultiLayersAsCoordinateSystems();
 
