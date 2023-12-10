@@ -1997,7 +1997,7 @@ void RetransformTest::removeReaddyColum() {
 
 	sheet->removeChild(yColumn);
 
-		   // Curve 2 got invalid
+	// Curve 2 got invalid
 	CHECK_RANGE(p, curve, Dimension::X, 0., 10.);
 	CHECK_RANGE(p, curve, Dimension::Y, 0., 10.);
 
