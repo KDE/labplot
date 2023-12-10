@@ -605,7 +605,6 @@ bool ImportSQLDatabaseWidget::prepareAndExecute(QSqlQuery& q) {
 QString ImportSQLDatabaseWidget::currentQuery(bool preview) {
 	QString query;
 	const bool customQuery = (ui.cbImportFrom->currentIndex() != 0);
-	qDebug()<<"custom query " << customQuery;
 	if (!customQuery) {
 		const auto* item = ui.lwTables->currentItem();
 		if (!item)
