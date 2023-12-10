@@ -241,7 +241,7 @@ QString AbstractAspect::comment() const {
 }
 
 QString AbstractAspect::sparkLine() const {
-	return d->m_name;
+	return QLatin1String("Test Spark");
 }
 
 void AbstractAspect::setComment(const QString& value) {

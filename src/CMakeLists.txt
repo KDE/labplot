@@ -479,7 +479,6 @@ ENDIF ()
 set(COMMONFRONTEND_SOURCES
 	${COMMONFRONTEND_DIR}/matrix/MatrixView.cpp
 	${COMMONFRONTEND_DIR}/note/NoteView.cpp
-        ${COMMONFRONTEND_DIR}/spreadsheet/TwoHeaderWidget.cpp
 	${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetCommentsHeaderModel.cpp
 	${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetHeaderView.cpp
         ${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetSparkLineHeaderModel.cpp

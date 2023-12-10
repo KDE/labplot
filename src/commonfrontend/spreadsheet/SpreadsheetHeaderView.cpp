@@ -192,44 +192,9 @@ void SpreadsheetHeaderView::showSparkLines(bool on) {
 	refresh();
 }
 
-/*!
-  adjust geometry and repaint header .
-*/
-// void SpreadsheetHeaderView::refresh() {
-// 	// Calculate total width and height
-// 	int totalWidth = 0;
-// 	int totalHeight = 0;
-
-// 	for (int i = 0; i < count(); ++i) {
-// 		totalWidth += sectionSize(i);
-// 	}
-
-// 	// Calculate height of each section
-// 	int masterHeight = QHeaderView::sizeHint().height();
-// 	int sparkLineHeight = m_sparkLineSlave->sizeHint().height();
-// 	int commentHeight = m_commentSlave->sizeHint().height();
-
-// 	// Update total height based on visible sections
-// 	totalHeight = masterHeight + (m_showSparkLines ? sparkLineHeight : 0) + (m_showComments ? commentHeight : 0);
-
-// 	// Update geometry for both slaves
-// 	m_sparkLineSlave->setGeometry(0, 0, totalWidth, sparkLineHeight);
-// 	m_commentSlave->setGeometry(0, masterHeight, totalWidth, commentHeight);
-
-// 	// Set viewport margins to create space for the sparkline section
-// 	setViewportMargins(0, 0, 0, (m_showSparkLines ? sparkLineHeight : 0) + (m_showComments ? commentHeight : 0));
-
-// 	setGeometry(0, 0, totalWidth, totalHeight);
-// 	DEBUG("Total Height" << totalHeight);
-// 	DEBUG("Total Width" << totalWidth);
-// 	DEBUG("SparkLine Height" << sparkLineHeight);
-// 	DEBUG("Comment Height" << commentHeight);
-
-// 	update();
-// }
 void SpreadsheetHeaderView::refresh() {
 	// TODO
-	//  adjust geometry and repaint header (still looking for a more elegant solution)
+	// adjust geometry and repaint header (still looking for a more elegant solution)
 	int width = sectionSize(count() - 1);
 	m_commentSlave->setStretchLastSection(true); // ugly hack (flaw in Qt? Does anyone know a better way?)
 	m_commentSlave->updateGeometry();

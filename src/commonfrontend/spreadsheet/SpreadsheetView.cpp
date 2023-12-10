@@ -126,7 +126,6 @@ SpreadsheetView::SpreadsheetView(Spreadsheet* spreadsheet, bool readOnly)
 		m_tableView->setEditTriggers(QTableView::NoEditTriggers);
 
 	init();
-	initHeader(layout);
 
 	// resize the view to show alls columns and the first 10 rows.
 	// no need to resize the view when the project is being opened,
@@ -204,8 +203,8 @@ void SpreadsheetView::init() {
 	setFocusPolicy(Qt::StrongFocus);
 	setFocus();
 	installEventFilter(this);
-	//	showComments(false);
-	//	showSparkLines(true);
+	showComments(false);
+	showSparkLines(false);
 
 	connect(m_model, &SpreadsheetModel::headerDataChanged, this, &SpreadsheetView::updateHeaderGeometry);
 	connect(m_model, &SpreadsheetModel::headerDataChanged, this, &SpreadsheetView::handleHeaderDataChanged);
@@ -222,41 +221,6 @@ void SpreadsheetView::init() {
 	connect(m_spreadsheet, &Spreadsheet::columnDeselected, this, &SpreadsheetView::deselectColumn);
 }
 
-void SpreadsheetView::initHeader(QVBoxLayout* layout) {
-	// int noOfCols = m_spreadsheet->children<Column>().count();
-	// int noOfRows = m_spreadsheet->rowCount();
-
-	// tableWidget.setRowCount(noOfRows);
-	// tableWidget.setColumnCount(noOfCols);
-
-	// // Create some sample data
-	// QTableWidgetItem* item;
-	// for (int i = 0; i < noOfRows; ++i) {
-	// 	for (int j = 0; j < noOfCols; ++j) {
-	// 		item = new QTableWidgetItem(QLatin1String("Item %1-%2").arg(i + 1).arg(j + 1));
-	// 		tableWidget.setItem(i, j, item);
-	// 	}
-	// }
-
-	// // Create the main header
-	// SpreadsheetHeaderView* mainHeader = new SpreadsheetHeaderView();
-
-	// // Create the first horizontal header
-	// SpreadsheetCommentsHeaderView* firstHorizontalHeader = new SpreadsheetCommentsHeaderView();
-	// mainHeader->addSlaveHeader(firstHorizontalHeader);
-	// firstHorizontalHeader->setSectionResizeMode(QHeaderView::Stretch);
-
-	// // Create the second horizontal header
-	// SpreadsheetSparkLineHeaderView* secondHorizontalHeader = new SpreadsheetSparkLineHeaderView();
-	// mainHeader->addSlaveHeader(secondHorizontalHeader);
-	// secondHorizontalHeader->setSectionResizeMode(QHeaderView::Fixed);
-
-	// // Create a vertical layout
-	// layout->addWidget(mainHeader);
-	// layout->addWidget(&tableWidget);
-	// layout->addWidget(firstHorizontalHeader);
-	// layout->addWidget(secondHorizontalHeader);
-}
 
 /*!
 	set the column sizes to the saved values or resize to content if no size was saved yet
@@ -1174,7 +1138,7 @@ void SpreadsheetView::showComments(bool on) {
 	m_horizontalHeader->showComments(on);
 }
 
-//! Shows (\c on=true) or hides (\c on=false) the column comments in the horizontal header
+//! Shows (\c on=true) or hides (\c on=false) the column sparkline in the horizontal header
 void SpreadsheetView::showSparkLines(bool on) {
 	m_horizontalHeader->showSparkLines(on);
 }
