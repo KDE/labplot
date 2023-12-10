@@ -97,9 +97,9 @@ void TextLabelTest::addPlot() {
 	ws->addChild(l);
 
 	QCOMPARE(l->text().mode, TextLabel::Mode::Text);
-	VERIFYLABELCOLORS(l, Qt::black, Qt::white);
+	VERIFYLABELCOLORS(l, Qt::black, Qt::transparent);
 	QCOMPARE(l->fontColor(), Qt::black);
-	QCOMPARE(l->backgroundColor(), Qt::white);
+	QCOMPARE(l->backgroundColor(), Qt::transparent);
 
 	// add title?
 
@@ -128,7 +128,7 @@ void TextLabelTest::multiLabelEditColorChange() {
 	l1->setText(QStringLiteral("Text1"));
 	ws->addChild(l1);
 
-	VERIFYLABELCOLORS(l1, Qt::black, Qt::white);
+	VERIFYLABELCOLORS(l1, Qt::black, Qt::transparent);
 
 	auto* l2 = new TextLabel(QStringLiteral("Label"));
 	QVERIFY(l2 != nullptr);
@@ -227,7 +227,7 @@ void TextLabelTest::multiLabelEditColorChangeSelection() {
 	ws->addChild(l1);
 	l1->setText(QStringLiteral("This is the text of label 1"));
 
-	VERIFYLABELCOLORS(l1, Qt::black, Qt::white);
+	VERIFYLABELCOLORS(l1, Qt::black, Qt::transparent);
 
 	auto* l2 = new TextLabel(QStringLiteral("Label"));
 	QVERIFY(l2 != nullptr);
