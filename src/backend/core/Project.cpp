@@ -195,6 +195,7 @@ Project::Project()
 
 Project::~Project() {
 	Q_D(Project);
+	Q_EMIT aboutToClose();
 #ifndef SDK
 	// if the project is being closed and the live data sources still continue reading the data,
 	// the dependent objects (columns, etc.), which are already deleted maybe here,  are still being notified about the changes.

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-07 00:38+0000\n"
+"POT-Creation-Date: 2023-12-10 00:39+0000\n"
 "PO-Revision-Date: 2023-11-26 22:42+0100\n"
 "Last-Translator: Stefan Gerlach <stefan.gerlach@uni.kn>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -447,7 +447,7 @@ msgid "incompatible filter type"
 msgstr "Inkompatibler Filtertyp"
 
 #: src/backend/core/AbstractSimpleFilter.cpp:366
-#: src/backend/core/Folder.cpp:151 src/backend/core/Project.cpp:799
+#: src/backend/core/Folder.cpp:151 src/backend/core/Project.cpp:800
 #: src/backend/datasources/MQTTClient.cpp:1376
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:283
@@ -717,47 +717,47 @@ msgstr "Noch nicht geladen."
 msgid "Project"
 msgstr "Projekt"
 
-#: src/backend/core/Project.cpp:250
+#: src/backend/core/Project.cpp:251
 #, kde-format
 msgid "Close"
 msgstr "Schließen"
 
-#: src/backend/core/Project.cpp:285
+#: src/backend/core/Project.cpp:286
 #, kde-format
 msgid "%1: set author"
 msgstr "%1: Autor festlegen"
 
-#: src/backend/core/Project.cpp:292
+#: src/backend/core/Project.cpp:293
 #, kde-format
 msgid "%1: save calculation changed"
 msgstr "%1: Berechnungen speichern geändert"
 
-#: src/backend/core/Project.cpp:635 src/backend/core/Project.cpp:669
+#: src/backend/core/Project.cpp:636 src/backend/core/Project.cpp:670
 #, kde-format
 msgid "Sorry. Could not open file for reading."
 msgstr "Die Datei kann leider nicht zum Lesen geöffnet werden."
 
-#: src/backend/core/Project.cpp:646 src/backend/core/Project.cpp:676
+#: src/backend/core/Project.cpp:647 src/backend/core/Project.cpp:677
 #, kde-format
 msgid "The project file is empty."
 msgstr "Die Projektdatei ist leer."
 
-#: src/backend/core/Project.cpp:646 src/backend/core/Project.cpp:676
+#: src/backend/core/Project.cpp:647 src/backend/core/Project.cpp:677
 #, kde-format
 msgid "Error opening project"
 msgstr "Fehler beim Öffnen des Projekts"
 
-#: src/backend/core/Project.cpp:695
+#: src/backend/core/Project.cpp:696
 #, kde-format
 msgid "Unknown error when opening the project %1."
 msgstr "Unbekannter Fehler beim Öffnen des Projekts %1."
 
-#: src/backend/core/Project.cpp:696
+#: src/backend/core/Project.cpp:697
 #, kde-format
 msgid "Error when opening the project"
 msgstr "Fehler beim Öffnen des Projekts"
 
-#: src/backend/core/Project.cpp:716
+#: src/backend/core/Project.cpp:717
 #, kde-format
 msgid ""
 "The project has content written with %1. Your installation of LabPlot lacks "
@@ -776,27 +776,27 @@ msgstr ""
 "\n"
 "Möchten Sie fortfahren?"
 
-#: src/backend/core/Project.cpp:723 src/backend/core/Project.cpp:726
+#: src/backend/core/Project.cpp:724 src/backend/core/Project.cpp:727
 #, kde-format
 msgid "Missing Support for CAS"
 msgstr "Fehlende Unterstützung für CAS"
 
-#: src/backend/core/Project.cpp:757
+#: src/backend/core/Project.cpp:758
 #, kde-format
 msgid "Attribute 'version' is missing."
 msgstr "Das Attribut „version“ fehlt."
 
-#: src/backend/core/Project.cpp:806
+#: src/backend/core/Project.cpp:807
 #, kde-format
 msgid "no project element found"
 msgstr "Kein Projektelement gefunden"
 
-#: src/backend/core/Project.cpp:808
+#: src/backend/core/Project.cpp:809
 #, kde-format
 msgid "no valid XML document found"
 msgstr "Kein gültiges XML-Dokument gefunden"
 
-#: src/backend/core/Project.cpp:1221
+#: src/backend/core/Project.cpp:1222
 #, kde-format
 msgid "Invalid project modification time. Using current time."
 msgstr ""

@@ -42,6 +42,7 @@ private:
 	void contextMenuEvent(QContextMenuEvent*) override;
 	void resizeEvent(QResizeEvent*) override;
 	void showEvent(QShowEvent*) override;
+	void projectAboutToClose();
 
 private Q_SLOTS:
 	void initPreview();

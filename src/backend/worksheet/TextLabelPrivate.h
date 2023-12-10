@@ -65,19 +65,16 @@ public:
 
 	ScaledTextItem* m_textItem{nullptr};
 
-	QRectF transformedBoundingRectangle; // bounding rectangle of transformed (rotated etc.) text
 	QPainterPath borderShapePath;
 	QPainterPath labelShape;
 
 	// reimplemented from QGraphicsItem
-	QRectF boundingRect() const override;
 	QPainterPath shape() const override;
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* = nullptr) override;
 	TextLabel* const q{nullptr};
 
 	// used in the InfoElement (Marker) to attach the line to the label
 	QVector<TextLabel::GluePoint> m_gluePoints;
-	QVector<TextLabel::GluePoint> m_gluePointsTransformed;
 };
 
 #endif

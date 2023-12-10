@@ -159,10 +159,14 @@ void Axis::init(Orientation orientation) {
 	d->title->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
 	d->title->graphicsItem()->setFlag(QGraphicsItem::ItemIsFocusable, false);
 	d->title->graphicsItem()->setAcceptHoverEvents(false);
-	if (d->orientation == Orientation::Vertical)
+	if (d->orientation == Orientation::Vertical) {
 		d->title->setRotationAngle(90);
-	d->titleOffsetX = Worksheet::convertToSceneUnits(2, Worksheet::Unit::Point); // distance to the axis tick labels
-	d->titleOffsetY = Worksheet::convertToSceneUnits(2, Worksheet::Unit::Point); // distance to the axis tick labels
+		d->titleOffsetX = 0; // distance to the axis tick labels
+		d->titleOffsetY = 0; // centering the title
+	} else {
+		d->titleOffsetX = 0; // centering the title
+		d->titleOffsetY = 0; // distance to the axis tick labels
+	}
 
 	d->majorTicksDirection = (Axis::TicksDirection)group.readEntry(QStringLiteral("MajorTicksDirection"), (int)Axis::ticksOut);
 	d->majorTicksType = (TicksType)group.readEntry(QStringLiteral("MajorTicksType"), static_cast<int>(TicksType::TotalNumber));
