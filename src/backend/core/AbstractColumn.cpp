@@ -567,8 +567,8 @@ void AbstractColumn::removeFormat() {
 }
 
 void AbstractColumn::reset() {
-	disconnect(this, nullptr, nullptr, nullptr);
 	Q_EMIT aboutToReset(this);
+	disconnect(this, nullptr, nullptr, nullptr);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
