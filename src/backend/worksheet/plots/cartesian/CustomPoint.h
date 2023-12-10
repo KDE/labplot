@@ -38,6 +38,7 @@ public:
 
 	void retransform() override;
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
+	static QString xmlName();
 
 	typedef CustomPointPrivate Private;
 
