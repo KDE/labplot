@@ -302,7 +302,7 @@ void InfoElement::addCurve(const XYCurve* curve, CustomPoint* custompoint) {
  * @param curvePath path from the curve
  * @param custompoint adding already created custom point
  */
-void InfoElement::addCurvePath(QString& curvePath, CustomPoint* custompoint) {
+void InfoElement::addCurvePath(const QString& curvePath, CustomPoint* custompoint) {
 	for (auto& markerpoint : markerpoints) {
 		if (curvePath == markerpoint.curvePath)
 			return;
@@ -435,15 +435,15 @@ void InfoElement::setZValue(qreal value) {
 /*!
  * Returns the amount of markerpoints. Used in the InfoElementDock to fill listWidget.
  */
-int InfoElement::markerPointsCount() {
+int InfoElement::markerPointsCount() const {
 	return markerpoints.length();
 }
 
-TextLabel::GluePoint InfoElement::gluePoint(int index) {
+TextLabel::GluePoint InfoElement::gluePoint(int index) const {
 	return m_title->gluePointAt(index);
 }
 
-int InfoElement::gluePointsCount() {
+int InfoElement::gluePointsCount() const {
 	return m_title->gluePointCount();
 }
 
@@ -451,7 +451,7 @@ int InfoElement::gluePointsCount() {
  * Returns the Markerpoint at index \p index. Used in the InfoElementDock to fill listWidget
  * @param index
  */
-InfoElement::MarkerPoints_T InfoElement::markerPointAt(int index) {
+InfoElement::MarkerPoints_T InfoElement::markerPointAt(int index) const {
 	return markerpoints.at(index);
 }
 
@@ -695,7 +695,7 @@ void InfoElement::childAdded(const AbstractAspect* child) {
  * \param new_x
  * \return
  */
-int InfoElement::currentIndex(double x, double* found_x) {
+int InfoElement::currentIndex(double x, double* found_x) const {
 	if (!isValid())
 		return -1;
 	for (auto& markerpoint : markerpoints) {
@@ -1305,7 +1305,6 @@ bool InfoElement::load(XmlStreamReader* reader, bool preview) {
 
 	QXmlStreamAttributes attribs;
 	QString str;
-	QString curvePath;
 
 	while (!reader->atEnd()) {
 		reader->readNext();
@@ -1345,22 +1344,8 @@ bool InfoElement::load(XmlStreamReader* reader, bool preview) {
 			}
 			if (!m_title->load(reader, preview))
 				return false;
-		} else if (reader->name() == QLatin1String("customPoint")) {
-			if (curvePath.isEmpty()) // safety check in case the xml is broken
-				continue;
-
-			auto* point = new CustomPoint(m_plot, QString());
-			point->setIsLoading(true);
-			if (!point->load(reader, preview)) {
-				delete point;
-				return false;
-			}
-			this->addChild(point);
-			addCurvePath(curvePath, point);
-			curvePath.clear();
-		} else if (reader->name() == QLatin1String("point")) {
-			attribs = reader->attributes();
-			curvePath = attribs.value(QStringLiteral("curvepath")).toString();
+		} else if (reader->name() == QLatin1String("points")) {
+			loadPoints(reader, preview);
 		} else { // unknown element
 			reader->raiseUnknownElementWarning();
 			if (!reader->skipToEndElement())
@@ -1369,6 +1354,36 @@ bool InfoElement::load(XmlStreamReader* reader, bool preview) {
 	}
 
 	return true;
+}
+
+void InfoElement::loadPoints(XmlStreamReader* reader, bool preview) {
+	reader->readNextStartElement();
+	if (!reader->isStartElement())
+		return;
+
+	while (!(reader->isEndElement() && reader->name() == QStringLiteral("points"))) {
+		if (!reader->isStartElement()) {
+			reader->readNext();
+			continue;
+		}
+		if (reader->name() != QLatin1String("point"))
+			break;
+		const auto& attribs = reader->attributes();
+		const QString curvePath = attribs.value(QStringLiteral("curvepath")).toString();
+
+		reader->readNextStartElement();
+		if (reader->name() != CustomPoint::xmlName())
+			break;
+
+		auto* point = new CustomPoint(m_plot, QString());
+		point->setIsLoading(true);
+		if (!point->load(reader, preview)) {
+			delete point;
+			return;
+		}
+		this->addChild(point);
+		addCurvePath(curvePath, point);
+	}
 }
 
 // ##############################################################################

@@ -32,6 +32,12 @@
 
 using Dimension = CartesianCoordinateSystem::Dimension;
 
+namespace {
+namespace XML {
+constexpr auto name = "customPoint";
+}
+}
+
 /**
  * \class CustomPoint
  * \brief A customizable point.
@@ -112,6 +118,10 @@ void CustomPoint::retransform() {
 }
 
 void CustomPoint::handleResize(double /*horizontalRatio*/, double /*verticalRatio*/, bool /*pageResize*/) {
+}
+
+QString CustomPoint::xmlName() {
+	return QLatin1String(XML::name);
 }
 
 Symbol* CustomPoint::symbol() const {
@@ -232,12 +242,9 @@ bool CustomPoint::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
-	QXmlStreamAttributes attribs;
-	QString str;
-
 	while (!reader->atEnd()) {
 		reader->readNext();
-		if (reader->isEndElement() && reader->name() == QLatin1String("customPoint"))
+		if (reader->isEndElement() && reader->name() == QLatin1String(XML::name))
 			break;
 
 		if (!reader->isStartElement())
