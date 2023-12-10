@@ -16,6 +16,7 @@
 #include <QContextMenuEvent>
 #include <QMenu>
 #include <QScreen>
+#include <QTimer>
 
 /*!
   \class WorksheetPreviewWidget
@@ -120,10 +121,21 @@ void WorksheetPreviewWidget::aspectAdded(const AbstractAspect* aspect) {
 		return;
 
 	const auto* w = dynamic_cast<const Worksheet*>(aspect);
-	if (!w)
+	if (w) {
+		addPreview(w, indexOfWorksheet(w));
 		return;
+	}
 
-	addPreview(w, indexOfWorksheet(w));
+	// in case a folder was added (copy&paste, duplicate, project import), check whether it has worksheets
+	// and add previews for them
+	const auto* folder = dynamic_cast<const Folder*>(aspect);
+	if (folder) {
+		QTimer::singleShot(0, this, [=]() {
+			const auto& worksheets = folder->children<Worksheet>(AbstractAspect::ChildIndexFlag::Recursive);
+			for (const auto* w : worksheets)
+				addPreview(w, indexOfWorksheet(w));
+		});
+	}
 }
 
 void WorksheetPreviewWidget::aspectSelected(const AbstractAspect* aspect) {
