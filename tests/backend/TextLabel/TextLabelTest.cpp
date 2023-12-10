@@ -27,18 +27,23 @@ struct TextProperties {
 };
 
 QColor getColorFromHTMLText(const QString& text, const QString& colortype) {
-	const QString htmlColorPattern(QStringLiteral("#[0-9A-Fa-f]{6}"));
+	const QString htmlColorPattern(QStringLiteral("(#[0-9A-Fa-f]{6})|(transparent)"));
 	QRegularExpression fontColorPattern(colortype + QStringLiteral(":") + htmlColorPattern);
 	QRegularExpressionMatch matchColor = fontColorPattern.match(text);
 	// QVERIFY(matchColor.hasMatch());
 	// QCOMPARE(matchColor.capturedTexts().count(), 1);
-	QString color = matchColor.capturedTexts().at(0).split(colortype + QStringLiteral(":#")).at(1);
+	const auto& splitted = matchColor.capturedTexts().at(0).split(colortype + QStringLiteral(":"));
+	QColor c;
+	if (splitted.length() > 1) {
+		QString color = splitted.at(1);
+		int r = color.mid(1, 2).toInt(nullptr, 16);
+		int g = color.mid(3, 2).toInt(nullptr, 16);
+		int b = color.mid(5, 2).toInt(nullptr, 16);
 
-	int r = color.left(2).toInt(nullptr, 16);
-	int g = color.mid(2, 2).toInt(nullptr, 16);
-	int b = color.mid(4, 2).toInt(nullptr, 16);
-
-	QColor c(r, g, b);
+		c = QColor(r, g, b);
+	} else {
+		c = QColor(Qt::transparent);
+	}
 	return c;
 }
 
