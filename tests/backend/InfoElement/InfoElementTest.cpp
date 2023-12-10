@@ -136,7 +136,6 @@ void InfoElementTest::removeCurve() {
 	QCOMPARE(ie->connectionLineCurveName(), curve->name());
 
 	ie->addCurve(curve2);
-
 	QCOMPARE(ie->connectionLineCurveName(), curve->name()); // No change here
 
 	{
@@ -166,22 +165,23 @@ void InfoElementTest::removeCurve() {
 
 	QCOMPARE(ie->connectionLineCurveName(), curve2->name());
 
-	project.undoStack()->undo();
+	// add/removeCurve from Infoelement currently not an undocommand
+	// project.undoStack()->undo();
 
-	QCOMPARE(ie->connectionLineCurveName(), curve2->name()); // first curve shall be connected again
-	// QCOMPARE(ie->connectionLineCurveName(), curve->name()); // Not implememented yet, quite difficult
-	{
-		const auto points = ie->children<CustomPoint>();
-		QCOMPARE(points.count(), 2);
+	// QCOMPARE(ie->connectionLineCurveName(), curve2->name()); // first curve shall be connected again
+	// // QCOMPARE(ie->connectionLineCurveName(), curve->name()); // Not implememented yet, quite difficult
+	// {
+	// 	const auto points = ie->children<CustomPoint>();
+	// 	QCOMPARE(points.count(), 2);
 
-		QCOMPARE(ie->markerPointsCount(), 2);
-		QCOMPARE(ie->markerPointAt(0).curve, curve);
-		QCOMPARE(ie->markerPointAt(0).customPoint, points.at(0));
-		QCOMPARE(points.at(0)->positionLogical(), QPointF(5, 5));
-		QCOMPARE(ie->markerPointAt(1).curve, curve2);
-		QCOMPARE(ie->markerPointAt(1).customPoint, points.at(1));
-		QCOMPARE(points.at(1)->positionLogical(), QPointF(5, 25));
-	}
+	// 	QCOMPARE(ie->markerPointsCount(), 2);
+	// 	QCOMPARE(ie->markerPointAt(0).curve, curve);
+	// 	QCOMPARE(ie->markerPointAt(0).customPoint, points.at(0));
+	// 	QCOMPARE(points.at(0)->positionLogical(), QPointF(5, 5));
+	// 	QCOMPARE(ie->markerPointAt(1).curve, curve2);
+	// 	QCOMPARE(ie->markerPointAt(1).customPoint, points.at(1));
+	// 	QCOMPARE(points.at(1)->positionLogical(), QPointF(5, 25));
+	// }
 }
 
 void InfoElementTest::removeColumn() {
@@ -199,6 +199,7 @@ void InfoElementTest::removeColumn() {
 
 	auto* spreadsheet = new Spreadsheet(QStringLiteral("spreadsheet"));
 	spreadsheet->setRowCount(11);
+	project.addChild(spreadsheet);
 	const auto& columns = spreadsheet->children<Column>();
 	QCOMPARE(columns.count(), 2);
 
@@ -232,13 +233,17 @@ void InfoElementTest::removeColumn() {
 	}
 	QCOMPARE(ie->connectionLineCurveName(), curve->name());
 
-	spreadsheet->removeChild(yColumn);
-
 	// InfoElement is invalid
-	const auto& labels = ie->children<TextLabel>();
+	const auto& labels = ie->children<TextLabel>(AbstractAspect::ChildIndexFlag::IncludeHidden);
 	const auto& points = ie->children<CustomPoint>();
 	QCOMPARE(labels.count(), 1);
 	QCOMPARE(points.count(), 1);
+
+	QCOMPARE(ie->isValid(), true);
+	QCOMPARE(labels.at(0)->isVisible(), true);
+	QCOMPARE(points.at(0)->isVisible(), true);
+
+	spreadsheet->removeChild(yColumn);
 
 	QCOMPARE(ie->isValid(), false);
 	QCOMPARE(labels.at(0)->isVisible(), false);
@@ -350,31 +355,13 @@ void InfoElementTest::deleteCurveRenameAddedAutomatically() {
 
 	const QString oldName = curve->name();
 
-#define NEW_CURVE 1
-
-#if NEW_CURVE == 0
 	curve->setName(QStringLiteral("new name for curve"));
 	p->addChild(curve);
-#else
-	auto* curve3{new XYEquationCurve(QStringLiteral("New curve"))};
-	curve3->setCoordinateSystemIndex(p->defaultCoordinateSystemIndex());
-	p->addChild(curve3);
-	data.min = QStringLiteral("0");
-	data.max = QStringLiteral("10");
-	data.count = 11;
-	data.expression1 = QStringLiteral("x^2");
-	curve3->setEquationData(data);
-	curve3->recalculate();
-#endif
 
 	QCOMPARE(ie->connectionLineCurveName(), curve2->name());
 
 	// rename
-#if NEW_CURVE == 0
 	curve->setName(oldName);
-#else
-	curve3->setName(oldName);
-#endif
 
 	QCOMPARE(ie->connectionLineCurveName(), curve2->name());
 	// QCOMPARE(ie->connectionLineCurveName(), curve->name()); // Not implemented yet, because quite complicated
@@ -386,7 +373,7 @@ void InfoElementTest::deleteCurveRenameAddedAutomatically() {
 		QCOMPARE(ie->markerPointsCount(), 2);
 		QCOMPARE(ie->markerPointAt(0).curve, curve);
 		QCOMPARE(ie->markerPointAt(0).customPoint, points.at(0));
-		QCOMPARE(points.at(0)->positionLogical(), QPointF(5, 25));
+		QCOMPARE(points.at(0)->positionLogical(), QPointF(5, 5));
 		QCOMPARE(ie->markerPointAt(0).visible, true);
 		QCOMPARE(points.at(0)->isVisible(), true);
 
@@ -505,7 +492,7 @@ void InfoElementTest::deleteCurveRenameAddedAutomaticallyCustomPointInvisible() 
 		QCOMPARE(ie->markerPointAt(0).curve, nullptr);
 		QCOMPARE(ie->markerPointAt(0).customPoint, points.at(0));
 		QCOMPARE(points.at(0)->positionLogical(), QPointF(5, 5));
-		QCOMPARE(ie->markerPointAt(0).visible, true);
+		QCOMPARE(ie->markerPointAt(0).visible, false);
 		QCOMPARE(points.at(0)->isVisible(), false);
 
 		QCOMPARE(ie->markerPointAt(1).curve, curve2);
@@ -526,7 +513,7 @@ void InfoElementTest::deleteCurveRenameAddedAutomaticallyCustomPointInvisible() 
 	// rename
 	curve->setName(oldName);
 
-	QCOMPARE(ie->connectionLineCurveName(), curve->name());
+	QCOMPARE(ie->connectionLineCurveName(), curve2->name()); // stays on curve 2
 
 	{
 		const auto points = ie->children<CustomPoint>();
@@ -535,9 +522,9 @@ void InfoElementTest::deleteCurveRenameAddedAutomaticallyCustomPointInvisible() 
 		QCOMPARE(ie->markerPointsCount(), 2);
 		QCOMPARE(ie->markerPointAt(0).curve, curve);
 		QCOMPARE(ie->markerPointAt(0).customPoint, points.at(0));
-		QCOMPARE(points.at(0)->positionLogical(), QPointF(5, 25));
-		QCOMPARE(ie->markerPointAt(0).visible, true);
-		QCOMPARE(points.at(0)->isVisible(), true);
+		QCOMPARE(points.at(0)->positionLogical(), QPointF(5, 5));
+		QCOMPARE(ie->markerPointAt(0).visible, false);
+		QCOMPARE(points.at(0)->isVisible(), false);
 
 		QCOMPARE(ie->markerPointAt(1).curve, curve2);
 		QCOMPARE(ie->markerPointAt(1).customPoint, points.at(1));
@@ -562,6 +549,7 @@ void InfoElementTest::addRemoveRenameColumn() {
 
 	auto* spreadsheet = new Spreadsheet(QStringLiteral("spreadsheet"));
 	spreadsheet->setRowCount(11);
+	project.addChild(spreadsheet);
 	const auto& columns = spreadsheet->children<Column>();
 	QCOMPARE(columns.count(), 2);
 
@@ -598,7 +586,7 @@ void InfoElementTest::addRemoveRenameColumn() {
 	spreadsheet->removeChild(yColumn);
 
 	// InfoElement is invalid
-	const auto& labels = ie->children<TextLabel>();
+	const auto& labels = ie->children<TextLabel>(AbstractAspect::ChildIndexFlag::IncludeHidden);
 	const auto& points = ie->children<CustomPoint>();
 	QCOMPARE(labels.count(), 1);
 	QCOMPARE(points.count(), 1);

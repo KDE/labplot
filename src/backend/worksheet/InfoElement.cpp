@@ -244,7 +244,9 @@ void InfoElement::addCurve(const XYCurve* curve, CustomPoint* custompoint) {
 		custompoint = new CustomPoint(m_plot, curve->name());
 		custompoint->setCoordinateBindingEnabled(true);
 		custompoint->setCoordinateSystemIndex(curve->coordinateSystemIndex());
+		setUndoAware(false);
 		addChild(custompoint);
+		setUndoAware(true);
 
 		if (curve->xColumn() && curve->yColumn()) {
 			bool valueFound;
@@ -359,10 +361,6 @@ void InfoElement::curveDeleted(const AbstractAspect* aspect) {
 
 	for (auto& mp : markerpoints) {
 		if (mp.curve == curve) {
-			if (curve->xColumn())
-				disconnect(curve->xColumn(), nullptr, this, nullptr);
-			if (curve->yColumn())
-				disconnect(curve->yColumn(), nullptr, this, nullptr);
 			disconnect(curve, nullptr, this, nullptr);
 			// No remove of the custompoint
 
@@ -396,12 +394,10 @@ void InfoElement::setConnectionLineNextValidCurve() {
 void InfoElement::removeCurve(const XYCurve* curve) {
 	for (const auto& mp : markerpoints) {
 		if (mp.curve == curve) {
-			if (curve->xColumn())
-				disconnect(curve->xColumn(), nullptr, this, nullptr);
-			if (curve->yColumn())
-				disconnect(curve->yColumn(), nullptr, this, nullptr);
 			disconnect(curve, nullptr, this, nullptr);
+			setUndoAware(false);
 			removeChild(mp.customPoint);
+			setUndoAware(true);
 		}
 	}
 
@@ -415,9 +411,7 @@ void InfoElement::removeCurve(const XYCurve* curve) {
 
 	// hide the label if now curves are selected
 	if (markerpoints.isEmpty()) {
-		m_title->setUndoAware(false);
 		m_title->setVisible(false); // hide in the worksheet view
-		m_title->setUndoAware(true);
 		Q_D(InfoElement);
 		d->update(); // redraw to remove all children graphic items belonging to InfoElement
 	}
@@ -810,7 +804,6 @@ void InfoElement::handleElementUpdated(const QString& path, const AbstractAspect
 	for (auto& p : markerpoints) {
 		if (!p.curve && p.curvePath.compare(path) == 0) {
 			p.curve = curve;
-			p.curvePath = path;
 			updateValid();
 			retransform();
 			break;
@@ -897,16 +890,24 @@ void InfoElement::updateValid() {
 	d->valid = valid;
 
 	Lock lock(m_suppressVisibleChange);
+	m_title->setUndoAware(false);
 	m_title->setVisible(valid);
+	m_title->setUndoAware(true);
 
 	if (valid) {
 		for (auto& mp : markerpoints) {
-			if (mp.curve && mp.curve->xColumn() && mp.curve->yColumn())
+			if (mp.curve && mp.curve->xColumn() && mp.curve->yColumn()) {
+				mp.customPoint->setUndoAware(false);
 				mp.customPoint->setVisible(mp.visible);
+				mp.customPoint->setUndoAware(true);
+			}
 		}
 	} else {
-		for (auto& mp : markerpoints)
+		for (auto& mp : markerpoints) {
+			mp.customPoint->setUndoAware(false);
 			mp.customPoint->setVisible(false);
+			mp.customPoint->setUndoAware(true);
+		}
 	}
 }
 
