@@ -35,6 +35,7 @@ New features:
 		* Support data import from ODS (Open Document Spreadsheet) files
 		* When importing tables from SQL databases, allow to specify which data region to read (start/end values for columns and records)
 		* Addeded seaborn's datasets to the collection of datasets
+		* Properly import Origin projects having graphs with mutliple axes (BUG 476355)
 
 Performance improvements:
 	* Make baseline removal much faster by using Eigen3 library (optional dependency)

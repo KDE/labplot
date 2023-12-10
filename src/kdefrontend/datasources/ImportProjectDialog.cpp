@@ -96,7 +96,6 @@ ImportProjectDialog::ImportProjectDialog(MainWin* parent, ProjectType type)
 	});
 	connect(ui.bOpen, &QPushButton::clicked, this, &ImportProjectDialog::selectFile);
 	connect(m_bNewFolder, &QPushButton::clicked, this, &ImportProjectDialog::newFolder);
-	connect(ui.chbUnusedObjects, &QCheckBox::toggled, this, &ImportProjectDialog::refreshPreview);
 	connect(m_buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
 	connect(m_buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
@@ -146,10 +145,39 @@ ImportProjectDialog::ImportProjectDialog(MainWin* parent, ProjectType type)
 	case ProjectType::LabPlot:
 		file = QStringLiteral("LastImportedLabPlotProject");
 		files = QStringLiteral("LastImportedLabPlotProjects");
+		ui.lGraphLayer->hide();
+		ui.cbGraphLayer->hide();
 		break;
 	case ProjectType::Origin:
 		file = QStringLiteral("LastImportedOriginProject");
 		files = QStringLiteral("LastImportedOriginProjects");
+
+		ui.chbUnusedObjects->setChecked(conf.readEntry(QStringLiteral("ShowUnusedObjects"), false));
+		connect(ui.chbUnusedObjects, &QCheckBox::toggled, this, &ImportProjectDialog::refreshPreview);
+
+		// add options to control how to read Origin's graph layers - as new plot areas or as new coordinate systems
+		ui.cbGraphLayer->addItem(i18n("As Plot Area"));
+		ui.cbGraphLayer->addItem(i18n("As Coordinate System"));
+		ui.cbGraphLayer->setCurrentIndex(conf.readEntry(QStringLiteral("GraphLayer"), 0));
+
+		// show more info for https://www.originlab.com/doc/Origin-Help/MultiLayer-Graph
+		info = i18n("Specify how to import multi-layered graphs.");
+		ui.lGraphLayer->setToolTip(info);
+		ui.cbGraphLayer->setToolTip(info);
+
+		info = i18n(
+			"Multiple layers are used in Origin to either implement multiple plots or multiple axes on the same plot "
+			"(see <a href=\"https://www.originlab.com/doc/Origin-Help/MultiLayer-Graph\">Origin's Documentation</a> for more details)."
+			"LabPlot can process only one type at the same time."
+			"<br><br>"
+			"Specify how to import multi-layered graphs in the selected project:"
+			"<ul>"
+			"<li>As Plot Area - a new plot area is created for every layer.</li>"
+			"<li>As Coordinate System - a new coordinate system (data range) on the same plot area is created for every layer</li>"
+			"</ul>");
+
+		ui.lGraphLayer->setWhatsThis(info);
+		ui.cbGraphLayer->setWhatsThis(info);
 		break;
 	}
 
@@ -176,6 +204,8 @@ ImportProjectDialog::~ImportProjectDialog() {
 	case ProjectType::Origin:
 		file = QStringLiteral("LastImportedOriginProject");
 		files = QStringLiteral("LastImportedOriginProjects");
+		conf.writeEntry(QStringLiteral("GraphLayer"), ui.cbGraphLayer->currentIndex());
+		conf.writeEntry(QStringLiteral("ShowUnusedObjects"), ui.chbUnusedObjects->isChecked());
 		break;
 	}
 
@@ -265,8 +295,13 @@ void ImportProjectDialog::importTo(QStatusBar* statusBar) const {
 	connect(m_projectParser, &ProjectParser::completed, progressBar, &QProgressBar::setValue);
 
 #ifdef HAVE_LIBORIGIN
-	if (m_projectType == ProjectType::Origin && ui.chbUnusedObjects->isVisible() && ui.chbUnusedObjects->isChecked())
-		reinterpret_cast<OriginProjectParser*>(m_projectParser)->setImportUnusedObjects(true);
+	if (m_projectType == ProjectType::Origin) {
+		auto* originParser = reinterpret_cast<OriginProjectParser*>(m_projectParser);
+		if (ui.chbUnusedObjects->isVisible() && ui.chbUnusedObjects->isChecked())
+			originParser->setImportUnusedObjects(true);
+
+		originParser->setGraphLayerAsPlotArea(ui.cbGraphLayer->currentIndex() == 0);
+	}
 #endif
 
 	m_projectParser->importTo(targetFolder, selectedPathes);
@@ -286,17 +321,20 @@ void ImportProjectDialog::refreshPreview() {
 #ifdef HAVE_LIBORIGIN
 	if (m_projectType == ProjectType::Origin) {
 		auto* originParser = reinterpret_cast<OriginProjectParser*>(m_projectParser);
-		if (originParser->hasUnusedObjects())
-			ui.chbUnusedObjects->show();
-		else
-			ui.chbUnusedObjects->hide();
+		bool hasUnusedObjects = false;
+		bool hasMultiLayerGraphs = false;
+		originParser->checkContent(hasUnusedObjects, hasMultiLayerGraphs);
 
-		originParser->setImportUnusedObjects(ui.chbUnusedObjects->isVisible() && ui.chbUnusedObjects->isChecked());
+		ui.lUnusedObjects->setVisible(hasUnusedObjects);
+		ui.chbUnusedObjects->setVisible(hasUnusedObjects);
+		originParser->setImportUnusedObjects(hasUnusedObjects && ui.chbUnusedObjects->isChecked());
+
+		ui.lGraphLayer->setVisible(hasMultiLayerGraphs);
+		ui.cbGraphLayer->setVisible(hasMultiLayerGraphs);
 	}
 #endif
 
 	ui.tvPreview->setModel(m_projectParser->model());
-
 	connect(ui.tvPreview->selectionModel(), &QItemSelectionModel::selectionChanged, this, &ImportProjectDialog::selectionChanged);
 
 	// show top-level containers only
