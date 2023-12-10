@@ -873,6 +873,21 @@ QIcon XYFitCurve::icon() const {
 	return QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve"));
 }
 
+void XYFitCurve::handleElementUpdated(const QString& aspectPath, const AbstractAspect* element) {
+	const auto* column = dynamic_cast<const Column*>(element);
+	if (!column)
+		return;
+
+	XYAnalysisCurve::handleElementUpdated(aspectPath, element);
+
+	setUndoAware(true);
+	if (xErrorColumnPath() == aspectPath)
+		setXErrorColumn(column);
+	if (yErrorColumnPath() == aspectPath)
+		setYErrorColumn(column);
+	setUndoAware(false);
+}
+
 // ##############################################################################
 // ##########################  getter methods  ##################################
 // ##############################################################################

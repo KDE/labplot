@@ -507,6 +507,7 @@ public:
 		q->mRetransformCalled += 1;
 
 	friend class AbstractAspectTest;
+	friend class InfoElementTest;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(AbstractAspect::ChildIndexFlags)

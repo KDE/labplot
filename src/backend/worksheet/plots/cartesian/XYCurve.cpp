@@ -235,6 +235,33 @@ QIcon XYCurve::icon() const {
 	return QIcon::fromTheme(QStringLiteral("labplot-xy-curve"));
 }
 
+void XYCurve::handleElementUpdated(const QString& aspectPath, const AbstractAspect* element) {
+	const auto* column = dynamic_cast<const Column*>(element);
+	if (!column)
+		return;
+
+	setUndoAware(false);
+	if (xColumnPath() == aspectPath)
+		setXColumn(column);
+	if (yColumnPath() == aspectPath)
+		setYColumn(column);
+	if (valuesColumnPath() == aspectPath)
+		setValuesColumn(column);
+	if (xErrorPlusColumnPath() == aspectPath)
+		setXErrorPlusColumn(column);
+	if (xErrorMinusColumnPath() == aspectPath)
+		setXErrorMinusColumn(column);
+	if (yErrorPlusColumnPath() == aspectPath)
+		setYErrorPlusColumn(column);
+	if (yErrorMinusColumnPath() == aspectPath)
+		setYErrorMinusColumn(column);
+
+	if (valuesColumnPath() == aspectPath)
+		setValuesColumn(column);
+
+	setUndoAware(true);
+}
+
 // ##############################################################################
 // ##########################  getter methods  ##################################
 // ##############################################################################
@@ -748,7 +775,7 @@ void XYCurve::xColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	if (aspect == d->xColumn) {
 		d->xColumn = nullptr;
 		d->m_logicalPoints.clear();
-		d->retransform();
+		CURVE_COLUMN_REMOVED(x);
 	}
 }
 
@@ -757,7 +784,7 @@ void XYCurve::yColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	if (aspect == d->yColumn) {
 		d->yColumn = nullptr;
 		d->m_logicalPoints.clear();
-		d->retransform();
+		CURVE_COLUMN_REMOVED(y);
 	}
 }
 
@@ -2271,6 +2298,8 @@ double XYCurve::y(double x, bool& valueFound) const {
  * @return y value from x value
  */
 double XYCurve::y(double x, double& x_new, bool& valueFound) const {
+	if (!xColumn() || !yColumn())
+		return std::nan("0");
 	int index = xColumn()->indexForValue(x);
 	if (index < 0) {
 		valueFound = false;
@@ -2286,7 +2315,7 @@ double XYCurve::y(double x, double& x_new, bool& valueFound) const {
 	else {
 		// any other type implemented
 		valueFound = false;
-		return NAN;
+		return std::nan("0");
 	}
 
 	valueFound = true;
@@ -2294,7 +2323,7 @@ double XYCurve::y(double x, double& x_new, bool& valueFound) const {
 		return yColumn()->valueAt(index);
 	else {
 		valueFound = false;
-		return NAN;
+		return std::nan("0");
 	}
 }
 

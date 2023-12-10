@@ -84,6 +84,12 @@ public Q_SLOTS:
 	void descriptionChanged(const AbstractAspect*);
 	void aspectAddedSlot(const AbstractAspect*);
 
+private:
+	template<typename T>
+	QVector<const T*> getElements(const AbstractAspect* aspect);
+	template<typename T>
+	void updateDependencies(const QVector<const T*>);
+
 Q_SIGNALS:
 	void authorChanged(const QString&);
 	void saveCalculationsChanged(bool);

@@ -35,8 +35,11 @@ public:
 	void updateVerticalLine();
 	void updateConnectionLine();
 	bool changeVisibility(bool on);
+	void updateValid();
 
 	virtual bool activate(QPointF mouseScenePos, double maxDist = -1);
+	virtual void recalcShapeAndBoundingRect() override {
+	}
 
 	// TextLabel Gluepoint
 	int gluePointIndex{-1}; // negative value means automatic mode
@@ -46,6 +49,8 @@ public:
 
 	Line* verticalLine{nullptr};
 	Line* connectionLine{nullptr};
+
+	bool valid{true};
 
 	// TODO
 	//	CartesianPlot* plot{nullptr};

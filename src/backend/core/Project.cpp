@@ -13,6 +13,7 @@
 #include "backend/core/Project.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
+#include "backend/matrix/Matrix.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Image.h"
 #include "backend/worksheet/InfoElement.h"
@@ -321,9 +322,54 @@ bool Project::hasChanged() const {
 }
 
 /*!
+ * \brief Project::getElements
+ * get all Elements of type T from the aspect. If the aspect is of type T this element is returned
+ * otherwise all childs of type T from the aspect are returned
+ * \param aspect
+ * \return
+ */
+template<typename T>
+QVector<const T*> Project::getElements(const AbstractAspect* aspect) {
+	QVector<const T*> elements;
+	const auto* element = static_cast<const T*>(aspect);
+	if (element)
+		elements.append(element);
+	else {
+		for (auto* child : aspect->children<T>(ChildIndexFlag::Recursive))
+			elements.append(static_cast<const T*>(child));
+	}
+	return elements;
+}
+
+/*!
+ * \brief Project::updateDependencies
+ * Notify that WorksheetElements are updated. This is required if the element
+ * is not a child of another element, like a XYCurve for an InfoElement, ...
+ * \param changedElements
+ */
+template<typename T>
+void Project::updateDependencies(const QVector<const T*> changedElements) {
+	if (!changedElements.isEmpty()) {
+		// if a new element was addded, check whether the element names match the missing
+		// names in the other elements, etc. and update the dependencies
+		const auto& elements = children<WorksheetElement>(ChildIndexFlag::Recursive);
+
+		for (const auto* element : changedElements) {
+			const auto& elementPath = element->path();
+			for (auto* e : elements) {
+				e->handleElementUpdated(elementPath, element);
+			}
+		}
+	}
+}
+
+/*!
  * \brief Project::descriptionChanged
  * This function is called, when an object changes its name. When a column changed its name and wasn't connected before to the curve/column(formula) then
  * this is done in this function
+ *
+ * Example: curve needs "column1"
+ * An Existing column is called "column2". This existing column will be renamed to "column1". Now the column shall be connected to the curve
  * \param aspect
  */
 void Project::descriptionChanged(const AbstractAspect* aspect) {
@@ -332,16 +378,9 @@ void Project::descriptionChanged(const AbstractAspect* aspect) {
 
 	// when the name of a column is being changed, it can matches again the names being used in the curves, etc.
 	// and we need to update the dependencies
-	const auto* column = dynamic_cast<const AbstractColumn*>(aspect);
-	if (column) {
-		const auto& curves = children<XYCurve>(ChildIndexFlag::Recursive);
-		updateColumnDependencies(curves, column);
-
-		const auto& histograms = children<Histogram>(ChildIndexFlag::Recursive);
-		updateColumnDependencies(histograms, column);
-
-		const auto& boxPlots = children<BoxPlot>(ChildIndexFlag::Recursive);
-		updateColumnDependencies(boxPlots, column);
+	const auto* element = dynamic_cast<const WorksheetElement*>(aspect);
+	if (element) {
+		updateDependencies<WorksheetElement>({element});
 	}
 
 	Q_D(Project);
@@ -359,32 +398,32 @@ void Project::aspectAddedSlot(const AbstractAspect* aspect) {
 		return;
 
 	if (aspect->inherits(AspectType::AbstractColumn)) {
-		// check whether new columns were added and if yes,
+		// check whether new elements were added and if yes,
 		// update the dependencies in the project
-		QVector<const AbstractColumn*> columns;
-		const auto* column = static_cast<const AbstractColumn*>(aspect);
-		if (column)
-			columns.append(column);
-		else {
-			for (auto* child : aspect->children<Column>(ChildIndexFlag::Recursive))
-				columns.append(static_cast<const AbstractColumn*>(child));
-		}
+		const auto& columns = getElements<Column>(aspect);
+		updateDependencies<Column>(columns);
 
 		if (!columns.isEmpty()) {
-			// if a new column was addded, check whether the column names match the missing
-			// names in the curves, etc. and update the dependencies
-			const auto& curves = children<XYCurve>(ChildIndexFlag::Recursive);
-			for (auto column : columns)
-				updateColumnDependencies(curves, column);
-
-			const auto& histograms = children<Histogram>(ChildIndexFlag::Recursive);
-			for (auto column : columns)
-				updateColumnDependencies(histograms, column);
-
-			const auto& boxPlots = children<BoxPlot>(ChildIndexFlag::Recursive);
-			for (auto column : columns)
-				updateColumnDependencies(boxPlots, column);
+			for (const auto* column : columns) {
+				const auto& columnPath = column->path();
+				const QVector<Column*>& columns = children<Column>(ChildIndexFlag::Recursive);
+				for (auto* tempColumn : columns) {
+					for (int i = 0; i < tempColumn->formulaData().count(); i++) {
+						auto path = tempColumn->formulaData().at(i).columnName();
+						if (path == columnPath)
+							tempColumn->setFormulVariableColumn(i, const_cast<Column*>(static_cast<const Column*>(column)));
+					}
+				}
+			}
 		}
+	} else if (aspect->inherits(AspectType::Matrix)) {
+		// Matrix needed by Heatmap
+		const auto& matrices = getElements<Matrix>(aspect);
+		updateDependencies<Matrix>(matrices);
+	} else if (aspect->inherits(AspectType::XYCurve)) {
+		// XYCurve needed by InfoElement
+		const auto& curves = getElements<XYCurve>(aspect);
+		updateDependencies<XYCurve>(curves);
 	} else if (aspect->inherits(AspectType::Spreadsheet)) {
 		// if a new spreadsheet was addded, check whether the spreadsheet name match the missing
 		// name in a linked spreadsheet, etc. and update the dependencies
@@ -413,104 +452,6 @@ void Project::updateSpreadsheetDependencies(const QVector<Spreadsheet*>& spreads
 		if (sh->linkedSpreadsheetPath() == spreadsheetPath)
 			sh->setLinkedSpreadsheet(spreadsheet);
 		sh->setUndoAware(true);
-	}
-}
-
-// TODO: move this update*() functions into the classes, Project shouldn't be aware of the details
-void Project::updateColumnDependencies(const QVector<XYCurve*>& curves, const AbstractColumn* column) const {
-	const QString& columnPath = column->path();
-
-	// setXColumnPath must not be set, because if curve->column matches column, there already exist a
-	// signal/slot connection between the curve and the column to update this. If they are not same,
-	// xColumnPath is set in setXColumn. Same for the yColumn.
-	for (auto* curve : curves) {
-		curve->setUndoAware(false);
-		auto* analysisCurve = dynamic_cast<XYAnalysisCurve*>(curve);
-		if (analysisCurve) {
-			if (analysisCurve->xDataColumnPath() == columnPath)
-				analysisCurve->setXDataColumn(column);
-			if (analysisCurve->yDataColumnPath() == columnPath)
-				analysisCurve->setYDataColumn(column);
-			if (analysisCurve->y2DataColumnPath() == columnPath)
-				analysisCurve->setY2DataColumn(column);
-
-			auto* fitCurve = dynamic_cast<XYFitCurve*>(curve);
-			if (fitCurve) {
-				if (fitCurve->xErrorColumnPath() == columnPath)
-					fitCurve->setXErrorColumn(column);
-				if (fitCurve->yErrorColumnPath() == columnPath)
-					fitCurve->setYErrorColumn(column);
-			}
-		} else {
-			if (curve->xColumnPath() == columnPath)
-				curve->setXColumn(column);
-			if (curve->yColumnPath() == columnPath)
-				curve->setYColumn(column);
-			if (curve->valuesColumnPath() == columnPath)
-				curve->setValuesColumn(column);
-			if (curve->xErrorPlusColumnPath() == columnPath)
-				curve->setXErrorPlusColumn(column);
-			if (curve->xErrorMinusColumnPath() == columnPath)
-				curve->setXErrorMinusColumn(column);
-			if (curve->yErrorPlusColumnPath() == columnPath)
-				curve->setYErrorPlusColumn(column);
-			if (curve->yErrorMinusColumnPath() == columnPath)
-				curve->setYErrorMinusColumn(column);
-		}
-
-		if (curve->valuesColumnPath() == columnPath)
-			curve->setValuesColumn(column);
-
-		curve->setUndoAware(true);
-	}
-
-	const QVector<Column*>& columns = children<Column>(ChildIndexFlag::Recursive);
-	for (auto* tempColumn : columns) {
-		for (int i = 0; i < tempColumn->formulaData().count(); i++) {
-			auto path = tempColumn->formulaData().at(i).columnName();
-			if (path == columnPath)
-				tempColumn->setFormulVariableColumn(i, const_cast<Column*>(static_cast<const Column*>(column)));
-		}
-	}
-}
-
-void Project::updateColumnDependencies(const QVector<Histogram*>& histograms, const AbstractColumn* column) const {
-	const QString& columnPath = column->path();
-	for (auto* histogram : histograms) {
-		if (histogram->dataColumnPath() == columnPath) {
-			histogram->setUndoAware(false);
-			histogram->setDataColumn(column);
-			histogram->setUndoAware(true);
-		}
-
-		if (histogram->value()->columnPath() == columnPath) {
-			histogram->setUndoAware(false);
-			histogram->value()->setColumn(column);
-			histogram->setUndoAware(true);
-		}
-	}
-}
-
-void Project::updateColumnDependencies(const QVector<BoxPlot*>& boxPlots, const AbstractColumn* column) const {
-	const QString& columnPath = column->path();
-	for (auto* boxPlot : boxPlots) {
-		const auto dataColumnPaths = boxPlot->dataColumnPaths();
-		auto dataColumns = boxPlot->dataColumns();
-		bool changed = false;
-		for (int i = 0; i < dataColumnPaths.count(); ++i) {
-			const auto& path = dataColumnPaths.at(i);
-
-			if (path == columnPath) {
-				dataColumns[i] = column;
-				changed = true;
-			}
-		}
-
-		if (changed) {
-			boxPlot->setUndoAware(false);
-			boxPlot->setDataColumns(dataColumns);
-			boxPlot->setUndoAware(true);
-		}
 	}
 }
 
