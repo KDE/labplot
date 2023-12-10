@@ -2417,3 +2417,9 @@ bool Column::indicesMinMax(double v1, double v2, int& start, int& end) const {
 AbstractColumn::ColumnMode Column::labelsMode() const {
 	return d->m_labels.mode();
 }
+
+void Column::handleElementUpdated(const QString&, const AbstractAspect* element) {
+	const auto* column = dynamic_cast<const Column*>(element);
+	if (column)
+		d->formulaVariableColumnAdded(element);
+}

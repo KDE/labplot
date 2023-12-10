@@ -38,8 +38,6 @@ public:
 	void updateValid();
 
 	virtual bool activate(QPointF mouseScenePos, double maxDist = -1);
-	virtual void recalcShapeAndBoundingRect() override {
-	}
 
 	// TextLabel Gluepoint
 	int gluePointIndex{-1}; // negative value means automatic mode
@@ -60,7 +58,7 @@ public:
 private:
 	void recalcShape();
 	void recalcShapeAndBoundingRect(const QRectF&);
-	virtual void recalcShapeAndBoundingRect() override;
+	void recalcShapeAndBoundingRect() override;
 	virtual void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
 
 private:

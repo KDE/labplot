@@ -949,7 +949,7 @@ void InfoElementPrivate::retransform() {
 	DEBUG(Q_FUNC_INFO)
 	q->updateValid();
 	if (!q->m_title || q->markerpoints.isEmpty() || q->isLoading() || !parentItem() || !valid) {
-		update(boundingRectangle);
+		update(m_boundingRectangle);
 		return;
 	}
 

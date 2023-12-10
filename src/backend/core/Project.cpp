@@ -329,8 +329,8 @@ bool Project::hasChanged() const {
  * \return
  */
 template<typename T>
-QVector<const T*> Project::getElements(const AbstractAspect* aspect) {
-	QVector<const T*> elements;
+QVector<const AbstractAspect*> Project::getElements(const AbstractAspect* aspect) {
+	QVector<const AbstractAspect*> elements;
 	const auto* element = static_cast<const T*>(aspect);
 	if (element)
 		elements.append(element);
@@ -348,11 +348,11 @@ QVector<const T*> Project::getElements(const AbstractAspect* aspect) {
  * \param changedElements
  */
 template<typename T>
-void Project::updateDependencies(const QVector<const T*> changedElements) {
+void Project::updateDependencies(const QVector<const AbstractAspect*> changedElements) {
 	if (!changedElements.isEmpty()) {
 		// if a new element was addded, check whether the element names match the missing
 		// names in the other elements, etc. and update the dependencies
-		const auto& elements = children<WorksheetElement>(ChildIndexFlag::Recursive);
+		const auto& elements = children<T>(ChildIndexFlag::Recursive);
 
 		for (const auto* element : changedElements) {
 			const auto& elementPath = element->path();
@@ -376,12 +376,10 @@ void Project::descriptionChanged(const AbstractAspect* aspect) {
 	if (isLoading())
 		return;
 
-	// when the name of a column is being changed, it can matches again the names being used in the curves, etc.
+	// when the name of a column is being changed, it can match again the names being used in the curves, etc.
 	// and we need to update the dependencies
-	const auto* element = dynamic_cast<const WorksheetElement*>(aspect);
-	if (element) {
-		updateDependencies<WorksheetElement>({element});
-	}
+	updateDependencies<WorksheetElement>({aspect}); // notify all worksheetelements
+	updateDependencies<Column>({aspect}); // notify all columns
 
 	Q_D(Project);
 	d->changed = true;
@@ -397,40 +395,11 @@ void Project::aspectAddedSlot(const AbstractAspect* aspect) {
 	if (isLoading())
 		return;
 
-	if (aspect->inherits(AspectType::AbstractColumn)) {
-		// check whether new elements were added and if yes,
-		// update the dependencies in the project
-		const auto& columns = getElements<Column>(aspect);
-		updateDependencies<Column>(columns);
-
-		if (!columns.isEmpty()) {
-			for (const auto* column : columns) {
-				const auto& columnPath = column->path();
-				const QVector<Column*>& columns = children<Column>(ChildIndexFlag::Recursive);
-				for (auto* tempColumn : columns) {
-					for (int i = 0; i < tempColumn->formulaData().count(); i++) {
-						auto path = tempColumn->formulaData().at(i).columnName();
-						if (path == columnPath)
-							tempColumn->setFormulVariableColumn(i, const_cast<Column*>(static_cast<const Column*>(column)));
-					}
-				}
-			}
-		}
-	} else if (aspect->inherits(AspectType::Matrix)) {
-		// Matrix needed by Heatmap
-		const auto& matrices = getElements<Matrix>(aspect);
-		updateDependencies<Matrix>(matrices);
-	} else if (aspect->inherits(AspectType::XYCurve)) {
-		// XYCurve needed by InfoElement
-		const auto& curves = getElements<XYCurve>(aspect);
-		updateDependencies<XYCurve>(curves);
-	} else if (aspect->inherits(AspectType::Spreadsheet)) {
+	if (aspect->inherits(AspectType::Spreadsheet)) {
 		// if a new spreadsheet was addded, check whether the spreadsheet name match the missing
 		// name in a linked spreadsheet, etc. and update the dependencies
-		const auto* newSpreadsheet = static_cast<const Spreadsheet*>(aspect);
-		const auto& spreadsheets = children<Spreadsheet>(ChildIndexFlag::Recursive);
-		updateSpreadsheetDependencies(spreadsheets, newSpreadsheet);
-
+		updateDependencies<WorksheetElement>({aspect});
+		updateDependencies<Column>({aspect});
 		connect(static_cast<const Spreadsheet*>(aspect), &Spreadsheet::aboutToResize, [this]() {
 			const auto& wes = children<WorksheetElement>(AbstractAspect::ChildIndexFlag::Recursive);
 			for (auto* we : wes)
@@ -441,17 +410,9 @@ void Project::aspectAddedSlot(const AbstractAspect* aspect) {
 			for (auto* we : wes)
 				we->setSuppressRetransform(false);
 		});
-	}
-}
-
-void Project::updateSpreadsheetDependencies(const QVector<Spreadsheet*>& spreadsheets, const Spreadsheet* spreadsheet) const {
-	const QString& spreadsheetPath = spreadsheet->path();
-
-	for (auto* sh : spreadsheets) {
-		sh->setUndoAware(false);
-		if (sh->linkedSpreadsheetPath() == spreadsheetPath)
-			sh->setLinkedSpreadsheet(spreadsheet);
-		sh->setUndoAware(true);
+	} else {
+		updateDependencies<WorksheetElement>({aspect});
+		updateDependencies<Column>({aspect});
 	}
 }
 

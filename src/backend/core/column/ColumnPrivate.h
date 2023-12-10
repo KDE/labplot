@@ -135,6 +135,8 @@ public:
 	void invalidate();
 	void finalizeLoad();
 
+	void formulaVariableColumnAdded(const AbstractAspect*);
+
 	struct CachedValuesAvailable {
 		void setUnavailable() {
 			statistics = false;
@@ -324,7 +326,6 @@ private:
 
 private Q_SLOTS:
 	void formulaVariableColumnRemoved(const AbstractAspect*);
-	void formulaVariableColumnAdded(const AbstractAspect*);
 
 	friend class ColumnSetGlobalFormulaCmd;
 	friend class ColumnRemoveRowsCmd;

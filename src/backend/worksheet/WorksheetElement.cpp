@@ -338,7 +338,6 @@ void WorksheetElement::prepareDrawingOrderMenu() {
 }
 
 void WorksheetElement::execMoveInFrontOf(QAction* action) {
-	Q_EMIT moveBegin();
 	auto* parent = parentAspect();
 	int index = action->data().toInt();
 	auto* sibling1 = parent->child<WorksheetElement>(index);
@@ -349,11 +348,9 @@ void WorksheetElement::execMoveInFrontOf(QAction* action) {
 	parent->insertChildBefore(this, sibling2);
 	setMoved(false);
 	endMacro();
-	Q_EMIT moveEnd();
 }
 
 void WorksheetElement::execMoveBehind(QAction* action) {
-	Q_EMIT moveBegin();
 	auto* parent = parentAspect();
 	int index = action->data().toInt();
 	auto* sibling = parent->child<WorksheetElement>(index);
@@ -363,7 +360,6 @@ void WorksheetElement::execMoveBehind(QAction* action) {
 	parent->insertChildBefore(this, sibling);
 	setMoved(false);
 	endMacro();
-	Q_EMIT moveEnd();
 }
 
 QPointF WorksheetElement::align(QPointF pos, QRectF rect, HorizontalAlignment horAlign, VerticalAlignment vertAlign, bool positive) const {

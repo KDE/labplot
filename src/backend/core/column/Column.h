@@ -227,6 +227,9 @@ public Q_SLOTS:
 	void pasteData();
 	void updateFormula();
 
+protected:
+	void handleElementUpdated(const QString& aspectPath, const AbstractAspect*);
+
 private:
 	bool XmlReadInputFilter(XmlStreamReader*);
 	bool XmlReadOutputFilter(XmlStreamReader*);
@@ -257,6 +260,7 @@ private Q_SLOTS:
 	friend class ColumnStringIO;
 	friend class ColumnRemoveRowsCmd;
 	friend class ColumnInsertRowsCmd;
+	friend class Project;
 };
 
 #endif

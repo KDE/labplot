@@ -86,9 +86,9 @@ public Q_SLOTS:
 
 private:
 	template<typename T>
-	QVector<const T*> getElements(const AbstractAspect* aspect);
+	QVector<const AbstractAspect*> getElements(const AbstractAspect* aspect);
 	template<typename T>
-	void updateDependencies(const QVector<const T*>);
+	void updateDependencies(const QVector<const AbstractAspect*>);
 
 Q_SIGNALS:
 	void authorChanged(const QString&);
@@ -108,10 +108,6 @@ Q_SIGNALS:
 private:
 	Q_DECLARE_PRIVATE(Project)
 	ProjectPrivate* const d_ptr;
-	void updateColumnDependencies(const QVector<XYCurve*>&, const AbstractColumn*) const;
-	void updateColumnDependencies(const QVector<Histogram*>&, const AbstractColumn*) const;
-	void updateColumnDependencies(const QVector<BoxPlot*>& boxPlots, const AbstractColumn* column) const;
-	void updateSpreadsheetDependencies(const QVector<Spreadsheet*>&, const Spreadsheet*) const;
 	bool readProjectAttributes(XmlStreamReader*);
 	void save(QXmlStreamWriter*) const override;
 };
