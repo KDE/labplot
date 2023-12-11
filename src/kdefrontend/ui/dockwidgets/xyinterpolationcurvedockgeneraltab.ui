@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>507</width>
-    <height>953</height>
+    <height>961</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
@@ -402,6 +402,9 @@
        </property>
        <property name="decimals">
         <number>0</number>
+       </property>
+       <property name="minimum">
+        <double>1.000000000000000</double>
        </property>
        <property name="maximum">
         <double>1000000000.000000000000000</double>

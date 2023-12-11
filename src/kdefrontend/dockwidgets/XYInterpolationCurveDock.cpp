@@ -10,6 +10,7 @@
 */
 
 #include "XYInterpolationCurveDock.h"
+#include "backend/core/column/Column.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/XYInterpolationCurve.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
@@ -89,6 +90,10 @@ void XYInterpolationCurveDock::setupGeneral() {
 	auto* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setContentsMargins(0, 0, 0, 0);
 	layout->addWidget(generalTab);
+
+	// tooltip texts
+	QString info = i18n("The number of the interpolation points should be bigger than the total number of points in the data source.");
+	uiGeneralTab.sbPoints->setToolTip(info);
 
 	// Slots
 	connect(uiGeneralTab.chkVisible, &QCheckBox::clicked, this, &XYInterpolationCurveDock::visibilityChanged);
@@ -196,17 +201,15 @@ void XYInterpolationCurveDock::initGeneralTab() {
 
 	switch (m_interpolationData.pointsMode) {
 	case XYInterpolationCurve::PointsMode::Auto:
-		uiGeneralTab.sbPoints->setValue(m_interpolationData.npoints / 5.);
-		break;
-	case XYInterpolationCurve::PointsMode::Multiple: {
-		uiGeneralTab.sbPoints->setValue(m_interpolationData.npoints / qMax(dataPoints, (unsigned int)1));
-		break;
-	}
 	case XYInterpolationCurve::PointsMode::Custom:
 		uiGeneralTab.sbPoints->setValue(m_interpolationData.npoints);
 		break;
+	case XYInterpolationCurve::PointsMode::Multiple:
+		uiGeneralTab.sbPoints->setValue(m_interpolationData.npoints / qMax(dataPoints, (unsigned int)1));
+		break;
 	}
 	uiGeneralTab.cbPointsMode->setCurrentIndex(static_cast<int>(m_interpolationData.pointsMode));
+	numberOfPointsChanged(); // call this to properly update the status of the spinbox after both, the value and the mode, were set
 
 	this->showInterpolationResult();
 
@@ -319,19 +322,17 @@ void XYInterpolationCurveDock::updateSettings(const AbstractColumn* column) {
 	if (!column)
 		return;
 
+	const auto& statistics = static_cast<const Column*>(column)->statistics();
+
 	// disable types that need more data points
 	if (uiGeneralTab.cbAutoRange->isChecked()) {
 		const auto numberLocale = QLocale();
-		// TODO: this does not check if there are valid data points
-		uiGeneralTab.leMin->setText(numberLocale.toString(column->minimum()));
-		uiGeneralTab.leMax->setText(numberLocale.toString(column->maximum()));
+		uiGeneralTab.leMin->setText(numberLocale.toString(statistics.minimum));
+		uiGeneralTab.leMax->setText(numberLocale.toString(statistics.maximum));
 	}
 
-	unsigned int n = 0;
-	for (int row = 0; row < column->rowCount(); row++)
-		if (!std::isnan(column->valueAt(row)) && !column->isMasked(row))
-			n++;
-	dataPoints = n;
+	dataPoints = statistics.size;
+
 	if (m_interpolationData.pointsMode == XYInterpolationCurve::PointsMode::Auto)
 		pointsModeChanged(uiGeneralTab.cbPointsMode->currentIndex());
 
@@ -391,7 +392,7 @@ void XYInterpolationCurveDock::updateSettings(const AbstractColumn* column) {
 void XYInterpolationCurveDock::yDataColumnChanged(const QModelIndex& index) {
 	CONDITIONAL_LOCK_RETURN;
 
-	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
+	const auto* column = static_cast<AbstractColumn*>(index.internalPointer());
 
 	for (auto* curve : m_curvesList)
 		static_cast<XYInterpolationCurve*>(curve)->setYDataColumn(column);
@@ -425,7 +426,6 @@ void XYInterpolationCurveDock::autoRangeChanged() {
 		if (xDataColumn) {
 			if (!m_dateTimeRange) {
 				const auto numberLocale = QLocale();
-				// TODO: this does not check if there are valid data points
 				uiGeneralTab.leMin->setText(numberLocale.toString(xDataColumn->minimum()));
 				uiGeneralTab.leMax->setText(numberLocale.toString(xDataColumn->maximum()));
 			} else {
