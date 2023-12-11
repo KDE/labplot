@@ -223,11 +223,12 @@ bool OriginProjectParser::load(Project* project, bool preview) {
 	// restore column pointers:
 	// 1. extend the pathes to contain the parent structures first
 	// 2. restore the pointers from the pathes
-	const QVector<Column*> columns = project->children<Column>(AbstractAspect::ChildIndexFlag::Recursive);
-	const QVector<Spreadsheet*> spreadsheets = project->children<Spreadsheet>(AbstractAspect::ChildIndexFlag::Recursive);
+	const auto& columns = project->children<Column>(AbstractAspect::ChildIndexFlag::Recursive);
+	const auto& spreadsheets = project->children<Spreadsheet>(AbstractAspect::ChildIndexFlag::Recursive);
+	const auto& curves = project->children<XYCurve>(AbstractAspect::ChildIndexFlag::Recursive);
 	DEBUG(Q_FUNC_INFO << ", NUMBER of spreadsheets/columns = "
 					  << "/" << spreadsheets.count() << "/" << columns.count())
-	for (auto* curve : project->children<XYCurve>(AbstractAspect::ChildIndexFlag::Recursive)) {
+	for (auto* curve : curves) {
 		DEBUG(Q_FUNC_INFO << ", RESTORE CURVE with x/y column path " << STDSTRING(curve->xColumnPath()) << " " << STDSTRING(curve->yColumnPath()))
 		curve->setSuppressRetransform(true);
 
@@ -299,7 +300,8 @@ bool OriginProjectParser::load(Project* project, bool preview) {
 	}
 
 	if (!preview) {
-		for (auto* plot : project->children<CartesianPlot>(AbstractAspect::ChildIndexFlag::Recursive)) {
+		const auto& plots = project->children<CartesianPlot>(AbstractAspect::ChildIndexFlag::Recursive);
+		for (auto* plot : plots) {
 			plot->setIsLoading(false);
 			plot->retransform();
 		}
@@ -1485,7 +1487,9 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 				// TODO: curve (legend) does not support HTML text yet.
 				// XYCurve* xyCurve = new XYCurve(curveText);
 				XYCurve* curve = new XYCurve(QString::fromLatin1(originCurve.yColumnName.c_str()));
-				if (!m_graphLayerAsPlotArea)
+				if (m_graphLayerAsPlotArea)
+					curve->setCoordinateSystemIndex(plot->defaultCoordinateSystemIndex());
+				else
 					curve->setCoordinateSystemIndex(layerIndex);
 				// DEBUG("CURVE path = " << STDSTRING(data))
 				QString containerName = data.right(data.length() - 2); // strip "E_" or "T_"
@@ -1534,7 +1538,9 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 			function = m_originFile->function(funcIndex);
 
 			auto* xyEqCurve = new XYEquationCurve(QLatin1String(function.name.c_str()));
-			if (!m_graphLayerAsPlotArea)
+			if (m_graphLayerAsPlotArea)
+				xyEqCurve->setCoordinateSystemIndex(plot->defaultCoordinateSystemIndex());
+			else
 				xyEqCurve->setCoordinateSystemIndex(layerIndex);
 			XYEquationCurve::EquationData eqData;
 

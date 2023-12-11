@@ -123,7 +123,7 @@ void ProjectParser::importTo(Folder* targetFolder, const QStringList& selectedPa
 }
 
 /*
- * moved \c sourceChildFolderToMove from its parten folder to \c targetParentFolder
+ * moved \c sourceChildFolderToMove from its parent folder to \c targetParentFolder
  * keeping (not overwriting) the sub-folder structure.
  */
 void ProjectParser::moveFolder(Folder* targetParentFolder, Folder* sourceChildFolderToMove) const {

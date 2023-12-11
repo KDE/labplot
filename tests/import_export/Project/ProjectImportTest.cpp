@@ -570,6 +570,7 @@ void ProjectImportTest::testOrigin_2graphs() {
 	auto* curve = dynamic_cast<XYCurve*>(plot->child<XYCurve>(0));
 	QVERIFY(curve != nullptr);
 	QCOMPARE(curve->name(), QStringLiteral("B")); // TODO: Origin uses Comments as curve name: "Length"
+	QCOMPARE(curve->coordinateSystemIndex(), plot->defaultCoordinateSystemIndex());
 
 	CHECK_RANGE(plot, curve, Dimension::X, .5, 5.5);
 	CHECK_RANGE(plot, curve, Dimension::Y, .5, 5.5);
@@ -615,6 +616,7 @@ void ProjectImportTest::testOrigin_2graphs() {
 	curve = dynamic_cast<XYCurve*>(plot->child<XYCurve>(0));
 	QVERIFY(curve != nullptr);
 	QCOMPARE(curve->name(), QStringLiteral("B")); // TODO: Origin uses Comments as curve name: "Length"
+	QCOMPARE(curve->coordinateSystemIndex(), plot->defaultCoordinateSystemIndex());
 
 	CHECK_RANGE(plot, curve, Dimension::X, 0., 9.);
 	CHECK_RANGE(plot, curve, Dimension::Y, 0., 9.);
