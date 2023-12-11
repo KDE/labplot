@@ -28,6 +28,10 @@
  \ingroup commonfrontend
 */
 
+SpreadsheetCommentsHeaderView::SpreadsheetCommentsHeaderView(QWidget* parent)
+	: QHeaderView(Qt::Horizontal, parent) {
+}
+
 SpreadsheetCommentsHeaderView::~SpreadsheetCommentsHeaderView() {
 	delete model();
 }
@@ -53,6 +57,10 @@ of SpreadsheetDoubleHeaderView if Qt allowed this.
 
 \ingroup commonfrontend
 */
+
+SpreadsheetSparkLineHeaderView::SpreadsheetSparkLineHeaderView(QWidget* parent)
+	: QHeaderView(Qt::Horizontal, parent) {
+}
 
 SpreadsheetSparkLineHeaderView::~SpreadsheetSparkLineHeaderView() {
 	delete model();
@@ -92,8 +100,6 @@ SpreadsheetHeaderView::SpreadsheetHeaderView(QWidget* parent)
 
 	m_showComments = true;
 	m_showSparkLines = true;
-
-
 }
 
 SpreadsheetHeaderView::~SpreadsheetHeaderView() {
@@ -139,6 +145,8 @@ void SpreadsheetHeaderView::paintSection(QPainter* painter, const QRect& rect, i
 			return;
 		}
 	}
+	QHeaderView::paintSection(painter, master_rect, logicalIndex);
+
 
 	if (m_showComments || m_showSparkLines) {
 		if (m_showComments) {
@@ -209,7 +217,6 @@ void SpreadsheetHeaderView::refresh() {
 
 	update();
 }
-
 
 /*!
   Reacts to a header data change.
