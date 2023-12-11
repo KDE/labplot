@@ -55,8 +55,6 @@ private Q_SLOTS:
 	//	void showOptions();
 	void recalculateClicked();
 
-	void enableRecalculate() const;
-
 	// SLOTs for changes triggered in XYCurve
 	// General-Tab
 	void curveXDataColumnChanged(const AbstractColumn*);

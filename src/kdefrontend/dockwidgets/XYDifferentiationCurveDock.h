@@ -57,7 +57,6 @@ private Q_SLOTS:
 	void accOrderChanged(int);
 
 	void recalculateClicked();
-	void enableRecalculate() const;
 
 	// SLOTs for changes triggered in XYDifferentiationCurve
 	// General-Tab

@@ -65,7 +65,6 @@ private Q_SLOTS:
 	void tolerance2Changed(double);
 
 	void recalculateClicked();
-	void enableRecalculate() const;
 
 	// SLOTs for changes triggered in XYCurve
 	// General-Tab

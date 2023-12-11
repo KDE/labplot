@@ -60,7 +60,6 @@ private Q_SLOTS:
 	void valueChanged();
 
 	void recalculateClicked();
-	void enableRecalculate() const;
 
 	// SLOTs for changes triggered in XYCurve
 	// General-Tab

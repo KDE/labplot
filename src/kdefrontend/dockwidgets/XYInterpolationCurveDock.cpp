@@ -48,7 +48,7 @@ void XYInterpolationCurveDock::setupGeneral() {
 	auto* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
 	setPlotRangeCombobox(uiGeneralTab.cbPlotRanges);
-	setBaseWidgets(uiGeneralTab.leName, uiGeneralTab.teComment, 1.2);
+	setBaseWidgets(uiGeneralTab.leName, uiGeneralTab.teComment, uiGeneralTab.pbRecalculate);
 
 	auto* gridLayout = static_cast<QGridLayout*>(generalTab->layout());
 	gridLayout->setContentsMargins(2, 2, 2, 2);
@@ -241,6 +241,7 @@ void XYInterpolationCurveDock::setCurves(QList<XYCurve*> list) {
 	m_curve = list.first();
 	setAspects(list);
 	m_interpolationCurve = static_cast<XYInterpolationCurve*>(m_curve);
+	m_analysisCurve = m_interpolationCurve;
 	this->setModel();
 	m_interpolationData = m_interpolationCurve->interpolationData();
 
@@ -614,29 +615,6 @@ void XYInterpolationCurveDock::recalculateClicked() {
 	uiGeneralTab.pbRecalculate->setEnabled(false);
 	Q_EMIT info(i18n("Interpolation status: %1", m_interpolationCurve->result().status));
 	QApplication::restoreOverrideCursor();
-}
-
-void XYInterpolationCurveDock::enableRecalculate() const {
-	CONDITIONAL_RETURN_NO_LOCK;
-
-	// no interpolation possible without the x- and y-data
-	bool hasSourceData = false;
-	if (m_interpolationCurve->dataSourceType() == XYAnalysisCurve::DataSourceType::Spreadsheet) {
-		auto* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
-		auto* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
-		hasSourceData = (aspectX && aspectY);
-		if (aspectX) {
-			cbXDataColumn->useCurrentIndexText(true);
-			cbXDataColumn->setInvalid(false);
-		}
-		if (aspectY) {
-			cbYDataColumn->useCurrentIndexText(true);
-			cbYDataColumn->setInvalid(false);
-		}
-	} else
-		hasSourceData = (m_interpolationCurve->dataSourceCurve() != nullptr);
-
-	uiGeneralTab.pbRecalculate->setEnabled(hasSourceData);
 }
 
 /*!

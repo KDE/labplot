@@ -15,8 +15,6 @@
 #include "kdefrontend/dockwidgets/XYAnalysisCurveDock.h"
 #include "ui_xyhilberttransformcurvedockgeneraltab.h"
 
-class TreeViewComboBox;
-
 class XYHilbertTransformCurveDock : public XYAnalysisCurveDock {
 	Q_OBJECT
 
@@ -50,7 +48,6 @@ private Q_SLOTS:
 
 	//	void showOptions();
 	void recalculateClicked();
-	void enableRecalculate() const;
 
 	// SLOTs for changes triggered in XYCurve
 	// General-Tab

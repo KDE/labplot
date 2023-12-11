@@ -54,7 +54,6 @@ private Q_SLOTS:
 	void normChanged();
 
 	void recalculateClicked();
-	void enableRecalculate() const;
 
 	// SLOTs for changes triggered in XYCurve
 	// General-Tab

@@ -34,7 +34,7 @@ extern "C" {
 */
 
 XYConvolutionCurveDock::XYConvolutionCurveDock(QWidget* parent)
-	: XYAnalysisCurveDock(parent) {
+	: XYAnalysisCurveDock(parent, XYAnalysisCurveDock::RequiredDataSource::Y) {
 }
 
 /*!
@@ -44,7 +44,7 @@ void XYConvolutionCurveDock::setupGeneral() {
 	auto* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
 	setPlotRangeCombobox(uiGeneralTab.cbPlotRanges);
-	setBaseWidgets(uiGeneralTab.leName, uiGeneralTab.teComment);
+	setBaseWidgets(uiGeneralTab.leName, uiGeneralTab.teComment, uiGeneralTab.pbRecalculate);
 
 	auto* gridLayout = static_cast<QGridLayout*>(generalTab->layout());
 	gridLayout->setContentsMargins(2, 2, 2, 2);
@@ -196,6 +196,7 @@ void XYConvolutionCurveDock::setCurves(QList<XYCurve*> list) {
 	m_curve = list.first();
 	setAspects(list);
 	m_convolutionCurve = static_cast<XYConvolutionCurve*>(m_curve);
+	m_analysisCurve = m_convolutionCurve;
 	this->setModel();
 	m_convolutionData = m_convolutionCurve->convolutionData();
 
@@ -468,26 +469,6 @@ void XYConvolutionCurveDock::recalculateClicked() {
 	else
 		Q_EMIT info(i18n("Deconvolution status: %1", m_convolutionCurve->convolutionResult().status));
 	QApplication::restoreOverrideCursor();
-}
-
-void XYConvolutionCurveDock::enableRecalculate() const {
-	DEBUG("XYConvolutionCurveDock::enableRecalculate()");
-	CONDITIONAL_RETURN_NO_LOCK;
-
-	bool hasSourceData = false;
-	// no convolution possible without the y-data
-	if (m_convolutionCurve->dataSourceType() == XYAnalysisCurve::DataSourceType::Spreadsheet) {
-		AbstractAspect* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
-		hasSourceData = (aspectY != nullptr);
-		if (aspectY) {
-			cbYDataColumn->useCurrentIndexText(true);
-			cbYDataColumn->setInvalid(false);
-		}
-	} else {
-		hasSourceData = (m_convolutionCurve->dataSourceCurve() != nullptr);
-	}
-
-	uiGeneralTab.pbRecalculate->setEnabled(hasSourceData);
 }
 
 /*!

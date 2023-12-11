@@ -36,7 +36,7 @@ extern "C" {
 */
 
 XYCorrelationCurveDock::XYCorrelationCurveDock(QWidget* parent)
-	: XYAnalysisCurveDock(parent) {
+	: XYAnalysisCurveDock(parent, XYAnalysisCurveDock::RequiredDataSource::YY2) {
 }
 
 /*!
@@ -46,7 +46,7 @@ void XYCorrelationCurveDock::setupGeneral() {
 	auto* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
 	setPlotRangeCombobox(uiGeneralTab.cbPlotRanges);
-	setBaseWidgets(uiGeneralTab.leName, uiGeneralTab.teComment);
+	setBaseWidgets(uiGeneralTab.leName, uiGeneralTab.teComment, uiGeneralTab.pbRecalculate);
 
 	auto* gridLayout = static_cast<QGridLayout*>(generalTab->layout());
 	gridLayout->setContentsMargins(2, 2, 2, 2);
@@ -181,6 +181,7 @@ void XYCorrelationCurveDock::setCurves(QList<XYCurve*> list) {
 	m_curve = list.first();
 	setAspects(list);
 	m_correlationCurve = static_cast<XYCorrelationCurve*>(m_curve);
+	m_analysisCurve = m_correlationCurve;
 	this->setModel();
 	m_correlationData = m_correlationCurve->correlationData();
 
@@ -360,31 +361,6 @@ void XYCorrelationCurveDock::recalculateClicked() {
 	uiGeneralTab.pbRecalculate->setEnabled(false);
 	Q_EMIT info(i18n("Correlation status: %1", m_correlationCurve->correlationResult().status));
 	QApplication::restoreOverrideCursor();
-}
-
-void XYCorrelationCurveDock::enableRecalculate() const {
-	DEBUG("XYCorrelationCurveDock::enableRecalculate()");
-	CONDITIONAL_RETURN_NO_LOCK;
-
-	bool hasSourceData = false;
-	// no correlation possible without y-data and y2-data
-	if (m_correlationCurve->dataSourceType() == XYAnalysisCurve::DataSourceType::Spreadsheet) {
-		AbstractAspect* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
-		AbstractAspect* aspectY2 = static_cast<AbstractAspect*>(cbY2DataColumn->currentModelIndex().internalPointer());
-		hasSourceData = (aspectY != nullptr && aspectY2 != nullptr);
-		if (aspectY) {
-			cbYDataColumn->useCurrentIndexText(true);
-			cbYDataColumn->setInvalid(false);
-		}
-		if (aspectY2) {
-			cbY2DataColumn->useCurrentIndexText(true);
-			cbY2DataColumn->setInvalid(false);
-		}
-	} else {
-		hasSourceData = (m_correlationCurve->dataSourceCurve() != nullptr);
-	}
-
-	uiGeneralTab.pbRecalculate->setEnabled(hasSourceData);
 }
 
 /*!

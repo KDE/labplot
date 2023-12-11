@@ -37,7 +37,7 @@ void XYHilbertTransformCurveDock::setupGeneral() {
 	auto* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
 	setPlotRangeCombobox(uiGeneralTab.cbPlotRanges);
-	setBaseWidgets(uiGeneralTab.leName, uiGeneralTab.teComment);
+	setBaseWidgets(uiGeneralTab.leName, uiGeneralTab.teComment, uiGeneralTab.pbRecalculate);
 
 	auto* gridLayout = static_cast<QGridLayout*>(generalTab->layout());
 	gridLayout->setContentsMargins(2, 2, 2, 2);
@@ -136,6 +136,7 @@ void XYHilbertTransformCurveDock::setCurves(QList<XYCurve*> list) {
 	m_curve = list.first();
 	setAspects(list);
 	m_transformCurve = static_cast<XYHilbertTransformCurve*>(m_curve);
+	m_analysisCurve = m_transformCurve;
 	this->setModel();
 	m_transformData = m_transformCurve->transformData();
 
@@ -229,25 +230,6 @@ void XYHilbertTransformCurveDock::recalculateClicked() {
 	uiGeneralTab.pbRecalculate->setEnabled(false);
 	Q_EMIT info(i18n("Hilbert transformation status: %1", m_transformCurve->result().status));
 	QApplication::restoreOverrideCursor();
-}
-
-void XYHilbertTransformCurveDock::enableRecalculate() const {
-	CONDITIONAL_RETURN_NO_LOCK;
-
-	// no transforming possible without the x- and y-data
-	auto* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
-	auto* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
-	bool data = (aspectX && aspectY);
-	if (aspectX) {
-		cbXDataColumn->useCurrentIndexText(true);
-		cbXDataColumn->setInvalid(false);
-	}
-	if (aspectY) {
-		cbYDataColumn->useCurrentIndexText(true);
-		cbYDataColumn->setInvalid(false);
-	}
-
-	uiGeneralTab.pbRecalculate->setEnabled(data);
 }
 
 /*!

@@ -37,7 +37,7 @@ void XYFourierTransformCurveDock::setupGeneral() {
 	auto* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
 	setPlotRangeCombobox(uiGeneralTab.cbPlotRanges);
-	setBaseWidgets(uiGeneralTab.leName, uiGeneralTab.teComment);
+	setBaseWidgets(uiGeneralTab.leName, uiGeneralTab.teComment, uiGeneralTab.pbRecalculate);
 
 	auto* gridLayout = static_cast<QGridLayout*>(generalTab->layout());
 	gridLayout->setContentsMargins(2, 2, 2, 2);
@@ -151,6 +151,7 @@ void XYFourierTransformCurveDock::setCurves(QList<XYCurve*> list) {
 	m_curve = list.first();
 	setAspects(list);
 	m_transformCurve = static_cast<XYFourierTransformCurve*>(m_curve);
+	m_analysisCurve = m_transformCurve;
 	this->setModel();
 	m_transformData = m_transformCurve->transformData();
 
@@ -281,25 +282,6 @@ void XYFourierTransformCurveDock::recalculateClicked() {
 	uiGeneralTab.pbRecalculate->setEnabled(false);
 	Q_EMIT info(i18n("Fourier transformation status: %1", m_transformCurve->result().status));
 	QApplication::restoreOverrideCursor();
-}
-
-void XYFourierTransformCurveDock::enableRecalculate() const {
-	CONDITIONAL_RETURN_NO_LOCK;
-
-	// no transforming possible without the x- and y-data
-	AbstractAspect* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
-	AbstractAspect* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
-	bool data = (aspectX && aspectY);
-	if (aspectX) {
-		cbXDataColumn->useCurrentIndexText(true);
-		cbXDataColumn->setInvalid(false);
-	}
-	if (aspectY) {
-		cbYDataColumn->useCurrentIndexText(true);
-		cbYDataColumn->setInvalid(false);
-	}
-
-	uiGeneralTab.pbRecalculate->setEnabled(data);
 }
 
 /*!
