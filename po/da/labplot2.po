@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-10 00:39+0000\n"
+"POT-Creation-Date: 2023-12-11 00:39+0000\n"
 "PO-Revision-Date: 2014-02-10 21:28+0100\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -2373,12 +2373,12 @@ msgstr ""
 msgid "The following error occurred: %1."
 msgstr ""
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1055
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1094
 #, kde-format
 msgid "Plot%1"
 msgstr ""
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1201
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1371
 #, kde-format
 msgid "legend"
 msgstr ""
@@ -7161,7 +7161,7 @@ msgstr "&Indsæt tomme rækker"
 msgid "%1: embed image"
 msgstr "&Indsæt tomme rækker"
 
-#: src/backend/worksheet/Image.cpp:151 src/backend/worksheet/TextLabel.cpp:340
+#: src/backend/worksheet/Image.cpp:151 src/backend/worksheet/TextLabel.cpp:366
 #, kde-format
 msgid "%1: set border opacity"
 msgstr ""
@@ -7285,7 +7285,7 @@ msgstr "&Indsæt tomme rækker"
 msgid "%1: set bottom padding"
 msgstr "&Indsæt tomme rækker"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:267
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:271
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:86
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:224
 #: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:80
@@ -7305,7 +7305,7 @@ msgstr "Vandret"
 
 #. i18n("AvgShifted Histogram"));
 #. Orientation
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:270
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:274
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:89
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:227
 #: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:83
@@ -7325,7 +7325,7 @@ msgstr "Vandret"
 msgid "Vertical"
 msgstr "Lodret"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:290
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:294
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:97
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:235
 #: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:91
@@ -7340,7 +7340,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, lEstimationLine)
 #. i18n: ectx: property (text), widget (QLabel, lWhiskersFormat)
 #. i18n: ectx: property (text), widget (QLabel, lLine)
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:296
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:300
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:134
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:219
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:488
@@ -7356,14 +7356,14 @@ msgstr ""
 msgid "Line"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:298
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:302
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:136
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:152
 #, kde-format
 msgid "Style"
 msgstr "Stil"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:303
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:307
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:141
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:157
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:319
@@ -7372,270 +7372,270 @@ msgstr "Stil"
 msgid "Color"
 msgstr "Farve"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:528
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:532
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Rows"
 msgid "%1: set axis range type"
 msgstr "&Indsæt tomme rækker"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:553
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:557
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:623
 #, kde-format
 msgid "%1: set axis orientation"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:560
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:564
 #, kde-format
 msgid "%1: set axis position"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:568
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:572
 #, kde-format
 msgid "%1: set axis offset"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:583
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:587
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Rows"
 msgid "%1: set axis range"
 msgstr "&Indsæt tomme rækker"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:622
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:626
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Rows"
 msgid "%1: set range scale"
 msgstr "&Indsæt tomme rækker"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:629
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:633
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Rows"
 msgid "%1: set scale"
 msgstr "&Indsæt tomme rækker"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:636
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:640
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Rows"
 msgid "%1: set major tick start type"
 msgstr "&Indsæt tomme rækker"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:643
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:647
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Rows"
 msgid "%1: set major tick start offset"
 msgstr "&Indsæt tomme rækker"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:651
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:655
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Rows"
 msgid "%1: set major tick start value"
 msgstr "&Indsæt tomme rækker"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:663
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:667
 #, kde-format
 msgid "%1: set axis scaling factor"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:672
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:676
 #, kde-format
 msgid "%1: set axis zero offset"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:678
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:682
 #, kde-format
 msgid "%1: show scale and offset"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:685
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:689
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Columns"
 msgid "%1: set axis logical position"
 msgstr "&Indsæt tomme kolonner"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:693
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:700
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:697
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:704
 #, kde-format
 msgid "%1: set title offset"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:708
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:712
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Rows"
 msgid "%1: set arrow type"
 msgstr "&Indsæt tomme rækker"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:715
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:719
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Columns"
 msgid "%1: set arrow position"
 msgstr "&Indsæt tomme kolonner"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:722
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:726
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Rows"
 msgid "%1: set arrow size"
 msgstr "&Indsæt tomme rækker"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:730
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:734
 #, kde-format
 msgid "%1: set major ticks direction"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:737
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:741
 #, kde-format
 msgid "%1: set major ticks type"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:745
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:749
 #, kde-format
 msgid "%1: enable/disable major automatic tick numbers"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:747
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:762
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:751
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:766
 #, kde-format
 msgid "%1: set the total number of the major ticks"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:764
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:846
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:768
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:850
 #, kde-format
 msgid "%1: disable major automatic tick numbers"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:787
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:791
 #, kde-format
 msgid "%1: set the spacing of the major ticks"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:794
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:798
 #, kde-format
 msgid "%1: assign major ticks' values"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:808
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:812
 #, kde-format
 msgid "%1: set major ticks length"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:816
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:820
 #, kde-format
 msgid "%1: set minor ticks direction"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:823
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:827
 #, kde-format
 msgid "%1: set minor ticks type"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:831
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:835
 #, kde-format
 msgid "%1: enable/disable minor automatic tick numbers"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:834
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:845
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:838
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:849
 #, kde-format
 msgid "%1: set the total number of the minor ticks"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:876
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:880
 #, kde-format
 msgid "%1: set the spacing of the minor ticks"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:883
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:887
 #, kde-format
 msgid "%1: assign minor ticks' values"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:897
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:901
 #, kde-format
 msgid "%1: set minor ticks length"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:906
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:910
 #, kde-format
 msgid "%1: set labels format"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:913
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:917
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Rows"
 msgid "%1: set labels format automatic"
 msgstr "&Indsæt tomme rækker"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:920
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:927
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:924
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:931
 #, kde-format
 msgid "%1: set labels precision"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:934
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:938
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Rows"
 msgid "%1: set labels datetime format"
 msgstr "&Indsæt tomme rækker"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:941
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:945
 #, kde-format
 msgid "%1: set labels position"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:948
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:952
 #, kde-format
 msgid "%1: set label offset"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:955
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:959
 #, kde-format
 msgid "%1: set label rotation angle"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:962
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:966
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Columns"
 msgid "%1: set labels text type"
 msgstr "&Indsæt tomme kolonner"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:969
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:973
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Columns"
 msgid "%1: set labels text column"
 msgstr "&Indsæt tomme kolonner"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:983
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:987
 #, kde-format
 msgid "%1: set label color"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:990
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:994
 #, kde-format
 msgid "%1: set label font"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:997
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1001
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Columns"
 msgid "%1: set labels background type"
 msgstr "&Indsæt tomme kolonner"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1004
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1008
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Columns"
 msgid "%1: set label background color"
 msgstr "&Indsæt tomme kolonner"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1011
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1015
 #, kde-format
 msgid "%1: set label prefix"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1018
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1022
 #, kde-format
 msgid "%1: set label suffix"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1025
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1029
 #, kde-format
 msgid "%1: set labels opacity"
 msgstr ""
@@ -8432,7 +8432,7 @@ msgid "%1: set font"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:213
-#: src/backend/worksheet/TextLabel.cpp:310
+#: src/backend/worksheet/TextLabel.cpp:344
 #, kde-format
 msgid "%1: set font color"
 msgstr ""
@@ -9381,37 +9381,39 @@ msgstr "Ændret"
 msgid "%1: set plot area corner radius"
 msgstr ""
 
-#: src/backend/worksheet/TextLabel.cpp:278
-#: src/backend/worksheet/TextLabel.cpp:280
-#, kde-format
-msgid "%1: set label text"
-msgstr ""
-
-#: src/backend/worksheet/TextLabel.cpp:296
-#, fuzzy, kde-format
-#| msgid "&Insert Empty Columns"
-msgid "%1: set label placeholdertext"
-msgstr "&Indsæt tomme kolonner"
-
-#: src/backend/worksheet/TextLabel.cpp:303
-#, fuzzy, kde-format
-#| msgid "&Insert Empty Columns"
-msgid "%1: set TeX main font"
-msgstr "&Indsæt tomme kolonner"
-
-#: src/backend/worksheet/TextLabel.cpp:318
+#: src/backend/worksheet/TextLabel.cpp:263
+#: src/backend/worksheet/TextLabel.cpp:307
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Columns"
 msgid "%1: set background color"
 msgstr "&Indsæt tomme kolonner"
 
-#: src/backend/worksheet/TextLabel.cpp:326
+#: src/backend/worksheet/TextLabel.cpp:298
+#: src/backend/worksheet/TextLabel.cpp:306
+#: src/backend/worksheet/TextLabel.cpp:309
+#, kde-format
+msgid "%1: set label text"
+msgstr ""
+
+#: src/backend/worksheet/TextLabel.cpp:330
+#, fuzzy, kde-format
+#| msgid "&Insert Empty Columns"
+msgid "%1: set label placeholdertext"
+msgstr "&Indsæt tomme kolonner"
+
+#: src/backend/worksheet/TextLabel.cpp:337
+#, fuzzy, kde-format
+#| msgid "&Insert Empty Columns"
+msgid "%1: set TeX main font"
+msgstr "&Indsæt tomme kolonner"
+
+#: src/backend/worksheet/TextLabel.cpp:352
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Rows"
 msgid "%1: set border shape"
 msgstr "&Indsæt tomme rækker"
 
-#: src/backend/worksheet/TextLabel.cpp:333
+#: src/backend/worksheet/TextLabel.cpp:359
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Rows"
 msgid "%1: set border"
@@ -11448,7 +11450,7 @@ msgid "Search..."
 msgstr ""
 
 #: src/kdefrontend/datasources/AsciiOptionsWidget.cpp:32
-#: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:50
+#: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:49
 #: src/kdefrontend/datasources/JsonOptionsWidget.cpp:35
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:84
 #, fuzzy, kde-format
@@ -11457,7 +11459,7 @@ msgid "Point '.'"
 msgstr "Antal punkter"
 
 #: src/kdefrontend/datasources/AsciiOptionsWidget.cpp:33
-#: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:51
+#: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:50
 #: src/kdefrontend/datasources/JsonOptionsWidget.cpp:36
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:85
 #, kde-format
@@ -11465,7 +11467,7 @@ msgid "Comma ','"
 msgstr ""
 
 #: src/kdefrontend/datasources/AsciiOptionsWidget.cpp:36
-#: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:54
+#: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:53
 #: src/kdefrontend/datasources/JsonOptionsWidget.cpp:117
 #, kde-format
 msgid ""
@@ -11474,7 +11476,7 @@ msgid ""
 msgstr ""
 
 #: src/kdefrontend/datasources/AsciiOptionsWidget.cpp:38
-#: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:56
+#: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:55
 #, kde-format
 msgid ""
 "When point character is used for the decimal separator, the valid number "
@@ -11484,7 +11486,7 @@ msgid ""
 msgstr ""
 
 #: src/kdefrontend/datasources/AsciiOptionsWidget.cpp:60
-#: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:75
+#: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:74
 #: src/kdefrontend/datasources/JsonOptionsWidget.cpp:140
 #, kde-format
 msgid ""
@@ -11494,7 +11496,7 @@ msgid ""
 msgstr ""
 
 #: src/kdefrontend/datasources/AsciiOptionsWidget.cpp:63
-#: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:78
+#: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:77
 #, kde-format
 msgid ""
 "Expressions that may be used for the date part of format string:"
@@ -11668,8 +11670,6 @@ msgstr "Forbindelse:"
 
 #: src/kdefrontend/datasources/DatabaseManagerWidget.cpp:501
 #: src/kdefrontend/datasources/DatabaseManagerWidget.cpp:538
-#: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:251
-#: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:275
 #: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:671
 #: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:685
 #, fuzzy, kde-format
@@ -11807,7 +11807,7 @@ msgstr "Ryd matrice"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbImportTo)
 #: src/kdefrontend/datasources/ImportDialog.cpp:72
-#: src/kdefrontend/ui/datasources/importprojectwidget.ui:68
+#: src/kdefrontend/ui/datasources/importprojectwidget.ui:108
 #, fuzzy, kde-format
 #| msgid "Import"
 msgid "Import to"
@@ -11880,23 +11880,23 @@ msgstr "&Tilføj rækker"
 msgid "%1 name:"
 msgstr "Navn:"
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:74
-#: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:43
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:71
+#: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:42
 #, fuzzy, kde-format
 #| msgid "&Spreadsheet"
 msgctxt "@title:window"
 msgid "Import Data to Spreadsheet or Matrix"
 msgstr "&Regneark"
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:76
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:73
 #, fuzzy, kde-format
 #| msgid "File data source"
 msgctxt "@title:window"
 msgid "Add New Live Data Source"
 msgstr "Kilde til fildata"
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:109
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:354
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:106
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:351
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:130
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:345
 #: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:113
@@ -11905,8 +11905,8 @@ msgstr "Kilde til fildata"
 msgid "Hide Options"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:109
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:354
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:106
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:351
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:130
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:345
 #: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:113
@@ -11915,92 +11915,92 @@ msgstr ""
 msgid "Show Options"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:149
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:146
 #, fuzzy, kde-format
 #| msgid "Project successfully opened."
 msgid "Live data source created in %1 seconds."
 msgstr "Projektet blev åbnet."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:186
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:183
 #, kde-format
 msgid "No data to import."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:337
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:334
 #, kde-format
 msgid "File %1 imported in %2 seconds."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:373
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:409
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:436
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:460
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:485
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:518
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:541
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:370
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:406
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:433
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:457
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:482
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:515
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:538
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:158
 #, kde-format
 msgid "Close the dialog and import the data."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:375
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:372
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:152
 #, kde-format
 msgid "Cannot import into a matrix since the data contains non-numerical data."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:387
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:384
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:136
 #, kde-format
 msgid "Select a data container where the data has to be imported into."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:412
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:409
 #, fuzzy, kde-format
 #| msgid "The project file %1 is already opened."
 msgid "The provided file doesn't exist."
 msgstr "Projektfilen %1 er allerede åben."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:440
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:437
 #, kde-format
 msgid "Could not connect to the provided local socket. Error: %1."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:446
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:443
 #, kde-format
 msgid ""
 "Could not connect to the provided local socket. The socket does not exist."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:465
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:462
 #, fuzzy, kde-format
 #| msgid "Could not open file %1 for reading."
 msgid "Could not connect to the provided TCP socket. Error: %1."
 msgstr "Kunne ikke åbne filen \"%1\" til læsning."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:471
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:497
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:468
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:494
 #, kde-format
 msgid "Either the host name or the port number is missing."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:491
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:488
 #, fuzzy, kde-format
 #| msgid "Could not open file %1 for reading."
 msgid "Could not connect to the provided UDP socket. Error: %1."
 msgstr "Kunne ikke åbne filen \"%1\" til læsning."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:522
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:519
 #, kde-format
 msgid "Could not connect to the provided serial port."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:528
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:525
 #, kde-format
 msgid "Serial port number is missing."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:544
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:541
 #, kde-format
 msgid ""
 "Either there is no connection, or no subscriptions were made, or the file "
@@ -12153,7 +12153,6 @@ msgstr ""
 msgid "Data Format"
 msgstr "Dataformat"
 
-#. i18n: ectx: attribute (title), widget (QWidget, tab_3)
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataPreview)
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1147
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:456
@@ -12162,7 +12161,6 @@ msgstr "Dataformat"
 msgid "Preview"
 msgstr "Forhåndsvisning"
 
-#. i18n: ectx: attribute (title), widget (QWidget, tab_4)
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataPortion)
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1149
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:535
@@ -12359,32 +12357,32 @@ msgid "Connecting to '%1:%2' timed out."
 msgstr "Forbindelse:"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:83
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:443
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:481
 #, fuzzy, kde-format
 #| msgid "Clear Matrix"
 msgid "Add new folder"
 msgstr "Ryd matrice"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:107
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:106
 #, fuzzy, kde-format
 #| msgid "Close Project"
 msgctxt "@title:window"
 msgid "Import LabPlot Project"
 msgstr "Luk projekt"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:112
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:111
 #, fuzzy, kde-format
 #| msgid "Import image from file"
 msgctxt "@title:window"
 msgid "Import Origin Project"
 msgstr "Importér billede fra fil"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:122
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:121
 #, kde-format
 msgid "Specify the file where the project content has to be imported from."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:126
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:125
 #, kde-format
 msgid ""
 "Select one or several objects to be imported into the current project.\n"
@@ -12393,14 +12391,44 @@ msgid ""
 "To import the whole project, select the top-level project node."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:131
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:130
 #, kde-format
 msgid ""
 "Specify the target folder in the current project where the selected objects "
 "have to be imported into."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:231
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:159
+#, fuzzy, kde-format
+#| msgid "Data, -"
+msgid "As Plot Area"
+msgstr "Data, -"
+
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:160
+#, fuzzy, kde-format
+#| msgid "&Insert Empty Columns"
+msgid "As Coordinate System"
+msgstr "&Indsæt tomme kolonner"
+
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:164
+#, kde-format
+msgid "Specify how to import multi-layered graphs."
+msgstr ""
+
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:169
+#, kde-format
+msgid ""
+"Multiple layers are used in Origin to either implement multiple plots or "
+"multiple axes on the same plot (see <a href=\"https://www.originlab.com/doc/"
+"Origin-Help/MultiLayer-Graph\">Origin's Documentation</a> for more details)."
+"LabPlot can process only one type at the same time.<br><br>Specify how to "
+"import multi-layered graphs in the selected project:<ul><li>As Plot Area - a "
+"new plot area is created for every layer.</li><li>As Coordinate System - a "
+"new coordinate system (data range) on the same plot area is created for "
+"every layer</li></ul>"
+msgstr ""
+
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:261
 #, kde-format
 msgid ""
 "The object listed below already exists in target folder and will be "
@@ -12411,62 +12439,62 @@ msgid_plural ""
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:237
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:267
 #, kde-format
 msgid "Do you want to proceed?"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:241
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:245
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:271
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:275
 #, kde-format
 msgid "Override existing objects?"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:273
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:308
 #, fuzzy, kde-format
 #| msgid "Project successfully opened."
 msgid "Project data imported in %1 seconds."
 msgstr "Projektet blev åbnet."
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:363
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:401
 #, kde-format
 msgid "Close the dialog and import the selected objects."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:365
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:403
 #, kde-format
 msgid "Select object(s) to be imported."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:380
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:418
 #, fuzzy, kde-format
 #| msgid "Open project"
 msgctxt "@title:window"
 msgid "Open LabPlot Project"
 msgstr "Åbn projekt"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:382
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:420
 #: src/kdefrontend/MainWin.cpp:1566
 #, fuzzy, kde-format
 #| msgid "Close Project"
 msgid "LabPlot Projects (%1)"
 msgstr "Luk projekt"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:386
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:424
 #, fuzzy, kde-format
 #| msgid "Open project"
 msgctxt "@title:window"
 msgid "Open Origin Project"
 msgstr "Åbn projekt"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:388
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:426
 #: src/kdefrontend/MainWin.cpp:1571
 #, fuzzy, kde-format
 #| msgid "Open project"
 msgid "Origin Projects (%1)"
 msgstr "Åbn projekt"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:443
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:481
 #, fuzzy, kde-format
 #| msgid "File name"
 msgid "Folder name:"
@@ -12485,19 +12513,19 @@ msgid ""
 "imported."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:43
+#: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:42
 #, fuzzy, kde-format
 #| msgid "Variance"
 msgid "Table"
 msgstr "Varians"
 
-#: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:44
+#: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:43
 #, fuzzy, kde-format
 #| msgid "Custom grid"
 msgid "Custom Query"
 msgstr "Brugertilpasset gitter"
 
-#: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:47
+#: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:46
 #, fuzzy, kde-format
 #| msgid "Connection:"
 msgid "Manage connections"
@@ -12509,27 +12537,35 @@ msgid ""
 "Couldn't find the database file '%1'. Please check the connection settings."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:273
+#: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:272
 #, kde-format
 msgid ""
 "Failed to connect to the database '%1'. Please check the connection settings."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:328
-#: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:437
-#, kde-format
-msgid "Unable to Execute Query"
-msgstr ""
+#: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:330
+#: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:332
+#, fuzzy, kde-format
+#| msgid "Could not open file %1 for reading."
+msgid "Failed to execute the query for the preview"
+msgstr "Kunne ikke åbne filen \"%1\" til læsning."
 
-#: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:405
+#: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:406
 #, kde-format
 msgid "Refresh the data preview of the selected table"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:410
+#: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:412
 #, kde-format
 msgid "Execute the query and preview its result"
 msgstr ""
+
+#: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:529
+#: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:531
+#, fuzzy, kde-format
+#| msgid "Could not open file %1 for reading."
+msgid "Failed to execute the query"
+msgstr "Kunne ikke åbne filen \"%1\" til læsning."
 
 #: src/kdefrontend/datasources/JsonOptionsWidget.cpp:119
 #, kde-format
@@ -19062,16 +19098,22 @@ msgstr "Filnavn"
 msgid "Objects to Import"
 msgstr "Data, -"
 
-#. i18n: ectx: property (text), widget (QCheckBox, chbUnusedObjects)
+#. i18n: ectx: property (text), widget (QLabel, lGraphLayer)
 #: src/kdefrontend/ui/datasources/importprojectwidget.ui:58
+#, kde-format
+msgid "Graph Layers:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lUnusedObjects)
+#: src/kdefrontend/ui/datasources/importprojectwidget.ui:82
 #, fuzzy, kde-format
 #| msgid "Import image from file"
-msgid "Import unused object"
+msgid "Unused Objects:"
 msgstr "Importér billede fra fil"
 
 #. i18n: ectx: property (text), widget (QLabel, lCustomFolder)
 #. i18n: ectx: property (text), widget (QLabel, lFolder)
-#: src/kdefrontend/ui/datasources/importprojectwidget.ui:74
+#: src/kdefrontend/ui/datasources/importprojectwidget.ui:114
 #: src/kdefrontend/ui/PlotTemplateDialog.ui:115
 #, fuzzy, kde-format
 #| msgid "Folder"
@@ -24060,12 +24102,6 @@ msgstr "Kunne ikke åbne filen \"%1\" til læsning."
 #~ msgctxt "@title:window"
 #~ msgid "Worksheet"
 #~ msgstr "&Arbejdsark"
-
-#, fuzzy
-#~| msgid "Data, -"
-#~ msgctxt "@title:window"
-#~ msgid "Plot Area"
-#~ msgstr "Data, -"
 
 #, fuzzy
 #~| msgid "x-Axis"

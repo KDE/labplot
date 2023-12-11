@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-10 00:39+0000\n"
+"POT-Creation-Date: 2023-12-11 00:39+0000\n"
 "PO-Revision-Date: 2015-02-25 20:16+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <kde-i18n-doc@kde.org>\n"
@@ -2400,13 +2400,13 @@ msgstr ""
 msgid "The following error occurred: %1."
 msgstr ""
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1055
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1094
 #, fuzzy, kde-format
 #| msgid "LabPlot2"
 msgid "Plot%1"
 msgstr "LabPlot2"
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1201
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1371
 #, kde-format
 msgid "legend"
 msgstr "legenda"
@@ -7262,7 +7262,7 @@ msgstr "%1: postavi ugao rotacije"
 msgid "%1: embed image"
 msgstr "%1: postavi ugao rotacije"
 
-#: src/backend/worksheet/Image.cpp:151 src/backend/worksheet/TextLabel.cpp:340
+#: src/backend/worksheet/Image.cpp:151 src/backend/worksheet/TextLabel.cpp:366
 #, kde-format
 msgid "%1: set border opacity"
 msgstr "%1: postavi prozirnost linije"
@@ -7386,7 +7386,7 @@ msgstr "%1: postavi horizontalno punjenje"
 msgid "%1: set bottom padding"
 msgstr "%1: postavi horizontalno punjenje"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:267
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:271
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:86
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:224
 #: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:80
@@ -7406,7 +7406,7 @@ msgstr "Horizontalno"
 
 #. i18n("AvgShifted Histogram"));
 #. Orientation
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:270
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:274
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:89
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:227
 #: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:83
@@ -7426,7 +7426,7 @@ msgstr "Horizontalno"
 msgid "Vertical"
 msgstr "Vertikalno"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:290
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:294
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:97
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:235
 #: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:91
@@ -7441,7 +7441,7 @@ msgstr "Orijentacija"
 #. i18n: ectx: property (text), widget (QLabel, lEstimationLine)
 #. i18n: ectx: property (text), widget (QLabel, lWhiskersFormat)
 #. i18n: ectx: property (text), widget (QLabel, lLine)
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:296
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:300
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:134
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:219
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:488
@@ -7457,14 +7457,14 @@ msgstr "Orijentacija"
 msgid "Line"
 msgstr "Linija"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:298
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:302
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:136
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:152
 #, kde-format
 msgid "Style"
 msgstr "Stil"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:303
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:307
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:141
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:157
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:319
@@ -7473,270 +7473,270 @@ msgstr "Stil"
 msgid "Color"
 msgstr "Boja"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:528
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:532
 #, fuzzy, kde-format
 #| msgid "%1: set rotation angle"
 msgid "%1: set axis range type"
 msgstr "%1: postavi ugao rotacije"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:553
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:557
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:623
 #, kde-format
 msgid "%1: set axis orientation"
 msgstr "%1: postavi osnu orjentaciju"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:560
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:564
 #, kde-format
 msgid "%1: set axis position"
 msgstr "%1: postavi osnu poziciju"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:568
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:572
 #, kde-format
 msgid "%1: set axis offset"
 msgstr "%1: postavi pomjeraj ose"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:583
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:587
 #, fuzzy, kde-format
 #| msgid "%1: set rotation angle"
 msgid "%1: set axis range"
 msgstr "%1: postavi ugao rotacije"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:622
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:626
 #, fuzzy, kde-format
 #| msgid "%1: set x scale"
 msgid "%1: set range scale"
 msgstr "%1: postavi x skalu"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:629
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:633
 #, fuzzy, kde-format
 #| msgid "%1: set x scale"
 msgid "%1: set scale"
 msgstr "%1: postavi x skalu"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:636
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:640
 #, fuzzy, kde-format
 #| msgid "%1: set major ticks type"
 msgid "%1: set major tick start type"
 msgstr "%1: postavi tip velike kvačice"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:643
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:647
 #, fuzzy, kde-format
 #| msgid "%1: set major ticks style"
 msgid "%1: set major tick start offset"
 msgstr "%1: postavi stil glavnih podioka"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:651
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:655
 #, fuzzy, kde-format
 #| msgid "%1: set major ticks style"
 msgid "%1: set major tick start value"
 msgstr "%1: postavi stil glavnih podioka"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:663
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:667
 #, kde-format
 msgid "%1: set axis scaling factor"
 msgstr "%1: postavi osni faktor skaliranja"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:672
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:676
 #, kde-format
 msgid "%1: set axis zero offset"
 msgstr "%1: postavi pomak osi"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:678
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:682
 #, fuzzy, kde-format
 #| msgid "%1: set axis offset"
 msgid "%1: show scale and offset"
 msgstr "%1: postavi pomjeraj ose"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:685
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:689
 #, fuzzy, kde-format
 #| msgid "%1: set labels position"
 msgid "%1: set axis logical position"
 msgstr "%1: postavi poziciju oznake"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:693
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:700
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:697
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:704
 #, kde-format
 msgid "%1: set title offset"
 msgstr "%1: postavi pomjeraj naslova"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:708
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:712
 #, kde-format
 msgid "%1: set arrow type"
 msgstr "%1: postavi tip strelice"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:715
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:719
 #, kde-format
 msgid "%1: set arrow position"
 msgstr "%1: postavi poziciju strelice"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:722
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:726
 #, kde-format
 msgid "%1: set arrow size"
 msgstr "%1: postavi veličinu strelice"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:730
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:734
 #, kde-format
 msgid "%1: set major ticks direction"
 msgstr "%1: postavi smjer kvačica"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:737
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:741
 #, kde-format
 msgid "%1: set major ticks type"
 msgstr "%1: postavi tip velike kvačice"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:745
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:749
 #, kde-format
 msgid "%1: enable/disable major automatic tick numbers"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:747
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:762
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:751
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:766
 #, kde-format
 msgid "%1: set the total number of the major ticks"
 msgstr "%1: postavi ukupan broj glavnih podioka"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:764
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:846
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:768
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:850
 #, kde-format
 msgid "%1: disable major automatic tick numbers"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:787
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:791
 #, fuzzy, kde-format
 #| msgid "%1: set the total number of the major ticks"
 msgid "%1: set the spacing of the major ticks"
 msgstr "%1: postavi ukupan broj glavnih podioka"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:794
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:798
 #, kde-format
 msgid "%1: assign major ticks' values"
 msgstr "%1: dodijeli vrijednost glavnih podioka"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:808
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:812
 #, kde-format
 msgid "%1: set major ticks length"
 msgstr "%1: postavi dužinu glavnih podioka"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:816
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:820
 #, kde-format
 msgid "%1: set minor ticks direction"
 msgstr "%1: postavi smijer sporednih podioka"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:823
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:827
 #, kde-format
 msgid "%1: set minor ticks type"
 msgstr "%1: postavi tip sporednih podioka"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:831
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:835
 #, kde-format
 msgid "%1: enable/disable minor automatic tick numbers"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:834
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:845
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:838
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:849
 #, kde-format
 msgid "%1: set the total number of the minor ticks"
 msgstr "%1: postavi ukupan broj sporednih podioka"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:876
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:880
 #, fuzzy, kde-format
 #| msgid "%1: set the total number of the minor ticks"
 msgid "%1: set the spacing of the minor ticks"
 msgstr "%1: postavi ukupan broj sporednih podioka"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:883
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:887
 #, kde-format
 msgid "%1: assign minor ticks' values"
 msgstr "%1: dodijeli sporednim podiocima vrijednost"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:897
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:901
 #, kde-format
 msgid "%1: set minor ticks length"
 msgstr "%1: postavi dužinu sporednih podioka"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:906
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:910
 #, kde-format
 msgid "%1: set labels format"
 msgstr "%1: postavi format oznake"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:913
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:917
 #, fuzzy, kde-format
 #| msgid "%1: set labels format"
 msgid "%1: set labels format automatic"
 msgstr "%1: postavi format oznake"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:920
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:927
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:924
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:931
 #, kde-format
 msgid "%1: set labels precision"
 msgstr "%1: postavi preciznost oznake"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:934
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:938
 #, fuzzy, kde-format
 #| msgid "%1: set labels format"
 msgid "%1: set labels datetime format"
 msgstr "%1: postavi format oznake"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:941
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:945
 #, kde-format
 msgid "%1: set labels position"
 msgstr "%1: postavi poziciju oznake"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:948
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:952
 #, kde-format
 msgid "%1: set label offset"
 msgstr "%1: postavi poziciju oznake"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:955
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:959
 #, kde-format
 msgid "%1: set label rotation angle"
 msgstr "%1: postavi ugao rotacije za oznaku"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:962
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:966
 #, fuzzy, kde-format
 #| msgid "%1: set label text"
 msgid "%1: set labels text type"
 msgstr "%1: postavi tekst oznake"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:969
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:973
 #, fuzzy, kde-format
 #| msgid "%1: set label text"
 msgid "%1: set labels text column"
 msgstr "%1: postavi tekst oznake"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:983
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:987
 #, kde-format
 msgid "%1: set label color"
 msgstr "%1: postavi boju oznake"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:990
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:994
 #, kde-format
 msgid "%1: set label font"
 msgstr "%1: postavi font oznake"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:997
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1001
 #, fuzzy, kde-format
 #| msgid "%1: set background image"
 msgid "%1: set labels background type"
 msgstr "%1: postavi pozadinsku sliku"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1004
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1008
 #, fuzzy, kde-format
 #| msgid "%1: set background first color"
 msgid "%1: set label background color"
 msgstr "%1: postavi prvu pozadinsku boju"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1011
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1015
 #, kde-format
 msgid "%1: set label prefix"
 msgstr "%1: postavi prefiks oznake"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1018
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1022
 #, kde-format
 msgid "%1: set label suffix"
 msgstr "%1: postavi sufiks oznake"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1025
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1029
 #, kde-format
 msgid "%1: set labels opacity"
 msgstr "%1: postavi prozirnost oznake"
@@ -8548,7 +8548,7 @@ msgid "%1: set font"
 msgstr "%1: postavi font"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:213
-#: src/backend/worksheet/TextLabel.cpp:310
+#: src/backend/worksheet/TextLabel.cpp:344
 #, kde-format
 msgid "%1: set font color"
 msgstr "%1: postavi boju fonta"
@@ -9513,37 +9513,39 @@ msgstr "%1: tip linije promijenjen"
 msgid "%1: set plot area corner radius"
 msgstr "%1: postavi granice za područje u kojem se crta"
 
-#: src/backend/worksheet/TextLabel.cpp:278
-#: src/backend/worksheet/TextLabel.cpp:280
-#, kde-format
-msgid "%1: set label text"
-msgstr "%1: postavi tekst oznake"
-
-#: src/backend/worksheet/TextLabel.cpp:296
-#, fuzzy, kde-format
-#| msgid "%1: set label text"
-msgid "%1: set label placeholdertext"
-msgstr "%1: postavi tekst oznake"
-
-#: src/backend/worksheet/TextLabel.cpp:303
-#, fuzzy, kde-format
-#| msgid "%1: set TeX font size"
-msgid "%1: set TeX main font"
-msgstr "%1: postavi TeX veličinu fonta"
-
-#: src/backend/worksheet/TextLabel.cpp:318
+#: src/backend/worksheet/TextLabel.cpp:263
+#: src/backend/worksheet/TextLabel.cpp:307
 #, fuzzy, kde-format
 #| msgid "%1: set background first color"
 msgid "%1: set background color"
 msgstr "%1: postavi prvu pozadinsku boju"
 
-#: src/backend/worksheet/TextLabel.cpp:326
+#: src/backend/worksheet/TextLabel.cpp:298
+#: src/backend/worksheet/TextLabel.cpp:306
+#: src/backend/worksheet/TextLabel.cpp:309
+#, kde-format
+msgid "%1: set label text"
+msgstr "%1: postavi tekst oznake"
+
+#: src/backend/worksheet/TextLabel.cpp:330
+#, fuzzy, kde-format
+#| msgid "%1: set label text"
+msgid "%1: set label placeholdertext"
+msgstr "%1: postavi tekst oznake"
+
+#: src/backend/worksheet/TextLabel.cpp:337
+#, fuzzy, kde-format
+#| msgid "%1: set TeX font size"
+msgid "%1: set TeX main font"
+msgstr "%1: postavi TeX veličinu fonta"
+
+#: src/backend/worksheet/TextLabel.cpp:352
 #, fuzzy, kde-format
 #| msgid "%1: set border style"
 msgid "%1: set border shape"
 msgstr "%1: postavi stil inije"
 
-#: src/backend/worksheet/TextLabel.cpp:333
+#: src/backend/worksheet/TextLabel.cpp:359
 #, fuzzy, kde-format
 #| msgid "%1: set border style"
 msgid "%1: set border"
@@ -11615,7 +11617,7 @@ msgid "Search..."
 msgstr ""
 
 #: src/kdefrontend/datasources/AsciiOptionsWidget.cpp:32
-#: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:50
+#: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:49
 #: src/kdefrontend/datasources/JsonOptionsWidget.cpp:35
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:84
 #, fuzzy, kde-format
@@ -11624,7 +11626,7 @@ msgid "Point '.'"
 msgstr "LabPlot2"
 
 #: src/kdefrontend/datasources/AsciiOptionsWidget.cpp:33
-#: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:51
+#: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:50
 #: src/kdefrontend/datasources/JsonOptionsWidget.cpp:36
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:85
 #, kde-format
@@ -11632,7 +11634,7 @@ msgid "Comma ','"
 msgstr ""
 
 #: src/kdefrontend/datasources/AsciiOptionsWidget.cpp:36
-#: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:54
+#: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:53
 #: src/kdefrontend/datasources/JsonOptionsWidget.cpp:117
 #, kde-format
 msgid ""
@@ -11641,7 +11643,7 @@ msgid ""
 msgstr ""
 
 #: src/kdefrontend/datasources/AsciiOptionsWidget.cpp:38
-#: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:56
+#: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:55
 #, kde-format
 msgid ""
 "When point character is used for the decimal separator, the valid number "
@@ -11651,7 +11653,7 @@ msgid ""
 msgstr ""
 
 #: src/kdefrontend/datasources/AsciiOptionsWidget.cpp:60
-#: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:75
+#: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:74
 #: src/kdefrontend/datasources/JsonOptionsWidget.cpp:140
 #, kde-format
 msgid ""
@@ -11661,7 +11663,7 @@ msgid ""
 msgstr ""
 
 #: src/kdefrontend/datasources/AsciiOptionsWidget.cpp:63
-#: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:78
+#: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:77
 #, kde-format
 msgid ""
 "Expressions that may be used for the date part of format string:"
@@ -11839,8 +11841,6 @@ msgstr "Veza:"
 
 #: src/kdefrontend/datasources/DatabaseManagerWidget.cpp:501
 #: src/kdefrontend/datasources/DatabaseManagerWidget.cpp:538
-#: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:251
-#: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:275
 #: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:671
 #: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:685
 #, fuzzy, kde-format
@@ -11977,7 +11977,7 @@ msgstr "Matrica"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbImportTo)
 #: src/kdefrontend/datasources/ImportDialog.cpp:72
-#: src/kdefrontend/ui/datasources/importprojectwidget.ui:68
+#: src/kdefrontend/ui/datasources/importprojectwidget.ui:108
 #, fuzzy, kde-format
 #| msgid "Import To"
 msgid "Import to"
@@ -12050,23 +12050,23 @@ msgstr "Dodaj novo"
 msgid "%1 name:"
 msgstr "Ime:"
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:74
-#: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:43
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:71
+#: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:42
 #, fuzzy, kde-format
 #| msgid "Import Data to Spreadsheet/Matrix"
 msgctxt "@title:window"
 msgid "Import Data to Spreadsheet or Matrix"
 msgstr "Uvezi Podatke u tabelarni prikaz/matricu"
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:76
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:73
 #, fuzzy, kde-format
 #| msgid "File data source"
 msgctxt "@title:window"
 msgid "Add New Live Data Source"
 msgstr "Datoteka podatak izvor"
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:109
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:354
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:106
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:351
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:130
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:345
 #: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:113
@@ -12075,8 +12075,8 @@ msgstr "Datoteka podatak izvor"
 msgid "Hide Options"
 msgstr "Sakrij Opcije"
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:109
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:354
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:106
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:351
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:130
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:345
 #: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:113
@@ -12085,92 +12085,92 @@ msgstr "Sakrij Opcije"
 msgid "Show Options"
 msgstr "Prikaži opcije"
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:149
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:146
 #, fuzzy, kde-format
 #| msgid "File data source created in %1 seconds."
 msgid "Live data source created in %1 seconds."
 msgstr "Izvor podataka datoteke kreiran u %1 sekundi"
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:186
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:183
 #, kde-format
 msgid "No data to import."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:337
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:334
 #, kde-format
 msgid "File %1 imported in %2 seconds."
 msgstr "Datoteka %1 uvezena u %2 sekundi."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:373
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:409
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:436
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:460
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:485
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:518
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:541
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:370
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:406
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:433
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:457
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:482
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:515
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:538
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:158
 #, kde-format
 msgid "Close the dialog and import the data."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:375
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:372
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:152
 #, kde-format
 msgid "Cannot import into a matrix since the data contains non-numerical data."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:387
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:384
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:136
 #, kde-format
 msgid "Select a data container where the data has to be imported into."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:412
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:409
 #, fuzzy, kde-format
 #| msgid "The project file %1 is already opened."
 msgid "The provided file doesn't exist."
 msgstr "Projektna datoteka %1 je već otvorena."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:440
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:437
 #, kde-format
 msgid "Could not connect to the provided local socket. Error: %1."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:446
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:443
 #, kde-format
 msgid ""
 "Could not connect to the provided local socket. The socket does not exist."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:465
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:462
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Could not connect to the provided TCP socket. Error: %1."
 msgstr "Otvaranje neuspješno"
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:471
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:497
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:468
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:494
 #, kde-format
 msgid "Either the host name or the port number is missing."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:491
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:488
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Could not connect to the provided UDP socket. Error: %1."
 msgstr "Otvaranje neuspješno"
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:522
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:519
 #, kde-format
 msgid "Could not connect to the provided serial port."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:528
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:525
 #, kde-format
 msgid "Serial port number is missing."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:544
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:541
 #, kde-format
 msgid ""
 "Either there is no connection, or no subscriptions were made, or the file "
@@ -12335,7 +12335,6 @@ msgstr ""
 msgid "Data Format"
 msgstr "Format podataka"
 
-#. i18n: ectx: attribute (title), widget (QWidget, tab_3)
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataPreview)
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1147
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:456
@@ -12344,7 +12343,6 @@ msgstr "Format podataka"
 msgid "Preview"
 msgstr "Pregled"
 
-#. i18n: ectx: attribute (title), widget (QWidget, tab_4)
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataPortion)
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1149
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:535
@@ -12539,32 +12537,32 @@ msgid "Connecting to '%1:%2' timed out."
 msgstr "Veza:"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:83
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:443
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:481
 #, fuzzy, kde-format
 #| msgid "Add new"
 msgid "Add new folder"
 msgstr "Dodaj novo"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:107
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:106
 #, fuzzy, kde-format
 #| msgid "Close Project"
 msgctxt "@title:window"
 msgid "Import LabPlot Project"
 msgstr "Zatvori projekat"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:112
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:111
 #, fuzzy, kde-format
 #| msgid "Import image from file"
 msgctxt "@title:window"
 msgid "Import Origin Project"
 msgstr "Uvezi sliku iz fajla"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:122
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:121
 #, kde-format
 msgid "Specify the file where the project content has to be imported from."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:126
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:125
 #, kde-format
 msgid ""
 "Select one or several objects to be imported into the current project.\n"
@@ -12573,14 +12571,44 @@ msgid ""
 "To import the whole project, select the top-level project node."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:131
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:130
 #, kde-format
 msgid ""
 "Specify the target folder in the current project where the selected objects "
 "have to be imported into."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:231
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:159
+#, fuzzy, kde-format
+#| msgid "Plot Area"
+msgid "As Plot Area"
+msgstr "Prostor za Crtanje"
+
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:160
+#, fuzzy, kde-format
+#| msgid "%1: set matrix coordinates"
+msgid "As Coordinate System"
+msgstr "%1: postavi koordinate matrice"
+
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:164
+#, kde-format
+msgid "Specify how to import multi-layered graphs."
+msgstr ""
+
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:169
+#, kde-format
+msgid ""
+"Multiple layers are used in Origin to either implement multiple plots or "
+"multiple axes on the same plot (see <a href=\"https://www.originlab.com/doc/"
+"Origin-Help/MultiLayer-Graph\">Origin's Documentation</a> for more details)."
+"LabPlot can process only one type at the same time.<br><br>Specify how to "
+"import multi-layered graphs in the selected project:<ul><li>As Plot Area - a "
+"new plot area is created for every layer.</li><li>As Coordinate System - a "
+"new coordinate system (data range) on the same plot area is created for "
+"every layer</li></ul>"
+msgstr ""
+
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:261
 #, kde-format
 msgid ""
 "The object listed below already exists in target folder and will be "
@@ -12592,65 +12620,65 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:237
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:267
 #, kde-format
 msgid "Do you want to proceed?"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:241
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:245
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:271
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:275
 #, kde-format
 msgid "Override existing objects?"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:273
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:308
 #, fuzzy, kde-format
 #| msgid "File %1 imported in %2 seconds."
 msgid "Project data imported in %1 seconds."
 msgstr "Datoteka %1 uvezena u %2 sekundi."
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:363
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:401
 #, fuzzy, kde-format
 #| msgid "Do you really want to delete the selected object?"
 #| msgid_plural "Do you really want to delete the selected %1 objects?"
 msgid "Close the dialog and import the selected objects."
 msgstr "Da li zaista želite da obrišete odabrani %1 objekat?"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:365
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:403
 #, fuzzy, kde-format
 #| msgid " Select the file to import"
 msgid "Select object(s) to be imported."
 msgstr " Označi datoteku za uvoz"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:380
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:418
 #, fuzzy, kde-format
 #| msgid "Open project"
 msgctxt "@title:window"
 msgid "Open LabPlot Project"
 msgstr "Otvori projekat"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:382
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:420
 #: src/kdefrontend/MainWin.cpp:1566
 #, fuzzy, kde-format
 #| msgid "Close Project"
 msgid "LabPlot Projects (%1)"
 msgstr "Zatvori projekat"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:386
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:424
 #, fuzzy, kde-format
 #| msgid "Open project"
 msgctxt "@title:window"
 msgid "Open Origin Project"
 msgstr "Otvori projekat"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:388
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:426
 #: src/kdefrontend/MainWin.cpp:1571
 #, fuzzy, kde-format
 #| msgid "Open project"
 msgid "Origin Projects (%1)"
 msgstr "Otvori projekat"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:443
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:481
 #, fuzzy, kde-format
 #| msgid "Filter name:"
 msgid "Folder name:"
@@ -12669,19 +12697,19 @@ msgid ""
 "imported."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:43
+#: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:42
 #, fuzzy, kde-format
 #| msgid "Variance"
 msgid "Table"
 msgstr "Varijanca"
 
-#: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:44
+#: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:43
 #, fuzzy, kde-format
 #| msgid "Custom grid"
 msgid "Custom Query"
 msgstr "Podesi meržu"
 
-#: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:47
+#: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:46
 #, fuzzy, kde-format
 #| msgid "Connection:"
 msgid "Manage connections"
@@ -12693,28 +12721,36 @@ msgid ""
 "Couldn't find the database file '%1'. Please check the connection settings."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:273
+#: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:272
 #, kde-format
 msgid ""
 "Failed to connect to the database '%1'. Please check the connection settings."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:328
-#: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:437
-#, kde-format
-msgid "Unable to Execute Query"
-msgstr ""
+#: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:330
+#: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:332
+#, fuzzy, kde-format
+#| msgid "Failed to open"
+msgid "Failed to execute the query for the preview"
+msgstr "Otvaranje neuspješno"
 
-#: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:405
+#: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:406
 #, fuzzy, kde-format
 #| msgid "Specify the name of the image file."
 msgid "Refresh the data preview of the selected table"
 msgstr "Specificiraj ime slike."
 
-#: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:410
+#: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:412
 #, kde-format
 msgid "Execute the query and preview its result"
 msgstr ""
+
+#: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:529
+#: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:531
+#, fuzzy, kde-format
+#| msgid "Failed to open"
+msgid "Failed to execute the query"
+msgstr "Otvaranje neuspješno"
 
 #: src/kdefrontend/datasources/JsonOptionsWidget.cpp:119
 #, kde-format
@@ -19401,16 +19437,22 @@ msgstr "Naziv datoteke"
 msgid "Objects to Import"
 msgstr "Podaci:"
 
-#. i18n: ectx: property (text), widget (QCheckBox, chbUnusedObjects)
+#. i18n: ectx: property (text), widget (QLabel, lGraphLayer)
 #: src/kdefrontend/ui/datasources/importprojectwidget.ui:58
+#, kde-format
+msgid "Graph Layers:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lUnusedObjects)
+#: src/kdefrontend/ui/datasources/importprojectwidget.ui:82
 #, fuzzy, kde-format
 #| msgid "Import image from file"
-msgid "Import unused object"
+msgid "Unused Objects:"
 msgstr "Uvezi sliku iz fajla"
 
 #. i18n: ectx: property (text), widget (QLabel, lCustomFolder)
 #. i18n: ectx: property (text), widget (QLabel, lFolder)
-#: src/kdefrontend/ui/datasources/importprojectwidget.ui:74
+#: src/kdefrontend/ui/datasources/importprojectwidget.ui:114
 #: src/kdefrontend/ui/PlotTemplateDialog.ui:115
 #, fuzzy, kde-format
 #| msgid "Folder"
