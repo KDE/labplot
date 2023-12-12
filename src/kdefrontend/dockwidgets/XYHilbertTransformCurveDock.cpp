@@ -117,7 +117,7 @@ void XYHilbertTransformCurveDock::initGeneralTab() {
 	connect(m_transformCurve, &XYHilbertTransformCurve::transformDataChanged, this, &XYHilbertTransformCurveDock::curveTransformDataChanged);
 	connect(m_transformCurve, &XYHilbertTransformCurve::sourceDataChanged, this, &XYHilbertTransformCurveDock::enableRecalculate);
 	connect(m_transformCurve, &XYCurve::visibleChanged, this, &XYHilbertTransformCurveDock::curveVisibilityChanged);
-	connect(m_transformCurve, &WorksheetElement::plotRangeListChanged, this, &XYHilbertTransformCurveDock::updatePlotRanges);
+	connect(m_transformCurve, &WorksheetElement::plotRangeListChanged, this, &XYHilbertTransformCurveDock::updatePlotRangeList);
 }
 
 void XYHilbertTransformCurveDock::setModel() {
@@ -145,10 +145,6 @@ void XYHilbertTransformCurveDock::setCurves(QList<XYCurve*> list) {
 	setSymbols(list);
 	m_initializing = false;
 
-	updatePlotRanges();
-}
-
-void XYHilbertTransformCurveDock::updatePlotRanges() {
 	updatePlotRangeList();
 }
 

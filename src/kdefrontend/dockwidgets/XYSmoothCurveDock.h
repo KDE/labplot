@@ -27,11 +27,9 @@ public:
 
 private:
 	void initGeneralTab() override;
-	void updatePlotRanges() override;
 	void showSmoothResult();
 
 	Ui::XYSmoothCurveDockGeneralTab uiGeneralTab;
-
 	XYSmoothCurve* m_smoothCurve{nullptr};
 	XYSmoothCurve::SmoothData m_smoothData;
 	bool m_dateTimeRange{false};
@@ -57,7 +55,6 @@ private Q_SLOTS:
 	void orderChanged(int);
 	void modeChanged(int);
 	void valueChanged();
-
 	void recalculateClicked();
 
 	// SLOTs for changes triggered in XYCurve

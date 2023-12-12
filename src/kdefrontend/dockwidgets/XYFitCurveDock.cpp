@@ -286,7 +286,7 @@ void XYFitCurveDock::initGeneralTab() {
 	connect(m_fitCurve, &XYFitCurve::yErrorColumnChanged, this, &XYFitCurveDock::curveYErrorColumnChanged);
 	connect(m_fitCurve, &XYFitCurve::fitDataChanged, this, &XYFitCurveDock::curveFitDataChanged);
 	connect(m_fitCurve, &XYFitCurve::sourceDataChanged, this, &XYFitCurveDock::enableRecalculate);
-	connect(m_fitCurve, &WorksheetElement::plotRangeListChanged, this, &XYFitCurveDock::updatePlotRanges);
+	connect(m_fitCurve, &WorksheetElement::plotRangeListChanged, this, &XYFitCurveDock::updatePlotRangeList);
 	connect(m_fitCurve, &WorksheetElement::visibleChanged, this, &XYFitCurveDock::curveVisibilityChanged);
 
 	connect(fitParametersWidget, &FitParametersWidget::parametersChanged, this, &XYFitCurveDock::parametersChanged);
@@ -362,15 +362,11 @@ void XYFitCurveDock::setCurves(QList<XYCurve*> list) {
 	m_initializing = false;
 	enableRecalculate();
 
-	updatePlotRanges();
+	updatePlotRangeList();
 
 	// init parameter list when not available
 	if (m_fitData.paramStartValues.size() == 0)
 		updateModelEquation();
-}
-
-void XYFitCurveDock ::updatePlotRanges() {
-	updatePlotRangeList();
 }
 
 bool XYFitCurveDock::eventFilter(QObject* obj, QEvent* event) {

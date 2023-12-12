@@ -39,7 +39,6 @@ public:
 private:
 	virtual void initGeneralTab();
 	void updateValuesWidgets();
-	void updatePlotRanges() override;
 
 	void load();
 	void loadConfig(KConfig&);

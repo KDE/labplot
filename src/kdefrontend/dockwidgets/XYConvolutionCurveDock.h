@@ -27,11 +27,9 @@ public:
 
 private:
 	void initGeneralTab() override;
-	void updatePlotRanges() override;
 	void showConvolutionResult();
 
 	Ui::XYConvolutionCurveDockGeneralTab uiGeneralTab;
-
 	XYConvolutionCurve* m_convolutionCurve{nullptr};
 	XYConvolutionCurve::ConvolutionData m_convolutionData;
 
@@ -55,7 +53,6 @@ private Q_SLOTS:
 	void typeChanged();
 	void normChanged();
 	void wrapChanged();
-
 	void recalculateClicked();
 
 	// SLOTs for changes triggered in XYCurve

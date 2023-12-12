@@ -166,7 +166,7 @@ void XYConvolutionCurveDock::initGeneralTab() {
 	connect(m_convolutionCurve, &XYConvolutionCurve::y2DataColumnChanged, this, &XYConvolutionCurveDock::curveY2DataColumnChanged);
 	connect(m_convolutionCurve, &XYConvolutionCurve::convolutionDataChanged, this, &XYConvolutionCurveDock::curveConvolutionDataChanged);
 	connect(m_convolutionCurve, &XYConvolutionCurve::sourceDataChanged, this, &XYConvolutionCurveDock::enableRecalculate);
-	connect(m_convolutionCurve, &WorksheetElement::plotRangeListChanged, this, &XYConvolutionCurveDock::updatePlotRanges);
+	connect(m_convolutionCurve, &WorksheetElement::plotRangeListChanged, this, &XYConvolutionCurveDock::updatePlotRangeList);
 	connect(m_convolutionCurve, &XYCurve::visibleChanged, this, &XYConvolutionCurveDock::curveVisibilityChanged);
 }
 
@@ -199,17 +199,13 @@ void XYConvolutionCurveDock::setCurves(QList<XYCurve*> list) {
 	initGeneralTab();
 	initTabs();
 	setSymbols(list);
-	updatePlotRanges();
+	updatePlotRangeList();
 
 	m_initializing = false;
 
 	// hide the "skip gaps" option after the curves were set
 	ui.lLineSkipGaps->hide();
 	ui.chkLineSkipGaps->hide();
-}
-
-void XYConvolutionCurveDock::updatePlotRanges() {
-	updatePlotRangeList();
 }
 
 //*************************************************************

@@ -28,12 +28,10 @@ public:
 
 private:
 	void initGeneralTab() override;
-	void updatePlotRanges() override;
 	void updateSettings(const AbstractColumn*);
 	void showDifferentiationResult();
 
 	Ui::XYDifferentiationCurveDockGeneralTab uiGeneralTab;
-
 	XYDifferentiationCurve* m_differentiationCurve{nullptr};
 	XYDifferentiationCurve::DifferentiationData m_differentiationData;
 	bool m_dateTimeRange{false};
@@ -54,7 +52,6 @@ private Q_SLOTS:
 	void xRangeMaxDateTimeChanged(qint64);
 	void derivOrderChanged(int);
 	void accOrderChanged(int);
-
 	void recalculateClicked();
 
 	// SLOTs for changes triggered in XYDifferentiationCurve

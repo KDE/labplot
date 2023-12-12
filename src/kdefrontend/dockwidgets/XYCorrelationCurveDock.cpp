@@ -154,7 +154,7 @@ void XYCorrelationCurveDock::initGeneralTab() {
 	connect(m_correlationCurve, &XYCorrelationCurve::correlationDataChanged, this, &XYCorrelationCurveDock::curveCorrelationDataChanged);
 	connect(m_correlationCurve, &XYCorrelationCurve::sourceDataChanged, this, &XYCorrelationCurveDock::enableRecalculate);
 	connect(m_correlationCurve, &XYCurve::visibleChanged, this, &XYCorrelationCurveDock::curveVisibilityChanged);
-	connect(m_correlationCurve, &WorksheetElement::plotRangeListChanged, this, &XYCorrelationCurveDock::updatePlotRanges);
+	connect(m_correlationCurve, &WorksheetElement::plotRangeListChanged, this, &XYCorrelationCurveDock::updatePlotRangeList);
 }
 
 void XYCorrelationCurveDock::setModel() {
@@ -188,15 +188,11 @@ void XYCorrelationCurveDock::setCurves(QList<XYCurve*> list) {
 	setSymbols(list);
 	m_initializing = false;
 
-	updatePlotRanges();
+	updatePlotRangeList();
 
 	// hide the "skip gaps" option after the curves were set
 	ui.lLineSkipGaps->hide();
 	ui.chkLineSkipGaps->hide();
-}
-
-void XYCorrelationCurveDock::updatePlotRanges() {
-	updatePlotRangeList();
 }
 
 //*************************************************************

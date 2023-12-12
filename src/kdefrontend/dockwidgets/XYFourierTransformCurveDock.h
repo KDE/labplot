@@ -27,11 +27,9 @@ public:
 
 private:
 	void initGeneralTab() override;
-	void updatePlotRanges() override;
 	void showTransformResult();
 
 	Ui::XYFourierTransformCurveDockGeneralTab uiGeneralTab;
-
 	XYFourierTransformCurve* m_transformCurve{nullptr};
 	XYFourierTransformCurve::TransformData m_transformData;
 
@@ -50,8 +48,6 @@ private Q_SLOTS:
 	void twoSidedChanged();
 	void shiftedChanged();
 	void xScaleChanged();
-
-	//	void showOptions();
 	void recalculateClicked();
 
 	// SLOTs for changes triggered in XYCurve

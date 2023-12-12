@@ -175,7 +175,7 @@ void XYFourierFilterCurveDock::initGeneralTab() {
 	connect(m_filterCurve, &XYFourierFilterCurve::filterDataChanged, this, &XYFourierFilterCurveDock::curveFilterDataChanged);
 	connect(m_filterCurve, &XYFourierFilterCurve::sourceDataChanged, this, &XYFourierFilterCurveDock::enableRecalculate);
 	connect(m_filterCurve, &XYCurve::visibleChanged, this, &XYFourierFilterCurveDock::curveVisibilityChanged);
-	connect(m_filterCurve, &WorksheetElement::plotRangeListChanged, this, &XYFourierFilterCurveDock::updatePlotRanges);
+	connect(m_filterCurve, &WorksheetElement::plotRangeListChanged, this, &XYFourierFilterCurveDock::updatePlotRangeList);
 }
 
 void XYFourierFilterCurveDock::setModel() {
@@ -203,10 +203,6 @@ void XYFourierFilterCurveDock::setCurves(QList<XYCurve*> list) {
 	setSymbols(list);
 	m_initializing = false;
 
-	updatePlotRanges();
-}
-
-void XYFourierFilterCurveDock::updatePlotRanges() {
 	updatePlotRangeList();
 }
 

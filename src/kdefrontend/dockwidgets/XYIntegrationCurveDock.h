@@ -28,13 +28,10 @@ public:
 private:
 	void initGeneralTab() override;
 	void updateSettings(const AbstractColumn*);
-	void updatePlotRanges() override;
 	void showIntegrationResult();
-
 	virtual QString customText() const override;
 
 	Ui::XYIntegrationCurveDockGeneralTab uiGeneralTab;
-
 	XYIntegrationCurve* m_integrationCurve{nullptr};
 	XYIntegrationCurve::IntegrationData m_integrationData;
 	bool m_dateTimeRange{false};
@@ -55,7 +52,6 @@ private Q_SLOTS:
 	void xRangeMaxDateTimeChanged(qint64);
 	void methodChanged(int);
 	void absoluteChanged();
-
 	void recalculateClicked();
 
 	// SLOTs for changes triggered in XYCurve

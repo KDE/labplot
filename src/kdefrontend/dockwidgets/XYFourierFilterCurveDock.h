@@ -27,12 +27,10 @@ public:
 
 private:
 	void initGeneralTab() override;
-	void updatePlotRanges() override;
 	void showFilterResult();
 	void updateCutoffSpinBoxes(NumberSpinBox* sb, nsl_filter_cutoff_unit newUnit, nsl_filter_cutoff_unit oldUnit, double oldValue);
 
 	Ui::XYFourierFilterCurveDockGeneralTab uiGeneralTab;
-
 	XYFourierFilterCurve* m_filterCurve{nullptr};
 	XYFourierFilterCurve::FilterData m_filterData;
 	bool m_dateTimeRange{false};
@@ -56,7 +54,6 @@ private Q_SLOTS:
 	void orderChanged();
 	void unitChanged();
 	void unit2Changed();
-
 	void recalculateClicked();
 
 	// SLOTs for changes triggered in XYCurve

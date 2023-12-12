@@ -29,11 +29,9 @@ public:
 private:
 	void initGeneralTab() override;
 	void updateSettings(const AbstractColumn*);
-	void updatePlotRanges() override;
 	void showInterpolationResult();
 
 	Ui::XYInterpolationCurveDockGeneralTab uiGeneralTab;
-
 	XYInterpolationCurve* m_interpolationCurve{nullptr};
 	XYInterpolationCurve::InterpolationData m_interpolationData;
 	unsigned int dataPoints{0}; // number of data points in selected column
@@ -61,7 +59,6 @@ private Q_SLOTS:
 	void evaluateChanged(int);
 	void numberOfPointsChanged();
 	void pointsModeChanged(int);
-
 	void recalculateClicked();
 
 	// SLOTs for changes triggered in XYCurve
