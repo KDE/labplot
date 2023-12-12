@@ -483,7 +483,7 @@ void XYSmoothCurveDock::recalculateClicked() {
  * show the result and details of the smooth
  */
 void XYSmoothCurveDock::showSmoothResult() {
-	showResult(m_smoothCurve, uiGeneralTab.teResult, uiGeneralTab.pbRecalculate);
+	showResult(m_smoothCurve, uiGeneralTab.teResult);
 }
 
 //*************************************************************
@@ -496,10 +496,6 @@ void XYSmoothCurveDock::curveSmoothDataChanged(const XYSmoothCurve::SmoothData& 
 	uiGeneralTab.cbType->setCurrentIndex(m_smoothData.type);
 
 	this->showSmoothResult();
-}
-
-void XYSmoothCurveDock::dataChanged() {
-	this->enableRecalculate();
 }
 
 void XYSmoothCurveDock::curveVisibilityChanged(bool on) {

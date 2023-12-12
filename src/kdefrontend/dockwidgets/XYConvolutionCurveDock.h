@@ -63,7 +63,6 @@ private Q_SLOTS:
 	void curveXDataColumnChanged(const AbstractColumn*);
 	void curveY2DataColumnChanged(const AbstractColumn*);
 	void curveConvolutionDataChanged(const XYConvolutionCurve::ConvolutionData&);
-	void dataChanged();
 	void curveVisibilityChanged(bool);
 };
 

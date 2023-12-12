@@ -10,7 +10,7 @@ XYAnalysisCurveDock::XYAnalysisCurveDock(QWidget* parent, RequiredDataSource req
 /*!
  * show the result and details of the transform
  */
-void XYAnalysisCurveDock::showResult(const XYAnalysisCurve* curve, QTextEdit* teResult, QPushButton* pbRecalculate) {
+void XYAnalysisCurveDock::showResult(const XYAnalysisCurve* curve, QTextEdit* teResult) {
 	const auto& result = curve->result();
 	if (!result.available) {
 		teResult->clear();
@@ -37,7 +37,7 @@ void XYAnalysisCurveDock::showResult(const XYAnalysisCurve* curve, QTextEdit* te
 	teResult->setText(str);
 
 	// enable the "recalculate"-button if the source data was changed since the last calculation
-	pbRecalculate->setEnabled(curve->isSourceDataChangedSinceLastRecalc());
+	m_recalculateButton->setEnabled(curve->isSourceDataChangedSinceLastRecalc());
 }
 
 QString XYAnalysisCurveDock::customText() const {

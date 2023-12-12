@@ -68,7 +68,6 @@ private Q_SLOTS:
 	// SLOTs for changes triggered in XYCurve
 	// General-Tab
 	void curveDataReductionDataChanged(const XYDataReductionCurve::DataReductionData&);
-	void dataChanged();
 	void curveVisibilityChanged(bool);
 };
 

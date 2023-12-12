@@ -67,7 +67,7 @@ private Q_SLOTS:
 	// SLOTs for changes triggered in XYCurve
 	// General-Tab
 	void curveInterpolationDataChanged(const XYInterpolationCurve::InterpolationData&);
-	void dataChanged();
+	void curveVisibilityChanged(bool);
 };
 
 #endif

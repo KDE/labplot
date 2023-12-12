@@ -377,7 +377,7 @@ void XYIntegrationCurveDock::recalculateClicked() {
  * show the result and details of the integration
  */
 void XYIntegrationCurveDock::showIntegrationResult() {
-	showResult(m_integrationCurve, uiGeneralTab.teResult, uiGeneralTab.pbRecalculate);
+	showResult(m_integrationCurve, uiGeneralTab.teResult);
 }
 
 QString XYIntegrationCurveDock::customText() const {
@@ -398,10 +398,6 @@ void XYIntegrationCurveDock::curveIntegrationDataChanged(const XYIntegrationCurv
 	this->absoluteChanged();
 
 	this->showIntegrationResult();
-}
-
-void XYIntegrationCurveDock::dataChanged() {
-	this->enableRecalculate();
 }
 
 void XYIntegrationCurveDock::curveVisibilityChanged(bool on) {

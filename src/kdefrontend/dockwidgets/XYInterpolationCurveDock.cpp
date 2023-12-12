@@ -218,6 +218,7 @@ void XYInterpolationCurveDock::initGeneralTab() {
 	connect(m_interpolationCurve, &XYInterpolationCurve::interpolationDataChanged, this, &XYInterpolationCurveDock::curveInterpolationDataChanged);
 	connect(m_interpolationCurve, &XYInterpolationCurve::sourceDataChanged, this, &XYInterpolationCurveDock::enableRecalculate);
 	connect(m_interpolationCurve, &WorksheetElement::plotRangeListChanged, this, &XYInterpolationCurveDock::updatePlotRanges);
+	connect(m_interpolationCurve, &XYCurve::visibleChanged, this, &XYInterpolationCurveDock::curveVisibilityChanged);
 }
 
 void XYInterpolationCurveDock::setModel() {
@@ -607,7 +608,7 @@ void XYInterpolationCurveDock::recalculateClicked() {
  * show the result and details of the interpolation
  */
 void XYInterpolationCurveDock::showInterpolationResult() {
-	showResult(m_interpolationCurve, uiGeneralTab.teResult, uiGeneralTab.pbRecalculate);
+	showResult(m_interpolationCurve, uiGeneralTab.teResult);
 }
 
 //*************************************************************
@@ -623,6 +624,7 @@ void XYInterpolationCurveDock::curveInterpolationDataChanged(const XYInterpolati
 	this->showInterpolationResult();
 }
 
-void XYInterpolationCurveDock::dataChanged() {
-	this->enableRecalculate();
+void XYInterpolationCurveDock::curveVisibilityChanged(bool on) {
+	CONDITIONAL_LOCK_RETURN;
+	uiGeneralTab.chkVisible->setChecked(on);
 }

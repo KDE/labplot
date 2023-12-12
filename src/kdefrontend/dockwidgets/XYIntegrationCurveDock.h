@@ -61,7 +61,6 @@ private Q_SLOTS:
 	// SLOTs for changes triggered in XYCurve
 	// General-Tab
 	void curveIntegrationDataChanged(const XYIntegrationCurve::IntegrationData&);
-	void dataChanged();
 	void curveVisibilityChanged(bool);
 };
 

@@ -223,7 +223,7 @@ void XYHilbertTransformCurveDock::recalculateClicked() {
  * show the result and details of the transform
  */
 void XYHilbertTransformCurveDock::showTransformResult() {
-	showResult(m_transformCurve, uiGeneralTab.teResult, uiGeneralTab.pbRecalculate);
+	showResult(m_transformCurve, uiGeneralTab.teResult);
 }
 
 //*************************************************************
@@ -237,10 +237,6 @@ void XYHilbertTransformCurveDock::curveTransformDataChanged(const XYHilbertTrans
 	this->typeChanged();
 
 	this->showTransformResult();
-}
-
-void XYHilbertTransformCurveDock::dataChanged() {
-	this->enableRecalculate();
 }
 
 void XYHilbertTransformCurveDock::curveVisibilityChanged(bool on) {

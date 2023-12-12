@@ -348,7 +348,7 @@ void XYCorrelationCurveDock::recalculateClicked() {
  * show the result and details of the correlation
  */
 void XYCorrelationCurveDock::showCorrelationResult() {
-	showResult(m_correlationCurve, uiGeneralTab.teResult, uiGeneralTab.pbRecalculate);
+	showResult(m_correlationCurve, uiGeneralTab.teResult);
 }
 
 //*************************************************************
@@ -387,10 +387,6 @@ void XYCorrelationCurveDock::curveCorrelationDataChanged(const XYCorrelationCurv
 	m_correlationData = correlationData;
 
 	this->showCorrelationResult();
-}
-
-void XYCorrelationCurveDock::dataChanged() {
-	this->enableRecalculate();
 }
 
 void XYCorrelationCurveDock::curveVisibilityChanged(bool on) {

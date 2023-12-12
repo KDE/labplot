@@ -453,7 +453,7 @@ void XYConvolutionCurveDock::recalculateClicked() {
  * show the result and details of the convolution
  */
 void XYConvolutionCurveDock::showConvolutionResult() {
-	showResult(m_convolutionCurve, uiGeneralTab.teResult, uiGeneralTab.pbRecalculate);
+	showResult(m_convolutionCurve, uiGeneralTab.teResult);
 }
 
 //*************************************************************
@@ -506,10 +506,6 @@ void XYConvolutionCurveDock::curveConvolutionDataChanged(const XYConvolutionCurv
 	this->directionChanged();
 
 	this->showConvolutionResult();
-}
-
-void XYConvolutionCurveDock::dataChanged() {
-	this->enableRecalculate();
 }
 
 void XYConvolutionCurveDock::curveVisibilityChanged(bool on) {

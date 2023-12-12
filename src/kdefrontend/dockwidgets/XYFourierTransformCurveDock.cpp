@@ -275,7 +275,7 @@ void XYFourierTransformCurveDock::recalculateClicked() {
  * show the result and details of the transform
  */
 void XYFourierTransformCurveDock::showTransformResult() {
-	showResult(m_transformCurve, uiGeneralTab.teResult, uiGeneralTab.pbRecalculate);
+	showResult(m_transformCurve, uiGeneralTab.teResult);
 }
 
 //*************************************************************
@@ -289,10 +289,6 @@ void XYFourierTransformCurveDock::curveTransformDataChanged(const XYFourierTrans
 	this->typeChanged();
 
 	this->showTransformResult();
-}
-
-void XYFourierTransformCurveDock::dataChanged() {
-	this->enableRecalculate();
 }
 
 void XYFourierTransformCurveDock::curveVisibilityChanged(bool on) {

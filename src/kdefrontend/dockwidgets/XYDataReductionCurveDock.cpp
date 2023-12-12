@@ -554,7 +554,7 @@ void XYDataReductionCurveDock::recalculateClicked() {
  * show the result and details of the dataReduction
  */
 void XYDataReductionCurveDock::showDataReductionResult() {
-	showResult(m_dataReductionCurve, uiGeneralTab.teResult, uiGeneralTab.pbRecalculate);
+	showResult(m_dataReductionCurve, uiGeneralTab.teResult);
 }
 
 QString XYDataReductionCurveDock::customText() const {
@@ -580,10 +580,6 @@ void XYDataReductionCurveDock::curveDataReductionDataChanged(const XYDataReducti
 	// this->typeChanged();
 
 	this->showDataReductionResult();
-}
-
-void XYDataReductionCurveDock::dataChanged() {
-	this->enableRecalculate();
 }
 
 void XYDataReductionCurveDock::curveVisibilityChanged(bool on) {

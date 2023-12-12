@@ -449,7 +449,7 @@ void XYDifferentiationCurveDock::recalculateClicked() {
  * show the result and details of the differentiation
  */
 void XYDifferentiationCurveDock::showDifferentiationResult() {
-	showResult(m_differentiationCurve, uiGeneralTab.teResult, uiGeneralTab.pbRecalculate);
+	showResult(m_differentiationCurve, uiGeneralTab.teResult);
 }
 
 //*************************************************************
@@ -465,10 +465,6 @@ void XYDifferentiationCurveDock::curveDifferentiationDataChanged(const XYDiffere
 	this->accOrderChanged(m_differentiationData.accOrder);
 
 	this->showDifferentiationResult();
-}
-
-void XYDifferentiationCurveDock::dataChanged() {
-	this->enableRecalculate();
 }
 
 void XYDifferentiationCurveDock::curveVisibilityChanged(bool on) {

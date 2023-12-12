@@ -59,7 +59,6 @@ private Q_SLOTS:
 	void curveXDataColumnChanged(const AbstractColumn*);
 	void curveY2DataColumnChanged(const AbstractColumn*);
 	void curveCorrelationDataChanged(const XYCorrelationCurve::CorrelationData&);
-	void dataChanged();
 	void curveVisibilityChanged(bool);
 };
 

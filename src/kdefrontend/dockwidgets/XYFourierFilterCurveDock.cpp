@@ -492,7 +492,7 @@ void XYFourierFilterCurveDock::recalculateClicked() {
  * show the result and details of the filter
  */
 void XYFourierFilterCurveDock::showFilterResult() {
-	showResult(m_filterCurve, uiGeneralTab.teResult, uiGeneralTab.pbRecalculate);
+	showResult(m_filterCurve, uiGeneralTab.teResult);
 }
 
 //*************************************************************
@@ -506,10 +506,6 @@ void XYFourierFilterCurveDock::curveFilterDataChanged(const XYFourierFilterCurve
 	this->typeChanged();
 
 	this->showFilterResult();
-}
-
-void XYFourierFilterCurveDock::dataChanged() {
-	this->enableRecalculate();
 }
 
 void XYFourierFilterCurveDock::curveVisibilityChanged(bool on) {

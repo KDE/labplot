@@ -13,7 +13,7 @@ public:
 	explicit XYAnalysisCurveDock(QWidget* parent, RequiredDataSource required = RequiredDataSource::XY);
 
 protected:
-	void showResult(const XYAnalysisCurve* curve, QTextEdit* teResult, QPushButton* pbRecalculate);
+	void showResult(const XYAnalysisCurve* curve, QTextEdit* teResult);
 	virtual QString customText() const;
 
 	void setAnalysisCurves(QList<XYCurve*>);
