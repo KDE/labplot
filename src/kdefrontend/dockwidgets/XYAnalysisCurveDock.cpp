@@ -44,14 +44,21 @@ QString XYAnalysisCurveDock::customText() const {
 	return QStringLiteral("");
 }
 
-void XYAnalysisCurveDock::setBaseWidgets(QLineEdit* nameLabel, ResizableTextEdit* commentLabel, QPushButton* recalculate, double commentHeightFactorNameLabel) {
+void XYAnalysisCurveDock::setBaseWidgets(QLineEdit* nameLabel, ResizableTextEdit* commentLabel, QPushButton* recalculate, QComboBox* dataSourceType) {
 	if (m_recalculateButton)
 		disconnect(m_recalculateButton, nullptr, this, nullptr);
 
 	m_recalculateButton = recalculate;
 	Q_ASSERT(m_recalculateButton);
+	m_recalculateButton->setIcon(QIcon::fromTheme(QStringLiteral("run-build")));
 
-	BaseDock::setBaseWidgets(nameLabel, commentLabel, commentHeightFactorNameLabel);
+	cbDataSourceType = dataSourceType;
+	if (cbDataSourceType) {
+		cbDataSourceType->addItem(i18n("Spreadsheet"));
+		cbDataSourceType->addItem(i18n("XY-Curve"));
+	}
+
+	BaseDock::setBaseWidgets(nameLabel, commentLabel);
 }
 
 void XYAnalysisCurveDock::setAnalysisCurves(QList<XYCurve*> curves) {
@@ -155,4 +162,28 @@ void XYAnalysisCurveDock::enableRecalculate() const {
 		hasSourceData = (m_analysisCurve->dataSourceCurve() != nullptr);
 
 	m_recalculateButton->setEnabled(hasSourceData);
+}
+
+//*************************************************************
+//*********** SLOTs for changes triggered in XYCurve **********
+//*************************************************************
+// General-Tab
+void XYAnalysisCurveDock::curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType type) {
+	CONDITIONAL_LOCK_RETURN;
+	cbDataSourceType->setCurrentIndex(static_cast<int>(type));
+}
+
+void XYAnalysisCurveDock::curveDataSourceCurveChanged(const XYCurve* curve) {
+	CONDITIONAL_LOCK_RETURN;
+	cbDataSourceCurve->setAspect(curve);
+}
+
+void XYAnalysisCurveDock::curveXDataColumnChanged(const AbstractColumn* column) {
+	CONDITIONAL_LOCK_RETURN;
+	cbXDataColumn->setColumn(column, m_analysisCurve->xDataColumnPath());
+}
+
+void XYAnalysisCurveDock::curveYDataColumnChanged(const AbstractColumn* column) {
+	CONDITIONAL_LOCK_RETURN;
+	cbYDataColumn->setColumn(column, m_analysisCurve->yDataColumnPath());
 }

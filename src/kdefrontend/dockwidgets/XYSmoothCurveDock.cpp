@@ -41,15 +41,12 @@ void XYSmoothCurveDock::setupGeneral() {
 	auto* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
 	setPlotRangeCombobox(uiGeneralTab.cbPlotRanges);
-	setBaseWidgets(uiGeneralTab.leName, uiGeneralTab.teComment, uiGeneralTab.pbRecalculate);
+	setBaseWidgets(uiGeneralTab.leName, uiGeneralTab.teComment, uiGeneralTab.pbRecalculate, uiGeneralTab.cbDataSourceType);
 
 	auto* gridLayout = static_cast<QGridLayout*>(generalTab->layout());
 	gridLayout->setContentsMargins(2, 2, 2, 2);
 	gridLayout->setHorizontalSpacing(2);
 	gridLayout->setVerticalSpacing(2);
-
-	uiGeneralTab.cbDataSourceType->addItem(i18n("Spreadsheet"));
-	uiGeneralTab.cbDataSourceType->addItem(i18n("XY-Curve"));
 
 	cbDataSourceCurve = new TreeViewComboBox(generalTab);
 	gridLayout->addWidget(cbDataSourceCurve, 5, 2, 1, 3);
@@ -69,8 +66,6 @@ void XYSmoothCurveDock::setupGeneral() {
 
 	uiGeneralTab.leMin->setValidator(new QDoubleValidator(uiGeneralTab.leMin));
 	uiGeneralTab.leMax->setValidator(new QDoubleValidator(uiGeneralTab.leMax));
-
-	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme(QStringLiteral("run-build")));
 
 	auto* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setContentsMargins(0, 0, 0, 0);
@@ -495,26 +490,6 @@ void XYSmoothCurveDock::showSmoothResult() {
 //*********** SLOTs for changes triggered in XYCurve **********
 //*************************************************************
 // General-Tab
-void XYSmoothCurveDock::curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType type) {
-	CONDITIONAL_LOCK_RETURN;
-	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(type));
-}
-
-void XYSmoothCurveDock::curveDataSourceCurveChanged(const XYCurve* curve) {
-	CONDITIONAL_LOCK_RETURN;
-	cbDataSourceCurve->setAspect(curve);
-}
-
-void XYSmoothCurveDock::curveXDataColumnChanged(const AbstractColumn* column) {
-	CONDITIONAL_LOCK_RETURN;
-	cbXDataColumn->setColumn(column, m_smoothCurve->xDataColumnPath());
-}
-
-void XYSmoothCurveDock::curveYDataColumnChanged(const AbstractColumn* column) {
-	CONDITIONAL_LOCK_RETURN;
-	cbYDataColumn->setColumn(column, m_smoothCurve->yDataColumnPath());
-}
-
 void XYSmoothCurveDock::curveSmoothDataChanged(const XYSmoothCurve::SmoothData& smoothData) {
 	CONDITIONAL_LOCK_RETURN;
 	m_smoothData = smoothData;

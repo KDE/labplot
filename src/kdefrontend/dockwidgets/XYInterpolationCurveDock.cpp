@@ -48,15 +48,12 @@ void XYInterpolationCurveDock::setupGeneral() {
 	auto* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
 	setPlotRangeCombobox(uiGeneralTab.cbPlotRanges);
-	setBaseWidgets(uiGeneralTab.leName, uiGeneralTab.teComment, uiGeneralTab.pbRecalculate);
+	setBaseWidgets(uiGeneralTab.leName, uiGeneralTab.teComment, uiGeneralTab.pbRecalculate, uiGeneralTab.cbDataSourceType);
 
 	auto* gridLayout = static_cast<QGridLayout*>(generalTab->layout());
 	gridLayout->setContentsMargins(2, 2, 2, 2);
 	gridLayout->setHorizontalSpacing(2);
 	gridLayout->setVerticalSpacing(2);
-
-	uiGeneralTab.cbDataSourceType->addItem(i18n("Spreadsheet"));
-	uiGeneralTab.cbDataSourceType->addItem(i18n("XY-Curve"));
 
 	cbDataSourceCurve = new TreeViewComboBox(generalTab);
 	gridLayout->addWidget(cbDataSourceCurve, 5, 2, 1, 2);
@@ -84,8 +81,6 @@ void XYInterpolationCurveDock::setupGeneral() {
 
 	uiGeneralTab.leMin->setValidator(new QDoubleValidator(uiGeneralTab.leMin));
 	uiGeneralTab.leMax->setValidator(new QDoubleValidator(uiGeneralTab.leMax));
-
-	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme(QStringLiteral("run-build")));
 
 	auto* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setContentsMargins(0, 0, 0, 0);
@@ -619,26 +614,6 @@ void XYInterpolationCurveDock::showInterpolationResult() {
 //*********** SLOTs for changes triggered in XYCurve **********
 //*************************************************************
 // General-Tab
-void XYInterpolationCurveDock::curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType type) {
-	CONDITIONAL_LOCK_RETURN;
-	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(type));
-}
-
-void XYInterpolationCurveDock::curveDataSourceCurveChanged(const XYCurve* curve) {
-	CONDITIONAL_LOCK_RETURN;
-	cbDataSourceCurve->setAspect(curve);
-}
-
-void XYInterpolationCurveDock::curveXDataColumnChanged(const AbstractColumn* column) {
-	CONDITIONAL_LOCK_RETURN;
-	cbXDataColumn->setColumn(column, m_interpolationCurve->xDataColumnPath());
-}
-
-void XYInterpolationCurveDock::curveYDataColumnChanged(const AbstractColumn* column) {
-	CONDITIONAL_LOCK_RETURN;
-	cbYDataColumn->setColumn(column, m_interpolationCurve->yDataColumnPath());
-}
-
 void XYInterpolationCurveDock::curveInterpolationDataChanged(const XYInterpolationCurve::InterpolationData& data) {
 	CONDITIONAL_LOCK_RETURN;
 	m_interpolationData = data;

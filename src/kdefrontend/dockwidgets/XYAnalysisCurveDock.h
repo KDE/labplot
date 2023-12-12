@@ -18,13 +18,14 @@ protected:
 
 	void setAnalysisCurves(QList<XYCurve*>);
 	void setModel(const QList<AspectType>& list);
-	void setBaseWidgets(QLineEdit* nameLabel, ResizableTextEdit* commentLabel, QPushButton* recalculate, double commentHeightFactorNameLabel = 1.2);
+	void setBaseWidgets(QLineEdit* nameLabel, ResizableTextEdit* commentLabel, QPushButton* recalculate, QComboBox* cbDataSourceType = nullptr);
 	void enableRecalculate() const;
 
 	QVector<XYAnalysisCurve*> m_analysisCurves;
 	XYAnalysisCurve* m_analysisCurve{nullptr};
 	RequiredDataSource m_requiredDataSource{RequiredDataSource::XY};
 	QPushButton* m_recalculateButton{nullptr};
+	QComboBox* cbDataSourceType{nullptr};
 	TreeViewComboBox* cbDataSourceCurve{nullptr};
 	TreeViewComboBox* cbXDataColumn{nullptr};
 	TreeViewComboBox* cbYDataColumn{nullptr};
@@ -32,6 +33,13 @@ protected:
 
 protected Q_SLOTS:
 	void yDataColumnChanged(const QModelIndex&);
+
+	// SLOTs for changes triggered in Dock
+	// General-Tab
+	void curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType);
+	void curveDataSourceCurveChanged(const XYCurve*);
+	void curveXDataColumnChanged(const AbstractColumn*);
+	void curveYDataColumnChanged(const AbstractColumn*);
 };
 
 #endif // XYANALYSISCURVEDOCK_H

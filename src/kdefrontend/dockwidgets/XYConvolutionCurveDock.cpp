@@ -44,15 +44,12 @@ void XYConvolutionCurveDock::setupGeneral() {
 	auto* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
 	setPlotRangeCombobox(uiGeneralTab.cbPlotRanges);
-	setBaseWidgets(uiGeneralTab.leName, uiGeneralTab.teComment, uiGeneralTab.pbRecalculate);
+	setBaseWidgets(uiGeneralTab.leName, uiGeneralTab.teComment, uiGeneralTab.pbRecalculate, uiGeneralTab.cbDataSourceType);
 
 	auto* gridLayout = static_cast<QGridLayout*>(generalTab->layout());
 	gridLayout->setContentsMargins(2, 2, 2, 2);
 	gridLayout->setHorizontalSpacing(2);
 	gridLayout->setVerticalSpacing(2);
-
-	uiGeneralTab.cbDataSourceType->addItem(i18n("Spreadsheet"));
-	uiGeneralTab.cbDataSourceType->addItem(i18n("XY-Curve"));
 
 	cbDataSourceCurve = new TreeViewComboBox(generalTab);
 	gridLayout->addWidget(cbDataSourceCurve, 5, 2, 1, 3);
@@ -79,13 +76,9 @@ void XYConvolutionCurveDock::setupGeneral() {
 	for (int i = 0; i < NSL_CONV_WRAP_COUNT; i++)
 		uiGeneralTab.cbWrap->addItem(i18n(nsl_conv_wrap_name[i]));
 
-	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme(QStringLiteral("run-build")));
-
 	auto* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setContentsMargins(0, 0, 0, 0);
 	layout->addWidget(generalTab);
-
-	DEBUG(Q_FUNC_INFO << ", DONE");
 
 	// Slots
 	// TODO	connect(uiGeneralTab.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYConvolutionCurveDock::plotRangeChanged );
@@ -467,16 +460,6 @@ void XYConvolutionCurveDock::showConvolutionResult() {
 //*********** SLOTs for changes triggered in XYCurve **********
 //*************************************************************
 // General-Tab
-void XYConvolutionCurveDock::curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType type) {
-	CONDITIONAL_LOCK_RETURN;
-	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(type));
-}
-
-void XYConvolutionCurveDock::curveDataSourceCurveChanged(const XYCurve* curve) {
-	CONDITIONAL_LOCK_RETURN;
-	cbDataSourceCurve->setAspect(curve);
-}
-
 void XYConvolutionCurveDock::curveXDataColumnChanged(const AbstractColumn* column) {
 	DEBUG("XYConvolutionCurveDock::curveXDataColumnChanged()");
 	if (column) {
@@ -497,12 +480,6 @@ void XYConvolutionCurveDock::curveXDataColumnChanged(const AbstractColumn* colum
 
 	CONDITIONAL_LOCK_RETURN;
 	cbXDataColumn->setColumn(column, m_convolutionCurve->xDataColumnPath());
-}
-
-void XYConvolutionCurveDock::curveYDataColumnChanged(const AbstractColumn* column) {
-	DEBUG("XYConvolutionCurveDock::curveYDataColumnChanged()");
-	CONDITIONAL_LOCK_RETURN;
-	cbYDataColumn->setColumn(column, m_convolutionCurve->yDataColumnPath());
 }
 
 void XYConvolutionCurveDock::curveY2DataColumnChanged(const AbstractColumn* column) {

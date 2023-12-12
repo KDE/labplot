@@ -56,10 +56,7 @@ private Q_SLOTS:
 
 	// SLOTs for changes triggered in XYCurve
 	// General-Tab
-	void curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType);
-	void curveDataSourceCurveChanged(const XYCurve*);
 	void curveXDataColumnChanged(const AbstractColumn*);
-	void curveYDataColumnChanged(const AbstractColumn*);
 	void curveY2DataColumnChanged(const AbstractColumn*);
 	void curveCorrelationDataChanged(const XYCorrelationCurve::CorrelationData&);
 	void dataChanged();

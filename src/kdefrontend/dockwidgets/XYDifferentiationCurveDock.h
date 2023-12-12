@@ -59,10 +59,6 @@ private Q_SLOTS:
 
 	// SLOTs for changes triggered in XYDifferentiationCurve
 	// General-Tab
-	void curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType);
-	void curveDataSourceCurveChanged(const XYCurve*);
-	void curveXDataColumnChanged(const AbstractColumn*);
-	void curveYDataColumnChanged(const AbstractColumn*);
 	void curveDifferentiationDataChanged(const XYDifferentiationCurve::DifferentiationData&);
 	void dataChanged();
 	void curveVisibilityChanged(bool);

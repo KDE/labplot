@@ -230,16 +230,6 @@ void XYHilbertTransformCurveDock::showTransformResult() {
 //*********** SLOTs for changes triggered in XYCurve **********
 //*************************************************************
 // General-Tab
-void XYHilbertTransformCurveDock::curveXDataColumnChanged(const AbstractColumn* column) {
-	CONDITIONAL_LOCK_RETURN;
-	cbXDataColumn->setColumn(column, m_transformCurve->xDataColumnPath());
-}
-
-void XYHilbertTransformCurveDock::curveYDataColumnChanged(const AbstractColumn* column) {
-	CONDITIONAL_LOCK_RETURN;
-	cbYDataColumn->setColumn(column, m_transformCurve->yDataColumnPath());
-}
-
 void XYHilbertTransformCurveDock::curveTransformDataChanged(const XYHilbertTransformCurve::TransformData& transformData) {
 	CONDITIONAL_LOCK_RETURN;
 	m_transformData = transformData;
