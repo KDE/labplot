@@ -27,6 +27,7 @@ public:
 
 private:
 	void initGeneralTab() override;
+	void updateSettings(const AbstractColumn*) override;
 	void showFilterResult();
 	void updateCutoffSpinBoxes(NumberSpinBox* sb, nsl_filter_cutoff_unit newUnit, nsl_filter_cutoff_unit oldUnit, double oldValue);
 
@@ -42,7 +43,6 @@ private Q_SLOTS:
 	// SLOTs for changes triggered in XYFourierFilterCurveDock
 	// general tab
 	void dataSourceTypeChanged(int);
-	void dataSourceCurveChanged(const QModelIndex&);
 	void xDataColumnChanged(const QModelIndex&);
 	void autoRangeChanged();
 	void xRangeMinChanged();

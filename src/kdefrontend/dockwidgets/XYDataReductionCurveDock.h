@@ -49,7 +49,6 @@ private Q_SLOTS:
 	// SLOTs for changes triggered in XYDataReductionCurveDock
 	// general tab
 	void dataSourceTypeChanged(int);
-	void dataSourceCurveChanged(const QModelIndex&);
 	void xDataColumnChanged(const QModelIndex&);
 	void autoRangeChanged();
 	void xRangeMinChanged();

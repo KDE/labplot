@@ -224,32 +224,6 @@ void XYDifferentiationCurveDock::dataSourceTypeChanged(int index) {
 		static_cast<XYDifferentiationCurve*>(curve)->setDataSourceType(type);
 }
 
-void XYDifferentiationCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
-	// disable deriv orders and accuracies that need more data points
-	auto* dataSourceCurve = static_cast<XYCurve*>(index.internalPointer());
-	this->updateSettings(dataSourceCurve->xColumn());
-
-	CONDITIONAL_LOCK_RETURN;
-
-	for (auto* curve : m_curvesList)
-		static_cast<XYDifferentiationCurve*>(curve)->setDataSourceCurve(dataSourceCurve);
-
-	enableRecalculate();
-}
-
-void XYDifferentiationCurveDock::xDataColumnChanged(const QModelIndex& index) {
-	CONDITIONAL_LOCK_RETURN;
-
-	// disable deriv orders and accuracies that need more data points
-	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
-	this->updateSettings(column);
-
-	for (auto* curve : m_curvesList)
-		static_cast<XYDifferentiationCurve*>(curve)->setXDataColumn(column);
-
-	enableRecalculate();
-}
-
 /*!
  * disable deriv orders and accuracies that need more data points
  */

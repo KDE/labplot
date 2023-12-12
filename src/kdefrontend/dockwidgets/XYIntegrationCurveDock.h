@@ -27,7 +27,7 @@ public:
 
 private:
 	void initGeneralTab() override;
-	void updateSettings(const AbstractColumn*);
+	void updateSettings(const AbstractColumn*) override;
 	void showIntegrationResult();
 	virtual QString customText() const override;
 
@@ -43,7 +43,6 @@ private Q_SLOTS:
 	// SLOTs for changes triggered in XYIntegrationCurveDock
 	// general tab
 	void dataSourceTypeChanged(int);
-	void dataSourceCurveChanged(const QModelIndex&);
 	void xDataColumnChanged(const QModelIndex&);
 	void autoRangeChanged();
 	void xRangeMinChanged();

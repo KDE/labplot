@@ -107,6 +107,33 @@ void XYAnalysisCurveDock::setModel(const QList<AspectType>& topLevelClasses) {
 	XYCurveDock::setModel();
 }
 
+//*************************************************************
+//******** SLOTs for changes triggered in the dock  ***********
+//*************************************************************
+void XYAnalysisCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
+	CONDITIONAL_LOCK_RETURN;
+
+	auto* dataSourceCurve = static_cast<XYCurve*>(index.internalPointer());
+	updateSettings(dataSourceCurve->xColumn());
+
+	for (auto* curve : m_analysisCurves)
+		curve->setDataSourceCurve(dataSourceCurve);
+
+	enableRecalculate();
+}
+
+void XYAnalysisCurveDock::xDataColumnChanged(const QModelIndex& index) {
+	CONDITIONAL_LOCK_RETURN;
+
+	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
+	updateSettings(column);
+
+	for (auto* curve : m_analysisCurves)
+		curve->setXDataColumn(column);
+
+	enableRecalculate();
+}
+
 void XYAnalysisCurveDock::yDataColumnChanged(const QModelIndex& index) {
 	CONDITIONAL_LOCK_RETURN;
 
@@ -165,9 +192,8 @@ void XYAnalysisCurveDock::enableRecalculate() const {
 }
 
 //*************************************************************
-//*********** SLOTs for changes triggered in XYCurve **********
+//***** SLOTs for changes triggered in the analyis curve ******
 //*************************************************************
-// General-Tab
 void XYAnalysisCurveDock::curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType type) {
 	CONDITIONAL_LOCK_RETURN;
 	cbDataSourceType->setCurrentIndex(static_cast<int>(type));

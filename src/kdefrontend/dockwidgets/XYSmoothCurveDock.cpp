@@ -249,16 +249,6 @@ void XYSmoothCurveDock::dataSourceTypeChanged(int index) {
 	enableRecalculate();
 }
 
-void XYSmoothCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
-	CONDITIONAL_LOCK_RETURN;
-
-	auto* dataSourceCurve = static_cast<XYCurve*>(index.internalPointer());
-	for (auto* curve : m_curvesList)
-		static_cast<XYSmoothCurve*>(curve)->setDataSourceCurve(dataSourceCurve);
-
-	enableRecalculate();
-}
-
 void XYSmoothCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	CONDITIONAL_LOCK_RETURN;
 

@@ -252,16 +252,6 @@ void XYConvolutionCurveDock::dataSourceTypeChanged(int index) {
 	enableRecalculate();
 }
 
-void XYConvolutionCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
-	CONDITIONAL_LOCK_RETURN;
-
-	auto* dataSourceCurve = static_cast<XYCurve*>(index.internalPointer());
-	for (auto* curve : m_curvesList)
-		static_cast<XYConvolutionCurve*>(curve)->setDataSourceCurve(dataSourceCurve);
-
-	enableRecalculate();
-}
-
 void XYConvolutionCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	CONDITIONAL_LOCK_RETURN;
 

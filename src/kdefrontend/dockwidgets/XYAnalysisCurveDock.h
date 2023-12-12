@@ -20,6 +20,7 @@ protected:
 	void setModel(const QList<AspectType>& list);
 	void setBaseWidgets(QLineEdit* nameLabel, ResizableTextEdit* commentLabel, QPushButton* recalculate, QComboBox* cbDataSourceType = nullptr);
 	void enableRecalculate() const;
+	virtual void updateSettings(const AbstractColumn*) {};
 
 	QVector<XYAnalysisCurve*> m_analysisCurves;
 	XYAnalysisCurve* m_analysisCurve{nullptr};
@@ -32,10 +33,12 @@ protected:
 	TreeViewComboBox* cbY2DataColumn{nullptr};
 
 protected Q_SLOTS:
+	// SLOTs for changes triggered in the dock
+	void dataSourceCurveChanged(const QModelIndex&);
+	void xDataColumnChanged(const QModelIndex&);
 	void yDataColumnChanged(const QModelIndex&);
 
-	// SLOTs for changes triggered in Dock
-	// General-Tab
+	// SLOTs for changes triggered in the analysis curve
 	void curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType);
 	void curveDataSourceCurveChanged(const XYCurve*);
 	void curveXDataColumnChanged(const AbstractColumn*);

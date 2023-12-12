@@ -243,16 +243,6 @@ void XYDataReductionCurveDock::dataSourceTypeChanged(int index) {
 	enableRecalculate();
 }
 
-void XYDataReductionCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
-	CONDITIONAL_LOCK_RETURN;
-
-	auto* dataSourceCurve = static_cast<XYCurve*>(index.internalPointer());
-	for (auto* curve : m_curvesList)
-		static_cast<XYDataReductionCurve*>(curve)->setDataSourceCurve(dataSourceCurve);
-
-	enableRecalculate();
-}
-
 void XYDataReductionCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	CONDITIONAL_LOCK_RETURN;
 

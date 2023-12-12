@@ -235,21 +235,6 @@ void XYFourierFilterCurveDock::dataSourceTypeChanged(int index) {
 	enableRecalculate();
 }
 
-void XYFourierFilterCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
-	auto* dataSourceCurve = static_cast<XYCurve*>(index.internalPointer());
-
-	// update range of cutoff spin boxes (like a unit change)
-	unitChanged();
-	unit2Changed();
-
-	CONDITIONAL_LOCK_RETURN;
-
-	for (auto* curve : m_curvesList)
-		static_cast<XYFourierFilterCurve*>(curve)->setDataSourceCurve(dataSourceCurve);
-
-	enableRecalculate();
-}
-
 void XYFourierFilterCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	CONDITIONAL_LOCK_RETURN;
 
@@ -257,9 +242,7 @@ void XYFourierFilterCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	for (auto* curve : m_curvesList)
 		static_cast<XYFourierFilterCurve*>(curve)->setXDataColumn(column);
 
-	// update range of cutoff spin boxes (like a unit change)
-	unitChanged();
-	unit2Changed();
+	updateSettings(column);
 
 	if (column && uiGeneralTab.cbAutoRange->isChecked()) {
 		const auto numberLocale = QLocale();
@@ -268,6 +251,12 @@ void XYFourierFilterCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	}
 
 	enableRecalculate();
+}
+
+void XYFourierFilterCurveDock::updateSettings(const AbstractColumn*) {
+	// update range of cutoff spin boxes (like a unit change)
+	unitChanged();
+	unit2Changed();
 }
 
 void XYFourierFilterCurveDock::autoRangeChanged() {

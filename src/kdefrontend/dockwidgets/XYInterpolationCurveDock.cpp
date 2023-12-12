@@ -288,31 +288,6 @@ void XYInterpolationCurveDock::dataSourceTypeChanged(int index) {
 	enableRecalculate();
 }
 
-void XYInterpolationCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
-	// disable types that need more data points
-	auto* dataSourceCurve = static_cast<XYCurve*>(index.internalPointer());
-	this->updateSettings(dataSourceCurve->xColumn());
-
-	CONDITIONAL_LOCK_RETURN;
-
-	for (auto* curve : m_curvesList)
-		static_cast<XYInterpolationCurve*>(curve)->setDataSourceCurve(dataSourceCurve);
-
-	enableRecalculate();
-}
-
-void XYInterpolationCurveDock::xDataColumnChanged(const QModelIndex& index) {
-	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
-	this->updateSettings(column);
-
-	CONDITIONAL_LOCK_RETURN;
-
-	for (auto* curve : m_curvesList)
-		static_cast<XYInterpolationCurve*>(curve)->setXDataColumn(column);
-
-	enableRecalculate();
-}
-
 void XYInterpolationCurveDock::updateSettings(const AbstractColumn* column) {
 	if (!column)
 		return;

@@ -226,19 +226,6 @@ void XYIntegrationCurveDock::dataSourceTypeChanged(int index) {
 	enableRecalculate();
 }
 
-void XYIntegrationCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
-	// disable integration orders and accuracies that need more data points
-	auto* dataSourceCurve = static_cast<XYCurve*>(index.internalPointer());
-	this->updateSettings(dataSourceCurve->xColumn());
-
-	CONDITIONAL_LOCK_RETURN;
-
-	for (auto* curve : m_curvesList)
-		static_cast<XYIntegrationCurve*>(curve)->setDataSourceCurve(dataSourceCurve);
-
-	enableRecalculate();
-}
-
 void XYIntegrationCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	CONDITIONAL_LOCK_RETURN;
 

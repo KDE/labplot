@@ -40,7 +40,6 @@ private Q_SLOTS:
 	// SLOTs for changes triggered in XYConvolutionCurveDock
 	// general tab
 	void dataSourceTypeChanged(int);
-	void dataSourceCurveChanged(const QModelIndex&);
 	void xDataColumnChanged(const QModelIndex&);
 	void y2DataColumnChanged(const QModelIndex&);
 	void samplingIntervalChanged();
