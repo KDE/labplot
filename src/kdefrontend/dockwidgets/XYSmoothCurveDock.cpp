@@ -203,8 +203,8 @@ void XYSmoothCurveDock::setCurves(QList<XYCurve*> list) {
 	m_curvesList = list;
 	m_curve = list.first();
 	setAspects(list);
+	setAnalysisCurves(list);
 	m_smoothCurve = static_cast<XYSmoothCurve*>(m_curve);
-	m_analysisCurve = m_smoothCurve;
 	this->setModel();
 	m_smoothData = m_smoothCurve->smoothData();
 
@@ -254,6 +254,8 @@ void XYSmoothCurveDock::dataSourceTypeChanged(int index) {
 
 	for (auto* curve : m_curvesList)
 		static_cast<XYSmoothCurve*>(curve)->setDataSourceType(type);
+
+	enableRecalculate();
 }
 
 void XYSmoothCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
@@ -262,13 +264,14 @@ void XYSmoothCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
 	auto* dataSourceCurve = static_cast<XYCurve*>(index.internalPointer());
 	for (auto* curve : m_curvesList)
 		static_cast<XYSmoothCurve*>(curve)->setDataSourceCurve(dataSourceCurve);
+
+	enableRecalculate();
 }
 
 void XYSmoothCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	CONDITIONAL_LOCK_RETURN;
 
 	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
-
 	for (auto* curve : m_curvesList)
 		static_cast<XYSmoothCurve*>(curve)->setXDataColumn(column);
 
@@ -307,20 +310,7 @@ void XYSmoothCurveDock::xDataColumnChanged(const QModelIndex& index) {
 		uiGeneralTab.sbPoints->setMaximum((int)n);
 	}
 
-	cbXDataColumn->useCurrentIndexText(true);
-	cbXDataColumn->setInvalid(false);
-}
-
-void XYSmoothCurveDock::yDataColumnChanged(const QModelIndex& index) {
-	CONDITIONAL_LOCK_RETURN;
-
-	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
-
-	for (auto* curve : m_curvesList)
-		static_cast<XYSmoothCurve*>(curve)->setYDataColumn(column);
-
-	cbYDataColumn->useCurrentIndexText(true);
-	cbYDataColumn->setInvalid(false);
+	enableRecalculate();
 }
 
 void XYSmoothCurveDock::autoRangeChanged() {
@@ -370,14 +360,14 @@ void XYSmoothCurveDock::xRangeMinDateTimeChanged(qint64 value) {
 	CONDITIONAL_LOCK_RETURN;
 
 	m_smoothData.xRange.first() = value;
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	enableRecalculate();
 }
 
 void XYSmoothCurveDock::xRangeMaxDateTimeChanged(qint64 value) {
 	CONDITIONAL_LOCK_RETURN;
 
 	m_smoothData.xRange.last() = value;
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	enableRecalculate();
 }
 
 void XYSmoothCurveDock::typeChanged(int index) {

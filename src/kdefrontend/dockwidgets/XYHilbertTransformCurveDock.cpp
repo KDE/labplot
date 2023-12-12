@@ -135,8 +135,8 @@ void XYHilbertTransformCurveDock::setCurves(QList<XYCurve*> list) {
 	m_curvesList = list;
 	m_curve = list.first();
 	setAspects(list);
+	setAnalysisCurves(list);
 	m_transformCurve = static_cast<XYHilbertTransformCurve*>(m_curve);
-	m_analysisCurve = m_transformCurve;
 	this->setModel();
 	m_transformData = m_transformCurve->transformData();
 
@@ -169,20 +169,7 @@ void XYHilbertTransformCurveDock::xDataColumnChanged(const QModelIndex& index) {
 		uiGeneralTab.leMax->setText(numberLocale.toString(column->maximum()));
 	}
 
-	cbXDataColumn->useCurrentIndexText(true);
-	cbXDataColumn->setInvalid(false);
-}
-
-void XYHilbertTransformCurveDock::yDataColumnChanged(const QModelIndex& index) {
-	CONDITIONAL_LOCK_RETURN;
-
-	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
-
-	for (auto* curve : m_curvesList)
-		static_cast<XYHilbertTransformCurve*>(curve)->setYDataColumn(column);
-
-	cbYDataColumn->useCurrentIndexText(true);
-	cbYDataColumn->setInvalid(false);
+	enableRecalculate();
 }
 
 void XYHilbertTransformCurveDock::autoRangeChanged() {

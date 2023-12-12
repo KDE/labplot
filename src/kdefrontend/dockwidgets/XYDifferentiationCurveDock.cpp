@@ -185,8 +185,8 @@ void XYDifferentiationCurveDock::setCurves(QList<XYCurve*> list) {
 	m_curvesList = list;
 	m_curve = list.first();
 	setAspects(list);
+	setAnalysisCurves(list);
 	m_differentiationCurve = static_cast<XYDifferentiationCurve*>(m_curve);
-	m_analysisCurve = m_differentiationCurve;
 	this->setModel();
 	m_differentiationData = m_differentiationCurve->differentiationData();
 
@@ -234,42 +234,29 @@ void XYDifferentiationCurveDock::dataSourceTypeChanged(int index) {
 }
 
 void XYDifferentiationCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
-	auto* dataSourceCurve = static_cast<XYCurve*>(index.internalPointer());
-
 	// disable deriv orders and accuracies that need more data points
+	auto* dataSourceCurve = static_cast<XYCurve*>(index.internalPointer());
 	this->updateSettings(dataSourceCurve->xColumn());
 
 	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* curve : m_curvesList)
 		static_cast<XYDifferentiationCurve*>(curve)->setDataSourceCurve(dataSourceCurve);
+
+	enableRecalculate();
 }
 
 void XYDifferentiationCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	CONDITIONAL_LOCK_RETURN;
 
-	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
-
 	// disable deriv orders and accuracies that need more data points
+	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
 	this->updateSettings(column);
 
 	for (auto* curve : m_curvesList)
 		static_cast<XYDifferentiationCurve*>(curve)->setXDataColumn(column);
 
-	cbXDataColumn->useCurrentIndexText(true);
-	cbXDataColumn->setInvalid(false);
-}
-
-void XYDifferentiationCurveDock::yDataColumnChanged(const QModelIndex& index) {
-	CONDITIONAL_LOCK_RETURN;
-
-	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
-
-	for (auto* curve : m_curvesList)
-		static_cast<XYDifferentiationCurve*>(curve)->setYDataColumn(column);
-
-	cbYDataColumn->useCurrentIndexText(true);
-	cbYDataColumn->setInvalid(false);
+	enableRecalculate();
 }
 
 /*!
@@ -396,14 +383,14 @@ void XYDifferentiationCurveDock::xRangeMinDateTimeChanged(qint64 value) {
 	CONDITIONAL_LOCK_RETURN;
 
 	m_differentiationData.xRange.first() = value;
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	enableRecalculate();
 }
 
 void XYDifferentiationCurveDock::xRangeMaxDateTimeChanged(qint64 value) {
 	CONDITIONAL_LOCK_RETURN;
 
 	m_differentiationData.xRange.last() = value;
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	enableRecalculate();
 }
 
 void XYDifferentiationCurveDock::derivOrderChanged(int index) {
@@ -444,12 +431,12 @@ void XYDifferentiationCurveDock::derivOrderChanged(int index) {
 		break;
 	}
 
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	enableRecalculate();
 }
 
 void XYDifferentiationCurveDock::accOrderChanged(int value) {
 	m_differentiationData.accOrder = value;
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	enableRecalculate();
 }
 
 void XYDifferentiationCurveDock::recalculateClicked() {

@@ -44,7 +44,6 @@ private Q_SLOTS:
 	void dataSourceTypeChanged(int);
 	void dataSourceCurveChanged(const QModelIndex&);
 	void xDataColumnChanged(const QModelIndex&);
-	void yDataColumnChanged(const QModelIndex&);
 	void y2DataColumnChanged(const QModelIndex&);
 	void samplingIntervalChanged();
 	void kernelChanged();

@@ -240,8 +240,8 @@ void XYInterpolationCurveDock::setCurves(QList<XYCurve*> list) {
 	m_curvesList = list;
 	m_curve = list.first();
 	setAspects(list);
+	setAnalysisCurves(list);
 	m_interpolationCurve = static_cast<XYInterpolationCurve*>(m_curve);
-	m_analysisCurve = m_interpolationCurve;
 	this->setModel();
 	m_interpolationData = m_interpolationCurve->interpolationData();
 
@@ -292,18 +292,21 @@ void XYInterpolationCurveDock::dataSourceTypeChanged(int index) {
 
 	for (auto* curve : m_curvesList)
 		static_cast<XYInterpolationCurve*>(curve)->setDataSourceType(type);
+
+	enableRecalculate();
 }
 
 void XYInterpolationCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
-	auto* dataSourceCurve = static_cast<XYCurve*>(index.internalPointer());
-
 	// disable types that need more data points
+	auto* dataSourceCurve = static_cast<XYCurve*>(index.internalPointer());
 	this->updateSettings(dataSourceCurve->xColumn());
 
 	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* curve : m_curvesList)
 		static_cast<XYInterpolationCurve*>(curve)->setDataSourceCurve(dataSourceCurve);
+
+	enableRecalculate();
 }
 
 void XYInterpolationCurveDock::xDataColumnChanged(const QModelIndex& index) {
@@ -315,8 +318,7 @@ void XYInterpolationCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	for (auto* curve : m_curvesList)
 		static_cast<XYInterpolationCurve*>(curve)->setXDataColumn(column);
 
-	cbXDataColumn->useCurrentIndexText(true);
-	cbXDataColumn->setInvalid(false);
+	enableRecalculate();
 }
 
 void XYInterpolationCurveDock::updateSettings(const AbstractColumn* column) {
@@ -390,18 +392,6 @@ void XYInterpolationCurveDock::updateSettings(const AbstractColumn* column) {
 	// own types work with 2 or more data points
 }
 
-void XYInterpolationCurveDock::yDataColumnChanged(const QModelIndex& index) {
-	CONDITIONAL_LOCK_RETURN;
-
-	const auto* column = static_cast<AbstractColumn*>(index.internalPointer());
-
-	for (auto* curve : m_curvesList)
-		static_cast<XYInterpolationCurve*>(curve)->setYDataColumn(column);
-
-	cbYDataColumn->useCurrentIndexText(true);
-	cbYDataColumn->setInvalid(false);
-}
-
 void XYInterpolationCurveDock::autoRangeChanged() {
 	bool autoRange = uiGeneralTab.cbAutoRange->isChecked();
 	m_interpolationData.autoRange = autoRange;
@@ -449,14 +439,14 @@ void XYInterpolationCurveDock::xRangeMinDateTimeChanged(qint64 value) {
 	CONDITIONAL_LOCK_RETURN;
 
 	m_interpolationData.xRange.first() = value;
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	enableRecalculate();
 }
 
 void XYInterpolationCurveDock::xRangeMaxDateTimeChanged(qint64 value) {
 	CONDITIONAL_LOCK_RETURN;
 
 	m_interpolationData.xRange.last() = value;
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	enableRecalculate();
 }
 
 void XYInterpolationCurveDock::typeChanged(int index) {
@@ -490,7 +480,7 @@ void XYInterpolationCurveDock::typeChanged(int index) {
 		uiGeneralTab.sbBias->hide();
 	}
 
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	enableRecalculate();
 }
 
 void XYInterpolationCurveDock::variantChanged(int index) {
@@ -540,27 +530,27 @@ void XYInterpolationCurveDock::variantChanged(int index) {
 		break;
 	}
 
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	enableRecalculate();
 }
 
 void XYInterpolationCurveDock::tensionChanged(double value) {
 	m_interpolationData.tension = value;
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	enableRecalculate();
 }
 
 void XYInterpolationCurveDock::continuityChanged(double value) {
 	m_interpolationData.continuity = value;
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	enableRecalculate();
 }
 
 void XYInterpolationCurveDock::biasChanged(double value) {
 	m_interpolationData.bias = value;
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	enableRecalculate();
 }
 
 void XYInterpolationCurveDock::evaluateChanged(int index) {
 	m_interpolationData.evaluate = (nsl_interp_evaluate)index;
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	enableRecalculate();
 }
 
 void XYInterpolationCurveDock::pointsModeChanged(int index) {
@@ -592,6 +582,7 @@ void XYInterpolationCurveDock::pointsModeChanged(int index) {
 	}
 
 	m_interpolationData.pointsMode = mode;
+	enableRecalculate();
 }
 
 void XYInterpolationCurveDock::numberOfPointsChanged() {

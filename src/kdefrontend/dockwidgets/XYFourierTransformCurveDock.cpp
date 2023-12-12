@@ -150,8 +150,8 @@ void XYFourierTransformCurveDock::setCurves(QList<XYCurve*> list) {
 	m_curvesList = list;
 	m_curve = list.first();
 	setAspects(list);
+	setAnalysisCurves(list);
 	m_transformCurve = static_cast<XYFourierTransformCurve*>(m_curve);
-	m_analysisCurve = m_transformCurve;
 	this->setModel();
 	m_transformData = m_transformCurve->transformData();
 
@@ -186,20 +186,7 @@ void XYFourierTransformCurveDock::xDataColumnChanged(const QModelIndex& index) {
 		}
 	}
 
-	cbXDataColumn->useCurrentIndexText(true);
-	cbXDataColumn->setInvalid(false);
-}
-
-void XYFourierTransformCurveDock::yDataColumnChanged(const QModelIndex& index) {
-	CONDITIONAL_LOCK_RETURN;
-
-	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
-
-	for (auto* curve : m_curvesList)
-		static_cast<XYFourierTransformCurve*>(curve)->setYDataColumn(column);
-
-	cbYDataColumn->useCurrentIndexText(true);
-	cbYDataColumn->setInvalid(false);
+	enableRecalculate();
 }
 
 void XYFourierTransformCurveDock::autoRangeChanged() {

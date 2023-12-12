@@ -54,6 +54,17 @@ void XYAnalysisCurveDock::setBaseWidgets(QLineEdit* nameLabel, ResizableTextEdit
 	BaseDock::setBaseWidgets(nameLabel, commentLabel, commentHeightFactorNameLabel);
 }
 
+void XYAnalysisCurveDock::setAnalysisCurves(QList<XYCurve*> curves) {
+	m_analysisCurves.clear();
+	m_analysisCurve = nullptr;
+
+	for (auto* curve : curves)
+		m_analysisCurves << static_cast<XYAnalysisCurve*>(curve);
+
+	if (!curves.isEmpty())
+		m_analysisCurve = m_analysisCurves.first();
+}
+
 void XYAnalysisCurveDock::setModel(const QList<AspectType>& topLevelClasses) {
 	if (cbDataSourceCurve) {
 		// The FourierTransformCurveDock and the XYHilbertTransformCurveDock don't use this datasource
@@ -89,16 +100,24 @@ void XYAnalysisCurveDock::setModel(const QList<AspectType>& topLevelClasses) {
 	XYCurveDock::setModel();
 }
 
-void XYAnalysisCurveDock::enableRecalculate() const {
-	CONDITIONAL_RETURN_NO_LOCK;
+void XYAnalysisCurveDock::yDataColumnChanged(const QModelIndex& index) {
+	CONDITIONAL_LOCK_RETURN;
 
+	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
+	for (auto* curve : m_analysisCurves)
+		curve->setYDataColumn(column);
+
+	enableRecalculate();
+}
+
+void XYAnalysisCurveDock::enableRecalculate() const {
 	// enable the recalculate button if all required data source columns were provided, disable otherwise
 	bool hasSourceData = false;
 	if (m_analysisCurve->dataSourceType() == XYAnalysisCurve::DataSourceType::Spreadsheet) {
 		AbstractAspect* aspectX = nullptr;
 		AbstractAspect* aspectY = nullptr;
 		AbstractAspect* aspectY2 = nullptr;
-		switch(m_requiredDataSource) {
+		switch (m_requiredDataSource) {
 		case RequiredDataSource::XY: {
 			aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
 			aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());

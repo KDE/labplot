@@ -184,8 +184,8 @@ void XYIntegrationCurveDock::setCurves(QList<XYCurve*> list) {
 	m_curvesList = list;
 	m_curve = list.first();
 	setAspects(list);
+	setAnalysisCurves(list);
 	m_integrationCurve = static_cast<XYIntegrationCurve*>(m_curve);
-	m_analysisCurve = m_integrationCurve;
 	this->setModel();
 	m_integrationData = m_integrationCurve->integrationData();
 
@@ -231,18 +231,21 @@ void XYIntegrationCurveDock::dataSourceTypeChanged(int index) {
 
 	for (auto* curve : m_curvesList)
 		static_cast<XYIntegrationCurve*>(curve)->setDataSourceType(type);
+
+	enableRecalculate();
 }
 
 void XYIntegrationCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
-	auto* dataSourceCurve = static_cast<XYCurve*>(index.internalPointer());
-
 	// disable integration orders and accuracies that need more data points
+	auto* dataSourceCurve = static_cast<XYCurve*>(index.internalPointer());
 	this->updateSettings(dataSourceCurve->xColumn());
 
 	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* curve : m_curvesList)
 		static_cast<XYIntegrationCurve*>(curve)->setDataSourceCurve(dataSourceCurve);
+
+	enableRecalculate();
 }
 
 void XYIntegrationCurveDock::xDataColumnChanged(const QModelIndex& index) {
@@ -264,8 +267,7 @@ void XYIntegrationCurveDock::xDataColumnChanged(const QModelIndex& index) {
 		this->updateSettings(column);
 	}
 
-	cbXDataColumn->useCurrentIndexText(true);
-	cbXDataColumn->setInvalid(false);
+	enableRecalculate();
 }
 
 /*!
@@ -280,19 +282,6 @@ void XYIntegrationCurveDock::updateSettings(const AbstractColumn* column) {
 	// 	for (int row = 0; row < column->rowCount(); row++)
 	// 		if (!std::isnan(column->valueAt(row)) && !column->isMasked(row))
 	// 			n++;
-}
-void XYIntegrationCurveDock::yDataColumnChanged(const QModelIndex& index) {
-	CONDITIONAL_LOCK_RETURN;
-
-	cbYDataColumn->hidePopup();
-
-	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
-
-	for (auto* curve : m_curvesList)
-		static_cast<XYIntegrationCurve*>(curve)->setYDataColumn(column);
-
-	cbYDataColumn->useCurrentIndexText(true);
-	cbYDataColumn->setInvalid(false);
 }
 
 void XYIntegrationCurveDock::autoRangeChanged() {
@@ -342,14 +331,14 @@ void XYIntegrationCurveDock::xRangeMinDateTimeChanged(qint64 value) {
 	CONDITIONAL_LOCK_RETURN;
 
 	m_integrationData.xRange.first() = value;
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	enableRecalculate();
 }
 
 void XYIntegrationCurveDock::xRangeMaxDateTimeChanged(qint64 value) {
 	CONDITIONAL_LOCK_RETURN;
 
 	m_integrationData.xRange.last() = value;
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	enableRecalculate();
 }
 
 void XYIntegrationCurveDock::methodChanged(int index) {
@@ -368,14 +357,14 @@ void XYIntegrationCurveDock::methodChanged(int index) {
 		uiGeneralTab.cbAbsolute->setEnabled(false);
 	}
 
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	enableRecalculate();
 }
 
 void XYIntegrationCurveDock::absoluteChanged() {
 	bool absolute = uiGeneralTab.cbAbsolute->isChecked();
 	m_integrationData.absolute = absolute;
 
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	enableRecalculate();
 }
 
 void XYIntegrationCurveDock::recalculateClicked() {

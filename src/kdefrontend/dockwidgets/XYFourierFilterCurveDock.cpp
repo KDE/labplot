@@ -198,8 +198,8 @@ void XYFourierFilterCurveDock::setCurves(QList<XYCurve*> list) {
 	m_curvesList = list;
 	m_curve = list.first();
 	setAspects(list);
+	setAnalysisCurves(list);
 	m_filterCurve = static_cast<XYFourierFilterCurve*>(m_curve);
-	m_analysisCurve = m_filterCurve;
 	this->setModel();
 	m_filterData = m_filterCurve->filterData();
 
@@ -240,6 +240,8 @@ void XYFourierFilterCurveDock::dataSourceTypeChanged(int index) {
 
 	for (auto* curve : m_curvesList)
 		static_cast<XYFourierFilterCurve*>(curve)->setDataSourceType(type);
+
+	enableRecalculate();
 }
 
 void XYFourierFilterCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
@@ -253,13 +255,14 @@ void XYFourierFilterCurveDock::dataSourceCurveChanged(const QModelIndex& index) 
 
 	for (auto* curve : m_curvesList)
 		static_cast<XYFourierFilterCurve*>(curve)->setDataSourceCurve(dataSourceCurve);
+
+	enableRecalculate();
 }
 
 void XYFourierFilterCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	CONDITIONAL_LOCK_RETURN;
 
 	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
-
 	for (auto* curve : m_curvesList)
 		static_cast<XYFourierFilterCurve*>(curve)->setXDataColumn(column);
 
@@ -273,20 +276,7 @@ void XYFourierFilterCurveDock::xDataColumnChanged(const QModelIndex& index) {
 		uiGeneralTab.leMax->setText(numberLocale.toString(column->maximum()));
 	}
 
-	cbXDataColumn->useCurrentIndexText(true);
-	cbXDataColumn->setInvalid(false);
-}
-
-void XYFourierFilterCurveDock::yDataColumnChanged(const QModelIndex& index) {
-	CONDITIONAL_LOCK_RETURN;
-
-	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
-
-	for (auto* curve : m_curvesList)
-		static_cast<XYFourierFilterCurve*>(curve)->setYDataColumn(column);
-
-	cbYDataColumn->useCurrentIndexText(true);
-	cbYDataColumn->setInvalid(false);
+	enableRecalculate();
 }
 
 void XYFourierFilterCurveDock::autoRangeChanged() {
@@ -329,14 +319,14 @@ void XYFourierFilterCurveDock::xRangeMinDateTimeChanged(qint64 value) {
 	CONDITIONAL_LOCK_RETURN;
 
 	m_filterData.xRange.first() = value;
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	enableRecalculate();
 }
 
 void XYFourierFilterCurveDock::xRangeMaxDateTimeChanged(qint64 value) {
 	CONDITIONAL_LOCK_RETURN;
 
 	m_filterData.xRange.last() = value;
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	enableRecalculate();
 }
 
 void XYFourierFilterCurveDock::typeChanged() {

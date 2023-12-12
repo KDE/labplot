@@ -180,8 +180,8 @@ void XYCorrelationCurveDock::setCurves(QList<XYCurve*> list) {
 	m_curvesList = list;
 	m_curve = list.first();
 	setAspects(list);
+	setAnalysisCurves(list);
 	m_correlationCurve = static_cast<XYCorrelationCurve*>(m_curve);
-	m_analysisCurve = m_correlationCurve;
 	this->setModel();
 	m_correlationData = m_correlationCurve->correlationData();
 
@@ -239,23 +239,24 @@ void XYCorrelationCurveDock::dataSourceTypeChanged(int index) {
 
 	for (auto* curve : m_curvesList)
 		static_cast<XYCorrelationCurve*>(curve)->setDataSourceType(type);
+
+	enableRecalculate();
 }
 
 void XYCorrelationCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
 	CONDITIONAL_LOCK_RETURN;
 
 	auto* dataSourceCurve = static_cast<XYCurve*>(index.internalPointer());
-
 	for (auto* curve : m_curvesList)
 		static_cast<XYCorrelationCurve*>(curve)->setDataSourceCurve(dataSourceCurve);
+
+	enableRecalculate();
 }
 
 void XYCorrelationCurveDock::xDataColumnChanged(const QModelIndex& index) {
-	DEBUG("XYCorrelationCurveDock::xDataColumnChanged()");
 	CONDITIONAL_LOCK_RETURN;
 
 	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
-
 	for (auto* curve : m_curvesList)
 		static_cast<XYCorrelationCurve*>(curve)->setXDataColumn(column);
 
@@ -265,32 +266,17 @@ void XYCorrelationCurveDock::xDataColumnChanged(const QModelIndex& index) {
 		uiGeneralTab.leMax->setText(numberLocale.toString(column->maximum()));
 	}
 
-	cbXDataColumn->useCurrentIndexText(true);
-	cbXDataColumn->setInvalid(false);
-}
-
-void XYCorrelationCurveDock::yDataColumnChanged(const QModelIndex& index) {
-	CONDITIONAL_LOCK_RETURN;
-
-	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
-
-	for (auto* curve : m_curvesList)
-		static_cast<XYCorrelationCurve*>(curve)->setYDataColumn(column);
-
-	cbYDataColumn->useCurrentIndexText(true);
-	cbYDataColumn->setInvalid(false);
+	enableRecalculate();
 }
 
 void XYCorrelationCurveDock::y2DataColumnChanged(const QModelIndex& index) {
 	CONDITIONAL_LOCK_RETURN;
 
 	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
-
 	for (auto* curve : m_curvesList)
 		static_cast<XYCorrelationCurve*>(curve)->setY2DataColumn(column);
 
-	cbY2DataColumn->useCurrentIndexText(true);
-	cbY2DataColumn->setInvalid(false);
+	enableRecalculate();
 }
 
 void XYCorrelationCurveDock::samplingIntervalChanged() {

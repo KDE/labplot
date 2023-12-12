@@ -198,8 +198,8 @@ void XYDataReductionCurveDock::setCurves(QList<XYCurve*> list) {
 	m_curvesList = list;
 	m_curve = list.first();
 	setAspects(list);
+	setAnalysisCurves(list);
 	m_dataReductionCurve = static_cast<XYDataReductionCurve*>(m_curve);
-	m_analysisCurve = m_dataReductionCurve;
 	this->setModel();
 	m_dataReductionData = m_dataReductionCurve->dataReductionData();
 
@@ -248,22 +248,24 @@ void XYDataReductionCurveDock::dataSourceTypeChanged(int index) {
 
 	for (auto* curve : m_curvesList)
 		static_cast<XYDataReductionCurve*>(curve)->setDataSourceType(type);
+
+	enableRecalculate();
 }
 
 void XYDataReductionCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
 	CONDITIONAL_LOCK_RETURN;
 
 	auto* dataSourceCurve = static_cast<XYCurve*>(index.internalPointer());
-
 	for (auto* curve : m_curvesList)
 		static_cast<XYDataReductionCurve*>(curve)->setDataSourceCurve(dataSourceCurve);
+
+	enableRecalculate();
 }
 
 void XYDataReductionCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	CONDITIONAL_LOCK_RETURN;
 
 	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
-
 	for (auto* curve : m_curvesList)
 		static_cast<XYDataReductionCurve*>(curve)->setXDataColumn(column);
 
@@ -273,23 +275,7 @@ void XYDataReductionCurveDock::xDataColumnChanged(const QModelIndex& index) {
 		uiGeneralTab.leMax->setText(numberLocale.toString(column->maximum()));
 	}
 
-	cbXDataColumn->useCurrentIndexText(true);
-	cbXDataColumn->setInvalid(false);
-
-	updateTolerance();
-	updateTolerance2();
-}
-
-void XYDataReductionCurveDock::yDataColumnChanged(const QModelIndex& index) {
-	CONDITIONAL_LOCK_RETURN;
-
-	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
-
-	for (auto* curve : m_curvesList)
-		static_cast<XYDataReductionCurve*>(curve)->setYDataColumn(column);
-
-	cbYDataColumn->useCurrentIndexText(true);
-	cbYDataColumn->setInvalid(false);
+	enableRecalculate();
 
 	updateTolerance();
 	updateTolerance2();
@@ -400,14 +386,14 @@ void XYDataReductionCurveDock::xRangeMinDateTimeChanged(qint64 value) {
 	CONDITIONAL_LOCK_RETURN;
 
 	m_dataReductionData.xRange.first() = value;
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	enableRecalculate();
 }
 
 void XYDataReductionCurveDock::xRangeMaxDateTimeChanged(qint64 value) {
 	CONDITIONAL_LOCK_RETURN;
 
 	m_dataReductionData.xRange.last() = value;
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	enableRecalculate();
 }
 
 void XYDataReductionCurveDock::typeChanged(int index) {
@@ -514,7 +500,7 @@ void XYDataReductionCurveDock::typeChanged(int index) {
 		break;
 	}
 
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	enableRecalculate();
 }
 
 void XYDataReductionCurveDock::autoToleranceChanged() {
@@ -530,7 +516,7 @@ void XYDataReductionCurveDock::autoToleranceChanged() {
 
 void XYDataReductionCurveDock::toleranceChanged(double value) {
 	m_dataReductionData.tolerance = value;
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	enableRecalculate();
 }
 
 void XYDataReductionCurveDock::autoTolerance2Changed() {
@@ -546,7 +532,7 @@ void XYDataReductionCurveDock::autoTolerance2Changed() {
 
 void XYDataReductionCurveDock::tolerance2Changed(double value) {
 	m_dataReductionData.tolerance2 = value;
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	enableRecalculate();
 }
 
 void XYDataReductionCurveDock::recalculateClicked() {

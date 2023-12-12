@@ -195,8 +195,8 @@ void XYConvolutionCurveDock::setCurves(QList<XYCurve*> list) {
 	m_curvesList = list;
 	m_curve = list.first();
 	setAspects(list);
+	setAnalysisCurves(list);
 	m_convolutionCurve = static_cast<XYConvolutionCurve*>(m_curve);
-	m_analysisCurve = m_convolutionCurve;
 	this->setModel();
 	m_convolutionData = m_convolutionCurve->convolutionData();
 
@@ -267,16 +267,16 @@ void XYConvolutionCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
 	CONDITIONAL_LOCK_RETURN;
 
 	auto* dataSourceCurve = static_cast<XYCurve*>(index.internalPointer());
-
 	for (auto* curve : m_curvesList)
 		static_cast<XYConvolutionCurve*>(curve)->setDataSourceCurve(dataSourceCurve);
+
+	enableRecalculate();
 }
 
 void XYConvolutionCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	CONDITIONAL_LOCK_RETURN;
 
 	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
-
 	for (auto* curve : m_curvesList)
 		static_cast<XYConvolutionCurve*>(curve)->setXDataColumn(column);
 
@@ -286,32 +286,17 @@ void XYConvolutionCurveDock::xDataColumnChanged(const QModelIndex& index) {
 		uiGeneralTab.leMax->setText(numberLocale.toString(column->maximum()));
 	}
 
-	cbXDataColumn->useCurrentIndexText(true);
-	cbXDataColumn->setInvalid(false);
-}
-
-void XYConvolutionCurveDock::yDataColumnChanged(const QModelIndex& index) {
-	CONDITIONAL_LOCK_RETURN;
-
-	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
-
-	for (auto* curve : m_curvesList)
-		static_cast<XYConvolutionCurve*>(curve)->setYDataColumn(column);
-
-	cbYDataColumn->useCurrentIndexText(true);
-	cbYDataColumn->setInvalid(false);
+	enableRecalculate();
 }
 
 void XYConvolutionCurveDock::y2DataColumnChanged(const QModelIndex& index) {
 	CONDITIONAL_LOCK_RETURN;
 
 	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
-
 	for (auto* curve : m_curvesList)
 		static_cast<XYConvolutionCurve*>(curve)->setY2DataColumn(column);
 
-	cbY2DataColumn->useCurrentIndexText(true);
-	cbY2DataColumn->setInvalid(false);
+	enableRecalculate();
 }
 
 void XYConvolutionCurveDock::samplingIntervalChanged() {
