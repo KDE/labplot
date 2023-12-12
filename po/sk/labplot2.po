@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-11 00:39+0000\n"
+"POT-Creation-Date: 2023-12-12 00:39+0000\n"
 "PO-Revision-Date: 2019-07-11 18:46+0200\n"
 "Last-Translator: Matej Mrenica <matejm98mthw@gmail.com>\n"
 "Language-Team: Slovak <kde-i18n-doc@kde.org>\n"
@@ -2365,13 +2365,13 @@ msgstr ""
 msgid "The following error occurred: %1."
 msgstr "Nastala nasledovná chyba: %1."
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1094
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1096
 #, fuzzy, kde-format
 #| msgid "Plot"
 msgid "Plot%1"
 msgstr "Kresliť"
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1371
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1373
 #, kde-format
 msgid "legend"
 msgstr "vysvetlivky"
@@ -5963,7 +5963,7 @@ msgstr "Kruhovo"
 #: src/kdefrontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:33
 #: src/kdefrontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:17
 #: src/kdefrontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:331
-#: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:509
+#: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:512
 #: src/kdefrontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:497
 #: src/kdefrontend/ui/spreadsheet/formattingheatmapwidget.ui:61
 #, kde-format
@@ -6268,7 +6268,7 @@ msgstr "Smer"
 #: src/kdefrontend/dockwidgets/KDEPlotDock.cpp:212
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:275
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:779
-#: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:82
+#: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:83
 #, kde-format
 msgid "Custom"
 msgstr "Vlastné"
@@ -9525,7 +9525,7 @@ msgstr ""
 #: src/kdefrontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:196
 #: src/kdefrontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:180
 #: src/kdefrontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:300
-#: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:492
+#: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:495
 #: src/kdefrontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:289
 #: src/kdefrontend/ui/labelwidget.ui:299
 #, kde-format
@@ -11125,7 +11125,7 @@ msgstr ""
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:74
 #: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:52
 #: src/kdefrontend/dockwidgets/XYIntegrationCurveDock.cpp:55
-#: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:57
+#: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:58
 #: src/kdefrontend/dockwidgets/XYSmoothCurveDock.cpp:51
 #: src/kdefrontend/labplot2ui.rc:32 src/kdefrontend/MainWin.cpp:703
 #: src/kdefrontend/MainWin.cpp:2106 src/kdefrontend/SettingsDialog.cpp:72
@@ -13354,7 +13354,7 @@ msgstr "stred"
 #: src/kdefrontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:309
 #: src/kdefrontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:255
 #: src/kdefrontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:314
-#: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:499
+#: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:502
 #: src/kdefrontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:507
 #, fuzzy, kde-format
 #| msgid "center"
@@ -13931,7 +13931,7 @@ msgstr ""
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:75
 #: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:53
 #: src/kdefrontend/dockwidgets/XYIntegrationCurveDock.cpp:56
-#: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:58
+#: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:59
 #: src/kdefrontend/dockwidgets/XYSmoothCurveDock.cpp:52
 #, fuzzy, kde-format
 #| msgid "Curve"
@@ -14362,17 +14362,24 @@ msgstr "Integrácia"
 msgid "value: %1"
 msgstr "Hodnota"
 
-#: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:80
+#: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:81
 #, fuzzy, kde-format
 #| msgid "Number of points"
 msgid "Auto (5x data points)"
 msgstr "Počet bodov"
 
-#: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:81
+#: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:82
 #, fuzzy, kde-format
 #| msgid "Number of points"
 msgid "Multiple of data points"
 msgstr "Počet bodov"
+
+#: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:95
+#, kde-format
+msgid ""
+"The number of the interpolation points should be bigger than the total "
+"number of points in the data source."
+msgstr ""
 
 #: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:615
 #, fuzzy, kde-format
@@ -21074,7 +21081,7 @@ msgstr "X rozsah:"
 #: src/kdefrontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:173
 #: src/kdefrontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:157
 #: src/kdefrontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:307
-#: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:469
+#: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:472
 #: src/kdefrontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:266
 #, kde-format
 msgid "Recalculate"
@@ -21092,7 +21099,7 @@ msgstr "Prepočítať"
 #: src/kdefrontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:149
 #: src/kdefrontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:133
 #: src/kdefrontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:270
-#: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:432
+#: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:435
 #: src/kdefrontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:229
 #, kde-format
 msgid "Results:"
