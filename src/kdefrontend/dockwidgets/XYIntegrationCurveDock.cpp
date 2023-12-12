@@ -175,7 +175,7 @@ void XYIntegrationCurveDock::setModel() {
   sets the curves. The properties of the curves in the list \c list can be edited in this widget.
 */
 void XYIntegrationCurveDock::setCurves(QList<XYCurve*> list) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	m_curvesList = list;
 	m_curve = list.first();
 	setAspects(list);
@@ -187,13 +187,8 @@ void XYIntegrationCurveDock::setCurves(QList<XYCurve*> list) {
 	initGeneralTab();
 	initTabs();
 	setSymbols(list);
-	m_initializing = false;
 
 	updatePlotRangeList();
-
-	// hide the "skip gaps" option after the curves were set
-	ui.lLineSkipGaps->hide();
-	ui.chkLineSkipGaps->hide();
 }
 
 //*************************************************************
@@ -240,7 +235,6 @@ void XYIntegrationCurveDock::xDataColumnChanged(const QModelIndex& index) {
 			uiGeneralTab.leMin->setText(numberLocale.toString(column->minimum()));
 			uiGeneralTab.leMax->setText(numberLocale.toString(column->maximum()));
 		}
-
 
 		updateSettings(column);
 	}
