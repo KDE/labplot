@@ -241,15 +241,15 @@ void XYIntegrationCurveDock::xDataColumnChanged(const QModelIndex& index) {
 			uiGeneralTab.leMax->setText(numberLocale.toString(column->maximum()));
 		}
 
-		// disable integration methods that need more data points
-		this->updateSettings(column);
+
+		updateSettings(column);
 	}
 
 	enableRecalculate();
 }
 
 /*!
- * disable deriv orders and accuracies that need more data points
+ * disable integration methods that need more data points
  */
 void XYIntegrationCurveDock::updateSettings(const AbstractColumn* column) {
 	if (!column)

@@ -27,6 +27,7 @@ public:
 
 private:
 	void initGeneralTab() override;
+	void updateSettings(const AbstractColumn*) override;
 	void showSmoothResult();
 
 	Ui::XYSmoothCurveDockGeneralTab uiGeneralTab;

@@ -10,6 +10,7 @@
 */
 
 #include "XYSmoothCurveDock.h"
+#include "backend/core/column/Column.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/XYSmoothCurve.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
@@ -264,34 +265,19 @@ void XYSmoothCurveDock::xDataColumnChanged(const QModelIndex& index) {
 			uiGeneralTab.leMax->setText(numberLocale.toString(column->maximum()));
 		}
 
-		unsigned int n = 0;
-		for (int row = 0; row < column->rowCount(); row++) {
-			if (column->isMasked(row))
-				continue;
-
-			switch (column->columnMode()) {
-			case AbstractColumn::ColumnMode::Double:
-			case AbstractColumn::ColumnMode::Integer:
-			case AbstractColumn::ColumnMode::BigInt:
-				if (!std::isnan(column->valueAt(row)))
-					n++;
-				break;
-			case AbstractColumn::ColumnMode::DateTime:
-			case AbstractColumn::ColumnMode::Month:
-			case AbstractColumn::ColumnMode::Day:
-				n++;
-				break;
-			case AbstractColumn::ColumnMode::Text:
-				break;
-			}
-		}
-
-		DEBUG("	Set maximum points to " << n)
-		// set maximum of sbPoints to number of columns
-		uiGeneralTab.sbPoints->setMaximum((int)n);
+		updateSettings(column);
 	}
 
 	enableRecalculate();
+}
+
+void XYSmoothCurveDock::updateSettings(const AbstractColumn* column) {
+	if (!column)
+		return;
+
+	// set maximum of sbPoints to the number of valid rows in the data column for x
+	const auto& statistics = static_cast<const Column*>(column)->statistics();
+	uiGeneralTab.sbPoints->setMaximum(statistics.size);
 }
 
 void XYSmoothCurveDock::autoRangeChanged() {

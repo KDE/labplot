@@ -20,7 +20,7 @@ protected:
 	void setModel(const QList<AspectType>& list);
 	void setBaseWidgets(QLineEdit* nameLabel, ResizableTextEdit* commentLabel, QPushButton* recalculate, QComboBox* cbDataSourceType = nullptr);
 	void enableRecalculate() const;
-	virtual void updateSettings(const AbstractColumn*) {};
+	virtual void updateSettings(const AbstractColumn*){};
 
 	QVector<XYAnalysisCurve*> m_analysisCurves;
 	XYAnalysisCurve* m_analysisCurve{nullptr};
