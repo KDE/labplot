@@ -219,8 +219,14 @@ QVariant SpreadsheetModel::headerData(int section, Qt::Orientation orientation, 
 		case static_cast<int>(CustomDataRole::CommentRole):
 			// Return the comment associated with the column
 			return m_spreadsheet->child<Column>(section)->comment();
-		case static_cast<int>(CustomDataRole::SparkLineRole):
+		case static_cast<int>(CustomDataRole::SparkLineRole): {
+			DEBUG("XXX")
+			DEBUG(m_spreadsheet->child<Column>(section)->sparkLine().size().height())
+
+			DEBUG(m_spreadsheet->child<Column>(section)->sparkLine().size().width())
+			DEBUG("XXX")
 			return m_spreadsheet->child<Column>(section)->sparkLine();
+		}
 		}
 		break;
 	case Qt::Vertical:

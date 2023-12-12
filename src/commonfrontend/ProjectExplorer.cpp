@@ -16,6 +16,7 @@
 #include "backend/core/Settings.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/XmlStreamReader.h"
+#include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "commonfrontend/core/ContentDockWidget.h"
 
@@ -44,6 +45,10 @@
 #include <QPushButton>
 #include <QTreeView>
 #include <QVBoxLayout>
+
+#include <backend/worksheet/plots/cartesian/XYCurve.h>
+
+#include <commonfrontend/worksheet/WorksheetView.h>
 
 /*!
   \class ProjectExplorer
@@ -644,6 +649,40 @@ void ProjectExplorer::toggleColumn(int index) {
 			list_showColumnActions.at(i)->setEnabled(false);
 		}
 	}
+}
+// show sparkLine of respective column
+QPixmap ProjectExplorer::showSparkLines(const Column* col) {
+	for (int i = 0; i < col->rowCount(); i++) {
+		DEBUG(col->valueAt(i));
+	}
+	if (col->isPlottable()) {
+		auto* worksheet = new Worksheet(i18n("check"));
+		auto* plot = new CartesianPlot(i18n("check"));
+		plot->setType(CartesianPlot::Type::FourAxes);
+		int maxLength = col->rowCount();
+		QVector<double> xData;
+		for (int i = 0; i < maxLength; i++)
+			xData.append(i);
+		Column* xColumn = new Column(i18n("check"), xData);
+		worksheet->addChild(plot);
+		auto* curve = new XYCurve(i18n("check"));
+		curve->setSuppressRetransform(true);
+		curve->setXColumn(xColumn);
+		curve->setYColumn(col);
+		curve->setSuppressRetransform(false);
+		plot->addChild(curve);
+		plot->scaleAuto(-1, -1);
+		plot->retransform();
+		worksheet->setSuppressLayoutUpdate(false);
+		worksheet->updateLayout();
+		// export to pixmap
+		auto* worsheetView = new WorksheetView(worksheet);
+		QPixmap pixmap;
+		worsheetView->exportToPixmap(pixmap);
+		DEBUG("INSIDE showSparkLine")
+		return pixmap;
+	}
+	return QPixmap();
 }
 
 void ProjectExplorer::showAllColumns() {

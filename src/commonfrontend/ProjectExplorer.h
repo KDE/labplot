@@ -13,6 +13,8 @@
 
 #include <QWidget>
 
+#include <backend/core/column/Column.h>
+
 class AbstractAspect;
 class AspectTreeModel;
 class Project;
@@ -44,6 +46,8 @@ public:
 	QModelIndex currentIndex() const;
 	AbstractAspect* currentAspect() const;
 	void search();
+	static QPixmap showSparkLines(const Column*);
+
 
 private:
 	void createActions();

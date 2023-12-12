@@ -14,6 +14,7 @@
 
 #include <QObject>
 #include <QVector>
+#include <qlabel.h>
 
 class AbstractAspectPrivate;
 class Folder;
@@ -263,7 +264,7 @@ public:
 	QUuid uuid() const;
 	void setSuppressWriteUuid(bool);
 	QString comment() const;
-	QString sparkLine() const;
+	QPixmap sparkLine() const;
 	void setCreationTime(const QDateTime&);
 	QDateTime creationTime() const;
 	virtual Project* project();

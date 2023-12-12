@@ -26,6 +26,8 @@
 #include <QMenu>
 #include <QMimeData>
 
+#include <commonfrontend/ProjectExplorer.h>
+
 /**
  * \class AbstractAspect
  * \brief Base class of all persistent objects in a Project.
@@ -240,8 +242,13 @@ QString AbstractAspect::comment() const {
 	return d->m_comment;
 }
 
-QString AbstractAspect::sparkLine() const {
-	return QLatin1String("Test Spark");
+QPixmap AbstractAspect::sparkLine() const {
+	if (d->q->m_type == AspectType::Column) {
+		const Column* col = dynamic_cast<Column*>(d->q);
+		if (col->hasValues())
+			return ProjectExplorer::showSparkLines(col);
+	}
+	return QPixmap();
 }
 
 void AbstractAspect::setComment(const QString& value) {

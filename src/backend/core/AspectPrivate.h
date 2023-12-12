@@ -15,6 +15,7 @@
 #include <QDateTime>
 #include <QList>
 #include <QUuid>
+#include <qlabel.h>
 
 class AbstractAspect;
 
@@ -30,7 +31,7 @@ public:
 	QVector<AbstractAspect*> m_children;
 	QString m_name;
 	QString m_comment;
-	QString m_sparkline;
+	QLabel m_sparkline;
 	QDateTime m_creation_time;
 	bool m_hidden{false};
 	bool m_fixed{false};
