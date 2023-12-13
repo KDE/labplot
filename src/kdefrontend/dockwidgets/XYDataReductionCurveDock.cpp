@@ -251,10 +251,12 @@ void XYDataReductionCurveDock::xDataColumnChanged(const QModelIndex& index) {
 		uiGeneralTab.leMax->setText(numberLocale.toString(column->maximum()));
 	}
 
+	updateSettings(column);
 	enableRecalculate();
+}
 
+void XYDataReductionCurveDock::updateSettings(const AbstractColumn*) {
 	updateTolerance();
-	updateTolerance2();
 }
 
 void XYDataReductionCurveDock::updateTolerance() {

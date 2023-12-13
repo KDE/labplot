@@ -37,6 +37,7 @@ protected Q_SLOTS:
 	void dataSourceCurveChanged(const QModelIndex&);
 	void xDataColumnChanged(const QModelIndex&);
 	void yDataColumnChanged(const QModelIndex&);
+	void y2DataColumnChanged(const QModelIndex&);
 
 	// SLOTs for changes triggered in the analysis curve
 	void curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType);

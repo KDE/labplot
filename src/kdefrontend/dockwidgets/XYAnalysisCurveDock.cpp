@@ -144,6 +144,16 @@ void XYAnalysisCurveDock::yDataColumnChanged(const QModelIndex& index) {
 	enableRecalculate();
 }
 
+void XYAnalysisCurveDock::y2DataColumnChanged(const QModelIndex& index) {
+	CONDITIONAL_LOCK_RETURN;
+
+	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
+	for (auto* curve : m_analysisCurves)
+		curve->setY2DataColumn(column);
+
+	enableRecalculate();
+}
+
 void XYAnalysisCurveDock::enableRecalculate() const {
 	// enable the recalculate button if all required data source columns were provided, disable otherwise
 	bool hasSourceData = false;

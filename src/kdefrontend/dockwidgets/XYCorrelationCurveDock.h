@@ -41,7 +41,6 @@ private Q_SLOTS:
 	// general tab
 	void dataSourceTypeChanged(int);
 	void xDataColumnChanged(const QModelIndex&);
-	void y2DataColumnChanged(const QModelIndex&);
 	void samplingIntervalChanged();
 	void autoRangeChanged();
 	void xRangeMinChanged();

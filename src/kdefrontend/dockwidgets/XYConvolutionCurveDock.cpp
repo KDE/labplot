@@ -34,7 +34,7 @@ extern "C" {
 */
 
 XYConvolutionCurveDock::XYConvolutionCurveDock(QWidget* parent)
-	: XYAnalysisCurveDock(parent, XYAnalysisCurveDock::RequiredDataSource::Y) {
+	: XYAnalysisCurveDock(parent, XYAnalysisCurveDock::RequiredDataSource::YY2) {
 }
 
 /*!
@@ -258,16 +258,6 @@ void XYConvolutionCurveDock::xDataColumnChanged(const QModelIndex& index) {
 		uiGeneralTab.leMin->setText(numberLocale.toString(column->minimum()));
 		uiGeneralTab.leMax->setText(numberLocale.toString(column->maximum()));
 	}
-
-	enableRecalculate();
-}
-
-void XYConvolutionCurveDock::y2DataColumnChanged(const QModelIndex& index) {
-	CONDITIONAL_LOCK_RETURN;
-
-	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
-	for (auto* curve : m_curvesList)
-		static_cast<XYConvolutionCurve*>(curve)->setY2DataColumn(column);
 
 	enableRecalculate();
 }

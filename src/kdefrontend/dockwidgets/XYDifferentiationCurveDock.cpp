@@ -4,12 +4,13 @@
 	Description      : widget for editing properties of differentiation curves
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2016-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
-	SPDX-FileCopyrightText: 2017 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2017-2023 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "XYDifferentiationCurveDock.h"
+#include "backend/core/column/Column.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/XYDifferentiationCurve.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
@@ -226,16 +227,15 @@ void XYDifferentiationCurveDock::updateSettings(const AbstractColumn* column) {
 	if (!column)
 		return;
 
+	const auto& statistics = static_cast<const Column*>(column)->statistics();
+
 	if (uiGeneralTab.cbAutoRange->isChecked()) {
 		const auto numberLocale = QLocale();
-		uiGeneralTab.leMin->setText(numberLocale.toString(column->minimum()));
-		uiGeneralTab.leMax->setText(numberLocale.toString(column->maximum()));
+		uiGeneralTab.leMin->setText(numberLocale.toString(statistics.minimum));
+		uiGeneralTab.leMax->setText(numberLocale.toString(statistics.maximum));
 	}
 
-	size_t n = 0;
-	for (int row = 0; row < column->rowCount(); ++row)
-		if (!std::isnan(column->valueAt(row)) && !column->isMasked(row))
-			n++;
+	const int n = statistics.size;
 
 	const auto* model = qobject_cast<const QStandardItemModel*>(uiGeneralTab.cbDerivOrder->model());
 	auto* item = model->item(nsl_diff_deriv_order_first);

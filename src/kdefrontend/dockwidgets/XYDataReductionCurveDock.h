@@ -30,6 +30,7 @@ public:
 
 private:
 	void initGeneralTab() override;
+	void updateSettings(const AbstractColumn*) override;
 	void updateTolerance();
 	void updateTolerance2();
 	void showDataReductionResult();

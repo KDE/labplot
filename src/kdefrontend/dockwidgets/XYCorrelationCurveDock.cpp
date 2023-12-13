@@ -245,16 +245,6 @@ void XYCorrelationCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	enableRecalculate();
 }
 
-void XYCorrelationCurveDock::y2DataColumnChanged(const QModelIndex& index) {
-	CONDITIONAL_LOCK_RETURN;
-
-	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
-	for (auto* curve : m_curvesList)
-		static_cast<XYCorrelationCurve*>(curve)->setY2DataColumn(column);
-
-	enableRecalculate();
-}
-
 void XYCorrelationCurveDock::samplingIntervalChanged() {
 	double samplingInterval = uiGeneralTab.sbSamplingInterval->value();
 	m_correlationData.samplingInterval = samplingInterval;
