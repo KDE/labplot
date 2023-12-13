@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-12-12 00:39+0000\n"
-"PO-Revision-Date: 2023-12-07 10:03+0100\n"
+"PO-Revision-Date: 2023-12-12 13:03+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 23.08.3\n"
+"X-Generator: Lokalize 23.08.4\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -11731,21 +11731,19 @@ msgstr ""
 "moeten worden geïmporteerd."
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:159
-#, fuzzy, kde-format
-#| msgid "Plot Area"
+#, kde-format
 msgid "As Plot Area"
-msgstr "Plotgebied"
+msgstr "Als plotgebied"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:160
-#, fuzzy, kde-format
-#| msgid "Logical Coordinates"
+#, kde-format
 msgid "As Coordinate System"
-msgstr "Logische coördinaten"
+msgstr "Als coördinatenstelsel"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:164
 #, kde-format
 msgid "Specify how to import multi-layered graphs."
-msgstr ""
+msgstr "Hoe multi-gelaagde grafieken specificeren."
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:169
 #, kde-format
@@ -11759,6 +11757,15 @@ msgid ""
 "new coordinate system (data range) on the same plot area is created for "
 "every layer</li></ul>"
 msgstr ""
+"Meerdere lagen worden gebruikt in Origin om ofwel meerdere plots te "
+"implementeren of meerdere assen op dezelfde plot (zie <a href=\"https://www."
+"originlab.com/doc/Origin-Help/MultiLayer-Graph\">Documentatie van Origin</a> "
+"voor meer details). LabPlot kan slechts een type tegelijk verwerken."
+"<br><br>Specificeer hoe multi-gelaagde grafieken in het geselecteerde "
+"project te importeren:<ul><li>Als plotgebied - een nieuw plotgebied wordt "
+"aangemaakt voor elke laag.</li><li>Als coördinatensysteem - een nieuw "
+"coördinatensysteem (gegevensreeks) op hetzelfde plotgebied wordt aangemaakt "
+"voor elke laag</li></ul>"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:261
 #, kde-format
@@ -11874,10 +11881,9 @@ msgstr ""
 
 #: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:330
 #: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:332
-#, fuzzy, kde-format
-#| msgid "Execute the query and preview its result"
+#, kde-format
 msgid "Failed to execute the query for the preview"
-msgstr "Doe de zoekopdracht en geef voorbeeld van het antwoord"
+msgstr "De zoekopdracht voor het voorbeeld uitvoeren is mislukt"
 
 #: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:406
 #, kde-format
@@ -11891,10 +11897,9 @@ msgstr "Doe de zoekopdracht en geef voorbeeld van het antwoord"
 
 #: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:529
 #: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:531
-#, fuzzy, kde-format
-#| msgid "Unable to Execute Query"
+#, kde-format
 msgid "Failed to execute the query"
-msgstr "Kon opzoekvraag niet uitvoeren"
+msgstr "De zoekopdracht uitvoeren is mislukt"
 
 #: src/kdefrontend/datasources/JsonOptionsWidget.cpp:119
 #, kde-format
@@ -13657,6 +13662,8 @@ msgid ""
 "The number of the interpolation points should be bigger than the total "
 "number of points in the data source."
 msgstr ""
+"Het aantal interpolatiepunten zou groter moeten zijn dan het totale aantal "
+"punten in de gegevensbron."
 
 #: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:615
 #, kde-format
@@ -18173,14 +18180,13 @@ msgstr "Te importeren objecten"
 #: src/kdefrontend/ui/datasources/importprojectwidget.ui:58
 #, kde-format
 msgid "Graph Layers:"
-msgstr ""
+msgstr "Grafieklagen:"
 
 #. i18n: ectx: property (text), widget (QLabel, lUnusedObjects)
 #: src/kdefrontend/ui/datasources/importprojectwidget.ui:82
-#, fuzzy, kde-format
-#| msgid "Import unused object"
+#, kde-format
 msgid "Unused Objects:"
-msgstr "Ongebruikt object importeren"
+msgstr "Ongebruikt objecten:"
 
 #. i18n: ectx: property (text), widget (QLabel, lCustomFolder)
 #. i18n: ectx: property (text), widget (QLabel, lFolder)

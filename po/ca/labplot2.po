@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-12-12 00:39+0000\n"
-"PO-Revision-Date: 2023-12-11 15:32+0100\n"
+"PO-Revision-Date: 2023-12-12 12:48+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -11357,7 +11357,7 @@ msgstr "Mostra les opcions"
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:146
 #, kde-format
 msgid "Live data source created in %1 seconds."
-msgstr "S'han creat les dades en viu d'origen en %1 segons."
+msgstr "S'ha creat l'origen de les dades en viu en %1 segons."
 
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:183
 #, kde-format
@@ -13805,6 +13805,8 @@ msgid ""
 "The number of the interpolation points should be bigger than the total "
 "number of points in the data source."
 msgstr ""
+"El nombre de punts d'interpolació ha de ser més gran que el nombre total de "
+"punts de l'origen de les dades."
 
 #: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:615
 #, kde-format

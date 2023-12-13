@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-12-12 00:39+0000\n"
-"PO-Revision-Date: 2023-12-11 08:58+0200\n"
+"PO-Revision-Date: 2023-12-12 09:20+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
@@ -13766,6 +13766,8 @@ msgid ""
 "The number of the interpolation points should be bigger than the total "
 "number of points in the data source."
 msgstr ""
+"Кількість точок інтерполяції має перевищувати загальну кількість точок у "
+"джерелі даних."
 
 #: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:615
 #, kde-format

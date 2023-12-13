@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-12-12 00:39+0000\n"
-"PO-Revision-Date: 2023-12-11 21:13+0100\n"
+"PO-Revision-Date: 2023-12-12 07:34+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -11736,6 +11736,14 @@ msgid ""
 "new coordinate system (data range) on the same plot area is created for "
 "every layer</li></ul>"
 msgstr ""
+"Multoblaj tavoloj estas uzataj en Origin por aŭ efektivigi plurajn grafikojn "
+"aŭ multoblajn aksojn sur la sama grafiko (vidu <a href=\"https://www."
+"originlab.com/doc/Origin-Help/MultiLayer-Graph\">Dokumentadon de Origin</a> "
+"por pliaj detaloj). LabPlot povas procezi nur unu tipon samtempe."
+"<br><br>Specifu kiel importi plurtavolajn grafikaĵojn en la elektita "
+"projekto:<ul><li>Kiel Grafika Areo - nova grafika areo estas kreita por ĉiu "
+"tavolo.</li><li>Kiel Koordinatsistemo - nova koordinatsistemo (datuma gamo) "
+"sur la sama grafikejo estas kreita por ĉiu tavolo</li></ul>"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:261
 #, kde-format
@@ -13630,6 +13638,8 @@ msgid ""
 "The number of the interpolation points should be bigger than the total "
 "number of points in the data source."
 msgstr ""
+"La nombro de la interpolaj punktoj devus esti pli granda ol la entuta nombro "
+"da punktoj en la datumfonto."
 
 #: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:615
 #, kde-format
@@ -18134,7 +18144,7 @@ msgstr "Objektoj por Importi"
 #: src/kdefrontend/ui/datasources/importprojectwidget.ui:58
 #, kde-format
 msgid "Graph Layers:"
-msgstr ""
+msgstr "Grafikaj Tavoloj:"
 
 #. i18n: ectx: property (text), widget (QLabel, lUnusedObjects)
 #: src/kdefrontend/ui/datasources/importprojectwidget.ui:82
