@@ -743,7 +743,7 @@ void WorksheetElementTest::prepareDrawingMenu() {
 	lThird->execMoveBehind(&action);
 
 	children = ws->children<AbstractAspect>(AbstractAspect::ChildIndexFlag::IncludeHidden);
-	DEBUG_ELEMENT_NAMES(children);
+	// DEBUG_ELEMENT_NAMES(children);
 	lThird->createContextMenu();
 	lThird->prepareDrawingOrderMenu();
 	QCOMPARE(lThird->m_moveBehindMenu->actions().count(), 0);
@@ -792,7 +792,7 @@ void WorksheetElementTest::moveTreeModelInteraction() {
 	QCOMPARE(selectedAspect->name(), lThird->name()); // The selectionModel() got updated correctly
 
 	children = ws->children<AbstractAspect>(AbstractAspect::ChildIndexFlag::IncludeHidden);
-	DEBUG_ELEMENT_NAMES(children);
+	// DEBUG_ELEMENT_NAMES(children);
 	lThird->createContextMenu();
 	lThird->prepareDrawingOrderMenu();
 	QCOMPARE(lThird->m_moveBehindMenu->actions().count(), 0);
