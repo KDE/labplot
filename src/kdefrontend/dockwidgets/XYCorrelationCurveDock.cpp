@@ -345,12 +345,13 @@ void XYCorrelationCurveDock::curveXDataColumnChanged(const AbstractColumn* colum
 	}
 	CONDITIONAL_LOCK_RETURN;
 	cbXDataColumn->setColumn(column, m_correlationCurve->xDataColumnPath());
+	enableRecalculate();
 }
 
 void XYCorrelationCurveDock::curveY2DataColumnChanged(const AbstractColumn* column) {
-	DEBUG("XYCorrelationCurveDock::curveY2DataColumnChanged()");
 	CONDITIONAL_LOCK_RETURN;
 	cbY2DataColumn->setColumn(column, m_correlationCurve->y2DataColumnPath());
+	enableRecalculate();
 }
 
 void XYCorrelationCurveDock::curveCorrelationDataChanged(const XYCorrelationCurve::CorrelationData& correlationData) {

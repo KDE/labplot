@@ -207,19 +207,23 @@ void XYAnalysisCurveDock::enableRecalculate() const {
 void XYAnalysisCurveDock::curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType type) {
 	CONDITIONAL_LOCK_RETURN;
 	cbDataSourceType->setCurrentIndex(static_cast<int>(type));
+	enableRecalculate();
 }
 
 void XYAnalysisCurveDock::curveDataSourceCurveChanged(const XYCurve* curve) {
 	CONDITIONAL_LOCK_RETURN;
 	cbDataSourceCurve->setAspect(curve);
+	enableRecalculate();
 }
 
 void XYAnalysisCurveDock::curveXDataColumnChanged(const AbstractColumn* column) {
 	CONDITIONAL_LOCK_RETURN;
 	cbXDataColumn->setColumn(column, m_analysisCurve->xDataColumnPath());
+	enableRecalculate();
 }
 
 void XYAnalysisCurveDock::curveYDataColumnChanged(const AbstractColumn* column) {
 	CONDITIONAL_LOCK_RETURN;
 	cbYDataColumn->setColumn(column, m_analysisCurve->yDataColumnPath());
+	enableRecalculate();
 }

@@ -218,6 +218,8 @@ void XYDifferentiationCurveDock::dataSourceTypeChanged(int index) {
 
 	for (auto* curve : m_curvesList)
 		static_cast<XYDifferentiationCurve*>(curve)->setDataSourceType(type);
+
+	enableRecalculate();
 }
 
 /*!

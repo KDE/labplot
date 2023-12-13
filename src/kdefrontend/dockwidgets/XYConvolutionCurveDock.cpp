@@ -450,6 +450,7 @@ void XYConvolutionCurveDock::curveXDataColumnChanged(const AbstractColumn* colum
 
 	CONDITIONAL_LOCK_RETURN;
 	cbXDataColumn->setColumn(column, m_convolutionCurve->xDataColumnPath());
+	enableRecalculate();
 }
 
 void XYConvolutionCurveDock::curveY2DataColumnChanged(const AbstractColumn* column) {
@@ -468,6 +469,7 @@ void XYConvolutionCurveDock::curveY2DataColumnChanged(const AbstractColumn* colu
 
 	CONDITIONAL_LOCK_RETURN;
 	cbY2DataColumn->setColumn(column, m_convolutionCurve->y2DataColumnPath());
+	enableRecalculate();
 }
 
 void XYConvolutionCurveDock::curveConvolutionDataChanged(const XYConvolutionCurve::ConvolutionData& convolutionData) {
