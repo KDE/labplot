@@ -19,6 +19,7 @@
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "commonfrontend/core/ContentDockWidget.h"
+#include "qscreen.h"
 
 #include <KConfig>
 #include <KConfigGroup>
@@ -657,6 +658,7 @@ QPixmap ProjectExplorer::showSparkLines(const Column* col) {
 	}
 	if (col->isPlottable()) {
 		auto* worksheet = new Worksheet(i18n("check"));
+		worksheet->view();
 		auto* plot = new CartesianPlot(i18n("check"));
 		plot->setType(CartesianPlot::Type::FourAxes);
 		int maxLength = col->rowCount();
@@ -676,11 +678,17 @@ QPixmap ProjectExplorer::showSparkLines(const Column* col) {
 		worksheet->setSuppressLayoutUpdate(false);
 		worksheet->updateLayout();
 		// export to pixmap
-		auto* worsheetView = new WorksheetView(worksheet);
-		QPixmap pixmap;
-		worsheetView->exportToPixmap(pixmap);
-		DEBUG("INSIDE showSparkLine")
-		return pixmap;
+		QPixmap pix(10, 10);
+		const bool rc = worksheet->exportView(pix);
+
+		// if (!rc) {
+		// 	// the view is not available yet, show the placeholder preview
+		// 	const auto icon = QIcon::fromTheme(QLatin1String("view-preview"));
+		// 	const int iconSize = std::ceil(5.0 / 2.54 * QApplication::primaryScreen()->physicalDotsPerInchX());
+		// 	pix = icon.pixmap(iconSize, iconSize);
+		// }
+
+		return pix;
 	}
 	return QPixmap();
 }

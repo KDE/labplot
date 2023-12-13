@@ -222,7 +222,6 @@ QVariant SpreadsheetModel::headerData(int section, Qt::Orientation orientation, 
 		case static_cast<int>(CustomDataRole::SparkLineRole): {
 			DEBUG("XXX")
 			DEBUG(m_spreadsheet->child<Column>(section)->sparkLine().size().height())
-
 			DEBUG(m_spreadsheet->child<Column>(section)->sparkLine().size().width())
 			DEBUG("XXX")
 			return m_spreadsheet->child<Column>(section)->sparkLine();

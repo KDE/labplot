@@ -2294,6 +2294,7 @@ void WorksheetView::exportToFile(const QString& path, const ExportFormat format,
 
 void WorksheetView::exportToPixmap(QPixmap& pixmap) {
 	const auto& sourceRect = scene()->sceneRect();
+
 	int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Unit::Millimeter);
 	int h = Worksheet::convertFromSceneUnits(sourceRect.height(), Worksheet::Unit::Millimeter);
 	w = w * QApplication::primaryScreen()->physicalDotsPerInchX() / 25.4;
@@ -2306,6 +2307,7 @@ void WorksheetView::exportToPixmap(QPixmap& pixmap) {
 	painter.setRenderHint(QPainter::Antialiasing);
 	exportPaint(&painter, targetRect, sourceRect, true /* export background */, true /* export selection */);
 	painter.end();
+
 }
 
 bool WorksheetView::eventFilter(QObject* /*watched*/, QEvent* event) {

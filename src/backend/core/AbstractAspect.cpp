@@ -25,6 +25,7 @@
 #include <QClipboard>
 #include <QMenu>
 #include <QMimeData>
+#include <qpixmap.h>
 
 #include <commonfrontend/ProjectExplorer.h>
 
@@ -245,8 +246,16 @@ QString AbstractAspect::comment() const {
 QPixmap AbstractAspect::sparkLine() const {
 	if (d->q->m_type == AspectType::Column) {
 		const Column* col = dynamic_cast<Column*>(d->q);
-		if (col->hasValues())
-			return ProjectExplorer::showSparkLines(col);
+		if (col->hasValues()) {
+			QPixmap pix = ProjectExplorer::showSparkLines(col);
+			DEBUG("XXX")
+
+			DEBUG(pix.size().height())
+			DEBUG(pix.size().width())
+			DEBUG("XXX")
+
+			return pix;
+		}
 	}
 	return QPixmap();
 }

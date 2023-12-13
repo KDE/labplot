@@ -46,7 +46,8 @@ public:
 	QModelIndex currentIndex() const;
 	AbstractAspect* currentAspect() const;
 	void search();
-	static QPixmap showSparkLines(const Column*);
+	// show sparkLine of respective column
+        static QPixmap showSparkLines(const Column*);
 
 
 private:
