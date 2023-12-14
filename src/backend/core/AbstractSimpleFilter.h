@@ -92,7 +92,7 @@ public:
 	int rowCount() const override {
 		return m_owner->rowCount();
 	}
-	int rowCount(double min, double max) const override {
+	int rowCount(double /*min*/, double /*max*/) const override {
 		return 0;
 	}
 	int availableRowCount(int max = -1) const override {
