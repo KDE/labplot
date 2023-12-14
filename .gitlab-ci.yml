@@ -19,10 +19,12 @@ include:
 # supposed to run manual:
       - /gitlab-templates/craft-appimage.yml
       - /gitlab-templates/craft-windows-x86-64.yml
-      - /gitlab-templates/craft-windows-mingw64.yml
+# fails due to poppler build problem
+#      - /gitlab-templates/craft-windows-mingw64.yml
+# fails due to python error: Bad CPU type in executable
+#      - /gitlab-templates/craft-macos-x86-64.yml
 # fails because cantor needs Qt5WebEngine:
-      - /gitlab-templates/craft-macos-x86-64.yml
-      - /gitlab-templates/craft-macos-arm64.yml
+#      - /gitlab-templates/craft-macos-arm64.yml
 
 # needed for tests (use "ctest -V" for more output)
 #variables:
