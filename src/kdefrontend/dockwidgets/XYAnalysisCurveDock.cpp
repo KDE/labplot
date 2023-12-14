@@ -2,9 +2,9 @@
 
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 
-XYAnalysisCurveDock::XYAnalysisCurveDock(QWidget* parent, RequiredDataSource required)
+XYAnalysisCurveDock::XYAnalysisCurveDock(QWidget* parent, RequiredDataSource requiredDataSource)
 	: XYCurveDock(parent)
-	, m_requiredDataSource(required) {
+	, m_requiredDataSource(requiredDataSource) {
 }
 
 /*!

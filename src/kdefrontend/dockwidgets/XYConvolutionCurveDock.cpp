@@ -431,7 +431,6 @@ void XYConvolutionCurveDock::showConvolutionResult() {
 //*************************************************************
 // General-Tab
 void XYConvolutionCurveDock::curveXDataColumnChanged(const AbstractColumn* column) {
-	DEBUG("XYConvolutionCurveDock::curveXDataColumnChanged()");
 	if (column) {
 		DEBUG("X Column available");
 		uiGeneralTab.lXRange->setEnabled(true);
@@ -454,7 +453,6 @@ void XYConvolutionCurveDock::curveXDataColumnChanged(const AbstractColumn* colum
 }
 
 void XYConvolutionCurveDock::curveY2DataColumnChanged(const AbstractColumn* column) {
-	DEBUG("XYConvolutionCurveDock::curveY2DataColumnChanged()");
 	if (column) {
 		DEBUG("Y2 Column available");
 		uiGeneralTab.lKernel->setEnabled(false);
