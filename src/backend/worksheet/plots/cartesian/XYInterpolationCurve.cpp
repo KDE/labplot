@@ -4,7 +4,7 @@
 	Description          : A xy-curve defined by an interpolation
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2016-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
-	SPDX-FileCopyrightText: 2016-2017 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2016-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -219,6 +219,16 @@ bool XYInterpolationCurvePrivate::recalculateSpecific(const AbstractColumn* tmpX
 
 		double x = xmin + i * (xmax - xmin) / (npoints - 1);
 		(*xVector)[(int)i] = x;
+
+		// make sure the value for x determined above is within the ranges to avoid subtle issues
+		// related to the representation of float numbers
+		if (i == 0 && x < xmin) {
+			x = xmin;
+			(*xVector)[(int)i] = xmin;
+		} else if (i == npoints - 1 && x > xmax) {
+			x = xmax;
+			(*xVector)[(int)i] = x;
+		}
 
 		// find index a,b for interval [x[a],x[b]] around x[i] using bisection
 		if (type == nsl_interp_type_cosine || type == nsl_interp_type_exponential || type == nsl_interp_type_pch) {
