@@ -41,10 +41,6 @@
 #include <KLocalizedString>
 #include <QGraphicsSceneMouseEvent>
 
-#include <gsl/gsl_errno.h>
-#include <gsl/gsl_histogram.h>
-#include <gsl/gsl_spline.h>
-
 CURVE_COLUMN_CONNECT(Histogram, Data, data, recalc)
 CURVE_COLUMN_CONNECT(Histogram, ErrorPlus, errorPlus, updateErrorBars)
 CURVE_COLUMN_CONNECT(Histogram, ErrorMinus, errorMinus, updateErrorBars)

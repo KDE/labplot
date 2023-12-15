@@ -151,6 +151,7 @@ bool XYHilbertTransformCurvePrivate::recalculateSpecific(const AbstractColumn* t
 	///////////////////////////////////////////////////////////
 	// transform with window
 	//	TODO: type
+	gsl_set_error_handler_off();
 	int status = nsl_hilbert_transform(ydata, 1, n, type);
 
 	unsigned int N = n;

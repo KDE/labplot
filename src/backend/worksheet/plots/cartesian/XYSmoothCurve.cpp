@@ -172,6 +172,7 @@ bool XYSmoothCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDataCol
 
 	///////////////////////////////////////////////////////////
 	int status = 0;
+	gsl_set_error_handler_off();
 
 	switch (type) {
 	case nsl_smooth_type_moving_average:

@@ -27,10 +27,6 @@
 #include "backend/nsl/nsl_kde.h"
 #include "backend/nsl/nsl_sf_kernel.h"
 
-#include <gsl/gsl_cdf.h>
-#include <gsl/gsl_math.h>
-#include <gsl/gsl_statistics.h>
-
 #include <QMenu>
 #include <QPainter>
 

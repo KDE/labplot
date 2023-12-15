@@ -172,6 +172,7 @@ bool XYInterpolationCurvePrivate::recalculateSpecific(const AbstractColumn* tmpX
 	///////////////////////////////////////////////////////////
 	int status = 0;
 
+	gsl_set_error_handler_off();
 	gsl_interp_accel* acc = gsl_interp_accel_alloc();
 	gsl_spline* spline = nullptr;
 	switch (type) {
