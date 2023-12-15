@@ -263,7 +263,6 @@ const QVector<ConstantGroups>& ExpressionParser::constantsGroupIndices() {
 
 bool ExpressionParser::isValid(const QString& expr, const QStringList& vars) {
 	QDEBUG(Q_FUNC_INFO << ", expr:" << expr << ", vars:" << vars);
-	gsl_set_error_handler_off();
 
 	Lock l(skipSpecialFunctionEvaluation);
 
@@ -341,7 +340,6 @@ bool ExpressionParser::evaluateCartesian(const QString& expr,
 		assign_symbol(qPrintable(paramNames.at(i)), paramValues.at(i));
 
 	const auto numberLocale = QLocale();
-	gsl_set_error_handler_off();
 	for (int i = 0; i < count; i++) {
 		const double x{range.start() + step * i};
 		assign_symbol("x", x);
@@ -386,7 +384,6 @@ bool ExpressionParser::evaluateCartesian(const QString& expr,
 										 QVector<double>* xVector,
 										 QVector<double>* yVector) {
 	DEBUG(Q_FUNC_INFO << ", v2")
-	gsl_set_error_handler_off();
 
 	const Range<double> range{min, max};
 	const double step = range.stepSize(count);
@@ -416,7 +413,6 @@ bool ExpressionParser::evaluateCartesian(const QString& expr,
 
 bool ExpressionParser::evaluateCartesian(const QString& expr, QVector<double>* xVector, QVector<double>* yVector) {
 	DEBUG(Q_FUNC_INFO << ", v3")
-	gsl_set_error_handler_off();
 
 	const auto numberLocale = QLocale();
 	for (int i = 0; i < xVector->count(); i++) {
@@ -442,7 +438,6 @@ bool ExpressionParser::evaluateCartesian(const QString& expr,
 										 const QStringList& paramNames,
 										 const QVector<double>& paramValues) {
 	DEBUG(Q_FUNC_INFO << ", v4")
-	gsl_set_error_handler_off();
 
 	for (int i = 0; i < paramNames.size(); ++i)
 		assign_symbol(qPrintable(paramNames.at(i)), paramValues.at(i));
@@ -619,7 +614,6 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList&
 #endif
 	DEBUG(Q_FUNC_INFO << ", v5")
 	Q_ASSERT(vars.size() == xVectors.size());
-	gsl_set_error_handler_off();
 
 	// determine the minimal size of involved vectors
 	int minSize{std::numeric_limits<int>::max()};
@@ -690,8 +684,6 @@ bool ExpressionParser::evaluatePolar(const QString& expr,
 									 int count,
 									 QVector<double>* xVector,
 									 QVector<double>* yVector) {
-	gsl_set_error_handler_off();
-
 	const Range<double> range{min, max};
 	const double step = range.stepSize(count);
 
@@ -723,8 +715,6 @@ bool ExpressionParser::evaluateParametric(const QString& xexpr,
 										  int count,
 										  QVector<double>* xVector,
 										  QVector<double>* yVector) {
-	gsl_set_error_handler_off();
-
 	const Range<double> range{min, max};
 	const double step = range.stepSize(count);
 

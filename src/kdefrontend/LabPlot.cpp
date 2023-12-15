@@ -31,6 +31,8 @@
 #include <QStandardPaths>
 #include <QSysInfo>
 
+#include <gsl/gsl_errno.h>
+
 #ifdef _WIN32
 #include <windows.h>
 #endif
@@ -225,6 +227,11 @@ int main(int argc, char* argv[]) {
 #if defined(Q_OS_MACOS) || defined(Q_OS_WIN)
 	QApplication::setStyle(QStringLiteral("breeze"));
 #endif
+
+	// switch off GSL's default error handler which triggers internally about()
+	// we don't want to crash but to rather react on the return codes
+	// s.a. https://www.gnu.org/software/gsl/doc/html/err.html
+	gsl_set_error_handler_off();
 
 	auto* window = new MainWin(nullptr, filename);
 	window->show();
