@@ -1480,6 +1480,7 @@ void XYCurvePrivate::updateLines() {
 
 				gsl_interp_accel* acc = gsl_interp_accel_alloc();
 				gsl_spline* spline{nullptr};
+				gsl_set_error_handler_off();
 				switch (lineType) {
 				case XYCurve::LineType::SplineCubicNatural:
 					spline = gsl_spline_alloc(gsl_interp_cspline, numberOfPoints);

@@ -2331,6 +2331,8 @@ void XYFitCurvePrivate::runLevenbergMarquardt(const AbstractColumn* tmpXDataColu
 		x_init[i] = nsl_fit_map_unbound(x_init[i], x_min[i], x_max[i]);
 	DEBUG(Q_FUNC_INFO << ",	DONE");
 	auto x = gsl_vector_view_array(x_init, np);
+	DEBUG(Q_FUNC_INFO << ", Turning off GSL error handler to avoid overflow/underflow");
+	gsl_set_error_handler_off();
 	DEBUG(Q_FUNC_INFO << ", Initialize solver with function f and initial guess x");
 	gsl_multifit_fdfsolver_set(s, &f, &x.vector);
 
