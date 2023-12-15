@@ -15,7 +15,8 @@ include:
       - /gitlab-templates/freebsd.yml
 # finds Qt5 but KF5 is not installed
 #      - /gitlab-templates/freebsd-qt6.yml
-      - /gitlab-templates/flatpak.yml
+# poppler not building due to Qt6 missing
+#      - /gitlab-templates/flatpak.yml
 # supposed to run manual:
       - /gitlab-templates/craft-appimage.yml
       - /gitlab-templates/craft-windows-x86-64.yml
