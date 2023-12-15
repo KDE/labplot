@@ -2319,10 +2319,9 @@ msgid "Euler's constant"
 msgstr ""
 
 #: src/backend/gsl/constants.cpp:60
-#, fuzzy, kde-format
-#| msgid "Number"
+#, kde-format
 msgid "Not a number"
-msgstr "Číslo"
+msgstr ""
 
 #. i18n("Fundamental constants"));
 #: src/backend/gsl/constants.cpp:63
@@ -3316,10 +3315,9 @@ msgid "Unknown Function"
 msgstr "Neznámá funkce"
 
 #: src/backend/gsl/functions.cpp:229
-#, fuzzy, kde-format
-#| msgid "Delete variable"
+#, kde-format
 msgid "Cell (index, variable)"
-msgstr "Smazat proměnnou"
+msgstr ""
 
 #: src/backend/gsl/functions.cpp:230
 #, kde-format
@@ -6990,16 +6988,14 @@ msgid "%1: set axis range"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:626
-#, fuzzy, kde-format
-#| msgid "%1: set image"
+#, kde-format
 msgid "%1: set range scale"
-msgstr "%1: nastavit obrázek"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:633
-#, fuzzy, kde-format
-#| msgid "%1: set image"
+#, kde-format
 msgid "%1: set scale"
-msgstr "%1: nastavit obrázek"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:640
 #, kde-format
@@ -9106,10 +9102,9 @@ msgid "Plot Data"
 msgstr "Zobrazit graf"
 
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:291
-#, fuzzy, kde-format
-#| msgid "Column Statistics..."
+#, kde-format
 msgid "Variable Statistics..."
-msgstr "Statistika sloupce..."
+msgstr ""
 
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:338
 #, kde-format
@@ -9127,10 +9122,9 @@ msgid "Ready"
 msgstr "Připraven"
 
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:362
-#, fuzzy, kde-format
-#| msgid "%1: row statistics"
+#, kde-format
 msgid "%1: variable statistics"
-msgstr "%1: statistika řady"
+msgstr ""
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:126
 #: src/commonfrontend/matrix/MatrixView.cpp:194
@@ -11607,16 +11601,14 @@ msgid ""
 msgstr ""
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:159
-#, fuzzy, kde-format
-#| msgid "Plot Area"
+#, kde-format
 msgid "As Plot Area"
-msgstr "Oblast zákresu"
+msgstr ""
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:160
-#, fuzzy, kde-format
-#| msgid "Logical Coordinates"
+#, kde-format
 msgid "As Coordinate System"
-msgstr "Logické souřadnice"
+msgstr ""
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:164
 #, kde-format
@@ -11760,10 +11752,9 @@ msgstr ""
 
 #: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:529
 #: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:531
-#, fuzzy, kde-format
-#| msgid "Failed to open the file '%1'."
+#, kde-format
 msgid "Failed to execute the query"
-msgstr "Nepodařilo se otevřít soubor '%1'."
+msgstr ""
 
 #: src/kdefrontend/datasources/JsonOptionsWidget.cpp:119
 #, kde-format

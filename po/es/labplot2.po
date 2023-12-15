@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-12-12 00:39+0000\n"
-"PO-Revision-Date: 2023-12-09 01:49+0100\n"
+"PO-Revision-Date: 2023-12-12 19:33+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 23.08.3\n"
+"X-Generator: Lokalize 23.08.4\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -11755,21 +11755,19 @@ msgstr ""
 "los objetos seleccionados."
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:159
-#, fuzzy, kde-format
-#| msgid "Plot Area"
+#, kde-format
 msgid "As Plot Area"
-msgstr "Área de gráfico"
+msgstr "Como área de gráfico"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:160
-#, fuzzy, kde-format
-#| msgid "Logical Coordinates"
+#, kde-format
 msgid "As Coordinate System"
-msgstr "Coordenadas lógicas"
+msgstr "Como sistema de coordenadas"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:164
 #, kde-format
 msgid "Specify how to import multi-layered graphs."
-msgstr ""
+msgstr "Indique cómo se importan los gráficos multicapa."
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:169
 #, kde-format
@@ -11783,6 +11781,15 @@ msgid ""
 "new coordinate system (data range) on the same plot area is created for "
 "every layer</li></ul>"
 msgstr ""
+"Las capas múltiples se usan en Origin para implementar múltiples gráficos o "
+"múltiples ejes en el mismo gráfico (consulte la <a href=\"https://www."
+"originlab.com/doc/Origin-Help/MultiLayer-Graph\">documentación de Origin</a> "
+"para más detalles). LabPlot puede procesar solo un tipo cada vez."
+"<br><br>Indique cómo se importan los gráficos muticapa del proyecto "
+"seleccionado:<ul><li>Como área de gráfico: se crea una nueva área de gráfico "
+"para cada capa.</li><li>Como sistema de coordenadas: se crea un nuevo "
+"sistema de coordenadas (intervalo de datos) en la misma área de gráfico para "
+"cada capa.</li></ul>"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:261
 #, kde-format
@@ -11900,10 +11907,9 @@ msgstr ""
 
 #: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:330
 #: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:332
-#, fuzzy, kde-format
-#| msgid "Execute the query and preview its result"
+#, kde-format
 msgid "Failed to execute the query for the preview"
-msgstr "Ejecutar la consulta y mostrar una vista previa del resultado"
+msgstr "No se ha podido ejecutar la consulta para la vista previa"
 
 #: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:406
 #, kde-format
@@ -11917,10 +11923,9 @@ msgstr "Ejecutar la consulta y mostrar una vista previa del resultado"
 
 #: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:529
 #: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:531
-#, fuzzy, kde-format
-#| msgid "Unable to Execute Query"
+#, kde-format
 msgid "Failed to execute the query"
-msgstr "No es posible ejecutar la consulta"
+msgstr "No se ha podido ejecutar la consulta"
 
 #: src/kdefrontend/datasources/JsonOptionsWidget.cpp:119
 #, kde-format
@@ -13694,6 +13699,8 @@ msgid ""
 "The number of the interpolation points should be bigger than the total "
 "number of points in the data source."
 msgstr ""
+"El número de puntos de interpolación debe ser mayor que el número total de "
+"puntos de la fuente de datos."
 
 #: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:615
 #, kde-format
@@ -18222,14 +18229,13 @@ msgstr "Objetos que importar"
 #: src/kdefrontend/ui/datasources/importprojectwidget.ui:58
 #, kde-format
 msgid "Graph Layers:"
-msgstr ""
+msgstr "Capas del gráfico:"
 
 #. i18n: ectx: property (text), widget (QLabel, lUnusedObjects)
 #: src/kdefrontend/ui/datasources/importprojectwidget.ui:82
-#, fuzzy, kde-format
-#| msgid "Import unused object"
+#, kde-format
 msgid "Unused Objects:"
-msgstr "Importar objeto no usado"
+msgstr "Objetos no usados:"
 
 #. i18n: ectx: property (text), widget (QLabel, lCustomFolder)
 #. i18n: ectx: property (text), widget (QLabel, lFolder)
