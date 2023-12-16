@@ -308,6 +308,10 @@ void LabelWidget::setLabels(QList<TextLabel*> labels) {
 	visible = (m_label->parentAspect()->type() != AspectType::InfoElement);
 	ui.chbVisible->setVisible(visible);
 
+	// hide the option "Lock" if the label is child of an axis, the label cannot be freely moved in this case
+	visible = (m_label->parentAspect()->type() != AspectType::Axis);
+	ui.chbLock->setVisible(visible);
+
 	// resize the widget to take the minimal height
 	layout()->activate();
 	const auto s = QSize(this->width(), 0).expandedTo(minimumSize());

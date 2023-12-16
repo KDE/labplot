@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : widget for cartesian plot legend properties
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2013-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2013-2023 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -64,6 +64,7 @@ CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget* parent)
 	// SIGNAL/SLOT
 
 	// General
+	connect(ui.chbLock, &QCheckBox::clicked, this, &CartesianPlotLegendDock::lockChanged);
 	connect(ui.chkVisible, &QCheckBox::clicked, this, &CartesianPlotLegendDock::visibilityChanged);
 	connect(ui.kfrLabelFont, &KFontRequester::fontSelected, this, &CartesianPlotLegendDock::labelFontChanged);
 	connect(ui.kcbLabelColor, &KColorButton::changed, this, &CartesianPlotLegendDock::labelColorChanged);
@@ -138,6 +139,7 @@ void CartesianPlotLegendDock::setLegends(QList<CartesianPlotLegend*> list) {
 	connect(m_legend, &CartesianPlotLegend::verticalAlignmentChanged, this, &CartesianPlotLegendDock::legendVerticalAlignmentChanged);
 	connect(m_legend, &CartesianPlotLegend::rotationAngleChanged, this, &CartesianPlotLegendDock::legendRotationAngleChanged);
 	connect(m_legend, &CartesianPlotLegend::lineSymbolWidthChanged, this, &CartesianPlotLegendDock::legendLineSymbolWidthChanged);
+	connect(m_legend, &CartesianPlotLegend::lockChanged, this, &CartesianPlotLegendDock::legendLockChanged);
 	connect(m_legend, &CartesianPlotLegend::visibleChanged, this, &CartesianPlotLegendDock::legendVisibilityChanged);
 
 	// layout
@@ -270,6 +272,13 @@ void CartesianPlotLegendDock::retranslateUi() {
 }
 
 // "General"-tab
+void CartesianPlotLegendDock::lockChanged(bool locked) {
+	CONDITIONAL_LOCK_RETURN;
+
+	for (auto* legend : m_legendList)
+		legend->setLock(locked);
+}
+
 void CartesianPlotLegendDock::visibilityChanged(bool state) {
 	CONDITIONAL_LOCK_RETURN;
 
@@ -533,6 +542,11 @@ void CartesianPlotLegendDock::legendRotationAngleChanged(qreal angle) {
 	ui.sbRotation->setValue(angle);
 }
 
+void CartesianPlotLegendDock::legendLockChanged(bool on) {
+	CONDITIONAL_LOCK_RETURN;
+	ui.chbLock->setChecked(on);
+}
+
 void CartesianPlotLegendDock::legendVisibilityChanged(bool on) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.chkVisible->setChecked(on);
@@ -649,8 +663,9 @@ void CartesianPlotLegendDock::load() {
 		ui.lPositionXLogicalDateTime->hide();
 		ui.dtePositionXLogical->hide();
 	}
-	ui.sbRotation->setValue(m_legend->rotationAngle());
 
+	ui.sbRotation->setValue(m_legend->rotationAngle());
+	ui.chbLock->setChecked(m_legend->isLocked());
 	ui.chkVisible->setChecked(m_legend->isVisible());
 
 	// legend title, background and border line

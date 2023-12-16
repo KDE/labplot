@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : widget for image properties
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2019-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2019-2023 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -112,6 +112,7 @@ ImageDock::ImageDock(QWidget* parent)
 	connect(ui.dtePositionXLogical, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &ImageDock::positionXLogicalDateTimeChanged);
 	connect(ui.sbPositionYLogical, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &ImageDock::positionYLogicalChanged);
 
+	connect(ui.chbLock, &QCheckBox::clicked, this, &ImageDock::lockChanged);
 	connect(ui.chbBindLogicalPos, &QCheckBox::clicked, this, &ImageDock::bindingChanged);
 	connect(ui.chbVisible, &QCheckBox::clicked, this, &ImageDock::visibilityChanged);
 }
@@ -138,6 +139,7 @@ void ImageDock::setImages(QList<Image*> list) {
 	connect(m_image, &Image::fileNameChanged, this, &ImageDock::imageFileNameChanged);
 	connect(m_image, &Image::embeddedChanged, this, &ImageDock::imageEmbeddedChanged);
 	connect(m_image, &Image::opacityChanged, this, &ImageDock::imageOpacityChanged);
+	connect(m_image, &Image::lockChanged, this, &ImageDock::imageLockChanged);
 	connect(m_image, &Image::visibleChanged, this, &ImageDock::imageVisibleChanged);
 
 	// Size
@@ -423,6 +425,12 @@ void ImageDock::rotationChanged(int value) {
 		image->setRotationAngle(value);
 }
 
+void ImageDock::lockChanged(bool locked) {
+	CONDITIONAL_LOCK_RETURN;
+	for (auto* image : m_imageList)
+		image->setLock(locked);
+}
+
 void ImageDock::visibilityChanged(bool state) {
 	CONDITIONAL_LOCK_RETURN;
 
@@ -500,6 +508,11 @@ void ImageDock::imageRotationAngleChanged(qreal angle) {
 	ui.sbRotation->setValue(angle);
 }
 
+void ImageDock::imageLockChanged(bool on) {
+	CONDITIONAL_LOCK_RETURN;
+	ui.chbLock->setChecked(on);
+}
+
 void ImageDock::imageVisibleChanged(bool on) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.chbVisible->setChecked(on);
@@ -517,6 +530,7 @@ void ImageDock::load() {
 	ui.leFileName->setText(m_image->fileName());
 	ui.chbEmbedded->setChecked(m_image->embedded());
 	embeddedChanged(ui.chbEmbedded->checkState());
+	ui.chbLock->setChecked(m_image->isLocked());
 	ui.chbVisible->setChecked(m_image->isVisible());
 
 	// Size
