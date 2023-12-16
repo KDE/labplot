@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-12 00:39+0000\n"
+"POT-Creation-Date: 2023-12-16 00:39+0000\n"
 "PO-Revision-Date: 2023-12-13 08:41+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
@@ -2855,7 +2855,7 @@ msgstr "Enerxía dun erguio"
 
 #: src/backend/gsl/errors.h:20
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1955
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1205
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1200
 #, kde-format
 msgid "Success"
 msgstr "Éxito"
@@ -5682,7 +5682,7 @@ msgstr "Circular"
 #: src/kdefrontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:33
 #: src/kdefrontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:17
 #: src/kdefrontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:331
-#: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:512
+#: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:527
 #: src/kdefrontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:497
 #: src/kdefrontend/ui/spreadsheet/formattingheatmapwidget.ui:61
 #, kde-format
@@ -5964,8 +5964,8 @@ msgstr "Estatística (distribucións)"
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:243
 #: src/kdefrontend/dockwidgets/KDEPlotDock.cpp:212
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:275
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:779
-#: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:83
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:774
+#: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:80
 #, kde-format
 msgid "Custom"
 msgstr "Personalizado"
@@ -7619,8 +7619,8 @@ msgstr "Intervalo de referencia"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:486
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:566
-#: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:426
-#: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:431
+#: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:375
+#: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:380
 #, kde-format
 msgid "Convolution"
 msgstr "Convolución"
@@ -8968,7 +8968,7 @@ msgstr "%1: desbloquear"
 #: src/kdefrontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:196
 #: src/kdefrontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:180
 #: src/kdefrontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:300
-#: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:495
+#: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:510
 #: src/kdefrontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:289
 #: src/kdefrontend/ui/labelwidget.ui:299
 #, kde-format
@@ -10435,15 +10435,8 @@ msgstr ""
 #: src/commonfrontend/workbook/WorkbookView.cpp:52
 #: src/commonfrontend/workbook/WorkbookView.cpp:165
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:115
-#: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:54
-#: src/kdefrontend/dockwidgets/XYCorrelationCurveDock.cpp:56
-#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:55
-#: src/kdefrontend/dockwidgets/XYDifferentiationCurveDock.cpp:55
+#: src/kdefrontend/dockwidgets/XYAnalysisCurveDock.cpp:57
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:74
-#: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:52
-#: src/kdefrontend/dockwidgets/XYIntegrationCurveDock.cpp:55
-#: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:58
-#: src/kdefrontend/dockwidgets/XYSmoothCurveDock.cpp:51
 #: src/kdefrontend/labplot2ui.rc:32 src/kdefrontend/MainWin.cpp:703
 #: src/kdefrontend/MainWin.cpp:2106 src/kdefrontend/SettingsDialog.cpp:72
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:237
@@ -12507,7 +12500,7 @@ msgstr "%1 eixos: cargouse o modelo «%2»"
 #: src/kdefrontend/dockwidgets/ReferenceLineDock.cpp:235
 #: src/kdefrontend/dockwidgets/SpreadsheetDock.cpp:221
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:604
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1279
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1275
 #, kde-format
 msgid "%1: template \"%2\" loaded"
 msgstr "%1: cargouse o modelo «%2»"
@@ -12714,7 +12707,7 @@ msgstr "Intervalos da gráfica:"
 #: src/kdefrontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:309
 #: src/kdefrontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:255
 #: src/kdefrontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:314
-#: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:502
+#: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:517
 #: src/kdefrontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:507
 #, kde-format
 msgid "Plot Range:"
@@ -12942,17 +12935,17 @@ msgid "Expand all curves"
 msgstr "Expandir todas as curvas"
 
 #: src/kdefrontend/dockwidgets/CursorDock.cpp:150
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1337
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1343
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1349
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1332
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1338
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1344
 #, kde-format
 msgid "Copy Selection"
 msgstr "Copiar a selección"
 
 #: src/kdefrontend/dockwidgets/CursorDock.cpp:151
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1338
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1344
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1350
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1333
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1339
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1345
 #, kde-format
 msgid "Copy All"
 msgstr "Copialo todo"
@@ -13077,8 +13070,8 @@ msgid "Custom Error Values, asymmetric"
 msgstr "Valores de erro personalizados, asimétricos"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:504
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:934
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:989
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:930
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:985
 #, kde-format
 msgid "Data, +-:"
 msgstr "Datos, +-:"
@@ -13087,8 +13080,8 @@ msgstr "Datos, +-:"
 #. i18n: ectx: property (text), widget (QLabel, lYErrorDataPlus)
 #. i18n: ectx: property (text), widget (QLabel, lErrorDataPlus)
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:511
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:941
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:996
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:937
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:992
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:455
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:654
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:661
@@ -13118,7 +13111,7 @@ msgstr "Silverman"
 
 #: src/kdefrontend/dockwidgets/KDEPlotDock.cpp:409
 #: src/kdefrontend/dockwidgets/QQPlotDock.cpp:315
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1277
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1273
 #, kde-format
 msgid "%1 xy-curves: template \"%2\" loaded"
 msgstr "%1 curvas xy: cargouse o modelo «%2»"
@@ -13252,63 +13245,56 @@ msgstr "Páxina estándar"
 msgid "%1 worksheets: template \"%2\" loaded"
 msgstr "%1 follas de traballo: cargouse o modelo «%2»"
 
-#: src/kdefrontend/dockwidgets/XYAnalysisCurveDock.cpp:19
+#: src/kdefrontend/dockwidgets/XYAnalysisCurveDock.cpp:20
 #, kde-format
 msgid "status: %1"
 msgstr "estado: %1"
 
-#: src/kdefrontend/dockwidgets/XYAnalysisCurveDock.cpp:28
+#: src/kdefrontend/dockwidgets/XYAnalysisCurveDock.cpp:29
 #, kde-format
 msgid "calculation time: %1 s"
 msgstr "tempo de cálculo: %1 s"
 
-#: src/kdefrontend/dockwidgets/XYAnalysisCurveDock.cpp:30
+#: src/kdefrontend/dockwidgets/XYAnalysisCurveDock.cpp:31
 #, kde-format
 msgid "calculation time: %1 ms"
 msgstr "tempo de cálculo: %1 ms"
 
-#: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:55
-#: src/kdefrontend/dockwidgets/XYCorrelationCurveDock.cpp:57
-#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:56
-#: src/kdefrontend/dockwidgets/XYDifferentiationCurveDock.cpp:56
+#: src/kdefrontend/dockwidgets/XYAnalysisCurveDock.cpp:58
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:75
-#: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:53
-#: src/kdefrontend/dockwidgets/XYIntegrationCurveDock.cpp:56
-#: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:59
-#: src/kdefrontend/dockwidgets/XYSmoothCurveDock.cpp:52
 #, kde-format
 msgid "XY-Curve"
 msgstr "Curva XY"
 
 #. i18n: ectx: property (text), widget (QLabel, lKernel)
-#: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:238
+#: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:222
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:30
 #, kde-format
 msgid "or Kernel/Size:"
 msgstr "ou kernel ou tamaño:"
 
-#: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:252
+#: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:236
 #, kde-format
 msgid "with Kernel/Size:"
 msgstr "con kernel ou tamaño:"
 
-#: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:427
-#: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:430
+#: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:376
+#: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:379
 #, kde-format
 msgid "Deconvolution"
 msgstr "Deconvolución"
 
-#: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:467
+#: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:416
 #, kde-format
 msgid "Convolution status: %1"
 msgstr "Estado da convolución: %1"
 
-#: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:469
+#: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:418
 #, kde-format
 msgid "Deconvolution status: %1"
 msgstr "Estado da deconvolución: %1"
 
-#: src/kdefrontend/dockwidgets/XYCorrelationCurveDock.cpp:361
+#: src/kdefrontend/dockwidgets/XYCorrelationCurveDock.cpp:314
 #, kde-format
 msgid "Correlation status: %1"
 msgstr "Estado da correlación: %1"
@@ -13400,8 +13386,8 @@ msgstr "Simétrica"
 msgid "Asymmetric"
 msgstr "Asimétrica"
 
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:593
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:594
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:589
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:590
 #, kde-format
 msgid ""
 "If checked, connect neighbour points with lines even if there are gaps "
@@ -13410,8 +13396,8 @@ msgstr ""
 "Marque esta opción para conectar os puntos lindeiros con liñas aínda que "
 "queden ocos (valores incorrectos ou enmascarados) entre eles"
 
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:595
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:596
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:591
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:592
 #, kde-format
 msgid ""
 "If checked, connect data points only for strictly increasing values of X"
@@ -13419,74 +13405,74 @@ msgstr ""
 "Marque esta opción para conectar puntos de datos só para valores en aumento "
 "de X"
 
-#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:67
+#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:64
 #, kde-format
 msgid "This method is much slower than any other"
 msgstr "Este método é máis lento que calquera outro"
 
-#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:421
-#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:453
-#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:498
+#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:386
+#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:418
+#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:463
 #, kde-format
 msgid "Tolerance (distance):"
 msgstr "Tolerancia (distancia):"
 
-#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:432
+#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:397
 #, kde-format
 msgid "Number of points:"
 msgstr "Número de puntos:"
 
-#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:443
+#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:408
 #, kde-format
 msgid "Step size:"
 msgstr "Tamaño do paso:"
 
-#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:460
+#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:425
 #, kde-format
 msgid "Repeats:"
 msgstr "Repeticións:"
 
-#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:470
+#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:435
 #, kde-format
 msgid "Tolerance (area):"
 msgstr "Tolerancia (zona):"
 
-#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:481
+#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:446
 #, kde-format
 msgid "Minimum tolerance:"
 msgstr "Tolerancia mínima:"
 
-#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:485
+#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:450
 #, kde-format
 msgid "Maximum tolerance:"
 msgstr "Tolerancia máxima:"
 
-#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:502
+#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:467
 #, kde-format
 msgid "Search region:"
 msgstr "Rexión de busca:"
 
-#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:568
+#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:533
 #, kde-format
 msgid "Data reduction status: %1"
 msgstr "Estado da redución de datos: %1"
 
-#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:607
+#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:548
 #, kde-format
 msgid "number of points: %1"
 msgstr "número de puntos: %1"
 
-#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:608
+#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:549
 #, kde-format
 msgid "positional squared error: %1"
 msgstr "erro cuadrático posicional: %1"
 
-#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:609
+#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:550
 #, kde-format
 msgid "area error: %1"
 msgstr "erro de zona: %1"
 
-#: src/kdefrontend/dockwidgets/XYDifferentiationCurveDock.cpp:461
+#: src/kdefrontend/dockwidgets/XYDifferentiationCurveDock.cpp:411
 #, kde-format
 msgid "Differentiation status: %1"
 msgstr "Estado de diferenciación: %1"
@@ -13571,7 +13557,7 @@ msgid "test"
 msgstr "proba"
 
 #. i18n: ectx: property (text), widget (QLabel, lDataSourceCurve)
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:425
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:420
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:97
 #: src/kdefrontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:378
 #: src/kdefrontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:92
@@ -13585,56 +13571,56 @@ msgstr "proba"
 msgid "Curve:"
 msgstr "Curva:"
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:445
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:440
 #, kde-format
 msgid "Histogram:"
 msgstr "Histograma:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDegree)
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:827
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:822
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:549
 #, kde-format
 msgid "Degree:"
 msgstr "Grao:"
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:884
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:879
 #, kde-format
 msgid "Number of peaks:"
 msgstr "Número de picos:"
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1206
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1201
 #, kde-format
 msgid "Fit status: %1"
 msgstr "Estado do axuste: %1"
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1384
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1379
 #, kde-format
 msgid "%1 % lower confidence level"
 msgstr "% de nivel de confianza inferior de %1"
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1385
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1380
 #, kde-format
 msgid "%1 % upper confidence level"
 msgstr "% de nivel de confianza superior de %1"
 
 #. i18n: ectx: property (text), widget (QLabel, lCutoff)
-#: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:348
+#: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:318
 #: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:241
 #, kde-format
 msgid "Cutoff:"
 msgstr "Punto de corte:"
 
-#: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:356
+#: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:326
 #, kde-format
 msgid "Lower cutoff:"
 msgstr "Punto de corte inferior:"
 
-#: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:357
+#: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:327
 #, kde-format
 msgid "Upper cutoff:"
 msgstr "Punto de corte superior:"
 
-#: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:491
+#: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:461
 #, kde-format
 msgid ""
 "The band width is <= 0 since lower cutoff value is not smaller than upper "
@@ -13643,47 +13629,47 @@ msgstr ""
 "A largura de banda é ≤ 0 dado que o punto de corte inferior non é menor que "
 "o punto de corte superior. Solucióneo."
 
-#: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:492
+#: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:462
 #, kde-format
 msgid "band width <= 0"
 msgstr "largura de banda ≤ 0"
 
-#: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:501
+#: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:471
 #, kde-format
 msgid "Fourier-Filter status: %1"
 msgstr "Estado do filtro de Fourier: %1"
 
-#: src/kdefrontend/dockwidgets/XYFourierTransformCurveDock.cpp:282
+#: src/kdefrontend/dockwidgets/XYFourierTransformCurveDock.cpp:265
 #, kde-format
 msgid "Fourier transformation status: %1"
 msgstr "Estado da transformación de Fourier: %1"
 
-#: src/kdefrontend/dockwidgets/XYHilbertTransformCurveDock.cpp:230
+#: src/kdefrontend/dockwidgets/XYHilbertTransformCurveDock.cpp:213
 #, kde-format
 msgid "Hilbert transformation status: %1"
 msgstr "Estado da transformación de Hilbert: %1"
 
-#: src/kdefrontend/dockwidgets/XYIntegrationCurveDock.cpp:387
+#: src/kdefrontend/dockwidgets/XYIntegrationCurveDock.cpp:349
 #, kde-format
 msgid "Integration status: %1"
 msgstr "Estado da integración: %1"
 
-#: src/kdefrontend/dockwidgets/XYIntegrationCurveDock.cpp:424
+#: src/kdefrontend/dockwidgets/XYIntegrationCurveDock.cpp:362
 #, kde-format
 msgid "value: %1"
 msgstr "valor: %1"
 
-#: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:81
+#: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:78
 #, kde-format
 msgid "Auto (5x data points)"
 msgstr "Automático (5 × puntos de datos)"
 
-#: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:82
+#: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:79
 #, kde-format
 msgid "Multiple of data points"
 msgstr "Múltiplo dos puntos de datos"
 
-#: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:95
+#: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:90
 #, kde-format
 msgid ""
 "The number of the interpolation points should be bigger than the total "
@@ -13692,12 +13678,12 @@ msgstr ""
 "O número de puntos de interpolación debería ser superior ao número total de "
 "puntos da fonte de datos."
 
-#: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:615
+#: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:569
 #, kde-format
 msgid "Interpolation status: %1"
 msgstr "Estado da interpolación: %1"
 
-#: src/kdefrontend/dockwidgets/XYSmoothCurveDock.cpp:492
+#: src/kdefrontend/dockwidgets/XYSmoothCurveDock.cpp:443
 #, kde-format
 msgid "Smoothing status: %1"
 msgstr "Estado da suavización: %1"
@@ -17139,9 +17125,9 @@ msgstr "Tamaño:"
 #: src/kdefrontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:356
 #: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:306
 #: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:359
-#: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:315
-#: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:338
-#: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:361
+#: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:321
+#: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:350
+#: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:379
 #: src/kdefrontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:197
 #: src/kdefrontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:210
 #: src/kdefrontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:517
@@ -19169,7 +19155,7 @@ msgstr "Escala"
 #. i18n: ectx: property (text), widget (QLabel, lNumber)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:242
 #: src/kdefrontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:286
-#: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:383
+#: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:401
 #: src/kdefrontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:124
 #, kde-format
 msgid "Points:"
@@ -20045,7 +20031,7 @@ msgstr "Intervalo de X:"
 #: src/kdefrontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:173
 #: src/kdefrontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:157
 #: src/kdefrontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:307
-#: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:472
+#: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:487
 #: src/kdefrontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:266
 #, kde-format
 msgid "Recalculate"
@@ -20063,7 +20049,7 @@ msgstr "Recalcular"
 #: src/kdefrontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:149
 #: src/kdefrontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:133
 #: src/kdefrontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:270
-#: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:435
+#: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:450
 #: src/kdefrontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:229
 #, kde-format
 msgid "Results:"
@@ -20648,28 +20634,22 @@ msgid "Tension:"
 msgstr "Tensión:"
 
 #. i18n: ectx: property (text), widget (QLabel, lContinuity)
-#: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:325
+#: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:331
 #, kde-format
 msgid "Continuity:"
 msgstr "Continuidade:"
 
 #. i18n: ectx: property (text), widget (QLabel, lBias)
-#: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:348
+#: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:360
 #, kde-format
 msgid "Bias:"
 msgstr "Erro de desviación:"
 
 #. i18n: ectx: property (text), widget (QLabel, lEval)
-#: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:373
+#: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:391
 #, kde-format
 msgid "Evaluate:"
 msgstr "Avaliar:"
-
-#. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, sbPoints)
-#: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:401
-#, kde-format
-msgid "number should be bigger than number of data points"
-msgstr "O número debería ser superior ao número de puntos de datos."
 
 #. i18n: ectx: property (text), widget (QLabel, lWeight)
 #: src/kdefrontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:131
@@ -22728,6 +22708,9 @@ msgstr "o proceso convert fallou, código de saída ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Non é posíbel abrir o ficheiro:"
+
+#~ msgid "number should be bigger than number of data points"
+#~ msgstr "O número debería ser superior ao número de puntos de datos."
 
 #~ msgid "auto update"
 #~ msgstr "Actualización automática."
