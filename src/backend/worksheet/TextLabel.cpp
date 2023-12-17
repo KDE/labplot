@@ -304,7 +304,7 @@ void TextLabel::setText(const TextWrapper& textWrapper) {
 			QUndoCommand* parent = nullptr;
 			if (bgColor != d->backgroundColor) {
 				parent = new QUndoCommand(ki18n("%1: set label text").subs(name()).toString());
-				new TextLabelSetTeXBackgroundColorCmd(d, bgColor, ki18n("%1: set background color")), parent;
+				new TextLabelSetTeXBackgroundColorCmd(d, bgColor, ki18n("%1: set background color"), parent);
 			}
 			auto* command = new TextLabelSetTextCmd(d, textWrapper, ki18n("%1: set label text"), parent);
 			if (!parent)

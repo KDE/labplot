@@ -434,7 +434,7 @@ bool BoxPlot::hasData() const {
 }
 
 QColor BoxPlot::color() const {
-	Q_D(const BoxPlot);
+	// Q_D(const BoxPlot);
 	return QColor();
 }
 

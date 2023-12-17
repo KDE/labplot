@@ -538,7 +538,7 @@ void KDEPlot::loadThemeConfig(const KConfig& config) {
 }
 
 void KDEPlot::saveThemeConfig(const KConfig& config) {
-	Q_D(const KDEPlot);
+	// Q_D(const KDEPlot);
 	KConfigGroup group = config.group(QStringLiteral("KDEPlot"));
 	// TODO
 }

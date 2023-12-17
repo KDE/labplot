@@ -1802,8 +1802,6 @@ void AxisTest::customColumnNumericMaxValues() {
 }
 
 void AxisTest::customColumnNonMonotonicColumnValues() {
-	constexpr int rowCountCustomColumn = 1000;
-
 	Project project;
 	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	QVERIFY(ws != nullptr);

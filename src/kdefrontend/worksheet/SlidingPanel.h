@@ -75,8 +75,8 @@ private:
 	QSize sizeHint() const override;
 
 	int m_sizeHintHeight{0};
-	bool m_fixed{false};
 	QToolBar* m_toolBar{nullptr};
+	bool m_fixed{false};
 };
 
 #endif // SLIDINGPANEL_H

@@ -1199,6 +1199,8 @@ void Project::restorePointers(AbstractAspect* aspect, bool preview) {
 				case Axis::Orientation::Vertical:
 					scale = plot->range(Dimension::Y, cSystem->index(Dimension::Y)).scale();
 					break;
+				case Axis::Orientation::Both:
+					continue;
 				}
 				if (axis->scale() == scale) {
 					axis->setUndoAware(false);
