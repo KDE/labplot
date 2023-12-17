@@ -1492,7 +1492,11 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 	}
 }
 
-void OriginProjectParser::loadAxes(const Origin::GraphLayer& layer, CartesianPlot* plot, int layerIndex, const QString& xColumnName, const QString& yColumnName) {
+void OriginProjectParser::loadAxes(const Origin::GraphLayer& layer,
+								   CartesianPlot* plot,
+								   int layerIndex,
+								   const QString& xColumnName,
+								   const QString& yColumnName) {
 	const auto& originXAxis = layer.xAxis;
 	const auto& originYAxis = layer.yAxis;
 
@@ -1674,7 +1678,7 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 	axis->line()->setWidth(Worksheet::convertToSceneUnits(axisFormat.thickness, Worksheet::Unit::Point));
 	if (axisFormat.hidden)
 		axis->line()->setStyle(Qt::NoPen);
-	//TODO: line style properties? (solid line, dashed line, etc.)
+	// TODO: read line style properties? (solid line, dashed line, etc.)
 
 	axis->setMajorTicksLength(Worksheet::convertToSceneUnits(axisFormat.majorTickLength, Worksheet::Unit::Point));
 	axis->setMajorTicksDirection((Axis::TicksFlags)axisFormat.majorTicksType);
