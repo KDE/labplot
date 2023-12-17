@@ -61,8 +61,6 @@ void OriginProjectParser::setImportUnusedObjects(bool importUnusedObjects) {
 
 void OriginProjectParser::checkContent(bool& hasUnusedObjects, bool& hasMultiLayerGraphs) {
 	m_originFile = new OriginFile(qPrintable(m_projectFileName));
-	DEBUG(Q_FUNC_INFO << "Project file name: " << m_projectFileName.toStdString());
-	DEBUG(Q_FUNC_INFO << "Origin version: " << m_originFile->version());
 	if (!m_originFile->parse()) {
 		delete m_originFile;
 		m_originFile = nullptr;
@@ -70,6 +68,9 @@ void OriginProjectParser::checkContent(bool& hasUnusedObjects, bool& hasMultiLay
 		hasMultiLayerGraphs = false;
 		return;
 	}
+
+	DEBUG(Q_FUNC_INFO << "Project file name: " << m_projectFileName.toStdString());
+	DEBUG(Q_FUNC_INFO << "Origin version: " << m_originFile->version());
 
 	hasUnusedObjects = this->hasUnusedObjects();
 	hasMultiLayerGraphs = this->hasMultiLayerGraphs();
@@ -190,13 +191,14 @@ bool OriginProjectParser::load(Project* project, bool preview) {
 
 	// read and parse the m_originFile-file
 	m_originFile = new OriginFile(qPrintable(m_projectFileName));
-	DEBUG(Q_FUNC_INFO << "Project file name: " << m_projectFileName.toStdString());
-	DEBUG(Q_FUNC_INFO << "Origin version: " << m_originFile->version());
 	if (!m_originFile->parse()) {
 		delete m_originFile;
 		m_originFile = nullptr;
 		return false;
 	}
+
+	DEBUG(Q_FUNC_INFO << "Project file name: " << m_projectFileName.toStdString());
+	DEBUG(Q_FUNC_INFO << "Origin version: " << m_originFile->version());
 
 	// Origin project tree and the iterator pointing to the root node
 	const auto* projectTree = m_originFile->project();
