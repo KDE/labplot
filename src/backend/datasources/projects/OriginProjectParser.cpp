@@ -1263,56 +1263,9 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 
 	// axes
 	DEBUG(Q_FUNC_INFO << ", layer.curves.size() = " << layer.curves.size())
-	if (layer.curves.empty()) { // no curves, just axes
-		// x bottom
-		if (!originXAxis.formatAxis[0].hidden) {
-			Axis* axis = new Axis(QStringLiteral("x"), Axis::Orientation::Horizontal);
-			axis->setSuppressRetransform(true);
-			axis->setPosition(Axis::Position::Bottom);
-			plot->addChildFast(axis);
-
-			loadAxis(originXAxis, axis, 0, QLatin1String("X Axis Title"));
-			if (!m_graphLayerAsPlotArea)
-				axis->setCoordinateSystemIndex(layerIndex);
-			axis->setSuppressRetransform(false);
-		}
-		// x top
-		if (!originXAxis.formatAxis[1].hidden) {
-			Axis* axis = new Axis(QStringLiteral("x top"), Axis::Orientation::Horizontal);
-			axis->setPosition(Axis::Position::Top);
-			axis->setSuppressRetransform(true);
-			plot->addChildFast(axis);
-
-			loadAxis(originXAxis, axis, 1, QLatin1String("X Axis Title"));
-			if (!m_graphLayerAsPlotArea)
-				axis->setCoordinateSystemIndex(layerIndex);
-			axis->setSuppressRetransform(false);
-		}
-		// y left
-		if (!originYAxis.formatAxis[0].hidden) {
-			Axis* axis = new Axis(QStringLiteral("y"), Axis::Orientation::Vertical);
-			axis->setSuppressRetransform(true);
-			axis->setPosition(Axis::Position::Left);
-			plot->addChildFast(axis);
-
-			loadAxis(originYAxis, axis, 0, QLatin1String("Y Axis Title"));
-			if (!m_graphLayerAsPlotArea)
-				axis->setCoordinateSystemIndex(layerIndex);
-			axis->setSuppressRetransform(false);
-		}
-		// y right
-		if (!originYAxis.formatAxis[1].hidden) {
-			Axis* axis = new Axis(QStringLiteral("y right"), Axis::Orientation::Vertical);
-			axis->setSuppressRetransform(true);
-			axis->setPosition(Axis::Position::Right);
-			plot->addChildFast(axis);
-
-			loadAxis(originYAxis, axis, 1, QLatin1String("Y Axis Title"));
-			if (!m_graphLayerAsPlotArea)
-				axis->setCoordinateSystemIndex(layerIndex);
-			axis->setSuppressRetransform(false);
-		}
-	} else {
+	if (layer.curves.empty()) // no curves, just axes
+		loadAxes(layer, plot, layerIndex, QLatin1String("X Axis Title"), QLatin1String("Y Axis Title"));
+	else {
 		auto originCurve = layer.curves.at(0);
 		QString xColumnName = QString::fromLatin1(originCurve.xColumnName.c_str());
 		// TODO: "Partikelgrö"
@@ -1322,50 +1275,7 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 		QDEBUG("	UTF8 xColumnName = " << xColumnName.toUtf8());
 		QString yColumnName = QString::fromLatin1(originCurve.yColumnName.c_str());
 
-		// x bottom
-		if (!originXAxis.formatAxis[0].hidden) {
-			Axis* axis = new Axis(QStringLiteral("x"), Axis::Orientation::Horizontal);
-			axis->setSuppressRetransform(true);
-			axis->setPosition(Axis::Position::Bottom);
-			plot->addChildFast(axis);
-			loadAxis(originXAxis, axis, 0, xColumnName);
-			if (!m_graphLayerAsPlotArea)
-				axis->setCoordinateSystemIndex(layerIndex);
-			axis->setSuppressRetransform(false);
-		}
-		// x top
-		if (!originXAxis.formatAxis[1].hidden) {
-			Axis* axis = new Axis(QStringLiteral("x top"), Axis::Orientation::Horizontal);
-			axis->setPosition(Axis::Position::Top);
-			axis->setSuppressRetransform(true);
-			plot->addChildFast(axis);
-			loadAxis(originXAxis, axis, 1, xColumnName);
-			if (!m_graphLayerAsPlotArea)
-				axis->setCoordinateSystemIndex(layerIndex);
-			axis->setSuppressRetransform(false);
-		}
-		// y left
-		if (!originYAxis.formatAxis[0].hidden) {
-			Axis* axis = new Axis(QStringLiteral("y"), Axis::Orientation::Vertical);
-			axis->setSuppressRetransform(true);
-			axis->setPosition(Axis::Position::Left);
-			plot->addChildFast(axis);
-			loadAxis(originYAxis, axis, 0, yColumnName);
-			if (!m_graphLayerAsPlotArea)
-				axis->setCoordinateSystemIndex(layerIndex);
-			axis->setSuppressRetransform(false);
-		}
-		// y right
-		if (!originYAxis.formatAxis[1].hidden) {
-			Axis* axis = new Axis(QStringLiteral("y right"), Axis::Orientation::Vertical);
-			axis->setSuppressRetransform(true);
-			axis->setPosition(Axis::Position::Right);
-			plot->addChildFast(axis);
-			loadAxis(originYAxis, axis, 1, yColumnName);
-			if (!m_graphLayerAsPlotArea)
-				axis->setCoordinateSystemIndex(layerIndex);
-			axis->setSuppressRetransform(false);
-		}
+		loadAxes(layer, plot, layerIndex, xColumnName, yColumnName);
 	}
 
 	// range breaks
@@ -1582,6 +1492,59 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 	}
 }
 
+void OriginProjectParser::loadAxes(const Origin::GraphLayer& layer, CartesianPlot* plot, int layerIndex, const QString& xColumnName, const QString& yColumnName) {
+	const auto& originXAxis = layer.xAxis;
+	const auto& originYAxis = layer.yAxis;
+
+	// x bottom
+	if (!originXAxis.formatAxis[0].hidden || originXAxis.tickAxis[0].showMajorLabels) {
+		Axis* axis = new Axis(QStringLiteral("x"), Axis::Orientation::Horizontal);
+		axis->setSuppressRetransform(true);
+		axis->setPosition(Axis::Position::Bottom);
+		plot->addChildFast(axis);
+		loadAxis(originXAxis, axis, 0, xColumnName);
+		if (!m_graphLayerAsPlotArea)
+			axis->setCoordinateSystemIndex(layerIndex);
+		axis->setSuppressRetransform(false);
+	}
+
+	// x top
+	if (!originXAxis.formatAxis[1].hidden || originXAxis.tickAxis[1].showMajorLabels) {
+		Axis* axis = new Axis(QStringLiteral("x top"), Axis::Orientation::Horizontal);
+		axis->setPosition(Axis::Position::Top);
+		axis->setSuppressRetransform(true);
+		plot->addChildFast(axis);
+		loadAxis(originXAxis, axis, 1, xColumnName);
+		if (!m_graphLayerAsPlotArea)
+			axis->setCoordinateSystemIndex(layerIndex);
+		axis->setSuppressRetransform(false);
+	}
+
+	// y left
+	if (!originYAxis.formatAxis[0].hidden || originYAxis.tickAxis[0].showMajorLabels) {
+		Axis* axis = new Axis(QStringLiteral("y"), Axis::Orientation::Vertical);
+		axis->setSuppressRetransform(true);
+		axis->setPosition(Axis::Position::Left);
+		plot->addChildFast(axis);
+		loadAxis(originYAxis, axis, 0, yColumnName);
+		if (!m_graphLayerAsPlotArea)
+			axis->setCoordinateSystemIndex(layerIndex);
+		axis->setSuppressRetransform(false);
+	}
+
+	// y right
+	if (!originYAxis.formatAxis[1].hidden || originYAxis.tickAxis[1].showMajorLabels) {
+		Axis* axis = new Axis(QStringLiteral("y right"), Axis::Orientation::Vertical);
+		axis->setSuppressRetransform(true);
+		axis->setPosition(Axis::Position::Right);
+		plot->addChildFast(axis);
+		loadAxis(originYAxis, axis, 1, yColumnName);
+		if (!m_graphLayerAsPlotArea)
+			axis->setCoordinateSystemIndex(layerIndex);
+		axis->setSuppressRetransform(false);
+	}
+}
+
 /*
  * sets the axis properties (format and ticks) as defined in \c originAxis in \c axis,
  * \c index being 0 or 1 for "bottom" and "top" or "left" and "right" for horizontal or vertical axes, respectively.
@@ -1709,6 +1672,9 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 	color.regular = axisFormat.color;
 	axis->line()->setColor(OriginProjectParser::color(color));
 	axis->line()->setWidth(Worksheet::convertToSceneUnits(axisFormat.thickness, Worksheet::Unit::Point));
+	if (axisFormat.hidden)
+		axis->line()->setStyle(Qt::NoPen);
+	//TODO: line style properties? (solid line, dashed line, etc.)
 
 	axis->setMajorTicksLength(Worksheet::convertToSceneUnits(axisFormat.majorTickLength, Worksheet::Unit::Point));
 	axis->setMajorTicksDirection((Axis::TicksFlags)axisFormat.majorTicksType);

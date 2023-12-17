@@ -1940,7 +1940,7 @@ void OriginAnyParser::getAnnotationProperties(const string &anhd, unsigned int a
             glayer.zLength /= 23.0;
 
             glayer.orthographic3D = (andt2[0x240] != 0);
-        } else if (sec_name == "Legend") {
+        } else if ((sec_name == "Legend") || (sec_name == "legend")) {
             string text = andt2.c_str();
             glayer.legend =
                     TextBox(text, r, color, fontSize, rotation / 10, tab,
