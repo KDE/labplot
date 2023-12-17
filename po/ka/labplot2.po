@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-12-16 00:39+0000\n"
-"PO-Revision-Date: 2023-12-09 09:27+0100\n"
+"PO-Revision-Date: 2023-12-16 06:39+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -11570,16 +11570,14 @@ msgid ""
 msgstr ""
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:159
-#, fuzzy, kde-format
-#| msgid "Plot Area"
+#, kde-format
 msgid "As Plot Area"
-msgstr "დასახაზი ადგილი"
+msgstr "როგორც დასახაზი ადგილი"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:160
-#, fuzzy, kde-format
-#| msgid "Logical Coordinates"
+#, kde-format
 msgid "As Coordinate System"
-msgstr "ლოგიკური კოორდინატები"
+msgstr "როგორც კოორდინატების სისტემა"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:164
 #, kde-format
@@ -11722,10 +11720,9 @@ msgstr ""
 
 #: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:529
 #: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:531
-#, fuzzy, kde-format
-#| msgid "Failed to allocate memory"
+#, kde-format
 msgid "Failed to execute the query"
-msgstr "მეხსიერების გამოყოფის შეცდომა"
+msgstr "მოთხოვნის შესრულება ჩავარდა"
 
 #: src/kdefrontend/datasources/JsonOptionsWidget.cpp:119
 #, kde-format
@@ -17863,10 +17860,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lUnusedObjects)
 #: src/kdefrontend/ui/datasources/importprojectwidget.ui:82
-#, fuzzy, kde-format
-#| msgid "Import unused object"
+#, kde-format
 msgid "Unused Objects:"
-msgstr "გამოუყენებელი ობიექტის შემოტანა"
+msgstr "გამოუყენებელი ობიექტები:"
 
 #. i18n: ectx: property (text), widget (QLabel, lCustomFolder)
 #. i18n: ectx: property (text), widget (QLabel, lFolder)
