@@ -33,6 +33,7 @@ private Q_SLOTS:
 	void testOriginSingleLayerTwoAxes();
 	void testOriginMultiLayersAsPlotAreas();
 	void testOriginMultiLayersAsCoordinateSystems();
+	void testOriginMultiLayersAsCoordinateSystemsWithLegend();
 
 	// test tags
 	void testParseOriginTags_data();

@@ -69,6 +69,9 @@ void OriginProjectParser::checkContent(bool& hasUnusedObjects, bool& hasMultiLay
 		return;
 	}
 
+	DEBUG(Q_FUNC_INFO << "Project file name: " << m_projectFileName.toStdString());
+	DEBUG(Q_FUNC_INFO << "Origin version: " << m_originFile->version());
+
 	hasUnusedObjects = this->hasUnusedObjects();
 	hasMultiLayerGraphs = this->hasMultiLayerGraphs();
 
@@ -193,6 +196,9 @@ bool OriginProjectParser::load(Project* project, bool preview) {
 		m_originFile = nullptr;
 		return false;
 	}
+
+	DEBUG(Q_FUNC_INFO << "Project file name: " << m_projectFileName.toStdString());
+	DEBUG(Q_FUNC_INFO << "Origin version: " << m_originFile->version());
 
 	// Origin project tree and the iterator pointing to the root node
 	const auto* projectTree = m_originFile->project();

@@ -1798,23 +1798,26 @@ void OriginAnyParser::getAnnotationProperties(const string &anhd, unsigned int a
                                    : r.top + (y2 - miny) / dy * r.height();
             }
             unsigned char arrows = andt1[0x11];
-            switch (arrows) {
-            case 0:
-                begin.shapeType = 0;
-                end.shapeType = 0;
-                break;
-            case 1:
-                begin.shapeType = 1;
-                end.shapeType = 0;
-                break;
-            case 2:
-                begin.shapeType = 0;
-                end.shapeType = 1;
-                break;
-            case 3:
-                begin.shapeType = 1;
-                end.shapeType = 1;
-                break;
+            if (andt1sz > 0x11) {
+                arrows = andt1[0x11];
+                switch (arrows) {
+                case 0:
+                    begin.shapeType = 0;
+                    end.shapeType = 0;
+                    break;
+                case 1:
+                    begin.shapeType = 1;
+                    end.shapeType = 0;
+                    break;
+                case 2:
+                    begin.shapeType = 0;
+                    end.shapeType = 1;
+                    break;
+                case 3:
+                    begin.shapeType = 1;
+                    end.shapeType = 1;
+                    break;
+                }
             }
             if (andt1sz > 0x77) {
                 begin.shapeType = andt1[0x60];
@@ -1834,14 +1837,21 @@ void OriginAnyParser::getAnnotationProperties(const string &anhd, unsigned int a
             }
         }
         // text properties
-        short rotation;
-        stmp.str(andt1.substr(0x02));
-        GET_SHORT(stmp, rotation)
-        unsigned char fontSize = andt1[0x4];
-        unsigned char tab = andt1[0x0A];
+        short rotation = 0;
+        unsigned char fontSize = 12;
+        if (andt1sz > 0x04) {
+            stmp.str(andt1.substr(0x02));
+            GET_SHORT(stmp, rotation)
+            fontSize = andt1[0x4];
+        }
+        unsigned char tab = 8;
+        if (andt1sz > 0x0A)
+             tab = andt1[0x0A];
 
         // line properties
-        unsigned char lineStyle = andt1[0x12];
+        unsigned char lineStyle = 0;
+        if (andt1sz > 0x12)
+            lineStyle = andt1[0x12];
         unsigned short w1 = 0;
         if (andt1sz > 0x14) {
             stmp.str(andt1.substr(0x13));
@@ -1850,14 +1860,15 @@ void OriginAnyParser::getAnnotationProperties(const string &anhd, unsigned int a
         double width = (double)w1 / 500.0;
 
         Figure figure;
-        if (andt1.size() > 4) {
+        if (andt1sz > 0x06) {
             stmp.str(andt1.substr(0x05));
             GET_SHORT(stmp, w1)
             figure.width = (double)w1 / 500.0;
         }
-        figure.style = andt1[0x08];
+        if (andt1sz > 0x08)
+            figure.style = andt1[0x08];
 
-        if (andt1sz > 0x4D) {
+        if (andt1sz > 0x4E) {
             figure.fillAreaColor = getColor(andt1.substr(0x42, 4));
             stmp.str(andt1.substr(0x46));
             GET_SHORT(stmp, w1)
@@ -1865,7 +1876,7 @@ void OriginAnyParser::getAnnotationProperties(const string &anhd, unsigned int a
             figure.fillAreaPatternColor = getColor(andt1.substr(0x4A, 4));
             figure.fillAreaPattern = andt1[0x4E];
         }
-        if (andt1sz > 0x56) {
+        if (andt1sz > 0x57) {
             unsigned char h = andt1[0x57];
             figure.useBorderColor = (h == 0x10);
         }

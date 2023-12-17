@@ -815,6 +815,63 @@ void ProjectImportTest::testOriginMultiLayersAsCoordinateSystems() {
 	QCOMPARE(curves.at(1)->coordinateSystemIndex(), 1);
 }
 
+/*!
+ * read a project file containing one plot area with two coordinate systems ("two axes") and one curve per each coordinate system.
+ * the test project was created with a newer version of Origin and has a legend defined via an annotation that we need to
+ * properly interpret.
+ */
+void ProjectImportTest::testOriginMultiLayersAsCoordinateSystemsWithLegend() {
+	// import the opj file into LabPlot's project object
+	OriginProjectParser parser;
+	parser.setProjectFileName(QFINDTESTDATA(QLatin1String("data/two_layers_as_two_coordinate_systems_with_legend.opj")));
+	parser.setGraphLayerAsPlotArea(false); // read every layer as a new coordinate system
+	Project project;
+	parser.importTo(&project, QStringList());
+
+	// check the ranges of the CartesianPlot in the project
+	const auto& plots = project.children<CartesianPlot>(AbstractAspect::ChildIndexFlag::Recursive);
+	QCOMPARE(plots.count(), 1);
+
+	const auto* plot = plots.first();
+	QVERIFY(plot != nullptr);
+
+	// ranges
+	QCOMPARE(plot->rangeCount(Dimension::X), 1);
+	QCOMPARE(plot->rangeCount(Dimension::Y), 2);
+
+	const auto& rangeX = plot->range(Dimension::X, 0);
+	QCOMPARE(rangeX.start(), 1.);
+	QCOMPARE(rangeX.end(), 12.);
+	QCOMPARE(rangeX.scale(), RangeT::Scale::Linear);
+	QCOMPARE(rangeX.format(), RangeT::Format::Numeric);
+
+	const auto& rangeY1 = plot->range(Dimension::Y, 0);
+	QCOMPARE(rangeY1.start(), 1.75);
+	QCOMPARE(rangeY1.end(), 5.25);
+	QCOMPARE(rangeY1.scale(), RangeT::Scale::Linear);
+	QCOMPARE(rangeY1.format(), RangeT::Format::Numeric);
+
+	const auto& rangeY2 = plot->range(Dimension::Y, 1);
+	QCOMPARE(rangeY2.start(), 20);
+	QCOMPARE(rangeY2.end(), 47.5);
+	QCOMPARE(rangeY2.scale(), RangeT::Scale::Linear);
+	QCOMPARE(rangeY2.format(), RangeT::Format::Numeric);
+
+	// coordinate systems
+	QCOMPARE(plot->coordinateSystemCount(), 2);
+
+	// curves, two curves in total, one curve for every layer/coordinate system
+	const auto& curves = plot->children<XYCurve>();
+	QCOMPARE(curves.count(), 2);
+	QCOMPARE(curves.at(0)->coordinateSystemIndex(), 0);
+	QCOMPARE(curves.at(1)->coordinateSystemIndex(), 1);
+
+	// legend
+	// TODO: the legend is not properly imported yet.
+	// const auto& legends = plot->children<CartesianPlotLegend>();
+	// QCOMPARE(legends.count(), 1);
+}
+
 void ProjectImportTest::testParseOriginTags_data() {
 	QTest::addColumn<QString>("originTag");
 	QTest::addColumn<QString>("labPlotHTML");
