@@ -15,7 +15,8 @@ include:
       - /gitlab-templates/freebsd.yml
 # finds Qt5 but KF5 is not installed
 #      - /gitlab-templates/freebsd-qt6.yml
-      - /gitlab-templates/flatpak.yml
+# fails downloading poppler (2023-12-17), see below
+#      - /gitlab-templates/flatpak.yml
 # supposed to run manual:
 #      - /gitlab-templates/craft-appimage.yml
 #      - /gitlab-templates/craft-windows-x86-64.yml
@@ -183,8 +184,8 @@ clang_format:
     ./cl-fmt.sh
     git diff --exit-code
 
-# see https://invent.kde.org/sysadmin/ci-utilities/-/blob/master/gitlab-templates/flatpak.yml
-flatpak:
-  variables:
-    KDE_FLATPAK_MODULE_NAME: labplot2
-    KDE_FLATPAK_APP_ID: org.kde.${KDE_FLATPAK_MODULE_NAME}
+# see above
+#flatpak:
+#  variables:
+#    KDE_FLATPAK_MODULE_NAME: labplot2
+#    KDE_FLATPAK_APP_ID: org.kde.${KDE_FLATPAK_MODULE_NAME}
