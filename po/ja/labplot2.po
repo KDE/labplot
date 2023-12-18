@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-16 00:39+0000\n"
+"POT-Creation-Date: 2023-12-18 00:39+0000\n"
 "PO-Revision-Date: 2014-02-22 22:22-0800\n"
 "Last-Translator: Japanese KDE translation team <kde-jp@kde.org>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -771,7 +771,7 @@ msgstr ""
 msgid "no valid XML document found"
 msgstr ""
 
-#: src/backend/core/Project.cpp:1222
+#: src/backend/core/Project.cpp:1224
 #, kde-format
 msgid "Invalid project modification time. Using current time."
 msgstr ""
@@ -896,7 +896,7 @@ msgstr ""
 #: src/backend/datapicker/DatapickerCurve.cpp:376
 #: src/backend/datapicker/DatapickerImage.cpp:414
 #: src/backend/worksheet/InfoElement.cpp:810
-#: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:130
+#: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:126
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:141
 #: src/backend/worksheet/WorksheetElement.cpp:160
 #: src/backend/worksheet/WorksheetElementContainer.cpp:63
@@ -908,7 +908,7 @@ msgstr ""
 #: src/backend/datapicker/DatapickerCurve.cpp:376
 #: src/backend/datapicker/DatapickerImage.cpp:414
 #: src/backend/worksheet/InfoElement.cpp:810
-#: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:130
+#: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:126
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:141
 #: src/backend/worksheet/WorksheetElement.cpp:160
 #: src/backend/worksheet/WorksheetElement.cpp:742
@@ -2021,7 +2021,7 @@ msgstr ""
 #: src/backend/datasources/MQTTClient.cpp:1200
 #: src/backend/datasources/MQTTTopic.cpp:218
 #: src/backend/lib/XmlStreamReader.cpp:99
-#: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:455
+#: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:451
 #, kde-format
 msgid "Attribute '%1' missing or empty, default value is used"
 msgstr ""
@@ -2190,12 +2190,12 @@ msgstr ""
 msgid "The following error occurred: %1."
 msgstr ""
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1096
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1102
 #, kde-format
 msgid "Plot%1"
 msgstr ""
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1373
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1289
 #, kde-format
 msgid "legend"
 msgstr ""
@@ -7204,7 +7204,7 @@ msgid "%1: width factor changed"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:292
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:178
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:174
 #: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:331
 #: src/backend/worksheet/plots/cartesian/XYEquationCurve.cpp:112
 #, kde-format
@@ -7287,28 +7287,28 @@ msgid "%1: jitterring changed"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:535
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:529
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:525
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:624
 #, kde-format
 msgid "%1: change rug enabled"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:542
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:536
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:532
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:638
 #, kde-format
 msgid "%1: change rug width"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:549
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:543
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:539
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:645
 #, kde-format
 msgid "%1: change rug length"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:556
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:550
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:546
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:652
 #, kde-format
 msgid "%1: change rug offset"
@@ -7612,7 +7612,7 @@ msgid "Analysis Curve"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:662
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:203
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:199
 #, kde-format
 msgid "Analysis"
 msgstr ""
@@ -7940,133 +7940,133 @@ msgstr ""
 msgid "%1: set layout column count"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:184
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:180
 #, kde-format
 msgid "bin positions"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:190
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:186
 #, kde-format
 msgid "bin values"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:206
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:202
 #, kde-format
 msgid "Fit Gaussian (Normal) Distribution"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:212
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:208
 #, kde-format
 msgid "Fit Exponential Distribution"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:218
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:214
 #, kde-format
 msgid "Fit Laplace Distribution"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:224
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:220
 #, kde-format
 msgid "Fit Cauchy-Lorentz Distribution"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:230
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:226
 #, kde-format
 msgid "Fit Log-normal Distribution"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:236
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:232
 #, kde-format
 msgid "Fit Poisson Distribution"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:242
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:238
 #, kde-format
 msgid "Fit Binomial Distribution"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:379
-#: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:211
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:375
+#: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:207
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:235
 #, kde-format
 msgid "%1: set data column"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:391
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:387
 #, kde-format
 msgid "%1: set histogram type"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:398
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:394
 #, kde-format
 msgid "%1: set histogram orientation"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:405
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:401
 #, kde-format
 msgid "%1: set histogram normalization"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:412
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:408
 #, kde-format
 msgid "%1: set binning method"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:419
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:415
 #, kde-format
 msgid "%1: set bin count"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:426
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:422
 #, kde-format
 msgid "%1: set bin width"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:434
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:430
 #, kde-format
 msgid "%1: change auto bin ranges"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:482
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:478
 #, kde-format
 msgid "%1: set bin ranges start"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:489
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:485
 #, kde-format
 msgid "%1: set bin ranges end"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:497
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:493
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:537
 #, kde-format
 msgid "%1: x-error type changed"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:504
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:516
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:500
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:512
 #, kde-format
 msgid "%1: set error column"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:872
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:868
 #, kde-format
 msgid ""
 "Calculation of the histogram not possible. The max value must be bigger than "
 "the min value."
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:223
+#: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:219
 #, kde-format
 msgid "%1: set kernel type"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:230
+#: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:226
 #, kde-format
 msgid "%1: set bandwidth type"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:237
+#: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:233
 #, kde-format
 msgid "%1: set bandwidth"
 msgstr ""
@@ -8542,7 +8542,7 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/XYConvolutionCurve.cpp:166
 #: src/backend/worksheet/plots/cartesian/XYCorrelationCurve.cpp:159
 #: src/backend/worksheet/plots/cartesian/XYDataReductionCurve.cpp:123
-#: src/backend/worksheet/plots/cartesian/XYDifferentiationCurve.cpp:122
+#: src/backend/worksheet/plots/cartesian/XYDifferentiationCurve.cpp:120
 #: src/backend/worksheet/plots/cartesian/XYIntegrationCurve.cpp:121
 #: src/backend/worksheet/plots/cartesian/XYInterpolationCurve.cpp:141
 #: src/backend/worksheet/plots/cartesian/XYSmoothCurve.cpp:145
@@ -8637,7 +8637,7 @@ msgstr ""
 msgid "%1: set options and perform the data reduction"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYDifferentiationCurve.cpp:76
+#: src/backend/worksheet/plots/cartesian/XYDifferentiationCurve.cpp:74
 #, kde-format
 msgid "%1: set options and perform the differentiation"
 msgstr ""
