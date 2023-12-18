@@ -978,7 +978,7 @@ QPointF WorksheetElementPrivate::mapParentToPlotArea(QPointF point) const {
  * \param point point in plotArea coordinates
  * \return point in parent coordinates
  */
-QPointF WorksheetElementPrivate::mapPlotAreaToParent(QPointF point) const  {
+QPointF WorksheetElementPrivate::mapPlotAreaToParent(QPointF point) const {
 	auto* parent = q->parent(AspectType::CartesianPlot);
 	if (parent) {
 		auto* plot = static_cast<CartesianPlot*>(parent);
