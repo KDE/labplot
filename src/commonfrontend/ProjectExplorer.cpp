@@ -681,13 +681,12 @@ QPixmap ProjectExplorer::showSparkLines(const Column* col) {
 		QPixmap pix(10, 10);
 		const bool rc = worksheet->exportView(pix);
 
-		// if (!rc) {
-		// 	// the view is not available yet, show the placeholder preview
-		// 	const auto icon = QIcon::fromTheme(QLatin1String("view-preview"));
-		// 	const int iconSize = std::ceil(5.0 / 2.54 * QApplication::primaryScreen()->physicalDotsPerInchX());
-		// 	pix = icon.pixmap(iconSize, iconSize);
-		// }
-
+		// the view is not available yet, show the placeholder preview
+		if (!rc) {
+			const auto icon = QIcon::fromTheme(QLatin1String("view-preview"));
+			const int iconSize = std::ceil(5.0 / 2.54 * QApplication::primaryScreen()->physicalDotsPerInchX());
+			pix = icon.pixmap(iconSize, iconSize);
+		}
 		return pix;
 	}
 	return QPixmap();
