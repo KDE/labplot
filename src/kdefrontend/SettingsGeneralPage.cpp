@@ -29,7 +29,8 @@ SettingsGeneralPage::SettingsGeneralPage(QWidget* parent)
 	retranslateUi();
 
 	connect(ui.cbLoadOnStart, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsGeneralPage::loadOnStartChanged);
-	connect(ui.cbLoadOnStartNotebook, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsGeneralPage::changed);
+	connect(ui.cbNewProject, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsGeneralPage::newProjectChanged);
+	connect(ui.cbNewProjectNotebook, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsGeneralPage::changed);
 	connect(ui.cbDockWindowPositionReopen, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsGeneralPage::changed);
 	connect(ui.cbLoadOnStart, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsGeneralPage::changed);
 	connect(ui.cbTitleBar, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsGeneralPage::changed);
@@ -45,7 +46,7 @@ SettingsGeneralPage::SettingsGeneralPage(QWidget* parent)
 #ifdef HAVE_CANTOR_LIBS
 	for (auto* backend : Cantor::Backend::availableBackends()) {
 		if (backend->isEnabled())
-			ui.cbLoadOnStartNotebook->addItem(QIcon::fromTheme(backend->icon()), backend->name());
+			ui.cbNewProjectNotebook->addItem(QIcon::fromTheme(backend->icon()), backend->name());
 	}
 #endif
 
@@ -101,7 +102,8 @@ void SettingsGeneralPage::applySettings() {
 
 	KConfigGroup group = Settings::settingsGeneral();
 	group.writeEntry(QLatin1String("LoadOnStart"), ui.cbLoadOnStart->currentData().toInt());
-	group.writeEntry(QLatin1String("LoadOnStartNotebook"), ui.cbLoadOnStartNotebook->currentText());
+	group.writeEntry(QLatin1String("NewProject"), ui.cbNewProject->currentData().toInt());
+	group.writeEntry(QLatin1String("NewProjectNotebook"), ui.cbNewProjectNotebook->currentText());
 	group.writeEntry(QLatin1String("TitleBar"), ui.cbTitleBar->currentIndex());
 	group.writeEntry(QLatin1String("Units"), ui.cbUnits->currentIndex());
 	if (ui.cbDecimalSeparator->currentIndex() == static_cast<int>(DecimalSeparator::Automatic)) // need to overwrite previous setting
@@ -125,6 +127,7 @@ void SettingsGeneralPage::applySettings() {
 
 void SettingsGeneralPage::restoreDefaults() {
 	ui.cbLoadOnStart->setCurrentIndex(ui.cbLoadOnStart->findData(static_cast<int>(MainWin::LoadOnStart::NewProject)));
+	ui.cbNewProject->setCurrentIndex(ui.cbLoadOnStart->findData(static_cast<int>(MainWin::NewProject::WithWorksheet)));
 	ui.cbTitleBar->setCurrentIndex(0);
 	ui.cbUnits->setCurrentIndex(0);
 	ui.cbDecimalSeparator->setCurrentIndex(static_cast<int>(DecimalSeparator::Automatic));
@@ -139,19 +142,23 @@ void SettingsGeneralPage::restoreDefaults() {
 }
 
 void SettingsGeneralPage::loadSettings() {
-	const KConfigGroup group = Settings::group(QStringLiteral("Settings_General"));
+	const auto group = Settings::group(QStringLiteral("Settings_General"));
 
-	auto loadOnStart = group.readEntry(QLatin1String("LoadOnStart"), static_cast<int>(MainWin::LoadOnStart::NewProject));
+	const auto loadOnStart = group.readEntry(QLatin1String("LoadOnStart"), static_cast<int>(MainWin::LoadOnStart::NewProject));
 	ui.cbLoadOnStart->setCurrentIndex(ui.cbLoadOnStart->findData(loadOnStart));
-	loadOnStartChanged(); // call it to update notebook related widgets also if the current index above was not changed (true for index=0)
+	loadOnStartChanged();
+
+	const auto newProject = group.readEntry(QLatin1String("NewProject"), static_cast<int>(MainWin::NewProject::WithWorksheet));
+	ui.cbNewProject->setCurrentIndex(ui.cbNewProject->findData(newProject));
+	newProjectChanged(); // call it to update notebook related widgets also if the current index above was not changed (true for index=0)
 
 #ifdef HAVE_CANTOR_LIBS
 	const auto& backendName = group.readEntry(QLatin1String("LoadOnStartNotebook"), QString());
-	int index = ui.cbLoadOnStartNotebook->findText(backendName);
-	if (index == -1 && ui.cbLoadOnStartNotebook->count() > 0)
-		ui.cbLoadOnStartNotebook->setCurrentIndex(0); // select the first available backend if not backend was select yet
+	int index = ui.cbNewProjectNotebook->findText(backendName);
+	if (index == -1 && ui.cbNewProjectNotebook->count() > 0)
+		ui.cbNewProjectNotebook->setCurrentIndex(0); // select the first available backend if not backend was select yet
 	else
-		ui.cbLoadOnStartNotebook->setCurrentIndex(index);
+		ui.cbNewProjectNotebook->setCurrentIndex(index);
 #endif
 
 	ui.cbTitleBar->setCurrentIndex(group.readEntry(QLatin1String("TitleBar"), 0));
@@ -182,19 +189,20 @@ void SettingsGeneralPage::loadSettings() {
 
 void SettingsGeneralPage::retranslateUi() {
 	ui.cbLoadOnStart->clear();
-	ui.cbLoadOnStart->addItem(i18n("Do Nothing"), static_cast<int>(MainWin::LoadOnStart::Nothing));
-	ui.cbLoadOnStart->addItem(i18n("Create New Empty Project"), static_cast<int>(MainWin::LoadOnStart::NewProject));
-	ui.cbLoadOnStart->addItem(i18n("Create New Project with Worksheet"), static_cast<int>(MainWin::LoadOnStart::NewProjectWorksheet));
-	ui.cbLoadOnStart->addItem(i18n("Create New Project with Spreadsheet"), static_cast<int>(MainWin::LoadOnStart::NewProjectSpreadsheet));
-#ifdef HAVE_CANTOR_LIBS
-	ui.cbLoadOnStart->addItem(i18n("Create New Project with Notebook"), static_cast<int>(MainWin::LoadOnStart::NewProjectNotebook));
-#endif
+	ui.cbLoadOnStart->addItem(i18n("Create New Project"), static_cast<int>(MainWin::LoadOnStart::NewProject));
 	ui.cbLoadOnStart->addItem(i18n("Load Last Used Project"), static_cast<int>(MainWin::LoadOnStart::LastProject));
-	// 	ui.cbLoadOnStart->addItem(i18n("Show Welcome Screen"));
+	// ui.cbLoadOnStart->addItem(i18n("Show Welcome Screen"), static_cast<int>(MainWin::LoadOnStart::WelcomeScreen));
+
+	ui.cbNewProject->clear();
+	ui.cbNewProject->addItem(i18n("With Worksheet"), static_cast<int>(MainWin::NewProject::WithWorksheet));
+	ui.cbNewProject->addItem(i18n("With Spreadsheet"), static_cast<int>(MainWin::NewProject::WithSpreadsheet));
+#ifdef HAVE_CANTOR_LIBS
+	ui.cbNewProject->addItem(i18n("With Notebook"), static_cast<int>(MainWin::NewProject::WithNotebook));
+#endif
 
 	QString msg = i18n("Notebook type to create automatically on startup");
-	ui.lLoadOnStartNotebook->setToolTip(msg);
-	ui.cbLoadOnStartNotebook->setToolTip(msg);
+	ui.lNewProjectNotebook->setToolTip(msg);
+	ui.cbNewProjectNotebook->setToolTip(msg);
 
 	msg = i18n("Controls the behavior of where the dock widgets are placed after being re-opened");
 	ui.lDockWindowPositionReopen->setToolTip(msg);
@@ -219,9 +227,17 @@ void SettingsGeneralPage::retranslateUi() {
 
 void SettingsGeneralPage::loadOnStartChanged() {
 	const auto loadOnStart = static_cast<MainWin::LoadOnStart>(ui.cbLoadOnStart->currentData().toInt());
-	const bool visible = (loadOnStart == MainWin::LoadOnStart::NewProjectNotebook);
-	ui.lLoadOnStartNotebook->setVisible(visible);
-	ui.cbLoadOnStartNotebook->setVisible(visible);
+	const bool visible = (loadOnStart == MainWin::LoadOnStart::NewProject);
+	ui.lNewProject->setVisible(visible);
+	ui.cbNewProject->setVisible(visible);
+	newProjectChanged();
+}
+
+void SettingsGeneralPage::newProjectChanged() {
+	const auto newProject = static_cast<MainWin::NewProject>(ui.cbNewProject->currentData().toInt());
+	const bool visible = (newProject == MainWin::NewProject::WithNotebook);
+	ui.lNewProjectNotebook->setVisible(visible);
+	ui.cbNewProjectNotebook->setVisible(visible);
 	changed();
 }
 

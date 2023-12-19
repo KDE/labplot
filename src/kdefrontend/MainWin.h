@@ -81,7 +81,8 @@ public:
 	void addAspectToProject(AbstractAspect*);
 	static void updateLocale();
 
-	enum class LoadOnStart { Nothing, NewProject, NewProjectWorksheet, NewProjectSpreadsheet, LastProject, WelcomeScreen, NewProjectNotebook };
+	enum class LoadOnStart { NewProject, LastProject, WelcomeScreen };
+	enum class NewProject { WithWorksheet, WithSpreadsheet, WithNotebook };
 	enum class TitleBarMode { ShowFilePath, ShowFileName, ShowProjectName };
 
 #ifdef HAVE_KUSERFEEDBACK
@@ -205,6 +206,9 @@ private:
 	bool save(const QString&);
 	// 	void toggleShowWidget(QWidget* widget, bool showToRight);
 	// 	void toggleHideWidget(QWidget* widget, bool hideToLeft);
+	// 	QQuickWidget* createWelcomeScreen();
+	// 	void resetWelcomeScreen();
+	void createADS();
 
 	Spreadsheet* activeSpreadsheet() const;
 
@@ -218,10 +222,6 @@ protected:
 
 private Q_SLOTS:
 	void initGUI(const QString&);
-	// 	QQuickWidget* createWelcomeScreen();
-	// 	void resetWelcomeScreen();
-	// void createMdiArea();
-	void createADS();
 	bool specialDock(ads::CDockWidget* dock);
 	void changeVisibleAllDocks(bool);
 	void activateNextDock();
@@ -234,7 +234,7 @@ private Q_SLOTS:
 	void undo();
 	void redo();
 
-	bool newProject();
+	bool newProject(bool createInitialContent = true);
 	void openProject();
 	void openProject(const QString&);
 	void openRecentProject(const QUrl&);
@@ -282,7 +282,6 @@ private Q_SLOTS:
 	void handleAspectAboutToBeRemoved(const AbstractAspect*);
 	void handleAspectRemoved(const AbstractAspect*, const AbstractAspect*, const AbstractAspect*);
 	void handleCurrentAspectChanged(AbstractAspect*);
-	//	void handleCurrentSubWindowChanged(QMdiSubWindow*);
 	void handleShowSubWindowRequested();
 
 	void handleSettingsChanges();
