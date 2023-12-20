@@ -127,7 +127,7 @@ void SettingsGeneralPage::applySettings() {
 
 void SettingsGeneralPage::restoreDefaults() {
 	ui.cbLoadOnStart->setCurrentIndex(ui.cbLoadOnStart->findData(static_cast<int>(MainWin::LoadOnStart::NewProject)));
-	ui.cbNewProject->setCurrentIndex(ui.cbLoadOnStart->findData(static_cast<int>(MainWin::NewProject::WithWorksheet)));
+	ui.cbNewProject->setCurrentIndex(ui.cbNewProject->findData(static_cast<int>(MainWin::NewProject::WithWorksheet)));
 	ui.cbTitleBar->setCurrentIndex(0);
 	ui.cbUnits->setCurrentIndex(0);
 	ui.cbDecimalSeparator->setCurrentIndex(static_cast<int>(DecimalSeparator::Automatic));

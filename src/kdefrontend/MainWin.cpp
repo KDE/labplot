@@ -639,11 +639,16 @@ void MainWin::dockFocusChanged(ads::CDockWidget* old, ads::CDockWidget* now) {
 void MainWin::initActions() {
 	// ******************** File-menu *******************************
 	// add some standard actions
-	m_newProjectAction = KStandardAction::openNew(this, [=]() { newProject(true); } , actionCollection());
+	m_newProjectAction = KStandardAction::openNew(
+		this,
+		[=]() {
+			newProject(true);
+		},
+		actionCollection());
 	m_openProjectAction = KStandardAction::open(this, static_cast<void (MainWin::*)()>(&MainWin::openProject), actionCollection());
 	m_recentProjectsAction = KStandardAction::openRecent(this, &MainWin::openRecentProject, actionCollection());
-	m_closeAction = KStandardAction::close(this, &MainWin::closeProject, actionCollection());
-	actionCollection()->setDefaultShortcut(m_closeAction, QKeySequence()); // remove the shortcut, QKeySequence::Close will be used for closing sub-windows
+	// m_closeAction = KStandardAction::close(this, &MainWin::closeProject, actionCollection());
+	// actionCollection()->setDefaultShortcut(m_closeAction, QKeySequence()); // remove the shortcut, QKeySequence::Close will be used for closing sub-windows
 	m_saveAction = KStandardAction::save(this, &MainWin::saveProject, actionCollection());
 	m_saveAsAction = KStandardAction::saveAs(this, &MainWin::saveProjectAs, actionCollection());
 	m_printAction = KStandardAction::print(this, &MainWin::print, actionCollection());
@@ -1129,8 +1134,7 @@ void MainWin::updateGUIOnProjectChanges(const QByteArray& windowState) {
 				d->part()->suppressDeletion(false);
 		}
 		m_DockManager->restoreState(windowState);
-	}
-	else {
+	} else {
 		// They might be not available, if at startup the "Do nothing" option is selected
 		if (m_projectExplorerDock)
 			m_projectExplorerDock->toggleView(true);
@@ -1464,9 +1468,6 @@ bool MainWin::newProject(bool createInitialContent) {
 	connect(m_project, &Project::mdiWindowVisibilityChanged, this, &MainWin::updateDockWindowVisibility);
 	connect(m_project, &Project::closeRequested, this, &MainWin::closeProject);
 
-	m_undoViewEmptyLabel = i18n("%1: created", m_project->name());
-	updateTitleBar();
-
 	// depending on the settings, create the default project content (add a worksheet, etc.)
 	if (createInitialContent) {
 		const auto newProject = (NewProject)group.readEntry(QStringLiteral("NewProject"), static_cast<int>(NewProject::WithWorksheet));
@@ -1478,11 +1479,11 @@ bool MainWin::newProject(bool createInitialContent) {
 			newSpreadsheet();
 			break;
 		case NewProject::WithNotebook: {
-	#ifdef HAVE_CANTOR_LIBS
+#ifdef HAVE_CANTOR_LIBS
 			const auto& backend = group.readEntry(QLatin1String("LoadOnStartNotebook"), QString());
 			if (Cantor::Backend::listAvailableBackends().indexOf(backend) != -1)
 				addAspectToProject(new CantorWorksheet(backend));
-	#endif
+#endif
 			break;
 		}
 		}
@@ -1490,6 +1491,7 @@ bool MainWin::newProject(bool createInitialContent) {
 		m_project->setChanged(false); // the project was initialized on startup, nothing has changed from user's perspective
 	}
 
+	m_undoViewEmptyLabel = i18n("%1: created", m_project->name());
 	updateGUIOnProjectChanges();
 
 	return true;
@@ -1707,7 +1709,6 @@ void MainWin::openProject(const QString& filename) {
 	m_project->undoStack()->clear();
 	m_undoViewEmptyLabel = i18n("%1: opened", m_project->name());
 	m_recentProjectsAction->addUrl(QUrl(filename));
-	updateTitleBar();
 	updateGUIOnProjectChanges(m_project->windowState().toUtf8());
 	updateGUI(); // there are most probably worksheets or spreadsheets in the open project -> update the GUI
 	if (m_project->windowState().toUtf8().isEmpty())
