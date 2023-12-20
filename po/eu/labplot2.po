@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-18 00:39+0000\n"
+"POT-Creation-Date: 2023-12-20 00:38+0000\n"
 "PO-Revision-Date: 2023-09-19 23:30+0200\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -920,7 +920,7 @@ msgstr "%1: ezarri errore barraren ingeradaren estiloa"
 #: src/backend/worksheet/InfoElement.cpp:810
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:126
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:141
-#: src/backend/worksheet/WorksheetElement.cpp:160
+#: src/backend/worksheet/WorksheetElement.cpp:159
 #: src/backend/worksheet/WorksheetElementContainer.cpp:63
 #: src/backend/worksheet/WorksheetElementContainer.cpp:64
 #, kde-format
@@ -932,7 +932,7 @@ msgstr "%1: ezarri ikusgai"
 #: src/backend/worksheet/InfoElement.cpp:810
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:126
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:141
-#: src/backend/worksheet/WorksheetElement.cpp:160
+#: src/backend/worksheet/WorksheetElement.cpp:159
 #: src/backend/worksheet/WorksheetElement.cpp:742
 #: src/backend/worksheet/WorksheetElementContainer.cpp:66
 #: src/backend/worksheet/WorksheetElementContainer.cpp:84
@@ -3374,7 +3374,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lSize)
 #: src/backend/gsl/functions.cpp:239
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:466
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:490
 #, kde-format
 msgid "Size"
 msgstr "Neurria"
@@ -6868,7 +6868,7 @@ msgstr "Etiketa"
 #. i18n: ectx: property (text), widget (QLabel, lGeneral)
 #. i18n: ectx: attribute (title), widget (QWidget, tabSymbol)
 #: src/backend/worksheet/InfoElement.cpp:287
-#: src/kdefrontend/ui/dockwidgets/custompointdock.ui:323
+#: src/kdefrontend/ui/dockwidgets/custompointdock.ui:331
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:406
 #: src/kdefrontend/ui/dockwidgets/lollipopplotdock.ui:311
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:220
@@ -7017,7 +7017,7 @@ msgstr "Orientazioa"
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1437
 #: src/kdefrontend/ui/dockwidgets/kdeplotdock.ui:228
 #: src/kdefrontend/ui/dockwidgets/lollipopplotdock.ui:226
-#: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:240
+#: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:248
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:26
 #: src/kdefrontend/widgets/SymbolWidget.cpp:142
 #, fuzzy, kde-format
@@ -7469,7 +7469,7 @@ msgstr "Erabilgarri"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5009
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:483
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:543
-#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:459
+#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:466
 #: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:224
 #, fuzzy, kde-format
 msgid "Title"
@@ -8994,12 +8994,12 @@ msgstr ""
 msgid "Curves"
 msgstr "Kurbak"
 
-#: src/backend/worksheet/WorksheetElement.cpp:153
+#: src/backend/worksheet/WorksheetElement.cpp:152
 #, kde-format
 msgid "%1: lock"
 msgstr ""
 
-#: src/backend/worksheet/WorksheetElement.cpp:153
+#: src/backend/worksheet/WorksheetElement.cpp:152
 #, kde-format
 msgid "%1: unlock"
 msgstr ""
@@ -9007,20 +9007,20 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QCheckBox, chbVisible)
 #. i18n: ectx: property (text), widget (QCheckBox, chkVisible)
 #. i18n: ectx: property (text), widget (QCheckBox, chbSymbolVisible)
-#: src/backend/worksheet/WorksheetElement.cpp:217
+#: src/backend/worksheet/WorksheetElement.cpp:216
 #: src/kdefrontend/ui/datapickercurvewidget.ui:178
 #: src/kdefrontend/ui/datapickerimagewidget.ui:826
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:58
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:115
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:535
-#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:64
-#: src/kdefrontend/ui/dockwidgets/custompointdock.ui:299
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:73
+#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:134
+#: src/kdefrontend/ui/dockwidgets/custompointdock.ui:260
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:113
 #: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:76
 #: src/kdefrontend/ui/dockwidgets/kdeplotdock.ui:106
 #: src/kdefrontend/ui/dockwidgets/qqplotdock.ui:37
-#: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:167
-#: src/kdefrontend/ui/dockwidgets/referencerangedock.ui:85
+#: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:213
+#: src/kdefrontend/ui/dockwidgets/referencerangedock.ui:95
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:47
 #: src/kdefrontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:160
 #: src/kdefrontend/ui/dockwidgets/xycurvedockgeneraltab.ui:68
@@ -9039,24 +9039,24 @@ msgstr ""
 msgid "Visible"
 msgstr "Ikusgai"
 
-#: src/backend/worksheet/WorksheetElement.cpp:226
+#: src/backend/worksheet/WorksheetElement.cpp:225
 #, fuzzy, kde-format
-msgid "Locking"
+msgid "Lock"
 msgstr "Esteka"
 
-#: src/backend/worksheet/WorksheetElement.cpp:235
+#: src/backend/worksheet/WorksheetElement.cpp:234
 #, kde-format
 msgid "Drawing &order"
 msgstr ""
 
-#: src/backend/worksheet/WorksheetElement.cpp:238
+#: src/backend/worksheet/WorksheetElement.cpp:237
 #: src/backend/worksheet/WorksheetElement.cpp:283
 #: src/backend/worksheet/WorksheetElement.cpp:286
 #, kde-format
 msgid "Move &behind"
 msgstr ""
 
-#: src/backend/worksheet/WorksheetElement.cpp:242
+#: src/backend/worksheet/WorksheetElement.cpp:241
 #: src/backend/worksheet/WorksheetElement.cpp:281
 #: src/backend/worksheet/WorksheetElement.cpp:288
 #, kde-format
@@ -10781,7 +10781,7 @@ msgstr "Grafikaren &area..."
 #. i18n: ectx: attribute (title), widget (QWidget, tabLayout)
 #: src/commonfrontend/worksheet/WorksheetView.cpp:463
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:548
-#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:603
+#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:610
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:265
 #, fuzzy, kde-format
 msgid "Layout"
@@ -12161,8 +12161,8 @@ msgstr "Bilaketa-barrutia"
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:301
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:483
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:486
-#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:242
-#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:250
+#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:244
+#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:252
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:50
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:60
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:68
@@ -12176,8 +12176,8 @@ msgstr "Goian"
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:302
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:484
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:487
-#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:244
-#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:252
+#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:246
+#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:254
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:52
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:62
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:70
@@ -12256,8 +12256,8 @@ msgstr ""
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:272
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:491
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:495
-#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:238
-#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:246
+#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:240
+#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:248
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:46
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:56
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:64
@@ -12274,8 +12274,8 @@ msgstr "Ezkerrean"
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:273
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:492
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:494
-#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:240
-#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:248
+#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:242
+#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:250
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:48
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:58
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:66
@@ -12322,7 +12322,7 @@ msgstr "Zenbakia"
 #. i18n: ectx: property (text), widget (QLabel, lSpacing)
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:282
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:295
-#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:644
+#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:651
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:454
 #, fuzzy, kde-format
 msgid "Spacing"
@@ -12433,14 +12433,14 @@ msgstr ""
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:507
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:737
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1804
-#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:690
-#: src/kdefrontend/dockwidgets/CustomPointDock.cpp:385
+#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:705
+#: src/kdefrontend/dockwidgets/CustomPointDock.cpp:400
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:720
 #: src/kdefrontend/dockwidgets/KDEPlotDock.cpp:411
 #: src/kdefrontend/dockwidgets/LollipopPlotDock.cpp:478
 #: src/kdefrontend/dockwidgets/MatrixDock.cpp:266
 #: src/kdefrontend/dockwidgets/QQPlotDock.cpp:317
-#: src/kdefrontend/dockwidgets/ReferenceLineDock.cpp:235
+#: src/kdefrontend/dockwidgets/ReferenceLineDock.cpp:249
 #: src/kdefrontend/dockwidgets/SpreadsheetDock.cpp:221
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:604
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1275
@@ -12485,7 +12485,7 @@ msgstr ""
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:384
 #: src/kdefrontend/dockwidgets/LollipopPlotDock.cpp:336
 #: src/kdefrontend/dockwidgets/LollipopPlotDock.cpp:362
-#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:85
+#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:233
 #: src/kdefrontend/ui/dockwidgets/matrixdock.ui:115
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:197
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:421
@@ -12629,11 +12629,11 @@ msgstr "Data barrutia"
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:262
 #: src/kdefrontend/ui/dockwidgets/barplotdock.ui:57
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:149
-#: src/kdefrontend/ui/dockwidgets/custompointdock.ui:276
+#: src/kdefrontend/ui/dockwidgets/custompointdock.ui:158
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:297
 #: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:194
 #: src/kdefrontend/ui/dockwidgets/lollipopplotdock.ui:98
-#: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:180
+#: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:233
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:299
 #: src/kdefrontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:34
 #: src/kdefrontend/ui/dockwidgets/xycurvedockgeneraltab.ui:114
@@ -12715,7 +12715,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, lHorizontalSpacing)
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1270
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:561
-#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:754
+#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:761
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:342
 #, fuzzy, kde-format
 msgid "Horizontal:"
@@ -12725,7 +12725,7 @@ msgstr "Horizontala:"
 #. i18n: ectx: property (text), widget (QLabel, lVerticalSpacing)
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1271
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:862
-#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:709
+#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:716
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:428
 #, fuzzy, kde-format
 msgid "Vertical:"
@@ -12735,7 +12735,7 @@ msgstr "Bertikala:"
 #. i18n: ectx: property (text), widget (QLabel, lLeftMargin)
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1273
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:797
-#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:702
+#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:709
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:414
 #, fuzzy, kde-format
 msgid "Left:"
@@ -12745,7 +12745,7 @@ msgstr "Ezkerrean:"
 #. i18n: ectx: property (text), widget (QLabel, lTopMargin)
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1274
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:804
-#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:651
+#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:658
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:407
 #, fuzzy, kde-format
 msgid "Top:"
@@ -12767,22 +12767,22 @@ msgstr ""
 msgid "%1 cartesian plots: template \"%2\" loaded"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:234
+#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:236
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:246
 #, fuzzy, kde-format
 msgid "Column Major"
 msgstr "Konexioa"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:235
+#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:237
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:247
 #, kde-format
 msgid "Row Major"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:239
-#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:243
-#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:247
-#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:251
+#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:241
+#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:245
+#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:249
+#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:253
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:47
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:51
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:57
@@ -12799,7 +12799,7 @@ msgstr ""
 msgid "Center"
 msgstr "Erdian"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:688
+#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:703
 #, kde-format
 msgid "%1 cartesian plot legends: template \"%2\" loaded"
 msgstr ""
@@ -12883,12 +12883,12 @@ msgstr "Kopiatu hautapena"
 msgid "Copy All"
 msgstr "Kopiatu guztia"
 
-#: src/kdefrontend/dockwidgets/CustomPointDock.cpp:232
+#: src/kdefrontend/dockwidgets/CustomPointDock.cpp:240
 #, kde-format
 msgid "%1 CustomPoints: visibility changed"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/CustomPointDock.cpp:383
+#: src/kdefrontend/dockwidgets/CustomPointDock.cpp:398
 #, kde-format
 msgid "%1 custom points: template \"%2\" loaded"
 msgstr ""
@@ -13119,7 +13119,7 @@ msgid ""
 "longer project load times."
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/ReferenceLineDock.cpp:233
+#: src/kdefrontend/dockwidgets/ReferenceLineDock.cpp:247
 #, fuzzy, kde-format
 #| msgid "%1 matrices: template \"%2\" loaded"
 msgid "%1 reference lines: template \"%2\" loaded"
@@ -15942,9 +15942,9 @@ msgstr "&Formateatu"
 #: src/kdefrontend/spreadsheet/FormattingHeatmapDialog.cpp:61
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1432
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1395
-#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:464
-#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:476
-#: src/kdefrontend/ui/dockwidgets/referencerangedock.ui:78
+#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:471
+#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:483
+#: src/kdefrontend/ui/dockwidgets/referencerangedock.ui:219
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:230
 #, kde-format
 msgid "Background"
@@ -16724,11 +16724,11 @@ msgstr "Y-errore mota:"
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:132
 #: src/kdefrontend/ui/dockwidgets/cantorworksheetdock.ui:65
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:437
-#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:350
+#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:288
 #: src/kdefrontend/ui/dockwidgets/columndock.ui:17
-#: src/kdefrontend/ui/dockwidgets/custompointdock.ui:60
+#: src/kdefrontend/ui/dockwidgets/custompointdock.ui:267
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:217
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:353
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:374
 #: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:83
 #: src/kdefrontend/ui/dockwidgets/kdeplotdock.ui:151
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:371
@@ -16737,8 +16737,8 @@ msgstr "Y-errore mota:"
 #: src/kdefrontend/ui/dockwidgets/notedock.ui:43
 #: src/kdefrontend/ui/dockwidgets/projectdock.ui:228
 #: src/kdefrontend/ui/dockwidgets/qqplotdock.ui:88
-#: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:58
-#: src/kdefrontend/ui/dockwidgets/referencerangedock.ui:118
+#: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:119
+#: src/kdefrontend/ui/dockwidgets/referencerangedock.ui:56
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:64
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:151
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:17
@@ -16774,11 +16774,11 @@ msgstr "Iruzkina:"
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:142
 #: src/kdefrontend/ui/dockwidgets/cantorworksheetdock.ui:33
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:447
-#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:257
+#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:117
 #: src/kdefrontend/ui/dockwidgets/columndock.ui:50
-#: src/kdefrontend/ui/dockwidgets/custompointdock.ui:27
+#: src/kdefrontend/ui/dockwidgets/custompointdock.ui:208
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:237
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:369
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:354
 #: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:147
 #: src/kdefrontend/ui/dockwidgets/kdeplotdock.ui:96
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:147
@@ -16787,8 +16787,8 @@ msgstr "Iruzkina:"
 #: src/kdefrontend/ui/dockwidgets/notedock.ui:17
 #: src/kdefrontend/ui/dockwidgets/projectdock.ui:194
 #: src/kdefrontend/ui/dockwidgets/qqplotdock.ui:105
-#: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:51
-#: src/kdefrontend/ui/dockwidgets/referencerangedock.ui:275
+#: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:190
+#: src/kdefrontend/ui/dockwidgets/referencerangedock.ui:112
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:43
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:46
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:117
@@ -16871,7 +16871,7 @@ msgstr "Estiloa:"
 #: src/kdefrontend/ui/datapickercurvewidget.ui:236
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:438
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1380
-#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:37
+#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:30
 #: src/kdefrontend/ui/dockwidgets/linewidget.ui:120
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:320
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:401
@@ -16941,8 +16941,8 @@ msgstr "Neurria:"
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbDistance)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbValuesDistance)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbSamplingInterval)
-#. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbPositionStart)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbPositionEnd)
+#. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbPositionStart)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbBinRangesMin)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbBinRangesMax)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbBinWidth)
@@ -17011,21 +17011,21 @@ msgstr "Neurria:"
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:827
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:849
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1345
-#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:369
-#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:391
-#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:413
-#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:432
-#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:445
-#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:492
-#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:667
-#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:689
-#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:725
-#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:777
-#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:799
-#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:841
-#: src/kdefrontend/ui/dockwidgets/custompointdock.ui:146
-#: src/kdefrontend/ui/dockwidgets/custompointdock.ui:188
-#: src/kdefrontend/ui/dockwidgets/custompointdock.ui:212
+#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:62
+#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:101
+#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:153
+#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:192
+#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:249
+#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:499
+#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:674
+#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:696
+#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:732
+#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:784
+#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:806
+#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:848
+#: src/kdefrontend/ui/dockwidgets/custompointdock.ui:148
+#: src/kdefrontend/ui/dockwidgets/custompointdock.ui:186
+#: src/kdefrontend/ui/dockwidgets/custompointdock.ui:229
 #: src/kdefrontend/ui/dockwidgets/custompointdock.ui:250
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:337
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:356
@@ -17033,21 +17033,21 @@ msgstr "Neurria:"
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:659
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:684
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:709
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:145
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:259
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:392
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:444
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:497
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:521
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:171
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:202
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:245
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:286
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:326
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:539
 #: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:213
 #: src/kdefrontend/ui/dockwidgets/kdeplotdock.ui:381
 #: src/kdefrontend/ui/dockwidgets/kdeplotdock.ui:413
 #: src/kdefrontend/ui/dockwidgets/kdeplotdock.ui:445
 #: src/kdefrontend/ui/dockwidgets/linewidget.ui:166
 #: src/kdefrontend/ui/dockwidgets/linewidget.ui:191
-#: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:94
-#: src/kdefrontend/ui/dockwidgets/referencerangedock.ui:301
-#: src/kdefrontend/ui/dockwidgets/referencerangedock.ui:320
+#: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:54
+#: src/kdefrontend/ui/dockwidgets/referencerangedock.ui:39
+#: src/kdefrontend/ui/dockwidgets/referencerangedock.ui:190
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:353
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:194
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:213
@@ -17135,7 +17135,7 @@ msgstr "Zehaztu irudi-fitxategiaren izena."
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bOpen)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:119
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:61
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:434
 #, kde-format
 msgid " Select the image file"
 msgstr " Hautatu irudi-fitxategia"
@@ -17179,8 +17179,8 @@ msgstr "x+y+z="
 #. i18n: ectx: property (text), widget (QLabel, lValuesRotation)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:188
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1279
-#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:327
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:421
+#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:363
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:83
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:108
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:421
 #: src/kdefrontend/ui/labelwidget.ui:716 src/kdefrontend/ui/symbolwidget.ui:85
@@ -17200,8 +17200,8 @@ msgstr "Segmentuak"
 #. i18n: ectx: property (suffix), widget (NumberSpinBox, sbRotation)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:219
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1253
-#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:108
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:27
+#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:314
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:387
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:121
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:483
 #: src/kdefrontend/ui/labelwidget.ui:211 src/kdefrontend/ui/symbolwidget.ui:101
@@ -17377,9 +17377,9 @@ msgstr "Intentsitatea:"
 #. i18n: ectx: property (toolTip), widget (QComboBox, cbPositionY)
 #. i18n: ectx: property (toolTip), widget (QComboBox, cbPlotImageType)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:884
-#: src/kdefrontend/ui/dockwidgets/custompointdock.ui:312
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:167
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:481
+#: src/kdefrontend/ui/dockwidgets/custompointdock.ui:290
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:130
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:310
 #: src/kdefrontend/ui/labelwidget.ui:25 src/kdefrontend/ui/labelwidget.ui:289
 #, kde-format
 msgid "Vertical position relative to label's parent"
@@ -18124,7 +18124,7 @@ msgstr "Estekatu fitxategia"
 #. i18n: ectx: property (text), widget (QLabel, lFileName)
 #: src/kdefrontend/ui/datasources/importprojectwidget.ui:23
 #: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:92
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:317
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:140
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:29
 #, kde-format
 msgid "File name:"
@@ -18425,8 +18425,8 @@ msgstr "Barrutia:"
 #: src/kdefrontend/ui/dockwidgets/barplotdock.ui:133
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:41
 #: src/kdefrontend/ui/dockwidgets/lollipopplotdock.ui:208
-#: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:68
-#: src/kdefrontend/ui/dockwidgets/referencerangedock.ui:216
+#: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:161
+#: src/kdefrontend/ui/dockwidgets/referencerangedock.ui:171
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:108
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:827
 #, kde-format
@@ -18447,7 +18447,7 @@ msgstr "Gezia"
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:568
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1393
 #: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:181
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:86
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:459
 #: src/kdefrontend/ui/dockwidgets/linewidget.ui:84
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:150
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:340
@@ -18628,10 +18628,10 @@ msgstr "Automatikoki zehaztu, koma hamartarraren ondoko digitu kopurua optimoa"
 #. i18n: ectx: property (text), widget (QLabel, lPosition)
 #. i18n: ectx: property (text), widget (QLabel, lMajorGrid_2)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1237
-#: src/kdefrontend/ui/dockwidgets/custompointdock.ui:101
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:280
-#: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:115
-#: src/kdefrontend/ui/dockwidgets/referencerangedock.ui:149
+#: src/kdefrontend/ui/dockwidgets/custompointdock.ui:316
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:99
+#: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:76
+#: src/kdefrontend/ui/dockwidgets/referencerangedock.ui:88
 #, kde-format
 msgid "Position"
 msgstr "Kokapena"
@@ -18642,7 +18642,7 @@ msgstr "Kokapena"
 #. i18n: ectx: property (text), widget (QLabel, lValuesFont)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1286
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1420
-#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:140
+#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:419
 #: src/kdefrontend/ui/dockwidgets/notedock.ui:92
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:310
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:301
@@ -18678,7 +18678,7 @@ msgstr "Jatorri-aldaketa:"
 #. i18n: ectx: property (text), widget (QLabel, lValuesOpacity)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1366
 #: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:168
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:200
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:123
 #: src/kdefrontend/ui/dockwidgets/linewidget.ui:137
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:137
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:294
@@ -18710,7 +18710,7 @@ msgstr "Formatua:"
 #: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:184
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1013
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1148
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:89
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:462
 #: src/kdefrontend/ui/dockwidgets/linewidget.ui:87
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:153
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:343
@@ -18804,20 +18804,20 @@ msgstr "ikusgai"
 #. i18n: ectx: property (text), widget (QLabel, lPositionX)
 #. i18n: ectx: property (text), widget (QLabel, lPositionXLogicalDateTime)
 #. i18n: ectx: property (text), widget (QLabel, lXData)
-#. i18n: ectx: property (text), widget (QLabel, lPositionDateTime)
 #. i18n: ectx: property (text), widget (QLabel, lPosition)
+#. i18n: ectx: property (text), widget (QLabel, lPositionDateTime)
 #. i18n: ectx: property (text), widget (QLabel, lPositionXLogical)
 #: src/kdefrontend/ui/dockwidgets/barplotdock.ui:87
-#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:44
-#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:267
-#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:317
-#: src/kdefrontend/ui/dockwidgets/custompointdock.ui:125
-#: src/kdefrontend/ui/dockwidgets/custompointdock.ui:158
-#: src/kdefrontend/ui/dockwidgets/custompointdock.ui:172
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:540
+#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:127
+#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:265
+#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:333
+#: src/kdefrontend/ui/dockwidgets/custompointdock.ui:57
+#: src/kdefrontend/ui/dockwidgets/custompointdock.ui:93
+#: src/kdefrontend/ui/dockwidgets/custompointdock.ui:201
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:106
 #: src/kdefrontend/ui/dockwidgets/lollipopplotdock.ui:27
-#: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:222
-#: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:232
+#: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:99
+#: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:220
 #: src/kdefrontend/ui/labelwidget.ui:56 src/kdefrontend/ui/labelwidget.ui:398
 #, kde-format
 msgid "x:"
@@ -18825,14 +18825,14 @@ msgstr "x:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPositionY)
 #. i18n: ectx: property (text), widget (QLabel, lDataColumn)
-#. i18n: ectx: property (text), widget (QLabel, lPositionYLogicalDateTime)
 #. i18n: ectx: property (text), widget (QLabel, lPositionYLogical)
+#. i18n: ectx: property (text), widget (QLabel, lPositionYLogicalDateTime)
 #: src/kdefrontend/ui/dockwidgets/barplotdock.ui:110
-#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:30
-#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:71
-#: src/kdefrontend/ui/dockwidgets/custompointdock.ui:224
-#: src/kdefrontend/ui/dockwidgets/custompointdock.ui:234
-#: src/kdefrontend/ui/dockwidgets/custompointdock.ui:315
+#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:226
+#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:340
+#: src/kdefrontend/ui/dockwidgets/custompointdock.ui:165
+#: src/kdefrontend/ui/dockwidgets/custompointdock.ui:277
+#: src/kdefrontend/ui/dockwidgets/custompointdock.ui:293
 #: src/kdefrontend/ui/dockwidgets/lollipopplotdock.ui:121
 #: src/kdefrontend/ui/labelwidget.ui:292
 #, kde-format
@@ -18852,9 +18852,9 @@ msgstr "Barrak"
 #: src/kdefrontend/ui/dockwidgets/barplotdock.ui:264
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:442
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1329
-#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:579
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:548
-#: src/kdefrontend/ui/dockwidgets/referencerangedock.ui:161
+#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:586
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:557
+#: src/kdefrontend/ui/dockwidgets/referencerangedock.ui:303
 #: src/kdefrontend/ui/labelwidget.ui:261 src/kdefrontend/ui/symbolwidget.ui:233
 #: src/kdefrontend/widgets/SymbolWidget.cpp:138
 #, kde-format
@@ -18978,7 +18978,7 @@ msgstr "txanoa"
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
 #. i18n: ectx: property (text), widget (QLabel, lMargin)
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:768
-#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:631
+#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:638
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:561
 #: src/kdefrontend/ui/dockwidgets/kdeplotdock.ui:310
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:362
@@ -19003,7 +19003,7 @@ msgstr "Marraztu"
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:830
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:554
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:610
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:177
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:69
 #: src/kdefrontend/ui/dockwidgets/kdeplotdock.ui:397
 #: src/kdefrontend/ui/dockwidgets/linewidget.ui:113
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:115
@@ -19051,7 +19051,7 @@ msgstr "y barrutien zerrenda"
 #. i18n: ectx: property (text), widget (QLabel, lFormat_2)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:203
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:343
-#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:133
+#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:78
 #: src/kdefrontend/ui/dockwidgets/columndock.ui:201
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:527
 #: src/kdefrontend/ui/dockwidgets/matrixdock.ui:261
@@ -19189,20 +19189,20 @@ msgstr "Hedatu:"
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:830
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:852
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1348
-#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:372
-#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:394
-#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:448
-#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:495
-#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:670
-#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:692
-#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:728
-#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:780
-#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:802
-#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:844
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:148
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:262
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:500
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:524
+#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:156
+#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:195
+#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:252
+#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:502
+#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:677
+#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:699
+#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:735
+#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:787
+#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:809
+#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:851
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:174
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:248
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:289
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:329
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:197
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:216
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:480
@@ -19218,7 +19218,7 @@ msgstr " cm"
 #. i18n: ectx: property (text), widget (QLabel, lGeometry)
 #. i18n: ectx: property (text), widget (QLabel, lPosition)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:595
-#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:300
+#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:392
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:59
 #: src/kdefrontend/ui/labelwidget.ui:445
 #, kde-format
@@ -19240,7 +19240,7 @@ msgstr "Simetrikoa:"
 #. i18n: ectx: property (text), widget (QLabel, lPaddingVerticalDown)
 #. i18n: ectx: property (text), widget (QLabel, lBottomMargin)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:650
-#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:825
+#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:832
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:349
 #, kde-format
 msgid "Bottom:"
@@ -19249,7 +19249,7 @@ msgstr "Behean:"
 #. i18n: ectx: property (text), widget (QLabel, lRightMargin)
 #. i18n: ectx: property (text), widget (QLabel, lHeight)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:752
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:376
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:523
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:33
 #, kde-format
 msgid "Height:"
@@ -19258,7 +19258,7 @@ msgstr "Altuera:"
 #. i18n: ectx: property (text), widget (QLabel, lPaddingHorizontalRight)
 #. i18n: ectx: property (text), widget (QLabel, lRightMargin)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:811
-#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:761
+#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:768
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:369
 #, kde-format
 msgid "Right:"
@@ -19344,28 +19344,15 @@ msgstr "Izkinaren erradioa:"
 
 #. i18n: ectx: property (text), widget (QLabel, lHorizontalAlignment)
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:78
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:207
+#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:166
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:30
 #, kde-format
 msgid "Hor. align.:"
 msgstr "Lerrok. hor.:"
 
-#. i18n: ectx: property (text), widget (QLabel, lBindLogicalPos)
-#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:224
-#: src/kdefrontend/ui/dockwidgets/custompointdock.ui:108
-#, kde-format
-msgid "Logical coordinates"
-msgstr "Koordenatu logikoak"
-
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:244
-#, kde-format
-msgid "Ver. align.:"
-msgstr "Lerrok. bert.:"
-
 #. i18n: ectx: property (text), widget (QLabel, lOrdering)
 #. i18n: ectx: property (text), widget (QLabel, lOrder)
-#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:284
+#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:205
 #: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:276
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:20
 #: src/kdefrontend/ui/spreadsheet/sortdialogwidget.ui:30
@@ -19373,14 +19360,38 @@ msgstr "Lerrok. bert.:"
 msgid "Order:"
 msgstr "Hurrenkera:"
 
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:212
+#, kde-format
+msgid "Ver. align.:"
+msgstr "Lerrok. bert.:"
+
 #. i18n: ectx: property (text), widget (QLabel, lLineSymbolWidth)
-#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:337
+#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:219
 #, kde-format
 msgid "Line+Symbol Width:"
 msgstr "Lerroa+Ikurraren zabalera:"
 
+#. i18n: ectx: property (text), widget (QLabel, lBindLogicalPos)
+#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:412
+#: src/kdefrontend/ui/dockwidgets/custompointdock.ui:27
+#, kde-format
+msgid "Logical coordinates"
+msgstr "Koordenatu logikoak"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chbLock)
+#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:458
+#: src/kdefrontend/ui/dockwidgets/custompointdock.ui:323
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:549
+#: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:240
+#: src/kdefrontend/ui/dockwidgets/referencerangedock.ui:333
+#: src/kdefrontend/ui/labelwidget.ui:759
+#, kde-format
+msgid "Locked"
+msgstr ""
+
 #. i18n: ectx: property (text), widget (QLabel, lBorderCornerRadius)
-#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:534
+#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:541
 #, kde-format
 msgid "Corner radius:"
 msgstr "Izkinaren erradioa:"
@@ -19438,14 +19449,14 @@ msgstr "Kurtsorea 2"
 #. i18n: ectx: property (toolTip), widget (KComboBox, cbPositionX)
 #. i18n: ectx: property (toolTip), widget (QLabel, lPosition)
 #. i18n: ectx: property (toolTip), widget (QComboBox, cbPositionX)
-#. i18n: ectx: property (toolTip), widget (QLabel, lPositionStart)
 #. i18n: ectx: property (toolTip), widget (QLabel, lPositionEnd)
-#: src/kdefrontend/ui/dockwidgets/custompointdock.ui:122
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:129
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:297
-#: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:229
-#: src/kdefrontend/ui/dockwidgets/referencerangedock.ui:108
-#: src/kdefrontend/ui/dockwidgets/referencerangedock.ui:282
+#. i18n: ectx: property (toolTip), widget (QLabel, lPositionStart)
+#: src/kdefrontend/ui/dockwidgets/custompointdock.ui:198
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:155
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:226
+#: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:96
+#: src/kdefrontend/ui/dockwidgets/referencerangedock.ui:102
+#: src/kdefrontend/ui/dockwidgets/referencerangedock.ui:310
 #: src/kdefrontend/ui/labelwidget.ui:53 src/kdefrontend/ui/labelwidget.ui:490
 #, kde-format
 msgid "Horizontal position relative to label's parent"
@@ -19562,62 +19573,62 @@ msgstr "Forma"
 msgid "Data, -:"
 msgstr "Datuak, -:"
 
-#. i18n: ectx: property (toolTip), widget (QLineEdit, leFileName)
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:45
+#. i18n: ectx: property (text), widget (QLabel, lPositionY)
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:133
 #, kde-format
-msgid "Specify the name of the image file"
-msgstr "Zehaztu irudi-fitxategiaren izena"
+msgid "Position Y:"
+msgstr "Y kokapena:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPositionYLogical)
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:114
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:186
 #: src/kdefrontend/ui/labelwidget.ui:282
 #, kde-format
 msgid "Y:"
 msgstr "Y:"
 
-#. i18n: ectx: property (text), widget (QLabel, lPositionY)
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:170
-#, kde-format
-msgid "Position Y:"
-msgstr "Y kokapena:"
-
-#. i18n: ectx: property (text), widget (QLabel, lRatio)
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:243
-#, kde-format
-msgid "Keep Ratio:"
-msgstr "Mantendu proportzioa:"
-
-#. i18n: ectx: property (text), widget (QLabel, lPositionX)
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:300
-#, kde-format
-msgid "Position X:"
-msgstr "X kokapena:"
-
-#. i18n: ectx: property (text), widget (QLabel, lVerticalAlignment)
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:307
-#, kde-format
-msgid "Vert. align.:"
-msgstr "Lerrok. bert.:"
-
 #. i18n: ectx: property (text), widget (QLabel, lPositionXLogical)
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:340
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:212
 #: src/kdefrontend/ui/labelwidget.ui:275
 #, kde-format
 msgid "X:"
 msgstr "X:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbBindLogicalPos)
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:428
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:219
 #: src/kdefrontend/ui/labelwidget.ui:346
 #, kde-format
 msgid "Logical Coordinates"
 msgstr "Koordenatu logikoak"
 
+#. i18n: ectx: property (text), widget (QLabel, lPositionX)
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:229
+#, kde-format
+msgid "Position X:"
+msgstr "X kokapena:"
+
 #. i18n: ectx: property (text), widget (QLabel, lEmbedded)
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:454
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:341
 #, kde-format
 msgid "Embedded:"
 msgstr "Kapsulatuta:"
+
+#. i18n: ectx: property (text), widget (QLabel, lVerticalAlignment)
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:361
+#, kde-format
+msgid "Vert. align.:"
+msgstr "Lerrok. bert.:"
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, leFileName)
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:418
+#, kde-format
+msgid "Specify the name of the image file"
+msgstr "Zehaztu irudi-fitxategiaren izena"
+
+#. i18n: ectx: property (text), widget (QLabel, lRatio)
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:446
+#, kde-format
+msgid "Keep Ratio:"
+msgstr "Mantendu proportzioa:"
 
 #. i18n: ectx: property (text), widget (QLabel, lCurves)
 #: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:32
@@ -19671,7 +19682,7 @@ msgstr "Banda-zabalera:"
 #. i18n: ectx: property (text), widget (QLabel, lPlotRange)
 #: src/kdefrontend/ui/dockwidgets/kdeplotdock.ui:180
 #: src/kdefrontend/ui/dockwidgets/qqplotdock.ui:30
-#: src/kdefrontend/ui/dockwidgets/referencerangedock.ui:46
+#: src/kdefrontend/ui/dockwidgets/referencerangedock.ui:135
 #, fuzzy, kde-format
 msgid "Plot range:"
 msgstr "Grafikaren barrutia"
@@ -19846,22 +19857,22 @@ msgstr "p(x) ="
 msgid "Percentiles"
 msgstr "Pertzentilak"
 
-#. i18n: ectx: property (text), widget (QLabel, lPositionDateTimeStart)
-#. i18n: ectx: property (text), widget (QLabel, lPositionStart)
-#: src/kdefrontend/ui/dockwidgets/referencerangedock.ui:63
-#: src/kdefrontend/ui/dockwidgets/referencerangedock.ui:111
-#, fuzzy, kde-format
-msgid "Start x:"
-msgstr "Hasi"
-
 #. i18n: ectx: property (text), widget (QLabel, lPositionDateTimeEnd)
 #. i18n: ectx: property (text), widget (QLabel, lPositionEnd)
-#: src/kdefrontend/ui/dockwidgets/referencerangedock.ui:223
-#: src/kdefrontend/ui/dockwidgets/referencerangedock.ui:285
+#: src/kdefrontend/ui/dockwidgets/referencerangedock.ui:49
+#: src/kdefrontend/ui/dockwidgets/referencerangedock.ui:105
 #, fuzzy, kde-format
 #| msgid "End row:"
 msgid "End x:"
 msgstr "Amaierako errenkada:"
+
+#. i18n: ectx: property (text), widget (QLabel, lPositionDateTimeStart)
+#. i18n: ectx: property (text), widget (QLabel, lPositionStart)
+#: src/kdefrontend/ui/dockwidgets/referencerangedock.ui:290
+#: src/kdefrontend/ui/dockwidgets/referencerangedock.ui:313
+#, fuzzy, kde-format
+msgid "Start x:"
+msgstr "Hasi"
 
 #. i18n: ectx: property (text), widget (QLabel, lShowComments)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:50
@@ -20848,12 +20859,6 @@ msgstr "Forma:"
 #, kde-format
 msgid "Offset Y:"
 msgstr "Y jatorri-aldaketa:"
-
-#. i18n: ectx: property (text), widget (QCheckBox, chbLock)
-#: src/kdefrontend/ui/labelwidget.ui:759
-#, kde-format
-msgid "Locked"
-msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lY)
 #: src/kdefrontend/ui/matrix/matrixfunctionwidget.ui:116
@@ -22368,14 +22373,14 @@ msgstr ""
 "LaTeX instalatu beharra dago</li><li>Markdown - Markdown markatzeko lengoaia "
 "erabiltzen duen testu-ezarpena</li></ul>"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:854
-#: src/kdefrontend/widgets/LabelWidget.cpp:880
+#: src/kdefrontend/widgets/LabelWidget.cpp:858
+#: src/kdefrontend/widgets/LabelWidget.cpp:884
 #, kde-format
 msgid "Date"
 msgstr "Data"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:862
-#: src/kdefrontend/widgets/LabelWidget.cpp:888
+#: src/kdefrontend/widgets/LabelWidget.cpp:866
+#: src/kdefrontend/widgets/LabelWidget.cpp:892
 #, kde-format
 msgid "Date and Time"
 msgstr "Data eta ordua"
