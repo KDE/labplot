@@ -1156,10 +1156,9 @@ void MainWin::updateGUI() {
 	if (m_closing || m_projectClosing)
 		return;
 
-	// reset the touchbar
 #ifdef HAVE_TOUCHBAR
+	// reset the touchbar
 	m_touchBar->clear();
-
 	m_touchBar->addAction(m_undoIconOnlyAction);
 	m_touchBar->addAction(m_redoIconOnlyAction);
 	m_touchBar->addSeparator();
@@ -1173,8 +1172,6 @@ void MainWin::updateGUI() {
 		factory->container(QLatin1String("datapicker"), this)->setEnabled(false);
 		factory->container(QLatin1String("spreadsheet_toolbar"), this)->hide();
 		factory->container(QLatin1String("worksheet_toolbar"), this)->hide();
-		// 		factory->container(QLatin1String("histogram_toolbar"),this)->hide();
-		// 		factory->container(QLatin1String("barchart_toolbar"),this)->hide();
 		factory->container(QLatin1String("cartesian_plot_toolbar"), this)->hide();
 		factory->container(QLatin1String("datapicker_toolbar"), this)->hide();
 #ifdef HAVE_CANTOR_LIBS
