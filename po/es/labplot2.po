@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-12-20 00:38+0000\n"
-"PO-Revision-Date: 2023-12-12 19:33+0100\n"
+"PO-Revision-Date: 2023-12-21 01:49+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -8965,10 +8965,9 @@ msgid "Visible"
 msgstr "Visible"
 
 #: src/backend/worksheet/WorksheetElement.cpp:225
-#, fuzzy, kde-format
-#| msgid "Locked"
+#, kde-format
 msgid "Lock"
-msgstr "Bloqueada"
+msgstr "Bloquear"
 
 #: src/backend/worksheet/WorksheetElement.cpp:234
 #, kde-format

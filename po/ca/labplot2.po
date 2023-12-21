@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-12-20 00:38+0000\n"
-"PO-Revision-Date: 2023-12-12 12:48+0100\n"
+"PO-Revision-Date: 2023-12-20 11:39+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -9060,10 +9060,9 @@ msgid "Visible"
 msgstr "Visible"
 
 #: src/backend/worksheet/WorksheetElement.cpp:225
-#, fuzzy, kde-format
-#| msgid "Locked"
+#, kde-format
 msgid "Lock"
-msgstr "Bloquejat"
+msgstr "Bloca"
 
 #: src/backend/worksheet/WorksheetElement.cpp:234
 #, kde-format

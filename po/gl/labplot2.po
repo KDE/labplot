@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-12-20 00:38+0000\n"
-"PO-Revision-Date: 2023-12-13 08:41+0100\n"
+"PO-Revision-Date: 2023-12-20 16:42+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -8976,10 +8976,9 @@ msgid "Visible"
 msgstr "Visíbel."
 
 #: src/backend/worksheet/WorksheetElement.cpp:225
-#, fuzzy, kde-format
-#| msgid "Locked"
+#, kde-format
 msgid "Lock"
-msgstr "Bloqueado"
+msgstr "Bloquear"
 
 #: src/backend/worksheet/WorksheetElement.cpp:234
 #, kde-format
