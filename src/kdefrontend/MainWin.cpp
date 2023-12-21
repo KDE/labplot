@@ -1475,6 +1475,10 @@ bool MainWin::newProject(bool createInitialContent) {
 		case NewProject::WithSpreadsheet:
 			newSpreadsheet();
 			break;
+		case NewProject::WithWorksheetSpreadsheet:
+			newWorksheet();
+			newSpreadsheet();
+			break;
 		case NewProject::WithNotebook: {
 #ifdef HAVE_CANTOR_LIBS
 			const auto& backend = group.readEntry(QLatin1String("LoadOnStartNotebook"), QString());

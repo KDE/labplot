@@ -196,6 +196,7 @@ void SettingsGeneralPage::retranslateUi() {
 	ui.cbNewProject->clear();
 	ui.cbNewProject->addItem(i18n("With Worksheet"), static_cast<int>(MainWin::NewProject::WithWorksheet));
 	ui.cbNewProject->addItem(i18n("With Spreadsheet"), static_cast<int>(MainWin::NewProject::WithSpreadsheet));
+	ui.cbNewProject->addItem(i18n("With Worksheet and Spreadsheet"), static_cast<int>(MainWin::NewProject::WithWorksheetSpreadsheet));
 #ifdef HAVE_CANTOR_LIBS
 	ui.cbNewProject->addItem(i18n("With Notebook"), static_cast<int>(MainWin::NewProject::WithNotebook));
 #endif
