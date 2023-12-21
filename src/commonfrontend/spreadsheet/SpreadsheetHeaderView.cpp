@@ -12,6 +12,7 @@
 #include "SpreadsheetCommentsHeaderModel.h"
 #include "SpreadsheetSparkLineHeaderModel.h"
 #include "backend/lib/macros.h"
+#include <QPainter>
 
 /*!
  \class SpreadsheetCommentsHeaderView
@@ -73,6 +74,10 @@ void SpreadsheetSparkLineHeaderView::setModel(QAbstractItemModel* model) {
 	QHeaderView::setModel(new_model);
 }
 
+SpreadsheetSparkLinesHeaderModel* SpreadsheetSparkLineHeaderView::getModel() const {
+	return static_cast<SpreadsheetSparkLinesHeaderModel*>(model());
+}
+
 /*!
  \class SpreadsheetDoubleHeaderView
  \brief Horizontal header for SpreadsheetView displaying comments in a second header
@@ -119,12 +124,16 @@ void SpreadsheetHeaderView::setModel(QAbstractItemModel* model) {
 	m_commentSlave->setModel(model);
 	m_sparkLineSlave->setModel(model);
 	QHeaderView::setModel(model);
+
 	connect(model, &QAbstractItemModel::headerDataChanged, this, &SpreadsheetHeaderView::headerDataChanged);
 }
 
 void SpreadsheetHeaderView::paintSection(QPainter* painter, const QRect& rect, int logicalIndex) const {
 	QRect master_rect = rect;
-
+	SpreadsheetSparkLinesHeaderModel* model = m_sparkLineSlave->getModel();
+	// Fetch QPixmap information from the model's headerData
+	QPixmap pixmap = model->headerData(logicalIndex, Qt::Horizontal, static_cast<int>(SpreadsheetModel::CustomDataRole::SparkLineRole)).value<QPixmap>();
+	pixmap.save(QLatin1String("/home/kuntal/kde/src/labplot/save_image2.jpg"), "JPEG", 95);
 	if (m_showComments && m_showSparkLines) {
 		if (m_showComments && m_showSparkLines) {
 			int totalHeight = m_commentSlave->sizeHint().height() + m_sparkLineSlave->sizeHint().height();
@@ -136,17 +145,14 @@ void SpreadsheetHeaderView::paintSection(QPainter* painter, const QRect& rect, i
 				QRect slave_rect = rect.adjusted(0, m_commentSlave->sizeHint().height(), 0, 0);
 				m_commentSlave->paintSection(painter, slave_rect, logicalIndex);
 			}
-
 			if (m_showSparkLines && rect.height() > QHeaderView::sizeHint().height()) {
 				QRect slave2_rect = rect.adjusted(0, QHeaderView::sizeHint().height() + m_sparkLineSlave->sizeHint().height(), 0, 0);
-				m_sparkLineSlave->paintSection(painter, slave2_rect, logicalIndex);
+				painter->drawPixmap(slave2_rect, pixmap);
 			}
-
 			return;
 		}
 	}
 	QHeaderView::paintSection(painter, master_rect, logicalIndex);
-
 
 	if (m_showComments || m_showSparkLines) {
 		if (m_showComments) {
@@ -165,7 +171,7 @@ void SpreadsheetHeaderView::paintSection(QPainter* painter, const QRect& rect, i
 
 			if (m_showSparkLines && rect.height() > QHeaderView::sizeHint().height()) {
 				QRect slave_rect = rect.adjusted(0, QHeaderView::sizeHint().height(), 0, 0);
-				m_sparkLineSlave->paintSection(painter, slave_rect, logicalIndex);
+				painter->drawPixmap(slave_rect, pixmap);
 			}
 			return;
 		}

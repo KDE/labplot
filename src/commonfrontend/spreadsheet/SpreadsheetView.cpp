@@ -178,6 +178,7 @@ void SpreadsheetView::init() {
 
 	// horizontal header
 	m_horizontalHeader = new SpreadsheetHeaderView(this);
+
 	m_horizontalHeader->setSectionsClickable(true);
 	m_horizontalHeader->setHighlightSections(true);
 	m_tableView->setHorizontalHeader(m_horizontalHeader);

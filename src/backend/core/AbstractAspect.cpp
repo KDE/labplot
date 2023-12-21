@@ -253,7 +253,7 @@ QPixmap AbstractAspect::sparkLine() const {
 			DEBUG(pix.size().height())
 			DEBUG(pix.size().width())
 			DEBUG("XXX")
-
+			pix.save(QLatin1String("/home/kuntal/kde/src/labplot/save_image.jpg"),"JPEG", 95);
 			return pix;
 		}
 	}

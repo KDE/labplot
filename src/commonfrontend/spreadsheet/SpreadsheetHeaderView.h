@@ -11,6 +11,8 @@
 #ifndef SPREADSHEETHEADERVIEW_H
 #define SPREADSHEETHEADERVIEW_H
 
+#include "SpreadsheetSparkLineHeaderModel.h"
+
 #include <QHeaderView>
 
 class SpreadsheetCommentsHeaderView : public QHeaderView {
@@ -44,8 +46,10 @@ public:
 	~SpreadsheetSparkLineHeaderView() override;
 
 	void setModel(QAbstractItemModel*) override;
+
 	friend class SpreadsheetHeaderView; // access to paintSection (protected)
 
+	SpreadsheetSparkLinesHeaderModel *getModel() const;
 };
 
 class SpreadsheetHeaderView : public QHeaderView {
