@@ -1392,8 +1392,8 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList names, 
 	//	PERFTRACE(Q_FUNC_INFO);
 	DEBUG(Q_FUNC_INFO << ", mode = " << ENUM_TO_STRING(AbstractFileFilter, ImportMode, mode) << ", cols = " << cols)
 	// QDEBUG("	column name list = " << colNameList)
-	//  name additional columns
-	Q_EMIT aboutToResize();
+
+	Q_EMIT aboutToResize(); // call this to disable the retransforms in worksheet elements in Project
 
 	// make sure the column names provided by the user don't have any duplicates
 	QStringList uniqueNames;
@@ -1454,24 +1454,19 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList names, 
 			Q_EMIT aspectsInserted(columnsCount, cols - 1);
 		}
 
-		// 1. suppressretransform for all WorksheetElements
-		// 2. rename the columns that were already available
-		// 3. suppress the dataChanged signal for all columns
-		// 4. send aspectDescriptionChanged because otherwise the column
-		//    will not be connected again to the curves (project.cpp, descriptionChanged)
-		// 5. Enable retransform for all WorksheetElements
+		// 1. rename the columns that were already available
+		// 2. suppress the dataChanged signal for all columns (will be restored later in finalizeImport())
 		const auto& columns = children<Column>();
 		int index = 0;
 		for (auto* column : columns) {
 			column->setSuppressDataChangedSignal(true);
-			column->reset();
 			column->setName(uniqueNames.at(index), AbstractAspect::NameHandling::UniqueNotRequired);
-			column->aspectDescriptionChanged(column);
 			++index;
 		}
 	}
 
-	Q_EMIT resizeFinished();
+	Q_EMIT resizeFinished(); // call this to re-enable the retransforms in worksheet elements in Project
+
 	return columnOffset;
 }
 
@@ -1483,26 +1478,12 @@ void Spreadsheet::finalizeImport(size_t columnOffset,
 	PERFTRACE(QLatin1String(Q_FUNC_INFO));
 	// DEBUG(Q_FUNC_INFO << ", start/end col = " << startColumn << " / " << endColumn);
 
-	// determine the dependent plots
-	QVector<CartesianPlot*> plots;
-	if (importMode == AbstractFileFilter::ImportMode::Replace) {
-		for (size_t n = startColumn; n <= endColumn; n++) {
-			auto* column = this->column((int)(columnOffset + n - startColumn));
-			if (column)
-				column->addUsedInPlots(plots);
-		}
-
-		// suppress retransform in the dependent plots
-		for (auto* plot : plots)
-			plot->setSuppressRetransform(true);
-	}
-
 	// set the comments for each of the columns if datasource is a spreadsheet
 	const int rows = rowCount();
 	for (size_t col = startColumn; col <= endColumn; col++) {
 		// DEBUG(Q_FUNC_INFO << ", column " << columnOffset + col - startColumn);
 		Column* column = this->column((int)(columnOffset + col - startColumn));
-		// DEBUG(Q_FUNC_INFO << ", type " << ENUM_TO_STRING(AbstractColumn, ColumnMode, column->columnMode()))
+		DEBUG(Q_FUNC_INFO << ", type " << ENUM_TO_STRING(AbstractColumn, ColumnMode, column->columnMode()))
 
 		QString comment;
 		switch (column->columnMode()) {
@@ -1535,14 +1516,6 @@ void Spreadsheet::finalizeImport(size_t columnOffset,
 		if (importMode == AbstractFileFilter::ImportMode::Replace) {
 			column->setSuppressDataChangedSignal(false);
 			column->setChanged();
-		}
-	}
-
-	if (importMode == AbstractFileFilter::ImportMode::Replace) {
-		// retransform the dependent plots
-		for (auto* plot : plots) {
-			plot->setSuppressRetransform(false);
-			plot->dataChanged(-1, -1); // TODO: check if all ranges must be updated
 		}
 	}
 
