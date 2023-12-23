@@ -285,14 +285,12 @@ struct funs _functions[] = {
 	{[]() { return i18n("Heavyside theta function"); }, "theta", nsl_sf_theta, 1, nullptr, FunctionGroups::StandardMathematicalFunctions},
 	{[]() { return i18n("Harmonic number function"); }, "harmonic", nsl_sf_harmonic, 1, nullptr, FunctionGroups::StandardMathematicalFunctions},
 
-#ifndef HAVE_WINDOWS
 	{[]() { return i18n("Cube root"); }, "cbrt", static_cast<double (*)(double)>(&cbrt), 1, nullptr, FunctionGroups::StandardMathematicalFunctions},
 	{[]() { return i18n("Extract the exponent"); }, "logb", static_cast<double (*)(double)>(&logb), 1, nullptr, FunctionGroups::StandardMathematicalFunctions},
 	{[]() { return i18n("Round to an integer value"); }, "rint", static_cast<double (*)(double)>(&rint), 1, nullptr, FunctionGroups::StandardMathematicalFunctions},
 	{[]() { return i18n("Round to the nearest integer"); }, "round", static_cast<double (*)(double)>(&round), 1, nullptr, FunctionGroups::StandardMathematicalFunctions},
 	{[]() { return i18n("Round to the nearest integer"); }, "trunc", static_cast<double (*)(double)>(&trunc), 1, nullptr, FunctionGroups::StandardMathematicalFunctions},
 	{[]() { return i18n("Round to n digits roundn(x;n)"); }, "roundn", static_cast<double (*)(double, double)>(&roundn), 2, nullptr, FunctionGroups::StandardMathematicalFunctions},
-#endif
 	{[]() { return QStringLiteral("log(1+x)"); }, "log1p", gsl_log1p, 1, nullptr, FunctionGroups::StandardMathematicalFunctions},
 	{[]() { return QStringLiteral("x * 2^e"); }, "ldexp", nsl_sf_ldexp, 2, &parameterXE, FunctionGroups::StandardMathematicalFunctions},
 	{[]() { return QStringLiteral("x^y"); }, "powint", nsl_sf_powint, 2, nullptr, FunctionGroups::StandardMathematicalFunctions},
