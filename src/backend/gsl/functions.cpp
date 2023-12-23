@@ -40,7 +40,7 @@ double outside(const double x, const double min, const double max);
 double equalEpsilon(const double v1, const double v2, const double epsilon);
 double betweenIncluded(const double x, const double min, const double max);
 double outsideIncluded(const double x, const double min, const double max);
-double roundn(const double v1, const double precision);
+double roundn(const double v, const double precision);
 
 // Parameter function definitions
 QString parameterXE(int parameterIndex);
@@ -909,9 +909,9 @@ double equalEpsilon(const double v1, const double v2, const double epsilon) {
 	return 0;
 }
 
-double roundn(const double v1, const double precision) {
+double roundn(const double v, const double precision) {
 	const int mult = std::pow(10, (int)precision);
-	return static_cast<double>(std::round(v1 * mult)) / mult;
+	return static_cast<double>(std::round(v * mult)) / mult;
 }
 
 // ########################################################################

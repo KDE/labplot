@@ -245,6 +245,54 @@ void ExpressionParserTest::testRoundn() {
 	QCOMPARE(fnct(10000.1, 5), 10000.1);
 }
 
+void ExpressionParserTest::testSpecialFunctions() {
+	auto fnct = getFunction1(QStringLiteral("cbrt"));
+	QVERIFY(fnct);
+
+	QCOMPARE(fnct(8.), 2.);
+	QCOMPARE(fnct(-8.), -2.);
+
+	fnct = getFunction1(QStringLiteral("logb"));
+	QVERIFY(fnct);
+
+	QCOMPARE(fnct(0.1), -4.);
+	QCOMPARE(fnct(0.4), -2.);
+	QCOMPARE(fnct(0.5), -1.);
+	QCOMPARE(fnct(8.), 3.);
+	QCOMPARE(fnct(10.), 3.);
+	QCOMPARE(fnct(100.), 6.);
+
+	fnct = getFunction1(QStringLiteral("rint"));
+	QVERIFY(fnct);
+
+	QCOMPARE(fnct(0.), 0.);
+	QCOMPARE(fnct(0.5), 0.);
+	QCOMPARE(fnct(1.49), 1.);
+	QCOMPARE(fnct(-0.5), 0.);
+	QCOMPARE(fnct(-0.99), -1.);
+	QCOMPARE(fnct(-1.5), -2.);
+
+	fnct = getFunction1(QStringLiteral("round"));
+	QVERIFY(fnct);
+
+	QCOMPARE(fnct(0.), 0.);
+	QCOMPARE(fnct(0.5), 1.);
+	QCOMPARE(fnct(1.49), 1.);
+	QCOMPARE(fnct(-0.5), -1.);
+	QCOMPARE(fnct(-0.99), -1.);
+	QCOMPARE(fnct(-1.5), -2.);
+
+	fnct = getFunction1(QStringLiteral("trunc"));
+	QVERIFY(fnct);
+
+	QCOMPARE(fnct(0.), 0.);
+	QCOMPARE(fnct(0.5), 0.);
+	QCOMPARE(fnct(1.49), 1.);
+	QCOMPARE(fnct(-0.5), -0.);
+	QCOMPARE(fnct(-0.99), -0.);
+	QCOMPARE(fnct(-1.5), -1.);
+}
+
 void ExpressionParserTest::testevaluateCartesian() {
 	const QString expr = QStringLiteral("x+y");
 	const QStringList vars = {QStringLiteral("x"), QStringLiteral("y")};
