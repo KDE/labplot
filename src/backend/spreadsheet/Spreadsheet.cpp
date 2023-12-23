@@ -1454,8 +1454,8 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList names, 
 			Q_EMIT aspectsInserted(columnsCount, cols - 1);
 		}
 
-		// 1. rename the columns that were already available
-		// 2. suppress the dataChanged signal for all columns (will be restored later in finalizeImport())
+		// 1. suppress the dataChanged signal for all columns (will be restored later in finalizeImport())
+		// 2. rename the columns that were already available
 		const auto& columns = children<Column>();
 		int index = 0;
 		for (auto* column : columns) {
@@ -1477,6 +1477,20 @@ void Spreadsheet::finalizeImport(size_t columnOffset,
 								 AbstractFileFilter::ImportMode importMode) {
 	PERFTRACE(QLatin1String(Q_FUNC_INFO));
 	// DEBUG(Q_FUNC_INFO << ", start/end col = " << startColumn << " / " << endColumn);
+
+	// determine the dependent plots
+	QVector<CartesianPlot*> plots;
+	if (importMode == AbstractFileFilter::ImportMode::Replace) {
+		for (size_t n = startColumn; n <= endColumn; n++) {
+			auto* column = this->column((int)(columnOffset + n - startColumn));
+			if (column)
+				column->addUsedInPlots(plots);
+		}
+
+		// suppress retransform in the dependent plots
+		for (auto* plot : plots)
+			plot->setSuppressRetransform(true);
+	}
 
 	// set the comments for each of the columns if datasource is a spreadsheet
 	const int rows = rowCount();
@@ -1516,6 +1530,14 @@ void Spreadsheet::finalizeImport(size_t columnOffset,
 		if (importMode == AbstractFileFilter::ImportMode::Replace) {
 			column->setSuppressDataChangedSignal(false);
 			column->setChanged();
+		}
+	}
+
+	if (importMode == AbstractFileFilter::ImportMode::Replace) {
+		// retransform the dependent plots
+		for (auto* plot : plots) {
+			plot->setSuppressRetransform(false);
+			plot->dataChanged(-1, -1); // TODO: check if all ranges must be updated
 		}
 	}
 
