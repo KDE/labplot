@@ -236,6 +236,15 @@ void ExpressionParserTest::testequalEpsilon() {
 	QCOMPARE(fnct(-5.11, -5.3, 0.2), 1);
 }
 
+void ExpressionParserTest::testRoundn() {
+	auto fnct = getFunction2(QStringLiteral("roundn"));
+	QVERIFY(fnct);
+
+	QCOMPARE(fnct(3.1415, 2), 3.14); // round down
+	QCOMPARE(fnct(10.2397281298423, 5), 10.23973); // roundup
+	QCOMPARE(fnct(10000.1, 5), 10000.1);
+}
+
 void ExpressionParserTest::testevaluateCartesian() {
 	const QString expr = QStringLiteral("x+y");
 	const QStringList vars = {QStringLiteral("x"), QStringLiteral("y")};

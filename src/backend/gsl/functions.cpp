@@ -40,6 +40,7 @@ double outside(const double x, const double min, const double max);
 double equalEpsilon(const double v1, const double v2, const double epsilon);
 double betweenIncluded(const double x, const double min, const double max);
 double outsideIncluded(const double x, const double min, const double max);
+double roundn(const double v1, const double precision);
 
 // Parameter function definitions
 QString parameterXE(int parameterIndex);
@@ -290,6 +291,7 @@ struct funs _functions[] = {
 	{[]() { return i18n("Round to an integer value"); }, "rint", static_cast<double (*)(double)>(&rint), 1, nullptr, FunctionGroups::StandardMathematicalFunctions},
 	{[]() { return i18n("Round to the nearest integer"); }, "round", static_cast<double (*)(double)>(&round), 1, nullptr, FunctionGroups::StandardMathematicalFunctions},
 	{[]() { return i18n("Round to the nearest integer"); }, "trunc", static_cast<double (*)(double)>(&trunc), 1, nullptr, FunctionGroups::StandardMathematicalFunctions},
+	{[]() { return i18n("Round to n digits roundn(x;n)"); }, "roundn", static_cast<double (*)(double, double)>(&roundn), 2, nullptr, FunctionGroups::StandardMathematicalFunctions},
 #endif
 	{[]() { return QStringLiteral("log(1+x)"); }, "log1p", gsl_log1p, 1, nullptr, FunctionGroups::StandardMathematicalFunctions},
 	{[]() { return QStringLiteral("x * 2^e"); }, "ldexp", nsl_sf_ldexp, 2, &parameterXE, FunctionGroups::StandardMathematicalFunctions},
@@ -907,6 +909,11 @@ double equalEpsilon(const double v1, const double v2, const double epsilon) {
 	if (fabs(v2 - v1) <= epsilon)
 		return 1;
 	return 0;
+}
+
+double roundn(const double v1, const double precision) {
+	const int mult = std::pow(10, (int)precision);
+	return static_cast<double>(std::round(v1 * mult)) / mult;
 }
 
 // ########################################################################
