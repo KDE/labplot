@@ -9,6 +9,7 @@
 */
 
 #include "functions.h"
+#include "backend/nsl/nsl_math.h"
 #include "backend/nsl/nsl_sf_basic.h"
 #include "parser.h"
 #include "parserFunctionTypes.h"
@@ -290,7 +291,7 @@ struct funs _functions[] = {
 	{[]() { return i18n("Round to an integer value"); }, "rint", static_cast<double (*)(double)>(&rint), 1, nullptr, FunctionGroups::StandardMathematicalFunctions},
 	{[]() { return i18n("Round to the nearest integer"); }, "round", static_cast<double (*)(double)>(&round), 1, nullptr, FunctionGroups::StandardMathematicalFunctions},
 	{[]() { return i18n("Round to the nearest integer"); }, "trunc", static_cast<double (*)(double)>(&trunc), 1, nullptr, FunctionGroups::StandardMathematicalFunctions},
-	{[]() { return i18n("Round to n digits roundn(x;n)"); }, "roundn", static_cast<double (*)(double, double)>(&roundn), 2, nullptr, FunctionGroups::StandardMathematicalFunctions},
+	{[]() { return i18n("Round to y decimal places"); }, "roundn", static_cast<double (*)(double, double)>(&roundn), 2, nullptr, FunctionGroups::StandardMathematicalFunctions},
 	{[]() { return QStringLiteral("log(1+x)"); }, "log1p", gsl_log1p, 1, nullptr, FunctionGroups::StandardMathematicalFunctions},
 	{[]() { return QStringLiteral("x * 2^e"); }, "ldexp", nsl_sf_ldexp, 2, &parameterXE, FunctionGroups::StandardMathematicalFunctions},
 	{[]() { return QStringLiteral("x^y"); }, "powint", nsl_sf_powint, 2, nullptr, FunctionGroups::StandardMathematicalFunctions},
@@ -910,8 +911,7 @@ double equalEpsilon(const double v1, const double v2, const double epsilon) {
 }
 
 double roundn(const double v, const double precision) {
-	const int mult = std::pow(10, (int)precision);
-	return static_cast<double>(std::round(v * mult)) / mult;
+	return nsl_math_round_places(v, static_cast<int>(precision));
 }
 
 // ########################################################################

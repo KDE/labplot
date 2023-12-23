@@ -243,6 +243,13 @@ void ExpressionParserTest::testRoundn() {
 	QCOMPARE(fnct(3.1415, 2), 3.14); // round down
 	QCOMPARE(fnct(10.2397281298423, 5), 10.23973); // roundup
 	QCOMPARE(fnct(10000.1, 5), 10000.1);
+	QCOMPARE(fnct(123.45, -1), 120.);
+	QCOMPARE(fnct(1.45, 1), 1.5);
+	QCOMPARE(fnct(-1.45, 1), -1.5);
+	QCOMPARE(fnct(-1.44, 1), -1.4);
+	QCOMPARE(fnct(-123.45, 1), -123.5);
+	QCOMPARE(fnct(-123.44, 1), -123.4);
+	QCOMPARE(fnct(-123.45, -1), -120);
 }
 
 void ExpressionParserTest::testSpecialFunctions() {
