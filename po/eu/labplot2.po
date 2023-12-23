@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-20 00:38+0000\n"
+"POT-Creation-Date: 2023-12-23 00:38+0000\n"
 "PO-Revision-Date: 2023-09-19 23:30+0200\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -395,13 +395,13 @@ msgstr "Sa%1"
 msgid "Import Data"
 msgstr "Inportatu datuak"
 
-#: src/backend/core/AbstractPart.cpp:115 src/kdefrontend/MainWin.cpp:738
-#: src/kdefrontend/MainWin.cpp:747
+#: src/backend/core/AbstractPart.cpp:115 src/kdefrontend/MainWin.cpp:720
+#: src/kdefrontend/MainWin.cpp:729
 #, kde-format
 msgid "From File..."
 msgstr "Fitxategitik..."
 
-#: src/backend/core/AbstractPart.cpp:117 src/kdefrontend/MainWin.cpp:754
+#: src/backend/core/AbstractPart.cpp:117 src/kdefrontend/MainWin.cpp:736
 #, kde-format
 msgid "From SQL Database..."
 msgstr "SQL datu-basetik..."
@@ -428,7 +428,7 @@ msgstr "Inprimatu"
 msgid "Print Preview"
 msgstr "Inprimatze aurre-ikuspegia"
 
-#: src/backend/core/AbstractPart.cpp:135 src/kdefrontend/MainWin.cpp:826
+#: src/backend/core/AbstractPart.cpp:135 src/kdefrontend/MainWin.cpp:808
 #, kde-format
 msgid "&Close"
 msgstr "It&xi"
@@ -1806,7 +1806,7 @@ msgstr "Ezezaguna"
 #: src/backend/datasources/filters/MatioFilter.cpp:434
 #: src/commonfrontend/workbook/WorkbookView.cpp:53
 #: src/commonfrontend/workbook/WorkbookView.cpp:160
-#: src/kdefrontend/MainWin.cpp:709 src/kdefrontend/MainWin.cpp:2124
+#: src/kdefrontend/MainWin.cpp:691 src/kdefrontend/MainWin.cpp:2056
 #, kde-format
 msgid "Matrix"
 msgstr "Matrizea"
@@ -7735,7 +7735,7 @@ msgstr ""
 #: src/commonfrontend/workbook/WorkbookView.cpp:135
 #: src/commonfrontend/worksheet/WorksheetView.cpp:291
 #: src/commonfrontend/worksheet/WorksheetView.cpp:430
-#: src/kdefrontend/MainWin.cpp:953
+#: src/kdefrontend/MainWin.cpp:935
 #, fuzzy, kde-format
 msgid "Add New"
 msgstr "Gehitu berria..."
@@ -10529,8 +10529,8 @@ msgstr ""
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:115
 #: src/kdefrontend/dockwidgets/XYAnalysisCurveDock.cpp:57
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:74
-#: src/kdefrontend/labplot2ui.rc:32 src/kdefrontend/MainWin.cpp:703
-#: src/kdefrontend/MainWin.cpp:2106 src/kdefrontend/SettingsDialog.cpp:72
+#: src/kdefrontend/labplot2ui.rc:32 src/kdefrontend/MainWin.cpp:685
+#: src/kdefrontend/MainWin.cpp:2038 src/kdefrontend/SettingsDialog.cpp:72
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:237
 #, fuzzy, kde-format
 msgid "Spreadsheet"
@@ -10706,7 +10706,7 @@ msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
 #: src/commonfrontend/worksheet/WorksheetView.cpp:359
-#: src/kdefrontend/MainWin.cpp:2587
+#: src/kdefrontend/MainWin.cpp:2519
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1426
 #, fuzzy, kde-format
 msgid "Cursor"
@@ -11543,7 +11543,7 @@ msgid "Data format && preview"
 msgstr ""
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1232
-#: src/kdefrontend/SettingsGeneralPage.cpp:217
+#: src/kdefrontend/SettingsGeneralPage.cpp:226
 #, fuzzy, kde-format
 msgid "Automatic"
 msgstr "Automatikoa"
@@ -11823,7 +11823,7 @@ msgid "Open LabPlot Project"
 msgstr ""
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:420
-#: src/kdefrontend/MainWin.cpp:1566
+#: src/kdefrontend/MainWin.cpp:1504
 #, kde-format
 msgid "LabPlot Projects (%1)"
 msgstr ""
@@ -11835,7 +11835,7 @@ msgid "Open Origin Project"
 msgstr ""
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:426
-#: src/kdefrontend/MainWin.cpp:1571
+#: src/kdefrontend/MainWin.cpp:1509
 #, kde-format
 msgid "Origin Projects (%1)"
 msgstr ""
@@ -12076,7 +12076,7 @@ msgstr ""
 
 #: src/kdefrontend/datasources/MQTTSubscriptionWidget.cpp:856
 #: src/kdefrontend/datasources/MQTTSubscriptionWidget.cpp:858
-#: src/kdefrontend/MainWin.cpp:2929
+#: src/kdefrontend/MainWin.cpp:2861
 #, fuzzy, kde-format
 msgid "Warning"
 msgstr "Abisua"
@@ -13621,7 +13621,7 @@ msgid ""
 "installation."
 msgstr ""
 
-#: src/kdefrontend/GuiObserver.cpp:191 src/kdefrontend/MainWin.cpp:1498
+#: src/kdefrontend/GuiObserver.cpp:191 src/kdefrontend/MainWin.cpp:1410
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Properties"
@@ -14400,15 +14400,15 @@ msgid "Failed to Open"
 msgstr "Irekitzea huts egin du"
 
 #. i18n: ectx: ToolBar (worksheet_toolbar)
-#: src/kdefrontend/labplot2ui.rc:24 src/kdefrontend/MainWin.cpp:715
-#: src/kdefrontend/MainWin.cpp:2142 src/kdefrontend/SettingsDialog.cpp:67
+#: src/kdefrontend/labplot2ui.rc:24 src/kdefrontend/MainWin.cpp:697
+#: src/kdefrontend/MainWin.cpp:2074 src/kdefrontend/SettingsDialog.cpp:67
 #, kde-format
 msgid "Worksheet"
 msgstr "Lan-orria"
 
 #. i18n: ectx: ToolBar (datapicker_toolbar)
-#: src/kdefrontend/labplot2ui.rc:28 src/kdefrontend/MainWin.cpp:698
-#: src/kdefrontend/MainWin.cpp:2098
+#: src/kdefrontend/labplot2ui.rc:28 src/kdefrontend/MainWin.cpp:680
+#: src/kdefrontend/MainWin.cpp:2030
 #, kde-format
 msgid "Data Extractor"
 msgstr "Datu-erauzlea"
@@ -14518,367 +14518,367 @@ msgctxt "%1 is the LabPlot version"
 msgid "Welcome to LabPlot %1"
 msgstr "Ongietorri LabPlot %1(e)ra"
 
-#: src/kdefrontend/MainWin.cpp:675
+#: src/kdefrontend/MainWin.cpp:657
 #, kde-format
 msgid "&Open Example"
 msgstr "&Ireki adibidea"
 
-#: src/kdefrontend/MainWin.cpp:693 src/kdefrontend/MainWin.cpp:2090
+#: src/kdefrontend/MainWin.cpp:675 src/kdefrontend/MainWin.cpp:2022
 #, kde-format
 msgid "Workbook"
 msgstr "Laneko liburua"
 
-#: src/kdefrontend/MainWin.cpp:695
+#: src/kdefrontend/MainWin.cpp:677
 #, kde-format
 msgid "Creates a new workbook for collection spreadsheets, matrices and plots"
 msgstr ""
 "Laneko liburu berri bat sortzen du bildumako kalkulu-orri, matrize eta "
 "diagrametarako"
 
-#: src/kdefrontend/MainWin.cpp:699
+#: src/kdefrontend/MainWin.cpp:681
 #, kde-format
 msgid "Creates a data extractor for getting data from a picture"
 msgstr "Datu-erauzle bat sortzen du, irudi batetik datuak lortzeko"
 
-#: src/kdefrontend/MainWin.cpp:705
+#: src/kdefrontend/MainWin.cpp:687
 #, kde-format
 msgid "Creates a new spreadsheet for data editing"
 msgstr "Kalkulu-orri berri bat sortzen du, datuak editatzeko"
 
-#: src/kdefrontend/MainWin.cpp:711
+#: src/kdefrontend/MainWin.cpp:693
 #, kde-format
 msgid "Creates a new matrix for data editing"
 msgstr "Matrize berri bat sortzen du, datuak editatzeko"
 
-#: src/kdefrontend/MainWin.cpp:717
+#: src/kdefrontend/MainWin.cpp:699
 #, kde-format
 msgid "Creates a new worksheet for data plotting"
 msgstr "Lan-orri berri bat sortzen du, datuak trazatzeko"
 
-#: src/kdefrontend/MainWin.cpp:721 src/kdefrontend/MainWin.cpp:2150
+#: src/kdefrontend/MainWin.cpp:703 src/kdefrontend/MainWin.cpp:2082
 #, kde-format
 msgid "Note"
 msgstr "Oharra"
 
-#: src/kdefrontend/MainWin.cpp:722
+#: src/kdefrontend/MainWin.cpp:704
 #, kde-format
 msgid "Creates a new note for arbitrary text"
 msgstr "Testu arbitrariorako ohar berri bat sortzen du"
 
-#: src/kdefrontend/MainWin.cpp:726 src/kdefrontend/MainWin.cpp:2082
+#: src/kdefrontend/MainWin.cpp:708 src/kdefrontend/MainWin.cpp:2014
 #, kde-format
 msgid "Folder"
 msgstr "Karpeta"
 
-#: src/kdefrontend/MainWin.cpp:727
+#: src/kdefrontend/MainWin.cpp:709
 #, kde-format
 msgid "Creates a new folder to collect sheets and other elements"
 msgstr "Sortu karpeta berri bat orriak eta beste elementu batzuk biltzeko"
 
-#: src/kdefrontend/MainWin.cpp:732
+#: src/kdefrontend/MainWin.cpp:714
 #, kde-format
 msgid "Live Data Source..."
 msgstr "Zuzeneko datu-sorburua..."
 
-#: src/kdefrontend/MainWin.cpp:733
+#: src/kdefrontend/MainWin.cpp:715
 #, kde-format
 msgid "Creates a live data source to read data from a real time device"
 msgstr ""
 "Zuzeneko datu-sorburu bat sortzen du, denbora errealeko gailu batetik datuak "
 "irakurtzeko"
 
-#: src/kdefrontend/MainWin.cpp:740 src/kdefrontend/MainWin.cpp:749
+#: src/kdefrontend/MainWin.cpp:722 src/kdefrontend/MainWin.cpp:731
 #, kde-format
 msgid "Import data from a regular file"
 msgstr "Inportatu datuak fitxategi arrunt batetik"
 
-#: src/kdefrontend/MainWin.cpp:755
+#: src/kdefrontend/MainWin.cpp:737
 #, kde-format
 msgid "Import data from a SQL database"
 msgstr "Inportatu datuak SQL datu-base batetik"
 
-#: src/kdefrontend/MainWin.cpp:759
+#: src/kdefrontend/MainWin.cpp:741
 #, kde-format
 msgid "From Dataset Collection..."
 msgstr "Datu-multzo bildumatik..."
 
-#: src/kdefrontend/MainWin.cpp:760
+#: src/kdefrontend/MainWin.cpp:742
 #, kde-format
 msgid "Imports data from an online dataset"
 msgstr "Datuak inportatzen ditu lerroko datu-multzo batetik"
 
-#: src/kdefrontend/MainWin.cpp:764
+#: src/kdefrontend/MainWin.cpp:746
 #, kde-format
 msgid "LabPlot Project..."
 msgstr "LabPlot proiektua..."
 
-#: src/kdefrontend/MainWin.cpp:765
+#: src/kdefrontend/MainWin.cpp:747
 #, kde-format
 msgid "Import a project from a LabPlot project file (.lml)"
 msgstr "Inportatu proiektu bat LabPlot proiektu-fitxategi batetik (.lml)"
 
-#: src/kdefrontend/MainWin.cpp:770
+#: src/kdefrontend/MainWin.cpp:752
 #, kde-format
 msgid "Origin Project (OPJ)..."
 msgstr "«Origin» proiektua (OPJ)..."
 
-#: src/kdefrontend/MainWin.cpp:771
+#: src/kdefrontend/MainWin.cpp:753
 #, kde-format
 msgid "Import a project from an OriginLab Origin project file (.opj)"
 msgstr ""
 "Inportatu proiektu bat «OriginLab» «Origin» proiektu-fitxategi batetik (.opj)"
 
-#: src/kdefrontend/MainWin.cpp:776
+#: src/kdefrontend/MainWin.cpp:758
 #, kde-format
 msgid "Export..."
 msgstr "Esportatu..."
 
-#: src/kdefrontend/MainWin.cpp:777
+#: src/kdefrontend/MainWin.cpp:759
 #, kde-format
 msgid "Export selected element"
 msgstr "Esportatu hautatutako elementuak"
 
-#: src/kdefrontend/MainWin.cpp:783 src/kdefrontend/MainWin.cpp:2623
-#: src/kdefrontend/MainWin.cpp:2631
+#: src/kdefrontend/MainWin.cpp:765 src/kdefrontend/MainWin.cpp:2555
+#: src/kdefrontend/MainWin.cpp:2563
 #, kde-format
 msgid "Share"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:788
+#: src/kdefrontend/MainWin.cpp:770
 #, kde-format
 msgid "Color Maps Browser"
 msgstr "Kolore-mapa arakatzailea"
 
-#: src/kdefrontend/MainWin.cpp:789
+#: src/kdefrontend/MainWin.cpp:771
 #, kde-format
 msgid "Open dialog to browse through the available color maps."
 msgstr ""
 "Ireki elkarrizketa-koadroa erabilgarri dauden kolore-mapen artean arakatzeko."
 
-#: src/kdefrontend/MainWin.cpp:798
+#: src/kdefrontend/MainWin.cpp:780
 #, kde-format
 msgid "FITS Metadata Editor..."
 msgstr "FITS meta-datu editorea..."
 
-#: src/kdefrontend/MainWin.cpp:799
+#: src/kdefrontend/MainWin.cpp:781
 #, kde-format
 msgid "Open editor to edit FITS meta data"
 msgstr "Ireki editorea FITS meta-datuak editatzeko"
 
-#: src/kdefrontend/MainWin.cpp:808
+#: src/kdefrontend/MainWin.cpp:790
 #, kde-format
 msgid "Undo/Redo History..."
 msgstr "Desegin/berregin historia..."
 
-#: src/kdefrontend/MainWin.cpp:828
+#: src/kdefrontend/MainWin.cpp:810
 #, kde-format
 msgid "Close the active window"
 msgstr "Itxi leiho aktiboa"
 
-#: src/kdefrontend/MainWin.cpp:831
+#: src/kdefrontend/MainWin.cpp:813
 #, kde-format
 msgid "Close &All"
 msgstr "Itxi guzti&ak"
 
-#: src/kdefrontend/MainWin.cpp:832
+#: src/kdefrontend/MainWin.cpp:814
 #, kde-format
 msgid "Close all the windows"
 msgstr "Itxi leiho guztiak"
 
-#: src/kdefrontend/MainWin.cpp:835
+#: src/kdefrontend/MainWin.cpp:817
 #, kde-format
 msgid "Ne&xt"
 msgstr "&Hurrengoa"
 
-#: src/kdefrontend/MainWin.cpp:837
+#: src/kdefrontend/MainWin.cpp:819
 #, kde-format
 msgid "Move the focus to the next window"
 msgstr "Eraman fokua hurrengo leihora"
 
-#: src/kdefrontend/MainWin.cpp:840
+#: src/kdefrontend/MainWin.cpp:822
 #, kde-format
 msgid "Pre&vious"
 msgstr "Aurre&koa"
 
-#: src/kdefrontend/MainWin.cpp:842
+#: src/kdefrontend/MainWin.cpp:824
 #, kde-format
 msgid "Move the focus to the previous window"
 msgstr "Eraman fokua aurreko leihora"
 
-#: src/kdefrontend/MainWin.cpp:849
+#: src/kdefrontend/MainWin.cpp:831
 #, kde-format
 msgid "Current &Folder Only"
 msgstr "Uneko &karpeta bakarrik"
 
-#: src/kdefrontend/MainWin.cpp:854
+#: src/kdefrontend/MainWin.cpp:836
 #, kde-format
 msgid "Current Folder and &Subfolders"
 msgstr "Uneko karpeta eta a&zpikarpetak"
 
-#: src/kdefrontend/MainWin.cpp:858
+#: src/kdefrontend/MainWin.cpp:840
 #, kde-format
 msgid "&All"
 msgstr "Guzti&ak"
 
-#: src/kdefrontend/MainWin.cpp:880
+#: src/kdefrontend/MainWin.cpp:862
 #, kde-format
 msgid "Show Memory Usage"
 msgstr "Erakutsi memoria-erabilera"
 
-#: src/kdefrontend/MainWin.cpp:888
+#: src/kdefrontend/MainWin.cpp:870
 #, kde-format
 msgid "Project Explorer"
 msgstr "Proiektu esploratzailea"
 
-#: src/kdefrontend/MainWin.cpp:893
+#: src/kdefrontend/MainWin.cpp:875
 #, kde-format
 msgid "Properties Explorer"
 msgstr "Propietateen esploratzailea"
 
-#: src/kdefrontend/MainWin.cpp:898
+#: src/kdefrontend/MainWin.cpp:880
 #, fuzzy, kde-format
 #| msgid "Worksheet"
 msgid "Worksheet Preview"
 msgstr "Lan-orria"
 
-#: src/kdefrontend/MainWin.cpp:921
+#: src/kdefrontend/MainWin.cpp:903
 #, kde-format
 msgid "Configure CAS..."
 msgstr "Konfiguratu CAS..."
 
-#: src/kdefrontend/MainWin.cpp:922
+#: src/kdefrontend/MainWin.cpp:904
 #, kde-format
 msgid ""
 "Opens the settings for Computer Algebra Systems to modify the available "
 "systems or to enable new ones"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:982
+#: src/kdefrontend/MainWin.cpp:964
 #, kde-format
 msgid "Window Visibility"
 msgstr "Leihoaren ikusgaitasuna"
 
-#: src/kdefrontend/MainWin.cpp:1008 src/kdefrontend/MainWin.cpp:1010
+#: src/kdefrontend/MainWin.cpp:990 src/kdefrontend/MainWin.cpp:992
 #, kde-format
 msgid "Color Scheme"
 msgstr "Kolore-antolaera"
 
-#: src/kdefrontend/MainWin.cpp:1081 src/kdefrontend/MainWin.cpp:1095
+#: src/kdefrontend/MainWin.cpp:1063 src/kdefrontend/MainWin.cpp:1077
 #, kde-format
 msgid "The current project %1 has been modified. Do you want to save it?"
 msgstr "Uneko %1 proiektua aldatu egin da. Gorde nahi duzu?"
 
-#: src/kdefrontend/MainWin.cpp:1082 src/kdefrontend/MainWin.cpp:1096
+#: src/kdefrontend/MainWin.cpp:1064 src/kdefrontend/MainWin.cpp:1078
 #, kde-format
 msgid "Save Project"
 msgstr "Gorde proiektua"
 
-#: src/kdefrontend/MainWin.cpp:1485
+#: src/kdefrontend/MainWin.cpp:1397
 #, kde-format
 msgctxt "@title:window"
 msgid "Project Explorer"
 msgstr "Proiektu esploratzailea"
 
-#: src/kdefrontend/MainWin.cpp:1503
+#: src/kdefrontend/MainWin.cpp:1415
 #, fuzzy, kde-format
 #| msgid "Worksheet"
 msgctxt "@title:window"
 msgid "Worksheet Preview"
 msgstr "Lan-orria"
 
-#: src/kdefrontend/MainWin.cpp:1557
+#: src/kdefrontend/MainWin.cpp:1495
 #, kde-format
 msgid "%1: created"
 msgstr "%1: sortuta"
 
-#: src/kdefrontend/MainWin.cpp:1577
+#: src/kdefrontend/MainWin.cpp:1515
 #, kde-format
 msgid "Cantor Projects (*.cws)"
 msgstr "«Cantor» proiektuak (*.cws)"
 
-#: src/kdefrontend/MainWin.cpp:1578
+#: src/kdefrontend/MainWin.cpp:1516
 #, kde-format
 msgid "Jupyter Notebooks (*.ipynb)"
 msgstr "«Jupyter» koadernoak (*.ipynb)"
 
-#: src/kdefrontend/MainWin.cpp:1585
+#: src/kdefrontend/MainWin.cpp:1523
 #, kde-format
 msgid "All supported files (%1)"
 msgstr "Onartutako fitxategi guztiak (%1)"
 
-#: src/kdefrontend/MainWin.cpp:1589
+#: src/kdefrontend/MainWin.cpp:1527
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Project"
 msgstr "Ireki proiektua"
 
-#: src/kdefrontend/MainWin.cpp:1606
+#: src/kdefrontend/MainWin.cpp:1544
 #, kde-format
 msgid "The project file %1 is already opened."
 msgstr "%1 proiektu-fitxategia dagoeneko irekita dago."
 
-#: src/kdefrontend/MainWin.cpp:1606 src/kdefrontend/MainWin.cpp:1614
-#: src/kdefrontend/MainWin.cpp:1619
+#: src/kdefrontend/MainWin.cpp:1544 src/kdefrontend/MainWin.cpp:1552
+#: src/kdefrontend/MainWin.cpp:1557
 #, kde-format
 msgid "Open Project"
 msgstr "Ireki proiektua"
 
-#: src/kdefrontend/MainWin.cpp:1614
+#: src/kdefrontend/MainWin.cpp:1552
 #, fuzzy, kde-format
 #| msgid "The project file is empty."
 msgid "The project file %1 doesn't exist."
 msgstr "Proiektuaren fitxategia hutsik dago."
 
-#: src/kdefrontend/MainWin.cpp:1619
+#: src/kdefrontend/MainWin.cpp:1557
 #, fuzzy, kde-format
 #| msgid "Couldn't save the file '%1'."
 msgid "Couldn't read the project file %1."
 msgstr "Ezin izan du '%1' fitxategia gorde."
 
-#: src/kdefrontend/MainWin.cpp:1633
+#: src/kdefrontend/MainWin.cpp:1566
 #, kde-format
 msgid "Loading %1..."
 msgstr "%1 zamatzen..."
 
-#: src/kdefrontend/MainWin.cpp:1683 src/kdefrontend/MainWin.cpp:1687
-#: src/kdefrontend/MainWin.cpp:1692 src/kdefrontend/MainWin.cpp:1697
-#: src/kdefrontend/MainWin.cpp:1701 src/kdefrontend/MainWin.cpp:1748
-#: src/kdefrontend/MainWin.cpp:1753 src/kdefrontend/MainWin.cpp:1758
-#: src/kdefrontend/MainWin.cpp:1764
+#: src/kdefrontend/MainWin.cpp:1616 src/kdefrontend/MainWin.cpp:1620
+#: src/kdefrontend/MainWin.cpp:1625 src/kdefrontend/MainWin.cpp:1630
+#: src/kdefrontend/MainWin.cpp:1634 src/kdefrontend/MainWin.cpp:1681
+#: src/kdefrontend/MainWin.cpp:1686 src/kdefrontend/MainWin.cpp:1691
+#: src/kdefrontend/MainWin.cpp:1697
 #, kde-format
 msgid "Failed to open project"
 msgstr "Proiektua irekitzea huts egin du"
 
-#: src/kdefrontend/MainWin.cpp:1683 src/kdefrontend/MainWin.cpp:1692
-#: src/kdefrontend/MainWin.cpp:1697 src/kdefrontend/MainWin.cpp:1748
-#: src/kdefrontend/MainWin.cpp:1753 src/kdefrontend/MainWin.cpp:1758
+#: src/kdefrontend/MainWin.cpp:1616 src/kdefrontend/MainWin.cpp:1625
+#: src/kdefrontend/MainWin.cpp:1630 src/kdefrontend/MainWin.cpp:1681
+#: src/kdefrontend/MainWin.cpp:1686 src/kdefrontend/MainWin.cpp:1691
 #, kde-format
 msgid "Failed to process the content of the file '%1'."
 msgstr "'%1' fitxategiko edukia prozesatzea huts egin du."
 
-#: src/kdefrontend/MainWin.cpp:1687 src/kdefrontend/MainWin.cpp:1701
-#: src/kdefrontend/MainWin.cpp:1764
+#: src/kdefrontend/MainWin.cpp:1620 src/kdefrontend/MainWin.cpp:1634
+#: src/kdefrontend/MainWin.cpp:1697
 #, kde-format
 msgid "Failed to open the file '%1'."
 msgstr "'%1' fitxategia irekitzea huts egin du."
 
-#: src/kdefrontend/MainWin.cpp:1778
+#: src/kdefrontend/MainWin.cpp:1711
 #, kde-format
 msgid "%1: opened"
 msgstr "%1: irekita"
 
-#: src/kdefrontend/MainWin.cpp:1790
+#: src/kdefrontend/MainWin.cpp:1722
 #, kde-format
 msgid "Project successfully opened (in %1 seconds)."
 msgstr "Proiektua ondo ireki da (%1 segundotan)."
 
-#: src/kdefrontend/MainWin.cpp:1888
+#: src/kdefrontend/MainWin.cpp:1820
 #, kde-format
 msgctxt "@title:window"
 msgid "Save Project As"
 msgstr "Gorde proiektua honela"
 
-#: src/kdefrontend/MainWin.cpp:1890
+#: src/kdefrontend/MainWin.cpp:1822
 #, kde-format
 msgid ""
 "LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 "
@@ -14887,96 +14887,96 @@ msgstr ""
 "LabPlot proiektuak (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML."
 "BZ2 *.LML.XZ)"
 
-#: src/kdefrontend/MainWin.cpp:1916
+#: src/kdefrontend/MainWin.cpp:1848
 #, kde-format
 msgid "Couldn't open the temporary file for writing."
 msgstr "Ezin izan du aldi baterako fitxategia idazteko ireki."
 
-#: src/kdefrontend/MainWin.cpp:1971
+#: src/kdefrontend/MainWin.cpp:1903
 #, kde-format
 msgid "Project saved"
 msgstr "Proiektua gorde da"
 
-#: src/kdefrontend/MainWin.cpp:1987
+#: src/kdefrontend/MainWin.cpp:1919
 #, kde-format
 msgid "Couldn't save the file '%1'."
 msgstr "Ezin izan du '%1' fitxategia gorde."
 
-#: src/kdefrontend/MainWin.cpp:1992
+#: src/kdefrontend/MainWin.cpp:1924
 #, kde-format
 msgid "Couldn't open the file '%1' for writing."
 msgstr "Ezin izan du '%1' fitxategia irakurtzeko ireki."
 
-#: src/kdefrontend/MainWin.cpp:2042
+#: src/kdefrontend/MainWin.cpp:1974
 #, kde-format
 msgid "Changed"
 msgstr "Aldatuta"
 
-#: src/kdefrontend/MainWin.cpp:2057 src/kdefrontend/MainWin.cpp:2069
+#: src/kdefrontend/MainWin.cpp:1989 src/kdefrontend/MainWin.cpp:2001
 #, kde-format
 msgid "Preparing printing of %1"
 msgstr "%1(r)en inprimaketa prestatzea"
 
-#: src/kdefrontend/MainWin.cpp:2059 src/kdefrontend/MainWin.cpp:2071
+#: src/kdefrontend/MainWin.cpp:1991 src/kdefrontend/MainWin.cpp:2003
 #, kde-format
 msgid "%1 printed"
 msgstr "%1 inprimatu da"
 
-#: src/kdefrontend/MainWin.cpp:2623
+#: src/kdefrontend/MainWin.cpp:2555
 #, kde-format
 msgid "There was a problem sharing the project: %1"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2627
+#: src/kdefrontend/MainWin.cpp:2559
 #, fuzzy, kde-format
 #| msgid "Project saved"
 msgid "Project shared successfully"
 msgstr "Proiektua gorde da"
 
-#: src/kdefrontend/MainWin.cpp:2630
+#: src/kdefrontend/MainWin.cpp:2562
 #, kde-format
 msgid "You can find the shared project at: <a href=\"%1\">%1</a>"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2862
+#: src/kdefrontend/MainWin.cpp:2794
 #: src/kdefrontend/welcomescreen/WelcomeScreenHelper.cpp:115
 #, kde-format
 msgid "Dataset%1"
 msgstr "Datu-multzoa%1"
 
-#: src/kdefrontend/MainWin.cpp:2892
+#: src/kdefrontend/MainWin.cpp:2824
 #, kde-format
 msgid "%1 exported"
 msgstr "%1 esportatu da"
 
-#: src/kdefrontend/MainWin.cpp:2899
+#: src/kdefrontend/MainWin.cpp:2831
 #, kde-format
 msgid "FITS files saved"
 msgstr "FITS fitxategiak gorde dira"
 
-#: src/kdefrontend/MainWin.cpp:2911
+#: src/kdefrontend/MainWin.cpp:2843
 #, kde-format
 msgid "MQTT Client%1"
 msgstr "MQTT bezeroa%1"
 
-#: src/kdefrontend/MainWin.cpp:2929
+#: src/kdefrontend/MainWin.cpp:2861
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2933
+#: src/kdefrontend/MainWin.cpp:2865
 #, kde-format
 msgid "Live data source%1"
 msgstr "Zuzeneko datuen sorburua%1"
 
-#: src/kdefrontend/MainWin.cpp:2984
+#: src/kdefrontend/MainWin.cpp:2916
 #, kde-format
 msgid "No Cantor backends found. Please install the ones you want to use."
 msgstr ""
 "Ez da aurkitu Cantor-ren bizkarraldekorik. Mesedez, instalatu erabili nahi "
 "dituzunak."
 
-#: src/kdefrontend/MainWin.cpp:2998
+#: src/kdefrontend/MainWin.cpp:2930
 #, fuzzy, kde-format
 #| msgid "Creates a new note for arbitrary text"
 msgid "Creates a new %1 notebook"
@@ -15204,96 +15204,97 @@ msgstr "Hobespenak    [Aldatuta]"
 msgid "min."
 msgstr "min."
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:185
-#, kde-format
-msgid "Do Nothing"
-msgstr "Ez egin ezer"
-
-#: src/kdefrontend/SettingsGeneralPage.cpp:186
-#, kde-format
-msgid "Create New Empty Project"
+#: src/kdefrontend/SettingsGeneralPage.cpp:192
+#, fuzzy, kde-format
+#| msgid "Create New Empty Project"
+msgid "Create New Project"
 msgstr "Sortu proiektu huts berria"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:187
-#, kde-format
-msgid "Create New Project with Worksheet"
-msgstr "Sortu proiektu berria lan-orriarekin"
-
-#: src/kdefrontend/SettingsGeneralPage.cpp:188
-#, kde-format
-msgid "Create New Project with Spreadsheet"
-msgstr "Sortu proiektu berria kalkulu-orriarekin"
-
-#: src/kdefrontend/SettingsGeneralPage.cpp:190
-#, fuzzy, kde-format
-#| msgid "Create New Project with Worksheet"
-msgid "Create New Project with Notebook"
-msgstr "Sortu proiektu berria lan-orriarekin"
-
-#: src/kdefrontend/SettingsGeneralPage.cpp:192
+#: src/kdefrontend/SettingsGeneralPage.cpp:193
 #, kde-format
 msgid "Load Last Used Project"
 msgstr "Zamatu erabilitako azken proiektua"
 
-#. i18n("Show Welcome Screen"));
-#: src/kdefrontend/SettingsGeneralPage.cpp:195
+#: src/kdefrontend/SettingsGeneralPage.cpp:197
+#, fuzzy, kde-format
+#| msgid "Worksheet"
+msgid "With Worksheet"
+msgstr "Lan-orria"
+
+#: src/kdefrontend/SettingsGeneralPage.cpp:198
+#, fuzzy, kde-format
+msgid "With Spreadsheet"
+msgstr "Kalkulu-orria"
+
+#: src/kdefrontend/SettingsGeneralPage.cpp:199
+#, fuzzy, kde-format
+msgid "With Worksheet and Spreadsheet"
+msgstr "Ezarri lerrokatze bertikala"
+
+#: src/kdefrontend/SettingsGeneralPage.cpp:201
+#, fuzzy, kde-format
+#| msgid "Notebook"
+msgid "With Notebook"
+msgstr "Koadernoa"
+
+#: src/kdefrontend/SettingsGeneralPage.cpp:204
 #, kde-format
 msgid "Notebook type to create automatically on startup"
 msgstr ""
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:199
+#: src/kdefrontend/SettingsGeneralPage.cpp:208
 #, kde-format
 msgid ""
 "Controls the behavior of where the dock widgets are placed after being re-"
 "opened"
 msgstr ""
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:203
+#: src/kdefrontend/SettingsGeneralPage.cpp:212
 #, fuzzy, kde-format
 msgid "Original Position"
 msgstr "Jatorrizko neurria"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:204
+#: src/kdefrontend/SettingsGeneralPage.cpp:213
 #, kde-format
 msgid "On top of the last active Dock Widget"
 msgstr ""
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:207
+#: src/kdefrontend/SettingsGeneralPage.cpp:216
 #, kde-format
 msgid "Show File Path"
 msgstr "Erakutsi fitxategiaren bide-izena"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:208
+#: src/kdefrontend/SettingsGeneralPage.cpp:217
 #, kde-format
 msgid "Show File Name"
 msgstr "Erakutsi fitxategiaren izena"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:209
+#: src/kdefrontend/SettingsGeneralPage.cpp:218
 #, kde-format
 msgid "Show Project Name"
 msgstr "Erakutsi proiektuaren izena"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:211
+#: src/kdefrontend/SettingsGeneralPage.cpp:220
 #, kde-format
 msgid "Metric"
 msgstr "Metrikoa"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:212
+#: src/kdefrontend/SettingsGeneralPage.cpp:221
 #, kde-format
 msgid "Imperial"
 msgstr "Inperiala"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:214
+#: src/kdefrontend/SettingsGeneralPage.cpp:223
 #, kde-format
 msgid "Dot (.)"
 msgstr "Puntua (.)"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:215
+#: src/kdefrontend/SettingsGeneralPage.cpp:224
 #, kde-format
 msgid "Comma (,)"
 msgstr "Koma (,)"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:216
+#: src/kdefrontend/SettingsGeneralPage.cpp:225
 #, kde-format
 msgid "Arabic (٫)"
 msgstr "Arabiera (,)"
@@ -18166,7 +18167,7 @@ msgstr "Nondik inportatu:"
 #. i18n: ectx: property (text), widget (QLabel, lDecimalSeparator)
 #: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:91
 #: src/kdefrontend/ui/datasources/jsonoptionswidget.ui:76
-#: src/kdefrontend/ui/settingsgeneralpage.ui:121
+#: src/kdefrontend/ui/settingsgeneralpage.ui:120
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:152
 #, kde-format
 msgid "Decimal separator:"
@@ -19715,7 +19716,7 @@ msgstr "Gaiak"
 #. i18n: ectx: property (text), widget (QLabel, lAutoSaveInterval)
 #. i18n: ectx: property (text), widget (QLabel, lUpdateInterval)
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:113
-#: src/kdefrontend/ui/settingsgeneralpage.ui:71
+#: src/kdefrontend/ui/settingsgeneralpage.ui:219
 #, kde-format
 msgid "Interval:"
 msgstr "Tartea:"
@@ -19889,7 +19890,7 @@ msgstr "Esteka"
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoSave)
 #. i18n: ectx: property (text), widget (QLabel, lLinkingEnabled)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:230
-#: src/kdefrontend/ui/settingsgeneralpage.ui:48
+#: src/kdefrontend/ui/settingsgeneralpage.ui:196
 #, kde-format
 msgid "Enabled"
 msgstr "Gaituta"
@@ -21132,21 +21133,59 @@ msgstr "Neurri osoa - "
 msgid "Clear"
 msgstr "Garbitu"
 
-#. i18n: ectx: property (text), widget (QLabel, lLoadOnStartNotebook)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:20
+#. i18n: ectx: property (text), widget (QLabel, lTitleBar)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:17
+#, kde-format
+msgid "Title Bar:"
+msgstr "Titulu-barra:"
+
+#. i18n: ectx: property (text), widget (QLabel, lAutoSave)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:24
+#, kde-format
+msgid "Auto-save:"
+msgstr "Gorde automatikoki:"
+
+#. i18n: ectx: property (text), widget (QLabel, lCompatible)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:37
+#, fuzzy, kde-format
+#| msgid "Probability"
+msgid "Compatibility:"
+msgstr "Probabilitatea"
+
+#. i18n: ectx: property (text), widget (QLabel, lUnits)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:44
+#, kde-format
+msgid "Units:"
+msgstr "Unitateak:"
+
+#. i18n: ectx: property (text), widget (QLabel, lNewProjectNotebook)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:73
 #, fuzzy, kde-format
 #| msgid "Notebook"
 msgid "Notebook:"
 msgstr "Koadernoa"
 
-#. i18n: ectx: property (text), widget (QLabel, lTitleBar)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:104
+#. i18n: ectx: property (text), widget (QLabel, lNewProject)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:96
+#, fuzzy, kde-format
+#| msgid "Save Project"
+msgid "New Project:"
+msgstr "Gorde proiektua"
+
+#. i18n: ectx: property (text), widget (QLabel, lGUMTerms)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:106
 #, kde-format
-msgid "Title Bar:"
-msgstr "Titulu-barra:"
+msgid "Terms:"
+msgstr "Baldintzak:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkOmitLeadingZeroInExponent)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:113
+#, kde-format
+msgid "Omit leading zero in exponent"
+msgstr "Ez ipini berretzailearen aurreko zeroa"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkGUMTerms)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:111
+#: src/kdefrontend/ui/settingsgeneralpage.ui:127
 #, kde-format
 msgid ""
 "<html><head/><body><p>Use terms compliant with the <a href=\"http://www.bipm."
@@ -21161,61 +21200,31 @@ msgstr ""
 "etorkorrak diren terminoak</a></p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkGUMTerms)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:114
+#: src/kdefrontend/ui/settingsgeneralpage.ui:130
 #, kde-format
 msgid "GUM compliant"
 msgstr "GUMekin etorkorra"
 
-#. i18n: ectx: property (text), widget (QLabel, lGUMTerms)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:131
-#, kde-format
-msgid "Terms:"
-msgstr "Baldintzak:"
-
-#. i18n: ectx: property (text), widget (QCheckBox, chkOmitGroupSeparator)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:138
-#, kde-format
-msgid "Omit group separator"
-msgstr "Talde-bereizlea ez ipini"
-
-#. i18n: ectx: property (text), widget (QCheckBox, chkIncludeTrailingZeroesAfterDot)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:145
-#, kde-format
-msgid "Include trailing zeroes after dot"
-msgstr "Sartu komaren ondorengo amaierako zeroak"
-
-#. i18n: ectx: property (text), widget (QCheckBox, chkOmitLeadingZeroInExponent)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:152
-#, kde-format
-msgid "Omit leading zero in exponent"
-msgstr "Ez ipini berretzailearen aurreko zeroa"
-
-#. i18n: ectx: property (text), widget (QLabel, lUnits)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:162
-#, kde-format
-msgid "Units:"
-msgstr "Unitateak:"
-
-#. i18n: ectx: property (text), widget (QLabel, lDockWindowPositionReopen)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:172
-#, kde-format
-msgid "Dock widget placement:"
-msgstr ""
-
 #. i18n: ectx: property (text), widget (QLabel, lStartup)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:185
+#: src/kdefrontend/ui/settingsgeneralpage.ui:137
 #, kde-format
 msgid "Startup:"
 msgstr "Abioa:"
 
+#. i18n: ectx: property (text), widget (QCheckBox, chkIncludeTrailingZeroesAfterDot)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:144
+#, kde-format
+msgid "Include trailing zeroes after dot"
+msgstr "Sartu komaren ondorengo amaierako zeroak"
+
 #. i18n: ectx: property (text), widget (QLabel, lNumberOptions)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:208
+#: src/kdefrontend/ui/settingsgeneralpage.ui:151
 #, kde-format
 msgid "Number options:"
 msgstr "Zenbakien aukerak:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkCompatible)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:215
+#: src/kdefrontend/ui/settingsgeneralpage.ui:158
 #, kde-format
 msgid ""
 "<html><head/><body><p>Save projects in a compatible format that can be "
@@ -21226,23 +21235,22 @@ msgstr ""
 "html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCompatible)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:218
+#: src/kdefrontend/ui/settingsgeneralpage.ui:161
 #, kde-format
 msgid "Save in compatible format"
 msgstr "Gorde formatu bateragarrian"
 
-#. i18n: ectx: property (text), widget (QLabel, lAutoSave)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:241
+#. i18n: ectx: property (text), widget (QCheckBox, chkOmitGroupSeparator)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:168
 #, kde-format
-msgid "Auto-save:"
-msgstr "Gorde automatikoki:"
+msgid "Omit group separator"
+msgstr "Talde-bereizlea ez ipini"
 
-#. i18n: ectx: property (text), widget (QLabel, lCompatible)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:261
-#, fuzzy, kde-format
-#| msgid "Probability"
-msgid "Compatibility:"
-msgstr "Probabilitatea"
+#. i18n: ectx: property (text), widget (QLabel, lDockWindowPositionReopen)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:287
+#, kde-format
+msgid "Dock widget placement:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode_2)
@@ -22662,6 +22670,20 @@ msgstr "«convert» prozesuak huts egin du, irteera kodea ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Ez da fitxategia irekitzeko gai:"
+
+#~ msgid "Do Nothing"
+#~ msgstr "Ez egin ezer"
+
+#~ msgid "Create New Project with Worksheet"
+#~ msgstr "Sortu proiektu berria lan-orriarekin"
+
+#~ msgid "Create New Project with Spreadsheet"
+#~ msgstr "Sortu proiektu berria kalkulu-orriarekin"
+
+#, fuzzy
+#~| msgid "Create New Project with Worksheet"
+#~ msgid "Create New Project with Notebook"
+#~ msgstr "Sortu proiektu berria lan-orriarekin"
 
 #~ msgid "number should be bigger than number of data points"
 #~ msgstr "zenbakia, datu-puntu kopurua baino handiagoa beharko luze"
