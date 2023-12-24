@@ -24,11 +24,8 @@
 #include "backend/worksheet/Line.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 
-extern "C" {
 #include <gsl/gsl_cdf.h>
-#include <gsl/gsl_math.h>
 #include <gsl/gsl_statistics.h>
-}
 
 #include <QMenu>
 #include <QPainter>
@@ -216,6 +213,11 @@ double QQPlot::maximum(const Dimension dim) const {
 bool QQPlot::hasData() const {
 	Q_D(const QQPlot);
 	return (d->dataColumn != nullptr);
+}
+
+bool QQPlot::usingColumn(const Column* column) const {
+	Q_D(const QQPlot);
+	return (d->dataColumn == column);
 }
 
 QColor QQPlot::color() const {

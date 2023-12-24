@@ -433,6 +433,17 @@ bool BoxPlot::hasData() const {
 	return !d->dataColumns.isEmpty();
 }
 
+bool BoxPlot::usingColumn(const Column* column) const {
+	Q_D(const BoxPlot);
+
+	for (auto* c : d->dataColumns) {
+		if (c == column)
+			return true;
+	}
+
+	return false;
+}
+
 QColor BoxPlot::color() const {
 	// Q_D(const BoxPlot);
 	return QColor();

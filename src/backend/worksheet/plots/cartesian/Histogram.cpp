@@ -339,6 +339,13 @@ bool Histogram::hasData() const {
 	return (d->dataColumn != nullptr);
 }
 
+bool Histogram::usingColumn(const Column* column) const {
+	Q_D(const Histogram);
+	return (d->dataColumn == column
+			|| (d->errorType == ErrorType::CustomSymmetric && d->errorPlusColumn == column)
+			|| (d->errorType == ErrorType::CustomAsymmetric && (d->errorPlusColumn == column || d->errorMinusColumn == column)));
+}
+
 QColor Histogram::color() const {
 	Q_D(const Histogram);
 	if (d->background->enabled())

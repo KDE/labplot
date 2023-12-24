@@ -23,6 +23,7 @@
 #include "backend/lib/trace.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "backend/worksheet/plots/cartesian/Plot.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
 #include "backend/worksheet/plots/cartesian/XYAnalysisCurve.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
@@ -342,7 +343,7 @@ void Column::setSuppressDataChangedSignal(bool b) {
 	m_suppressDataChangedSignal = b;
 }
 
-void Column::addUsedInPlots(QVector<CartesianPlot*>& plots) {
+void Column::addUsedInPlots(QVector<CartesianPlot*>& plotAreas) {
 	const Project* project = this->project();
 
 	// when executing tests we don't create any project,
@@ -350,26 +351,12 @@ void Column::addUsedInPlots(QVector<CartesianPlot*>& plots) {
 	if (!project)
 		return;
 
-	const auto& curves = project->children<const XYCurve>(AbstractAspect::ChildIndexFlag::Recursive);
-
-	// determine the plots where the column is consumed
-	for (const auto* curve : curves) {
-		if (curve->xColumn() == this || curve->yColumn() == this || (curve->xErrorType() == XYCurve::ErrorType::Symmetric && curve->xErrorPlusColumn() == this)
-			|| (curve->xErrorType() == XYCurve::ErrorType::Asymmetric && (curve->xErrorPlusColumn() == this || curve->xErrorMinusColumn() == this))
-			|| (curve->yErrorType() == XYCurve::ErrorType::Symmetric && curve->yErrorPlusColumn() == this)
-			|| (curve->yErrorType() == XYCurve::ErrorType::Asymmetric && (curve->yErrorPlusColumn() == this || curve->yErrorMinusColumn() == this))) {
-			auto* plot = static_cast<CartesianPlot*>(curve->parentAspect());
-			if (plots.indexOf(plot) == -1)
-				plots << plot;
-		}
-	}
-
-	const auto& hists = project->children<const Histogram>(AbstractAspect::ChildIndexFlag::Recursive);
-	for (const auto* hist : hists) {
-		if (hist->dataColumn() == this) {
-			auto* plot = static_cast<CartesianPlot*>(hist->parentAspect());
-			if (plots.indexOf(plot) == -1)
-				plots << plot;
+	const auto& plots = project->children<const Plot>(AbstractAspect::ChildIndexFlag::Recursive);
+	for (const auto* plot : plots) {
+		if (plot->usingColumn(this)) {
+			auto* plotArea = static_cast<CartesianPlot*>(plot->parentAspect());
+			if (plotAreas.indexOf(plotArea) == -1)
+				plotAreas << plotArea;
 		}
 	}
 }

@@ -182,6 +182,11 @@ bool KDEPlot::hasData() const {
 	return (d->dataColumn != nullptr);
 }
 
+bool KDEPlot::usingColumn(const Column* column) const {
+	Q_D(const KDEPlot);
+	return (d->dataColumn == column);
+}
+
 QColor KDEPlot::color() const {
 	Q_D(const KDEPlot);
 	return d->estimationCurve->color();

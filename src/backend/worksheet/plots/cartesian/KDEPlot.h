@@ -62,6 +62,7 @@ public:
 	double maximum(CartesianCoordinateSystem::Dimension) const override;
 	int gridPointsCount() const;
 	bool hasData() const override;
+	bool usingColumn(const Column*) const override;
 	QColor color() const override;
 
 	typedef KDEPlotPrivate Private;

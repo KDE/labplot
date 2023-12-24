@@ -195,6 +195,20 @@ bool BarPlot::hasData() const {
 	return !d->dataColumns.isEmpty();
 }
 
+bool BarPlot::usingColumn(const Column* column) const {
+	Q_D(const BarPlot);
+
+	if (d->xColumn == column)
+		return true;
+
+	for (auto* c : d->dataColumns) {
+		if (c == column)
+			return true;
+	}
+
+	return false;
+}
+
 QColor BarPlot::color() const {
 	Q_D(const BarPlot);
 	if (d->backgrounds.size() > 0 && d->backgrounds.at(0)->enabled())

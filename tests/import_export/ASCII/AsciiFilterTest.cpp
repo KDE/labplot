@@ -1380,7 +1380,7 @@ void AsciiFilterTest::spreadsheetFormulaUpdateAfterImportWithColumnRestore() {
 	col->setValueAt(2, 30.);
 
 	// create the second spreadsheet with one single column calculated via a formula from the first spreadsheet
-	auto* spreadsheetFormula = new Spreadsheet (QStringLiteral("formula"), false);
+	auto* spreadsheetFormula = new Spreadsheet(QStringLiteral("formula"), false);
 	project.addChild(spreadsheetFormula);
 	spreadsheetFormula->setColumnCount(1);
 	spreadsheetFormula->setRowCount(3);
