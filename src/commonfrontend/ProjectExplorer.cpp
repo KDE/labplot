@@ -659,8 +659,10 @@ QPixmap ProjectExplorer::showSparkLines(const Column* col) {
 	if (col->isPlottable()) {
 		auto* worksheet = new Worksheet(i18n("check"));
 		worksheet->view();
+		worksheet->setLayoutBottomMargin(0);
+		worksheet->setLayoutTopMargin(0);
 		auto* plot = new CartesianPlot(i18n("check"));
-		plot->setType(CartesianPlot::Type::FourAxes);
+		plot->setType(CartesianPlot::Type::TwoAxes);
 		int maxLength = col->rowCount();
 		QVector<double> xData;
 		for (int i = 0; i < maxLength; i++)

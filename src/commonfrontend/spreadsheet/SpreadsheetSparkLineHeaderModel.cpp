@@ -37,10 +37,10 @@ QVariant SpreadsheetSparkLinesHeaderModel::data(const QModelIndex& /*index*/, in
 }
 
 QVariant SpreadsheetSparkLinesHeaderModel::headerData(int section, Qt::Orientation orientation, int role) const {
-	if (orientation != Qt::Horizontal || role != Qt::DisplayRole || section < 0 || section >= columnCount())
+	if (orientation != Qt::Horizontal || section < 0 || section >= columnCount())
 		return {};
 
-	return {m_spreadsheet_model->headerData(section, Qt::Horizontal, static_cast<int>(SpreadsheetModel::CustomDataRole::SparkLineRole))};
+	return {m_spreadsheet_model->headerData(section, Qt::Horizontal, role)};
 }
 
 int SpreadsheetSparkLinesHeaderModel::rowCount(const QModelIndex& /*parent*/) const {
