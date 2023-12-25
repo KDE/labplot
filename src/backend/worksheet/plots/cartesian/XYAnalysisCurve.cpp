@@ -49,6 +49,15 @@ bool XYAnalysisCurve::resultAvailable() const {
 	return result().available;
 }
 
+bool XYAnalysisCurve::usingColumn(const Column* column) const {
+	Q_D(const XYAnalysisCurve);
+
+	if (d->dataSourceType == DataSourceType::Spreadsheet)
+		return (d->xDataColumn == column || d->yDataColumn == column || d->y2DataColumn == column);
+	else
+		return (d->dataSourceCurve->xColumn() == column || d->dataSourceCurve->yColumn() == column);
+}
+
 // copy valid data from x/y data columns to x/y data vectors
 // for analysis functions
 // avgUniqueX: average y values for duplicate x values

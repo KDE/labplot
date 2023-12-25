@@ -63,6 +63,7 @@ public:
 	virtual void recalculate() = 0;
 	bool resultAvailable() const;
 	virtual const Result& result() const = 0;
+	bool usingColumn(const Column*) const override;
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
