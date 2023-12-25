@@ -225,7 +225,9 @@ void SettingsGeneralPage::retranslateUi() {
 	ui.cbDecimalSeparator->addItem(i18n("Arabic (٫)"));
 	ui.cbDecimalSeparator->addItem(i18n("Automatic"));
 
-	msg = i18n("Use terms compliant with the <a href=\"http://www.bipm.org/utils/common/documents/jcgm/JCGM_100_2008_E.pdf\">Guide to the Expression of Uncertainty in Measurement (GUM)</a>");
+	msg = i18n(
+		"Use terms compliant with the <a href=\"http://www.bipm.org/utils/common/documents/jcgm/JCGM_100_2008_E.pdf\">Guide to the Expression of Uncertainty "
+		"in Measurement (GUM)</a>");
 	ui.chkGUMTerms->setWhatsThis(msg);
 }
 
