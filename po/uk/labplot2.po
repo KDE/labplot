@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-12-24 00:39+0000\n"
-"PO-Revision-Date: 2023-12-23 08:51+0200\n"
+"PO-Revision-Date: 2023-12-24 16:15+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
@@ -3704,7 +3704,7 @@ msgstr "Округлення до найближчого цілого значе
 #: src/backend/gsl/functions.cpp:294
 #, kde-format
 msgid "Round to y decimal places"
-msgstr ""
+msgstr "Округлити до y десяткових позицій"
 
 #: src/backend/gsl/functions.cpp:308
 #, kde-format

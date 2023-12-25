@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-12-24 00:39+0000\n"
-"PO-Revision-Date: 2023-12-23 11:33+0300\n"
+"PO-Revision-Date: 2023-12-24 13:35+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 23.08.4\n"
+"X-Generator: Lokalize 24.01.85\n"
 "X-POOTLE-MTIME: 1502201241.000000\n"
 
 #, kde-format
@@ -3681,7 +3681,7 @@ msgstr "En yakın tamsayıya yuvarla"
 #: src/backend/gsl/functions.cpp:294
 #, kde-format
 msgid "Round to y decimal places"
-msgstr ""
+msgstr "y ondalık basamağa yuvarla"
 
 #: src/backend/gsl/functions.cpp:308
 #, kde-format

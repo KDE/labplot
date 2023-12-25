@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-12-24 00:39+0000\n"
-"PO-Revision-Date: 2023-12-20 16:42+0100\n"
+"PO-Revision-Date: 2023-12-24 08:22+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -15264,10 +15264,9 @@ msgid "min."
 msgstr "min."
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:192
-#, fuzzy, kde-format
-#| msgid "Create New Empty Project"
+#, kde-format
 msgid "Create New Project"
-msgstr "Crear un novo proxecto baleiro"
+msgstr "Crear un novo proxecto"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:193
 #, kde-format
@@ -15275,30 +15274,24 @@ msgid "Load Last Used Project"
 msgstr "Cargar o último proxecto usado"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:197
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Print Worksheet"
+#, kde-format
 msgid "With Worksheet"
-msgstr "Imprimir a folla de traballo"
+msgstr "Con folla de traballo"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:198
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Print Spreadsheet"
+#, kde-format
 msgid "With Spreadsheet"
-msgstr "Imprimir a folla de cálculo"
+msgstr "Con folla de cálculo"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:199
-#, fuzzy, kde-format
-#| msgid "%1: set linked spreadsheet"
+#, kde-format
 msgid "With Worksheet and Spreadsheet"
-msgstr "%1: definir a folla de cálculo ligada"
+msgstr "Con folla de traballo e folla de cálculo"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:201
-#, fuzzy, kde-format
-#| msgid "Notebook"
+#, kde-format
 msgid "With Notebook"
-msgstr "Caderno"
+msgstr "Con caderno"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:204
 #, kde-format
@@ -21238,10 +21231,9 @@ msgstr "Caderno:"
 
 #. i18n: ectx: property (text), widget (QLabel, lNewProject)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:96
-#, fuzzy, kde-format
-#| msgid "Save Project"
+#, kde-format
 msgid "New Project:"
-msgstr "Gardar o proxecto"
+msgstr "Novo proxecto:"
 
 #. i18n: ectx: property (text), widget (QLabel, lGUMTerms)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:106

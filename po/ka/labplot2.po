@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-12-24 00:39+0000\n"
-"PO-Revision-Date: 2023-12-16 06:39+0100\n"
+"PO-Revision-Date: 2023-12-24 05:16+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -8907,10 +8907,9 @@ msgid "Visible"
 msgstr "ხილული"
 
 #: src/backend/worksheet/WorksheetElement.cpp:225
-#, fuzzy, kde-format
-#| msgid "Locked"
+#, kde-format
 msgid "Lock"
-msgstr "დაბლოკილია"
+msgstr "ჩაკეტვა"
 
 #: src/backend/worksheet/WorksheetElement.cpp:234
 #, kde-format
@@ -14967,10 +14966,9 @@ msgid "min."
 msgstr "წთ."
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:192
-#, fuzzy, kde-format
-#| msgid "Create New Empty Project"
+#, kde-format
 msgid "Create New Project"
-msgstr "ახალი ცარიელი პროექტის შექმნა"
+msgstr "ახალი პროექტის შექმნა"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:193
 #, kde-format
@@ -14978,30 +14976,24 @@ msgid "Load Last Used Project"
 msgstr ""
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:197
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Print Worksheet"
+#, kde-format
 msgid "With Worksheet"
-msgstr "სამუშაო ფურცლის დაბეჭდვა"
+msgstr "სამუშაო ფურცლით"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:198
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Print Spreadsheet"
+#, kde-format
 msgid "With Spreadsheet"
-msgstr "ელცხრილის დაბეჭდვა"
+msgstr "ელცხრილით"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:199
-#, fuzzy, kde-format
-#| msgid "%1: set linked spreadsheet"
+#, kde-format
 msgid "With Worksheet and Spreadsheet"
-msgstr "%1: დააყენეთ მიბმული ელცხრილი"
+msgstr "სამუშაო ფურცლითა და ელცხრილით"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:201
-#, fuzzy, kde-format
-#| msgid "Notebook"
+#, kde-format
 msgid "With Notebook"
-msgstr "ნოუთბუქი"
+msgstr "ნოუთბუქით"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:204
 #, kde-format
@@ -19519,7 +19511,7 @@ msgstr "ტექსტის ფერი:"
 #: src/kdefrontend/ui/dockwidgets/projectdock.ui:140
 #, kde-format
 msgid "Settings:"
-msgstr ""
+msgstr "მორგება:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: src/kdefrontend/ui/dockwidgets/projectdock.ui:147
@@ -20883,10 +20875,9 @@ msgstr "წიგნაკი:"
 
 #. i18n: ectx: property (text), widget (QLabel, lNewProject)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:96
-#, fuzzy, kde-format
-#| msgid "Save Project"
+#, kde-format
 msgid "New Project:"
-msgstr "პროექტის შენახვა"
+msgstr "ახალი პროექტი:"
 
 #. i18n: ectx: property (text), widget (QLabel, lGUMTerms)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:106

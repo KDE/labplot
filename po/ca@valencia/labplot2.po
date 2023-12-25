@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-12-24 00:39+0000\n"
-"PO-Revision-Date: 2023-12-23 10:40+0100\n"
+"PO-Revision-Date: 2023-12-24 11:06+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -3733,7 +3733,7 @@ msgstr "Arredonix a l'enter més proper"
 #: src/backend/gsl/functions.cpp:294
 #, kde-format
 msgid "Round to y decimal places"
-msgstr ""
+msgstr "Arredonix a «y» posicions decimals"
 
 #: src/backend/gsl/functions.cpp:308
 #, kde-format

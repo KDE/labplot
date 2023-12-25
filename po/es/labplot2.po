@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-12-24 00:39+0000\n"
-"PO-Revision-Date: 2023-12-21 01:49+0100\n"
+"PO-Revision-Date: 2023-12-24 12:26+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -3688,7 +3688,7 @@ msgstr "Redondear al entero más cercano"
 #: src/backend/gsl/functions.cpp:294
 #, kde-format
 msgid "Round to y decimal places"
-msgstr ""
+msgstr "Redondear a y dígitos decimales"
 
 #: src/backend/gsl/functions.cpp:308
 #, kde-format
@@ -15273,10 +15273,9 @@ msgid "min."
 msgstr "min."
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:192
-#, fuzzy, kde-format
-#| msgid "Create New Empty Project"
+#, kde-format
 msgid "Create New Project"
-msgstr "Crear nuevo proyecto vacío"
+msgstr "Crear nuevo proyecto"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:193
 #, kde-format
@@ -15284,30 +15283,24 @@ msgid "Load Last Used Project"
 msgstr "Cargar el último proyecto usado"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:197
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Print Worksheet"
+#, kde-format
 msgid "With Worksheet"
-msgstr "Imprimir hoja de trabajo"
+msgstr "Con hoja de trabajo"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:198
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Print Spreadsheet"
+#, kde-format
 msgid "With Spreadsheet"
-msgstr "Imprimir hoja de cálculo"
+msgstr "Con hoja de cálculo"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:199
-#, fuzzy, kde-format
-#| msgid "%1: set linked spreadsheet"
+#, kde-format
 msgid "With Worksheet and Spreadsheet"
-msgstr "%1: definir hoja de cálculo enlazada"
+msgstr "Con hoja de trabajo y hoja de cálculo"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:201
-#, fuzzy, kde-format
-#| msgid "Notebook"
+#, kde-format
 msgid "With Notebook"
-msgstr "Bloc de notas"
+msgstr "Con bloc de notas"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:204
 #, kde-format
@@ -21256,10 +21249,9 @@ msgstr "Bloc de notas:"
 
 #. i18n: ectx: property (text), widget (QLabel, lNewProject)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:96
-#, fuzzy, kde-format
-#| msgid "Save Project"
+#, kde-format
 msgid "New Project:"
-msgstr "Guardar proyecto"
+msgstr "Nuevo proyecto:"
 
 #. i18n: ectx: property (text), widget (QLabel, lGUMTerms)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:106

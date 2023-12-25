@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-12-24 00:39+0000\n"
-"PO-Revision-Date: 2023-12-23 11:24+0100\n"
+"PO-Revision-Date: 2023-12-24 09:09+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -3677,7 +3677,7 @@ msgstr "Afronden naar meest nabije geheel getal"
 #: src/backend/gsl/functions.cpp:294
 #, kde-format
 msgid "Round to y decimal places"
-msgstr ""
+msgstr "Afronden tot y decimale posities"
 
 #: src/backend/gsl/functions.cpp:308
 #, kde-format
