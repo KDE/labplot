@@ -1335,9 +1335,8 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 		DEBUG("EXTRA TEXT = " << t.text.c_str());
 		auto* label = new TextLabel(QStringLiteral("text label"));
 		QTextEdit te(parseOriginText(QString::fromLatin1(t.text.c_str())));
-		// label settings (with resonable font size scaling)
 		te.selectAll();
-		te.setFontPointSize(int(t.fontSize * 0.4));
+		te.setFontPointSize(int(t.fontSize));
 		te.setTextColor(OriginProjectParser::color(t.color));
 		label->setText(te.toHtml());
 		// DEBUG(" TEXT = " << STDSTRING(label->text().text))
@@ -1609,7 +1608,7 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 	}
 
 	// major grid
-	const Origin::GraphGrid& majorGrid = originAxis.majorGrid;
+	const auto& majorGrid = originAxis.majorGrid;
 	Qt::PenStyle penStyle(Qt::NoPen);
 	if (!majorGrid.hidden) {
 		switch (majorGrid.style) {
@@ -1642,7 +1641,7 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 	axis->majorGridLine()->setWidth(Worksheet::convertToSceneUnits(majorGrid.width, Worksheet::Unit::Point));
 
 	// minor grid
-	const Origin::GraphGrid& minorGrid = originAxis.minorGrid;
+	const auto& minorGrid = originAxis.minorGrid;
 	penStyle = Qt::NoPen;
 	if (!minorGrid.hidden) {
 		switch (minorGrid.style) {
@@ -1673,7 +1672,7 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 	axis->minorGridLine()->setWidth(Worksheet::convertToSceneUnits(minorGrid.width, Worksheet::Unit::Point));
 
 	// process Origin::GraphAxisFormat
-	const Origin::GraphAxisFormat& axisFormat = originAxis.formatAxis[index];
+	const auto& axisFormat = originAxis.formatAxis[index];
 
 	Origin::Color color;
 	color.type = Origin::Color::ColorType::Regular;
@@ -1712,7 +1711,7 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 	// TODO: handle string factor member in GraphAxisFormat
 
 	// process Origin::GraphAxisTick
-	const Origin::GraphAxisTick& tickAxis = originAxis.tickAxis[index];
+	const auto& tickAxis = originAxis.tickAxis[index];
 	if (tickAxis.showMajorLabels) {
 		color.type = Origin::Color::ColorType::Regular;
 		color.regular = tickAxis.color;
@@ -1738,8 +1737,7 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 
 	QFont font;
 	// TODO: font family?
-	//  use half the font size to be closer to original
-	font.setPixelSize(Worksheet::convertToSceneUnits(tickAxis.fontSize / 2, Worksheet::Unit::Point));
+	font.setPixelSize(Worksheet::convertToSceneUnits(tickAxis.fontSize, Worksheet::Unit::Point));
 	font.setBold(tickAxis.fontBold);
 	axis->setLabelsFont(font);
 	// TODO: handle string dataName member in GraphAxisTick
@@ -2105,8 +2103,7 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 			symbol->setStyle(Symbol::Style::NoSymbols);
 		}
 		// symbol size
-		const double sizeScaleFactor = 0.5; // match size
-		symbol->setSize(Worksheet::convertToSceneUnits(originCurve.symbolSize * sizeScaleFactor, Worksheet::Unit::Point));
+		symbol->setSize(Worksheet::convertToSceneUnits(originCurve.symbolSize, Worksheet::Unit::Point));
 
 		// symbol fill color
 		QBrush brush = symbol->brush();
@@ -2138,7 +2135,7 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 		// DEBUG(Q_FUNC_INFO << ", BORDER THICKNESS = " << borderScaleFactor * originCurve.symbolThickness/100.*symbol->size()/scaleFactor)
 		// border width (edge thickness in Origin) is given as percentage of the symbol radius
 		const double borderScaleFactor = 5.; // match size
-		pen.setWidthF(borderScaleFactor * originCurve.symbolThickness / 100. * symbol->size() / sizeScaleFactor);
+		pen.setWidthF(borderScaleFactor * originCurve.symbolThickness / 100. * symbol->size());
 
 		symbol->setPen(pen);
 
@@ -2223,7 +2220,7 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 bool OriginProjectParser::loadNote(Note* note, bool preview) {
 	DEBUG(Q_FUNC_INFO);
 	// load note data
-	const Origin::Note& originNote = m_originFile->note(findNoteByName(note->name()));
+	const auto& originNote = m_originFile->note(findNoteByName(note->name()));
 
 	if (preview)
 		return true;
