@@ -247,6 +247,10 @@ QPixmap AbstractAspect::sparkLine() const {
 	if (d->q->m_type == AspectType::Column) {
 		const Column* col = dynamic_cast<Column*>(d->q);
 		if (col->hasValues()) {
+			QPixmap pix = ProjectExplorer::showSparkLines(col);
+
+			pix.save(QLatin1String("/home/kuntal/kde/src/labplot/worksheet.jpg"), "JPEG", 95);
+
 			return ProjectExplorer::showSparkLines(col);
 		}
 	}

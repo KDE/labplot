@@ -658,11 +658,17 @@ QPixmap ProjectExplorer::showSparkLines(const Column* col) {
 	}
 	if (col->isPlottable()) {
 		auto* worksheet = new Worksheet(i18n("check"));
+		worksheet->setTheme(QLatin1String("Sparkline"));
+		// worksheet->setScaleContent(true);
+		// worksheet->setUseViewSize(true);
+		// worksheet->setLayout(Worksheet::Layout::NoLayout);
+		// worksheet->setZoomFit(Worksheet::ZoomFit::FitToWidth);
 		worksheet->view();
 		worksheet->setLayoutBottomMargin(0);
 		worksheet->setLayoutTopMargin(0);
 		auto* plot = new CartesianPlot(i18n("check"));
 		plot->setType(CartesianPlot::Type::TwoAxes);
+		plot->setTheme(QLatin1String("Sparkline"));
 		int maxLength = col->rowCount();
 		QVector<double> xData;
 		for (int i = 0; i < maxLength; i++)
@@ -682,6 +688,7 @@ QPixmap ProjectExplorer::showSparkLines(const Column* col) {
 		// export to pixmap
 		QPixmap pix(10, 10);
 		const bool rc = worksheet->exportView(pix);
+		// pix.scaled(QSize(200,100));
 
 		// the view is not available yet, show the placeholder preview
 		if (!rc) {
