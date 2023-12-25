@@ -24,9 +24,6 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/Plot.h"
-#include "backend/worksheet/plots/cartesian/Histogram.h"
-#include "backend/worksheet/plots/cartesian/XYAnalysisCurve.h"
-#include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
 
 #include <KLocalizedString>
@@ -157,7 +154,7 @@ QMenu* Column::createContextMenu() {
 		}
 	}
 
-	//"Used in" menu containing all curves where the column is used
+	//"Used in" menu containing all plots where the column is used
 	QMenu* usedInMenu = new QMenu(i18n("Used in"));
 	usedInMenu->setIcon(QIcon::fromTheme(QStringLiteral("go-next-view")));
 
@@ -165,57 +162,22 @@ QMenu* Column::createContextMenu() {
 	for (auto* action : m_usedInActionGroup->actions())
 		m_usedInActionGroup->removeAction(action);
 
-	Project* project = this->project();
+	auto* project = this->project();
 	bool showIsUsed = false;
 
 	// add curves where the column is currently in use
 	bool sectionAdded = false;
-	const auto& curves = project->children<XYCurve>(AbstractAspect::ChildIndexFlag::Recursive);
-	for (const auto* curve : curves) {
-		bool used = false;
-
-		const auto* analysisCurve = dynamic_cast<const XYAnalysisCurve*>(curve);
-		if (analysisCurve) {
-			if (analysisCurve->dataSourceType() == XYAnalysisCurve::DataSourceType::Spreadsheet
-				&& (analysisCurve->xDataColumn() == this || analysisCurve->yDataColumn() == this || analysisCurve->y2DataColumn() == this))
-				used = true;
-		} else {
-			if (curve->xColumn() == this || curve->yColumn() == this || curve->xErrorMinusColumn() == this || curve->xErrorPlusColumn() == this
-				|| curve->yErrorMinusColumn() == this || curve->yErrorPlusColumn() == this)
-				used = true;
-		}
-
-		if (!used) {
-			// the column is not used direclty as a data source, check the values custom column
-			if (curve->valuesColumn() == this)
-				used = true;
-		}
-
+	const auto& plots = project->children<Plot>(AbstractAspect::ChildIndexFlag::Recursive);
+	for (const auto* plot : plots) {
+		const bool used = plot->usingColumn(this);
 		if (used) {
 			if (!sectionAdded) {
-				usedInMenu->addSection(i18n("XY-Curves"));
+				usedInMenu->addSection(i18n("Plots"));
 				sectionAdded = true;
 			}
 
-			QAction* action = new QAction(curve->icon(), curve->name(), m_usedInActionGroup);
-			action->setData(curve->path());
-			usedInMenu->addAction(action);
-			showIsUsed = true;
-		}
-	}
-
-	// add histograms where the column is used
-	sectionAdded = false;
-	const auto& hists = project->children<Histogram>(AbstractAspect::ChildIndexFlag::Recursive);
-	for (const auto* hist : hists) {
-		bool used = (hist->dataColumn() == this);
-		if (used) {
-			if (!sectionAdded) {
-				usedInMenu->addSection(i18n("Histograms"));
-				sectionAdded = true;
-			}
-			QAction* action = new QAction(hist->icon(), hist->name(), m_usedInActionGroup);
-			action->setData(hist->path());
+			auto* action = new QAction(plot->icon(), plot->name(), m_usedInActionGroup);
+			action->setData(plot->path());
 			usedInMenu->addAction(action);
 			showIsUsed = true;
 		}
@@ -225,13 +187,14 @@ QMenu* Column::createContextMenu() {
 	sectionAdded = false;
 	const auto& axes = project->children<Axis>(AbstractAspect::ChildIndexFlag::Recursive);
 	for (const auto* axis : axes) {
-		bool used = (axis->majorTicksColumn() == this || axis->minorTicksColumn() == this || axis->labelsTextColumn() == this);
+		const bool used = (axis->majorTicksColumn() == this || axis->minorTicksColumn() == this || axis->labelsTextColumn() == this);
 		if (used) {
 			if (!sectionAdded) {
 				usedInMenu->addSection(i18n("Axes"));
 				sectionAdded = true;
 			}
-			QAction* action = new QAction(axis->icon(), axis->name(), m_usedInActionGroup);
+
+			auto* action = new QAction(axis->icon(), axis->name(), m_usedInActionGroup);
 			action->setData(axis->path());
 			usedInMenu->addAction(action);
 			showIsUsed = true;
@@ -256,7 +219,8 @@ QMenu* Column::createContextMenu() {
 				usedInMenu->addSection(i18n("Calculations"));
 				sectionAdded = true;
 			}
-			QAction* action = new QAction(column->icon(), column->name(), m_usedInActionGroup);
+
+			auto* action = new QAction(column->icon(), column->name(), m_usedInActionGroup);
 			action->setData(column->path());
 			usedInMenu->addAction(action);
 			showIsUsed = true;

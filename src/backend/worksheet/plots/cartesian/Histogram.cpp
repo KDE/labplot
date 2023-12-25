@@ -341,8 +341,7 @@ bool Histogram::hasData() const {
 
 bool Histogram::usingColumn(const Column* column) const {
 	Q_D(const Histogram);
-	return (d->dataColumn == column
-			|| (d->errorType == ErrorType::CustomSymmetric && d->errorPlusColumn == column)
+	return (d->dataColumn == column || (d->errorType == ErrorType::CustomSymmetric && d->errorPlusColumn == column)
 			|| (d->errorType == ErrorType::CustomAsymmetric && (d->errorPlusColumn == column || d->errorMinusColumn == column)));
 }
 

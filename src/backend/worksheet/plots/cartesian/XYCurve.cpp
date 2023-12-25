@@ -351,11 +351,11 @@ bool XYCurve::hasData() const {
 
 bool XYCurve::usingColumn(const Column* column) const {
 	Q_D(const XYCurve);
-	return (d->xColumn == column || d->yColumn == column
-		|| (d->xErrorType == ErrorType::Symmetric && d->xErrorPlusColumn == column)
-		|| (d->xErrorType == ErrorType::Asymmetric && (d->xErrorPlusColumn == column || d->xErrorMinusColumn == column))
-		|| (d->yErrorType == ErrorType::Symmetric && d->yErrorPlusColumn == column)
-		|| (d->yErrorType == ErrorType::Asymmetric && (d->yErrorPlusColumn == column || d->yErrorMinusColumn == column)));
+	return (d->xColumn == column || d->yColumn == column || (d->xErrorType == ErrorType::Symmetric && d->xErrorPlusColumn == column)
+			|| (d->xErrorType == ErrorType::Asymmetric && (d->xErrorPlusColumn == column || d->xErrorMinusColumn == column))
+			|| (d->yErrorType == ErrorType::Symmetric && d->yErrorPlusColumn == column)
+			|| (d->yErrorType == ErrorType::Asymmetric && (d->yErrorPlusColumn == column || d->yErrorMinusColumn == column))
+			|| (d->valuesType == ValuesType::CustomColumn && d->valuesColumn == column));
 }
 
 QColor XYCurve::color() const {
