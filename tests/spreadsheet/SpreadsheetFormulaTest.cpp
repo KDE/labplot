@@ -13,6 +13,8 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
 
+#include <QClipboard>
+
 #define INIT_SPREADSHEET                                                                                                                                       \
 	Spreadsheet sheet(QStringLiteral("test 2 cols"), false);                                                                                                   \
 	const int cols = 2;                                                                                                                                        \
@@ -463,6 +465,72 @@ void SpreadsheetFormulaTest::formulasmr() {
 	for (int i = 3; i < rows; i++) {
 		QCOMPARE(sheet.column(0)->valueAt(i), i + 1);
 		QCOMPARE(sheet.column(1)->valueAt(i), 3);
+	}
+}
+
+// ##############################################################################
+// ######### check updates of columns defined via a formula on changes ##########
+// ##############################################################################
+void SpreadsheetFormulaTest::formulaUpdateAfterCellChange() {
+	INIT_SPREADSHEET
+
+	auto* col1 = sheet.column(0);
+	auto* col2 = sheet.column(1);
+	col2->setFormula(QLatin1String("x"), variableNames, variableColumns, true);
+	col2->updateFormula();
+
+	// values
+	for (int i = 0; i < rows; i++) {
+		QCOMPARE(col1->valueAt(i), i + 1);
+		QCOMPARE(col2->valueAt(i), i + 1);
+	}
+
+	// modify the first cell in the first column and check the updated values
+	col1->setIntegerAt(0, 5);
+
+	// check the first row
+	QCOMPARE(col1->valueAt(0), 5);
+	QCOMPARE(col2->valueAt(0), 5);
+
+	// check the remaining rows
+	for (int i = 1; i < rows; i++) {
+		QCOMPARE(col1->valueAt(i), i + 1);
+		QCOMPARE(col2->valueAt(i), i + 1);
+	}
+}
+
+void SpreadsheetFormulaTest::formulaUpdateAfterPaste() {
+	INIT_SPREADSHEET
+
+	auto* col1 = sheet.column(0);
+	auto* col2 = sheet.column(1);
+	col2->setFormula(QLatin1String("x"), variableNames, variableColumns, true);
+	col2->updateFormula();
+
+	// values
+	for (int i = 0; i < rows; i++) {
+		QCOMPARE(col1->valueAt(i), i + 1);
+		QCOMPARE(col2->valueAt(i), i + 1);
+	}
+
+	// paste three values into the first column and check the updated values
+	const QString str = QStringLiteral("10\n20\n30");
+	QApplication::clipboard()->setText(str);
+	SpreadsheetView viewToPaste(&sheet, false);
+	viewToPaste.pasteIntoSelection();
+
+	// check the first three rows
+	QCOMPARE(col1->valueAt(0), 10);
+	QCOMPARE(col2->valueAt(0), 10);
+	QCOMPARE(col1->valueAt(1), 20);
+	QCOMPARE(col2->valueAt(1), 20);
+	QCOMPARE(col1->valueAt(2), 30);
+	QCOMPARE(col2->valueAt(2), 30);
+
+	// check the remaining rows
+	for (int i = 3; i < rows; i++) {
+		QCOMPARE(col1->valueAt(i), i + 1);
+		QCOMPARE(col2->valueAt(i), i + 1);
 	}
 }
 
