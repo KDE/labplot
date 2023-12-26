@@ -18,18 +18,14 @@
 #include "backend/matrix/Matrix.h"
 #include "backend/note/Note.h"
 #include "backend/spreadsheet/Spreadsheet.h"
-#include "backend/worksheet/Background.h"
 #include "backend/worksheet/Line.h"
 #include "backend/worksheet/TextLabel.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/WorksheetElement.h"
 #include "backend/worksheet/plots/PlotArea.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
-#include "backend/worksheet/plots/cartesian/BarPlot.h"
-#include "backend/worksheet/plots/cartesian/BoxPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
-#include "backend/worksheet/plots/cartesian/Histogram.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
@@ -1377,9 +1373,9 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 		label->setRotationAngle(t.rotation);
 
 		// TODO:
-		// int tab;
-		// BorderType borderType;
-		// Attach attach;
+		// 				int tab;
+		// 				BorderType borderType;
+		// 				Attach attach;
 	}
 
 	// curves
@@ -1387,174 +1383,83 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 	for (const auto& originCurve : layer.curves) {
 		QString data(QLatin1String(originCurve.dataName.c_str()));
 		DEBUG(Q_FUNC_INFO << ", NEW CURVE " << STDSTRING(data))
-		Plot* childPlot{nullptr};
-
-		// handle the different data sources for plots (spreadsheet, workbook, matrix and function)
 		switch (data.at(0).toLatin1()) {
 		case 'T': // Spreadsheet
 		case 'E': { // Workbook
-			// determine the used columns first
-			QString containerName = data.right(data.length() - 2); // strip "E_" or "T_"
-			int sheetIndex = 0; // which sheet? "@..."
-			const int atIndex = containerName.indexOf(QLatin1Char('@'));
-			if (atIndex != -1) {
-				sheetIndex = containerName.mid(atIndex + 1).toInt() - 1;
-				containerName.truncate(atIndex);
-			}
-			// DEBUG("CONTAINER = " << STDSTRING(containerName) << ", SHEET = " << sheetIndex)
-			int workbookIndex = findWorkbookByName(containerName);
-			// if workbook not found, findWorkbookByName() returns 0: check this
-			if (workbookIndex == 0 && (m_originFile->excelCount() == 0 || containerName.toStdString() != m_originFile->excel(0).name))
-				workbookIndex = -1;
-			// DEBUG("WORKBOOK  index = " << workbookIndex)
-			QString tableName = containerName;
-			if (workbookIndex != -1) // container is a workbook
-				tableName = containerName + QLatin1Char('/') + QLatin1String(m_originFile->excel(workbookIndex).sheets[sheetIndex].name.c_str());
-			// DEBUG("SPREADSHEET name = " << STDSTRING(tableName))
-
-			QString xColumnName = QLatin1String(originCurve.xColumnName.c_str());
-			QString yColumnName = QLatin1String(originCurve.yColumnName.c_str());
-			QString xColumnPath = tableName + QLatin1Char('/') + xColumnName;
-			QString yColumnPath = tableName + QLatin1Char('/') + yColumnName;
-			DEBUG(Q_FUNC_INFO << ", x/y column path = \"" << STDSTRING(xColumnPath) << "\" \"" << STDSTRING(yColumnPath) << "\"")
-
-			const auto type = originCurve.type;
-			switch (type) {
-			case Origin::GraphCurve::Line:
-			case Origin::GraphCurve::Scatter:
-			case Origin::GraphCurve::LineSymbol:
-			case Origin::GraphCurve::ErrorBar:
-			case Origin::GraphCurve::XErrorBar:
-			case Origin::GraphCurve::YErrorBar:
-			case Origin::GraphCurve::XYErrorBar:
-			{
-				/*
+			if (originCurve.type == Origin::GraphCurve::Line || originCurve.type == Origin::GraphCurve::Scatter
+				|| originCurve.type == Origin::GraphCurve::LineSymbol || originCurve.type == Origin::GraphCurve::ErrorBar
+				|| originCurve.type == Origin::GraphCurve::XErrorBar) {
 				// parse and use legend text
 				// find substring between %c{curveIndex} and %c{curveIndex+1}
 				int pos1 = legendText.indexOf(QStringLiteral("\\c{%1}").arg(curveIndex)) + 5;
 				int pos2 = legendText.indexOf(QStringLiteral("\\c{%1}").arg(curveIndex + 1));
 				QString curveText = legendText.mid(pos1, pos2 - pos1);
 				// replace %(1), %(2), etc. with curve name
-				curveText.replace(QStringLiteral("%(%1)").arg(curveIndex), yColumnName);
+				curveText.replace(QStringLiteral("%(%1)").arg(curveIndex), QLatin1String(originCurve.yColumnName.c_str()));
 				curveText = curveText.trimmed();
 				DEBUG(" curve " << curveIndex << " text = \"" << STDSTRING(curveText) << "\"");
 
 				// XYCurve* xyCurve = new XYCurve(i18n("Curve%1", QString::number(curveIndex)));
 				// TODO: curve (legend) does not support HTML text yet.
 				// XYCurve* xyCurve = new XYCurve(curveText);
-				*/
+				XYCurve* curve = new XYCurve(QString::fromLatin1(originCurve.yColumnName.c_str()));
+				if (m_graphLayerAsPlotArea)
+					curve->setCoordinateSystemIndex(plot->defaultCoordinateSystemIndex());
+				else
+					curve->setCoordinateSystemIndex(layerIndex);
+				// DEBUG("CURVE path = " << STDSTRING(data))
+				QString containerName = data.right(data.length() - 2); // strip "E_" or "T_"
+				int sheetIndex = 0; // which sheet? "@..."
+				const int atIndex = containerName.indexOf(QLatin1Char('@'));
+				if (atIndex != -1) {
+					sheetIndex = containerName.mid(atIndex + 1).toInt() - 1;
+					containerName.truncate(atIndex);
+				}
+				// DEBUG("CONTAINER = " << STDSTRING(containerName) << ", SHEET = " << sheetIndex)
+				int workbookIndex = findWorkbookByName(containerName);
+				// if workbook not found, findWorkbookByName() returns 0: check this
+				if (workbookIndex == 0 && (m_originFile->excelCount() == 0 || containerName.toStdString() != m_originFile->excel(0).name))
+					workbookIndex = -1;
+				// DEBUG("WORKBOOK  index = " << workbookIndex)
+				QString tableName = containerName;
+				if (workbookIndex != -1) // container is a workbook
+					tableName = containerName + QLatin1Char('/') + QLatin1String(m_originFile->excel(workbookIndex).sheets[sheetIndex].name.c_str());
+				// DEBUG("SPREADSHEET name = " << STDSTRING(tableName))
+				curve->setXColumnPath(tableName + QLatin1Char('/') + QLatin1String(originCurve.xColumnName.c_str()));
+				curve->setYColumnPath(tableName + QLatin1Char('/') + QLatin1String(originCurve.yColumnName.c_str()));
+				DEBUG(Q_FUNC_INFO << ", x/y column path = \"" << STDSTRING(curve->xColumnPath()) << "\" \"" << STDSTRING(curve->yColumnPath()) << "\"")
 
-				auto* curve = new XYCurve(yColumnName);
-				childPlot = curve;
-				curve->setXColumnPath(xColumnPath);
-				curve->setYColumnPath(yColumnPath);
-
-				if (!preview) {
-					curve->setSuppressRetransform(true);
+				curve->setSuppressRetransform(true);
+				if (!preview)
 					loadCurve(originCurve, curve);
-				}
+				plot->addChildFast(curve);
+				curve->setSuppressRetransform(false);
+			} else if (originCurve.type == Origin::GraphCurve::Column) {
+				// vertical bars
 
-				break;
+			} else if (originCurve.type == Origin::GraphCurve::Bar) {
+				// horizontal bars
+
+			} else if (originCurve.type == Origin::GraphCurve::Histogram) {
 			}
-			case Origin::GraphCurve::Column:
-			case Origin::GraphCurve::ColumnStack:
-			case Origin::GraphCurve::Bar:
-			case Origin::GraphCurve::BarStack: {
-				auto* barPlot = new BarPlot(yColumnName);
-				childPlot = barPlot;
-
-				if (!preview) {
-					// orientation
-					if (type == Origin::GraphCurve::Column || type == Origin::GraphCurve::ColumnStack)
-						barPlot->setOrientation(BarPlot::Orientation::Vertical);
-					else
-						barPlot->setOrientation(BarPlot::Orientation::Horizontal);
-
-					// type - grouped vs. stacked
-					if (type == Origin::GraphCurve::ColumnStack || type == Origin::GraphCurve::BarStack)
-						barPlot->setType(BarPlot::Type::Stacked);
-					else
-						barPlot->setType(BarPlot::Type::Grouped);
-				}
-
-				break;
-			}
-			case Origin::GraphCurve::Box: {
-				// box plot
-				auto* boxPlot = new BoxPlot(yColumnName);
-				childPlot = boxPlot;
-
-				if (!preview) {
-					// TODO
-				}
-				break;
-			}
-			case Origin::GraphCurve::Histogram: {
-				auto* hist = new Histogram(yColumnName);
-				childPlot = hist;
-				hist->setDataColumnPath(yColumnPath);
-
-				if (!preview) {
-					hist->setSuppressRetransform(true);
-					hist->setBinningMethod(Histogram::BinningMethod::ByWidth);
-					hist->setBinWidth(layer.histogramBin);
-					// TODO: orientation
-					loadBackground(originCurve, hist->background());
-				}
-				break;
-			}
-			case Origin::GraphCurve::Scatter3D:
-			case Origin::GraphCurve::Surface3D:
-			case Origin::GraphCurve::Vector3D:
-			case Origin::GraphCurve::ScatterAndErrorBar3D:
-			case Origin::GraphCurve::TernaryContour:
-			case Origin::GraphCurve::PolarXrYTheta:
-			case Origin::GraphCurve::SmithChart:
-			case Origin::GraphCurve::Polar:
-			case Origin::GraphCurve::BubbleIndexed:
-			case Origin::GraphCurve::BubbleColorMapped:
-			case Origin::GraphCurve::Area:
-			case Origin::GraphCurve::HiLoClose:
-			case Origin::GraphCurve::ColumnFloat:
-			case Origin::GraphCurve::Vector:
-			case Origin::GraphCurve::PlotDot:
-			case Origin::GraphCurve::Wall3D:
-			case Origin::GraphCurve::Ribbon3D:
-			case Origin::GraphCurve::Bar3D:
-			case Origin::GraphCurve::AreaStack:
-			case Origin::GraphCurve::FlowVector:
-			case Origin::GraphCurve::MatrixImage:
-			case Origin::GraphCurve::Pie:
-			case Origin::GraphCurve::Contour:
-			case Origin::GraphCurve::Unknown:
-			case Origin::GraphCurve::TextPlot:
-			case Origin::GraphCurve::SurfaceColorMap:
-			case Origin::GraphCurve::SurfaceColorFill:
-			case Origin::GraphCurve::SurfaceWireframe:
-			case Origin::GraphCurve::SurfaceBars:
-			case Origin::GraphCurve::Line3D:
-			case Origin::GraphCurve::Text3D:
-			case Origin::GraphCurve::Mesh3D:
-			case Origin::GraphCurve::XYZContour:
-			case Origin::GraphCurve::XYZTriangular:
-			case Origin::GraphCurve::LineSeries:
-				break;
-			}
-
-			break;
-		}
+		} break;
 		case 'F': {
+			Origin::Function function;
 			const auto funcIndex = m_originFile->functionIndex(data.right(data.length() - 2).toStdString().c_str());
 			if (funcIndex < 0) {
 				++curveIndex;
 				continue;
 			}
 
-			const auto& function = m_originFile->function(funcIndex);
+			function = m_originFile->function(funcIndex);
 
 			auto* xyEqCurve = new XYEquationCurve(QLatin1String(function.name.c_str()));
-			childPlot = xyEqCurve;
+			if (m_graphLayerAsPlotArea)
+				xyEqCurve->setCoordinateSystemIndex(plot->defaultCoordinateSystemIndex());
+			else
+				xyEqCurve->setCoordinateSystemIndex(layerIndex);
 			XYEquationCurve::EquationData eqData;
+
 			eqData.count = function.totalPoints;
 			eqData.expression1 = QLatin1String(function.formula.c_str());
 
@@ -1573,29 +1478,14 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 				eqData.max = QString::number(function.end);
 			}
 
-			if (!preview) {
-				xyEqCurve->setEquationData(eqData);
-				xyEqCurve->setSuppressRetransform(true);
+			xyEqCurve->setSuppressRetransform(true);
+			xyEqCurve->setEquationData(eqData);
+			if (!preview)
 				loadCurve(originCurve, xyEqCurve);
-			}
-
-			break;
+			plot->addChildFast(xyEqCurve);
+			xyEqCurve->setSuppressRetransform(false);
 		}
-		case 'M': {// Matrix
-			// TODO
-			break;
-		}
-		}
-
-		// set the coordinate system index and add to the plot area parent
-		if (childPlot && !preview) {
-			if (m_graphLayerAsPlotArea)
-				childPlot->setCoordinateSystemIndex(plot->defaultCoordinateSystemIndex());
-			else
-				childPlot->setCoordinateSystemIndex(layerIndex);
-
-			plot->addChildFast(childPlot);
-			childPlot->setSuppressRetransform(false);
+			// TODO case 'M': Matrix
 		}
 
 		++curveIndex;
@@ -1855,7 +1745,6 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 
 void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCurve* curve) const {
 	DEBUG(Q_FUNC_INFO)
-
 	// line properties
 	Qt::PenStyle penStyle(Qt::NoPen);
 	if (originCurve.type == Origin::GraphCurve::Line || originCurve.type == Origin::GraphCurve::LineSymbol) {
@@ -1912,432 +1801,419 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 			break;
 		}
 
+		curve->line()->setStyle(penStyle);
 		curve->line()->setWidth(Worksheet::convertToSceneUnits(originCurve.lineWidth, Worksheet::Unit::Point));
 		curve->line()->setColor(color(originCurve.lineColor));
 		curve->line()->setOpacity(1 - originCurve.lineTransparency / 255);
-		// TODO: handle unsigned char boxWidth of Origin::GraphCurve
-	}
 
-	curve->line()->setStyle(penStyle);
+		// TODO: handle unsigned char boxWidth of Origin::GraphCurve
+	} else
+		curve->line()->setStyle(penStyle);
 
 	// symbol properties
-	loadSymbol(originCurve, curve->symbol());
+	auto* symbol = curve->symbol();
+	if (originCurve.type == Origin::GraphCurve::Scatter || originCurve.type == Origin::GraphCurve::LineSymbol) {
+		// try to map the different symbols, mapping is not exact
+		symbol->setRotationAngle(0);
+		switch (originCurve.symbolShape) { // see https://www.originlab.com/doc/Labtalk/Ref/List-of-Symbol-Shapes
+		case 0: // NoSymbol
+			symbol->setStyle(Symbol::Style::NoSymbols);
+			break;
+		case 1: // Square
+			switch (originCurve.symbolInterior) {
+			case 0: // solid
+			case 1: // open
+			case 3: // hollow
+				symbol->setStyle(Symbol::Style::Square);
+				break;
+			case 2: // dot
+				symbol->setStyle(Symbol::Style::SquareDot);
+				break;
+			case 4: // plus
+				symbol->setStyle(Symbol::Style::SquarePlus);
+				break;
+			case 5: // X
+				symbol->setStyle(Symbol::Style::SquareX);
+				break;
+			case 6: // minus
+			case 10: // down
+				symbol->setStyle(Symbol::Style::SquareHalf);
+				break;
+			case 7: // pipe
+				symbol->setStyle(Symbol::Style::SquareHalf);
+				symbol->setRotationAngle(90);
+				break;
+			case 8: // up
+				symbol->setStyle(Symbol::Style::SquareHalf);
+				symbol->setRotationAngle(180);
+				break;
+			case 9: // right
+				symbol->setStyle(Symbol::Style::SquareHalf);
+				symbol->setRotationAngle(-90);
+				break;
+			case 11: // left
+				symbol->setStyle(Symbol::Style::SquareHalf);
+				symbol->setRotationAngle(90);
+				break;
+			}
+			break;
+		case 2: // Ellipse
+		case 20: // Sphere
+			switch (originCurve.symbolInterior) {
+			case 0: // solid
+			case 1: // open
+			case 3: // hollow
+				symbol->setStyle(Symbol::Style::Circle);
+				break;
+			case 2: // dot
+				symbol->setStyle(Symbol::Style::CircleDot);
+				break;
+			case 4: // plus
+				symbol->setStyle(Symbol::Style::CircleX);
+				symbol->setRotationAngle(45);
+				break;
+			case 5: // X
+				symbol->setStyle(Symbol::Style::CircleX);
+				break;
+			case 6: // minus
+				symbol->setStyle(Symbol::Style::CircleHalf);
+				symbol->setRotationAngle(90);
+				break;
+			case 7: // pipe
+			case 11: // left
+				symbol->setStyle(Symbol::Style::CircleHalf);
+				break;
+			case 8: // up
+				symbol->setStyle(Symbol::Style::CircleHalf);
+				symbol->setRotationAngle(90);
+				break;
+			case 9: // right
+				symbol->setStyle(Symbol::Style::CircleHalf);
+				symbol->setRotationAngle(180);
+				break;
+			case 10: // down
+				symbol->setStyle(Symbol::Style::CircleHalf);
+				symbol->setRotationAngle(-90);
+				break;
+			}
+			break;
+		case 3: // UTriangle
+			switch (originCurve.symbolInterior) {
+			case 0: // solid
+			case 1: // open
+			case 3: // hollow
+			case 4: // plus	TODO
+			case 5: // X	TODO
+				symbol->setStyle(Symbol::Style::EquilateralTriangle);
+				break;
+			case 2: // dot
+				symbol->setStyle(Symbol::Style::TriangleDot);
+				break;
+			case 7: // pipe
+			case 11: // left
+				symbol->setStyle(Symbol::Style::TriangleLine);
+				break;
+			case 6: // minus
+			case 8: // up
+				symbol->setStyle(Symbol::Style::TriangleHalf);
+				break;
+			case 9: // right	TODO
+				symbol->setStyle(Symbol::Style::TriangleLine);
+				// symbol->setRotationAngle(180);
+				break;
+			case 10: // down	TODO
+				symbol->setStyle(Symbol::Style::TriangleHalf);
+				// symbol->setRotationAngle(180);
+				break;
+			}
+			break;
+		case 4: // DTriangle
+			switch (originCurve.symbolInterior) {
+			case 0: // solid
+			case 1: // open
+			case 3: // hollow
+			case 4: // plus	TODO
+			case 5: // X	TODO
+				symbol->setStyle(Symbol::Style::EquilateralTriangle);
+				symbol->setRotationAngle(180);
+				break;
+			case 2: // dot
+				symbol->setStyle(Symbol::Style::TriangleDot);
+				symbol->setRotationAngle(180);
+				break;
+			case 7: // pipe
+			case 11: // left
+				symbol->setStyle(Symbol::Style::TriangleLine);
+				symbol->setRotationAngle(180);
+				break;
+			case 6: // minus
+			case 8: // up
+				symbol->setStyle(Symbol::Style::TriangleHalf);
+				symbol->setRotationAngle(180);
+				break;
+			case 9: // right	TODO
+				symbol->setStyle(Symbol::Style::TriangleLine);
+				symbol->setRotationAngle(180);
+				break;
+			case 10: // down	TODO
+				symbol->setStyle(Symbol::Style::TriangleHalf);
+				symbol->setRotationAngle(180);
+				break;
+			}
+			break;
+		case 5: // Diamond
+			symbol->setStyle(Symbol::Style::Diamond);
+			switch (originCurve.symbolInterior) {
+			case 0: // solid
+			case 1: // open
+			case 3: // hollow
+				symbol->setStyle(Symbol::Style::Diamond);
+				break;
+			case 2: // dot
+				symbol->setStyle(Symbol::Style::SquareDot);
+				symbol->setRotationAngle(45);
+				break;
+			case 4: // plus
+				symbol->setStyle(Symbol::Style::SquareX);
+				symbol->setRotationAngle(45);
+				break;
+			case 5: // X
+				symbol->setStyle(Symbol::Style::SquarePlus);
+				symbol->setRotationAngle(45);
+				break;
+			case 6: // minus
+			case 10: // down
+				symbol->setStyle(Symbol::Style::SquareHalf);
+				break;
+			case 7: // pipe
+				symbol->setStyle(Symbol::Style::SquareHalf);
+				symbol->setRotationAngle(90);
+				break;
+			case 8: // up
+				symbol->setStyle(Symbol::Style::SquareHalf);
+				symbol->setRotationAngle(180);
+				break;
+			case 9: // right
+				symbol->setStyle(Symbol::Style::SquareHalf);
+				symbol->setRotationAngle(-90);
+				break;
+			case 11: // left
+				symbol->setStyle(Symbol::Style::SquareHalf);
+				symbol->setRotationAngle(90);
+				break;
+			}
+			break;
+		case 6: // Cross +
+			symbol->setStyle(Symbol::Style::Cross);
+			break;
+		case 7: // Cross x
+			symbol->setStyle(Symbol::Style::Cross);
+			symbol->setRotationAngle(45);
+			break;
+		case 8: // Snow
+			symbol->setStyle(Symbol::Style::XPlus);
+			break;
+		case 9: // Horizontal -
+			symbol->setStyle(Symbol::Style::Line);
+			symbol->setRotationAngle(90);
+			break;
+		case 10: // Vertical |
+			symbol->setStyle(Symbol::Style::Line);
+			break;
+		case 15: // LTriangle
+			switch (originCurve.symbolInterior) {
+			case 0: // solid
+			case 1: // open
+			case 3: // hollow
+			case 4: // plus	TODO
+			case 5: // X	TODO
+				symbol->setStyle(Symbol::Style::EquilateralTriangle);
+				symbol->setRotationAngle(-90);
+				break;
+			case 2: // dot
+				symbol->setStyle(Symbol::Style::TriangleDot);
+				symbol->setRotationAngle(-90);
+				break;
+			case 7: // pipe
+			case 11: // left
+				symbol->setStyle(Symbol::Style::TriangleLine);
+				symbol->setRotationAngle(-90);
+				break;
+			case 6: // minus
+			case 8: // up
+				symbol->setStyle(Symbol::Style::TriangleHalf);
+				symbol->setRotationAngle(-90);
+				break;
+			case 9: // right	TODO
+				symbol->setStyle(Symbol::Style::TriangleLine);
+				symbol->setRotationAngle(-90);
+				break;
+			case 10: // down	TODO
+				symbol->setStyle(Symbol::Style::TriangleHalf);
+				symbol->setRotationAngle(-90);
+				break;
+			}
+			break;
+		case 16: // RTriangle
+			switch (originCurve.symbolInterior) {
+			case 0: // solid
+			case 1: // open
+			case 3: // hollow
+			case 4: // plus	TODO
+			case 5: // X	TODO
+				symbol->setStyle(Symbol::Style::EquilateralTriangle);
+				symbol->setRotationAngle(90);
+				break;
+			case 2: // dot
+				symbol->setStyle(Symbol::Style::TriangleDot);
+				symbol->setRotationAngle(90);
+				break;
+			case 7: // pipe
+			case 11: // left
+				symbol->setStyle(Symbol::Style::TriangleLine);
+				symbol->setRotationAngle(90);
+				break;
+			case 6: // minus
+			case 8: // up
+				symbol->setStyle(Symbol::Style::TriangleHalf);
+				symbol->setRotationAngle(90);
+				break;
+			case 9: // right	TODO
+				symbol->setStyle(Symbol::Style::TriangleLine);
+				symbol->setRotationAngle(90);
+				break;
+			case 10: // down	TODO
+				symbol->setStyle(Symbol::Style::TriangleHalf);
+				symbol->setRotationAngle(90);
+				break;
+			}
+			break;
+		case 17: // Hexagon
+			symbol->setStyle(Symbol::Style::Hexagon);
+			break;
+		case 18: // Star
+			symbol->setStyle(Symbol::Style::Star);
+			break;
+		case 19: // Pentagon
+			symbol->setStyle(Symbol::Style::Pentagon);
+			break;
+		default:
+			symbol->setStyle(Symbol::Style::NoSymbols);
+		}
+		// symbol size
+		const double sizeScaleFactor = 0.5; // match size
+		symbol->setSize(Worksheet::convertToSceneUnits(originCurve.symbolSize * sizeScaleFactor, Worksheet::Unit::Point));
+
+		// symbol fill color
+		QBrush brush = symbol->brush();
+		if (originCurve.symbolFillColor.type == Origin::Color::ColorType::Automatic) {
+			// DEBUG(Q_FUNC_INFO << ", AUTOMATIC fill color")
+			//"automatic" color -> the color of the line, if available, is used, and black otherwise
+			if (curve->lineType() != XYCurve::LineType::NoLine)
+				brush.setColor(curve->line()->pen().color());
+			else
+				brush.setColor(Qt::black);
+		} else
+			brush.setColor(color(originCurve.symbolFillColor));
+		if (originCurve.symbolInterior > 0 && originCurve.symbolInterior < 8) // unfilled styles
+			brush.setStyle(Qt::NoBrush);
+		symbol->setBrush(brush);
+
+		// symbol border/edge color and width
+		QPen pen = symbol->pen();
+		if (originCurve.symbolColor.type == Origin::Color::ColorType::Automatic) {
+			//"automatic" color -> the color of the line, if available, has to be used, black otherwise
+			if (curve->lineType() != XYCurve::LineType::NoLine)
+				pen.setColor(curve->line()->pen().color());
+			else
+				pen.setColor(Qt::black);
+		} else
+			pen.setColor(color(originCurve.symbolColor));
+
+		// DEBUG(Q_FUNC_INFO << ", SYMBOL THICKNESS = " << (int)originCurve.symbolThickness)
+		// DEBUG(Q_FUNC_INFO << ", BORDER THICKNESS = " << borderScaleFactor * originCurve.symbolThickness/100.*symbol->size()/scaleFactor)
+		// border width (edge thickness in Origin) is given as percentage of the symbol radius
+		const double borderScaleFactor = 5.; // match size
+		pen.setWidthF(borderScaleFactor * originCurve.symbolThickness / 100. * symbol->size() / sizeScaleFactor);
+
+		symbol->setPen(pen);
+
+		// handle unsigned char pointOffset member
+		// handle bool connectSymbols member
+	} else {
+		symbol->setStyle(Symbol::Style::NoSymbols);
+	}
 
 	// filling properties
-	loadBackground(originCurve, curve->background());
-}
+	if (originCurve.fillArea) {
+		// TODO: handle unsigned char fillAreaType;
+		// with 'fillAreaType'=0x10 the area between the curve and the x-axis is filled
+		// with 'fillAreaType'=0x14 the area included inside the curve is filled. First and last curve points are joined by a line to close the otherwise open
+		// area. with 'fillAreaType'=0x12 the area excluded outside the curve is filled. The inverse of fillAreaType=0x14 is filled. At the moment we only
+		// support the first type, so set it to XYCurve::FillingBelow
+		curve->background()->setPosition(Background::Position::Below);
+		auto* background = curve->background();
 
-void OriginProjectParser::loadBackground(const Origin::GraphCurve& originCurve, Background* background) const {
-	if (!originCurve.fillArea) {
-		background->setPosition(Background::Position::No);
-		return;
-	}
+		if (originCurve.fillAreaPattern == 0) {
+			background->setType(Background::Type::Color);
+		} else {
+			background->setType(Background::Type::Pattern);
 
-	// TODO: handle unsigned char fillAreaType;
-	// with 'fillAreaType'=0x10 the area between the curve and the x-axis is filled
-	// with 'fillAreaType'=0x14 the area included inside the curve is filled. First and last curve points are joined by a line to close the otherwise open
-	// area. with 'fillAreaType'=0x12 the area excluded outside the curve is filled. The inverse of fillAreaType=0x14 is filled. At the moment we only
-	// support the first type, so set it to XYCurve::FillingBelow
-	background->setPosition(Background::Position::Below);
-
-	if (originCurve.fillAreaPattern == 0) {
-		background->setType(Background::Type::Color);
-	} else {
-		background->setType(Background::Type::Pattern);
-
-		// map different patterns in originCurve.fillAreaPattern (has the values of Origin::FillPattern) to Qt::BrushStyle;
-		switch (originCurve.fillAreaPattern) {
-		case 0:
-			background->setBrushStyle(Qt::NoBrush);
-			break;
-		case 1:
-		case 2:
-		case 3:
-			background->setBrushStyle(Qt::BDiagPattern);
-			break;
-		case 4:
-		case 5:
-		case 6:
-			background->setBrushStyle(Qt::FDiagPattern);
-			break;
-		case 7:
-		case 8:
-		case 9:
-			background->setBrushStyle(Qt::DiagCrossPattern);
-			break;
-		case 10:
-		case 11:
-		case 12:
-			background->setBrushStyle(Qt::HorPattern);
-			break;
-		case 13:
-		case 14:
-		case 15:
-			background->setBrushStyle(Qt::VerPattern);
-			break;
-		case 16:
-		case 17:
-		case 18:
-			background->setBrushStyle(Qt::CrossPattern);
-			break;
+			// map different patterns in originCurve.fillAreaPattern (has the values of Origin::FillPattern) to Qt::BrushStyle;
+			switch (originCurve.fillAreaPattern) {
+			case 0:
+				background->setBrushStyle(Qt::NoBrush);
+				break;
+			case 1:
+			case 2:
+			case 3:
+				background->setBrushStyle(Qt::BDiagPattern);
+				break;
+			case 4:
+			case 5:
+			case 6:
+				background->setBrushStyle(Qt::FDiagPattern);
+				break;
+			case 7:
+			case 8:
+			case 9:
+				background->setBrushStyle(Qt::DiagCrossPattern);
+				break;
+			case 10:
+			case 11:
+			case 12:
+				background->setBrushStyle(Qt::HorPattern);
+				break;
+			case 13:
+			case 14:
+			case 15:
+				background->setBrushStyle(Qt::VerPattern);
+				break;
+			case 16:
+			case 17:
+			case 18:
+				background->setBrushStyle(Qt::CrossPattern);
+				break;
+			}
 		}
-	}
 
-	background->setFirstColor(color(originCurve.fillAreaColor));
-	background->setOpacity(1 - originCurve.fillAreaTransparency / 255);
+		background->setFirstColor(color(originCurve.fillAreaColor));
+		background->setOpacity(1 - originCurve.fillAreaTransparency / 255);
 
-	// Color fillAreaPatternColor - color for the pattern lines, not supported
-	// double fillAreaPatternWidth - width of the pattern lines, not supported
-	// bool fillAreaWithLineTransparency - transparency of the pattern lines independent of the area transparency, not supported
+		// Color fillAreaPatternColor - color for the pattern lines, not supported
+		// double fillAreaPatternWidth - width of the pattern lines, not supported
+		// bool fillAreaWithLineTransparency - transparency of the pattern lines independent of the area transparency, not supported
 
-	// TODO:
-	// unsigned char fillAreaPatternBorderStyle;
-	// Color fillAreaPatternBorderColor;
-	// double fillAreaPatternBorderWidth;
-	// The Border properties are used only in "Column/Bar" (histogram) plots. Those properties are:
-	// fillAreaPatternBorderStyle   for the line style (use enum Origin::LineStyle here)
-	// fillAreaPatternBorderColor   for the line color
-	// fillAreaPatternBorderWidth   for the line width
-}
-
-void OriginProjectParser::loadSymbol(const Origin::GraphCurve& originCurve, Symbol* symbol, const XYCurve* curve) const {
-	if (originCurve.type != Origin::GraphCurve::Scatter || originCurve.type == Origin::GraphCurve::LineSymbol) {
-		symbol->setStyle(Symbol::Style::NoSymbols);
-		return;
-	}
-
-	// symbol style:
-	// try to map the different symbols, mapping is not exact,
-	// see https://www.originlab.com/doc/Labtalk/Ref/List-of-Symbol-Shapes
-	symbol->setRotationAngle(0);
-	switch (originCurve.symbolShape) {
-	case 0: // NoSymbol
-		symbol->setStyle(Symbol::Style::NoSymbols);
-		break;
-	case 1: // Square
-		switch (originCurve.symbolInterior) {
-		case 0: // solid
-		case 1: // open
-		case 3: // hollow
-			symbol->setStyle(Symbol::Style::Square);
-			break;
-		case 2: // dot
-			symbol->setStyle(Symbol::Style::SquareDot);
-			break;
-		case 4: // plus
-			symbol->setStyle(Symbol::Style::SquarePlus);
-			break;
-		case 5: // X
-			symbol->setStyle(Symbol::Style::SquareX);
-			break;
-		case 6: // minus
-		case 10: // down
-			symbol->setStyle(Symbol::Style::SquareHalf);
-			break;
-		case 7: // pipe
-			symbol->setStyle(Symbol::Style::SquareHalf);
-			symbol->setRotationAngle(90);
-			break;
-		case 8: // up
-			symbol->setStyle(Symbol::Style::SquareHalf);
-			symbol->setRotationAngle(180);
-			break;
-		case 9: // right
-			symbol->setStyle(Symbol::Style::SquareHalf);
-			symbol->setRotationAngle(-90);
-			break;
-		case 11: // left
-			symbol->setStyle(Symbol::Style::SquareHalf);
-			symbol->setRotationAngle(90);
-			break;
-		}
-		break;
-	case 2: // Ellipse
-	case 20: // Sphere
-		switch (originCurve.symbolInterior) {
-		case 0: // solid
-		case 1: // open
-		case 3: // hollow
-			symbol->setStyle(Symbol::Style::Circle);
-			break;
-		case 2: // dot
-			symbol->setStyle(Symbol::Style::CircleDot);
-			break;
-		case 4: // plus
-			symbol->setStyle(Symbol::Style::CircleX);
-			symbol->setRotationAngle(45);
-			break;
-		case 5: // X
-			symbol->setStyle(Symbol::Style::CircleX);
-			break;
-		case 6: // minus
-			symbol->setStyle(Symbol::Style::CircleHalf);
-			symbol->setRotationAngle(90);
-			break;
-		case 7: // pipe
-		case 11: // left
-			symbol->setStyle(Symbol::Style::CircleHalf);
-			break;
-		case 8: // up
-			symbol->setStyle(Symbol::Style::CircleHalf);
-			symbol->setRotationAngle(90);
-			break;
-		case 9: // right
-			symbol->setStyle(Symbol::Style::CircleHalf);
-			symbol->setRotationAngle(180);
-			break;
-		case 10: // down
-			symbol->setStyle(Symbol::Style::CircleHalf);
-			symbol->setRotationAngle(-90);
-			break;
-		}
-		break;
-	case 3: // UTriangle
-		switch (originCurve.symbolInterior) {
-		case 0: // solid
-		case 1: // open
-		case 3: // hollow
-		case 4: // plus	TODO
-		case 5: // X	TODO
-			symbol->setStyle(Symbol::Style::EquilateralTriangle);
-			break;
-		case 2: // dot
-			symbol->setStyle(Symbol::Style::TriangleDot);
-			break;
-		case 7: // pipe
-		case 11: // left
-			symbol->setStyle(Symbol::Style::TriangleLine);
-			break;
-		case 6: // minus
-		case 8: // up
-			symbol->setStyle(Symbol::Style::TriangleHalf);
-			break;
-		case 9: // right	TODO
-			symbol->setStyle(Symbol::Style::TriangleLine);
-			// symbol->setRotationAngle(180);
-			break;
-		case 10: // down	TODO
-			symbol->setStyle(Symbol::Style::TriangleHalf);
-			// symbol->setRotationAngle(180);
-			break;
-		}
-		break;
-	case 4: // DTriangle
-		switch (originCurve.symbolInterior) {
-		case 0: // solid
-		case 1: // open
-		case 3: // hollow
-		case 4: // plus	TODO
-		case 5: // X	TODO
-			symbol->setStyle(Symbol::Style::EquilateralTriangle);
-			symbol->setRotationAngle(180);
-			break;
-		case 2: // dot
-			symbol->setStyle(Symbol::Style::TriangleDot);
-			symbol->setRotationAngle(180);
-			break;
-		case 7: // pipe
-		case 11: // left
-			symbol->setStyle(Symbol::Style::TriangleLine);
-			symbol->setRotationAngle(180);
-			break;
-		case 6: // minus
-		case 8: // up
-			symbol->setStyle(Symbol::Style::TriangleHalf);
-			symbol->setRotationAngle(180);
-			break;
-		case 9: // right	TODO
-			symbol->setStyle(Symbol::Style::TriangleLine);
-			symbol->setRotationAngle(180);
-			break;
-		case 10: // down	TODO
-			symbol->setStyle(Symbol::Style::TriangleHalf);
-			symbol->setRotationAngle(180);
-			break;
-		}
-		break;
-	case 5: // Diamond
-		symbol->setStyle(Symbol::Style::Diamond);
-		switch (originCurve.symbolInterior) {
-		case 0: // solid
-		case 1: // open
-		case 3: // hollow
-			symbol->setStyle(Symbol::Style::Diamond);
-			break;
-		case 2: // dot
-			symbol->setStyle(Symbol::Style::SquareDot);
-			symbol->setRotationAngle(45);
-			break;
-		case 4: // plus
-			symbol->setStyle(Symbol::Style::SquareX);
-			symbol->setRotationAngle(45);
-			break;
-		case 5: // X
-			symbol->setStyle(Symbol::Style::SquarePlus);
-			symbol->setRotationAngle(45);
-			break;
-		case 6: // minus
-		case 10: // down
-			symbol->setStyle(Symbol::Style::SquareHalf);
-			break;
-		case 7: // pipe
-			symbol->setStyle(Symbol::Style::SquareHalf);
-			symbol->setRotationAngle(90);
-			break;
-		case 8: // up
-			symbol->setStyle(Symbol::Style::SquareHalf);
-			symbol->setRotationAngle(180);
-			break;
-		case 9: // right
-			symbol->setStyle(Symbol::Style::SquareHalf);
-			symbol->setRotationAngle(-90);
-			break;
-		case 11: // left
-			symbol->setStyle(Symbol::Style::SquareHalf);
-			symbol->setRotationAngle(90);
-			break;
-		}
-		break;
-	case 6: // Cross +
-		symbol->setStyle(Symbol::Style::Cross);
-		break;
-	case 7: // Cross x
-		symbol->setStyle(Symbol::Style::Cross);
-		symbol->setRotationAngle(45);
-		break;
-	case 8: // Snow
-		symbol->setStyle(Symbol::Style::XPlus);
-		break;
-	case 9: // Horizontal -
-		symbol->setStyle(Symbol::Style::Line);
-		symbol->setRotationAngle(90);
-		break;
-	case 10: // Vertical |
-		symbol->setStyle(Symbol::Style::Line);
-		break;
-	case 15: // LTriangle
-		switch (originCurve.symbolInterior) {
-		case 0: // solid
-		case 1: // open
-		case 3: // hollow
-		case 4: // plus	TODO
-		case 5: // X	TODO
-			symbol->setStyle(Symbol::Style::EquilateralTriangle);
-			symbol->setRotationAngle(-90);
-			break;
-		case 2: // dot
-			symbol->setStyle(Symbol::Style::TriangleDot);
-			symbol->setRotationAngle(-90);
-			break;
-		case 7: // pipe
-		case 11: // left
-			symbol->setStyle(Symbol::Style::TriangleLine);
-			symbol->setRotationAngle(-90);
-			break;
-		case 6: // minus
-		case 8: // up
-			symbol->setStyle(Symbol::Style::TriangleHalf);
-			symbol->setRotationAngle(-90);
-			break;
-		case 9: // right	TODO
-			symbol->setStyle(Symbol::Style::TriangleLine);
-			symbol->setRotationAngle(-90);
-			break;
-		case 10: // down	TODO
-			symbol->setStyle(Symbol::Style::TriangleHalf);
-			symbol->setRotationAngle(-90);
-			break;
-		}
-		break;
-	case 16: // RTriangle
-		switch (originCurve.symbolInterior) {
-		case 0: // solid
-		case 1: // open
-		case 3: // hollow
-		case 4: // plus	TODO
-		case 5: // X	TODO
-			symbol->setStyle(Symbol::Style::EquilateralTriangle);
-			symbol->setRotationAngle(90);
-			break;
-		case 2: // dot
-			symbol->setStyle(Symbol::Style::TriangleDot);
-			symbol->setRotationAngle(90);
-			break;
-		case 7: // pipe
-		case 11: // left
-			symbol->setStyle(Symbol::Style::TriangleLine);
-			symbol->setRotationAngle(90);
-			break;
-		case 6: // minus
-		case 8: // up
-			symbol->setStyle(Symbol::Style::TriangleHalf);
-			symbol->setRotationAngle(90);
-			break;
-		case 9: // right	TODO
-			symbol->setStyle(Symbol::Style::TriangleLine);
-			symbol->setRotationAngle(90);
-			break;
-		case 10: // down	TODO
-			symbol->setStyle(Symbol::Style::TriangleHalf);
-			symbol->setRotationAngle(90);
-			break;
-		}
-		break;
-	case 17: // Hexagon
-		symbol->setStyle(Symbol::Style::Hexagon);
-		break;
-	case 18: // Star
-		symbol->setStyle(Symbol::Style::Star);
-		break;
-	case 19: // Pentagon
-		symbol->setStyle(Symbol::Style::Pentagon);
-		break;
-	default:
-		symbol->setStyle(Symbol::Style::NoSymbols);
-	}
-
-	// symbol size
-	const double sizeScaleFactor = 0.5; // match size
-	symbol->setSize(Worksheet::convertToSceneUnits(originCurve.symbolSize * sizeScaleFactor, Worksheet::Unit::Point));
-
-	// symbol fill color
-	QBrush brush = symbol->brush();
-	if (originCurve.symbolFillColor.type == Origin::Color::ColorType::Automatic) {
-		// DEBUG(Q_FUNC_INFO << ", AUTOMATIC fill color")
-		//"automatic" color -> the color of the line, if available, is used, and black otherwise
-		if (curve && curve->lineType() != XYCurve::LineType::NoLine)
-			brush.setColor(curve->line()->pen().color());
-		else
-			brush.setColor(Qt::black);
+		// TODO:
+		// unsigned char fillAreaPatternBorderStyle;
+		// Color fillAreaPatternBorderColor;
+		// double fillAreaPatternBorderWidth;
+		// The Border properties are used only in "Column/Bar" (histogram) plots. Those properties are:
+		// fillAreaPatternBorderStyle   for the line style (use enum Origin::LineStyle here)
+		// fillAreaPatternBorderColor   for the line color
+		// fillAreaPatternBorderWidth   for the line width
 	} else
-		brush.setColor(color(originCurve.symbolFillColor));
-
-	if (originCurve.symbolInterior > 0 && originCurve.symbolInterior < 8) // unfilled styles
-		brush.setStyle(Qt::NoBrush);
-
-	symbol->setBrush(brush);
-
-	// symbol border/edge color and width
-	QPen pen = symbol->pen();
-	if (originCurve.symbolColor.type == Origin::Color::ColorType::Automatic) {
-		//"automatic" color -> the color of the line, if available, has to be used, black otherwise
-		if (curve && curve->lineType() != XYCurve::LineType::NoLine)
-			pen.setColor(curve->line()->pen().color());
-		else
-			pen.setColor(Qt::black);
-	} else
-		pen.setColor(color(originCurve.symbolColor));
-
-	// DEBUG(Q_FUNC_INFO << ", SYMBOL THICKNESS = " << (int)originCurve.symbolThickness)
-	// DEBUG(Q_FUNC_INFO << ", BORDER THICKNESS = " << borderScaleFactor * originCurve.symbolThickness/100.*symbol->size()/scaleFactor)
-	// border width (edge thickness in Origin) is given as percentage of the symbol radius
-	const double borderScaleFactor = 5.; // match size
-	pen.setWidthF(borderScaleFactor * originCurve.symbolThickness / 100. * symbol->size() / sizeScaleFactor);
-
-	symbol->setPen(pen);
-
-	// handle unsigned char pointOffset member
-	// handle bool connectSymbols member
+		curve->background()->setPosition(Background::Position::No);
 }
 
 bool OriginProjectParser::loadNote(Note* note, bool preview) {
