@@ -2477,6 +2477,134 @@ QString OriginProjectParser::replaceSpecialChars(const QString& text) const {
 }
 
 /*!
+ * helper function mapping the characters from the Symbol font (outdated and shouldn't be used for html)
+ * to Unicode characters, s.a. https://www.alanwood.net/demos/symbol.html
+ */
+QString greekSymbol(const QString& symbol) {
+	// characters in the Symbol-font
+	static QStringList symbols{// letters
+							   QStringLiteral("A"),
+							   QStringLiteral("a"),
+							   QStringLiteral("B"),
+							   QStringLiteral("b"),
+							   QStringLiteral("G"),
+							   QStringLiteral("g"),
+							   QStringLiteral("D"),
+							   QStringLiteral("d"),
+							   QStringLiteral("E"),
+							   QStringLiteral("e"),
+							   QStringLiteral("Z"),
+							   QStringLiteral("z"),
+							   QStringLiteral("H"),
+							   QStringLiteral("h"),
+							   QStringLiteral("Q"),
+							   QStringLiteral("q"),
+							   QStringLiteral("I"),
+							   QStringLiteral("i"),
+							   QStringLiteral("K"),
+							   QStringLiteral("k"),
+							   QStringLiteral("L"),
+							   QStringLiteral("l"),
+							   QStringLiteral("M"),
+							   QStringLiteral("m"),
+							   QStringLiteral("N"),
+							   QStringLiteral("n"),
+							   QStringLiteral("X"),
+							   QStringLiteral("x"),
+							   QStringLiteral("O"),
+							   QStringLiteral("o"),
+							   QStringLiteral("P"),
+							   QStringLiteral("p"),
+							   QStringLiteral("R"),
+							   QStringLiteral("r"),
+							   QStringLiteral("S"),
+							   QStringLiteral("s"),
+							   QStringLiteral("T"),
+							   QStringLiteral("t"),
+							   QStringLiteral("U"),
+							   QStringLiteral("u"),
+							   QStringLiteral("F"),
+							   QStringLiteral("f"),
+							   QStringLiteral("C"),
+							   QStringLiteral("c"),
+							   QStringLiteral("Y"),
+							   QStringLiteral("y"),
+							   QStringLiteral("W"),
+							   QStringLiteral("w"),
+
+							   // extra symbols
+							   QStringLiteral("V"),
+							   QStringLiteral("J"),
+							   QStringLiteral("j"),
+							   QStringLiteral("v"),
+							   QStringLiteral("i")};
+
+	// Unicode friendy codes for greek letters and symbols
+	static QStringList unicodeFriendlyCode{// letters
+										   QStringLiteral("&Alpha;"),
+										   QStringLiteral("&alpha;"),
+										   QStringLiteral("&Beta;"),
+										   QStringLiteral("&beta;"),
+										   QStringLiteral("&Gamma;"),
+										   QStringLiteral("&gamma;"),
+										   QStringLiteral("&Delta;"),
+										   QStringLiteral("&delta;"),
+										   QStringLiteral("&Epsilon;"),
+										   QStringLiteral("&epsilon;"),
+										   QStringLiteral("&Zeta;"),
+										   QStringLiteral("&zeta;"),
+										   QStringLiteral("&Eta;"),
+										   QStringLiteral("&eta;"),
+										   QStringLiteral("&Theta;"),
+										   QStringLiteral("&theta;"),
+										   QStringLiteral("&Iota;"),
+										   QStringLiteral("Iota;"),
+										   QStringLiteral("&Kappa;"),
+										   QStringLiteral("&kappa;"),
+										   QStringLiteral("&Lambda;"),
+										   QStringLiteral("&lambda;"),
+										   QStringLiteral("&Mu;"),
+										   QStringLiteral("&mu;"),
+										   QStringLiteral("&Nu;"),
+										   QStringLiteral("&nu;"),
+										   QStringLiteral("&Xi;"),
+										   QStringLiteral("&xi;"),
+										   QStringLiteral("&Omicron;"),
+										   QStringLiteral("&omicron;"),
+										   QStringLiteral("&Pi;"),
+										   QStringLiteral("&pi;"),
+										   QStringLiteral("&Rho;"),
+										   QStringLiteral("&rho;"),
+										   QStringLiteral("&Sigma;"),
+										   QStringLiteral("&sigma;"),
+										   QStringLiteral("&Tua;"),
+										   QStringLiteral("&tau;"),
+										   QStringLiteral("&Upsilon;"),
+										   QStringLiteral("&upsilon;"),
+										   QStringLiteral("&Phi;"),
+										   QStringLiteral("&phi;"),
+										   QStringLiteral("&Chi;"),
+										   QStringLiteral("&chi;"),
+										   QStringLiteral("&Psi;"),
+										   QStringLiteral("&psi;"),
+										   QStringLiteral("&Omega;"),
+										   QStringLiteral("&omega;"),
+
+										   // extra symbols
+										   QStringLiteral("&sigmaf;"),
+										   QStringLiteral("&thetasym;"),
+										   QStringLiteral("&#981;;") /* phi symbol, no friendly code */,
+										   QStringLiteral("&piv;"),
+										   QStringLiteral("&upsih;")};
+
+	int index = symbols.indexOf(symbol);
+	if (index != -1)
+		return unicodeFriendlyCode.at(index);
+	else
+		return QString();
+}
+
+/*!
  * converts the string with Origin's syntax for text formatting/highlighting
  * to a string in the richtext/html format supported by Qt.
  * For the supported syntax, see:
@@ -2532,7 +2660,7 @@ QString OriginProjectParser::parseOriginTags(const QString& str) const {
 		} else if (marker.startsWith(QLatin1Char('b'))) {
 			rep = QStringLiteral("<b>%1</b>").arg(tagText);
 		} else if (marker.startsWith(QLatin1Char('g'))) { // greek symbols e.g. α φ
-			rep = QStringLiteral("<font face=Symbol>%1</font>").arg(tagText);
+			rep = greekSymbol(tagText);
 		} else if (marker.startsWith(QLatin1Char('i'))) {
 			rep = QStringLiteral("<i>%1</i>").arg(tagText);
 		} else if (marker.startsWith(QLatin1Char('s'))) {
