@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-24 00:39+0000\n"
+"POT-Creation-Date: 2023-12-26 00:38+0000\n"
 "PO-Revision-Date: 2023-11-13 14:41+0300\n"
 "Last-Translator: Sergey Kazorin <translation-team@basealt.ru>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -2948,7 +2948,7 @@ msgstr "Сбой факторизации"
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:603
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:623
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:658
-#: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:434
+#: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:437
 #, kde-format
 msgid "Failed to allocate memory"
 msgstr "Не удалось выделить память"
@@ -15658,6 +15658,23 @@ msgstr "Запятая (,)"
 msgid "Arabic (٫)"
 msgstr "Арабский (٫)"
 
+#: src/kdefrontend/SettingsGeneralPage.cpp:229
+#, fuzzy, kde-format
+#| msgid ""
+#| "<html><head/><body><p>Use terms compliant with the <a href=\"http://www."
+#| "bipm.org/utils/common/documents/jcgm/JCGM_100_2008_E.pdf\"><span style=\" "
+#| "text-decoration: underline; color:#2980b9;\">Guide to the Expression of "
+#| "Uncertainty in Measurement (GUM)</span></a></p></body></html>"
+msgid ""
+"Use terms compliant with the <a href=\"http://www.bipm.org/utils/common/"
+"documents/jcgm/JCGM_100_2008_E.pdf\">Guide to the Expression of Uncertainty "
+"in Measurement (GUM)</a>"
+msgstr ""
+"<html><head/><body><p>Термины необходимо использовать в соответствии с <a "
+"href=\"https://internet-law.ru/gosts/gost/65118/\"> <span style=\" text-"
+"decoration: underline; color:#2980b9;\">ГОСТ 34100.1-2017 Руководство по "
+"выражению неопределенности измерения</span></a></p></body></html>"
+
 #: src/kdefrontend/SettingsNotebookPage.cpp:23
 #, kde-format
 msgid "Enable syntax highlighting"
@@ -16157,7 +16174,7 @@ msgstr[3] "%1: заполнение столбца равноудалённым�
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:603
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:623
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:658
-#: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:434
+#: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:437
 #, kde-format
 msgid "Not enough memory to perform this operation."
 msgstr "Недостаточно памяти для выполнения этой операции."
@@ -16570,7 +16587,23 @@ msgstr ""
 "Если число не указано, в качестве начального числа для генератора будет "
 "использована временная метка."
 
-#: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:458
+#: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:89
+#, fuzzy, kde-format
+#| msgid ""
+#| "<html><head/><body><p>Random number distributions as defined in <a href="
+#| "\"https://www.gnu.org/software/gsl/doc/html/randist.html\"><span style=\" "
+#| "text-decoration: underline; color:#2980b9;\">GSL documentation</span></"
+#| "a></p></body></html>"
+msgid ""
+"Random number distributions as defined in <a href=\"https://www.gnu.org/"
+"software/gsl/doc/html/randist.html\">GSL documentation</a>"
+msgstr ""
+"<html><head/><body><p>Распределение случайного числа в соответствии с <a "
+"href=\"https://www.gnu.org/software/gsl/doc/html/randist.html\"><span style="
+"\" text-decoration: underline; color:#2980b9;\">документацией GSL</span></"
+"a></p></body></html>"
+
+#: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:461
 #, kde-format
 msgid "%1: fill column with non-uniform random numbers"
 msgid_plural "%1: fill columns with non-uniform random numbers"
