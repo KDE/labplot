@@ -16,16 +16,19 @@
 #include <OriginFile.h>
 
 class Axis;
+class Background;
 class CartesianPlot;
 class Column;
-class Project;
-class Workbook;
-class Spreadsheet;
+class Histogram;
 class Matrix;
-class TextLabel;
-class Worksheet;
 class Note;
+class Project;
+class Spreadsheet;
+class Symbol;
+class TextLabel;
 class XYCurve;
+class Workbook;
+class Worksheet;
 
 class OriginProjectParser : public ProjectParser {
 	Q_OBJECT
@@ -56,6 +59,8 @@ private:
 	void loadAxes(const Origin::GraphLayer&, CartesianPlot*, int index, const QString& xColumnName, const QString& yColumnName);
 	void loadAxis(const Origin::GraphAxis&, Axis*, int index, const QString& axisTitle = QString()) const;
 	void loadCurve(const Origin::GraphCurve&, XYCurve*) const;
+	void loadBackground(const Origin::GraphCurve&, Background*) const;
+	void loadSymbol(const Origin::GraphCurve&, Symbol*, const XYCurve* curve = nullptr) const;
 
 	bool loadNote(Note*, bool preview);
 	void handleLooseWindows(Folder*, bool preview);
