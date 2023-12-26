@@ -934,7 +934,7 @@ void ProjectImportTest::testParseOriginTags_data() {
 								<< "<u>underlined</u>";
 
 	QTest::newRow("greek char") << "\\g(a)"
-								<< "<font face=Symbol>a</font>";
+								<< "&alpha;";
 
 	QTest::newRow("sub-script") << "a\\-(b)"
 								<< "a<sub>b</sub>";
