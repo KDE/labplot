@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-12-26 00:38+0000\n"
-"PO-Revision-Date: 2023-12-24 08:22+0100\n"
+"PO-Revision-Date: 2023-12-26 08:26+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -3685,7 +3685,7 @@ msgstr "Redondear ao enteiro máis próximo"
 #: src/backend/gsl/functions.cpp:294
 #, kde-format
 msgid "Round to y decimal places"
-msgstr ""
+msgstr "Arredondar a y decimais"
 
 #: src/backend/gsl/functions.cpp:308
 #, kde-format
