@@ -31,7 +31,6 @@
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
-#include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
 
 #include <KLocalizedString>
@@ -1122,13 +1121,13 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 		// worksheet and plots got their sizes,
 		//-> position all text labels inside the plots correctly by converting
 		// the relative positions determined above to the absolute values
-		QHash<TextLabel*, QSizeF>::const_iterator it = textLabelPositions.constBegin();
+		auto it = textLabelPositions.constBegin();
 		while (it != textLabelPositions.constEnd()) {
 			TextLabel* label = it.key();
 			const QSizeF& ratios = it.value();
 			const auto* plot = static_cast<const CartesianPlot*>(label->parentAspect());
 
-			TextLabel::PositionWrapper position = label->position();
+			auto position = label->position();
 			position.point.setX(plot->dataRect().width() * (ratios.width() - 0.5));
 			position.point.setY(plot->dataRect().height() * (ratios.height() - 0.5));
 			label->setPosition(position);
@@ -1215,55 +1214,8 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 	}
 
 	// scales
-	switch (originXAxis.scale) {
-	case Origin::GraphAxis::Linear:
-		plot->setXRangeScale(RangeT::Scale::Linear);
-		break;
-	case Origin::GraphAxis::Log10:
-		plot->setXRangeScale(RangeT::Scale::Log10);
-		break;
-	case Origin::GraphAxis::Ln:
-		plot->setXRangeScale(RangeT::Scale::Ln);
-		break;
-	case Origin::GraphAxis::Log2:
-		plot->setXRangeScale(RangeT::Scale::Log2);
-		break;
-	case Origin::GraphAxis::Reciprocal:
-		plot->setXRangeScale(RangeT::Scale::Inverse);
-		break;
-	case Origin::GraphAxis::Probability:
-	case Origin::GraphAxis::Probit:
-	case Origin::GraphAxis::OffsetReciprocal:
-	case Origin::GraphAxis::Logit:
-		// TODO:
-		plot->setXRangeScale(RangeT::Scale::Linear);
-		break;
-	}
-
-	switch (originYAxis.scale) {
-	case Origin::GraphAxis::Linear:
-		plot->setYRangeScale(RangeT::Scale::Linear);
-		break;
-	case Origin::GraphAxis::Log10:
-		plot->setYRangeScale(RangeT::Scale::Log10);
-		break;
-	case Origin::GraphAxis::Ln:
-		plot->setYRangeScale(RangeT::Scale::Ln);
-		break;
-	case Origin::GraphAxis::Log2:
-		plot->setYRangeScale(RangeT::Scale::Log2);
-		break;
-	case Origin::GraphAxis::Reciprocal:
-		plot->setYRangeScale(RangeT::Scale::Inverse);
-		break;
-	case Origin::GraphAxis::Probability:
-	case Origin::GraphAxis::Probit:
-	case Origin::GraphAxis::OffsetReciprocal:
-	case Origin::GraphAxis::Logit:
-		// TODO:
-		plot->setYRangeScale(RangeT::Scale::Linear);
-		break;
-	}
+	plot->setXRangeScale(scale(originXAxis.scale));
+	plot->setYRangeScale(scale(originYAxis.scale));
 
 	// axes
 	DEBUG(Q_FUNC_INFO << ", layer.curves.size() = " << layer.curves.size())
@@ -1426,8 +1378,7 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 			case Origin::GraphCurve::ErrorBar:
 			case Origin::GraphCurve::XErrorBar:
 			case Origin::GraphCurve::YErrorBar:
-			case Origin::GraphCurve::XYErrorBar:
-			{
+			case Origin::GraphCurve::XYErrorBar: {
 				/*
 				// parse and use legend text
 				// find substring between %c{curveIndex} and %c{curveIndex+1}
@@ -1498,7 +1449,18 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 					hist->setSuppressRetransform(true);
 					hist->setBinningMethod(Histogram::BinningMethod::ByWidth);
 					hist->setBinWidth(layer.histogramBin);
-					// TODO: orientation
+					hist->setBinRangesMin(layer.histogramBegin);
+					hist->setBinRangesMax(layer.histogramEnd);
+
+					// TODO: the orientation of the histogram is indirectly determined by the "swapped axes" parameter.
+					// while we can handle the orientation of the histogram here, we also need to handle this parameter
+					// for axes and ranges correctly further above.
+					if (layer.exchangedAxes)
+						hist->setOrientation(Histogram::Orientation::Horizontal);
+					else
+						hist->setOrientation(Histogram::Orientation::Vertical);
+
+					// TODO: doesn't work
 					loadBackground(originCurve, hist->background());
 				}
 				break;
@@ -1857,68 +1819,15 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 	DEBUG(Q_FUNC_INFO)
 
 	// line properties
-	Qt::PenStyle penStyle(Qt::NoPen);
-	if (originCurve.type == Origin::GraphCurve::Line || originCurve.type == Origin::GraphCurve::LineSymbol) {
-		switch (originCurve.lineConnect) {
-		case Origin::GraphCurve::NoLine:
-			curve->setLineType(XYCurve::LineType::NoLine);
-			break;
-		case Origin::GraphCurve::Straight:
-			curve->setLineType(XYCurve::LineType::Line);
-			break;
-		case Origin::GraphCurve::TwoPointSegment:
-			curve->setLineType(XYCurve::LineType::Segments2);
-			break;
-		case Origin::GraphCurve::ThreePointSegment:
-			curve->setLineType(XYCurve::LineType::Segments3);
-			break;
-		case Origin::GraphCurve::BSpline:
-		case Origin::GraphCurve::Bezier:
-		case Origin::GraphCurve::Spline:
-			curve->setLineType(XYCurve::LineType::SplineCubicNatural);
-			break;
-		case Origin::GraphCurve::StepHorizontal:
-			curve->setLineType(XYCurve::LineType::StartHorizontal);
-			break;
-		case Origin::GraphCurve::StepVertical:
-			curve->setLineType(XYCurve::LineType::StartVertical);
-			break;
-		case Origin::GraphCurve::StepHCenter:
-			curve->setLineType(XYCurve::LineType::MidpointHorizontal);
-			break;
-		case Origin::GraphCurve::StepVCenter:
-			curve->setLineType(XYCurve::LineType::MidpointVertical);
-			break;
-		}
-
-		switch (originCurve.lineStyle) {
-		case Origin::GraphCurve::Solid:
-			penStyle = Qt::SolidLine;
-			break;
-		case Origin::GraphCurve::Dash:
-		case Origin::GraphCurve::ShortDash:
-			penStyle = Qt::DashLine;
-			break;
-		case Origin::GraphCurve::Dot:
-		case Origin::GraphCurve::ShortDot:
-			penStyle = Qt::DotLine;
-			break;
-		case Origin::GraphCurve::DashDot:
-		case Origin::GraphCurve::ShortDashDot:
-			penStyle = Qt::DashDotLine;
-			break;
-		case Origin::GraphCurve::DashDotDot:
-			penStyle = Qt::DashDotDotLine;
-			break;
-		}
-
+	if (originCurve.type == Origin::GraphCurve::Line || originCurve.type == Origin::GraphCurve::LineSymbol) { // TODO: what about *ErrorBar types?
+		curve->setLineType(lineType(originCurve.lineConnect));
+		curve->line()->setStyle(penStyle(originCurve.lineStyle));
 		curve->line()->setWidth(Worksheet::convertToSceneUnits(originCurve.lineWidth, Worksheet::Unit::Point));
 		curve->line()->setColor(color(originCurve.lineColor));
 		curve->line()->setOpacity(1 - originCurve.lineTransparency / 255);
 		// TODO: handle unsigned char boxWidth of Origin::GraphCurve
-	}
-
-	curve->line()->setStyle(penStyle);
+	} else
+		curve->line()->setStyle(Qt::NoPen);
 
 	// symbol properties
 	loadSymbol(originCurve, curve->symbol());
@@ -2001,7 +1910,7 @@ void OriginProjectParser::loadBackground(const Origin::GraphCurve& originCurve, 
 }
 
 void OriginProjectParser::loadSymbol(const Origin::GraphCurve& originCurve, Symbol* symbol, const XYCurve* curve) const {
-	if (originCurve.type != Origin::GraphCurve::Scatter || originCurve.type == Origin::GraphCurve::LineSymbol) {
+	if (originCurve.type != Origin::GraphCurve::Scatter && originCurve.type != Origin::GraphCurve::LineSymbol) {
 		symbol->setStyle(Symbol::Style::NoSymbols);
 		return;
 	}
@@ -2379,6 +2288,29 @@ QString OriginProjectParser::parseOriginText(const QString& str) const {
 	return text;
 }
 
+RangeT::Scale OriginProjectParser::scale(unsigned char scale) const {
+	switch (scale) {
+	case Origin::GraphAxis::Linear:
+		return RangeT::Scale::Linear;
+	case Origin::GraphAxis::Log10:
+		return RangeT::Scale::Log10;
+	case Origin::GraphAxis::Ln:
+		return RangeT::Scale::Ln;
+	case Origin::GraphAxis::Log2:
+		return RangeT::Scale::Log2;
+	case Origin::GraphAxis::Reciprocal:
+		return RangeT::Scale::Inverse;
+	case Origin::GraphAxis::Probability:
+	case Origin::GraphAxis::Probit:
+	case Origin::GraphAxis::OffsetReciprocal:
+	case Origin::GraphAxis::Logit:
+		// TODO:
+		return RangeT::Scale::Linear;
+	}
+
+	return RangeT::Scale::Linear;
+}
+
 QColor OriginProjectParser::color(Origin::Color color) const {
 	switch (color.type) {
 	case Origin::Color::ColorType::Regular:
@@ -2481,6 +2413,53 @@ QString strreverse(const QString& str) { // QString reversing
 	std::reverse(ba.begin(), ba.end());
 
 	return QLatin1String(ba);
+}
+
+Qt::PenStyle OriginProjectParser::penStyle(unsigned char lineStyle) const {
+	switch (lineStyle) {
+	case Origin::GraphCurve::Solid:
+		return Qt::SolidLine;
+	case Origin::GraphCurve::Dash:
+	case Origin::GraphCurve::ShortDash:
+		return  Qt::DashLine;
+	case Origin::GraphCurve::Dot:
+	case Origin::GraphCurve::ShortDot:
+		return Qt::DotLine;
+	case Origin::GraphCurve::DashDot:
+	case Origin::GraphCurve::ShortDashDot:
+		return Qt::DashDotLine;
+	case Origin::GraphCurve::DashDotDot:
+		return Qt::DashDotDotLine;
+	}
+
+	return Qt::SolidLine;
+}
+
+XYCurve::LineType OriginProjectParser::lineType(unsigned char lineConnect) const {
+	switch (lineConnect) {
+	case Origin::GraphCurve::NoLine:
+		return XYCurve::LineType::NoLine;
+	case Origin::GraphCurve::Straight:
+		return XYCurve::LineType::Line;
+	case Origin::GraphCurve::TwoPointSegment:
+		return XYCurve::LineType::Segments2;
+	case Origin::GraphCurve::ThreePointSegment:
+		return XYCurve::LineType::Segments3;
+	case Origin::GraphCurve::BSpline:
+	case Origin::GraphCurve::Bezier:
+	case Origin::GraphCurve::Spline:
+		return XYCurve::LineType::SplineCubicNatural;
+	case Origin::GraphCurve::StepHorizontal:
+		return XYCurve::LineType::StartHorizontal;
+	case Origin::GraphCurve::StepVertical:
+		return XYCurve::LineType::StartVertical;
+	case Origin::GraphCurve::StepHCenter:
+		return XYCurve::LineType::MidpointHorizontal;
+	case Origin::GraphCurve::StepVCenter:
+		return XYCurve::LineType::MidpointVertical;
+	}
+
+	return XYCurve::LineType::NoLine;
 }
 
 QList<QPair<QString, QString>> OriginProjectParser::charReplacementList() const {

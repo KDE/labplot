@@ -13,13 +13,13 @@
 
 #include "backend/datasources/projects/ProjectParser.h"
 #include "backend/worksheet/Background.h"
+#include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include <OriginFile.h>
 
 class Axis;
 class Background;
 class CartesianPlot;
 class Column;
-class Histogram;
 class Matrix;
 class Note;
 class Project;
@@ -73,11 +73,17 @@ private:
 	unsigned int findWorkbookByName(const QString&);
 	unsigned int findWorksheetByName(const QString&);
 	unsigned int findNoteByName(const QString&);
+
 	QString parseOriginText(const QString&) const;
 	QString parseOriginTags(const QString&) const;
 	QDateTime creationTime(tree<Origin::ProjectNode>::iterator) const;
+
+	// map between the different enums/datatypes
+	RangeT::Scale scale(unsigned char) const;
 	QColor color(Origin::Color) const;
 	Background::ColorStyle backgroundColorStyle(Origin::ColorGradientDirection) const;
+	Qt::PenStyle penStyle(unsigned char lineStyle) const;
+	XYCurve::LineType lineType(unsigned char lineConnect) const;
 
 	QList<QPair<QString, QString>> charReplacementList() const;
 	QString replaceSpecialChars(const QString&) const;
