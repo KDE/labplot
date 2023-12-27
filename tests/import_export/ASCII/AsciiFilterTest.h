@@ -94,6 +94,7 @@ private Q_SLOTS:
 	void spreadsheetFormulaUpdateAfterImportWithColumnRestore();
 	void plotUpdateAfterImport();
 	void plotUpdateAfterImportWithColumnRestore();
+	void plotUpdateAfterImportWithColumnRenaming();
 
 	// benchmarks
 	void benchDoubleImport_data();

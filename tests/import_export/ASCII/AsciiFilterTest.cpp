@@ -1543,6 +1543,78 @@ void AsciiFilterTest::plotUpdateAfterImportWithColumnRestore() {
 	QCOMPARE(rangeY.end(), 3);
 }
 
+/*!
+ * test the update of the xycurve and plot ranges after the order or columns (their names)
+ * was changed during the import.
+ */
+void AsciiFilterTest::plotUpdateAfterImportWithColumnRenaming() {
+	Project project; // need a project object since the column restore logic is in project
+
+	// create the spreadsheet with the source data
+	auto* spreadsheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(spreadsheet);
+	spreadsheet->setColumnCount(3);
+	spreadsheet->setRowCount(3);
+
+	auto* col = spreadsheet->column(0);
+	col->setColumnMode(AbstractColumn::ColumnMode::Double);
+	col->setName(QStringLiteral("c0")); // dummy column, values not required
+
+	col = spreadsheet->column(1);
+	col->setColumnMode(AbstractColumn::ColumnMode::Double);
+	col->setName(QStringLiteral("c1"));
+	col->setValueAt(0, 10.);
+	col->setValueAt(1, 20.);
+	col->setValueAt(2, 30.);
+
+	col = spreadsheet->column(2);
+	col->setColumnMode(AbstractColumn::ColumnMode::Double);
+	col->setName(QStringLiteral("c2"));
+	col->setValueAt(0, 10.);
+	col->setValueAt(1, 20.);
+	col->setValueAt(2, 30.);
+
+	// create a xy-curve with the both columns in the source spreadsheet and check the ranges
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	project.addChild(p);
+	auto* curve = new XYCurve(QStringLiteral("curve"));
+	p->addChild(curve);
+	curve->setXColumn(spreadsheet->column(1)); // use "c1" for x
+	curve->setYColumn(spreadsheet->column(2)); // use "c2" for y
+
+	auto rangeX = p->range(Dimension::X);
+	QCOMPARE(rangeX.start(), 10);
+	QCOMPARE(rangeX.end(), 30);
+
+	auto rangeY = p->range(Dimension::Y);
+	QCOMPARE(rangeY.start(), 10);
+	QCOMPARE(rangeY.end(), 30);
+
+	// import the data into the source spreadsheet:
+	// the columns "c0", "c1" and "c2" are renamed to "c1", "c2" and "c3" and xy-curve should still be using "c1" and "c2"
+	// event hough their positions in the spreadsheet have changed
+	AsciiFilter filter;
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/separator_semicolon_with_header.txt"));
+	filter.setCommentCharacter(QString());
+	filter.setSeparatingCharacter(QStringLiteral(";"));
+	filter.setHeaderEnabled(true);
+	filter.setHeaderLine(1);
+	filter.readDataFromFile(fileName, spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+	// check the connection to the new columns
+	QCOMPARE(curve->xColumn(), spreadsheet->column(0)); // "c1" for x
+	QCOMPARE(curve->yColumn(), spreadsheet->column(1)); // "c2" for y
+
+	// re-check the plot ranges with the new data
+	rangeX = p->range(Dimension::X);
+	QCOMPARE(rangeX.start(), 1);
+	QCOMPARE(rangeX.end(), 3);
+
+	rangeY = p->range(Dimension::Y);
+	QCOMPARE(rangeY.start(), 1);
+	QCOMPARE(rangeY.end(), 3);
+}
+
 // ##############################################################################
 // ################################# Benchmarks #################################
 // ##############################################################################

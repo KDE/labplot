@@ -1454,13 +1454,17 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList names, 
 			Q_EMIT aspectsInserted(columnsCount, cols - 1);
 		}
 
-		// 1. suppress the dataChanged signal for all columns (will be restored later in finalizeImport())
-		// 2. rename the columns that were already available
+		// 1. call Column::reset() to disconnect all dependent objects from the dataChanged signal
+		// 2. suppress the dataChanged signal for all columns (will be restored later in finalizeImport())
+		// 3. rename the columns that were already available
+		// 4. column->aspectDescriptionChanged() to trigger the update of the dependencies on column in Project.
 		const auto& columns = children<Column>();
 		int index = 0;
 		for (auto* column : columns) {
+			column->reset();
 			column->setSuppressDataChangedSignal(true);
 			column->setName(uniqueNames.at(index), AbstractAspect::NameHandling::UniqueNotRequired);
+			column->aspectDescriptionChanged(column);
 			++index;
 		}
 	}
