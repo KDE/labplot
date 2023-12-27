@@ -358,6 +358,29 @@ bool XYCurve::usingColumn(const Column* column) const {
 			|| (d->valuesType == ValuesType::CustomColumn && d->valuesColumn == column));
 }
 
+void XYCurve::updateColumnDependencies(const AbstractColumn* column) {
+	Q_D(const XYCurve);
+	const QString& columnPath = column->path();
+	setUndoAware(false);
+
+	if (d->xColumnPath == columnPath)
+		setXColumn(column);
+	if (d->yColumnPath == columnPath)
+		setYColumn(column);
+	if (d->valuesColumnPath == columnPath)
+		setValuesColumn(column);
+	if (d->xErrorPlusColumnPath == columnPath)
+		setXErrorPlusColumn(column);
+	if (d->xErrorMinusColumnPath == columnPath)
+		setXErrorMinusColumn(column);
+	if (d->yErrorPlusColumnPath == columnPath)
+		setYErrorPlusColumn(column);
+	if (d->yErrorMinusColumnPath == columnPath)
+		setYErrorMinusColumn(column);
+
+	setUndoAware(true);
+}
+
 QColor XYCurve::color() const {
 	Q_D(const XYCurve);
 	if (d->lineType != XYCurve::LineType::NoLine)

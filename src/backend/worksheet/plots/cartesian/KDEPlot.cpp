@@ -187,6 +187,18 @@ bool KDEPlot::usingColumn(const Column* column) const {
 	return (d->dataColumn == column);
 }
 
+void KDEPlot::updateColumnDependencies(const AbstractColumn* column) {
+	Q_D(const KDEPlot);
+	const QString& columnPath = column->path();
+
+	if (d->dataColumnPath == columnPath) {
+		setUndoAware(false);
+		setDataColumn(column);
+	}
+
+	setUndoAware(false);
+}
+
 QColor KDEPlot::color() const {
 	Q_D(const KDEPlot);
 	return d->estimationCurve->color();

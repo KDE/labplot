@@ -13,6 +13,7 @@
 #include "backend/worksheet/WorksheetElement.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 
+class AbstractColumn;
 class Column;
 class PlotPrivate;
 class QPointF;
@@ -27,10 +28,12 @@ public:
 	virtual double minimum(CartesianCoordinateSystem::Dimension dim) const = 0;
 	virtual double maximum(CartesianCoordinateSystem::Dimension dim) const = 0;
 	virtual bool hasData() const = 0;
-	virtual bool usingColumn(const Column*) const = 0;
 	bool activatePlot(QPointF mouseScenePos, double maxDist = -1);
 	virtual QColor color() const = 0; // Color of the plot. If the plot consists multiple colors, return the main Color (This is used in the cursor dock as
 									  // background color for example)
+
+	virtual bool usingColumn(const Column*) const = 0;
+	virtual void updateColumnDependencies(const AbstractColumn*) = 0;
 
 	typedef PlotPrivate Private;
 

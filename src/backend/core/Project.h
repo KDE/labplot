@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Represents a LabPlot project.
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2011-2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2007-2008 Tilman Benkert <thzs@gmx.net>
 	SPDX-FileCopyrightText: 2007 Knut Franke <knut.franke@gmx.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -16,13 +16,11 @@
 #include "backend/lib/macros.h"
 
 class AbstractColumn;
-class BoxPlot;
-class Histogram;
-class XYCurve;
-class QMimeData;
-class QString;
 class Spreadsheet;
 class ProjectPrivate;
+
+class QMimeData;
+class QString;
 
 class Project : public Folder {
 	Q_OBJECT
@@ -102,10 +100,8 @@ Q_SIGNALS:
 private:
 	Q_DECLARE_PRIVATE(Project)
 	ProjectPrivate* const d_ptr;
-	void updateColumnDependencies(const QVector<XYCurve*>&, const AbstractColumn*) const;
-	void updateColumnDependencies(const QVector<Histogram*>&, const AbstractColumn*) const;
-	void updateColumnDependencies(const QVector<BoxPlot*>& boxPlots, const AbstractColumn* column) const;
-	void updateSpreadsheetDependencies(const QVector<Spreadsheet*>&, const Spreadsheet*) const;
+	void updateColumnDependencies(const AbstractColumn*) const;
+	void updateSpreadsheetDependencies(const Spreadsheet*) const;
 	bool readProjectAttributes(XmlStreamReader*);
 	void save(QXmlStreamWriter*) const override;
 };

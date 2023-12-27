@@ -78,6 +78,7 @@ public:
 	double maximum(CartesianCoordinateSystem::Dimension dim) const override;
 	bool hasData() const override;
 	bool usingColumn(const Column*) const override;
+	void updateColumnDependencies(const AbstractColumn*) override;
 	QColor color() const override;
 
 	const AbstractColumn* column(CartesianCoordinateSystem::Dimension dim) const;

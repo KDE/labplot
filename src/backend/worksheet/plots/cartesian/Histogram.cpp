@@ -345,6 +345,23 @@ bool Histogram::usingColumn(const Column* column) const {
 			|| (d->errorType == ErrorType::CustomAsymmetric && (d->errorPlusColumn == column || d->errorMinusColumn == column)));
 }
 
+void Histogram::updateColumnDependencies(const AbstractColumn* column) {
+	Q_D(const Histogram);
+	setUndoAware(false);
+	const QString& columnPath = column->path();
+
+	if (d->dataColumnPath == columnPath)
+		setDataColumn(column);
+	if (d->value->columnPath() == columnPath)
+		d->value->setColumn(column);
+	if (d->errorPlusColumnPath == columnPath)
+		setErrorPlusColumn(column);
+	if (d->errorMinusColumnPath == columnPath)
+		setErrorPlusColumn(column);
+
+	setUndoAware(false);
+}
+
 QColor Histogram::color() const {
 	Q_D(const Histogram);
 	if (d->background->enabled())

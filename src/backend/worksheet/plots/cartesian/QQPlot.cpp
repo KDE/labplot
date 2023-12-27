@@ -220,6 +220,18 @@ bool QQPlot::usingColumn(const Column* column) const {
 	return (d->dataColumn == column);
 }
 
+void QQPlot::updateColumnDependencies(const AbstractColumn* column) {
+	Q_D(const QQPlot);
+	const QString& columnPath = column->path();
+
+	if (d->dataColumnPath == columnPath) {
+		setUndoAware(false);
+		setDataColumn(column);
+	}
+
+	setUndoAware(false);
+}
+
 QColor QQPlot::color() const {
 	Q_D(const QQPlot);
 	return d->percentilesCurve->color();

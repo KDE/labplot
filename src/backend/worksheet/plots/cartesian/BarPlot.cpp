@@ -209,6 +209,29 @@ bool BarPlot::usingColumn(const Column* column) const {
 	return false;
 }
 
+void BarPlot::updateColumnDependencies(const AbstractColumn* column) {
+	Q_D(const BarPlot);
+	const QString& columnPath = column->path();
+	const auto dataColumnPaths = d->dataColumnPaths;
+	auto dataColumns = d->dataColumns;
+	bool changed = false;
+
+	for (int i = 0; i < dataColumnPaths.count(); ++i) {
+		const auto& path = dataColumnPaths.at(i);
+
+		if (path == columnPath) {
+			dataColumns[i] = column;
+			changed = true;
+		}
+	}
+
+	if (changed) {
+		setUndoAware(false);
+		setDataColumns(dataColumns);
+		setUndoAware(true);
+	}
+}
+
 QColor BarPlot::color() const {
 	Q_D(const BarPlot);
 	if (d->backgrounds.size() > 0 && d->backgrounds.at(0)->enabled())
