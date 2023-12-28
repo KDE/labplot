@@ -651,54 +651,60 @@ void ProjectExplorer::toggleColumn(int index) {
 		}
 	}
 }
+
 // show sparkLine of respective column
 QPixmap ProjectExplorer::showSparkLines(const Column* col) {
-	for (int i = 0; i < col->rowCount(); i++) {
-		DEBUG(col->valueAt(i));
-	}
-	if (col->isPlottable()) {
-		auto* worksheet = new Worksheet(i18n("check"));
-		worksheet->setTheme(QLatin1String("Sparkline"));
-		// worksheet->setScaleContent(true);
-		// worksheet->setUseViewSize(true);
-		// worksheet->setLayout(Worksheet::Layout::NoLayout);
-		// worksheet->setZoomFit(Worksheet::ZoomFit::FitToWidth);
-		worksheet->view();
-		worksheet->setLayoutBottomMargin(0);
-		worksheet->setLayoutTopMargin(0);
-		auto* plot = new CartesianPlot(i18n("check"));
-		plot->setType(CartesianPlot::Type::TwoAxes);
-		plot->setTheme(QLatin1String("Sparkline"));
-		int maxLength = col->rowCount();
-		QVector<double> xData;
-		for (int i = 0; i < maxLength; i++)
-			xData.append(i);
-		Column* xColumn = new Column(i18n("check"), xData);
-		worksheet->addChild(plot);
-		auto* curve = new XYCurve(i18n("check"));
-		curve->setSuppressRetransform(true);
-		curve->setXColumn(xColumn);
-		curve->setYColumn(col);
-		curve->setSuppressRetransform(false);
-		plot->addChild(curve);
-		plot->scaleAuto(-1, -1);
-		plot->retransform();
-		worksheet->setSuppressLayoutUpdate(false);
-		worksheet->updateLayout();
-		// export to pixmap
-		QPixmap pix(10, 10);
-		const bool rc = worksheet->exportView(pix);
-		// pix.scaled(QSize(200,100));
+	static const QString sparklineTheme = i18n("Sparkline");
+	static const QString sparklineText = i18n("add-sparkline");
 
-		// the view is not available yet, show the placeholder preview
-		if (!rc) {
-			const auto icon = QIcon::fromTheme(QLatin1String("view-preview"));
-			const int iconSize = std::ceil(5.0 / 2.54 * QApplication::primaryScreen()->physicalDotsPerInchX());
-			pix = icon.pixmap(iconSize, iconSize);
-		}
-		return pix;
+	auto* worksheet = new Worksheet(sparklineText);
+	worksheet->setTheme(sparklineTheme);
+	worksheet->view();
+	worksheet->setLayoutBottomMargin(0);
+	worksheet->setLayoutTopMargin(0);
+
+	auto* plot = new CartesianPlot(sparklineText);
+	plot->setType(CartesianPlot::Type::TwoAxes);
+	plot->setTheme(sparklineTheme);
+	plot->setVerticalPadding(0);
+	plot->setHorizontalPadding(0);
+	plot->setRightPadding(0);
+	plot->setBottomPadding(0);
+
+	const int rowCount = col->rowCount();
+	QVector<double> xData(rowCount);
+
+	for (int i = 0; i < rowCount; ++i)
+		xData[i] = i;
+
+	Column* xColumn = new Column(sparklineText, xData);
+	worksheet->addChild(plot);
+
+	auto* curve = new XYCurve(sparklineText);
+	curve->setSuppressRetransform(true);
+	curve->setXColumn(xColumn);
+	curve->setYColumn(col);
+	curve->setSuppressRetransform(false);
+	plot->addChild(curve);
+
+	plot->scaleAuto(-1, -1);
+	plot->retransform();
+	worksheet->setSuppressLayoutUpdate(false);
+	worksheet->updateLayout();
+
+	// Export to pixmap
+	QPixmap pixmap(worksheet->view()->size());
+	const bool exportSuccess = worksheet->exportView(pixmap);
+
+	// Use a placeholder preview if the view is not available yet
+	if (!exportSuccess) {
+		const auto placeholderIcon = QIcon::fromTheme(i18n("view-preview"));
+		const int iconSize = std::ceil(5.0 / 2.54 * QApplication::primaryScreen()->physicalDotsPerInchX());
+		pixmap = placeholderIcon.pixmap(iconSize, iconSize);
 	}
-	return QPixmap();
+
+	delete worksheet;
+	return pixmap;
 }
 
 void ProjectExplorer::showAllColumns() {

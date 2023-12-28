@@ -73,7 +73,7 @@ SpreadsheetSparkLineHeaderView::~SpreadsheetSparkLineHeaderView() {
 }
 QSize SpreadsheetSparkLineHeaderView::sizeHint() const {
 	QSize sizeHint = QHeaderView::sizeHint();
-	sizeHint.setHeight(60);
+	sizeHint.setHeight(30);
 	return sizeHint;
 }
 
@@ -141,7 +141,6 @@ void SpreadsheetHeaderView::paintSection(QPainter* painter, const QRect& rect, i
 	QRect master_rect = rect;
 	SpreadsheetSparkLinesHeaderModel* model = m_sparkLineSlave->getModel();
 	QPixmap pixmap = model->headerData(logicalIndex, Qt::Horizontal, static_cast<int>(SpreadsheetModel::CustomDataRole::SparkLineRole)).value<QPixmap>();
-	DEBUG(Q_FUNC_INFO << " check " << pixmap.size().height() << " " << pixmap.size().width())
 
 	QHeaderView::paintSection(painter, master_rect, logicalIndex);
 	if (m_showComments && m_showSparkLines) {
@@ -155,14 +154,8 @@ void SpreadsheetHeaderView::paintSection(QPainter* painter, const QRect& rect, i
 
 			painter->resetTransform(); // Reset any transformations
 			painter->setClipping(false); // Disable clipping
-			pixmap = pixmap.copy(97, 95, 364, 364);
-			painter->setRenderHint(QPainter::Antialiasing, true); // Enable antialiasing for smoother lines
-			painter->setRenderHint(QPainter::HighQualityAntialiasing, true); // Enable high-quality antialiasing
-			painter->setRenderHint(QPainter::SmoothPixmapTransform, true); // Enable smooth transformations
-			// painter->setRenderHint(QPainter::Qt4CompatiblePainting, true); // Set to QPainter::Qt4CompatiblePainting for older Qt versions
 
-
-			painter->drawPixmap(slave2_rect, pixmap);
+			painter->drawPixmap(slave2_rect, pixmap.scaled(slave2_rect.size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
 		}
 		if (m_showComments && rect.height() > QHeaderView::sizeHint().height()) {
 			QRect slave_rect = rect.adjusted(0, m_sparkLineSlave->sizeHint().height() + QHeaderView::sizeHint().height(), 0, 0);
@@ -186,15 +179,11 @@ void SpreadsheetHeaderView::paintSection(QPainter* painter, const QRect& rect, i
 			QHeaderView::paintSection(painter, master_rect, logicalIndex);
 			if (m_showSparkLines) {
 				QRect slave_rect = rect.adjusted(0, QHeaderView::sizeHint().height(), 0, 0);
-				pixmap = pixmap.copy(97, 95, 364, 364);
 
 				painter->resetTransform(); // Reset any transformations
 				painter->setClipping(false); // Disable clipping
-				painter->setRenderHint(QPainter::Antialiasing, true); // Enable antialiasing for smoother lines
-				painter->setRenderHint(QPainter::HighQualityAntialiasing, true);
-				painter->setRenderHint(QPainter::SmoothPixmapTransform, true); // Enable smooth transformations
-				painter->setRenderHint(QPainter::Qt4CompatiblePainting, true); // Set to QPainter::Qt4CompatiblePainting for older Qt versions
-				painter->drawPixmap(slave_rect, pixmap);
+
+				painter->drawPixmap(slave_rect, pixmap.scaled(slave_rect.size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
 			}
 			return;
 		}
