@@ -573,8 +573,8 @@ void AbstractColumn::removeFormat() {
 void AbstractColumn::reset() {
 	// don't disconnect from all signals since we'd loose all connections done in AbstractAspect::connectChild().
 	// disconnect from the dataChanged signal only, the reconnect is triggered in Project::descriptionChanged().
-	disconnect(this, &AbstractColumn::dataChanged, nullptr, nullptr);
 	Q_EMIT aboutToReset(this);
+	disconnect(this, &AbstractColumn::dataChanged, nullptr, nullptr);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -737,7 +737,7 @@ void XYCurve::handleResize(double horizontalRatio, double verticalRatio, bool /*
  */
 int XYCurve::getNextValue(double xpos, int offset, double& x, double& y, bool& valueFound) const {
 	valueFound = false;
-	AbstractColumn::Properties properties = xColumn()->properties();
+	auto properties = xColumn()->properties();
 	if (properties == AbstractColumn::Properties::MonotonicDecreasing)
 		offset *= -1;
 
@@ -753,7 +753,7 @@ int XYCurve::getNextValue(double xpos, int offset, double& x, double& y, bool& v
 	else
 		index = 0;
 
-	AbstractColumn::ColumnMode xMode = xColumn()->columnMode();
+	auto xMode = xColumn()->columnMode();
 
 	if (xMode == AbstractColumn::ColumnMode::Double || xMode == AbstractColumn::ColumnMode::Integer)
 		x = xColumn()->valueAt(index);
@@ -762,7 +762,7 @@ int XYCurve::getNextValue(double xpos, int offset, double& x, double& y, bool& v
 	else
 		return index;
 
-	AbstractColumn::ColumnMode yMode = yColumn()->columnMode();
+	auto yMode = yColumn()->columnMode();
 
 	if (yMode == AbstractColumn::ColumnMode::Double || yMode == AbstractColumn::ColumnMode::Integer)
 		y = yColumn()->valueAt(index);
@@ -831,42 +831,6 @@ void XYCurve::yErrorMinusColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 		d->yErrorMinusColumn = nullptr;
 		d->updateErrorBars();
 	}
-}
-
-// TODO: where are these two functions used?
-void XYCurve::xColumnNameChanged() {
-	Q_D(XYCurve);
-	setXColumnPath(d->xColumn->path());
-}
-
-void XYCurve::yColumnNameChanged() {
-	Q_D(XYCurve);
-	setYColumnPath(d->yColumn->path());
-}
-
-void XYCurve::xErrorPlusColumnNameChanged() {
-	Q_D(XYCurve);
-	setXErrorPlusColumnPath(d->xErrorPlusColumn->path());
-}
-
-void XYCurve::xErrorMinusColumnNameChanged() {
-	Q_D(XYCurve);
-	setXErrorMinusColumnPath(d->xErrorMinusColumn->path());
-}
-
-void XYCurve::yErrorPlusColumnNameChanged() {
-	Q_D(XYCurve);
-	setYErrorPlusColumnPath(d->yErrorPlusColumn->path());
-}
-
-void XYCurve::yErrorMinusColumnNameChanged() {
-	Q_D(XYCurve);
-	setYErrorMinusColumnPath(d->yErrorMinusColumn->path());
-}
-
-void XYCurve::valuesColumnNameChanged() {
-	Q_D(XYCurve);
-	setValuesColumnPath(d->valuesColumn->path());
 }
 
 // ##############################################################################
