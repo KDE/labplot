@@ -95,6 +95,7 @@ private Q_SLOTS:
 	void plotUpdateAfterImport();
 	void plotUpdateAfterImportWithColumnRestore();
 	void plotUpdateAfterImportWithColumnRenaming();
+	void plotUpdateAfterImportWithColumnRemove();
 
 	// benchmarks
 	void benchDoubleImport_data();

@@ -1615,6 +1615,65 @@ void AsciiFilterTest::plotUpdateAfterImportWithColumnRenaming() {
 	QCOMPARE(rangeY.end(), 3);
 }
 
+/*!
+ * test the update of the xycurve after the source columns were renamed
+ * during the import, the curve becomes invalid after this.
+ */
+void AsciiFilterTest::plotUpdateAfterImportWithColumnRemove() {
+	Project project; // need a project object since the column restore logic is in project
+
+	// create the spreadsheet with the source data
+	auto* spreadsheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(spreadsheet);
+	spreadsheet->setColumnCount(2);
+	spreadsheet->setRowCount(3);
+
+	auto* col = spreadsheet->column(0);
+	col->setColumnMode(AbstractColumn::ColumnMode::Double);
+	col->setName(QStringLiteral("1"));
+	col->setValueAt(0, 10.);
+	col->setValueAt(1, 20.);
+	col->setValueAt(2, 30.);
+
+	col = spreadsheet->column(1);
+	col->setColumnMode(AbstractColumn::ColumnMode::Double);
+	col->setName(QStringLiteral("2"));
+	col->setValueAt(0, 10.);
+	col->setValueAt(1, 20.);
+	col->setValueAt(2, 30.);
+
+	// create a xy-curve with the both columns in the source spreadsheet and check the ranges
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	project.addChild(p);
+	auto* curve = new XYCurve(QStringLiteral("curve"));
+	p->addChild(curve);
+	curve->setXColumn(spreadsheet->column(0)); // use "1" for x
+	curve->setYColumn(spreadsheet->column(1)); // use "2" for y
+
+	auto rangeX = p->range(Dimension::X);
+	QCOMPARE(rangeX.start(), 10);
+	QCOMPARE(rangeX.end(), 30);
+
+	auto rangeY = p->range(Dimension::Y);
+	QCOMPARE(rangeY.start(), 10);
+	QCOMPARE(rangeY.end(), 30);
+
+	// import the data into the source spreadsheet, the columns are renamed to "c1" and "c2"
+	AsciiFilter filter;
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/separator_semicolon_with_header.txt"));
+	filter.setCommentCharacter(QString());
+	filter.setSeparatingCharacter(QStringLiteral(";"));
+	filter.setHeaderEnabled(true);
+	filter.setHeaderLine(1);
+	filter.readDataFromFile(fileName, spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+	// the assignment to the data columns got lost since the columns were renamed
+	QCOMPARE(curve->xColumn(), nullptr);
+	QCOMPARE(curve->yColumn(), nullptr);
+
+	// TODO: further checks to make sure the curve was really and properly invalidated
+}
+
 // ##############################################################################
 // ################################# Benchmarks #################################
 // ##############################################################################

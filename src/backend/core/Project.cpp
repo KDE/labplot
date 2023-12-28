@@ -401,13 +401,13 @@ void Project::updateSpreadsheetDependencies(const Spreadsheet* spreadsheet) cons
  */
 void Project::updateColumnDependencies(const AbstractColumn* column) const {
 	// update the dependencies in the plots
-	const auto& plots = children<XYCurve>(ChildIndexFlag::Recursive);
+	const auto& plots = children<Plot>(ChildIndexFlag::Recursive);
 	for (auto* plot : plots)
 		plot->updateColumnDependencies(column);
 
 	// update the dependencies in the column formulas
 	const QString& columnPath = column->path();
-	const QVector<Column*>& columns = children<Column>(ChildIndexFlag::Recursive);
+	const auto& columns = children<Column>(ChildIndexFlag::Recursive);
 	for (auto* tempColumn : columns) {
 		for (int i = 0; i < tempColumn->formulaData().count(); i++) {
 			auto path = tempColumn->formulaData().at(i).columnName();
