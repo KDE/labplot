@@ -833,6 +833,42 @@ void XYCurve::yErrorMinusColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	}
 }
 
+// TODO: where are these two functions used?
+void XYCurve::xColumnNameChanged() {
+	Q_D(XYCurve);
+	setXColumnPath(d->xColumn->path());
+}
+
+void XYCurve::yColumnNameChanged() {
+	Q_D(XYCurve);
+	setYColumnPath(d->yColumn->path());
+}
+
+void XYCurve::xErrorPlusColumnNameChanged() {
+	Q_D(XYCurve);
+	setXErrorPlusColumnPath(d->xErrorPlusColumn->path());
+}
+
+void XYCurve::xErrorMinusColumnNameChanged() {
+	Q_D(XYCurve);
+	setXErrorMinusColumnPath(d->xErrorMinusColumn->path());
+}
+
+void XYCurve::yErrorPlusColumnNameChanged() {
+	Q_D(XYCurve);
+	setYErrorPlusColumnPath(d->yErrorPlusColumn->path());
+}
+
+void XYCurve::yErrorMinusColumnNameChanged() {
+	Q_D(XYCurve);
+	setYErrorMinusColumnPath(d->yErrorMinusColumn->path());
+}
+
+void XYCurve::valuesColumnNameChanged() {
+	Q_D(XYCurve);
+	setValuesColumnPath(d->valuesColumn->path());
+}
+
 // ##############################################################################
 // ######  SLOTs for changes triggered via QActions in the context menu  ########
 // ##############################################################################
