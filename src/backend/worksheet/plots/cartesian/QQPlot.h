@@ -74,7 +74,6 @@ public:
 
 private Q_SLOTS:
 	void dataColumnAboutToBeRemoved(const AbstractAspect*);
-	void dataColumnNameChanged();
 
 protected:
 	QQPlot(const QString& name, QQPlotPrivate* dd);

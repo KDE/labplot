@@ -70,7 +70,6 @@ public:
 
 private Q_SLOTS:
 	void dataColumnAboutToBeRemoved(const AbstractAspect*);
-	void dataColumnNameChanged();
 
 protected:
 	KDEPlot(const QString& name, KDEPlotPrivate* dd);

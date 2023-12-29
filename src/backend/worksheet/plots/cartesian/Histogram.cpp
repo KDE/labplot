@@ -346,20 +346,31 @@ bool Histogram::usingColumn(const Column* column) const {
 }
 
 void Histogram::updateColumnDependencies(const AbstractColumn* column) {
-	Q_D(const Histogram);
+	Q_D(Histogram);
 	setUndoAware(false);
 	const QString& columnPath = column->path();
 
-	if (d->dataColumnPath == columnPath)
+	if (d->dataColumn == column) // the column is the same and was just renamed -> update the column path
+		d->dataColumnPath = columnPath;
+	else if (d->dataColumnPath == columnPath) // another column was renamed to the current path -> set and connect to the new column
 		setDataColumn(column);
-	if (d->value->columnPath() == columnPath)
+
+	if (d->value->column() == column)
+		d->value->setColumnPath(columnPath);
+	else if (d->value->columnPath() == columnPath)
 		d->value->setColumn(column);
-	if (d->errorPlusColumnPath == columnPath)
-		setErrorPlusColumn(column);
-	if (d->errorMinusColumnPath == columnPath)
+
+	if (d->errorPlusColumn == column)
+		d->errorPlusColumnPath = columnPath;
+	else if (d->errorPlusColumnPath == columnPath)
 		setErrorPlusColumn(column);
 
-	setUndoAware(false);
+	if (d->errorMinusColumn == column)
+		d->errorMinusColumnPath = columnPath;
+	else if (d->errorMinusColumnPath == columnPath)
+		setErrorMinusColumn(column);
+
+	setUndoAware(true);
 }
 
 QColor Histogram::color() const {
@@ -606,11 +617,6 @@ void Histogram::dataColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	}
 }
 
-void Histogram::dataColumnNameChanged() {
-	Q_D(Histogram);
-	setDataColumnPath(d->dataColumn->path());
-}
-
 void Histogram::updateErrorBars() {
 	Q_D(Histogram);
 	d->updateErrorBars();
@@ -624,22 +630,12 @@ void Histogram::errorPlusColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	}
 }
 
-void Histogram::errorPlusColumnNameChanged() {
-	Q_D(Histogram);
-	setErrorPlusColumnPath(d->errorPlusColumn->path());
-}
-
 void Histogram::errorMinusColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(Histogram);
 	if (aspect == d->errorMinusColumn) {
 		d->errorMinusColumn = nullptr;
 		d->updateErrorBars();
 	}
-}
-
-void Histogram::errorMinusColumnNameChanged() {
-	Q_D(Histogram);
-	setErrorMinusColumnPath(d->errorMinusColumn->path());
 }
 
 // ##############################################################################

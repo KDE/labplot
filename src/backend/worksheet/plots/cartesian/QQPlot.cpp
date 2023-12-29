@@ -221,15 +221,16 @@ bool QQPlot::usingColumn(const Column* column) const {
 }
 
 void QQPlot::updateColumnDependencies(const AbstractColumn* column) {
-	Q_D(const QQPlot);
+	Q_D(QQPlot);
 	const QString& columnPath = column->path();
 
-	if (d->dataColumnPath == columnPath) {
+	if (d->dataColumn == column) // the column is the same and was just renamed -> update the column path
+		d->dataColumnPath = columnPath;
+	else if (d->dataColumnPath == columnPath) { // another column was renamed to the current path -> set and connect to the new column
 		setUndoAware(false);
 		setDataColumn(column);
+		setUndoAware(true);
 	}
-
-	setUndoAware(false);
 }
 
 QColor QQPlot::color() const {
@@ -282,10 +283,6 @@ void QQPlot::dataColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	}
 }
 
-void QQPlot::dataColumnNameChanged() {
-	Q_D(QQPlot);
-	setDataColumnPath(d->dataColumn->path());
-}
 
 // ##############################################################################
 // ######################### Private implementation #############################

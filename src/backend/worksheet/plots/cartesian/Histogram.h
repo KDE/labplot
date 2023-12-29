@@ -109,13 +109,8 @@ private Q_SLOTS:
 	void updateErrorBars();
 
 	void dataColumnAboutToBeRemoved(const AbstractAspect*);
-	void dataColumnNameChanged();
-
 	void errorPlusColumnAboutToBeRemoved(const AbstractAspect*);
-	void errorPlusColumnNameChanged();
-
 	void errorMinusColumnAboutToBeRemoved(const AbstractAspect*);
-	void errorMinusColumnNameChanged();
 
 protected:
 	Histogram(const QString& name, HistogramPrivate* dd);

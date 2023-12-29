@@ -359,23 +359,46 @@ bool XYCurve::usingColumn(const Column* column) const {
 }
 
 void XYCurve::updateColumnDependencies(const AbstractColumn* column) {
-	Q_D(const XYCurve);
+	Q_D(XYCurve);
 	const QString& columnPath = column->path();
 	setUndoAware(false);
 
-	if (d->xColumnPath == columnPath)
+	if (d->xColumn == column) // the column is the same and was just renamed -> update the column path
+		d->xColumnPath = columnPath;
+	else if (d->xColumnPath == columnPath) // another column was renamed to the current path -> set and connect to the new column
 		setXColumn(column);
-	if (d->yColumnPath == columnPath)
+
+	if (d->yColumn == column)
+		d->yColumnPath = columnPath;
+	else if (d->yColumnPath == columnPath)
 		setYColumn(column);
+
+	if (d->valuesColumn == column)
+		d->valuesColumnPath = columnPath;
+	else if (d->valuesColumnPath == columnPath)
+		setValuesColumn(column);
+
 	if (d->valuesColumnPath == columnPath)
 		setValuesColumn(column);
-	if (d->xErrorPlusColumnPath == columnPath)
+
+	if (d->xErrorPlusColumn == column)
+		d->xErrorPlusColumnPath = columnPath;
+	else if (d->xErrorPlusColumnPath == columnPath)
 		setXErrorPlusColumn(column);
-	if (d->xErrorMinusColumnPath == columnPath)
+
+	if (d->xErrorMinusColumn == column)
+		d->xErrorMinusColumnPath = columnPath;
+	else if (d->xErrorMinusColumnPath == columnPath)
 		setXErrorMinusColumn(column);
-	if (d->yErrorPlusColumnPath == columnPath)
+
+	if (d->yErrorPlusColumn == column)
+		d->yErrorPlusColumnPath = columnPath;
+	else if (d->yErrorPlusColumnPath == columnPath)
 		setYErrorPlusColumn(column);
-	if (d->yErrorMinusColumnPath == columnPath)
+
+	if (d->yErrorMinusColumn == column)
+		d->yErrorMinusColumnPath = columnPath;
+	else if (d->yErrorMinusColumnPath == columnPath)
 		setYErrorMinusColumn(column);
 
 	setUndoAware(true);
@@ -831,42 +854,6 @@ void XYCurve::yErrorMinusColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 		d->yErrorMinusColumn = nullptr;
 		d->updateErrorBars();
 	}
-}
-
-// TODO: where are these two functions used?
-void XYCurve::xColumnNameChanged() {
-	Q_D(XYCurve);
-	setXColumnPath(d->xColumn->path());
-}
-
-void XYCurve::yColumnNameChanged() {
-	Q_D(XYCurve);
-	setYColumnPath(d->yColumn->path());
-}
-
-void XYCurve::xErrorPlusColumnNameChanged() {
-	Q_D(XYCurve);
-	setXErrorPlusColumnPath(d->xErrorPlusColumn->path());
-}
-
-void XYCurve::xErrorMinusColumnNameChanged() {
-	Q_D(XYCurve);
-	setXErrorMinusColumnPath(d->xErrorMinusColumn->path());
-}
-
-void XYCurve::yErrorPlusColumnNameChanged() {
-	Q_D(XYCurve);
-	setYErrorPlusColumnPath(d->yErrorPlusColumn->path());
-}
-
-void XYCurve::yErrorMinusColumnNameChanged() {
-	Q_D(XYCurve);
-	setYErrorMinusColumnPath(d->yErrorMinusColumn->path());
-}
-
-void XYCurve::valuesColumnNameChanged() {
-	Q_D(XYCurve);
-	setValuesColumnPath(d->valuesColumn->path());
 }
 
 // ##############################################################################

@@ -188,15 +188,16 @@ bool KDEPlot::usingColumn(const Column* column) const {
 }
 
 void KDEPlot::updateColumnDependencies(const AbstractColumn* column) {
-	Q_D(const KDEPlot);
+	Q_D(KDEPlot);
 	const QString& columnPath = column->path();
 
-	if (d->dataColumnPath == columnPath) {
+	if (d->dataColumn == column) // the column is the same and was just renamed -> update the column path
+		d->dataColumnPath = columnPath;
+	else if (d->dataColumnPath == columnPath) { // another column was renamed to the current path -> set and connect to the new column
 		setUndoAware(false);
 		setDataColumn(column);
+		setUndoAware(true);
 	}
-
-	setUndoAware(false);
 }
 
 QColor KDEPlot::color() const {
@@ -268,11 +269,6 @@ void KDEPlot::dataColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 		d->dataColumn = nullptr;
 		d->retransform();
 	}
-}
-
-void KDEPlot::dataColumnNameChanged() {
-	Q_D(KDEPlot);
-	setDataColumnPath(d->dataColumn->path());
 }
 
 // ##############################################################################
