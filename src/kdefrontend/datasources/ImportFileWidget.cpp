@@ -4,7 +4,7 @@
 	Description          : import file data widget
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2009-2023 Stefan Gerlach <stefan.gerlach@uni.kn>
-	SPDX-FileCopyrightText: 2009-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2009-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2017-2018 Fabian Kristof <fkristofszabolcs@gmail.com>
 	SPDX-FileCopyrightText: 2018-2019 Kovacs Ferencz <kferike98@gmail.com>
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -32,7 +32,6 @@
 #include <QDir>
 #include <QFileDialog>
 #include <QFileSystemModel>
-#include <QInputDialog>
 #include <QIntValidator>
 #include <QLocalSocket>
 #include <QProcess>
@@ -55,7 +54,6 @@
 #include "MQTTSubscriptionWidget.h"
 #include "kdefrontend/widgets/MQTTWillSettingsWidget.h"
 #include <QMenu>
-#include <QMessageBox>
 #include <QMqttClient>
 #include <QMqttMessage>
 #include <QMqttSubscription>
@@ -1366,10 +1364,11 @@ void ImportFileWidget::initOptionsWidget() {
 	case AbstractFileFilter::FileType::JSON:
 		if (!m_jsonOptionsWidget) {
 			auto* jsonw = new QWidget();
-			m_jsonOptionsWidget = std::unique_ptr<JsonOptionsWidget>(new JsonOptionsWidget(jsonw, this));
+			m_jsonOptionsWidget = std::unique_ptr<JsonOptionsWidget>(new JsonOptionsWidget(jsonw));
 			ui.tvJson->setModel(m_jsonOptionsWidget->model());
 			ui.swOptions->addWidget(jsonw);
 			m_jsonOptionsWidget->loadSettings();
+			connect(m_jsonOptionsWidget.get(), &JsonOptionsWidget::error, this, &ImportFileWidget::error);
 		} else
 			m_jsonOptionsWidget->clearModel();
 		ui.swOptions->setCurrentWidget(m_jsonOptionsWidget->parentWidget());

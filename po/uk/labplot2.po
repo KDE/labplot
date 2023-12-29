@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-12-26 00:38+0000\n"
-"PO-Revision-Date: 2023-12-24 16:15+0200\n"
+"PO-Revision-Date: 2023-12-26 08:13+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
@@ -15430,21 +15430,15 @@ msgid "Arabic (٫)"
 msgstr "Арабські (.)"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:229
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Use terms compliant with the <a href=\"http://www."
-#| "bipm.org/utils/common/documents/jcgm/JCGM_100_2008_E.pdf\"><span style=\" "
-#| "text-decoration: underline; color:#2980b9;\">Guide to the Expression of "
-#| "Uncertainty in Measurement (GUM)</span></a></p></body></html>"
+#, kde-format
 msgid ""
 "Use terms compliant with the <a href=\"http://www.bipm.org/utils/common/"
 "documents/jcgm/JCGM_100_2008_E.pdf\">Guide to the Expression of Uncertainty "
 "in Measurement (GUM)</a>"
 msgstr ""
-"<html><head/><body><p>Використовувати терміни, сумісні із <a href=\"http://"
-"www.bipm.org/utils/common/documents/jcgm/JCGM_100_2008_E.pdf\"><span style="
-"\" text-decoration: underline; color:#2980b9;\">Guide to the Expression of "
-"Uncertainty in Measurement (GUM)</span></a></p></body></html>"
+"Використовувати терміни, сумісні із <a href=\"http://www.bipm.org/utils/"
+"common/documents/jcgm/JCGM_100_2008_E.pdf\">Guide to the Expression of "
+"Uncertainty in Measurement (GUM)</a>"
 
 #: src/kdefrontend/SettingsNotebookPage.cpp:23
 #, kde-format
@@ -16345,20 +16339,13 @@ msgstr ""
 "поточною часовою позначкою."
 
 #: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:89
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Random number distributions as defined in <a href="
-#| "\"https://www.gnu.org/software/gsl/doc/html/randist.html\"><span style=\" "
-#| "text-decoration: underline; color:#2980b9;\">GSL documentation</span></"
-#| "a></p></body></html>"
+#, kde-format
 msgid ""
 "Random number distributions as defined in <a href=\"https://www.gnu.org/"
 "software/gsl/doc/html/randist.html\">GSL documentation</a>"
 msgstr ""
-"<html><head/><body><p>Розподіли випадкових чисел, як їх визначено у <a href="
-"\"https://www.gnu.org/software/gsl/doc/html/randist.html\"><span style=\" "
-"text-decoration: underline; color:#2980b9;\">документації до GSL</span></a></"
-"p></body></html>"
+"Розподіли випадкових чисел, як їх визначено у <a href=\"https://www.gnu.org/"
+"software/gsl/doc/html/randist.html\">документації до GSL</a>"
 
 #: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:461
 #, kde-format
