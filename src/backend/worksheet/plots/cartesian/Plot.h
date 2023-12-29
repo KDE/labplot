@@ -33,8 +33,8 @@ public:
 									  // background color for example)
 
 	/*!
-	* returns \c true if the column is used internally in the plot for the visualisation, returns \c false otherwise.
-	*/
+	 * returns \c true if the column is used internally in the plot for the visualisation, returns \c false otherwise.
+	 */
 	virtual bool usingColumn(const Column*) const = 0;
 
 	/*!
