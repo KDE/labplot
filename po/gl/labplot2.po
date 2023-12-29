@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-12-28 00:38+0000\n"
-"PO-Revision-Date: 2023-12-27 20:36+0100\n"
+"PO-Revision-Date: 2023-12-28 17:55+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -1986,10 +1986,9 @@ msgid "Size in Bytes"
 msgstr "Tamaño en bytes"
 
 #: src/backend/datasources/filters/QJsonModel.cpp:200
-#, fuzzy, kde-format
-#| msgid "Failed to load JSON document"
+#, kde-format
 msgid "Failed to load the JSON file. Empty JSON document."
-msgstr "Non foi posíbel cargar o documento JSON"
+msgstr "Non foi posíbel cargar o ficheiro JSON. O documento JSON está baleiro."
 
 #: src/backend/datasources/filters/QJsonModel.cpp:206
 #, kde-format

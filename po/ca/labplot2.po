@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-12-28 00:38+0000\n"
-"PO-Revision-Date: 2023-12-26 11:24+0100\n"
+"PO-Revision-Date: 2023-12-28 08:04+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -2005,10 +2005,9 @@ msgid "Size in Bytes"
 msgstr "Mida en bytes"
 
 #: src/backend/datasources/filters/QJsonModel.cpp:200
-#, fuzzy, kde-format
-#| msgid "Failed to load JSON document"
+#, kde-format
 msgid "Failed to load the JSON file. Empty JSON document."
-msgstr "No s'ha pogut carregar el document JSON"
+msgstr "Ha fallat en carregar el fitxer JSON. Document JSON buit."
 
 #: src/backend/datasources/filters/QJsonModel.cpp:206
 #, kde-format

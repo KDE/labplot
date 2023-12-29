@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-12-28 00:38+0000\n"
-"PO-Revision-Date: 2023-11-22 21:12+0100\n"
+"PO-Revision-Date: 2023-12-28 21:01+0100\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 23.08.1\n"
+"X-Generator: Lokalize 23.08.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -1979,10 +1979,9 @@ msgid "Size in Bytes"
 msgstr "Storlek i byte"
 
 #: src/backend/datasources/filters/QJsonModel.cpp:200
-#, fuzzy, kde-format
-#| msgid "Failed to load JSON document"
+#, kde-format
 msgid "Failed to load the JSON file. Empty JSON document."
-msgstr "Misslyckades läsa in JSON-dokument"
+msgstr "Misslyckades läsa in JSON-filen. Tomt JSON-dokument."
 
 #: src/backend/datasources/filters/QJsonModel.cpp:206
 #, kde-format
@@ -2329,10 +2328,9 @@ msgid "Euler's constant"
 msgstr "Eulers konstant"
 
 #: src/backend/gsl/constants.cpp:60
-#, fuzzy, kde-format
-#| msgid "Number"
+#, kde-format
 msgid "Not a number"
-msgstr "Nummer"
+msgstr "Inte ett tal"
 
 #. i18n("Fundamental constants"));
 #: src/backend/gsl/constants.cpp:63
@@ -3679,7 +3677,7 @@ msgstr "Avrunda till närmaste heltal"
 #: src/backend/gsl/functions.cpp:294
 #, kde-format
 msgid "Round to y decimal places"
-msgstr ""
+msgstr "Avrunda till y decimaler"
 
 #: src/backend/gsl/functions.cpp:308
 #, kde-format
@@ -8959,10 +8957,9 @@ msgid "Visible"
 msgstr "Synlig"
 
 #: src/backend/worksheet/WorksheetElement.cpp:225
-#, fuzzy, kde-format
-#| msgid "Locked"
+#, kde-format
 msgid "Lock"
-msgstr "Låst"
+msgstr "Lås"
 
 #: src/backend/worksheet/WorksheetElement.cpp:234
 #, kde-format
@@ -11726,21 +11723,19 @@ msgstr ""
 "importeras till."
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:159
-#, fuzzy, kde-format
-#| msgid "Plot Area"
+#, kde-format
 msgid "As Plot Area"
-msgstr "Diagramområde"
+msgstr "Som diagramområde"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:160
-#, fuzzy, kde-format
-#| msgid "Logical Coordinates"
+#, kde-format
 msgid "As Coordinate System"
-msgstr "Logiska koordinater"
+msgstr "Som koordinatsystem"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:164
 #, kde-format
 msgid "Specify how to import multi-layered graphs."
-msgstr ""
+msgstr "Ange hur diagram med flera lager ska importeras"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:169
 #, kde-format
@@ -11754,6 +11749,14 @@ msgid ""
 "new coordinate system (data range) on the same plot area is created for "
 "every layer</li></ul>"
 msgstr ""
+"Flera lager används i Origin för att antingen implementera flera diagram "
+"eller flera axlar på samma diagram (se <a href=\"https://www.originlab.com/"
+"doc/Origin-Help/MultiLayer-Graph\">Origins dokumentation</a> för mer "
+"information). Labplot kan endast bearbeta en typ samtidigt.<br><br>Ange hur "
+"diagram med flera lager ska importeras i det valda projektet:<ul><li>Som "
+"diagramområde - ett nytt diagramområde skapas för varje lager.</li><li>Som "
+"koordinatsystem - ett nytt koordinatsystem (dataintervall) på samma "
+"diagramområde skapas för varje lager</li></ul>"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:261
 #, kde-format
@@ -11871,10 +11874,9 @@ msgstr ""
 
 #: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:330
 #: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:332
-#, fuzzy, kde-format
-#| msgid "Execute the query and preview its result"
+#, kde-format
 msgid "Failed to execute the query for the preview"
-msgstr "Utför förfrågan och förhandsgranska dess resultat"
+msgstr "Misslyckades utföra förfrågan för förhandsgranskning"
 
 #: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:406
 #, kde-format
@@ -11888,10 +11890,9 @@ msgstr "Utför förfrågan och förhandsgranska dess resultat"
 
 #: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:529
 #: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:531
-#, fuzzy, kde-format
-#| msgid "Unable to Execute Query"
+#, kde-format
 msgid "Failed to execute the query"
-msgstr "Kan inte utföra förfrågan"
+msgstr "Misslyckades utföra förfrågan"
 
 #: src/kdefrontend/datasources/JsonOptionsWidget.cpp:120
 #, kde-format
@@ -13645,6 +13646,8 @@ msgid ""
 "The number of the interpolation points should be bigger than the total "
 "number of points in the data source."
 msgstr ""
+"Antalet interpolationspunkter bör vara större än det totala antalet punkter "
+"i datakällan."
 
 #: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:569
 #, kde-format
@@ -15219,10 +15222,9 @@ msgid "min."
 msgstr "min."
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:192
-#, fuzzy, kde-format
-#| msgid "Create New Empty Project"
+#, kde-format
 msgid "Create New Project"
-msgstr "Skapa nytt tomt projekt"
+msgstr "Skapa nytt projekt"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:193
 #, kde-format
@@ -15230,30 +15232,24 @@ msgid "Load Last Used Project"
 msgstr "Läs in senast använda projekt"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:197
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Print Worksheet"
+#, kde-format
 msgid "With Worksheet"
-msgstr "Skriv ut arbetsblad"
+msgstr "Med arbetsblad"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:198
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Print Spreadsheet"
+#, kde-format
 msgid "With Spreadsheet"
-msgstr "Skriv ut kalkylark"
+msgstr "Med kalkylark"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:199
-#, fuzzy, kde-format
-#| msgid "%1: set linked spreadsheet"
+#, kde-format
 msgid "With Worksheet and Spreadsheet"
-msgstr "%1: ställ in länkat kalkylark"
+msgstr "Med arbetsblad och kalkylark"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:201
-#, fuzzy, kde-format
-#| msgid "Notebook"
+#, kde-format
 msgid "With Notebook"
-msgstr "Anteckningsblock"
+msgstr "Med anteckningsblock"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:204
 #, kde-format
@@ -15320,21 +15316,15 @@ msgid "Arabic (٫)"
 msgstr "Arabiska (٫)"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:229
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Use terms compliant with the <a href=\"http://www."
-#| "bipm.org/utils/common/documents/jcgm/JCGM_100_2008_E.pdf\"><span style=\" "
-#| "text-decoration: underline; color:#2980b9;\">Guide to the Expression of "
-#| "Uncertainty in Measurement (GUM)</span></a></p></body></html>"
+#, kde-format
 msgid ""
 "Use terms compliant with the <a href=\"http://www.bipm.org/utils/common/"
 "documents/jcgm/JCGM_100_2008_E.pdf\">Guide to the Expression of Uncertainty "
 "in Measurement (GUM)</a>"
 msgstr ""
-"<html><head/><body><p>Använd villkor som överensstämmer med <a href=\"http://"
-"www.bipm.org/utils/common/documents/jcgm/JCGM_100_2008_E.pdf\"><span style="
-"\" text-decoration: underline; color:#2980b9;\">Guide to the Expression of "
-"Uncertainty in Measurement (GUM)</span></a></p></body></html>"
+"Använd villkor som överensstämmer med <a href=\"http://www.bipm.org/utils/"
+"common/documents/jcgm/JCGM_100_2008_E.pdf\">Guide to the Expression of "
+"Uncertainty in Measurement (GUM)</a>"
 
 #: src/kdefrontend/SettingsNotebookPage.cpp:23
 #, kde-format
@@ -16228,20 +16218,13 @@ msgstr ""
 "generatorn."
 
 #: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:89
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Random number distributions as defined in <a href="
-#| "\"https://www.gnu.org/software/gsl/doc/html/randist.html\"><span style=\" "
-#| "text-decoration: underline; color:#2980b9;\">GSL documentation</span></"
-#| "a></p></body></html>"
+#, kde-format
 msgid ""
 "Random number distributions as defined in <a href=\"https://www.gnu.org/"
 "software/gsl/doc/html/randist.html\">GSL documentation</a>"
 msgstr ""
-"<html><head/><body><p>Distributioner av slumptal är i den ordning de finns i "
-"<a href=\"https://www.gnu.org/software/gsl/doc/html/randist.html\"><span "
-"style=\" text-decoration: underline; color:#2980b9;\">GSL-dokumentationen</"
-"span></a></p></body></html>"
+"Distributioner av slumptal är i den ordning de finns i <a href=\"https://www."
+"gnu.org/software/gsl/doc/html/randist.html\">GSL-dokumentationen</a>"
 
 #: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:461
 #, kde-format
@@ -18190,14 +18173,13 @@ msgstr "Objekt att importera"
 #: src/kdefrontend/ui/datasources/importprojectwidget.ui:58
 #, kde-format
 msgid "Graph Layers:"
-msgstr ""
+msgstr "Diagramlager:"
 
 #. i18n: ectx: property (text), widget (QLabel, lUnusedObjects)
 #: src/kdefrontend/ui/datasources/importprojectwidget.ui:82
-#, fuzzy, kde-format
-#| msgid "Import unused object"
+#, kde-format
 msgid "Unused Objects:"
-msgstr "importera oanvända objekt"
+msgstr "Oanvända objekt:"
 
 #. i18n: ectx: property (text), widget (QLabel, lCustomFolder)
 #. i18n: ectx: property (text), widget (QLabel, lFolder)
@@ -21220,10 +21202,9 @@ msgstr "Anteckningsblock:"
 
 #. i18n: ectx: property (text), widget (QLabel, lNewProject)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:96
-#, fuzzy, kde-format
-#| msgid "Save Project"
+#, kde-format
 msgid "New Project:"
-msgstr "Spara projekt"
+msgstr "Nytt projekt:"
 
 #. i18n: ectx: property (text), widget (QLabel, lGUMTerms)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:106
@@ -22653,7 +22634,7 @@ msgstr "Avsluta presentation"
 #: src/kdefrontend/worksheet/SlidingPanel.cpp:131
 #, kde-format
 msgid "Pin the navigation panel"
-msgstr ""
+msgstr "Fäst navigeringspanelen"
 
 #: src/tools/ColorMapsManager.cpp:153
 #, kde-format

@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-12-28 00:38+0000\n"
-"PO-Revision-Date: 2023-12-26 11:04+0300\n"
+"PO-Revision-Date: 2023-12-28 10:26+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -1983,10 +1983,9 @@ msgid "Size in Bytes"
 msgstr "Bayt Türünden Boyut"
 
 #: src/backend/datasources/filters/QJsonModel.cpp:200
-#, fuzzy, kde-format
-#| msgid "Failed to load JSON document"
+#, kde-format
 msgid "Failed to load the JSON file. Empty JSON document."
-msgstr "JSON belgesi yüklenemedi"
+msgstr "JSON belgesi yüklenemedi. Boş JSON belgesi."
 
 #: src/backend/datasources/filters/QJsonModel.cpp:206
 #, kde-format
