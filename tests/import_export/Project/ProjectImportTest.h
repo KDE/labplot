@@ -28,6 +28,8 @@ private Q_SLOTS:
 	void testOriginTextNumericColumns();
 	void testOrigin_2folder_with_graphs();
 	void testOrigin_2graphs();
+	void testOriginHistogram();
+	void testOriginBarPlot();
 
 	// signgle/multi graph layers
 	void testOriginSingleLayerTwoAxes();

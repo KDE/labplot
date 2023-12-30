@@ -19,10 +19,12 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Line.h"
 #include "backend/worksheet/Worksheet.h"
+#include "backend/worksheet/plots/cartesian/BarPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
+
 // ##############################################################################
 // #####################  import of LabPlot projects ############################
 // ##############################################################################
@@ -651,6 +653,124 @@ void ProjectImportTest::testOrigin_2graphs() {
 	c2 = dynamic_cast<Column*>(s1->child<AbstractAspect>(1));
 	QVERIFY(c2 != nullptr);
 	QCOMPARE(c2->name(), QLatin1String("B"));
+}
+
+void ProjectImportTest::testOriginHistogram() {
+	OriginProjectParser parser;
+	parser.setProjectFileName(QFINDTESTDATA(QLatin1String("data/histogram.opj")));
+	Project project;
+	parser.importTo(&project, QStringList());
+
+	// check the project tree for the imported project
+	auto* folder = dynamic_cast<Folder*>(project.child<AbstractAspect>(0));
+	QVERIFY(folder != nullptr);
+	QCOMPARE(folder->name(), QLatin1String("Folder1"));
+
+	//  Book
+	auto* sheet = dynamic_cast<Spreadsheet*>(folder->child<AbstractAspect>(0));
+	QVERIFY(sheet != nullptr);
+	QCOMPARE(sheet->name(), QLatin1String("Book1"));
+	QCOMPARE(sheet->columnCount(), 2);
+	QCOMPARE(sheet->rowCount(), 32);
+
+	auto* col1 = dynamic_cast<Column*>(sheet->child<AbstractAspect>(0));
+	QVERIFY(col1 != nullptr);
+	QCOMPARE(col1->name(), QLatin1String("A"));
+
+	auto* col2 = dynamic_cast<Column*>(sheet->child<AbstractAspect>(1));
+	QVERIFY(col2 != nullptr);
+	QCOMPARE(col2->name(), QLatin1String("B"));
+
+	// Graph 1
+	auto* worksheet = dynamic_cast<Worksheet*>(folder->child<AbstractAspect>(1));
+	QVERIFY(worksheet != nullptr);
+	QCOMPARE(worksheet->name(), QLatin1String("Graph1"));
+
+	auto* plot = dynamic_cast<CartesianPlot*>(worksheet->child<CartesianPlot>(0));
+	QVERIFY(plot != nullptr);
+	QCOMPARE(plot->name(), QLatin1String("Plot1"));
+
+	auto* histogram = dynamic_cast<Histogram*>(plot->child<Histogram>(0));
+	QVERIFY(histogram != nullptr);
+	QCOMPARE(histogram->name(), QStringLiteral("A"));
+	QCOMPARE(histogram->coordinateSystemIndex(), plot->defaultCoordinateSystemIndex());
+	QCOMPARE(histogram->orientation(), Histogram::Orientation::Vertical);
+	// TODO: chek more properties of the histogram
+
+	// Graph 2
+	worksheet = dynamic_cast<Worksheet*>(folder->child<AbstractAspect>(2));
+	QVERIFY(worksheet != nullptr);
+	QCOMPARE(worksheet->name(), QLatin1String("Graph2"));
+
+	plot = dynamic_cast<CartesianPlot*>(worksheet->child<CartesianPlot>(0));
+	QVERIFY(plot != nullptr);
+	QCOMPARE(plot->name(), QLatin1String("Plot1"));
+
+	histogram = dynamic_cast<Histogram*>(plot->child<Histogram>(0));
+	QVERIFY(histogram != nullptr);
+	QCOMPARE(histogram->name(), QStringLiteral("A"));
+	QCOMPARE(histogram->coordinateSystemIndex(), plot->defaultCoordinateSystemIndex());
+	QCOMPARE(histogram->orientation(), Histogram::Orientation::Horizontal);
+	// TODO: check more properties of the histogram
+}
+
+void ProjectImportTest::testOriginBarPlot() {
+	OriginProjectParser parser;
+	parser.setProjectFileName(QFINDTESTDATA(QLatin1String("data/bar-column.opj")));
+	Project project;
+	parser.importTo(&project, QStringList());
+
+	// check the project tree for the imported project
+	auto* folder = dynamic_cast<Folder*>(project.child<AbstractAspect>(0));
+	QVERIFY(folder != nullptr);
+	QCOMPARE(folder->name(), QLatin1String("Folder1"));
+
+	//  Book
+	auto* sheet = dynamic_cast<Spreadsheet*>(folder->child<AbstractAspect>(0));
+	QVERIFY(sheet != nullptr);
+	QCOMPARE(sheet->name(), QLatin1String("Book1"));
+	QCOMPARE(sheet->columnCount(), 2);
+	QCOMPARE(sheet->rowCount(), 32);
+
+	auto* col1 = dynamic_cast<Column*>(sheet->child<AbstractAspect>(0));
+	QVERIFY(col1 != nullptr);
+	QCOMPARE(col1->name(), QLatin1String("A"));
+
+	auto* col2 = dynamic_cast<Column*>(sheet->child<AbstractAspect>(1));
+	QVERIFY(col2 != nullptr);
+	QCOMPARE(col2->name(), QLatin1String("B"));
+
+	// Graph 2
+	auto* worksheet = dynamic_cast<Worksheet*>(folder->child<AbstractAspect>(1));
+	QVERIFY(worksheet != nullptr);
+	QCOMPARE(worksheet->name(), QLatin1String("Graph2"));
+
+	auto* plot = dynamic_cast<CartesianPlot*>(worksheet->child<CartesianPlot>(0));
+	QVERIFY(plot != nullptr);
+	QCOMPARE(plot->name(), QLatin1String("Plot1"));
+
+	auto* barPlot = dynamic_cast<BarPlot*>(plot->child<BarPlot>(0));
+	QVERIFY(barPlot != nullptr);
+	QCOMPARE(barPlot->name(), QStringLiteral("B"));
+	QCOMPARE(barPlot->coordinateSystemIndex(), plot->defaultCoordinateSystemIndex());
+	QCOMPARE(barPlot->orientation(), BarPlot::Orientation::Horizontal);
+	// TODO: chek more properties of the barPlot
+
+	// Graph 1
+	worksheet = dynamic_cast<Worksheet*>(folder->child<AbstractAspect>(2));
+	QVERIFY(worksheet != nullptr);
+	QCOMPARE(worksheet->name(), QLatin1String("Graph1"));
+
+	plot = dynamic_cast<CartesianPlot*>(worksheet->child<CartesianPlot>(0));
+	QVERIFY(plot != nullptr);
+	QCOMPARE(plot->name(), QLatin1String("Plot1"));
+
+	barPlot = dynamic_cast<BarPlot*>(plot->child<BarPlot>(0));
+	QVERIFY(barPlot != nullptr);
+	QCOMPARE(barPlot->name(), QStringLiteral("B"));
+	QCOMPARE(barPlot->coordinateSystemIndex(), plot->defaultCoordinateSystemIndex());
+	QCOMPARE(barPlot->orientation(), BarPlot::Orientation::Vertical);
+	// TODO: check more properties of the barPlot
 }
 
 /*!
