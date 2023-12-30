@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-12-28 00:38+0000\n"
-"PO-Revision-Date: 2023-12-24 15:40+0100\n"
+"PO-Revision-Date: 2023-12-28 10:55+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -3715,7 +3715,7 @@ msgstr "Arrondir à l'entier le plus proche"
 #: src/backend/gsl/functions.cpp:294
 #, kde-format
 msgid "Round to y decimal places"
-msgstr ""
+msgstr "Arrondir à y valeurs décimales"
 
 #: src/backend/gsl/functions.cpp:308
 #, kde-format
@@ -15438,22 +15438,16 @@ msgid "Arabic (٫)"
 msgstr "Arabe (٫)"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:229
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Use terms compliant with the <a href=\"http://www."
-#| "bipm.org/utils/common/documents/jcgm/JCGM_100_2008_E.pdf\"><span style=\" "
-#| "text-decoration: underline; color:#2980b9;\">Guide to the Expression of "
-#| "Uncertainty in Measurement (GUM)</span></a></p></body></html>"
+#, kde-format
 msgid ""
 "Use terms compliant with the <a href=\"http://www.bipm.org/utils/common/"
 "documents/jcgm/JCGM_100_2008_E.pdf\">Guide to the Expression of Uncertainty "
 "in Measurement (GUM)</a>"
 msgstr ""
-"<html><head/><body><p>Utiliser les termes conformes au <a href=\"http://www."
-"bipm.org/utils/common/documents/jcgm/JCGM_100_2008_E.pdf\"><span style=\" "
-"text-decoration: underline; color:#2980b9;\">Guide pour l'expression de "
-"l'incertitude dans les mesures (« GUM », Guide for the Expression of "
-"Uncertainty in Measurement)</span></a></p></body></html>"
+"Utiliser des termes conformes au <a href=\"http://www.bipm.org/utils/common/"
+"documents/jcgm/JCGM_100_2008_E.pdf\">Guide pour l'expression de "
+"l'incertitude dans les mesures (« GUM », Guide to the Expression of "
+"Uncertainty in Measurement)</a>"
 
 #: src/kdefrontend/SettingsNotebookPage.cpp:23
 #, kde-format
@@ -16359,20 +16353,14 @@ msgstr ""
 "initialiser le générateur."
 
 #: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:89
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Random number distributions as defined in <a href="
-#| "\"https://www.gnu.org/software/gsl/doc/html/randist.html\"><span style=\" "
-#| "text-decoration: underline; color:#2980b9;\">GSL documentation</span></"
-#| "a></p></body></html>"
+#, kde-format
 msgid ""
 "Random number distributions as defined in <a href=\"https://www.gnu.org/"
 "software/gsl/doc/html/randist.html\">GSL documentation</a>"
 msgstr ""
-"<html><head/><body><p>Les distributions de nombres aléatoires comme défini "
-"dans la <a href=\"https://www.gnu.org/software/gsl/doc/html/randist.html"
-"\"><span style=\" text-decoration: underline; color:#2980b9;\">documentation "
-"de GSL.</span></a></p></body></html>"
+"Les distributions de nombres aléatoires comme défini dans la <a href="
+"\"https://www.gnu.org/software/gsl/doc/html/randist.html\">documentation de "
+"GSL.</a>"
 
 #: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:461
 #, kde-format
