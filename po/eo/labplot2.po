@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-12-28 00:38+0000\n"
-"PO-Revision-Date: 2023-12-27 22:06+0100\n"
+"PO-Revision-Date: 2023-12-30 07:05+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -1980,10 +1980,9 @@ msgid "Size in Bytes"
 msgstr "Grandeco en bajtoj"
 
 #: src/backend/datasources/filters/QJsonModel.cpp:200
-#, fuzzy, kde-format
-#| msgid "Failed to load JSON document"
+#, kde-format
 msgid "Failed to load the JSON file. Empty JSON document."
-msgstr "Malsukcesis ŝargi JSON-dokumenton"
+msgstr "Malsukcesis ŝargi la JSON-dokumenton. Malplena JSON-dokumento."
 
 #: src/backend/datasources/filters/QJsonModel.cpp:206
 #, kde-format

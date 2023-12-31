@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-12-28 00:38+0000\n"
-"PO-Revision-Date: 2023-12-24 05:16+0100\n"
+"PO-Revision-Date: 2023-12-30 06:11+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -1973,10 +1973,9 @@ msgid "Size in Bytes"
 msgstr "ზომა ბაიტებში"
 
 #: src/backend/datasources/filters/QJsonModel.cpp:200
-#, fuzzy, kde-format
-#| msgid "Failed to load JSON document"
+#, kde-format
 msgid "Failed to load the JSON file. Empty JSON document."
-msgstr "JSON დოკუმენტის ჩატვირთვა შეუძლებელია"
+msgstr "JSON დოკუმენტის ჩატვირთვა ჩავარდა. JSON დოკუმენტი ცარიელია."
 
 #: src/backend/datasources/filters/QJsonModel.cpp:206
 #, kde-format
