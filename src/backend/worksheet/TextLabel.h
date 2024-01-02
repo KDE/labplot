@@ -83,12 +83,12 @@ public:
 
 		bool operator!=(const TextWrapper& other) const {
 			return (text != other.text || mode != other.mode || allowPlaceholder != other.allowPlaceholder
-								|| ((allowPlaceholder || other.allowPlaceholder) && textPlaceholder != other.textPlaceholder));
+					|| ((allowPlaceholder || other.allowPlaceholder) && textPlaceholder != other.textPlaceholder));
 		}
 
 		bool operator==(TextWrapper& other) const {
 			return (text == other.text && mode == other.mode && allowPlaceholder == other.allowPlaceholder
-								&& ((allowPlaceholder || other.allowPlaceholder) && textPlaceholder == other.textPlaceholder));
+					&& ((allowPlaceholder || other.allowPlaceholder) && textPlaceholder == other.textPlaceholder));
 		}
 
 		QString text;
