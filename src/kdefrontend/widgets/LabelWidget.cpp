@@ -74,7 +74,7 @@
 	if (!cursorHasSelection) {                                                                                                                                 \
 		cursor.clearSelection();                                                                                                                               \
 		ui.teLabel->setTextCursor(cursor);                                                                                                                     \
-	}                                                                                                                                                          \
+	}
 
 /*!
 	\class LabelWidget

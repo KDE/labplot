@@ -273,7 +273,6 @@ void TextLabel::setText(const TextWrapper& textWrapper) {
 	if (d->textWrapper != textWrapper) {
 		bool oldEmpty = d->textWrapper.text.isEmpty();
 		if (textWrapper.mode == TextLabel::Mode::Text && !textWrapper.text.isEmpty()) {
-
 			QTextEdit pte(d->textWrapper.text); // te with previous text
 			// restore formatting when text changes or switching back to text mode
 			if (d->textWrapper.mode != TextLabel::Mode::Text || oldEmpty || pte.toPlainText().isEmpty()) {
