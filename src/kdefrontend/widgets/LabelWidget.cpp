@@ -722,7 +722,12 @@ void LabelWidget::backgroundColorChanged(const QColor& color) {
 	auto mode = m_label->text().mode;
 	DEBUG(Q_FUNC_INFO << ", tex enable = " << m_teXEnabled << ", mode = " << (int)mode)
 	if (mode == TextLabel::Mode::Text || (mode == TextLabel::Mode::LaTeX && !m_teXEnabled)) {
-		SETLABELTEXTPROPERTY(setTextBackgroundColor, color);
+		auto newColor(color);
+		if (color.alpha() == 0) { // remove the transparency if it was set initially before.
+			newColor.setAlpha(255);
+			ui.kcbBackgroundColor->setColor(newColor);
+		}
+		SETLABELTEXTPROPERTY(setTextBackgroundColor, newColor)
 	} else { // LaTeX (enabled) or Markup mode
 		// Latex text does not support html code. For this the backgroundColor variable is used
 		// Only single color background is supported
@@ -1539,8 +1544,8 @@ void LabelWidget::loadConfig(KConfigGroup& group) {
 	ui.cbMode->setCurrentIndex(group.readEntry("Mode", static_cast<int>(m_label->text().mode)));
 	this->modeChanged(ui.cbMode->currentIndex());
 	ui.sbFontSize->setValue(group.readEntry("TeXFontSize", m_label->teXFont().pointSize()));
-	ui.kcbFontColor->setColor(group.readEntry("TeXFontColor", m_label->fontColor()));
-	ui.kcbBackgroundColor->setColor(group.readEntry("TeXBackgroundColor", m_label->backgroundColor()));
+	ui.kcbFontColor->setColor(group.readEntry("FontColor", m_label->fontColor()));
+	ui.kcbBackgroundColor->setColor(group.readEntry("BackgroundColor", m_label->backgroundColor()));
 	ui.kfontRequesterTeX->setFont(group.readEntry("TeXFont", m_label->teXFont()));
 
 	// Geometry
@@ -1568,8 +1573,8 @@ void LabelWidget::loadConfig(KConfigGroup& group) {
 void LabelWidget::saveConfig(KConfigGroup& group) {
 	// Text
 	group.writeEntry("Mode", ui.cbMode->currentIndex());
-	group.writeEntry("TeXFontColor", ui.kcbFontColor->color());
-	group.writeEntry("TeXBackgroundColor", ui.kcbBackgroundColor->color());
+	group.writeEntry("FontColor", ui.kcbFontColor->color());
+	group.writeEntry("BackgroundColor", ui.kcbBackgroundColor->color());
 	group.writeEntry("TeXFont", ui.kfontRequesterTeX->font());
 
 	// Geometry

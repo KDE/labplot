@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-28 00:38+0000\n"
+"POT-Creation-Date: 2024-01-03 00:38+0000\n"
 "PO-Revision-Date: 2023-12-28 08:34+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
@@ -6871,7 +6871,7 @@ msgstr "%1: встановити зображення"
 msgid "%1: embed image"
 msgstr "%1: вбудувати зображення"
 
-#: src/backend/worksheet/Image.cpp:151 src/backend/worksheet/TextLabel.cpp:366
+#: src/backend/worksheet/Image.cpp:151 src/backend/worksheet/TextLabel.cpp:362
 #, kde-format
 msgid "%1: set border opacity"
 msgstr "%1: встановити рівень непрозорості рамки"
@@ -8024,7 +8024,7 @@ msgid "%1: set font"
 msgstr "%1: встановити шрифт"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:213
-#: src/backend/worksheet/TextLabel.cpp:344
+#: src/backend/worksheet/TextLabel.cpp:340
 #, kde-format
 msgid "%1: set font color"
 msgstr "%1: встановити колір шрифту"
@@ -8913,35 +8913,36 @@ msgstr "%1: змінено тип рамки"
 msgid "%1: set plot area corner radius"
 msgstr "%1: встановити радіус заокруглення кутів області креслення"
 
-#: src/backend/worksheet/TextLabel.cpp:263
-#: src/backend/worksheet/TextLabel.cpp:307
+#: src/backend/worksheet/TextLabel.cpp:262
+#: src/backend/worksheet/TextLabel.cpp:299
 #, kde-format
 msgid "%1: set background color"
 msgstr "%1: встановити колір тла"
 
+#: src/backend/worksheet/TextLabel.cpp:290
 #: src/backend/worksheet/TextLabel.cpp:298
-#: src/backend/worksheet/TextLabel.cpp:306
+#: src/backend/worksheet/TextLabel.cpp:302
 #: src/backend/worksheet/TextLabel.cpp:309
 #, kde-format
 msgid "%1: set label text"
 msgstr "%1: встановити текст мітки"
 
-#: src/backend/worksheet/TextLabel.cpp:330
+#: src/backend/worksheet/TextLabel.cpp:326
 #, kde-format
 msgid "%1: set label placeholdertext"
 msgstr "%1: встановити текст-замінник мітки"
 
-#: src/backend/worksheet/TextLabel.cpp:337
+#: src/backend/worksheet/TextLabel.cpp:333
 #, kde-format
 msgid "%1: set TeX main font"
 msgstr "%1: встановити основний шрифт TeX"
 
-#: src/backend/worksheet/TextLabel.cpp:352
+#: src/backend/worksheet/TextLabel.cpp:348
 #, kde-format
 msgid "%1: set border shape"
 msgstr "%1: встановити форму рамки"
 
-#: src/backend/worksheet/TextLabel.cpp:359
+#: src/backend/worksheet/TextLabel.cpp:355
 #, kde-format
 msgid "%1: set border"
 msgstr "%1: встановити рамку"
@@ -22547,14 +22548,14 @@ msgstr ""
 "li><li>LaTeX — режим з використанням LaTeX, має бути встановлено дистрибутив "
 "LaTeX</li><li>Markdown — режим мови розмітки Markdown</li></ul>"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:858
-#: src/kdefrontend/widgets/LabelWidget.cpp:884
+#: src/kdefrontend/widgets/LabelWidget.cpp:863
+#: src/kdefrontend/widgets/LabelWidget.cpp:889
 #, kde-format
 msgid "Date"
 msgstr "Дата"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:866
-#: src/kdefrontend/widgets/LabelWidget.cpp:892
+#: src/kdefrontend/widgets/LabelWidget.cpp:871
+#: src/kdefrontend/widgets/LabelWidget.cpp:897
 #, kde-format
 msgid "Date and Time"
 msgstr "Дата і час"

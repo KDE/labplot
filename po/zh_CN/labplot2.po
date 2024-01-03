@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-28 00:38+0000\n"
-"PO-Revision-Date: 2023-12-23 08:02\n"
+"POT-Creation-Date: 2024-01-03 00:38+0000\n"
+"PO-Revision-Date: 2023-12-30 13:41\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -6726,7 +6726,7 @@ msgstr ""
 msgid "%1: embed image"
 msgstr ""
 
-#: src/backend/worksheet/Image.cpp:151 src/backend/worksheet/TextLabel.cpp:366
+#: src/backend/worksheet/Image.cpp:151 src/backend/worksheet/TextLabel.cpp:362
 #, kde-format
 msgid "%1: set border opacity"
 msgstr ""
@@ -7879,7 +7879,7 @@ msgid "%1: set font"
 msgstr "%1：设置字体"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:213
-#: src/backend/worksheet/TextLabel.cpp:344
+#: src/backend/worksheet/TextLabel.cpp:340
 #, kde-format
 msgid "%1: set font color"
 msgstr ""
@@ -8761,35 +8761,36 @@ msgstr ""
 msgid "%1: set plot area corner radius"
 msgstr ""
 
-#: src/backend/worksheet/TextLabel.cpp:263
-#: src/backend/worksheet/TextLabel.cpp:307
+#: src/backend/worksheet/TextLabel.cpp:262
+#: src/backend/worksheet/TextLabel.cpp:299
 #, kde-format
 msgid "%1: set background color"
 msgstr ""
 
+#: src/backend/worksheet/TextLabel.cpp:290
 #: src/backend/worksheet/TextLabel.cpp:298
-#: src/backend/worksheet/TextLabel.cpp:306
+#: src/backend/worksheet/TextLabel.cpp:302
 #: src/backend/worksheet/TextLabel.cpp:309
 #, kde-format
 msgid "%1: set label text"
 msgstr ""
 
-#: src/backend/worksheet/TextLabel.cpp:330
+#: src/backend/worksheet/TextLabel.cpp:326
 #, kde-format
 msgid "%1: set label placeholdertext"
 msgstr ""
 
-#: src/backend/worksheet/TextLabel.cpp:337
+#: src/backend/worksheet/TextLabel.cpp:333
 #, kde-format
 msgid "%1: set TeX main font"
 msgstr ""
 
-#: src/backend/worksheet/TextLabel.cpp:352
+#: src/backend/worksheet/TextLabel.cpp:348
 #, kde-format
 msgid "%1: set border shape"
 msgstr ""
 
-#: src/backend/worksheet/TextLabel.cpp:359
+#: src/backend/worksheet/TextLabel.cpp:355
 #, kde-format
 msgid "%1: set border"
 msgstr ""
@@ -14923,10 +14924,9 @@ msgid "min."
 msgstr "最小."
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:192
-#, fuzzy, kde-format
-#| msgid "Save Project"
+#, kde-format
 msgid "Create New Project"
-msgstr "保存项目"
+msgstr ""
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:193
 #, kde-format
@@ -14934,16 +14934,14 @@ msgid "Load Last Used Project"
 msgstr ""
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:197
-#, fuzzy, kde-format
-#| msgid "Worksheet"
+#, kde-format
 msgid "With Worksheet"
-msgstr "工作表"
+msgstr ""
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:198
-#, fuzzy, kde-format
-#| msgid "Spreadsheet"
+#, kde-format
 msgid "With Spreadsheet"
-msgstr "数据表"
+msgstr ""
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:199
 #, kde-format
@@ -20843,10 +20841,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lNewProject)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:96
-#, fuzzy, kde-format
-#| msgid "Save Project"
+#, kde-format
 msgid "New Project:"
-msgstr "保存项目"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lGUMTerms)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:106
@@ -22024,14 +22021,14 @@ msgid ""
 "li><li>Markdown - text setting using Markdown markup language</li></ul>"
 msgstr ""
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:858
-#: src/kdefrontend/widgets/LabelWidget.cpp:884
+#: src/kdefrontend/widgets/LabelWidget.cpp:863
+#: src/kdefrontend/widgets/LabelWidget.cpp:889
 #, kde-format
 msgid "Date"
 msgstr "日期"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:866
-#: src/kdefrontend/widgets/LabelWidget.cpp:892
+#: src/kdefrontend/widgets/LabelWidget.cpp:871
+#: src/kdefrontend/widgets/LabelWidget.cpp:897
 #, kde-format
 msgid "Date and Time"
 msgstr "日期和时间"
