@@ -48,15 +48,12 @@ void XYInterpolationCurveDock::setupGeneral() {
 	auto* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
 	setPlotRangeCombobox(uiGeneralTab.cbPlotRanges);
-	setBaseWidgets(uiGeneralTab.leName, uiGeneralTab.teComment, 1.2);
+	setBaseWidgets(uiGeneralTab.leName, uiGeneralTab.teComment, uiGeneralTab.pbRecalculate, uiGeneralTab.cbDataSourceType);
 
 	auto* gridLayout = static_cast<QGridLayout*>(generalTab->layout());
 	gridLayout->setContentsMargins(2, 2, 2, 2);
 	gridLayout->setHorizontalSpacing(2);
 	gridLayout->setVerticalSpacing(2);
-
-	uiGeneralTab.cbDataSourceType->addItem(i18n("Spreadsheet"));
-	uiGeneralTab.cbDataSourceType->addItem(i18n("XY-Curve"));
 
 	cbDataSourceCurve = new TreeViewComboBox(generalTab);
 	gridLayout->addWidget(cbDataSourceCurve, 5, 2, 1, 2);
@@ -84,8 +81,6 @@ void XYInterpolationCurveDock::setupGeneral() {
 
 	uiGeneralTab.leMin->setValidator(new QDoubleValidator(uiGeneralTab.leMin));
 	uiGeneralTab.leMax->setValidator(new QDoubleValidator(uiGeneralTab.leMax));
-
-	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme(QStringLiteral("run-build")));
 
 	auto* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setContentsMargins(0, 0, 0, 0);
@@ -222,7 +217,8 @@ void XYInterpolationCurveDock::initGeneralTab() {
 	connect(m_interpolationCurve, &XYInterpolationCurve::yDataColumnChanged, this, &XYInterpolationCurveDock::curveYDataColumnChanged);
 	connect(m_interpolationCurve, &XYInterpolationCurve::interpolationDataChanged, this, &XYInterpolationCurveDock::curveInterpolationDataChanged);
 	connect(m_interpolationCurve, &XYInterpolationCurve::sourceDataChanged, this, &XYInterpolationCurveDock::enableRecalculate);
-	connect(m_interpolationCurve, &WorksheetElement::plotRangeListChanged, this, &XYInterpolationCurveDock::updatePlotRanges);
+	connect(m_interpolationCurve, &WorksheetElement::plotRangeListChanged, this, &XYInterpolationCurveDock::updatePlotRangeList);
+	connect(m_interpolationCurve, &XYCurve::visibleChanged, this, &XYInterpolationCurveDock::curveVisibilityChanged);
 }
 
 void XYInterpolationCurveDock::setModel() {
@@ -236,10 +232,11 @@ void XYInterpolationCurveDock::setModel() {
   sets the curves. The properties of the curves in the list \c list can be edited in this widget.
 */
 void XYInterpolationCurveDock::setCurves(QList<XYCurve*> list) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	m_curvesList = list;
 	m_curve = list.first();
 	setAspects(list);
+	setAnalysisCurves(list);
 	m_interpolationCurve = static_cast<XYInterpolationCurve*>(m_curve);
 	this->setModel();
 	m_interpolationData = m_interpolationCurve->interpolationData();
@@ -253,16 +250,7 @@ void XYInterpolationCurveDock::setCurves(QList<XYCurve*> list) {
 	initGeneralTab();
 	initTabs();
 	setSymbols(list);
-	m_initializing = false;
 
-	updatePlotRanges();
-
-	// hide the "skip gaps" option after the curves were set
-	ui.lLineSkipGaps->hide();
-	ui.chkLineSkipGaps->hide();
-}
-
-void XYInterpolationCurveDock::updatePlotRanges() {
 	updatePlotRangeList();
 }
 
@@ -291,31 +279,8 @@ void XYInterpolationCurveDock::dataSourceTypeChanged(int index) {
 
 	for (auto* curve : m_curvesList)
 		static_cast<XYInterpolationCurve*>(curve)->setDataSourceType(type);
-}
 
-void XYInterpolationCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
-	auto* dataSourceCurve = static_cast<XYCurve*>(index.internalPointer());
-
-	// disable types that need more data points
-	this->updateSettings(dataSourceCurve->xColumn());
-
-	CONDITIONAL_LOCK_RETURN;
-
-	for (auto* curve : m_curvesList)
-		static_cast<XYInterpolationCurve*>(curve)->setDataSourceCurve(dataSourceCurve);
-}
-
-void XYInterpolationCurveDock::xDataColumnChanged(const QModelIndex& index) {
-	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
-	this->updateSettings(column);
-
-	CONDITIONAL_LOCK_RETURN;
-
-	for (auto* curve : m_curvesList)
-		static_cast<XYInterpolationCurve*>(curve)->setXDataColumn(column);
-
-	cbXDataColumn->useCurrentIndexText(true);
-	cbXDataColumn->setInvalid(false);
+	enableRecalculate();
 }
 
 void XYInterpolationCurveDock::updateSettings(const AbstractColumn* column) {
@@ -389,18 +354,6 @@ void XYInterpolationCurveDock::updateSettings(const AbstractColumn* column) {
 	// own types work with 2 or more data points
 }
 
-void XYInterpolationCurveDock::yDataColumnChanged(const QModelIndex& index) {
-	CONDITIONAL_LOCK_RETURN;
-
-	const auto* column = static_cast<AbstractColumn*>(index.internalPointer());
-
-	for (auto* curve : m_curvesList)
-		static_cast<XYInterpolationCurve*>(curve)->setYDataColumn(column);
-
-	cbYDataColumn->useCurrentIndexText(true);
-	cbYDataColumn->setInvalid(false);
-}
-
 void XYInterpolationCurveDock::autoRangeChanged() {
 	bool autoRange = uiGeneralTab.cbAutoRange->isChecked();
 	m_interpolationData.autoRange = autoRange;
@@ -448,14 +401,14 @@ void XYInterpolationCurveDock::xRangeMinDateTimeChanged(qint64 value) {
 	CONDITIONAL_LOCK_RETURN;
 
 	m_interpolationData.xRange.first() = value;
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	enableRecalculate();
 }
 
 void XYInterpolationCurveDock::xRangeMaxDateTimeChanged(qint64 value) {
 	CONDITIONAL_LOCK_RETURN;
 
 	m_interpolationData.xRange.last() = value;
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	enableRecalculate();
 }
 
 void XYInterpolationCurveDock::typeChanged(int index) {
@@ -489,7 +442,7 @@ void XYInterpolationCurveDock::typeChanged(int index) {
 		uiGeneralTab.sbBias->hide();
 	}
 
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	enableRecalculate();
 }
 
 void XYInterpolationCurveDock::variantChanged(int index) {
@@ -539,27 +492,27 @@ void XYInterpolationCurveDock::variantChanged(int index) {
 		break;
 	}
 
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	enableRecalculate();
 }
 
 void XYInterpolationCurveDock::tensionChanged(double value) {
 	m_interpolationData.tension = value;
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	enableRecalculate();
 }
 
 void XYInterpolationCurveDock::continuityChanged(double value) {
 	m_interpolationData.continuity = value;
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	enableRecalculate();
 }
 
 void XYInterpolationCurveDock::biasChanged(double value) {
 	m_interpolationData.bias = value;
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	enableRecalculate();
 }
 
 void XYInterpolationCurveDock::evaluateChanged(int index) {
 	m_interpolationData.evaluate = (nsl_interp_evaluate)index;
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	enableRecalculate();
 }
 
 void XYInterpolationCurveDock::pointsModeChanged(int index) {
@@ -591,6 +544,7 @@ void XYInterpolationCurveDock::pointsModeChanged(int index) {
 	}
 
 	m_interpolationData.pointsMode = mode;
+	enableRecalculate();
 }
 
 void XYInterpolationCurveDock::numberOfPointsChanged() {
@@ -616,60 +570,17 @@ void XYInterpolationCurveDock::recalculateClicked() {
 	QApplication::restoreOverrideCursor();
 }
 
-void XYInterpolationCurveDock::enableRecalculate() const {
-	CONDITIONAL_RETURN_NO_LOCK;
-
-	// no interpolation possible without the x- and y-data
-	bool hasSourceData = false;
-	if (m_interpolationCurve->dataSourceType() == XYAnalysisCurve::DataSourceType::Spreadsheet) {
-		auto* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
-		auto* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
-		hasSourceData = (aspectX && aspectY);
-		if (aspectX) {
-			cbXDataColumn->useCurrentIndexText(true);
-			cbXDataColumn->setInvalid(false);
-		}
-		if (aspectY) {
-			cbYDataColumn->useCurrentIndexText(true);
-			cbYDataColumn->setInvalid(false);
-		}
-	} else
-		hasSourceData = (m_interpolationCurve->dataSourceCurve() != nullptr);
-
-	uiGeneralTab.pbRecalculate->setEnabled(hasSourceData);
-}
-
 /*!
  * show the result and details of the interpolation
  */
 void XYInterpolationCurveDock::showInterpolationResult() {
-	showResult(m_interpolationCurve, uiGeneralTab.teResult, uiGeneralTab.pbRecalculate);
+	showResult(m_interpolationCurve, uiGeneralTab.teResult);
 }
 
 //*************************************************************
 //*********** SLOTs for changes triggered in XYCurve **********
 //*************************************************************
 // General-Tab
-void XYInterpolationCurveDock::curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType type) {
-	CONDITIONAL_LOCK_RETURN;
-	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(type));
-}
-
-void XYInterpolationCurveDock::curveDataSourceCurveChanged(const XYCurve* curve) {
-	CONDITIONAL_LOCK_RETURN;
-	cbDataSourceCurve->setAspect(curve);
-}
-
-void XYInterpolationCurveDock::curveXDataColumnChanged(const AbstractColumn* column) {
-	CONDITIONAL_LOCK_RETURN;
-	cbXDataColumn->setColumn(column, m_interpolationCurve->xDataColumnPath());
-}
-
-void XYInterpolationCurveDock::curveYDataColumnChanged(const AbstractColumn* column) {
-	CONDITIONAL_LOCK_RETURN;
-	cbYDataColumn->setColumn(column, m_interpolationCurve->yDataColumnPath());
-}
-
 void XYInterpolationCurveDock::curveInterpolationDataChanged(const XYInterpolationCurve::InterpolationData& data) {
 	CONDITIONAL_LOCK_RETURN;
 	m_interpolationData = data;
@@ -679,6 +590,7 @@ void XYInterpolationCurveDock::curveInterpolationDataChanged(const XYInterpolati
 	this->showInterpolationResult();
 }
 
-void XYInterpolationCurveDock::dataChanged() {
-	this->enableRecalculate();
+void XYInterpolationCurveDock::curveVisibilityChanged(bool on) {
+	CONDITIONAL_LOCK_RETURN;
+	uiGeneralTab.chkVisible->setChecked(on);
 }

@@ -185,6 +185,43 @@ bool LollipopPlot::hasData() const {
 	return !d->dataColumns.isEmpty();
 }
 
+bool LollipopPlot::usingColumn(const Column* column) const {
+	Q_D(const LollipopPlot);
+
+	if (d->xColumn == column)
+		return true;
+
+	for (auto* c : d->dataColumns) {
+		if (c == column)
+			return true;
+	}
+
+	return false;
+}
+
+void LollipopPlot::updateColumnDependencies(const AbstractColumn* column) {
+	Q_D(const LollipopPlot);
+	const QString& columnPath = column->path();
+	const auto dataColumnPaths = d->dataColumnPaths;
+	auto dataColumns = d->dataColumns;
+	bool changed = false;
+
+	for (int i = 0; i < dataColumnPaths.count(); ++i) {
+		const auto& path = dataColumnPaths.at(i);
+
+		if (path == columnPath) {
+			dataColumns[i] = column;
+			changed = true;
+		}
+	}
+
+	if (changed) {
+		setUndoAware(false);
+		setDataColumns(dataColumns);
+		setUndoAware(true);
+	}
+}
+
 QColor LollipopPlot::color() const {
 	Q_D(const LollipopPlot);
 	if (d->lines.size() > 0 && d->lines.at(0)->style() != Qt::PenStyle::NoPen)

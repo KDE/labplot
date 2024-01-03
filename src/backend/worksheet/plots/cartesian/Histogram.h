@@ -87,6 +87,8 @@ public:
 	double minimum(CartesianCoordinateSystem::Dimension) const override;
 	double maximum(CartesianCoordinateSystem::Dimension) const override;
 	bool hasData() const override;
+	bool usingColumn(const Column*) const override;
+	void updateColumnDependencies(const AbstractColumn*) override;
 	QColor color() const override;
 
 	const AbstractColumn* bins() const;
@@ -107,13 +109,8 @@ private Q_SLOTS:
 	void updateErrorBars();
 
 	void dataColumnAboutToBeRemoved(const AbstractAspect*);
-	void dataColumnNameChanged();
-
 	void errorPlusColumnAboutToBeRemoved(const AbstractAspect*);
-	void errorPlusColumnNameChanged();
-
 	void errorMinusColumnAboutToBeRemoved(const AbstractAspect*);
-	void errorMinusColumnNameChanged();
 
 protected:
 	Histogram(const QString& name, HistogramPrivate* dd);

@@ -77,6 +77,8 @@ public:
 	double minimum(CartesianCoordinateSystem::Dimension dim) const override;
 	double maximum(CartesianCoordinateSystem::Dimension dim) const override;
 	bool hasData() const override;
+	bool usingColumn(const Column*) const override;
+	void updateColumnDependencies(const AbstractColumn*) override;
 	QColor color() const override;
 
 	const AbstractColumn* column(CartesianCoordinateSystem::Dimension dim) const;
@@ -150,13 +152,7 @@ private Q_SLOTS:
 	void xErrorMinusColumnAboutToBeRemoved(const AbstractAspect*);
 	void yErrorPlusColumnAboutToBeRemoved(const AbstractAspect*);
 	void yErrorMinusColumnAboutToBeRemoved(const AbstractAspect*);
-	void xColumnNameChanged();
-	void yColumnNameChanged();
-	void xErrorPlusColumnNameChanged();
-	void xErrorMinusColumnNameChanged();
-	void yErrorPlusColumnNameChanged();
-	void yErrorMinusColumnNameChanged();
-	void valuesColumnNameChanged();
+
 	// SLOTs for changes triggered via QActions in the context menu
 	void navigateTo();
 

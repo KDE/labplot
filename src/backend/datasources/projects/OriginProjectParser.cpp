@@ -69,6 +69,9 @@ void OriginProjectParser::checkContent(bool& hasUnusedObjects, bool& hasMultiLay
 		return;
 	}
 
+	DEBUG(Q_FUNC_INFO << "Project file name: " << m_projectFileName.toStdString());
+	DEBUG(Q_FUNC_INFO << "Origin version: " << m_originFile->version());
+
 	hasUnusedObjects = this->hasUnusedObjects();
 	hasMultiLayerGraphs = this->hasMultiLayerGraphs();
 
@@ -193,6 +196,9 @@ bool OriginProjectParser::load(Project* project, bool preview) {
 		m_originFile = nullptr;
 		return false;
 	}
+
+	DEBUG(Q_FUNC_INFO << "Project file name: " << m_projectFileName.toStdString());
+	DEBUG(Q_FUNC_INFO << "Origin version: " << m_originFile->version());
 
 	// Origin project tree and the iterator pointing to the root node
 	const auto* projectTree = m_originFile->project();
@@ -1257,56 +1263,9 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 
 	// axes
 	DEBUG(Q_FUNC_INFO << ", layer.curves.size() = " << layer.curves.size())
-	if (layer.curves.empty()) { // no curves, just axes
-		// x bottom
-		if (!originXAxis.formatAxis[0].hidden) {
-			Axis* axis = new Axis(QStringLiteral("x"), Axis::Orientation::Horizontal);
-			axis->setSuppressRetransform(true);
-			axis->setPosition(Axis::Position::Bottom);
-			plot->addChildFast(axis);
-
-			loadAxis(originXAxis, axis, 0, QLatin1String("X Axis Title"));
-			if (!m_graphLayerAsPlotArea)
-				axis->setCoordinateSystemIndex(layerIndex);
-			axis->setSuppressRetransform(false);
-		}
-		// x top
-		if (!originXAxis.formatAxis[1].hidden) {
-			Axis* axis = new Axis(QStringLiteral("x top"), Axis::Orientation::Horizontal);
-			axis->setPosition(Axis::Position::Top);
-			axis->setSuppressRetransform(true);
-			plot->addChildFast(axis);
-
-			loadAxis(originXAxis, axis, 1, QLatin1String("X Axis Title"));
-			if (!m_graphLayerAsPlotArea)
-				axis->setCoordinateSystemIndex(layerIndex);
-			axis->setSuppressRetransform(false);
-		}
-		// y left
-		if (!originYAxis.formatAxis[0].hidden) {
-			Axis* axis = new Axis(QStringLiteral("y"), Axis::Orientation::Vertical);
-			axis->setSuppressRetransform(true);
-			axis->setPosition(Axis::Position::Left);
-			plot->addChildFast(axis);
-
-			loadAxis(originYAxis, axis, 0, QLatin1String("Y Axis Title"));
-			if (!m_graphLayerAsPlotArea)
-				axis->setCoordinateSystemIndex(layerIndex);
-			axis->setSuppressRetransform(false);
-		}
-		// y right
-		if (!originYAxis.formatAxis[1].hidden) {
-			Axis* axis = new Axis(QStringLiteral("y right"), Axis::Orientation::Vertical);
-			axis->setSuppressRetransform(true);
-			axis->setPosition(Axis::Position::Right);
-			plot->addChildFast(axis);
-
-			loadAxis(originYAxis, axis, 1, QLatin1String("Y Axis Title"));
-			if (!m_graphLayerAsPlotArea)
-				axis->setCoordinateSystemIndex(layerIndex);
-			axis->setSuppressRetransform(false);
-		}
-	} else {
+	if (layer.curves.empty()) // no curves, just axes
+		loadAxes(layer, plot, layerIndex, QLatin1String("X Axis Title"), QLatin1String("Y Axis Title"));
+	else {
 		auto originCurve = layer.curves.at(0);
 		QString xColumnName = QString::fromLatin1(originCurve.xColumnName.c_str());
 		// TODO: "Partikelgrö"
@@ -1316,50 +1275,7 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 		QDEBUG("	UTF8 xColumnName = " << xColumnName.toUtf8());
 		QString yColumnName = QString::fromLatin1(originCurve.yColumnName.c_str());
 
-		// x bottom
-		if (!originXAxis.formatAxis[0].hidden) {
-			Axis* axis = new Axis(QStringLiteral("x"), Axis::Orientation::Horizontal);
-			axis->setSuppressRetransform(true);
-			axis->setPosition(Axis::Position::Bottom);
-			plot->addChildFast(axis);
-			loadAxis(originXAxis, axis, 0, xColumnName);
-			if (!m_graphLayerAsPlotArea)
-				axis->setCoordinateSystemIndex(layerIndex);
-			axis->setSuppressRetransform(false);
-		}
-		// x top
-		if (!originXAxis.formatAxis[1].hidden) {
-			Axis* axis = new Axis(QStringLiteral("x top"), Axis::Orientation::Horizontal);
-			axis->setPosition(Axis::Position::Top);
-			axis->setSuppressRetransform(true);
-			plot->addChildFast(axis);
-			loadAxis(originXAxis, axis, 1, xColumnName);
-			if (!m_graphLayerAsPlotArea)
-				axis->setCoordinateSystemIndex(layerIndex);
-			axis->setSuppressRetransform(false);
-		}
-		// y left
-		if (!originYAxis.formatAxis[0].hidden) {
-			Axis* axis = new Axis(QStringLiteral("y"), Axis::Orientation::Vertical);
-			axis->setSuppressRetransform(true);
-			axis->setPosition(Axis::Position::Left);
-			plot->addChildFast(axis);
-			loadAxis(originYAxis, axis, 0, yColumnName);
-			if (!m_graphLayerAsPlotArea)
-				axis->setCoordinateSystemIndex(layerIndex);
-			axis->setSuppressRetransform(false);
-		}
-		// y right
-		if (!originYAxis.formatAxis[1].hidden) {
-			Axis* axis = new Axis(QStringLiteral("y right"), Axis::Orientation::Vertical);
-			axis->setSuppressRetransform(true);
-			axis->setPosition(Axis::Position::Right);
-			plot->addChildFast(axis);
-			loadAxis(originYAxis, axis, 1, yColumnName);
-			if (!m_graphLayerAsPlotArea)
-				axis->setCoordinateSystemIndex(layerIndex);
-			axis->setSuppressRetransform(false);
-		}
+		loadAxes(layer, plot, layerIndex, xColumnName, yColumnName);
 	}
 
 	// range breaks
@@ -1576,6 +1492,63 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 	}
 }
 
+void OriginProjectParser::loadAxes(const Origin::GraphLayer& layer,
+								   CartesianPlot* plot,
+								   int layerIndex,
+								   const QString& xColumnName,
+								   const QString& yColumnName) {
+	const auto& originXAxis = layer.xAxis;
+	const auto& originYAxis = layer.yAxis;
+
+	// x bottom
+	if (!originXAxis.formatAxis[0].hidden || originXAxis.tickAxis[0].showMajorLabels) {
+		Axis* axis = new Axis(QStringLiteral("x"), Axis::Orientation::Horizontal);
+		axis->setSuppressRetransform(true);
+		axis->setPosition(Axis::Position::Bottom);
+		plot->addChildFast(axis);
+		loadAxis(originXAxis, axis, 0, xColumnName);
+		if (!m_graphLayerAsPlotArea)
+			axis->setCoordinateSystemIndex(layerIndex);
+		axis->setSuppressRetransform(false);
+	}
+
+	// x top
+	if (!originXAxis.formatAxis[1].hidden || originXAxis.tickAxis[1].showMajorLabels) {
+		Axis* axis = new Axis(QStringLiteral("x top"), Axis::Orientation::Horizontal);
+		axis->setPosition(Axis::Position::Top);
+		axis->setSuppressRetransform(true);
+		plot->addChildFast(axis);
+		loadAxis(originXAxis, axis, 1, xColumnName);
+		if (!m_graphLayerAsPlotArea)
+			axis->setCoordinateSystemIndex(layerIndex);
+		axis->setSuppressRetransform(false);
+	}
+
+	// y left
+	if (!originYAxis.formatAxis[0].hidden || originYAxis.tickAxis[0].showMajorLabels) {
+		Axis* axis = new Axis(QStringLiteral("y"), Axis::Orientation::Vertical);
+		axis->setSuppressRetransform(true);
+		axis->setPosition(Axis::Position::Left);
+		plot->addChildFast(axis);
+		loadAxis(originYAxis, axis, 0, yColumnName);
+		if (!m_graphLayerAsPlotArea)
+			axis->setCoordinateSystemIndex(layerIndex);
+		axis->setSuppressRetransform(false);
+	}
+
+	// y right
+	if (!originYAxis.formatAxis[1].hidden || originYAxis.tickAxis[1].showMajorLabels) {
+		Axis* axis = new Axis(QStringLiteral("y right"), Axis::Orientation::Vertical);
+		axis->setSuppressRetransform(true);
+		axis->setPosition(Axis::Position::Right);
+		plot->addChildFast(axis);
+		loadAxis(originYAxis, axis, 1, yColumnName);
+		if (!m_graphLayerAsPlotArea)
+			axis->setCoordinateSystemIndex(layerIndex);
+		axis->setSuppressRetransform(false);
+	}
+}
+
 /*
  * sets the axis properties (format and ticks) as defined in \c originAxis in \c axis,
  * \c index being 0 or 1 for "bottom" and "top" or "left" and "right" for horizontal or vertical axes, respectively.
@@ -1703,6 +1676,9 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 	color.regular = axisFormat.color;
 	axis->line()->setColor(OriginProjectParser::color(color));
 	axis->line()->setWidth(Worksheet::convertToSceneUnits(axisFormat.thickness, Worksheet::Unit::Point));
+	if (axisFormat.hidden)
+		axis->line()->setStyle(Qt::NoPen);
+	// TODO: read line style properties? (solid line, dashed line, etc.)
 
 	axis->setMajorTicksLength(Worksheet::convertToSceneUnits(axisFormat.majorTickLength, Worksheet::Unit::Point));
 	axis->setMajorTicksDirection((Axis::TicksFlags)axisFormat.majorTicksType);
@@ -2501,6 +2477,134 @@ QString OriginProjectParser::replaceSpecialChars(const QString& text) const {
 }
 
 /*!
+ * helper function mapping the characters from the Symbol font (outdated and shouldn't be used for html)
+ * to Unicode characters, s.a. https://www.alanwood.net/demos/symbol.html
+ */
+QString greekSymbol(const QString& symbol) {
+	// characters in the Symbol-font
+	static QStringList symbols{// letters
+							   QStringLiteral("A"),
+							   QStringLiteral("a"),
+							   QStringLiteral("B"),
+							   QStringLiteral("b"),
+							   QStringLiteral("G"),
+							   QStringLiteral("g"),
+							   QStringLiteral("D"),
+							   QStringLiteral("d"),
+							   QStringLiteral("E"),
+							   QStringLiteral("e"),
+							   QStringLiteral("Z"),
+							   QStringLiteral("z"),
+							   QStringLiteral("H"),
+							   QStringLiteral("h"),
+							   QStringLiteral("Q"),
+							   QStringLiteral("q"),
+							   QStringLiteral("I"),
+							   QStringLiteral("i"),
+							   QStringLiteral("K"),
+							   QStringLiteral("k"),
+							   QStringLiteral("L"),
+							   QStringLiteral("l"),
+							   QStringLiteral("M"),
+							   QStringLiteral("m"),
+							   QStringLiteral("N"),
+							   QStringLiteral("n"),
+							   QStringLiteral("X"),
+							   QStringLiteral("x"),
+							   QStringLiteral("O"),
+							   QStringLiteral("o"),
+							   QStringLiteral("P"),
+							   QStringLiteral("p"),
+							   QStringLiteral("R"),
+							   QStringLiteral("r"),
+							   QStringLiteral("S"),
+							   QStringLiteral("s"),
+							   QStringLiteral("T"),
+							   QStringLiteral("t"),
+							   QStringLiteral("U"),
+							   QStringLiteral("u"),
+							   QStringLiteral("F"),
+							   QStringLiteral("f"),
+							   QStringLiteral("C"),
+							   QStringLiteral("c"),
+							   QStringLiteral("Y"),
+							   QStringLiteral("y"),
+							   QStringLiteral("W"),
+							   QStringLiteral("w"),
+
+							   // extra symbols
+							   QStringLiteral("V"),
+							   QStringLiteral("J"),
+							   QStringLiteral("j"),
+							   QStringLiteral("v"),
+							   QStringLiteral("i")};
+
+	// Unicode friendy codes for greek letters and symbols
+	static QStringList unicodeFriendlyCode{// letters
+										   QStringLiteral("&Alpha;"),
+										   QStringLiteral("&alpha;"),
+										   QStringLiteral("&Beta;"),
+										   QStringLiteral("&beta;"),
+										   QStringLiteral("&Gamma;"),
+										   QStringLiteral("&gamma;"),
+										   QStringLiteral("&Delta;"),
+										   QStringLiteral("&delta;"),
+										   QStringLiteral("&Epsilon;"),
+										   QStringLiteral("&epsilon;"),
+										   QStringLiteral("&Zeta;"),
+										   QStringLiteral("&zeta;"),
+										   QStringLiteral("&Eta;"),
+										   QStringLiteral("&eta;"),
+										   QStringLiteral("&Theta;"),
+										   QStringLiteral("&theta;"),
+										   QStringLiteral("&Iota;"),
+										   QStringLiteral("Iota;"),
+										   QStringLiteral("&Kappa;"),
+										   QStringLiteral("&kappa;"),
+										   QStringLiteral("&Lambda;"),
+										   QStringLiteral("&lambda;"),
+										   QStringLiteral("&Mu;"),
+										   QStringLiteral("&mu;"),
+										   QStringLiteral("&Nu;"),
+										   QStringLiteral("&nu;"),
+										   QStringLiteral("&Xi;"),
+										   QStringLiteral("&xi;"),
+										   QStringLiteral("&Omicron;"),
+										   QStringLiteral("&omicron;"),
+										   QStringLiteral("&Pi;"),
+										   QStringLiteral("&pi;"),
+										   QStringLiteral("&Rho;"),
+										   QStringLiteral("&rho;"),
+										   QStringLiteral("&Sigma;"),
+										   QStringLiteral("&sigma;"),
+										   QStringLiteral("&Tua;"),
+										   QStringLiteral("&tau;"),
+										   QStringLiteral("&Upsilon;"),
+										   QStringLiteral("&upsilon;"),
+										   QStringLiteral("&Phi;"),
+										   QStringLiteral("&phi;"),
+										   QStringLiteral("&Chi;"),
+										   QStringLiteral("&chi;"),
+										   QStringLiteral("&Psi;"),
+										   QStringLiteral("&psi;"),
+										   QStringLiteral("&Omega;"),
+										   QStringLiteral("&omega;"),
+
+										   // extra symbols
+										   QStringLiteral("&sigmaf;"),
+										   QStringLiteral("&thetasym;"),
+										   QStringLiteral("&#981;;") /* phi symbol, no friendly code */,
+										   QStringLiteral("&piv;"),
+										   QStringLiteral("&upsih;")};
+
+	int index = symbols.indexOf(symbol);
+	if (index != -1)
+		return unicodeFriendlyCode.at(index);
+	else
+		return QString();
+}
+
+/*!
  * converts the string with Origin's syntax for text formatting/highlighting
  * to a string in the richtext/html format supported by Qt.
  * For the supported syntax, see:
@@ -2556,7 +2660,7 @@ QString OriginProjectParser::parseOriginTags(const QString& str) const {
 		} else if (marker.startsWith(QLatin1Char('b'))) {
 			rep = QStringLiteral("<b>%1</b>").arg(tagText);
 		} else if (marker.startsWith(QLatin1Char('g'))) { // greek symbols e.g. α φ
-			rep = QStringLiteral("<font face=Symbol>%1</font>").arg(tagText);
+			rep = greekSymbol(tagText);
 		} else if (marker.startsWith(QLatin1Char('i'))) {
 			rep = QStringLiteral("<i>%1</i>").arg(tagText);
 		} else if (marker.startsWith(QLatin1Char('s'))) {

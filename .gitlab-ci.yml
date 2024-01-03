@@ -177,7 +177,7 @@ include:
 
 clang_format:
   stage: test
-  image: debian:testing
+  image: debian:stable
   before_script:
     - apt-get update
     - apt-get install --yes --no-install-recommends git clang-format-13
@@ -185,8 +185,8 @@ clang_format:
     ./cl-fmt.sh
     git diff --exit-code
 
-# see https://invent.kde.org/sysadmin/ci-utilities/-/blob/master/gitlab-templates/flatpak.yml
-flatpak:
-  variables:
-    KDE_FLATPAK_MODULE_NAME: labplot2
-    KDE_FLATPAK_APP_ID: org.kde.${KDE_FLATPAK_MODULE_NAME}
+# see above
+#flatpak:
+#  variables:
+#    KDE_FLATPAK_MODULE_NAME: labplot2
+#    KDE_FLATPAK_APP_ID: org.kde.${KDE_FLATPAK_MODULE_NAME}

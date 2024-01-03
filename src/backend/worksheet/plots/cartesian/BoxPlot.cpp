@@ -433,8 +433,42 @@ bool BoxPlot::hasData() const {
 	return !d->dataColumns.isEmpty();
 }
 
-QColor BoxPlot::color() const {
+bool BoxPlot::usingColumn(const Column* column) const {
 	Q_D(const BoxPlot);
+
+	for (auto* c : d->dataColumns) {
+		if (c == column)
+			return true;
+	}
+
+	return false;
+}
+
+void BoxPlot::updateColumnDependencies(const AbstractColumn* column) {
+	Q_D(const BoxPlot);
+	const QString& columnPath = column->path();
+	const auto dataColumnPaths = d->dataColumnPaths;
+	auto dataColumns = d->dataColumns;
+	bool changed = false;
+
+	for (int i = 0; i < dataColumnPaths.count(); ++i) {
+		const auto& path = dataColumnPaths.at(i);
+
+		if (path == columnPath) {
+			dataColumns[i] = column;
+			changed = true;
+		}
+	}
+
+	if (changed) {
+		setUndoAware(false);
+		setDataColumns(dataColumns);
+		setUndoAware(true);
+	}
+}
+
+QColor BoxPlot::color() const {
+	// Q_D(const BoxPlot);
 	return QColor();
 }
 

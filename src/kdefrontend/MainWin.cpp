@@ -352,48 +352,25 @@ void MainWin::initGUI(const QString& fileName) {
 	} else {
 		// There is no file to open. Depending on the settings do nothing,
 		// create a new project or open the last used project.
-		LoadOnStart load = (LoadOnStart)group.readEntry("LoadOnStart", static_cast<int>(LoadOnStart::NewProject));
-		if (load != LoadOnStart::WelcomeScreen) {
+		const auto load = (LoadOnStart)group.readEntry("LoadOnStart", static_cast<int>(LoadOnStart::NewProject));
+		switch (load) {
+		case LoadOnStart::NewProject:
 			createADS();
-			switch (load) {
-			case LoadOnStart::NewProject:
-				newProject();
-				break;
-			case LoadOnStart::NewProjectWorksheet:
-				newProject();
-				newWorksheet();
-				break;
-			case LoadOnStart::NewProjectSpreadsheet:
-				newProject();
-				newSpreadsheet();
-				break;
-			case LoadOnStart::LastProject: {
-				const QString& path = Settings::group(QStringLiteral("MainWin")).readEntry("LastOpenProject", "");
-				if (!path.isEmpty())
-					openProject(path);
-				break;
-			}
-			case LoadOnStart::NewProjectNotebook: {
-				newProject();
-#ifdef HAVE_CANTOR_LIBS
-				const auto& backend = group.readEntry(QLatin1String("LoadOnStartNotebook"), QString());
-				if (Cantor::Backend::listAvailableBackends().indexOf(backend) != -1)
-					addAspectToProject(new CantorWorksheet(backend));
-#endif
-				break;
-			}
-			case LoadOnStart::Nothing:
-			case LoadOnStart::WelcomeScreen:
-				break;
-			}
-
-			updateGUIOnProjectChanges();
-			if (m_project)
-				m_project->setChanged(false); // the project was initialized on startup, nothing has changed from user's perspective
-		} else { // welcome screen
-			// 			m_showWelcomeScreen = true;
-			// 			m_welcomeWidget = createWelcomeScreen();
-			// 			setCentralWidget(m_welcomeWidget);
+			newProject();
+			break;
+		case LoadOnStart::LastProject: {
+			createADS();
+			const QString& path = Settings::group(QStringLiteral("MainWin")).readEntry("LastOpenProject", "");
+			if (!path.isEmpty())
+				openProject(path);
+			break;
+		}
+		case LoadOnStart::WelcomeScreen:
+			// TODO:
+			// m_showWelcomeScreen = true;
+			// m_welcomeWidget = createWelcomeScreen();
+			// setCentralWidget(m_welcomeWidget);
+			break;
 		}
 	}
 
@@ -662,11 +639,16 @@ void MainWin::dockFocusChanged(ads::CDockWidget* old, ads::CDockWidget* now) {
 void MainWin::initActions() {
 	// ******************** File-menu *******************************
 	// add some standard actions
-	m_newProjectAction = KStandardAction::openNew(this, &MainWin::newProject, actionCollection());
+	m_newProjectAction = KStandardAction::openNew(
+		this,
+		[=]() {
+			newProject(true);
+		},
+		actionCollection());
 	m_openProjectAction = KStandardAction::open(this, static_cast<void (MainWin::*)()>(&MainWin::openProject), actionCollection());
 	m_recentProjectsAction = KStandardAction::openRecent(this, &MainWin::openRecentProject, actionCollection());
-	m_closeAction = KStandardAction::close(this, &MainWin::closeProject, actionCollection());
-	actionCollection()->setDefaultShortcut(m_closeAction, QKeySequence()); // remove the shortcut, QKeySequence::Close will be used for closing sub-windows
+	// m_closeAction = KStandardAction::close(this, &MainWin::closeProject, actionCollection());
+	// actionCollection()->setDefaultShortcut(m_closeAction, QKeySequence()); // remove the shortcut, QKeySequence::Close will be used for closing sub-windows
 	m_saveAction = KStandardAction::save(this, &MainWin::saveProject, actionCollection());
 	m_saveAsAction = KStandardAction::saveAs(this, &MainWin::saveProjectAs, actionCollection());
 	m_printAction = KStandardAction::print(this, &MainWin::print, actionCollection());
@@ -1113,54 +1095,9 @@ bool MainWin::warnModified() {
  * on project changes (project closes and opens)
  */
 void MainWin::updateGUIOnProjectChanges(const QByteArray& windowState) {
+	// return;
 	if (m_closing)
 		return;
-
-	// disable all menus if there is no project
-	bool hasProject = (m_project != nullptr);
-	m_saveAction->setEnabled(hasProject);
-	m_saveAsAction->setEnabled(hasProject);
-	m_importFileAction->setEnabled(hasProject);
-	m_importFileAction_2->setEnabled(hasProject);
-	m_importSqlAction->setEnabled(hasProject);
-	m_importLabPlotAction->setEnabled(hasProject);
-#ifdef HAVE_LIBORIGIN
-	m_importOpjAction->setEnabled(hasProject);
-#endif
-	m_importDatasetAction->setEnabled(hasProject);
-#ifdef HAVE_PURPOSE
-	m_shareAction->setEnabled(hasProject);
-#endif
-	m_newFolderAction->setEnabled(hasProject);
-	m_newWorkbookAction->setEnabled(hasProject);
-	m_newSpreadsheetAction->setEnabled(hasProject);
-	m_newMatrixAction->setEnabled(hasProject);
-	m_newWorksheetAction->setEnabled(hasProject);
-	m_newDatapickerAction->setEnabled(hasProject);
-	m_newNotesAction->setEnabled(hasProject);
-	m_newLiveDataSourceAction->setEnabled(hasProject);
-#ifdef HAVE_CANTOR_LIBS
-	for (auto* action : m_newNotebookMenu->actions())
-		action->setEnabled(hasProject);
-#endif
-	m_closeAction->setEnabled(hasProject);
-	m_projectExplorerDockAction->setEnabled(hasProject);
-	m_propertiesDockAction->setEnabled(hasProject);
-	m_worksheetPreviewAction->setEnabled(hasProject);
-	m_closeWindowAction->setEnabled(hasProject);
-	m_closeAllWindowsAction->setEnabled(hasProject);
-	m_nextWindowAction->setEnabled(hasProject);
-	m_prevWindowAction->setEnabled(hasProject);
-
-	// disable print and export actions if there is no project
-	// and don't activate them if a new project was created.
-	// they will be activated later in updateGUI() once there is
-	// a view to print or to export
-	if (!hasProject) {
-		m_printAction->setEnabled(false);
-		m_printPreviewAction->setEnabled(false);
-		m_exportAction->setEnabled(false);
-	}
 
 	auto* factory = this->guiFactory();
 	if (!m_DockManager || !m_DockManager->focusedDockWidget()) {
@@ -1171,8 +1108,6 @@ void MainWin::updateGUIOnProjectChanges(const QByteArray& windowState) {
 		factory->container(QLatin1String("spreadsheet_toolbar"), this)->hide();
 		factory->container(QLatin1String("worksheet_toolbar"), this)->hide();
 		factory->container(QLatin1String("cartesian_plot_toolbar"), this)->hide();
-		// 		factory->container(QLatin1String("histogram_toolbar"),this)->hide();
-		// 		factory->container(QLatin1String("barchart_toolbar"),this)->hide();
 		factory->container(QLatin1String("datapicker_toolbar"), this)->hide();
 #ifdef HAVE_CANTOR_LIBS
 		factory->container(QLatin1String("notebook"), this)->setEnabled(false);
@@ -1180,25 +1115,8 @@ void MainWin::updateGUIOnProjectChanges(const QByteArray& windowState) {
 #endif
 	}
 
-	factory->container(QLatin1String("new"), this)->setEnabled(hasProject);
-	factory->container(QLatin1String("edit"), this)->setEnabled(hasProject);
-	factory->container(QLatin1String("import"), this)->setEnabled(hasProject);
-
 	updateTitleBar();
 
-#ifdef HAVE_TOUCHBAR
-	m_touchBar->clear();
-
-	if (!hasProject) {
-		m_touchBar->addAction(m_newProjectAction);
-		m_touchBar->addAction(m_openProjectAction);
-	} else {
-		m_touchBar->addAction(m_importFileAction);
-		m_touchBar->addAction(m_newWorksheetAction);
-		m_touchBar->addAction(m_newSpreadsheetAction);
-		m_touchBar->addAction(m_newMatrixAction);
-	}
-#endif
 	// undo/redo actions are disabled in both cases - when the project is closed or opened
 	m_undoAction->setEnabled(false);
 	m_redoAction->setEnabled(false);
@@ -1238,10 +1156,9 @@ void MainWin::updateGUI() {
 	if (m_closing || m_projectClosing)
 		return;
 
-		// reset the touchbar
 #ifdef HAVE_TOUCHBAR
+	// reset the touchbar
 	m_touchBar->clear();
-
 	m_touchBar->addAction(m_undoIconOnlyAction);
 	m_touchBar->addAction(m_redoIconOnlyAction);
 	m_touchBar->addSeparator();
@@ -1255,8 +1172,6 @@ void MainWin::updateGUI() {
 		factory->container(QLatin1String("datapicker"), this)->setEnabled(false);
 		factory->container(QLatin1String("spreadsheet_toolbar"), this)->hide();
 		factory->container(QLatin1String("worksheet_toolbar"), this)->hide();
-		// 		factory->container(QLatin1String("histogram_toolbar"),this)->hide();
-		// 		factory->container(QLatin1String("barchart_toolbar"),this)->hide();
 		factory->container(QLatin1String("cartesian_plot_toolbar"), this)->hide();
 		factory->container(QLatin1String("datapicker_toolbar"), this)->hide();
 #ifdef HAVE_CANTOR_LIBS
@@ -1443,16 +1358,13 @@ void MainWin::updateGUI() {
 
 /*!
 	creates a new empty project. Returns \c true, if a new project was created.
+	the parameter \c createInitialContent whether a default content (new worksheet, etc. )
+	has to be created automatically (it's \c false if a project is opened, \c true if a new project is created).
 */
-bool MainWin::newProject() {
+bool MainWin::newProject(bool createInitialContent) {
 	// close the current project, if available
 	if (!closeProject())
 		return false;
-
-	// 	if (dynamic_cast<QQuickWidget*>(centralWidget())) {
-	// 		createMdiArea();
-	// 		setCentralWidget(m_mdiArea);
-	// 	}
 
 	QApplication::processEvents(QEventLoop::AllEvents, 100);
 
@@ -1479,7 +1391,7 @@ bool MainWin::newProject() {
 	// newProject is called for the first time, there is no project explorer yet
 	//-> initialize the project explorer,  the GUI-observer and the dock widgets.
 	if (!m_projectExplorer) {
-		group = Settings::group(QStringLiteral("MainWin"));
+		const auto groupMainWin = Settings::group(QStringLiteral("MainWin"));
 
 		// project explorer
 		m_projectExplorerDock = new ads::CDockWidget(i18nc("@title:window", "Project Explorer"));
@@ -1517,8 +1429,8 @@ bool MainWin::newProject() {
 		m_DockManager->addDockWidget(ads::LeftDockWidgetArea, m_projectExplorerDock);
 		m_DockManager->addDockWidget(ads::RightDockWidgetArea, m_propertiesDock);
 		m_DockManager->addDockWidget(ads::RightDockWidgetArea, m_worksheetPreviewDock, m_projectExplorerDock->dockAreaWidget());
-		if (group.keyList().indexOf(QLatin1String("WindowState")) != -1)
-			restoreState(group.readEntry("WindowState", QByteArray()));
+		if (groupMainWin.keyList().indexOf(QLatin1String("WindowState")) != -1)
+			restoreState(groupMainWin.readEntry("WindowState", QByteArray()));
 
 		auto* scrollArea = new QScrollArea(m_propertiesDock);
 		scrollArea->setWidgetResizable(true);
@@ -1535,7 +1447,6 @@ bool MainWin::newProject() {
 	m_projectExplorer->setCurrentAspect(m_project);
 	m_worksheetPreviewWidget->setProject(m_project);
 
-	updateGUIOnProjectChanges();
 	m_newProjectAction->setEnabled(false);
 #ifdef HAVE_PURPOSE
 	m_shareAction->setEnabled(false); // sharing is only possible after the project was saved to a file
@@ -1554,8 +1465,35 @@ bool MainWin::newProject() {
 	connect(m_project, &Project::mdiWindowVisibilityChanged, this, &MainWin::updateDockWindowVisibility);
 	connect(m_project, &Project::closeRequested, this, &MainWin::closeProject);
 
+	// depending on the settings, create the default project content (add a worksheet, etc.)
+	if (createInitialContent) {
+		const auto newProject = (NewProject)group.readEntry(QStringLiteral("NewProject"), static_cast<int>(NewProject::WithWorksheet));
+		switch (newProject) {
+		case NewProject::WithWorksheet:
+			newWorksheet();
+			break;
+		case NewProject::WithSpreadsheet:
+			newSpreadsheet();
+			break;
+		case NewProject::WithWorksheetSpreadsheet:
+			newWorksheet();
+			newSpreadsheet();
+			break;
+		case NewProject::WithNotebook: {
+#ifdef HAVE_CANTOR_LIBS
+			const auto& backend = group.readEntry(QLatin1String("LoadOnStartNotebook"), QString());
+			if (Cantor::Backend::listAvailableBackends().indexOf(backend) != -1)
+				addAspectToProject(new CantorWorksheet(backend));
+#endif
+			break;
+		}
+		}
+
+		m_project->setChanged(false); // the project was initialized on startup, nothing has changed from user's perspective
+	}
+
 	m_undoViewEmptyLabel = i18n("%1: created", m_project->name());
-	updateTitleBar();
+	updateGUIOnProjectChanges();
 
 	return true;
 }
@@ -1621,12 +1559,7 @@ void MainWin::openProject(const QString& filename) {
 	} else
 		file.close();
 
-	// 	if (dynamic_cast<QQuickWidget*>(centralWidget())) {
-	// 		createMdiArea();
-	// 		setCentralWidget(m_mdiArea);
-	// 	}
-
-	if (!newProject())
+	if (!newProject(false))
 		return;
 
 	WAIT_CURSOR;
@@ -1777,7 +1710,6 @@ void MainWin::openProject(const QString& filename) {
 	m_project->undoStack()->clear();
 	m_undoViewEmptyLabel = i18n("%1: opened", m_project->name());
 	m_recentProjectsAction->addUrl(QUrl(filename));
-	updateTitleBar();
 	updateGUIOnProjectChanges(m_project->windowState().toUtf8());
 	updateGUI(); // there are most probably worksheets or spreadsheets in the open project -> update the GUI
 	if (m_project->windowState().toUtf8().isEmpty())

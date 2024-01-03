@@ -308,6 +308,12 @@
      </item>
      <item>
       <widget class="NumberSpinBox" name="sbTension">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="toolTip">
         <string/>
        </property>
@@ -331,6 +337,12 @@
      </item>
      <item>
       <widget class="NumberSpinBox" name="sbContinuity">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="toolTip">
         <string/>
        </property>
@@ -354,6 +366,12 @@
      </item>
      <item>
       <widget class="NumberSpinBox" name="sbBias">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="toolTip">
         <string/>
        </property>
@@ -396,9 +414,6 @@
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
-       </property>
-       <property name="toolTip">
-        <string>number should be bigger than number of data points</string>
        </property>
        <property name="decimals">
         <number>0</number>

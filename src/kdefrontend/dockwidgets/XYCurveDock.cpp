@@ -505,13 +505,13 @@ void XYCurveDock::initGeneralTab() {
 	uiGeneralTab.chkLegendVisible->setChecked(m_curve->legendVisible());
 	uiGeneralTab.chkVisible->setChecked(m_curve->isVisible());
 
-	updatePlotRanges();
+	updatePlotRangeList();
 
 	// Slots
 	connect(m_curve, &XYCurve::aspectDescriptionChanged, this, &XYCurveDock::curveDescriptionChanged);
 	connect(m_curve, &XYCurve::xColumnChanged, this, &XYCurveDock::curveXColumnChanged);
 	connect(m_curve, &XYCurve::yColumnChanged, this, &XYCurveDock::curveYColumnChanged);
-	connect(m_curve, &WorksheetElement::plotRangeListChanged, this, &XYCurveDock::updatePlotRanges);
+	connect(m_curve, &WorksheetElement::plotRangeListChanged, this, &XYCurveDock::updatePlotRangeList);
 	connect(m_curve, &XYCurve::legendVisibleChanged, this, &XYCurveDock::curveLegendVisibleChanged);
 	connect(m_curve, &WorksheetElement::visibleChanged, this, &XYCurveDock::curveVisibilityChanged);
 }
@@ -580,10 +580,6 @@ void XYCurveDock::updateLocale() {
 	dropLineWidget->updateLocale();
 	symbolWidget->updateLocale();
 	errorBarsLineWidget->updateLocale();
-}
-
-void XYCurveDock::updatePlotRanges() {
-	updatePlotRangeList();
 }
 
 //*************************************************************

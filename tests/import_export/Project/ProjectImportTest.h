@@ -31,8 +31,10 @@ private Q_SLOTS:
 
 	// signgle/multi graph layers
 	void testOriginSingleLayerTwoAxes();
+	void testOriginSingleLayerTwoAxesWithoutLines();
 	void testOriginMultiLayersAsPlotAreas();
 	void testOriginMultiLayersAsCoordinateSystems();
+	void testOriginMultiLayersAsCoordinateSystemsWithLegend();
 
 	// test tags
 	void testParseOriginTags_data();

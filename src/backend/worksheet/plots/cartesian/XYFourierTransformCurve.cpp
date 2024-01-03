@@ -150,6 +150,7 @@ bool XYFourierTransformCurvePrivate::recalculateSpecific(const AbstractColumn* t
 
 	///////////////////////////////////////////////////////////
 	// transform with window
+	gsl_set_error_handler_off();
 	int status = nsl_dft_transform_window(ydata, 1, n, twoSided, type, windowType);
 
 	unsigned int N = n;

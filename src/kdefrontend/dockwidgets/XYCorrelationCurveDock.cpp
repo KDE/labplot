@@ -36,7 +36,7 @@ extern "C" {
 */
 
 XYCorrelationCurveDock::XYCorrelationCurveDock(QWidget* parent)
-	: XYAnalysisCurveDock(parent) {
+	: XYAnalysisCurveDock(parent, XYAnalysisCurveDock::RequiredDataSource::YY2) {
 }
 
 /*!
@@ -46,15 +46,12 @@ void XYCorrelationCurveDock::setupGeneral() {
 	auto* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
 	setPlotRangeCombobox(uiGeneralTab.cbPlotRanges);
-	setBaseWidgets(uiGeneralTab.leName, uiGeneralTab.teComment);
+	setBaseWidgets(uiGeneralTab.leName, uiGeneralTab.teComment, uiGeneralTab.pbRecalculate, uiGeneralTab.cbDataSourceType);
 
 	auto* gridLayout = static_cast<QGridLayout*>(generalTab->layout());
 	gridLayout->setContentsMargins(2, 2, 2, 2);
 	gridLayout->setHorizontalSpacing(2);
 	gridLayout->setVerticalSpacing(2);
-
-	uiGeneralTab.cbDataSourceType->addItem(i18n("Spreadsheet"));
-	uiGeneralTab.cbDataSourceType->addItem(i18n("XY-Curve"));
 
 	cbDataSourceCurve = new TreeViewComboBox(generalTab);
 	gridLayout->addWidget(cbDataSourceCurve, 5, 2, 1, 3);
@@ -73,8 +70,6 @@ void XYCorrelationCurveDock::setupGeneral() {
 	// nsl_corr_method_type not exposed to user
 	for (int i = 0; i < NSL_CORR_NORM_COUNT; i++)
 		uiGeneralTab.cbNorm->addItem(i18n(nsl_corr_norm_name[i]));
-
-	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme(QStringLiteral("run-build")));
 
 	auto* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setContentsMargins(0, 0, 0, 0);
@@ -159,7 +154,7 @@ void XYCorrelationCurveDock::initGeneralTab() {
 	connect(m_correlationCurve, &XYCorrelationCurve::correlationDataChanged, this, &XYCorrelationCurveDock::curveCorrelationDataChanged);
 	connect(m_correlationCurve, &XYCorrelationCurve::sourceDataChanged, this, &XYCorrelationCurveDock::enableRecalculate);
 	connect(m_correlationCurve, &XYCurve::visibleChanged, this, &XYCorrelationCurveDock::curveVisibilityChanged);
-	connect(m_correlationCurve, &WorksheetElement::plotRangeListChanged, this, &XYCorrelationCurveDock::updatePlotRanges);
+	connect(m_correlationCurve, &WorksheetElement::plotRangeListChanged, this, &XYCorrelationCurveDock::updatePlotRangeList);
 }
 
 void XYCorrelationCurveDock::setModel() {
@@ -176,10 +171,11 @@ void XYCorrelationCurveDock::setModel() {
   sets the curves. The properties of the curves in the list \c list can be edited in this widget.
 */
 void XYCorrelationCurveDock::setCurves(QList<XYCurve*> list) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	m_curvesList = list;
 	m_curve = list.first();
 	setAspects(list);
+	setAnalysisCurves(list);
 	m_correlationCurve = static_cast<XYCorrelationCurve*>(m_curve);
 	this->setModel();
 	m_correlationData = m_correlationCurve->correlationData();
@@ -190,16 +186,7 @@ void XYCorrelationCurveDock::setCurves(QList<XYCurve*> list) {
 	initGeneralTab();
 	initTabs();
 	setSymbols(list);
-	m_initializing = false;
 
-	updatePlotRanges();
-
-	// hide the "skip gaps" option after the curves were set
-	ui.lLineSkipGaps->hide();
-	ui.chkLineSkipGaps->hide();
-}
-
-void XYCorrelationCurveDock::updatePlotRanges() {
 	updatePlotRangeList();
 }
 
@@ -238,23 +225,14 @@ void XYCorrelationCurveDock::dataSourceTypeChanged(int index) {
 
 	for (auto* curve : m_curvesList)
 		static_cast<XYCorrelationCurve*>(curve)->setDataSourceType(type);
-}
 
-void XYCorrelationCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
-	CONDITIONAL_LOCK_RETURN;
-
-	auto* dataSourceCurve = static_cast<XYCurve*>(index.internalPointer());
-
-	for (auto* curve : m_curvesList)
-		static_cast<XYCorrelationCurve*>(curve)->setDataSourceCurve(dataSourceCurve);
+	enableRecalculate();
 }
 
 void XYCorrelationCurveDock::xDataColumnChanged(const QModelIndex& index) {
-	DEBUG("XYCorrelationCurveDock::xDataColumnChanged()");
 	CONDITIONAL_LOCK_RETURN;
 
 	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
-
 	for (auto* curve : m_curvesList)
 		static_cast<XYCorrelationCurve*>(curve)->setXDataColumn(column);
 
@@ -264,32 +242,7 @@ void XYCorrelationCurveDock::xDataColumnChanged(const QModelIndex& index) {
 		uiGeneralTab.leMax->setText(numberLocale.toString(column->maximum()));
 	}
 
-	cbXDataColumn->useCurrentIndexText(true);
-	cbXDataColumn->setInvalid(false);
-}
-
-void XYCorrelationCurveDock::yDataColumnChanged(const QModelIndex& index) {
-	CONDITIONAL_LOCK_RETURN;
-
-	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
-
-	for (auto* curve : m_curvesList)
-		static_cast<XYCorrelationCurve*>(curve)->setYDataColumn(column);
-
-	cbYDataColumn->useCurrentIndexText(true);
-	cbYDataColumn->setInvalid(false);
-}
-
-void XYCorrelationCurveDock::y2DataColumnChanged(const QModelIndex& index) {
-	CONDITIONAL_LOCK_RETURN;
-
-	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
-
-	for (auto* curve : m_curvesList)
-		static_cast<XYCorrelationCurve*>(curve)->setY2DataColumn(column);
-
-	cbY2DataColumn->useCurrentIndexText(true);
-	cbY2DataColumn->setInvalid(false);
+	enableRecalculate();
 }
 
 void XYCorrelationCurveDock::samplingIntervalChanged() {
@@ -362,52 +315,17 @@ void XYCorrelationCurveDock::recalculateClicked() {
 	QApplication::restoreOverrideCursor();
 }
 
-void XYCorrelationCurveDock::enableRecalculate() const {
-	DEBUG("XYCorrelationCurveDock::enableRecalculate()");
-	CONDITIONAL_RETURN_NO_LOCK;
-
-	bool hasSourceData = false;
-	// no correlation possible without y-data and y2-data
-	if (m_correlationCurve->dataSourceType() == XYAnalysisCurve::DataSourceType::Spreadsheet) {
-		AbstractAspect* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
-		AbstractAspect* aspectY2 = static_cast<AbstractAspect*>(cbY2DataColumn->currentModelIndex().internalPointer());
-		hasSourceData = (aspectY != nullptr && aspectY2 != nullptr);
-		if (aspectY) {
-			cbYDataColumn->useCurrentIndexText(true);
-			cbYDataColumn->setInvalid(false);
-		}
-		if (aspectY2) {
-			cbY2DataColumn->useCurrentIndexText(true);
-			cbY2DataColumn->setInvalid(false);
-		}
-	} else {
-		hasSourceData = (m_correlationCurve->dataSourceCurve() != nullptr);
-	}
-
-	uiGeneralTab.pbRecalculate->setEnabled(hasSourceData);
-}
-
 /*!
  * show the result and details of the correlation
  */
 void XYCorrelationCurveDock::showCorrelationResult() {
-	showResult(m_correlationCurve, uiGeneralTab.teResult, uiGeneralTab.pbRecalculate);
+	showResult(m_correlationCurve, uiGeneralTab.teResult);
 }
 
 //*************************************************************
 //*********** SLOTs for changes triggered in XYCurve **********
 //*************************************************************
 // General-Tab
-void XYCorrelationCurveDock::curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType type) {
-	CONDITIONAL_LOCK_RETURN;
-	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(type));
-}
-
-void XYCorrelationCurveDock::curveDataSourceCurveChanged(const XYCurve* curve) {
-	CONDITIONAL_LOCK_RETURN;
-	cbDataSourceCurve->setAspect(curve);
-}
-
 void XYCorrelationCurveDock::curveXDataColumnChanged(const AbstractColumn* column) {
 	DEBUG("XYCorrelationCurveDock::curveXDataColumnChanged()");
 	if (column) {
@@ -427,18 +345,13 @@ void XYCorrelationCurveDock::curveXDataColumnChanged(const AbstractColumn* colum
 	}
 	CONDITIONAL_LOCK_RETURN;
 	cbXDataColumn->setColumn(column, m_correlationCurve->xDataColumnPath());
-}
-
-void XYCorrelationCurveDock::curveYDataColumnChanged(const AbstractColumn* column) {
-	DEBUG("XYCorrelationCurveDock::curveYDataColumnChanged()");
-	CONDITIONAL_LOCK_RETURN;
-	cbYDataColumn->setColumn(column, m_correlationCurve->yDataColumnPath());
+	enableRecalculate();
 }
 
 void XYCorrelationCurveDock::curveY2DataColumnChanged(const AbstractColumn* column) {
-	DEBUG("XYCorrelationCurveDock::curveY2DataColumnChanged()");
 	CONDITIONAL_LOCK_RETURN;
 	cbY2DataColumn->setColumn(column, m_correlationCurve->y2DataColumnPath());
+	enableRecalculate();
 }
 
 void XYCorrelationCurveDock::curveCorrelationDataChanged(const XYCorrelationCurve::CorrelationData& correlationData) {
@@ -446,10 +359,6 @@ void XYCorrelationCurveDock::curveCorrelationDataChanged(const XYCorrelationCurv
 	m_correlationData = correlationData;
 
 	this->showCorrelationResult();
-}
-
-void XYCorrelationCurveDock::dataChanged() {
-	this->enableRecalculate();
 }
 
 void XYCorrelationCurveDock::curveVisibilityChanged(bool on) {

@@ -62,13 +62,14 @@ public:
 	double maximum(CartesianCoordinateSystem::Dimension) const override;
 	int gridPointsCount() const;
 	bool hasData() const override;
+	bool usingColumn(const Column*) const override;
+	void updateColumnDependencies(const AbstractColumn*) override;
 	QColor color() const override;
 
 	typedef KDEPlotPrivate Private;
 
 private Q_SLOTS:
 	void dataColumnAboutToBeRemoved(const AbstractAspect*);
-	void dataColumnNameChanged();
 
 protected:
 	KDEPlot(const QString& name, KDEPlotPrivate* dd);

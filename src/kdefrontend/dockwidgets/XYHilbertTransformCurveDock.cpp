@@ -37,7 +37,7 @@ void XYHilbertTransformCurveDock::setupGeneral() {
 	auto* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
 	setPlotRangeCombobox(uiGeneralTab.cbPlotRanges);
-	setBaseWidgets(uiGeneralTab.leName, uiGeneralTab.teComment);
+	setBaseWidgets(uiGeneralTab.leName, uiGeneralTab.teComment, uiGeneralTab.pbRecalculate);
 
 	auto* gridLayout = static_cast<QGridLayout*>(generalTab->layout());
 	gridLayout->setContentsMargins(2, 2, 2, 2);
@@ -117,7 +117,7 @@ void XYHilbertTransformCurveDock::initGeneralTab() {
 	connect(m_transformCurve, &XYHilbertTransformCurve::transformDataChanged, this, &XYHilbertTransformCurveDock::curveTransformDataChanged);
 	connect(m_transformCurve, &XYHilbertTransformCurve::sourceDataChanged, this, &XYHilbertTransformCurveDock::enableRecalculate);
 	connect(m_transformCurve, &XYCurve::visibleChanged, this, &XYHilbertTransformCurveDock::curveVisibilityChanged);
-	connect(m_transformCurve, &WorksheetElement::plotRangeListChanged, this, &XYHilbertTransformCurveDock::updatePlotRanges);
+	connect(m_transformCurve, &WorksheetElement::plotRangeListChanged, this, &XYHilbertTransformCurveDock::updatePlotRangeList);
 }
 
 void XYHilbertTransformCurveDock::setModel() {
@@ -131,10 +131,11 @@ void XYHilbertTransformCurveDock::setModel() {
   sets the curves. The properties of the curves in the list \c list can be edited in this widget.
 */
 void XYHilbertTransformCurveDock::setCurves(QList<XYCurve*> list) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	m_curvesList = list;
 	m_curve = list.first();
 	setAspects(list);
+	setAnalysisCurves(list);
 	m_transformCurve = static_cast<XYHilbertTransformCurve*>(m_curve);
 	this->setModel();
 	m_transformData = m_transformCurve->transformData();
@@ -142,12 +143,7 @@ void XYHilbertTransformCurveDock::setCurves(QList<XYCurve*> list) {
 	initGeneralTab();
 	initTabs();
 	setSymbols(list);
-	m_initializing = false;
 
-	updatePlotRanges();
-}
-
-void XYHilbertTransformCurveDock::updatePlotRanges() {
 	updatePlotRangeList();
 }
 
@@ -168,20 +164,7 @@ void XYHilbertTransformCurveDock::xDataColumnChanged(const QModelIndex& index) {
 		uiGeneralTab.leMax->setText(numberLocale.toString(column->maximum()));
 	}
 
-	cbXDataColumn->useCurrentIndexText(true);
-	cbXDataColumn->setInvalid(false);
-}
-
-void XYHilbertTransformCurveDock::yDataColumnChanged(const QModelIndex& index) {
-	CONDITIONAL_LOCK_RETURN;
-
-	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
-
-	for (auto* curve : m_curvesList)
-		static_cast<XYHilbertTransformCurve*>(curve)->setYDataColumn(column);
-
-	cbYDataColumn->useCurrentIndexText(true);
-	cbYDataColumn->setInvalid(false);
+	enableRecalculate();
 }
 
 void XYHilbertTransformCurveDock::autoRangeChanged() {
@@ -231,46 +214,17 @@ void XYHilbertTransformCurveDock::recalculateClicked() {
 	QApplication::restoreOverrideCursor();
 }
 
-void XYHilbertTransformCurveDock::enableRecalculate() const {
-	CONDITIONAL_RETURN_NO_LOCK;
-
-	// no transforming possible without the x- and y-data
-	auto* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
-	auto* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
-	bool data = (aspectX && aspectY);
-	if (aspectX) {
-		cbXDataColumn->useCurrentIndexText(true);
-		cbXDataColumn->setInvalid(false);
-	}
-	if (aspectY) {
-		cbYDataColumn->useCurrentIndexText(true);
-		cbYDataColumn->setInvalid(false);
-	}
-
-	uiGeneralTab.pbRecalculate->setEnabled(data);
-}
-
 /*!
  * show the result and details of the transform
  */
 void XYHilbertTransformCurveDock::showTransformResult() {
-	showResult(m_transformCurve, uiGeneralTab.teResult, uiGeneralTab.pbRecalculate);
+	showResult(m_transformCurve, uiGeneralTab.teResult);
 }
 
 //*************************************************************
 //*********** SLOTs for changes triggered in XYCurve **********
 //*************************************************************
 // General-Tab
-void XYHilbertTransformCurveDock::curveXDataColumnChanged(const AbstractColumn* column) {
-	CONDITIONAL_LOCK_RETURN;
-	cbXDataColumn->setColumn(column, m_transformCurve->xDataColumnPath());
-}
-
-void XYHilbertTransformCurveDock::curveYDataColumnChanged(const AbstractColumn* column) {
-	CONDITIONAL_LOCK_RETURN;
-	cbYDataColumn->setColumn(column, m_transformCurve->yDataColumnPath());
-}
-
 void XYHilbertTransformCurveDock::curveTransformDataChanged(const XYHilbertTransformCurve::TransformData& transformData) {
 	CONDITIONAL_LOCK_RETURN;
 	m_transformData = transformData;
@@ -278,10 +232,6 @@ void XYHilbertTransformCurveDock::curveTransformDataChanged(const XYHilbertTrans
 	this->typeChanged();
 
 	this->showTransformResult();
-}
-
-void XYHilbertTransformCurveDock::dataChanged() {
-	this->enableRecalculate();
 }
 
 void XYHilbertTransformCurveDock::curveVisibilityChanged(bool on) {

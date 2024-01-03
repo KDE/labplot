@@ -41,10 +41,6 @@
 #include <KLocalizedString>
 #include <QGraphicsSceneMouseEvent>
 
-#include <gsl/gsl_errno.h>
-#include <gsl/gsl_histogram.h>
-#include <gsl/gsl_spline.h>
-
 CURVE_COLUMN_CONNECT(Histogram, Data, data, recalc)
 CURVE_COLUMN_CONNECT(Histogram, ErrorPlus, errorPlus, updateErrorBars)
 CURVE_COLUMN_CONNECT(Histogram, ErrorMinus, errorMinus, updateErrorBars)
@@ -343,6 +339,40 @@ bool Histogram::hasData() const {
 	return (d->dataColumn != nullptr);
 }
 
+bool Histogram::usingColumn(const Column* column) const {
+	Q_D(const Histogram);
+	return (d->dataColumn == column || (d->errorType == ErrorType::CustomSymmetric && d->errorPlusColumn == column)
+			|| (d->errorType == ErrorType::CustomAsymmetric && (d->errorPlusColumn == column || d->errorMinusColumn == column)));
+}
+
+void Histogram::updateColumnDependencies(const AbstractColumn* column) {
+	Q_D(Histogram);
+	setUndoAware(false);
+	const QString& columnPath = column->path();
+
+	if (d->dataColumn == column) // the column is the same and was just renamed -> update the column path
+		d->dataColumnPath = columnPath;
+	else if (d->dataColumnPath == columnPath) // another column was renamed to the current path -> set and connect to the new column
+		setDataColumn(column);
+
+	if (d->value->column() == column)
+		d->value->setColumnPath(columnPath);
+	else if (d->value->columnPath() == columnPath)
+		d->value->setColumn(column);
+
+	if (d->errorPlusColumn == column)
+		d->errorPlusColumnPath = columnPath;
+	else if (d->errorPlusColumnPath == columnPath)
+		setErrorPlusColumn(column);
+
+	if (d->errorMinusColumn == column)
+		d->errorMinusColumnPath = columnPath;
+	else if (d->errorMinusColumnPath == columnPath)
+		setErrorMinusColumn(column);
+
+	setUndoAware(true);
+}
+
 QColor Histogram::color() const {
 	Q_D(const Histogram);
 	if (d->background->enabled())
@@ -587,11 +617,6 @@ void Histogram::dataColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	}
 }
 
-void Histogram::dataColumnNameChanged() {
-	Q_D(Histogram);
-	setDataColumnPath(d->dataColumn->path());
-}
-
 void Histogram::updateErrorBars() {
 	Q_D(Histogram);
 	d->updateErrorBars();
@@ -605,22 +630,12 @@ void Histogram::errorPlusColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	}
 }
 
-void Histogram::errorPlusColumnNameChanged() {
-	Q_D(Histogram);
-	setErrorPlusColumnPath(d->errorPlusColumn->path());
-}
-
 void Histogram::errorMinusColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(Histogram);
 	if (aspect == d->errorMinusColumn) {
 		d->errorMinusColumn = nullptr;
 		d->updateErrorBars();
 	}
-}
-
-void Histogram::errorMinusColumnNameChanged() {
-	Q_D(Histogram);
-	setErrorMinusColumnPath(d->errorMinusColumn->path());
 }
 
 // ##############################################################################

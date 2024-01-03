@@ -34,7 +34,7 @@ extern "C" {
 */
 
 XYConvolutionCurveDock::XYConvolutionCurveDock(QWidget* parent)
-	: XYAnalysisCurveDock(parent) {
+	: XYAnalysisCurveDock(parent, XYAnalysisCurveDock::RequiredDataSource::YY2) {
 }
 
 /*!
@@ -44,15 +44,12 @@ void XYConvolutionCurveDock::setupGeneral() {
 	auto* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
 	setPlotRangeCombobox(uiGeneralTab.cbPlotRanges);
-	setBaseWidgets(uiGeneralTab.leName, uiGeneralTab.teComment);
+	setBaseWidgets(uiGeneralTab.leName, uiGeneralTab.teComment, uiGeneralTab.pbRecalculate, uiGeneralTab.cbDataSourceType);
 
 	auto* gridLayout = static_cast<QGridLayout*>(generalTab->layout());
 	gridLayout->setContentsMargins(2, 2, 2, 2);
 	gridLayout->setHorizontalSpacing(2);
 	gridLayout->setVerticalSpacing(2);
-
-	uiGeneralTab.cbDataSourceType->addItem(i18n("Spreadsheet"));
-	uiGeneralTab.cbDataSourceType->addItem(i18n("XY-Curve"));
 
 	cbDataSourceCurve = new TreeViewComboBox(generalTab);
 	gridLayout->addWidget(cbDataSourceCurve, 5, 2, 1, 3);
@@ -79,13 +76,9 @@ void XYConvolutionCurveDock::setupGeneral() {
 	for (int i = 0; i < NSL_CONV_WRAP_COUNT; i++)
 		uiGeneralTab.cbWrap->addItem(i18n(nsl_conv_wrap_name[i]));
 
-	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme(QStringLiteral("run-build")));
-
 	auto* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setContentsMargins(0, 0, 0, 0);
 	layout->addWidget(generalTab);
-
-	DEBUG(Q_FUNC_INFO << ", DONE");
 
 	// Slots
 	// TODO	connect(uiGeneralTab.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYConvolutionCurveDock::plotRangeChanged );
@@ -173,7 +166,7 @@ void XYConvolutionCurveDock::initGeneralTab() {
 	connect(m_convolutionCurve, &XYConvolutionCurve::y2DataColumnChanged, this, &XYConvolutionCurveDock::curveY2DataColumnChanged);
 	connect(m_convolutionCurve, &XYConvolutionCurve::convolutionDataChanged, this, &XYConvolutionCurveDock::curveConvolutionDataChanged);
 	connect(m_convolutionCurve, &XYConvolutionCurve::sourceDataChanged, this, &XYConvolutionCurveDock::enableRecalculate);
-	connect(m_convolutionCurve, &WorksheetElement::plotRangeListChanged, this, &XYConvolutionCurveDock::updatePlotRanges);
+	connect(m_convolutionCurve, &WorksheetElement::plotRangeListChanged, this, &XYConvolutionCurveDock::updatePlotRangeList);
 	connect(m_convolutionCurve, &XYCurve::visibleChanged, this, &XYConvolutionCurveDock::curveVisibilityChanged);
 }
 
@@ -191,10 +184,11 @@ void XYConvolutionCurveDock::setModel() {
   sets the curves. The properties of the curves in the list \c list can be edited in this widget.
 */
 void XYConvolutionCurveDock::setCurves(QList<XYCurve*> list) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	m_curvesList = list;
 	m_curve = list.first();
 	setAspects(list);
+	setAnalysisCurves(list);
 	m_convolutionCurve = static_cast<XYConvolutionCurve*>(m_curve);
 	this->setModel();
 	m_convolutionData = m_convolutionCurve->convolutionData();
@@ -205,16 +199,6 @@ void XYConvolutionCurveDock::setCurves(QList<XYCurve*> list) {
 	initGeneralTab();
 	initTabs();
 	setSymbols(list);
-	updatePlotRanges();
-
-	m_initializing = false;
-
-	// hide the "skip gaps" option after the curves were set
-	ui.lLineSkipGaps->hide();
-	ui.chkLineSkipGaps->hide();
-}
-
-void XYConvolutionCurveDock::updatePlotRanges() {
 	updatePlotRangeList();
 }
 
@@ -262,20 +246,10 @@ void XYConvolutionCurveDock::dataSourceTypeChanged(int index) {
 	enableRecalculate();
 }
 
-void XYConvolutionCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
-	CONDITIONAL_LOCK_RETURN;
-
-	auto* dataSourceCurve = static_cast<XYCurve*>(index.internalPointer());
-
-	for (auto* curve : m_curvesList)
-		static_cast<XYConvolutionCurve*>(curve)->setDataSourceCurve(dataSourceCurve);
-}
-
 void XYConvolutionCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	CONDITIONAL_LOCK_RETURN;
 
 	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
-
 	for (auto* curve : m_curvesList)
 		static_cast<XYConvolutionCurve*>(curve)->setXDataColumn(column);
 
@@ -285,32 +259,7 @@ void XYConvolutionCurveDock::xDataColumnChanged(const QModelIndex& index) {
 		uiGeneralTab.leMax->setText(numberLocale.toString(column->maximum()));
 	}
 
-	cbXDataColumn->useCurrentIndexText(true);
-	cbXDataColumn->setInvalid(false);
-}
-
-void XYConvolutionCurveDock::yDataColumnChanged(const QModelIndex& index) {
-	CONDITIONAL_LOCK_RETURN;
-
-	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
-
-	for (auto* curve : m_curvesList)
-		static_cast<XYConvolutionCurve*>(curve)->setYDataColumn(column);
-
-	cbYDataColumn->useCurrentIndexText(true);
-	cbYDataColumn->setInvalid(false);
-}
-
-void XYConvolutionCurveDock::y2DataColumnChanged(const QModelIndex& index) {
-	CONDITIONAL_LOCK_RETURN;
-
-	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
-
-	for (auto* curve : m_curvesList)
-		static_cast<XYConvolutionCurve*>(curve)->setY2DataColumn(column);
-
-	cbY2DataColumn->useCurrentIndexText(true);
-	cbY2DataColumn->setInvalid(false);
+	enableRecalculate();
 }
 
 void XYConvolutionCurveDock::samplingIntervalChanged() {
@@ -470,49 +419,18 @@ void XYConvolutionCurveDock::recalculateClicked() {
 	QApplication::restoreOverrideCursor();
 }
 
-void XYConvolutionCurveDock::enableRecalculate() const {
-	DEBUG("XYConvolutionCurveDock::enableRecalculate()");
-	CONDITIONAL_RETURN_NO_LOCK;
-
-	bool hasSourceData = false;
-	// no convolution possible without the y-data
-	if (m_convolutionCurve->dataSourceType() == XYAnalysisCurve::DataSourceType::Spreadsheet) {
-		AbstractAspect* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
-		hasSourceData = (aspectY != nullptr);
-		if (aspectY) {
-			cbYDataColumn->useCurrentIndexText(true);
-			cbYDataColumn->setInvalid(false);
-		}
-	} else {
-		hasSourceData = (m_convolutionCurve->dataSourceCurve() != nullptr);
-	}
-
-	uiGeneralTab.pbRecalculate->setEnabled(hasSourceData);
-}
-
 /*!
  * show the result and details of the convolution
  */
 void XYConvolutionCurveDock::showConvolutionResult() {
-	showResult(m_convolutionCurve, uiGeneralTab.teResult, uiGeneralTab.pbRecalculate);
+	showResult(m_convolutionCurve, uiGeneralTab.teResult);
 }
 
 //*************************************************************
 //*********** SLOTs for changes triggered in XYCurve **********
 //*************************************************************
 // General-Tab
-void XYConvolutionCurveDock::curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType type) {
-	CONDITIONAL_LOCK_RETURN;
-	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(type));
-}
-
-void XYConvolutionCurveDock::curveDataSourceCurveChanged(const XYCurve* curve) {
-	CONDITIONAL_LOCK_RETURN;
-	cbDataSourceCurve->setAspect(curve);
-}
-
 void XYConvolutionCurveDock::curveXDataColumnChanged(const AbstractColumn* column) {
-	DEBUG("XYConvolutionCurveDock::curveXDataColumnChanged()");
 	if (column) {
 		DEBUG("X Column available");
 		uiGeneralTab.lXRange->setEnabled(true);
@@ -531,16 +449,10 @@ void XYConvolutionCurveDock::curveXDataColumnChanged(const AbstractColumn* colum
 
 	CONDITIONAL_LOCK_RETURN;
 	cbXDataColumn->setColumn(column, m_convolutionCurve->xDataColumnPath());
-}
-
-void XYConvolutionCurveDock::curveYDataColumnChanged(const AbstractColumn* column) {
-	DEBUG("XYConvolutionCurveDock::curveYDataColumnChanged()");
-	CONDITIONAL_LOCK_RETURN;
-	cbYDataColumn->setColumn(column, m_convolutionCurve->yDataColumnPath());
+	enableRecalculate();
 }
 
 void XYConvolutionCurveDock::curveY2DataColumnChanged(const AbstractColumn* column) {
-	DEBUG("XYConvolutionCurveDock::curveY2DataColumnChanged()");
 	if (column) {
 		DEBUG("Y2 Column available");
 		uiGeneralTab.lKernel->setEnabled(false);
@@ -555,6 +467,7 @@ void XYConvolutionCurveDock::curveY2DataColumnChanged(const AbstractColumn* colu
 
 	CONDITIONAL_LOCK_RETURN;
 	cbY2DataColumn->setColumn(column, m_convolutionCurve->y2DataColumnPath());
+	enableRecalculate();
 }
 
 void XYConvolutionCurveDock::curveConvolutionDataChanged(const XYConvolutionCurve::ConvolutionData& convolutionData) {
@@ -563,10 +476,6 @@ void XYConvolutionCurveDock::curveConvolutionDataChanged(const XYConvolutionCurv
 	this->directionChanged();
 
 	this->showConvolutionResult();
-}
-
-void XYConvolutionCurveDock::dataChanged() {
-	this->enableRecalculate();
 }
 
 void XYConvolutionCurveDock::curveVisibilityChanged(bool on) {

@@ -37,7 +37,7 @@ void XYFourierTransformCurveDock::setupGeneral() {
 	auto* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
 	setPlotRangeCombobox(uiGeneralTab.cbPlotRanges);
-	setBaseWidgets(uiGeneralTab.leName, uiGeneralTab.teComment);
+	setBaseWidgets(uiGeneralTab.leName, uiGeneralTab.teComment, uiGeneralTab.pbRecalculate);
 
 	auto* gridLayout = static_cast<QGridLayout*>(generalTab->layout());
 	gridLayout->setContentsMargins(2, 2, 2, 2);
@@ -132,7 +132,7 @@ void XYFourierTransformCurveDock::initGeneralTab() {
 	connect(m_transformCurve, &XYFourierTransformCurve::transformDataChanged, this, &XYFourierTransformCurveDock::curveTransformDataChanged);
 	connect(m_transformCurve, &XYFourierTransformCurve::sourceDataChanged, this, &XYFourierTransformCurveDock::enableRecalculate);
 	connect(m_transformCurve, &XYCurve::visibleChanged, this, &XYFourierTransformCurveDock::curveVisibilityChanged);
-	connect(m_transformCurve, &WorksheetElement::plotRangeListChanged, this, &XYFourierTransformCurveDock::updatePlotRanges);
+	connect(m_transformCurve, &WorksheetElement::plotRangeListChanged, this, &XYFourierTransformCurveDock::updatePlotRangeList);
 }
 
 void XYFourierTransformCurveDock::setModel() {
@@ -146,10 +146,11 @@ void XYFourierTransformCurveDock::setModel() {
   sets the curves. The properties of the curves in the list \c list can be edited in this widget.
 */
 void XYFourierTransformCurveDock::setCurves(QList<XYCurve*> list) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	m_curvesList = list;
 	m_curve = list.first();
 	setAspects(list);
+	setAnalysisCurves(list);
 	m_transformCurve = static_cast<XYFourierTransformCurve*>(m_curve);
 	this->setModel();
 	m_transformData = m_transformCurve->transformData();
@@ -157,12 +158,7 @@ void XYFourierTransformCurveDock::setCurves(QList<XYCurve*> list) {
 	initGeneralTab();
 	initTabs();
 	setSymbols(list);
-	m_initializing = false;
 
-	updatePlotRanges();
-}
-
-void XYFourierTransformCurveDock::updatePlotRanges() {
 	updatePlotRangeList();
 }
 
@@ -185,20 +181,7 @@ void XYFourierTransformCurveDock::xDataColumnChanged(const QModelIndex& index) {
 		}
 	}
 
-	cbXDataColumn->useCurrentIndexText(true);
-	cbXDataColumn->setInvalid(false);
-}
-
-void XYFourierTransformCurveDock::yDataColumnChanged(const QModelIndex& index) {
-	CONDITIONAL_LOCK_RETURN;
-
-	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
-
-	for (auto* curve : m_curvesList)
-		static_cast<XYFourierTransformCurve*>(curve)->setYDataColumn(column);
-
-	cbYDataColumn->useCurrentIndexText(true);
-	cbYDataColumn->setInvalid(false);
+	enableRecalculate();
 }
 
 void XYFourierTransformCurveDock::autoRangeChanged() {
@@ -283,46 +266,17 @@ void XYFourierTransformCurveDock::recalculateClicked() {
 	QApplication::restoreOverrideCursor();
 }
 
-void XYFourierTransformCurveDock::enableRecalculate() const {
-	CONDITIONAL_RETURN_NO_LOCK;
-
-	// no transforming possible without the x- and y-data
-	AbstractAspect* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
-	AbstractAspect* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
-	bool data = (aspectX && aspectY);
-	if (aspectX) {
-		cbXDataColumn->useCurrentIndexText(true);
-		cbXDataColumn->setInvalid(false);
-	}
-	if (aspectY) {
-		cbYDataColumn->useCurrentIndexText(true);
-		cbYDataColumn->setInvalid(false);
-	}
-
-	uiGeneralTab.pbRecalculate->setEnabled(data);
-}
-
 /*!
  * show the result and details of the transform
  */
 void XYFourierTransformCurveDock::showTransformResult() {
-	showResult(m_transformCurve, uiGeneralTab.teResult, uiGeneralTab.pbRecalculate);
+	showResult(m_transformCurve, uiGeneralTab.teResult);
 }
 
 //*************************************************************
 //*********** SLOTs for changes triggered in XYCurve **********
 //*************************************************************
 // General-Tab
-void XYFourierTransformCurveDock::curveXDataColumnChanged(const AbstractColumn* column) {
-	CONDITIONAL_LOCK_RETURN;
-	cbXDataColumn->setColumn(column, m_transformCurve->xDataColumnPath());
-}
-
-void XYFourierTransformCurveDock::curveYDataColumnChanged(const AbstractColumn* column) {
-	CONDITIONAL_LOCK_RETURN;
-	cbYDataColumn->setColumn(column, m_transformCurve->yDataColumnPath());
-}
-
 void XYFourierTransformCurveDock::curveTransformDataChanged(const XYFourierTransformCurve::TransformData& transformData) {
 	CONDITIONAL_LOCK_RETURN;
 	m_transformData = transformData;
@@ -330,10 +284,6 @@ void XYFourierTransformCurveDock::curveTransformDataChanged(const XYFourierTrans
 	this->typeChanged();
 
 	this->showTransformResult();
-}
-
-void XYFourierTransformCurveDock::dataChanged() {
-	this->enableRecalculate();
 }
 
 void XYFourierTransformCurveDock::curveVisibilityChanged(bool on) {

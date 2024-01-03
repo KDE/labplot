@@ -4,7 +4,7 @@
 	Description          : Base class for all Worksheet children.
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2009 Tilman Benkert <thzs@gmx.net>
-	SPDX-FileCopyrightText: 2012-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2012-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -18,6 +18,7 @@
 #include "plots/AbstractPlot.h"
 #include "plots/PlotArea.h"
 #include "plots/cartesian/CartesianCoordinateSystem.h"
+#include "plots/cartesian/Plot.h"
 
 #include <KLocalizedString>
 #include <QGraphicsItem>
@@ -26,8 +27,6 @@
 #include <QKeyEvent>
 #include <QMenu>
 #include <QPen>
-#include <QStringLiteral>
-#include <QXmlStreamReader>
 
 /**
  * \class WorksheetElement
@@ -223,7 +222,7 @@ QAction* WorksheetElement::visibilityAction() {
 
 QAction* WorksheetElement::lockingAction() {
 	if (!m_lockingAction) {
-		m_lockingAction = new QAction(QIcon::fromTheme(QStringLiteral("hidemouse")), i18n("Locking"), this);
+		m_lockingAction = new QAction(QIcon::fromTheme(QStringLiteral("hidemouse")), i18n("Lock"), this);
 		m_lockingAction->setCheckable(true);
 		connect(m_lockingAction, &QAction::triggered, this, &WorksheetElement::changeLocking);
 	}
@@ -255,15 +254,16 @@ QMenu* WorksheetElement::createContextMenu() {
 	visibilityAction->setChecked(isVisible());
 	menu->insertAction(firstAction, visibilityAction);
 	menu->insertSeparator(firstAction);
-	auto* lockingAction = this->lockingAction();
-	menu->insertAction(firstAction, lockingAction);
-	menu->insertSeparator(firstAction);
 
-	visibilityAction->setChecked(isVisible());
-	lockingAction->setChecked(isLocked());
+	// don't add the lock action for elements which cannot be freely moved on the worksheet (like axis and curves/plots)
+	if (!dynamic_cast<Axis*>(this) && !dynamic_cast<Plot*>(this)) {
+		auto* lockingAction = this->lockingAction();
+		lockingAction->setChecked(isLocked());
+		menu->insertAction(firstAction, lockingAction);
+		menu->insertSeparator(firstAction);
+	}
 
 	// add the sub-menu for the drawing order
-
 	// don't add the drawing order menu for axes and legends, they're always drawn on top of each other elements
 	if (type() == AspectType::Axis || type() == AspectType::CartesianPlotLegend)
 		return menu;
@@ -834,7 +834,8 @@ void WorksheetElementPrivate::updatePosition() {
 }
 
 bool WorksheetElementPrivate::sceneEvent(QEvent* event) {
-	if (lock) {
+	// don't allow to move the element with the mouse or with the cursor keys if it's locked, react on all other events
+	if (lock && (event->type() == QEvent::GraphicsSceneMouseMove || event->type() == QEvent::KeyPress)) {
 		event->ignore();
 		return true;
 	}
@@ -957,8 +958,8 @@ QVariant WorksheetElementPrivate::itemChange(GraphicsItemChange change, const QV
  * \param point point in parent coordinates
  * \return point in PlotArea coordinates
  */
-QPointF WorksheetElementPrivate::mapParentToPlotArea(QPointF point) {
-	AbstractAspect* parent = q->parent(AspectType::CartesianPlot);
+QPointF WorksheetElementPrivate::mapParentToPlotArea(QPointF point) const {
+	auto* parent = q->parent(AspectType::CartesianPlot);
 	if (parent) {
 		auto* plot = static_cast<CartesianPlot*>(parent);
 		// mapping from parent to item coordinates and them to plot area
@@ -977,9 +978,8 @@ QPointF WorksheetElementPrivate::mapParentToPlotArea(QPointF point) {
  * \param point point in plotArea coordinates
  * \return point in parent coordinates
  */
-QPointF WorksheetElementPrivate::mapPlotAreaToParent(QPointF point) {
-	AbstractAspect* parent = q->parent(AspectType::CartesianPlot);
-
+QPointF WorksheetElementPrivate::mapPlotAreaToParent(QPointF point) const {
+	auto* parent = q->parent(AspectType::CartesianPlot);
 	if (parent) {
 		auto* plot = static_cast<CartesianPlot*>(parent);
 		// first mapping to item coordinates and from there back to parent

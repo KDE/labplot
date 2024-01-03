@@ -53,6 +53,7 @@ private:
 
 	bool loadWorksheet(Worksheet*, bool preview);
 	void loadGraphLayer(const Origin::GraphLayer&, CartesianPlot*, int index, QHash<TextLabel*, QSizeF> textLabelPositions, bool preview);
+	void loadAxes(const Origin::GraphLayer&, CartesianPlot*, int index, const QString& xColumnName, const QString& yColumnName);
 	void loadAxis(const Origin::GraphAxis&, Axis*, int index, const QString& axisTitle = QString()) const;
 	void loadCurve(const Origin::GraphCurve&, XYCurve*) const;
 

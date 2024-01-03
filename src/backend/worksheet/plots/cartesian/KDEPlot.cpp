@@ -27,10 +27,6 @@
 #include "backend/nsl/nsl_kde.h"
 #include "backend/nsl/nsl_sf_kernel.h"
 
-#include <gsl/gsl_cdf.h>
-#include <gsl/gsl_math.h>
-#include <gsl/gsl_statistics.h>
-
 #include <QMenu>
 #include <QPainter>
 
@@ -186,6 +182,24 @@ bool KDEPlot::hasData() const {
 	return (d->dataColumn != nullptr);
 }
 
+bool KDEPlot::usingColumn(const Column* column) const {
+	Q_D(const KDEPlot);
+	return (d->dataColumn == column);
+}
+
+void KDEPlot::updateColumnDependencies(const AbstractColumn* column) {
+	Q_D(KDEPlot);
+	const QString& columnPath = column->path();
+
+	if (d->dataColumn == column) // the column is the same and was just renamed -> update the column path
+		d->dataColumnPath = columnPath;
+	else if (d->dataColumnPath == columnPath) { // another column was renamed to the current path -> set and connect to the new column
+		setUndoAware(false);
+		setDataColumn(column);
+		setUndoAware(true);
+	}
+}
+
 QColor KDEPlot::color() const {
 	Q_D(const KDEPlot);
 	return d->estimationCurve->color();
@@ -255,11 +269,6 @@ void KDEPlot::dataColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 		d->dataColumn = nullptr;
 		d->retransform();
 	}
-}
-
-void KDEPlot::dataColumnNameChanged() {
-	Q_D(KDEPlot);
-	setDataColumnPath(d->dataColumn->path());
 }
 
 // ##############################################################################
@@ -542,7 +551,7 @@ void KDEPlot::loadThemeConfig(const KConfig& config) {
 }
 
 void KDEPlot::saveThemeConfig(const KConfig& config) {
-	Q_D(const KDEPlot);
+	// Q_D(const KDEPlot);
 	KConfigGroup group = config.group(QStringLiteral("KDEPlot"));
 	// TODO
 }
