@@ -1104,10 +1104,6 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 			plot->setIsLoading(true);
 		}
 
-		// TODO: if we skip, the curves are not loaded below and we cannot track the dependencies on columns
-		if (preview)
-			continue;
-
 		loadGraphLayer(layer, plot, layerIndex, textLabelPositions, preview);
 		++layerIndex;
 	}
@@ -1261,26 +1257,6 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 		break;
 	}
 
-	// axes
-	DEBUG(Q_FUNC_INFO << ", layer.curves.size() = " << layer.curves.size())
-	if (layer.curves.empty()) // no curves, just axes
-		loadAxes(layer, plot, layerIndex, QLatin1String("X Axis Title"), QLatin1String("Y Axis Title"));
-	else {
-		auto originCurve = layer.curves.at(0);
-		QString xColumnName = QString::fromLatin1(originCurve.xColumnName.c_str());
-		// TODO: "Partikelgrö"
-		DEBUG("	xColumnName = " << STDSTRING(xColumnName));
-		//				xColumnName.replace("%(?X,@LL)", );	// Long Name
-
-		QDEBUG("	UTF8 xColumnName = " << xColumnName.toUtf8());
-		QString yColumnName = QString::fromLatin1(originCurve.yColumnName.c_str());
-
-		loadAxes(layer, plot, layerIndex, xColumnName, yColumnName);
-	}
-
-	// range breaks
-	// TODO
-
 	// add legend if available
 	const auto& originLegend = layer.legend;
 	const QString& legendText = QString::fromLatin1(originLegend.text.c_str());
@@ -1347,6 +1323,13 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 			legend->background()->setFirstColor(Qt::white);
 	}
 
+	// curves
+	loadCurves(layer, plot, layerIndex, legendText, preview);
+
+	// reading of other properties is not relevant for the dependecy checks in the preview, skip them
+	if (preview)
+		return;
+
 	// texts
 	for (const auto& t : layer.texts) {
 		DEBUG("EXTRA TEXT = " << t.text.c_str());
@@ -1378,7 +1361,32 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 		// 				Attach attach;
 	}
 
-	// curves
+	// axes
+	DEBUG(Q_FUNC_INFO << ", layer.curves.size() = " << layer.curves.size())
+	if (layer.curves.empty()) // no curves, just axes
+		loadAxes(layer, plot, layerIndex, QLatin1String("X Axis Title"), QLatin1String("Y Axis Title"));
+	else {
+		auto originCurve = layer.curves.at(0);
+		QString xColumnName = QString::fromLatin1(originCurve.xColumnName.c_str());
+		// TODO: "Partikelgrö"
+		DEBUG("	xColumnName = " << STDSTRING(xColumnName));
+		//				xColumnName.replace("%(?X,@LL)", );	// Long Name
+
+		QDEBUG("	UTF8 xColumnName = " << xColumnName.toUtf8());
+		QString yColumnName = QString::fromLatin1(originCurve.yColumnName.c_str());
+
+		loadAxes(layer, plot, layerIndex, xColumnName, yColumnName);
+	}
+
+	// range breaks
+	// TODO
+}
+
+void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer,
+								   CartesianPlot* plot,
+								   int layerIndex,
+								   const QString& legendText,
+								   bool preview) {
 	int curveIndex = 1;
 	for (const auto& originCurve : layer.curves) {
 		QString data(QLatin1String(originCurve.dataName.c_str()));
