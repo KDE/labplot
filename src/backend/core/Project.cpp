@@ -686,7 +686,7 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 					} else if (reader->name() == QLatin1String("child_aspect")) {
 						if (!readChildAspectElement(reader, preview))
 							return false;
-					} else if (!preview && reader->name() == QLatin1String("state")) {
+					} else if (reader->name() == QLatin1String("state")) {
 						// load the state of the views (visible, maximized/minimized/geometry)
 						// and the state of the project explorer (expanded items, currently selected item).
 						//"state" is read at the very end of XML, restore the pointers here so the current index
@@ -695,8 +695,9 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 						// otherwise curves don't have column pointers assigned and therefore calculations
 						// in the docks might be wrong
 						stateAttributeFound = true;
-						restorePointers(this, preview);
-						retransformElements(this);
+						restorePointers(this);
+						if (!preview)
+							retransformElements(this);
 						Q_EMIT requestLoadState(reader);
 					} else {
 						if (!preview)
@@ -711,10 +712,11 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 	} else // no start document
 		reader->raiseError(i18n("no valid XML document found"));
 
-	if (!preview && !stateAttributeFound) {
+	if (!stateAttributeFound) {
 		// No state attribute available, means no project explorer reacted on the signal
-		restorePointers(this, preview);
-		retransformElements(this);
+		restorePointers(this);
+		if (!preview)
+			retransformElements(this);
 	}
 
 	Q_EMIT loaded();
@@ -813,7 +815,7 @@ void Project::retransformElements(AbstractAspect* aspect) {
  * and when an aspect is being pasted. In both cases we deserialized from XML and need
  * to restore the pointers.
  */
-void Project::restorePointers(AbstractAspect* aspect, bool preview) {
+void Project::restorePointers(AbstractAspect* aspect) {
 	// wait until all columns are decoded from base64-encoded data
 	QThreadPool::globalInstance()->waitForDone();
 
@@ -1113,9 +1115,6 @@ void Project::restorePointers(AbstractAspect* aspect, bool preview) {
 			}
 		}
 	}
-
-	if (preview)
-		return;
 }
 
 bool Project::readProjectAttributes(XmlStreamReader* reader) {

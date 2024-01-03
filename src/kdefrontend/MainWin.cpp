@@ -373,7 +373,7 @@ void MainWin::initGUI(const QString& fileName) {
 				load = LoadOnStart::NewProject;
 				group.writeEntry(QStringLiteral("LoadOnStart"), static_cast<int>(load));
 				group.writeEntry(QStringLiteral("NewProject"), static_cast<int>(NewProject::WithSpreadsheet));
-			} else if (oldLoad == 4) { //old "last project"
+			} else if (oldLoad == 4) { // old "last project"
 				load = LoadOnStart::LastProject;
 				group.writeEntry(QStringLiteral("LoadOnStart"), static_cast<int>(load));
 			} else if (oldLoad > 4 || oldLoad < 0) {

@@ -3186,7 +3186,7 @@ bool XYCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_QFONT(d->valuesFont);
 		} else if (!preview && reader->name() == QLatin1String("filling"))
 			d->background->load(reader, preview);
-		else if (!preview && reader->name() == QLatin1String("errorBars")) {
+		else if (reader->name() == QLatin1String("errorBars")) {
 			attribs = reader->attributes();
 
 			READ_INT_VALUE("xErrorType", xErrorType, ErrorType);
