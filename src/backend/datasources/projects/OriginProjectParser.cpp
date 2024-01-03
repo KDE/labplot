@@ -1382,11 +1382,7 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 	// TODO
 }
 
-void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer,
-								   CartesianPlot* plot,
-								   int layerIndex,
-								   const QString& legendText,
-								   bool preview) {
+void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianPlot* plot, int layerIndex, const QString& legendText, bool preview) {
 	int curveIndex = 1;
 	for (const auto& originCurve : layer.curves) {
 		QString data(QLatin1String(originCurve.dataName.c_str()));
