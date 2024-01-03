@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-07-10 02:40+0000\n"
-"PO-Revision-Date: 2023-09-18 11:45+0200\n"
+"PO-Revision-Date: 2023-12-12 12:48+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -10906,7 +10906,7 @@ msgstr "Mostra les opcions"
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:148
 #, kde-format
 msgid "Live data source created in %1 seconds."
-msgstr "S'han creat les dades en viu d'origen en %1 segons."
+msgstr "S'ha creat l'origen de les dades en viu en %1 segons."
 
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:180
 #, kde-format
