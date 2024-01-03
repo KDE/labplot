@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-28 00:38+0000\n"
+"POT-Creation-Date: 2024-01-03 00:38+0000\n"
 "PO-Revision-Date: 2023-12-28 21:01+0100\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -6798,7 +6798,7 @@ msgstr "%1: ställ in bild"
 msgid "%1: embed image"
 msgstr "%1: inbädda bild"
 
-#: src/backend/worksheet/Image.cpp:151 src/backend/worksheet/TextLabel.cpp:366
+#: src/backend/worksheet/Image.cpp:151 src/backend/worksheet/TextLabel.cpp:362
 #, kde-format
 msgid "%1: set border opacity"
 msgstr "%1: ställ in ogenomskinlighet för kant"
@@ -7951,7 +7951,7 @@ msgid "%1: set font"
 msgstr "%1: ställ in teckensnitt"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:213
-#: src/backend/worksheet/TextLabel.cpp:344
+#: src/backend/worksheet/TextLabel.cpp:340
 #, kde-format
 msgid "%1: set font color"
 msgstr "%1: ställ in teckensnittsfärg"
@@ -8838,35 +8838,36 @@ msgstr "%1: kanttyp ändrad"
 msgid "%1: set plot area corner radius"
 msgstr "%1: ställ in diagramområdets hörnradie"
 
-#: src/backend/worksheet/TextLabel.cpp:263
-#: src/backend/worksheet/TextLabel.cpp:307
+#: src/backend/worksheet/TextLabel.cpp:262
+#: src/backend/worksheet/TextLabel.cpp:299
 #, kde-format
 msgid "%1: set background color"
 msgstr "%1: ställ in bakgrundsfärg"
 
+#: src/backend/worksheet/TextLabel.cpp:290
 #: src/backend/worksheet/TextLabel.cpp:298
-#: src/backend/worksheet/TextLabel.cpp:306
+#: src/backend/worksheet/TextLabel.cpp:302
 #: src/backend/worksheet/TextLabel.cpp:309
 #, kde-format
 msgid "%1: set label text"
 msgstr "%1: ställ in beteckningstext"
 
-#: src/backend/worksheet/TextLabel.cpp:330
+#: src/backend/worksheet/TextLabel.cpp:326
 #, kde-format
 msgid "%1: set label placeholdertext"
 msgstr "%1: ställ in platsmarkörtext"
 
-#: src/backend/worksheet/TextLabel.cpp:337
+#: src/backend/worksheet/TextLabel.cpp:333
 #, kde-format
 msgid "%1: set TeX main font"
 msgstr "%1: ställ in Tex-huvudteckensnitt"
 
-#: src/backend/worksheet/TextLabel.cpp:352
+#: src/backend/worksheet/TextLabel.cpp:348
 #, kde-format
 msgid "%1: set border shape"
 msgstr "%1: ställ in kantform"
 
-#: src/backend/worksheet/TextLabel.cpp:359
+#: src/backend/worksheet/TextLabel.cpp:355
 #, kde-format
 msgid "%1: set border"
 msgstr "%1: ställ in kant"
@@ -22411,14 +22412,14 @@ msgstr ""
 "installation av Latex krävs</li><li>Markdown - textinställning som använder "
 "markörspråket Markdown</li></ul>"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:858
-#: src/kdefrontend/widgets/LabelWidget.cpp:884
+#: src/kdefrontend/widgets/LabelWidget.cpp:863
+#: src/kdefrontend/widgets/LabelWidget.cpp:889
 #, kde-format
 msgid "Date"
 msgstr "Datum"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:866
-#: src/kdefrontend/widgets/LabelWidget.cpp:892
+#: src/kdefrontend/widgets/LabelWidget.cpp:871
+#: src/kdefrontend/widgets/LabelWidget.cpp:897
 #, kde-format
 msgid "Date and Time"
 msgstr "Datum och tid"

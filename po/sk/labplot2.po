@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-28 00:38+0000\n"
+"POT-Creation-Date: 2024-01-03 00:38+0000\n"
 "PO-Revision-Date: 2019-07-11 18:46+0200\n"
 "Last-Translator: Matej Mrenica <matejm98mthw@gmail.com>\n"
 "Language-Team: Slovak <kde-i18n-doc@kde.org>\n"
@@ -7185,7 +7185,7 @@ msgstr "%1: nastaviť písmo"
 msgid "%1: embed image"
 msgstr "%1: nastaviť písmo"
 
-#: src/backend/worksheet/Image.cpp:151 src/backend/worksheet/TextLabel.cpp:366
+#: src/backend/worksheet/Image.cpp:151 src/backend/worksheet/TextLabel.cpp:362
 #, kde-format
 msgid "%1: set border opacity"
 msgstr ""
@@ -8458,7 +8458,7 @@ msgid "%1: set font"
 msgstr "%1: nastaviť písmo"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:213
-#: src/backend/worksheet/TextLabel.cpp:344
+#: src/backend/worksheet/TextLabel.cpp:340
 #, kde-format
 msgid "%1: set font color"
 msgstr ""
@@ -9410,39 +9410,40 @@ msgstr "%1    [zmenené]"
 msgid "%1: set plot area corner radius"
 msgstr ""
 
-#: src/backend/worksheet/TextLabel.cpp:263
-#: src/backend/worksheet/TextLabel.cpp:307
+#: src/backend/worksheet/TextLabel.cpp:262
+#: src/backend/worksheet/TextLabel.cpp:299
 #, fuzzy, kde-format
 #| msgid "%1: set background image"
 msgid "%1: set background color"
 msgstr "Nastaviť farbu &pozadia..."
 
+#: src/backend/worksheet/TextLabel.cpp:290
 #: src/backend/worksheet/TextLabel.cpp:298
-#: src/backend/worksheet/TextLabel.cpp:306
+#: src/backend/worksheet/TextLabel.cpp:302
 #: src/backend/worksheet/TextLabel.cpp:309
 #, kde-format
 msgid "%1: set label text"
 msgstr ""
 
-#: src/backend/worksheet/TextLabel.cpp:330
+#: src/backend/worksheet/TextLabel.cpp:326
 #, fuzzy, kde-format
 #| msgid "%1: set background image"
 msgid "%1: set label placeholdertext"
 msgstr "%1: nastaviť obrázok pozadia"
 
-#: src/backend/worksheet/TextLabel.cpp:337
+#: src/backend/worksheet/TextLabel.cpp:333
 #, fuzzy, kde-format
 #| msgid "%1: set font"
 msgid "%1: set TeX main font"
 msgstr "%1: nastaviť písmo"
 
-#: src/backend/worksheet/TextLabel.cpp:352
+#: src/backend/worksheet/TextLabel.cpp:348
 #, fuzzy, kde-format
 #| msgid "%1: set layout"
 msgid "%1: set border shape"
 msgstr "%1: nastaviť rozloženie"
 
-#: src/backend/worksheet/TextLabel.cpp:359
+#: src/backend/worksheet/TextLabel.cpp:355
 #, fuzzy, kde-format
 #| msgid "%1: set font"
 msgid "%1: set border"
@@ -23634,14 +23635,14 @@ msgid ""
 "li><li>Markdown - text setting using Markdown markup language</li></ul>"
 msgstr ""
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:858
-#: src/kdefrontend/widgets/LabelWidget.cpp:884
+#: src/kdefrontend/widgets/LabelWidget.cpp:863
+#: src/kdefrontend/widgets/LabelWidget.cpp:889
 #, kde-format
 msgid "Date"
 msgstr "Dátum"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:866
-#: src/kdefrontend/widgets/LabelWidget.cpp:892
+#: src/kdefrontend/widgets/LabelWidget.cpp:871
+#: src/kdefrontend/widgets/LabelWidget.cpp:897
 #, kde-format
 msgid "Date and Time"
 msgstr "Dátum a čas"

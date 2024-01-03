@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-28 00:38+0000\n"
+"POT-Creation-Date: 2024-01-03 00:38+0000\n"
 "PO-Revision-Date: 2023-12-30 07:05+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
@@ -6785,7 +6785,7 @@ msgstr "%1: agordi bildon"
 msgid "%1: embed image"
 msgstr "%1: enigi bildon"
 
-#: src/backend/worksheet/Image.cpp:151 src/backend/worksheet/TextLabel.cpp:366
+#: src/backend/worksheet/Image.cpp:151 src/backend/worksheet/TextLabel.cpp:362
 #, kde-format
 msgid "%1: set border opacity"
 msgstr "%1: agordi bordan opakecon"
@@ -7938,7 +7938,7 @@ msgid "%1: set font"
 msgstr "%1: agordi tiparon"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:213
-#: src/backend/worksheet/TextLabel.cpp:344
+#: src/backend/worksheet/TextLabel.cpp:340
 #, kde-format
 msgid "%1: set font color"
 msgstr "%1: agordi tiparkoloron"
@@ -8825,35 +8825,36 @@ msgstr "%1: limtipo ŝanĝiĝis"
 msgid "%1: set plot area corner radius"
 msgstr "%1: agordi la angulon de la grafika areo"
 
-#: src/backend/worksheet/TextLabel.cpp:263
-#: src/backend/worksheet/TextLabel.cpp:307
+#: src/backend/worksheet/TextLabel.cpp:262
+#: src/backend/worksheet/TextLabel.cpp:299
 #, kde-format
 msgid "%1: set background color"
 msgstr "%1: agordi fonkoloron"
 
+#: src/backend/worksheet/TextLabel.cpp:290
 #: src/backend/worksheet/TextLabel.cpp:298
-#: src/backend/worksheet/TextLabel.cpp:306
+#: src/backend/worksheet/TextLabel.cpp:302
 #: src/backend/worksheet/TextLabel.cpp:309
 #, kde-format
 msgid "%1: set label text"
 msgstr "%1: agordi etikedtekston"
 
-#: src/backend/worksheet/TextLabel.cpp:330
+#: src/backend/worksheet/TextLabel.cpp:326
 #, kde-format
 msgid "%1: set label placeholdertext"
 msgstr "%1: agordi etikedan lokokupilontekston"
 
-#: src/backend/worksheet/TextLabel.cpp:337
+#: src/backend/worksheet/TextLabel.cpp:333
 #, kde-format
 msgid "%1: set TeX main font"
 msgstr "%1: agordi la ĉefan tiparon TeX"
 
-#: src/backend/worksheet/TextLabel.cpp:352
+#: src/backend/worksheet/TextLabel.cpp:348
 #, kde-format
 msgid "%1: set border shape"
 msgstr "%1: starigis randformon"
 
-#: src/backend/worksheet/TextLabel.cpp:359
+#: src/backend/worksheet/TextLabel.cpp:355
 #, kde-format
 msgid "%1: set border"
 msgstr "%1: starigis randon"
@@ -22390,14 +22391,14 @@ msgstr ""
 "li><li>LaTeX - teksta agordo per LaTeX, necesas instalo de LaTeX</"
 "li><li>Markdown - teksta agordo per Markdown marka lingvo</li></ul>"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:858
-#: src/kdefrontend/widgets/LabelWidget.cpp:884
+#: src/kdefrontend/widgets/LabelWidget.cpp:863
+#: src/kdefrontend/widgets/LabelWidget.cpp:889
 #, kde-format
 msgid "Date"
 msgstr "Dato"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:866
-#: src/kdefrontend/widgets/LabelWidget.cpp:892
+#: src/kdefrontend/widgets/LabelWidget.cpp:871
+#: src/kdefrontend/widgets/LabelWidget.cpp:897
 #, kde-format
 msgid "Date and Time"
 msgstr "Dato kaj Tempo"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-28 00:38+0000\n"
+"POT-Creation-Date: 2024-01-03 00:38+0000\n"
 "PO-Revision-Date: 2017-04-20 14:04+0200\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -6959,7 +6959,7 @@ msgstr "%1: ορισμός τύπου"
 msgid "%1: embed image"
 msgstr "%1: ορισμός τύπου"
 
-#: src/backend/worksheet/Image.cpp:151 src/backend/worksheet/TextLabel.cpp:366
+#: src/backend/worksheet/Image.cpp:151 src/backend/worksheet/TextLabel.cpp:362
 #, kde-format
 msgid "%1: set border opacity"
 msgstr ""
@@ -8218,7 +8218,7 @@ msgid "%1: set font"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:213
-#: src/backend/worksheet/TextLabel.cpp:344
+#: src/backend/worksheet/TextLabel.cpp:340
 #, kde-format
 msgid "%1: set font color"
 msgstr ""
@@ -9149,38 +9149,39 @@ msgstr "%1: αλλαγή τύπου στήλης"
 msgid "%1: set plot area corner radius"
 msgstr ""
 
-#: src/backend/worksheet/TextLabel.cpp:263
-#: src/backend/worksheet/TextLabel.cpp:307
+#: src/backend/worksheet/TextLabel.cpp:262
+#: src/backend/worksheet/TextLabel.cpp:299
 #, fuzzy, kde-format
 #| msgid "Background Color"
 msgid "%1: set background color"
 msgstr "Χρώμα παρασκηνίου"
 
+#: src/backend/worksheet/TextLabel.cpp:290
 #: src/backend/worksheet/TextLabel.cpp:298
-#: src/backend/worksheet/TextLabel.cpp:306
+#: src/backend/worksheet/TextLabel.cpp:302
 #: src/backend/worksheet/TextLabel.cpp:309
 #, kde-format
 msgid "%1: set label text"
 msgstr ""
 
-#: src/backend/worksheet/TextLabel.cpp:330
+#: src/backend/worksheet/TextLabel.cpp:326
 #, fuzzy, kde-format
 #| msgid "Background Color"
 msgid "%1: set label placeholdertext"
 msgstr "Χρώμα παρασκηνίου"
 
-#: src/backend/worksheet/TextLabel.cpp:337
+#: src/backend/worksheet/TextLabel.cpp:333
 #, kde-format
 msgid "%1: set TeX main font"
 msgstr ""
 
-#: src/backend/worksheet/TextLabel.cpp:352
+#: src/backend/worksheet/TextLabel.cpp:348
 #, fuzzy, kde-format
 #| msgid "%1: change column type"
 msgid "%1: set border shape"
 msgstr "%1: αλλαγή τύπου στήλης"
 
-#: src/backend/worksheet/TextLabel.cpp:359
+#: src/backend/worksheet/TextLabel.cpp:355
 #, fuzzy, kde-format
 #| msgid "%1: set formula"
 msgid "%1: set border"
@@ -23315,14 +23316,14 @@ msgid ""
 "li><li>Markdown - text setting using Markdown markup language</li></ul>"
 msgstr ""
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:858
-#: src/kdefrontend/widgets/LabelWidget.cpp:884
+#: src/kdefrontend/widgets/LabelWidget.cpp:863
+#: src/kdefrontend/widgets/LabelWidget.cpp:889
 #, kde-format
 msgid "Date"
 msgstr ""
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:866
-#: src/kdefrontend/widgets/LabelWidget.cpp:892
+#: src/kdefrontend/widgets/LabelWidget.cpp:871
+#: src/kdefrontend/widgets/LabelWidget.cpp:897
 #, kde-format
 msgid "Date and Time"
 msgstr ""
