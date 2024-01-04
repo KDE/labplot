@@ -190,7 +190,6 @@ void BoxPlot::init() {
 	Returns an icon to be used in the project explorer.
 */
 QIcon BoxPlot::icon() const {
-	// 	return QIcon::fromTheme(QLatin1String("draw-line"));
 	return BoxPlot::staticIcon();
 }
 

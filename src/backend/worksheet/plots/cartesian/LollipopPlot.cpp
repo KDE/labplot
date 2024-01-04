@@ -19,6 +19,7 @@
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "backend/worksheet/plots/cartesian/Value.h"
+#include "kdefrontend/GuiTools.h"
 #include "tools/ImageTools.h"
 
 #include <KConfig>
@@ -68,7 +69,28 @@ void LollipopPlot::init() {
 	Returns an icon to be used in the project explorer.
 */
 QIcon LollipopPlot::icon() const {
-	return QIcon::fromTheme(QStringLiteral("office-chart-bar"));
+	return LollipopPlot::staticIcon();
+}
+
+QIcon LollipopPlot::staticIcon() {
+	QPainter pa;
+	pa.setRenderHint(QPainter::Antialiasing);
+	int iconSize = 20;
+	QPixmap pm(iconSize, iconSize);
+
+	QPen pen(Qt::SolidLine);
+	pen.setColor(GuiTools::isDarkMode() ? Qt::white : Qt::black);
+	pen.setWidthF(0.0);
+
+	pm.fill(Qt::transparent);
+	pa.begin(&pm);
+	pa.setPen(pen);
+	pa.setBrush(pen.color());
+	pa.drawLine(10, 6, 10, 14);
+	pa.drawEllipse(8, 4, 4, 4);
+	pa.end();
+
+	return {pm};
 }
 
 void LollipopPlot::initActions() {

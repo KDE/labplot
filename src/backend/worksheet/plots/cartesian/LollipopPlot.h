@@ -32,6 +32,7 @@ public:
 	~LollipopPlot() override;
 
 	QIcon icon() const override;
+	static QIcon staticIcon();
 	QMenu* createContextMenu() override;
 
 	void save(QXmlStreamWriter*) const override;

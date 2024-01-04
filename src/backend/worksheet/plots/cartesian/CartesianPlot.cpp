@@ -411,7 +411,7 @@ void CartesianPlot::initActions() {
 
 	// bar plots
 	addBarPlotAction = new QAction(QIcon::fromTheme(QStringLiteral("office-chart-bar")), i18n("Bar Plot"), this);
-	addLollipopPlotAction = new QAction(QIcon::fromTheme(QStringLiteral("office-chart-bar")), i18n("Lollipop Plot"), this);
+	addLollipopPlotAction = new QAction(LollipopPlot::staticIcon(), i18n("Lollipop Plot"), this);
 
 	// analysis curves, no icons yet
 	addDataReductionCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Data Reduction"), this);
