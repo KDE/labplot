@@ -297,6 +297,7 @@ void LollipopPlot::setDataColumns(const QVector<const AbstractColumn*> columns) 
 			// TODO: add disconnect in the undo-function
 
 			connect(column, &AbstractColumn::dataChanged, this, &LollipopPlot::dataChanged);
+			connect(column, &AbstractAspect::aspectDescriptionChanged, this, &Plot::appearanceChanged);
 		}
 	}
 }

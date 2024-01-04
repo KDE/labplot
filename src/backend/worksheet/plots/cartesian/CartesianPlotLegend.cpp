@@ -374,7 +374,6 @@ void CartesianPlotLegendPrivate::retransform() {
 			continue;
 		}
 
-
 		m_plots << plot;
 		m_names << plot->name();
 		continue;
@@ -773,7 +772,7 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 				painter->setPen(line->pen());
 				painter->setOpacity(line->opacity());
 				painter->setBrush(Qt::NoBrush);
-				painter->drawLine(lineSymbolWidth / 2, h * 0.25 , lineSymbolWidth / 2, h);
+				painter->drawLine(lineSymbolWidth / 2, h * 0.25, lineSymbolWidth / 2, h);
 
 				// draw the symbol
 				const auto* symbol = lollipopPlot->symbolAt(index);
@@ -834,7 +833,7 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 				painter->setBrush(symbol->brush());
 				painter->setPen(symbol->pen());
 
-				QPainterPath path = Symbol::stylePath(symbol->style());
+				auto path = Symbol::stylePath(symbol->style());
 				QTransform trafo;
 				trafo.scale(symbol->size(), symbol->size());
 				path = trafo.map(path);
