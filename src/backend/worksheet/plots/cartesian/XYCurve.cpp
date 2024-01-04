@@ -238,9 +238,6 @@ QIcon XYCurve::icon() const {
 // ##############################################################################
 // ##########################  getter methods  ##################################
 // ##############################################################################
-//  general
-BASIC_SHARED_D_READER_IMPL(XYCurve, bool, legendVisible, legendVisible)
-
 // data source
 const AbstractColumn* XYCurve::column(const Dimension dim) const {
 	switch (dim) {
@@ -442,13 +439,6 @@ void XYCurve::setXColumnPath(const QString& path) {
 void XYCurve::setYColumnPath(const QString& path) {
 	Q_D(XYCurve);
 	d->yColumnPath = path;
-}
-
-STD_SETTER_CMD_IMPL_S(XYCurve, SetLegendVisible, bool, legendVisible)
-void XYCurve::setLegendVisible(bool visible) {
-	Q_D(XYCurve);
-	if (visible != d->legendVisible)
-		exec(new XYCurveSetLegendVisibleCmd(d, visible, ki18n("%1: legend visibility changed")));
 }
 
 // Line

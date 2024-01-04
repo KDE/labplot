@@ -13,7 +13,6 @@
 #include "Plot.h"
 #include "backend/nsl/nsl_kde.h"
 #include "backend/nsl/nsl_sf_kernel.h"
-#include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 
 class AbstractColumn;
 class KDEPlotPrivate;

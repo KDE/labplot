@@ -10,12 +10,11 @@
 #ifndef BOXPLOT_H
 #define BOXPLOT_H
 
-#include "backend/lib/macros.h"
 #include "backend/worksheet/plots/cartesian/Plot.h"
 
-class BoxPlotPrivate;
 class AbstractColumn;
 class Background;
+class BoxPlotPrivate;
 class Line;
 class Symbol;
 

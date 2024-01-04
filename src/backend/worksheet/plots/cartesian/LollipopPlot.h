@@ -10,12 +10,11 @@
 #ifndef LOLLIPOPPLOT_H
 #define LOLLIPOPPLOT_H
 
-#include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/Plot.h"
 
-class LollipopPlotPrivate;
 class AbstractColumn;
 class Line;
+class LollipopPlotPrivate;
 class Symbol;
 class Value;
 
@@ -89,10 +88,6 @@ Q_SIGNALS:
 	void xColumnChanged(const AbstractColumn*);
 	void dataColumnsChanged(const QVector<const AbstractColumn*>&);
 	void orientationChanged(LollipopPlot::Orientation);
-
-	// box border
-	// void borderPenChanged(QPen&);
-	// void borderOpacityChanged(float);
 };
 
 #endif

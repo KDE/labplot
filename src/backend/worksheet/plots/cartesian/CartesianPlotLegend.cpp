@@ -339,13 +339,8 @@ void CartesianPlotLegendPrivate::retransform() {
 
 	const auto& plots = this->plot->children<Plot>();
 	for (auto* plot : plots) {
-		if (!plot->isVisible())
+		if (!plot->isVisible() || !plot->legendVisible())
 			continue;
-
-		// TODO: implement the property "legendVisible" for all plot types and make use of it here
-		auto* curve = dynamic_cast<XYCurve*>(plot);
-		if (curve && !curve->legendVisible())
-			return;
 
 		auto* boxPlot = dynamic_cast<BoxPlot*>(plot);
 		if (boxPlot) {

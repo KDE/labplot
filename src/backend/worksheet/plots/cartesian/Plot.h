@@ -10,6 +10,7 @@
 #ifndef PLOT_H
 #define PLOT_H
 
+#include "backend/lib/macros.h"
 #include "backend/worksheet/WorksheetElement.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 
@@ -24,6 +25,7 @@ class Plot : public WorksheetElement {
 public:
 	virtual ~Plot();
 
+	BASIC_D_ACCESSOR_DECL(bool, legendVisible, LegendVisible)
 	virtual bool minMax(const CartesianCoordinateSystem::Dimension dim, const Range<int>& indexRange, Range<double>& r, bool includeErrorBars = true) const;
 	virtual double minimum(CartesianCoordinateSystem::Dimension dim) const = 0;
 	virtual double maximum(CartesianCoordinateSystem::Dimension dim) const = 0;
@@ -58,6 +60,7 @@ protected:
 Q_SIGNALS:
 	void dataChanged(); // emitted when the data to be plotted was changed to re-adjust the parent plot area
 	void appearanceChanged();
+	void legendVisibleChanged(bool);
 };
 
 #endif

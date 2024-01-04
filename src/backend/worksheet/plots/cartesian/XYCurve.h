@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : A xy-curve
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2010-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2010-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2013-2020 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -12,12 +12,7 @@
 #define XYCURVE_H
 
 #include "Plot.h"
-#include "backend/lib/Range.h"
-#include "backend/lib/macros.h"
-#include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
-
 #include <QFont>
-#include <QPen>
 
 class AbstractColumn;
 class Background;
@@ -86,7 +81,6 @@ public:
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, yColumn, YColumn)
 	CLASS_D_ACCESSOR_DECL(QString, xColumnPath, XColumnPath)
 	CLASS_D_ACCESSOR_DECL(QString, yColumnPath, YColumnPath)
-	BASIC_D_ACCESSOR_DECL(bool, legendVisible, LegendVisible)
 
 	BASIC_D_ACCESSOR_DECL(LineType, lineType, LineType)
 	BASIC_D_ACCESSOR_DECL(bool, lineSkipGaps, LineSkipGaps)
@@ -194,7 +188,6 @@ Q_SIGNALS:
 	void yErrorPlusDataChanged();
 	void yErrorMinusDataChanged();
 	void valuesDataChanged();
-	void legendVisibleChanged(bool);
 	void selected(double pos);
 
 	void xColumnChanged(const AbstractColumn*);
