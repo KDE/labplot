@@ -388,6 +388,7 @@ void LollipopPlotPrivate::addValue(const KConfigGroup& group) {
 	value = new Value(QString());
 	q->addChild(value);
 	value->setHidden(true);
+	value->setcenterPositionAvailable(true);
 	if (!q->isLoading())
 		value->init(group);
 
@@ -609,6 +610,7 @@ void LollipopPlotPrivate::verticalPlot(int columnIndex) {
 		x += (width + barGap) * columnIndex; // translate to the beginning of the bar within the current group
 
 		symbolPoints << QPointF(x + width / 2, value);
+		m_valuesPointsLogical << QPointF(x + width / 2, value);
 		barLines << QLineF(x + width / 2, 0, x + width / 2, value);
 		++valueIndex;
 	}
