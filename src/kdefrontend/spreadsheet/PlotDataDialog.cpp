@@ -228,7 +228,7 @@ void PlotDataDialog::fillMenu(QMenu* menu, QActionGroup* group) {
 	action->setData(static_cast<int>(PlotDataDialog::PlotType::BarPlot));
 	addNewBarPlotsMenu->addAction(action);
 
-	action = new QAction(QIcon::fromTheme(QStringLiteral("office-chart-bar")), i18n("Lollipop Plot"), group);
+	action = new QAction(LollipopPlot::staticIcon(), i18n("Lollipop Plot"), group);
 	action->setData(static_cast<int>(PlotDataDialog::PlotType::LollipopPlot));
 	addNewBarPlotsMenu->addAction(action);
 	menu->addMenu(addNewBarPlotsMenu);

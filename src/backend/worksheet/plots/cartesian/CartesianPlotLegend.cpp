@@ -29,6 +29,7 @@
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegendPrivate.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
 #include "backend/worksheet/plots/cartesian/KDEPlot.h"
+#include "backend/worksheet/plots/cartesian/LollipopPlot.h"
 #include "backend/worksheet/plots/cartesian/QQPlot.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
@@ -342,6 +343,7 @@ void CartesianPlotLegendPrivate::retransform() {
 		if (!plot->isVisible() || !plot->legendVisible())
 			continue;
 
+		// add the names for plot types which can show multiple datasets
 		auto* boxPlot = dynamic_cast<BoxPlot*>(plot);
 		if (boxPlot) {
 			m_plots << boxPlot;
@@ -361,6 +363,17 @@ void CartesianPlotLegendPrivate::retransform() {
 
 			continue;
 		}
+
+		auto* lollipopPlot = dynamic_cast<LollipopPlot*>(plot);
+		if (lollipopPlot) {
+			m_plots << lollipopPlot;
+			const auto& columns = lollipopPlot->dataColumns();
+			for (auto* column : columns)
+				m_names << column->name();
+
+			continue;
+		}
+
 
 		m_plots << plot;
 		m_names << plot->name();
@@ -561,10 +574,12 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 	int row = 0;
 	for (auto* plot : m_plots) {
 		// process the curves
+		// TODO: move the logic below into the plot classes
 		const auto* curve = dynamic_cast<const XYCurve*>(plot);
 		const auto* hist = dynamic_cast<const Histogram*>(plot);
 		const auto* boxPlot = dynamic_cast<const BoxPlot*>(plot);
 		const auto* barPlot = dynamic_cast<const BarPlot*>(plot);
+		const auto* lollipopPlot = dynamic_cast<const LollipopPlot*>(plot);
 		const auto* kdePlot = dynamic_cast<const KDEPlot*>(plot);
 		const auto* qqPlot = dynamic_cast<const QQPlot*>(plot);
 
@@ -637,7 +652,7 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 				painter->setBrush(symbol->brush());
 				painter->setPen(symbol->pen());
 
-				QPainterPath path = Symbol::stylePath(symbol->style());
+				auto path = Symbol::stylePath(symbol->style());
 				QTransform trafo;
 				trafo.scale(symbol->size(), symbol->size());
 				path = trafo.map(path);
@@ -721,7 +736,7 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 				if (!translatePainter(painter, row, col, h))
 					break;
 			}
-		} else if (barPlot) { // draw a legend item for every dataset bar in the bar plot
+		} else if (barPlot) { // draw a legend item for every dataset in the bar plot
 			const auto& columns = barPlot->dataColumns();
 			int index = 0;
 			for (auto* column : columns) {
@@ -740,6 +755,48 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 				painter->translate(QPointF(lineSymbolWidth / 2, h / 2));
 				painter->drawRect(QRectF(-h * 0.25, -h / 2, h * 0.5, h));
 				painter->translate(-QPointF(lineSymbolWidth / 2, h / 2));
+
+				// draw the name text
+				painter->setPen(QPen(labelColor));
+				painter->setOpacity(1.0);
+				painter->drawText(QPoint(lineSymbolWidth + layoutHorizontalSpacing, h), column->name());
+				++index;
+				if (!translatePainter(painter, row, col, h))
+					break;
+			}
+		} else if (lollipopPlot) { // draw a legend item for every dataset in the lollipop plot
+			const auto& columns = lollipopPlot->dataColumns();
+			int index = 0;
+			for (auto* column : columns) {
+				// draw the line
+				auto* line = lollipopPlot->lineAt(index);
+				painter->setPen(line->pen());
+				painter->setOpacity(line->opacity());
+				painter->setBrush(Qt::NoBrush);
+				painter->drawLine(lineSymbolWidth / 2, h * 0.25 , lineSymbolWidth / 2, h);
+
+				// draw the symbol
+				const auto* symbol = lollipopPlot->symbolAt(index);
+				if (symbol->style() != Symbol::Style::NoSymbols) {
+					painter->setOpacity(symbol->opacity());
+					painter->setBrush(symbol->brush());
+					painter->setPen(symbol->pen());
+
+					auto path = Symbol::stylePath(symbol->style());
+					QTransform trafo;
+					trafo.scale(symbol->size(), symbol->size());
+					path = trafo.map(path);
+
+					if (symbol->rotationAngle() != 0) {
+						trafo.reset();
+						trafo.rotate(symbol->rotationAngle());
+						path = trafo.map(path);
+					}
+
+					painter->translate(QPointF(lineSymbolWidth / 2, h * 0.25));
+					painter->drawPath(path);
+					painter->translate(-QPointF(lineSymbolWidth / 2, h * 0.25));
+				}
 
 				// draw the name text
 				painter->setPen(QPen(labelColor));

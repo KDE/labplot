@@ -48,7 +48,7 @@ bool Plot::activatePlot(QPointF mouseScenePos, double maxDist) {
 	return d->activatePlot(mouseScenePos, maxDist);
 }
 
-//  general
+// general
 BASIC_SHARED_D_READER_IMPL(Plot, bool, legendVisible, legendVisible)
 
 STD_SETTER_CMD_IMPL_S(Plot, SetLegendVisible, bool, legendVisible)
