@@ -246,7 +246,7 @@ QString AbstractAspect::comment() const {
 QPixmap AbstractAspect::sparkLine() const {
 	if (d->q->m_type == AspectType::Column) {
 		const Column* col = dynamic_cast<Column*>(d->q);
-		if (col->hasValues() && col->isPlottable()) {
+		if (col->hasValues()) {
 			return ProjectExplorer::showSparkLines(col);
 		}
 	}

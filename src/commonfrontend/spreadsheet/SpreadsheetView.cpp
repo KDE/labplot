@@ -205,7 +205,7 @@ void SpreadsheetView::init() {
 	setFocus();
 	installEventFilter(this);
 	showComments(false);
-	showSparkLines(false);
+	// showSparkLines(false);
 
 	connect(m_model, &SpreadsheetModel::headerDataChanged, this, &SpreadsheetView::updateHeaderGeometry);
 	connect(m_model, &SpreadsheetModel::headerDataChanged, this, &SpreadsheetView::handleHeaderDataChanged);

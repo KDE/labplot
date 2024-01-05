@@ -155,7 +155,8 @@ void SpreadsheetHeaderView::paintSection(QPainter* painter, const QRect& rect, i
 			painter->resetTransform(); // Reset any transformations
 			painter->setClipping(false); // Disable clipping
 
-			painter->drawPixmap(slave2_rect, pixmap.scaled(slave2_rect.size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+			if (pixmap.size().isValid())
+				painter->drawPixmap(slave2_rect, pixmap.scaled(slave2_rect.size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
 		}
 		if (m_showComments && rect.height() > QHeaderView::sizeHint().height()) {
 			QRect slave_rect = rect.adjusted(0, m_sparkLineSlave->sizeHint().height() + QHeaderView::sizeHint().height(), 0, 0);
@@ -177,14 +178,15 @@ void SpreadsheetHeaderView::paintSection(QPainter* painter, const QRect& rect, i
 		if (m_showSparkLines) {
 			master_rect = rect.adjusted(0, 0, 0, -m_sparkLineSlave->sizeHint().height());
 			QHeaderView::paintSection(painter, master_rect, logicalIndex);
-			if (m_showSparkLines) {
-				QRect slave_rect = rect.adjusted(0, QHeaderView::sizeHint().height(), 0, 0);
 
-				painter->resetTransform(); // Reset any transformations
-				painter->setClipping(false); // Disable clipping
+			QRect slave_rect = rect.adjusted(0, QHeaderView::sizeHint().height(), 0, 0);
+			DEBUG(Q_FUNC_INFO << pixmap.size().height() << " Height")
 
-				painter->drawPixmap(slave_rect, pixmap.scaled(slave_rect.size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
-			}
+			painter->resetTransform(); // Reset any transformations
+			painter->setClipping(false); // Disable clipping
+
+			painter->drawPixmap(slave_rect, pixmap.scaled(slave_rect.size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+
 			return;
 		}
 	}

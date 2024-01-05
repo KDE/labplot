@@ -47,9 +47,7 @@ public:
 	AbstractAspect* currentAspect() const;
 	void search();
 	// show sparkLine of respective column
-        // show sparkLine of respective column
-        static QPixmap showSparkLines(const Column*);
-
+	static QPixmap showSparkLines(const Column*);
 
 private:
 	void createActions();
