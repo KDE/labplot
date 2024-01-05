@@ -21,21 +21,24 @@ include:
 #      - /gitlab-templates/craft-appimage.yml
 # fails for analitza (20240105)
 #      - /gitlab-templates/craft-appimage-qt6.yml
-      - /gitlab-templates/craft-windows-x86-64.yml
+# fails uploading the sideload.appx for signing (20240105)
+#      - /gitlab-templates/craft-windows-x86-64.yml
+#      - /gitlab-templates/craft-windows-appx-qt5.yml
 # fails for analitza (20240105)
 #      - /gitlab-templates/craft-windows-x86-64-qt6.yml
-      - /gitlab-templates/craft-windows-appx-qt5.yml
 #      - /gitlab-templates/craft-windows-appx-qt6.yml
 # fails due to PSAPI NOTFOUND
 #      - /gitlab-templates/craft-windows-mingw64.yml
 # fails for analitza (20240105)
 #      - /gitlab-templates/craft-windows-mingw64-qt6.yml
-#? fails due to python error: Bad CPU type in executable
-      - /gitlab-templates/craft-macos-x86-64.yml
-      - /gitlab-templates/craft-macos-x86-64-qt6.yml
-#? fails because cantor needs Qt5WebEngine:
-      - /gitlab-templates/craft-macos-arm64.yml
-      - /gitlab-templates/craft-macos-arm64-qt6.yml
+# fails because of cantor misses qt5webengine (20240105)
+#      - /gitlab-templates/craft-macos-x86-64.yml
+# fails for analitza (20240105)
+#      - /gitlab-templates/craft-macos-x86-64-qt6.yml
+# fails because of cantor (20240105)
+#      - /gitlab-templates/craft-macos-arm64.yml
+# fails for analitza (20240105)
+#      - /gitlab-templates/craft-macos-arm64-qt6.yml
 
 # needed for tests (use "ctest -V" for more output)
 #variables:
