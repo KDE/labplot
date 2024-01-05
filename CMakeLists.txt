@@ -310,7 +310,11 @@ ENDIF ()
 IF (WIN32)
 	add_definitions (-DHAVE_WINDOWS)
 	find_library (PSAPI Psapi)
-	message (STATUS "PSAPI: ${PSAPI}")
+	if (PSAPI)
+		message (STATUS "Found PSAPI: ${PSAPI}")
+	else ()
+		message (STATUS "PSAPI not found")
+	endif ()
 ENDIF ()
 
 ### GSL (required) ###############################
