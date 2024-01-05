@@ -16,6 +16,7 @@ include:
 # finds Qt5 but KF5 is not installed
 #      - /gitlab-templates/freebsd-qt6.yml
 ### DEPLOY
+# see below for flatpak variables
 #      - /gitlab-templates/flatpak.yml
 #      - /gitlab-templates/craft-appimage.yml
 # fails for analitza (20240105)
@@ -196,7 +197,7 @@ clang_format:
     git diff --exit-code
 
 # see above
-flatpak:
-  variables:
-    KDE_FLATPAK_MODULE_NAME: labplot2
-    KDE_FLATPAK_APP_ID: org.kde.${KDE_FLATPAK_MODULE_NAME}
+#flatpak:
+#  variables:
+#    KDE_FLATPAK_MODULE_NAME: labplot2
+#    KDE_FLATPAK_APP_ID: org.kde.${KDE_FLATPAK_MODULE_NAME}
