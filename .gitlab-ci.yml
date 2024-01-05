@@ -27,7 +27,8 @@ include:
 # fails for analitza (20240105)
 #      - /gitlab-templates/craft-windows-x86-64-qt6.yml
 #      - /gitlab-templates/craft-windows-appx-qt6.yml
-      - /gitlab-templates/craft-windows-mingw64.yml
+# fails linking tests due to undefined references to GSL functions
+#      - /gitlab-templates/craft-windows-mingw64.yml
 # fails for analitza (20240105)
 #      - /gitlab-templates/craft-windows-mingw64-qt6.yml
 # fails because of cantor misses qt5webengine (20240105)
