@@ -1,17 +1,17 @@
 # Translation of labplot2.po to Catalan (Valencian)
-# Copyright (C) 2015-2023 This_file_is_part_of_KDE
+# Copyright (C) 2015-2024 This_file_is_part_of_KDE
 # This file is distributed under the license LGPL version 2.1 or
 # version 3 or later versions approved by the membership of KDE e.V.
 #
 # SPDX-FileCopyrightText: 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Antoni Bella Pérez <antonibella5@yahoo.com>
-# Josep M. Ferrer <txemaq@gmail.com>, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023.
+# Josep M. Ferrer <txemaq@gmail.com>, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024.
 # Orestes Mas <orestes@tsc.upc.edu>, 2018.
 msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-01-05 00:38+0000\n"
-"PO-Revision-Date: 2023-12-28 08:04+0200\n"
+"PO-Revision-Date: 2024-01-04 08:48+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -563,10 +563,9 @@ msgid "Used in"
 msgstr "Utilitzat a"
 
 #: src/backend/core/column/Column.cpp:175
-#, fuzzy, kde-format
-#| msgid "Plot"
+#, kde-format
 msgid "Plots"
-msgstr "Diagrama"
+msgstr "Diagrames"
 
 #: src/backend/core/column/Column.cpp:193
 #, kde-format
@@ -22899,6 +22898,3 @@ msgstr "El procés «convert» ha fallat, codi d'eixida ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "No s'ha pogut obrir el fitxer:"
-
-#~ msgid "XY-Curves"
-#~ msgstr "Corbes XY"
