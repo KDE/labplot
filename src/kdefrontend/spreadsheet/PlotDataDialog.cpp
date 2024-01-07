@@ -1,3 +1,4 @@
+
 /*
 	File                 : PlotDataDialog.cpp
 	Project              : LabPlot

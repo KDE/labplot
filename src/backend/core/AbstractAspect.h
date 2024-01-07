@@ -264,7 +264,7 @@ public:
 	QUuid uuid() const;
 	void setSuppressWriteUuid(bool);
 	QString comment() const;
-	QPixmap sparkLine() const;
+	QPixmap sparkLine();
 	void setCreationTime(const QDateTime&);
 	QDateTime creationTime() const;
 	virtual Project* project();
@@ -502,6 +502,10 @@ public:
 		return mRetransformCalled;
 	}
 	int mRetransformCalled{0};
+	bool isFirstSparkLineShown;
+	bool isFirstSparkLineShownCalled() const {
+		return isFirstSparkLineShown;
+	}
 
 #define trackRetransformCalled(suppressed)                                                                                                                     \
 	Q_EMIT q->retransformCalledSignal(q, suppressed);                                                                                                          \

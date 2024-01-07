@@ -661,6 +661,7 @@ QPixmap ProjectExplorer::showSparkLines(const Column* col) {
 	static const QString sparklineTheme = i18n("Sparkline");
 	static const QString sparklineText = i18n("add-sparkline");
 	auto* worksheet = new Worksheet(sparklineText);
+	DEBUG(Q_FUNC_INFO<<"Called")
 
 	if (col->columnMode() == Column::ColumnMode::Text) {
 		worksheet->setTheme(sparklineTheme);
@@ -718,6 +719,7 @@ QPixmap ProjectExplorer::showSparkLines(const Column* col) {
 			pixmap = placeholderIcon.pixmap(iconSize, iconSize);
 		}
 		delete worksheet;
+
 		return pixmap;
 	} else {
 		worksheet->setTheme(sparklineTheme);

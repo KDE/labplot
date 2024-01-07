@@ -180,7 +180,6 @@ void SpreadsheetHeaderView::paintSection(QPainter* painter, const QRect& rect, i
 			QHeaderView::paintSection(painter, master_rect, logicalIndex);
 
 			QRect slave_rect = rect.adjusted(0, QHeaderView::sizeHint().height(), 0, 0);
-			DEBUG(Q_FUNC_INFO << pixmap.size().height() << " Height")
 
 			painter->resetTransform(); // Reset any transformations
 			painter->setClipping(false); // Disable clipping

@@ -243,14 +243,19 @@ QString AbstractAspect::comment() const {
 	return d->m_comment;
 }
 
-QPixmap AbstractAspect::sparkLine() const {
-	if (d->q->m_type == AspectType::Column) {
-		const Column* col = dynamic_cast<Column*>(d->q);
-		if (col->hasValues()) {
-			return ProjectExplorer::showSparkLines(col);
+QPixmap AbstractAspect::sparkLine() {
+	DEBUG(Q_FUNC_INFO << isFirstSparkLineShown)
+	if (!isFirstSparkLineShown) {
+		if (d->q->m_type == AspectType::Column) {
+			const Column* col = dynamic_cast<Column*>(d->q);
+			if (col->hasValues()) {
+				isFirstSparkLineShown = true;
+				d->m_sparkline = ProjectExplorer::showSparkLines(col);
+				return d->m_sparkline;
+			}
 		}
 	}
-	return QPixmap();
+	return d->m_sparkline;
 }
 
 void AbstractAspect::setComment(const QString& value) {

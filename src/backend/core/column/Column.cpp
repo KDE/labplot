@@ -127,6 +127,9 @@ QMenu* Column::createContextMenu() {
 		connect(this, &AbstractColumn::maskingChanged, this, [=] {
 			d->invalidate();
 		});
+		connect(this, &AbstractColumn::dataChanged, this, [=] {
+			// isFirstSparkLineShown = false;
+		});
 	}
 
 	QMenu* menu = AbstractAspect::createContextMenu();
@@ -305,6 +308,8 @@ void Column::pasteData() {
  */
 void Column::setSuppressDataChangedSignal(bool b) {
 	m_suppressDataChangedSignal = b;
+	if (!b)
+		isFirstSparkLineShown = false;
 }
 
 void Column::addUsedInPlots(QVector<CartesianPlot*>& plotAreas) {
@@ -676,6 +681,7 @@ void Column::setValueAt(int row, const double new_value) {
 		d->setValueAt(row, new_value);
 	else
 		exec(new ColumnSetCmd<double>(d, row, valueAt(row), new_value));
+	isFirstSparkLineShown = false;
 }
 
 /**
@@ -937,8 +943,11 @@ qint64 Column::bigIntAt(int row) const {
  * This is used e.g. in \c XYFitCurvePrivate::recalculate()
  */
 void Column::setChanged() {
-	if (!m_suppressDataChangedSignal)
+	if (!m_suppressDataChangedSignal) {
+		DEBUG(Q_FUNC_INFO << " changed")
+		isFirstSparkLineShown = false;
 		Q_EMIT dataChanged(this);
+	}
 
 	invalidateProperties();
 }

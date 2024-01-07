@@ -31,7 +31,7 @@ public:
 	QVector<AbstractAspect*> m_children;
 	QString m_name;
 	QString m_comment;
-	QLabel m_sparkline;
+	QPixmap m_sparkline{QPixmap()};
 	QDateTime m_creation_time;
 	bool m_hidden{false};
 	bool m_fixed{false};
