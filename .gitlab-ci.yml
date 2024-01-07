@@ -18,13 +18,12 @@ include:
 #      - /gitlab-templates/freebsd-qt6.yml
 ### DEPLOY
       - /gitlab-templates/craft-appimage.yml
+      - /gitlab-templates/craft-windows-x86-64.yml
+      - /gitlab-templates/craft-windows-appx-qt5.yml
 # see below for flatpak variables
 #      - /gitlab-templates/flatpak.yml
 # fails for analitza (20240105)
 #      - /gitlab-templates/craft-appimage-qt6.yml
-# fails uploading the sideload.appx for signing (20240105)
-#      - /gitlab-templates/craft-windows-x86-64.yml
-#      - /gitlab-templates/craft-windows-appx-qt5.yml
 # fails for analitza (20240105)
 #      - /gitlab-templates/craft-windows-x86-64-qt6.yml
 #      - /gitlab-templates/craft-windows-appx-qt6.yml
