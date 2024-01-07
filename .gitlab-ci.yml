@@ -12,7 +12,8 @@ include:
       - /gitlab-templates/windows.yml
       - /gitlab-templates/linux-qt6.yml
       - /gitlab-templates/windows-qt6.yml
-      - /gitlab-templates/freebsd.yml
+# fails sometimes with No space left on device
+#      - /gitlab-templates/freebsd.yml
 # finds Qt5 but KF5 is not installed
 #      - /gitlab-templates/freebsd-qt6.yml
 ### DEPLOY
