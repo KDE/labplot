@@ -122,7 +122,7 @@ void BaseDock::updatePlotRangeList() {
 //*************************************************************
 //******* SLOTs for changes triggered in the dock widget *****
 //*************************************************************
- // used in worksheet element docks
+// used in worksheet element docks
 void BaseDock::plotRangeChanged(int index) {
 	if (m_suppressPlotRetransform)
 		return;
@@ -252,7 +252,6 @@ void BaseDock::legendVisibleChanged(bool state) {
 //*************************************************************
 //********** SLOTs for changes triggered in the aspect ********
 //*************************************************************
-
 void BaseDock::aspectDescriptionChanged(const AbstractAspect* aspect) {
 	if (m_aspect != aspect)
 		return;

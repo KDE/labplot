@@ -13,8 +13,8 @@
 #define BASEDOCK
 
 #include "backend/core/AspectTreeModel.h"
-#include "backend/worksheet/plots/cartesian/Plot.h"
 #include "backend/worksheet/Worksheet.h"
+#include "backend/worksheet/plots/cartesian/Plot.h"
 
 #include <QWidget>
 
@@ -68,7 +68,6 @@ public:
 			if (aspect->inherits(AspectType::AbstractAspect))
 				m_aspects.append(static_cast<AbstractAspect*>(aspect));
 		}
-
 
 		// delete the potentially available model, will be re-created if needed for the newly set aspects
 		delete m_aspectModel;
