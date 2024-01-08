@@ -128,7 +128,8 @@ QMenu* Column::createContextMenu() {
 			d->invalidate();
 		});
 		connect(this, &AbstractColumn::dataChanged, this, [=] {
-			// isFirstSparkLineShown = false;
+			isFirstSparkLineShown = false;
+			sparkLine();
 		});
 	}
 
@@ -308,8 +309,7 @@ void Column::pasteData() {
  */
 void Column::setSuppressDataChangedSignal(bool b) {
 	m_suppressDataChangedSignal = b;
-	if (!b)
-		isFirstSparkLineShown = false;
+	isFirstSparkLineShown = false;
 }
 
 void Column::addUsedInPlots(QVector<CartesianPlot*>& plotAreas) {
@@ -943,9 +943,9 @@ qint64 Column::bigIntAt(int row) const {
  * This is used e.g. in \c XYFitCurvePrivate::recalculate()
  */
 void Column::setChanged() {
+	isFirstSparkLineShown = false;
+
 	if (!m_suppressDataChangedSignal) {
-		DEBUG(Q_FUNC_INFO << " changed")
-		isFirstSparkLineShown = false;
 		Q_EMIT dataChanged(this);
 	}
 

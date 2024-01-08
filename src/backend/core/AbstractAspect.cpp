@@ -244,7 +244,6 @@ QString AbstractAspect::comment() const {
 }
 
 QPixmap AbstractAspect::sparkLine() {
-	DEBUG(Q_FUNC_INFO << isFirstSparkLineShown)
 	if (!isFirstSparkLineShown) {
 		if (d->q->m_type == AspectType::Column) {
 			const Column* col = dynamic_cast<Column*>(d->q);
