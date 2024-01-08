@@ -50,7 +50,6 @@ private Q_SLOTS:
 	void positionLogicalDateTimeEndChanged(qint64);
 
 	// SLOTs for changes triggered in ReferenceRange
-	void updatePlotRanges() override;
 	void rangeVisibilityChanged(bool);
 
 	// Position

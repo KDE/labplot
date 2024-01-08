@@ -35,7 +35,6 @@ ReferenceLineDock::ReferenceLineDock(QWidget* parent)
 	connect(ui.cbOrientation, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ReferenceLineDock::orientationChanged);
 	connect(ui.sbPosition, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &ReferenceLineDock::positionLogicalChanged);
 	connect(ui.dtePosition, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &ReferenceLineDock::positionLogicalDateTimeChanged);
-	connect(ui.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ReferenceLineDock::plotRangeChanged);
 	connect(ui.chbLock, &QCheckBox::clicked, this, &ReferenceLineDock::lockChanged);
 	connect(ui.chkVisible, &QCheckBox::clicked, this, &ReferenceLineDock::visibilityChanged);
 
@@ -68,10 +67,9 @@ void ReferenceLineDock::setReferenceLines(QList<ReferenceLine*> list) {
 		lines << line->line();
 	lineWidget->setLines(lines);
 
-	updatePlotRanges();
+	updatePlotRangeList();
 
 	// SIGNALs/SLOTs
-	connect(m_line, &WorksheetElement::plotRangeListChanged, this, &ReferenceLineDock::updatePlotRanges);
 	connect(m_line, &ReferenceLine::lockChanged, this, &ReferenceLineDock::lineLockChanged);
 	connect(m_line, &ReferenceLine::visibleChanged, this, &ReferenceLineDock::lineVisibilityChanged);
 
@@ -95,10 +93,6 @@ void ReferenceLineDock::updateLocale() {
 	}
 
 	lineWidget->updateLocale();
-}
-
-void ReferenceLineDock::updatePlotRanges() {
-	updatePlotRangeList();
 }
 
 void ReferenceLineDock::updateWidgetsOrientation(ReferenceLine::Orientation orientation) {

@@ -90,7 +90,6 @@ LollipopPlotDock::LollipopPlotDock(QWidget* parent)
 	connect(ui.bRemoveXColumn, &QPushButton::clicked, this, &LollipopPlotDock::removeXColumn);
 	connect(m_buttonNew, &QPushButton::clicked, this, &LollipopPlotDock::addDataColumn);
 	connect(ui.cbOrientation, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &LollipopPlotDock::orientationChanged);
-	connect(ui.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &LollipopPlotDock::plotRangeChanged);
 
 	// Tab "Line"
 	connect(ui.cbNumberLine, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &LollipopPlotDock::currentBarLineChanged);
@@ -141,14 +140,13 @@ void LollipopPlotDock::setPlots(QList<LollipopPlot*> list) {
 	cbXColumn->setColumn(m_plot->xColumn(), m_plot->xColumnPath());
 	loadDataColumns();
 
-	updatePlotRanges();
+	updatePlotRangeList();
 
 	// set the current locale
 	updateLocale();
 
 	// SIGNALs/SLOTs
 	// general
-	connect(m_plot, &WorksheetElement::plotRangeListChanged, this, &LollipopPlotDock::updatePlotRanges);
 	connect(m_plot, &LollipopPlot::xColumnChanged, this, &LollipopPlotDock::plotXColumnChanged);
 	connect(m_plot, &LollipopPlot::dataColumnsChanged, this, &LollipopPlotDock::plotDataColumnsChanged);
 }
@@ -183,10 +181,6 @@ void LollipopPlotDock::setModel() {
  */
 void LollipopPlotDock::updateLocale() {
 	lineWidget->updateLocale();
-}
-
-void LollipopPlotDock::updatePlotRanges() {
-	updatePlotRangeList();
 }
 
 void LollipopPlotDock::loadDataColumns() {

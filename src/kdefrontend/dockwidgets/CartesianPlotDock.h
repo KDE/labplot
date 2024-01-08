@@ -36,7 +36,7 @@ public:
 	void updateLocale() override;
 	void updateUnits() override;
 	void updateRangeList(const Dimension dim);
-	void updatePlotRangeList();
+	void updatePlotRangeList() override;
 
 private:
 	Ui::CartesianPlotDock ui;

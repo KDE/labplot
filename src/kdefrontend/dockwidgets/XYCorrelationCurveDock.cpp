@@ -153,7 +153,6 @@ void XYCorrelationCurveDock::initGeneralTab() {
 	connect(m_correlationCurve, &XYCorrelationCurve::y2DataColumnChanged, this, &XYCorrelationCurveDock::curveY2DataColumnChanged);
 	connect(m_correlationCurve, &XYCorrelationCurve::correlationDataChanged, this, &XYCorrelationCurveDock::curveCorrelationDataChanged);
 	connect(m_correlationCurve, &XYCorrelationCurve::sourceDataChanged, this, &XYCorrelationCurveDock::enableRecalculate);
-	connect(m_correlationCurve, &WorksheetElement::plotRangeListChanged, this, &XYCorrelationCurveDock::updatePlotRangeList);
 }
 
 void XYCorrelationCurveDock::setModel() {

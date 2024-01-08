@@ -68,7 +68,6 @@ private Q_SLOTS:
 
 	// SLOTs for changes triggered in BarPlot
 	// general
-	void updatePlotRanges() override;
 	void plotXColumnChanged(const AbstractColumn*);
 	void plotDataColumnsChanged(const QVector<const AbstractColumn*>&);
 	void plotTypeChanged(BarPlot::Type);

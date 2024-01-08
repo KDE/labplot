@@ -88,7 +88,6 @@ private Q_SLOTS:
 
 	// SLOTs for changes triggered in BoxPlot
 	// general
-	void updatePlotRanges() override;
 	void plotDescriptionChanged(const AbstractAspect*);
 	void plotDataColumnsChanged(const QVector<const AbstractColumn*>&);
 	void plotOrderingChanged(BoxPlot::Ordering);

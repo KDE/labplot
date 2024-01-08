@@ -69,7 +69,6 @@ private Q_SLOTS:
 
 	// SLOTs for changes triggered in Lollipop
 	// general
-	void updatePlotRanges() override;
 	void plotXColumnChanged(const AbstractColumn*);
 	void plotDataColumnsChanged(const QVector<const AbstractColumn*>&);
 	void plotOrientationChanged(LollipopPlot::Orientation);

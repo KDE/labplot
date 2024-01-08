@@ -46,7 +46,6 @@ private Q_SLOTS:
 	void elementConnectionLineCurveChanged(const QString&);
 	void elementLabelBorderShapeChanged();
 	void elementVisibilityChanged(const bool);
-	void updatePlotRanges() override;
 
 private:
 	Ui::InfoElementDock* ui;

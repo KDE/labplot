@@ -103,7 +103,6 @@ BarPlotDock::BarPlotDock(QWidget* parent)
 	connect(m_buttonNew, &QPushButton::clicked, this, &BarPlotDock::addDataColumn);
 	connect(ui.cbType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BarPlotDock::typeChanged);
 	connect(ui.cbOrientation, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BarPlotDock::orientationChanged);
-	connect(ui.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BarPlotDock::plotRangeChanged);
 
 	// Tab "Bars"
 	connect(ui.cbNumber, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BarPlotDock::currentBarChanged);
@@ -153,14 +152,13 @@ void BarPlotDock::setBarPlots(QList<BarPlot*> list) {
 	cbXColumn->setColumn(m_barPlot->xColumn(), m_barPlot->xColumnPath());
 	loadDataColumns();
 
-	updatePlotRanges();
+	updatePlotRangeList();
 
 	// set the current locale
 	updateLocale();
 
 	// SIGNALs/SLOTs
 	// general
-	connect(m_barPlot, &WorksheetElement::plotRangeListChanged, this, &BarPlotDock::updatePlotRanges);
 	connect(m_barPlot, &BarPlot::typeChanged, this, &BarPlotDock::plotTypeChanged);
 	connect(m_barPlot, &BarPlot::xColumnChanged, this, &BarPlotDock::plotXColumnChanged);
 	connect(m_barPlot, &BarPlot::dataColumnsChanged, this, &BarPlotDock::plotDataColumnsChanged);
@@ -198,10 +196,6 @@ void BarPlotDock::setModel() {
  */
 void BarPlotDock::updateLocale() {
 	lineWidget->updateLocale();
-}
-
-void BarPlotDock::updatePlotRanges() {
-	updatePlotRangeList();
 }
 
 void BarPlotDock::loadDataColumns() {

@@ -51,7 +51,6 @@ InfoElementDock::InfoElementDock(QWidget* parent)
 	connect(ui->dateTimeEditPosition, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &InfoElementDock::positionDateTimeChanged);
 	connect(ui->cbConnectToCurve, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &InfoElementDock::curveChanged);
 	connect(ui->cbConnectToAnchor, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &InfoElementDock::gluePointChanged);
-	connect(ui->cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &InfoElementDock::plotRangeChanged);
 	connect(ui->chbVisible, &QCheckBox::toggled, this, &InfoElementDock::visibilityChanged);
 }
 
@@ -150,7 +149,7 @@ void InfoElementDock::setInfoElements(QList<InfoElement*> list) {
 
 	// connections
 
-	updatePlotRanges(); // needed when loading project
+	updatePlotRangeList(); // needed when loading project
 
 	// general
 	connect(m_element, &InfoElement::positionLogicalChanged, this, &InfoElementDock::elementPositionChanged);
@@ -158,12 +157,7 @@ void InfoElementDock::setInfoElements(QList<InfoElement*> list) {
 	connect(m_element, &InfoElement::connectionLineCurveNameChanged, this, &InfoElementDock::elementConnectionLineCurveChanged);
 	connect(m_element, &InfoElement::labelBorderShapeChangedSignal, this, &InfoElementDock::elementLabelBorderShapeChanged);
 	connect(m_element, &InfoElement::curveRemoved, this, &InfoElementDock::elementCurveRemoved);
-	connect(m_element, &WorksheetElement::plotRangeListChanged, this, &InfoElementDock::updatePlotRanges);
 	connect(m_element, &InfoElement::visibleChanged, this, &InfoElementDock::elementVisibilityChanged);
-}
-
-void InfoElementDock::updatePlotRanges() {
-	updatePlotRangeList();
 }
 
 //*************************************************************

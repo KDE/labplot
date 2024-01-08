@@ -44,6 +44,7 @@ HistogramDock::HistogramDock(QWidget* parent)
 	: BaseDock(parent)
 	, cbDataColumn(new TreeViewComboBox) {
 	ui.setupUi(this);
+	setPlotRangeCombobox(ui.cbPlotRanges);
 	setBaseWidgets(ui.leName, ui.teComment);
 	setVisibilityWidgets(ui.chkVisible, ui.chkLegendVisible);
 
@@ -118,7 +119,6 @@ HistogramDock::HistogramDock(QWidget* parent)
 	connect(ui.sbBinRangesMax, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &HistogramDock::binRangesMaxChanged);
 	connect(ui.dteBinRangesMin, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &HistogramDock::binRangesMinDateTimeChanged);
 	connect(ui.dteBinRangesMax, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &HistogramDock::binRangesMaxDateTimeChanged);
-	connect(ui.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &HistogramDock::plotRangeChanged);
 
 	// Error bars
 	connect(ui.cbErrorType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &HistogramDock::errorTypeChanged);
@@ -300,7 +300,7 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 	// load the remaining properties
 	load();
 
-	updatePlotRanges();
+	updatePlotRangeList();
 
 	// Slots
 	// General-tab
@@ -336,20 +336,6 @@ void HistogramDock::retranslateUi() {
 	// 	ui.lYColumn->setText(i18n("y-data"));
 
 	// TODO updatePenStyles, updateBrushStyles for all comboboxes
-}
-void HistogramDock::updatePlotRanges() {
-	const int cSystemCount{m_curve->coordinateSystemCount()};
-	const int cSystemIndex{m_curve->coordinateSystemIndex()};
-	DEBUG(Q_FUNC_INFO << ", plot ranges count: " << cSystemCount)
-	DEBUG(Q_FUNC_INFO << ", current plot range: " << cSystemIndex + 1)
-
-	// fill ui.cbPlotRanges
-	ui.cbPlotRanges->clear();
-	for (int i{0}; i < cSystemCount; i++)
-		ui.cbPlotRanges->addItem(QString::number(i + 1) + QLatin1String(" : ") + m_curve->coordinateSystemInfo(i));
-	ui.cbPlotRanges->setCurrentIndex(cSystemIndex);
-	// disable when there is only on plot range
-	ui.cbPlotRanges->setEnabled(cSystemCount == 1 ? false : true);
 }
 
 void HistogramDock::updateLocale() {

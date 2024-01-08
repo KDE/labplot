@@ -64,7 +64,6 @@ KDEPlotDock::KDEPlotDock(QWidget* parent)
 	connect(ui.cbKernelType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &KDEPlotDock::kernelTypeChanged);
 	connect(ui.cbBandwidthType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &KDEPlotDock::bandwidthTypeChanged);
 	connect(ui.sbBandwidth, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &KDEPlotDock::bandwidthChanged);
-	connect(ui.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &KDEPlotDock::plotRangeChanged);
 
 	// Margin Plots
 	connect(ui.chkRugEnabled, &QCheckBox::toggled, this, &KDEPlotDock::rugEnabledChanged);
@@ -173,7 +172,7 @@ void KDEPlotDock::setPlots(QList<KDEPlot*> list) {
 	// load the remaining properties
 	load();
 
-	updatePlotRanges();
+	updatePlotRangeList();
 
 	// Slots
 	// General-tab
@@ -181,7 +180,6 @@ void KDEPlotDock::setPlots(QList<KDEPlot*> list) {
 	connect(m_plot, &KDEPlot::kernelTypeChanged, this, &KDEPlotDock::plotKernelTypeChanged);
 	connect(m_plot, &KDEPlot::bandwidthTypeChanged, this, &KDEPlotDock::plotBandwidthTypeChanged);
 	connect(m_plot, &KDEPlot::bandwidthChanged, this, &KDEPlotDock::plotBandwidthChanged);
-	connect(m_plot, &WorksheetElement::plotRangeListChanged, this, &KDEPlotDock::updatePlotRanges);
 
 	//"Margin Plots"-Tab
 	auto* curve = m_plot->rugCurve();
@@ -214,10 +212,6 @@ void KDEPlotDock::retranslateUi() {
  */
 void KDEPlotDock::updateLocale() {
 	estimationLineWidget->updateLocale();
-}
-
-void KDEPlotDock::updatePlotRanges() {
-	updatePlotRangeList();
 }
 
 //*************************************************************

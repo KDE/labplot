@@ -67,7 +67,6 @@ QQPlotDock::QQPlotDock(QWidget* parent)
 	// General
 	connect(cbDataColumn, &TreeViewComboBox::currentModelIndexChanged, this, &QQPlotDock::dataColumnChanged);
 	connect(ui.cbDistribution, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &QQPlotDock::distributionChanged);
-	connect(ui.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &QQPlotDock::plotRangeChanged);
 
 	// template handler
 	auto* frame = new QFrame(this);
@@ -149,13 +148,12 @@ void QQPlotDock::setPlots(QList<QQPlot*> list) {
 	// load the remaining properties
 	load();
 
-	updatePlotRanges();
+	updatePlotRangeList();
 
 	// Slots
 	// General-tab
 	connect(m_plot, &QQPlot::dataColumnChanged, this, &QQPlotDock::plotDataColumnChanged);
 	connect(m_plot, &QQPlot::distributionChanged, this, &QQPlotDock::plotDistributionChanged);
-	connect(m_plot, &WorksheetElement::plotRangeListChanged, this, &QQPlotDock::updatePlotRanges);
 }
 
 void QQPlotDock::retranslateUi() {
@@ -187,10 +185,6 @@ void QQPlotDock::retranslateUi() {
 void QQPlotDock::updateLocale() {
 	lineWidget->updateLocale();
 	symbolWidget->updateLocale();
-}
-
-void QQPlotDock::updatePlotRanges() {
-	updatePlotRangeList();
 }
 
 //*************************************************************

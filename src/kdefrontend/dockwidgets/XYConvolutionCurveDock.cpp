@@ -166,7 +166,6 @@ void XYConvolutionCurveDock::initGeneralTab() {
 	connect(m_convolutionCurve, &XYConvolutionCurve::y2DataColumnChanged, this, &XYConvolutionCurveDock::curveY2DataColumnChanged);
 	connect(m_convolutionCurve, &XYConvolutionCurve::convolutionDataChanged, this, &XYConvolutionCurveDock::curveConvolutionDataChanged);
 	connect(m_convolutionCurve, &XYConvolutionCurve::sourceDataChanged, this, &XYConvolutionCurveDock::enableRecalculate);
-	connect(m_convolutionCurve, &WorksheetElement::plotRangeListChanged, this, &XYConvolutionCurveDock::updatePlotRangeList);
 }
 
 void XYConvolutionCurveDock::setModel() {

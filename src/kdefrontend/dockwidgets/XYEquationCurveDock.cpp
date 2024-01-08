@@ -94,7 +94,6 @@ void XYEquationCurveDock::setupGeneral() {
 	connect(uiGeneralTab.teMax, &ExpressionTextEdit::expressionChanged, this, &XYEquationCurveDock::enableRecalculate);
 	connect(uiGeneralTab.sbCount, QOverload<int>::of(&QSpinBox::valueChanged), this, &XYEquationCurveDock::enableRecalculate);
 	connect(uiGeneralTab.pbRecalculate, &QPushButton::clicked, this, &XYEquationCurveDock::recalculateClicked);
-	connect(uiGeneralTab.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYEquationCurveDock::plotRangeChanged);
 }
 
 void XYEquationCurveDock::initGeneralTab() {
@@ -115,7 +114,6 @@ void XYEquationCurveDock::initGeneralTab() {
 
 	// Slots
 	connect(m_equationCurve, &XYEquationCurve::equationDataChanged, this, &XYEquationCurveDock::curveEquationDataChanged);
-	connect(m_equationCurve, &WorksheetElement::plotRangeListChanged, this, &XYEquationCurveDock::updatePlotRanges);
 }
 
 /*!
@@ -133,13 +131,9 @@ void XYEquationCurveDock::setCurves(QList<XYCurve*> list) {
 	initTabs();
 	setSymbols(list);
 
-	updatePlotRanges();
+	updatePlotRangeList();
 
 	uiGeneralTab.pbRecalculate->setEnabled(false);
-}
-
-void XYEquationCurveDock::updatePlotRanges() {
-	updatePlotRangeList();
 }
 
 //*************************************************************
@@ -213,7 +207,7 @@ void XYEquationCurveDock::recalculateClicked() {
 		static_cast<XYEquationCurve*>(curve)->setEquationData(data);
 
 	uiGeneralTab.pbRecalculate->setEnabled(false);
-	updatePlotRanges(); // axes range may change when range on auto scale
+	updatePlotRangeList(); // axes range may change when range on auto scale
 }
 
 void XYEquationCurveDock::showConstants() {
@@ -297,7 +291,7 @@ void XYEquationCurveDock::enableRecalculate() {
 	valid = (valid && uiGeneralTab.teMin->isValid() && uiGeneralTab.teMax->isValid());
 	uiGeneralTab.pbRecalculate->setEnabled(valid);
 
-	updatePlotRanges();
+	updatePlotRangeList();
 }
 
 //*************************************************************

@@ -33,7 +33,11 @@ BaseDock::BaseDock(QWidget* parent)
 }
 
 void BaseDock::setPlotRangeCombobox(QComboBox* cb) {
+	if (m_cbPlotRangeList)
+		disconnect(m_cbPlotRangeList, nullptr, this, nullptr);
+
 	m_cbPlotRangeList = cb;
+	connect(m_cbPlotRangeList, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BaseDock::plotRangeChanged);
 }
 
 BaseDock::~BaseDock() {

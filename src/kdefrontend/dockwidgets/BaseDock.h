@@ -37,7 +37,6 @@ public:
 
 	virtual void updateLocale(){};
 	virtual void updateUnits(){};
-	virtual void updatePlotRanges(){}; // used in worksheet element docks
 	static void spinBoxCalculateMinMax(QDoubleSpinBox* spinbox, Range<double> range, double newValue = NAN);
 
 	template<typename T>
@@ -58,6 +57,7 @@ public:
 		auto* wse = dynamic_cast<WorksheetElement*>(m_aspect);
 		if (wse) {
 			connect(wse, &WorksheetElement::coordinateSystemIndexChanged, this, &BaseDock::updatePlotRangeList);
+			connect(wse, &WorksheetElement::plotRangeListChanged, this, &BaseDock::updatePlotRangeList);
 			connect(wse, &WorksheetElement::visibleChanged, this, &BaseDock::aspectVisibleChanged);
 			auto* plot = dynamic_cast<Plot*>(wse);
 			if (plot)
@@ -95,7 +95,7 @@ protected:
 	bool m_initializing{false};
 	Units m_units{Units::Metric};
 	Worksheet::Unit m_worksheetUnit{Worksheet::Unit::Centimeter};
-	void updatePlotRangeList(); // used in worksheet element docks
+	virtual void updatePlotRangeList(); // used in worksheet element docks
 
 private:
 	AbstractAspect* m_aspect{nullptr};

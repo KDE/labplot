@@ -37,7 +37,6 @@ private:
 	TreeViewComboBox* cbErrorMinusColumn;
 
 	void updateValuesWidgets();
-	void updatePlotRanges() override;
 	void updateLocale() override;
 	void load();
 	void loadConfig(KConfig&);
