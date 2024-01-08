@@ -141,29 +141,13 @@ void KDEPlotDock::setPlots(QList<KDEPlot*> list) {
 
 	// if there are more then one curve in the list, disable the content in the tab "general"
 	if (m_plots.size() == 1) {
-		ui.lName->setEnabled(true);
-		ui.leName->setEnabled(true);
-		ui.lComment->setEnabled(true);
-		ui.teComment->setEnabled(true);
-
-		ui.lDataColumn->setEnabled(true);
 		cbDataColumn->setEnabled(true);
-
 		cbDataColumn->setColumn(m_plot->dataColumn(), m_plot->dataColumnPath());
 		ui.leName->setText(m_plot->name());
 		ui.teComment->setText(m_plot->comment());
 	} else {
-		ui.lName->setEnabled(false);
-		ui.leName->setEnabled(false);
-		ui.lComment->setEnabled(false);
-		ui.teComment->setEnabled(false);
-
-		ui.lDataColumn->setEnabled(false);
 		cbDataColumn->setEnabled(false);
 		cbDataColumn->setCurrentModelIndex(QModelIndex());
-
-		ui.leName->setText(QString());
-		ui.teComment->setText(QString());
 	}
 
 	ui.chkLegendVisible->setChecked(m_plot->legendVisible());

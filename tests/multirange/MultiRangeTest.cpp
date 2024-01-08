@@ -1046,7 +1046,7 @@ void MultiRangeTest::baseDockSetAspects_NoPlotRangeChange() {
 	dock.setupGeneral();
 	dock.setCurves(QList<XYCurve*>({sinCurve, tanCurve}));
 
-	dock.updatePlotRanges();
+	dock.updatePlotRangeList();
 
 	// The coordinatesystem indices shall not change
 	QCOMPARE(sinCurveCSystemIndex, sinCurve->coordinateSystemIndex());

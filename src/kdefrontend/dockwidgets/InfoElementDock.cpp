@@ -147,8 +147,6 @@ void InfoElementDock::setInfoElements(QList<InfoElement*> list) {
 		ui->dateTimeEditPosition->show();
 	}
 
-	// connections
-
 	updatePlotRangeList(); // needed when loading project
 
 	// general

@@ -133,11 +133,9 @@ void QQPlotDock::setPlots(QList<QQPlot*> list) {
 
 	// if there are more then one curve in the list, disable the content in the tab "general"
 	if (m_plots.size() == 1) {
-		ui.lDataColumn->setEnabled(true);
 		cbDataColumn->setEnabled(true);
 		cbDataColumn->setColumn(m_plot->dataColumn(), m_plot->dataColumnPath());
 	} else {
-		ui.lDataColumn->setEnabled(false);
 		cbDataColumn->setEnabled(false);
 		cbDataColumn->setCurrentModelIndex(QModelIndex());
 	}
