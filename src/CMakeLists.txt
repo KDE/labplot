@@ -150,6 +150,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/widgets/FITSHeaderEditAddUnitDialog.cpp
 	${KDEFRONTEND_DIR}/widgets/FITSHeaderEditDialog.cpp
 	${KDEFRONTEND_DIR}/widgets/ResizableTextEdit.cpp
+  ${KDEFRONTEND_DIR}/widgets/TimedLineEdit.cpp
 )
 
 if (Qt${QT_VERSION_MAJOR}Mqtt_FOUND)
