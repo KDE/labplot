@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-01-05 00:38+0000\n"
+"POT-Creation-Date: 2024-01-08 00:38+0000\n"
 "PO-Revision-Date: 2024-01-04 16:17+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -504,7 +504,7 @@ msgid "%1   (no values)"
 msgstr "%1   (değer yok)"
 
 #: src/backend/core/AspectTreeModel.cpp:226
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1504
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1506
 #, kde-format
 msgid "Size: %1"
 msgstr "Boyut: %1"
@@ -1484,7 +1484,7 @@ msgstr "h5dump bulunamadı."
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:358
 #: src/backend/datasources/filters/NetCDFFilter.cpp:268
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1479
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1481
 #, kde-format
 msgid "Reading from file %1 failed."
 msgstr "%1 dosyasından okuma başarısız."
@@ -5939,7 +5939,7 @@ msgstr "İstatistik (Dağılımlar)"
 #: src/backend/nsl/nsl_fit.c:24
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:552
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:524
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1231
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1233
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:243
 #: src/kdefrontend/dockwidgets/KDEPlotDock.cpp:212
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:275
@@ -11458,32 +11458,32 @@ msgstr ""
 "'Son Vasiyet ve Ahit' iletisini (LWT) belirtin. En azından bir konuya abone "
 "olunmalıdır."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:912
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:910
 #, kde-format
 msgctxt "@title:window"
 msgid "Select the File Data Source"
 msgstr "Dosya Veri Kaynağını Seç"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:942
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:940
 #, kde-format
 msgctxt "@title:window"
 msgid "Select the DBC file"
 msgstr "DBC dosyasını seç"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:942
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:940
 #, kde-format
 msgid "DBC file (*.dbc)"
 msgstr "DBC dosyası (*.dbc)"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataFormat)
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1144
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1146
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:402
 #, kde-format
 msgid "Data Format"
 msgstr "Veri Biçimi"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataPreview)
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1145
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1147
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:456
 #: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:158
 #, kde-format
@@ -11491,183 +11491,183 @@ msgid "Preview"
 msgstr "Önizleme"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataPortion)
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1147
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1149
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:535
 #: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:239
 #, kde-format
 msgid "Data Portion to Read"
 msgstr "Okunacak Veri Porsiyonu"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1187
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1189
 #, kde-format
 msgid "Data format && preview"
 msgstr "Veri biçimi ve önizleme"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1230
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1232
 #: src/kdefrontend/SettingsGeneralPage.cpp:226
 #, kde-format
 msgid "Automatic"
 msgstr "Otomatik"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1471
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1473
 #, kde-format
 msgid "file command not found"
 msgstr "dosya komutu bulunamadı"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1482
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1484
 #, kde-format
 msgid "cannot open"
 msgstr "açılamıyor"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1487
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1489
 #, kde-format
 msgid "<b>File type:</b> %1"
 msgstr "<b>Dosya türü:</b> %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1492
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1494
 #, kde-format
 msgid "General:"
 msgstr "Genel:"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1494
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1495
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1496
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1497
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1498
 #, kde-format
 msgid "yes"
 msgstr "evet"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1494
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1495
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1496
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1497
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1498
 #, kde-format
 msgid "no"
 msgstr "hayır"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1494
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1496
 #, kde-format
 msgid "Readable: %1"
 msgstr "Okunabilir: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1495
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1497
 #, kde-format
 msgid "Writable: %1"
 msgstr "Yazılabilir: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1496
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1498
 #, kde-format
 msgid "Executable: %1"
 msgstr "Yürütülebilir: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1498
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1500
 #, kde-format
 msgid "Birth time: %1"
 msgstr "Doğum zamanı: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1499
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1501
 #, kde-format
 msgid "Last metadata changed: %1"
 msgstr "Son üst veri değişikliği: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1500
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1502
 #, kde-format
 msgid "Last modified: %1"
 msgstr "Son düzenleme: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1501
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1503
 #, kde-format
 msgid "Last read: %1"
 msgstr "Son okuma: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1502
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1504
 #, kde-format
 msgid "Owner: %1"
 msgstr "Sahibi: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1503
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1505
 #, kde-format
 msgid "Group: %1"
 msgstr "Grup: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1504
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1506
 #, kde-format
 msgid "%1 cByte"
 msgid_plural "%1 cBytes"
 msgstr[0] "%1 cByte"
 msgstr[1] "%1 cByte"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1507
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1509
 #, kde-format
 msgid "Summary:"
 msgstr "Özet:"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1530
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1535
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1532
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1537
 #, kde-format
 msgid "Content:"
 msgstr "İçerik:"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1563
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1565
 #, kde-format
 msgid "Could not open file %1 for reading."
 msgstr "%1 dosyası okuma için açılamadı."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1723
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1725
 #, kde-format
 msgid "No data arrived yet for the selected topic"
 msgstr "Seçili konu için henüz bir veri gelmedi"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1959
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1961
 #, kde-format
 msgid "Not a HDF5 file: %1"
 msgstr "Bir HDF5 dosyası değil: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2392
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2394
 #, kde-format
 msgid "Couldn't subscribe to all available topics."
 msgstr "Tüm kullanılabilir konulara abone olunamıyor."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2422
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2424
 #, kde-format
 msgid "Disconnected from '%1'."
 msgstr "Bağlantı kesildi: '%1'."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2491
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2493
 #, kde-format
 msgid "Available (%1)"
 msgstr "Kullanılabilir (%1)"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2603
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2605
 #, kde-format
 msgid "Wrong username or password"
 msgstr "Yanlış kullanıcı adı veya parola"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2606
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2608
 #, kde-format
 msgid "The client ID wasn't accepted"
 msgstr "İstemci kimliği kabul edilmedi"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2610
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2612
 #, kde-format
 msgid "The broker %1 couldn't be reached."
 msgstr "%1 aracısına ulaşılamadı."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2613
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2615
 #, kde-format
 msgid "The client is not authorized to connect."
 msgstr "İstemci, bağlanmak için yetkili değil."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2616
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2618
 #, kde-format
 msgid "An unknown error occurred."
 msgstr "Bilinmeyen bir hata oluştu."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2622
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2625
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2624
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2627
 #, kde-format
 msgid "An error occurred."
 msgstr "Bir hata oluştu."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2639
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2641
 #, kde-format
 msgid "Connecting to '%1:%2' timed out."
 msgstr "'%1:%2' konumuna bağlantı zaman aşımına uğradı."
@@ -14306,8 +14306,9 @@ msgstr ""
 "platform veri görselleştirme ve çözümleme yazılımıdır."
 
 #: src/kdefrontend/LabPlot.cpp:98
-#, kde-format
-msgid "(c) 2007-2023"
+#, fuzzy, kde-format
+#| msgid "(c) 2007-2023"
+msgid "(c) 2007-2024"
 msgstr "(c) 2007-2023"
 
 #: src/kdefrontend/LabPlot.cpp:101
