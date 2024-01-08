@@ -47,6 +47,7 @@ void XYDifferentiationCurveDock::setupGeneral() {
 	uiGeneralTab.setupUi(generalTab);
 	setPlotRangeCombobox(uiGeneralTab.cbPlotRanges);
 	setBaseWidgets(uiGeneralTab.leName, uiGeneralTab.teComment, uiGeneralTab.pbRecalculate, uiGeneralTab.cbDataSourceType);
+	setVisibilityWidgets(uiGeneralTab.chkVisible, uiGeneralTab.chkLegendVisible);
 
 	auto* gridLayout = static_cast<QGridLayout*>(generalTab->layout());
 	gridLayout->setContentsMargins(2, 2, 2, 2);
@@ -71,7 +72,6 @@ void XYDifferentiationCurveDock::setupGeneral() {
 	layout->addWidget(generalTab);
 
 	// Slots
-	connect(uiGeneralTab.chkVisible, &QCheckBox::clicked, this, &XYDifferentiationCurveDock::visibilityChanged);
 	connect(uiGeneralTab.cbDataSourceType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYDifferentiationCurveDock::dataSourceTypeChanged);
 	connect(uiGeneralTab.cbAutoRange, &QCheckBox::clicked, this, &XYDifferentiationCurveDock::autoRangeChanged);
 	connect(uiGeneralTab.leMin, &QLineEdit::textChanged, this, &XYDifferentiationCurveDock::xRangeMinChanged);
@@ -153,6 +153,7 @@ void XYDifferentiationCurveDock::initGeneralTab() {
 
 	this->showDifferentiationResult();
 
+	uiGeneralTab.chkLegendVisible->setChecked(m_curve->legendVisible());
 	uiGeneralTab.chkVisible->setChecked(m_curve->isVisible());
 
 	// Slots
@@ -163,7 +164,6 @@ void XYDifferentiationCurveDock::initGeneralTab() {
 	connect(m_differentiationCurve, &XYDifferentiationCurve::differentiationDataChanged, this, &XYDifferentiationCurveDock::curveDifferentiationDataChanged);
 	connect(m_differentiationCurve, &XYDifferentiationCurve::sourceDataChanged, this, &XYDifferentiationCurveDock::enableRecalculate);
 	connect(m_differentiationCurve, &WorksheetElement::plotRangeListChanged, this, &XYDifferentiationCurveDock::updatePlotRangeList);
-	connect(m_differentiationCurve, &XYCurve::visibleChanged, this, &XYDifferentiationCurveDock::curveVisibilityChanged);
 }
 
 void XYDifferentiationCurveDock::setModel() {
@@ -432,9 +432,4 @@ void XYDifferentiationCurveDock::curveDifferentiationDataChanged(const XYDiffere
 	this->accOrderChanged(m_differentiationData.accOrder);
 
 	this->showDifferentiationResult();
-}
-
-void XYDifferentiationCurveDock::curveVisibilityChanged(bool on) {
-	CONDITIONAL_LOCK_RETURN;
-	uiGeneralTab.chkVisible->setChecked(on);
 }

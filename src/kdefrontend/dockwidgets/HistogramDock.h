@@ -63,7 +63,6 @@ private Q_SLOTS:
 
 	// General-Tab
 	void dataColumnChanged(const QModelIndex&);
-	void visibilityChanged(bool);
 	void typeChanged(int);
 	void orientationChanged(int);
 	void normalizationChanged(int);
@@ -99,7 +98,6 @@ private Q_SLOTS:
 	void curveAutoBinRangesChanged(bool);
 	void curveBinRangesMinChanged(double);
 	void curveBinRangesMaxChanged(double);
-	void curveVisibilityChanged(bool);
 
 	//"Error bars"-Tab
 	void curveErrorTypeChanged(Histogram::ErrorType);

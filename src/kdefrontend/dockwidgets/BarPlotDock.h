@@ -61,7 +61,6 @@ private Q_SLOTS:
 	void dataColumnChanged(const QModelIndex&);
 	void typeChanged(int);
 	void orientationChanged(int);
-	void visibilityChanged(bool);
 
 	//"Box"-tab
 	void currentBarChanged(int);
@@ -75,7 +74,6 @@ private Q_SLOTS:
 	void plotTypeChanged(BarPlot::Type);
 	void plotOrientationChanged(BarPlot::Orientation);
 	void plotWidthFactorChanged(double);
-	void plotVisibilityChanged(bool);
 
 	// load and save
 	void loadConfigFromTemplate(KConfig&);

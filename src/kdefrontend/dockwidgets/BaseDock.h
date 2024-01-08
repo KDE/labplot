@@ -13,12 +13,14 @@
 #define BASEDOCK
 
 #include "backend/core/AspectTreeModel.h"
+#include "backend/worksheet/plots/cartesian/Plot.h"
 #include "backend/worksheet/Worksheet.h"
 
 #include <QWidget>
 
 class AbstractAspect;
 class ResizableTextEdit;
+class QCheckBox;
 class QComboBox;
 class QDoubleSpinBox;
 class QLineEdit;
@@ -52,13 +54,21 @@ public:
 		m_aspect = aspects.first();
 		connect(m_aspect, &AbstractAspect::childAspectAboutToBeRemoved, this, &BaseDock::disconnectAspect);
 		connect(m_aspect, &AbstractAspect::aspectDescriptionChanged, this, &BaseDock::aspectDescriptionChanged);
+
 		auto* wse = dynamic_cast<WorksheetElement*>(m_aspect);
-		if (wse)
+		if (wse) {
 			connect(wse, &WorksheetElement::coordinateSystemIndexChanged, this, &BaseDock::updatePlotRangeList);
+			connect(wse, &WorksheetElement::visibleChanged, this, &BaseDock::aspectVisibleChanged);
+			auto* plot = dynamic_cast<Plot*>(wse);
+			if (plot)
+				connect(plot, &Plot::legendVisibleChanged, this, &BaseDock::aspectLegendVisibleChanged);
+		}
+
 		for (auto* aspect : aspects) {
 			if (aspect->inherits(AspectType::AbstractAspect))
 				m_aspects.append(static_cast<AbstractAspect*>(aspect));
 		}
+
 
 		// delete the potentially available model, will be re-created if needed for the newly set aspects
 		delete m_aspectModel;
@@ -77,6 +87,7 @@ public:
 	}
 
 	void setBaseWidgets(QLineEdit* nameLabel, ResizableTextEdit* commentLabel, double commentHeightFactorNameLabel = 1.2);
+	void setVisibilityWidgets(QCheckBox* visible, QCheckBox* legendVisible = nullptr);
 
 	AspectTreeModel* aspectModel();
 
@@ -94,12 +105,21 @@ private:
 	QComboBox* m_cbPlotRangeList{nullptr};
 	QLineEdit* m_leName{nullptr};
 	ResizableTextEdit* m_teComment{nullptr};
+	QCheckBox* m_chkVisible{nullptr};
+	QCheckBox* m_chkLegendVisible{nullptr};
 
 protected Q_SLOTS:
+	// SLOTs for changes triggered in the dock widget
 	void nameChanged();
 	void commentChanged();
+	void plotRangeChanged(int index);
+	void visibleChanged(bool);
+	void legendVisibleChanged(bool);
+
+	// SLOTs for changes triggered in the aspect
 	void aspectDescriptionChanged(const AbstractAspect*);
-	void plotRangeChanged(int index); // used in worksheet element docks
+	void aspectVisibleChanged(bool);
+	void aspectLegendVisibleChanged(bool);
 
 private:
 	bool m_suppressPlotRetransform{false};

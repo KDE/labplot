@@ -60,7 +60,5 @@ private Q_SLOTS:
 	// SLOTs for changes triggered in XYCurve
 	// General-Tab
 	void curveSmoothDataChanged(const XYSmoothCurve::SmoothData&);
-	void curveVisibilityChanged(bool);
 };
-
 #endif

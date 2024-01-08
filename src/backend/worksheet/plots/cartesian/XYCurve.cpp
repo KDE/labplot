@@ -78,8 +78,6 @@ void XYCurve::init() {
 	KConfig config;
 	KConfigGroup group = config.group(QStringLiteral("XYCurve"));
 
-	d->legendVisible = group.readEntry(QStringLiteral("LegendVisible"), true);
-
 	d->lineType = (LineType)group.readEntry(QStringLiteral("LineType"), static_cast<int>(LineType::Line));
 	d->lineIncreasingXOnly = group.readEntry(QStringLiteral("LineIncreasingXOnly"), false);
 	d->lineSkipGaps = group.readEntry(QStringLiteral("SkipLineGaps"), false);

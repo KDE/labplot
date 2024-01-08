@@ -45,6 +45,7 @@ void XYConvolutionCurveDock::setupGeneral() {
 	uiGeneralTab.setupUi(generalTab);
 	setPlotRangeCombobox(uiGeneralTab.cbPlotRanges);
 	setBaseWidgets(uiGeneralTab.leName, uiGeneralTab.teComment, uiGeneralTab.pbRecalculate, uiGeneralTab.cbDataSourceType);
+	setVisibilityWidgets(uiGeneralTab.chkVisible, uiGeneralTab.chkLegendVisible);
 
 	auto* gridLayout = static_cast<QGridLayout*>(generalTab->layout());
 	gridLayout->setContentsMargins(2, 2, 2, 2);
@@ -81,8 +82,6 @@ void XYConvolutionCurveDock::setupGeneral() {
 	layout->addWidget(generalTab);
 
 	// Slots
-	// TODO	connect(uiGeneralTab.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYConvolutionCurveDock::plotRangeChanged );
-	connect(uiGeneralTab.chkVisible, &QCheckBox::clicked, this, &XYConvolutionCurveDock::visibilityChanged);
 	connect(uiGeneralTab.cbDataSourceType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYConvolutionCurveDock::dataSourceTypeChanged);
 	connect(uiGeneralTab.sbSamplingInterval, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &XYConvolutionCurveDock::samplingIntervalChanged);
 	connect(uiGeneralTab.cbKernel, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYConvolutionCurveDock::kernelChanged);
@@ -156,6 +155,7 @@ void XYConvolutionCurveDock::initGeneralTab() {
 
 	this->showConvolutionResult();
 
+	uiGeneralTab.chkLegendVisible->setChecked(m_curve->legendVisible());
 	uiGeneralTab.chkVisible->setChecked(m_curve->isVisible());
 
 	// Slots
@@ -167,7 +167,6 @@ void XYConvolutionCurveDock::initGeneralTab() {
 	connect(m_convolutionCurve, &XYConvolutionCurve::convolutionDataChanged, this, &XYConvolutionCurveDock::curveConvolutionDataChanged);
 	connect(m_convolutionCurve, &XYConvolutionCurve::sourceDataChanged, this, &XYConvolutionCurveDock::enableRecalculate);
 	connect(m_convolutionCurve, &WorksheetElement::plotRangeListChanged, this, &XYConvolutionCurveDock::updatePlotRangeList);
-	connect(m_convolutionCurve, &XYCurve::visibleChanged, this, &XYConvolutionCurveDock::curveVisibilityChanged);
 }
 
 void XYConvolutionCurveDock::setModel() {
@@ -476,9 +475,4 @@ void XYConvolutionCurveDock::curveConvolutionDataChanged(const XYConvolutionCurv
 	this->directionChanged();
 
 	this->showConvolutionResult();
-}
-
-void XYConvolutionCurveDock::curveVisibilityChanged(bool on) {
-	CONDITIONAL_LOCK_RETURN;
-	uiGeneralTab.chkVisible->setChecked(on);
 }

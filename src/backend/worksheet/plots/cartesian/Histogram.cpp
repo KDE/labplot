@@ -1823,6 +1823,7 @@ void Histogram::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("binRangesMin"), QString::number(d->binRangesMin));
 	writer->writeAttribute(QStringLiteral("binRangesMax"), QString::number(d->binRangesMax));
 	writer->writeAttribute(QStringLiteral("plotRangeIndex"), QString::number(m_cSystemIndex));
+	writer->writeAttribute(QStringLiteral("legendVisible"), QString::number(d->legendVisible));
 	writer->writeAttribute(QStringLiteral("visible"), QString::number(d->isVisible()));
 	writer->writeEndElement();
 
@@ -1884,8 +1885,8 @@ bool Histogram::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("autoBinRanges", autoBinRanges, bool);
 			READ_DOUBLE_VALUE("binRangesMin", binRangesMin);
 			READ_DOUBLE_VALUE("binRangesMax", binRangesMax);
-
 			READ_INT_VALUE_DIRECT("plotRangeIndex", m_cSystemIndex, int);
+			READ_INT_VALUE("legendVisible", legendVisible, bool);
 
 			str = attribs.value(QStringLiteral("visible")).toString();
 			if (str.isEmpty())

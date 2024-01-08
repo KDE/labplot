@@ -60,7 +60,6 @@ private Q_SLOTS:
 	void removeDataColumn();
 	void dataColumnChanged(const QModelIndex&);
 	void orientationChanged(int);
-	void visibilityChanged(bool);
 
 	//"Line"-tab
 	void currentBarLineChanged(int);
@@ -74,7 +73,6 @@ private Q_SLOTS:
 	void plotXColumnChanged(const AbstractColumn*);
 	void plotDataColumnsChanged(const QVector<const AbstractColumn*>&);
 	void plotOrientationChanged(LollipopPlot::Orientation);
-	void plotVisibilityChanged(bool);
 
 	// load and save
 	void loadConfigFromTemplate(KConfig&);

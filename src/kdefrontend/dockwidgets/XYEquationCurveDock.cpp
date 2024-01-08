@@ -3,7 +3,7 @@
 	Project          : LabPlot
 	Description      : widget for editing properties of equation curves
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2014-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2014-2024 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -49,6 +49,7 @@ void XYEquationCurveDock::setupGeneral() {
 	uiGeneralTab.setupUi(generalTab);
 	setPlotRangeCombobox(uiGeneralTab.cbPlotRanges);
 	setBaseWidgets(uiGeneralTab.leName, uiGeneralTab.teComment);
+	setVisibilityWidgets(uiGeneralTab.chkVisible, uiGeneralTab.chkLegendVisible);
 
 	auto* gridLayout = dynamic_cast<QGridLayout*>(generalTab->layout());
 	if (gridLayout) {
@@ -82,7 +83,6 @@ void XYEquationCurveDock::setupGeneral() {
 	uiGeneralTab.teMax->setMaximumHeight(uiGeneralTab.leName->sizeHint().height());
 
 	// Slots
-	connect(uiGeneralTab.chkVisible, &QCheckBox::clicked, this, &XYEquationCurveDock::visibilityChanged);
 	connect(uiGeneralTab.cbType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYEquationCurveDock::typeChanged);
 	connect(uiGeneralTab.teEquation1, &ExpressionTextEdit::expressionChanged, this, &XYEquationCurveDock::enableRecalculate);
 	connect(uiGeneralTab.teEquation2, &ExpressionTextEdit::expressionChanged, this, &XYEquationCurveDock::enableRecalculate);
@@ -110,6 +110,7 @@ void XYEquationCurveDock::initGeneralTab() {
 	uiGeneralTab.teMax->setText(data.max);
 	uiGeneralTab.sbCount->setValue(data.count);
 
+	uiGeneralTab.chkLegendVisible->setChecked(m_curve->legendVisible());
 	uiGeneralTab.chkVisible->setChecked(m_curve->isVisible());
 
 	// Slots

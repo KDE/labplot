@@ -67,6 +67,20 @@ void BaseDock::setBaseWidgets(QLineEdit* nameLabel, ResizableTextEdit* commentLa
 	m_teComment->setFixedHeight(commentHeightFactorNameLabel * m_leName->height());
 }
 
+void BaseDock::setVisibilityWidgets(QCheckBox* visible, QCheckBox* legendVisible) {
+	if (m_chkVisible)
+		disconnect(m_chkVisible, nullptr, this, nullptr);
+	if (m_chkLegendVisible)
+		disconnect(m_chkLegendVisible, nullptr, this, nullptr);
+
+	m_chkVisible = visible;
+	m_chkLegendVisible = legendVisible;
+
+	connect(m_chkVisible, &QCheckBox::clicked, this, &BaseDock::visibleChanged);
+	if (m_chkLegendVisible)
+		connect(m_chkLegendVisible, &QCheckBox::toggled, this, &BaseDock::legendVisibleChanged);
+}
+
 void BaseDock::updatePlotRangeList() {
 	auto* element{static_cast<WorksheetElement*>(m_aspect)};
 	if (!element) {
@@ -101,6 +115,10 @@ void BaseDock::updatePlotRangeList() {
 	m_cbPlotRangeList->setEnabled(cSystemCount == 1 ? false : true);
 }
 
+//*************************************************************
+//******* SLOTs for changes triggered in the dock widget *****
+//*************************************************************
+ // used in worksheet element docks
 void BaseDock::plotRangeChanged(int index) {
 	if (m_suppressPlotRetransform)
 		return;
@@ -207,6 +225,30 @@ void BaseDock::commentChanged() {
 	m_aspect->setComment(m_teComment->text());
 }
 
+void BaseDock::visibleChanged(bool state) {
+	CONDITIONAL_LOCK_RETURN;
+
+	for (auto* aspect : m_aspects) {
+		auto* we = dynamic_cast<WorksheetElement*>(aspect);
+		if (we)
+			we->setVisible(state);
+	}
+}
+
+void BaseDock::legendVisibleChanged(bool state) {
+	CONDITIONAL_LOCK_RETURN;
+
+	for (auto* aspect : m_aspects) {
+		auto* plot = dynamic_cast<Plot*>(aspect);
+		if (plot)
+			plot->setLegendVisible(state);
+	}
+}
+
+//*************************************************************
+//********** SLOTs for changes triggered in the aspect ********
+//*************************************************************
+
 void BaseDock::aspectDescriptionChanged(const AbstractAspect* aspect) {
 	if (m_aspect != aspect)
 		return;
@@ -229,6 +271,16 @@ void BaseDock::aspectDescriptionChanged(const AbstractAspect* aspect) {
 		if (aspect->comment() != m_teComment->text())
 			m_teComment->document()->setPlainText(aspect->comment());
 	}
+}
+
+void BaseDock::aspectVisibleChanged(bool on) {
+	CONDITIONAL_LOCK_RETURN;
+	m_chkVisible->setChecked(on);
+}
+
+void BaseDock::aspectLegendVisibleChanged(bool on) {
+	CONDITIONAL_LOCK_RETURN;
+	m_chkLegendVisible->setChecked(on);
 }
 
 AspectTreeModel* BaseDock::aspectModel() {

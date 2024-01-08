@@ -441,6 +441,7 @@ void KDEPlot::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("bandwidthType"), QString::number(d->bandwidthType));
 	writer->writeAttribute(QStringLiteral("bandwidth"), QString::number(d->bandwidth));
 	writer->writeAttribute(QStringLiteral("visible"), QString::number(d->isVisible()));
+	writer->writeAttribute(QStringLiteral("legendVisible"), QString::number(d->legendVisible));
 	writer->writeEndElement();
 
 	// save the internal columns, above only the references to them were saved
@@ -484,6 +485,8 @@ bool KDEPlot::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("kernelType", kernelType, nsl_kernel_type);
 			READ_INT_VALUE("bandwidthType", bandwidthType, nsl_kde_bandwidth_type);
 			READ_DOUBLE_VALUE("bandwidth", bandwidth);
+			READ_INT_VALUE("legendVisible", legendVisible, bool);
+
 			str = attribs.value(QStringLiteral("visible")).toString();
 			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs(QStringLiteral("visible")).toString());

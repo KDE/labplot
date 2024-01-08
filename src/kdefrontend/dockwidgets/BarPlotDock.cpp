@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Dock widget for the bar plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2022-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -28,6 +28,7 @@ BarPlotDock::BarPlotDock(QWidget* parent)
 	ui.setupUi(this);
 	setPlotRangeCombobox(ui.cbPlotRanges);
 	setBaseWidgets(ui.leName, ui.teComment);
+	setVisibilityWidgets(ui.chkVisible, ui.chkLegendVisible);
 
 	// Tab "General"
 
@@ -102,7 +103,6 @@ BarPlotDock::BarPlotDock(QWidget* parent)
 	connect(m_buttonNew, &QPushButton::clicked, this, &BarPlotDock::addDataColumn);
 	connect(ui.cbType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BarPlotDock::typeChanged);
 	connect(ui.cbOrientation, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BarPlotDock::orientationChanged);
-	connect(ui.chkVisible, &QCheckBox::toggled, this, &BarPlotDock::visibilityChanged);
 	connect(ui.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BarPlotDock::plotRangeChanged);
 
 	// Tab "Bars"
@@ -147,6 +147,7 @@ void BarPlotDock::setBarPlots(QList<BarPlot*> list) {
 	valueWidget->setValues(values);
 
 	// show the properties of the first box plot
+	ui.chkLegendVisible->setChecked(m_barPlot->legendVisible());
 	ui.chkVisible->setChecked(m_barPlot->isVisible());
 	load();
 	cbXColumn->setColumn(m_barPlot->xColumn(), m_barPlot->xColumnPath());
@@ -160,7 +161,6 @@ void BarPlotDock::setBarPlots(QList<BarPlot*> list) {
 	// SIGNALs/SLOTs
 	// general
 	connect(m_barPlot, &WorksheetElement::plotRangeListChanged, this, &BarPlotDock::updatePlotRanges);
-	connect(m_barPlot, &BarPlot::visibleChanged, this, &BarPlotDock::plotVisibilityChanged);
 	connect(m_barPlot, &BarPlot::typeChanged, this, &BarPlotDock::plotTypeChanged);
 	connect(m_barPlot, &BarPlot::xColumnChanged, this, &BarPlotDock::plotXColumnChanged);
 	connect(m_barPlot, &BarPlot::dataColumnsChanged, this, &BarPlotDock::plotDataColumnsChanged);
@@ -398,13 +398,6 @@ void BarPlotDock::orientationChanged(int index) {
 		barPlot->setOrientation(orientation);
 }
 
-void BarPlotDock::visibilityChanged(bool state) {
-	CONDITIONAL_LOCK_RETURN;
-
-	for (auto* barPlot : m_barPlots)
-		barPlot->setVisible(state);
-}
-
 //"Box"-tab
 /*!
  * called when the current bar number was changed, shows the bar properties for the selected bar.
@@ -458,10 +451,6 @@ void BarPlotDock::plotTypeChanged(BarPlot::Type type) {
 void BarPlotDock::plotOrientationChanged(BarPlot::Orientation orientation) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.cbOrientation->setCurrentIndex((int)orientation);
-}
-void BarPlotDock::plotVisibilityChanged(bool on) {
-	CONDITIONAL_LOCK_RETURN;
-	ui.chkVisible->setChecked(on);
 }
 
 // box

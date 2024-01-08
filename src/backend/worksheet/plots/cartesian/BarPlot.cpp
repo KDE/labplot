@@ -1287,6 +1287,7 @@ void BarPlot::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("yMin"), QString::number(d->yMin));
 	writer->writeAttribute(QStringLiteral("yMax"), QString::number(d->yMax));
 	writer->writeAttribute(QStringLiteral("visible"), QString::number(d->isVisible()));
+	writer->writeAttribute(QStringLiteral("legendVisible"), QString::number(d->legendVisible));
 
 	if (d->xColumn)
 		writer->writeAttribute(QStringLiteral("xColumn"), d->xColumn->path());
@@ -1348,6 +1349,7 @@ bool BarPlot::load(XmlStreamReader* reader, bool preview) {
 			READ_DOUBLE_VALUE("yMin", yMin);
 			READ_DOUBLE_VALUE("yMax", yMax);
 			READ_COLUMN(xColumn);
+			READ_INT_VALUE("legendVisible", legendVisible, bool);
 
 			str = attribs.value(QStringLiteral("visible")).toString();
 			if (str.isEmpty())

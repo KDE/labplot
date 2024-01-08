@@ -38,6 +38,7 @@ void XYFourierTransformCurveDock::setupGeneral() {
 	uiGeneralTab.setupUi(generalTab);
 	setPlotRangeCombobox(uiGeneralTab.cbPlotRanges);
 	setBaseWidgets(uiGeneralTab.leName, uiGeneralTab.teComment, uiGeneralTab.pbRecalculate);
+	setVisibilityWidgets(uiGeneralTab.chkVisible, uiGeneralTab.chkLegendVisible);
 
 	auto* gridLayout = static_cast<QGridLayout*>(generalTab->layout());
 	gridLayout->setContentsMargins(2, 2, 2, 2);
@@ -64,7 +65,6 @@ void XYFourierTransformCurveDock::setupGeneral() {
 	layout->addWidget(generalTab);
 
 	// Slots
-	connect(uiGeneralTab.chkVisible, &QCheckBox::clicked, this, &XYFourierTransformCurveDock::visibilityChanged);
 	connect(uiGeneralTab.cbAutoRange, &QCheckBox::clicked, this, &XYFourierTransformCurveDock::autoRangeChanged);
 	connect(uiGeneralTab.leMin, &QLineEdit::textChanged, this, &XYFourierTransformCurveDock::xRangeMinChanged);
 	connect(uiGeneralTab.leMax, &QLineEdit::textChanged, this, &XYFourierTransformCurveDock::xRangeMaxChanged);
@@ -124,6 +124,7 @@ void XYFourierTransformCurveDock::initGeneralTab() {
 	// enable the "recalculate"-button if the source data was changed since the last transform
 	uiGeneralTab.pbRecalculate->setEnabled(m_transformCurve->isSourceDataChangedSinceLastRecalc());
 
+	uiGeneralTab.chkLegendVisible->setChecked(m_curve->legendVisible());
 	uiGeneralTab.chkVisible->setChecked(m_curve->isVisible());
 
 	// Slots
@@ -131,7 +132,6 @@ void XYFourierTransformCurveDock::initGeneralTab() {
 	connect(m_transformCurve, &XYFourierTransformCurve::yDataColumnChanged, this, &XYFourierTransformCurveDock::curveYDataColumnChanged);
 	connect(m_transformCurve, &XYFourierTransformCurve::transformDataChanged, this, &XYFourierTransformCurveDock::curveTransformDataChanged);
 	connect(m_transformCurve, &XYFourierTransformCurve::sourceDataChanged, this, &XYFourierTransformCurveDock::enableRecalculate);
-	connect(m_transformCurve, &XYCurve::visibleChanged, this, &XYFourierTransformCurveDock::curveVisibilityChanged);
 	connect(m_transformCurve, &WorksheetElement::plotRangeListChanged, this, &XYFourierTransformCurveDock::updatePlotRangeList);
 }
 
@@ -284,9 +284,4 @@ void XYFourierTransformCurveDock::curveTransformDataChanged(const XYFourierTrans
 	this->typeChanged();
 
 	this->showTransformResult();
-}
-
-void XYFourierTransformCurveDock::curveVisibilityChanged(bool on) {
-	CONDITIONAL_LOCK_RETURN;
-	uiGeneralTab.chkVisible->setChecked(on);
 }

@@ -43,6 +43,7 @@ void XYFourierFilterCurveDock::setupGeneral() {
 	uiGeneralTab.setupUi(generalTab);
 	setPlotRangeCombobox(uiGeneralTab.cbPlotRanges);
 	setBaseWidgets(uiGeneralTab.leName, uiGeneralTab.teComment, uiGeneralTab.pbRecalculate, uiGeneralTab.cbDataSourceType);
+	setVisibilityWidgets(uiGeneralTab.chkVisible, uiGeneralTab.chkLegendVisible);
 
 	auto* gridLayout = static_cast<QGridLayout*>(generalTab->layout());
 	gridLayout->setContentsMargins(2, 2, 2, 2);
@@ -75,7 +76,6 @@ void XYFourierFilterCurveDock::setupGeneral() {
 	layout->addWidget(generalTab);
 
 	// Slots
-	connect(uiGeneralTab.chkVisible, &QCheckBox::clicked, this, &XYFourierFilterCurveDock::visibilityChanged);
 	connect(uiGeneralTab.cbDataSourceType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFourierFilterCurveDock::dataSourceTypeChanged);
 	connect(uiGeneralTab.cbAutoRange, &QCheckBox::clicked, this, &XYFourierFilterCurveDock::autoRangeChanged);
 	connect(uiGeneralTab.leMin, &QLineEdit::textChanged, this, &XYFourierFilterCurveDock::xRangeMinChanged);
@@ -165,6 +165,7 @@ void XYFourierFilterCurveDock::initGeneralTab() {
 	uiGeneralTab.sbCutoff2->setValue(m_filterData.cutoff2);
 	this->showFilterResult();
 
+	uiGeneralTab.chkLegendVisible->setChecked(m_curve->legendVisible());
 	uiGeneralTab.chkVisible->setChecked(m_curve->isVisible());
 
 	// Slots
@@ -174,7 +175,6 @@ void XYFourierFilterCurveDock::initGeneralTab() {
 	connect(m_filterCurve, &XYFourierFilterCurve::yDataColumnChanged, this, &XYFourierFilterCurveDock::curveYDataColumnChanged);
 	connect(m_filterCurve, &XYFourierFilterCurve::filterDataChanged, this, &XYFourierFilterCurveDock::curveFilterDataChanged);
 	connect(m_filterCurve, &XYFourierFilterCurve::sourceDataChanged, this, &XYFourierFilterCurveDock::enableRecalculate);
-	connect(m_filterCurve, &XYCurve::visibleChanged, this, &XYFourierFilterCurveDock::curveVisibilityChanged);
 	connect(m_filterCurve, &WorksheetElement::plotRangeListChanged, this, &XYFourierFilterCurveDock::updatePlotRangeList);
 }
 
@@ -490,9 +490,4 @@ void XYFourierFilterCurveDock::curveFilterDataChanged(const XYFourierFilterCurve
 	this->typeChanged();
 
 	this->showFilterResult();
-}
-
-void XYFourierFilterCurveDock::curveVisibilityChanged(bool on) {
-	CONDITIONAL_LOCK_RETURN;
-	uiGeneralTab.chkVisible->setChecked(on);
 }

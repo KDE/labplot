@@ -38,6 +38,7 @@ void XYHilbertTransformCurveDock::setupGeneral() {
 	uiGeneralTab.setupUi(generalTab);
 	setPlotRangeCombobox(uiGeneralTab.cbPlotRanges);
 	setBaseWidgets(uiGeneralTab.leName, uiGeneralTab.teComment, uiGeneralTab.pbRecalculate);
+	setVisibilityWidgets(uiGeneralTab.chkVisible, uiGeneralTab.chkLegendVisible);
 
 	auto* gridLayout = static_cast<QGridLayout*>(generalTab->layout());
 	gridLayout->setContentsMargins(2, 2, 2, 2);
@@ -60,7 +61,6 @@ void XYHilbertTransformCurveDock::setupGeneral() {
 	layout->addWidget(generalTab);
 
 	// Slots
-	connect(uiGeneralTab.chkVisible, &QCheckBox::clicked, this, &XYHilbertTransformCurveDock::visibilityChanged);
 	connect(uiGeneralTab.cbAutoRange, &QCheckBox::clicked, this, &XYHilbertTransformCurveDock::autoRangeChanged);
 	connect(uiGeneralTab.leMin, &QLineEdit::textChanged, this, &XYHilbertTransformCurveDock::xRangeMinChanged);
 	connect(uiGeneralTab.leMax, &QLineEdit::textChanged, this, &XYHilbertTransformCurveDock::xRangeMaxChanged);
@@ -109,6 +109,7 @@ void XYHilbertTransformCurveDock::initGeneralTab() {
 	// enable the "recalculate"-button if the source data was changed since the last transform
 	uiGeneralTab.pbRecalculate->setEnabled(m_transformCurve->isSourceDataChangedSinceLastRecalc());
 
+	uiGeneralTab.chkLegendVisible->setChecked(m_curve->legendVisible());
 	uiGeneralTab.chkVisible->setChecked(m_curve->isVisible());
 
 	// Slots
@@ -116,7 +117,6 @@ void XYHilbertTransformCurveDock::initGeneralTab() {
 	connect(m_transformCurve, &XYHilbertTransformCurve::yDataColumnChanged, this, &XYHilbertTransformCurveDock::curveYDataColumnChanged);
 	connect(m_transformCurve, &XYHilbertTransformCurve::transformDataChanged, this, &XYHilbertTransformCurveDock::curveTransformDataChanged);
 	connect(m_transformCurve, &XYHilbertTransformCurve::sourceDataChanged, this, &XYHilbertTransformCurveDock::enableRecalculate);
-	connect(m_transformCurve, &XYCurve::visibleChanged, this, &XYHilbertTransformCurveDock::curveVisibilityChanged);
 	connect(m_transformCurve, &WorksheetElement::plotRangeListChanged, this, &XYHilbertTransformCurveDock::updatePlotRangeList);
 }
 
@@ -232,9 +232,4 @@ void XYHilbertTransformCurveDock::curveTransformDataChanged(const XYHilbertTrans
 	this->typeChanged();
 
 	this->showTransformResult();
-}
-
-void XYHilbertTransformCurveDock::curveVisibilityChanged(bool on) {
-	CONDITIONAL_LOCK_RETURN;
-	uiGeneralTab.chkVisible->setChecked(on);
 }

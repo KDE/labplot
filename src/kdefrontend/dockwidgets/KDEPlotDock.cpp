@@ -33,6 +33,7 @@ KDEPlotDock::KDEPlotDock(QWidget* parent)
 	ui.setupUi(this);
 	setPlotRangeCombobox(ui.cbPlotRanges);
 	setBaseWidgets(ui.leName, ui.teComment);
+	setVisibilityWidgets(ui.chkVisible, ui.chkLegendVisible);
 
 	// Tab "General"
 	auto* gridLayout = qobject_cast<QGridLayout*>(ui.tabGeneral->layout());
@@ -63,8 +64,6 @@ KDEPlotDock::KDEPlotDock(QWidget* parent)
 	connect(ui.cbKernelType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &KDEPlotDock::kernelTypeChanged);
 	connect(ui.cbBandwidthType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &KDEPlotDock::bandwidthTypeChanged);
 	connect(ui.sbBandwidth, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &KDEPlotDock::bandwidthChanged);
-
-	connect(ui.chkVisible, &QCheckBox::clicked, this, &KDEPlotDock::visibilityChanged);
 	connect(ui.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &KDEPlotDock::plotRangeChanged);
 
 	// Margin Plots
@@ -168,8 +167,7 @@ void KDEPlotDock::setPlots(QList<KDEPlot*> list) {
 		ui.teComment->setText(QString());
 	}
 
-	ui.leName->setStyleSheet(QString());
-	ui.leName->setToolTip(QString());
+	ui.chkLegendVisible->setChecked(m_plot->legendVisible());
 	ui.chkVisible->setChecked(m_plot->isVisible());
 
 	// load the remaining properties
@@ -184,7 +182,6 @@ void KDEPlotDock::setPlots(QList<KDEPlot*> list) {
 	connect(m_plot, &KDEPlot::bandwidthTypeChanged, this, &KDEPlotDock::plotBandwidthTypeChanged);
 	connect(m_plot, &KDEPlot::bandwidthChanged, this, &KDEPlotDock::plotBandwidthChanged);
 	connect(m_plot, &WorksheetElement::plotRangeListChanged, this, &KDEPlotDock::updatePlotRanges);
-	connect(m_plot, &WorksheetElement::visibleChanged, this, &KDEPlotDock::plotVisibilityChanged);
 
 	//"Margin Plots"-Tab
 	auto* curve = m_plot->rugCurve();
@@ -272,14 +269,6 @@ void KDEPlotDock::bandwidthChanged(double value) {
 		plot->setBandwidth(value);
 }
 
-void KDEPlotDock::visibilityChanged(bool state) {
-	if (m_initializing)
-		return;
-
-	for (auto* plot : m_plots)
-		plot->setVisible(state);
-}
-
 //"Margin Plots"-Tab
 void KDEPlotDock::rugEnabledChanged(bool state) {
 	CONDITIONAL_LOCK_RETURN;
@@ -336,11 +325,6 @@ void KDEPlotDock::plotBandwidthTypeChanged(nsl_kde_bandwidth_type type) {
 void KDEPlotDock::plotBandwidthChanged(double value) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.sbBandwidth->setValue(value);
-}
-
-void KDEPlotDock::plotVisibilityChanged(bool on) {
-	CONDITIONAL_LOCK_RETURN;
-	ui.chkVisible->setChecked(on);
 }
 
 //"Margin Plot"-Tab

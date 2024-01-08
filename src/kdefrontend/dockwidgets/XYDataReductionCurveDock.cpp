@@ -46,6 +46,7 @@ void XYDataReductionCurveDock::setupGeneral() {
 	uiGeneralTab.setupUi(generalTab);
 	setPlotRangeCombobox(uiGeneralTab.cbPlotRanges);
 	setBaseWidgets(uiGeneralTab.leName, uiGeneralTab.teComment, uiGeneralTab.pbRecalculate, uiGeneralTab.cbDataSourceType);
+	setVisibilityWidgets(uiGeneralTab.chkVisible, uiGeneralTab.chkLegendVisible);
 
 	auto* gridLayout = static_cast<QGridLayout*>(generalTab->layout());
 	gridLayout->setContentsMargins(2, 2, 2, 2);
@@ -73,7 +74,6 @@ void XYDataReductionCurveDock::setupGeneral() {
 	layout->addWidget(generalTab);
 
 	// Slots
-	connect(uiGeneralTab.chkVisible, &QCheckBox::clicked, this, &XYDataReductionCurveDock::visibilityChanged);
 	connect(uiGeneralTab.cbDataSourceType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYDataReductionCurveDock::dataSourceTypeChanged);
 	connect(uiGeneralTab.cbAutoRange, &QCheckBox::clicked, this, &XYDataReductionCurveDock::autoRangeChanged);
 	connect(uiGeneralTab.leMin, &QLineEdit::textChanged, this, &XYDataReductionCurveDock::xRangeMinChanged);
@@ -165,6 +165,7 @@ void XYDataReductionCurveDock::initGeneralTab() {
 	// enable the "recalculate"-button if the source data was changed since the last dataReduction
 	uiGeneralTab.pbRecalculate->setEnabled(m_dataReductionCurve->isSourceDataChangedSinceLastRecalc());
 
+	uiGeneralTab.chkLegendVisible->setChecked(m_curve->legendVisible());
 	uiGeneralTab.chkVisible->setChecked(m_curve->isVisible());
 
 	// Slots
@@ -175,7 +176,6 @@ void XYDataReductionCurveDock::initGeneralTab() {
 	connect(m_dataReductionCurve, &XYDataReductionCurve::dataReductionDataChanged, this, &XYDataReductionCurveDock::curveDataReductionDataChanged);
 	connect(m_dataReductionCurve, &XYDataReductionCurve::sourceDataChanged, this, &XYDataReductionCurveDock::enableRecalculate);
 	connect(m_dataReductionCurve, &WorksheetElement::plotRangeListChanged, this, &XYDataReductionCurveDock::updatePlotRangeList);
-	connect(m_dataReductionCurve, &WorksheetElement::visibleChanged, this, &XYDataReductionCurveDock::curveVisibilityChanged);
 }
 
 void XYDataReductionCurveDock::setModel() {
@@ -563,9 +563,4 @@ void XYDataReductionCurveDock::curveDataReductionDataChanged(const XYDataReducti
 	// this->typeChanged();
 
 	this->showDataReductionResult();
-}
-
-void XYDataReductionCurveDock::curveVisibilityChanged(bool on) {
-	CONDITIONAL_LOCK_RETURN;
-	uiGeneralTab.chkVisible->setChecked(on);
 }

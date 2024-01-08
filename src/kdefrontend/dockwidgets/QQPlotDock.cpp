@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : widget for QQ-plot properties
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2023-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -35,6 +35,7 @@ QQPlotDock::QQPlotDock(QWidget* parent)
 	ui.setupUi(this);
 	setPlotRangeCombobox(ui.cbPlotRanges);
 	setBaseWidgets(ui.leName, ui.teComment);
+	setVisibilityWidgets(ui.chkVisible, ui.chkLegendVisible);
 
 	// Tab "General"
 	auto* gridLayout = qobject_cast<QGridLayout*>(ui.tabGeneral->layout());
@@ -64,7 +65,6 @@ QQPlotDock::QQPlotDock(QWidget* parent)
 
 	// Slots
 	// General
-	connect(ui.chkVisible, &QCheckBox::clicked, this, &QQPlotDock::visibilityChanged);
 	connect(cbDataColumn, &TreeViewComboBox::currentModelIndexChanged, this, &QQPlotDock::dataColumnChanged);
 	connect(ui.cbDistribution, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &QQPlotDock::distributionChanged);
 	connect(ui.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &QQPlotDock::plotRangeChanged);
@@ -143,6 +143,7 @@ void QQPlotDock::setPlots(QList<QQPlot*> list) {
 		cbDataColumn->setCurrentModelIndex(QModelIndex());
 	}
 
+	ui.chkLegendVisible->setChecked(m_plot->legendVisible());
 	ui.chkVisible->setChecked(m_plot->isVisible());
 
 	// load the remaining properties
@@ -155,7 +156,6 @@ void QQPlotDock::setPlots(QList<QQPlot*> list) {
 	connect(m_plot, &QQPlot::dataColumnChanged, this, &QQPlotDock::plotDataColumnChanged);
 	connect(m_plot, &QQPlot::distributionChanged, this, &QQPlotDock::plotDistributionChanged);
 	connect(m_plot, &WorksheetElement::plotRangeListChanged, this, &QQPlotDock::updatePlotRanges);
-	connect(m_plot, &WorksheetElement::visibleChanged, this, &QQPlotDock::plotVisibilityChanged);
 }
 
 void QQPlotDock::retranslateUi() {
@@ -258,14 +258,6 @@ void QQPlotDock::distributionChanged(int index) {
 		plot->setDistribution(dist);
 }
 
-void QQPlotDock::visibilityChanged(bool state) {
-	if (m_initializing)
-		return;
-
-	for (auto* plot : m_plots)
-		plot->setVisible(state);
-}
-
 //*************************************************************
 //*********** SLOTs for changes triggered in QQPlot *******
 //*************************************************************
@@ -279,11 +271,6 @@ void QQPlotDock::plotDistributionChanged(nsl_sf_stats_distribution distribution)
 	CONDITIONAL_LOCK_RETURN;
 	int index = ui.cbDistribution->findData(static_cast<int>(distribution));
 	ui.cbDistribution->setCurrentIndex(index);
-}
-
-void QQPlotDock::plotVisibilityChanged(bool on) {
-	CONDITIONAL_LOCK_RETURN;
-	ui.chkVisible->setChecked(on);
 }
 
 //*************************************************************

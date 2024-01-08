@@ -49,6 +49,7 @@ void XYInterpolationCurveDock::setupGeneral() {
 	uiGeneralTab.setupUi(generalTab);
 	setPlotRangeCombobox(uiGeneralTab.cbPlotRanges);
 	setBaseWidgets(uiGeneralTab.leName, uiGeneralTab.teComment, uiGeneralTab.pbRecalculate, uiGeneralTab.cbDataSourceType);
+	setVisibilityWidgets(uiGeneralTab.chkVisible, uiGeneralTab.chkLegendVisible);
 
 	auto* gridLayout = static_cast<QGridLayout*>(generalTab->layout());
 	gridLayout->setContentsMargins(2, 2, 2, 2);
@@ -91,7 +92,6 @@ void XYInterpolationCurveDock::setupGeneral() {
 	uiGeneralTab.sbPoints->setToolTip(info);
 
 	// Slots
-	connect(uiGeneralTab.chkVisible, &QCheckBox::clicked, this, &XYInterpolationCurveDock::visibilityChanged);
 	connect(uiGeneralTab.cbDataSourceType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYInterpolationCurveDock::dataSourceTypeChanged);
 	connect(uiGeneralTab.cbAutoRange, &QCheckBox::clicked, this, &XYInterpolationCurveDock::autoRangeChanged);
 	connect(uiGeneralTab.leMin, &QLineEdit::textChanged, this, &XYInterpolationCurveDock::xRangeMinChanged);
@@ -208,6 +208,7 @@ void XYInterpolationCurveDock::initGeneralTab() {
 
 	this->showInterpolationResult();
 
+	uiGeneralTab.chkLegendVisible->setChecked(m_curve->legendVisible());
 	uiGeneralTab.chkVisible->setChecked(m_curve->isVisible());
 
 	// Slots
@@ -218,7 +219,6 @@ void XYInterpolationCurveDock::initGeneralTab() {
 	connect(m_interpolationCurve, &XYInterpolationCurve::interpolationDataChanged, this, &XYInterpolationCurveDock::curveInterpolationDataChanged);
 	connect(m_interpolationCurve, &XYInterpolationCurve::sourceDataChanged, this, &XYInterpolationCurveDock::enableRecalculate);
 	connect(m_interpolationCurve, &WorksheetElement::plotRangeListChanged, this, &XYInterpolationCurveDock::updatePlotRangeList);
-	connect(m_interpolationCurve, &XYCurve::visibleChanged, this, &XYInterpolationCurveDock::curveVisibilityChanged);
 }
 
 void XYInterpolationCurveDock::setModel() {
@@ -588,9 +588,4 @@ void XYInterpolationCurveDock::curveInterpolationDataChanged(const XYInterpolati
 	this->typeChanged(m_interpolationData.type);
 
 	this->showInterpolationResult();
-}
-
-void XYInterpolationCurveDock::curveVisibilityChanged(bool on) {
-	CONDITIONAL_LOCK_RETURN;
-	uiGeneralTab.chkVisible->setChecked(on);
 }

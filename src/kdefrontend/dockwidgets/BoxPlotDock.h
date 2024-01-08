@@ -66,7 +66,6 @@ private Q_SLOTS:
 	void orientationChanged(int);
 	void variableWidthChanged(bool);
 	void notchesEnabledChanged(bool);
-	void visibilityChanged(bool);
 
 	//"Box"-tab
 	void currentBoxChanged(int);
@@ -97,7 +96,6 @@ private Q_SLOTS:
 	void plotVariableWidthChanged(bool);
 	void plotWidthFactorChanged(double);
 	void plotNotchesEnabledChanged(bool);
-	void plotVisibilityChanged(bool);
 
 	// symbols
 	void plotJitteringEnabledChanged(bool);
