@@ -288,18 +288,27 @@ void TextLabel::setText(const TextWrapper& textWrapper) {
 				tw.text = te.toHtml();
 				// DEBUG("\nTW TEXT = " << STDSTRING(tw.text) << std::endl)
 				exec(new TextLabelSetTextCmd(d, tw, ki18n("%1: set label text")));
-			} else {
+			} else { // the existing text is being modified
+				QUndoCommand* parent = nullptr;
+				TextLabelSetTextCmd* command = nullptr;
 				QTextEdit te;
 				te.setHtml(textWrapper.text);
 				te.selectAll();
-				const auto& bgColor = te.textBackgroundColor();
-				QUndoCommand* parent = nullptr;
-				if (bgColor != d->backgroundColor) {
-					parent = new QUndoCommand(ki18n("%1: set label text").subs(name()).toString());
-					new TextLabelSetTeXBackgroundColorCmd(d, bgColor, ki18n("%1: set background color"), parent);
+				if (textWrapper.text.indexOf(QStringLiteral("background-color:#")) != -1) {
+					const auto& bgColor = te.textBackgroundColor();
+					if (bgColor != d->backgroundColor) {
+						parent = new QUndoCommand(ki18n("%1: set label text").subs(name()).toString());
+						new TextLabelSetTeXBackgroundColorCmd(d, bgColor, ki18n("%1: set background color"), parent);
+					}
+					command = new TextLabelSetTextCmd(d, textWrapper, ki18n("%1: set label text"), parent);
+				} else {
+					// no color available yet, plain text is being provided -> set the color from member variable
+					te.setTextBackgroundColor(d->backgroundColor);
+					TextWrapper tw = textWrapper;
+					tw.text = te.toHtml();
+					command = new TextLabelSetTextCmd(d, tw, ki18n("%1: set label text"), parent);
 				}
 
-				auto* command = new TextLabelSetTextCmd(d, textWrapper, ki18n("%1: set label text"), parent);
 				if (!parent)
 					exec(command);
 				else
