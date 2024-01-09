@@ -763,6 +763,20 @@ void LollipopPlotPrivate::updateValues() {
 		}
 		break;
 	case Value::Center:
+		QVector<qreal> listBarWidth;
+		for (const auto& columnBarLines : m_barLines) // loop over the different data columns
+			for (const auto& line : columnBarLines)
+				listBarWidth.append(line.length());
+
+		for (int i = 0; i < m_valuesStrings.size(); i++) {
+			w = fm.boundingRect(m_valuesStrings.at(i)).width();
+			const auto& point = pointsScene.at(i);
+			if (orientation == LollipopPlot::Orientation::Vertical)
+				m_valuesPoints << QPointF(point.x() - w / 2,
+										  point.y() + listBarWidth.at(i) / 2 + offset - Worksheet::convertToSceneUnits(1, Worksheet::Unit::Point));
+			else
+				m_valuesPoints << QPointF(point.x() - listBarWidth.at(i) / 2 - offset + h / 2 - w / 2, point.y() + h / 2);
+		}
 		break;
 	}
 

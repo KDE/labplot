@@ -1070,7 +1070,7 @@ void BarPlotPrivate::updateValues() {
 				m_valuesPoints << QPointF(point.x() - w / 2,
 										  point.y() + listBarWidth.at(i) / 2 + offset - Worksheet::convertToSceneUnits(1, Worksheet::Unit::Point));
 			else
-				m_valuesPoints << QPointF(point.x() - listBarWidth.at(i) / 2 - w - offset, point.y() + h / 2);
+				m_valuesPoints << QPointF(point.x() - listBarWidth.at(i) / 2 - offset + h / 2 - w / 2, point.y() + h / 2);
 		}
 		break;
 	}
