@@ -90,6 +90,7 @@ LabelWidget::LabelWidget(QWidget* parent)
 	, m_dateTimeMenu(new QMenu(this)) {
 	ui.setupUi(this);
 	setBaseWidgets(ui.leName, ui.teComment);
+	setVisibilityWidgets(ui.chbVisible);
 
 	// set the minimum size of the text edit widget to one row of a QLabel
 	ui.teLabel->setMinimumHeight(ui.lName->height());
@@ -262,7 +263,6 @@ LabelWidget::LabelWidget(QWidget* parent)
 	connect(ui.sbOffsetX, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &LabelWidget::offsetXChanged);
 	connect(ui.sbOffsetY, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &LabelWidget::offsetYChanged);
 
-	connect(ui.chbVisible, &QCheckBox::clicked, this, &LabelWidget::visibilityChanged);
 	connect(ui.chbLock, &QCheckBox::clicked, this, &LabelWidget::lockChanged);
 	connect(ui.chbBindLogicalPos, &QCheckBox::clicked, this, &LabelWidget::bindingChanged);
 	connect(ui.chbShowPlaceholderText, &QCheckBox::toggled, this, &LabelWidget::showPlaceholderTextChanged);
@@ -405,7 +405,6 @@ void LabelWidget::initConnections() {
 	m_connections << connect(m_label, &TextLabel::borderShapeChanged, this, &LabelWidget::labelBorderShapeChanged);
 	m_connections << connect(m_label, &TextLabel::borderPenChanged, this, &LabelWidget::labelBorderPenChanged);
 	m_connections << connect(m_label, &TextLabel::borderOpacityChanged, this, &LabelWidget::labelBorderOpacityChanged);
-	m_connections << connect(m_label, &TextLabel::visibleChanged, this, &LabelWidget::labelVisibleChanged);
 	m_connections << connect(m_label, &TextLabel::lockChanged, this, &LabelWidget::labelLockChanged);
 
 	if (!m_label->parentAspect()) {
@@ -1026,12 +1025,6 @@ void LabelWidget::offsetYChanged(double value) {
 		axis->setTitleOffsetY(Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point));
 }
 
-void LabelWidget::visibilityChanged(bool state) {
-	CONDITIONAL_LOCK_RETURN;
-	for (auto* label : m_labelsList)
-		label->setVisible(state);
-}
-
 void LabelWidget::lockChanged(bool locked) {
 	CONDITIONAL_LOCK_RETURN;
 	for (auto* label : m_labelsList)
@@ -1281,11 +1274,6 @@ void LabelWidget::labelOffsetYChanged(qreal offset) {
 void LabelWidget::labelRotationAngleChanged(qreal angle) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.sbRotation->setValue(angle);
-}
-
-void LabelWidget::labelVisibleChanged(bool on) {
-	CONDITIONAL_LOCK_RETURN;
-	ui.chbVisible->setChecked(on);
 }
 
 void LabelWidget::labelLockChanged(bool on) {
