@@ -18,8 +18,8 @@ class TimedLineEdit : public QLineEdit {
 	Q_OBJECT
 
 public:
-	explicit TimedLineEdit(QWidget*);
-	explicit TimedLineEdit(const QString&, QWidget*);
+	explicit TimedLineEdit(QWidget* parent = nullptr);
+	explicit TimedLineEdit(const QString&, QWidget* parent = nullptr);
 
 	int getTime();
 	void setTime(int time);

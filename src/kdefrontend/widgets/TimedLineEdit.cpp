@@ -9,7 +9,7 @@
 
 #include "TimedLineEdit.h"
 
-TimedLineEdit::TimedLineEdit(QWidget* parent = nullptr)
+TimedLineEdit::TimedLineEdit(QWidget* parent)
 	: QLineEdit(parent) {
 	m_timer.setSingleShot(true);
 	connect(this, &QLineEdit::textChanged, [=]() {
@@ -20,7 +20,7 @@ TimedLineEdit::TimedLineEdit(QWidget* parent = nullptr)
 	});
 }
 
-TimedLineEdit::TimedLineEdit(const QString& contents, QWidget* parent = nullptr)
+TimedLineEdit::TimedLineEdit(const QString& contents, QWidget* parent)
 	: QLineEdit(contents, parent) {
 	m_timer.setSingleShot(true);
 	connect(this, &QLineEdit::textChanged, [=]() {
