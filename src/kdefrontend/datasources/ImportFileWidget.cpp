@@ -676,7 +676,7 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 
 		if (ui.cbFilter->currentIndex() == 0) //"automatic"
 			filter->setAutoModeEnabled(true);
-		else if (ui.cbFilter->currentIndex() == 1) { //"custom"
+		else { //"custom" and templates
 			filter->setAutoModeEnabled(false);
 
 			// set the data portion to import
@@ -688,8 +688,6 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 			// set the remaining filter settings
 			if (m_asciiOptionsWidget)
 				m_asciiOptionsWidget->applyFilterSettings(filter);
-		} else {
-			// templates are handled in fileTypeChanged()
 		}
 
 		break;
@@ -702,14 +700,13 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 
 		if (ui.cbFilter->currentIndex() == 0) //"automatic"
 			filter->setAutoModeEnabled(true);
-		else if (ui.cbFilter->currentIndex() == 1) { //"custom"
+		else { //"custom" and templates
 			filter->setAutoModeEnabled(false);
 			if (m_binaryOptionsWidget)
 				m_binaryOptionsWidget->applyFilterSettings(filter);
-		} else
-			// templates are handled in fileTypeChanged()
+		}
 
-			filter->setStartRow(ui.sbStartRow->value());
+		filter->setStartRow(ui.sbStartRow->value());
 		filter->setEndRow(ui.sbEndRow->value());
 
 		break;
