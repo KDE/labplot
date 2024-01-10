@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-01-09 00:38+0000\n"
+"POT-Creation-Date: 2024-01-10 00:38+0000\n"
 "PO-Revision-Date: 2023-06-23 15:21+0200\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
@@ -302,7 +302,7 @@ msgstr ""
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1524
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:269
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:280
-#: src/kdefrontend/widgets/LabelWidget.cpp:189
+#: src/kdefrontend/widgets/LabelWidget.cpp:190
 #, kde-format
 msgid "Text"
 msgstr "Text"
@@ -556,10 +556,9 @@ msgid "Used in"
 msgstr ""
 
 #: src/backend/core/column/Column.cpp:175
-#, fuzzy, kde-format
-#| msgid "Plot"
+#, kde-format
 msgid "Plots"
-msgstr "Vykreslit"
+msgstr "Grafy"
 
 #: src/backend/core/column/Column.cpp:193
 #, kde-format
@@ -5602,7 +5601,7 @@ msgstr "Kruhový"
 #. i18n: ectx: property (text), widget (QCheckBox, chkAuto)
 #: src/backend/nsl/nsl_conv.c:21 src/kdefrontend/dockwidgets/AxisDock.cpp:239
 #: src/kdefrontend/dockwidgets/InfoElementDock.cpp:130
-#: src/kdefrontend/dockwidgets/InfoElementDock.cpp:287
+#: src/kdefrontend/dockwidgets/InfoElementDock.cpp:274
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:473
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:670
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:904
@@ -6760,7 +6759,7 @@ msgstr "%1: nastavit obrázek"
 msgid "%1: embed image"
 msgstr ""
 
-#: src/backend/worksheet/Image.cpp:151 src/backend/worksheet/TextLabel.cpp:362
+#: src/backend/worksheet/Image.cpp:151 src/backend/worksheet/TextLabel.cpp:371
 #, kde-format
 msgid "%1: set border opacity"
 msgstr ""
@@ -7931,7 +7930,7 @@ msgid "%1: set font"
 msgstr "%1: nastavit písmo"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:214
-#: src/backend/worksheet/TextLabel.cpp:340
+#: src/backend/worksheet/TextLabel.cpp:349
 #, kde-format
 msgid "%1: set font color"
 msgstr ""
@@ -8816,35 +8815,36 @@ msgid "%1: set plot area corner radius"
 msgstr ""
 
 #: src/backend/worksheet/TextLabel.cpp:262
-#: src/backend/worksheet/TextLabel.cpp:299
+#: src/backend/worksheet/TextLabel.cpp:301
 #, kde-format
 msgid "%1: set background color"
 msgstr "%1: nastavit barvu pozadí"
 
 #: src/backend/worksheet/TextLabel.cpp:290
-#: src/backend/worksheet/TextLabel.cpp:298
-#: src/backend/worksheet/TextLabel.cpp:302
+#: src/backend/worksheet/TextLabel.cpp:300
+#: src/backend/worksheet/TextLabel.cpp:303
 #: src/backend/worksheet/TextLabel.cpp:309
+#: src/backend/worksheet/TextLabel.cpp:318
 #, kde-format
 msgid "%1: set label text"
 msgstr ""
 
-#: src/backend/worksheet/TextLabel.cpp:326
+#: src/backend/worksheet/TextLabel.cpp:335
 #, kde-format
 msgid "%1: set label placeholdertext"
 msgstr ""
 
-#: src/backend/worksheet/TextLabel.cpp:333
+#: src/backend/worksheet/TextLabel.cpp:342
 #, kde-format
 msgid "%1: set TeX main font"
 msgstr ""
 
-#: src/backend/worksheet/TextLabel.cpp:348
+#: src/backend/worksheet/TextLabel.cpp:357
 #, kde-format
 msgid "%1: set border shape"
 msgstr ""
 
-#: src/backend/worksheet/TextLabel.cpp:355
+#: src/backend/worksheet/TextLabel.cpp:364
 #, kde-format
 msgid "%1: set border"
 msgstr ""
@@ -8935,10 +8935,9 @@ msgid "Visible"
 msgstr "Viditelné"
 
 #: src/backend/worksheet/WorksheetElement.cpp:225
-#, fuzzy, kde-format
-#| msgid "Locked"
+#, kde-format
 msgid "Lock"
-msgstr "Uzamčeno"
+msgstr "Uzamknout"
 
 #: src/backend/worksheet/WorksheetElement.cpp:234
 #, kde-format
@@ -9052,7 +9051,7 @@ msgid "Command"
 msgstr "Příkaz"
 
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:101
-#: src/kdefrontend/widgets/LabelWidget.cpp:192
+#: src/kdefrontend/widgets/LabelWidget.cpp:193
 #, kde-format
 msgid "Markdown"
 msgstr "Markdown"
@@ -9060,7 +9059,7 @@ msgstr "Markdown"
 #. i18n: ectx: property (text), widget (QLabel, lTex)
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:105
 #: src/kdefrontend/ui/settingsworksheetpage.ui:147
-#: src/kdefrontend/widgets/LabelWidget.cpp:190
+#: src/kdefrontend/widgets/LabelWidget.cpp:191
 #, kde-format
 msgid "LaTeX"
 msgstr "LaTeX"
@@ -12027,10 +12026,10 @@ msgstr ""
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:244
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:252
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:50
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:60
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:68
-#: src/kdefrontend/widgets/LabelWidget.cpp:140
-#: src/kdefrontend/widgets/LabelWidget.cpp:157
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:61
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:69
+#: src/kdefrontend/widgets/LabelWidget.cpp:141
+#: src/kdefrontend/widgets/LabelWidget.cpp:158
 #, kde-format
 msgid "Top"
 msgstr "Nahoře"
@@ -12042,10 +12041,10 @@ msgstr "Nahoře"
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:246
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:254
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:52
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:62
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:70
-#: src/kdefrontend/widgets/LabelWidget.cpp:142
-#: src/kdefrontend/widgets/LabelWidget.cpp:159
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:63
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:71
+#: src/kdefrontend/widgets/LabelWidget.cpp:143
+#: src/kdefrontend/widgets/LabelWidget.cpp:160
 #, kde-format
 msgid "Bottom"
 msgstr "Dole"
@@ -12122,12 +12121,12 @@ msgstr ""
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:240
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:248
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:46
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:56
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:64
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:57
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:65
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:361
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:132
-#: src/kdefrontend/widgets/LabelWidget.cpp:136
-#: src/kdefrontend/widgets/LabelWidget.cpp:153
+#: src/kdefrontend/widgets/LabelWidget.cpp:137
+#: src/kdefrontend/widgets/LabelWidget.cpp:154
 #: src/kdefrontend/widgets/ValueWidget.cpp:37
 #, kde-format
 msgid "Left"
@@ -12140,12 +12139,12 @@ msgstr "Vlevo"
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:242
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:250
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:48
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:58
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:66
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:59
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:67
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:362
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:133
-#: src/kdefrontend/widgets/LabelWidget.cpp:138
-#: src/kdefrontend/widgets/LabelWidget.cpp:155
+#: src/kdefrontend/widgets/LabelWidget.cpp:139
+#: src/kdefrontend/widgets/LabelWidget.cpp:156
 #: src/kdefrontend/widgets/ValueWidget.cpp:38
 #, kde-format
 msgid "Right"
@@ -12642,14 +12641,14 @@ msgstr ""
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:253
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:47
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:51
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:57
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:61
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:65
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:69
-#: src/kdefrontend/widgets/LabelWidget.cpp:137
-#: src/kdefrontend/widgets/LabelWidget.cpp:141
-#: src/kdefrontend/widgets/LabelWidget.cpp:154
-#: src/kdefrontend/widgets/LabelWidget.cpp:158
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:58
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:62
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:66
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:70
+#: src/kdefrontend/widgets/LabelWidget.cpp:138
+#: src/kdefrontend/widgets/LabelWidget.cpp:142
+#: src/kdefrontend/widgets/LabelWidget.cpp:155
+#: src/kdefrontend/widgets/LabelWidget.cpp:159
 #: src/kdefrontend/widgets/ValueWidget.cpp:88
 #: src/kdefrontend/widgets/ValueWidget.cpp:89
 #, kde-format
@@ -12884,12 +12883,12 @@ msgstr "Data, +:"
 msgid "%1 histograms: template \"%2\" loaded"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/InfoElementDock.cpp:219
+#: src/kdefrontend/dockwidgets/InfoElementDock.cpp:218
 #, kde-format
 msgid "%1 info elements: curve \"%2\" removed"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/InfoElementDock.cpp:221
+#: src/kdefrontend/dockwidgets/InfoElementDock.cpp:220
 #, kde-format
 msgid "%1: curve \"%2\" removed"
 msgstr ""
@@ -14111,10 +14110,9 @@ msgid ""
 msgstr ""
 
 #: src/kdefrontend/LabPlot.cpp:98
-#, fuzzy, kde-format
-#| msgid "(c) 2007-2023"
+#, kde-format
 msgid "(c) 2007-2024"
-msgstr "(c) 2007-2023"
+msgstr ""
 
 #: src/kdefrontend/LabPlot.cpp:101
 #, kde-format
@@ -15010,10 +15008,9 @@ msgid "min."
 msgstr "min."
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:192
-#, fuzzy, kde-format
-#| msgid "Create New Empty Project"
+#, kde-format
 msgid "Create New Project"
-msgstr "Vytvořit nový prázdný projekt"
+msgstr "Vytvořit nový projekt"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:193
 #, kde-format
@@ -15021,30 +15018,24 @@ msgid "Load Last Used Project"
 msgstr "Načíst naposled otevřený projekt"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:197
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Print Worksheet"
+#, kde-format
 msgid "With Worksheet"
-msgstr "Vytisknout pracovní list"
+msgstr ""
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:198
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Print Spreadsheet"
+#, kde-format
 msgid "With Spreadsheet"
-msgstr "Vytisknout sešit"
+msgstr ""
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:199
-#, fuzzy, kde-format
-#| msgid "Create Data Spreadsheet"
+#, kde-format
 msgid "With Worksheet and Spreadsheet"
-msgstr "Vytvořit sešit s daty"
+msgstr ""
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:201
-#, fuzzy, kde-format
-#| msgid "Notebook"
+#, kde-format
 msgid "With Notebook"
-msgstr "Poznámkový blok"
+msgstr ""
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:204
 #, kde-format
@@ -15981,20 +15972,11 @@ msgid ""
 msgstr ""
 
 #: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:89
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Random number distributions as defined in <a href="
-#| "\"https://www.gnu.org/software/gsl/doc/html/randist.html\"><span style=\" "
-#| "text-decoration: underline; color:#2980b9;\">GSL documentation</span></"
-#| "a></p></body></html>"
+#, kde-format
 msgid ""
 "Random number distributions as defined in <a href=\"https://www.gnu.org/"
 "software/gsl/doc/html/randist.html\">GSL documentation</a>"
 msgstr ""
-"<html><head/><body><p>Distribuce náhodných čísel jsou určeny v <a href="
-"\"https://www.gnu.org/software/gsl/doc/html/randist.html\"><span style=\" "
-"text-decoration: underline; color:#2980b9;\">Dokumentaci GSL</span></a></p></"
-"body></html>"
 
 #: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:461
 #, kde-format
@@ -20953,10 +20935,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lNewProject)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:96
-#, fuzzy, kde-format
-#| msgid "Save Project"
+#, kde-format
 msgid "New Project:"
-msgstr "Uložit projekt"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lGUMTerms)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:106
@@ -21993,144 +21974,144 @@ msgstr ""
 msgid "Removing Keyword"
 msgstr "Odstraňuji klíčové slovo"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:111
+#: src/kdefrontend/widgets/LabelWidget.cpp:112
 #, kde-format
 msgid ""
 "Use logical instead of absolute coordinates to specify the position on the "
 "plot"
 msgstr ""
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:126
+#: src/kdefrontend/widgets/LabelWidget.cpp:127
 #, kde-format
 msgid "Bold"
 msgstr "Tučné"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:127
+#: src/kdefrontend/widgets/LabelWidget.cpp:128
 #, kde-format
 msgid "Italic"
 msgstr "Kurzíva"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:128
+#: src/kdefrontend/widgets/LabelWidget.cpp:129
 #, kde-format
 msgid "Underline"
 msgstr "Podtržené"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:129
+#: src/kdefrontend/widgets/LabelWidget.cpp:130
 #, kde-format
 msgid "Strike Out"
 msgstr "Přeškrtnuté"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:130
+#: src/kdefrontend/widgets/LabelWidget.cpp:131
 #, kde-format
 msgid "Super Script"
 msgstr ""
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:131
+#: src/kdefrontend/widgets/LabelWidget.cpp:132
 #, kde-format
 msgid "Sub-Script"
 msgstr ""
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:132
+#: src/kdefrontend/widgets/LabelWidget.cpp:133
 #, kde-format
 msgid "Insert Symbol"
 msgstr ""
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:133
+#: src/kdefrontend/widgets/LabelWidget.cpp:134
 #, kde-format
 msgid "Insert Date/Time"
 msgstr ""
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:161
+#: src/kdefrontend/widgets/LabelWidget.cpp:162
 #, kde-format
 msgid "No Border"
 msgstr "Bez okrajů"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:162
+#: src/kdefrontend/widgets/LabelWidget.cpp:163
 #, kde-format
 msgid "Rectangle"
 msgstr "Obdélník"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:163
+#: src/kdefrontend/widgets/LabelWidget.cpp:164
 #, kde-format
 msgid "Ellipse"
 msgstr "Elipsa"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:164
+#: src/kdefrontend/widgets/LabelWidget.cpp:165
 #, kde-format
 msgid "Round sided rectangle"
 msgstr ""
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:165
+#: src/kdefrontend/widgets/LabelWidget.cpp:166
 #, kde-format
 msgid "Round corner rectangle"
 msgstr ""
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:166
+#: src/kdefrontend/widgets/LabelWidget.cpp:167
 #, kde-format
 msgid "Inwards round corner rectangle"
 msgstr ""
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:167
+#: src/kdefrontend/widgets/LabelWidget.cpp:168
 #, kde-format
 msgid "Dented border rectangle"
 msgstr ""
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:168
+#: src/kdefrontend/widgets/LabelWidget.cpp:169
 #, kde-format
 msgid "Cuboid"
 msgstr ""
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:169
+#: src/kdefrontend/widgets/LabelWidget.cpp:170
 #, kde-format
 msgid "Up Pointing rectangle"
 msgstr ""
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:170
+#: src/kdefrontend/widgets/LabelWidget.cpp:171
 #, kde-format
 msgid "Down Pointing rectangle"
 msgstr ""
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:171
+#: src/kdefrontend/widgets/LabelWidget.cpp:172
 #, kde-format
 msgid "Left Pointing rectangle"
 msgstr ""
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:172
+#: src/kdefrontend/widgets/LabelWidget.cpp:173
 #, kde-format
 msgid "Right Pointing rectangle"
 msgstr ""
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:174
+#: src/kdefrontend/widgets/LabelWidget.cpp:175
 #, kde-format
 msgid "No line"
 msgstr ""
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:175
+#: src/kdefrontend/widgets/LabelWidget.cpp:176
 #, kde-format
 msgid "Solid line"
 msgstr "Plná čára"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:176
+#: src/kdefrontend/widgets/LabelWidget.cpp:177
 #, kde-format
 msgid "Dash line"
 msgstr "Čárkovaná čára"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:177
+#: src/kdefrontend/widgets/LabelWidget.cpp:178
 #, kde-format
 msgid "Dot line"
 msgstr "Tečkovaná čára"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:178
+#: src/kdefrontend/widgets/LabelWidget.cpp:179
 #, kde-format
 msgid "Dash dot line"
 msgstr "Tečko čárkovaná čára"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:179
+#: src/kdefrontend/widgets/LabelWidget.cpp:180
 #, kde-format
 msgid "Dash dot dot line"
 msgstr ""
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:196
+#: src/kdefrontend/widgets/LabelWidget.cpp:197
 #, kde-format
 msgid ""
 "Text setting mode:<ul><li>Text - text setting using rich-text formatting</"
@@ -22138,14 +22119,14 @@ msgid ""
 "li><li>Markdown - text setting using Markdown markup language</li></ul>"
 msgstr ""
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:863
-#: src/kdefrontend/widgets/LabelWidget.cpp:889
+#: src/kdefrontend/widgets/LabelWidget.cpp:862
+#: src/kdefrontend/widgets/LabelWidget.cpp:888
 #, kde-format
 msgid "Date"
 msgstr "Datum"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:871
-#: src/kdefrontend/widgets/LabelWidget.cpp:897
+#: src/kdefrontend/widgets/LabelWidget.cpp:870
+#: src/kdefrontend/widgets/LabelWidget.cpp:896
 #, kde-format
 msgid "Date and Time"
 msgstr "Datum a čas"
@@ -22419,15 +22400,3 @@ msgstr ""
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Nelze otevřít soubor:"
-
-#~ msgid "Do Nothing"
-#~ msgstr "Nedělat nic"
-
-#~ msgid "Create New Project with Worksheet"
-#~ msgstr "Vytvořit nový projekt s pracovním listem"
-
-#~ msgid "Create New Project with Spreadsheet"
-#~ msgstr "Vytvořit nový projekt se sešitem"
-
-#~ msgid "Locking"
-#~ msgstr "Zamykání"

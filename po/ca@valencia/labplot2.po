@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-01-09 00:38+0000\n"
-"PO-Revision-Date: 2024-01-04 08:48+0200\n"
+"POT-Creation-Date: 2024-01-10 00:38+0000\n"
+"PO-Revision-Date: 2024-01-08 10:54+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -310,7 +310,7 @@ msgstr "Enter gran"
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1524
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:269
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:280
-#: src/kdefrontend/widgets/LabelWidget.cpp:189
+#: src/kdefrontend/widgets/LabelWidget.cpp:190
 #, kde-format
 msgid "Text"
 msgstr "Text"
@@ -5723,7 +5723,7 @@ msgstr "Circular"
 #. i18n: ectx: property (text), widget (QCheckBox, chkAuto)
 #: src/backend/nsl/nsl_conv.c:21 src/kdefrontend/dockwidgets/AxisDock.cpp:239
 #: src/kdefrontend/dockwidgets/InfoElementDock.cpp:130
-#: src/kdefrontend/dockwidgets/InfoElementDock.cpp:287
+#: src/kdefrontend/dockwidgets/InfoElementDock.cpp:274
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:473
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:670
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:904
@@ -6880,7 +6880,7 @@ msgstr "%1: establix la imatge"
 msgid "%1: embed image"
 msgstr "%1: incrusta una imatge"
 
-#: src/backend/worksheet/Image.cpp:151 src/backend/worksheet/TextLabel.cpp:362
+#: src/backend/worksheet/Image.cpp:151 src/backend/worksheet/TextLabel.cpp:371
 #, kde-format
 msgid "%1: set border opacity"
 msgstr "%1: establix l'opacitat de la vora"
@@ -8060,7 +8060,7 @@ msgid "%1: set font"
 msgstr "%1: establix el tipus de lletra"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:214
-#: src/backend/worksheet/TextLabel.cpp:340
+#: src/backend/worksheet/TextLabel.cpp:349
 #, kde-format
 msgid "%1: set font color"
 msgstr "%1: establix el color del tipus de lletra"
@@ -8959,35 +8959,36 @@ msgid "%1: set plot area corner radius"
 msgstr "%1: establix el radi dels cantons de l'àrea del diagrama"
 
 #: src/backend/worksheet/TextLabel.cpp:262
-#: src/backend/worksheet/TextLabel.cpp:299
+#: src/backend/worksheet/TextLabel.cpp:301
 #, kde-format
 msgid "%1: set background color"
 msgstr "%1: establix el color del fons"
 
 #: src/backend/worksheet/TextLabel.cpp:290
-#: src/backend/worksheet/TextLabel.cpp:298
-#: src/backend/worksheet/TextLabel.cpp:302
+#: src/backend/worksheet/TextLabel.cpp:300
+#: src/backend/worksheet/TextLabel.cpp:303
 #: src/backend/worksheet/TextLabel.cpp:309
+#: src/backend/worksheet/TextLabel.cpp:318
 #, kde-format
 msgid "%1: set label text"
 msgstr "%1: establix el text de l'etiqueta"
 
-#: src/backend/worksheet/TextLabel.cpp:326
+#: src/backend/worksheet/TextLabel.cpp:335
 #, kde-format
 msgid "%1: set label placeholdertext"
 msgstr "%1: establix l'etiqueta amb un text d'espai reservat"
 
-#: src/backend/worksheet/TextLabel.cpp:333
+#: src/backend/worksheet/TextLabel.cpp:342
 #, kde-format
 msgid "%1: set TeX main font"
 msgstr "%1: establix el tipus de lletra principal de TeX"
 
-#: src/backend/worksheet/TextLabel.cpp:348
+#: src/backend/worksheet/TextLabel.cpp:357
 #, kde-format
 msgid "%1: set border shape"
 msgstr "%1: establix la forma de la vora"
 
-#: src/backend/worksheet/TextLabel.cpp:355
+#: src/backend/worksheet/TextLabel.cpp:364
 #, kde-format
 msgid "%1: set border"
 msgstr "%1: establix la vora"
@@ -9194,7 +9195,7 @@ msgid "Command"
 msgstr "Ordre"
 
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:101
-#: src/kdefrontend/widgets/LabelWidget.cpp:192
+#: src/kdefrontend/widgets/LabelWidget.cpp:193
 #, kde-format
 msgid "Markdown"
 msgstr "Markdown"
@@ -9202,7 +9203,7 @@ msgstr "Markdown"
 #. i18n: ectx: property (text), widget (QLabel, lTex)
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:105
 #: src/kdefrontend/ui/settingsworksheetpage.ui:147
-#: src/kdefrontend/widgets/LabelWidget.cpp:190
+#: src/kdefrontend/widgets/LabelWidget.cpp:191
 #, kde-format
 msgid "LaTeX"
 msgstr "LaTeX"
@@ -12340,10 +12341,10 @@ msgstr "Regions de les dades"
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:244
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:252
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:50
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:60
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:68
-#: src/kdefrontend/widgets/LabelWidget.cpp:140
-#: src/kdefrontend/widgets/LabelWidget.cpp:157
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:61
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:69
+#: src/kdefrontend/widgets/LabelWidget.cpp:141
+#: src/kdefrontend/widgets/LabelWidget.cpp:158
 #, kde-format
 msgid "Top"
 msgstr "Dalt"
@@ -12355,10 +12356,10 @@ msgstr "Dalt"
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:246
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:254
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:52
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:62
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:70
-#: src/kdefrontend/widgets/LabelWidget.cpp:142
-#: src/kdefrontend/widgets/LabelWidget.cpp:159
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:63
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:71
+#: src/kdefrontend/widgets/LabelWidget.cpp:143
+#: src/kdefrontend/widgets/LabelWidget.cpp:160
 #, kde-format
 msgid "Bottom"
 msgstr "Baix"
@@ -12442,12 +12443,12 @@ msgstr "Mig farcida, gran"
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:240
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:248
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:46
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:56
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:64
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:57
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:65
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:361
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:132
-#: src/kdefrontend/widgets/LabelWidget.cpp:136
-#: src/kdefrontend/widgets/LabelWidget.cpp:153
+#: src/kdefrontend/widgets/LabelWidget.cpp:137
+#: src/kdefrontend/widgets/LabelWidget.cpp:154
 #: src/kdefrontend/widgets/ValueWidget.cpp:37
 #, kde-format
 msgid "Left"
@@ -12460,12 +12461,12 @@ msgstr "Esquerra"
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:242
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:250
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:48
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:58
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:66
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:59
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:67
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:362
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:133
-#: src/kdefrontend/widgets/LabelWidget.cpp:138
-#: src/kdefrontend/widgets/LabelWidget.cpp:155
+#: src/kdefrontend/widgets/LabelWidget.cpp:139
+#: src/kdefrontend/widgets/LabelWidget.cpp:156
 #: src/kdefrontend/widgets/ValueWidget.cpp:38
 #, kde-format
 msgid "Right"
@@ -12984,14 +12985,14 @@ msgstr "Fila principal"
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:253
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:47
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:51
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:57
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:61
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:65
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:69
-#: src/kdefrontend/widgets/LabelWidget.cpp:137
-#: src/kdefrontend/widgets/LabelWidget.cpp:141
-#: src/kdefrontend/widgets/LabelWidget.cpp:154
-#: src/kdefrontend/widgets/LabelWidget.cpp:158
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:58
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:62
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:66
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:70
+#: src/kdefrontend/widgets/LabelWidget.cpp:138
+#: src/kdefrontend/widgets/LabelWidget.cpp:142
+#: src/kdefrontend/widgets/LabelWidget.cpp:155
+#: src/kdefrontend/widgets/LabelWidget.cpp:159
 #: src/kdefrontend/widgets/ValueWidget.cpp:88
 #: src/kdefrontend/widgets/ValueWidget.cpp:89
 #, kde-format
@@ -13229,12 +13230,12 @@ msgstr "Dades, +:"
 msgid "%1 histograms: template \"%2\" loaded"
 msgstr "Histogrames %1: s'ha carregat la plantilla «%2»"
 
-#: src/kdefrontend/dockwidgets/InfoElementDock.cpp:219
+#: src/kdefrontend/dockwidgets/InfoElementDock.cpp:218
 #, kde-format
 msgid "%1 info elements: curve \"%2\" removed"
 msgstr "Elements d'informació %1: s'ha eliminat la corba «%2»"
 
-#: src/kdefrontend/dockwidgets/InfoElementDock.cpp:221
+#: src/kdefrontend/dockwidgets/InfoElementDock.cpp:220
 #, kde-format
 msgid "%1: curve \"%2\" removed"
 msgstr "%1: s'ha eliminat la corba «%2»"
@@ -14483,10 +14484,9 @@ msgstr ""
 "obert i multiplataforma, accessible a tothom."
 
 #: src/kdefrontend/LabPlot.cpp:98
-#, fuzzy, kde-format
-#| msgid "(c) 2007-2023"
+#, kde-format
 msgid "(c) 2007-2024"
-msgstr "(c) 2007-2023"
+msgstr "(c) 2007-2024"
 
 #: src/kdefrontend/LabPlot.cpp:101
 #, kde-format
@@ -22479,7 +22479,7 @@ msgstr "No es pot eliminar la paraula clau obligatòria."
 msgid "Removing Keyword"
 msgstr "S'està eliminant la paraula clau"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:111
+#: src/kdefrontend/widgets/LabelWidget.cpp:112
 #, kde-format
 msgid ""
 "Use logical instead of absolute coordinates to specify the position on the "
@@ -22488,141 +22488,141 @@ msgstr ""
 "Utilitza coordenades lògiques en lloc d'absolutes per a especificar la "
 "posició del diagrama"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:126
+#: src/kdefrontend/widgets/LabelWidget.cpp:127
 #, kde-format
 msgid "Bold"
 msgstr "Negreta"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:127
+#: src/kdefrontend/widgets/LabelWidget.cpp:128
 #, kde-format
 msgid "Italic"
 msgstr "Cursiva"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:128
+#: src/kdefrontend/widgets/LabelWidget.cpp:129
 #, kde-format
 msgid "Underline"
 msgstr "Subratllat"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:129
+#: src/kdefrontend/widgets/LabelWidget.cpp:130
 #, kde-format
 msgid "Strike Out"
 msgstr "Barrat"
 
 # skip-rule: kct-script,k-Super
-#: src/kdefrontend/widgets/LabelWidget.cpp:130
+#: src/kdefrontend/widgets/LabelWidget.cpp:131
 #, kde-format
 msgid "Super Script"
 msgstr "Superíndex"
 
 # skip-rule: kct-script
-#: src/kdefrontend/widgets/LabelWidget.cpp:131
+#: src/kdefrontend/widgets/LabelWidget.cpp:132
 #, kde-format
 msgid "Sub-Script"
 msgstr "Subíndex"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:132
+#: src/kdefrontend/widgets/LabelWidget.cpp:133
 #, kde-format
 msgid "Insert Symbol"
 msgstr "Inserix un símbol"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:133
+#: src/kdefrontend/widgets/LabelWidget.cpp:134
 #, kde-format
 msgid "Insert Date/Time"
 msgstr "Inserix la data i hora"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:161
+#: src/kdefrontend/widgets/LabelWidget.cpp:162
 #, kde-format
 msgid "No Border"
 msgstr "Sense vores"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:162
+#: src/kdefrontend/widgets/LabelWidget.cpp:163
 #, kde-format
 msgid "Rectangle"
 msgstr "Rectangle"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:163
+#: src/kdefrontend/widgets/LabelWidget.cpp:164
 #, kde-format
 msgid "Ellipse"
 msgstr "El·lipse"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:164
+#: src/kdefrontend/widgets/LabelWidget.cpp:165
 #, kde-format
 msgid "Round sided rectangle"
 msgstr "Rectangle amb els costats rodons"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:165
+#: src/kdefrontend/widgets/LabelWidget.cpp:166
 #, kde-format
 msgid "Round corner rectangle"
 msgstr "Rectangle amb cantó arrodonit"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:166
+#: src/kdefrontend/widgets/LabelWidget.cpp:167
 #, kde-format
 msgid "Inwards round corner rectangle"
 msgstr "Rectangle amb cantó arrodonit cap a dins"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:167
+#: src/kdefrontend/widgets/LabelWidget.cpp:168
 #, kde-format
 msgid "Dented border rectangle"
 msgstr "Rectangle amb vora dentada"
 
 # Nota: https://ca.wikipedia.org/wiki/Ortoedre
-#: src/kdefrontend/widgets/LabelWidget.cpp:168
+#: src/kdefrontend/widgets/LabelWidget.cpp:169
 #, kde-format
 msgid "Cuboid"
 msgstr "Ortoedre"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:169
+#: src/kdefrontend/widgets/LabelWidget.cpp:170
 #, kde-format
 msgid "Up Pointing rectangle"
 msgstr "Rectangle que assenyala cap amunt"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:170
+#: src/kdefrontend/widgets/LabelWidget.cpp:171
 #, kde-format
 msgid "Down Pointing rectangle"
 msgstr "Rectangle que assenyala cap avall"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:171
+#: src/kdefrontend/widgets/LabelWidget.cpp:172
 #, kde-format
 msgid "Left Pointing rectangle"
 msgstr "Rectangle que assenyala cap a l'esquerra"
 
 # Nota: https://ca.wikipedia.org/wiki/Triangle_rectangle
-#: src/kdefrontend/widgets/LabelWidget.cpp:172
+#: src/kdefrontend/widgets/LabelWidget.cpp:173
 #, kde-format
 msgid "Right Pointing rectangle"
 msgstr "Rectangle que assenyala cap a la dreta"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:174
+#: src/kdefrontend/widgets/LabelWidget.cpp:175
 #, kde-format
 msgid "No line"
 msgstr "Sense línia"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:175
+#: src/kdefrontend/widgets/LabelWidget.cpp:176
 #, kde-format
 msgid "Solid line"
 msgstr "Línia contínua"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:176
+#: src/kdefrontend/widgets/LabelWidget.cpp:177
 #, kde-format
 msgid "Dash line"
 msgstr "Línia de guions"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:177
+#: src/kdefrontend/widgets/LabelWidget.cpp:178
 #, kde-format
 msgid "Dot line"
 msgstr "Línia de punts"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:178
+#: src/kdefrontend/widgets/LabelWidget.cpp:179
 #, kde-format
 msgid "Dash dot line"
 msgstr "Línia de guió-punt"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:179
+#: src/kdefrontend/widgets/LabelWidget.cpp:180
 #, kde-format
 msgid "Dash dot dot line"
 msgstr "Línia de guió-punt-punt"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:196
+#: src/kdefrontend/widgets/LabelWidget.cpp:197
 #, kde-format
 msgid ""
 "Text setting mode:<ul><li>Text - text setting using rich-text formatting</"
@@ -22634,14 +22634,14 @@ msgstr ""
 "es requerix la instal·lació de LaTeX</li><li>Markdown - s'establix el text "
 "utilitzant el llenguatge de marcadors Markdown</li></ul>"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:863
-#: src/kdefrontend/widgets/LabelWidget.cpp:889
+#: src/kdefrontend/widgets/LabelWidget.cpp:862
+#: src/kdefrontend/widgets/LabelWidget.cpp:888
 #, kde-format
 msgid "Date"
 msgstr "Data"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:871
-#: src/kdefrontend/widgets/LabelWidget.cpp:897
+#: src/kdefrontend/widgets/LabelWidget.cpp:870
+#: src/kdefrontend/widgets/LabelWidget.cpp:896
 #, kde-format
 msgid "Date and Time"
 msgstr "Data i hora"

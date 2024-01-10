@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-01-09 00:38+0000\n"
+"POT-Creation-Date: 2024-01-10 00:38+0000\n"
 "PO-Revision-Date: 2023-11-13 14:41+0300\n"
 "Last-Translator: Sergey Kazorin <translation-team@basealt.ru>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -309,7 +309,7 @@ msgstr "Большое целое число"
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1524
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:269
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:280
-#: src/kdefrontend/widgets/LabelWidget.cpp:189
+#: src/kdefrontend/widgets/LabelWidget.cpp:190
 #, kde-format
 msgid "Text"
 msgstr "Текст"
@@ -5756,7 +5756,7 @@ msgstr "Циклическая"
 #. i18n: ectx: property (text), widget (QCheckBox, chkAuto)
 #: src/backend/nsl/nsl_conv.c:21 src/kdefrontend/dockwidgets/AxisDock.cpp:239
 #: src/kdefrontend/dockwidgets/InfoElementDock.cpp:130
-#: src/kdefrontend/dockwidgets/InfoElementDock.cpp:287
+#: src/kdefrontend/dockwidgets/InfoElementDock.cpp:274
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:473
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:670
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:904
@@ -6937,7 +6937,7 @@ msgstr "%1: задание изображения"
 msgid "%1: embed image"
 msgstr "%1: встраивание изображения"
 
-#: src/backend/worksheet/Image.cpp:151 src/backend/worksheet/TextLabel.cpp:362
+#: src/backend/worksheet/Image.cpp:151 src/backend/worksheet/TextLabel.cpp:371
 #, kde-format
 msgid "%1: set border opacity"
 msgstr "%1: задание степени непрозрачности границы"
@@ -8139,7 +8139,7 @@ msgid "%1: set font"
 msgstr "%1: задание шрифта"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:214
-#: src/backend/worksheet/TextLabel.cpp:340
+#: src/backend/worksheet/TextLabel.cpp:349
 #, kde-format
 msgid "%1: set font color"
 msgstr "%1: задание цвета шрифта"
@@ -9040,35 +9040,36 @@ msgid "%1: set plot area corner radius"
 msgstr "%1: задание радиуса cкругления углов области построения"
 
 #: src/backend/worksheet/TextLabel.cpp:262
-#: src/backend/worksheet/TextLabel.cpp:299
+#: src/backend/worksheet/TextLabel.cpp:301
 #, kde-format
 msgid "%1: set background color"
 msgstr "%1: задание цвета фона"
 
 #: src/backend/worksheet/TextLabel.cpp:290
-#: src/backend/worksheet/TextLabel.cpp:298
-#: src/backend/worksheet/TextLabel.cpp:302
+#: src/backend/worksheet/TextLabel.cpp:300
+#: src/backend/worksheet/TextLabel.cpp:303
 #: src/backend/worksheet/TextLabel.cpp:309
+#: src/backend/worksheet/TextLabel.cpp:318
 #, kde-format
 msgid "%1: set label text"
 msgstr "%1: задание текста подписи"
 
-#: src/backend/worksheet/TextLabel.cpp:326
+#: src/backend/worksheet/TextLabel.cpp:335
 #, kde-format
 msgid "%1: set label placeholdertext"
 msgstr "%1: задание замещающего текста"
 
-#: src/backend/worksheet/TextLabel.cpp:333
+#: src/backend/worksheet/TextLabel.cpp:342
 #, kde-format
 msgid "%1: set TeX main font"
 msgstr "%1: задание основного шрифта TeX"
 
-#: src/backend/worksheet/TextLabel.cpp:348
+#: src/backend/worksheet/TextLabel.cpp:357
 #, kde-format
 msgid "%1: set border shape"
 msgstr "%1: задание формы границы"
 
-#: src/backend/worksheet/TextLabel.cpp:355
+#: src/backend/worksheet/TextLabel.cpp:364
 #, kde-format
 msgid "%1: set border"
 msgstr "%1: задание границы"
@@ -9279,7 +9280,7 @@ msgid "Command"
 msgstr "Команда"
 
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:101
-#: src/kdefrontend/widgets/LabelWidget.cpp:192
+#: src/kdefrontend/widgets/LabelWidget.cpp:193
 #, kde-format
 msgid "Markdown"
 msgstr "Markdown"
@@ -9287,7 +9288,7 @@ msgstr "Markdown"
 #. i18n: ectx: property (text), widget (QLabel, lTex)
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:105
 #: src/kdefrontend/ui/settingsworksheetpage.ui:147
-#: src/kdefrontend/widgets/LabelWidget.cpp:190
+#: src/kdefrontend/widgets/LabelWidget.cpp:191
 #, kde-format
 msgid "LaTeX"
 msgstr "LaTeX"
@@ -12491,10 +12492,10 @@ msgstr "Области данных"
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:244
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:252
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:50
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:60
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:68
-#: src/kdefrontend/widgets/LabelWidget.cpp:140
-#: src/kdefrontend/widgets/LabelWidget.cpp:157
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:61
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:69
+#: src/kdefrontend/widgets/LabelWidget.cpp:141
+#: src/kdefrontend/widgets/LabelWidget.cpp:158
 #, kde-format
 msgid "Top"
 msgstr "Вверху"
@@ -12506,10 +12507,10 @@ msgstr "Вверху"
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:246
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:254
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:52
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:62
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:70
-#: src/kdefrontend/widgets/LabelWidget.cpp:142
-#: src/kdefrontend/widgets/LabelWidget.cpp:159
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:63
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:71
+#: src/kdefrontend/widgets/LabelWidget.cpp:143
+#: src/kdefrontend/widgets/LabelWidget.cpp:160
 #, kde-format
 msgid "Bottom"
 msgstr "Внизу"
@@ -12592,12 +12593,12 @@ msgstr "Полузаполненная, большая"
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:240
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:248
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:46
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:56
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:64
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:57
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:65
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:361
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:132
-#: src/kdefrontend/widgets/LabelWidget.cpp:136
-#: src/kdefrontend/widgets/LabelWidget.cpp:153
+#: src/kdefrontend/widgets/LabelWidget.cpp:137
+#: src/kdefrontend/widgets/LabelWidget.cpp:154
 #: src/kdefrontend/widgets/ValueWidget.cpp:37
 #, kde-format
 msgid "Left"
@@ -12610,12 +12611,12 @@ msgstr "Слева"
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:242
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:250
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:48
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:58
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:66
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:59
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:67
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:362
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:133
-#: src/kdefrontend/widgets/LabelWidget.cpp:138
-#: src/kdefrontend/widgets/LabelWidget.cpp:155
+#: src/kdefrontend/widgets/LabelWidget.cpp:139
+#: src/kdefrontend/widgets/LabelWidget.cpp:156
 #: src/kdefrontend/widgets/ValueWidget.cpp:38
 #, kde-format
 msgid "Right"
@@ -13131,14 +13132,14 @@ msgstr "По строкам"
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:253
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:47
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:51
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:57
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:61
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:65
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:69
-#: src/kdefrontend/widgets/LabelWidget.cpp:137
-#: src/kdefrontend/widgets/LabelWidget.cpp:141
-#: src/kdefrontend/widgets/LabelWidget.cpp:154
-#: src/kdefrontend/widgets/LabelWidget.cpp:158
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:58
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:62
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:66
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:70
+#: src/kdefrontend/widgets/LabelWidget.cpp:138
+#: src/kdefrontend/widgets/LabelWidget.cpp:142
+#: src/kdefrontend/widgets/LabelWidget.cpp:155
+#: src/kdefrontend/widgets/LabelWidget.cpp:159
 #: src/kdefrontend/widgets/ValueWidget.cpp:88
 #: src/kdefrontend/widgets/ValueWidget.cpp:89
 #, kde-format
@@ -13377,12 +13378,12 @@ msgstr "Данные, +:"
 msgid "%1 histograms: template \"%2\" loaded"
 msgstr "Оси (%1): загрузка шаблона «%2»"
 
-#: src/kdefrontend/dockwidgets/InfoElementDock.cpp:219
+#: src/kdefrontend/dockwidgets/InfoElementDock.cpp:218
 #, kde-format
 msgid "%1 info elements: curve \"%2\" removed"
 msgstr "Маркеры (%1): удаление кривой «%2»"
 
-#: src/kdefrontend/dockwidgets/InfoElementDock.cpp:221
+#: src/kdefrontend/dockwidgets/InfoElementDock.cpp:220
 #, kde-format
 msgid "%1: curve \"%2\" removed"
 msgstr "%1: удаление кривой «%2»"
@@ -22817,7 +22818,7 @@ msgstr "Не удалось удалить обязательное ключев
 msgid "Removing Keyword"
 msgstr "Удаление ключевого слова"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:111
+#: src/kdefrontend/widgets/LabelWidget.cpp:112
 #, kde-format
 msgid ""
 "Use logical instead of absolute coordinates to specify the position on the "
@@ -22826,138 +22827,138 @@ msgstr ""
 "Использовать логические координаты вместо абсолютных для указания положения "
 "графика"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:126
+#: src/kdefrontend/widgets/LabelWidget.cpp:127
 #, kde-format
 msgid "Bold"
 msgstr "Жирный шрифт"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:127
+#: src/kdefrontend/widgets/LabelWidget.cpp:128
 #, kde-format
 msgid "Italic"
 msgstr "Курсив"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:128
+#: src/kdefrontend/widgets/LabelWidget.cpp:129
 #, kde-format
 msgid "Underline"
 msgstr "Подчёркивание"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:129
+#: src/kdefrontend/widgets/LabelWidget.cpp:130
 #, kde-format
 msgid "Strike Out"
 msgstr "Зачёркивание"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:130
+#: src/kdefrontend/widgets/LabelWidget.cpp:131
 #, kde-format
 msgid "Super Script"
 msgstr "Верхний индекс"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:131
+#: src/kdefrontend/widgets/LabelWidget.cpp:132
 #, kde-format
 msgid "Sub-Script"
 msgstr "Нижний индекс"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:132
+#: src/kdefrontend/widgets/LabelWidget.cpp:133
 #, kde-format
 msgid "Insert Symbol"
 msgstr "Вставка символа"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:133
+#: src/kdefrontend/widgets/LabelWidget.cpp:134
 #, kde-format
 msgid "Insert Date/Time"
 msgstr "Вставка времени и даты"
 
 # BUGME: please split to allow translation "Порядок сортировки:" --aspotashev
-#: src/kdefrontend/widgets/LabelWidget.cpp:161
+#: src/kdefrontend/widgets/LabelWidget.cpp:162
 #, kde-format
 msgid "No Border"
 msgstr "Без границы"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:162
+#: src/kdefrontend/widgets/LabelWidget.cpp:163
 #, kde-format
 msgid "Rectangle"
 msgstr "Прямоугольник"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:163
+#: src/kdefrontend/widgets/LabelWidget.cpp:164
 #, kde-format
 msgid "Ellipse"
 msgstr "Эллипс"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:164
+#: src/kdefrontend/widgets/LabelWidget.cpp:165
 #, kde-format
 msgid "Round sided rectangle"
 msgstr "Прямоугольник с закруглёнными сторонами"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:165
+#: src/kdefrontend/widgets/LabelWidget.cpp:166
 #, kde-format
 msgid "Round corner rectangle"
 msgstr "Прямоугольник с закруглёнными углами"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:166
+#: src/kdefrontend/widgets/LabelWidget.cpp:167
 #, kde-format
 msgid "Inwards round corner rectangle"
 msgstr "Прямоугольник с закруглёнными внутрь углами"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:167
+#: src/kdefrontend/widgets/LabelWidget.cpp:168
 #, kde-format
 msgid "Dented border rectangle"
 msgstr "Прямоугольник с вогнутыми сторонами"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:168
+#: src/kdefrontend/widgets/LabelWidget.cpp:169
 #, kde-format
 msgid "Cuboid"
 msgstr "Прямоугольный параллелепипед"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:169
+#: src/kdefrontend/widgets/LabelWidget.cpp:170
 #, kde-format
 msgid "Up Pointing rectangle"
 msgstr "Прямоугольник с заострением вверху"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:170
+#: src/kdefrontend/widgets/LabelWidget.cpp:171
 #, kde-format
 msgid "Down Pointing rectangle"
 msgstr "Прямоугольник с заострением внизу"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:171
+#: src/kdefrontend/widgets/LabelWidget.cpp:172
 #, kde-format
 msgid "Left Pointing rectangle"
 msgstr "Прямоугольник с заострением слева"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:172
+#: src/kdefrontend/widgets/LabelWidget.cpp:173
 #, kde-format
 msgid "Right Pointing rectangle"
 msgstr "Прямоугольник с заострением справа"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:174
+#: src/kdefrontend/widgets/LabelWidget.cpp:175
 #, kde-format
 msgid "No line"
 msgstr "Без линий"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:175
+#: src/kdefrontend/widgets/LabelWidget.cpp:176
 #, kde-format
 msgid "Solid line"
 msgstr "Сплошная линия"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:176
+#: src/kdefrontend/widgets/LabelWidget.cpp:177
 #, kde-format
 msgid "Dash line"
 msgstr "Штриховая линия"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:177
+#: src/kdefrontend/widgets/LabelWidget.cpp:178
 #, kde-format
 msgid "Dot line"
 msgstr "Точечная линия"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:178
+#: src/kdefrontend/widgets/LabelWidget.cpp:179
 #, kde-format
 msgid "Dash dot line"
 msgstr "Штрихпунктирная линия"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:179
+#: src/kdefrontend/widgets/LabelWidget.cpp:180
 #, kde-format
 msgid "Dash dot dot line"
 msgstr "Штрихпунктирная линия с двумя точками"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:196
+#: src/kdefrontend/widgets/LabelWidget.cpp:197
 #, kde-format
 msgid ""
 "Text setting mode:<ul><li>Text - text setting using rich-text formatting</"
@@ -22969,14 +22970,14 @@ msgstr ""
 "с применением LaTeX, требуется установка LaTeX</li><li>Markdown — разметка "
 "осуществляется с помощью языка разметки Markdown</li></ul>"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:863
-#: src/kdefrontend/widgets/LabelWidget.cpp:889
+#: src/kdefrontend/widgets/LabelWidget.cpp:862
+#: src/kdefrontend/widgets/LabelWidget.cpp:888
 #, kde-format
 msgid "Date"
 msgstr "Дата"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:871
-#: src/kdefrontend/widgets/LabelWidget.cpp:897
+#: src/kdefrontend/widgets/LabelWidget.cpp:870
+#: src/kdefrontend/widgets/LabelWidget.cpp:896
 #, kde-format
 msgid "Date and Time"
 msgstr "Дата и время"
