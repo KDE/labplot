@@ -8,8 +8,8 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-#ifndef WORKSHEETELEMENTTEST_H
-#define WORKSHEETELEMENTTEST_H
+#ifndef AXISTEST_H
+#define AXISTEST_H
 
 #include "../../CommonTest.h"
 
@@ -63,4 +63,4 @@ private Q_SLOTS:
 	void autoScale2();
 };
 
-#endif // WORKSHEETELEMENTTEST_H
+#endif // AXISTEST_H
