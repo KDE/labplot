@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-01-10 00:38+0000\n"
+"POT-Creation-Date: 2024-01-11 01:34+0000\n"
 "PO-Revision-Date: 2023-12-03 18:24+0100\n"
 "Last-Translator: Paolo Zamponi <feus73@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -509,7 +509,7 @@ msgid "%1   (no values)"
 msgstr "%1   (nessun valore)"
 
 #: src/backend/core/AspectTreeModel.cpp:226
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1506
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1503
 #, kde-format
 msgid "Size: %1"
 msgstr "Dimensione: %1"
@@ -1497,7 +1497,7 @@ msgstr "h5dump non trovato."
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:358
 #: src/backend/datasources/filters/NetCDFFilter.cpp:268
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1481
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1478
 #, kde-format
 msgid "Reading from file %1 failed."
 msgstr "Lettura del file %1 non riuscita."
@@ -5975,7 +5975,7 @@ msgstr "Statistica (distribuzioni)"
 #: src/backend/nsl/nsl_fit.c:24
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:552
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:524
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1233
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1230
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:241
 #: src/kdefrontend/dockwidgets/KDEPlotDock.cpp:191
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:275
@@ -6919,13 +6919,13 @@ msgstr "%1: imposta l'opacità della linea"
 
 #: src/backend/worksheet/plots/AbstractPlot.cpp:100
 #: src/backend/worksheet/plots/AbstractPlot.cpp:128
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1298
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1289
 #, kde-format
 msgid "%1: set horizontal padding"
 msgstr "%1: imposta la spaziatura orizzontale"
 
 #: src/backend/worksheet/plots/AbstractPlot.cpp:107
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1324
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1315
 #, kde-format
 msgid "%1: set vertical padding"
 msgstr "%1: imposta la spaziatura verticale"
@@ -6969,8 +6969,8 @@ msgstr "Orizzontale"
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:258
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:56
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:53
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:843
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:847
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:841
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:845
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:171
 #: src/kdefrontend/dockwidgets/LollipopPlotDock.cpp:52
 #: src/kdefrontend/dockwidgets/ReferenceLineDock.cpp:27
@@ -11535,32 +11535,32 @@ msgstr ""
 "Specifica il messaggio «Ultime volontà e testamento» (LWT). Deve essere "
 "sottoscritto almeno un argomento."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:910
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:907
 #, kde-format
 msgctxt "@title:window"
 msgid "Select the File Data Source"
 msgstr "Seleziona la fonte dati file"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:940
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:937
 #, kde-format
 msgctxt "@title:window"
 msgid "Select the DBC file"
 msgstr "Seleziona il file DBC"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:940
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:937
 #, kde-format
 msgid "DBC file (*.dbc)"
 msgstr "File DBC (*.dbc)"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataFormat)
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1146
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1143
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:402
 #, kde-format
 msgid "Data Format"
 msgstr "Formato dati"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataPreview)
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1147
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1144
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:456
 #: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:158
 #, kde-format
@@ -11568,183 +11568,183 @@ msgid "Preview"
 msgstr "Anteprima"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataPortion)
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1149
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1146
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:535
 #: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:239
 #, kde-format
 msgid "Data Portion to Read"
 msgstr "Porzione di dati da leggere"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1189
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1186
 #, kde-format
 msgid "Data format && preview"
 msgstr "Formato dei dati e anteprima"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1232
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1229
 #: src/kdefrontend/SettingsGeneralPage.cpp:226
 #, kde-format
 msgid "Automatic"
 msgstr "Automatico"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1473
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1470
 #, kde-format
 msgid "file command not found"
 msgstr "file di comandi non trovato"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1484
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1481
 #, kde-format
 msgid "cannot open"
 msgstr "impossibile aprire"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1489
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1486
 #, kde-format
 msgid "<b>File type:</b> %1"
 msgstr "<b>Tipo di file:</b> %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1494
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1491
 #, kde-format
 msgid "General:"
 msgstr "Generale:"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1496
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1497
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1498
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1493
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1494
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1495
 #, kde-format
 msgid "yes"
 msgstr "sì"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1496
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1497
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1498
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1493
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1494
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1495
 #, kde-format
 msgid "no"
 msgstr "no"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1496
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1493
 #, kde-format
 msgid "Readable: %1"
 msgstr "Leggibile: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1497
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1494
 #, kde-format
 msgid "Writable: %1"
 msgstr "Scrivibile: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1498
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1495
 #, kde-format
 msgid "Executable: %1"
 msgstr "Eseguibile: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1500
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1497
 #, kde-format
 msgid "Birth time: %1"
 msgstr "Ora di nascita: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1501
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1498
 #, kde-format
 msgid "Last metadata changed: %1"
 msgstr "Ultimo metadato modificato: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1502
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1499
 #, kde-format
 msgid "Last modified: %1"
 msgstr "Ultima modifica: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1503
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1500
 #, kde-format
 msgid "Last read: %1"
 msgstr "Ultima lettura: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1504
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1501
 #, kde-format
 msgid "Owner: %1"
 msgstr "Proprietario: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1505
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1502
 #, kde-format
 msgid "Group: %1"
 msgstr "Gruppo: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1506
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1503
 #, kde-format
 msgid "%1 cByte"
 msgid_plural "%1 cBytes"
 msgstr[0] "%1 cByte"
 msgstr[1] "%1 cByte"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1509
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1506
 #, kde-format
 msgid "Summary:"
 msgstr "Riepilogo:"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1532
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1537
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1529
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1534
 #, kde-format
 msgid "Content:"
 msgstr "Contenuto:"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1565
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1562
 #, kde-format
 msgid "Could not open file %1 for reading."
 msgstr "Impossibile aprire il file %1 in lettura."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1725
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1722
 #, kde-format
 msgid "No data arrived yet for the selected topic"
 msgstr "Non è ancora arrivato nessun dato per l'argomento selezionato"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1961
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1958
 #, kde-format
 msgid "Not a HDF5 file: %1"
 msgstr "Non è un file HDF5: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2394
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2391
 #, kde-format
 msgid "Couldn't subscribe to all available topics."
 msgstr "Impossibile iscriversi a tutti gli argomenti."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2424
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2421
 #, kde-format
 msgid "Disconnected from '%1'."
 msgstr "Disconnesso da «%1»."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2493
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2490
 #, kde-format
 msgid "Available (%1)"
 msgstr "Disponibile (%1)"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2605
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2602
 #, kde-format
 msgid "Wrong username or password"
 msgstr "Nome utente o password non corretti"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2608
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2605
 #, kde-format
 msgid "The client ID wasn't accepted"
 msgstr "L'ID del client non è stato accettato"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2612
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2609
 #, kde-format
 msgid "The broker %1 couldn't be reached."
 msgstr "Il broker %1 non può essere raggiunto."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2615
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2612
 #, kde-format
 msgid "The client is not authorized to connect."
 msgstr "Il client non è autorizzato alla connessione."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2618
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2615
 #, kde-format
 msgid "An unknown error occurred."
 msgstr "Si è verificato un errore sconosciuto."
 
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2621
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:2624
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2627
 #, kde-format
 msgid "An error occurred."
 msgstr "Si è verificato un errore."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2641
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2638
 #, kde-format
 msgid "Connecting to '%1:%2' timed out."
 msgstr "Connessione a «%1:%2» scaduta."
@@ -12268,8 +12268,8 @@ msgstr "Regione di dati"
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:299
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:480
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:483
-#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:244
-#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:252
+#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:243
+#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:251
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:50
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:61
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:69
@@ -12283,8 +12283,8 @@ msgstr "In alto"
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:300
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:481
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:484
-#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:246
-#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:254
+#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:245
+#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:253
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:52
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:63
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:71
@@ -12369,8 +12369,8 @@ msgstr "Parzialmente riempito, grande"
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:270
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:488
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:492
-#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:240
-#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:248
+#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:239
+#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:247
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:46
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:57
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:65
@@ -12387,8 +12387,8 @@ msgstr "A sinistra"
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:271
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:489
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:491
-#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:242
-#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:250
+#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:241
+#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:249
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:48
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:59
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:67
@@ -12543,8 +12543,8 @@ msgstr "%1 assi: modello «%2» caricato"
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:2044
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:490
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:719
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1804
-#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:705
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1790
+#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:692
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:394
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:694
 #: src/kdefrontend/dockwidgets/KDEPlotDock.cpp:373
@@ -12720,31 +12720,31 @@ msgstr "Navigatore dei file"
 msgid "Save current plot area definition as template"
 msgstr "Salva la definizione di area del grafico corrente come modello"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:604
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:602
 #, kde-format
 msgid "%1-Ranges:"
 msgstr "Intervalli %1:"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:606
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:604
 #, kde-format
 msgid "%1-Range:"
 msgstr "Intervallo %1:"
 
 #. i18n: ectx: property (text), widget (QLabel, lNumeric)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:630
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:628
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:209
 #: src/kdefrontend/ui/spreadsheet/equidistantvalueswidget.ui:53
 #, kde-format
 msgid "Numeric"
 msgstr "Numerico"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:733
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:731
 #, kde-format
 msgid "Plot Ranges:"
 msgstr "Intervalli del grafico"
 
 #. i18n: ectx: property (text), widget (QLabel, lPlotRange)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:735
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:733
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:262
 #: src/kdefrontend/ui/dockwidgets/barplotdock.ui:186
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:90
@@ -12770,22 +12770,22 @@ msgstr "Intervalli del grafico"
 msgid "Plot Range:"
 msgstr "intervallo del grafico:"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:823
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:821
 #, kde-format
 msgid "Free"
 msgstr "Libero"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:824
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:822
 #, kde-format
 msgid "Last Points"
 msgstr "Ultimi punti"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:825
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:823
 #, kde-format
 msgid "First Points"
 msgstr "Primi punti"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:828
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:826
 #, kde-format
 msgid ""
 "Data Range:<ul><li>Free - full data range is plotted</li><li>Last Points - "
@@ -12797,48 +12797,48 @@ msgstr ""
 "punti</li><li>Primi punti: viene tracciato il numero specificato dei primi "
 "punti </li></ul>"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:837
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:835
 #, kde-format
 msgid "If checked, automatically extend the plot range to nice values"
 msgstr ""
 "Se selezionato, estende automaticamente l'intervallo di stampa a valori "
 "significativi"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:842
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:846
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:840
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:844
 #, kde-format
 msgid "Simple"
 msgstr "Semplice"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:844
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:848
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:842
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:846
 #, kde-format
 msgid "Sloped"
 msgstr "Inclinato"
 
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1101
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1110
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1119
 #, kde-format
 msgid "%1 range %2 is used in plot range %3. "
 msgstr "L'intervallo %1 %2 è usato nell'intervallo del grafico %3 "
 
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1102
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1111
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1120
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1172
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1179
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1163
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1170
 #, kde-format
 msgid "Really remove it?"
 msgstr "Vuoi davvero rimuoverlo?"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1172
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1179
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1163
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1170
 #, kde-format
 msgid "Plot range %1 is used by element \"%2\". "
 msgstr "L'intervallo del grafico %1 è usato dall'elemento «%2». "
 
 #. i18n: ectx: property (text), widget (QLabel, lPaddingHorizontal)
 #. i18n: ectx: property (text), widget (QLabel, lHorizontalSpacing)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1270
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1261
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:561
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:761
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:342
@@ -12848,7 +12848,7 @@ msgstr "Orizzontale:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPaddingVertical)
 #. i18n: ectx: property (text), widget (QLabel, lVerticalSpacing)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1271
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1262
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:862
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:716
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:428
@@ -12858,7 +12858,7 @@ msgstr "Verticale:"
 
 #. i18n: ectx: property (text), widget (QLabel, lTopMargin)
 #. i18n: ectx: property (text), widget (QLabel, lLeftMargin)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1273
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1264
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:797
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:709
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:414
@@ -12868,7 +12868,7 @@ msgstr "Sinistra:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLeftMargin)
 #. i18n: ectx: property (text), widget (QLabel, lTopMargin)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1274
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1265
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:804
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:658
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:407
@@ -12876,38 +12876,38 @@ msgstr "Sinistra:"
 msgid "Top:"
 msgstr "Alto:"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1606
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1597
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Template Save File"
 msgstr "Seleziona modello di file di salvataggio"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1608
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1599
 #, kde-format
 msgid "Labplot Plot Templates (*%1)"
 msgstr "Modelli di grafico di LabPlot (*%1)"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1802
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1788
 #, kde-format
 msgid "%1 cartesian plots: template \"%2\" loaded"
 msgstr "%1 grafici cartesiani: modello «%2» caricato"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:236
+#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:235
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:246
 #, kde-format
 msgid "Column Major"
 msgstr "Colonna maggiore"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:237
+#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:236
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:247
 #, kde-format
 msgid "Row Major"
 msgstr "Riga maggiore"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:241
-#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:245
-#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:249
-#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:253
+#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:240
+#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:244
+#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:248
+#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:252
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:47
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:51
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:58
@@ -12924,7 +12924,7 @@ msgstr "Riga maggiore"
 msgid "Center"
 msgstr "Centra"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:703
+#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:690
 #, kde-format
 msgid "%1 cartesian plot legends: template \"%2\" loaded"
 msgstr "%1 legende di grafici cartesiani: modello «%2» caricato"
