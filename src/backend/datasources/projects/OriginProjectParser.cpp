@@ -1567,17 +1567,18 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 	// 		bool zeroLine;
 	// 		bool oppositeLine;
 
+	DEBUG(Q_FUNC_INFO << ", index = " << index)
+
 	// ranges
 	axis->setRange(originAxis.min, originAxis.max);
 
 	// ticks
 	axis->setMajorTicksType(Axis::TicksType::Spacing);
-	axis->setMajorTicksSpacing(originAxis.step);
-	DEBUG(Q_FUNC_INFO << ", index = " << index)
+	DEBUG(Q_FUNC_INFO << ", step = " << originAxis.step)
 	DEBUG(Q_FUNC_INFO << ", position = " << originAxis.position)
-	// TODO: set offset from step and anchor (not currently available in liborigin)
 	DEBUG(Q_FUNC_INFO << ", anchor = " << originAxis.anchor)
-	axis->setMajorTickStartOffset(0.0);
+	axis->setMajorTicksSpacing(originAxis.step);
+	// set offset from step and min later, when scaling factor is known
 	axis->setMinorTicksType(Axis::TicksType::TotalNumber);
 	axis->setMinorTicksNumber(originAxis.minorTicks);
 
@@ -1707,10 +1708,21 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 	axis->title()->setRotationAngle(axisFormat.label.rotation);
 
 	// handle string factor member in GraphAxisFormat
+	double scalingFactor = 1.0;
 	if (!axisFormat.factor.empty()) {
-		double scalingFactor = 1. / std::stod(axisFormat.factor);
+		scalingFactor = 1. / std::stod(axisFormat.factor);
 		DEBUG(Q_FUNC_INFO <<", scaling factor = " << scalingFactor)
 		axis->setScalingFactor(scalingFactor);
+	}
+	// now set axis ticks start offset
+	double startOffset = nsl_math_ceil_multiple(originAxis.min * scalingFactor, originAxis.step * scalingFactor) - originAxis.min;
+	DEBUG(Q_FUNC_INFO << ", min = " << originAxis.min << ", step = " << originAxis.step)
+	DEBUG(Q_FUNC_INFO << ", start offset = " << startOffset)
+	if (axis->range().contains(startOffset))
+		axis->setMajorTickStartOffset(startOffset);
+	else {
+		DEBUG(Q_FUNC_INFO << ", WARNING: start offset = " << startOffset << " outside of axis range!")
+		axis->setMajorTickStartOffset(0.);
 	}
 
 	axis->setLabelsPrefix(QLatin1String(axisFormat.prefix.c_str()));
