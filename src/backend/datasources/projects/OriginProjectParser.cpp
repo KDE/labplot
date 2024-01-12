@@ -4,7 +4,7 @@
 	Description          : parser for Origin projects
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2017-2018 Alexander Semke <alexander.semke@web.de>
-	SPDX-FileCopyrightText: 2017-2023 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2017-2024 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -1706,9 +1706,15 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 	axis->title()->setText(titleText);
 	axis->title()->setRotationAngle(axisFormat.label.rotation);
 
+	// handle string factor member in GraphAxisFormat
+	if (!axisFormat.factor.empty()) {
+		double scalingFactor = 1. / std::stod(axisFormat.factor);
+		DEBUG(Q_FUNC_INFO <<", scaling factor = " << scalingFactor)
+		axis->setScalingFactor(scalingFactor);
+	}
+
 	axis->setLabelsPrefix(QLatin1String(axisFormat.prefix.c_str()));
 	axis->setLabelsSuffix(QLatin1String(axisFormat.suffix.c_str()));
-	// TODO: handle string factor member in GraphAxisFormat
 
 	// process Origin::GraphAxisTick
 	const auto& tickAxis = originAxis.tickAxis[index];
@@ -1728,9 +1734,11 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 	// TODO: handle int valueTypeSpecification in GraphAxisTick
 
 	// precision
-	if (tickAxis.decimalPlaces == -1)
+	if (tickAxis.decimalPlaces == -1) {
+		DEBUG(Q_FUNC_INFO << ", SET auto precision")
 		axis->setLabelsAutoPrecision(true);
-	else {
+	} else {
+		DEBUG(Q_FUNC_INFO << ", DISABLE auto precision. decimalPlaces = " << tickAxis.decimalPlaces)
 		axis->setLabelsPrecision(tickAxis.decimalPlaces);
 		axis->setLabelsAutoPrecision(false);
 	}

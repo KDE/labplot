@@ -1925,7 +1925,7 @@ void AxisPrivate::retransformTicks() {
 	(=the smallest possible number of digits) precision for the floats
 */
 void AxisPrivate::retransformTickLabelStrings() {
-	DEBUG(Q_FUNC_INFO << ' ' << STDSTRING(title->name()) << ", labels precision = " << labelsPrecision)
+	DEBUG(Q_FUNC_INFO << ' ' << STDSTRING(title->name()) << ", labels precision = " << labelsPrecision << ", labels auto precision = " << labelsAutoPrecision)
 	if (suppressRetransform)
 		return;
 	QDEBUG(Q_FUNC_INFO << ", values = " << tickLabelValues)
