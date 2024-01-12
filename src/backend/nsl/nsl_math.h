@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : NSL math functions
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2018-2020 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2018-2024 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -25,6 +25,8 @@ __BEGIN_DECLS
 
 #define M_PI_180 (M_PI / 180.)
 #define M_180_PI (180. / M_PI)
+
+typedef enum round_method {Round, Floor, Ceil, Trunc} round_method;
 
 /*
  * more intelligent comparison of doubles,
@@ -76,6 +78,15 @@ double nsl_math_round_precision(double value, int p);
  * p <= 0 : power of x
  */
 double nsl_math_round_basex(double value, int p, double base);
+
+/* round double value 'value' to multiple of 'multiple'
+ * (2.5, 2) -> 2,2,4,2 (4.5, 3) -> 6,3,6,3
+ */
+double nsl_math_round_multiple(double value, double multiple);
+double nsl_math_floor_multiple(double value, double multiple);
+double nsl_math_ceil_multiple(double value, double multiple);
+double nsl_math_trunc_multiple(double value, double multiple);
+double nsl_math_multiple(double value, double multiple, round_method method);
 
 __END_DECLS
 
