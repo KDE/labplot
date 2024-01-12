@@ -26,7 +26,7 @@ __BEGIN_DECLS
 #define M_PI_180 (M_PI / 180.)
 #define M_180_PI (180. / M_PI)
 
-typedef enum round_method {Round, Floor, Ceil, Trunc} round_method;
+typedef enum round_method { Round, Floor, Ceil, Trunc } round_method;
 
 /*
  * more intelligent comparison of doubles,

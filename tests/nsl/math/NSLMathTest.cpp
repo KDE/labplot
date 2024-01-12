@@ -28,7 +28,7 @@ void NSLMathTest::mathMultiple() {
 	QCOMPARE(nsl_math_floor_multiple(value, multiple), 3.);
 	QCOMPARE(nsl_math_ceil_multiple(value, multiple), 6.);
 	QCOMPARE(nsl_math_trunc_multiple(value, multiple), 3.);
-	
+
 	// (-0.25, 1)	-> 0.,0.,-1.,0.
 	value = -0.25, multiple = 1.;
 	QCOMPARE(nsl_math_round_multiple(value, multiple), 0.);

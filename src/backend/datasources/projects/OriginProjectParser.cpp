@@ -1711,7 +1711,7 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 	double scalingFactor = 1.0;
 	if (!axisFormat.factor.empty()) {
 		scalingFactor = 1. / std::stod(axisFormat.factor);
-		DEBUG(Q_FUNC_INFO <<", scaling factor = " << scalingFactor)
+		DEBUG(Q_FUNC_INFO << ", scaling factor = " << scalingFactor)
 		axis->setScalingFactor(scalingFactor);
 	}
 	// now set axis ticks start offset
