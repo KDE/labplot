@@ -66,7 +66,7 @@ void ElidingLabelPrivate::elideText(int Width)
 	}
     QFontMetrics fm = _this->fontMetrics();
     QString  str = fm.elidedText(Text, ElideMode, Width - _this->margin() * 2 - _this->indent());
-    if (str == QLatin1String("…"))
+    if (str == "…")
     {
     	str = Text.at(0);
     }
@@ -174,9 +174,9 @@ QSize CElidingLabel::minimumSizeHint() const
     }
     const QFontMetrics  &fm = fontMetrics();
     #if (QT_VERSION >= QT_VERSION_CHECK(5, 11, 0))
-        QSize size(fm.horizontalAdvance(d->Text.left(2) + QLatin1String("…")), fm.height());
+        QSize size(fm.horizontalAdvance(d->Text.left(2) + "…"), fm.height());
     #else
-        QSize size(fm.width(d->Text.left(2) + QLatin1String("…")), fm.height());
+        QSize size(fm.width(d->Text.left(2) + "…"), fm.height());
     #endif
     return size;
 }

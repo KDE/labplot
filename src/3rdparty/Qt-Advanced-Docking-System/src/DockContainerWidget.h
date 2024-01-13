@@ -53,6 +53,7 @@ struct FloatingDragPreviewPrivate;
 class CDockingStateReader;
 class CAutoHideSideBar;
 class CAutoHideTab;
+class CDockSplitter;
 struct AutoHideTabPrivate;
 struct AutoHideDockContainerPrivate;
 
@@ -94,14 +95,14 @@ protected:
 	/**
 	 * Access function for the internal root splitter
 	 */
-	QSplitter* rootSplitter() const;
+	CDockSplitter* rootSplitter() const;
 
 	/**
 	 * Creates and initializes a dockwidget auto hide container into the given area.
 	 * Initializing inserts the tabs into the side tab widget and hides it
 	 * Returns nullptr if you try and insert into an area where the configuration is not enabled
 	 */
-	CAutoHideDockContainer* createAndSetupAutoHideContainer(SideBarLocation area, CDockWidget* DockWidget);
+	CAutoHideDockContainer* createAndSetupAutoHideContainer(SideBarLocation area, CDockWidget* DockWidget, int TabIndex = -1);
 
 	/**
 	 * Helper function for creation of the root splitter
@@ -125,7 +126,8 @@ protected:
 	 * a nullptr, then the DropArea indicates the drop area in the given
 	 * TargetAreaWidget
 	 */
-	void dropWidget(QWidget* Widget, DockWidgetArea DropArea, CDockAreaWidget* TargetAreaWidget);
+	void dropWidget(QWidget* Widget, DockWidgetArea DropArea, CDockAreaWidget* TargetAreaWidget,
+		int TabIndex = -1);
 
 	/**
 	 * Adds the given dock area to this container widget
@@ -207,7 +209,7 @@ public:
 	/**
 	 * Default Constructor
 	 */
-	CDockContainerWidget(CDockManager* DockManager, QWidget* parent = nullptr);
+	CDockContainerWidget(CDockManager* DockManager, QWidget* parent = 0);
 
 	/**
 	 * Virtual Destructor
@@ -322,7 +324,7 @@ public:
 	/**
 	 * Returns the side tab widget for the given area
 	 */
-	CAutoHideSideBar* sideTabBar(SideBarLocation area) const;
+	CAutoHideSideBar* autoHideSideBar(SideBarLocation area) const;
 
 
 	/**
