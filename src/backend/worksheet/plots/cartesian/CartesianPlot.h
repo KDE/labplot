@@ -292,7 +292,7 @@ private:
 
 	friend CartesianPlotDock;
 	friend class CartesianPlotTest;
-	friend class MultiRangeTest;
+	friend class MultiRangeTest2;
 
 public Q_SLOTS:
 	void addHorizontalAxis();
