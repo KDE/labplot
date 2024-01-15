@@ -64,7 +64,7 @@ void BaseDock::setBaseWidgets(TimedLineEdit* nameLabel, ResizableTextEdit* comme
 	Q_ASSERT(m_teComment);
 
 	connect(m_teComment, &QTextEdit::textChanged, this, &BaseDock::commentChanged);
-	connect(m_leName, &QLineEdit::textChanged, this, &BaseDock::nameChanged);
+	connect(m_leName, &TimedLineEdit::textChanged, this, &BaseDock::nameChanged);
 
 	// adjust the height of the TextEdit for the comment since it's default value
 	// is too high and we want to set it to a more reasonable value
