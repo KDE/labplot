@@ -961,7 +961,7 @@ void DockContainerWidgetPrivate::saveChildNodesState(QXmlStreamWriter& s, QWidge
 			s.writeStartElement("Sizes");
 			for (auto Size : Splitter->sizes())
 			{
-				s.writeCharacters(QString::number(Size) + " ");
+				s.writeCharacters(QString::number(Size) + QStringLiteral(" "));
 			}
 			s.writeEndElement();
 		s.writeEndElement();
