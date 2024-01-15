@@ -51,7 +51,7 @@ BaseDock::~BaseDock() {
  * the default value is 1.2 to make the comment field looking slightly bigger so the user can realize a multi-line text can be
  * enterede in this field.
  */
-void BaseDock::setBaseWidgets(QLineEdit* nameLabel, ResizableTextEdit* commentLabel, double commentHeightFactorNameLabel) {
+void BaseDock::setBaseWidgets(TimedLineEdit* nameLabel, ResizableTextEdit* commentLabel, double commentHeightFactorNameLabel) {
 	if (m_leName)
 		disconnect(m_leName, nullptr, this, nullptr);
 	if (m_teComment)

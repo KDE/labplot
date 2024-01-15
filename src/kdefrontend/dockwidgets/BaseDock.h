@@ -20,6 +20,7 @@
 
 class AbstractAspect;
 class ResizableTextEdit;
+class TimedLineEdit;
 class QCheckBox;
 class QComboBox;
 class QDoubleSpinBox;
@@ -85,7 +86,7 @@ public:
 		return m_aspect;
 	}
 
-	void setBaseWidgets(QLineEdit* nameLabel, ResizableTextEdit* commentLabel, double commentHeightFactorNameLabel = 1.2);
+	void setBaseWidgets(TimedLineEdit* nameLabel, ResizableTextEdit* commentLabel, double commentHeightFactorNameLabel = 1.2);
 	void setVisibilityWidgets(QCheckBox* visible, QCheckBox* legendVisible = nullptr);
 
 	AspectTreeModel* aspectModel();
@@ -102,7 +103,7 @@ private:
 	AspectTreeModel* m_aspectModel{nullptr};
 	void updateNameDescriptionWidgets();
 	QComboBox* m_cbPlotRangeList{nullptr};
-	QLineEdit* m_leName{nullptr};
+	TimedLineEdit* m_leName{nullptr};
 	ResizableTextEdit* m_teComment{nullptr};
 	QCheckBox* m_chkVisible{nullptr};
 	QCheckBox* m_chkLegendVisible{nullptr};
