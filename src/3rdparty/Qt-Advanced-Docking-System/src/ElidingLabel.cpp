@@ -66,7 +66,7 @@ void ElidingLabelPrivate::elideText(int Width)
 	}
     QFontMetrics fm = _this->fontMetrics();
     QString  str = fm.elidedText(Text, ElideMode, Width - _this->margin() * 2 - _this->indent());
-    if (str == "…")
+    if (str == QStringLiteral("…"))
     {
     	str = Text.at(0);
     }

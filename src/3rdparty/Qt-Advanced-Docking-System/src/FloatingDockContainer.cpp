@@ -688,16 +688,16 @@ CFloatingDockContainer::CFloatingDockContainer(CDockManager *DockManager) :
 	else
 	{
 		// KDE doesn't seem to fire MoveEvents while moving windows, so for now no native titlebar for everything using KWin.
-		QString window_manager = internal::windowManager().toUpper().split(" ")[0];
-                native_window = window_manager != "KWIN";
+		QString window_manager = internal::windowManager().toUpper().split(QStringLiteral(" "))[0];
+                native_window = window_manager != QStringLiteral("KWIN");
 	}
 
     if (native_window)
     {
         // Native windows do not work if wayland is used. Ubuntu 22.04 uses wayland by default. To use
         // native windows, switch to Xorg
-        QString XdgSessionType = qgetenv("XDG_SESSION_TYPE").toLower();
-        if ("wayland" == XdgSessionType)
+        QString XdgSessionType = QString::fromLocal8Bit(qgetenv("XDG_SESSION_TYPE").toLower());
+        if (QStringLiteral("wayland") == XdgSessionType)
         {
             native_window = false;
         }
