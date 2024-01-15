@@ -229,7 +229,7 @@
     </widget>
    </item>
    <item row="0" column="2" colspan="2">
-    <widget class="QLineEdit" name="leName"/>
+    <widget class="TimedLineEdit" name="leName"/>
    </item>
    <item row="7" column="0">
     <widget class="QLabel" name="lXRange">
@@ -326,6 +326,11 @@
    <class>ResizableTextEdit</class>
    <extends>QTextEdit</extends>
    <header>src/kdefrontend/widgets/ResizableTextEdit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>TimedLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>src/kdefrontend/widgets/TimedLineEdit.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
