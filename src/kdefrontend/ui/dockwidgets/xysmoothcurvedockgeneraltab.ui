@@ -261,7 +261,7 @@
     </widget>
    </item>
    <item row="0" column="2" colspan="3">
-    <widget class="QLineEdit" name="leName"/>
+    <widget class="TimedLineEdit" name="leName"/>
    </item>
    <item row="9" column="2" colspan="3">
     <widget class="QFrame" name="frameRange">
@@ -604,6 +604,11 @@
    <class>UTCDateTimeEdit</class>
    <extends>QDateTimeEdit</extends>
    <header>UTCDateTimeEdit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>TimedLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>src/kdefrontend/widgets/TimedLineEdit.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
