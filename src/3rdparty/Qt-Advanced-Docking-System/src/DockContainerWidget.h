@@ -209,7 +209,7 @@ public:
 	/**
 	 * Default Constructor
 	 */
-	CDockContainerWidget(CDockManager* DockManager, QWidget* parent = 0);
+	CDockContainerWidget(CDockManager* DockManager, QWidget* parent = nullptr);
 
 	/**
 	 * Virtual Destructor
