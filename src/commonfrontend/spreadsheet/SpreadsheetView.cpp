@@ -222,7 +222,6 @@ void SpreadsheetView::init() {
 	connect(m_spreadsheet, &Spreadsheet::columnDeselected, this, &SpreadsheetView::deselectColumn);
 }
 
-
 /*!
 	set the column sizes to the saved values or resize to content if no size was saved yet
 */

@@ -129,7 +129,6 @@ QMenu* Column::createContextMenu() {
 		});
 		connect(this, &AbstractColumn::dataChanged, this, [=] {
 			isFirstSparkLineShown = false;
-			sparkLine();
 		});
 	}
 
@@ -681,7 +680,6 @@ void Column::setValueAt(int row, const double new_value) {
 		d->setValueAt(row, new_value);
 	else
 		exec(new ColumnSetCmd<double>(d, row, valueAt(row), new_value));
-	isFirstSparkLineShown = false;
 }
 
 /**

@@ -264,7 +264,6 @@ public:
 	QUuid uuid() const;
 	void setSuppressWriteUuid(bool);
 	QString comment() const;
-	QPixmap sparkLine();
 	void setCreationTime(const QDateTime&);
 	QDateTime creationTime() const;
 	virtual Project* project();
@@ -432,12 +431,13 @@ private:
 public Q_SLOTS:
 	bool setName(const QString&, NameHandling handling = NameHandling::AutoUnique, QUndoCommand* parent = nullptr);
 	void setComment(const QString&);
+	void setSparkline(QPixmap pix);
+	QPixmap getSparkline();
 	void remove();
 	void remove(QUndoCommand* parent);
 	void copy();
 	void duplicate();
 	void paste(bool duplicate = false);
-
 private Q_SLOTS:
 	void moveUp();
 	void moveDown();

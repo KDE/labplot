@@ -29,6 +29,8 @@
 
 #include <commonfrontend/ProjectExplorer.h>
 
+#include <commonfrontend/spreadsheet/SpreadsheetSparkLineHeaderModel.h>
+
 /**
  * \class AbstractAspect
  * \brief Base class of all persistent objects in a Project.
@@ -243,20 +245,13 @@ QString AbstractAspect::comment() const {
 	return d->m_comment;
 }
 
-QPixmap AbstractAspect::sparkLine() {
-	if (!isFirstSparkLineShown) {
-		if (d->q->m_type == AspectType::Column) {
-			const Column* col = dynamic_cast<Column*>(d->q);
-			if (col->hasValues()) {
-				isFirstSparkLineShown = true;
-				d->m_sparkline = ProjectExplorer::showSparkLines(col);
-				return d->m_sparkline;
-			}
-		}
-	}
-	return d->m_sparkline;
+void AbstractAspect::setSparkline(QPixmap pix) {
+	d->m_sparkline = pix;
 }
 
+QPixmap AbstractAspect::getSparkline() {
+	return d->m_sparkline;
+}
 void AbstractAspect::setComment(const QString& value) {
 	if (value == d->m_comment)
 		return;
