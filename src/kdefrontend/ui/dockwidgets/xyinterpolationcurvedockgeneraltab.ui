@@ -240,7 +240,7 @@
     </spacer>
    </item>
    <item row="0" column="2" colspan="2">
-    <widget class="QLineEdit" name="leName"/>
+    <widget class="TimedLineEdit" name="leName"/>
    </item>
    <item row="1" column="2" colspan="2">
     <widget class="ResizableTextEdit" name="teComment"/>
@@ -592,6 +592,11 @@
    <class>UTCDateTimeEdit</class>
    <extends>QDateTimeEdit</extends>
    <header>UTCDateTimeEdit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>TimedLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>src/kdefrontend/widgets/TimedLineEdit.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
