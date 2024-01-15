@@ -40,6 +40,8 @@
 #include <array>
 #include <functional>
 
+#include <commonfrontend/spreadsheet/SpreadsheetSparkLineHeaderModel.h>
+
 /**
  * \class Column
  * \brief Aspect that manages a column
@@ -129,6 +131,7 @@ QMenu* Column::createContextMenu() {
 		});
 		connect(this, &AbstractColumn::dataChanged, this, [=] {
 			isFirstSparkLineShown = false;
+			SpreadsheetSparkLinesHeaderModel::sparkLine(this);
 		});
 	}
 
