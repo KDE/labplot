@@ -1136,7 +1136,7 @@
     </layout>
    </item>
    <item row="0" column="3" colspan="4">
-    <widget class="QLineEdit" name="leName"/>
+    <widget class="TimedLineEdit" name="leName"/>
    </item>
    <item row="31" column="0">
     <widget class="QCheckBox" name="chkLegendVisible">
@@ -1162,6 +1162,11 @@
    <class>ExpressionTextEdit</class>
    <extends>QTextEdit</extends>
    <header>kdefrontend/widgets/ExpressionTextEdit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>TimedLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>src/kdefrontend/widgets/TimedLineEdit.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
