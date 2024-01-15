@@ -1783,6 +1783,11 @@ bool MainWin::closeProject() {
 	if (warnModified())
 		return false;
 
+	// clear the worksheet preview before deleting the project and before deleting the dock widgets
+	// so we don't need to react on current aspect changes
+	if (m_worksheetPreviewWidget)
+		m_worksheetPreviewWidget->setProject(nullptr);
+
 	if (!m_closing) {
 		// 		if (dynamic_cast<QQuickWidget*>(centralWidget()) && m_showWelcomeScreen) {
 		// 			m_welcomeWidget = createWelcomeScreen();
@@ -1799,7 +1804,6 @@ bool MainWin::closeProject() {
 
 	m_projectClosing = true;
 	statusBar()->clearMessage();
-	m_worksheetPreviewWidget->setProject(nullptr); // clear the preview befor deleting the project so we don't need to update it
 	delete m_guiObserver;
 	m_guiObserver = nullptr;
 	delete m_aspectTreeModel;
