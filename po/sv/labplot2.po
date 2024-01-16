@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-01-11 01:34+0000\n"
+"POT-Creation-Date: 2024-01-16 01:36+0000\n"
 "PO-Revision-Date: 2024-01-04 20:52+0100\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -1792,7 +1792,7 @@ msgstr "Okänd"
 #: src/backend/datasources/filters/MatioFilter.cpp:434
 #: src/commonfrontend/workbook/WorkbookView.cpp:53
 #: src/commonfrontend/workbook/WorkbookView.cpp:160
-#: src/kdefrontend/MainWin.cpp:722 src/kdefrontend/MainWin.cpp:2087
+#: src/kdefrontend/MainWin.cpp:722 src/kdefrontend/MainWin.cpp:2091
 #, kde-format
 msgid "Matrix"
 msgstr "Matris"
@@ -10433,7 +10433,7 @@ msgstr ""
 #: src/kdefrontend/dockwidgets/XYAnalysisCurveDock.cpp:57
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:75
 #: src/kdefrontend/labplot2ui.rc:32 src/kdefrontend/MainWin.cpp:716
-#: src/kdefrontend/MainWin.cpp:2069 src/kdefrontend/SettingsDialog.cpp:72
+#: src/kdefrontend/MainWin.cpp:2073 src/kdefrontend/SettingsDialog.cpp:72
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:237
 #, kde-format
 msgid "Spreadsheet"
@@ -10608,7 +10608,7 @@ msgstr "Markera y-område och zooma in"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
 #: src/commonfrontend/worksheet/WorksheetView.cpp:359
-#: src/kdefrontend/MainWin.cpp:2550
+#: src/kdefrontend/MainWin.cpp:2554
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1426
 #, kde-format
 msgid "Cursor"
@@ -12119,7 +12119,7 @@ msgstr ""
 
 #: src/kdefrontend/datasources/MQTTSubscriptionWidget.cpp:856
 #: src/kdefrontend/datasources/MQTTSubscriptionWidget.cpp:858
-#: src/kdefrontend/MainWin.cpp:2892
+#: src/kdefrontend/MainWin.cpp:2896
 #, kde-format
 msgid "Warning"
 msgstr "Varning"
@@ -14454,14 +14454,14 @@ msgstr "Misslyckades öppna"
 
 #. i18n: ectx: ToolBar (worksheet_toolbar)
 #: src/kdefrontend/labplot2ui.rc:24 src/kdefrontend/MainWin.cpp:728
-#: src/kdefrontend/MainWin.cpp:2105 src/kdefrontend/SettingsDialog.cpp:67
+#: src/kdefrontend/MainWin.cpp:2109 src/kdefrontend/SettingsDialog.cpp:67
 #, kde-format
 msgid "Worksheet"
 msgstr "Arbetsblad"
 
 #. i18n: ectx: ToolBar (datapicker_toolbar)
 #: src/kdefrontend/labplot2ui.rc:28 src/kdefrontend/MainWin.cpp:711
-#: src/kdefrontend/MainWin.cpp:2061
+#: src/kdefrontend/MainWin.cpp:2065
 #, kde-format
 msgid "Data Extractor"
 msgstr "Dataextrahering"
@@ -14577,7 +14577,7 @@ msgstr "Välkommen till Labplot %1"
 msgid "&Open Example"
 msgstr "Ö&ppna exempel"
 
-#: src/kdefrontend/MainWin.cpp:706 src/kdefrontend/MainWin.cpp:2053
+#: src/kdefrontend/MainWin.cpp:706 src/kdefrontend/MainWin.cpp:2057
 #, kde-format
 msgid "Workbook"
 msgstr "Arbetsbok"
@@ -14607,7 +14607,7 @@ msgstr "Skapar en ny matris för dataredigering"
 msgid "Creates a new worksheet for data plotting"
 msgstr "Skapar ett nytt kalkylark för datauppritning"
 
-#: src/kdefrontend/MainWin.cpp:734 src/kdefrontend/MainWin.cpp:2113
+#: src/kdefrontend/MainWin.cpp:734 src/kdefrontend/MainWin.cpp:2117
 #, kde-format
 msgid "Note"
 msgstr "Anmärkning"
@@ -14617,7 +14617,7 @@ msgstr "Anmärkning"
 msgid "Creates a new note for arbitrary text"
 msgstr "Skapar en ny anteckning för godtycklig text"
 
-#: src/kdefrontend/MainWin.cpp:739 src/kdefrontend/MainWin.cpp:2045
+#: src/kdefrontend/MainWin.cpp:739 src/kdefrontend/MainWin.cpp:2049
 #, kde-format
 msgid "Folder"
 msgstr "Katalog"
@@ -14687,8 +14687,8 @@ msgstr "Exportera..."
 msgid "Export selected element"
 msgstr "Exportera markerat element"
 
-#: src/kdefrontend/MainWin.cpp:796 src/kdefrontend/MainWin.cpp:2586
-#: src/kdefrontend/MainWin.cpp:2594
+#: src/kdefrontend/MainWin.cpp:796 src/kdefrontend/MainWin.cpp:2590
+#: src/kdefrontend/MainWin.cpp:2598
 #, kde-format
 msgid "Share"
 msgstr "Dela"
@@ -14918,13 +14918,13 @@ msgstr "%1: öppnat"
 msgid "Project successfully opened (in %1 seconds)."
 msgstr "Projekt öppnat med lyckat resultat (på %1 sekunder)"
 
-#: src/kdefrontend/MainWin.cpp:1851
+#: src/kdefrontend/MainWin.cpp:1855
 #, kde-format
 msgctxt "@title:window"
 msgid "Save Project As"
 msgstr "Spara projekt som"
 
-#: src/kdefrontend/MainWin.cpp:1853
+#: src/kdefrontend/MainWin.cpp:1857
 #, kde-format
 msgid ""
 "LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 "
@@ -14933,93 +14933,93 @@ msgstr ""
 "Labplot-projekt (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 "
 "*.LML.XZ)"
 
-#: src/kdefrontend/MainWin.cpp:1879
+#: src/kdefrontend/MainWin.cpp:1883
 #, kde-format
 msgid "Couldn't open the temporary file for writing."
 msgstr "Kunde inte öppna den tillfälliga filen för skrivning."
 
-#: src/kdefrontend/MainWin.cpp:1934
+#: src/kdefrontend/MainWin.cpp:1938
 #, kde-format
 msgid "Project saved"
 msgstr "Projektet sparat"
 
-#: src/kdefrontend/MainWin.cpp:1950
+#: src/kdefrontend/MainWin.cpp:1954
 #, kde-format
 msgid "Couldn't save the file '%1'."
 msgstr "Kunde inte spara filen '%1'."
 
-#: src/kdefrontend/MainWin.cpp:1955
+#: src/kdefrontend/MainWin.cpp:1959
 #, kde-format
 msgid "Couldn't open the file '%1' for writing."
 msgstr "Kunde inte öppna filen '%1' för skrivning."
 
-#: src/kdefrontend/MainWin.cpp:2005
+#: src/kdefrontend/MainWin.cpp:2009
 #, kde-format
 msgid "Changed"
 msgstr "Ändrad"
 
-#: src/kdefrontend/MainWin.cpp:2020 src/kdefrontend/MainWin.cpp:2032
+#: src/kdefrontend/MainWin.cpp:2024 src/kdefrontend/MainWin.cpp:2036
 #, kde-format
 msgid "Preparing printing of %1"
 msgstr "Förbereder utskrift av %1"
 
-#: src/kdefrontend/MainWin.cpp:2022 src/kdefrontend/MainWin.cpp:2034
+#: src/kdefrontend/MainWin.cpp:2026 src/kdefrontend/MainWin.cpp:2038
 #, kde-format
 msgid "%1 printed"
 msgstr "%1 utskriven"
 
-#: src/kdefrontend/MainWin.cpp:2586
+#: src/kdefrontend/MainWin.cpp:2590
 #, kde-format
 msgid "There was a problem sharing the project: %1"
 msgstr "Ett problem uppstod när projektet skulle delas: %1"
 
-#: src/kdefrontend/MainWin.cpp:2590
+#: src/kdefrontend/MainWin.cpp:2594
 #, kde-format
 msgid "Project shared successfully"
 msgstr "Projektet delat med lyckat resultat"
 
-#: src/kdefrontend/MainWin.cpp:2593
+#: src/kdefrontend/MainWin.cpp:2597
 #, kde-format
 msgid "You can find the shared project at: <a href=\"%1\">%1</a>"
 msgstr "Det delade projektet finns på: <a href=\"%1\">%1</a>"
 
-#: src/kdefrontend/MainWin.cpp:2825
+#: src/kdefrontend/MainWin.cpp:2829
 #: src/kdefrontend/welcomescreen/WelcomeScreenHelper.cpp:115
 #, kde-format
 msgid "Dataset%1"
 msgstr "Datamängd%1"
 
-#: src/kdefrontend/MainWin.cpp:2855
+#: src/kdefrontend/MainWin.cpp:2859
 #, kde-format
 msgid "%1 exported"
 msgstr "%1 exporterad"
 
-#: src/kdefrontend/MainWin.cpp:2862
+#: src/kdefrontend/MainWin.cpp:2866
 #, kde-format
 msgid "FITS files saved"
 msgstr "FITS-filer sparade"
 
-#: src/kdefrontend/MainWin.cpp:2874
+#: src/kdefrontend/MainWin.cpp:2878
 #, kde-format
 msgid "MQTT Client%1"
 msgstr "MQTT-klient%1"
 
-#: src/kdefrontend/MainWin.cpp:2892
+#: src/kdefrontend/MainWin.cpp:2896
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
 msgstr "Det finns redan en MQTT-klient med värddatorn."
 
-#: src/kdefrontend/MainWin.cpp:2896
+#: src/kdefrontend/MainWin.cpp:2900
 #, kde-format
 msgid "Live data source%1"
 msgstr "Direktdatakälla %1"
 
-#: src/kdefrontend/MainWin.cpp:2947
+#: src/kdefrontend/MainWin.cpp:2951
 #, kde-format
 msgid "No Cantor backends found. Please install the ones you want to use."
 msgstr "Inga Cantor bakgrundsprogram hittades. Installera de du vill använda."
 
-#: src/kdefrontend/MainWin.cpp:2961
+#: src/kdefrontend/MainWin.cpp:2965
 #, kde-format
 msgid "Creates a new %1 notebook"
 msgstr "Skapar ett nytt %1 anteckningsblock"
@@ -22092,12 +22092,12 @@ msgstr "Originalbild"
 msgid "Processed Image"
 msgstr "Behandlad bild"
 
-#: src/kdefrontend/widgets/DatapickerImageWidget.cpp:374
+#: src/kdefrontend/widgets/DatapickerImageWidget.cpp:372
 #, kde-format
 msgid "Save project before using this option"
 msgstr "Spara projekt innan alternativet används"
 
-#: src/kdefrontend/widgets/DatapickerImageWidget.cpp:383
+#: src/kdefrontend/widgets/DatapickerImageWidget.cpp:381
 #, kde-format
 msgid "Invalid image"
 msgstr "Ogiltig bild"
