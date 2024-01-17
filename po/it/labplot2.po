@@ -1,6 +1,6 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the labplot package.
-# SPDX-FileCopyrightText: 2017, 2018, 2019, 2020, 2021, 2022, 2023 Paolo Zamponi <feus73@gmail.com>
+# SPDX-FileCopyrightText: 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024 Paolo Zamponi <feus73@gmail.com>
 # Vincenzo Reale <smart2128vr@gmail.com>, 2020, 2022.
 #
 msgid ""
@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-01-16 01:36+0000\n"
-"PO-Revision-Date: 2023-12-03 18:24+0100\n"
+"PO-Revision-Date: 2024-01-14 14:50+0100\n"
 "Last-Translator: Paolo Zamponi <feus73@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 23.08.3\n"
+"X-Generator: Lokalize 23.08.4\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -561,10 +561,9 @@ msgid "Used in"
 msgstr "Usato in"
 
 #: src/backend/core/column/Column.cpp:175
-#, fuzzy, kde-format
-#| msgid "Plot"
+#, kde-format
 msgid "Plots"
-msgstr "Grafico"
+msgstr "Grafici"
 
 #: src/backend/core/column/Column.cpp:193
 #, kde-format
@@ -1990,10 +1989,9 @@ msgid "Size in Bytes"
 msgstr "Dimensione in byte"
 
 #: src/backend/datasources/filters/QJsonModel.cpp:200
-#, fuzzy, kde-format
-#| msgid "Failed to load JSON document"
+#, kde-format
 msgid "Failed to load the JSON file. Empty JSON document."
-msgstr "Impossibile caricare documento JSON"
+msgstr "Impossibile caricare il file JSON. Documento JSON vuoto."
 
 #: src/backend/datasources/filters/QJsonModel.cpp:206
 #, kde-format
@@ -2340,10 +2338,9 @@ msgid "Euler's constant"
 msgstr "Costante di Eulero"
 
 #: src/backend/gsl/constants.cpp:60
-#, fuzzy, kde-format
-#| msgid "Number"
+#, kde-format
 msgid "Not a number"
-msgstr "Numero"
+msgstr "Non è un numero"
 
 #. i18n("Fundamental constants"));
 #: src/backend/gsl/constants.cpp:63
@@ -3698,7 +3695,7 @@ msgstr "Arrotonda all'intero più vicino"
 #: src/backend/gsl/functions.cpp:294
 #, kde-format
 msgid "Round to y decimal places"
-msgstr ""
+msgstr "Arrotonda a y posizioni decimali"
 
 #: src/backend/gsl/functions.cpp:308
 #, kde-format
@@ -9011,10 +9008,9 @@ msgid "Visible"
 msgstr "Visibile"
 
 #: src/backend/worksheet/WorksheetElement.cpp:225
-#, fuzzy, kde-format
-#| msgid "Locked"
+#, kde-format
 msgid "Lock"
-msgstr "Bloccato"
+msgstr "Blocca"
 
 #: src/backend/worksheet/WorksheetElement.cpp:234
 #, kde-format
@@ -11795,21 +11791,19 @@ msgstr ""
 "gli oggetti selezionati."
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:159
-#, fuzzy, kde-format
-#| msgid "Plot Area"
+#, kde-format
 msgid "As Plot Area"
-msgstr "Area del grafico"
+msgstr "Come area del grafico"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:160
-#, fuzzy, kde-format
-#| msgid "Logical Coordinates"
+#, kde-format
 msgid "As Coordinate System"
-msgstr "Coordinate logiche"
+msgstr "Come sistema di coordinate"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:164
 #, kde-format
 msgid "Specify how to import multi-layered graphs."
-msgstr ""
+msgstr "Specifica come importare i grafici multi livello."
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:169
 #, kde-format
@@ -11941,10 +11935,9 @@ msgstr ""
 
 #: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:330
 #: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:332
-#, fuzzy, kde-format
-#| msgid "Execute the query and preview its result"
+#, kde-format
 msgid "Failed to execute the query for the preview"
-msgstr "Esegui l'interrogazione e fai l'anteprima dei suoi risultati"
+msgstr "Impossibile eseguire l'interrogazione per l'anteprima"
 
 #: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:406
 #, kde-format
@@ -11958,8 +11951,7 @@ msgstr "Esegui l'interrogazione e fai l'anteprima dei suoi risultati"
 
 #: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:529
 #: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:531
-#, fuzzy, kde-format
-#| msgid "Unable to Execute Query"
+#, kde-format
 msgid "Failed to execute the query"
 msgstr "Impossibile eseguire l'interrogazione"
 
@@ -12211,10 +12203,9 @@ msgid "Values"
 msgstr "Valori"
 
 #: src/kdefrontend/datasources/OdsOptionsWidget.cpp:19
-#, fuzzy, kde-format
-#| msgid "Datasets"
+#, kde-format
 msgid "Data sheets"
-msgstr "Insiemi di dati"
+msgstr "Schede dati"
 
 #: src/kdefrontend/datasources/ROOTOptionsWidget.cpp:22
 #, kde-format
@@ -13735,6 +13726,8 @@ msgid ""
 "The number of the interpolation points should be bigger than the total "
 "number of points in the data source."
 msgstr ""
+"Il numero dei punti di interpolazione dovrebbe essere maggiore del numero "
+"totale di punti nella sorgente dei dati."
 
 #: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:548
 #, kde-format
@@ -14402,10 +14395,9 @@ msgstr ""
 "visualizzazione e per l'analisi dei dati accessibile da chiunque."
 
 #: src/kdefrontend/LabPlot.cpp:98
-#, fuzzy, kde-format
-#| msgid "(c) 2007-2023"
+#, kde-format
 msgid "(c) 2007-2024"
-msgstr "(c) 2007-2023"
+msgstr "(c) 2007-2024"
 
 #: src/kdefrontend/LabPlot.cpp:101
 #, kde-format
@@ -15094,10 +15086,9 @@ msgid "No Cantor backends found. Please install the ones you want to use."
 msgstr "Nessun motore di Cantor trovato. installane uno se vuoi usarlo."
 
 #: src/kdefrontend/MainWin.cpp:2965
-#, fuzzy, kde-format
-#| msgid "Creates a new note for arbitrary text"
+#, kde-format
 msgid "Creates a new %1 notebook"
-msgstr "Crea una nuova nota di testo arbitrario"
+msgstr "Crea un nuovo notebook %1"
 
 #: src/kdefrontend/matrix/MatrixFunctionDialog.cpp:45
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:43
@@ -15318,10 +15309,9 @@ msgid "min."
 msgstr "min."
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:192
-#, fuzzy, kde-format
-#| msgid "Create New Empty Project"
+#, kde-format
 msgid "Create New Project"
-msgstr "Crea un nuovo progetto vuoto"
+msgstr "Crea un nuovo progetto"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:193
 #, kde-format
@@ -15349,10 +15339,9 @@ msgid "With Worksheet and Spreadsheet"
 msgstr "%1: imposta foglio elettronico collegato"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:201
-#, fuzzy, kde-format
-#| msgid "Notebook"
+#, kde-format
 msgid "With Notebook"
-msgstr "Notebook"
+msgstr "Con Notebook"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:204
 #, kde-format
@@ -15419,21 +15408,15 @@ msgid "Arabic (٫)"
 msgstr "Arabo (٫)"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:229
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Use terms compliant with the <a href=\"http://www."
-#| "bipm.org/utils/common/documents/jcgm/JCGM_100_2008_E.pdf\"><span style=\" "
-#| "text-decoration: underline; color:#2980b9;\">Guide to the Expression of "
-#| "Uncertainty in Measurement (GUM)</span></a></p></body></html>"
+#, kde-format
 msgid ""
 "Use terms compliant with the <a href=\"http://www.bipm.org/utils/common/"
 "documents/jcgm/JCGM_100_2008_E.pdf\">Guide to the Expression of Uncertainty "
 "in Measurement (GUM)</a>"
 msgstr ""
-"<html><head/><body><p>Usa termini conformi alla <a href=\"http://www.bipm."
-"org/utils/common/documents/jcgm/JCGM_100_2008_E.pdf\"><span style=\" text-"
-"decoration: underline; color:#2980b9;\">Guida all'espressione "
-"dell'incertezza nella misurazione (GUM)</span></a></p></body></html>"
+"Usa termini conformi alla <a href=\"http://www.bipm.org/utils/common/"
+"documents/jcgm/JCGM_100_2008_E.pdf\">Guida all'espressione dell'incertezza "
+"nella misurazione (GUM)</a>"
 
 #: src/kdefrontend/SettingsNotebookPage.cpp:23
 #, kde-format
@@ -16332,20 +16315,13 @@ msgstr ""
 "utilizzata per eseguire il seeding del generatore."
 
 #: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:89
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Random number distributions as defined in <a href="
-#| "\"https://www.gnu.org/software/gsl/doc/html/randist.html\"><span style=\" "
-#| "text-decoration: underline; color:#2980b9;\">GSL documentation</span></"
-#| "a></p></body></html>"
+#, kde-format
 msgid ""
 "Random number distributions as defined in <a href=\"https://www.gnu.org/"
 "software/gsl/doc/html/randist.html\">GSL documentation</a>"
 msgstr ""
-"<html><head/><body><p>Distribuzioni dei numeri casuali come definite nella "
-"<a href=\"https://www.gnu.org/software/gsl/doc/html/randist.html\"><span "
-"style=\" text-decoration: underline; color:#2980b9;\">documentazione di GSL</"
-"span></a></p></body></html>"
+"Distribuzioni dei numeri casuali come definite nella <a href=\"https://www."
+"gnu.org/software/gsl/doc/html/randist.html\">documentazione di GSL</a>"
 
 #: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:461
 #, kde-format
@@ -18297,14 +18273,13 @@ msgstr "Oggetti da importare"
 #: src/kdefrontend/ui/datasources/importprojectwidget.ui:58
 #, kde-format
 msgid "Graph Layers:"
-msgstr ""
+msgstr "Livelli del grafico:"
 
 #. i18n: ectx: property (text), widget (QLabel, lUnusedObjects)
 #: src/kdefrontend/ui/datasources/importprojectwidget.ui:82
-#, fuzzy, kde-format
-#| msgid "Import unused object"
+#, kde-format
 msgid "Unused Objects:"
-msgstr "importa oggetto non usato"
+msgstr "Oggetto non usati:"
 
 #. i18n: ectx: property (text), widget (QLabel, lCustomFolder)
 #. i18n: ectx: property (text), widget (QLabel, lFolder)
@@ -21330,10 +21305,9 @@ msgstr "Notebook:"
 
 #. i18n: ectx: property (text), widget (QLabel, lNewProject)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:96
-#, fuzzy, kde-format
-#| msgid "Save Project"
+#, kde-format
 msgid "New Project:"
-msgstr "Salva il progetto"
+msgstr "Nuovo progetto:"
 
 #. i18n: ectx: property (text), widget (QLabel, lGUMTerms)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:106
