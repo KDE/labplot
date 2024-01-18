@@ -888,7 +888,7 @@ void WorksheetElementPrivate::keyPressEvent(QKeyEvent* event) {
 		QGraphicsItem::keyPressEvent(event);
 }
 
-void WorksheetElementPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
+void WorksheetElementPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 	if (!m_moveStarted && event->button() == Qt::LeftButton)
 		m_moveStarted = true;
 
