@@ -888,7 +888,19 @@ void WorksheetElementPrivate::keyPressEvent(QKeyEvent* event) {
 		QGraphicsItem::keyPressEvent(event);
 }
 
+void WorksheetElementPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
+	if (!m_moveStarted && event->button() == Qt::LeftButton)
+		m_moveStarted = true;
+
+	QGraphicsItem::mouseMoveEvent(event);
+}
+
 void WorksheetElementPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
+	if (!m_moveStarted) {
+		QGraphicsItem::mouseReleaseEvent(event);
+		return;
+	}
+
 	// convert position of the item in parent coordinates to label's position
 	QPointF point = q->parentPosToRelativePos(pos(), position);
 	point = q->align(point, boundingRect(), horizontalAlignment, verticalAlignment, false);
@@ -902,6 +914,7 @@ void WorksheetElementPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
 		suppressRetransform = false;
 	}
 
+	m_moveStarted = false;
 	QGraphicsItem::mouseReleaseEvent(event);
 }
 
