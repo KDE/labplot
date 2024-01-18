@@ -16,14 +16,7 @@
 #include "backend/core/Settings.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/XmlStreamReader.h"
-#include "backend/worksheet/Line.h"
-#include "backend/worksheet/Worksheet.h"
-#include "backend/worksheet/plots/cartesian/BoxPlot.h"
-#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
-#include "backend/worksheet/plots/cartesian/Value.h"
 #include "commonfrontend/core/ContentDockWidget.h"
-#include "qscreen.h"
-
 #include <KConfig>
 #include <KConfigGroup>
 #include <KLocalizedString>
@@ -49,11 +42,6 @@
 #include <QPushButton>
 #include <QTreeView>
 #include <QVBoxLayout>
-
-#include <backend/worksheet/plots/cartesian/BarPlot.h>
-#include <backend/worksheet/plots/cartesian/XYCurve.h>
-
-#include <commonfrontend/worksheet/WorksheetView.h>
 
 /*!
   \class ProjectExplorer

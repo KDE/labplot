@@ -37,10 +37,6 @@ SpreadsheetCommentsHeaderView::SpreadsheetCommentsHeaderView(QWidget* parent)
 SpreadsheetCommentsHeaderView::~SpreadsheetCommentsHeaderView() {
 	delete model();
 }
-QSize SpreadsheetCommentsHeaderView::sizeHint() const {
-	QSize sizeHint = QHeaderView::sizeHint();
-	return sizeHint;
-}
 
 void SpreadsheetCommentsHeaderView::setModel(QAbstractItemModel* model) {
 	Q_ASSERT(model->inherits("SpreadsheetModel"));

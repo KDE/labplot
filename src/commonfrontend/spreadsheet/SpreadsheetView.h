@@ -11,7 +11,6 @@
 #ifndef SPREADSHEETVIEW_H
 #define SPREADSHEETVIEW_H
 
-#include <QTableWidget>
 #include <QVBoxLayout>
 #include <QWidget>
 

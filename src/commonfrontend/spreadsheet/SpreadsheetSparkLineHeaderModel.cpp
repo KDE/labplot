@@ -1,5 +1,5 @@
 /*
-	File                 : SpreadsheetCommentsHeaderModel.cpp
+	File                 : SpreadsheetSparkLineHeaderModel.cpp
 	Project              : LabPlot
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2023 Kuntal Bar <barkuntal6@gmail.com>
@@ -51,8 +51,8 @@ void SpreadsheetSparkLinesHeaderModel::sparkLine(Column* col) {
 
 // show sparkLine of respective column
 QPixmap SpreadsheetSparkLinesHeaderModel::showSparkLines(const Column* col) {
-	static const QString sparklineTheme = i18n("Sparkline");
-	static const QString sparklineText = i18n("add-sparkline");
+	static const QString sparklineTheme = QStringLiteral("Sparkline");
+	static const QString sparklineText = QStringLiteral("add-sparkline");
 	auto* worksheet = new Worksheet(sparklineText);
 	DEBUG(Q_FUNC_INFO << "Called")
 
@@ -90,9 +90,8 @@ QPixmap SpreadsheetSparkLinesHeaderModel::showSparkLines(const Column* col) {
 
 		QVector<int> data;
 		QVector<QString> labels;
-		for (const auto& pair : pairs) {
+		for (const auto& pair : pairs)
 			data << pair.second;
-		}
 		dataColumn->replaceInteger(0, data);
 		QVector<const AbstractColumn*> columns;
 		columns << dataColumn;
