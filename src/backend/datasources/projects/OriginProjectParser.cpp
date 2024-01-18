@@ -1037,39 +1037,51 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 		DEBUG(Q_FUNC_INFO << ", parent PATH " << STDSTRING(worksheet->parentAspect()->path()))
 
 	// load worksheet data
-	const Origin::Graph& graph = m_originFile->graph(findWorksheetByName(worksheet->name()));
+	const auto& graph = m_originFile->graph(findWorksheetByName(worksheet->name()));
 	DEBUG(Q_FUNC_INFO << ", worksheet name = " << graph.name);
 	worksheet->setComment(QLatin1String(graph.label.c_str()));
 
 	// TODO: width, height, view mode (print view, page view, window view, draft view)
 	// Origin allows to freely resize the window and ajusts the size of the plot (layer) automatically
 	// by keeping a certain width-to-height ratio. It's not clear what the actual size of the plot/layer is and how to handle this.
-	// For now we simply create a new wokrsheet here with it's default size and make it using the whole view size.
+	// For now we simply create a new worksheet here with it's default size and make it using the whole view size.
 	// Later we can decide to use one of the following properties:
 	//  1) Window.frameRect gives Rect-corner coordinates (in pixels) of the Window object
 	//  2) GraphLayer.clientRect gives Rect-corner coordinates (pixels) of the Layer inside the (printer?) page.
 	//  3) Graph.width, Graph.height give the (printer?) page size in pixels.
 	// 	const QRectF size(0, 0,
-	// 					  Worksheet::convertToSceneUnits(graph.width/600., Worksheet::Inch),
-	// 					  Worksheet::convertToSceneUnits(graph.height/600., Worksheet::Inch));
+	// 			Worksheet::convertToSceneUnits(graph.width/600., Worksheet::Inch),
+	// 			Worksheet::convertToSceneUnits(graph.height/600., Worksheet::Inch));
 	// 	worksheet->setPageRect(size);
+	DEBUG(Q_FUNC_INFO << ", GRAPH width/height (px) = " << graph.width << "/" << graph.height)
+	// Graphic elements in Origin are scaled relative to the dimensions of the page (Format->Page) with 600 DPI (>=9.6), 300 DPI (<9.6)
+	double dpi = 600.;
+	if (m_originFile->version() < 9.6)
+		dpi = 300.;
+	DEBUG(Q_FUNC_INFO << ", GRAPH width/height (mm) = " << graph.width * 25.4 / dpi << "/" << graph.height * 25.4 / dpi)
+	// Origin scales the elements with the size of the layer when no fixed size is used (Layer properties->Size)
+	// so we scale all elements with the scaling factor to the whole view height (295 mm) used as default
+	scalingFactor = 295. / (graph.height * 25.4 / dpi);
+	DEBUG(Q_FUNC_INFO << ", SCALING FACTOR = " << scalingFactor)
+	// default values (1000/1000)
+	//	DEBUG(Q_FUNC_INFO << ", WORKSHEET width/height = " << worksheet->pageRect().width() << "/" << worksheet->pageRect().height())
 	worksheet->setUseViewSize(true);
 
 	QHash<TextLabel*, QSizeF> textLabelPositions;
 
 	// worksheet background color
-	const Origin::ColorGradientDirection bckgColorGradient = graph.windowBackgroundColorGradient;
-	const Origin::Color bckgBaseColor = graph.windowBackgroundColorBase;
-	const Origin::Color bckgEndColor = graph.windowBackgroundColorEnd;
-	worksheet->background()->setColorStyle(backgroundColorStyle(bckgColorGradient));
-	switch (bckgColorGradient) {
+	const Origin::ColorGradientDirection bgColorGradient = graph.windowBackgroundColorGradient;
+	const Origin::Color bgBaseColor = graph.windowBackgroundColorBase;
+	const Origin::Color bgEndColor = graph.windowBackgroundColorEnd;
+	worksheet->background()->setColorStyle(backgroundColorStyle(bgColorGradient));
+	switch (bgColorGradient) {
 	case Origin::ColorGradientDirection::NoGradient:
 	case Origin::ColorGradientDirection::TopLeft:
 	case Origin::ColorGradientDirection::Left:
 	case Origin::ColorGradientDirection::BottomLeft:
 	case Origin::ColorGradientDirection::Top:
-		worksheet->background()->setFirstColor(color(bckgEndColor));
-		worksheet->background()->setSecondColor(color(bckgBaseColor));
+		worksheet->background()->setFirstColor(color(bgEndColor));
+		worksheet->background()->setSecondColor(color(bgBaseColor));
 		break;
 	case Origin::ColorGradientDirection::Center:
 		break;
@@ -1077,8 +1089,8 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 	case Origin::ColorGradientDirection::TopRight:
 	case Origin::ColorGradientDirection::Right:
 	case Origin::ColorGradientDirection::BottomRight:
-		worksheet->background()->setFirstColor(color(bckgBaseColor));
-		worksheet->background()->setSecondColor(color(bckgEndColor));
+		worksheet->background()->setFirstColor(color(bgBaseColor));
+		worksheet->background()->setSecondColor(color(bgEndColor));
 	}
 
 	// TODO: do we need changes on the worksheet layout?
@@ -1332,10 +1344,11 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 
 	// texts
 	for (const auto& t : layer.texts) {
-		DEBUG("EXTRA TEXT = " << t.text.c_str());
+		DEBUG(Q_FUNC_INFO << ", EXTRA TEXT = " << t.text.c_str());
 		auto* label = new TextLabel(QStringLiteral("text label"));
 		QTextEdit te(parseOriginText(QString::fromLatin1(t.text.c_str())));
 		te.selectAll();
+		DEBUG(Q_FUNC_INFO << ", font size = " << t.fontSize)
 		te.setFontPointSize(int(t.fontSize));
 		te.setTextColor(OriginProjectParser::color(t.color));
 		label->setText(te.toHtml());
@@ -1757,7 +1770,9 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 
 	QFont font;
 	// TODO: font family?
-	font.setPixelSize(Worksheet::convertToSceneUnits(tickAxis.fontSize, Worksheet::Unit::Point));
+	DEBUG(Q_FUNC_INFO << ", axis tick font size = " << tickAxis.fontSize)
+	DEBUG(Q_FUNC_INFO << ", axis tick font size in points = " << Worksheet::convertToSceneUnits(tickAxis.fontSize, Worksheet::Unit::Point))
+	font.setPointSize(Worksheet::convertToSceneUnits(tickAxis.fontSize, Worksheet::Unit::Point));
 	font.setBold(tickAxis.fontBold);
 	axis->setLabelsFont(font);
 	// TODO: handle string dataName member in GraphAxisTick
@@ -1824,7 +1839,7 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 		}
 
 		curve->line()->setStyle(penStyle);
-		curve->line()->setWidth(Worksheet::convertToSceneUnits(originCurve.lineWidth, Worksheet::Unit::Point));
+		curve->line()->setWidth(Worksheet::convertToSceneUnits(originCurve.lineWidth * scalingFactor, Worksheet::Unit::Point));
 		curve->line()->setColor(color(originCurve.lineColor));
 		curve->line()->setOpacity(1 - originCurve.lineTransparency / 255);
 
@@ -2123,7 +2138,9 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 			symbol->setStyle(Symbol::Style::NoSymbols);
 		}
 		// symbol size
-		symbol->setSize(Worksheet::convertToSceneUnits(originCurve.symbolSize, Worksheet::Unit::Point));
+		DEBUG(Q_FUNC_INFO << ", symbol size = " << originCurve.symbolSize)
+		DEBUG(Q_FUNC_INFO << ", symbol size in points = " << Worksheet::convertToSceneUnits(originCurve.symbolSize, Worksheet::Unit::Point))
+		symbol->setSize(Worksheet::convertToSceneUnits(originCurve.symbolSize * scalingFactor, Worksheet::Unit::Point));
 
 		// symbol fill color
 		QBrush brush = symbol->brush();
@@ -2151,10 +2168,10 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 		} else
 			pen.setColor(color(originCurve.symbolColor));
 
-		// DEBUG(Q_FUNC_INFO << ", SYMBOL THICKNESS = " << (int)originCurve.symbolThickness)
-		// DEBUG(Q_FUNC_INFO << ", BORDER THICKNESS = " << borderScaleFactor * originCurve.symbolThickness/100.*symbol->size()/scaleFactor)
+		DEBUG(Q_FUNC_INFO << ", SYMBOL THICKNESS = " << (int)originCurve.symbolThickness)
 		// border width (edge thickness in Origin) is given as percentage of the symbol radius
 		const double borderScaleFactor = 5.; // match size
+		DEBUG(Q_FUNC_INFO << ", BORDER THICKNESS = " << borderScaleFactor * originCurve.symbolThickness / 100. * symbol->size())
 		pen.setWidthF(borderScaleFactor * originCurve.symbolThickness / 100. * symbol->size());
 
 		symbol->setPen(pen);

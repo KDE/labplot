@@ -86,6 +86,7 @@ private:
 	QStringList m_noteNameList;
 	bool m_importUnusedObjects{false};
 	bool m_graphLayerAsPlotArea{true};
+	double scalingFactor{1.};
 
 	friend class ProjectImportTest;
 };
