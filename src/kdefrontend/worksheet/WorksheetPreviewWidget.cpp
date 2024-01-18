@@ -44,6 +44,9 @@ WorksheetPreviewWidget::WorksheetPreviewWidget(QWidget* parent)
 WorksheetPreviewWidget::~WorksheetPreviewWidget() = default;
 
 void WorksheetPreviewWidget::setProject(Project* project) {
+	// TODO: disconnect to all slots here doesn't seem to work, we still need nullptr checks in the slots.
+	// disconnect(m_project, nullptr, this, nullptr);
+
 	m_project = project;
 
 	// clear the content of the previous project
@@ -139,6 +142,9 @@ void WorksheetPreviewWidget::aspectAdded(const AbstractAspect* aspect) {
 }
 
 void WorksheetPreviewWidget::aspectSelected(const AbstractAspect* aspect) {
+	if (!m_project)
+		return;
+
 	const auto* w = dynamic_cast<const Worksheet*>(aspect);
 	if (!w)
 		return;
@@ -149,6 +155,9 @@ void WorksheetPreviewWidget::aspectSelected(const AbstractAspect* aspect) {
 }
 
 void WorksheetPreviewWidget::aspectDeselected(const AbstractAspect* aspect) {
+	if (!m_project)
+		return;
+
 	const auto* w = dynamic_cast<const Worksheet*>(aspect);
 	if (!w)
 		return;
@@ -165,6 +174,9 @@ void WorksheetPreviewWidget::aspectDeselected(const AbstractAspect* aspect) {
 }
 
 void WorksheetPreviewWidget::aspectAboutToBeRemoved(const AbstractAspect* aspect) {
+	if (!m_project)
+		return;
+
 	const auto* w = dynamic_cast<const Worksheet*>(aspect);
 	if (!w)
 		return;
