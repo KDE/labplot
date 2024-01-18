@@ -67,6 +67,7 @@ Spreadsheet::Spreadsheet(const QString& name, bool loading, AspectType type)
 
 Spreadsheet::~Spreadsheet() {
 	delete m_model;
+	delete d_ptr;
 }
 
 /*!

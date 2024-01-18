@@ -1581,6 +1581,7 @@ void WorksheetPrivate::update() {
 
 WorksheetPrivate::~WorksheetPrivate() {
 	delete m_scene;
+	delete cursorData;
 }
 
 void WorksheetPrivate::updateLayout(bool undoable) {

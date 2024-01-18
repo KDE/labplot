@@ -138,6 +138,7 @@ CartesianPlot::CartesianPlot(const QString& name, CartesianPlotPrivate* dd)
 CartesianPlot::~CartesianPlot() {
 	if (m_menusInitialized) {
 		delete m_addNewMenu;
+		delete dataAnalysisMenu;
 		delete themeMenu;
 	}
 
@@ -587,21 +588,21 @@ void CartesianPlot::initMenus() {
 	m_addNewMenu->addAction(addCurveAction);
 	m_addNewMenu->addAction(addEquationCurveAction);
 
-	auto* addNewStatisticalPlotsMenu = new QMenu(i18n("Statistical Plots"));
+	auto* addNewStatisticalPlotsMenu = new QMenu(i18n("Statistical Plots"), m_addNewMenu);
 	addNewStatisticalPlotsMenu->addAction(addHistogramAction);
 	addNewStatisticalPlotsMenu->addAction(addBoxPlotAction);
 	addNewStatisticalPlotsMenu->addAction(addKDEPlotAction);
 	addNewStatisticalPlotsMenu->addAction(addQQPlotAction);
 	m_addNewMenu->addMenu(addNewStatisticalPlotsMenu);
 
-	auto* addNewBarPlotsMenu = new QMenu(i18n("Bar Plots"));
+	auto* addNewBarPlotsMenu = new QMenu(i18n("Bar Plots"), m_addNewMenu);
 	addNewBarPlotsMenu->addAction(addBarPlotAction);
 	addNewBarPlotsMenu->addAction(addLollipopPlotAction);
 	m_addNewMenu->addMenu(addNewBarPlotsMenu);
 
 	m_addNewMenu->addSeparator();
 
-	addNewAnalysisMenu = new QMenu(i18n("Analysis Curve"));
+	addNewAnalysisMenu = new QMenu(i18n("Analysis Curve"), m_addNewMenu);
 	addNewAnalysisMenu->addAction(addFitCurveAction);
 	addNewAnalysisMenu->addSeparator();
 	addNewAnalysisMenu->addAction(addDifferentiationCurveAction);
@@ -640,8 +641,10 @@ void CartesianPlot::initMenus() {
 	// 	dataManipulationMenu->addAction(addDataOperationAction);
 	// 	dataManipulationMenu->addAction(addDataReductionAction);
 
-	// Data fit menu
-	QMenu* dataFitMenu = new QMenu(i18n("Fit"));
+	// analysis menu
+	dataAnalysisMenu = new QMenu(i18n("Analysis"));
+
+	QMenu* dataFitMenu = new QMenu(i18n("Fit"), dataAnalysisMenu);
 	dataFitMenu->setIcon(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")));
 	dataFitMenu->addAction(addFitActions.at(0));
 	dataFitMenu->addAction(addFitActions.at(1));
@@ -657,10 +660,8 @@ void CartesianPlot::initMenus() {
 	dataFitMenu->addAction(addFitActions.at(9));
 	dataFitMenu->addSeparator();
 	dataFitMenu->addAction(addFitActions.at(10));
-
-	// analysis menu
-	dataAnalysisMenu = new QMenu(i18n("Analysis"));
 	dataAnalysisMenu->addMenu(dataFitMenu);
+
 	dataAnalysisMenu->addSeparator();
 	dataAnalysisMenu->addAction(addDifferentiationAction);
 	dataAnalysisMenu->addAction(addIntegrationAction);

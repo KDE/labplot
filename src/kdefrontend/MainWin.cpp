@@ -890,7 +890,7 @@ void MainWin::initActions() {
 	KStandardAction::showMenubar(this, &MainWin::toggleMenuBar, actionCollection());
 
 	// show/hide the memory usage widget
-	m_memoryInfoAction = new QAction(i18n("Show Memory Usage"));
+	m_memoryInfoAction = new QAction(i18n("Show Memory Usage"), this);
 	m_memoryInfoAction->setCheckable(true);
 	connect(m_memoryInfoAction, &QAction::triggered, this, &MainWin::toggleMemoryInfo);
 
@@ -941,7 +941,7 @@ void MainWin::initActions() {
 
 void MainWin::initMenus() {
 #ifdef HAVE_PURPOSE
-	m_shareMenu = new Purpose::Menu();
+	m_shareMenu = new Purpose::Menu(this);
 	m_shareMenu->model()->setPluginType(QStringLiteral("Export"));
 	connect(m_shareMenu, &Purpose::Menu::finished, this, &MainWin::shareActionFinished);
 	m_shareAction->setMenu(m_shareMenu);
