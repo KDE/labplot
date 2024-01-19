@@ -411,7 +411,7 @@ bool OriginProjectParser::loadFolder(Folder* folder, tree<Origin::ProjectNode>::
 		}
 		case Origin::ProjectNode::Matrix: {
 			DEBUG(Q_FUNC_INFO << ", top level MATRIX");
-			const Origin::Matrix& originMatrix = m_originFile->matrix(findMatrixByName(name));
+			const auto& originMatrix = m_originFile->matrix(findMatrixByName(name));
 			DEBUG("	matrix name = " << originMatrix.name);
 			DEBUG("	number of sheets = " << originMatrix.sheets.size());
 			if (originMatrix.sheets.size() == 1) {
@@ -493,7 +493,7 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 	// loop over all spreads to find loose ones
 	for (unsigned int i = 0; i < m_originFile->spreadCount(); i++) {
 		AbstractAspect* aspect = nullptr;
-		const Origin::SpreadSheet& spread = m_originFile->spread(i);
+		const auto& spread = m_originFile->spread(i);
 		QString name = QString::fromStdString(spread.name);
 
 		DEBUG("	spread.objectId = " << spread.objectID);
@@ -521,7 +521,7 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 	// loop over all workbooks to find loose ones
 	for (unsigned int i = 0; i < m_originFile->excelCount(); i++) {
 		AbstractAspect* aspect = nullptr;
-		const Origin::Excel& excel = m_originFile->excel(i);
+		const auto& excel = m_originFile->excel(i);
 		QString name = QString::fromStdString(excel.name);
 
 		DEBUG("	excel.objectId = " << excel.objectID);
@@ -550,7 +550,7 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 	// loop over all matrices to find loose ones
 	for (unsigned int i = 0; i < m_originFile->matrixCount(); i++) {
 		AbstractAspect* aspect = nullptr;
-		const Origin::Matrix& originMatrix = m_originFile->matrix(i);
+		const auto& originMatrix = m_originFile->matrix(i);
 		QString name = QString::fromStdString(originMatrix.name);
 
 		DEBUG("	originMatrix.objectId = " << originMatrix.objectID);
@@ -582,7 +582,7 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 	// handle loose graphs (is this even possible?)
 	for (unsigned int i = 0; i < m_originFile->graphCount(); i++) {
 		AbstractAspect* aspect = nullptr;
-		const Origin::Graph& graph = m_originFile->graph(i);
+		const auto& graph = m_originFile->graph(i);
 		QString name = QString::fromStdString(graph.name);
 
 		DEBUG("	graph.objectId = " << graph.objectID);
@@ -607,7 +607,7 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 	// handle loose notes (is this even possible?)
 	for (unsigned int i = 0; i < m_originFile->noteCount(); i++) {
 		AbstractAspect* aspect = nullptr;
-		const Origin::Note& originNote = m_originFile->note(i);
+		const auto& originNote = m_originFile->note(i);
 		QString name = QString::fromStdString(originNote.name);
 
 		DEBUG("	originNote.objectId = " << originNote.objectID);
@@ -634,7 +634,7 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 bool OriginProjectParser::loadWorkbook(Workbook* workbook, bool preview) {
 	DEBUG(Q_FUNC_INFO);
 	// load workbook sheets
-	const Origin::Excel& excel = m_originFile->excel(findWorkbookByName(workbook->name()));
+	const auto& excel = m_originFile->excel(findWorkbookByName(workbook->name()));
 	DEBUG(Q_FUNC_INFO << ", workbook name = " << excel.name);
 	DEBUG(Q_FUNC_INFO << ", number of sheets = " << excel.sheets.size());
 	for (unsigned int s = 0; s < excel.sheets.size(); ++s) {
@@ -685,7 +685,7 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 	const int scaling_factor = fm.maxWidth();
 
 	for (size_t j = 0; j < cols; ++j) {
-		Origin::SpreadColumn column = spread.columns[j];
+		auto column = spread.columns[j];
 		Column* col = spreadsheet->column((int)j);
 
 		DEBUG(Q_FUNC_INFO << ", column " << j << ", name = " << column.name.c_str())
@@ -965,7 +965,7 @@ void OriginProjectParser::loadColumnNumericFormat(const Origin::SpreadColumn& or
 bool OriginProjectParser::loadMatrixWorkbook(Workbook* workbook, bool preview) {
 	DEBUG(Q_FUNC_INFO)
 	// load matrix workbook sheets
-	const Origin::Matrix& originMatrix = m_originFile->matrix(findMatrixByName(workbook->name()));
+	const auto& originMatrix = m_originFile->matrix(findMatrixByName(workbook->name()));
 	for (size_t s = 0; s < originMatrix.sheets.size(); ++s) {
 		Matrix* matrix = new Matrix(QString::fromLatin1(originMatrix.sheets[s].name.c_str()));
 		loadMatrix(matrix, preview, s, workbook->name());
@@ -978,7 +978,7 @@ bool OriginProjectParser::loadMatrixWorkbook(Workbook* workbook, bool preview) {
 bool OriginProjectParser::loadMatrix(Matrix* matrix, bool preview, size_t sheetIndex, const QString& mwbName) {
 	DEBUG(Q_FUNC_INFO)
 	// import matrix data
-	const Origin::Matrix& originMatrix = m_originFile->matrix(findMatrixByName(mwbName));
+	const auto& originMatrix = m_originFile->matrix(findMatrixByName(mwbName));
 
 	if (preview)
 		return true;
@@ -989,7 +989,7 @@ bool OriginProjectParser::loadMatrix(Matrix* matrix, bool preview, size_t sheetI
 	QFontMetrics fm(font);
 	const int scaling_factor = fm.maxWidth();
 
-	const Origin::MatrixSheet& layer = originMatrix.sheets[sheetIndex];
+	const auto& layer = originMatrix.sheets[sheetIndex];
 	const int colCount = layer.columnCount;
 	const int rowCount = layer.rowCount;
 
@@ -1060,9 +1060,9 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 		dpi = 300.;
 	DEBUG(Q_FUNC_INFO << ", GRAPH width/height (mm) = " << graph.width * 25.4 / dpi << "/" << graph.height * 25.4 / dpi)
 	// Origin scales the elements with the size of the layer when no fixed size is used (Layer properties->Size)
-	// so we scale all elements with the scaling factor to the whole view height (295 mm) used as default
-	scalingFactor = 295. / (graph.height * 25.4 / dpi);
-	DEBUG(Q_FUNC_INFO << ", SCALING FACTOR = " << scalingFactor)
+	// so we scale all elements with a scaling factor to the whole view height (295 mm) used as default
+	elementScalingFactor = 295. / (graph.height * 25.4 / dpi);
+	DEBUG(Q_FUNC_INFO << ", ELEMENT SCALING FACTOR = " << elementScalingFactor)
 	// default values (1000/1000)
 	//	DEBUG(Q_FUNC_INFO << ", WORKSHEET width/height = " << worksheet->pageRect().width() << "/" << worksheet->pageRect().height())
 	worksheet->setUseViewSize(true);
@@ -1132,7 +1132,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 			const QSizeF& ratios = it.value();
 			const auto* plot = static_cast<const CartesianPlot*>(label->parentAspect());
 
-			TextLabel::PositionWrapper position = label->position();
+			auto position = label->position();
 			position.point.setX(plot->dataRect().width() * (ratios.width() - 0.5));
 			position.point.setY(plot->dataRect().height() * (ratios.height() - 0.5));
 			label->setPosition(position);
@@ -1349,7 +1349,7 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 		QTextEdit te(parseOriginText(QString::fromLatin1(t.text.c_str())));
 		te.selectAll();
 		DEBUG(Q_FUNC_INFO << ", font size = " << t.fontSize)
-		te.setFontPointSize(int(t.fontSize));
+		te.setFontPointSize(int(t.fontSize)); // no scaling
 		te.setTextColor(OriginProjectParser::color(t.color));
 		label->setText(te.toHtml());
 		// DEBUG(" TEXT = " << STDSTRING(label->text().text))
@@ -1418,7 +1418,7 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 				// XYCurve* xyCurve = new XYCurve(i18n("Curve%1", QString::number(curveIndex)));
 				// TODO: curve (legend) does not support HTML text yet.
 				// XYCurve* xyCurve = new XYCurve(curveText);
-				XYCurve* curve = new XYCurve(QString::fromLatin1(originCurve.yColumnName.c_str()));
+				auto* curve = new XYCurve(QString::fromLatin1(originCurve.yColumnName.c_str()));
 				if (m_graphLayerAsPlotArea)
 					curve->setCoordinateSystemIndex(plot->defaultCoordinateSystemIndex());
 				else
@@ -1692,12 +1692,12 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 	color.type = Origin::Color::ColorType::Regular;
 	color.regular = axisFormat.color;
 	axis->line()->setColor(OriginProjectParser::color(color));
-	axis->line()->setWidth(Worksheet::convertToSceneUnits(axisFormat.thickness, Worksheet::Unit::Point));
+	axis->line()->setWidth(Worksheet::convertToSceneUnits(axisFormat.thickness * elementScalingFactor, Worksheet::Unit::Point));
 	if (axisFormat.hidden)
 		axis->line()->setStyle(Qt::NoPen);
 	// TODO: read line style properties? (solid line, dashed line, etc.)
 
-	axis->setMajorTicksLength(Worksheet::convertToSceneUnits(axisFormat.majorTickLength, Worksheet::Unit::Point));
+	axis->setMajorTicksLength(Worksheet::convertToSceneUnits(axisFormat.majorTickLength * elementScalingFactor, Worksheet::Unit::Point));
 	axis->setMajorTicksDirection((Axis::TicksFlags)axisFormat.majorTicksType);
 	axis->majorTicksLine()->setStyle(axis->line()->style());
 	axis->majorTicksLine()->setColor(axis->line()->color());
@@ -1709,15 +1709,23 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 	axis->minorTicksLine()->setWidth(axis->line()->width());
 
 	QString titleText = parseOriginText(QString::fromLatin1(axisFormat.label.text.c_str()));
-	DEBUG("	axis title text = " << STDSTRING(titleText));
-	// TODO: parseOriginText() returns html formatted string. What is axisFormat.color used for?
-	// TODO: use axisFormat.fontSize to override the global font size for the hmtl string?
+	DEBUG(Q_FUNC_INFO << ", axis title text = " << STDSTRING(titleText));
 	// TODO: convert special character here too
-	DEBUG("	curve name = " << STDSTRING(axisTitle));
+	DEBUG(Q_FUNC_INFO << ", curve name = " << STDSTRING(axisTitle));
 	titleText.replace(QLatin1String("%(?X)"), axisTitle);
 	titleText.replace(QLatin1String("%(?Y)"), axisTitle);
-	DEBUG(" axis title = " << STDSTRING(titleText));
-	axis->title()->setText(titleText);
+	DEBUG(Q_FUNC_INFO << ", axis title = " << STDSTRING(titleText));
+
+	// use axisFormat.fontSize to override the global font size for the hmtl string
+	DEBUG(Q_FUNC_INFO << ", axis font size = " << axisFormat.label.fontSize)
+	QTextEdit te(titleText);
+	te.selectAll();
+	te.setFontPointSize(int(axisFormat.label.fontSize * elementScalingFactor));
+	// TODO: parseOriginText() returns html formatted string. What is axisFormat.color used for?
+	// te.setTextColor(OriginProjectParser::color(t.color));
+	axis->title()->setText(te.toHtml());
+
+	// axis->title()->setText(titleText);
 	axis->title()->setRotationAngle(axisFormat.label.rotation);
 
 	// handle string factor member in GraphAxisFormat
@@ -1726,6 +1734,7 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 		scalingFactor = 1. / std::stod(axisFormat.factor);
 		DEBUG(Q_FUNC_INFO << ", scaling factor = " << scalingFactor)
 		axis->setScalingFactor(scalingFactor);
+		axis->setShowScaleOffset(false); // don't show scale factor
 	}
 	// now set axis ticks start offset
 	double startOffset = nsl_math_ceil_multiple(originAxis.min * scalingFactor, originAxis.step * scalingFactor) - originAxis.min;
@@ -1770,9 +1779,9 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 
 	QFont font;
 	// TODO: font family?
-	DEBUG(Q_FUNC_INFO << ", axis tick font size = " << tickAxis.fontSize)
-	DEBUG(Q_FUNC_INFO << ", axis tick font size in points = " << Worksheet::convertToSceneUnits(tickAxis.fontSize, Worksheet::Unit::Point))
-	font.setPointSize(Worksheet::convertToSceneUnits(tickAxis.fontSize, Worksheet::Unit::Point));
+	DEBUG(Q_FUNC_INFO << ", axis tick label font size = " << tickAxis.fontSize)
+	DEBUG(Q_FUNC_INFO << ", axis tick label font size in points = " << Worksheet::convertToSceneUnits(tickAxis.fontSize, Worksheet::Unit::Point))
+	font.setPointSize(static_cast<int>(Worksheet::convertToSceneUnits(tickAxis.fontSize * elementScalingFactor, Worksheet::Unit::Point)));
 	font.setBold(tickAxis.fontBold);
 	axis->setLabelsFont(font);
 	// TODO: handle string dataName member in GraphAxisTick
@@ -1783,7 +1792,7 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCurve* curve) const {
 	DEBUG(Q_FUNC_INFO)
 	// line properties
-	Qt::PenStyle penStyle(Qt::NoPen);
+	auto penStyle(Qt::NoPen);
 	if (originCurve.type == Origin::GraphCurve::Line || originCurve.type == Origin::GraphCurve::LineSymbol) {
 		switch (originCurve.lineConnect) {
 		case Origin::GraphCurve::NoLine:
@@ -1839,7 +1848,7 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 		}
 
 		curve->line()->setStyle(penStyle);
-		curve->line()->setWidth(Worksheet::convertToSceneUnits(originCurve.lineWidth * scalingFactor, Worksheet::Unit::Point));
+		curve->line()->setWidth(Worksheet::convertToSceneUnits(originCurve.lineWidth * elementScalingFactor, Worksheet::Unit::Point));
 		curve->line()->setColor(color(originCurve.lineColor));
 		curve->line()->setOpacity(1 - originCurve.lineTransparency / 255);
 
@@ -2140,10 +2149,10 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 		// symbol size
 		DEBUG(Q_FUNC_INFO << ", symbol size = " << originCurve.symbolSize)
 		DEBUG(Q_FUNC_INFO << ", symbol size in points = " << Worksheet::convertToSceneUnits(originCurve.symbolSize, Worksheet::Unit::Point))
-		symbol->setSize(Worksheet::convertToSceneUnits(originCurve.symbolSize * scalingFactor, Worksheet::Unit::Point));
+		symbol->setSize(Worksheet::convertToSceneUnits(originCurve.symbolSize * elementScalingFactor, Worksheet::Unit::Point));
 
 		// symbol fill color
-		QBrush brush = symbol->brush();
+		auto brush = symbol->brush();
 		if (originCurve.symbolFillColor.type == Origin::Color::ColorType::Automatic) {
 			// DEBUG(Q_FUNC_INFO << ", AUTOMATIC fill color")
 			//"automatic" color -> the color of the line, if available, is used, and black otherwise
@@ -2158,7 +2167,7 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 		symbol->setBrush(brush);
 
 		// symbol border/edge color and width
-		QPen pen = symbol->pen();
+		auto pen = symbol->pen();
 		if (originCurve.symbolColor.type == Origin::Color::ColorType::Automatic) {
 			//"automatic" color -> the color of the line, if available, has to be used, black otherwise
 			if (curve->lineType() != XYCurve::LineType::NoLine)
@@ -2280,7 +2289,7 @@ QDateTime OriginProjectParser::creationTime(tree<Origin::ProjectNode>::iterator 
 
 QString OriginProjectParser::parseOriginText(const QString& str) const {
 	DEBUG(Q_FUNC_INFO);
-	QStringList lines = str.split(QLatin1Char('\n'));
+	auto lines = str.split(QLatin1Char('\n'));
 	QString text;
 	for (int i = 0; i < lines.size(); ++i) {
 		if (i > 0)
@@ -2391,7 +2400,7 @@ Background::ColorStyle OriginProjectParser::backgroundColorStyle(Origin::ColorGr
 }
 
 QString strreverse(const QString& str) { // QString reversing
-	QByteArray ba = str.toLocal8Bit();
+	auto ba = str.toLocal8Bit();
 	std::reverse(ba.begin(), ba.end());
 
 	return QLatin1String(ba);
