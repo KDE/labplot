@@ -753,28 +753,7 @@ void SpreadsheetView::initMenus() {
 
 	// Spreadsheet menu
 	m_spreadsheetMenu = new QMenu(this);
-	m_spreadsheetMenu->addMenu(m_plotDataMenu);
-	m_spreadsheetMenu->addMenu(m_analyzePlotMenu);
-	m_spreadsheetMenu->addSeparator();
-	m_spreadsheetMenu->addMenu(m_selectionMenu);
-	m_spreadsheetMenu->addSeparator();
-	m_spreadsheetMenu->addAction(action_select_all);
-	if (!m_readOnly) {
-		m_spreadsheetMenu->addAction(action_clear_spreadsheet);
-		m_spreadsheetMenu->addAction(action_clear_masks);
-		m_spreadsheetMenu->addAction(action_sort);
-	}
-	m_spreadsheetMenu->addSeparator();
-	m_spreadsheetMenu->addMenu(m_formattingMenu);
-	m_spreadsheetMenu->addSeparator();
-	m_spreadsheetMenu->addAction(action_go_to_cell);
-	m_spreadsheetMenu->addAction(action_search);
-	if (!m_readOnly)
-		m_spreadsheetMenu->addAction(action_search_replace);
-	m_spreadsheetMenu->addSeparator();
-	m_spreadsheetMenu->addAction(action_toggle_comments);
-	m_spreadsheetMenu->addSeparator();
-	m_spreadsheetMenu->addAction(action_statistics_columns);
+	createContextMenu(m_spreadsheetMenu);
 
 	// Row menu
 	m_rowMenu = new QMenu(this);
@@ -952,6 +931,7 @@ void SpreadsheetView::createContextMenu(QMenu* menu) {
 
 	if (m_spreadsheet->columnCount() > 0 && m_spreadsheet->rowCount() > 0) {
 		menu->insertMenu(firstAction, m_plotDataMenu);
+		menu->insertMenu(firstAction, m_analyzePlotMenu);
 		menu->insertSeparator(firstAction);
 	}
 	menu->insertMenu(firstAction, m_selectionMenu);
@@ -964,7 +944,12 @@ void SpreadsheetView::createContextMenu(QMenu* menu) {
 		menu->insertSeparator(firstAction);
 	}
 
+	menu->insertMenu(firstAction, m_formattingMenu);
+	menu->insertSeparator(firstAction);
 	menu->insertAction(firstAction, action_go_to_cell);
+	menu->insertAction(firstAction, action_search);
+	if (!m_readOnly)
+		menu->insertAction(firstAction, action_search_replace);
 	menu->insertSeparator(firstAction);
 	menu->insertAction(firstAction, action_toggle_comments);
 	menu->insertSeparator(firstAction);
