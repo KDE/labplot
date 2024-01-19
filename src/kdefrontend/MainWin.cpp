@@ -1748,6 +1748,7 @@ void MainWin::openProject(const QString& filename) {
 	m_saveAction->setEnabled(false);
 	m_newProjectAction->setEnabled(true);
 #ifdef HAVE_PURPOSE
+	m_shareAction->setEnabled(true);
 	fillShareMenu();
 #endif
 	statusBar()->showMessage(i18n("Project successfully opened (in %1 seconds).", (float)timer.elapsed() / 1000));
