@@ -36,7 +36,6 @@ public:
 
 	void setModel(QAbstractItemModel*) override;
 	friend class SpreadsheetHeaderView; // access to paintSection (protected)
-	QSize sizeHint() const override ;
 };
 
 class SpreadsheetSparkLineHeaderView : public QHeaderView {

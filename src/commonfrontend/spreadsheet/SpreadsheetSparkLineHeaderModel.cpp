@@ -15,7 +15,7 @@
 #include <backend/worksheet/plots/cartesian/BarPlot.h>
 #include <backend/worksheet/plots/cartesian/XYCurve.h>
 
-#include <qicon.h>
+#include <QIcon>
 
 /*!
    \class SpreadsheetSparkLineHeaderModel

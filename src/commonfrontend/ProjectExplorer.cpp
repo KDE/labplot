@@ -17,6 +17,7 @@
 #include "backend/core/column/Column.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "commonfrontend/core/ContentDockWidget.h"
+#include "backend/worksheet/WorksheetElement.h"
 #include <KConfig>
 #include <KConfigGroup>
 #include <KLocalizedString>
