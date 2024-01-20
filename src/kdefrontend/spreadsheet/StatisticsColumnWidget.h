@@ -43,10 +43,10 @@ private:
 	QString modeValue(const Column*, double) const;
 	void copyValidData(QVector<double>&) const;
 
-	const Column* m_column;
-	Project* m_project;
-	QTabWidget* m_tabWidget;
-	QTextEdit* m_teOverview;
+	const Column* m_column{nullptr}; // external column that the statistics has to be shown for
+	Project* m_project{nullptr};
+	QTabWidget* m_tabWidget{nullptr};
+	QTextEdit* m_teOverview{nullptr};
 	QWidget m_overviewWidget;
 	QWidget m_overviewPlotWidget;
 	QWidget m_histogramWidget;
