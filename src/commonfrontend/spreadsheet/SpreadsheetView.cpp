@@ -720,11 +720,19 @@ void SpreadsheetView::initMenus() {
 		m_columnMenu->addAction(action_sort);
 		m_columnMenu->addAction(action_sort_asc);
 		m_columnMenu->addAction(action_sort_desc);
-		m_columnMenu->addSeparator();
+	}
 
-		m_columnMenu->addMenu(m_formattingMenu);
-		m_columnMenu->addSeparator();
+	m_columnMenu->addSeparator();
+	m_columnMenu->addMenu(m_formattingMenu);
+	m_columnMenu->addSeparator();
+	m_columnMenu->addAction(action_freeze_columns);
+	m_columnMenu->addSeparator();
+	m_columnMenu->addAction(action_toggle_comments);
+	m_columnMenu->addSeparator();
+	m_columnMenu->addAction(action_statistics_columns);
 
+	if (!m_readOnly) {
+		m_columnMenu->addSeparator();
 		m_columnMenu->addAction(action_insert_column_left);
 		m_columnMenu->addAction(action_insert_column_right);
 		m_columnMenu->addSeparator();
@@ -736,20 +744,7 @@ void SpreadsheetView::initMenus() {
 		m_columnMenu->addSeparator();
 		m_columnMenu->addAction(action_remove_missing_value_rows);
 		m_columnMenu->addAction(action_mask_missing_value_rows);
-	} else {
-		m_columnMenu->addSeparator();
-		m_columnMenu->addMenu(m_formattingMenu);
 	}
-
-	m_columnMenu->addSeparator();
-	m_columnMenu->addAction(action_freeze_columns);
-	m_columnMenu->addSeparator();
-
-	m_columnMenu->addSeparator();
-	m_columnMenu->addAction(action_toggle_comments);
-	m_columnMenu->addSeparator();
-
-	m_columnMenu->addAction(action_statistics_columns);
 
 	// Spreadsheet menu
 	m_spreadsheetMenu = new QMenu(this);
@@ -969,18 +964,13 @@ void SpreadsheetView::fillColumnContextMenu(QMenu* menu, Column* column) {
 	if (!m_selectionMenu)
 		initMenus();
 
-	const bool hasValues = column->hasValues();
 	const bool numeric = column->isNumeric();
 	const bool datetime = (column->columnMode() == AbstractColumn::ColumnMode::DateTime);
-	const bool text = (column->columnMode() == AbstractColumn::ColumnMode::Text);
-	const bool plottable = column->isPlottable();
 
 	QAction* firstAction = menu->actions().at(1);
 	menu->insertMenu(firstAction, m_plotDataMenu);
 	menu->insertMenu(firstAction, m_analyzePlotMenu);
 	menu->insertSeparator(firstAction);
-	m_plotDataMenu->setEnabled(plottable && hasValues);
-	m_analyzePlotMenu->setEnabled(numeric && hasValues);
 
 	if (numeric)
 		menu->insertMenu(firstAction, m_columnSetAsMenu);
@@ -1000,13 +990,18 @@ void SpreadsheetView::fillColumnContextMenu(QMenu* menu, Column* column) {
 		menu->insertAction(firstAction, action_sort);
 		menu->insertAction(firstAction, action_sort_asc);
 		menu->insertAction(firstAction, action_sort_desc);
-
-		checkColumnMenus(numeric, datetime, text, hasValues);
 	}
 
 	menu->insertSeparator(firstAction);
+	menu->insertMenu(firstAction, m_formattingMenu);
+	menu->insertSeparator(firstAction);
+	menu->insertAction(firstAction, action_freeze_columns);
+	menu->insertSeparator(firstAction);
+	menu->insertAction(firstAction, action_toggle_comments);
+	menu->insertSeparator(firstAction);
 	menu->insertAction(firstAction, action_statistics_columns);
-	action_statistics_columns->setEnabled(hasValues);
+
+	checkColumnMenus(QVector<Column*>{column});
 }
 
 // SLOTS
@@ -1357,65 +1352,7 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 				}
 			}
 
-			// check whether we have non-numeric columns selected and deactivate actions for numeric columns
-			bool numeric = true;
-			bool plottable = true;
-			bool datetime = false;
-			bool text = false;
-			bool hasValues = false;
-			bool hasFormat = false;
-			bool enoughValues = false; // enough for statistics (> 1)
-			const auto& columns = selectedColumns();
-
-			for (const auto* col : columns) {
-				if (!col->isNumeric()) {
-					datetime = (col->columnMode() == AbstractColumn::ColumnMode::DateTime);
-					if (!datetime)
-						plottable = false;
-
-					numeric = false;
-					break;
-				}
-			}
-
-			for (const auto* col : columns) {
-				if (col->columnMode() == AbstractColumn::ColumnMode::Text) {
-					text = true;
-					break;
-				}
-			}
-
-			for (const auto* col : columns) {
-				if (col->hasValues()) {
-					hasValues = true;
-					break;
-				}
-			}
-			for (const auto* col : columns) {
-				if (col->availableRowCount() > 1) {
-					enoughValues = true;
-					break;
-				}
-			}
-
-			for (const auto* col : columns) {
-				if (col->hasHeatmapFormat()) {
-					hasFormat = true;
-					break;
-				}
-			}
-
-			m_plotDataMenu->setEnabled(plottable && hasValues);
-			m_analyzePlotMenu->setEnabled(numeric && hasValues);
-			m_columnSetAsMenu->setEnabled(numeric);
-			action_statistics_columns->setEnabled(enoughValues);
-			action_clear_columns->setEnabled(hasValues);
-			m_formattingMenu->setEnabled(hasValues);
-			action_formatting_remove->setVisible(hasFormat);
-
-			if (!m_readOnly)
-				checkColumnMenus(numeric, datetime, text, hasValues);
-
+			checkColumnMenus(selectedColumns());
 			m_columnMenu->exec(global_pos);
 		} else if (watched == this) {
 			// the cursor position is in one of the cells and no full columns are selected,
@@ -1555,7 +1492,54 @@ void SpreadsheetView::checkSpreadsheetSelectionMenu() {
 	action_unmask_selection->setEnabled(hasMasked);
 }
 
-void SpreadsheetView::checkColumnMenus(bool numeric, bool datetime, bool text, bool hasValues) {
+void SpreadsheetView::checkColumnMenus(const QVector<Column*>& columns) {
+	bool numeric = true;
+	bool plottable = true;
+	bool datetime = false;
+	bool text = false;
+	bool hasValues = false;
+	bool hasFormat = false;
+	bool hasEnoughValues = false; // enough for statistics (> 1)
+
+	for (const auto* col : columns) {
+		if (!col->isNumeric()) {
+			datetime = (col->columnMode() == AbstractColumn::ColumnMode::DateTime);
+			if (!datetime)
+				plottable = false;
+
+			numeric = false;
+			break;
+		}
+	}
+
+	for (const auto* col : columns) {
+		if (col->columnMode() == AbstractColumn::ColumnMode::Text) {
+			text = true;
+			break;
+		}
+	}
+
+	for (const auto* col : columns) {
+		if (col->hasValues()) {
+			hasValues = true;
+			break;
+		}
+	}
+
+	for (const auto* col : columns) {
+		if (col->availableRowCount() > 1) {
+			hasEnoughValues = true;
+			break;
+		}
+	}
+
+	for (const auto* col : columns) {
+		if (col->hasHeatmapFormat()) {
+			hasFormat = true;
+			break;
+		}
+	}
+
 	// generate data is only possible for numeric columns and if there are cells available
 	const bool hasCells = m_spreadsheet->rowCount() > 0;
 	m_columnGenerateDataMenu->setEnabled(hasCells);
@@ -1596,6 +1580,14 @@ void SpreadsheetView::checkColumnMenus(bool numeric, bool datetime, bool text, b
 		}
 	} else
 		action_freeze_columns->setVisible(false);
+
+	m_plotDataMenu->setEnabled(plottable && hasValues);
+	m_analyzePlotMenu->setEnabled(numeric && hasValues);
+	m_columnSetAsMenu->setEnabled(numeric);
+	action_statistics_columns->setEnabled(hasEnoughValues);
+	action_clear_columns->setEnabled(hasValues);
+	m_formattingMenu->setEnabled(hasValues);
+	action_formatting_remove->setVisible(hasFormat);
 }
 
 bool SpreadsheetView::formulaModeActive() const {
