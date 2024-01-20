@@ -130,8 +130,9 @@ ExportWorksheetDialog::~ExportWorksheetDialog() {
 	conf.writeEntry("Background", ui->chkExportBackground->isChecked());
 	conf.writeEntry("Resolution", ui->cbResolution->currentIndex());
 	conf.writeEntry("ShowOptions", m_showOptions);
-
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
+
+	delete ui;
 }
 
 /*!

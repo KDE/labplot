@@ -189,6 +189,7 @@ PlotDataDialog::~PlotDataDialog() {
 
 	delete m_plotsModel;
 	delete m_worksheetsModel;
+	delete ui;
 }
 
 void PlotDataDialog::setAnalysisAction(XYAnalysisCurve::AnalysisAction action) {
