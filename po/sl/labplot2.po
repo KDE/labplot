@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-01-19 01:38+0000\n"
+"POT-Creation-Date: 2024-01-20 01:34+0000\n"
 "PO-Revision-Date: 2024-01-08 09:14+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -375,13 +375,13 @@ msgid "%1: unmask cells"
 msgstr "%1: odmaskiraj celice"
 
 #: src/backend/core/abstractcolumncommands.cpp:253
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2430
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2415
 #, kde-format
 msgid "%1: set heatmap format"
 msgstr "%1: določite obliko toplotnega grafa"
 
 #: src/backend/core/abstractcolumncommands.cpp:280
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2447
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2432
 #, kde-format
 msgid "%1: remove heatmap format"
 msgstr "%1: odstrani obliko toplotnega grafa"
@@ -620,7 +620,7 @@ msgid "%1: change cell values"
 msgstr "%1: spremeni vrednosti celic"
 
 #: src/backend/core/column/columncommands.cpp:531
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2654
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2639
 #, kde-format
 msgid "%1: set plot designation"
 msgstr "%1: nastavitev določitve grafa"
@@ -1189,10 +1189,10 @@ msgstr "Kazalo"
 #: src/backend/datasources/filters/AsciiFilter.cpp:2094
 #: src/backend/datasources/filters/QJsonModel.cpp:133
 #: src/commonfrontend/matrix/MatrixView.cpp:617
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2333
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2354
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2372
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2389
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2318
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2339
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2357
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2374
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:149
 #: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:188
 #: src/kdefrontend/ui/dockwidgets/columndock.ui:182
@@ -1802,7 +1802,7 @@ msgstr "Neznano"
 #: src/backend/datasources/filters/MatioFilter.cpp:434
 #: src/commonfrontend/workbook/WorkbookView.cpp:53
 #: src/commonfrontend/workbook/WorkbookView.cpp:160
-#: src/kdefrontend/MainWin.cpp:722 src/kdefrontend/MainWin.cpp:2091
+#: src/kdefrontend/MainWin.cpp:722 src/kdefrontend/MainWin.cpp:2092
 #, kde-format
 msgid "Matrix"
 msgstr "Matrika"
@@ -5443,13 +5443,13 @@ msgid "unexpected end of document"
 msgstr "nepričakovan konec dokumenta"
 
 #: src/backend/matrix/Matrix.cpp:118
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3622
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3607
 #, kde-format
 msgid "FITS image"
 msgstr "Slika FITS"
 
 #: src/backend/matrix/Matrix.cpp:118
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3622
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3607
 #, kde-format
 msgid "FITS table"
 msgstr "Tabela FITS"
@@ -9382,16 +9382,16 @@ msgid "Curve"
 msgstr "Krivulja"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:870
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3862
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3916
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3847
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3901
 #: src/commonfrontend/worksheet/WorksheetView.cpp:2287
 #, kde-format
 msgid "Failed to export"
 msgstr "Izvoz ni uspel"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:870
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3862
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3916
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3847
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3901
 #: src/commonfrontend/worksheet/WorksheetView.cpp:2287
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
@@ -9611,7 +9611,7 @@ msgid "%1: cut selected cell(s)"
 msgstr "%1: izreži izbrane celice"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:687
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1734
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1719
 #, kde-format
 msgid "%1: paste from clipboard"
 msgstr "%1: prilepi iz odložišča"
@@ -9812,7 +9812,7 @@ msgid "Flatten Columns"
 msgstr "Poravnaj stolpce"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:297
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1116
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1101
 #, kde-format
 msgid "Show Comments"
 msgstr "Pokaži komentarje"
@@ -9876,7 +9876,7 @@ msgid "Delete Selected Column(s)"
 msgstr "Odstrani izbrani/e stolpec(e)"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:319
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1603
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1588
 #, kde-format
 msgid "Freeze Column"
 msgstr "Zamrzni stolpec"
@@ -10103,42 +10103,42 @@ msgstr "Normaliziraj"
 msgid "Ladder of Powers"
 msgstr "Lestvica moči"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1114
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1099
 #, kde-format
 msgid "Hide Comments"
 msgstr "Skrij komentarje"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1607
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1592
 #, kde-format
 msgid "Unfreeze Column"
 msgstr "Odmrzni stolpec"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1653
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1638
 #, kde-format
 msgid "%1: cut selected cells"
 msgstr "%1: izreže izbrane celice"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1977
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1962
 #, kde-format
 msgid "Not enough memory to finalize this operation."
 msgstr "Ni dovolj pomnilnika za dokončanje te operacije."
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1991
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1976
 #, kde-format
 msgid "%1: mask selected cells"
 msgstr "%1: maskira izbrane celice"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2033
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2018
 #, kde-format
 msgid "%1: unmask selected cells"
 msgstr "%1: odmaskira izbrane celice"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2097
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2082
 #, kde-format
 msgid "%1: fill cells with row numbers"
 msgstr "%1: zapolne celice s številkami vrstic"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2162
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2147
 #, kde-format
 msgid "%1: fill column with row numbers"
 msgid_plural "%1: fill columns with row numbers"
@@ -10147,37 +10147,37 @@ msgstr[1] "%1: napolni stolpca s številkami vrstic"
 msgstr[2] "%1: napolni stolpce s številkami vrstic"
 msgstr[3] "%1: napolni stolpce s številkami vrstic"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2204
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2189
 #, kde-format
 msgid "%1: fill cells with random values"
 msgstr "%1: zapolne celice z naključnimi vrednostmi"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2324
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2309
 #, kde-format
 msgid "%1: fill cells with const values"
 msgstr "%1: zapolni celice s konstantnimi vrednostmi"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2332
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2354
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2372
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2389
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2317
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2339
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2357
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2374
 #, kde-format
 msgid "Fill the selection with constant value"
 msgstr "Napolni izbor s konstantnimi vrednostmi"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2467
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2501
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2452
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2486
 #, kde-format
 msgid "Insert empty columns"
 msgstr "Vstavi prazne stolpce"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2468
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2502
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2453
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2487
 #, kde-format
 msgid "Enter the number of columns to insert"
 msgstr "Vnesite število stolpcev, ki jih želite vstaviti"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2520
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2505
 #, kde-format
 msgid "%1: insert empty column"
 msgid_plural "%1: insert empty columns"
@@ -10186,12 +10186,12 @@ msgstr[1] "%1: vstavi prazna stolpca"
 msgstr[2] "%1: vstavi prazne stolpce"
 msgstr[3] "%1: vstavi prazne stolpce"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2590
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2575
 #, kde-format
 msgid "%1: remove selected columns"
 msgstr "%1: odstrani izbrane stolpce"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2687
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2672
 #, kde-format
 msgid "%1: reverse column"
 msgid_plural "%1: reverse columns"
@@ -10200,7 +10200,7 @@ msgstr[1] "%1: obrni stolpca"
 msgstr[2] "%1: obrni stolpce"
 msgstr[3] "%1: obrni stolpce"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2760
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2745
 #, kde-format
 msgid ""
 "The selected columns have different data types and cannot be flattened "
@@ -10209,123 +10209,123 @@ msgstr ""
 "Izbrani stolpci imajo različne vrste podatkov in jih zaradi tega ni mogoče "
 "poravnati. "
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2798
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2783
 #, kde-format
 msgid "%1: normalize columns"
 msgstr "%1: normaliziraj stolpce"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2818
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2803
 #, kde-format
 msgid "Sum = 0"
 msgstr "Sum = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2829
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2814
 #, kde-format
 msgid "Min = 0"
 msgstr "Min = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2840
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2825
 #, kde-format
 msgid "Max = 0"
 msgstr "Max = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2851
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2836
 #, kde-format
 msgid "Count = 0"
 msgstr "Count = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2862
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2847
 #, kde-format
 msgid "Mean = 0"
 msgstr "Mean = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2873
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2858
 #, kde-format
 msgid "Median = 0"
 msgstr "Median = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2885
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2870
 #, kde-format
 msgid "Mode = 0"
 msgstr "Mode = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2887
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2872
 #, kde-format
 msgid "'Mode not defined'"
 msgstr "»Način ni opredeljen«"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2898
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2883
 #, kde-format
 msgid "Range = 0"
 msgstr "Range = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2909
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2943
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2894
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2928
 #, kde-format
 msgid "SD = 0"
 msgstr "SD = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2920
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2955
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2905
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2940
 #, kde-format
 msgid "MAD = 0"
 msgstr "MAD = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2931
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2967
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2916
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2952
 #, kde-format
 msgid "IQR = 0"
 msgstr "IQR = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2979
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2964
 #, kde-format
 msgid "Max - Min = 0"
 msgstr "Max - Min = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2998
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2983
 #, kde-format
 msgid "Normalization not possible"
 msgstr "Normalizacija ni mogoča"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3010
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2995
 #, kde-format
 msgid "%1: power transform columns"
 msgstr "%1: stolpci tranformacije moči"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3129
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3114
 #, kde-format
 msgid "%1: column statistics"
 msgstr "%1: statistike stolpca"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3160
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3145
 #, kde-format
 msgid "Selection in %1"
 msgstr "Izbor v %1"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3203
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3188
 #, kde-format
 msgid "%1: row statistics"
 msgstr "%1: statistike vrstice"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3213
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3198
 #, kde-format
 msgid "Row %1"
 msgstr "Vrstica %1"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3238
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3277
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3223
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3262
 #, kde-format
 msgid "Insert multiple rows"
 msgstr "Vstavi več vrstic"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3239
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3278
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3224
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3263
 #, kde-format
 msgid "Enter the number of rows to insert"
 msgstr "Vnesite število vrstic, ki jih želite vstaviti"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3258
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3297
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3243
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3282
 #, kde-format
 msgid "%1: insert empty row"
 msgid_plural "%1: insert empty rows"
@@ -10334,17 +10334,17 @@ msgstr[1] "%1: vstavi prazni vrstici"
 msgstr[2] "%1: vstavi prazne vrstice"
 msgstr[3] "%1: vstavi prazne vrstice"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3313
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3298
 #, kde-format
 msgid "%1: remove selected rows"
 msgstr "%1: odstrani izbrane vrstice"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3340
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3325
 #, kde-format
 msgid "%1: clear selected cells"
 msgstr "%1: počisti izbrane celice"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3586
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3571
 #, kde-format
 msgid "row"
 msgid_plural "rows"
@@ -10353,7 +10353,7 @@ msgstr[1] "vrstici"
 msgstr[2] "vrstice"
 msgstr[3] "vrstic"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3587
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3572
 #, kde-format
 msgid "column"
 msgid_plural "columns"
@@ -10362,74 +10362,74 @@ msgstr[1] "stolpca"
 msgstr[2] "stolpci"
 msgstr[3] "stolpcev"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3588
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3573
 #, kde-format
 msgid "cells"
 msgstr "celice"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3589
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3574
 #, kde-format
 msgid "masked value"
 msgstr "maskirana vrednost"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3589
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3574
 #, kde-format
 msgid "masked values"
 msgstr "maskirane vrednosti"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3590
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3575
 #, kde-format
 msgid "missing value"
 msgstr "manjkajoča vednost"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3590
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3575
 #, kde-format
 msgid "missing values"
 msgstr "manjkajoče vednosti"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3591
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3576
 #, kde-format
 msgid " , "
 msgstr " , "
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3591
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3592
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3576
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3577
 #, kde-format
 msgid "%1"
 msgstr "%1"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3592
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3577
 #, kde-format
 msgid ", "
 msgstr ", "
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3595
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3580
 #, kde-format
 msgid "Selected: %1 %2 , %3 %4%5 %6 %7 %8"
 msgstr "Izbrano: %1 %2 , %3 %4%5 %6 %7 %8"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3606
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3591
 #, kde-format
 msgid "Selected: %1 %2%3 %4 %5 %6"
 msgstr "Izbrano: %1 %2%3 %4 %5 %6"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3679
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3664
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Spreadsheet"
 msgstr "Natisni preglednico"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4284
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4269
 #, kde-format
 msgid "Couldn't create the SQLite database %1."
 msgstr "Zbirke podatkov SQLite %1 ni bilo mogoče ustvariti."
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4316
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4301
 #, kde-format
 msgid "Failed to create table in the SQLite database %1."
 msgstr "Ustvarjanje tabele v zbirki podatkov SQLite %1 ni uspelo."
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4369
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4354
 #, kde-format
 msgid "Failed to insert values into the table."
 msgstr "V tabelo ni bilo mogoče vstaviti vrednosti."
@@ -10493,7 +10493,7 @@ msgstr ""
 #: src/kdefrontend/dockwidgets/XYAnalysisCurveDock.cpp:57
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:75
 #: src/kdefrontend/labplot2ui.rc:32 src/kdefrontend/MainWin.cpp:716
-#: src/kdefrontend/MainWin.cpp:2073 src/kdefrontend/SettingsDialog.cpp:72
+#: src/kdefrontend/MainWin.cpp:2074 src/kdefrontend/SettingsDialog.cpp:72
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:237
 #, kde-format
 msgid "Spreadsheet"
@@ -10668,7 +10668,7 @@ msgstr "Izberite x-področje in ga približajte"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
 #: src/commonfrontend/worksheet/WorksheetView.cpp:359
-#: src/kdefrontend/MainWin.cpp:2554
+#: src/kdefrontend/MainWin.cpp:2555
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1426
 #, kde-format
 msgid "Cursor"
@@ -12184,7 +12184,7 @@ msgstr ""
 
 #: src/kdefrontend/datasources/MQTTSubscriptionWidget.cpp:856
 #: src/kdefrontend/datasources/MQTTSubscriptionWidget.cpp:858
-#: src/kdefrontend/MainWin.cpp:2896
+#: src/kdefrontend/MainWin.cpp:2897
 #, kde-format
 msgid "Warning"
 msgstr "Opozorilo"
@@ -14520,14 +14520,14 @@ msgstr "Odpiranje ni uspelo"
 
 #. i18n: ectx: ToolBar (worksheet_toolbar)
 #: src/kdefrontend/labplot2ui.rc:24 src/kdefrontend/MainWin.cpp:728
-#: src/kdefrontend/MainWin.cpp:2109 src/kdefrontend/SettingsDialog.cpp:67
+#: src/kdefrontend/MainWin.cpp:2110 src/kdefrontend/SettingsDialog.cpp:67
 #, kde-format
 msgid "Worksheet"
 msgstr "Delovni list"
 
 #. i18n: ectx: ToolBar (datapicker_toolbar)
 #: src/kdefrontend/labplot2ui.rc:28 src/kdefrontend/MainWin.cpp:711
-#: src/kdefrontend/MainWin.cpp:2065
+#: src/kdefrontend/MainWin.cpp:2066
 #, kde-format
 msgid "Data Extractor"
 msgstr "Izvlečnik podatkov"
@@ -14643,7 +14643,7 @@ msgstr "Dobrodošli v LabPlot %1"
 msgid "&Open Example"
 msgstr "&Odpri primer"
 
-#: src/kdefrontend/MainWin.cpp:706 src/kdefrontend/MainWin.cpp:2057
+#: src/kdefrontend/MainWin.cpp:706 src/kdefrontend/MainWin.cpp:2058
 #, kde-format
 msgid "Workbook"
 msgstr "Delovni zvezek"
@@ -14673,7 +14673,7 @@ msgstr "Ustvari novo matriko za urejanje podatkov"
 msgid "Creates a new worksheet for data plotting"
 msgstr "Ustvari nov delovni list za urejanje podatkov"
 
-#: src/kdefrontend/MainWin.cpp:734 src/kdefrontend/MainWin.cpp:2117
+#: src/kdefrontend/MainWin.cpp:734 src/kdefrontend/MainWin.cpp:2118
 #, kde-format
 msgid "Note"
 msgstr "Opomba"
@@ -14683,7 +14683,7 @@ msgstr "Opomba"
 msgid "Creates a new note for arbitrary text"
 msgstr "Ustvari novo opombo za poljubno besedilo"
 
-#: src/kdefrontend/MainWin.cpp:739 src/kdefrontend/MainWin.cpp:2049
+#: src/kdefrontend/MainWin.cpp:739 src/kdefrontend/MainWin.cpp:2050
 #, kde-format
 msgid "Folder"
 msgstr "Mapa"
@@ -14754,8 +14754,8 @@ msgstr "Izvozi ..."
 msgid "Export selected element"
 msgstr "Izvozi izbrani element"
 
-#: src/kdefrontend/MainWin.cpp:796 src/kdefrontend/MainWin.cpp:2590
-#: src/kdefrontend/MainWin.cpp:2598
+#: src/kdefrontend/MainWin.cpp:796 src/kdefrontend/MainWin.cpp:2591
+#: src/kdefrontend/MainWin.cpp:2599
 #, kde-format
 msgid "Share"
 msgstr "Deli"
@@ -14980,18 +14980,18 @@ msgstr "Odpiranje datoteke »%1« ni uspelo."
 msgid "%1: opened"
 msgstr "%1: odprto"
 
-#: src/kdefrontend/MainWin.cpp:1753
+#: src/kdefrontend/MainWin.cpp:1754
 #, kde-format
 msgid "Project successfully opened (in %1 seconds)."
 msgstr "Projekt se je uspešno odprl (v %1 s)."
 
-#: src/kdefrontend/MainWin.cpp:1855
+#: src/kdefrontend/MainWin.cpp:1856
 #, kde-format
 msgctxt "@title:window"
 msgid "Save Project As"
 msgstr "Shrani projekt kot"
 
-#: src/kdefrontend/MainWin.cpp:1857
+#: src/kdefrontend/MainWin.cpp:1858
 #, kde-format
 msgid ""
 "LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 "
@@ -15000,95 +15000,95 @@ msgstr ""
 "Projekti LabPlot (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 "
 "*.LML.XZ)"
 
-#: src/kdefrontend/MainWin.cpp:1883
+#: src/kdefrontend/MainWin.cpp:1884
 #, kde-format
 msgid "Couldn't open the temporary file for writing."
 msgstr "Začasne datoteke za pisanje ni bilo mogoče odpreti."
 
-#: src/kdefrontend/MainWin.cpp:1938
+#: src/kdefrontend/MainWin.cpp:1939
 #, kde-format
 msgid "Project saved"
 msgstr "Projekt shranjen"
 
-#: src/kdefrontend/MainWin.cpp:1954
+#: src/kdefrontend/MainWin.cpp:1955
 #, kde-format
 msgid "Couldn't save the file '%1'."
 msgstr "Datoteke »%1« ni bilo mogoče shraniti."
 
-#: src/kdefrontend/MainWin.cpp:1959
+#: src/kdefrontend/MainWin.cpp:1960
 #, kde-format
 msgid "Couldn't open the file '%1' for writing."
 msgstr "Datoteke »%1« ni bilo mogoče odpreti za pisanje."
 
-#: src/kdefrontend/MainWin.cpp:2009
+#: src/kdefrontend/MainWin.cpp:2010
 #, kde-format
 msgid "Changed"
 msgstr "Spremenjeno"
 
-#: src/kdefrontend/MainWin.cpp:2024 src/kdefrontend/MainWin.cpp:2036
+#: src/kdefrontend/MainWin.cpp:2025 src/kdefrontend/MainWin.cpp:2037
 #, kde-format
 msgid "Preparing printing of %1"
 msgstr "Priprava tiskanja %1"
 
-#: src/kdefrontend/MainWin.cpp:2026 src/kdefrontend/MainWin.cpp:2038
+#: src/kdefrontend/MainWin.cpp:2027 src/kdefrontend/MainWin.cpp:2039
 #, kde-format
 msgid "%1 printed"
 msgstr "%1 natisnjeno"
 
-#: src/kdefrontend/MainWin.cpp:2590
+#: src/kdefrontend/MainWin.cpp:2591
 #, kde-format
 msgid "There was a problem sharing the project: %1"
 msgstr "Pri souporabi projekta je prišlo do težave: %1"
 
-#: src/kdefrontend/MainWin.cpp:2594
+#: src/kdefrontend/MainWin.cpp:2595
 #, kde-format
 msgid "Project shared successfully"
 msgstr "Projekt je uspešno deljen"
 
-#: src/kdefrontend/MainWin.cpp:2597
+#: src/kdefrontend/MainWin.cpp:2598
 #, kde-format
 msgid "You can find the shared project at: <a href=\"%1\">%1</a>"
 msgstr "Skupni projekt najdete na: <a href=\"%1\">%1</a>"
 
-#: src/kdefrontend/MainWin.cpp:2829
+#: src/kdefrontend/MainWin.cpp:2830
 #: src/kdefrontend/welcomescreen/WelcomeScreenHelper.cpp:115
 #, kde-format
 msgid "Dataset%1"
 msgstr "Nabor podatkov%1"
 
-#: src/kdefrontend/MainWin.cpp:2859
+#: src/kdefrontend/MainWin.cpp:2860
 #, kde-format
 msgid "%1 exported"
 msgstr "%1 izvoženo"
 
-#: src/kdefrontend/MainWin.cpp:2866
+#: src/kdefrontend/MainWin.cpp:2867
 #, kde-format
 msgid "FITS files saved"
 msgstr "Datoteke FITS shranjene"
 
-#: src/kdefrontend/MainWin.cpp:2878
+#: src/kdefrontend/MainWin.cpp:2879
 #, kde-format
 msgid "MQTT Client%1"
 msgstr "Odjemalec MQTT%1"
 
-#: src/kdefrontend/MainWin.cpp:2896
+#: src/kdefrontend/MainWin.cpp:2897
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
 msgstr "S tem gostiteljem že obstaja MQTTClient!"
 
-#: src/kdefrontend/MainWin.cpp:2900
+#: src/kdefrontend/MainWin.cpp:2901
 #, kde-format
 msgid "Live data source%1"
 msgstr "Vir podatkov v živo%1"
 
-#: src/kdefrontend/MainWin.cpp:2951
+#: src/kdefrontend/MainWin.cpp:2952
 #, kde-format
 msgid "No Cantor backends found. Please install the ones you want to use."
 msgstr ""
 "Najdeno ni bilo nobeno zaledje Cantor. Prosimo, namestite tiste, ki jih "
 "želite uporabiti."
 
-#: src/kdefrontend/MainWin.cpp:2965
+#: src/kdefrontend/MainWin.cpp:2966
 #, kde-format
 msgid "Creates a new %1 notebook"
 msgstr "Ustvari novo %1 zvezek"
