@@ -1708,6 +1708,7 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 	axis->minorTicksLine()->setColor(axis->line()->color());
 	axis->minorTicksLine()->setWidth(axis->line()->width());
 
+	// axis title
 	QString titleText = parseOriginText(QString::fromLatin1(axisFormat.label.text.c_str()));
 	DEBUG(Q_FUNC_INFO << ", axis title text = " << STDSTRING(titleText));
 	// TODO: convert special character here too
