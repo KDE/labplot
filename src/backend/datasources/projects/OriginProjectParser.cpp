@@ -1120,6 +1120,14 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 		++layerIndex;
 	}
 
+	// padding
+	plot->setHorizontalPadding(plot->horizontalPadding() * elementScalingFactor);
+	plot->setVerticalPadding(plot->verticalPadding() * elementScalingFactor);
+	plot->setRightPadding(plot->rightPadding() * elementScalingFactor);
+	plot->setBottomPadding(plot->bottomPadding() * elementScalingFactor);
+	DEBUG(Q_FUNC_INFO << ", PADDING = " << plot->horizontalPadding() << ", " << plot->verticalPadding())
+	DEBUG(Q_FUNC_INFO << ", PADDING = " << plot->rightPadding() << ", " << plot->bottomPadding())
+
 	if (!preview) {
 		worksheet->updateLayout();
 
