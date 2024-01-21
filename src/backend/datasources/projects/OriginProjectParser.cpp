@@ -1062,6 +1062,8 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 	// Origin scales the elements with the size of the layer when no fixed size is used (Layer properties->Size)
 	// so we scale all elements with a scaling factor to the whole view height (295 mm) used as default
 	elementScalingFactor = 295. / (graph.height * 25.4 / dpi);
+	// not using the full value for scaling looks better in most cases
+	elementScalingFactor = 1. + (elementScalingFactor - 1.) / 2.;
 	DEBUG(Q_FUNC_INFO << ", ELEMENT SCALING FACTOR = " << elementScalingFactor)
 	// default values (1000/1000)
 	//	DEBUG(Q_FUNC_INFO << ", WORKSHEET width/height = " << worksheet->pageRect().width() << "/" << worksheet->pageRect().height())
@@ -1717,25 +1719,29 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 	axis->minorTicksLine()->setWidth(axis->line()->width());
 
 	// axis title
-	QString titleText = parseOriginText(QString::fromLatin1(axisFormat.label.text.c_str()));
-	DEBUG(Q_FUNC_INFO << ", axis title text = " << STDSTRING(titleText));
-	// TODO: convert special character here too
-	DEBUG(Q_FUNC_INFO << ", curve name = " << STDSTRING(axisTitle));
-	titleText.replace(QLatin1String("%(?X)"), axisTitle);
-	titleText.replace(QLatin1String("%(?Y)"), axisTitle);
-	DEBUG(Q_FUNC_INFO << ", axis title = " << STDSTRING(titleText));
+	if (axisFormat.label.shown) {
+		QString titleText = parseOriginText(QString::fromLatin1(axisFormat.label.text.c_str()));
+		DEBUG(Q_FUNC_INFO << ", axis title text = " << STDSTRING(titleText));
+		// TODO: convert special character here too
+		DEBUG(Q_FUNC_INFO << ", curve name = " << STDSTRING(axisTitle));
+		titleText.replace(QLatin1String("%(?X)"), axisTitle);
+		titleText.replace(QLatin1String("%(?Y)"), axisTitle);
+		DEBUG(Q_FUNC_INFO << ", axis title = " << STDSTRING(titleText));
 
-	// use axisFormat.fontSize to override the global font size for the hmtl string
-	DEBUG(Q_FUNC_INFO << ", axis font size = " << axisFormat.label.fontSize)
-	QTextEdit te(titleText);
-	te.selectAll();
-	te.setFontPointSize(int(axisFormat.label.fontSize * elementScalingFactor));
-	// TODO: parseOriginText() returns html formatted string. What is axisFormat.color used for?
-	// te.setTextColor(OriginProjectParser::color(t.color));
-	axis->title()->setText(te.toHtml());
+		// use axisFormat.fontSize to override the global font size for the hmtl string
+		DEBUG(Q_FUNC_INFO << ", axis font size = " << axisFormat.label.fontSize)
+		QTextEdit te(titleText);
+		te.selectAll();
+		te.setFontPointSize(int(axisFormat.label.fontSize * elementScalingFactor));
+		// TODO: parseOriginText() returns html formatted string. What is axisFormat.color used for?
+		// te.setTextColor(OriginProjectParser::color(t.color));
+		axis->title()->setText(te.toHtml());
 
-	// axis->title()->setText(titleText);
-	axis->title()->setRotationAngle(axisFormat.label.rotation);
+		// axis->title()->setText(titleText);
+		axis->title()->setRotationAngle(axisFormat.label.rotation);
+	} else {
+		axis->title()->setText({});
+	}
 
 	// handle string factor member in GraphAxisFormat
 	double scalingFactor = 1.0;
