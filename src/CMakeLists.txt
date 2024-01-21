@@ -350,6 +350,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/datasources/filters/HDF5Filter.cpp
 	${BACKEND_DIR}/datasources/filters/ImageFilter.cpp
 	${BACKEND_DIR}/datasources/filters/JsonFilter.cpp
+	${BACKEND_DIR}/datasources/filters/McapFilter.cpp
 	${BACKEND_DIR}/datasources/filters/MatioFilter.cpp
 	${BACKEND_DIR}/datasources/filters/NetCDFFilter.cpp
 	${BACKEND_DIR}/datasources/filters/OdsFilter.cpp
