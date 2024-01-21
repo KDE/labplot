@@ -213,6 +213,7 @@ ImportProjectDialog::~ImportProjectDialog() {
 	conf.writeXdgListEntry(files, m_cbFileName->urls());
 
 	delete ui.tvPreview->model();
+	delete m_projectParser;
 }
 
 void ImportProjectDialog::setCurrentFolder(const Folder* folder) {

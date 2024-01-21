@@ -12,7 +12,6 @@
 
 #include <QObject>
 
-class AspectTreeModel;
 class Folder;
 class Project;
 class QAbstractItemModel;
@@ -40,7 +39,6 @@ protected:
 
 	QString m_projectFileName;
 	Project* m_previewProject{nullptr};
-	AspectTreeModel* m_previewModel{nullptr};
 	QList<AspectType> m_topLevelClasses;
 
 private:

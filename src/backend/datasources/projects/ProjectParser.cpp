@@ -28,17 +28,14 @@ ProjectParser::ProjectParser()
 
 ProjectParser::~ProjectParser() {
 	delete m_previewProject;
-	delete m_previewModel;
 }
 
 void ProjectParser::setProjectFileName(const QString& name) {
 	m_projectFileName = name;
 
-	// delete the previous project and model used for the preview
+	// delete the previous project used to generate the preview
 	delete m_previewProject;
 	m_previewProject = nullptr;
-	delete m_previewModel;
-	m_previewModel = nullptr;
 }
 
 const QString& ProjectParser::projectFileName() const {
@@ -60,13 +57,14 @@ QAbstractItemModel* ProjectParser::model() {
 	m_previewProject = new Project();
 
 	bool rc = load(m_previewProject, true);
+	AspectTreeModel* model = nullptr;
 	if (rc) {
-		m_previewModel = new AspectTreeModel(m_previewProject);
-		m_previewModel->setReadOnly(true);
+		model = new AspectTreeModel(m_previewProject);
+		model->setReadOnly(true);
 	}
 
 	RESET_CURSOR;
-	return m_previewModel;
+	return model;
 }
 
 void ProjectParser::importTo(Folder* targetFolder, const QStringList& selectedPathes) {
