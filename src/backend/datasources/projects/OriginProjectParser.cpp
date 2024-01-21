@@ -1059,12 +1059,13 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 	if (m_originFile->version() < 9.6)
 		dpi = 300.;
 	DEBUG(Q_FUNC_INFO << ", GRAPH width/height (mm) = " << graph.width * 25.4 / dpi << "/" << graph.height * 25.4 / dpi)
-	// Origin scales the elements with the size of the layer when no fixed size is used (Layer properties->Size)
-	// so we scale all elements with a scaling factor to the whole view height (295 mm) used as default
+	// Origin scales text and plots with the size of the layer when no fixed size is used (Layer properties->Size)
+	// so we scale all text and plots with a scaling factor to the whole view height (295 mm) used as default
 	elementScalingFactor = 295. / (graph.height * 25.4 / dpi);
-	// not using the full value for scaling looks better in most cases
-	elementScalingFactor = 1. + (elementScalingFactor - 1.) / 2.;
+	// not using the full value for scaling text is better in most cases
+	textScalingFactor = 1. + (elementScalingFactor - 1.) / 2.;
 	DEBUG(Q_FUNC_INFO << ", ELEMENT SCALING FACTOR = " << elementScalingFactor)
+	DEBUG(Q_FUNC_INFO << ", TEXT SCALING FACTOR = " << textScalingFactor)
 	// default values (1000/1000)
 	//	DEBUG(Q_FUNC_INFO << ", WORKSHEET width/height = " << worksheet->pageRect().width() << "/" << worksheet->pageRect().height())
 	worksheet->setUseViewSize(true);
@@ -1732,7 +1733,7 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 		DEBUG(Q_FUNC_INFO << ", axis font size = " << axisFormat.label.fontSize)
 		QTextEdit te(titleText);
 		te.selectAll();
-		te.setFontPointSize(int(axisFormat.label.fontSize * elementScalingFactor));
+		te.setFontPointSize(int(axisFormat.label.fontSize * textScalingFactor));
 		// TODO: parseOriginText() returns html formatted string. What is axisFormat.color used for?
 		// te.setTextColor(OriginProjectParser::color(t.color));
 		axis->title()->setText(te.toHtml());
@@ -1796,7 +1797,7 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 	// TODO: font family?
 	DEBUG(Q_FUNC_INFO << ", axis tick label font size = " << tickAxis.fontSize)
 	DEBUG(Q_FUNC_INFO << ", axis tick label font size in points = " << Worksheet::convertToSceneUnits(tickAxis.fontSize, Worksheet::Unit::Point))
-	font.setPointSize(static_cast<int>(Worksheet::convertToSceneUnits(tickAxis.fontSize * elementScalingFactor, Worksheet::Unit::Point)));
+	font.setPointSize(static_cast<int>(Worksheet::convertToSceneUnits(tickAxis.fontSize * textScalingFactor, Worksheet::Unit::Point)));
 	font.setBold(tickAxis.fontBold);
 	axis->setLabelsFont(font);
 	// TODO: handle string dataName member in GraphAxisTick
