@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : parser for Origin projects
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2017-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2017-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2018-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -32,6 +32,7 @@ class OriginProjectParser : public ProjectParser {
 
 public:
 	OriginProjectParser();
+	~OriginProjectParser() override;
 
 	static bool isOriginProject(const QString& fileName);
 	static QString supportedExtensions();
