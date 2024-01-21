@@ -1283,10 +1283,18 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 	// add legend if available
 	const auto& originLegend = layer.legend;
 	const QString& legendText = QString::fromLatin1(originLegend.text.c_str());
-	DEBUG(Q_FUNC_INFO << ", legend text = \"" << STDSTRING(legendText) << "\"");
 	if (!originLegend.text.empty()) {
+		DEBUG(Q_FUNC_INFO << ", legend text = \"" << STDSTRING(legendText) << "\"");
+
 		auto* legend = new CartesianPlotLegend(i18n("legend"));
+
 		plot->addLegend(legend);
+
+		// set legend text size
+		DEBUG(Q_FUNC_INFO << ", legend text size = " << originLegend.fontSize);
+		auto labelFont = legend->labelFont();
+		labelFont.setPointSize(Worksheet::convertToSceneUnits(originLegend.fontSize * textScalingFactor, Worksheet::Unit::Point));
+		legend->setLabelFont(labelFont);
 
 		// Origin's legend uses "\l(...)" or "\L(...)" string to format the legend symbol
 		//  and "%(...) to format the legend text for each curve
