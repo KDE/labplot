@@ -47,7 +47,6 @@ private Q_SLOTS:
 	// SLOTs for changes triggered in XYCurve
 	// General-Tab
 	void curveTransformDataChanged(const XYHilbertTransformCurve::TransformData&);
-	void curveVisibilityChanged(bool);
 };
 
 #endif

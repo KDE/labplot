@@ -47,6 +47,7 @@ void XYCorrelationCurveDock::setupGeneral() {
 	uiGeneralTab.setupUi(generalTab);
 	setPlotRangeCombobox(uiGeneralTab.cbPlotRanges);
 	setBaseWidgets(uiGeneralTab.leName, uiGeneralTab.teComment, uiGeneralTab.pbRecalculate, uiGeneralTab.cbDataSourceType);
+	setVisibilityWidgets(uiGeneralTab.chkVisible, uiGeneralTab.chkLegendVisible);
 
 	auto* gridLayout = static_cast<QGridLayout*>(generalTab->layout());
 	gridLayout->setContentsMargins(2, 2, 2, 2);
@@ -78,7 +79,6 @@ void XYCorrelationCurveDock::setupGeneral() {
 	DEBUG("XYCorrelationCurveDock::setupGeneral() DONE");
 
 	// Slots
-	connect(uiGeneralTab.chkVisible, &QCheckBox::clicked, this, &XYCorrelationCurveDock::visibilityChanged);
 	connect(uiGeneralTab.cbDataSourceType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYCorrelationCurveDock::dataSourceTypeChanged);
 	connect(uiGeneralTab.sbSamplingInterval, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &XYCorrelationCurveDock::samplingIntervalChanged);
 	connect(uiGeneralTab.cbAutoRange, &QCheckBox::clicked, this, &XYCorrelationCurveDock::autoRangeChanged);
@@ -96,26 +96,6 @@ void XYCorrelationCurveDock::setupGeneral() {
 }
 
 void XYCorrelationCurveDock::initGeneralTab() {
-	DEBUG("XYCorrelationCurveDock::initGeneralTab()");
-	// if there are more than one curve in the list, disable the tab "general"
-	if (m_curvesList.size() == 1) {
-		uiGeneralTab.lName->setEnabled(true);
-		uiGeneralTab.leName->setEnabled(true);
-		uiGeneralTab.lComment->setEnabled(true);
-		uiGeneralTab.teComment->setEnabled(true);
-
-		uiGeneralTab.leName->setText(m_curve->name());
-		uiGeneralTab.teComment->setText(m_curve->comment());
-	} else {
-		uiGeneralTab.lName->setEnabled(false);
-		uiGeneralTab.leName->setEnabled(false);
-		uiGeneralTab.lComment->setEnabled(false);
-		uiGeneralTab.teComment->setEnabled(false);
-
-		uiGeneralTab.leName->setText(QString());
-		uiGeneralTab.teComment->setText(QString());
-	}
-
 	// show the properties of the first curve
 	//  hide x-Range per default
 	uiGeneralTab.lXRange->setEnabled(false);
@@ -143,6 +123,7 @@ void XYCorrelationCurveDock::initGeneralTab() {
 
 	this->showCorrelationResult();
 
+	uiGeneralTab.chkLegendVisible->setChecked(m_curve->legendVisible());
 	uiGeneralTab.chkVisible->setChecked(m_curve->isVisible());
 
 	// Slots
@@ -153,18 +134,13 @@ void XYCorrelationCurveDock::initGeneralTab() {
 	connect(m_correlationCurve, &XYCorrelationCurve::y2DataColumnChanged, this, &XYCorrelationCurveDock::curveY2DataColumnChanged);
 	connect(m_correlationCurve, &XYCorrelationCurve::correlationDataChanged, this, &XYCorrelationCurveDock::curveCorrelationDataChanged);
 	connect(m_correlationCurve, &XYCorrelationCurve::sourceDataChanged, this, &XYCorrelationCurveDock::enableRecalculate);
-	connect(m_correlationCurve, &XYCurve::visibleChanged, this, &XYCorrelationCurveDock::curveVisibilityChanged);
-	connect(m_correlationCurve, &WorksheetElement::plotRangeListChanged, this, &XYCorrelationCurveDock::updatePlotRangeList);
 }
 
 void XYCorrelationCurveDock::setModel() {
-	DEBUG("XYCorrelationCurveDock::setModel()");
-
 	auto list = defaultColumnTopLevelClasses();
 	list.append(AspectType::XYCorrelationCurve);
 
 	XYAnalysisCurveDock::setModel(list);
-	DEBUG("XYCorrelationCurveDock::setModel() DONE");
 }
 
 /*!
@@ -359,9 +335,4 @@ void XYCorrelationCurveDock::curveCorrelationDataChanged(const XYCorrelationCurv
 	m_correlationData = correlationData;
 
 	this->showCorrelationResult();
-}
-
-void XYCorrelationCurveDock::curveVisibilityChanged(bool on) {
-	CONDITIONAL_LOCK_RETURN;
-	uiGeneralTab.chkVisible->setChecked(on);
 }

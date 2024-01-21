@@ -47,7 +47,6 @@ private Q_SLOTS:
 	void positionLogicalDateTimeChanged(qint64);
 
 	// SLOTs for changes triggered in ReferenceLine
-	void updatePlotRanges() override;
 	void lineLockChanged(bool);
 	void lineVisibilityChanged(bool);
 

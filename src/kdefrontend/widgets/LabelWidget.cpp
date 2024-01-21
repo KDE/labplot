@@ -90,6 +90,7 @@ LabelWidget::LabelWidget(QWidget* parent)
 	, m_dateTimeMenu(new QMenu(this)) {
 	ui.setupUi(this);
 	setBaseWidgets(ui.leName, ui.teComment);
+	setVisibilityWidgets(ui.chbVisible);
 
 	// set the minimum size of the text edit widget to one row of a QLabel
 	ui.teLabel->setMinimumHeight(ui.lName->height());
@@ -262,7 +263,6 @@ LabelWidget::LabelWidget(QWidget* parent)
 	connect(ui.sbOffsetX, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &LabelWidget::offsetXChanged);
 	connect(ui.sbOffsetY, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &LabelWidget::offsetYChanged);
 
-	connect(ui.chbVisible, &QCheckBox::clicked, this, &LabelWidget::visibilityChanged);
 	connect(ui.chbLock, &QCheckBox::clicked, this, &LabelWidget::lockChanged);
 	connect(ui.chbBindLogicalPos, &QCheckBox::clicked, this, &LabelWidget::bindingChanged);
 	connect(ui.chbShowPlaceholderText, &QCheckBox::toggled, this, &LabelWidget::showPlaceholderTextChanged);
@@ -405,7 +405,6 @@ void LabelWidget::initConnections() {
 	m_connections << connect(m_label, &TextLabel::borderShapeChanged, this, &LabelWidget::labelBorderShapeChanged);
 	m_connections << connect(m_label, &TextLabel::borderPenChanged, this, &LabelWidget::labelBorderPenChanged);
 	m_connections << connect(m_label, &TextLabel::borderOpacityChanged, this, &LabelWidget::labelBorderOpacityChanged);
-	m_connections << connect(m_label, &TextLabel::visibleChanged, this, &LabelWidget::labelVisibleChanged);
 	m_connections << connect(m_label, &TextLabel::lockChanged, this, &LabelWidget::labelLockChanged);
 
 	if (!m_label->parentAspect()) {
@@ -722,7 +721,12 @@ void LabelWidget::backgroundColorChanged(const QColor& color) {
 	auto mode = m_label->text().mode;
 	DEBUG(Q_FUNC_INFO << ", tex enable = " << m_teXEnabled << ", mode = " << (int)mode)
 	if (mode == TextLabel::Mode::Text || (mode == TextLabel::Mode::LaTeX && !m_teXEnabled)) {
-		SETLABELTEXTPROPERTY(setTextBackgroundColor, color);
+		auto newColor(color);
+		if (color.alpha() == 0) { // remove the transparency if it was set initially before.
+			newColor.setAlpha(255);
+			ui.kcbBackgroundColor->setColor(newColor);
+		}
+		SETLABELTEXTPROPERTY(setTextBackgroundColor, newColor)
 	} else { // LaTeX (enabled) or Markup mode
 		// Latex text does not support html code. For this the backgroundColor variable is used
 		// Only single color background is supported
@@ -1021,12 +1025,6 @@ void LabelWidget::offsetYChanged(double value) {
 		axis->setTitleOffsetY(Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point));
 }
 
-void LabelWidget::visibilityChanged(bool state) {
-	CONDITIONAL_LOCK_RETURN;
-	for (auto* label : m_labelsList)
-		label->setVisible(state);
-}
-
 void LabelWidget::lockChanged(bool locked) {
 	CONDITIONAL_LOCK_RETURN;
 	for (auto* label : m_labelsList)
@@ -1276,11 +1274,6 @@ void LabelWidget::labelOffsetYChanged(qreal offset) {
 void LabelWidget::labelRotationAngleChanged(qreal angle) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.sbRotation->setValue(angle);
-}
-
-void LabelWidget::labelVisibleChanged(bool on) {
-	CONDITIONAL_LOCK_RETURN;
-	ui.chbVisible->setChecked(on);
 }
 
 void LabelWidget::labelLockChanged(bool on) {
@@ -1539,8 +1532,8 @@ void LabelWidget::loadConfig(KConfigGroup& group) {
 	ui.cbMode->setCurrentIndex(group.readEntry("Mode", static_cast<int>(m_label->text().mode)));
 	this->modeChanged(ui.cbMode->currentIndex());
 	ui.sbFontSize->setValue(group.readEntry("TeXFontSize", m_label->teXFont().pointSize()));
-	ui.kcbFontColor->setColor(group.readEntry("TeXFontColor", m_label->fontColor()));
-	ui.kcbBackgroundColor->setColor(group.readEntry("TeXBackgroundColor", m_label->backgroundColor()));
+	ui.kcbFontColor->setColor(group.readEntry("FontColor", m_label->fontColor()));
+	ui.kcbBackgroundColor->setColor(group.readEntry("BackgroundColor", m_label->backgroundColor()));
 	ui.kfontRequesterTeX->setFont(group.readEntry("TeXFont", m_label->teXFont()));
 
 	// Geometry
@@ -1568,8 +1561,8 @@ void LabelWidget::loadConfig(KConfigGroup& group) {
 void LabelWidget::saveConfig(KConfigGroup& group) {
 	// Text
 	group.writeEntry("Mode", ui.cbMode->currentIndex());
-	group.writeEntry("TeXFontColor", ui.kcbFontColor->color());
-	group.writeEntry("TeXBackgroundColor", ui.kcbBackgroundColor->color());
+	group.writeEntry("FontColor", ui.kcbFontColor->color());
+	group.writeEntry("BackgroundColor", ui.kcbBackgroundColor->color());
 	group.writeEntry("TeXFont", ui.kfontRequesterTeX->font());
 
 	// Geometry

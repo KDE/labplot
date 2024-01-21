@@ -55,7 +55,6 @@ CustomPointDock::CustomPointDock(QWidget* parent)
 	// General
 	connect(ui.chbLock, &QCheckBox::clicked, this, &CustomPointDock::lockChanged);
 	connect(ui.chkVisible, &QCheckBox::clicked, this, &CustomPointDock::visibilityChanged);
-	connect(ui.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CustomPointDock::plotRangeChanged);
 
 	// positioning
 	connect(ui.chbBindLogicalPos, &QCheckBox::clicked, this, &CustomPointDock::bindingChanged);
@@ -98,7 +97,7 @@ void CustomPointDock::setPoints(QList<CustomPoint*> points) {
 	// show the properties of the first custom point
 	this->load();
 	initConnections();
-	updatePlotRanges(); // needed when loading project
+	updatePlotRangeList(); // needed when loading project
 
 	// for custom points being children of an InfoElement, the position is changed
 	// via the parent settings -> disable the positioning here.
@@ -113,7 +112,6 @@ void CustomPointDock::setPoints(QList<CustomPoint*> points) {
 void CustomPointDock::initConnections() const {
 	// SIGNALs/SLOTs
 	//  general
-	connect(m_point, &WorksheetElement::plotRangeListChanged, this, &CustomPointDock::updatePlotRanges);
 	connect(m_point, &CustomPoint::lockChanged, this, &CustomPointDock::pointLockChanged);
 	connect(m_point, &CustomPoint::visibleChanged, this, &CustomPointDock::pointVisibilityChanged);
 	connect(m_point, &CustomPoint::positionChanged, this, &CustomPointDock::pointPositionChanged);
@@ -131,10 +129,6 @@ void CustomPointDock::updateLocale() {
 	ui.sbPositionXLogical->setLocale(numberLocale);
 	ui.sbPositionYLogical->setLocale(numberLocale);
 	symbolWidget->updateLocale();
-}
-
-void CustomPointDock::updatePlotRanges() {
-	updatePlotRangeList();
 }
 
 //**********************************************************

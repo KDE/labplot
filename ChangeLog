@@ -15,6 +15,7 @@ New features:
 		* Add possibility to lock elements for unintentional change in the plot
 		* New panel in the presenter widget to allow the selection, zooming and navigation also in the presenter mode
 		* Add possibility to limit the number of ticks for custom columns
+		* Allow to show/hide the entry in the legend for all supported plot types and not only for XY-Curve
 	* [spreadsheet]
 		* Spreadsheet linking - allow to synchronize number of rows across multiple spreadsheets
 		* Extended search and replace
@@ -25,6 +26,7 @@ New features:
 		* When generating values via a mathematical expression ("generate function values"), allow to use variables in CAS-notebooks as source columns
 		* Generatation of equidistant values: support for Date&Time and integer columns
 		* Generatation of equidistant values: allow to fix the number of values and the increment at the same time
+		* Implement more functions for formulas
 	* [notebook]
 		* Export to PDF
 		* "Configure CAS" in the menu to create a new notebook to directly allow the user to enable new backends in case not done yet

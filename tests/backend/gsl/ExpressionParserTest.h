@@ -24,6 +24,8 @@ private Q_SLOTS:
 	void testbetween();
 	void testoutside();
 	void testequalEpsilon();
+	void testRoundn();
+	void testSpecialFunctions();
 
 	void testevaluateCartesian();
 	void testevaluateCartesianConstExpr();

@@ -36,7 +36,6 @@ public:
 private:
 	TreeViewComboBox* cbDataColumn;
 
-	void updatePlotRanges() override;
 	void load();
 	void loadConfig(KConfig&);
 
@@ -58,7 +57,6 @@ private Q_SLOTS:
 
 	// General-Tab
 	void dataColumnChanged(const QModelIndex&);
-	void visibilityChanged(bool);
 	void kernelTypeChanged(int);
 	void bandwidthTypeChanged(int);
 	void bandwidthChanged(double);
@@ -72,7 +70,6 @@ private Q_SLOTS:
 	// SLOTs for changes triggered in KDEPlot
 	// General-Tab
 	void plotDataColumnChanged(const AbstractColumn*);
-	void plotVisibilityChanged(bool);
 	void plotKernelTypeChanged(nsl_kernel_type);
 	void plotBandwidthTypeChanged(nsl_kde_bandwidth_type);
 	void plotBandwidthChanged(double);

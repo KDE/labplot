@@ -10,12 +10,11 @@
 #ifndef BOXPLOT_H
 #define BOXPLOT_H
 
-#include "backend/lib/macros.h"
 #include "backend/worksheet/plots/cartesian/Plot.h"
 
-class BoxPlotPrivate;
 class AbstractColumn;
 class Background;
+class BoxPlotPrivate;
 class Line;
 class Symbol;
 
@@ -84,6 +83,8 @@ public:
 	double minimum(CartesianCoordinateSystem::Dimension) const override;
 	double maximum(CartesianCoordinateSystem::Dimension) const override;
 	bool hasData() const override;
+	bool usingColumn(const Column*) const override;
+	void updateColumnDependencies(const AbstractColumn*) override;
 	QColor color() const override;
 
 	typedef BoxPlotPrivate Private;

@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Dock widget for the lolliplot plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2023-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -28,6 +28,7 @@ LollipopPlotDock::LollipopPlotDock(QWidget* parent)
 	ui.setupUi(this);
 	setPlotRangeCombobox(ui.cbPlotRanges);
 	setBaseWidgets(ui.leName, ui.teComment);
+	setVisibilityWidgets(ui.chkVisible, ui.chkLegendVisible);
 
 	// Tab "General"
 
@@ -89,8 +90,6 @@ LollipopPlotDock::LollipopPlotDock(QWidget* parent)
 	connect(ui.bRemoveXColumn, &QPushButton::clicked, this, &LollipopPlotDock::removeXColumn);
 	connect(m_buttonNew, &QPushButton::clicked, this, &LollipopPlotDock::addDataColumn);
 	connect(ui.cbOrientation, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &LollipopPlotDock::orientationChanged);
-	connect(ui.chkVisible, &QCheckBox::toggled, this, &LollipopPlotDock::visibilityChanged);
-	connect(ui.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &LollipopPlotDock::plotRangeChanged);
 
 	// Tab "Line"
 	connect(ui.cbNumberLine, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &LollipopPlotDock::currentBarLineChanged);
@@ -135,20 +134,19 @@ void LollipopPlotDock::setPlots(QList<LollipopPlot*> list) {
 	valueWidget->setValues(values);
 
 	// show the properties of the first box plot
+	ui.chkLegendVisible->setChecked(m_plot->legendVisible());
 	ui.chkVisible->setChecked(m_plot->isVisible());
 	load();
 	cbXColumn->setColumn(m_plot->xColumn(), m_plot->xColumnPath());
 	loadDataColumns();
 
-	updatePlotRanges();
+	updatePlotRangeList();
 
 	// set the current locale
 	updateLocale();
 
 	// SIGNALs/SLOTs
 	// general
-	connect(m_plot, &WorksheetElement::plotRangeListChanged, this, &LollipopPlotDock::updatePlotRanges);
-	connect(m_plot, &LollipopPlot::visibleChanged, this, &LollipopPlotDock::plotVisibilityChanged);
 	connect(m_plot, &LollipopPlot::xColumnChanged, this, &LollipopPlotDock::plotXColumnChanged);
 	connect(m_plot, &LollipopPlot::dataColumnsChanged, this, &LollipopPlotDock::plotDataColumnsChanged);
 }
@@ -183,10 +181,6 @@ void LollipopPlotDock::setModel() {
  */
 void LollipopPlotDock::updateLocale() {
 	lineWidget->updateLocale();
-}
-
-void LollipopPlotDock::updatePlotRanges() {
-	updatePlotRangeList();
 }
 
 void LollipopPlotDock::loadDataColumns() {
@@ -382,13 +376,6 @@ void LollipopPlotDock::orientationChanged(int index) {
 		plot->setOrientation(orientation);
 }
 
-void LollipopPlotDock::visibilityChanged(bool state) {
-	CONDITIONAL_LOCK_RETURN;
-
-	for (auto* plot : m_plots)
-		plot->setVisible(state);
-}
-
 //"Line"-tab
 /*!
  * called when the current bar number was changed, shows the line properties for the selected bar.
@@ -444,10 +431,6 @@ void LollipopPlotDock::plotDataColumnsChanged(const QVector<const AbstractColumn
 void LollipopPlotDock::plotOrientationChanged(LollipopPlot::Orientation orientation) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.cbOrientation->setCurrentIndex((int)orientation);
-}
-void LollipopPlotDock::plotVisibilityChanged(bool on) {
-	CONDITIONAL_LOCK_RETURN;
-	ui.chkVisible->setChecked(on);
 }
 
 //**********************************************************

@@ -86,6 +86,9 @@ RandomValuesDialog::RandomValuesDialog(Spreadsheet* s, QWidget* parent)
 	ui.lSeed->setToolTip(info);
 	ui.leSeed->setToolTip(info);
 
+	info = i18n("Random number distributions as defined in <a href=\"https://www.gnu.org/software/gsl/doc/html/randist.html\">GSL documentation</a>");
+	ui.cbDistribution->setWhatsThis(info);
+
 	connect(ui.cbDistribution, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &RandomValuesDialog::distributionChanged);
 	connect(ui.leParameter1, &QLineEdit::textChanged, this, &RandomValuesDialog::checkValues);
 	connect(ui.leParameter2, &QLineEdit::textChanged, this, &RandomValuesDialog::checkValues);

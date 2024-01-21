@@ -107,7 +107,6 @@ private Q_SLOTS:
 	void curveYErrorColumnChanged(const AbstractColumn*);
 	void curveFitDataChanged(const XYFitCurve::FitData&);
 	void dataChanged();
-	void curveVisibilityChanged(bool);
 };
 
 #endif

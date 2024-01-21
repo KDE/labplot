@@ -69,7 +69,7 @@
     </widget>
    </item>
    <item row="0" column="3">
-    <widget class="QLineEdit" name="leName"/>
+    <widget class="TimedLineEdit" name="leName"/>
    </item>
    <item row="14" column="3">
     <widget class="TreeViewComboBox" name="cbLinkedSpreadsheet"/>
@@ -250,6 +250,11 @@
    <class>TreeViewComboBox</class>
    <extends>QComboBox</extends>
    <header>TreeViewComboBox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>TimedLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>src/kdefrontend/widgets/TimedLineEdit.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

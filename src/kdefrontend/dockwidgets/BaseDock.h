@@ -14,11 +14,14 @@
 
 #include "backend/core/AspectTreeModel.h"
 #include "backend/worksheet/Worksheet.h"
+#include "backend/worksheet/plots/cartesian/Plot.h"
 
 #include <QWidget>
 
 class AbstractAspect;
 class ResizableTextEdit;
+class TimedLineEdit;
+class QCheckBox;
 class QComboBox;
 class QDoubleSpinBox;
 class QLineEdit;
@@ -35,7 +38,6 @@ public:
 
 	virtual void updateLocale(){};
 	virtual void updateUnits(){};
-	virtual void updatePlotRanges(){}; // used in worksheet element docks
 	static void spinBoxCalculateMinMax(QDoubleSpinBox* spinbox, Range<double> range, double newValue = NAN);
 
 	template<typename T>
@@ -52,9 +54,17 @@ public:
 		m_aspect = aspects.first();
 		connect(m_aspect, &AbstractAspect::childAspectAboutToBeRemoved, this, &BaseDock::disconnectAspect);
 		connect(m_aspect, &AbstractAspect::aspectDescriptionChanged, this, &BaseDock::aspectDescriptionChanged);
+
 		auto* wse = dynamic_cast<WorksheetElement*>(m_aspect);
-		if (wse)
+		if (wse) {
 			connect(wse, &WorksheetElement::coordinateSystemIndexChanged, this, &BaseDock::updatePlotRangeList);
+			connect(wse, &WorksheetElement::plotRangeListChanged, this, &BaseDock::updatePlotRangeList);
+			connect(wse, &WorksheetElement::visibleChanged, this, &BaseDock::aspectVisibleChanged);
+			auto* plot = dynamic_cast<Plot*>(wse);
+			if (plot)
+				connect(plot, &Plot::legendVisibleChanged, this, &BaseDock::aspectLegendVisibleChanged);
+		}
+
 		for (auto* aspect : aspects) {
 			if (aspect->inherits(AspectType::AbstractAspect))
 				m_aspects.append(static_cast<AbstractAspect*>(aspect));
@@ -76,7 +86,8 @@ public:
 		return m_aspect;
 	}
 
-	void setBaseWidgets(QLineEdit* nameLabel, ResizableTextEdit* commentLabel, double commentHeightFactorNameLabel = 1.2);
+	void setBaseWidgets(TimedLineEdit* nameLabel, ResizableTextEdit* commentLabel, double commentHeightFactorNameLabel = 1.2);
+	void setVisibilityWidgets(QCheckBox* visible, QCheckBox* legendVisible = nullptr);
 
 	AspectTreeModel* aspectModel();
 
@@ -84,7 +95,7 @@ protected:
 	bool m_initializing{false};
 	Units m_units{Units::Metric};
 	Worksheet::Unit m_worksheetUnit{Worksheet::Unit::Centimeter};
-	void updatePlotRangeList(); // used in worksheet element docks
+	virtual void updatePlotRangeList(); // used in worksheet element docks
 
 private:
 	AbstractAspect* m_aspect{nullptr};
@@ -92,20 +103,29 @@ private:
 	AspectTreeModel* m_aspectModel{nullptr};
 	void updateNameDescriptionWidgets();
 	QComboBox* m_cbPlotRangeList{nullptr};
-	QLineEdit* m_leName{nullptr};
+	TimedLineEdit* m_leName{nullptr};
 	ResizableTextEdit* m_teComment{nullptr};
+	QCheckBox* m_chkVisible{nullptr};
+	QCheckBox* m_chkLegendVisible{nullptr};
 
 protected Q_SLOTS:
+	// SLOTs for changes triggered in the dock widget
 	void nameChanged();
 	void commentChanged();
+	void plotRangeChanged(int index);
+	void visibleChanged(bool);
+	void legendVisibleChanged(bool);
+
+	// SLOTs for changes triggered in the aspect
 	void aspectDescriptionChanged(const AbstractAspect*);
-	void plotRangeChanged(int index); // used in worksheet element docks
+	void aspectVisibleChanged(bool);
+	void aspectLegendVisibleChanged(bool);
 
 private:
 	bool m_suppressPlotRetransform{false};
 
 	friend class RetransformTest;
-	friend class MultiRangeTest;
+	friend class MultiRangeTest2;
 };
 
 #endif

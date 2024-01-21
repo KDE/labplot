@@ -782,7 +782,7 @@ int yylex(param *p) {
 #endif
 		double result;
 		if (locale != nullptr) {
-#if defined(__OpenBSD__)
+#if defined(__OpenBSD__) || defined(__HAIKU__)
 			result = strtod(s, &remain);
 #else
 			result = strtod_l(s, &remain, locale);

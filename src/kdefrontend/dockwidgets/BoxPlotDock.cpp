@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Dock widget for the reference line on the plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2020-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2020-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -28,6 +28,7 @@ BoxPlotDock::BoxPlotDock(QWidget* parent)
 	ui.setupUi(this);
 	setPlotRangeCombobox(ui.cbPlotRanges);
 	setBaseWidgets(ui.leName, ui.teComment);
+	setVisibilityWidgets(ui.chkVisible, ui.chkLegendVisible);
 
 	// Tab "General"
 	m_buttonNew = new QPushButton();
@@ -123,8 +124,6 @@ BoxPlotDock::BoxPlotDock(QWidget* parent)
 	connect(ui.cbOrientation, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BoxPlotDock::orientationChanged);
 	connect(ui.chkVariableWidth, &QCheckBox::toggled, this, &BoxPlotDock::variableWidthChanged);
 	connect(ui.chkNotches, &QCheckBox::toggled, this, &BoxPlotDock::notchesEnabledChanged);
-	connect(ui.chkVisible, &QCheckBox::toggled, this, &BoxPlotDock::visibilityChanged);
-	connect(ui.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BoxPlotDock::plotRangeChanged);
 
 	// Tab "Box"
 	connect(ui.cbNumber, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BoxPlotDock::currentBoxChanged);
@@ -191,20 +190,18 @@ void BoxPlotDock::setBoxPlots(QList<BoxPlot*> list) {
 	whiskersCapLineWidget->setLines(whiskersCapLines);
 
 	// show the properties of the first box plot
+	ui.chkLegendVisible->setChecked(m_boxPlot->legendVisible());
 	ui.chkVisible->setChecked(m_boxPlot->isVisible());
 	load();
 	loadDataColumns();
 
-	updatePlotRanges();
+	updatePlotRangeList();
 
 	// set the current locale
 	updateLocale();
 
 	// SIGNALs/SLOTs
 	// general
-	connect(m_boxPlot, &AbstractAspect::aspectDescriptionChanged, this, &BoxPlotDock::plotDescriptionChanged);
-	connect(m_boxPlot, &WorksheetElement::plotRangeListChanged, this, &BoxPlotDock::updatePlotRanges);
-	connect(m_boxPlot, &BoxPlot::visibleChanged, this, &BoxPlotDock::plotVisibilityChanged);
 	connect(m_boxPlot, &BoxPlot::orientationChanged, this, &BoxPlotDock::plotOrientationChanged);
 	connect(m_boxPlot, &BoxPlot::variableWidthChanged, this, &BoxPlotDock::plotVariableWidthChanged);
 	connect(m_boxPlot, &BoxPlot::notchesEnabledChanged, this, &BoxPlotDock::plotNotchesEnabledChanged);
@@ -244,10 +241,6 @@ void BoxPlotDock::updateLocale() {
 	medianLineWidget->updateLocale();
 	whiskersLineWidget->updateLocale();
 	whiskersCapLineWidget->updateLocale();
-}
-
-void BoxPlotDock::updatePlotRanges() {
-	updatePlotRangeList();
 }
 
 void BoxPlotDock::loadDataColumns() {
@@ -430,13 +423,6 @@ void BoxPlotDock::notchesEnabledChanged(bool state) {
 		boxPlot->setNotchesEnabled(state);
 }
 
-void BoxPlotDock::visibilityChanged(bool state) {
-	CONDITIONAL_LOCK_RETURN;
-
-	for (auto* boxPlot : m_boxPlots)
-		boxPlot->setVisible(state);
-}
-
 //"Box"-tab
 /*!
  * called when the current box number was changed, shows the box properties for the selected box.
@@ -609,10 +595,6 @@ void BoxPlotDock::plotVariableWidthChanged(bool on) {
 void BoxPlotDock::plotNotchesEnabledChanged(bool on) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.chkNotches->setChecked(on);
-}
-void BoxPlotDock::plotVisibilityChanged(bool on) {
-	CONDITIONAL_LOCK_RETURN;
-	ui.chkVisible->setChecked(on);
 }
 
 // box

@@ -65,6 +65,7 @@ void XYFitCurveDock::setupGeneral() {
 	uiGeneralTab.setupUi(generalTab);
 	setPlotRangeCombobox(uiGeneralTab.cbPlotRanges);
 	setBaseWidgets(uiGeneralTab.leName, uiGeneralTab.teComment);
+	setVisibilityWidgets(uiGeneralTab.chkVisible, uiGeneralTab.chkLegendVisible);
 
 	auto* gridLayout = static_cast<QGridLayout*>(generalTab->layout());
 	gridLayout->setContentsMargins(2, 2, 2, 2);
@@ -184,7 +185,6 @@ void XYFitCurveDock::setupGeneral() {
 	layout->addWidget(generalTab);
 
 	// Slots
-	connect(uiGeneralTab.chkVisible, &QCheckBox::clicked, this, &XYFitCurveDock::visibilityChanged);
 	connect(uiGeneralTab.cbDataSourceType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFitCurveDock::dataSourceTypeChanged);
 	connect(uiGeneralTab.lWeights, &QPushButton::clicked, this, &XYFitCurveDock::showWeightsOptions);
 	connect(uiGeneralTab.cbXWeight, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFitCurveDock::xWeightChanged);
@@ -215,25 +215,6 @@ void XYFitCurveDock::setupGeneral() {
  * load curve settings
  */
 void XYFitCurveDock::initGeneralTab() {
-	// if there are more than one curve in the list, disable the tab "general"
-	if (m_curvesList.size() == 1) {
-		uiGeneralTab.lName->setEnabled(true);
-		uiGeneralTab.leName->setEnabled(true);
-		uiGeneralTab.lComment->setEnabled(true);
-		uiGeneralTab.teComment->setEnabled(true);
-
-		uiGeneralTab.leName->setText(m_curve->name());
-		uiGeneralTab.teComment->setText(m_curve->comment());
-	} else {
-		uiGeneralTab.lName->setEnabled(false);
-		uiGeneralTab.leName->setEnabled(false);
-		uiGeneralTab.lComment->setEnabled(false);
-		uiGeneralTab.teComment->setEnabled(false);
-
-		uiGeneralTab.leName->setText(QString());
-		uiGeneralTab.teComment->setText(QString());
-	}
-
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(m_fitCurve->dataSourceType()));
 	this->dataSourceTypeChanged(uiGeneralTab.cbDataSourceType->currentIndex());
 
@@ -274,6 +255,7 @@ void XYFitCurveDock::initGeneralTab() {
 
 	uiGeneralTab.cbAlgorithm->setCurrentIndex(m_fitData.algorithm);
 
+	uiGeneralTab.chkLegendVisible->setChecked(m_curve->legendVisible());
 	uiGeneralTab.chkVisible->setChecked(m_curve->isVisible());
 
 	// Slots
@@ -286,8 +268,6 @@ void XYFitCurveDock::initGeneralTab() {
 	connect(m_fitCurve, &XYFitCurve::yErrorColumnChanged, this, &XYFitCurveDock::curveYErrorColumnChanged);
 	connect(m_fitCurve, &XYFitCurve::fitDataChanged, this, &XYFitCurveDock::curveFitDataChanged);
 	connect(m_fitCurve, &XYFitCurve::sourceDataChanged, this, &XYFitCurveDock::enableRecalculate);
-	connect(m_fitCurve, &WorksheetElement::plotRangeListChanged, this, &XYFitCurveDock::updatePlotRangeList);
-	connect(m_fitCurve, &WorksheetElement::visibleChanged, this, &XYFitCurveDock::curveVisibilityChanged);
 
 	connect(fitParametersWidget, &FitParametersWidget::parametersChanged, this, &XYFitCurveDock::parametersChanged);
 	connect(fitParametersWidget, &FitParametersWidget::parametersValid, this, &XYFitCurveDock::parametersValid);
@@ -1575,9 +1555,4 @@ void XYFitCurveDock::curveFitDataChanged(const XYFitCurve::FitData& fitData) {
 
 void XYFitCurveDock::dataChanged() {
 	this->enableRecalculate();
-}
-
-void XYFitCurveDock::curveVisibilityChanged(bool on) {
-	CONDITIONAL_LOCK_RETURN;
-	uiGeneralTab.chkVisible->setChecked(on);
 }

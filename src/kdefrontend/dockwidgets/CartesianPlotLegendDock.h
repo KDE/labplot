@@ -49,7 +49,6 @@ private Q_SLOTS:
 	// SLOTs for changes triggered in CartesianPlotLegendDock
 	//"General"-tab
 	void lockChanged(bool);
-	void visibilityChanged(bool);
 	void labelFontChanged(const QFont&);
 	void labelColorChanged(const QColor&);
 	void labelOrderChanged(int);
@@ -83,7 +82,6 @@ private Q_SLOTS:
 	void legendPositionChanged(const CartesianPlotLegend::PositionWrapper&);
 	void legendRotationAngleChanged(qreal);
 	void legendLockChanged(bool);
-	void legendVisibilityChanged(bool);
 	void legendPositionLogicalChanged(QPointF);
 	void legendHorizontalAlignmentChanged(const WorksheetElement::HorizontalAlignment);
 	void legendVerticalAlignmentChanged(const WorksheetElement::VerticalAlignment);

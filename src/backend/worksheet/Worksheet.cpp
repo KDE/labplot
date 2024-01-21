@@ -55,16 +55,16 @@ Worksheet::Worksheet(const QString& name, bool loading)
 	: AbstractPart(name, AspectType::Worksheet)
 	, d_ptr(new WorksheetPrivate(this)) {
 	Q_D(Worksheet);
-	connect(this, &Worksheet::childAspectAdded, this, &Worksheet::handleAspectAdded);
-	connect(this, &Worksheet::childAspectAboutToBeRemoved, this, &Worksheet::handleAspectAboutToBeRemoved);
-	connect(this, &Worksheet::childAspectRemoved, this, &Worksheet::handleAspectRemoved);
-
 	d->background = new Background(QString());
 	addChild(d->background);
 	d->background->setHidden(true);
 	connect(d->background, &Background::updateRequested, [=] {
 		d->update();
 	});
+
+	connect(this, &Worksheet::childAspectAdded, this, &Worksheet::handleAspectAdded);
+	connect(this, &Worksheet::childAspectAboutToBeRemoved, this, &Worksheet::handleAspectAboutToBeRemoved);
+	connect(this, &Worksheet::childAspectRemoved, this, &Worksheet::handleAspectRemoved);
 
 	if (!loading)
 		init();
@@ -1581,6 +1581,7 @@ void WorksheetPrivate::update() {
 
 WorksheetPrivate::~WorksheetPrivate() {
 	delete m_scene;
+	delete cursorData;
 }
 
 void WorksheetPrivate::updateLayout(bool undoable) {

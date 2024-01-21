@@ -1,8 +1,7 @@
 To compile LabPlot from source following packages are required:
 	* CMake version 3.17.0 or higher
-	* Qt version 5.10 or higher (including the devel-package, libqt5-devel or similar)
-	* KDE Frameworks 5.16.0 or higher (including the devel-package),
-		optional 5.28.0 or higher for syntax highlighting
+	* Qt version 5.12 or higher (including the devel-package, libqt5-devel or similar)
+	* KDE Frameworks 5.32.0 or higher (including the devel-package)
 	* Qt Advanced Docking System (QADS) or Qt5::GuiPrivate to build QADS locally
 	* GSL version 1.15 or higher (including the devel-package, gsl-devel or similar)
 

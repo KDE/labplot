@@ -24,11 +24,8 @@
 #include "backend/worksheet/Line.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 
-extern "C" {
 #include <gsl/gsl_cdf.h>
-#include <gsl/gsl_math.h>
 #include <gsl/gsl_statistics.h>
-}
 
 #include <QMenu>
 #include <QPainter>
@@ -218,6 +215,24 @@ bool QQPlot::hasData() const {
 	return (d->dataColumn != nullptr);
 }
 
+bool QQPlot::usingColumn(const Column* column) const {
+	Q_D(const QQPlot);
+	return (d->dataColumn == column);
+}
+
+void QQPlot::updateColumnDependencies(const AbstractColumn* column) {
+	Q_D(QQPlot);
+	const QString& columnPath = column->path();
+
+	if (d->dataColumn == column) // the column is the same and was just renamed -> update the column path
+		d->dataColumnPath = columnPath;
+	else if (d->dataColumnPath == columnPath) { // another column was renamed to the current path -> set and connect to the new column
+		setUndoAware(false);
+		setDataColumn(column);
+		setUndoAware(true);
+	}
+}
+
 QColor QQPlot::color() const {
 	Q_D(const QQPlot);
 	return d->percentilesCurve->color();
@@ -266,11 +281,6 @@ void QQPlot::dataColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 		d->dataColumn = nullptr;
 		d->retransform();
 	}
-}
-
-void QQPlot::dataColumnNameChanged() {
-	Q_D(QQPlot);
-	setDataColumnPath(d->dataColumn->path());
 }
 
 // ##############################################################################
@@ -577,6 +587,7 @@ void QQPlot::save(QXmlStreamWriter* writer) const {
 	WRITE_COLUMN(d->yPercentilesColumn, yPercentilesColumn);
 	writer->writeAttribute(QStringLiteral("distribution"), QString::number(static_cast<int>(d->distribution)));
 	writer->writeAttribute(QStringLiteral("visible"), QString::number(d->isVisible()));
+	writer->writeAttribute(QStringLiteral("legendVisible"), QString::number(d->legendVisible));
 	writer->writeEndElement();
 
 	// save the internal columns, above only the references to them were saved
@@ -621,6 +632,7 @@ bool QQPlot::load(XmlStreamReader* reader, bool preview) {
 			READ_COLUMN(xPercentilesColumn);
 			READ_COLUMN(yPercentilesColumn);
 			READ_INT_VALUE("distribution", distribution, nsl_sf_stats_distribution);
+			READ_INT_VALUE("legendVisible", legendVisible, bool);
 
 			str = attribs.value(QStringLiteral("visible")).toString();
 			if (str.isEmpty())

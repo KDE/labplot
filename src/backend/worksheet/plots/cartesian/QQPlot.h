@@ -11,14 +11,7 @@
 #define QQPLOT_H
 
 #include "Plot.h"
-#include "backend/lib/Range.h"
-#include "backend/lib/macros.h"
 #include "backend/nsl/nsl_sf_stats.h"
-#include "backend/worksheet/WorksheetElement.h"
-#include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
-
-#include <QFont>
-#include <QPen>
 
 class AbstractColumn;
 class Background;
@@ -66,13 +59,14 @@ public:
 	double minimum(CartesianCoordinateSystem::Dimension) const override;
 	double maximum(CartesianCoordinateSystem::Dimension) const override;
 	bool hasData() const override;
+	bool usingColumn(const Column*) const override;
+	void updateColumnDependencies(const AbstractColumn*) override;
 	QColor color() const override;
 
 	typedef QQPlotPrivate Private;
 
 private Q_SLOTS:
 	void dataColumnAboutToBeRemoved(const AbstractAspect*);
-	void dataColumnNameChanged();
 
 protected:
 	QQPlot(const QString& name, QQPlotPrivate* dd);

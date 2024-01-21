@@ -13,7 +13,6 @@
 #include "Plot.h"
 #include "backend/nsl/nsl_kde.h"
 #include "backend/nsl/nsl_sf_kernel.h"
-#include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 
 class AbstractColumn;
 class KDEPlotPrivate;
@@ -62,13 +61,14 @@ public:
 	double maximum(CartesianCoordinateSystem::Dimension) const override;
 	int gridPointsCount() const;
 	bool hasData() const override;
+	bool usingColumn(const Column*) const override;
+	void updateColumnDependencies(const AbstractColumn*) override;
 	QColor color() const override;
 
 	typedef KDEPlotPrivate Private;
 
 private Q_SLOTS:
 	void dataColumnAboutToBeRemoved(const AbstractAspect*);
-	void dataColumnNameChanged();
 
 protected:
 	KDEPlot(const QString& name, KDEPlotPrivate* dd);

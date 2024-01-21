@@ -42,7 +42,6 @@ ReferenceRangeDock::ReferenceRangeDock(QWidget* parent)
 	connect(ui.sbPositionEnd, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &ReferenceRangeDock::positionLogicalEndChanged);
 	connect(ui.dtePositionStart, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &ReferenceRangeDock::positionLogicalDateTimeStartChanged);
 	connect(ui.dtePositionEnd, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &ReferenceRangeDock::positionLogicalDateTimeEndChanged);
-	connect(ui.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ReferenceRangeDock::plotRangeChanged);
 	connect(ui.chkVisible, &QCheckBox::clicked, this, &ReferenceRangeDock::visibilityChanged);
 }
 
@@ -66,10 +65,9 @@ void ReferenceRangeDock::setReferenceRanges(QList<ReferenceRange*> list) {
 	// show the properties of the first reference range
 	this->load();
 
-	updatePlotRanges();
+	updatePlotRangeList();
 
 	// SIGNALs/SLOTs
-	connect(m_range, &WorksheetElement::plotRangeListChanged, this, &ReferenceRangeDock::updatePlotRanges);
 	connect(m_range, &ReferenceRange::visibleChanged, this, &ReferenceRangeDock::rangeVisibilityChanged);
 
 	// position
@@ -87,10 +85,6 @@ void ReferenceRangeDock::updateLocale() {
 	ui.sbPositionEnd->setLocale(numberLocale);
 
 	// TODO datetime
-}
-
-void ReferenceRangeDock::updatePlotRanges() {
-	updatePlotRangeList();
 }
 
 //**********************************************************

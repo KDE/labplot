@@ -43,6 +43,7 @@ void XYSmoothCurveDock::setupGeneral() {
 	uiGeneralTab.setupUi(generalTab);
 	setPlotRangeCombobox(uiGeneralTab.cbPlotRanges);
 	setBaseWidgets(uiGeneralTab.leName, uiGeneralTab.teComment, uiGeneralTab.pbRecalculate, uiGeneralTab.cbDataSourceType);
+	setVisibilityWidgets(uiGeneralTab.chkVisible, uiGeneralTab.chkLegendVisible);
 
 	auto* gridLayout = static_cast<QGridLayout*>(generalTab->layout());
 	gridLayout->setContentsMargins(2, 2, 2, 2);
@@ -73,7 +74,6 @@ void XYSmoothCurveDock::setupGeneral() {
 	layout->addWidget(generalTab);
 
 	// Slots
-	connect(uiGeneralTab.chkVisible, &QCheckBox::clicked, this, &XYSmoothCurveDock::visibilityChanged);
 	connect(uiGeneralTab.cbDataSourceType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYSmoothCurveDock::dataSourceTypeChanged);
 	connect(uiGeneralTab.cbAutoRange, &QCheckBox::clicked, this, &XYSmoothCurveDock::autoRangeChanged);
 	connect(uiGeneralTab.leMin, &QLineEdit::textChanged, this, &XYSmoothCurveDock::xRangeMinChanged);
@@ -90,7 +90,6 @@ void XYSmoothCurveDock::setupGeneral() {
 	connect(uiGeneralTab.sbLeftValue, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &XYSmoothCurveDock::valueChanged);
 	connect(uiGeneralTab.sbRightValue, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &XYSmoothCurveDock::valueChanged);
 	connect(uiGeneralTab.pbRecalculate, &QPushButton::clicked, this, &XYSmoothCurveDock::recalculateClicked);
-	connect(uiGeneralTab.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYSmoothCurveDock::plotRangeChanged);
 
 	connect(cbDataSourceCurve, &TreeViewComboBox::currentModelIndexChanged, this, &XYSmoothCurveDock::dataSourceCurveChanged);
 	connect(cbXDataColumn, &TreeViewComboBox::currentModelIndexChanged, this, &XYSmoothCurveDock::xDataColumnChanged);
@@ -98,27 +97,6 @@ void XYSmoothCurveDock::setupGeneral() {
 }
 
 void XYSmoothCurveDock::initGeneralTab() {
-	DEBUG(Q_FUNC_INFO);
-
-	// if there are more than one curve in the list, disable the tab "general"
-	if (m_curvesList.size() == 1) {
-		uiGeneralTab.lName->setEnabled(true);
-		uiGeneralTab.leName->setEnabled(true);
-		uiGeneralTab.lComment->setEnabled(true);
-		uiGeneralTab.teComment->setEnabled(true);
-
-		uiGeneralTab.leName->setText(m_curve->name());
-		uiGeneralTab.teComment->setText(m_curve->comment());
-	} else {
-		uiGeneralTab.lName->setEnabled(false);
-		uiGeneralTab.leName->setEnabled(false);
-		uiGeneralTab.lComment->setEnabled(false);
-		uiGeneralTab.teComment->setEnabled(false);
-
-		uiGeneralTab.leName->setText(QString());
-		uiGeneralTab.teComment->setText(QString());
-	}
-
 	// show the properties of the first curve
 	// data source
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(m_smoothCurve->dataSourceType()));
@@ -169,6 +147,7 @@ void XYSmoothCurveDock::initGeneralTab() {
 	valueChanged();
 	this->showSmoothResult();
 
+	uiGeneralTab.chkLegendVisible->setChecked(m_curve->legendVisible());
 	uiGeneralTab.chkVisible->setChecked(m_curve->isVisible());
 
 	// Slots
@@ -178,8 +157,6 @@ void XYSmoothCurveDock::initGeneralTab() {
 	connect(m_smoothCurve, &XYSmoothCurve::yDataColumnChanged, this, &XYSmoothCurveDock::curveYDataColumnChanged);
 	connect(m_smoothCurve, &XYSmoothCurve::smoothDataChanged, this, &XYSmoothCurveDock::curveSmoothDataChanged);
 	connect(m_smoothCurve, &XYSmoothCurve::sourceDataChanged, this, &XYSmoothCurveDock::enableRecalculate);
-	connect(m_smoothCurve, &WorksheetElement::plotRangeListChanged, this, &XYSmoothCurveDock::updatePlotRangeList);
-	connect(m_smoothCurve, &WorksheetElement::visibleChanged, this, &XYSmoothCurveDock::curveVisibilityChanged);
 }
 
 void XYSmoothCurveDock::setModel() {
@@ -461,9 +438,4 @@ void XYSmoothCurveDock::curveSmoothDataChanged(const XYSmoothCurve::SmoothData& 
 	uiGeneralTab.cbType->setCurrentIndex(m_smoothData.type);
 
 	this->showSmoothResult();
-}
-
-void XYSmoothCurveDock::curveVisibilityChanged(bool on) {
-	CONDITIONAL_LOCK_RETURN;
-	uiGeneralTab.chkVisible->setChecked(on);
 }

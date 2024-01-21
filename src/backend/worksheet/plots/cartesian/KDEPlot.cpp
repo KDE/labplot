@@ -182,6 +182,24 @@ bool KDEPlot::hasData() const {
 	return (d->dataColumn != nullptr);
 }
 
+bool KDEPlot::usingColumn(const Column* column) const {
+	Q_D(const KDEPlot);
+	return (d->dataColumn == column);
+}
+
+void KDEPlot::updateColumnDependencies(const AbstractColumn* column) {
+	Q_D(KDEPlot);
+	const QString& columnPath = column->path();
+
+	if (d->dataColumn == column) // the column is the same and was just renamed -> update the column path
+		d->dataColumnPath = columnPath;
+	else if (d->dataColumnPath == columnPath) { // another column was renamed to the current path -> set and connect to the new column
+		setUndoAware(false);
+		setDataColumn(column);
+		setUndoAware(true);
+	}
+}
+
 QColor KDEPlot::color() const {
 	Q_D(const KDEPlot);
 	return d->estimationCurve->color();
@@ -251,11 +269,6 @@ void KDEPlot::dataColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 		d->dataColumn = nullptr;
 		d->retransform();
 	}
-}
-
-void KDEPlot::dataColumnNameChanged() {
-	Q_D(KDEPlot);
-	setDataColumnPath(d->dataColumn->path());
 }
 
 // ##############################################################################
@@ -428,6 +441,7 @@ void KDEPlot::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("bandwidthType"), QString::number(d->bandwidthType));
 	writer->writeAttribute(QStringLiteral("bandwidth"), QString::number(d->bandwidth));
 	writer->writeAttribute(QStringLiteral("visible"), QString::number(d->isVisible()));
+	writer->writeAttribute(QStringLiteral("legendVisible"), QString::number(d->legendVisible));
 	writer->writeEndElement();
 
 	// save the internal columns, above only the references to them were saved
@@ -471,6 +485,8 @@ bool KDEPlot::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("kernelType", kernelType, nsl_kernel_type);
 			READ_INT_VALUE("bandwidthType", bandwidthType, nsl_kde_bandwidth_type);
 			READ_DOUBLE_VALUE("bandwidth", bandwidth);
+			READ_INT_VALUE("legendVisible", legendVisible, bool);
+
 			str = attribs.value(QStringLiteral("visible")).toString();
 			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs(QStringLiteral("visible")).toString());

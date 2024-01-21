@@ -61,7 +61,6 @@ private Q_SLOTS:
 
 	void lockChanged(bool);
 	void bindingChanged(bool checked);
-	void visibilityChanged(bool);
 
 	// SLOTs for changes triggered in Image
 	void imageFileNameChanged(const QString&);
@@ -79,7 +78,6 @@ private Q_SLOTS:
 	void imageRotationAngleChanged(qreal);
 
 	void imageLockChanged(bool);
-	void imageVisibleChanged(bool);
 
 Q_SIGNALS:
 	void info(const QString&);

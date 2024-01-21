@@ -187,6 +187,7 @@ void XYCurveDock::setupGeneral() {
 	uiGeneralTab.setupUi(generalTab);
 	setPlotRangeCombobox(uiGeneralTab.cbPlotRanges);
 	setBaseWidgets(uiGeneralTab.leName, uiGeneralTab.teComment);
+	setVisibilityWidgets(uiGeneralTab.chkVisible, uiGeneralTab.chkLegendVisible);
 
 	auto* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setContentsMargins(0, 0, 0, 0);
@@ -204,11 +205,8 @@ void XYCurveDock::setupGeneral() {
 	gridLayout->addWidget(cbYColumn, 5, 2, 1, 1);
 
 	// General
-	connect(uiGeneralTab.chkLegendVisible, &QCheckBox::toggled, this, &XYCurveDock::legendVisibleChanged);
-	connect(uiGeneralTab.chkVisible, &QCheckBox::clicked, this, &XYCurveDock::visibilityChanged);
 	connect(cbXColumn, &TreeViewComboBox::currentModelIndexChanged, this, &XYCurveDock::xColumnChanged);
 	connect(cbYColumn, &TreeViewComboBox::currentModelIndexChanged, this, &XYCurveDock::yColumnChanged);
-	connect(uiGeneralTab.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYCurveDock::plotRangeChanged);
 }
 
 void XYCurveDock::init() {
@@ -512,8 +510,6 @@ void XYCurveDock::initGeneralTab() {
 	connect(m_curve, &XYCurve::xColumnChanged, this, &XYCurveDock::curveXColumnChanged);
 	connect(m_curve, &XYCurve::yColumnChanged, this, &XYCurveDock::curveYColumnChanged);
 	connect(m_curve, &WorksheetElement::plotRangeListChanged, this, &XYCurveDock::updatePlotRangeList);
-	connect(m_curve, &XYCurve::legendVisibleChanged, this, &XYCurveDock::curveLegendVisibleChanged);
-	connect(m_curve, &WorksheetElement::visibleChanged, this, &XYCurveDock::curveVisibilityChanged);
 }
 
 void XYCurveDock::initTabs() {
@@ -630,20 +626,6 @@ void XYCurveDock::yColumnChanged(const QModelIndex& index) {
 
 	for (auto* curve : m_curvesList)
 		curve->setYColumn(column);
-}
-
-void XYCurveDock::legendVisibleChanged(bool state) {
-	CONDITIONAL_LOCK_RETURN;
-
-	for (auto* curve : m_curvesList)
-		curve->setLegendVisible(state);
-}
-
-void XYCurveDock::visibilityChanged(bool state) {
-	CONDITIONAL_LOCK_RETURN;
-
-	for (auto* curve : m_curvesList)
-		curve->setVisible(state);
 }
 
 // "Line"-tab
@@ -1089,14 +1071,6 @@ void XYCurveDock::curveYColumnChanged(const AbstractColumn* column) {
 	updateValuesWidgets();
 	CONDITIONAL_LOCK_RETURN;
 	cbYColumn->setColumn(column, m_curve->yColumnPath());
-}
-void XYCurveDock::curveLegendVisibleChanged(bool on) {
-	CONDITIONAL_LOCK_RETURN;
-	uiGeneralTab.chkLegendVisible->setChecked(on);
-}
-void XYCurveDock::curveVisibilityChanged(bool on) {
-	CONDITIONAL_LOCK_RETURN;
-	uiGeneralTab.chkVisible->setChecked(on);
 }
 
 // Line-Tab

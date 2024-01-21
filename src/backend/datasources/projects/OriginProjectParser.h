@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : parser for Origin projects
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2017-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2017-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2018-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -32,6 +32,7 @@ class OriginProjectParser : public ProjectParser {
 
 public:
 	OriginProjectParser();
+	~OriginProjectParser() override;
 
 	static bool isOriginProject(const QString& fileName);
 	static QString supportedExtensions();
@@ -53,6 +54,7 @@ private:
 
 	bool loadWorksheet(Worksheet*, bool preview);
 	void loadGraphLayer(const Origin::GraphLayer&, CartesianPlot*, int index, QHash<TextLabel*, QSizeF> textLabelPositions, bool preview);
+	void loadCurves(const Origin::GraphLayer&, CartesianPlot*, int index, const QString& legendText, bool preview);
 	void loadAxes(const Origin::GraphLayer&, CartesianPlot*, int index, const QString& xColumnName, const QString& yColumnName);
 	void loadAxis(const Origin::GraphAxis&, Axis*, int index, const QString& axisTitle = QString()) const;
 	void loadCurve(const Origin::GraphCurve&, XYCurve*) const;
@@ -85,6 +87,7 @@ private:
 	QStringList m_noteNameList;
 	bool m_importUnusedObjects{false};
 	bool m_graphLayerAsPlotArea{true};
+	double elementScalingFactor{1.};
 
 	friend class ProjectImportTest;
 };

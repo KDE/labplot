@@ -3,7 +3,7 @@
 	Project          : LabPlot
 	Description      : widget for editing properties of equation curves
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2014-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2014-2024 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -49,6 +49,7 @@ void XYEquationCurveDock::setupGeneral() {
 	uiGeneralTab.setupUi(generalTab);
 	setPlotRangeCombobox(uiGeneralTab.cbPlotRanges);
 	setBaseWidgets(uiGeneralTab.leName, uiGeneralTab.teComment);
+	setVisibilityWidgets(uiGeneralTab.chkVisible, uiGeneralTab.chkLegendVisible);
 
 	auto* gridLayout = dynamic_cast<QGridLayout*>(generalTab->layout());
 	if (gridLayout) {
@@ -82,7 +83,6 @@ void XYEquationCurveDock::setupGeneral() {
 	uiGeneralTab.teMax->setMaximumHeight(uiGeneralTab.leName->sizeHint().height());
 
 	// Slots
-	connect(uiGeneralTab.chkVisible, &QCheckBox::clicked, this, &XYEquationCurveDock::visibilityChanged);
 	connect(uiGeneralTab.cbType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYEquationCurveDock::typeChanged);
 	connect(uiGeneralTab.teEquation1, &ExpressionTextEdit::expressionChanged, this, &XYEquationCurveDock::enableRecalculate);
 	connect(uiGeneralTab.teEquation2, &ExpressionTextEdit::expressionChanged, this, &XYEquationCurveDock::enableRecalculate);
@@ -94,7 +94,6 @@ void XYEquationCurveDock::setupGeneral() {
 	connect(uiGeneralTab.teMax, &ExpressionTextEdit::expressionChanged, this, &XYEquationCurveDock::enableRecalculate);
 	connect(uiGeneralTab.sbCount, QOverload<int>::of(&QSpinBox::valueChanged), this, &XYEquationCurveDock::enableRecalculate);
 	connect(uiGeneralTab.pbRecalculate, &QPushButton::clicked, this, &XYEquationCurveDock::recalculateClicked);
-	connect(uiGeneralTab.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYEquationCurveDock::plotRangeChanged);
 }
 
 void XYEquationCurveDock::initGeneralTab() {
@@ -110,11 +109,11 @@ void XYEquationCurveDock::initGeneralTab() {
 	uiGeneralTab.teMax->setText(data.max);
 	uiGeneralTab.sbCount->setValue(data.count);
 
+	uiGeneralTab.chkLegendVisible->setChecked(m_curve->legendVisible());
 	uiGeneralTab.chkVisible->setChecked(m_curve->isVisible());
 
 	// Slots
 	connect(m_equationCurve, &XYEquationCurve::equationDataChanged, this, &XYEquationCurveDock::curveEquationDataChanged);
-	connect(m_equationCurve, &WorksheetElement::plotRangeListChanged, this, &XYEquationCurveDock::updatePlotRanges);
 }
 
 /*!
@@ -132,13 +131,9 @@ void XYEquationCurveDock::setCurves(QList<XYCurve*> list) {
 	initTabs();
 	setSymbols(list);
 
-	updatePlotRanges();
+	updatePlotRangeList();
 
 	uiGeneralTab.pbRecalculate->setEnabled(false);
-}
-
-void XYEquationCurveDock::updatePlotRanges() {
-	updatePlotRangeList();
 }
 
 //*************************************************************
@@ -212,7 +207,7 @@ void XYEquationCurveDock::recalculateClicked() {
 		static_cast<XYEquationCurve*>(curve)->setEquationData(data);
 
 	uiGeneralTab.pbRecalculate->setEnabled(false);
-	updatePlotRanges(); // axes range may change when range on auto scale
+	updatePlotRangeList(); // axes range may change when range on auto scale
 }
 
 void XYEquationCurveDock::showConstants() {
@@ -296,7 +291,7 @@ void XYEquationCurveDock::enableRecalculate() {
 	valid = (valid && uiGeneralTab.teMin->isValid() && uiGeneralTab.teMax->isValid());
 	uiGeneralTab.pbRecalculate->setEnabled(valid);
 
-	updatePlotRanges();
+	updatePlotRangeList();
 }
 
 //*************************************************************

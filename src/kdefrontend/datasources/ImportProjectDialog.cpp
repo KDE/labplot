@@ -211,6 +211,9 @@ ImportProjectDialog::~ImportProjectDialog() {
 
 	conf.writeEntry(file, m_cbFileName->currentText());
 	conf.writeXdgListEntry(files, m_cbFileName->urls());
+
+	delete ui.tvPreview->model();
+	delete m_projectParser;
 }
 
 void ImportProjectDialog::setCurrentFolder(const Folder* folder) {
@@ -334,6 +337,7 @@ void ImportProjectDialog::refreshPreview() {
 	}
 #endif
 
+	delete ui.tvPreview->model();
 	ui.tvPreview->setModel(m_projectParser->model());
 	connect(ui.tvPreview->selectionModel(), &QItemSelectionModel::selectionChanged, this, &ImportProjectDialog::selectionChanged);
 
@@ -464,6 +468,7 @@ void ImportProjectDialog::fileNameChanged(const QString& name) {
 	if (!fileExists) {
 		// file doesn't exist -> delete the content preview that is still potentially
 		// available from the previously selected file
+		delete ui.tvPreview->model();
 		ui.tvPreview->setModel(nullptr);
 		m_buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
 		return;

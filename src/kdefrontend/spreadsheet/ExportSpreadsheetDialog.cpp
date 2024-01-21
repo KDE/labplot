@@ -154,8 +154,9 @@ ExportSpreadsheetDialog::~ExportSpreadsheetDialog() {
 	conf.writeEntry("MatrixHorizontalHeader", ui->chkMatrixHHeader->isChecked());
 	conf.writeEntry("FITSTo", ui->cbExportToFITS->currentIndex());
 	conf.writeEntry("FITSSpreadsheetColumnsUnits", ui->chkColumnsAsUnits->isChecked());
-
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
+
+	delete ui;
 }
 
 /*!
