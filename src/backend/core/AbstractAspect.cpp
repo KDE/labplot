@@ -937,7 +937,7 @@ void AbstractAspect::writeCommentElement(QXmlStreamWriter* writer) const {
  * \brief Load comment from an XML element
  */
 bool AbstractAspect::readCommentElement(XmlStreamReader* reader) {
-	setComment(reader->readElementText());
+	d->m_comment = reader->readElementText();
 	return true;
 }
 

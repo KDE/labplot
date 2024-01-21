@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : parser for Origin projects
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2017-2018 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2017-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2017-2024 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -48,6 +48,10 @@
 OriginProjectParser::OriginProjectParser()
 	: ProjectParser() {
 	m_topLevelClasses = {AspectType::Folder, AspectType::Workbook, AspectType::Spreadsheet, AspectType::Matrix, AspectType::Worksheet, AspectType::Note};
+}
+
+OriginProjectParser::~OriginProjectParser() {
+	delete m_originFile;
 }
 
 bool OriginProjectParser::isOriginProject(const QString& fileName) {
