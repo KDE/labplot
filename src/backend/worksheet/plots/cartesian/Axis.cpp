@@ -2675,8 +2675,9 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 
 	prepareGeometryChange();
 
+	QPainterPath tmpPath; // temp path used to calculate the bounding box for all elements that the axis consists of
+
 	if (linePath.isEmpty()) {
-		m_shape = QPainterPath();
 		m_boundingRectangle = QRectF();
 		title->setPositionInvalid(true);
 		if (plot())
@@ -2687,10 +2688,10 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 	}
 
 	const auto& linePen = line->pen();
-	m_shape = WorksheetElement::shapeFromPath(linePath, linePen);
-	m_shape.addPath(WorksheetElement::shapeFromPath(arrowPath, linePen));
-	m_shape.addPath(WorksheetElement::shapeFromPath(majorTicksPath, majorTicksLine->pen()));
-	m_shape.addPath(WorksheetElement::shapeFromPath(minorTicksPath, minorTicksLine->pen()));
+	tmpPath = WorksheetElement::shapeFromPath(linePath, linePen);
+	tmpPath.addPath(WorksheetElement::shapeFromPath(arrowPath, linePen));
+	tmpPath.addPath(WorksheetElement::shapeFromPath(majorTicksPath, majorTicksLine->pen()));
+	tmpPath.addPath(WorksheetElement::shapeFromPath(minorTicksPath, minorTicksLine->pen()));
 
 	QPainterPath tickLabelsPath = QPainterPath();
 	if (labelsPosition != Axis::LabelsPosition::NoLabels) {
@@ -2716,11 +2717,12 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 
 			tickLabelsPath.addPath(WorksheetElement::shapeFromPath(tempPath, linePen));
 		}
-		m_shape.addPath(WorksheetElement::shapeFromPath(tickLabelsPath, QPen()));
+		tmpPath.addPath(WorksheetElement::shapeFromPath(tickLabelsPath, QPen()));
 	}
 
 	const auto margin = (double)hoverSelectionEffectPenWidth / 2;
-	const auto axisRect = m_shape.boundingRect().marginsRemoved(QMarginsF(margin, margin, margin, margin));
+	const auto axisRect = tmpPath.boundingRect().marginsRemoved(QMarginsF(margin, margin, margin, margin));
+	tmpPath.addRect(axisRect); // add rect instead of the actual path for ticks - this is done for performance reasons,the calculation for many ticks and long tick texts can be very expensive
 
 	// add title label, if available
 	QTextDocument doc; // text may be Html, so check if plain text is empty
@@ -2747,14 +2749,13 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 				title->setPosition(QPointF(rect.topLeft().x() + offsetX, (rect.topLeft().y() + rect.bottomLeft().y()) / 2. - titleOffsetY));
 			}
 			titlePath = WorksheetElement::shapeFromPath(title->graphicsItem()->mapToParent(title->graphicsItem()->shape()), linePen);
-			m_shape.addPath(titlePath);
+			tmpPath.addPath(titlePath);
 		}
 	}
 
-	m_boundingRectangle = m_shape.boundingRect();
+	m_boundingRectangle = tmpPath.boundingRect();
 	m_shape = QPainterPath();
-	m_shape.addRect(axisRect); // This is done for performance reasons, because for many ticks, the shape is really complicated and slows down the plot insanely
-	m_shape.addPath(titlePath);
+	m_shape.addRect(m_boundingRectangle);
 
 	// if the axis goes beyond the current bounding box of the plot (too high offset is used, too long labels etc.)
 	// request a prepareGeometryChange() for the plot in order to properly keep track of geometry changes
