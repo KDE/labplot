@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-01-21 01:34+0000\n"
+"POT-Creation-Date: 2024-01-22 01:56+0000\n"
 "PO-Revision-Date: 2024-01-08 21:56+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -2209,17 +2209,17 @@ msgstr "Aygıt zaman aşımına uğradı."
 msgid "The following error occurred: %1."
 msgstr "Şu hata oluştu: %1."
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1114
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1118
 #, kde-format
 msgid "Plot%1"
 msgstr "%1 çiz"
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1277
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1281
 #, kde-format
 msgid "legend"
 msgstr "gösterge"
 
-#: src/backend/datasources/projects/ProjectParser.cpp:95
+#: src/backend/datasources/projects/ProjectParser.cpp:99
 #, kde-format
 msgid "%1: Import from %2"
 msgstr "%1: %2 konumundan içe aktar"
@@ -11692,7 +11692,7 @@ msgid "Connecting to '%1:%2' timed out."
 msgstr "'%1:%2' konumuna bağlantı zaman aşımına uğradı."
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:83
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:481
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:486
 #, kde-format
 msgid "Add new folder"
 msgstr "Yeni klasör ekle"
@@ -11773,7 +11773,7 @@ msgstr ""
 "katman için aynı çizim alanında yeni bir koordinat sistemi (veri erimi) "
 "oluşturulur</li></ul>"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:261
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:264
 #, kde-format
 msgid ""
 "The object listed below already exists in target folder and will be "
@@ -11786,57 +11786,57 @@ msgstr[0] ""
 msgstr[1] ""
 "Aşağıda listelenen nesneler zaten hedef klasörde var ve üzerine yazılacak:"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:267
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:270
 #, kde-format
 msgid "Do you want to proceed?"
 msgstr "Sürdürmek istiyor musunuz?"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:271
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:275
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:274
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:278
 #, kde-format
 msgid "Override existing objects?"
 msgstr "Var olan nesnelerin üzerine yazılsın mı?"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:308
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:311
 #, kde-format
 msgid "Project data imported in %1 seconds."
 msgstr "Proje verisi, %1 saniyede içe aktarıldı."
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:401
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:405
 #, kde-format
 msgid "Close the dialog and import the selected objects."
 msgstr "İletişim kutusunu kapatın ve seçili nesneleri içe aktarın."
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:403
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:407
 #, kde-format
 msgid "Select object(s) to be imported."
 msgstr "İçe aktarılacak nesneleri seçin."
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:418
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:422
 #, kde-format
 msgctxt "@title:window"
 msgid "Open LabPlot Project"
 msgstr "LabPlot Projesi Aç"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:420
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:424
 #: src/kdefrontend/MainWin.cpp:1535
 #, kde-format
 msgid "LabPlot Projects (%1)"
 msgstr "LabPlot Projeleri (%1)"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:424
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:428
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Origin Project"
 msgstr "Origin Projesi Aç"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:426
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:430
 #: src/kdefrontend/MainWin.cpp:1540
 #, kde-format
 msgid "Origin Projects (%1)"
 msgstr "Origin Projeleri (%1)"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:481
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:486
 #, kde-format
 msgid "Folder name:"
 msgstr "Klasör adı:"
@@ -13684,272 +13684,272 @@ msgid ""
 "installation."
 msgstr "Örnek koleksiyon dosyası %1 açılamadı. Lütfen kurulumunuzu denetleyin."
 
-#: src/kdefrontend/GuiObserver.cpp:191 src/kdefrontend/MainWin.cpp:1441
+#: src/kdefrontend/GuiObserver.cpp:190 src/kdefrontend/MainWin.cpp:1441
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties"
 msgstr "Özellikler"
 
-#: src/kdefrontend/GuiObserver.cpp:227
+#: src/kdefrontend/GuiObserver.cpp:226
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Spreadsheet"
 msgstr "Özellikler: Hesap Tablosu"
 
-#: src/kdefrontend/GuiObserver.cpp:232
+#: src/kdefrontend/GuiObserver.cpp:231
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Column Statistics"
 msgstr "Özellikler: Sütun İstatistikleri"
 
-#: src/kdefrontend/GuiObserver.cpp:242
+#: src/kdefrontend/GuiObserver.cpp:241
 #, kde-format
 msgctxt "@title:window %1 is a Cantor backend"
 msgid "%1 Worksheet"
 msgstr "%1 Çalışma sayfası"
 
-#: src/kdefrontend/GuiObserver.cpp:247
+#: src/kdefrontend/GuiObserver.cpp:246
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Column"
 msgstr "Özellikler: Sütun"
 
-#: src/kdefrontend/GuiObserver.cpp:254
+#: src/kdefrontend/GuiObserver.cpp:253
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Matrix"
 msgstr "Özellikler: Matris"
 
-#: src/kdefrontend/GuiObserver.cpp:259
+#: src/kdefrontend/GuiObserver.cpp:258
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Worksheet"
 msgstr "Özellikler: Çalışma Sayfası"
 
-#: src/kdefrontend/GuiObserver.cpp:265
+#: src/kdefrontend/GuiObserver.cpp:264
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Plot Area"
 msgstr "Özellikler: Çizim Alanı"
 
-#: src/kdefrontend/GuiObserver.cpp:271
+#: src/kdefrontend/GuiObserver.cpp:270
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Legend"
 msgstr "Özellikler: Gösterge"
 
-#: src/kdefrontend/GuiObserver.cpp:276
+#: src/kdefrontend/GuiObserver.cpp:275
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Axis"
 msgstr "Özellikler: Eksen"
 
-#: src/kdefrontend/GuiObserver.cpp:281
+#: src/kdefrontend/GuiObserver.cpp:280
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: XY-Curve"
 msgstr "Özellikler: XY Eğrisi"
 
-#: src/kdefrontend/GuiObserver.cpp:286
+#: src/kdefrontend/GuiObserver.cpp:285
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: XY-Equation"
 msgstr "Özellikler: XY Denklemi"
 
-#: src/kdefrontend/GuiObserver.cpp:291
+#: src/kdefrontend/GuiObserver.cpp:290
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Data Reduction"
 msgstr "Özellikler: Veri İndirgeme"
 
-#: src/kdefrontend/GuiObserver.cpp:307
+#: src/kdefrontend/GuiObserver.cpp:306
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Differentiation"
 msgstr "Özellikler: Türev Alma"
 
-#: src/kdefrontend/GuiObserver.cpp:312
+#: src/kdefrontend/GuiObserver.cpp:311
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Integration"
 msgstr "Özellikler: Tümleştirme"
 
-#: src/kdefrontend/GuiObserver.cpp:317
+#: src/kdefrontend/GuiObserver.cpp:316
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Interpolation"
 msgstr "Özellikler: Aradeğerleme"
 
-#: src/kdefrontend/GuiObserver.cpp:322
+#: src/kdefrontend/GuiObserver.cpp:321
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Smoothing"
 msgstr "Özellikler: Pürüzsüzleştirme"
 
-#: src/kdefrontend/GuiObserver.cpp:327
+#: src/kdefrontend/GuiObserver.cpp:326
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Fit"
 msgstr "Özellikler: Sığdır"
 
-#: src/kdefrontend/GuiObserver.cpp:332
+#: src/kdefrontend/GuiObserver.cpp:331
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Fourier Transform"
 msgstr "Özellikler: Fourier Dönüşümü"
 
-#: src/kdefrontend/GuiObserver.cpp:337
+#: src/kdefrontend/GuiObserver.cpp:336
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Hilbert Transform"
 msgstr "Özellikler: Hilbert Dönüşümü"
 
-#: src/kdefrontend/GuiObserver.cpp:342
+#: src/kdefrontend/GuiObserver.cpp:341
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Fourier Filter"
 msgstr "Özellikler: Fourier Süzgeci"
 
-#: src/kdefrontend/GuiObserver.cpp:347
+#: src/kdefrontend/GuiObserver.cpp:346
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Convolution/Deconvolution"
 msgstr "Özellikler: Evrişim/Ters Evrişim"
 
-#: src/kdefrontend/GuiObserver.cpp:352
+#: src/kdefrontend/GuiObserver.cpp:351
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Auto-/Cross-Correlation"
 msgstr "Özellikler: Otomatik/Çapraz Bağlılık"
 
-#: src/kdefrontend/GuiObserver.cpp:357
+#: src/kdefrontend/GuiObserver.cpp:356
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Histogram"
 msgstr "Özellikler: Histogram"
 
-#: src/kdefrontend/GuiObserver.cpp:362
+#: src/kdefrontend/GuiObserver.cpp:361
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Bar Plot"
 msgstr "Özellikler: Çubuk Çizim"
 
-#: src/kdefrontend/GuiObserver.cpp:367
+#: src/kdefrontend/GuiObserver.cpp:366
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Lollipop Plot"
 msgstr "Özellikler: Lolipop Çizim"
 
-#: src/kdefrontend/GuiObserver.cpp:372
+#: src/kdefrontend/GuiObserver.cpp:371
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Box Plot"
 msgstr "Özellikler: Kutu Çizim"
 
-#: src/kdefrontend/GuiObserver.cpp:377
+#: src/kdefrontend/GuiObserver.cpp:376
 #, kde-format
 msgctxt "@title:window"
 msgid "KDE Plot"
 msgstr "KDE Çizimi"
 
-#: src/kdefrontend/GuiObserver.cpp:382
+#: src/kdefrontend/GuiObserver.cpp:381
 #, kde-format
 msgctxt "@title:window"
 msgid "Q-Q Plot"
 msgstr "Q-Q Çizimi"
 
-#: src/kdefrontend/GuiObserver.cpp:387
+#: src/kdefrontend/GuiObserver.cpp:386
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Text Label"
 msgstr "Özellikler: Metin Etiketi"
 
-#: src/kdefrontend/GuiObserver.cpp:392
+#: src/kdefrontend/GuiObserver.cpp:391
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Image"
 msgstr "Özellikler: Görsel"
 
-#: src/kdefrontend/GuiObserver.cpp:397
+#: src/kdefrontend/GuiObserver.cpp:396
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Custom Point"
 msgstr "Özellikler: Özel Nokta"
 
-#: src/kdefrontend/GuiObserver.cpp:402
+#: src/kdefrontend/GuiObserver.cpp:401
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Reference Line"
 msgstr "Özellikler: Başvuru Çizgisi"
 
-#: src/kdefrontend/GuiObserver.cpp:407
+#: src/kdefrontend/GuiObserver.cpp:406
 #, kde-format
 msgctxt "@title:window"
 msgid "Reference Range"
 msgstr "Başvuru Erimi"
 
-#: src/kdefrontend/GuiObserver.cpp:412
+#: src/kdefrontend/GuiObserver.cpp:411
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Datapicker Curve"
 msgstr "Özellikler: Veri Seçicisi Eğrisi"
 
-#: src/kdefrontend/GuiObserver.cpp:417
+#: src/kdefrontend/GuiObserver.cpp:416
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Data Extractor"
 msgstr "Özellikler: Veri Çıkarma"
 
-#: src/kdefrontend/GuiObserver.cpp:427
+#: src/kdefrontend/GuiObserver.cpp:426
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Project"
 msgstr "Özellikler: Proje"
 
-#: src/kdefrontend/GuiObserver.cpp:437
+#: src/kdefrontend/GuiObserver.cpp:436
 #, kde-format
 msgctxt "@title:window %1 is a Cantor backend"
 msgid "%1 Notebook"
 msgstr "%1 Defteri"
 
-#: src/kdefrontend/GuiObserver.cpp:439
+#: src/kdefrontend/GuiObserver.cpp:438
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Notebook"
 msgstr "Özellikler: Defter"
 
-#: src/kdefrontend/GuiObserver.cpp:445
+#: src/kdefrontend/GuiObserver.cpp:444
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Notes"
 msgstr "Özellikler: Notlar"
 
-#: src/kdefrontend/GuiObserver.cpp:450
+#: src/kdefrontend/GuiObserver.cpp:449
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Info Element"
 msgstr "Özellikler: Bilgi Ögesi"
 
-#: src/kdefrontend/GuiObserver.cpp:457 src/kdefrontend/GuiObserver.cpp:464
-#: src/kdefrontend/GuiObserver.cpp:471
+#: src/kdefrontend/GuiObserver.cpp:456 src/kdefrontend/GuiObserver.cpp:463
+#: src/kdefrontend/GuiObserver.cpp:470
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: MQTT Data Source"
 msgstr "Özellikler: MQTT Veri Kaynağı"
 
-#: src/kdefrontend/GuiObserver.cpp:477
+#: src/kdefrontend/GuiObserver.cpp:476
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Live Data Source"
 msgstr "Özellikler: Canlı Veri Kaynağı"
 
-#: src/kdefrontend/GuiObserver.cpp:491
+#: src/kdefrontend/GuiObserver.cpp:490
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Folder"
 msgstr "Özellikler: Klasör"
 
-#: src/kdefrontend/GuiObserver.cpp:498
+#: src/kdefrontend/GuiObserver.cpp:497
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Workbook"

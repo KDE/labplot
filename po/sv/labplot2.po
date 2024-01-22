@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-01-21 01:34+0000\n"
+"POT-Creation-Date: 2024-01-22 01:56+0000\n"
 "PO-Revision-Date: 2024-01-04 20:52+0100\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -2205,17 +2205,17 @@ msgstr "Enheten överskred tidsgräns."
 msgid "The following error occurred: %1."
 msgstr "Följande fel uppstod: %1."
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1114
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1118
 #, kde-format
 msgid "Plot%1"
 msgstr "Diagram %1"
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1277
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1281
 #, kde-format
 msgid "legend"
 msgstr "förklaring"
 
-#: src/backend/datasources/projects/ProjectParser.cpp:95
+#: src/backend/datasources/projects/ProjectParser.cpp:99
 #, kde-format
 msgid "%1: Import from %2"
 msgstr "%1; Importera från %2"
@@ -11692,7 +11692,7 @@ msgid "Connecting to '%1:%2' timed out."
 msgstr "Tidsgräns för anslutning till '%1:%2' gick ut."
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:83
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:481
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:486
 #, kde-format
 msgid "Add new folder"
 msgstr "Lägg till ny katalog"
@@ -11772,7 +11772,7 @@ msgstr ""
 "koordinatsystem - ett nytt koordinatsystem (dataintervall) på samma "
 "diagramområde skapas för varje lager</li></ul>"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:261
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:264
 #, kde-format
 msgid ""
 "The object listed below already exists in target folder and will be "
@@ -11787,57 +11787,57 @@ msgstr[1] ""
 "Objekten som listas nedan finns redan i målkatalogen och kommer att skrivas "
 "över:"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:267
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:270
 #, kde-format
 msgid "Do you want to proceed?"
 msgstr "Vill du fortsätta?"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:271
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:275
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:274
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:278
 #, kde-format
 msgid "Override existing objects?"
 msgstr "Skriv över befintliga objekt?"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:308
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:311
 #, kde-format
 msgid "Project data imported in %1 seconds."
 msgstr "Projektdata importerad på %1 sekunder."
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:401
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:405
 #, kde-format
 msgid "Close the dialog and import the selected objects."
 msgstr "Stäng dialogrutan och importera markerade objekt."
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:403
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:407
 #, kde-format
 msgid "Select object(s) to be imported."
 msgstr "Markera objekt att importera."
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:418
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:422
 #, kde-format
 msgctxt "@title:window"
 msgid "Open LabPlot Project"
 msgstr "Öppna LabPlot-projekt"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:420
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:424
 #: src/kdefrontend/MainWin.cpp:1535
 #, kde-format
 msgid "LabPlot Projects (%1)"
 msgstr "LabPlot-projekt (%1)"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:424
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:428
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Origin Project"
 msgstr "Öppna Origin-projekt"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:426
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:430
 #: src/kdefrontend/MainWin.cpp:1540
 #, kde-format
 msgid "Origin Projects (%1)"
 msgstr "Origin-projekt (%1)"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:481
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:486
 #, kde-format
 msgid "Folder name:"
 msgstr "Katalognamn:"
@@ -13691,272 +13691,272 @@ msgid ""
 "installation."
 msgstr "Kunde inte hitta exempelsamlingsfilen %1. Kontrollera installationen."
 
-#: src/kdefrontend/GuiObserver.cpp:191 src/kdefrontend/MainWin.cpp:1441
+#: src/kdefrontend/GuiObserver.cpp:190 src/kdefrontend/MainWin.cpp:1441
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties"
 msgstr "Egenskaper"
 
-#: src/kdefrontend/GuiObserver.cpp:227
+#: src/kdefrontend/GuiObserver.cpp:226
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Spreadsheet"
 msgstr "Egenskaper: Kalkylark"
 
-#: src/kdefrontend/GuiObserver.cpp:232
+#: src/kdefrontend/GuiObserver.cpp:231
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Column Statistics"
 msgstr "Egenskaper: Kolumnstatistik"
 
-#: src/kdefrontend/GuiObserver.cpp:242
+#: src/kdefrontend/GuiObserver.cpp:241
 #, kde-format
 msgctxt "@title:window %1 is a Cantor backend"
 msgid "%1 Worksheet"
 msgstr "%1 arbetsblad"
 
-#: src/kdefrontend/GuiObserver.cpp:247
+#: src/kdefrontend/GuiObserver.cpp:246
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Column"
 msgstr "Egenskaper: Kolumn"
 
-#: src/kdefrontend/GuiObserver.cpp:254
+#: src/kdefrontend/GuiObserver.cpp:253
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Matrix"
 msgstr "Egenskaper: Matris"
 
-#: src/kdefrontend/GuiObserver.cpp:259
+#: src/kdefrontend/GuiObserver.cpp:258
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Worksheet"
 msgstr "Egenskaper: Arbetsblad"
 
-#: src/kdefrontend/GuiObserver.cpp:265
+#: src/kdefrontend/GuiObserver.cpp:264
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Plot Area"
 msgstr "Egenskaper: Diagramområde"
 
-#: src/kdefrontend/GuiObserver.cpp:271
+#: src/kdefrontend/GuiObserver.cpp:270
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Legend"
 msgstr "Egenskaper: Förklaring"
 
-#: src/kdefrontend/GuiObserver.cpp:276
+#: src/kdefrontend/GuiObserver.cpp:275
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Axis"
 msgstr "Egenskaper: Axel"
 
-#: src/kdefrontend/GuiObserver.cpp:281
+#: src/kdefrontend/GuiObserver.cpp:280
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: XY-Curve"
 msgstr "Egenskaper: XY-kurva"
 
-#: src/kdefrontend/GuiObserver.cpp:286
+#: src/kdefrontend/GuiObserver.cpp:285
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: XY-Equation"
 msgstr "Egenskaper: XY-ekvation"
 
-#: src/kdefrontend/GuiObserver.cpp:291
+#: src/kdefrontend/GuiObserver.cpp:290
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Data Reduction"
 msgstr "Egenskaper: Datareduktion"
 
-#: src/kdefrontend/GuiObserver.cpp:307
+#: src/kdefrontend/GuiObserver.cpp:306
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Differentiation"
 msgstr "Egenskaper: Derivering"
 
-#: src/kdefrontend/GuiObserver.cpp:312
+#: src/kdefrontend/GuiObserver.cpp:311
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Integration"
 msgstr "Egenskaper: Integrering"
 
-#: src/kdefrontend/GuiObserver.cpp:317
+#: src/kdefrontend/GuiObserver.cpp:316
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Interpolation"
 msgstr "Egenskaper: Interpolation"
 
-#: src/kdefrontend/GuiObserver.cpp:322
+#: src/kdefrontend/GuiObserver.cpp:321
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Smoothing"
 msgstr "Egenskaper: Utjämning"
 
-#: src/kdefrontend/GuiObserver.cpp:327
+#: src/kdefrontend/GuiObserver.cpp:326
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Fit"
 msgstr "Egenskaper: Anpassa"
 
-#: src/kdefrontend/GuiObserver.cpp:332
+#: src/kdefrontend/GuiObserver.cpp:331
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Fourier Transform"
 msgstr "Egenskaper: Fouriertransform"
 
-#: src/kdefrontend/GuiObserver.cpp:337
+#: src/kdefrontend/GuiObserver.cpp:336
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Hilbert Transform"
 msgstr "Egenskaper: Hilberttransform"
 
-#: src/kdefrontend/GuiObserver.cpp:342
+#: src/kdefrontend/GuiObserver.cpp:341
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Fourier Filter"
 msgstr "Egenskaper: Fourierfilter"
 
-#: src/kdefrontend/GuiObserver.cpp:347
+#: src/kdefrontend/GuiObserver.cpp:346
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Convolution/Deconvolution"
 msgstr "Egenskaper: Faltning eller dekonvolution"
 
-#: src/kdefrontend/GuiObserver.cpp:352
+#: src/kdefrontend/GuiObserver.cpp:351
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Auto-/Cross-Correlation"
 msgstr "Egenskaper: Automatisk korrelation eller korskorrelation"
 
-#: src/kdefrontend/GuiObserver.cpp:357
+#: src/kdefrontend/GuiObserver.cpp:356
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Histogram"
 msgstr "Egenskaper: Histogram"
 
-#: src/kdefrontend/GuiObserver.cpp:362
+#: src/kdefrontend/GuiObserver.cpp:361
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Bar Plot"
 msgstr "Egenskaper: Stapeldiagram"
 
-#: src/kdefrontend/GuiObserver.cpp:367
+#: src/kdefrontend/GuiObserver.cpp:366
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Lollipop Plot"
 msgstr "Egenskaper: Klubbdiagram"
 
-#: src/kdefrontend/GuiObserver.cpp:372
+#: src/kdefrontend/GuiObserver.cpp:371
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Box Plot"
 msgstr "Egenskaper: Låddiagram"
 
-#: src/kdefrontend/GuiObserver.cpp:377
+#: src/kdefrontend/GuiObserver.cpp:376
 #, kde-format
 msgctxt "@title:window"
 msgid "KDE Plot"
 msgstr "KDE-diagram"
 
-#: src/kdefrontend/GuiObserver.cpp:382
+#: src/kdefrontend/GuiObserver.cpp:381
 #, kde-format
 msgctxt "@title:window"
 msgid "Q-Q Plot"
 msgstr "Q-Q-diagram"
 
-#: src/kdefrontend/GuiObserver.cpp:387
+#: src/kdefrontend/GuiObserver.cpp:386
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Text Label"
 msgstr "Egenskaper: Textbeteckning"
 
-#: src/kdefrontend/GuiObserver.cpp:392
+#: src/kdefrontend/GuiObserver.cpp:391
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Image"
 msgstr "Egenskaper: Bild"
 
-#: src/kdefrontend/GuiObserver.cpp:397
+#: src/kdefrontend/GuiObserver.cpp:396
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Custom Point"
 msgstr "Egenskaper: Egen punkt"
 
-#: src/kdefrontend/GuiObserver.cpp:402
+#: src/kdefrontend/GuiObserver.cpp:401
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Reference Line"
 msgstr "Egenskaper: Referenslinje"
 
-#: src/kdefrontend/GuiObserver.cpp:407
+#: src/kdefrontend/GuiObserver.cpp:406
 #, kde-format
 msgctxt "@title:window"
 msgid "Reference Range"
 msgstr "Referensintervall"
 
-#: src/kdefrontend/GuiObserver.cpp:412
+#: src/kdefrontend/GuiObserver.cpp:411
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Datapicker Curve"
 msgstr "Egenskaper: Dataväljarkurva"
 
-#: src/kdefrontend/GuiObserver.cpp:417
+#: src/kdefrontend/GuiObserver.cpp:416
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Data Extractor"
 msgstr "Egenskaper: Dataextrahering"
 
-#: src/kdefrontend/GuiObserver.cpp:427
+#: src/kdefrontend/GuiObserver.cpp:426
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Project"
 msgstr "Egenskaper: Projekt"
 
-#: src/kdefrontend/GuiObserver.cpp:437
+#: src/kdefrontend/GuiObserver.cpp:436
 #, kde-format
 msgctxt "@title:window %1 is a Cantor backend"
 msgid "%1 Notebook"
 msgstr "%1 anteckningsblock"
 
-#: src/kdefrontend/GuiObserver.cpp:439
+#: src/kdefrontend/GuiObserver.cpp:438
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Notebook"
 msgstr "Egenskaper: Anteckningsblock"
 
-#: src/kdefrontend/GuiObserver.cpp:445
+#: src/kdefrontend/GuiObserver.cpp:444
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Notes"
 msgstr "Egenskaper: Anteckningar"
 
-#: src/kdefrontend/GuiObserver.cpp:450
+#: src/kdefrontend/GuiObserver.cpp:449
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Info Element"
 msgstr "Egenskaper: Informationselement"
 
-#: src/kdefrontend/GuiObserver.cpp:457 src/kdefrontend/GuiObserver.cpp:464
-#: src/kdefrontend/GuiObserver.cpp:471
+#: src/kdefrontend/GuiObserver.cpp:456 src/kdefrontend/GuiObserver.cpp:463
+#: src/kdefrontend/GuiObserver.cpp:470
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: MQTT Data Source"
 msgstr "Egenskaper: MQTT-datakälla"
 
-#: src/kdefrontend/GuiObserver.cpp:477
+#: src/kdefrontend/GuiObserver.cpp:476
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Live Data Source"
 msgstr "Egenskaper: Direktdatakälla"
 
-#: src/kdefrontend/GuiObserver.cpp:491
+#: src/kdefrontend/GuiObserver.cpp:490
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Folder"
 msgstr "Egenskaper: Katalog"
 
-#: src/kdefrontend/GuiObserver.cpp:498
+#: src/kdefrontend/GuiObserver.cpp:497
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Workbook"

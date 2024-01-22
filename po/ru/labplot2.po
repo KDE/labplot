@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-01-21 01:34+0000\n"
+"POT-Creation-Date: 2024-01-22 01:56+0000\n"
 "PO-Revision-Date: 2023-11-13 14:41+0300\n"
 "Last-Translator: Sergey Kazorin <translation-team@basealt.ru>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -2246,18 +2246,18 @@ msgstr "Время ожидания устройства истекло."
 msgid "The following error occurred: %1."
 msgstr "Произошла следующая ошибка: %1."
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1114
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1118
 #, kde-format
 msgid "Plot%1"
 msgstr "График%1"
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1277
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1281
 #, kde-format
 msgid "legend"
 msgstr "легенда"
 
 # BUGME: please add semantic ctxt --aspotashev
-#: src/backend/datasources/projects/ProjectParser.cpp:95
+#: src/backend/datasources/projects/ProjectParser.cpp:99
 #, kde-format
 msgid "%1: Import from %2"
 msgstr "%1: Импорт из %2"
@@ -11960,7 +11960,7 @@ msgstr "Истекло время ожидания подключения к «%
 
 # BUGME: please add ctxt --aspotashev
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:83
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:481
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:486
 #, kde-format
 msgid "Add new folder"
 msgstr "Создание новой папки"
@@ -12035,7 +12035,7 @@ msgid ""
 "every layer</li></ul>"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:261
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:264
 #, kde-format
 msgid ""
 "The object listed below already exists in target folder and will be "
@@ -12052,61 +12052,61 @@ msgstr[2] ""
 msgstr[3] ""
 "Указанный ниже объект уже находится в целевом каталоге и будет перезаписан:"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:267
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:270
 #, kde-format
 msgid "Do you want to proceed?"
 msgstr "Продолжить?"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:271
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:275
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:274
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:278
 #, kde-format
 msgid "Override existing objects?"
 msgstr "Перезаписать существующие объекты?"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:308
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:311
 #, kde-format
 msgid "Project data imported in %1 seconds."
 msgstr "Данные проекта были импортированы за %1 сек."
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:401
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:405
 #, kde-format
 msgid "Close the dialog and import the selected objects."
 msgstr "Закрыть диалоговое окно и импортировать выбранные объекты."
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:403
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:407
 #, kde-format
 msgid "Select object(s) to be imported."
 msgstr "Выбрать импортируемый объект (объекты)."
 
 # BUGME: please add @title:window --aspotashev
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:418
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:422
 #, kde-format
 msgctxt "@title:window"
 msgid "Open LabPlot Project"
 msgstr "Открытие проекта LabPlot"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:420
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:424
 #: src/kdefrontend/MainWin.cpp:1535
 #, kde-format
 msgid "LabPlot Projects (%1)"
 msgstr "Проекты LabPlot (%1)"
 
 # BUGME: please add @title:window --aspotashev
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:424
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:428
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Origin Project"
 msgstr "Открытие проекта Origin"
 
 # BUGME: please add @title:window --aspotashev
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:426
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:430
 #: src/kdefrontend/MainWin.cpp:1540
 #, kde-format
 msgid "Origin Projects (%1)"
 msgstr "Проекты Origin (%1)"
 
 # BUGME: please add colon (:) to the label in front of text edit --aspotashev
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:481
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:486
 #, kde-format
 msgid "Folder name:"
 msgstr "Имя папки:"
@@ -13995,278 +13995,278 @@ msgstr ""
 "Не удалось открыть файл коллекций примеров %1. Проверьте правильность "
 "установки."
 
-#: src/kdefrontend/GuiObserver.cpp:191 src/kdefrontend/MainWin.cpp:1441
+#: src/kdefrontend/GuiObserver.cpp:190 src/kdefrontend/MainWin.cpp:1441
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties"
 msgstr "Свойства"
 
-#: src/kdefrontend/GuiObserver.cpp:227
+#: src/kdefrontend/GuiObserver.cpp:226
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Properties: Spreadsheet"
 msgstr "&Сортировать таблицу"
 
-#: src/kdefrontend/GuiObserver.cpp:232
+#: src/kdefrontend/GuiObserver.cpp:231
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Properties: Column Statistics"
 msgstr "Статистика по столбцам"
 
 # BUGME: split strings (e.g. toolbar name) --aspotashev
-#: src/kdefrontend/GuiObserver.cpp:242
+#: src/kdefrontend/GuiObserver.cpp:241
 #, kde-format
 msgctxt "@title:window %1 is a Cantor backend"
 msgid "%1 Worksheet"
 msgstr "Лист %1"
 
-#: src/kdefrontend/GuiObserver.cpp:247
+#: src/kdefrontend/GuiObserver.cpp:246
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Properties: Column"
 msgstr "Свойства"
 
-#: src/kdefrontend/GuiObserver.cpp:254
+#: src/kdefrontend/GuiObserver.cpp:253
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Properties: Matrix"
 msgstr "Свойства"
 
-#: src/kdefrontend/GuiObserver.cpp:259
+#: src/kdefrontend/GuiObserver.cpp:258
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Properties: Worksheet"
 msgstr "Весь лист"
 
-#: src/kdefrontend/GuiObserver.cpp:265
+#: src/kdefrontend/GuiObserver.cpp:264
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Properties: Plot Area"
 msgstr "Панель свойств"
 
-#: src/kdefrontend/GuiObserver.cpp:271
+#: src/kdefrontend/GuiObserver.cpp:270
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Properties: Legend"
 msgstr "Свойства"
 
-#: src/kdefrontend/GuiObserver.cpp:276
+#: src/kdefrontend/GuiObserver.cpp:275
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Properties: Axis"
 msgstr "Свойства"
 
-#: src/kdefrontend/GuiObserver.cpp:281
+#: src/kdefrontend/GuiObserver.cpp:280
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Properties: XY-Curve"
 msgstr "Свойства"
 
 # BUGME: please add context --aspotashev
-#: src/kdefrontend/GuiObserver.cpp:286
+#: src/kdefrontend/GuiObserver.cpp:285
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Properties: XY-Equation"
 msgstr "Формула XY"
 
 # BUGME: please add context --aspotashev
-#: src/kdefrontend/GuiObserver.cpp:291
+#: src/kdefrontend/GuiObserver.cpp:290
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Properties: Data Reduction"
 msgstr "Приведение данных"
 
 # BUGME: please split --aspotashev
-#: src/kdefrontend/GuiObserver.cpp:307
+#: src/kdefrontend/GuiObserver.cpp:306
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Properties: Differentiation"
 msgstr "Дифференцирование"
 
-#: src/kdefrontend/GuiObserver.cpp:312
+#: src/kdefrontend/GuiObserver.cpp:311
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Properties: Integration"
 msgstr "Интегрирование"
 
-#: src/kdefrontend/GuiObserver.cpp:317
+#: src/kdefrontend/GuiObserver.cpp:316
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Properties: Interpolation"
 msgstr "Интерполяция"
 
-#: src/kdefrontend/GuiObserver.cpp:322
+#: src/kdefrontend/GuiObserver.cpp:321
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Properties: Smoothing"
 msgstr "Свойства"
 
-#: src/kdefrontend/GuiObserver.cpp:327
+#: src/kdefrontend/GuiObserver.cpp:326
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Properties: Fit"
 msgstr "Свойства"
 
-#: src/kdefrontend/GuiObserver.cpp:332
+#: src/kdefrontend/GuiObserver.cpp:331
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Properties: Fourier Transform"
 msgstr "Трансформация Фурье"
 
-#: src/kdefrontend/GuiObserver.cpp:337
+#: src/kdefrontend/GuiObserver.cpp:336
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Properties: Hilbert Transform"
 msgstr "Трансформация Гилберта"
 
-#: src/kdefrontend/GuiObserver.cpp:342
+#: src/kdefrontend/GuiObserver.cpp:341
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Properties: Fourier Filter"
 msgstr "Фильтр Фурье"
 
 # BUGME: please add context --aspotashev
-#: src/kdefrontend/GuiObserver.cpp:347
+#: src/kdefrontend/GuiObserver.cpp:346
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Properties: Convolution/Deconvolution"
 msgstr "Свёртка/Обратная свёртка"
 
 # BUGME: please add context --aspotashev
-#: src/kdefrontend/GuiObserver.cpp:352
+#: src/kdefrontend/GuiObserver.cpp:351
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Properties: Auto-/Cross-Correlation"
 msgstr "Авто-/Перекрёстная корреляция"
 
-#: src/kdefrontend/GuiObserver.cpp:357
+#: src/kdefrontend/GuiObserver.cpp:356
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Properties: Histogram"
 msgstr "Панель свойств"
 
-#: src/kdefrontend/GuiObserver.cpp:362
+#: src/kdefrontend/GuiObserver.cpp:361
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Properties: Bar Plot"
 msgstr "Свойства"
 
-#: src/kdefrontend/GuiObserver.cpp:367
+#: src/kdefrontend/GuiObserver.cpp:366
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Properties: Lollipop Plot"
 msgstr "Панель свойств"
 
-#: src/kdefrontend/GuiObserver.cpp:372
+#: src/kdefrontend/GuiObserver.cpp:371
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Properties: Box Plot"
 msgstr "Панель свойств"
 
-#: src/kdefrontend/GuiObserver.cpp:377
+#: src/kdefrontend/GuiObserver.cpp:376
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "KDE Plot"
 msgstr "График ЯОП"
 
-#: src/kdefrontend/GuiObserver.cpp:382
+#: src/kdefrontend/GuiObserver.cpp:381
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Q-Q Plot"
 msgstr "Нормальный график К-К"
 
-#: src/kdefrontend/GuiObserver.cpp:387
+#: src/kdefrontend/GuiObserver.cpp:386
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Properties: Text Label"
 msgstr "Панель свойств"
 
-#: src/kdefrontend/GuiObserver.cpp:392
+#: src/kdefrontend/GuiObserver.cpp:391
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Properties: Image"
 msgstr "Свойства"
 
-#: src/kdefrontend/GuiObserver.cpp:397
+#: src/kdefrontend/GuiObserver.cpp:396
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Properties: Custom Point"
 msgstr "Настраиваемая точка"
 
-#: src/kdefrontend/GuiObserver.cpp:402
+#: src/kdefrontend/GuiObserver.cpp:401
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Properties: Reference Line"
 msgstr "Контрольная линия"
 
-#: src/kdefrontend/GuiObserver.cpp:407
+#: src/kdefrontend/GuiObserver.cpp:406
 #, kde-format
 msgctxt "@title:window"
 msgid "Reference Range"
 msgstr "Контрольный интервал"
 
-#: src/kdefrontend/GuiObserver.cpp:412
+#: src/kdefrontend/GuiObserver.cpp:411
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Properties: Datapicker Curve"
 msgstr "Кривая средства извлечения данных"
 
-#: src/kdefrontend/GuiObserver.cpp:417
+#: src/kdefrontend/GuiObserver.cpp:416
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Properties: Data Extractor"
 msgstr "Средство извлечения данных"
 
-#: src/kdefrontend/GuiObserver.cpp:427
+#: src/kdefrontend/GuiObserver.cpp:426
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Properties: Project"
 msgstr "Свойства"
 
-#: src/kdefrontend/GuiObserver.cpp:437
+#: src/kdefrontend/GuiObserver.cpp:436
 #, kde-format
 msgctxt "@title:window %1 is a Cantor backend"
 msgid "%1 Notebook"
 msgstr "Блокнот %1"
 
-#: src/kdefrontend/GuiObserver.cpp:439
+#: src/kdefrontend/GuiObserver.cpp:438
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Properties: Notebook"
 msgstr "Свойства"
 
-#: src/kdefrontend/GuiObserver.cpp:445
+#: src/kdefrontend/GuiObserver.cpp:444
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Properties: Notes"
 msgstr "Свойства"
 
-#: src/kdefrontend/GuiObserver.cpp:450
+#: src/kdefrontend/GuiObserver.cpp:449
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Properties: Info Element"
 msgstr "Информационный элемент"
 
-#: src/kdefrontend/GuiObserver.cpp:457 src/kdefrontend/GuiObserver.cpp:464
-#: src/kdefrontend/GuiObserver.cpp:471
+#: src/kdefrontend/GuiObserver.cpp:456 src/kdefrontend/GuiObserver.cpp:463
+#: src/kdefrontend/GuiObserver.cpp:470
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Properties: MQTT Data Source"
 msgstr "Источник данных MQTT"
 
-#: src/kdefrontend/GuiObserver.cpp:477
+#: src/kdefrontend/GuiObserver.cpp:476
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Properties: Live Data Source"
 msgstr "Источник передачи данных"
 
-#: src/kdefrontend/GuiObserver.cpp:491
+#: src/kdefrontend/GuiObserver.cpp:490
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Properties: Folder"
 msgstr "Панель свойств"
 
-#: src/kdefrontend/GuiObserver.cpp:498
+#: src/kdefrontend/GuiObserver.cpp:497
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Properties: Workbook"
