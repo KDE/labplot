@@ -1057,12 +1057,14 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 	// 			Worksheet::convertToSceneUnits(graph.width/600., Worksheet::Inch),
 	// 			Worksheet::convertToSceneUnits(graph.height/600., Worksheet::Inch));
 	// 	worksheet->setPageRect(size);
-	DEBUG(Q_FUNC_INFO << ", GRAPH width/height (px) = " << graph.width << "/" << graph.height)
+	graphSize.rwidth() = graph.width;
+	graphSize.rheight() = graph.height;
+	DEBUG(Q_FUNC_INFO << ", GRAPH width/height (px) = " << graphSize.width() << "/" << graphSize.height())
 	// Graphic elements in Origin are scaled relative to the dimensions of the page (Format->Page) with 600 DPI (>=9.6), 300 DPI (<9.6)
 	double dpi = 600.;
 	if (m_originFile->version() < 9.6)
 		dpi = 300.;
-	DEBUG(Q_FUNC_INFO << ", GRAPH width/height (mm) = " << graph.width * 25.4 / dpi << "/" << graph.height * 25.4 / dpi)
+	DEBUG(Q_FUNC_INFO << ", GRAPH width/height (mm) = " << graphSize.width() * 25.4 / dpi << "/" << graphSize.height() * 25.4 / dpi)
 	// Origin scales text and plots with the size of the layer when no fixed size is used (Layer properties->Size)
 	// so we scale all text and plots with a scaling factor to the whole view height (295 mm) used as default
 	elementScalingFactor = 295. / (graph.height * 25.4 / dpi);
@@ -1331,13 +1333,40 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 		// const Origin::Color& originColor = originLegend.color;
 
 		// position
-		// TODO: for the first release with OPJ support we put the legend to the bottom left corner,
-		// in the next release we'll evaluate originLegend.clientRect giving the position inside of the whole page in Origin.
-		// In Origin the legend can be placed outside of the plot which is not possible in LabPlot.
+		// TODO: In Origin the legend can be placed outside of the plot which is not possible in LabPlot.
 		// To achieve this we'll need to increase padding area in the plot and to place the legend outside of the plot area.
+		// graphSize (% of page), layer.clientRect (% of layer) -> see loadWorksheet()
+		// DEBUG(Q_FUNC_INFO << ", graph size = " << graphSize.width() << " " << graphSize.height())
+		auto legendRect = originLegend.clientRect;
+		auto layerRect = layer.clientRect; // for % of layer
+		DEBUG(Q_FUNC_INFO << ", LEGEND position (l/t) << " << legendRect.left << "/" << legendRect.top)
+		DEBUG(Q_FUNC_INFO << ", layer position = " << layerRect.left << "/" << layerRect.top)
 		CartesianPlotLegend::PositionWrapper position;
-		position.horizontalPosition = WorksheetElement::HorizontalPosition::Right;
-		position.verticalPosition = WorksheetElement::VerticalPosition::Top;
+		QSizeF relativePosition((legendRect.left - layerRect.left) / (double)(layerRect.right - layerRect.left),
+								(legendRect.top - layerRect.top) / (double)(layerRect.bottom - layerRect.top));
+		DEBUG(Q_FUNC_INFO << ", relative position to layer (l/t) = " << relativePosition.width() << "/" << relativePosition.height())
+		// DEBUG(Q_FUNC_INFO << ", plot are size = " << plot->plotArea()->rect().width() << " " << plot->plotArea()->rect().height())
+		// relativePosition = QSizeF(legendRect.right/(double)graphSize.width(), legendRect.bottom/(double)graphSize.height());
+		// DEBUG(Q_FUNC_INFO << ", relative postion (r b) = " << relativePosition.width() << " " << relativePosition.height())
+		// We don't support relative positions yet: use best fitting left/center/right etc. and position when inside layer (=center)
+		if (relativePosition.width() < 0.)
+			position.horizontalPosition = WorksheetElement::HorizontalPosition::Left;
+		else if (relativePosition.width() > 1.)
+			position.horizontalPosition = WorksheetElement::HorizontalPosition::Right;
+		else {
+			position.horizontalPosition = WorksheetElement::HorizontalPosition::Center;
+			// TODO: set position relative to center (not possible since plot area not know)
+			//  position.point.setX(relativePosition.width());
+			//  position.point.setY(relativePosition.height());
+		}
+		if (relativePosition.height() < 0.)
+			position.verticalPosition = WorksheetElement::VerticalPosition::Top;
+		else if (relativePosition.height() > 1.)
+			position.verticalPosition = WorksheetElement::VerticalPosition::Bottom;
+		else {
+			position.verticalPosition = WorksheetElement::VerticalPosition::Center;
+			// TODO: set position relative to center (not possible since plot area not know)
+		}
 		legend->setPosition(position);
 
 		// rotation
@@ -1361,7 +1390,7 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 	// curves
 	loadCurves(layer, plot, layerIndex, legendText, preview);
 
-	// reading of other properties is not relevant for the dependecy checks in the preview, skip them
+	// reading of other properties is not relevant for the dependency checks in the preview, skip them
 	if (preview)
 		return;
 

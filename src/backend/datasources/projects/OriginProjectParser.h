@@ -89,6 +89,7 @@ private:
 	bool m_graphLayerAsPlotArea{true};
 	double textScalingFactor{1.};
 	double elementScalingFactor{1.};
+	QSize graphSize;
 
 	friend class ProjectImportTest;
 };
