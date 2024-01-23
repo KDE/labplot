@@ -16,6 +16,7 @@
 #include <QList>
 #include <QUuid>
 #include <qlabel.h>
+#include <QPixmap>
 
 class AbstractAspect;
 

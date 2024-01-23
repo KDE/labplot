@@ -105,6 +105,10 @@ void Column::init() {
 	d->outputFilter()->setHidden(true);
 	addChildFast(d->inputFilter());
 	addChildFast(d->outputFilter());
+	// set empty pixmap for sparkline
+	QPixmap pixmap(1, 1);
+	pixmap.fill(QColor(49, 54, 59));
+	setSparkline(pixmap);
 }
 
 Column::~Column() {
@@ -939,7 +943,6 @@ qint64 Column::bigIntAt(int row) const {
  * This is used e.g. in \c XYFitCurvePrivate::recalculate()
  */
 void Column::setChanged() {
-
 	if (!m_suppressDataChangedSignal) {
 		Q_EMIT dataChanged(this);
 	}
