@@ -24,6 +24,15 @@ public:
 	friend class SpreadsheetHeaderView; // access to paintSection (protected)
 };
 
+class SpreadsheetSparkLineHeaderView : public QHeaderView {
+	Q_OBJECT
+public:
+	explicit SpreadsheetSparkLineHeaderView(QWidget* parent = nullptr);
+	~SpreadsheetSparkLineHeaderView() override;
+	void setModel(QAbstractItemModel*) override;
+	friend class SpreadsheetHeaderView; // access to paintSection (protected)
+};
+
 class SpreadsheetHeaderView : public QHeaderView {
 	Q_OBJECT
 
@@ -37,9 +46,14 @@ public:
 	void showComments(bool on = true);
 	bool areCommentsShown() const;
 
+	void showSparkLines(bool on = true);
+	bool areSparkLinesShown() const;
+
 private:
-	SpreadsheetCommentsHeaderView* m_slave;
+	SpreadsheetCommentsHeaderView* m_commentSlave;
+	SpreadsheetSparkLineHeaderView* m_sparkLineSlave;
 	bool m_showComments;
+	bool m_showSparkLines;
 
 private Q_SLOTS:
 	void refresh();

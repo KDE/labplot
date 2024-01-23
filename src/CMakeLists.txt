@@ -739,7 +739,9 @@ IF (APPLE AND ${ECM_VERSION} VERSION_GREATER "5.48.0")
 	ecm_add_app_icon(LABPLOT_SOURCE ICONS ${LML_ICONS} OUTFILE_BASENAME LML_ICONS)
 ENDIF ()
 
-add_executable( labplot2 ${LABPLOT_SOURCE} ${GUI_QRC} ${qml_QRC} )
+add_executable( labplot2 ${LABPLOT_SOURCE} ${GUI_QRC} ${qml_QRC}
+    commonfrontend/spreadsheet/SpreadsheetSparkLineHeaderModel.h
+    commonfrontend/spreadsheet/SpreadsheetSparkLineHeaderModel.cpp )
 target_link_libraries( labplot2 labplot2lib labplot2backendlib labplot2nsllib )
 #if (KUserFeedbackQt6_FOUND)
 #	target_link_libraries( labplot2 KUserFeedbackCoreQt6 KUserFeedbackWidgetsQt6 )

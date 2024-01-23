@@ -55,6 +55,9 @@ public:
 	void showComments(bool on = true);
 	bool areCommentsShown() const;
 
+	void showSparkLines(bool on = true);
+	bool areSparkLinesShown() const;
+
 	int selectedColumnCount(bool full = true) const;
 	int selectedColumnCount(AbstractColumn::PlotDesignation) const;
 	bool isColumnSelected(int col, bool full = false) const;
@@ -136,6 +139,7 @@ private:
 
 	// spreadsheet related actions
 	QAction* action_toggle_comments{nullptr};
+	QAction* action_toggle_sparklines{nullptr};
 	QAction* action_select_all{nullptr};
 	QAction* action_clear_spreadsheet{nullptr};
 	QAction* action_clear_masks{nullptr};
@@ -243,6 +247,7 @@ public Q_SLOTS:
 private Q_SLOTS:
 	void searchReplace();
 	void toggleComments();
+	void toggleSparkLines();
 	void goToNextColumn();
 	void goToPreviousColumn();
 	void goToCell();
