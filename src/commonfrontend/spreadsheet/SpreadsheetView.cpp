@@ -217,8 +217,12 @@ void SpreadsheetView::init() {
 	});
 
 	for (int colIndex = 0; colIndex < m_spreadsheet->columnCount(); ++colIndex) {
+		// initialise sparkline
+		QPixmap pixmap(1, 1);
+		pixmap.fill(QColor(49, 54, 59));
+		m_model->column(colIndex)->setSparkline(pixmap);
 		connect(m_spreadsheet->column(colIndex), &AbstractColumn::dataChanged, this, [=] {
-			m_model->column(colIndex)->isFirstSparkLineShown = false;
+			m_model->column(colIndex)->mDataChanged = true;
 			SpreadsheetSparkLinesHeaderModel::sparkLine(m_model->column(colIndex));
 		});
 	}

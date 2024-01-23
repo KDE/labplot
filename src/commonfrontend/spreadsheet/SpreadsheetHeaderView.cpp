@@ -106,8 +106,6 @@ SpreadsheetHeaderView::SpreadsheetHeaderView(QWidget* parent)
 	m_sparkLineSlave = new SpreadsheetSparkLineHeaderView();
 
 	m_commentSlave->setDefaultAlignment(Qt::AlignCenter | Qt::AlignVCenter);
-	m_sparkLineSlave->setDefaultAlignment(Qt::AlignCenter | Qt::AlignVCenter);
-
 	m_showComments = true;
 	m_showSparkLines = true;
 }

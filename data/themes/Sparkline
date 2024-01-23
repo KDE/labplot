@@ -1,6 +1,6 @@
 [Theme]
 ThemeName=Sparkline
-ThemePaletteColor1=0,0,0
+ThemePaletteColor1=255,255,255
 ThemePaletteColor2=85,93,80
 ThemePaletteColor3=72,60,50
 ThemePaletteColor4=59,60,54
@@ -33,7 +33,7 @@ MinorTicksWidth=0
 [CartesianPlot]
 BackgroundBrushStyle=1
 BackgroundColorStyle=0
-BackgroundFirstColor=255,255,255
+BackgroundFirstColor=49,54,59
 BackgroundImageStyle=1
 BackgroundOpacity=1
 BackgroundSecondColor=160,160,160
@@ -43,10 +43,6 @@ BorderCornerRadius=0
 BorderOpacity=0
 BorderStyle=0
 BorderWidth=0
-
-[Label]
-FontColor=104,104,104
-BackgroundColor=255,255,255
 
 [XYCurve]
 DropLineOpacity=1
@@ -62,8 +58,8 @@ FillingPosition=0
 FillingSecondColor=255,255,255
 FillingType=0
 LineOpacity=1
-LineStyle=1
-LineWidth=2
+LineStyle=2
+LineWidth=4
 SymbolOpacity=0
 ValuesColor=104,104,104
 ValuesOpacity=0

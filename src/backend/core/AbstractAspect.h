@@ -502,9 +502,9 @@ public:
 		return mRetransformCalled;
 	}
 	int mRetransformCalled{0};
-	bool isFirstSparkLineShown;
-	bool isFirstSparkLineShownCalled() const {
-		return isFirstSparkLineShown;
+	bool mDataChanged;
+	bool isDataChanged() const {
+		return mDataChanged;
 	}
 
 #define trackRetransformCalled(suppressed)                                                                                                                     \

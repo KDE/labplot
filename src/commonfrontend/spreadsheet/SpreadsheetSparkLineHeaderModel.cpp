@@ -41,9 +41,9 @@ Qt::ItemFlags SpreadsheetSparkLinesHeaderModel::flags(const QModelIndex& index) 
 		return Qt::ItemIsEnabled;
 }
 void SpreadsheetSparkLinesHeaderModel::sparkLine(Column* col) {
-	if (!col->isFirstSparkLineShown) {
+	if (col->mDataChanged) {
 		if (col->hasValues()) {
-			col->isFirstSparkLineShown = true;
+			col->mDataChanged = false;
 			col->setSparkline(SpreadsheetSparkLinesHeaderModel::showSparkLines(col));
 		}
 	}
@@ -101,14 +101,7 @@ QPixmap SpreadsheetSparkLinesHeaderModel::showSparkLines(const Column* col) {
 		worksheet->updateLayout();
 		// Export to pixmap
 		QPixmap pixmap(worksheet->view()->size());
-		const bool exportSuccess = worksheet->exportView(pixmap);
-
-		// Use a placeholder preview if the view is not available yet
-		if (!exportSuccess) {
-			const auto placeholderIcon = QIcon::fromTheme(i18n("view-preview"));
-			const int iconSize = std::ceil(5.0 / 2.54 * QApplication::primaryScreen()->physicalDotsPerInchX());
-			pixmap = placeholderIcon.pixmap(iconSize, iconSize);
-		}
+		worksheet->exportView(pixmap);
 		delete worksheet;
 
 		return pixmap;
@@ -149,27 +142,13 @@ QPixmap SpreadsheetSparkLinesHeaderModel::showSparkLines(const Column* col) {
 
 		// Export to pixmap
 		QPixmap pixmap(worksheet->view()->size());
-		const bool exportSuccess = worksheet->exportView(pixmap);
-
-		// Use a placeholder preview if the view is not available yet
-		if (!exportSuccess) {
-			const auto placeholderIcon = QIcon::fromTheme(i18n("view-preview"));
-			const int iconSize = std::ceil(5.0 / 2.54 * QApplication::primaryScreen()->physicalDotsPerInchX());
-			pixmap = placeholderIcon.pixmap(iconSize, iconSize);
-		}
-
+		worksheet->exportView(pixmap);
 		delete worksheet;
 		return pixmap;
 	} else {
+		worksheet->setTheme(sparklineTheme);
 		QPixmap pixmap(worksheet->view()->size());
-		const bool exportSuccess = worksheet->exportView(pixmap);
-
-		// Use a placeholder preview if the view is not available yet
-		if (!exportSuccess) {
-			const auto placeholderIcon = QIcon::fromTheme(i18n("view-preview"));
-			const int iconSize = std::ceil(5.0 / 2.54 * QApplication::primaryScreen()->physicalDotsPerInchX());
-			pixmap = placeholderIcon.pixmap(iconSize, iconSize);
-		}
+		worksheet->exportView(pixmap);
 		delete worksheet;
 		return pixmap;
 	}

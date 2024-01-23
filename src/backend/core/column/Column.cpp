@@ -307,7 +307,6 @@ void Column::pasteData() {
  */
 void Column::setSuppressDataChangedSignal(bool b) {
 	m_suppressDataChangedSignal = b;
-	isFirstSparkLineShown = false;
 }
 
 void Column::addUsedInPlots(QVector<CartesianPlot*>& plotAreas) {
@@ -940,7 +939,6 @@ qint64 Column::bigIntAt(int row) const {
  * This is used e.g. in \c XYFitCurvePrivate::recalculate()
  */
 void Column::setChanged() {
-	isFirstSparkLineShown = false;
 
 	if (!m_suppressDataChangedSignal) {
 		Q_EMIT dataChanged(this);
