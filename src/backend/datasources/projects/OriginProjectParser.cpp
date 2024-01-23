@@ -1334,7 +1334,7 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 
 		// position
 		// TODO: In Origin the legend can be placed outside of the plot which is not possible in LabPlot.
-		// To achieve this we'll need to increase padding area in the plot and to place the legend outside of the plot area.
+		// To achieve this we'll need to increase padding area in the plot to place the legend outside of the plot area.
 		// graphSize (% of page), layer.clientRect (% of layer) -> see loadWorksheet()
 		// DEBUG(Q_FUNC_INFO << ", graph size = " << graphSize.width() << " " << graphSize.height())
 		auto legendRect = originLegend.clientRect;
@@ -1355,7 +1355,7 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 			position.horizontalPosition = WorksheetElement::HorizontalPosition::Right;
 		else {
 			position.horizontalPosition = WorksheetElement::HorizontalPosition::Center;
-			// TODO: set position relative to center (not possible since plot area not know)
+			// TODO: set position relative to center (not possible since plot area not know yet)
 			//  position.point.setX(relativePosition.width());
 			//  position.point.setY(relativePosition.height());
 		}
@@ -1365,7 +1365,7 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 			position.verticalPosition = WorksheetElement::VerticalPosition::Bottom;
 		else {
 			position.verticalPosition = WorksheetElement::VerticalPosition::Center;
-			// TODO: set position relative to center (not possible since plot area not know)
+			// TODO: set position relative to center (not possible since plot area not know yet)
 		}
 		legend->setPosition(position);
 
