@@ -129,10 +129,6 @@ QMenu* Column::createContextMenu() {
 		connect(this, &AbstractColumn::maskingChanged, this, [=] {
 			d->invalidate();
 		});
-		connect(this, &AbstractColumn::dataChanged, this, [=] {
-			isFirstSparkLineShown = false;
-			SpreadsheetSparkLinesHeaderModel::sparkLine(this);
-		});
 	}
 
 	QMenu* menu = AbstractAspect::createContextMenu();

@@ -54,7 +54,6 @@ QPixmap SpreadsheetSparkLinesHeaderModel::showSparkLines(const Column* col) {
 	static const QString sparklineTheme = QStringLiteral("Sparkline");
 	static const QString sparklineText = QStringLiteral("add-sparkline");
 	auto* worksheet = new Worksheet(sparklineText);
-	DEBUG(Q_FUNC_INFO << "Called")
 
 	if (col->columnMode() == Column::ColumnMode::Text) {
 		worksheet->setTheme(sparklineTheme);
@@ -113,7 +112,7 @@ QPixmap SpreadsheetSparkLinesHeaderModel::showSparkLines(const Column* col) {
 		delete worksheet;
 
 		return pixmap;
-	} else {
+	} else if (col->isNumeric()) {
 		worksheet->setTheme(sparklineTheme);
 		worksheet->view();
 		worksheet->setLayoutBottomMargin(0);
@@ -159,6 +158,18 @@ QPixmap SpreadsheetSparkLinesHeaderModel::showSparkLines(const Column* col) {
 			pixmap = placeholderIcon.pixmap(iconSize, iconSize);
 		}
 
+		delete worksheet;
+		return pixmap;
+	} else {
+		QPixmap pixmap(worksheet->view()->size());
+		const bool exportSuccess = worksheet->exportView(pixmap);
+
+		// Use a placeholder preview if the view is not available yet
+		if (!exportSuccess) {
+			const auto placeholderIcon = QIcon::fromTheme(i18n("view-preview"));
+			const int iconSize = std::ceil(5.0 / 2.54 * QApplication::primaryScreen()->physicalDotsPerInchX());
+			pixmap = placeholderIcon.pixmap(iconSize, iconSize);
+		}
 		delete worksheet;
 		return pixmap;
 	}

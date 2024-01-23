@@ -205,7 +205,7 @@ void SpreadsheetView::init() {
 	setFocus();
 	installEventFilter(this);
 	showComments(false);
-	// showSparkLines(false);
+	showSparkLines(false);
 
 	connect(m_model, &SpreadsheetModel::headerDataChanged, this, &SpreadsheetView::updateHeaderGeometry);
 	connect(m_model, &SpreadsheetModel::headerDataChanged, this, &SpreadsheetView::handleHeaderDataChanged);
@@ -215,6 +215,13 @@ void SpreadsheetView::init() {
 	connect(m_spreadsheet, &Spreadsheet::manyAspectsAboutToBeInserted, [this] {
 		m_suppressResize = true;
 	});
+
+	for (int colIndex = 0; colIndex < m_spreadsheet->columnCount(); ++colIndex) {
+		connect(m_spreadsheet->column(colIndex), &AbstractColumn::dataChanged, this, [=] {
+			m_model->column(colIndex)->isFirstSparkLineShown = false;
+			SpreadsheetSparkLinesHeaderModel::sparkLine(m_model->column(colIndex));
+		});
+	}
 
 	// selection related connections
 	connect(m_tableView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &SpreadsheetView::selectionChanged);
