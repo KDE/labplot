@@ -446,6 +446,8 @@ QPointF WorksheetElement::parentPosToRelativePos(QPointF parentPos, PositionWrap
 	QPointF relPos;
 	QRectF parentRect = this->parentRect();
 
+	// TODO: relativ position when Custom (using position.pos)
+	DEBUG(Q_FUNC_INFO << ", position.pos = " << position.point.x() << "/" << position.point.y())
 	if (position.horizontalPosition == HorizontalPosition::Left)
 		relPos.setX(parentPos.x() - parentRect.x());
 	else if (position.horizontalPosition == HorizontalPosition::Center || position.horizontalPosition == HorizontalPosition::Custom)
@@ -453,6 +455,7 @@ QPointF WorksheetElement::parentPosToRelativePos(QPointF parentPos, PositionWrap
 	else // position.horizontalPosition == WorksheetElement::HorizontalPosition::Right // default
 		relPos.setX(parentPos.x() - (parentRect.x() + parentRect.width()));
 
+	// TODO: relativ position when Custom (using position.pos)
 	if (position.verticalPosition == VerticalPosition::Center || position.verticalPosition == VerticalPosition::Custom)
 		relPos.setY(parentRect.y() + parentRect.height() / 2 - parentPos.y());
 	else if (position.verticalPosition == VerticalPosition::Bottom)
@@ -479,6 +482,7 @@ QPointF WorksheetElement::relativePosToParentPos(PositionWrapper position) const
 	QPointF parentPos;
 	QRectF parentRect = this->parentRect();
 
+	// TODO: relativ position when Custom (using position.pos)
 	if (position.horizontalPosition == HorizontalPosition::Left)
 		parentPos.setX(parentRect.x() + position.point.x());
 	else if (position.horizontalPosition == HorizontalPosition::Center || position.horizontalPosition == HorizontalPosition::Custom)
@@ -486,6 +490,7 @@ QPointF WorksheetElement::relativePosToParentPos(PositionWrapper position) const
 	else // position.horizontalPosition == WorksheetElement::HorizontalPosition::Right // default
 		parentPos.setX(parentRect.x() + parentRect.width() + position.point.x());
 
+	// TODO: relativ position when Custom (using position.pos)
 	if (position.verticalPosition == VerticalPosition::Center || position.verticalPosition == VerticalPosition::Custom)
 		parentPos.setY(parentRect.y() + parentRect.height() / 2 - position.point.y());
 	else if (position.verticalPosition == VerticalPosition::Bottom)
@@ -540,14 +545,14 @@ bool WorksheetElement::load(XmlStreamReader* reader, bool preview) {
 		// "position" and it was not possible to arrange relative to this alignpoint
 		// From 2.9.0, the horizontalPosition and verticalPosition indicate the anchor
 		// point and position.point indicates the distance to them
-		// Custom is the same as Center, so rename it, because Custom is legacy
+		// Custom is used for relative position on plot area
 		if (d->position.horizontalPosition != WorksheetElement::HorizontalPosition::Custom) {
 			d->position.point.setX(0);
 			if (d->position.horizontalPosition == WorksheetElement::HorizontalPosition::Left)
 				d->horizontalAlignment = WorksheetElement::HorizontalAlignment::Left;
 			else if (d->position.horizontalPosition == WorksheetElement::HorizontalPosition::Right)
 				d->horizontalAlignment = WorksheetElement::HorizontalAlignment::Right;
-		} else
+		} else // TODO
 			d->position.horizontalPosition = WorksheetElement::HorizontalPosition::Center;
 
 		if (d->position.verticalPosition != WorksheetElement::VerticalPosition::Custom) {
@@ -556,7 +561,7 @@ bool WorksheetElement::load(XmlStreamReader* reader, bool preview) {
 				d->verticalAlignment = WorksheetElement::VerticalAlignment::Top;
 			else if (d->position.verticalPosition == WorksheetElement::VerticalPosition::Bottom)
 				d->verticalAlignment = WorksheetElement::VerticalAlignment::Bottom;
-		} else
+		} else // TODO
 			d->position.verticalPosition = WorksheetElement::VerticalPosition::Center;
 
 		// in the old format the order was reversed, multiple by -1 here

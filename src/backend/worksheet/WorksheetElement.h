@@ -35,7 +35,7 @@ public:
 	~WorksheetElement() override;
 
 	enum class Orientation { Horizontal, Vertical, Both };
-	enum class HorizontalPosition { Left, Center, Right, Custom };
+	enum class HorizontalPosition { Left, Center, Right, Custom }; // Custom: relative to plot area
 	enum class VerticalPosition { Top, Center, Bottom, Custom };
 
 	enum class HorizontalAlignment { Left, Center, Right };
@@ -53,7 +53,7 @@ public:
 			, positionLimit(limit) {
 		}
 
-		QPointF point;
+		QPointF point; // range [0 .. 1] for custom position
 		HorizontalPosition horizontalPosition{HorizontalPosition::Center};
 		VerticalPosition verticalPosition{VerticalPosition::Center};
 		PositionLimit positionLimit{PositionLimit::None};
