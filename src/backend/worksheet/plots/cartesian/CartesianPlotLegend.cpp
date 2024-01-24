@@ -390,14 +390,10 @@ void CartesianPlotLegendPrivate::retransform() {
 
 	// determine the width of the legend
 	QFontMetrics fm(labelFont);
-	float w;
-	float h = fm.ascent();
 
-	float legendWidth = 0;
-
-	int index;
+	qreal legendWidth = 0;
 	for (int c = 0; c < columnCount; ++c) {
-		float maxTextWidth = 0;
+		int maxTextWidth = 0, index;
 		for (int r = 0; r < rowCount; ++r) {
 			if (labelColumnMajor)
 				index = c * rowCount + r;
@@ -407,7 +403,7 @@ void CartesianPlotLegendPrivate::retransform() {
 			if (index >= namesCount)
 				break;
 
-			w = fm.boundingRect(m_names.at(index)).width();
+			int w = fm.boundingRect(m_names.at(index)).width();
 			if (w > maxTextWidth)
 				maxTextWidth = w;
 		}
@@ -417,11 +413,11 @@ void CartesianPlotLegendPrivate::retransform() {
 
 	legendWidth += layoutLeftMargin + layoutRightMargin; // margins
 	legendWidth += columnCount * (lineSymbolWidth + layoutHorizontalSpacing); // width of the columns without the text
-	legendWidth += (columnCount - 1) * 2 * layoutHorizontalSpacing; // spacings between the columns
+	legendWidth += (columnCount - 1) * 2. * layoutHorizontalSpacing; // spacings between the columns
 
 	// add title width if title is available
 	if (title->isVisible() && !title->text().text.isEmpty()) {
-		float titleWidth;
+		qreal titleWidth;
 		titleWidth = title->graphicsItem()->boundingRect().width();
 
 		if (titleWidth > legendWidth)
@@ -429,14 +425,15 @@ void CartesianPlotLegendPrivate::retransform() {
 	}
 
 	// determine the height of the legend
-	float legendHeight = layoutTopMargin + layoutBottomMargin; // margins
+	int h = fm.ascent();
+	qreal legendHeight = layoutTopMargin + layoutBottomMargin; // margins
 	legendHeight += rowCount * h; // height of the rows
 	legendHeight += (rowCount - 1) * layoutVerticalSpacing; // spacing between the rows
 	if (title->isVisible() && !title->text().text.isEmpty())
 		legendHeight += title->graphicsItem()->boundingRect().height(); // legend titl
 
-	m_boundingRectangle.setX(-legendWidth / 2);
-	m_boundingRectangle.setY(-legendHeight / 2);
+	m_boundingRectangle.setX(-legendWidth / 2.);
+	m_boundingRectangle.setY(-legendHeight / 2.);
 	m_boundingRectangle.setWidth(legendWidth);
 	m_boundingRectangle.setHeight(legendHeight);
 
@@ -569,8 +566,7 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 
 	painter->save();
 
-	int col = 0;
-	int row = 0;
+	int col = 0, row = 0;
 	for (auto* plot : m_plots) {
 		// process the curves
 		// TODO: move the logic below into the plot classes
