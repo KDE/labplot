@@ -46,6 +46,7 @@ private Q_SLOTS:
 	void testHeaderEnabledColumnNaming();
 	void testHeaderEnabledColumnNaming2();
 	void testHeaderEnabledHeaderLine();
+	void testHeaderEnabledStartRowEqualHeaderRow();
 
 	// read ranges
 	void testColumnRange00();
