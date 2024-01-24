@@ -181,6 +181,15 @@ void ExpressionParserTest::testxorFunction() {
 	QCOMPARE(fnct(2.3345, 2.3345), 0);
 	QCOMPARE(fnct(2.3345, 0), 1);
 }
+
+void testnotFunction() {
+	auto fnct = getFunction2(QStringLiteral("not"));
+	QVERIFY(fnct);
+
+	QCOMPARE(fnct(1), 0);
+	QCOMPARE(fnct(0), 1);
+}
+
 void ExpressionParserTest::testbetweenIncluded() {
 	auto fnct = getFunction3(QStringLiteral("between_inc"));
 	QVERIFY(fnct);

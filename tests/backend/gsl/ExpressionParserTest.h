@@ -19,6 +19,7 @@ private Q_SLOTS:
 	void testandFunction();
 	void testorFunction();
 	void testxorFunction();
+	void testnotFunction();
 	void testbetweenIncluded();
 	void testoutsideIncluded();
 	void testbetween();
