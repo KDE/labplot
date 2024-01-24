@@ -883,7 +883,7 @@ double xorFunction(const double v1, const double v2) {
 }
 
 double notFunction(const double v) {
-	if (convertDoubleToBool(v1))
+	if (convertDoubleToBool(v))
 		return 0;
 	return 1;
 }

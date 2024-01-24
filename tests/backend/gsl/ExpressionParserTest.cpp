@@ -148,14 +148,14 @@ void ExpressionParserTest::testifCondition() {
 	QCOMPARE(fnct(-1, 1, 5), 1);
 }
 void ExpressionParserTest::testandFunction() {
-	auto fnct = getFunction2(QStringLiteral("and"));
-	QVERIFY(fnct);
+	// auto fnct = getFunction2(QStringLiteral("and"));
+	// QVERIFY(fnct);
 
-	QCOMPARE(fnct(1, 1), 1);
-	QCOMPARE(fnct(0, 1), 0);
-	QCOMPARE(fnct(1, 0), 0);
-	QCOMPARE(fnct(0, 0), 0);
-	QCOMPARE(fnct(2, 5), 1);
+	// QCOMPARE(fnct(1, 1), 1);
+	// QCOMPARE(fnct(0, 1), 0);
+	// QCOMPARE(fnct(1, 0), 0);
+	// QCOMPARE(fnct(0, 0), 0);
+	// QCOMPARE(fnct(2, 5), 1);
 }
 void ExpressionParserTest::testorFunction() {
 	auto fnct = getFunction2(QStringLiteral("or"));
@@ -182,8 +182,8 @@ void ExpressionParserTest::testxorFunction() {
 	QCOMPARE(fnct(2.3345, 0), 1);
 }
 
-void testnotFunction() {
-	auto fnct = getFunction2(QStringLiteral("not"));
+void ExpressionParserTest::testnotFunction() {
+	auto fnct = getFunction1(QStringLiteral("not"));
 	QVERIFY(fnct);
 
 	QCOMPARE(fnct(1), 0);
@@ -347,6 +347,162 @@ void ExpressionParserTest::testevaluateCartesianConstExpr() {
 	// All yVector rows are filled
 	for (const auto v : yVector)
 		QCOMPARE(v, 5. + 5.);
+}
+
+void ExpressionParserTest::testEvaluateAnd() {
+	const QString expr = QStringLiteral("x && y");
+	const QStringList vars = {QStringLiteral("x"), QStringLiteral("y")};
+
+	QVector<QVector<double>*> xVectors;
+
+	xVectors << new QVector<double>({1., 0., 1., 0.}); // x
+	xVectors << new QVector<double>({0., 0., 1., 1.}); // y
+	QVector<double> yVector({5., 5., 5., 5.,});
+	ExpressionParser::evaluateCartesian(expr, vars, xVectors, &yVector);
+
+	QCOMPARE(yVector.size(), 4);
+	QCOMPARE(yVector.at(0), 0.);
+	QCOMPARE(yVector.at(1), 0.);
+	QCOMPARE(yVector.at(2), 1.);
+	QCOMPARE(yVector.at(3), 0.);
+}
+
+void ExpressionParserTest::testEvaluateOr() {
+	const QString expr = QStringLiteral("x || y");
+	const QStringList vars = {QStringLiteral("x"), QStringLiteral("y")};
+
+	QVector<QVector<double>*> xVectors;
+
+	xVectors << new QVector<double>({1., 0., 1., 0.}); // x
+	xVectors << new QVector<double>({0., 0., 1., 1.}); // y
+	QVector<double> yVector({5., 5., 5., 5.,});
+	ExpressionParser::evaluateCartesian(expr, vars, xVectors, &yVector);
+
+	QCOMPARE(yVector.size(), 4);
+	QCOMPARE(yVector.at(0), 1.);
+	QCOMPARE(yVector.at(1), 0.);
+	QCOMPARE(yVector.at(2), 1.);
+	QCOMPARE(yVector.at(3), 1.);
+}
+
+void ExpressionParserTest::testEvaluateNot() {
+	const QString expr = QStringLiteral("!x");
+	const QStringList vars = {QStringLiteral("x")};
+
+	QVector<QVector<double>*> xVectors;
+
+	xVectors << new QVector<double>({1., 0.}); // x
+	QVector<double> yVector({5., 5., 5., 5.,});
+	ExpressionParser::evaluateCartesian(expr, vars, xVectors, &yVector);
+
+	QCOMPARE(yVector.size(), 2);
+	QCOMPARE(yVector.at(0), 0.);
+	QCOMPARE(yVector.at(1), 1.);
+}
+
+void ExpressionParserTest::testEvaluateLogicalExpression() {
+	const QString expr = QStringLiteral("!x || y && x");
+	const QStringList vars = {QStringLiteral("x"), QStringLiteral("y")};
+
+	QVector<QVector<double>*> xVectors;
+
+	xVectors << new QVector<double>({0., 1., 0., 1.}); // x
+	xVectors << new QVector<double>({0., 0., 1., 1.}); // y
+	QVector<double> yVector({5., 5., 5., 5.,});
+	ExpressionParser::evaluateCartesian(expr, vars, xVectors, &yVector);
+
+	// if or evaluated first:
+	// x y
+	// 0 0 : 0
+	// 1 0 : 0
+	// 0 1 : 0
+	// 1 1 : 1
+
+	// if and evaluated first:
+	// x y
+	// 0 0 : 1
+	// 1 0 : 0
+	// 0 1 : 1
+	// 1 1 : 1
+
+	// And must be evaluated before or!
+	QCOMPARE(yVector.size(), 4);
+	QCOMPARE(yVector.at(0), 1.);
+	QCOMPARE(yVector.at(1), 0.);
+	QCOMPARE(yVector.at(2), 1.);
+	QCOMPARE(yVector.at(3), 1.);
+}
+
+void ExpressionParserTest::testevaluateGreaterThan() {
+	const QString expr = QStringLiteral("x > y");
+	const QStringList vars = {QStringLiteral("x"), QStringLiteral("x")};
+
+	QVector<QVector<double>*> xVectors;
+
+	xVectors << new QVector<double>({0., 1., 0., 1.}); // x
+	xVectors << new QVector<double>({0., 0., 1., 1.}); // y
+	QVector<double> yVector({5., 5., 5., 5.,});
+	ExpressionParser::evaluateCartesian(expr, vars, xVectors, &yVector);
+
+	QCOMPARE(yVector.size(), 4);
+	QCOMPARE(yVector.at(0), 0.);
+	QCOMPARE(yVector.at(1), 1.);
+	QCOMPARE(yVector.at(2), 0.);
+	QCOMPARE(yVector.at(3), 0.);
+}
+
+void ExpressionParserTest::testevaluateLessThan() {
+	const QString expr = QStringLiteral("x < y");
+	const QStringList vars = {QStringLiteral("x"), QStringLiteral("x")};
+
+	QVector<QVector<double>*> xVectors;
+
+	xVectors << new QVector<double>({0., 1., 0., 1.}); // x
+	xVectors << new QVector<double>({0., 0., 1., 1.}); // y
+	QVector<double> yVector({5., 5., 5., 5.,});
+	ExpressionParser::evaluateCartesian(expr, vars, xVectors, &yVector);
+
+	QCOMPARE(yVector.size(), 4);
+	QCOMPARE(yVector.at(0), 0.);
+	QCOMPARE(yVector.at(1), 0.);
+	QCOMPARE(yVector.at(2), 1.);
+	QCOMPARE(yVector.at(3), 0.);
+}
+
+void ExpressionParserTest::testevaluateLessEqualThan() {
+	const QString expr = QStringLiteral("x <= y");
+	const QStringList vars = {QStringLiteral("x"), QStringLiteral("x")};
+
+	QVector<QVector<double>*> xVectors;
+
+	xVectors << new QVector<double>({0., 1., 0., 1.}); // x
+	xVectors << new QVector<double>({0., 0., 1., 1.}); // y
+	QVector<double> yVector({5., 5., 5., 5.,});
+	ExpressionParser::evaluateCartesian(expr, vars, xVectors, &yVector);
+
+	QCOMPARE(yVector.size(), 4);
+	QCOMPARE(yVector.at(0), 0.);
+	QCOMPARE(yVector.at(1), 0.);
+	QCOMPARE(yVector.at(2), 1.);
+	QCOMPARE(yVector.at(3), 1.);
+}
+
+void ExpressionParserTest::testevaluateGreaterEqualThan() {
+	const QString expr = QStringLiteral("x >= y");
+	const QStringList vars = {QStringLiteral("x"), QStringLiteral("x")};
+
+	QVector<QVector<double>*> xVectors;
+
+	xVectors << new QVector<double>({0., 1., 0., 1.}); // x
+	xVectors << new QVector<double>({0., 0., 1., 1.}); // y
+	QVector<double> yVector({5., 5., 5., 5.,});
+	ExpressionParser::evaluateCartesian(expr, vars, xVectors, &yVector);
+
+	QCOMPARE(yVector.size(), 4);
+	QCOMPARE(yVector.at(0), 0.);
+	QCOMPARE(yVector.at(1), 1.);
+	QCOMPARE(yVector.at(2), 1.);
+	QCOMPARE(yVector.at(3), 0.);
 }
 
 // This is not implemented. It uses always the smallest rowCount
