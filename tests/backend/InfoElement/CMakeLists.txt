@@ -1,5 +1,9 @@
-add_executable (InfoElementTest InfoElementTest.cpp)
+option(ENABLE_TEST_BACKEND_INFOELEMENT "Enable InfoElement Tests" ON)
 
-target_link_libraries(InfoElementTest labplot2backendlib labplot2lib labplot2nsllib labplot2test)
+if (ENABLE_TEST_BACKEND_INFOELEMENT)
+    add_executable (InfoElementTest InfoElementTest.cpp)
 
-add_test(NAME InfoElementTest COMMAND InfoElementTest)
+    target_link_libraries(InfoElementTest labplot2backendlib labplot2lib labplot2nsllib labplot2test)
+
+    add_test(NAME InfoElementTest COMMAND InfoElementTest)
+endif()

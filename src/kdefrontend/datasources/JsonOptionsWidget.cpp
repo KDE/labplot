@@ -4,7 +4,7 @@
 	Description          : Widget providing options for the import of json data.
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2018 Andrey Cygankov <craftplace.ms@gmail.com>
-	SPDX-FileCopyrightText: 2018-2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2018-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -26,15 +26,16 @@
 
 \ingroup kdefrontend
 */
-JsonOptionsWidget::JsonOptionsWidget(QWidget* parent, ImportFileWidget* fileWidget)
+JsonOptionsWidget::JsonOptionsWidget(QWidget* parent)
 	: QWidget(parent)
-	, m_fileWidget(fileWidget)
 	, m_model(new QJsonModel()) {
 	ui.setupUi(parent);
 
 	ui.cbDecimalSeparator->addItem(i18n("Point '.'"));
 	ui.cbDecimalSeparator->addItem(i18n("Comma ','"));
 	ui.cbDateTimeFormat->addItems(AbstractColumn::dateTimeFormats());
+
+	connect(m_model, &QJsonModel::error, this, &JsonOptionsWidget::error);
 
 	setTooltips();
 }

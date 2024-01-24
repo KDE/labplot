@@ -12,10 +12,8 @@
 
 #include <QWidget>
 
-class QLabel;
-class QTimeLine;
-class QPushButton;
-class SlidingPanel;
+class SlidingPanelTop;
+class SlidingPanelBottom;
 class WorksheetView;
 class Worksheet;
 
@@ -23,14 +21,14 @@ class PresenterWidget : public QWidget {
 	Q_OBJECT
 
 public:
-	explicit PresenterWidget(Worksheet* worksheet, bool interactive = false, QWidget* parent = nullptr);
+	explicit PresenterWidget(Worksheet* worksheet, QScreen* screen, bool interactive = false, QWidget* parent = nullptr);
 	~PresenterWidget() override;
 
 private:
-	Worksheet* m_worksheet;
-	WorksheetView* m_view;
-	QTimeLine* m_timeLine;
-	SlidingPanel* m_panel;
+	Worksheet* m_worksheet{nullptr};
+	WorksheetView* m_view{nullptr};
+	SlidingPanelTop* m_panel{nullptr};
+	SlidingPanelBottom* m_navigationPanel{nullptr};
 	void startTimeline();
 
 protected:
@@ -40,10 +38,6 @@ protected:
 #ifdef Q_OS_MAC
 	void closeEvent(QCloseEvent*) override;
 #endif
-
-private Q_SLOTS:
-	void slideDown();
-	void slideUp();
 };
 
 #endif // PRESENTERWIDGET_H

@@ -26,7 +26,6 @@ public:
 
 private:
 	void initGeneralTab() override;
-	void updatePlotRanges() override;
 
 	Ui::XYEquationCurveDockGeneralTab uiGeneralTab;
 	XYEquationCurve* m_equationCurve{nullptr};

@@ -63,7 +63,7 @@ ImportDatasetWidget::ImportDatasetWidget(QWidget* parent)
 			updateDatasets(ui.twCategories->selectedItems().first());
 	});
 
-	connect(ui.leSearch, &QLineEdit::textChanged, this, &ImportDatasetWidget::updateCategories);
+	connect(ui.leSearch, &TimedLineEdit::textChanged, this, &ImportDatasetWidget::updateCategories);
 	connect(ui.lwDatasets, &QListWidget::itemSelectionChanged, [this]() {
 		if (!m_initializing)
 			datasetChanged();

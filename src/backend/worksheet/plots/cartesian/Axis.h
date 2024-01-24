@@ -175,6 +175,7 @@ public:
 	CLASS_D_ACCESSOR_DECL(QString, labelsPrefix, LabelsPrefix)
 	CLASS_D_ACCESSOR_DECL(QString, labelsSuffix, LabelsSuffix)
 	BASIC_D_ACCESSOR_DECL(qreal, labelsOpacity, LabelsOpacity)
+	static int maxNumberMajorTicksCustomColumn();
 
 	Line* majorGridLine() const;
 	Line* minorGridLine() const;
@@ -290,6 +291,7 @@ Q_SIGNALS:
 
 	friend class RetransformTest;
 	friend class AxisTest;
+	friend class AxisTest2;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Axis::TicksDirection)

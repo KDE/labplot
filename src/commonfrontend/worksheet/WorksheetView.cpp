@@ -318,6 +318,17 @@ void WorksheetView::initActions() {
 	setCartesianPlotCursorMode(m_worksheet->cartesianPlotCursorMode());
 	connect(plotActionCursorGroup, &QActionGroup::triggered, this, &WorksheetView::cartesianPlotCursorModeChanged);
 
+	initPlotNavigationActions();
+
+	// set some default values
+	selectionModeAction->setChecked(true);
+	currentZoomAction = zoomInViewAction;
+	currentMagnificationAction = noMagnificationAction;
+
+	m_actionsInitialized = true;
+}
+
+void WorksheetView::initPlotNavigationActions() {
 	auto* plotMouseModeActionGroup = new QActionGroup(this);
 	plotMouseModeActionGroup->setExclusive(true);
 	cartesianPlotSelectionModeAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-cursor-arrow")), i18n("Select and Edit"), plotMouseModeActionGroup);
@@ -399,13 +410,9 @@ void WorksheetView::initActions() {
 
 	connect(cartesianPlotNavigationGroup, &QActionGroup::triggered, this, &WorksheetView::cartesianPlotNavigationChanged);
 
-	// set some default values
-	selectionModeAction->setChecked(true);
-	handleCartesianPlotActions();
-	currentZoomAction = zoomInViewAction;
-	currentMagnificationAction = noMagnificationAction;
+	m_plotActionsInitialized = true;
 
-	m_actionsInitialized = true;
+	handleCartesianPlotActions();
 }
 
 void WorksheetView::initMenus() {
@@ -635,12 +642,20 @@ void WorksheetView::fillTouchBar(KDMacTouchBar* touchBar) {
 void WorksheetView::fillCartesianPlotToolBar(QToolBar* toolBar) {
 	toolBar->addWidget(tbCartesianPlotAddNew);
 	toolBar->addSeparator();
+	fillCartesianPlotNavigationToolBar(toolBar);
+	toolBar->addSeparator();
+
+	handleCartesianPlotActions();
+}
+
+void WorksheetView::fillCartesianPlotNavigationToolBar(QToolBar* toolBar, bool enableCursor) const {
 	toolBar->addAction(cartesianPlotSelectionModeAction);
 	toolBar->addAction(cartesianPlotCrosshairModeAction);
 	toolBar->addAction(cartesianPlotZoomSelectionModeAction);
 	toolBar->addAction(cartesianPlotZoomXSelectionModeAction);
 	toolBar->addAction(cartesianPlotZoomYSelectionModeAction);
-	toolBar->addAction(cartesianPlotCursorModeAction);
+	if (enableCursor)
+		toolBar->addAction(cartesianPlotCursorModeAction);
 	toolBar->addSeparator();
 	toolBar->addAction(scaleAutoAction);
 	toolBar->addAction(scaleAutoXAction);
@@ -655,9 +670,6 @@ void WorksheetView::fillCartesianPlotToolBar(QToolBar* toolBar) {
 	toolBar->addAction(shiftRightXAction);
 	toolBar->addAction(shiftUpYAction);
 	toolBar->addAction(shiftDownYAction);
-	toolBar->addSeparator();
-
-	handleCartesianPlotActions();
 }
 
 void WorksheetView::setScene(QGraphicsScene* scene) {
@@ -1734,8 +1746,10 @@ void WorksheetView::selectionChanged() {
 }
 
 void WorksheetView::handleCartesianPlotSelected(CartesianPlot* plot) {
-	tbCartesianPlotAddNew->setMenu(plot->addNewMenu()); // update the tool button shown in the toolbar
-	cartesianPlotAddNewAction->setMenu(plot->addNewMenu()); // update the action shown in the main menu
+	if (tbCartesianPlotAddNew) { // not available in the presenter mode
+		tbCartesianPlotAddNew->setMenu(plot->addNewMenu()); // update the tool button shown in the toolbar
+		cartesianPlotAddNewAction->setMenu(plot->addNewMenu()); // update the action shown in the main menu
+	}
 
 	/* Action to All: action is applied to all ranges
 	 *	- Applied to all plots and all ranges
@@ -1831,7 +1845,8 @@ void WorksheetView::handleCartesianPlotSelected(CartesianPlot* plot) {
 	}
 
 	cartesianPlotSelectionModeAction->setEnabled(true);
-	cartesianPlotCursorModeAction->setEnabled(true);
+	if (cartesianPlotCursorModeAction) // not available in the presenter mode
+		cartesianPlotCursorModeAction->setEnabled(true);
 }
 
 void WorksheetView::handleReferenceRangeSelected() {
@@ -2088,7 +2103,7 @@ void WorksheetView::handleAxisSelected(const Axis* a) {
 
 // check whether we have cartesian plots selected and activate/deactivate
 void WorksheetView::handleCartesianPlotActions() {
-	if (!m_menusInitialized)
+	if (!m_plotActionsInitialized)
 		return;
 
 	if (m_mouseMode != MouseMode::Selection)
@@ -2152,10 +2167,14 @@ void WorksheetView::handleCartesianPlotActions() {
 		scaleAutoYAction->setEnabled(false);
 	}
 
-	tbCartesianPlotAddNew->setEnabled(plot);
-	cartesianPlotAddNewAction->setEnabled(plot);
-	m_cartesianPlotZoomMenu->setEnabled(m_selectedElement);
-	m_cartesianPlotMouseModeMenu->setEnabled(plot);
+	if (cartesianPlotAddNewAction) // not available in the presenter mode
+		cartesianPlotAddNewAction->setEnabled(plot);
+
+	if (m_menusInitialized) { // not available in the presenter mode
+		tbCartesianPlotAddNew->setEnabled(plot);
+		m_cartesianPlotZoomMenu->setEnabled(m_selectedElement);
+		m_cartesianPlotMouseModeMenu->setEnabled(plot);
+	}
 }
 
 void WorksheetView::exportToFile(const QString& path, const ExportFormat format, const ExportArea area, const bool background, const int resolution) {
@@ -2285,7 +2304,7 @@ void WorksheetView::exportToPixmap(QPixmap& pixmap) {
 	QPainter painter;
 	painter.begin(&pixmap);
 	painter.setRenderHint(QPainter::Antialiasing);
-	exportPaint(&painter, targetRect, sourceRect, true);
+	exportPaint(&painter, targetRect, sourceRect, true /* export background */, true /* export selection */);
 	painter.end();
 }
 
@@ -2345,7 +2364,8 @@ void WorksheetView::exportToClipboard() {
 	QApplication::clipboard()->setImage(image, QClipboard::Clipboard);
 }
 
-void WorksheetView::exportPaint(QPainter* painter, const QRectF& targetRect, const QRectF& sourceRect, const bool background) {
+void WorksheetView::exportPaint(QPainter* painter, const QRectF& targetRect, const QRectF& sourceRect, const bool background, const bool selection) {
+	// hide the magnification window, shouldn't be exported
 	bool magnificationActive = false;
 	if (m_magnificationWindow && m_magnificationWindow->isVisible()) {
 		magnificationActive = true;
@@ -2362,11 +2382,14 @@ void WorksheetView::exportPaint(QPainter* painter, const QRectF& targetRect, con
 	}
 
 	// draw the scene items
-	m_worksheet->setPrinting(true);
+	if (!selection) // if no selection effects have to be exported, set the printing flag to suppress it in the paint()'s of the children
+		m_worksheet->setPrinting(true);
 	scene()->render(painter, QRectF(), sourceRect);
-	m_worksheet->setPrinting(false);
+	if (!selection)
+		m_worksheet->setPrinting(false);
 	m_isPrinting = false;
 
+	// show the magnification window if it was active before
 	if (magnificationActive)
 		m_magnificationWindow->setVisible(true);
 }
@@ -2576,7 +2599,7 @@ void WorksheetView::cartesianPlotNavigationChanged(QAction* action) {
 	}
 }
 
-Worksheet::CartesianPlotActionMode WorksheetView::getCartesianPlotActionMode() {
+Worksheet::CartesianPlotActionMode WorksheetView::getCartesianPlotActionMode() const {
 	return m_worksheet->cartesianPlotActionMode();
 }
 
@@ -2584,7 +2607,7 @@ void WorksheetView::presenterMode() {
 #ifndef SDK
 	const auto& group = Settings::group(QStringLiteral("Settings_Worksheet"));
 	const bool interactive = group.readEntry("PresenterModeInteractive", false);
-	auto* presenterWidget = new PresenterWidget(m_worksheet, interactive);
+	auto* presenterWidget = new PresenterWidget(m_worksheet, screen(), interactive);
 	presenterWidget->showFullScreen();
 #endif
 }

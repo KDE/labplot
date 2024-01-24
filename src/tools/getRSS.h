@@ -9,7 +9,7 @@
 #include <windows.h>
 #include <psapi.h>
 
-#elif defined(__unix__) || defined(__unix) || defined(unix) || (defined(__APPLE__) && defined(__MACH__))
+#elif defined(__unix__) || defined(__unix) || defined(unix) || (defined(__APPLE__) && defined(__MACH__)) || defined(__HAIKU__)
 #include <unistd.h>
 #include <sys/resource.h>
 

@@ -288,6 +288,7 @@ void StatisticsColumnWidget::showOverviewPlot() {
 
 	// x
 	auto* xColumn = new Column(QStringLiteral("x"), AbstractColumn::ColumnMode::Integer);
+	m_project->addChild(xColumn);
 	int rows = m_column->rowCount();
 	QVector<int> xData;
 	xData.resize(rows);
@@ -437,9 +438,11 @@ void StatisticsColumnWidget::showBarPlot() {
 	// generate columns holding the data and the labels
 	auto* dataColumn = new Column(QStringLiteral("data"));
 	dataColumn->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	m_project->addChild(dataColumn);
 
 	auto* labelsColumn = new Column(QStringLiteral("labels"));
 	labelsColumn->setColumnMode(AbstractColumn::ColumnMode::Text);
+	m_project->addChild(labelsColumn);
 
 	// sort the frequencies and the accompanying labels
 	const auto& frequencies = m_column->frequencies();
@@ -527,12 +530,15 @@ void StatisticsColumnWidget::showParetoPlot() {
 
 	auto* dataColumn = new Column(QStringLiteral("data"));
 	dataColumn->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	m_project->addChild(dataColumn);
 
 	auto* xColumn = new Column(QStringLiteral("x"));
 	xColumn->setColumnMode(AbstractColumn::ColumnMode::Double);
+	m_project->addChild(xColumn);
 	QVector<double> xData(count);
 
 	auto* yColumn = new Column(QStringLiteral("y"));
+	m_project->addChild(yColumn);
 	QVector<double> yData(count);
 
 	auto* labelsColumn = new Column(QStringLiteral("labels"));

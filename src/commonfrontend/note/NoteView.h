@@ -21,7 +21,7 @@ class NoteView : public QWidget {
 	Q_OBJECT
 
 public:
-	explicit NoteView(Note* notes);
+	explicit NoteView(Note*);
 
 public Q_SLOTS:
 	void print(QPrinter*) const;
@@ -33,7 +33,7 @@ private Q_SLOTS:
 	void textChanged();
 
 private:
-	Note* m_notes;
+	Note* m_note;
 	QTextEdit* m_textEdit;
 };
 

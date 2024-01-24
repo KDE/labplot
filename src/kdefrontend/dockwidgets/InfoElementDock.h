@@ -38,15 +38,12 @@ private Q_SLOTS:
 	void positionChanged(double);
 	void positionDateTimeChanged(qint64);
 	void curveSelectionChanged(bool);
-	void visibilityChanged(bool);
 
 	// slots triggered in the InfoElement
 	void elementPositionChanged(double pos);
 	void elementGluePointIndexChanged(const int);
 	void elementConnectionLineCurveChanged(const QString&);
 	void elementLabelBorderShapeChanged();
-	void elementVisibilityChanged(const bool);
-	void updatePlotRanges() override;
 
 private:
 	Ui::InfoElementDock* ui;

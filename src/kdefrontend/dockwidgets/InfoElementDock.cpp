@@ -23,6 +23,7 @@ InfoElementDock::InfoElementDock(QWidget* parent)
 	ui->setupUi(this);
 	setPlotRangeCombobox(ui->cbPlotRanges);
 	setBaseWidgets(ui->leName, ui->teComment);
+	setVisibilityWidgets(ui->chbVisible);
 
 	//"Title"-tab
 	auto* hboxLayout = new QHBoxLayout(ui->tabTitle);
@@ -51,8 +52,6 @@ InfoElementDock::InfoElementDock(QWidget* parent)
 	connect(ui->dateTimeEditPosition, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &InfoElementDock::positionDateTimeChanged);
 	connect(ui->cbConnectToCurve, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &InfoElementDock::curveChanged);
 	connect(ui->cbConnectToAnchor, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &InfoElementDock::gluePointChanged);
-	connect(ui->cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &InfoElementDock::plotRangeChanged);
-	connect(ui->chbVisible, &QCheckBox::toggled, this, &InfoElementDock::visibilityChanged);
 }
 
 void InfoElementDock::setInfoElements(QList<InfoElement*> list) {
@@ -148,9 +147,7 @@ void InfoElementDock::setInfoElements(QList<InfoElement*> list) {
 		ui->dateTimeEditPosition->show();
 	}
 
-	// connections
-
-	updatePlotRanges(); // needed when loading project
+	updatePlotRangeList(); // needed when loading project
 
 	// general
 	connect(m_element, &InfoElement::positionLogicalChanged, this, &InfoElementDock::elementPositionChanged);
@@ -158,12 +155,6 @@ void InfoElementDock::setInfoElements(QList<InfoElement*> list) {
 	connect(m_element, &InfoElement::connectionLineCurveNameChanged, this, &InfoElementDock::elementConnectionLineCurveChanged);
 	connect(m_element, &InfoElement::labelBorderShapeChangedSignal, this, &InfoElementDock::elementLabelBorderShapeChanged);
 	connect(m_element, &InfoElement::curveRemoved, this, &InfoElementDock::elementCurveRemoved);
-	connect(m_element, &WorksheetElement::plotRangeListChanged, this, &InfoElementDock::updatePlotRanges);
-	connect(m_element, &InfoElement::visibleChanged, this, &InfoElementDock::elementVisibilityChanged);
-}
-
-void InfoElementDock::updatePlotRanges() {
-	updatePlotRangeList();
 }
 
 //*************************************************************
@@ -256,21 +247,9 @@ void InfoElementDock::gluePointChanged(int index) {
 		infoElement->setGluePointIndex(index - 1); // index 0 means automatic, which is defined as -1
 }
 
-void InfoElementDock::visibilityChanged(bool state) {
-	CONDITIONAL_LOCK_RETURN;
-
-	for (auto* infoElement : m_elements)
-		infoElement->setVisible(state);
-}
-
 //***********************************************************
 //******* SLOTs for changes triggered in InfoElement ********
 //***********************************************************
-void InfoElementDock::elementVisibilityChanged(const bool visible) {
-	CONDITIONAL_LOCK_RETURN;
-	ui->chbVisible->setChecked(visible);
-}
-
 void InfoElementDock::elementGluePointIndexChanged(const int index) {
 	CONDITIONAL_LOCK_RETURN;
 	if (index < 0)

@@ -292,7 +292,7 @@ private:
 
 	friend CartesianPlotDock;
 	friend class CartesianPlotTest;
-	friend class MultiRangeTest;
+	friend class MultiRangeTest2;
 
 public Q_SLOTS:
 	void addHorizontalAxis();
@@ -344,7 +344,7 @@ private Q_SLOTS:
 
 	void dataChanged(WorksheetElement*);
 	void dataChanged(XYCurve*, const Dimension);
-	void curveLinePenChanged(QPen);
+	void plotColorChanged();
 	void curveVisibilityChanged();
 	void boxPlotOrientationChanged(WorksheetElement::Orientation);
 
@@ -387,7 +387,7 @@ Q_SIGNALS:
 	void cursorPosChanged(int cursorNumber, double xPos);
 	void curveAdded(const XYCurve*);
 	void curveRemoved(const XYCurve*);
-	void curveLinePenChanged(QPen, QString curveName);
+	void plotColorChanged(const QColor&, const QString& curveName);
 	void cursorPenChanged(QPen);
 	void curveDataChanged(const XYCurve*);
 	void curveVisibilityChangedSignal();

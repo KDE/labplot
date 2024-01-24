@@ -47,11 +47,12 @@ public:
 	virtual QPainterPath shape() const override;
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
 	virtual void keyPressEvent(QKeyEvent*) override;
+	virtual void mouseMoveEvent(QGraphicsSceneMouseEvent*) override;
 	virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
 	virtual QVariant itemChange(GraphicsItemChange, const QVariant& value) override;
 	virtual bool sceneEvent(QEvent* event) override;
-	QPointF mapParentToPlotArea(QPointF);
-	QPointF mapPlotAreaToParent(QPointF);
+	QPointF mapParentToPlotArea(QPointF) const;
+	QPointF mapPlotAreaToParent(QPointF) const;
 	void setHover(bool);
 	bool isHovered() const;
 
@@ -62,6 +63,7 @@ private:
 
 protected:
 	bool m_hovered{false};
+	bool m_moveStarted{false};
 	QRectF m_boundingRectangle; // bounding rectangle of the element
 	QPainterPath m_shape;
 };

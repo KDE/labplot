@@ -72,13 +72,6 @@ private:
 	CONDITIONAL_RETURN_NO_LOCK                                                                                                                                 \
 	const Lock lock(m_initializing);
 
-#if QT_VERSION < 0x050700
-template<class T>
-constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
-	return t;
-}
-#endif
-
 #define WAIT_CURSOR QApplication::setOverrideCursor(QCursor(Qt::WaitCursor))
 #define RESET_CURSOR QApplication::restoreOverrideCursor()
 

@@ -102,6 +102,7 @@ CartesianPlotDock::CartesianPlotDock(QWidget* parent)
 	: BaseDock(parent) {
 	ui.setupUi(this);
 	setBaseWidgets(ui.leName, ui.teComment);
+	setVisibilityWidgets(ui.chkVisible);
 
 	//"General"-tab
 	ui.twXRanges->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
@@ -157,7 +158,6 @@ CartesianPlotDock::CartesianPlotDock(QWidget* parent)
 
 	// SIGNAL/SLOT
 	// General
-	connect(ui.chkVisible, &QCheckBox::clicked, this, &CartesianPlotDock::visibilityChanged);
 	connect(ui.cbRangeType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CartesianPlotDock::rangeTypeChanged);
 	connect(ui.cbNiceExtend, &QCheckBox::clicked, this, &CartesianPlotDock::niceExtendChanged);
 	connect(ui.leRangePoints, &QLineEdit::textChanged, this, &CartesianPlotDock::rangePointsChanged);
@@ -411,8 +411,6 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list) {
 	connect(m_plot, &CartesianPlot::rangeChanged, this, &CartesianPlotDock::plotRangeChanged);
 	connect(m_plot, &CartesianPlot::scaleChanged, this, &CartesianPlotDock::plotScaleChanged);
 	connect(m_plot, &CartesianPlot::rangeFormatChanged, this, &CartesianPlotDock::plotRangeFormatChanged);
-
-	connect(m_plot, &CartesianPlot::visibleChanged, this, &CartesianPlotDock::plotVisibleChanged);
 
 	// range breaks
 	connect(m_plot, &CartesianPlot::xRangeBreakingEnabledChanged, this, &CartesianPlotDock::plotXRangeBreakingEnabledChanged);
@@ -865,13 +863,6 @@ void CartesianPlotDock::retranslateUi() {
 }
 
 // "General"-tab
-void CartesianPlotDock::visibilityChanged(bool state) {
-	CONDITIONAL_LOCK_RETURN;
-
-	for (auto* plot : m_plotList)
-		plot->setVisible(state);
-}
-
 void CartesianPlotDock::rangeTypeChanged(int index) {
 	auto type = static_cast<CartesianPlot::RangeType>(index);
 	if (type == CartesianPlot::RangeType::Free) {
@@ -1737,11 +1728,6 @@ void CartesianPlotDock::plotYRangeBreakingEnabledChanged(bool on) {
 }
 
 void CartesianPlotDock::plotYRangeBreaksChanged(const CartesianPlot::RangeBreaks&) {
-}
-
-void CartesianPlotDock::plotVisibleChanged(bool on) {
-	CONDITIONAL_LOCK_RETURN;
-	ui.chkVisible->setChecked(on);
 }
 
 // layout

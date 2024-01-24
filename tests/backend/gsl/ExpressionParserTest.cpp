@@ -236,6 +236,70 @@ void ExpressionParserTest::testequalEpsilon() {
 	QCOMPARE(fnct(-5.11, -5.3, 0.2), 1);
 }
 
+void ExpressionParserTest::testRoundn() {
+	auto fnct = getFunction2(QStringLiteral("roundn"));
+	QVERIFY(fnct);
+
+	QCOMPARE(fnct(3.1415, 2), 3.14); // round down
+	QCOMPARE(fnct(10.2397281298423, 5), 10.23973); // roundup
+	QCOMPARE(fnct(10000.1, 5), 10000.1);
+	QCOMPARE(fnct(123.45, -1), 120.);
+	QCOMPARE(fnct(1.45, 1), 1.5);
+	QCOMPARE(fnct(-1.45, 1), -1.5);
+	QCOMPARE(fnct(-1.44, 1), -1.4);
+	QCOMPARE(fnct(-123.45, 1), -123.5);
+	QCOMPARE(fnct(-123.44, 1), -123.4);
+	QCOMPARE(fnct(-123.45, -1), -120);
+}
+
+void ExpressionParserTest::testSpecialFunctions() {
+	auto fnct = getFunction1(QStringLiteral("cbrt"));
+	QVERIFY(fnct);
+
+	QCOMPARE(fnct(8.), 2.);
+	QCOMPARE(fnct(-8.), -2.);
+
+	fnct = getFunction1(QStringLiteral("logb"));
+	QVERIFY(fnct);
+
+	QCOMPARE(fnct(0.1), -4.);
+	QCOMPARE(fnct(0.4), -2.);
+	QCOMPARE(fnct(0.5), -1.);
+	QCOMPARE(fnct(8.), 3.);
+	QCOMPARE(fnct(10.), 3.);
+	QCOMPARE(fnct(100.), 6.);
+
+	fnct = getFunction1(QStringLiteral("rint"));
+	QVERIFY(fnct);
+
+	QCOMPARE(fnct(0.), 0.);
+	QCOMPARE(fnct(0.5), 0.);
+	QCOMPARE(fnct(1.49), 1.);
+	QCOMPARE(fnct(-0.5), 0.);
+	QCOMPARE(fnct(-0.99), -1.);
+	QCOMPARE(fnct(-1.5), -2.);
+
+	fnct = getFunction1(QStringLiteral("round"));
+	QVERIFY(fnct);
+
+	QCOMPARE(fnct(0.), 0.);
+	QCOMPARE(fnct(0.5), 1.);
+	QCOMPARE(fnct(1.49), 1.);
+	QCOMPARE(fnct(-0.5), -1.);
+	QCOMPARE(fnct(-0.99), -1.);
+	QCOMPARE(fnct(-1.5), -2.);
+
+	fnct = getFunction1(QStringLiteral("trunc"));
+	QVERIFY(fnct);
+
+	QCOMPARE(fnct(0.), 0.);
+	QCOMPARE(fnct(0.5), 0.);
+	QCOMPARE(fnct(1.49), 1.);
+	QCOMPARE(fnct(-0.5), -0.);
+	QCOMPARE(fnct(-0.99), -0.);
+	QCOMPARE(fnct(-1.5), -1.);
+}
+
 void ExpressionParserTest::testevaluateCartesian() {
 	const QString expr = QStringLiteral("x+y");
 	const QStringList vars = {QStringLiteral("x"), QStringLiteral("y")};

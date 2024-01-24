@@ -412,7 +412,7 @@ QMenu* AbstractAspect::createContextMenu() {
 		const auto* parent = parentAspect();
 		int count = parent->childCount<AbstractAspect>();
 		if (count > 1) {
-			auto* moveMenu = new QMenu(i18n("Move"));
+			auto* moveMenu = new QMenu(i18n("Move"), menu);
 			moveMenu->setIcon(QIcon::fromTheme(QStringLiteral("layer-bottom")));
 			if (parent->indexOfChild<AbstractAspect>(this) != 0)
 				moveMenu->addAction(QIcon::fromTheme(QStringLiteral("draw-arrow-up")), i18n("Up"), this, &AbstractAspect::moveUp);
@@ -937,7 +937,7 @@ void AbstractAspect::writeCommentElement(QXmlStreamWriter* writer) const {
  * \brief Load comment from an XML element
  */
 bool AbstractAspect::readCommentElement(XmlStreamReader* reader) {
-	setComment(reader->readElementText());
+	d->m_comment = reader->readElementText();
 	return true;
 }
 

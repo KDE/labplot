@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Value
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2022-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -85,6 +85,11 @@ QString& Value::columnPath() const {
 	D(Value);
 	return d->columnPath;
 }
+void Value::setColumnPath(const QString& path) {
+	D(Value);
+	d->columnPath = path;
+}
+
 BASIC_SHARED_D_READER_IMPL(Value, Value::Position, position, position)
 BASIC_SHARED_D_READER_IMPL(Value, bool, centerPositionAvailable, centerPositionAvailable)
 BASIC_SHARED_D_READER_IMPL(Value, double, distance, distance)

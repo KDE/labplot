@@ -36,6 +36,7 @@ private:
 
 private Q_SLOTS:
 	void loadOnStartChanged();
+	void newProjectChanged();
 	void autoSaveChanged(bool);
 	void changed();
 

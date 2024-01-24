@@ -1,6 +1,6 @@
 /*
 	SPDX-FileCopyrightText: 2011 SCHUTZ Sacha
-	SPDX-FileCopyrightText: 2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2020-2023 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: MIT
 */
@@ -9,8 +9,8 @@
 #include "backend/lib/trace.h"
 
 #include <QFile>
-#include <QMessageBox>
 #include <QPainter>
+#include <QPalette>
 
 #include <KLocalizedString>
 
@@ -191,13 +191,19 @@ bool QJsonModel::load(QIODevice* device) {
 }
 
 bool QJsonModel::loadJson(const QByteArray& json) {
-	QJsonParseError error;
+	QJsonParseError jsonError;
 
-	const QJsonDocument& doc = QJsonDocument::fromJson(json, &error);
-	if (error.error == QJsonParseError::NoError)
-		return loadJson(doc);
-	else {
-		QMessageBox::critical(nullptr, i18n("Failed to load JSON document"), i18n("Failed to load JSON document. Error: %1.", error.errorString()));
+	const QJsonDocument& doc = QJsonDocument::fromJson(json, &jsonError);
+	if (jsonError.error == QJsonParseError::NoError) {
+		const bool rc = loadJson(doc);
+		if (!rc)
+			Q_EMIT error(i18n("Failed to load the JSON file. Empty JSON document."));
+		else
+			Q_EMIT error(QString());
+
+		return rc;
+	} else {
+		Q_EMIT error(i18n("Failed to load JSON document. Error: %1.", jsonError.errorString()));
 		return false;
 	}
 }

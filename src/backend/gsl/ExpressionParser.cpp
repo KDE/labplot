@@ -304,11 +304,7 @@ QStringList ExpressionParser::getParameter(const QString& expr, const QStringLis
 #endif
 	QDEBUG(Q_FUNC_INFO << ", found strings:" << strings);
 	// RE for any number
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 12, 0))
 	const QRegularExpression re(QRegularExpression::anchoredPattern(QStringLiteral("[0-9]*")));
-#else
-	const QRegularExpression re("\\A(?:" + QStringLiteral("[0-9]*") + ")\\z");
-#endif
 	for (const QString& string : strings) {
 		QDEBUG(string << ':' << constants().indexOf(string) << ' ' << functions().indexOf(string) << ' ' << vars.indexOf(string) << ' '
 					  << re.match(string).hasMatch());

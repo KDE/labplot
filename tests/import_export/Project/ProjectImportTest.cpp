@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Tests for project imports
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2018 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2018-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -23,7 +23,6 @@
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
-
 // ##############################################################################
 // #####################  import of LabPlot projects ############################
 // ##############################################################################
@@ -465,7 +464,7 @@ void ProjectImportTest::testOrigin_2folder_with_graphs() {
 	auto* symbol = curve->symbol();
 	QVERIFY(symbol != nullptr);
 	QCOMPARE(symbol->style(), Symbol::Style::SquareHalf);
-	QCOMPARE(symbol->size(), 31.75);
+	QCOMPARE(symbol->size(), 89.8842169409);
 	// TODO: more symbol props
 
 	// Folder 2
@@ -521,7 +520,7 @@ void ProjectImportTest::testOrigin_2folder_with_graphs() {
 	symbol = curve->symbol();
 	QVERIFY(symbol != nullptr);
 	QCOMPARE(symbol->style(), Symbol::Style::Hexagon);
-	QCOMPARE(symbol->size(), 31.75);
+	QCOMPARE(symbol->size(), 89.8842169409);
 	// TODO: more symbol props
 }
 
@@ -571,6 +570,7 @@ void ProjectImportTest::testOrigin_2graphs() {
 	auto* curve = dynamic_cast<XYCurve*>(plot->child<XYCurve>(0));
 	QVERIFY(curve != nullptr);
 	QCOMPARE(curve->name(), QStringLiteral("B")); // TODO: Origin uses Comments as curve name: "Length"
+	QCOMPARE(curve->coordinateSystemIndex(), plot->defaultCoordinateSystemIndex());
 
 	CHECK_RANGE(plot, curve, Dimension::X, .5, 5.5);
 	CHECK_RANGE(plot, curve, Dimension::Y, .5, 5.5);
@@ -589,7 +589,7 @@ void ProjectImportTest::testOrigin_2graphs() {
 	auto* symbol = curve->symbol();
 	QVERIFY(symbol != nullptr);
 	QCOMPARE(symbol->style(), Symbol::Style::Hexagon);
-	QCOMPARE(symbol->size(), 31.75);
+	QCOMPARE(symbol->size(), 89.8842169409);
 	// TODO: more symbol props
 
 	// Graph 1
@@ -616,6 +616,7 @@ void ProjectImportTest::testOrigin_2graphs() {
 	curve = dynamic_cast<XYCurve*>(plot->child<XYCurve>(0));
 	QVERIFY(curve != nullptr);
 	QCOMPARE(curve->name(), QStringLiteral("B")); // TODO: Origin uses Comments as curve name: "Length"
+	QCOMPARE(curve->coordinateSystemIndex(), plot->defaultCoordinateSystemIndex());
 
 	CHECK_RANGE(plot, curve, Dimension::X, 0., 9.);
 	CHECK_RANGE(plot, curve, Dimension::Y, 0., 9.);
@@ -633,7 +634,7 @@ void ProjectImportTest::testOrigin_2graphs() {
 	symbol = curve->symbol();
 	QVERIFY(symbol != nullptr);
 	QCOMPARE(symbol->style(), Symbol::Style::SquareHalf);
-	QCOMPARE(symbol->size(), 31.75);
+	QCOMPARE(symbol->size(), 89.8842169409);
 	// TODO: more symbol props
 
 	// Book 1
@@ -650,6 +651,270 @@ void ProjectImportTest::testOrigin_2graphs() {
 	c2 = dynamic_cast<Column*>(s1->child<AbstractAspect>(1));
 	QVERIFY(c2 != nullptr);
 	QCOMPARE(c2->name(), QLatin1String("B"));
+}
+
+/*!
+ * read a project file containing one plot area/layer with one single coordinate system with 4 axes and one curve.
+ */
+void ProjectImportTest::testOriginSingleLayerTwoAxes() {
+	// import the opj file into LabPlot's project object
+	OriginProjectParser parser;
+	parser.setProjectFileName(QFINDTESTDATA(QLatin1String("data/single_layer_two_axes.opj")));
+	parser.setGraphLayerAsPlotArea(true); // read every layer as a new plot area
+	Project project;
+	parser.importTo(&project, QStringList());
+
+	const auto& plots = project.children<CartesianPlot>(AbstractAspect::ChildIndexFlag::Recursive);
+	QCOMPARE(plots.count(), 1);
+
+	// check the plot area
+	const auto* plot1 = plots.first();
+	QVERIFY(plot1 != nullptr);
+
+	// ranges and axes - there should be one single coordinate system and 4 axes on the plot area
+	QCOMPARE(plot1->rangeCount(Dimension::X), 1);
+	QCOMPARE(plot1->rangeCount(Dimension::Y), 1);
+	QCOMPARE(plot1->coordinateSystemCount(), 1);
+
+	const auto& rangeX1 = plot1->range(Dimension::X, 0);
+	QCOMPARE(rangeX1.start(), 1.5);
+	QCOMPARE(rangeX1.end(), 8.5);
+	QCOMPARE(rangeX1.scale(), RangeT::Scale::Linear);
+	QCOMPARE(rangeX1.format(), RangeT::Format::Numeric);
+
+	const auto& rangeY1 = plot1->range(Dimension::Y, 0);
+	QCOMPARE(rangeY1.start(), 3.5);
+	QCOMPARE(rangeY1.end(), 8.5);
+	QCOMPARE(rangeY1.scale(), RangeT::Scale::Linear);
+	QCOMPARE(rangeY1.format(), RangeT::Format::Numeric);
+
+	// axes
+	const auto& axes = plot1->children<Axis>();
+	QCOMPARE(axes.count(), 4);
+
+	// curve
+	const auto& curves1 = plot1->children<XYCurve>();
+	QCOMPARE(curves1.count(), 1);
+	QCOMPARE(curves1.constFirst()->coordinateSystemIndex(), 0);
+}
+
+/*!
+ * read a project file containing one plot area/layer with one single coordinate system with 4 axes and one curve.
+ * the line of the second axes is hidden, only the labels are shown - we still have to create for axes objects after the import.
+ */
+void ProjectImportTest::testOriginSingleLayerTwoAxesWithoutLines() {
+	// import the opj file into LabPlot's project object
+	OriginProjectParser parser;
+	parser.setProjectFileName(QFINDTESTDATA(QLatin1String("data/single_layer_two_axes_without_lines.opj")));
+	parser.setGraphLayerAsPlotArea(true); // read every layer as a new plot area
+	Project project;
+	parser.importTo(&project, QStringList());
+
+	const auto& plots = project.children<CartesianPlot>(AbstractAspect::ChildIndexFlag::Recursive);
+	QCOMPARE(plots.count(), 1);
+
+	// check the plot area
+	const auto* plot1 = plots.first();
+	QVERIFY(plot1 != nullptr);
+
+	// ranges and axes - there should be one single coordinate system and 4 axes on the plot area
+	QCOMPARE(plot1->rangeCount(Dimension::X), 1);
+	QCOMPARE(plot1->rangeCount(Dimension::Y), 1);
+	QCOMPARE(plot1->coordinateSystemCount(), 1);
+
+	const auto& rangeX1 = plot1->range(Dimension::X, 0);
+	QCOMPARE(rangeX1.start(), 1.5);
+	QCOMPARE(rangeX1.end(), 8.5);
+	QCOMPARE(rangeX1.scale(), RangeT::Scale::Linear);
+	QCOMPARE(rangeX1.format(), RangeT::Format::Numeric);
+
+	const auto& rangeY1 = plot1->range(Dimension::Y, 0);
+	QCOMPARE(rangeY1.start(), 3.5);
+	QCOMPARE(rangeY1.end(), 8.5);
+	QCOMPARE(rangeY1.scale(), RangeT::Scale::Linear);
+	QCOMPARE(rangeY1.format(), RangeT::Format::Numeric);
+
+	// axes
+	const auto& axes = plot1->children<Axis>();
+	QCOMPARE(axes.count(), 4);
+
+	// curve
+	const auto& curves1 = plot1->children<XYCurve>();
+	QCOMPARE(curves1.count(), 1);
+	QCOMPARE(curves1.constFirst()->coordinateSystemIndex(), 0);
+}
+
+/*!
+ * read a project file containing two plot areas with one single coordinate system and one curve in each the plot area.
+ */
+void ProjectImportTest::testOriginMultiLayersAsPlotAreas() {
+	// import the opj file into LabPlot's project object
+	OriginProjectParser parser;
+	parser.setProjectFileName(QFINDTESTDATA(QLatin1String("data/two_layers_as_two_plot_areas.opj")));
+	parser.setGraphLayerAsPlotArea(true); // read every layer as a new plot area
+	Project project;
+	parser.importTo(&project, QStringList());
+
+	const auto& plots = project.children<CartesianPlot>(AbstractAspect::ChildIndexFlag::Recursive);
+	QCOMPARE(plots.count(), 2);
+
+	// check the first plot area
+	const auto* plot1 = plots.first();
+	QVERIFY(plot1 != nullptr);
+
+	// ranges
+	QCOMPARE(plot1->rangeCount(Dimension::X), 1);
+	QCOMPARE(plot1->rangeCount(Dimension::Y), 1);
+	QCOMPARE(plot1->coordinateSystemCount(), 1);
+
+	const auto& rangeX1 = plot1->range(Dimension::X, 0);
+	QCOMPARE(rangeX1.start(), 1.5);
+	QCOMPARE(rangeX1.end(), 8.5);
+	QCOMPARE(rangeX1.scale(), RangeT::Scale::Linear);
+	QCOMPARE(rangeX1.format(), RangeT::Format::Numeric);
+
+	const auto& rangeY1 = plot1->range(Dimension::Y, 0);
+	QCOMPARE(rangeY1.start(), 3.5);
+	QCOMPARE(rangeY1.end(), 8.5);
+	QCOMPARE(rangeY1.scale(), RangeT::Scale::Linear);
+	QCOMPARE(rangeY1.format(), RangeT::Format::Numeric);
+
+	// curve
+	const auto& curves1 = plot1->children<XYCurve>();
+	QCOMPARE(curves1.count(), 1);
+	QCOMPARE(curves1.constFirst()->coordinateSystemIndex(), 0);
+
+	// check the second plot area
+	const auto* plot2 = plots.at(1);
+	QVERIFY(plot2 != nullptr);
+
+	// ranges
+	QCOMPARE(plot2->rangeCount(Dimension::X), 1);
+	QCOMPARE(plot2->rangeCount(Dimension::Y), 1);
+	QCOMPARE(plot2->coordinateSystemCount(), 1);
+
+	const auto& rangeX2 = plot2->range(Dimension::X, 0);
+	QCOMPARE(rangeX2.start(), 1.5);
+	QCOMPARE(rangeX2.end(), 8.5);
+	QCOMPARE(rangeX2.scale(), RangeT::Scale::Linear);
+	QCOMPARE(rangeX2.format(), RangeT::Format::Numeric);
+
+	const auto& rangeY2 = plot2->range(Dimension::Y, 0);
+	QCOMPARE(rangeY2.start(), 8.);
+	QCOMPARE(rangeY2.end(), 18.);
+	QCOMPARE(rangeY2.scale(), RangeT::Scale::Linear);
+	QCOMPARE(rangeY2.format(), RangeT::Format::Numeric);
+
+	// curve
+	const auto& curves2 = plot1->children<XYCurve>();
+	QCOMPARE(curves2.count(), 1);
+	QCOMPARE(curves2.constFirst()->coordinateSystemIndex(), 0);
+}
+
+/*!
+ * read a project file containing one plot area with two coordinate systems ("two axes") and one curve per each coordinate system.
+ */
+void ProjectImportTest::testOriginMultiLayersAsCoordinateSystems() {
+	// import the opj file into LabPlot's project object
+	OriginProjectParser parser;
+	parser.setProjectFileName(QFINDTESTDATA(QLatin1String("data/two_layers_as_two_coordinate_systems.opj")));
+	parser.setGraphLayerAsPlotArea(false); // read every layer as a new coordinate system
+	Project project;
+	parser.importTo(&project, QStringList());
+
+	// check the ranges of the CartesianPlot in the project
+	const auto& plots = project.children<CartesianPlot>(AbstractAspect::ChildIndexFlag::Recursive);
+	QCOMPARE(plots.count(), 1);
+
+	const auto* plot = plots.first();
+	QVERIFY(plot != nullptr);
+
+	// ranges
+	QCOMPARE(plot->rangeCount(Dimension::X), 1);
+	QCOMPARE(plot->rangeCount(Dimension::Y), 2);
+
+	const auto& rangeX = plot->range(Dimension::X, 0);
+	QCOMPARE(rangeX.start(), 1.);
+	QCOMPARE(rangeX.end(), 12.);
+	QCOMPARE(rangeX.scale(), RangeT::Scale::Linear);
+	QCOMPARE(rangeX.format(), RangeT::Format::Numeric);
+
+	const auto& rangeY1 = plot->range(Dimension::Y, 0);
+	QCOMPARE(rangeY1.start(), 1.75);
+	QCOMPARE(rangeY1.end(), 5.25);
+	QCOMPARE(rangeY1.scale(), RangeT::Scale::Linear);
+	QCOMPARE(rangeY1.format(), RangeT::Format::Numeric);
+
+	const auto& rangeY2 = plot->range(Dimension::Y, 1);
+	QCOMPARE(rangeY2.start(), 20);
+	QCOMPARE(rangeY2.end(), 47.5);
+	QCOMPARE(rangeY2.scale(), RangeT::Scale::Linear);
+	QCOMPARE(rangeY2.format(), RangeT::Format::Numeric);
+
+	// coordinate systems
+	QCOMPARE(plot->coordinateSystemCount(), 2);
+
+	// curves, two curves in total, one curve for every layer/coordinate system
+	const auto& curves = plot->children<XYCurve>();
+	QCOMPARE(curves.count(), 2);
+	QCOMPARE(curves.at(0)->coordinateSystemIndex(), 0);
+	QCOMPARE(curves.at(1)->coordinateSystemIndex(), 1);
+}
+
+/*!
+ * read a project file containing one plot area with two coordinate systems ("two axes") and one curve per each coordinate system.
+ * the test project was created with a newer version of Origin and has a legend defined via an annotation that we need to
+ * properly interpret.
+ */
+void ProjectImportTest::testOriginMultiLayersAsCoordinateSystemsWithLegend() {
+	// import the opj file into LabPlot's project object
+	OriginProjectParser parser;
+	parser.setProjectFileName(QFINDTESTDATA(QLatin1String("data/two_layers_as_two_coordinate_systems_with_legend.opj")));
+	parser.setGraphLayerAsPlotArea(false); // read every layer as a new coordinate system
+	Project project;
+	parser.importTo(&project, QStringList());
+
+	// check the ranges of the CartesianPlot in the project
+	const auto& plots = project.children<CartesianPlot>(AbstractAspect::ChildIndexFlag::Recursive);
+	QCOMPARE(plots.count(), 1);
+
+	const auto* plot = plots.first();
+	QVERIFY(plot != nullptr);
+
+	// ranges
+	QCOMPARE(plot->rangeCount(Dimension::X), 1);
+	QCOMPARE(plot->rangeCount(Dimension::Y), 2);
+
+	const auto& rangeX = plot->range(Dimension::X, 0);
+	QCOMPARE(rangeX.start(), 1.);
+	QCOMPARE(rangeX.end(), 12.);
+	QCOMPARE(rangeX.scale(), RangeT::Scale::Linear);
+	QCOMPARE(rangeX.format(), RangeT::Format::Numeric);
+
+	const auto& rangeY1 = plot->range(Dimension::Y, 0);
+	QCOMPARE(rangeY1.start(), 1.75);
+	QCOMPARE(rangeY1.end(), 5.25);
+	QCOMPARE(rangeY1.scale(), RangeT::Scale::Linear);
+	QCOMPARE(rangeY1.format(), RangeT::Format::Numeric);
+
+	const auto& rangeY2 = plot->range(Dimension::Y, 1);
+	QCOMPARE(rangeY2.start(), 20);
+	QCOMPARE(rangeY2.end(), 47.5);
+	QCOMPARE(rangeY2.scale(), RangeT::Scale::Linear);
+	QCOMPARE(rangeY2.format(), RangeT::Format::Numeric);
+
+	// coordinate systems
+	QCOMPARE(plot->coordinateSystemCount(), 2);
+
+	// curves, two curves in total, one curve for every layer/coordinate system
+	const auto& curves = plot->children<XYCurve>();
+	QCOMPARE(curves.count(), 2);
+	QCOMPARE(curves.at(0)->coordinateSystemIndex(), 0);
+	QCOMPARE(curves.at(1)->coordinateSystemIndex(), 1);
+
+	// legend
+	const auto& legends = plot->children<CartesianPlotLegend>();
+	QCOMPARE(legends.count(), 1);
 }
 
 void ProjectImportTest::testParseOriginTags_data() {
@@ -669,7 +934,7 @@ void ProjectImportTest::testParseOriginTags_data() {
 								<< "<u>underlined</u>";
 
 	QTest::newRow("greek char") << "\\g(a)"
-								<< "<font face=Symbol>a</font>";
+								<< "&alpha;";
 
 	QTest::newRow("sub-script") << "a\\-(b)"
 								<< "a<sub>b</sub>";

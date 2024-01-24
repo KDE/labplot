@@ -19,6 +19,7 @@ public:
 	explicit PlotPrivate(Plot*);
 	virtual bool activatePlot(QPointF mouseScenePos, double maxDist = -1);
 	Plot* const q;
+	bool legendVisible{true};
 
 protected:
 	void drawFillingPollygon(const QPolygonF&, QPainter*, const Background*) const;

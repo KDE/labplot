@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : parser for Origin projects
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2017 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2017-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2018-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -16,11 +16,13 @@
 #include <OriginFile.h>
 
 class Axis;
+class CartesianPlot;
 class Column;
 class Project;
 class Workbook;
 class Spreadsheet;
 class Matrix;
+class TextLabel;
 class Worksheet;
 class Note;
 class XYCurve;
@@ -30,14 +32,17 @@ class OriginProjectParser : public ProjectParser {
 
 public:
 	OriginProjectParser();
+	~OriginProjectParser() override;
 
 	static bool isOriginProject(const QString& fileName);
 	static QString supportedExtensions();
+
+	void checkContent(bool& hasUnusedObjects, bool& hasMultiLayers);
 	void setImportUnusedObjects(bool);
-	bool hasUnusedObjects();
+	void setGraphLayerAsPlotArea(bool);
 
 protected:
-	bool load(Project*, bool) override;
+	bool load(Project*, bool preview) override;
 
 private:
 	bool loadFolder(Folder*, tree<Origin::ProjectNode>::iterator, bool preview);
@@ -46,11 +51,19 @@ private:
 	void loadColumnNumericFormat(const Origin::SpreadColumn& originColumn, Column* column) const;
 	bool loadMatrixWorkbook(Workbook*, bool preview);
 	bool loadMatrix(Matrix*, bool preview, size_t sheetIndex = 0, const QString& mwbName = QString());
+
 	bool loadWorksheet(Worksheet*, bool preview);
+	void loadGraphLayer(const Origin::GraphLayer&, CartesianPlot*, int index, QHash<TextLabel*, QSizeF> textLabelPositions, bool preview);
+	void loadCurves(const Origin::GraphLayer&, CartesianPlot*, int index, const QString& legendText, bool preview);
+	void loadAxes(const Origin::GraphLayer&, CartesianPlot*, int index, const QString& xColumnName, const QString& yColumnName);
 	void loadAxis(const Origin::GraphAxis&, Axis*, int index, const QString& axisTitle = QString()) const;
 	void loadCurve(const Origin::GraphCurve&, XYCurve*) const;
+
 	bool loadNote(Note*, bool preview);
 	void handleLooseWindows(Folder*, bool preview);
+
+	bool hasUnusedObjects();
+	bool hasMultiLayerGraphs();
 
 	unsigned int findSpreadsheetByName(const QString&);
 	unsigned int findMatrixByName(const QString&);
@@ -73,6 +86,8 @@ private:
 	QStringList m_worksheetNameList;
 	QStringList m_noteNameList;
 	bool m_importUnusedObjects{false};
+	bool m_graphLayerAsPlotArea{true};
+	double elementScalingFactor{1.};
 
 	friend class ProjectImportTest;
 };

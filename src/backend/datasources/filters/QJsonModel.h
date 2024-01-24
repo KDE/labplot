@@ -1,6 +1,6 @@
 /*
 	SPDX-FileCopyrightText: 2011 SCHUTZ Sacha
-
+	SPDX-FileCopyrightText: 2020-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: MIT
 */
 
@@ -78,6 +78,9 @@ private:
 	QStringList mHeaders;
 	QIcon mObjectIcon;
 	QIcon mArrayIcon;
+
+Q_SIGNALS:
+	void error(const QString&);
 };
 
 #endif // QJSONMODEL_H

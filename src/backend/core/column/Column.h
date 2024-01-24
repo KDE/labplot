@@ -66,6 +66,7 @@ public:
 	bool isReadOnly() const override;
 	void resizeTo(int);
 	int rowCount() const override;
+	int rowCount(double min, double max) const override;
 	int availableRowCount(int max = -1) const override;
 	int width() const;
 	void setWidth(const int);
@@ -137,6 +138,8 @@ public:
 	void setData(void*);
 	bool hasValues() const;
 	bool valueLabelsInitialized() const;
+	double valueLabelsMinimum() const;
+	double valueLabelsMaximum() const;
 	void setLabelsMode(ColumnMode mode);
 	void removeValueLabel(const QString&);
 	void valueLabelsRemoveAll();
@@ -201,6 +204,10 @@ public:
 	};
 	AbstractColumn::ColumnMode labelsMode() const;
 	int valueLabelsCount() const;
+	int valueLabelsCount(double min, double max) const;
+	int valueLabelsIndexForValue(double x) const;
+	double valueLabelsValueAt(int index) const;
+	QString valueLabelAt(int index) const;
 	void addValueLabel(qint64, const QString&);
 	const QVector<ValueLabel<qint64>>* bigIntValueLabels() const;
 	void addValueLabel(int, const QString&);

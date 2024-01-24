@@ -53,7 +53,7 @@ private:
 
 	void setModel();
 	void setModelIndexFromColumn(TreeViewComboBox*, const AbstractColumn*);
-	void updatePlotRanges() override;
+	void updatePlotRangeList() override;
 	void updateMajorTicksStartType(bool visible);
 	void initConnections();
 

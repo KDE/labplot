@@ -35,7 +35,7 @@
     </spacer>
    </item>
    <item row="0" column="2">
-    <widget class="QLineEdit" name="leName"/>
+    <widget class="TimedLineEdit" name="leName"/>
    </item>
    <item row="1" column="0">
     <widget class="QLabel" name="lComment">
@@ -341,6 +341,11 @@
    <class>ResizableTextEdit</class>
    <extends>QTextEdit</extends>
    <header>src/kdefrontend/widgets/ResizableTextEdit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>TimedLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>src/kdefrontend/widgets/TimedLineEdit.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

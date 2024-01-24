@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : import file data dialog
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2008-2018 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2008-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2008-2015 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -31,7 +31,7 @@
 
 #include <KConfigGroup>
 #include <KLocalizedString>
-#include <KMessageBox>
+#include <KMessageWidget>
 
 /*!
 	\class ImportDialog
@@ -167,4 +167,20 @@ void ImportDialog::newDataContainer(QAction* action) {
 
 void ImportDialog::newDataContainerMenu() {
 	m_newDataContainerMenu->exec(tbNewDataContainer->mapToGlobal(tbNewDataContainer->rect().bottomLeft()));
+}
+
+void ImportDialog::showErrorMessage(const QString& message) {
+	if (message.isEmpty()) {
+		if (m_messageWidget && m_messageWidget->isVisible())
+			m_messageWidget->close();
+	} else {
+		if (!m_messageWidget) {
+			m_messageWidget = new KMessageWidget(this);
+			m_messageWidget->setMessageType(KMessageWidget::Error);
+			vLayout->insertWidget(vLayout->count() - 1, m_messageWidget);
+		}
+		m_messageWidget->setText(message);
+		m_messageWidget->animatedShow();
+		QDEBUG(message);
+	}
 }

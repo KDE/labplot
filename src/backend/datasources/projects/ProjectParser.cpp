@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : base class for project parsers
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2017-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2017-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2019 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -27,15 +27,15 @@ ProjectParser::ProjectParser()
 }
 
 ProjectParser::~ProjectParser() {
-	delete m_project;
+	delete m_previewProject;
 }
 
 void ProjectParser::setProjectFileName(const QString& name) {
 	m_projectFileName = name;
 
-	// delete the previous project object
-	delete m_project;
-	m_project = nullptr;
+	// delete the previous project used to generate the preview
+	delete m_previewProject;
+	m_previewProject = nullptr;
 }
 
 const QString& ProjectParser::projectFileName() const {
@@ -46,16 +46,20 @@ QList<AspectType> ProjectParser::topLevelClasses() const {
 	return m_topLevelClasses;
 }
 
+/*!
+ * returns the model containing the structure of the current project used for the preview in the import project dialog.
+ * The caller takes over the ownership of the model.
+ */
 QAbstractItemModel* ProjectParser::model() {
 	WAIT_CURSOR;
 	PERFTRACE(QStringLiteral("project model for preview created"));
-	if (!m_project)
-		m_project = new Project();
+	delete m_previewProject;
+	m_previewProject = new Project();
 
+	bool rc = load(m_previewProject, true);
 	AspectTreeModel* model = nullptr;
-	bool rc = load(m_project, true);
 	if (rc) {
-		model = new AspectTreeModel(m_project);
+		model = new AspectTreeModel(m_previewProject);
 		model->setReadOnly(true);
 	}
 
@@ -123,7 +127,7 @@ void ProjectParser::importTo(Folder* targetFolder, const QStringList& selectedPa
 }
 
 /*
- * moved \c sourceChildFolderToMove from its parten folder to \c targetParentFolder
+ * moved \c sourceChildFolderToMove from its parent folder to \c targetParentFolder
  * keeping (not overwriting) the sub-folder structure.
  */
 void ProjectParser::moveFolder(Folder* targetParentFolder, Folder* sourceChildFolderToMove) const {

@@ -88,6 +88,7 @@ FITSHeaderEditWidget::FITSHeaderEditWidget(QWidget* parent)
  */
 FITSHeaderEditWidget::~FITSHeaderEditWidget() {
 	delete m_fitsFilter;
+	delete ui;
 }
 
 /*!

@@ -69,6 +69,8 @@ private Q_SLOTS:
 Q_SIGNALS:
 	friend class ReferenceLineSetPositionCmd;
 	void orientationChanged(Orientation);
+
+	friend class WorksheetElementTest;
 };
 
 #endif

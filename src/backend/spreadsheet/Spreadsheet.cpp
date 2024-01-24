@@ -67,6 +67,7 @@ Spreadsheet::Spreadsheet(const QString& name, bool loading, AspectType type)
 
 Spreadsheet::~Spreadsheet() {
 	delete m_model;
+	delete d_ptr;
 }
 
 /*!
@@ -1324,7 +1325,7 @@ int Spreadsheet::prepareImport(std::vector<void*>& dataContainer,
 	}
 
 	if (columnMode.size() < actualCols) {
-		DEBUG(Q_FUNC_INFO << ", columnMode[] size is too small! Giving up.");
+		QDEBUG(Q_FUNC_INFO << ", columnMode[] size " << columnMode.size() << " is too small, should be " << actualCols << "! Giving up.");
 		return -1;
 	}
 
@@ -1392,8 +1393,8 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList names, 
 	//	PERFTRACE(Q_FUNC_INFO);
 	DEBUG(Q_FUNC_INFO << ", mode = " << ENUM_TO_STRING(AbstractFileFilter, ImportMode, mode) << ", cols = " << cols)
 	// QDEBUG("	column name list = " << colNameList)
-	//  name additional columns
-	Q_EMIT aboutToResize();
+
+	Q_EMIT aboutToResize(); // call this to disable the retransforms in worksheet elements in Project
 
 	// make sure the column names provided by the user don't have any duplicates
 	QStringList uniqueNames;
@@ -1454,24 +1455,26 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList names, 
 			Q_EMIT aspectsInserted(columnsCount, cols - 1);
 		}
 
-		// 1. suppressretransform for all WorksheetElements
-		// 2. rename the columns that were already available
-		// 3. suppress the dataChanged signal for all columns
-		// 4. send aspectDescriptionChanged because otherwise the column
-		//    will not be connected again to the curves (project.cpp, descriptionChanged)
-		// 5. Enable retransform for all WorksheetElements
+		// 1. if the column name has changed, call Column::reset() to disconnect all dependent objects from the dataChanged signal
+		// 2. suppress the dataChanged signal for all columns (will be restored later in finalizeImport())
+		// 3. rename the columns that were already available
+		// 4. column->aspectDescriptionChanged() to trigger the update of the dependencies on column in Project.
 		const auto& columns = children<Column>();
 		int index = 0;
 		for (auto* column : columns) {
 			column->setSuppressDataChangedSignal(true);
-			column->reset();
-			column->setName(uniqueNames.at(index), AbstractAspect::NameHandling::UniqueNotRequired);
-			column->aspectDescriptionChanged(column);
+			const auto& newName = uniqueNames.at(index);
+			if (column->name() != newName) {
+				column->reset();
+				column->setName(newName, AbstractAspect::NameHandling::UniqueNotRequired);
+				column->aspectDescriptionChanged(column);
+			}
 			++index;
 		}
 	}
 
-	Q_EMIT resizeFinished();
+	Q_EMIT resizeFinished(); // call this to re-enable the retransforms in worksheet elements in Project
+
 	return columnOffset;
 }
 
@@ -1502,7 +1505,7 @@ void Spreadsheet::finalizeImport(size_t columnOffset,
 	for (size_t col = startColumn; col <= endColumn; col++) {
 		// DEBUG(Q_FUNC_INFO << ", column " << columnOffset + col - startColumn);
 		Column* column = this->column((int)(columnOffset + col - startColumn));
-		// DEBUG(Q_FUNC_INFO << ", type " << ENUM_TO_STRING(AbstractColumn, ColumnMode, column->columnMode()))
+		DEBUG(Q_FUNC_INFO << ", type " << ENUM_TO_STRING(AbstractColumn, ColumnMode, column->columnMode()))
 
 		QString comment;
 		switch (column->columnMode()) {

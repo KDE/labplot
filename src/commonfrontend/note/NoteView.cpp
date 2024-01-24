@@ -4,7 +4,7 @@
 	Description          : Notes View for taking notes
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2016-2016 Garvit Khatri <garvitdelhi@gmail.com>
-	SPDX-FileCopyrightText: 2016-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2016-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -15,25 +15,25 @@
 #include <QPrinter>
 #include <QTextEdit>
 
-NoteView::NoteView(Note* notes)
-	: m_notes(notes)
+NoteView::NoteView(Note* note)
+	: m_note(note)
 	, m_textEdit(new QTextEdit(this)) {
 	auto* layout = new QHBoxLayout(this);
 	layout->setContentsMargins(0, 0, 0, 0);
 
 	QPalette palette = m_textEdit->palette();
-	palette.setColor(QPalette::Base, m_notes->backgroundColor());
-	palette.setColor(QPalette::Text, m_notes->textColor());
+	palette.setColor(QPalette::Base, m_note->backgroundColor());
+	palette.setColor(QPalette::Text, m_note->textColor());
 
 	m_textEdit->setPalette(palette);
-	m_textEdit->setFont(m_notes->textFont());
-	m_textEdit->setText(m_notes->note());
+	m_textEdit->setFont(m_note->textFont());
+	m_textEdit->setText(m_note->note());
 
 	layout->addWidget(m_textEdit);
 
-	connect(m_notes, &Note::backgroundColorChanged, this, &NoteView::backgroundColorChanged);
-	connect(m_notes, &Note::textColorChanged, this, &NoteView::textColorChanged);
-	connect(m_notes, &Note::textFontChanged, this, &NoteView::textFontChanged);
+	connect(m_note, &Note::backgroundColorChanged, this, &NoteView::backgroundColorChanged);
+	connect(m_note, &Note::textColorChanged, this, &NoteView::textColorChanged);
+	connect(m_note, &Note::textFontChanged, this, &NoteView::textFontChanged);
 	connect(m_textEdit, &QTextEdit::textChanged, this, &NoteView::textChanged);
 }
 
@@ -42,16 +42,14 @@ void NoteView::print(QPrinter* printer) const {
 }
 
 void NoteView::textChanged() {
-	m_notes->setNote(m_textEdit->toPlainText());
+	m_note->setNote(m_textEdit->toPlainText());
 }
 
 void NoteView::backgroundColorChanged(QColor color) {
-	// the background color needs to be applied to the viewport and not
-	// to the widget directly, works in the constructor prior to adding to
-	// the layout, though.
-	QPalette palette = m_textEdit->viewport()->palette();
-	palette.setColor(QPalette::Base, color);
-	m_textEdit->viewport()->setPalette(palette);
+	QString red = QString::number(color.red());
+	QString green = QString::number(color.green());
+	QString blue = QString::number(color.blue());
+	m_textEdit->setStyleSheet(QStringLiteral("QTextEdit{background-color: rgb(%1, %2, %3);}").arg(red, green, blue));
 }
 
 void NoteView::textFontChanged(const QFont& font) {
@@ -59,7 +57,5 @@ void NoteView::textFontChanged(const QFont& font) {
 }
 
 void NoteView::textColorChanged(QColor color) {
-	QPalette palette = m_textEdit->palette();
-	palette.setColor(QPalette::Text, color);
-	m_textEdit->setPalette(palette);
+	m_textEdit->setTextColor(color);
 }

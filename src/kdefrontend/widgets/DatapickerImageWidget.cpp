@@ -220,8 +220,6 @@ DatapickerImageWidget::DatapickerImageWidget(QWidget* parent)
 
 	// SLOTS
 	// general
-	connect(ui.leName, &QLineEdit::textChanged, this, &DatapickerImageWidget::nameChanged);
-	connect(ui.teComment, &QTextEdit::textChanged, this, &DatapickerImageWidget::commentChanged);
 	connect(ui.bOpen, &QPushButton::clicked, this, &DatapickerImageWidget::selectFile);
 	connect(ui.leFileName, &QLineEdit::returnPressed, this, &DatapickerImageWidget::fileNameChanged);
 	connect(ui.leFileName, &QLineEdit::textChanged, this, &DatapickerImageWidget::fileNameChanged);

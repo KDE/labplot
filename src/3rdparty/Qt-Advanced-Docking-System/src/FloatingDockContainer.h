@@ -298,7 +298,6 @@ public:
 	 */
 	bool hasNativeTitleBar();
 #endif
-
 }; // class FloatingDockContainer
 }
  // namespace ads

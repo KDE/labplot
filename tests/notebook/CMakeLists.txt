@@ -1,5 +1,11 @@
-add_executable (NotebookTest NotebookTest.cpp)
+option(ENABLE_TEST_NOTEBOOK "Enable Notebook Tests" ON)
 
-target_link_libraries(NotebookTest labplot2lib labplot2test)
+if (ENABLE_TEST_NOTEBOOK)
 
-add_test(NAME NotebookTest COMMAND NotebookTest)
+    add_executable (NotebookTest NotebookTest.cpp)
+
+    target_link_libraries(NotebookTest labplot2lib labplot2test)
+
+    add_test(NAME NotebookTest COMMAND NotebookTest)
+
+endif()

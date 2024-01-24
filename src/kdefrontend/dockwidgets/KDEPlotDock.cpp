@@ -33,6 +33,7 @@ KDEPlotDock::KDEPlotDock(QWidget* parent)
 	ui.setupUi(this);
 	setPlotRangeCombobox(ui.cbPlotRanges);
 	setBaseWidgets(ui.leName, ui.teComment);
+	setVisibilityWidgets(ui.chkVisible, ui.chkLegendVisible);
 
 	// Tab "General"
 	auto* gridLayout = qobject_cast<QGridLayout*>(ui.tabGeneral->layout());
@@ -63,9 +64,6 @@ KDEPlotDock::KDEPlotDock(QWidget* parent)
 	connect(ui.cbKernelType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &KDEPlotDock::kernelTypeChanged);
 	connect(ui.cbBandwidthType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &KDEPlotDock::bandwidthTypeChanged);
 	connect(ui.sbBandwidth, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &KDEPlotDock::bandwidthChanged);
-
-	connect(ui.chkVisible, &QCheckBox::clicked, this, &KDEPlotDock::visibilityChanged);
-	connect(ui.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &KDEPlotDock::plotRangeChanged);
 
 	// Margin Plots
 	connect(ui.chkRugEnabled, &QCheckBox::toggled, this, &KDEPlotDock::rugEnabledChanged);
@@ -143,39 +141,22 @@ void KDEPlotDock::setPlots(QList<KDEPlot*> list) {
 
 	// if there are more then one curve in the list, disable the content in the tab "general"
 	if (m_plots.size() == 1) {
-		ui.lName->setEnabled(true);
-		ui.leName->setEnabled(true);
-		ui.lComment->setEnabled(true);
-		ui.teComment->setEnabled(true);
-
-		ui.lDataColumn->setEnabled(true);
 		cbDataColumn->setEnabled(true);
-
 		cbDataColumn->setColumn(m_plot->dataColumn(), m_plot->dataColumnPath());
 		ui.leName->setText(m_plot->name());
 		ui.teComment->setText(m_plot->comment());
 	} else {
-		ui.lName->setEnabled(false);
-		ui.leName->setEnabled(false);
-		ui.lComment->setEnabled(false);
-		ui.teComment->setEnabled(false);
-
-		ui.lDataColumn->setEnabled(false);
 		cbDataColumn->setEnabled(false);
 		cbDataColumn->setCurrentModelIndex(QModelIndex());
-
-		ui.leName->setText(QString());
-		ui.teComment->setText(QString());
 	}
 
-	ui.leName->setStyleSheet(QString());
-	ui.leName->setToolTip(QString());
+	ui.chkLegendVisible->setChecked(m_plot->legendVisible());
 	ui.chkVisible->setChecked(m_plot->isVisible());
 
 	// load the remaining properties
 	load();
 
-	updatePlotRanges();
+	updatePlotRangeList();
 
 	// Slots
 	// General-tab
@@ -183,8 +164,6 @@ void KDEPlotDock::setPlots(QList<KDEPlot*> list) {
 	connect(m_plot, &KDEPlot::kernelTypeChanged, this, &KDEPlotDock::plotKernelTypeChanged);
 	connect(m_plot, &KDEPlot::bandwidthTypeChanged, this, &KDEPlotDock::plotBandwidthTypeChanged);
 	connect(m_plot, &KDEPlot::bandwidthChanged, this, &KDEPlotDock::plotBandwidthChanged);
-	connect(m_plot, &WorksheetElement::plotRangeListChanged, this, &KDEPlotDock::updatePlotRanges);
-	connect(m_plot, &WorksheetElement::visibleChanged, this, &KDEPlotDock::plotVisibilityChanged);
 
 	//"Margin Plots"-Tab
 	auto* curve = m_plot->rugCurve();
@@ -217,10 +196,6 @@ void KDEPlotDock::retranslateUi() {
  */
 void KDEPlotDock::updateLocale() {
 	estimationLineWidget->updateLocale();
-}
-
-void KDEPlotDock::updatePlotRanges() {
-	updatePlotRangeList();
 }
 
 //*************************************************************
@@ -270,14 +245,6 @@ void KDEPlotDock::bandwidthChanged(double value) {
 
 	for (auto* plot : m_plots)
 		plot->setBandwidth(value);
-}
-
-void KDEPlotDock::visibilityChanged(bool state) {
-	if (m_initializing)
-		return;
-
-	for (auto* plot : m_plots)
-		plot->setVisible(state);
 }
 
 //"Margin Plots"-Tab
@@ -336,11 +303,6 @@ void KDEPlotDock::plotBandwidthTypeChanged(nsl_kde_bandwidth_type type) {
 void KDEPlotDock::plotBandwidthChanged(double value) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.sbBandwidth->setValue(value);
-}
-
-void KDEPlotDock::plotVisibilityChanged(bool on) {
-	CONDITIONAL_LOCK_RETURN;
-	ui.chkVisible->setChecked(on);
 }
 
 //"Margin Plot"-Tab

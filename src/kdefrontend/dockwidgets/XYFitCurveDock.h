@@ -33,7 +33,6 @@ public:
 
 private:
 	void initGeneralTab() override;
-	void updatePlotRanges() override;
 	void updateSettings(const AbstractColumn*);
 	void showFitResult();
 	bool eventFilter(QObject*, QEvent*) override;
@@ -108,7 +107,6 @@ private Q_SLOTS:
 	void curveYErrorColumnChanged(const AbstractColumn*);
 	void curveFitDataChanged(const XYFitCurve::FitData&);
 	void dataChanged();
-	void curveVisibilityChanged(bool);
 };
 
 #endif

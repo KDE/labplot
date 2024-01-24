@@ -190,7 +190,6 @@ void BoxPlot::init() {
 	Returns an icon to be used in the project explorer.
 */
 QIcon BoxPlot::icon() const {
-	// 	return QIcon::fromTheme(QLatin1String("draw-line"));
 	return BoxPlot::staticIcon();
 }
 
@@ -433,6 +432,45 @@ bool BoxPlot::hasData() const {
 	return !d->dataColumns.isEmpty();
 }
 
+bool BoxPlot::usingColumn(const Column* column) const {
+	Q_D(const BoxPlot);
+
+	for (auto* c : d->dataColumns) {
+		if (c == column)
+			return true;
+	}
+
+	return false;
+}
+
+void BoxPlot::updateColumnDependencies(const AbstractColumn* column) {
+	Q_D(const BoxPlot);
+	const QString& columnPath = column->path();
+	const auto dataColumnPaths = d->dataColumnPaths;
+	auto dataColumns = d->dataColumns;
+	bool changed = false;
+
+	for (int i = 0; i < dataColumnPaths.count(); ++i) {
+		const auto& path = dataColumnPaths.at(i);
+
+		if (path == columnPath) {
+			dataColumns[i] = column;
+			changed = true;
+		}
+	}
+
+	if (changed) {
+		setUndoAware(false);
+		setDataColumns(dataColumns);
+		setUndoAware(true);
+	}
+}
+
+QColor BoxPlot::color() const {
+	// Q_D(const BoxPlot);
+	return QColor();
+}
+
 /* ============================ setter methods and undo commands ================= */
 
 // General
@@ -450,7 +488,7 @@ void BoxPlot::setDataColumns(const QVector<const AbstractColumn*> columns) {
 
 			// update the curve itself on changes
 			connect(column, &AbstractColumn::dataChanged, this, &BoxPlot::recalc);
-			connect(column, &AbstractAspect::aspectDescriptionChanged, this, &Plot::updateLegendRequested);
+			connect(column, &AbstractAspect::aspectDescriptionChanged, this, &Plot::appearanceChanged);
 			connect(column->parentAspect(), &AbstractAspect::childAspectAboutToBeRemoved, this, &BoxPlot::dataColumnAboutToBeRemoved);
 			// TODO: add disconnect in the undo-function
 		}
@@ -1699,6 +1737,7 @@ void BoxPlot::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("xMax"), QString::number(d->xMax));
 	writer->writeAttribute(QStringLiteral("yMin"), QString::number(d->yMin));
 	writer->writeAttribute(QStringLiteral("yMax"), QString::number(d->yMax));
+	writer->writeAttribute(QStringLiteral("legendVisible"), QString::number(d->legendVisible));
 	writer->writeAttribute(QStringLiteral("visible"), QString::number(d->isVisible()));
 	for (auto* column : d->dataColumns) {
 		writer->writeStartElement(QStringLiteral("column"));
@@ -1787,6 +1826,7 @@ bool BoxPlot::load(XmlStreamReader* reader, bool preview) {
 			READ_DOUBLE_VALUE("xMax", xMax);
 			READ_DOUBLE_VALUE("yMin", yMin);
 			READ_DOUBLE_VALUE("yMax", yMax);
+			READ_INT_VALUE("legendVisible", legendVisible, bool);
 
 			str = attribs.value(QStringLiteral("visible")).toString();
 			if (str.isEmpty())

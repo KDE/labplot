@@ -11,9 +11,9 @@
 #ifndef DEPENDENCIESTEST_H
 #define DEPENDENCIESTEST_H
 
-#include "CommonTest.h"
+#include <QtTest>
 
-class DependenciesTest : public CommonTest {
+class DependenciesTest : public QObject {
 	Q_OBJECT
 
 private Q_SLOTS:
@@ -95,7 +95,7 @@ private Q_SLOTS:
 	}
 #elif !defined(HAVE_VECTOR_BLF)
 	void checkVectorBLF() {
-		QSKIP("Skipping Vector Cantor Tests, because it was not found!");
+		QSKIP("Skipping Vector Tests, because it was not found!");
 	}
 #endif
 };

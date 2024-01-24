@@ -81,6 +81,16 @@ public:
 			return text.startsWith(QStringLiteral("<!DOCTYPE HTML"));
 		}
 
+		bool operator!=(const TextWrapper& other) const {
+			return (text != other.text || mode != other.mode || allowPlaceholder != other.allowPlaceholder
+					|| ((allowPlaceholder || other.allowPlaceholder) && textPlaceholder != other.textPlaceholder));
+		}
+
+		bool operator==(TextWrapper& other) const {
+			return (text == other.text && mode == other.mode && allowPlaceholder == other.allowPlaceholder
+					&& ((allowPlaceholder || other.allowPlaceholder) && textPlaceholder == other.textPlaceholder));
+		}
+
 		QString text;
 		TextLabel::Mode mode{TextLabel::Mode::Text};
 		/*! Determines if the Textlabe can have a placeholder or not.

@@ -28,10 +28,8 @@
 
 #include <QClipboard>
 #include <QModelIndex>
-#include <QUndoStack>
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
 #include <QRandomGenerator>
-#endif
+#include <QUndoStack>
 
 //**********************************************************
 //****************** Copy&Paste tests **********************
@@ -1148,11 +1146,7 @@ void SpreadsheetTest::testSortPerformanceNumeric1() {
 	QVector<double> xData;
 	WARN("CREATE DATA")
 	for (int i = 0; i < sheet.rowCount(); i++)
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
 		xData << QRandomGenerator::global()->generateDouble();
-#else
-		xData << (double)(qrand()) / RAND_MAX;
-#endif
 
 	auto* col = sheet.column(0);
 	col->replaceValues(0, xData);
@@ -1173,11 +1167,7 @@ void SpreadsheetTest::testSortPerformanceNumeric2() {
 	QVector<int> yData;
 	WARN("CREATE DATA")
 	for (int i = 0; i < sheet.rowCount(); i++) {
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
 		xData << QRandomGenerator::global()->generateDouble();
-#else
-		xData << (double)(qrand()) / RAND_MAX;
-#endif
 		yData << i + 1;
 	}
 

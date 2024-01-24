@@ -95,7 +95,7 @@ int main(int argc, char* argv[]) {
 						 QLatin1String(LVERSION),
 						 i18n("LabPlot is a FREE, open-source and cross-platform Data Visualization and Analysis software accessible to everyone."),
 						 KAboutLicense::GPL,
-						 i18n("(c) 2007-2023"),
+						 i18n("(c) 2007-2024"),
 						 systemInfo,
 						 QStringLiteral("https://labplot.kde.org"));
 	aboutData.addAuthor(i18n("Stefan Gerlach"), i18nc("@info:credit", "Developer"), QStringLiteral("stefan.gerlach@uni.kn"), QString());

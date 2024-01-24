@@ -9,6 +9,7 @@
 
 #include "Plot.h"
 #include "PlotPrivate.h"
+#include "backend/lib/commandtemplates.h"
 #include "backend/lib/trace.h"
 #include "backend/worksheet/Background.h"
 
@@ -45,6 +46,16 @@ bool Plot::minMax(const CartesianCoordinateSystem::Dimension, const Range<int>&,
 bool Plot::activatePlot(QPointF mouseScenePos, double maxDist) {
 	Q_D(Plot);
 	return d->activatePlot(mouseScenePos, maxDist);
+}
+
+// general
+BASIC_SHARED_D_READER_IMPL(Plot, bool, legendVisible, legendVisible)
+
+STD_SETTER_CMD_IMPL_S(Plot, SetLegendVisible, bool, legendVisible)
+void Plot::setLegendVisible(bool visible) {
+	Q_D(Plot);
+	if (visible != d->legendVisible)
+		exec(new PlotSetLegendVisibleCmd(d, visible, ki18n("%1: legend visibility changed")));
 }
 
 // ##############################################################################

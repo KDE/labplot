@@ -1,5 +1,9 @@
-add_executable (ParserTest ParserTest.cpp)
+option(ENABLE_TEST_BACKEND_PARSER "Enable Parser Tests" ON)
 
-target_link_libraries(ParserTest labplot2test labplot2backendlib labplot2nsllib)
+if (ENABLE_TEST_BACKEND_PARSER)
+    add_executable (ParserTest ParserTest.cpp)
 
-add_test(NAME ParserTest COMMAND ParserTest)
+    target_link_libraries(ParserTest labplot2test labplot2backendlib labplot2nsllib)
+
+    add_test(NAME ParserTest COMMAND ParserTest)
+endif()
