@@ -19,6 +19,7 @@
 #include "backend/worksheet/plots/cartesian/BarPlot.h"
 #include "backend/worksheet/plots/cartesian/BoxPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "backend/worksheet/plots/cartesian/ErrorBar.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
 #include "backend/worksheet/plots/cartesian/KDEPlot.h"
 #include "backend/worksheet/plots/cartesian/LollipopPlot.h"
@@ -916,8 +917,8 @@ void Project::restorePointers(AbstractAspect* aspect) {
 		RESTORE_COLUMN_POINTER(hist, dataColumn, DataColumn);
 		auto* value = hist->value();
 		RESTORE_COLUMN_POINTER(value, column, Column);
-		RESTORE_COLUMN_POINTER(hist, errorPlusColumn, ErrorPlusColumn);
-		RESTORE_COLUMN_POINTER(hist, errorMinusColumn, ErrorMinusColumn);
+		RESTORE_COLUMN_POINTER(hist->errorBar(), plusColumn, PlusColumn);
+		RESTORE_COLUMN_POINTER(hist->errorBar(), minusColumn, MinusColumn);
 	}
 
 	// QQ-plots

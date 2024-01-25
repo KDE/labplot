@@ -4,7 +4,7 @@
 	Description          : widget for Histogram properties
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2016 Anu Mittal <anu22mittal@gmail.com>
-	SPDX-FileCopyrightText: 2018-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2018-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2021-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -18,6 +18,7 @@
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
+#include "backend/worksheet/plots/cartesian/ErrorBarStyle.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 #include "kdefrontend/GuiTools.h"
 #include "kdefrontend/TemplateHandler.h"
@@ -241,7 +242,7 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 		symbols << hist->symbol();
 		backgrounds << hist->background();
 		values << hist->value();
-		errorBarLines << hist->errorBarsLine();
+		errorBarLines << hist->errorBarStyle()->line();
 	}
 	lineWidget->setLines(lines);
 	symbolWidget->setSymbols(symbols);
@@ -253,8 +254,8 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 	if (m_curvesList.size() == 1) {
 		cbDataColumn->setEnabled(true);
 		cbDataColumn->setColumn(m_curve->dataColumn(), m_curve->dataColumnPath());
-		cbErrorPlusColumn->setColumn(m_curve->errorPlusColumn(), m_curve->errorPlusColumnPath());
-		cbErrorMinusColumn->setColumn(m_curve->errorMinusColumn(), m_curve->errorMinusColumnPath());
+		cbErrorPlusColumn->setColumn(m_curve->errorBar()->plusColumn(), m_curve->errorBar()->plusColumnPath());
+		cbErrorMinusColumn->setColumn(m_curve->errorBar()->minusColumn(), m_curve->errorBar()->minusColumnPath());
 	} else {
 		cbDataColumn->setEnabled(false);
 		cbDataColumn->setCurrentModelIndex(QModelIndex());
@@ -316,9 +317,9 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 	connect(m_curve, &Histogram::binRangesMaxChanged, this, &HistogramDock::curveBinRangesMaxChanged);
 
 	//"Error bars"-Tab
-	connect(m_curve, &Histogram::errorTypeChanged, this, &HistogramDock::curveErrorTypeChanged);
-	connect(m_curve, &Histogram::errorPlusColumnChanged, this, &HistogramDock::curveErrorPlusColumnChanged);
-	connect(m_curve, &Histogram::errorMinusColumnChanged, this, &HistogramDock::curveErrorMinusColumnChanged);
+	connect(m_curve->errorBar(), &ErrorBar::typeChanged, this, &HistogramDock::curveErrorTypeChanged);
+	connect(m_curve->errorBar(), &ErrorBar::plusColumnChanged, this, &HistogramDock::curveErrorPlusColumnChanged);
+	connect(m_curve->errorBar(), &ErrorBar::minusColumnChanged, this, &HistogramDock::curveErrorMinusColumnChanged);
 
 	//"Margin Plots"-Tab
 	connect(m_curve, &Histogram::rugEnabledChanged, this, &HistogramDock::curveRugEnabledChanged);
@@ -497,7 +498,7 @@ void HistogramDock::errorTypeChanged(int index) {
 	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* curve : m_curvesList)
-		curve->setErrorType(Histogram::ErrorType(index));
+		curve->errorBar()->setType(ErrorBar::Type(index));
 }
 
 void HistogramDock::errorPlusColumnChanged(const QModelIndex& index) {
@@ -508,7 +509,7 @@ void HistogramDock::errorPlusColumnChanged(const QModelIndex& index) {
 	Q_ASSERT(column);
 
 	for (auto* curve : m_curvesList)
-		curve->setErrorPlusColumn(column);
+		curve->errorBar()->setPlusColumn(column);
 }
 
 void HistogramDock::errorMinusColumnChanged(const QModelIndex& index) {
@@ -519,7 +520,7 @@ void HistogramDock::errorMinusColumnChanged(const QModelIndex& index) {
 	Q_ASSERT(column);
 
 	for (auto* curve : m_curvesList)
-		curve->setErrorMinusColumn(column);
+		curve->errorBar()->setMinusColumn(column);
 }
 
 //"Margin Plots"-Tab
@@ -611,17 +612,17 @@ void HistogramDock::curveBinRangesMaxChanged(double value) {
 }
 
 //"Error bars"-Tab
-void HistogramDock::curveErrorTypeChanged(Histogram::ErrorType type) {
+void HistogramDock::curveErrorTypeChanged(ErrorBar::Type type) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.cbErrorType->setCurrentIndex((int)type);
 }
 void HistogramDock::curveErrorPlusColumnChanged(const AbstractColumn* column) {
 	CONDITIONAL_LOCK_RETURN;
-	cbErrorPlusColumn->setColumn(column, m_curve->errorPlusColumnPath());
+	cbErrorPlusColumn->setColumn(column, m_curve->errorBar()->plusColumnPath());
 }
 void HistogramDock::curveErrorMinusColumnChanged(const AbstractColumn* column) {
 	CONDITIONAL_LOCK_RETURN;
-	cbErrorMinusColumn->setColumn(column, m_curve->errorMinusColumnPath());
+	cbErrorMinusColumn->setColumn(column, m_curve->errorBar()->minusColumnPath());
 }
 
 //"Margin Plot"-Tab
@@ -652,7 +653,7 @@ void HistogramDock::load() {
 	// This data is read in HistogramDock::setCurves().
 
 	// Error bars
-	ui.cbErrorType->setCurrentIndex((int)m_curve->errorType());
+	ui.cbErrorType->setCurrentIndex((int)m_curve->errorBar()->type());
 
 	// Margin plots
 	ui.chkRugEnabled->setChecked(m_curve->rugEnabled());
@@ -675,7 +676,7 @@ void HistogramDock::loadConfig(KConfig& config) {
 	backgroundWidget->loadConfig(group);
 
 	// Error bars
-	ui.cbErrorType->setCurrentIndex(group.readEntry(QStringLiteral("ErrorType"), (int)m_curve->errorType()));
+	ui.cbErrorType->setCurrentIndex(group.readEntry(QStringLiteral("ErrorType"), (int)m_curve->errorBar()->type()));
 	errorBarsLineWidget->loadConfig(group);
 
 	// Margin plots

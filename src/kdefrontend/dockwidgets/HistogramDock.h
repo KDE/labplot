@@ -13,6 +13,7 @@
 #define HISTOGRAMDOCK_H
 
 #include "backend/worksheet/plots/cartesian/Histogram.h"
+#include "backend/worksheet/plots/cartesian/ErrorBar.h"
 #include "kdefrontend/dockwidgets/BaseDock.h"
 #include "ui_histogramdock.h"
 
@@ -99,7 +100,7 @@ private Q_SLOTS:
 	void curveBinRangesMaxChanged(double);
 
 	//"Error bars"-Tab
-	void curveErrorTypeChanged(Histogram::ErrorType);
+	void curveErrorTypeChanged(ErrorBar::Type);
 	void curveErrorPlusColumnChanged(const AbstractColumn*);
 	void curveErrorMinusColumnChanged(const AbstractColumn*);
 
