@@ -444,6 +444,11 @@ void ExpressionParserTest::testevaluateGreaterThan() {
 	QVector<double> yVector({5., 5., 5., 5.,});
 	ExpressionParser::evaluateCartesian(expr, vars, xVectors, &yVector);
 
+	qDebug() << "ExpressionParserTest::testevaluateGreaterThan()";
+	for (const auto v: yVector) {
+		qDebug() << v;
+	}
+
 	QCOMPARE(yVector.size(), 4);
 	QCOMPARE(yVector.at(0), 0.);
 	QCOMPARE(yVector.at(1), 1.);
@@ -461,6 +466,11 @@ void ExpressionParserTest::testevaluateLessThan() {
 	xVectors << new QVector<double>({0., 0., 1., 1.}); // y
 	QVector<double> yVector({5., 5., 5., 5.,});
 	ExpressionParser::evaluateCartesian(expr, vars, xVectors, &yVector);
+
+	qDebug() << "ExpressionParserTest::testevaluateLessThan()";
+	for (const auto v: yVector) {
+		qDebug() << v;
+	}
 
 	QCOMPARE(yVector.size(), 4);
 	QCOMPARE(yVector.at(0), 0.);
@@ -480,6 +490,11 @@ void ExpressionParserTest::testevaluateLessEqualThan() {
 	QVector<double> yVector({5., 5., 5., 5.,});
 	ExpressionParser::evaluateCartesian(expr, vars, xVectors, &yVector);
 
+	qDebug() << "ExpressionParserTest::testevaluateLessEqualThan()";
+	for (const auto v: yVector) {
+		qDebug() << v;
+	}
+
 	QCOMPARE(yVector.size(), 4);
 	QCOMPARE(yVector.at(0), 1.);
 	QCOMPARE(yVector.at(1), 0.);
@@ -497,6 +512,11 @@ void ExpressionParserTest::testevaluateGreaterEqualThan() {
 	xVectors << new QVector<double>({0., 0., 1., 1.}); // y
 	QVector<double> yVector({5., 5., 5., 5.,});
 	ExpressionParser::evaluateCartesian(expr, vars, xVectors, &yVector);
+
+	qDebug() << "ExpressionParserTest::testevaluateGreaterEqualThan()";
+	for (const auto v: yVector) {
+		qDebug() << v;
+	}
 
 	QCOMPARE(yVector.size(), 4);
 	QCOMPARE(yVector.at(0), 1.);
