@@ -392,7 +392,7 @@ void ExpressionParserTest::testEvaluateNot() {
 	QVector<QVector<double>*> xVectors;
 
 	xVectors << new QVector<double>({1., 0.}); // x
-	QVector<double> yVector({5., 5., 5., 5.,});
+	QVector<double> yVector({5., 5.});
 	ExpressionParser::evaluateCartesian(expr, vars, xVectors, &yVector);
 
 	QCOMPARE(yVector.size(), 2);
@@ -481,7 +481,7 @@ void ExpressionParserTest::testevaluateLessEqualThan() {
 	ExpressionParser::evaluateCartesian(expr, vars, xVectors, &yVector);
 
 	QCOMPARE(yVector.size(), 4);
-	QCOMPARE(yVector.at(0), 0.);
+	QCOMPARE(yVector.at(0), 1.);
 	QCOMPARE(yVector.at(1), 0.);
 	QCOMPARE(yVector.at(2), 1.);
 	QCOMPARE(yVector.at(3), 1.);
@@ -499,10 +499,10 @@ void ExpressionParserTest::testevaluateGreaterEqualThan() {
 	ExpressionParser::evaluateCartesian(expr, vars, xVectors, &yVector);
 
 	QCOMPARE(yVector.size(), 4);
-	QCOMPARE(yVector.at(0), 0.);
+	QCOMPARE(yVector.at(0), 1.);
 	QCOMPARE(yVector.at(1), 1.);
-	QCOMPARE(yVector.at(2), 1.);
-	QCOMPARE(yVector.at(3), 0.);
+	QCOMPARE(yVector.at(2), 0.);
+	QCOMPARE(yVector.at(3), 1.);
 }
 
 // This is not implemented. It uses always the smallest rowCount
