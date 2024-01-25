@@ -5,6 +5,8 @@
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2009 Tilman Benkert <thzs@gmx.net>
 	SPDX-FileCopyrightText: 2012-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2024 Stefan Gerlach <stefan.gerlach@uni.kn>
+
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -437,37 +439,40 @@ QPointF WorksheetElement::parentPosToRelativePos(QPointF parentPos, PositionWrap
 	// increasing parent pos hor --> right
 	// increasing parent pos vert --> bottom
 
-	QPointF relPos;
 	QRectF parentRect = this->parentRect();
+	QPointF relPos;
 
-	DEBUG(Q_FUNC_INFO << ", position.pos = " << position.point.x() << "/" << position.point.y())
+	double percentage = 0.;
 	switch (position.horizontalPosition) {
 	case HorizontalPosition::Left:
-		relPos.setX(parentPos.x() - parentRect.x());
 		break;
 	case HorizontalPosition::Center:
-		relPos.setX(parentPos.x() - (parentRect.x() + parentRect.width() / 2.));
+		percentage = 0.5;
 		break;
 	case HorizontalPosition::Right:
-		relPos.setX(parentPos.x() - (parentRect.x() + parentRect.width()));
+		percentage = 1.0;
 		break;
 	case HorizontalPosition::Custom:
-		relPos.setX(parentPos.x() - (parentRect.x() + parentRect.width() * position.point.x()));
+		percentage = position.point.x();
 	}
+
+	relPos.setX(parentPos.x() - (parentRect.x() + parentRect.width() * percentage));
 
 	switch (position.verticalPosition) {
 	case VerticalPosition::Top:
-		relPos.setY(parentRect.y() - parentPos.y());
+		percentage = 0.;
 		break;
 	case VerticalPosition::Center:
-		relPos.setY(parentRect.y() + parentRect.height() / 2. - parentPos.y());
+		percentage = 0.5;
 		break;
 	case VerticalPosition::Bottom:
-		relPos.setY(parentRect.y() + parentRect.height() - parentPos.y());
+		percentage = 1.0;
 		break;
 	case VerticalPosition::Custom:
-		relPos.setY(parentRect.y() + parentRect.height() * position.point.y() - parentPos.y());
+		percentage = position.point.y();
 	}
+
+	relPos.setY(parentRect.y() + parentRect.height() * percentage - parentPos.y());
 
 	return relPos;
 }
@@ -485,36 +490,45 @@ QPointF WorksheetElement::relativePosToParentPos(PositionWrapper position) const
 	// increasing parent pos hor --> right
 	// increasing parent pos vert --> bottom
 
-	QPointF parentPos;
 	QRectF parentRect = this->parentRect();
+	QPointF parentPos;
 
+	double percentage = 0.;
 	switch (position.horizontalPosition) {
 	case HorizontalPosition::Left:
-		parentPos.setX(parentRect.x() + position.point.x());
+	case HorizontalPosition::Custom:
 		break;
 	case HorizontalPosition::Center:
-		parentPos.setX(parentRect.x() + parentRect.width() / 2. + position.point.x());
+		percentage = 0.5;
 		break;
 	case HorizontalPosition::Right:
-		parentPos.setX(parentRect.x() + parentRect.width() + position.point.x());
+		percentage = 1.0;
 		break;
-	case HorizontalPosition::Custom:
-		parentPos.setX(parentRect.x() + parentRect.width() * position.point.x());
 	}
+
+	if (position.horizontalPosition == HorizontalPosition::Custom)
+		parentPos.setX(parentRect.x() + parentRect.width() * position.point.x());
+	else
+		parentPos.setX(parentRect.x() + parentRect.width() * percentage + position.point.x());
 
 	switch (position.verticalPosition) {
 	case VerticalPosition::Top:
-		parentPos.setY(parentRect.y() - position.point.y());
+		percentage = 0.;
 		break;
 	case VerticalPosition::Center:
-		parentPos.setY(parentRect.y() + parentRect.height() / 2 - position.point.y());
+		percentage = 0.5;
 		break;
 	case VerticalPosition::Bottom:
-		parentPos.setY(parentRect.y() + parentRect.height() - position.point.y());
+		percentage = 1.0;
 		break;
 	case VerticalPosition::Custom:
-		parentPos.setY(parentRect.y() + parentRect.height() * position.point.y());
+		break;
 	}
+
+	if (position.verticalPosition == VerticalPosition::Custom)
+		parentPos.setY(parentRect.y() + parentRect.height() * position.point.y());
+	else
+		parentPos.setY(parentRect.y() + parentRect.height() * percentage - position.point.y());
 
 	return parentPos;
 }
