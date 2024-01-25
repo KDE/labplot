@@ -765,6 +765,29 @@ int yylex(param *p) {
 		return c;
 	}
 
+	if (c == '&') {
+		// Check if the next is also an &, because then it is the AND operator
+		if (getcharstr(p) == '&') {
+			return AND;
+		}
+		ungetcstr(&(p->pos));
+	} else if (c == '|') {
+		if (getcharstr(p) == '|') {
+			return OR;
+		}
+		ungetcstr(&(p->pos));
+	} else if (c == '>') {
+		if (getcharstr(p) == '=') {
+			return GE;
+		}
+		ungetstr(&(p->pos));
+	} else if (c == '<') {
+		if (getcharstr(p) == '=') {
+			return LE;
+		}
+		ungetstr(&(p->pos));
+	}
+
 	pdebug("PARSER: PROCESSING character '%c'\n", c);
 
 	/* process numbers */
