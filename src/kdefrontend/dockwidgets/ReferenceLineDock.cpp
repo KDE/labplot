@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Dock widget for the reference line on the plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2020-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2020-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -35,7 +35,7 @@ ReferenceLineDock::ReferenceLineDock(QWidget* parent)
 	connect(ui.cbOrientation, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ReferenceLineDock::orientationChanged);
 	connect(ui.sbPosition, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &ReferenceLineDock::positionLogicalChanged);
 	connect(ui.dtePosition, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &ReferenceLineDock::positionLogicalDateTimeChanged);
-	connect(ui.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ReferenceLineDock::plotRangeChanged);
+	connect(ui.chbLock, &QCheckBox::clicked, this, &ReferenceLineDock::lockChanged);
 	connect(ui.chkVisible, &QCheckBox::clicked, this, &ReferenceLineDock::visibilityChanged);
 
 	// Template handler
@@ -67,10 +67,10 @@ void ReferenceLineDock::setReferenceLines(QList<ReferenceLine*> list) {
 		lines << line->line();
 	lineWidget->setLines(lines);
 
-	updatePlotRanges();
+	updatePlotRangeList();
 
 	// SIGNALs/SLOTs
-	connect(m_line, &WorksheetElement::plotRangeListChanged, this, &ReferenceLineDock::updatePlotRanges);
+	connect(m_line, &ReferenceLine::lockChanged, this, &ReferenceLineDock::lineLockChanged);
 	connect(m_line, &ReferenceLine::visibleChanged, this, &ReferenceLineDock::lineVisibilityChanged);
 
 	// position
@@ -93,10 +93,6 @@ void ReferenceLineDock::updateLocale() {
 	}
 
 	lineWidget->updateLocale();
-}
-
-void ReferenceLineDock::updatePlotRanges() {
-	updatePlotRangeList();
 }
 
 void ReferenceLineDock::updateWidgetsOrientation(ReferenceLine::Orientation orientation) {
@@ -161,6 +157,13 @@ void ReferenceLineDock::positionLogicalDateTimeChanged(qint64 pos) {
 	}
 }
 
+void ReferenceLineDock::lockChanged(bool locked) {
+	CONDITIONAL_LOCK_RETURN;
+
+	for (auto* line : m_linesList)
+		line->setLock(locked);
+}
+
 void ReferenceLineDock::visibilityChanged(bool state) {
 	CONDITIONAL_LOCK_RETURN;
 
@@ -187,6 +190,10 @@ void ReferenceLineDock::lineOrientationChanged(ReferenceLine::Orientation orient
 	ui.cbOrientation->setCurrentIndex(static_cast<int>(orientation));
 }
 
+void ReferenceLineDock::lineLockChanged(bool on) {
+	CONDITIONAL_LOCK_RETURN;
+	ui.chbLock->setChecked(on);
+}
 void ReferenceLineDock::lineVisibilityChanged(bool on) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.chkVisible->setChecked(on);
@@ -223,6 +230,7 @@ void ReferenceLineDock::load() {
 		}
 	}
 
+	ui.chbLock->setChecked(m_line->isLocked());
 	ui.chkVisible->setChecked(m_line->isVisible());
 }
 

@@ -17,6 +17,7 @@
 #include "backend/core/Settings.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
+#include "backend/lib/macros.h"
 #include "backend/worksheet/plots/PlotArea.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
@@ -51,18 +52,29 @@ public:
 		: QGraphicsTextItem(parent) {
 	}
 
+	QRectF scaledBoundingRect() const {
+		auto rect = QGraphicsTextItem::boundingRect();
+		rect.setHeight(rect.height() * scale());
+		rect.setWidth(rect.width() * scale());
+		// rect.moveTopLeft(QPointF(-rect.width() * scale() / 2, -rect.height() * scale() / 2));
+		return rect;
+	}
+
 protected:
 	void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override {
 #if DEBUG_TEXTLABEL_BOUNDING_RECT
 		painter->setPen(QColor(Qt::GlobalColor::green));
 		painter->drawRect(boundingRect());
-#endif
 
-#if DEBUG_TEXTLABEL_BOUNDING_RECT
 		painter->setPen(QColor(Qt::GlobalColor::black));
 		painter->drawRect(QRectF(-5, -5, 10, 10));
 #endif
 		QGraphicsTextItem::paint(painter, option, widget);
+	}
+
+private:
+	QRectF boundingRect() const override {
+		return QGraphicsTextItem::boundingRect();
 	}
 
 private:
@@ -146,8 +158,8 @@ void TextLabel::init() {
 		d->textWrapper.mode = static_cast<TextLabel::Mode>(group.readEntry(QStringLiteral("Mode"), static_cast<int>(d->textWrapper.mode)));
 		d->teXFont.setFamily(group.readEntry(QStringLiteral("TeXFontFamily"), d->teXFont.family()));
 		d->teXFont.setPointSize(group.readEntry(QStringLiteral("TeXFontSize"), d->teXFont.pointSize()));
-		d->fontColor = group.readEntry(QStringLiteral("TeXFontColor"), d->fontColor);
-		d->backgroundColor = group.readEntry(QStringLiteral("TeXBackgroundColor"), d->backgroundColor);
+		d->fontColor = group.readEntry(QStringLiteral("FontColor"), d->fontColor);
+		d->backgroundColor = group.readEntry(QStringLiteral("BackgroundColor"), d->backgroundColor);
 		d->setRotation(group.readEntry(QStringLiteral("Rotation"), d->rotation()));
 
 		// border
@@ -172,7 +184,6 @@ void TextLabel::init() {
 	d->updatePosition();
 
 	DEBUG(Q_FUNC_INFO << ", default/run time image resolution: " << d->teXImageResolution << '/' << QApplication::primaryScreen()->physicalDotsPerInchX());
-
 	connect(&d->teXImageFutureWatcher, &QFutureWatcher<QByteArray>::finished, this, &TextLabel::updateTeXImage);
 }
 
@@ -243,23 +254,25 @@ BASIC_SHARED_D_READER_IMPL(TextLabel, QPen, borderPen, borderPen)
 BASIC_SHARED_D_READER_IMPL(TextLabel, qreal, borderOpacity, borderOpacity)
 
 /* ============================ setter methods and undo commands ================= */
+STD_SETTER_CMD_IMPL_F_S(TextLabel, SetTeXBackgroundColor, QColor, backgroundColor, updateText)
+void TextLabel::setBackgroundColor(const QColor color) {
+	QDEBUG(Q_FUNC_INFO << ", color = " << color)
+	Q_D(TextLabel);
+	if (color != d->backgroundColor)
+		exec(new TextLabelSetTeXBackgroundColorCmd(d, color, ki18n("%1: set background color")));
+}
+
 STD_SETTER_CMD_IMPL_F_S(TextLabel, SetText, TextLabel::TextWrapper, textWrapper, updateText)
 void TextLabel::setText(const TextWrapper& textWrapper) {
 	Q_D(TextLabel);
 	// DEBUG("********************\n" << Q_FUNC_INFO << ", old/new mode = " << (int)d->textWrapper.mode << " " << (int)textWrapper.mode)
 	// DEBUG("\nOLD TEXT = " << STDSTRING(d->textWrapper.text) << '\n')
 	// DEBUG("NEW TEXT = " << STDSTRING(textWrapper.text) << '\n')
-
 	// QDEBUG("COLORS: color =" << d->fontColor << ", background color =" << d->backgroundColor)
 
-	if ((textWrapper.text != d->textWrapper.text) || (textWrapper.mode != d->textWrapper.mode)
-		|| ((d->textWrapper.allowPlaceholder || textWrapper.allowPlaceholder) && (textWrapper.textPlaceholder != d->textWrapper.textPlaceholder))
-		|| textWrapper.allowPlaceholder != d->textWrapper.allowPlaceholder) {
+	if (d->textWrapper != textWrapper) {
 		bool oldEmpty = d->textWrapper.text.isEmpty();
 		if (textWrapper.mode == TextLabel::Mode::Text && !textWrapper.text.isEmpty()) {
-			// DEBUG("SET TEXTWRAPPER")
-			TextWrapper tw = textWrapper;
-
 			QTextEdit pte(d->textWrapper.text); // te with previous text
 			// restore formatting when text changes or switching back to text mode
 			if (d->textWrapper.mode != TextLabel::Mode::Text || oldEmpty || pte.toPlainText().isEmpty()) {
@@ -271,13 +284,39 @@ void TextLabel::setText(const TextWrapper& textWrapper) {
 				te.setTextColor(d->fontColor);
 				te.setTextBackgroundColor(d->backgroundColor);
 
+				TextWrapper tw = textWrapper;
 				tw.text = te.toHtml();
 				// DEBUG("\nTW TEXT = " << STDSTRING(tw.text) << std::endl)
-			}
+				exec(new TextLabelSetTextCmd(d, tw, ki18n("%1: set label text")));
+			} else { // the existing text is being modified
+				QUndoCommand* parent = nullptr;
+				TextLabelSetTextCmd* command = nullptr;
+				QTextEdit te;
+				te.setHtml(textWrapper.text);
+				te.selectAll();
+				if (textWrapper.text.indexOf(QStringLiteral("background-color:#")) != -1) {
+					const auto& bgColor = te.textBackgroundColor();
+					if (bgColor != d->backgroundColor) {
+						parent = new QUndoCommand(ki18n("%1: set label text").subs(name()).toString());
+						new TextLabelSetTeXBackgroundColorCmd(d, bgColor, ki18n("%1: set background color"), parent);
+					}
+					command = new TextLabelSetTextCmd(d, textWrapper, ki18n("%1: set label text"), parent);
+				} else {
+					// no color available yet, plain text is being provided -> set the color from member variable
+					te.setTextBackgroundColor(d->backgroundColor);
+					TextWrapper tw = textWrapper;
+					tw.text = te.toHtml();
+					command = new TextLabelSetTextCmd(d, tw, ki18n("%1: set label text"), parent);
+				}
 
-			exec(new TextLabelSetTextCmd(d, tw, ki18n("%1: set label text")));
+				if (!parent)
+					exec(command);
+				else
+					exec(parent);
+			}
 		} else
 			exec(new TextLabelSetTextCmd(d, textWrapper, ki18n("%1: set label text")));
+
 		// If previously the text was empty, the bounding rect is zero
 		// therefore the alignment did not work properly.
 		// If text is added, the bounding rectangle is updated
@@ -308,14 +347,6 @@ void TextLabel::setFontColor(const QColor color) {
 	Q_D(TextLabel);
 	if (color != d->fontColor)
 		exec(new TextLabelSetTeXFontColorCmd(d, color, ki18n("%1: set font color")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(TextLabel, SetTeXBackgroundColor, QColor, backgroundColor, updateText)
-void TextLabel::setBackgroundColor(const QColor color) {
-	QDEBUG(Q_FUNC_INFO << ", color = " << color)
-	Q_D(TextLabel);
-	if (color != d->backgroundColor)
-		exec(new TextLabelSetTeXBackgroundColorCmd(d, color, ki18n("%1: set background color")));
 }
 
 // Border
@@ -359,7 +390,7 @@ TextLabel::GluePoint TextLabel::gluePointAt(int index) {
 
 int TextLabel::gluePointCount() {
 	Q_D(const TextLabel);
-	return d->m_gluePointsTransformed.length();
+	return d->m_gluePoints.length();
 }
 
 void TextLabel::updateTeXImage() {
@@ -410,8 +441,8 @@ QRectF TextLabelPrivate::size() {
 		// if (textWrapper.mode == TextLabel::Mode::Markdown && textWrapper.text.contains(QLatin1Char('\n')))
 		//	yScale = 0.95;
 		// see updateBoundingRect()
-		w = m_textItem->boundingRect().width() * m_textItem->scale();
-		h = m_textItem->boundingRect().height() * m_textItem->scale();
+		w = m_textItem->scaledBoundingRect().width();
+		h = m_textItem->scaledBoundingRect().height();
 	}
 	qreal x = position.point.x();
 	qreal y = position.point.y();
@@ -425,18 +456,18 @@ QRectF TextLabelPrivate::size() {
  * \return Nearest point to @param point
  */
 QPointF TextLabelPrivate::findNearestGluePoint(QPointF scenePoint) {
-	if (m_gluePointsTransformed.isEmpty())
-		return m_boundingRectangle.center();
+	if (m_gluePoints.isEmpty())
+		return boundingRect().center();
 
-	if (m_gluePointsTransformed.length() == 1)
-		return mapParentToPlotArea(mapToParent(m_gluePointsTransformed.at(0).point));
+	if (m_gluePoints.length() == 1)
+		return mapParentToPlotArea(mapToParent(m_gluePoints.at(0).point));
 
-	QPointF point = mapParentToPlotArea(mapToParent(m_gluePointsTransformed.at(0).point));
+	QPointF point = mapParentToPlotArea(mapToParent(m_gluePoints.at(0).point));
 	QPointF nearestPoint = point;
 	double distance2 = pow(point.x() - scenePoint.x(), 2) + pow(point.y() - scenePoint.y(), 2);
 	// assumption, more than one point available
-	for (int i = 1; i < m_gluePointsTransformed.length(); i++) {
-		point = mapParentToPlotArea(mapToParent(m_gluePointsTransformed.at(i).point));
+	for (int i = 1; i < m_gluePoints.length(); i++) {
+		point = mapParentToPlotArea(mapToParent(m_gluePoints.at(i).point));
 		double distance2_temp = pow(point.x() - scenePoint.x(), 2) + pow(point.y() - scenePoint.y(), 2);
 		if (distance2_temp < distance2) {
 			nearestPoint = point;
@@ -457,15 +488,15 @@ TextLabel::GluePoint TextLabelPrivate::gluePointAt(int index) {
 	QPointF pos;
 	QString name;
 
-	if (m_gluePointsTransformed.isEmpty() || index > m_gluePointsTransformed.length()) {
-		pos = m_boundingRectangle.center();
+	if (m_gluePoints.isEmpty() || index > m_gluePoints.length()) {
+		pos = boundingRect().center();
 		name = QLatin1String("center");
 	} else if (index < 0) {
-		pos = m_gluePointsTransformed.at(0).point;
-		name = m_gluePointsTransformed.at(0).name;
+		pos = m_gluePoints.at(0).point;
+		name = m_gluePoints.at(0).name;
 	} else {
-		pos = m_gluePointsTransformed.at(index).point;
-		name = m_gluePointsTransformed.at(index).name;
+		pos = m_gluePoints.at(index).point;
+		name = m_gluePoints.at(index).name;
 	}
 
 	return {mapParentToPlotArea(mapToParent(pos)), name};
@@ -624,7 +655,7 @@ void TextLabelPrivate::updateBoundingRect() {
 		h = teXImage.height() * teXImageScaleFactor / zoomFactor;
 	} else {
 		// size is in points, convert to scene units
-		// QDEBUG(" BOUNDING RECT = " << m_textItem->boundingRect())
+		// QDEBUG(" BOUNDING RECT = " << m_textItem->scaledBoundingRect())
 		//  TODO: the shift and scaling is just a workaround to avoid the big bounding box
 		//  s.a. TextLabelPrivate::size()
 
@@ -632,9 +663,9 @@ void TextLabelPrivate::updateBoundingRect() {
 		//  better scaling for multiline Markdown
 		// if (textWrapper.mode == TextLabel::Mode::Markdown && textWrapper.text.contains(QLatin1Char('\n')))
 		//	yScale = 0.95;
-		w = m_textItem->boundingRect().width() * m_textItem->scale(); // - xShift;
-		h = m_textItem->boundingRect().height() * m_textItem->scale(); // * yScale;
-		m_textItem->setPos(QPointF(-w / 2, -h / 2));
+		w = m_textItem->scaledBoundingRect().width(); // - xShift;
+		h = m_textItem->scaledBoundingRect().height(); // * yScale;
+		m_textItem->setPos(-w / 2, -h / 2);
 	}
 
 	// DEBUG(Q_FUNC_INFO << ", scale factor = " << scaleFactor << ", w/h = " << w << " / " << h)
@@ -643,6 +674,7 @@ void TextLabelPrivate::updateBoundingRect() {
 	m_boundingRectangle.setWidth(w);
 	m_boundingRectangle.setHeight(h);
 
+	updatePosition();
 	updateBorder();
 }
 
@@ -666,38 +698,31 @@ void TextLabelPrivate::updateBorder() {
 	using GluePoint = TextLabel::GluePoint;
 
 	borderShapePath = QPainterPath();
+	const auto& br = m_boundingRectangle;
 	switch (borderShape) {
 	case (TextLabel::BorderShape::NoBorder): {
 		m_gluePoints.clear();
-		m_gluePoints.append(GluePoint(QPointF(m_boundingRectangle.x() + m_boundingRectangle.width() / 2, m_boundingRectangle.y()), QStringLiteral("top")));
-		m_gluePoints.append(
-			GluePoint(QPointF(m_boundingRectangle.x() + m_boundingRectangle.width(), m_boundingRectangle.y() + m_boundingRectangle.height() / 2),
-					  QStringLiteral("right")));
-		m_gluePoints.append(
-			GluePoint(QPointF(m_boundingRectangle.x() + m_boundingRectangle.width() / 2, m_boundingRectangle.y() + m_boundingRectangle.height()),
-					  QStringLiteral("bottom")));
-		m_gluePoints.append(GluePoint(QPointF(m_boundingRectangle.x(), m_boundingRectangle.y() + m_boundingRectangle.height() / 2), QStringLiteral("left")));
+		m_gluePoints.append(GluePoint(QPointF(br.x() + br.width() / 2, br.y()), QStringLiteral("top")));
+		m_gluePoints.append(GluePoint(QPointF(br.x() + br.width(), br.y() + br.height() / 2), QStringLiteral("right")));
+		m_gluePoints.append(GluePoint(QPointF(br.x() + br.width() / 2, br.y() + br.height()), QStringLiteral("bottom")));
+		m_gluePoints.append(GluePoint(QPointF(br.x(), br.y() + br.height() / 2), QStringLiteral("left")));
 		break;
 	}
 	case (TextLabel::BorderShape::Rect): {
-		borderShapePath.addRect(m_boundingRectangle);
+		borderShapePath.addRect(br);
 
 		m_gluePoints.clear();
-		m_gluePoints.append(GluePoint(QPointF(m_boundingRectangle.x() + m_boundingRectangle.width() / 2, m_boundingRectangle.y()), QStringLiteral("top")));
-		m_gluePoints.append(
-			GluePoint(QPointF(m_boundingRectangle.x() + m_boundingRectangle.width(), m_boundingRectangle.y() + m_boundingRectangle.height() / 2),
-					  QStringLiteral("right")));
-		m_gluePoints.append(
-			GluePoint(QPointF(m_boundingRectangle.x() + m_boundingRectangle.width() / 2, m_boundingRectangle.y() + m_boundingRectangle.height()),
-					  QStringLiteral("bottom")));
-		m_gluePoints.append(GluePoint(QPointF(m_boundingRectangle.x(), m_boundingRectangle.y() + m_boundingRectangle.height() / 2), QStringLiteral("left")));
+		m_gluePoints.append(GluePoint(QPointF(br.x() + br.width() / 2, br.y()), QStringLiteral("top")));
+		m_gluePoints.append(GluePoint(QPointF(br.x() + br.width(), br.y() + br.height() / 2), QStringLiteral("right")));
+		m_gluePoints.append(GluePoint(QPointF(br.x() + br.width() / 2, br.y() + br.height()), QStringLiteral("bottom")));
+		m_gluePoints.append(GluePoint(QPointF(br.x(), br.y() + br.height() / 2), QStringLiteral("left")));
 		break;
 	}
 	case (TextLabel::BorderShape::Ellipse): {
-		const double xs = m_boundingRectangle.x();
-		const double ys = m_boundingRectangle.y();
-		const double w = m_boundingRectangle.width();
-		const double h = m_boundingRectangle.height();
+		const double xs = br.x();
+		const double ys = br.y();
+		const double w = br.width();
+		const double h = br.height();
 		const QRectF ellipseRect(xs - 0.1 * w, ys - 0.1 * h, 1.2 * w, 1.2 * h);
 		borderShapePath.addEllipse(ellipseRect);
 
@@ -709,10 +734,10 @@ void TextLabelPrivate::updateBorder() {
 		break;
 	}
 	case (TextLabel::BorderShape::RoundSideRect): {
-		const double xs = m_boundingRectangle.x();
-		const double ys = m_boundingRectangle.y();
-		const double w = m_boundingRectangle.width();
-		const double h = m_boundingRectangle.height();
+		const double xs = br.x();
+		const double ys = br.y();
+		const double w = br.width();
+		const double h = br.height();
 		borderShapePath.moveTo(xs, ys);
 		borderShapePath.lineTo(xs + w, ys);
 		borderShapePath.quadTo(xs + w + h / 2, ys + h / 2, xs + w, ys + h);
@@ -727,10 +752,10 @@ void TextLabelPrivate::updateBorder() {
 		break;
 	}
 	case (TextLabel::BorderShape::RoundCornerRect): {
-		const double xs = m_boundingRectangle.x();
-		const double ys = m_boundingRectangle.y();
-		const double w = m_boundingRectangle.width();
-		const double h = m_boundingRectangle.height();
+		const double xs = br.x();
+		const double ys = br.y();
+		const double w = br.width();
+		const double h = br.height();
 		borderShapePath.moveTo(xs + h * 0.2, ys);
 		borderShapePath.lineTo(xs + w - h * 0.2, ys);
 		borderShapePath.quadTo(xs + w, ys, xs + w, ys + h * 0.2);
@@ -749,10 +774,10 @@ void TextLabelPrivate::updateBorder() {
 		break;
 	}
 	case (TextLabel::BorderShape::InwardsRoundCornerRect): {
-		const double xs = m_boundingRectangle.x();
-		const double ys = m_boundingRectangle.y();
-		const double w = m_boundingRectangle.width();
-		const double h = m_boundingRectangle.height();
+		const double xs = br.x();
+		const double ys = br.y();
+		const double w = br.width();
+		const double h = br.height();
 		borderShapePath.moveTo(xs, ys - 0.3 * h);
 		borderShapePath.lineTo(xs + w, ys - 0.3 * h);
 		borderShapePath.quadTo(xs + w, ys, xs + w + 0.3 * h, ys);
@@ -771,10 +796,10 @@ void TextLabelPrivate::updateBorder() {
 		break;
 	}
 	case (TextLabel::BorderShape::DentedBorderRect): {
-		const double xs = m_boundingRectangle.x();
-		const double ys = m_boundingRectangle.y();
-		const double w = m_boundingRectangle.width();
-		const double h = m_boundingRectangle.height();
+		const double xs = br.x();
+		const double ys = br.y();
+		const double w = br.width();
+		const double h = br.height();
 		borderShapePath.moveTo(xs - 0.2 * h, ys - 0.2 * h);
 		borderShapePath.quadTo(xs + w / 2, ys, xs + w + 0.2 * h, ys - 0.2 * h);
 		borderShapePath.quadTo(xs + w, ys + h / 2, xs + w + 0.2 * h, ys + h + 0.2 * h);
@@ -789,10 +814,10 @@ void TextLabelPrivate::updateBorder() {
 		break;
 	}
 	case (TextLabel::BorderShape::Cuboid): {
-		const double xs = m_boundingRectangle.x();
-		const double ys = m_boundingRectangle.y();
-		const double w = m_boundingRectangle.width();
-		const double h = m_boundingRectangle.height();
+		const double xs = br.x();
+		const double ys = br.y();
+		const double w = br.width();
+		const double h = br.height();
 		borderShapePath.moveTo(xs, ys);
 		borderShapePath.lineTo(xs + w, ys);
 		borderShapePath.lineTo(xs + w, ys + h);
@@ -813,10 +838,10 @@ void TextLabelPrivate::updateBorder() {
 		break;
 	}
 	case (TextLabel::BorderShape::UpPointingRectangle): {
-		const double xs = m_boundingRectangle.x();
-		const double ys = m_boundingRectangle.y();
-		const double w = m_boundingRectangle.width();
-		const double h = m_boundingRectangle.height();
+		const double xs = br.x();
+		const double ys = br.y();
+		const double w = br.width();
+		const double h = br.height();
 		borderShapePath.moveTo(xs + h * 0.2, ys);
 		borderShapePath.lineTo(xs + w / 2 - 0.2 * h, ys);
 		borderShapePath.lineTo(xs + w / 2, ys - 0.2 * h);
@@ -838,10 +863,10 @@ void TextLabelPrivate::updateBorder() {
 		break;
 	}
 	case (TextLabel::BorderShape::DownPointingRectangle): {
-		const double xs = m_boundingRectangle.x();
-		const double ys = m_boundingRectangle.y();
-		const double w = m_boundingRectangle.width();
-		const double h = m_boundingRectangle.height();
+		const double xs = br.x();
+		const double ys = br.y();
+		const double w = br.width();
+		const double h = br.height();
 		borderShapePath.moveTo(xs + h * 0.2, ys);
 		borderShapePath.lineTo(xs + w - h * 0.2, ys);
 		borderShapePath.quadTo(xs + w, ys, xs + w, ys + h * 0.2);
@@ -863,10 +888,10 @@ void TextLabelPrivate::updateBorder() {
 		break;
 	}
 	case (TextLabel::BorderShape::LeftPointingRectangle): {
-		const double xs = m_boundingRectangle.x();
-		const double ys = m_boundingRectangle.y();
-		const double w = m_boundingRectangle.width();
-		const double h = m_boundingRectangle.height();
+		const double xs = br.x();
+		const double ys = br.y();
+		const double w = br.width();
+		const double h = br.height();
 		borderShapePath.moveTo(xs + h * 0.2, ys);
 		borderShapePath.lineTo(xs + w - h * 0.2, ys);
 		borderShapePath.quadTo(xs + w, ys, xs + w, ys + h * 0.2);
@@ -888,10 +913,10 @@ void TextLabelPrivate::updateBorder() {
 		break;
 	}
 	case (TextLabel::BorderShape::RightPointingRectangle): {
-		const double xs = m_boundingRectangle.x();
-		const double ys = m_boundingRectangle.y();
-		const double w = m_boundingRectangle.width();
-		const double h = m_boundingRectangle.height();
+		const double xs = br.x();
+		const double ys = br.y();
+		const double w = br.width();
+		const double h = br.height();
 		borderShapePath.moveTo(xs + h * 0.2, ys);
 		borderShapePath.lineTo(xs + w - h * 0.2, ys);
 		borderShapePath.quadTo(xs + w, ys, xs + w, ys + h * 0.2);
@@ -918,13 +943,6 @@ void TextLabelPrivate::updateBorder() {
 }
 
 /*!
-	Returns the outer bounds of the item as a rectangle.
- */
-QRectF TextLabelPrivate::boundingRect() const {
-	return transformedBoundingRectangle;
-}
-
-/*!
 	Returns the shape of this item as a QPainterPath in local coordinates.
 */
 QPainterPath TextLabelPrivate::shape() const {
@@ -937,22 +955,12 @@ QPainterPath TextLabelPrivate::shape() const {
 void TextLabelPrivate::recalcShapeAndBoundingRect() {
 	prepareGeometryChange();
 
-	QTransform matrix;
 	labelShape = QPainterPath();
 	if (borderShape != TextLabel::BorderShape::NoBorder) {
 		labelShape.addPath(WorksheetElement::shapeFromPath(borderShapePath, borderPen));
-		transformedBoundingRectangle = matrix.mapRect(labelShape.boundingRect());
-	} else {
+		m_boundingRectangle = labelShape.boundingRect();
+	} else
 		labelShape.addRect(m_boundingRectangle);
-		transformedBoundingRectangle = matrix.mapRect(m_boundingRectangle);
-	}
-
-	labelShape = matrix.map(labelShape);
-
-	// rotate gluePoints
-	m_gluePointsTransformed.clear();
-	for (auto& gPoint : m_gluePoints)
-		m_gluePointsTransformed.append(TextLabel::GluePoint(matrix.map(gPoint.point), gPoint.name));
 
 	Q_EMIT q->changed();
 }
@@ -978,6 +986,11 @@ void TextLabelPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 	}
 	painter->restore();
 
+	// Fill the complete path with the background color, for text mode only since for latex and markdown
+	// a rectangular image is drawn which is not cropped to the boundaries of the selected shape (eclipse, etc.)
+	if (textWrapper.mode == TextLabel::Mode::Text)
+		painter->fillPath(labelShape, QBrush(backgroundColor));
+
 	// draw the border
 	if (borderShape != TextLabel::BorderShape::NoBorder) {
 		painter->save();
@@ -995,31 +1008,31 @@ void TextLabelPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 	const bool hovered = (m_hovered && !selected);
 	if ((hovered || selected) && !q->isPrinting()) {
 		static double penWidth = 2.;
-		const QRectF& br = boundingRect();
-		const qreal width = br.width();
-		const qreal height = br.height();
-		const QRectF rect = QRectF(-width / 2 + penWidth / 2, -height / 2 + penWidth / 2, width - penWidth, height - penWidth);
-
 		if (hovered)
 			painter->setPen(QPen(QApplication::palette().color(QPalette::Shadow), penWidth));
 		else
 			painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), penWidth));
 
-		painter->drawRect(rect);
+		painter->drawPath(labelShape);
 	}
 
 #if DEBUG_TEXTLABEL_BOUNDING_RECT
 	painter->setPen(QColor(Qt::GlobalColor::red));
 	painter->drawRect(boundingRect());
+
+	painter->setPen(QColor(Qt::GlobalColor::darkGreen));
+	painter->drawRect(m_boundingRectangle.marginsAdded(QMarginsF(3, 3, 3, 3)));
+
+	painter->setPen(QColor(Qt::GlobalColor::blue));
+	painter->drawEllipse(QRectF(-5, -5, 10, 10));
 #endif
 
 #if DEBUG_TEXTLABEL_GLUEPOINTS
 	// just for debugging
 	painter->setPen(QColor(Qt::GlobalColor::red));
 	QRectF gluePointRect(0, 0, 10, 10);
-	for (int i = 0; i < m_gluePointsTransformed.length(); i++) {
-		gluePointRect.moveTo(m_gluePointsTransformed[i].point.x() - gluePointRect.width() / 2,
-							 m_gluePointsTransformed[i].point.y() - gluePointRect.height() / 2);
+	for (int i = 0; i < m_gluePoints.length(); i++) {
+		gluePointRect.moveTo(m_gluePoints[i].point.x() - gluePointRect.width() / 2, m_gluePoints[i].point.y() - gluePointRect.height() / 2);
 		painter->fillRect(gluePointRect, QColor(Qt::GlobalColor::red));
 	}
 #endif
@@ -1143,6 +1156,19 @@ bool TextLabel::load(XmlStreamReader* reader, bool preview) {
 	if (preview)
 		return true;
 
+	// starting with XML version 10, the background color used in the html text is extracted
+	// to fill the complete shape of the label and is also saved. For older projects we need
+	// to extract it from hmtl here if available.
+	if (d->textWrapper.mode == TextLabel::Mode::Text && Project::xmlVersion() < 10) {
+		if (d->textWrapper.text.indexOf(QStringLiteral("background-color:#")) != -1) {
+			QTextEdit te;
+			te.setHtml(d->textWrapper.text);
+			te.selectAll();
+			d->backgroundColor = te.textBackgroundColor();
+		} else
+			d->backgroundColor.setAlpha(0);
+	}
+
 	// in case we use latex and the image was stored (older versions of LabPlot didn't save the image)and loaded,
 	// we just need to call updateBoundingRect() to calculate the new rect.
 	// otherwise, we set the static text and call updateBoundingRect() in updateText()
@@ -1168,10 +1194,8 @@ void TextLabel::loadThemeConfig(const KConfig& config) {
 	// TODO: dark mode support?
 	d->fontColor = group.readEntry(QStringLiteral("FontColor"), QColor(Qt::black)); // used when it's latex text
 	d->backgroundColor = group.readEntry(QStringLiteral("BackgroundColor"), QColor(Qt::white)); // used when it's latex text
-
 	if (d->textWrapper.mode == TextLabel::Mode::Text && !d->textWrapper.text.isEmpty()) {
-		// TODO: Replace QTextEdit by QTextDocument, because this does not contain the graphical stuff.
-		// To set the color in a html text, a QTextEdit must be used
+		// To set the color in a html text, a QTextEdit must be used, QTextDocument is not enough
 		QTextEdit te;
 		te.setHtml(d->textWrapper.text);
 		te.selectAll();

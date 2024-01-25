@@ -1,5 +1,5 @@
 # SPDX-FileCopyrightText: 2020 Volker Krause <vkrause@kde.org>
-# SPDX-FileCopyrightText: 2022-2023 Stefan Gerlach <stefan.gerlach@uni.kn>
+# SPDX-FileCopyrightText: 2022-2024 Stefan Gerlach <stefan.gerlach@uni.kn>
 # SPDX-License-Identifier: CC0-1.0
 
 # full path: https://invent.kde.org/sysadmin/ci-utilities/-/tree/master/gitlab-templates?ref_type=heads
@@ -8,22 +8,45 @@ include:
     file:
 # fails
 #      - /gitlab-templates/reuse-lint.yml
-# TODO: fails atm due to libpoppler linking
-#      - /gitlab-templates/linux.yml
+      - /gitlab-templates/linux.yml
       - /gitlab-templates/windows.yml
       - /gitlab-templates/linux-qt6.yml
       - /gitlab-templates/windows-qt6.yml
-      - /gitlab-templates/freebsd.yml
+# fails sometimes with No space left on device
+#      - /gitlab-templates/freebsd.yml
 # finds Qt5 but KF5 is not installed
 #      - /gitlab-templates/freebsd-qt6.yml
-      - /gitlab-templates/flatpak.yml
-# supposed to run manual:
-#      - /gitlab-templates/craft-appimage.yml
-#      - /gitlab-templates/craft-windows-x86-64.yml
+### DEPLOY
+      - /gitlab-templates/craft-appimage.yml
+      - /gitlab-templates/craft-windows-x86-64.yml
+      - /gitlab-templates/craft-windows-appx-qt5.yml
+# see below for flatpak variables
+#      - /gitlab-templates/flatpak.yml
+# fails for analitza (20240105)
+#      - /gitlab-templates/craft-appimage-qt6.yml
+# fails for analitza (20240105)
+#      - /gitlab-templates/craft-windows-x86-64-qt6.yml
+#      - /gitlab-templates/craft-windows-appx-qt6.yml
+# fails linking tests due to undefined references to GSL functions
 #      - /gitlab-templates/craft-windows-mingw64.yml
-# fails because cantor needs Qt5WebEngine:
+# fails for analitza (20240105)
+#      - /gitlab-templates/craft-windows-mingw64-qt6.yml
+# fails because of cantor misses qt5webengine (20240105)
 #      - /gitlab-templates/craft-macos-x86-64.yml
+# fails for analitza (20240105)
+#      - /gitlab-templates/craft-macos-x86-64-qt6.yml
+# fails because of cantor (20240105)
 #      - /gitlab-templates/craft-macos-arm64.yml
+# fails for analitza (20240105)
+#      - /gitlab-templates/craft-macos-arm64-qt6.yml
+
+craft_appimage_qt515_x86_64:
+  only:
+    - master
+
+craft_windows_qt515_x86_64:
+  only:
+    - master
 
 # needed for tests (use "ctest -V" for more output)
 #variables:
@@ -176,7 +199,7 @@ include:
 
 clang_format:
   stage: test
-  image: debian:testing
+  image: debian:stable
   before_script:
     - apt-get update
     - apt-get install --yes --no-install-recommends git clang-format-13
@@ -184,8 +207,8 @@ clang_format:
     ./cl-fmt.sh
     git diff --exit-code
 
-# see https://invent.kde.org/sysadmin/ci-utilities/-/blob/master/gitlab-templates/flatpak.yml
-flatpak:
-  variables:
-    KDE_FLATPAK_MODULE_NAME: labplot2
-    KDE_FLATPAK_APP_ID: org.kde.${KDE_FLATPAK_MODULE_NAME}
+# see above
+#flatpak:
+#  variables:
+#    KDE_FLATPAK_MODULE_NAME: labplot2
+#    KDE_FLATPAK_APP_ID: org.kde.${KDE_FLATPAK_MODULE_NAME}

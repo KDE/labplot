@@ -9,6 +9,7 @@ if (ENABLE_TEST_IMPORTEXPORT)
     add_subdirectory(Project)
     add_subdirectory(Spice)
     add_subdirectory(CAN)
+    add_subdirectory(SQL)
 
     option(ENABLE_TEST_IMPORTEXPORT_ROOT "Enable Root Tests" ON)
     IF (ZLIB_FOUND AND LZ4_FOUND AND ENABLE_TEST_IMPORTEXPORT_ROOT)

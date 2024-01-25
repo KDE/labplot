@@ -189,6 +189,7 @@ PlotDataDialog::~PlotDataDialog() {
 
 	delete m_plotsModel;
 	delete m_worksheetsModel;
+	delete ui;
 }
 
 void PlotDataDialog::setAnalysisAction(XYAnalysisCurve::AnalysisAction action) {
@@ -205,7 +206,7 @@ void PlotDataDialog::fillMenu(QMenu* menu, QActionGroup* group) {
 	action->setData(static_cast<int>(PlotDataDialog::PlotType::XYCurve));
 	menu->addAction(action);
 
-	auto* addNewStatisticalPlotsMenu = new QMenu(i18n("Statistical Plots"));
+	auto* addNewStatisticalPlotsMenu = new QMenu(i18n("Statistical Plots"), menu);
 	action = new QAction(QIcon::fromTheme(QStringLiteral("view-object-histogram-linear")), i18n("Histogram"), group);
 	action->setData(static_cast<int>(PlotDataDialog::PlotType::Histogram));
 	addNewStatisticalPlotsMenu->addAction(action);
@@ -223,12 +224,12 @@ void PlotDataDialog::fillMenu(QMenu* menu, QActionGroup* group) {
 	addNewStatisticalPlotsMenu->addAction(action);
 	menu->addMenu(addNewStatisticalPlotsMenu);
 
-	auto* addNewBarPlotsMenu = new QMenu(i18n("Bar Plots"));
+	auto* addNewBarPlotsMenu = new QMenu(i18n("Bar Plots"), menu);
 	action = new QAction(QIcon::fromTheme(QStringLiteral("office-chart-bar")), i18n("Bar Plot"), group);
 	action->setData(static_cast<int>(PlotDataDialog::PlotType::BarPlot));
 	addNewBarPlotsMenu->addAction(action);
 
-	action = new QAction(QIcon::fromTheme(QStringLiteral("office-chart-bar")), i18n("Lollipop Plot"), group);
+	action = new QAction(LollipopPlot::staticIcon(), i18n("Lollipop Plot"), group);
 	action->setData(static_cast<int>(PlotDataDialog::PlotType::LollipopPlot));
 	addNewBarPlotsMenu->addAction(action);
 	menu->addMenu(addNewBarPlotsMenu);

@@ -36,7 +36,7 @@ public:
 	void updateLocale() override;
 	void updateUnits() override;
 	void updateRangeList(const Dimension dim);
-	void updatePlotRangeList();
+	void updatePlotRangeList() override;
 
 private:
 	Ui::CartesianPlotDock ui;
@@ -61,8 +61,6 @@ private Q_SLOTS:
 
 	// SLOTs for changes triggered in CartesianPlotDock
 	//"General"-tab
-	void visibilityChanged(bool);
-
 	void rangeTypeChanged(int);
 	void niceExtendChanged(bool checked);
 	void rangePointsChanged(const QString&);
@@ -137,8 +135,6 @@ private Q_SLOTS:
 	void plotScaleChanged(const Dimension, int xRangeIndex, RangeT::Scale);
 
 	void defaultPlotRangeChanged();
-
-	void plotVisibleChanged(bool);
 
 	// layout
 	void plotRectChanged(QRectF&);

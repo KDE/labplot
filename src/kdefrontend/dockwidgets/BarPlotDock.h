@@ -61,7 +61,6 @@ private Q_SLOTS:
 	void dataColumnChanged(const QModelIndex&);
 	void typeChanged(int);
 	void orientationChanged(int);
-	void visibilityChanged(bool);
 
 	//"Box"-tab
 	void currentBarChanged(int);
@@ -69,13 +68,11 @@ private Q_SLOTS:
 
 	// SLOTs for changes triggered in BarPlot
 	// general
-	void updatePlotRanges() override;
 	void plotXColumnChanged(const AbstractColumn*);
 	void plotDataColumnsChanged(const QVector<const AbstractColumn*>&);
 	void plotTypeChanged(BarPlot::Type);
 	void plotOrientationChanged(BarPlot::Orientation);
 	void plotWidthFactorChanged(double);
-	void plotVisibilityChanged(bool);
 
 	// load and save
 	void loadConfigFromTemplate(KConfig&);

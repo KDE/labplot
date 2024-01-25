@@ -3,8 +3,7 @@
 	Project              : LabPlot
 	Description          : import SQL dataase dialog
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2016 Ankit Wagadre <wagadre.ankit@gmail.com>
-	SPDX-FileCopyrightText: 2016-2017 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2016-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -52,6 +51,7 @@ ImportSQLDatabaseDialog::ImportSQLDatabaseDialog(MainWin* parent)
 
 	// Signals/Slots
 	connect(importSQLDatabaseWidget, &ImportSQLDatabaseWidget::stateChanged, this, &ImportSQLDatabaseDialog::checkOkButton);
+	connect(importSQLDatabaseWidget, &ImportSQLDatabaseWidget::error, this, &ImportSQLDatabaseDialog::showErrorMessage);
 	connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
 	connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 

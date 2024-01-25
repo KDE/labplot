@@ -229,6 +229,7 @@ bool XYFourierFilterCurvePrivate::recalculateSpecific(const AbstractColumn* tmpX
 	DEBUG("bandwidth =" << bandwidth);
 
 	// run filter
+	gsl_set_error_handler_off();
 	int status = nsl_filter_fourier(ydata, n, type, form, order, cutindex, bandwidth);
 
 	xVector->resize((int)n);

@@ -4,7 +4,7 @@
 	Description          : import file data widget
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2009-2023 Stefan Gerlach <stefan.gerlach@uni.kn>
-	SPDX-FileCopyrightText: 2009-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2009-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2017-2018 Fabian Kristof <fkristofszabolcs@gmail.com>
 	SPDX-FileCopyrightText: 2018-2019 Kovacs Ferencz <kferike98@gmail.com>
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -32,7 +32,6 @@
 #include <QDir>
 #include <QFileDialog>
 #include <QFileSystemModel>
-#include <QInputDialog>
 #include <QIntValidator>
 #include <QLocalSocket>
 #include <QProcess>
@@ -55,7 +54,6 @@
 #include "MQTTSubscriptionWidget.h"
 #include "kdefrontend/widgets/MQTTWillSettingsWidget.h"
 #include <QMenu>
-#include <QMessageBox>
 #include <QMqttClient>
 #include <QMqttMessage>
 #include <QMqttSubscription>
@@ -286,25 +284,20 @@ void ImportFileWidget::loadSettings() {
 		}
 	}
 
-	fileTypeChanged(); // call it to load the filter templates for the current file type and to select the last used index in cbFilter below
-
-	if (m_fileName.isEmpty()) {
-		ui.cbFilter->setCurrentIndex(conf.readEntry("Filter", 0));
+	auto urls = m_cbFileName->urls();
+	urls.append(conf.readXdgListEntry("LastImportedFiles"));
+	m_cbFileName->setUrls(urls);
+	if (m_fileName.isEmpty())
 		m_cbFileName->setUrl(QUrl(conf.readEntry("LastImportedFile", "")));
-		QStringList urls = m_cbFileName->urls();
-		urls.append(conf.readXdgListEntry("LastImportedFiles"));
-		m_cbFileName->setUrls(urls);
-		filterChanged(ui.cbFilter->currentIndex()); // needed if filter is not changed
-	} else
+	else
 		m_cbFileName->setUrl(QUrl(m_fileName));
 
-	if (m_dbcFileName.isEmpty()) {
+	urls = m_cbDBCFileName->urls();
+	urls.append(conf.readXdgListEntry("LastImportedDBCFiles"));
+	m_cbDBCFileName->setUrls(urls);
+	if (m_dbcFileName.isEmpty())
 		m_cbDBCFileName->setUrl(QUrl(conf.readEntry("LastImportedDBCFile", "")));
-		QStringList urls = m_cbDBCFileName->urls();
-		urls.append(conf.readXdgListEntry("LastImportedDBCFiles"));
-		m_cbDBCFileName->setUrls(urls);
-		filterChanged(ui.cbFilter->currentIndex()); // needed if filter is not changed
-	} else
+	else
 		m_cbDBCFileName->setUrl(QUrl(m_dbcFileName));
 
 	ui.sbPreviewLines->setValue(conf.readEntry("PreviewLines", 100));
@@ -315,7 +308,6 @@ void ImportFileWidget::loadSettings() {
 	ui.cbReadingType->setCurrentIndex(conf.readEntry("ReadingType", static_cast<int>(LiveDataSource::ReadingType::WholeFile)));
 	ui.cbSerialPort->setCurrentIndex(conf.readEntry("SerialPort").toInt());
 	ui.cbUpdateType->setCurrentIndex(conf.readEntry("UpdateType", static_cast<int>(LiveDataSource::UpdateType::NewData)));
-	updateTypeChanged(ui.cbUpdateType->currentIndex());
 	ui.leHost->setText(conf.readEntry("Host", ""));
 	ui.sbKeepNValues->setValue(conf.readEntry("KeepNValues", 0)); // keep all values
 	ui.lePort->setText(conf.readEntry("Port", ""));
@@ -354,6 +346,10 @@ void ImportFileWidget::loadSettings() {
 
 	// update the status of the widgets
 	sourceTypeChanged(static_cast<int>(currentSourceType()));
+	fileTypeChanged(); // call it to load the filter templates for the current file type and to select the last used index in cbFilter below
+	ui.cbFilter->setCurrentIndex(conf.readEntry("Filter", 0));
+	filterChanged(ui.cbFilter->currentIndex());
+	updateTypeChanged(ui.cbUpdateType->currentIndex());
 	readingTypeChanged(ui.cbReadingType->currentIndex());
 
 	// all set now, refresh the content of the file and the preview for the selected dataset
@@ -680,7 +676,7 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 
 		if (ui.cbFilter->currentIndex() == 0) //"automatic"
 			filter->setAutoModeEnabled(true);
-		else if (ui.cbFilter->currentIndex() == 1) { //"custom"
+		else { //"custom" and templates
 			filter->setAutoModeEnabled(false);
 
 			// set the data portion to import
@@ -692,8 +688,6 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 			// set the remaining filter settings
 			if (m_asciiOptionsWidget)
 				m_asciiOptionsWidget->applyFilterSettings(filter);
-		} else {
-			// templates are handled in fileTypeChanged()
 		}
 
 		break;
@@ -706,14 +700,13 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 
 		if (ui.cbFilter->currentIndex() == 0) //"automatic"
 			filter->setAutoModeEnabled(true);
-		else if (ui.cbFilter->currentIndex() == 1) { //"custom"
+		else { //"custom" and templates
 			filter->setAutoModeEnabled(false);
 			if (m_binaryOptionsWidget)
 				m_binaryOptionsWidget->applyFilterSettings(filter);
-		} else
-			// templates are handled in fileTypeChanged()
+		}
 
-			filter->setStartRow(ui.sbStartRow->value());
+		filter->setStartRow(ui.sbStartRow->value());
 		filter->setEndRow(ui.sbEndRow->value());
 
 		break;
@@ -1131,6 +1124,10 @@ void ImportFileWidget::fileTypeChanged(int /*index*/) {
 	Q_EMIT error(QString()); // clear the potential error message that was shown for the previous file type
 	initOptionsWidget();
 
+	// enable the options widgets, should be avaible for all types where there is no "automatic" vs "custom",
+	// will be disabled for "automatic" for the relevant data types
+	ui.swOptions->setEnabled(true);
+
 	// default
 	hidePropertyWidgets();
 	ui.lFilter->hide();
@@ -1366,10 +1363,11 @@ void ImportFileWidget::initOptionsWidget() {
 	case AbstractFileFilter::FileType::JSON:
 		if (!m_jsonOptionsWidget) {
 			auto* jsonw = new QWidget();
-			m_jsonOptionsWidget = std::unique_ptr<JsonOptionsWidget>(new JsonOptionsWidget(jsonw, this));
+			m_jsonOptionsWidget = std::unique_ptr<JsonOptionsWidget>(new JsonOptionsWidget(jsonw));
 			ui.tvJson->setModel(m_jsonOptionsWidget->model());
 			ui.swOptions->addWidget(jsonw);
 			m_jsonOptionsWidget->loadSettings();
+			connect(m_jsonOptionsWidget.get(), &JsonOptionsWidget::error, this, &ImportFileWidget::error);
 		} else
 			m_jsonOptionsWidget->clearModel();
 		ui.swOptions->setCurrentWidget(m_jsonOptionsWidget->parentWidget());

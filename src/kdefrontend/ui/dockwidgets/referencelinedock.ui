@@ -39,46 +39,6 @@
        <property name="spacing">
         <number>2</number>
        </property>
-       <item row="0" column="0">
-        <widget class="QLabel" name="lName">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>Name:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="lComment">
-         <property name="text">
-          <string>Comment:</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="0">
-        <widget class="QLabel" name="lOrientation">
-         <property name="text">
-          <string>Orientation:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="2">
-        <widget class="ResizableTextEdit" name="teComment">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-        </widget>
-       </item>
        <item row="5" column="2">
         <widget class="NumberSpinBox" name="sbPosition">
          <property name="sizePolicy">
@@ -108,11 +68,35 @@
         <widget class="QLabel" name="lPosition_2">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
          <property name="text">
           <string>Position</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="2">
+        <widget class="UTCDateTimeEdit" name="dtePosition"/>
+       </item>
+       <item row="0" column="2">
+        <widget class="TimedLineEdit" name="leName">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0">
+        <widget class="QLabel" name="lPosition">
+         <property name="toolTip">
+          <string>Horizontal position relative to label's parent</string>
+         </property>
+         <property name="text">
+          <string>x:</string>
          </property>
         </widget>
        </item>
@@ -125,6 +109,32 @@
           <size>
            <width>20</width>
            <height>694</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="lComment">
+         <property name="text">
+          <string>Comment:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <spacer name="horizontalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>10</width>
+           <height>20</height>
           </size>
          </property>
         </spacer>
@@ -145,60 +155,12 @@
          </property>
         </spacer>
        </item>
-       <item row="0" column="2">
-        <widget class="QLineEdit" name="leName">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-        </widget>
-       </item>
-       <item row="10" column="0">
-        <widget class="QCheckBox" name="chkVisible">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
+       <item row="4" column="0">
+        <widget class="QLabel" name="lOrientation">
          <property name="text">
-          <string>Visible</string>
+          <string>Orientation:</string>
          </property>
         </widget>
-       </item>
-       <item row="8" column="0">
-        <widget class="QLabel" name="lPlotRange">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>Plot Range:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="2">
-        <widget class="UTCDateTimeEdit" name="dtePosition"/>
-       </item>
-       <item row="0" column="1">
-        <spacer name="horizontalSpacer_2">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>10</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
        </item>
        <item row="7" column="0">
         <spacer name="verticalSpacer_4">
@@ -216,6 +178,42 @@
          </property>
         </spacer>
        </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="lName">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Name:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <widget class="ResizableTextEdit" name="teComment">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+       <item row="11" column="0">
+        <widget class="QCheckBox" name="chkVisible">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Visible</string>
+         </property>
+        </widget>
+       </item>
        <item row="6" column="0">
         <widget class="QLabel" name="lPositionDateTime">
          <property name="text">
@@ -223,13 +221,23 @@
          </property>
         </widget>
        </item>
-       <item row="5" column="0">
-        <widget class="QLabel" name="lPosition">
-         <property name="toolTip">
-          <string>Horizontal position relative to label's parent</string>
+       <item row="8" column="0">
+        <widget class="QLabel" name="lPlotRange">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
          </property>
          <property name="text">
-          <string>x:</string>
+          <string>Plot Range:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="10" column="0">
+        <widget class="QCheckBox" name="chbLock">
+         <property name="text">
+          <string>Locked</string>
          </property>
         </widget>
        </item>
@@ -266,6 +274,11 @@
    <header>kcombobox.h</header>
   </customwidget>
   <customwidget>
+   <class>ResizableTextEdit</class>
+   <extends>QTextEdit</extends>
+   <header>src/kdefrontend/widgets/ResizableTextEdit.h</header>
+  </customwidget>
+  <customwidget>
    <class>NumberSpinBox</class>
    <extends>QDoubleSpinBox</extends>
    <header>NumberSpinBox.h</header>
@@ -276,9 +289,9 @@
    <header>UTCDateTimeEdit.h</header>
   </customwidget>
   <customwidget>
-   <class>ResizableTextEdit</class>
-   <extends>QTextEdit</extends>
-   <header>src/kdefrontend/widgets/ResizableTextEdit.h</header>
+   <class>TimedLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>src/kdefrontend/widgets/TimedLineEdit.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

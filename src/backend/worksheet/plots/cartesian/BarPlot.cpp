@@ -195,6 +195,43 @@ bool BarPlot::hasData() const {
 	return !d->dataColumns.isEmpty();
 }
 
+bool BarPlot::usingColumn(const Column* column) const {
+	Q_D(const BarPlot);
+
+	if (d->xColumn == column)
+		return true;
+
+	for (auto* c : d->dataColumns) {
+		if (c == column)
+			return true;
+	}
+
+	return false;
+}
+
+void BarPlot::updateColumnDependencies(const AbstractColumn* column) {
+	Q_D(const BarPlot);
+	const QString& columnPath = column->path();
+	const auto dataColumnPaths = d->dataColumnPaths;
+	auto dataColumns = d->dataColumns;
+	bool changed = false;
+
+	for (int i = 0; i < dataColumnPaths.count(); ++i) {
+		const auto& path = dataColumnPaths.at(i);
+
+		if (path == columnPath) {
+			dataColumns[i] = column;
+			changed = true;
+		}
+	}
+
+	if (changed) {
+		setUndoAware(false);
+		setDataColumns(dataColumns);
+		setUndoAware(true);
+	}
+}
+
 QColor BarPlot::color() const {
 	Q_D(const BarPlot);
 	if (d->backgrounds.size() > 0 && d->backgrounds.at(0)->enabled())
@@ -1033,7 +1070,7 @@ void BarPlotPrivate::updateValues() {
 				m_valuesPoints << QPointF(point.x() - w / 2,
 										  point.y() + listBarWidth.at(i) / 2 + offset - Worksheet::convertToSceneUnits(1, Worksheet::Unit::Point));
 			else
-				m_valuesPoints << QPointF(point.x() - listBarWidth.at(i) / 2 - w - offset, point.y() + h / 2);
+				m_valuesPoints << QPointF(point.x() - listBarWidth.at(i) / 2 - offset + h / 2 - w / 2, point.y() + h / 2);
 		}
 		break;
 	}
@@ -1250,6 +1287,7 @@ void BarPlot::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("yMin"), QString::number(d->yMin));
 	writer->writeAttribute(QStringLiteral("yMax"), QString::number(d->yMax));
 	writer->writeAttribute(QStringLiteral("visible"), QString::number(d->isVisible()));
+	writer->writeAttribute(QStringLiteral("legendVisible"), QString::number(d->legendVisible));
 
 	if (d->xColumn)
 		writer->writeAttribute(QStringLiteral("xColumn"), d->xColumn->path());
@@ -1311,6 +1349,7 @@ bool BarPlot::load(XmlStreamReader* reader, bool preview) {
 			READ_DOUBLE_VALUE("yMin", yMin);
 			READ_DOUBLE_VALUE("yMax", yMax);
 			READ_COLUMN(xColumn);
+			READ_INT_VALUE("legendVisible", legendVisible, bool);
 
 			str = attribs.value(QStringLiteral("visible")).toString();
 			if (str.isEmpty())

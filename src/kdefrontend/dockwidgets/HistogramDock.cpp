@@ -44,7 +44,9 @@ HistogramDock::HistogramDock(QWidget* parent)
 	: BaseDock(parent)
 	, cbDataColumn(new TreeViewComboBox) {
 	ui.setupUi(this);
+	setPlotRangeCombobox(ui.cbPlotRanges);
 	setBaseWidgets(ui.leName, ui.teComment);
+	setVisibilityWidgets(ui.chkVisible, ui.chkLegendVisible);
 
 	// Tab "General"
 	auto* gridLayout = qobject_cast<QGridLayout*>(ui.tabGeneral->layout());
@@ -105,7 +107,6 @@ HistogramDock::HistogramDock(QWidget* parent)
 
 	// Slots
 	// General
-	connect(ui.chkVisible, &QCheckBox::clicked, this, &HistogramDock::visibilityChanged);
 	connect(cbDataColumn, &TreeViewComboBox::currentModelIndexChanged, this, &HistogramDock::dataColumnChanged);
 	connect(ui.cbType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &HistogramDock::typeChanged);
 	connect(ui.cbOrientation, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &HistogramDock::orientationChanged);
@@ -118,7 +119,6 @@ HistogramDock::HistogramDock(QWidget* parent)
 	connect(ui.sbBinRangesMax, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &HistogramDock::binRangesMaxChanged);
 	connect(ui.dteBinRangesMin, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &HistogramDock::binRangesMinDateTimeChanged);
 	connect(ui.dteBinRangesMax, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &HistogramDock::binRangesMaxDateTimeChanged);
-	connect(ui.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &HistogramDock::plotRangeChanged);
 
 	// Error bars
 	connect(ui.cbErrorType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &HistogramDock::errorTypeChanged);
@@ -273,6 +273,7 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 	ui.chkAutoBinRanges->setChecked(m_curve->autoBinRanges());
 	ui.sbBinRangesMin->setValue(m_curve->binRangesMin());
 	ui.sbBinRangesMax->setValue(m_curve->binRangesMax());
+	ui.chkLegendVisible->setChecked(m_curve->legendVisible());
 	ui.chkVisible->setChecked(m_curve->isVisible());
 
 	// handle numeric vs. datetime widgets
@@ -299,7 +300,7 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 	// load the remaining properties
 	load();
 
-	updatePlotRanges();
+	updatePlotRangeList();
 
 	// Slots
 	// General-tab
@@ -313,7 +314,6 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 	connect(m_curve, &Histogram::autoBinRangesChanged, this, &HistogramDock::curveAutoBinRangesChanged);
 	connect(m_curve, &Histogram::binRangesMinChanged, this, &HistogramDock::curveBinRangesMinChanged);
 	connect(m_curve, &Histogram::binRangesMaxChanged, this, &HistogramDock::curveBinRangesMaxChanged);
-	connect(m_curve, &Histogram::visibleChanged, this, &HistogramDock::curveVisibilityChanged);
 
 	//"Error bars"-Tab
 	connect(m_curve, &Histogram::errorTypeChanged, this, &HistogramDock::curveErrorTypeChanged);
@@ -337,20 +337,6 @@ void HistogramDock::retranslateUi() {
 
 	// TODO updatePenStyles, updateBrushStyles for all comboboxes
 }
-void HistogramDock::updatePlotRanges() {
-	const int cSystemCount{m_curve->coordinateSystemCount()};
-	const int cSystemIndex{m_curve->coordinateSystemIndex()};
-	DEBUG(Q_FUNC_INFO << ", plot ranges count: " << cSystemCount)
-	DEBUG(Q_FUNC_INFO << ", current plot range: " << cSystemIndex + 1)
-
-	// fill ui.cbPlotRanges
-	ui.cbPlotRanges->clear();
-	for (int i{0}; i < cSystemCount; i++)
-		ui.cbPlotRanges->addItem(QString::number(i + 1) + QLatin1String(" : ") + m_curve->coordinateSystemInfo(i));
-	ui.cbPlotRanges->setCurrentIndex(cSystemIndex);
-	// disable when there is only on plot range
-	ui.cbPlotRanges->setEnabled(cSystemCount == 1 ? false : true);
-}
 
 void HistogramDock::updateLocale() {
 	lineWidget->updateLocale();
@@ -363,13 +349,6 @@ void HistogramDock::updateLocale() {
 //*************************************************************
 
 // "General"-tab
-void HistogramDock::visibilityChanged(bool state) {
-	CONDITIONAL_LOCK_RETURN;
-
-	for (auto* curve : m_curvesList)
-		curve->setVisible(state);
-}
-
 void HistogramDock::typeChanged(int index) {
 	CONDITIONAL_LOCK_RETURN;
 
@@ -629,11 +608,6 @@ void HistogramDock::curveBinRangesMaxChanged(double value) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.sbBinRangesMax->setValue(value);
 	ui.dteBinRangesMax->setMSecsSinceEpochUTC(value);
-}
-
-void HistogramDock::curveVisibilityChanged(bool on) {
-	CONDITIONAL_LOCK_RETURN;
-	ui.chkVisible->setChecked(on);
 }
 
 //"Error bars"-Tab

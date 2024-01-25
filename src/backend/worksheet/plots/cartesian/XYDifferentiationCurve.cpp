@@ -22,8 +22,6 @@
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
 
-#include <gsl/gsl_errno.h>
-
 #include <KLocalizedString>
 #include <QElapsedTimer>
 #include <QIcon>
