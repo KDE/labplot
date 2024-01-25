@@ -684,11 +684,20 @@ void CartesianPlotLegendDock::load() {
 
 	// widgets for positioning using absolute plot distances
 	ui.cbPositionX->setCurrentIndex((int)m_legend->position().horizontalPosition);
-	//	positionXChanged(ui.cbPositionX->currentIndex());
-	ui.sbPositionX->setValue(Worksheet::convertFromSceneUnits(m_legend->position().point.x(), m_worksheetUnit));
+	// positionXChanged(ui.cbPositionX->currentIndex());
+	DEBUG(Q_FUNC_INFO << ", X VALUE = " << m_legend->position().point.x())
+	if (m_legend->position().horizontalPosition == WorksheetElement::HorizontalPosition::Custom) {
+		ui.sbPositionX->setValue(m_legend->position().point.x() * 100);
+		ui.sbPositionX->setSuffix(QStringLiteral(" %"));
+	} else
+		ui.sbPositionX->setValue(Worksheet::convertFromSceneUnits(m_legend->position().point.x(), m_worksheetUnit));
 	ui.cbPositionY->setCurrentIndex((int)m_legend->position().verticalPosition);
 	//	positionYChanged(ui.cbPositionY->currentIndex());
-	ui.sbPositionY->setValue(Worksheet::convertFromSceneUnits(m_legend->position().point.y(), m_worksheetUnit));
+	if (m_legend->position().verticalPosition == WorksheetElement::VerticalPosition::Custom) {
+		ui.sbPositionY->setValue(m_legend->position().point.y() * 100);
+		ui.sbPositionY->setSuffix(QStringLiteral(" %"));
+	} else
+		ui.sbPositionY->setValue(Worksheet::convertFromSceneUnits(m_legend->position().point.y(), m_worksheetUnit));
 
 	ui.cbHorizontalAlignment->setCurrentIndex((int)m_legend->horizontalAlignment());
 	ui.cbVerticalAlignment->setCurrentIndex((int)m_legend->verticalAlignment());
