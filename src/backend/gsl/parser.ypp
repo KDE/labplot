@@ -95,10 +95,10 @@ symbol *tptr;   /* For returning symbol-table pointers */
 %token <dval>  NUM 	/* Simple double precision number */
 %token <tptr> VAR FNCT SPECFNCT /* VARiable and FuNCTion and Special functions*/
 /* https://www.gnu.org/software/bison/manual/html_node/Token-Decl.html */
-%left <operator> OR "||"
-%left <operator> AND "&&"
-%left <operator> LE "<="
-%left <operator> GE ">="
+%token <operator> OR "||"
+%token <operator> AND "&&"
+%token <operator> LE "<="
+%token <operator> GE ">="
 %type  <dval>  expr
 
 %right '='
