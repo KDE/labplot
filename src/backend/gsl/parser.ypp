@@ -102,7 +102,7 @@ symbol *tptr;   /* For returning symbol-table pointers */
 %type  <dval>  expr
 
 %right '='
-%left '-' '+' OR LE GE
+%left '-' '+' OR LE GE '<' '>'
 %left '*' '/' '%' AND
 %left NEG     /* Negation--unary minus */
 %right '^' '!'
