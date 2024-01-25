@@ -435,7 +435,7 @@ void ExpressionParserTest::testEvaluateLogicalExpression() {
 
 void ExpressionParserTest::testevaluateGreaterThan() {
 	const QString expr = QStringLiteral("x > y");
-	const QStringList vars = {QStringLiteral("x"), QStringLiteral("x")};
+	const QStringList vars = {QStringLiteral("x"), QStringLiteral("y")};
 
 	QVector<QVector<double>*> xVectors;
 
@@ -458,7 +458,7 @@ void ExpressionParserTest::testevaluateGreaterThan() {
 
 void ExpressionParserTest::testevaluateLessThan() {
 	const QString expr = QStringLiteral("x < y");
-	const QStringList vars = {QStringLiteral("x"), QStringLiteral("x")};
+	const QStringList vars = {QStringLiteral("x"), QStringLiteral("y")};
 
 	QVector<QVector<double>*> xVectors;
 
@@ -481,7 +481,7 @@ void ExpressionParserTest::testevaluateLessThan() {
 
 void ExpressionParserTest::testevaluateLessEqualThan() {
 	const QString expr = QStringLiteral("x <= y");
-	const QStringList vars = {QStringLiteral("x"), QStringLiteral("x")};
+	const QStringList vars = {QStringLiteral("x"), QStringLiteral("y")};
 
 	QVector<QVector<double>*> xVectors;
 
@@ -504,7 +504,7 @@ void ExpressionParserTest::testevaluateLessEqualThan() {
 
 void ExpressionParserTest::testevaluateGreaterEqualThan() {
 	const QString expr = QStringLiteral("x >= y");
-	const QStringList vars = {QStringLiteral("x"), QStringLiteral("x")};
+	const QStringList vars = {QStringLiteral("x"), QStringLiteral("y")};
 
 	QVector<QVector<double>*> xVectors;
 
