@@ -16,6 +16,7 @@ New features:
 		* New panel in the presenter widget to allow the selection, zooming and navigation also in the presenter mode
 		* Add possibility to limit the number of ticks for custom columns
 		* Allow to show/hide the entry in the legend for all supported plot types and not only for XY-Curve
+		* Add setting legend position relative to plot
 	* [spreadsheet]
 		* Spreadsheet linking - allow to synchronize number of rows across multiple spreadsheets
 		* Extended search and replace
