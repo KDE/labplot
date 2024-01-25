@@ -125,7 +125,7 @@ private:
 	bool m_suppressPlotRetransform{false};
 
 	friend class RetransformTest;
-	friend class MultiRangeTest2;
+	friend class MultiRangeTest3;
 };
 
 #endif
