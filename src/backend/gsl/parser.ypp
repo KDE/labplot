@@ -95,10 +95,10 @@ symbol *tptr;   /* For returning symbol-table pointers */
 %token <dval>  NUM 	/* Simple double precision number */
 %token <tptr> VAR FNCT SPECFNCT /* VARiable and FuNCTion and Special functions*/
 /* https://www.gnu.org/software/bison/manual/html_node/Token-Decl.html */
-%token <operator> OR "||"
-%token <operator> AND "&&"
-%token <operator> LE "<="
-%token <operator> GE ">="
+%left <operator> OR "||"
+%left <operator> AND "&&"
+%left <operator> LE "<="
+%left <operator> GE ">="
 %type  <dval>  expr
 
 %right '='
@@ -780,12 +780,12 @@ int yylex(param *p) {
 		if (getcharstr(p) == '=') {
 			return GE;
 		}
-		ungetstr(&(p->pos));
+		ungetcstr(&(p->pos));
 	} else if (c == '<') {
 		if (getcharstr(p) == '=') {
 			return LE;
 		}
-		ungetstr(&(p->pos));
+		ungetcstr(&(p->pos));
 	}
 
 	pdebug("PARSER: PROCESSING character '%c'\n", c);
