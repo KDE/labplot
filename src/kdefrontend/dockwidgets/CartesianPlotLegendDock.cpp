@@ -190,9 +190,9 @@ void CartesianPlotLegendDock::updateUnits() {
 		m_worksheetUnit = Worksheet::Unit::Centimeter;
 		suffix = QLatin1String(" cm");
 		ui.sbLineSymbolWidth->setValue(ui.sbLineSymbolWidth->value() * 2.54);
-		if (xPosition != static_cast<int>(WorksheetElement::HorizontalPosition::Custom))
+		if (xPosition != static_cast<int>(WorksheetElement::HorizontalPosition::Relative))
 			ui.sbPositionX->setValue(ui.sbPositionX->value() * 2.54);
-		if (yPosition != static_cast<int>(WorksheetElement::VerticalPosition::Custom))
+		if (yPosition != static_cast<int>(WorksheetElement::VerticalPosition::Relative))
 			ui.sbPositionY->setValue(ui.sbPositionY->value() * 2.54);
 		ui.sbBorderCornerRadius->setValue(ui.sbBorderCornerRadius->value() * 2.54);
 		ui.sbLayoutTopMargin->setValue(ui.sbLayoutTopMargin->value() * 2.54);
@@ -206,9 +206,9 @@ void CartesianPlotLegendDock::updateUnits() {
 		m_worksheetUnit = Worksheet::Unit::Inch;
 		suffix = QLatin1String(" in");
 		ui.sbLineSymbolWidth->setValue(ui.sbLineSymbolWidth->value() / 2.54);
-		if (xPosition != static_cast<int>(WorksheetElement::HorizontalPosition::Custom))
+		if (xPosition != static_cast<int>(WorksheetElement::HorizontalPosition::Relative))
 			ui.sbPositionX->setValue(ui.sbPositionX->value() / 2.54);
-		if (yPosition != static_cast<int>(WorksheetElement::VerticalPosition::Custom))
+		if (yPosition != static_cast<int>(WorksheetElement::VerticalPosition::Relative))
 			ui.sbPositionY->setValue(ui.sbPositionY->value() / 2.54);
 		ui.sbBorderCornerRadius->setValue(ui.sbBorderCornerRadius->value() / 2.54);
 		ui.sbLayoutTopMargin->setValue(ui.sbLayoutTopMargin->value() / 2.54);
@@ -220,9 +220,9 @@ void CartesianPlotLegendDock::updateUnits() {
 	}
 
 	ui.sbLineSymbolWidth->setSuffix(suffix);
-	if (xPosition != static_cast<int>(WorksheetElement::HorizontalPosition::Custom))
+	if (xPosition != static_cast<int>(WorksheetElement::HorizontalPosition::Relative))
 		ui.sbPositionX->setSuffix(suffix);
-	if (yPosition != static_cast<int>(WorksheetElement::HorizontalPosition::Custom))
+	if (yPosition != static_cast<int>(WorksheetElement::HorizontalPosition::Relative))
 		ui.sbPositionY->setSuffix(suffix);
 	ui.sbBorderCornerRadius->setSuffix(suffix);
 	ui.sbLayoutTopMargin->setSuffix(suffix);
@@ -331,10 +331,10 @@ void CartesianPlotLegendDock::positionXChanged(int index) {
 	auto oldHorizontalPosition = position.horizontalPosition;
 	position.horizontalPosition = CartesianPlotLegend::HorizontalPosition(index);
 	double x = 0.;
-	if (position.horizontalPosition == WorksheetElement::HorizontalPosition::Custom) {
+	if (position.horizontalPosition == WorksheetElement::HorizontalPosition::Relative) {
 		switch (oldHorizontalPosition) {
 		case WorksheetElement::HorizontalPosition::Left:
-		case WorksheetElement::HorizontalPosition::Custom:
+		case WorksheetElement::HorizontalPosition::Relative:
 			break;
 		case WorksheetElement::HorizontalPosition::Center:
 			x = 0.5;
@@ -368,10 +368,10 @@ void CartesianPlotLegendDock::positionYChanged(int index) {
 	auto oldVerticalPosition = position.verticalPosition;
 	position.verticalPosition = CartesianPlotLegend::VerticalPosition(index);
 	double y = 0.;
-	if (position.verticalPosition == WorksheetElement::VerticalPosition::Custom) {
+	if (position.verticalPosition == WorksheetElement::VerticalPosition::Relative) {
 		switch (oldVerticalPosition) {
 		case WorksheetElement::VerticalPosition::Top:
-		case WorksheetElement::VerticalPosition::Custom:
+		case WorksheetElement::VerticalPosition::Relative:
 			break;
 		case WorksheetElement::VerticalPosition::Center:
 			y = 0.5;
@@ -399,7 +399,7 @@ void CartesianPlotLegendDock::customPositionXChanged(double value) {
 	CONDITIONAL_RETURN_NO_LOCK;
 
 	CartesianPlotLegend::PositionWrapper position = m_legend->position();
-	if (position.horizontalPosition == WorksheetElement::HorizontalPosition::Custom)
+	if (position.horizontalPosition == WorksheetElement::HorizontalPosition::Relative)
 		position.point.setX(value / 100.);
 	else
 		position.point.setX(Worksheet::convertToSceneUnits(value, m_worksheetUnit));
@@ -411,7 +411,7 @@ void CartesianPlotLegendDock::customPositionYChanged(double value) {
 	CONDITIONAL_RETURN_NO_LOCK;
 
 	CartesianPlotLegend::PositionWrapper position = m_legend->position();
-	if (position.verticalPosition == WorksheetElement::VerticalPosition::Custom)
+	if (position.verticalPosition == WorksheetElement::VerticalPosition::Relative)
 		position.point.setY(value / 100.);
 	else
 		position.point.setY(Worksheet::convertToSceneUnits(value, m_worksheetUnit));
@@ -586,13 +586,13 @@ void CartesianPlotLegendDock::legendPositionChanged(const CartesianPlotLegend::P
 
 	ui.cbPositionX->setCurrentIndex(static_cast<int>(position.horizontalPosition));
 	ui.cbPositionY->setCurrentIndex(static_cast<int>(position.verticalPosition));
-	if (position.horizontalPosition == WorksheetElement::HorizontalPosition::Custom) {
+	if (position.horizontalPosition == WorksheetElement::HorizontalPosition::Relative) {
 		ui.sbPositionX->setValue(position.point.x() * 100.);
 		ui.sbPositionX->setSuffix(QStringLiteral(" %"));
 	} else
 		ui.sbPositionX->setValue(Worksheet::convertFromSceneUnits(position.point.x(), m_worksheetUnit));
 
-	if (position.verticalPosition == WorksheetElement::VerticalPosition::Custom) {
+	if (position.verticalPosition == WorksheetElement::VerticalPosition::Relative) {
 		ui.sbPositionY->setValue(position.point.y() * 100.);
 		ui.sbPositionX->setSuffix(QStringLiteral(" %"));
 	} else
@@ -686,14 +686,14 @@ void CartesianPlotLegendDock::load() {
 	// widgets for positioning using absolute plot distances
 	ui.cbPositionX->setCurrentIndex((int)m_legend->position().horizontalPosition);
 	// positionXChanged(ui.cbPositionX->currentIndex());
-	if (m_legend->position().horizontalPosition == WorksheetElement::HorizontalPosition::Custom) {
+	if (m_legend->position().horizontalPosition == WorksheetElement::HorizontalPosition::Relative) {
 		ui.sbPositionX->setValue(m_legend->position().point.x() * 100);
 		ui.sbPositionX->setSuffix(QStringLiteral(" %"));
 	} else
 		ui.sbPositionX->setValue(Worksheet::convertFromSceneUnits(m_legend->position().point.x(), m_worksheetUnit));
 	ui.cbPositionY->setCurrentIndex((int)m_legend->position().verticalPosition);
 	// positionYChanged(ui.cbPositionY->currentIndex());
-	if (m_legend->position().verticalPosition == WorksheetElement::VerticalPosition::Custom) {
+	if (m_legend->position().verticalPosition == WorksheetElement::VerticalPosition::Relative) {
 		ui.sbPositionY->setValue(m_legend->position().point.y() * 100);
 		ui.sbPositionY->setSuffix(QStringLiteral(" %"));
 	} else

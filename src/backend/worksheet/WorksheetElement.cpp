@@ -452,7 +452,7 @@ QPointF WorksheetElement::parentPosToRelativePos(QPointF parentPos, PositionWrap
 	case HorizontalPosition::Right:
 		percentage = 1.0;
 		break;
-	case HorizontalPosition::Custom:
+	case HorizontalPosition::Relative:
 		percentage = position.point.x();
 	}
 
@@ -468,7 +468,7 @@ QPointF WorksheetElement::parentPosToRelativePos(QPointF parentPos, PositionWrap
 	case VerticalPosition::Bottom:
 		percentage = 1.0;
 		break;
-	case VerticalPosition::Custom:
+	case VerticalPosition::Relative:
 		percentage = position.point.y();
 	}
 
@@ -496,7 +496,7 @@ QPointF WorksheetElement::relativePosToParentPos(PositionWrapper position) const
 	double percentage = 0.;
 	switch (position.horizontalPosition) {
 	case HorizontalPosition::Left:
-	case HorizontalPosition::Custom:
+	case HorizontalPosition::Relative:
 		break;
 	case HorizontalPosition::Center:
 		percentage = 0.5;
@@ -506,7 +506,7 @@ QPointF WorksheetElement::relativePosToParentPos(PositionWrapper position) const
 		break;
 	}
 
-	if (position.horizontalPosition == HorizontalPosition::Custom)
+	if (position.horizontalPosition == HorizontalPosition::Relative)
 		parentPos.setX(parentRect.x() + parentRect.width() * position.point.x());
 	else
 		parentPos.setX(parentRect.x() + parentRect.width() * percentage + position.point.x());
@@ -521,11 +521,11 @@ QPointF WorksheetElement::relativePosToParentPos(PositionWrapper position) const
 	case VerticalPosition::Bottom:
 		percentage = 1.0;
 		break;
-	case VerticalPosition::Custom:
+	case VerticalPosition::Relative:
 		break;
 	}
 
-	if (position.verticalPosition == VerticalPosition::Custom)
+	if (position.verticalPosition == VerticalPosition::Relative)
 		parentPos.setY(parentRect.y() + parentRect.height() * position.point.y());
 	else
 		parentPos.setY(parentRect.y() + parentRect.height() * percentage - position.point.y());
@@ -577,7 +577,7 @@ bool WorksheetElement::load(XmlStreamReader* reader, bool preview) {
 		// "position" and it was not possible to arrange relative to this anchor point
 		// From 2.9.0, the horizontalPosition and verticalPosition indicate the anchor
 		// point and position.point indicates the distance to them
-		if (d->position.horizontalPosition != HorizontalPosition::Custom) {
+		if (d->position.horizontalPosition != HorizontalPosition::Relative) {
 			d->position.point.setX(0);
 			if (d->position.horizontalPosition == HorizontalPosition::Left)
 				d->horizontalAlignment = HorizontalAlignment::Left;
@@ -586,7 +586,7 @@ bool WorksheetElement::load(XmlStreamReader* reader, bool preview) {
 		} else // TODO
 			d->position.horizontalPosition = HorizontalPosition::Center;
 
-		if (d->position.verticalPosition != VerticalPosition::Custom) {
+		if (d->position.verticalPosition != VerticalPosition::Relative) {
 			d->position.point.setY(0);
 			if (d->position.verticalPosition == VerticalPosition::Top)
 				d->verticalAlignment = VerticalAlignment::Top;

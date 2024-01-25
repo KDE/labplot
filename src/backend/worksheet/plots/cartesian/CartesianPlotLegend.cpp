@@ -1024,7 +1024,7 @@ bool CartesianPlotLegend::load(XmlStreamReader* reader, bool preview) {
 					reader->raiseMissingAttributeWarning(QStringLiteral("horizontalPosition"));
 				else {
 					const auto pos = (WorksheetElement::HorizontalPosition)str.toInt();
-					if (pos == WorksheetElement::HorizontalPosition::Custom)
+					if (pos == WorksheetElement::HorizontalPosition::Relative)
 						d->position.horizontalPosition = WorksheetElement::HorizontalPosition::Center;
 					else
 						d->position.horizontalPosition = pos;
@@ -1035,7 +1035,7 @@ bool CartesianPlotLegend::load(XmlStreamReader* reader, bool preview) {
 					reader->raiseMissingAttributeWarning(QStringLiteral("verticalPosition"));
 				else {
 					const auto pos = (WorksheetElement::VerticalPosition)str.toInt();
-					if (pos == WorksheetElement::VerticalPosition::Custom)
+					if (pos == WorksheetElement::VerticalPosition::Relative)
 						d->position.verticalPosition = WorksheetElement::VerticalPosition::Center;
 					else
 						d->position.verticalPosition = pos;
