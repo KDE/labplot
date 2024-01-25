@@ -148,14 +148,14 @@ void ExpressionParserTest::testifCondition() {
 	QCOMPARE(fnct(-1, 1, 5), 1);
 }
 void ExpressionParserTest::testandFunction() {
-	// auto fnct = getFunction2(QStringLiteral("and"));
-	// QVERIFY(fnct);
+	auto fnct = getFunction2(QStringLiteral("and"));
+	QVERIFY(fnct);
 
-	// QCOMPARE(fnct(1, 1), 1);
-	// QCOMPARE(fnct(0, 1), 0);
-	// QCOMPARE(fnct(1, 0), 0);
-	// QCOMPARE(fnct(0, 0), 0);
-	// QCOMPARE(fnct(2, 5), 1);
+	QCOMPARE(fnct(1, 1), 1);
+	QCOMPARE(fnct(0, 1), 0);
+	QCOMPARE(fnct(1, 0), 0);
+	QCOMPARE(fnct(0, 0), 0);
+	QCOMPARE(fnct(2, 5), 1);
 }
 void ExpressionParserTest::testorFunction() {
 	auto fnct = getFunction2(QStringLiteral("or"));
