@@ -188,8 +188,8 @@ void ExpressionParserTest::testnotFunction() {
 
 	QCOMPARE(fnct(1), 0);
 	QCOMPARE(fnct(0), 1);
-	QCOMPARE(fnct(-1), 1); // According to C/C++ standard
-	QCOMPARE(fnct(2), 1);
+	QCOMPARE(fnct(-1), 0); // According to C/C++ standard. -1 is true and !-1 is false
+	QCOMPARE(fnct(2), 0);
 }
 
 void ExpressionParserTest::testbetweenIncluded() {
@@ -400,8 +400,8 @@ void ExpressionParserTest::testEvaluateNot() {
 	QCOMPARE(yVector.size(), 4);
 	QCOMPARE(yVector.at(0), 0.);
 	QCOMPARE(yVector.at(1), 1.);
-	QCOMPARE(yVector.at(2), 1.);
-	QCOMPARE(yVector.at(3), 1.);
+	QCOMPARE(yVector.at(2), 0.); // According to C/C++ standard, -1 is true for bool and therefore the negated is false
+	QCOMPARE(yVector.at(3), 0.);
 }
 
 void ExpressionParserTest::testEvaluateLogicalExpression() {
