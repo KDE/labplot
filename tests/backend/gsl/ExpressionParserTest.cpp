@@ -188,6 +188,8 @@ void ExpressionParserTest::testnotFunction() {
 
 	QCOMPARE(fnct(1), 0);
 	QCOMPARE(fnct(0), 1);
+	QCOMPARE(fnct(-1), 1); // According to C/C++ standard
+	QCOMPARE(fnct(2), 1);
 }
 
 void ExpressionParserTest::testbetweenIncluded() {
