@@ -30,6 +30,8 @@
 #endif
 #include <QPageSize>
 
+#include <gsl/gsl_const_cgs.h>
+
 /*!
   \class ImageDock
   \brief  Provides a widget for editing the properties of the worksheets image element.
@@ -180,18 +182,18 @@ void ImageDock::updateUnits() {
 		// convert from imperial to metric
 		m_worksheetUnit = Worksheet::Unit::Centimeter;
 		suffix = QStringLiteral(" cm");
-		ui.sbWidth->setValue(ui.sbWidth->value() * 2.54);
-		ui.sbHeight->setValue(ui.sbHeight->value() * 2.54);
-		ui.sbPositionX->setValue(ui.sbPositionX->value() * 2.54);
-		ui.sbPositionY->setValue(ui.sbPositionY->value() * 2.54);
+		ui.sbWidth->setValue(ui.sbWidth->value() * GSL_CONST_CGS_INCH);
+		ui.sbHeight->setValue(ui.sbHeight->value() * GSL_CONST_CGS_INCH);
+		ui.sbPositionX->setValue(ui.sbPositionX->value() * GSL_CONST_CGS_INCH);
+		ui.sbPositionY->setValue(ui.sbPositionY->value() * GSL_CONST_CGS_INCH);
 	} else {
 		// convert from metric to imperial
 		m_worksheetUnit = Worksheet::Unit::Inch;
 		suffix = QStringLiteral(" in");
-		ui.sbWidth->setValue(ui.sbWidth->value() / 2.54);
-		ui.sbHeight->setValue(ui.sbHeight->value() / 2.54);
-		ui.sbPositionX->setValue(ui.sbPositionX->value() / 2.54);
-		ui.sbPositionY->setValue(ui.sbPositionY->value() / 2.54);
+		ui.sbWidth->setValue(ui.sbWidth->value() / GSL_CONST_CGS_INCH);
+		ui.sbHeight->setValue(ui.sbHeight->value() / GSL_CONST_CGS_INCH);
+		ui.sbPositionX->setValue(ui.sbPositionX->value() / GSL_CONST_CGS_INCH);
+		ui.sbPositionY->setValue(ui.sbPositionY->value() / GSL_CONST_CGS_INCH);
 	}
 
 	ui.sbWidth->setSuffix(suffix);

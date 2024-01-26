@@ -21,6 +21,8 @@
 
 #include <KLocalizedString>
 
+#include <gsl/gsl_const_cgs.h>
+
 /*!
   \class CartesianPlotLegendDock
   \brief  Provides a widget for editing the properties of the cartesian plot legend currently selected in the project explorer.
@@ -189,34 +191,34 @@ void CartesianPlotLegendDock::updateUnits() {
 		// convert from imperial to metric
 		m_worksheetUnit = Worksheet::Unit::Centimeter;
 		suffix = QLatin1String(" cm");
-		ui.sbLineSymbolWidth->setValue(ui.sbLineSymbolWidth->value() * 2.54);
+		ui.sbLineSymbolWidth->setValue(ui.sbLineSymbolWidth->value() * GSL_CONST_CGS_INCH);
 		if (xPosition != static_cast<int>(WorksheetElement::HorizontalPosition::Relative))
-			ui.sbPositionX->setValue(ui.sbPositionX->value() * 2.54);
+			ui.sbPositionX->setValue(ui.sbPositionX->value() * GSL_CONST_CGS_INCH);
 		if (yPosition != static_cast<int>(WorksheetElement::VerticalPosition::Relative))
-			ui.sbPositionY->setValue(ui.sbPositionY->value() * 2.54);
-		ui.sbBorderCornerRadius->setValue(ui.sbBorderCornerRadius->value() * 2.54);
-		ui.sbLayoutTopMargin->setValue(ui.sbLayoutTopMargin->value() * 2.54);
-		ui.sbLayoutBottomMargin->setValue(ui.sbLayoutBottomMargin->value() * 2.54);
-		ui.sbLayoutLeftMargin->setValue(ui.sbLayoutLeftMargin->value() * 2.54);
-		ui.sbLayoutRightMargin->setValue(ui.sbLayoutRightMargin->value() * 2.54);
-		ui.sbLayoutHorizontalSpacing->setValue(ui.sbLayoutHorizontalSpacing->value() * 2.54);
-		ui.sbLayoutVerticalSpacing->setValue(ui.sbLayoutVerticalSpacing->value() * 2.54);
+			ui.sbPositionY->setValue(ui.sbPositionY->value() * GSL_CONST_CGS_INCH);
+		ui.sbBorderCornerRadius->setValue(ui.sbBorderCornerRadius->value() * GSL_CONST_CGS_INCH);
+		ui.sbLayoutTopMargin->setValue(ui.sbLayoutTopMargin->value() * GSL_CONST_CGS_INCH);
+		ui.sbLayoutBottomMargin->setValue(ui.sbLayoutBottomMargin->value() * GSL_CONST_CGS_INCH);
+		ui.sbLayoutLeftMargin->setValue(ui.sbLayoutLeftMargin->value() * GSL_CONST_CGS_INCH);
+		ui.sbLayoutRightMargin->setValue(ui.sbLayoutRightMargin->value() * GSL_CONST_CGS_INCH);
+		ui.sbLayoutHorizontalSpacing->setValue(ui.sbLayoutHorizontalSpacing->value() * GSL_CONST_CGS_INCH);
+		ui.sbLayoutVerticalSpacing->setValue(ui.sbLayoutVerticalSpacing->value() * GSL_CONST_CGS_INCH);
 	} else {
 		// convert from metric to imperial
 		m_worksheetUnit = Worksheet::Unit::Inch;
 		suffix = QLatin1String(" in");
-		ui.sbLineSymbolWidth->setValue(ui.sbLineSymbolWidth->value() / 2.54);
+		ui.sbLineSymbolWidth->setValue(ui.sbLineSymbolWidth->value() / GSL_CONST_CGS_INCH);
 		if (xPosition != static_cast<int>(WorksheetElement::HorizontalPosition::Relative))
-			ui.sbPositionX->setValue(ui.sbPositionX->value() / 2.54);
+			ui.sbPositionX->setValue(ui.sbPositionX->value() / GSL_CONST_CGS_INCH);
 		if (yPosition != static_cast<int>(WorksheetElement::VerticalPosition::Relative))
-			ui.sbPositionY->setValue(ui.sbPositionY->value() / 2.54);
-		ui.sbBorderCornerRadius->setValue(ui.sbBorderCornerRadius->value() / 2.54);
-		ui.sbLayoutTopMargin->setValue(ui.sbLayoutTopMargin->value() / 2.54);
-		ui.sbLayoutBottomMargin->setValue(ui.sbLayoutBottomMargin->value() / 2.54);
-		ui.sbLayoutLeftMargin->setValue(ui.sbLayoutLeftMargin->value() / 2.54);
-		ui.sbLayoutRightMargin->setValue(ui.sbLayoutRightMargin->value() / 2.54);
-		ui.sbLayoutHorizontalSpacing->setValue(ui.sbLayoutHorizontalSpacing->value() / 2.54);
-		ui.sbLayoutVerticalSpacing->setValue(ui.sbLayoutVerticalSpacing->value() / 2.54);
+			ui.sbPositionY->setValue(ui.sbPositionY->value() / GSL_CONST_CGS_INCH);
+		ui.sbBorderCornerRadius->setValue(ui.sbBorderCornerRadius->value() / GSL_CONST_CGS_INCH);
+		ui.sbLayoutTopMargin->setValue(ui.sbLayoutTopMargin->value() / GSL_CONST_CGS_INCH);
+		ui.sbLayoutBottomMargin->setValue(ui.sbLayoutBottomMargin->value() / GSL_CONST_CGS_INCH);
+		ui.sbLayoutLeftMargin->setValue(ui.sbLayoutLeftMargin->value() / GSL_CONST_CGS_INCH);
+		ui.sbLayoutRightMargin->setValue(ui.sbLayoutRightMargin->value() / GSL_CONST_CGS_INCH);
+		ui.sbLayoutHorizontalSpacing->setValue(ui.sbLayoutHorizontalSpacing->value() / GSL_CONST_CGS_INCH);
+		ui.sbLayoutVerticalSpacing->setValue(ui.sbLayoutVerticalSpacing->value() / GSL_CONST_CGS_INCH);
 	}
 
 	ui.sbLineSymbolWidth->setSuffix(suffix);
