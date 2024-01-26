@@ -1336,37 +1336,18 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 		// TODO: In Origin the legend can be placed outside of the plot which is not possible in LabPlot.
 		// To achieve this we'll need to increase padding area in the plot to place the legend outside of the plot area.
 		// graphSize (% of page), layer.clientRect (% of layer) -> see loadWorksheet()
-		// DEBUG(Q_FUNC_INFO << ", graph size = " << graphSize.width() << " " << graphSize.height())
 		auto legendRect = originLegend.clientRect;
-		auto layerRect = layer.clientRect; // for % of layer
+		// auto layerRect = layer.clientRect; // for % of layer
 		DEBUG(Q_FUNC_INFO << ", LEGEND position (l/t) << " << legendRect.left << "/" << legendRect.top)
-		DEBUG(Q_FUNC_INFO << ", layer position = " << layerRect.left << "/" << layerRect.top)
+		DEBUG(Q_FUNC_INFO << ", page size = " << graphSize.width() << "/" << graphSize.height())
 		CartesianPlotLegend::PositionWrapper position;
-		QSizeF relativePosition((legendRect.left - layerRect.left) / (double)(layerRect.right - layerRect.left),
-								(legendRect.top - layerRect.top) / (double)(layerRect.bottom - layerRect.top));
-		DEBUG(Q_FUNC_INFO << ", relative position to layer (l/t) = " << relativePosition.width() << "/" << relativePosition.height())
-		// DEBUG(Q_FUNC_INFO << ", plot are size = " << plot->plotArea()->rect().width() << " " << plot->plotArea()->rect().height())
-		// relativePosition = QSizeF(legendRect.right/(double)graphSize.width(), legendRect.bottom/(double)graphSize.height());
-		// DEBUG(Q_FUNC_INFO << ", relative postion (r b) = " << relativePosition.width() << " " << relativePosition.height())
-		// We don't support relative positions yet: use best fitting left/center/right etc. and position when inside layer (=center)
-		if (relativePosition.width() < 0.)
-			position.horizontalPosition = WorksheetElement::HorizontalPosition::Left;
-		else if (relativePosition.width() > 1.)
-			position.horizontalPosition = WorksheetElement::HorizontalPosition::Right;
-		else {
-			position.horizontalPosition = WorksheetElement::HorizontalPosition::Center;
-			// TODO: set position relative to center (not possible since plot area not know yet)
-			//  position.point.setX(relativePosition.width());
-			//  position.point.setY(relativePosition.height());
-		}
-		if (relativePosition.height() < 0.)
-			position.verticalPosition = WorksheetElement::VerticalPosition::Top;
-		else if (relativePosition.height() > 1.)
-			position.verticalPosition = WorksheetElement::VerticalPosition::Bottom;
-		else {
-			position.verticalPosition = WorksheetElement::VerticalPosition::Center;
-			// TODO: set position relative to center (not possible since plot area not know yet)
-		}
+		QSizeF relativePosition(legendRect.left / (double)graphSize.width(), legendRect.top / (double)graphSize.height());
+		DEBUG(Q_FUNC_INFO << ", relative position to page = " << relativePosition.width() << "/" << relativePosition.height())
+
+		position.point.setX(relativePosition.width());
+		position.point.setY(relativePosition.height());
+		position.horizontalPosition = WorksheetElement::HorizontalPosition::Relative;
+		position.verticalPosition = WorksheetElement::VerticalPosition::Relative;
 		legend->setPosition(position);
 
 		// rotation
