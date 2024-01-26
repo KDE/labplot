@@ -1,25 +1,26 @@
 /*
-	File                 : WidgetsTest.h
+	File                 : SpinBoxTest.h
 	Project              : LabPlot
-	Description          : Tests for widgets
+	Description          : More tests for spinbox widgets
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2022 Martin Marmsoler <martin.marmsoler@gmail.com>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-#ifndef WIDGETSTEST_H
-#define WIDGETSTEST_H
+#ifndef SPINBOXTEST_H
+#define SPINBOXTEST_H
 
 #include "tests/CommonTest.h"
 
-class WidgetsTest : public CommonTest {
+class SpinBoxTest : public CommonTest {
 	Q_OBJECT
 
 private Q_SLOTS:
 	void initTestCase() {
 		QLocale::setDefault(QLocale(QLocale::Language::English));
 	}
+
 	void numberSpinBoxProperties();
 	void numberSpinBoxCreateStringNumber();
 	void numberSpinBoxChangingValueKeyPress();
@@ -49,4 +50,4 @@ private Q_SLOTS:
 	void thousandSeparatorScrolling2();
 	void thousandSeparatorScrollingSeparatorPosition();
 };
-#endif // WIDGETSTEST_H
+#endif // SPINBOXTEST_H
