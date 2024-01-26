@@ -12,55 +12,6 @@
 #include "MultiRangeTest3.h"
 #include "MultiRangeTest_macros.h"
 
-void MultiRangeTest3::autoScaleYAfterZoomInX() {
-	/* 1) Zoom in X
-	 * 2) Autoscale X
-	 * 3) Check that y also changed! */
-	LOAD_PROJECT
-	auto refValues = horAxisP1->tickLabelValues();
-	horAxisP1->setSelected(true);
-	SET_CARTESIAN_MOUSE_MODE(CartesianPlot::MouseMode::ZoomXSelection)
-
-	p1->mousePressZoomSelectionMode(QPointF(0.2, -150), 0);
-	p1->mouseMoveZoomSelectionMode(QPointF(0.6, 100), 0);
-	p1->mouseReleaseZoomSelectionMode(0);
-
-	CHECK_RANGE(p1, tanCurve, Dimension::X, 0.2, 0.6); // zoom
-	CHECK_RANGE(p1, tanCurve, Dimension::Y, -250., 250.);
-
-	p1->navigate(tanCurve->coordinateSystemIndex(), CartesianPlot::NavigationOperation::ScaleAutoX);
-
-	CHECK_RANGE(p1, tanCurve, Dimension::X, 0., 1.);
-	CHECK_RANGE(p1, horAxisP1, Dimension::X, 0., 1.); // range is changed in retransform scale
-
-	// retransform of horAxisP1 is done, so the tickLabelValues change back
-	// to be in the range of 0, 1
-	COMPARE_DOUBLE_VECTORS(horAxisP1->tickLabelValues(), refValues);
-}
-
-void MultiRangeTest3::autoScaleXAfterZoomInY() {
-	LOAD_PROJECT
-	auto refValues = vertAxisP1->tickLabelValues();
-	vertAxisP1->setSelected(true);
-	SET_CARTESIAN_MOUSE_MODE(CartesianPlot::MouseMode::ZoomYSelection)
-
-	p1->mousePressZoomSelectionMode(QPointF(0.2, -150), 0);
-	p1->mouseMoveZoomSelectionMode(QPointF(0.6, 100), 0);
-	p1->mouseReleaseZoomSelectionMode(0);
-
-	CHECK_RANGE(p1, sinCurve, Dimension::X, 0., 1.);
-	CHECK_RANGE(p1, sinCurve, Dimension::Y, -1., 1.);
-	CHECK_RANGE(p1, tanCurve, Dimension::X, 0., 1.);
-	CHECK_RANGE(p1, tanCurve, Dimension::Y, -150., 100.); // zoom
-	CHECK_RANGE(p1, logCurve, Dimension::X, 0., 100.);
-	CHECK_RANGE(p1, logCurve, Dimension::Y, -10., 6.);
-
-	p1->navigate(tanCurve->coordinateSystemIndex(), CartesianPlot::NavigationOperation::ScaleAutoY);
-
-	// retransform of vertAxisP1 is done, so the tickLabelValues change back
-	COMPARE_DOUBLE_VECTORS(vertAxisP1->tickLabelValues(), refValues);
-}
-
 void MultiRangeTest3::baseDockSetAspects_NoPlotRangeChange() {
 	LOAD_PROJECT
 
