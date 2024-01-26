@@ -26,7 +26,7 @@ New features:
 		* When generating values via a mathematical expression ("generate function values"), allow to use variables in CAS-notebooks as source columns
 		* Generatation of equidistant values: support for Date&Time and integer columns
 		* Generatation of equidistant values: allow to fix the number of values and the increment at the same time
-		* Implement more functions for formulas
+		* Support parsing more functions and operators for formulas and expressions
 	* [notebook]
 		* Export to PDF
 		* "Configure CAS" in the menu to create a new notebook to directly allow the user to enable new backends in case not done yet

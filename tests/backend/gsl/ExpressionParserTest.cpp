@@ -359,7 +359,12 @@ void ExpressionParserTest::testEvaluateAnd() {
 
 	xVectors << new QVector<double>({1., 0., 1., 0.}); // x
 	xVectors << new QVector<double>({0., 0., 1., 1.}); // y
-	QVector<double> yVector({5., 5., 5., 5.,});
+	QVector<double> yVector({
+		5.,
+		5.,
+		5.,
+		5.,
+	}); // random value
 	ExpressionParser::evaluateCartesian(expr, vars, xVectors, &yVector);
 
 	QCOMPARE(yVector.size(), 4);
@@ -377,7 +382,12 @@ void ExpressionParserTest::testEvaluateOr() {
 
 	xVectors << new QVector<double>({1., 0., 1., 0.}); // x
 	xVectors << new QVector<double>({0., 0., 1., 1.}); // y
-	QVector<double> yVector({5., 5., 5., 5.,});
+	QVector<double> yVector({
+		5.,
+		5.,
+		5.,
+		5.,
+	}); // random value
 	ExpressionParser::evaluateCartesian(expr, vars, xVectors, &yVector);
 
 	QCOMPARE(yVector.size(), 4);
@@ -394,7 +404,7 @@ void ExpressionParserTest::testEvaluateNot() {
 	QVector<QVector<double>*> xVectors;
 
 	xVectors << new QVector<double>({1., 0., -1., 2.}); // x
-	QVector<double> yVector({5., 5., 5., 5.});
+	QVector<double> yVector({5., 5., 5., 5.}); // random value
 	ExpressionParser::evaluateCartesian(expr, vars, xVectors, &yVector);
 
 	QCOMPARE(yVector.size(), 4);
@@ -412,7 +422,12 @@ void ExpressionParserTest::testEvaluateLogicalExpression() {
 
 	xVectors << new QVector<double>({0., 1., 0., 1.}); // x
 	xVectors << new QVector<double>({0., 0., 1., 1.}); // y
-	QVector<double> yVector({5., 5., 5., 5.,});
+	QVector<double> yVector({
+		5.,
+		5.,
+		5.,
+		5.,
+	}); // random value
 	ExpressionParser::evaluateCartesian(expr, vars, xVectors, &yVector);
 
 	// if or evaluated first:
@@ -445,7 +460,7 @@ void ExpressionParserTest::testevaluateGreaterThan() {
 
 	xVectors << new QVector<double>({0., 1., 0., 1., -1., -std::numeric_limits<double>::infinity(), 1, std::numeric_limits<double>::infinity(), 7.}); // x
 	xVectors << new QVector<double>({0., 0., 1., 1., -2., std::numeric_limits<double>::infinity(), std::nan("0"), 1e9, 7.}); // y
-	QVector<double> yVector({5., 5., 5., 5., 5., 5., 5., 5., 5.});
+	QVector<double> yVector({5., 5., 5., 5., 5., 5., 5., 5., 5.}); // random value
 	ExpressionParser::evaluateCartesian(expr, vars, xVectors, &yVector);
 
 	QCOMPARE(yVector.size(), 9);
@@ -468,7 +483,7 @@ void ExpressionParserTest::testevaluateLessThan() {
 
 	xVectors << new QVector<double>({0., 1., 0., 1., -1., -std::numeric_limits<double>::infinity(), 1, std::numeric_limits<double>::infinity(), 7.}); // x
 	xVectors << new QVector<double>({0., 0., 1., 1., -2., std::numeric_limits<double>::infinity(), std::nan("0"), 1e9, 7.}); // y
-	QVector<double> yVector({5., 5., 5., 5., 5., 5., 5., 5., 5.});
+	QVector<double> yVector({5., 5., 5., 5., 5., 5., 5., 5., 5.}); // random value
 	ExpressionParser::evaluateCartesian(expr, vars, xVectors, &yVector);
 
 	QCOMPARE(yVector.size(), 9);
@@ -491,7 +506,7 @@ void ExpressionParserTest::testevaluateLessEqualThan() {
 
 	xVectors << new QVector<double>({0., 1., 0., 1., -1., -std::numeric_limits<double>::infinity(), 1, std::numeric_limits<double>::infinity(), 7.}); // x
 	xVectors << new QVector<double>({0., 0., 1., 1., -2., std::numeric_limits<double>::infinity(), std::nan("0"), 1e9, 7.}); // y
-	QVector<double> yVector({5., 5., 5., 5., 5., 5., 5., 5., 5.});
+	QVector<double> yVector({5., 5., 5., 5., 5., 5., 5., 5., 5.}); // random value
 	ExpressionParser::evaluateCartesian(expr, vars, xVectors, &yVector);
 
 	QCOMPARE(yVector.size(), 9);
@@ -514,7 +529,7 @@ void ExpressionParserTest::testevaluateGreaterEqualThan() {
 
 	xVectors << new QVector<double>({0., 1., 0., 1., -1., -std::numeric_limits<double>::infinity(), 1, std::numeric_limits<double>::infinity(), 7.}); // x
 	xVectors << new QVector<double>({0., 0., 1., 1., -2., std::numeric_limits<double>::infinity(), std::nan("0"), 1e9, 7.}); // y
-	QVector<double> yVector({5., 5., 5., 5., 5., 5., 5., 5., 5.});
+	QVector<double> yVector({5., 5., 5., 5., 5., 5., 5., 5., 5.}); // random value
 	ExpressionParser::evaluateCartesian(expr, vars, xVectors, &yVector);
 
 	QCOMPARE(yVector.size(), 9);
@@ -557,7 +572,7 @@ void ExpressionParserTest::testLog2() {
 	auto fnct = getFunction1(QStringLiteral("log2"));
 	QVERIFY(fnct);
 
-	QCOMPARE(fnct(2), 1);
+	QCOMPARE(fnct(2), 1.);
 	QCOMPARE(fnct(10), 3.32192809489);
 }
 

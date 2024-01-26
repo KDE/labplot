@@ -777,12 +777,12 @@ int yylex(param *p) {
 		}
 		ungetcstr(&(p->pos));
 	} else if (c == '>') {
-		if (getcharstr(p) == '=') {
+		if (getcharstr(p) == '=') {	// >=
 			return GE;
 		}
 		ungetcstr(&(p->pos));
 	} else if (c == '<') {
-		if (getcharstr(p) == '=') {
+		if (getcharstr(p) == '=') {	// <=
 			return LE;
 		}
 		ungetcstr(&(p->pos));
