@@ -503,7 +503,7 @@ void ExpressionParserTest::testevaluateLessEqualThan() {
 	QCOMPARE(yVector.at(5), 1.);
 	QCOMPARE(yVector.at(6), 0.);
 	QCOMPARE(yVector.at(7), 0.);
-	QCOMPARE(yVector.at(8), 1.)
+	QCOMPARE(yVector.at(8), 1.);
 }
 
 void ExpressionParserTest::testevaluateGreaterEqualThan() {
