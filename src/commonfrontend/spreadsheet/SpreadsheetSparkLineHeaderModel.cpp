@@ -60,6 +60,8 @@ QPixmap SpreadsheetSparkLinesHeaderModel::showSparkLines(const Column* col) {
 		worksheet->view();
 		worksheet->setLayoutBottomMargin(0);
 		worksheet->setLayoutTopMargin(0);
+		worksheet->setLayoutLeftMargin(0);
+		worksheet->setLayoutRightMargin(0);
 
 		auto* plot = new CartesianPlot(sparklineText);
 		plot->setTheme(sparklineTheme);
@@ -67,6 +69,7 @@ QPixmap SpreadsheetSparkLinesHeaderModel::showSparkLines(const Column* col) {
 		plot->setHorizontalPadding(0);
 		plot->setRightPadding(0);
 		plot->setBottomPadding(0);
+		plot->setLeftPadding(0);
 		worksheet->addChild(plot);
 
 		auto* barPlot = new BarPlot(QString());
@@ -96,7 +99,7 @@ QPixmap SpreadsheetSparkLinesHeaderModel::showSparkLines(const Column* col) {
 		columns << dataColumn;
 		barPlot->setDataColumns(columns);
 		plot->scaleAuto(-1, -1);
-		plot->retransform();
+		// plot->retransform();
 		worksheet->setSuppressLayoutUpdate(false);
 		worksheet->updateLayout();
 		// Export to pixmap
@@ -110,6 +113,8 @@ QPixmap SpreadsheetSparkLinesHeaderModel::showSparkLines(const Column* col) {
 		worksheet->view();
 		worksheet->setLayoutBottomMargin(0);
 		worksheet->setLayoutTopMargin(0);
+		worksheet->setLayoutLeftMargin(0);
+		worksheet->setLayoutRightMargin(0);
 
 		auto* plot = new CartesianPlot(sparklineText);
 		plot->setType(CartesianPlot::Type::TwoAxes);
@@ -118,6 +123,7 @@ QPixmap SpreadsheetSparkLinesHeaderModel::showSparkLines(const Column* col) {
 		plot->setHorizontalPadding(0);
 		plot->setRightPadding(0);
 		plot->setBottomPadding(0);
+		plot->setLeftPadding(0);
 
 		const int rowCount = col->rowCount();
 		QVector<double> xData(rowCount);
@@ -136,7 +142,7 @@ QPixmap SpreadsheetSparkLinesHeaderModel::showSparkLines(const Column* col) {
 		plot->addChild(curve);
 
 		plot->scaleAuto(-1, -1);
-		plot->retransform();
+		// plot->retransform();
 		worksheet->setSuppressLayoutUpdate(false);
 		worksheet->updateLayout();
 
