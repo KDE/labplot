@@ -443,16 +443,21 @@ void ExpressionParserTest::testevaluateGreaterThan() {
 
 	QVector<QVector<double>*> xVectors;
 
-	xVectors << new QVector<double>({0., 1., 0., 1.}); // x
-	xVectors << new QVector<double>({0., 0., 1., 1.}); // y
-	QVector<double> yVector({5., 5., 5., 5.,});
+	xVectors << new QVector<double>({0., 1., 0., 1., -1., -std::numeric_limits<double>::infinity(), 1, std::numeric_limits<double>::infinity(), 7.}); // x
+	xVectors << new QVector<double>({0., 0., 1., 1., -2., std::numeric_limits<double>::infinity(), std::nan("0"), 1e9, 7.}); // y
+	QVector<double> yVector({5., 5., 5., 5., 5., 5., 5., 5., 5.});
 	ExpressionParser::evaluateCartesian(expr, vars, xVectors, &yVector);
 
-	QCOMPARE(yVector.size(), 4);
+	QCOMPARE(yVector.size(), 9);
 	QCOMPARE(yVector.at(0), 0.);
 	QCOMPARE(yVector.at(1), 1.);
 	QCOMPARE(yVector.at(2), 0.);
 	QCOMPARE(yVector.at(3), 0.);
+	QCOMPARE(yVector.at(4), 1.);
+	QCOMPARE(yVector.at(5), 0.);
+	QCOMPARE(yVector.at(6), 0.);
+	QCOMPARE(yVector.at(7), 1.);
+	QCOMPARE(yVector.at(8), 0.);
 }
 
 void ExpressionParserTest::testevaluateLessThan() {
@@ -461,16 +466,21 @@ void ExpressionParserTest::testevaluateLessThan() {
 
 	QVector<QVector<double>*> xVectors;
 
-	xVectors << new QVector<double>({0., 1., 0., 1.}); // x
-	xVectors << new QVector<double>({0., 0., 1., 1.}); // y
-	QVector<double> yVector({5., 5., 5., 5.,});
+	xVectors << new QVector<double>({0., 1., 0., 1., -1., -std::numeric_limits<double>::infinity(), 1, std::numeric_limits<double>::infinity(), 7.}); // x
+	xVectors << new QVector<double>({0., 0., 1., 1., -2., std::numeric_limits<double>::infinity(), std::nan("0"), 1e9, 7.}); // y
+	QVector<double> yVector({5., 5., 5., 5., 5., 5., 5., 5., 5.});
 	ExpressionParser::evaluateCartesian(expr, vars, xVectors, &yVector);
 
-	QCOMPARE(yVector.size(), 4);
+	QCOMPARE(yVector.size(), 9);
 	QCOMPARE(yVector.at(0), 0.);
 	QCOMPARE(yVector.at(1), 0.);
 	QCOMPARE(yVector.at(2), 1.);
 	QCOMPARE(yVector.at(3), 0.);
+	QCOMPARE(yVector.at(4), 0.);
+	QCOMPARE(yVector.at(5), 1.);
+	QCOMPARE(yVector.at(6), 0.);
+	QCOMPARE(yVector.at(7), 0.);
+	QCOMPARE(yVector.at(8), 0.);
 }
 
 void ExpressionParserTest::testevaluateLessEqualThan() {
@@ -479,16 +489,21 @@ void ExpressionParserTest::testevaluateLessEqualThan() {
 
 	QVector<QVector<double>*> xVectors;
 
-	xVectors << new QVector<double>({0., 1., 0., 1.}); // x
-	xVectors << new QVector<double>({0., 0., 1., 1.}); // y
-	QVector<double> yVector({5., 5., 5., 5.,});
+	xVectors << new QVector<double>({0., 1., 0., 1., -1., -std::numeric_limits<double>::infinity(), 1, std::numeric_limits<double>::infinity(), 7.}); // x
+	xVectors << new QVector<double>({0., 0., 1., 1., -2., std::numeric_limits<double>::infinity(), std::nan("0"), 1e9, 7.}); // y
+	QVector<double> yVector({5., 5., 5., 5., 5., 5., 5., 5., 5.});
 	ExpressionParser::evaluateCartesian(expr, vars, xVectors, &yVector);
 
-	QCOMPARE(yVector.size(), 4);
+	QCOMPARE(yVector.size(), 9);
 	QCOMPARE(yVector.at(0), 1.);
 	QCOMPARE(yVector.at(1), 0.);
 	QCOMPARE(yVector.at(2), 1.);
 	QCOMPARE(yVector.at(3), 1.);
+	QCOMPARE(yVector.at(4), 0.);
+	QCOMPARE(yVector.at(5), 1.);
+	QCOMPARE(yVector.at(6), 0.);
+	QCOMPARE(yVector.at(7), 0.);
+	QCOMPARE(yVector.at(8), 1.)
 }
 
 void ExpressionParserTest::testevaluateGreaterEqualThan() {
@@ -497,16 +512,21 @@ void ExpressionParserTest::testevaluateGreaterEqualThan() {
 
 	QVector<QVector<double>*> xVectors;
 
-	xVectors << new QVector<double>({0., 1., 0., 1.}); // x
-	xVectors << new QVector<double>({0., 0., 1., 1.}); // y
-	QVector<double> yVector({5., 5., 5., 5.,});
+	xVectors << new QVector<double>({0., 1., 0., 1., -1., -std::numeric_limits<double>::infinity(), 1, std::numeric_limits<double>::infinity(), 7.}); // x
+	xVectors << new QVector<double>({0., 0., 1., 1., -2., std::numeric_limits<double>::infinity(), std::nan("0"), 1e9, 7.}); // y
+	QVector<double> yVector({5., 5., 5., 5., 5., 5., 5., 5., 5.});
 	ExpressionParser::evaluateCartesian(expr, vars, xVectors, &yVector);
 
-	QCOMPARE(yVector.size(), 4);
+	QCOMPARE(yVector.size(), 9);
 	QCOMPARE(yVector.at(0), 1.);
 	QCOMPARE(yVector.at(1), 1.);
 	QCOMPARE(yVector.at(2), 0.);
 	QCOMPARE(yVector.at(3), 1.);
+	QCOMPARE(yVector.at(4), 1.);
+	QCOMPARE(yVector.at(5), 0.);
+	QCOMPARE(yVector.at(6), 0.);
+	QCOMPARE(yVector.at(7), 1.);
+	QCOMPARE(yVector.at(8), 1.);
 }
 
 // This is not implemented. It uses always the smallest rowCount
