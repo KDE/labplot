@@ -19,6 +19,7 @@ private Q_SLOTS:
 	void testandFunction();
 	void testorFunction();
 	void testxorFunction();
+	void testnotFunction();
 	void testbetweenIncluded();
 	void testoutsideIncluded();
 	void testbetween();
@@ -29,7 +30,15 @@ private Q_SLOTS:
 
 	void testevaluateCartesian();
 	void testevaluateCartesianConstExpr();
-	// void testevaluateCartesianConstExpr2();
+	void testevaluateGreaterThan();
+	void testevaluateLessThan();
+	void testevaluateLessEqualThan();
+	void testevaluateGreaterEqualThan();
+
+	void testEvaluateAnd();
+	void testEvaluateOr();
+	void testEvaluateNot();
+	void testEvaluateLogicalExpression();
 
 	void testIsValid();
 	void testIsValidStdev();

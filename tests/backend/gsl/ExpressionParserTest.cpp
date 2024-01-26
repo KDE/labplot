@@ -181,6 +181,17 @@ void ExpressionParserTest::testxorFunction() {
 	QCOMPARE(fnct(2.3345, 2.3345), 0);
 	QCOMPARE(fnct(2.3345, 0), 1);
 }
+
+void ExpressionParserTest::testnotFunction() {
+	auto fnct = getFunction1(QStringLiteral("not"));
+	QVERIFY(fnct);
+
+	QCOMPARE(fnct(1), 0);
+	QCOMPARE(fnct(0), 1);
+	QCOMPARE(fnct(-1), 0); // According to C/C++ standard. -1 is true and !-1 is false
+	QCOMPARE(fnct(2), 0);
+}
+
 void ExpressionParserTest::testbetweenIncluded() {
 	auto fnct = getFunction3(QStringLiteral("between_inc"));
 	QVERIFY(fnct);
@@ -340,6 +351,199 @@ void ExpressionParserTest::testevaluateCartesianConstExpr() {
 		QCOMPARE(v, 5. + 5.);
 }
 
+void ExpressionParserTest::testEvaluateAnd() {
+	const QString expr = QStringLiteral("x && y");
+	const QStringList vars = {QStringLiteral("x"), QStringLiteral("y")};
+
+	QVector<QVector<double>*> xVectors;
+
+	xVectors << new QVector<double>({1., 0., 1., 0.}); // x
+	xVectors << new QVector<double>({0., 0., 1., 1.}); // y
+	QVector<double> yVector({
+		5.,
+		5.,
+		5.,
+		5.,
+	}); // random value
+	ExpressionParser::evaluateCartesian(expr, vars, xVectors, &yVector);
+
+	QCOMPARE(yVector.size(), 4);
+	QCOMPARE(yVector.at(0), 0.);
+	QCOMPARE(yVector.at(1), 0.);
+	QCOMPARE(yVector.at(2), 1.);
+	QCOMPARE(yVector.at(3), 0.);
+}
+
+void ExpressionParserTest::testEvaluateOr() {
+	const QString expr = QStringLiteral("x || y");
+	const QStringList vars = {QStringLiteral("x"), QStringLiteral("y")};
+
+	QVector<QVector<double>*> xVectors;
+
+	xVectors << new QVector<double>({1., 0., 1., 0.}); // x
+	xVectors << new QVector<double>({0., 0., 1., 1.}); // y
+	QVector<double> yVector({
+		5.,
+		5.,
+		5.,
+		5.,
+	}); // random value
+	ExpressionParser::evaluateCartesian(expr, vars, xVectors, &yVector);
+
+	QCOMPARE(yVector.size(), 4);
+	QCOMPARE(yVector.at(0), 1.);
+	QCOMPARE(yVector.at(1), 0.);
+	QCOMPARE(yVector.at(2), 1.);
+	QCOMPARE(yVector.at(3), 1.);
+}
+
+void ExpressionParserTest::testEvaluateNot() {
+	const QString expr = QStringLiteral("!x");
+	const QStringList vars = {QStringLiteral("x")};
+
+	QVector<QVector<double>*> xVectors;
+
+	xVectors << new QVector<double>({1., 0., -1., 2.}); // x
+	QVector<double> yVector({5., 5., 5., 5.}); // random value
+	ExpressionParser::evaluateCartesian(expr, vars, xVectors, &yVector);
+
+	QCOMPARE(yVector.size(), 4);
+	QCOMPARE(yVector.at(0), 0.);
+	QCOMPARE(yVector.at(1), 1.);
+	QCOMPARE(yVector.at(2), 0.); // According to C/C++ standard, -1 is true for bool and therefore the negated is false
+	QCOMPARE(yVector.at(3), 0.);
+}
+
+void ExpressionParserTest::testEvaluateLogicalExpression() {
+	const QString expr = QStringLiteral("!x || y && x");
+	const QStringList vars = {QStringLiteral("x"), QStringLiteral("y")};
+
+	QVector<QVector<double>*> xVectors;
+
+	xVectors << new QVector<double>({0., 1., 0., 1.}); // x
+	xVectors << new QVector<double>({0., 0., 1., 1.}); // y
+	QVector<double> yVector({
+		5.,
+		5.,
+		5.,
+		5.,
+	}); // random value
+	ExpressionParser::evaluateCartesian(expr, vars, xVectors, &yVector);
+
+	// if or evaluated first:
+	// x y
+	// 0 0 : 0
+	// 1 0 : 0
+	// 0 1 : 0
+	// 1 1 : 1
+
+	// if and evaluated first:
+	// x y
+	// 0 0 : 1
+	// 1 0 : 0
+	// 0 1 : 1
+	// 1 1 : 1
+
+	// And must be evaluated before or!
+	QCOMPARE(yVector.size(), 4);
+	QCOMPARE(yVector.at(0), 1.);
+	QCOMPARE(yVector.at(1), 0.);
+	QCOMPARE(yVector.at(2), 1.);
+	QCOMPARE(yVector.at(3), 1.);
+}
+
+void ExpressionParserTest::testevaluateGreaterThan() {
+	const QString expr = QStringLiteral("x > y");
+	const QStringList vars = {QStringLiteral("x"), QStringLiteral("y")};
+
+	QVector<QVector<double>*> xVectors;
+
+	xVectors << new QVector<double>({0., 1., 0., 1., -1., -std::numeric_limits<double>::infinity(), 1, std::numeric_limits<double>::infinity(), 7.}); // x
+	xVectors << new QVector<double>({0., 0., 1., 1., -2., std::numeric_limits<double>::infinity(), std::nan("0"), 1e9, 7.}); // y
+	QVector<double> yVector({5., 5., 5., 5., 5., 5., 5., 5., 5.}); // random value
+	ExpressionParser::evaluateCartesian(expr, vars, xVectors, &yVector);
+
+	QCOMPARE(yVector.size(), 9);
+	QCOMPARE(yVector.at(0), 0.);
+	QCOMPARE(yVector.at(1), 1.);
+	QCOMPARE(yVector.at(2), 0.);
+	QCOMPARE(yVector.at(3), 0.);
+	QCOMPARE(yVector.at(4), 1.);
+	QCOMPARE(yVector.at(5), 0.);
+	QCOMPARE(yVector.at(6), 0.);
+	QCOMPARE(yVector.at(7), 1.);
+	QCOMPARE(yVector.at(8), 0.);
+}
+
+void ExpressionParserTest::testevaluateLessThan() {
+	const QString expr = QStringLiteral("x < y");
+	const QStringList vars = {QStringLiteral("x"), QStringLiteral("y")};
+
+	QVector<QVector<double>*> xVectors;
+
+	xVectors << new QVector<double>({0., 1., 0., 1., -1., -std::numeric_limits<double>::infinity(), 1, std::numeric_limits<double>::infinity(), 7.}); // x
+	xVectors << new QVector<double>({0., 0., 1., 1., -2., std::numeric_limits<double>::infinity(), std::nan("0"), 1e9, 7.}); // y
+	QVector<double> yVector({5., 5., 5., 5., 5., 5., 5., 5., 5.}); // random value
+	ExpressionParser::evaluateCartesian(expr, vars, xVectors, &yVector);
+
+	QCOMPARE(yVector.size(), 9);
+	QCOMPARE(yVector.at(0), 0.);
+	QCOMPARE(yVector.at(1), 0.);
+	QCOMPARE(yVector.at(2), 1.);
+	QCOMPARE(yVector.at(3), 0.);
+	QCOMPARE(yVector.at(4), 0.);
+	QCOMPARE(yVector.at(5), 1.);
+	QCOMPARE(yVector.at(6), 0.);
+	QCOMPARE(yVector.at(7), 0.);
+	QCOMPARE(yVector.at(8), 0.);
+}
+
+void ExpressionParserTest::testevaluateLessEqualThan() {
+	const QString expr = QStringLiteral("x <= y");
+	const QStringList vars = {QStringLiteral("x"), QStringLiteral("y")};
+
+	QVector<QVector<double>*> xVectors;
+
+	xVectors << new QVector<double>({0., 1., 0., 1., -1., -std::numeric_limits<double>::infinity(), 1, std::numeric_limits<double>::infinity(), 7.}); // x
+	xVectors << new QVector<double>({0., 0., 1., 1., -2., std::numeric_limits<double>::infinity(), std::nan("0"), 1e9, 7.}); // y
+	QVector<double> yVector({5., 5., 5., 5., 5., 5., 5., 5., 5.}); // random value
+	ExpressionParser::evaluateCartesian(expr, vars, xVectors, &yVector);
+
+	QCOMPARE(yVector.size(), 9);
+	QCOMPARE(yVector.at(0), 1.);
+	QCOMPARE(yVector.at(1), 0.);
+	QCOMPARE(yVector.at(2), 1.);
+	QCOMPARE(yVector.at(3), 1.);
+	QCOMPARE(yVector.at(4), 0.);
+	QCOMPARE(yVector.at(5), 1.);
+	QCOMPARE(yVector.at(6), 0.);
+	QCOMPARE(yVector.at(7), 0.);
+	QCOMPARE(yVector.at(8), 1.);
+}
+
+void ExpressionParserTest::testevaluateGreaterEqualThan() {
+	const QString expr = QStringLiteral("x >= y");
+	const QStringList vars = {QStringLiteral("x"), QStringLiteral("y")};
+
+	QVector<QVector<double>*> xVectors;
+
+	xVectors << new QVector<double>({0., 1., 0., 1., -1., -std::numeric_limits<double>::infinity(), 1, std::numeric_limits<double>::infinity(), 7.}); // x
+	xVectors << new QVector<double>({0., 0., 1., 1., -2., std::numeric_limits<double>::infinity(), std::nan("0"), 1e9, 7.}); // y
+	QVector<double> yVector({5., 5., 5., 5., 5., 5., 5., 5., 5.}); // random value
+	ExpressionParser::evaluateCartesian(expr, vars, xVectors, &yVector);
+
+	QCOMPARE(yVector.size(), 9);
+	QCOMPARE(yVector.at(0), 1.);
+	QCOMPARE(yVector.at(1), 1.);
+	QCOMPARE(yVector.at(2), 0.);
+	QCOMPARE(yVector.at(3), 1.);
+	QCOMPARE(yVector.at(4), 1.);
+	QCOMPARE(yVector.at(5), 0.);
+	QCOMPARE(yVector.at(6), 0.);
+	QCOMPARE(yVector.at(7), 1.);
+	QCOMPARE(yVector.at(8), 1.);
+}
+
 // This is not implemented. It uses always the smallest rowCount
 // Does not matter if the variable is used in the expression or not
 // void ExpressionParserTest::testevaluateCartesianConstExpr2() {
@@ -368,7 +572,7 @@ void ExpressionParserTest::testLog2() {
 	auto fnct = getFunction1(QStringLiteral("log2"));
 	QVERIFY(fnct);
 
-	QCOMPARE(fnct(2), 1);
+	QCOMPARE(fnct(2), 1.);
 	QCOMPARE(fnct(10), 3.32192809489);
 }
 
