@@ -1,8 +1,8 @@
-add_executable (WidgetsTest WidgetsTest.cpp)
+add_executable (SpinBoxTest SpinBoxTest.cpp)
 
-target_link_libraries(WidgetsTest labplot2backendlib labplot2lib labplot2nsllib labplot2test)
+target_link_libraries(SpinBoxTest labplot2backendlib labplot2lib labplot2nsllib labplot2test)
 
-add_test(NAME WidgetsTest COMMAND WidgetsTest)
+add_test(NAME SpinBoxTest COMMAND SpinBoxTest)
 
 add_executable (NumberSpinBox NumberSpinBoxMain.cpp ../../../src/commonfrontend/widgets/NumberSpinBox.cpp)
 set_property(TARGET NumberSpinBox PROPERTY AUTOMOC ON)

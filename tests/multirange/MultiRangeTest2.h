@@ -17,6 +17,9 @@ class MultiRangeTest2 : public CommonTest {
 	Q_OBJECT
 
 private Q_SLOTS:
+	void autoScaleYAfterZoomInX();
+	void autoScaleXAfterZoomInY();
+
 	void mouseWheelXAxisApplyToAllX();
 	void mouseWheelTanCurveApplyToAllX();
 	void mouseWheelXAxisApplyToSelected();

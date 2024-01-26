@@ -166,7 +166,7 @@ Q_SIGNALS:
 	void info(const QString&);
 
 	friend class RetransformTest;
-	friend class WidgetsTest;
+	friend class SpinBoxTest;
 };
 
 #endif

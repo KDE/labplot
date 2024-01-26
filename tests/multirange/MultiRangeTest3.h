@@ -17,9 +17,6 @@ class MultiRangeTest3 : public CommonTest {
 	Q_OBJECT
 
 private Q_SLOTS:
-	void autoScaleYAfterZoomInX();
-	void autoScaleXAfterZoomInY();
-
 	void baseDockSetAspects_NoPlotRangeChange();
 
 	void curveRangeChange();
