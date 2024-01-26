@@ -17,18 +17,11 @@ class MultiRangeTest2 : public CommonTest {
 	Q_OBJECT
 
 private Q_SLOTS:
-	void autoScaleYAfterZoomInX();
-	void autoScaleXAfterZoomInY();
-
-	void baseDockSetAspects_NoPlotRangeChange();
-
 	void mouseWheelXAxisApplyToAllX();
 	void mouseWheelTanCurveApplyToAllX();
 	void mouseWheelXAxisApplyToSelected();
 
 	void axisMouseMoveApplyToAllX();
 	void axisMouseMoveApplyToSelection();
-
-	void curveRangeChange();
 };
 #endif

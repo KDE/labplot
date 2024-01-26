@@ -94,11 +94,16 @@ symbol *tptr;   /* For returning symbol-table pointers */
 
 %token <dval>  NUM 	/* Simple double precision number */
 %token <tptr> VAR FNCT SPECFNCT /* VARiable and FuNCTion and Special functions*/
+/* https://www.gnu.org/software/bison/manual/html_node/Token-Decl.html */
+%token <operator> OR "||"
+%token <operator> AND "&&"
+%token <operator> LE "<="
+%token <operator> GE ">="
 %type  <dval>  expr
 
 %right '='
-%left '-' '+'
-%left '*' '/' '%'
+%left '-' '+' OR LE GE '<' '>'
+%left '*' '/' '%' AND
 %left NEG     /* Negation--unary minus */
 %right '^' '!'
 
@@ -420,16 +425,22 @@ expr:      NUM       { $$ = $1;                            }
 }
 | expr '+' expr      { $$ = $1 + $3;                       }
 | expr '-' expr      { $$ = $1 - $3;                       }
+| expr OR expr       { $$ = orFunction($1, $3);            }
 | expr '*' expr      { $$ = $1 * $3;                       }
 | expr '/' expr      { $$ = $1 / $3;                       }
 | expr '%' expr      { $$ = (int)($1) % (int)($3);         }
+| expr AND expr      { $$ = andFunction($1, $3);           }
+| '!' expr           { $$ = notFunction($2);               }
+| expr GE expr       { $$ = greaterEqualThan($1, $3);      }
+| expr LE expr       { $$ = lessEqualThan($1, $3);         }
+| expr '>' expr      { $$ = greaterThan($1, $3);           }
+| expr '<' expr      { $$ = lessThan($1, $3);              }
 | '-' expr  %prec NEG{ $$ = -$2;                           }
 | expr '^' expr      { $$ = std::pow($1, $3);              }
 | expr '*' '*' expr  { $$ = std::pow($1, $4);              }
 | '(' expr ')'       { $$ = $2;                            }
 | '|' expr '|'       { $$ = std::abs($2);                  }
 | expr '!'           { $$ = gsl_sf_fact((unsigned int)$1); }
-/* logical operators (!,&&,||) are not supported */
 ;
 
 %%
@@ -752,6 +763,29 @@ int yylex(param *p) {
 	if (c == '\n') {
 		pdebug("PARSER: Reached EOL\n");
 		return c;
+	}
+
+	if (c == '&') {
+		// Check if the next is also an &, because then it is the AND operator
+		if (getcharstr(p) == '&') {
+			return AND;
+		}
+		ungetcstr(&(p->pos));
+	} else if (c == '|') {
+		if (getcharstr(p) == '|') {
+			return OR;
+		}
+		ungetcstr(&(p->pos));
+	} else if (c == '>') {
+		if (getcharstr(p) == '=') {	// >=
+			return GE;
+		}
+		ungetcstr(&(p->pos));
+	} else if (c == '<') {
+		if (getcharstr(p) == '=') {	// <=
+			return LE;
+		}
+		ungetcstr(&(p->pos));
 	}
 
 	pdebug("PARSER: PROCESSING character '%c'\n", c);

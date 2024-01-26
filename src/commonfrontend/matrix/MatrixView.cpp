@@ -47,6 +47,8 @@
 #include <cfloat>
 #include <cmath>
 
+#include <gsl/gsl_const_cgs.h>
+
 MatrixView::MatrixView(Matrix* matrix)
 	: QWidget()
 	, m_stackedWidget(new QStackedWidget(this))
@@ -1037,7 +1039,7 @@ void MatrixView::print(QPrinter* printer) const {
 	QPainter painter(printer);
 
 	const int dpiy = printer->logicalDpiY();
-	const int margin = (int)((1 / 2.54) * dpiy); // 1 cm margins
+	const int margin = (int)((1 / GSL_CONST_CGS_INCH) * dpiy); // 1 cm margins
 
 	QHeaderView* hHeader = m_tableView->horizontalHeader();
 	QHeaderView* vHeader = m_tableView->verticalHeader();
