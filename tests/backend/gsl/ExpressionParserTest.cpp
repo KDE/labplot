@@ -393,13 +393,15 @@ void ExpressionParserTest::testEvaluateNot() {
 
 	QVector<QVector<double>*> xVectors;
 
-	xVectors << new QVector<double>({1., 0.}); // x
-	QVector<double> yVector({5., 5.});
+	xVectors << new QVector<double>({1., 0., -1., 2.}); // x
+	QVector<double> yVector({5., 5., 5., 5.});
 	ExpressionParser::evaluateCartesian(expr, vars, xVectors, &yVector);
 
-	QCOMPARE(yVector.size(), 2);
+	QCOMPARE(yVector.size(), 4);
 	QCOMPARE(yVector.at(0), 0.);
 	QCOMPARE(yVector.at(1), 1.);
+	QCOMPARE(yVector.at(2), 1.);
+	QCOMPARE(yVector.at(3), 1.);
 }
 
 void ExpressionParserTest::testEvaluateLogicalExpression() {
