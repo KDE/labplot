@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-01-22 01:56+0000\n"
+"POT-Creation-Date: 2024-01-27 01:34+0000\n"
 "PO-Revision-Date: 2024-01-08 21:56+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -81,7 +81,7 @@ msgid "Rename"
 msgstr "Yeniden Adlandır"
 
 #: src/backend/core/AbstractAspect.cpp:407
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:455
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:456
 #: src/commonfrontend/worksheet/WorksheetView.cpp:136
 #: src/kdefrontend/widgets/FITSHeaderEditWidget.cpp:273
 #, kde-format
@@ -304,7 +304,7 @@ msgstr "Büyük Tamsayı"
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1524
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:269
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:280
-#: src/kdefrontend/widgets/LabelWidget.cpp:190
+#: src/kdefrontend/widgets/LabelWidget.cpp:192
 #, kde-format
 msgid "Text"
 msgstr "Metin"
@@ -369,13 +369,13 @@ msgid "%1: unmask cells"
 msgstr "%1: Hücre maskesini kaldır"
 
 #: src/backend/core/abstractcolumncommands.cpp:253
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2407
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2408
 #, kde-format
 msgid "%1: set heatmap format"
 msgstr "%1: Isı haritası biçimini ayarla"
 
 #: src/backend/core/abstractcolumncommands.cpp:280
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2424
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2425
 #, kde-format
 msgid "%1: remove heatmap format"
 msgstr "%1: Isı haritası biçimini kaldır"
@@ -614,7 +614,7 @@ msgid "%1: change cell values"
 msgstr "%1: Hücre değerlerini değiştir"
 
 #: src/backend/core/column/columncommands.cpp:531
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2631
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2632
 #, kde-format
 msgid "%1: set plot designation"
 msgstr "%1: Çizim gösterimini ayarla"
@@ -826,7 +826,7 @@ msgstr "geçersiz veri seçici ögesi '%1'"
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QRadioButton, rbJitter)
 #: src/backend/datapicker/DatapickerCurve.cpp:176
-#: src/commonfrontend/matrix/MatrixView.cpp:132
+#: src/commonfrontend/matrix/MatrixView.cpp:134
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:382
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:401
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:409
@@ -910,7 +910,7 @@ msgstr "%1: Hata çubuğu taslak biçemini ayarla"
 #: src/backend/worksheet/InfoElement.cpp:810
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:126
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:138
-#: src/backend/worksheet/WorksheetElement.cpp:159
+#: src/backend/worksheet/WorksheetElement.cpp:161
 #: src/backend/worksheet/WorksheetElementContainer.cpp:63
 #: src/backend/worksheet/WorksheetElementContainer.cpp:64
 #, kde-format
@@ -922,8 +922,8 @@ msgstr "%1: Görünürlüğünü ayarla"
 #: src/backend/worksheet/InfoElement.cpp:810
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:126
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:138
-#: src/backend/worksheet/WorksheetElement.cpp:159
-#: src/backend/worksheet/WorksheetElement.cpp:742
+#: src/backend/worksheet/WorksheetElement.cpp:161
+#: src/backend/worksheet/WorksheetElement.cpp:778
 #: src/backend/worksheet/WorksheetElementContainer.cpp:66
 #: src/backend/worksheet/WorksheetElementContainer.cpp:84
 #, kde-format
@@ -948,7 +948,7 @@ msgid "%1: upload new image"
 msgstr "%1: Yeni görsel yükle"
 
 #: src/backend/datapicker/DatapickerImage.cpp:385
-#: src/backend/worksheet/WorksheetElement.cpp:783
+#: src/backend/worksheet/WorksheetElement.cpp:819
 #, kde-format
 msgid "%1: set rotation angle"
 msgstr "%1: Döndürme açısını ayarla"
@@ -981,7 +981,7 @@ msgstr "Görsel verisi okunamadı"
 
 #: src/backend/datapicker/DatapickerPoint.cpp:213
 #: src/backend/worksheet/InfoElement.cpp:780
-#: src/backend/worksheet/WorksheetElement.cpp:704
+#: src/backend/worksheet/WorksheetElement.cpp:740
 #, kde-format
 msgid "%1: set position"
 msgstr "%1: Konum ayarla"
@@ -1077,7 +1077,7 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:437
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1998
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:108
-#: src/commonfrontend/matrix/MatrixView.cpp:135
+#: src/commonfrontend/matrix/MatrixView.cpp:137
 #: src/commonfrontend/worksheet/WorksheetView.cpp:221
 #: src/commonfrontend/worksheet/WorksheetView.cpp:1437
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:98
@@ -1182,11 +1182,11 @@ msgstr "İndeks"
 #: src/backend/datasources/filters/AsciiFilter.cpp:1540
 #: src/backend/datasources/filters/AsciiFilter.cpp:2094
 #: src/backend/datasources/filters/QJsonModel.cpp:133
-#: src/commonfrontend/matrix/MatrixView.cpp:617
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2310
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2331
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2349
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2366
+#: src/commonfrontend/matrix/MatrixView.cpp:619
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2311
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2332
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2350
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2367
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:149
 #: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:188
 #: src/kdefrontend/ui/dockwidgets/columndock.ui:182
@@ -2388,7 +2388,7 @@ msgstr "Stefan-Boltzmann sabiti"
 
 #: src/backend/gsl/constants.cpp:74
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:533
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:504
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:505
 #: src/kdefrontend/dockwidgets/KDEPlotDock.cpp:179
 #, kde-format
 msgid "Gauss"
@@ -3020,344 +3020,344 @@ msgstr "Geçişte belirtilen toleransa erişilemiyor"
 msgid "End of file"
 msgstr "Dosyanın sonu"
 
-#: src/backend/gsl/functions.cpp:56
+#: src/backend/gsl/functions.cpp:57
 #, kde-format
 msgid "Standard Mathematical Functions"
 msgstr "Standart Matematiksel İşlevler"
 
-#: src/backend/gsl/functions.cpp:58
+#: src/backend/gsl/functions.cpp:59
 #, kde-format
 msgid "Comparison Functions"
 msgstr "Karşılaştırma İşlevleri"
 
-#: src/backend/gsl/functions.cpp:60
+#: src/backend/gsl/functions.cpp:61
 #, kde-format
 msgid "Logical Functions"
 msgstr "Mantıksal İşlevler"
 
-#: src/backend/gsl/functions.cpp:62
+#: src/backend/gsl/functions.cpp:63
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:28
 #, kde-format
 msgid "Column Statistics"
 msgstr "Sütun İstatistikleri"
 
-#: src/backend/gsl/functions.cpp:64
+#: src/backend/gsl/functions.cpp:65
 #, kde-format
 msgid "Moving Statistics"
 msgstr "Hareket Eden İstatistikler"
 
-#: src/backend/gsl/functions.cpp:66
+#: src/backend/gsl/functions.cpp:67
 #, kde-format
 msgid "Airy Functions and Derivatives"
 msgstr "Airy İşlevleri ve Türevleri"
 
-#: src/backend/gsl/functions.cpp:68
+#: src/backend/gsl/functions.cpp:69
 #, kde-format
 msgid "Bessel Functions"
 msgstr "Bessel İşlevleri"
 
-#: src/backend/gsl/functions.cpp:70
+#: src/backend/gsl/functions.cpp:71
 #, kde-format
 msgid "Clausen Functions"
 msgstr "Clausen İşlevleri"
 
-#: src/backend/gsl/functions.cpp:72
+#: src/backend/gsl/functions.cpp:73
 #, kde-format
 msgid "Coulomb Functions"
 msgstr "Coulomb İşlevleri"
 
-#: src/backend/gsl/functions.cpp:74
+#: src/backend/gsl/functions.cpp:75
 #, kde-format
 msgid "Dawson Function"
 msgstr "Dawson İşlevi"
 
-#: src/backend/gsl/functions.cpp:76
+#: src/backend/gsl/functions.cpp:77
 #, kde-format
 msgid "Debye Functions"
 msgstr "Debye İşlevleri"
 
-#: src/backend/gsl/functions.cpp:78
+#: src/backend/gsl/functions.cpp:79
 #, kde-format
 msgid "Dilogarithm"
 msgstr "Dilogaritma"
 
-#: src/backend/gsl/functions.cpp:80
+#: src/backend/gsl/functions.cpp:81
 #, kde-format
 msgid "Elliptic Integrals"
 msgstr "Eliptik İntegraller"
 
-#: src/backend/gsl/functions.cpp:84
+#: src/backend/gsl/functions.cpp:85
 #, kde-format
 msgid "Error Functions and Related Functions"
 msgstr "Hata İşlevleri ve İlgili İşlevler"
 
-#: src/backend/gsl/functions.cpp:87
+#: src/backend/gsl/functions.cpp:88
 #, kde-format
 msgid "Error Functions"
 msgstr "Hata İşlevleri"
 
-#: src/backend/gsl/functions.cpp:90
+#: src/backend/gsl/functions.cpp:91
 #, kde-format
 msgid "Exponential Functions"
 msgstr "Üstel İşlevler"
 
-#: src/backend/gsl/functions.cpp:92
+#: src/backend/gsl/functions.cpp:93
 #, kde-format
 msgid "Exponential Integrals"
 msgstr "Üstel İntegraller"
 
-#: src/backend/gsl/functions.cpp:94
+#: src/backend/gsl/functions.cpp:95
 #, kde-format
 msgid "Fermi-Dirac Function"
 msgstr "Fermi-Dirac İşlevi"
 
-#: src/backend/gsl/functions.cpp:96
+#: src/backend/gsl/functions.cpp:97
 #, kde-format
 msgid "Gamma and Beta Functions"
 msgstr "Gama ve Beta İşlevleri"
 
-#: src/backend/gsl/functions.cpp:98
+#: src/backend/gsl/functions.cpp:99
 #, kde-format
 msgid "Gegenbauer Functions"
 msgstr "Gegenbauer İşlevleri"
 
-#: src/backend/gsl/functions.cpp:101
+#: src/backend/gsl/functions.cpp:102
 #, kde-format
 msgid "Hermite Polynomials and Functions"
 msgstr "Hermite Polinomları ve İşlevleri"
 
-#: src/backend/gsl/functions.cpp:104
+#: src/backend/gsl/functions.cpp:105
 #, kde-format
 msgid "Hypergeometric Functions"
 msgstr "Hipergeometrik İşlevler"
 
-#: src/backend/gsl/functions.cpp:106
+#: src/backend/gsl/functions.cpp:107
 #, kde-format
 msgid "Laguerre Functions"
 msgstr "Laguerre İşlevleri"
 
-#: src/backend/gsl/functions.cpp:108
+#: src/backend/gsl/functions.cpp:109
 #, kde-format
 msgid "Lambert W Functions"
 msgstr "Lambert W İşlevleri"
 
-#: src/backend/gsl/functions.cpp:110
+#: src/backend/gsl/functions.cpp:111
 #, kde-format
 msgid "Legendre Functions and Spherical Harmonics"
 msgstr "Legendre İşlevleri ve Küresel Harmonikler"
 
-#: src/backend/gsl/functions.cpp:112
+#: src/backend/gsl/functions.cpp:113
 #, kde-format
 msgid "Logarithm and Related Functions"
 msgstr "Logaritma ve İlgili İşlevleri"
 
-#: src/backend/gsl/functions.cpp:115
+#: src/backend/gsl/functions.cpp:116
 #, kde-format
 msgid "Mathieu Functions"
 msgstr "Mathieu İşlevleri"
 
-#: src/backend/gsl/functions.cpp:118
+#: src/backend/gsl/functions.cpp:119
 #, kde-format
 msgid "Power Function"
 msgstr "Üs İşlevi"
 
-#: src/backend/gsl/functions.cpp:120
+#: src/backend/gsl/functions.cpp:121
 #, kde-format
 msgid "Psi (Digamma) Function"
 msgstr "Psi (Digamma) İşlevi"
 
-#: src/backend/gsl/functions.cpp:122
+#: src/backend/gsl/functions.cpp:123
 #, kde-format
 msgid "Synchrotron Functions"
 msgstr "Sinkrotron İşlevleri"
 
-#: src/backend/gsl/functions.cpp:124
+#: src/backend/gsl/functions.cpp:125
 #, kde-format
 msgid "Transport Functions"
 msgstr "Taşıma İşlevleri"
 
-#: src/backend/gsl/functions.cpp:126
+#: src/backend/gsl/functions.cpp:127
 #, kde-format
 msgid "Trigonometric Functions"
 msgstr "Trigonometrik İşlevler"
 
-#: src/backend/gsl/functions.cpp:128
+#: src/backend/gsl/functions.cpp:129
 #, kde-format
 msgid "Zeta Functions"
 msgstr "Zeta İşlevleri"
 
-#: src/backend/gsl/functions.cpp:130
+#: src/backend/gsl/functions.cpp:131
 #, kde-format
 msgid "Random number generator"
 msgstr "Rastgele sayı üreteci"
 
-#: src/backend/gsl/functions.cpp:132
+#: src/backend/gsl/functions.cpp:133
 #, kde-format
 msgid "Gaussian Distribution"
 msgstr "Gauss Dağılımı"
 
-#: src/backend/gsl/functions.cpp:134
+#: src/backend/gsl/functions.cpp:135
 #, kde-format
 msgid "Exponential Distribution"
 msgstr "Üstel Dağılım"
 
-#: src/backend/gsl/functions.cpp:136
+#: src/backend/gsl/functions.cpp:137
 #, kde-format
 msgid "Laplace Distribution"
 msgstr "Laplace Dağılımı"
 
-#: src/backend/gsl/functions.cpp:138
+#: src/backend/gsl/functions.cpp:139
 #, kde-format
 msgid "Exponential Power Distribution"
 msgstr "Üstel Kuvvet Dağılımı"
 
-#: src/backend/gsl/functions.cpp:140
+#: src/backend/gsl/functions.cpp:141
 #, kde-format
 msgid "Cauchy Distribution"
 msgstr "Cauchy Dağılımı"
 
-#: src/backend/gsl/functions.cpp:142
+#: src/backend/gsl/functions.cpp:143
 #, kde-format
 msgid "Rayleigh Distribution"
 msgstr "Rayleigh Dağılımı"
 
-#: src/backend/gsl/functions.cpp:144
+#: src/backend/gsl/functions.cpp:145
 #, kde-format
 msgid "Landau Distribution"
 msgstr "Landau Dağılımı"
 
-#: src/backend/gsl/functions.cpp:146
+#: src/backend/gsl/functions.cpp:147
 #, kde-format
 msgid "Gamma Distribution"
 msgstr "Gama Dağılımı"
 
-#: src/backend/gsl/functions.cpp:148
+#: src/backend/gsl/functions.cpp:149
 #, kde-format
 msgid "Flat (Uniform) Distribution"
 msgstr "Düz (Değişmeyen) Dağılım"
 
-#: src/backend/gsl/functions.cpp:150
+#: src/backend/gsl/functions.cpp:151
 #, kde-format
 msgid "Lognormal Distribution"
 msgstr "Lognormal Dağılım"
 
-#: src/backend/gsl/functions.cpp:152
+#: src/backend/gsl/functions.cpp:153
 #, kde-format
 msgid "Chi-squared Distribution"
 msgstr "Ki-kare Dağılımı"
 
-#: src/backend/gsl/functions.cpp:154
+#: src/backend/gsl/functions.cpp:155
 #, kde-format
 msgid "F-distribution"
 msgstr "F dağılımı"
 
-#: src/backend/gsl/functions.cpp:156
+#: src/backend/gsl/functions.cpp:157
 #, kde-format
 msgid "t-distribution"
 msgstr "t dağılımı"
 
-#: src/backend/gsl/functions.cpp:158
+#: src/backend/gsl/functions.cpp:159
 #, kde-format
 msgid "Beta Distribution"
 msgstr "Beta Dağılımı"
 
-#: src/backend/gsl/functions.cpp:160
+#: src/backend/gsl/functions.cpp:161
 #, kde-format
 msgid "Logistic Distribution"
 msgstr "Lojistik Dağılım"
 
-#: src/backend/gsl/functions.cpp:162
+#: src/backend/gsl/functions.cpp:163
 #, kde-format
 msgid "Pareto Distribution"
 msgstr "Pareto Dağılımı"
 
-#: src/backend/gsl/functions.cpp:164
+#: src/backend/gsl/functions.cpp:165
 #, kde-format
 msgid "Weibull Distribution"
 msgstr "Weibull Dağılımı"
 
-#: src/backend/gsl/functions.cpp:166
+#: src/backend/gsl/functions.cpp:167
 #, kde-format
 msgid "Gumbel Distribution"
 msgstr "Gumbel Dağılımı"
 
-#: src/backend/gsl/functions.cpp:168
+#: src/backend/gsl/functions.cpp:169
 #, kde-format
 msgid "Poisson Distribution"
 msgstr "Poisson Dağılımı"
 
-#: src/backend/gsl/functions.cpp:170
+#: src/backend/gsl/functions.cpp:171
 #, kde-format
 msgid "Bernoulli Distribution"
 msgstr "Bernoulli Dağılımı"
 
-#: src/backend/gsl/functions.cpp:172
+#: src/backend/gsl/functions.cpp:173
 #, kde-format
 msgid "Binomial Distribution"
 msgstr "İki Terimli Dağılım"
 
-#: src/backend/gsl/functions.cpp:174
+#: src/backend/gsl/functions.cpp:175
 #, kde-format
 msgid "Pascal Distribution"
 msgstr "Pascal Dağılımı"
 
-#: src/backend/gsl/functions.cpp:176
+#: src/backend/gsl/functions.cpp:177
 #, kde-format
 msgid "Geometric Distribution"
 msgstr "Geometrik Dağılım"
 
-#: src/backend/gsl/functions.cpp:178
+#: src/backend/gsl/functions.cpp:179
 #, kde-format
 msgid "Hypergeometric Distribution"
 msgstr "Hipergeometrik Dağılım"
 
-#: src/backend/gsl/functions.cpp:180
+#: src/backend/gsl/functions.cpp:181
 #, kde-format
 msgid "Logarithmic Distribution"
 msgstr "Logaritmik Dağılımı"
 
-#: src/backend/gsl/functions.cpp:184
+#: src/backend/gsl/functions.cpp:185
 #, kde-format
 msgid "Unknown Function"
 msgstr "Bilinmeyen İşlev"
 
-#: src/backend/gsl/functions.cpp:231
+#: src/backend/gsl/functions.cpp:232
 #, kde-format
 msgid "Cell (index, variable)"
 msgstr "Hücre (indeks, değişken)"
 
-#: src/backend/gsl/functions.cpp:232
+#: src/backend/gsl/functions.cpp:233
 #, kde-format
 msgid "Moving Average"
 msgstr "Hareket Eden Ortalama"
 
-#: src/backend/gsl/functions.cpp:233
+#: src/backend/gsl/functions.cpp:234
 #, kde-format
 msgid "Moving Range"
 msgstr "Hareket Erimi"
 
-#: src/backend/gsl/functions.cpp:234
+#: src/backend/gsl/functions.cpp:235
 #, kde-format
 msgid "Simple Moving Minimum"
 msgstr "Temel Hareket Eden En Düşük Değer"
 
-#: src/backend/gsl/functions.cpp:235
+#: src/backend/gsl/functions.cpp:236
 #, kde-format
 msgid "Simple Moving Maximum"
 msgstr "Temel Hareket Eden En Yüksek Değer"
 
-#: src/backend/gsl/functions.cpp:236
+#: src/backend/gsl/functions.cpp:237
 #, kde-format
 msgid "Simple Moving Average"
 msgstr "Temel Hareket Eden Ortalama"
 
-#: src/backend/gsl/functions.cpp:237
+#: src/backend/gsl/functions.cpp:238
 #, kde-format
 msgid "Simple Moving Range"
 msgstr "Temel Hareket Eden Erim"
 
 #. i18n: ectx: property (text), widget (QLabel, lSize)
-#: src/backend/gsl/functions.cpp:241
+#: src/backend/gsl/functions.cpp:242
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:490
 #, kde-format
 msgid "Size"
@@ -3365,7 +3365,7 @@ msgstr "Boyut"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbMinimum)
-#: src/backend/gsl/functions.cpp:242
+#: src/backend/gsl/functions.cpp:243
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:32
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:138
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:64
@@ -3378,7 +3378,7 @@ msgstr "En düşük değer"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbMaximum)
-#: src/backend/gsl/functions.cpp:243 src/backend/nsl/nsl_conv.c:23
+#: src/backend/gsl/functions.cpp:244 src/backend/nsl/nsl_conv.c:23
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:33
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:139
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:65
@@ -3391,7 +3391,7 @@ msgstr "En yüksek değer"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbArithmeticMean)
-#: src/backend/gsl/functions.cpp:244
+#: src/backend/gsl/functions.cpp:245
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:66
 #: src/kdefrontend/ui/dockwidgets/statisticsspreadsheetdock.ui:63
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:53
@@ -3402,7 +3402,7 @@ msgstr "Aritmetik ortalama"
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QRadioButton, rbMedian)
 #. i18n: ectx: property (text), widget (QCheckBox, cbMedian)
-#: src/backend/gsl/functions.cpp:245
+#: src/backend/gsl/functions.cpp:246
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:40
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:140
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:72
@@ -3415,7 +3415,7 @@ msgstr "Orta"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbStandardDeviation)
-#: src/backend/gsl/functions.cpp:246
+#: src/backend/gsl/functions.cpp:247
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:79
 #: src/kdefrontend/ui/dockwidgets/statisticsspreadsheetdock.ui:168
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:119
@@ -3425,7 +3425,7 @@ msgstr "Standart sapma"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbVariance)
-#: src/backend/gsl/functions.cpp:247
+#: src/backend/gsl/functions.cpp:248
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:50
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:78
 #: src/kdefrontend/ui/dockwidgets/statisticsspreadsheetdock.ui:158
@@ -3436,7 +3436,7 @@ msgstr "Değişim"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbGeometricMean)
-#: src/backend/gsl/functions.cpp:248
+#: src/backend/gsl/functions.cpp:249
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:67
 #: src/kdefrontend/ui/dockwidgets/statisticsspreadsheetdock.ui:73
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:64
@@ -3446,7 +3446,7 @@ msgstr "Geometrik ortalama"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbHarmonicMean)
-#: src/backend/gsl/functions.cpp:249
+#: src/backend/gsl/functions.cpp:250
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:68
 #: src/kdefrontend/ui/dockwidgets/statisticsspreadsheetdock.ui:80
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:75
@@ -3456,7 +3456,7 @@ msgstr "Harmonik ortalama"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbContraharmonicMean)
-#: src/backend/gsl/functions.cpp:250
+#: src/backend/gsl/functions.cpp:251
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:69
 #: src/kdefrontend/ui/dockwidgets/statisticsspreadsheetdock.ui:87
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:86
@@ -3465,7 +3465,7 @@ msgid "Contraharmonic mean"
 msgstr "Kontraharmonik ortalama"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbMode)
-#: src/backend/gsl/functions.cpp:251
+#: src/backend/gsl/functions.cpp:252
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:38
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:70
 #: src/kdefrontend/ui/dockwidgets/statisticsspreadsheetdock.ui:94
@@ -3474,58 +3474,58 @@ msgid "Mode"
 msgstr "Kip"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbFirstQuartile)
-#: src/backend/gsl/functions.cpp:252
+#: src/backend/gsl/functions.cpp:253
 #: src/kdefrontend/ui/dockwidgets/statisticsspreadsheetdock.ui:101
 #, kde-format
 msgid "First quartile"
 msgstr "İlk çeyrek"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbThirdQuartile)
-#: src/backend/gsl/functions.cpp:253
+#: src/backend/gsl/functions.cpp:254
 #: src/kdefrontend/ui/dockwidgets/statisticsspreadsheetdock.ui:115
 #, kde-format
 msgid "Third quartile"
 msgstr "Üçüncü çeyrek"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbIQR)
-#: src/backend/gsl/functions.cpp:254
+#: src/backend/gsl/functions.cpp:255
 #: src/kdefrontend/ui/dockwidgets/statisticsspreadsheetdock.ui:199
 #, kde-format
 msgid "Interquartile range"
 msgstr "İnterçeyrek erimi"
 
-#: src/backend/gsl/functions.cpp:255
+#: src/backend/gsl/functions.cpp:256
 #, kde-format
 msgid "1st percentile"
 msgstr "1. persantil"
 
-#: src/backend/gsl/functions.cpp:256
+#: src/backend/gsl/functions.cpp:257
 #, kde-format
 msgid "5th percentile"
 msgstr "5. persantil"
 
-#: src/backend/gsl/functions.cpp:257
+#: src/backend/gsl/functions.cpp:258
 #, kde-format
 msgid "10th percentile"
 msgstr "10. persantil"
 
-#: src/backend/gsl/functions.cpp:258
+#: src/backend/gsl/functions.cpp:259
 #, kde-format
 msgid "90th percentile"
 msgstr "90. persantil"
 
-#: src/backend/gsl/functions.cpp:259
+#: src/backend/gsl/functions.cpp:260
 #, kde-format
 msgid "95th percentile"
 msgstr "95. persantil"
 
-#: src/backend/gsl/functions.cpp:260
+#: src/backend/gsl/functions.cpp:261
 #, kde-format
 msgid "99th percentile"
 msgstr "99. persantil"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbTrimean)
-#: src/backend/gsl/functions.cpp:261
+#: src/backend/gsl/functions.cpp:262
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:49
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:74
 #: src/kdefrontend/ui/dockwidgets/statisticsspreadsheetdock.ui:122
@@ -3533,13 +3533,13 @@ msgstr "99. persantil"
 msgid "Trimean"
 msgstr "Üçlü ortalama"
 
-#: src/backend/gsl/functions.cpp:262
+#: src/backend/gsl/functions.cpp:263
 #, kde-format
 msgid "Mean absolute deviation"
 msgstr "Ortalama mutlak sapma"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbMeanDeviationAroundMedian)
-#: src/backend/gsl/functions.cpp:263
+#: src/backend/gsl/functions.cpp:264
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:81
 #: src/kdefrontend/ui/dockwidgets/statisticsspreadsheetdock.ui:185
 #, kde-format
@@ -3547,7 +3547,7 @@ msgid "Mean absolute deviation around median"
 msgstr "Orta çevresindeki ortalama mutlak sapma"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbMedianDeviation)
-#: src/backend/gsl/functions.cpp:264
+#: src/backend/gsl/functions.cpp:265
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:82
 #: src/kdefrontend/ui/dockwidgets/statisticsspreadsheetdock.ui:192
 #, kde-format
@@ -3556,7 +3556,7 @@ msgstr "Orta mutlak sapma"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbSkewness)
-#: src/backend/gsl/functions.cpp:265
+#: src/backend/gsl/functions.cpp:266
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:55
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:87
 #: src/kdefrontend/ui/dockwidgets/statisticsspreadsheetdock.ui:235
@@ -3567,7 +3567,7 @@ msgstr "Eğrilik"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbKurtosis)
-#: src/backend/gsl/functions.cpp:266
+#: src/backend/gsl/functions.cpp:267
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:56
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:88
 #: src/kdefrontend/ui/dockwidgets/statisticsspreadsheetdock.ui:242
@@ -3578,7 +3578,7 @@ msgstr "Basıklık"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbEntropy)
-#: src/backend/gsl/functions.cpp:267
+#: src/backend/gsl/functions.cpp:268
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:57
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:89
 #: src/kdefrontend/ui/dockwidgets/statisticsspreadsheetdock.ui:249
@@ -3587,154 +3587,154 @@ msgstr "Basıklık"
 msgid "Entropy"
 msgstr "Dağıntı"
 
-#: src/backend/gsl/functions.cpp:268
+#: src/backend/gsl/functions.cpp:269
 #, kde-format
 msgid "Quantile"
 msgstr "Dağılım dilimi"
 
-#: src/backend/gsl/functions.cpp:269 src/backend/nsl/nsl_smooth.c:21
+#: src/backend/gsl/functions.cpp:270 src/backend/nsl/nsl_smooth.c:21
 #, kde-format
 msgid "Percentile"
 msgstr "Persantil"
 
-#: src/backend/gsl/functions.cpp:276
+#: src/backend/gsl/functions.cpp:277
 #, kde-format
 msgid "pseudo-random integer [0, RAND_MAX]"
 msgstr "sözde rastgele tamsayı [0, RAND_MAX]"
 
-#: src/backend/gsl/functions.cpp:277
+#: src/backend/gsl/functions.cpp:278
 #, kde-format
 msgid "nonlinear additive feedback rng [0, RAND_MAX]"
 msgstr "doğrusal olmayan ek geri besleme aralığı [0, RAND_MAX]"
 
-#: src/backend/gsl/functions.cpp:278
+#: src/backend/gsl/functions.cpp:279
 #, kde-format
 msgid "nonlinear additive feedback rng [0, 1]"
 msgstr "doğrusal olmayan ek geri besleme aralığı [0, 1]"
 
-#: src/backend/gsl/functions.cpp:279
+#: src/backend/gsl/functions.cpp:280
 #, kde-format
 msgid "Smallest integral value not less"
 msgstr "Olabilecek en düşük integral değeri"
 
-#: src/backend/gsl/functions.cpp:280
+#: src/backend/gsl/functions.cpp:281
 #, kde-format
 msgid "Absolute value"
 msgstr "Mutlak değer"
 
-#: src/backend/gsl/functions.cpp:282
+#: src/backend/gsl/functions.cpp:283
 #, kde-format
 msgid "Base 10 logarithm"
 msgstr "10 tabanında logaritma"
 
-#: src/backend/gsl/functions.cpp:283
+#: src/backend/gsl/functions.cpp:284
 #, kde-format
 msgid "Power function [x^y]"
 msgstr "Üs işlevi [x^y]"
 
-#: src/backend/gsl/functions.cpp:284
+#: src/backend/gsl/functions.cpp:285
 #, kde-format
 msgid "Nonnegative square root"
 msgstr "Negatif olmayan karekök"
 
-#: src/backend/gsl/functions.cpp:285
+#: src/backend/gsl/functions.cpp:286
 #, kde-format
 msgid "Sign function"
 msgstr "İşaret işlevi"
 
-#: src/backend/gsl/functions.cpp:286
+#: src/backend/gsl/functions.cpp:287
 #, kde-format
 msgid "Heavyside theta function"
 msgstr "Heaviside teta işlevi"
 
-#: src/backend/gsl/functions.cpp:287
+#: src/backend/gsl/functions.cpp:288
 #, kde-format
 msgid "Harmonic number function"
 msgstr "Hetmite sayısı işlevi"
 
-#: src/backend/gsl/functions.cpp:289
+#: src/backend/gsl/functions.cpp:290
 #, kde-format
 msgid "Cube root"
 msgstr "Küpkök"
 
-#: src/backend/gsl/functions.cpp:290
+#: src/backend/gsl/functions.cpp:291
 #, kde-format
 msgid "Extract the exponent"
 msgstr "Üssü çıkar"
 
-#: src/backend/gsl/functions.cpp:291
+#: src/backend/gsl/functions.cpp:292
 #, kde-format
 msgid "Round to an integer value"
 msgstr "Tamsayı değere yuvarla"
 
-#: src/backend/gsl/functions.cpp:292 src/backend/gsl/functions.cpp:293
+#: src/backend/gsl/functions.cpp:293 src/backend/gsl/functions.cpp:294
 #, kde-format
 msgid "Round to the nearest integer"
 msgstr "En yakın tamsayıya yuvarla"
 
-#: src/backend/gsl/functions.cpp:294
+#: src/backend/gsl/functions.cpp:295
 #, kde-format
 msgid "Round to y decimal places"
 msgstr "y ondalık basamağa yuvarla"
 
-#: src/backend/gsl/functions.cpp:308
+#: src/backend/gsl/functions.cpp:309
 #, kde-format
 msgid "greaterThan"
 msgstr "büyüktür"
 
-#: src/backend/gsl/functions.cpp:309
+#: src/backend/gsl/functions.cpp:310
 #, kde-format
 msgid "lessThan"
 msgstr "küçüktür"
 
-#: src/backend/gsl/functions.cpp:310
+#: src/backend/gsl/functions.cpp:311
 #, kde-format
 msgid "greaterEqualThan"
 msgstr "büyükEşittir"
 
-#: src/backend/gsl/functions.cpp:311
+#: src/backend/gsl/functions.cpp:312
 #, kde-format
 msgid "lessEqualThan"
 msgstr "küçükEşittir"
 
-#: src/backend/gsl/functions.cpp:312
+#: src/backend/gsl/functions.cpp:313
 #, kde-format
 msgid "equal"
 msgstr "eşittir"
 
-#: src/backend/gsl/functions.cpp:313
+#: src/backend/gsl/functions.cpp:314
 #, kde-format
 msgid "equal with epsilon"
 msgstr "epsilon'a eşit"
 
-#: src/backend/gsl/functions.cpp:314
+#: src/backend/gsl/functions.cpp:315
 #, kde-format
 msgid "between with boundaries included"
 msgstr "sınırlar içerilen biçimde arasında"
 
-#: src/backend/gsl/functions.cpp:315
+#: src/backend/gsl/functions.cpp:316
 #, kde-format
 msgid "outside with boundaries included"
 msgstr "sınırlar içerilen biçimde dışında"
 
-#: src/backend/gsl/functions.cpp:316
+#: src/backend/gsl/functions.cpp:317
 #, kde-format
 msgid "between with boundaries excluded"
 msgstr "sınırlar dışarıda biçimde arasında"
 
-#: src/backend/gsl/functions.cpp:317
+#: src/backend/gsl/functions.cpp:318
 #, kde-format
 msgid "outside with boundaries excluded"
 msgstr "sınırlar dışarıda biçimde dışında"
 
-#: src/backend/gsl/functions.cpp:320
+#: src/backend/gsl/functions.cpp:321
 #, kde-format
 msgid "if(condition; ifTrue; ifFalse)"
 msgstr "if(koşul; doğruysa; yanlışsa)"
 
 #. i18n: ectx: property (text), widget (QLabel, lAnd)
 #. i18n: ectx: property (text), widget (QLabel, lAndDateTime)
-#: src/backend/gsl/functions.cpp:321 src/backend/lib/XmlStreamReader.cpp:58
+#: src/backend/gsl/functions.cpp:322 src/backend/lib/XmlStreamReader.cpp:58
 #: src/kdefrontend/ui/spreadsheet/dropvalueswidget.ui:74
 #: src/kdefrontend/ui/spreadsheet/dropvalueswidget.ui:220
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:354
@@ -3744,124 +3744,130 @@ msgid "and"
 msgstr "ve"
 
 #. i18n: ectx: property (text), widget (QLabel, l2SamplingInterval)
-#: src/backend/gsl/functions.cpp:322
+#: src/backend/gsl/functions.cpp:323
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:265
 #: src/kdefrontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:24
 #, kde-format
 msgid "or"
 msgstr "veya"
 
-#: src/backend/gsl/functions.cpp:323
+#: src/backend/gsl/functions.cpp:324
 #, kde-format
 msgid "xor"
 msgstr "farklıysa"
 
-#: src/backend/gsl/functions.cpp:327
+#: src/backend/gsl/functions.cpp:325
+#, fuzzy, kde-format
+#| msgid "no"
+msgid "not"
+msgstr "hayır"
+
+#: src/backend/gsl/functions.cpp:329
 #, kde-format
 msgid "Airy function of the first kind"
 msgstr "Birinci türden Airy işlevi"
 
-#: src/backend/gsl/functions.cpp:328
+#: src/backend/gsl/functions.cpp:330
 #, kde-format
 msgid "Airy function of the second kind"
 msgstr "İkinci türden Airy işlevi"
 
-#: src/backend/gsl/functions.cpp:329
+#: src/backend/gsl/functions.cpp:331
 #, kde-format
 msgid "Scaled Airy function of the first kind"
 msgstr "Birinci türden ölçekli Airy işlevi"
 
-#: src/backend/gsl/functions.cpp:330
+#: src/backend/gsl/functions.cpp:332
 #, kde-format
 msgid "Scaled Airy function of the second kind"
 msgstr "İkinci tür ölçekli Airy işlevi"
 
-#: src/backend/gsl/functions.cpp:331
+#: src/backend/gsl/functions.cpp:333
 #, kde-format
 msgid "Airy function derivative of the first kind"
 msgstr "Birinci tür Airy işlevinin türevi"
 
-#: src/backend/gsl/functions.cpp:332
+#: src/backend/gsl/functions.cpp:334
 #, kde-format
 msgid "Airy function derivative of the second kind"
 msgstr "İkinci tür Airy işlevinin türevi"
 
-#: src/backend/gsl/functions.cpp:333
+#: src/backend/gsl/functions.cpp:335
 #, kde-format
 msgid "Scaled Airy function derivative of the first kind"
 msgstr "Birinci tür ölçekli Airy işlevinin türevi"
 
-#: src/backend/gsl/functions.cpp:334
+#: src/backend/gsl/functions.cpp:336
 #, kde-format
 msgid "Scaled Airy function derivative of the second kind"
 msgstr "İkinci tür ölçekli Airy işlevinin türevi"
 
-#: src/backend/gsl/functions.cpp:335
+#: src/backend/gsl/functions.cpp:337
 #, kde-format
 msgid "n-th zero of the Airy function of the first kind"
 msgstr "Birinci tür Airy işlevinin n-inci sıfırı"
 
-#: src/backend/gsl/functions.cpp:336
+#: src/backend/gsl/functions.cpp:338
 #, kde-format
 msgid "n-th zero of the Airy function of the second kind"
 msgstr "İkinci tür Airy işlevinin n-inci sıfırı"
 
-#: src/backend/gsl/functions.cpp:337
+#: src/backend/gsl/functions.cpp:339
 #, kde-format
 msgid "n-th zero of the Airy function derivative of the first kind"
 msgstr "Birinci tür Airy işlevi türevinin n-inci sıfırı"
 
-#: src/backend/gsl/functions.cpp:338
+#: src/backend/gsl/functions.cpp:340
 #, kde-format
 msgid "n-th zero of the Airy function derivative of the second kind"
 msgstr "İkinci tür Airy işlevi türevinin n-inci sıfırı"
 
-#: src/backend/gsl/functions.cpp:341
+#: src/backend/gsl/functions.cpp:343
 #, kde-format
 msgid "Regular cylindrical Bessel function of zeroth order"
 msgstr "Sıfır sırasının düzenli silindirik Bessel işlevi"
 
-#: src/backend/gsl/functions.cpp:342
+#: src/backend/gsl/functions.cpp:344
 #, kde-format
 msgid "Regular cylindrical Bessel function of first order"
 msgstr "Birinci mertebe düzenli silindirik Bessel işlevi"
 
-#: src/backend/gsl/functions.cpp:343
+#: src/backend/gsl/functions.cpp:345
 #, kde-format
 msgid "Regular cylindrical Bessel function of order n"
 msgstr "n sırasının düzenli silindirik Bessel işlevi"
 
-#: src/backend/gsl/functions.cpp:344
+#: src/backend/gsl/functions.cpp:346
 #, kde-format
 msgid "Irregular cylindrical Bessel function of zeroth order"
 msgstr "Sıfır sırasının düzensiz silindirik Bessel işlevi"
 
-#: src/backend/gsl/functions.cpp:345
+#: src/backend/gsl/functions.cpp:347
 #, kde-format
 msgid "Irregular cylindrical Bessel function of first order"
 msgstr "İlk sıranın düzensiz silindirik Bessel işlevi"
 
-#: src/backend/gsl/functions.cpp:346
+#: src/backend/gsl/functions.cpp:348
 #, kde-format
 msgid "Irregular cylindrical Bessel function of order n"
 msgstr "n sırasının düzensiz silindirik Bessel işlevi"
 
-#: src/backend/gsl/functions.cpp:347
+#: src/backend/gsl/functions.cpp:349
 #, kde-format
 msgid "Regular modified cylindrical Bessel function of zeroth order"
 msgstr "Sıfırıncı sıranın düzenli değiştirilmiş silindirik Bessel işlevi"
 
-#: src/backend/gsl/functions.cpp:348
+#: src/backend/gsl/functions.cpp:350
 #, kde-format
 msgid "Regular modified cylindrical Bessel function of first order"
 msgstr "İlk sıranın düzenli değiştirilmiş silindirik Bessel işlevi"
 
-#: src/backend/gsl/functions.cpp:349
+#: src/backend/gsl/functions.cpp:351
 #, kde-format
 msgid "Regular modified cylindrical Bessel function of order n"
 msgstr "n sırasının düzenli değiştirilmiş silindirik Bessel işlevi"
 
-#: src/backend/gsl/functions.cpp:350
+#: src/backend/gsl/functions.cpp:352
 #, kde-format
 msgid ""
 "Scaled regular modified cylindrical Bessel function of zeroth order exp(-|"
@@ -3870,7 +3876,7 @@ msgstr ""
 "exp(-|x|) I0(x) sıfırıncı sıranın ölçeklendirilmiş düzenli düzenlenmiş "
 "silindirik Bessel işlevi"
 
-#: src/backend/gsl/functions.cpp:352
+#: src/backend/gsl/functions.cpp:354
 #, kde-format
 msgid ""
 "Scaled regular modified cylindrical Bessel function of first order exp(-|x|) "
@@ -3879,7 +3885,7 @@ msgstr ""
 "exp(-|x|) I1(x) birinci sıranın ölçeklendirilmiş düzenli düzenlenmiş "
 "silindirik Bessel işlevi"
 
-#: src/backend/gsl/functions.cpp:353
+#: src/backend/gsl/functions.cpp:355
 #, kde-format
 msgid ""
 "Scaled regular modified cylindrical Bessel function of order n exp(-|x|) "
@@ -3888,22 +3894,22 @@ msgstr ""
 "exp(-|x|) In(x) n. sıranın ölçeklendirilmiş düzenli düzenlenmiş silindirik "
 "Bessel işlevi"
 
-#: src/backend/gsl/functions.cpp:354
+#: src/backend/gsl/functions.cpp:356
 #, kde-format
 msgid "Irregular modified cylindrical Bessel function of zeroth order"
 msgstr "Sıfır sıranın düzensiz modifiye silindirik Bessel işlevi"
 
-#: src/backend/gsl/functions.cpp:355
+#: src/backend/gsl/functions.cpp:357
 #, kde-format
 msgid "Irregular modified cylindrical Bessel function of first order"
 msgstr "Düzensiz modifiye silindirik Bessel birinci dereceden işlevi"
 
-#: src/backend/gsl/functions.cpp:356
+#: src/backend/gsl/functions.cpp:358
 #, kde-format
 msgid "Irregular modified cylindrical Bessel function of order n"
 msgstr "Düzensiz modifiye silindirik Bessel n. dereceden işlevi"
 
-#: src/backend/gsl/functions.cpp:357
+#: src/backend/gsl/functions.cpp:359
 #, kde-format
 msgid ""
 "Scaled irregular modified cylindrical Bessel function of zeroth order exp(x) "
@@ -3912,7 +3918,7 @@ msgstr ""
 "exp(x) K0(x) sıfırıncı dereceden ölçeklendirilmiş düzensiz modifiye "
 "silindirik Bessel işlevi"
 
-#: src/backend/gsl/functions.cpp:358
+#: src/backend/gsl/functions.cpp:360
 #, kde-format
 msgid ""
 "Scaled irregular modified cylindrical Bessel function of first order exp(x) "
@@ -3921,7 +3927,7 @@ msgstr ""
 "exp(x) K1(x) birinci dereceden ölçeklendirilmiş düzensiz modifiye silindirik "
 "Bessel işlevi"
 
-#: src/backend/gsl/functions.cpp:359
+#: src/backend/gsl/functions.cpp:361
 #, kde-format
 msgid ""
 "Scaled irregular modified cylindrical Bessel function of order n exp(x) Kn(x)"
@@ -3929,47 +3935,47 @@ msgstr ""
 "exp(x) Kn(x) n. dereceden ölçeklendirilmiş düzensiz modifiye silindirik "
 "Bessel işlevi"
 
-#: src/backend/gsl/functions.cpp:360
+#: src/backend/gsl/functions.cpp:362
 #, kde-format
 msgid "Regular spherical Bessel function of zeroth order"
 msgstr "Sıfırıncı sıranın düzenli küresel Bessel işlevi"
 
-#: src/backend/gsl/functions.cpp:361
+#: src/backend/gsl/functions.cpp:363
 #, kde-format
 msgid "Regular spherical Bessel function of first order"
 msgstr "İlk sıranın düzenli küresel Bessel işlevi"
 
-#: src/backend/gsl/functions.cpp:363
+#: src/backend/gsl/functions.cpp:365
 #, kde-format
 msgid "Regular spherical Bessel function of second order"
 msgstr "İkinci sıranın düzenli küresel Bessel işlevi"
 
-#: src/backend/gsl/functions.cpp:364
+#: src/backend/gsl/functions.cpp:366
 #, kde-format
 msgid "Regular spherical Bessel function of order l"
 msgstr "l sıranın düzenli küresel Bessel işlevi"
 
-#: src/backend/gsl/functions.cpp:365
+#: src/backend/gsl/functions.cpp:367
 #, kde-format
 msgid "Irregular spherical Bessel function of zeroth order"
 msgstr "Sıfırıncı sırada düzensiz küresel Bessel işlevi"
 
-#: src/backend/gsl/functions.cpp:366
+#: src/backend/gsl/functions.cpp:368
 #, kde-format
 msgid "Irregular spherical Bessel function of first order"
 msgstr "Birinci dereceden düzensiz küresel Bessel işlevi"
 
-#: src/backend/gsl/functions.cpp:367
+#: src/backend/gsl/functions.cpp:369
 #, kde-format
 msgid "Irregular spherical Bessel function of second order"
 msgstr "İkinci dereceden düzensiz küresel Bessel işlevi"
 
-#: src/backend/gsl/functions.cpp:368
+#: src/backend/gsl/functions.cpp:370
 #, kde-format
 msgid "Irregular spherical Bessel function of order l"
 msgstr "I. dereceden düzensiz küresel Bessel işlevi"
 
-#: src/backend/gsl/functions.cpp:369
+#: src/backend/gsl/functions.cpp:371
 #, kde-format
 msgid ""
 "Scaled regular modified spherical Bessel function of zeroth order, exp(-|x|) "
@@ -3978,7 +3984,7 @@ msgstr ""
 "Sıfırıncı dereceden ölçeklendirilmiş düzenli modifiye küresel Bessel işlevi, "
 "exp(-|x|) i0(x)"
 
-#: src/backend/gsl/functions.cpp:370
+#: src/backend/gsl/functions.cpp:372
 #, kde-format
 msgid ""
 "Scaled regular modified spherical Bessel function of first order, exp(-|x|) "
@@ -3987,7 +3993,7 @@ msgstr ""
 "Birinci dereceden ölçeklendirilmiş düzenli modifiye küresel Bessel işlevi, "
 "exp(-|x|) i1(x)"
 
-#: src/backend/gsl/functions.cpp:371
+#: src/backend/gsl/functions.cpp:373
 #, kde-format
 msgid ""
 "Scaled regular modified spherical Bessel function of second order, exp(-|x|) "
@@ -3996,7 +4002,7 @@ msgstr ""
 "İkinci dereceden ölçeklendirilmiş düzenli modifiye küresel Bessel işlevi, "
 "exp(-|x|) i2(x)"
 
-#: src/backend/gsl/functions.cpp:372
+#: src/backend/gsl/functions.cpp:374
 #, kde-format
 msgid ""
 "Scaled regular modified spherical Bessel function of order l, exp(-|x|) il(x)"
@@ -4004,7 +4010,7 @@ msgstr ""
 "I. dereceden ölçeklendirilmiş düzenli modifiye küresel Bessel işlevi, exp(-|"
 "x|) il(x)"
 
-#: src/backend/gsl/functions.cpp:374
+#: src/backend/gsl/functions.cpp:376
 #, kde-format
 msgid ""
 "Scaled irregular modified spherical Bessel function of zeroth order, exp(x) "
@@ -4013,7 +4019,7 @@ msgstr ""
 "Sıfırıncı dereceden ölçeklendirilmiş düzensiz modifiye küresel Bessel "
 "işlevi, exp(x) k0(x)"
 
-#: src/backend/gsl/functions.cpp:375
+#: src/backend/gsl/functions.cpp:377
 #, kde-format
 msgid ""
 "Scaled irregular modified spherical Bessel function of first order, exp(-|"
@@ -4022,7 +4028,7 @@ msgstr ""
 "Birinci dereceden ölçeklenmiş düzensiz modifiye küresel Bessel işlevi, exp(-|"
 "x|) k1(x)"
 
-#: src/backend/gsl/functions.cpp:376
+#: src/backend/gsl/functions.cpp:378
 #, kde-format
 msgid ""
 "Scaled irregular modified spherical Bessel function of second order, exp(-|"
@@ -4031,7 +4037,7 @@ msgstr ""
 "İkinci dereceden ölçeklenmiş düzensiz modifiye küresel Bessel işlevi, exp(-|"
 "x|) k2(x)"
 
-#: src/backend/gsl/functions.cpp:377
+#: src/backend/gsl/functions.cpp:379
 #, kde-format
 msgid ""
 "Scaled irregular modified spherical Bessel function of order l, exp(-|x|) "
@@ -4040,208 +4046,208 @@ msgstr ""
 "I. dereceden ölçeklenmiş düzensiz modifiye küresel Bessel işlevi, exp(-|x|) "
 "kl(x)"
 
-#: src/backend/gsl/functions.cpp:378
+#: src/backend/gsl/functions.cpp:380
 #, kde-format
 msgid "Regular cylindrical Bessel function of fractional order"
 msgstr "Kesirli sadeleştirilmiş düzenli Bessel işlevi"
 
-#: src/backend/gsl/functions.cpp:379
+#: src/backend/gsl/functions.cpp:381
 #, kde-format
 msgid "Irregular cylindrical Bessel function of fractional order"
 msgstr "Kesirli sadeleştirilmiş düzensiz Bessel işlevi"
 
-#: src/backend/gsl/functions.cpp:380
+#: src/backend/gsl/functions.cpp:382
 #, kde-format
 msgid "Regular modified Bessel function of fractional order"
 msgstr "Kesirli düzenli modifiye Bessel işlevi"
 
-#: src/backend/gsl/functions.cpp:381
+#: src/backend/gsl/functions.cpp:383
 #, kde-format
 msgid "Scaled regular modified Bessel function of fractional order"
 msgstr "Kesirli ölçeklenmiş düzenli modifiye Bessel işlevi"
 
-#: src/backend/gsl/functions.cpp:382
+#: src/backend/gsl/functions.cpp:384
 #, kde-format
 msgid "Irregular modified Bessel function of fractional order"
 msgstr "Kesirli düzensiz modifiye Bessel işlevi"
 
-#: src/backend/gsl/functions.cpp:383
+#: src/backend/gsl/functions.cpp:385
 #, kde-format
 msgid "Logarithm of irregular modified Bessel function of fractional order"
 msgstr "Kesirli düzensiz modifiye Bessel işlevinin logaritması"
 
-#: src/backend/gsl/functions.cpp:385
+#: src/backend/gsl/functions.cpp:387
 #, kde-format
 msgid "Scaled irregular modified Bessel function of fractional order"
 msgstr "Kesirli ölçeklendirilmiş düzensiz modifiye Bessel işlevi"
 
-#: src/backend/gsl/functions.cpp:386
+#: src/backend/gsl/functions.cpp:388
 #, kde-format
 msgid "n-th positive zero of the Bessel function J0"
 msgstr "Bessel işlevi J0'ın n. pozitif sıfırı"
 
-#: src/backend/gsl/functions.cpp:387
+#: src/backend/gsl/functions.cpp:389
 #, kde-format
 msgid "n-th positive zero of the Bessel function J1"
 msgstr "J1 Bessel işlevinun n. pozitif sıfırı"
 
-#: src/backend/gsl/functions.cpp:388
+#: src/backend/gsl/functions.cpp:390
 #, kde-format
 msgid "n-th positive zero of the Bessel function Jnu"
 msgstr "Jnu Bessel işlevinin n. pozitif sıfırı"
 
-#: src/backend/gsl/functions.cpp:391
+#: src/backend/gsl/functions.cpp:393
 #, kde-format
 msgid "Clausen function"
 msgstr "Clausen işlevi"
 
-#: src/backend/gsl/functions.cpp:394
+#: src/backend/gsl/functions.cpp:396
 #, kde-format
 msgid "Lowest-order normalized hydrogenic bound state radial wavefunction"
 msgstr ""
 "En düşük dereceli normalleştirilmiş hidrojen bağlı durum radyal dalga işlevi"
 
-#: src/backend/gsl/functions.cpp:395
+#: src/backend/gsl/functions.cpp:397
 #, kde-format
 msgid "n-th normalized hydrogenic bound state radial wavefunction"
 msgstr "n. normalleştirilmiş hidrojen bağlı durum radyal dalga işlevi"
 
-#: src/backend/gsl/functions.cpp:398 src/backend/gsl/functions.cpp:435
+#: src/backend/gsl/functions.cpp:400 src/backend/gsl/functions.cpp:437
 #, kde-format
 msgid "Dawson's integral D(z) = sqrt(pi)/2 * exp(-z^2) * erfi(z)"
 msgstr "Dawson'un D(z) = sqrt(pi)/2 * exp(-z^2) * erfi(z) integrali"
 
-#: src/backend/gsl/functions.cpp:401
+#: src/backend/gsl/functions.cpp:403
 #, kde-format
 msgid "First-order Debye function"
 msgstr "Birinci dereceden Debye işlevi"
 
-#: src/backend/gsl/functions.cpp:402
+#: src/backend/gsl/functions.cpp:404
 #, kde-format
 msgid "Second-order Debye function"
 msgstr "İkinci dereceden Debye işlevi"
 
-#: src/backend/gsl/functions.cpp:403
+#: src/backend/gsl/functions.cpp:405
 #, kde-format
 msgid "Third-order Debye function"
 msgstr "Üçüncü sıra Debye işlevi"
 
-#: src/backend/gsl/functions.cpp:404
+#: src/backend/gsl/functions.cpp:406
 #, kde-format
 msgid "Fourth-order Debye function"
 msgstr "Dördüncü sıra Debye işlevi"
 
-#: src/backend/gsl/functions.cpp:405
+#: src/backend/gsl/functions.cpp:407
 #, kde-format
 msgid "Fifth-order Debye function"
 msgstr "Beşinci sıra Debye işlevi"
 
-#: src/backend/gsl/functions.cpp:406
+#: src/backend/gsl/functions.cpp:408
 #, kde-format
 msgid "Sixth-order Debye function"
 msgstr "Altıncı sıra Debye işlevi"
 
-#: src/backend/gsl/functions.cpp:409
+#: src/backend/gsl/functions.cpp:411
 #, kde-format
 msgid "Dilogarithm for a real argument"
 msgstr "Reel argüman için dilogaritma"
 
-#: src/backend/gsl/functions.cpp:412
+#: src/backend/gsl/functions.cpp:414
 #, kde-format
 msgid "Legendre form of complete elliptic integral K"
 msgstr "Tam eliptik integral K'nin Legendre formu"
 
-#: src/backend/gsl/functions.cpp:413
+#: src/backend/gsl/functions.cpp:415
 #, kde-format
 msgid "Legendre form of complete elliptic integral E"
 msgstr "Tam eliptik integral E'nin Legendre formu"
 
-#: src/backend/gsl/functions.cpp:414
+#: src/backend/gsl/functions.cpp:416
 #, kde-format
 msgid "Legendre form of complete elliptic integral Pi"
 msgstr "Tam eliptik integral Pi'nin Legendre formu"
 
-#: src/backend/gsl/functions.cpp:415
+#: src/backend/gsl/functions.cpp:417
 #, kde-format
 msgid "Legendre form of incomplete elliptic integral F"
 msgstr "Tamamlanmamış eliptik integral F'nin legendre biçemi"
 
-#: src/backend/gsl/functions.cpp:416
+#: src/backend/gsl/functions.cpp:418
 #, kde-format
 msgid "Legendre form of incomplete elliptic integral E"
 msgstr "Tamamlanmamış eliptik integral E'nin Legendre biçimi"
 
-#: src/backend/gsl/functions.cpp:417
+#: src/backend/gsl/functions.cpp:419
 #, kde-format
 msgid "Legendre form of incomplete elliptic integral P"
 msgstr "Tamamlanmamış eliptik integral P'nin legendre formu"
 
-#: src/backend/gsl/functions.cpp:418
+#: src/backend/gsl/functions.cpp:420
 #, kde-format
 msgid "Legendre form of incomplete elliptic integral D"
 msgstr "Tamamlanmamış eliptik integral D'nin legendre formu"
 
-#: src/backend/gsl/functions.cpp:419
+#: src/backend/gsl/functions.cpp:421
 #, kde-format
 msgid "Carlson form of incomplete elliptic integral RC"
 msgstr "Tamamlanmamış eliptik integral RC'nin Carlson formu"
 
-#: src/backend/gsl/functions.cpp:420
+#: src/backend/gsl/functions.cpp:422
 #, kde-format
 msgid "Carlson form of incomplete elliptic integral RD"
 msgstr "Tamamlanmamış eliptik integral RD'nin Carlson formu"
 
-#: src/backend/gsl/functions.cpp:421
+#: src/backend/gsl/functions.cpp:423
 #, kde-format
 msgid "Carlson form of incomplete elliptic integral RF"
 msgstr "Tamamlanmamış eliptik integral RF'nin Carlson formu"
 
-#: src/backend/gsl/functions.cpp:422
+#: src/backend/gsl/functions.cpp:424
 #, kde-format
 msgid "Carlson form of incomplete elliptic integral RJ"
 msgstr "Tamamlanmamış eliptik integral RJ'nin Carlson formu"
 
-#: src/backend/gsl/functions.cpp:425
+#: src/backend/gsl/functions.cpp:427
 #, kde-format
 msgid "Error function"
 msgstr "Hata işlevi"
 
-#: src/backend/gsl/functions.cpp:426
+#: src/backend/gsl/functions.cpp:428
 #, kde-format
 msgid "Complementary error function"
 msgstr "Tamamlayıcı hata işlevi"
 
-#: src/backend/gsl/functions.cpp:427
+#: src/backend/gsl/functions.cpp:429
 #, kde-format
 msgid "Logarithm of complementary error function"
 msgstr "Tamamlayıcı hata işlevinin logaritması"
 
-#: src/backend/gsl/functions.cpp:428
+#: src/backend/gsl/functions.cpp:430
 #, kde-format
 msgid "Gaussian probability density function Z"
 msgstr "Gaus olasılık yoğunluk işlevi Z"
 
-#: src/backend/gsl/functions.cpp:429
+#: src/backend/gsl/functions.cpp:431
 #, kde-format
 msgid "Upper tail of the Gaussian probability function Q"
 msgstr "Gaus olasılık işlevi Q'nın üst kuyruğu"
 
-#: src/backend/gsl/functions.cpp:430
+#: src/backend/gsl/functions.cpp:432
 #, kde-format
 msgid "Hazard function for the normal distribution Z/Q"
 msgstr "Normal dağılım Z/Q için tehlike işlevi"
 
-#: src/backend/gsl/functions.cpp:432
+#: src/backend/gsl/functions.cpp:434
 #, kde-format
 msgid "Underflow-compensating function exp(x^2) erfc(x) for real x"
 msgstr "Gerçek x için aşağı taşma tamamlayıcı exp(x^2) erfc(x) işlevi"
 
-#: src/backend/gsl/functions.cpp:433
+#: src/backend/gsl/functions.cpp:435
 #, kde-format
 msgid "Imaginary error function erfi(x) = -i erf(ix) for real x"
 msgstr "Gerçek x için hayali erfi(x) = -i erf(ix) işlevi"
 
-#: src/backend/gsl/functions.cpp:434
+#: src/backend/gsl/functions.cpp:436
 #, kde-format
 msgid ""
 "Imaginary part of Faddeeva's scaled complex error function w(x) = exp(-x^2) "
@@ -4250,868 +4256,836 @@ msgstr ""
 "Gerçek x için Faddeeva'nın ölçekli karmaşık w(x) = exp(-x^2) erfc(-ix) "
 "işlevinin hayali kısmı"
 
-#: src/backend/gsl/functions.cpp:436
+#: src/backend/gsl/functions.cpp:438
 #, kde-format
 msgid "Voigt profile"
 msgstr "Voigt profili"
 
-#: src/backend/gsl/functions.cpp:438
+#: src/backend/gsl/functions.cpp:440
 #, kde-format
 msgid "Pseudo-Voigt profile (same width)"
 msgstr "Sahte Voigt profili (aynı genişlik)"
 
-#: src/backend/gsl/functions.cpp:441
+#: src/backend/gsl/functions.cpp:443
 #, kde-format
 msgid "Exponential function"
 msgstr "Üstel işlev"
 
-#: src/backend/gsl/functions.cpp:442
+#: src/backend/gsl/functions.cpp:444
 #, kde-format
 msgid "exponentiate x and multiply by y"
 msgstr "x'in üssünü al ve y ile çarp"
 
-#: src/backend/gsl/functions.cpp:446
+#: src/backend/gsl/functions.cpp:448
 #, kde-format
 msgid "n-relative exponential"
 msgstr "n-bağıl üstel"
 
-#: src/backend/gsl/functions.cpp:449
+#: src/backend/gsl/functions.cpp:451
 #, kde-format
 msgid "Exponential integral"
 msgstr "Üstel integral"
 
-#: src/backend/gsl/functions.cpp:450
+#: src/backend/gsl/functions.cpp:452
 #, kde-format
 msgid "Second order exponential integral"
 msgstr "İkinci dereceden üstel integral"
 
-#: src/backend/gsl/functions.cpp:451
+#: src/backend/gsl/functions.cpp:453
 #, kde-format
 msgid "Exponential integral of order n"
 msgstr "n. derecenin üstel integrali"
 
-#: src/backend/gsl/functions.cpp:452
+#: src/backend/gsl/functions.cpp:454
 #, kde-format
 msgid "Exponential integral Ei"
 msgstr "Ei üstel integrali"
 
-#: src/backend/gsl/functions.cpp:453
+#: src/backend/gsl/functions.cpp:455
 #, kde-format
 msgid "Hyperbolic integral Shi"
 msgstr "Hiperbolik integral Shi"
 
-#: src/backend/gsl/functions.cpp:454
+#: src/backend/gsl/functions.cpp:456
 #, kde-format
 msgid "Hyperbolic integral Chi"
 msgstr "Hiperbolik integral Chi"
 
-#: src/backend/gsl/functions.cpp:455
+#: src/backend/gsl/functions.cpp:457
 #, kde-format
 msgid "Third-order exponential integral"
 msgstr "Üçüncü dereceden üstel integral"
 
-#: src/backend/gsl/functions.cpp:456
+#: src/backend/gsl/functions.cpp:458
 #, kde-format
 msgid "Sine integral"
 msgstr "Sinüs integrali"
 
-#: src/backend/gsl/functions.cpp:457
+#: src/backend/gsl/functions.cpp:459
 #, kde-format
 msgid "Cosine integral"
 msgstr "Kosinüs integrali"
 
-#: src/backend/gsl/functions.cpp:458
+#: src/backend/gsl/functions.cpp:460
 #, kde-format
 msgid "Arctangent integral"
 msgstr "Arktanjant integrali"
 
-#: src/backend/gsl/functions.cpp:461
+#: src/backend/gsl/functions.cpp:463
 #, kde-format
 msgid "Complete Fermi-Dirac integral with index -1"
 msgstr "-1 indeksli tam Fermi-Dirac integrali"
 
-#: src/backend/gsl/functions.cpp:462
+#: src/backend/gsl/functions.cpp:464
 #, kde-format
 msgid "Complete Fermi-Dirac integral with index 0"
 msgstr "0 indeksli tam Fermi-Dirac integrali"
 
-#: src/backend/gsl/functions.cpp:463
+#: src/backend/gsl/functions.cpp:465
 #, kde-format
 msgid "Complete Fermi-Dirac integral with index 1"
 msgstr "1 indeksli tam Fermi-Dirac integrali"
 
-#: src/backend/gsl/functions.cpp:464
+#: src/backend/gsl/functions.cpp:466
 #, kde-format
 msgid "Complete Fermi-Dirac integral with index 2"
 msgstr "2 indeksli tam Fermi-Dirac integrali"
 
-#: src/backend/gsl/functions.cpp:465
+#: src/backend/gsl/functions.cpp:467
 #, kde-format
 msgid "Complete Fermi-Dirac integral with integer index j"
 msgstr "j indeksli tam Fermi-Dirac integrali"
 
-#: src/backend/gsl/functions.cpp:466
+#: src/backend/gsl/functions.cpp:468
 #, kde-format
 msgid "Complete Fermi-Dirac integral with index -1/2"
 msgstr "-1/2 indeksli tam Fermi-Dirac integrali"
 
-#: src/backend/gsl/functions.cpp:467
+#: src/backend/gsl/functions.cpp:469
 #, kde-format
 msgid "Complete Fermi-Dirac integral with index 1/2"
 msgstr "1/2 indeksli tam Fermi-Dirac integrali"
 
-#: src/backend/gsl/functions.cpp:468
+#: src/backend/gsl/functions.cpp:470
 #, kde-format
 msgid "Complete Fermi-Dirac integral with index 3/2"
 msgstr "3/2 indeksli tam Fermi-Dirac integrali"
 
-#: src/backend/gsl/functions.cpp:469
+#: src/backend/gsl/functions.cpp:471
 #, kde-format
 msgid "Incomplete Fermi-Dirac integral with index zero"
 msgstr "Sıfır indeksli eksik Fermi-Dirac integrali"
 
-#: src/backend/gsl/functions.cpp:472 src/backend/gsl/functions.cpp:473
+#: src/backend/gsl/functions.cpp:474 src/backend/gsl/functions.cpp:475
 #, kde-format
 msgid "Gamma function"
 msgstr "Gama işlevi"
 
-#: src/backend/gsl/functions.cpp:474
+#: src/backend/gsl/functions.cpp:476
 #, kde-format
 msgid "Logarithm of the gamma function"
 msgstr "Gama işlevinin logaritması"
 
-#: src/backend/gsl/functions.cpp:475
+#: src/backend/gsl/functions.cpp:477
 #, kde-format
 msgid "Logarithm naturalis of the gamma function"
 msgstr "Gama işlevinin doğal logaritması"
 
-#: src/backend/gsl/functions.cpp:476
+#: src/backend/gsl/functions.cpp:478
 #, kde-format
 msgid "Regulated gamma function"
 msgstr "Düzenlenmiş gama işlevi"
 
-#: src/backend/gsl/functions.cpp:477
+#: src/backend/gsl/functions.cpp:479
 #, kde-format
 msgid "Reciprocal of the gamma function"
 msgstr "Gama işlevinin çarpmaya göre tersi"
 
-#: src/backend/gsl/functions.cpp:478
+#: src/backend/gsl/functions.cpp:480
 #, kde-format
 msgid "Factorial n!"
 msgstr "n! faktöriyel"
 
-#: src/backend/gsl/functions.cpp:479
+#: src/backend/gsl/functions.cpp:481
 #, kde-format
 msgid "Double factorial n!!"
 msgstr "n!! çift faktöriyel"
 
-#: src/backend/gsl/functions.cpp:480
+#: src/backend/gsl/functions.cpp:482
 #, kde-format
 msgid "Logarithm of the factorial"
 msgstr "Faktöriyelin logaritması"
 
-#: src/backend/gsl/functions.cpp:481
+#: src/backend/gsl/functions.cpp:483
 #, kde-format
 msgid "Logarithm of the double factorial"
 msgstr "Çift faktöriyelin logaritması"
 
-#: src/backend/gsl/functions.cpp:483
+#: src/backend/gsl/functions.cpp:485
 #, kde-format
 msgid "Combinatorial factor"
 msgstr "Kombinatoryal çarpanı"
 
-#: src/backend/gsl/functions.cpp:484
+#: src/backend/gsl/functions.cpp:486
 #, kde-format
 msgid "Logarithm of the combinatorial factor"
 msgstr "Kombinatorial çarpanının logaritması"
 
-#: src/backend/gsl/functions.cpp:485
+#: src/backend/gsl/functions.cpp:487
 #, kde-format
 msgid "Taylor coefficient"
 msgstr "Taylor katsayısı"
 
-#: src/backend/gsl/functions.cpp:486
+#: src/backend/gsl/functions.cpp:488
 #, kde-format
 msgid "Pochhammer symbol"
 msgstr "Pochhammer sembolü"
 
-#: src/backend/gsl/functions.cpp:487
+#: src/backend/gsl/functions.cpp:489
 #, kde-format
 msgid "Logarithm of the Pochhammer symbol"
 msgstr "Pochhammer sembolünün logaritması"
 
-#: src/backend/gsl/functions.cpp:488
+#: src/backend/gsl/functions.cpp:490
 #, kde-format
 msgid "Relative Pochhammer symbol"
 msgstr "Bağıl Pochhammer sembolü"
 
-#: src/backend/gsl/functions.cpp:489
+#: src/backend/gsl/functions.cpp:491
 #, kde-format
 msgid "Unnormalized incomplete gamma function"
 msgstr "Normalize edilmemiş tamamlanmamış gama işlevi"
 
-#: src/backend/gsl/functions.cpp:490
+#: src/backend/gsl/functions.cpp:492
 #, kde-format
 msgid "Normalized incomplete gamma function"
 msgstr "Normalize edilmiş tamamlanmamış gama işlevi"
 
-#: src/backend/gsl/functions.cpp:491
+#: src/backend/gsl/functions.cpp:493
 #, kde-format
 msgid "Complementary normalized incomplete gamma function"
 msgstr "Tamamlayıcı normalize edilmiş tamamlanmamış gamma işlevi"
 
-#: src/backend/gsl/functions.cpp:492
+#: src/backend/gsl/functions.cpp:494
 #, kde-format
 msgid "Beta function"
 msgstr "Beta işlevi"
 
-#: src/backend/gsl/functions.cpp:494
+#: src/backend/gsl/functions.cpp:496
 #, kde-format
 msgid "Logarithm of the beta function"
 msgstr "Beta işlevinin logaritması"
 
-#: src/backend/gsl/functions.cpp:495
+#: src/backend/gsl/functions.cpp:497
 #, kde-format
 msgid "Normalized incomplete beta function"
 msgstr "Normalize edilmiş tamamlanmamış beta işlevi"
 
-#: src/backend/gsl/functions.cpp:498
+#: src/backend/gsl/functions.cpp:500
 #, kde-format
 msgid "Gegenbauer polynomial C_1"
 msgstr "Gegenbauer polinomu C_1"
 
-#: src/backend/gsl/functions.cpp:499
+#: src/backend/gsl/functions.cpp:501
 #, kde-format
 msgid "Gegenbauer polynomial C_2"
 msgstr "Gegenbauer polinomu C_2"
 
-#: src/backend/gsl/functions.cpp:500
+#: src/backend/gsl/functions.cpp:502
 #, kde-format
 msgid "Gegenbauer polynomial C_3"
 msgstr "Gegenbauer polinomu C_3"
 
-#: src/backend/gsl/functions.cpp:501
+#: src/backend/gsl/functions.cpp:503
 #, kde-format
 msgid "Gegenbauer polynomial C_n"
 msgstr "Gegenbauer polinomu C_n"
 
-#: src/backend/gsl/functions.cpp:505
+#: src/backend/gsl/functions.cpp:507
 #, kde-format
 msgid "Hermite polynomials physicists version"
 msgstr "Hermite polinomları fizikçileri versiyonu"
 
-#: src/backend/gsl/functions.cpp:506
+#: src/backend/gsl/functions.cpp:508
 #, kde-format
 msgid "Hermite polynomials probabilists version"
 msgstr "Hermite polinomları olasılıkçılar versiyonu"
 
-#: src/backend/gsl/functions.cpp:507
+#: src/backend/gsl/functions.cpp:509
 #, kde-format
 msgid "Hermite functions"
 msgstr "Hetmite işlevleri"
 
-#: src/backend/gsl/functions.cpp:509
+#: src/backend/gsl/functions.cpp:511
 #, kde-format
 msgid "Hermite functions (fast version)"
 msgstr "Hetmite işlevleri (hızlı sürüm)"
 
-#: src/backend/gsl/functions.cpp:511
+#: src/backend/gsl/functions.cpp:513
 #, kde-format
 msgid "Derivatives of Hermite polynomials physicists version"
 msgstr "Hermite polinomları fizikçileri versiyonunun türevleri"
 
-#: src/backend/gsl/functions.cpp:512
+#: src/backend/gsl/functions.cpp:514
 #, kde-format
 msgid "Derivatives of Hermite polynomials probabilists version"
 msgstr "Hermite polinomları olasılıkçılar versiyonunun türevleri"
 
-#: src/backend/gsl/functions.cpp:513
+#: src/backend/gsl/functions.cpp:515
 #, kde-format
 msgid "Derivatives of Hermite functions"
 msgstr "Hermite işlevleri türevleri"
 
-#: src/backend/gsl/functions.cpp:517
+#: src/backend/gsl/functions.cpp:519
 #, kde-format
 msgid "Hypergeometric function 0F1"
 msgstr "Hipergeometrik işlev 0F1"
 
-#: src/backend/gsl/functions.cpp:518
+#: src/backend/gsl/functions.cpp:520
 #, kde-format
 msgid "Confluent hypergeometric function 1F1 for integer parameters"
 msgstr "Tamsayı parametreleri için konfluent hipergeometrik işlev 1F1"
 
-#: src/backend/gsl/functions.cpp:519
+#: src/backend/gsl/functions.cpp:521
 #, kde-format
 msgid "Confluent hypergeometric function 1F1 for general parameters"
 msgstr "Genel parametreler için konfluent hipergeometrik işlev 1F1"
 
-#: src/backend/gsl/functions.cpp:520
+#: src/backend/gsl/functions.cpp:522
 #, kde-format
 msgid "Confluent hypergeometric function U for integer parameters"
 msgstr "Tamsayı parametreleri için konfluent hipergeometrik işlev U"
 
-#: src/backend/gsl/functions.cpp:521
+#: src/backend/gsl/functions.cpp:523
 #, kde-format
 msgid "Confluent hypergeometric function U"
 msgstr "Konfluent hipergeometrik işlev U"
 
-#: src/backend/gsl/functions.cpp:522
+#: src/backend/gsl/functions.cpp:524
 #, kde-format
 msgid "Gauss hypergeometric function 2F1"
 msgstr "Gaus hipergeometrik işlev 2F1"
 
-#: src/backend/gsl/functions.cpp:523
+#: src/backend/gsl/functions.cpp:525
 #, kde-format
 msgid "Gauss hypergeometric function 2F1 with complex parameters"
 msgstr "Karmaşık parametreler ile Gaus hipergeometrik işlevi 2F1"
 
-#: src/backend/gsl/functions.cpp:524
+#: src/backend/gsl/functions.cpp:526
 #, kde-format
 msgid "Renormalized Gauss hypergeometric function 2F1"
 msgstr "Tekrar normalize edilmiş Gauss hipergeometrik işlevi 2F1"
 
-#: src/backend/gsl/functions.cpp:525
+#: src/backend/gsl/functions.cpp:527
 #, kde-format
 msgid "Renormalized Gauss hypergeometric function 2F1 with complex parameters"
 msgstr ""
 "Tekrar normalize edilmiş Gauss hipergeometrik işlevi 2F1 karmaşık "
 "parametreler ile birlikte"
 
-#: src/backend/gsl/functions.cpp:526
+#: src/backend/gsl/functions.cpp:528
 #, kde-format
 msgid "Hypergeometric function 2F0"
 msgstr "Hipergeometrik işlev 2F0"
 
-#: src/backend/gsl/functions.cpp:529
+#: src/backend/gsl/functions.cpp:531
 #, kde-format
 msgid "generalized Laguerre polynomials L_1"
 msgstr "genelleştirilmiş Laguerre polinomları L_1"
 
-#: src/backend/gsl/functions.cpp:530
+#: src/backend/gsl/functions.cpp:532
 #, kde-format
 msgid "generalized Laguerre polynomials L_2"
 msgstr "genelleştirilmiş Laguerre polinomları L_2"
 
-#: src/backend/gsl/functions.cpp:531
+#: src/backend/gsl/functions.cpp:533
 #, kde-format
 msgid "generalized Laguerre polynomials L_3"
 msgstr "genelleştirilmiş Laguerre polinomları L_3"
 
-#: src/backend/gsl/functions.cpp:532
+#: src/backend/gsl/functions.cpp:534
 #, kde-format
 msgid "generalized Laguerre polynomials L_n"
 msgstr "genelleştirilmiş Laguerre polinomları L_n"
 
-#: src/backend/gsl/functions.cpp:535
+#: src/backend/gsl/functions.cpp:537
 #, kde-format
 msgid "Principal branch of the Lambert W function"
 msgstr "Lambert W işlevinin ana dalı"
 
-#: src/backend/gsl/functions.cpp:536
+#: src/backend/gsl/functions.cpp:538
 #, kde-format
 msgid "Secondary real-valued branch of the Lambert W function"
 msgstr "Lambert W işlevinin ikincil gerçek değerli kolu"
 
-#: src/backend/gsl/functions.cpp:539
+#: src/backend/gsl/functions.cpp:541
 #, kde-format
 msgid "Legendre polynomial P_1"
 msgstr "Legendre polinomu P_1"
 
-#: src/backend/gsl/functions.cpp:540
+#: src/backend/gsl/functions.cpp:542
 #, kde-format
 msgid "Legendre polynomial P_2"
 msgstr "Legendre polinomu P_2"
 
-#: src/backend/gsl/functions.cpp:541
+#: src/backend/gsl/functions.cpp:543
 #, kde-format
 msgid "Legendre polynomial P_3"
 msgstr "Legendre polinomu P_3"
 
-#: src/backend/gsl/functions.cpp:542
+#: src/backend/gsl/functions.cpp:544
 #, kde-format
 msgid "Legendre polynomial P_l"
 msgstr "Legendre polinomu P_I"
 
-#: src/backend/gsl/functions.cpp:543
+#: src/backend/gsl/functions.cpp:545
 #, kde-format
 msgid "Legendre function Q_0"
 msgstr "Legendre işlevi Q_0"
 
-#: src/backend/gsl/functions.cpp:544
+#: src/backend/gsl/functions.cpp:546
 #, kde-format
 msgid "Legendre function Q_1"
 msgstr "Legendre işlevi Q_1"
 
-#: src/backend/gsl/functions.cpp:545
+#: src/backend/gsl/functions.cpp:547
 #, kde-format
 msgid "Legendre function Q_l"
 msgstr "Legendre işlevi Q_I"
 
-#: src/backend/gsl/functions.cpp:546
+#: src/backend/gsl/functions.cpp:548
 #, kde-format
 msgid "Associated Legendre polynomial"
 msgstr "İlişkili Legendre polinomu"
 
-#: src/backend/gsl/functions.cpp:547
+#: src/backend/gsl/functions.cpp:549
 #, kde-format
 msgid "Normalized associated Legendre polynomial"
 msgstr "Normalleştirilmiş ilişkili Legendre polinomu"
 
-#: src/backend/gsl/functions.cpp:548
+#: src/backend/gsl/functions.cpp:550
 #, kde-format
 msgid "Irregular spherical conical function P^1/2"
 msgstr "Düzensiz küresel konik işlev P^1/2"
 
-#: src/backend/gsl/functions.cpp:550
+#: src/backend/gsl/functions.cpp:552
 #, kde-format
 msgid "Regular spherical conical function P^(-1/2)"
 msgstr "Düzenli küresel konik işlevi P^(-1/2)"
 
-#: src/backend/gsl/functions.cpp:551
+#: src/backend/gsl/functions.cpp:553
 #, kde-format
 msgid "Conical function P^0"
 msgstr "Konik işlev P^0"
 
-#: src/backend/gsl/functions.cpp:552
+#: src/backend/gsl/functions.cpp:554
 #, kde-format
 msgid "Conical function P^1"
 msgstr "Konik işlevi P^1"
 
-#: src/backend/gsl/functions.cpp:553
+#: src/backend/gsl/functions.cpp:555
 #, kde-format
 msgid "Regular spherical conical function P^(-1/2-l)"
 msgstr "Düzenli küresel konik işlevi P^(-1/2-l)"
 
-#: src/backend/gsl/functions.cpp:554
+#: src/backend/gsl/functions.cpp:556
 #, kde-format
 msgid "Regular cylindrical conical function P^(-m)"
 msgstr "Düzenli silindirik konik işlevi P^(-m)"
 
-#: src/backend/gsl/functions.cpp:555
+#: src/backend/gsl/functions.cpp:557
 #, kde-format
 msgid ""
 "Zeroth radial eigenfunction of the Laplacian on the 3-dimensional hyperbolic "
 "space"
 msgstr "Laplace'in 3 boyutlu hiperbolik uzayda sıfır radyal eigenişlevi"
 
-#: src/backend/gsl/functions.cpp:556
+#: src/backend/gsl/functions.cpp:558
 #, kde-format
 msgid ""
 "First radial eigenfunction of the Laplacian on the 3-dimensional hyperbolic "
 "space"
 msgstr "Laplace'in 3 boyutlu hiperbolik uzayda ilk radyal eigenişlevi"
 
-#: src/backend/gsl/functions.cpp:557
+#: src/backend/gsl/functions.cpp:559
 #, kde-format
 msgid ""
 "l-th radial eigenfunction of the Laplacian on the 3-dimensional hyperbolic "
 "space"
 msgstr "Laplace'in 3 boyutlu hiperbolik uzayda I. radyal eigenişlevi"
 
-#: src/backend/gsl/functions.cpp:560
+#: src/backend/gsl/functions.cpp:562
 #, kde-format
 msgid "Logarithm"
 msgstr "Logaritma"
 
-#: src/backend/gsl/functions.cpp:561
+#: src/backend/gsl/functions.cpp:563
 #, kde-format
 msgid "Base 2 logarithm"
 msgstr "2 tabanında logaritma"
 
-#: src/backend/gsl/functions.cpp:562
+#: src/backend/gsl/functions.cpp:564
 #, kde-format
 msgid "Logarithm of the magnitude"
 msgstr "Büyüklüğün logaritması"
 
-#: src/backend/gsl/functions.cpp:568
+#: src/backend/gsl/functions.cpp:570
 #, kde-format
 msgid "Characteristic values a_n(q) of the Mathieu functions ce_n(q, x)"
 msgstr "Mathieu işlevleri ce_n(q, x)'in a_n(q) karakteristik değerleri"
 
-#: src/backend/gsl/functions.cpp:569
+#: src/backend/gsl/functions.cpp:571
 #, kde-format
 msgid "Characteristic values b_n(q) of the Mathieu functions se_n(q, x)"
 msgstr "Mathieu işlevleri se_n(q, x)'in b_n(q) karakteristik değerleri"
 
-#: src/backend/gsl/functions.cpp:570
+#: src/backend/gsl/functions.cpp:572
 #, kde-format
 msgid "Angular Mathieu functions ce_n(q, x)"
 msgstr "Açısal Mathieu işlevleri ce_n(q, x)"
 
-#: src/backend/gsl/functions.cpp:571
+#: src/backend/gsl/functions.cpp:573
 #, kde-format
 msgid "Angular Mathieu functions se_n(q, x)"
 msgstr "Açısal Mathieu işlevleri se_n(q, x)"
 
-#: src/backend/gsl/functions.cpp:572
+#: src/backend/gsl/functions.cpp:574
 #, kde-format
 msgid "Radial j-th kind Mathieu functions Mc_n^{(j)}(q, x)"
 msgstr "Radyal j. tür Mathieu işlevleri Mc_n^{(j)}(q, x)"
 
-#: src/backend/gsl/functions.cpp:573
+#: src/backend/gsl/functions.cpp:575
 #, kde-format
 msgid "Radial j-th kind Mathieu functions Ms_n^{(j)}(q, x)"
 msgstr "Radyal j. tür Mathieu işlevleri Ms_n^{(j)}(q, x)"
 
-#: src/backend/gsl/functions.cpp:577
+#: src/backend/gsl/functions.cpp:579
 #, kde-format
 msgid "x^n for integer n with an error estimate"
 msgstr "hata ölçütü ile n tamsayısı için x^n"
 
-#: src/backend/gsl/functions.cpp:580
+#: src/backend/gsl/functions.cpp:582
 #, kde-format
 msgid "Digamma function for positive integer n"
 msgstr "Pozitif tamsayı n için digama işlevi"
 
-#: src/backend/gsl/functions.cpp:581
+#: src/backend/gsl/functions.cpp:583
 #, kde-format
 msgid "Digamma function"
 msgstr "Digama işlevi"
 
-#: src/backend/gsl/functions.cpp:582
+#: src/backend/gsl/functions.cpp:584
 #, kde-format
 msgid "Real part of the digamma function on the line 1+i y"
 msgstr "1+i y doğrusu üzerinde digama işlevinin reel parçası"
 
-#: src/backend/gsl/functions.cpp:583
+#: src/backend/gsl/functions.cpp:585
 #, kde-format
 msgid "Trigamma function psi' for positive integer n"
 msgstr "n pozitif tamsayısı için trigama işlevinin psi'i"
 
-#: src/backend/gsl/functions.cpp:584
+#: src/backend/gsl/functions.cpp:586
 #, kde-format
 msgid "Trigamma function psi'"
 msgstr "Trigama işlev psi'"
 
-#: src/backend/gsl/functions.cpp:585
+#: src/backend/gsl/functions.cpp:587
 #, kde-format
 msgid "Polygamma function psi^(n)"
 msgstr "Poligama işlev psi^(n)"
 
-#: src/backend/gsl/functions.cpp:588
+#: src/backend/gsl/functions.cpp:590
 #, kde-format
 msgid "First synchrotron function"
 msgstr "İlk sinkroton işlevi"
 
-#: src/backend/gsl/functions.cpp:589
+#: src/backend/gsl/functions.cpp:591
 #, kde-format
 msgid "Second synchrotron function"
 msgstr "İkinci senkrotron işlevi"
 
-#: src/backend/gsl/functions.cpp:592 src/backend/gsl/functions.cpp:593
 #: src/backend/gsl/functions.cpp:594 src/backend/gsl/functions.cpp:595
+#: src/backend/gsl/functions.cpp:596 src/backend/gsl/functions.cpp:597
 #, kde-format
 msgid "Transport function"
 msgstr "Taşıma işlevi"
 
-#: src/backend/gsl/functions.cpp:598
+#: src/backend/gsl/functions.cpp:600
 #, kde-format
 msgid "Sine"
 msgstr "Sinüs"
 
-#: src/backend/gsl/functions.cpp:599 src/backend/nsl/nsl_interp.c:21
+#: src/backend/gsl/functions.cpp:601 src/backend/nsl/nsl_interp.c:21
 #: src/backend/nsl/nsl_sf_window.c:27 src/backend/nsl/nsl_smooth.c:30
 #: src/kdefrontend/dockwidgets/KDEPlotDock.cpp:186
 #, kde-format
 msgid "Cosine"
 msgstr "Kosinüs"
 
-#: src/backend/gsl/functions.cpp:600
+#: src/backend/gsl/functions.cpp:602
 #, kde-format
 msgid "Tangent"
 msgstr "Tanjant"
 
-#: src/backend/gsl/functions.cpp:601
+#: src/backend/gsl/functions.cpp:603
 #, kde-format
 msgid "Inverse sine"
 msgstr "Ters sinüs"
 
-#: src/backend/gsl/functions.cpp:602
+#: src/backend/gsl/functions.cpp:604
 #, kde-format
 msgid "Inverse cosine"
 msgstr "Ters kosinüs"
 
-#: src/backend/gsl/functions.cpp:603
+#: src/backend/gsl/functions.cpp:605
 #, kde-format
 msgid "Inverse tangent"
 msgstr "Ters tanjant"
 
-#: src/backend/gsl/functions.cpp:604
+#: src/backend/gsl/functions.cpp:606
 #, kde-format
 msgid "Inverse tangent using sign"
 msgstr "İşaret kullanan ters tanjant"
 
-#: src/backend/gsl/functions.cpp:605
+#: src/backend/gsl/functions.cpp:607
 #, kde-format
 msgid "Hyperbolic sine"
 msgstr "Hiperbolik sinüs"
 
-#: src/backend/gsl/functions.cpp:606
+#: src/backend/gsl/functions.cpp:608
 #, kde-format
 msgid "Hyperbolic cosine"
 msgstr "Hiperbolik kosinüs"
 
-#: src/backend/gsl/functions.cpp:607
+#: src/backend/gsl/functions.cpp:609
 #, kde-format
 msgid "Hyperbolic tangent"
 msgstr "Hiperbolik tanjant"
 
-#: src/backend/gsl/functions.cpp:608
+#: src/backend/gsl/functions.cpp:610
 #, kde-format
 msgid "Inverse hyperbolic cosine"
 msgstr "Ark hiperbolik kosinüs"
 
-#: src/backend/gsl/functions.cpp:609
+#: src/backend/gsl/functions.cpp:611
 #, kde-format
 msgid "Inverse hyperbolic sine"
 msgstr "Ark hiperbolik sinüs"
 
-#: src/backend/gsl/functions.cpp:610
+#: src/backend/gsl/functions.cpp:612
 #, kde-format
 msgid "Inverse hyperbolic tangent"
 msgstr "Ark hiperbolik tanjant"
 
-#: src/backend/gsl/functions.cpp:611
+#: src/backend/gsl/functions.cpp:613
 #, kde-format
 msgid "Secant"
 msgstr "Sekant"
 
-#: src/backend/gsl/functions.cpp:612
+#: src/backend/gsl/functions.cpp:614
 #, kde-format
 msgid "Cosecant"
 msgstr "Kosekant"
 
-#: src/backend/gsl/functions.cpp:613
+#: src/backend/gsl/functions.cpp:615
 #, kde-format
 msgid "Cotangent"
 msgstr "Kotanjant"
 
-#: src/backend/gsl/functions.cpp:614
+#: src/backend/gsl/functions.cpp:616
 #, kde-format
 msgid "Inverse secant"
 msgstr "Ark sekant"
 
-#: src/backend/gsl/functions.cpp:615
+#: src/backend/gsl/functions.cpp:617
 #, kde-format
 msgid "Inverse cosecant"
 msgstr "Ark kosekant"
 
-#: src/backend/gsl/functions.cpp:616
+#: src/backend/gsl/functions.cpp:618
 #, kde-format
 msgid "Inverse cotangent"
 msgstr "Ark kotanjant"
 
-#: src/backend/gsl/functions.cpp:617
+#: src/backend/gsl/functions.cpp:619
 #, kde-format
 msgid "Hyperbolic secant"
 msgstr "Hiperbolik sekant"
 
-#: src/backend/gsl/functions.cpp:618
+#: src/backend/gsl/functions.cpp:620
 #, kde-format
 msgid "Hyperbolic cosecant"
 msgstr "Hiperbolik kosekant"
 
-#: src/backend/gsl/functions.cpp:619
+#: src/backend/gsl/functions.cpp:621
 #, kde-format
 msgid "Hyperbolic cotangent"
 msgstr "Hiperbolik kotanjant"
 
-#: src/backend/gsl/functions.cpp:620
+#: src/backend/gsl/functions.cpp:622
 #, kde-format
 msgid "Inverse hyperbolic secant"
 msgstr "Ark hiperbolik sekant"
 
-#: src/backend/gsl/functions.cpp:621
+#: src/backend/gsl/functions.cpp:623
 #, kde-format
 msgid "Inverse hyperbolic cosecant"
 msgstr "Ark hiperbolik kosekant"
 
-#: src/backend/gsl/functions.cpp:622
+#: src/backend/gsl/functions.cpp:624
 #, kde-format
 msgid "Inverse hyperbolic cotangent"
 msgstr "Ark hiperbolik kotanjant"
 
-#: src/backend/gsl/functions.cpp:623
+#: src/backend/gsl/functions.cpp:625
 #, kde-format
 msgid "Sinc function sin(x)/x"
 msgstr "Sinc işlevi sin(x)/x"
 
-#: src/backend/gsl/functions.cpp:626
+#: src/backend/gsl/functions.cpp:628
 #, kde-format
 msgid "Hypotenuse function"
 msgstr "Hipotenüs işlevi"
 
-#: src/backend/gsl/functions.cpp:627
+#: src/backend/gsl/functions.cpp:629
 #, kde-format
 msgid "Three component hypotenuse function"
 msgstr "Üç bileşen hipotenüs işlevi"
 
-#: src/backend/gsl/functions.cpp:628
+#: src/backend/gsl/functions.cpp:630
 #, kde-format
 msgid "restrict to [-pi, pi]"
 msgstr "[-pi, pi] ile sınırlı"
 
-#: src/backend/gsl/functions.cpp:629
+#: src/backend/gsl/functions.cpp:631
 #, kde-format
 msgid "restrict to [0, 2 pi]"
 msgstr "[0, 2 pi] ile sınırlı"
 
-#: src/backend/gsl/functions.cpp:632
+#: src/backend/gsl/functions.cpp:634
 #, kde-format
 msgid "Riemann zeta function for integer n"
 msgstr "n tamsayısı için Riemann zeta işlevi"
 
-#: src/backend/gsl/functions.cpp:633
+#: src/backend/gsl/functions.cpp:635
 #, kde-format
 msgid "Riemann zeta function"
 msgstr "Riemann zeta işlevi"
 
-#: src/backend/gsl/functions.cpp:634
+#: src/backend/gsl/functions.cpp:636
 #, kde-format
 msgid "zeta(n)-1 for integer n"
 msgstr "n tamsayısı için zeta(n)-1"
 
-#: src/backend/gsl/functions.cpp:635
+#: src/backend/gsl/functions.cpp:637
 #, kde-format
 msgid "zeta(x)-1"
 msgstr "zeta(x)-1"
 
-#: src/backend/gsl/functions.cpp:636
+#: src/backend/gsl/functions.cpp:638
 #, kde-format
 msgid "Hurwitz zeta function"
 msgstr "Hurwitz zeta işlevi"
 
-#: src/backend/gsl/functions.cpp:637
+#: src/backend/gsl/functions.cpp:639
 #, kde-format
 msgid "Eta function for integer n"
 msgstr "n tamsayısı için Eta işlevi"
 
-#: src/backend/gsl/functions.cpp:638
+#: src/backend/gsl/functions.cpp:640
 #, kde-format
 msgid "Eta function"
 msgstr "Eta işlevi"
 
-#: src/backend/gsl/functions.cpp:642
+#: src/backend/gsl/functions.cpp:644
 #, kde-format
 msgid "Gaussian random numbers"
 msgstr "Gauss rastgele sayılar"
 
-#: src/backend/gsl/functions.cpp:643
+#: src/backend/gsl/functions.cpp:645
 #, kde-format
 msgid "Exponential random numbers"
 msgstr "Üstel rastgele sayılar"
 
-#: src/backend/gsl/functions.cpp:644
+#: src/backend/gsl/functions.cpp:646
 #, kde-format
 msgid "Laplacian random numbers"
 msgstr "Laplas rastgele sayılar"
 
-#: src/backend/gsl/functions.cpp:645
+#: src/backend/gsl/functions.cpp:647
 #, kde-format
 msgid "Cauchy/Lorentz random numbers"
 msgstr "Cauchy/Lorentz rastgele sayılar"
 
-#: src/backend/gsl/functions.cpp:646
+#: src/backend/gsl/functions.cpp:648
 #, kde-format
 msgid "Rayleigh random numbers"
 msgstr "Rayleigh rastgele sayılar"
 
-#: src/backend/gsl/functions.cpp:647
+#: src/backend/gsl/functions.cpp:649
 #, kde-format
 msgid "Landau random numbers"
 msgstr "Landau rastgele sayılar"
 
-#: src/backend/gsl/functions.cpp:648
+#: src/backend/gsl/functions.cpp:650
 #, kde-format
 msgid "Levy alpha-stable random numbers"
 msgstr "Levy alfa kararlı rastgele sayılar"
 
-#: src/backend/gsl/functions.cpp:649
+#: src/backend/gsl/functions.cpp:651
 #, kde-format
 msgid "Gamma random numbers"
 msgstr "Gama rastgele sayılar"
 
-#: src/backend/gsl/functions.cpp:650
+#: src/backend/gsl/functions.cpp:652
 #, kde-format
 msgid "Flat random numbers"
 msgstr "Düz rastgele sayılar"
 
-#: src/backend/gsl/functions.cpp:651
+#: src/backend/gsl/functions.cpp:653
 #, kde-format
 msgid "Lognormal random numbers"
 msgstr "Lognormal rastgele sayılar"
 
-#: src/backend/gsl/functions.cpp:653
+#: src/backend/gsl/functions.cpp:655
 #, kde-format
 msgid "Chi-squared random numbers"
 msgstr "Ki-kare rastgele sayılar"
 
-#: src/backend/gsl/functions.cpp:654
+#: src/backend/gsl/functions.cpp:656
 #, kde-format
 msgid "t-distributed random numbers"
 msgstr "t dağılımlı rastgele sayılar"
 
-#: src/backend/gsl/functions.cpp:655
+#: src/backend/gsl/functions.cpp:657
 #, kde-format
 msgid "Logistic random numbers"
 msgstr "Lojistik rastgele sayılar"
 
-#: src/backend/gsl/functions.cpp:656
+#: src/backend/gsl/functions.cpp:658
 #, kde-format
 msgid "Poisson random numbers"
 msgstr "Poisson rastgele sayıları"
 
-#: src/backend/gsl/functions.cpp:657
+#: src/backend/gsl/functions.cpp:659
 #, kde-format
 msgid "Bernoulli random numbers"
 msgstr "Bernoulli rastgele sayılar"
 
-#: src/backend/gsl/functions.cpp:658
+#: src/backend/gsl/functions.cpp:660
 #, kde-format
 msgid "Binomial random numbers"
 msgstr "İki terimli rastgele sayılar"
 
-#: src/backend/gsl/functions.cpp:662
+#: src/backend/gsl/functions.cpp:664
 #, kde-format
 msgid "Probability density for a Gaussian distribution"
 msgstr "Gauss dağılımı için olasılık derinliği"
 
-#: src/backend/gsl/functions.cpp:663
+#: src/backend/gsl/functions.cpp:665
 #, kde-format
 msgid "Probability density for a unit Gaussian distribution"
 msgstr "Birim Gauss dağılımı için olasılık derinliği"
-
-#: src/backend/gsl/functions.cpp:664 src/backend/gsl/functions.cpp:679
-#: src/backend/gsl/functions.cpp:686 src/backend/gsl/functions.cpp:698
-#: src/backend/gsl/functions.cpp:705 src/backend/gsl/functions.cpp:716
-#: src/backend/gsl/functions.cpp:723 src/backend/gsl/functions.cpp:730
-#: src/backend/gsl/functions.cpp:737 src/backend/gsl/functions.cpp:744
-#: src/backend/gsl/functions.cpp:751 src/backend/gsl/functions.cpp:758
-#: src/backend/gsl/functions.cpp:765 src/backend/gsl/functions.cpp:772
-#: src/backend/gsl/functions.cpp:779 src/backend/gsl/functions.cpp:786
-#: src/backend/gsl/functions.cpp:791 src/backend/gsl/functions.cpp:798
-#: src/backend/gsl/functions.cpp:806 src/backend/gsl/functions.cpp:809
-#: src/backend/gsl/functions.cpp:814 src/backend/gsl/functions.cpp:819
-#: src/backend/gsl/functions.cpp:824
-#, kde-format
-msgid "Cumulative distribution function P"
-msgstr "Kümülatif dağılım işlevi P"
-
-#: src/backend/gsl/functions.cpp:665 src/backend/gsl/functions.cpp:680
-#: src/backend/gsl/functions.cpp:687 src/backend/gsl/functions.cpp:694
-#: src/backend/gsl/functions.cpp:699 src/backend/gsl/functions.cpp:706
-#: src/backend/gsl/functions.cpp:717 src/backend/gsl/functions.cpp:724
-#: src/backend/gsl/functions.cpp:731 src/backend/gsl/functions.cpp:738
-#: src/backend/gsl/functions.cpp:745 src/backend/gsl/functions.cpp:752
-#: src/backend/gsl/functions.cpp:759 src/backend/gsl/functions.cpp:766
-#: src/backend/gsl/functions.cpp:773 src/backend/gsl/functions.cpp:780
-#: src/backend/gsl/functions.cpp:787 src/backend/gsl/functions.cpp:792
-#: src/backend/gsl/functions.cpp:799 src/backend/gsl/functions.cpp:807
-#: src/backend/gsl/functions.cpp:810 src/backend/gsl/functions.cpp:815
-#: src/backend/gsl/functions.cpp:820 src/backend/gsl/functions.cpp:825
-#, kde-format
-msgid "Cumulative distribution function Q"
-msgstr "Kümülatif dağılım işlevi Q"
 
 #: src/backend/gsl/functions.cpp:666 src/backend/gsl/functions.cpp:681
 #: src/backend/gsl/functions.cpp:688 src/backend/gsl/functions.cpp:700
@@ -5121,269 +5095,301 @@ msgstr "Kümülatif dağılım işlevi Q"
 #: src/backend/gsl/functions.cpp:753 src/backend/gsl/functions.cpp:760
 #: src/backend/gsl/functions.cpp:767 src/backend/gsl/functions.cpp:774
 #: src/backend/gsl/functions.cpp:781 src/backend/gsl/functions.cpp:788
-#: src/backend/gsl/functions.cpp:793
+#: src/backend/gsl/functions.cpp:793 src/backend/gsl/functions.cpp:800
+#: src/backend/gsl/functions.cpp:808 src/backend/gsl/functions.cpp:811
+#: src/backend/gsl/functions.cpp:816 src/backend/gsl/functions.cpp:821
+#: src/backend/gsl/functions.cpp:826
+#, kde-format
+msgid "Cumulative distribution function P"
+msgstr "Kümülatif dağılım işlevi P"
+
+#: src/backend/gsl/functions.cpp:667 src/backend/gsl/functions.cpp:682
+#: src/backend/gsl/functions.cpp:689 src/backend/gsl/functions.cpp:696
+#: src/backend/gsl/functions.cpp:701 src/backend/gsl/functions.cpp:708
+#: src/backend/gsl/functions.cpp:719 src/backend/gsl/functions.cpp:726
+#: src/backend/gsl/functions.cpp:733 src/backend/gsl/functions.cpp:740
+#: src/backend/gsl/functions.cpp:747 src/backend/gsl/functions.cpp:754
+#: src/backend/gsl/functions.cpp:761 src/backend/gsl/functions.cpp:768
+#: src/backend/gsl/functions.cpp:775 src/backend/gsl/functions.cpp:782
+#: src/backend/gsl/functions.cpp:789 src/backend/gsl/functions.cpp:794
+#: src/backend/gsl/functions.cpp:801 src/backend/gsl/functions.cpp:809
+#: src/backend/gsl/functions.cpp:812 src/backend/gsl/functions.cpp:817
+#: src/backend/gsl/functions.cpp:822 src/backend/gsl/functions.cpp:827
+#, kde-format
+msgid "Cumulative distribution function Q"
+msgstr "Kümülatif dağılım işlevi Q"
+
+#: src/backend/gsl/functions.cpp:668 src/backend/gsl/functions.cpp:683
+#: src/backend/gsl/functions.cpp:690 src/backend/gsl/functions.cpp:702
+#: src/backend/gsl/functions.cpp:709 src/backend/gsl/functions.cpp:720
+#: src/backend/gsl/functions.cpp:727 src/backend/gsl/functions.cpp:734
+#: src/backend/gsl/functions.cpp:741 src/backend/gsl/functions.cpp:748
+#: src/backend/gsl/functions.cpp:755 src/backend/gsl/functions.cpp:762
+#: src/backend/gsl/functions.cpp:769 src/backend/gsl/functions.cpp:776
+#: src/backend/gsl/functions.cpp:783 src/backend/gsl/functions.cpp:790
+#: src/backend/gsl/functions.cpp:795
 #, kde-format
 msgid "Inverse cumulative distribution function P"
 msgstr "Ark kümülatif dağılım işlevi P"
 
-#: src/backend/gsl/functions.cpp:667 src/backend/gsl/functions.cpp:682
-#: src/backend/gsl/functions.cpp:689 src/backend/gsl/functions.cpp:701
-#: src/backend/gsl/functions.cpp:708 src/backend/gsl/functions.cpp:719
-#: src/backend/gsl/functions.cpp:726 src/backend/gsl/functions.cpp:733
-#: src/backend/gsl/functions.cpp:740 src/backend/gsl/functions.cpp:747
-#: src/backend/gsl/functions.cpp:754 src/backend/gsl/functions.cpp:761
-#: src/backend/gsl/functions.cpp:768 src/backend/gsl/functions.cpp:775
-#: src/backend/gsl/functions.cpp:782 src/backend/gsl/functions.cpp:789
-#: src/backend/gsl/functions.cpp:794
+#: src/backend/gsl/functions.cpp:669 src/backend/gsl/functions.cpp:684
+#: src/backend/gsl/functions.cpp:691 src/backend/gsl/functions.cpp:703
+#: src/backend/gsl/functions.cpp:710 src/backend/gsl/functions.cpp:721
+#: src/backend/gsl/functions.cpp:728 src/backend/gsl/functions.cpp:735
+#: src/backend/gsl/functions.cpp:742 src/backend/gsl/functions.cpp:749
+#: src/backend/gsl/functions.cpp:756 src/backend/gsl/functions.cpp:763
+#: src/backend/gsl/functions.cpp:770 src/backend/gsl/functions.cpp:777
+#: src/backend/gsl/functions.cpp:784 src/backend/gsl/functions.cpp:791
+#: src/backend/gsl/functions.cpp:796
 #, kde-format
 msgid "Inverse cumulative distribution function Q"
 msgstr "Ark kümülatif dağılım işlevi Q"
 
-#: src/backend/gsl/functions.cpp:668
+#: src/backend/gsl/functions.cpp:670
 #, kde-format
 msgid "Cumulative unit distribution function P"
 msgstr "Birikimli birim dağılım işlevi P"
 
-#: src/backend/gsl/functions.cpp:669
+#: src/backend/gsl/functions.cpp:671
 #, kde-format
 msgid "Cumulative unit distribution function Q"
 msgstr "Birikimli birim dağılım işlevi Q"
 
-#: src/backend/gsl/functions.cpp:670
+#: src/backend/gsl/functions.cpp:672
 #, kde-format
 msgid "Inverse cumulative unit distribution function P"
 msgstr "Ters birikimli birim dağılım işlevi P"
 
-#: src/backend/gsl/functions.cpp:671
+#: src/backend/gsl/functions.cpp:673
 #, kde-format
 msgid "Inverse cumulative unit distribution function Q"
 msgstr "Ters birikimli birim dağılım işlevi Q"
 
-#: src/backend/gsl/functions.cpp:673
+#: src/backend/gsl/functions.cpp:675
 #, kde-format
 msgid "Probability density for Gaussian tail distribution"
 msgstr "Gauss kuyruk dağılımı için olasılık yoğunluğu"
 
-#: src/backend/gsl/functions.cpp:674
+#: src/backend/gsl/functions.cpp:676
 #, kde-format
 msgid "Probability density for unit Gaussian tail distribution"
 msgstr "Birim Gauss kuyruk dağılımı için olasılık yoğunluğu"
 
-#: src/backend/gsl/functions.cpp:675
+#: src/backend/gsl/functions.cpp:677
 #, kde-format
 msgid "Probability density for a bivariate Gaussian distribution"
 msgstr "İki değişkenli Gauss kuyruk dağılımı için olasılık yoğunluğu"
 
-#: src/backend/gsl/functions.cpp:678
+#: src/backend/gsl/functions.cpp:680
 #, kde-format
 msgid "Probability density for an exponential distribution"
 msgstr "Üstel dağılım için olasılık yoğunluğu"
 
-#: src/backend/gsl/functions.cpp:685
+#: src/backend/gsl/functions.cpp:687
 #, kde-format
 msgid "Probability density for a Laplace distribution"
 msgstr "Laplas dağılımı için olasılık yoğunluğu"
 
-#: src/backend/gsl/functions.cpp:692
+#: src/backend/gsl/functions.cpp:694
 #, kde-format
 msgid "Probability density for an exponential power distribution"
 msgstr "Üstel kuvvet dağılımı için olasılık yoğunluğu"
 
-#: src/backend/gsl/functions.cpp:693
+#: src/backend/gsl/functions.cpp:695
 #, kde-format
 msgid "cumulative distribution function P"
 msgstr "kümalatif dağılım işlevi P"
 
-#: src/backend/gsl/functions.cpp:697
+#: src/backend/gsl/functions.cpp:699
 #, kde-format
 msgid "Probability density for a Cauchy distribution"
 msgstr "Cauchy dağılımı için olasılık yoğunluğu"
 
-#: src/backend/gsl/functions.cpp:704
+#: src/backend/gsl/functions.cpp:706
 #, kde-format
 msgid "Probability density for a Rayleigh distribution"
 msgstr "Rayleigh dağılımı için olasılık yoğunluğu"
 
-#: src/backend/gsl/functions.cpp:709
+#: src/backend/gsl/functions.cpp:711
 #, kde-format
 msgid "Probability density for a Rayleigh tail distribution"
 msgstr "Rayleigh kuyruk dağılımı için olasılık yoğunluğu"
 
-#: src/backend/gsl/functions.cpp:712
+#: src/backend/gsl/functions.cpp:714
 #, kde-format
 msgid "Probability density for a Landau distribution"
 msgstr "Landau dağılımı için olasılık yoğunluğu"
 
-#: src/backend/gsl/functions.cpp:715
+#: src/backend/gsl/functions.cpp:717
 #, kde-format
 msgid "Probability density for a gamma distribution"
 msgstr "Gama dağılımı için olasılık yoğunluğu"
 
-#: src/backend/gsl/functions.cpp:722
+#: src/backend/gsl/functions.cpp:724
 #, kde-format
 msgid "Probability density for a uniform distribution"
 msgstr "Tekdüze dağılımı için olasılık yoğunluğu"
 
-#: src/backend/gsl/functions.cpp:729
+#: src/backend/gsl/functions.cpp:731
 #, kde-format
 msgid "Probability density for a lognormal distribution"
 msgstr "Lognormal dağılımı için olasılık yoğunluğu"
 
-#: src/backend/gsl/functions.cpp:736
+#: src/backend/gsl/functions.cpp:738
 #, kde-format
 msgid "Probability density for a chi squared distribution"
 msgstr "Ki-kare dağılımı için olasılık yoğunluğu"
 
-#: src/backend/gsl/functions.cpp:743
+#: src/backend/gsl/functions.cpp:745
 #, kde-format
 msgid "Probability density for a F-distribution"
 msgstr "F dağılımı için olasılık yoğunluğu"
 
-#: src/backend/gsl/functions.cpp:750
+#: src/backend/gsl/functions.cpp:752
 #, kde-format
 msgid "Probability density for a t-distribution"
 msgstr "T dağılımı için olasılık yoğunluğu"
 
-#: src/backend/gsl/functions.cpp:757
+#: src/backend/gsl/functions.cpp:759
 #, kde-format
 msgid "Probability density for a beta distribution"
 msgstr "Beta dağılımı için olasılık yoğunluğu"
 
-#: src/backend/gsl/functions.cpp:764
+#: src/backend/gsl/functions.cpp:766
 #, kde-format
 msgid "Probability density for a logistic distribution"
 msgstr "Lojistik dağılımı için olasılık yoğunluğu"
 
-#: src/backend/gsl/functions.cpp:771
+#: src/backend/gsl/functions.cpp:773
 #, kde-format
 msgid "Probability density for a Pareto distribution"
 msgstr "Pareto dağılımı için olasılık yoğunluğu"
 
-#: src/backend/gsl/functions.cpp:778
+#: src/backend/gsl/functions.cpp:780
 #, kde-format
 msgid "Probability density for a Weibull distribution"
 msgstr "Weibull dağılımı için olasılık yoğunluğu"
 
-#: src/backend/gsl/functions.cpp:785
+#: src/backend/gsl/functions.cpp:787
 #, kde-format
 msgid "Probability density for a Type-1 Gumbel distribution"
 msgstr "Tip-1 Gumbel dağılımı için olasılık yoğunluğu"
 
-#: src/backend/gsl/functions.cpp:790
+#: src/backend/gsl/functions.cpp:792
 #, kde-format
 msgid "Probability density for a Type-2 Gumbel distribution"
 msgstr "Tip-2 Gumbel dağılımı için olasılık yoğunluğu"
 
-#: src/backend/gsl/functions.cpp:797
+#: src/backend/gsl/functions.cpp:799
 #, kde-format
 msgid "Probability density for a Poisson distribution"
 msgstr "Poisson dağılımı için olasılık yoğunluğu"
 
-#: src/backend/gsl/functions.cpp:802
+#: src/backend/gsl/functions.cpp:804
 #, kde-format
 msgid "Probability density for a Bernoulli distribution"
 msgstr "Bernoulli dağılımı için olasılık yoğunluğu"
 
-#: src/backend/gsl/functions.cpp:805
+#: src/backend/gsl/functions.cpp:807
 #, kde-format
 msgid "Probability density for a binomial distribution"
 msgstr "Binominal dağılımı için olasılık yoğunluğu"
 
-#: src/backend/gsl/functions.cpp:808
+#: src/backend/gsl/functions.cpp:810
 #, kde-format
 msgid "Probability density for a negative binomial distribution"
 msgstr "Negatif binominal dağılımı için olasılık yoğunluğu"
 
-#: src/backend/gsl/functions.cpp:813
+#: src/backend/gsl/functions.cpp:815
 #, kde-format
 msgid "Probability density for a Pascal distribution"
 msgstr "Pascal dağılımı için olasılık yoğunluğu"
 
-#: src/backend/gsl/functions.cpp:818
+#: src/backend/gsl/functions.cpp:820
 #, kde-format
 msgid "Probability density for a geometric distribution"
 msgstr "Geometrik dağılımı için olasılık yoğunluğu"
 
-#: src/backend/gsl/functions.cpp:823
+#: src/backend/gsl/functions.cpp:825
 #, kde-format
 msgid "Probability density for a hypergeometric distribution"
 msgstr "Hipergeometrik dağılım için olasılık yoğunluğu"
 
-#: src/backend/gsl/functions.cpp:828
+#: src/backend/gsl/functions.cpp:830
 #, kde-format
 msgid "Probability density for a logarithmic distribution"
 msgstr "Logaritmik dağılım için olasılık yoğunluğu"
 
-#: src/backend/gsl/functions.cpp:928 src/backend/gsl/functions.cpp:940
-#: src/backend/gsl/functions.cpp:954 src/backend/gsl/functions.cpp:966
-#: src/backend/gsl/functions.cpp:978
+#: src/backend/gsl/functions.cpp:936 src/backend/gsl/functions.cpp:948
+#: src/backend/gsl/functions.cpp:962 src/backend/gsl/functions.cpp:974
+#: src/backend/gsl/functions.cpp:986
 #, kde-format
 msgid "Invalid"
 msgstr "Geçersiz"
 
-#: src/backend/gsl/functions.cpp:934
+#: src/backend/gsl/functions.cpp:942
 #, kde-format
 msgid "condition"
 msgstr "koşul"
 
-#: src/backend/gsl/functions.cpp:936
+#: src/backend/gsl/functions.cpp:944
 #, kde-format
 msgid "trueValue"
 msgstr "doğruDeğer"
 
-#: src/backend/gsl/functions.cpp:938
+#: src/backend/gsl/functions.cpp:946
 #, kde-format
 msgid "falseValue"
 msgstr "yanlışDeğer"
 
-#: src/backend/gsl/functions.cpp:946
+#: src/backend/gsl/functions.cpp:954
 #, kde-format
 msgid "n"
 msgstr "n"
 
-#: src/backend/gsl/functions.cpp:948
+#: src/backend/gsl/functions.cpp:956
 #, kde-format
 msgid "j"
 msgstr "j"
 
-#: src/backend/gsl/functions.cpp:950
+#: src/backend/gsl/functions.cpp:958
 #, kde-format
 msgid "q"
 msgstr "q"
 
-#: src/backend/gsl/functions.cpp:952 src/backend/gsl/functions.cpp:960
+#: src/backend/gsl/functions.cpp:960 src/backend/gsl/functions.cpp:968
 #, kde-format
 msgid "x"
 msgstr "x"
 
-#: src/backend/gsl/functions.cpp:962
+#: src/backend/gsl/functions.cpp:970
 #, kde-format
 msgid "min"
 msgstr "en küçük"
 
-#: src/backend/gsl/functions.cpp:964
+#: src/backend/gsl/functions.cpp:972
 #, kde-format
 msgid "max"
 msgstr "en büyük"
 
-#: src/backend/gsl/functions.cpp:972
+#: src/backend/gsl/functions.cpp:980
 #, kde-format
 msgid "v1"
 msgstr "v1"
 
-#: src/backend/gsl/functions.cpp:974
+#: src/backend/gsl/functions.cpp:982
 #, kde-format
 msgid "v2"
 msgstr "v2"
 
-#: src/backend/gsl/functions.cpp:976
+#: src/backend/gsl/functions.cpp:984
 #, kde-format
 msgid "ep"
 msgstr "ep"
 
 #: src/backend/lib/Range.h:49 src/backend/nsl/nsl_interp.c:14
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:513
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:484
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:485
 #, kde-format
 msgid "Linear"
 msgstr "Doğrusal"
@@ -5430,13 +5436,13 @@ msgid "unexpected end of document"
 msgstr "belgenin beklenmedik sonu"
 
 #: src/backend/matrix/Matrix.cpp:118
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3599
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3600
 #, kde-format
 msgid "FITS image"
 msgstr "FITS görseli"
 
 #: src/backend/matrix/Matrix.cpp:118
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3599
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3600
 #, kde-format
 msgid "FITS table"
 msgstr "FITS tablosu"
@@ -5780,7 +5786,7 @@ msgstr "Sanal Kısım"
 
 #: src/backend/nsl/nsl_dft.c:22 src/backend/nsl/nsl_fit.c:26
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:517
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:488
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:489
 #, kde-format
 msgid "Power"
 msgstr "Güç"
@@ -5938,11 +5944,11 @@ msgstr "İstatistik (Dağılımlar)"
 
 #: src/backend/nsl/nsl_fit.c:24
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:553
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:524
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:525
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1230
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:241
 #: src/kdefrontend/dockwidgets/KDEPlotDock.cpp:191
-#: src/kdefrontend/dockwidgets/WorksheetDock.cpp:275
+#: src/kdefrontend/dockwidgets/WorksheetDock.cpp:277
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:754
 #: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:81
 #, kde-format
@@ -5950,7 +5956,7 @@ msgid "Custom"
 msgstr "Özel"
 
 #: src/backend/nsl/nsl_fit.c:26
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:500
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:501
 #, kde-format
 msgid "Inverse Exponential"
 msgstr "Ters Üstel"
@@ -5978,7 +5984,7 @@ msgstr "Gauss (normal)"
 
 #: src/backend/nsl/nsl_fit.c:31
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:537
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:508
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:509
 #, kde-format
 msgid "Cauchy-Lorentz"
 msgstr "Cauchy-Lorentz"
@@ -6010,7 +6016,7 @@ msgstr "Ters Tanjant"
 
 #: src/backend/nsl/nsl_fit.c:45
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:545
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:516
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:517
 #, kde-format
 msgid "Hyperbolic Tangent"
 msgstr "Hiperbolik Tanjant"
@@ -6883,13 +6889,13 @@ msgstr "%1: Çizgi matlığını ayarla"
 
 #: src/backend/worksheet/plots/AbstractPlot.cpp:100
 #: src/backend/worksheet/plots/AbstractPlot.cpp:128
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1289
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1291
 #, kde-format
 msgid "%1: set horizontal padding"
 msgstr "%1: Yatay boşluğu ayarla"
 
 #: src/backend/worksheet/plots/AbstractPlot.cpp:107
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1315
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1317
 #, kde-format
 msgid "%1: set vertical padding"
 msgstr "%1: Dikey boşluğu ayarla"
@@ -6933,8 +6939,8 @@ msgstr "Yatay"
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:258
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:56
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:53
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:841
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:845
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:843
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:847
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:171
 #: src/kdefrontend/dockwidgets/LollipopPlotDock.cpp:52
 #: src/kdefrontend/dockwidgets/ReferenceLineDock.cpp:27
@@ -7493,7 +7499,7 @@ msgstr "Tümleştirme"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:422
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:509
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1863
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:481
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:482
 #: src/kdefrontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:73
 #, kde-format
 msgid "Smooth"
@@ -7502,7 +7508,7 @@ msgstr "Pürüzsüzleştir"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:423
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:647
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1882
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:581
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:582
 #: src/commonfrontend/worksheet/WorksheetView.cpp:178
 #, kde-format
 msgid "Fit"
@@ -7511,7 +7517,7 @@ msgstr "Sığdır"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:424
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:557
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1923
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:528
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:529
 #, kde-format
 msgid "Fourier Filter"
 msgstr "Fourier Süzgeci"
@@ -7618,19 +7624,19 @@ msgid "Convolution"
 msgstr "Evrişim"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:506
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:473
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:474
 #, kde-format
 msgid "Differentiate"
 msgstr "Türev Al"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:507
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:476
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:477
 #, kde-format
 msgid "Integrate"
 msgstr "Integral Al"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:508
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:479
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:480
 #, kde-format
 msgid "Interpolate"
 msgstr "Aradeğerle"
@@ -7641,13 +7647,13 @@ msgid "Convolute/Deconvolute"
 msgstr "Sar/Sarmayı Aç"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:521
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:492
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:493
 #, kde-format
 msgid "Exponential (degree 1)"
 msgstr "Üstel (derece 1)"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:525
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:496
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:497
 #, kde-format
 msgid "Exponential (degree 2)"
 msgstr "Üstel (derece 2)"
@@ -7658,13 +7664,13 @@ msgid "Inverse exponential"
 msgstr "Ters üstel"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:541
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:512
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:513
 #, kde-format
 msgid "Arc Tangent"
 msgstr "Ark Tanjant"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:549
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:520
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:521
 #, kde-format
 msgid "Error Function"
 msgstr "Hata İşlevi"
@@ -8914,7 +8920,7 @@ msgstr "%1: Yerleşim satır sayısını ayarla"
 
 #: src/backend/worksheet/Worksheet.cpp:789
 #: src/backend/worksheet/Worksheet.cpp:790
-#: src/kdefrontend/dockwidgets/WorksheetDock.cpp:371
+#: src/kdefrontend/dockwidgets/WorksheetDock.cpp:373
 #, kde-format
 msgid "%1: set page size"
 msgstr "%1: Sayfa boyutunu ayarla"
@@ -8924,12 +8930,12 @@ msgstr "%1: Sayfa boyutunu ayarla"
 msgid "Curves"
 msgstr "Eğriler"
 
-#: src/backend/worksheet/WorksheetElement.cpp:152
+#: src/backend/worksheet/WorksheetElement.cpp:154
 #, kde-format
 msgid "%1: lock"
 msgstr "%1: Kilitle"
 
-#: src/backend/worksheet/WorksheetElement.cpp:152
+#: src/backend/worksheet/WorksheetElement.cpp:154
 #, kde-format
 msgid "%1: unlock"
 msgstr "%1: Kilidi aç"
@@ -8937,7 +8943,7 @@ msgstr "%1: Kilidi aç"
 #. i18n: ectx: property (text), widget (QCheckBox, chbVisible)
 #. i18n: ectx: property (text), widget (QCheckBox, chkVisible)
 #. i18n: ectx: property (text), widget (QCheckBox, chbSymbolVisible)
-#: src/backend/worksheet/WorksheetElement.cpp:216
+#: src/backend/worksheet/WorksheetElement.cpp:218
 #: src/kdefrontend/ui/datapickercurvewidget.ui:178
 #: src/kdefrontend/ui/datapickerimagewidget.ui:826
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:58
@@ -8969,56 +8975,56 @@ msgstr "%1: Kilidi aç"
 msgid "Visible"
 msgstr "Görünür"
 
-#: src/backend/worksheet/WorksheetElement.cpp:225
+#: src/backend/worksheet/WorksheetElement.cpp:227
 #, kde-format
 msgid "Lock"
 msgstr "Kilitle"
 
-#: src/backend/worksheet/WorksheetElement.cpp:234
+#: src/backend/worksheet/WorksheetElement.cpp:236
 #, kde-format
 msgid "Drawing &order"
 msgstr "Çizim sı&rası"
 
-#: src/backend/worksheet/WorksheetElement.cpp:237
-#: src/backend/worksheet/WorksheetElement.cpp:283
-#: src/backend/worksheet/WorksheetElement.cpp:286
+#: src/backend/worksheet/WorksheetElement.cpp:239
+#: src/backend/worksheet/WorksheetElement.cpp:285
+#: src/backend/worksheet/WorksheetElement.cpp:288
 #, kde-format
 msgid "Move &behind"
 msgstr "Geri&ye taşı"
 
-#: src/backend/worksheet/WorksheetElement.cpp:241
-#: src/backend/worksheet/WorksheetElement.cpp:281
-#: src/backend/worksheet/WorksheetElement.cpp:288
+#: src/backend/worksheet/WorksheetElement.cpp:243
+#: src/backend/worksheet/WorksheetElement.cpp:283
+#: src/backend/worksheet/WorksheetElement.cpp:290
 #, kde-format
 msgid "Move in &front of"
 msgstr "Ö&ne taşı"
 
-#: src/backend/worksheet/WorksheetElement.cpp:346
+#: src/backend/worksheet/WorksheetElement.cpp:348
 #, kde-format
 msgid "%1: move behind %2."
 msgstr "%1: %2 ögesinin arkasına taşı."
 
-#: src/backend/worksheet/WorksheetElement.cpp:360
+#: src/backend/worksheet/WorksheetElement.cpp:362
 #, kde-format
 msgid "%1: move in front of %2."
 msgstr "%1: %2 ögesinin önüne taşı."
 
-#: src/backend/worksheet/WorksheetElement.cpp:716
+#: src/backend/worksheet/WorksheetElement.cpp:752
 #, kde-format
 msgid "%1: set horizontal alignment"
 msgstr "%1: Yatay hizalamayı ayarla"
 
-#: src/backend/worksheet/WorksheetElement.cpp:728
+#: src/backend/worksheet/WorksheetElement.cpp:764
 #, kde-format
 msgid "%1: set vertical alignment"
 msgstr "%1: Dikey hizalamayı ayarla"
 
-#: src/backend/worksheet/WorksheetElement.cpp:742
+#: src/backend/worksheet/WorksheetElement.cpp:778
 #, kde-format
 msgid "%1: use logical coordinates"
 msgstr "%1: Mantıksal koordinatlar kullan"
 
-#: src/backend/worksheet/WorksheetElement.cpp:752
+#: src/backend/worksheet/WorksheetElement.cpp:788
 #, kde-format
 msgid "%1: set logical position"
 msgstr "%1: Mantıksal konum ayarla"
@@ -9030,7 +9036,7 @@ msgstr "%1 ilklendirilemedi."
 
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:52
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:120
-#: src/commonfrontend/matrix/MatrixView.cpp:192
+#: src/commonfrontend/matrix/MatrixView.cpp:194
 #: src/commonfrontend/worksheet/WorksheetView.cpp:145
 #: src/commonfrontend/worksheet/WorksheetView.cpp:378
 #, kde-format
@@ -9039,7 +9045,7 @@ msgstr "Yaklaştır"
 
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:56
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:123
-#: src/commonfrontend/matrix/MatrixView.cpp:193
+#: src/commonfrontend/matrix/MatrixView.cpp:195
 #: src/commonfrontend/worksheet/WorksheetView.cpp:146
 #: src/commonfrontend/worksheet/WorksheetView.cpp:382
 #, kde-format
@@ -9086,7 +9092,7 @@ msgid "Command"
 msgstr "Komut"
 
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:101
-#: src/kdefrontend/widgets/LabelWidget.cpp:193
+#: src/kdefrontend/widgets/LabelWidget.cpp:195
 #, kde-format
 msgid "Markdown"
 msgstr "Markdown"
@@ -9094,7 +9100,7 @@ msgstr "Markdown"
 #. i18n: ectx: property (text), widget (QLabel, lTex)
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:105
 #: src/kdefrontend/ui/settingsworksheetpage.ui:147
-#: src/kdefrontend/widgets/LabelWidget.cpp:191
+#: src/kdefrontend/widgets/LabelWidget.cpp:193
 #, kde-format
 msgid "LaTeX"
 msgstr "LaTeX"
@@ -9150,7 +9156,7 @@ msgid "Assistants"
 msgstr "Yardımcılar"
 
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:288
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:567
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:568
 #, kde-format
 msgid "Plot Data"
 msgstr "Veriyi Çiz"
@@ -9181,7 +9187,7 @@ msgid "%1: variable statistics"
 msgstr "%1: Değişken istatistikleri"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:126
-#: src/commonfrontend/matrix/MatrixView.cpp:194
+#: src/commonfrontend/matrix/MatrixView.cpp:196
 #: src/commonfrontend/worksheet/WorksheetView.cpp:147
 #, kde-format
 msgid "Original Size"
@@ -9337,271 +9343,271 @@ msgid "Curve"
 msgstr "Eğri"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:870
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3839
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3893
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3840
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3894
 #: src/commonfrontend/worksheet/WorksheetView.cpp:2287
 #, kde-format
 msgid "Failed to export"
 msgstr "Dışa aktarılamadı"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:870
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3839
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3893
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3840
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3894
 #: src/commonfrontend/worksheet/WorksheetView.cpp:2287
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
 msgstr "'%1' yazılamadı. Lütfen yolu denetleyin."
 
-#: src/commonfrontend/matrix/MatrixView.cpp:123
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:275
+#: src/commonfrontend/matrix/MatrixView.cpp:125
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:276
 #, kde-format
 msgid "Cu&t"
 msgstr "&Kes"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:124
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:276
+#: src/commonfrontend/matrix/MatrixView.cpp:126
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:277
 #, kde-format
 msgid "&Copy"
 msgstr "Ko&pyala"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:125
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:277
+#: src/commonfrontend/matrix/MatrixView.cpp:127
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:278
 #, kde-format
 msgid "Past&e"
 msgstr "&Yapıştır"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:126
+#: src/commonfrontend/matrix/MatrixView.cpp:128
 #, kde-format
 msgid "Clea&r Selection"
 msgstr "Seçimi &Temizle"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:127
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:281
+#: src/commonfrontend/matrix/MatrixView.cpp:129
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:282
 #: src/commonfrontend/worksheet/WorksheetView.cpp:132
 #, kde-format
 msgid "Select All"
 msgstr "Tümünü Seç"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:139
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:290
+#: src/commonfrontend/matrix/MatrixView.cpp:141
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:291
 #, kde-format
 msgid "Function Values"
 msgstr "İşlev Değerleri"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:140
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:291
+#: src/commonfrontend/matrix/MatrixView.cpp:142
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:292
 #, kde-format
 msgid "Const Values"
 msgstr "Sabit Değerler"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:141
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:318
+#: src/commonfrontend/matrix/MatrixView.cpp:143
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:319
 #, kde-format
 msgid "Clear Content"
 msgstr "İçeriği Temizle"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:142
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:300
+#: src/commonfrontend/matrix/MatrixView.cpp:144
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:301
 #, kde-format
 msgid "&Go to Cell..."
 msgstr "Hücreye G&it..."
 
-#: src/commonfrontend/matrix/MatrixView.cpp:144
+#: src/commonfrontend/matrix/MatrixView.cpp:146
 #, kde-format
 msgid "&Transpose"
 msgstr "&Transpoz"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:145
+#: src/commonfrontend/matrix/MatrixView.cpp:147
 #, kde-format
 msgid "Mirror &Horizontally"
 msgstr "&Yatay Yansıt"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:146
+#: src/commonfrontend/matrix/MatrixView.cpp:148
 #, kde-format
 msgid "Mirror &Vertically"
 msgstr "&Dikey Yansıt"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:148
+#: src/commonfrontend/matrix/MatrixView.cpp:150
 #, kde-format
 msgid "Add Value"
 msgstr "Değer Ekle"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:150
+#: src/commonfrontend/matrix/MatrixView.cpp:152
 #, kde-format
 msgid "Subtract Value"
 msgstr "Değeri Çıkar"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:152
+#: src/commonfrontend/matrix/MatrixView.cpp:154
 #, kde-format
 msgid "Multiply Value"
 msgstr "Değeri Çarp"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:154
+#: src/commonfrontend/matrix/MatrixView.cpp:156
 #, kde-format
 msgid "Divide Value"
 msgstr "Değeri Böl"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:162
+#: src/commonfrontend/matrix/MatrixView.cpp:164
 #: src/kdefrontend/dockwidgets/MatrixDock.cpp:37
 #, kde-format
 msgid "Rows and Columns"
 msgstr "Satırlar ve Sütunlar"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:164
+#: src/commonfrontend/matrix/MatrixView.cpp:166
 #: src/kdefrontend/dockwidgets/MatrixDock.cpp:38
 #, kde-format
 msgid "xy-Values"
 msgstr "xy Değerleri"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:166
+#: src/commonfrontend/matrix/MatrixView.cpp:168
 #: src/kdefrontend/dockwidgets/MatrixDock.cpp:39
 #, kde-format
 msgid "Rows, Columns and xy-Values"
 msgstr "Satırlar, Sütunlar ve xy Değerleri"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:178
+#: src/commonfrontend/matrix/MatrixView.cpp:180
 #, kde-format
 msgid "&Add Columns"
 msgstr "Sütunlar &Ekle"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:179
+#: src/commonfrontend/matrix/MatrixView.cpp:181
 #, kde-format
 msgid "&Insert Empty Columns"
 msgstr "Boş Sütunlar E&kle"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:180
+#: src/commonfrontend/matrix/MatrixView.cpp:182
 #, kde-format
 msgid "Remo&ve Columns"
 msgstr "Sütunları Kal&dır"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:181
+#: src/commonfrontend/matrix/MatrixView.cpp:183
 #, kde-format
 msgid "Clea&r Columns"
 msgstr "Sütunları Temi&zle"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:182
-#: src/commonfrontend/matrix/MatrixView.cpp:189
+#: src/commonfrontend/matrix/MatrixView.cpp:184
+#: src/commonfrontend/matrix/MatrixView.cpp:191
 #, kde-format
 msgid "Statisti&cs"
 msgstr "İstatisti&kler"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:185
+#: src/commonfrontend/matrix/MatrixView.cpp:187
 #, kde-format
 msgid "&Add Rows"
 msgstr "Sütun &Ekle"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:186
+#: src/commonfrontend/matrix/MatrixView.cpp:188
 #, kde-format
 msgid "&Insert Empty Rows"
 msgstr "&Boş Sütun Ekle"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:187
+#: src/commonfrontend/matrix/MatrixView.cpp:189
 #, kde-format
 msgid "Remo&ve Rows"
 msgstr "Satırları Kal&dır"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:188
+#: src/commonfrontend/matrix/MatrixView.cpp:190
 #, kde-format
 msgid "Clea&r Rows"
 msgstr "Satırla&rı Temizle"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:246
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:538
+#: src/commonfrontend/matrix/MatrixView.cpp:248
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:539
 #, kde-format
 msgid "Selection"
 msgstr "Seçim"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:268
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:631
+#: src/commonfrontend/matrix/MatrixView.cpp:270
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:632
 #, kde-format
 msgid "Generate Data"
 msgstr "Veri Üret"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:273
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:646
+#: src/commonfrontend/matrix/MatrixView.cpp:275
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:647
 #, kde-format
 msgid "Manipulate Data"
 msgstr "Veriyle Oyna"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:284
+#: src/commonfrontend/matrix/MatrixView.cpp:286
 #, kde-format
 msgid "View"
 msgstr "Görünüm"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:289
+#: src/commonfrontend/matrix/MatrixView.cpp:291
 #, kde-format
 msgid "Header Format"
 msgstr "Üstbilgi Biçimi"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:295
+#: src/commonfrontend/matrix/MatrixView.cpp:297
 #: src/commonfrontend/worksheet/WorksheetView.cpp:444
 #, kde-format
 msgid "Zoom"
 msgstr "Yakınlaştır"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:585
-#: src/commonfrontend/matrix/MatrixView.cpp:589
+#: src/commonfrontend/matrix/MatrixView.cpp:587
+#: src/commonfrontend/matrix/MatrixView.cpp:591
 #, kde-format
 msgid "Go to Cell"
 msgstr "Hücreye Git"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:585
+#: src/commonfrontend/matrix/MatrixView.cpp:587
 #, kde-format
 msgid "Enter column"
 msgstr "Sütun gir"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:589
+#: src/commonfrontend/matrix/MatrixView.cpp:591
 #, kde-format
 msgid "Enter row"
 msgstr "Satır gir"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:617
+#: src/commonfrontend/matrix/MatrixView.cpp:619
 #, kde-format
 msgid "Fill the matrix with constant value"
 msgstr "Matrisi sabit değerle doldur"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:636
+#: src/commonfrontend/matrix/MatrixView.cpp:638
 #, kde-format
 msgid "%1: cut selected cell(s)"
 msgstr "%1: Seçili hücreleri kes"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:687
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1711
+#: src/commonfrontend/matrix/MatrixView.cpp:689
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1712
 #, kde-format
 msgid "%1: paste from clipboard"
 msgstr "%1: Panodan yapıştır"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:757
+#: src/commonfrontend/matrix/MatrixView.cpp:759
 #, kde-format
 msgid "%1: clear selected cell(s)"
 msgstr "%1: Seçili hücreleri temizle"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:908
+#: src/commonfrontend/matrix/MatrixView.cpp:910
 #, kde-format
 msgid "%1: insert empty column(s)"
 msgstr "%1: Boş sütunlar ekle"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:932
+#: src/commonfrontend/matrix/MatrixView.cpp:934
 #, kde-format
 msgid "%1: remove selected column(s)"
 msgstr "%1: Seçili sütunları kaldır"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:942
+#: src/commonfrontend/matrix/MatrixView.cpp:944
 #, kde-format
 msgid "%1: clear selected column(s)"
 msgstr "%1: Seçili sütunları temizle"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:968
+#: src/commonfrontend/matrix/MatrixView.cpp:970
 #, kde-format
 msgid "%1: insert empty rows(s)"
 msgstr "%1: Boş satırlar ekle"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:992
+#: src/commonfrontend/matrix/MatrixView.cpp:994
 #, kde-format
 msgid "%1: remove selected rows(s)"
 msgstr "%1: Seçili satırları kaldır"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:1007
+#: src/commonfrontend/matrix/MatrixView.cpp:1009
 #, kde-format
 msgid "%1: clear selected rows(s)"
 msgstr "%1: Seçili satır(lar)ı temizle"
@@ -9713,18 +9719,18 @@ msgid_plural "Project Explorer: delete %1 selected objects"
 msgstr[0] "Proje Gezgini: Seçili %1 nesneyi sil"
 msgstr[1] "Proje Gezgini: Seçili %1 nesneyi sil"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:278
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:279
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:74
 #, kde-format
 msgid "&Mask"
 msgstr "&Maskele"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:279
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:280
 #, kde-format
 msgid "&Unmask"
 msgstr "Maskeyi &Kaldır"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:280
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:281
 #, kde-format
 msgid "Clea&r Content"
 msgstr "İçeriği &Temizle"
@@ -9732,420 +9738,420 @@ msgstr "İçeriği &Temizle"
 #. i18n("Assign &Formula"), this);
 #. action_recalculate = new QAction(QIcon::fromTheme(QString()), i18n("Recalculate"), this);
 #. action_fill_sel_row_numbers = new QAction(QIcon::fromTheme(QString()), i18n("Row Numbers"), this);
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:286
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:287
 #, kde-format
 msgid "Row Numbers"
 msgstr "Satır Numaraları"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:287
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:288
 #, kde-format
 msgid "Uniform Random Values"
 msgstr "Tektip Rastgele Değerler"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:288
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:289
 #, kde-format
 msgid "Random Values"
 msgstr "Rastgele Değerler"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:289
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:290
 #, kde-format
 msgid "Equidistant Values"
 msgstr "Eş Aralıklı Değerler"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:293
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:294
 #, kde-format
 msgid "Sample Values"
 msgstr "Örnek Değerler"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:294
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:295
 #, kde-format
 msgid "Flatten Columns"
 msgstr "Sütunları Düzleştir"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:297
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1096
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:298
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1097
 #, kde-format
 msgid "Show Comments"
 msgstr "Açıklamaları Göster"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:298
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:299
 #, kde-format
 msgid "Clear Spreadsheet"
 msgstr "Hesap Tablosunu Temizle"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:299
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:300
 #, kde-format
 msgid "Clear Masks"
 msgstr "Maskeleri Temizle"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:301
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:302
 #, kde-format
 msgid "&Search"
 msgstr "&Ara"
 
 #. i18n: ectx: property (text), widget (QPushButton, bReplaceNext)
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:303
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:304
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:225
 #, kde-format
 msgid "&Replace"
 msgstr "&Değiştir"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:305
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:451
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:306
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:452
 #, kde-format
 msgid "Column Statistics..."
 msgstr "Sütun İstatistikleri..."
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:307
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:308
 #, kde-format
 msgid "Column Statistics Spreadsheet"
 msgstr "Sütun İstatistikleri Sayfası"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:313
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:314
 #, kde-format
 msgid "Insert Column Left"
 msgstr "Sola Sütun Ekle"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:314
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:315
 #, kde-format
 msgid "Insert Column Right"
 msgstr "Sağa Sütun Ekle"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:315
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:316
 #, kde-format
 msgid "Insert Multiple Columns Left"
 msgstr "Sola Birden Çok Sütun Ekle"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:316
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:317
 #, kde-format
 msgid "Insert Multiple Columns Right"
 msgstr "Sağa Birden Çok Sütun Ekle"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:317
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:318
 #, kde-format
 msgid "Delete Selected Column(s)"
 msgstr "Seçili Sütunları Sil"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:319
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1572
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:320
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1573
 #, kde-format
 msgid "Freeze Column"
 msgstr "Sütunu Dondur"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:353
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:354
 #, kde-format
 msgid "Add"
 msgstr "Ekle"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:355
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:356
 #, kde-format
 msgid "Subtract"
 msgstr "Çıkar"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:357
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:358
 #, kde-format
 msgid "Multiply"
 msgstr "Çarp"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:359
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:360
 #, kde-format
 msgid "Divide"
 msgstr "Böl"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:361
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:362
 #, kde-format
 msgid "Drop Values"
 msgstr "Değerleri Bırak"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:362
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:363
 #, kde-format
 msgid "Mask Values"
 msgstr "Değerleri Maskele"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:364
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:365
 #, kde-format
 msgid "Reverse"
 msgstr "Ters Çevir"
 
 #. i18n("Join"), this);
 #. algorithms - baseline subtraction, outliar removal, etc.
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:368
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:369
 #, kde-format
 msgid "Subtract Baseline"
 msgstr "Taban Çizgisini Çıkar"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:373
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:374
 #, kde-format
 msgid "Divide by Sum"
 msgstr "Toplama Böl"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:376
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:377
 #, kde-format
 msgid "Divide by Min"
 msgstr "En Küçük Değere Böl"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:379
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:380
 #, kde-format
 msgid "Divide by Max"
 msgstr "En Büyük Değere Böl"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:382
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:383
 #, kde-format
 msgid "Divide by Count"
 msgstr "Sayıma Böl"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:385
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:386
 #, kde-format
 msgid "Divide by Mean"
 msgstr "Ortalamaya Böl"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:388
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:389
 #, kde-format
 msgid "Divide by Median"
 msgstr "Ortaya Böl"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:391
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:392
 #, kde-format
 msgid "Divide by Mode"
 msgstr "Kipe Böl"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:394
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:395
 #, kde-format
 msgid "Divide by Range"
 msgstr "Erime Böl"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:397
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:398
 #, kde-format
 msgid "Divide by SD"
 msgstr "SD'ye Böl"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:400
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:401
 #, kde-format
 msgid "Divide by MAD"
 msgstr "MAD'e Böl"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:403
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:404
 #, kde-format
 msgid "Divide by IQR"
 msgstr "IQR'ye Böl"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:406
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:407
 #, kde-format
 msgid "(x-Mean)/SD"
 msgstr "(x Ortalaması)/SD"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:409
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:410
 #, kde-format
 msgid "(x-Median)/MAD"
 msgstr "(x Ortalaması)/MAD"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:412
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:413
 #, kde-format
 msgid "(x-Median)/IQR"
 msgstr "(x Ortalaması)/IQR"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:415
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:416
 #, kde-format
 msgid "Rescale to [a, b]"
 msgstr "[a, b]'ye yeniden ölçekle"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:445
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:446
 #, kde-format
 msgid "&Sort..."
 msgstr "&Sırala..."
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:446
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:447
 #, kde-format
 msgid "Sort multiple columns together"
 msgstr "Birden çok sütunu birlikte sırala"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:447
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:448
 #, kde-format
 msgid "Sort &Ascending"
 msgstr "&Artan Biçimde Sırala"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:448
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:449
 #, kde-format
 msgid "Sort the selected columns separately in ascending order"
 msgstr "Seçili sütunları ayrı ayrı artan düzende sırala"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:449
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:450
 #, kde-format
 msgid "Sort &Descending"
 msgstr "A&zalan Biçimde Sırala"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:450
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:451
 #, kde-format
 msgid "Sort the selected columns separately in descending order"
 msgstr "Seçili sütunları ayrı ayrı azalan düzende sırala"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:454
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:455
 #, kde-format
 msgid "Heatmap"
 msgstr "Isı Haritası"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:458
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:459
 #, kde-format
 msgid "Insert Row Above"
 msgstr "Yukarı Satır Ekle"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:459
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:460
 #, kde-format
 msgid "Insert Row Below"
 msgstr "Aşağı Satır Ekle"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:462
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:463
 #, kde-format
 msgid "Insert Multiple Rows Above"
 msgstr "Yukarı Birden Çok Satır Ekle"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:463
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:464
 #, kde-format
 msgid "Insert Multiple Rows Below"
 msgstr "Aşağı Birden Çok Satır Ekle"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:464
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:465
 #, kde-format
 msgid "Remo&ve Selected Row(s)"
 msgstr "Seçili Satırları &Kaldır"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:465
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:466
 #, kde-format
 msgid "Delete Rows With Missing Values"
 msgstr "Değer Olmayan Satırları Sil"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:466
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:467
 #, kde-format
 msgid "Mask Rows With Missing Values"
 msgstr "Değer Olmayan Satırları Maskele"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:467
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:468
 #, kde-format
 msgid "Row Statisti&cs"
 msgstr "Satır İstati&stikleri"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:470
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:471
 #, kde-format
 msgid "Reduce Data"
 msgstr "Veriyi İndirge"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:571
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:572
 #, kde-format
 msgid "Conditional Formatting"
 msgstr "Koşullu Biçimlendirme"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:599
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:600
 #, kde-format
 msgid "Analyze and Plot Data"
 msgstr "Veriyi Çözümle ve Çiz"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:613
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:614
 #, kde-format
 msgid "Set Column As"
 msgstr "Sütunu Farklı Ayarla"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:682
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:683
 #, kde-format
 msgid "Normalize"
 msgstr "Normalleştir"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:705
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:706
 #, kde-format
 msgid "Ladder of Powers"
 msgstr "Üsler Merdiveni"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1094
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1095
 #, kde-format
 msgid "Hide Comments"
 msgstr "Açıklamaları Gizle"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1576
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1577
 #, kde-format
 msgid "Unfreeze Column"
 msgstr "Sütunları Çöz"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1630
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1631
 #, kde-format
 msgid "%1: cut selected cells"
 msgstr "%1: Seçili hücreleri kes"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1954
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1955
 #, kde-format
 msgid "Not enough memory to finalize this operation."
 msgstr "Bu işlemi bitirebilmek için yeterli bellek yok."
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1968
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1969
 #, kde-format
 msgid "%1: mask selected cells"
 msgstr "%1: Seçili nesneleri maskele"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2010
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2011
 #, kde-format
 msgid "%1: unmask selected cells"
 msgstr "%1: Seçili hücrelerin maskelerini kaldır"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2074
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2075
 #, kde-format
 msgid "%1: fill cells with row numbers"
 msgstr "%1: Hücreleri satır numarasıyla doldur"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2139
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2140
 #, kde-format
 msgid "%1: fill column with row numbers"
 msgid_plural "%1: fill columns with row numbers"
 msgstr[0] "%1: Sütunu satır numaralarıyla doldur"
 msgstr[1] "%1: Sütunları satır numaralarıyla doldur"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2181
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2182
 #, kde-format
 msgid "%1: fill cells with random values"
 msgstr "%1: Hücreleri rastgele değerlerle doldur"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2301
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2302
 #, kde-format
 msgid "%1: fill cells with const values"
 msgstr "%1: Hücreleri sabit değerlerle doldur"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2309
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2331
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2349
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2366
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2310
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2332
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2350
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2367
 #, kde-format
 msgid "Fill the selection with constant value"
 msgstr "Seçimi sabit değerle doldur"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2444
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2478
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2445
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2479
 #, kde-format
 msgid "Insert empty columns"
 msgstr "Boş sütunlar ekle"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2445
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2479
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2446
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2480
 #, kde-format
 msgid "Enter the number of columns to insert"
 msgstr "Eklenecek sütun sayısını gir"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2497
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2498
 #, kde-format
 msgid "%1: insert empty column"
 msgid_plural "%1: insert empty columns"
 msgstr[0] "%1: Boş sütun ekle"
 msgstr[1] "%1: Boş sütun ekle"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2567
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2568
 #, kde-format
 msgid "%1: remove selected columns"
 msgstr "%1: Seçili sütunları kaldır"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2664
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2665
 #, kde-format
 msgid "%1: reverse column"
 msgid_plural "%1: reverse columns"
 msgstr[0] "%1: Sütunu ters çevir"
 msgstr[1] "%1: Sütunları ters çevir"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2737
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2738
 #, kde-format
 msgid ""
 "The selected columns have different data types and cannot be flattened "
@@ -10153,221 +10159,221 @@ msgid ""
 msgstr ""
 "Seçili sütunlarda farklı veri türleri var ve bu yüzden düzleştirilemiyorlar. "
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2775
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2776
 #, kde-format
 msgid "%1: normalize columns"
 msgstr "%1: Sütunları normalleştir"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2795
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2796
 #, kde-format
 msgid "Sum = 0"
 msgstr "Toplam = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2806
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2807
 #, kde-format
 msgid "Min = 0"
 msgstr "En Küçük = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2817
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2818
 #, kde-format
 msgid "Max = 0"
 msgstr "En Büyük = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2828
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2829
 #, kde-format
 msgid "Count = 0"
 msgstr "Sayım = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2839
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2840
 #, kde-format
 msgid "Mean = 0"
 msgstr "Ortalama = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2850
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2851
 #, kde-format
 msgid "Median = 0"
 msgstr "Orta = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2862
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2863
 #, kde-format
 msgid "Mode = 0"
 msgstr "Kip = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2864
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2865
 #, kde-format
 msgid "'Mode not defined'"
 msgstr "'Kip tanımlanmamış'"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2875
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2876
 #, kde-format
 msgid "Range = 0"
 msgstr "Erim = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2886
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2920
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2887
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2921
 #, kde-format
 msgid "SD = 0"
 msgstr "SD = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2897
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2932
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2898
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2933
 #, kde-format
 msgid "MAD = 0"
 msgstr "MAD = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2908
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2944
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2909
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2945
 #, kde-format
 msgid "IQR = 0"
 msgstr "IQR = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2956
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2957
 #, kde-format
 msgid "Max - Min = 0"
 msgstr "En büyük - en küçük = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2975
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2976
 #, kde-format
 msgid "Normalization not possible"
 msgstr "Normalleştirme olanaklı değil"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2987
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2988
 #, kde-format
 msgid "%1: power transform columns"
 msgstr "%1: Sütunları üs dönüştür"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3106
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3107
 #, kde-format
 msgid "%1: column statistics"
 msgstr "%1: Sütun istatistikleri"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3137
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3138
 #, kde-format
 msgid "Selection in %1"
 msgstr "%1 İçindeki Seçim"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3180
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3181
 #, kde-format
 msgid "%1: row statistics"
 msgstr "%1: Satır istatistikleri"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3190
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3191
 #, kde-format
 msgid "Row %1"
 msgstr "%1. Satır"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3215
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3254
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3216
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3255
 #, kde-format
 msgid "Insert multiple rows"
 msgstr "Birden çok satır ekle"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3216
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3255
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3217
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3256
 #, kde-format
 msgid "Enter the number of rows to insert"
 msgstr "Eklenecek satır sayısını gir"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3235
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3274
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3236
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3275
 #, kde-format
 msgid "%1: insert empty row"
 msgid_plural "%1: insert empty rows"
 msgstr[0] "%1: Boş satır ekle"
 msgstr[1] "%1: Boş satırlar ekle"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3290
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3291
 #, kde-format
 msgid "%1: remove selected rows"
 msgstr "%1: Seçili satırları kaldır"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3317
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3318
 #, kde-format
 msgid "%1: clear selected cells"
 msgstr "%1: Seçili hücreleri temizle"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3563
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3564
 #, kde-format
 msgid "row"
 msgid_plural "rows"
 msgstr[0] "satır"
 msgstr[1] "satır"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3564
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3565
 #, kde-format
 msgid "column"
 msgid_plural "columns"
 msgstr[0] "sütun"
 msgstr[1] "sütun"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3565
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3566
 #, kde-format
 msgid "cells"
 msgstr "hücre"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3566
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3567
 #, kde-format
 msgid "masked value"
 msgstr "maskelenmiş değer"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3566
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3567
 #, kde-format
 msgid "masked values"
 msgstr "maskelenmiş değer"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3567
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3568
 #, kde-format
 msgid "missing value"
 msgstr "eksik değer"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3567
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3568
 #, kde-format
 msgid "missing values"
 msgstr "eksik değer"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3568
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3569
 #, kde-format
 msgid " , "
 msgstr " , "
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3568
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3569
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3570
 #, kde-format
 msgid "%1"
 msgstr "%1"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3569
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3570
 #, kde-format
 msgid ", "
 msgstr ", "
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3572
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3573
 #, kde-format
 msgid "Selected: %1 %2 , %3 %4%5 %6 %7 %8"
 msgstr "Seçili: %1 %2 , %3 %4%5 %6 %7 %8"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3583
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3584
 #, kde-format
 msgid "Selected: %1 %2%3 %4 %5 %6"
 msgstr "Seçili: %1 %2%3 %4 %5 %6"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3656
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3657
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Spreadsheet"
 msgstr "Hesap Tablosunu Yazdır"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4261
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4262
 #, kde-format
 msgid "Couldn't create the SQLite database %1."
 msgstr "%1 SQLite veritabanı oluşturulamadı.."
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4293
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4294
 #, kde-format
 msgid "Failed to create table in the SQLite database %1."
 msgstr "%1 SQLite veritabanında tablo oluşturulamadı.."
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4346
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4347
 #, kde-format
 msgid "Failed to insert values into the table."
 msgstr "Tabloya veriler eklenemedi."
@@ -10482,25 +10488,25 @@ msgid "Load from Template"
 msgstr "Şablondan Yükle"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:229
-#: src/kdefrontend/dockwidgets/WorksheetDock.cpp:45
+#: src/kdefrontend/dockwidgets/WorksheetDock.cpp:47
 #, kde-format
 msgid "Vertical Layout"
 msgstr "Dikey Yerleşim"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:232
-#: src/kdefrontend/dockwidgets/WorksheetDock.cpp:46
+#: src/kdefrontend/dockwidgets/WorksheetDock.cpp:48
 #, kde-format
 msgid "Horizontal Layout"
 msgstr "Yatay Yerleşim"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:235
-#: src/kdefrontend/dockwidgets/WorksheetDock.cpp:47
+#: src/kdefrontend/dockwidgets/WorksheetDock.cpp:49
 #, kde-format
 msgid "Grid Layout"
 msgstr "Izgara Yerleşimi"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:238
-#: src/kdefrontend/dockwidgets/WorksheetDock.cpp:44
+#: src/kdefrontend/dockwidgets/WorksheetDock.cpp:46
 #, kde-format
 msgid "No Layout"
 msgstr "Yerleşim Yok"
@@ -12203,13 +12209,13 @@ msgstr "Veri bölgeleri"
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:299
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:480
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:483
-#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:243
-#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:251
+#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:255
+#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:264
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:50
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:61
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:69
-#: src/kdefrontend/widgets/LabelWidget.cpp:141
-#: src/kdefrontend/widgets/LabelWidget.cpp:158
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:63
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:71
+#: src/kdefrontend/widgets/LabelWidget.cpp:143
+#: src/kdefrontend/widgets/LabelWidget.cpp:160
 #, kde-format
 msgid "Top"
 msgstr "Üst"
@@ -12218,13 +12224,13 @@ msgstr "Üst"
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:300
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:481
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:484
-#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:245
-#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:253
+#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:257
+#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:266
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:52
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:63
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:71
-#: src/kdefrontend/widgets/LabelWidget.cpp:143
-#: src/kdefrontend/widgets/LabelWidget.cpp:160
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:65
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:73
+#: src/kdefrontend/widgets/LabelWidget.cpp:145
+#: src/kdefrontend/widgets/LabelWidget.cpp:162
 #, kde-format
 msgid "Bottom"
 msgstr "Alt"
@@ -12303,15 +12309,15 @@ msgstr "Yarı Dolu, Büyük"
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:270
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:488
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:492
-#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:239
-#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:247
+#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:250
+#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:260
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:46
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:57
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:65
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:59
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:67
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:361
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:132
-#: src/kdefrontend/widgets/LabelWidget.cpp:137
-#: src/kdefrontend/widgets/LabelWidget.cpp:154
+#: src/kdefrontend/widgets/LabelWidget.cpp:139
+#: src/kdefrontend/widgets/LabelWidget.cpp:156
 #: src/kdefrontend/widgets/ValueWidget.cpp:37
 #, kde-format
 msgid "Left"
@@ -12321,15 +12327,15 @@ msgstr "Sol"
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:271
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:489
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:491
-#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:241
-#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:249
+#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:252
+#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:262
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:48
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:59
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:67
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:61
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:69
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:362
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:133
-#: src/kdefrontend/widgets/LabelWidget.cpp:139
-#: src/kdefrontend/widgets/LabelWidget.cpp:156
+#: src/kdefrontend/widgets/LabelWidget.cpp:141
+#: src/kdefrontend/widgets/LabelWidget.cpp:158
 #: src/kdefrontend/widgets/ValueWidget.cpp:38
 #, kde-format
 msgid "Right"
@@ -12477,8 +12483,8 @@ msgstr "%1 eksenleri: \"%2\" şablonu yüklendi"
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:2044
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:490
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:719
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1790
-#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:692
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1792
+#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:781
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:394
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:694
 #: src/kdefrontend/dockwidgets/KDEPlotDock.cpp:373
@@ -12487,7 +12493,7 @@ msgstr "%1 eksenleri: \"%2\" şablonu yüklendi"
 #: src/kdefrontend/dockwidgets/QQPlotDock.cpp:296
 #: src/kdefrontend/dockwidgets/ReferenceLineDock.cpp:243
 #: src/kdefrontend/dockwidgets/SpreadsheetDock.cpp:221
-#: src/kdefrontend/dockwidgets/WorksheetDock.cpp:604
+#: src/kdefrontend/dockwidgets/WorksheetDock.cpp:606
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1249
 #, kde-format
 msgid "%1: template \"%2\" loaded"
@@ -12644,36 +12650,36 @@ msgstr "%1 Kutu çizimler: \"%2\" şablonu yüklendi"
 msgid "File Browser"
 msgstr "Dosya Tarayıcısı"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:225
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:227
 #, kde-format
 msgid "Save current plot area definition as template"
 msgstr "Geçerli çizim alanı tanımını şablon olarak kaydet"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:602
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:604
 #, kde-format
 msgid "%1-Ranges:"
 msgstr "%1 Erimleri:"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:604
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:606
 #, kde-format
 msgid "%1-Range:"
 msgstr "%1 Erimi:"
 
 #. i18n: ectx: property (text), widget (QLabel, lNumeric)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:628
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:630
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:209
 #: src/kdefrontend/ui/spreadsheet/equidistantvalueswidget.ui:53
 #, kde-format
 msgid "Numeric"
 msgstr "Sayısal"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:731
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:733
 #, kde-format
 msgid "Plot Ranges:"
 msgstr "Çizim Erimleri:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPlotRange)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:733
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:735
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:262
 #: src/kdefrontend/ui/dockwidgets/barplotdock.ui:186
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:90
@@ -12699,22 +12705,22 @@ msgstr "Çizim Erimleri:"
 msgid "Plot Range:"
 msgstr "Çizim Erimi:"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:821
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:823
 #, kde-format
 msgid "Free"
 msgstr "Boş"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:822
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:824
 #, kde-format
 msgid "Last Points"
 msgstr "Son Noktalar"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:823
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:825
 #, kde-format
 msgid "First Points"
 msgstr "İlk Noktalar"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:826
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:828
 #, kde-format
 msgid ""
 "Data Range:<ul><li>Free - full data range is plotted</li><li>Last Points - "
@@ -12725,46 +12731,46 @@ msgstr ""
 "Belirli sayıdaki son noktalar çizilir</li><li>İlk Noktalar - Belirli "
 "sayıdaki ilk noktalar çizilir</li></ul>"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:835
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:837
 #, kde-format
 msgid "If checked, automatically extend the plot range to nice values"
 msgstr "İşaretlenmişse çizim erimini kendiliğinden güzel değerlere genişlet"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:840
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:844
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:842
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:846
 #, kde-format
 msgid "Simple"
 msgstr "Basit"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:842
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:846
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:844
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:848
 #, kde-format
 msgid "Sloped"
 msgstr "Eğimli"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1101
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1110
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1103
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1112
 #, kde-format
 msgid "%1 range %2 is used in plot range %3. "
 msgstr "%1 erimi %2, %3 çizim eriminde kullanılıyor. "
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1102
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1111
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1163
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1170
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1104
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1113
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1165
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1172
 #, kde-format
 msgid "Really remove it?"
 msgstr "Gerçekten kaldırılsın mı?"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1163
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1170
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1165
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1172
 #, kde-format
 msgid "Plot range %1 is used by element \"%2\". "
 msgstr "%1 çizim erimi, \"%2\" ögesi tarafından kullanılıyor. "
 
 #. i18n: ectx: property (text), widget (QLabel, lPaddingHorizontal)
 #. i18n: ectx: property (text), widget (QLabel, lHorizontalSpacing)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1261
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1263
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:561
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:761
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:342
@@ -12774,7 +12780,7 @@ msgstr "Yatay:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPaddingVertical)
 #. i18n: ectx: property (text), widget (QLabel, lVerticalSpacing)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1262
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1264
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:862
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:716
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:428
@@ -12784,7 +12790,7 @@ msgstr "Dikey:"
 
 #. i18n: ectx: property (text), widget (QLabel, lTopMargin)
 #. i18n: ectx: property (text), widget (QLabel, lLeftMargin)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1264
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1266
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:797
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:709
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:414
@@ -12794,7 +12800,7 @@ msgstr "Sol:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLeftMargin)
 #. i18n: ectx: property (text), widget (QLabel, lTopMargin)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1265
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1267
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:804
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:658
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:407
@@ -12802,55 +12808,62 @@ msgstr "Sol:"
 msgid "Top:"
 msgstr "Üst:"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1597
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1599
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Template Save File"
 msgstr "Şablon Kayıt Dosyası Seç"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1599
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1601
 #, kde-format
 msgid "Labplot Plot Templates (*%1)"
 msgstr "Labplot Çizim Şablonları (*%1)"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1788
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1790
 #, kde-format
 msgid "%1 cartesian plots: template \"%2\" loaded"
 msgstr "%1 kartezyen çizimleri: \"%2\" şablonu yüklendi"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:235
+#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:246
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:246
 #, kde-format
 msgid "Column Major"
 msgstr "Ana Sütun"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:236
+#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:247
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:247
 #, kde-format
 msgid "Row Major"
 msgstr "Ana Satır"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:240
-#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:244
-#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:248
-#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:252
+#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:251
+#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:256
+#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:261
+#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:265
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:47
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:51
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:58
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:62
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:66
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:70
-#: src/kdefrontend/widgets/LabelWidget.cpp:138
-#: src/kdefrontend/widgets/LabelWidget.cpp:142
-#: src/kdefrontend/widgets/LabelWidget.cpp:155
-#: src/kdefrontend/widgets/LabelWidget.cpp:159
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:60
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:64
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:68
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:72
+#: src/kdefrontend/widgets/LabelWidget.cpp:140
+#: src/kdefrontend/widgets/LabelWidget.cpp:144
+#: src/kdefrontend/widgets/LabelWidget.cpp:157
+#: src/kdefrontend/widgets/LabelWidget.cpp:161
 #: src/kdefrontend/widgets/ValueWidget.cpp:88
 #: src/kdefrontend/widgets/ValueWidget.cpp:89
 #, kde-format
 msgid "Center"
 msgstr "Merkez"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:690
+#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:253
+#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:258
+#, fuzzy, kde-format
+#| msgid "Relative Path"
+msgid "Relative to plot"
+msgstr "Göreceli Yol"
+
+#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:779
 #, kde-format
 msgid "%1 cartesian plot legends: template \"%2\" loaded"
 msgstr "%1 kartezyen çizim göstergeleri: \"%2\" şablonu yüklendi"
@@ -13195,7 +13208,7 @@ msgstr "Satır sayısının eşzamanlanacağı hesap tablosu"
 msgid "%1 spreadsheets: template \"%2\" loaded"
 msgstr "%1 hesap tabloları: \"%2\" yüklendi"
 
-#: src/kdefrontend/dockwidgets/WorksheetDock.cpp:42
+#: src/kdefrontend/dockwidgets/WorksheetDock.cpp:44
 #, kde-format
 msgid ""
 "If checked, rescale the content of the worksheet on size changes. Otherwise "
@@ -13204,27 +13217,27 @@ msgstr ""
 "İşaretlenmişse boyut değişikliklerinde çalışma sayfasının içeriğini yeniden "
 "ölçekle. Aksi durumda yalnızca tuvali yeniden boyutlandır."
 
-#: src/kdefrontend/dockwidgets/WorksheetDock.cpp:254
+#: src/kdefrontend/dockwidgets/WorksheetDock.cpp:256
 #, kde-format
 msgid "Portrait"
 msgstr "Dikey"
 
-#: src/kdefrontend/dockwidgets/WorksheetDock.cpp:255
+#: src/kdefrontend/dockwidgets/WorksheetDock.cpp:257
 #, kde-format
 msgid "Landscape"
 msgstr "Yatay"
 
-#: src/kdefrontend/dockwidgets/WorksheetDock.cpp:273
+#: src/kdefrontend/dockwidgets/WorksheetDock.cpp:275
 #, kde-format
 msgid "View Size"
 msgstr "Görünüm Boyutu"
 
-#: src/kdefrontend/dockwidgets/WorksheetDock.cpp:274
+#: src/kdefrontend/dockwidgets/WorksheetDock.cpp:276
 #, kde-format
 msgid "Standard Page"
 msgstr "Standart Sayfa"
 
-#: src/kdefrontend/dockwidgets/WorksheetDock.cpp:602
+#: src/kdefrontend/dockwidgets/WorksheetDock.cpp:604
 #, kde-format
 msgid "%1 worksheets: template \"%2\" loaded"
 msgstr "%1 çalışma sayfaları: \"%2\" şablonu yüklendi"
@@ -15064,7 +15077,7 @@ msgstr "Çizim Alanı Şablonları"
 #: src/kdefrontend/SettingsWorksheetPage.cpp:72
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:99
 #: src/kdefrontend/widgets/ThemesComboBox.cpp:72
-#: src/kdefrontend/widgets/ThemesWidget.cpp:67
+#: src/kdefrontend/widgets/ThemesWidget.cpp:69
 #, kde-format
 msgid "Default"
 msgstr "Öntanımlı"
@@ -22274,7 +22287,7 @@ msgstr "Zorunlu anahtar sözcük kaldırılamıyor."
 msgid "Removing Keyword"
 msgstr "Anahtar Sözcük Kaldırılıyor"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:112
+#: src/kdefrontend/widgets/LabelWidget.cpp:114
 #, kde-format
 msgid ""
 "Use logical instead of absolute coordinates to specify the position on the "
@@ -22283,137 +22296,137 @@ msgstr ""
 "Çizimdeki konumu belirtmek için mutlak koordinatlar yerine mantıksal "
 "koordinatlar kullan"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:127
+#: src/kdefrontend/widgets/LabelWidget.cpp:129
 #, kde-format
 msgid "Bold"
 msgstr "Kalın"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:128
+#: src/kdefrontend/widgets/LabelWidget.cpp:130
 #, kde-format
 msgid "Italic"
 msgstr "Yatık"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:129
+#: src/kdefrontend/widgets/LabelWidget.cpp:131
 #, kde-format
 msgid "Underline"
 msgstr "Altı Çizili"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:130
+#: src/kdefrontend/widgets/LabelWidget.cpp:132
 #, kde-format
 msgid "Strike Out"
 msgstr "Üzeri Çizili"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:131
+#: src/kdefrontend/widgets/LabelWidget.cpp:133
 #, kde-format
 msgid "Super Script"
 msgstr "Üst Simge"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:132
+#: src/kdefrontend/widgets/LabelWidget.cpp:134
 #, kde-format
 msgid "Sub-Script"
 msgstr "Alt Simge"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:133
+#: src/kdefrontend/widgets/LabelWidget.cpp:135
 #, kde-format
 msgid "Insert Symbol"
 msgstr "Sembol Ekle"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:134
+#: src/kdefrontend/widgets/LabelWidget.cpp:136
 #, kde-format
 msgid "Insert Date/Time"
 msgstr "Tarih ve Zaman Ekle"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:162
+#: src/kdefrontend/widgets/LabelWidget.cpp:164
 #, kde-format
 msgid "No Border"
 msgstr "Kenarlıksız"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:163
+#: src/kdefrontend/widgets/LabelWidget.cpp:165
 #, kde-format
 msgid "Rectangle"
 msgstr "Dikdörtgen"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:164
+#: src/kdefrontend/widgets/LabelWidget.cpp:166
 #, kde-format
 msgid "Ellipse"
 msgstr "Elips"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:165
+#: src/kdefrontend/widgets/LabelWidget.cpp:167
 #, kde-format
 msgid "Round sided rectangle"
 msgstr "Yuvarlak kenarlı dörtgen"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:166
+#: src/kdefrontend/widgets/LabelWidget.cpp:168
 #, kde-format
 msgid "Round corner rectangle"
 msgstr "Yuvarlak köşeli dörtgen"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:167
+#: src/kdefrontend/widgets/LabelWidget.cpp:169
 #, kde-format
 msgid "Inwards round corner rectangle"
 msgstr "İçe doğru yuvarlak köşeli dörtgen"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:168
+#: src/kdefrontend/widgets/LabelWidget.cpp:170
 #, kde-format
 msgid "Dented border rectangle"
 msgstr "Vuruk kenarlı dörtgen"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:169
+#: src/kdefrontend/widgets/LabelWidget.cpp:171
 #, kde-format
 msgid "Cuboid"
 msgstr "Küp"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:170
+#: src/kdefrontend/widgets/LabelWidget.cpp:172
 #, kde-format
 msgid "Up Pointing rectangle"
 msgstr "Yukarı işaret eden dörtgen"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:171
+#: src/kdefrontend/widgets/LabelWidget.cpp:173
 #, kde-format
 msgid "Down Pointing rectangle"
 msgstr "Aşağı işaret eden dörtgen"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:172
+#: src/kdefrontend/widgets/LabelWidget.cpp:174
 #, kde-format
 msgid "Left Pointing rectangle"
 msgstr "Sola işaret eden dörtgen"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:173
+#: src/kdefrontend/widgets/LabelWidget.cpp:175
 #, kde-format
 msgid "Right Pointing rectangle"
 msgstr "Sağa işaret eden dörtgen"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:175
+#: src/kdefrontend/widgets/LabelWidget.cpp:177
 #, kde-format
 msgid "No line"
 msgstr "Satır yok"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:176
+#: src/kdefrontend/widgets/LabelWidget.cpp:178
 #, kde-format
 msgid "Solid line"
 msgstr "Düz çizgi"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:177
+#: src/kdefrontend/widgets/LabelWidget.cpp:179
 #, kde-format
 msgid "Dash line"
 msgstr "Kısa çizgi"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:178
+#: src/kdefrontend/widgets/LabelWidget.cpp:180
 #, kde-format
 msgid "Dot line"
 msgstr "Nokta çizgi"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:179
+#: src/kdefrontend/widgets/LabelWidget.cpp:181
 #, kde-format
 msgid "Dash dot line"
 msgstr "Tire nokta çizgisi"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:180
+#: src/kdefrontend/widgets/LabelWidget.cpp:182
 #, kde-format
 msgid "Dash dot dot line"
 msgstr "Tire nokta nokta çizgisi"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:197
+#: src/kdefrontend/widgets/LabelWidget.cpp:199
 #, kde-format
 msgid ""
 "Text setting mode:<ul><li>Text - text setting using rich-text formatting</"
@@ -22425,14 +22438,14 @@ msgstr ""
 "li><li>Markdown - Markdown biçimlendirmesi kullanarak metin ayarları</li></"
 "ul>"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:862
-#: src/kdefrontend/widgets/LabelWidget.cpp:888
+#: src/kdefrontend/widgets/LabelWidget.cpp:864
+#: src/kdefrontend/widgets/LabelWidget.cpp:890
 #, kde-format
 msgid "Date"
 msgstr "Tarih"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:870
-#: src/kdefrontend/widgets/LabelWidget.cpp:896
+#: src/kdefrontend/widgets/LabelWidget.cpp:872
+#: src/kdefrontend/widgets/LabelWidget.cpp:898
 #, kde-format
 msgid "Date and Time"
 msgstr "Tarih ve Zaman"
