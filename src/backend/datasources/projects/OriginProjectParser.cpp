@@ -38,6 +38,8 @@
 #include <QGraphicsScene>
 #include <QRegularExpression>
 
+#include <gsl/gsl_const_cgs.h>
+
 /*!
 \class OriginProjectParser
 \brief parser for Origin projects.
@@ -131,13 +133,23 @@ QString OriginProjectParser::supportedExtensions() {
 
 // sets first found spread of given name
 unsigned int OriginProjectParser::findSpreadsheetByName(const QString& name) {
+	DEBUG(Q_FUNC_INFO << ", name = " << name.toStdString() << ", count = " << m_originFile->spreadCount())
 	for (unsigned int i = 0; i < m_originFile->spreadCount(); i++) {
 		const Origin::SpreadSheet& spread = m_originFile->spread(i);
+		DEBUG(Q_FUNC_INFO << ", spread name = " << spread.name)
 		if (spread.name == name.toStdString()) {
 			m_spreadsheetNameList << name;
 			m_spreadsheetNameList.removeDuplicates();
 			return i;
 		}
+	}
+	return 0;
+}
+unsigned int OriginProjectParser::findColumnByName(Origin::SpreadSheet& spread, const QString& name) {
+	for (unsigned int i = 0; i < spread.columns.size(); i++) {
+		auto column = spread.columns[i];
+		if (column.name == name.toStdString())
+			return i;
 	}
 	return 0;
 }
@@ -690,9 +702,10 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 
 	for (size_t j = 0; j < cols; ++j) {
 		auto column = spread.columns[j];
-		Column* col = spreadsheet->column((int)j);
+		auto* col = spreadsheet->column((int)j);
 
 		DEBUG(Q_FUNC_INFO << ", column " << j << ", name = " << column.name.c_str())
+		DEBUG(Q_FUNC_INFO << ", column " << j << ", dataset name = " << column.dataset_name.c_str())
 		QString name(QLatin1String(column.name.c_str()));
 		col->setName(name.replace(QRegularExpression(QStringLiteral(".*_")), QString()));
 
@@ -700,9 +713,11 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 			continue;
 
 		// TODO: we don't support any formulas for cells yet.
+		DEBUG(Q_FUNC_INFO << ", column " << j << ", command = " << column.command.c_str())
 		// 		if (column.command.size() > 0)
 		// 			col->setFormula(Interval<int>(0, rows), QString(column.command.c_str()));
 
+		DEBUG(Q_FUNC_INFO << ", column " << j << ", comment = " << column.comment.c_str())
 		col->setComment(QString::fromLatin1(column.comment.c_str()));
 		col->setWidth((int)column.width * scaling_factor);
 
@@ -1064,10 +1079,10 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 	double dpi = 600.;
 	if (m_originFile->version() < 9.6)
 		dpi = 300.;
-	DEBUG(Q_FUNC_INFO << ", GRAPH width/height (mm) = " << graphSize.width() * 25.4 / dpi << "/" << graphSize.height() * 25.4 / dpi)
+	DEBUG(Q_FUNC_INFO << ", GRAPH width/height (cm) = " << graphSize.width() * GSL_CONST_CGS_INCH / dpi << "/" << graphSize.height() * GSL_CONST_CGS_INCH / dpi)
 	// Origin scales text and plots with the size of the layer when no fixed size is used (Layer properties->Size)
-	// so we scale all text and plots with a scaling factor to the whole view height (295 mm) used as default
-	elementScalingFactor = 295. / (graph.height * 25.4 / dpi);
+	// so we scale all text and plots with a scaling factor to the whole view height (29.5 cm) used as default
+	elementScalingFactor = 29.5 / (graph.height * GSL_CONST_CGS_INCH / dpi);
 	// not using the full value for scaling text is better in most cases
 	textScalingFactor = 1. + (elementScalingFactor - 1.) / 2.;
 	DEBUG(Q_FUNC_INFO << ", ELEMENT SCALING FACTOR = " << elementScalingFactor)
@@ -1136,6 +1151,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 	plot->setBottomPadding(plot->bottomPadding() * elementScalingFactor);
 	DEBUG(Q_FUNC_INFO << ", PADDING = " << plot->horizontalPadding() << ", " << plot->verticalPadding())
 	DEBUG(Q_FUNC_INFO << ", PADDING = " << plot->rightPadding() << ", " << plot->bottomPadding())
+	// TODO: reduce top padding when there is no title and top x axis title is disabled
 
 	if (!preview) {
 		worksheet->updateLayout();
@@ -1168,7 +1184,6 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 										 QHash<TextLabel*, QSizeF> textLabelPositions,
 										 bool preview) {
 	DEBUG(Q_FUNC_INFO << ", NEW GRAPH LAYER")
-	// TODO: width, height
 
 	// background color
 	const auto& regColor = layer.backgroundColor;
@@ -1444,6 +1459,25 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 				int pos2 = legendText.indexOf(QStringLiteral("\\c{%1}").arg(curveIndex + 1));
 				QString curveText = legendText.mid(pos1, pos2 - pos1);
 				// replace %(1), %(2), etc. with curve name
+				DEBUG(Q_FUNC_INFO << ", data name = " << originCurve.dataName.c_str())
+				DEBUG(Q_FUNC_INFO << ", x column name = " << originCurve.xColumnName.c_str())
+				DEBUG(Q_FUNC_INFO << ", y column name = " << originCurve.yColumnName.c_str())
+				DEBUG(Q_FUNC_INFO << ", x data name = " << originCurve.xDataName.c_str())
+				DEBUG("SPREAD COUNT = " << m_originFile->spreadCount())
+				if (m_originFile->spreadCount() > 0) {
+					auto spread = m_originFile->spread(findSpreadsheetByName(QString::fromStdString(originCurve.dataName)));
+					auto column = spread.columns[findColumnByName(spread, QString::fromStdString(originCurve.yColumnName))];
+					DEBUG(Q_FUNC_INFO << ", y column comment = " << column.comment.c_str())
+				}
+				DEBUG("EXCEL COUNT = " << m_originFile->excelCount())
+				if (m_originFile->excelCount() > 0) {
+					auto excel = m_originFile->excel(findWorkbookByName(QString::fromStdString(originCurve.dataName)));
+					//					auto column = excel.sheets[findColumnByName(excel, QString::fromStdString(originCurve.yColumnName))];
+					//					DEBUG(Q_FUNC_INFO << ", y column comment = " << column.comment.c_str())
+				}
+				// Origin's legend uses "\l(...)" or "\L(...)" string to format the legend symbol
+				//  and "%(...) to format the legend text for each curve
+				// s. a. https://www.originlab.com/doc/Origin-Help/Legend-ManualControl
 				curveText.replace(QStringLiteral("%(%1)").arg(curveIndex), QLatin1String(originCurve.yColumnName.c_str()));
 				curveText = curveText.trimmed();
 				DEBUG(" curve " << curveIndex << " text = \"" << STDSTRING(curveText) << "\"");
