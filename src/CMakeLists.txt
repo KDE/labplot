@@ -483,6 +483,8 @@ set(COMMONFRONTEND_SOURCES
 	${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetHeaderView.cpp
         ${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetSparkLineHeaderModel.cpp
 	${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetItemDelegate.cpp
+        ${COMMONFRONTEND_DIR}/spreadsheet/sparklinerunnable.h
+        ${COMMONFRONTEND_DIR}/spreadsheet/sparklinerunnable.cpp
 	${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetView.cpp
 	${COMMONFRONTEND_DIR}/workbook/WorkbookView.cpp
 	${COMMONFRONTEND_DIR}/worksheet/WorksheetView.cpp
@@ -740,8 +742,7 @@ IF (APPLE AND ${ECM_VERSION} VERSION_GREATER "5.48.0")
 	ecm_add_app_icon(LABPLOT_SOURCE ICONS ${LML_ICONS} OUTFILE_BASENAME LML_ICONS)
 ENDIF ()
 
-add_executable( labplot2 ${LABPLOT_SOURCE} ${GUI_QRC} ${qml_QRC}
-)
+add_executable( labplot2 ${LABPLOT_SOURCE} ${GUI_QRC} ${qml_QRC})
 target_link_libraries( labplot2 labplot2lib labplot2backendlib labplot2nsllib )
 
 #if (KUserFeedbackQt6_FOUND)

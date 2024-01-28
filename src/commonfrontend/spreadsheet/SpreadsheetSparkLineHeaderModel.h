@@ -1,5 +1,5 @@
 /*
-	File                 : SpreadsheetSparkLineHeaderModel.cpp
+	File                 : SpreadsheetSparkLineHeaderModel.h
 	Project              : LabPlot
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2023 Kuntal Bar <barkuntal6@gmail.com>
@@ -24,9 +24,12 @@ public:
 	int rowCount(const QModelIndex& parent = QModelIndex()) const override;
 	int columnCount(const QModelIndex& parent = QModelIndex()) const override;
 
-	static QPixmap showSparkLines(const Column* col);
+	// show sparkLine of respective column
+	// show sparkLine of respective column
+	static QPixmap showSparkLines(Column* col);
 
-	static void sparkLine(Column *col);
+	static void sparkLine(Column* col);
+
 private:
 	SpreadsheetModel* m_spreadsheet_model;
 };

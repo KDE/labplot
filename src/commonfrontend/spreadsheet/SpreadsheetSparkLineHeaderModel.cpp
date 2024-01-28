@@ -8,14 +8,19 @@
 
 #include "SpreadsheetSparkLineHeaderModel.h"
 #include "backend/core/column/Column.h"
+#include "backend/lib/trace.h"
+#include "commonfrontend/spreadsheet/sparklinerunnable.h"
 #include "qscreen.h"
+#include "qtconcurrentrun.h"
 
 #include <backend/worksheet/Worksheet.h>
 
 #include <backend/worksheet/plots/cartesian/BarPlot.h>
 #include <backend/worksheet/plots/cartesian/XYCurve.h>
 
+#include <QFutureWatcher>
 #include <QIcon>
+#include <QThreadPool>
 
 /*!
    \class SpreadsheetSparkLineHeaderModel
@@ -50,114 +55,45 @@ void SpreadsheetSparkLinesHeaderModel::sparkLine(Column* col) {
 }
 
 // show sparkLine of respective column
-QPixmap SpreadsheetSparkLinesHeaderModel::showSparkLines(const Column* col) {
-	static const QString sparklineTheme = QStringLiteral("Sparkline");
-	static const QString sparklineText = QStringLiteral("add-sparkline");
-	auto* worksheet = new Worksheet(sparklineText);
+QPixmap SpreadsheetSparkLinesHeaderModel::showSparkLines(Column* col) {
+	// Create a QThreadPool instance and set the maximum number of threads
+	QThreadPool threadPool;
+	threadPool.setMaxThreadCount(QThread::idealThreadCount());
+	PERFTRACE(QLatin1String(Q_FUNC_INFO));
+	// Create a QFutureWatcher to monitor the task's progress
+	QFutureWatcher<QPixmap> watcher;
 
-	if (col->columnMode() == Column::ColumnMode::Text) {
-		worksheet->setTheme(sparklineTheme);
-		worksheet->view();
-		worksheet->setLayoutBottomMargin(0);
-		worksheet->setLayoutTopMargin(0);
-		worksheet->setLayoutLeftMargin(0);
-		worksheet->setLayoutRightMargin(0);
+	// Create an instance of SparkLineRunnable
+	SparkLineRunnable* runnable = new SparkLineRunnable(col);
 
-		auto* plot = new CartesianPlot(sparklineText);
-		plot->setTheme(sparklineTheme);
-		plot->setVerticalPadding(0);
-		plot->setHorizontalPadding(0);
-		plot->setRightPadding(0);
-		plot->setBottomPadding(0);
-		plot->setLeftPadding(0);
-		worksheet->addChild(plot);
-
-		auto* barPlot = new BarPlot(QString());
-		plot->addChild(barPlot);
-
-		barPlot->setOrientation(BarPlot::Orientation::Vertical);
-
-		// generate columns holding the data and the labels
-		auto* dataColumn = new Column(QStringLiteral("data"));
-		dataColumn->setColumnMode(AbstractColumn::ColumnMode::Integer);
-
-		// sort the frequencies and the accompanying labels
-		const auto& frequencies = col->frequencies();
-		auto i = frequencies.constBegin();
-		QVector<QPair<QString, int>> pairs;
-		while (i != frequencies.constEnd()) {
-			pairs << QPair<QString, int>(i.key(), i.value());
-			++i;
+	// Connect the finished signal of the runnable to the watcher's setFuture slot
+	QObject::connect(runnable, &SparkLineRunnable::taskFinished, [&]() {
+		QPixmap resultPixmap = runnable->getResultPixmap();
+		// Check if the result is valid
+		if (!resultPixmap.isNull()) {
+			watcher.setFuture(QtConcurrent::run([=]() {
+				return resultPixmap;
+			}));
+		} else {
+			qDebug() << "Error: getResultPixmap returned an invalid QPixmap";
+			// Handle the error accordingly
+			watcher.cancel();
 		}
+	});
 
-		QVector<int> data;
-		QVector<QString> labels;
-		for (const auto& pair : pairs)
-			data << pair.second;
-		dataColumn->replaceInteger(0, data);
-		QVector<const AbstractColumn*> columns;
-		columns << dataColumn;
-		barPlot->setDataColumns(columns);
-		plot->scaleAuto(-1, -1);
-		// plot->retransform();
-		worksheet->setSuppressLayoutUpdate(false);
-		worksheet->updateLayout();
-		// Export to pixmap
-		QPixmap pixmap(worksheet->view()->size());
-		worksheet->exportView(pixmap);
-		delete worksheet;
+	// Start the runnable in the thread pool
+	threadPool.start(runnable);
 
-		return pixmap;
-	} else if (col->isNumeric()) {
-		worksheet->setTheme(sparklineTheme);
-		worksheet->view();
-		worksheet->setLayoutBottomMargin(0);
-		worksheet->setLayoutTopMargin(0);
-		worksheet->setLayoutLeftMargin(0);
-		worksheet->setLayoutRightMargin(0);
+	// Wait for the task to finish
+	QEventLoop loop;
+	QObject::connect(runnable, &SparkLineRunnable::taskFinished, &loop, &QEventLoop::quit);
+	loop.exec();
 
-		auto* plot = new CartesianPlot(sparklineText);
-		plot->setType(CartesianPlot::Type::TwoAxes);
-		plot->setTheme(sparklineTheme);
-		plot->setVerticalPadding(0);
-		plot->setHorizontalPadding(0);
-		plot->setRightPadding(0);
-		plot->setBottomPadding(0);
-		plot->setLeftPadding(0);
-
-		const int rowCount = col->rowCount();
-		QVector<double> xData(rowCount);
-
-		for (int i = 0; i < rowCount; ++i)
-			xData[i] = i;
-
-		Column* xColumn = new Column(sparklineText, xData);
-		worksheet->addChild(plot);
-
-		auto* curve = new XYCurve(sparklineText);
-		curve->setSuppressRetransform(true);
-		curve->setXColumn(xColumn);
-		curve->setYColumn(col);
-		curve->setSuppressRetransform(false);
-		plot->addChild(curve);
-
-		plot->scaleAuto(-1, -1);
-		// plot->retransform();
-		worksheet->setSuppressLayoutUpdate(false);
-		worksheet->updateLayout();
-
-		// Export to pixmap
-		QPixmap pixmap(worksheet->view()->size());
-		worksheet->exportView(pixmap);
-		delete worksheet;
-		return pixmap;
-	} else {
-		worksheet->setTheme(sparklineTheme);
-		QPixmap pixmap(worksheet->view()->size());
-		worksheet->exportView(pixmap);
-		delete worksheet;
-		return pixmap;
-	}
+	// Return the final result from SparkLineRunnable
+	if (watcher.result().height() == 0)
+		return QPixmap();
+	else
+		return watcher.result();
 }
 
 QVariant SpreadsheetSparkLinesHeaderModel::data(const QModelIndex& /*index*/, int /*role*/) const {
