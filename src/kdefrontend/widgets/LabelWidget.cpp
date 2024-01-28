@@ -20,14 +20,6 @@
 #include "kdefrontend/dockwidgets/BaseDock.h"
 #include "tools/TeXRenderer.h"
 
-#include <QFile>
-#include <QMenu>
-#include <QSettings>
-#include <QSplitter>
-#include <QStandardItemModel>
-#include <QTextDocumentFragment>
-#include <QWidgetAction>
-
 #include <KCharSelect>
 #include <KLocalizedString>
 #ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
@@ -36,6 +28,16 @@
 #include <KSyntaxHighlighting/Theme>
 #endif
 #include <KMessageWidget>
+
+#include <QFile>
+#include <QMenu>
+#include <QSettings>
+#include <QSplitter>
+#include <QStandardItemModel>
+#include <QTextDocumentFragment>
+#include <QWidgetAction>
+
+#include <gsl/gsl_const_cgs.h>
 
 /*!
  * Setting label property without changing the content. This is needed,
@@ -505,14 +507,14 @@ void LabelWidget::updateUnits() {
 		// convert from imperial to metric
 		m_worksheetUnit = Worksheet::Unit::Centimeter;
 		suffix = QLatin1String(" cm");
-		ui.sbPositionX->setValue(ui.sbPositionX->value() * 2.54);
-		ui.sbPositionY->setValue(ui.sbPositionX->value() * 2.54);
+		ui.sbPositionX->setValue(ui.sbPositionX->value() * GSL_CONST_CGS_INCH);
+		ui.sbPositionY->setValue(ui.sbPositionX->value() * GSL_CONST_CGS_INCH);
 	} else {
 		// convert from metric to imperial
 		m_worksheetUnit = Worksheet::Unit::Inch;
 		suffix = QLatin1String(" in");
-		ui.sbPositionX->setValue(ui.sbPositionX->value() / 2.54);
-		ui.sbPositionY->setValue(ui.sbPositionY->value() / 2.54);
+		ui.sbPositionX->setValue(ui.sbPositionX->value() / GSL_CONST_CGS_INCH);
+		ui.sbPositionY->setValue(ui.sbPositionY->value() / GSL_CONST_CGS_INCH);
 	}
 
 	ui.sbPositionX->setSuffix(suffix);

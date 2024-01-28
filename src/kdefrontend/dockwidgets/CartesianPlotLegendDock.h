@@ -80,9 +80,9 @@ private Q_SLOTS:
 	void legendLabelOrderChanged(bool);
 	void legendLineSymbolWidthChanged(float);
 	void legendPositionChanged(const CartesianPlotLegend::PositionWrapper&);
+	void legendPositionLogicalChanged(QPointF);
 	void legendRotationAngleChanged(qreal);
 	void legendLockChanged(bool);
-	void legendPositionLogicalChanged(QPointF);
 	void legendHorizontalAlignmentChanged(const WorksheetElement::HorizontalAlignment);
 	void legendVerticalAlignmentChanged(const WorksheetElement::VerticalAlignment);
 

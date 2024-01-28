@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-01-21 01:34+0000\n"
+"POT-Creation-Date: 2024-01-27 01:34+0000\n"
 "PO-Revision-Date: 2022-07-14 10:06-0300\n"
 "Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
 "Language-Team: Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -81,7 +81,7 @@ msgid "Rename"
 msgstr "Renomear"
 
 #: src/backend/core/AbstractAspect.cpp:407
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:455
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:456
 #: src/commonfrontend/worksheet/WorksheetView.cpp:136
 #: src/kdefrontend/widgets/FITSHeaderEditWidget.cpp:273
 #, kde-format
@@ -315,7 +315,7 @@ msgstr "Interpolação"
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1524
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:269
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:280
-#: src/kdefrontend/widgets/LabelWidget.cpp:190
+#: src/kdefrontend/widgets/LabelWidget.cpp:192
 #, kde-format
 msgid "Text"
 msgstr "Texto"
@@ -380,14 +380,14 @@ msgid "%1: unmask cells"
 msgstr "%1: remover as máscaras das células"
 
 #: src/backend/core/abstractcolumncommands.cpp:253
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2407
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2408
 #, fuzzy, kde-format
 #| msgid "%1: set labels format"
 msgid "%1: set heatmap format"
 msgstr "%1: definir o formato das legendas"
 
 #: src/backend/core/abstractcolumncommands.cpp:280
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2424
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2425
 #, fuzzy, kde-format
 #| msgid "%1: set labels format"
 msgid "%1: remove heatmap format"
@@ -632,7 +632,7 @@ msgid "%1: change cell values"
 msgstr "%1: alterar os valores da célula"
 
 #: src/backend/core/column/columncommands.cpp:531
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2631
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2632
 #, kde-format
 msgid "%1: set plot designation"
 msgstr "%1: definir a designação do gráfico"
@@ -838,7 +838,7 @@ msgstr "elemento do seletor de dados desconhecido '%1'"
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QRadioButton, rbJitter)
 #: src/backend/datapicker/DatapickerCurve.cpp:176
-#: src/commonfrontend/matrix/MatrixView.cpp:132
+#: src/commonfrontend/matrix/MatrixView.cpp:134
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:382
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:401
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:409
@@ -922,7 +922,7 @@ msgstr "%1: definir o estilo do contorno da barra de erros"
 #: src/backend/worksheet/InfoElement.cpp:810
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:126
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:138
-#: src/backend/worksheet/WorksheetElement.cpp:159
+#: src/backend/worksheet/WorksheetElement.cpp:161
 #: src/backend/worksheet/WorksheetElementContainer.cpp:63
 #: src/backend/worksheet/WorksheetElementContainer.cpp:64
 #, kde-format
@@ -934,8 +934,8 @@ msgstr "%1: definir como visível"
 #: src/backend/worksheet/InfoElement.cpp:810
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:126
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:138
-#: src/backend/worksheet/WorksheetElement.cpp:159
-#: src/backend/worksheet/WorksheetElement.cpp:742
+#: src/backend/worksheet/WorksheetElement.cpp:161
+#: src/backend/worksheet/WorksheetElement.cpp:778
 #: src/backend/worksheet/WorksheetElementContainer.cpp:66
 #: src/backend/worksheet/WorksheetElementContainer.cpp:84
 #, kde-format
@@ -960,7 +960,7 @@ msgid "%1: upload new image"
 msgstr "%1: enviar nova imagem"
 
 #: src/backend/datapicker/DatapickerImage.cpp:385
-#: src/backend/worksheet/WorksheetElement.cpp:783
+#: src/backend/worksheet/WorksheetElement.cpp:819
 #, kde-format
 msgid "%1: set rotation angle"
 msgstr "%1: definir o ângulo da rotação"
@@ -994,7 +994,7 @@ msgstr "Falha ao abrir"
 
 #: src/backend/datapicker/DatapickerPoint.cpp:213
 #: src/backend/worksheet/InfoElement.cpp:780
-#: src/backend/worksheet/WorksheetElement.cpp:704
+#: src/backend/worksheet/WorksheetElement.cpp:740
 #, kde-format
 msgid "%1: set position"
 msgstr "%1: definir a posição"
@@ -1091,7 +1091,7 @@ msgstr "Não foi possível abrir o arquivo %1 para leitura."
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:437
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1998
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:108
-#: src/commonfrontend/matrix/MatrixView.cpp:135
+#: src/commonfrontend/matrix/MatrixView.cpp:137
 #: src/commonfrontend/worksheet/WorksheetView.cpp:221
 #: src/commonfrontend/worksheet/WorksheetView.cpp:1437
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:98
@@ -1196,11 +1196,11 @@ msgstr "Índice"
 #: src/backend/datasources/filters/AsciiFilter.cpp:1540
 #: src/backend/datasources/filters/AsciiFilter.cpp:2094
 #: src/backend/datasources/filters/QJsonModel.cpp:133
-#: src/commonfrontend/matrix/MatrixView.cpp:617
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2310
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2331
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2349
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2366
+#: src/commonfrontend/matrix/MatrixView.cpp:619
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2311
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2332
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2350
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2367
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:149
 #: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:188
 #: src/kdefrontend/ui/dockwidgets/columndock.ui:182
@@ -2282,17 +2282,17 @@ msgstr ""
 msgid "The following error occurred: %1."
 msgstr ""
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1114
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1118
 #, kde-format
 msgid "Plot%1"
 msgstr "Gráfico%1"
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1277
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1281
 #, kde-format
 msgid "legend"
 msgstr "legenda"
 
-#: src/backend/datasources/projects/ProjectParser.cpp:95
+#: src/backend/datasources/projects/ProjectParser.cpp:99
 #, kde-format
 msgid "%1: Import from %2"
 msgstr "%1: Importado de %2"
@@ -2464,7 +2464,7 @@ msgstr "Constante de Stefan-Boltzmann"
 
 #: src/backend/gsl/constants.cpp:74
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:533
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:504
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:505
 #: src/kdefrontend/dockwidgets/KDEPlotDock.cpp:179
 #, kde-format
 msgid "Gauss"
@@ -3103,357 +3103,357 @@ msgstr ""
 msgid "End of file"
 msgstr "Exportar para arquivo"
 
-#: src/backend/gsl/functions.cpp:56
+#: src/backend/gsl/functions.cpp:57
 #, fuzzy, kde-format
 #| msgid "Standard Mathematical functions"
 msgid "Standard Mathematical Functions"
 msgstr "Funções matemáticas padrão"
 
-#: src/backend/gsl/functions.cpp:58
+#: src/backend/gsl/functions.cpp:59
 #, fuzzy, kde-format
 #| msgid "Clausen Functions"
 msgid "Comparison Functions"
 msgstr "Funções de Clausen"
 
-#: src/backend/gsl/functions.cpp:60
+#: src/backend/gsl/functions.cpp:61
 #, fuzzy, kde-format
 #| msgid "Beta function"
 msgid "Logical Functions"
 msgstr "Função Beta"
 
-#: src/backend/gsl/functions.cpp:62
+#: src/backend/gsl/functions.cpp:63
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:28
 #, fuzzy, kde-format
 #| msgid "Column Statisti&cs"
 msgid "Column Statistics"
 msgstr "Estatísti&cas das colunas"
 
-#: src/backend/gsl/functions.cpp:64
+#: src/backend/gsl/functions.cpp:65
 #, fuzzy, kde-format
 #| msgid "Statistics"
 msgid "Moving Statistics"
 msgstr "Estatísticas"
 
-#: src/backend/gsl/functions.cpp:66
+#: src/backend/gsl/functions.cpp:67
 #, kde-format
 msgid "Airy Functions and Derivatives"
 msgstr "Funções matemáticas do Airy e Derivadas"
 
-#: src/backend/gsl/functions.cpp:68
+#: src/backend/gsl/functions.cpp:69
 #, kde-format
 msgid "Bessel Functions"
 msgstr "Funções de Bessel"
 
-#: src/backend/gsl/functions.cpp:70
+#: src/backend/gsl/functions.cpp:71
 #, kde-format
 msgid "Clausen Functions"
 msgstr "Funções de Clausen"
 
-#: src/backend/gsl/functions.cpp:72
+#: src/backend/gsl/functions.cpp:73
 #, kde-format
 msgid "Coulomb Functions"
 msgstr "Funções de Coulomb"
 
-#: src/backend/gsl/functions.cpp:74
+#: src/backend/gsl/functions.cpp:75
 #, kde-format
 msgid "Dawson Function"
 msgstr "Funções de Dawson"
 
-#: src/backend/gsl/functions.cpp:76
+#: src/backend/gsl/functions.cpp:77
 #, kde-format
 msgid "Debye Functions"
 msgstr "Funções de Debye"
 
-#: src/backend/gsl/functions.cpp:78
+#: src/backend/gsl/functions.cpp:79
 #, kde-format
 msgid "Dilogarithm"
 msgstr "Di-logaritmo"
 
-#: src/backend/gsl/functions.cpp:80
+#: src/backend/gsl/functions.cpp:81
 #, kde-format
 msgid "Elliptic Integrals"
 msgstr "Integrais elípticos"
 
-#: src/backend/gsl/functions.cpp:84
+#: src/backend/gsl/functions.cpp:85
 #, fuzzy, kde-format
 #| msgid "Logarithm and Related Functions"
 msgid "Error Functions and Related Functions"
 msgstr "Funções Logarítmicas e Relacionadas"
 
-#: src/backend/gsl/functions.cpp:87
+#: src/backend/gsl/functions.cpp:88
 #, kde-format
 msgid "Error Functions"
 msgstr "Funções de erro"
 
-#: src/backend/gsl/functions.cpp:90
+#: src/backend/gsl/functions.cpp:91
 #, kde-format
 msgid "Exponential Functions"
 msgstr "Funções exponenciais"
 
-#: src/backend/gsl/functions.cpp:92
+#: src/backend/gsl/functions.cpp:93
 #, kde-format
 msgid "Exponential Integrals"
 msgstr "Integrais exponenciais"
 
-#: src/backend/gsl/functions.cpp:94
+#: src/backend/gsl/functions.cpp:95
 #, kde-format
 msgid "Fermi-Dirac Function"
 msgstr "Função de Fermi-Dirac"
 
-#: src/backend/gsl/functions.cpp:96
+#: src/backend/gsl/functions.cpp:97
 #, kde-format
 msgid "Gamma and Beta Functions"
 msgstr "Funções Gama e Beta"
 
-#: src/backend/gsl/functions.cpp:98
+#: src/backend/gsl/functions.cpp:99
 #, kde-format
 msgid "Gegenbauer Functions"
 msgstr "Funções de Gegenbauer"
 
-#: src/backend/gsl/functions.cpp:101
+#: src/backend/gsl/functions.cpp:102
 #, fuzzy, kde-format
 #| msgid "Trigonometric Functions"
 msgid "Hermite Polynomials and Functions"
 msgstr "Funções trigonométricas"
 
-#: src/backend/gsl/functions.cpp:104
+#: src/backend/gsl/functions.cpp:105
 #, kde-format
 msgid "Hypergeometric Functions"
 msgstr "Funções Hipergeométricas"
 
-#: src/backend/gsl/functions.cpp:106
+#: src/backend/gsl/functions.cpp:107
 #, kde-format
 msgid "Laguerre Functions"
 msgstr "Funções de Laguerre"
 
-#: src/backend/gsl/functions.cpp:108
+#: src/backend/gsl/functions.cpp:109
 #, kde-format
 msgid "Lambert W Functions"
 msgstr "Funções W de Lambert"
 
-#: src/backend/gsl/functions.cpp:110
+#: src/backend/gsl/functions.cpp:111
 #, kde-format
 msgid "Legendre Functions and Spherical Harmonics"
 msgstr "Funções de Legendre e Harmônicas Esféricas"
 
-#: src/backend/gsl/functions.cpp:112
+#: src/backend/gsl/functions.cpp:113
 #, kde-format
 msgid "Logarithm and Related Functions"
 msgstr "Funções Logarítmicas e Relacionadas"
 
-#: src/backend/gsl/functions.cpp:115
+#: src/backend/gsl/functions.cpp:116
 #, fuzzy, kde-format
 #| msgid "Zeta Functions"
 msgid "Mathieu Functions"
 msgstr "Funções Zeta"
 
-#: src/backend/gsl/functions.cpp:118
+#: src/backend/gsl/functions.cpp:119
 #, kde-format
 msgid "Power Function"
 msgstr "Funções de Potência"
 
-#: src/backend/gsl/functions.cpp:120
+#: src/backend/gsl/functions.cpp:121
 #, kde-format
 msgid "Psi (Digamma) Function"
 msgstr "Função Psi (Digama)"
 
-#: src/backend/gsl/functions.cpp:122
+#: src/backend/gsl/functions.cpp:123
 #, kde-format
 msgid "Synchrotron Functions"
 msgstr "Funções síncroton"
 
-#: src/backend/gsl/functions.cpp:124
+#: src/backend/gsl/functions.cpp:125
 #, kde-format
 msgid "Transport Functions"
 msgstr "Funções de transporte"
 
-#: src/backend/gsl/functions.cpp:126
+#: src/backend/gsl/functions.cpp:127
 #, kde-format
 msgid "Trigonometric Functions"
 msgstr "Funções trigonométricas"
 
-#: src/backend/gsl/functions.cpp:128
+#: src/backend/gsl/functions.cpp:129
 #, kde-format
 msgid "Zeta Functions"
 msgstr "Funções Zeta"
 
-#: src/backend/gsl/functions.cpp:130
+#: src/backend/gsl/functions.cpp:131
 #, kde-format
 msgid "Random number generator"
 msgstr ""
 
-#: src/backend/gsl/functions.cpp:132
+#: src/backend/gsl/functions.cpp:133
 #, kde-format
 msgid "Gaussian Distribution"
 msgstr "Distribuição Gaussiana"
 
-#: src/backend/gsl/functions.cpp:134
+#: src/backend/gsl/functions.cpp:135
 #, kde-format
 msgid "Exponential Distribution"
 msgstr "Distribuição Exponencial"
 
-#: src/backend/gsl/functions.cpp:136
+#: src/backend/gsl/functions.cpp:137
 #, kde-format
 msgid "Laplace Distribution"
 msgstr "Distribuição de Laplace"
 
-#: src/backend/gsl/functions.cpp:138
+#: src/backend/gsl/functions.cpp:139
 #, kde-format
 msgid "Exponential Power Distribution"
 msgstr "Distribuição de Potência Exponencial"
 
-#: src/backend/gsl/functions.cpp:140
+#: src/backend/gsl/functions.cpp:141
 #, kde-format
 msgid "Cauchy Distribution"
 msgstr "Distribuição de Cauchy"
 
-#: src/backend/gsl/functions.cpp:142
+#: src/backend/gsl/functions.cpp:143
 #, kde-format
 msgid "Rayleigh Distribution"
 msgstr "Distribuição de Rayleigh"
 
-#: src/backend/gsl/functions.cpp:144
+#: src/backend/gsl/functions.cpp:145
 #, kde-format
 msgid "Landau Distribution"
 msgstr "Distribuição de Landau"
 
-#: src/backend/gsl/functions.cpp:146
+#: src/backend/gsl/functions.cpp:147
 #, kde-format
 msgid "Gamma Distribution"
 msgstr "Distribuição Gama"
 
-#: src/backend/gsl/functions.cpp:148
+#: src/backend/gsl/functions.cpp:149
 #, kde-format
 msgid "Flat (Uniform) Distribution"
 msgstr "Distribuição Plana (Uniforme)"
 
-#: src/backend/gsl/functions.cpp:150
+#: src/backend/gsl/functions.cpp:151
 #, kde-format
 msgid "Lognormal Distribution"
 msgstr "Distribuição Normal-Logarítmica"
 
-#: src/backend/gsl/functions.cpp:152
+#: src/backend/gsl/functions.cpp:153
 #, kde-format
 msgid "Chi-squared Distribution"
 msgstr "Distribuição Qui-Quadrado"
 
-#: src/backend/gsl/functions.cpp:154
+#: src/backend/gsl/functions.cpp:155
 #, kde-format
 msgid "F-distribution"
 msgstr "Distribuição-F"
 
-#: src/backend/gsl/functions.cpp:156
+#: src/backend/gsl/functions.cpp:157
 #, kde-format
 msgid "t-distribution"
 msgstr "Distribuição-t"
 
-#: src/backend/gsl/functions.cpp:158
+#: src/backend/gsl/functions.cpp:159
 #, kde-format
 msgid "Beta Distribution"
 msgstr "Distribuição Beta"
 
-#: src/backend/gsl/functions.cpp:160
+#: src/backend/gsl/functions.cpp:161
 #, kde-format
 msgid "Logistic Distribution"
 msgstr "Distribuição Logística"
 
-#: src/backend/gsl/functions.cpp:162
+#: src/backend/gsl/functions.cpp:163
 #, kde-format
 msgid "Pareto Distribution"
 msgstr "Distribuição de Pareto"
 
-#: src/backend/gsl/functions.cpp:164
+#: src/backend/gsl/functions.cpp:165
 #, kde-format
 msgid "Weibull Distribution"
 msgstr "Distribuição de Weibull"
 
-#: src/backend/gsl/functions.cpp:166
+#: src/backend/gsl/functions.cpp:167
 #, kde-format
 msgid "Gumbel Distribution"
 msgstr "Distribuição de Gumbel"
 
-#: src/backend/gsl/functions.cpp:168
+#: src/backend/gsl/functions.cpp:169
 #, kde-format
 msgid "Poisson Distribution"
 msgstr "Distribuição de Poisson"
 
-#: src/backend/gsl/functions.cpp:170
+#: src/backend/gsl/functions.cpp:171
 #, kde-format
 msgid "Bernoulli Distribution"
 msgstr "Distribuição de Bernoulli"
 
-#: src/backend/gsl/functions.cpp:172
+#: src/backend/gsl/functions.cpp:173
 #, kde-format
 msgid "Binomial Distribution"
 msgstr "Distribuição Binomial"
 
-#: src/backend/gsl/functions.cpp:174
+#: src/backend/gsl/functions.cpp:175
 #, kde-format
 msgid "Pascal Distribution"
 msgstr "Distribuição de Pascal"
 
-#: src/backend/gsl/functions.cpp:176
+#: src/backend/gsl/functions.cpp:177
 #, kde-format
 msgid "Geometric Distribution"
 msgstr "Distribuição Geométrica"
 
-#: src/backend/gsl/functions.cpp:178
+#: src/backend/gsl/functions.cpp:179
 #, kde-format
 msgid "Hypergeometric Distribution"
 msgstr "Distribuição Hipergeométrica"
 
-#: src/backend/gsl/functions.cpp:180
+#: src/backend/gsl/functions.cpp:181
 #, kde-format
 msgid "Logarithmic Distribution"
 msgstr "Distribuição Logarítmica"
 
-#: src/backend/gsl/functions.cpp:184
+#: src/backend/gsl/functions.cpp:185
 #, fuzzy, kde-format
 #| msgid "Power Function"
 msgid "Unknown Function"
 msgstr "Funções de Potência"
 
-#: src/backend/gsl/functions.cpp:231
+#: src/backend/gsl/functions.cpp:232
 #, fuzzy, kde-format
 #| msgid "Delete variable"
 msgid "Cell (index, variable)"
 msgstr "Excluir variável"
 
-#: src/backend/gsl/functions.cpp:232
+#: src/backend/gsl/functions.cpp:233
 #, fuzzy, kde-format
 #| msgid "center"
 msgid "Moving Average"
 msgstr "centro"
 
-#: src/backend/gsl/functions.cpp:233
+#: src/backend/gsl/functions.cpp:234
 #, fuzzy, kde-format
 #| msgid "center"
 msgid "Moving Range"
 msgstr "centro"
 
-#: src/backend/gsl/functions.cpp:234
+#: src/backend/gsl/functions.cpp:235
 #, kde-format
 msgid "Simple Moving Minimum"
 msgstr ""
 
-#: src/backend/gsl/functions.cpp:235
+#: src/backend/gsl/functions.cpp:236
 #, kde-format
 msgid "Simple Moving Maximum"
 msgstr ""
 
-#: src/backend/gsl/functions.cpp:236
+#: src/backend/gsl/functions.cpp:237
 #, kde-format
 msgid "Simple Moving Average"
 msgstr ""
 
-#: src/backend/gsl/functions.cpp:237
+#: src/backend/gsl/functions.cpp:238
 #, fuzzy, kde-format
 #| msgid "center"
 msgid "Simple Moving Range"
 msgstr "centro"
 
 #. i18n: ectx: property (text), widget (QLabel, lSize)
-#: src/backend/gsl/functions.cpp:241
+#: src/backend/gsl/functions.cpp:242
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:490
 #, fuzzy, kde-format
 #| msgid "Size"
@@ -3462,7 +3462,7 @@ msgstr "Tamanho"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbMinimum)
-#: src/backend/gsl/functions.cpp:242
+#: src/backend/gsl/functions.cpp:243
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:32
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:138
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:64
@@ -3475,7 +3475,7 @@ msgstr "Mínimo"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbMaximum)
-#: src/backend/gsl/functions.cpp:243 src/backend/nsl/nsl_conv.c:23
+#: src/backend/gsl/functions.cpp:244 src/backend/nsl/nsl_conv.c:23
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:33
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:139
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:65
@@ -3488,7 +3488,7 @@ msgstr "Máximo"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbArithmeticMean)
-#: src/backend/gsl/functions.cpp:244
+#: src/backend/gsl/functions.cpp:245
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:66
 #: src/kdefrontend/ui/dockwidgets/statisticsspreadsheetdock.ui:63
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:53
@@ -3499,7 +3499,7 @@ msgstr "Média aritmética"
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QRadioButton, rbMedian)
 #. i18n: ectx: property (text), widget (QCheckBox, cbMedian)
-#: src/backend/gsl/functions.cpp:245
+#: src/backend/gsl/functions.cpp:246
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:40
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:140
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:72
@@ -3512,7 +3512,7 @@ msgstr "Mediana"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbStandardDeviation)
-#: src/backend/gsl/functions.cpp:246
+#: src/backend/gsl/functions.cpp:247
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:79
 #: src/kdefrontend/ui/dockwidgets/statisticsspreadsheetdock.ui:168
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:119
@@ -3522,7 +3522,7 @@ msgstr "Desvio padrão"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbVariance)
-#: src/backend/gsl/functions.cpp:247
+#: src/backend/gsl/functions.cpp:248
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:50
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:78
 #: src/kdefrontend/ui/dockwidgets/statisticsspreadsheetdock.ui:158
@@ -3533,7 +3533,7 @@ msgstr "Variância"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbGeometricMean)
-#: src/backend/gsl/functions.cpp:248
+#: src/backend/gsl/functions.cpp:249
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:67
 #: src/kdefrontend/ui/dockwidgets/statisticsspreadsheetdock.ui:73
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:64
@@ -3543,7 +3543,7 @@ msgstr "Média geométrica"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbHarmonicMean)
-#: src/backend/gsl/functions.cpp:249
+#: src/backend/gsl/functions.cpp:250
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:68
 #: src/kdefrontend/ui/dockwidgets/statisticsspreadsheetdock.ui:80
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:75
@@ -3553,7 +3553,7 @@ msgstr "Média harmônica"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbContraharmonicMean)
-#: src/backend/gsl/functions.cpp:250
+#: src/backend/gsl/functions.cpp:251
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:69
 #: src/kdefrontend/ui/dockwidgets/statisticsspreadsheetdock.ui:87
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:86
@@ -3562,7 +3562,7 @@ msgid "Contraharmonic mean"
 msgstr "Média contra-harmônica"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbMode)
-#: src/backend/gsl/functions.cpp:251
+#: src/backend/gsl/functions.cpp:252
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:38
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:70
 #: src/kdefrontend/ui/dockwidgets/statisticsspreadsheetdock.ui:94
@@ -3572,7 +3572,7 @@ msgid "Mode"
 msgstr "Modelo"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbFirstQuartile)
-#: src/backend/gsl/functions.cpp:252
+#: src/backend/gsl/functions.cpp:253
 #: src/kdefrontend/ui/dockwidgets/statisticsspreadsheetdock.ui:101
 #, fuzzy, kde-format
 #| msgid "derivative"
@@ -3580,7 +3580,7 @@ msgid "First quartile"
 msgstr "derivada"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbThirdQuartile)
-#: src/backend/gsl/functions.cpp:253
+#: src/backend/gsl/functions.cpp:254
 #: src/kdefrontend/ui/dockwidgets/statisticsspreadsheetdock.ui:115
 #, fuzzy, kde-format
 #| msgid "derivative"
@@ -3588,51 +3588,51 @@ msgid "Third quartile"
 msgstr "derivada"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbIQR)
-#: src/backend/gsl/functions.cpp:254
+#: src/backend/gsl/functions.cpp:255
 #: src/kdefrontend/ui/dockwidgets/statisticsspreadsheetdock.ui:199
 #, fuzzy, kde-format
 #| msgid "Interface"
 msgid "Interquartile range"
 msgstr "Interface"
 
-#: src/backend/gsl/functions.cpp:255
+#: src/backend/gsl/functions.cpp:256
 #, fuzzy, kde-format
 #| msgid "center tiled"
 msgid "1st percentile"
 msgstr "ladrilhado centralizado"
 
-#: src/backend/gsl/functions.cpp:256
+#: src/backend/gsl/functions.cpp:257
 #, fuzzy, kde-format
 #| msgid "center tiled"
 msgid "5th percentile"
 msgstr "ladrilhado centralizado"
 
-#: src/backend/gsl/functions.cpp:257
+#: src/backend/gsl/functions.cpp:258
 #, fuzzy, kde-format
 #| msgid "center tiled"
 msgid "10th percentile"
 msgstr "ladrilhado centralizado"
 
-#: src/backend/gsl/functions.cpp:258
+#: src/backend/gsl/functions.cpp:259
 #, fuzzy, kde-format
 #| msgid "center tiled"
 msgid "90th percentile"
 msgstr "ladrilhado centralizado"
 
-#: src/backend/gsl/functions.cpp:259
+#: src/backend/gsl/functions.cpp:260
 #, fuzzy, kde-format
 #| msgid "center tiled"
 msgid "95th percentile"
 msgstr "ladrilhado centralizado"
 
-#: src/backend/gsl/functions.cpp:260
+#: src/backend/gsl/functions.cpp:261
 #, fuzzy, kde-format
 #| msgid "center tiled"
 msgid "99th percentile"
 msgstr "ladrilhado centralizado"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbTrimean)
-#: src/backend/gsl/functions.cpp:261
+#: src/backend/gsl/functions.cpp:262
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:49
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:74
 #: src/kdefrontend/ui/dockwidgets/statisticsspreadsheetdock.ui:122
@@ -3641,14 +3641,14 @@ msgstr "ladrilhado centralizado"
 msgid "Trimean"
 msgstr "Média harmônica"
 
-#: src/backend/gsl/functions.cpp:262
+#: src/backend/gsl/functions.cpp:263
 #, fuzzy, kde-format
 #| msgid "Median absolute deviation"
 msgid "Mean absolute deviation"
 msgstr "Desvio absoluto da mediana"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbMeanDeviationAroundMedian)
-#: src/backend/gsl/functions.cpp:263
+#: src/backend/gsl/functions.cpp:264
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:81
 #: src/kdefrontend/ui/dockwidgets/statisticsspreadsheetdock.ui:185
 #, kde-format
@@ -3656,7 +3656,7 @@ msgid "Mean absolute deviation around median"
 msgstr "Desvio médio absoluto em torno da mediana"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbMedianDeviation)
-#: src/backend/gsl/functions.cpp:264
+#: src/backend/gsl/functions.cpp:265
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:82
 #: src/kdefrontend/ui/dockwidgets/statisticsspreadsheetdock.ui:192
 #, kde-format
@@ -3665,7 +3665,7 @@ msgstr "Desvio absoluto da mediana"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbSkewness)
-#: src/backend/gsl/functions.cpp:265
+#: src/backend/gsl/functions.cpp:266
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:55
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:87
 #: src/kdefrontend/ui/dockwidgets/statisticsspreadsheetdock.ui:235
@@ -3676,7 +3676,7 @@ msgstr "Obliquidade"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbKurtosis)
-#: src/backend/gsl/functions.cpp:266
+#: src/backend/gsl/functions.cpp:267
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:56
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:88
 #: src/kdefrontend/ui/dockwidgets/statisticsspreadsheetdock.ui:242
@@ -3687,7 +3687,7 @@ msgstr "Curtose"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbEntropy)
-#: src/backend/gsl/functions.cpp:267
+#: src/backend/gsl/functions.cpp:268
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:57
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:89
 #: src/kdefrontend/ui/dockwidgets/statisticsspreadsheetdock.ui:249
@@ -3696,25 +3696,25 @@ msgstr "Curtose"
 msgid "Entropy"
 msgstr "Entropia"
 
-#: src/backend/gsl/functions.cpp:268
+#: src/backend/gsl/functions.cpp:269
 #, fuzzy, kde-format
 #| msgid "Cap size"
 msgid "Quantile"
 msgstr "Tamanho do extremo"
 
-#: src/backend/gsl/functions.cpp:269 src/backend/nsl/nsl_smooth.c:21
+#: src/backend/gsl/functions.cpp:270 src/backend/nsl/nsl_smooth.c:21
 #, fuzzy, kde-format
 #| msgid "center tiled"
 msgid "Percentile"
 msgstr "ladrilhado centralizado"
 
-#: src/backend/gsl/functions.cpp:276
+#: src/backend/gsl/functions.cpp:277
 #, fuzzy, kde-format
 #| msgid "pseudo-random integer [0,RAND_MAX]"
 msgid "pseudo-random integer [0, RAND_MAX]"
 msgstr "inteiro pseudo-aleatório [0,MAX_RAND]"
 
-#: src/backend/gsl/functions.cpp:277
+#: src/backend/gsl/functions.cpp:278
 #, fuzzy, kde-format
 #| msgid "nonlinear additive feedback rng [0,RAND_MAX]"
 msgid "nonlinear additive feedback rng [0, RAND_MAX]"
@@ -3722,142 +3722,142 @@ msgstr ""
 "gerador de números aleatórios não-lineares com realimentação aditiva [0,"
 "MAX_RAND]"
 
-#: src/backend/gsl/functions.cpp:278
+#: src/backend/gsl/functions.cpp:279
 #, fuzzy, kde-format
 #| msgid "nonlinear additive feedback rng [0,1]"
 msgid "nonlinear additive feedback rng [0, 1]"
 msgstr ""
 "gerador de números aleatórios não-lineares com realimentação aditiva [0,1]"
 
-#: src/backend/gsl/functions.cpp:279
+#: src/backend/gsl/functions.cpp:280
 #, kde-format
 msgid "Smallest integral value not less"
 msgstr "Menor valor integral não-inferior"
 
-#: src/backend/gsl/functions.cpp:280
+#: src/backend/gsl/functions.cpp:281
 #, kde-format
 msgid "Absolute value"
 msgstr "Valor absoluto"
 
-#: src/backend/gsl/functions.cpp:282
+#: src/backend/gsl/functions.cpp:283
 #, kde-format
 msgid "Base 10 logarithm"
 msgstr "Logaritmo de base 10"
 
-#: src/backend/gsl/functions.cpp:283
+#: src/backend/gsl/functions.cpp:284
 #, kde-format
 msgid "Power function [x^y]"
 msgstr "Função de potência [x^y]"
 
-#: src/backend/gsl/functions.cpp:284
+#: src/backend/gsl/functions.cpp:285
 #, kde-format
 msgid "Nonnegative square root"
 msgstr "Raiz quadrada não negativa"
 
-#: src/backend/gsl/functions.cpp:285
+#: src/backend/gsl/functions.cpp:286
 #, fuzzy, kde-format
 #| msgid "function"
 msgid "Sign function"
 msgstr "função"
 
-#: src/backend/gsl/functions.cpp:286
+#: src/backend/gsl/functions.cpp:287
 #, fuzzy, kde-format
 #| msgid "Riemann zeta function"
 msgid "Heavyside theta function"
 msgstr "Função zeta de Riemann"
 
-#: src/backend/gsl/functions.cpp:287
+#: src/backend/gsl/functions.cpp:288
 #, fuzzy, kde-format
 #| msgid "Hurwitz zeta function"
 msgid "Harmonic number function"
 msgstr "Função zeta de Hurwitz"
 
-#: src/backend/gsl/functions.cpp:289
+#: src/backend/gsl/functions.cpp:290
 #, kde-format
 msgid "Cube root"
 msgstr "Raiz cúbica"
 
-#: src/backend/gsl/functions.cpp:290
+#: src/backend/gsl/functions.cpp:291
 #, kde-format
 msgid "Extract the exponent"
 msgstr "Extração do expoente"
 
-#: src/backend/gsl/functions.cpp:291
+#: src/backend/gsl/functions.cpp:292
 #, kde-format
 msgid "Round to an integer value"
 msgstr "Arredondamento para valor inteiro"
 
-#: src/backend/gsl/functions.cpp:292 src/backend/gsl/functions.cpp:293
+#: src/backend/gsl/functions.cpp:293 src/backend/gsl/functions.cpp:294
 #, kde-format
 msgid "Round to the nearest integer"
 msgstr "Arredondamento para o inteiro mais próximo"
 
-#: src/backend/gsl/functions.cpp:294
+#: src/backend/gsl/functions.cpp:295
 #, kde-format
 msgid "Round to y decimal places"
 msgstr ""
 
-#: src/backend/gsl/functions.cpp:308
+#: src/backend/gsl/functions.cpp:309
 #, fuzzy, kde-format
 #| msgid "greater then"
 msgid "greaterThan"
 msgstr "maior que"
 
-#: src/backend/gsl/functions.cpp:309
+#: src/backend/gsl/functions.cpp:310
 #, kde-format
 msgid "lessThan"
 msgstr ""
 
-#: src/backend/gsl/functions.cpp:310
+#: src/backend/gsl/functions.cpp:311
 #, fuzzy, kde-format
 #| msgid "greater then"
 msgid "greaterEqualThan"
 msgstr "maior que"
 
-#: src/backend/gsl/functions.cpp:311
+#: src/backend/gsl/functions.cpp:312
 #, kde-format
 msgid "lessEqualThan"
 msgstr ""
 
-#: src/backend/gsl/functions.cpp:312
+#: src/backend/gsl/functions.cpp:313
 #, fuzzy, kde-format
 #| msgid "equal to"
 msgid "equal"
 msgstr "igual a"
 
-#: src/backend/gsl/functions.cpp:313
+#: src/backend/gsl/functions.cpp:314
 #, kde-format
 msgid "equal with epsilon"
 msgstr ""
 
-#: src/backend/gsl/functions.cpp:314
+#: src/backend/gsl/functions.cpp:315
 #, kde-format
 msgid "between with boundaries included"
 msgstr ""
 
-#: src/backend/gsl/functions.cpp:315
+#: src/backend/gsl/functions.cpp:316
 #, kde-format
 msgid "outside with boundaries included"
 msgstr ""
 
-#: src/backend/gsl/functions.cpp:316
+#: src/backend/gsl/functions.cpp:317
 #, kde-format
 msgid "between with boundaries excluded"
 msgstr ""
 
-#: src/backend/gsl/functions.cpp:317
+#: src/backend/gsl/functions.cpp:318
 #, kde-format
 msgid "outside with boundaries excluded"
 msgstr ""
 
-#: src/backend/gsl/functions.cpp:320
+#: src/backend/gsl/functions.cpp:321
 #, kde-format
 msgid "if(condition; ifTrue; ifFalse)"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lAnd)
 #. i18n: ectx: property (text), widget (QLabel, lAndDateTime)
-#: src/backend/gsl/functions.cpp:321 src/backend/lib/XmlStreamReader.cpp:58
+#: src/backend/gsl/functions.cpp:322 src/backend/lib/XmlStreamReader.cpp:58
 #: src/kdefrontend/ui/spreadsheet/dropvalueswidget.ui:74
 #: src/kdefrontend/ui/spreadsheet/dropvalueswidget.ui:220
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:354
@@ -3867,7 +3867,7 @@ msgid "and"
 msgstr "e"
 
 #. i18n: ectx: property (text), widget (QLabel, l2SamplingInterval)
-#: src/backend/gsl/functions.cpp:322
+#: src/backend/gsl/functions.cpp:323
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:265
 #: src/kdefrontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:24
 #, fuzzy, kde-format
@@ -3875,118 +3875,124 @@ msgstr "e"
 msgid "or"
 msgstr "Ordenar"
 
-#: src/backend/gsl/functions.cpp:323
+#: src/backend/gsl/functions.cpp:324
 #, fuzzy, kde-format
 #| msgid "Sort"
 msgid "xor"
 msgstr "Ordenar"
 
-#: src/backend/gsl/functions.cpp:327
+#: src/backend/gsl/functions.cpp:325
+#, fuzzy, kde-format
+#| msgid "no"
+msgid "not"
+msgstr "não"
+
+#: src/backend/gsl/functions.cpp:329
 #, kde-format
 msgid "Airy function of the first kind"
 msgstr "Função de Airy do primeiro tipo"
 
-#: src/backend/gsl/functions.cpp:328
+#: src/backend/gsl/functions.cpp:330
 #, kde-format
 msgid "Airy function of the second kind"
 msgstr "Função de Airy do segundo tipo"
 
-#: src/backend/gsl/functions.cpp:329
+#: src/backend/gsl/functions.cpp:331
 #, kde-format
 msgid "Scaled Airy function of the first kind"
 msgstr "Função de Airy do primeiro tipo com escala"
 
-#: src/backend/gsl/functions.cpp:330
+#: src/backend/gsl/functions.cpp:332
 #, kde-format
 msgid "Scaled Airy function of the second kind"
 msgstr "Função de Airy do segundo tipo com escala"
 
-#: src/backend/gsl/functions.cpp:331
+#: src/backend/gsl/functions.cpp:333
 #, kde-format
 msgid "Airy function derivative of the first kind"
 msgstr "Derivada da função de Airy do primeiro tipo"
 
-#: src/backend/gsl/functions.cpp:332
+#: src/backend/gsl/functions.cpp:334
 #, kde-format
 msgid "Airy function derivative of the second kind"
 msgstr "Derivada da função de Airy do segundo tipo"
 
-#: src/backend/gsl/functions.cpp:333
+#: src/backend/gsl/functions.cpp:335
 #, kde-format
 msgid "Scaled Airy function derivative of the first kind"
 msgstr "Derivada da função de Airy do primeiro tipo com escala"
 
-#: src/backend/gsl/functions.cpp:334
+#: src/backend/gsl/functions.cpp:336
 #, kde-format
 msgid "Scaled Airy function derivative of the second kind"
 msgstr "Derivada da função de Airy do segundo tipo com escala"
 
-#: src/backend/gsl/functions.cpp:335
+#: src/backend/gsl/functions.cpp:337
 #, kde-format
 msgid "n-th zero of the Airy function of the first kind"
 msgstr "N-ésimo zero da função de Airy do primeiro tipo"
 
-#: src/backend/gsl/functions.cpp:336
+#: src/backend/gsl/functions.cpp:338
 #, kde-format
 msgid "n-th zero of the Airy function of the second kind"
 msgstr "N-ésimo zero da função de Airy do segundo tipo"
 
-#: src/backend/gsl/functions.cpp:337
+#: src/backend/gsl/functions.cpp:339
 #, kde-format
 msgid "n-th zero of the Airy function derivative of the first kind"
 msgstr "N-ésimo zero da derivada da função de Airy do primeiro tipo"
 
-#: src/backend/gsl/functions.cpp:338
+#: src/backend/gsl/functions.cpp:340
 #, kde-format
 msgid "n-th zero of the Airy function derivative of the second kind"
 msgstr "N-ésimo zero da derivada da função de Airy do segundo tipo"
 
-#: src/backend/gsl/functions.cpp:341
+#: src/backend/gsl/functions.cpp:343
 #, kde-format
 msgid "Regular cylindrical Bessel function of zeroth order"
 msgstr "Função de Bessel cilíndrica regular de 0-ésima ordem"
 
-#: src/backend/gsl/functions.cpp:342
+#: src/backend/gsl/functions.cpp:344
 #, kde-format
 msgid "Regular cylindrical Bessel function of first order"
 msgstr "Função de Bessel cilíndrica regular de primeira ordem"
 
-#: src/backend/gsl/functions.cpp:343
+#: src/backend/gsl/functions.cpp:345
 #, kde-format
 msgid "Regular cylindrical Bessel function of order n"
 msgstr "Função de Bessel cilíndrica regular de n-ésima ordem"
 
-#: src/backend/gsl/functions.cpp:344
+#: src/backend/gsl/functions.cpp:346
 #, kde-format
 msgid "Irregular cylindrical Bessel function of zeroth order"
 msgstr "Função de Bessel cilíndrica irregular de 0-ésima ordem"
 
-#: src/backend/gsl/functions.cpp:345
+#: src/backend/gsl/functions.cpp:347
 #, kde-format
 msgid "Irregular cylindrical Bessel function of first order"
 msgstr "Função de Bessel cilíndrica irregular de primeira ordem"
 
-#: src/backend/gsl/functions.cpp:346
+#: src/backend/gsl/functions.cpp:348
 #, kde-format
 msgid "Irregular cylindrical Bessel function of order n"
 msgstr "Função de Bessel cilíndrica irregular de n-ésima ordem"
 
-#: src/backend/gsl/functions.cpp:347
+#: src/backend/gsl/functions.cpp:349
 #, kde-format
 msgid "Regular modified cylindrical Bessel function of zeroth order"
 msgstr "Função de Bessel cilíndrica regular modificada de 0-ésima ordem"
 
-#: src/backend/gsl/functions.cpp:348
+#: src/backend/gsl/functions.cpp:350
 #, kde-format
 msgid "Regular modified cylindrical Bessel function of first order"
 msgstr "Função de Bessel cilíndrica regular modificada de primeira ordem"
 
-#: src/backend/gsl/functions.cpp:349
+#: src/backend/gsl/functions.cpp:351
 #, kde-format
 msgid "Regular modified cylindrical Bessel function of order n"
 msgstr "Função de Bessel cilíndrica regular modificada de n-ésima ordem"
 
-#: src/backend/gsl/functions.cpp:350
+#: src/backend/gsl/functions.cpp:352
 #, kde-format
 msgid ""
 "Scaled regular modified cylindrical Bessel function of zeroth order exp(-|"
@@ -3995,7 +4001,7 @@ msgstr ""
 "Função de Bessel cilíndrica regular modificada de 0-ésima ordem com escala, "
 "exp (-|x|) I0(x)"
 
-#: src/backend/gsl/functions.cpp:352
+#: src/backend/gsl/functions.cpp:354
 #, kde-format
 msgid ""
 "Scaled regular modified cylindrical Bessel function of first order exp(-|x|) "
@@ -4004,7 +4010,7 @@ msgstr ""
 "Função de Bessel cilíndrica regular modificada de primeira ordem com escala, "
 "exp (-|x|) I1(x)"
 
-#: src/backend/gsl/functions.cpp:353
+#: src/backend/gsl/functions.cpp:355
 #, kde-format
 msgid ""
 "Scaled regular modified cylindrical Bessel function of order n exp(-|x|) "
@@ -4013,22 +4019,22 @@ msgstr ""
 "Função de Bessel cilíndrica regular modificada de n-ésima ordem com escala, "
 "exp (-|x|) In(x)"
 
-#: src/backend/gsl/functions.cpp:354
+#: src/backend/gsl/functions.cpp:356
 #, kde-format
 msgid "Irregular modified cylindrical Bessel function of zeroth order"
 msgstr "Função de Bessel cilíndrica irregular modificada de 0-ésima ordem"
 
-#: src/backend/gsl/functions.cpp:355
+#: src/backend/gsl/functions.cpp:357
 #, kde-format
 msgid "Irregular modified cylindrical Bessel function of first order"
 msgstr "Função de Bessel cilíndrica irregular modificada de primeira ordem"
 
-#: src/backend/gsl/functions.cpp:356
+#: src/backend/gsl/functions.cpp:358
 #, kde-format
 msgid "Irregular modified cylindrical Bessel function of order n"
 msgstr "Função de Bessel cilíndrica irregular modificada de n-ésima ordem"
 
-#: src/backend/gsl/functions.cpp:357
+#: src/backend/gsl/functions.cpp:359
 #, kde-format
 msgid ""
 "Scaled irregular modified cylindrical Bessel function of zeroth order exp(x) "
@@ -4037,7 +4043,7 @@ msgstr ""
 "Função de Bessel cilíndrica irregular modificada de 0-ésima ordem com "
 "escala, exp(x) K0(x)"
 
-#: src/backend/gsl/functions.cpp:358
+#: src/backend/gsl/functions.cpp:360
 #, kde-format
 msgid ""
 "Scaled irregular modified cylindrical Bessel function of first order exp(x) "
@@ -4046,7 +4052,7 @@ msgstr ""
 "Função de Bessel cilíndrica irregular modificada de primeira ordem com "
 "escala, exp(x) K1(x)"
 
-#: src/backend/gsl/functions.cpp:359
+#: src/backend/gsl/functions.cpp:361
 #, kde-format
 msgid ""
 "Scaled irregular modified cylindrical Bessel function of order n exp(x) Kn(x)"
@@ -4054,47 +4060,47 @@ msgstr ""
 "Função de Bessel cilíndrica irregular modificada de n-ésima ordem com "
 "escala, exp(x) Kn(x)"
 
-#: src/backend/gsl/functions.cpp:360
+#: src/backend/gsl/functions.cpp:362
 #, kde-format
 msgid "Regular spherical Bessel function of zeroth order"
 msgstr "Função de Bessel esférica regular de 0-ésima ordem"
 
-#: src/backend/gsl/functions.cpp:361
+#: src/backend/gsl/functions.cpp:363
 #, kde-format
 msgid "Regular spherical Bessel function of first order"
 msgstr "Função de Bessel esférica regular de primeira ordem"
 
-#: src/backend/gsl/functions.cpp:363
+#: src/backend/gsl/functions.cpp:365
 #, kde-format
 msgid "Regular spherical Bessel function of second order"
 msgstr "Função de Bessel esférica regular de segunda ordem"
 
-#: src/backend/gsl/functions.cpp:364
+#: src/backend/gsl/functions.cpp:366
 #, kde-format
 msgid "Regular spherical Bessel function of order l"
 msgstr "Função de Bessel esférica regular de l-ésima ordem"
 
-#: src/backend/gsl/functions.cpp:365
+#: src/backend/gsl/functions.cpp:367
 #, kde-format
 msgid "Irregular spherical Bessel function of zeroth order"
 msgstr "Função de Bessel esférica irregular de 0-ésima ordem"
 
-#: src/backend/gsl/functions.cpp:366
+#: src/backend/gsl/functions.cpp:368
 #, kde-format
 msgid "Irregular spherical Bessel function of first order"
 msgstr "Função de Bessel esférica irregular de primeira ordem"
 
-#: src/backend/gsl/functions.cpp:367
+#: src/backend/gsl/functions.cpp:369
 #, kde-format
 msgid "Irregular spherical Bessel function of second order"
 msgstr "Função de Bessel esférica irregular de segunda ordem"
 
-#: src/backend/gsl/functions.cpp:368
+#: src/backend/gsl/functions.cpp:370
 #, kde-format
 msgid "Irregular spherical Bessel function of order l"
 msgstr "Função de Bessel esférica irregular de l-ésima ordem"
 
-#: src/backend/gsl/functions.cpp:369
+#: src/backend/gsl/functions.cpp:371
 #, kde-format
 msgid ""
 "Scaled regular modified spherical Bessel function of zeroth order, exp(-|x|) "
@@ -4103,7 +4109,7 @@ msgstr ""
 "Função de Bessel esférica regular de 0-ésima ordem com escala, exp (-|x|) "
 "i0(x)"
 
-#: src/backend/gsl/functions.cpp:370
+#: src/backend/gsl/functions.cpp:372
 #, kde-format
 msgid ""
 "Scaled regular modified spherical Bessel function of first order, exp(-|x|) "
@@ -4112,7 +4118,7 @@ msgstr ""
 "Função de Bessel esférica regular de primeira ordem com escala, exp (-|x|) "
 "i1(x)"
 
-#: src/backend/gsl/functions.cpp:371
+#: src/backend/gsl/functions.cpp:373
 #, kde-format
 msgid ""
 "Scaled regular modified spherical Bessel function of second order, exp(-|x|) "
@@ -4121,7 +4127,7 @@ msgstr ""
 "Função de Bessel esférica regular de segunda ordem com escala, exp (-|x|) "
 "i2(x)"
 
-#: src/backend/gsl/functions.cpp:372
+#: src/backend/gsl/functions.cpp:374
 #, kde-format
 msgid ""
 "Scaled regular modified spherical Bessel function of order l, exp(-|x|) il(x)"
@@ -4129,7 +4135,7 @@ msgstr ""
 "Função de Bessel esférica regular de l-ésima ordem com escala, exp (-|x|) "
 "il(x)"
 
-#: src/backend/gsl/functions.cpp:374
+#: src/backend/gsl/functions.cpp:376
 #, kde-format
 msgid ""
 "Scaled irregular modified spherical Bessel function of zeroth order, exp(x) "
@@ -4138,7 +4144,7 @@ msgstr ""
 "Função de Bessel esférica irregular de 0-ésima ordem com escala, exp (x) "
 "k0(x)"
 
-#: src/backend/gsl/functions.cpp:375
+#: src/backend/gsl/functions.cpp:377
 #, kde-format
 msgid ""
 "Scaled irregular modified spherical Bessel function of first order, exp(-|"
@@ -4147,7 +4153,7 @@ msgstr ""
 "Função de Bessel esférica irregular de primeira ordem com escala, exp(-|x|) "
 "k1(x)"
 
-#: src/backend/gsl/functions.cpp:376
+#: src/backend/gsl/functions.cpp:378
 #, kde-format
 msgid ""
 "Scaled irregular modified spherical Bessel function of second order, exp(-|"
@@ -4156,7 +4162,7 @@ msgstr ""
 "Função de Bessel esférica irregular de primeira ordem com escala, exp(-|x|) "
 "k2(x)"
 
-#: src/backend/gsl/functions.cpp:377
+#: src/backend/gsl/functions.cpp:379
 #, kde-format
 msgid ""
 "Scaled irregular modified spherical Bessel function of order l, exp(-|x|) "
@@ -4165,662 +4171,662 @@ msgstr ""
 "Função de Bessel esférica irregular de l-ésima ordem com escala, exp(-|x|) "
 "kl(x)"
 
-#: src/backend/gsl/functions.cpp:378
+#: src/backend/gsl/functions.cpp:380
 #, kde-format
 msgid "Regular cylindrical Bessel function of fractional order"
 msgstr "Função de Bessel cilíndrica regular de ordem fracionária"
 
-#: src/backend/gsl/functions.cpp:379
+#: src/backend/gsl/functions.cpp:381
 #, kde-format
 msgid "Irregular cylindrical Bessel function of fractional order"
 msgstr "Função de Bessel cilíndrica irregular de ordem fracionária"
 
-#: src/backend/gsl/functions.cpp:380
+#: src/backend/gsl/functions.cpp:382
 #, kde-format
 msgid "Regular modified Bessel function of fractional order"
 msgstr "Função de Bessel cilíndrica regular modificada de ordem fracionária"
 
-#: src/backend/gsl/functions.cpp:381
+#: src/backend/gsl/functions.cpp:383
 #, kde-format
 msgid "Scaled regular modified Bessel function of fractional order"
 msgstr ""
 "Função de Bessel cilíndrica regular modificada com escala de ordem "
 "fracionária"
 
-#: src/backend/gsl/functions.cpp:382
+#: src/backend/gsl/functions.cpp:384
 #, kde-format
 msgid "Irregular modified Bessel function of fractional order"
 msgstr ""
 "Função de Bessel cilíndrica irregular modificada com escala de ordem "
 "fracionária"
 
-#: src/backend/gsl/functions.cpp:383
+#: src/backend/gsl/functions.cpp:385
 #, kde-format
 msgid "Logarithm of irregular modified Bessel function of fractional order"
 msgstr ""
 "Logaritmo da função de Bessel cilíndrica irregular modificada com escala de "
 "ordem fracionária"
 
-#: src/backend/gsl/functions.cpp:385
+#: src/backend/gsl/functions.cpp:387
 #, kde-format
 msgid "Scaled irregular modified Bessel function of fractional order"
 msgstr "Função de Bessel irregular modificada com escala de ordem fracionária"
 
-#: src/backend/gsl/functions.cpp:386
+#: src/backend/gsl/functions.cpp:388
 #, kde-format
 msgid "n-th positive zero of the Bessel function J0"
 msgstr "N-ésimo zero positivo da função de Bessel J0"
 
-#: src/backend/gsl/functions.cpp:387
+#: src/backend/gsl/functions.cpp:389
 #, kde-format
 msgid "n-th positive zero of the Bessel function J1"
 msgstr "N-ésimo zero positivo da função de Bessel J1"
 
-#: src/backend/gsl/functions.cpp:388
+#: src/backend/gsl/functions.cpp:390
 #, kde-format
 msgid "n-th positive zero of the Bessel function Jnu"
 msgstr "N-ésimo zero positivo da função de Bessel Jnu"
 
-#: src/backend/gsl/functions.cpp:391
+#: src/backend/gsl/functions.cpp:393
 #, kde-format
 msgid "Clausen function"
 msgstr "Função de Clausen"
 
-#: src/backend/gsl/functions.cpp:394
+#: src/backend/gsl/functions.cpp:396
 #, kde-format
 msgid "Lowest-order normalized hydrogenic bound state radial wavefunction"
 msgstr ""
 "Função de onda radial de estado associado normalizada de ordem inferior"
 
-#: src/backend/gsl/functions.cpp:395
+#: src/backend/gsl/functions.cpp:397
 #, kde-format
 msgid "n-th normalized hydrogenic bound state radial wavefunction"
 msgstr "Função de onda radial de estado associado normalizada de n-ésima ordem"
 
-#: src/backend/gsl/functions.cpp:398 src/backend/gsl/functions.cpp:435
+#: src/backend/gsl/functions.cpp:400 src/backend/gsl/functions.cpp:437
 #, kde-format
 msgid "Dawson's integral D(z) = sqrt(pi)/2 * exp(-z^2) * erfi(z)"
 msgstr ""
 
-#: src/backend/gsl/functions.cpp:401
+#: src/backend/gsl/functions.cpp:403
 #, kde-format
 msgid "First-order Debye function"
 msgstr "Função de Debye de primeira ordem"
 
-#: src/backend/gsl/functions.cpp:402
+#: src/backend/gsl/functions.cpp:404
 #, kde-format
 msgid "Second-order Debye function"
 msgstr "Função de Debye de segunda ordem"
 
-#: src/backend/gsl/functions.cpp:403
+#: src/backend/gsl/functions.cpp:405
 #, kde-format
 msgid "Third-order Debye function"
 msgstr "Função de Debye de terceira ordem"
 
-#: src/backend/gsl/functions.cpp:404
+#: src/backend/gsl/functions.cpp:406
 #, kde-format
 msgid "Fourth-order Debye function"
 msgstr "Função de Debye de quarta ordem"
 
-#: src/backend/gsl/functions.cpp:405
+#: src/backend/gsl/functions.cpp:407
 #, kde-format
 msgid "Fifth-order Debye function"
 msgstr "Função de Debye de quinta ordem"
 
-#: src/backend/gsl/functions.cpp:406
+#: src/backend/gsl/functions.cpp:408
 #, kde-format
 msgid "Sixth-order Debye function"
 msgstr "Função de Debye de sexta ordem"
 
-#: src/backend/gsl/functions.cpp:409
+#: src/backend/gsl/functions.cpp:411
 #, kde-format
 msgid "Dilogarithm for a real argument"
 msgstr "Di-logaritmo de um argumento real"
 
-#: src/backend/gsl/functions.cpp:412
+#: src/backend/gsl/functions.cpp:414
 #, kde-format
 msgid "Legendre form of complete elliptic integral K"
 msgstr "Forma de Legendre do integral elíptico completo K"
 
-#: src/backend/gsl/functions.cpp:413
+#: src/backend/gsl/functions.cpp:415
 #, kde-format
 msgid "Legendre form of complete elliptic integral E"
 msgstr "Forma de Legendre do integral elíptico completo E"
 
-#: src/backend/gsl/functions.cpp:414
+#: src/backend/gsl/functions.cpp:416
 #, kde-format
 msgid "Legendre form of complete elliptic integral Pi"
 msgstr "Forma de Legendre do integral elíptico completo Pi"
 
-#: src/backend/gsl/functions.cpp:415
+#: src/backend/gsl/functions.cpp:417
 #, kde-format
 msgid "Legendre form of incomplete elliptic integral F"
 msgstr "Forma de Legendre do integral elíptico incompleto F"
 
-#: src/backend/gsl/functions.cpp:416
+#: src/backend/gsl/functions.cpp:418
 #, kde-format
 msgid "Legendre form of incomplete elliptic integral E"
 msgstr "Forma de Legendre do integral elíptico incompleto E"
 
-#: src/backend/gsl/functions.cpp:417
+#: src/backend/gsl/functions.cpp:419
 #, kde-format
 msgid "Legendre form of incomplete elliptic integral P"
 msgstr "Forma de Legendre do integral elíptico incompleto P"
 
-#: src/backend/gsl/functions.cpp:418
+#: src/backend/gsl/functions.cpp:420
 #, kde-format
 msgid "Legendre form of incomplete elliptic integral D"
 msgstr "Forma de Legendre do integral elíptico incompleto D"
 
-#: src/backend/gsl/functions.cpp:419
+#: src/backend/gsl/functions.cpp:421
 #, kde-format
 msgid "Carlson form of incomplete elliptic integral RC"
 msgstr "Forma de Carlson do integral elíptico incompleto RC"
 
-#: src/backend/gsl/functions.cpp:420
+#: src/backend/gsl/functions.cpp:422
 #, kde-format
 msgid "Carlson form of incomplete elliptic integral RD"
 msgstr "Forma de Carlson do integral elíptico incompleto RD"
 
-#: src/backend/gsl/functions.cpp:421
+#: src/backend/gsl/functions.cpp:423
 #, kde-format
 msgid "Carlson form of incomplete elliptic integral RF"
 msgstr "Forma de Carlson do integral elíptico incompleto RF"
 
-#: src/backend/gsl/functions.cpp:422
+#: src/backend/gsl/functions.cpp:424
 #, kde-format
 msgid "Carlson form of incomplete elliptic integral RJ"
 msgstr "Forma de Carlson do integral elíptico incompleto RJ"
 
-#: src/backend/gsl/functions.cpp:425
+#: src/backend/gsl/functions.cpp:427
 #, kde-format
 msgid "Error function"
 msgstr "Função de erro"
 
-#: src/backend/gsl/functions.cpp:426
+#: src/backend/gsl/functions.cpp:428
 #, kde-format
 msgid "Complementary error function"
 msgstr "Função de erro complementar"
 
-#: src/backend/gsl/functions.cpp:427
+#: src/backend/gsl/functions.cpp:429
 #, kde-format
 msgid "Logarithm of complementary error function"
 msgstr "Logaritmo da função de erro complementar"
 
-#: src/backend/gsl/functions.cpp:428
+#: src/backend/gsl/functions.cpp:430
 #, kde-format
 msgid "Gaussian probability density function Z"
 msgstr "Função de densidade probabilística Gaussiana Z"
 
-#: src/backend/gsl/functions.cpp:429
+#: src/backend/gsl/functions.cpp:431
 #, kde-format
 msgid "Upper tail of the Gaussian probability function Q"
 msgstr "Extremo superior da função de probabilidade Gaussiana Q"
 
-#: src/backend/gsl/functions.cpp:430
+#: src/backend/gsl/functions.cpp:432
 #, kde-format
 msgid "Hazard function for the normal distribution Z/Q"
 msgstr "Função de Hazard da distribuição normal Z/Q"
 
-#: src/backend/gsl/functions.cpp:432
+#: src/backend/gsl/functions.cpp:434
 #, kde-format
 msgid "Underflow-compensating function exp(x^2) erfc(x) for real x"
 msgstr ""
 
-#: src/backend/gsl/functions.cpp:433
+#: src/backend/gsl/functions.cpp:435
 #, kde-format
 msgid "Imaginary error function erfi(x) = -i erf(ix) for real x"
 msgstr ""
 
-#: src/backend/gsl/functions.cpp:434
+#: src/backend/gsl/functions.cpp:436
 #, kde-format
 msgid ""
 "Imaginary part of Faddeeva's scaled complex error function w(x) = exp(-x^2) "
 "erfc(-ix) for real x"
 msgstr ""
 
-#: src/backend/gsl/functions.cpp:436
+#: src/backend/gsl/functions.cpp:438
 #, kde-format
 msgid "Voigt profile"
 msgstr ""
 
-#: src/backend/gsl/functions.cpp:438
+#: src/backend/gsl/functions.cpp:440
 #, kde-format
 msgid "Pseudo-Voigt profile (same width)"
 msgstr ""
 
-#: src/backend/gsl/functions.cpp:441
+#: src/backend/gsl/functions.cpp:443
 #, kde-format
 msgid "Exponential function"
 msgstr "Função exponencial"
 
-#: src/backend/gsl/functions.cpp:442
+#: src/backend/gsl/functions.cpp:444
 #, kde-format
 msgid "exponentiate x and multiply by y"
 msgstr "Expoente de X e multiplicação por Y"
 
-#: src/backend/gsl/functions.cpp:446
+#: src/backend/gsl/functions.cpp:448
 #, kde-format
 msgid "n-relative exponential"
 msgstr "Exponencial n-relativa"
 
-#: src/backend/gsl/functions.cpp:449
+#: src/backend/gsl/functions.cpp:451
 #, kde-format
 msgid "Exponential integral"
 msgstr "Integral da exponencial"
 
-#: src/backend/gsl/functions.cpp:450
+#: src/backend/gsl/functions.cpp:452
 #, kde-format
 msgid "Second order exponential integral"
 msgstr "Integral da exponencial de segunda ordem"
 
-#: src/backend/gsl/functions.cpp:451
+#: src/backend/gsl/functions.cpp:453
 #, kde-format
 msgid "Exponential integral of order n"
 msgstr "Integral da exponencial de n-ésima ordem"
 
-#: src/backend/gsl/functions.cpp:452
+#: src/backend/gsl/functions.cpp:454
 #, kde-format
 msgid "Exponential integral Ei"
 msgstr "Integral da exponencial Ei"
 
-#: src/backend/gsl/functions.cpp:453
+#: src/backend/gsl/functions.cpp:455
 #, kde-format
 msgid "Hyperbolic integral Shi"
 msgstr "Integral hiperbólico Shi"
 
-#: src/backend/gsl/functions.cpp:454
+#: src/backend/gsl/functions.cpp:456
 #, kde-format
 msgid "Hyperbolic integral Chi"
 msgstr "Integral hiperbólico Chi"
 
-#: src/backend/gsl/functions.cpp:455
+#: src/backend/gsl/functions.cpp:457
 #, kde-format
 msgid "Third-order exponential integral"
 msgstr "Integral da exponencial de terceira ordem"
 
-#: src/backend/gsl/functions.cpp:456
+#: src/backend/gsl/functions.cpp:458
 #, kde-format
 msgid "Sine integral"
 msgstr "Integral do seno"
 
-#: src/backend/gsl/functions.cpp:457
+#: src/backend/gsl/functions.cpp:459
 #, kde-format
 msgid "Cosine integral"
 msgstr "Integral do cosseno"
 
-#: src/backend/gsl/functions.cpp:458
+#: src/backend/gsl/functions.cpp:460
 #, kde-format
 msgid "Arctangent integral"
 msgstr "Integral da arco-tangente"
 
-#: src/backend/gsl/functions.cpp:461
+#: src/backend/gsl/functions.cpp:463
 #, kde-format
 msgid "Complete Fermi-Dirac integral with index -1"
 msgstr "Integral completa de Fermi-Dirac com índice -1"
 
-#: src/backend/gsl/functions.cpp:462
+#: src/backend/gsl/functions.cpp:464
 #, kde-format
 msgid "Complete Fermi-Dirac integral with index 0"
 msgstr "Integral completa de Fermi-Dirac com índice 0"
 
-#: src/backend/gsl/functions.cpp:463
+#: src/backend/gsl/functions.cpp:465
 #, kde-format
 msgid "Complete Fermi-Dirac integral with index 1"
 msgstr "Integral completa de Fermi-Dirac com índice 1"
 
-#: src/backend/gsl/functions.cpp:464
+#: src/backend/gsl/functions.cpp:466
 #, kde-format
 msgid "Complete Fermi-Dirac integral with index 2"
 msgstr "Integral completa de Fermi-Dirac com índice 2"
 
-#: src/backend/gsl/functions.cpp:465
+#: src/backend/gsl/functions.cpp:467
 #, kde-format
 msgid "Complete Fermi-Dirac integral with integer index j"
 msgstr "Integral completa de Fermi-Dirac com índice inteiro j"
 
-#: src/backend/gsl/functions.cpp:466
+#: src/backend/gsl/functions.cpp:468
 #, kde-format
 msgid "Complete Fermi-Dirac integral with index -1/2"
 msgstr "Integral completa de Fermi-Dirac com índice -1/2"
 
-#: src/backend/gsl/functions.cpp:467
+#: src/backend/gsl/functions.cpp:469
 #, kde-format
 msgid "Complete Fermi-Dirac integral with index 1/2"
 msgstr "Integral completa de Fermi-Dirac com índice 1/2"
 
-#: src/backend/gsl/functions.cpp:468
+#: src/backend/gsl/functions.cpp:470
 #, kde-format
 msgid "Complete Fermi-Dirac integral with index 3/2"
 msgstr "Integral completa de Fermi-Dirac com índice 3/2"
 
-#: src/backend/gsl/functions.cpp:469
+#: src/backend/gsl/functions.cpp:471
 #, kde-format
 msgid "Incomplete Fermi-Dirac integral with index zero"
 msgstr "Integral incompleta de Fermi-Dirac com índice zero"
 
-#: src/backend/gsl/functions.cpp:472 src/backend/gsl/functions.cpp:473
+#: src/backend/gsl/functions.cpp:474 src/backend/gsl/functions.cpp:475
 #, kde-format
 msgid "Gamma function"
 msgstr "Função Gama"
 
-#: src/backend/gsl/functions.cpp:474
+#: src/backend/gsl/functions.cpp:476
 #, kde-format
 msgid "Logarithm of the gamma function"
 msgstr "Logaritmo da função Gama"
 
-#: src/backend/gsl/functions.cpp:475
+#: src/backend/gsl/functions.cpp:477
 #, fuzzy, kde-format
 #| msgid "Logarithm of the gamma function"
 msgid "Logarithm naturalis of the gamma function"
 msgstr "Logaritmo da função Gama"
 
-#: src/backend/gsl/functions.cpp:476
+#: src/backend/gsl/functions.cpp:478
 #, kde-format
 msgid "Regulated gamma function"
 msgstr "Função Gama regulada"
 
-#: src/backend/gsl/functions.cpp:477
+#: src/backend/gsl/functions.cpp:479
 #, kde-format
 msgid "Reciprocal of the gamma function"
 msgstr "Inversa da função Gama"
 
-#: src/backend/gsl/functions.cpp:478
+#: src/backend/gsl/functions.cpp:480
 #, kde-format
 msgid "Factorial n!"
 msgstr "Fatorial de n!"
 
-#: src/backend/gsl/functions.cpp:479
+#: src/backend/gsl/functions.cpp:481
 #, kde-format
 msgid "Double factorial n!!"
 msgstr "Duplo fatorial de n!!"
 
-#: src/backend/gsl/functions.cpp:480
+#: src/backend/gsl/functions.cpp:482
 #, kde-format
 msgid "Logarithm of the factorial"
 msgstr "Logaritmo do fatorial"
 
-#: src/backend/gsl/functions.cpp:481
+#: src/backend/gsl/functions.cpp:483
 #, kde-format
 msgid "Logarithm of the double factorial"
 msgstr "Logaritmo do duplo fatorial"
 
-#: src/backend/gsl/functions.cpp:483
+#: src/backend/gsl/functions.cpp:485
 #, kde-format
 msgid "Combinatorial factor"
 msgstr "Fator combinatório"
 
-#: src/backend/gsl/functions.cpp:484
+#: src/backend/gsl/functions.cpp:486
 #, kde-format
 msgid "Logarithm of the combinatorial factor"
 msgstr "Logaritmo do fator combinatório"
 
-#: src/backend/gsl/functions.cpp:485
+#: src/backend/gsl/functions.cpp:487
 #, kde-format
 msgid "Taylor coefficient"
 msgstr "Coeficiente de Taylor"
 
-#: src/backend/gsl/functions.cpp:486
+#: src/backend/gsl/functions.cpp:488
 #, kde-format
 msgid "Pochhammer symbol"
 msgstr "Símbolo de Pochhammer"
 
-#: src/backend/gsl/functions.cpp:487
+#: src/backend/gsl/functions.cpp:489
 #, kde-format
 msgid "Logarithm of the Pochhammer symbol"
 msgstr "Logaritmo do símbolo de Pochhammer"
 
-#: src/backend/gsl/functions.cpp:488
+#: src/backend/gsl/functions.cpp:490
 #, kde-format
 msgid "Relative Pochhammer symbol"
 msgstr "Símbolo de Pochhammer relativo"
 
-#: src/backend/gsl/functions.cpp:489
+#: src/backend/gsl/functions.cpp:491
 #, kde-format
 msgid "Unnormalized incomplete gamma function"
 msgstr "Função gama incompleta e não-normalizada"
 
-#: src/backend/gsl/functions.cpp:490
+#: src/backend/gsl/functions.cpp:492
 #, kde-format
 msgid "Normalized incomplete gamma function"
 msgstr "Função Gama incompleta normalizada"
 
-#: src/backend/gsl/functions.cpp:491
+#: src/backend/gsl/functions.cpp:493
 #, kde-format
 msgid "Complementary normalized incomplete gamma function"
 msgstr "Função Gama incompleta normalizada complementa"
 
-#: src/backend/gsl/functions.cpp:492
+#: src/backend/gsl/functions.cpp:494
 #, kde-format
 msgid "Beta function"
 msgstr "Função Beta"
 
-#: src/backend/gsl/functions.cpp:494
+#: src/backend/gsl/functions.cpp:496
 #, kde-format
 msgid "Logarithm of the beta function"
 msgstr "Logaritmo da função Beta"
 
-#: src/backend/gsl/functions.cpp:495
+#: src/backend/gsl/functions.cpp:497
 #, kde-format
 msgid "Normalized incomplete beta function"
 msgstr "Função Beta incompleta normalizada"
 
-#: src/backend/gsl/functions.cpp:498
+#: src/backend/gsl/functions.cpp:500
 #, kde-format
 msgid "Gegenbauer polynomial C_1"
 msgstr "Polinômio de Gegenbauer C_1"
 
-#: src/backend/gsl/functions.cpp:499
+#: src/backend/gsl/functions.cpp:501
 #, kde-format
 msgid "Gegenbauer polynomial C_2"
 msgstr "Polinômio de Gegenbauer C_2"
 
-#: src/backend/gsl/functions.cpp:500
+#: src/backend/gsl/functions.cpp:502
 #, kde-format
 msgid "Gegenbauer polynomial C_3"
 msgstr "Polinômio de Gegenbauer C_3"
 
-#: src/backend/gsl/functions.cpp:501
+#: src/backend/gsl/functions.cpp:503
 #, kde-format
 msgid "Gegenbauer polynomial C_n"
 msgstr "Polinômio de Gegenbauer C_n"
 
-#: src/backend/gsl/functions.cpp:505
+#: src/backend/gsl/functions.cpp:507
 #, kde-format
 msgid "Hermite polynomials physicists version"
 msgstr ""
 
-#: src/backend/gsl/functions.cpp:506
+#: src/backend/gsl/functions.cpp:508
 #, kde-format
 msgid "Hermite polynomials probabilists version"
 msgstr ""
 
-#: src/backend/gsl/functions.cpp:507
+#: src/backend/gsl/functions.cpp:509
 #, fuzzy, kde-format
 #| msgid "Hurwitz zeta function"
 msgid "Hermite functions"
 msgstr "Função zeta de Hurwitz"
 
-#: src/backend/gsl/functions.cpp:509
+#: src/backend/gsl/functions.cpp:511
 #, fuzzy, kde-format
 #| msgid "Hurwitz zeta function"
 msgid "Hermite functions (fast version)"
 msgstr "Função zeta de Hurwitz"
 
-#: src/backend/gsl/functions.cpp:511
+#: src/backend/gsl/functions.cpp:513
 #, kde-format
 msgid "Derivatives of Hermite polynomials physicists version"
 msgstr ""
 
-#: src/backend/gsl/functions.cpp:512
+#: src/backend/gsl/functions.cpp:514
 #, kde-format
 msgid "Derivatives of Hermite polynomials probabilists version"
 msgstr ""
 
-#: src/backend/gsl/functions.cpp:513
+#: src/backend/gsl/functions.cpp:515
 #, fuzzy, kde-format
 #| msgid "rational functions"
 msgid "Derivatives of Hermite functions"
 msgstr "funções racionais"
 
-#: src/backend/gsl/functions.cpp:517
+#: src/backend/gsl/functions.cpp:519
 #, kde-format
 msgid "Hypergeometric function 0F1"
 msgstr "Função hipergeométrica 0F1"
 
-#: src/backend/gsl/functions.cpp:518
+#: src/backend/gsl/functions.cpp:520
 #, kde-format
 msgid "Confluent hypergeometric function 1F1 for integer parameters"
 msgstr "Função hipergeométrica confluente 1F1 para os parâmetros inteiros"
 
-#: src/backend/gsl/functions.cpp:519
+#: src/backend/gsl/functions.cpp:521
 #, kde-format
 msgid "Confluent hypergeometric function 1F1 for general parameters"
 msgstr "Função hipergeométrica confluente 1F1 para os parâmetros gerais"
 
-#: src/backend/gsl/functions.cpp:520
+#: src/backend/gsl/functions.cpp:522
 #, kde-format
 msgid "Confluent hypergeometric function U for integer parameters"
 msgstr "Função hipergeométrica confluente U para os parâmetros inteiros"
 
-#: src/backend/gsl/functions.cpp:521
+#: src/backend/gsl/functions.cpp:523
 #, kde-format
 msgid "Confluent hypergeometric function U"
 msgstr "Função hipergeométrica confluente U"
 
-#: src/backend/gsl/functions.cpp:522
+#: src/backend/gsl/functions.cpp:524
 #, kde-format
 msgid "Gauss hypergeometric function 2F1"
 msgstr "Função hipergeométrica de Gauss 2F1"
 
-#: src/backend/gsl/functions.cpp:523
+#: src/backend/gsl/functions.cpp:525
 #, kde-format
 msgid "Gauss hypergeometric function 2F1 with complex parameters"
 msgstr "Função hipergeométrica de Gauss 2F1 com parâmetros complexos"
 
-#: src/backend/gsl/functions.cpp:524
+#: src/backend/gsl/functions.cpp:526
 #, kde-format
 msgid "Renormalized Gauss hypergeometric function 2F1"
 msgstr "Função hipergeométrica de Gauss renormalizada 2F1"
 
-#: src/backend/gsl/functions.cpp:525
+#: src/backend/gsl/functions.cpp:527
 #, kde-format
 msgid "Renormalized Gauss hypergeometric function 2F1 with complex parameters"
 msgstr ""
 "Função hipergeométrica de Gauss renormalizada 2F1 com parâmetros complexos"
 
-#: src/backend/gsl/functions.cpp:526
+#: src/backend/gsl/functions.cpp:528
 #, kde-format
 msgid "Hypergeometric function 2F0"
 msgstr "Função hipergeométrica 2F0"
 
-#: src/backend/gsl/functions.cpp:529
+#: src/backend/gsl/functions.cpp:531
 #, kde-format
 msgid "generalized Laguerre polynomials L_1"
 msgstr "Polinômios de Laguerre generalizados L_1"
 
-#: src/backend/gsl/functions.cpp:530
+#: src/backend/gsl/functions.cpp:532
 #, kde-format
 msgid "generalized Laguerre polynomials L_2"
 msgstr "Polinômios de Laguerre generalizados L_2"
 
-#: src/backend/gsl/functions.cpp:531
+#: src/backend/gsl/functions.cpp:533
 #, kde-format
 msgid "generalized Laguerre polynomials L_3"
 msgstr "Polinômios de Laguerre generalizados L_3"
 
-#: src/backend/gsl/functions.cpp:532
+#: src/backend/gsl/functions.cpp:534
 #, fuzzy, kde-format
 #| msgid "generalized Laguerre polynomials L_1"
 msgid "generalized Laguerre polynomials L_n"
 msgstr "Polinômios de Laguerre generalizados L_1"
 
-#: src/backend/gsl/functions.cpp:535
+#: src/backend/gsl/functions.cpp:537
 #, kde-format
 msgid "Principal branch of the Lambert W function"
 msgstr "Ramo principal da função W de Lambert"
 
-#: src/backend/gsl/functions.cpp:536
+#: src/backend/gsl/functions.cpp:538
 #, kde-format
 msgid "Secondary real-valued branch of the Lambert W function"
 msgstr "Ramo de valor real secundário da função W de Lambert"
 
-#: src/backend/gsl/functions.cpp:539
+#: src/backend/gsl/functions.cpp:541
 #, kde-format
 msgid "Legendre polynomial P_1"
 msgstr "Polinômio de Legendre P_1"
 
-#: src/backend/gsl/functions.cpp:540
+#: src/backend/gsl/functions.cpp:542
 #, kde-format
 msgid "Legendre polynomial P_2"
 msgstr "Polinômio de Legendre P_2"
 
-#: src/backend/gsl/functions.cpp:541
+#: src/backend/gsl/functions.cpp:543
 #, kde-format
 msgid "Legendre polynomial P_3"
 msgstr "Polinômio de Legendre P_3"
 
-#: src/backend/gsl/functions.cpp:542
+#: src/backend/gsl/functions.cpp:544
 #, kde-format
 msgid "Legendre polynomial P_l"
 msgstr "Polinômio de Legendre P_l"
 
-#: src/backend/gsl/functions.cpp:543
+#: src/backend/gsl/functions.cpp:545
 #, kde-format
 msgid "Legendre function Q_0"
 msgstr "Função de Legendre Q_0"
 
-#: src/backend/gsl/functions.cpp:544
+#: src/backend/gsl/functions.cpp:546
 #, kde-format
 msgid "Legendre function Q_1"
 msgstr "Função de Legendre Q_1"
 
-#: src/backend/gsl/functions.cpp:545
+#: src/backend/gsl/functions.cpp:547
 #, kde-format
 msgid "Legendre function Q_l"
 msgstr "Função de Legendre Q_l"
 
-#: src/backend/gsl/functions.cpp:546
+#: src/backend/gsl/functions.cpp:548
 #, kde-format
 msgid "Associated Legendre polynomial"
 msgstr "Polinômio de Legendre associado"
 
-#: src/backend/gsl/functions.cpp:547
+#: src/backend/gsl/functions.cpp:549
 #, kde-format
 msgid "Normalized associated Legendre polynomial"
 msgstr "Polinômio de Legendre associado e normalizado"
 
-#: src/backend/gsl/functions.cpp:548
+#: src/backend/gsl/functions.cpp:550
 #, kde-format
 msgid "Irregular spherical conical function P^1/2"
 msgstr "Função cônica esférica irregular P^1/2"
 
-#: src/backend/gsl/functions.cpp:550
+#: src/backend/gsl/functions.cpp:552
 #, kde-format
 msgid "Regular spherical conical function P^(-1/2)"
 msgstr "Função cônica esférica regular P^(-1/2)"
 
-#: src/backend/gsl/functions.cpp:551
+#: src/backend/gsl/functions.cpp:553
 #, kde-format
 msgid "Conical function P^0"
 msgstr "Função cônica P^0"
 
-#: src/backend/gsl/functions.cpp:552
+#: src/backend/gsl/functions.cpp:554
 #, kde-format
 msgid "Conical function P^1"
 msgstr "Função cônica P^1"
 
-#: src/backend/gsl/functions.cpp:553
+#: src/backend/gsl/functions.cpp:555
 #, kde-format
 msgid "Regular spherical conical function P^(-1/2-l)"
 msgstr "Função cônica esférica regular P^(-1/2-l)"
 
-#: src/backend/gsl/functions.cpp:554
+#: src/backend/gsl/functions.cpp:556
 #, kde-format
 msgid "Regular cylindrical conical function P^(-m)"
 msgstr "Função cônica cilíndrica regular P^(-m)"
 
-#: src/backend/gsl/functions.cpp:555
+#: src/backend/gsl/functions.cpp:557
 #, kde-format
 msgid ""
 "Zeroth radial eigenfunction of the Laplacian on the 3-dimensional hyperbolic "
@@ -4829,7 +4835,7 @@ msgstr ""
 "Função de Eigen radial de ordem zero do Laplaciano no espaço hiperbólico "
 "tridimensional"
 
-#: src/backend/gsl/functions.cpp:556
+#: src/backend/gsl/functions.cpp:558
 #, kde-format
 msgid ""
 "First radial eigenfunction of the Laplacian on the 3-dimensional hyperbolic "
@@ -4838,7 +4844,7 @@ msgstr ""
 "Função de Eigen radial de primeira ordem do Laplaciano no espaço hiperbólico "
 "tridimensional"
 
-#: src/backend/gsl/functions.cpp:557
+#: src/backend/gsl/functions.cpp:559
 #, kde-format
 msgid ""
 "l-th radial eigenfunction of the Laplacian on the 3-dimensional hyperbolic "
@@ -4847,423 +4853,391 @@ msgstr ""
 "Função de Eigen radial de l-ésima ordem do Laplaciano no espaço hiperbólico "
 "tridimensional"
 
-#: src/backend/gsl/functions.cpp:560
+#: src/backend/gsl/functions.cpp:562
 #, kde-format
 msgid "Logarithm"
 msgstr "Logaritmo"
 
-#: src/backend/gsl/functions.cpp:561
+#: src/backend/gsl/functions.cpp:563
 #, fuzzy, kde-format
 #| msgid "Base 10 logarithm"
 msgid "Base 2 logarithm"
 msgstr "Logaritmo de base 10"
 
-#: src/backend/gsl/functions.cpp:562
+#: src/backend/gsl/functions.cpp:564
 #, kde-format
 msgid "Logarithm of the magnitude"
 msgstr "Logaritmo da magnitude"
 
-#: src/backend/gsl/functions.cpp:568
+#: src/backend/gsl/functions.cpp:570
 #, kde-format
 msgid "Characteristic values a_n(q) of the Mathieu functions ce_n(q, x)"
 msgstr ""
 
-#: src/backend/gsl/functions.cpp:569
+#: src/backend/gsl/functions.cpp:571
 #, kde-format
 msgid "Characteristic values b_n(q) of the Mathieu functions se_n(q, x)"
 msgstr ""
 
-#: src/backend/gsl/functions.cpp:570
+#: src/backend/gsl/functions.cpp:572
 #, fuzzy, kde-format
 #| msgid "Zeta Functions"
 msgid "Angular Mathieu functions ce_n(q, x)"
 msgstr "Funções Zeta"
 
-#: src/backend/gsl/functions.cpp:571
+#: src/backend/gsl/functions.cpp:573
 #, fuzzy, kde-format
 #| msgid "Zeta Functions"
 msgid "Angular Mathieu functions se_n(q, x)"
 msgstr "Funções Zeta"
 
-#: src/backend/gsl/functions.cpp:572
+#: src/backend/gsl/functions.cpp:574
 #, kde-format
 msgid "Radial j-th kind Mathieu functions Mc_n^{(j)}(q, x)"
 msgstr ""
 
-#: src/backend/gsl/functions.cpp:573
+#: src/backend/gsl/functions.cpp:575
 #, kde-format
 msgid "Radial j-th kind Mathieu functions Ms_n^{(j)}(q, x)"
 msgstr ""
 
-#: src/backend/gsl/functions.cpp:577
+#: src/backend/gsl/functions.cpp:579
 #, kde-format
 msgid "x^n for integer n with an error estimate"
 msgstr "x^n para um inteiro 'n' com uma estimativa de erro"
 
-#: src/backend/gsl/functions.cpp:580
+#: src/backend/gsl/functions.cpp:582
 #, kde-format
 msgid "Digamma function for positive integer n"
 msgstr "Função Digama para um inteiro positivo n"
 
-#: src/backend/gsl/functions.cpp:581
+#: src/backend/gsl/functions.cpp:583
 #, kde-format
 msgid "Digamma function"
 msgstr "Função Digama"
 
-#: src/backend/gsl/functions.cpp:582
+#: src/backend/gsl/functions.cpp:584
 #, kde-format
 msgid "Real part of the digamma function on the line 1+i y"
 msgstr "Parte real da função Digama sobre a linha 1+i y"
 
-#: src/backend/gsl/functions.cpp:583
+#: src/backend/gsl/functions.cpp:585
 #, kde-format
 msgid "Trigamma function psi' for positive integer n"
 msgstr "Função Trigamma psi' para um inteiro positivo n"
 
-#: src/backend/gsl/functions.cpp:584
+#: src/backend/gsl/functions.cpp:586
 #, kde-format
 msgid "Trigamma function psi'"
 msgstr "Função Trigamma psi'"
 
-#: src/backend/gsl/functions.cpp:585
+#: src/backend/gsl/functions.cpp:587
 #, kde-format
 msgid "Polygamma function psi^(n)"
 msgstr "Função Polygamma psi^(n)"
 
-#: src/backend/gsl/functions.cpp:588
+#: src/backend/gsl/functions.cpp:590
 #, kde-format
 msgid "First synchrotron function"
 msgstr "Primeira função de síncrotron"
 
-#: src/backend/gsl/functions.cpp:589
+#: src/backend/gsl/functions.cpp:591
 #, kde-format
 msgid "Second synchrotron function"
 msgstr "Segunda função de síncrotron"
 
-#: src/backend/gsl/functions.cpp:592 src/backend/gsl/functions.cpp:593
 #: src/backend/gsl/functions.cpp:594 src/backend/gsl/functions.cpp:595
+#: src/backend/gsl/functions.cpp:596 src/backend/gsl/functions.cpp:597
 #, kde-format
 msgid "Transport function"
 msgstr "Função de transporte"
 
-#: src/backend/gsl/functions.cpp:598
+#: src/backend/gsl/functions.cpp:600
 #, kde-format
 msgid "Sine"
 msgstr "Seno"
 
-#: src/backend/gsl/functions.cpp:599 src/backend/nsl/nsl_interp.c:21
+#: src/backend/gsl/functions.cpp:601 src/backend/nsl/nsl_interp.c:21
 #: src/backend/nsl/nsl_sf_window.c:27 src/backend/nsl/nsl_smooth.c:30
 #: src/kdefrontend/dockwidgets/KDEPlotDock.cpp:186
 #, kde-format
 msgid "Cosine"
 msgstr "Cosseno"
 
-#: src/backend/gsl/functions.cpp:600
+#: src/backend/gsl/functions.cpp:602
 #, kde-format
 msgid "Tangent"
 msgstr "Tangente"
 
-#: src/backend/gsl/functions.cpp:601
+#: src/backend/gsl/functions.cpp:603
 #, kde-format
 msgid "Inverse sine"
 msgstr "Seno inverso"
 
-#: src/backend/gsl/functions.cpp:602
+#: src/backend/gsl/functions.cpp:604
 #, kde-format
 msgid "Inverse cosine"
 msgstr "Cosseno inverso"
 
-#: src/backend/gsl/functions.cpp:603
+#: src/backend/gsl/functions.cpp:605
 #, kde-format
 msgid "Inverse tangent"
 msgstr "Tangente inversa"
 
-#: src/backend/gsl/functions.cpp:604
+#: src/backend/gsl/functions.cpp:606
 #, fuzzy, kde-format
 #| msgid "atan() using sign"
 msgid "Inverse tangent using sign"
 msgstr "atan() com sinal"
 
-#: src/backend/gsl/functions.cpp:605
+#: src/backend/gsl/functions.cpp:607
 #, kde-format
 msgid "Hyperbolic sine"
 msgstr "Seno hiperbólico"
 
-#: src/backend/gsl/functions.cpp:606
+#: src/backend/gsl/functions.cpp:608
 #, kde-format
 msgid "Hyperbolic cosine"
 msgstr "Cosseno hiperbólico"
 
-#: src/backend/gsl/functions.cpp:607
+#: src/backend/gsl/functions.cpp:609
 #, kde-format
 msgid "Hyperbolic tangent"
 msgstr "Tangente hiperbólica"
 
-#: src/backend/gsl/functions.cpp:608
+#: src/backend/gsl/functions.cpp:610
 #, kde-format
 msgid "Inverse hyperbolic cosine"
 msgstr "Cosseno hiperbólico inverso"
 
-#: src/backend/gsl/functions.cpp:609
+#: src/backend/gsl/functions.cpp:611
 #, kde-format
 msgid "Inverse hyperbolic sine"
 msgstr "Seno hiperbólico inverso"
 
-#: src/backend/gsl/functions.cpp:610
+#: src/backend/gsl/functions.cpp:612
 #, kde-format
 msgid "Inverse hyperbolic tangent"
 msgstr "Tangente hiperbólica inversa"
 
-#: src/backend/gsl/functions.cpp:611
+#: src/backend/gsl/functions.cpp:613
 #, kde-format
 msgid "Secant"
 msgstr "Secante"
 
-#: src/backend/gsl/functions.cpp:612
+#: src/backend/gsl/functions.cpp:614
 #, kde-format
 msgid "Cosecant"
 msgstr "Cossecante"
 
-#: src/backend/gsl/functions.cpp:613
+#: src/backend/gsl/functions.cpp:615
 #, kde-format
 msgid "Cotangent"
 msgstr "Cotangente"
 
-#: src/backend/gsl/functions.cpp:614
+#: src/backend/gsl/functions.cpp:616
 #, kde-format
 msgid "Inverse secant"
 msgstr "Secante inversa"
 
-#: src/backend/gsl/functions.cpp:615
+#: src/backend/gsl/functions.cpp:617
 #, kde-format
 msgid "Inverse cosecant"
 msgstr "Cossecante inversa"
 
-#: src/backend/gsl/functions.cpp:616
+#: src/backend/gsl/functions.cpp:618
 #, kde-format
 msgid "Inverse cotangent"
 msgstr "Cotangente inversa"
 
-#: src/backend/gsl/functions.cpp:617
+#: src/backend/gsl/functions.cpp:619
 #, kde-format
 msgid "Hyperbolic secant"
 msgstr "Secante hiperbólica"
 
-#: src/backend/gsl/functions.cpp:618
+#: src/backend/gsl/functions.cpp:620
 #, kde-format
 msgid "Hyperbolic cosecant"
 msgstr "Cossecante hiperbólica"
 
-#: src/backend/gsl/functions.cpp:619
+#: src/backend/gsl/functions.cpp:621
 #, kde-format
 msgid "Hyperbolic cotangent"
 msgstr "Cotangente hiperbólica"
 
-#: src/backend/gsl/functions.cpp:620
+#: src/backend/gsl/functions.cpp:622
 #, kde-format
 msgid "Inverse hyperbolic secant"
 msgstr "Secante hiperbólica inversa"
 
-#: src/backend/gsl/functions.cpp:621
+#: src/backend/gsl/functions.cpp:623
 #, kde-format
 msgid "Inverse hyperbolic cosecant"
 msgstr "Cossecante hiperbólica inversa"
 
-#: src/backend/gsl/functions.cpp:622
+#: src/backend/gsl/functions.cpp:624
 #, kde-format
 msgid "Inverse hyperbolic cotangent"
 msgstr "Cotangente hiperbólica inversa"
 
-#: src/backend/gsl/functions.cpp:623
+#: src/backend/gsl/functions.cpp:625
 #, kde-format
 msgid "Sinc function sin(x)/x"
 msgstr "Função sinc sin(x)/x"
 
-#: src/backend/gsl/functions.cpp:626
+#: src/backend/gsl/functions.cpp:628
 #, kde-format
 msgid "Hypotenuse function"
 msgstr "Função hipotenusa"
 
-#: src/backend/gsl/functions.cpp:627
+#: src/backend/gsl/functions.cpp:629
 #, kde-format
 msgid "Three component hypotenuse function"
 msgstr "Função hipotenusa de três componentes"
 
-#: src/backend/gsl/functions.cpp:628
+#: src/backend/gsl/functions.cpp:630
 #, fuzzy, kde-format
 #| msgid "restrict to [-pi,pi]"
 msgid "restrict to [-pi, pi]"
 msgstr "restrição a [-pi,pi]"
 
-#: src/backend/gsl/functions.cpp:629
+#: src/backend/gsl/functions.cpp:631
 #, fuzzy, kde-format
 #| msgid "restrict to [0,2 pi]"
 msgid "restrict to [0, 2 pi]"
 msgstr "restrição a [0,2 pi]"
 
-#: src/backend/gsl/functions.cpp:632
+#: src/backend/gsl/functions.cpp:634
 #, kde-format
 msgid "Riemann zeta function for integer n"
 msgstr "Função zeta de Riemann para um inteiro n"
 
-#: src/backend/gsl/functions.cpp:633
+#: src/backend/gsl/functions.cpp:635
 #, kde-format
 msgid "Riemann zeta function"
 msgstr "Função zeta de Riemann"
 
-#: src/backend/gsl/functions.cpp:634
+#: src/backend/gsl/functions.cpp:636
 #, kde-format
 msgid "zeta(n)-1 for integer n"
 msgstr "zeta(n)-1 para o inteiro n"
 
-#: src/backend/gsl/functions.cpp:635
+#: src/backend/gsl/functions.cpp:637
 #, kde-format
 msgid "zeta(x)-1"
 msgstr "zeta(x)-1"
 
-#: src/backend/gsl/functions.cpp:636
+#: src/backend/gsl/functions.cpp:638
 #, kde-format
 msgid "Hurwitz zeta function"
 msgstr "Função zeta de Hurwitz"
 
-#: src/backend/gsl/functions.cpp:637
+#: src/backend/gsl/functions.cpp:639
 #, kde-format
 msgid "Eta function for integer n"
 msgstr "Função eta para o inteiro n"
 
-#: src/backend/gsl/functions.cpp:638
+#: src/backend/gsl/functions.cpp:640
 #, kde-format
 msgid "Eta function"
 msgstr "Função eta"
 
-#: src/backend/gsl/functions.cpp:642
+#: src/backend/gsl/functions.cpp:644
 #, fuzzy, kde-format
 #| msgid "Gaussian"
 msgid "Gaussian random numbers"
 msgstr "Gaussiano"
 
-#: src/backend/gsl/functions.cpp:643
+#: src/backend/gsl/functions.cpp:645
 #, fuzzy, kde-format
 #| msgid "Exponential"
 msgid "Exponential random numbers"
 msgstr "Exponencial"
 
-#: src/backend/gsl/functions.cpp:644
+#: src/backend/gsl/functions.cpp:646
 #, kde-format
 msgid "Laplacian random numbers"
 msgstr ""
 
-#: src/backend/gsl/functions.cpp:645
+#: src/backend/gsl/functions.cpp:647
 #, kde-format
 msgid "Cauchy/Lorentz random numbers"
 msgstr ""
 
-#: src/backend/gsl/functions.cpp:646
+#: src/backend/gsl/functions.cpp:648
 #, kde-format
 msgid "Rayleigh random numbers"
 msgstr ""
 
-#: src/backend/gsl/functions.cpp:647
+#: src/backend/gsl/functions.cpp:649
 #, kde-format
 msgid "Landau random numbers"
 msgstr ""
 
-#: src/backend/gsl/functions.cpp:648
+#: src/backend/gsl/functions.cpp:650
 #, fuzzy, kde-format
 #| msgid "Levy alpha-stable Distribution"
 msgid "Levy alpha-stable random numbers"
 msgstr "Distribuição alfa-estável de Levy"
 
-#: src/backend/gsl/functions.cpp:649
+#: src/backend/gsl/functions.cpp:651
 #, kde-format
 msgid "Gamma random numbers"
 msgstr ""
 
-#: src/backend/gsl/functions.cpp:650
+#: src/backend/gsl/functions.cpp:652
 #, kde-format
 msgid "Flat random numbers"
 msgstr ""
 
-#: src/backend/gsl/functions.cpp:651
+#: src/backend/gsl/functions.cpp:653
 #, fuzzy, kde-format
 #| msgid "Uniform Random Values"
 msgid "Lognormal random numbers"
 msgstr "Valores aleatórios uniformes"
 
-#: src/backend/gsl/functions.cpp:653
+#: src/backend/gsl/functions.cpp:655
 #, fuzzy, kde-format
 #| msgid "Chi-squared Distribution"
 msgid "Chi-squared random numbers"
 msgstr "Distribuição Qui-Quadrado"
 
-#: src/backend/gsl/functions.cpp:654
+#: src/backend/gsl/functions.cpp:656
 #, fuzzy, kde-format
 #| msgid "t-distribution"
 msgid "t-distributed random numbers"
 msgstr "Distribuição-t"
 
-#: src/backend/gsl/functions.cpp:655
+#: src/backend/gsl/functions.cpp:657
 #, fuzzy, kde-format
 #| msgid "Beta function"
 msgid "Logistic random numbers"
 msgstr "Função Beta"
 
-#: src/backend/gsl/functions.cpp:656
+#: src/backend/gsl/functions.cpp:658
 #, kde-format
 msgid "Poisson random numbers"
 msgstr ""
 
-#: src/backend/gsl/functions.cpp:657
+#: src/backend/gsl/functions.cpp:659
 #, kde-format
 msgid "Bernoulli random numbers"
 msgstr ""
 
-#: src/backend/gsl/functions.cpp:658
+#: src/backend/gsl/functions.cpp:660
 #, kde-format
 msgid "Binomial random numbers"
 msgstr ""
 
-#: src/backend/gsl/functions.cpp:662
+#: src/backend/gsl/functions.cpp:664
 #, kde-format
 msgid "Probability density for a Gaussian distribution"
 msgstr "Densidade da probabilidade para uma distribuição Gaussiana"
 
-#: src/backend/gsl/functions.cpp:663
+#: src/backend/gsl/functions.cpp:665
 #, kde-format
 msgid "Probability density for a unit Gaussian distribution"
 msgstr "Densidade da probabilidade para uma distribuição Gaussiana unitária"
-
-#: src/backend/gsl/functions.cpp:664 src/backend/gsl/functions.cpp:679
-#: src/backend/gsl/functions.cpp:686 src/backend/gsl/functions.cpp:698
-#: src/backend/gsl/functions.cpp:705 src/backend/gsl/functions.cpp:716
-#: src/backend/gsl/functions.cpp:723 src/backend/gsl/functions.cpp:730
-#: src/backend/gsl/functions.cpp:737 src/backend/gsl/functions.cpp:744
-#: src/backend/gsl/functions.cpp:751 src/backend/gsl/functions.cpp:758
-#: src/backend/gsl/functions.cpp:765 src/backend/gsl/functions.cpp:772
-#: src/backend/gsl/functions.cpp:779 src/backend/gsl/functions.cpp:786
-#: src/backend/gsl/functions.cpp:791 src/backend/gsl/functions.cpp:798
-#: src/backend/gsl/functions.cpp:806 src/backend/gsl/functions.cpp:809
-#: src/backend/gsl/functions.cpp:814 src/backend/gsl/functions.cpp:819
-#: src/backend/gsl/functions.cpp:824
-#, kde-format
-msgid "Cumulative distribution function P"
-msgstr "Função de distribuição acumulada P"
-
-#: src/backend/gsl/functions.cpp:665 src/backend/gsl/functions.cpp:680
-#: src/backend/gsl/functions.cpp:687 src/backend/gsl/functions.cpp:694
-#: src/backend/gsl/functions.cpp:699 src/backend/gsl/functions.cpp:706
-#: src/backend/gsl/functions.cpp:717 src/backend/gsl/functions.cpp:724
-#: src/backend/gsl/functions.cpp:731 src/backend/gsl/functions.cpp:738
-#: src/backend/gsl/functions.cpp:745 src/backend/gsl/functions.cpp:752
-#: src/backend/gsl/functions.cpp:759 src/backend/gsl/functions.cpp:766
-#: src/backend/gsl/functions.cpp:773 src/backend/gsl/functions.cpp:780
-#: src/backend/gsl/functions.cpp:787 src/backend/gsl/functions.cpp:792
-#: src/backend/gsl/functions.cpp:799 src/backend/gsl/functions.cpp:807
-#: src/backend/gsl/functions.cpp:810 src/backend/gsl/functions.cpp:815
-#: src/backend/gsl/functions.cpp:820 src/backend/gsl/functions.cpp:825
-#, kde-format
-msgid "Cumulative distribution function Q"
-msgstr "Função de distribuição acumulada Q"
 
 #: src/backend/gsl/functions.cpp:666 src/backend/gsl/functions.cpp:681
 #: src/backend/gsl/functions.cpp:688 src/backend/gsl/functions.cpp:700
@@ -5273,281 +5247,313 @@ msgstr "Função de distribuição acumulada Q"
 #: src/backend/gsl/functions.cpp:753 src/backend/gsl/functions.cpp:760
 #: src/backend/gsl/functions.cpp:767 src/backend/gsl/functions.cpp:774
 #: src/backend/gsl/functions.cpp:781 src/backend/gsl/functions.cpp:788
-#: src/backend/gsl/functions.cpp:793
+#: src/backend/gsl/functions.cpp:793 src/backend/gsl/functions.cpp:800
+#: src/backend/gsl/functions.cpp:808 src/backend/gsl/functions.cpp:811
+#: src/backend/gsl/functions.cpp:816 src/backend/gsl/functions.cpp:821
+#: src/backend/gsl/functions.cpp:826
+#, kde-format
+msgid "Cumulative distribution function P"
+msgstr "Função de distribuição acumulada P"
+
+#: src/backend/gsl/functions.cpp:667 src/backend/gsl/functions.cpp:682
+#: src/backend/gsl/functions.cpp:689 src/backend/gsl/functions.cpp:696
+#: src/backend/gsl/functions.cpp:701 src/backend/gsl/functions.cpp:708
+#: src/backend/gsl/functions.cpp:719 src/backend/gsl/functions.cpp:726
+#: src/backend/gsl/functions.cpp:733 src/backend/gsl/functions.cpp:740
+#: src/backend/gsl/functions.cpp:747 src/backend/gsl/functions.cpp:754
+#: src/backend/gsl/functions.cpp:761 src/backend/gsl/functions.cpp:768
+#: src/backend/gsl/functions.cpp:775 src/backend/gsl/functions.cpp:782
+#: src/backend/gsl/functions.cpp:789 src/backend/gsl/functions.cpp:794
+#: src/backend/gsl/functions.cpp:801 src/backend/gsl/functions.cpp:809
+#: src/backend/gsl/functions.cpp:812 src/backend/gsl/functions.cpp:817
+#: src/backend/gsl/functions.cpp:822 src/backend/gsl/functions.cpp:827
+#, kde-format
+msgid "Cumulative distribution function Q"
+msgstr "Função de distribuição acumulada Q"
+
+#: src/backend/gsl/functions.cpp:668 src/backend/gsl/functions.cpp:683
+#: src/backend/gsl/functions.cpp:690 src/backend/gsl/functions.cpp:702
+#: src/backend/gsl/functions.cpp:709 src/backend/gsl/functions.cpp:720
+#: src/backend/gsl/functions.cpp:727 src/backend/gsl/functions.cpp:734
+#: src/backend/gsl/functions.cpp:741 src/backend/gsl/functions.cpp:748
+#: src/backend/gsl/functions.cpp:755 src/backend/gsl/functions.cpp:762
+#: src/backend/gsl/functions.cpp:769 src/backend/gsl/functions.cpp:776
+#: src/backend/gsl/functions.cpp:783 src/backend/gsl/functions.cpp:790
+#: src/backend/gsl/functions.cpp:795
 #, kde-format
 msgid "Inverse cumulative distribution function P"
 msgstr "Função de distribuição acumulada inversa P"
 
-#: src/backend/gsl/functions.cpp:667 src/backend/gsl/functions.cpp:682
-#: src/backend/gsl/functions.cpp:689 src/backend/gsl/functions.cpp:701
-#: src/backend/gsl/functions.cpp:708 src/backend/gsl/functions.cpp:719
-#: src/backend/gsl/functions.cpp:726 src/backend/gsl/functions.cpp:733
-#: src/backend/gsl/functions.cpp:740 src/backend/gsl/functions.cpp:747
-#: src/backend/gsl/functions.cpp:754 src/backend/gsl/functions.cpp:761
-#: src/backend/gsl/functions.cpp:768 src/backend/gsl/functions.cpp:775
-#: src/backend/gsl/functions.cpp:782 src/backend/gsl/functions.cpp:789
-#: src/backend/gsl/functions.cpp:794
+#: src/backend/gsl/functions.cpp:669 src/backend/gsl/functions.cpp:684
+#: src/backend/gsl/functions.cpp:691 src/backend/gsl/functions.cpp:703
+#: src/backend/gsl/functions.cpp:710 src/backend/gsl/functions.cpp:721
+#: src/backend/gsl/functions.cpp:728 src/backend/gsl/functions.cpp:735
+#: src/backend/gsl/functions.cpp:742 src/backend/gsl/functions.cpp:749
+#: src/backend/gsl/functions.cpp:756 src/backend/gsl/functions.cpp:763
+#: src/backend/gsl/functions.cpp:770 src/backend/gsl/functions.cpp:777
+#: src/backend/gsl/functions.cpp:784 src/backend/gsl/functions.cpp:791
+#: src/backend/gsl/functions.cpp:796
 #, kde-format
 msgid "Inverse cumulative distribution function Q"
 msgstr "Função de distribuição acumulada inversa Q"
 
-#: src/backend/gsl/functions.cpp:668
+#: src/backend/gsl/functions.cpp:670
 #, kde-format
 msgid "Cumulative unit distribution function P"
 msgstr "Função de distribuição acumulada unitária P"
 
-#: src/backend/gsl/functions.cpp:669
+#: src/backend/gsl/functions.cpp:671
 #, kde-format
 msgid "Cumulative unit distribution function Q"
 msgstr "Função de distribuição acumulada unitária Q"
 
-#: src/backend/gsl/functions.cpp:670
+#: src/backend/gsl/functions.cpp:672
 #, kde-format
 msgid "Inverse cumulative unit distribution function P"
 msgstr "Função de distribuição acumulada unitária inversa P"
 
-#: src/backend/gsl/functions.cpp:671
+#: src/backend/gsl/functions.cpp:673
 #, kde-format
 msgid "Inverse cumulative unit distribution function Q"
 msgstr "Função de distribuição acumulada unitária inversa Q"
 
-#: src/backend/gsl/functions.cpp:673
+#: src/backend/gsl/functions.cpp:675
 #, kde-format
 msgid "Probability density for Gaussian tail distribution"
 msgstr "Densidade da probabilidade para uma distribuição de calda Gaussiana"
 
-#: src/backend/gsl/functions.cpp:674
+#: src/backend/gsl/functions.cpp:676
 #, kde-format
 msgid "Probability density for unit Gaussian tail distribution"
 msgstr ""
 "Densidade da probabilidade para uma distribuição de calda Gaussiana unitária"
 
-#: src/backend/gsl/functions.cpp:675
+#: src/backend/gsl/functions.cpp:677
 #, kde-format
 msgid "Probability density for a bivariate Gaussian distribution"
 msgstr "Densidade da probabilidade para uma distribuição Gaussiana bivariada"
 
-#: src/backend/gsl/functions.cpp:678
+#: src/backend/gsl/functions.cpp:680
 #, kde-format
 msgid "Probability density for an exponential distribution"
 msgstr "Densidade da probabilidade para uma distribuição exponencial"
 
-#: src/backend/gsl/functions.cpp:685
+#: src/backend/gsl/functions.cpp:687
 #, kde-format
 msgid "Probability density for a Laplace distribution"
 msgstr "Densidade da probabilidade para uma distribuição de Laplace"
 
-#: src/backend/gsl/functions.cpp:692
+#: src/backend/gsl/functions.cpp:694
 #, kde-format
 msgid "Probability density for an exponential power distribution"
 msgstr ""
 "Densidade da probabilidade para uma distribuição de potência exponencial"
 
-#: src/backend/gsl/functions.cpp:693
+#: src/backend/gsl/functions.cpp:695
 #, kde-format
 msgid "cumulative distribution function P"
 msgstr "Função da distribuição acumulada P"
 
-#: src/backend/gsl/functions.cpp:697
+#: src/backend/gsl/functions.cpp:699
 #, kde-format
 msgid "Probability density for a Cauchy distribution"
 msgstr "Densidade da probabilidade para uma distribuição de Cauchy"
 
-#: src/backend/gsl/functions.cpp:704
+#: src/backend/gsl/functions.cpp:706
 #, kde-format
 msgid "Probability density for a Rayleigh distribution"
 msgstr "Densidade da probabilidade para uma distribuição de Rayleigh"
 
-#: src/backend/gsl/functions.cpp:709
+#: src/backend/gsl/functions.cpp:711
 #, kde-format
 msgid "Probability density for a Rayleigh tail distribution"
 msgstr "Densidade da probabilidade para uma distribuição de calda de Rayleigh"
 
-#: src/backend/gsl/functions.cpp:712
+#: src/backend/gsl/functions.cpp:714
 #, kde-format
 msgid "Probability density for a Landau distribution"
 msgstr "Densidade da probabilidade para uma distribuição de Landau"
 
-#: src/backend/gsl/functions.cpp:715
+#: src/backend/gsl/functions.cpp:717
 #, kde-format
 msgid "Probability density for a gamma distribution"
 msgstr "Densidade da probabilidade para uma distribuição gama"
 
-#: src/backend/gsl/functions.cpp:722
+#: src/backend/gsl/functions.cpp:724
 #, kde-format
 msgid "Probability density for a uniform distribution"
 msgstr "Densidade da probabilidade para uma distribuição uniforme"
 
-#: src/backend/gsl/functions.cpp:729
+#: src/backend/gsl/functions.cpp:731
 #, kde-format
 msgid "Probability density for a lognormal distribution"
 msgstr "Densidade da probabilidade para uma distribuição normal-logarítmica"
 
-#: src/backend/gsl/functions.cpp:736
+#: src/backend/gsl/functions.cpp:738
 #, kde-format
 msgid "Probability density for a chi squared distribution"
 msgstr "Densidade da probabilidade para uma distribuição qui-quadrada"
 
-#: src/backend/gsl/functions.cpp:743
+#: src/backend/gsl/functions.cpp:745
 #, kde-format
 msgid "Probability density for a F-distribution"
 msgstr "Densidade da probabilidade para uma distribuição F"
 
-#: src/backend/gsl/functions.cpp:750
+#: src/backend/gsl/functions.cpp:752
 #, kde-format
 msgid "Probability density for a t-distribution"
 msgstr "Densidade da probabilidade para uma distribuição t"
 
-#: src/backend/gsl/functions.cpp:757
+#: src/backend/gsl/functions.cpp:759
 #, kde-format
 msgid "Probability density for a beta distribution"
 msgstr "Densidade da probabilidade para uma distribuição beta"
 
-#: src/backend/gsl/functions.cpp:764
+#: src/backend/gsl/functions.cpp:766
 #, kde-format
 msgid "Probability density for a logistic distribution"
 msgstr "Densidade da probabilidade para uma distribuição logística"
 
-#: src/backend/gsl/functions.cpp:771
+#: src/backend/gsl/functions.cpp:773
 #, kde-format
 msgid "Probability density for a Pareto distribution"
 msgstr "Densidade da probabilidade para uma distribuição de Pareto"
 
-#: src/backend/gsl/functions.cpp:778
+#: src/backend/gsl/functions.cpp:780
 #, kde-format
 msgid "Probability density for a Weibull distribution"
 msgstr "Densidade da probabilidade para uma distribuição de Weibull"
 
-#: src/backend/gsl/functions.cpp:785
+#: src/backend/gsl/functions.cpp:787
 #, kde-format
 msgid "Probability density for a Type-1 Gumbel distribution"
 msgstr "Densidade da probabilidade para uma distribuição de Gumbel Tipo-1"
 
-#: src/backend/gsl/functions.cpp:790
+#: src/backend/gsl/functions.cpp:792
 #, kde-format
 msgid "Probability density for a Type-2 Gumbel distribution"
 msgstr "Densidade da probabilidade para uma distribuição de Gumbel Tipo-2"
 
-#: src/backend/gsl/functions.cpp:797
+#: src/backend/gsl/functions.cpp:799
 #, kde-format
 msgid "Probability density for a Poisson distribution"
 msgstr "Densidade da probabilidade para uma distribuição de Poisson"
 
-#: src/backend/gsl/functions.cpp:802
+#: src/backend/gsl/functions.cpp:804
 #, kde-format
 msgid "Probability density for a Bernoulli distribution"
 msgstr "Densidade da probabilidade para uma distribuição de Bernoulli"
 
-#: src/backend/gsl/functions.cpp:805
+#: src/backend/gsl/functions.cpp:807
 #, kde-format
 msgid "Probability density for a binomial distribution"
 msgstr "Densidade da probabilidade para uma distribuição binomial"
 
-#: src/backend/gsl/functions.cpp:808
+#: src/backend/gsl/functions.cpp:810
 #, kde-format
 msgid "Probability density for a negative binomial distribution"
 msgstr "Densidade da probabilidade para uma distribuição binomial negativa"
 
-#: src/backend/gsl/functions.cpp:813
+#: src/backend/gsl/functions.cpp:815
 #, kde-format
 msgid "Probability density for a Pascal distribution"
 msgstr "Densidade da probabilidade para uma distribuição de Pascal"
 
-#: src/backend/gsl/functions.cpp:818
+#: src/backend/gsl/functions.cpp:820
 #, kde-format
 msgid "Probability density for a geometric distribution"
 msgstr "Densidade da probabilidade para uma distribuição geométrica"
 
-#: src/backend/gsl/functions.cpp:823
+#: src/backend/gsl/functions.cpp:825
 #, kde-format
 msgid "Probability density for a hypergeometric distribution"
 msgstr "Densidade da probabilidade para uma distribuição hipergeométrica"
 
-#: src/backend/gsl/functions.cpp:828
+#: src/backend/gsl/functions.cpp:830
 #, kde-format
 msgid "Probability density for a logarithmic distribution"
 msgstr "Densidade da probabilidade para uma distribuição logarítmica"
 
-#: src/backend/gsl/functions.cpp:928 src/backend/gsl/functions.cpp:940
-#: src/backend/gsl/functions.cpp:954 src/backend/gsl/functions.cpp:966
-#: src/backend/gsl/functions.cpp:978
+#: src/backend/gsl/functions.cpp:936 src/backend/gsl/functions.cpp:948
+#: src/backend/gsl/functions.cpp:962 src/backend/gsl/functions.cpp:974
+#: src/backend/gsl/functions.cpp:986
 #, fuzzy, kde-format
 #| msgid "Export to file"
 msgid "Invalid"
 msgstr "Exportar para arquivo"
 
-#: src/backend/gsl/functions.cpp:934
+#: src/backend/gsl/functions.cpp:942
 #, fuzzy, kde-format
 #| msgid "Connection:"
 msgid "condition"
 msgstr "Conexão:"
 
-#: src/backend/gsl/functions.cpp:936
+#: src/backend/gsl/functions.cpp:944
 #, fuzzy, kde-format
 #| msgid "Value"
 msgid "trueValue"
 msgstr "Valor"
 
-#: src/backend/gsl/functions.cpp:938
+#: src/backend/gsl/functions.cpp:946
 #, fuzzy, kde-format
 #| msgid "Cap size"
 msgid "falseValue"
 msgstr "Tamanho do extremo"
 
-#: src/backend/gsl/functions.cpp:946
+#: src/backend/gsl/functions.cpp:954
 #, fuzzy, kde-format
 #| msgid "Ln"
 msgid "n"
 msgstr "Ln"
 
-#: src/backend/gsl/functions.cpp:948
+#: src/backend/gsl/functions.cpp:956
 #, kde-format
 msgid "j"
 msgstr ""
 
-#: src/backend/gsl/functions.cpp:950
+#: src/backend/gsl/functions.cpp:958
 #, kde-format
 msgid "q"
 msgstr ""
 
-#: src/backend/gsl/functions.cpp:952 src/backend/gsl/functions.cpp:960
+#: src/backend/gsl/functions.cpp:960 src/backend/gsl/functions.cpp:968
 #, fuzzy, kde-format
 #| msgid "x="
 msgid "x"
 msgstr "x="
 
-#: src/backend/gsl/functions.cpp:962
+#: src/backend/gsl/functions.cpp:970
 #, fuzzy, kde-format
 #| msgid "min."
 msgid "min"
 msgstr "min."
 
-#: src/backend/gsl/functions.cpp:964
+#: src/backend/gsl/functions.cpp:972
 #, fuzzy, kde-format
 #| msgid "max."
 msgid "max"
 msgstr "máx."
 
-#: src/backend/gsl/functions.cpp:972
+#: src/backend/gsl/functions.cpp:980
 #, fuzzy, kde-format
 #| msgid "1."
 msgid "v1"
 msgstr "1."
 
-#: src/backend/gsl/functions.cpp:974
+#: src/backend/gsl/functions.cpp:982
 #, fuzzy, kde-format
 #| msgid "2."
 msgid "v2"
 msgstr "2."
 
-#: src/backend/gsl/functions.cpp:976
+#: src/backend/gsl/functions.cpp:984
 #, kde-format
 msgid "ep"
 msgstr ""
 
 #: src/backend/lib/Range.h:49 src/backend/nsl/nsl_interp.c:14
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:513
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:484
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:485
 #, kde-format
 msgid "Linear"
 msgstr "Linear"
@@ -5595,13 +5601,13 @@ msgid "unexpected end of document"
 msgstr "fim de documento inesperado"
 
 #: src/backend/matrix/Matrix.cpp:118
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3599
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3600
 #, kde-format
 msgid "FITS image"
 msgstr "Imagem FITS"
 
 #: src/backend/matrix/Matrix.cpp:118
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3599
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3600
 #, kde-format
 msgid "FITS table"
 msgstr "Tabela FITS"
@@ -5967,7 +5973,7 @@ msgstr "Dados binários"
 
 #: src/backend/nsl/nsl_dft.c:22 src/backend/nsl/nsl_fit.c:26
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:517
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:488
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:489
 #, kde-format
 msgid "Power"
 msgstr "Potência"
@@ -6142,11 +6148,11 @@ msgstr "Distribuição Logística"
 
 #: src/backend/nsl/nsl_fit.c:24
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:553
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:524
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:525
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1230
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:241
 #: src/kdefrontend/dockwidgets/KDEPlotDock.cpp:191
-#: src/kdefrontend/dockwidgets/WorksheetDock.cpp:275
+#: src/kdefrontend/dockwidgets/WorksheetDock.cpp:277
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:754
 #: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:81
 #, kde-format
@@ -6154,7 +6160,7 @@ msgid "Custom"
 msgstr "Personalizado"
 
 #: src/backend/nsl/nsl_fit.c:26
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:500
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:501
 #, fuzzy, kde-format
 #| msgid "Inverse Exponential"
 msgid "Inverse Exponential"
@@ -6184,7 +6190,7 @@ msgstr "Gaussiano"
 
 #: src/backend/nsl/nsl_fit.c:31
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:537
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:508
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:509
 #, kde-format
 msgid "Cauchy-Lorentz"
 msgstr ""
@@ -6218,7 +6224,7 @@ msgstr "Tangente inversa"
 
 #: src/backend/nsl/nsl_fit.c:45
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:545
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:516
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:517
 #, fuzzy, kde-format
 #| msgid "Hyperbolic tangent"
 msgid "Hyperbolic Tangent"
@@ -7192,13 +7198,13 @@ msgstr "%1: definir a opacidade da linha"
 
 #: src/backend/worksheet/plots/AbstractPlot.cpp:100
 #: src/backend/worksheet/plots/AbstractPlot.cpp:128
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1289
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1291
 #, kde-format
 msgid "%1: set horizontal padding"
 msgstr "%1: definir o preenchimento horizontal"
 
 #: src/backend/worksheet/plots/AbstractPlot.cpp:107
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1315
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1317
 #, kde-format
 msgid "%1: set vertical padding"
 msgstr "%1: definir o preenchimento vertical"
@@ -7244,8 +7250,8 @@ msgstr "Horizontal"
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:258
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:56
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:53
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:841
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:845
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:843
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:847
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:171
 #: src/kdefrontend/dockwidgets/LollipopPlotDock.cpp:52
 #: src/kdefrontend/dockwidgets/ReferenceLineDock.cpp:27
@@ -7853,7 +7859,7 @@ msgstr "Interpolação"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:422
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:509
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1863
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:481
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:482
 #: src/kdefrontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:73
 #, kde-format
 msgid "Smooth"
@@ -7862,7 +7868,7 @@ msgstr "Suave"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:423
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:647
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1882
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:581
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:582
 #: src/commonfrontend/worksheet/WorksheetView.cpp:178
 #, fuzzy, kde-format
 #| msgid "Fit:"
@@ -7872,7 +7878,7 @@ msgstr "Ajustar:"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:424
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:557
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1923
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:528
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:529
 #, fuzzy, kde-format
 #| msgid "Fourier filter"
 msgid "Fourier Filter"
@@ -7988,19 +7994,19 @@ msgid "Convolution"
 msgstr "Conexão:"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:506
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:473
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:474
 #, kde-format
 msgid "Differentiate"
 msgstr "Derivada"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:507
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:476
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:477
 #, kde-format
 msgid "Integrate"
 msgstr "Integral"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:508
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:479
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:480
 #, kde-format
 msgid "Interpolate"
 msgstr "Interpolação"
@@ -8012,14 +8018,14 @@ msgid "Convolute/Deconvolute"
 msgstr "Conexão:"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:521
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:492
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:493
 #, fuzzy, kde-format
 #| msgid "Exponential"
 msgid "Exponential (degree 1)"
 msgstr "Exponencial"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:525
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:496
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:497
 #, fuzzy, kde-format
 #| msgid "Exponential"
 msgid "Exponential (degree 2)"
@@ -8032,14 +8038,14 @@ msgid "Inverse exponential"
 msgstr "Exponencial inversa"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:541
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:512
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:513
 #, fuzzy, kde-format
 #| msgid "Tangent"
 msgid "Arc Tangent"
 msgstr "Tangente"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:549
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:520
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:521
 #, fuzzy, kde-format
 #| msgid "Error Functions"
 msgid "Error Function"
@@ -9417,7 +9423,7 @@ msgstr "%1: definir o número de linhas do layout"
 
 #: src/backend/worksheet/Worksheet.cpp:789
 #: src/backend/worksheet/Worksheet.cpp:790
-#: src/kdefrontend/dockwidgets/WorksheetDock.cpp:371
+#: src/kdefrontend/dockwidgets/WorksheetDock.cpp:373
 #, kde-format
 msgid "%1: set page size"
 msgstr "%1: definir o tamanho da página"
@@ -9428,12 +9434,12 @@ msgstr "%1: definir o tamanho da página"
 msgid "Curves"
 msgstr "Curva"
 
-#: src/backend/worksheet/WorksheetElement.cpp:152
+#: src/backend/worksheet/WorksheetElement.cpp:154
 #, kde-format
 msgid "%1: lock"
 msgstr ""
 
-#: src/backend/worksheet/WorksheetElement.cpp:152
+#: src/backend/worksheet/WorksheetElement.cpp:154
 #, kde-format
 msgid "%1: unlock"
 msgstr ""
@@ -9441,7 +9447,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QCheckBox, chbVisible)
 #. i18n: ectx: property (text), widget (QCheckBox, chkVisible)
 #. i18n: ectx: property (text), widget (QCheckBox, chbSymbolVisible)
-#: src/backend/worksheet/WorksheetElement.cpp:216
+#: src/backend/worksheet/WorksheetElement.cpp:218
 #: src/kdefrontend/ui/datapickercurvewidget.ui:178
 #: src/kdefrontend/ui/datapickerimagewidget.ui:826
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:58
@@ -9473,58 +9479,58 @@ msgstr ""
 msgid "Visible"
 msgstr "Visível"
 
-#: src/backend/worksheet/WorksheetElement.cpp:225
+#: src/backend/worksheet/WorksheetElement.cpp:227
 #, fuzzy, kde-format
 #| msgid "Link"
 msgid "Lock"
 msgstr "Link"
 
-#: src/backend/worksheet/WorksheetElement.cpp:234
+#: src/backend/worksheet/WorksheetElement.cpp:236
 #, kde-format
 msgid "Drawing &order"
 msgstr "&Ordem de desenho"
 
-#: src/backend/worksheet/WorksheetElement.cpp:237
-#: src/backend/worksheet/WorksheetElement.cpp:283
-#: src/backend/worksheet/WorksheetElement.cpp:286
+#: src/backend/worksheet/WorksheetElement.cpp:239
+#: src/backend/worksheet/WorksheetElement.cpp:285
+#: src/backend/worksheet/WorksheetElement.cpp:288
 #, kde-format
 msgid "Move &behind"
 msgstr "Mover para &trás"
 
-#: src/backend/worksheet/WorksheetElement.cpp:241
-#: src/backend/worksheet/WorksheetElement.cpp:281
-#: src/backend/worksheet/WorksheetElement.cpp:288
+#: src/backend/worksheet/WorksheetElement.cpp:243
+#: src/backend/worksheet/WorksheetElement.cpp:283
+#: src/backend/worksheet/WorksheetElement.cpp:290
 #, kde-format
 msgid "Move in &front of"
 msgstr "Mover para a &frente de"
 
-#: src/backend/worksheet/WorksheetElement.cpp:346
+#: src/backend/worksheet/WorksheetElement.cpp:348
 #, kde-format
 msgid "%1: move behind %2."
 msgstr "%1: mover para trás de %2."
 
-#: src/backend/worksheet/WorksheetElement.cpp:360
+#: src/backend/worksheet/WorksheetElement.cpp:362
 #, kde-format
 msgid "%1: move in front of %2."
 msgstr "%1: mover para a frente de %2."
 
-#: src/backend/worksheet/WorksheetElement.cpp:716
+#: src/backend/worksheet/WorksheetElement.cpp:752
 #, kde-format
 msgid "%1: set horizontal alignment"
 msgstr "%1: definir o alinhamento horizontal"
 
-#: src/backend/worksheet/WorksheetElement.cpp:728
+#: src/backend/worksheet/WorksheetElement.cpp:764
 #, kde-format
 msgid "%1: set vertical alignment"
 msgstr "%1: definir o alinhamento vertical"
 
-#: src/backend/worksheet/WorksheetElement.cpp:742
+#: src/backend/worksheet/WorksheetElement.cpp:778
 #, fuzzy, kde-format
 #| msgid "%1: set matrix coordinates"
 msgid "%1: use logical coordinates"
 msgstr "%1: definir as coordenadas da matriz"
 
-#: src/backend/worksheet/WorksheetElement.cpp:752
+#: src/backend/worksheet/WorksheetElement.cpp:788
 #, fuzzy, kde-format
 #| msgid "%1: set labels position"
 msgid "%1: set logical position"
@@ -9538,7 +9544,7 @@ msgstr "Falha ao abrir"
 
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:52
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:120
-#: src/commonfrontend/matrix/MatrixView.cpp:192
+#: src/commonfrontend/matrix/MatrixView.cpp:194
 #: src/commonfrontend/worksheet/WorksheetView.cpp:145
 #: src/commonfrontend/worksheet/WorksheetView.cpp:378
 #, fuzzy, kde-format
@@ -9548,7 +9554,7 @@ msgstr "Ampliar"
 
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:56
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:123
-#: src/commonfrontend/matrix/MatrixView.cpp:193
+#: src/commonfrontend/matrix/MatrixView.cpp:195
 #: src/commonfrontend/worksheet/WorksheetView.cpp:146
 #: src/commonfrontend/worksheet/WorksheetView.cpp:382
 #, fuzzy, kde-format
@@ -9598,7 +9604,7 @@ msgid "Command"
 msgstr "Comentário"
 
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:101
-#: src/kdefrontend/widgets/LabelWidget.cpp:193
+#: src/kdefrontend/widgets/LabelWidget.cpp:195
 #, kde-format
 msgid "Markdown"
 msgstr ""
@@ -9606,7 +9612,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, lTex)
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:105
 #: src/kdefrontend/ui/settingsworksheetpage.ui:147
-#: src/kdefrontend/widgets/LabelWidget.cpp:191
+#: src/kdefrontend/widgets/LabelWidget.cpp:193
 #, kde-format
 msgid "LaTeX"
 msgstr ""
@@ -9670,7 +9676,7 @@ msgid "Assistants"
 msgstr "Constantes"
 
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:288
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:567
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:568
 #, fuzzy, kde-format
 #| msgid "Plot Area"
 msgid "Plot Data"
@@ -9705,7 +9711,7 @@ msgid "%1: variable statistics"
 msgstr "Estatísti&cas das linhas"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:126
-#: src/commonfrontend/matrix/MatrixView.cpp:194
+#: src/commonfrontend/matrix/MatrixView.cpp:196
 #: src/commonfrontend/worksheet/WorksheetView.cpp:147
 #, fuzzy, kde-format
 #| msgid "Original size"
@@ -9868,8 +9874,8 @@ msgid "Curve"
 msgstr "Curva"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:870
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3839
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3893
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3840
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3894
 #: src/commonfrontend/worksheet/WorksheetView.cpp:2287
 #, fuzzy, kde-format
 #| msgid "Failed to open"
@@ -9877,271 +9883,271 @@ msgid "Failed to export"
 msgstr "Falha ao abrir"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:870
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3839
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3893
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3840
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3894
 #: src/commonfrontend/worksheet/WorksheetView.cpp:2287
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
 msgstr ""
 
-#: src/commonfrontend/matrix/MatrixView.cpp:123
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:275
+#: src/commonfrontend/matrix/MatrixView.cpp:125
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:276
 #, kde-format
 msgid "Cu&t"
 msgstr "Recor&tar"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:124
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:276
+#: src/commonfrontend/matrix/MatrixView.cpp:126
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:277
 #, kde-format
 msgid "&Copy"
 msgstr "&Copiar"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:125
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:277
+#: src/commonfrontend/matrix/MatrixView.cpp:127
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:278
 #, kde-format
 msgid "Past&e"
 msgstr "Co&lar"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:126
+#: src/commonfrontend/matrix/MatrixView.cpp:128
 #, kde-format
 msgid "Clea&r Selection"
 msgstr "Limpa&r seleção"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:127
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:281
+#: src/commonfrontend/matrix/MatrixView.cpp:129
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:282
 #: src/commonfrontend/worksheet/WorksheetView.cpp:132
 #, kde-format
 msgid "Select All"
 msgstr "Selecionar tudo"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:139
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:290
+#: src/commonfrontend/matrix/MatrixView.cpp:141
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:291
 #, kde-format
 msgid "Function Values"
 msgstr "Valores da função"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:140
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:291
+#: src/commonfrontend/matrix/MatrixView.cpp:142
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:292
 #, kde-format
 msgid "Const Values"
 msgstr "Valores constantes"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:141
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:318
+#: src/commonfrontend/matrix/MatrixView.cpp:143
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:319
 #, fuzzy, kde-format
 #| msgid "Clea&r Columns"
 msgid "Clear Content"
 msgstr "Limpa&r colunas"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:142
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:300
+#: src/commonfrontend/matrix/MatrixView.cpp:144
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:301
 #, fuzzy, kde-format
 #| msgid "&Go to Cell"
 msgid "&Go to Cell..."
 msgstr "&Ir para a célula"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:144
+#: src/commonfrontend/matrix/MatrixView.cpp:146
 #, kde-format
 msgid "&Transpose"
 msgstr "&Transpor"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:145
+#: src/commonfrontend/matrix/MatrixView.cpp:147
 #, kde-format
 msgid "Mirror &Horizontally"
 msgstr "Espelhar &horizontalmente"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:146
+#: src/commonfrontend/matrix/MatrixView.cpp:148
 #, kde-format
 msgid "Mirror &Vertically"
 msgstr "Espelhar &verticalmente"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:148
+#: src/commonfrontend/matrix/MatrixView.cpp:150
 #, fuzzy, kde-format
 #| msgid "Value"
 msgid "Add Value"
 msgstr "Valor"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:150
+#: src/commonfrontend/matrix/MatrixView.cpp:152
 #, fuzzy, kde-format
 #| msgid "Start value"
 msgid "Subtract Value"
 msgstr "Valor inicial"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:152
+#: src/commonfrontend/matrix/MatrixView.cpp:154
 #, fuzzy, kde-format
 #| msgid "Function Values"
 msgid "Multiply Value"
 msgstr "Valores da função"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:154
+#: src/commonfrontend/matrix/MatrixView.cpp:156
 #, fuzzy, kde-format
 #| msgid "invalid row value"
 msgid "Divide Value"
 msgstr "valor da linha inválido"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:162
+#: src/commonfrontend/matrix/MatrixView.cpp:164
 #: src/kdefrontend/dockwidgets/MatrixDock.cpp:37
 #, kde-format
 msgid "Rows and Columns"
 msgstr "Linhas e Colunas"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:164
+#: src/commonfrontend/matrix/MatrixView.cpp:166
 #: src/kdefrontend/dockwidgets/MatrixDock.cpp:38
 #, kde-format
 msgid "xy-Values"
 msgstr "Valores xy"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:166
+#: src/commonfrontend/matrix/MatrixView.cpp:168
 #: src/kdefrontend/dockwidgets/MatrixDock.cpp:39
 #, kde-format
 msgid "Rows, Columns and xy-Values"
 msgstr "Linhas, Colunas e Valores xy"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:178
+#: src/commonfrontend/matrix/MatrixView.cpp:180
 #, kde-format
 msgid "&Add Columns"
 msgstr "&Adicionar colunas"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:179
+#: src/commonfrontend/matrix/MatrixView.cpp:181
 #, kde-format
 msgid "&Insert Empty Columns"
 msgstr "&Inserir colunas vazias"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:180
+#: src/commonfrontend/matrix/MatrixView.cpp:182
 #, kde-format
 msgid "Remo&ve Columns"
 msgstr "Remo&ver colunas"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:181
+#: src/commonfrontend/matrix/MatrixView.cpp:183
 #, kde-format
 msgid "Clea&r Columns"
 msgstr "Limpa&r colunas"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:182
-#: src/commonfrontend/matrix/MatrixView.cpp:189
+#: src/commonfrontend/matrix/MatrixView.cpp:184
+#: src/commonfrontend/matrix/MatrixView.cpp:191
 #, kde-format
 msgid "Statisti&cs"
 msgstr "Estatísti&cas"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:185
+#: src/commonfrontend/matrix/MatrixView.cpp:187
 #, kde-format
 msgid "&Add Rows"
 msgstr "&Adicionar linhas"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:186
+#: src/commonfrontend/matrix/MatrixView.cpp:188
 #, kde-format
 msgid "&Insert Empty Rows"
 msgstr "&Inserir linhas vazias"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:187
+#: src/commonfrontend/matrix/MatrixView.cpp:189
 #, kde-format
 msgid "Remo&ve Rows"
 msgstr "Remo&ver linhas"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:188
+#: src/commonfrontend/matrix/MatrixView.cpp:190
 #, kde-format
 msgid "Clea&r Rows"
 msgstr "Limpa&r linhas"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:246
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:538
+#: src/commonfrontend/matrix/MatrixView.cpp:248
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:539
 #, kde-format
 msgid "Selection"
 msgstr "Seleção"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:268
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:631
+#: src/commonfrontend/matrix/MatrixView.cpp:270
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:632
 #, kde-format
 msgid "Generate Data"
 msgstr "Gerar dados"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:273
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:646
+#: src/commonfrontend/matrix/MatrixView.cpp:275
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:647
 #, fuzzy, kde-format
 #| msgid "Generate Data"
 msgid "Manipulate Data"
 msgstr "Gerar dados"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:284
+#: src/commonfrontend/matrix/MatrixView.cpp:286
 #, kde-format
 msgid "View"
 msgstr "Exibir"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:289
+#: src/commonfrontend/matrix/MatrixView.cpp:291
 #, fuzzy, kde-format
 #| msgid "Header format"
 msgid "Header Format"
 msgstr "Formato do cabeçalho"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:295
+#: src/commonfrontend/matrix/MatrixView.cpp:297
 #: src/commonfrontend/worksheet/WorksheetView.cpp:444
 #, kde-format
 msgid "Zoom"
 msgstr "Zoom"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:585
-#: src/commonfrontend/matrix/MatrixView.cpp:589
+#: src/commonfrontend/matrix/MatrixView.cpp:587
+#: src/commonfrontend/matrix/MatrixView.cpp:591
 #, kde-format
 msgid "Go to Cell"
 msgstr "Ir para a célula"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:585
+#: src/commonfrontend/matrix/MatrixView.cpp:587
 #, kde-format
 msgid "Enter column"
 msgstr "Indicar a coluna"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:589
+#: src/commonfrontend/matrix/MatrixView.cpp:591
 #, kde-format
 msgid "Enter row"
 msgstr "Indicar a linha"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:617
+#: src/commonfrontend/matrix/MatrixView.cpp:619
 #, kde-format
 msgid "Fill the matrix with constant value"
 msgstr "Preenche a matriz com o valor constante"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:636
+#: src/commonfrontend/matrix/MatrixView.cpp:638
 #, kde-format
 msgid "%1: cut selected cell(s)"
 msgstr "%1: recortar a(s) célula(s) selecionada(s)"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:687
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1711
+#: src/commonfrontend/matrix/MatrixView.cpp:689
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1712
 #, kde-format
 msgid "%1: paste from clipboard"
 msgstr "%1: colar da área de transferência"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:757
+#: src/commonfrontend/matrix/MatrixView.cpp:759
 #, kde-format
 msgid "%1: clear selected cell(s)"
 msgstr "%1: limpar a(s) célula(s) selecionada(s)"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:908
+#: src/commonfrontend/matrix/MatrixView.cpp:910
 #, kde-format
 msgid "%1: insert empty column(s)"
 msgstr "%1: inserir coluna(s) vazia(s)"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:932
+#: src/commonfrontend/matrix/MatrixView.cpp:934
 #, kde-format
 msgid "%1: remove selected column(s)"
 msgstr "%1: remover a(s) coluna(s) selecionada(s)"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:942
+#: src/commonfrontend/matrix/MatrixView.cpp:944
 #, kde-format
 msgid "%1: clear selected column(s)"
 msgstr "%1: limpar a(s) coluna(s) selecionada(s)"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:968
+#: src/commonfrontend/matrix/MatrixView.cpp:970
 #, kde-format
 msgid "%1: insert empty rows(s)"
 msgstr "%1: inserir linha(s) vazia(s)"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:992
+#: src/commonfrontend/matrix/MatrixView.cpp:994
 #, kde-format
 msgid "%1: remove selected rows(s)"
 msgstr "%1: remover a(s) linha(s) selecionada(s)"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:1007
+#: src/commonfrontend/matrix/MatrixView.cpp:1009
 #, kde-format
 msgid "%1: clear selected rows(s)"
 msgstr "%1: limpar a(s) linha(s) selecionada(s)"
@@ -10268,18 +10274,18 @@ msgid_plural "Project Explorer: delete %1 selected objects"
 msgstr[0] "Excluir os objetos selecionados"
 msgstr[1] "Excluir os objetos selecionados"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:278
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:279
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:74
 #, kde-format
 msgid "&Mask"
 msgstr "&Máscara"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:279
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:280
 #, kde-format
 msgid "&Unmask"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:280
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:281
 #, fuzzy, kde-format
 #| msgid "Clea&r Columns"
 msgid "Clea&r Content"
@@ -10288,450 +10294,450 @@ msgstr "Limpa&r colunas"
 #. i18n("Assign &Formula"), this);
 #. action_recalculate = new QAction(QIcon::fromTheme(QString()), i18n("Recalculate"), this);
 #. action_fill_sel_row_numbers = new QAction(QIcon::fromTheme(QString()), i18n("Row Numbers"), this);
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:286
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:287
 #, kde-format
 msgid "Row Numbers"
 msgstr "Números de linha"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:287
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:288
 #, kde-format
 msgid "Uniform Random Values"
 msgstr "Valores aleatórios uniformes"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:288
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:289
 #, kde-format
 msgid "Random Values"
 msgstr "Valores aleatórios"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:289
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:290
 #, kde-format
 msgid "Equidistant Values"
 msgstr "Valores equidistantes"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:293
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:294
 #, fuzzy, kde-format
 #| msgid "Cap size"
 msgid "Sample Values"
 msgstr "Tamanho do extremo"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:294
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:295
 #, fuzzy, kde-format
 #| msgid "Calculated Columns"
 msgid "Flatten Columns"
 msgstr "Colunas calculadas"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:297
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1096
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:298
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1097
 #, kde-format
 msgid "Show Comments"
 msgstr "Mostrar comentários"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:298
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:299
 #, kde-format
 msgid "Clear Spreadsheet"
 msgstr "Limpar planilha"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:299
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:300
 #, kde-format
 msgid "Clear Masks"
 msgstr "Limpar máscaras"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:301
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:302
 #, fuzzy, kde-format
 #| msgid "Search/Filter:"
 msgid "&Search"
 msgstr "Pesquisar/Filtrar:"
 
 #. i18n: ectx: property (text), widget (QPushButton, bReplaceNext)
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:303
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:304
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:225
 #, fuzzy, kde-format
 #| msgid "Replace"
 msgid "&Replace"
 msgstr "Substituir"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:305
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:451
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:306
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:452
 #, fuzzy, kde-format
 #| msgid "Column Statisti&cs"
 msgid "Column Statistics..."
 msgstr "Estatísti&cas das colunas"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:307
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:308
 #, fuzzy, kde-format
 #| msgid "Column Statisti&cs"
 msgid "Column Statistics Spreadsheet"
 msgstr "Estatísti&cas das colunas"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:313
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:314
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Columns"
 msgid "Insert Column Left"
 msgstr "&Inserir colunas vazias"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:314
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:315
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Columns"
 msgid "Insert Column Right"
 msgstr "&Inserir colunas vazias"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:315
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:316
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Columns"
 msgid "Insert Multiple Columns Left"
 msgstr "&Inserir colunas vazias"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:316
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:317
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Columns"
 msgid "Insert Multiple Columns Right"
 msgstr "&Inserir colunas vazias"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:317
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:318
 #, fuzzy, kde-format
 #| msgid "%1: remove selected column(s)"
 msgid "Delete Selected Column(s)"
 msgstr "%1: remover a(s) coluna(s) selecionada(s)"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:319
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1572
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:320
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1573
 #, fuzzy, kde-format
 #| msgid "&Selected Columns"
 msgid "Freeze Column"
 msgstr "Colunas &selecionadas"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:353
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:354
 #, fuzzy, kde-format
 #| msgid "&Add Rows"
 msgid "Add"
 msgstr "&Adicionar linhas"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:355
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:356
 #, fuzzy, kde-format
 #| msgid "Start value"
 msgid "Subtract"
 msgstr "Valor inicial"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:357
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:358
 #, fuzzy, kde-format
 #| msgid "Function Values"
 msgid "Multiply"
 msgstr "Valores da função"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:359
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:360
 #, fuzzy, kde-format
 #| msgid "invalid row value"
 msgid "Divide"
 msgstr "valor da linha inválido"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:361
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:362
 #, fuzzy, kde-format
 #| msgid "Drop Values"
 msgid "Drop Values"
 msgstr "Soltar os valores"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:362
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:363
 #, fuzzy, kde-format
 #| msgid "Mask Values"
 msgid "Mask Values"
 msgstr "Mascarar os valores"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:364
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:365
 #, kde-format
 msgid "Reverse"
 msgstr "Inversa"
 
 #. i18n("Join"), this);
 #. algorithms - baseline subtraction, outliar removal, etc.
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:368
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:369
 #, fuzzy, kde-format
 #| msgid "Start value"
 msgid "Subtract Baseline"
 msgstr "Valor inicial"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:373
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:374
 #, fuzzy, kde-format
 #| msgid "invalid row value"
 msgid "Divide by Sum"
 msgstr "valor da linha inválido"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:376
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:377
 #, fuzzy, kde-format
 #| msgid "invalid row value"
 msgid "Divide by Min"
 msgstr "valor da linha inválido"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:379
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:380
 #, fuzzy, kde-format
 #| msgid "invalid row value"
 msgid "Divide by Max"
 msgstr "valor da linha inválido"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:382
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:383
 #, fuzzy, kde-format
 #| msgid "invalid row value"
 msgid "Divide by Count"
 msgstr "valor da linha inválido"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:385
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:386
 #, fuzzy, kde-format
 #| msgid "invalid row value"
 msgid "Divide by Mean"
 msgstr "valor da linha inválido"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:388
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:389
 #, fuzzy, kde-format
 #| msgid "invalid row value"
 msgid "Divide by Median"
 msgstr "valor da linha inválido"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:391
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:392
 #, fuzzy, kde-format
 #| msgid "invalid row value"
 msgid "Divide by Mode"
 msgstr "valor da linha inválido"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:394
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:395
 #, fuzzy, kde-format
 #| msgid "invalid row value"
 msgid "Divide by Range"
 msgstr "valor da linha inválido"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:397
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:398
 #, fuzzy, kde-format
 #| msgid "invalid row value"
 msgid "Divide by SD"
 msgstr "valor da linha inválido"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:400
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:401
 #, fuzzy, kde-format
 #| msgid "invalid row value"
 msgid "Divide by MAD"
 msgstr "valor da linha inválido"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:403
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:404
 #, fuzzy, kde-format
 #| msgid "invalid row value"
 msgid "Divide by IQR"
 msgstr "valor da linha inválido"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:406
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:407
 #, kde-format
 msgid "(x-Mean)/SD"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:409
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:410
 #, fuzzy, kde-format
 #| msgid "Median"
 msgid "(x-Median)/MAD"
 msgstr "Mediana"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:412
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:413
 #, fuzzy, kde-format
 #| msgid "Median"
 msgid "(x-Median)/IQR"
 msgstr "Mediana"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:415
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:416
 #, fuzzy, kde-format
 #| msgid "Interface"
 msgid "Rescale to [a, b]"
 msgstr "Interface"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:445
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:446
 #, fuzzy, kde-format
 #| msgid "&Sort"
 msgid "&Sort..."
 msgstr "&Ordenar"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:446
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:447
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Columns"
 msgid "Sort multiple columns together"
 msgstr "&Inserir colunas vazias"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:447
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:448
 #, fuzzy, kde-format
 #| msgid "&Ascending"
 msgid "Sort &Ascending"
 msgstr "&Crescente"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:448
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:449
 #, fuzzy, kde-format
 #| msgid "%1: clear selected columns"
 msgid "Sort the selected columns separately in ascending order"
 msgstr "%1: limpar as colunas selecionadas"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:449
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:450
 #, fuzzy, kde-format
 #| msgid "&Descending"
 msgid "Sort &Descending"
 msgstr "&Decrescente"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:450
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:451
 #, fuzzy, kde-format
 #| msgid "%1: clear selected columns"
 msgid "Sort the selected columns separately in descending order"
 msgstr "%1: limpar as colunas selecionadas"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:454
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:455
 #, kde-format
 msgid "Heatmap"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:458
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:459
 #, kde-format
 msgid "Insert Row Above"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:459
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:460
 #, fuzzy, kde-format
 #| msgid "Range Breaks"
 msgid "Insert Row Below"
 msgstr "Quebras de intervalo"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:462
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:463
 #, kde-format
 msgid "Insert Multiple Rows Above"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:463
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:464
 #, fuzzy, kde-format
 #| msgid "Range Breaks"
 msgid "Insert Multiple Rows Below"
 msgstr "Quebras de intervalo"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:464
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:465
 #, fuzzy, kde-format
 #| msgid "%1: remove selected rows"
 msgid "Remo&ve Selected Row(s)"
 msgstr "%1: remover as linhas selecionadas"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:465
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:466
 #, fuzzy, kde-format
 #| msgid "%1: fill matrix with function values"
 msgid "Delete Rows With Missing Values"
 msgstr "%1: preencher a matriz com os valores da função"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:466
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:467
 #, kde-format
 msgid "Mask Rows With Missing Values"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:467
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:468
 #, kde-format
 msgid "Row Statisti&cs"
 msgstr "Estatísti&cas das linhas"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:470
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:471
 #, kde-format
 msgid "Reduce Data"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:571
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:572
 #, fuzzy, kde-format
 #| msgid "Connection:"
 msgid "Conditional Formatting"
 msgstr "Conexão:"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:599
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:600
 #, kde-format
 msgid "Analyze and Plot Data"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:613
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:614
 #, fuzzy, kde-format
 #| msgid "&Selected Columns"
 msgid "Set Column As"
 msgstr "Colunas &selecionadas"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:682
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:683
 #, fuzzy, kde-format
 #| msgid "&Normalize"
 msgid "Normalize"
 msgstr "&Normalizar"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:705
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:706
 #, kde-format
 msgid "Ladder of Powers"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1094
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1095
 #, kde-format
 msgid "Hide Comments"
 msgstr "Ocultar comentários"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1576
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1577
 #, fuzzy, kde-format
 #| msgid "&Selected Columns"
 msgid "Unfreeze Column"
 msgstr "Colunas &selecionadas"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1630
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1631
 #, kde-format
 msgid "%1: cut selected cells"
 msgstr "%1: recortar as células selecionadas"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1954
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1955
 #, kde-format
 msgid "Not enough memory to finalize this operation."
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1968
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1969
 #, kde-format
 msgid "%1: mask selected cells"
 msgstr "%1: mascarar as células selecionadas"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2010
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2011
 #, kde-format
 msgid "%1: unmask selected cells"
 msgstr "%1: retirar a máscara das células selecionadas"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2074
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2075
 #, kde-format
 msgid "%1: fill cells with row numbers"
 msgstr "%1: preencher as células com os números de linha"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2139
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2140
 #, kde-format
 msgid "%1: fill column with row numbers"
 msgid_plural "%1: fill columns with row numbers"
 msgstr[0] "%1: preencher a coluna com os números de linha"
 msgstr[1] "%1: preencher as colunas com os números de linha"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2181
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2182
 #, kde-format
 msgid "%1: fill cells with random values"
 msgstr "%1: preencher as células com valores aleatórios"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2301
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2302
 #, kde-format
 msgid "%1: fill cells with const values"
 msgstr "%1: preencher as células com valores constantes"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2309
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2331
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2349
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2366
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2310
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2332
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2350
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2367
 #, kde-format
 msgid "Fill the selection with constant value"
 msgstr "Preenche a seleção com o valor constante"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2444
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2478
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2445
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2479
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Columns"
 msgid "Insert empty columns"
 msgstr "&Inserir colunas vazias"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2445
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2479
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2446
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2480
 #, fuzzy, kde-format
 #| msgid "Specify the name of the file to import."
 msgid "Enter the number of columns to insert"
 msgstr "Indique o nome do arquivo a importar."
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2497
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2498
 #, fuzzy, kde-format
 #| msgid "%1: insert empty columns"
 msgid "%1: insert empty column"
@@ -10739,154 +10745,154 @@ msgid_plural "%1: insert empty columns"
 msgstr[0] "%1: inserir colunas vazias"
 msgstr[1] "%1: inserir colunas vazias"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2567
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2568
 #, kde-format
 msgid "%1: remove selected columns"
 msgstr "%1: remover as colunas selecionadas"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2664
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2665
 #, kde-format
 msgid "%1: reverse column"
 msgid_plural "%1: reverse columns"
 msgstr[0] "%1: inverter coluna"
 msgstr[1] "%1: inverter colunas"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2737
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2738
 #, kde-format
 msgid ""
 "The selected columns have different data types and cannot be flattened "
 "because of this. "
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2775
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2776
 #, kde-format
 msgid "%1: normalize columns"
 msgstr "%1: normalizar as colunas"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2795
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2796
 #, kde-format
 msgid "Sum = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2806
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2807
 #, kde-format
 msgid "Min = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2817
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2818
 #, fuzzy, kde-format
 #| msgid "x = "
 msgid "Max = 0"
 msgstr "x = "
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2828
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2829
 #, fuzzy, kde-format
 #| msgid "center"
 msgid "Count = 0"
 msgstr "centro"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2839
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2840
 #, fuzzy, kde-format
 #| msgid "Mean"
 msgid "Mean = 0"
 msgstr "Média"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2850
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2851
 #, fuzzy, kde-format
 #| msgid "Median"
 msgid "Median = 0"
 msgstr "Mediana"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2862
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2863
 #, fuzzy, kde-format
 #| msgid "Model"
 msgid "Mode = 0"
 msgstr "Modelo"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2864
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2865
 #, kde-format
 msgid "'Mode not defined'"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2875
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2876
 #, fuzzy, kde-format
 #| msgid "x-Range:"
 msgid "Range = 0"
 msgstr "Intervalo em X:"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2886
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2920
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2887
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2921
 #, kde-format
 msgid "SD = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2897
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2932
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2898
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2933
 #, kde-format
 msgid "MAD = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2908
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2944
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2909
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2945
 #, kde-format
 msgid "IQR = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2956
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2957
 #, kde-format
 msgid "Max - Min = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2975
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2976
 #, kde-format
 msgid "Normalization not possible"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2987
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2988
 #, fuzzy, kde-format
 #| msgid "%1: sort columns"
 msgid "%1: power transform columns"
 msgstr "%1: ordenar as colunas"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3106
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3107
 #, fuzzy, kde-format
 #| msgid "Column Statisti&cs"
 msgid "%1: column statistics"
 msgstr "Estatísti&cas das colunas"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3137
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3138
 #, fuzzy, kde-format
 #| msgid "Selection"
 msgid "Selection in %1"
 msgstr "Seleção"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3180
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3181
 #, fuzzy, kde-format
 #| msgid "Row Statisti&cs"
 msgid "%1: row statistics"
 msgstr "Estatísti&cas das linhas"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3190
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3191
 #, kde-format
 msgid "Row %1"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3215
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3254
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3216
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3255
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Rows"
 msgid "Insert multiple rows"
 msgstr "&Inserir linhas vazias"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3216
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3255
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3217
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3256
 #, fuzzy, kde-format
 #| msgid "Specify the name of the file to import."
 msgid "Enter the number of rows to insert"
 msgstr "Indique o nome do arquivo a importar."
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3235
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3274
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3236
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3275
 #, fuzzy, kde-format
 #| msgid "%1: insert empty rows"
 msgid "%1: insert empty row"
@@ -10894,17 +10900,17 @@ msgid_plural "%1: insert empty rows"
 msgstr[0] "%1: inserir linhas vazias"
 msgstr[1] "%1: inserir linhas vazias"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3290
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3291
 #, kde-format
 msgid "%1: remove selected rows"
 msgstr "%1: remover as linhas selecionadas"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3317
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3318
 #, kde-format
 msgid "%1: clear selected cells"
 msgstr "%1: limpar as células selecionadas"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3563
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3564
 #, fuzzy, kde-format
 #| msgid "Arrow:"
 msgid "row"
@@ -10912,7 +10918,7 @@ msgid_plural "rows"
 msgstr[0] "Seta:"
 msgstr[1] "Seta:"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3564
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3565
 #, fuzzy, kde-format
 #| msgid "Column"
 msgid "column"
@@ -10920,83 +10926,83 @@ msgid_plural "columns"
 msgstr[0] "Coluna"
 msgstr[1] "Coluna"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3565
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3566
 #, kde-format
 msgid "cells"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3566
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3567
 #, fuzzy, kde-format
 #| msgid "Mask values"
 msgid "masked value"
 msgstr "Mascarar os valores"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3566
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3567
 #, fuzzy, kde-format
 #| msgid "Mask values"
 msgid "masked values"
 msgstr "Mascarar os valores"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3567
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3568
 #, fuzzy, kde-format
 #| msgid "no values"
 msgid "missing value"
 msgstr "sem valores"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3567
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3568
 #, fuzzy, kde-format
 #| msgid "no values"
 msgid "missing values"
 msgstr "sem valores"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3568
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3569
 #, kde-format
 msgid " , "
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3568
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3569
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3570
 #, fuzzy, kde-format
 #| msgid "1."
 msgid "%1"
 msgstr "1."
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3569
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3570
 #, fuzzy, kde-format
 #| msgctxt "postfix for XML warning messages"
 #| msgid " "
 msgid ", "
 msgstr " "
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3572
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3573
 #, kde-format
 msgid "Selected: %1 %2 , %3 %4%5 %6 %7 %8"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3583
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3584
 #, kde-format
 msgid "Selected: %1 %2%3 %4 %5 %6"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3656
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3657
 #, fuzzy, kde-format
 #| msgid "Print Spreadsheet"
 msgctxt "@title:window"
 msgid "Print Spreadsheet"
 msgstr "Imprimir planilha"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4261
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4262
 #, kde-format
 msgid "Couldn't create the SQLite database %1."
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4293
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4294
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to create table in the SQLite database %1."
 msgstr "Falha ao abrir"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4346
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4347
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to insert values into the table."
@@ -11121,28 +11127,28 @@ msgid "Load from Template"
 msgstr "Carregar de"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:229
-#: src/kdefrontend/dockwidgets/WorksheetDock.cpp:45
+#: src/kdefrontend/dockwidgets/WorksheetDock.cpp:47
 #, fuzzy, kde-format
 #| msgid "Vertical layout"
 msgid "Vertical Layout"
 msgstr "Layout vertical"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:232
-#: src/kdefrontend/dockwidgets/WorksheetDock.cpp:46
+#: src/kdefrontend/dockwidgets/WorksheetDock.cpp:48
 #, fuzzy, kde-format
 #| msgid "Horizontal layout"
 msgid "Horizontal Layout"
 msgstr "Layout horizontal"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:235
-#: src/kdefrontend/dockwidgets/WorksheetDock.cpp:47
+#: src/kdefrontend/dockwidgets/WorksheetDock.cpp:49
 #, fuzzy, kde-format
 #| msgid "Grid layout"
 msgid "Grid Layout"
 msgstr "Layout em grade"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:238
-#: src/kdefrontend/dockwidgets/WorksheetDock.cpp:44
+#: src/kdefrontend/dockwidgets/WorksheetDock.cpp:46
 #, fuzzy, kde-format
 #| msgid "Layout"
 msgid "No Layout"
@@ -12340,7 +12346,7 @@ msgid "Connecting to '%1:%2' timed out."
 msgstr "Conexão:"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:83
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:481
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:486
 #, fuzzy, kde-format
 #| msgid "Add new"
 msgid "Add new folder"
@@ -12411,7 +12417,7 @@ msgid ""
 "every layer</li></ul>"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:261
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:264
 #, kde-format
 msgid ""
 "The object listed below already exists in target folder and will be "
@@ -12422,64 +12428,64 @@ msgid_plural ""
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:267
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:270
 #, kde-format
 msgid "Do you want to proceed?"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:271
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:275
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:274
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:278
 #, kde-format
 msgid "Override existing objects?"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:308
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:311
 #, fuzzy, kde-format
 #| msgid "File %1 imported in %2 seconds."
 msgid "Project data imported in %1 seconds."
 msgstr "O arquivo %1 foi importado em %2 segundos."
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:401
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:405
 #, fuzzy, kde-format
 #| msgid "Choose how to import the image"
 msgid "Close the dialog and import the selected objects."
 msgstr "Escolha como importar a imagem"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:403
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:407
 #, fuzzy, kde-format
 #| msgid " Select the file to import"
 msgid "Select object(s) to be imported."
 msgstr " Selecione o arquivo a importar"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:418
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:422
 #, fuzzy, kde-format
 #| msgid "Open project"
 msgctxt "@title:window"
 msgid "Open LabPlot Project"
 msgstr "Abrir projeto"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:420
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:424
 #: src/kdefrontend/MainWin.cpp:1535
 #, fuzzy, kde-format
 #| msgid "Save Project"
 msgid "LabPlot Projects (%1)"
 msgstr "Salvar projeto"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:424
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:428
 #, fuzzy, kde-format
 #| msgid "Open project"
 msgctxt "@title:window"
 msgid "Open Origin Project"
 msgstr "Abrir projeto"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:426
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:430
 #: src/kdefrontend/MainWin.cpp:1540
 #, fuzzy, kde-format
 #| msgid "Open project"
 msgid "Origin Projects (%1)"
 msgstr "Abrir projeto"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:481
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:486
 #, fuzzy, kde-format
 #| msgid "Filter name:"
 msgid "Folder name:"
@@ -12824,13 +12830,13 @@ msgstr "Direção"
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:299
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:480
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:483
-#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:243
-#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:251
+#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:255
+#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:264
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:50
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:61
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:69
-#: src/kdefrontend/widgets/LabelWidget.cpp:141
-#: src/kdefrontend/widgets/LabelWidget.cpp:158
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:63
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:71
+#: src/kdefrontend/widgets/LabelWidget.cpp:143
+#: src/kdefrontend/widgets/LabelWidget.cpp:160
 #, kde-format
 msgid "Top"
 msgstr "Superior"
@@ -12839,13 +12845,13 @@ msgstr "Superior"
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:300
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:481
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:484
-#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:245
-#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:253
+#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:257
+#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:266
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:52
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:63
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:71
-#: src/kdefrontend/widgets/LabelWidget.cpp:143
-#: src/kdefrontend/widgets/LabelWidget.cpp:160
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:65
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:73
+#: src/kdefrontend/widgets/LabelWidget.cpp:145
+#: src/kdefrontend/widgets/LabelWidget.cpp:162
 #, kde-format
 msgid "Bottom"
 msgstr "Inferior"
@@ -12929,15 +12935,15 @@ msgstr "semi-preenchido, grande"
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:270
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:488
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:492
-#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:239
-#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:247
+#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:250
+#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:260
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:46
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:57
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:65
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:59
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:67
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:361
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:132
-#: src/kdefrontend/widgets/LabelWidget.cpp:137
-#: src/kdefrontend/widgets/LabelWidget.cpp:154
+#: src/kdefrontend/widgets/LabelWidget.cpp:139
+#: src/kdefrontend/widgets/LabelWidget.cpp:156
 #: src/kdefrontend/widgets/ValueWidget.cpp:37
 #, kde-format
 msgid "Left"
@@ -12947,15 +12953,15 @@ msgstr "Esquerda"
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:271
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:489
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:491
-#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:241
-#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:249
+#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:252
+#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:262
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:48
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:59
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:67
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:61
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:69
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:362
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:133
-#: src/kdefrontend/widgets/LabelWidget.cpp:139
-#: src/kdefrontend/widgets/LabelWidget.cpp:156
+#: src/kdefrontend/widgets/LabelWidget.cpp:141
+#: src/kdefrontend/widgets/LabelWidget.cpp:158
 #: src/kdefrontend/widgets/ValueWidget.cpp:38
 #, kde-format
 msgid "Right"
@@ -13118,8 +13124,8 @@ msgstr "%1 eixos: foi carregado o modelo \"%2\""
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:2044
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:490
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:719
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1790
-#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:692
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1792
+#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:781
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:394
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:694
 #: src/kdefrontend/dockwidgets/KDEPlotDock.cpp:373
@@ -13128,7 +13134,7 @@ msgstr "%1 eixos: foi carregado o modelo \"%2\""
 #: src/kdefrontend/dockwidgets/QQPlotDock.cpp:296
 #: src/kdefrontend/dockwidgets/ReferenceLineDock.cpp:243
 #: src/kdefrontend/dockwidgets/SpreadsheetDock.cpp:221
-#: src/kdefrontend/dockwidgets/WorksheetDock.cpp:604
+#: src/kdefrontend/dockwidgets/WorksheetDock.cpp:606
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1249
 #, kde-format
 msgid "%1: template \"%2\" loaded"
@@ -13290,40 +13296,40 @@ msgstr "%1 eixos: foi carregado o modelo \"%2\""
 msgid "File Browser"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:225
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:227
 #, fuzzy, kde-format
 #| msgid "Save current properties as a template"
 msgid "Save current plot area definition as template"
 msgstr "Salvar as propriedades atuais como um modelo"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:602
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:604
 #, fuzzy, kde-format
 #| msgid "x-Range:"
 msgid "%1-Ranges:"
 msgstr "Intervalo em X:"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:604
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:606
 #, fuzzy, kde-format
 #| msgid "x-Range:"
 msgid "%1-Range:"
 msgstr "Intervalo em X:"
 
 #. i18n: ectx: property (text), widget (QLabel, lNumeric)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:628
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:630
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:209
 #: src/kdefrontend/ui/spreadsheet/equidistantvalueswidget.ui:53
 #, kde-format
 msgid "Numeric"
 msgstr "Numérico"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:731
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:733
 #, fuzzy, kde-format
 #| msgid "center"
 msgid "Plot Ranges:"
 msgstr "centro"
 
 #. i18n: ectx: property (text), widget (QLabel, lPlotRange)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:733
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:735
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:262
 #: src/kdefrontend/ui/dockwidgets/barplotdock.ui:186
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:90
@@ -13350,24 +13356,24 @@ msgstr "centro"
 msgid "Plot Range:"
 msgstr "centro"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:821
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:823
 #, kde-format
 msgid "Free"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:822
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:824
 #, fuzzy, kde-format
 #| msgid "Move Last Point"
 msgid "Last Points"
 msgstr "Mover para o último ponto"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:823
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:825
 #, fuzzy, kde-format
 #| msgid "Set Axis Points"
 msgid "First Points"
 msgstr "Definir os pontos do eixo"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:826
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:828
 #, kde-format
 msgid ""
 "Data Range:<ul><li>Free - full data range is plotted</li><li>Last Points - "
@@ -13375,48 +13381,48 @@ msgid ""
 "number of first points is plotted</li></ul>"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:835
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:837
 #, kde-format
 msgid "If checked, automatically extend the plot range to nice values"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:840
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:844
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:842
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:846
 #, fuzzy, kde-format
 #| msgid "simple"
 msgid "Simple"
 msgstr "simples"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:842
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:846
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:844
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:848
 #, fuzzy, kde-format
 #| msgid "sloped"
 msgid "Sloped"
 msgstr "inclinado"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1101
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1110
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1103
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1112
 #, kde-format
 msgid "%1 range %2 is used in plot range %3. "
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1102
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1111
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1163
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1170
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1104
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1113
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1165
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1172
 #, kde-format
 msgid "Really remove it?"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1163
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1170
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1165
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1172
 #, kde-format
 msgid "Plot range %1 is used by element \"%2\". "
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lPaddingHorizontal)
 #. i18n: ectx: property (text), widget (QLabel, lHorizontalSpacing)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1261
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1263
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:561
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:761
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:342
@@ -13427,7 +13433,7 @@ msgstr "Horizontal"
 
 #. i18n: ectx: property (text), widget (QLabel, lPaddingVertical)
 #. i18n: ectx: property (text), widget (QLabel, lVerticalSpacing)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1262
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1264
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:862
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:716
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:428
@@ -13438,7 +13444,7 @@ msgstr "Vertical"
 
 #. i18n: ectx: property (text), widget (QLabel, lTopMargin)
 #. i18n: ectx: property (text), widget (QLabel, lLeftMargin)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1264
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1266
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:797
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:709
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:414
@@ -13449,7 +13455,7 @@ msgstr "Esquerda"
 
 #. i18n: ectx: property (text), widget (QLabel, lLeftMargin)
 #. i18n: ectx: property (text), widget (QLabel, lTopMargin)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1265
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1267
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:804
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:658
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:407
@@ -13457,51 +13463,51 @@ msgstr "Esquerda"
 msgid "Top:"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1597
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1599
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Template Save File"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1599
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1601
 #, fuzzy, kde-format
 #| msgid "Save Project"
 msgid "Labplot Plot Templates (*%1)"
 msgstr "Salvar projeto"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1788
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1790
 #, kde-format
 msgid "%1 cartesian plots: template \"%2\" loaded"
 msgstr "%1 gráficos cartesianos: foi carregado o modelo \"%2\""
 
-#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:235
+#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:246
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:246
 #, fuzzy, kde-format
 #| msgid "column major"
 msgid "Column Major"
 msgstr "coluna maior"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:236
+#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:247
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:247
 #, fuzzy, kde-format
 #| msgid "row major"
 msgid "Row Major"
 msgstr "linha maior"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:240
-#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:244
-#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:248
-#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:252
+#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:251
+#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:256
+#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:261
+#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:265
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:47
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:51
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:58
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:62
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:66
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:70
-#: src/kdefrontend/widgets/LabelWidget.cpp:138
-#: src/kdefrontend/widgets/LabelWidget.cpp:142
-#: src/kdefrontend/widgets/LabelWidget.cpp:155
-#: src/kdefrontend/widgets/LabelWidget.cpp:159
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:60
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:64
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:68
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:72
+#: src/kdefrontend/widgets/LabelWidget.cpp:140
+#: src/kdefrontend/widgets/LabelWidget.cpp:144
+#: src/kdefrontend/widgets/LabelWidget.cpp:157
+#: src/kdefrontend/widgets/LabelWidget.cpp:161
 #: src/kdefrontend/widgets/ValueWidget.cpp:88
 #: src/kdefrontend/widgets/ValueWidget.cpp:89
 #, fuzzy, kde-format
@@ -13509,7 +13515,14 @@ msgstr "linha maior"
 msgid "Center"
 msgstr "centro"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:690
+#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:253
+#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:258
+#, fuzzy, kde-format
+#| msgid "Relative scale"
+msgid "Relative to plot"
+msgstr "Escala relativa"
+
+#: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:779
 #, kde-format
 msgid "%1 cartesian plot legends: template \"%2\" loaded"
 msgstr "%1 legendas do gráfico cartesiano: foi carregado o modelo \"%2\""
@@ -13872,7 +13885,7 @@ msgstr ""
 msgid "%1 spreadsheets: template \"%2\" loaded"
 msgstr "%1 planilhas: foi carregado o modelo \"%2\""
 
-#: src/kdefrontend/dockwidgets/WorksheetDock.cpp:42
+#: src/kdefrontend/dockwidgets/WorksheetDock.cpp:44
 #, kde-format
 msgid ""
 "If checked, rescale the content of the worksheet on size changes. Otherwise "
@@ -13882,29 +13895,29 @@ msgstr ""
 "caso de mudança no tamanho. Caso contrário, muda apenas o tamanho da área de "
 "desenho."
 
-#: src/kdefrontend/dockwidgets/WorksheetDock.cpp:254
+#: src/kdefrontend/dockwidgets/WorksheetDock.cpp:256
 #, kde-format
 msgid "Portrait"
 msgstr "Retrato"
 
-#: src/kdefrontend/dockwidgets/WorksheetDock.cpp:255
+#: src/kdefrontend/dockwidgets/WorksheetDock.cpp:257
 #, kde-format
 msgid "Landscape"
 msgstr "Paisagem"
 
-#: src/kdefrontend/dockwidgets/WorksheetDock.cpp:273
+#: src/kdefrontend/dockwidgets/WorksheetDock.cpp:275
 #, fuzzy, kde-format
 #| msgid "view size"
 msgid "View Size"
 msgstr "tamanho da área"
 
-#: src/kdefrontend/dockwidgets/WorksheetDock.cpp:274
+#: src/kdefrontend/dockwidgets/WorksheetDock.cpp:276
 #, fuzzy, kde-format
 #| msgid "StandardDev"
 msgid "Standard Page"
 msgstr "Desvio padrão"
 
-#: src/kdefrontend/dockwidgets/WorksheetDock.cpp:602
+#: src/kdefrontend/dockwidgets/WorksheetDock.cpp:604
 #, kde-format
 msgid "%1 worksheets: template \"%2\" loaded"
 msgstr "%1 folhas de trabalho: foi carregado o modelo \"%2\""
@@ -14411,315 +14424,315 @@ msgid ""
 "installation."
 msgstr ""
 
-#: src/kdefrontend/GuiObserver.cpp:191 src/kdefrontend/MainWin.cpp:1441
+#: src/kdefrontend/GuiObserver.cpp:190 src/kdefrontend/MainWin.cpp:1441
 #, fuzzy, kde-format
 #| msgid "Properties"
 msgctxt "@title:window"
 msgid "Properties"
 msgstr "Propriedades"
 
-#: src/kdefrontend/GuiObserver.cpp:227
+#: src/kdefrontend/GuiObserver.cpp:226
 #, fuzzy, kde-format
 #| msgid "&Sort Spreadsheet"
 msgctxt "@title:window"
 msgid "Properties: Spreadsheet"
 msgstr "&Ordenar planilha"
 
-#: src/kdefrontend/GuiObserver.cpp:232
+#: src/kdefrontend/GuiObserver.cpp:231
 #, fuzzy, kde-format
 #| msgid "Properties"
 msgctxt "@title:window"
 msgid "Properties: Column Statistics"
 msgstr "Propriedades"
 
-#: src/kdefrontend/GuiObserver.cpp:242
+#: src/kdefrontend/GuiObserver.cpp:241
 #, fuzzy, kde-format
 #| msgid "Worksheet"
 msgctxt "@title:window %1 is a Cantor backend"
 msgid "%1 Worksheet"
 msgstr "Folha de trabalho"
 
-#: src/kdefrontend/GuiObserver.cpp:247
+#: src/kdefrontend/GuiObserver.cpp:246
 #, fuzzy, kde-format
 #| msgid "Properties"
 msgctxt "@title:window"
 msgid "Properties: Column"
 msgstr "Propriedades"
 
-#: src/kdefrontend/GuiObserver.cpp:254
+#: src/kdefrontend/GuiObserver.cpp:253
 #, fuzzy, kde-format
 #| msgid "Properties"
 msgctxt "@title:window"
 msgid "Properties: Matrix"
 msgstr "Propriedades"
 
-#: src/kdefrontend/GuiObserver.cpp:259
+#: src/kdefrontend/GuiObserver.cpp:258
 #, fuzzy, kde-format
 #| msgid "Complete worksheet"
 msgctxt "@title:window"
 msgid "Properties: Worksheet"
 msgstr "Folha de trabalho completa"
 
-#: src/kdefrontend/GuiObserver.cpp:265
+#: src/kdefrontend/GuiObserver.cpp:264
 #, fuzzy, kde-format
 #| msgid "Properties explorer"
 msgctxt "@title:window"
 msgid "Properties: Plot Area"
 msgstr "Explorador de propriedades"
 
-#: src/kdefrontend/GuiObserver.cpp:271
+#: src/kdefrontend/GuiObserver.cpp:270
 #, fuzzy, kde-format
 #| msgid "Properties"
 msgctxt "@title:window"
 msgid "Properties: Legend"
 msgstr "Propriedades"
 
-#: src/kdefrontend/GuiObserver.cpp:276
+#: src/kdefrontend/GuiObserver.cpp:275
 #, fuzzy, kde-format
 #| msgid "Properties"
 msgctxt "@title:window"
 msgid "Properties: Axis"
 msgstr "Propriedades"
 
-#: src/kdefrontend/GuiObserver.cpp:281
+#: src/kdefrontend/GuiObserver.cpp:280
 #, fuzzy, kde-format
 #| msgid "Properties"
 msgctxt "@title:window"
 msgid "Properties: XY-Curve"
 msgstr "Propriedades"
 
-#: src/kdefrontend/GuiObserver.cpp:286
+#: src/kdefrontend/GuiObserver.cpp:285
 #, fuzzy, kde-format
 #| msgid "Equation type"
 msgctxt "@title:window"
 msgid "Properties: XY-Equation"
 msgstr "Tipo de equação"
 
-#: src/kdefrontend/GuiObserver.cpp:291
+#: src/kdefrontend/GuiObserver.cpp:290
 #, fuzzy, kde-format
 #| msgid "Direction"
 msgctxt "@title:window"
 msgid "Properties: Data Reduction"
 msgstr "Direção"
 
-#: src/kdefrontend/GuiObserver.cpp:307
+#: src/kdefrontend/GuiObserver.cpp:306
 #, fuzzy, kde-format
 #| msgid "Orientation"
 msgctxt "@title:window"
 msgid "Properties: Differentiation"
 msgstr "Orientação"
 
-#: src/kdefrontend/GuiObserver.cpp:312
+#: src/kdefrontend/GuiObserver.cpp:311
 #, fuzzy, kde-format
 #| msgid "Interpolation"
 msgctxt "@title:window"
 msgid "Properties: Integration"
 msgstr "Interpolação"
 
-#: src/kdefrontend/GuiObserver.cpp:317
+#: src/kdefrontend/GuiObserver.cpp:316
 #, fuzzy, kde-format
 #| msgid "Interpolation"
 msgctxt "@title:window"
 msgid "Properties: Interpolation"
 msgstr "Interpolação"
 
-#: src/kdefrontend/GuiObserver.cpp:322
+#: src/kdefrontend/GuiObserver.cpp:321
 #, fuzzy, kde-format
 #| msgid "Properties"
 msgctxt "@title:window"
 msgid "Properties: Smoothing"
 msgstr "Propriedades"
 
-#: src/kdefrontend/GuiObserver.cpp:327
+#: src/kdefrontend/GuiObserver.cpp:326
 #, fuzzy, kde-format
 #| msgid "Properties"
 msgctxt "@title:window"
 msgid "Properties: Fit"
 msgstr "Propriedades"
 
-#: src/kdefrontend/GuiObserver.cpp:332
+#: src/kdefrontend/GuiObserver.cpp:331
 #, fuzzy, kde-format
 #| msgid "Fourier filter"
 msgctxt "@title:window"
 msgid "Properties: Fourier Transform"
 msgstr "Filtro de Fourier"
 
-#: src/kdefrontend/GuiObserver.cpp:337
+#: src/kdefrontend/GuiObserver.cpp:336
 #, fuzzy, kde-format
 #| msgid "Fourier filter"
 msgctxt "@title:window"
 msgid "Properties: Hilbert Transform"
 msgstr "Filtro de Fourier"
 
-#: src/kdefrontend/GuiObserver.cpp:342
+#: src/kdefrontend/GuiObserver.cpp:341
 #, fuzzy, kde-format
 #| msgid "Fourier filter"
 msgctxt "@title:window"
 msgid "Properties: Fourier Filter"
 msgstr "Filtro de Fourier"
 
-#: src/kdefrontend/GuiObserver.cpp:347
+#: src/kdefrontend/GuiObserver.cpp:346
 #, fuzzy, kde-format
 #| msgid "Connection:"
 msgctxt "@title:window"
 msgid "Properties: Convolution/Deconvolution"
 msgstr "Conexão:"
 
-#: src/kdefrontend/GuiObserver.cpp:352
+#: src/kdefrontend/GuiObserver.cpp:351
 #, fuzzy, kde-format
 #| msgid "Connection:"
 msgctxt "@title:window"
 msgid "Properties: Auto-/Cross-Correlation"
 msgstr "Conexão:"
 
-#: src/kdefrontend/GuiObserver.cpp:357
+#: src/kdefrontend/GuiObserver.cpp:356
 #, fuzzy, kde-format
 #| msgid "Properties explorer"
 msgctxt "@title:window"
 msgid "Properties: Histogram"
 msgstr "Explorador de propriedades"
 
-#: src/kdefrontend/GuiObserver.cpp:362
+#: src/kdefrontend/GuiObserver.cpp:361
 #, fuzzy, kde-format
 #| msgid "Properties"
 msgctxt "@title:window"
 msgid "Properties: Bar Plot"
 msgstr "Propriedades"
 
-#: src/kdefrontend/GuiObserver.cpp:367
+#: src/kdefrontend/GuiObserver.cpp:366
 #, fuzzy, kde-format
 #| msgid "Properties explorer"
 msgctxt "@title:window"
 msgid "Properties: Lollipop Plot"
 msgstr "Explorador de propriedades"
 
-#: src/kdefrontend/GuiObserver.cpp:372
+#: src/kdefrontend/GuiObserver.cpp:371
 #, fuzzy, kde-format
 #| msgid "Properties explorer"
 msgctxt "@title:window"
 msgid "Properties: Box Plot"
 msgstr "Explorador de propriedades"
 
-#: src/kdefrontend/GuiObserver.cpp:377
+#: src/kdefrontend/GuiObserver.cpp:376
 #, fuzzy, kde-format
 #| msgid "Plot"
 msgctxt "@title:window"
 msgid "KDE Plot"
 msgstr "Gráfico"
 
-#: src/kdefrontend/GuiObserver.cpp:382
+#: src/kdefrontend/GuiObserver.cpp:381
 #, fuzzy, kde-format
 #| msgid "Plot"
 msgctxt "@title:window"
 msgid "Q-Q Plot"
 msgstr "Gráfico"
 
-#: src/kdefrontend/GuiObserver.cpp:387
+#: src/kdefrontend/GuiObserver.cpp:386
 #, fuzzy, kde-format
 #| msgid "Properties explorer"
 msgctxt "@title:window"
 msgid "Properties: Text Label"
 msgstr "Explorador de propriedades"
 
-#: src/kdefrontend/GuiObserver.cpp:392
+#: src/kdefrontend/GuiObserver.cpp:391
 #, fuzzy, kde-format
 #| msgid "Properties"
 msgctxt "@title:window"
 msgid "Properties: Image"
 msgstr "Propriedades"
 
-#: src/kdefrontend/GuiObserver.cpp:397
+#: src/kdefrontend/GuiObserver.cpp:396
 #, fuzzy, kde-format
 #| msgid "custom point"
 msgctxt "@title:window"
 msgid "Properties: Custom Point"
 msgstr "ponto personalizado"
 
-#: src/kdefrontend/GuiObserver.cpp:402
+#: src/kdefrontend/GuiObserver.cpp:401
 #, fuzzy, kde-format
 #| msgid "Reference Line"
 msgctxt "@title:window"
 msgid "Properties: Reference Line"
 msgstr "Linha de referência"
 
-#: src/kdefrontend/GuiObserver.cpp:407
+#: src/kdefrontend/GuiObserver.cpp:406
 #, fuzzy, kde-format
 #| msgid "Reference Line"
 msgctxt "@title:window"
 msgid "Reference Range"
 msgstr "Linha de referência"
 
-#: src/kdefrontend/GuiObserver.cpp:412
+#: src/kdefrontend/GuiObserver.cpp:411
 #, fuzzy, kde-format
 #| msgid "Datapicker"
 msgctxt "@title:window"
 msgid "Properties: Datapicker Curve"
 msgstr "Seletor de dados"
 
-#: src/kdefrontend/GuiObserver.cpp:417
+#: src/kdefrontend/GuiObserver.cpp:416
 #, fuzzy, kde-format
 #| msgid "Data format"
 msgctxt "@title:window"
 msgid "Properties: Data Extractor"
 msgstr "Formato dos dados"
 
-#: src/kdefrontend/GuiObserver.cpp:427
+#: src/kdefrontend/GuiObserver.cpp:426
 #, fuzzy, kde-format
 #| msgid "Properties"
 msgctxt "@title:window"
 msgid "Properties: Project"
 msgstr "Propriedades"
 
-#: src/kdefrontend/GuiObserver.cpp:437
+#: src/kdefrontend/GuiObserver.cpp:436
 #, kde-format
 msgctxt "@title:window %1 is a Cantor backend"
 msgid "%1 Notebook"
 msgstr ""
 
-#: src/kdefrontend/GuiObserver.cpp:439
+#: src/kdefrontend/GuiObserver.cpp:438
 #, fuzzy, kde-format
 #| msgid "Properties"
 msgctxt "@title:window"
 msgid "Properties: Notebook"
 msgstr "Propriedades"
 
-#: src/kdefrontend/GuiObserver.cpp:445
+#: src/kdefrontend/GuiObserver.cpp:444
 #, fuzzy, kde-format
 #| msgid "Properties"
 msgctxt "@title:window"
 msgid "Properties: Notes"
 msgstr "Propriedades"
 
-#: src/kdefrontend/GuiObserver.cpp:450
+#: src/kdefrontend/GuiObserver.cpp:449
 #, fuzzy, kde-format
 #| msgid "Increment"
 msgctxt "@title:window"
 msgid "Properties: Info Element"
 msgstr "Incremento"
 
-#: src/kdefrontend/GuiObserver.cpp:457 src/kdefrontend/GuiObserver.cpp:464
-#: src/kdefrontend/GuiObserver.cpp:471
+#: src/kdefrontend/GuiObserver.cpp:456 src/kdefrontend/GuiObserver.cpp:463
+#: src/kdefrontend/GuiObserver.cpp:470
 #, fuzzy, kde-format
 #| msgid "File data source"
 msgctxt "@title:window"
 msgid "Properties: MQTT Data Source"
 msgstr "Fonte de dados em arquivo"
 
-#: src/kdefrontend/GuiObserver.cpp:477
+#: src/kdefrontend/GuiObserver.cpp:476
 #, fuzzy, kde-format
 #| msgid "File Data Source"
 msgctxt "@title:window"
 msgid "Properties: Live Data Source"
 msgstr "Fonte de dados em arquivo"
 
-#: src/kdefrontend/GuiObserver.cpp:491
+#: src/kdefrontend/GuiObserver.cpp:490
 #, fuzzy, kde-format
 #| msgid "Properties explorer"
 msgctxt "@title:window"
 msgid "Properties: Folder"
 msgstr "Explorador de propriedades"
 
-#: src/kdefrontend/GuiObserver.cpp:498
+#: src/kdefrontend/GuiObserver.cpp:497
 #, fuzzy, kde-format
 #| msgid "Properties"
 msgctxt "@title:window"
@@ -15933,7 +15946,7 @@ msgstr "Carregar de"
 #: src/kdefrontend/SettingsWorksheetPage.cpp:72
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:99
 #: src/kdefrontend/widgets/ThemesComboBox.cpp:72
-#: src/kdefrontend/widgets/ThemesWidget.cpp:67
+#: src/kdefrontend/widgets/ThemesWidget.cpp:69
 #, kde-format
 msgid "Default"
 msgstr "Padrão"
@@ -23669,159 +23682,159 @@ msgstr ""
 msgid "Removing Keyword"
 msgstr "Remo&ver linhas"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:112
+#: src/kdefrontend/widgets/LabelWidget.cpp:114
 #, kde-format
 msgid ""
 "Use logical instead of absolute coordinates to specify the position on the "
 "plot"
 msgstr ""
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:127
+#: src/kdefrontend/widgets/LabelWidget.cpp:129
 #, kde-format
 msgid "Bold"
 msgstr ""
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:128
+#: src/kdefrontend/widgets/LabelWidget.cpp:130
 #, kde-format
 msgid "Italic"
 msgstr ""
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:129
+#: src/kdefrontend/widgets/LabelWidget.cpp:131
 #, fuzzy, kde-format
 #| msgid "line"
 msgid "Underline"
 msgstr "linha"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:130
+#: src/kdefrontend/widgets/LabelWidget.cpp:132
 #, kde-format
 msgid "Strike Out"
 msgstr ""
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:131
+#: src/kdefrontend/widgets/LabelWidget.cpp:133
 #, fuzzy, kde-format
 #| msgid "&Script"
 msgid "Super Script"
 msgstr "&Script"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:132
+#: src/kdefrontend/widgets/LabelWidget.cpp:134
 #, fuzzy, kde-format
 #| msgid "&Script"
 msgid "Sub-Script"
 msgstr "&Script"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:133
+#: src/kdefrontend/widgets/LabelWidget.cpp:135
 #, fuzzy, kde-format
 #| msgid "Insert"
 msgid "Insert Symbol"
 msgstr "Inserir"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:134
+#: src/kdefrontend/widgets/LabelWidget.cpp:136
 #, fuzzy, kde-format
 #| msgid "Date and Time"
 msgid "Insert Date/Time"
 msgstr "Data e Hora"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:162
+#: src/kdefrontend/widgets/LabelWidget.cpp:164
 #, fuzzy, kde-format
 #| msgid "Border:"
 msgid "No Border"
 msgstr "Borda:"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:163
+#: src/kdefrontend/widgets/LabelWidget.cpp:165
 #, kde-format
 msgid "Rectangle"
 msgstr ""
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:164
+#: src/kdefrontend/widgets/LabelWidget.cpp:166
 #, kde-format
 msgid "Ellipse"
 msgstr ""
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:165
+#: src/kdefrontend/widgets/LabelWidget.cpp:167
 #, kde-format
 msgid "Round sided rectangle"
 msgstr ""
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:166
+#: src/kdefrontend/widgets/LabelWidget.cpp:168
 #, fuzzy, kde-format
 #| msgid "uniform (rectangular)"
 msgid "Round corner rectangle"
 msgstr "uniforme (retangular)"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:167
+#: src/kdefrontend/widgets/LabelWidget.cpp:169
 #, kde-format
 msgid "Inwards round corner rectangle"
 msgstr ""
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:168
+#: src/kdefrontend/widgets/LabelWidget.cpp:170
 #, fuzzy, kde-format
 #| msgid "%1: set border style"
 msgid "Dented border rectangle"
 msgstr "%1: definir o estilo da borda"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:169
+#: src/kdefrontend/widgets/LabelWidget.cpp:171
 #, kde-format
 msgid "Cuboid"
 msgstr ""
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:170
+#: src/kdefrontend/widgets/LabelWidget.cpp:172
 #, kde-format
 msgid "Up Pointing rectangle"
 msgstr ""
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:171
+#: src/kdefrontend/widgets/LabelWidget.cpp:173
 #, kde-format
 msgid "Down Pointing rectangle"
 msgstr ""
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:172
+#: src/kdefrontend/widgets/LabelWidget.cpp:174
 #, kde-format
 msgid "Left Pointing rectangle"
 msgstr ""
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:173
+#: src/kdefrontend/widgets/LabelWidget.cpp:175
 #, fuzzy, kde-format
 #| msgid "right triangle"
 msgid "Right Pointing rectangle"
 msgstr "Triângulo retângulo"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:175
+#: src/kdefrontend/widgets/LabelWidget.cpp:177
 #, fuzzy, kde-format
 #| msgid "no line"
 msgid "No line"
 msgstr "sem linha"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:176
+#: src/kdefrontend/widgets/LabelWidget.cpp:178
 #, fuzzy, kde-format
 #| msgid "solid line"
 msgid "Solid line"
 msgstr "linha sólida"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:177
+#: src/kdefrontend/widgets/LabelWidget.cpp:179
 #, fuzzy, kde-format
 #| msgid "dash line"
 msgid "Dash line"
 msgstr "linha tracejada"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:178
+#: src/kdefrontend/widgets/LabelWidget.cpp:180
 #, fuzzy, kde-format
 #| msgid "dot line"
 msgid "Dot line"
 msgstr "linha pontilhada"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:179
+#: src/kdefrontend/widgets/LabelWidget.cpp:181
 #, fuzzy, kde-format
 #| msgid "dash-dot line"
 msgid "Dash dot line"
 msgstr "linha com traço e ponto"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:180
+#: src/kdefrontend/widgets/LabelWidget.cpp:182
 #, fuzzy, kde-format
 #| msgid "dash-dot-dot line"
 msgid "Dash dot dot line"
 msgstr "linha com traço, ponto e ponto"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:197
+#: src/kdefrontend/widgets/LabelWidget.cpp:199
 #, kde-format
 msgid ""
 "Text setting mode:<ul><li>Text - text setting using rich-text formatting</"
@@ -23829,14 +23842,14 @@ msgid ""
 "li><li>Markdown - text setting using Markdown markup language</li></ul>"
 msgstr ""
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:862
-#: src/kdefrontend/widgets/LabelWidget.cpp:888
+#: src/kdefrontend/widgets/LabelWidget.cpp:864
+#: src/kdefrontend/widgets/LabelWidget.cpp:890
 #, kde-format
 msgid "Date"
 msgstr "Data"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:870
-#: src/kdefrontend/widgets/LabelWidget.cpp:896
+#: src/kdefrontend/widgets/LabelWidget.cpp:872
+#: src/kdefrontend/widgets/LabelWidget.cpp:898
 #, kde-format
 msgid "Date and Time"
 msgstr "Data e Hora"

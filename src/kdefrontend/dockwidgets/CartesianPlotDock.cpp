@@ -36,6 +36,8 @@
 #include <QWheelEvent>
 #include <QXmlStreamWriter>
 
+#include <gsl/gsl_const_cgs.h>
+
 namespace {
 enum TwRangesColumn { Automatic = 0, Format, Min, Max, Scale };
 
@@ -529,28 +531,28 @@ void CartesianPlotDock::updateUnits() {
 		// convert from imperial to metric
 		m_worksheetUnit = Worksheet::Unit::Centimeter;
 		suffix = QStringLiteral(" cm");
-		ui.sbLeft->setValue(ui.sbLeft->value() * 2.54);
-		ui.sbTop->setValue(ui.sbTop->value() * 2.54);
-		ui.sbWidth->setValue(ui.sbWidth->value() * 2.54);
-		ui.sbHeight->setValue(ui.sbHeight->value() * 2.54);
-		ui.sbBorderCornerRadius->setValue(ui.sbBorderCornerRadius->value() * 2.54);
-		ui.sbPaddingHorizontal->setValue(ui.sbPaddingHorizontal->value() * 2.54);
-		ui.sbPaddingVertical->setValue(ui.sbPaddingVertical->value() * 2.54);
-		ui.sbPaddingRight->setValue(ui.sbPaddingRight->value() * 2.54);
-		ui.sbPaddingBottom->setValue(ui.sbPaddingBottom->value() * 2.54);
+		ui.sbLeft->setValue(ui.sbLeft->value() * GSL_CONST_CGS_INCH);
+		ui.sbTop->setValue(ui.sbTop->value() * GSL_CONST_CGS_INCH);
+		ui.sbWidth->setValue(ui.sbWidth->value() * GSL_CONST_CGS_INCH);
+		ui.sbHeight->setValue(ui.sbHeight->value() * GSL_CONST_CGS_INCH);
+		ui.sbBorderCornerRadius->setValue(ui.sbBorderCornerRadius->value() * GSL_CONST_CGS_INCH);
+		ui.sbPaddingHorizontal->setValue(ui.sbPaddingHorizontal->value() * GSL_CONST_CGS_INCH);
+		ui.sbPaddingVertical->setValue(ui.sbPaddingVertical->value() * GSL_CONST_CGS_INCH);
+		ui.sbPaddingRight->setValue(ui.sbPaddingRight->value() * GSL_CONST_CGS_INCH);
+		ui.sbPaddingBottom->setValue(ui.sbPaddingBottom->value() * GSL_CONST_CGS_INCH);
 	} else {
 		// convert from metric to imperial
 		m_worksheetUnit = Worksheet::Unit::Inch;
 		suffix = QStringLiteral(" in");
-		ui.sbLeft->setValue(ui.sbLeft->value() / 2.54);
-		ui.sbTop->setValue(ui.sbTop->value() / 2.54);
-		ui.sbWidth->setValue(ui.sbWidth->value() / 2.54);
-		ui.sbHeight->setValue(ui.sbHeight->value() / 2.54);
-		ui.sbBorderCornerRadius->setValue(ui.sbBorderCornerRadius->value() / 2.54);
-		ui.sbPaddingHorizontal->setValue(ui.sbPaddingHorizontal->value() / 2.54);
-		ui.sbPaddingVertical->setValue(ui.sbPaddingVertical->value() / 2.54);
-		ui.sbPaddingRight->setValue(ui.sbPaddingRight->value() / 2.54);
-		ui.sbPaddingBottom->setValue(ui.sbPaddingBottom->value() / 2.54);
+		ui.sbLeft->setValue(ui.sbLeft->value() / GSL_CONST_CGS_INCH);
+		ui.sbTop->setValue(ui.sbTop->value() / GSL_CONST_CGS_INCH);
+		ui.sbWidth->setValue(ui.sbWidth->value() / GSL_CONST_CGS_INCH);
+		ui.sbHeight->setValue(ui.sbHeight->value() / GSL_CONST_CGS_INCH);
+		ui.sbBorderCornerRadius->setValue(ui.sbBorderCornerRadius->value() / GSL_CONST_CGS_INCH);
+		ui.sbPaddingHorizontal->setValue(ui.sbPaddingHorizontal->value() / GSL_CONST_CGS_INCH);
+		ui.sbPaddingVertical->setValue(ui.sbPaddingVertical->value() / GSL_CONST_CGS_INCH);
+		ui.sbPaddingRight->setValue(ui.sbPaddingRight->value() / GSL_CONST_CGS_INCH);
+		ui.sbPaddingBottom->setValue(ui.sbPaddingBottom->value() / GSL_CONST_CGS_INCH);
 	}
 
 	ui.sbLeft->setSuffix(suffix);

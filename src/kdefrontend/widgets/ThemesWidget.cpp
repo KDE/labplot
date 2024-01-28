@@ -25,6 +25,8 @@
 
 #include <cmath>
 
+#include <gsl/gsl_const_cgs.h>
+
 /*!
 	\class ThemesWidget
 	\brief Widget for showing theme previews and for selecting a theme.
@@ -40,7 +42,7 @@ ThemesWidget::ThemesWidget(QWidget* parent)
 	setDragDropMode(QListView::NoDragDrop);
 
 	// make the icon 3x3cm big and show two of them in the height
-	static const int themeIconSize = std::ceil(3.0 / 2.54 * QApplication::primaryScreen()->physicalDotsPerInchX());
+	static const int themeIconSize = std::ceil(3.0 / GSL_CONST_CGS_INCH * QApplication::primaryScreen()->physicalDotsPerInchX());
 	setIconSize(QSize(themeIconSize, themeIconSize));
 	setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
@@ -114,7 +116,7 @@ void ThemesWidget::setFixedMode() {
 	int frameWidth = style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
 	QFont font;
 	QFontMetrics fm(font);
-	static const int themeIconSize = std::ceil(3.0 / 2.54 * QApplication::primaryScreen()->physicalDotsPerInchX());
+	static const int themeIconSize = std::ceil(3.0 / GSL_CONST_CGS_INCH * QApplication::primaryScreen()->physicalDotsPerInchX());
 	QSize widgetSize(themeIconSize + style()->pixelMetric(QStyle::PM_ScrollBarExtent) + frameWidth * 2,
 					 3 * (themeIconSize + fm.height() + 2 * frameWidth) + fm.height() + frameWidth);
 	setMinimumSize(widgetSize);

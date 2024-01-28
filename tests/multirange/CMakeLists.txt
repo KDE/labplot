@@ -12,4 +12,10 @@ if (ENABLE_TEST_MULTIRANGE)
     target_link_libraries(MultiRangeTest2 labplot2backendlib labplot2lib labplot2nsllib labplot2test)
 
     add_test(NAME MultiRangeTest2 COMMAND MultiRangeTest2)
+
+    add_executable (MultiRangeTest3 MultiRangeTest3.cpp)
+
+    target_link_libraries(MultiRangeTest3 labplot2backendlib labplot2lib labplot2nsllib labplot2test)
+
+    add_test(NAME MultiRangeTest3 COMMAND MultiRangeTest3)
 endif()
