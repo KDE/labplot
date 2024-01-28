@@ -2722,7 +2722,8 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 
 	const auto margin = (double)hoverSelectionEffectPenWidth / 2;
 	const auto axisRect = tmpPath.boundingRect().marginsRemoved(QMarginsF(margin, margin, margin, margin));
-	tmpPath.addRect(axisRect); // add rect instead of the actual path for ticks - this is done for performance reasons,the calculation for many ticks and long tick texts can be very expensive
+	tmpPath.addRect(axisRect); // add rect instead of the actual path for ticks - this is done for performance reasons,the calculation for many ticks and long
+							   // tick texts can be very expensive
 
 	// add title label, if available
 	QTextDocument doc; // text may be Html, so check if plain text is empty
