@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-01-27 01:34+0000\n"
-"PO-Revision-Date: 2024-01-08 10:54+0100\n"
+"PO-Revision-Date: 2024-01-27 11:47+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -3811,10 +3811,9 @@ msgid "xor"
 msgstr "xor"
 
 #: src/backend/gsl/functions.cpp:325
-#, fuzzy, kde-format
-#| msgid "no"
+#, kde-format
 msgid "not"
-msgstr "No"
+msgstr "no"
 
 #: src/backend/gsl/functions.cpp:329
 #, kde-format
@@ -13009,10 +13008,9 @@ msgstr "Centre"
 
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:253
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:258
-#, fuzzy, kde-format
-#| msgid "Relative Path"
+#, kde-format
 msgid "Relative to plot"
-msgstr "Camí relatiu"
+msgstr "Relatiu al diagrama"
 
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:779
 #, kde-format

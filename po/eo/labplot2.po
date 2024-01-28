@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-01-27 01:34+0000\n"
-"PO-Revision-Date: 2024-01-08 22:51+0100\n"
+"PO-Revision-Date: 2024-01-28 20:02+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -3740,7 +3740,7 @@ msgstr "if(kondiĉo; seVera; seMalvera)"
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:412
 #, kde-format
 msgid "and"
-msgstr "kaj"
+msgstr "and"
 
 #. i18n: ectx: property (text), widget (QLabel, l2SamplingInterval)
 #: src/backend/gsl/functions.cpp:323
@@ -3748,7 +3748,7 @@ msgstr "kaj"
 #: src/kdefrontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:24
 #, kde-format
 msgid "or"
-msgstr "aŭ"
+msgstr "or"
 
 #: src/backend/gsl/functions.cpp:324
 #, kde-format
@@ -3756,10 +3756,9 @@ msgid "xor"
 msgstr "xor"
 
 #: src/backend/gsl/functions.cpp:325
-#, fuzzy, kde-format
-#| msgid "no"
+#, kde-format
 msgid "not"
-msgstr "ne"
+msgstr "not"
 
 #: src/backend/gsl/functions.cpp:329
 #, kde-format
@@ -12849,10 +12848,9 @@ msgstr "Centro"
 
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:253
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:258
-#, fuzzy, kde-format
-#| msgid "Relative Path"
+#, kde-format
 msgid "Relative to plot"
-msgstr "Relativa Vojo"
+msgstr "Relativa al grafiko"
 
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:779
 #, kde-format
@@ -22705,6 +22703,3 @@ msgstr "konvertprocezo malsukcesis, elirkodo ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Ne eblas malfermi dosieron:"
-
-#~ msgid "XY-Curves"
-#~ msgstr "XY-Kurboj"
