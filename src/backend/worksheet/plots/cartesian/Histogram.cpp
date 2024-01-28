@@ -26,11 +26,11 @@
 #include "backend/lib/macrosCurve.h"
 #include "backend/lib/trace.h"
 #include "backend/spreadsheet/Spreadsheet.h"
-#include "backend/worksheet/plots/cartesian/ErrorBar.h"
-#include "backend/worksheet/plots/cartesian/ErrorBarStyle.h"
 #include "backend/worksheet/Background.h"
 #include "backend/worksheet/Line.h"
 #include "backend/worksheet/Worksheet.h"
+#include "backend/worksheet/plots/cartesian/ErrorBar.h"
+#include "backend/worksheet/plots/cartesian/ErrorBarStyle.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "backend/worksheet/plots/cartesian/Value.h"
 #include "tools/ImageTools.h"
@@ -132,7 +132,6 @@ void Histogram::init() {
 
 	// error bars
 	d->errorBar = new ErrorBar(QString());
-	// d->errorBar->setPrefix(QStringLiteral("Filling"));
 	addChild(d->errorBar);
 	d->errorBar->setHidden(true);
 	d->errorBar->init(group);

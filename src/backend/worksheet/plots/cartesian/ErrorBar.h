@@ -21,6 +21,8 @@ class ErrorBar : public AbstractAspect {
 	Q_OBJECT
 
 public:
+	friend class ErrorBarSetPlusColumnCmd;
+	friend class ErrorBarSetMinusColumnCmd;
 	enum class Type { NoError, Symmetric, Asymmetric, Poisson };
 	enum class BarsType { Simple, WithEnds };
 
@@ -43,14 +45,13 @@ public:
 
 	typedef ErrorBarPrivate Private;
 
-	void connectPlusColumn(const AbstractColumn*);
-	void connectMinusColumn(const AbstractColumn*);
-
 protected:
 	ErrorBarPrivate* const d_ptr;
 
 private:
 	Q_DECLARE_PRIVATE(ErrorBar)
+	void connectPlusColumn(const AbstractColumn*);
+	void connectMinusColumn(const AbstractColumn*);
 
 private Q_SLOTS:
 	void plusColumnAboutToBeRemoved(const AbstractAspect*);

@@ -4,7 +4,7 @@
 	Description          : widget for histogram plot properties
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2016 Anu Mittal <anu22mittal@gmail.com>
-	SPDX-FileCopyrightText: 2016-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2016-2024 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -18,6 +18,7 @@
 #include "ui_histogramdock.h"
 
 class BackgroundWidget;
+class ErrorBarStyleWidget;
 class LineWidget;
 class SymbolWidget;
 class ValueWidget;
@@ -48,7 +49,7 @@ protected:
 	LineWidget* lineWidget{nullptr};
 	SymbolWidget* symbolWidget{nullptr};
 	ValueWidget* valueWidget{nullptr};
-	LineWidget* errorBarsLineWidget{nullptr};
+	ErrorBarStyleWidget* errorBarStyleWidget{nullptr};
 
 	QList<Histogram*> m_curvesList;
 	Histogram* m_curve{nullptr};

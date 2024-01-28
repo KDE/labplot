@@ -23,6 +23,7 @@
 #include "kdefrontend/GuiTools.h"
 #include "kdefrontend/TemplateHandler.h"
 #include "kdefrontend/widgets/BackgroundWidget.h"
+#include "kdefrontend/widgets/ErrorBarStyleWidget.h"
 #include "kdefrontend/widgets/LineWidget.h"
 #include "kdefrontend/widgets/SymbolWidget.h"
 #include "kdefrontend/widgets/ValueWidget.h"
@@ -92,8 +93,8 @@ HistogramDock::HistogramDock(QWidget* parent)
 	cbErrorMinusColumn = new TreeViewComboBox(ui.tabErrorBars);
 	gridLayout->addWidget(cbErrorMinusColumn, 3, 2, 1, 1);
 
-	errorBarsLineWidget = new LineWidget(ui.tabErrorBars);
-	gridLayout->addWidget(errorBarsLineWidget, 6, 0, 1, 3);
+	errorBarStyleWidget = new ErrorBarStyleWidget(ui.tabErrorBars);
+	gridLayout->addWidget(errorBarStyleWidget, 6, 0, 1, 3);
 
 	// adjust layouts in the tabs
 	for (int i = 0; i < ui.tabWidget->count(); ++i) {
@@ -182,14 +183,14 @@ void HistogramDock::init() {
 	const KConfigGroup group = Settings::group(QStringLiteral("Settings_General"));
 	if (group.readEntry("GUMTerms", false)) {
 		ui.cbErrorType->addItem(i18n("No Uncertainties"));
-		ui.cbErrorType->addItem(i18n("Poisson variance, sqrt(N)"));
 		ui.cbErrorType->addItem(i18n("Custom Uncertainty Values, symmetric"));
 		ui.cbErrorType->addItem(i18n("Custom Uncertainty Values, asymmetric"));
+		ui.cbErrorType->addItem(i18n("Poisson variance, sqrt(N)"));
 	} else {
 		ui.cbErrorType->addItem(i18n("No Errors"));
-		ui.cbErrorType->addItem(i18n("Poisson variance, sqrt(N)"));
 		ui.cbErrorType->addItem(i18n("Custom Error Values, symmetric"));
 		ui.cbErrorType->addItem(i18n("Custom Error Values, asymmetric"));
+		ui.cbErrorType->addItem(i18n("Poisson variance, sqrt(N)"));
 	}
 }
 
@@ -236,19 +237,19 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 	QList<Symbol*> symbols;
 	QList<Background*> backgrounds;
 	QList<Value*> values;
-	QList<Line*> errorBarLines;
+	QList<ErrorBarStyle*> errorBarStyles;
 	for (auto* hist : m_curvesList) {
 		lines << hist->line();
 		symbols << hist->symbol();
 		backgrounds << hist->background();
 		values << hist->value();
-		errorBarLines << hist->errorBarStyle()->line();
+		errorBarStyles << hist->errorBarStyle();
 	}
 	lineWidget->setLines(lines);
 	symbolWidget->setSymbols(symbols);
 	backgroundWidget->setBackgrounds(backgrounds);
 	valueWidget->setValues(values);
-	errorBarsLineWidget->setLines(errorBarLines);
+	errorBarStyleWidget->setErrorBarStyles(errorBarStyles);
 
 	// if there are more than one curve in the list, disable the content in the tab "general"
 	if (m_curvesList.size() == 1) {
@@ -342,7 +343,7 @@ void HistogramDock::retranslateUi() {
 void HistogramDock::updateLocale() {
 	lineWidget->updateLocale();
 	symbolWidget->updateLocale();
-	errorBarsLineWidget->updateLocale();
+	errorBarStyleWidget->updateLocale();
 }
 
 //*************************************************************
@@ -493,7 +494,7 @@ void HistogramDock::errorTypeChanged(int index) {
 
 	const bool b = (index != 0);
 	ui.lErrorFormat->setVisible(b);
-	errorBarsLineWidget->setVisible(b);
+	errorBarStyleWidget->setVisible(b);
 
 	CONDITIONAL_LOCK_RETURN;
 
@@ -677,7 +678,7 @@ void HistogramDock::loadConfig(KConfig& config) {
 
 	// Error bars
 	ui.cbErrorType->setCurrentIndex(group.readEntry(QStringLiteral("ErrorType"), (int)m_curve->errorBar()->type()));
-	errorBarsLineWidget->loadConfig(group);
+	errorBarStyleWidget->loadConfig(group);
 
 	// Margin plots
 	ui.chkRugEnabled->setChecked(m_curve->rugEnabled());

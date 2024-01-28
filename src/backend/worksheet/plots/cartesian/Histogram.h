@@ -32,9 +32,6 @@ class Histogram : public Plot {
 
 public:
 	friend class HistogramSetDataColumnCmd;
-	friend class HistogramSetErrorPlusColumnCmd;
-	friend class HistogramSetErrorMinusColumnCmd;
-
 	enum Type { Ordinary, Cumulative, AvgShift };
 	enum Orientation { Vertical, Horizontal };
 	enum Normalization { Count, Probability, CountDensity, ProbabilityDensity };

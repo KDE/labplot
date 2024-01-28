@@ -867,10 +867,10 @@ void Project::restorePointers(AbstractAspect* aspect) {
 			RESTORE_COLUMN_POINTER(curve, xColumn, XColumn);
 			RESTORE_COLUMN_POINTER(curve, yColumn, YColumn);
 			RESTORE_COLUMN_POINTER(curve, valuesColumn, ValuesColumn);
-			RESTORE_COLUMN_POINTER(curve, xErrorPlusColumn, XErrorPlusColumn);
-			RESTORE_COLUMN_POINTER(curve, xErrorMinusColumn, XErrorMinusColumn);
-			RESTORE_COLUMN_POINTER(curve, yErrorPlusColumn, YErrorPlusColumn);
-			RESTORE_COLUMN_POINTER(curve, yErrorMinusColumn, YErrorMinusColumn);
+			RESTORE_COLUMN_POINTER(curve->xErrorBar(), plusColumn, PlusColumn);
+			RESTORE_COLUMN_POINTER(curve->xErrorBar(), minusColumn, MinusColumn);
+			RESTORE_COLUMN_POINTER(curve->yErrorBar(), plusColumn, PlusColumn);
+			RESTORE_COLUMN_POINTER(curve->yErrorBar(), minusColumn, MinusColumn);
 		}
 
 		if (analysisCurve)

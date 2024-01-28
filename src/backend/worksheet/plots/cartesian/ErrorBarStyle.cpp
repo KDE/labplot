@@ -48,7 +48,13 @@ void ErrorBarStyle::init(const KConfigGroup& group) {
 	Q_D(ErrorBarStyle);
 	d->type = (Type)group.readEntry(d->prefix + QStringLiteral("Type"), static_cast<int>(Type::Simple));
 	d->capSize = group.readEntry(d->prefix + QStringLiteral("CapSize"), Worksheet::convertToSceneUnits(10, Worksheet::Unit::Point));
+
+	d->line = new Line(QString());
+	d->line->setHidden(true);
+	addChild(d->line);
 	d->line->init(group);
+	connect(d->line, &Line::updatePixmapRequested, this, &ErrorBarStyle::updatePixmapRequested);
+	connect(d->line, &Line::updateRequested, this, &ErrorBarStyle::updateRequested);
 }
 
 // ##############################################################################
