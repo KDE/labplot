@@ -133,8 +133,8 @@ QString OriginProjectParser::supportedExtensions() {
 unsigned int OriginProjectParser::findSpreadsheetByName(const QString& name) {
 	DEBUG(Q_FUNC_INFO << ", name = " << name.toStdString() << ", count = " << m_originFile->spreadCount())
 	for (unsigned int i = 0; i < m_originFile->spreadCount(); i++) {
-		const Origin::SpreadSheet& spread = m_originFile->spread(i);
-		DEBUG(Q_FUNC_INFO << ", spread name = " << spread.name)
+		const auto& spread = m_originFile->spread(i);
+		DEBUG(Q_FUNC_INFO << ", spreadsheet name = " << spread.name)
 		if (spread.name == name.toStdString()) {
 			m_spreadsheetNameList << name;
 			m_spreadsheetNameList.removeDuplicates();
@@ -153,7 +153,7 @@ unsigned int OriginProjectParser::findColumnByName(Origin::SpreadSheet& spread, 
 }
 unsigned int OriginProjectParser::findMatrixByName(const QString& name) {
 	for (unsigned int i = 0; i < m_originFile->matrixCount(); i++) {
-		const Origin::Matrix& originMatrix = m_originFile->matrix(i);
+		const auto& originMatrix = m_originFile->matrix(i);
 		if (originMatrix.name == name.toStdString()) {
 			m_matrixNameList << name;
 			m_matrixNameList.removeDuplicates();
@@ -165,7 +165,7 @@ unsigned int OriginProjectParser::findMatrixByName(const QString& name) {
 unsigned int OriginProjectParser::findWorkbookByName(const QString& name) {
 	// QDEBUG("WORKBOOK LIST: " << m_workbookNameList << ", name = " << name)
 	for (unsigned int i = 0; i < m_originFile->excelCount(); i++) {
-		const Origin::Excel& excel = m_originFile->excel(i);
+		const auto& excel = m_originFile->excel(i);
 		if (excel.name == name.toStdString()) {
 			m_workbookNameList << name;
 			m_workbookNameList.removeDuplicates();
@@ -176,7 +176,7 @@ unsigned int OriginProjectParser::findWorkbookByName(const QString& name) {
 }
 unsigned int OriginProjectParser::findWorksheetByName(const QString& name) {
 	for (unsigned int i = 0; i < m_originFile->graphCount(); i++) {
-		const Origin::Graph& graph = m_originFile->graph(i);
+		const auto& graph = m_originFile->graph(i);
 		if (graph.name == name.toStdString()) {
 			m_worksheetNameList << name;
 			m_worksheetNameList.removeDuplicates();
@@ -187,7 +187,7 @@ unsigned int OriginProjectParser::findWorksheetByName(const QString& name) {
 }
 unsigned int OriginProjectParser::findNoteByName(const QString& name) {
 	for (unsigned int i = 0; i < m_originFile->noteCount(); i++) {
-		const Origin::Note& originNote = m_originFile->note(i);
+		const auto& originNote = m_originFile->note(i);
 		if (originNote.name == name.toStdString()) {
 			m_noteNameList << name;
 			m_noteNameList.removeDuplicates();
@@ -469,7 +469,7 @@ bool OriginProjectParser::loadFolder(Folder* folder, tree<Origin::ProjectNode>::
 	}
 
 	// ResultsLog
-	QString resultsLog = QString::fromLatin1(m_originFile->resultsLogString().c_str());
+	QString resultsLog = QString::fromStdString(m_originFile->resultsLogString());
 	if (resultsLog.length() > 0) {
 		DEBUG("Results log:\t\tyes");
 		Note* note = new Note(QStringLiteral("ResultsLog"));
@@ -579,7 +579,7 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 			DEBUG("	Adding loose matrix: " << STDSTRING(name));
 			DEBUG("	containing number of sheets = " << originMatrix.sheets.size());
 			if (originMatrix.sheets.size() == 1) { // single sheet -> load into a matrix
-				Matrix* matrix = new Matrix(name);
+				auto* matrix = new Matrix(name);
 				loadMatrix(matrix, preview);
 				aspect = matrix;
 			} else { // multiple sheets -> load into a workbook
@@ -652,8 +652,8 @@ bool OriginProjectParser::loadWorkbook(Workbook* workbook, bool preview) {
 	DEBUG(Q_FUNC_INFO << ", workbook name = " << excel.name);
 	DEBUG(Q_FUNC_INFO << ", number of sheets = " << excel.sheets.size());
 	for (unsigned int s = 0; s < excel.sheets.size(); ++s) {
-		// DEBUG(Q_FUNC_INFO << ", LOADING SHEET " << excel.sheets[s].name.c_str())
-		auto* spreadsheet = new Spreadsheet(QString::fromLatin1(excel.sheets[s].name.c_str()));
+		// DEBUG(Q_FUNC_INFO << ", LOADING SHEET " << excel.sheets[s].name)
+		auto* spreadsheet = new Spreadsheet(QString::fromStdString(excel.sheets[s].name));
 		loadSpreadsheet(spreadsheet, preview, workbook->name(), s);
 		workbook->addChildFast(spreadsheet);
 	}
@@ -688,9 +688,9 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 	spreadsheet->setRowCount(rows);
 	spreadsheet->setColumnCount((int)cols);
 	if (sheetIndex == -1)
-		spreadsheet->setComment(QString::fromLatin1(spread.label.c_str()));
+		spreadsheet->setComment(QString::fromStdString(spread.label));
 	else // TODO: only first spread should get the comments
-		spreadsheet->setComment(QString::fromLatin1(excel.label.c_str()));
+		spreadsheet->setComment(QString::fromStdString(excel.label));
 
 	// in Origin column width is measured in characters, we need to convert to pixels
 	// TODO: determine the font used in Origin in order to get the same column width as in Origin
@@ -702,20 +702,20 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 		auto column = spread.columns[j];
 		auto* col = spreadsheet->column((int)j);
 
-		DEBUG(Q_FUNC_INFO << ", column " << j << ", name = " << column.name.c_str() << ", dataset name = " << column.dataset_name.c_str())
-		QString name(QLatin1String(column.name.c_str()));
+		DEBUG(Q_FUNC_INFO << ", column " << j << ", name = " << column.name << ", dataset name = " << column.dataset_name)
+		QString name(QString::fromStdString(column.name));
 		col->setName(name.replace(QRegularExpression(QStringLiteral(".*_")), QString()));
 
 		if (preview)
 			continue;
 
 		// TODO: we don't support any formulas for cells yet.
-		DEBUG(Q_FUNC_INFO << ", column " << j << ", command = " << column.command.c_str())
+		DEBUG(Q_FUNC_INFO << ", column " << j << ", command = " << column.command)
 		// 		if (column.command.size() > 0)
-		// 			col->setFormula(Interval<int>(0, rows), QString(column.command.c_str()));
+		// 			col->setFormula(Interval<int>(0, rows), QString::fromStdString(column.command));
 
-		DEBUG(Q_FUNC_INFO << ", column " << j << ", comment = " << column.comment.c_str())
-		col->setComment(QString::fromLatin1(column.comment.c_str()));
+		DEBUG(Q_FUNC_INFO << ", column " << j << ", comment = " << column.comment)
+		col->setComment(QString::fromStdString(column.comment));
 		col->setWidth((int)column.width * scaling_factor);
 
 		// plot designation
@@ -983,7 +983,7 @@ bool OriginProjectParser::loadMatrixWorkbook(Workbook* workbook, bool preview) {
 	// load matrix workbook sheets
 	const auto& originMatrix = m_originFile->matrix(findMatrixByName(workbook->name()));
 	for (size_t s = 0; s < originMatrix.sheets.size(); ++s) {
-		Matrix* matrix = new Matrix(QString::fromLatin1(originMatrix.sheets[s].name.c_str()));
+		auto* matrix = new Matrix(QString::fromStdString(originMatrix.sheets[s].name));
 		loadMatrix(matrix, preview, s, workbook->name());
 		workbook->addChildFast(matrix);
 	}
@@ -1005,13 +1005,13 @@ bool OriginProjectParser::loadMatrix(Matrix* matrix, bool preview, size_t sheetI
 	QFontMetrics fm(font);
 	const int scaling_factor = fm.maxWidth();
 
-	const auto& layer = originMatrix.sheets[sheetIndex];
+	const auto& layer = originMatrix.sheets.at(sheetIndex);
 	const int colCount = layer.columnCount;
 	const int rowCount = layer.rowCount;
 
 	matrix->setRowCount(rowCount);
 	matrix->setColumnCount(colCount);
-	matrix->setFormula(QLatin1String(layer.command.c_str()));
+	matrix->setFormula(QString::fromStdString(layer.command));
 
 	// TODO: how to handle different widths for different columns?
 	for (int j = 0; j < colCount; j++)
@@ -1156,7 +1156,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 		// worksheet and plots got their sizes,
 		//-> position all text labels inside the plots correctly by converting
 		// the relative positions determined above to the absolute values
-		QHash<TextLabel*, QSizeF>::const_iterator it = textLabelPositions.constBegin();
+		auto it = textLabelPositions.constBegin();
 		while (it != textLabelPositions.constEnd()) {
 			TextLabel* label = it.key();
 			const QSizeF& ratios = it.value();
@@ -1300,7 +1300,7 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 
 	// add legend if available
 	const auto& originLegend = layer.legend;
-	const QString& legendText = QString::fromLatin1(originLegend.text.c_str());
+	const auto& legendText = QString::fromStdString(originLegend.text);
 	if (!originLegend.text.empty()) {
 		DEBUG(Q_FUNC_INFO << ", legend text = \"" << STDSTRING(legendText) << "\"");
 
@@ -1389,9 +1389,9 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 
 	// texts
 	for (const auto& t : layer.texts) {
-		DEBUG(Q_FUNC_INFO << ", EXTRA TEXT = " << t.text.c_str());
+		DEBUG(Q_FUNC_INFO << ", EXTRA TEXT = " << t.text);
 		auto* label = new TextLabel(QStringLiteral("text label"));
-		QTextEdit te(parseOriginText(QString::fromLatin1(t.text.c_str())));
+		QTextEdit te(parseOriginText(QString::fromStdString(t.text)));
 		te.selectAll();
 		DEBUG(Q_FUNC_INFO << ", font size = " << t.fontSize)
 		te.setFontPointSize(int(t.fontSize)); // no scaling
@@ -1424,13 +1424,13 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 		loadAxes(layer, plot, layerIndex, QLatin1String("X Axis Title"), QLatin1String("Y Axis Title"));
 	else {
 		auto originCurve = layer.curves.at(0);
-		QString xColumnName = QString::fromLatin1(originCurve.xColumnName.c_str());
+		QString xColumnName = QString::fromStdString(originCurve.xColumnName);
 		// TODO: "Partikelgrö"
 		DEBUG("	xColumnName = " << STDSTRING(xColumnName));
 		//				xColumnName.replace("%(?X,@LL)", );	// Long Name
 
 		QDEBUG("	UTF8 xColumnName = " << xColumnName.toUtf8());
-		QString yColumnName = QString::fromLatin1(originCurve.yColumnName.c_str());
+		QString yColumnName = QString::fromStdString(originCurve.yColumnName);
 
 		loadAxes(layer, plot, layerIndex, xColumnName, yColumnName);
 	}
@@ -1442,13 +1442,13 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianPlot* plot, int layerIndex, const QString& /*legendText*/, bool preview) {
 	DEBUG(Q_FUNC_INFO)
 
-	int curveIndex = 1;
+	// int curveIndex = 1;
 	for (const auto& originCurve : layer.curves) {
-		QString dataName(QLatin1String(originCurve.dataName.c_str()));
+		QString dataName(QString::fromStdString(originCurve.dataName));
 		DEBUG(Q_FUNC_INFO << ", NEW CURVE (curve data name) " << STDSTRING(dataName))
-		DEBUG(Q_FUNC_INFO << ", curve x column name = " << originCurve.xColumnName.c_str())
-		DEBUG(Q_FUNC_INFO << ", curve y column name = " << originCurve.yColumnName.c_str())
-		DEBUG(Q_FUNC_INFO << ", curve x data name = " << originCurve.xDataName.c_str())
+		DEBUG(Q_FUNC_INFO << ", curve x column name = " << originCurve.xColumnName)
+		DEBUG(Q_FUNC_INFO << ", curve y column name = " << originCurve.yColumnName)
+		DEBUG(Q_FUNC_INFO << ", curve x data name = " << originCurve.xDataName)
 
 		switch (dataName.at(0).toLatin1()) {
 		case 'T': // Spreadsheet
@@ -1526,9 +1526,9 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 				// set column path
 				QString tableName = containerName;
 				if (workbookIndex != -1) // container is a workbook
-					tableName += QLatin1Char('/') + QLatin1String(m_originFile->excel(workbookIndex).sheets[sheetIndex].name.c_str());
-				curve->setXColumnPath(tableName + QLatin1Char('/') + QLatin1String(originCurve.xColumnName.c_str()));
-				curve->setYColumnPath(tableName + QLatin1Char('/') + QLatin1String(originCurve.yColumnName.c_str()));
+					tableName += QLatin1Char('/') + QString::fromStdString(m_originFile->excel(workbookIndex).sheets[sheetIndex].name);
+				curve->setXColumnPath(tableName + QLatin1Char('/') + QString::fromStdString(originCurve.xColumnName));
+				curve->setYColumnPath(tableName + QLatin1Char('/') + QString::fromStdString(originCurve.yColumnName));
 				DEBUG(Q_FUNC_INFO << ", x/y column path = \"" << STDSTRING(curve->xColumnPath()) << "\" \"" << STDSTRING(curve->yColumnPath()) << "\"")
 
 				curve->setSuppressRetransform(true);
@@ -1548,15 +1548,15 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 		} break;
 		case 'F': {
 			Origin::Function function;
-			const auto funcIndex = m_originFile->functionIndex(dataName.right(dataName.length() - 2).toStdString().c_str());
+			const auto funcIndex = m_originFile->functionIndex(dataName.right(dataName.length() - 2).toStdString());
 			if (funcIndex < 0) {
-				++curveIndex;
+				// ++curveIndex;
 				continue;
 			}
 
 			function = m_originFile->function(funcIndex);
 
-			auto* xyEqCurve = new XYEquationCurve(QLatin1String(function.name.c_str()));
+			auto* xyEqCurve = new XYEquationCurve(QString::fromStdString(function.name));
 			if (m_graphLayerAsPlotArea)
 				xyEqCurve->setCoordinateSystemIndex(plot->defaultCoordinateSystemIndex());
 			else
@@ -1564,7 +1564,7 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 			XYEquationCurve::EquationData eqData;
 
 			eqData.count = function.totalPoints;
-			eqData.expression1 = QLatin1String(function.formula.c_str());
+			eqData.expression1 = QString::fromStdString(function.formula);
 
 			if (function.type == Origin::Function::Polar) {
 				eqData.type = XYEquationCurve::EquationType::Polar;
@@ -1591,7 +1591,7 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 			// TODO case 'M': Matrix
 		}
 
-		++curveIndex;
+		//++curveIndex;
 	}
 }
 
@@ -1605,7 +1605,7 @@ void OriginProjectParser::loadAxes(const Origin::GraphLayer& layer,
 
 	// x bottom
 	if (!originXAxis.formatAxis[0].hidden || originXAxis.tickAxis[0].showMajorLabels) {
-		Axis* axis = new Axis(QStringLiteral("x"), Axis::Orientation::Horizontal);
+		auto* axis = new Axis(QStringLiteral("x"), Axis::Orientation::Horizontal);
 		axis->setSuppressRetransform(true);
 		axis->setPosition(Axis::Position::Bottom);
 		plot->addChildFast(axis);
@@ -1617,7 +1617,7 @@ void OriginProjectParser::loadAxes(const Origin::GraphLayer& layer,
 
 	// x top
 	if (!originXAxis.formatAxis[1].hidden || originXAxis.tickAxis[1].showMajorLabels) {
-		Axis* axis = new Axis(QStringLiteral("x top"), Axis::Orientation::Horizontal);
+		auto* axis = new Axis(QStringLiteral("x top"), Axis::Orientation::Horizontal);
 		axis->setPosition(Axis::Position::Top);
 		axis->setSuppressRetransform(true);
 		plot->addChildFast(axis);
@@ -1629,7 +1629,7 @@ void OriginProjectParser::loadAxes(const Origin::GraphLayer& layer,
 
 	// y left
 	if (!originYAxis.formatAxis[0].hidden || originYAxis.tickAxis[0].showMajorLabels) {
-		Axis* axis = new Axis(QStringLiteral("y"), Axis::Orientation::Vertical);
+		auto* axis = new Axis(QStringLiteral("y"), Axis::Orientation::Vertical);
 		axis->setSuppressRetransform(true);
 		axis->setPosition(Axis::Position::Left);
 		plot->addChildFast(axis);
@@ -1641,7 +1641,7 @@ void OriginProjectParser::loadAxes(const Origin::GraphLayer& layer,
 
 	// y right
 	if (!originYAxis.formatAxis[1].hidden || originYAxis.tickAxis[1].showMajorLabels) {
-		Axis* axis = new Axis(QStringLiteral("y right"), Axis::Orientation::Vertical);
+		auto* axis = new Axis(QStringLiteral("y right"), Axis::Orientation::Vertical);
 		axis->setSuppressRetransform(true);
 		axis->setPosition(Axis::Position::Right);
 		plot->addChildFast(axis);
@@ -1797,7 +1797,7 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 
 	// axis title
 	if (axisFormat.label.shown) {
-		QString titleText = parseOriginText(QString::fromLatin1(axisFormat.label.text.c_str()));
+		QString titleText = parseOriginText(QString::fromStdString(axisFormat.label.text));
 		DEBUG(Q_FUNC_INFO << ", axis title text = " << STDSTRING(titleText));
 		// TODO: convert special character here too
 		DEBUG(Q_FUNC_INFO << ", curve name = " << STDSTRING(axisTitle));
@@ -2363,8 +2363,8 @@ bool OriginProjectParser::loadNote(Note* note, bool preview) {
 	if (preview)
 		return true;
 
-	note->setComment(QLatin1String(originNote.label.c_str()));
-	note->setNote(QLatin1String(originNote.text.c_str()));
+	note->setComment(QString::fromStdString(originNote.label));
+	note->setNote(QString::fromStdString(originNote.text));
 
 	return true;
 }
