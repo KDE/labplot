@@ -66,6 +66,7 @@ void OriginProjectParser::setImportUnusedObjects(bool importUnusedObjects) {
 }
 
 void OriginProjectParser::checkContent(bool& hasUnusedObjects, bool& hasMultiLayerGraphs) {
+	DEBUG(Q_FUNC_INFO)
 	m_originFile = new OriginFile(qPrintable(m_projectFileName));
 	if (!m_originFile->parse()) {
 		delete m_originFile;
@@ -74,9 +75,6 @@ void OriginProjectParser::checkContent(bool& hasUnusedObjects, bool& hasMultiLay
 		hasMultiLayerGraphs = false;
 		return;
 	}
-
-	DEBUG(Q_FUNC_INFO << "Project file name: " << m_projectFileName.toStdString());
-	DEBUG(Q_FUNC_INFO << "Origin version: " << m_originFile->version());
 
 	hasUnusedObjects = this->hasUnusedObjects();
 	hasMultiLayerGraphs = this->hasMultiLayerGraphs();
@@ -213,8 +211,8 @@ bool OriginProjectParser::load(Project* project, bool preview) {
 		return false;
 	}
 
-	DEBUG(Q_FUNC_INFO << "Project file name: " << m_projectFileName.toStdString());
-	DEBUG(Q_FUNC_INFO << "Origin version: " << m_originFile->version());
+	DEBUG(Q_FUNC_INFO << ", project file name: " << m_projectFileName.toStdString());
+	DEBUG(Q_FUNC_INFO << ", Origin version: " << m_originFile->version());
 
 	// Origin project tree and the iterator pointing to the root node
 	const auto* projectTree = m_originFile->project();
@@ -228,7 +226,7 @@ bool OriginProjectParser::load(Project* project, bool preview) {
 
 	// convert the project tree from liborigin's representation to LabPlot's project object
 	project->setIsLoading(true);
-	if (projectIt.node) { // only opj files from version >= 6.0 do have project tree
+	if (projectIt.node) { // only opj files from version >= 6.0 have a project tree
 		DEBUG(Q_FUNC_INFO << ", project tree found");
 		QString name(QString::fromLatin1(projectIt->name.c_str()));
 		project->setName(name);
@@ -351,7 +349,7 @@ bool OriginProjectParser::loadFolder(Folder* folder, tree<Origin::ProjectNode>::
 	// load folder's children: logic for reading the selected objects only is similar to Folder::readChildAspectElement
 	for (auto it = projectTree->begin(baseIt); it != projectTree->end(baseIt); ++it) {
 		QString name(QString::fromLatin1(it->name.c_str())); // name of the current child
-		DEBUG("	* folder item name = " << STDSTRING(name))
+		DEBUG(Q_FUNC_INFO << ", folder item name = " << STDSTRING(name))
 
 		// check whether we need to skip the loading of the current child
 		if (!folder->pathesToLoad().isEmpty()) {
@@ -666,7 +664,7 @@ bool OriginProjectParser::loadWorkbook(Workbook* workbook, bool preview) {
 // load spreadsheet from spread (sheetIndex == -1) or from workbook (only sheet sheetIndex)
 // name is the spreadsheet name (spread) or the workbook name (if inside a workbook)
 bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview, const QString& name, int sheetIndex) {
-	DEBUG(Q_FUNC_INFO << ", own/workbook name = " << STDSTRING(name) << ", sheetIndex = " << sheetIndex);
+	DEBUG(Q_FUNC_INFO << ", own/workbook name = " << STDSTRING(name) << ", sheet index = " << sheetIndex);
 
 	// load spreadsheet data
 	Origin::SpreadSheet spread;
@@ -704,8 +702,7 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 		auto column = spread.columns[j];
 		auto* col = spreadsheet->column((int)j);
 
-		DEBUG(Q_FUNC_INFO << ", column " << j << ", name = " << column.name.c_str())
-		DEBUG(Q_FUNC_INFO << ", column " << j << ", dataset name = " << column.dataset_name.c_str())
+		DEBUG(Q_FUNC_INFO << ", column " << j << ", name = " << column.name.c_str() << ", dataset name = " << column.dataset_name.c_str())
 		QString name(QLatin1String(column.name.c_str()));
 		col->setName(name.replace(QRegularExpression(QStringLiteral(".*_")), QString()));
 
@@ -1321,10 +1318,10 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 		//  and "%(...) to format the legend text for each curve
 		// s. a. https://www.originlab.com/doc/Origin-Help/Legend-ManualControl
 		// the text before these formatting tags, if available, is interpreted as the legend title
-		QString legendTitle;
 
 		// search for the first occurrence of the legend symbol substring
 		int index = legendText.indexOf(QLatin1String("\\l("), 0, Qt::CaseInsensitive);
+		QString legendTitle;
 		if (index != -1)
 			legendTitle = legendText.left(index);
 		else {
@@ -1443,10 +1440,12 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 }
 
 void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianPlot* plot, int layerIndex, const QString& legendText, bool preview) {
+	DEBUG(Q_FUNC_INFO)
+
 	int curveIndex = 1;
 	for (const auto& originCurve : layer.curves) {
 		QString data(QLatin1String(originCurve.dataName.c_str()));
-		DEBUG(Q_FUNC_INFO << ", NEW CURVE " << STDSTRING(data))
+		DEBUG(Q_FUNC_INFO << ", NEW CURVE (curve data name) " << STDSTRING(data))
 		switch (data.at(0).toLatin1()) {
 		case 'T': // Spreadsheet
 		case 'E': { // Workbook
@@ -1459,40 +1458,12 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 				int pos2 = legendText.indexOf(QStringLiteral("\\c{%1}").arg(curveIndex + 1));
 				QString curveText = legendText.mid(pos1, pos2 - pos1);
 				// replace %(1), %(2), etc. with curve name
-				DEBUG(Q_FUNC_INFO << ", data name = " << originCurve.dataName.c_str())
-				DEBUG(Q_FUNC_INFO << ", x column name = " << originCurve.xColumnName.c_str())
-				DEBUG(Q_FUNC_INFO << ", y column name = " << originCurve.yColumnName.c_str())
-				DEBUG(Q_FUNC_INFO << ", x data name = " << originCurve.xDataName.c_str())
-				DEBUG("SPREAD COUNT = " << m_originFile->spreadCount())
-				if (m_originFile->spreadCount() > 0) {
-					auto spread = m_originFile->spread(findSpreadsheetByName(QString::fromStdString(originCurve.dataName)));
-					auto column = spread.columns[findColumnByName(spread, QString::fromStdString(originCurve.yColumnName))];
-					DEBUG(Q_FUNC_INFO << ", y column comment = " << column.comment.c_str())
-				}
-				DEBUG("EXCEL COUNT = " << m_originFile->excelCount())
-				if (m_originFile->excelCount() > 0) {
-					auto excel = m_originFile->excel(findWorkbookByName(QString::fromStdString(originCurve.dataName)));
-					//					auto column = excel.sheets[findColumnByName(excel, QString::fromStdString(originCurve.yColumnName))];
-					//					DEBUG(Q_FUNC_INFO << ", y column comment = " << column.comment.c_str())
-				}
-				// Origin's legend uses "\l(...)" or "\L(...)" string to format the legend symbol
-				//  and "%(...) to format the legend text for each curve
-				// s. a. https://www.originlab.com/doc/Origin-Help/Legend-ManualControl
-				curveText.replace(QStringLiteral("%(%1)").arg(curveIndex), QLatin1String(originCurve.yColumnName.c_str()));
-				curveText = curveText.trimmed();
-				DEBUG(" curve " << curveIndex << " text = \"" << STDSTRING(curveText) << "\"");
+				DEBUG(Q_FUNC_INFO << ", curve x column name = " << originCurve.xColumnName.c_str())
+				DEBUG(Q_FUNC_INFO << ", curve y column name = " << originCurve.yColumnName.c_str())
+				DEBUG(Q_FUNC_INFO << ", curve x data name = " << originCurve.xDataName.c_str())
 
-				// XYCurve* xyCurve = new XYCurve(i18n("Curve%1", QString::number(curveIndex)));
-				// TODO: curve (legend) does not support HTML text yet.
-				// XYCurve* xyCurve = new XYCurve(curveText);
-				auto* curve = new XYCurve(QString::fromLatin1(originCurve.yColumnName.c_str()));
-				if (m_graphLayerAsPlotArea)
-					curve->setCoordinateSystemIndex(plot->defaultCoordinateSystemIndex());
-				else
-					curve->setCoordinateSystemIndex(layerIndex);
-				// DEBUG("CURVE path = " << STDSTRING(data))
 				QString containerName = data.right(data.length() - 2); // strip "E_" or "T_"
-				int sheetIndex = 0; // which sheet? "@..."
+				int sheetIndex = 0; // which sheet? "@X"
 				const int atIndex = containerName.indexOf(QLatin1Char('@'));
 				if (atIndex != -1) {
 					sheetIndex = containerName.mid(atIndex + 1).toInt() - 1;
@@ -1508,6 +1479,43 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 				if (workbookIndex != -1) // container is a workbook
 					tableName = containerName + QLatin1Char('/') + QLatin1String(m_originFile->excel(workbookIndex).sheets[sheetIndex].name.c_str());
 				// DEBUG("SPREADSHEET name = " << STDSTRING(tableName))
+
+				// comment of y column is used in legend (if not empty), else the column name
+				QString legendText(QString::fromStdString(originCurve.yColumnName));
+				if (workbookIndex != -1) { // container is a workbook
+					auto sheet = m_originFile->excel(workbookIndex).sheets[sheetIndex];
+					auto column = sheet.columns[findColumnByName(sheet, QString::fromStdString(originCurve.yColumnName))];
+					DEBUG(Q_FUNC_INFO << ", y column comment = " << column.comment.c_str())
+					if (column.comment.length() > 0) {
+						auto comment = QString::fromStdString(column.comment);
+						comment.truncate(comment.indexOf(QLatin1Char('@')));
+						legendText = comment;
+					}
+				} // TODO: what if spreadsheet?
+				// DEBUG("SPREAD COUNT = " << m_originFile->spreadCount())
+				// QDEBUG(m_spreadsheetNameList)
+				if (m_originFile->spreadCount() > 0) {
+					// auto spread = m_originFile->spread(findSpreadsheetByName(QString::fromStdString(originCurve.dataName)));
+					// auto column = spread.columns[findColumnByName(spread, QString::fromStdString(originCurve.yColumnName))];
+					// DEBUG(Q_FUNC_INFO << ", y column comment = " << column.comment.c_str())
+				}
+
+				// Origin's legend uses "%(...) to format the legend text for each curve
+				// s. a. https://www.originlab.com/doc/Origin-Help/Legend-ManualControl
+				curveText.replace(QStringLiteral("%(%1)").arg(curveIndex), legendText);
+				curveText = curveText.trimmed();
+				DEBUG(" curve " << curveIndex << " text = \"" << STDSTRING(curveText) << "\"");
+
+				// XYCurve* xyCurve = new XYCurve(i18n("Curve%1", QString::number(curveIndex)));
+				// TODO: curve (legend) does not support HTML text yet.
+				// XYCurve* xyCurve = new XYCurve(curveText);
+				auto* curve = new XYCurve(legendText);
+				if (m_graphLayerAsPlotArea)
+					curve->setCoordinateSystemIndex(plot->defaultCoordinateSystemIndex());
+				else
+					curve->setCoordinateSystemIndex(layerIndex);
+				// DEBUG("CURVE path = " << STDSTRING(data))
+
 				curve->setXColumnPath(tableName + QLatin1Char('/') + QLatin1String(originCurve.xColumnName.c_str()));
 				curve->setYColumnPath(tableName + QLatin1Char('/') + QLatin1String(originCurve.yColumnName.c_str()));
 				DEBUG(Q_FUNC_INFO << ", x/y column path = \"" << STDSTRING(curve->xColumnPath()) << "\" \"" << STDSTRING(curve->yColumnPath()) << "\"")
