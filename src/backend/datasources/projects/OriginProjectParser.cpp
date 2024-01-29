@@ -1360,6 +1360,8 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 		position.point.setY(relativePosition.height());
 		position.horizontalPosition = WorksheetElement::HorizontalPosition::Relative;
 		position.verticalPosition = WorksheetElement::VerticalPosition::Relative;
+		legend->setHorizontalAlignment(WorksheetElement::HorizontalAlignment::Left);
+		legend->setVerticalAlignment(WorksheetElement::VerticalAlignment::Top);
 		legend->setPosition(position);
 
 		// rotation
