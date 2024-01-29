@@ -142,9 +142,18 @@ void ErrorBar::save(QXmlStreamWriter* writer) const {
 		// for names in the XML file, the first letter is lower case but the camel case still remains.
 		QString newPrefix = d->prefix;
 		newPrefix.replace(0, 1, d->prefix.at(0).toLower());
+
 		writer->writeAttribute(newPrefix + QStringLiteral("ErrorType"), QString::number(static_cast<int>(d->type)));
-		WRITE_COLUMN(d->plusColumn, newPrefix + ErrorPlusColumn);
-		WRITE_COLUMN(d->minusColumn, newPrefix + ErrorMinusColumn);
+
+		if (d->plusColumn)
+			writer->writeAttribute(newPrefix + QStringLiteral("ErrorPlusColumn"), d->plusColumn->path());
+		else
+			writer->writeAttribute(newPrefix + QStringLiteral("ErrorPlusColumn"), QString());
+
+		if (d->minusColumn)
+			writer->writeAttribute(newPrefix + QStringLiteral("ErrorMinusColumn"), d->minusColumn->path());
+		else
+			writer->writeAttribute(newPrefix + QStringLiteral("ErrorMinusColumn"), QString());
 	} else {
 		writer->writeAttribute(QStringLiteral("errorType"), QString::number(static_cast<int>(d->type)));
 		WRITE_COLUMN(d->plusColumn, errorPlusColumn);
@@ -181,4 +190,3 @@ bool ErrorBar::load(XmlStreamReader* reader, bool preview) {
 
 	return true;
 }
-
