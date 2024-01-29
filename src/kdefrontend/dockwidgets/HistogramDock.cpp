@@ -182,15 +182,15 @@ void HistogramDock::init() {
 	// Error-bars
 	const KConfigGroup group = Settings::group(QStringLiteral("Settings_General"));
 	if (group.readEntry("GUMTerms", false)) {
-		ui.cbErrorType->addItem(i18n("No Uncertainties"));
-		ui.cbErrorType->addItem(i18n("Custom Uncertainty Values, symmetric"));
-		ui.cbErrorType->addItem(i18n("Custom Uncertainty Values, asymmetric"));
-		ui.cbErrorType->addItem(i18n("Poisson variance, sqrt(N)"));
+		ui.cbErrorType->addItem(i18n("No Uncertainties"), static_cast<int>(ErrorBar::Type::NoError));
+		ui.cbErrorType->addItem(i18n("Poisson variance, sqrt(N)"), static_cast<int>(ErrorBar::Type::Poisson));
+		ui.cbErrorType->addItem(i18n("Custom Uncertainty Values, symmetric"), static_cast<int>(ErrorBar::Type::Symmetric));
+		ui.cbErrorType->addItem(i18n("Custom Uncertainty Values, asymmetric"), static_cast<int>(ErrorBar::Type::Asymmetric));
 	} else {
-		ui.cbErrorType->addItem(i18n("No Errors"));
-		ui.cbErrorType->addItem(i18n("Custom Error Values, symmetric"));
-		ui.cbErrorType->addItem(i18n("Custom Error Values, asymmetric"));
-		ui.cbErrorType->addItem(i18n("Poisson variance, sqrt(N)"));
+		ui.cbErrorType->addItem(i18n("No Errors"), static_cast<int>(ErrorBar::Type::NoError));
+		ui.cbErrorType->addItem(i18n("Poisson variance, sqrt(N)"), static_cast<int>(ErrorBar::Type::Poisson));
+		ui.cbErrorType->addItem(i18n("Custom Error Values, symmetric"), static_cast<int>(ErrorBar::Type::Symmetric));
+		ui.cbErrorType->addItem(i18n("Custom Error Values, asymmetric"), static_cast<int>(ErrorBar::Type::Asymmetric));
 	}
 }
 
@@ -470,21 +470,23 @@ void HistogramDock::binRangesMaxDateTimeChanged(qint64 value) {
 
 //"Error bars"-Tab
 void HistogramDock::errorTypeChanged(int index) {
-	if (index == 0 /* no errors */ || index == 1 /* Poisson */) {
-		// no error
+	const auto type = static_cast<ErrorBar::Type>(ui.cbErrorType->currentData().toInt());
+	switch (type) {
+	case ErrorBar::Type::NoError:
+	case ErrorBar::Type::Poisson:
 		ui.lErrorDataPlus->setVisible(false);
 		cbErrorPlusColumn->setVisible(false);
 		ui.lErrorDataMinus->setVisible(false);
 		cbErrorMinusColumn->setVisible(false);
-	} else if (index == 2) {
-		// symmetric error
+		break;
+	case ErrorBar::Type::Symmetric:
 		ui.lErrorDataPlus->setVisible(true);
 		cbErrorPlusColumn->setVisible(true);
 		ui.lErrorDataMinus->setVisible(false);
 		cbErrorMinusColumn->setVisible(false);
 		ui.lErrorDataPlus->setText(i18n("Data, +-:"));
-	} else if (index == 3) {
-		// asymmetric error
+		break;
+	case ErrorBar::Type::Asymmetric:
 		ui.lErrorDataPlus->setVisible(true);
 		cbErrorPlusColumn->setVisible(true);
 		ui.lErrorDataMinus->setVisible(true);
@@ -499,7 +501,7 @@ void HistogramDock::errorTypeChanged(int index) {
 	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* curve : m_curvesList)
-		curve->errorBar()->setType(ErrorBar::Type(index));
+		curve->errorBar()->setType(type);
 }
 
 void HistogramDock::errorPlusColumnChanged(const QModelIndex& index) {
