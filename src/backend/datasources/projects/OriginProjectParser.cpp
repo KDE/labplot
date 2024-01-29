@@ -1439,30 +1439,32 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 	// TODO
 }
 
-void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianPlot* plot, int layerIndex, const QString& legendText, bool preview) {
+void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianPlot* plot, int layerIndex, const QString& /*legendText*/, bool preview) {
 	DEBUG(Q_FUNC_INFO)
 
 	int curveIndex = 1;
 	for (const auto& originCurve : layer.curves) {
-		QString data(QLatin1String(originCurve.dataName.c_str()));
-		DEBUG(Q_FUNC_INFO << ", NEW CURVE (curve data name) " << STDSTRING(data))
-		switch (data.at(0).toLatin1()) {
+		QString dataName(QLatin1String(originCurve.dataName.c_str()));
+		DEBUG(Q_FUNC_INFO << ", NEW CURVE (curve data name) " << STDSTRING(dataName))
+		DEBUG(Q_FUNC_INFO << ", curve x column name = " << originCurve.xColumnName.c_str())
+		DEBUG(Q_FUNC_INFO << ", curve y column name = " << originCurve.yColumnName.c_str())
+		DEBUG(Q_FUNC_INFO << ", curve x data name = " << originCurve.xDataName.c_str())
+
+		switch (dataName.at(0).toLatin1()) {
 		case 'T': // Spreadsheet
 		case 'E': { // Workbook
 			if (originCurve.type == Origin::GraphCurve::Line || originCurve.type == Origin::GraphCurve::Scatter
 				|| originCurve.type == Origin::GraphCurve::LineSymbol || originCurve.type == Origin::GraphCurve::ErrorBar
 				|| originCurve.type == Origin::GraphCurve::XErrorBar) {
-				// parse and use legend text
+				// parse and use legend text (not used)
 				// find substring between %c{curveIndex} and %c{curveIndex+1}
-				int pos1 = legendText.indexOf(QStringLiteral("\\c{%1}").arg(curveIndex)) + 5;
-				int pos2 = legendText.indexOf(QStringLiteral("\\c{%1}").arg(curveIndex + 1));
-				QString curveText = legendText.mid(pos1, pos2 - pos1);
+				// int pos1 = legendText.indexOf(QStringLiteral("\\c{%1}").arg(curveIndex)) + 5;
+				// int pos2 = legendText.indexOf(QStringLiteral("\\c{%1}").arg(curveIndex + 1));
+				// QString curveText = legendText.mid(pos1, pos2 - pos1);
 				// replace %(1), %(2), etc. with curve name
-				DEBUG(Q_FUNC_INFO << ", curve x column name = " << originCurve.xColumnName.c_str())
-				DEBUG(Q_FUNC_INFO << ", curve y column name = " << originCurve.yColumnName.c_str())
-				DEBUG(Q_FUNC_INFO << ", curve x data name = " << originCurve.xDataName.c_str())
 
-				QString containerName = data.right(data.length() - 2); // strip "E_" or "T_"
+				// get name of container and (if available) index of sheet
+				QString containerName = dataName.right(dataName.length() - 2); // strip "E_" or "T_"
 				int sheetIndex = 0; // which sheet? "@X"
 				const int atIndex = containerName.indexOf(QLatin1Char('@'));
 				if (atIndex != -1) {
@@ -1470,52 +1472,61 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 					containerName.truncate(atIndex);
 				}
 				// DEBUG("CONTAINER = " << STDSTRING(containerName) << ", SHEET = " << sheetIndex)
+
+				// check if workbook
 				int workbookIndex = findWorkbookByName(containerName);
 				// if workbook not found, findWorkbookByName() returns 0: check this
 				if (workbookIndex == 0 && (m_originFile->excelCount() == 0 || containerName.toStdString() != m_originFile->excel(0).name))
 					workbookIndex = -1;
 				// DEBUG("WORKBOOK  index = " << workbookIndex)
-				QString tableName = containerName;
-				if (workbookIndex != -1) // container is a workbook
-					tableName = containerName + QLatin1Char('/') + QLatin1String(m_originFile->excel(workbookIndex).sheets[sheetIndex].name.c_str());
-				// DEBUG("SPREADSHEET name = " << STDSTRING(tableName))
 
 				// comment of y column is used in legend (if not empty), else the column name
-				QString legendText(QString::fromStdString(originCurve.yColumnName));
+				Origin::SpreadSheet sheet;
 				if (workbookIndex != -1) { // container is a workbook
-					auto sheet = m_originFile->excel(workbookIndex).sheets[sheetIndex];
-					auto column = sheet.columns[findColumnByName(sheet, QString::fromStdString(originCurve.yColumnName))];
-					DEBUG(Q_FUNC_INFO << ", y column comment = " << column.comment.c_str())
-					if (column.comment.length() > 0) {
-						auto comment = QString::fromStdString(column.comment);
-						comment.truncate(comment.indexOf(QLatin1Char('@')));
-						legendText = comment;
-					}
-				} // TODO: what if spreadsheet?
-				// DEBUG("SPREAD COUNT = " << m_originFile->spreadCount())
-				// QDEBUG(m_spreadsheetNameList)
-				if (m_originFile->spreadCount() > 0) {
-					// auto spread = m_originFile->spread(findSpreadsheetByName(QString::fromStdString(originCurve.dataName)));
-					// auto column = spread.columns[findColumnByName(spread, QString::fromStdString(originCurve.yColumnName))];
-					// DEBUG(Q_FUNC_INFO << ", y column comment = " << column.comment.c_str())
+					sheet = m_originFile->excel(workbookIndex).sheets[sheetIndex];
+				} else { // container is a spreadsheet?
+					int spreadsheetIndex = findSpreadsheetByName(containerName);
+					// if spreadsheet not found, findSpreadsheetByName() returns 0: check this
+					if (spreadsheetIndex == 0 && (m_originFile->spreadCount() == 0 || containerName.toStdString() != m_originFile->spread(0).name))
+						spreadsheetIndex = -1;
+					if (spreadsheetIndex != -1)
+						sheet = m_originFile->spread(spreadsheetIndex);
 				}
 
+				QString curveName(QString::fromStdString(originCurve.yColumnName));
+				auto column = sheet.columns[findColumnByName(sheet, curveName)];
+				if (column.comment.length() > 0) {
+					auto comment = QString::fromStdString(column.comment);
+					DEBUG(Q_FUNC_INFO << ", y column full comment = \"" << column.comment << "\"")
+					if (comment.contains(QLatin1Char('@'))) // remove @ options
+						comment.truncate(comment.indexOf(QLatin1Char('@')));
+					if (comment.contains(QRegularExpression(QLatin1String("[\r\n]")))) // comment is last line
+						comment = comment.split(QRegularExpression(QLatin1String("[\r\n]")), Qt::SkipEmptyParts).last();
+
+					curveName = comment;
+				}
+				DEBUG(Q_FUNC_INFO << ", curve name = \"" << curveName.toStdString() << "\"")
+
+				// TODO: custom legend not used yet
 				// Origin's legend uses "%(...) to format the legend text for each curve
 				// s. a. https://www.originlab.com/doc/Origin-Help/Legend-ManualControl
-				curveText.replace(QStringLiteral("%(%1)").arg(curveIndex), legendText);
-				curveText = curveText.trimmed();
-				DEBUG(" curve " << curveIndex << " text = \"" << STDSTRING(curveText) << "\"");
-
-				// XYCurve* xyCurve = new XYCurve(i18n("Curve%1", QString::number(curveIndex)));
+				// curveText.replace(QStringLiteral("%(%1)").arg(curveIndex), legendText);
+				// curveText = curveText.trimmed();
+				// DEBUG(" curve " << curveIndex << " text = \"" << STDSTRING(curveText) << "\"");
 				// TODO: curve (legend) does not support HTML text yet.
-				// XYCurve* xyCurve = new XYCurve(curveText);
-				auto* curve = new XYCurve(legendText);
+				// auto* curve = new XYCurve(curveText);
+
+				auto* curve = new XYCurve(curveName);
 				if (m_graphLayerAsPlotArea)
 					curve->setCoordinateSystemIndex(plot->defaultCoordinateSystemIndex());
 				else
 					curve->setCoordinateSystemIndex(layerIndex);
 				// DEBUG("CURVE path = " << STDSTRING(data))
 
+				// set column path
+				QString tableName = containerName;
+				if (workbookIndex != -1) // container is a workbook
+					tableName += QLatin1Char('/') + QLatin1String(m_originFile->excel(workbookIndex).sheets[sheetIndex].name.c_str());
 				curve->setXColumnPath(tableName + QLatin1Char('/') + QLatin1String(originCurve.xColumnName.c_str()));
 				curve->setYColumnPath(tableName + QLatin1Char('/') + QLatin1String(originCurve.yColumnName.c_str()));
 				DEBUG(Q_FUNC_INFO << ", x/y column path = \"" << STDSTRING(curve->xColumnPath()) << "\" \"" << STDSTRING(curve->yColumnPath()) << "\"")
@@ -1526,17 +1537,18 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 				plot->addChildFast(curve);
 				curve->setSuppressRetransform(false);
 			} else if (originCurve.type == Origin::GraphCurve::Column) {
-				// vertical bars
+				// TODO: vertical bars
 
 			} else if (originCurve.type == Origin::GraphCurve::Bar) {
-				// horizontal bars
+				// TODO: horizontal bars
 
 			} else if (originCurve.type == Origin::GraphCurve::Histogram) {
+				// TODO
 			}
 		} break;
 		case 'F': {
 			Origin::Function function;
-			const auto funcIndex = m_originFile->functionIndex(data.right(data.length() - 2).toStdString().c_str());
+			const auto funcIndex = m_originFile->functionIndex(dataName.right(dataName.length() - 2).toStdString().c_str());
 			if (funcIndex < 0) {
 				++curveIndex;
 				continue;
