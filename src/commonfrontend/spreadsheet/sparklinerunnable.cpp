@@ -19,7 +19,7 @@ void SparkLineRunnable::run() {
 
 	if (col->columnMode() == Column::ColumnMode::Text) {
 		worksheet->setTheme(sparklineTheme);
-		worksheet->view();
+		// worksheet->view();
 		worksheet->setLayoutBottomMargin(0);
 		worksheet->setLayoutTopMargin(0);
 		worksheet->setLayoutLeftMargin(0);
@@ -68,7 +68,6 @@ void SparkLineRunnable::run() {
 		QPixmap pixmap(worksheet->view()->size());
 		worksheet->exportView(pixmap);
 		delete worksheet;
-
 		resultPixmap = pixmap;
 	} else if (col->isNumeric()) {
 		worksheet->setTheme(sparklineTheme);
@@ -103,7 +102,7 @@ void SparkLineRunnable::run() {
 		curve->setSuppressRetransform(false);
 		plot->addChild(curve);
 
-		plot->scaleAuto(-1, -1);
+		// plot->scaleAuto(-1, -1);
 		// plot->retransform();
 		worksheet->setSuppressLayoutUpdate(false);
 		worksheet->updateLayout();
@@ -120,7 +119,6 @@ void SparkLineRunnable::run() {
 		delete worksheet;
 		resultPixmap = pixmap;
 	}
-	resultPixmap.save(QLatin1String("/home/kuntal/testImg/test2.jpg"), "JPEG", 100);
 	emit taskFinished(resultPixmap);
 }
 

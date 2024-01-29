@@ -62,7 +62,6 @@ QPixmap SpreadsheetSparkLinesHeaderModel::showSparkLines(Column* col) {
 	PERFTRACE(QLatin1String(Q_FUNC_INFO));
 	// Create a QFutureWatcher to monitor the task's progress
 	QFutureWatcher<QPixmap> watcher;
-
 	// Create an instance of SparkLineRunnable
 	SparkLineRunnable* runnable = new SparkLineRunnable(col);
 
@@ -74,11 +73,8 @@ QPixmap SpreadsheetSparkLinesHeaderModel::showSparkLines(Column* col) {
 			watcher.setFuture(QtConcurrent::run([=]() {
 				return resultPixmap;
 			}));
-		} else {
-			qDebug() << "Error: getResultPixmap returned an invalid QPixmap";
-			// Handle the error accordingly
+		} else
 			watcher.cancel();
-		}
 	});
 
 	// Start the runnable in the thread pool
@@ -89,11 +85,7 @@ QPixmap SpreadsheetSparkLinesHeaderModel::showSparkLines(Column* col) {
 	QObject::connect(runnable, &SparkLineRunnable::taskFinished, &loop, &QEventLoop::quit);
 	loop.exec();
 
-	// Return the final result from SparkLineRunnable
-	if (watcher.result().height() == 0)
-		return QPixmap();
-	else
-		return watcher.result();
+	return watcher.result();
 }
 
 QVariant SpreadsheetSparkLinesHeaderModel::data(const QModelIndex& /*index*/, int /*role*/) const {
