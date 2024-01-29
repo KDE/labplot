@@ -154,7 +154,7 @@ void XYCurve::init() {
 
 	// error bars
 	d->xErrorBar = new ErrorBar(QString());
-	d->xErrorBar->setPrefix(QStringLiteral("x"));
+	d->xErrorBar->setPrefix(QStringLiteral("X"));
 	addChild(d->xErrorBar);
 	d->xErrorBar->setHidden(true);
 	d->xErrorBar->init(group);
@@ -163,7 +163,7 @@ void XYCurve::init() {
 	});
 
 	d->yErrorBar = new ErrorBar(QString());
-	d->yErrorBar->setPrefix(QStringLiteral("y"));
+	d->yErrorBar->setPrefix(QStringLiteral("Y"));
 	addChild(d->yErrorBar);
 	d->yErrorBar->setHidden(true);
 	d->yErrorBar->init(group);
@@ -176,7 +176,7 @@ void XYCurve::init() {
 	d->errorBarStyle->setHidden(true);
 	d->errorBarStyle->init(group);
 	connect(d->errorBarStyle, &ErrorBarStyle::updateRequested, [=] {
-		d->recalcShapeAndBoundingRect();
+		d->updateErrorBars();
 	});
 	connect(d->errorBarStyle, &ErrorBarStyle::updatePixmapRequested, [=] {
 		d->updatePixmap();
@@ -2598,9 +2598,9 @@ void XYCurvePrivate::updateErrorBars() {
 		}
 
 		// error bars for y
-		const auto yErrorType = xErrorBar->type();
-		const auto* yErrorPlusColumn = xErrorBar->plusColumn();
-		const auto* yErrorMinusColumn = xErrorBar->minusColumn();
+		const auto yErrorType = yErrorBar->type();
+		const auto* yErrorPlusColumn = yErrorBar->plusColumn();
+		const auto* yErrorMinusColumn = yErrorBar->minusColumn();
 		if (yErrorType != ErrorBar::Type::NoError) {
 			// determine the values for the errors
 			if (yErrorPlusColumn && yErrorPlusColumn->isValid(index) && !yErrorPlusColumn->isMasked(index))

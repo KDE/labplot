@@ -37,7 +37,6 @@ private:
 	ErrorBarStyle* m_style{nullptr};
 	QList<ErrorBarStyle*> m_styles;
 	bool m_initializing{false};
-	QString m_prefix;
 
 	void showEvent(QShowEvent*) override;
 	void adjustLayout();

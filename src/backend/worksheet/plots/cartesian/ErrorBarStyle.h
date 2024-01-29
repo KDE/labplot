@@ -32,8 +32,6 @@ public:
 	void loadThemeConfig(const KConfigGroup&, const QColor&);
 	void saveThemeConfig(KConfigGroup&) const;
 
-	void setPrefix(const QString&);
-	const QString& prefix() const;
 	void init(const KConfigGroup&);
 
 	BASIC_D_ACCESSOR_DECL(Type, type, Type)

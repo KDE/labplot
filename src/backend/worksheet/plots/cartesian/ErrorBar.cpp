@@ -138,9 +138,18 @@ void ErrorBarPrivate::update() {
 void ErrorBar::save(QXmlStreamWriter* writer) const {
 	Q_D(const ErrorBar);
 
-	writer->writeAttribute(QStringLiteral("errorType"), QString::number(static_cast<int>(d->type)));
-	WRITE_COLUMN(d->plusColumn, plusColumn);
-	WRITE_COLUMN(d->minusColumn, minusColumn);
+	if (!d->prefix.isEmpty()) {
+		// for names in the XML file, the first letter is lower case but the camel case still remains.
+		QString newPrefix = d->prefix;
+		newPrefix.replace(0, 1, d->prefix.at(0).toLower());
+		writer->writeAttribute(newPrefix + QStringLiteral("ErrorType"), QString::number(static_cast<int>(d->type)));
+		WRITE_COLUMN(d->plusColumn, newPrefix + ErrorPlusColumn);
+		WRITE_COLUMN(d->minusColumn, newPrefix + ErrorMinusColumn);
+	} else {
+		writer->writeAttribute(QStringLiteral("errorType"), QString::number(static_cast<int>(d->type)));
+		WRITE_COLUMN(d->plusColumn, errorPlusColumn);
+		WRITE_COLUMN(d->minusColumn, errorMinusColumn);
+	}
 }
 
 //! Load from XML
@@ -152,10 +161,23 @@ bool ErrorBar::load(XmlStreamReader* reader, bool preview) {
 	QString str;
 	auto attribs = reader->attributes();
 
-	//TODO prefix
-	READ_INT_VALUE("errorType", type, Type);
-	READ_COLUMN(plusColumn);
-	READ_COLUMN(minusColumn);
+	if (!d->prefix.isEmpty()) {
+		QString newPrefix = d->prefix;
+		newPrefix.replace(0, 1, d->prefix.at(0).toLower());
+
+		str = attribs.value(newPrefix + QStringLiteral("ErrorType")).toString();
+		if (str.isEmpty())
+			reader->raiseMissingAttributeWarning(newPrefix + QStringLiteral("ErrorType"));
+		else
+			d->type = static_cast<Type>(str.toInt());
+
+		d->plusColumnPath = attribs.value(newPrefix + QStringLiteral("ErrorPlusColumn")).toString();
+		d->minusColumnPath = attribs.value(newPrefix + QStringLiteral("ErrorMinusColumn")).toString();
+	} else {
+		READ_INT_VALUE("errorType", type, Type);
+		d->plusColumnPath = attribs.value(QStringLiteral("errorPlusColumn")).toString();
+		d->minusColumnPath = attribs.value(QStringLiteral("errorMinusColumn")).toString();
+	}
 
 	return true;
 }

@@ -34,23 +34,14 @@ ErrorBarStyle::~ErrorBarStyle() {
 	delete d_ptr;
 }
 
-void ErrorBarStyle::setPrefix(const QString& prefix) {
-	Q_D(ErrorBarStyle);
-	d->prefix = prefix;
-}
-
-const QString& ErrorBarStyle::prefix() const {
-	Q_D(const ErrorBarStyle);
-	return d->prefix;
-}
-
 void ErrorBarStyle::init(const KConfigGroup& group) {
 	Q_D(ErrorBarStyle);
-	d->type = (Type)group.readEntry(d->prefix + QStringLiteral("Type"), static_cast<int>(Type::Simple));
-	d->capSize = group.readEntry(d->prefix + QStringLiteral("CapSize"), Worksheet::convertToSceneUnits(10, Worksheet::Unit::Point));
+	d->type = (Type)group.readEntry(QStringLiteral("ErrorBarsType"), static_cast<int>(Type::Simple));
+	d->capSize = group.readEntry(QStringLiteral("ErrorBarsCapSize"), Worksheet::convertToSceneUnits(10, Worksheet::Unit::Point));
 
 	d->line = new Line(QString());
 	d->line->setHidden(true);
+	d->line->setCreateXmlElement(false);
 	addChild(d->line);
 	d->line->init(group);
 	connect(d->line, &Line::updatePixmapRequested, this, &ErrorBarStyle::updatePixmapRequested);
@@ -70,14 +61,14 @@ Line* ErrorBarStyle::line() const {
 // ##############################################################################
 // #################  setter methods and undo commands ##########################
 // ##############################################################################
-STD_SETTER_CMD_IMPL_S(ErrorBarStyle, SetCapSize, double, capSize)
+STD_SETTER_CMD_IMPL_F_S(ErrorBarStyle, SetCapSize, double, capSize, update)
 void ErrorBarStyle::setCapSize(qreal size) {
 	Q_D(ErrorBarStyle);
 	if (size != d->capSize)
 		exec(new ErrorBarStyleSetCapSizeCmd(d, size, ki18n("%1: set error bar cap size")));
 }
 
-STD_SETTER_CMD_IMPL_S(ErrorBarStyle, SetType, ErrorBarStyle::Type, type)
+STD_SETTER_CMD_IMPL_F_S(ErrorBarStyle, SetType, ErrorBarStyle::Type, type, update)
 void ErrorBarStyle::setType(ErrorBarStyle::Type type) {
 	Q_D(ErrorBarStyle);
 	if (type != d->type)

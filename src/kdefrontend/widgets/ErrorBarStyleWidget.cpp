@@ -64,7 +64,6 @@ void ErrorBarStyleWidget::setErrorBarStyles(const QList<ErrorBarStyle*>& styles)
 	CONDITIONAL_LOCK_RETURN;
 	m_styles = styles;
 	m_style = m_styles.first();
-	m_prefix = m_style->prefix();
 
 	load();
 
@@ -167,13 +166,13 @@ void ErrorBarStyleWidget::load() {
 }
 
 void ErrorBarStyleWidget::loadConfig(const KConfigGroup& group) {
-	ui.cbType->setCurrentIndex(group.readEntry(m_prefix + QStringLiteral("Type"), static_cast<int>(m_style->type())));
+	ui.cbType->setCurrentIndex(group.readEntry(QStringLiteral("ErrorBarsType"), static_cast<int>(m_style->type())));
 	const double size =
-		Worksheet::convertFromSceneUnits(group.readEntry(m_prefix + QStringLiteral("CapSize"), m_style->capSize()), Worksheet::Unit::Point);
+		Worksheet::convertFromSceneUnits(group.readEntry(QStringLiteral("ErrorBarsCapSize"), m_style->capSize()), Worksheet::Unit::Point);
 	ui.sbCapSize->setValue(size);
 }
 
 void ErrorBarStyleWidget::saveConfig(KConfigGroup& group) const {
-	group.writeEntry(m_prefix + QStringLiteral("Type"), ui.cbType->currentIndex());
-	group.writeEntry(m_prefix + QStringLiteral("CapSize"), Worksheet::convertToSceneUnits(ui.sbCapSize->value(), Worksheet::Unit::Point));
+	group.writeEntry(QStringLiteral("ErrorBarsType"), ui.cbType->currentIndex());
+	group.writeEntry(QStringLiteral("ErrorBarsCapSize"), Worksheet::convertToSceneUnits(ui.sbCapSize->value(), Worksheet::Unit::Point));
 }
