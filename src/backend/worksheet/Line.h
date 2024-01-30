@@ -40,11 +40,6 @@ public:
 	BASIC_D_ACCESSOR_DECL(bool, histogramLineTypeAvailable, HistogramLineTypeAvailable)
 	BASIC_D_ACCESSOR_DECL(Histogram::LineType, histogramLineType, HistogramLineType)
 
-	// error bars specific parameters
-	BASIC_D_ACCESSOR_DECL(bool, errorBarsTypeAvailable, ErrorBarsTypeAvailable)
-	BASIC_D_ACCESSOR_DECL(XYCurve::ErrorBarsType, errorBarsType, ErrorBarsType)
-	BASIC_D_ACCESSOR_DECL(double, errorBarsCapSize, ErrorBarsCapSize)
-
 	// drop line specific parameters for XYCurve
 	BASIC_D_ACCESSOR_DECL(XYCurve::DropLineType, dropLineType, DropLineType)
 
@@ -65,8 +60,6 @@ private:
 
 Q_SIGNALS:
 	void histogramLineTypeChanged(Histogram::LineType);
-	void errorBarsTypeChanged(XYCurve::ErrorBarsType);
-	void errorBarsCapSizeChanged(double);
 	void dropLineTypeChanged(XYCurve::DropLineType);
 
 	void styleChanged(Qt::PenStyle);
