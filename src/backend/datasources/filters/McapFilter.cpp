@@ -523,23 +523,69 @@ void McapFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSo
 
   std::cout << "topic\ttype\ttimestamp\tfields" << std::endl;
 
+  // Get number of messages in view
+  int msg_count = 0;
+
+  	if (createIndexEnabled) {
+		columnModes << AbstractColumn::ColumnMode::Integer;
+		vectorNames << i18n("index");
+	}
+
+	columnModes << AbstractColumn::ColumnMode::DateTime;
+	vectorNames << i18n("logTime");
+
+	columnModes << AbstractColumn::ColumnMode::DateTime;
+	vectorNames << i18n("publishTime");
+	
+	columnModes << AbstractColumn::ColumnMode::Integer;
+	vectorNames << i18n("sequence");
+
+
+  QVector<int> sequences;
+  QVector<int> indices;
+
+  QVector<qlonglong> logTimes;
+  QVector<qlonglong> publishTimes;
+
+
   for (auto it = messageView.begin(); it != messageView.end(); it++) {
     // skip any non-json-encoded messages.
     if (it->channel->messageEncoding != "json") { // only support json encoding for now
       continue;
     }
+	    std::cout << it->channel->topic << "\t(" << it->schema->name << ")\t[" << it->message.logTime;
+
     QString asString = QString::fromUtf8(reinterpret_cast<const char*>(it->message.data));
 
 	DEBUG(STDSTRING(asString));
 
 	QJsonDocument doc = QJsonDocument::fromJson(reinterpret_cast<const char*>(it->message.data));
+
+
 	DEBUG(std::to_string(it->message.sequence) << " " << std::to_string(it->message.publishTime) );
-	
-	auto* s = dynamic_cast<Spreadsheet*>(dataSource);
+	sequences << it->message.sequence;
 
-	DEBUG(s->rowCount());
-
+	logTimes << it->message.logTime;
+	publishTimes << it->message.publishTime;	
+	msg_count++;
   }
+
+	m_actualRows = msg_count;
+	m_actualCols = 4;
+
+	m_columnOffset = dataSource->prepareImport(m_dataContainer, importMode, m_actualRows, m_actualCols, vectorNames, columnModes);
+	
+	for (int i = 0; i < msg_count; ++i) {
+		if (createIndexEnabled){
+			static_cast<QVector<int>*>(m_dataContainer[0])->operator[](i) = i + 1;
+		}
+		static_cast<QVector<QDateTime>*>(m_dataContainer[0+createIndexEnabled])->operator[](i) = QDateTime::fromMSecsSinceEpoch(logTimes[i] / 1000000);
+		static_cast<QVector<QDateTime>*>(m_dataContainer[1+createIndexEnabled])->operator[](i) = QDateTime::fromMSecsSinceEpoch(publishTimes[i] / 1000000);
+		static_cast<QVector<int>*>(m_dataContainer[2+createIndexEnabled])->operator[](i) = sequences[i];
+	}
+		
+		
+	dataSource->finalizeImport(m_columnOffset, startColumn, startColumn + m_actualCols - 1, dateTimeFormat, importMode);
 
 }
 

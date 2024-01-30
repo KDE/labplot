@@ -49,29 +49,45 @@ void MCAPFilterTest::testArrayImport() {
 	filter.setDateTimeFormat(QLatin1String("yyyy-MM-dd"));
 	filter.readDataFromFile(fileName, &spreadsheet, mode);
 
-	QCOMPARE(spreadsheet.columnCount(), 3);
+	QCOMPARE(spreadsheet.columnCount(), 4);
 	QCOMPARE(spreadsheet.rowCount(), 10);
 	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer); // Index
-	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::DateTime); // Timestamp
-	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::ColumnMode::Integer); // Value
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::DateTime); // LogTime
+	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::ColumnMode::DateTime); // PublishTime
+	QCOMPARE(spreadsheet.column(3)->columnMode(), AbstractColumn::ColumnMode::Integer); // Sequence
+
 
 	QCOMPARE(spreadsheet.column(0)->plotDesignation(), AbstractColumn::PlotDesignation::X);
 	QCOMPARE(spreadsheet.column(1)->plotDesignation(), AbstractColumn::PlotDesignation::Y);
 	QCOMPARE(spreadsheet.column(2)->plotDesignation(), AbstractColumn::PlotDesignation::Y);
 
 	QCOMPARE(spreadsheet.column(0)->name(), i18n("index"));
-	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("Timestamp"));
-	QCOMPARE(spreadsheet.column(2)->name(), QLatin1String("value"));
+	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("logTime"));
+	QCOMPARE(spreadsheet.column(2)->name(), QLatin1String("publishTime"));
+	QCOMPARE(spreadsheet.column(3)->name(), QLatin1String("sequence"));
 
 
+	// Check index
 	QCOMPARE(spreadsheet.column(0)->integerAt(0), 1);
 	QCOMPARE(spreadsheet.column(0)->integerAt(1), 2);
 	QCOMPARE(spreadsheet.column(0)->integerAt(2), 3);
 
+	// Check Publish Times
+	QCOMPARE(spreadsheet.column(1)->dateTimeAt(0), QDateTime::fromMSecsSinceEpoch(0));
+	QCOMPARE(spreadsheet.column(1)->dateTimeAt(1), QDateTime::fromMSecsSinceEpoch(1 * 3600000));
+	QCOMPARE(spreadsheet.column(1)->dateTimeAt(2), QDateTime::fromMSecsSinceEpoch(2 * 3600000));
 
-	QCOMPARE(spreadsheet.column(2)->valueAt(0), 0);
-	QCOMPARE(spreadsheet.column(2)->valueAt(1), 1);
-	QCOMPARE(spreadsheet.column(2)->valueAt(2), 2);
+	// Check Logging Times
+	QCOMPARE(spreadsheet.column(2)->dateTimeAt(0), QDateTime::fromMSecsSinceEpoch(0));
+	QCOMPARE(spreadsheet.column(2)->dateTimeAt(1), QDateTime::fromMSecsSinceEpoch(1 * 3600000));
+	QCOMPARE(spreadsheet.column(2)->dateTimeAt(2), QDateTime::fromMSecsSinceEpoch(2 * 3600000));
+
+	// Check Sequence
+	QCOMPARE(spreadsheet.column(3)->valueAt(0), 0);
+	QCOMPARE(spreadsheet.column(3)->valueAt(1), 1);
+	QCOMPARE(spreadsheet.column(3)->valueAt(2), 2);
+
+
 }
 
 QTEST_MAIN(MCAPFilterTest)
