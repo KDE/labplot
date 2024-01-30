@@ -1142,13 +1142,13 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 	}
 
 	// padding
+	plot->setSymmetricPadding(false);
 	plot->setHorizontalPadding(plot->horizontalPadding() * elementScalingFactor);
 	plot->setVerticalPadding(plot->verticalPadding() * elementScalingFactor);
 	plot->setRightPadding(plot->rightPadding() * elementScalingFactor);
 	plot->setBottomPadding(plot->bottomPadding() * elementScalingFactor);
 	DEBUG(Q_FUNC_INFO << ", PADDING = " << plot->horizontalPadding() << ", " << plot->verticalPadding())
 	DEBUG(Q_FUNC_INFO << ", PADDING = " << plot->rightPadding() << ", " << plot->bottomPadding())
-	// TODO: reduce top padding when there is no title and top x axis title is disabled
 
 	if (!preview) {
 		worksheet->updateLayout();
@@ -1412,7 +1412,7 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 		const qreal horRatio = (qreal)(t.clientRect.left - layer.clientRect.left) / (layer.clientRect.right - layer.clientRect.left);
 		const qreal vertRatio = (qreal)(t.clientRect.top - layer.clientRect.top) / (layer.clientRect.bottom - layer.clientRect.top);
 		textLabelPositions[label] = QSizeF(horRatio, vertRatio);
-		DEBUG("horizontal/vertical ratio = " << horRatio << ", " << vertRatio);
+		DEBUG(Q_FUNC_INFO << ", horizontal/vertical ratio = " << horRatio << ", " << vertRatio);
 
 		// rotation
 		label->setRotationAngle(t.rotation);
@@ -1625,6 +1625,12 @@ void OriginProjectParser::loadAxes(const Origin::GraphLayer& layer,
 		axis->setSuppressRetransform(true);
 		axis->setPosition(Axis::Position::Bottom);
 		plot->addChildFast(axis);
+
+		// fix padding if label not shown
+		const auto& axisFormat = originXAxis.formatAxis[0];
+		if (!axisFormat.label.shown)
+			plot->setBottomPadding(plot->bottomPadding() / 2.);
+
 		loadAxis(originXAxis, axis, 0, xColumnName);
 		if (!m_graphLayerAsPlotArea)
 			axis->setCoordinateSystemIndex(layerIndex);
@@ -1637,6 +1643,12 @@ void OriginProjectParser::loadAxes(const Origin::GraphLayer& layer,
 		axis->setPosition(Axis::Position::Top);
 		axis->setSuppressRetransform(true);
 		plot->addChildFast(axis);
+
+		// fix padding if label not shown
+		const auto& axisFormat = originXAxis.formatAxis[1];
+		if (!axisFormat.label.shown)
+			plot->setVerticalPadding(plot->verticalPadding() / 2.);
+
 		loadAxis(originXAxis, axis, 1, xColumnName);
 		if (!m_graphLayerAsPlotArea)
 			axis->setCoordinateSystemIndex(layerIndex);
@@ -1649,6 +1661,12 @@ void OriginProjectParser::loadAxes(const Origin::GraphLayer& layer,
 		axis->setSuppressRetransform(true);
 		axis->setPosition(Axis::Position::Left);
 		plot->addChildFast(axis);
+
+		// fix padding if label not shown
+		const auto& axisFormat = originYAxis.formatAxis[0];
+		if (!axisFormat.label.shown)
+			plot->setHorizontalPadding(plot->horizontalPadding() / 2.);
+
 		loadAxis(originYAxis, axis, 0, yColumnName);
 		if (!m_graphLayerAsPlotArea)
 			axis->setCoordinateSystemIndex(layerIndex);
@@ -1661,6 +1679,12 @@ void OriginProjectParser::loadAxes(const Origin::GraphLayer& layer,
 		axis->setSuppressRetransform(true);
 		axis->setPosition(Axis::Position::Right);
 		plot->addChildFast(axis);
+
+		// fix padding if label not shown
+		const auto& axisFormat = originYAxis.formatAxis[1];
+		if (!axisFormat.label.shown)
+			plot->setRightPadding(plot->rightPadding() / 2.);
+
 		loadAxis(originYAxis, axis, 1, yColumnName);
 		if (!m_graphLayerAsPlotArea)
 			axis->setCoordinateSystemIndex(layerIndex);
