@@ -149,7 +149,7 @@ private Q_SLOTS:
 	void labelCartesianPlotParent(bool on);
 	void labelModeChanged(TextLabel::Mode);
 
-	friend class AxisDock; // fontColorChanged() is a private method of LabelWidget, needs to be called
+	friend class AxisDock; // fontColorChanged() and labelFontColorChanged() are private methods of LabelWidget
 	friend class TextLabelTest;
 	friend class AxisTest;
 	friend class AxisTest2;
