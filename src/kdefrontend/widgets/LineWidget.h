@@ -67,6 +67,7 @@ Q_SIGNALS:
 	void colorChanged(const QColor&);
 
 	friend class AxisTest;
+	friend class AxisTest2;
 };
 
 #endif // LINEWIDGET_H

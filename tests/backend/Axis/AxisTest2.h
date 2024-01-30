@@ -1,7 +1,7 @@
 /*
 	File                 : AxisTest2.h
 	Project              : LabPlot
-	Description          : Second tests for Axis methods
+	Description          : More tests for Axis methods
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2022 Martin Marmsoler <martin.marmsoler@gmail.com>
 
@@ -17,25 +17,20 @@ class AxisTest2 : public CommonTest {
 	Q_OBJECT
 
 private Q_SLOTS:
-	void dateTime();
-	void dateTimeSpacing();
-	void dateTimeSpacingOffsetNonZero();
-	void dateTimeSpacingStartValueNonZero();
+	void setAxisColor(); // Set color of all elements
+	void setTitleColor();
+	void setMajorTickColor();
+	void setMinorTickColor();
+	void setLineColor();
+	void setTickLabelColor();
 
-	void numeric();
-	void numericSpacing();
-	void numericSpacingOffsetNonZero();
-	void numericSpacingStartValueNonZero();
+	void automaticTicNumberUpdateDockMajorTicks();
+	void automaticTicNumberUpdateDockMinorTicks();
 
-	void customColumnNumeric();
-	void customColumnNumericMaxValues();
-	void customColumnNumericMaxValuesLimitedRange();
-	void customColumnNumericMaxValuesLimitedRangeNotCompleteRange();
-	void customColumnNonMonotonicColumnValues();
-	void customColumnDateTime();
+	void columnLabelValues();
+	void columnLabelValuesMaxValues();
 
-	void autoScale();
-	void autoScale2();
+	void customTextLabels();
 };
 
 #endif // AXISTEST2_H
