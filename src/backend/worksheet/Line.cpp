@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Line
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2022-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -18,6 +18,7 @@
 #include "LinePrivate.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
+#include "backend/worksheet/plots/cartesian/ErrorBarStyle.h"
 
 #include <KConfigGroup>
 #include <KLocalizedString>
@@ -142,7 +143,10 @@ LinePrivate::LinePrivate(Line* owner)
 }
 
 QString LinePrivate::name() const {
-	return q->parentAspect()->name();
+	if (dynamic_cast<ErrorBarStyle*>(q->parentAspect()))
+		return q->parentAspect()->parentAspect()->name(); // for error bars we need to go one level higher to get the curve/plot name
+	else
+		return q->parentAspect()->name();
 }
 
 void LinePrivate::update() {

@@ -72,7 +72,7 @@ STD_SETTER_CMD_IMPL_F_S(ErrorBarStyle, SetType, ErrorBarStyle::Type, type, updat
 void ErrorBarStyle::setType(ErrorBarStyle::Type type) {
 	Q_D(ErrorBarStyle);
 	if (type != d->type)
-		exec(new ErrorBarStyleSetTypeCmd(d, type, ki18n("%1: error bar type changed")));
+		exec(new ErrorBarStyleSetTypeCmd(d, type, ki18n("%1: error bar style type changed")));
 }
 
 // ##############################################################################
@@ -124,13 +124,16 @@ bool ErrorBarStyle::load(XmlStreamReader* reader, bool preview) {
 // #########################  Theme management ##################################
 // ##############################################################################
 void ErrorBarStyle::loadThemeConfig(const KConfigGroup& group) {
-
+	Q_D(ErrorBarStyle);
+	d->line->loadThemeConfig(group);
 }
 
 void ErrorBarStyle::loadThemeConfig(const KConfigGroup& group, const QColor& themeColor) {
-
+	Q_D(ErrorBarStyle);
+	d->line->loadThemeConfig(group, themeColor);
 }
 
 void ErrorBarStyle::saveThemeConfig(KConfigGroup& group) const {
-
+	Q_D(const ErrorBarStyle);
+	d->line->saveThemeConfig(group);
 }
