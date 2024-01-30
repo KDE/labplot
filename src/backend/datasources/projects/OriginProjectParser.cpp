@@ -1819,7 +1819,10 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 	color.type = Origin::Color::ColorType::Regular;
 	color.regular = axisFormat.color;
 	axis->line()->setColor(OriginProjectParser::color(color));
-	axis->line()->setWidth(Worksheet::convertToSceneUnits(axisFormat.thickness * elementScalingFactor, Worksheet::Unit::Point));
+	// axis line thickness is actually not used in Origin!
+	// DEBUG("AXIS THICKNESS = " << axisFormat.thickness)
+	double lineThickness = 1.; // axisFormat.thickness
+	axis->line()->setWidth(Worksheet::convertToSceneUnits(lineThickness * elementScalingFactor, Worksheet::Unit::Point));
 	if (axisFormat.hidden)
 		axis->line()->setStyle(Qt::NoPen);
 	// TODO: read line style properties? (solid line, dashed line, etc.)
