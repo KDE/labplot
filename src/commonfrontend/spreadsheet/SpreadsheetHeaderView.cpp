@@ -12,6 +12,7 @@
 #include "SpreadsheetCommentsHeaderModel.h"
 #include "SpreadsheetSparkLineHeaderModel.h"
 #include "backend/lib/macros.h"
+#include "backend/lib/trace.h"
 #include <QPainter>
 #include <qpainter.h>
 
@@ -106,6 +107,8 @@ SpreadsheetHeaderView::SpreadsheetHeaderView(QWidget* parent)
 	m_sparkLineSlave = new SpreadsheetSparkLineHeaderView();
 
 	m_commentSlave->setDefaultAlignment(Qt::AlignCenter | Qt::AlignVCenter);
+	m_sparkLineSlave->setDefaultAlignment(Qt::AlignCenter | Qt::AlignVCenter);
+
 	m_showComments = true;
 	m_showSparkLines = true;
 }
@@ -180,6 +183,8 @@ void SpreadsheetHeaderView::paintSection(QPainter* painter, const QRect& rect, i
 			return;
 		}
 	}
+	m_commentSlave->paintSection(painter, master_rect, logicalIndex);
+	m_sparkLineSlave->paintSection(painter, master_rect, logicalIndex);
 	QHeaderView::paintSection(painter, master_rect, logicalIndex);
 }
 

@@ -73,8 +73,7 @@ QPixmap SpreadsheetSparkLinesHeaderModel::showSparkLines(Column* col) {
 			watcher.setFuture(QtConcurrent::run([=]() {
 				return resultPixmap;
 			}));
-		} else
-			watcher.cancel();
+		}
 	});
 
 	// Start the runnable in the thread pool
