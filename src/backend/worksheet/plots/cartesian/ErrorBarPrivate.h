@@ -20,7 +20,7 @@ public:
 	QString name() const;
 	void update();
 
-	QString prefix{QLatin1String("ErrorBar")};
+	QString prefix;
 
 	ErrorBar::Type type{ErrorBar::Type::NoError};
 	const AbstractColumn* plusColumn{nullptr};

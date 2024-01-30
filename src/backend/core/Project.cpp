@@ -60,7 +60,7 @@ namespace {
 // the project version will compared with this.
 // if you make any compatibilty changes to the xmlfile
 // or the function in labplot, increase this number
-int buildXmlVersion = 10;
+int buildXmlVersion = 11;
 }
 
 /**

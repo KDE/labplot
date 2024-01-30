@@ -144,7 +144,7 @@ void Histogram::init() {
 	d->errorBarStyle->setHidden(true);
 	d->errorBarStyle->init(group);
 	connect(d->errorBarStyle, &ErrorBarStyle::updateRequested, [=] {
-		d->recalcShapeAndBoundingRect();
+		d->updateErrorBars();
 	});
 	connect(d->errorBarStyle, &ErrorBarStyle::updatePixmapRequested, [=] {
 		d->updatePixmap();

@@ -18,6 +18,7 @@
 #include "ErrorBar.h"
 #include "ErrorBarPrivate.h"
 #include "backend/core/AbstractColumn.h"
+#include "backend/core/Project.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macrosCurve.h"
@@ -169,24 +170,36 @@ bool ErrorBar::load(XmlStreamReader* reader, bool preview) {
 	Q_D(ErrorBar);
 	QString str;
 	auto attribs = reader->attributes();
+	int type = 0;
 
 	if (!d->prefix.isEmpty()) {
 		QString newPrefix = d->prefix;
 		newPrefix.replace(0, 1, d->prefix.at(0).toLower());
 
-		str = attribs.value(newPrefix + QStringLiteral("ErrorType")).toString();
-		if (str.isEmpty())
-			reader->raiseMissingAttributeWarning(newPrefix + QStringLiteral("ErrorType"));
-		else
-			d->type = static_cast<Type>(str.toInt());
-
+		type = attribs.value(newPrefix + QStringLiteral("ErrorType")).toInt();
 		d->plusColumnPath = attribs.value(newPrefix + QStringLiteral("ErrorPlusColumn")).toString();
 		d->minusColumnPath = attribs.value(newPrefix + QStringLiteral("ErrorMinusColumn")).toString();
 	} else {
-		READ_INT_VALUE("errorType", type, Type);
+		type = attribs.value(QStringLiteral("errorType")).toInt();
 		d->plusColumnPath = attribs.value(QStringLiteral("errorPlusColumn")).toString();
 		d->minusColumnPath = attribs.value(QStringLiteral("errorMinusColumn")).toString();
 	}
+
+	// prior to XML version 11, a different order of enum values for the error type was used in Histogram
+	// (old "{ NoError, Poisson, CustomSymmetric, CustomAsymmetric }" instead of
+	// the new "{ NoError, Symmetric, Asymmetric, Poisson }")
+	// and we need to map from the old to the new values
+	if (Project::xmlVersion() < 11 && parentAspect()->type() == AspectType::Histogram) {
+		if (type == 0)
+			d->type = ErrorBar::Type::NoError;
+		else if (type == 1)
+			d->type = ErrorBar::Type::Poisson;
+		else if (type == 2)
+			d->type = ErrorBar::Type::Symmetric;
+		else if (type == 3)
+			d->type = ErrorBar::Type::Asymmetric;
+	} else
+		d->type = static_cast<Type>(type);
 
 	return true;
 }
