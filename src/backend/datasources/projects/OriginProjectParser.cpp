@@ -1380,10 +1380,13 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 			legend->background()->setFirstColor(Qt::black);
 		else
 			legend->background()->setFirstColor(Qt::white);
+
+		// save current legend text
+		m_legendText = legendText;
 	}
 
 	// curves
-	loadCurves(layer, plot, layerIndex, legendText, preview);
+	loadCurves(layer, plot, layerIndex, preview);
 
 	// reading of other properties is not relevant for the dependency checks in the preview, skip them
 	if (preview)
@@ -1441,10 +1444,10 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 	// TODO
 }
 
-void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianPlot* plot, int layerIndex, const QString& /*legendText*/, bool preview) {
+void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianPlot* plot, int layerIndex, bool preview) {
 	DEBUG(Q_FUNC_INFO)
 
-	// int curveIndex = 1;
+	int curveIndex = 1;
 	for (const auto& originCurve : layer.curves) {
 		QString dataName(QString::fromStdString(originCurve.dataName));
 		DEBUG(Q_FUNC_INFO << ", NEW CURVE (curve data name) " << STDSTRING(dataName))
@@ -1533,6 +1536,17 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 				curve->setYColumnPath(tableName + QLatin1Char('/') + QString::fromStdString(originCurve.yColumnName));
 				DEBUG(Q_FUNC_INFO << ", x/y column path = \"" << STDSTRING(curve->xColumnPath()) << "\" \"" << STDSTRING(curve->yColumnPath()) << "\"")
 
+				// check if curve is in actual legendText
+				// DEBUG("LEGEND TEXT = " << legendText.toStdString())
+				// DEBUG(Q_FUNC_INFO << ", layer index = " << layerIndex + 1 << ", curve index = " << curveIndex)
+				bool enableCurveInLegend = false;
+				if (m_legendText.contains(QStringLiteral("%(%1)").arg(curveIndex))
+					|| m_legendText.contains(QStringLiteral("%(%1.%2)").arg(layerIndex + 1).arg(curveIndex)))
+					enableCurveInLegend = true;
+				DEBUG(Q_FUNC_INFO << ", curve in legend = " << enableCurveInLegend)
+
+				curve->setLegendVisible(enableCurveInLegend);
+
 				curve->setSuppressRetransform(true);
 				if (!preview)
 					loadCurve(originCurve, curve);
@@ -1552,7 +1566,7 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 			Origin::Function function;
 			const auto funcIndex = m_originFile->functionIndex(dataName.right(dataName.length() - 2).toStdString());
 			if (funcIndex < 0) {
-				// ++curveIndex;
+				++curveIndex;
 				continue;
 			}
 
@@ -1593,7 +1607,7 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 			// TODO case 'M': Matrix
 		}
 
-		//++curveIndex;
+		++curveIndex;
 	}
 }
 
