@@ -1400,7 +1400,7 @@ void HistogramPrivate::updateErrorBars() {
 	QVector<QLineF> elines;
 
 	switch (errorBar->type()) {
-		case ErrorBar::Type::NoError:
+	case ErrorBar::Type::NoError:
 		break;
 	case ErrorBar::Type::Poisson: {
 		if (orientation == Histogram::Vertical) {

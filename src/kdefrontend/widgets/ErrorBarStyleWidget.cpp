@@ -167,8 +167,7 @@ void ErrorBarStyleWidget::load() {
 
 void ErrorBarStyleWidget::loadConfig(const KConfigGroup& group) {
 	ui.cbType->setCurrentIndex(group.readEntry(QStringLiteral("ErrorBarsType"), static_cast<int>(m_style->type())));
-	const double size =
-		Worksheet::convertFromSceneUnits(group.readEntry(QStringLiteral("ErrorBarsCapSize"), m_style->capSize()), Worksheet::Unit::Point);
+	const double size = Worksheet::convertFromSceneUnits(group.readEntry(QStringLiteral("ErrorBarsCapSize"), m_style->capSize()), Worksheet::Unit::Point);
 	ui.sbCapSize->setValue(size);
 }
 

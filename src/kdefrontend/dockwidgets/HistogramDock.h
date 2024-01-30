@@ -12,8 +12,8 @@
 #ifndef HISTOGRAMDOCK_H
 #define HISTOGRAMDOCK_H
 
-#include "backend/worksheet/plots/cartesian/Histogram.h"
 #include "backend/worksheet/plots/cartesian/ErrorBar.h"
+#include "backend/worksheet/plots/cartesian/Histogram.h"
 #include "kdefrontend/dockwidgets/BaseDock.h"
 #include "ui_histogramdock.h"
 

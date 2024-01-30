@@ -30,9 +30,9 @@
 #include "backend/worksheet/Background.h"
 #include "backend/worksheet/Line.h"
 #include "backend/worksheet/Worksheet.h"
-#include "backend/worksheet/plots/cartesian/ErrorBarStyle.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "backend/worksheet/plots/cartesian/ErrorBarStyle.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "tools/ImageTools.h"
 

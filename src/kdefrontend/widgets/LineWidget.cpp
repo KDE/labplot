@@ -44,7 +44,6 @@ void LineWidget::setLines(const QList<Line*>& lines) {
 		ui.lType->show();
 		ui.cbType->show();
 
-
 		if (ui.cbType->count() == 0) {
 			ui.cbType->addItem(i18n("None"));
 			ui.cbType->addItem(i18n("Bars"));
