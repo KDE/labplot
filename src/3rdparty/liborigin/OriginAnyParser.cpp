@@ -1652,7 +1652,7 @@ void OriginAnyParser::getAnnotationProperties(const string &anhd, unsigned int a
 {
     LOG_PRINT(logfile, "getAnnotationProperties()\n")
 
-    LOG_PRINT(logfile, "anhd =")
+/*    LOG_PRINT(logfile, "anhd =")
     for (unsigned int i = 0; i < anhdsz; i++)
         LOG_PRINT(logfile, " %02x", anhd[i] & 0xFF);
     LOG_PRINT(logfile, "\n")
@@ -1668,7 +1668,7 @@ void OriginAnyParser::getAnnotationProperties(const string &anhd, unsigned int a
     for (unsigned int i = 0; i < andt3sz; i++)
         LOG_PRINT(logfile, " %02x", andt3[i] & 0xFF);
     LOG_PRINT(logfile, "\n")
-
+*/
     istringstream stmp;
     (void)anhdsz;
     (void)andt3;
@@ -1927,7 +1927,6 @@ void OriginAnyParser::getAnnotationProperties(const string &anhd, unsigned int a
                             (BorderType)(border >= 0x80 ? border - 0x80 : None), (Attach)attach, shown);
         } else if (sec_name == "XT") {
             string text = andt2.c_str();
-	    LOG_PRINT(logfile, "top axis title = \"%s\"\n", text.c_str())
             glayer.xAxis.position = GraphAxis::Top;
             glayer.xAxis.formatAxis[1].label =
                     TextBox(text, r, color, fontSize, rotation / 10, tab,
