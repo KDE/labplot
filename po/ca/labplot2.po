@@ -1,17 +1,17 @@
 # Translation of labplot2.po to Catalan
-# Copyright (C) 2015-2023 This_file_is_part_of_KDE
+# Copyright (C) 2015-2024 This_file_is_part_of_KDE
 # This file is distributed under the license LGPL version 2.1 or
 # version 3 or later versions approved by the membership of KDE e.V.
 #
 # Antoni Bella Pérez <antonibella5@yahoo.com>, 2015, 2016, 2017, 2018, 2019, 2020, 2022.
-# Josep M. Ferrer <txemaq@gmail.com>, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023.
+# Josep M. Ferrer <txemaq@gmail.com>, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024.
 # Orestes Mas <orestes@tsc.upc.edu>, 2018.
 msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-07-10 02:40+0000\n"
-"PO-Revision-Date: 2023-12-12 12:48+0100\n"
+"PO-Revision-Date: 2024-01-30 19:50+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -2222,7 +2222,7 @@ msgstr "Dibuixa el diagrama de les dades"
 #: src/backend/datasources/LiveDataSource.cpp:740
 #, kde-format
 msgid "Serial Port Error"
-msgstr "Error del port sèrie"
+msgstr "Error del port en sèrie"
 
 #: src/backend/datasources/LiveDataSource.cpp:711
 #, kde-format
@@ -10538,14 +10538,14 @@ msgid ""
 "If checked, the specified line in the file will be used to determine the "
 "column names."
 msgstr ""
-"Si està marcat, la línia especificada en el fitxer s'usarà per determinar "
+"Si està marcat, la línia especificada en el fitxer s'usarà per a determinar "
 "els noms de les columnes."
 
 #: src/kdefrontend/datasources/AsciiOptionsWidget.cpp:108
 #, kde-format
 msgid "Line in the file that should be used to determine the column names."
 msgstr ""
-"La línia del fitxer que s'hauria d'usar per determinar els noms de les "
+"La línia del fitxer que s'hauria d'usar per a determinar els noms de les "
 "columnes."
 
 #: src/kdefrontend/datasources/AsciiOptionsWidget.cpp:111
@@ -10989,12 +10989,12 @@ msgstr "No s'ha pogut connectar amb el sòcol UDP proporcionat. Error: %1."
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:508
 #, kde-format
 msgid "Could not connect to the provided serial port."
-msgstr "No s'ha pogut connectar amb el port sèrie proporcionat."
+msgstr "No s'ha pogut connectar amb el port en sèrie proporcionat."
 
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:514
 #, kde-format
 msgid "Serial port number is missing."
-msgstr "Falta el número del port sèrie."
+msgstr "Falta el número del port en sèrie."
 
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:530
 #, kde-format
@@ -11132,8 +11132,8 @@ msgid ""
 "Enable to use the first row of the selected data region for the column names "
 "of the spreadsheet."
 msgstr ""
-"Activeu-ho per usar la primera fila de la regió de dades seleccionada com a "
-"noms de columna del full de càlcul."
+"Activeu-ho per a usar la primera fila de la regió de dades seleccionada com "
+"a noms de columna del full de càlcul."
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:242
 #, kde-format
@@ -12431,7 +12431,7 @@ msgstr "Dalt:"
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Template Save File"
-msgstr "Trieu el fitxer per desar una plantilla"
+msgstr "Trieu el fitxer de desament de plantilla"
 
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1631
 #, kde-format
@@ -15292,7 +15292,7 @@ msgstr "Incrementa"
 #: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:435
 #, kde-format
 msgid "Not enough memory to perform this operation."
-msgstr "No hi ha prou memòria per portar a terme aquesta operació."
+msgstr "No hi ha prou memòria per a portar a terme aquesta operació."
 
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:183
 #, kde-format
@@ -15717,8 +15717,8 @@ msgstr ""
 "Valor de la llavor per a inicialitzar el generador de nombres aleatoris.\n"
 "Si el generador s'alimenta amb el mateix valor, es generarà el mateix flux "
 "de nombres aleatoris en crides successives.\n"
-"Si no s'especifica cap valor, s'usarà la marca horària actual per alimentar "
-"el generador."
+"Si no s'especifica cap valor, s'usarà la marca horària actual per a "
+"alimentar el generador."
 
 #: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:459
 #, kde-format
