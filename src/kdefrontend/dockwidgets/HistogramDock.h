@@ -34,9 +34,9 @@ public:
 	void setCurves(QList<Histogram*>);
 
 private:
-	TreeViewComboBox* cbDataColumn;
-	TreeViewComboBox* cbErrorPlusColumn;
-	TreeViewComboBox* cbErrorMinusColumn;
+	TreeViewComboBox* cbDataColumn{nullptr};
+	TreeViewComboBox* cbErrorPlusColumn{nullptr};
+	TreeViewComboBox* cbErrorMinusColumn{nullptr};
 
 	void updateValuesWidgets();
 	void updateLocale() override;

@@ -9,11 +9,13 @@
 
 #include "BarPlotDock.h"
 #include "backend/core/AbstractColumn.h"
+#include "backend/core/Settings.h"
 #include "backend/lib/macros.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 #include "kdefrontend/GuiTools.h"
 #include "kdefrontend/TemplateHandler.h"
 #include "kdefrontend/widgets/BackgroundWidget.h"
+#include "kdefrontend/widgets/ErrorBarStyleWidget.h"
 #include "kdefrontend/widgets/LineWidget.h"
 #include "kdefrontend/widgets/ValueWidget.h"
 
@@ -85,6 +87,24 @@ BarPlotDock::BarPlotDock(QWidget* parent)
 	hboxLayout->setContentsMargins(2, 2, 2, 2);
 	hboxLayout->setSpacing(2);
 
+	// Tab "Error Bars"
+	const KConfigGroup group = Settings::group(QStringLiteral("Settings_General"));
+	if (group.readEntry(QStringLiteral("GUMTerms"), false)) {
+		ui.tabWidget->setTabText(ui.tabWidget->indexOf(ui.tabErrorBars), i18n("Uncertainty Bars"));
+		ui.lErrorBar->setText(i18n("X Uncertainty"));
+	}
+
+	gridLayout = qobject_cast<QGridLayout*>(ui.tabErrorBars->layout());
+
+	cbErrorPlusColumn = new TreeViewComboBox(ui.tabErrorBars);
+	gridLayout->addWidget(cbErrorPlusColumn, 4, 2, 1, 1);
+
+	cbErrorMinusColumn = new TreeViewComboBox(ui.tabErrorBars);
+	gridLayout->addWidget(cbErrorMinusColumn, 5, 2, 1, 1);
+
+	errorBarStyleWidget = new ErrorBarStyleWidget(ui.tabErrorBars);
+	gridLayout->addWidget(errorBarStyleWidget, 8, 0, 1, 3);
+
 	// adjust layouts in the tabs
 	for (int i = 0; i < ui.tabWidget->count(); ++i) {
 		auto* layout = dynamic_cast<QGridLayout*>(ui.tabWidget->widget(i)->layout());
@@ -105,8 +125,11 @@ BarPlotDock::BarPlotDock(QWidget* parent)
 	connect(ui.cbOrientation, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BarPlotDock::orientationChanged);
 
 	// Tab "Bars"
-	connect(ui.cbNumber, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BarPlotDock::currentBarChanged);
+	connect(ui.cbNumber, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BarPlotDock::currentBarNumberChanged);
 	connect(ui.sbWidthFactor, QOverload<int>::of(&QSpinBox::valueChanged), this, &BarPlotDock::widthFactorChanged);
+
+	// Tab "Error Bars"
+	connect(ui.cbErrorBarsNumber, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BarPlotDock::currentErrorBarsNumberChanged);
 
 	// template handler
 	auto* frame = new QFrame(this);
@@ -189,6 +212,8 @@ void BarPlotDock::setModel() {
 
 	cbXColumn->setTopLevelClasses(list);
 	cbXColumn->setModel(model);
+	cbErrorPlusColumn->setTopLevelClasses(list);
+	cbErrorMinusColumn->setTopLevelClasses(list);
 }
 
 /*
@@ -392,11 +417,11 @@ void BarPlotDock::orientationChanged(int index) {
 		barPlot->setOrientation(orientation);
 }
 
-//"Box"-tab
+//"Bars"-tab
 /*!
  * called when the current bar number was changed, shows the bar properties for the selected bar.
  */
-void BarPlotDock::currentBarChanged(int index) {
+void BarPlotDock::currentBarNumberChanged(int index) {
 	if (index == -1)
 		return;
 
@@ -424,6 +449,19 @@ void BarPlotDock::widthFactorChanged(int value) {
 	double factor = (double)value / 100.;
 	for (auto* barPlot : m_barPlots)
 		barPlot->setWidthFactor(factor);
+}
+
+//"Error Bars"-tab
+/*!
+ * called when the current error bars number was changed, shows the bar properties for the selected bar.
+ */
+void BarPlotDock::currentErrorBarsNumberChanged(int index) {
+	if (index == -1)
+		return;
+
+	CONDITIONAL_LOCK_RETURN;
+
+	// TODO
 }
 
 //*************************************************************
