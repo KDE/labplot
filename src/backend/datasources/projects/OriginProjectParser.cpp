@@ -2288,38 +2288,59 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 		DEBUG(Q_FUNC_INFO << ", symbol size in points = " << Worksheet::convertToSceneUnits(originCurve.symbolSize, Worksheet::Unit::Point))
 		symbol->setSize(Worksheet::convertToSceneUnits(originCurve.symbolSize * elementScalingFactor, Worksheet::Unit::Point));
 
-		// symbol fill color
+		// symbol colors
+		DEBUG(Q_FUNC_INFO << ", symbol fill color = " << originCurve.symbolFillColor.type << "_"
+						  << (Origin::Color::RegularColor)originCurve.symbolFillColor.regular)
+		DEBUG(Q_FUNC_INFO << ", symbol color = " << originCurve.symbolColor.type << "_" << (Origin::Color::RegularColor)originCurve.symbolColor.regular)
+		// if plot type == line+symbol
+
 		auto brush = symbol->brush();
-		if (originCurve.symbolFillColor.type == Origin::Color::ColorType::Automatic) {
-			// DEBUG(Q_FUNC_INFO << ", AUTOMATIC fill color")
-			//"automatic" color -> the color of the line, if available, is used, and black otherwise
-			if (curve->lineType() != XYCurve::LineType::NoLine)
-				brush.setColor(curve->line()->pen().color());
-			else
-				brush.setColor(Qt::black);
-		} else
-			brush.setColor(color(originCurve.symbolFillColor));
-		if (originCurve.symbolInterior > 0 && originCurve.symbolInterior < 8) // unfilled styles
-			brush.setStyle(Qt::NoBrush);
-		symbol->setBrush(brush);
-
-		// symbol border/edge color and width
 		auto pen = symbol->pen();
-		if (originCurve.symbolColor.type == Origin::Color::ColorType::Automatic) {
-			//"automatic" color -> the color of the line, if available, has to be used, black otherwise
-			if (curve->lineType() != XYCurve::LineType::NoLine)
-				pen.setColor(curve->line()->pen().color());
-			else
-				pen.setColor(Qt::black);
-		} else
-			pen.setColor(color(originCurve.symbolColor));
+		if (originCurve.type == Origin::GraphCurve::LineSymbol) {
+			// symbol fill color
+			if (originCurve.symbolFillColor.type == Origin::Color::ColorType::Automatic) {
+				//"automatic" color -> the color of the line, if available, is used, and black otherwise
+				if (curve->lineType() != XYCurve::LineType::NoLine)
+					brush.setColor(curve->line()->pen().color());
+				else
+					brush.setColor(Qt::black);
+			} else
+				brush.setColor(color(originCurve.symbolFillColor));
+			if (originCurve.symbolInterior > 0 && originCurve.symbolInterior < 8) // unfilled styles
+				brush.setStyle(Qt::NoBrush);
 
-		DEBUG(Q_FUNC_INFO << ", SYMBOL THICKNESS = " << (int)originCurve.symbolThickness)
-		// border width (edge thickness in Origin) is given as percentage of the symbol radius
-		const double borderScaleFactor = 5.; // match size
-		DEBUG(Q_FUNC_INFO << ", BORDER THICKNESS = " << borderScaleFactor * originCurve.symbolThickness / 100. * symbol->size())
-		pen.setWidthF(borderScaleFactor * originCurve.symbolThickness / 100. * symbol->size());
+			// symbol border/edge color and width
+			if (originCurve.symbolColor.type == Origin::Color::ColorType::Automatic) {
+				//"automatic" color -> the color of the line, if available, has to be used, black otherwise
+				if (curve->lineType() != XYCurve::LineType::NoLine)
+					pen.setColor(curve->line()->pen().color());
+				else
+					pen.setColor(Qt::black);
+			} else
+				pen.setColor(color(originCurve.symbolColor));
 
+			DEBUG(Q_FUNC_INFO << ", SYMBOL THICKNESS = " << (int)originCurve.symbolThickness)
+			// border width (edge thickness in Origin) is given as percentage of the symbol radius
+			const double borderScaleFactor = 5.; // match size
+			DEBUG(Q_FUNC_INFO << ", BORDER THICKNESS = " << borderScaleFactor * originCurve.symbolThickness / 100. * symbol->size())
+			pen.setWidthF(borderScaleFactor * originCurve.symbolThickness / 100. * symbol->size());
+		} else if (originCurve.type == Origin::GraphCurve::Scatter) {
+			// symbol color (uses originCurve.symbolColor)
+			if (originCurve.symbolColor.type == Origin::Color::ColorType::Automatic) {
+				//"automatic" color -> the color of the line, if available, is used, and black otherwise
+				if (curve->lineType() != XYCurve::LineType::NoLine)
+					brush.setColor(curve->line()->pen().color());
+				else
+					brush.setColor(Qt::black);
+			} else
+				brush.setColor(color(originCurve.symbolColor));
+
+			if (originCurve.symbolInterior > 0 && originCurve.symbolInterior < 8) // unfilled styles
+				brush.setStyle(Qt::NoBrush);
+
+			pen.setStyle(Qt::NoPen); // no border
+		}
+		symbol->setBrush(brush);
 		symbol->setPen(pen);
 
 		// handle unsigned char pointOffset member
