@@ -1631,7 +1631,7 @@ void OriginProjectParser::loadAxes(const Origin::GraphLayer& layer,
 		if (!axisFormat.label.shown)
 			plot->setBottomPadding(plot->bottomPadding() / 2.);
 
-		loadAxis(originXAxis, axis, 0, xColumnName);
+		loadAxis(originXAxis, axis, layerIndex, 0, xColumnName);
 		if (!m_graphLayerAsPlotArea)
 			axis->setCoordinateSystemIndex(layerIndex);
 		axis->setSuppressRetransform(false);
@@ -1649,7 +1649,7 @@ void OriginProjectParser::loadAxes(const Origin::GraphLayer& layer,
 		if (!axisFormat.label.shown)
 			plot->setVerticalPadding(plot->verticalPadding() / 2.);
 
-		loadAxis(originXAxis, axis, 1, xColumnName);
+		loadAxis(originXAxis, axis, layerIndex, 1, xColumnName);
 		if (!m_graphLayerAsPlotArea)
 			axis->setCoordinateSystemIndex(layerIndex);
 		axis->setSuppressRetransform(false);
@@ -1667,7 +1667,7 @@ void OriginProjectParser::loadAxes(const Origin::GraphLayer& layer,
 		if (!axisFormat.label.shown)
 			plot->setHorizontalPadding(plot->horizontalPadding() / 2.);
 
-		loadAxis(originYAxis, axis, 0, yColumnName);
+		loadAxis(originYAxis, axis, layerIndex, 0, yColumnName);
 		if (!m_graphLayerAsPlotArea)
 			axis->setCoordinateSystemIndex(layerIndex);
 		axis->setSuppressRetransform(false);
@@ -1685,7 +1685,7 @@ void OriginProjectParser::loadAxes(const Origin::GraphLayer& layer,
 		if (!axisFormat.label.shown)
 			plot->setRightPadding(plot->rightPadding() / 2.);
 
-		loadAxis(originYAxis, axis, 1, yColumnName);
+		loadAxis(originYAxis, axis, layerIndex, 1, yColumnName);
 		if (!m_graphLayerAsPlotArea)
 			axis->setCoordinateSystemIndex(layerIndex);
 		axis->setSuppressRetransform(false);
@@ -1696,7 +1696,7 @@ void OriginProjectParser::loadAxes(const Origin::GraphLayer& layer,
  * sets the axis properties (format and ticks) as defined in \c originAxis in \c axis,
  * \c index being 0 or 1 for "bottom" and "top" or "left" and "right" for horizontal or vertical axes, respectively.
  */
-void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* axis, int index, const QString& axisTitle) const {
+void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* axis, int layerIndex, int index, const QString& axisTitle) const {
 	// 	int axisPosition;
 	//		possible values:
 	//			0: Axis is at default position
@@ -1819,10 +1819,12 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 	color.type = Origin::Color::ColorType::Regular;
 	color.regular = axisFormat.color;
 	axis->line()->setColor(OriginProjectParser::color(color));
-	// axis line thickness is actually not used in Origin!
-	// DEBUG("AXIS THICKNESS = " << axisFormat.thickness)
-	double lineThickness = 1.; // axisFormat.thickness
+	// DEBUG("AXIS LINE THICKNESS = " << axisFormat.thickness)
+	double lineThickness = 1.;
+	if (layerIndex == 0) // axis line thickness is actually only used for first layer in Origin!
+		lineThickness = axisFormat.thickness;
 	axis->line()->setWidth(Worksheet::convertToSceneUnits(lineThickness * elementScalingFactor, Worksheet::Unit::Point));
+
 	if (axisFormat.hidden)
 		axis->line()->setStyle(Qt::NoPen);
 	// TODO: read line style properties? (solid line, dashed line, etc.)
