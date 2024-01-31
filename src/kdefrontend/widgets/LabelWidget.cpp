@@ -333,6 +333,7 @@ void LabelWidget::setAxes(QList<Axis*> axes) {
 
 	m_axesList = axes;
 	m_label = m_labelsList.first();
+	setAspects(m_labelsList);
 
 	ui.lName->hide();
 	ui.leName->hide();
