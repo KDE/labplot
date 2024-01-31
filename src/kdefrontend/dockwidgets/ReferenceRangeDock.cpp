@@ -21,7 +21,8 @@ ReferenceRangeDock::ReferenceRangeDock(QWidget* parent)
 	: BaseDock(parent) {
 	ui.setupUi(this);
 	setPlotRangeCombobox(ui.cbPlotRanges);
-	setBaseWidgets(ui.leName, ui.teComment, 1.2);
+	setBaseWidgets(ui.leName, ui.teComment);
+	setVisibilityWidgets(ui.chkVisible);
 
 	ui.cbOrientation->addItem(i18n("Horizontal"));
 	ui.cbOrientation->addItem(i18n("Vertical"));
@@ -42,7 +43,6 @@ ReferenceRangeDock::ReferenceRangeDock(QWidget* parent)
 	connect(ui.sbPositionEnd, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &ReferenceRangeDock::positionLogicalEndChanged);
 	connect(ui.dtePositionStart, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &ReferenceRangeDock::positionLogicalDateTimeStartChanged);
 	connect(ui.dtePositionEnd, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &ReferenceRangeDock::positionLogicalDateTimeEndChanged);
-	connect(ui.chkVisible, &QCheckBox::clicked, this, &ReferenceRangeDock::visibilityChanged);
 }
 
 void ReferenceRangeDock::setReferenceRanges(QList<ReferenceRange*> list) {
@@ -68,9 +68,6 @@ void ReferenceRangeDock::setReferenceRanges(QList<ReferenceRange*> list) {
 	updatePlotRangeList();
 
 	// SIGNALs/SLOTs
-	connect(m_range, &ReferenceRange::visibleChanged, this, &ReferenceRangeDock::rangeVisibilityChanged);
-
-	// position
 	connect(m_range, &ReferenceRange::orientationChanged, this, &ReferenceRangeDock::rangeOrientationChanged);
 	connect(m_range, &ReferenceRange::positionLogicalStartChanged, this, &ReferenceRangeDock::rangePositionLogicalStartChanged);
 	connect(m_range, &ReferenceRange::positionLogicalEndChanged, this, &ReferenceRangeDock::rangePositionLogicalEndChanged);
@@ -192,13 +189,6 @@ void ReferenceRangeDock::positionLogicalDateTimeEndChanged(qint64 pos) {
 	}
 }
 
-void ReferenceRangeDock::visibilityChanged(bool state) {
-	CONDITIONAL_LOCK_RETURN;
-
-	for (auto* range : m_rangeList)
-		range->setVisible(state);
-}
-
 //*************************************************************
 //******* SLOTs for changes triggered in ReferenceRange ********
 //*************************************************************
@@ -227,11 +217,6 @@ void ReferenceRangeDock::rangePositionLogicalEndChanged(const QPointF& positionL
 void ReferenceRangeDock::rangeOrientationChanged(ReferenceRange::Orientation orientation) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.cbOrientation->setCurrentIndex(static_cast<int>(orientation));
-}
-
-void ReferenceRangeDock::rangeVisibilityChanged(bool on) {
-	CONDITIONAL_LOCK_RETURN;
-	ui.chkVisible->setChecked(on);
 }
 
 //**********************************************************
