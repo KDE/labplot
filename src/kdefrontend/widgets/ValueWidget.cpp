@@ -126,7 +126,7 @@ void ValueWidget::setValues(const QList<Value*>& values) {
 }
 
 //*************************************************************
-//******** SLOTs for changes triggered in ValueWidget ****
+//******** SLOTs for changes triggered in ValueWidget *********
 //*************************************************************
 /*!
   called when the type of the values (none, x, y, (x,y) etc.) was changed.

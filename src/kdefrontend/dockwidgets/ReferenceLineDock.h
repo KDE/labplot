@@ -39,18 +39,12 @@ private:
 private Q_SLOTS:
 	// SLOTs for changes triggered in ReferenceLineDock
 	void lockChanged(bool);
-	void visibilityChanged(bool);
-
-	// Position
 	void orientationChanged(int);
 	void positionLogicalChanged(double);
 	void positionLogicalDateTimeChanged(qint64);
 
 	// SLOTs for changes triggered in ReferenceLine
 	void lineLockChanged(bool);
-	void lineVisibilityChanged(bool);
-
-	// Position
 	void linePositionLogicalChanged(const QPointF&);
 	void lineOrientationChanged(ReferenceLine::Orientation);
 
