@@ -1,11 +1,11 @@
 /*
-	File                 : sparklinerunnable.cpp
+	File                 : SparklineRunnable.cpp
 	Project              : LabPlot
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2023 Kuntal Bar <barkuntal6@gmail.com>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
-#include "sparklinerunnable.h"
+#include "SparklineRunnable.h"
 
 #include <backend/worksheet/Worksheet.h>
 

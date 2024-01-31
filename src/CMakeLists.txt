@@ -288,6 +288,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/core/AbstractFilter.cpp
 	${BACKEND_DIR}/core/AbstractSimpleFilter.cpp
 	${BACKEND_DIR}/core/column/Column.cpp
+
 	${BACKEND_DIR}/core/column/ColumnPrivate.cpp
 	${BACKEND_DIR}/core/column/ColumnStringIO.cpp
 	${BACKEND_DIR}/core/column/columncommands.cpp
@@ -483,8 +484,8 @@ set(COMMONFRONTEND_SOURCES
 	${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetHeaderView.cpp
         ${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetSparkLineHeaderModel.cpp
 	${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetItemDelegate.cpp
-        ${COMMONFRONTEND_DIR}/spreadsheet/sparklinerunnable.h
-        ${COMMONFRONTEND_DIR}/spreadsheet/sparklinerunnable.cpp
+        ${COMMONFRONTEND_DIR}/spreadsheet/SparklineRunnable.h
+        ${COMMONFRONTEND_DIR}/spreadsheet/SparklineRunnable.cpp
 	${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetView.cpp
 	${COMMONFRONTEND_DIR}/workbook/WorkbookView.cpp
 	${COMMONFRONTEND_DIR}/worksheet/WorksheetView.cpp

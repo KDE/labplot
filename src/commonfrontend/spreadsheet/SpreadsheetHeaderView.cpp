@@ -139,6 +139,9 @@ void SpreadsheetHeaderView::paintSection(QPainter* painter, const QRect& rect, i
 	QRect master_rect = rect;
 	SpreadsheetSparkLinesHeaderModel* model = m_sparkLineSlave->getModel();
 	QPixmap pixmap = model->headerData(logicalIndex, Qt::Horizontal, static_cast<int>(SpreadsheetModel::CustomDataRole::SparkLineRole)).value<QPixmap>();
+	m_commentSlave->paintSection(painter, master_rect, logicalIndex);
+	m_sparkLineSlave->paintSection(painter, master_rect, logicalIndex);
+	QHeaderView::paintSection(painter, master_rect, logicalIndex);
 
 	if (m_showComments && m_showSparkLines) {
 		int totalHeight = m_commentSlave->sizeHint().height() + m_sparkLineSlave->sizeHint().height();
@@ -148,7 +151,7 @@ void SpreadsheetHeaderView::paintSection(QPainter* painter, const QRect& rect, i
 			QRect slave2_rect = rect.adjusted(0, QHeaderView::sizeHint().height(), 0, -m_commentSlave->sizeHint().height());
 			m_sparkLineSlave->paintSection(painter, slave2_rect, logicalIndex);
 			QHeaderView::paintSection(painter, master_rect, logicalIndex);
-			painter->resetTransform(); // Reset any transformations
+			// painter->resetTransform(); // Reset any transformations
 			painter->setClipping(false); // Disable clipping
 			if (pixmap.size().isValid())
 				painter->drawPixmap(slave2_rect, pixmap.scaled(slave2_rect.size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
@@ -176,16 +179,13 @@ void SpreadsheetHeaderView::paintSection(QPainter* painter, const QRect& rect, i
 			QRect slave_rect = rect.adjusted(0, QHeaderView::sizeHint().height(), 0, 0);
 			m_sparkLineSlave->paintSection(painter, slave_rect, logicalIndex);
 			QHeaderView::paintSection(painter, master_rect, logicalIndex);
-			painter->resetTransform(); // Reset any transformations
+			// painter->resetTransform(); // Reset any transformations
 			painter->setClipping(false); // Disable clipping
 			if (pixmap.size().isValid())
 				painter->drawPixmap(slave_rect, pixmap.scaled(slave_rect.size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
 			return;
 		}
 	}
-	m_commentSlave->paintSection(painter, master_rect, logicalIndex);
-	m_sparkLineSlave->paintSection(painter, master_rect, logicalIndex);
-	QHeaderView::paintSection(painter, master_rect, logicalIndex);
 }
 
 /*!

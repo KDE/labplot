@@ -9,7 +9,7 @@
 #include "SpreadsheetSparkLineHeaderModel.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/trace.h"
-#include "commonfrontend/spreadsheet/sparklinerunnable.h"
+#include "commonfrontend/spreadsheet/SparklineRunnable.h"
 #include "qscreen.h"
 #include "qtconcurrentrun.h"
 
@@ -73,7 +73,8 @@ QPixmap SpreadsheetSparkLinesHeaderModel::showSparkLines(Column* col) {
 			watcher.setFuture(QtConcurrent::run([=]() {
 				return resultPixmap;
 			}));
-		}
+		} else
+			watcher.cancel();
 	});
 
 	// Start the runnable in the thread pool

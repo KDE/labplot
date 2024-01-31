@@ -87,6 +87,7 @@ private:
 	void init();
 	void initActions();
 	void initMenus();
+	void connectColsToSparkline();
 	void connectActions();
 	bool formulaModeActive() const;
 	void exportToFile(const QString&, bool, const QString&, QLocale::Language) const;

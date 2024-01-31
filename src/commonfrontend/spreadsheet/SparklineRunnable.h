@@ -1,3 +1,10 @@
+/*
+	File                 : SparklineRunnable.h
+	Project              : LabPlot
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2023 Kuntal Bar <barkuntal6@gmail.com>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 #ifndef SPARKLINERUNNABLE_H
 #define SPARKLINERUNNABLE_H
 

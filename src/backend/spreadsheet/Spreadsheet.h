@@ -15,6 +15,8 @@
 #include "backend/datasources/AbstractDataSource.h"
 #include "backend/lib/macros.h"
 
+#include <QUndoCommand>
+
 class AbstractFileFilter;
 class SpreadsheetView;
 class SpreadsheetModel;
