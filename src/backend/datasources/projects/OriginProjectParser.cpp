@@ -714,8 +714,11 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 		// 		if (column.command.size() > 0)
 		// 			col->setFormula(Interval<int>(0, rows), QString::fromStdString(column.command));
 
-		DEBUG(Q_FUNC_INFO << ", column " << j << ", comment = " << column.comment)
-		col->setComment(QString::fromStdString(column.comment));
+		DEBUG(Q_FUNC_INFO << ", column " << j << ", full comment = " << column.comment)
+		QString comment(QString::fromStdString(column.comment));
+		if (comment.contains(QLatin1Char('@'))) // remove @ options
+			comment.truncate(comment.indexOf(QLatin1Char('@')));
+		col->setComment(comment);
 		col->setWidth((int)column.width * scaling_factor);
 
 		// plot designation
