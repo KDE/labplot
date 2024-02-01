@@ -20,15 +20,15 @@
  \class SpreadsheetCommentsHeaderView
  \brief Slave header for SpreadsheetDoubleHeaderView
 
- This class is only to be used by SpreadsheetDoubleHeaderView.
- It allows for displaying two horizontal headers in a SpreadsheetView.
- A SpreadsheetCommentsHeaderView displays the column comments
- in a second header below the normal header. It is completely
- controlled by a SpreadsheetDoubleHeaderView object and thus has
- a master-slave relationship to it. This would be an inner class
- of SpreadsheetDoubleHeaderView if Qt allowed this.
+This class is only to be used by SpreadsheetDoubleHeaderView.
+It allows for displaying two horizontal headers in a SpreadsheetView.
+A SpreadsheetCommentsHeaderView displays the column comments
+in a second header below the normal header. It is completely
+controlled by a SpreadsheetDoubleHeaderView object and thus has
+a master-slave relationship to it. This would be an inner class
+of SpreadsheetDoubleHeaderView if Qt allowed this.
 
- \ingroup commonfrontend
+\ingroup commonfrontend
 */
 
 SpreadsheetCommentsHeaderView::SpreadsheetCommentsHeaderView(QWidget* parent)
@@ -88,16 +88,16 @@ SpreadsheetSparkLinesHeaderModel* SpreadsheetSparkLineHeaderView::getModel() con
  \class SpreadsheetDoubleHeaderView
  \brief Horizontal header for SpreadsheetView displaying comments in a second header
 
- This class is only to be used by SpreadsheetView.
- It allows for displaying two horizontal headers.
- A \c SpreadsheetDoubleHeaderView displays the column name, plot designation, and
- type icon in a normal QHeaderView and below that a second header
- which displays the column comments.
+This class is only to be used by SpreadsheetView.
+It allows for displaying two horizontal headers.
+A \c SpreadsheetDoubleHeaderView displays the column name, plot designation, and
+type icon in a normal QHeaderView and below that a second header
+which displays the column comments.
 
- \sa SpreadsheetCommentsHeaderView
- \sa QHeaderView
+\sa SpreadsheetCommentsHeaderView
+\sa QHeaderView
 
- \ingroup commonfrontend
+\ingroup commonfrontend
 */
 SpreadsheetHeaderView::SpreadsheetHeaderView(QWidget* parent)
 	: QHeaderView(Qt::Horizontal, parent) {
@@ -133,25 +133,30 @@ void SpreadsheetHeaderView::setModel(QAbstractItemModel* model) {
 	QHeaderView::setModel(model);
 
 	connect(model, &QAbstractItemModel::headerDataChanged, this, &SpreadsheetHeaderView::headerDataChanged);
+	connect(model, &QAbstractItemModel::headerDataChanged, this, &SpreadsheetHeaderView::refresh);
+
 }
 
 void SpreadsheetHeaderView::paintSection(QPainter* painter, const QRect& rect, int logicalIndex) const {
 	QRect master_rect = rect;
 	SpreadsheetSparkLinesHeaderModel* model = m_sparkLineSlave->getModel();
 	QPixmap pixmap = model->headerData(logicalIndex, Qt::Horizontal, static_cast<int>(SpreadsheetModel::CustomDataRole::SparkLineRole)).value<QPixmap>();
-	m_commentSlave->paintSection(painter, master_rect, logicalIndex);
-	m_sparkLineSlave->paintSection(painter, master_rect, logicalIndex);
-	QHeaderView::paintSection(painter, master_rect, logicalIndex);
-
+	// initalise header
 	if (m_showComments && m_showSparkLines) {
 		int totalHeight = m_commentSlave->sizeHint().height() + m_sparkLineSlave->sizeHint().height();
 		master_rect = rect.adjusted(0, 0, 0, -totalHeight);
-
+	} else if (m_showComments || m_showSparkLines) {
+		if (m_showComments)
+			master_rect = rect.adjusted(0, 0, 0, -m_commentSlave->sizeHint().height());
+		else
+			master_rect = rect.adjusted(0, 0, 0, -m_sparkLineSlave->sizeHint().height());
+	}
+	painter->save();
+	QHeaderView::paintSection(painter, master_rect, logicalIndex);
+	painter->restore();
+	if (m_showComments && m_showSparkLines && rect.height() > QHeaderView::sizeHint().height()) {
 		if (m_showSparkLines && rect.height() > QHeaderView::sizeHint().height()) {
 			QRect slave2_rect = rect.adjusted(0, QHeaderView::sizeHint().height(), 0, -m_commentSlave->sizeHint().height());
-			m_sparkLineSlave->paintSection(painter, slave2_rect, logicalIndex);
-			QHeaderView::paintSection(painter, master_rect, logicalIndex);
-			// painter->resetTransform(); // Reset any transformations
 			painter->setClipping(false); // Disable clipping
 			if (pixmap.size().isValid())
 				painter->drawPixmap(slave2_rect, pixmap.scaled(slave2_rect.size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
@@ -159,27 +164,16 @@ void SpreadsheetHeaderView::paintSection(QPainter* painter, const QRect& rect, i
 		if (m_showComments && rect.height() > QHeaderView::sizeHint().height()) {
 			QRect slave_rect = rect.adjusted(0, m_sparkLineSlave->sizeHint().height() + QHeaderView::sizeHint().height(), 0, 0);
 			m_commentSlave->paintSection(painter, slave_rect, logicalIndex);
-			QHeaderView::paintSection(painter, master_rect, logicalIndex);
 		}
-
 		return;
-	}
-	if (m_showComments || m_showSparkLines) {
-		if (m_showComments) {
-			master_rect = rect.adjusted(0, 0, 0, -m_commentSlave->sizeHint().height());
-			if (m_showComments && rect.height() > QHeaderView::sizeHint().height()) {
-				QRect slave_rect = rect.adjusted(0, QHeaderView::sizeHint().height(), 0, 0);
-				m_commentSlave->paintSection(painter, slave_rect, logicalIndex);
-				QHeaderView::paintSection(painter, master_rect, logicalIndex);
-			}
+	} else if (m_showComments || m_showSparkLines) {
+		if (m_showComments && rect.height() > QHeaderView::sizeHint().height()) {
+			QRect slave_rect = rect.adjusted(0, QHeaderView::sizeHint().height(), 0, 0);
+			m_commentSlave->paintSection(painter, slave_rect, logicalIndex);
 			return;
 		}
-		if (m_showSparkLines) {
-			master_rect = rect.adjusted(0, 0, 0, -m_sparkLineSlave->sizeHint().height());
-			QRect slave_rect = rect.adjusted(0, QHeaderView::sizeHint().height(), 0, 0);
-			m_sparkLineSlave->paintSection(painter, slave_rect, logicalIndex);
-			QHeaderView::paintSection(painter, master_rect, logicalIndex);
-			// painter->resetTransform(); // Reset any transformations
+		if (m_showSparkLines && rect.height() > QHeaderView::sizeHint().height()) {
+			QRect slave_rect = rect.adjusted(0, m_sparkLineSlave->sizeHint().height(), 0, 0);
 			painter->setClipping(false); // Disable clipping
 			if (pixmap.size().isValid())
 				painter->drawPixmap(slave_rect, pixmap.scaled(slave_rect.size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
@@ -230,8 +224,7 @@ void SpreadsheetHeaderView::refresh() {
 	updateGeometry();
 	setStretchLastSection(false); // ugly hack part 2
 	resizeSection(count() - 1, width);
-
-	update();
+	repaint();
 }
 
 /*!

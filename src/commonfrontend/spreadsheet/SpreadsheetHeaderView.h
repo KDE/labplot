@@ -49,7 +49,7 @@ public:
 	friend class SpreadsheetHeaderView; // access to paintSection (protected)
 
 	SpreadsheetSparkLinesHeaderModel* getModel() const;
-	QSize sizeHint() const override ;
+	QSize sizeHint() const override;
 };
 
 class SpreadsheetHeaderView : public QHeaderView {
@@ -72,12 +72,13 @@ public:
 private:
 	SpreadsheetCommentsHeaderView* m_commentSlave;
 	SpreadsheetSparkLineHeaderView* m_sparkLineSlave;
+
 	bool m_showComments;
 	bool m_showSparkLines;
 
 private Q_SLOTS:
-	void refresh();
 	void headerDataChanged(Qt::Orientation, int logicalFirst, int logicalLast);
+	void refresh();
 
 protected:
 	void paintSection(QPainter*, const QRect&, int logicalIndex) const override;
