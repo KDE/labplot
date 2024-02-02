@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-01 01:34+0000\n"
-"PO-Revision-Date: 2024-01-30 19:50+0100\n"
+"PO-Revision-Date: 2024-01-31 09:35+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -8125,10 +8125,9 @@ msgid "%1: set layout column count"
 msgstr "%1: establix el comptador de columnes de la disposició"
 
 #: src/backend/worksheet/plots/cartesian/ErrorBar.cpp:77
-#, fuzzy, kde-format
-#| msgid "%1: x-error type changed"
+#, kde-format
 msgid "%1: error type changed"
-msgstr "%1: s'ha canviat el tipus d'error X"
+msgstr "%1: s'ha canviat el tipus d'error"
 
 #: src/backend/worksheet/plots/cartesian/ErrorBar.cpp:84
 #: src/backend/worksheet/plots/cartesian/ErrorBar.cpp:96
@@ -8142,10 +8141,9 @@ msgid "%1: set error bar cap size"
 msgstr "%1: establix la mida de l'extrem de la barra d'errors"
 
 #: src/backend/worksheet/plots/cartesian/ErrorBarStyle.cpp:75
-#, fuzzy, kde-format
-#| msgid "%1: error bar type changed"
+#, kde-format
 msgid "%1: error bar style type changed"
-msgstr "%1: s'ha canviat el tipus de la barra d'errors"
+msgstr "%1: s'ha canviat el tipus d'estil de la barra d'errors"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:178
 #, kde-format
@@ -22910,15 +22908,6 @@ msgstr "El procés «convert» ha fallat, codi d'eixida ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "No s'ha pogut obrir el fitxer:"
-
-#~ msgid "%1: set x-error column"
-#~ msgstr "%1: establix la columna d'error X"
-
-#~ msgid "%1: y-error type changed"
-#~ msgstr "%1: s'ha canviat el tipus d'error Y"
-
-#~ msgid "%1: set y-error column"
-#~ msgstr "%1: establix la columna d'error Y"
 
 #~ msgid "%1 CustomPoints: visibility changed"
 #~ msgstr "%1 punts personalitzats: s'ha canviat la visibilitat"

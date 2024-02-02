@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-01 01:34+0000\n"
-"PO-Revision-Date: 2024-01-09 23:04+0100\n"
+"PO-Revision-Date: 2024-01-31 21:20+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -3790,8 +3790,7 @@ msgid "xor"
 msgstr "ou exclusif"
 
 #: src/backend/gsl/functions.cpp:325
-#, fuzzy, kde-format
-#| msgid "no"
+#, kde-format
 msgid "not"
 msgstr "non"
 
@@ -8084,10 +8083,9 @@ msgid "%1: set layout column count"
 msgstr "%1 : définir le nombre de colonnes pour la mise en page"
 
 #: src/backend/worksheet/plots/cartesian/ErrorBar.cpp:77
-#, fuzzy, kde-format
-#| msgid "%1: x-error type changed"
+#, kde-format
 msgid "%1: error type changed"
-msgstr "%1 : le type des erreurs X a changé"
+msgstr "%1 : le type d'erreur a changé"
 
 #: src/backend/worksheet/plots/cartesian/ErrorBar.cpp:84
 #: src/backend/worksheet/plots/cartesian/ErrorBar.cpp:96
@@ -8101,10 +8099,9 @@ msgid "%1: set error bar cap size"
 msgstr "%1 : définir la taille du bout de la barre d'erreur"
 
 #: src/backend/worksheet/plots/cartesian/ErrorBarStyle.cpp:75
-#, fuzzy, kde-format
-#| msgid "%1: error bar type changed"
+#, kde-format
 msgid "%1: error bar style type changed"
-msgstr "%1 : le type de la barre d'erreur a changé"
+msgstr "%1 : le type de style de la barre d'erreurs a changé"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:178
 #, kde-format
@@ -12951,10 +12948,9 @@ msgstr "Centrer"
 
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:253
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:258
-#, fuzzy, kde-format
-#| msgid "Relative Path"
+#, kde-format
 msgid "Relative to plot"
-msgstr "Emplacement relatif"
+msgstr "Relatif vers le tracé"
 
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:779
 #, kde-format

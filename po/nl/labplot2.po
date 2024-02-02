@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-01 01:34+0000\n"
-"PO-Revision-Date: 2024-01-27 11:36+0100\n"
+"PO-Revision-Date: 2024-02-01 10:37+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -8030,10 +8030,9 @@ msgid "%1: set layout column count"
 msgstr "%1: aantal kolommen instellen"
 
 #: src/backend/worksheet/plots/cartesian/ErrorBar.cpp:77
-#, fuzzy, kde-format
-#| msgid "%1: x-error type changed"
+#, kde-format
 msgid "%1: error type changed"
-msgstr "%1: type x-fout gewijzigd"
+msgstr "%1: fout type gewijzigd"
 
 #: src/backend/worksheet/plots/cartesian/ErrorBar.cpp:84
 #: src/backend/worksheet/plots/cartesian/ErrorBar.cpp:96
@@ -8047,10 +8046,9 @@ msgid "%1: set error bar cap size"
 msgstr "%1: grootte foutenbalk instellen"
 
 #: src/backend/worksheet/plots/cartesian/ErrorBarStyle.cpp:75
-#, fuzzy, kde-format
-#| msgid "%1: error bar type changed"
+#, kde-format
 msgid "%1: error bar style type changed"
-msgstr "%1: type foutenbalk gewijzigd"
+msgstr "%1: fout type balkstijl gewijzigd"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:178
 #, kde-format
