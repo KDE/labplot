@@ -3,6 +3,7 @@
   <id>org.kde.labplot2.desktop</id>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-2.0+</project_license>
+  <developer_name>The KDE community</developer_name>
   <name>LabPlot</name>
   <name xml:lang="ar">معمل الرسم</name>
   <name xml:lang="bs">LabPlot</name>
