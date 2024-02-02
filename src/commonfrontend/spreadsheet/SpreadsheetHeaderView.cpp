@@ -9,10 +9,12 @@
 */
 
 #include "SpreadsheetHeaderView.h"
+#include "SparklineRunnable.h"
 #include "SpreadsheetCommentsHeaderModel.h"
 #include "SpreadsheetSparkLineHeaderModel.h"
 #include "backend/lib/macros.h"
 #include "backend/lib/trace.h"
+#include "backend/spreadsheet/Spreadsheet.h"
 #include <QPainter>
 #include <qpainter.h>
 
@@ -80,6 +82,7 @@ void SpreadsheetSparkLineHeaderView::setModel(QAbstractItemModel* model) {
 	auto* new_model = new SpreadsheetSparkLinesHeaderModel(static_cast<SpreadsheetModel*>(model));
 	QHeaderView::setModel(new_model);
 }
+
 SpreadsheetSparkLinesHeaderModel* SpreadsheetSparkLineHeaderView::getModel() const {
 	return static_cast<SpreadsheetSparkLinesHeaderModel*>(model());
 }
@@ -131,10 +134,12 @@ void SpreadsheetHeaderView::setModel(QAbstractItemModel* model) {
 	m_commentSlave->setModel(model);
 	m_sparkLineSlave->setModel(model);
 	QHeaderView::setModel(model);
-
 	connect(model, &QAbstractItemModel::headerDataChanged, this, &SpreadsheetHeaderView::headerDataChanged);
 	connect(model, &QAbstractItemModel::headerDataChanged, this, &SpreadsheetHeaderView::refresh);
+}
 
+SpreadsheetSparkLinesHeaderModel* SpreadsheetHeaderView::getModel() const {
+	return static_cast<SpreadsheetSparkLinesHeaderModel*>(m_sparkLineSlave->model());
 }
 
 void SpreadsheetHeaderView::paintSection(QPainter* painter, const QRect& rect, int logicalIndex) const {
@@ -207,6 +212,8 @@ bool SpreadsheetHeaderView::areSparkLinesShown() const {
 */
 void SpreadsheetHeaderView::showSparkLines(bool on) {
 	m_showSparkLines = on;
+	if (on)
+		m_sparkLineSlave->getModel()->getSpreadSheetModel()->getSpreadSheet()->isSparklineShown = true;
 	refresh();
 }
 
@@ -224,7 +231,7 @@ void SpreadsheetHeaderView::refresh() {
 	updateGeometry();
 	setStretchLastSection(false); // ugly hack part 2
 	resizeSection(count() - 1, width);
-	repaint();
+	update();
 }
 
 /*!

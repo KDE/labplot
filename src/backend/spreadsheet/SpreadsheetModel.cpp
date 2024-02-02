@@ -117,6 +117,10 @@ QModelIndex SpreadsheetModel::index(const QString& text) const {
 	return createIndex(-1, -1);
 }
 
+Spreadsheet* SpreadsheetModel::getSpreadSheet() {
+	return m_spreadsheet;
+}
+
 QVariant SpreadsheetModel::data(const QModelIndex& index, int role) const {
 	if (!index.isValid())
 		return {};
@@ -224,8 +228,8 @@ QVariant SpreadsheetModel::headerData(int section, Qt::Orientation orientation, 
 
 		case static_cast<int>(CustomDataRole::SparkLineRole): {
 			// Return the sparkline associated with the column
-			SpreadsheetSparkLinesHeaderModel::sparkLine(m_spreadsheet->child<Column>(section));
-
+			if (m_spreadsheet->isSparklineShown)
+				SpreadsheetSparkLinesHeaderModel::sparkLine(m_spreadsheet->child<Column>(section));
 			return m_spreadsheet->child<Column>(section)->getSparkline();
 		}
 		}

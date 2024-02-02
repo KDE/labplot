@@ -54,6 +54,10 @@ void SpreadsheetSparkLinesHeaderModel::sparkLine(Column* col) {
 	}
 }
 
+SpreadsheetModel* SpreadsheetSparkLinesHeaderModel::getSpreadSheetModel() {
+	return m_spreadsheet_model;
+}
+
 // show sparkLine of respective column
 QPixmap SpreadsheetSparkLinesHeaderModel::showSparkLines(Column* col) {
 	// Create a QThreadPool instance and set the maximum number of threads

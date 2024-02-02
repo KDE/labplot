@@ -56,10 +56,13 @@ class SpreadsheetHeaderView : public QHeaderView {
 	Q_OBJECT
 
 public:
+	SpreadsheetCommentsHeaderView* m_commentSlave;
+	SpreadsheetSparkLineHeaderView* m_sparkLineSlave;
 	explicit SpreadsheetHeaderView(QWidget* parent = nullptr);
 	~SpreadsheetHeaderView() override;
 
 	void setModel(QAbstractItemModel*) override;
+	SpreadsheetSparkLinesHeaderModel* getModel() const;
 	QSize sizeHint() const override;
 	void addSlaveHeader(QHeaderView* slaveHeader);
 
@@ -70,9 +73,6 @@ public:
 	bool areSparkLinesShown() const;
 
 private:
-	SpreadsheetCommentsHeaderView* m_commentSlave;
-	SpreadsheetSparkLineHeaderView* m_sparkLineSlave;
-
 	bool m_showComments;
 	bool m_showSparkLines;
 

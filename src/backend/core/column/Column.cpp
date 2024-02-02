@@ -105,10 +105,6 @@ void Column::init() {
 	d->outputFilter()->setHidden(true);
 	addChildFast(d->inputFilter());
 	addChildFast(d->outputFilter());
-	// set empty pixmap for sparkline
-	QPixmap pixmap(1, 1);
-	pixmap.fill(QColor(49, 54, 59));
-	setSparkline(pixmap);
 }
 
 Column::~Column() {

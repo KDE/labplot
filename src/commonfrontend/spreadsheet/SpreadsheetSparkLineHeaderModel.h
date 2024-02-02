@@ -30,8 +30,10 @@ public:
 
 	static void sparkLine(Column* col);
 
+	SpreadsheetModel* getSpreadSheetModel();
 private:
 	SpreadsheetModel* m_spreadsheet_model;
+
 };
 
 #endif

@@ -53,6 +53,8 @@ public:
 	void setSearchText(const QString&);
 	QModelIndex index(const QString&) const;
 
+	Spreadsheet* getSpreadSheet();
+
 private Q_SLOTS:
 	void handleAspectsAboutToBeInserted(int first, int last);
 	void handleAspectsInserted(int first, int last);

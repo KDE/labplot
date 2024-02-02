@@ -13,13 +13,18 @@
 #include <backend/worksheet/plots/cartesian/XYCurve.h>
 
 void SparkLineRunnable::run() {
+	if (col->columnMode() != Column::ColumnMode::Text && !col->isNumeric()) {
+		QPixmap mPixmap = QPixmap(1, 1);
+		mPixmap.fill(QColor(49, 54, 59));
+		resultPixmap = mPixmap;
+		return;
+	}
 	static const QString sparklineTheme = QStringLiteral("Sparkline");
 	static const QString sparklineText = QStringLiteral("add-sparkline");
 	auto* worksheet = new Worksheet(sparklineText);
 
 	if (col->columnMode() == Column::ColumnMode::Text) {
 		worksheet->setTheme(sparklineTheme);
-		// worksheet->view();
 		worksheet->setLayoutBottomMargin(0);
 		worksheet->setLayoutTopMargin(0);
 		worksheet->setLayoutLeftMargin(0);
@@ -108,12 +113,6 @@ void SparkLineRunnable::run() {
 		worksheet->updateLayout();
 
 		// Export to pixmap
-		QPixmap pixmap(worksheet->view()->size());
-		worksheet->exportView(pixmap);
-		delete worksheet;
-		resultPixmap = pixmap;
-	} else {
-		worksheet->setTheme(sparklineTheme);
 		QPixmap pixmap(worksheet->view()->size());
 		worksheet->exportView(pixmap);
 		delete worksheet;
