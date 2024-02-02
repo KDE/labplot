@@ -129,7 +129,10 @@ BarPlotDock::BarPlotDock(QWidget* parent)
 	connect(ui.sbWidthFactor, QOverload<int>::of(&QSpinBox::valueChanged), this, &BarPlotDock::widthFactorChanged);
 
 	// Tab "Error Bars"
-	connect(ui.cbErrorBarsNumber, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BarPlotDock::currentErrorBarsNumberChanged);
+	connect(ui.cbErrorBarsNumber, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BarPlotDock::errorNumberChanged);
+	connect(ui.cbErrorType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BarPlotDock::errorTypeChanged);
+	connect(cbErrorPlusColumn, &TreeViewComboBox::currentModelIndexChanged, this, &BarPlotDock::errorPlusColumnChanged);
+	connect(cbErrorMinusColumn, &TreeViewComboBox::currentModelIndexChanged, this, &BarPlotDock::errorMinusColumnChanged);
 
 	// template handler
 	auto* frame = new QFrame(this);
@@ -455,13 +458,94 @@ void BarPlotDock::widthFactorChanged(int value) {
 /*!
  * called when the current error bars number was changed, shows the bar properties for the selected bar.
  */
-void BarPlotDock::currentErrorBarsNumberChanged(int index) {
+void BarPlotDock::errorNumberChanged(int index) {
 	if (index == -1)
 		return;
 
 	CONDITIONAL_LOCK_RETURN;
 
-	// TODO
+	const auto* errorBar = m_barPlot->errorBarAt(index);
+	ui.cbErrorType->setCurrentIndex((int)errorBar->type());
+	cbErrorPlusColumn->setColumn(errorBar->plusColumn(), errorBar->plusColumnPath());
+	cbErrorMinusColumn->setColumn(errorBar->minusColumn(), errorBar->minusColumnPath());
+
+	QList<ErrorBarStyle*> styles;
+	for (auto* plot : m_barPlots) {
+		auto* style = plot->errorBarStyleAt(index);
+		if (style)
+			styles << style;
+	}
+
+	errorBarStyleWidget->setErrorBarStyles(styles);
+}
+
+void BarPlotDock::errorTypeChanged(int index) {
+	const auto type = static_cast<ErrorBar::Type>(ui.cbErrorType->currentData().toInt());
+	switch (type) {
+	case ErrorBar::Type::NoError:
+	case ErrorBar::Type::Poisson:
+		ui.lErrorDataPlus->setVisible(false);
+		cbErrorPlusColumn->setVisible(false);
+		ui.lErrorDataMinus->setVisible(false);
+		cbErrorMinusColumn->setVisible(false);
+		break;
+	case ErrorBar::Type::Symmetric:
+		ui.lErrorDataPlus->setVisible(true);
+		cbErrorPlusColumn->setVisible(true);
+		ui.lErrorDataMinus->setVisible(false);
+		cbErrorMinusColumn->setVisible(false);
+		ui.lErrorDataPlus->setText(i18n("Data, +-:"));
+		break;
+	case ErrorBar::Type::Asymmetric:
+		ui.lErrorDataPlus->setVisible(true);
+		cbErrorPlusColumn->setVisible(true);
+		ui.lErrorDataMinus->setVisible(true);
+		cbErrorMinusColumn->setVisible(true);
+		ui.lErrorDataPlus->setText(i18n("Data, +:"));
+	}
+
+	const bool b = (index != 0);
+	ui.lErrorFormat->setVisible(b);
+	errorBarStyleWidget->setVisible(b);
+
+	CONDITIONAL_LOCK_RETURN;
+
+	const int number = ui.cbErrorBarsNumber->currentIndex();
+	for (auto* plot : m_barPlots) {
+		auto* errorBar = plot->errorBarAt(number);
+		if (errorBar)
+			errorBar->setType(type);
+	}
+}
+
+void BarPlotDock::errorPlusColumnChanged(const QModelIndex& index) {
+	CONDITIONAL_LOCK_RETURN;
+
+	const auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	const auto* column = dynamic_cast<const AbstractColumn*>(aspect);
+	Q_ASSERT(column);
+	const int number = ui.cbErrorBarsNumber->currentIndex();
+
+	for (auto* plot : m_barPlots) {
+		auto* errorBar = plot->errorBarAt(number);
+		if (errorBar)
+			errorBar->setPlusColumn(column);
+	}
+}
+
+void BarPlotDock::errorMinusColumnChanged(const QModelIndex& index) {
+	CONDITIONAL_LOCK_RETURN;
+
+	const auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	const auto* column = dynamic_cast<const AbstractColumn*>(aspect);
+	Q_ASSERT(column);
+	const int number = ui.cbErrorBarsNumber->currentIndex();
+
+	for (auto* plot : m_barPlots) {
+		auto* errorBar = plot->errorBarAt(number);
+		if (errorBar)
+			errorBar->setMinusColumn(column);
+	}
 }
 
 //*************************************************************

@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Bar Plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2022-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -16,6 +16,8 @@
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/trace.h"
 #include "backend/worksheet/Background.h"
+#include "backend/worksheet/plots/cartesian/ErrorBar.h"
+#include "backend/worksheet/plots/cartesian/ErrorBarStyle.h"
 #include "backend/worksheet/Line.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
@@ -62,12 +64,12 @@ void BarPlot::init() {
 	d->orientation = (BarPlot::Orientation)group.readEntry(QStringLiteral("Orientation"), (int)BarPlot::Orientation::Vertical);
 	d->widthFactor = group.readEntry(QStringLiteral("WidthFactor"), 1.0);
 
-	// initial background and border line objects that will be available even if not data column was set yet
+	// initial property objects that will be available even if no data column was set yet
 	d->addBackground(group);
 	d->addBorderLine(group);
-
-	// values
 	d->addValue(group);
+	d->addErrorBar(group);
+	d->addErrorBarStyle(group);
 }
 
 /*!
@@ -159,6 +161,23 @@ Line* BarPlot::lineAt(int index) const {
 	Q_D(const BarPlot);
 	if (index < d->borderLines.size())
 		return d->borderLines.at(index);
+	else
+		return nullptr;
+}
+
+// error bars
+ErrorBar* BarPlot::errorBarAt(int index) const {
+	Q_D(const BarPlot);
+	if (index < d->errorBars.size())
+		return d->errorBars.at(index);
+	else
+		return nullptr;
+}
+
+ErrorBarStyle* BarPlot::errorBarStyleAt(int index) const {
+	Q_D(const BarPlot);
+	if (index < d->errorBarStyles.size())
+		return d->errorBarStyles.at(index);
 	else
 		return nullptr;
 }
@@ -404,6 +423,37 @@ void BarPlotPrivate::addValue(const KConfigGroup& group) {
 	q->connect(value, &Value::updateRequested, [=] {
 		updateValues();
 	});
+}
+
+ErrorBar* BarPlotPrivate::addErrorBar(const KConfigGroup& group) {
+	auto* errorBar = new ErrorBar(QString());
+	q->addChild(errorBar);
+	errorBar->setHidden(true);
+	errorBar->init(group);
+	q->connect(errorBar, &ErrorBar::updateRequested, [=] {
+		updateErrorBars();
+	});
+
+	errorBars << errorBar;
+
+	return errorBar;
+}
+
+ErrorBarStyle* BarPlotPrivate::addErrorBarStyle(const KConfigGroup& group) {
+	auto* errorBarStyle = new ErrorBarStyle(QString());
+	q->addChild(errorBarStyle);
+	errorBarStyle->setHidden(true);
+	errorBarStyle->init(group);
+	q->connect(errorBarStyle, &ErrorBarStyle::updateRequested, [=] {
+		updateErrorBars();
+	});
+	q->connect(errorBarStyle, &ErrorBarStyle::updatePixmapRequested, [=] {
+		updatePixmap();
+	});
+
+	errorBarStyles << errorBarStyle;
+
+	return errorBarStyle;
 }
 
 /*!
@@ -1122,6 +1172,10 @@ void BarPlotPrivate::updateValues() {
 	}
 
 	recalcShapeAndBoundingRect();
+}
+
+void BarPlotPrivate::updateErrorBars() {
+
 }
 
 /*!

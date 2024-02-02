@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Bar Plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2022-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2022-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -15,6 +15,8 @@
 class BarPlotPrivate;
 class AbstractColumn;
 class Background;
+class ErrorBar;
+class ErrorBarStyle;
 class Line;
 class Value;
 
@@ -53,9 +55,12 @@ public:
 
 	// box border line
 	Line* lineAt(int) const;
-
 	// values
 	Value* value() const;
+
+	// error bars;
+	ErrorBar* errorBarAt(int) const;
+	ErrorBarStyle* errorBarStyleAt(int) const;
 
 	void retransform() override;
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;

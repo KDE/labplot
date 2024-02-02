@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Bar Plot - private implementation
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2022-2024 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -16,6 +16,8 @@
 #include <QPen>
 
 class Background;
+class ErrorBar;
+class ErrorBarStyle;
 class Line;
 class CartesianCoordinateSystem;
 class Value;
@@ -31,11 +33,14 @@ public:
 	void recalc();
 	virtual void recalcShapeAndBoundingRect() override;
 	void updateValues();
+	void updateErrorBars();
 	void updatePixmap();
 
 	Background* addBackground(const KConfigGroup&);
 	Line* addBorderLine(const KConfigGroup&);
 	void addValue(const KConfigGroup&);
+	ErrorBar* addErrorBar(const KConfigGroup&);
+	ErrorBarStyle* addErrorBarStyle(const KConfigGroup&);
 
 	BarPlot* const q;
 
@@ -57,6 +62,10 @@ public:
 	// bar properties
 	QVector<Background*> backgrounds;
 	QVector<Line*> borderLines;
+
+	// error bars
+	QVector<ErrorBar*> errorBars;
+	QVector<ErrorBarStyle*> errorBarStyles;
 
 	// values
 	Value* value{nullptr};

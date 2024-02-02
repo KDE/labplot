@@ -71,8 +71,11 @@ private Q_SLOTS:
 	void currentBarNumberChanged(int);
 	void widthFactorChanged(int);
 
-	//"Bars"-tab
-	void currentErrorBarsNumberChanged(int);
+	//"Error Bars"-tab
+	void errorNumberChanged(int);
+	void errorTypeChanged(int);
+	void errorPlusColumnChanged(const QModelIndex&);
+	void errorMinusColumnChanged(const QModelIndex&);
 
 	// SLOTs for changes triggered in BarPlot
 	// general
