@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-01 01:34+0000\n"
+"POT-Creation-Date: 2024-02-03 01:38+0000\n"
 "PO-Revision-Date: 2024-01-04 20:52+0100\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -11681,30 +11681,30 @@ msgstr "Ett fel uppstod."
 msgid "Connecting to '%1:%2' timed out."
 msgstr "Tidsgräns för anslutning till '%1:%2' gick ut."
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:83
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:486
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:85
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:514
 #, kde-format
 msgid "Add new folder"
 msgstr "Lägg till ny katalog"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:106
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:108
 #, kde-format
 msgctxt "@title:window"
 msgid "Import LabPlot Project"
 msgstr "Importera LabPlot-projekt"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:111
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:113
 #, kde-format
 msgctxt "@title:window"
 msgid "Import Origin Project"
 msgstr "Importera Origin-projekt"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:121
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:123
 #, kde-format
 msgid "Specify the file where the project content has to be imported from."
 msgstr "Ange filen som projektets innehåll ska importeras från."
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:125
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:127
 #, kde-format
 msgid ""
 "Select one or several objects to be imported into the current project.\n"
@@ -11717,7 +11717,7 @@ msgstr ""
 "beroende objekt automatiskt blir markerade.\n"
 "Markera projektets topnivånod för att importera hela projektet."
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:130
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:132
 #, kde-format
 msgid ""
 "Specify the target folder in the current project where the selected objects "
@@ -11726,22 +11726,22 @@ msgstr ""
 "Välj målkatalogen i aktuellt projekt dit de markerade objekten ska "
 "importeras till."
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:159
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:161
 #, kde-format
 msgid "As Plot Area"
 msgstr "Som diagramområde"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:160
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:162
 #, kde-format
 msgid "As Coordinate System"
 msgstr "Som koordinatsystem"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:164
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:166
 #, kde-format
 msgid "Specify how to import multi-layered graphs."
 msgstr "Ange hur diagram med flera lager ska importeras"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:169
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:171
 #, kde-format
 msgid ""
 "Multiple layers are used in Origin to either implement multiple plots or "
@@ -11762,7 +11762,7 @@ msgstr ""
 "koordinatsystem - ett nytt koordinatsystem (dataintervall) på samma "
 "diagramområde skapas för varje lager</li></ul>"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:264
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:266
 #, kde-format
 msgid ""
 "The object listed below already exists in target folder and will be "
@@ -11777,57 +11777,59 @@ msgstr[1] ""
 "Objekten som listas nedan finns redan i målkatalogen och kommer att skrivas "
 "över:"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:270
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:272
 #, kde-format
 msgid "Do you want to proceed?"
 msgstr "Vill du fortsätta?"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:274
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:278
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:276
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:280
 #, kde-format
 msgid "Override existing objects?"
 msgstr "Skriv över befintliga objekt?"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:311
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:313
 #, kde-format
 msgid "Project data imported in %1 seconds."
 msgstr "Projektdata importerad på %1 sekunder."
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:405
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:407
 #, kde-format
 msgid "Close the dialog and import the selected objects."
 msgstr "Stäng dialogrutan och importera markerade objekt."
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:407
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:409
 #, kde-format
 msgid "Select object(s) to be imported."
 msgstr "Markera objekt att importera."
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:422
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:437
 #, kde-format
 msgctxt "@title:window"
 msgid "Open LabPlot Project"
 msgstr "Öppna LabPlot-projekt"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:424
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:439
 #: src/kdefrontend/MainWin.cpp:1535
 #, kde-format
 msgid "LabPlot Projects (%1)"
 msgstr "LabPlot-projekt (%1)"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:428
-#, kde-format
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:443
+#, fuzzy, kde-format
+#| msgctxt "@title:window"
+#| msgid "Open Origin Project"
 msgctxt "@title:window"
-msgid "Open Origin Project"
+msgid "Open Origin OPJ Project"
 msgstr "Öppna Origin-projekt"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:430
-#: src/kdefrontend/MainWin.cpp:1540
-#, kde-format
-msgid "Origin Projects (%1)"
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:445
+#, fuzzy, kde-format
+#| msgid "Origin Projects (%1)"
+msgid "Origin OPJ Projects (%1)"
 msgstr "Origin-projekt (%1)"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:486
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:514
 #, kde-format
 msgid "Folder name:"
 msgstr "Katalognamn:"
@@ -14830,6 +14832,11 @@ msgstr "Förhandsgranskning av arbetsblad"
 #, kde-format
 msgid "%1: created"
 msgstr "%1: skapad"
+
+#: src/kdefrontend/MainWin.cpp:1540
+#, kde-format
+msgid "Origin Projects (%1)"
+msgstr "Origin-projekt (%1)"
 
 #: src/kdefrontend/MainWin.cpp:1546
 #, kde-format
