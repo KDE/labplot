@@ -69,6 +69,7 @@ protected:
 	ErrorBarStyleWidget* errorBarStyleWidget{nullptr};
 	QList<XYCurve*> m_curvesList;
 	XYCurve* m_curve{nullptr};
+	AspectTreeModel* m_valuesModel{nullptr};
 
 private Q_SLOTS:
 	void init();
