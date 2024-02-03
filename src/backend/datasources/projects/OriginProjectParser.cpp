@@ -1574,6 +1574,11 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 				if (m_legendText.contains(QStringLiteral("%(%1)").arg(curveIndex))
 					|| m_legendText.contains(QStringLiteral("%(%1.%2)").arg(layerIndex + 1).arg(curveIndex)))
 					enableCurveInLegend = true;
+				if (!enableCurveInLegend
+					&& (m_legendText.contains(QStringLiteral("\\l(%1)").arg(curveIndex))
+						|| m_legendText.contains(QStringLiteral("\\l(%1.%2)").arg(layerIndex + 1).arg(curveIndex)))) // custom entry
+					enableCurveInLegend = true;
+
 				DEBUG(Q_FUNC_INFO << ", curve in legend = " << enableCurveInLegend)
 
 				curve->setLegendVisible(enableCurveInLegend);
