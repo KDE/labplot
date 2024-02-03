@@ -173,7 +173,6 @@ void CartesianPlot::init() {
 	d->verticalPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter);
 	d->rightPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter);
 	d->bottomPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter);
-	d->leftPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter);
 	d->symmetricPadding = true;
 
 	// cursor line
@@ -3326,8 +3325,10 @@ void CartesianPlotPrivate::retransformScales(int xIndex, int yIndex) {
  */
 void CartesianPlotPrivate::updateDataRect() {
 	dataRect = mapRectFromScene(rect);
+	DEBUG(Q_FUNC_INFO << " Horizontal" << horizontalPadding);
+	DEBUG(Q_FUNC_INFO << " Right" << rightPadding);
 
-	double paddingLeft = leftPadding;
+	double paddingLeft = horizontalPadding;
 	double paddingRight = rightPadding;
 	double paddingTop = verticalPadding;
 	double paddingBottom = bottomPadding;
@@ -4589,7 +4590,6 @@ void CartesianPlot::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("horizontalPadding"), QString::number(d->horizontalPadding));
 	writer->writeAttribute(QStringLiteral("verticalPadding"), QString::number(d->verticalPadding));
 	writer->writeAttribute(QStringLiteral("rightPadding"), QString::number(d->rightPadding));
-	writer->writeAttribute(QStringLiteral("leftPadding"), QString::number(d->leftPadding));
 	writer->writeAttribute(QStringLiteral("bottomPadding"), QString::number(d->bottomPadding));
 	writer->writeAttribute(QStringLiteral("symmetricPadding"), QString::number(d->symmetricPadding));
 	writer->writeAttribute(QStringLiteral("niceExtend"), QString::number(d->niceExtend));
@@ -4804,7 +4804,6 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			READ_DOUBLE_VALUE("horizontalPadding", horizontalPadding);
 			READ_DOUBLE_VALUE("verticalPadding", verticalPadding);
 			READ_DOUBLE_VALUE("rightPadding", rightPadding);
-			READ_DOUBLE_VALUE("leftPadding", leftPadding);
 			READ_DOUBLE_VALUE("bottomPadding", bottomPadding);
 			READ_INT_VALUE("symmetricPadding", symmetricPadding, bool);
 			hasCoordinateSystems = true;

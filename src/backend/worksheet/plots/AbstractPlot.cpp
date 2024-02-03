@@ -89,7 +89,6 @@ void AbstractPlot::handleResize(double horizontalRatio, double verticalRatio, bo
 BASIC_SHARED_D_READER_IMPL(AbstractPlot, double, horizontalPadding, horizontalPadding)
 BASIC_SHARED_D_READER_IMPL(AbstractPlot, double, verticalPadding, verticalPadding)
 BASIC_SHARED_D_READER_IMPL(AbstractPlot, double, rightPadding, rightPadding)
-BASIC_SHARED_D_READER_IMPL(AbstractPlot, double, leftPadding, leftPadding)
 BASIC_SHARED_D_READER_IMPL(AbstractPlot, double, bottomPadding, bottomPadding)
 BASIC_SHARED_D_READER_IMPL(AbstractPlot, bool, symmetricPadding, symmetricPadding)
 
@@ -113,13 +112,6 @@ void AbstractPlot::setRightPadding(double padding) {
 	Q_D(AbstractPlot);
 	if (padding != d->rightPadding)
 		exec(new AbstractPlotSetRightPaddingCmd(d, padding, ki18n("%1: set right padding")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(AbstractPlot, SetLeftPadding, double, leftPadding, retransform)
-void AbstractPlot::setLeftPadding(double padding) {
-	Q_D(AbstractPlot);
-	if (padding != d->leftPadding)
-		exec(new AbstractPlotSetLeftPaddingCmd(d, padding, ki18n("%1: set left padding")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(AbstractPlot, SetBottomPadding, double, bottomPadding, retransform)

@@ -32,15 +32,14 @@ void SparkLineRunnable::run() {
 
 		auto* plot = new CartesianPlot(sparklineText);
 		plot->setTheme(sparklineTheme);
-		plot->setVerticalPadding(0);
-		plot->setHorizontalPadding(0);
-		plot->setRightPadding(0);
-		plot->setBottomPadding(0);
-		plot->setLeftPadding(0);
 		worksheet->addChild(plot);
 
 		auto* barPlot = new BarPlot(QString());
 		plot->addChild(barPlot);
+		plot->setVerticalPadding(0);
+		plot->setRightPadding(0);
+		plot->setBottomPadding(0);
+		plot->setHorizontalPadding(0);
 
 		barPlot->setOrientation(BarPlot::Orientation::Vertical);
 
@@ -65,7 +64,7 @@ void SparkLineRunnable::run() {
 		QVector<const AbstractColumn*> columns;
 		columns << dataColumn;
 		barPlot->setDataColumns(columns);
-		plot->scaleAuto(-1, -1);
+		// plot->scaleAuto(-1, -1);
 		// plot->retransform();
 		worksheet->setSuppressLayoutUpdate(false);
 		worksheet->updateLayout();
@@ -85,11 +84,8 @@ void SparkLineRunnable::run() {
 		auto* plot = new CartesianPlot(sparklineText);
 		plot->setType(CartesianPlot::Type::TwoAxes);
 		plot->setTheme(sparklineTheme);
-		plot->setVerticalPadding(0);
-		plot->setHorizontalPadding(0);
-		plot->setRightPadding(0);
-		plot->setBottomPadding(0);
-		plot->setLeftPadding(0);
+
+
 
 		const int rowCount = col->rowCount();
 		QVector<double> xData(rowCount);
@@ -106,6 +102,10 @@ void SparkLineRunnable::run() {
 		curve->setYColumn(col);
 		curve->setSuppressRetransform(false);
 		plot->addChild(curve);
+		plot->setVerticalPadding(0);
+		plot->setRightPadding(0);
+		plot->setBottomPadding(0);
+		plot->setHorizontalPadding(0);
 
 		// plot->scaleAuto(-1, -1);
 		// plot->retransform();

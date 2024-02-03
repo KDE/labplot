@@ -9,11 +9,8 @@
 */
 
 #include "SpreadsheetHeaderView.h"
-#include "SparklineRunnable.h"
 #include "SpreadsheetCommentsHeaderModel.h"
 #include "SpreadsheetSparkLineHeaderModel.h"
-#include "backend/lib/macros.h"
-#include "backend/lib/trace.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include <QPainter>
 #include <qpainter.h>

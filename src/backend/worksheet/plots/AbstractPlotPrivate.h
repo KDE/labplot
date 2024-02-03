@@ -24,7 +24,6 @@ public:
 	double horizontalPadding; // horiz. offset between the plot area and the area defining the coordinate system, in scene units
 	double verticalPadding; // vert. offset between the plot area and the area defining the coordinate system, in scene units
 	double rightPadding;
-	double leftPadding;
 	double bottomPadding;
 	bool symmetricPadding;
 

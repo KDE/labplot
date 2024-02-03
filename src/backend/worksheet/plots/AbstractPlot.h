@@ -35,7 +35,6 @@ public:
 	BASIC_D_ACCESSOR_DECL(double, horizontalPadding, HorizontalPadding)
 	BASIC_D_ACCESSOR_DECL(double, verticalPadding, VerticalPadding)
 	BASIC_D_ACCESSOR_DECL(double, rightPadding, RightPadding)
-	BASIC_D_ACCESSOR_DECL(double, leftPadding, LeftPadding)
 	BASIC_D_ACCESSOR_DECL(double, bottomPadding, BottomPadding)
 	BASIC_D_ACCESSOR_DECL(bool, symmetricPadding, SymmetricPadding)
 
@@ -45,7 +44,6 @@ Q_SIGNALS:
 	void horizontalPaddingChanged(double);
 	void verticalPaddingChanged(double);
 	void rightPaddingChanged(double);
-	void leftPaddingChanged(double);
 	void bottomPaddingChanged(double);
 	void symmetricPaddingChanged(bool);
 

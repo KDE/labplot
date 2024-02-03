@@ -289,11 +289,19 @@ void SpreadsheetView::connectColsToSparkline() {
 		SparkLineRunnable* sparkLine = new SparkLineRunnable(m_spreadsheet->column(colIndex));
 		connect(m_spreadsheet->column(colIndex), &AbstractColumn::dataChanged, this, [=] {
 			m_model->column(colIndex)->mDataChanged = true;
-			SpreadsheetSparkLinesHeaderModel::sparkLine(m_model->column(colIndex));
+			if (m_spreadsheet->isSparklineShown)
+				SpreadsheetSparkLinesHeaderModel::sparkLine(m_model->column(colIndex));
+			m_tableView->horizontalHeader()->setStretchLastSection(true); // ugly hack (flaw in Qt? Does anyone know a better way?)
+			m_tableView->horizontalHeader()->updateGeometry();
+			m_tableView->horizontalHeader()->setStretchLastSection(false);
+			m_horizontalHeader->m_sparkLineSlave->setStretchLastSection(true);
+			m_horizontalHeader->m_sparkLineSlave->updateGeometry();
+			m_horizontalHeader->m_sparkLineSlave->setStretchLastSection(false);
 		});
 		QObject::connect(sparkLine, &SparkLineRunnable::taskFinished, [=](const QPixmap&) {
 			m_horizontalHeader->repaint();
-		});	}
+		});
+	}
 }
 
 void SpreadsheetView::initActions() {
@@ -3158,19 +3166,18 @@ void SpreadsheetView::normalizeSelection() {
 					max = m_spreadsheet->column(col)->valueAt(row);
 			}
 
- if (max != 0.0) { // avoid division by zero
-	 //TODO setSuppressDataChangedSignal
-	 for (int col = firstSelectedColumn(); col <= lastSelectedColumn(); col++)
-		 if (m_spreadsheet->column(col)->columnMode() == AbstractColumn::ColumnMode::Double)
-			 for (int row = 0; row < m_spreadsheet->rowCount(); row++) {
-				 if (isCellSelected(row, col))
-					 m_spreadsheet->column(col)->setValueAt(row, m_spreadsheet->column(col)->valueAt(row) / max);
-			 }
- }
- m_spreadsheet->endMacro();
- RESET_CURSOR;
-}
-*/
+	if (max != 0.0) { // avoid division by zero
+		// TODO setSuppressDataChangedSignal
+		for (int col = firstSelectedColumn(); col <= lastSelectedColumn(); col++)
+			if (m_spreadsheet->column(col)->columnMode() == AbstractColumn::ColumnMode::Double)
+				for (int row = 0; row < m_spreadsheet->rowCount(); row++) {
+					if (isCellSelected(row, col))
+						m_spreadsheet->column(col)->setValueAt(row, m_spreadsheet->column(col)->valueAt(row) / max);
+				}
+	}
+	m_spreadsheet->endMacro();
+	RESET_CURSOR;
+}*/
 
 void SpreadsheetView::showAllColumnsStatistics() {
 	showColumnStatistics(true);
