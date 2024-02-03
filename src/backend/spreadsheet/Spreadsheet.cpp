@@ -107,6 +107,9 @@ QWidget* Spreadsheet::view() const {
 		bool readOnly = (type == AspectType::Spreadsheet || type == AspectType::DatapickerCurve);
 		m_view = new SpreadsheetView(const_cast<Spreadsheet*>(this), readOnly);
 		m_partView = m_view;
+		connect(this, &Spreadsheet::viewAboutToBeDeleted, [this]() {
+			m_view = nullptr;
+		});
 	}
 	return m_partView;
 #else
