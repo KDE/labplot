@@ -1504,12 +1504,16 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 				QString curveName(QString::fromStdString(originCurve.yColumnName));
 				auto column = sheet.columns[findColumnByName(sheet, curveName)];
 				if (column.comment.length() > 0) {
-					auto comment = QString::fromStdString(column.comment);
+					auto comment = QString::fromStdString(column.comment); // long name(, unit(, comment))
 					DEBUG(Q_FUNC_INFO << ", y column full comment = \"" << column.comment << "\"")
 					if (comment.contains(QLatin1Char('@'))) // remove @ options
 						comment.truncate(comment.indexOf(QLatin1Char('@')));
-					if (comment.contains(QRegularExpression(QLatin1String("[\r\n]")))) // comment is last line
-						comment = comment.split(QRegularExpression(QLatin1String("[\r\n]")), Qt::SkipEmptyParts).last();
+
+					auto comments = comment.split(QRegularExpression(QLatin1String("[\r\n]")), Qt::SkipEmptyParts);
+					if (comments.size() >= 3) // third field (comment) is available
+						comment = comments.last();
+					else // use long name
+						comment = comments.first();
 
 					curveName = comment;
 				}
