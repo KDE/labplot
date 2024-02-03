@@ -1082,13 +1082,15 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 	DEBUG(Q_FUNC_INFO << ", GRAPH width/height (cm) = " << graphSize.width() * GSL_CONST_CGS_INCH / dpi << "/" << graphSize.height() * GSL_CONST_CGS_INCH / dpi)
 	// Origin scales text and plots with the size of the layer when no fixed size is used (Layer properties->Size)
 	// so we scale all text and plots with a scaling factor to the whole view height (29.5 cm) used as default
-	elementScalingFactor = 29.5 / (graph.height * GSL_CONST_CGS_INCH / dpi);
+	const double fixedHeight = 29.5; // full height [cm]
+	elementScalingFactor = fixedHeight / (graph.height * GSL_CONST_CGS_INCH / dpi);
 	// not using the full value for scaling text is better in most cases
 	textScalingFactor = 1. + (elementScalingFactor - 1.) / 2.;
 	DEBUG(Q_FUNC_INFO << ", ELEMENT SCALING FACTOR = " << elementScalingFactor)
 	DEBUG(Q_FUNC_INFO << ", TEXT SCALING FACTOR = " << textScalingFactor)
 	// default values (1000/1000)
 	//	DEBUG(Q_FUNC_INFO << ", WORKSHEET width/height = " << worksheet->pageRect().width() << "/" << worksheet->pageRect().height())
+
 	worksheet->setUseViewSize(true);
 
 	QHash<TextLabel*, QSizeF> textLabelPositions;
@@ -1123,12 +1125,18 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 	// https://www.originlab.com/doc/Origin-Help/MultiLayer-Graph
 	int layerIndex = 0; // index of the graph layer
 	CartesianPlot* plot = nullptr;
+	Origin::Rect layerRect;
 	for (const auto& layer : graph.layers) {
 		DEBUG(Q_FUNC_INFO << ", Graph Layer " << layerIndex + 1)
 		if (layer.is3D()) {
 			// TODO: add an "UnsupportedAspect" here since we don't support 3D yet
 			break;
 		}
+
+		layerRect = layer.clientRect;
+		// DEBUG(Q_FUNC_INFO << ", layer left/right (px) = " << layerRect.left << "/" << layerRect.right)
+		// DEBUG(Q_FUNC_INFO << ", layer top/bottom (px) = " << layerRect.top << "/" << layerRect.bottom)
+		// DEBUG(Q_FUNC_INFO << ", layer width/height (px) = " << layerRect.width() << "/" << layerRect.height())
 
 		// create a new plot if we're
 		// 1. interpreting every layer as a new plot
@@ -1146,12 +1154,28 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 
 	// padding
 	plot->setSymmetricPadding(false);
-	plot->setHorizontalPadding(plot->horizontalPadding() * elementScalingFactor);
-	plot->setVerticalPadding(plot->verticalPadding() * elementScalingFactor);
-	plot->setRightPadding(plot->rightPadding() * elementScalingFactor);
-	plot->setBottomPadding(plot->bottomPadding() * elementScalingFactor);
-	DEBUG(Q_FUNC_INFO << ", PADDING = " << plot->horizontalPadding() << ", " << plot->verticalPadding())
-	DEBUG(Q_FUNC_INFO << ", PADDING = " << plot->rightPadding() << ", " << plot->bottomPadding())
+	int numberOfLayer = layerIndex + 1;
+	DEBUG(Q_FUNC_INFO << ", number of layer = " << numberOfLayer)
+	if (numberOfLayer == 1 || !m_graphLayerAsPlotArea) { // use layer clientRect for padding
+		DEBUG(Q_FUNC_INFO << ", using layer rect for padding")
+		double aspectRatio = graphSize.width() / graphSize.height();
+
+		double leftPadding = layerRect.left / (double)graphSize.width() * aspectRatio * fixedHeight;
+		double topPadding = layerRect.top / (double)graphSize.height() * fixedHeight;
+		double rightPadding = (graphSize.width() - layerRect.right) / (double)graphSize.width() * aspectRatio * fixedHeight;
+		double bottomPadding = (graphSize.height() - layerRect.bottom) / (double)graphSize.height() * fixedHeight;
+		plot->setHorizontalPadding(Worksheet::convertToSceneUnits(leftPadding, Worksheet::Unit::Centimeter));
+		plot->setVerticalPadding(Worksheet::convertToSceneUnits(topPadding, Worksheet::Unit::Centimeter));
+		plot->setRightPadding(Worksheet::convertToSceneUnits(rightPadding, Worksheet::Unit::Centimeter));
+		plot->setBottomPadding(Worksheet::convertToSceneUnits(bottomPadding, Worksheet::Unit::Centimeter));
+	} else {
+		plot->setHorizontalPadding(plot->horizontalPadding() * elementScalingFactor);
+		plot->setVerticalPadding(plot->verticalPadding() * elementScalingFactor);
+		plot->setRightPadding(plot->rightPadding() * elementScalingFactor);
+		plot->setBottomPadding(plot->bottomPadding() * elementScalingFactor);
+	}
+	DEBUG(Q_FUNC_INFO << ", PADDING (H/V) = " << plot->horizontalPadding() << ", " << plot->verticalPadding())
+	DEBUG(Q_FUNC_INFO << ", PADDING (R/B) = " << plot->rightPadding() << ", " << plot->bottomPadding())
 
 	if (!preview) {
 		worksheet->updateLayout();
