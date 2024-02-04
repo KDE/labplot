@@ -78,8 +78,8 @@ public:
 	void emitColumnCountChanged() {
 		Q_EMIT columnCountChanged(columnCount());
 	}
-	bool isSparklineShown{false};
 
+	bool isSparklineShown{false};
 
 	// data import
 	int prepareImport(std::vector<void*>& dataContainer,

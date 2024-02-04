@@ -13,6 +13,7 @@
 #include <backend/worksheet/plots/cartesian/XYCurve.h>
 
 void SparkLineRunnable::run() {
+	DEBUG(Q_FUNC_INFO)
 	if (col->columnMode() != Column::ColumnMode::Text && !col->isNumeric()) {
 		QPixmap mPixmap = QPixmap(1, 1);
 		mPixmap.fill(QColor(49, 54, 59));
@@ -84,8 +85,6 @@ void SparkLineRunnable::run() {
 		auto* plot = new CartesianPlot(sparklineText);
 		plot->setType(CartesianPlot::Type::TwoAxes);
 		plot->setTheme(sparklineTheme);
-
-
 
 		const int rowCount = col->rowCount();
 		QVector<double> xData(rowCount);

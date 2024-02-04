@@ -10,7 +10,6 @@
 */
 
 #include "SpreadsheetView.h"
-#include "SparklineRunnable.h"
 #include "backend/core/AbstractAspect.h"
 #include "backend/core/Project.h"
 #include "backend/core/Settings.h"
@@ -286,20 +285,12 @@ void SpreadsheetView::updateFrozenTableGeometry() {
 
 void SpreadsheetView::connectColsToSparkline() {
 	for (int colIndex = 0; colIndex < m_spreadsheet->columnCount(); ++colIndex) {
-		SparkLineRunnable* sparkLine = new SparkLineRunnable(m_spreadsheet->column(colIndex));
 		connect(m_spreadsheet->column(colIndex), &AbstractColumn::dataChanged, this, [=] {
 			m_model->column(colIndex)->mDataChanged = true;
-			if (m_spreadsheet->isSparklineShown)
+			if (m_spreadsheet->isSparklineShown) {
 				SpreadsheetSparkLinesHeaderModel::sparkLine(m_model->column(colIndex));
-			m_tableView->horizontalHeader()->setStretchLastSection(true); // ugly hack (flaw in Qt? Does anyone know a better way?)
-			m_tableView->horizontalHeader()->updateGeometry();
-			m_tableView->horizontalHeader()->setStretchLastSection(false);
-			m_horizontalHeader->m_sparkLineSlave->setStretchLastSection(true);
-			m_horizontalHeader->m_sparkLineSlave->updateGeometry();
-			m_horizontalHeader->m_sparkLineSlave->setStretchLastSection(false);
-		});
-		QObject::connect(sparkLine, &SparkLineRunnable::taskFinished, [=](const QPixmap&) {
-			m_horizontalHeader->repaint();
+				m_horizontalHeader->refresh();
+			}
 		});
 	}
 }
@@ -3573,23 +3564,15 @@ void SpreadsheetView::updateHeaderGeometry(Qt::Orientation o, int first, int las
 	m_tableView->horizontalHeader()->setStretchLastSection(true); // ugly hack (flaw in Qt? Does anyone know a better way?)
 	m_tableView->horizontalHeader()->updateGeometry();
 	m_tableView->horizontalHeader()->setStretchLastSection(false); // ugly hack part 2
-	// Update the geometry for the horizontal header
-	// m_tableView->horizontalHeader()->setStretchLastSection(true);
-	// m_tableView->horizontalHeader()->updateGeometry();
-	// m_tableView->horizontalHeader()->setStretchLastSection(false);
-
+	// Update the geometry for the sparkline header
 	m_horizontalHeader->m_sparkLineSlave->setStretchLastSection(true);
 	m_horizontalHeader->m_sparkLineSlave->updateGeometry();
 	m_horizontalHeader->m_sparkLineSlave->setStretchLastSection(false);
-	// // Update the geometry for the comment header
-	// m_commentHeader->setStretchLastSection(true);
-	// m_commentHeader->updateGeometry();
-	// m_commentHeader->setStretchLastSection(false);
+	// Update the geometry for the comment header
+	m_horizontalHeader->m_commentSlave->setStretchLastSection(true);
+	m_horizontalHeader->m_commentSlave->updateGeometry();
+	m_horizontalHeader->m_commentSlave->setStretchLastSection(false);
 
-	// // Update the geometry for the Sparkline header
-	// m_sparklineHeader->setStretchLastSection(true);
-	// m_sparklineHeader->updateGeometry();
-	// m_sparklineHeader->setStretchLastSection(false);
 }
 
 /*!

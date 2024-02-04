@@ -72,13 +72,15 @@ public:
 	void showSparkLines(bool on = true);
 	bool areSparkLinesShown() const;
 
+public Q_SLOTS:
+	void refresh();
+
 private:
 	bool m_showComments;
 	bool m_showSparkLines;
 
 private Q_SLOTS:
 	void headerDataChanged(Qt::Orientation, int logicalFirst, int logicalLast);
-	void refresh();
 
 protected:
 	void paintSection(QPainter*, const QRect&, int logicalIndex) const override;
