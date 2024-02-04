@@ -241,59 +241,7 @@ private:
 	int m_last;
 };
 
-class SpreadsheetSetColumnsCountCmd : public QUndoCommand {
-public:
-	SpreadsheetSetColumnsCountCmd(Spreadsheet* spreadsheet, bool insert, int first, int count, QUndoCommand* parent)
-		: QUndoCommand(parent)
-		, m_spreadsheet(spreadsheet)
-		, m_insert(insert)
-		, m_first(first)
-		, m_last(first + count - 1) {
-		if (insert)
-			setText(i18np("%1: insert 1 column", "%1: insert %2 columns", spreadsheet->name(), count));
-		else
-			setText(i18np("%1: remove 1 column", "%1: remove %2 columns", spreadsheet->name(), count));
-	}
 
-	virtual void redo() override {
-		WAIT_CURSOR;
-		if (m_insert)
-			Q_EMIT m_spreadsheet->aspectsAboutToBeInserted(m_first, m_last);
-		else
-			Q_EMIT m_spreadsheet->aspectsAboutToBeRemoved(m_first, m_last);
-
-		QUndoCommand::redo();
-
-		if (m_insert)
-			Q_EMIT m_spreadsheet->aspectsInserted(m_first, m_last);
-		else
-			Q_EMIT m_spreadsheet->aspectsRemoved();
-		RESET_CURSOR;
-		m_spreadsheet->emitColumnCountChanged();
-	}
-
-	virtual void undo() override {
-		WAIT_CURSOR;
-		if (m_insert)
-			Q_EMIT m_spreadsheet->aspectsAboutToBeRemoved(m_first, m_last);
-		else
-			Q_EMIT m_spreadsheet->aspectsAboutToBeInserted(m_first, m_last);
-		QUndoCommand::undo();
-
-		if (m_insert)
-			Q_EMIT m_spreadsheet->aspectsRemoved();
-		else
-			Q_EMIT m_spreadsheet->aspectsInserted(m_first, m_last);
-		RESET_CURSOR;
-		m_spreadsheet->emitColumnCountChanged();
-	}
-
-private:
-	Spreadsheet* m_spreadsheet;
-	bool m_insert;
-	int m_first;
-	int m_last;
-};
 
 void Spreadsheet::removeRows(int first, int count, QUndoCommand* parent) {
 	if (count < 1 || first < 0 || first + count > rowCount())
@@ -533,6 +481,60 @@ int Spreadsheet::columnCount(AbstractColumn::PlotDesignation pd) const {
 			count++;
 	return count;
 }
+
+class SpreadsheetSetColumnsCountCmd : public QUndoCommand {
+public:
+	SpreadsheetSetColumnsCountCmd(Spreadsheet* spreadsheet, bool insert, int first, int count, QUndoCommand* parent)
+		: QUndoCommand(parent)
+		, m_spreadsheet(spreadsheet)
+		, m_insert(insert)
+		, m_first(first)
+		, m_last(first + count - 1) {
+		if (insert)
+			setText(i18np("%1: insert 1 column", "%1: insert %2 columns", spreadsheet->name(), count));
+		else
+			setText(i18np("%1: remove 1 column", "%1: remove %2 columns", spreadsheet->name(), count));
+	}
+
+	virtual void redo() override {
+		WAIT_CURSOR;
+		if (m_insert)
+			Q_EMIT m_spreadsheet->aspectsAboutToBeInserted(m_first, m_last);
+		else
+			Q_EMIT m_spreadsheet->aspectsAboutToBeRemoved(m_first, m_last);
+
+		QUndoCommand::redo();
+
+		if (m_insert)
+			Q_EMIT m_spreadsheet->aspectsInserted(m_first, m_last);
+		else
+			Q_EMIT m_spreadsheet->aspectsRemoved();
+		RESET_CURSOR;
+		m_spreadsheet->emitColumnCountChanged();
+	}
+
+	virtual void undo() override {
+		WAIT_CURSOR;
+		if (m_insert)
+			Q_EMIT m_spreadsheet->aspectsAboutToBeRemoved(m_first, m_last);
+		else
+			Q_EMIT m_spreadsheet->aspectsAboutToBeInserted(m_first, m_last);
+		QUndoCommand::undo();
+
+		if (m_insert)
+			Q_EMIT m_spreadsheet->aspectsRemoved();
+		else
+			Q_EMIT m_spreadsheet->aspectsInserted(m_first, m_last);
+		RESET_CURSOR;
+		m_spreadsheet->emitColumnCountChanged();
+	}
+
+private:
+	Spreadsheet* m_spreadsheet;
+	bool m_insert;
+	int m_first;
+	int m_last;
+};
 
 void Spreadsheet::removeColumns(int first, int count, QUndoCommand* parent) {
 	if (count < 1 || first < 0 || first + count > columnCount())

@@ -23,8 +23,8 @@
 #include <QThreadPool>
 
 /*!
-   \class SpreadsheetSparkLineHeaderModel
-   \brief Model class wrapping a SpreadsheetModel to display column SparkLine in a SpreadsheetSparkLineHeaderView
+ \class SpreadsheetSparkLineHeaderModel
+ \brief Model class wrapping a SpreadsheetModel to display column SparkLine in a SpreadsheetSparkLineHeaderView
 
 \ingroup commonfrontend
 */

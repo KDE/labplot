@@ -85,20 +85,22 @@ SpreadsheetSparkLinesHeaderModel* SpreadsheetSparkLineHeaderView::getModel() con
 }
 
 /*!
- \class SpreadsheetDoubleHeaderView
- \brief Horizontal header for SpreadsheetView displaying comments in a second header
+ \class SpreadsheetHeaderView
+ \brief Horizontal header for SpreadsheetView displaying sparkline in second header and comments in a third header
 
 This class is only to be used by SpreadsheetView.
-It allows for displaying two horizontal headers.
-A \c SpreadsheetDoubleHeaderView displays the column name, plot designation, and
+It allows for displaying 3 horizontal headers.
+A \c SpreadsheetHeaderView displays the column name, plot designation, and
 type icon in a normal QHeaderView and below that a second header
-which displays the column comments.
+which displays the column sparkline and third header showing column comments.
 
 \sa SpreadsheetCommentsHeaderView
+\sa SpreadsheetSparklineHeaderView
 \sa QHeaderView
 
 \ingroup commonfrontend
 */
+
 SpreadsheetHeaderView::SpreadsheetHeaderView(QWidget* parent)
 	: QHeaderView(Qt::Horizontal, parent) {
 	setDefaultAlignment(Qt::AlignLeft | Qt::AlignVCenter);
