@@ -2,9 +2,9 @@
     "id": "org.kde.labplot2",
     "branch": "master",
     "runtime": "org.kde.Platform",
-    "runtime-version": "5.15-22.08",
+    "runtime-version": "5.15-23.08",
     "base": "io.qt.qtwebengine.BaseApp",
-    "base-version": "5.15-22.08",
+    "base-version": "5.15-23.08",
     "sdk": "org.kde.Sdk",
     "command": "labplot2",
     "tags": ["nightly"],
@@ -12,8 +12,8 @@
     "finish-args": [
         "--share=network",
         "--share=ipc",
-        "--socket=x11",
         "--socket=wayland",
+        "--socket=fallback-x11",
         "--filesystem=host",
         "--filesystem=/tmp"
     ],
@@ -290,7 +290,7 @@
                 {
                     "type": "git",
                     "url": "https://github.com/Murmele/vector_blf.git",
-                    "tag": "b7a419c4d8edbf495ab309b57a380a2444ee2730"
+                    "tag": "2c1a8e649328f2e06ce4d45c6223628bc39fd178"
                 }
             ]
         },
