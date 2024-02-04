@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-03 01:38+0000\n"
+"POT-Creation-Date: 2024-02-04 01:35+0000\n"
 "PO-Revision-Date: 2024-01-21 14:07+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -207,7 +207,7 @@ msgstr "დღე"
 #: src/backend/nsl/nsl_smooth.c:22 src/kdefrontend/dockwidgets/AxisDock.cpp:275
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:288
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:55
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:218
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:220
 #: src/kdefrontend/GuiTools.cpp:156
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:128
 #: src/kdefrontend/widgets/LineWidget.cpp:48
@@ -1367,8 +1367,8 @@ msgstr "ქეშის კონფიგურაციის ვერსი�
 #: src/backend/datasources/filters/HDF5Filter.cpp:309
 #: src/backend/datasources/filters/MatioFilter.cpp:576
 #: src/backend/datasources/filters/MatioFilter.cpp:580
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:367
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:371
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:369
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:373
 #, kde-format
 msgid "No"
 msgstr "არა"
@@ -6088,13 +6088,13 @@ msgid "Simpson's 3/8 (4-point)"
 msgstr ""
 
 #: src/backend/nsl/nsl_interp.c:16
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:226
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:228
 #, kde-format
 msgid "Cubic Spline (Natural)"
 msgstr ""
 
 #: src/backend/nsl/nsl_interp.c:17
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:227
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:229
 #, kde-format
 msgid "Cubic Spline (Periodic)"
 msgstr ""
@@ -6914,7 +6914,7 @@ msgstr "ორიენტაცია"
 #. i18n: ectx: property (text), widget (QLabel, lLine)
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:301
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:134
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:219
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:221
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:488
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:628
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:687
@@ -12090,7 +12090,7 @@ msgstr "ნახევრად-შევსებული, დიდი"
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:47
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:59
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:67
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:363
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:365
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:132
 #: src/kdefrontend/widgets/LabelWidget.cpp:139
 #: src/kdefrontend/widgets/LabelWidget.cpp:156
@@ -12108,7 +12108,7 @@ msgstr "მარცხნივ"
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:49
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:61
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:69
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:364
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:366
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:133
 #: src/kdefrontend/widgets/LabelWidget.cpp:141
 #: src/kdefrontend/widgets/LabelWidget.cpp:158
@@ -12262,15 +12262,15 @@ msgstr ""
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1792
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:781
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:378
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:698
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:700
 #: src/kdefrontend/dockwidgets/KDEPlotDock.cpp:373
 #: src/kdefrontend/dockwidgets/LollipopPlotDock.cpp:461
 #: src/kdefrontend/dockwidgets/MatrixDock.cpp:266
 #: src/kdefrontend/dockwidgets/QQPlotDock.cpp:296
 #: src/kdefrontend/dockwidgets/ReferenceLineDock.cpp:229
-#: src/kdefrontend/dockwidgets/SpreadsheetDock.cpp:221
+#: src/kdefrontend/dockwidgets/SpreadsheetDock.cpp:215
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:606
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1253
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1259
 #, kde-format
 msgid "%1: template \"%2\" loaded"
 msgstr ""
@@ -12616,8 +12616,8 @@ msgstr ""
 #: src/kdefrontend/widgets/LabelWidget.cpp:144
 #: src/kdefrontend/widgets/LabelWidget.cpp:157
 #: src/kdefrontend/widgets/LabelWidget.cpp:161
-#: src/kdefrontend/widgets/ValueWidget.cpp:88
-#: src/kdefrontend/widgets/ValueWidget.cpp:89
+#: src/kdefrontend/widgets/ValueWidget.cpp:94
+#: src/kdefrontend/widgets/ValueWidget.cpp:95
 #, kde-format
 msgid "Center"
 msgstr "ცენტრი"
@@ -12828,8 +12828,8 @@ msgid "Custom Error Values, asymmetric"
 msgstr ""
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:487
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:916
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:971
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:920
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:975
 #, kde-format
 msgid "Data, +-:"
 msgstr "მონაცემები, +-:"
@@ -12838,8 +12838,8 @@ msgstr "მონაცემები, +-:"
 #. i18n: ectx: property (text), widget (QLabel, lYErrorDataPlus)
 #. i18n: ectx: property (text), widget (QLabel, lErrorDataPlus)
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:494
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:923
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:978
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:927
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:982
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:462
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:654
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:661
@@ -12847,7 +12847,7 @@ msgstr "მონაცემები, +-:"
 msgid "Data, +:"
 msgstr "მონაცემები, +:"
 
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:696
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:698
 #, kde-format
 msgid "%1 histograms: template \"%2\" loaded"
 msgstr ""
@@ -12869,7 +12869,7 @@ msgstr ""
 
 #: src/kdefrontend/dockwidgets/KDEPlotDock.cpp:371
 #: src/kdefrontend/dockwidgets/QQPlotDock.cpp:294
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1251
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1257
 #, kde-format
 msgid "%1 xy-curves: template \"%2\" loaded"
 msgstr ""
@@ -12958,7 +12958,7 @@ msgstr ""
 msgid "Spreadsheet to synchronize the number of rows with"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/SpreadsheetDock.cpp:219
+#: src/kdefrontend/dockwidgets/SpreadsheetDock.cpp:213
 #, kde-format
 msgid "%1 spreadsheets: template \"%2\" loaded"
 msgstr ""
@@ -13054,98 +13054,98 @@ msgstr "კორელაციის სტატუსი: %1"
 msgid "Y Uncertainty"
 msgstr "Y გაურკვევლობა"
 
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:220
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:222
 #, kde-format
 msgid "Horiz. Start"
 msgstr "ჰორიზ. დასაწყისი"
 
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:221
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:223
 #, kde-format
 msgid "Vert. Start"
 msgstr "ვერტ. დასაწყისი"
 
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:222
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:224
 #, kde-format
 msgid "Horiz. Midpoint"
 msgstr "ჰორიზ. შუაწერტილი"
 
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:223
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:225
 #, kde-format
 msgid "Vert. Midpoint"
 msgstr "ვერტ. შუაწერტილი"
 
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:224
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:226
 #, kde-format
 msgid "2-segments"
 msgstr "2-სეგმენტი"
 
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:225
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:227
 #, kde-format
 msgid "3-segments"
 msgstr "3-სეგმენტი"
 
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:228
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:230
 #, kde-format
 msgid "Akima-spline (Natural)"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:229
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:231
 #, kde-format
 msgid "Akima-spline (Periodic)"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:354
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:356
 #: src/kdefrontend/widgets/ValueWidget.cpp:31
 #, kde-format
 msgid "No Values"
 msgstr "მნიშვნელობის გარეშე"
 
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:359
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:361
 #: src/kdefrontend/widgets/ValueWidget.cpp:33
 #, kde-format
 msgid "Custom Column"
 msgstr "მორგებული სვეტი"
 
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:361
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:363
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:129
 #: src/kdefrontend/widgets/ValueWidget.cpp:35
 #, kde-format
 msgid "Above"
 msgstr "ზემოდან"
 
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:362
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:364
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:130
 #: src/kdefrontend/widgets/ValueWidget.cpp:36
 #, kde-format
 msgid "Below"
 msgstr "ქვემოდან"
 
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:368
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:372
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:370
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:374
 #: src/kdefrontend/widgets/DatapickerCurveWidget.cpp:30
 #: src/kdefrontend/widgets/DatapickerCurveWidget.cpp:34
 #, kde-format
 msgid "Symmetric"
 msgstr "სიმეტრიული"
 
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:369
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:373
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:371
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:375
 #: src/kdefrontend/widgets/DatapickerCurveWidget.cpp:31
 #: src/kdefrontend/widgets/DatapickerCurveWidget.cpp:35
 #, kde-format
 msgid "Asymmetric"
 msgstr "ასიმეტრიული"
 
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:589
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:590
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:593
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:594
 #, kde-format
 msgid ""
 "If checked, connect neighbour points with lines even if there are gaps "
 "(invalid or masked values) between them"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:591
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:592
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:595
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:596
 #, kde-format
 msgid ""
 "If checked, connect data points only for strictly increasing values of X"
