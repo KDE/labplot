@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-03 01:38+0000\n"
+"POT-Creation-Date: 2024-02-04 01:35+0000\n"
 "PO-Revision-Date: 2024-01-27 10:32+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
@@ -206,7 +206,7 @@ msgstr "Días"
 #: src/backend/nsl/nsl_smooth.c:22 src/kdefrontend/dockwidgets/AxisDock.cpp:275
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:288
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:55
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:218
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:220
 #: src/kdefrontend/GuiTools.cpp:156
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:128
 #: src/kdefrontend/widgets/LineWidget.cpp:48
@@ -1378,8 +1378,8 @@ msgstr "Versión de configuración da caché: %1"
 #: src/backend/datasources/filters/HDF5Filter.cpp:309
 #: src/backend/datasources/filters/MatioFilter.cpp:576
 #: src/backend/datasources/filters/MatioFilter.cpp:580
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:367
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:371
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:369
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:373
 #, kde-format
 msgid "No"
 msgstr "Non"
@@ -6150,13 +6150,13 @@ msgid "Simpson's 3/8 (4-point)"
 msgstr "3/8 de Simpson (4 puntos)"
 
 #: src/backend/nsl/nsl_interp.c:16
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:226
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:228
 #, kde-format
 msgid "Cubic Spline (Natural)"
 msgstr "Eixe nervado cúbico (natural)"
 
 #: src/backend/nsl/nsl_interp.c:17
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:227
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:229
 #, kde-format
 msgid "Cubic Spline (Periodic)"
 msgstr "Eixe nervado cúbico (periódico)"
@@ -6976,7 +6976,7 @@ msgstr "Orientación"
 #. i18n: ectx: property (text), widget (QLabel, lLine)
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:301
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:134
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:219
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:221
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:488
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:628
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:687
@@ -12335,7 +12335,7 @@ msgstr "Medio cheo, grande"
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:47
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:59
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:67
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:363
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:365
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:132
 #: src/kdefrontend/widgets/LabelWidget.cpp:139
 #: src/kdefrontend/widgets/LabelWidget.cpp:156
@@ -12353,7 +12353,7 @@ msgstr "Esquerda"
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:49
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:61
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:69
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:364
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:366
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:133
 #: src/kdefrontend/widgets/LabelWidget.cpp:141
 #: src/kdefrontend/widgets/LabelWidget.cpp:158
@@ -12507,15 +12507,15 @@ msgstr "%1 eixos: cargouse o modelo «%2»"
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1792
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:781
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:378
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:698
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:700
 #: src/kdefrontend/dockwidgets/KDEPlotDock.cpp:373
 #: src/kdefrontend/dockwidgets/LollipopPlotDock.cpp:461
 #: src/kdefrontend/dockwidgets/MatrixDock.cpp:266
 #: src/kdefrontend/dockwidgets/QQPlotDock.cpp:296
 #: src/kdefrontend/dockwidgets/ReferenceLineDock.cpp:229
-#: src/kdefrontend/dockwidgets/SpreadsheetDock.cpp:221
+#: src/kdefrontend/dockwidgets/SpreadsheetDock.cpp:215
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:606
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1253
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1259
 #, kde-format
 msgid "%1: template \"%2\" loaded"
 msgstr "%1: cargouse o modelo «%2»"
@@ -12875,8 +12875,8 @@ msgstr "Por filas"
 #: src/kdefrontend/widgets/LabelWidget.cpp:144
 #: src/kdefrontend/widgets/LabelWidget.cpp:157
 #: src/kdefrontend/widgets/LabelWidget.cpp:161
-#: src/kdefrontend/widgets/ValueWidget.cpp:88
-#: src/kdefrontend/widgets/ValueWidget.cpp:89
+#: src/kdefrontend/widgets/ValueWidget.cpp:94
+#: src/kdefrontend/widgets/ValueWidget.cpp:95
 #, kde-format
 msgid "Center"
 msgstr "Centro"
@@ -13086,8 +13086,8 @@ msgid "Custom Error Values, asymmetric"
 msgstr "Valores de erro personalizados, asimétricos"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:487
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:916
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:971
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:920
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:975
 #, kde-format
 msgid "Data, +-:"
 msgstr "Datos, +-:"
@@ -13096,8 +13096,8 @@ msgstr "Datos, +-:"
 #. i18n: ectx: property (text), widget (QLabel, lYErrorDataPlus)
 #. i18n: ectx: property (text), widget (QLabel, lErrorDataPlus)
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:494
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:923
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:978
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:927
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:982
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:462
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:654
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:661
@@ -13105,7 +13105,7 @@ msgstr "Datos, +-:"
 msgid "Data, +:"
 msgstr "Datos, +:"
 
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:696
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:698
 #, kde-format
 msgid "%1 histograms: template \"%2\" loaded"
 msgstr "%1 histogramas: cargouse o modelo «%2»"
@@ -13127,7 +13127,7 @@ msgstr "Silverman"
 
 #: src/kdefrontend/dockwidgets/KDEPlotDock.cpp:371
 #: src/kdefrontend/dockwidgets/QQPlotDock.cpp:294
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1251
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1257
 #, kde-format
 msgid "%1 xy-curves: template \"%2\" loaded"
 msgstr "%1 curvas xy: cargouse o modelo «%2»"
@@ -13222,7 +13222,7 @@ msgstr ""
 msgid "Spreadsheet to synchronize the number of rows with"
 msgstr "Folla de cálculo coa que sincronizar o número de filas"
 
-#: src/kdefrontend/dockwidgets/SpreadsheetDock.cpp:219
+#: src/kdefrontend/dockwidgets/SpreadsheetDock.cpp:213
 #, kde-format
 msgid "%1 spreadsheets: template \"%2\" loaded"
 msgstr "%1 follas de cálculo: cargouse o modelo «%2»"
@@ -13320,90 +13320,90 @@ msgstr "Estado da correlación: %1"
 msgid "Y Uncertainty"
 msgstr "Incerteza de Y"
 
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:220
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:222
 #, kde-format
 msgid "Horiz. Start"
 msgstr "Inicio horiz."
 
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:221
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:223
 #, kde-format
 msgid "Vert. Start"
 msgstr "Inicio vert."
 
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:222
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:224
 #, kde-format
 msgid "Horiz. Midpoint"
 msgstr "Punto medio horiz."
 
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:223
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:225
 #, kde-format
 msgid "Vert. Midpoint"
 msgstr "Punto medio vert."
 
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:224
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:226
 #, kde-format
 msgid "2-segments"
 msgstr "2 segmentos"
 
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:225
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:227
 #, kde-format
 msgid "3-segments"
 msgstr "3 segmentos"
 
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:228
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:230
 #, kde-format
 msgid "Akima-spline (Natural)"
 msgstr "Eixe nervado de Alima (natural)"
 
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:229
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:231
 #, kde-format
 msgid "Akima-spline (Periodic)"
 msgstr "Eixe nervado de Akima (periódico)"
 
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:354
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:356
 #: src/kdefrontend/widgets/ValueWidget.cpp:31
 #, kde-format
 msgid "No Values"
 msgstr "Sen valores"
 
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:359
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:361
 #: src/kdefrontend/widgets/ValueWidget.cpp:33
 #, kde-format
 msgid "Custom Column"
 msgstr "Columna personalizada"
 
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:361
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:363
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:129
 #: src/kdefrontend/widgets/ValueWidget.cpp:35
 #, kde-format
 msgid "Above"
 msgstr "Por riba"
 
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:362
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:364
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:130
 #: src/kdefrontend/widgets/ValueWidget.cpp:36
 #, kde-format
 msgid "Below"
 msgstr "Por baixo"
 
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:368
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:372
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:370
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:374
 #: src/kdefrontend/widgets/DatapickerCurveWidget.cpp:30
 #: src/kdefrontend/widgets/DatapickerCurveWidget.cpp:34
 #, kde-format
 msgid "Symmetric"
 msgstr "Simétrica"
 
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:369
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:373
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:371
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:375
 #: src/kdefrontend/widgets/DatapickerCurveWidget.cpp:31
 #: src/kdefrontend/widgets/DatapickerCurveWidget.cpp:35
 #, kde-format
 msgid "Asymmetric"
 msgstr "Asimétrica"
 
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:589
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:590
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:593
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:594
 #, kde-format
 msgid ""
 "If checked, connect neighbour points with lines even if there are gaps "
@@ -13412,8 +13412,8 @@ msgstr ""
 "Marque esta opción para conectar os puntos lindeiros con liñas aínda que "
 "queden ocos (valores incorrectos ou enmascarados) entre eles"
 
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:591
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:592
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:595
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:596
 #, kde-format
 msgid ""
 "If checked, connect data points only for strictly increasing values of X"
