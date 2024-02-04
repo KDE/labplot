@@ -2307,7 +2307,6 @@ void WorksheetView::exportToPixmap(QPixmap& pixmap) {
 	painter.setRenderHint(QPainter::Antialiasing);
 	exportPaint(&painter, targetRect, sourceRect, true /* export background */, true /* export selection */);
 	painter.end();
-
 }
 
 bool WorksheetView::eventFilter(QObject* /*watched*/, QEvent* event) {

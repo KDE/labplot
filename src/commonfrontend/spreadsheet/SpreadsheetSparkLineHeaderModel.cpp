@@ -10,12 +10,10 @@
 #include "backend/core/column/Column.h"
 #include "backend/lib/trace.h"
 #include "commonfrontend/spreadsheet/SparklineRunnable.h"
-
 #include <QFutureWatcher>
 #include <QIcon>
 #include <QThreadPool>
 #include <QtConcurrent/QtConcurrentRun>
-
 
 /*!
  \class SpreadsheetSparkLineHeaderModel

@@ -241,8 +241,6 @@ private:
 	int m_last;
 };
 
-
-
 void Spreadsheet::removeRows(int first, int count, QUndoCommand* parent) {
 	if (count < 1 || first < 0 || first + count > rowCount())
 		return;

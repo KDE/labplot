@@ -3569,7 +3569,6 @@ void SpreadsheetView::updateHeaderGeometry(Qt::Orientation o, int first, int las
 	m_horizontalHeader->m_commentSlave->setStretchLastSection(true);
 	m_horizontalHeader->m_commentSlave->updateGeometry();
 	m_horizontalHeader->m_commentSlave->setStretchLastSection(false);
-
 }
 
 /*!
