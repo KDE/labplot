@@ -137,16 +137,6 @@
             ]
         },
         {
-            "name": "cfitsio",
-            "sources": [
-                {
-                    "type": "archive",
-                    "url": "https://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/cfitsio-4.3.1.tar.gz",
-                    "sha256": "47a7c8ee05687be1e1d8eeeb94fb88f060fbf3cd8a4df52ccb88d5eb0f5062be"
-                }
-            ]
-        },
-        {
             "name": "libcerf",
 	    "buildsystem": "cmake-ninja",
 	    "builddir": true,
