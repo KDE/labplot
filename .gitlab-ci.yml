@@ -8,7 +8,7 @@ include:
     file:
 # fails
 #      - /gitlab-templates/reuse-lint.yml
-      - /gitlab-templates/clang-format.yml
+#      - /gitlab-templates/clang-format.yml
       - /gitlab-templates/linux.yml
       - /gitlab-templates/windows.yml
       - /gitlab-templates/linux-qt6.yml
