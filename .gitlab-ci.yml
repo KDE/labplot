@@ -201,6 +201,7 @@ clang_format:
   stage: test
   image: debian:bookworm
   before_script:
+    - apt-get update
     - apt-get install --yes --no-install-recommends git clang-format-13
   script: |
     ./cl-fmt.sh
