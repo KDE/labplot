@@ -199,10 +199,11 @@ craft_windows_qt515_x86_64:
 
 clang_format:
   stage: test
-  image: debian:stable
+  image: debian:bookworm
   before_script:
     - apt-get update
-    - apt-get install --yes --no-install-recommends git clang-format-13
+    - apt-get install --yes --no-install-recommends wget ca-certificates git clang-format-13
+    - update-ca-certificates
   script: |
     ./cl-fmt.sh
     git diff --exit-code
