@@ -182,7 +182,9 @@ XYCurveDock::XYCurveDock(QWidget* parent)
 	init();
 }
 
-XYCurveDock::~XYCurveDock() = default;
+XYCurveDock::~XYCurveDock() {
+	delete m_valuesModel;
+}
 
 void XYCurveDock::setupGeneral() {
 	auto* generalTab = new QWidget(ui.tabGeneral);
@@ -364,13 +366,13 @@ void XYCurveDock::init() {
 	ui.cbValuesPosition->addItem(i18n("Right"));
 
 	// Error Bars
-	ui.cbXErrorType->addItem(i18n("No"));
-	ui.cbXErrorType->addItem(i18n("Symmetric"));
-	ui.cbXErrorType->addItem(i18n("Asymmetric"));
+	ui.cbXErrorType->addItem(i18n("No"), static_cast<int>(ErrorBar::Type::NoError));
+	ui.cbXErrorType->addItem(i18n("Symmetric"), static_cast<int>(ErrorBar::Type::Symmetric));
+	ui.cbXErrorType->addItem(i18n("Asymmetric"), static_cast<int>(ErrorBar::Type::Asymmetric));
 
-	ui.cbYErrorType->addItem(i18n("No"));
-	ui.cbYErrorType->addItem(i18n("Symmetric"));
-	ui.cbYErrorType->addItem(i18n("Asymmetric"));
+	ui.cbYErrorType->addItem(i18n("No"), static_cast<int>(ErrorBar::Type::NoError));
+	ui.cbYErrorType->addItem(i18n("Symmetric"), static_cast<int>(ErrorBar::Type::Symmetric));
+	ui.cbYErrorType->addItem(i18n("Asymmetric"), static_cast<int>(ErrorBar::Type::Asymmetric));
 }
 
 QList<AspectType> XYCurveDock::defaultColumnTopLevelClasses() {
@@ -435,9 +437,11 @@ void XYCurveDock::setModel() {
 
 	// for value labels we need a dedicated model since we also want to allow
 	// to select text columns and we don't want to call enablePlottableColumnsOnly().
-	auto* valuesTreeModel = new AspectTreeModel(m_curve->project());
-	valuesTreeModel->setSelectableAspects(list);
-	cbValuesColumn->setModel(valuesTreeModel);
+	if (!m_valuesModel) {
+		m_valuesModel = new AspectTreeModel(m_curve->project());
+		m_valuesModel->setSelectableAspects(list);
+	}
+	cbValuesColumn->setModel(m_valuesModel);
 
 	// this function is called after the dock widget is initialized and the curves are set.
 	// so, we use this function to finalize the initialization even though it's not related
@@ -1232,7 +1236,9 @@ void XYCurveDock::load() {
 
 	// Error bars
 	if (xyCurve) {
-		ui.cbXErrorType->setCurrentIndex((int)m_curve->xErrorBar()->type());
+		int index = ui.cbXErrorType->findData(static_cast<int>(m_curve->xErrorBar()->type()));
+		ui.cbXErrorType->setCurrentIndex(index);
+		index = ui.cbYErrorType->findData(static_cast<int>(m_curve->yErrorBar()->type()));
 		ui.cbYErrorType->setCurrentIndex((int)m_curve->yErrorBar()->type());
 	}
 

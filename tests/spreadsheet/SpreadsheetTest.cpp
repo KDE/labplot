@@ -2645,7 +2645,7 @@ void SpreadsheetTest::testLinkSpreadsheetsUndoRedo() {
 	QCOMPARE(sheetCalculations->rowCount(), 2);
 	QCOMPARE(modelSheetCalculations->rowCount(), 2);
 
-	const auto index = dock.m_aspectTreeModel->modelIndexOfAspect(sheetData);
+	const auto index = dock.aspectModel()->modelIndexOfAspect(sheetData);
 	QCOMPARE(index.isValid(), true);
 	// dock.ui.cbLinkedSpreadsheet->setCurrentModelIndex(index); // Does not trigger the slot
 	sheetCalculations->setLinkedSpreadsheet(sheetData);

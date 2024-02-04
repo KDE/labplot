@@ -71,6 +71,9 @@ QWidget* Datapicker::view() const {
 	if (!m_partView) {
 		m_view = new DatapickerView(const_cast<Datapicker*>(this));
 		m_partView = m_view;
+		connect(this, &Datapicker::viewAboutToBeDeleted, [this]() {
+			m_view = nullptr;
+		});
 	}
 	return m_partView;
 }

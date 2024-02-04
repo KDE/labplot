@@ -93,7 +93,7 @@ public:
 
 		QString text;
 		TextLabel::Mode mode{TextLabel::Mode::Text};
-		/*! Determines if the Textlabe can have a placeholder or not.
+		/*! Determines if the Textlabel can have a placeholder or not.
 		 * Depending on this variable in the LabelWidget between
 		 * the text and the placeholder text can be switched
 		 */

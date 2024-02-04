@@ -45,6 +45,9 @@ QWidget* Workbook::view() const {
 	if (!m_partView) {
 		m_view = new WorkbookView(const_cast<Workbook*>(this));
 		m_partView = m_view;
+		connect(this, &Workbook::viewAboutToBeDeleted, [this]() {
+			m_view = nullptr;
+		});
 	}
 	return m_partView;
 }

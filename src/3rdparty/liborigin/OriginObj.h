@@ -468,6 +468,7 @@ struct TextBox
     int tab;
     BorderType borderType;
     Attach attach;
+    bool shown;
 
     TextBox(const std::string &_text = std::string())
         : text(_text),
@@ -476,10 +477,11 @@ struct TextBox
           rotation(0),
           tab(8),
           borderType(BlackLine),
-          attach(Frame){};
+          attach(Frame),
+          shown(true){};
 
     TextBox(const std::string &_text, Rect _clientRect, Color _color, unsigned short _fontSize,
-            int _rotation, int _tab, BorderType _borderType, Attach _attach)
+            int _rotation, int _tab, BorderType _borderType, Attach _attach, bool _shown = true)
         : text(_text),
           clientRect(_clientRect),
           color(_color),
@@ -487,7 +489,8 @@ struct TextBox
           rotation(_rotation),
           tab(_tab),
           borderType(_borderType),
-          attach(_attach){};
+          attach(_attach),
+          shown(_shown){};
 };
 
 struct PieProperties

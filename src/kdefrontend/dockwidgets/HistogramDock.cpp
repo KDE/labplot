@@ -43,14 +43,14 @@
   \ingroup kdefrontend
 */
 HistogramDock::HistogramDock(QWidget* parent)
-	: BaseDock(parent)
-	, cbDataColumn(new TreeViewComboBox) {
+	: BaseDock(parent) {
 	ui.setupUi(this);
 	setPlotRangeCombobox(ui.cbPlotRanges);
 	setBaseWidgets(ui.leName, ui.teComment);
 	setVisibilityWidgets(ui.chkVisible, ui.chkLegendVisible);
 
 	// Tab "General"
+	cbDataColumn = new TreeViewComboBox(ui.tabGeneral);
 	auto* gridLayout = qobject_cast<QGridLayout*>(ui.tabGeneral->layout());
 	gridLayout->addWidget(cbDataColumn, 3, 2, 1, 1);
 
@@ -656,7 +656,8 @@ void HistogramDock::load() {
 	// This data is read in HistogramDock::setCurves().
 
 	// Error bars
-	ui.cbErrorType->setCurrentIndex((int)m_curve->errorBar()->type());
+	const int index = ui.cbErrorType->findData(static_cast<int>(m_curve->errorBar()->type()));
+	ui.cbErrorType->setCurrentIndex(index);
 
 	// Margin plots
 	ui.chkRugEnabled->setChecked(m_curve->rugEnabled());
@@ -679,7 +680,8 @@ void HistogramDock::loadConfig(KConfig& config) {
 	backgroundWidget->loadConfig(group);
 
 	// Error bars
-	ui.cbErrorType->setCurrentIndex(group.readEntry(QStringLiteral("ErrorType"), (int)m_curve->errorBar()->type()));
+	const int index = ui.cbErrorType->findData(static_cast<int>(m_curve->errorBar()->type()));
+	ui.cbErrorType->setCurrentIndex(group.readEntry(QStringLiteral("ErrorType"), index));
 	errorBarStyleWidget->loadConfig(group);
 
 	// Margin plots

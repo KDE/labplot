@@ -105,6 +105,9 @@ QWidget* Matrix::view() const {
 		m_view = new MatrixView(const_cast<Matrix*>(this));
 		m_partView = m_view;
 		m_model = m_view->model();
+		connect(this, &Matrix::viewAboutToBeDeleted, [this]() {
+			m_view = nullptr;
+		});
 	}
 	return m_partView;
 }

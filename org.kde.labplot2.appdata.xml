@@ -3,6 +3,14 @@
   <id>org.kde.labplot2.desktop</id>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-2.0+</project_license>
+  <developer_name>The KDE community</developer_name>
+  <developer_name xml:lang="ca">La comunitat KDE</developer_name>
+  <developer_name xml:lang="eo">La komunumo de KDE</developer_name>
+  <developer_name xml:lang="nl">De KDE gemeenschap</developer_name>
+  <developer_name xml:lang="sl">Skupnost KDE</developer_name>
+  <developer_name xml:lang="tr">KDE topluluğu</developer_name>
+  <developer_name xml:lang="uk">Спільнота KDE</developer_name>
+  <developer_name xml:lang="x-test">xxThe KDE communityxx</developer_name>
   <name>LabPlot</name>
   <name xml:lang="ar">معمل الرسم</name>
   <name xml:lang="bs">LabPlot</name>
@@ -41,7 +49,7 @@
   <summary>Interactive Data Visualization and Analysis</summary>
   <summary xml:lang="ar">تصور وتحليل البيانات التفاعلي</summary>
   <summary xml:lang="ca">Visualització i anàlisi interactiva de dades</summary>
-  <summary xml:lang="ca-valencia">Visualització i anàlisi de dades interactius</summary>
+  <summary xml:lang="ca-valencia">Visualització i anàlisi interactiva de dades</summary>
   <summary xml:lang="de">Interaktive Datenvisualisierung und -analyse</summary>
   <summary xml:lang="en-GB">Interactive Data Visualisation and Analysis</summary>
   <summary xml:lang="eo">Interaga Datuma Bildigo kaj Analizo</summary>
