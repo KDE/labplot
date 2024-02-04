@@ -14,7 +14,7 @@
 #include <QFutureWatcher>
 #include <QIcon>
 #include <QThreadPool>
-#include <QtConcurrent>
+#include <QtConcurrent/QtConcurrentRun>
 
 
 /*!
