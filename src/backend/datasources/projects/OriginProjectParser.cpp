@@ -2734,8 +2734,10 @@ QList<QPair<QString, QString>> OriginProjectParser::charReplacementList() const 
 
 QString OriginProjectParser::replaceSpecialChars(const QString& text) const {
 	QString t = text;
+	DEBUG(Q_FUNC_INFO << ", got " << t.toStdString())
 	for (const auto& r : charReplacementList())
 		t.replace(r.first, r.second);
+	DEBUG(Q_FUNC_INFO << ", now " << t.toStdString())
 	return t;
 }
 
