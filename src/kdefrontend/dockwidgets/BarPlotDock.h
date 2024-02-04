@@ -68,7 +68,7 @@ private Q_SLOTS:
 	void orientationChanged(int);
 
 	//"Bars"-tab
-	void currentBarNumberChanged(int);
+	void barNumberChanged(int);
 	void widthFactorChanged(int);
 
 	//"Error Bars"-tab

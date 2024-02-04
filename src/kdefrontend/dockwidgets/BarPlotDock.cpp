@@ -25,16 +25,15 @@
 #include <KLocalizedString>
 
 BarPlotDock::BarPlotDock(QWidget* parent)
-	: BaseDock(parent)
-	, cbXColumn(new TreeViewComboBox) {
+	: BaseDock(parent) {
 	ui.setupUi(this);
 	setPlotRangeCombobox(ui.cbPlotRanges);
 	setBaseWidgets(ui.leName, ui.teComment);
 	setVisibilityWidgets(ui.chkVisible, ui.chkLegendVisible);
 
 	// Tab "General"
-
 	// x-data
+	cbXColumn = new TreeViewComboBox(ui.tabGeneral);
 	QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 	cbXColumn->setSizePolicy(sizePolicy);
 	static_cast<QVBoxLayout*>(ui.frameXColumn->layout())->insertWidget(0, cbXColumn);
@@ -61,6 +60,8 @@ BarPlotDock::BarPlotDock(QWidget* parent)
 	QString msg = i18n("Select the data column for which the properties should be shown and edited");
 	ui.lNumber->setToolTip(msg);
 	ui.cbNumber->setToolTip(msg);
+	ui.lErrorBarsNumber->setToolTip(msg);
+	ui.cbErrorBarsNumber->setToolTip(msg);
 
 	msg = i18n("Specify the factor in percent to control the width of the bar relative to its default value, applying to all bars");
 	ui.lWidthFactor->setToolTip(msg);
@@ -94,6 +95,10 @@ BarPlotDock::BarPlotDock(QWidget* parent)
 		ui.lErrorBar->setText(i18n("X Uncertainty"));
 	}
 
+	ui.cbErrorType->addItem(i18n("No"), static_cast<int>(ErrorBar::Type::NoError));
+	ui.cbErrorType->addItem(i18n("Symmetric"), static_cast<int>(ErrorBar::Type::Symmetric));
+	ui.cbErrorType->addItem(i18n("Asymmetric"), static_cast<int>(ErrorBar::Type::Asymmetric));
+
 	gridLayout = qobject_cast<QGridLayout*>(ui.tabErrorBars->layout());
 
 	cbErrorPlusColumn = new TreeViewComboBox(ui.tabErrorBars);
@@ -125,7 +130,7 @@ BarPlotDock::BarPlotDock(QWidget* parent)
 	connect(ui.cbOrientation, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BarPlotDock::orientationChanged);
 
 	// Tab "Bars"
-	connect(ui.cbNumber, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BarPlotDock::currentBarNumberChanged);
+	connect(ui.cbNumber, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BarPlotDock::barNumberChanged);
 	connect(ui.sbWidthFactor, QOverload<int>::of(&QSpinBox::valueChanged), this, &BarPlotDock::widthFactorChanged);
 
 	// Tab "Error Bars"
@@ -157,27 +162,41 @@ void BarPlotDock::setBarPlots(QList<BarPlot*> list) {
 	Q_ASSERT(m_barPlot);
 	setModel();
 
-	// backgrounds
+	// initialize widgets for common properties
 	QList<Background*> backgrounds;
 	QList<Line*> lines;
 	QList<Value*> values;
+	QList<ErrorBarStyle*> errorBarStyles;
 	for (auto* plot : m_barPlots) {
 		backgrounds << plot->backgroundAt(0);
 		lines << plot->lineAt(0);
 		values << plot->value();
+		errorBarStyles << plot->errorBarStyleAt(0);
 	}
 
 	backgroundWidget->setBackgrounds(backgrounds);
 	lineWidget->setLines(lines);
 	valueWidget->setValues(values);
+	errorBarStyleWidget->setErrorBarStyles(errorBarStyles);
 
-	// show the properties of the first box plot
+	// show the properties of the first plot
 	ui.chkLegendVisible->setChecked(m_barPlot->legendVisible());
 	ui.chkVisible->setChecked(m_barPlot->isVisible());
-	load();
 	cbXColumn->setColumn(m_barPlot->xColumn(), m_barPlot->xColumnPath());
 	loadDataColumns();
 
+	// if there are more than one plot in the list, disable the columns for error bars
+	if (m_barPlots.size() == 1) {
+		auto* errorBar = m_barPlot->errorBarAt(0);
+		cbErrorPlusColumn->setColumn(errorBar->plusColumn(), errorBar->plusColumnPath());
+		cbErrorMinusColumn->setColumn(errorBar->minusColumn(), errorBar->minusColumnPath());
+	} else {
+		cbErrorPlusColumn->setCurrentModelIndex(QModelIndex());
+		cbErrorMinusColumn->setCurrentModelIndex(QModelIndex());
+	}
+
+	// load the remaining properties
+	load();
 	updatePlotRangeList();
 
 	// set the current locale
@@ -215,6 +234,9 @@ void BarPlotDock::setModel() {
 
 	cbXColumn->setTopLevelClasses(list);
 	cbXColumn->setModel(model);
+
+	cbErrorPlusColumn->setModel(model);
+	cbErrorMinusColumn->setModel(model);
 	cbErrorPlusColumn->setTopLevelClasses(list);
 	cbErrorMinusColumn->setTopLevelClasses(list);
 }
@@ -233,6 +255,7 @@ void BarPlotDock::loadDataColumns() {
 
 	int count = m_barPlot->dataColumns().count();
 	ui.cbNumber->clear();
+	ui.cbErrorBarsNumber->clear();
 
 	if (count != 0) {
 		// box plot has already data columns, make sure we have the proper number of comboboxes
@@ -254,8 +277,11 @@ void BarPlotDock::loadDataColumns() {
 
 		// show columns names in the combobox for the selection of the bar to be modified
 		for (int i = 0; i < count; ++i)
-			if (m_barPlot->dataColumns().at(i))
-				ui.cbNumber->addItem(m_barPlot->dataColumns().at(i)->name());
+			if (m_barPlot->dataColumns().at(i)) {
+				const auto& name = m_barPlot->dataColumns().at(i)->name();
+				ui.cbNumber->addItem(name);
+				ui.cbErrorBarsNumber->addItem(name);
+			}
 	} else {
 		// no data columns set in the box plot yet, we show the first combo box only
 		m_dataComboBoxes.first()->setAspect(nullptr);
@@ -273,17 +299,21 @@ void BarPlotDock::loadDataColumns() {
 
 	// select the first column after all of them were added to the combobox
 	ui.cbNumber->setCurrentIndex(0);
+	ui.cbErrorBarsNumber->setCurrentIndex(0);
 }
 
 void BarPlotDock::setDataColumns() const {
 	int newCount = m_dataComboBoxes.count();
 	int oldCount = m_barPlot->dataColumns().count();
 
-	if (newCount > oldCount)
+	if (newCount > oldCount) {
 		ui.cbNumber->addItem(QString::number(newCount));
-	else {
-		if (newCount != 0)
+		ui.cbErrorBarsNumber->addItem(QString::number(newCount));
+	} else {
+		if (newCount != 0) {
 			ui.cbNumber->removeItem(ui.cbNumber->count() - 1);
+			ui.cbErrorBarsNumber->removeItem(ui.cbErrorBarsNumber->count() - 1);
+		}
 	}
 
 	QVector<const AbstractColumn*> columns;
@@ -424,7 +454,7 @@ void BarPlotDock::orientationChanged(int index) {
 /*!
  * called when the current bar number was changed, shows the bar properties for the selected bar.
  */
-void BarPlotDock::currentBarNumberChanged(int index) {
+void BarPlotDock::barNumberChanged(int index) {
 	if (index == -1)
 		return;
 

@@ -530,11 +530,14 @@ void BarPlotPrivate::recalc() {
 			// box filling and border line
 			auto* background = addBackground(group);
 			auto* line = addBorderLine(group);
+			addErrorBar(group);
+			auto* errorBarStyle = addErrorBarStyle(group);
 
 			if (plot) {
 				const auto& themeColor = plot->themeColorPalette(backgrounds.count() - 1);
 				background->setFirstColor(themeColor);
 				line->setColor(themeColor);
+				errorBarStyle->line()->setColor(themeColor);
 			}
 		}
 	} else if (diff < 0) {
@@ -1175,7 +1178,6 @@ void BarPlotPrivate::updateValues() {
 }
 
 void BarPlotPrivate::updateErrorBars() {
-
 }
 
 /*!
