@@ -201,10 +201,7 @@ clang_format:
   stage: test
   image: debian:bookworm
   before_script:
-    - apt-get install --yes debian-keyring
-    - apt-get update
-    - apt-get install --yes --no-install-recommends wget ca-certificates git clang-format-13
-    - update-ca-certificates
+    - apt-get install --yes --no-install-recommends git clang-format-13
   script: |
     ./cl-fmt.sh
     git diff --exit-code
