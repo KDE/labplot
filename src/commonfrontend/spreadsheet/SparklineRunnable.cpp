@@ -7,13 +7,12 @@
 */
 #include "SparklineRunnable.h"
 
-#include <backend/worksheet/Worksheet.h>
+#include "backend/worksheet/Worksheet.h"
 
-#include <backend/worksheet/plots/cartesian/BarPlot.h>
-#include <backend/worksheet/plots/cartesian/XYCurve.h>
+#include "backend/worksheet/plots/cartesian/BarPlot.h"
+#include "backend/worksheet/plots/cartesian/XYCurve.h"
 
 void SparkLineRunnable::run() {
-	DEBUG(Q_FUNC_INFO)
 	if (col->columnMode() != Column::ColumnMode::Text && !col->isNumeric()) {
 		QPixmap mPixmap = QPixmap(1, 1);
 		mPixmap.fill(QColor(49, 54, 59));
@@ -117,7 +116,7 @@ void SparkLineRunnable::run() {
 		delete worksheet;
 		resultPixmap = pixmap;
 	}
-	emit taskFinished(resultPixmap);
+	Q_EMIT taskFinished(resultPixmap);
 }
 
 QPixmap SparkLineRunnable::getResultPixmap() {

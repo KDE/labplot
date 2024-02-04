@@ -10,17 +10,12 @@
 #include "backend/core/column/Column.h"
 #include "backend/lib/trace.h"
 #include "commonfrontend/spreadsheet/SparklineRunnable.h"
-#include "qscreen.h"
-#include "qtconcurrentrun.h"
-
-#include <backend/worksheet/Worksheet.h>
-
-#include <backend/worksheet/plots/cartesian/BarPlot.h>
-#include <backend/worksheet/plots/cartesian/XYCurve.h>
 
 #include <QFutureWatcher>
 #include <QIcon>
 #include <QThreadPool>
+#include <QtConcurrent>
+
 
 /*!
  \class SpreadsheetSparkLineHeaderModel
@@ -74,7 +69,7 @@ QPixmap SpreadsheetSparkLinesHeaderModel::showSparkLines(Column* col) {
 		QPixmap resultPixmap = runnable->getResultPixmap();
 		// Check if the result is valid
 		if (!resultPixmap.isNull()) {
-			watcher.setFuture(QtConcurrent::run([=]() {
+			watcher.setFuture(QtConcurrent::run(&threadPool, [=]() {
 				return resultPixmap;
 			}));
 		} else
