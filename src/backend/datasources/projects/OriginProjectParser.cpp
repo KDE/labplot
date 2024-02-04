@@ -1568,21 +1568,22 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 						pos1 = m_legendText.indexOf(QStringLiteral("\\l(%1.%2)").arg(layerIndex + 1).arg(curveIndex));
 					else // remove symbol string
 						m_legendText.replace(QStringLiteral("\\l(%1)").arg(curveIndex), QStringLiteral(""));
-					if (pos1 == -1)
-						break;
-					else // remove symbol string
+
+					if (pos1 != -1) {
+						// remove symbol string
 						m_legendText.replace(QStringLiteral("\\l(%1.%2)").arg(layerIndex + 1).arg(curveIndex), QStringLiteral(""));
 
-					// whole line
-					int pos2 = m_legendText.indexOf(QRegularExpression(QLatin1String("[\r\n]")), pos1);
-					if (pos2 == -1)
-						legendCurveString = m_legendText.mid(pos1, pos2);
-					else
-						legendCurveString = m_legendText.mid(pos1, pos2 - pos1);
+						// whole line
+						int pos2 = m_legendText.indexOf(QRegularExpression(QLatin1String("[\r\n]")), pos1);
+						if (pos2 == -1)
+							legendCurveString = m_legendText.mid(pos1, pos2);
+						else
+							legendCurveString = m_legendText.mid(pos1, pos2 - pos1);
 
-					if (!legendCurveString.isEmpty())
-						curveName = legendCurveString;
-					enableCurveInLegend = true;
+						if (!legendCurveString.isEmpty())
+							curveName = legendCurveString;
+						enableCurveInLegend = true;
+					}
 				}
 
 				DEBUG(Q_FUNC_INFO << ", curve in legend = " << enableCurveInLegend)
