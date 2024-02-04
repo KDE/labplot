@@ -1488,13 +1488,6 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 			if (originCurve.type == Origin::GraphCurve::Line || originCurve.type == Origin::GraphCurve::Scatter
 				|| originCurve.type == Origin::GraphCurve::LineSymbol || originCurve.type == Origin::GraphCurve::ErrorBar
 				|| originCurve.type == Origin::GraphCurve::XErrorBar) {
-				// parse and use legend text (not used)
-				// find substring between %c{curveIndex} and %c{curveIndex+1}
-				// int pos1 = legendText.indexOf(QStringLiteral("\\c{%1}").arg(curveIndex)) + 5;
-				// int pos2 = legendText.indexOf(QStringLiteral("\\c{%1}").arg(curveIndex + 1));
-				// QString curveText = legendText.mid(pos1, pos2 - pos1);
-				// replace %(1), %(2), etc. with curve name
-
 				// get name of container and (if available) index of sheet
 				QString containerName = dataName.right(dataName.length() - 2); // strip "E_" or "T_"
 				int sheetIndex = 0; // which sheet? "@X"
@@ -1546,11 +1539,53 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 				// TODO: custom legend not used yet
 				// Origin's legend uses "%(...) to format the legend text for each curve
 				// s. a. https://www.originlab.com/doc/Origin-Help/Legend-ManualControl
+
+				// parse and use legend text (not used)
+				// find substring between %c{curveIndex} and %c{curveIndex+1}
+				// int pos1 = legendText.indexOf(QStringLiteral("\\c{%1}").arg(curveIndex)) + 5;
+				// int pos2 = legendText.indexOf(QStringLiteral("\\c{%1}").arg(curveIndex + 1));
+				// QString curveText = legendText.mid(pos1, pos2 - pos1);
+				// replace %(1), %(2), etc. with curve name
 				// curveText.replace(QStringLiteral("%(%1)").arg(curveIndex), legendText);
+
 				// curveText = curveText.trimmed();
 				// DEBUG(" curve " << curveIndex << " text = \"" << STDSTRING(curveText) << "\"");
 				// TODO: curve (legend) does not support HTML text yet.
 				// auto* curve = new XYCurve(curveText);
+
+				// check if curve is in actual legendText
+				DEBUG("LEGEND TEXT = " << m_legendText.toStdString())
+				// DEBUG(Q_FUNC_INFO << ", layer index = " << layerIndex + 1 << ", curve index = " << curveIndex)
+				bool enableCurveInLegend = false;
+				if (m_legendText.contains(QStringLiteral("%(%1)").arg(curveIndex))
+					|| m_legendText.contains(QStringLiteral("%(%1.%2)").arg(layerIndex + 1).arg(curveIndex)))
+					enableCurveInLegend = true;
+				if (!enableCurveInLegend) {
+					QString legendCurveString;
+					// find \l(C)
+					int pos1 = m_legendText.indexOf(QStringLiteral("\\l(%1)").arg(curveIndex));
+					if (pos1 == -1) // try \l(L.C)
+						pos1 = m_legendText.indexOf(QStringLiteral("\\l(%1.%2)").arg(layerIndex + 1).arg(curveIndex));
+					else // remove symbol string
+						m_legendText.replace(QStringLiteral("\\l(%1)").arg(curveIndex), QStringLiteral(""));
+					if (pos1 == -1)
+						break;
+					else // remove symbol string
+						m_legendText.replace(QStringLiteral("\\l(%1.%2)").arg(layerIndex + 1).arg(curveIndex), QStringLiteral(""));
+
+					// whole line
+					int pos2 = m_legendText.indexOf(QRegularExpression(QLatin1String("[\r\n]")), pos1);
+					if (pos2 == -1)
+						legendCurveString = m_legendText.mid(pos1, pos2);
+					else
+						legendCurveString = m_legendText.mid(pos1, pos2 - pos1);
+
+					if (!legendCurveString.isEmpty())
+						curveName = legendCurveString;
+					enableCurveInLegend = true;
+				}
+
+				DEBUG(Q_FUNC_INFO << ", curve in legend = " << enableCurveInLegend)
 
 				auto* curve = new XYCurve(curveName);
 				if (m_graphLayerAsPlotArea)
@@ -1566,20 +1601,6 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 				curve->setXColumnPath(tableName + QLatin1Char('/') + QString::fromStdString(originCurve.xColumnName));
 				curve->setYColumnPath(tableName + QLatin1Char('/') + QString::fromStdString(originCurve.yColumnName));
 				DEBUG(Q_FUNC_INFO << ", x/y column path = \"" << STDSTRING(curve->xColumnPath()) << "\" \"" << STDSTRING(curve->yColumnPath()) << "\"")
-
-				// check if curve is in actual legendText
-				// DEBUG("LEGEND TEXT = " << legendText.toStdString())
-				// DEBUG(Q_FUNC_INFO << ", layer index = " << layerIndex + 1 << ", curve index = " << curveIndex)
-				bool enableCurveInLegend = false;
-				if (m_legendText.contains(QStringLiteral("%(%1)").arg(curveIndex))
-					|| m_legendText.contains(QStringLiteral("%(%1.%2)").arg(layerIndex + 1).arg(curveIndex)))
-					enableCurveInLegend = true;
-				if (!enableCurveInLegend
-					&& (m_legendText.contains(QStringLiteral("\\l(%1)").arg(curveIndex))
-						|| m_legendText.contains(QStringLiteral("\\l(%1.%2)").arg(layerIndex + 1).arg(curveIndex)))) // custom entry
-					enableCurveInLegend = true;
-
-				DEBUG(Q_FUNC_INFO << ", curve in legend = " << enableCurveInLegend)
 
 				curve->setLegendVisible(enableCurveInLegend);
 
