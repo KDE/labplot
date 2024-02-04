@@ -198,7 +198,7 @@ void BaseDock::plotRangeChanged(int index) {
 }
 
 void BaseDock::nameChanged() {
-	if (m_initializing || !m_aspect)
+	if (m_initializing || !m_aspect || m_aspects.size() > 1)
 		return;
 
 	if (!m_leName) {
@@ -217,7 +217,7 @@ void BaseDock::nameChanged() {
 }
 
 void BaseDock::commentChanged() {
-	if (m_initializing || !m_aspect)
+	if (m_initializing || !m_aspect || m_aspects.size() > 1)
 		return;
 
 	if (!m_teComment) {
@@ -253,7 +253,7 @@ void BaseDock::legendVisibleChanged(bool state) {
 //********** SLOTs for changes triggered in the aspect ********
 //*************************************************************
 void BaseDock::aspectDescriptionChanged(const AbstractAspect* aspect) {
-	if (m_aspect != aspect)
+	if (m_aspect != aspect || m_aspects.size() > 1)
 		return;
 
 	if (!m_leName) {
