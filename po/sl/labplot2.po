@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-04 01:35+0000\n"
+"POT-Creation-Date: 2024-02-05 01:51+0000\n"
 "PO-Revision-Date: 2024-02-03 05:19+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -16,8 +16,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100>=3 && n"
-"%100<=4 ? 2 : 3);\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
+"%100==4 ? 3 : 0);\n"
 "X-Generator: Poedit 3.4.2\n"
 "X-Accelerator-Marker: ~\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -108,7 +108,7 @@ msgstr "Dol"
 
 #: src/backend/core/AbstractAspect.cpp:518
 #: src/backend/core/aspectcommands.h:121
-#: src/backend/datapicker/Datapicker.cpp:217
+#: src/backend/datapicker/Datapicker.cpp:220
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2022
 #, kde-format
 msgid "%1: add %2"
@@ -335,7 +335,7 @@ msgid "UNDEFINED"
 msgstr "NEDOLOČENO"
 
 #: src/backend/core/AbstractColumn.cpp:327
-#: src/backend/spreadsheet/Spreadsheet.cpp:196
+#: src/backend/spreadsheet/Spreadsheet.cpp:199
 #, kde-format
 msgid "%1: insert 1 row"
 msgid_plural "%1: insert %2 rows"
@@ -345,7 +345,7 @@ msgstr[2] "%1: vstavi %2 vrstice"
 msgstr[3] "%1: vstavi %2 vrstic"
 
 #: src/backend/core/AbstractColumn.cpp:329
-#: src/backend/spreadsheet/Spreadsheet.cpp:198
+#: src/backend/spreadsheet/Spreadsheet.cpp:201
 #, kde-format
 msgid "%1: remove 1 row"
 msgid_plural "%1: remove %2 rows"
@@ -392,24 +392,24 @@ msgctxt "default labels of filter input ports"
 msgid "In%1"
 msgstr "Vh%1"
 
-#: src/backend/core/AbstractPart.cpp:114
+#: src/backend/core/AbstractPart.cpp:115
 #, kde-format
 msgid "Import Data"
 msgstr "Uvoz podatkov"
 
-#: src/backend/core/AbstractPart.cpp:115 src/kdefrontend/MainWin.cpp:751
+#: src/backend/core/AbstractPart.cpp:116 src/kdefrontend/MainWin.cpp:751
 #: src/kdefrontend/MainWin.cpp:760
 #, kde-format
 msgid "From File..."
 msgstr "Iz datoteke..."
 
-#: src/backend/core/AbstractPart.cpp:117 src/kdefrontend/MainWin.cpp:767
+#: src/backend/core/AbstractPart.cpp:118 src/kdefrontend/MainWin.cpp:767
 #, kde-format
 msgid "From SQL Database..."
 msgstr "Iz zbirke podatkov SQL..."
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbExport)
-#: src/backend/core/AbstractPart.cpp:126
+#: src/backend/core/AbstractPart.cpp:127
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:311
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:316
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:23
@@ -420,22 +420,22 @@ msgstr "Iz zbirke podatkov SQL..."
 msgid "Export"
 msgstr "Izvozi"
 
-#: src/backend/core/AbstractPart.cpp:127
+#: src/backend/core/AbstractPart.cpp:128
 #, kde-format
 msgid "Print"
 msgstr "Natisni"
 
-#: src/backend/core/AbstractPart.cpp:128
+#: src/backend/core/AbstractPart.cpp:129
 #, kde-format
 msgid "Print Preview"
 msgstr "Predogled tiskanja"
 
-#: src/backend/core/AbstractPart.cpp:135 src/kdefrontend/MainWin.cpp:839
+#: src/backend/core/AbstractPart.cpp:136 src/kdefrontend/MainWin.cpp:839
 #, kde-format
 msgid "&Close"
 msgstr "&Zapri"
 
-#: src/backend/core/AbstractPart.cpp:140 src/backend/core/AbstractPart.cpp:153
+#: src/backend/core/AbstractPart.cpp:141 src/backend/core/AbstractPart.cpp:154
 #, kde-format
 msgid "Show"
 msgstr "Pokaži"
@@ -794,35 +794,35 @@ msgstr "ni bilo najdenega veljavnega dokumenta XML"
 msgid "Invalid project modification time. Using current time."
 msgstr "Neveljaven čas spreminjanja projekta. Uporabljen bo trenutni čas."
 
-#: src/backend/core/Workbook.cpp:205
+#: src/backend/core/Workbook.cpp:208
 #, kde-format
 msgid "matrix"
 msgstr "matrika"
 
-#: src/backend/core/Workbook.cpp:212
+#: src/backend/core/Workbook.cpp:215
 #, kde-format
 msgid "unknown workbook element '%1'"
 msgstr "neznan element delovnega zvezka »%1«"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/backend/datapicker/Datapicker.cpp:45
-#: src/backend/datapicker/Datapicker.cpp:353
+#: src/backend/datapicker/Datapicker.cpp:356
 #: src/kdefrontend/ui/datapickerimagewidget.ui:260
 #, kde-format
 msgid "Plot"
 msgstr "Izriši"
 
-#: src/backend/datapicker/Datapicker.cpp:135
+#: src/backend/datapicker/Datapicker.cpp:138
 #, kde-format
 msgid "%1, active curve \"%2\""
 msgstr "%1, aktivna krivulja »%2«"
 
-#: src/backend/datapicker/Datapicker.cpp:214
+#: src/backend/datapicker/Datapicker.cpp:217
 #, kde-format
 msgid "Point %1"
 msgstr "Točka %1"
 
-#: src/backend/datapicker/Datapicker.cpp:370
+#: src/backend/datapicker/Datapicker.cpp:373
 #, kde-format
 msgid "unknown datapicker element '%1'"
 msgstr "neznan element izbirnika podatkov »%1«"
@@ -5447,66 +5447,66 @@ msgstr "vrstica %1, stolpec %2: %3"
 msgid "unexpected end of document"
 msgstr "nepričakovan konec dokumenta"
 
-#: src/backend/matrix/Matrix.cpp:118
+#: src/backend/matrix/Matrix.cpp:121
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3600
 #, kde-format
 msgid "FITS image"
 msgstr "Slika FITS"
 
-#: src/backend/matrix/Matrix.cpp:118
+#: src/backend/matrix/Matrix.cpp:121
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3600
 #, kde-format
 msgid "FITS table"
 msgstr "Tabela FITS"
 
-#: src/backend/matrix/Matrix.cpp:154
+#: src/backend/matrix/Matrix.cpp:157
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Matrix"
 msgstr "Matrika tiskanja"
 
-#: src/backend/matrix/Matrix.cpp:230
+#: src/backend/matrix/Matrix.cpp:233
 #, kde-format
 msgid "%1: x-start changed"
 msgstr "%1: x-začetek spremenjen"
 
-#: src/backend/matrix/Matrix.cpp:237
+#: src/backend/matrix/Matrix.cpp:240
 #, kde-format
 msgid "%1: x-end changed"
 msgstr "%1: x-konec spremenjen"
 
-#: src/backend/matrix/Matrix.cpp:244
+#: src/backend/matrix/Matrix.cpp:247
 #, kde-format
 msgid "%1: y-start changed"
 msgstr "%1: y-začetek spremenjen"
 
-#: src/backend/matrix/Matrix.cpp:251
+#: src/backend/matrix/Matrix.cpp:254
 #, kde-format
 msgid "%1: y-end changed"
 msgstr "%1: y-konec spremenjen"
 
-#: src/backend/matrix/Matrix.cpp:258
+#: src/backend/matrix/Matrix.cpp:261
 #, kde-format
 msgid "%1: numeric format changed"
 msgstr "%1: spremenjena številčna oblika"
 
-#: src/backend/matrix/Matrix.cpp:265
+#: src/backend/matrix/Matrix.cpp:268
 #, kde-format
 msgid "%1: precision changed"
 msgstr "%1: natančnost spremenjena"
 
-#: src/backend/matrix/Matrix.cpp:489
+#: src/backend/matrix/Matrix.cpp:492
 #, kde-format
 msgid "%1: set matrix size to %2x%3"
 msgstr "%1: določitev velikosti matrike na %2x%3"
 
-#: src/backend/matrix/Matrix.cpp:510
-#: src/backend/spreadsheet/Spreadsheet.cpp:658
+#: src/backend/matrix/Matrix.cpp:513
+#: src/backend/spreadsheet/Spreadsheet.cpp:661
 #, kde-format
 msgid "%1: copy %2"
 msgstr "%1: kopiranje %2"
 
-#: src/backend/matrix/Matrix.cpp:575
+#: src/backend/matrix/Matrix.cpp:578
 #, kde-format
 msgid "%1: add %2 row"
 msgid_plural "%1: add %2 rows"
@@ -5515,7 +5515,7 @@ msgstr[1] "%1: dodaj %2 stolpca"
 msgstr[2] "%1: dodaj %2 stolpce"
 msgstr[3] "%1: dodaj %2 stolpcev"
 
-#: src/backend/matrix/Matrix.cpp:587
+#: src/backend/matrix/Matrix.cpp:590
 #, kde-format
 msgid "%1: add %2 column"
 msgid_plural "%1: add %2 columns"
@@ -5524,8 +5524,8 @@ msgstr[1] "%1: dodaj %2 stolpca"
 msgstr[2] "%1: dodaj %2 stolpce"
 msgstr[3] "%1: dodaj %2 stolpcev"
 
-#: src/backend/matrix/Matrix.cpp:712 src/backend/matrix/matrixcommands.h:126
-#: src/backend/spreadsheet/Spreadsheet.cpp:592
+#: src/backend/matrix/Matrix.cpp:715 src/backend/matrix/matrixcommands.h:126
+#: src/backend/spreadsheet/Spreadsheet.cpp:595
 #, kde-format
 msgid "%1: clear"
 msgstr "%1: počisti"
@@ -6528,27 +6528,27 @@ msgstr "Tritežno"
 msgid "Tricube"
 msgstr "Trikubično"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:284
+#: src/backend/spreadsheet/Spreadsheet.cpp:287
 #, kde-format
 msgid "%1: remove rows with missing values"
 msgstr "%1: odstrani vrstice z manjkajočimi vrednostmi"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:302
+#: src/backend/spreadsheet/Spreadsheet.cpp:305
 #, kde-format
 msgid "%1: mask rows with missing values"
 msgstr "%1: maskiraj vrstice z manjkajočimi vrednostmi"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:414
+#: src/backend/spreadsheet/Spreadsheet.cpp:417
 #, kde-format
 msgid "%1: set linking"
 msgstr "%1: nastavi povezovanje"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:434
+#: src/backend/spreadsheet/Spreadsheet.cpp:437
 #, kde-format
 msgid "%1: set linked spreadsheet"
 msgstr "%1: nastavi povezano preglednico"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:489
+#: src/backend/spreadsheet/Spreadsheet.cpp:492
 #, kde-format
 msgid "%1: insert 1 column"
 msgid_plural "%1: insert %2 columns"
@@ -6557,7 +6557,7 @@ msgstr[1] "%1: vstavi %2 stolpca"
 msgstr[2] "%1: vstavi %2 stolpce"
 msgstr[3] "%1: vstavi %2 stolpcev"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:491
+#: src/backend/spreadsheet/Spreadsheet.cpp:494
 #, kde-format
 msgid "%1: remove 1 column"
 msgid_plural "%1: remove %2 columns"
@@ -6566,32 +6566,32 @@ msgstr[1] "%1: odstrani %2 stolpca"
 msgstr[2] "%1: odstrani %2 stolpce"
 msgstr[3] "%1: odstrani %2 stolpcev"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:600
+#: src/backend/spreadsheet/Spreadsheet.cpp:603
 #, kde-format
 msgid "%1: clear selected columns"
 msgstr "%1: počisti izbrane stolpce"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:624
+#: src/backend/spreadsheet/Spreadsheet.cpp:627
 #, kde-format
 msgid "%1: clear all masks"
 msgstr "%1: počisti vse maske"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:650
+#: src/backend/spreadsheet/Spreadsheet.cpp:653
 #, kde-format
 msgid "%1: move column %2 from position %3 to %4."
 msgstr "%1: premaknite stolpec %2 iz položaja %3 na %4."
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:775
+#: src/backend/spreadsheet/Spreadsheet.cpp:778
 #, kde-format
 msgid "%1: sort columns"
 msgstr "%1: razvrščanje stolpcev"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1140
+#: src/backend/spreadsheet/Spreadsheet.cpp:1143
 #, kde-format
 msgid "%1: linked spreadsheet removed"
 msgstr "%1: povezana preglednica odstranjena"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1513
+#: src/backend/spreadsheet/Spreadsheet.cpp:1516
 #, kde-format
 msgid "double precision data, %1 element"
 msgid_plural "numerical data, %1 elements"
@@ -6600,7 +6600,7 @@ msgstr[1] "dvojni številski podatki, %1 elementa"
 msgstr[2] "dvojni številski podatki, %1 elementi"
 msgstr[3] "dvojni številski podatki, %1 elementov"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1516
+#: src/backend/spreadsheet/Spreadsheet.cpp:1519
 #, kde-format
 msgid "integer data, %1 element"
 msgid_plural "integer data, %1 elements"
@@ -6609,7 +6609,7 @@ msgstr[1] "celoštevilska podatka, %1 elementa"
 msgstr[2] "celoštevilski podatki, %1 elementi"
 msgstr[3] "celoštevilski podatki, %1 elementov"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1519
+#: src/backend/spreadsheet/Spreadsheet.cpp:1522
 #, kde-format
 msgid "big integer data, %1 element"
 msgid_plural "big integer data, %1 elements"
@@ -6618,7 +6618,7 @@ msgstr[1] "dolga celoštevilska podatka, %1 elementa"
 msgstr[2] "dolgi celoštevilski podatki, %1 elementi"
 msgstr[3] "dolgi celoštevilski podatki, %1 elementov"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1522
+#: src/backend/spreadsheet/Spreadsheet.cpp:1525
 #, kde-format
 msgid "text data, %1 element"
 msgid_plural "text data, %1 elements"
@@ -6627,7 +6627,7 @@ msgstr[1] "tekstovna podatka, %1 elementa"
 msgstr[2] "tekstovni podatki, %1 elementi"
 msgstr[3] "tekstovni podatki, %1 elementov"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1525
+#: src/backend/spreadsheet/Spreadsheet.cpp:1528
 #, kde-format
 msgid "month data, %1 element"
 msgid_plural "month data, %1 elements"
@@ -6636,7 +6636,7 @@ msgstr[1] "podatka o mesecu, %1 elementa"
 msgstr[2] "podatki o mesecu, %1 elementi"
 msgstr[3] "podatki o mesecu, %1 elementov"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1528
+#: src/backend/spreadsheet/Spreadsheet.cpp:1531
 #, kde-format
 msgid "day data, %1 element"
 msgid_plural "day data, %1 elements"
@@ -6645,7 +6645,7 @@ msgstr[1] "podatka o dnevu, %1 elementa"
 msgstr[2] "podatki o dnevu, %1 elementi"
 msgstr[3] "podatki o dnevu, %1 elementov"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1531
+#: src/backend/spreadsheet/Spreadsheet.cpp:1534
 #, kde-format
 msgid "date and time data, %1 element"
 msgid_plural "date and time data, %1 elements"
@@ -7825,20 +7825,20 @@ msgid "%1: Cursor1 enable"
 msgstr "%1: omogočite Kazalec1"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1690
-#: src/backend/worksheet/Worksheet.cpp:811
+#: src/backend/worksheet/Worksheet.cpp:814
 #, kde-format
 msgid "%1: load theme %2"
 msgstr "%1: naložite temo %2"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1692
-#: src/backend/worksheet/Worksheet.cpp:813
+#: src/backend/worksheet/Worksheet.cpp:816
 #, kde-format
 msgid "%1: load default theme"
 msgstr "%1: naložite privzeto temo"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1694
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5321
-#: src/backend/worksheet/Worksheet.cpp:815
+#: src/backend/worksheet/Worksheet.cpp:818
 #, kde-format
 msgid "%1: set theme"
 msgstr "%1: določite temo"
@@ -8020,50 +8020,50 @@ msgid "%1: set border corner radius"
 msgstr "%1: nastavite polmer kota obrobe"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:246
-#: src/backend/worksheet/Worksheet.cpp:688
-#: src/backend/worksheet/Worksheet.cpp:689
+#: src/backend/worksheet/Worksheet.cpp:691
+#: src/backend/worksheet/Worksheet.cpp:692
 #, kde-format
 msgid "%1: set layout top margin"
 msgstr "%1: nastavite zgornji rob postavitve"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:253
-#: src/backend/worksheet/Worksheet.cpp:698
-#: src/backend/worksheet/Worksheet.cpp:699
+#: src/backend/worksheet/Worksheet.cpp:701
+#: src/backend/worksheet/Worksheet.cpp:702
 #, kde-format
 msgid "%1: set layout bottom margin"
 msgstr "%1: nastavite spodnji rob postavitve"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:260
-#: src/backend/worksheet/Worksheet.cpp:708
-#: src/backend/worksheet/Worksheet.cpp:709
+#: src/backend/worksheet/Worksheet.cpp:711
+#: src/backend/worksheet/Worksheet.cpp:712
 #, kde-format
 msgid "%1: set layout left margin"
 msgstr "%1: nastavi levi rob postavitve"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:267
-#: src/backend/worksheet/Worksheet.cpp:718
-#: src/backend/worksheet/Worksheet.cpp:719
+#: src/backend/worksheet/Worksheet.cpp:721
+#: src/backend/worksheet/Worksheet.cpp:722
 #, kde-format
 msgid "%1: set layout right margin"
 msgstr "%1: nastavite desni rob postavitve"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:274
-#: src/backend/worksheet/Worksheet.cpp:728
-#: src/backend/worksheet/Worksheet.cpp:729
+#: src/backend/worksheet/Worksheet.cpp:731
+#: src/backend/worksheet/Worksheet.cpp:732
 #, kde-format
 msgid "%1: set layout vertical spacing"
 msgstr "%1: nastavite navpični razmik postavitve"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:281
-#: src/backend/worksheet/Worksheet.cpp:738
-#: src/backend/worksheet/Worksheet.cpp:739
+#: src/backend/worksheet/Worksheet.cpp:741
+#: src/backend/worksheet/Worksheet.cpp:742
 #, kde-format
 msgid "%1: set layout horizontal spacing"
 msgstr "%1: nastavite vodoravni razmik postavitve"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:288
-#: src/backend/worksheet/Worksheet.cpp:758
-#: src/backend/worksheet/Worksheet.cpp:759
+#: src/backend/worksheet/Worksheet.cpp:761
+#: src/backend/worksheet/Worksheet.cpp:762
 #, kde-format
 msgid "%1: set layout column count"
 msgstr "%1: nastavite število stolpcev postavitve"
@@ -8916,42 +8916,42 @@ msgstr "%1: nastavit obliko obrobe"
 msgid "%1: set border"
 msgstr "%1: določite obrobo"
 
-#: src/backend/worksheet/Worksheet.cpp:235
+#: src/backend/worksheet/Worksheet.cpp:238
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Worksheet"
 msgstr "Natisni delovni list"
 
-#: src/backend/worksheet/Worksheet.cpp:658
+#: src/backend/worksheet/Worksheet.cpp:661
 #, kde-format
 msgid "%1: change size type"
 msgstr "%1: spremeni vrsto velikosti"
 
-#: src/backend/worksheet/Worksheet.cpp:670
+#: src/backend/worksheet/Worksheet.cpp:673
 #, kde-format
 msgid "%1: change \"rescale the content\" property"
 msgstr "%1: spremenite lastnost »spremeni velikost vsebine«"
 
-#: src/backend/worksheet/Worksheet.cpp:678
-#: src/backend/worksheet/Worksheet.cpp:679
+#: src/backend/worksheet/Worksheet.cpp:681
+#: src/backend/worksheet/Worksheet.cpp:682
 #, kde-format
 msgid "%1: set layout"
 msgstr "%1: nastavite postavitev"
 
-#: src/backend/worksheet/Worksheet.cpp:748
-#: src/backend/worksheet/Worksheet.cpp:749
+#: src/backend/worksheet/Worksheet.cpp:751
+#: src/backend/worksheet/Worksheet.cpp:752
 #, kde-format
 msgid "%1: set layout row count"
 msgstr "%1: nastavite število vrstic postavitve"
 
-#: src/backend/worksheet/Worksheet.cpp:789
-#: src/backend/worksheet/Worksheet.cpp:790
+#: src/backend/worksheet/Worksheet.cpp:792
+#: src/backend/worksheet/Worksheet.cpp:793
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:373
 #, kde-format
 msgid "%1: set page size"
 msgstr "%1: nastavite velikost strani"
 
-#: src/backend/worksheet/Worksheet.cpp:1536
+#: src/backend/worksheet/Worksheet.cpp:1539
 #, kde-format
 msgid "Curves"
 msgstr "Krivulje"

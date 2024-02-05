@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-04 01:35+0000\n"
+"POT-Creation-Date: 2024-02-05 01:51+0000\n"
 "PO-Revision-Date: 2023-10-30 14:32+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -107,7 +107,7 @@ msgstr "Alemmas"
 
 #: src/backend/core/AbstractAspect.cpp:518
 #: src/backend/core/aspectcommands.h:121
-#: src/backend/datapicker/Datapicker.cpp:217
+#: src/backend/datapicker/Datapicker.cpp:220
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2022
 #, kde-format
 msgid "%1: add %2"
@@ -363,7 +363,7 @@ msgid "UNDEFINED"
 msgstr "EI MÄÄRITETTY"
 
 #: src/backend/core/AbstractColumn.cpp:327
-#: src/backend/spreadsheet/Spreadsheet.cpp:196
+#: src/backend/spreadsheet/Spreadsheet.cpp:199
 #, kde-format
 msgid "%1: insert 1 row"
 msgid_plural "%1: insert %2 rows"
@@ -371,7 +371,7 @@ msgstr[0] "%1: lisää %2 rivi"
 msgstr[1] "%1: lisää %2 riviä"
 
 #: src/backend/core/AbstractColumn.cpp:329
-#: src/backend/spreadsheet/Spreadsheet.cpp:198
+#: src/backend/spreadsheet/Spreadsheet.cpp:201
 #, kde-format
 msgid "%1: remove 1 row"
 msgid_plural "%1: remove %2 rows"
@@ -418,25 +418,25 @@ msgctxt "default labels of filter input ports"
 msgid "In%1"
 msgstr ""
 
-#: src/backend/core/AbstractPart.cpp:114
+#: src/backend/core/AbstractPart.cpp:115
 #, fuzzy, kde-format
 #| msgid "Import To"
 msgid "Import Data"
 msgstr "Tuo kohteeseen"
 
-#: src/backend/core/AbstractPart.cpp:115 src/kdefrontend/MainWin.cpp:751
+#: src/backend/core/AbstractPart.cpp:116 src/kdefrontend/MainWin.cpp:751
 #: src/kdefrontend/MainWin.cpp:760
 #, kde-format
 msgid "From File..."
 msgstr "Tiedostosta…"
 
-#: src/backend/core/AbstractPart.cpp:117 src/kdefrontend/MainWin.cpp:767
+#: src/backend/core/AbstractPart.cpp:118 src/kdefrontend/MainWin.cpp:767
 #, kde-format
 msgid "From SQL Database..."
 msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbExport)
-#: src/backend/core/AbstractPart.cpp:126
+#: src/backend/core/AbstractPart.cpp:127
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:311
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:316
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:23
@@ -447,22 +447,22 @@ msgstr ""
 msgid "Export"
 msgstr "Vie"
 
-#: src/backend/core/AbstractPart.cpp:127
+#: src/backend/core/AbstractPart.cpp:128
 #, kde-format
 msgid "Print"
 msgstr "Tulosta"
 
-#: src/backend/core/AbstractPart.cpp:128
+#: src/backend/core/AbstractPart.cpp:129
 #, kde-format
 msgid "Print Preview"
 msgstr "Tulostuksen esikatselu"
 
-#: src/backend/core/AbstractPart.cpp:135 src/kdefrontend/MainWin.cpp:839
+#: src/backend/core/AbstractPart.cpp:136 src/kdefrontend/MainWin.cpp:839
 #, kde-format
 msgid "&Close"
 msgstr "&Sulje"
 
-#: src/backend/core/AbstractPart.cpp:140 src/backend/core/AbstractPart.cpp:153
+#: src/backend/core/AbstractPart.cpp:141 src/backend/core/AbstractPart.cpp:154
 #, kde-format
 msgid "Show"
 msgstr "Näytä"
@@ -841,12 +841,12 @@ msgstr "kelvollista XML-asiakirjaa ei löytynyt"
 msgid "Invalid project modification time. Using current time."
 msgstr "Projektin muutosaika on virheellinen. Käytetään nykyistä aikaa."
 
-#: src/backend/core/Workbook.cpp:205
+#: src/backend/core/Workbook.cpp:208
 #, kde-format
 msgid "matrix"
 msgstr "matrix"
 
-#: src/backend/core/Workbook.cpp:212
+#: src/backend/core/Workbook.cpp:215
 #, fuzzy, kde-format
 #| msgid "unknown element '%1'"
 msgid "unknown workbook element '%1'"
@@ -856,14 +856,14 @@ msgstr "tuntematon elementti ”%1”"
 # pmap: =/elat=LabPlot2:sta/
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/backend/datapicker/Datapicker.cpp:45
-#: src/backend/datapicker/Datapicker.cpp:353
+#: src/backend/datapicker/Datapicker.cpp:356
 #: src/kdefrontend/ui/datapickerimagewidget.ui:260
 #, fuzzy, kde-format
 #| msgid "LabPlot2"
 msgid "Plot"
 msgstr "LabPlot2"
 
-#: src/backend/datapicker/Datapicker.cpp:135
+#: src/backend/datapicker/Datapicker.cpp:138
 #, fuzzy, kde-format
 #| msgid "Relative scale"
 msgid "%1, active curve \"%2\""
@@ -871,13 +871,13 @@ msgstr "Suhteellinen asteikko"
 
 # pmap: =/gen=LabPlot2:n/
 # pmap: =/elat=LabPlot2:sta/
-#: src/backend/datapicker/Datapicker.cpp:214
+#: src/backend/datapicker/Datapicker.cpp:217
 #, fuzzy, kde-format
 #| msgid "LabPlot2"
 msgid "Point %1"
 msgstr "LabPlot2"
 
-#: src/backend/datapicker/Datapicker.cpp:370
+#: src/backend/datapicker/Datapicker.cpp:373
 #, fuzzy, kde-format
 #| msgid "unknown element '%1'"
 msgid "unknown datapicker element '%1'"
@@ -5720,73 +5720,73 @@ msgstr "rivi %1, sarake %2: "
 msgid "unexpected end of document"
 msgstr "odottamaton tiedoston loppu"
 
-#: src/backend/matrix/Matrix.cpp:118
+#: src/backend/matrix/Matrix.cpp:121
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3600
 #, fuzzy, kde-format
 #| msgid "image"
 msgid "FITS image"
 msgstr "kuva"
 
-#: src/backend/matrix/Matrix.cpp:118
+#: src/backend/matrix/Matrix.cpp:121
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3600
 #, kde-format
 msgid "FITS table"
 msgstr ""
 
-#: src/backend/matrix/Matrix.cpp:154
+#: src/backend/matrix/Matrix.cpp:157
 #, fuzzy, kde-format
 #| msgid "new Matrix"
 msgctxt "@title:window"
 msgid "Print Matrix"
 msgstr "uusi matriisi"
 
-#: src/backend/matrix/Matrix.cpp:230
+#: src/backend/matrix/Matrix.cpp:233
 #, fuzzy, kde-format
 #| msgid "%1: set numeric format to '%2'"
 msgid "%1: x-start changed"
 msgstr "%1: aseta numeeriseksi muodoksi ”%2”"
 
-#: src/backend/matrix/Matrix.cpp:237
+#: src/backend/matrix/Matrix.cpp:240
 #, fuzzy, kde-format
 #| msgid "%1    [Changed]"
 msgid "%1: x-end changed"
 msgstr "%1    [muutettu]"
 
-#: src/backend/matrix/Matrix.cpp:244
+#: src/backend/matrix/Matrix.cpp:247
 #, fuzzy, kde-format
 #| msgid "%1: set numeric format to '%2'"
 msgid "%1: y-start changed"
 msgstr "%1: aseta numeeriseksi muodoksi ”%2”"
 
-#: src/backend/matrix/Matrix.cpp:251
+#: src/backend/matrix/Matrix.cpp:254
 #, fuzzy, kde-format
 #| msgid "%1    [Changed]"
 msgid "%1: y-end changed"
 msgstr "%1    [muutettu]"
 
-#: src/backend/matrix/Matrix.cpp:258
+#: src/backend/matrix/Matrix.cpp:261
 #, fuzzy, kde-format
 #| msgid "%1: set numeric format to '%2'"
 msgid "%1: numeric format changed"
 msgstr "%1: aseta numeeriseksi muodoksi ”%2”"
 
-#: src/backend/matrix/Matrix.cpp:265
+#: src/backend/matrix/Matrix.cpp:268
 #, kde-format
 msgid "%1: precision changed"
 msgstr "%1: tarkkuus muuttunut"
 
-#: src/backend/matrix/Matrix.cpp:489
+#: src/backend/matrix/Matrix.cpp:492
 #, kde-format
 msgid "%1: set matrix size to %2x%3"
 msgstr "%1: aseta matriisin kooksi %2×%3"
 
-#: src/backend/matrix/Matrix.cpp:510
-#: src/backend/spreadsheet/Spreadsheet.cpp:658
+#: src/backend/matrix/Matrix.cpp:513
+#: src/backend/spreadsheet/Spreadsheet.cpp:661
 #, kde-format
 msgid "%1: copy %2"
 msgstr ""
 
-#: src/backend/matrix/Matrix.cpp:575
+#: src/backend/matrix/Matrix.cpp:578
 #, fuzzy, kde-format
 #| msgid "%1: insert %2 row"
 #| msgid_plural "%1: insert %2 rows"
@@ -5795,15 +5795,15 @@ msgid_plural "%1: add %2 rows"
 msgstr[0] "%1: lisää %2 rivi"
 msgstr[1] "%1: lisää %2 riviä"
 
-#: src/backend/matrix/Matrix.cpp:587
+#: src/backend/matrix/Matrix.cpp:590
 #, kde-format
 msgid "%1: add %2 column"
 msgid_plural "%1: add %2 columns"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/backend/matrix/Matrix.cpp:712 src/backend/matrix/matrixcommands.h:126
-#: src/backend/spreadsheet/Spreadsheet.cpp:592
+#: src/backend/matrix/Matrix.cpp:715 src/backend/matrix/matrixcommands.h:126
+#: src/backend/spreadsheet/Spreadsheet.cpp:595
 #, kde-format
 msgid "%1: clear"
 msgstr "%1: tyhjennä"
@@ -6878,70 +6878,70 @@ msgstr "Korkeus"
 msgid "Tricube"
 msgstr ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:284
+#: src/backend/spreadsheet/Spreadsheet.cpp:287
 #, kde-format
 msgid "%1: remove rows with missing values"
 msgstr ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:302
+#: src/backend/spreadsheet/Spreadsheet.cpp:305
 #, fuzzy, kde-format
 #| msgid "%1: fill cells with const values"
 msgid "%1: mask rows with missing values"
 msgstr "%1: täytä solut vakioarvoin"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:414
+#: src/backend/spreadsheet/Spreadsheet.cpp:417
 #, fuzzy, kde-format
 #| msgid "%1: set vertical alignment"
 msgid "%1: set linking"
 msgstr "%1: aseta pystytasaus"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:434
+#: src/backend/spreadsheet/Spreadsheet.cpp:437
 #, fuzzy, kde-format
 #| msgid "%1: set vertical alignment"
 msgid "%1: set linked spreadsheet"
 msgstr "%1: aseta pystytasaus"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:489
+#: src/backend/spreadsheet/Spreadsheet.cpp:492
 #, kde-format
 msgid "%1: insert 1 column"
 msgid_plural "%1: insert %2 columns"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:491
+#: src/backend/spreadsheet/Spreadsheet.cpp:494
 #, kde-format
 msgid "%1: remove 1 column"
 msgid_plural "%1: remove %2 columns"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:600
+#: src/backend/spreadsheet/Spreadsheet.cpp:603
 #, kde-format
 msgid "%1: clear selected columns"
 msgstr "%1: tyhjennä valitut sarakkeet"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:624
+#: src/backend/spreadsheet/Spreadsheet.cpp:627
 #, kde-format
 msgid "%1: clear all masks"
 msgstr ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:650
+#: src/backend/spreadsheet/Spreadsheet.cpp:653
 #, kde-format
 msgid "%1: move column %2 from position %3 to %4."
 msgstr ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:775
+#: src/backend/spreadsheet/Spreadsheet.cpp:778
 #, kde-format
 msgid "%1: sort columns"
 msgstr ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1140
+#: src/backend/spreadsheet/Spreadsheet.cpp:1143
 #, fuzzy, kde-format
 #| msgid "Add new spreadsheet"
 msgid "%1: linked spreadsheet removed"
 msgstr "Lisää uusi laskentataulukko"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1513
+#: src/backend/spreadsheet/Spreadsheet.cpp:1516
 #, fuzzy, kde-format
 #| msgid "numerical data, %1 element"
 #| msgid_plural "numerical data, %1 elements"
@@ -6950,7 +6950,7 @@ msgid_plural "numerical data, %1 elements"
 msgstr[0] "numeerista dataa, %1 elementti"
 msgstr[1] "numeerista dataa, %1 elementtiä"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1516
+#: src/backend/spreadsheet/Spreadsheet.cpp:1519
 #, fuzzy, kde-format
 #| msgid "numerical data, %1 element"
 #| msgid_plural "numerical data, %1 elements"
@@ -6959,7 +6959,7 @@ msgid_plural "integer data, %1 elements"
 msgstr[0] "numeerista dataa, %1 elementti"
 msgstr[1] "numeerista dataa, %1 elementtiä"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1519
+#: src/backend/spreadsheet/Spreadsheet.cpp:1522
 #, fuzzy, kde-format
 #| msgid "numerical data, %1 element"
 #| msgid_plural "numerical data, %1 elements"
@@ -6968,7 +6968,7 @@ msgid_plural "big integer data, %1 elements"
 msgstr[0] "numeerista dataa, %1 elementti"
 msgstr[1] "numeerista dataa, %1 elementtiä"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1522
+#: src/backend/spreadsheet/Spreadsheet.cpp:1525
 #, fuzzy, kde-format
 #| msgid "numerical data, %1 element"
 #| msgid_plural "numerical data, %1 elements"
@@ -6977,7 +6977,7 @@ msgid_plural "text data, %1 elements"
 msgstr[0] "numeerista dataa, %1 elementti"
 msgstr[1] "numeerista dataa, %1 elementtiä"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1525
+#: src/backend/spreadsheet/Spreadsheet.cpp:1528
 #, fuzzy, kde-format
 #| msgid "numerical data, %1 element"
 #| msgid_plural "numerical data, %1 elements"
@@ -6986,7 +6986,7 @@ msgid_plural "month data, %1 elements"
 msgstr[0] "numeerista dataa, %1 elementti"
 msgstr[1] "numeerista dataa, %1 elementtiä"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1528
+#: src/backend/spreadsheet/Spreadsheet.cpp:1531
 #, fuzzy, kde-format
 #| msgid "numerical data, %1 element"
 #| msgid_plural "numerical data, %1 elements"
@@ -6995,7 +6995,7 @@ msgid_plural "day data, %1 elements"
 msgstr[0] "numeerista dataa, %1 elementti"
 msgstr[1] "numeerista dataa, %1 elementtiä"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1531
+#: src/backend/spreadsheet/Spreadsheet.cpp:1534
 #, fuzzy, kde-format
 #| msgid "numerical data, %1 element"
 #| msgid_plural "numerical data, %1 elements"
@@ -8269,14 +8269,14 @@ msgid "%1: Cursor1 enable"
 msgstr "Arvot"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1690
-#: src/backend/worksheet/Worksheet.cpp:811
+#: src/backend/worksheet/Worksheet.cpp:814
 #, fuzzy, kde-format
 #| msgid "%1: add %2."
 msgid "%1: load theme %2"
 msgstr "%1: lisää %2."
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1692
-#: src/backend/worksheet/Worksheet.cpp:813
+#: src/backend/worksheet/Worksheet.cpp:816
 #, fuzzy, kde-format
 #| msgid "%1: add %2."
 msgid "%1: load default theme"
@@ -8284,7 +8284,7 @@ msgstr "%1: lisää %2."
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1694
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5321
-#: src/backend/worksheet/Worksheet.cpp:815
+#: src/backend/worksheet/Worksheet.cpp:818
 #, fuzzy, kde-format
 #| msgid "%1: set page size"
 msgid "%1: set theme"
@@ -8490,50 +8490,50 @@ msgid "%1: set border corner radius"
 msgstr "%1: aseta reunan kulman säde"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:246
-#: src/backend/worksheet/Worksheet.cpp:688
-#: src/backend/worksheet/Worksheet.cpp:689
+#: src/backend/worksheet/Worksheet.cpp:691
+#: src/backend/worksheet/Worksheet.cpp:692
 #, kde-format
 msgid "%1: set layout top margin"
 msgstr "%1: aseta asettelun yläreunus"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:253
-#: src/backend/worksheet/Worksheet.cpp:698
-#: src/backend/worksheet/Worksheet.cpp:699
+#: src/backend/worksheet/Worksheet.cpp:701
+#: src/backend/worksheet/Worksheet.cpp:702
 #, kde-format
 msgid "%1: set layout bottom margin"
 msgstr "%1: aseta asettelu alareunus"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:260
-#: src/backend/worksheet/Worksheet.cpp:708
-#: src/backend/worksheet/Worksheet.cpp:709
+#: src/backend/worksheet/Worksheet.cpp:711
+#: src/backend/worksheet/Worksheet.cpp:712
 #, kde-format
 msgid "%1: set layout left margin"
 msgstr "%1: aseta asettelu vasen reunus"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:267
-#: src/backend/worksheet/Worksheet.cpp:718
-#: src/backend/worksheet/Worksheet.cpp:719
+#: src/backend/worksheet/Worksheet.cpp:721
+#: src/backend/worksheet/Worksheet.cpp:722
 #, kde-format
 msgid "%1: set layout right margin"
 msgstr "%1: aseta asettelu oikea reunus"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:274
-#: src/backend/worksheet/Worksheet.cpp:728
-#: src/backend/worksheet/Worksheet.cpp:729
+#: src/backend/worksheet/Worksheet.cpp:731
+#: src/backend/worksheet/Worksheet.cpp:732
 #, kde-format
 msgid "%1: set layout vertical spacing"
 msgstr "%1: aseta asettelun pystyvälistys"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:281
-#: src/backend/worksheet/Worksheet.cpp:738
-#: src/backend/worksheet/Worksheet.cpp:739
+#: src/backend/worksheet/Worksheet.cpp:741
+#: src/backend/worksheet/Worksheet.cpp:742
 #, kde-format
 msgid "%1: set layout horizontal spacing"
 msgstr "%1: aseta asettelun vaakavälistys"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:288
-#: src/backend/worksheet/Worksheet.cpp:758
-#: src/backend/worksheet/Worksheet.cpp:759
+#: src/backend/worksheet/Worksheet.cpp:761
+#: src/backend/worksheet/Worksheet.cpp:762
 #, kde-format
 msgid "%1: set layout column count"
 msgstr "%1: aseta asettelun sarakemäärä"
@@ -9448,42 +9448,42 @@ msgstr "%1: aseta reunan tyyli"
 msgid "%1: set border"
 msgstr "%1: aseta reuna"
 
-#: src/backend/worksheet/Worksheet.cpp:235
+#: src/backend/worksheet/Worksheet.cpp:238
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Worksheet"
 msgstr "Tulosta työvihko"
 
-#: src/backend/worksheet/Worksheet.cpp:658
+#: src/backend/worksheet/Worksheet.cpp:661
 #, kde-format
 msgid "%1: change size type"
 msgstr "%1: muuta koon tyyppiä"
 
-#: src/backend/worksheet/Worksheet.cpp:670
+#: src/backend/worksheet/Worksheet.cpp:673
 #, kde-format
 msgid "%1: change \"rescale the content\" property"
 msgstr ""
 
-#: src/backend/worksheet/Worksheet.cpp:678
-#: src/backend/worksheet/Worksheet.cpp:679
+#: src/backend/worksheet/Worksheet.cpp:681
+#: src/backend/worksheet/Worksheet.cpp:682
 #, kde-format
 msgid "%1: set layout"
 msgstr "%1: aseta asettelu"
 
-#: src/backend/worksheet/Worksheet.cpp:748
-#: src/backend/worksheet/Worksheet.cpp:749
+#: src/backend/worksheet/Worksheet.cpp:751
+#: src/backend/worksheet/Worksheet.cpp:752
 #, kde-format
 msgid "%1: set layout row count"
 msgstr "%1: aseta asettelun rivimäärä"
 
-#: src/backend/worksheet/Worksheet.cpp:789
-#: src/backend/worksheet/Worksheet.cpp:790
+#: src/backend/worksheet/Worksheet.cpp:792
+#: src/backend/worksheet/Worksheet.cpp:793
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:373
 #, kde-format
 msgid "%1: set page size"
 msgstr "%1: aseta sivukoko"
 
-#: src/backend/worksheet/Worksheet.cpp:1536
+#: src/backend/worksheet/Worksheet.cpp:1539
 #, kde-format
 msgid "Curves"
 msgstr "Käyrät"
