@@ -82,7 +82,7 @@ HistogramDock::HistogramDock(QWidget* parent)
 	const KConfigGroup group = Settings::group(QStringLiteral("Settings_General"));
 	if (group.readEntry(QStringLiteral("GUMTerms"), false)) {
 		ui.tabWidget->setTabText(ui.tabWidget->indexOf(ui.tabErrorBars), i18n("Uncertainty Bars"));
-		ui.lErrorBar->setText(i18n("X Uncertainty"));
+		ui.lErrorBar->setText(i18n("Uncertainty"));
 	}
 
 	gridLayout = qobject_cast<QGridLayout*>(ui.tabErrorBars->layout());
