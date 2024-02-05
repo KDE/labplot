@@ -8,6 +8,7 @@ include:
     file:
 # fails
 #      - /gitlab-templates/reuse-lint.yml
+#      - /gitlab-templates/clang-format.yml
       - /gitlab-templates/linux.yml
       - /gitlab-templates/windows.yml
       - /gitlab-templates/linux-qt6.yml
@@ -21,7 +22,7 @@ include:
       - /gitlab-templates/craft-windows-x86-64.yml
       - /gitlab-templates/craft-windows-appx-qt5.yml
 # see below for flatpak variables
-#      - /gitlab-templates/flatpak.yml
+      - /gitlab-templates/flatpak.yml
 # fails for analitza (20240105)
 #      - /gitlab-templates/craft-appimage-qt6.yml
 # fails for analitza (20240105)
@@ -197,9 +198,9 @@ craft_windows_qt515_x86_64:
 
 #########################################################
 
-clang_format:
+.clang_format:
   stage: test
-  image: debian:stable
+  image: debian:bookworm
   before_script:
     - apt-get update
     - apt-get install --yes --no-install-recommends git clang-format-13
@@ -208,7 +209,7 @@ clang_format:
     git diff --exit-code
 
 # see above
-#flatpak:
-#  variables:
-#    KDE_FLATPAK_MODULE_NAME: labplot2
-#    KDE_FLATPAK_APP_ID: org.kde.${KDE_FLATPAK_MODULE_NAME}
+flatpak:
+  variables:
+    KDE_FLATPAK_MODULE_NAME: labplot2
+    KDE_FLATPAK_APP_ID: org.kde.${KDE_FLATPAK_MODULE_NAME}

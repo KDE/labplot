@@ -172,6 +172,9 @@ QWidget* Worksheet::view() const {
 		connect(m_view, &WorksheetView::propertiesExplorerRequested, this, &Worksheet::propertiesExplorerRequested);
 		connect(this, &Worksheet::cartesianPlotMouseModeChanged, m_view, &WorksheetView::cartesianPlotMouseModeChangedSlot);
 		connect(this, &Worksheet::childContextMenuRequested, m_view, &WorksheetView::childContextMenuRequested);
+		connect(this, &Worksheet::viewAboutToBeDeleted, [this]() {
+			m_view = nullptr;
+		});
 		Q_EMIT const_cast<Worksheet*>(this)->changed();
 	}
 	return m_partView;

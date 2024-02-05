@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Base class of Aspects with MDI windows as views.
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2012-2015 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2012-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -57,6 +57,7 @@ Q_SIGNALS:
 	void exportRequested();
 	void printRequested();
 	void printPreviewRequested();
+	void viewAboutToBeDeleted() const;
 };
 
 #endif // ifndef ABSTRACT_PART_H
