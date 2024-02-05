@@ -141,8 +141,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/cfitsio-4.3.1.tar.gz",
-                    "sha256": "47a7c8ee05687be1e1d8eeeb94fb88f060fbf3cd8a4df52ccb88d5eb0f5062be"
+                    "url": "https://fossies.org/linux/misc/cfitsio-4.3.1.tar.xz",
+                    "sha256": "997e835fb491ec04f5e48c7fdd38732615b3ff8597becc426598c2e856dab0ef"
                 }
             ]
         },
