@@ -137,6 +137,16 @@
             ]
         },
         {
+            "name": "cfitsio",
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://fossies.org/linux/misc/cfitsio-4.3.1.tar.xz",
+                    "sha256": "997e835fb491ec04f5e48c7fdd38732615b3ff8597becc426598c2e856dab0ef"
+                }
+            ]
+        },
+        {
             "name": "libcerf",
 	    "buildsystem": "cmake-ninja",
 	    "builddir": true,
