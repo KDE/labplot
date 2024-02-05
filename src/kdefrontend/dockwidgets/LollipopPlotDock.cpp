@@ -23,8 +23,7 @@
 #include <KLocalizedString>
 
 LollipopPlotDock::LollipopPlotDock(QWidget* parent)
-	: BaseDock(parent)
-	, cbXColumn(new TreeViewComboBox) {
+	: BaseDock(parent) {
 	ui.setupUi(this);
 	setPlotRangeCombobox(ui.cbPlotRanges);
 	setBaseWidgets(ui.leName, ui.teComment);
@@ -33,6 +32,7 @@ LollipopPlotDock::LollipopPlotDock(QWidget* parent)
 	// Tab "General"
 
 	// x-data
+	cbXColumn = new TreeViewComboBox(ui.tabGeneral);
 	QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 	cbXColumn->setSizePolicy(sizePolicy);
 	static_cast<QVBoxLayout*>(ui.frameXColumn->layout())->insertWidget(0, cbXColumn);

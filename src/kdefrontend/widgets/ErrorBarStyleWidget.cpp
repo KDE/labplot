@@ -114,25 +114,21 @@ void ErrorBarStyleWidget::setEnabled(bool enabled) {
 }
 
 void ErrorBarStyleWidget::updateLocale() {
-	const auto numberLocale = QLocale();
-	ui.sbCapSize->setLocale(numberLocale);
+	ui.sbCapSize->setLocale(QLocale());
 }
 
 //*************************************************************
 //******** SLOTs for changes triggered in ErrorBarStyleWidget **********
 //*************************************************************
 void ErrorBarStyleWidget::typeChanged(int index) {
-	// bool enabled = true;
-
-	auto type = ErrorBarStyle::Type(index);
-	bool b = (type == ErrorBarStyle::Type::WithEnds);
+	const auto type = ErrorBarStyle::Type(index);
+	const bool b = (type == ErrorBarStyle::Type::WithEnds);
 	ui.lCapSize->setVisible(b);
 	ui.sbCapSize->setVisible(b);
 
-	if (!m_initializing) {
-		for (auto* style : m_styles)
-			style->setType(type);
-	}
+	CONDITIONAL_RETURN_NO_LOCK;
+	for (auto* style : m_styles)
+		style->setType(type);
 }
 
 void ErrorBarStyleWidget::capSizeChanged(double value) {
@@ -161,14 +157,18 @@ void ErrorBarStyleWidget::errorBarStyleCapSizeChanged(double size) {
 //**********************************************************
 void ErrorBarStyleWidget::load() {
 	ui.cbType->setCurrentIndex(static_cast<int>(m_style->type()));
+	typeChanged(ui.cbType->currentIndex());
+
 	const double size = Worksheet::convertFromSceneUnits(m_style->capSize(), Worksheet::Unit::Point);
 	ui.sbCapSize->setValue(size);
 }
 
 void ErrorBarStyleWidget::loadConfig(const KConfigGroup& group) {
 	ui.cbType->setCurrentIndex(group.readEntry(QStringLiteral("ErrorBarsType"), static_cast<int>(m_style->type())));
-	const double size = Worksheet::convertFromSceneUnits(group.readEntry(QStringLiteral("ErrorBarsCapSize"), m_style->capSize()), Worksheet::Unit::Point);
-	ui.sbCapSize->setValue(size);
+	typeChanged(ui.cbType->currentIndex());
+
+	const double size = group.readEntry(QStringLiteral("ErrorBarsCapSize"), m_style->capSize());
+	ui.sbCapSize->setValue(Worksheet::convertFromSceneUnits(size, Worksheet::Unit::Point));
 }
 
 void ErrorBarStyleWidget::saveConfig(KConfigGroup& group) const {
