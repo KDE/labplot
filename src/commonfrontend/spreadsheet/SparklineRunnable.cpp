@@ -24,6 +24,8 @@ void SparkLineRunnable::run() {
 	auto* worksheet = new Worksheet(sparklineText);
 	DEBUG(Q_FUNC_INFO);
 
+	DEBUG(Q_FUNC_INFO << " "<< col->doubleAt(0));
+
 	if (col->columnMode() == Column::ColumnMode::Text) {
 		worksheet->setTheme(sparklineTheme);
 		worksheet->setLayoutBottomMargin(0);
