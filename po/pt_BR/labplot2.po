@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-05 01:51+0000\n"
+"POT-Creation-Date: 2024-02-06 01:57+0000\n"
 "PO-Revision-Date: 2022-07-14 10:06-0300\n"
 "Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
 "Language-Team: Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -2282,12 +2282,12 @@ msgstr ""
 msgid "The following error occurred: %1."
 msgstr ""
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1135
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1146
 #, kde-format
 msgid "Plot%1"
 msgstr "Gráfico%1"
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1307
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1334
 #, kde-format
 msgid "legend"
 msgstr "legenda"
@@ -13607,9 +13607,9 @@ msgid "Uncertainty Bars"
 msgstr ""
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:85
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:91
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:149
 #, kde-format
-msgid "X Uncertainty"
+msgid "Uncertainty"
 msgstr ""
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:159
@@ -13960,6 +13960,11 @@ msgstr "Interpolação:"
 msgid "Correlation status: %1"
 msgstr "Interpolação:"
 
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:91
+#, kde-format
+msgid "X Uncertainty"
+msgstr ""
+
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:92
 #, kde-format
 msgid "Y Uncertainty"
@@ -14209,11 +14214,6 @@ msgstr "t, mín"
 #, kde-format
 msgid "t, max"
 msgstr "t, máx"
-
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:149
-#, kde-format
-msgid "Uncertainty"
-msgstr ""
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:149
 #, kde-format

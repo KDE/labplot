@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-05 01:51+0000\n"
+"POT-Creation-Date: 2024-02-06 01:57+0000\n"
 "PO-Revision-Date: 2024-02-03 09:00+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
@@ -2229,12 +2229,12 @@ msgstr "Перевищено час очікування на дані від п
 msgid "The following error occurred: %1."
 msgstr "Сталася така помилка: %1."
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1135
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1146
 #, kde-format
 msgid "Plot%1"
 msgstr "Креслення%1"
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1307
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1334
 #, kde-format
 msgid "legend"
 msgstr "умовні позначення"
@@ -13056,10 +13056,10 @@ msgid "Uncertainty Bars"
 msgstr "Смуги невизначеності"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:85
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:91
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:149
 #, kde-format
-msgid "X Uncertainty"
-msgstr "Невизначеність за X"
+msgid "Uncertainty"
+msgstr "Невизначеність"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:159
 #, kde-format
@@ -13388,6 +13388,11 @@ msgstr "Стан розгортки: %1"
 msgid "Correlation status: %1"
 msgstr "Стан кореляції: %1"
 
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:91
+#, kde-format
+msgid "X Uncertainty"
+msgstr "Невизначеність за X"
+
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:92
 #, kde-format
 msgid "Y Uncertainty"
@@ -13613,11 +13618,6 @@ msgstr "t, мін."
 #, kde-format
 msgid "t, max"
 msgstr "t, макс."
-
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:149
-#, kde-format
-msgid "Uncertainty"
-msgstr "Невизначеність"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:149
 #, kde-format

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-05 01:51+0000\n"
+"POT-Creation-Date: 2024-02-06 01:57+0000\n"
 "PO-Revision-Date: 2024-02-04 17:21+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
@@ -2208,12 +2208,12 @@ msgstr "La aparato elĉerpiĝis."
 msgid "The following error occurred: %1."
 msgstr "La jena eraro okazis: %1."
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1135
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1146
 #, kde-format
 msgid "Plot%1"
 msgstr "Grafiko%1"
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1307
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1334
 #, kde-format
 msgid "legend"
 msgstr "legendo"
@@ -12929,10 +12929,10 @@ msgid "Uncertainty Bars"
 msgstr "Bretoj de Necerteco"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:85
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:91
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:149
 #, kde-format
-msgid "X Uncertainty"
-msgstr "X Necerteco"
+msgid "Uncertainty"
+msgstr "Necerteco"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:159
 #, kde-format
@@ -13260,6 +13260,11 @@ msgstr "Malkonvolucia stato: %1"
 msgid "Correlation status: %1"
 msgstr "Korelacia stato: %1"
 
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:91
+#, kde-format
+msgid "X Uncertainty"
+msgstr "X Necerteco"
+
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:92
 #, kde-format
 msgid "Y Uncertainty"
@@ -13485,11 +13490,6 @@ msgstr "t, min"
 #, kde-format
 msgid "t, max"
 msgstr "t, maks"
-
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:149
-#, kde-format
-msgid "Uncertainty"
-msgstr "Necerteco"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:149
 #, kde-format

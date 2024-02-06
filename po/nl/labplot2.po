@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-05 01:51+0000\n"
+"POT-Creation-Date: 2024-02-06 01:57+0000\n"
 "PO-Revision-Date: 2024-02-03 11:11+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
@@ -2205,12 +2205,12 @@ msgstr "Tijd voor apparaat is verlopen."
 msgid "The following error occurred: %1."
 msgstr "De volgende fout is opgetreden: %1"
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1135
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1146
 #, kde-format
 msgid "Plot%1"
 msgstr "Plot%1"
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1307
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1334
 #, kde-format
 msgid "legend"
 msgstr "legenda"
@@ -12951,10 +12951,10 @@ msgid "Uncertainty Bars"
 msgstr "Onzekerheidsbalken"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:85
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:91
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:149
 #, kde-format
-msgid "X Uncertainty"
-msgstr "X-onzekerheid"
+msgid "Uncertainty"
+msgstr "Onzekerheid"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:159
 #, kde-format
@@ -13283,6 +13283,11 @@ msgstr "Deconvolutiestatus:: %1"
 msgid "Correlation status: %1"
 msgstr "Correlatiestatus: %1"
 
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:91
+#, kde-format
+msgid "X Uncertainty"
+msgstr "X-onzekerheid"
+
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:92
 #, kde-format
 msgid "Y Uncertainty"
@@ -13509,11 +13514,6 @@ msgstr "t, min"
 #, kde-format
 msgid "t, max"
 msgstr "t, max"
-
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:149
-#, kde-format
-msgid "Uncertainty"
-msgstr "Onzekerheid"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:149
 #, kde-format

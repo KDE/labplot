@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-05 01:51+0000\n"
+"POT-Creation-Date: 2024-02-06 01:57+0000\n"
 "PO-Revision-Date: 2024-02-03 16:04+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -2209,12 +2209,12 @@ msgstr "Aygıt zaman aşımına uğradı."
 msgid "The following error occurred: %1."
 msgstr "Şu hata oluştu: %1."
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1135
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1146
 #, kde-format
 msgid "Plot%1"
 msgstr "%1 çiz"
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1307
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1334
 #, kde-format
 msgid "legend"
 msgstr "gösterge"
@@ -12938,10 +12938,10 @@ msgid "Uncertainty Bars"
 msgstr "Belirsizlik Çubukları"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:85
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:91
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:149
 #, kde-format
-msgid "X Uncertainty"
-msgstr "X Belirsizliği"
+msgid "Uncertainty"
+msgstr "Belirsizlik"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:159
 #, kde-format
@@ -13270,6 +13270,11 @@ msgstr "Ters evrişim durumu: %1"
 msgid "Correlation status: %1"
 msgstr "Korelasyon durumu: %1"
 
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:91
+#, kde-format
+msgid "X Uncertainty"
+msgstr "X Belirsizliği"
+
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:92
 #, kde-format
 msgid "Y Uncertainty"
@@ -13495,11 +13500,6 @@ msgstr "t, en küçük"
 #, kde-format
 msgid "t, max"
 msgstr "t, en büyük"
-
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:149
-#, kde-format
-msgid "Uncertainty"
-msgstr "Belirsizlik"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:149
 #, kde-format

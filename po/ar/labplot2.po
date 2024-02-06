@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-05 01:51+0000\n"
+"POT-Creation-Date: 2024-02-06 01:57+0000\n"
 "PO-Revision-Date: 2022-09-05 22:28+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -2230,12 +2230,12 @@ msgstr ""
 msgid "The following error occurred: %1."
 msgstr "حدث الخطأ التالي: %1."
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1135
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1146
 #, kde-format
 msgid "Plot%1"
 msgstr "ارسم%1"
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1307
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1334
 #, kde-format
 msgid "legend"
 msgstr "مفتاح"
@@ -13024,10 +13024,9 @@ msgid "Uncertainty Bars"
 msgstr "ارتياب"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:85
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:91
-#, fuzzy, kde-format
-#| msgid "Uncertainty"
-msgid "X Uncertainty"
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:149
+#, kde-format
+msgid "Uncertainty"
 msgstr "ارتياب"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:159
@@ -13350,6 +13349,12 @@ msgstr ""
 msgid "Correlation status: %1"
 msgstr ""
 
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:91
+#, fuzzy, kde-format
+#| msgid "Uncertainty"
+msgid "X Uncertainty"
+msgstr "ارتياب"
+
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:92
 #, fuzzy, kde-format
 #| msgid "Uncertainty"
@@ -13573,11 +13578,6 @@ msgstr ""
 #, kde-format
 msgid "t, max"
 msgstr ""
-
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:149
-#, kde-format
-msgid "Uncertainty"
-msgstr "ارتياب"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:149
 #, kde-format

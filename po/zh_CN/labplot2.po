@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-05 01:51+0000\n"
-"PO-Revision-Date: 2024-01-21 14:14\n"
+"POT-Creation-Date: 2024-02-06 01:57+0000\n"
+"PO-Revision-Date: 2024-02-05 11:40\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -2187,12 +2187,12 @@ msgstr ""
 msgid "The following error occurred: %1."
 msgstr "出现了以下错误： %1。"
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1135
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1146
 #, kde-format
 msgid "Plot%1"
 msgstr ""
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1307
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1334
 #, kde-format
 msgid "legend"
 msgstr "图例"
@@ -3735,10 +3735,9 @@ msgid "xor"
 msgstr ""
 
 #: src/backend/gsl/functions.cpp:325
-#, fuzzy, kde-format
-#| msgid "no"
+#, kde-format
 msgid "not"
-msgstr "否"
+msgstr ""
 
 #: src/backend/gsl/functions.cpp:329
 #, kde-format
@@ -11616,11 +11615,10 @@ msgid "LabPlot Projects (%1)"
 msgstr ""
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:443
-#, fuzzy, kde-format
-#| msgid "Open Project"
+#, kde-format
 msgctxt "@title:window"
 msgid "Open Origin OPJ Project"
-msgstr "打开工程"
+msgstr ""
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:445
 #, kde-format
@@ -12682,9 +12680,9 @@ msgid "Uncertainty Bars"
 msgstr ""
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:85
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:91
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:149
 #, kde-format
-msgid "X Uncertainty"
+msgid "Uncertainty"
 msgstr ""
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:159
@@ -13006,6 +13004,11 @@ msgstr ""
 msgid "Correlation status: %1"
 msgstr ""
 
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:91
+#, kde-format
+msgid "X Uncertainty"
+msgstr ""
+
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:92
 #, kde-format
 msgid "Y Uncertainty"
@@ -13227,11 +13230,6 @@ msgstr ""
 #: src/kdefrontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:94
 #, kde-format
 msgid "t, max"
-msgstr ""
-
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:149
-#, kde-format
-msgid "Uncertainty"
 msgstr ""
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:149

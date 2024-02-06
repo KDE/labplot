@@ -13,10 +13,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-05 01:51+0000\n"
-"PO-Revision-Date: 2024-01-31 21:20+0100\n"
+"POT-Creation-Date: 2024-02-06 01:57+0000\n"
+"PO-Revision-Date: 2024-02-04 11:03+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
-"Language-Team: French <kde-francophone@kde.org>\n"
+"Language-Team: \n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2241,12 +2241,12 @@ msgstr "Le périphérique a expiré."
 msgid "The following error occurred: %1."
 msgstr "L'erreur suivante est survenue : %1."
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1135
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1146
 #, kde-format
 msgid "Plot%1"
 msgstr "Tracé%1"
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1307
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1334
 #, kde-format
 msgid "legend"
 msgstr "légende"
@@ -11901,18 +11901,15 @@ msgid "LabPlot Projects (%1)"
 msgstr "Projet LabPlot (%1)"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:443
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Open Origin Project"
+#, kde-format
 msgctxt "@title:window"
 msgid "Open Origin OPJ Project"
-msgstr "Ouvrir un projet originel"
+msgstr "Ouvrir un projet « Origin » au format » OPJ »"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:445
-#, fuzzy, kde-format
-#| msgid "Origin Projects (%1)"
+#, kde-format
 msgid "Origin OPJ Projects (%1)"
-msgstr "Projets originels (%1)"
+msgstr "Projets « Origin » au format » OPJ » (%1)"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:514
 #, kde-format
@@ -13051,10 +13048,10 @@ msgid "Uncertainty Bars"
 msgstr "Barres d'incertitude"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:85
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:91
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:149
 #, kde-format
-msgid "X Uncertainty"
-msgstr "Incertitude en X"
+msgid "Uncertainty"
+msgstr "Incertitude"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:159
 #, kde-format
@@ -13387,6 +13384,11 @@ msgstr "État de déconvolution : %1"
 msgid "Correlation status: %1"
 msgstr "État de corrélation : %1"
 
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:91
+#, kde-format
+msgid "X Uncertainty"
+msgstr "Incertitude en X"
+
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:92
 #, kde-format
 msgid "Y Uncertainty"
@@ -13613,11 +13615,6 @@ msgstr "t min"
 #, kde-format
 msgid "t, max"
 msgstr "t max"
-
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:149
-#, kde-format
-msgid "Uncertainty"
-msgstr "Incertitude"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:149
 #, kde-format

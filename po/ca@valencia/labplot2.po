@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-05 01:51+0000\n"
-"PO-Revision-Date: 2024-01-31 09:35+0100\n"
+"POT-Creation-Date: 2024-02-06 01:57+0000\n"
+"PO-Revision-Date: 2024-02-03 09:42+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -2233,12 +2233,12 @@ msgstr "El dispositiu ha excedit el temps."
 msgid "The following error occurred: %1."
 msgstr "Ha ocorregut l'error següent: %1."
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1135
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1146
 #, kde-format
 msgid "Plot%1"
 msgstr "Diagrama%1"
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1307
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1334
 #, kde-format
 msgid "legend"
 msgstr "llegenda"
@@ -11937,18 +11937,15 @@ msgid "LabPlot Projects (%1)"
 msgstr "Projectes de LabPlot (%1)"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:443
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Open Origin Project"
+#, kde-format
 msgctxt "@title:window"
 msgid "Open Origin OPJ Project"
-msgstr "Obri un projecte d'Origin"
+msgstr "Obri un projecte OPJ d'Origin"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:445
-#, fuzzy, kde-format
-#| msgid "Origin Projects (%1)"
+#, kde-format
 msgid "Origin OPJ Projects (%1)"
-msgstr "Projectes d'Origin (%1)"
+msgstr "Projectes OPJ d'Origin (%1)"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:514
 #, kde-format
@@ -13093,10 +13090,10 @@ msgid "Uncertainty Bars"
 msgstr "Barres d'incertesa"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:85
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:91
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:149
 #, kde-format
-msgid "X Uncertainty"
-msgstr "Incertesa X"
+msgid "Uncertainty"
+msgstr "Incertesa"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:159
 #, kde-format
@@ -13427,6 +13424,11 @@ msgstr "Estat de la desconvolució: %1"
 msgid "Correlation status: %1"
 msgstr "Estat de la correlació: %1"
 
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:91
+#, kde-format
+msgid "X Uncertainty"
+msgstr "Incertesa X"
+
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:92
 #, kde-format
 msgid "Y Uncertainty"
@@ -13653,11 +13655,6 @@ msgstr "t, mín"
 #, kde-format
 msgid "t, max"
 msgstr "t, màx"
-
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:149
-#, kde-format
-msgid "Uncertainty"
-msgstr "Incertesa"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:149
 #, kde-format
@@ -22915,6 +22912,3 @@ msgstr "El procés «convert» ha fallat, codi d'eixida ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "No s'ha pogut obrir el fitxer:"
-
-#~ msgid "%1 CustomPoints: visibility changed"
-#~ msgstr "%1 punts personalitzats: s'ha canviat la visibilitat"
