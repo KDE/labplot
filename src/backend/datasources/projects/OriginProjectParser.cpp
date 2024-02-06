@@ -1327,8 +1327,12 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 
 	// add legend if available
 	const auto& originLegend = layer.legend;
-	const auto& legendText = QString::fromStdString(originLegend.text);
 	if (!originLegend.text.empty()) {
+		QString legendText;
+		if (m_originFile->version() < 9.5) // <= 2017 : pre-Unicode
+			legendText = QString::fromLatin1(originLegend.text.c_str());
+		else
+			legendText = QString::fromStdString(originLegend.text);
 		DEBUG(Q_FUNC_INFO << ", legend text = \"" << STDSTRING(legendText) << "\"");
 
 		auto* legend = new CartesianPlotLegend(i18n("legend"));
@@ -1423,7 +1427,12 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 	for (const auto& t : layer.texts) {
 		DEBUG(Q_FUNC_INFO << ", EXTRA TEXT = " << t.text);
 		auto* label = new TextLabel(QStringLiteral("text label"));
-		QTextEdit te(parseOriginText(QString::fromStdString(t.text)));
+		QString text;
+		if (m_originFile->version() < 9.5) // <= 2017 : pre-Unicode
+			text = QString::fromLatin1(t.text.c_str());
+		else
+			text = QString::fromStdString(t.text);
+		QTextEdit te(parseOriginText(text));
 		te.selectAll();
 		DEBUG(Q_FUNC_INFO << ", font size = " << t.fontSize)
 		te.setFontPointSize(int(t.fontSize)); // no scaling
@@ -1900,9 +1909,19 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 
 	// axis title
 	if (axisFormat.label.shown) {
-		QString titleText = parseOriginText(QString::fromStdString(axisFormat.label.text));
+		/*for (int i=0; i<axisFormat.label.text.size(); i++)
+			printf(" %c ", axisFormat.label.text.at(i));
+		printf("\n");
+		for (int i=0; i<axisFormat.label.text.size(); i++)
+			printf(" %02hhx", axisFormat.label.text.at(i));
+		printf("\n");
+		*/
+		QString titleText;
+		if (m_originFile->version() < 9.5) // <= 2017 : pre-Unicode
+			titleText = parseOriginText(QString::fromLatin1(axisFormat.label.text.c_str()));
+		else
+			titleText = parseOriginText(QString::fromStdString(axisFormat.label.text));
 		DEBUG(Q_FUNC_INFO << ", axis title text = " << STDSTRING(titleText));
-		// TODO: convert special character here too
 		DEBUG(Q_FUNC_INFO << ", curve name = " << STDSTRING(axisTitle));
 		titleText.replace(QLatin1String("%(?X)"), axisTitle);
 		titleText.replace(QLatin1String("%(?Y)"), axisTitle);
