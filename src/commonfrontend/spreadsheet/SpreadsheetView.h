@@ -87,7 +87,6 @@ private:
 	void init();
 	void initActions();
 	void initMenus();
-	void connectColsToSparkline();
 	void connectActions();
 	bool formulaModeActive() const;
 	void exportToFile(const QString&, bool, const QString&, QLocale::Language) const;
@@ -232,6 +231,7 @@ public Q_SLOTS:
 	void createContextMenu(QMenu*);
 	void fillColumnContextMenu(QMenu*, Column*);
 	void fillToolBar(QToolBar*);
+
 #ifdef HAVE_TOUCHBAR
 	void fillTouchBar(KDMacTouchBar*);
 #endif
@@ -255,6 +255,7 @@ private Q_SLOTS:
 	void goToCell();
 	void formatHeatmap();
 	void removeFormat();
+	void connectColsToSparkline(int);
 
 	void cutSelection();
 	void copySelection();

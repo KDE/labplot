@@ -252,6 +252,7 @@ void AbstractAspect::setSparkline(QPixmap pix) {
 QPixmap AbstractAspect::getSparkline() {
 	return d->m_sparkline;
 }
+
 void AbstractAspect::setComment(const QString& value) {
 	if (value == d->m_comment)
 		return;

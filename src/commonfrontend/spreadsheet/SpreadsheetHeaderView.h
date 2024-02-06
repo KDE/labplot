@@ -72,6 +72,9 @@ public:
 	void showSparkLines(bool on = true);
 	bool areSparkLinesShown() const;
 
+Q_SIGNALS:
+	void sparklineToggled();
+
 public Q_SLOTS:
 	void refresh();
 

@@ -502,7 +502,7 @@ public:
 		return mRetransformCalled;
 	}
 	int mRetransformCalled{0};
-	bool mDataChanged;
+	bool mDataChanged{0};
 	bool isDataChanged() const {
 		return mDataChanged;
 	}

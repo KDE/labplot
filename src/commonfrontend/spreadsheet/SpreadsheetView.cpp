@@ -215,12 +215,11 @@ void SpreadsheetView::init() {
 	});
 
 	// initial connection to sparkline
-	connectColsToSparkline();
-
-	// rect on columnCount change
-	connect(m_spreadsheet, &Spreadsheet::columnCountChanged, this, [=] {
-		connectColsToSparkline();
+	connect(m_horizontalHeader, &SpreadsheetHeaderView::sparklineToggled, this, [=] {
+		connectColsToSparkline(m_spreadsheet->columnCount());
 	});
+	// rect on columnCount change
+	connect(m_spreadsheet, &Spreadsheet::columnCountChanged, this, &SpreadsheetView::connectColsToSparkline);
 	// selection related connections
 	connect(m_tableView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &SpreadsheetView::selectionChanged);
 	connect(m_spreadsheet, &Spreadsheet::columnSelected, this, &SpreadsheetView::selectColumn);
@@ -280,14 +279,21 @@ void SpreadsheetView::updateFrozenTableGeometry() {
 								   m_tableView->viewport()->height() + m_tableView->horizontalHeader()->height());
 }
 
-void SpreadsheetView::connectColsToSparkline() {
-	for (int colIndex = 0; colIndex < m_spreadsheet->columnCount(); ++colIndex) {
-		connect(m_spreadsheet->column(colIndex), &AbstractColumn::dataChanged, this, [=] {
-			m_model->column(colIndex)->mDataChanged = true;
-			if (m_spreadsheet->isSparklineShown) {
-				SpreadsheetSparkLinesHeaderModel::sparkLine(m_model->column(colIndex));
-				m_horizontalHeader->refresh();
-			}
+void SpreadsheetView::connectColsToSparkline(int colCount) {
+	if (!m_spreadsheet->isSparklineShown)
+		return;
+	for (int colIndex = 0; colIndex < colCount; ++colIndex) {
+		// init sparkline
+		Column* column = m_model->column(colIndex);
+		column->mDataChanged = true;
+		SpreadsheetSparkLinesHeaderModel::sparkLine(column);
+		m_horizontalHeader->refresh();
+
+		// connect for update on data change
+		connect(column, &Column::dataChanged, this, [=] {
+			column->mDataChanged = true;
+			SpreadsheetSparkLinesHeaderModel::sparkLine(column);
+			m_horizontalHeader->refresh();
 		});
 	}
 }
