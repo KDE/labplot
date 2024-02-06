@@ -22,8 +22,6 @@ void SparkLineRunnable::run() {
 	static const QString sparklineTheme = QStringLiteral("Sparkline");
 	static const QString sparklineText = QStringLiteral("add-sparkline");
 	auto* worksheet = new Worksheet(sparklineText);
-	DEBUG(Q_FUNC_INFO);
-
 	DEBUG(Q_FUNC_INFO << " "<< col->doubleAt(0));
 
 	if (col->columnMode() == Column::ColumnMode::Text) {

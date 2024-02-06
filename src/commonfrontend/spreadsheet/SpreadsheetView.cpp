@@ -215,9 +215,7 @@ void SpreadsheetView::init() {
 	});
 
 	// initial connection to sparkline
-	connect(m_horizontalHeader, &SpreadsheetHeaderView::sparklineToggled, this, [=] {
-		connectColsToSparkline(m_spreadsheet->columnCount());
-	});
+	connectColsToSparkline();
 	// rect on columnCount change
 	connect(m_spreadsheet, &Spreadsheet::columnCountChanged, this, &SpreadsheetView::connectColsToSparkline);
 	// selection related connections
@@ -279,7 +277,7 @@ void SpreadsheetView::updateFrozenTableGeometry() {
 								   m_tableView->viewport()->height() + m_tableView->horizontalHeader()->height());
 }
 
-void SpreadsheetView::connectColsToSparkline(int colCount) {
+void SpreadsheetView::connectColsToSparkline() {
 	for (int colIndex = 0; colIndex < m_spreadsheet->columnCount(); ++colIndex) {
 		connect(m_spreadsheet->column(colIndex), &AbstractColumn::dataChanged, this, [=] {
 			m_model->column(colIndex)->mDataChanged = true;

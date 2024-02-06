@@ -211,10 +211,8 @@ bool SpreadsheetHeaderView::areSparkLinesShown() const {
 */
 void SpreadsheetHeaderView::showSparkLines(bool on) {
 	m_showSparkLines = on;
-	if (on){
+	if (on)
 		m_sparkLineSlave->getModel()->getSpreadSheetModel()->getSpreadSheet()->isSparklineShown = true;
-		Q_EMIT sparklineToggled();
-	}
 	refresh();
 }
 
