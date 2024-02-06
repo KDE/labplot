@@ -32,15 +32,16 @@ void MCAPFilterTest::testArrayImport() {
 	// library: python mcap 1.1.1
 	// profile: 
 	// messages: 10
-	// duration: 176.674µs
-	// start: 2024-01-18T18:57:47.21980086-08:00 (1705633067.219800860)
-	// end: 2024-01-18T18:57:47.219977534-08:00 (1705633067.219977534)
+	// duration: 9h0m0s
+	// start: 0.000000000
+	// end: 32400.000000000
 	// compression:
-	// 	: [1/1 chunks] [575.00 B/575.00 B (0.00%)] [3.10 MiB/sec] 
+	// 	: [1/1 chunks] [575.00 B/575.00 B (0.00%)] [0.00 B/sec] 
 	// channels:
-	//   	(1) integer_topic  10 msgs (56601.42 Hz)   : sample [jsonschema]  
+	//   	(1) integer_topic  10 msgs (0.00 Hz)   : sample [jsonschema]  
 	// attachments: 0
 	// metadata: 0
+
 
 
 	AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode::Replace;
@@ -48,6 +49,7 @@ void MCAPFilterTest::testArrayImport() {
 	filter.setDataRowType(QJsonValue::Double);
 	filter.setDateTimeFormat(QLatin1String("yyyy-MM-dd"));
 	filter.readDataFromFile(fileName, &spreadsheet, mode);
+
 
 	QCOMPARE(spreadsheet.columnCount(), 4);
 	QCOMPARE(spreadsheet.rowCount(), 10);

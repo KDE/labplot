@@ -248,6 +248,8 @@ int McapFilterPrivate::checkRow(QJsonValueRef value, int& countCols) {
 	case QJsonValue::Bool:
 	case QJsonValue::Null:
 	case QJsonValue::Undefined:
+		qDebug() << value;
+
 		return 1;
 	}
 	return 0;
@@ -462,6 +464,7 @@ bool McapFilterPrivate::prepareDocumentToRead() {
 		int endRowOffset = (endRow == -1 || endRow > count) ? count : endRow;
 		firstRow = *(arr.begin() + (startRow - 1));
 		for (QJsonArray::iterator it = arr.begin() + (startRow - 1); it != arr.begin() + endRowOffset; ++it) {
+
 			if (checkRow(*it, countCols) != 0)
 				return false;
 			countRows++;
@@ -547,22 +550,46 @@ void McapFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSo
   QVector<qlonglong> logTimes;
   QVector<qlonglong> publishTimes;
 
-
+QJsonArray jsonArray;
   for (auto it = messageView.begin(); it != messageView.end(); it++) {
     // skip any non-json-encoded messages.
     if (it->channel->messageEncoding != "json") { // only support json encoding for now
       continue;
     }
-	    std::cout << it->channel->topic << "\t(" << it->schema->name << ")\t[" << it->message.logTime;
 
-    QString asString = QString::fromUtf8(reinterpret_cast<const char*>(it->message.data));
+	// Without going to string_view first I get this error:
+	// 32: QWARN  : MCAPFilterTest::testArrayImport() Error parsing JSON string: "{\"value\": 0}\u0005" "garbage at the end of the document"
+	std::string_view a(reinterpret_cast<const char*>(it->message.data),
+                              it->message.dataSize);
 
-	DEBUG(STDSTRING(asString));
+    QString asString = QString::fromStdString(std::string(a));
 
-	QJsonDocument doc = QJsonDocument::fromJson(reinterpret_cast<const char*>(it->message.data));
+	QJsonParseError error;
+    QJsonDocument jsonDocument = QJsonDocument::fromJson(asString.toUtf8(), &error);
+	QJsonObject obj = jsonDocument.object();
 
+    obj.insert(QLatin1String("sequence"), QJsonValue::fromVariant(it->message.sequence));
+	obj.insert(QLatin1String("logTime"), QJsonValue::fromVariant(QString::number(it->message.logTime)));        
+    obj.insert(QLatin1String("publishTime"), QJsonValue::fromVariant(QString::number(it->message.publishTime)));        
 
-	DEBUG(std::to_string(it->message.sequence) << " " << std::to_string(it->message.publishTime) );
+        if (error.error != QJsonParseError::NoError) {
+            qWarning() << "Error parsing JSON string:" << asString<<error.errorString();
+            continue;
+        }
+
+        // Check if the parsed JSON document is an object
+        if (!jsonDocument.isObject()) {
+            qWarning() << "JSON string does not contain an object:" << asString;
+            continue;
+        }
+
+        // Convert the JSON document to a JSON object and add it to the JSON array
+		foreach(const QString& key, jsonDocument.object().keys()) {
+        QJsonValue value = jsonDocument.object().value(key);
+        qDebug() << "Key = " << key << ", Value = " << value;
+    }
+        jsonArray.append(obj);
+
 	sequences << it->message.sequence;
 
 	logTimes << it->message.logTime;
@@ -570,22 +597,31 @@ void McapFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSo
 	msg_count++;
   }
 
-	m_actualRows = msg_count;
-	m_actualCols = 4;
+  QJsonDocument finalJsonDocument(jsonArray);
 
-	m_columnOffset = dataSource->prepareImport(m_dataContainer, importMode, m_actualRows, m_actualCols, vectorNames, columnModes);
+    qDebug() << finalJsonDocument.toJson(QJsonDocument::Compact);
+
+	m_actualRows = msg_count;
+	//m_actualCols = 4;
+
+	//m_columnOffset = dataSource->prepareImport(m_dataContainer, importMode, m_actualRows, m_actualCols, vectorNames, columnModes);
 	
-	for (int i = 0; i < msg_count; ++i) {
-		if (createIndexEnabled){
-			static_cast<QVector<int>*>(m_dataContainer[0])->operator[](i) = i + 1;
-		}
-		static_cast<QVector<QDateTime>*>(m_dataContainer[0+createIndexEnabled])->operator[](i) = QDateTime::fromMSecsSinceEpoch(logTimes[i] / 1000000);
-		static_cast<QVector<QDateTime>*>(m_dataContainer[1+createIndexEnabled])->operator[](i) = QDateTime::fromMSecsSinceEpoch(publishTimes[i] / 1000000);
-		static_cast<QVector<int>*>(m_dataContainer[2+createIndexEnabled])->operator[](i) = sequences[i];
-	}
+	// for (int i = 0; i < msg_count; ++i) {
+	// 	if (createIndexEnabled){
+	// 		static_cast<QVector<int>*>(m_dataContainer[0])->operator[](i) = i + 1;
+	// 	}
+	// 	static_cast<QVector<QDateTime>*>(m_dataContainer[0+createIndexEnabled])->operator[](i) = QDateTime::fromMSecsSinceEpoch(logTimes[i] / 1000000);
+	// 	static_cast<QVector<QDateTime>*>(m_dataContainer[1+createIndexEnabled])->operator[](i) = QDateTime::fromMSecsSinceEpoch(publishTimes[i] / 1000000);
+	// 	static_cast<QVector<int>*>(m_dataContainer[2+createIndexEnabled])->operator[](i) = sequences[i];
+	// }
 		
-		
-	dataSource->finalizeImport(m_columnOffset, startColumn, startColumn + m_actualCols - 1, dateTimeFormat, importMode);
+	m_doc = finalJsonDocument;
+	bool success = prepareDocumentToRead();
+	qDebug() << success;
+	if (success)
+		importData(dataSource, importMode, msg_count);
+
+	//dataSource->finalizeImport(m_columnOffset, startColumn, startColumn + m_actualCols - 1, dateTimeFormat, importMode);
 
 }
 
