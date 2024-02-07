@@ -68,6 +68,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/datasources/ROOTOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/FITSOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/JsonOptionsWidget.cpp
+	${KDEFRONTEND_DIR}/datasources/McapOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/BaseDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/AspectDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/AxisDock.cpp
@@ -202,6 +203,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/datasources/rootoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/fitsoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/jsonoptionswidget.ui
+	${KDEFRONTEND_DIR}/ui/datasources/mcapoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/odsoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/xlsxoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/aspectdock.ui

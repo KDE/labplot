@@ -18,6 +18,7 @@
 #include "HDF5OptionsWidget.h"
 #include "ImageOptionsWidget.h"
 #include "JsonOptionsWidget.h"
+#include "McapOptionsWidget.h"
 #include "MatioOptionsWidget.h"
 #include "NetCDFOptionsWidget.h"
 #include "OdsOptionsWidget.h"
@@ -125,6 +126,8 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 #ifdef HAVE_MATIO
 		ui.cbFileType->addItem(i18n("MATLAB MAT file"), static_cast<int>(AbstractFileFilter::FileType::MATIO));
 #endif
+		ui.cbFileType->addItem(i18n("MCAP Data"), static_cast<int>(AbstractFileFilter::FileType::MCAP));
+
 
 		// hide widgets relevant for live data reading only
 		ui.lRelativePath->hide();
@@ -430,6 +433,8 @@ ImportFileWidget::~ImportFileWidget() {
 		m_imageOptionsWidget->saveSettings();
 	if (m_jsonOptionsWidget)
 		m_jsonOptionsWidget->saveSettings();
+	if (m_mcapOptionsWidget)
+		m_mcapOptionsWidget->saveSettings();
 	if (m_canOptionsWidget)
 		m_canOptionsWidget->saveSettings();
 }
@@ -833,6 +838,20 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 			m_currentFilter.reset(new JsonFilter);
 		auto filter = static_cast<JsonFilter*>(m_currentFilter.get());
 		m_jsonOptionsWidget->applyFilterSettings(filter, ui.tvJson->currentIndex());
+
+		filter->setStartRow(ui.sbStartRow->value());
+		filter->setEndRow(ui.sbEndRow->value());
+		filter->setStartColumn(ui.sbStartColumn->value());
+		filter->setEndColumn(ui.sbEndColumn->value());
+
+		break;
+	}
+	case AbstractFileFilter::FileType::MCAP: {
+		DEBUG(Q_FUNC_INFO << ", MCAP");
+		if (!m_currentFilter)
+			m_currentFilter.reset(new McapFilter);
+		auto filter = static_cast<McapFilter*>(m_currentFilter.get());
+		m_mcapOptionsWidget->applyFilterSettings(filter, ui.tvJson->currentIndex());
 
 		filter->setStartRow(ui.sbStartRow->value());
 		filter->setEndRow(ui.sbEndRow->value());
@@ -1373,6 +1392,19 @@ void ImportFileWidget::initOptionsWidget() {
 		ui.swOptions->setCurrentWidget(m_jsonOptionsWidget->parentWidget());
 		showJsonModel(true);
 		break;
+	case AbstractFileFilter::FileType::MCAP:
+		if (!m_mcapOptionsWidget) {
+			auto* jsonw = new QWidget();
+			m_mcapOptionsWidget = std::unique_ptr<McapOptionsWidget>(new McapOptionsWidget(jsonw));
+			ui.tvJson->setModel(m_mcapOptionsWidget->model());
+			ui.swOptions->addWidget(jsonw);
+			m_mcapOptionsWidget->loadSettings();
+			connect(m_mcapOptionsWidget.get(), &McapOptionsWidget::error, this, &ImportFileWidget::error);
+		} else
+			m_mcapOptionsWidget->clearModel();
+		ui.swOptions->setCurrentWidget(m_mcapOptionsWidget->parentWidget());
+		showJsonModel(true);
+		break;
 	case AbstractFileFilter::FileType::ROOT:
 		if (!m_rootOptionsWidget) {
 			auto* rootw = new QWidget();
@@ -1542,6 +1574,9 @@ QString ImportFileWidget::fileInfoString(const QString& name) const {
 			break;
 		case AbstractFileFilter::FileType::JSON:
 			infoStrings << JsonFilter::fileInfoString(fileName);
+			break;
+		case AbstractFileFilter::FileType::MCAP:
+			infoStrings << McapFilter::fileInfoString(fileName);
 			break;
 		case AbstractFileFilter::FileType::ROOT:
 			infoStrings << ROOTFilter::fileInfoString(fileName);

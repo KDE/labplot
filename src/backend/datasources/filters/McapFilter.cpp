@@ -596,6 +596,7 @@ QJsonArray jsonArray;
 reads the content of device \c device to the data source \c dataSource. Uses the settings defined in the data source.
 */
 void McapFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
+	
 	if (!m_prepared) {
 		const int deviceError = prepareDeviceToRead(device);
 		if (deviceError != 0) {

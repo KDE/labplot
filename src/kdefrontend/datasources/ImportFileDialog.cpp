@@ -173,7 +173,6 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 		DEBUG("	cbAddTo->currentModelIndex() row/column = " << cbAddTo->currentModelIndex().row() << ' ' << cbAddTo->currentModelIndex().column());
 		return;
 	}
-
 	auto filter = m_importFileWidget->currentFileFilter();
 	if (m_importFileWidget->importValid()) {
 		DEBUG(Q_FUNC_INFO << ", Import VALID!")
@@ -213,13 +212,14 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 		DEBUG(Q_FUNC_INFO << ", to Spreadsheet");
 		auto* spreadsheet = qobject_cast<Spreadsheet*>(aspect);
 		filter->readDataFromFile(fileName, spreadsheet, mode);
+
 	} else if (aspect->inherits(AspectType::Workbook)) {
 		DEBUG(Q_FUNC_INFO << ", to Workbook");
 		auto* workbook = static_cast<Workbook*>(aspect);
 		workbook->setUndoAware(false);
 		auto sheets = workbook->children<AbstractAspect>();
-
 		AbstractFileFilter::FileType fileType = m_importFileWidget->currentFileType();
+
 		// types supporting multiple data sets/variables
 		if (fileType == AbstractFileFilter::FileType::HDF5 || fileType == AbstractFileFilter::FileType::NETCDF || fileType == AbstractFileFilter::FileType::ROOT
 			|| fileType == AbstractFileFilter::FileType::MATIO || fileType == AbstractFileFilter::FileType::XLSX
@@ -319,6 +319,7 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 			workbook->setUndoAware(true);
 		} else { // single import file types
 			// use active spreadsheet/matrix if present, else new spreadsheet
+			qDebug() << "Hello";
 			auto* sheet = workbook->currentSpreadsheet();
 			if (sheet)
 				filter->readDataFromFile(fileName, sheet, mode);

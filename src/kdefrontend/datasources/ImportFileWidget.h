@@ -33,6 +33,7 @@ class FITSOptionsWidget;
 class HDF5OptionsWidget;
 class ImageOptionsWidget;
 class JsonOptionsWidget;
+class McapOptionsWidget;
 class MatioOptionsWidget;
 class NetCDFOptionsWidget;
 class OdsOptionsWidget;
@@ -107,6 +108,8 @@ private:
 	std::unique_ptr<MatioOptionsWidget> m_matioOptionsWidget;
 	std::unique_ptr<FITSOptionsWidget> m_fitsOptionsWidget;
 	std::unique_ptr<JsonOptionsWidget> m_jsonOptionsWidget;
+	std::unique_ptr<McapOptionsWidget> m_mcapOptionsWidget;
+
 	std::unique_ptr<ROOTOptionsWidget> m_rootOptionsWidget;
 
 	mutable std::unique_ptr<AbstractFileFilter> m_currentFilter;
