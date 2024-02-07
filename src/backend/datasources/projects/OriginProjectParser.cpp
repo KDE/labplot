@@ -1225,11 +1225,14 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 		while (it != textLabelPositions.constEnd()) {
 			TextLabel* label = it.key();
 			const QSizeF& ratios = it.value();
-			const auto* plot = static_cast<const CartesianPlot*>(label->parentAspect());
 
 			auto position = label->position();
-			position.point.setX(plot->dataRect().width() * (ratios.width() - 0.5));
-			position.point.setY(plot->dataRect().height() * (ratios.height() - 0.5));
+			position.point.setX(ratios.width());
+			position.point.setY(ratios.height());
+			position.horizontalPosition = WorksheetElement::HorizontalPosition::Relative;
+			position.verticalPosition = WorksheetElement::VerticalPosition::Relative;
+			label->setHorizontalAlignment(WorksheetElement::HorizontalAlignment::Left);
+			label->setVerticalAlignment(WorksheetElement::VerticalAlignment::Top);
 			label->setPosition(position);
 
 			++it;
@@ -1482,11 +1485,10 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 		label->setParentGraphicsItem(plot->graphicsItem());
 
 		// position
-		// determine the relative position inside of the layer rect
-		const qreal horRatio = (qreal)(t.clientRect.left - layer.clientRect.left) / (layer.clientRect.right - layer.clientRect.left);
-		const qreal vertRatio = (qreal)(t.clientRect.top - layer.clientRect.top) / (layer.clientRect.bottom - layer.clientRect.top);
-		textLabelPositions[label] = QSizeF(horRatio, vertRatio);
-		DEBUG(Q_FUNC_INFO << ", horizontal/vertical ratio = " << horRatio << ", " << vertRatio);
+		// determine the relative position to the graph
+		QSizeF relativePosition(t.clientRect.left / (double)graphSize.width(), t.clientRect.top / (double)graphSize.height());
+		DEBUG(Q_FUNC_INFO << ", relative position to page = " << relativePosition.width() << "/" << relativePosition.height())
+		textLabelPositions[label] = relativePosition;
 
 		// rotation
 		label->setRotationAngle(t.rotation);
