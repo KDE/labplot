@@ -11,6 +11,7 @@
 
 #include "backend/worksheet/plots/cartesian/BarPlot.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
+#include "qwidget.h"
 
 void SparkLineRunnable::run() {
 	if (col->columnMode() != Column::ColumnMode::Text && !col->isPlottable()) {

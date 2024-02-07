@@ -214,11 +214,10 @@ void SpreadsheetView::init() {
 		m_suppressResize = true;
 	});
 
-
 	// initialise sparkline
 	for (int colIndex = 0; colIndex < m_spreadsheet->columnCount(); ++colIndex) {
 		connect(m_spreadsheet->column(colIndex), &AbstractColumn::dataChanged, this, [=] {
-			m_spreadsheet->column(colIndex)->mDataChanged = true;
+			m_spreadsheet->column(colIndex)->mSparklineToRepaint = true;
 			if (m_spreadsheet->isSparklineShown) {
 				SpreadsheetSparkLinesHeaderModel::sparkLine(m_spreadsheet->column(colIndex));
 				m_horizontalHeader->refresh();
@@ -229,7 +228,7 @@ void SpreadsheetView::init() {
 	// react on sparkline toggled
 	connect(m_horizontalHeader, &SpreadsheetHeaderView::sparklineToggled, this, [=] {
 		for (int colIndex = 0; colIndex < m_spreadsheet->columnCount(); ++colIndex) {
-			m_spreadsheet->column(colIndex)->mDataChanged = true;
+			m_spreadsheet->column(colIndex)->mSparklineToRepaint = true;
 			SpreadsheetSparkLinesHeaderModel::sparkLine(m_spreadsheet->column(colIndex));
 			m_horizontalHeader->refresh();
 		}
@@ -237,14 +236,13 @@ void SpreadsheetView::init() {
 
 	connect(m_spreadsheet, &Spreadsheet::columnCountChanged, this, [=] {
 		// Disconnect existing connections before creating new ones
-		for (int colIndex = 0; colIndex < m_spreadsheet->columnCount(); ++colIndex) {
-			QObject::disconnect(m_spreadsheet->column(colIndex), &AbstractColumn::dataChanged, this, nullptr);
-		}
+		for (int colIndex = 0; colIndex < m_spreadsheet->columnCount(); ++colIndex)
+			disconnect(m_spreadsheet->column(colIndex), &AbstractColumn::dataChanged, this, nullptr);
 
 		// Establish new connections
 		for (int colIndex = 0; colIndex < m_spreadsheet->columnCount(); ++colIndex) {
 			connect(m_spreadsheet->column(colIndex), &AbstractColumn::dataChanged, this, [=] {
-				m_spreadsheet->column(colIndex)->mDataChanged = true;
+				m_spreadsheet->column(colIndex)->mSparklineToRepaint = true;
 				SpreadsheetSparkLinesHeaderModel::sparkLine(m_spreadsheet->column(colIndex));
 				m_horizontalHeader->refresh();
 			});

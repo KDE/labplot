@@ -13,6 +13,7 @@
 #define COLUMN_H
 
 #include "backend/core/AbstractColumn.h"
+#include <QPixmap>
 
 class AbstractSimpleFilter;
 class CartesianPlot;
@@ -223,9 +224,14 @@ public:
 	bool load(XmlStreamReader*, bool preview) override;
 	void finalizeLoad();
 
+	// for react on sparkline
+	bool mSparklineToRepaint{0};
+
 public Q_SLOTS:
 	void pasteData();
 	void updateFormula();
+	void setSparkline(QPixmap pix);
+	QPixmap getSparkline();
 
 private:
 	bool XmlReadInputFilter(XmlStreamReader*);
@@ -243,6 +249,8 @@ private:
 
 	ColumnPrivate* d;
 	ColumnStringIO* m_string_io;
+
+	QPixmap m_sparkline;
 
 Q_SIGNALS:
 	void requestProjectContextMenu(QMenu*);

@@ -25,7 +25,6 @@
 #include <QClipboard>
 #include <QMenu>
 #include <QMimeData>
-#include <qpixmap.h>
 
 #include <commonfrontend/ProjectExplorer.h>
 
@@ -243,14 +242,6 @@ bool AbstractAspect::setName(const QString& value, NameHandling handling, QUndoC
 
 QString AbstractAspect::comment() const {
 	return d->m_comment;
-}
-
-void AbstractAspect::setSparkline(QPixmap pix) {
-	d->m_sparkline = pix;
-}
-
-QPixmap AbstractAspect::getSparkline() {
-	return d->m_sparkline;
 }
 
 void AbstractAspect::setComment(const QString& value) {

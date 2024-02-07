@@ -13,8 +13,6 @@
 
 #include <QWidget>
 
-#include <backend/core/column/Column.h>
-
 class AbstractAspect;
 class AspectTreeModel;
 class Project;

@@ -526,7 +526,6 @@ void PlotDataDialog::addCurvesToPlot(CartesianPlot* plot) {
 	QApplication::processEvents(QEventLoop::AllEvents, 100);
 	switch (m_plotType) {
 	case PlotType::XYCurve: {
-		DEBUG("INSIDE XY");
 		Column* xColumn = columnFromName(ui->cbXColumn->currentText());
 		for (auto* comboBox : m_columnComboBoxes) {
 			const QString& name = comboBox->currentText();
@@ -549,8 +548,6 @@ void PlotDataDialog::addCurvesToPlot(CartesianPlot* plot) {
 	case PlotType::Histogram:
 	case PlotType::KDEPlot:
 	case PlotType::QQPlot: {
-		DEBUG("INSIDE QQ");
-
 		for (auto* comboBox : m_columnComboBoxes) {
 			const QString& name = comboBox->currentText();
 			Column* column = columnFromName(name);
@@ -561,8 +558,6 @@ void PlotDataDialog::addCurvesToPlot(CartesianPlot* plot) {
 	case PlotType::BoxPlot:
 	case PlotType::BarPlot:
 	case PlotType::LollipopPlot: {
-		DEBUG("INSIDE Lollipop");
-
 		QVector<const AbstractColumn*> columns;
 		for (auto* comboBox : m_columnComboBoxes)
 			columns << columnFromName(comboBox->currentText());
@@ -585,11 +580,7 @@ void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) {
 
 	switch (m_plotType) {
 	case PlotType::XYCurve: {
-		DEBUG("INSIDE XY");
-
 		const QString& xColumnName = ui->cbXColumn->currentText();
-		DEBUG(xColumnName.toStdString());
-
 		Column* xColumn = columnFromName(xColumnName);
 		for (auto* comboBox : m_columnComboBoxes) {
 			const QString& name = comboBox->currentText();
@@ -611,8 +602,6 @@ void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) {
 	case PlotType::Histogram:
 	case PlotType::KDEPlot:
 	case PlotType::QQPlot: {
-		DEBUG("INSIDE QQ");
-
 		for (auto* comboBox : m_columnComboBoxes) {
 			const QString& name = comboBox->currentText();
 			Column* column = columnFromName(name);
@@ -630,7 +619,6 @@ void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) {
 	case PlotType::BoxPlot:
 	case PlotType::BarPlot:
 	case PlotType::LollipopPlot: {
-		DEBUG("INSIDE LOLLIPOP");
 		for (auto* comboBox : m_columnComboBoxes) {
 			const QString& name = comboBox->currentText();
 			Column* column = columnFromName(name);

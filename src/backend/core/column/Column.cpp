@@ -296,6 +296,14 @@ void Column::copyData() {
 	QApplication::clipboard()->setText(output);
 }
 
+void Column::setSparkline(QPixmap pix) {
+	m_sparkline = pix;
+}
+
+QPixmap Column::getSparkline() {
+	return m_sparkline;
+}
+
 void Column::pasteData() {
 	auto* spreadsheet = dynamic_cast<Spreadsheet*>(parentAspect());
 	if (spreadsheet)

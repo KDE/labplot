@@ -38,10 +38,11 @@ Qt::ItemFlags SpreadsheetSparkLinesHeaderModel::flags(const QModelIndex& index) 
 	else
 		return Qt::ItemIsEnabled;
 }
+
 void SpreadsheetSparkLinesHeaderModel::sparkLine(Column* col) {
-	if (col->mDataChanged) {
+	if (col->mSparklineToRepaint) {
 		if (col->hasValues()) {
-			col->mDataChanged = false;
+			col->mSparklineToRepaint = false;
 			col->setSparkline(SpreadsheetSparkLinesHeaderModel::showSparkLines(col));
 		}
 	}
@@ -63,7 +64,7 @@ QPixmap SpreadsheetSparkLinesHeaderModel::showSparkLines(Column* col) {
 	SparkLineRunnable* runnable = new SparkLineRunnable(col);
 
 	// Connect the finished signal of the runnable to the watcher's setFuture slot
-	QObject::connect(runnable, &SparkLineRunnable::taskFinished, [&]() {
+	connect(runnable, &SparkLineRunnable::taskFinished, [&]() {
 		QPixmap resultPixmap = runnable->getResultPixmap();
 		// Check if the result is valid
 		if (!resultPixmap.isNull()) {

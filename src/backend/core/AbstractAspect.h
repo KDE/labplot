@@ -14,7 +14,6 @@
 
 #include <QObject>
 #include <QVector>
-#include <qlabel.h>
 
 class AbstractAspectPrivate;
 class Folder;
@@ -431,8 +430,6 @@ private:
 public Q_SLOTS:
 	bool setName(const QString&, NameHandling handling = NameHandling::AutoUnique, QUndoCommand* parent = nullptr);
 	void setComment(const QString&);
-	void setSparkline(QPixmap pix);
-	QPixmap getSparkline();
 	void remove();
 	void remove(QUndoCommand* parent);
 	void copy();
@@ -502,10 +499,6 @@ public:
 		return mRetransformCalled;
 	}
 	int mRetransformCalled{0};
-	bool mDataChanged{0};
-	bool isDataChanged() const {
-		return mDataChanged;
-	}
 
 #define trackRetransformCalled(suppressed)                                                                                                                     \
 	Q_EMIT q->retransformCalledSignal(q, suppressed);                                                                                                          \
