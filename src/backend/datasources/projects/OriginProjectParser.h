@@ -55,8 +55,8 @@ private:
 	bool loadWorksheet(Worksheet*, bool preview);
 	void loadGraphLayer(const Origin::GraphLayer&, CartesianPlot*, int layerIndex, QHash<TextLabel*, QSizeF> textLabelPositions, bool preview);
 	void loadCurves(const Origin::GraphLayer&, CartesianPlot*, int layerIndex, bool preview);
-	void loadAxes(const Origin::GraphLayer&, CartesianPlot*, int layerIndex, const QString& xColumnName, const QString& yColumnName);
-	void loadAxis(const Origin::GraphAxis&, Axis*, int layerIndex, int index, const QString& axisTitle = QString()) const;
+	void loadAxes(const Origin::GraphLayer&, CartesianPlot*, int layerIndex, const QString& xColumnInfo, const QString& yColumnInfo);
+	void loadAxis(const Origin::GraphAxis&, Axis*, int layerIndex, int index, const QString& columnInfo = QString()) const;
 	void loadCurve(const Origin::GraphCurve&, XYCurve*) const;
 
 	bool loadNote(Note*, bool preview);
@@ -71,6 +71,7 @@ private:
 	unsigned int findWorkbookByName(const QString&);
 	unsigned int findWorksheetByName(const QString&);
 	unsigned int findNoteByName(const QString&);
+	Origin::SpreadSheet getSpreadsheetByName(QString&);
 	QString parseOriginText(const QString&) const;
 	QString parseOriginTags(const QString&) const;
 	QDateTime creationTime(tree<Origin::ProjectNode>::iterator) const;

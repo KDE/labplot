@@ -197,6 +197,40 @@ unsigned int OriginProjectParser::findNoteByName(const QString& name) {
 	return 0;
 }
 
+// get Origin::Spreadsheet from container name (may be a spreadsheet or workbook)
+Origin::SpreadSheet OriginProjectParser::getSpreadsheetByName(QString& containerName) {
+	DEBUG(Q_FUNC_INFO)
+	int sheetIndex = 0; // which sheet? "@X"
+	const int atIndex = containerName.indexOf(QLatin1Char('@'));
+	if (atIndex != -1) {
+		sheetIndex = containerName.mid(atIndex + 1).toInt() - 1;
+		containerName.truncate(atIndex);
+	}
+	// DEBUG("CONTAINER = " << STDSTRING(containerName) << ", SHEET = " << sheetIndex)
+
+	// check if workbook
+	int workbookIndex = findWorkbookByName(containerName);
+	// if workbook not found, findWorkbookByName() returns 0: check this
+	if (workbookIndex == 0 && (m_originFile->excelCount() == 0 || containerName.toStdString() != m_originFile->excel(0).name))
+		workbookIndex = -1;
+	// DEBUG("WORKBOOK  index = " << workbookIndex)
+
+	// comment of y column is used in legend (if not empty), else the column name
+	Origin::SpreadSheet sheet;
+	if (workbookIndex != -1) { // container is a workbook
+		sheet = m_originFile->excel(workbookIndex).sheets[sheetIndex];
+	} else { // container is a spreadsheet?
+		int spreadsheetIndex = findSpreadsheetByName(containerName);
+		// if spreadsheet not found, findSpreadsheetByName() returns 0: check this
+		if (spreadsheetIndex == 0 && (m_originFile->spreadCount() == 0 || containerName.toStdString() != m_originFile->spread(0).name))
+			spreadsheetIndex = -1;
+		if (spreadsheetIndex != -1)
+			sheet = m_originFile->spread(spreadsheetIndex);
+	}
+
+	return sheet;
+}
+
 // ##############################################################################
 // ############## Deserialization from Origin's project tree ####################
 // ##############################################################################
@@ -1465,15 +1499,52 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 		loadAxes(layer, plot, layerIndex, QLatin1String("X Axis Title"), QLatin1String("Y Axis Title"));
 	else {
 		auto originCurve = layer.curves.at(0);
-		QString xColumnName = QString::fromStdString(originCurve.xColumnName);
-		// TODO: "Partikelgrö"
-		DEBUG("	xColumnName = " << STDSTRING(xColumnName));
-		//				xColumnName.replace("%(?X,@LL)", );	// Long Name
+		// see loadCurves()
+		QString dataName(QString::fromStdString(originCurve.dataName));
+		DEBUG(Q_FUNC_INFO << ", curve data name " << STDSTRING(dataName))
+		QString containerName = dataName.right(dataName.length() - 2); // strip "E_" or "T_"
+		auto sheet = getSpreadsheetByName(containerName);
 
-		QDEBUG("	UTF8 xColumnName = " << xColumnName.toUtf8());
-		QString yColumnName = QString::fromStdString(originCurve.yColumnName);
+		QString xColumnName;
+		if (m_originFile->version() < 9.5) // <= 2017 : pre-Unicode
+			xColumnName = QString::fromLatin1(originCurve.xColumnName.c_str());
+		else
+			xColumnName = QString::fromStdString(originCurve.xColumnName);
 
-		loadAxes(layer, plot, layerIndex, xColumnName, yColumnName);
+		auto xColumn = sheet.columns[findColumnByName(sheet, xColumnName)];
+		QString xColumnInfo = xColumnName;
+		if (xColumn.comment.length() > 0) { // long name(, unit(, comment))
+			if (m_originFile->version() < 9.5) // <= 2017 : pre-Unicode
+				xColumnInfo = QString::fromLatin1(xColumn.comment.c_str());
+			else
+				xColumnInfo = QString::fromStdString(xColumn.comment);
+			if (xColumnInfo.contains(QLatin1Char('@'))) // remove @ options
+				xColumnInfo.truncate(xColumnInfo.indexOf(QLatin1Char('@')));
+		}
+		DEBUG(Q_FUNC_INFO << ", x column name = " << STDSTRING(xColumnName));
+		DEBUG(Q_FUNC_INFO << ", x column info = " << STDSTRING(xColumnInfo));
+
+		// same for y
+		QString yColumnName;
+		if (m_originFile->version() < 9.5) // <= 2017 : pre-Unicode
+			yColumnName = QString::fromLatin1(originCurve.yColumnName.c_str());
+		else
+			yColumnName = QString::fromStdString(originCurve.yColumnName);
+
+		auto yColumn = sheet.columns[findColumnByName(sheet, yColumnName)];
+		QString yColumnInfo = yColumnName;
+		if (yColumn.comment.length() > 0) { // long name(, unit(, comment))
+			if (m_originFile->version() < 9.5) // <= 2017 : pre-Unicode
+				yColumnInfo = QString::fromLatin1(yColumn.comment.c_str());
+			else
+				yColumnInfo = QString::fromStdString(yColumn.comment);
+			if (yColumnInfo.contains(QLatin1Char('@'))) // remove @ options
+				yColumnInfo.truncate(yColumnInfo.indexOf(QLatin1Char('@')));
+		}
+		DEBUG(Q_FUNC_INFO << ", y column name = " << STDSTRING(yColumnName));
+		DEBUG(Q_FUNC_INFO << ", y column info = " << STDSTRING(yColumnInfo));
+
+		loadAxes(layer, plot, layerIndex, xColumnInfo, yColumnInfo);
 	}
 
 	// range breaks
@@ -1497,37 +1568,10 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 			if (originCurve.type == Origin::GraphCurve::Line || originCurve.type == Origin::GraphCurve::Scatter
 				|| originCurve.type == Origin::GraphCurve::LineSymbol || originCurve.type == Origin::GraphCurve::ErrorBar
 				|| originCurve.type == Origin::GraphCurve::XErrorBar) {
-				// get name of container and (if available) index of sheet
-				QString containerName = dataName.right(dataName.length() - 2); // strip "E_" or "T_"
-				int sheetIndex = 0; // which sheet? "@X"
-				const int atIndex = containerName.indexOf(QLatin1Char('@'));
-				if (atIndex != -1) {
-					sheetIndex = containerName.mid(atIndex + 1).toInt() - 1;
-					containerName.truncate(atIndex);
-				}
-				// DEBUG("CONTAINER = " << STDSTRING(containerName) << ", SHEET = " << sheetIndex)
+				auto containerName = dataName.right(dataName.length() - 2); // strip "E_" or "T_"
+				auto sheet = getSpreadsheetByName(containerName);
 
-				// check if workbook
-				int workbookIndex = findWorkbookByName(containerName);
-				// if workbook not found, findWorkbookByName() returns 0: check this
-				if (workbookIndex == 0 && (m_originFile->excelCount() == 0 || containerName.toStdString() != m_originFile->excel(0).name))
-					workbookIndex = -1;
-				// DEBUG("WORKBOOK  index = " << workbookIndex)
-
-				// comment of y column is used in legend (if not empty), else the column name
-				Origin::SpreadSheet sheet;
-				if (workbookIndex != -1) { // container is a workbook
-					sheet = m_originFile->excel(workbookIndex).sheets[sheetIndex];
-				} else { // container is a spreadsheet?
-					int spreadsheetIndex = findSpreadsheetByName(containerName);
-					// if spreadsheet not found, findSpreadsheetByName() returns 0: check this
-					if (spreadsheetIndex == 0 && (m_originFile->spreadCount() == 0 || containerName.toStdString() != m_originFile->spread(0).name))
-						spreadsheetIndex = -1;
-					if (spreadsheetIndex != -1)
-						sheet = m_originFile->spread(spreadsheetIndex);
-				}
-
-				QString curveName(QString::fromStdString(originCurve.yColumnName));
+				auto curveName(QString::fromStdString(originCurve.yColumnName));
 				auto column = sheet.columns[findColumnByName(sheet, curveName)];
 				if (column.comment.length() > 0) {
 					auto comment = QString::fromStdString(column.comment); // long name(, unit(, comment))
@@ -1606,8 +1650,8 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 
 				// set column path
 				QString tableName = containerName;
-				if (workbookIndex != -1) // container is a workbook
-					tableName += QLatin1Char('/') + QString::fromStdString(m_originFile->excel(workbookIndex).sheets[sheetIndex].name);
+				if (dataName.startsWith(QStringLiteral("E_"))) // container is a workbook
+					tableName += QLatin1Char('/') + QString::fromStdString(sheet.name);
 				curve->setXColumnPath(tableName + QLatin1Char('/') + QString::fromStdString(originCurve.xColumnName));
 				curve->setYColumnPath(tableName + QLatin1Char('/') + QString::fromStdString(originCurve.yColumnName));
 				DEBUG(Q_FUNC_INFO << ", x/y column path = \"" << STDSTRING(curve->xColumnPath()) << "\" \"" << STDSTRING(curve->yColumnPath()) << "\"")
@@ -1681,8 +1725,8 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 void OriginProjectParser::loadAxes(const Origin::GraphLayer& layer,
 								   CartesianPlot* plot,
 								   int layerIndex,
-								   const QString& xColumnName,
-								   const QString& yColumnName) {
+								   const QString& xColumnInfo,
+								   const QString& yColumnInfo) {
 	const auto& originXAxis = layer.xAxis;
 	const auto& originYAxis = layer.yAxis;
 
@@ -1698,7 +1742,7 @@ void OriginProjectParser::loadAxes(const Origin::GraphLayer& layer,
 		if (!axisFormat.label.shown)
 			plot->setBottomPadding(plot->bottomPadding() / 2.);
 
-		loadAxis(originXAxis, axis, layerIndex, 0, xColumnName);
+		loadAxis(originXAxis, axis, layerIndex, 0, xColumnInfo);
 		if (!m_graphLayerAsPlotArea)
 			axis->setCoordinateSystemIndex(layerIndex);
 		axis->setSuppressRetransform(false);
@@ -1716,7 +1760,7 @@ void OriginProjectParser::loadAxes(const Origin::GraphLayer& layer,
 		if (!axisFormat.label.shown)
 			plot->setVerticalPadding(plot->verticalPadding() / 2.);
 
-		loadAxis(originXAxis, axis, layerIndex, 1, xColumnName);
+		loadAxis(originXAxis, axis, layerIndex, 1, xColumnInfo);
 		if (!m_graphLayerAsPlotArea)
 			axis->setCoordinateSystemIndex(layerIndex);
 		axis->setSuppressRetransform(false);
@@ -1734,7 +1778,7 @@ void OriginProjectParser::loadAxes(const Origin::GraphLayer& layer,
 		if (!axisFormat.label.shown)
 			plot->setHorizontalPadding(plot->horizontalPadding() / 2.);
 
-		loadAxis(originYAxis, axis, layerIndex, 0, yColumnName);
+		loadAxis(originYAxis, axis, layerIndex, 0, yColumnInfo);
 		if (!m_graphLayerAsPlotArea)
 			axis->setCoordinateSystemIndex(layerIndex);
 		axis->setSuppressRetransform(false);
@@ -1752,7 +1796,7 @@ void OriginProjectParser::loadAxes(const Origin::GraphLayer& layer,
 		if (!axisFormat.label.shown)
 			plot->setRightPadding(plot->rightPadding() / 2.);
 
-		loadAxis(originYAxis, axis, layerIndex, 1, yColumnName);
+		loadAxis(originYAxis, axis, layerIndex, 1, yColumnInfo);
 		if (!m_graphLayerAsPlotArea)
 			axis->setCoordinateSystemIndex(layerIndex);
 		axis->setSuppressRetransform(false);
@@ -1763,7 +1807,7 @@ void OriginProjectParser::loadAxes(const Origin::GraphLayer& layer,
  * sets the axis properties (format and ticks) as defined in \c originAxis in \c axis,
  * \c index being 0 or 1 for "bottom" and "top" or "left" and "right" for horizontal or vertical axes, respectively.
  */
-void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* axis, int layerIndex, int index, const QString& axisTitle) const {
+void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* axis, int layerIndex, int index, const QString& columnInfo) const {
 	// 	int axisPosition;
 	//		possible values:
 	//			0: Axis is at default position
@@ -1921,10 +1965,18 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 			titleText = parseOriginText(QString::fromLatin1(axisFormat.label.text.c_str()));
 		else
 			titleText = parseOriginText(QString::fromStdString(axisFormat.label.text));
-		DEBUG(Q_FUNC_INFO << ", axis title text = " << STDSTRING(titleText));
-		DEBUG(Q_FUNC_INFO << ", curve name = " << STDSTRING(axisTitle));
-		titleText.replace(QLatin1String("%(?X)"), axisTitle);
-		titleText.replace(QLatin1String("%(?Y)"), axisTitle);
+		DEBUG(Q_FUNC_INFO << ", axis title string = " << STDSTRING(titleText));
+		DEBUG(Q_FUNC_INFO << ", column info = " << STDSTRING(columnInfo));
+
+		auto infoList = columnInfo.split(QRegularExpression(QLatin1String("[\r\n]")), Qt::SkipEmptyParts);
+		// TODO: more replacements here using column info
+		if (infoList.size() > 1) { // unit available: "Name (Unit)""
+			titleText.replace(QLatin1String("%(?X)"), infoList.at(0) + QStringLiteral(" (") + infoList.at(1) + QStringLiteral(")"));
+			titleText.replace(QLatin1String("%(?Y)"), infoList.at(0) + QStringLiteral(" (") + infoList.at(1) + QStringLiteral(")"));
+		} else { // only long name or short name available
+			titleText.replace(QLatin1String("%(?X)"), columnInfo);
+			titleText.replace(QLatin1String("%(?Y)"), columnInfo);
+		}
 		DEBUG(Q_FUNC_INFO << ", axis title = " << STDSTRING(titleText));
 
 		// use axisFormat.fontSize to override the global font size for the hmtl string
