@@ -749,7 +749,11 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 		// 			col->setFormula(Interval<int>(0, rows), QString::fromStdString(column.command));
 
 		DEBUG(Q_FUNC_INFO << ", column " << j << ", full comment = " << column.comment)
-		QString comment(QString::fromStdString(column.comment));
+		QString comment;
+		if (m_originFile->version() < 9.5) // <= 2017 : pre-Unicode
+			comment = QString::fromLatin1(column.comment.c_str());
+		else
+			comment = QString::fromStdString(column.comment);
 		if (comment.contains(QLatin1Char('@'))) // remove @ options
 			comment.truncate(comment.indexOf(QLatin1Char('@')));
 		col->setComment(comment);
