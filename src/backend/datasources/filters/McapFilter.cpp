@@ -248,8 +248,6 @@ int McapFilterPrivate::checkRow(QJsonValueRef value, int& countCols) {
 	case QJsonValue::Bool:
 	case QJsonValue::Null:
 	case QJsonValue::Undefined:
-		qDebug() << value;
-
 		return 1;
 	}
 	return 0;
@@ -529,21 +527,6 @@ void McapFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSo
   // Get number of messages in view
   int msg_count = 0;
 
-  	if (createIndexEnabled) {
-		columnModes << AbstractColumn::ColumnMode::Integer;
-		vectorNames << i18n("index");
-	}
-
-	columnModes << AbstractColumn::ColumnMode::DateTime;
-	vectorNames << i18n("logTime");
-
-	columnModes << AbstractColumn::ColumnMode::DateTime;
-	vectorNames << i18n("publishTime");
-	
-	columnModes << AbstractColumn::ColumnMode::Integer;
-	vectorNames << i18n("sequence");
-
-
   QVector<int> sequences;
   QVector<int> indices;
 
@@ -569,8 +552,8 @@ QJsonArray jsonArray;
 	QJsonObject obj = jsonDocument.object();
 
     obj.insert(QLatin1String("sequence"), QJsonValue::fromVariant(it->message.sequence));
-	obj.insert(QLatin1String("logTime"), QJsonValue::fromVariant(QString::number(it->message.logTime)));        
-    obj.insert(QLatin1String("publishTime"), QJsonValue::fromVariant(QString::number(it->message.publishTime)));        
+	obj.insert(QLatin1String("logTime"), QJsonValue::fromVariant(QString::number(it->message.logTime/1000000))); //nano to milli otherwise value is 0     
+    obj.insert(QLatin1String("publishTime"), QJsonValue::fromVariant(QString::number(it->message.publishTime/1000000))); //nano to milli otherwise value is 0       
 
         if (error.error != QJsonParseError::NoError) {
             qWarning() << "Error parsing JSON string:" << asString<<error.errorString();
@@ -599,29 +582,13 @@ QJsonArray jsonArray;
 
   QJsonDocument finalJsonDocument(jsonArray);
 
-    qDebug() << finalJsonDocument.toJson(QJsonDocument::Compact);
-
-	m_actualRows = msg_count;
-	//m_actualCols = 4;
-
-	//m_columnOffset = dataSource->prepareImport(m_dataContainer, importMode, m_actualRows, m_actualCols, vectorNames, columnModes);
-	
-	// for (int i = 0; i < msg_count; ++i) {
-	// 	if (createIndexEnabled){
-	// 		static_cast<QVector<int>*>(m_dataContainer[0])->operator[](i) = i + 1;
-	// 	}
-	// 	static_cast<QVector<QDateTime>*>(m_dataContainer[0+createIndexEnabled])->operator[](i) = QDateTime::fromMSecsSinceEpoch(logTimes[i] / 1000000);
-	// 	static_cast<QVector<QDateTime>*>(m_dataContainer[1+createIndexEnabled])->operator[](i) = QDateTime::fromMSecsSinceEpoch(publishTimes[i] / 1000000);
-	// 	static_cast<QVector<int>*>(m_dataContainer[2+createIndexEnabled])->operator[](i) = sequences[i];
-	// }
+    //qDebug() << finalJsonDocument.toJson(QJsonDocument::Compact);
 		
 	m_doc = finalJsonDocument;
 	bool success = prepareDocumentToRead();
 	qDebug() << success;
 	if (success)
 		importData(dataSource, importMode, msg_count);
-
-	//dataSource->finalizeImport(m_columnOffset, startColumn, startColumn + m_actualCols - 1, dateTimeFormat, importMode);
 
 }
 
