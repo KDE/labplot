@@ -214,10 +214,43 @@ void SpreadsheetView::init() {
 		m_suppressResize = true;
 	});
 
-	// initial connection to sparkline
-	connectColsToSparkline();
-	// rect on columnCount change
-	connect(m_spreadsheet, &Spreadsheet::columnCountChanged, this, &SpreadsheetView::connectColsToSparkline);
+
+	// initialise sparkline
+	for (int colIndex = 0; colIndex < m_spreadsheet->columnCount(); ++colIndex) {
+		connect(m_spreadsheet->column(colIndex), &AbstractColumn::dataChanged, this, [=] {
+			m_spreadsheet->column(colIndex)->mDataChanged = true;
+			if (m_spreadsheet->isSparklineShown) {
+				SpreadsheetSparkLinesHeaderModel::sparkLine(m_spreadsheet->column(colIndex));
+				m_horizontalHeader->refresh();
+			}
+		});
+	}
+
+	// react on sparkline toggled
+	connect(m_horizontalHeader, &SpreadsheetHeaderView::sparklineToggled, this, [=] {
+		for (int colIndex = 0; colIndex < m_spreadsheet->columnCount(); ++colIndex) {
+			m_spreadsheet->column(colIndex)->mDataChanged = true;
+			SpreadsheetSparkLinesHeaderModel::sparkLine(m_spreadsheet->column(colIndex));
+			m_horizontalHeader->refresh();
+		}
+	});
+
+	connect(m_spreadsheet, &Spreadsheet::columnCountChanged, this, [=] {
+		// Disconnect existing connections before creating new ones
+		for (int colIndex = 0; colIndex < m_spreadsheet->columnCount(); ++colIndex) {
+			QObject::disconnect(m_spreadsheet->column(colIndex), &AbstractColumn::dataChanged, this, nullptr);
+		}
+
+		// Establish new connections
+		for (int colIndex = 0; colIndex < m_spreadsheet->columnCount(); ++colIndex) {
+			connect(m_spreadsheet->column(colIndex), &AbstractColumn::dataChanged, this, [=] {
+				m_spreadsheet->column(colIndex)->mDataChanged = true;
+				SpreadsheetSparkLinesHeaderModel::sparkLine(m_spreadsheet->column(colIndex));
+				m_horizontalHeader->refresh();
+			});
+		}
+	});
+
 	// selection related connections
 	connect(m_tableView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &SpreadsheetView::selectionChanged);
 	connect(m_spreadsheet, &Spreadsheet::columnSelected, this, &SpreadsheetView::selectColumn);
@@ -275,18 +308,6 @@ void SpreadsheetView::updateFrozenTableGeometry() {
 								   m_tableView->frameWidth(),
 								   m_tableView->columnWidth(0),
 								   m_tableView->viewport()->height() + m_tableView->horizontalHeader()->height());
-}
-
-void SpreadsheetView::connectColsToSparkline() {
-	for (int colIndex = 0; colIndex < m_spreadsheet->columnCount(); ++colIndex) {
-		connect(m_spreadsheet->column(colIndex), &AbstractColumn::dataChanged, this, [=] {
-			m_model->column(colIndex)->mDataChanged = true;
-			if (m_spreadsheet->isSparklineShown) {
-				SpreadsheetSparkLinesHeaderModel::sparkLine(m_model->column(colIndex));
-				m_horizontalHeader->refresh();
-			}
-		});
-	}
 }
 
 void SpreadsheetView::initActions() {
@@ -3610,7 +3631,8 @@ void SpreadsheetView::selectionChanged(const QItemSelection& /*selected*/, const
 	for (int i = 0; i < m_spreadsheet->columnCount(); i++)
 		m_spreadsheet->setColumnSelectedInView(i, selModel->isColumnSelected(i));
 
-	// determine the number of selected cells, columns, missing values and masked values in the current selection and show this information in the status bar.
+	// determine the number of selected cells, columns, missing values and masked values in the current selection and show this information in the status
+	// bar.
 	const auto& indexes = m_tableView->selectionModel()->selectedIndexes();
 	QString resultString = QString();
 	if (indexes.empty() || indexes.count() == 1) {

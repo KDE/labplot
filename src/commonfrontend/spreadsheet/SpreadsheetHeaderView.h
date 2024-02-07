@@ -72,12 +72,17 @@ public:
 	void showSparkLines(bool on = true);
 	bool areSparkLinesShown() const;
 
+Q_SIGNALS:
+	void sparklineToggled();
+
 public Q_SLOTS:
 	void refresh();
 
 private:
 	bool m_showComments;
 	bool m_showSparkLines;
+
+	bool m_sparklineCalled{0};
 
 private Q_SLOTS:
 	void headerDataChanged(Qt::Orientation, int logicalFirst, int logicalLast);

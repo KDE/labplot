@@ -255,8 +255,6 @@ private Q_SLOTS:
 	void goToCell();
 	void formatHeatmap();
 	void removeFormat();
-	void connectColsToSparkline();
-
 	void cutSelection();
 	void copySelection();
 	void clearSelectedCells();

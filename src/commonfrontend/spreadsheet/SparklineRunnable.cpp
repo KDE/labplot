@@ -22,7 +22,7 @@ void SparkLineRunnable::run() {
 	static const QString sparklineTheme = QStringLiteral("Sparkline");
 	static const QString sparklineText = QStringLiteral("add-sparkline");
 	auto* worksheet = new Worksheet(sparklineText);
-	DEBUG(Q_FUNC_INFO << " "<< col->doubleAt(0));
+	DEBUG(Q_FUNC_INFO << " " << col->doubleAt(0));
 
 	if (col->columnMode() == Column::ColumnMode::Text) {
 		worksheet->setTheme(sparklineTheme);
@@ -58,15 +58,12 @@ void SparkLineRunnable::run() {
 		}
 
 		QVector<int> data;
-		QVector<QString> labels;
-		for (const auto& pair : pairs)
+		for (const auto& pair : qAsConst(pairs))
 			data << pair.second;
 		dataColumn->replaceInteger(0, data);
 		QVector<const AbstractColumn*> columns;
 		columns << dataColumn;
 		barPlot->setDataColumns(columns);
-		// plot->scaleAuto(-1, -1);
-		// plot->retransform();
 		worksheet->setSuppressLayoutUpdate(false);
 		worksheet->updateLayout();
 		// Export to pixmap
@@ -105,9 +102,6 @@ void SparkLineRunnable::run() {
 		plot->setRightPadding(0);
 		plot->setBottomPadding(0);
 		plot->setHorizontalPadding(0);
-
-		// plot->scaleAuto(-1, -1);
-		// plot->retransform();
 		worksheet->setSuppressLayoutUpdate(false);
 		worksheet->updateLayout();
 
