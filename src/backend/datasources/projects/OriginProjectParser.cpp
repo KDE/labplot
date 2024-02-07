@@ -1974,13 +1974,17 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 
 		auto infoList = columnInfo.split(QRegularExpression(QLatin1String("[\r\n]")), Qt::SkipEmptyParts);
 		// TODO: more replacements here using column info
-		if (infoList.size() > 1) { // unit available: "Name (Unit)""
+		if (infoList.size() > 1) { // unit available: "Name (Unit)"
 			titleText.replace(QLatin1String("%(?X)"), infoList.at(0) + QStringLiteral(" (") + infoList.at(1) + QStringLiteral(")"));
 			titleText.replace(QLatin1String("%(?Y)"), infoList.at(0) + QStringLiteral(" (") + infoList.at(1) + QStringLiteral(")"));
+			titleText.replace(QLatin1String("%(?X,@LU)"), infoList.at(1));
+			titleText.replace(QLatin1String("%(?Y,@LU)"), infoList.at(1));
 		} else { // only long name or short name available
 			titleText.replace(QLatin1String("%(?X)"), columnInfo);
 			titleText.replace(QLatin1String("%(?Y)"), columnInfo);
 		}
+		titleText.replace(QLatin1String("%(?X,@LL)"), infoList.at(0));
+		titleText.replace(QLatin1String("%(?Y,@LL)"), infoList.at(0));
 		DEBUG(Q_FUNC_INFO << ", axis title = " << STDSTRING(titleText));
 
 		// use axisFormat.fontSize to override the global font size for the hmtl string
