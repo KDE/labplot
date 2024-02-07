@@ -2132,6 +2132,7 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 
 	// symbol properties
 	auto* symbol = curve->symbol();
+	DEBUG(Q_FUNC_INFO << ", curve type = " << (unsigned int)originCurve.type)
 	if (originCurve.type == Origin::GraphCurve::Scatter || originCurve.type == Origin::GraphCurve::LineSymbol) {
 		// try to map the different symbols, mapping is not exact
 		symbol->setRotationAngle(0);
@@ -2420,6 +2421,7 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 		default:
 			symbol->setStyle(Symbol::Style::NoSymbols);
 		}
+
 		// symbol size
 		DEBUG(Q_FUNC_INFO << ", symbol size = " << originCurve.symbolSize)
 		DEBUG(Q_FUNC_INFO << ", symbol size in points = " << Worksheet::convertToSceneUnits(originCurve.symbolSize, Worksheet::Unit::Point))
@@ -2433,6 +2435,9 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 
 		auto brush = symbol->brush();
 		auto pen = symbol->pen();
+		DEBUG(Q_FUNC_INFO << ", SYMBOL THICKNESS = " << (int)originCurve.symbolThickness)
+		// border width (edge thickness in Origin) is given as percentage of the symbol radius
+		const double borderScaleFactor = 5.; // match size
 		if (originCurve.type == Origin::GraphCurve::LineSymbol) {
 			// symbol fill color
 			if (originCurve.symbolFillColor.type == Origin::Color::ColorType::Automatic) {
@@ -2456,9 +2461,6 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 			} else
 				pen.setColor(color(originCurve.symbolColor));
 
-			DEBUG(Q_FUNC_INFO << ", SYMBOL THICKNESS = " << (int)originCurve.symbolThickness)
-			// border width (edge thickness in Origin) is given as percentage of the symbol radius
-			const double borderScaleFactor = 5.; // match size
 			DEBUG(Q_FUNC_INFO << ", BORDER THICKNESS = " << borderScaleFactor * originCurve.symbolThickness / 100. * symbol->size())
 			pen.setWidthF(borderScaleFactor * originCurve.symbolThickness / 100. * symbol->size());
 		} else if (originCurve.type == Origin::GraphCurve::Scatter) {
@@ -2472,10 +2474,22 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 			} else
 				brush.setColor(color(originCurve.symbolColor));
 
-			if (originCurve.symbolInterior > 0 && originCurve.symbolInterior < 8) // unfilled styles
+			if (originCurve.symbolInterior > 0 && originCurve.symbolInterior < 8) { // unfilled styles
 				brush.setStyle(Qt::NoBrush);
+				DEBUG(Q_FUNC_INFO << ", BORDER THICKNESS = " << borderScaleFactor * originCurve.symbolThickness / 100. * symbol->size())
+				pen.setWidthF(borderScaleFactor * originCurve.symbolThickness / 100. * symbol->size());
 
-			pen.setStyle(Qt::NoPen); // no border
+				// symbol border/edge color and width
+				if (originCurve.symbolColor.type == Origin::Color::ColorType::Automatic) {
+					//"automatic" color -> the color of the line, if available, has to be used, black otherwise
+					if (curve->lineType() != XYCurve::LineType::NoLine)
+						pen.setColor(curve->line()->pen().color());
+					else
+						pen.setColor(Qt::black);
+				} else
+					pen.setColor(color(originCurve.symbolColor));
+			} else
+				pen.setStyle(Qt::NoPen); // no border
 		}
 		symbol->setBrush(brush);
 		symbol->setPen(pen);
