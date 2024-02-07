@@ -2122,7 +2122,8 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 		}
 
 		curve->line()->setStyle(penStyle);
-		curve->line()->setWidth(Worksheet::convertToSceneUnits(originCurve.lineWidth * elementScalingFactor, Worksheet::Unit::Point));
+		auto lineWidth = std::max(originCurve.lineWidth * elementScalingFactor, 1.); // minimum 1 px
+		curve->line()->setWidth(Worksheet::convertToSceneUnits(lineWidth, Worksheet::Unit::Point));
 		curve->line()->setColor(color(originCurve.lineColor));
 		curve->line()->setOpacity(1 - originCurve.lineTransparency / 255);
 
