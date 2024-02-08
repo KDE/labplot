@@ -1465,14 +1465,14 @@ void LabelWidget::load() {
 	// Geometry
 	// widgets for positioning using absolute plot distances
 	ui.cbPositionX->setCurrentIndex((int)m_label->position().horizontalPosition);
-	//positionXChanged(ui.cbPositionX->currentIndex());
+	// positionXChanged(ui.cbPositionX->currentIndex());
 	if (m_label->position().horizontalPosition == WorksheetElement::HorizontalPosition::Relative) {
 		ui.sbPositionX->setValue(m_label->position().point.x() * 100);
 		ui.sbPositionX->setSuffix(QStringLiteral(" %"));
 	} else
 		ui.sbPositionX->setValue(Worksheet::convertFromSceneUnits(m_label->position().point.x(), m_worksheetUnit));
 	ui.cbPositionY->setCurrentIndex((int)m_label->position().verticalPosition);
-	//positionYChanged(ui.cbPositionY->currentIndex());
+	// positionYChanged(ui.cbPositionY->currentIndex());
 	if (m_label->position().verticalPosition == WorksheetElement::VerticalPosition::Relative) {
 		ui.sbPositionY->setValue(m_label->position().point.y() * 100);
 		ui.sbPositionY->setSuffix(QStringLiteral(" %"));
