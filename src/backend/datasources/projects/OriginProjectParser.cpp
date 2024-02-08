@@ -1231,8 +1231,21 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 			position.point.setY(ratios.height());
 			position.horizontalPosition = WorksheetElement::HorizontalPosition::Relative;
 			position.verticalPosition = WorksheetElement::VerticalPosition::Relative;
-			label->setHorizontalAlignment(WorksheetElement::HorizontalAlignment::Left);
-			label->setVerticalAlignment(WorksheetElement::VerticalAlignment::Top);
+			// achor depending on rotation
+			auto rotation = label->rotationAngle();
+			auto hAlign = WorksheetElement::HorizontalAlignment::Left;
+			auto vAlign = WorksheetElement::VerticalAlignment::Top;
+			if (rotation > 45 && rotation <= 135) // left/bottom
+				vAlign = WorksheetElement::VerticalAlignment::Bottom;
+			else if (rotation > 135 && rotation <= 225) { // right/bottom
+				hAlign = WorksheetElement::HorizontalAlignment::Right;
+				vAlign = WorksheetElement::VerticalAlignment::Bottom;
+			} else if (rotation > 225) // right/top
+				hAlign = WorksheetElement::HorizontalAlignment::Right;
+
+			label->setHorizontalAlignment(hAlign);
+			label->setVerticalAlignment(vAlign);
+
 			label->setPosition(position);
 
 			++it;
@@ -1426,14 +1439,35 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 		DEBUG(Q_FUNC_INFO << ", page size = " << graphSize.width() << "/" << graphSize.height())
 		CartesianPlotLegend::PositionWrapper position;
 		QSizeF relativePosition(legendRect.left / (double)graphSize.width(), legendRect.top / (double)graphSize.height());
+		// achor depending on rotation
+		auto rotation = originLegend.rotation;
+		if (rotation > 45 && rotation <= 135) // left/bottom
+			relativePosition.setHeight(legendRect.bottom / (double)graphSize.height());
+		else if (rotation > 135 && rotation <= 225) { // right/bottom
+			relativePosition.setWidth(legendRect.right / (double)graphSize.width());
+			relativePosition.setHeight(legendRect.bottom / (double)graphSize.height());
+		} else if (rotation > 225) // right/top
+			relativePosition.setWidth(legendRect.right / (double)graphSize.width());
+
 		DEBUG(Q_FUNC_INFO << ", relative position to page = " << relativePosition.width() << "/" << relativePosition.height())
 
 		position.point.setX(relativePosition.width());
 		position.point.setY(relativePosition.height());
+		// achor depending on rotation
 		position.horizontalPosition = WorksheetElement::HorizontalPosition::Relative;
 		position.verticalPosition = WorksheetElement::VerticalPosition::Relative;
-		legend->setHorizontalAlignment(WorksheetElement::HorizontalAlignment::Left);
-		legend->setVerticalAlignment(WorksheetElement::VerticalAlignment::Top);
+		auto hAlign = WorksheetElement::HorizontalAlignment::Left;
+		auto vAlign = WorksheetElement::VerticalAlignment::Top;
+		if (rotation > 45 && rotation <= 135) // left/bottom
+			vAlign = WorksheetElement::VerticalAlignment::Bottom;
+		else if (rotation > 135 && rotation <= 225) { // right/bottom
+			hAlign = WorksheetElement::HorizontalAlignment::Right;
+			vAlign = WorksheetElement::VerticalAlignment::Bottom;
+		} else if (rotation > 225) // right/top
+			hAlign = WorksheetElement::HorizontalAlignment::Right;
+		legend->setHorizontalAlignment(hAlign);
+		legend->setVerticalAlignment(vAlign);
+
 		legend->setPosition(position);
 
 		// rotation
@@ -1487,6 +1521,15 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 		// position
 		// determine the relative position to the graph
 		QSizeF relativePosition(t.clientRect.left / (double)graphSize.width(), t.clientRect.top / (double)graphSize.height());
+		// achor depending on rotation
+		if (t.rotation > 45 && t.rotation <= 135) // left/bottom
+			relativePosition.setHeight(t.clientRect.bottom / (double)graphSize.height());
+		else if (t.rotation > 135 && t.rotation <= 225) { // right/bottom
+			relativePosition.setWidth(t.clientRect.right / (double)graphSize.width());
+			relativePosition.setHeight(t.clientRect.bottom / (double)graphSize.height());
+		} else if (t.rotation > 225) // right/top
+			relativePosition.setWidth(t.clientRect.right / (double)graphSize.height());
+
 		DEBUG(Q_FUNC_INFO << ", relative position to page = " << relativePosition.width() << "/" << relativePosition.height())
 		textLabelPositions[label] = relativePosition;
 
@@ -1706,8 +1749,8 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 				eqData.expression1 = eqData.expression1.replace(QLatin1Char('x'), QLatin1String("phi"));
 
 				// convert from degrees to radians
-				eqData.min = QString::number(function.begin / 180) + QLatin1String("*pi");
-				eqData.max = QString::number(function.end / 180) + QLatin1String("*pi");
+				eqData.min = QString::number(function.begin / 180.) + QLatin1String("*pi");
+				eqData.max = QString::number(function.end / 180.) + QLatin1String("*pi");
 			} else {
 				eqData.expression1 = QLatin1String(function.formula.c_str());
 				eqData.min = QString::number(function.begin);
