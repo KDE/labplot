@@ -1223,8 +1223,8 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 		// the relative positions determined above to the absolute values
 		auto it = textLabelPositions.constBegin();
 		while (it != textLabelPositions.constEnd()) {
-			TextLabel* label = it.key();
-			const QSizeF& ratios = it.value();
+			auto* label = it.key();
+			const auto& ratios = it.value();
 
 			auto position = label->position();
 			position.point.setX(ratios.width());
@@ -1246,7 +1246,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 										 CartesianPlot* plot,
 										 int layerIndex,
-										 QHash<TextLabel*, QSizeF> textLabelPositions,
+										 QHash<TextLabel*, QSizeF>& textLabelPositions,
 										 bool preview) {
 	DEBUG(Q_FUNC_INFO << ", NEW GRAPH LAYER")
 

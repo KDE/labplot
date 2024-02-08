@@ -53,7 +53,7 @@ private:
 	bool loadMatrix(Matrix*, bool preview, size_t sheetIndex = 0, const QString& mwbName = QString());
 
 	bool loadWorksheet(Worksheet*, bool preview);
-	void loadGraphLayer(const Origin::GraphLayer&, CartesianPlot*, int layerIndex, QHash<TextLabel*, QSizeF> textLabelPositions, bool preview);
+	void loadGraphLayer(const Origin::GraphLayer&, CartesianPlot*, int layerIndex, QHash<TextLabel*, QSizeF>& textLabelPositions, bool preview);
 	void loadCurves(const Origin::GraphLayer&, CartesianPlot*, int layerIndex, bool preview);
 	void loadAxes(const Origin::GraphLayer&, CartesianPlot*, int layerIndex, const QString& xColumnInfo, const QString& yColumnInfo);
 	void loadAxis(const Origin::GraphAxis&, Axis*, int layerIndex, int index, const QString& columnInfo = QString()) const;
