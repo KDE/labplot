@@ -224,7 +224,7 @@ void CartesianPlotLegendDock::updateUnits() {
 	ui.sbLineSymbolWidth->setSuffix(suffix);
 	if (xPosition != static_cast<int>(WorksheetElement::HorizontalPosition::Relative))
 		ui.sbPositionX->setSuffix(suffix);
-	if (yPosition != static_cast<int>(WorksheetElement::HorizontalPosition::Relative))
+	if (yPosition != static_cast<int>(WorksheetElement::VerticalPosition::Relative))
 		ui.sbPositionY->setSuffix(suffix);
 	ui.sbBorderCornerRadius->setSuffix(suffix);
 	ui.sbLayoutTopMargin->setSuffix(suffix);
@@ -324,7 +324,7 @@ void CartesianPlotLegendDock::lineSymbolWidthChanged(double value) {
 }
 
 /*!
-	called when legend's current horizontal position relative to its parent (left, center, right, custom) is changed.
+	called when legend's current horizontal position relative to its parent (left, center, right, relative) is changed.
 */
 void CartesianPlotLegendDock::positionXChanged(int index) {
 	CONDITIONAL_LOCK_RETURN;
@@ -343,7 +343,6 @@ void CartesianPlotLegendDock::positionXChanged(int index) {
 			break;
 		case WorksheetElement::HorizontalPosition::Right:
 			x = 1.0;
-			break;
 		}
 		ui.sbPositionX->setSuffix(QStringLiteral(" %"));
 	} else {
@@ -380,7 +379,6 @@ void CartesianPlotLegendDock::positionYChanged(int index) {
 			break;
 		case WorksheetElement::VerticalPosition::Bottom:
 			y = 1.0;
-			break;
 		}
 		ui.sbPositionY->setSuffix(QStringLiteral(" %"));
 	} else {
@@ -400,25 +398,27 @@ void CartesianPlotLegendDock::positionYChanged(int index) {
 void CartesianPlotLegendDock::customPositionXChanged(double value) {
 	CONDITIONAL_RETURN_NO_LOCK;
 
-	CartesianPlotLegend::PositionWrapper position = m_legend->position();
-	if (position.horizontalPosition == WorksheetElement::HorizontalPosition::Relative)
-		position.point.setX(value / 100.);
-	else
-		position.point.setX(Worksheet::convertToSceneUnits(value, m_worksheetUnit));
-	for (auto* legend : m_legendList)
+	for (auto* legend : m_legendList) {
+		auto position = legend->position();
+		if (position.horizontalPosition == WorksheetElement::HorizontalPosition::Relative)
+			position.point.setX(value / 100.);
+		else
+			position.point.setX(Worksheet::convertToSceneUnits(value, m_worksheetUnit));
 		legend->setPosition(position);
+	}
 }
 
 void CartesianPlotLegendDock::customPositionYChanged(double value) {
 	CONDITIONAL_RETURN_NO_LOCK;
 
-	CartesianPlotLegend::PositionWrapper position = m_legend->position();
-	if (position.verticalPosition == WorksheetElement::VerticalPosition::Relative)
-		position.point.setY(value / 100.);
-	else
-		position.point.setY(Worksheet::convertToSceneUnits(value, m_worksheetUnit));
-	for (auto* legend : m_legendList)
+	for (auto* legend : m_legendList) {
+		auto position = legend->position();
+		if (position.verticalPosition == WorksheetElement::VerticalPosition::Relative)
+			position.point.setY(value / 100.);
+		else
+			position.point.setY(Worksheet::convertToSceneUnits(value, m_worksheetUnit));
 		legend->setPosition(position);
+	}
 }
 void CartesianPlotLegendDock::horizontalAlignmentChanged(int index) {
 	CONDITIONAL_LOCK_RETURN;
@@ -596,7 +596,7 @@ void CartesianPlotLegendDock::legendPositionChanged(const CartesianPlotLegend::P
 
 	if (position.verticalPosition == WorksheetElement::VerticalPosition::Relative) {
 		ui.sbPositionY->setValue(position.point.y() * 100.);
-		ui.sbPositionX->setSuffix(QStringLiteral(" %"));
+		ui.sbPositionY->setSuffix(QStringLiteral(" %"));
 	} else
 		ui.sbPositionY->setValue(Worksheet::convertFromSceneUnits(position.point.y(), m_worksheetUnit));
 }
