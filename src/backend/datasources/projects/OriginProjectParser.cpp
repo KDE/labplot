@@ -1620,21 +1620,32 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 				auto containerName = dataName.right(dataName.length() - 2); // strip "E_" or "T_"
 				auto sheet = getSpreadsheetByName(containerName);
 
-				auto curveName(QString::fromStdString(originCurve.yColumnName));
-				auto column = sheet.columns[findColumnByName(sheet, curveName)];
+				auto columnName(QString::fromStdString(originCurve.yColumnName));
+				auto column = sheet.columns[findColumnByName(sheet, columnName)];
+				QString shortName = columnName;
+				QString longName, unit, comments, curveName;
 				if (column.comment.length() > 0) {
-					auto comment = QString::fromStdString(column.comment); // long name(, unit(, comment))
+					auto columnInfo = QString::fromStdString(column.comment); // long name(, unit(, comment))
 					DEBUG(Q_FUNC_INFO << ", y column full comment = \"" << column.comment << "\"")
-					if (comment.contains(QLatin1Char('@'))) // remove @ options
-						comment.truncate(comment.indexOf(QLatin1Char('@')));
+					if (columnInfo.contains(QLatin1Char('@'))) // remove @ options
+						columnInfo.truncate(columnInfo.indexOf(QLatin1Char('@')));
 
-					auto comments = comment.split(QRegularExpression(QLatin1String("[\r\n]")), Qt::SkipEmptyParts);
-					if (comments.size() >= 3) // third field (comment) is available
-						comment = comments.last();
-					else // use long name
-						comment = comments.first();
+					auto infoList = columnInfo.split(QRegularExpression(QLatin1String("[\r\n]")), Qt::SkipEmptyParts);
 
-					curveName = comment;
+					switch (infoList.size()) {
+					case 2:
+						unit = infoList.at(1);
+						// fallthrough
+					case 1: // long name
+						longName = infoList.at(0);
+						curveName = longName;
+						break;
+					default: // long name, unit, comment
+						longName = infoList.at(0);
+						unit = infoList.at(1);
+						comments = infoList.at(2);
+						curveName = comments;
+					}
 				}
 				DEBUG(Q_FUNC_INFO << ", curve name = \"" << curveName.toStdString() << "\"")
 
@@ -1656,36 +1667,70 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 				// auto* curve = new XYCurve(curveText);
 
 				// check if curve is in actual legendText
+				// examples:  \l(1) %(1), \l(2) %(2) text, \l(3) %(3,@LG), ..
 				DEBUG("LEGEND TEXT = " << m_legendText.toStdString())
 				// DEBUG(Q_FUNC_INFO << ", layer index = " << layerIndex + 1 << ", curve index = " << curveIndex)
 				bool enableCurveInLegend = false;
-				if (m_legendText.contains(QStringLiteral("%(%1)").arg(curveIndex))
-					|| m_legendText.contains(QStringLiteral("%(%1.%2)").arg(layerIndex + 1).arg(curveIndex)))
+				QString legendCurveString;
+				// find \l(C)
+				int pos1 = m_legendText.indexOf(QStringLiteral("\\l(%1)").arg(curveIndex));
+				if (pos1 == -1) // try \l(L.C)
+					pos1 = m_legendText.indexOf(QStringLiteral("\\l(%1.%2)").arg(layerIndex + 1).arg(curveIndex));
+				else // remove symbol string
+					m_legendText.replace(QStringLiteral("\\l(%1)").arg(curveIndex), QStringLiteral(""));
+
+				if (pos1 != -1) { // \l(C) or \l(L.C) found
+					// remove symbol string
+					m_legendText.replace(QStringLiteral("\\l(%1.%2)").arg(layerIndex + 1).arg(curveIndex), QStringLiteral(""));
+
+					// whole line
+					int pos2 = m_legendText.indexOf(QRegularExpression(QLatin1String("[\r\n]")), pos1);
+					if (pos2 == -1)
+						legendCurveString = m_legendText.mid(pos1, pos2);
+					else
+						legendCurveString = m_legendText.mid(pos1, pos2 - pos1);
+
+					// replace %(C) and %(L.C)
+					// see https://www.originlab.com/doc/en/LabTalk/ref/Text-Label-Options#Complete_List_of_.40Options
+					// TODO: implement more
+					legendCurveString.replace(QStringLiteral("%(%1)").arg(curveIndex), curveName);
+					legendCurveString.replace(QStringLiteral("%(%1,@C)").arg(curveIndex), shortName);
+					legendCurveString.replace(QStringLiteral("%(%1,@L)").arg(curveIndex), longName);
+					legendCurveString.replace(QStringLiteral("%(%1,@LA)").arg(curveIndex), longName.isEmpty() ? shortName : longName);
+					legendCurveString.replace(QStringLiteral("%(%1,@LC)").arg(curveIndex),
+											  comments.isEmpty() ? (longName.isEmpty() ? shortName : longName) : comments);
+					legendCurveString.replace(QStringLiteral("%(%1,@LG)").arg(curveIndex),
+											  (longName.isEmpty() ? shortName : longName)
+												  + (unit.isEmpty() ? QStringLiteral("") : QStringLiteral(" (") + unit + QStringLiteral(")")));
+					legendCurveString.replace(QStringLiteral("%(%1,@LL)").arg(curveIndex), longName);
+					legendCurveString.replace(QStringLiteral("%(%1,@LM)").arg(curveIndex),
+											  comments.isEmpty() ? (longName.isEmpty() ? shortName : longName) : comments);
+					legendCurveString.replace(QStringLiteral("%(%1,@LN)").arg(curveIndex),
+											  (comments.isEmpty() ? (longName.isEmpty() ? shortName : longName) : comments)
+												  + (unit.isEmpty() ? QStringLiteral("") : QStringLiteral(" (") + unit + QStringLiteral(")")));
+					legendCurveString.replace(QStringLiteral("%(%1,@LS)").arg(curveIndex), shortName);
+
+					// same with %(L.C)
+					legendCurveString.replace(QStringLiteral("%(%1.%2)").arg(layerIndex + 1).arg(curveIndex), curveName);
+					legendCurveString.replace(QStringLiteral("%(%1.%2,@C)").arg(layerIndex + 1).arg(curveIndex), shortName);
+					legendCurveString.replace(QStringLiteral("%(%1.%2,@L)").arg(layerIndex + 1).arg(curveIndex), longName);
+					legendCurveString.replace(QStringLiteral("%(%1.%2,@LA)").arg(layerIndex + 1).arg(curveIndex), longName.isEmpty() ? shortName : longName);
+					legendCurveString.replace(QStringLiteral("%(%1.%2,@LC)").arg(layerIndex + 1).arg(curveIndex),
+											  comments.isEmpty() ? (longName.isEmpty() ? shortName : longName) : comments);
+					legendCurveString.replace(QStringLiteral("%(%1.%2,@LG)").arg(layerIndex + 1).arg(curveIndex),
+											  (longName.isEmpty() ? shortName : longName)
+												  + (unit.isEmpty() ? QStringLiteral("") : QStringLiteral(" (") + unit + QStringLiteral(")")));
+					legendCurveString.replace(QStringLiteral("%(%1.%2,@LL)").arg(layerIndex + 1).arg(curveIndex), longName);
+					legendCurveString.replace(QStringLiteral("%(%1.%2,@LM)").arg(layerIndex + 1).arg(curveIndex),
+											  comments.isEmpty() ? (longName.isEmpty() ? shortName : longName) : comments);
+					legendCurveString.replace(QStringLiteral("%(%1.%2,@LN)").arg(layerIndex + 1).arg(curveIndex),
+											  (comments.isEmpty() ? (longName.isEmpty() ? shortName : longName) : comments)
+												  + (unit.isEmpty() ? QStringLiteral("") : QStringLiteral(" (") + unit + QStringLiteral(")")));
+					legendCurveString.replace(QStringLiteral("%(%1.%2,@LS)").arg(layerIndex + 1).arg(curveIndex), shortName);
+
+					if (!legendCurveString.isEmpty())
+						curveName = legendCurveString;
 					enableCurveInLegend = true;
-				if (!enableCurveInLegend) {
-					QString legendCurveString;
-					// find \l(C)
-					int pos1 = m_legendText.indexOf(QStringLiteral("\\l(%1)").arg(curveIndex));
-					if (pos1 == -1) // try \l(L.C)
-						pos1 = m_legendText.indexOf(QStringLiteral("\\l(%1.%2)").arg(layerIndex + 1).arg(curveIndex));
-					else // remove symbol string
-						m_legendText.replace(QStringLiteral("\\l(%1)").arg(curveIndex), QStringLiteral(""));
-
-					if (pos1 != -1) {
-						// remove symbol string
-						m_legendText.replace(QStringLiteral("\\l(%1.%2)").arg(layerIndex + 1).arg(curveIndex), QStringLiteral(""));
-
-						// whole line
-						int pos2 = m_legendText.indexOf(QRegularExpression(QLatin1String("[\r\n]")), pos1);
-						if (pos2 == -1)
-							legendCurveString = m_legendText.mid(pos1, pos2);
-						else
-							legendCurveString = m_legendText.mid(pos1, pos2 - pos1);
-
-						if (!legendCurveString.isEmpty())
-							curveName = legendCurveString;
-						enableCurveInLegend = true;
-					}
 				}
 
 				DEBUG(Q_FUNC_INFO << ", curve in legend = " << enableCurveInLegend)
