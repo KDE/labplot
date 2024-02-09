@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-06 01:57+0000\n"
-"PO-Revision-Date: 2024-02-03 16:04+0300\n"
+"POT-Creation-Date: 2024-02-09 01:41+0000\n"
+"PO-Revision-Date: 2024-02-08 18:04+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -304,7 +304,7 @@ msgstr "Büyük Tamsayı"
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1524
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:269
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:280
-#: src/kdefrontend/widgets/LabelWidget.cpp:192
+#: src/kdefrontend/widgets/LabelWidget.cpp:194
 #, kde-format
 msgid "Text"
 msgstr "Metin"
@@ -1394,8 +1394,7 @@ msgstr "Evet"
 #, kde-format
 msgid "Adaptive cache resize report function enabled: %1"
 msgstr ""
-"Uyarlanabilir önbellek yeniden boyutlandırma raporlaması işlevi "
-"etkinleştirildi: %1"
+"Uyarlanır önbellek yeniden boyutlandırma raporu işlevi etkinleştirildi: %1"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:269
 #, kde-format
@@ -1405,12 +1404,12 @@ msgstr "İlk en büyük boyutu önbellekle: %1 bayt"
 #: src/backend/datasources/filters/HDF5Filter.cpp:271
 #, kde-format
 msgid "Adaptive cache maximum size: %1 bytes"
-msgstr "Uyarlanabilir önbellek en büyük boyut: %1 bayt"
+msgstr "Uyarlanır önbellek en büyük boyutu: %1 bayt"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:273
 #, kde-format
 msgid "Adaptive cache minimum size: %1 bytes"
-msgstr "Uyarlanabilir önbellek en küçük boyut: %1 bayt"
+msgstr "Uyarlanır önbellek en küçük boyutu: %1 bayt"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:279
 #, kde-format
@@ -3411,7 +3410,7 @@ msgstr "Aritmetik ortalama"
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:97
 #, kde-format
 msgid "Median"
-msgstr "Orta"
+msgstr "Ortanca"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbStandardDeviation)
@@ -3544,7 +3543,7 @@ msgstr "Ortalama mutlak sapma"
 #: src/kdefrontend/ui/dockwidgets/statisticsspreadsheetdock.ui:185
 #, kde-format
 msgid "Mean absolute deviation around median"
-msgstr "Orta çevresindeki ortalama mutlak sapma"
+msgstr "Ortanca çevresindeki ortalama mutlak sapma"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbMedianDeviation)
 #: src/backend/gsl/functions.cpp:265
@@ -3552,7 +3551,7 @@ msgstr "Orta çevresindeki ortalama mutlak sapma"
 #: src/kdefrontend/ui/dockwidgets/statisticsspreadsheetdock.ui:192
 #, kde-format
 msgid "Median absolute deviation"
-msgstr "Orta mutlak sapma"
+msgstr "Ortanca mutlak sapma"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbSkewness)
@@ -6716,12 +6715,12 @@ msgstr "OrtalamaSapma"
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:53
 #, kde-format
 msgid "MeanDeviationAroundMedian"
-msgstr "OrtadakiOrtalamaSapma"
+msgstr "OrtancaÇevresindekiOrtalamaSapma"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:54
 #, kde-format
 msgid "MedianDeviation"
-msgstr "OrtaSapma"
+msgstr "OrtancaSapma"
 
 #. i18n: ectx: property (text), widget (QLabel, lNumberLine)
 #. i18n: ectx: property (text), widget (QLabel, lNumberSymbol)
@@ -7291,7 +7290,7 @@ msgstr "3. çeyrek"
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:299
 #, kde-format
 msgid "median"
-msgstr "orta"
+msgstr "ortanca"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:300
 #, kde-format
@@ -9073,7 +9072,7 @@ msgid "Command"
 msgstr "Komut"
 
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:101
-#: src/kdefrontend/widgets/LabelWidget.cpp:195
+#: src/kdefrontend/widgets/LabelWidget.cpp:197
 #, kde-format
 msgid "Markdown"
 msgstr "Markdown"
@@ -9081,7 +9080,7 @@ msgstr "Markdown"
 #. i18n: ectx: property (text), widget (QLabel, lTex)
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:105
 #: src/kdefrontend/ui/settingsworksheetpage.ui:147
-#: src/kdefrontend/widgets/LabelWidget.cpp:193
+#: src/kdefrontend/widgets/LabelWidget.cpp:195
 #, kde-format
 msgid "LaTeX"
 msgstr "LaTeX"
@@ -9889,7 +9888,7 @@ msgstr "Ortalamaya Böl"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:389
 #, kde-format
 msgid "Divide by Median"
-msgstr "Ortaya Böl"
+msgstr "Ortancayla Böl"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:392
 #, kde-format
@@ -9924,12 +9923,12 @@ msgstr "(x Ortalaması)/SD"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:410
 #, kde-format
 msgid "(x-Median)/MAD"
-msgstr "(x Ortalaması)/MAD"
+msgstr "(x Ortancası)/MAD"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:413
 #, kde-format
 msgid "(x-Median)/IQR"
-msgstr "(x Ortalaması)/IQR"
+msgstr "(x Ortancası)/IQR"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:416
 #, kde-format
@@ -10173,7 +10172,7 @@ msgstr "Ortalama = 0"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2851
 #, kde-format
 msgid "Median = 0"
-msgstr "Orta = 0"
+msgstr "Ortanca = 0"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2863
 #, kde-format
@@ -12194,8 +12193,8 @@ msgstr "Veri bölgeleri"
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:51
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:63
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:71
-#: src/kdefrontend/widgets/LabelWidget.cpp:143
-#: src/kdefrontend/widgets/LabelWidget.cpp:160
+#: src/kdefrontend/widgets/LabelWidget.cpp:144
+#: src/kdefrontend/widgets/LabelWidget.cpp:162
 #, kde-format
 msgid "Top"
 msgstr "Üst"
@@ -12209,8 +12208,8 @@ msgstr "Üst"
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:53
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:65
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:73
-#: src/kdefrontend/widgets/LabelWidget.cpp:145
-#: src/kdefrontend/widgets/LabelWidget.cpp:162
+#: src/kdefrontend/widgets/LabelWidget.cpp:146
+#: src/kdefrontend/widgets/LabelWidget.cpp:164
 #, kde-format
 msgid "Bottom"
 msgstr "Alt"
@@ -12297,7 +12296,7 @@ msgstr "Yarı Dolu, Büyük"
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:365
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:132
 #: src/kdefrontend/widgets/LabelWidget.cpp:139
-#: src/kdefrontend/widgets/LabelWidget.cpp:156
+#: src/kdefrontend/widgets/LabelWidget.cpp:158
 #: src/kdefrontend/widgets/ValueWidget.cpp:37
 #, kde-format
 msgid "Left"
@@ -12315,7 +12314,7 @@ msgstr "Sol"
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:366
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:133
 #: src/kdefrontend/widgets/LabelWidget.cpp:141
-#: src/kdefrontend/widgets/LabelWidget.cpp:158
+#: src/kdefrontend/widgets/LabelWidget.cpp:160
 #: src/kdefrontend/widgets/ValueWidget.cpp:38
 #, kde-format
 msgid "Right"
@@ -12572,12 +12571,12 @@ msgstr "1/99 persantil"
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:56
 #, kde-format
 msgid "By Median, Ascending"
-msgstr "Ortayla, Artan"
+msgstr "Ortancayla, Artan"
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:57
 #, kde-format
 msgid "By Median, Descending"
-msgstr "Ortayla, Azalan"
+msgstr "Ortancayla, Azalan"
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:58
 #, kde-format
@@ -12827,9 +12826,9 @@ msgstr "Ana Satır"
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:68
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:72
 #: src/kdefrontend/widgets/LabelWidget.cpp:140
-#: src/kdefrontend/widgets/LabelWidget.cpp:144
-#: src/kdefrontend/widgets/LabelWidget.cpp:157
-#: src/kdefrontend/widgets/LabelWidget.cpp:161
+#: src/kdefrontend/widgets/LabelWidget.cpp:145
+#: src/kdefrontend/widgets/LabelWidget.cpp:159
+#: src/kdefrontend/widgets/LabelWidget.cpp:163
 #: src/kdefrontend/widgets/ValueWidget.cpp:94
 #: src/kdefrontend/widgets/ValueWidget.cpp:95
 #, kde-format
@@ -12838,6 +12837,8 @@ msgstr "Merkez"
 
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:253
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:258
+#: src/kdefrontend/widgets/LabelWidget.cpp:142
+#: src/kdefrontend/widgets/LabelWidget.cpp:147
 #, kde-format
 msgid "Relative to plot"
 msgstr "Çizime Göreceli"
@@ -18971,7 +18972,7 @@ msgstr "Kutu"
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:348
 #, kde-format
 msgid "Median Line"
-msgstr "Orta Çizgi"
+msgstr "Ortanca Çizgi"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabSymbol)
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:489
@@ -20936,13 +20937,13 @@ msgstr "Ortalama sapma"
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:141
 #, kde-format
 msgid "Mean deviation around median"
-msgstr "Ortadaki ortalama sapma"
+msgstr "Ortanca çevresindeki ortalama sapma"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:152
 #, kde-format
 msgid "Median deviation"
-msgstr "Orta sapma"
+msgstr "Ortanca sapma"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbWillQoS)
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:206
@@ -22323,97 +22324,97 @@ msgstr "Sembol Ekle"
 msgid "Insert Date/Time"
 msgstr "Tarih ve Zaman Ekle"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:164
+#: src/kdefrontend/widgets/LabelWidget.cpp:166
 #, kde-format
 msgid "No Border"
 msgstr "Kenarlıksız"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:165
+#: src/kdefrontend/widgets/LabelWidget.cpp:167
 #, kde-format
 msgid "Rectangle"
 msgstr "Dikdörtgen"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:166
+#: src/kdefrontend/widgets/LabelWidget.cpp:168
 #, kde-format
 msgid "Ellipse"
 msgstr "Elips"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:167
+#: src/kdefrontend/widgets/LabelWidget.cpp:169
 #, kde-format
 msgid "Round sided rectangle"
 msgstr "Yuvarlak kenarlı dörtgen"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:168
+#: src/kdefrontend/widgets/LabelWidget.cpp:170
 #, kde-format
 msgid "Round corner rectangle"
 msgstr "Yuvarlak köşeli dörtgen"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:169
+#: src/kdefrontend/widgets/LabelWidget.cpp:171
 #, kde-format
 msgid "Inwards round corner rectangle"
 msgstr "İçe doğru yuvarlak köşeli dörtgen"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:170
+#: src/kdefrontend/widgets/LabelWidget.cpp:172
 #, kde-format
 msgid "Dented border rectangle"
 msgstr "Vuruk kenarlı dörtgen"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:171
+#: src/kdefrontend/widgets/LabelWidget.cpp:173
 #, kde-format
 msgid "Cuboid"
 msgstr "Küp"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:172
+#: src/kdefrontend/widgets/LabelWidget.cpp:174
 #, kde-format
 msgid "Up Pointing rectangle"
 msgstr "Yukarı işaret eden dörtgen"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:173
+#: src/kdefrontend/widgets/LabelWidget.cpp:175
 #, kde-format
 msgid "Down Pointing rectangle"
 msgstr "Aşağı işaret eden dörtgen"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:174
+#: src/kdefrontend/widgets/LabelWidget.cpp:176
 #, kde-format
 msgid "Left Pointing rectangle"
 msgstr "Sola işaret eden dörtgen"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:175
+#: src/kdefrontend/widgets/LabelWidget.cpp:177
 #, kde-format
 msgid "Right Pointing rectangle"
 msgstr "Sağa işaret eden dörtgen"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:177
+#: src/kdefrontend/widgets/LabelWidget.cpp:179
 #, kde-format
 msgid "No line"
 msgstr "Satır yok"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:178
+#: src/kdefrontend/widgets/LabelWidget.cpp:180
 #, kde-format
 msgid "Solid line"
 msgstr "Düz çizgi"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:179
+#: src/kdefrontend/widgets/LabelWidget.cpp:181
 #, kde-format
 msgid "Dash line"
 msgstr "Kısa çizgi"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:180
+#: src/kdefrontend/widgets/LabelWidget.cpp:182
 #, kde-format
 msgid "Dot line"
 msgstr "Nokta çizgi"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:181
+#: src/kdefrontend/widgets/LabelWidget.cpp:183
 #, kde-format
 msgid "Dash dot line"
 msgstr "Tire nokta çizgisi"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:182
+#: src/kdefrontend/widgets/LabelWidget.cpp:184
 #, kde-format
 msgid "Dash dot dot line"
 msgstr "Tire nokta nokta çizgisi"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:199
+#: src/kdefrontend/widgets/LabelWidget.cpp:201
 #, kde-format
 msgid ""
 "Text setting mode:<ul><li>Text - text setting using rich-text formatting</"
@@ -22425,14 +22426,14 @@ msgstr ""
 "li><li>Markdown - Markdown biçimlendirmesi kullanarak metin ayarları</li></"
 "ul>"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:865
-#: src/kdefrontend/widgets/LabelWidget.cpp:891
+#: src/kdefrontend/widgets/LabelWidget.cpp:876
+#: src/kdefrontend/widgets/LabelWidget.cpp:902
 #, kde-format
 msgid "Date"
 msgstr "Tarih"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:873
-#: src/kdefrontend/widgets/LabelWidget.cpp:899
+#: src/kdefrontend/widgets/LabelWidget.cpp:884
+#: src/kdefrontend/widgets/LabelWidget.cpp:910
 #, kde-format
 msgid "Date and Time"
 msgstr "Tarih ve Zaman"
