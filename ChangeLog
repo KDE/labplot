@@ -41,6 +41,7 @@ New features:
 		* OPJ:
 			* Properly import projects having graphs with multiple axes (BUG 476355)
 			* correctly import font sizes and legend fixes (#839)
+			* improved text and legend label and positioning
 
 Performance improvements:
 	* Make baseline removal much faster by using Eigen3 library (optional dependency)
