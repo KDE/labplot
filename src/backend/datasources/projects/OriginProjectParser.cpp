@@ -738,7 +738,7 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 
 		DEBUG(Q_FUNC_INFO << ", column " << j << ", name = " << column.name << ", dataset name = " << column.dataset_name)
 		QString name(QString::fromStdString(column.name));
-		col->setName(name.replace(QRegularExpression(QStringLiteral(".*_")), QString()));
+		col->setName(name.remove(QRegularExpression(QStringLiteral(".*_"))));
 
 		if (preview)
 			continue;
@@ -1675,11 +1675,11 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 				if (pos1 == -1) // try \l(L.C)
 					pos1 = m_legendText.indexOf(QStringLiteral("\\l(%1.%2)").arg(layerIndex + 1).arg(curveIndex));
 				else // remove symbol string
-					m_legendText.replace(QStringLiteral("\\l(%1)").arg(curveIndex), QStringLiteral(""));
+					m_legendText.remove(QStringLiteral("\\l(%1)").arg(curveIndex));
 
 				if (pos1 != -1) { // \l(C) or \l(L.C) found
 					// remove symbol string
-					m_legendText.replace(QStringLiteral("\\l(%1.%2)").arg(layerIndex + 1).arg(curveIndex), QStringLiteral(""));
+					m_legendText.remove(QStringLiteral("\\l(%1.%2)").arg(layerIndex + 1).arg(curveIndex));
 
 					// whole line
 					int pos2 = m_legendText.indexOf(QRegularExpression(QLatin1String("[\r\n]")), pos1);
@@ -1729,8 +1729,10 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 
 					DEBUG(Q_FUNC_INFO << ", legend curve string final = \"" << legendCurveString.toStdString() << "\"")
 
-					if (!legendCurveString.trimmed().isEmpty())
-						curveName = legendCurveString.trimmed();
+					legendCurveString = legendCurveString.trimmed(); // remove leading and trailing whitspaces for curve name
+					legendCurveString.remove(QRegularExpression(QStringLiteral("\\\\l\\(\\d+\\)"))); // remove left over "\l(X)" (TO)
+					if (!legendCurveString.isEmpty())
+						curveName = legendCurveString;
 					enableCurveInLegend = true;
 				}
 
@@ -2063,7 +2065,7 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 		DEBUG(Q_FUNC_INFO << ", axis title string = " << STDSTRING(titleText));
 		DEBUG(Q_FUNC_INFO << ", column info = " << STDSTRING(columnInfo));
 
-		auto infoList = columnInfo.split(QRegularExpression(QLatin1String("[\r\n]")), Qt::SkipEmptyParts);
+		auto infoList = columnInfo.split(QRegularExpression(QStringLiteral("[\r\n]")), Qt::SkipEmptyParts);
 		// TODO: more replacements here using column info
 		if (infoList.size() > 1) { // unit available: "Name (Unit)"
 			titleText.replace(QLatin1String("%(?X)"), infoList.at(0) + QStringLiteral(" (") + infoList.at(1) + QStringLiteral(")"));
