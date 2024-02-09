@@ -19,6 +19,7 @@
 #include <KCompressionDevice>
 #include <KConfigGroup>
 #include <KLocalizedString>
+#include <QJsonDocument>
 
 /*!
 \class McapOptionsWidget
@@ -74,7 +75,7 @@ void McapOptionsWidget::clearModel() {
 }
 
 void McapOptionsWidget::loadSettings() const {
-	KConfigGroup conf = Settings::group(QStringLiteral("ImportJson"));
+	KConfigGroup conf = Settings::group(QStringLiteral("ImportMcap"));
 
 	const auto decimalSeparator = QLocale().decimalPoint();
 	int index = (decimalSeparator == QLatin1Char('.')) ? 0 : 1;
@@ -87,7 +88,7 @@ void McapOptionsWidget::loadSettings() const {
 }
 
 void McapOptionsWidget::saveSettings() {
-	KConfigGroup conf = Settings::group(QStringLiteral("ImportJson"));
+	KConfigGroup conf = Settings::group(QStringLiteral("ImportMcap"));
 
 	conf.writeEntry("DecimalSeparator", ui.cbDecimalSeparator->currentIndex());
 	conf.writeEntry("DateTimeFormat", ui.cbDateTimeFormat->currentText());
@@ -96,17 +97,11 @@ void McapOptionsWidget::saveSettings() {
 	conf.writeEntry("ParseRowsName", ui.chbImportObjectNames->isChecked());
 }
 
-void McapOptionsWidget::loadDocument(const QString& filename) {
-	PERFTRACE(QStringLiteral("JsonOptionsWidget::loadDocument"));
-	if (m_filename == filename)
-		return;
-	else
-		m_filename = filename;
+void McapOptionsWidget::loadDocument(const QJsonDocument& doc) {
+	PERFTRACE(QStringLiteral("McapOptionsWidget::loadDocument"));
 
-	KCompressionDevice device(m_filename);
 	m_model->clear();
-	if (!device.open(QIODevice::ReadOnly) || (device.atEnd() && !device.isSequential()) || // empty file
-		!m_model->loadJson(device.readAll()))
+	if (!m_model->loadJson(doc.toJson()))
 		clearModel();
 }
 

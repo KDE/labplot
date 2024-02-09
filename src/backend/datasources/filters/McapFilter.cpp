@@ -40,7 +40,7 @@
 \ingroup datasources
 */
 McapFilter::McapFilter()
-	: AbstractFileFilter(FileType::JSON)
+	: AbstractFileFilter(FileType::MCAP)
 	, d(new McapFilterPrivate(this)) {
 }
 
@@ -462,7 +462,6 @@ bool McapFilterPrivate::prepareDocumentToRead() {
 		int endRowOffset = (endRow == -1 || endRow > count) ? count : endRow;
 		firstRow = *(arr.begin() + (startRow - 1));
 		for (QJsonArray::iterator it = arr.begin() + (startRow - 1); it != arr.begin() + endRowOffset; ++it) {
-
 			if (checkRow(*it, countCols) != 0)
 				return false;
 			countRows++;
@@ -500,103 +499,96 @@ bool McapFilterPrivate::prepareDocumentToRead() {
 	DEBUG("start/end column: = " << startColumn << ' ' << endColumn);
 	DEBUG("start/end rows = " << startRow << ' ' << endRow);
 	DEBUG("actual cols/rows = " << m_actualCols << ' ' << m_actualRows);
+	m_prepared = true;
 
 	return true;
+}
+
+
+int McapFilterPrivate::mcapToJson(const QString& fileName){
+	mcap::McapReader reader;
+	{
+		const auto res = reader.open(STDSTRING(fileName));
+		if (!res.ok()) {
+			std::cerr << "Failed to open " << STDSTRING(fileName) << " for reading: " << res.message << std::endl;
+		}
+	}
+
+	auto messageView = reader.readMessages();
+	m_prepared = true;
+
+	std::cout << "topic\ttype\ttimestamp\tfields" << std::endl;
+
+	// Get number of messages in view
+	int msg_count = 0;
+
+	QJsonArray jsonArray;
+	for (auto it = messageView.begin(); it != messageView.end(); it++) {
+		// skip any non-json-encoded messages.
+		if (it->channel->messageEncoding != "json") { // only support json encoding for now
+			continue;
+		}
+
+		// Without going to string_view first I get this error:
+		// 32: QWARN  : MCAPFilterTest::testArrayImport() Error parsing JSON string: "{\"value\": 0}\u0005" "garbage at the end of the document"
+		std::string_view a(reinterpret_cast<const char*>(it->message.data), it->message.dataSize);
+
+		QString asString = QString::fromStdString(std::string(a));
+
+		QJsonParseError error;
+		QJsonDocument jsonDocument = QJsonDocument::fromJson(asString.toUtf8(), &error);
+		QJsonObject obj = jsonDocument.object();
+
+		obj.insert(QLatin1String("sequence"), QJsonValue::fromVariant(it->message.sequence));
+		obj.insert(QLatin1String("logTime"), QJsonValue::fromVariant(QString::number(it->message.logTime / 1000000))); // nano to milli otherwise value is 0
+		obj.insert(QLatin1String("publishTime"),
+				   QJsonValue::fromVariant(QString::number(it->message.publishTime / 1000000))); // nano to milli otherwise value is 0
+
+		if (error.error != QJsonParseError::NoError) {
+			qWarning() << "Error parsing JSON string:" << asString << error.errorString();
+			continue;
+		}
+
+		// Check if the parsed JSON document is an object
+		if (!jsonDocument.isObject()) {
+			qWarning() << "JSON string does not contain an object:" << asString;
+			continue;
+		}
+
+		// Convert the JSON document to a JSON object and add it to the JSON array
+		foreach (const QString& key, jsonDocument.object().keys()) {
+			QJsonValue value = jsonDocument.object().value(key);
+			qDebug() << "Key = " << key << ", Value = " << value;
+		}
+		jsonArray.append(obj);
+		msg_count++;
+	}
+
+	QJsonDocument finalJsonDocument(jsonArray);
+
+	// qDebug() << finalJsonDocument.toJson(QJsonDocument::Compact);
+
+	m_doc = finalJsonDocument;
+	return msg_count;
 }
 
 /*!
 reads the content of the file \c fileName to the data source \c dataSource. Uses the settings defined in the data source.
 */
 void McapFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
-	
 	DEBUG("MCAP Filter: Trying to open file:" << STDSTRING(fileName));
 
-	mcap::McapReader reader;
-  {
-    const auto res = reader.open(STDSTRING(fileName));
-    if (!res.ok()) {
-      std::cerr << "Failed to open " << STDSTRING(fileName) << " for reading: " << res.message
-                << std::endl;
-    }
-  }
-
-  auto messageView = reader.readMessages();
-
-  std::cout << "topic\ttype\ttimestamp\tfields" << std::endl;
-
-  // Get number of messages in view
-  int msg_count = 0;
-
-  QVector<int> sequences;
-  QVector<int> indices;
-
-  QVector<qlonglong> logTimes;
-  QVector<qlonglong> publishTimes;
-
-QJsonArray jsonArray;
-  for (auto it = messageView.begin(); it != messageView.end(); it++) {
-    // skip any non-json-encoded messages.
-    if (it->channel->messageEncoding != "json") { // only support json encoding for now
-      continue;
-    }
-
-	// Without going to string_view first I get this error:
-	// 32: QWARN  : MCAPFilterTest::testArrayImport() Error parsing JSON string: "{\"value\": 0}\u0005" "garbage at the end of the document"
-	std::string_view a(reinterpret_cast<const char*>(it->message.data),
-                              it->message.dataSize);
-
-    QString asString = QString::fromStdString(std::string(a));
-
-	QJsonParseError error;
-    QJsonDocument jsonDocument = QJsonDocument::fromJson(asString.toUtf8(), &error);
-	QJsonObject obj = jsonDocument.object();
-
-    obj.insert(QLatin1String("sequence"), QJsonValue::fromVariant(it->message.sequence));
-	obj.insert(QLatin1String("logTime"), QJsonValue::fromVariant(QString::number(it->message.logTime/1000000))); //nano to milli otherwise value is 0     
-    obj.insert(QLatin1String("publishTime"), QJsonValue::fromVariant(QString::number(it->message.publishTime/1000000))); //nano to milli otherwise value is 0       
-
-        if (error.error != QJsonParseError::NoError) {
-            qWarning() << "Error parsing JSON string:" << asString<<error.errorString();
-            continue;
-        }
-
-        // Check if the parsed JSON document is an object
-        if (!jsonDocument.isObject()) {
-            qWarning() << "JSON string does not contain an object:" << asString;
-            continue;
-        }
-
-        // Convert the JSON document to a JSON object and add it to the JSON array
-		foreach(const QString& key, jsonDocument.object().keys()) {
-        QJsonValue value = jsonDocument.object().value(key);
-        qDebug() << "Key = " << key << ", Value = " << value;
-    }
-        jsonArray.append(obj);
-
-	sequences << it->message.sequence;
-
-	logTimes << it->message.logTime;
-	publishTimes << it->message.publishTime;	
-	msg_count++;
-  }
-
-  QJsonDocument finalJsonDocument(jsonArray);
-
-    //qDebug() << finalJsonDocument.toJson(QJsonDocument::Compact);
-		
-	m_doc = finalJsonDocument;
+	int msg_count = mcapToJson(fileName);
 	bool success = prepareDocumentToRead();
 	qDebug() << success;
 	if (success)
 		importData(dataSource, importMode, msg_count);
-
 }
 
 /*!
 reads the content of device \c device to the data source \c dataSource. Uses the settings defined in the data source.
 */
 void McapFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
-	
 	if (!m_prepared) {
 		const int deviceError = prepareDeviceToRead(device);
 		if (deviceError != 0) {
@@ -713,8 +705,9 @@ generates the preview for the file \c fileName.
 */
 QVector<QStringList> McapFilterPrivate::preview(const QString& fileName, int lines) {
 	if (!m_prepared) {
-		KCompressionDevice device(fileName);
-		return preview(device, lines);
+		mcapToJson(fileName);	
+		bool success = prepareDocumentToRead();
+		return preview(lines);
 	} else
 		return preview(lines);
 }
@@ -723,6 +716,8 @@ QVector<QStringList> McapFilterPrivate::preview(const QString& fileName, int lin
 generates the preview for device \c device.
 */
 QVector<QStringList> McapFilterPrivate::preview(QIODevice& device, int lines) {
+	DEBUG(Q_FUNC_INFO);
+
 	if (!m_prepared) {
 		const int deviceError = prepareDeviceToRead(device);
 		if (deviceError != 0) {
@@ -741,6 +736,8 @@ QVector<QStringList> McapFilterPrivate::preview(QIODevice& device, int lines) {
 generates the preview for document \c m_preparedDoc.
 */
 QVector<QStringList> McapFilterPrivate::preview(int lines) {
+	DEBUG(Q_FUNC_INFO);
+
 	QVector<QStringList> dataStrings;
 	const int rowOffset = startRow - 1;
 	DEBUG("	Generating preview for " << std::min(lines, m_actualRows) << " lines");
@@ -805,6 +802,7 @@ QVector<QStringList> McapFilterPrivate::preview(int lines) {
 		}
 		dataStrings << lineString;
 	}
+	QDEBUG(dataStrings[0])
 	return dataStrings;
 }
 
@@ -871,4 +869,18 @@ bool McapFilter::load(XmlStreamReader* reader) {
 	}
 
 	return true;
+}
+
+
+QJsonDocument McapFilter::getJsonDocument(const QString& fileName){
+	return d->getJsonDocument(fileName);
+}
+
+QJsonDocument McapFilterPrivate::getJsonDocument(const QString& fileName){
+	if (!m_prepared) {
+		mcapToJson(fileName);	
+		bool success = prepareDocumentToRead();
+		return m_preparedDoc;
+	} else
+		return m_preparedDoc;
 }

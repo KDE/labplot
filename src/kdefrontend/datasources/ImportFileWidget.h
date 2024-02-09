@@ -160,6 +160,7 @@ private Q_SLOTS:
 	friend class NetCDFOptionsWidget; // to access refreshPreview() and others
 	friend class FITSOptionsWidget;
 	friend class JsonOptionsWidget;
+	friend class McapOptionsWidget;
 	friend class ROOTOptionsWidget; // to access refreshPreview() and others
 	friend class OdsOptionsWidget; // to access refreshPreview()
 	friend class XLSXOptionsWidget; // to access refreshPreview()

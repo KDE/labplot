@@ -37,6 +37,7 @@ public:
 	// read data from any device
 	void readDataFromDevice(QIODevice& device, AbstractDataSource*, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace, int lines = -1);
 	// overloaded function to read from file
+
 	void
 	readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace) override;
 	void write(const QString& fileName, AbstractDataSource*) override;
@@ -74,6 +75,8 @@ public:
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*) override;
+
+	QJsonDocument getJsonDocument(const QString&);
 
 private:
 	std::unique_ptr<McapFilterPrivate> const d;

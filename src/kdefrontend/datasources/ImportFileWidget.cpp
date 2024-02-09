@@ -43,6 +43,7 @@
 #include <QTreeWidgetItem>
 #include <QUdpSocket>
 #include <QWhatsThis>
+#include <QJsonDocument>
 
 #include <KConfig>
 #include <KConfigGroup>
@@ -60,6 +61,7 @@
 #include <QMqttSubscription>
 #include <QMqttTopicFilter>
 #include <QWidgetAction>
+#include <QJsonDocument>
 #endif
 
 QString ImportFileWidget::absolutePath(const QString& fileName) {
@@ -847,10 +849,10 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 		break;
 	}
 	case AbstractFileFilter::FileType::MCAP: {
-		DEBUG(Q_FUNC_INFO << ", MCAP");
 		if (!m_currentFilter)
 			m_currentFilter.reset(new McapFilter);
 		auto filter = static_cast<McapFilter*>(m_currentFilter.get());
+
 		m_mcapOptionsWidget->applyFilterSettings(filter, ui.tvJson->currentIndex());
 
 		filter->setStartRow(ui.sbStartRow->value());
@@ -1230,6 +1232,9 @@ void ImportFileWidget::fileTypeChanged(int /*index*/) {
 		ui.tabWidget->setCurrentIndex(0);
 		break;
 	case AbstractFileFilter::FileType::JSON:
+		showJsonModel(true);
+		break;
+	case AbstractFileFilter::FileType::MCAP:
 		showJsonModel(true);
 		break;
 	case AbstractFileFilter::FileType::READSTAT:
@@ -1644,7 +1649,7 @@ void ImportFileWidget::refreshPreview() {
 		DEBUG(Q_FUNC_INFO << ", file name = " << STDSTRING(file));
 
 	// default preview widget
-	if (fileType == AbstractFileFilter::FileType::Ascii || fileType == AbstractFileFilter::FileType::Binary || fileType == AbstractFileFilter::FileType::JSON
+	if (fileType == AbstractFileFilter::FileType::Ascii || fileType == AbstractFileFilter::FileType::Binary || fileType == AbstractFileFilter::FileType::JSON || fileType == AbstractFileFilter::FileType::MCAP
 		|| fileType == AbstractFileFilter::FileType::Spice || fileType == AbstractFileFilter::FileType::VECTOR_BLF
 		|| fileType == AbstractFileFilter::FileType::READSTAT)
 		m_twPreview->show();
@@ -1982,7 +1987,7 @@ void ImportFileWidget::updateContent(const QString& fileName) {
 
 	QApplication::processEvents(QEventLoop::AllEvents, 0);
 	WAIT_CURSOR;
-
+	QJsonDocument doc;
 	DEBUG(Q_FUNC_INFO << ", file name = " << STDSTRING(fileName));
 	if (auto filter = currentFileFilter()) {
 		switch (filter->type()) {
@@ -2011,6 +2016,13 @@ void ImportFileWidget::updateContent(const QString& fileName) {
 		case AbstractFileFilter::FileType::JSON:
 			m_jsonOptionsWidget->loadDocument(fileName);
 			ui.tvJson->setExpanded(m_jsonOptionsWidget->model()->index(0, 0), true); // expand the root node
+			break;
+		case AbstractFileFilter::FileType::MCAP:
+			doc = reinterpret_cast<McapFilter*>(filter)->getJsonDocument(fileName);
+			DEBUG(Q_FUNC_INFO << "loadDocument, file name = " << STDSTRING(fileName));
+			
+			m_mcapOptionsWidget->loadDocument(doc);
+			ui.tvJson->setExpanded(m_mcapOptionsWidget->model()->index(0, 0), true); // expand the root node
 			break;
 		case AbstractFileFilter::FileType::MATIO:
 			m_matioOptionsWidget->updateContent(static_cast<MatioFilter*>(filter), fileName);

@@ -27,7 +27,7 @@ public:
 	void clearModel();
 	void loadSettings() const;
 	void saveSettings();
-	void loadDocument(const QString& filename);
+	void loadDocument(const QJsonDocument&);
 	QAbstractItemModel* model();
 
 private:

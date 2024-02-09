@@ -210,6 +210,8 @@ AbstractFileFilter::FileType AbstractFileFilter::fileType(const QString& fileNam
 #endif
 	else if (fileInfo.contains(QLatin1String("image")) || fileInfo.contains(QLatin1String("bitmap")) || !imageFormat.isEmpty())
 		fileType = FileType::Image;
+	else if (fileInfo.contains(QLatin1String("mcap"))  || fileName.endsWith(QLatin1String(".mcap")))
+		fileType = FileType::MCAP;
 	else
 		fileType = FileType::Binary;
 

@@ -12,6 +12,7 @@
 #define MCAPFILTERPRIVATE_H
 
 #include "QJsonModel.h"
+#include <limits.h>
 
 class QJsonDocument;
 class AbstractDataSource;
@@ -31,6 +32,8 @@ public:
 	readDataFromDevice(QIODevice&, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace, int lines = -1);
 	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace);
 	void importData(AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace, int lines = -1);
+	int mcapToJson(const QString& fileName);
+	QJsonDocument getJsonDocument(const QString&);
 
 	void write(const QString& fileName, AbstractDataSource*);
 	QVector<QStringList> preview(const QString& fileName, int lines);
@@ -67,6 +70,7 @@ private:
 	QJsonDocument m_preparedDoc; // selected part of the full JSON document, the part that needs to be imported
 
 	bool prepareDocumentToRead();
+
 };
 
 #endif
