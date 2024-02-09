@@ -1631,7 +1631,7 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 					auto infoList = columnInfo.split(QRegularExpression(QLatin1String("[\r\n]")), Qt::SkipEmptyParts);
 
 					switch (infoList.size()) {
-					case 2:
+					case 2: // long name, unit
 						unit = infoList.at(1);
 						// fallthrough
 					case 1: // long name
@@ -1645,6 +1645,10 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 						curveName = comments;
 					}
 				}
+				if (longName.isEmpty())
+					longName = shortName;
+				if (comments.isEmpty())
+					comments = longName;
 				DEBUG(Q_FUNC_INFO << ", default curve name = \"" << curveName.toStdString() << "\"")
 
 				// TODO: custom legend not used yet
@@ -1691,42 +1695,32 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 					if (!legendCurveString.isEmpty()) { // don't include empty entries
 						// replace %(C) and %(L.C)
 						// see https://www.originlab.com/doc/en/LabTalk/ref/Text-Label-Options#Complete_List_of_.40Options
+						QString unitString(unit.isEmpty() ? QStringLiteral("") : QStringLiteral(" (") + unit + QStringLiteral(")"));
 						// TODO: implement more
 						legendCurveString.replace(QStringLiteral("%(%1)").arg(curveIndex), curveName);
 						legendCurveString.replace(QStringLiteral("%(%1,@C)").arg(curveIndex), shortName);
 						legendCurveString.replace(QStringLiteral("%(%1,@L)").arg(curveIndex), longName);
-						legendCurveString.replace(QStringLiteral("%(%1,@LA)").arg(curveIndex), longName.isEmpty() ? shortName : longName);
-						legendCurveString.replace(QStringLiteral("%(%1,@LC)").arg(curveIndex),
-												  comments.isEmpty() ? (longName.isEmpty() ? shortName : longName) : comments);
-						legendCurveString.replace(QStringLiteral("%(%1,@LG)").arg(curveIndex),
-												  (longName.isEmpty() ? shortName : longName)
-													  + (unit.isEmpty() ? QStringLiteral("") : QStringLiteral(" (") + unit + QStringLiteral(")")));
+						legendCurveString.replace(QStringLiteral("%(%1,@LA)").arg(curveIndex), longName);
+						legendCurveString.replace(QStringLiteral("%(%1,@LC)").arg(curveIndex), comments);
+						legendCurveString.replace(QStringLiteral("%(%1,@LG)").arg(curveIndex), longName + unitString);
 						legendCurveString.replace(QStringLiteral("%(%1,@LL)").arg(curveIndex), longName);
-						legendCurveString.replace(QStringLiteral("%(%1,@LM)").arg(curveIndex),
-												  comments.isEmpty() ? (longName.isEmpty() ? shortName : longName) : comments);
-						legendCurveString.replace(QStringLiteral("%(%1,@LN)").arg(curveIndex),
-												  (comments.isEmpty() ? (longName.isEmpty() ? shortName : longName) : comments)
-													  + (unit.isEmpty() ? QStringLiteral("") : QStringLiteral(" (") + unit + QStringLiteral(")")));
+						legendCurveString.replace(QStringLiteral("%(%1,@LM)").arg(curveIndex), comments);
+						legendCurveString.replace(QStringLiteral("%(%1,@LN)").arg(curveIndex), comments + unitString);
 						legendCurveString.replace(QStringLiteral("%(%1,@LS)").arg(curveIndex), shortName);
+						legendCurveString.replace(QStringLiteral("%(%1,@LU)").arg(curveIndex), unit);
 
 						// same with %(L.C)
 						legendCurveString.replace(QStringLiteral("%(%1.%2)").arg(layerIndex + 1).arg(curveIndex), curveName);
 						legendCurveString.replace(QStringLiteral("%(%1.%2,@C)").arg(layerIndex + 1).arg(curveIndex), shortName);
 						legendCurveString.replace(QStringLiteral("%(%1.%2,@L)").arg(layerIndex + 1).arg(curveIndex), longName);
-						legendCurveString.replace(QStringLiteral("%(%1.%2,@LA)").arg(layerIndex + 1).arg(curveIndex),
-												  longName.isEmpty() ? shortName : longName);
-						legendCurveString.replace(QStringLiteral("%(%1.%2,@LC)").arg(layerIndex + 1).arg(curveIndex),
-												  comments.isEmpty() ? (longName.isEmpty() ? shortName : longName) : comments);
-						legendCurveString.replace(QStringLiteral("%(%1.%2,@LG)").arg(layerIndex + 1).arg(curveIndex),
-												  (longName.isEmpty() ? shortName : longName)
-													  + (unit.isEmpty() ? QStringLiteral("") : QStringLiteral(" (") + unit + QStringLiteral(")")));
+						legendCurveString.replace(QStringLiteral("%(%1.%2,@LA)").arg(layerIndex + 1).arg(curveIndex), longName);
+						legendCurveString.replace(QStringLiteral("%(%1.%2,@LC)").arg(layerIndex + 1).arg(curveIndex), comments);
+						legendCurveString.replace(QStringLiteral("%(%1.%2,@LG)").arg(layerIndex + 1).arg(curveIndex), longName + unitString);
 						legendCurveString.replace(QStringLiteral("%(%1.%2,@LL)").arg(layerIndex + 1).arg(curveIndex), longName);
-						legendCurveString.replace(QStringLiteral("%(%1.%2,@LM)").arg(layerIndex + 1).arg(curveIndex),
-												  comments.isEmpty() ? (longName.isEmpty() ? shortName : longName) : comments);
-						legendCurveString.replace(QStringLiteral("%(%1.%2,@LN)").arg(layerIndex + 1).arg(curveIndex),
-												  (comments.isEmpty() ? (longName.isEmpty() ? shortName : longName) : comments)
-													  + (unit.isEmpty() ? QStringLiteral("") : QStringLiteral(" (") + unit + QStringLiteral(")")));
+						legendCurveString.replace(QStringLiteral("%(%1.%2,@LM)").arg(layerIndex + 1).arg(curveIndex), comments);
+						legendCurveString.replace(QStringLiteral("%(%1.%2,@LN)").arg(layerIndex + 1).arg(curveIndex), comments + unitString);
 						legendCurveString.replace(QStringLiteral("%(%1.%2,@LS)").arg(layerIndex + 1).arg(curveIndex), shortName);
+						legendCurveString.replace(QStringLiteral("%(%1.%2,@LU)").arg(layerIndex + 1).arg(curveIndex), unit);
 
 						DEBUG(Q_FUNC_INFO << ", legend curve string final = \"" << legendCurveString.toStdString() << "\"")
 
@@ -2068,20 +2062,50 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 		DEBUG(Q_FUNC_INFO << ", axis title string = " << STDSTRING(titleText));
 		DEBUG(Q_FUNC_INFO << ", column info = " << STDSTRING(columnInfo));
 
+		// long name(, unit(, comment))
+		// if long name not defined: columnInfo contains column name (s.a.)
 		auto infoList = columnInfo.split(QRegularExpression(QStringLiteral("[\r\n]")), Qt::SkipEmptyParts);
-		// TODO: more replacements here using column info
-		if (infoList.size() > 1) { // unit available: "Name (Unit)"
-			titleText.replace(QLatin1String("%(?X)"), infoList.at(0) + QStringLiteral(" (") + infoList.at(1) + QStringLiteral(")"));
-			titleText.replace(QLatin1String("%(?Y)"), infoList.at(0) + QStringLiteral(" (") + infoList.at(1) + QStringLiteral(")"));
-			titleText.replace(QLatin1String("%(?X,@LU)"), infoList.at(1));
-			titleText.replace(QLatin1String("%(?Y,@LU)"), infoList.at(1));
-		} else { // only long name or short name available
-			titleText.replace(QLatin1String("%(?X)"), columnInfo);
-			titleText.replace(QLatin1String("%(?Y)"), columnInfo);
+		QString longName, unit, comments;
+		switch (infoList.size()) {
+		case 2: // long name, unit
+			unit = infoList.at(1);
+			// fallthrough
+		case 1: // long name
+			longName = infoList.at(0);
+			// curveName = longName;
+			break;
+		default: // long name, unit, comment
+			longName = infoList.at(0);
+			unit = infoList.at(1);
+			comments = infoList.at(2);
+			// curveName = comments;
 		}
-		titleText.replace(QLatin1String("%(?X,@LL)"), infoList.at(0));
-		titleText.replace(QLatin1String("%(?Y,@LL)"), infoList.at(0));
-		DEBUG(Q_FUNC_INFO << ", axis title = " << STDSTRING(titleText));
+		if (comments.isEmpty())
+			comments = longName;
+
+		QString unitString(unit.isEmpty() ? QStringLiteral("") : QStringLiteral(" (") + unit + QStringLiteral(")"));
+		// TODO: more replacements here using column info (see loadCurves())
+		titleText.replace(QLatin1String("%(?X)"), longName + unitString);
+		titleText.replace(QLatin1String("%(?Y)"), longName + unitString);
+		titleText.replace(QLatin1String("%(?X,@L)"), longName);
+		titleText.replace(QLatin1String("%(?Y,@L)"), longName);
+		titleText.replace(QLatin1String("%(?X,@LC)"), comments);
+		titleText.replace(QLatin1String("%(?Y,@LC)"), comments);
+		titleText.replace(QLatin1String("%(?X,@LG)"), longName + unitString);
+		titleText.replace(QLatin1String("%(?Y,@LG)"), longName + unitString);
+		titleText.replace(QLatin1String("%(?X,@LL)"), longName);
+		titleText.replace(QLatin1String("%(?Y,@LL)"), longName);
+		titleText.replace(QLatin1String("%(?X,@LM)"), comments);
+		titleText.replace(QLatin1String("%(?Y,@LM)"), comments);
+		titleText.replace(QLatin1String("%(?X,@LN)"), comments + unitString);
+		titleText.replace(QLatin1String("%(?Y,@LN)"), comments + unitString);
+		// not available
+		//		titleText.replace(QLatin1String("%(?X,@LS)"), shortName);
+		//		titleText.replace(QLatin1String("%(?Y,@LS)"), shortName);
+		titleText.replace(QLatin1String("%(?X,@LU)"), unit);
+		titleText.replace(QLatin1String("%(?Y,@LU)"), unit);
+
+		DEBUG(Q_FUNC_INFO << ", axis title final = " << STDSTRING(titleText));
 
 		// use axisFormat.fontSize to override the global font size for the hmtl string
 		DEBUG(Q_FUNC_INFO << ", axis font size = " << axisFormat.label.fontSize)
