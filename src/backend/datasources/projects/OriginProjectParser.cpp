@@ -1383,10 +1383,8 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 	const auto& originLegend = layer.legend;
 	if (!originLegend.text.empty()) {
 		QString legendText;
-		if (m_originFile->version() < 9.5) // <= 2017 : pre-Unicode
-			legendText = QString::fromLatin1(originLegend.text.c_str());
-		else
-			legendText = QString::fromStdString(originLegend.text);
+		// not using UTF8! (9.85, TO)
+		legendText = QString::fromLatin1(originLegend.text.c_str());
 		DEBUG(Q_FUNC_INFO << ", legend text = \"" << STDSTRING(legendText) << "\"");
 
 		auto* legend = new CartesianPlotLegend(i18n("legend"));
