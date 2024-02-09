@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-05 01:51+0000\n"
+"POT-Creation-Date: 2024-02-09 01:41+0000\n"
 "PO-Revision-Date: 2023-09-19 23:30+0200\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -308,7 +308,7 @@ msgstr "Oso handia"
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1524
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:269
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:280
-#: src/kdefrontend/widgets/LabelWidget.cpp:192
+#: src/kdefrontend/widgets/LabelWidget.cpp:194
 #, kde-format
 msgid "Text"
 msgstr "Testua"
@@ -2217,12 +2217,12 @@ msgstr "Gailuak denbora muga gainditu du."
 msgid "The following error occurred: %1."
 msgstr "Ondoko errorea gertatu da: %1."
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1135
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1146
 #, kde-format
 msgid "Plot%1"
 msgstr "Diagrama%1"
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1307
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1334
 #, kde-format
 msgid "legend"
 msgstr "Legenda"
@@ -9169,7 +9169,7 @@ msgid "Command"
 msgstr "Komandoa"
 
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:101
-#: src/kdefrontend/widgets/LabelWidget.cpp:195
+#: src/kdefrontend/widgets/LabelWidget.cpp:197
 #, fuzzy, kde-format
 msgid "Markdown"
 msgstr "Markdown"
@@ -9177,7 +9177,7 @@ msgstr "Markdown"
 #. i18n: ectx: property (text), widget (QLabel, lTex)
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:105
 #: src/kdefrontend/ui/settingsworksheetpage.ui:147
-#: src/kdefrontend/widgets/LabelWidget.cpp:193
+#: src/kdefrontend/widgets/LabelWidget.cpp:195
 #, fuzzy, kde-format
 msgid "LaTeX"
 msgstr "LaTeX"
@@ -12183,8 +12183,8 @@ msgstr "Bilaketa-barrutia"
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:51
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:63
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:71
-#: src/kdefrontend/widgets/LabelWidget.cpp:143
-#: src/kdefrontend/widgets/LabelWidget.cpp:160
+#: src/kdefrontend/widgets/LabelWidget.cpp:144
+#: src/kdefrontend/widgets/LabelWidget.cpp:162
 #, fuzzy, kde-format
 msgid "Top"
 msgstr "Goian"
@@ -12198,8 +12198,8 @@ msgstr "Goian"
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:53
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:65
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:73
-#: src/kdefrontend/widgets/LabelWidget.cpp:145
-#: src/kdefrontend/widgets/LabelWidget.cpp:162
+#: src/kdefrontend/widgets/LabelWidget.cpp:146
+#: src/kdefrontend/widgets/LabelWidget.cpp:164
 #, fuzzy, kde-format
 msgid "Bottom"
 msgstr "Behean"
@@ -12281,7 +12281,7 @@ msgstr ""
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:365
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:132
 #: src/kdefrontend/widgets/LabelWidget.cpp:139
-#: src/kdefrontend/widgets/LabelWidget.cpp:156
+#: src/kdefrontend/widgets/LabelWidget.cpp:158
 #: src/kdefrontend/widgets/ValueWidget.cpp:37
 #, fuzzy, kde-format
 msgid "Left"
@@ -12299,7 +12299,7 @@ msgstr "Ezkerrean"
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:366
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:133
 #: src/kdefrontend/widgets/LabelWidget.cpp:141
-#: src/kdefrontend/widgets/LabelWidget.cpp:158
+#: src/kdefrontend/widgets/LabelWidget.cpp:160
 #: src/kdefrontend/widgets/ValueWidget.cpp:38
 #, fuzzy, kde-format
 msgid "Right"
@@ -12807,9 +12807,9 @@ msgstr ""
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:68
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:72
 #: src/kdefrontend/widgets/LabelWidget.cpp:140
-#: src/kdefrontend/widgets/LabelWidget.cpp:144
-#: src/kdefrontend/widgets/LabelWidget.cpp:157
-#: src/kdefrontend/widgets/LabelWidget.cpp:161
+#: src/kdefrontend/widgets/LabelWidget.cpp:145
+#: src/kdefrontend/widgets/LabelWidget.cpp:159
+#: src/kdefrontend/widgets/LabelWidget.cpp:163
 #: src/kdefrontend/widgets/ValueWidget.cpp:94
 #: src/kdefrontend/widgets/ValueWidget.cpp:95
 #, fuzzy, kde-format
@@ -12818,6 +12818,8 @@ msgstr "Erdian"
 
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:253
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:258
+#: src/kdefrontend/widgets/LabelWidget.cpp:142
+#: src/kdefrontend/widgets/LabelWidget.cpp:147
 #, fuzzy, kde-format
 #| msgid "Relative Path"
 msgid "Relative to plot"
@@ -12919,9 +12921,9 @@ msgid "Uncertainty Bars"
 msgstr ""
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:85
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:91
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:149
 #, kde-format
-msgid "X Uncertainty"
+msgid "Uncertainty"
 msgstr ""
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:159
@@ -13246,6 +13248,11 @@ msgstr ""
 msgid "Correlation status: %1"
 msgstr ""
 
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:91
+#, kde-format
+msgid "X Uncertainty"
+msgstr ""
+
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:92
 #, kde-format
 msgid "Y Uncertainty"
@@ -13467,11 +13474,6 @@ msgstr ""
 #: src/kdefrontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:94
 #, kde-format
 msgid "t, max"
-msgstr ""
-
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:149
-#, kde-format
-msgid "Uncertainty"
 msgstr ""
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:149
@@ -22345,97 +22347,97 @@ msgstr "Txertatu ikurra"
 msgid "Insert Date/Time"
 msgstr "Txertatu Data/Ordua"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:164
+#: src/kdefrontend/widgets/LabelWidget.cpp:166
 #, kde-format
 msgid "No Border"
 msgstr "Ertzik gabe"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:165
+#: src/kdefrontend/widgets/LabelWidget.cpp:167
 #, kde-format
 msgid "Rectangle"
 msgstr "Laukizuzena"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:166
+#: src/kdefrontend/widgets/LabelWidget.cpp:168
 #, kde-format
 msgid "Ellipse"
 msgstr "Elipsea"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:167
+#: src/kdefrontend/widgets/LabelWidget.cpp:169
 #, kde-format
 msgid "Round sided rectangle"
 msgstr "Alde biribilduko laukizuzena"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:168
+#: src/kdefrontend/widgets/LabelWidget.cpp:170
 #, kde-format
 msgid "Round corner rectangle"
 msgstr "Izkina biribilduko laukizuzena"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:169
+#: src/kdefrontend/widgets/LabelWidget.cpp:171
 #, kde-format
 msgid "Inwards round corner rectangle"
 msgstr "Barrurantz biribildutako izkinako laukizuzena"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:170
+#: src/kdefrontend/widgets/LabelWidget.cpp:172
 #, kde-format
 msgid "Dented border rectangle"
 msgstr "Ertz koskaduneko laukizuzena"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:171
+#: src/kdefrontend/widgets/LabelWidget.cpp:173
 #, kde-format
 msgid "Cuboid"
 msgstr "Kuboidea"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:172
+#: src/kdefrontend/widgets/LabelWidget.cpp:174
 #, kde-format
 msgid "Up Pointing rectangle"
 msgstr "Gorantz seinalatzen duen laukizuzena"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:173
+#: src/kdefrontend/widgets/LabelWidget.cpp:175
 #, kde-format
 msgid "Down Pointing rectangle"
 msgstr "Beherantz seinalatzen duen laukizuzena"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:174
+#: src/kdefrontend/widgets/LabelWidget.cpp:176
 #, kde-format
 msgid "Left Pointing rectangle"
 msgstr "Ezkerrerantz seinalatzen duen laukizuzena"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:175
+#: src/kdefrontend/widgets/LabelWidget.cpp:177
 #, kde-format
 msgid "Right Pointing rectangle"
 msgstr "Eskuinerantz seinalatzen duen laukizuzena"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:177
+#: src/kdefrontend/widgets/LabelWidget.cpp:179
 #, kde-format
 msgid "No line"
 msgstr "Lerrorik ez"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:178
+#: src/kdefrontend/widgets/LabelWidget.cpp:180
 #, kde-format
 msgid "Solid line"
 msgstr "Lerro solidoa"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:179
+#: src/kdefrontend/widgets/LabelWidget.cpp:181
 #, kde-format
 msgid "Dash line"
 msgstr "Marratxo lerroa"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:180
+#: src/kdefrontend/widgets/LabelWidget.cpp:182
 #, kde-format
 msgid "Dot line"
 msgstr "Puntu lerroa"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:181
+#: src/kdefrontend/widgets/LabelWidget.cpp:183
 #, kde-format
 msgid "Dash dot line"
 msgstr "Marratxo-puntu lerroa"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:182
+#: src/kdefrontend/widgets/LabelWidget.cpp:184
 #, kde-format
 msgid "Dash dot dot line"
 msgstr "marratxo-puntu-puntu lerroa"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:199
+#: src/kdefrontend/widgets/LabelWidget.cpp:201
 #, kde-format
 msgid ""
 "Text setting mode:<ul><li>Text - text setting using rich-text formatting</"
@@ -22447,14 +22449,14 @@ msgstr ""
 "LaTeX instalatu beharra dago</li><li>Markdown - Markdown markatzeko lengoaia "
 "erabiltzen duen testu-ezarpena</li></ul>"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:865
-#: src/kdefrontend/widgets/LabelWidget.cpp:891
+#: src/kdefrontend/widgets/LabelWidget.cpp:876
+#: src/kdefrontend/widgets/LabelWidget.cpp:902
 #, kde-format
 msgid "Date"
 msgstr "Data"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:873
-#: src/kdefrontend/widgets/LabelWidget.cpp:899
+#: src/kdefrontend/widgets/LabelWidget.cpp:884
+#: src/kdefrontend/widgets/LabelWidget.cpp:910
 #, kde-format
 msgid "Date and Time"
 msgstr "Data eta ordua"

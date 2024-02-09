@@ -13,10 +13,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-05 01:51+0000\n"
-"PO-Revision-Date: 2024-01-31 21:20+0100\n"
+"POT-Creation-Date: 2024-02-09 01:41+0000\n"
+"PO-Revision-Date: 2024-02-04 11:03+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
-"Language-Team: French <kde-francophone@kde.org>\n"
+"Language-Team: \n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -318,7 +318,7 @@ msgstr "Entier long"
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1524
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:269
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:280
-#: src/kdefrontend/widgets/LabelWidget.cpp:192
+#: src/kdefrontend/widgets/LabelWidget.cpp:194
 #, kde-format
 msgid "Text"
 msgstr "Texte"
@@ -2241,12 +2241,12 @@ msgstr "Le périphérique a expiré."
 msgid "The following error occurred: %1."
 msgstr "L'erreur suivante est survenue : %1."
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1135
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1146
 #, kde-format
 msgid "Plot%1"
 msgstr "Tracé%1"
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1307
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1334
 #, kde-format
 msgid "legend"
 msgstr "légende"
@@ -9136,7 +9136,7 @@ msgid "Command"
 msgstr "Commande"
 
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:101
-#: src/kdefrontend/widgets/LabelWidget.cpp:195
+#: src/kdefrontend/widgets/LabelWidget.cpp:197
 #, kde-format
 msgid "Markdown"
 msgstr "Markdown"
@@ -9144,7 +9144,7 @@ msgstr "Markdown"
 #. i18n: ectx: property (text), widget (QLabel, lTex)
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:105
 #: src/kdefrontend/ui/settingsworksheetpage.ui:147
-#: src/kdefrontend/widgets/LabelWidget.cpp:193
+#: src/kdefrontend/widgets/LabelWidget.cpp:195
 #, kde-format
 msgid "LaTeX"
 msgstr "LaTeX"
@@ -11901,18 +11901,15 @@ msgid "LabPlot Projects (%1)"
 msgstr "Projet LabPlot (%1)"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:443
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Open Origin Project"
+#, kde-format
 msgctxt "@title:window"
 msgid "Open Origin OPJ Project"
-msgstr "Ouvrir un projet originel"
+msgstr "Ouvrir un projet « Origin » au format » OPJ »"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:445
-#, fuzzy, kde-format
-#| msgid "Origin Projects (%1)"
+#, kde-format
 msgid "Origin OPJ Projects (%1)"
-msgstr "Projets originels (%1)"
+msgstr "Projets « Origin » au format » OPJ » (%1)"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:514
 #, kde-format
@@ -12296,8 +12293,8 @@ msgstr "Zone de données"
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:51
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:63
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:71
-#: src/kdefrontend/widgets/LabelWidget.cpp:143
-#: src/kdefrontend/widgets/LabelWidget.cpp:160
+#: src/kdefrontend/widgets/LabelWidget.cpp:144
+#: src/kdefrontend/widgets/LabelWidget.cpp:162
 #, kde-format
 msgid "Top"
 msgstr "En haut"
@@ -12311,8 +12308,8 @@ msgstr "En haut"
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:53
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:65
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:73
-#: src/kdefrontend/widgets/LabelWidget.cpp:145
-#: src/kdefrontend/widgets/LabelWidget.cpp:162
+#: src/kdefrontend/widgets/LabelWidget.cpp:146
+#: src/kdefrontend/widgets/LabelWidget.cpp:164
 #, kde-format
 msgid "Bottom"
 msgstr "En bas"
@@ -12400,7 +12397,7 @@ msgstr "semi-rempli, grand"
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:365
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:132
 #: src/kdefrontend/widgets/LabelWidget.cpp:139
-#: src/kdefrontend/widgets/LabelWidget.cpp:156
+#: src/kdefrontend/widgets/LabelWidget.cpp:158
 #: src/kdefrontend/widgets/ValueWidget.cpp:37
 #, kde-format
 msgid "Left"
@@ -12418,7 +12415,7 @@ msgstr "À gauche"
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:366
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:133
 #: src/kdefrontend/widgets/LabelWidget.cpp:141
-#: src/kdefrontend/widgets/LabelWidget.cpp:158
+#: src/kdefrontend/widgets/LabelWidget.cpp:160
 #: src/kdefrontend/widgets/ValueWidget.cpp:38
 #, kde-format
 msgid "Right"
@@ -12939,9 +12936,9 @@ msgstr "Ligne principale"
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:68
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:72
 #: src/kdefrontend/widgets/LabelWidget.cpp:140
-#: src/kdefrontend/widgets/LabelWidget.cpp:144
-#: src/kdefrontend/widgets/LabelWidget.cpp:157
-#: src/kdefrontend/widgets/LabelWidget.cpp:161
+#: src/kdefrontend/widgets/LabelWidget.cpp:145
+#: src/kdefrontend/widgets/LabelWidget.cpp:159
+#: src/kdefrontend/widgets/LabelWidget.cpp:163
 #: src/kdefrontend/widgets/ValueWidget.cpp:94
 #: src/kdefrontend/widgets/ValueWidget.cpp:95
 #, kde-format
@@ -12950,6 +12947,8 @@ msgstr "Centrer"
 
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:253
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:258
+#: src/kdefrontend/widgets/LabelWidget.cpp:142
+#: src/kdefrontend/widgets/LabelWidget.cpp:147
 #, kde-format
 msgid "Relative to plot"
 msgstr "Relatif vers le tracé"
@@ -13051,10 +13050,10 @@ msgid "Uncertainty Bars"
 msgstr "Barres d'incertitude"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:85
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:91
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:149
 #, kde-format
-msgid "X Uncertainty"
-msgstr "Incertitude en X"
+msgid "Uncertainty"
+msgstr "Incertitude"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:159
 #, kde-format
@@ -13387,6 +13386,11 @@ msgstr "État de déconvolution : %1"
 msgid "Correlation status: %1"
 msgstr "État de corrélation : %1"
 
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:91
+#, kde-format
+msgid "X Uncertainty"
+msgstr "Incertitude en X"
+
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:92
 #, kde-format
 msgid "Y Uncertainty"
@@ -13613,11 +13617,6 @@ msgstr "t min"
 #, kde-format
 msgid "t, max"
 msgstr "t max"
-
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:149
-#, kde-format
-msgid "Uncertainty"
-msgstr "Incertitude"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:149
 #, kde-format
@@ -22495,97 +22494,97 @@ msgstr "Insérer un symbole"
 msgid "Insert Date/Time"
 msgstr "Insérer une Date / Heure"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:164
+#: src/kdefrontend/widgets/LabelWidget.cpp:166
 #, kde-format
 msgid "No Border"
 msgstr "Aucune bordure"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:165
+#: src/kdefrontend/widgets/LabelWidget.cpp:167
 #, kde-format
 msgid "Rectangle"
 msgstr "Rectangle"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:166
+#: src/kdefrontend/widgets/LabelWidget.cpp:168
 #, kde-format
 msgid "Ellipse"
 msgstr "Ellipse"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:167
+#: src/kdefrontend/widgets/LabelWidget.cpp:169
 #, kde-format
 msgid "Round sided rectangle"
 msgstr "Rectangles à coins arrondis"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:168
+#: src/kdefrontend/widgets/LabelWidget.cpp:170
 #, kde-format
 msgid "Round corner rectangle"
 msgstr "Rectangles à coins arrondis"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:169
+#: src/kdefrontend/widgets/LabelWidget.cpp:171
 #, kde-format
 msgid "Inwards round corner rectangle"
 msgstr "Rectangles à coins arrondis vers l'intérieur"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:170
+#: src/kdefrontend/widgets/LabelWidget.cpp:172
 #, kde-format
 msgid "Dented border rectangle"
 msgstr "Rectangle à bord dentelé"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:171
+#: src/kdefrontend/widgets/LabelWidget.cpp:173
 #, kde-format
 msgid "Cuboid"
 msgstr "Cuboïde"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:172
+#: src/kdefrontend/widgets/LabelWidget.cpp:174
 #, kde-format
 msgid "Up Pointing rectangle"
 msgstr "Rectangle avec flèche vers le haut"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:173
+#: src/kdefrontend/widgets/LabelWidget.cpp:175
 #, kde-format
 msgid "Down Pointing rectangle"
 msgstr "Rectangle avec flèche vers le bas"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:174
+#: src/kdefrontend/widgets/LabelWidget.cpp:176
 #, kde-format
 msgid "Left Pointing rectangle"
 msgstr "Rectangle avec flèche vers la gauche"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:175
+#: src/kdefrontend/widgets/LabelWidget.cpp:177
 #, kde-format
 msgid "Right Pointing rectangle"
 msgstr "Rectangle avec flèche vers la droite"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:177
+#: src/kdefrontend/widgets/LabelWidget.cpp:179
 #, kde-format
 msgid "No line"
 msgstr "Aucune ligne"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:178
+#: src/kdefrontend/widgets/LabelWidget.cpp:180
 #, kde-format
 msgid "Solid line"
 msgstr "Ligne pleine"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:179
+#: src/kdefrontend/widgets/LabelWidget.cpp:181
 #, kde-format
 msgid "Dash line"
 msgstr "Ligne en tirets"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:180
+#: src/kdefrontend/widgets/LabelWidget.cpp:182
 #, kde-format
 msgid "Dot line"
 msgstr "Ligne pointillée"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:181
+#: src/kdefrontend/widgets/LabelWidget.cpp:183
 #, kde-format
 msgid "Dash dot line"
 msgstr "Ligne tiret-point"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:182
+#: src/kdefrontend/widgets/LabelWidget.cpp:184
 #, kde-format
 msgid "Dash dot dot line"
 msgstr "Ligne tiret-point-point"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:199
+#: src/kdefrontend/widgets/LabelWidget.cpp:201
 #, kde-format
 msgid ""
 "Text setting mode:<ul><li>Text - text setting using rich-text formatting</"
@@ -22598,14 +22597,14 @@ msgstr ""
 "est nécessaire,</li><li>Markdown - Configuration du texte par utilisation du "
 "langage à balises « Markdown ».</li></ul>"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:865
-#: src/kdefrontend/widgets/LabelWidget.cpp:891
+#: src/kdefrontend/widgets/LabelWidget.cpp:876
+#: src/kdefrontend/widgets/LabelWidget.cpp:902
 #, kde-format
 msgid "Date"
 msgstr "Date"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:873
-#: src/kdefrontend/widgets/LabelWidget.cpp:899
+#: src/kdefrontend/widgets/LabelWidget.cpp:884
+#: src/kdefrontend/widgets/LabelWidget.cpp:910
 #, kde-format
 msgid "Date and Time"
 msgstr "Date et heure"

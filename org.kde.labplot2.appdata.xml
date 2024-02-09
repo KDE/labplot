@@ -5,8 +5,10 @@
   <project_license>GPL-2.0+</project_license>
   <developer_name>The KDE community</developer_name>
   <developer_name xml:lang="ca">La comunitat KDE</developer_name>
+  <developer_name xml:lang="ca-valencia">La comunitat KDE</developer_name>
   <developer_name xml:lang="eo">La komunumo de KDE</developer_name>
   <developer_name xml:lang="es">La Comunidad KDE</developer_name>
+  <developer_name xml:lang="fr">La communauté de KDE</developer_name>
   <developer_name xml:lang="nl">De KDE gemeenschap</developer_name>
   <developer_name xml:lang="sl">Skupnost KDE</developer_name>
   <developer_name xml:lang="tr">KDE topluluğu</developer_name>

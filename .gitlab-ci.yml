@@ -198,7 +198,7 @@ craft_windows_qt515_x86_64:
 
 #########################################################
 
-.clang_format:
+clang_format:
   stage: test
   image: debian:bookworm
   before_script:
@@ -210,6 +210,8 @@ craft_windows_qt515_x86_64:
 
 # see above
 flatpak:
+  only:
+    - master
   variables:
     KDE_FLATPAK_MODULE_NAME: labplot2
     KDE_FLATPAK_APP_ID: org.kde.${KDE_FLATPAK_MODULE_NAME}

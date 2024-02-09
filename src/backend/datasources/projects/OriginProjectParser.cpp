@@ -197,6 +197,40 @@ unsigned int OriginProjectParser::findNoteByName(const QString& name) {
 	return 0;
 }
 
+// get Origin::Spreadsheet from container name (may be a spreadsheet or workbook)
+Origin::SpreadSheet OriginProjectParser::getSpreadsheetByName(QString& containerName) {
+	DEBUG(Q_FUNC_INFO)
+	int sheetIndex = 0; // which sheet? "@X"
+	const int atIndex = containerName.indexOf(QLatin1Char('@'));
+	if (atIndex != -1) {
+		sheetIndex = containerName.mid(atIndex + 1).toInt() - 1;
+		containerName.truncate(atIndex);
+	}
+	// DEBUG("CONTAINER = " << STDSTRING(containerName) << ", SHEET = " << sheetIndex)
+
+	// check if workbook
+	int workbookIndex = findWorkbookByName(containerName);
+	// if workbook not found, findWorkbookByName() returns 0: check this
+	if (workbookIndex == 0 && (m_originFile->excelCount() == 0 || containerName.toStdString() != m_originFile->excel(0).name))
+		workbookIndex = -1;
+	// DEBUG("WORKBOOK  index = " << workbookIndex)
+
+	// comment of y column is used in legend (if not empty), else the column name
+	Origin::SpreadSheet sheet;
+	if (workbookIndex != -1) { // container is a workbook
+		sheet = m_originFile->excel(workbookIndex).sheets[sheetIndex];
+	} else { // container is a spreadsheet?
+		int spreadsheetIndex = findSpreadsheetByName(containerName);
+		// if spreadsheet not found, findSpreadsheetByName() returns 0: check this
+		if (spreadsheetIndex == 0 && (m_originFile->spreadCount() == 0 || containerName.toStdString() != m_originFile->spread(0).name))
+			spreadsheetIndex = -1;
+		if (spreadsheetIndex != -1)
+			sheet = m_originFile->spread(spreadsheetIndex);
+	}
+
+	return sheet;
+}
+
 // ##############################################################################
 // ############## Deserialization from Origin's project tree ####################
 // ##############################################################################
@@ -704,7 +738,7 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 
 		DEBUG(Q_FUNC_INFO << ", column " << j << ", name = " << column.name << ", dataset name = " << column.dataset_name)
 		QString name(QString::fromStdString(column.name));
-		col->setName(name.replace(QRegularExpression(QStringLiteral(".*_")), QString()));
+		col->setName(name.remove(QRegularExpression(QStringLiteral(".*_"))));
 
 		if (preview)
 			continue;
@@ -714,8 +748,15 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 		// 		if (column.command.size() > 0)
 		// 			col->setFormula(Interval<int>(0, rows), QString::fromStdString(column.command));
 
-		DEBUG(Q_FUNC_INFO << ", column " << j << ", comment = " << column.comment)
-		col->setComment(QString::fromStdString(column.comment));
+		DEBUG(Q_FUNC_INFO << ", column " << j << ", full comment = " << column.comment)
+		QString comment;
+		if (m_originFile->version() < 9.5) // <= 2017 : pre-Unicode
+			comment = QString::fromLatin1(column.comment.c_str());
+		else
+			comment = QString::fromStdString(column.comment);
+		if (comment.contains(QLatin1Char('@'))) // remove @ options
+			comment.truncate(comment.indexOf(QLatin1Char('@')));
+		col->setComment(comment);
 		col->setWidth((int)column.width * scaling_factor);
 
 		// plot designation
@@ -1079,13 +1120,15 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 	DEBUG(Q_FUNC_INFO << ", GRAPH width/height (cm) = " << graphSize.width() * GSL_CONST_CGS_INCH / dpi << "/" << graphSize.height() * GSL_CONST_CGS_INCH / dpi)
 	// Origin scales text and plots with the size of the layer when no fixed size is used (Layer properties->Size)
 	// so we scale all text and plots with a scaling factor to the whole view height (29.5 cm) used as default
-	elementScalingFactor = 29.5 / (graph.height * GSL_CONST_CGS_INCH / dpi);
+	const double fixedHeight = 29.5; // full height [cm]
+	elementScalingFactor = fixedHeight / (graph.height * GSL_CONST_CGS_INCH / dpi);
 	// not using the full value for scaling text is better in most cases
 	textScalingFactor = 1. + (elementScalingFactor - 1.) / 2.;
 	DEBUG(Q_FUNC_INFO << ", ELEMENT SCALING FACTOR = " << elementScalingFactor)
 	DEBUG(Q_FUNC_INFO << ", TEXT SCALING FACTOR = " << textScalingFactor)
 	// default values (1000/1000)
 	//	DEBUG(Q_FUNC_INFO << ", WORKSHEET width/height = " << worksheet->pageRect().width() << "/" << worksheet->pageRect().height())
+
 	worksheet->setUseViewSize(true);
 
 	QHash<TextLabel*, QSizeF> textLabelPositions;
@@ -1120,12 +1163,18 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 	// https://www.originlab.com/doc/Origin-Help/MultiLayer-Graph
 	int layerIndex = 0; // index of the graph layer
 	CartesianPlot* plot = nullptr;
+	Origin::Rect layerRect;
 	for (const auto& layer : graph.layers) {
 		DEBUG(Q_FUNC_INFO << ", Graph Layer " << layerIndex + 1)
 		if (layer.is3D()) {
 			// TODO: add an "UnsupportedAspect" here since we don't support 3D yet
 			break;
 		}
+
+		layerRect = layer.clientRect;
+		// DEBUG(Q_FUNC_INFO << ", layer left/right (px) = " << layerRect.left << "/" << layerRect.right)
+		// DEBUG(Q_FUNC_INFO << ", layer top/bottom (px) = " << layerRect.top << "/" << layerRect.bottom)
+		// DEBUG(Q_FUNC_INFO << ", layer width/height (px) = " << layerRect.width() << "/" << layerRect.height())
 
 		// create a new plot if we're
 		// 1. interpreting every layer as a new plot
@@ -1143,12 +1192,28 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 
 	// padding
 	plot->setSymmetricPadding(false);
-	plot->setHorizontalPadding(plot->horizontalPadding() * elementScalingFactor);
-	plot->setVerticalPadding(plot->verticalPadding() * elementScalingFactor);
-	plot->setRightPadding(plot->rightPadding() * elementScalingFactor);
-	plot->setBottomPadding(plot->bottomPadding() * elementScalingFactor);
-	DEBUG(Q_FUNC_INFO << ", PADDING = " << plot->horizontalPadding() << ", " << plot->verticalPadding())
-	DEBUG(Q_FUNC_INFO << ", PADDING = " << plot->rightPadding() << ", " << plot->bottomPadding())
+	int numberOfLayer = layerIndex + 1;
+	DEBUG(Q_FUNC_INFO << ", number of layer = " << numberOfLayer)
+	if (numberOfLayer == 1 || !m_graphLayerAsPlotArea) { // use layer clientRect for padding
+		DEBUG(Q_FUNC_INFO << ", using layer rect for padding")
+		double aspectRatio = graphSize.width() / graphSize.height();
+
+		double leftPadding = layerRect.left / (double)graphSize.width() * aspectRatio * fixedHeight;
+		double topPadding = layerRect.top / (double)graphSize.height() * fixedHeight;
+		double rightPadding = (graphSize.width() - layerRect.right) / (double)graphSize.width() * aspectRatio * fixedHeight;
+		double bottomPadding = (graphSize.height() - layerRect.bottom) / (double)graphSize.height() * fixedHeight;
+		plot->setHorizontalPadding(Worksheet::convertToSceneUnits(leftPadding, Worksheet::Unit::Centimeter));
+		plot->setVerticalPadding(Worksheet::convertToSceneUnits(topPadding, Worksheet::Unit::Centimeter));
+		plot->setRightPadding(Worksheet::convertToSceneUnits(rightPadding, Worksheet::Unit::Centimeter));
+		plot->setBottomPadding(Worksheet::convertToSceneUnits(bottomPadding, Worksheet::Unit::Centimeter));
+	} else {
+		plot->setHorizontalPadding(plot->horizontalPadding() * elementScalingFactor);
+		plot->setVerticalPadding(plot->verticalPadding() * elementScalingFactor);
+		plot->setRightPadding(plot->rightPadding() * elementScalingFactor);
+		plot->setBottomPadding(plot->bottomPadding() * elementScalingFactor);
+	}
+	DEBUG(Q_FUNC_INFO << ", PADDING (H/V) = " << plot->horizontalPadding() << ", " << plot->verticalPadding())
+	DEBUG(Q_FUNC_INFO << ", PADDING (R/B) = " << plot->rightPadding() << ", " << plot->bottomPadding())
 
 	if (!preview) {
 		worksheet->updateLayout();
@@ -1158,13 +1223,29 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 		// the relative positions determined above to the absolute values
 		auto it = textLabelPositions.constBegin();
 		while (it != textLabelPositions.constEnd()) {
-			TextLabel* label = it.key();
-			const QSizeF& ratios = it.value();
-			const auto* plot = static_cast<const CartesianPlot*>(label->parentAspect());
+			auto* label = it.key();
+			const auto& ratios = it.value();
 
 			auto position = label->position();
-			position.point.setX(plot->dataRect().width() * (ratios.width() - 0.5));
-			position.point.setY(plot->dataRect().height() * (ratios.height() - 0.5));
+			position.point.setX(ratios.width());
+			position.point.setY(ratios.height());
+			position.horizontalPosition = WorksheetElement::HorizontalPosition::Relative;
+			position.verticalPosition = WorksheetElement::VerticalPosition::Relative;
+			// achor depending on rotation
+			auto rotation = label->rotationAngle();
+			auto hAlign = WorksheetElement::HorizontalAlignment::Left;
+			auto vAlign = WorksheetElement::VerticalAlignment::Top;
+			if (rotation > 45 && rotation <= 135) // left/bottom
+				vAlign = WorksheetElement::VerticalAlignment::Bottom;
+			else if (rotation > 135 && rotation <= 225) { // right/bottom
+				hAlign = WorksheetElement::HorizontalAlignment::Right;
+				vAlign = WorksheetElement::VerticalAlignment::Bottom;
+			} else if (rotation > 225) // right/top
+				hAlign = WorksheetElement::HorizontalAlignment::Right;
+
+			label->setHorizontalAlignment(hAlign);
+			label->setVerticalAlignment(vAlign);
+
 			label->setPosition(position);
 
 			++it;
@@ -1178,7 +1259,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 										 CartesianPlot* plot,
 										 int layerIndex,
-										 QHash<TextLabel*, QSizeF> textLabelPositions,
+										 QHash<TextLabel*, QSizeF>& textLabelPositions,
 										 bool preview) {
 	DEBUG(Q_FUNC_INFO << ", NEW GRAPH LAYER")
 
@@ -1300,8 +1381,10 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 
 	// add legend if available
 	const auto& originLegend = layer.legend;
-	const auto& legendText = QString::fromStdString(originLegend.text);
 	if (!originLegend.text.empty()) {
+		QString legendText;
+		// not using UTF8! (9.85, TO)
+		legendText = QString::fromLatin1(originLegend.text.c_str());
 		DEBUG(Q_FUNC_INFO << ", legend text = \"" << STDSTRING(legendText) << "\"");
 
 		auto* legend = new CartesianPlotLegend(i18n("legend"));
@@ -1354,14 +1437,35 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 		DEBUG(Q_FUNC_INFO << ", page size = " << graphSize.width() << "/" << graphSize.height())
 		CartesianPlotLegend::PositionWrapper position;
 		QSizeF relativePosition(legendRect.left / (double)graphSize.width(), legendRect.top / (double)graphSize.height());
+		// achor depending on rotation
+		auto rotation = originLegend.rotation;
+		if (rotation > 45 && rotation <= 135) // left/bottom
+			relativePosition.setHeight(legendRect.bottom / (double)graphSize.height());
+		else if (rotation > 135 && rotation <= 225) { // right/bottom
+			relativePosition.setWidth(legendRect.right / (double)graphSize.width());
+			relativePosition.setHeight(legendRect.bottom / (double)graphSize.height());
+		} else if (rotation > 225) // right/top
+			relativePosition.setWidth(legendRect.right / (double)graphSize.width());
+
 		DEBUG(Q_FUNC_INFO << ", relative position to page = " << relativePosition.width() << "/" << relativePosition.height())
 
 		position.point.setX(relativePosition.width());
 		position.point.setY(relativePosition.height());
+		// achor depending on rotation
 		position.horizontalPosition = WorksheetElement::HorizontalPosition::Relative;
 		position.verticalPosition = WorksheetElement::VerticalPosition::Relative;
-		legend->setHorizontalAlignment(WorksheetElement::HorizontalAlignment::Left);
-		legend->setVerticalAlignment(WorksheetElement::VerticalAlignment::Top);
+		auto hAlign = WorksheetElement::HorizontalAlignment::Left;
+		auto vAlign = WorksheetElement::VerticalAlignment::Top;
+		if (rotation > 45 && rotation <= 135) // left/bottom
+			vAlign = WorksheetElement::VerticalAlignment::Bottom;
+		else if (rotation > 135 && rotation <= 225) { // right/bottom
+			hAlign = WorksheetElement::HorizontalAlignment::Right;
+			vAlign = WorksheetElement::VerticalAlignment::Bottom;
+		} else if (rotation > 225) // right/top
+			hAlign = WorksheetElement::HorizontalAlignment::Right;
+		legend->setHorizontalAlignment(hAlign);
+		legend->setVerticalAlignment(vAlign);
+
 		legend->setPosition(position);
 
 		// rotation
@@ -1396,7 +1500,12 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 	for (const auto& t : layer.texts) {
 		DEBUG(Q_FUNC_INFO << ", EXTRA TEXT = " << t.text);
 		auto* label = new TextLabel(QStringLiteral("text label"));
-		QTextEdit te(parseOriginText(QString::fromStdString(t.text)));
+		QString text;
+		if (m_originFile->version() < 9.5) // <= 2017 : pre-Unicode
+			text = QString::fromLatin1(t.text.c_str());
+		else
+			text = QString::fromStdString(t.text);
+		QTextEdit te(parseOriginText(text));
 		te.selectAll();
 		DEBUG(Q_FUNC_INFO << ", font size = " << t.fontSize)
 		te.setFontPointSize(int(t.fontSize)); // no scaling
@@ -1408,11 +1517,19 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 		label->setParentGraphicsItem(plot->graphicsItem());
 
 		// position
-		// determine the relative position inside of the layer rect
-		const qreal horRatio = (qreal)(t.clientRect.left - layer.clientRect.left) / (layer.clientRect.right - layer.clientRect.left);
-		const qreal vertRatio = (qreal)(t.clientRect.top - layer.clientRect.top) / (layer.clientRect.bottom - layer.clientRect.top);
-		textLabelPositions[label] = QSizeF(horRatio, vertRatio);
-		DEBUG(Q_FUNC_INFO << ", horizontal/vertical ratio = " << horRatio << ", " << vertRatio);
+		// determine the relative position to the graph
+		QSizeF relativePosition(t.clientRect.left / (double)graphSize.width(), t.clientRect.top / (double)graphSize.height());
+		// achor depending on rotation
+		if (t.rotation > 45 && t.rotation <= 135) // left/bottom
+			relativePosition.setHeight(t.clientRect.bottom / (double)graphSize.height());
+		else if (t.rotation > 135 && t.rotation <= 225) { // right/bottom
+			relativePosition.setWidth(t.clientRect.right / (double)graphSize.width());
+			relativePosition.setHeight(t.clientRect.bottom / (double)graphSize.height());
+		} else if (t.rotation > 225) // right/top
+			relativePosition.setWidth(t.clientRect.right / (double)graphSize.height());
+
+		DEBUG(Q_FUNC_INFO << ", relative position to page = " << relativePosition.width() << "/" << relativePosition.height())
+		textLabelPositions[label] = relativePosition;
 
 		// rotation
 		label->setRotationAngle(t.rotation);
@@ -1429,15 +1546,52 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 		loadAxes(layer, plot, layerIndex, QLatin1String("X Axis Title"), QLatin1String("Y Axis Title"));
 	else {
 		auto originCurve = layer.curves.at(0);
-		QString xColumnName = QString::fromStdString(originCurve.xColumnName);
-		// TODO: "Partikelgrö"
-		DEBUG("	xColumnName = " << STDSTRING(xColumnName));
-		//				xColumnName.replace("%(?X,@LL)", );	// Long Name
+		// see loadCurves()
+		QString dataName(QString::fromStdString(originCurve.dataName));
+		DEBUG(Q_FUNC_INFO << ", curve data name " << STDSTRING(dataName))
+		QString containerName = dataName.right(dataName.length() - 2); // strip "E_" or "T_"
+		auto sheet = getSpreadsheetByName(containerName);
 
-		QDEBUG("	UTF8 xColumnName = " << xColumnName.toUtf8());
-		QString yColumnName = QString::fromStdString(originCurve.yColumnName);
+		QString xColumnName;
+		if (m_originFile->version() < 9.5) // <= 2017 : pre-Unicode
+			xColumnName = QString::fromLatin1(originCurve.xColumnName.c_str());
+		else
+			xColumnName = QString::fromStdString(originCurve.xColumnName);
 
-		loadAxes(layer, plot, layerIndex, xColumnName, yColumnName);
+		auto xColumn = sheet.columns[findColumnByName(sheet, xColumnName)];
+		QString xColumnInfo = xColumnName;
+		if (xColumn.comment.length() > 0) { // long name(, unit(, comment))
+			if (m_originFile->version() < 9.5) // <= 2017 : pre-Unicode
+				xColumnInfo = QString::fromLatin1(xColumn.comment.c_str());
+			else
+				xColumnInfo = QString::fromStdString(xColumn.comment);
+			if (xColumnInfo.contains(QLatin1Char('@'))) // remove @ options
+				xColumnInfo.truncate(xColumnInfo.indexOf(QLatin1Char('@')));
+		}
+		DEBUG(Q_FUNC_INFO << ", x column name = " << STDSTRING(xColumnName));
+		DEBUG(Q_FUNC_INFO << ", x column info = " << STDSTRING(xColumnInfo));
+
+		// same for y
+		QString yColumnName;
+		if (m_originFile->version() < 9.5) // <= 2017 : pre-Unicode
+			yColumnName = QString::fromLatin1(originCurve.yColumnName.c_str());
+		else
+			yColumnName = QString::fromStdString(originCurve.yColumnName);
+
+		auto yColumn = sheet.columns[findColumnByName(sheet, yColumnName)];
+		QString yColumnInfo = yColumnName;
+		if (yColumn.comment.length() > 0) { // long name(, unit(, comment))
+			if (m_originFile->version() < 9.5) // <= 2017 : pre-Unicode
+				yColumnInfo = QString::fromLatin1(yColumn.comment.c_str());
+			else
+				yColumnInfo = QString::fromStdString(yColumn.comment);
+			if (yColumnInfo.contains(QLatin1Char('@'))) // remove @ options
+				yColumnInfo.truncate(yColumnInfo.indexOf(QLatin1Char('@')));
+		}
+		DEBUG(Q_FUNC_INFO << ", y column name = " << STDSTRING(yColumnName));
+		DEBUG(Q_FUNC_INFO << ", y column info = " << STDSTRING(yColumnInfo));
+
+		loadAxes(layer, plot, layerIndex, xColumnInfo, yColumnInfo);
 	}
 
 	// range breaks
@@ -1461,65 +1615,125 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 			if (originCurve.type == Origin::GraphCurve::Line || originCurve.type == Origin::GraphCurve::Scatter
 				|| originCurve.type == Origin::GraphCurve::LineSymbol || originCurve.type == Origin::GraphCurve::ErrorBar
 				|| originCurve.type == Origin::GraphCurve::XErrorBar) {
+				auto containerName = dataName.right(dataName.length() - 2); // strip "E_" or "T_"
+				auto sheet = getSpreadsheetByName(containerName);
+
+				auto columnName(QString::fromStdString(originCurve.yColumnName));
+				auto column = sheet.columns[findColumnByName(sheet, columnName)];
+				QString shortName = columnName, curveName = columnName;
+				QString longName, unit, comments;
+				if (column.comment.length() > 0) {
+					auto columnInfo = QString::fromStdString(column.comment); // long name(, unit(, comment))
+					DEBUG(Q_FUNC_INFO << ", y column full comment = \"" << column.comment << "\"")
+					if (columnInfo.contains(QLatin1Char('@'))) // remove @ options
+						columnInfo.truncate(columnInfo.indexOf(QLatin1Char('@')));
+
+					auto infoList = columnInfo.split(QRegularExpression(QLatin1String("[\r\n]")), Qt::SkipEmptyParts);
+
+					switch (infoList.size()) {
+					case 2: // long name, unit
+						unit = infoList.at(1);
+						// fallthrough
+					case 1: // long name
+						longName = infoList.at(0);
+						curveName = longName;
+						break;
+					default: // long name, unit, comment
+						longName = infoList.at(0);
+						unit = infoList.at(1);
+						comments = infoList.at(2);
+						curveName = comments;
+					}
+				}
+				if (longName.isEmpty())
+					longName = shortName;
+				if (comments.isEmpty())
+					comments = longName;
+				DEBUG(Q_FUNC_INFO << ", default curve name = \"" << curveName.toStdString() << "\"")
+
+				// TODO: custom legend not used yet
+				// Origin's legend uses "%(...) to format the legend text for each curve
+				// s. a. https://www.originlab.com/doc/Origin-Help/Legend-ManualControl
+
 				// parse and use legend text (not used)
 				// find substring between %c{curveIndex} and %c{curveIndex+1}
 				// int pos1 = legendText.indexOf(QStringLiteral("\\c{%1}").arg(curveIndex)) + 5;
 				// int pos2 = legendText.indexOf(QStringLiteral("\\c{%1}").arg(curveIndex + 1));
 				// QString curveText = legendText.mid(pos1, pos2 - pos1);
 				// replace %(1), %(2), etc. with curve name
-
-				// get name of container and (if available) index of sheet
-				QString containerName = dataName.right(dataName.length() - 2); // strip "E_" or "T_"
-				int sheetIndex = 0; // which sheet? "@X"
-				const int atIndex = containerName.indexOf(QLatin1Char('@'));
-				if (atIndex != -1) {
-					sheetIndex = containerName.mid(atIndex + 1).toInt() - 1;
-					containerName.truncate(atIndex);
-				}
-				// DEBUG("CONTAINER = " << STDSTRING(containerName) << ", SHEET = " << sheetIndex)
-
-				// check if workbook
-				int workbookIndex = findWorkbookByName(containerName);
-				// if workbook not found, findWorkbookByName() returns 0: check this
-				if (workbookIndex == 0 && (m_originFile->excelCount() == 0 || containerName.toStdString() != m_originFile->excel(0).name))
-					workbookIndex = -1;
-				// DEBUG("WORKBOOK  index = " << workbookIndex)
-
-				// comment of y column is used in legend (if not empty), else the column name
-				Origin::SpreadSheet sheet;
-				if (workbookIndex != -1) { // container is a workbook
-					sheet = m_originFile->excel(workbookIndex).sheets[sheetIndex];
-				} else { // container is a spreadsheet?
-					int spreadsheetIndex = findSpreadsheetByName(containerName);
-					// if spreadsheet not found, findSpreadsheetByName() returns 0: check this
-					if (spreadsheetIndex == 0 && (m_originFile->spreadCount() == 0 || containerName.toStdString() != m_originFile->spread(0).name))
-						spreadsheetIndex = -1;
-					if (spreadsheetIndex != -1)
-						sheet = m_originFile->spread(spreadsheetIndex);
-				}
-
-				QString curveName(QString::fromStdString(originCurve.yColumnName));
-				auto column = sheet.columns[findColumnByName(sheet, curveName)];
-				if (column.comment.length() > 0) {
-					auto comment = QString::fromStdString(column.comment);
-					DEBUG(Q_FUNC_INFO << ", y column full comment = \"" << column.comment << "\"")
-					if (comment.contains(QLatin1Char('@'))) // remove @ options
-						comment.truncate(comment.indexOf(QLatin1Char('@')));
-					if (comment.contains(QRegularExpression(QLatin1String("[\r\n]")))) // comment is last line
-						comment = comment.split(QRegularExpression(QLatin1String("[\r\n]")), Qt::SkipEmptyParts).last();
-
-					curveName = comment;
-				}
-				DEBUG(Q_FUNC_INFO << ", curve name = \"" << curveName.toStdString() << "\"")
-
-				// TODO: custom legend not used yet
-				// Origin's legend uses "%(...) to format the legend text for each curve
-				// s. a. https://www.originlab.com/doc/Origin-Help/Legend-ManualControl
 				// curveText.replace(QStringLiteral("%(%1)").arg(curveIndex), legendText);
+
 				// curveText = curveText.trimmed();
 				// DEBUG(" curve " << curveIndex << " text = \"" << STDSTRING(curveText) << "\"");
 				// TODO: curve (legend) does not support HTML text yet.
 				// auto* curve = new XYCurve(curveText);
+
+				// check if curve is in actual legendText
+				// examples:  \l(1) %(1), \l(2) %(2) text, \l(3) %(3,@LG), ..
+				DEBUG(Q_FUNC_INFO << ", LEGEND TEXT = \"" << m_legendText.toStdString() << "\"")
+				// DEBUG(Q_FUNC_INFO << ", layer index = " << layerIndex + 1 << ", curve index = " << curveIndex)
+				bool enableCurveInLegend = false;
+				QString legendCurveString;
+				// find \l(C)
+				int pos1 = m_legendText.indexOf(QStringLiteral("\\l(%1)").arg(curveIndex));
+				if (pos1 == -1) // try \l(L.C)
+					pos1 = m_legendText.indexOf(QStringLiteral("\\l(%1.%2)").arg(layerIndex + 1).arg(curveIndex));
+				else // remove symbol string
+					m_legendText.remove(QStringLiteral("\\l(%1)").arg(curveIndex));
+
+				if (pos1 != -1) { // \l(C) or \l(L.C) found
+					// remove symbol string
+					m_legendText.remove(QStringLiteral("\\l(%1.%2)").arg(layerIndex + 1).arg(curveIndex));
+
+					// whole line
+					int pos2 = m_legendText.indexOf(QRegularExpression(QLatin1String("[\r\n]")), pos1);
+					if (pos2 == -1)
+						legendCurveString = m_legendText.mid(pos1, pos2);
+					else
+						legendCurveString = m_legendText.mid(pos1, pos2 - pos1);
+					DEBUG(Q_FUNC_INFO << ", legend curve string = \"" << legendCurveString.toStdString() << "\"")
+					if (!legendCurveString.isEmpty()) { // don't include empty entries
+						// replace %(C) and %(L.C)
+						// see https://www.originlab.com/doc/en/LabTalk/ref/Text-Label-Options#Complete_List_of_.40Options
+						QString unitString(unit.isEmpty() ? QStringLiteral("") : QStringLiteral(" (") + unit + QStringLiteral(")"));
+						// TODO: implement more
+						legendCurveString.replace(QStringLiteral("%(%1)").arg(curveIndex), curveName);
+						legendCurveString.replace(QStringLiteral("%(%1,@C)").arg(curveIndex), shortName);
+						legendCurveString.replace(QStringLiteral("%(%1,@L)").arg(curveIndex), longName);
+						legendCurveString.replace(QStringLiteral("%(%1,@LA)").arg(curveIndex), longName);
+						legendCurveString.replace(QStringLiteral("%(%1,@LC)").arg(curveIndex), comments);
+						legendCurveString.replace(QStringLiteral("%(%1,@LG)").arg(curveIndex), longName + unitString);
+						legendCurveString.replace(QStringLiteral("%(%1,@LL)").arg(curveIndex), longName);
+						legendCurveString.replace(QStringLiteral("%(%1,@LM)").arg(curveIndex), comments);
+						legendCurveString.replace(QStringLiteral("%(%1,@LN)").arg(curveIndex), comments + unitString);
+						legendCurveString.replace(QStringLiteral("%(%1,@LS)").arg(curveIndex), shortName);
+						legendCurveString.replace(QStringLiteral("%(%1,@LU)").arg(curveIndex), unit);
+
+						// same with %(L.C)
+						legendCurveString.replace(QStringLiteral("%(%1.%2)").arg(layerIndex + 1).arg(curveIndex), curveName);
+						legendCurveString.replace(QStringLiteral("%(%1.%2,@C)").arg(layerIndex + 1).arg(curveIndex), shortName);
+						legendCurveString.replace(QStringLiteral("%(%1.%2,@L)").arg(layerIndex + 1).arg(curveIndex), longName);
+						legendCurveString.replace(QStringLiteral("%(%1.%2,@LA)").arg(layerIndex + 1).arg(curveIndex), longName);
+						legendCurveString.replace(QStringLiteral("%(%1.%2,@LC)").arg(layerIndex + 1).arg(curveIndex), comments);
+						legendCurveString.replace(QStringLiteral("%(%1.%2,@LG)").arg(layerIndex + 1).arg(curveIndex), longName + unitString);
+						legendCurveString.replace(QStringLiteral("%(%1.%2,@LL)").arg(layerIndex + 1).arg(curveIndex), longName);
+						legendCurveString.replace(QStringLiteral("%(%1.%2,@LM)").arg(layerIndex + 1).arg(curveIndex), comments);
+						legendCurveString.replace(QStringLiteral("%(%1.%2,@LN)").arg(layerIndex + 1).arg(curveIndex), comments + unitString);
+						legendCurveString.replace(QStringLiteral("%(%1.%2,@LS)").arg(layerIndex + 1).arg(curveIndex), shortName);
+						legendCurveString.replace(QStringLiteral("%(%1.%2,@LU)").arg(layerIndex + 1).arg(curveIndex), unit);
+
+						DEBUG(Q_FUNC_INFO << ", legend curve string final = \"" << legendCurveString.toStdString() << "\"")
+
+						legendCurveString = legendCurveString.trimmed(); // remove leading and trailing whitspaces for curve name
+						legendCurveString.remove(QRegularExpression(QStringLiteral("\\\\l\\(\\d+\\)"))); // remove left over "\l(X)" (TO)
+						if (!legendCurveString.isEmpty())
+							curveName = legendCurveString;
+
+						enableCurveInLegend = true;
+					}
+				}
+
+				DEBUG(Q_FUNC_INFO << ", curve name = \"" << curveName.toStdString() << "\", in legend = " << enableCurveInLegend)
 
 				auto* curve = new XYCurve(curveName);
 				if (m_graphLayerAsPlotArea)
@@ -1530,20 +1744,11 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 
 				// set column path
 				QString tableName = containerName;
-				if (workbookIndex != -1) // container is a workbook
-					tableName += QLatin1Char('/') + QString::fromStdString(m_originFile->excel(workbookIndex).sheets[sheetIndex].name);
+				if (dataName.startsWith(QStringLiteral("E_"))) // container is a workbook
+					tableName += QLatin1Char('/') + QString::fromStdString(sheet.name);
 				curve->setXColumnPath(tableName + QLatin1Char('/') + QString::fromStdString(originCurve.xColumnName));
 				curve->setYColumnPath(tableName + QLatin1Char('/') + QString::fromStdString(originCurve.yColumnName));
 				DEBUG(Q_FUNC_INFO << ", x/y column path = \"" << STDSTRING(curve->xColumnPath()) << "\" \"" << STDSTRING(curve->yColumnPath()) << "\"")
-
-				// check if curve is in actual legendText
-				// DEBUG("LEGEND TEXT = " << legendText.toStdString())
-				// DEBUG(Q_FUNC_INFO << ", layer index = " << layerIndex + 1 << ", curve index = " << curveIndex)
-				bool enableCurveInLegend = false;
-				if (m_legendText.contains(QStringLiteral("%(%1)").arg(curveIndex))
-					|| m_legendText.contains(QStringLiteral("%(%1.%2)").arg(layerIndex + 1).arg(curveIndex)))
-					enableCurveInLegend = true;
-				DEBUG(Q_FUNC_INFO << ", curve in legend = " << enableCurveInLegend)
 
 				curve->setLegendVisible(enableCurveInLegend);
 
@@ -1589,8 +1794,8 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 				eqData.expression1 = eqData.expression1.replace(QLatin1Char('x'), QLatin1String("phi"));
 
 				// convert from degrees to radians
-				eqData.min = QString::number(function.begin / 180) + QLatin1String("*pi");
-				eqData.max = QString::number(function.end / 180) + QLatin1String("*pi");
+				eqData.min = QString::number(function.begin / 180.) + QLatin1String("*pi");
+				eqData.max = QString::number(function.end / 180.) + QLatin1String("*pi");
 			} else {
 				eqData.expression1 = QLatin1String(function.formula.c_str());
 				eqData.min = QString::number(function.begin);
@@ -1614,8 +1819,8 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 void OriginProjectParser::loadAxes(const Origin::GraphLayer& layer,
 								   CartesianPlot* plot,
 								   int layerIndex,
-								   const QString& xColumnName,
-								   const QString& yColumnName) {
+								   const QString& xColumnInfo,
+								   const QString& yColumnInfo) {
 	const auto& originXAxis = layer.xAxis;
 	const auto& originYAxis = layer.yAxis;
 
@@ -1631,7 +1836,7 @@ void OriginProjectParser::loadAxes(const Origin::GraphLayer& layer,
 		if (!axisFormat.label.shown)
 			plot->setBottomPadding(plot->bottomPadding() / 2.);
 
-		loadAxis(originXAxis, axis, layerIndex, 0, xColumnName);
+		loadAxis(originXAxis, axis, layerIndex, 0, xColumnInfo);
 		if (!m_graphLayerAsPlotArea)
 			axis->setCoordinateSystemIndex(layerIndex);
 		axis->setSuppressRetransform(false);
@@ -1649,7 +1854,7 @@ void OriginProjectParser::loadAxes(const Origin::GraphLayer& layer,
 		if (!axisFormat.label.shown)
 			plot->setVerticalPadding(plot->verticalPadding() / 2.);
 
-		loadAxis(originXAxis, axis, layerIndex, 1, xColumnName);
+		loadAxis(originXAxis, axis, layerIndex, 1, xColumnInfo);
 		if (!m_graphLayerAsPlotArea)
 			axis->setCoordinateSystemIndex(layerIndex);
 		axis->setSuppressRetransform(false);
@@ -1667,7 +1872,7 @@ void OriginProjectParser::loadAxes(const Origin::GraphLayer& layer,
 		if (!axisFormat.label.shown)
 			plot->setHorizontalPadding(plot->horizontalPadding() / 2.);
 
-		loadAxis(originYAxis, axis, layerIndex, 0, yColumnName);
+		loadAxis(originYAxis, axis, layerIndex, 0, yColumnInfo);
 		if (!m_graphLayerAsPlotArea)
 			axis->setCoordinateSystemIndex(layerIndex);
 		axis->setSuppressRetransform(false);
@@ -1685,7 +1890,7 @@ void OriginProjectParser::loadAxes(const Origin::GraphLayer& layer,
 		if (!axisFormat.label.shown)
 			plot->setRightPadding(plot->rightPadding() / 2.);
 
-		loadAxis(originYAxis, axis, layerIndex, 1, yColumnName);
+		loadAxis(originYAxis, axis, layerIndex, 1, yColumnInfo);
 		if (!m_graphLayerAsPlotArea)
 			axis->setCoordinateSystemIndex(layerIndex);
 		axis->setSuppressRetransform(false);
@@ -1696,7 +1901,7 @@ void OriginProjectParser::loadAxes(const Origin::GraphLayer& layer,
  * sets the axis properties (format and ticks) as defined in \c originAxis in \c axis,
  * \c index being 0 or 1 for "bottom" and "top" or "left" and "right" for horizontal or vertical axes, respectively.
  */
-void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* axis, int layerIndex, int index, const QString& axisTitle) const {
+void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* axis, int layerIndex, int index, const QString& columnInfo) const {
 	// 	int axisPosition;
 	//		possible values:
 	//			0: Axis is at default position
@@ -1842,13 +2047,65 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 
 	// axis title
 	if (axisFormat.label.shown) {
-		QString titleText = parseOriginText(QString::fromStdString(axisFormat.label.text));
-		DEBUG(Q_FUNC_INFO << ", axis title text = " << STDSTRING(titleText));
-		// TODO: convert special character here too
-		DEBUG(Q_FUNC_INFO << ", curve name = " << STDSTRING(axisTitle));
-		titleText.replace(QLatin1String("%(?X)"), axisTitle);
-		titleText.replace(QLatin1String("%(?Y)"), axisTitle);
-		DEBUG(Q_FUNC_INFO << ", axis title = " << STDSTRING(titleText));
+		/*for (int i=0; i<axisFormat.label.text.size(); i++)
+			printf(" %c ", axisFormat.label.text.at(i));
+		printf("\n");
+		for (int i=0; i<axisFormat.label.text.size(); i++)
+			printf(" %02hhx", axisFormat.label.text.at(i));
+		printf("\n");
+		*/
+		QString titleText;
+		if (m_originFile->version() < 9.5) // <= 2017 : pre-Unicode
+			titleText = parseOriginText(QString::fromLatin1(axisFormat.label.text.c_str()));
+		else
+			titleText = parseOriginText(QString::fromStdString(axisFormat.label.text));
+		DEBUG(Q_FUNC_INFO << ", axis title string = " << STDSTRING(titleText));
+		DEBUG(Q_FUNC_INFO << ", column info = " << STDSTRING(columnInfo));
+
+		// long name(, unit(, comment))
+		// if long name not defined: columnInfo contains column name (s.a.)
+		auto infoList = columnInfo.split(QRegularExpression(QStringLiteral("[\r\n]")), Qt::SkipEmptyParts);
+		QString longName, unit, comments;
+		switch (infoList.size()) {
+		case 2: // long name, unit
+			unit = infoList.at(1);
+			// fallthrough
+		case 1: // long name
+			longName = infoList.at(0);
+			// curveName = longName;
+			break;
+		default: // long name, unit, comment
+			longName = infoList.at(0);
+			unit = infoList.at(1);
+			comments = infoList.at(2);
+			// curveName = comments;
+		}
+		if (comments.isEmpty())
+			comments = longName;
+
+		QString unitString(unit.isEmpty() ? QStringLiteral("") : QStringLiteral(" (") + unit + QStringLiteral(")"));
+		// TODO: more replacements here using column info (see loadCurves())
+		titleText.replace(QLatin1String("%(?X)"), longName + unitString);
+		titleText.replace(QLatin1String("%(?Y)"), longName + unitString);
+		titleText.replace(QLatin1String("%(?X,@L)"), longName);
+		titleText.replace(QLatin1String("%(?Y,@L)"), longName);
+		titleText.replace(QLatin1String("%(?X,@LC)"), comments);
+		titleText.replace(QLatin1String("%(?Y,@LC)"), comments);
+		titleText.replace(QLatin1String("%(?X,@LG)"), longName + unitString);
+		titleText.replace(QLatin1String("%(?Y,@LG)"), longName + unitString);
+		titleText.replace(QLatin1String("%(?X,@LL)"), longName);
+		titleText.replace(QLatin1String("%(?Y,@LL)"), longName);
+		titleText.replace(QLatin1String("%(?X,@LM)"), comments);
+		titleText.replace(QLatin1String("%(?Y,@LM)"), comments);
+		titleText.replace(QLatin1String("%(?X,@LN)"), comments + unitString);
+		titleText.replace(QLatin1String("%(?Y,@LN)"), comments + unitString);
+		// not available
+		//		titleText.replace(QLatin1String("%(?X,@LS)"), shortName);
+		//		titleText.replace(QLatin1String("%(?Y,@LS)"), shortName);
+		titleText.replace(QLatin1String("%(?X,@LU)"), unit);
+		titleText.replace(QLatin1String("%(?Y,@LU)"), unit);
+
+		DEBUG(Q_FUNC_INFO << ", axis title final = " << STDSTRING(titleText));
 
 		// use axisFormat.fontSize to override the global font size for the hmtl string
 		DEBUG(Q_FUNC_INFO << ", axis font size = " << axisFormat.label.fontSize)
@@ -1985,7 +2242,8 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 		}
 
 		curve->line()->setStyle(penStyle);
-		curve->line()->setWidth(Worksheet::convertToSceneUnits(originCurve.lineWidth * elementScalingFactor, Worksheet::Unit::Point));
+		auto lineWidth = std::max(originCurve.lineWidth * elementScalingFactor, 1.); // minimum 1 px
+		curve->line()->setWidth(Worksheet::convertToSceneUnits(lineWidth, Worksheet::Unit::Point));
 		curve->line()->setColor(color(originCurve.lineColor));
 		curve->line()->setOpacity(1 - originCurve.lineTransparency / 255);
 
@@ -1995,6 +2253,7 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 
 	// symbol properties
 	auto* symbol = curve->symbol();
+	DEBUG(Q_FUNC_INFO << ", curve type = " << (unsigned int)originCurve.type)
 	if (originCurve.type == Origin::GraphCurve::Scatter || originCurve.type == Origin::GraphCurve::LineSymbol) {
 		// try to map the different symbols, mapping is not exact
 		symbol->setRotationAngle(0);
@@ -2283,6 +2542,7 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 		default:
 			symbol->setStyle(Symbol::Style::NoSymbols);
 		}
+
 		// symbol size
 		DEBUG(Q_FUNC_INFO << ", symbol size = " << originCurve.symbolSize)
 		DEBUG(Q_FUNC_INFO << ", symbol size in points = " << Worksheet::convertToSceneUnits(originCurve.symbolSize, Worksheet::Unit::Point))
@@ -2296,6 +2556,9 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 
 		auto brush = symbol->brush();
 		auto pen = symbol->pen();
+		DEBUG(Q_FUNC_INFO << ", SYMBOL THICKNESS = " << (int)originCurve.symbolThickness)
+		// border width (edge thickness in Origin) is given as percentage of the symbol radius
+		const double borderScaleFactor = 5.; // match size
 		if (originCurve.type == Origin::GraphCurve::LineSymbol) {
 			// symbol fill color
 			if (originCurve.symbolFillColor.type == Origin::Color::ColorType::Automatic) {
@@ -2319,9 +2582,6 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 			} else
 				pen.setColor(color(originCurve.symbolColor));
 
-			DEBUG(Q_FUNC_INFO << ", SYMBOL THICKNESS = " << (int)originCurve.symbolThickness)
-			// border width (edge thickness in Origin) is given as percentage of the symbol radius
-			const double borderScaleFactor = 5.; // match size
 			DEBUG(Q_FUNC_INFO << ", BORDER THICKNESS = " << borderScaleFactor * originCurve.symbolThickness / 100. * symbol->size())
 			pen.setWidthF(borderScaleFactor * originCurve.symbolThickness / 100. * symbol->size());
 		} else if (originCurve.type == Origin::GraphCurve::Scatter) {
@@ -2335,10 +2595,22 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 			} else
 				brush.setColor(color(originCurve.symbolColor));
 
-			if (originCurve.symbolInterior > 0 && originCurve.symbolInterior < 8) // unfilled styles
+			if (originCurve.symbolInterior > 0 && originCurve.symbolInterior < 8) { // unfilled styles
 				brush.setStyle(Qt::NoBrush);
+				DEBUG(Q_FUNC_INFO << ", BORDER THICKNESS = " << borderScaleFactor * originCurve.symbolThickness / 100. * symbol->size())
+				pen.setWidthF(borderScaleFactor * originCurve.symbolThickness / 100. * symbol->size());
 
-			pen.setStyle(Qt::NoPen); // no border
+				// symbol border/edge color and width
+				if (originCurve.symbolColor.type == Origin::Color::ColorType::Automatic) {
+					//"automatic" color -> the color of the line, if available, has to be used, black otherwise
+					if (curve->lineType() != XYCurve::LineType::NoLine)
+						pen.setColor(curve->line()->pen().color());
+					else
+						pen.setColor(Qt::black);
+				} else
+					pen.setColor(color(originCurve.symbolColor));
+			} else
+				pen.setStyle(Qt::NoPen); // no border
 		}
 		symbol->setBrush(brush);
 		symbol->setPen(pen);
@@ -2676,8 +2948,10 @@ QList<QPair<QString, QString>> OriginProjectParser::charReplacementList() const 
 
 QString OriginProjectParser::replaceSpecialChars(const QString& text) const {
 	QString t = text;
+	DEBUG(Q_FUNC_INFO << ", got " << t.toStdString())
 	for (const auto& r : charReplacementList())
 		t.replace(r.first, r.second);
+	DEBUG(Q_FUNC_INFO << ", now " << t.toStdString())
 	return t;
 }
 
