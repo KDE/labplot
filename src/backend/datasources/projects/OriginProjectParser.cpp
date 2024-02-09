@@ -1622,8 +1622,8 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 
 				auto columnName(QString::fromStdString(originCurve.yColumnName));
 				auto column = sheet.columns[findColumnByName(sheet, columnName)];
-				QString shortName = columnName;
-				QString longName, unit, comments, curveName;
+				QString shortName = columnName, curveName = columnName;
+				QString longName, unit, comments;
 				if (column.comment.length() > 0) {
 					auto columnInfo = QString::fromStdString(column.comment); // long name(, unit(, comment))
 					DEBUG(Q_FUNC_INFO << ", y column full comment = \"" << column.comment << "\"")
@@ -1647,7 +1647,7 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 						curveName = comments;
 					}
 				}
-				DEBUG(Q_FUNC_INFO << ", curve name = \"" << curveName.toStdString() << "\"")
+				DEBUG(Q_FUNC_INFO << ", default curve name = \"" << curveName.toStdString() << "\"")
 
 				// TODO: custom legend not used yet
 				// Origin's legend uses "%(...) to format the legend text for each curve
@@ -1668,7 +1668,7 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 
 				// check if curve is in actual legendText
 				// examples:  \l(1) %(1), \l(2) %(2) text, \l(3) %(3,@LG), ..
-				DEBUG("LEGEND TEXT = " << m_legendText.toStdString())
+				DEBUG(Q_FUNC_INFO << ", LEGEND TEXT = \"" << m_legendText.toStdString() << "\"")
 				// DEBUG(Q_FUNC_INFO << ", layer index = " << layerIndex + 1 << ", curve index = " << curveIndex)
 				bool enableCurveInLegend = false;
 				QString legendCurveString;
@@ -1689,6 +1689,7 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 						legendCurveString = m_legendText.mid(pos1, pos2);
 					else
 						legendCurveString = m_legendText.mid(pos1, pos2 - pos1);
+					DEBUG(Q_FUNC_INFO << ", legend curve string = \"" << legendCurveString.toStdString() << "\"")
 
 					// replace %(C) and %(L.C)
 					// see https://www.originlab.com/doc/en/LabTalk/ref/Text-Label-Options#Complete_List_of_.40Options
@@ -1728,12 +1729,14 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 												  + (unit.isEmpty() ? QStringLiteral("") : QStringLiteral(" (") + unit + QStringLiteral(")")));
 					legendCurveString.replace(QStringLiteral("%(%1.%2,@LS)").arg(layerIndex + 1).arg(curveIndex), shortName);
 
-					if (!legendCurveString.isEmpty())
-						curveName = legendCurveString;
+					DEBUG(Q_FUNC_INFO << ", legend curve string final = \"" << legendCurveString.toStdString() << "\"")
+
+					if (!legendCurveString.trimmed().isEmpty())
+						curveName = legendCurveString.trimmed();
 					enableCurveInLegend = true;
 				}
 
-				DEBUG(Q_FUNC_INFO << ", curve in legend = " << enableCurveInLegend)
+				DEBUG(Q_FUNC_INFO << ", curve name = \"" << curveName.toStdString() << "\", in legend = " << enableCurveInLegend)
 
 				auto* curve = new XYCurve(curveName);
 				if (m_graphLayerAsPlotArea)
