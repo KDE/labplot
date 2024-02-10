@@ -62,7 +62,7 @@ private:
 	void loadAxis(const Origin::GraphAxis&, Axis*, int layerIndex, int index, const QString& columnInfo = QString()) const;
 	void loadCurve(const Origin::GraphCurve&, XYCurve*) const;
 	void loadBackground(const Origin::GraphCurve&, Background*) const;
-	void loadSymbol(const Origin::GraphCurve&, Symbol*, const XYCurve* curve = nullptr) const;
+	void loadSymbol(const Origin::GraphCurve&, Symbol*, const XYCurve* = nullptr) const;
 
 	bool loadNote(Note*, bool preview);
 	void handleLooseWindows(Folder*, bool preview);
@@ -79,6 +79,7 @@ private:
 	unsigned int findNoteByName(const QString&);
 
 	Origin::SpreadSheet getSpreadsheetByName(QString&);
+	void parseColumnInfo(const QString& info, QString& longName, QString& unit, QString& comments) const;
 	QString parseOriginText(const QString&) const;
 	QString parseOriginTags(const QString&) const;
 	QDateTime creationTime(tree<Origin::ProjectNode>::iterator) const;

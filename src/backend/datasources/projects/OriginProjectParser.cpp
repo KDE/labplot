@@ -1569,7 +1569,7 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 
 	int curveIndex = 1;
 	for (const auto& originCurve : layer.curves) {
-		QString dataName(QLatin1String(originCurve.dataName.c_str()));
+		QString dataName(QString::fromStdString(originCurve.dataName));
 		DEBUG(Q_FUNC_INFO << ", NEW CURVE " << STDSTRING(dataName))
 		DEBUG(Q_FUNC_INFO << ", curve x column name = " << originCurve.xColumnName)
 		DEBUG(Q_FUNC_INFO << ", curve y column name = " << originCurve.yColumnName)
@@ -1585,8 +1585,8 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 			QString containerName = dataName.right(dataName.length() - 2); // strip "E_" or "T_"
 			auto sheet = getSpreadsheetByName(containerName);
 			QString tableName = containerName;
-				if (dataName.startsWith(QStringLiteral("E_"))) // container is a workbook
-					tableName += QLatin1Char('/') + QString::fromStdString(sheet.name);
+			if (dataName.startsWith(QStringLiteral("E_"))) // container is a workbook
+				tableName += QLatin1Char('/') + QString::fromStdString(sheet.name);
 
 			QString xColumnName = QLatin1String(originCurve.xColumnName.c_str());
 			QString yColumnName = QLatin1String(originCurve.yColumnName.c_str());
@@ -1613,27 +1613,13 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 					if (columnInfo.contains(QLatin1Char('@'))) // remove @ options
 						columnInfo.truncate(columnInfo.indexOf(QLatin1Char('@')));
 
-					auto infoList = columnInfo.split(QRegularExpression(QLatin1String("[\r\n]")), Qt::SkipEmptyParts);
-
-					switch (infoList.size()) {
-					case 2: // long name, unit
-						unit = infoList.at(1);
-						// fallthrough
-					case 1: // long name
-						longName = infoList.at(0);
-						curveName = longName;
-						break;
-					default: // long name, unit, comment
-						longName = infoList.at(0);
-						unit = infoList.at(1);
-						comments = infoList.at(2);
-						curveName = comments;
-					}
+					parseColumnInfo(columnInfo, longName, unit, comments);
 				}
 				if (longName.isEmpty())
 					longName = shortName;
 				if (comments.isEmpty())
 					comments = longName;
+				curveName = comments;
 				DEBUG(Q_FUNC_INFO << ", default curve name = \"" << curveName.toStdString() << "\"")
 
 				// TODO: custom legend not used yet
@@ -1867,7 +1853,7 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 
 			break;
 		}
-		case 'M': {// Matrix
+		case 'M': { // Matrix
 			// TODO
 			break;
 		}
@@ -2134,28 +2120,11 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 		DEBUG(Q_FUNC_INFO << ", axis title string = " << STDSTRING(titleText));
 		DEBUG(Q_FUNC_INFO << ", column info = " << STDSTRING(columnInfo));
 
-		// long name(, unit(, comment))
 		// if long name not defined: columnInfo contains column name (s.a.)
-		auto infoList = columnInfo.split(QRegularExpression(QStringLiteral("[\r\n]")), Qt::SkipEmptyParts);
 		QString longName, unit, comments;
-		if (!infoList.isEmpty()) {
-			switch (infoList.size()) {
-			case 2: // long name, unit
-				unit = infoList.at(1);
-				// fallthrough
-			case 1: // long name
-				longName = infoList.at(0);
-				// curveName = longName;
-				break;
-			default: // long name, unit, comment
-				longName = infoList.at(0);
-				unit = infoList.at(1);
-				comments = infoList.at(2);
-				// curveName = comments;
-			}
-			if (comments.isEmpty())
-				comments = longName;
-		}
+		parseColumnInfo(columnInfo, longName, unit, comments);
+		if (comments.isEmpty())
+			comments = longName;
 
 		QString unitString(unit.isEmpty() ? QStringLiteral("") : QStringLiteral(" (") + unit + QStringLiteral(")"));
 		// TODO: more replacements here using column info (see loadCurves())
@@ -2656,7 +2625,7 @@ void OriginProjectParser::loadSymbol(const Origin::GraphCurve& originCurve, Symb
 
 	// symbol colors
 	DEBUG(Q_FUNC_INFO << ", symbol fill color = " << originCurve.symbolFillColor.type << "_"
-						<< (Origin::Color::RegularColor)originCurve.symbolFillColor.regular)
+					  << (Origin::Color::RegularColor)originCurve.symbolFillColor.regular)
 	DEBUG(Q_FUNC_INFO << ", symbol color = " << originCurve.symbolColor.type << "_" << (Origin::Color::RegularColor)originCurve.symbolColor.regular)
 	// if plot type == line+symbol
 
@@ -2747,6 +2716,26 @@ QDateTime OriginProjectParser::creationTime(tree<Origin::ProjectNode>::iterator 
 	char time_str[21];
 	strftime(time_str, sizeof(time_str), "%F %T", gmtime(&(*it).creationDate));
 	return QDateTime::fromString(QLatin1String(time_str), Qt::ISODate);
+}
+
+// parse column info: (long name(, unit(, comment)))
+void OriginProjectParser::parseColumnInfo(const QString& info, QString& longName, QString& unit, QString& comments) const {
+	if (info.isEmpty())
+		return;
+	auto infoList = info.split(QRegularExpression(QStringLiteral("[\r\n]")), Qt::SkipEmptyParts);
+
+	switch (infoList.size()) {
+	case 2: // long name, unit
+		unit = infoList.at(1);
+		// fallthrough
+	case 1: // long name
+		longName = infoList.at(0);
+		break;
+	default: // long name, unit, comment
+		longName = infoList.at(0);
+		unit = infoList.at(1);
+		comments = infoList.at(2);
+	}
 }
 
 QString OriginProjectParser::parseOriginText(const QString& str) const {
@@ -2897,7 +2886,7 @@ Qt::PenStyle OriginProjectParser::penStyle(unsigned char lineStyle) const {
 		return Qt::SolidLine;
 	case Origin::GraphCurve::Dash:
 	case Origin::GraphCurve::ShortDash:
-		return  Qt::DashLine;
+		return Qt::DashLine;
 	case Origin::GraphCurve::Dot:
 	case Origin::GraphCurve::ShortDot:
 		return Qt::DotLine;

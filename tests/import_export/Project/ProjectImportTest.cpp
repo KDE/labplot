@@ -666,7 +666,7 @@ void ProjectImportTest::testOriginHistogram() {
 	QVERIFY(folder != nullptr);
 	QCOMPARE(folder->name(), QLatin1String("Folder1"));
 
-	//  Book
+	// Book
 	auto* sheet = dynamic_cast<Spreadsheet*>(folder->child<AbstractAspect>(0));
 	QVERIFY(sheet != nullptr);
 	QCOMPARE(sheet->name(), QLatin1String("Book1"));
@@ -725,7 +725,7 @@ void ProjectImportTest::testOriginBarPlot() {
 	QVERIFY(folder != nullptr);
 	QCOMPARE(folder->name(), QLatin1String("Folder1"));
 
-	//  Book
+	// Book
 	auto* sheet = dynamic_cast<Spreadsheet*>(folder->child<AbstractAspect>(0));
 	QVERIFY(sheet != nullptr);
 	QCOMPARE(sheet->name(), QLatin1String("Book1"));
