@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-09 01:41+0000\n"
+"POT-Creation-Date: 2024-02-10 01:49+0000\n"
 "PO-Revision-Date: 2024-02-03 09:42+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -2233,12 +2233,12 @@ msgstr "El dispositiu ha excedit el temps."
 msgid "The following error occurred: %1."
 msgstr "Ha ocorregut l'error següent: %1."
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1146
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1184
 #, kde-format
 msgid "Plot%1"
 msgstr "Diagrama%1"
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1334
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1390
 #, kde-format
 msgid "legend"
 msgstr "llegenda"

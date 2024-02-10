@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-09 01:41+0000\n"
+"POT-Creation-Date: 2024-02-10 01:49+0000\n"
 "PO-Revision-Date: 2023-11-13 14:41+0300\n"
 "Last-Translator: Sergey Kazorin <translation-team@basealt.ru>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -2246,12 +2246,12 @@ msgstr "Время ожидания устройства истекло."
 msgid "The following error occurred: %1."
 msgstr "Произошла следующая ошибка: %1."
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1146
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1184
 #, kde-format
 msgid "Plot%1"
 msgstr "График%1"
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1334
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1390
 #, kde-format
 msgid "legend"
 msgstr "легенда"
