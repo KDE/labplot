@@ -1724,11 +1724,12 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 				childPlot = curve;
 				curve->setXColumnPath(xColumnPath);
 				curve->setYColumnPath(yColumnPath);
-				curve->setLegendVisible(enableCurveInLegend);
 
 				curve->setSuppressRetransform(true);
-				if (!preview)
+				if (!preview) {
 					loadCurve(originCurve, curve);
+					curve->setLegendVisible(enableCurveInLegend);
+				}
 			} break;
 			case Origin::GraphCurve::Column:
 			case Origin::GraphCurve::ColumnStack:
@@ -2272,7 +2273,7 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 		curve->line()->setStyle(Qt::NoPen);
 
 	// symbol properties
-	loadSymbol(originCurve, curve->symbol());
+	loadSymbol(originCurve, curve->symbol(), curve);
 
 	// filling properties
 	loadBackground(originCurve, curve->background());
@@ -2664,7 +2665,7 @@ void OriginProjectParser::loadSymbol(const Origin::GraphCurve& originCurve, Symb
 	DEBUG(Q_FUNC_INFO << ", SYMBOL THICKNESS = " << (int)originCurve.symbolThickness)
 	// border width (edge thickness in Origin) is given as percentage of the symbol radius
 	const double borderScaleFactor = 5.; // match size
-	if (originCurve.type == Origin::GraphCurve::LineSymbol) {
+	if (curve && originCurve.type == Origin::GraphCurve::LineSymbol) {
 		// symbol fill color
 		if (originCurve.symbolFillColor.type == Origin::Color::ColorType::Automatic) {
 			//"automatic" color -> the color of the line, if available, is used, and black otherwise
@@ -2689,7 +2690,7 @@ void OriginProjectParser::loadSymbol(const Origin::GraphCurve& originCurve, Symb
 
 		DEBUG(Q_FUNC_INFO << ", BORDER THICKNESS = " << borderScaleFactor * originCurve.symbolThickness / 100. * symbol->size())
 		pen.setWidthF(borderScaleFactor * originCurve.symbolThickness / 100. * symbol->size());
-	} else if (originCurve.type == Origin::GraphCurve::Scatter) {
+	} else if (curve && originCurve.type == Origin::GraphCurve::Scatter) {
 		// symbol color (uses originCurve.symbolColor)
 		if (originCurve.symbolColor.type == Origin::Color::ColorType::Automatic) {
 			//"automatic" color -> the color of the line, if available, is used, and black otherwise
