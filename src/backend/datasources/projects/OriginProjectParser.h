@@ -69,6 +69,7 @@ private:
 
 	bool hasUnusedObjects();
 	bool hasMultiLayerGraphs();
+	void restorePointers(Project*);
 
 	unsigned int findSpreadsheetByName(const QString&);
 	unsigned int findColumnByName(Origin::SpreadSheet&, const QString&);

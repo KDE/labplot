@@ -278,13 +278,36 @@ bool OriginProjectParser::load(Project* project, bool preview) {
 	handleLooseWindows(project, preview);
 
 	// restore column pointers:
+	restorePointers(project);
+
+	if (!preview) {
+		const auto& plots = project->children<CartesianPlot>(AbstractAspect::ChildIndexFlag::Recursive);
+		for (auto* plot : plots) {
+			plot->setIsLoading(false);
+			plot->retransform();
+		}
+	}
+
+	project->setIsLoading(false);
+
+	delete m_originFile;
+	m_originFile = nullptr;
+
+	return true;
+}
+
+/*!
+ * restores the column pointers from the column paths after the project was loaded and all objects instantiated.
+ */
+void OriginProjectParser::restorePointers(Project* project) {
 	// 1. extend the pathes to contain the parent structures first
 	// 2. restore the pointers from the pathes
 	const auto& columns = project->children<Column>(AbstractAspect::ChildIndexFlag::Recursive);
 	const auto& spreadsheets = project->children<Spreadsheet>(AbstractAspect::ChildIndexFlag::Recursive);
+	DEBUG(Q_FUNC_INFO << ", NUMBER of spreadsheets/columns = " << spreadsheets.count() << "/" << columns.count())
+
+	// xy-curves
 	const auto& curves = project->children<XYCurve>(AbstractAspect::ChildIndexFlag::Recursive);
-	DEBUG(Q_FUNC_INFO << ", NUMBER of spreadsheets/columns = "
-					  << "/" << spreadsheets.count() << "/" << columns.count())
 	for (auto* curve : curves) {
 		DEBUG(Q_FUNC_INFO << ", RESTORE CURVE with x/y column path " << STDSTRING(curve->xColumnPath()) << " " << STDSTRING(curve->yColumnPath()))
 		curve->setSuppressRetransform(true);
@@ -356,20 +379,8 @@ bool OriginProjectParser::load(Project* project, bool preview) {
 		curve->setSuppressRetransform(false);
 	}
 
-	if (!preview) {
-		const auto& plots = project->children<CartesianPlot>(AbstractAspect::ChildIndexFlag::Recursive);
-		for (auto* plot : plots) {
-			plot->setIsLoading(false);
-			plot->retransform();
-		}
-	}
-
-	project->setIsLoading(false);
-
-	delete m_originFile;
-	m_originFile = nullptr;
-
-	return true;
+	// histograms
+	// TODO
 }
 
 bool OriginProjectParser::loadFolder(Folder* folder, tree<Origin::ProjectNode>::iterator baseIt, bool preview) {
@@ -1827,10 +1838,7 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 			const auto& function = m_originFile->function(funcIndex);
 
 			auto* xyEqCurve = new XYEquationCurve(QString::fromStdString(function.name));
-			if (m_graphLayerAsPlotArea)
-				xyEqCurve->setCoordinateSystemIndex(plot->defaultCoordinateSystemIndex());
-			else
-				xyEqCurve->setCoordinateSystemIndex(layerIndex);
+			childPlot = xyEqCurve;
 			XYEquationCurve::EquationData eqData;
 			eqData.count = function.totalPoints;
 			eqData.expression1 = QString::fromStdString(function.formula);
@@ -2129,22 +2137,24 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 		// if long name not defined: columnInfo contains column name (s.a.)
 		auto infoList = columnInfo.split(QRegularExpression(QStringLiteral("[\r\n]")), Qt::SkipEmptyParts);
 		QString longName, unit, comments;
-		switch (infoList.size()) {
-		case 2: // long name, unit
-			unit = infoList.at(1);
-			// fallthrough
-		case 1: // long name
-			longName = infoList.at(0);
-			// curveName = longName;
-			break;
-		default: // long name, unit, comment
-			longName = infoList.at(0);
-			unit = infoList.at(1);
-			comments = infoList.at(2);
-			// curveName = comments;
+		if (!infoList.isEmpty()) {
+			switch (infoList.size()) {
+			case 2: // long name, unit
+				unit = infoList.at(1);
+				// fallthrough
+			case 1: // long name
+				longName = infoList.at(0);
+				// curveName = longName;
+				break;
+			default: // long name, unit, comment
+				longName = infoList.at(0);
+				unit = infoList.at(1);
+				comments = infoList.at(2);
+				// curveName = comments;
+			}
+			if (comments.isEmpty())
+				comments = longName;
 		}
-		if (comments.isEmpty())
-			comments = longName;
 
 		QString unitString(unit.isEmpty() ? QStringLiteral("") : QStringLiteral(" (") + unit + QStringLiteral(")"));
 		// TODO: more replacements here using column info (see loadCurves())
