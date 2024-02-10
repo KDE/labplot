@@ -36,7 +36,7 @@ set(ads_SRCS
     AutoHideTab.cpp
     AutoHideDockContainer.cpp
     PushButton.cpp
-	ResizeHandle.cpp
+    ResizeHandle.cpp
     ads.qrc
 )
 set(ads_HEADERS
@@ -62,7 +62,7 @@ set(ads_HEADERS
     AutoHideTab.h
     AutoHideDockContainer.h
     PushButton.h
-	ResizeHandle.h
+    ResizeHandle.h
 )
 add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
 if (UNIX AND NOT APPLE)
@@ -85,7 +85,12 @@ target_link_libraries(${library_name} PUBLIC Qt${QT_VERSION_MAJOR}::Core
                                                Qt${QT_VERSION_MAJOR}::Gui 
                                                Qt${QT_VERSION_MAJOR}::Widgets)
 if (UNIX AND NOT APPLE)
-  target_link_libraries(${library_name} PUBLIC xcb)
+  if (${CMAKE_SYSTEM_NAME} MATCHES "FreeBSD")
+      find_package(X11 REQUIRED)
+      target_link_libraries(${library_name} PUBLIC X11::xcb)
+  else()
+    target_link_libraries(${library_name} PUBLIC xcb)
+  endif()
 endif()
 set_target_properties(${library_name} PROPERTIES
     AUTOMOC ON
@@ -93,6 +98,7 @@ set_target_properties(${library_name} PROPERTIES
     CXX_EXTENSIONS OFF
     VERSION ${VERSION_SHORT}
     EXPORT_NAME ${library_name}
+    DEBUG_POSTFIX "d"
     ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/${ads_PlatformDir}/lib"
     LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/${ads_PlatformDir}/lib"
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/${ads_PlatformDir}/bin"
@@ -114,7 +120,7 @@ write_basic_package_version_file(
     COMPATIBILITY SameMajorVersion
 )
 install(FILES ${ads_HEADERS}
-    DESTINATION include/${library_name}
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${library_name}
     COMPONENT headers
 )
 install(FILES
@@ -125,22 +131,25 @@ install(FILES
 )
 install(TARGETS ${library_name}
     EXPORT adsTargets
-    INCLUDES DESTINATION include/${library_name}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${library_name}
 )
 
 install(EXPORT adsTargets
     FILE adsTargets.cmake
     NAMESPACE ads::
-    DESTINATION lib/cmake/${library_name}
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${library_name}
 )
 install(FILES qtadvanceddockingConfig.cmake RENAME ${library_name}Config.cmake
-    DESTINATION lib/cmake/${library_name}
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${library_name}
 )
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${library_name}ConfigVersion.cmake"
-    DESTINATION lib/cmake/${library_name}
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${library_name}
 )
 
 target_include_directories(${library_name} PUBLIC
-    $<INSTALL_INTERFACE:include>
+    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
 )

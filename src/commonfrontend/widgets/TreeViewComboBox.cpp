@@ -37,7 +37,7 @@ TreeViewComboBox::TreeViewComboBox(QWidget* parent)
 	, m_treeView(new QTreeView)
 	, m_groupBox(new QGroupBox)
 	, m_lineEdit(new QLineEdit) {
-	auto* layout = new QVBoxLayout;
+	auto* layout = new QVBoxLayout(this);
 	layout->setContentsMargins(0, 0, 0, 0);
 	layout->setSpacing(0);
 

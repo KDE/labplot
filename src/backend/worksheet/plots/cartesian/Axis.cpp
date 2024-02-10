@@ -42,6 +42,7 @@ using Dimension = CartesianCoordinateSystem::Dimension;
 namespace {
 constexpr int maxNumberMajorTicks = 100;
 constexpr int _maxNumberMajorTicksCustomColumn = 21; // Use one more because one will be subtracted below
+constexpr int hoverSelectionEffectPenWidth = 2;
 } // Anounymous namespace
 
 /**
@@ -1925,7 +1926,7 @@ void AxisPrivate::retransformTicks() {
 	(=the smallest possible number of digits) precision for the floats
 */
 void AxisPrivate::retransformTickLabelStrings() {
-	DEBUG(Q_FUNC_INFO << ' ' << STDSTRING(title->name()) << ", labels precision = " << labelsPrecision)
+	DEBUG(Q_FUNC_INFO << ' ' << STDSTRING(title->name()) << ", labels precision = " << labelsPrecision << ", labels auto precision = " << labelsAutoPrecision)
 	if (suppressRetransform)
 		return;
 	QDEBUG(Q_FUNC_INFO << ", values = " << tickLabelValues)
@@ -2674,8 +2675,9 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 
 	prepareGeometryChange();
 
+	QPainterPath tmpPath; // temp path used to calculate the bounding box for all elements that the axis consists of
+
 	if (linePath.isEmpty()) {
-		m_shape = QPainterPath();
 		m_boundingRectangle = QRectF();
 		title->setPositionInvalid(true);
 		if (plot())
@@ -2686,10 +2688,10 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 	}
 
 	const auto& linePen = line->pen();
-	m_shape = WorksheetElement::shapeFromPath(linePath, linePen);
-	m_shape.addPath(WorksheetElement::shapeFromPath(arrowPath, linePen));
-	m_shape.addPath(WorksheetElement::shapeFromPath(majorTicksPath, majorTicksLine->pen()));
-	m_shape.addPath(WorksheetElement::shapeFromPath(minorTicksPath, minorTicksLine->pen()));
+	tmpPath = WorksheetElement::shapeFromPath(linePath, linePen);
+	tmpPath.addPath(WorksheetElement::shapeFromPath(arrowPath, linePen));
+	tmpPath.addPath(WorksheetElement::shapeFromPath(majorTicksPath, majorTicksLine->pen()));
+	tmpPath.addPath(WorksheetElement::shapeFromPath(minorTicksPath, minorTicksLine->pen()));
 
 	QPainterPath tickLabelsPath = QPainterPath();
 	if (labelsPosition != Axis::LabelsPosition::NoLabels) {
@@ -2715,13 +2717,19 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 
 			tickLabelsPath.addPath(WorksheetElement::shapeFromPath(tempPath, linePen));
 		}
-		m_shape.addPath(WorksheetElement::shapeFromPath(tickLabelsPath, QPen()));
+		tmpPath.addPath(WorksheetElement::shapeFromPath(tickLabelsPath, QPen()));
 	}
+
+	const auto margin = (double)hoverSelectionEffectPenWidth / 2;
+	const auto axisRect = tmpPath.boundingRect().marginsRemoved(QMarginsF(margin, margin, margin, margin));
+	tmpPath.addRect(axisRect); // add rect instead of the actual path for ticks - this is done for performance reasons,the calculation for many ticks and long
+							   // tick texts can be very expensive
 
 	// add title label, if available
 	QTextDocument doc; // text may be Html, so check if plain text is empty
 	doc.setHtml(title->text().text);
 	// QDEBUG(Q_FUNC_INFO << ", title text plain: " << doc.toPlainText())
+	QPainterPath titlePath;
 	if (title->isVisible() && !doc.toPlainText().isEmpty()) {
 		const QRectF& titleRect = title->graphicsItem()->boundingRect();
 		if (titleRect.size() != QSizeF(0, 0)) {
@@ -2741,11 +2749,14 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 					offsetX -= labelsOffset + tickLabelsPath.boundingRect().width();
 				title->setPosition(QPointF(rect.topLeft().x() + offsetX, (rect.topLeft().y() + rect.bottomLeft().y()) / 2. - titleOffsetY));
 			}
-			m_shape.addPath(WorksheetElement::shapeFromPath(title->graphicsItem()->mapToParent(title->graphicsItem()->shape()), linePen));
+			titlePath = WorksheetElement::shapeFromPath(title->graphicsItem()->mapToParent(title->graphicsItem()->shape()), linePen);
+			tmpPath.addPath(titlePath);
 		}
 	}
 
-	m_boundingRectangle = m_shape.boundingRect();
+	m_boundingRectangle = tmpPath.boundingRect();
+	m_shape = QPainterPath();
+	m_shape.addRect(m_boundingRectangle);
 
 	// if the axis goes beyond the current bounding box of the plot (too high offset is used, too long labels etc.)
 	// request a prepareGeometryChange() for the plot in order to properly keep track of geometry changes
@@ -2894,12 +2905,12 @@ void AxisPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*opt
 
 	// shape and label
 	if (m_hovered && !isSelected() && !q->isPrinting()) {
-		painter->setPen(QPen(QApplication::palette().color(QPalette::Shadow), 2, Qt::SolidLine));
+		painter->setPen(QPen(QApplication::palette().color(QPalette::Shadow), hoverSelectionEffectPenWidth, Qt::SolidLine));
 		painter->drawPath(m_shape);
 	}
 
 	if (isSelected() && !q->isPrinting()) {
-		painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), 2, Qt::SolidLine));
+		painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), hoverSelectionEffectPenWidth, Qt::SolidLine));
 		painter->drawPath(m_shape);
 	}
 

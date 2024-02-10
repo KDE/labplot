@@ -158,8 +158,8 @@ void TextLabel::init() {
 		d->textWrapper.mode = static_cast<TextLabel::Mode>(group.readEntry(QStringLiteral("Mode"), static_cast<int>(d->textWrapper.mode)));
 		d->teXFont.setFamily(group.readEntry(QStringLiteral("TeXFontFamily"), d->teXFont.family()));
 		d->teXFont.setPointSize(group.readEntry(QStringLiteral("TeXFontSize"), d->teXFont.pointSize()));
-		d->fontColor = group.readEntry(QStringLiteral("TeXFontColor"), d->fontColor);
-		d->backgroundColor = group.readEntry(QStringLiteral("TeXBackgroundColor"), d->backgroundColor);
+		d->fontColor = group.readEntry(QStringLiteral("FontColor"), d->fontColor);
+		d->backgroundColor = group.readEntry(QStringLiteral("BackgroundColor"), d->backgroundColor);
 		d->setRotation(group.readEntry(QStringLiteral("Rotation"), d->rotation()));
 
 		// border
@@ -184,7 +184,6 @@ void TextLabel::init() {
 	d->updatePosition();
 
 	DEBUG(Q_FUNC_INFO << ", default/run time image resolution: " << d->teXImageResolution << '/' << QApplication::primaryScreen()->physicalDotsPerInchX());
-
 	connect(&d->teXImageFutureWatcher, &QFutureWatcher<QByteArray>::finished, this, &TextLabel::updateTeXImage);
 }
 
@@ -269,17 +268,11 @@ void TextLabel::setText(const TextWrapper& textWrapper) {
 	// DEBUG("********************\n" << Q_FUNC_INFO << ", old/new mode = " << (int)d->textWrapper.mode << " " << (int)textWrapper.mode)
 	// DEBUG("\nOLD TEXT = " << STDSTRING(d->textWrapper.text) << '\n')
 	// DEBUG("NEW TEXT = " << STDSTRING(textWrapper.text) << '\n')
-
 	// QDEBUG("COLORS: color =" << d->fontColor << ", background color =" << d->backgroundColor)
 
-	if ((textWrapper.text != d->textWrapper.text) || (textWrapper.mode != d->textWrapper.mode)
-		|| ((d->textWrapper.allowPlaceholder || textWrapper.allowPlaceholder) && (textWrapper.textPlaceholder != d->textWrapper.textPlaceholder))
-		|| textWrapper.allowPlaceholder != d->textWrapper.allowPlaceholder) {
+	if (d->textWrapper != textWrapper) {
 		bool oldEmpty = d->textWrapper.text.isEmpty();
 		if (textWrapper.mode == TextLabel::Mode::Text && !textWrapper.text.isEmpty()) {
-			// DEBUG("SET TEXTWRAPPER")
-			TextWrapper tw = textWrapper;
-
 			QTextEdit pte(d->textWrapper.text); // te with previous text
 			// restore formatting when text changes or switching back to text mode
 			if (d->textWrapper.mode != TextLabel::Mode::Text || oldEmpty || pte.toPlainText().isEmpty()) {
@@ -291,27 +284,39 @@ void TextLabel::setText(const TextWrapper& textWrapper) {
 				te.setTextColor(d->fontColor);
 				te.setTextBackgroundColor(d->backgroundColor);
 
+				TextWrapper tw = textWrapper;
 				tw.text = te.toHtml();
 				// DEBUG("\nTW TEXT = " << STDSTRING(tw.text) << std::endl)
-			}
+				exec(new TextLabelSetTextCmd(d, tw, ki18n("%1: set label text")));
+			} else { // the existing text is being modified
+				QUndoCommand* parent = nullptr;
+				TextLabelSetTextCmd* command = nullptr;
+				QTextEdit te;
+				te.setHtml(textWrapper.text);
+				te.selectAll();
+				if (textWrapper.text.indexOf(QStringLiteral("background-color:#")) != -1) {
+					const auto& bgColor = te.textBackgroundColor();
+					if (bgColor != d->backgroundColor) {
+						parent = new QUndoCommand(ki18n("%1: set label text").subs(name()).toString());
+						new TextLabelSetTeXBackgroundColorCmd(d, bgColor, ki18n("%1: set background color"), parent);
+					}
+					command = new TextLabelSetTextCmd(d, textWrapper, ki18n("%1: set label text"), parent);
+				} else {
+					// no color available yet, plain text is being provided -> set the color from member variable
+					te.setTextBackgroundColor(d->backgroundColor);
+					TextWrapper tw = textWrapper;
+					tw.text = te.toHtml();
+					command = new TextLabelSetTextCmd(d, tw, ki18n("%1: set label text"), parent);
+				}
 
-			exec(new TextLabelSetTextCmd(d, tw, ki18n("%1: set label text")));
-		} else {
-			QTextEdit te;
-			te.setHtml(textWrapper.text);
-			te.selectAll();
-			const auto& bgColor = te.textBackgroundColor();
-			QUndoCommand* parent = nullptr;
-			if (bgColor != d->backgroundColor) {
-				parent = new QUndoCommand(ki18n("%1: set label text").subs(name()).toString());
-				new TextLabelSetTeXBackgroundColorCmd(d, bgColor, ki18n("%1: set background color"), parent);
+				if (!parent)
+					exec(command);
+				else
+					exec(parent);
 			}
-			auto* command = new TextLabelSetTextCmd(d, textWrapper, ki18n("%1: set label text"), parent);
-			if (!parent)
-				exec(command);
-			else
-				exec(parent);
-		}
+		} else
+			exec(new TextLabelSetTextCmd(d, textWrapper, ki18n("%1: set label text")));
+
 		// If previously the text was empty, the bounding rect is zero
 		// therefore the alignment did not work properly.
 		// If text is added, the bounding rectangle is updated
@@ -981,8 +986,10 @@ void TextLabelPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 	}
 	painter->restore();
 
-	// Fill the complete path with the background color
-	painter->fillPath(labelShape, QBrush(backgroundColor));
+	// Fill the complete path with the background color, for text mode only since for latex and markdown
+	// a rectangular image is drawn which is not cropped to the boundaries of the selected shape (eclipse, etc.)
+	if (textWrapper.mode == TextLabel::Mode::Text)
+		painter->fillPath(labelShape, QBrush(backgroundColor));
 
 	// draw the border
 	if (borderShape != TextLabel::BorderShape::NoBorder) {
@@ -1149,6 +1156,19 @@ bool TextLabel::load(XmlStreamReader* reader, bool preview) {
 	if (preview)
 		return true;
 
+	// starting with XML version 10, the background color used in the html text is extracted
+	// to fill the complete shape of the label and is also saved. For older projects we need
+	// to extract it from hmtl here if available.
+	if (d->textWrapper.mode == TextLabel::Mode::Text && Project::xmlVersion() < 10) {
+		if (d->textWrapper.text.indexOf(QStringLiteral("background-color:#")) != -1) {
+			QTextEdit te;
+			te.setHtml(d->textWrapper.text);
+			te.selectAll();
+			d->backgroundColor = te.textBackgroundColor();
+		} else
+			d->backgroundColor.setAlpha(0);
+	}
+
 	// in case we use latex and the image was stored (older versions of LabPlot didn't save the image)and loaded,
 	// we just need to call updateBoundingRect() to calculate the new rect.
 	// otherwise, we set the static text and call updateBoundingRect() in updateText()
@@ -1173,11 +1193,9 @@ void TextLabel::loadThemeConfig(const KConfig& config) {
 	KConfigGroup group = config.group(QStringLiteral("Label"));
 	// TODO: dark mode support?
 	d->fontColor = group.readEntry(QStringLiteral("FontColor"), QColor(Qt::black)); // used when it's latex text
-	d->backgroundColor = group.readEntry(QStringLiteral("BackgroundColor"), QColor(Qt::white)); // used when it's latex text
-
+	d->backgroundColor = group.readEntry(QStringLiteral("BackgroundColor"), QColor(Qt::transparent)); // used when it's latex text
 	if (d->textWrapper.mode == TextLabel::Mode::Text && !d->textWrapper.text.isEmpty()) {
-		// TODO: Replace QTextEdit by QTextDocument, because this does not contain the graphical stuff.
-		// To set the color in a html text, a QTextEdit must be used
+		// To set the color in a html text, a QTextEdit must be used, QTextDocument is not enough
 		QTextEdit te;
 		te.setHtml(d->textWrapper.text);
 		te.selectAll();

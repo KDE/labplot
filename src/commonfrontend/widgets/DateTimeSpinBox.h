@@ -27,6 +27,8 @@ private:
 
 public:
 	explicit DateTimeSpinBox(QWidget* parent);
+	~DateTimeSpinBox() override;
+
 	void keyPressEvent(QKeyEvent*) override;
 	void stepBy(int steps) override;
 	QAbstractSpinBox::StepEnabled stepEnabled() const override;

@@ -69,14 +69,8 @@ public:
 	Symbol* symbol{nullptr};
 	Background* background{nullptr};
 	Value* value{nullptr};
-
-	// error bars
-	Histogram::ErrorType errorType{Histogram::NoError};
-	const AbstractColumn* errorPlusColumn{nullptr};
-	QString errorPlusColumnPath;
-	const AbstractColumn* errorMinusColumn{nullptr};
-	QString errorMinusColumnPath;
-	Line* errorBarsLine{nullptr};
+	ErrorBar* errorBar{nullptr};
+	ErrorBarStyle* errorBarStyle{nullptr};
 
 	// rug
 	bool rugEnabled{false};

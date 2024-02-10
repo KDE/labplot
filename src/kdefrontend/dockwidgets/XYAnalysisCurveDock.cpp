@@ -44,7 +44,7 @@ QString XYAnalysisCurveDock::customText() const {
 	return QStringLiteral("");
 }
 
-void XYAnalysisCurveDock::setBaseWidgets(QLineEdit* nameLabel, ResizableTextEdit* commentLabel, QPushButton* recalculate, QComboBox* dataSourceType) {
+void XYAnalysisCurveDock::setBaseWidgets(TimedLineEdit* nameLabel, ResizableTextEdit* commentLabel, QPushButton* recalculate, QComboBox* dataSourceType) {
 	if (m_recalculateButton)
 		disconnect(m_recalculateButton, nullptr, this, nullptr);
 

@@ -325,7 +325,7 @@ void MainWin::initGUI(const QString& fileName) {
 	m_recentProjectsAction->loadEntries(Settings::group(QStringLiteral("Recent Files")));
 
 	// General Settings
-	const KConfigGroup& group = Settings::group(QStringLiteral("Settings_General"));
+	auto group = Settings::group(QStringLiteral("Settings_General"));
 
 	// title bar
 	m_titleBarMode = static_cast<MainWin::TitleBarMode>(group.readEntry("TitleBar", 0));
@@ -352,7 +352,36 @@ void MainWin::initGUI(const QString& fileName) {
 	} else {
 		// There is no file to open. Depending on the settings do nothing,
 		// create a new project or open the last used project.
-		const auto load = (LoadOnStart)group.readEntry("LoadOnStart", static_cast<int>(LoadOnStart::NewProject));
+		auto load = (LoadOnStart)group.readEntry("LoadOnStart", static_cast<int>(LoadOnStart::NewProject));
+
+		// in case we're starting with the settings created with an older version where the LoadOnStart enum had more values
+		// or in case the config file was manipulated, we need to ensure we start with proper values and properly initialize the docks
+		// by mapping the old/manipulated values to the new/correct values:
+		// * old value 0 - "do nothing" -> map to new values "new project" and "with worksheet" which are default
+		// * old value 1 - "new project" -> map to new values "new project" and "with worksheet" which are default
+		// * old value 2 - "new project with worksheet" -> map to new values "new project" and "with worksheet" which are default
+		// * old value 3 - "new project with spreadsheet" -> map to new values "new project" and "with spreadsheet"
+		// * old value 4 - "last project" -> map to the new "last project"
+		// * any higher values or <0, manipulated file -> map to the new default values
+		if (load > LoadOnStart::LastProject) {
+			int oldLoad = static_cast<int>(load);
+			if (oldLoad == 2) { // old "new project with worksheet"
+				load = LoadOnStart::NewProject;
+				group.writeEntry(QStringLiteral("LoadOnStart"), static_cast<int>(load));
+				group.writeEntry(QStringLiteral("NewProject"), static_cast<int>(NewProject::WithWorksheet));
+			} else if (oldLoad == 3) { // old "new project with spreadsheet"
+				load = LoadOnStart::NewProject;
+				group.writeEntry(QStringLiteral("LoadOnStart"), static_cast<int>(load));
+				group.writeEntry(QStringLiteral("NewProject"), static_cast<int>(NewProject::WithSpreadsheet));
+			} else if (oldLoad == 4) { // old "last project"
+				load = LoadOnStart::LastProject;
+				group.writeEntry(QStringLiteral("LoadOnStart"), static_cast<int>(load));
+			} else if (oldLoad > 4 || oldLoad < 0) {
+				load = LoadOnStart::NewProject;
+				group.writeEntry(QStringLiteral("LoadOnStart"), static_cast<int>(load));
+			}
+		}
+
 		switch (load) {
 		case LoadOnStart::NewProject:
 			createADS();
@@ -363,6 +392,8 @@ void MainWin::initGUI(const QString& fileName) {
 			const QString& path = Settings::group(QStringLiteral("MainWin")).readEntry("LastOpenProject", "");
 			if (!path.isEmpty())
 				openProject(path);
+			else
+				newProject();
 			break;
 		}
 		case LoadOnStart::WelcomeScreen:
@@ -859,7 +890,7 @@ void MainWin::initActions() {
 	KStandardAction::showMenubar(this, &MainWin::toggleMenuBar, actionCollection());
 
 	// show/hide the memory usage widget
-	m_memoryInfoAction = new QAction(i18n("Show Memory Usage"));
+	m_memoryInfoAction = new QAction(i18n("Show Memory Usage"), this);
 	m_memoryInfoAction->setCheckable(true);
 	connect(m_memoryInfoAction, &QAction::triggered, this, &MainWin::toggleMemoryInfo);
 
@@ -910,7 +941,7 @@ void MainWin::initActions() {
 
 void MainWin::initMenus() {
 #ifdef HAVE_PURPOSE
-	m_shareMenu = new Purpose::Menu();
+	m_shareMenu = new Purpose::Menu(this);
 	m_shareMenu->model()->setPluginType(QStringLiteral("Export"));
 	connect(m_shareMenu, &Purpose::Menu::finished, this, &MainWin::shareActionFinished);
 	m_shareAction->setMenu(m_shareMenu);
@@ -1717,6 +1748,7 @@ void MainWin::openProject(const QString& filename) {
 	m_saveAction->setEnabled(false);
 	m_newProjectAction->setEnabled(true);
 #ifdef HAVE_PURPOSE
+	m_shareAction->setEnabled(true);
 	fillShareMenu();
 #endif
 	statusBar()->showMessage(i18n("Project successfully opened (in %1 seconds).", (float)timer.elapsed() / 1000));
@@ -1752,6 +1784,11 @@ bool MainWin::closeProject() {
 	if (warnModified())
 		return false;
 
+	// clear the worksheet preview before deleting the project and before deleting the dock widgets
+	// so we don't need to react on current aspect changes
+	if (m_worksheetPreviewWidget)
+		m_worksheetPreviewWidget->setProject(nullptr);
+
 	if (!m_closing) {
 		// 		if (dynamic_cast<QQuickWidget*>(centralWidget()) && m_showWelcomeScreen) {
 		// 			m_welcomeWidget = createWelcomeScreen();
@@ -1768,7 +1805,6 @@ bool MainWin::closeProject() {
 
 	m_projectClosing = true;
 	statusBar()->clearMessage();
-	m_worksheetPreviewWidget->setProject(nullptr); // clear the preview befor deleting the project so we don't need to update it
 	delete m_guiObserver;
 	m_guiObserver = nullptr;
 	delete m_aspectTreeModel;

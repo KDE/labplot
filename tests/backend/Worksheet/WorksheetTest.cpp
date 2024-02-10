@@ -18,6 +18,8 @@
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 
+#include <QPen>
+
 void WorksheetTest::cursorCurveColor() {
 	Project project;
 

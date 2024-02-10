@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : parser for Origin projects
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2017-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2017-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2018-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -35,6 +35,7 @@ class OriginProjectParser : public ProjectParser {
 
 public:
 	OriginProjectParser();
+	~OriginProjectParser() override;
 
 	static bool isOriginProject(const QString& fileName);
 	static QString supportedExtensions();
@@ -55,9 +56,10 @@ private:
 	bool loadMatrix(Matrix*, bool preview, size_t sheetIndex = 0, const QString& mwbName = QString());
 
 	bool loadWorksheet(Worksheet*, bool preview);
-	void loadGraphLayer(const Origin::GraphLayer&, CartesianPlot*, int index, QHash<TextLabel*, QSizeF> textLabelPositions, bool preview);
-	void loadAxes(const Origin::GraphLayer&, CartesianPlot*, int index, const QString& xColumnName, const QString& yColumnName);
-	void loadAxis(const Origin::GraphAxis&, Axis*, int index, const QString& axisTitle = QString()) const;
+	void loadGraphLayer(const Origin::GraphLayer&, CartesianPlot*, int layerIndex, QHash<TextLabel*, QSizeF>& textLabelPositions, bool preview);
+	void loadCurves(const Origin::GraphLayer&, CartesianPlot*, int layerIndex, bool preview);
+	void loadAxes(const Origin::GraphLayer&, CartesianPlot*, int layerIndex, const QString& xColumnInfo, const QString& yColumnInfo);
+	void loadAxis(const Origin::GraphAxis&, Axis*, int layerIndex, int index, const QString& columnInfo = QString()) const;
 	void loadCurve(const Origin::GraphCurve&, XYCurve*) const;
 	void loadBackground(const Origin::GraphCurve&, Background*) const;
 	void loadSymbol(const Origin::GraphCurve&, Symbol*, const XYCurve* curve = nullptr) const;
@@ -69,11 +71,13 @@ private:
 	bool hasMultiLayerGraphs();
 
 	unsigned int findSpreadsheetByName(const QString&);
+	unsigned int findColumnByName(Origin::SpreadSheet&, const QString&);
 	unsigned int findMatrixByName(const QString&);
 	unsigned int findWorkbookByName(const QString&);
 	unsigned int findWorksheetByName(const QString&);
 	unsigned int findNoteByName(const QString&);
 
+	Origin::SpreadSheet getSpreadsheetByName(QString&);
 	QString parseOriginText(const QString&) const;
 	QString parseOriginTags(const QString&) const;
 	QDateTime creationTime(tree<Origin::ProjectNode>::iterator) const;
@@ -94,8 +98,12 @@ private:
 	QStringList m_matrixNameList;
 	QStringList m_worksheetNameList;
 	QStringList m_noteNameList;
+	QString m_legendText;
 	bool m_importUnusedObjects{false};
 	bool m_graphLayerAsPlotArea{true};
+	double textScalingFactor{1.};
+	double elementScalingFactor{1.};
+	QSize graphSize;
 
 	friend class ProjectImportTest;
 };

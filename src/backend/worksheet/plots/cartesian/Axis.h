@@ -291,6 +291,8 @@ Q_SIGNALS:
 
 	friend class RetransformTest;
 	friend class AxisTest;
+	friend class AxisTest2;
+	friend class AxisTest3;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Axis::TicksDirection)

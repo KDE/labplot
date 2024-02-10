@@ -36,6 +36,7 @@ double ifCondition(const double condition, const double valueIfTrue, const doubl
 double andFunction(const double v1, const double v2);
 double orFunction(const double v1, const double v2);
 double xorFunction(const double v1, const double v2);
+double notFunction(const double v);
 double between(const double x, const double min, const double max);
 double outside(const double x, const double min, const double max);
 double equalEpsilon(const double v1, const double v2, const double epsilon);
@@ -321,6 +322,7 @@ struct funs _functions[] = {
 	{[]() { return i18n("and"); }, "and", andFunction, 2, nullptr, FunctionGroups::LogicalFunctions},
 	{[]() { return i18n("or"); }, "or", orFunction, 2, nullptr, FunctionGroups::LogicalFunctions},
 	{[]() { return i18n("xor"); }, "xor", xorFunction, 2, nullptr, FunctionGroups::LogicalFunctions},
+	{[]() { return i18n("not"); }, "not", notFunction, 1, nullptr, FunctionGroups::LogicalFunctions},
 
 	// https://www.gnu.org/software/gsl/doc/html/specfunc.html
 	// Airy Functions and Derivatives
@@ -876,6 +878,12 @@ double orFunction(const double v1, const double v2) {
 
 double xorFunction(const double v1, const double v2) {
 	if (convertDoubleToBool(v1) == convertDoubleToBool(v2))
+		return 0;
+	return 1;
+}
+
+double notFunction(const double v) {
+	if (convertDoubleToBool(v))
 		return 0;
 	return 1;
 }

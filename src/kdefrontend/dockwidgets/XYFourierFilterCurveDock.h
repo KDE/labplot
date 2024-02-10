@@ -59,7 +59,6 @@ private Q_SLOTS:
 	// SLOTs for changes triggered in XYCurve
 	// General-Tab
 	void curveFilterDataChanged(const XYFourierFilterCurve::FilterData&);
-	void curveVisibilityChanged(bool);
 };
 
 #endif

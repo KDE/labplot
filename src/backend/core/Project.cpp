@@ -14,19 +14,17 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/spreadsheet/Spreadsheet.h"
-#include "backend/worksheet/Image.h"
 #include "backend/worksheet/InfoElement.h"
-#include "backend/worksheet/TextLabel.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/BarPlot.h"
 #include "backend/worksheet/plots/cartesian/BoxPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "backend/worksheet/plots/cartesian/ErrorBar.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
 #include "backend/worksheet/plots/cartesian/KDEPlot.h"
 #include "backend/worksheet/plots/cartesian/LollipopPlot.h"
 #include "backend/worksheet/plots/cartesian/QQPlot.h"
 #include "backend/worksheet/plots/cartesian/Value.h"
-#include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
 #include "backend/worksheet/plots/cartesian/XYFitCurve.h"
 
 #ifdef HAVE_LIBORIGIN
@@ -62,7 +60,7 @@ namespace {
 // the project version will compared with this.
 // if you make any compatibilty changes to the xmlfile
 // or the function in labplot, increase this number
-int buildXmlVersion = 9;
+int buildXmlVersion = 11;
 }
 
 /**
@@ -322,27 +320,19 @@ bool Project::hasChanged() const {
 
 /*!
  * \brief Project::descriptionChanged
- * This function is called, when an object changes its name. When a column changed its name and wasn't connected before to the curve/column(formula) then
- * this is done in this function
+ * This function is called, when an object changes its name. When a column changed its name and wasn't connected
+ * before to the curve/column(formula), this is updated in this function.
  * \param aspect
  */
 void Project::descriptionChanged(const AbstractAspect* aspect) {
 	if (isLoading())
 		return;
 
-	// when the name of a column is being changed, it can matches again the names being used in the curves, etc.
+	// when the name of a column is being changed, it can match again the names being used in the plots, etc.
 	// and we need to update the dependencies
 	const auto* column = dynamic_cast<const AbstractColumn*>(aspect);
-	if (column) {
-		const auto& curves = children<XYCurve>(ChildIndexFlag::Recursive);
-		updateColumnDependencies(curves, column);
-
-		const auto& histograms = children<Histogram>(ChildIndexFlag::Recursive);
-		updateColumnDependencies(histograms, column);
-
-		const auto& boxPlots = children<BoxPlot>(ChildIndexFlag::Recursive);
-		updateColumnDependencies(boxPlots, column);
-	}
+	if (column)
+		updateColumnDependencies(column);
 
 	Q_D(Project);
 	d->changed = true;
@@ -371,26 +361,16 @@ void Project::aspectAddedSlot(const AbstractAspect* aspect) {
 		}
 
 		if (!columns.isEmpty()) {
-			// if a new column was addded, check whether the column names match the missing
-			// names in the curves, etc. and update the dependencies
-			const auto& curves = children<XYCurve>(ChildIndexFlag::Recursive);
+			// if a new column was addded, check whether the column name matches the missing
+			// names in the plots, etc. and update the dependencies
 			for (auto column : columns)
-				updateColumnDependencies(curves, column);
-
-			const auto& histograms = children<Histogram>(ChildIndexFlag::Recursive);
-			for (auto column : columns)
-				updateColumnDependencies(histograms, column);
-
-			const auto& boxPlots = children<BoxPlot>(ChildIndexFlag::Recursive);
-			for (auto column : columns)
-				updateColumnDependencies(boxPlots, column);
+				updateColumnDependencies(column);
 		}
 	} else if (aspect->inherits(AspectType::Spreadsheet)) {
-		// if a new spreadsheet was addded, check whether the spreadsheet name match the missing
+		// if a new spreadsheet was addded, check whether the spreadsheet name matches the missing
 		// name in a linked spreadsheet, etc. and update the dependencies
 		const auto* newSpreadsheet = static_cast<const Spreadsheet*>(aspect);
-		const auto& spreadsheets = children<Spreadsheet>(ChildIndexFlag::Recursive);
-		updateSpreadsheetDependencies(spreadsheets, newSpreadsheet);
+		updateSpreadsheetDependencies(newSpreadsheet);
 
 		connect(static_cast<const Spreadsheet*>(aspect), &Spreadsheet::aboutToResize, [this]() {
 			const auto& wes = children<WorksheetElement>(AbstractAspect::ChildIndexFlag::Recursive);
@@ -405,8 +385,9 @@ void Project::aspectAddedSlot(const AbstractAspect* aspect) {
 	}
 }
 
-void Project::updateSpreadsheetDependencies(const QVector<Spreadsheet*>& spreadsheets, const Spreadsheet* spreadsheet) const {
+void Project::updateSpreadsheetDependencies(const Spreadsheet* spreadsheet) const {
 	const QString& spreadsheetPath = spreadsheet->path();
+	const auto& spreadsheets = children<Spreadsheet>(ChildIndexFlag::Recursive);
 
 	for (auto* sh : spreadsheets) {
 		sh->setUndoAware(false);
@@ -416,100 +397,23 @@ void Project::updateSpreadsheetDependencies(const QVector<Spreadsheet*>& spreads
 	}
 }
 
-// TODO: move this update*() functions into the classes, Project shouldn't be aware of the details
-void Project::updateColumnDependencies(const QVector<XYCurve*>& curves, const AbstractColumn* column) const {
+/*!
+ * in case the column \c column was added or renamed, update all dependent objects in the project accordingly.
+ */
+void Project::updateColumnDependencies(const AbstractColumn* column) const {
+	// update the dependencies in the plots
+	const auto& plots = children<Plot>(ChildIndexFlag::Recursive);
+	for (auto* plot : plots)
+		plot->updateColumnDependencies(column);
+
+	// update the dependencies in the column formulas
 	const QString& columnPath = column->path();
-
-	// setXColumnPath must not be set, because if curve->column matches column, there already exist a
-	// signal/slot connection between the curve and the column to update this. If they are not same,
-	// xColumnPath is set in setXColumn. Same for the yColumn.
-	for (auto* curve : curves) {
-		curve->setUndoAware(false);
-		auto* analysisCurve = dynamic_cast<XYAnalysisCurve*>(curve);
-		if (analysisCurve) {
-			if (analysisCurve->xDataColumnPath() == columnPath)
-				analysisCurve->setXDataColumn(column);
-			if (analysisCurve->yDataColumnPath() == columnPath)
-				analysisCurve->setYDataColumn(column);
-			if (analysisCurve->y2DataColumnPath() == columnPath)
-				analysisCurve->setY2DataColumn(column);
-
-			auto* fitCurve = dynamic_cast<XYFitCurve*>(curve);
-			if (fitCurve) {
-				if (fitCurve->xErrorColumnPath() == columnPath)
-					fitCurve->setXErrorColumn(column);
-				if (fitCurve->yErrorColumnPath() == columnPath)
-					fitCurve->setYErrorColumn(column);
-			}
-		} else {
-			if (curve->xColumnPath() == columnPath)
-				curve->setXColumn(column);
-			if (curve->yColumnPath() == columnPath)
-				curve->setYColumn(column);
-			if (curve->valuesColumnPath() == columnPath)
-				curve->setValuesColumn(column);
-			if (curve->xErrorPlusColumnPath() == columnPath)
-				curve->setXErrorPlusColumn(column);
-			if (curve->xErrorMinusColumnPath() == columnPath)
-				curve->setXErrorMinusColumn(column);
-			if (curve->yErrorPlusColumnPath() == columnPath)
-				curve->setYErrorPlusColumn(column);
-			if (curve->yErrorMinusColumnPath() == columnPath)
-				curve->setYErrorMinusColumn(column);
-		}
-
-		if (curve->valuesColumnPath() == columnPath)
-			curve->setValuesColumn(column);
-
-		curve->setUndoAware(true);
-	}
-
-	const QVector<Column*>& columns = children<Column>(ChildIndexFlag::Recursive);
+	const auto& columns = children<Column>(ChildIndexFlag::Recursive);
 	for (auto* tempColumn : columns) {
 		for (int i = 0; i < tempColumn->formulaData().count(); i++) {
 			auto path = tempColumn->formulaData().at(i).columnName();
 			if (path == columnPath)
 				tempColumn->setFormulVariableColumn(i, const_cast<Column*>(static_cast<const Column*>(column)));
-		}
-	}
-}
-
-void Project::updateColumnDependencies(const QVector<Histogram*>& histograms, const AbstractColumn* column) const {
-	const QString& columnPath = column->path();
-	for (auto* histogram : histograms) {
-		if (histogram->dataColumnPath() == columnPath) {
-			histogram->setUndoAware(false);
-			histogram->setDataColumn(column);
-			histogram->setUndoAware(true);
-		}
-
-		if (histogram->value()->columnPath() == columnPath) {
-			histogram->setUndoAware(false);
-			histogram->value()->setColumn(column);
-			histogram->setUndoAware(true);
-		}
-	}
-}
-
-void Project::updateColumnDependencies(const QVector<BoxPlot*>& boxPlots, const AbstractColumn* column) const {
-	const QString& columnPath = column->path();
-	for (auto* boxPlot : boxPlots) {
-		const auto dataColumnPaths = boxPlot->dataColumnPaths();
-		auto dataColumns = boxPlot->dataColumns();
-		bool changed = false;
-		for (int i = 0; i < dataColumnPaths.count(); ++i) {
-			const auto& path = dataColumnPaths.at(i);
-
-			if (path == columnPath) {
-				dataColumns[i] = column;
-				changed = true;
-			}
-		}
-
-		if (changed) {
-			boxPlot->setUndoAware(false);
-			boxPlot->setDataColumns(dataColumns);
-			boxPlot->setUndoAware(true);
 		}
 	}
 }
@@ -783,7 +687,7 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 					} else if (reader->name() == QLatin1String("child_aspect")) {
 						if (!readChildAspectElement(reader, preview))
 							return false;
-					} else if (!preview && reader->name() == QLatin1String("state")) {
+					} else if (reader->name() == QLatin1String("state")) {
 						// load the state of the views (visible, maximized/minimized/geometry)
 						// and the state of the project explorer (expanded items, currently selected item).
 						//"state" is read at the very end of XML, restore the pointers here so the current index
@@ -792,8 +696,9 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 						// otherwise curves don't have column pointers assigned and therefore calculations
 						// in the docks might be wrong
 						stateAttributeFound = true;
-						restorePointers(this, preview);
-						retransformElements(this);
+						restorePointers(this);
+						if (!preview)
+							retransformElements(this);
 						Q_EMIT requestLoadState(reader);
 					} else {
 						if (!preview)
@@ -808,10 +713,11 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 	} else // no start document
 		reader->raiseError(i18n("no valid XML document found"));
 
-	if (!preview && !stateAttributeFound) {
+	if (!stateAttributeFound) {
 		// No state attribute available, means no project explorer reacted on the signal
-		restorePointers(this, preview);
-		retransformElements(this);
+		restorePointers(this);
+		if (!preview)
+			retransformElements(this);
 	}
 
 	Q_EMIT loaded();
@@ -910,7 +816,7 @@ void Project::retransformElements(AbstractAspect* aspect) {
  * and when an aspect is being pasted. In both cases we deserialized from XML and need
  * to restore the pointers.
  */
-void Project::restorePointers(AbstractAspect* aspect, bool preview) {
+void Project::restorePointers(AbstractAspect* aspect) {
 	// wait until all columns are decoded from base64-encoded data
 	QThreadPool::globalInstance()->waitForDone();
 
@@ -961,10 +867,10 @@ void Project::restorePointers(AbstractAspect* aspect, bool preview) {
 			RESTORE_COLUMN_POINTER(curve, xColumn, XColumn);
 			RESTORE_COLUMN_POINTER(curve, yColumn, YColumn);
 			RESTORE_COLUMN_POINTER(curve, valuesColumn, ValuesColumn);
-			RESTORE_COLUMN_POINTER(curve, xErrorPlusColumn, XErrorPlusColumn);
-			RESTORE_COLUMN_POINTER(curve, xErrorMinusColumn, XErrorMinusColumn);
-			RESTORE_COLUMN_POINTER(curve, yErrorPlusColumn, YErrorPlusColumn);
-			RESTORE_COLUMN_POINTER(curve, yErrorMinusColumn, YErrorMinusColumn);
+			RESTORE_COLUMN_POINTER(curve->xErrorBar(), plusColumn, PlusColumn);
+			RESTORE_COLUMN_POINTER(curve->xErrorBar(), minusColumn, MinusColumn);
+			RESTORE_COLUMN_POINTER(curve->yErrorBar(), plusColumn, PlusColumn);
+			RESTORE_COLUMN_POINTER(curve->yErrorBar(), minusColumn, MinusColumn);
 		}
 
 		if (analysisCurve)
@@ -1011,8 +917,8 @@ void Project::restorePointers(AbstractAspect* aspect, bool preview) {
 		RESTORE_COLUMN_POINTER(hist, dataColumn, DataColumn);
 		auto* value = hist->value();
 		RESTORE_COLUMN_POINTER(value, column, Column);
-		RESTORE_COLUMN_POINTER(hist, errorPlusColumn, ErrorPlusColumn);
-		RESTORE_COLUMN_POINTER(hist, errorMinusColumn, ErrorMinusColumn);
+		RESTORE_COLUMN_POINTER(hist->errorBar(), plusColumn, PlusColumn);
+		RESTORE_COLUMN_POINTER(hist->errorBar(), minusColumn, MinusColumn);
 	}
 
 	// QQ-plots
@@ -1191,7 +1097,7 @@ void Project::restorePointers(AbstractAspect* aspect, bool preview) {
 			const auto& axes = plot->children<Axis>(ChildIndexFlag::Recursive);
 			for (auto* axis : axes) {
 				const auto cSystem = plot->coordinateSystem(axis->coordinateSystemIndex());
-				RangeT::Scale scale;
+				RangeT::Scale scale{RangeT::Scale::Linear};
 				switch (axis->orientation()) {
 				case Axis::Orientation::Horizontal:
 					scale = plot->range(Dimension::X, cSystem->index(Dimension::X)).scale();
@@ -1210,9 +1116,6 @@ void Project::restorePointers(AbstractAspect* aspect, bool preview) {
 			}
 		}
 	}
-
-	if (preview)
-		return;
 }
 
 bool Project::readProjectAttributes(XmlStreamReader* reader) {

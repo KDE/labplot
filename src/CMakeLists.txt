@@ -140,6 +140,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/widgets/FitParametersWidget.cpp
 	${KDEFRONTEND_DIR}/widgets/FunctionsWidget.cpp
 	${KDEFRONTEND_DIR}/widgets/LabelWidget.cpp
+	${KDEFRONTEND_DIR}/widgets/ErrorBarStyleWidget.cpp
 	${KDEFRONTEND_DIR}/widgets/LineWidget.cpp
 	${KDEFRONTEND_DIR}/widgets/SymbolWidget.cpp
 	${KDEFRONTEND_DIR}/widgets/ValueWidget.cpp
@@ -150,6 +151,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/widgets/FITSHeaderEditAddUnitDialog.cpp
 	${KDEFRONTEND_DIR}/widgets/FITSHeaderEditDialog.cpp
 	${KDEFRONTEND_DIR}/widgets/ResizableTextEdit.cpp
+  ${KDEFRONTEND_DIR}/widgets/TimedLineEdit.cpp
 )
 
 if (Qt${QT_VERSION_MAJOR}Mqtt_FOUND)
@@ -215,6 +217,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/dockwidgets/boxplotdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/columndock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/custompointdock.ui
+	${KDEFRONTEND_DIR}/ui/dockwidgets/errorbarstylewidget.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/imagedock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/kdeplotdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/linewidget.ui
@@ -396,6 +399,8 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/worksheet/plots/cartesian/CartesianCoordinateSystem.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/CartesianPlot.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/CartesianPlotLegend.cpp
+	${BACKEND_DIR}/worksheet/plots/cartesian/ErrorBar.cpp
+	${BACKEND_DIR}/worksheet/plots/cartesian/ErrorBarStyle.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/Histogram.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/CustomPoint.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/KDEPlot.cpp
@@ -685,7 +690,7 @@ IF (ENABLE_LIBORIGIN)
 		target_include_directories( labplot2lib PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/liborigin" )
 	ENDIF()
 ENDIF ()
-IF (WIN32)
+IF (PSAPI)
 	target_link_libraries( labplot2lib ${PSAPI} )
 ENDIF ()
 
