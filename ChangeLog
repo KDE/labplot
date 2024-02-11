@@ -2,6 +2,7 @@
 New features:
 	* [general]
 		* New application theme "Dracula"
+		* New categorical color map "Dracula"
 		* New option in the application settings to run a selected CAS engine at startup
 		* Share the project via email, Nextcloud, etc. directly from the main menu
 	* [worksheet]
