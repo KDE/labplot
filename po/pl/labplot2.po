@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-09 01:41+0000\n"
+"POT-Creation-Date: 2024-02-10 01:49+0000\n"
 "PO-Revision-Date: 2023-11-04 12:55+0100\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -2216,12 +2216,12 @@ msgstr "Czas oczekiwania na urządzenie upłynął."
 msgid "The following error occurred: %1."
 msgstr "Wystąpił następujący błąd: %1."
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1146
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1184
 #, kde-format
 msgid "Plot%1"
 msgstr "Wykres%1"
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1334
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1390
 #, kde-format
 msgid "legend"
 msgstr "legenda"

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-09 01:41+0000\n"
-"PO-Revision-Date: 2024-01-21 14:07+0100\n"
+"POT-Creation-Date: 2024-02-10 01:49+0000\n"
+"PO-Revision-Date: 2024-02-11 02:26+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -2199,12 +2199,12 @@ msgstr "მოწყობილობასთან კავშირის �
 msgid "The following error occurred: %1."
 msgstr "აღმოჩენილია შემდეგი შეცდომა: %1."
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1146
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1184
 #, kde-format
 msgid "Plot%1"
 msgstr "გრაფიკი%1"
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1334
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1390
 #, kde-format
 msgid "legend"
 msgstr "შინაარსი"
@@ -3747,10 +3747,9 @@ msgid "xor"
 msgstr "არ-ან"
 
 #: src/backend/gsl/functions.cpp:325
-#, fuzzy, kde-format
-#| msgid "no"
+#, kde-format
 msgid "not"
-msgstr "არა"
+msgstr "არ"
 
 #: src/backend/gsl/functions.cpp:329
 #, kde-format
@@ -7984,10 +7983,9 @@ msgid "%1: set layout column count"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/ErrorBar.cpp:77
-#, fuzzy, kde-format
-#| msgid "%1: error bar type changed"
+#, kde-format
 msgid "%1: error type changed"
-msgstr "%1: შეცდომის ზოლის ტიპი შეიცვალა"
+msgstr "%1: შეცდომის ტიპი შეიცვალა"
 
 #: src/backend/worksheet/plots/cartesian/ErrorBar.cpp:84
 #: src/backend/worksheet/plots/cartesian/ErrorBar.cpp:96
@@ -8001,10 +7999,9 @@ msgid "%1: set error bar cap size"
 msgstr "%1: შეცდომის ზოლის თავის ზომის შეცვლა"
 
 #: src/backend/worksheet/plots/cartesian/ErrorBarStyle.cpp:75
-#, fuzzy, kde-format
-#| msgid "%1: error bar type changed"
+#, kde-format
 msgid "%1: error bar style type changed"
-msgstr "%1: შეცდომის ზოლის ტიპი შეიცვალა"
+msgstr "%1: შეცდომის ზოლის სტილის ტიპი შეიცვალა"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:178
 #, kde-format
@@ -11656,18 +11653,15 @@ msgid "LabPlot Projects (%1)"
 msgstr "LabPlot -ის პროექტები (%1)"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:443
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Open Project"
+#, kde-format
 msgctxt "@title:window"
 msgid "Open Origin OPJ Project"
-msgstr "პროექტის გახსნა"
+msgstr "საწყისი OPJ პროექტის გახსნა"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:445
-#, fuzzy, kde-format
-#| msgid "LabPlot Projects (%1)"
+#, kde-format
 msgid "Origin OPJ Projects (%1)"
-msgstr "LabPlot -ის პროექტები (%1)"
+msgstr "საწყისი OPJ პროექტები (%1)"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:514
 #, kde-format
@@ -12626,10 +12620,9 @@ msgstr "ცენტრი"
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:258
 #: src/kdefrontend/widgets/LabelWidget.cpp:142
 #: src/kdefrontend/widgets/LabelWidget.cpp:147
-#, fuzzy, kde-format
-#| msgid "Relative Path"
+#, kde-format
 msgid "Relative to plot"
-msgstr "შეფარდებითი ბილიკი"
+msgstr "ნახაზთან შედარებით"
 
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:779
 #, kde-format
