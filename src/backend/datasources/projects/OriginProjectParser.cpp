@@ -385,7 +385,7 @@ void OriginProjectParser::restorePointers(Project* project) {
 
 bool OriginProjectParser::loadFolder(Folder* folder, tree<Origin::ProjectNode>::iterator baseIt, bool preview) {
 	DEBUG(Q_FUNC_INFO)
-	const tree<Origin::ProjectNode>* projectTree = m_originFile->project();
+	const auto* projectTree = m_originFile->project();
 
 	// do not skip anything if pathesToLoad() contains only root folder
 	bool containsRootFolder = (folder->pathesToLoad().size() == 1 && folder->pathesToLoad().contains(folder->path()));
@@ -1740,8 +1740,7 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 
 				break;
 			}
-			case Origin::GraphCurve::Box: {
-				// box plot
+			case Origin::GraphCurve::Box: { // box plot
 				auto* boxPlot = new BoxPlot(yColumnName);
 				childPlot = boxPlot;
 

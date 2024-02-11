@@ -4,7 +4,7 @@
 	Description          : parser for Origin projects
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2017-2024 Alexander Semke <alexander.semke@web.de>
-	SPDX-FileCopyrightText: 2018-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2018-2024 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -51,7 +51,7 @@ private:
 	bool loadFolder(Folder*, tree<Origin::ProjectNode>::iterator, bool preview);
 	bool loadWorkbook(Workbook*, bool preview);
 	bool loadSpreadsheet(Spreadsheet*, bool preview, const QString& wbName = QString(), int sheetIndex = -1);
-	void loadColumnNumericFormat(const Origin::SpreadColumn& originColumn, Column* column) const;
+	void loadColumnNumericFormat(const Origin::SpreadColumn&, Column*) const;
 	bool loadMatrixWorkbook(Workbook*, bool preview);
 	bool loadMatrix(Matrix*, bool preview, size_t sheetIndex = 0, const QString& mwbName = QString());
 
