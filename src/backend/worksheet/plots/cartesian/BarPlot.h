@@ -43,7 +43,7 @@ public:
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, xColumn, XColumn)
 	QString& xColumnPath() const;
 	BASIC_D_ACCESSOR_DECL(QVector<const AbstractColumn*>, dataColumns, DataColumns)
-	QVector<QString>& dataColumnPaths() const;
+	CLASS_D_ACCESSOR_DECL(QVector<QString>, dataColumnPaths, DataColumnPaths)
 	BASIC_D_ACCESSOR_DECL(BarPlot::Type, type, Type)
 	BASIC_D_ACCESSOR_DECL(BarPlot::Orientation, orientation, Orientation)
 	BASIC_D_ACCESSOR_DECL(double, widthFactor, WidthFactor)

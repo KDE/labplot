@@ -298,6 +298,8 @@ bool OriginProjectParser::load(Project* project, bool preview) {
 
 /*!
  * restores the column pointers from the column paths after the project was loaded and all objects instantiated.
+ * TODO: why do we need this extra logic here and why Project::restorePointers() is not enough which is already called in ProjectParser::importTo() at the end
+ * of the import anyway?
  */
 void OriginProjectParser::restorePointers(Project* project) {
 	// 1. extend the pathes to contain the parent structures first
@@ -1723,6 +1725,9 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 			case Origin::GraphCurve::BarStack: {
 				auto* barPlot = new BarPlot(yColumnName);
 				childPlot = barPlot;
+
+				// TODO: this leads to a crash at the moment since the pointers are not properly restored yet in OriginProjectParser::restorePointers() and in
+				// Project::restorePointers() and we have nullptr's in BarPlot barPlot->setDataColumnPaths({yColumnPath});
 
 				if (!preview) {
 					// orientation

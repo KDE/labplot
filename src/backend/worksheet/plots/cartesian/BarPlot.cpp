@@ -135,6 +135,7 @@ void BarPlot::handleResize(double /*horizontalRatio*/, double /*verticalRatio*/,
 /* ============================ getter methods ================= */
 // general
 BASIC_SHARED_D_READER_IMPL(BarPlot, QVector<const AbstractColumn*>, dataColumns, dataColumns)
+BASIC_SHARED_D_READER_IMPL(BarPlot, QVector<QString>, dataColumnPaths, dataColumnPaths)
 BASIC_SHARED_D_READER_IMPL(BarPlot, BarPlot::Type, type, type)
 BASIC_SHARED_D_READER_IMPL(BarPlot, BarPlot::Orientation, orientation, orientation)
 BASIC_SHARED_D_READER_IMPL(BarPlot, double, widthFactor, widthFactor)
@@ -161,11 +162,6 @@ Line* BarPlot::lineAt(int index) const {
 		return d->borderLines.at(index);
 	else
 		return nullptr;
-}
-
-QVector<QString>& BarPlot::dataColumnPaths() const {
-	D(BarPlot);
-	return d->dataColumnPaths;
 }
 
 double BarPlot::minimum(const Dimension dim) const {
@@ -288,6 +284,11 @@ void BarPlot::setDataColumns(const QVector<const AbstractColumn*> columns) {
 			connect(column, &AbstractAspect::aspectDescriptionChanged, this, &Plot::appearanceChanged);
 		}
 	}
+}
+
+void BarPlot::setDataColumnPaths(const QVector<QString>& paths) {
+	Q_D(BarPlot);
+	d->dataColumnPaths = paths;
 }
 
 STD_SETTER_CMD_IMPL_F_S(BarPlot, SetType, BarPlot::Type, type, recalc)
