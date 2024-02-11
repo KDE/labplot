@@ -685,8 +685,8 @@ void LiveDataSource::tcpSocketError(QAbstractSocket::SocketError /*socketError*/
 }
 
 #ifdef HAVE_QTSERIALPORT
-void LiveDataSource::serialPortError(QSerialPort::SerialPortError serialPortError) {
-	switch (serialPortError) {
+void LiveDataSource::serialPortError(QSerialPort::SerialPortError error) {
+	switch (error) {
 	case QSerialPort::DeviceNotFoundError:
 		QMessageBox::critical(nullptr, i18n("Serial Port Error"), i18n("Failed to open the device."));
 		break;
@@ -710,9 +710,11 @@ void LiveDataSource::serialPortError(QSerialPort::SerialPortError serialPortErro
 		break;
 	case QSerialPort::WriteError:
 	case QSerialPort::UnsupportedOperationError:
+#if QT_VERSION <= QT_VERSION_CHECK(6, 0, 0)
 	case QSerialPort::ParityError:
 	case QSerialPort::FramingError:
 	case QSerialPort::BreakConditionError:
+#endif
 	case QSerialPort::UnknownError:
 		QMessageBox::critical(nullptr, i18n("Serial Port Error"), i18n("The following error occurred: %1.", m_serialPort->errorString()));
 		break;
