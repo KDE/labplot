@@ -2059,8 +2059,16 @@ void SpreadsheetView::plotData(QAction* action) {
 void SpreadsheetView::plotAnalysisData() {
 	const auto* action = dynamic_cast<const QAction*>(QObject::sender());
 	auto* dlg = new PlotDataDialog(m_spreadsheet, PlotDataDialog::PlotType::XYCurve);
+
 	auto type = static_cast<XYAnalysisCurve::AnalysisAction>(action->data().toInt());
 	dlg->setAnalysisAction(type);
+
+	// use all spreadsheet columns if no columns are selected
+	auto columns = selectedColumns(true);
+	if (columns.isEmpty())
+		columns = m_spreadsheet->children<Column>();
+	dlg->setSelectedColumns(columns);
+
 	dlg->exec();
 }
 
