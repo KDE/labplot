@@ -298,6 +298,7 @@ bool OriginProjectParser::load(Project* project, bool preview) {
 
 /*!
  * restores the column pointers from the column paths after the project was loaded and all objects instantiated.
+ * TODO: why do we need this extra logic here and why Project::restorePointers() is not enough which is already called in ProjectParser::importTo() at the end of the import anyway?
  */
 void OriginProjectParser::restorePointers(Project* project) {
 	// 1. extend the pathes to contain the parent structures first
@@ -1585,8 +1586,8 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 			QString containerName = dataName.right(dataName.length() - 2); // strip "E_" or "T_"
 			auto sheet = getSpreadsheetByName(containerName);
 			QString tableName = containerName;
-				if (dataName.startsWith(QStringLiteral("E_"))) // container is a workbook
-					tableName += QLatin1Char('/') + QString::fromStdString(sheet.name);
+			if (dataName.startsWith(QStringLiteral("E_"))) // container is a workbook
+				tableName += QLatin1Char('/') + QString::fromStdString(sheet.name);
 
 			QString xColumnName = QLatin1String(originCurve.xColumnName.c_str());
 			QString yColumnName = QLatin1String(originCurve.yColumnName.c_str());
@@ -1738,6 +1739,10 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 				auto* barPlot = new BarPlot(yColumnName);
 				childPlot = barPlot;
 
+				// TODO: this leads to a crash at the moment since the pointers are not properly restored yet in OriginProjectParser::restorePointers() and in Project::restorePointers()
+				// and we have nullptr's in BarPlot
+				// barPlot->setDataColumnPaths({yColumnPath});
+
 				if (!preview) {
 					// orientation
 					if (type == Origin::GraphCurve::Column || type == Origin::GraphCurve::ColumnStack)
@@ -1867,7 +1872,7 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 
 			break;
 		}
-		case 'M': {// Matrix
+		case 'M': { // Matrix
 			// TODO
 			break;
 		}
@@ -2656,7 +2661,7 @@ void OriginProjectParser::loadSymbol(const Origin::GraphCurve& originCurve, Symb
 
 	// symbol colors
 	DEBUG(Q_FUNC_INFO << ", symbol fill color = " << originCurve.symbolFillColor.type << "_"
-						<< (Origin::Color::RegularColor)originCurve.symbolFillColor.regular)
+					<< (Origin::Color::RegularColor)originCurve.symbolFillColor.regular)
 	DEBUG(Q_FUNC_INFO << ", symbol color = " << originCurve.symbolColor.type << "_" << (Origin::Color::RegularColor)originCurve.symbolColor.regular)
 	// if plot type == line+symbol
 
@@ -2897,7 +2902,7 @@ Qt::PenStyle OriginProjectParser::penStyle(unsigned char lineStyle) const {
 		return Qt::SolidLine;
 	case Origin::GraphCurve::Dash:
 	case Origin::GraphCurve::ShortDash:
-		return  Qt::DashLine;
+		return Qt::DashLine;
 	case Origin::GraphCurve::Dot:
 	case Origin::GraphCurve::ShortDot:
 		return Qt::DotLine;
