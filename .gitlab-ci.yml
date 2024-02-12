@@ -2,7 +2,7 @@
 # SPDX-FileCopyrightText: 2022-2024 Stefan Gerlach <stefan.gerlach@uni.kn>
 # SPDX-License-Identifier: CC0-1.0
 
-# full path: https://invent.kde.org/sysadmin/ci-utilities/-/tree/master/gitlab-templates?ref_type=heads
+# full path: https://invent.kde.org/sysadmin/ci-utilities/-/tree/master/gitlab-templates
 include:
   - project: sysadmin/ci-utilities
     file:
@@ -20,7 +20,8 @@ include:
 ### DEPLOY
       - /gitlab-templates/craft-appimage.yml
       - /gitlab-templates/craft-windows-x86-64.yml
-      - /gitlab-templates/craft-windows-appx-qt5.yml
+# currently fails (20240212)
+#      - /gitlab-templates/craft-windows-appx-qt5.yml
 # see below for flatpak variables
       - /gitlab-templates/flatpak.yml
 # fails for analitza (20240105)
