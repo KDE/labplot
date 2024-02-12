@@ -435,6 +435,7 @@ public Q_SLOTS:
 	void copy();
 	void duplicate();
 	void paste(bool duplicate = false);
+
 private Q_SLOTS:
 	void moveUp();
 	void moveDown();

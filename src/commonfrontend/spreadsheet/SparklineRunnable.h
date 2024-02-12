@@ -22,14 +22,14 @@ public:
 	}
 
 	void run() override;
-	QPixmap getResultPixmap();
+	QPixmap pixmap();
 
 Q_SIGNALS:
-	void taskFinished(const QPixmap& resultPixmap);
+	void taskFinished(const QPixmap&);
 
 private:
 	Column* col;
-	QPixmap resultPixmap{QPixmap()};
+	QPixmap mPixmap{QPixmap()};
 };
 
 #endif // SPARKLINERUNNABLE_H

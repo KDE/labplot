@@ -13,9 +13,8 @@
 
 void SparkLineRunnable::run() {
 	if (col->columnMode() != Column::ColumnMode::Text && !col->isPlottable()) {
-		QPixmap mPixmap = QPixmap(1, 1);
+		mPixmap = QPixmap(1, 1);
 		mPixmap.fill(QColor(49, 54, 59));
-		resultPixmap = mPixmap;
 		return;
 	}
 
@@ -67,7 +66,7 @@ void SparkLineRunnable::run() {
 		QPixmap pixmap(worksheet->view()->size());
 		worksheet->exportView(pixmap);
 		delete worksheet;
-		resultPixmap = pixmap;
+		mPixmap = pixmap;
 	} else {
 		const int rowCount = col->rowCount();
 		QVector<double> xData(rowCount);
@@ -93,11 +92,11 @@ void SparkLineRunnable::run() {
 		QPixmap pixmap(worksheet->view()->size());
 		worksheet->exportView(pixmap);
 		delete worksheet;
-		resultPixmap = pixmap;
+		mPixmap = pixmap;
 	}
-	Q_EMIT taskFinished(resultPixmap);
+	Q_EMIT taskFinished(mPixmap);
 }
 
-QPixmap SparkLineRunnable::getResultPixmap() {
-	return resultPixmap;
+QPixmap SparkLineRunnable::pixmap() {
+	return mPixmap;
 };

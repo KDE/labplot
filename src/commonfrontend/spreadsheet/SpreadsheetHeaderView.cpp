@@ -142,7 +142,7 @@ SpreadsheetSparkLinesHeaderModel* SpreadsheetHeaderView::model() const {
 
 void SpreadsheetHeaderView::paintSection(QPainter* painter, const QRect& rect, int logicalIndex) const {
 	QRect master_rect = rect;
-	SpreadsheetSparkLinesHeaderModel* model = m_sparkLineSlave->getModel();
+	auto* model = m_sparkLineSlave->getModel();
 	QPixmap pixmap = model->headerData(logicalIndex, Qt::Horizontal, static_cast<int>(SpreadsheetModel::CustomDataRole::SparkLineRole)).value<QPixmap>();
 	// initalise header
 	if (m_showComments && m_showSparkLines) {

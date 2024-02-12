@@ -229,7 +229,7 @@ public:
 public Q_SLOTS:
 	void pasteData();
 	void updateFormula();
-	void setSparkline(QPixmap pix);
+	void setSparkline(const QPixmap&);
 	QPixmap sparkline();
 
 private:
