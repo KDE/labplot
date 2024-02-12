@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-10 01:49+0000\n"
+"POT-Creation-Date: 2024-02-12 01:35+0000\n"
 "PO-Revision-Date: 2024-02-09 19:01+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -369,13 +369,13 @@ msgid "%1: unmask cells"
 msgstr "%1: Hücre maskesini kaldır"
 
 #: src/backend/core/abstractcolumncommands.cpp:253
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2408
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2419
 #, kde-format
 msgid "%1: set heatmap format"
 msgstr "%1: Isı haritası biçimini ayarla"
 
 #: src/backend/core/abstractcolumncommands.cpp:280
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2425
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2436
 #, kde-format
 msgid "%1: remove heatmap format"
 msgstr "%1: Isı haritası biçimini kaldır"
@@ -504,7 +504,7 @@ msgid "%1   (no values)"
 msgstr "%1   (değer yok)"
 
 #: src/backend/core/AspectTreeModel.cpp:226
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1503
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1504
 #, kde-format
 msgid "Size: %1"
 msgstr "Boyut: %1"
@@ -614,7 +614,7 @@ msgid "%1: change cell values"
 msgstr "%1: Hücre değerlerini değiştir"
 
 #: src/backend/core/column/columncommands.cpp:531
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2632
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2643
 #, kde-format
 msgid "%1: set plot designation"
 msgstr "%1: Çizim gösterimini ayarla"
@@ -1183,10 +1183,10 @@ msgstr "İndeks"
 #: src/backend/datasources/filters/AsciiFilter.cpp:2094
 #: src/backend/datasources/filters/QJsonModel.cpp:133
 #: src/commonfrontend/matrix/MatrixView.cpp:619
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2311
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2332
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2350
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2367
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2322
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2343
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2361
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2378
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:149
 #: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:188
 #: src/kdefrontend/ui/dockwidgets/columndock.ui:182
@@ -1483,7 +1483,7 @@ msgstr "h5dump bulunamadı."
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:358
 #: src/backend/datasources/filters/NetCDFFilter.cpp:268
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1478
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1479
 #, kde-format
 msgid "Reading from file %1 failed."
 msgstr "%1 dosyasından okuma başarısız."
@@ -2149,64 +2149,63 @@ msgstr "Zaman_10µs"
 msgid "Sheets: "
 msgstr "Sayfalar: "
 
-#: src/backend/datasources/LiveDataSource.cpp:436
-#: src/backend/datasources/MQTTTopic.cpp:142
-#, kde-format
-msgid "Plot data"
-msgstr "Veriyi çiz"
-
-#: src/backend/datasources/LiveDataSource.cpp:711
-#: src/backend/datasources/LiveDataSource.cpp:714
-#: src/backend/datasources/LiveDataSource.cpp:717
-#: src/backend/datasources/LiveDataSource.cpp:720
-#: src/backend/datasources/LiveDataSource.cpp:723
-#: src/backend/datasources/LiveDataSource.cpp:726
-#: src/backend/datasources/LiveDataSource.cpp:729
-#: src/backend/datasources/LiveDataSource.cpp:734
+#: src/backend/datasources/LiveDataSource.cpp:691
+#: src/backend/datasources/LiveDataSource.cpp:694
+#: src/backend/datasources/LiveDataSource.cpp:697
+#: src/backend/datasources/LiveDataSource.cpp:700
+#: src/backend/datasources/LiveDataSource.cpp:703
+#: src/backend/datasources/LiveDataSource.cpp:706
+#: src/backend/datasources/LiveDataSource.cpp:709
+#: src/backend/datasources/LiveDataSource.cpp:719
 #, kde-format
 msgid "Serial Port Error"
 msgstr "Seri Kapı Hatası"
 
-#: src/backend/datasources/LiveDataSource.cpp:711
+#: src/backend/datasources/LiveDataSource.cpp:691
 #, kde-format
 msgid "Failed to open the device."
 msgstr "Aygıt açılamadı."
 
-#: src/backend/datasources/LiveDataSource.cpp:714
+#: src/backend/datasources/LiveDataSource.cpp:694
 #, kde-format
 msgid ""
 "Failed to open the device. Please check your permissions on this device."
 msgstr "Aygıt açılamadı. Aygıt izinlerinizi denetleyin."
 
-#: src/backend/datasources/LiveDataSource.cpp:717
+#: src/backend/datasources/LiveDataSource.cpp:697
 #, kde-format
 msgid "Device already opened."
 msgstr "Aygıt zaten açık."
 
-#: src/backend/datasources/LiveDataSource.cpp:720
+#: src/backend/datasources/LiveDataSource.cpp:700
 #, kde-format
 msgid "The device is not opened."
 msgstr "Aygıt açılamadı."
 
-#: src/backend/datasources/LiveDataSource.cpp:723
+#: src/backend/datasources/LiveDataSource.cpp:703
 #, kde-format
 msgid "Failed to read data."
 msgstr "Veri okunamadı."
 
-#: src/backend/datasources/LiveDataSource.cpp:726
+#: src/backend/datasources/LiveDataSource.cpp:706
 #, kde-format
 msgid "Failed to read data. The device is removed."
 msgstr "Veri okunamadı. Aygıt kaldırılmış."
 
-#: src/backend/datasources/LiveDataSource.cpp:729
+#: src/backend/datasources/LiveDataSource.cpp:709
 #, kde-format
 msgid "The device timed out."
 msgstr "Aygıt zaman aşımına uğradı."
 
-#: src/backend/datasources/LiveDataSource.cpp:734
+#: src/backend/datasources/LiveDataSource.cpp:719
 #, kde-format
 msgid "The following error occurred: %1."
 msgstr "Şu hata oluştu: %1."
+
+#: src/backend/datasources/MQTTTopic.cpp:142
+#, kde-format
+msgid "Plot data"
+msgstr "Veriyi çiz"
 
 #: src/backend/datasources/projects/OriginProjectParser.cpp:1184
 #, kde-format
@@ -5434,13 +5433,13 @@ msgid "unexpected end of document"
 msgstr "belgenin beklenmedik sonu"
 
 #: src/backend/matrix/Matrix.cpp:121
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3600
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3611
 #, kde-format
 msgid "FITS image"
 msgstr "FITS görseli"
 
 #: src/backend/matrix/Matrix.cpp:121
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3600
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3611
 #, kde-format
 msgid "FITS table"
 msgstr "FITS tablosu"
@@ -5943,7 +5942,7 @@ msgstr "İstatistik (Dağılımlar)"
 #: src/backend/nsl/nsl_fit.c:24
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:554
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:525
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1230
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1231
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:242
 #: src/kdefrontend/dockwidgets/KDEPlotDock.cpp:191
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:277
@@ -9323,16 +9322,16 @@ msgid "Curve"
 msgstr "Eğri"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:870
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3840
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3894
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3851
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3905
 #: src/commonfrontend/worksheet/WorksheetView.cpp:2287
 #, kde-format
 msgid "Failed to export"
 msgstr "Dışa aktarılamadı"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:870
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3840
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3894
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3851
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3905
 #: src/commonfrontend/worksheet/WorksheetView.cpp:2287
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
@@ -9552,7 +9551,7 @@ msgid "%1: cut selected cell(s)"
 msgstr "%1: Seçili hücreleri kes"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:689
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1712
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1715
 #, kde-format
 msgid "%1: paste from clipboard"
 msgstr "%1: Panodan yapıştır"
@@ -9813,7 +9812,7 @@ msgid "Delete Selected Column(s)"
 msgstr "Seçili Sütunları Sil"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:320
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1573
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1548
 #, kde-format
 msgid "Freeze Column"
 msgstr "Sütunu Dondur"
@@ -10045,93 +10044,93 @@ msgstr "Üsler Merdiveni"
 msgid "Hide Comments"
 msgstr "Açıklamaları Gizle"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1577
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1552
 #, kde-format
 msgid "Unfreeze Column"
 msgstr "Sütunları Çöz"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1631
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1634
 #, kde-format
 msgid "%1: cut selected cells"
 msgstr "%1: Seçili hücreleri kes"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1955
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1958
 #, kde-format
 msgid "Not enough memory to finalize this operation."
 msgstr "Bu işlemi bitirebilmek için yeterli bellek yok."
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1969
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1972
 #, kde-format
 msgid "%1: mask selected cells"
 msgstr "%1: Seçili nesneleri maskele"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2011
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2014
 #, kde-format
 msgid "%1: unmask selected cells"
 msgstr "%1: Seçili hücrelerin maskelerini kaldır"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2075
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2086
 #, kde-format
 msgid "%1: fill cells with row numbers"
 msgstr "%1: Hücreleri satır numarasıyla doldur"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2140
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2151
 #, kde-format
 msgid "%1: fill column with row numbers"
 msgid_plural "%1: fill columns with row numbers"
 msgstr[0] "%1: Sütunu satır numaralarıyla doldur"
 msgstr[1] "%1: Sütunları satır numaralarıyla doldur"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2182
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2193
 #, kde-format
 msgid "%1: fill cells with random values"
 msgstr "%1: Hücreleri rastgele değerlerle doldur"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2302
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2313
 #, kde-format
 msgid "%1: fill cells with const values"
 msgstr "%1: Hücreleri sabit değerlerle doldur"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2310
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2332
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2350
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2367
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2321
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2343
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2361
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2378
 #, kde-format
 msgid "Fill the selection with constant value"
 msgstr "Seçimi sabit değerle doldur"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2445
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2479
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2456
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2490
 #, kde-format
 msgid "Insert empty columns"
 msgstr "Boş sütunlar ekle"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2446
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2480
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2457
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2491
 #, kde-format
 msgid "Enter the number of columns to insert"
 msgstr "Eklenecek sütun sayısını gir"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2498
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2509
 #, kde-format
 msgid "%1: insert empty column"
 msgid_plural "%1: insert empty columns"
 msgstr[0] "%1: Boş sütun ekle"
 msgstr[1] "%1: Boş sütun ekle"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2568
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2579
 #, kde-format
 msgid "%1: remove selected columns"
 msgstr "%1: Seçili sütunları kaldır"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2665
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2676
 #, kde-format
 msgid "%1: reverse column"
 msgid_plural "%1: reverse columns"
 msgstr[0] "%1: Sütunu ters çevir"
 msgstr[1] "%1: Sütunları ters çevir"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2738
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2749
 #, kde-format
 msgid ""
 "The selected columns have different data types and cannot be flattened "
@@ -10139,221 +10138,221 @@ msgid ""
 msgstr ""
 "Seçili sütunlarda farklı veri türleri var ve bu yüzden düzleştirilemiyorlar. "
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2776
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2787
 #, kde-format
 msgid "%1: normalize columns"
 msgstr "%1: Sütunları normalleştir"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2796
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2807
 #, kde-format
 msgid "Sum = 0"
 msgstr "Toplam = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2807
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2818
 #, kde-format
 msgid "Min = 0"
 msgstr "En Küçük = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2818
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2829
 #, kde-format
 msgid "Max = 0"
 msgstr "En Büyük = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2829
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2840
 #, kde-format
 msgid "Count = 0"
 msgstr "Sayım = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2840
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2851
 #, kde-format
 msgid "Mean = 0"
 msgstr "Ortalama = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2851
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2862
 #, kde-format
 msgid "Median = 0"
 msgstr "Ortanca = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2863
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2874
 #, kde-format
 msgid "Mode = 0"
 msgstr "Kip = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2865
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2876
 #, kde-format
 msgid "'Mode not defined'"
 msgstr "'Kip tanımlanmamış'"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2876
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2887
 #, kde-format
 msgid "Range = 0"
 msgstr "Erim = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2887
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2921
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2898
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2932
 #, kde-format
 msgid "SD = 0"
 msgstr "SD = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2898
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2933
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2909
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2944
 #, kde-format
 msgid "MAD = 0"
 msgstr "MAD = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2909
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2945
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2920
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2956
 #, kde-format
 msgid "IQR = 0"
 msgstr "IQR = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2957
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2968
 #, kde-format
 msgid "Max - Min = 0"
 msgstr "En büyük - en küçük = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2976
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2987
 #, kde-format
 msgid "Normalization not possible"
 msgstr "Normalleştirme olanaklı değil"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2988
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2999
 #, kde-format
 msgid "%1: power transform columns"
 msgstr "%1: Sütunları üs dönüştür"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3107
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3118
 #, kde-format
 msgid "%1: column statistics"
 msgstr "%1: Sütun istatistikleri"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3138
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3149
 #, kde-format
 msgid "Selection in %1"
 msgstr "%1 İçindeki Seçim"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3181
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3192
 #, kde-format
 msgid "%1: row statistics"
 msgstr "%1: Satır istatistikleri"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3191
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3202
 #, kde-format
 msgid "Row %1"
 msgstr "%1. Satır"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3216
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3255
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3227
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3266
 #, kde-format
 msgid "Insert multiple rows"
 msgstr "Birden çok satır ekle"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3217
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3256
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3228
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3267
 #, kde-format
 msgid "Enter the number of rows to insert"
 msgstr "Eklenecek satır sayısını gir"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3236
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3275
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3247
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3286
 #, kde-format
 msgid "%1: insert empty row"
 msgid_plural "%1: insert empty rows"
 msgstr[0] "%1: Boş satır ekle"
 msgstr[1] "%1: Boş satırlar ekle"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3291
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3302
 #, kde-format
 msgid "%1: remove selected rows"
 msgstr "%1: Seçili satırları kaldır"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3318
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3329
 #, kde-format
 msgid "%1: clear selected cells"
 msgstr "%1: Seçili hücreleri temizle"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3564
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3575
 #, kde-format
 msgid "row"
 msgid_plural "rows"
 msgstr[0] "satır"
 msgstr[1] "satır"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3565
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3576
 #, kde-format
 msgid "column"
 msgid_plural "columns"
 msgstr[0] "sütun"
 msgstr[1] "sütun"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3566
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3577
 #, kde-format
 msgid "cells"
 msgstr "hücre"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3567
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3578
 #, kde-format
 msgid "masked value"
 msgstr "maskelenmiş değer"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3567
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3578
 #, kde-format
 msgid "masked values"
 msgstr "maskelenmiş değer"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3568
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3579
 #, kde-format
 msgid "missing value"
 msgstr "eksik değer"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3568
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3579
 #, kde-format
 msgid "missing values"
 msgstr "eksik değer"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3569
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3580
 #, kde-format
 msgid " , "
 msgstr " , "
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3569
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3570
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3580
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3581
 #, kde-format
 msgid "%1"
 msgstr "%1"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3570
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3581
 #, kde-format
 msgid ", "
 msgstr ", "
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3573
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3584
 #, kde-format
 msgid "Selected: %1 %2 , %3 %4%5 %6 %7 %8"
 msgstr "Seçili: %1 %2 , %3 %4%5 %6 %7 %8"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3584
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3595
 #, kde-format
 msgid "Selected: %1 %2%3 %4 %5 %6"
 msgstr "Seçili: %1 %2%3 %4 %5 %6"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3657
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3668
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Spreadsheet"
 msgstr "Hesap Tablosunu Yazdır"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4262
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4273
 #, kde-format
 msgid "Couldn't create the SQLite database %1."
 msgstr "%1 SQLite veritabanı oluşturulamadı.."
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4294
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4305
 #, kde-format
 msgid "Failed to create table in the SQLite database %1."
 msgstr "%1 SQLite veritabanında tablo oluşturulamadı.."
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4347
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4358
 #, kde-format
 msgid "Failed to insert values into the table."
 msgstr "Tabloya veriler eklenemedi."
@@ -11463,32 +11462,32 @@ msgstr ""
 "'Son Vasiyet ve Ahit' iletisini (LWT) belirtin. En azından bir konuya abone "
 "olunmalıdır."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:907
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:908
 #, kde-format
 msgctxt "@title:window"
 msgid "Select the File Data Source"
 msgstr "Dosya Veri Kaynağını Seç"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:937
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:938
 #, kde-format
 msgctxt "@title:window"
 msgid "Select the DBC file"
 msgstr "DBC dosyasını seç"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:937
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:938
 #, kde-format
 msgid "DBC file (*.dbc)"
 msgstr "DBC dosyası (*.dbc)"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataFormat)
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1143
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1144
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:402
 #, kde-format
 msgid "Data Format"
 msgstr "Veri Biçimi"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataPreview)
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1144
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1145
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:456
 #: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:158
 #, kde-format
@@ -11496,183 +11495,183 @@ msgid "Preview"
 msgstr "Önizleme"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataPortion)
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1146
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1147
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:535
 #: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:239
 #, kde-format
 msgid "Data Portion to Read"
 msgstr "Okunacak Veri Porsiyonu"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1186
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1187
 #, kde-format
 msgid "Data format && preview"
 msgstr "Veri biçimi ve önizleme"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1229
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1230
 #: src/kdefrontend/SettingsGeneralPage.cpp:226
 #, kde-format
 msgid "Automatic"
 msgstr "Otomatik"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1470
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1471
 #, kde-format
 msgid "file command not found"
 msgstr "dosya komutu bulunamadı"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1481
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1482
 #, kde-format
 msgid "cannot open"
 msgstr "açılamıyor"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1486
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1487
 #, kde-format
 msgid "<b>File type:</b> %1"
 msgstr "<b>Dosya türü:</b> %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1491
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1492
 #, kde-format
 msgid "General:"
 msgstr "Genel:"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1493
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1494
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1495
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1496
 #, kde-format
 msgid "yes"
 msgstr "evet"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1493
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1494
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1495
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1496
 #, kde-format
 msgid "no"
 msgstr "hayır"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1493
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1494
 #, kde-format
 msgid "Readable: %1"
 msgstr "Okunabilir: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1494
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1495
 #, kde-format
 msgid "Writable: %1"
 msgstr "Yazılabilir: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1495
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1496
 #, kde-format
 msgid "Executable: %1"
 msgstr "Yürütülebilir: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1497
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1498
 #, kde-format
 msgid "Birth time: %1"
 msgstr "Doğum zamanı: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1498
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1499
 #, kde-format
 msgid "Last metadata changed: %1"
 msgstr "Son üst veri değişikliği: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1499
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1500
 #, kde-format
 msgid "Last modified: %1"
 msgstr "Son düzenleme: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1500
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1501
 #, kde-format
 msgid "Last read: %1"
 msgstr "Son okuma: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1501
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1502
 #, kde-format
 msgid "Owner: %1"
 msgstr "Sahibi: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1502
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1503
 #, kde-format
 msgid "Group: %1"
 msgstr "Grup: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1503
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1504
 #, kde-format
 msgid "%1 cByte"
 msgid_plural "%1 cBytes"
 msgstr[0] "%1 cByte"
 msgstr[1] "%1 cByte"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1506
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1507
 #, kde-format
 msgid "Summary:"
 msgstr "Özet:"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1529
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1534
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1530
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1535
 #, kde-format
 msgid "Content:"
 msgstr "İçerik:"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1562
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1563
 #, kde-format
 msgid "Could not open file %1 for reading."
 msgstr "%1 dosyası okuma için açılamadı."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1722
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1723
 #, kde-format
 msgid "No data arrived yet for the selected topic"
 msgstr "Seçili konu için henüz bir veri gelmedi"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1958
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1959
 #, kde-format
 msgid "Not a HDF5 file: %1"
 msgstr "Bir HDF5 dosyası değil: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2391
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2392
 #, kde-format
 msgid "Couldn't subscribe to all available topics."
 msgstr "Tüm kullanılabilir konulara abone olunamıyor."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2421
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2422
 #, kde-format
 msgid "Disconnected from '%1'."
 msgstr "Bağlantı kesildi: '%1'."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2490
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2491
 #, kde-format
 msgid "Available (%1)"
 msgstr "Kullanılabilir (%1)"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2602
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2603
 #, kde-format
 msgid "Wrong username or password"
 msgstr "Yanlış kullanıcı adı veya parola"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2605
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2606
 #, kde-format
 msgid "The client ID wasn't accepted"
 msgstr "İstemci kimliği kabul edilmedi"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2609
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2610
 #, kde-format
 msgid "The broker %1 couldn't be reached."
 msgstr "%1 aracısına ulaşılamadı."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2612
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2613
 #, kde-format
 msgid "The client is not authorized to connect."
 msgstr "İstemci, bağlanmak için yetkili değil."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2615
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2616
 #, kde-format
 msgid "An unknown error occurred."
 msgstr "Bilinmeyen bir hata oluştu."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2621
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2624
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2622
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2625
 #, kde-format
 msgid "An error occurred."
 msgstr "Bir hata oluştu."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2638
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2639
 #, kde-format
 msgid "Connecting to '%1:%2' timed out."
 msgstr "'%1:%2' konumuna bağlantı zaman aşımına uğradı."
