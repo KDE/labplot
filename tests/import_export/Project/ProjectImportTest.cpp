@@ -445,7 +445,7 @@ void ProjectImportTest::testOrigin_2folder_with_graphs() {
 
 	auto* curve = dynamic_cast<XYCurve*>(plot->child<XYCurve>(0));
 	QVERIFY(curve != nullptr);
-	QCOMPARE(curve->name(), QStringLiteral("B")); // TODO: Origin uses Comments as curve name: "Length"
+	QCOMPARE(curve->name(), QStringLiteral("Length"));
 
 	CHECK_RANGE(plot, curve, Dimension::X, 0., 9.);
 	CHECK_RANGE(plot, curve, Dimension::Y, 0., 9.);
@@ -464,7 +464,7 @@ void ProjectImportTest::testOrigin_2folder_with_graphs() {
 	auto* symbol = curve->symbol();
 	QVERIFY(symbol != nullptr);
 	QCOMPARE(symbol->style(), Symbol::Style::SquareHalf);
-	QCOMPARE(symbol->size(), 31.75);
+	QCOMPARE(symbol->size(), 89.8842169409);
 	// TODO: more symbol props
 
 	// Folder 2
@@ -520,7 +520,7 @@ void ProjectImportTest::testOrigin_2folder_with_graphs() {
 	symbol = curve->symbol();
 	QVERIFY(symbol != nullptr);
 	QCOMPARE(symbol->style(), Symbol::Style::Hexagon);
-	QCOMPARE(symbol->size(), 31.75);
+	QCOMPARE(symbol->size(), 89.8842169409);
 	// TODO: more symbol props
 }
 
@@ -589,7 +589,7 @@ void ProjectImportTest::testOrigin_2graphs() {
 	auto* symbol = curve->symbol();
 	QVERIFY(symbol != nullptr);
 	QCOMPARE(symbol->style(), Symbol::Style::Hexagon);
-	QCOMPARE(symbol->size(), 31.75);
+	QCOMPARE(symbol->size(), 89.8842169409);
 	// TODO: more symbol props
 
 	// Graph 1
@@ -615,7 +615,7 @@ void ProjectImportTest::testOrigin_2graphs() {
 
 	curve = dynamic_cast<XYCurve*>(plot->child<XYCurve>(0));
 	QVERIFY(curve != nullptr);
-	QCOMPARE(curve->name(), QStringLiteral("B")); // TODO: Origin uses Comments as curve name: "Length"
+	QCOMPARE(curve->name(), QStringLiteral("Length"));
 	QCOMPARE(curve->coordinateSystemIndex(), plot->defaultCoordinateSystemIndex());
 
 	CHECK_RANGE(plot, curve, Dimension::X, 0., 9.);
@@ -634,7 +634,7 @@ void ProjectImportTest::testOrigin_2graphs() {
 	symbol = curve->symbol();
 	QVERIFY(symbol != nullptr);
 	QCOMPARE(symbol->style(), Symbol::Style::SquareHalf);
-	QCOMPARE(symbol->size(), 31.75);
+	QCOMPARE(symbol->size(), 89.8842169409);
 	// TODO: more symbol props
 
 	// Book 1

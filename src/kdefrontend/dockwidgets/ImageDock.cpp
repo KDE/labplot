@@ -30,6 +30,8 @@
 #endif
 #include <QPageSize>
 
+#include <gsl/gsl_const_cgs.h>
+
 /*!
   \class ImageDock
   \brief  Provides a widget for editing the properties of the worksheets image element.
@@ -41,6 +43,7 @@ ImageDock::ImageDock(QWidget* parent)
 	: BaseDock(parent) {
 	ui.setupUi(this);
 	setBaseWidgets(ui.leName, ui.teComment);
+	setVisibilityWidgets(ui.chbVisible);
 
 	ui.bOpen->setIcon(QIcon::fromTheme(QStringLiteral("document-open")));
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
@@ -114,7 +117,6 @@ ImageDock::ImageDock(QWidget* parent)
 
 	connect(ui.chbLock, &QCheckBox::clicked, this, &ImageDock::lockChanged);
 	connect(ui.chbBindLogicalPos, &QCheckBox::clicked, this, &ImageDock::bindingChanged);
-	connect(ui.chbVisible, &QCheckBox::clicked, this, &ImageDock::visibilityChanged);
 }
 
 void ImageDock::setImages(QList<Image*> list) {
@@ -140,7 +142,6 @@ void ImageDock::setImages(QList<Image*> list) {
 	connect(m_image, &Image::embeddedChanged, this, &ImageDock::imageEmbeddedChanged);
 	connect(m_image, &Image::opacityChanged, this, &ImageDock::imageOpacityChanged);
 	connect(m_image, &Image::lockChanged, this, &ImageDock::imageLockChanged);
-	connect(m_image, &Image::visibleChanged, this, &ImageDock::imageVisibleChanged);
 
 	// Size
 	connect(m_image, &Image::widthChanged, this, &ImageDock::imageWidthChanged);
@@ -181,18 +182,18 @@ void ImageDock::updateUnits() {
 		// convert from imperial to metric
 		m_worksheetUnit = Worksheet::Unit::Centimeter;
 		suffix = QStringLiteral(" cm");
-		ui.sbWidth->setValue(ui.sbWidth->value() * 2.54);
-		ui.sbHeight->setValue(ui.sbHeight->value() * 2.54);
-		ui.sbPositionX->setValue(ui.sbPositionX->value() * 2.54);
-		ui.sbPositionY->setValue(ui.sbPositionY->value() * 2.54);
+		ui.sbWidth->setValue(ui.sbWidth->value() * GSL_CONST_CGS_INCH);
+		ui.sbHeight->setValue(ui.sbHeight->value() * GSL_CONST_CGS_INCH);
+		ui.sbPositionX->setValue(ui.sbPositionX->value() * GSL_CONST_CGS_INCH);
+		ui.sbPositionY->setValue(ui.sbPositionY->value() * GSL_CONST_CGS_INCH);
 	} else {
 		// convert from metric to imperial
 		m_worksheetUnit = Worksheet::Unit::Inch;
 		suffix = QStringLiteral(" in");
-		ui.sbWidth->setValue(ui.sbWidth->value() / 2.54);
-		ui.sbHeight->setValue(ui.sbHeight->value() / 2.54);
-		ui.sbPositionX->setValue(ui.sbPositionX->value() / 2.54);
-		ui.sbPositionY->setValue(ui.sbPositionY->value() / 2.54);
+		ui.sbWidth->setValue(ui.sbWidth->value() / GSL_CONST_CGS_INCH);
+		ui.sbHeight->setValue(ui.sbHeight->value() / GSL_CONST_CGS_INCH);
+		ui.sbPositionX->setValue(ui.sbPositionX->value() / GSL_CONST_CGS_INCH);
+		ui.sbPositionY->setValue(ui.sbPositionY->value() / GSL_CONST_CGS_INCH);
 	}
 
 	ui.sbWidth->setSuffix(suffix);
@@ -431,13 +432,6 @@ void ImageDock::lockChanged(bool locked) {
 		image->setLock(locked);
 }
 
-void ImageDock::visibilityChanged(bool state) {
-	CONDITIONAL_LOCK_RETURN;
-
-	for (auto* image : m_imageList)
-		image->setVisible(state);
-}
-
 //*************************************************************
 //********** SLOTs for changes triggered in Image *************
 //*************************************************************
@@ -511,11 +505,6 @@ void ImageDock::imageRotationAngleChanged(qreal angle) {
 void ImageDock::imageLockChanged(bool on) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.chbLock->setChecked(on);
-}
-
-void ImageDock::imageVisibleChanged(bool on) {
-	CONDITIONAL_LOCK_RETURN;
-	ui.chbVisible->setChecked(on);
 }
 
 //*************************************************************

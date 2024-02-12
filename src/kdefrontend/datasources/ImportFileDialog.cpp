@@ -499,10 +499,10 @@ void ImportFileDialog::checkOkButton() {
 	case LiveDataSource::SourceType::SerialPort: {
 #ifdef HAVE_QTSERIALPORT
 		const QString sPort = m_importFileWidget->serialPort();
-		const int baudRate = m_importFileWidget->baudRate();
 
 		if (!sPort.isEmpty()) {
 			QSerialPort serialPort{this};
+			const int baudRate = m_importFileWidget->baudRate();
 
 			DEBUG("	Port: " << STDSTRING(sPort) << ", Settings: " << baudRate << ',' << serialPort.dataBits() << ',' << serialPort.parity() << ','
 							<< serialPort.stopBits());

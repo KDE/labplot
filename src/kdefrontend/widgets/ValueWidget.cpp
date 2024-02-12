@@ -1,10 +1,10 @@
 /*
-								File                 : ValueWidget.cpp
-								Project              : LabPlot
-								Description          : values settings widget
-								--------------------------------------------------------------------
-								SPDX-FileCopyrightText: 2022 Alexander Semke
-   <alexander.semke@web.de> SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : ValueWidget.cpp
+	Project              : LabPlot
+	Description          : values settings widget
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2022-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "ValueWidget.h"
@@ -73,15 +73,21 @@ ValueWidget::ValueWidget(QWidget* parent)
 	connect(ui.kcbColor, &KColorButton::changed, this, &ValueWidget::colorChanged);
 }
 
+ValueWidget::~ValueWidget() {
+	delete m_aspectModel;
+}
+
 void ValueWidget::setValues(const QList<Value*>& values) {
 	m_values = values;
 	m_value = m_values.first();
 
 	ui.sbDistance->setLocale(QLocale());
 
-	auto* m_aspectTreeModel = new AspectTreeModel(m_value->project());
-	m_aspectTreeModel->enablePlottableColumnsOnly(true);
-	m_aspectTreeModel->enableShowPlotDesignation(true);
+	if (!m_aspectModel) {
+		m_aspectModel = new AspectTreeModel(m_value->project());
+		m_aspectModel->enablePlottableColumnsOnly(true);
+		m_aspectModel->enableShowPlotDesignation(true);
+	}
 
 	// add center value if position is available
 	if (m_value->centerPositionAvailable())
@@ -102,11 +108,9 @@ void ValueWidget::setValues(const QList<Value*>& values) {
 						   AspectType::CantorWorksheet};
 
 	cbColumn->setTopLevelClasses(list);
+	m_aspectModel->setSelectableAspects({AspectType::Column});
 
-	list = {AspectType::Column};
-	m_aspectTreeModel->setSelectableAspects(list);
-
-	cbColumn->setModel(m_aspectTreeModel);
+	cbColumn->setModel(m_aspectModel);
 
 	load();
 
@@ -126,7 +130,7 @@ void ValueWidget::setValues(const QList<Value*>& values) {
 }
 
 //*************************************************************
-//******** SLOTs for changes triggered in ValueWidget ****
+//******** SLOTs for changes triggered in ValueWidget *********
 //*************************************************************
 /*!
   called when the type of the values (none, x, y, (x,y) etc.) was changed.

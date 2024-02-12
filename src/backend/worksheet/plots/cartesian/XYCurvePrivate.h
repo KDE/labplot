@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Private members of XYCurve
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2010-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2010-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2013-2020 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -13,7 +13,6 @@
 #define XYCURVEPRIVATE_H
 
 #include "backend/worksheet/plots/cartesian/PlotPrivate.h"
-#include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include <vector>
 
 class Background;
@@ -68,8 +67,6 @@ public:
 	QString yColumnPath;
 	bool sourceDataChangedSinceLastRecalc{false};
 
-	bool legendVisible{true};
-
 	// line
 	XYCurve::LineType lineType{XYCurve::LineType::Line};
 	bool lineSkipGaps{false};
@@ -109,19 +106,9 @@ public:
 	Background* background{nullptr};
 
 	// error bars
-	XYCurve::ErrorType xErrorType{XYCurve::ErrorType::NoError};
-	const AbstractColumn* xErrorPlusColumn{nullptr};
-	QString xErrorPlusColumnPath;
-	const AbstractColumn* xErrorMinusColumn{nullptr};
-	QString xErrorMinusColumnPath;
-
-	XYCurve::ErrorType yErrorType{XYCurve::ErrorType::NoError};
-	const AbstractColumn* yErrorPlusColumn{nullptr};
-	QString yErrorPlusColumnPath;
-	const AbstractColumn* yErrorMinusColumn{nullptr};
-	QString yErrorMinusColumnPath;
-
-	Line* errorBarsLine{nullptr};
+	ErrorBar* xErrorBar{nullptr};
+	ErrorBar* yErrorBar{nullptr};
+	ErrorBarStyle* errorBarStyle{nullptr};
 
 	XYCurve* const q;
 	friend class XYCurve;

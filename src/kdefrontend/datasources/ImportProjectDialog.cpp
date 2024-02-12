@@ -30,8 +30,10 @@
 #include <QDir>
 #include <QElapsedTimer>
 #include <QFileDialog>
+#include <QFileSystemModel>
 #include <QInputDialog>
 #include <QProgressBar>
+#include <QSortFilterProxyModel>
 #include <QStatusBar>
 #include <QWindow>
 
@@ -211,6 +213,9 @@ ImportProjectDialog::~ImportProjectDialog() {
 
 	conf.writeEntry(file, m_cbFileName->currentText());
 	conf.writeXdgListEntry(files, m_cbFileName->urls());
+
+	delete ui.tvPreview->model();
+	delete m_projectParser;
 }
 
 void ImportProjectDialog::setCurrentFolder(const Folder* folder) {
@@ -218,7 +223,7 @@ void ImportProjectDialog::setCurrentFolder(const Folder* folder) {
 }
 
 void ImportProjectDialog::importTo(QStatusBar* statusBar) const {
-	DEBUG("ImportProjectDialog::importTo()");
+	DEBUG(Q_FUNC_INFO)
 
 	// determine the selected objects, convert the model indexes to string pathes
 	const QModelIndexList& indexes = ui.tvPreview->selectionModel()->selectedIndexes();
@@ -334,6 +339,7 @@ void ImportProjectDialog::refreshPreview() {
 	}
 #endif
 
+	delete ui.tvPreview->model();
 	ui.tvPreview->setModel(m_projectParser->model());
 	connect(ui.tvPreview->selectionModel(), &QItemSelectionModel::selectionChanged, this, &ImportProjectDialog::selectionChanged);
 
@@ -403,6 +409,19 @@ void ImportProjectDialog::selectionChanged(const QItemSelection& selected, const
 		m_buttonBox->button(QDialogButtonBox::Ok)->setToolTip(i18n("Select object(s) to be imported."));
 }
 
+class OPJFilterProxyModel : public QSortFilterProxyModel {
+protected:
+	virtual bool filterAcceptsRow(int source_row, const QModelIndex& source_parent) const override;
+};
+
+bool OPJFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const {
+	QModelIndex index0 = sourceModel()->index(sourceRow, 0, sourceParent);
+	QFileSystemModel* fileModel = qobject_cast<QFileSystemModel*>(sourceModel());
+	return fileModel->fileName(index0).indexOf(QStringLiteral(".opju")) < 0;
+	// uncomment to call the default implementation
+	// return QSortFilterProxyModel::filterAcceptsRow(sourceRow, sourceParent);
+}
+
 /*!
 	opens a file dialog and lets the user select the project file.
 */
@@ -421,17 +440,30 @@ void ImportProjectDialog::selectFile() {
 		break;
 	case ProjectType::Origin:
 #ifdef HAVE_LIBORIGIN
-		title = i18nc("@title:window", "Open Origin Project");
-		lastDirConfEntryName = QStringLiteral("LastImportOriginProjecttDir");
-		supportedFormats = i18n("Origin Projects (%1)", OriginProjectParser::supportedExtensions());
+		title = i18nc("@title:window", "Open Origin OPJ Project");
+		lastDirConfEntryName = QStringLiteral("LastImportOriginProjectDir");
+		supportedFormats = i18n("Origin OPJ Projects (%1)", OriginProjectParser::supportedExtensions());
 #endif
 		break;
 	}
 
 	lastDir = conf.readEntry(lastDirConfEntryName, "");
-	QString path = QFileDialog::getOpenFileName(this, title, lastDir, supportedFormats);
+
+	QString path;
+	if (m_projectType == ProjectType::Origin) { // need custom filter to avoid matching .opju files
+		QFileDialog dialog(this, title, lastDir);
+		dialog.setOption(QFileDialog::DontUseNativeDialog);
+		dialog.setProxyModel(new OPJFilterProxyModel);
+		dialog.setNameFilter(supportedFormats);
+		dialog.setFileMode(QFileDialog::ExistingFile);
+		if (dialog.exec())
+			path = dialog.selectedFiles().first();
+	} else {
+		QString path = QFileDialog::getOpenFileName(this, title, lastDir, supportedFormats);
+	}
+
 	if (path.isEmpty())
-		return; // cancel was clicked in the file-dialog
+		return; // cancel was clicked in the file dialog
 
 	int pos = path.lastIndexOf(QLatin1Char('/'));
 	if (pos != -1) {
@@ -464,6 +496,7 @@ void ImportProjectDialog::fileNameChanged(const QString& name) {
 	if (!fileExists) {
 		// file doesn't exist -> delete the content preview that is still potentially
 		// available from the previously selected file
+		delete ui.tvPreview->model();
 		ui.tvPreview->setModel(nullptr);
 		m_buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
 		return;

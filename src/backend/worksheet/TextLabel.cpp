@@ -288,18 +288,27 @@ void TextLabel::setText(const TextWrapper& textWrapper) {
 				tw.text = te.toHtml();
 				// DEBUG("\nTW TEXT = " << STDSTRING(tw.text) << std::endl)
 				exec(new TextLabelSetTextCmd(d, tw, ki18n("%1: set label text")));
-			} else {
+			} else { // the existing text is being modified
+				QUndoCommand* parent = nullptr;
+				TextLabelSetTextCmd* command = nullptr;
 				QTextEdit te;
 				te.setHtml(textWrapper.text);
 				te.selectAll();
-				const auto& bgColor = te.textBackgroundColor();
-				QUndoCommand* parent = nullptr;
-				if (bgColor != d->backgroundColor) {
-					parent = new QUndoCommand(ki18n("%1: set label text").subs(name()).toString());
-					new TextLabelSetTeXBackgroundColorCmd(d, bgColor, ki18n("%1: set background color"), parent);
+				if (textWrapper.text.indexOf(QStringLiteral("background-color:#")) != -1) {
+					const auto& bgColor = te.textBackgroundColor();
+					if (bgColor != d->backgroundColor) {
+						parent = new QUndoCommand(ki18n("%1: set label text").subs(name()).toString());
+						new TextLabelSetTeXBackgroundColorCmd(d, bgColor, ki18n("%1: set background color"), parent);
+					}
+					command = new TextLabelSetTextCmd(d, textWrapper, ki18n("%1: set label text"), parent);
+				} else {
+					// no color available yet, plain text is being provided -> set the color from member variable
+					te.setTextBackgroundColor(d->backgroundColor);
+					TextWrapper tw = textWrapper;
+					tw.text = te.toHtml();
+					command = new TextLabelSetTextCmd(d, tw, ki18n("%1: set label text"), parent);
 				}
 
-				auto* command = new TextLabelSetTextCmd(d, textWrapper, ki18n("%1: set label text"), parent);
 				if (!parent)
 					exec(command);
 				else
@@ -1184,7 +1193,7 @@ void TextLabel::loadThemeConfig(const KConfig& config) {
 	KConfigGroup group = config.group(QStringLiteral("Label"));
 	// TODO: dark mode support?
 	d->fontColor = group.readEntry(QStringLiteral("FontColor"), QColor(Qt::black)); // used when it's latex text
-	d->backgroundColor = group.readEntry(QStringLiteral("BackgroundColor"), QColor(Qt::white)); // used when it's latex text
+	d->backgroundColor = group.readEntry(QStringLiteral("BackgroundColor"), QColor(Qt::transparent)); // used when it's latex text
 	if (d->textWrapper.mode == TextLabel::Mode::Text && !d->textWrapper.text.isEmpty()) {
 		// To set the color in a html text, a QTextEdit must be used, QTextDocument is not enough
 		QTextEdit te;

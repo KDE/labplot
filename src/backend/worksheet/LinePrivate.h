@@ -30,11 +30,6 @@ public:
 	bool histogramLineTypeAvailable{false};
 	Histogram::LineType histogramLineType{Histogram::Bars};
 
-	// error bars specific parameters
-	bool errorBarsTypeAvailable{false};
-	XYCurve::ErrorBarsType errorBarsType{XYCurve::ErrorBarsType::Simple};
-	double errorBarsCapSize{1.};
-
 	XYCurve::DropLineType dropLineType{XYCurve::DropLineType::NoDropLine};
 
 	// common parameters

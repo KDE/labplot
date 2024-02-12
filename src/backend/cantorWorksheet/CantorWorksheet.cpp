@@ -309,6 +309,9 @@ QWidget* CantorWorksheet::view() const {
 		m_view = new CantorWorksheetView(const_cast<CantorWorksheet*>(this));
 		m_view->setBaseSize(1500, 1500);
 		m_partView = m_view;
+		connect(this, &CantorWorksheet::viewAboutToBeDeleted, [this]() {
+			m_view = nullptr;
+		});
 		// 	connect(m_view, SIGNAL(statusInfo(QString)), this, SIGNAL(statusInfo(QString)));
 
 		// set the current path in the session to the path of the project file

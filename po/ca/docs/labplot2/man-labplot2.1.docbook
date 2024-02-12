@@ -76,7 +76,7 @@
 ><title
 >Opcions del LabPlot</title>
 <para
->Per obtenir un resum complet de les opcions genèriques, executeu <userinput
+>Per a obtenir un resum complet de les opcions genèriques, executeu <userinput
 ><command
 >labplot2</command
 > <parameter

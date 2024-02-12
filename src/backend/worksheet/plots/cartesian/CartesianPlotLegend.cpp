@@ -27,8 +27,11 @@
 #include "backend/worksheet/plots/cartesian/BoxPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegendPrivate.h"
+#include "backend/worksheet/plots/cartesian/ErrorBar.h"
+#include "backend/worksheet/plots/cartesian/ErrorBarStyle.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
 #include "backend/worksheet/plots/cartesian/KDEPlot.h"
+#include "backend/worksheet/plots/cartesian/LollipopPlot.h"
 #include "backend/worksheet/plots/cartesian/QQPlot.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
@@ -339,14 +342,10 @@ void CartesianPlotLegendPrivate::retransform() {
 
 	const auto& plots = this->plot->children<Plot>();
 	for (auto* plot : plots) {
-		if (!plot->isVisible())
+		if (!plot->isVisible() || !plot->legendVisible())
 			continue;
 
-		// TODO: implement the property "legendVisible" for all plot types and make use of it here
-		auto* curve = dynamic_cast<XYCurve*>(plot);
-		if (curve && !curve->legendVisible())
-			return;
-
+		// add the names for plot types which can show multiple datasets
 		auto* boxPlot = dynamic_cast<BoxPlot*>(plot);
 		if (boxPlot) {
 			m_plots << boxPlot;
@@ -361,6 +360,16 @@ void CartesianPlotLegendPrivate::retransform() {
 		if (barPlot) {
 			m_plots << barPlot;
 			const auto& columns = barPlot->dataColumns();
+			for (auto* column : columns)
+				m_names << column->name();
+
+			continue;
+		}
+
+		auto* lollipopPlot = dynamic_cast<LollipopPlot*>(plot);
+		if (lollipopPlot) {
+			m_plots << lollipopPlot;
+			const auto& columns = lollipopPlot->dataColumns();
 			for (auto* column : columns)
 				m_names << column->name();
 
@@ -383,14 +392,10 @@ void CartesianPlotLegendPrivate::retransform() {
 
 	// determine the width of the legend
 	QFontMetrics fm(labelFont);
-	float w;
-	float h = fm.ascent();
 
-	float legendWidth = 0;
-
-	int index;
+	qreal legendWidth = 0;
 	for (int c = 0; c < columnCount; ++c) {
-		float maxTextWidth = 0;
+		int maxTextWidth = 0, index;
 		for (int r = 0; r < rowCount; ++r) {
 			if (labelColumnMajor)
 				index = c * rowCount + r;
@@ -400,7 +405,7 @@ void CartesianPlotLegendPrivate::retransform() {
 			if (index >= namesCount)
 				break;
 
-			w = fm.boundingRect(m_names.at(index)).width();
+			int w = fm.boundingRect(m_names.at(index)).width();
 			if (w > maxTextWidth)
 				maxTextWidth = w;
 		}
@@ -410,11 +415,11 @@ void CartesianPlotLegendPrivate::retransform() {
 
 	legendWidth += layoutLeftMargin + layoutRightMargin; // margins
 	legendWidth += columnCount * (lineSymbolWidth + layoutHorizontalSpacing); // width of the columns without the text
-	legendWidth += (columnCount - 1) * 2 * layoutHorizontalSpacing; // spacings between the columns
+	legendWidth += (columnCount - 1) * 2. * layoutHorizontalSpacing; // spacings between the columns
 
 	// add title width if title is available
 	if (title->isVisible() && !title->text().text.isEmpty()) {
-		float titleWidth;
+		qreal titleWidth;
 		titleWidth = title->graphicsItem()->boundingRect().width();
 
 		if (titleWidth > legendWidth)
@@ -422,14 +427,15 @@ void CartesianPlotLegendPrivate::retransform() {
 	}
 
 	// determine the height of the legend
-	float legendHeight = layoutTopMargin + layoutBottomMargin; // margins
+	int h = fm.ascent();
+	qreal legendHeight = layoutTopMargin + layoutBottomMargin; // margins
 	legendHeight += rowCount * h; // height of the rows
 	legendHeight += (rowCount - 1) * layoutVerticalSpacing; // spacing between the rows
 	if (title->isVisible() && !title->text().text.isEmpty())
 		legendHeight += title->graphicsItem()->boundingRect().height(); // legend titl
 
-	m_boundingRectangle.setX(-legendWidth / 2);
-	m_boundingRectangle.setY(-legendHeight / 2);
+	m_boundingRectangle.setX(-legendWidth / 2.);
+	m_boundingRectangle.setY(-legendHeight / 2.);
 	m_boundingRectangle.setWidth(legendWidth);
 	m_boundingRectangle.setHeight(legendHeight);
 
@@ -562,14 +568,15 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 
 	painter->save();
 
-	int col = 0;
-	int row = 0;
+	int col = 0, row = 0;
 	for (auto* plot : m_plots) {
 		// process the curves
+		// TODO: move the logic below into the plot classes
 		const auto* curve = dynamic_cast<const XYCurve*>(plot);
 		const auto* hist = dynamic_cast<const Histogram*>(plot);
 		const auto* boxPlot = dynamic_cast<const BoxPlot*>(plot);
 		const auto* barPlot = dynamic_cast<const BarPlot*>(plot);
+		const auto* lollipopPlot = dynamic_cast<const LollipopPlot*>(plot);
 		const auto* kdePlot = dynamic_cast<const KDEPlot*>(plot);
 		const auto* qqPlot = dynamic_cast<const QQPlot*>(plot);
 
@@ -582,28 +589,31 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 			}
 
 			// error bars
-			if ((curve->xErrorType() != XYCurve::ErrorType::NoError && curve->xErrorPlusColumn())
-				|| (curve->yErrorType() != XYCurve::ErrorType::NoError && curve->yErrorPlusColumn())) {
-				painter->setOpacity(curve->errorBarsLine()->opacity());
-				painter->setPen(curve->errorBarsLine()->pen());
+			const auto xErrorType = curve->xErrorBar()->type();
+			const auto yErrorType = curve->yErrorBar()->type();
+			const auto* errorBarsLine = curve->errorBarStyle()->line();
+			if ((xErrorType != ErrorBar::Type::NoError && curve->xErrorBar()->plusColumn())
+				|| (yErrorType != ErrorBar::Type::NoError && curve->yErrorBar()->plusColumn())) {
+				painter->setOpacity(errorBarsLine->opacity());
+				painter->setPen(errorBarsLine->pen());
 
 				// curve's error bars for x
 				float errorBarsSize = Worksheet::convertToSceneUnits(10, Worksheet::Unit::Point);
 				if (curve->symbol()->style() != Symbol::Style::NoSymbols && errorBarsSize < curve->symbol()->size() * 1.4)
 					errorBarsSize = curve->symbol()->size() * 1.4;
 
-				switch (curve->errorBarsLine()->errorBarsType()) {
-				case XYCurve::ErrorBarsType::Simple:
+				switch (curve->errorBarStyle()->type()) {
+				case ErrorBarStyle::Type::Simple:
 					// horiz. line
-					if (curve->xErrorType() != XYCurve::ErrorType::NoError)
+					if (xErrorType != ErrorBar::Type::NoError)
 						painter->drawLine(lineSymbolWidth / 2 - errorBarsSize / 2, h / 2, lineSymbolWidth / 2 + errorBarsSize / 2, h / 2);
 					// vert. line
-					if (curve->yErrorType() != XYCurve::ErrorType::NoError)
+					if (yErrorType != ErrorBar::Type::NoError)
 						painter->drawLine(lineSymbolWidth / 2, h / 2 - errorBarsSize / 2, lineSymbolWidth / 2, h / 2 + errorBarsSize / 2);
 					break;
-				case XYCurve::ErrorBarsType::WithEnds:
+				case ErrorBarStyle::Type::WithEnds:
 					// horiz. line
-					if (curve->xErrorType() != XYCurve::ErrorType::NoError) {
+					if (xErrorType != ErrorBar::Type::NoError) {
 						painter->drawLine(lineSymbolWidth / 2 - errorBarsSize / 2, h / 2, lineSymbolWidth / 2 + errorBarsSize / 2, h / 2);
 
 						// caps for the horiz. line
@@ -618,7 +628,7 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 					}
 
 					// vert. line
-					if (curve->yErrorType() != XYCurve::ErrorType::NoError) {
+					if (yErrorType != ErrorBar::Type::NoError) {
 						painter->drawLine(lineSymbolWidth / 2, h / 2 - errorBarsSize / 2, lineSymbolWidth / 2, h / 2 + errorBarsSize / 2);
 
 						// caps for the vert. line
@@ -642,7 +652,7 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 				painter->setBrush(symbol->brush());
 				painter->setPen(symbol->pen());
 
-				QPainterPath path = Symbol::stylePath(symbol->style());
+				auto path = Symbol::stylePath(symbol->style());
 				QTransform trafo;
 				trafo.scale(symbol->size(), symbol->size());
 				path = trafo.map(path);
@@ -726,7 +736,7 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 				if (!translatePainter(painter, row, col, h))
 					break;
 			}
-		} else if (barPlot) { // draw a legend item for every dataset bar in the bar plot
+		} else if (barPlot) { // draw a legend item for every dataset in the bar plot
 			const auto& columns = barPlot->dataColumns();
 			int index = 0;
 			for (auto* column : columns) {
@@ -745,6 +755,48 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 				painter->translate(QPointF(lineSymbolWidth / 2, h / 2));
 				painter->drawRect(QRectF(-h * 0.25, -h / 2, h * 0.5, h));
 				painter->translate(-QPointF(lineSymbolWidth / 2, h / 2));
+
+				// draw the name text
+				painter->setPen(QPen(labelColor));
+				painter->setOpacity(1.0);
+				painter->drawText(QPoint(lineSymbolWidth + layoutHorizontalSpacing, h), column->name());
+				++index;
+				if (!translatePainter(painter, row, col, h))
+					break;
+			}
+		} else if (lollipopPlot) { // draw a legend item for every dataset in the lollipop plot
+			const auto& columns = lollipopPlot->dataColumns();
+			int index = 0;
+			for (auto* column : columns) {
+				// draw the line
+				auto* line = lollipopPlot->lineAt(index);
+				painter->setPen(line->pen());
+				painter->setOpacity(line->opacity());
+				painter->setBrush(Qt::NoBrush);
+				painter->drawLine(lineSymbolWidth / 2, h * 0.25, lineSymbolWidth / 2, h);
+
+				// draw the symbol
+				const auto* symbol = lollipopPlot->symbolAt(index);
+				if (symbol->style() != Symbol::Style::NoSymbols) {
+					painter->setOpacity(symbol->opacity());
+					painter->setBrush(symbol->brush());
+					painter->setPen(symbol->pen());
+
+					auto path = Symbol::stylePath(symbol->style());
+					QTransform trafo;
+					trafo.scale(symbol->size(), symbol->size());
+					path = trafo.map(path);
+
+					if (symbol->rotationAngle() != 0) {
+						trafo.reset();
+						trafo.rotate(symbol->rotationAngle());
+						path = trafo.map(path);
+					}
+
+					painter->translate(QPointF(lineSymbolWidth / 2, h * 0.25));
+					painter->drawPath(path);
+					painter->translate(-QPointF(lineSymbolWidth / 2, h * 0.25));
+				}
 
 				// draw the name text
 				painter->setPen(QPen(labelColor));
@@ -782,7 +834,7 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 				painter->setBrush(symbol->brush());
 				painter->setPen(symbol->pen());
 
-				QPainterPath path = Symbol::stylePath(symbol->style());
+				auto path = Symbol::stylePath(symbol->style());
 				QTransform trafo;
 				trafo.scale(symbol->size(), symbol->size());
 				path = trafo.map(path);
@@ -977,7 +1029,7 @@ bool CartesianPlotLegend::load(XmlStreamReader* reader, bool preview) {
 					reader->raiseMissingAttributeWarning(QStringLiteral("horizontalPosition"));
 				else {
 					const auto pos = (WorksheetElement::HorizontalPosition)str.toInt();
-					if (pos == WorksheetElement::HorizontalPosition::Custom)
+					if (pos == WorksheetElement::HorizontalPosition::Relative)
 						d->position.horizontalPosition = WorksheetElement::HorizontalPosition::Center;
 					else
 						d->position.horizontalPosition = pos;
@@ -988,7 +1040,7 @@ bool CartesianPlotLegend::load(XmlStreamReader* reader, bool preview) {
 					reader->raiseMissingAttributeWarning(QStringLiteral("verticalPosition"));
 				else {
 					const auto pos = (WorksheetElement::VerticalPosition)str.toInt();
-					if (pos == WorksheetElement::VerticalPosition::Custom)
+					if (pos == WorksheetElement::VerticalPosition::Relative)
 						d->position.verticalPosition = WorksheetElement::VerticalPosition::Center;
 					else
 						d->position.verticalPosition = pos;

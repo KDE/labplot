@@ -53,7 +53,7 @@ private:
 
 	void setModel();
 	void setModelIndexFromColumn(TreeViewComboBox*, const AbstractColumn*);
-	void updatePlotRanges() override;
+	void updatePlotRangeList() override;
 	void updateMajorTicksStartType(bool visible);
 	void initConnections();
 
@@ -223,7 +223,7 @@ private Q_SLOTS:
 Q_SIGNALS:
 	void info(const QString&);
 
-	friend class AxisTest;
+	friend class AxisTest2;
 };
 
 #endif

@@ -27,7 +27,7 @@ SlidingPanel::SlidingPanel(const QRect& screenRect, Position position, QWidget* 
 	: QFrame(parent)
 	, m_screenRect(screenRect)
 	, m_pos(position)
-	, m_timeLine(new QTimeLine(600, this)) {
+	, m_timeLine(new QTimeLine(400, this)) {
 	setAttribute(Qt::WA_DeleteOnClose);
 	connect(m_timeLine, &QTimeLine::valueChanged, this, &SlidingPanel::movePanel);
 }
@@ -94,7 +94,7 @@ SlidingPanelTop::SlidingPanelTop(const QRect& screenRect, const QString& workshe
 	setLayout(hlayout);
 
 	QPalette pal(palette());
-	pal.setColor(QPalette::Window, Qt::gray);
+	pal.setColor(QPalette::Window, Qt::lightGray);
 	setAutoFillBackground(true);
 	setPalette(pal);
 
@@ -139,7 +139,7 @@ SlidingPanelBottom::SlidingPanelBottom(const QRect& screenRect, WorksheetView* v
 	layout->addWidget(m_toolBar);
 
 	QPalette pal(palette());
-	pal.setColor(QPalette::Window, Qt::gray);
+	pal.setColor(QPalette::Window, Qt::lightGray);
 	setAutoFillBackground(true);
 	setPalette(pal);
 

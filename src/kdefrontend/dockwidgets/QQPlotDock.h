@@ -32,7 +32,6 @@ public:
 private:
 	TreeViewComboBox* cbDataColumn;
 
-	void updatePlotRanges() override;
 	void load();
 	void loadConfig(KConfig&);
 
@@ -54,13 +53,11 @@ private Q_SLOTS:
 	// General-Tab
 	void dataColumnChanged(const QModelIndex&);
 	void distributionChanged(int);
-	void visibilityChanged(bool);
 
 	// SLOTs for changes triggered in QQPlot
 	// General-Tab
 	void plotDataColumnChanged(const AbstractColumn*);
 	void plotDistributionChanged(nsl_sf_stats_distribution);
-	void plotVisibilityChanged(bool);
 
 	// load and save
 	void loadConfigFromTemplate(KConfig&);

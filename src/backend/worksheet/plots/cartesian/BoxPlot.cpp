@@ -190,7 +190,6 @@ void BoxPlot::init() {
 	Returns an icon to be used in the project explorer.
 */
 QIcon BoxPlot::icon() const {
-	// 	return QIcon::fromTheme(QLatin1String("draw-line"));
 	return BoxPlot::staticIcon();
 }
 
@@ -1738,6 +1737,7 @@ void BoxPlot::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("xMax"), QString::number(d->xMax));
 	writer->writeAttribute(QStringLiteral("yMin"), QString::number(d->yMin));
 	writer->writeAttribute(QStringLiteral("yMax"), QString::number(d->yMax));
+	writer->writeAttribute(QStringLiteral("legendVisible"), QString::number(d->legendVisible));
 	writer->writeAttribute(QStringLiteral("visible"), QString::number(d->isVisible()));
 	for (auto* column : d->dataColumns) {
 		writer->writeStartElement(QStringLiteral("column"));
@@ -1826,6 +1826,7 @@ bool BoxPlot::load(XmlStreamReader* reader, bool preview) {
 			READ_DOUBLE_VALUE("xMax", xMax);
 			READ_DOUBLE_VALUE("yMin", yMin);
 			READ_DOUBLE_VALUE("yMax", yMax);
+			READ_INT_VALUE("legendVisible", legendVisible, bool);
 
 			str = attribs.value(QStringLiteral("visible")).toString();
 			if (str.isEmpty())

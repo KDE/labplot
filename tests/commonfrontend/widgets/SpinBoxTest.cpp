@@ -1,14 +1,14 @@
 /*
-	File                 : WidgetsTest.cpp
+	File                 : SpinBoxTest.cpp
 	Project              : LabPlot
-	Description          : Tests for widgets
+	Description          : Tests for spinbox widgets
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2022 Martin Marmsoler <martin.marmsoler@gmail.com>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-#include "WidgetsTest.h"
+#include "SpinBoxTest.h"
 #include "backend/core/Project.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
@@ -19,7 +19,7 @@
 #include <QLineEdit>
 #include <QLocale>
 
-void WidgetsTest::numberSpinBoxProperties() {
+void SpinBoxTest::numberSpinBoxProperties() {
 	{
 		NumberSpinBox sb;
 		NumberSpinBox::NumberProperties p;
@@ -278,7 +278,7 @@ void WidgetsTest::numberSpinBoxProperties() {
 	}
 }
 
-void WidgetsTest::numberSpinBoxCreateStringNumber() {
+void SpinBoxTest::numberSpinBoxCreateStringNumber() {
 	{
 		NumberSpinBox sb;
 		NumberSpinBox::NumberProperties p;
@@ -407,7 +407,7 @@ void WidgetsTest::numberSpinBoxCreateStringNumber() {
 	}
 }
 
-void WidgetsTest::numberSpinBoxChangingValueKeyPress() {
+void SpinBoxTest::numberSpinBoxChangingValueKeyPress() {
 	{
 		NumberSpinBox sb;
 		sb.lineEdit()->setText(QStringLiteral("3"));
@@ -616,7 +616,7 @@ void WidgetsTest::numberSpinBoxChangingValueKeyPress() {
 	}
 }
 
-void WidgetsTest::numberSpinBoxLimit() {
+void SpinBoxTest::numberSpinBoxLimit() {
 	NumberSpinBox sb(5);
 	sb.setMaximum(7);
 	sb.setMinimum(3);
@@ -663,7 +663,7 @@ void WidgetsTest::numberSpinBoxLimit() {
 	VALUES_EQUAL(sb.value(), 3.);
 }
 
-void WidgetsTest::numberSpinBoxPrefixSuffix() {
+void SpinBoxTest::numberSpinBoxPrefixSuffix() {
 	NumberSpinBox sb(5.01);
 	sb.setMaximum(7);
 	sb.setMinimum(3);
@@ -689,7 +689,7 @@ void WidgetsTest::numberSpinBoxPrefixSuffix() {
 	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("Prefix 5.02 Suffix"));
 }
 
-void WidgetsTest::numberSpinBoxSuffixFrontToBackSelection() {
+void SpinBoxTest::numberSpinBoxSuffixFrontToBackSelection() {
 	// Select from front to back
 	NumberSpinBox sb;
 	sb.setSuffix(QStringLiteral(" cm")); // whitespace is important!
@@ -711,7 +711,7 @@ void WidgetsTest::numberSpinBoxSuffixFrontToBackSelection() {
 	QCOMPARE(counter, 1);
 }
 
-void WidgetsTest::numberSpinBoxSuffixBackToFrontSelection() {
+void SpinBoxTest::numberSpinBoxSuffixBackToFrontSelection() {
 	// Select from back to front
 	NumberSpinBox sb;
 	sb.setSuffix(QStringLiteral(" cm")); // whitespace is important!
@@ -733,7 +733,7 @@ void WidgetsTest::numberSpinBoxSuffixBackToFrontSelection() {
 	QCOMPARE(counter, 1);
 }
 
-void WidgetsTest::numberSpinBoxSuffixSetCursor() {
+void SpinBoxTest::numberSpinBoxSuffixSetCursor() {
 	// Just set cursor into suffix
 	NumberSpinBox sb;
 	sb.setSuffix(QStringLiteral(" cm")); // whitespace is important!
@@ -755,7 +755,7 @@ void WidgetsTest::numberSpinBoxSuffixSetCursor() {
 	QCOMPARE(counter, 1);
 }
 
-void WidgetsTest::numberSpinBoxPrefixFrontToBackSelection() {
+void SpinBoxTest::numberSpinBoxPrefixFrontToBackSelection() {
 	// from front to back
 	NumberSpinBox sb;
 	sb.setPrefix(QStringLiteral("prefix ")); // whitespace is important!
@@ -770,7 +770,7 @@ void WidgetsTest::numberSpinBoxPrefixFrontToBackSelection() {
 	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("prefix 1"));
 }
 
-void WidgetsTest::numberSpinBoxPrefixBackToFrontSelection() {
+void SpinBoxTest::numberSpinBoxPrefixBackToFrontSelection() {
 	// from back to front
 	NumberSpinBox sb;
 	sb.setPrefix(QStringLiteral("prefix ")); // whitespace is important!
@@ -785,7 +785,7 @@ void WidgetsTest::numberSpinBoxPrefixBackToFrontSelection() {
 	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("prefix 1"));
 }
 
-void WidgetsTest::numberSpinBoxPrefixSetCursorPosition() {
+void SpinBoxTest::numberSpinBoxPrefixSetCursorPosition() {
 	// set cursor
 	NumberSpinBox sb;
 	sb.setPrefix(QStringLiteral("prefix ")); // whitespace is important!
@@ -801,7 +801,7 @@ void WidgetsTest::numberSpinBoxPrefixSetCursorPosition() {
 	// QCOMPARE(sb.lineEdit()->text(), QStringLiteral("prefix 15"));
 }
 
-void WidgetsTest::numberSpinBoxEnterNumber() {
+void SpinBoxTest::numberSpinBoxEnterNumber() {
 	NumberSpinBox sb;
 	sb.setDecimals(0);
 	sb.setValue(5);
@@ -903,7 +903,7 @@ void WidgetsTest::numberSpinBoxEnterNumber() {
 }
 
 // Testing feedback feature
-void WidgetsTest::numberSpinBoxFeedback() {
+void SpinBoxTest::numberSpinBoxFeedback() {
 	NumberSpinBox sb(5);
 	sb.setFeedback(true);
 
@@ -951,7 +951,7 @@ void WidgetsTest::numberSpinBoxFeedback() {
 
 // set value called directly when valueChanged() is called. This can happen if the other side directly sets another
 // value, because the received value is invalid.
-void WidgetsTest::numberSpinBoxFeedback2() {
+void SpinBoxTest::numberSpinBoxFeedback2() {
 	NumberSpinBox sb(5);
 	sb.setFeedback(true);
 
@@ -972,7 +972,7 @@ void WidgetsTest::numberSpinBoxFeedback2() {
 	QCOMPARE(sb.toolTip(), i18n("Invalid value entered. Valid value: %1", 5));
 }
 
-void WidgetsTest::numberSpinBoxFeedbackCursorPosition() {
+void SpinBoxTest::numberSpinBoxFeedbackCursorPosition() {
 	NumberSpinBox sb(5.11);
 	sb.setFeedback(true);
 
@@ -1001,7 +1001,7 @@ void WidgetsTest::numberSpinBoxFeedbackCursorPosition() {
 	QCOMPARE(sb.toolTip(), QStringLiteral(""));
 }
 
-void WidgetsTest::numberSpinBoxFeedbackCursorPosition2() {
+void SpinBoxTest::numberSpinBoxFeedbackCursorPosition2() {
 	Project project;
 	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	QVERIFY(ws != nullptr);
@@ -1042,9 +1042,9 @@ void WidgetsTest::numberSpinBoxFeedbackCursorPosition2() {
 	QCOMPARE(d.ui.sbPaddingHorizontal->lineEdit()->cursorPosition(), 3);
 }
 
-// \brief WidgetsTest::numberSpinBoxDecimals
+// \brief SpinBoxTest::numberSpinBoxDecimals
 // Check that application shows the correct value, even decimals is set to zero
-void WidgetsTest::numberSpinBoxDecimals2() {
+void SpinBoxTest::numberSpinBoxDecimals2() {
 	NumberSpinBox sb;
 	sb.setMinimum(-10);
 	sb.setDecimals(0);
@@ -1052,7 +1052,7 @@ void WidgetsTest::numberSpinBoxDecimals2() {
 	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("-1"));
 }
 
-void WidgetsTest::numberSpinBoxScrollingNegToPos() {
+void SpinBoxTest::numberSpinBoxScrollingNegToPos() {
 	NumberSpinBox sb;
 	sb.setMinimum(-10);
 	sb.setValue(-1.01);
@@ -1072,7 +1072,7 @@ void WidgetsTest::numberSpinBoxScrollingNegToPos() {
 	QCOMPARE(sb.lineEdit()->cursorPosition(), 2); // cursor should not be at position of the minus but behind the 1
 }
 
-void WidgetsTest::numberSpinBoxScrollingNegToPos2() {
+void SpinBoxTest::numberSpinBoxScrollingNegToPos2() {
 	NumberSpinBox sb;
 	sb.setMinimum(-10);
 	sb.setValue(0.13);
@@ -1097,7 +1097,7 @@ void WidgetsTest::numberSpinBoxScrollingNegToPos2() {
 	QCOMPARE(sb.lineEdit()->cursorPosition(), 1);
 }
 
-void WidgetsTest::numberSpinBoxScrollingNegativeValues() {
+void SpinBoxTest::numberSpinBoxScrollingNegativeValues() {
 	NumberSpinBox sb;
 	sb.setMinimum(-20);
 	sb.setValue(-9.81);
@@ -1116,7 +1116,7 @@ void WidgetsTest::numberSpinBoxScrollingNegativeValues() {
 	QCOMPARE(sb.lineEdit()->cursorPosition(), 3);
 }
 
-void WidgetsTest::numberSpinBoxMinimumFeedback() {
+void SpinBoxTest::numberSpinBoxMinimumFeedback() {
 	// Limit to min/max when stepping in the spinbox
 	// instead of raising an error
 	NumberSpinBox sb;
@@ -1162,11 +1162,11 @@ void WidgetsTest::numberSpinBoxMinimumFeedback() {
 	QCOMPARE(sb.toolTip(), QString());
 }
 
-// \brief WidgetsTest::numberSpinBoxDecimalsMinMax
+// \brief SpinBoxTest::numberSpinBoxDecimalsMinMax
 // In the default implementation of QDoubleSpinbox the maximum and
 // minimums are round to the decimals. The numberspinbox should not do
 // this
-void WidgetsTest::numberSpinBoxDecimalsMinMax() {
+void SpinBoxTest::numberSpinBoxDecimalsMinMax() {
 	NumberSpinBox sb;
 	sb.setDecimals(2);
 	sb.setMaximum(1.289343892e-10);
@@ -1176,24 +1176,26 @@ void WidgetsTest::numberSpinBoxDecimalsMinMax() {
 	QCOMPARE(sb.minimum(), 1.289343892e-15); // not rounded!
 }
 
-void WidgetsTest::thousandSeparator() {
-	NumberSpinBox sb;
-	sb.setLocale(QLocale(QLocale::German));
-	QCOMPARE(sb.locale().decimalPoint(), QLatin1Char(','));
-	QCOMPARE(sb.locale().groupSeparator(), QLatin1Char('.'));
+void SpinBoxTest::thousandSeparator() {
+	{
+		NumberSpinBox sb;
+		sb.setLocale(QLocale(QLocale::German));
+		QCOMPARE(sb.locale().decimalPoint(), QLatin1Char(','));
+		QCOMPARE(sb.locale().groupSeparator(), QLatin1Char('.'));
 
-	sb.setValue(50000);
-	QCOMPARE(sb.text(), QStringLiteral("50.000"));
+		sb.setValue(50000);
+		QCOMPARE(sb.text(), QStringLiteral("50.000"));
 
-	sb.lineEdit()->setCursorPosition(0);
-	QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_1, Qt::KeyboardModifier::NoModifier, QStringLiteral("1"));
-	sb.keyPressEvent(&event);
+		sb.lineEdit()->setCursorPosition(0);
+		QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_1, Qt::KeyboardModifier::NoModifier, QStringLiteral("1"));
+		sb.keyPressEvent(&event);
 
-	QCOMPARE(sb.value(), 150000);
-	QCOMPARE(sb.text(), QStringLiteral("150.000"));
+		QCOMPARE(sb.value(), 150000);
+		QCOMPARE(sb.text(), QStringLiteral("150.000"));
+	}
 }
 
-void WidgetsTest::thousandSeparatorNegative() {
+void SpinBoxTest::thousandSeparatorNegative() {
 	NumberSpinBox sb;
 	sb.setLocale(QLocale(QLocale::German));
 	QCOMPARE(sb.locale().decimalPoint(), QLatin1Char(','));
@@ -1210,7 +1212,7 @@ void WidgetsTest::thousandSeparatorNegative() {
 	QCOMPARE(sb.text(), QStringLiteral("50.000,1"));
 }
 
-void WidgetsTest::thousandSeparatorScrolling() {
+void SpinBoxTest::thousandSeparatorScrolling() {
 	NumberSpinBox sb;
 	sb.setLocale(QLocale(QLocale::German));
 	QCOMPARE(sb.locale().decimalPoint(), QLatin1Char(','));
@@ -1227,7 +1229,7 @@ void WidgetsTest::thousandSeparatorScrolling() {
 	QCOMPARE(sb.text(), QStringLiteral("100.000,1"));
 }
 
-void WidgetsTest::thousandSeparatorScrolling2() {
+void SpinBoxTest::thousandSeparatorScrolling2() {
 	NumberSpinBox sb;
 	sb.setLocale(QLocale(QLocale::German));
 	QCOMPARE(sb.locale().decimalPoint(), QLatin1Char(','));
@@ -1244,7 +1246,7 @@ void WidgetsTest::thousandSeparatorScrolling2() {
 	QCOMPARE(sb.text(), QStringLiteral("25.000,1"));
 }
 
-void WidgetsTest::thousandSeparatorScrollingSeparatorPosition() {
+void SpinBoxTest::thousandSeparatorScrollingSeparatorPosition() {
 	QSKIP("Undecided what to do");
 	NumberSpinBox sb;
 	sb.setLocale(QLocale(QLocale::German));
@@ -1262,4 +1264,4 @@ void WidgetsTest::thousandSeparatorScrollingSeparatorPosition() {
 	QCOMPARE(sb.text(), QStringLiteral("50.000"));
 }
 
-QTEST_MAIN(WidgetsTest)
+QTEST_MAIN(SpinBoxTest)

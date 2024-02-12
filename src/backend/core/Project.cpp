@@ -19,6 +19,7 @@
 #include "backend/worksheet/plots/cartesian/BarPlot.h"
 #include "backend/worksheet/plots/cartesian/BoxPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "backend/worksheet/plots/cartesian/ErrorBar.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
 #include "backend/worksheet/plots/cartesian/KDEPlot.h"
 #include "backend/worksheet/plots/cartesian/LollipopPlot.h"
@@ -59,7 +60,7 @@ namespace {
 // the project version will compared with this.
 // if you make any compatibilty changes to the xmlfile
 // or the function in labplot, increase this number
-int buildXmlVersion = 10;
+int buildXmlVersion = 11;
 }
 
 /**
@@ -686,7 +687,7 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 					} else if (reader->name() == QLatin1String("child_aspect")) {
 						if (!readChildAspectElement(reader, preview))
 							return false;
-					} else if (!preview && reader->name() == QLatin1String("state")) {
+					} else if (reader->name() == QLatin1String("state")) {
 						// load the state of the views (visible, maximized/minimized/geometry)
 						// and the state of the project explorer (expanded items, currently selected item).
 						//"state" is read at the very end of XML, restore the pointers here so the current index
@@ -695,8 +696,9 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 						// otherwise curves don't have column pointers assigned and therefore calculations
 						// in the docks might be wrong
 						stateAttributeFound = true;
-						restorePointers(this, preview);
-						retransformElements(this);
+						restorePointers(this);
+						if (!preview)
+							retransformElements(this);
 						Q_EMIT requestLoadState(reader);
 					} else {
 						if (!preview)
@@ -711,10 +713,11 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 	} else // no start document
 		reader->raiseError(i18n("no valid XML document found"));
 
-	if (!preview && !stateAttributeFound) {
+	if (!stateAttributeFound) {
 		// No state attribute available, means no project explorer reacted on the signal
-		restorePointers(this, preview);
-		retransformElements(this);
+		restorePointers(this);
+		if (!preview)
+			retransformElements(this);
 	}
 
 	Q_EMIT loaded();
@@ -813,7 +816,7 @@ void Project::retransformElements(AbstractAspect* aspect) {
  * and when an aspect is being pasted. In both cases we deserialized from XML and need
  * to restore the pointers.
  */
-void Project::restorePointers(AbstractAspect* aspect, bool preview) {
+void Project::restorePointers(AbstractAspect* aspect) {
 	// wait until all columns are decoded from base64-encoded data
 	QThreadPool::globalInstance()->waitForDone();
 
@@ -864,10 +867,10 @@ void Project::restorePointers(AbstractAspect* aspect, bool preview) {
 			RESTORE_COLUMN_POINTER(curve, xColumn, XColumn);
 			RESTORE_COLUMN_POINTER(curve, yColumn, YColumn);
 			RESTORE_COLUMN_POINTER(curve, valuesColumn, ValuesColumn);
-			RESTORE_COLUMN_POINTER(curve, xErrorPlusColumn, XErrorPlusColumn);
-			RESTORE_COLUMN_POINTER(curve, xErrorMinusColumn, XErrorMinusColumn);
-			RESTORE_COLUMN_POINTER(curve, yErrorPlusColumn, YErrorPlusColumn);
-			RESTORE_COLUMN_POINTER(curve, yErrorMinusColumn, YErrorMinusColumn);
+			RESTORE_COLUMN_POINTER(curve->xErrorBar(), plusColumn, PlusColumn);
+			RESTORE_COLUMN_POINTER(curve->xErrorBar(), minusColumn, MinusColumn);
+			RESTORE_COLUMN_POINTER(curve->yErrorBar(), plusColumn, PlusColumn);
+			RESTORE_COLUMN_POINTER(curve->yErrorBar(), minusColumn, MinusColumn);
 		}
 
 		if (analysisCurve)
@@ -914,8 +917,8 @@ void Project::restorePointers(AbstractAspect* aspect, bool preview) {
 		RESTORE_COLUMN_POINTER(hist, dataColumn, DataColumn);
 		auto* value = hist->value();
 		RESTORE_COLUMN_POINTER(value, column, Column);
-		RESTORE_COLUMN_POINTER(hist, errorPlusColumn, ErrorPlusColumn);
-		RESTORE_COLUMN_POINTER(hist, errorMinusColumn, ErrorMinusColumn);
+		RESTORE_COLUMN_POINTER(hist->errorBar(), plusColumn, PlusColumn);
+		RESTORE_COLUMN_POINTER(hist->errorBar(), minusColumn, MinusColumn);
 	}
 
 	// QQ-plots
@@ -1113,9 +1116,6 @@ void Project::restorePointers(AbstractAspect* aspect, bool preview) {
 			}
 		}
 	}
-
-	if (preview)
-		return;
 }
 
 bool Project::readProjectAttributes(XmlStreamReader* reader) {

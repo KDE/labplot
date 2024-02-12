@@ -43,6 +43,7 @@
 #include "backend/worksheet/plots/cartesian/BoxPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
 #include "backend/worksheet/plots/cartesian/CustomPoint.h"
+#include "backend/worksheet/plots/cartesian/ErrorBar.h"
 #include "backend/worksheet/plots/cartesian/KDEPlot.h"
 #include "backend/worksheet/plots/cartesian/LollipopPlot.h"
 #include "backend/worksheet/plots/cartesian/QQPlot.h"
@@ -138,6 +139,7 @@ CartesianPlot::CartesianPlot(const QString& name, CartesianPlotPrivate* dd)
 CartesianPlot::~CartesianPlot() {
 	if (m_menusInitialized) {
 		delete m_addNewMenu;
+		delete dataAnalysisMenu;
 		delete themeMenu;
 	}
 
@@ -411,7 +413,7 @@ void CartesianPlot::initActions() {
 
 	// bar plots
 	addBarPlotAction = new QAction(QIcon::fromTheme(QStringLiteral("office-chart-bar")), i18n("Bar Plot"), this);
-	addLollipopPlotAction = new QAction(QIcon::fromTheme(QStringLiteral("office-chart-bar")), i18n("Lollipop Plot"), this);
+	addLollipopPlotAction = new QAction(LollipopPlot::staticIcon(), i18n("Lollipop Plot"), this);
 
 	// analysis curves, no icons yet
 	addDataReductionCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Data Reduction"), this);
@@ -587,21 +589,21 @@ void CartesianPlot::initMenus() {
 	m_addNewMenu->addAction(addCurveAction);
 	m_addNewMenu->addAction(addEquationCurveAction);
 
-	auto* addNewStatisticalPlotsMenu = new QMenu(i18n("Statistical Plots"));
+	auto* addNewStatisticalPlotsMenu = new QMenu(i18n("Statistical Plots"), m_addNewMenu);
 	addNewStatisticalPlotsMenu->addAction(addHistogramAction);
 	addNewStatisticalPlotsMenu->addAction(addBoxPlotAction);
 	addNewStatisticalPlotsMenu->addAction(addKDEPlotAction);
 	addNewStatisticalPlotsMenu->addAction(addQQPlotAction);
 	m_addNewMenu->addMenu(addNewStatisticalPlotsMenu);
 
-	auto* addNewBarPlotsMenu = new QMenu(i18n("Bar Plots"));
+	auto* addNewBarPlotsMenu = new QMenu(i18n("Bar Plots"), m_addNewMenu);
 	addNewBarPlotsMenu->addAction(addBarPlotAction);
 	addNewBarPlotsMenu->addAction(addLollipopPlotAction);
 	m_addNewMenu->addMenu(addNewBarPlotsMenu);
 
 	m_addNewMenu->addSeparator();
 
-	addNewAnalysisMenu = new QMenu(i18n("Analysis Curve"));
+	addNewAnalysisMenu = new QMenu(i18n("Analysis Curve"), m_addNewMenu);
 	addNewAnalysisMenu->addAction(addFitCurveAction);
 	addNewAnalysisMenu->addSeparator();
 	addNewAnalysisMenu->addAction(addDifferentiationCurveAction);
@@ -640,8 +642,10 @@ void CartesianPlot::initMenus() {
 	// 	dataManipulationMenu->addAction(addDataOperationAction);
 	// 	dataManipulationMenu->addAction(addDataReductionAction);
 
-	// Data fit menu
-	QMenu* dataFitMenu = new QMenu(i18n("Fit"));
+	// analysis menu
+	dataAnalysisMenu = new QMenu(i18n("Analysis"));
+
+	QMenu* dataFitMenu = new QMenu(i18n("Fit"), dataAnalysisMenu);
 	dataFitMenu->setIcon(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")));
 	dataFitMenu->addAction(addFitActions.at(0));
 	dataFitMenu->addAction(addFitActions.at(1));
@@ -657,10 +661,8 @@ void CartesianPlot::initMenus() {
 	dataFitMenu->addAction(addFitActions.at(9));
 	dataFitMenu->addSeparator();
 	dataFitMenu->addAction(addFitActions.at(10));
-
-	// analysis menu
-	dataAnalysisMenu = new QMenu(i18n("Analysis"));
 	dataAnalysisMenu->addMenu(dataFitMenu);
+
 	dataAnalysisMenu->addSeparator();
 	dataAnalysisMenu->addAction(addDifferentiationAction);
 	dataAnalysisMenu->addAction(addIntegrationAction);
@@ -1897,11 +1899,11 @@ void CartesianPlot::addFitCurve() {
 		curve->initStartValues(curCurve);
 
 		// fit with weights for y if the curve has error bars for y
-		if (curCurve->yErrorType() == XYCurve::ErrorType::Symmetric && curCurve->yErrorPlusColumn()) {
+		if (curCurve->yErrorBar()->type() == ErrorBar::Type::Symmetric && curCurve->yErrorBar()->plusColumn()) {
 			auto fitData = curve->fitData();
 			fitData.yWeightsType = nsl_fit_weight_instrumental;
 			curve->setFitData(fitData);
-			curve->setYErrorColumn(curCurve->yErrorPlusColumn());
+			curve->setYErrorColumn(curCurve->yErrorBar()->plusColumn());
 		}
 
 		curve->recalculate();
@@ -2116,6 +2118,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 	if (plot) {
 		connect(plot, &WorksheetElement::visibleChanged, this, &CartesianPlot::curveVisibilityChanged);
 		connect(plot, &WorksheetElement::aspectDescriptionChanged, this, &CartesianPlot::updateLegend);
+		connect(plot, &Plot::legendVisibleChanged, this, &CartesianPlot::updateLegend);
 		connect(plot, &Plot::appearanceChanged, this, &CartesianPlot::updateLegend);
 		connect(plot, &Plot::appearanceChanged, this, QOverload<>::of(&CartesianPlot::plotColorChanged)); // forward to Worksheet to update CursorDock
 
@@ -2151,13 +2154,13 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		connect(curve, &XYCurve::xDataChanged, [this, curve]() {
 			this->dataChanged(const_cast<XYCurve*>(curve), Dimension::X);
 		});
-		connect(curve, &XYCurve::xErrorTypeChanged, [this, curve]() {
+		connect(curve->xErrorBar(), &ErrorBar::typeChanged, [this, curve]() {
 			this->dataChanged(const_cast<XYCurve*>(curve), Dimension::X);
 		});
-		connect(curve, &XYCurve::xErrorPlusColumnChanged, [this, curve]() {
+		connect(curve->xErrorBar(), &ErrorBar::plusColumnChanged, [this, curve]() {
 			this->dataChanged(const_cast<XYCurve*>(curve), Dimension::X);
 		});
-		connect(curve, &XYCurve::xErrorMinusColumnChanged, [this, curve]() {
+		connect(curve->xErrorBar(), &ErrorBar::minusColumnChanged, [this, curve]() {
 			this->dataChanged(const_cast<XYCurve*>(curve), Dimension::X);
 		});
 
@@ -2169,19 +2172,18 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		connect(curve, &XYCurve::yDataChanged, [this, curve]() {
 			this->dataChanged(const_cast<XYCurve*>(curve), Dimension::Y);
 		});
-		connect(curve, &XYCurve::yErrorTypeChanged, [this, curve]() {
+		connect(curve->yErrorBar(), &ErrorBar::typeChanged, [this, curve]() {
 			this->dataChanged(const_cast<XYCurve*>(curve), Dimension::Y);
 		});
-		connect(curve, &XYCurve::yErrorPlusColumnChanged, [this, curve]() {
+		connect(curve->yErrorBar(), &ErrorBar::plusColumnChanged, [this, curve]() {
 			this->dataChanged(const_cast<XYCurve*>(curve), Dimension::Y);
 		});
-		connect(curve, &XYCurve::yErrorMinusColumnChanged, [this, curve]() {
+		connect(curve->yErrorBar(), &ErrorBar::minusColumnChanged, [this, curve]() {
 			this->dataChanged(const_cast<XYCurve*>(curve), Dimension::Y);
 		});
 
 		// update the legend on line and symbol properties changes
 		connect(curve, &XYCurve::aspectDescriptionChanged, this, &CartesianPlot::curveNameChanged);
-		connect(curve, &XYCurve::legendVisibleChanged, this, &CartesianPlot::updateLegend);
 		connect(curve, &XYCurve::lineTypeChanged, this, &CartesianPlot::updateLegend);
 
 		// in case the first curve is added, check whether we start plotting datetime data

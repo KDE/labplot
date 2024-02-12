@@ -261,14 +261,14 @@ QString detectWindowManagerX11()
 	// See: https://specifications.freedesktop.org/wm-spec/1.3/ar01s03.html#idm46018259946000
     if (!is_platform_x11())
 	{
-		return QLatin1String("UNKNOWN");
+		return QStringLiteral("UNKNOWN");
 	}
 	xcb_connection_t *connection = x11_connection();
 	xcb_screen_t *first_screen = xcb_setup_roots_iterator (xcb_get_setup (connection)).data;
 	if(!first_screen)
 	{
 		ADS_PRINT("No screen found via XCB.");
-		return QLatin1String("UNKNOWN");
+		return QStringLiteral("UNKNOWN");
 	}
 	// Get supporting window ()
 	xcb_window_t root = first_screen->root;
@@ -284,14 +284,14 @@ QString detectWindowManagerX11()
 	if(sup_windows.length() == 0)
 	{
 		ADS_PRINT("Failed to get the supporting window on non EWMH comform WM.");
-		return QLatin1String("UNKNOWN");
+		return QStringLiteral("UNKNOWN");
 	}
 	support_win = sup_windows[0];
 	QString ret = xcb_get_prop_string(support_win, "_NET_WM_NAME");
 	if(ret.length() == 0)
 	{
-		ADS_PRINT("Empty WM name occured.");
-		return QLatin1String("UNKNOWN");
+		ADS_PRINT("Empty WM name occurred.");
+		return QStringLiteral("UNKNOWN");
 	}
 	return ret;
 }
@@ -330,6 +330,47 @@ CDockInsertParam dockAreaInsertParameters(DockWidgetArea Area)
     } // switch (Area)
 
 	return CDockInsertParam(Qt::Vertical, false);
+}
+
+
+//============================================================================
+SideBarLocation toSideBarLocation(DockWidgetArea Area)
+{
+	switch (Area)
+	{
+	case LeftAutoHideArea: return SideBarLeft;
+	case RightAutoHideArea: return SideBarRight;
+	case TopAutoHideArea: return SideBarTop;
+	case BottomAutoHideArea: return SideBarBottom;
+	default:
+		return SideBarNone;
+	}
+
+	return SideBarNone;
+}
+
+
+//============================================================================
+bool isHorizontalSideBarLocation(SideBarLocation Location)
+{
+	switch (Location)
+	{
+	case SideBarTop:
+	case SideBarBottom: return true;
+	case SideBarLeft:
+	case SideBarRight: return false;
+	default:
+		return false;
+	}
+
+	return false;
+}
+
+
+//============================================================================
+bool isSideBarArea(DockWidgetArea Area)
+{
+	return toSideBarLocation(Area) != SideBarNone;
 }
 
 

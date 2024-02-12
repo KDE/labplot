@@ -36,6 +36,8 @@
 #include <QWheelEvent>
 #include <QXmlStreamWriter>
 
+#include <gsl/gsl_const_cgs.h>
+
 namespace {
 enum TwRangesColumn { Automatic = 0, Format, Min, Max, Scale };
 
@@ -102,6 +104,7 @@ CartesianPlotDock::CartesianPlotDock(QWidget* parent)
 	: BaseDock(parent) {
 	ui.setupUi(this);
 	setBaseWidgets(ui.leName, ui.teComment);
+	setVisibilityWidgets(ui.chkVisible);
 
 	//"General"-tab
 	ui.twXRanges->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
@@ -157,7 +160,6 @@ CartesianPlotDock::CartesianPlotDock(QWidget* parent)
 
 	// SIGNAL/SLOT
 	// General
-	connect(ui.chkVisible, &QCheckBox::clicked, this, &CartesianPlotDock::visibilityChanged);
 	connect(ui.cbRangeType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CartesianPlotDock::rangeTypeChanged);
 	connect(ui.cbNiceExtend, &QCheckBox::clicked, this, &CartesianPlotDock::niceExtendChanged);
 	connect(ui.leRangePoints, &QLineEdit::textChanged, this, &CartesianPlotDock::rangePointsChanged);
@@ -412,8 +414,6 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list) {
 	connect(m_plot, &CartesianPlot::scaleChanged, this, &CartesianPlotDock::plotScaleChanged);
 	connect(m_plot, &CartesianPlot::rangeFormatChanged, this, &CartesianPlotDock::plotRangeFormatChanged);
 
-	connect(m_plot, &CartesianPlot::visibleChanged, this, &CartesianPlotDock::plotVisibleChanged);
-
 	// range breaks
 	connect(m_plot, &CartesianPlot::xRangeBreakingEnabledChanged, this, &CartesianPlotDock::plotXRangeBreakingEnabledChanged);
 	connect(m_plot, &CartesianPlot::xRangeBreaksChanged, this, &CartesianPlotDock::plotXRangeBreaksChanged);
@@ -531,28 +531,28 @@ void CartesianPlotDock::updateUnits() {
 		// convert from imperial to metric
 		m_worksheetUnit = Worksheet::Unit::Centimeter;
 		suffix = QStringLiteral(" cm");
-		ui.sbLeft->setValue(ui.sbLeft->value() * 2.54);
-		ui.sbTop->setValue(ui.sbTop->value() * 2.54);
-		ui.sbWidth->setValue(ui.sbWidth->value() * 2.54);
-		ui.sbHeight->setValue(ui.sbHeight->value() * 2.54);
-		ui.sbBorderCornerRadius->setValue(ui.sbBorderCornerRadius->value() * 2.54);
-		ui.sbPaddingHorizontal->setValue(ui.sbPaddingHorizontal->value() * 2.54);
-		ui.sbPaddingVertical->setValue(ui.sbPaddingVertical->value() * 2.54);
-		ui.sbPaddingRight->setValue(ui.sbPaddingRight->value() * 2.54);
-		ui.sbPaddingBottom->setValue(ui.sbPaddingBottom->value() * 2.54);
+		ui.sbLeft->setValue(ui.sbLeft->value() * GSL_CONST_CGS_INCH);
+		ui.sbTop->setValue(ui.sbTop->value() * GSL_CONST_CGS_INCH);
+		ui.sbWidth->setValue(ui.sbWidth->value() * GSL_CONST_CGS_INCH);
+		ui.sbHeight->setValue(ui.sbHeight->value() * GSL_CONST_CGS_INCH);
+		ui.sbBorderCornerRadius->setValue(ui.sbBorderCornerRadius->value() * GSL_CONST_CGS_INCH);
+		ui.sbPaddingHorizontal->setValue(ui.sbPaddingHorizontal->value() * GSL_CONST_CGS_INCH);
+		ui.sbPaddingVertical->setValue(ui.sbPaddingVertical->value() * GSL_CONST_CGS_INCH);
+		ui.sbPaddingRight->setValue(ui.sbPaddingRight->value() * GSL_CONST_CGS_INCH);
+		ui.sbPaddingBottom->setValue(ui.sbPaddingBottom->value() * GSL_CONST_CGS_INCH);
 	} else {
 		// convert from metric to imperial
 		m_worksheetUnit = Worksheet::Unit::Inch;
 		suffix = QStringLiteral(" in");
-		ui.sbLeft->setValue(ui.sbLeft->value() / 2.54);
-		ui.sbTop->setValue(ui.sbTop->value() / 2.54);
-		ui.sbWidth->setValue(ui.sbWidth->value() / 2.54);
-		ui.sbHeight->setValue(ui.sbHeight->value() / 2.54);
-		ui.sbBorderCornerRadius->setValue(ui.sbBorderCornerRadius->value() / 2.54);
-		ui.sbPaddingHorizontal->setValue(ui.sbPaddingHorizontal->value() / 2.54);
-		ui.sbPaddingVertical->setValue(ui.sbPaddingVertical->value() / 2.54);
-		ui.sbPaddingRight->setValue(ui.sbPaddingRight->value() / 2.54);
-		ui.sbPaddingBottom->setValue(ui.sbPaddingBottom->value() / 2.54);
+		ui.sbLeft->setValue(ui.sbLeft->value() / GSL_CONST_CGS_INCH);
+		ui.sbTop->setValue(ui.sbTop->value() / GSL_CONST_CGS_INCH);
+		ui.sbWidth->setValue(ui.sbWidth->value() / GSL_CONST_CGS_INCH);
+		ui.sbHeight->setValue(ui.sbHeight->value() / GSL_CONST_CGS_INCH);
+		ui.sbBorderCornerRadius->setValue(ui.sbBorderCornerRadius->value() / GSL_CONST_CGS_INCH);
+		ui.sbPaddingHorizontal->setValue(ui.sbPaddingHorizontal->value() / GSL_CONST_CGS_INCH);
+		ui.sbPaddingVertical->setValue(ui.sbPaddingVertical->value() / GSL_CONST_CGS_INCH);
+		ui.sbPaddingRight->setValue(ui.sbPaddingRight->value() / GSL_CONST_CGS_INCH);
+		ui.sbPaddingBottom->setValue(ui.sbPaddingBottom->value() / GSL_CONST_CGS_INCH);
 	}
 
 	ui.sbLeft->setSuffix(suffix);
@@ -865,13 +865,6 @@ void CartesianPlotDock::retranslateUi() {
 }
 
 // "General"-tab
-void CartesianPlotDock::visibilityChanged(bool state) {
-	CONDITIONAL_LOCK_RETURN;
-
-	for (auto* plot : m_plotList)
-		plot->setVisible(state);
-}
-
 void CartesianPlotDock::rangeTypeChanged(int index) {
 	auto type = static_cast<CartesianPlot::RangeType>(index);
 	if (type == CartesianPlot::RangeType::Free) {
@@ -1737,11 +1730,6 @@ void CartesianPlotDock::plotYRangeBreakingEnabledChanged(bool on) {
 }
 
 void CartesianPlotDock::plotYRangeBreaksChanged(const CartesianPlot::RangeBreaks&) {
-}
-
-void CartesianPlotDock::plotVisibleChanged(bool on) {
-	CONDITIONAL_LOCK_RETURN;
-	ui.chkVisible->setChecked(on);
 }
 
 // layout

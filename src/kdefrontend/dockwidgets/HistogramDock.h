@@ -4,7 +4,7 @@
 	Description          : widget for histogram plot properties
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2016 Anu Mittal <anu22mittal@gmail.com>
-	SPDX-FileCopyrightText: 2016-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2016-2024 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -12,11 +12,13 @@
 #ifndef HISTOGRAMDOCK_H
 #define HISTOGRAMDOCK_H
 
+#include "backend/worksheet/plots/cartesian/ErrorBar.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
 #include "kdefrontend/dockwidgets/BaseDock.h"
 #include "ui_histogramdock.h"
 
 class BackgroundWidget;
+class ErrorBarStyleWidget;
 class LineWidget;
 class SymbolWidget;
 class ValueWidget;
@@ -37,7 +39,6 @@ private:
 	TreeViewComboBox* cbErrorMinusColumn;
 
 	void updateValuesWidgets();
-	void updatePlotRanges() override;
 	void updateLocale() override;
 	void load();
 	void loadConfig(KConfig&);
@@ -48,7 +49,7 @@ protected:
 	LineWidget* lineWidget{nullptr};
 	SymbolWidget* symbolWidget{nullptr};
 	ValueWidget* valueWidget{nullptr};
-	LineWidget* errorBarsLineWidget{nullptr};
+	ErrorBarStyleWidget* errorBarStyleWidget{nullptr};
 
 	QList<Histogram*> m_curvesList;
 	Histogram* m_curve{nullptr};
@@ -63,7 +64,6 @@ private Q_SLOTS:
 
 	// General-Tab
 	void dataColumnChanged(const QModelIndex&);
-	void visibilityChanged(bool);
 	void typeChanged(int);
 	void orientationChanged(int);
 	void normalizationChanged(int);
@@ -99,10 +99,9 @@ private Q_SLOTS:
 	void curveAutoBinRangesChanged(bool);
 	void curveBinRangesMinChanged(double);
 	void curveBinRangesMaxChanged(double);
-	void curveVisibilityChanged(bool);
 
 	//"Error bars"-Tab
-	void curveErrorTypeChanged(Histogram::ErrorType);
+	void curveErrorTypeChanged(ErrorBar::Type);
 	void curveErrorPlusColumnChanged(const AbstractColumn*);
 	void curveErrorMinusColumnChanged(const AbstractColumn*);
 

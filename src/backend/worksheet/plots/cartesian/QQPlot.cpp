@@ -587,6 +587,7 @@ void QQPlot::save(QXmlStreamWriter* writer) const {
 	WRITE_COLUMN(d->yPercentilesColumn, yPercentilesColumn);
 	writer->writeAttribute(QStringLiteral("distribution"), QString::number(static_cast<int>(d->distribution)));
 	writer->writeAttribute(QStringLiteral("visible"), QString::number(d->isVisible()));
+	writer->writeAttribute(QStringLiteral("legendVisible"), QString::number(d->legendVisible));
 	writer->writeEndElement();
 
 	// save the internal columns, above only the references to them were saved
@@ -631,6 +632,7 @@ bool QQPlot::load(XmlStreamReader* reader, bool preview) {
 			READ_COLUMN(xPercentilesColumn);
 			READ_COLUMN(yPercentilesColumn);
 			READ_INT_VALUE("distribution", distribution, nsl_sf_stats_distribution);
+			READ_INT_VALUE("legendVisible", legendVisible, bool);
 
 			str = attribs.value(QStringLiteral("visible")).toString();
 			if (str.isEmpty())

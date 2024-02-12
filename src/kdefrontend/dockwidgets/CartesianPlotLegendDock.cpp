@@ -4,6 +4,7 @@
 	Description          : widget for cartesian plot legend properties
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2013-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2024 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -20,6 +21,8 @@
 
 #include <KLocalizedString>
 
+#include <gsl/gsl_const_cgs.h>
+
 /*!
   \class CartesianPlotLegendDock
   \brief  Provides a widget for editing the properties of the cartesian plot legend currently selected in the project explorer.
@@ -30,6 +33,7 @@ CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget* parent)
 	: BaseDock(parent) {
 	ui.setupUi(this);
 	setBaseWidgets(ui.leName, ui.teComment);
+	setVisibilityWidgets(ui.chkVisible);
 
 	//"Title"-tab
 	auto hboxLayout = new QHBoxLayout(ui.tabTitle);
@@ -65,7 +69,6 @@ CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget* parent)
 
 	// General
 	connect(ui.chbLock, &QCheckBox::clicked, this, &CartesianPlotLegendDock::lockChanged);
-	connect(ui.chkVisible, &QCheckBox::clicked, this, &CartesianPlotLegendDock::visibilityChanged);
 	connect(ui.kfrLabelFont, &KFontRequester::fontSelected, this, &CartesianPlotLegendDock::labelFontChanged);
 	connect(ui.kcbLabelColor, &KColorButton::changed, this, &CartesianPlotLegendDock::labelColorChanged);
 	connect(ui.cbOrder, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CartesianPlotLegendDock::labelOrderChanged);
@@ -140,7 +143,6 @@ void CartesianPlotLegendDock::setLegends(QList<CartesianPlotLegend*> list) {
 	connect(m_legend, &CartesianPlotLegend::rotationAngleChanged, this, &CartesianPlotLegendDock::legendRotationAngleChanged);
 	connect(m_legend, &CartesianPlotLegend::lineSymbolWidthChanged, this, &CartesianPlotLegendDock::legendLineSymbolWidthChanged);
 	connect(m_legend, &CartesianPlotLegend::lockChanged, this, &CartesianPlotLegendDock::legendLockChanged);
-	connect(m_legend, &CartesianPlotLegend::visibleChanged, this, &CartesianPlotLegendDock::legendVisibilityChanged);
 
 	// layout
 	connect(m_legend, &CartesianPlotLegend::layoutTopMarginChanged, this, &CartesianPlotLegendDock::legendLayoutTopMarginChanged);
@@ -183,39 +185,47 @@ void CartesianPlotLegendDock::updateUnits() {
 	m_units = units;
 	CONDITIONAL_LOCK_RETURN;
 	QString suffix;
+	auto xPosition = ui.cbPositionX->currentIndex();
+	auto yPosition = ui.cbPositionY->currentIndex();
 	if (m_units == Units::Metric) {
 		// convert from imperial to metric
 		m_worksheetUnit = Worksheet::Unit::Centimeter;
 		suffix = QLatin1String(" cm");
-		ui.sbLineSymbolWidth->setValue(ui.sbLineSymbolWidth->value() * 2.54);
-		ui.sbPositionX->setValue(ui.sbPositionX->value() * 2.54);
-		ui.sbPositionY->setValue(ui.sbPositionY->value() * 2.54);
-		ui.sbBorderCornerRadius->setValue(ui.sbBorderCornerRadius->value() * 2.54);
-		ui.sbLayoutTopMargin->setValue(ui.sbLayoutTopMargin->value() * 2.54);
-		ui.sbLayoutBottomMargin->setValue(ui.sbLayoutBottomMargin->value() * 2.54);
-		ui.sbLayoutLeftMargin->setValue(ui.sbLayoutLeftMargin->value() * 2.54);
-		ui.sbLayoutRightMargin->setValue(ui.sbLayoutRightMargin->value() * 2.54);
-		ui.sbLayoutHorizontalSpacing->setValue(ui.sbLayoutHorizontalSpacing->value() * 2.54);
-		ui.sbLayoutVerticalSpacing->setValue(ui.sbLayoutVerticalSpacing->value() * 2.54);
+		ui.sbLineSymbolWidth->setValue(ui.sbLineSymbolWidth->value() * GSL_CONST_CGS_INCH);
+		if (xPosition != static_cast<int>(WorksheetElement::HorizontalPosition::Relative))
+			ui.sbPositionX->setValue(ui.sbPositionX->value() * GSL_CONST_CGS_INCH);
+		if (yPosition != static_cast<int>(WorksheetElement::VerticalPosition::Relative))
+			ui.sbPositionY->setValue(ui.sbPositionY->value() * GSL_CONST_CGS_INCH);
+		ui.sbBorderCornerRadius->setValue(ui.sbBorderCornerRadius->value() * GSL_CONST_CGS_INCH);
+		ui.sbLayoutTopMargin->setValue(ui.sbLayoutTopMargin->value() * GSL_CONST_CGS_INCH);
+		ui.sbLayoutBottomMargin->setValue(ui.sbLayoutBottomMargin->value() * GSL_CONST_CGS_INCH);
+		ui.sbLayoutLeftMargin->setValue(ui.sbLayoutLeftMargin->value() * GSL_CONST_CGS_INCH);
+		ui.sbLayoutRightMargin->setValue(ui.sbLayoutRightMargin->value() * GSL_CONST_CGS_INCH);
+		ui.sbLayoutHorizontalSpacing->setValue(ui.sbLayoutHorizontalSpacing->value() * GSL_CONST_CGS_INCH);
+		ui.sbLayoutVerticalSpacing->setValue(ui.sbLayoutVerticalSpacing->value() * GSL_CONST_CGS_INCH);
 	} else {
 		// convert from metric to imperial
 		m_worksheetUnit = Worksheet::Unit::Inch;
 		suffix = QLatin1String(" in");
-		ui.sbLineSymbolWidth->setValue(ui.sbLineSymbolWidth->value() / 2.54);
-		ui.sbPositionX->setValue(ui.sbPositionX->value() / 2.54);
-		ui.sbPositionY->setValue(ui.sbPositionY->value() / 2.54);
-		ui.sbBorderCornerRadius->setValue(ui.sbBorderCornerRadius->value() / 2.54);
-		ui.sbLayoutTopMargin->setValue(ui.sbLayoutTopMargin->value() / 2.54);
-		ui.sbLayoutBottomMargin->setValue(ui.sbLayoutBottomMargin->value() / 2.54);
-		ui.sbLayoutLeftMargin->setValue(ui.sbLayoutLeftMargin->value() / 2.54);
-		ui.sbLayoutRightMargin->setValue(ui.sbLayoutRightMargin->value() / 2.54);
-		ui.sbLayoutHorizontalSpacing->setValue(ui.sbLayoutHorizontalSpacing->value() / 2.54);
-		ui.sbLayoutVerticalSpacing->setValue(ui.sbLayoutVerticalSpacing->value() / 2.54);
+		ui.sbLineSymbolWidth->setValue(ui.sbLineSymbolWidth->value() / GSL_CONST_CGS_INCH);
+		if (xPosition != static_cast<int>(WorksheetElement::HorizontalPosition::Relative))
+			ui.sbPositionX->setValue(ui.sbPositionX->value() / GSL_CONST_CGS_INCH);
+		if (yPosition != static_cast<int>(WorksheetElement::VerticalPosition::Relative))
+			ui.sbPositionY->setValue(ui.sbPositionY->value() / GSL_CONST_CGS_INCH);
+		ui.sbBorderCornerRadius->setValue(ui.sbBorderCornerRadius->value() / GSL_CONST_CGS_INCH);
+		ui.sbLayoutTopMargin->setValue(ui.sbLayoutTopMargin->value() / GSL_CONST_CGS_INCH);
+		ui.sbLayoutBottomMargin->setValue(ui.sbLayoutBottomMargin->value() / GSL_CONST_CGS_INCH);
+		ui.sbLayoutLeftMargin->setValue(ui.sbLayoutLeftMargin->value() / GSL_CONST_CGS_INCH);
+		ui.sbLayoutRightMargin->setValue(ui.sbLayoutRightMargin->value() / GSL_CONST_CGS_INCH);
+		ui.sbLayoutHorizontalSpacing->setValue(ui.sbLayoutHorizontalSpacing->value() / GSL_CONST_CGS_INCH);
+		ui.sbLayoutVerticalSpacing->setValue(ui.sbLayoutVerticalSpacing->value() / GSL_CONST_CGS_INCH);
 	}
 
 	ui.sbLineSymbolWidth->setSuffix(suffix);
-	ui.sbPositionX->setSuffix(suffix);
-	ui.sbPositionY->setSuffix(suffix);
+	if (xPosition != static_cast<int>(WorksheetElement::HorizontalPosition::Relative))
+		ui.sbPositionX->setSuffix(suffix);
+	if (yPosition != static_cast<int>(WorksheetElement::VerticalPosition::Relative))
+		ui.sbPositionY->setSuffix(suffix);
 	ui.sbBorderCornerRadius->setSuffix(suffix);
 	ui.sbLayoutTopMargin->setSuffix(suffix);
 	ui.sbLayoutBottomMargin->setSuffix(suffix);
@@ -240,10 +250,12 @@ void CartesianPlotLegendDock::retranslateUi() {
 	ui.cbPositionX->addItem(i18n("Left"));
 	ui.cbPositionX->addItem(i18n("Center"));
 	ui.cbPositionX->addItem(i18n("Right"));
+	ui.cbPositionX->addItem(i18n("Relative to plot"));
 
 	ui.cbPositionY->addItem(i18n("Top"));
 	ui.cbPositionY->addItem(i18n("Center"));
 	ui.cbPositionY->addItem(i18n("Bottom"));
+	ui.cbPositionY->addItem(i18n("Relative to plot"));
 
 	ui.cbHorizontalAlignment->addItem(i18n("Left"));
 	ui.cbHorizontalAlignment->addItem(i18n("Center"));
@@ -279,19 +291,12 @@ void CartesianPlotLegendDock::lockChanged(bool locked) {
 		legend->setLock(locked);
 }
 
-void CartesianPlotLegendDock::visibilityChanged(bool state) {
-	CONDITIONAL_LOCK_RETURN;
-
-	for (auto* legend : m_legendList)
-		legend->setVisible(state);
-}
-
 // General
 void CartesianPlotLegendDock::labelFontChanged(const QFont& font) {
 	CONDITIONAL_LOCK_RETURN;
 
 	QFont labelsFont = font;
-	labelsFont.setPixelSize(Worksheet::convertToSceneUnits(font.pointSizeF(), Worksheet::Unit::Point));
+	labelsFont.setPointSize(Worksheet::convertToSceneUnits(font.pointSizeF(), Worksheet::Unit::Point));
 	for (auto* legend : m_legendList)
 		legend->setLabelFont(labelsFont);
 }
@@ -319,17 +324,102 @@ void CartesianPlotLegendDock::lineSymbolWidthChanged(double value) {
 }
 
 /*!
-	called when legend's current horizontal position relative to its parent (left, center, right ) is changed.
+	called when legend's current horizontal position relative to its parent (left, center, right, relative) is changed.
 */
 void CartesianPlotLegendDock::positionXChanged(int index) {
 	CONDITIONAL_LOCK_RETURN;
 
-	CartesianPlotLegend::PositionWrapper position = m_legend->position();
+	auto position = m_legend->position();
+	auto oldHorizontalPosition = position.horizontalPosition;
 	position.horizontalPosition = CartesianPlotLegend::HorizontalPosition(index);
+	double x = 0.;
+	if (position.horizontalPosition == WorksheetElement::HorizontalPosition::Relative) {
+		switch (oldHorizontalPosition) {
+		case WorksheetElement::HorizontalPosition::Left:
+		case WorksheetElement::HorizontalPosition::Relative:
+			break;
+		case WorksheetElement::HorizontalPosition::Center:
+			x = 0.5;
+			break;
+		case WorksheetElement::HorizontalPosition::Right:
+			x = 1.0;
+		}
+		ui.sbPositionX->setSuffix(QStringLiteral(" %"));
+	} else {
+		if (m_units == Units::Metric)
+			ui.sbPositionX->setSuffix(QStringLiteral(" cm"));
+		else
+			ui.sbPositionX->setSuffix(QStringLiteral(" in"));
+	}
+
+	position.point.setX(x);
+	ui.sbPositionX->setValue(100. * x);
+
 	for (auto* legend : m_legendList)
 		legend->setPosition(position);
 }
 
+/*!
+	called when legend's current vertical position relative to its parent (top, center, bottom, custom) is changed.
+*/
+void CartesianPlotLegendDock::positionYChanged(int index) {
+	CONDITIONAL_LOCK_RETURN;
+
+	CartesianPlotLegend::PositionWrapper position = m_legend->position();
+	auto oldVerticalPosition = position.verticalPosition;
+	position.verticalPosition = CartesianPlotLegend::VerticalPosition(index);
+	double y = 0.;
+	if (position.verticalPosition == WorksheetElement::VerticalPosition::Relative) {
+		switch (oldVerticalPosition) {
+		case WorksheetElement::VerticalPosition::Top:
+		case WorksheetElement::VerticalPosition::Relative:
+			break;
+		case WorksheetElement::VerticalPosition::Center:
+			y = 0.5;
+			break;
+		case WorksheetElement::VerticalPosition::Bottom:
+			y = 1.0;
+		}
+		ui.sbPositionY->setSuffix(QStringLiteral(" %"));
+	} else {
+		if (m_units == Units::Metric)
+			ui.sbPositionY->setSuffix(QStringLiteral(" cm"));
+		else
+			ui.sbPositionY->setSuffix(QStringLiteral(" in"));
+	}
+
+	position.point.setY(y);
+	ui.sbPositionY->setValue(100. * y);
+
+	for (auto* legend : m_legendList)
+		legend->setPosition(position);
+}
+
+void CartesianPlotLegendDock::customPositionXChanged(double value) {
+	CONDITIONAL_RETURN_NO_LOCK;
+
+	for (auto* legend : m_legendList) {
+		auto position = legend->position();
+		if (position.horizontalPosition == WorksheetElement::HorizontalPosition::Relative)
+			position.point.setX(value / 100.);
+		else
+			position.point.setX(Worksheet::convertToSceneUnits(value, m_worksheetUnit));
+		legend->setPosition(position);
+	}
+}
+
+void CartesianPlotLegendDock::customPositionYChanged(double value) {
+	CONDITIONAL_RETURN_NO_LOCK;
+
+	for (auto* legend : m_legendList) {
+		auto position = legend->position();
+		if (position.verticalPosition == WorksheetElement::VerticalPosition::Relative)
+			position.point.setY(value / 100.);
+		else
+			position.point.setY(Worksheet::convertToSceneUnits(value, m_worksheetUnit));
+		legend->setPosition(position);
+	}
+}
 void CartesianPlotLegendDock::horizontalAlignmentChanged(int index) {
 	CONDITIONAL_LOCK_RETURN;
 
@@ -342,36 +432,6 @@ void CartesianPlotLegendDock::verticalAlignmentChanged(int index) {
 
 	for (auto* legend : m_legendList)
 		legend->setVerticalAlignment(WorksheetElement::VerticalAlignment(index));
-}
-
-/*!
-	called when legend's current horizontal position relative to its parent (top, center, bottom ) is changed.
-*/
-void CartesianPlotLegendDock::positionYChanged(int index) {
-	CONDITIONAL_LOCK_RETURN;
-
-	CartesianPlotLegend::PositionWrapper position = m_legend->position();
-	position.verticalPosition = CartesianPlotLegend::VerticalPosition(index);
-	for (auto* legend : m_legendList)
-		legend->setPosition(position);
-}
-
-void CartesianPlotLegendDock::customPositionXChanged(double value) {
-	CONDITIONAL_RETURN_NO_LOCK;
-
-	CartesianPlotLegend::PositionWrapper position = m_legend->position();
-	position.point.setX(Worksheet::convertToSceneUnits(value, m_worksheetUnit));
-	for (auto* legend : m_legendList)
-		legend->setPosition(position);
-}
-
-void CartesianPlotLegendDock::customPositionYChanged(double value) {
-	CONDITIONAL_RETURN_NO_LOCK;
-
-	CartesianPlotLegend::PositionWrapper position = m_legend->position();
-	position.point.setY(Worksheet::convertToSceneUnits(value, m_worksheetUnit));
-	for (auto* legend : m_legendList)
-		legend->setPosition(position);
 }
 
 void CartesianPlotLegendDock::rotationChanged(int value) {
@@ -522,19 +582,32 @@ void CartesianPlotLegendDock::legendVerticalAlignmentChanged(TextLabel::Vertical
 	ui.cbVerticalAlignment->setCurrentIndex(static_cast<int>(index));
 }
 
+// called when anchor changes
+void CartesianPlotLegendDock::legendPositionChanged(const CartesianPlotLegend::PositionWrapper& position) {
+	CONDITIONAL_LOCK_RETURN;
+
+	ui.cbPositionX->setCurrentIndex(static_cast<int>(position.horizontalPosition));
+	ui.cbPositionY->setCurrentIndex(static_cast<int>(position.verticalPosition));
+	if (position.horizontalPosition == WorksheetElement::HorizontalPosition::Relative) {
+		ui.sbPositionX->setValue(position.point.x() * 100.);
+		ui.sbPositionX->setSuffix(QStringLiteral(" %"));
+	} else
+		ui.sbPositionX->setValue(Worksheet::convertFromSceneUnits(position.point.x(), m_worksheetUnit));
+
+	if (position.verticalPosition == WorksheetElement::VerticalPosition::Relative) {
+		ui.sbPositionY->setValue(position.point.y() * 100.);
+		ui.sbPositionY->setSuffix(QStringLiteral(" %"));
+	} else
+		ui.sbPositionY->setValue(Worksheet::convertFromSceneUnits(position.point.y(), m_worksheetUnit));
+}
+
+// called when position relative to anchor changes (aka. position.point)
 void CartesianPlotLegendDock::legendPositionLogicalChanged(QPointF pos) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.sbPositionXLogical->setValue(pos.x());
 	ui.dtePositionXLogical->setMSecsSinceEpochUTC(pos.x());
 	ui.sbPositionYLogical->setValue(pos.y());
-}
-
-void CartesianPlotLegendDock::legendPositionChanged(const CartesianPlotLegend::PositionWrapper& position) {
-	CONDITIONAL_LOCK_RETURN;
-	ui.sbPositionX->setValue(Worksheet::convertFromSceneUnits(position.point.x(), m_worksheetUnit));
-	ui.sbPositionY->setValue(Worksheet::convertFromSceneUnits(position.point.y(), m_worksheetUnit));
-	ui.cbPositionX->setCurrentIndex(static_cast<int>(position.horizontalPosition));
-	ui.cbPositionY->setCurrentIndex(static_cast<int>(position.verticalPosition));
+	// TODO: why not ui.dtePositionYLogical->setMSecsSinceEpochUTC(pos.y());
 }
 
 void CartesianPlotLegendDock::legendRotationAngleChanged(qreal angle) {
@@ -545,11 +618,6 @@ void CartesianPlotLegendDock::legendRotationAngleChanged(qreal angle) {
 void CartesianPlotLegendDock::legendLockChanged(bool on) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.chbLock->setChecked(on);
-}
-
-void CartesianPlotLegendDock::legendVisibilityChanged(bool on) {
-	CONDITIONAL_LOCK_RETURN;
-	ui.chkVisible->setChecked(on);
 }
 
 // Border
@@ -619,11 +687,19 @@ void CartesianPlotLegendDock::load() {
 
 	// widgets for positioning using absolute plot distances
 	ui.cbPositionX->setCurrentIndex((int)m_legend->position().horizontalPosition);
-	//	positionXChanged(ui.cbPositionX->currentIndex());
-	ui.sbPositionX->setValue(Worksheet::convertFromSceneUnits(m_legend->position().point.x(), m_worksheetUnit));
+	// positionXChanged(ui.cbPositionX->currentIndex());
+	if (m_legend->position().horizontalPosition == WorksheetElement::HorizontalPosition::Relative) {
+		ui.sbPositionX->setValue(m_legend->position().point.x() * 100);
+		ui.sbPositionX->setSuffix(QStringLiteral(" %"));
+	} else
+		ui.sbPositionX->setValue(Worksheet::convertFromSceneUnits(m_legend->position().point.x(), m_worksheetUnit));
 	ui.cbPositionY->setCurrentIndex((int)m_legend->position().verticalPosition);
-	//	positionYChanged(ui.cbPositionY->currentIndex());
-	ui.sbPositionY->setValue(Worksheet::convertFromSceneUnits(m_legend->position().point.y(), m_worksheetUnit));
+	// positionYChanged(ui.cbPositionY->currentIndex());
+	if (m_legend->position().verticalPosition == WorksheetElement::VerticalPosition::Relative) {
+		ui.sbPositionY->setValue(m_legend->position().point.y() * 100);
+		ui.sbPositionY->setSuffix(QStringLiteral(" %"));
+	} else
+		ui.sbPositionY->setValue(Worksheet::convertFromSceneUnits(m_legend->position().point.y(), m_worksheetUnit));
 
 	ui.cbHorizontalAlignment->setCurrentIndex((int)m_legend->horizontalAlignment());
 	ui.cbVerticalAlignment->setCurrentIndex((int)m_legend->verticalAlignment());

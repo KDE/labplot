@@ -63,7 +63,7 @@ public:
 	void save(const QPixmap&, QXmlStreamWriter*);
 	bool load(XmlStreamReader*, bool preview) override;
 	bool load(const QString&, bool preview = false);
-	static void restorePointers(AbstractAspect*, bool preview = false);
+	static void restorePointers(AbstractAspect*);
 	static void retransformElements(AbstractAspect*);
 
 	static bool isSupportedProject(const QString& fileName);

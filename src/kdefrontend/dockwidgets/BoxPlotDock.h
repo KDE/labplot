@@ -66,7 +66,6 @@ private Q_SLOTS:
 	void orientationChanged(int);
 	void variableWidthChanged(bool);
 	void notchesEnabledChanged(bool);
-	void visibilityChanged(bool);
 
 	//"Box"-tab
 	void currentBoxChanged(int);
@@ -89,7 +88,6 @@ private Q_SLOTS:
 
 	// SLOTs for changes triggered in BoxPlot
 	// general
-	void updatePlotRanges() override;
 	void plotDescriptionChanged(const AbstractAspect*);
 	void plotDataColumnsChanged(const QVector<const AbstractColumn*>&);
 	void plotOrderingChanged(BoxPlot::Ordering);
@@ -97,7 +95,6 @@ private Q_SLOTS:
 	void plotVariableWidthChanged(bool);
 	void plotWidthFactorChanged(double);
 	void plotNotchesEnabledChanged(bool);
-	void plotVisibilityChanged(bool);
 
 	// symbols
 	void plotJitteringEnabledChanged(bool);

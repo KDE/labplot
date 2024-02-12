@@ -75,19 +75,13 @@ void SpreadsheetDock::setSpreadsheets(const QList<Spreadsheet*> list) {
 		}
 	}
 
-	const QList<AspectType> topLevelClasses = {AspectType::Spreadsheet};
-// needed for buggy compiler
-#if __cplusplus < 201103L
-	m_aspectTreeModel = std::auto_ptr<AspectTreeModel>(new AspectTreeModel(m_spreadsheet->project()));
-#else
-	m_aspectTreeModel = std::unique_ptr<AspectTreeModel>(new AspectTreeModel(m_spreadsheet->project()));
-#endif
-	m_aspectTreeModel->setSelectableAspects(topLevelClasses);
-	m_aspectTreeModel->enableNumericColumnsOnly(true);
-	// m_aspectTreeModel->enableNonEmptyNumericColumnsOnly(true);
+	auto* model = aspectModel();
+	model->setSelectableAspects({AspectType::Spreadsheet});
+	model->enableNumericColumnsOnly(true);
+	// model->enableNonEmptyNumericColumnsOnly(true);
 
-	ui.cbLinkedSpreadsheet->setTopLevelClasses(topLevelClasses);
-	ui.cbLinkedSpreadsheet->setModel(m_aspectTreeModel.get());
+	ui.cbLinkedSpreadsheet->setTopLevelClasses({AspectType::Folder, AspectType::Workbook, AspectType::Spreadsheet});
+	ui.cbLinkedSpreadsheet->setModel(model);
 
 	// don't allow to select self spreadsheet!
 	QList<const AbstractAspect*> aspects;
@@ -194,7 +188,7 @@ void SpreadsheetDock::spreadsheetLinkingChanged(bool linking) {
 
 void SpreadsheetDock::spreadsheetLinkedSpreadsheetChanged(const Spreadsheet* spreadsheet) {
 	CONDITIONAL_LOCK_RETURN;
-	ui.cbLinkedSpreadsheet->setCurrentModelIndex(m_aspectTreeModel->modelIndexOfAspect(spreadsheet));
+	ui.cbLinkedSpreadsheet->setAspect(spreadsheet);
 }
 
 //*************************************************************
@@ -207,7 +201,7 @@ void SpreadsheetDock::load() {
 	auto* view = static_cast<SpreadsheetView*>(m_spreadsheet->view());
 	ui.cbShowComments->setChecked(view->areCommentsShown());
 
-	ui.cbLinkedSpreadsheet->setCurrentModelIndex(m_aspectTreeModel->modelIndexOfAspect(m_spreadsheet->linkedSpreadsheet()));
+	ui.cbLinkedSpreadsheet->setAspect(m_spreadsheet->linkedSpreadsheet());
 	ui.cbLinkingEnabled->setChecked(m_spreadsheet->linking());
 	linkingChanged(m_spreadsheet->linking()); // call this to update the widgets
 }
