@@ -18,6 +18,8 @@ void SparkLineRunnable::run() {
 		resultPixmap = mPixmap;
 		return;
 	}
+
+	DEBUG(Q_FUNC_INFO)
 	static const QString sparklineTheme = QStringLiteral("Sparkline");
 	static const QString sparklineText = QStringLiteral("add-sparkline");
 	auto* worksheet = new Worksheet(sparklineText);

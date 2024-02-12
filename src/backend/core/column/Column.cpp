@@ -849,6 +849,14 @@ bool Column::hasValues() const {
 	return d->hasValues;
 }
 
+bool Column::sparklineToRepaint() const {
+	return mSparklineToRepaint;
+}
+
+void Column::setSparklineToRepaint(bool repaint) {
+	mSparklineToRepaint = repaint;
+}
+
 /*
  * set item at i to col[j] for same columnMode()
  */

@@ -39,9 +39,9 @@ Qt::ItemFlags SpreadsheetSparkLinesHeaderModel::flags(const QModelIndex& index) 
 }
 
 void SpreadsheetSparkLinesHeaderModel::sparkLine(Column* col) {
-	if (col->mSparklineToRepaint) {
+	if (col->sparklineToRepaint()) {
 		if (col->hasValues()) {
-			col->mSparklineToRepaint = false;
+			col->setSparklineToRepaint(false);
 			col->setSparkline(SpreadsheetSparkLinesHeaderModel::showSparkLines(col));
 		}
 	}
