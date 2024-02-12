@@ -46,9 +46,9 @@ craft_appimage_qt515_x86_64:
   only:
     - master
 
-craft_windows_qt515_x86_64:
-  only:
-    - master
+#craft_windows_qt515_x86_64:
+#  only:
+#    - master
 
 # needed for tests (use "ctest -V" for more output)
 #variables:
