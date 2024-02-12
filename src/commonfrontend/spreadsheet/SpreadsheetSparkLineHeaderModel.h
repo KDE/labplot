@@ -9,7 +9,6 @@
 #ifndef SPREADSHEETSPARKLINEHEADERMODEL_H
 #define SPREADSHEETSPARKLINEHEADERMODEL_H
 
-#include <QAbstractTableModel>
 #include <backend/spreadsheet/SpreadsheetModel.h>
 
 class SpreadsheetSparkLinesHeaderModel : public QAbstractTableModel {
@@ -29,7 +28,7 @@ public:
 
 	static void sparkLine(Column* col);
 
-	SpreadsheetModel* getSpreadSheetModel();
+	SpreadsheetModel* spreadsheetModel();
 
 private:
 	SpreadsheetModel* m_spreadsheet_model;

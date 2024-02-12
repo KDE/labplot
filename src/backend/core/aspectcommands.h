@@ -14,7 +14,6 @@
 #define ASPECTCOMMANDS_H
 
 #include "AspectPrivate.h"
-#include "backend/core/AbstractAspect.h"
 #include <KLocalizedString>
 #include <QUndoCommand>
 

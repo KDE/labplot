@@ -26,10 +26,6 @@
 #include <QMenu>
 #include <QMimeData>
 
-#include <commonfrontend/ProjectExplorer.h>
-
-#include <commonfrontend/spreadsheet/SpreadsheetSparkLineHeaderModel.h>
-
 /**
  * \class AbstractAspect
  * \brief Base class of all persistent objects in a Project.

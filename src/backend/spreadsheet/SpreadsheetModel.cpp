@@ -117,7 +117,7 @@ QModelIndex SpreadsheetModel::index(const QString& text) const {
 	return createIndex(-1, -1);
 }
 
-Spreadsheet* SpreadsheetModel::getSpreadSheet() {
+Spreadsheet* SpreadsheetModel::spreadsheet() {
 	return m_spreadsheet;
 }
 

@@ -62,7 +62,7 @@ public:
 	~SpreadsheetHeaderView() override;
 
 	void setModel(QAbstractItemModel*) override;
-	SpreadsheetSparkLinesHeaderModel* getModel() const;
+	SpreadsheetSparkLinesHeaderModel* model() const;
 	QSize sizeHint() const override;
 	void addSlaveHeader(QHeaderView* slaveHeader);
 

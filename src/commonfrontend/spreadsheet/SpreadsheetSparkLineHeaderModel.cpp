@@ -7,7 +7,6 @@
 */
 
 #include "SpreadsheetSparkLineHeaderModel.h"
-#include "backend/core/column/Column.h"
 #include "backend/lib/trace.h"
 #include "commonfrontend/spreadsheet/SparklineRunnable.h"
 #include <QFutureWatcher>
@@ -48,7 +47,7 @@ void SpreadsheetSparkLinesHeaderModel::sparkLine(Column* col) {
 	}
 }
 
-SpreadsheetModel* SpreadsheetSparkLinesHeaderModel::getSpreadSheetModel() {
+SpreadsheetModel* SpreadsheetSparkLinesHeaderModel::spreadsheetModel() {
 	return m_spreadsheet_model;
 }
 

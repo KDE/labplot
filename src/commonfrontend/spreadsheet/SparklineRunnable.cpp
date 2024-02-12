@@ -6,9 +6,7 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 #include "SparklineRunnable.h"
-
 #include "backend/worksheet/Worksheet.h"
-
 #include "backend/worksheet/plots/cartesian/BarPlot.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "qwidget.h"

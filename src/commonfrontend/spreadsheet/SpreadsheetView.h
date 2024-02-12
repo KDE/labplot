@@ -11,7 +11,6 @@
 #ifndef SPREADSHEETVIEW_H
 #define SPREADSHEETVIEW_H
 
-#include <QVBoxLayout>
 #include <QWidget>
 
 #include "backend/core/AbstractColumn.h"

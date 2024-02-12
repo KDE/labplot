@@ -13,7 +13,6 @@
 #include "SpreadsheetSparkLineHeaderModel.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include <QPainter>
-#include <qpainter.h>
 
 /*!
  \class SpreadsheetCommentsHeaderView
@@ -137,7 +136,7 @@ void SpreadsheetHeaderView::setModel(QAbstractItemModel* model) {
 	connect(model, &QAbstractItemModel::headerDataChanged, this, &SpreadsheetHeaderView::refresh);
 }
 
-SpreadsheetSparkLinesHeaderModel* SpreadsheetHeaderView::getModel() const {
+SpreadsheetSparkLinesHeaderModel* SpreadsheetHeaderView::model() const {
 	return static_cast<SpreadsheetSparkLinesHeaderModel*>(m_sparkLineSlave->model());
 }
 
@@ -212,7 +211,7 @@ bool SpreadsheetHeaderView::areSparkLinesShown() const {
 void SpreadsheetHeaderView::showSparkLines(bool on) {
 	m_showSparkLines = on;
 	if (on) {
-		m_sparkLineSlave->getModel()->getSpreadSheetModel()->getSpreadSheet()->isSparklineShown = true;
+		m_sparkLineSlave->getModel()->spreadsheetModel()->spreadsheet()->isSparklineShown = true;
 		if (!m_sparklineCalled) {
 			Q_EMIT sparklineToggled();
 			m_sparklineCalled = true;
