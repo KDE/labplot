@@ -19,8 +19,8 @@ include:
 #      - /gitlab-templates/freebsd-qt6.yml
 ### DEPLOY
       - /gitlab-templates/craft-appimage.yml
-      - /gitlab-templates/craft-windows-x86-64.yml
-# currently fails (20240212)
+# currently both fail (20240212)
+#      - /gitlab-templates/craft-windows-x86-64.yml
 #      - /gitlab-templates/craft-windows-appx-qt5.yml
 # see below for flatpak variables
       - /gitlab-templates/flatpak.yml
