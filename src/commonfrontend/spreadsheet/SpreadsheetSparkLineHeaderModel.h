@@ -25,7 +25,6 @@ public:
 	int columnCount(const QModelIndex& parent = QModelIndex()) const override;
 
 	// show sparkLine of respective column
-	// show sparkLine of respective column
 	static QPixmap showSparkLines(Column* col);
 
 	static void sparkLine(Column* col);

@@ -300,7 +300,7 @@ void Column::setSparkline(QPixmap pix) {
 	m_sparkline = pix;
 }
 
-QPixmap Column::getSparkline() {
+QPixmap Column::sparkline() {
 	return m_sparkline;
 }
 
@@ -947,10 +947,8 @@ qint64 Column::bigIntAt(int row) const {
  * This is used e.g. in \c XYFitCurvePrivate::recalculate()
  */
 void Column::setChanged() {
-	if (!m_suppressDataChangedSignal) {
+	if (!m_suppressDataChangedSignal)
 		Q_EMIT dataChanged(this);
-	}
-
 	invalidateProperties();
 }
 

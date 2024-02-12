@@ -23,17 +23,15 @@ void SparkLineRunnable::run() {
 	static const QString sparklineTheme = QStringLiteral("Sparkline");
 	static const QString sparklineText = QStringLiteral("add-sparkline");
 	auto* worksheet = new Worksheet(sparklineText);
+	worksheet->setTheme(sparklineTheme);
+	worksheet->setLayoutBottomMargin(0);
+	worksheet->setLayoutTopMargin(0);
+	worksheet->setLayoutLeftMargin(0);
+	worksheet->setLayoutRightMargin(0);
+	auto* plot = new CartesianPlot(sparklineText);
+	plot->setTheme(sparklineTheme);
+	worksheet->addChild(plot);
 	if (col->columnMode() == Column::ColumnMode::Text) {
-		worksheet->setTheme(sparklineTheme);
-		worksheet->setLayoutBottomMargin(0);
-		worksheet->setLayoutTopMargin(0);
-		worksheet->setLayoutLeftMargin(0);
-		worksheet->setLayoutRightMargin(0);
-
-		auto* plot = new CartesianPlot(sparklineText);
-		plot->setTheme(sparklineTheme);
-		worksheet->addChild(plot);
-
 		auto* barPlot = new BarPlot(QString());
 		plot->addChild(barPlot);
 		plot->setVerticalPadding(0);
@@ -71,17 +69,6 @@ void SparkLineRunnable::run() {
 		delete worksheet;
 		resultPixmap = pixmap;
 	} else {
-		worksheet->setTheme(sparklineTheme);
-		worksheet->view();
-		worksheet->setLayoutBottomMargin(0);
-		worksheet->setLayoutTopMargin(0);
-		worksheet->setLayoutLeftMargin(0);
-		worksheet->setLayoutRightMargin(0);
-
-		auto* plot = new CartesianPlot(sparklineText);
-		plot->setType(CartesianPlot::Type::TwoAxes);
-		plot->setTheme(sparklineTheme);
-
 		const int rowCount = col->rowCount();
 		QVector<double> xData(rowCount);
 
@@ -89,8 +76,6 @@ void SparkLineRunnable::run() {
 			xData[i] = i;
 
 		Column* xColumn = new Column(sparklineText, xData);
-		worksheet->addChild(plot);
-
 		auto* curve = new XYCurve(sparklineText);
 		curve->setSuppressRetransform(true);
 		curve->setXColumn(xColumn);

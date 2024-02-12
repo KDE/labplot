@@ -230,7 +230,7 @@ QVariant SpreadsheetModel::headerData(int section, Qt::Orientation orientation, 
 			// Return the sparkline associated with the column
 			if (m_spreadsheet->isSparklineShown)
 				SpreadsheetSparkLinesHeaderModel::sparkLine(m_spreadsheet->child<Column>(section));
-			return m_spreadsheet->child<Column>(section)->getSparkline();
+			return m_spreadsheet->child<Column>(section)->sparkline();
 		}
 		}
 		break;

@@ -14,9 +14,7 @@
 
 #include <QDateTime>
 #include <QList>
-#include <QPixmap>
 #include <QUuid>
-#include <qlabel.h>
 
 class AbstractAspect;
 

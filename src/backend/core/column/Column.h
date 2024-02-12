@@ -231,7 +231,7 @@ public Q_SLOTS:
 	void pasteData();
 	void updateFormula();
 	void setSparkline(QPixmap pix);
-	QPixmap getSparkline();
+	QPixmap sparkline();
 
 private:
 	bool XmlReadInputFilter(XmlStreamReader*);
