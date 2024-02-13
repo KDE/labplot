@@ -16,6 +16,8 @@
 class ErrorBarStylePrivate;
 class Line;
 class KConfigGroup;
+class QPainter;
+class QPainterPath;
 
 class ErrorBarStyle : public AbstractAspect {
 	Q_OBJECT
@@ -33,6 +35,7 @@ public:
 	void saveThemeConfig(KConfigGroup&) const;
 
 	void init(const KConfigGroup&);
+	void draw(QPainter*, const QPainterPath&);
 
 	BASIC_D_ACCESSOR_DECL(Type, type, Type)
 	BASIC_D_ACCESSOR_DECL(double, capSize, CapSize)

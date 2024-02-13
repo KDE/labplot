@@ -16,11 +16,11 @@
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/trace.h"
 #include "backend/worksheet/Background.h"
-#include "backend/worksheet/plots/cartesian/ErrorBar.h"
-#include "backend/worksheet/plots/cartesian/ErrorBarStyle.h"
 #include "backend/worksheet/Line.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "backend/worksheet/plots/cartesian/ErrorBar.h"
+#include "backend/worksheet/plots/cartesian/ErrorBarStyle.h"
 #include "backend/worksheet/plots/cartesian/Value.h"
 #include "tools/ImageTools.h"
 
@@ -431,7 +431,7 @@ ErrorBar* BarPlotPrivate::addErrorBar(const KConfigGroup& group) {
 	errorBar->setHidden(true);
 	errorBar->init(group);
 	q->connect(errorBar, &ErrorBar::updateRequested, [=] {
-		updateErrorBars();
+		updateErrorBars(errorBars.indexOf(errorBar));
 	});
 
 	errorBars << errorBar;
@@ -445,7 +445,7 @@ ErrorBarStyle* BarPlotPrivate::addErrorBarStyle(const KConfigGroup& group) {
 	errorBarStyle->setHidden(true);
 	errorBarStyle->init(group);
 	q->connect(errorBarStyle, &ErrorBarStyle::updateRequested, [=] {
-		updateErrorBars();
+		updateErrorBars(errorBarStyles.indexOf(errorBarStyle));
 	});
 	q->connect(errorBarStyle, &ErrorBarStyle::updatePixmapRequested, [=] {
 		updatePixmap();
@@ -479,8 +479,7 @@ void BarPlotPrivate::retransform() {
 	m_stackedBarPositiveOffsets.fill(0);
 	m_stackedBarNegativeOffsets.fill(0);
 
-	m_valuesPointsLogical.clear();
-
+	suppressRecalc = true;
 	if (count) {
 		if (orientation == BarPlot::Orientation::Vertical) {
 			for (int i = 0; i < count; ++i) {
@@ -494,6 +493,7 @@ void BarPlotPrivate::retransform() {
 			}
 		}
 	}
+	suppressRecalc = false;
 
 	updateValues(); // this also calls recalcShapeAndBoundingRect()
 }
@@ -512,6 +512,10 @@ void BarPlotPrivate::recalc() {
 	m_barLines.resize(newSize);
 	m_fillPolygons.clear();
 	m_fillPolygons.resize(newSize);
+	m_valuesPointsLogical.clear();
+	m_valuesPointsLogical.resize(newSize);
+	m_errorBarsPaths.clear();
+	m_errorBarsPaths.resize(newSize);
 
 	const double xMinOld = xMin;
 	const double xMaxOld = xMax;
@@ -718,6 +722,7 @@ void BarPlotPrivate::verticalBarPlot(int columnIndex) {
 	const auto* column = static_cast<const Column*>(dataColumns.at(columnIndex));
 	QVector<QLineF> lines; // four lines for one bar in logical coordinates
 	QVector<QVector<QLineF>> barLines; // lines for all bars for one colum in scene coordinates
+	QVector<QPointF> valuesPointsLogical;
 
 	switch (type) {
 	case BarPlot::Type::Grouped: {
@@ -747,7 +752,7 @@ void BarPlotPrivate::verticalBarPlot(int columnIndex) {
 			lines << QLineF(x + width, 0, x, 0);
 			lines << QLineF(x, 0, x, value);
 
-			m_valuesPointsLogical << QPointF(x + width / 2, value);
+			valuesPointsLogical << QPointF(x + width / 2, value);
 
 			barLines << q->cSystem->mapLogicalToScene(lines);
 			updateFillingRect(columnIndex, valueIndex, lines);
@@ -784,10 +789,10 @@ void BarPlotPrivate::verticalBarPlot(int columnIndex) {
 
 			if (value > 0) {
 				m_stackedBarPositiveOffsets[valueIndex] += value;
-				m_valuesPointsLogical << QPointF(x + width / 2, m_stackedBarPositiveOffsets.at(valueIndex));
+				valuesPointsLogical << QPointF(x + width / 2, m_stackedBarPositiveOffsets.at(valueIndex));
 			} else {
 				m_stackedBarNegativeOffsets[valueIndex] += value;
-				m_valuesPointsLogical << QPointF(x + width / 2, m_stackedBarNegativeOffsets.at(valueIndex));
+				valuesPointsLogical << QPointF(x + width / 2, m_stackedBarNegativeOffsets.at(valueIndex));
 			}
 
 			barLines << q->cSystem->mapLogicalToScene(lines);
@@ -826,7 +831,7 @@ void BarPlotPrivate::verticalBarPlot(int columnIndex) {
 
 			m_stackedBarPositiveOffsets[valueIndex] += value;
 
-			m_valuesPointsLogical << QPointF(x + width / 2, m_stackedBarPositiveOffsets.at(valueIndex));
+			valuesPointsLogical << QPointF(x + width / 2, m_stackedBarPositiveOffsets.at(valueIndex));
 
 			barLines << q->cSystem->mapLogicalToScene(lines);
 			updateFillingRect(columnIndex, valueIndex, lines);
@@ -835,8 +840,9 @@ void BarPlotPrivate::verticalBarPlot(int columnIndex) {
 		}
 	}
 	}
-
 	m_barLines[columnIndex] = barLines;
+	m_valuesPointsLogical[columnIndex] = valuesPointsLogical;
+	updateErrorBars(columnIndex);
 }
 
 void BarPlotPrivate::horizontalBarPlot(int columnIndex) {
@@ -845,6 +851,7 @@ void BarPlotPrivate::horizontalBarPlot(int columnIndex) {
 	const auto* column = static_cast<const Column*>(dataColumns.at(columnIndex));
 	QVector<QLineF> lines; // four lines for one bar in logical coordinates
 	QVector<QVector<QLineF>> barLines; // lines for all bars for one colum in scene coordinates
+	QVector<QPointF> valuesPointsLogical;
 
 	switch (type) {
 	case BarPlot::Type::Grouped: {
@@ -872,7 +879,7 @@ void BarPlotPrivate::horizontalBarPlot(int columnIndex) {
 			lines << QLineF(0, y + width, 0, y);
 			lines << QLineF(0, y, value, y);
 
-			m_valuesPointsLogical << QPointF(value, y + width / 2);
+			valuesPointsLogical << QPointF(value, y + width / 2);
 
 			barLines << q->cSystem->mapLogicalToScene(lines);
 			updateFillingRect(columnIndex, valueIndex, lines);
@@ -909,10 +916,10 @@ void BarPlotPrivate::horizontalBarPlot(int columnIndex) {
 
 			if (value > 0) {
 				m_stackedBarPositiveOffsets[valueIndex] += value;
-				m_valuesPointsLogical << QPointF(m_stackedBarPositiveOffsets.at(valueIndex), y + width / 2);
+				valuesPointsLogical << QPointF(m_stackedBarPositiveOffsets.at(valueIndex), y + width / 2);
 			} else {
 				m_stackedBarNegativeOffsets[valueIndex] += value;
-				m_valuesPointsLogical << QPointF(m_stackedBarNegativeOffsets.at(valueIndex), y + width / 2);
+				valuesPointsLogical << QPointF(m_stackedBarNegativeOffsets.at(valueIndex), y + width / 2);
 			}
 			barLines << q->cSystem->mapLogicalToScene(lines);
 			updateFillingRect(columnIndex, valueIndex, lines);
@@ -948,7 +955,7 @@ void BarPlotPrivate::horizontalBarPlot(int columnIndex) {
 			lines << QLineF(offset, y, value + offset, y);
 
 			m_stackedBarPositiveOffsets[valueIndex] += value;
-			m_valuesPointsLogical << QPointF(m_stackedBarPositiveOffsets.at(valueIndex), y + width / 2);
+			valuesPointsLogical << QPointF(m_stackedBarPositiveOffsets.at(valueIndex), y + width / 2);
 
 			barLines << q->cSystem->mapLogicalToScene(lines);
 			updateFillingRect(columnIndex, valueIndex, lines);
@@ -959,6 +966,8 @@ void BarPlotPrivate::horizontalBarPlot(int columnIndex) {
 	}
 
 	m_barLines[columnIndex] = barLines;
+	m_valuesPointsLogical[columnIndex] = valuesPointsLogical;
+	updateErrorBars(columnIndex);
 }
 
 void BarPlotPrivate::updateFillingRect(int columnIndex, int valueIndex, const QVector<QLineF>& lines) {
@@ -1024,18 +1033,24 @@ void BarPlotPrivate::updateValues() {
 		return;
 	}
 
+	// formatting and drawing of the value strings is independent of the data columns,
+	// put all value points for the different data columns together here to process in the same way below
+	QVector<QPointF> valuesPointsLogical;
+	for (const auto& points : m_valuesPointsLogical)
+		valuesPointsLogical << points;
+
 	// determine the value string for all points that are currently visible in the plot
-	auto visiblePoints = std::vector<bool>(m_valuesPointsLogical.count(), false);
+	auto visiblePoints = std::vector<bool>(valuesPointsLogical.count(), false);
 	Points pointsScene;
-	q->cSystem->mapLogicalToScene(m_valuesPointsLogical, pointsScene, visiblePoints);
+	q->cSystem->mapLogicalToScene(valuesPointsLogical, pointsScene, visiblePoints);
 	const auto& prefix = value->prefix();
 	const auto& suffix = value->suffix();
 	if (value->type() == Value::BinEntries) {
-		for (int i = 0; i < m_valuesPointsLogical.count(); ++i) {
+		for (int i = 0; i < valuesPointsLogical.count(); ++i) {
 			if (!visiblePoints[i])
 				continue;
 
-			auto& point = m_valuesPointsLogical.at(i);
+			auto& point = valuesPointsLogical.at(i);
 			if (orientation == BarPlot::Orientation::Vertical) {
 				if (type == BarPlot::Type::Stacked_100_Percent)
 					m_valuesStrings << prefix + QString::number(point.y(), value->numericFormat(), 1) + QLatin1String("%") + suffix;
@@ -1056,9 +1071,9 @@ void BarPlotPrivate::updateValues() {
 		}
 
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-		const int endRow = std::min(m_valuesPointsLogical.size(), static_cast<qsizetype>(valuesColumn->rowCount()));
+		const int endRow = std::min(valuesPointsLogical.size(), static_cast<qsizetype>(valuesColumn->rowCount()));
 #else
-		const int endRow = std::min(m_valuesPointsLogical.size(), valuesColumn->rowCount());
+		const int endRow = std::min(valuesPointsLogical.size(), valuesColumn->rowCount());
 #endif
 		const auto xColMode = valuesColumn->columnMode();
 		for (int i = 0; i < endRow; ++i) {
@@ -1177,13 +1192,132 @@ void BarPlotPrivate::updateValues() {
 	recalcShapeAndBoundingRect();
 }
 
-void BarPlotPrivate::updateErrorBars() {
+void BarPlotPrivate::updateErrorBars(int columnIndex) {
+	auto errorBarsPath = QPainterPath();
+
+	QVector<QLineF> elines;
+	auto* errorBar = errorBars.at(columnIndex);
+	const auto& valuesPointsLogical = m_valuesPointsLogical.at(columnIndex);
+
+	switch (errorBar->type()) {
+	case ErrorBar::Type::NoError:
+	case ErrorBar::Type::Poisson:
+		break;
+	case ErrorBar::Type::Symmetric: {
+		int index = 0;
+		if (orientation == BarPlot::Orientation::Vertical) {
+			const auto* errorPlusColumn = errorBar->plusColumn();
+			for (auto& point : valuesPointsLogical) {
+				if (errorPlusColumn && errorPlusColumn->isValid(index) && !errorPlusColumn->isMasked(index)) {
+					double error = errorPlusColumn->valueAt(index);
+					if (error != 0.)
+						elines << QLineF(point.x(), point.y() + error, point.x(), point.y() - error);
+				}
+				++index;
+			}
+		} else {
+			const auto* errorMinusColumn = errorBar->minusColumn();
+			for (auto& point : valuesPointsLogical) {
+				if (errorMinusColumn && errorMinusColumn->isValid(index) && !errorMinusColumn->isMasked(index)) {
+					double error = errorMinusColumn->valueAt(index);
+					if (error != 0.)
+						elines << QLineF(point.x() - error, point.y(), point.x() + error, point.y());
+				}
+				++index;
+			}
+		}
+		break;
+	}
+	case ErrorBar::Type::Asymmetric: {
+		int index = 0;
+		if (orientation == BarPlot::Orientation::Vertical) {
+			for (auto& point : valuesPointsLogical) {
+				double errorPlus = 0.;
+				double errorMinus = 0.;
+				const auto* errorPlusColumn = errorBar->plusColumn();
+				const auto* errorMinusColumn = errorBar->minusColumn();
+
+				if (errorPlusColumn && errorPlusColumn->isValid(index) && !errorPlusColumn->isMasked(index))
+					errorPlus = errorPlusColumn->valueAt(index);
+
+				if (errorMinusColumn && errorMinusColumn->isValid(index) && !errorMinusColumn->isMasked(index))
+					errorMinus = errorMinusColumn->valueAt(index);
+
+				if (errorPlus != 0. || errorMinus != 0.)
+					elines << QLineF(point.x(), point.y() - errorMinus, point.x(), point.y() + errorPlus);
+
+				++index;
+			}
+		} else {
+			for (auto& point : valuesPointsLogical) {
+				double errorPlus = 0.;
+				double errorMinus = 0.;
+				const auto* errorPlusColumn = errorBar->plusColumn();
+				const auto* errorMinusColumn = errorBar->minusColumn();
+
+				if (errorPlusColumn && errorPlusColumn->isValid(index) && !errorPlusColumn->isMasked(index))
+					errorPlus = errorPlusColumn->valueAt(index);
+
+				if (errorMinusColumn && errorMinusColumn->isValid(index) && !errorMinusColumn->isMasked(index))
+					errorMinus = errorMinusColumn->valueAt(index);
+
+				if (errorPlus != 0. || errorMinus != 0.)
+					elines << QLineF(point.x() - errorMinus, point.y(), point.x() + errorPlus, point.y());
+
+				++index;
+			}
+		}
+		break;
+	}
+	}
+
+	// map the error bars to scene coordinates
+	elines = q->cSystem->mapLogicalToScene(elines);
+
+	// new painter path for the error bars
+	for (const auto& line : qAsConst(elines)) {
+		errorBarsPath.moveTo(line.p1());
+		errorBarsPath.lineTo(line.p2());
+	}
+
+	// add caps for error bars
+	const auto* errorBarStyle = errorBarStyles.at(columnIndex);
+	const auto errorBarsCapSize = errorBarStyle->capSize();
+	if (errorBarStyle->type() == ErrorBarStyle::Type::WithEnds) {
+		if (orientation == BarPlot::Orientation::Vertical) {
+			for (const auto& line : qAsConst(elines)) {
+				const auto& p1 = line.p1();
+				errorBarsPath.moveTo(QPointF(p1.x() - errorBarsCapSize / 2., p1.y()));
+				errorBarsPath.lineTo(QPointF(p1.x() + errorBarsCapSize / 2., p1.y()));
+
+				const auto& p2 = line.p2();
+				errorBarsPath.moveTo(QPointF(p2.x() - errorBarsCapSize / 2., p2.y()));
+				errorBarsPath.lineTo(QPointF(p2.x() + errorBarsCapSize / 2., p2.y()));
+			}
+		} else {
+			for (const auto& line : qAsConst(elines)) {
+				const auto& p1 = line.p1();
+				errorBarsPath.moveTo(QPointF(p1.x(), p1.y() - errorBarsCapSize / 2.));
+				errorBarsPath.lineTo(QPointF(p1.x(), p1.y() + errorBarsCapSize / 2.));
+
+				const auto& p2 = line.p2();
+				errorBarsPath.moveTo(QPointF(p2.x(), p2.y() - errorBarsCapSize / 2.));
+				errorBarsPath.lineTo(QPointF(p2.x(), p2.y() + errorBarsCapSize / 2.));
+			}
+		}
+	}
+
+	m_errorBarsPaths[columnIndex] = errorBarsPath;
+	recalcShapeAndBoundingRect();
 }
 
 /*!
   recalculates the outer bounds and the shape of the item.
 */
 void BarPlotPrivate::recalcShapeAndBoundingRect() {
+	if (suppressRecalc)
+		return;
+
 	prepareGeometryChange();
 	m_shape = QPainterPath();
 
@@ -1201,6 +1335,10 @@ void BarPlotPrivate::recalcShapeAndBoundingRect() {
 				m_shape.addPath(WorksheetElement::shapeFromPath(barPath, borderPen));
 			}
 		}
+
+		if (errorBars.at(index)->type() != ErrorBar::Type::NoError)
+			m_shape.addPath(WorksheetElement::shapeFromPath(m_errorBarsPaths.at(index), errorBarStyles.at(index)->line()->pen()));
+
 		++index;
 	}
 
@@ -1268,6 +1406,11 @@ void BarPlotPrivate::draw(QPainter* painter) {
 
 			++valueIndex;
 		}
+
+		// draw error bars
+		if (errorBars.at(columnIndex)->type() != ErrorBar::Type::NoError)
+			errorBarStyles.at(columnIndex)->draw(painter, m_errorBarsPaths.at(columnIndex));
+
 		++columnIndex;
 	}
 

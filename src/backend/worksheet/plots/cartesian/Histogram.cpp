@@ -1630,12 +1630,8 @@ void HistogramPrivate::draw(QPainter* painter) {
 	value->draw(painter, valuesPoints, valuesStrings);
 
 	// draw error bars
-	if (errorBar->type() != ErrorBar::Type::NoError) {
-		painter->setOpacity(errorBarStyle->line()->opacity());
-		painter->setPen(errorBarStyle->line()->pen());
-		painter->setBrush(Qt::NoBrush);
-		painter->drawPath(errorBarsPath);
-	}
+	if (errorBar->type() != ErrorBar::Type::NoError)
+		errorBarStyle->draw(painter, errorBarsPath);
 
 	// draw rug
 	if (rugEnabled) {

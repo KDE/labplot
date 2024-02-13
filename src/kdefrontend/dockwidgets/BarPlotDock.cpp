@@ -540,7 +540,10 @@ void BarPlotDock::errorTypeChanged(int index) {
 
 	CONDITIONAL_LOCK_RETURN;
 
-	const int number = ui.cbErrorBarsNumber->currentIndex();
+	int number = ui.cbErrorBarsNumber->currentIndex();
+	if (number == -1)
+		number = 0;
+
 	for (auto* plot : m_barPlots) {
 		auto* errorBar = plot->errorBarAt(number);
 		if (errorBar)
@@ -554,7 +557,9 @@ void BarPlotDock::errorPlusColumnChanged(const QModelIndex& index) {
 	const auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 	const auto* column = dynamic_cast<const AbstractColumn*>(aspect);
 	Q_ASSERT(column);
-	const int number = ui.cbErrorBarsNumber->currentIndex();
+	int number = ui.cbErrorBarsNumber->currentIndex();
+	if (number == -1)
+		number = 0;
 
 	for (auto* plot : m_barPlots) {
 		auto* errorBar = plot->errorBarAt(number);
@@ -569,7 +574,9 @@ void BarPlotDock::errorMinusColumnChanged(const QModelIndex& index) {
 	const auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 	const auto* column = dynamic_cast<const AbstractColumn*>(aspect);
 	Q_ASSERT(column);
-	const int number = ui.cbErrorBarsNumber->currentIndex();
+	int number = ui.cbErrorBarsNumber->currentIndex();
+	if (number == -1)
+		number = 0;
 
 	for (auto* plot : m_barPlots) {
 		auto* errorBar = plot->errorBarAt(number);

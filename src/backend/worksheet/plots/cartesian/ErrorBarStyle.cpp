@@ -25,6 +25,9 @@
 #include <KConfigGroup>
 #include <KLocalizedString>
 
+#include <QPainter>
+#include <QPainterPath>
+
 ErrorBarStyle::ErrorBarStyle(const QString& name)
 	: AbstractAspect(name, AspectType::AbstractAspect)
 	, d_ptr(new ErrorBarStylePrivate(this)) {
@@ -46,6 +49,14 @@ void ErrorBarStyle::init(const KConfigGroup& group) {
 	d->line->init(group);
 	connect(d->line, &Line::updatePixmapRequested, this, &ErrorBarStyle::updatePixmapRequested);
 	connect(d->line, &Line::updateRequested, this, &ErrorBarStyle::updateRequested);
+}
+
+void ErrorBarStyle::draw(QPainter* painter, const QPainterPath& path) {
+	Q_D(const ErrorBarStyle);
+	painter->setOpacity(d->line->opacity());
+	painter->setPen(d->line->pen());
+	painter->setBrush(Qt::NoBrush);
+	painter->drawPath(path);
 }
 
 // ##############################################################################

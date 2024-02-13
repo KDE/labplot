@@ -2746,12 +2746,8 @@ void XYCurvePrivate::draw(QPainter* painter) {
 	}
 
 	// draw error bars
-	if ((xErrorBar->type() != ErrorBar::Type::NoError) || (yErrorBar->type() != ErrorBar::Type::NoError)) {
-		painter->setOpacity(errorBarStyle->line()->opacity());
-		painter->setPen(errorBarStyle->line()->pen());
-		painter->setBrush(Qt::NoBrush);
-		painter->drawPath(errorBarsPath);
-	}
+	if ((xErrorBar->type() != ErrorBar::Type::NoError) || (yErrorBar->type() != ErrorBar::Type::NoError))
+		errorBarStyle->draw(painter, errorBarsPath);
 
 	// draw symbols
 	if (symbol->style() != Symbol::Style::NoSymbols) {

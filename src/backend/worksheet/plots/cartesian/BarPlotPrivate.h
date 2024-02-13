@@ -33,7 +33,6 @@ public:
 	void recalc();
 	virtual void recalcShapeAndBoundingRect() override;
 	void updateValues();
-	void updateErrorBars();
 	void updatePixmap();
 
 	Background* addBackground(const KConfigGroup&);
@@ -76,14 +75,16 @@ private:
 	void recalc(int);
 	void verticalBarPlot(int);
 	void horizontalBarPlot(int);
+	void updateErrorBars(int);
 	void updateFillingRect(int columnIndex, int valueIndex, const QVector<QLineF>&);
 
 	void draw(QPainter*);
 
-	QVector<QPointF> m_valuesPoints;
-	QVector<QPointF> m_valuesPointsLogical;
+	QVector<QPointF> m_valuesPoints; // values positions in scene coordinates for all columns
+	QVector<QVector<QPointF>> m_valuesPointsLogical; // QVector<QPointF> contains the poins in logical coordinates for the value positions for one data column
 	QVector<QString> m_valuesStrings;
 	QPainterPath m_valuesPath;
+	QVector<QPainterPath> m_errorBarsPaths;
 
 	QVector<QVector<QVector<QLineF>>> m_barLines; // QVector<QLineF> contains four lines that are clipped on the plot rectangle
 	QVector<QVector<QPolygonF>> m_fillPolygons; // polygons used for the filling (clipped versions of the boxes)
