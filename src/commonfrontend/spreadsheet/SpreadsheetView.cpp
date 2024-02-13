@@ -213,7 +213,6 @@ void SpreadsheetView::init() {
 	// initialise sparkline
 	for (int colIndex = 0; colIndex < m_spreadsheet->columnCount(); ++colIndex) {
 		connect(m_spreadsheet->column(colIndex), &AbstractColumn::dataChanged, this, [=] {
-			m_spreadsheet->column(colIndex)->setSparklineToRepaint(true);
 			if (m_spreadsheet->isSparklineShown) {
 				SpreadsheetSparkLinesHeaderModel::sparkLine(m_spreadsheet->column(colIndex));
 				m_horizontalHeader->refresh();
@@ -224,7 +223,6 @@ void SpreadsheetView::init() {
 	// react on sparkline toggled
 	connect(m_horizontalHeader, &SpreadsheetHeaderView::sparklineToggled, this, [=] {
 		for (int colIndex = 0; colIndex < m_spreadsheet->columnCount(); ++colIndex) {
-			m_spreadsheet->column(colIndex)->setSparklineToRepaint(true);
 			SpreadsheetSparkLinesHeaderModel::sparkLine(m_spreadsheet->column(colIndex));
 			m_horizontalHeader->refresh();
 		}
@@ -238,7 +236,6 @@ void SpreadsheetView::init() {
 		// Establish new connections
 		for (int colIndex = 0; colIndex < m_spreadsheet->columnCount(); ++colIndex) {
 			connect(m_spreadsheet->column(colIndex), &AbstractColumn::dataChanged, this, [=] {
-				m_spreadsheet->column(colIndex)->setSparklineToRepaint(true);
 				SpreadsheetSparkLinesHeaderModel::sparkLine(m_spreadsheet->column(colIndex));
 				m_horizontalHeader->refresh();
 			});

@@ -39,12 +39,8 @@ Qt::ItemFlags SpreadsheetSparkLinesHeaderModel::flags(const QModelIndex& index) 
 }
 
 void SpreadsheetSparkLinesHeaderModel::sparkLine(Column* col) {
-	if (col->sparklineToRepaint()) {
-		if (col->hasValues()) {
-			col->setSparklineToRepaint(false);
-			col->setSparkline(SpreadsheetSparkLinesHeaderModel::showSparkLines(col));
-		}
-	}
+	if (col->hasValues())
+		col->setSparkline(SpreadsheetSparkLinesHeaderModel::showSparkLines(col));
 }
 
 SpreadsheetModel* SpreadsheetSparkLinesHeaderModel::spreadsheetModel() {
@@ -64,7 +60,7 @@ QPixmap SpreadsheetSparkLinesHeaderModel::showSparkLines(Column* col) {
 
 	// Connect the finished signal of the runnable to the watcher's setFuture slot
 	connect(runnable, &SparkLineRunnable::taskFinished, [&]() {
-		QPixmap resultPixmap = runnable->getResultPixmap();
+		QPixmap resultPixmap = runnable->pixmap();
 		// Check if the result is valid
 		if (!resultPixmap.isNull()) {
 			watcher.setFuture(QtConcurrent::run(&threadPool, [=]() {

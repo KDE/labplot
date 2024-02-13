@@ -294,7 +294,7 @@ void Column::copyData() {
 	QApplication::clipboard()->setText(output);
 }
 
-void Column::setSparkline(QPixmap pix) {
+void Column::setSparkline(const QPixmap& pix) {
 	m_sparkline = pix;
 }
 
@@ -847,14 +847,6 @@ bool Column::hasValues() const {
 	d->hasValues = foundValues;
 	d->available.hasValues = true;
 	return d->hasValues;
-}
-
-bool Column::sparklineToRepaint() const {
-	return mSparklineToRepaint;
-}
-
-void Column::setSparklineToRepaint(bool repaint) {
-	mSparklineToRepaint = repaint;
 }
 
 /*

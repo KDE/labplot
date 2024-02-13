@@ -228,8 +228,6 @@ QVariant SpreadsheetModel::headerData(int section, Qt::Orientation orientation, 
 
 		case static_cast<int>(CustomDataRole::SparkLineRole): {
 			// Return the sparkline associated with the column
-			if (m_spreadsheet->isSparklineShown)
-				SpreadsheetSparkLinesHeaderModel::sparkLine(m_spreadsheet->child<Column>(section));
 			return m_spreadsheet->child<Column>(section)->sparkline();
 		}
 		}

@@ -196,9 +196,6 @@ public:
 	void setSuppressDataChangedSignal(const bool);
 	void addUsedInPlots(QVector<CartesianPlot*>&);
 
-	bool sparklineToRepaint() const;
-	void setSparklineToRepaint(bool);
-
 	// Value Labels
 	template<typename T>
 	struct ValueLabel {
@@ -251,7 +248,6 @@ private:
 
 	QPixmap m_sparkline;
 	// for react on sparkline
-	bool mSparklineToRepaint{0};
 
 Q_SIGNALS:
 	void requestProjectContextMenu(QMenu*);
