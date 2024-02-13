@@ -1541,6 +1541,33 @@ void SpreadsheetView::checkColumnMenus(const QVector<Column*>& columns) {
 		}
 	}
 
+	if (isColumnSelected(0, true)) {
+		action_freeze_columns->setVisible(true);
+		if (m_frozenTableView) {
+			if (!m_frozenTableView->isVisible()) {
+				action_freeze_columns->setText(i18n("Freeze Column"));
+				action_insert_column_left->setEnabled(true);
+				action_insert_columns_left->setEnabled(true);
+			} else {
+				action_freeze_columns->setText(i18n("Unfreeze Column"));
+				action_insert_column_left->setEnabled(false);
+				action_insert_columns_left->setEnabled(false);
+			}
+		}
+	} else
+		action_freeze_columns->setVisible(false);
+
+	m_plotDataMenu->setEnabled(plottable && hasValues);
+	m_analyzePlotMenu->setEnabled(numeric && hasValues);
+	m_columnSetAsMenu->setEnabled(numeric);
+	action_statistics_columns->setEnabled(hasEnoughValues);
+	action_clear_columns->setEnabled(hasValues);
+	m_formattingMenu->setEnabled(hasValues);
+	action_formatting_remove->setVisible(hasFormat);
+
+	if (m_readOnly)
+		return;
+
 	// generate data is only possible for numeric columns and if there are cells available
 	const bool hasCells = m_spreadsheet->rowCount() > 0;
 	m_columnGenerateDataMenu->setEnabled(hasCells);
@@ -1565,30 +1592,6 @@ void SpreadsheetView::checkColumnMenus(const QVector<Column*>& columns) {
 	action_mask_values->setEnabled(numeric || text || datetime);
 	m_columnNormalizeMenu->setEnabled(numeric);
 	m_columnLadderOfPowersMenu->setEnabled(numeric);
-
-	if (isColumnSelected(0, true)) {
-		action_freeze_columns->setVisible(true);
-		if (m_frozenTableView) {
-			if (!m_frozenTableView->isVisible()) {
-				action_freeze_columns->setText(i18n("Freeze Column"));
-				action_insert_column_left->setEnabled(true);
-				action_insert_columns_left->setEnabled(true);
-			} else {
-				action_freeze_columns->setText(i18n("Unfreeze Column"));
-				action_insert_column_left->setEnabled(false);
-				action_insert_columns_left->setEnabled(false);
-			}
-		}
-	} else
-		action_freeze_columns->setVisible(false);
-
-	m_plotDataMenu->setEnabled(plottable && hasValues);
-	m_analyzePlotMenu->setEnabled(numeric && hasValues);
-	m_columnSetAsMenu->setEnabled(numeric);
-	action_statistics_columns->setEnabled(hasEnoughValues);
-	action_clear_columns->setEnabled(hasValues);
-	m_formattingMenu->setEnabled(hasValues);
-	action_formatting_remove->setVisible(hasFormat);
 }
 
 bool SpreadsheetView::formulaModeActive() const {
@@ -2056,8 +2059,16 @@ void SpreadsheetView::plotData(QAction* action) {
 void SpreadsheetView::plotAnalysisData() {
 	const auto* action = dynamic_cast<const QAction*>(QObject::sender());
 	auto* dlg = new PlotDataDialog(m_spreadsheet, PlotDataDialog::PlotType::XYCurve);
+
 	auto type = static_cast<XYAnalysisCurve::AnalysisAction>(action->data().toInt());
 	dlg->setAnalysisAction(type);
+
+	// use all spreadsheet columns if no columns are selected
+	auto columns = selectedColumns(true);
+	if (columns.isEmpty())
+		columns = m_spreadsheet->children<Column>();
+	dlg->setSelectedColumns(columns);
+
 	dlg->exec();
 }
 

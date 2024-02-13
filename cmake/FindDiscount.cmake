@@ -11,9 +11,9 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
 find_package(PkgConfig QUIET)
-pkg_check_modules(PC_LIBMARKDOWN libmarkdown QUIET)
+pkg_check_modules(MARKDOWN libmarkdown)
 
-set(Discount_VERSION ${PC_LIBMARKDOWN_VERSION})
+set(Discount_VERSION ${MARKDOWN_VERSION})
 
 if (Discount_INCLUDE_DIR AND Discount_LIBRARIES)
 
@@ -24,12 +24,12 @@ else (Discount_INCLUDE_DIR AND Discount_LIBRARIES)
 
   find_library (Discount_LIBRARIES
     NAMES markdown libmarkdown
-    HINTS ${PC_LIBMARKDOWN_LIBRARY_DIRS}
+    HINTS ${MARKDOWN_LIBRARY_DIRS}
   )
 
   find_path (Discount_INCLUDE_DIR
     NAMES mkdio.h
-    HINTS ${PC_LIBMARKDOWN_INCLUDE_DIRS}
+    HINTS ${MARKDOWN_INCLUDE_DIRS}
   )
 
   include (FindPackageHandleStandardArgs)

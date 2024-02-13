@@ -72,6 +72,7 @@ LiveDataSource::~LiveDataSource() {
 #ifdef HAVE_QTSERIALPORT
 	delete m_serialPort;
 #endif
+	delete m_device;
 }
 
 QWidget* LiveDataSource::view() const {
@@ -422,27 +423,6 @@ QIcon LiveDataSource::icon() const {
 	return icon;
 }
 
-QMenu* LiveDataSource::createContextMenu() {
-	QMenu* menu = AbstractPart::createContextMenu();
-
-	QAction* firstAction = nullptr;
-	// if we're populating the context menu for the project explorer, then
-	// there're already actions available there. Skip the first title-action
-	// and insert the action at the beginning of the menu.
-	if (menu->actions().size() > 1)
-		firstAction = menu->actions().at(1);
-
-	if (!m_plotDataAction) {
-		m_plotDataAction = new QAction(QIcon::fromTheme(QStringLiteral("office-chart-line")), i18n("Plot data"), this);
-		connect(m_plotDataAction, &QAction::triggered, this, &LiveDataSource::plotData);
-	}
-
-	menu->insertAction(firstAction, m_plotDataAction);
-	menu->insertSeparator(firstAction);
-
-	return menu;
-}
-
 // ##############################################################################
 // #################################  SLOTS  ####################################
 // ##############################################################################
@@ -705,8 +685,8 @@ void LiveDataSource::tcpSocketError(QAbstractSocket::SocketError /*socketError*/
 }
 
 #ifdef HAVE_QTSERIALPORT
-void LiveDataSource::serialPortError(QSerialPort::SerialPortError serialPortError) {
-	switch (serialPortError) {
+void LiveDataSource::serialPortError(QSerialPort::SerialPortError error) {
+	switch (error) {
 	case QSerialPort::DeviceNotFoundError:
 		QMessageBox::critical(nullptr, i18n("Serial Port Error"), i18n("Failed to open the device."));
 		break;
@@ -730,6 +710,11 @@ void LiveDataSource::serialPortError(QSerialPort::SerialPortError serialPortErro
 		break;
 	case QSerialPort::WriteError:
 	case QSerialPort::UnsupportedOperationError:
+#if QT_VERSION <= QT_VERSION_CHECK(6, 0, 0)
+	case QSerialPort::ParityError:
+	case QSerialPort::FramingError:
+	case QSerialPort::BreakConditionError:
+#endif
 	case QSerialPort::UnknownError:
 		QMessageBox::critical(nullptr, i18n("Serial Port Error"), i18n("The following error occurred: %1.", m_serialPort->errorString()));
 		break;
