@@ -1509,6 +1509,14 @@ void BarPlot::save(QXmlStreamWriter* writer) const {
 	// Values
 	d->value->save(writer);
 
+	// error bars
+	for (int i = 0; i < d->errorBars.count(); ++i) {
+		writer->writeStartElement(QStringLiteral("errorBars"));
+		d->errorBars.at(i)->save(writer);
+		d->errorBarStyles.at(i)->save(writer);
+		writer->writeEndElement();
+	}
+
 	writer->writeEndElement(); // close "BarPlot" section
 }
 
@@ -1523,6 +1531,7 @@ bool BarPlot::load(XmlStreamReader* reader, bool preview) {
 	QString str;
 	bool firstBackgroundRead = false;
 	bool firstBorderLineRead = false;
+	bool firstErrorBarRead = false;
 
 	while (!reader->atEnd()) {
 		reader->readNext();
@@ -1582,6 +1591,19 @@ bool BarPlot::load(XmlStreamReader* reader, bool preview) {
 			}
 		} else if (!preview && reader->name() == QLatin1String("values")) {
 			d->value->load(reader, preview);
+		} else if (!preview && reader->name() == QLatin1String("errorBars")) {
+			if (!firstErrorBarRead) {
+				auto* errorBar = d->errorBars.at(0);
+				errorBar->load(reader, preview);
+				auto* errorBarStyle = d->errorBarStyles.at(0);
+				errorBarStyle->load(reader, preview);
+				firstErrorBarRead = true;
+			} else {
+				auto* errorBar = d->addErrorBar(KConfigGroup());
+				errorBar->load(reader, preview);
+				auto* errorBarStyle = d->addErrorBarStyle(KConfigGroup());
+				errorBarStyle->load(reader, preview);
+			}
 		} else { // unknown element
 			reader->raiseUnknownElementWarning();
 			if (!reader->skipToEndElement())
@@ -1611,16 +1633,20 @@ void BarPlot::loadThemeConfig(const KConfig& config) {
 	Q_D(BarPlot);
 	d->suppressRecalc = true;
 
-	// box filling
-	for (int i = 0; i < d->backgrounds.count(); ++i) {
-		auto* background = d->backgrounds.at(i);
-		background->loadThemeConfig(group, plot->themeColorPalette(i));
-	}
+	for (int i = 0; i < d->dataColumns.count(); ++i) {
+		const auto& color = plot->themeColorPalette(i);
 
-	// box border lines
-	for (int i = 0; i < d->borderLines.count(); ++i) {
+		// box filling
+		auto* background = d->backgrounds.at(i);
+		background->loadThemeConfig(group, color);
+
+		// bar border lines
 		auto* line = d->borderLines.at(i);
-		line->loadThemeConfig(group, plot->themeColorPalette(i));
+		line->loadThemeConfig(group, color);
+
+		// error bars
+		auto* errorBarStyle = d->errorBarStyles.at(i);
+		errorBarStyle->loadThemeConfig(group, color);
 	}
 
 	// Values
