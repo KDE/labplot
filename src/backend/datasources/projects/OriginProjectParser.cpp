@@ -31,6 +31,7 @@
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
+#include "backend/worksheet/plots/cartesian/Value.h"
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
 
 #include <KLocalizedString>
@@ -302,8 +303,8 @@ bool OriginProjectParser::load(Project* project, bool preview) {
  * of the import anyway?
  */
 void OriginProjectParser::restorePointers(Project* project) {
-	// 1. extend the pathes to contain the parent structures first
-	// 2. restore the pointers from the pathes
+	// 1. extend the paths to contain the parent structures first
+	// 2. restore the pointers from the paths
 	const auto& columns = project->children<Column>(AbstractAspect::ChildIndexFlag::Recursive);
 	const auto& spreadsheets = project->children<Spreadsheet>(AbstractAspect::ChildIndexFlag::Recursive);
 	DEBUG(Q_FUNC_INFO << ", NUMBER of spreadsheets/columns = " << spreadsheets.count() << "/" << columns.count())
@@ -331,7 +332,6 @@ void OriginProjectParser::restorePointers(Project* project) {
 			// DEBUG("SPREADSHEET parent path = " << STDSTRING(spreadsheet->parentAspect()->path()))
 			if (container + spreadsheet->name() == spreadsheetName) {
 				const QString& newPath = containerPath + QLatin1Char('/') + curve->xColumnPath();
-				// const QString& newPath = QLatin1String("Project") + QLatin1Char('/') + curve->xColumnPath();
 				DEBUG(Q_FUNC_INFO << ", SET COLUMN PATH to \"" << STDSTRING(newPath) << "\"")
 				curve->setXColumnPath(newPath);
 
@@ -382,7 +382,46 @@ void OriginProjectParser::restorePointers(Project* project) {
 	}
 
 	// histograms
-	// TODO
+	const auto& hists = project->children<Histogram>(AbstractAspect::ChildIndexFlag::Recursive);
+	for (auto* hist : hists) {
+		if (!hist)
+			continue;
+		hist->setSuppressRetransform(true);
+		QString spreadsheetName = hist->dataColumnPath();
+		spreadsheetName.truncate(hist->dataColumnPath().lastIndexOf(QLatin1Char('/')));
+
+		// RESTORE_COLUMN_POINTER(hist, dataColumn, DataColumn);
+		for (const auto* spreadsheet : spreadsheets) {
+			QString container, containerPath = spreadsheet->parentAspect()->path();
+			if (spreadsheetName.contains(QLatin1Char('/'))) { // part of a workbook
+				container = containerPath.mid(containerPath.lastIndexOf(QLatin1Char('/')) + 1) + QLatin1Char('/');
+				containerPath = containerPath.left(containerPath.lastIndexOf(QLatin1Char('/')));
+			}
+			if (container + spreadsheet->name() == spreadsheetName) {
+				const QString& newPath = containerPath + QLatin1Char('/') + hist->dataColumnPath();
+				hist->setDataColumnPath(newPath);
+
+				for (auto* column : columns) {
+					if (!column)
+						continue;
+					if (column->path() == newPath) {
+						hist->setDataColumn(column);
+						break;
+					}
+				}
+				break;
+			}
+		}
+
+		// unused: auto* value = hist->value();
+		// RESTORE_COLUMN_POINTER(value, column, Column);
+		// TODO
+		RESTORE_COLUMN_POINTER(hist->errorBar(), plusColumn, PlusColumn);
+		RESTORE_COLUMN_POINTER(hist->errorBar(), minusColumn, MinusColumn);
+		hist->setSuppressRetransform(false);
+	}
+
+	// TODO: others
 }
 
 bool OriginProjectParser::loadFolder(Folder* folder, tree<Origin::ProjectNode>::iterator baseIt, bool preview) {
@@ -1755,6 +1794,7 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 				break;
 			}
 			case Origin::GraphCurve::Histogram: {
+				DEBUG(Q_FUNC_INFO << ", HISTOGRAM")
 				auto* hist = new Histogram(yColumnName);
 				childPlot = hist;
 				hist->setDataColumnPath(yColumnPath);
@@ -1763,6 +1803,7 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 					hist->setSuppressRetransform(true);
 					hist->setBinningMethod(Histogram::BinningMethod::ByWidth);
 					hist->setBinWidth(layer.histogramBin);
+					// TODO: incorrect
 					hist->setBinRangesMin(layer.histogramBegin);
 					hist->setBinRangesMax(layer.histogramEnd);
 
@@ -2309,7 +2350,7 @@ void OriginProjectParser::loadBackground(const Origin::GraphCurve& originCurve, 
 	}
 
 	background->setFirstColor(color(originCurve.fillAreaColor));
-	background->setOpacity(1 - originCurve.fillAreaTransparency / 255);
+	background->setOpacity(1. - originCurve.fillAreaTransparency / 255.);
 
 	// Color fillAreaPatternColor - color for the pattern lines, not supported
 	// double fillAreaPatternWidth - width of the pattern lines, not supported
