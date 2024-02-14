@@ -55,7 +55,7 @@ public:
 	const AbstractColumn* dataColumn{nullptr};
 	QString dataColumnPath;
 	Histogram::Type type{Histogram::Ordinary};
-	Histogram::Orientation orientation{Histogram::Vertical};
+	Histogram::Orientation orientation{Histogram::Orientation::Vertical};
 	Histogram::Normalization normalization{Histogram::Count};
 	Histogram::BinningMethod binningMethod{Histogram::SquareRoot};
 	int totalCount{0};

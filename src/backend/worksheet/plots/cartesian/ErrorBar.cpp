@@ -22,6 +22,8 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macrosCurve.h"
+#include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
+#include "backend/worksheet/plots/cartesian/ErrorBarStyle.h"
 
 #include <KConfigGroup>
 #include <KLocalizedString>
@@ -56,6 +58,136 @@ void ErrorBar::init(const KConfigGroup& group) {
 void ErrorBar::update() {
 	Q_D(ErrorBar);
 	d->update();
+}
+
+QPainterPath ErrorBar::painterPath(const ErrorBarStyle* style, const QVector<QPointF>& points, const CartesianCoordinateSystem* cSystem, WorksheetElement::Orientation orientation) const {
+	Q_D(const ErrorBar);
+	auto errorBarsPath = QPainterPath();
+	QVector<QLineF> elines;
+
+	switch (d->type) {
+	case ErrorBar::Type::NoError:
+		break;
+	case ErrorBar::Type::Poisson: {
+		if (orientation == WorksheetElement::Orientation::Vertical) {
+			for (auto& point : points) {
+				double error = sqrt(point.y());
+				if (error != 0.)
+					elines << QLineF(point.x(), point.y() + error, point.x(), point.y() - error);
+			}
+		} else {
+			for (auto& point : points) {
+				double error = sqrt(point.x());
+				if (error != 0.)
+					elines << QLineF(point.x() - error, point.y(), point.x() + error, point.y());
+			}
+		}
+		break;
+	}
+	case ErrorBar::Type::Symmetric: {
+		int index = 0;
+		if (orientation == WorksheetElement::Orientation::Vertical) {
+			const auto* errorPlusColumn = d->plusColumn;
+			for (auto& point : points) {
+				if (errorPlusColumn && errorPlusColumn->isValid(index) && !errorPlusColumn->isMasked(index)) {
+					double error = errorPlusColumn->valueAt(index);
+					if (error != 0.)
+						elines << QLineF(point.x(), point.y() + error, point.x(), point.y() - error);
+				}
+				++index;
+			}
+		} else {
+			const auto* errorMinusColumn = d->minusColumn;
+			for (auto& point : points) {
+				if (errorMinusColumn && errorMinusColumn->isValid(index) && !errorMinusColumn->isMasked(index)) {
+					double error = errorMinusColumn->valueAt(index);
+					if (error != 0.)
+						elines << QLineF(point.x() - error, point.y(), point.x() + error, point.y());
+				}
+				++index;
+			}
+		}
+		break;
+	}
+	case ErrorBar::Type::Asymmetric: {
+		int index = 0;
+		if (orientation == WorksheetElement::Orientation::Vertical) {
+			for (auto& point : points) {
+				double errorPlus = 0.;
+				double errorMinus = 0.;
+				const auto* errorPlusColumn = d->plusColumn;
+				const auto* errorMinusColumn = d->minusColumn;
+
+				if (errorPlusColumn && errorPlusColumn->isValid(index) && !errorPlusColumn->isMasked(index))
+					errorPlus = errorPlusColumn->valueAt(index);
+
+				if (errorMinusColumn && errorMinusColumn->isValid(index) && !errorMinusColumn->isMasked(index))
+					errorMinus = errorMinusColumn->valueAt(index);
+
+				if (errorPlus != 0. || errorMinus != 0.)
+					elines << QLineF(point.x(), point.y() - errorMinus, point.x(), point.y() + errorPlus);
+
+				++index;
+			}
+		} else {
+			for (auto& point : points) {
+				double errorPlus = 0.;
+				double errorMinus = 0.;
+				const auto* errorPlusColumn = d->plusColumn;
+				const auto* errorMinusColumn = d->minusColumn;
+
+				if (errorPlusColumn && errorPlusColumn->isValid(index) && !errorPlusColumn->isMasked(index))
+					errorPlus = errorPlusColumn->valueAt(index);
+
+				if (errorMinusColumn && errorMinusColumn->isValid(index) && !errorMinusColumn->isMasked(index))
+					errorMinus = errorMinusColumn->valueAt(index);
+
+				if (errorPlus != 0. || errorMinus != 0.)
+					elines << QLineF(point.x() - errorMinus, point.y(), point.x() + errorPlus, point.y());
+
+				++index;
+			}
+		}
+		break;
+	}
+	}
+
+	// map the error bars to scene coordinates
+	elines =cSystem->mapLogicalToScene(elines);
+
+	// new painter path for the error bars
+	for (const auto& line : qAsConst(elines)) {
+		errorBarsPath.moveTo(line.p1());
+		errorBarsPath.lineTo(line.p2());
+	}
+
+	// add caps for error bars
+	const auto capSize = style->capSize();
+	if (style->type() == ErrorBarStyle::Type::WithEnds) {
+		if (orientation == WorksheetElement::Orientation::Vertical) {
+			for (const auto& line : qAsConst(elines)) {
+				const auto& p1 = line.p1();
+				errorBarsPath.moveTo(QPointF(p1.x() - capSize / 2., p1.y()));
+				errorBarsPath.lineTo(QPointF(p1.x() + capSize / 2., p1.y()));
+
+				const auto& p2 = line.p2();
+				errorBarsPath.moveTo(QPointF(p2.x() - capSize / 2., p2.y()));
+				errorBarsPath.lineTo(QPointF(p2.x() + capSize / 2., p2.y()));
+			}
+		} else {
+			for (const auto& line : qAsConst(elines)) {
+				const auto& p1 = line.p1();
+				errorBarsPath.moveTo(QPointF(p1.x(), p1.y() - capSize / 2.));
+				errorBarsPath.lineTo(QPointF(p1.x(), p1.y() + capSize / 2.));
+
+				const auto& p2 = line.p2();
+				errorBarsPath.moveTo(QPointF(p2.x(), p2.y() - capSize / 2.));
+				errorBarsPath.lineTo(QPointF(p2.x(), p2.y() + capSize / 2.));
+			}
+		}
+	}
+
+	return errorBarsPath;
 }
 
 // ##############################################################################

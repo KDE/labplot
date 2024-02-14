@@ -267,7 +267,7 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 	// show the properties of the first curve
 	const auto numberLocale = QLocale();
 	ui.cbType->setCurrentIndex(m_curve->type());
-	ui.cbOrientation->setCurrentIndex(m_curve->orientation());
+	ui.cbOrientation->setCurrentIndex(static_cast<int>(m_curve->orientation()));
 	ui.cbNormalization->setCurrentIndex(m_curve->normalization());
 	ui.cbBinningMethod->setCurrentIndex(m_curve->binningMethod());
 	ui.sbBinCount->setValue(m_curve->binCount());

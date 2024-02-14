@@ -33,7 +33,6 @@ class Histogram : public Plot {
 public:
 	friend class HistogramSetDataColumnCmd;
 	enum Type { Ordinary, Cumulative, AvgShift };
-	enum Orientation { Vertical, Horizontal };
 	enum Normalization { Count, Probability, CountDensity, ProbabilityDensity };
 	enum BinningMethod { ByNumber, ByWidth, SquareRoot, Rice, Sturges, Doane, Scott };
 	enum LineType { NoLine, Bars, Envelope, DropLines, HalfBars };

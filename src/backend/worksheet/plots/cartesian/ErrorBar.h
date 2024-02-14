@@ -12,9 +12,12 @@
 
 #include "backend/core/AbstractAspect.h"
 #include "backend/lib/macros.h"
+#include "backend/worksheet/WorksheetElement.h"
 
 class AbstractColumn;
+class CartesianCoordinateSystem;
 class ErrorBarPrivate;
+class ErrorBarStyle;
 class KConfigGroup;
 
 class ErrorBar : public AbstractAspect {
@@ -36,6 +39,7 @@ public:
 	const QString& prefix() const;
 	void init(const KConfigGroup&);
 	void update();
+	QPainterPath painterPath(const ErrorBarStyle*, const QVector<QPointF>&, const CartesianCoordinateSystem*, WorksheetElement::Orientation) const;
 
 	BASIC_D_ACCESSOR_DECL(Type, type, Type)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, plusColumn, PlusColumn)
