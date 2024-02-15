@@ -751,6 +751,15 @@ target_link_libraries( labplot2 labplot2lib labplot2backendlib labplot2nsllib )
 #endif ()
 target_compile_definitions(labplot2 PRIVATE ${LABPLOT_COMPILE_DEFINITIONS})
 
+if (APPLE) # Apple app package
+    set_target_properties(labplot2 PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist)
+    set_target_properties(labplot2 PROPERTIES
+    MACOSX_BUNDLE_BUNDLE_NAME "LabPlot2"
+    MACOSX_BUNDLE_LONG_VERSION_STRING "${LABPLOT_VERSION}"
+    MACOSX_BUNDLE_SHORT_VERSION_STRING "${LABPLOT_VERSION}"
+    MACOSX_BUNDLE_GUI_IDENTIFIER "org.kde.labplot2")
+endif()
+
 ############## installation ################################
 install( TARGETS labplot2 ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 install( FILES ${KDEFRONTEND_DIR}/splash.png ${KDEFRONTEND_DIR}/labplot2.ico ${CMAKE_CURRENT_SOURCE_DIR}/../icons/application-x-labplot2.ico DESTINATION ${KDE_INSTALL_DATADIR}/${PROJECT_NAME} )
