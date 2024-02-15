@@ -6,7 +6,10 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 #include "SparklineRunnable.h"
+#include "backend/lib/trace.h"
+#include "backend/worksheet/Line.h"
 #include "backend/worksheet/Worksheet.h"
+#include "backend/worksheet/plots/PlotArea.h"
 #include "backend/worksheet/plots/cartesian/BarPlot.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "qwidget.h"
@@ -17,19 +20,24 @@ void SparkLineRunnable::run() {
 		mPixmap.fill(QColor(49, 54, 59));
 		return;
 	}
-
-	DEBUG(Q_FUNC_INFO)
 	static const QString sparklineTheme = QStringLiteral("Sparkline");
 	static const QString sparklineText = QStringLiteral("add-sparkline");
 	auto* worksheet = new Worksheet(sparklineText);
 	worksheet->setTheme(sparklineTheme);
+	worksheet->setUseViewSize(true);
 	worksheet->setLayoutBottomMargin(0);
 	worksheet->setLayoutTopMargin(0);
 	worksheet->setLayoutLeftMargin(0);
 	worksheet->setLayoutRightMargin(0);
 	auto* plot = new CartesianPlot(sparklineText);
 	plot->setTheme(sparklineTheme);
+	plot->setSuppressRetransform(true);
+	plot->setType(CartesianPlot::Type::TwoAxes);
+	plot->plotArea()->borderLine()->setStyle(Qt::NoPen);
+
 	worksheet->addChild(plot);
+	plot->setSuppressRetransform(false);
+
 	if (col->columnMode() == Column::ColumnMode::Text) {
 		auto* barPlot = new BarPlot(QString());
 		plot->addChild(barPlot);
@@ -62,15 +70,19 @@ void SparkLineRunnable::run() {
 		barPlot->setDataColumns(columns);
 
 	} else {
+		QApplication::processEvents(QEventLoop::AllEvents, 100);
 		const int rowCount = col->rowCount();
-		QVector<double> xData(rowCount);
+		QVector<int> xData(rowCount);
+		xData.resize(rowCount);
 
 		for (int i = 0; i < rowCount; ++i)
 			xData[i] = i;
 
-		Column* xColumn = new Column(sparklineText, xData);
+		auto* xColumn = new Column(QStringLiteral("x"), AbstractColumn::ColumnMode::Integer);
+		xColumn->setIntegers(xData);
+
 		auto* curve = new XYCurve(sparklineText);
-		curve->setSuppressRetransform(true);
+		curve->setSuppressRetransform(false);
 		curve->setXColumn(xColumn);
 		curve->setYColumn(col);
 		curve->setSuppressRetransform(false);
@@ -83,10 +95,9 @@ void SparkLineRunnable::run() {
 	worksheet->setSuppressLayoutUpdate(false);
 	worksheet->updateLayout();
 	// Export to pixmap
-	QPixmap pixmap(worksheet->view()->size());
-	worksheet->exportView(pixmap);
+	mPixmap = QPixmap(worksheet->view()->size());
+	worksheet->exportView(mPixmap);
 	delete worksheet;
-	mPixmap = pixmap;
 	Q_EMIT taskFinished(mPixmap);
 }
 

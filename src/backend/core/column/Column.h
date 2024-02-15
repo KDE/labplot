@@ -247,7 +247,6 @@ private:
 	ColumnStringIO* m_string_io;
 
 	QPixmap m_sparkline;
-	// for react on sparkline
 
 Q_SIGNALS:
 	void requestProjectContextMenu(QMenu*);
