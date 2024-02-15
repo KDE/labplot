@@ -316,7 +316,7 @@ void OriginProjectParser::restorePointers(Project* project) {
 		curve->setSuppressRetransform(true);
 
 		// x-column
-		QString spreadsheetName = curve->xColumnPath();
+		auto spreadsheetName = curve->xColumnPath();
 		spreadsheetName.truncate(curve->xColumnPath().lastIndexOf(QLatin1Char('/')));
 		// DEBUG(Q_FUNC_INFO << ", SPREADSHEET name from column: " << STDSTRING(spreadsheetName))
 		for (const auto* spreadsheet : spreadsheets) {
@@ -335,15 +335,7 @@ void OriginProjectParser::restorePointers(Project* project) {
 				DEBUG(Q_FUNC_INFO << ", SET COLUMN PATH to \"" << STDSTRING(newPath) << "\"")
 				curve->setXColumnPath(newPath);
 
-				for (auto* column : columns) {
-					if (!column)
-						continue;
-					if (column->path() == newPath) {
-						// DEBUG(Q_FUNC_INFO << ", set X column path = \"" << STDSTRING(column->path()) << "\"")
-						curve->setXColumn(column);
-						break;
-					}
-				}
+				RESTORE_COLUMN_POINTER(curve, xColumn, XColumn);
 				break;
 			}
 		}
@@ -358,19 +350,10 @@ void OriginProjectParser::restorePointers(Project* project) {
 				containerPath = containerPath.left(containerPath.lastIndexOf(QLatin1Char('/')));
 			}
 			if (container + spreadsheet->name() == spreadsheetName) {
-				const QString& newPath = containerPath + QLatin1Char('/') + curve->yColumnPath();
+				const auto& newPath = containerPath + QLatin1Char('/') + curve->yColumnPath();
 				curve->setYColumnPath(newPath);
 
-				for (auto* column : columns) {
-					if (!column)
-						continue;
-					// DEBUG(Q_FUNC_INFO << ", column paths = \"" << STDSTRING(column->path())
-					//	<< "\" / \"" << STDSTRING(newPath) << "\"" )
-					if (column->path() == newPath) {
-						curve->setYColumn(column);
-						break;
-					}
-				}
+				RESTORE_COLUMN_POINTER(curve, yColumn, YColumn);
 				break;
 			}
 		}
@@ -387,10 +370,9 @@ void OriginProjectParser::restorePointers(Project* project) {
 		if (!hist)
 			continue;
 		hist->setSuppressRetransform(true);
-		QString spreadsheetName = hist->dataColumnPath();
+		auto spreadsheetName = hist->dataColumnPath();
 		spreadsheetName.truncate(hist->dataColumnPath().lastIndexOf(QLatin1Char('/')));
 
-		// RESTORE_COLUMN_POINTER(hist, dataColumn, DataColumn);
 		for (const auto* spreadsheet : spreadsheets) {
 			QString container, containerPath = spreadsheet->parentAspect()->path();
 			if (spreadsheetName.contains(QLatin1Char('/'))) { // part of a workbook
@@ -398,17 +380,9 @@ void OriginProjectParser::restorePointers(Project* project) {
 				containerPath = containerPath.left(containerPath.lastIndexOf(QLatin1Char('/')));
 			}
 			if (container + spreadsheet->name() == spreadsheetName) {
-				const QString& newPath = containerPath + QLatin1Char('/') + hist->dataColumnPath();
+				const auto& newPath = containerPath + QLatin1Char('/') + hist->dataColumnPath();
 				hist->setDataColumnPath(newPath);
-
-				for (auto* column : columns) {
-					if (!column)
-						continue;
-					if (column->path() == newPath) {
-						hist->setDataColumn(column);
-						break;
-					}
-				}
+				RESTORE_COLUMN_POINTER(hist, dataColumn, DataColumn);
 				break;
 			}
 		}
