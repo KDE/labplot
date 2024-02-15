@@ -45,14 +45,6 @@ include:
 #  only:
 #    - master
 
-craft_macos_x86_64:
-  only:
-    - master
-
-craft_macos_arm64:
-  only:
-    - master
-
 clang_format:
   stage: test
   image: debian:bookworm
