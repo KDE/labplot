@@ -350,7 +350,7 @@ void OriginProjectParser::restorePointers(Project* project) {
 				containerPath = containerPath.left(containerPath.lastIndexOf(QLatin1Char('/')));
 			}
 			if (container + spreadsheet->name() == spreadsheetName) {
-				const auto& newPath = containerPath + QLatin1Char('/') + curve->yColumnPath();
+				const QString& newPath = containerPath + QLatin1Char('/') + curve->yColumnPath();
 				curve->setYColumnPath(newPath);
 
 				RESTORE_COLUMN_POINTER(curve, yColumn, YColumn);
@@ -380,7 +380,7 @@ void OriginProjectParser::restorePointers(Project* project) {
 				containerPath = containerPath.left(containerPath.lastIndexOf(QLatin1Char('/')));
 			}
 			if (container + spreadsheet->name() == spreadsheetName) {
-				const auto& newPath = containerPath + QLatin1Char('/') + hist->dataColumnPath();
+				const QString& newPath = containerPath + QLatin1Char('/') + hist->dataColumnPath();
 				hist->setDataColumnPath(newPath);
 				RESTORE_COLUMN_POINTER(hist, dataColumn, DataColumn);
 				break;
@@ -2268,11 +2268,13 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 }
 
 void OriginProjectParser::loadBackground(const Origin::GraphCurve& originCurve, Background* background) const {
-	if (!originCurve.fillArea) {
-		background->setPosition(Background::Position::No);
-		return;
-	}
-
+	DEBUG(Q_FUNC_INFO << ", fill area? " << originCurve.fillArea)
+	// TODO: fillArea option not used in Origin?
+	/*	if (!originCurve.fillArea) {
+			background->setPosition(Background::Position::No);
+			return;
+		}
+	*/
 	// TODO: handle unsigned char fillAreaType;
 	// with 'fillAreaType'=0x10 the area between the curve and the x-axis is filled
 	// with 'fillAreaType'=0x14 the area included inside the curve is filled. First and last curve points are joined by a line to close the otherwise open
