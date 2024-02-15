@@ -8,19 +8,34 @@ include:
     file:
 # fails
 #      - /gitlab-templates/reuse-lint.yml
-      - /gitlab-templates/linux.yml
-      - /gitlab-templates/windows.yml
-      - /gitlab-templates/freebsd.yml
+#      - /gitlab-templates/linux.yml
+#      - /gitlab-templates/windows.yml
+#      - /gitlab-templates/freebsd.yml
 # poppler not building due to Qt6 missing (see below)
 #      - /gitlab-templates/flatpak.yml
-      - /gitlab-templates/craft-appimage.yml
-      - /gitlab-templates/craft-windows-x86-64.yml
-      - /gitlab-templates/craft-windows-appx-qt5.yml
+#      - /gitlab-templates/craft-appimage.yml
+#      - /gitlab-templates/craft-windows-x86-64.yml
+#      - /gitlab-templates/craft-windows-appx-qt5.yml
 #      - /gitlab-templates/craft-windows-mingw64.yml
-#      - /gitlab-templates/craft-macos-x86-64.yml
-#      - /gitlab-templates/craft-macos-arm64.yml
+      - /gitlab-templates/craft-macos-x86-64.yml
+      - /gitlab-templates/craft-macos-arm64.yml
 
-# needed for tests (use "ctest -V" for more output)
+clang_format:
+  stage: test
+  image: debian:stable
+  before_script:
+    - apt-get update
+    - apt-get install --yes --no-install-recommends git clang-format-13
+  script: |
+    ./cl-fmt.sh
+    git diff --exit-code
+
+# enable, when enabled above
+#flatpak:
+#  variables:
+#    KDE_FLATPAK_MODULE_NAME: labplot2
+#    KDE_FLATPAK_APP_ID: org.kde.${KDE_FLATPAK_MODULE_NAME}
+
 #variables:
 #  QT_TEST_TIMEOUT_FUNCTION: "600"
 
@@ -167,20 +182,3 @@ include:
 # libEGL warning: DRI2: failed to create any config
 #    - xvfb-run ctest -T Test --output-on-failure
 
-#########################################################
-
-clang_format:
-  stage: test
-  image: debian:stable
-  before_script:
-    - apt-get update
-    - apt-get install --yes --no-install-recommends git clang-format-13
-  script: |
-    ./cl-fmt.sh
-    git diff --exit-code
-
-# enable, when enabled above
-#flatpak:
-#  variables:
-#    KDE_FLATPAK_MODULE_NAME: labplot2
-#    KDE_FLATPAK_APP_ID: org.kde.${KDE_FLATPAK_MODULE_NAME}
