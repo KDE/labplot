@@ -757,7 +757,7 @@ if (APPLE) # Apple app package
     MACOSX_BUNDLE_BUNDLE_NAME "LabPlot2"
     MACOSX_BUNDLE_LONG_VERSION_STRING "${LABPLOT_VERSION}"
     MACOSX_BUNDLE_SHORT_VERSION_STRING "${LABPLOT_VERSION}"
-    MACOSX_BUNDLE_GUI_IDENTIFIER "org.kde.labplot2")
+    MACOSX_BUNDLE_GUI_IDENTIFIER "org.kde.labplot")
 endif()
 
 ############## installation ################################
