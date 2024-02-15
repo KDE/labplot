@@ -1803,7 +1803,7 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 					hist->setSuppressRetransform(true);
 					hist->setBinningMethod(Histogram::BinningMethod::ByWidth);
 					hist->setBinWidth(layer.histogramBin);
-					// TODO: incorrect
+					hist->setAutoBinRanges(false);
 					hist->setBinRangesMin(layer.histogramBegin);
 					hist->setBinRangesMax(layer.histogramEnd);
 
