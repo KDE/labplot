@@ -1,17 +1,17 @@
 # Translation of labplot2.po to Catalan (Valencian)
-# Copyright (C) 2015-2023 This_file_is_part_of_KDE
+# Copyright (C) 2015-2024 This_file_is_part_of_KDE
 # This file is distributed under the license LGPL version 2.1 or
 # version 3 or later versions approved by the membership of KDE e.V.
 #
 # Antoni Bella Pérez <antonibella5@yahoo.com>, 2015, 2016, 2017, 2018, 2019, 2020, 2022.
-# Josep M. Ferrer <txemaq@gmail.com>, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023.
+# Josep M. Ferrer <txemaq@gmail.com>, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024.
 # Orestes Mas <orestes@tsc.upc.edu>, 2018.
 msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-07-10 02:40+0000\n"
-"PO-Revision-Date: 2023-12-12 12:48+0100\n"
+"PO-Revision-Date: 2024-01-30 19:50+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -12428,7 +12428,7 @@ msgstr "Dalt:"
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Template Save File"
-msgstr "Seleccioneu el fitxer per a guardar una plantilla"
+msgstr "Seleccioneu el fitxer de guardada de plantilla"
 
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1631
 #, kde-format

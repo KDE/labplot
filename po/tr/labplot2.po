@@ -2,13 +2,13 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Volkan Gezer <volkangezer@gmail.com>, 2021.
-# Emir SARI <emir_sari@icloud.com>, 2022, 2023.
+# SPDX-FileCopyrightText: 2022, 2023, 2024 Emir SARI <emir_sari@icloud.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-07-10 02:40+0000\n"
-"PO-Revision-Date: 2023-08-26 12:01+0300\n"
+"PO-Revision-Date: 2024-02-08 18:04+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-i18n-doc@kde.org>\n"
 "Language: tr\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 23.11.70\n"
+"X-Generator: Lokalize 24.01.95\n"
 "X-POOTLE-MTIME: 1502201241.000000\n"
 
 #, kde-format
@@ -1495,6 +1495,7 @@ msgstr "Evet"
 #, kde-format
 msgid "Adaptive cache resize report function enabled: %1"
 msgstr ""
+"Uyarlanır önbellek yeniden boyutlandırma raporu işlevi etkinleştirildi: %1"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:281
 #, kde-format
@@ -1504,12 +1505,12 @@ msgstr ""
 #: src/backend/datasources/filters/HDF5Filter.cpp:283
 #, kde-format
 msgid "Adaptive cache maximum size: %1 bytes"
-msgstr ""
+msgstr "Uyarlanır önbellek en büyük boyutu: %1 bayt"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:285
 #, kde-format
 msgid "Adaptive cache minimum size: %1 bytes"
-msgstr ""
+msgstr "Uyarlanır önbellek en küçük boyutu: %1 bayt"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:291
 #, kde-format
@@ -2940,7 +2941,7 @@ msgstr "Aritmetik ortalama"
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:97
 #, kde-format
 msgid "Median"
-msgstr "Orta"
+msgstr "Ortanca"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #: src/backend/gsl/ExpressionParser.cpp:163

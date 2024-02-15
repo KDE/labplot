@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-07-10 02:40+0000\n"
-"PO-Revision-Date: 2023-12-12 07:34+0100\n"
+"PO-Revision-Date: 2024-01-08 22:51+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -7020,12 +7020,12 @@ msgstr "%1: agordi la tipon de barbo"
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:522
 #, kde-format
 msgid "%1: set whiskers range parameter"
-msgstr "%1: agordi la parametron de bararoj"
+msgstr "%1: agordi la parametron de lipharoj"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:529
 #, kde-format
 msgid "%1: set whiskers cap size"
-msgstr "%1: agordi la grandecon de la ĉapelo"
+msgstr "%1: agordi la grandecon de la liphara ĉapelo"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:537
 #, kde-format
@@ -12416,7 +12416,7 @@ msgstr "%1 propraj punktoj: ŝablono \"%2\" ŝargita"
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:89
 #, kde-format
 msgid "Uncertainty Bars"
-msgstr "Necerteco Baroj"
+msgstr "Bretoj de Necerteco"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:84
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:90
@@ -14592,7 +14592,7 @@ msgstr "Preferoj"
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:314
 #, kde-format
 msgid "General"
-msgstr "Ĝeneralo"
+msgstr "Ĝenerala"
 
 #: src/kdefrontend/SettingsDialog.cpp:78
 #, kde-format
@@ -15057,7 +15057,7 @@ msgstr "Maski valorojn en la specifita regiono"
 #, kde-format
 msgctxt "@title:window"
 msgid "Mask Values"
-msgstr "Maskaj Valoroj"
+msgstr "Maski Valorojn"
 
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:77
 #, kde-format
@@ -15523,7 +15523,7 @@ msgstr ""
 "Se la generatoro estas semita kun la sama valoro, la sama fluo de hazardaj "
 "nombroj estos generita per sinsekvaj vokoj.\n"
 "Se neniu valoro estas specifita, la nuna tempomarko estos uzata por semi la "
-"generatoron. ."
+"generatoron."
 
 #: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:459
 #, kde-format
@@ -15992,7 +15992,7 @@ msgstr "Simboloj"
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:586
 #, kde-format
 msgid "Error Bars"
-msgstr "Eraraj Baroj"
+msgstr "Erarbretoj"
 
 #. i18n: ectx: property (text), widget (QLabel, lStyle)
 #. i18n: ectx: property (text), widget (QLabel, lFillingStyle)
@@ -16357,7 +16357,7 @@ msgstr "°"
 #: src/kdefrontend/ui/datapickerimagewidget.ui:273
 #, kde-format
 msgid " px"
-msgstr "px"
+msgstr " px"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbFileEmbedd)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:158
@@ -17817,7 +17817,7 @@ msgstr "Formato:"
 #: src/kdefrontend/worksheet/GridDialog.cpp:80
 #, no-c-format, kde-format
 msgid " %"
-msgstr "%"
+msgstr " %"
 
 #. i18n: ectx: property (text), widget (QLabel, lLabelsPrefix)
 #. i18n: ectx: property (text), widget (QLabel, lPrefix)
@@ -20230,7 +20230,7 @@ msgstr "Preterlasi unuan nul en eksponento"
 #: src/kdefrontend/ui/settingsgeneralpage.ui:146
 #, kde-format
 msgid "Title Bar:"
-msgstr "Titolobaro:"
+msgstr "Titolobreto:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkOmitGroupSeparator)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:153
@@ -21182,7 +21182,7 @@ msgstr ""
 #: src/kdefrontend/widgets/LabelWidget.cpp:128
 #, kde-format
 msgid "Bold"
-msgstr "Aŭdaca"
+msgstr "Grasa"
 
 #: src/kdefrontend/widgets/LabelWidget.cpp:129
 #, kde-format
