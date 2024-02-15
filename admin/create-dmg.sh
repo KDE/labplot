@@ -65,7 +65,7 @@ mkdir -p $INPREFIX/Resources/kf5/kcharselect
 cp -v kde/share/kf5/kcharselect/kcharselect-data $INPREFIX/Resources/kf5/kcharselect/
 
 # misc
-cp -v labplot/admin/Info.plist $INPREFIX
+cp -v labplot/src/Info.plist $INPREFIX
 cp -v /Applications/KDE/labplot2.app/Contents/Resources/{LABPLOT_ICONS.icns,LML_ICONS.icns} $INPREFIX/Resources
 
 # translation (locale)

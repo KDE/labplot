@@ -653,6 +653,15 @@ ENDIF ()
 add_executable( labplot2 ${LABPLOT_SOURCE} ${qml_QRC} )
 target_link_libraries( labplot2 labplot2lib )
 
+if (APPLE) # Apple app package
+    set_target_properties(labplot2 PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist)
+    set_target_properties(labplot2 PROPERTIES
+    MACOSX_BUNDLE_BUNDLE_NAME "LabPlot2"
+    MACOSX_BUNDLE_LONG_VERSION_STRING "${LABPLOT_VERSION}"
+    MACOSX_BUNDLE_SHORT_VERSION_STRING "${LABPLOT_VERSION}"
+    MACOSX_BUNDLE_GUI_IDENTIFIER "org.kde.labplot2")
+endif()
+
 ############## installation ################################
 install( TARGETS labplot2 ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 install( FILES ${KDEFRONTEND_DIR}/labplot2ui.rc DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/${PROJECT_NAME} )
