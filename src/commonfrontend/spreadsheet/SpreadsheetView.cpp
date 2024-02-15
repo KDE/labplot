@@ -210,21 +210,13 @@ void SpreadsheetView::init() {
 		m_suppressResize = true;
 	});
 
-	// initialise sparkline
-	for (int colIndex = 0; colIndex < m_spreadsheet->columnCount(); ++colIndex) {
-		connect(m_spreadsheet->column(colIndex), &AbstractColumn::dataChanged, this, [=] {
-			if (m_spreadsheet->isSparklineShown) {
-				SpreadsheetSparkLinesHeaderModel::sparkLine(m_spreadsheet->column(colIndex));
-				m_horizontalHeader->refresh();
-			}
-		});
-	}
-
 	// react on sparkline toggled
 	connect(m_horizontalHeader, &SpreadsheetHeaderView::sparklineToggled, this, [=] {
 		for (int colIndex = 0; colIndex < m_spreadsheet->columnCount(); ++colIndex) {
-			SpreadsheetSparkLinesHeaderModel::sparkLine(m_spreadsheet->column(colIndex));
-			m_horizontalHeader->refresh();
+			connect(m_spreadsheet->column(colIndex), &AbstractColumn::dataChanged, this, [=] {
+				SpreadsheetSparkLinesHeaderModel::sparkLine(m_spreadsheet->column(colIndex));
+				m_horizontalHeader->refresh();
+			});
 		}
 	});
 

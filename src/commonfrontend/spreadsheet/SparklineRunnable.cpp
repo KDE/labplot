@@ -60,13 +60,7 @@ void SparkLineRunnable::run() {
 		QVector<const AbstractColumn*> columns;
 		columns << dataColumn;
 		barPlot->setDataColumns(columns);
-		worksheet->setSuppressLayoutUpdate(false);
-		worksheet->updateLayout();
-		// Export to pixmap
-		QPixmap pixmap(worksheet->view()->size());
-		worksheet->exportView(pixmap);
-		delete worksheet;
-		mPixmap = pixmap;
+
 	} else {
 		const int rowCount = col->rowCount();
 		QVector<double> xData(rowCount);
@@ -85,15 +79,14 @@ void SparkLineRunnable::run() {
 		plot->setRightPadding(0);
 		plot->setBottomPadding(0);
 		plot->setHorizontalPadding(0);
-		worksheet->setSuppressLayoutUpdate(false);
-		worksheet->updateLayout();
-
-		// Export to pixmap
-		QPixmap pixmap(worksheet->view()->size());
-		worksheet->exportView(pixmap);
-		delete worksheet;
-		mPixmap = pixmap;
 	}
+	worksheet->setSuppressLayoutUpdate(false);
+	worksheet->updateLayout();
+	// Export to pixmap
+	QPixmap pixmap(worksheet->view()->size());
+	worksheet->exportView(pixmap);
+	delete worksheet;
+	mPixmap = pixmap;
 	Q_EMIT taskFinished(mPixmap);
 }
 

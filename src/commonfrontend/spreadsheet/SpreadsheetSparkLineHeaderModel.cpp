@@ -56,7 +56,7 @@ QPixmap SpreadsheetSparkLinesHeaderModel::showSparkLines(Column* col) {
 	// Create a QFutureWatcher to monitor the task's progress
 	QFutureWatcher<QPixmap> watcher;
 	// Create an instance of SparkLineRunnable
-	SparkLineRunnable* runnable = new SparkLineRunnable(col);
+	auto* runnable = new SparkLineRunnable(col);
 
 	// Connect the finished signal of the runnable to the watcher's setFuture slot
 	connect(runnable, &SparkLineRunnable::taskFinished, [&]() {
