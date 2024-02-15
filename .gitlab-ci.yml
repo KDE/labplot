@@ -9,24 +9,25 @@ include:
 # reuse-lint fails
 #      - /gitlab-templates/reuse-lint.yml
 # unused
-#      - /gitlab-templates/clang-format.yml
-#      - /gitlab-templates/linux.yml
-#      - /gitlab-templates/windows.yml
-#      - /gitlab-templates/linux-qt6.yml
-#      - /gitlab-templates/windows-qt6.yml
+      - /gitlab-templates/clang-format.yml
+      - /gitlab-templates/linux.yml
+      - /gitlab-templates/windows.yml
+      - /gitlab-templates/linux-qt6.yml
+      - /gitlab-templates/windows-qt6.yml
 # fails with readline (20240213)
 #      - /gitlab-templates/freebsd.yml
 # finds Qt5 but KF5 is not installed
 #      - /gitlab-templates/freebsd-qt6.yml
 ### DEPLOY
-#      - /gitlab-templates/craft-appimage.yml
+      - /gitlab-templates/craft-appimage.yml
 # see below for flatpak variables
-#      - /gitlab-templates/flatpak.yml
+      - /gitlab-templates/flatpak.yml
 # currently fails (20240212)
 #      - /gitlab-templates/craft-windows-x86-64.yml
 #      - /gitlab-templates/craft-windows-appx-qt5.yml
-      - /gitlab-templates/craft-macos-x86-64.yml
-      - /gitlab-templates/craft-macos-arm64.yml
+# currently both fail (20240215)
+#      - /gitlab-templates/craft-macos-x86-64.yml
+#      - /gitlab-templates/craft-macos-arm64.yml
 # Qt6 fails for analitza (20240105)
 #      - /gitlab-templates/craft-appimage-qt6.yml
 #      - /gitlab-templates/craft-windows-x86-64-qt6.yml
@@ -56,13 +57,12 @@ clang_format:
     git diff --exit-code
 
 # see above
-#flatpak:
-#  only:
-#    - master
-#  variables:
-#    KDE_FLATPAK_MODULE_NAME: labplot2
-#    KDE_FLATPAK_APP_ID: org.kde.${KDE_FLATPAK_MODULE_NAME}
-# needed for tests (use "ctest -V" for more output)
+flatpak:
+  only:
+    - master
+  variables:
+    KDE_FLATPAK_MODULE_NAME: labplot2
+    KDE_FLATPAK_APP_ID: org.kde.${KDE_FLATPAK_MODULE_NAME}
 
 #variables:
 #  QT_TEST_TIMEOUT_FUNCTION: "600"
