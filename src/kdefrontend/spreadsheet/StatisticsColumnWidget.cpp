@@ -249,7 +249,6 @@ void StatisticsColumnWidget::showOverview() {
 }
 
 void StatisticsColumnWidget::showOverviewPlot() {
-	PERFTRACE(QLatin1String(Q_FUNC_INFO));
 	if (!m_column->isNumeric())
 		return;
 

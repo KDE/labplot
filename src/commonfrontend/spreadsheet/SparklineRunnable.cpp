@@ -33,8 +33,6 @@ void SparkLineRunnable::run() {
 	plot->setTheme(sparklineTheme);
 	plot->setSuppressRetransform(true);
 	plot->setType(CartesianPlot::Type::TwoAxes);
-	plot->plotArea()->borderLine()->setStyle(Qt::NoPen);
-
 	worksheet->addChild(plot);
 	plot->setSuppressRetransform(false);
 
