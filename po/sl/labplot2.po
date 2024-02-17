@@ -9,15 +9,15 @@ msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-16 01:37+0000\n"
-"PO-Revision-Date: 2024-02-03 05:19+0100\n"
+"PO-Revision-Date: 2024-02-16 20:26+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
-"%100==4 ? 3 : 0);\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100>=3 && n"
+"%100<=4 ? 2 : 3);\n"
 "X-Generator: Poedit 3.4.2\n"
 "X-Accelerator-Marker: ~\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -9804,10 +9804,9 @@ msgid "Show Comments"
 msgstr "Pokaži komentarje"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:323
-#, fuzzy, kde-format
-#| msgid "Somewhat Sparse"
+#, kde-format
 msgid "Show SparkLine"
-msgstr "Nekoliko redko"
+msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:325
 #, kde-format
@@ -10101,16 +10100,14 @@ msgid "Hide Comments"
 msgstr "Skrij komentarje"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1151
-#, fuzzy, kde-format
-#| msgid "Hide Options"
+#, kde-format
 msgid "Hide Spark Lines"
-msgstr "Skrij možnosti"
+msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1153
-#, fuzzy, kde-format
-#| msgid "Show Options"
+#, kde-format
 msgid "Show Spark Lines"
-msgstr "Pokaži možnosti"
+msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1613
 #, kde-format
@@ -20024,10 +20021,9 @@ msgstr "Omogočeno"
 
 #. i18n: ectx: property (text), widget (QLabel, lShowSparklines)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:174
-#, fuzzy, kde-format
-#| msgid "Column Separator:"
+#, kde-format
 msgid "Column Sparklines:"
-msgstr "Ločilo stolpcev:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lShowComments)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:220

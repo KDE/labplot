@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-16 01:37+0000\n"
-"PO-Revision-Date: 2024-02-03 11:11+0100\n"
+"PO-Revision-Date: 2024-02-16 11:37+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -9757,10 +9757,9 @@ msgid "Show Comments"
 msgstr "Commentaar tonen"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:323
-#, fuzzy, kde-format
-#| msgid "Somewhat Sparse"
+#, kde-format
 msgid "Show SparkLine"
-msgstr "Tamelijk ruim"
+msgstr "SparkLine tonen"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:325
 #, kde-format
@@ -10054,16 +10053,14 @@ msgid "Hide Comments"
 msgstr "Commentaar verbergen"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1151
-#, fuzzy, kde-format
-#| msgid "Hide Options"
+#, kde-format
 msgid "Hide Spark Lines"
-msgstr "Opties verbergen"
+msgstr "Spark Lines verbergen"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1153
-#, fuzzy, kde-format
-#| msgid "Show Options"
+#, kde-format
 msgid "Show Spark Lines"
-msgstr "Opties tonen"
+msgstr "Spark Lines tonen"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1613
 #, kde-format
@@ -19967,10 +19964,9 @@ msgstr "Aan"
 
 #. i18n: ectx: property (text), widget (QLabel, lShowSparklines)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:174
-#, fuzzy, kde-format
-#| msgid "Column Separator:"
+#, kde-format
 msgid "Column Sparklines:"
-msgstr "Scheidingsteken voor kolommen"
+msgstr "Kolom Sparklines:"
 
 #. i18n: ectx: property (text), widget (QLabel, lShowComments)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:220

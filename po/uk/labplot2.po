@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-16 01:37+0000\n"
-"PO-Revision-Date: 2024-02-03 09:00+0200\n"
+"PO-Revision-Date: 2024-02-16 09:26+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
@@ -9834,10 +9834,9 @@ msgid "Show Comments"
 msgstr "Показувати коментарі"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:323
-#, fuzzy, kde-format
-#| msgid "Somewhat Sparse"
+#, kde-format
 msgid "Show SparkLine"
-msgstr "дещо щільно"
+msgstr "Показати спарклайни"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:325
 #, kde-format
@@ -10131,16 +10130,14 @@ msgid "Hide Comments"
 msgstr "Приховати коментарі"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1151
-#, fuzzy, kde-format
-#| msgid "Hide Search Options"
+#, kde-format
 msgid "Hide Spark Lines"
-msgstr "Приховати параметри пошуку"
+msgstr "Приховати спарклайни"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1153
-#, fuzzy, kde-format
-#| msgid "Show Options"
+#, kde-format
 msgid "Show Spark Lines"
-msgstr "Показати параметри"
+msgstr "Показати спарклайни"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1613
 #, kde-format
@@ -20084,10 +20081,9 @@ msgstr "Увімкнено"
 
 #. i18n: ectx: property (text), widget (QLabel, lShowSparklines)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:174
-#, fuzzy, kde-format
-#| msgid "Column Separator:"
+#, kde-format
 msgid "Column Sparklines:"
-msgstr "Роздільник стовпчиків:"
+msgstr "Спарклайни за стовпичком:"
 
 #. i18n: ectx: property (text), widget (QLabel, lShowComments)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:220
