@@ -2,56 +2,72 @@
 # SPDX-FileCopyrightText: 2022-2024 Stefan Gerlach <stefan.gerlach@uni.kn>
 # SPDX-License-Identifier: CC0-1.0
 
-# full path: https://invent.kde.org/sysadmin/ci-utilities/-/tree/master/gitlab-templates?ref_type=heads
+# full path: https://invent.kde.org/sysadmin/ci-utilities/-/tree/master/gitlab-templates
 include:
   - project: sysadmin/ci-utilities
     file:
-# fails
+# reuse-lint fails
 #      - /gitlab-templates/reuse-lint.yml
+# unused
+      - /gitlab-templates/clang-format.yml
       - /gitlab-templates/linux.yml
       - /gitlab-templates/windows.yml
       - /gitlab-templates/linux-qt6.yml
       - /gitlab-templates/windows-qt6.yml
-# fails sometimes with No space left on device
+# fails with readline (20240213)
 #      - /gitlab-templates/freebsd.yml
 # finds Qt5 but KF5 is not installed
 #      - /gitlab-templates/freebsd-qt6.yml
 ### DEPLOY
       - /gitlab-templates/craft-appimage.yml
-      - /gitlab-templates/craft-windows-x86-64.yml
-      - /gitlab-templates/craft-windows-appx-qt5.yml
 # see below for flatpak variables
-#      - /gitlab-templates/flatpak.yml
-# fails for analitza (20240105)
+      - /gitlab-templates/flatpak.yml
+# currently fails (20240212)
+#      - /gitlab-templates/craft-windows-x86-64.yml
+#      - /gitlab-templates/craft-windows-appx-qt5.yml
+# currently both fail (20240215)
+#      - /gitlab-templates/craft-macos-x86-64.yml
+#      - /gitlab-templates/craft-macos-arm64.yml
+# Qt6 fails for analitza (20240105)
 #      - /gitlab-templates/craft-appimage-qt6.yml
-# fails for analitza (20240105)
 #      - /gitlab-templates/craft-windows-x86-64-qt6.yml
 #      - /gitlab-templates/craft-windows-appx-qt6.yml
+#      - /gitlab-templates/craft-windows-mingw64-qt6.yml
+#      - /gitlab-templates/craft-macos-x86-64-qt6.yml
+#      - /gitlab-templates/craft-macos-arm64-qt6.yml
 # fails linking tests due to undefined references to GSL functions
 #      - /gitlab-templates/craft-windows-mingw64.yml
-# fails for analitza (20240105)
-#      - /gitlab-templates/craft-windows-mingw64-qt6.yml
-# fails because of cantor misses qt5webengine (20240105)
-#      - /gitlab-templates/craft-macos-x86-64.yml
-# fails for analitza (20240105)
-#      - /gitlab-templates/craft-macos-x86-64-qt6.yml
-# fails because of cantor (20240105)
-#      - /gitlab-templates/craft-macos-arm64.yml
-# fails for analitza (20240105)
-#      - /gitlab-templates/craft-macos-arm64-qt6.yml
 
-craft_appimage_qt515_x86_64:
+#craft_appimage_qt515_x86_64:
+#  only:
+#    - master
+
+#craft_windows_qt515_x86_64:
+#  only:
+#    - master
+
+clang_format:
+  stage: test
+  image: debian:bookworm
+  before_script:
+    - apt-get update
+    - apt-get install --yes --no-install-recommends git clang-format-13
+  script: |
+    ./cl-fmt.sh
+    git diff --exit-code
+
+# see above
+flatpak:
   only:
     - master
+  variables:
+    KDE_FLATPAK_MODULE_NAME: labplot2
+    KDE_FLATPAK_APP_ID: org.kde.${KDE_FLATPAK_MODULE_NAME}
 
-craft_windows_qt515_x86_64:
-  only:
-    - master
+variables:
+    QT_TEST_TIMEOUT_FUNCTION: "600"
 
-# needed for tests (use "ctest -V" for more output)
-#variables:
-#  QT_TEST_TIMEOUT_FUNCTION: "600"
-
+########################################################
 # test builds (prepend '.' to temporary disable):
 ## Ubuntu 22.04 min (Debug)
 ## Ubuntu 22.04 full (Release)
@@ -60,8 +76,6 @@ craft_windows_qt515_x86_64:
 ## OS 15.5 min (Release)
 ## OS 15.5 full (Debug)
 ## Tumbleweed full (Debug)
-
-########################################################
 
 .ubuntu_22.04_min:
   stage: build
@@ -195,20 +209,3 @@ craft_windows_qt515_x86_64:
 # libEGL warning: DRI2: failed to create any config
 #    - xvfb-run ctest -T Test --output-on-failure
 
-#########################################################
-
-clang_format:
-  stage: test
-  image: debian:stable
-  before_script:
-    - apt-get update
-    - apt-get install --yes --no-install-recommends git clang-format-13
-  script: |
-    ./cl-fmt.sh
-    git diff --exit-code
-
-# see above
-#flatpak:
-#  variables:
-#    KDE_FLATPAK_MODULE_NAME: labplot2
-#    KDE_FLATPAK_APP_ID: org.kde.${KDE_FLATPAK_MODULE_NAME}

@@ -27,6 +27,8 @@
 #include "backend/worksheet/plots/cartesian/BoxPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegendPrivate.h"
+#include "backend/worksheet/plots/cartesian/ErrorBar.h"
+#include "backend/worksheet/plots/cartesian/ErrorBarStyle.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
 #include "backend/worksheet/plots/cartesian/KDEPlot.h"
 #include "backend/worksheet/plots/cartesian/LollipopPlot.h"
@@ -390,14 +392,10 @@ void CartesianPlotLegendPrivate::retransform() {
 
 	// determine the width of the legend
 	QFontMetrics fm(labelFont);
-	float w;
-	float h = fm.ascent();
 
-	float legendWidth = 0;
-
-	int index;
+	qreal legendWidth = 0;
 	for (int c = 0; c < columnCount; ++c) {
-		float maxTextWidth = 0;
+		int maxTextWidth = 0, index;
 		for (int r = 0; r < rowCount; ++r) {
 			if (labelColumnMajor)
 				index = c * rowCount + r;
@@ -407,7 +405,7 @@ void CartesianPlotLegendPrivate::retransform() {
 			if (index >= namesCount)
 				break;
 
-			w = fm.boundingRect(m_names.at(index)).width();
+			int w = fm.boundingRect(m_names.at(index)).width();
 			if (w > maxTextWidth)
 				maxTextWidth = w;
 		}
@@ -417,11 +415,11 @@ void CartesianPlotLegendPrivate::retransform() {
 
 	legendWidth += layoutLeftMargin + layoutRightMargin; // margins
 	legendWidth += columnCount * (lineSymbolWidth + layoutHorizontalSpacing); // width of the columns without the text
-	legendWidth += (columnCount - 1) * 2 * layoutHorizontalSpacing; // spacings between the columns
+	legendWidth += (columnCount - 1) * 2. * layoutHorizontalSpacing; // spacings between the columns
 
 	// add title width if title is available
 	if (title->isVisible() && !title->text().text.isEmpty()) {
-		float titleWidth;
+		qreal titleWidth;
 		titleWidth = title->graphicsItem()->boundingRect().width();
 
 		if (titleWidth > legendWidth)
@@ -429,14 +427,15 @@ void CartesianPlotLegendPrivate::retransform() {
 	}
 
 	// determine the height of the legend
-	float legendHeight = layoutTopMargin + layoutBottomMargin; // margins
+	int h = fm.ascent();
+	qreal legendHeight = layoutTopMargin + layoutBottomMargin; // margins
 	legendHeight += rowCount * h; // height of the rows
 	legendHeight += (rowCount - 1) * layoutVerticalSpacing; // spacing between the rows
 	if (title->isVisible() && !title->text().text.isEmpty())
 		legendHeight += title->graphicsItem()->boundingRect().height(); // legend titl
 
-	m_boundingRectangle.setX(-legendWidth / 2);
-	m_boundingRectangle.setY(-legendHeight / 2);
+	m_boundingRectangle.setX(-legendWidth / 2.);
+	m_boundingRectangle.setY(-legendHeight / 2.);
 	m_boundingRectangle.setWidth(legendWidth);
 	m_boundingRectangle.setHeight(legendHeight);
 
@@ -569,8 +568,7 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 
 	painter->save();
 
-	int col = 0;
-	int row = 0;
+	int col = 0, row = 0;
 	for (auto* plot : m_plots) {
 		// process the curves
 		// TODO: move the logic below into the plot classes
@@ -591,28 +589,31 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 			}
 
 			// error bars
-			if ((curve->xErrorType() != XYCurve::ErrorType::NoError && curve->xErrorPlusColumn())
-				|| (curve->yErrorType() != XYCurve::ErrorType::NoError && curve->yErrorPlusColumn())) {
-				painter->setOpacity(curve->errorBarsLine()->opacity());
-				painter->setPen(curve->errorBarsLine()->pen());
+			const auto xErrorType = curve->xErrorBar()->type();
+			const auto yErrorType = curve->yErrorBar()->type();
+			const auto* errorBarsLine = curve->errorBarStyle()->line();
+			if ((xErrorType != ErrorBar::Type::NoError && curve->xErrorBar()->plusColumn())
+				|| (yErrorType != ErrorBar::Type::NoError && curve->yErrorBar()->plusColumn())) {
+				painter->setOpacity(errorBarsLine->opacity());
+				painter->setPen(errorBarsLine->pen());
 
 				// curve's error bars for x
 				float errorBarsSize = Worksheet::convertToSceneUnits(10, Worksheet::Unit::Point);
 				if (curve->symbol()->style() != Symbol::Style::NoSymbols && errorBarsSize < curve->symbol()->size() * 1.4)
 					errorBarsSize = curve->symbol()->size() * 1.4;
 
-				switch (curve->errorBarsLine()->errorBarsType()) {
-				case XYCurve::ErrorBarsType::Simple:
+				switch (curve->errorBarStyle()->type()) {
+				case ErrorBarStyle::Type::Simple:
 					// horiz. line
-					if (curve->xErrorType() != XYCurve::ErrorType::NoError)
+					if (xErrorType != ErrorBar::Type::NoError)
 						painter->drawLine(lineSymbolWidth / 2 - errorBarsSize / 2, h / 2, lineSymbolWidth / 2 + errorBarsSize / 2, h / 2);
 					// vert. line
-					if (curve->yErrorType() != XYCurve::ErrorType::NoError)
+					if (yErrorType != ErrorBar::Type::NoError)
 						painter->drawLine(lineSymbolWidth / 2, h / 2 - errorBarsSize / 2, lineSymbolWidth / 2, h / 2 + errorBarsSize / 2);
 					break;
-				case XYCurve::ErrorBarsType::WithEnds:
+				case ErrorBarStyle::Type::WithEnds:
 					// horiz. line
-					if (curve->xErrorType() != XYCurve::ErrorType::NoError) {
+					if (xErrorType != ErrorBar::Type::NoError) {
 						painter->drawLine(lineSymbolWidth / 2 - errorBarsSize / 2, h / 2, lineSymbolWidth / 2 + errorBarsSize / 2, h / 2);
 
 						// caps for the horiz. line
@@ -627,7 +628,7 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 					}
 
 					// vert. line
-					if (curve->yErrorType() != XYCurve::ErrorType::NoError) {
+					if (yErrorType != ErrorBar::Type::NoError) {
 						painter->drawLine(lineSymbolWidth / 2, h / 2 - errorBarsSize / 2, lineSymbolWidth / 2, h / 2 + errorBarsSize / 2);
 
 						// caps for the vert. line
@@ -1028,7 +1029,7 @@ bool CartesianPlotLegend::load(XmlStreamReader* reader, bool preview) {
 					reader->raiseMissingAttributeWarning(QStringLiteral("horizontalPosition"));
 				else {
 					const auto pos = (WorksheetElement::HorizontalPosition)str.toInt();
-					if (pos == WorksheetElement::HorizontalPosition::Custom)
+					if (pos == WorksheetElement::HorizontalPosition::Relative)
 						d->position.horizontalPosition = WorksheetElement::HorizontalPosition::Center;
 					else
 						d->position.horizontalPosition = pos;
@@ -1039,7 +1040,7 @@ bool CartesianPlotLegend::load(XmlStreamReader* reader, bool preview) {
 					reader->raiseMissingAttributeWarning(QStringLiteral("verticalPosition"));
 				else {
 					const auto pos = (WorksheetElement::VerticalPosition)str.toInt();
-					if (pos == WorksheetElement::VerticalPosition::Custom)
+					if (pos == WorksheetElement::VerticalPosition::Relative)
 						d->position.verticalPosition = WorksheetElement::VerticalPosition::Center;
 					else
 						d->position.verticalPosition = pos;

@@ -13,6 +13,7 @@
 #define COLUMN_H
 
 #include "backend/core/AbstractColumn.h"
+#include <QPixmap>
 
 class AbstractSimpleFilter;
 class CartesianPlot;
@@ -193,7 +194,6 @@ public:
 
 	void setChanged();
 	void setSuppressDataChangedSignal(const bool);
-
 	void addUsedInPlots(QVector<CartesianPlot*>&);
 
 	// Value Labels
@@ -226,6 +226,8 @@ public:
 public Q_SLOTS:
 	void pasteData();
 	void updateFormula();
+	void setSparkline(const QPixmap&);
+	QPixmap sparkline();
 
 private:
 	bool XmlReadInputFilter(XmlStreamReader*);
@@ -243,6 +245,8 @@ private:
 
 	ColumnPrivate* d;
 	ColumnStringIO* m_string_io;
+
+	QPixmap m_sparkline;
 
 Q_SIGNALS:
 	void requestProjectContextMenu(QMenu*);

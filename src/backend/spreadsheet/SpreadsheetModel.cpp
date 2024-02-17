@@ -23,6 +23,8 @@
 #include <QIcon>
 #include <QPalette>
 
+#include <commonfrontend/spreadsheet/SpreadsheetSparkLineHeaderModel.h>
+
 /*!
 	\class SpreadsheetModel
 	\brief  Model for the access to a Spreadsheet
@@ -113,6 +115,10 @@ QModelIndex SpreadsheetModel::index(const QString& text) const {
 	}
 
 	return createIndex(-1, -1);
+}
+
+Spreadsheet* SpreadsheetModel::spreadsheet() {
+	return m_spreadsheet;
 }
 
 QVariant SpreadsheetModel::data(const QModelIndex& index, int role) const {
@@ -217,7 +223,13 @@ QVariant SpreadsheetModel::headerData(int section, Qt::Orientation orientation, 
 		case Qt::DecorationRole:
 			return m_spreadsheet->child<Column>(section)->icon();
 		case static_cast<int>(CustomDataRole::CommentRole):
+			// Return the comment associated with the column
 			return m_spreadsheet->child<Column>(section)->comment();
+
+		case static_cast<int>(CustomDataRole::SparkLineRole): {
+			// Return the sparkline associated with the column
+			return m_spreadsheet->child<Column>(section)->sparkline();
+		}
 		}
 		break;
 	case Qt::Vertical:

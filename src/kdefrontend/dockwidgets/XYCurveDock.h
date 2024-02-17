@@ -3,7 +3,7 @@
 	Project          : LabPlot
 	Description      : widget for curve properties
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2010-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2010-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2013 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -13,6 +13,7 @@
 #define XYCURVEDOCK_H
 
 #include "backend/core/AbstractColumn.h"
+#include "backend/worksheet/plots/cartesian/ErrorBar.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "kdefrontend/dockwidgets/BaseDock.h"
 
@@ -20,6 +21,7 @@
 #include "ui_xycurvedockgeneraltab.h"
 
 class BackgroundWidget;
+class ErrorBarStyleWidget;
 class LineWidget;
 class Column;
 class SymbolWidget;
@@ -64,9 +66,10 @@ protected:
 	LineWidget* dropLineWidget{nullptr};
 	BackgroundWidget* backgroundWidget{nullptr};
 	SymbolWidget* symbolWidget{nullptr};
-	LineWidget* errorBarsLineWidget{nullptr};
+	ErrorBarStyleWidget* errorBarStyleWidget{nullptr};
 	QList<XYCurve*> m_curvesList;
 	XYCurve* m_curve{nullptr};
+	AspectTreeModel* m_valuesModel{nullptr};
 
 private Q_SLOTS:
 	void init();
@@ -140,10 +143,10 @@ private Q_SLOTS:
 	void curveValuesColorChanged(QColor);
 
 	//"Error bars"-Tab
-	void curveXErrorTypeChanged(XYCurve::ErrorType);
+	void curveXErrorTypeChanged(ErrorBar::Type);
 	void curveXErrorPlusColumnChanged(const AbstractColumn*);
 	void curveXErrorMinusColumnChanged(const AbstractColumn*);
-	void curveYErrorTypeChanged(XYCurve::ErrorType);
+	void curveYErrorTypeChanged(ErrorBar::Type);
 	void curveYErrorPlusColumnChanged(const AbstractColumn*);
 	void curveYErrorMinusColumnChanged(const AbstractColumn*);
 

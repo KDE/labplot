@@ -9,10 +9,10 @@
 #include "commonfrontend/spreadsheet/SpreadsheetCommentsHeaderModel.h"
 
 /*!
-   \class SpreadsheetCommentsHeaderModel
-   \brief Model class wrapping a SpreadsheetModel to display column comments in a SpreadsheetCommentsHeaderView
+ \class SpreadsheetCommentsHeaderModel
+ \brief Model class wrapping a SpreadsheetModel to display column comments in a SpreadsheetCommentsHeaderView
 
-   \ingroup commonfrontend
+\ingroup commonfrontend
 */
 
 SpreadsheetCommentsHeaderModel::SpreadsheetCommentsHeaderModel(SpreadsheetModel* spreadsheet_model, QObject* parent)

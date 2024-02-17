@@ -21,6 +21,7 @@ CustomPointDock::CustomPointDock(QWidget* parent)
 	ui.setupUi(this);
 	setPlotRangeCombobox(ui.cbPlotRanges);
 	setBaseWidgets(ui.leName, ui.teComment);
+	setVisibilityWidgets(ui.chkVisible);
 
 	//"Symbol"-tab
 	auto* hboxLayout = new QHBoxLayout(ui.tabSymbol);
@@ -54,7 +55,6 @@ CustomPointDock::CustomPointDock(QWidget* parent)
 	// SLOTS
 	// General
 	connect(ui.chbLock, &QCheckBox::clicked, this, &CustomPointDock::lockChanged);
-	connect(ui.chkVisible, &QCheckBox::clicked, this, &CustomPointDock::visibilityChanged);
 
 	// positioning
 	connect(ui.chbBindLogicalPos, &QCheckBox::clicked, this, &CustomPointDock::bindingChanged);
@@ -111,9 +111,7 @@ void CustomPointDock::setPoints(QList<CustomPoint*> points) {
 
 void CustomPointDock::initConnections() const {
 	// SIGNALs/SLOTs
-	//  general
 	connect(m_point, &CustomPoint::lockChanged, this, &CustomPointDock::pointLockChanged);
-	connect(m_point, &CustomPoint::visibleChanged, this, &CustomPointDock::pointVisibilityChanged);
 	connect(m_point, &CustomPoint::positionChanged, this, &CustomPointDock::pointPositionChanged);
 	connect(m_point, &CustomPoint::positionLogicalChanged, this, &CustomPointDock::pointPositionLogicalChanged);
 	connect(m_point, &CustomPoint::coordinateBindingEnabledChanged, this, &CustomPointDock::pointCoordinateBindingEnabledChanged);
@@ -228,15 +226,6 @@ void CustomPointDock::lockChanged(bool locked) {
 		point->setLock(locked);
 }
 
-void CustomPointDock::visibilityChanged(bool state) {
-	CONDITIONAL_LOCK_RETURN;
-
-	m_point->beginMacro(i18n("%1 CustomPoints: visibility changed", m_points.count()));
-	for (auto* point : m_points)
-		point->setVisible(state);
-	m_point->endMacro();
-}
-
 /*!
  * \brief CustomPointDock::bindingChanged
  * Bind CustomPoint to the cartesian plot coords or not
@@ -312,11 +301,6 @@ void CustomPointDock::pointPositionLogicalChanged(QPointF pos) {
 void CustomPointDock::pointLockChanged(bool on) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.chbLock->setChecked(on);
-}
-
-void CustomPointDock::pointVisibilityChanged(bool on) {
-	CONDITIONAL_LOCK_RETURN;
-	ui.chkVisible->setChecked(on);
 }
 
 //**********************************************************

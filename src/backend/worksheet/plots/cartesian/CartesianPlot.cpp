@@ -43,6 +43,7 @@
 #include "backend/worksheet/plots/cartesian/BoxPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
 #include "backend/worksheet/plots/cartesian/CustomPoint.h"
+#include "backend/worksheet/plots/cartesian/ErrorBar.h"
 #include "backend/worksheet/plots/cartesian/KDEPlot.h"
 #include "backend/worksheet/plots/cartesian/LollipopPlot.h"
 #include "backend/worksheet/plots/cartesian/QQPlot.h"
@@ -1898,11 +1899,11 @@ void CartesianPlot::addFitCurve() {
 		curve->initStartValues(curCurve);
 
 		// fit with weights for y if the curve has error bars for y
-		if (curCurve->yErrorType() == XYCurve::ErrorType::Symmetric && curCurve->yErrorPlusColumn()) {
+		if (curCurve->yErrorBar()->type() == ErrorBar::Type::Symmetric && curCurve->yErrorBar()->plusColumn()) {
 			auto fitData = curve->fitData();
 			fitData.yWeightsType = nsl_fit_weight_instrumental;
 			curve->setFitData(fitData);
-			curve->setYErrorColumn(curCurve->yErrorPlusColumn());
+			curve->setYErrorColumn(curCurve->yErrorBar()->plusColumn());
 		}
 
 		curve->recalculate();
@@ -2153,13 +2154,13 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		connect(curve, &XYCurve::xDataChanged, [this, curve]() {
 			this->dataChanged(const_cast<XYCurve*>(curve), Dimension::X);
 		});
-		connect(curve, &XYCurve::xErrorTypeChanged, [this, curve]() {
+		connect(curve->xErrorBar(), &ErrorBar::typeChanged, [this, curve]() {
 			this->dataChanged(const_cast<XYCurve*>(curve), Dimension::X);
 		});
-		connect(curve, &XYCurve::xErrorPlusColumnChanged, [this, curve]() {
+		connect(curve->xErrorBar(), &ErrorBar::plusColumnChanged, [this, curve]() {
 			this->dataChanged(const_cast<XYCurve*>(curve), Dimension::X);
 		});
-		connect(curve, &XYCurve::xErrorMinusColumnChanged, [this, curve]() {
+		connect(curve->xErrorBar(), &ErrorBar::minusColumnChanged, [this, curve]() {
 			this->dataChanged(const_cast<XYCurve*>(curve), Dimension::X);
 		});
 
@@ -2171,13 +2172,13 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		connect(curve, &XYCurve::yDataChanged, [this, curve]() {
 			this->dataChanged(const_cast<XYCurve*>(curve), Dimension::Y);
 		});
-		connect(curve, &XYCurve::yErrorTypeChanged, [this, curve]() {
+		connect(curve->yErrorBar(), &ErrorBar::typeChanged, [this, curve]() {
 			this->dataChanged(const_cast<XYCurve*>(curve), Dimension::Y);
 		});
-		connect(curve, &XYCurve::yErrorPlusColumnChanged, [this, curve]() {
+		connect(curve->yErrorBar(), &ErrorBar::plusColumnChanged, [this, curve]() {
 			this->dataChanged(const_cast<XYCurve*>(curve), Dimension::Y);
 		});
-		connect(curve, &XYCurve::yErrorMinusColumnChanged, [this, curve]() {
+		connect(curve->yErrorBar(), &ErrorBar::minusColumnChanged, [this, curve]() {
 			this->dataChanged(const_cast<XYCurve*>(curve), Dimension::Y);
 		});
 
@@ -3324,7 +3325,6 @@ void CartesianPlotPrivate::retransformScales(int xIndex, int yIndex) {
  */
 void CartesianPlotPrivate::updateDataRect() {
 	dataRect = mapRectFromScene(rect);
-
 	double paddingLeft = horizontalPadding;
 	double paddingRight = rightPadding;
 	double paddingTop = verticalPadding;

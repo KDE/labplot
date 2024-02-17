@@ -106,19 +106,9 @@ public:
 	Background* background{nullptr};
 
 	// error bars
-	XYCurve::ErrorType xErrorType{XYCurve::ErrorType::NoError};
-	const AbstractColumn* xErrorPlusColumn{nullptr};
-	QString xErrorPlusColumnPath;
-	const AbstractColumn* xErrorMinusColumn{nullptr};
-	QString xErrorMinusColumnPath;
-
-	XYCurve::ErrorType yErrorType{XYCurve::ErrorType::NoError};
-	const AbstractColumn* yErrorPlusColumn{nullptr};
-	QString yErrorPlusColumnPath;
-	const AbstractColumn* yErrorMinusColumn{nullptr};
-	QString yErrorMinusColumnPath;
-
-	Line* errorBarsLine{nullptr};
+	ErrorBar* xErrorBar{nullptr};
+	ErrorBar* yErrorBar{nullptr};
+	ErrorBarStyle* errorBarStyle{nullptr};
 
 	XYCurve* const q;
 	friend class XYCurve;

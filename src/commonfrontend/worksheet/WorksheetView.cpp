@@ -2294,6 +2294,7 @@ void WorksheetView::exportToFile(const QString& path, const ExportFormat format,
 
 void WorksheetView::exportToPixmap(QPixmap& pixmap) {
 	const auto& sourceRect = scene()->sceneRect();
+
 	int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Unit::Millimeter);
 	int h = Worksheet::convertFromSceneUnits(sourceRect.height(), Worksheet::Unit::Millimeter);
 	w = w * QApplication::primaryScreen()->physicalDotsPerInchX() / 25.4;

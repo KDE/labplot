@@ -19,6 +19,7 @@
 #include "backend/worksheet/plots/cartesian/BarPlot.h"
 #include "backend/worksheet/plots/cartesian/BoxPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "backend/worksheet/plots/cartesian/ErrorBar.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
 #include "backend/worksheet/plots/cartesian/KDEPlot.h"
 #include "backend/worksheet/plots/cartesian/LollipopPlot.h"
@@ -59,7 +60,7 @@ namespace {
 // the project version will compared with this.
 // if you make any compatibilty changes to the xmlfile
 // or the function in labplot, increase this number
-int buildXmlVersion = 10;
+int buildXmlVersion = 11;
 }
 
 /**
@@ -866,10 +867,10 @@ void Project::restorePointers(AbstractAspect* aspect) {
 			RESTORE_COLUMN_POINTER(curve, xColumn, XColumn);
 			RESTORE_COLUMN_POINTER(curve, yColumn, YColumn);
 			RESTORE_COLUMN_POINTER(curve, valuesColumn, ValuesColumn);
-			RESTORE_COLUMN_POINTER(curve, xErrorPlusColumn, XErrorPlusColumn);
-			RESTORE_COLUMN_POINTER(curve, xErrorMinusColumn, XErrorMinusColumn);
-			RESTORE_COLUMN_POINTER(curve, yErrorPlusColumn, YErrorPlusColumn);
-			RESTORE_COLUMN_POINTER(curve, yErrorMinusColumn, YErrorMinusColumn);
+			RESTORE_COLUMN_POINTER(curve->xErrorBar(), plusColumn, PlusColumn);
+			RESTORE_COLUMN_POINTER(curve->xErrorBar(), minusColumn, MinusColumn);
+			RESTORE_COLUMN_POINTER(curve->yErrorBar(), plusColumn, PlusColumn);
+			RESTORE_COLUMN_POINTER(curve->yErrorBar(), minusColumn, MinusColumn);
 		}
 
 		if (analysisCurve)
@@ -916,8 +917,8 @@ void Project::restorePointers(AbstractAspect* aspect) {
 		RESTORE_COLUMN_POINTER(hist, dataColumn, DataColumn);
 		auto* value = hist->value();
 		RESTORE_COLUMN_POINTER(value, column, Column);
-		RESTORE_COLUMN_POINTER(hist, errorPlusColumn, ErrorPlusColumn);
-		RESTORE_COLUMN_POINTER(hist, errorMinusColumn, ErrorMinusColumn);
+		RESTORE_COLUMN_POINTER(hist->errorBar(), plusColumn, PlusColumn);
+		RESTORE_COLUMN_POINTER(hist->errorBar(), minusColumn, MinusColumn);
 	}
 
 	// QQ-plots

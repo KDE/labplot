@@ -4,7 +4,7 @@
 	Description          : Histogram
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2016 Anu Mittal <anu22mittal@gmail.com>
-	SPDX-FileCopyrightText: 2016-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2016-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2017-2018 Garvit Khatri <garvitdelhi@gmail.com>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -29,6 +29,8 @@
 #include "backend/worksheet/Background.h"
 #include "backend/worksheet/Line.h"
 #include "backend/worksheet/Worksheet.h"
+#include "backend/worksheet/plots/cartesian/ErrorBar.h"
+#include "backend/worksheet/plots/cartesian/ErrorBarStyle.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "backend/worksheet/plots/cartesian/Value.h"
 #include "tools/ImageTools.h"
@@ -42,8 +44,6 @@
 #include <QGraphicsSceneMouseEvent>
 
 CURVE_COLUMN_CONNECT(Histogram, Data, data, recalc)
-CURVE_COLUMN_CONNECT(Histogram, ErrorPlus, errorPlus, updateErrorBars)
-CURVE_COLUMN_CONNECT(Histogram, ErrorMinus, errorMinus, updateErrorBars)
 
 Histogram::Histogram(const QString& name)
 	: Plot(name, new HistogramPrivate(this), AspectType::Histogram) {
@@ -131,25 +131,23 @@ void Histogram::init() {
 	});
 
 	// error bars
-	d->errorType = (Histogram::ErrorType)group.readEntry(QStringLiteral("ErrorType"), (int)Histogram::NoError);
-	d->errorBarsLine = new Line(QString());
-	d->errorBarsLine->setPrefix(QStringLiteral("ErrorBars"));
-	d->errorBarsLine->setCreateXmlElement(false); // errorBars element is created in Histogram::save()
-	d->errorBarsLine->setErrorBarsTypeAvailable(true);
-	d->errorBarsLine->setHidden(true);
-	addChild(d->errorBarsLine);
-	d->errorBarsLine->init(group);
-	connect(d->errorBarsLine, &Line::errorBarsTypeChanged, [=] {
+	d->errorBar = new ErrorBar(QString());
+	addChild(d->errorBar);
+	d->errorBar->setHidden(true);
+	d->errorBar->init(group);
+	connect(d->errorBar, &ErrorBar::updateRequested, [=] {
 		d->updateErrorBars();
 	});
-	connect(d->errorBarsLine, &Line::errorBarsCapSizeChanged, [=] {
+
+	d->errorBarStyle = new ErrorBarStyle(QString());
+	addChild(d->errorBarStyle);
+	d->errorBarStyle->setHidden(true);
+	d->errorBarStyle->init(group);
+	connect(d->errorBarStyle, &ErrorBarStyle::updateRequested, [=] {
 		d->updateErrorBars();
 	});
-	connect(d->errorBarsLine, &Line::updatePixmapRequested, [=] {
+	connect(d->errorBarStyle, &ErrorBarStyle::updatePixmapRequested, [=] {
 		d->updatePixmap();
-	});
-	connect(d->errorBarsLine, &Line::updateRequested, [=] {
-		d->recalcShapeAndBoundingRect();
 	});
 
 	// marginal plots (rug, histogram, boxplot)
@@ -295,15 +293,14 @@ Background* Histogram::background() const {
 }
 
 // error bars
-BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::ErrorType, errorType, errorType)
-BASIC_SHARED_D_READER_IMPL(Histogram, const AbstractColumn*, errorPlusColumn, errorPlusColumn)
-BASIC_SHARED_D_READER_IMPL(Histogram, const AbstractColumn*, errorMinusColumn, errorMinusColumn)
-BASIC_SHARED_D_READER_IMPL(Histogram, QString, errorPlusColumnPath, errorPlusColumnPath)
-BASIC_SHARED_D_READER_IMPL(Histogram, QString, errorMinusColumnPath, errorMinusColumnPath)
-
-Line* Histogram::errorBarsLine() const {
+ErrorBar* Histogram::errorBar() const {
 	Q_D(const Histogram);
-	return d->errorBarsLine;
+	return d->errorBar;
+}
+
+ErrorBarStyle* Histogram::errorBarStyle() const {
+	Q_D(const Histogram);
+	return d->errorBarStyle;
 }
 
 // margin plots
@@ -341,8 +338,8 @@ bool Histogram::hasData() const {
 
 bool Histogram::usingColumn(const Column* column) const {
 	Q_D(const Histogram);
-	return (d->dataColumn == column || (d->errorType == ErrorType::CustomSymmetric && d->errorPlusColumn == column)
-			|| (d->errorType == ErrorType::CustomAsymmetric && (d->errorPlusColumn == column || d->errorMinusColumn == column)));
+	return (d->dataColumn == column || (d->errorBar->type() == ErrorBar::Type::Symmetric && d->errorBar->plusColumn() == column)
+			|| (d->errorBar->type() == ErrorBar::Type::Asymmetric && (d->errorBar->plusColumn() == column || d->errorBar->minusColumn() == column)));
 }
 
 void Histogram::updateColumnDependencies(const AbstractColumn* column) {
@@ -360,15 +357,15 @@ void Histogram::updateColumnDependencies(const AbstractColumn* column) {
 	else if (d->value->columnPath() == columnPath)
 		d->value->setColumn(column);
 
-	if (d->errorPlusColumn == column)
-		d->errorPlusColumnPath = columnPath;
-	else if (d->errorPlusColumnPath == columnPath)
-		setErrorPlusColumn(column);
+	if (d->errorBar->plusColumn() == column)
+		d->errorBar->setPlusColumnPath(columnPath);
+	else if (d->errorBar->plusColumnPath() == columnPath)
+		d->errorBar->setPlusColumn(column);
 
-	if (d->errorMinusColumn == column)
-		d->errorMinusColumnPath = columnPath;
-	else if (d->errorMinusColumnPath == columnPath)
-		setErrorMinusColumn(column);
+	if (d->errorBar->minusColumn() == column)
+		d->errorBar->setMinusColumnPath(columnPath);
+	else if (d->errorBar->minusColumnPath() == columnPath)
+		d->errorBar->setMinusColumn(column);
 
 	setUndoAware(true);
 }
@@ -519,38 +516,6 @@ void Histogram::setBinRangesMax(double binRangesMax) {
 		exec(new HistogramSetBinRangesMaxCmd(d, binRangesMax, ki18n("%1: set bin ranges end")));
 }
 
-// Error bars
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetErrorType, Histogram::ErrorType, errorType, updateErrorBars)
-void Histogram::setErrorType(ErrorType type) {
-	Q_D(Histogram);
-	if (type != d->errorType)
-		exec(new HistogramSetErrorTypeCmd(d, type, ki18n("%1: x-error type changed")));
-}
-
-CURVE_COLUMN_SETTER_CMD_IMPL_F_S(Histogram, ErrorPlus, errorPlus, updateErrorBars)
-void Histogram::setErrorPlusColumn(const AbstractColumn* column) {
-	Q_D(Histogram);
-	if (column != d->errorPlusColumn)
-		exec(new HistogramSetErrorPlusColumnCmd(d, column, ki18n("%1: set error column")));
-}
-
-void Histogram::setErrorPlusColumnPath(const QString& path) {
-	Q_D(Histogram);
-	d->errorPlusColumnPath = path;
-}
-
-CURVE_COLUMN_SETTER_CMD_IMPL_F_S(Histogram, ErrorMinus, errorMinus, updateErrorBars)
-void Histogram::setErrorMinusColumn(const AbstractColumn* column) {
-	Q_D(Histogram);
-	if (column != d->errorMinusColumn)
-		exec(new HistogramSetErrorMinusColumnCmd(d, column, ki18n("%1: set error column")));
-}
-
-void Histogram::setErrorMinusColumnPath(const QString& path) {
-	Q_D(Histogram);
-	d->errorMinusColumnPath = path;
-}
-
 // margin plots
 STD_SETTER_CMD_IMPL_F_S(Histogram, SetRugEnabled, bool, rugEnabled, updateRug)
 void Histogram::setRugEnabled(bool enabled) {
@@ -620,22 +585,6 @@ void Histogram::dataColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 void Histogram::updateErrorBars() {
 	Q_D(Histogram);
 	d->updateErrorBars();
-}
-
-void Histogram::errorPlusColumnAboutToBeRemoved(const AbstractAspect* aspect) {
-	Q_D(Histogram);
-	if (aspect == d->errorPlusColumn) {
-		d->errorPlusColumn = nullptr;
-		d->updateErrorBars();
-	}
-}
-
-void Histogram::errorMinusColumnAboutToBeRemoved(const AbstractAspect* aspect) {
-	Q_D(Histogram);
-	if (aspect == d->errorMinusColumn) {
-		d->errorMinusColumn = nullptr;
-		d->updateErrorBars();
-	}
 }
 
 // ##############################################################################
@@ -1450,10 +1399,10 @@ void HistogramPrivate::updateErrorBars() {
 
 	QVector<QLineF> elines;
 
-	switch (errorType) {
-	case Histogram::ErrorType::NoError:
+	switch (errorBar->type()) {
+	case ErrorBar::Type::NoError:
 		break;
-	case Histogram::ErrorType::Poisson: {
+	case ErrorBar::Type::Poisson: {
 		if (orientation == Histogram::Vertical) {
 			for (auto& point : pointsLogical) {
 				double error = sqrt(point.y());
@@ -1469,9 +1418,10 @@ void HistogramPrivate::updateErrorBars() {
 		}
 		break;
 	}
-	case Histogram::ErrorType::CustomSymmetric: {
+	case ErrorBar::Type::Symmetric: {
 		int index = 0;
 		if (orientation == Histogram::Vertical) {
+			const auto* errorPlusColumn = errorBar->plusColumn();
 			for (auto& point : pointsLogical) {
 				if (errorPlusColumn && errorPlusColumn->isValid(index) && !errorPlusColumn->isMasked(index)) {
 					double error = errorPlusColumn->valueAt(index);
@@ -1481,9 +1431,10 @@ void HistogramPrivate::updateErrorBars() {
 				++index;
 			}
 		} else {
+			const auto* errorMinusColumn = errorBar->minusColumn();
 			for (auto& point : pointsLogical) {
-				if (errorPlusColumn && errorPlusColumn->isValid(index) && !errorPlusColumn->isMasked(index)) {
-					double error = errorPlusColumn->valueAt(index);
+				if (errorMinusColumn && errorMinusColumn->isValid(index) && !errorMinusColumn->isMasked(index)) {
+					double error = errorMinusColumn->valueAt(index);
 					if (error != 0.)
 						elines << QLineF(point.x() - error, point.y(), point.x() + error, point.y());
 				}
@@ -1492,12 +1443,15 @@ void HistogramPrivate::updateErrorBars() {
 		}
 		break;
 	}
-	case Histogram::ErrorType::CustomAsymmetric: {
+	case ErrorBar::Type::Asymmetric: {
 		int index = 0;
 		if (orientation == Histogram::Vertical) {
 			for (auto& point : pointsLogical) {
 				double errorPlus = 0.;
 				double errorMinus = 0.;
+				const auto* errorPlusColumn = errorBar->plusColumn();
+				const auto* errorMinusColumn = errorBar->minusColumn();
+
 				if (errorPlusColumn && errorPlusColumn->isValid(index) && !errorPlusColumn->isMasked(index))
 					errorPlus = errorPlusColumn->valueAt(index);
 
@@ -1513,6 +1467,9 @@ void HistogramPrivate::updateErrorBars() {
 			for (auto& point : pointsLogical) {
 				double errorPlus = 0.;
 				double errorMinus = 0.;
+				const auto* errorPlusColumn = errorBar->plusColumn();
+				const auto* errorMinusColumn = errorBar->minusColumn();
+
 				if (errorPlusColumn && errorPlusColumn->isValid(index) && !errorPlusColumn->isMasked(index))
 					errorPlus = errorPlusColumn->valueAt(index);
 
@@ -1539,9 +1496,8 @@ void HistogramPrivate::updateErrorBars() {
 	}
 
 	// add caps for error bars
-	const auto errorBarsType = errorBarsLine->errorBarsType();
-	const auto errorBarsCapSize = errorBarsLine->errorBarsCapSize();
-	if (errorBarsType == XYCurve::ErrorBarsType::WithEnds) {
+	const auto errorBarsCapSize = errorBarStyle->capSize();
+	if (errorBarStyle->type() == ErrorBarStyle::Type::WithEnds) {
 		if (orientation == Histogram::Vertical) {
 			for (const auto& line : qAsConst(elines)) {
 				const auto& p1 = line.p1();
@@ -1632,8 +1588,8 @@ void HistogramPrivate::recalcShapeAndBoundingRect() {
 	if (value->type() != Value::NoValues)
 		m_shape.addPath(valuesPath);
 
-	if (errorType != Histogram::ErrorType::NoError)
-		m_shape.addPath(WorksheetElement::shapeFromPath(errorBarsPath, errorBarsLine->pen()));
+	if (errorBar->type() != ErrorBar::Type::NoError)
+		m_shape.addPath(WorksheetElement::shapeFromPath(errorBarsPath, errorBarStyle->line()->pen()));
 
 	m_shape.addPath(rugPath);
 	m_shape.addPolygon(fillPolygon);
@@ -1674,9 +1630,9 @@ void HistogramPrivate::draw(QPainter* painter) {
 	value->draw(painter, valuesPoints, valuesStrings);
 
 	// draw error bars
-	if (errorType != Histogram::ErrorType::NoError) {
-		painter->setOpacity(errorBarsLine->opacity());
-		painter->setPen(errorBarsLine->pen());
+	if (errorBar->type() != ErrorBar::Type::NoError) {
+		painter->setOpacity(errorBarStyle->line()->opacity());
+		painter->setPen(errorBarStyle->line()->pen());
 		painter->setBrush(Qt::NoBrush);
 		painter->drawPath(errorBarsPath);
 	}
@@ -1834,10 +1790,8 @@ void Histogram::save(QXmlStreamWriter* writer) const {
 
 	// Error bars
 	writer->writeStartElement(QStringLiteral("errorBars"));
-	writer->writeAttribute(QStringLiteral("errorType"), QString::number(static_cast<int>(d->errorType)));
-	WRITE_COLUMN(d->errorPlusColumn, errorPlusColumn);
-	WRITE_COLUMN(d->errorMinusColumn, errorMinusColumn);
-	d->errorBarsLine->save(writer);
+	d->errorBar->save(writer);
+	d->errorBarStyle->save(writer);
 	writer->writeEndElement();
 
 	// margin plots
@@ -1902,12 +1856,8 @@ bool Histogram::load(XmlStreamReader* reader, bool preview) {
 		else if (!preview && reader->name() == QLatin1String("filling"))
 			d->background->load(reader, preview);
 		else if (!preview && reader->name() == QLatin1String("errorBars")) {
-			attribs = reader->attributes();
-
-			READ_INT_VALUE("errorType", errorType, ErrorType);
-			READ_COLUMN(errorPlusColumn);
-			READ_COLUMN(errorMinusColumn);
-			d->errorBarsLine->load(reader, preview);
+			d->errorBar->load(reader, preview);
+			d->errorBarStyle->load(reader, preview);
 		} else if (!preview && reader->name() == QLatin1String("margins")) {
 			attribs = reader->attributes();
 
@@ -1947,7 +1897,7 @@ void Histogram::loadThemeConfig(const KConfig& config) {
 	d->symbol->loadThemeConfig(group, themeColor);
 	d->value->loadThemeConfig(group, themeColor);
 	d->background->loadThemeConfig(group, themeColor);
-	d->errorBarsLine->loadThemeConfig(group, themeColor);
+	d->errorBarStyle->loadThemeConfig(group, themeColor);
 
 	if (plot->theme() == QLatin1String("Tufte")) {
 		d->line->setHistogramLineType(Histogram::LineType::HalfBars);
@@ -1968,7 +1918,7 @@ void Histogram::saveThemeConfig(const KConfig& config) {
 	d->symbol->saveThemeConfig(group);
 	d->value->saveThemeConfig(group);
 	d->background->saveThemeConfig(group);
-	d->errorBarsLine->saveThemeConfig(group);
+	d->errorBarStyle->saveThemeConfig(group);
 
 	int index = parentAspect()->indexOfChild<Histogram>(this);
 	if (index < 5) {

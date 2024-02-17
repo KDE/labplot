@@ -4,7 +4,7 @@
 	Description          : Base class of Aspects with MDI windows as views.
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2008 Knut Franke <knut.franke@gmx.de>
-	SPDX-FileCopyrightText: 2012-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2012-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -92,6 +92,7 @@ void AbstractPart::deleteView() const {
 	}
 
 	if (m_partView) {
+		Q_EMIT viewAboutToBeDeleted();
 		delete m_partView;
 		m_partView = nullptr;
 	}

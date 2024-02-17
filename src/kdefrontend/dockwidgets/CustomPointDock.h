@@ -43,7 +43,6 @@ private Q_SLOTS:
 	void customPositionXChanged(double);
 	void customPositionYChanged(double);
 	void lockChanged(bool);
-	void visibilityChanged(bool);
 	void bindingChanged(bool checked);
 
 	void positionXLogicalChanged(double);
@@ -54,7 +53,6 @@ private Q_SLOTS:
 	// SLOTs for changes triggered in CustomPoint
 	// General-Tab
 	void pointLockChanged(bool);
-	void pointVisibilityChanged(bool);
 	void pointPositionChanged(const WorksheetElement::PositionWrapper&);
 	void pointPositionLogicalChanged(QPointF);
 	void pointCoordinateBindingEnabledChanged(bool);

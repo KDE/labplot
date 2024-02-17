@@ -22,6 +22,7 @@ ReferenceLineDock::ReferenceLineDock(QWidget* parent)
 	ui.setupUi(this);
 	setPlotRangeCombobox(ui.cbPlotRanges);
 	setBaseWidgets(ui.leName, ui.teComment);
+	setVisibilityWidgets(ui.chkVisible);
 
 	ui.cbOrientation->addItem(i18n("Horizontal"));
 	ui.cbOrientation->addItem(i18n("Vertical"));
@@ -36,7 +37,6 @@ ReferenceLineDock::ReferenceLineDock(QWidget* parent)
 	connect(ui.sbPosition, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &ReferenceLineDock::positionLogicalChanged);
 	connect(ui.dtePosition, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &ReferenceLineDock::positionLogicalDateTimeChanged);
 	connect(ui.chbLock, &QCheckBox::clicked, this, &ReferenceLineDock::lockChanged);
-	connect(ui.chkVisible, &QCheckBox::clicked, this, &ReferenceLineDock::visibilityChanged);
 
 	// Template handler
 	auto* frame = new QFrame(this);
@@ -71,9 +71,6 @@ void ReferenceLineDock::setReferenceLines(QList<ReferenceLine*> list) {
 
 	// SIGNALs/SLOTs
 	connect(m_line, &ReferenceLine::lockChanged, this, &ReferenceLineDock::lineLockChanged);
-	connect(m_line, &ReferenceLine::visibleChanged, this, &ReferenceLineDock::lineVisibilityChanged);
-
-	// position
 	connect(m_line, &ReferenceLine::orientationChanged, this, &ReferenceLineDock::lineOrientationChanged);
 	connect(m_line, &ReferenceLine::positionLogicalChanged, this, &ReferenceLineDock::linePositionLogicalChanged);
 }
@@ -164,13 +161,6 @@ void ReferenceLineDock::lockChanged(bool locked) {
 		line->setLock(locked);
 }
 
-void ReferenceLineDock::visibilityChanged(bool state) {
-	CONDITIONAL_LOCK_RETURN;
-
-	for (auto* line : m_linesList)
-		line->setVisible(state);
-}
-
 //*************************************************************
 //******* SLOTs for changes triggered in ReferenceLine ********
 //*************************************************************
@@ -193,10 +183,6 @@ void ReferenceLineDock::lineOrientationChanged(ReferenceLine::Orientation orient
 void ReferenceLineDock::lineLockChanged(bool on) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.chbLock->setChecked(on);
-}
-void ReferenceLineDock::lineVisibilityChanged(bool on) {
-	CONDITIONAL_LOCK_RETURN;
-	ui.chkVisible->setChecked(on);
 }
 
 //**********************************************************

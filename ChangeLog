@@ -2,6 +2,7 @@
 New features:
 	* [general]
 		* New application theme "Dracula"
+		* New categorical color map "Dracula"
 		* New option in the application settings to run a selected CAS engine at startup
 		* Share the project via email, Nextcloud, etc. directly from the main menu
 	* [worksheet]
@@ -16,6 +17,7 @@ New features:
 		* New panel in the presenter widget to allow the selection, zooming and navigation also in the presenter mode
 		* Add possibility to limit the number of ticks for custom columns
 		* Allow to show/hide the entry in the legend for all supported plot types and not only for XY-Curve
+		* Add setting legend and text position relative to plot
 	* [spreadsheet]
 		* Spreadsheet linking - allow to synchronize number of rows across multiple spreadsheets
 		* Extended search and replace
@@ -26,7 +28,8 @@ New features:
 		* When generating values via a mathematical expression ("generate function values"), allow to use variables in CAS-notebooks as source columns
 		* Generatation of equidistant values: support for Date&Time and integer columns
 		* Generatation of equidistant values: allow to fix the number of values and the increment at the same time
-		* Implement more functions for formulas
+                * Support parsing more functions and operators for formulas and expressions
+                * Added support to show the Sparkline of each respective column
 	* [notebook]
 		* Export to PDF
 		* "Configure CAS" in the menu to create a new notebook to directly allow the user to enable new backends in case not done yet
@@ -37,7 +40,10 @@ New features:
 		* Support data import from ODS (Open Document Spreadsheet) files
 		* When importing tables from SQL databases, allow to specify which data region to read (start/end values for columns and records)
 		* Addeded seaborn's datasets to the collection of datasets
-		* Properly import Origin projects having graphs with mutliple axes (BUG 476355)
+		* OPJ:
+			* Properly import projects having graphs with multiple axes (BUG 476355)
+			* correctly import font sizes and legend fixes (#839)
+			* improved text and legend label and positioning
 
 Performance improvements:
 	* Make baseline removal much faster by using Eigen3 library (optional dependency)
