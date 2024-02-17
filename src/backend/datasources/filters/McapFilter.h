@@ -16,7 +16,6 @@
 
 #include <QJsonValue>
 
-class QIODevice;
 class QJsonDocument;
 class QJsonModel;
 class McapFilterPrivate;
@@ -34,16 +33,11 @@ public:
 	static QStringList dataRowTypes();
 	static QString fileInfoString(const QString&);
 
-	// read data from any device
-	void readDataFromDevice(QIODevice& device, AbstractDataSource*, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace, int lines = -1);
-	// overloaded function to read from file
-
 	void
 	readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace) override;
 	void write(const QString& fileName, AbstractDataSource*) override;
 
 	QVector<QStringList> preview(const QString& fileName, int lines);
-	QVector<QStringList> preview(QIODevice& device, int lines);
 
 	void setDataRowType(const QJsonValue::Type);
 	QJsonValue::Type dataRowType() const;
@@ -77,6 +71,8 @@ public:
 	bool load(XmlStreamReader*) override;
 
 	QJsonDocument getJsonDocument(const QString&);
+	QVector<QString> getValidTopics(const QString& fileName);
+	void setCurrentTopic(QString currentTopic);
 
 private:
 	std::unique_ptr<McapFilterPrivate> const d;

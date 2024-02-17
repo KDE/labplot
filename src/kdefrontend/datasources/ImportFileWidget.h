@@ -124,7 +124,8 @@ private:
 	bool m_liveDataSource;
 	bool m_suppressRefresh{false};
 	TemplateHandler* m_templateHandler{nullptr};
-
+	bool topicsPopulated{false};
+	
 Q_SIGNALS:
 	void enableImportToMatrix(bool enable);
 	void fileNameChanged();
@@ -150,6 +151,7 @@ private Q_SLOTS:
 	void refreshPreview();
 	void updateStartRow(int);
 	void enableDataPortionSelection(bool);
+	void changeTopic();
 
 	// save/load template
 	void loadConfigFromTemplate(KConfig&);

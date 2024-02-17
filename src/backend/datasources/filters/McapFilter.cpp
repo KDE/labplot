@@ -47,13 +47,6 @@ McapFilter::McapFilter()
 McapFilter::~McapFilter() = default;
 
 /*!
-reads the content of the device \c device.
-*/
-void McapFilter::readDataFromDevice(QIODevice& device, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
-	d->readDataFromDevice(device, dataSource, importMode, lines);
-}
-
-/*!
 reads the content of the file \c fileName.
 */
 void McapFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
@@ -63,14 +56,6 @@ void McapFilter::readDataFromFile(const QString& fileName, AbstractDataSource* d
 QVector<QStringList> McapFilter::preview(const QString& fileName, int lines) {
 	return d->preview(fileName, lines);
 }
-
-QVector<QStringList> McapFilter::preview(QIODevice& device, int lines) {
-	return d->preview(device, lines);
-}
-
-// QVector<QStringList> JsonFilter::preview(const QJsonDocument& doc) {
-// 	return d->preview(doc);
-// }
 
 /*!
 writes the content of the data source \c dataSource to the file \c fileName.
@@ -382,31 +367,6 @@ void McapFilterPrivate::setValueFromString(int column, int row, const QString& v
 }
 
 /*!
-returns -1 if the device couldn't be opened, 1 if the current read position in the device is at the end
-*/
-int McapFilterPrivate::prepareDeviceToRead(QIODevice& device) {
-	DEBUG("device is sequential = " << device.isSequential());
-
-	if (!device.open(QIODevice::ReadOnly))
-		return -1;
-
-	if (device.atEnd() && !device.isSequential()) // empty file
-		return 1;
-
-	QJsonParseError err;
-	m_doc = QJsonDocument::fromJson(device.readAll(), &err);
-
-	if (err.error != QJsonParseError::NoError || m_doc.isEmpty())
-		return 1;
-
-	// reset to start of file
-	if (!device.isSequential())
-		device.seek(0);
-
-	return 0;
-}
-
-/*!
 	determines the relevant part of the full JSON document to be read and its structure.
 	returns \c true if successful, \c false otherwise.
 */
@@ -455,7 +415,6 @@ bool McapFilterPrivate::prepareDocumentToRead() {
 	case McapFilter::DataContainerType::Array: {
 		QJsonArray arr = m_preparedDoc.array();
 		int count = arr.count();
-
 		if (count < startRow)
 			return false;
 
@@ -470,7 +429,6 @@ bool McapFilterPrivate::prepareDocumentToRead() {
 	}
 	case McapFilter::DataContainerType::Object: {
 		QJsonObject obj = m_preparedDoc.object();
-
 		if (obj.count() < startRow)
 			return false;
 
@@ -483,6 +441,7 @@ bool McapFilterPrivate::prepareDocumentToRead() {
 				return false;
 			countRows++;
 		}
+
 		break;
 	}
 	}
@@ -499,25 +458,34 @@ bool McapFilterPrivate::prepareDocumentToRead() {
 	DEBUG("start/end column: = " << startColumn << ' ' << endColumn);
 	DEBUG("start/end rows = " << startRow << ' ' << endRow);
 	DEBUG("actual cols/rows = " << m_actualCols << ' ' << m_actualRows);
-	m_prepared = true;
 
 	return true;
 }
 
+int McapFilterPrivate::mcapToJson(const QString& fileName) {
+	DEBUG("MCAP Filter mcapToJson:" << STDSTRING(current_topic));
 
-int McapFilterPrivate::mcapToJson(const QString& fileName){
 	mcap::McapReader reader;
 	{
 		const auto res = reader.open(STDSTRING(fileName));
 		if (!res.ok()) {
 			std::cerr << "Failed to open " << STDSTRING(fileName) << " for reading: " << res.message << std::endl;
+			return 0;
 		}
 	}
 
-	auto messageView = reader.readMessages();
-	m_prepared = true;
+	if(current_topic==""){
+		current_topic = m_validTopics[0];
+	}
 
-	std::cout << "topic\ttype\ttimestamp\tfields" << std::endl;
+	mcap::ReadMessageOptions opt;
+
+	std::function<bool(std::string_view)> lambda2 = [this](std::string_view v) {
+		std::string s{v};
+		return QString::fromStdString(s) == current_topic;
+	};
+	opt.topicFilter = lambda2;
+	auto messageView = reader.readMessages(nullptr, opt);
 
 	// Get number of messages in view
 	int msg_count = 0;
@@ -525,19 +493,28 @@ int McapFilterPrivate::mcapToJson(const QString& fileName){
 	QJsonArray jsonArray;
 	for (auto it = messageView.begin(); it != messageView.end(); it++) {
 		// skip any non-json-encoded messages.
+		// qDebug() << "Processing topic " << QString::fromStdString(it->channel->topic) << "with encoding"
+		// 		 << QString::fromStdString(it->channel->messageEncoding);
+
 		if (it->channel->messageEncoding != "json") { // only support json encoding for now
 			continue;
 		}
+		if(current_topic!=""){
+			if (QString::fromStdString(it->channel->topic) != current_topic) { // only support json encoding for now
+				continue;
+			}
+		}
+
 
 		// Without going to string_view first I get this error:
 		// 32: QWARN  : MCAPFilterTest::testArrayImport() Error parsing JSON string: "{\"value\": 0}\u0005" "garbage at the end of the document"
 		std::string_view a(reinterpret_cast<const char*>(it->message.data), it->message.dataSize);
 
 		QString asString = QString::fromStdString(std::string(a));
-
 		QJsonParseError error;
 		QJsonDocument jsonDocument = QJsonDocument::fromJson(asString.toUtf8(), &error);
-		QJsonObject obj = jsonDocument.object();
+
+		QJsonObject obj = flattenJson(jsonDocument.object());
 
 		obj.insert(QLatin1String("sequence"), QJsonValue::fromVariant(it->message.sequence));
 		obj.insert(QLatin1String("logTime"), QJsonValue::fromVariant(QString::number(it->message.logTime / 1000000))); // nano to milli otherwise value is 0
@@ -556,17 +533,17 @@ int McapFilterPrivate::mcapToJson(const QString& fileName){
 		}
 
 		// Convert the JSON document to a JSON object and add it to the JSON array
-		foreach (const QString& key, jsonDocument.object().keys()) {
-			QJsonValue value = jsonDocument.object().value(key);
-			qDebug() << "Key = " << key << ", Value = " << value;
-		}
+		// foreach (const QString& key, jsonDocument.object().keys()) {
+		// 	QJsonValue value = jsonDocument.object().value(key);
+		// 	qDebug() << "Key = " << key << ", Value = " << value;
+		// }
 		jsonArray.append(obj);
 		msg_count++;
 	}
 
 	QJsonDocument finalJsonDocument(jsonArray);
 
-	// qDebug() << finalJsonDocument.toJson(QJsonDocument::Compact);
+	//qDebug() << finalJsonDocument.toJson(QJsonDocument::Compact);
 
 	m_doc = finalJsonDocument;
 	return msg_count;
@@ -580,27 +557,8 @@ void McapFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSo
 
 	int msg_count = mcapToJson(fileName);
 	bool success = prepareDocumentToRead();
-	qDebug() << success;
 	if (success)
 		importData(dataSource, importMode, msg_count);
-}
-
-/*!
-reads the content of device \c device to the data source \c dataSource. Uses the settings defined in the data source.
-*/
-void McapFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
-	if (!m_prepared) {
-		const int deviceError = prepareDeviceToRead(device);
-		if (deviceError != 0) {
-			DEBUG("Device error = " << deviceError);
-			return;
-		}
-		// TODO: support other modes and vector names
-		m_prepared = true;
-	}
-
-	if (prepareDocumentToRead())
-		importData(dataSource, importMode, lines);
 }
 
 /*!
@@ -704,32 +662,15 @@ void McapFilterPrivate::importData(AbstractDataSource* dataSource, AbstractFileF
 generates the preview for the file \c fileName.
 */
 QVector<QStringList> McapFilterPrivate::preview(const QString& fileName, int lines) {
-	if (!m_prepared) {
-		mcapToJson(fileName);	
-		bool success = prepareDocumentToRead();
-		return preview(lines);
-	} else
-		return preview(lines);
-}
-
-/*!
-generates the preview for device \c device.
-*/
-QVector<QStringList> McapFilterPrivate::preview(QIODevice& device, int lines) {
 	DEBUG(Q_FUNC_INFO);
 
 	if (!m_prepared) {
-		const int deviceError = prepareDeviceToRead(device);
-		if (deviceError != 0) {
-			DEBUG("Device error = " << deviceError);
-			return {};
-		}
-	}
-
-	if (prepareDocumentToRead())
+		mcapToJson(fileName);
+		bool success = prepareDocumentToRead();
+		QDEBUG(success);
 		return preview(lines);
-
-	return {};
+	} else
+		return preview(lines);
 }
 
 /*!
@@ -741,15 +682,17 @@ QVector<QStringList> McapFilterPrivate::preview(int lines) {
 	QVector<QStringList> dataStrings;
 	const int rowOffset = startRow - 1;
 	DEBUG("	Generating preview for " << std::min(lines, m_actualRows) << " lines");
-
+	
 	const auto& array = m_preparedDoc.array();
 	const auto& arrayIterator = array.begin();
 	const auto& object = m_preparedDoc.object();
+
 	const auto& objectIterator = object.begin();
 
 	for (int i = 0; i < std::min(lines, m_actualRows); ++i) {
 		QString rowName;
 		QJsonValue row;
+
 		switch (containerType) {
 		case McapFilter::DataContainerType::Object:
 			rowName = (objectIterator + rowOffset + i).key();
@@ -757,6 +700,7 @@ QVector<QStringList> McapFilterPrivate::preview(int lines) {
 			break;
 		case McapFilter::DataContainerType::Array:
 			row = *(arrayIterator + rowOffset + i);
+
 			break;
 		}
 
@@ -802,7 +746,6 @@ QVector<QStringList> McapFilterPrivate::preview(int lines) {
 		}
 		dataStrings << lineString;
 	}
-	QDEBUG(dataStrings[0])
 	return dataStrings;
 }
 
@@ -871,16 +814,99 @@ bool McapFilter::load(XmlStreamReader* reader) {
 	return true;
 }
 
-
-QJsonDocument McapFilter::getJsonDocument(const QString& fileName){
+QJsonDocument McapFilter::getJsonDocument(const QString& fileName) {
 	return d->getJsonDocument(fileName);
 }
 
-QJsonDocument McapFilterPrivate::getJsonDocument(const QString& fileName){
-	if (!m_prepared) {
-		mcapToJson(fileName);	
-		bool success = prepareDocumentToRead();
-		return m_preparedDoc;
-	} else
-		return m_preparedDoc;
+QJsonDocument McapFilterPrivate::getJsonDocument(const QString& fileName) {
+	DEBUG(Q_FUNC_INFO);
+	mcapToJson(fileName);
+	bool success = prepareDocumentToRead();
+	return m_preparedDoc;
+}
+
+// https://stackoverflow.com/a/76036333
+QJsonObject McapFilterPrivate::flattenJson(QJsonValue jsonVal, QString aggregatedKey) {
+	QJsonObject flattenedJson;
+
+	auto dryFx = [&](auto& key, auto& value) {
+		const QString delimiter = ".";
+		QString nKey = aggregatedKey + delimiter + key;
+		if (nKey.at(0) == delimiter)
+			nKey.remove(0, 1);
+
+		if (value.isObject() || value.isArray()) {
+			QJsonObject nestedJson = flattenJson(value, nKey);
+			flattenedJson = mergeJsonObjects(flattenedJson, nestedJson);
+		} else {
+			flattenedJson.insert(nKey, value);
+		}
+	};
+
+	if (jsonVal.isArray()) {
+		const auto json_arr = jsonVal.toArray();
+		for (auto it = json_arr.constBegin(); it != json_arr.constEnd(); ++it) {
+			const auto key = QString::number((it - json_arr.constBegin()));
+			const auto value = *it;
+			dryFx(key, value);
+		}
+	}
+
+	if (jsonVal.isObject()) {
+		const auto json_obj = jsonVal.toObject();
+		for (auto it = json_obj.constBegin(); it != json_obj.constEnd(); ++it) {
+			const auto key = it.key();
+			const auto value = it.value();
+			dryFx(key, value);
+		}
+	}
+
+	return flattenedJson;
+}
+
+QJsonObject McapFilterPrivate::mergeJsonObjects(const QJsonObject& obj1, const QJsonObject& obj2) {
+	QJsonObject mergedObj = obj1;
+	for (auto it = obj2.constBegin(); it != obj2.constEnd(); ++it) {
+		mergedObj.insert(it.key(), it.value());
+	}
+	return mergedObj;
+}
+
+QVector<QString> McapFilterPrivate::getValidTopics(const QString& fileName) {
+	QVector<QString> valid_topics;
+	mcap::McapReader reader;
+	{
+		const auto res = reader.open(STDSTRING(fileName));
+		if (!res.ok()) {
+			std::cerr << "Failed to open " << STDSTRING(fileName) << " for reading: " << res.message << std::endl;
+			return valid_topics;
+		}
+	}
+
+	reader.readSummary(mcap::ReadSummaryMethod::NoFallbackScan);
+	std::unordered_map<mcap::ChannelId, mcap::ChannelPtr> channel_map = reader.channels();
+	std::for_each(channel_map.begin(), channel_map.end(), [&](std::pair<mcap::ChannelId, mcap::ChannelPtr> entry) {
+		if (entry.second->messageEncoding == "json") {
+			DEBUG("Found valid topic:" << entry.second->topic);
+			valid_topics.append(QString::fromStdString((entry.second->topic)));
+			current_topic = QString::fromStdString(entry.second->topic); //Last topic by default?
+		}
+	});
+	return valid_topics;
+}
+
+QVector<QString> McapFilter::getValidTopics(const QString& fileName) {
+	return d->getValidTopics(fileName);
+}
+
+void McapFilterPrivate::setCurrentTopic(QString topic) {
+	if(current_topic!=topic){
+		m_prepared = false;
+	}
+	current_topic = topic;
+	
+}
+
+void McapFilter::setCurrentTopic(QString topic) {
+	d->setCurrentTopic(topic);
 }

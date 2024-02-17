@@ -42,9 +42,12 @@
     </widget>
    </item>
    <item row="0" column="2">
-    <widget class="QComboBox" name="cbDecimalSeparator"/>
+    <widget class="QComboBox" name="cbTopic"/>
    </item>
    <item row="0" column="3">
+    <widget class="QComboBox" name="cbDecimalSeparator"/>
+   </item>
+   <item row="0" column="4">
     <spacer name="horizontalSpacer">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>

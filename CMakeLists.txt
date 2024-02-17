@@ -206,8 +206,6 @@ endif ()
 
 # see also https://wiki.qt.io/Using_QString_Effectively
 set(LABPLOT_COMPILE_DEFINITIONS
-    -DQT_NO_CAST_TO_ASCII
-    -DQT_NO_CAST_FROM_ASCII
     -DQT_NO_CAST_FROM_BYTEARRAY
     -DQT_NO_URL_CAST_FROM_STRING
     -DQT_USE_FAST_CONCATENATION
