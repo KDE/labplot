@@ -74,12 +74,6 @@ void McapOptionsWidget::clearModel() {
 	m_filename.clear();
 }
 
-void McapOptionsWidget::setTopics(QVector<QString> topics) {
-	for (int i = 0; i < topics.size(); i++){
-    	ui.cbTopic->addItem(topics[i]);
-    }
-}
-
 void McapOptionsWidget::loadSettings() const {
 	KConfigGroup conf = Settings::group(QStringLiteral("ImportMcap"));
 

@@ -24,7 +24,6 @@ public:
 	explicit McapOptionsWidget(QWidget*);
 
 	void applyFilterSettings(McapFilter*, const QModelIndex&) const;
-	void setTopics(QVector<QString> topics);
 	void clearModel();
 	void loadSettings() const;
 	void saveSettings();
