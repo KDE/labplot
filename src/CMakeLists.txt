@@ -654,7 +654,7 @@ IF (APPLE AND ${ECM_VERSION} VERSION_GREATER "5.48.0")
 ENDIF ()
 
 add_executable( labplot2 ${LABPLOT_SOURCE} ${GUI_QRC} ${qml_QRC} )
-target_link_libraries( labplot2 labplot2lib labplot2backendlib labplot2nsllib )
+target_link_libraries( labplot2 labplot2lib )
 target_compile_definitions(labplot2 PRIVATE ${LABPLOT_COMPILE_DEFINITIONS})
 
 if (APPLE) # Apple app package
