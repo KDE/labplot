@@ -17,6 +17,7 @@
 class AbstractAspect;
 class BackgroundWidget;
 class BarPlot;
+class ErrorBarWidget;
 class ErrorBarStyleWidget;
 class LineWidget;
 class TreeViewComboBox;
@@ -37,12 +38,11 @@ private:
 	BackgroundWidget* backgroundWidget{nullptr};
 	LineWidget* lineWidget{nullptr};
 	ValueWidget* valueWidget{nullptr};
+	ErrorBarWidget* errorBarWidget{nullptr};
 	ErrorBarStyleWidget* errorBarStyleWidget{nullptr};
 	QList<BarPlot*> m_barPlots;
 	BarPlot* m_barPlot{nullptr};
 	TreeViewComboBox* cbXColumn{nullptr};
-	TreeViewComboBox* cbErrorPlusColumn{nullptr};
-	TreeViewComboBox* cbErrorMinusColumn{nullptr};
 
 	QGridLayout* m_gridLayout;
 	QPushButton* m_buttonNew;
@@ -73,9 +73,6 @@ private Q_SLOTS:
 
 	//"Error Bars"-tab
 	void errorNumberChanged(int);
-	void errorTypeChanged(int);
-	void errorPlusColumnChanged(const QModelIndex&);
-	void errorMinusColumnChanged(const QModelIndex&);
 
 	// SLOTs for changes triggered in BarPlot
 	// general

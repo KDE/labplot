@@ -17,7 +17,6 @@
 
 class Background;
 class ErrorBar;
-class ErrorBarStyle;
 class Line;
 class CartesianCoordinateSystem;
 class Value;
@@ -39,7 +38,6 @@ public:
 	Line* addBorderLine(const KConfigGroup&);
 	void addValue(const KConfigGroup&);
 	ErrorBar* addErrorBar(const KConfigGroup&);
-	ErrorBarStyle* addErrorBarStyle(const KConfigGroup&);
 
 	BarPlot* const q;
 
@@ -58,15 +56,9 @@ public:
 	double yMin{0.};
 	double yMax{1.};
 
-	// bar properties
 	QVector<Background*> backgrounds;
 	QVector<Line*> borderLines;
-
-	// error bars
 	QVector<ErrorBar*> errorBars;
-	QVector<ErrorBarStyle*> errorBarStyles;
-
-	// values
 	Value* value{nullptr};
 
 private:

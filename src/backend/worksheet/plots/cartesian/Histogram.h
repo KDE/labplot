@@ -66,10 +66,7 @@ public:
 	Background* background() const;
 	Symbol* symbol() const;
 	Value* value() const;
-
-	// error bars
 	ErrorBar* errorBar() const;
-	ErrorBarStyle* errorBarStyle() const;
 
 	// margin plots
 	BASIC_D_ACCESSOR_DECL(bool, rugEnabled, RugEnabled)

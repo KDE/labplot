@@ -16,14 +16,13 @@
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "backend/core/datatypes/Double2StringFilter.h"
 #include "backend/worksheet/Worksheet.h"
-#include "backend/worksheet/plots/cartesian/ErrorBarStyle.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 #include "kdefrontend/GuiTools.h"
 #include "kdefrontend/TemplateHandler.h"
 #include "kdefrontend/widgets/BackgroundWidget.h"
-#include "kdefrontend/widgets/ErrorBarStyleWidget.h"
+#include "kdefrontend/widgets/ErrorBarWidget.h"
 #include "kdefrontend/widgets/LineWidget.h"
 #include "kdefrontend/widgets/SymbolWidget.h"
 #include "kdefrontend/widgets/ValueWidget.h"
@@ -80,21 +79,12 @@ HistogramDock::HistogramDock(QWidget* parent)
 
 	// Tab "Error Bars"
 	const KConfigGroup group = Settings::group(QStringLiteral("Settings_General"));
-	if (group.readEntry(QStringLiteral("GUMTerms"), false)) {
+	if (group.readEntry(QStringLiteral("GUMTerms"), false))
 		ui.tabWidget->setTabText(ui.tabWidget->indexOf(ui.tabErrorBars), i18n("Uncertainty Bars"));
-		ui.lErrorBar->setText(i18n("Uncertainty"));
-	}
 
-	gridLayout = qobject_cast<QGridLayout*>(ui.tabErrorBars->layout());
-
-	cbErrorPlusColumn = new TreeViewComboBox(ui.tabErrorBars);
-	gridLayout->addWidget(cbErrorPlusColumn, 2, 2, 1, 1);
-
-	cbErrorMinusColumn = new TreeViewComboBox(ui.tabErrorBars);
-	gridLayout->addWidget(cbErrorMinusColumn, 3, 2, 1, 1);
-
-	errorBarStyleWidget = new ErrorBarStyleWidget(ui.tabErrorBars);
-	gridLayout->addWidget(errorBarStyleWidget, 6, 0, 1, 3);
+	errorBarWidget = new ErrorBarWidget(ui.tabErrorBars, true);
+	auto* vLayout = qobject_cast<QVBoxLayout*>(ui.tabErrorBars->layout());
+	vLayout->insertWidget(0, errorBarWidget);
 
 	// adjust layouts in the tabs
 	for (int i = 0; i < ui.tabWidget->count(); ++i) {
@@ -121,11 +111,6 @@ HistogramDock::HistogramDock(QWidget* parent)
 	connect(ui.sbBinRangesMax, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &HistogramDock::binRangesMaxChanged);
 	connect(ui.dteBinRangesMin, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &HistogramDock::binRangesMinDateTimeChanged);
 	connect(ui.dteBinRangesMax, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &HistogramDock::binRangesMaxDateTimeChanged);
-
-	// Error bars
-	connect(ui.cbErrorType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &HistogramDock::errorTypeChanged);
-	connect(cbErrorPlusColumn, &TreeViewComboBox::currentModelIndexChanged, this, &HistogramDock::errorPlusColumnChanged);
-	connect(cbErrorMinusColumn, &TreeViewComboBox::currentModelIndexChanged, this, &HistogramDock::errorMinusColumnChanged);
 
 	// Margin Plots
 	connect(ui.chkRugEnabled, &QCheckBox::toggled, this, &HistogramDock::rugEnabledChanged);
@@ -178,20 +163,6 @@ void HistogramDock::init() {
 	ui.cbNormalization->addItem(i18n("Probability"));
 	ui.cbNormalization->addItem(i18n("Count Density"));
 	ui.cbNormalization->addItem(i18n("Probability Density"));
-
-	// Error-bars
-	const KConfigGroup group = Settings::group(QStringLiteral("Settings_General"));
-	if (group.readEntry("GUMTerms", false)) {
-		ui.cbErrorType->addItem(i18n("No Uncertainties"), static_cast<int>(ErrorBar::Type::NoError));
-		ui.cbErrorType->addItem(i18n("Poisson variance, sqrt(N)"), static_cast<int>(ErrorBar::Type::Poisson));
-		ui.cbErrorType->addItem(i18n("Custom Uncertainty Values, symmetric"), static_cast<int>(ErrorBar::Type::Symmetric));
-		ui.cbErrorType->addItem(i18n("Custom Uncertainty Values, asymmetric"), static_cast<int>(ErrorBar::Type::Asymmetric));
-	} else {
-		ui.cbErrorType->addItem(i18n("No Errors"), static_cast<int>(ErrorBar::Type::NoError));
-		ui.cbErrorType->addItem(i18n("Poisson variance, sqrt(N)"), static_cast<int>(ErrorBar::Type::Poisson));
-		ui.cbErrorType->addItem(i18n("Custom Error Values, symmetric"), static_cast<int>(ErrorBar::Type::Symmetric));
-		ui.cbErrorType->addItem(i18n("Custom Error Values, asymmetric"), static_cast<int>(ErrorBar::Type::Asymmetric));
-	}
 }
 
 void HistogramDock::setModel() {
@@ -213,15 +184,10 @@ void HistogramDock::setModel() {
 						   AspectType::CantorWorksheet};
 
 	cbDataColumn->setTopLevelClasses(list);
-	cbErrorPlusColumn->setTopLevelClasses(list);
-	cbErrorMinusColumn->setTopLevelClasses(list);
 
 	list = {AspectType::Column};
 	model->setSelectableAspects(list);
-
 	cbDataColumn->setModel(model);
-	cbErrorPlusColumn->setModel(model);
-	cbErrorMinusColumn->setModel(model);
 }
 
 void HistogramDock::setCurves(QList<Histogram*> list) {
@@ -237,31 +203,27 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 	QList<Symbol*> symbols;
 	QList<Background*> backgrounds;
 	QList<Value*> values;
-	QList<ErrorBarStyle*> errorBarStyles;
+	QList<ErrorBar*> errorBars;
 	for (auto* hist : m_curvesList) {
 		lines << hist->line();
 		symbols << hist->symbol();
 		backgrounds << hist->background();
 		values << hist->value();
-		errorBarStyles << hist->errorBarStyle();
+		errorBars << hist->errorBar();
 	}
 	lineWidget->setLines(lines);
 	symbolWidget->setSymbols(symbols);
 	backgroundWidget->setBackgrounds(backgrounds);
 	valueWidget->setValues(values);
-	errorBarStyleWidget->setErrorBarStyles(errorBarStyles);
+	errorBarWidget->setErrorBars(errorBars);
 
 	// if there are more than one curve in the list, disable the content in the tab "general"
 	if (m_curvesList.size() == 1) {
 		cbDataColumn->setEnabled(true);
 		cbDataColumn->setColumn(m_curve->dataColumn(), m_curve->dataColumnPath());
-		cbErrorPlusColumn->setColumn(m_curve->errorBar()->plusColumn(), m_curve->errorBar()->plusColumnPath());
-		cbErrorMinusColumn->setColumn(m_curve->errorBar()->minusColumn(), m_curve->errorBar()->minusColumnPath());
 	} else {
 		cbDataColumn->setEnabled(false);
 		cbDataColumn->setCurrentModelIndex(QModelIndex());
-		cbErrorPlusColumn->setCurrentModelIndex(QModelIndex());
-		cbErrorMinusColumn->setCurrentModelIndex(QModelIndex());
 	}
 
 	// show the properties of the first curve
@@ -317,11 +279,6 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 	connect(m_curve, &Histogram::binRangesMinChanged, this, &HistogramDock::curveBinRangesMinChanged);
 	connect(m_curve, &Histogram::binRangesMaxChanged, this, &HistogramDock::curveBinRangesMaxChanged);
 
-	//"Error bars"-Tab
-	connect(m_curve->errorBar(), &ErrorBar::typeChanged, this, &HistogramDock::curveErrorTypeChanged);
-	connect(m_curve->errorBar(), &ErrorBar::plusColumnChanged, this, &HistogramDock::curveErrorPlusColumnChanged);
-	connect(m_curve->errorBar(), &ErrorBar::minusColumnChanged, this, &HistogramDock::curveErrorMinusColumnChanged);
-
 	//"Margin Plots"-Tab
 	connect(m_curve, &Histogram::rugEnabledChanged, this, &HistogramDock::curveRugEnabledChanged);
 	connect(m_curve, &Histogram::rugLengthChanged, this, &HistogramDock::curveRugLengthChanged);
@@ -343,7 +300,7 @@ void HistogramDock::retranslateUi() {
 void HistogramDock::updateLocale() {
 	lineWidget->updateLocale();
 	symbolWidget->updateLocale();
-	errorBarStyleWidget->updateLocale();
+	errorBarWidget->updateLocale();
 }
 
 //*************************************************************
@@ -468,64 +425,6 @@ void HistogramDock::binRangesMaxDateTimeChanged(qint64 value) {
 		hist->setBinRangesMax(value);
 }
 
-//"Error bars"-Tab
-void HistogramDock::errorTypeChanged(int index) {
-	const auto type = static_cast<ErrorBar::Type>(ui.cbErrorType->currentData().toInt());
-	switch (type) {
-	case ErrorBar::Type::NoError:
-	case ErrorBar::Type::Poisson:
-		ui.lErrorDataPlus->setVisible(false);
-		cbErrorPlusColumn->setVisible(false);
-		ui.lErrorDataMinus->setVisible(false);
-		cbErrorMinusColumn->setVisible(false);
-		break;
-	case ErrorBar::Type::Symmetric:
-		ui.lErrorDataPlus->setVisible(true);
-		cbErrorPlusColumn->setVisible(true);
-		ui.lErrorDataMinus->setVisible(false);
-		cbErrorMinusColumn->setVisible(false);
-		ui.lErrorDataPlus->setText(i18n("Data, +-:"));
-		break;
-	case ErrorBar::Type::Asymmetric:
-		ui.lErrorDataPlus->setVisible(true);
-		cbErrorPlusColumn->setVisible(true);
-		ui.lErrorDataMinus->setVisible(true);
-		cbErrorMinusColumn->setVisible(true);
-		ui.lErrorDataPlus->setText(i18n("Data, +:"));
-	}
-
-	const bool b = (index != 0);
-	ui.lErrorFormat->setVisible(b);
-	errorBarStyleWidget->setVisible(b);
-
-	CONDITIONAL_LOCK_RETURN;
-
-	for (auto* curve : m_curvesList)
-		curve->errorBar()->setType(type);
-}
-
-void HistogramDock::errorPlusColumnChanged(const QModelIndex& index) {
-	CONDITIONAL_LOCK_RETURN;
-
-	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	auto* column = dynamic_cast<AbstractColumn*>(aspect);
-	Q_ASSERT(column);
-
-	for (auto* curve : m_curvesList)
-		curve->errorBar()->setPlusColumn(column);
-}
-
-void HistogramDock::errorMinusColumnChanged(const QModelIndex& index) {
-	CONDITIONAL_LOCK_RETURN;
-
-	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	auto* column = dynamic_cast<AbstractColumn*>(aspect);
-	Q_ASSERT(column);
-
-	for (auto* curve : m_curvesList)
-		curve->errorBar()->setMinusColumn(column);
-}
-
 //"Margin Plots"-Tab
 void HistogramDock::rugEnabledChanged(bool state) {
 	CONDITIONAL_LOCK_RETURN;
@@ -614,20 +513,6 @@ void HistogramDock::curveBinRangesMaxChanged(double value) {
 	ui.dteBinRangesMax->setMSecsSinceEpochUTC(value);
 }
 
-//"Error bars"-Tab
-void HistogramDock::curveErrorTypeChanged(ErrorBar::Type type) {
-	CONDITIONAL_LOCK_RETURN;
-	ui.cbErrorType->setCurrentIndex((int)type);
-}
-void HistogramDock::curveErrorPlusColumnChanged(const AbstractColumn* column) {
-	CONDITIONAL_LOCK_RETURN;
-	cbErrorPlusColumn->setColumn(column, m_curve->errorBar()->plusColumnPath());
-}
-void HistogramDock::curveErrorMinusColumnChanged(const AbstractColumn* column) {
-	CONDITIONAL_LOCK_RETURN;
-	cbErrorMinusColumn->setColumn(column, m_curve->errorBar()->minusColumnPath());
-}
-
 //"Margin Plot"-Tab
 void HistogramDock::curveRugEnabledChanged(bool status) {
 	CONDITIONAL_LOCK_RETURN;
@@ -655,10 +540,6 @@ void HistogramDock::load() {
 	// It doesn't make sense to load/save them in the template.
 	// This data is read in HistogramDock::setCurves().
 
-	// Error bars
-	const int index = ui.cbErrorType->findData(static_cast<int>(m_curve->errorBar()->type()));
-	ui.cbErrorType->setCurrentIndex(index);
-
 	// Margin plots
 	ui.chkRugEnabled->setChecked(m_curve->rugEnabled());
 	ui.sbRugWidth->setValue(Worksheet::convertFromSceneUnits(m_curve->rugWidth(), Worksheet::Unit::Point));
@@ -678,11 +559,7 @@ void HistogramDock::loadConfig(KConfig& config) {
 	symbolWidget->loadConfig(group);
 	valueWidget->loadConfig(group);
 	backgroundWidget->loadConfig(group);
-
-	// Error bars
-	const int index = ui.cbErrorType->findData(static_cast<int>(m_curve->errorBar()->type()));
-	ui.cbErrorType->setCurrentIndex(group.readEntry(QStringLiteral("ErrorType"), index));
-	errorBarStyleWidget->loadConfig(group);
+	errorBarWidget->loadConfig(group);
 
 	// Margin plots
 	ui.chkRugEnabled->setChecked(m_curve->rugEnabled());
@@ -711,7 +588,7 @@ void HistogramDock::saveConfigAsTemplate(KConfig& config) {
 	symbolWidget->saveConfig(group);
 	valueWidget->saveConfig(group);
 	backgroundWidget->saveConfig(group);
-	group.writeEntry(QStringLiteral("ErrorType"), ui.cbErrorType->currentIndex());
+	errorBarWidget->saveConfig(group);
 
 	config.sync();
 }

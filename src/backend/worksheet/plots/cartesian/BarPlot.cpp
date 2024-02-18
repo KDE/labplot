@@ -20,7 +20,6 @@
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/ErrorBar.h"
-#include "backend/worksheet/plots/cartesian/ErrorBarStyle.h"
 #include "backend/worksheet/plots/cartesian/Value.h"
 #include "tools/ImageTools.h"
 
@@ -69,7 +68,6 @@ void BarPlot::init() {
 	d->addBorderLine(group);
 	d->addValue(group);
 	d->addErrorBar(group);
-	d->addErrorBarStyle(group);
 }
 
 /*!
@@ -170,14 +168,6 @@ ErrorBar* BarPlot::errorBarAt(int index) const {
 	Q_D(const BarPlot);
 	if (index < d->errorBars.size())
 		return d->errorBars.at(index);
-	else
-		return nullptr;
-}
-
-ErrorBarStyle* BarPlot::errorBarStyleAt(int index) const {
-	Q_D(const BarPlot);
-	if (index < d->errorBarStyles.size())
-		return d->errorBarStyles.at(index);
 	else
 		return nullptr;
 }
@@ -426,7 +416,7 @@ void BarPlotPrivate::addValue(const KConfigGroup& group) {
 }
 
 ErrorBar* BarPlotPrivate::addErrorBar(const KConfigGroup& group) {
-	auto* errorBar = new ErrorBar(QString());
+	auto* errorBar = new ErrorBar(QString(), ErrorBar::Dimension::Y);
 	q->addChild(errorBar);
 	errorBar->setHidden(true);
 	errorBar->init(group);
@@ -437,23 +427,6 @@ ErrorBar* BarPlotPrivate::addErrorBar(const KConfigGroup& group) {
 	errorBars << errorBar;
 
 	return errorBar;
-}
-
-ErrorBarStyle* BarPlotPrivate::addErrorBarStyle(const KConfigGroup& group) {
-	auto* errorBarStyle = new ErrorBarStyle(QString());
-	q->addChild(errorBarStyle);
-	errorBarStyle->setHidden(true);
-	errorBarStyle->init(group);
-	q->connect(errorBarStyle, &ErrorBarStyle::updateRequested, [=] {
-		updateErrorBars(errorBarStyles.indexOf(errorBarStyle));
-	});
-	q->connect(errorBarStyle, &ErrorBarStyle::updatePixmapRequested, [=] {
-		updatePixmap();
-	});
-
-	errorBarStyles << errorBarStyle;
-
-	return errorBarStyle;
 }
 
 /*!
@@ -534,14 +507,13 @@ void BarPlotPrivate::recalc() {
 			// box filling and border line
 			auto* background = addBackground(group);
 			auto* line = addBorderLine(group);
-			addErrorBar(group);
-			auto* errorBarStyle = addErrorBarStyle(group);
+			auto* errorBar = addErrorBar(group);
 
 			if (plot) {
 				const auto& themeColor = plot->themeColorPalette(backgrounds.count() - 1);
 				background->setFirstColor(themeColor);
 				line->setColor(themeColor);
-				errorBarStyle->line()->setColor(themeColor);
+				errorBar->line()->setColor(themeColor);
 			}
 		}
 	} else if (diff < 0) {
@@ -1193,11 +1165,11 @@ void BarPlotPrivate::updateValues() {
 }
 
 void BarPlotPrivate::updateErrorBars(int columnIndex) {
+	if (m_valuesPointsLogical.isEmpty())
+		return;
 	const auto* errorBar = errorBars.at(columnIndex);
-	const auto* errorBarStyle = errorBarStyles.at(columnIndex);
 	const auto& points = m_valuesPointsLogical.at(columnIndex);
-
-	m_errorBarsPaths[columnIndex] = errorBar->painterPath(errorBarStyle, points, q->cSystem, orientation);
+	m_errorBarsPaths[columnIndex] = errorBar->painterPath(points, q->cSystem, orientation);
 	recalcShapeAndBoundingRect();
 }
 
@@ -1226,8 +1198,8 @@ void BarPlotPrivate::recalcShapeAndBoundingRect() {
 			}
 		}
 
-		if (errorBars.at(index)->type() != ErrorBar::Type::NoError)
-			m_shape.addPath(WorksheetElement::shapeFromPath(m_errorBarsPaths.at(index), errorBarStyles.at(index)->line()->pen()));
+		if (errorBars.at(index)->yErrorType() != ErrorBar::ErrorType::NoError)
+			m_shape.addPath(WorksheetElement::shapeFromPath(m_errorBarsPaths.at(index), errorBars.at(index)->line()->pen()));
 
 		++index;
 	}
@@ -1298,8 +1270,9 @@ void BarPlotPrivate::draw(QPainter* painter) {
 		}
 
 		// draw error bars
-		if (errorBars.at(columnIndex)->type() != ErrorBar::Type::NoError)
-			errorBarStyles.at(columnIndex)->draw(painter, m_errorBarsPaths.at(columnIndex));
+		auto* errorBar = errorBars.at(columnIndex);
+		if (errorBar->yErrorType() != ErrorBar::ErrorType::NoError)
+			errorBar->draw(painter, m_errorBarsPaths.at(columnIndex));
 
 		++columnIndex;
 	}
@@ -1403,7 +1376,6 @@ void BarPlot::save(QXmlStreamWriter* writer) const {
 	for (int i = 0; i < d->errorBars.count(); ++i) {
 		writer->writeStartElement(QStringLiteral("errorBars"));
 		d->errorBars.at(i)->save(writer);
-		d->errorBarStyles.at(i)->save(writer);
 		writer->writeEndElement();
 	}
 
@@ -1485,14 +1457,10 @@ bool BarPlot::load(XmlStreamReader* reader, bool preview) {
 			if (!firstErrorBarRead) {
 				auto* errorBar = d->errorBars.at(0);
 				errorBar->load(reader, preview);
-				auto* errorBarStyle = d->errorBarStyles.at(0);
-				errorBarStyle->load(reader, preview);
 				firstErrorBarRead = true;
 			} else {
 				auto* errorBar = d->addErrorBar(KConfigGroup());
 				errorBar->load(reader, preview);
-				auto* errorBarStyle = d->addErrorBarStyle(KConfigGroup());
-				errorBarStyle->load(reader, preview);
 			}
 		} else { // unknown element
 			reader->raiseUnknownElementWarning();
@@ -1535,8 +1503,8 @@ void BarPlot::loadThemeConfig(const KConfig& config) {
 		line->loadThemeConfig(group, color);
 
 		// error bars
-		auto* errorBarStyle = d->errorBarStyles.at(i);
-		errorBarStyle->loadThemeConfig(group, color);
+		auto* errorBar = d->errorBars.at(i);
+		errorBar->loadThemeConfig(group, color);
 	}
 
 	// Values

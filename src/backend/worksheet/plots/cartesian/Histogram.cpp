@@ -30,7 +30,6 @@
 #include "backend/worksheet/Line.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/ErrorBar.h"
-#include "backend/worksheet/plots/cartesian/ErrorBarStyle.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "backend/worksheet/plots/cartesian/Value.h"
 #include "tools/ImageTools.h"
@@ -131,23 +130,12 @@ void Histogram::init() {
 	});
 
 	// error bars
-	d->errorBar = new ErrorBar(QString());
+	d->errorBar = new ErrorBar(QString(), ErrorBar::Dimension::Y);
 	addChild(d->errorBar);
 	d->errorBar->setHidden(true);
 	d->errorBar->init(group);
 	connect(d->errorBar, &ErrorBar::updateRequested, [=] {
 		d->updateErrorBars();
-	});
-
-	d->errorBarStyle = new ErrorBarStyle(QString());
-	addChild(d->errorBarStyle);
-	d->errorBarStyle->setHidden(true);
-	d->errorBarStyle->init(group);
-	connect(d->errorBarStyle, &ErrorBarStyle::updateRequested, [=] {
-		d->updateErrorBars();
-	});
-	connect(d->errorBarStyle, &ErrorBarStyle::updatePixmapRequested, [=] {
-		d->updatePixmap();
 	});
 
 	// marginal plots (rug, histogram, boxplot)
@@ -298,11 +286,6 @@ ErrorBar* Histogram::errorBar() const {
 	return d->errorBar;
 }
 
-ErrorBarStyle* Histogram::errorBarStyle() const {
-	Q_D(const Histogram);
-	return d->errorBarStyle;
-}
-
 // margin plots
 BASIC_SHARED_D_READER_IMPL(Histogram, bool, rugEnabled, rugEnabled)
 BASIC_SHARED_D_READER_IMPL(Histogram, double, rugLength, rugLength)
@@ -338,8 +321,8 @@ bool Histogram::hasData() const {
 
 bool Histogram::usingColumn(const Column* column) const {
 	Q_D(const Histogram);
-	return (d->dataColumn == column || (d->errorBar->type() == ErrorBar::Type::Symmetric && d->errorBar->plusColumn() == column)
-			|| (d->errorBar->type() == ErrorBar::Type::Asymmetric && (d->errorBar->plusColumn() == column || d->errorBar->minusColumn() == column)));
+	return (d->dataColumn == column || (d->errorBar->yErrorType() == ErrorBar::ErrorType::Symmetric && d->errorBar->yPlusColumn() == column)
+			|| (d->errorBar->yErrorType() == ErrorBar::ErrorType::Asymmetric && (d->errorBar->yPlusColumn() == column || d->errorBar->yMinusColumn() == column)));
 }
 
 void Histogram::updateColumnDependencies(const AbstractColumn* column) {
@@ -357,15 +340,15 @@ void Histogram::updateColumnDependencies(const AbstractColumn* column) {
 	else if (d->value->columnPath() == columnPath)
 		d->value->setColumn(column);
 
-	if (d->errorBar->plusColumn() == column)
-		d->errorBar->setPlusColumnPath(columnPath);
-	else if (d->errorBar->plusColumnPath() == columnPath)
-		d->errorBar->setPlusColumn(column);
+	if (d->errorBar->yPlusColumn() == column)
+		d->errorBar->setYPlusColumnPath(columnPath);
+	else if (d->errorBar->yPlusColumnPath() == columnPath)
+		d->errorBar->setYPlusColumn(column);
 
-	if (d->errorBar->minusColumn() == column)
-		d->errorBar->setMinusColumnPath(columnPath);
-	else if (d->errorBar->minusColumnPath() == columnPath)
-		d->errorBar->setMinusColumn(column);
+	if (d->errorBar->yMinusColumn() == column)
+		d->errorBar->setYMinusColumnPath(columnPath);
+	else if (d->errorBar->yMinusColumnPath() == columnPath)
+		d->errorBar->setYMinusColumn(column);
 
 	setUndoAware(true);
 }
@@ -1395,7 +1378,7 @@ void HistogramPrivate::updateFilling() {
 }
 
 void HistogramPrivate::updateErrorBars() {
-	errorBarsPath = errorBar->painterPath(errorBarStyle, pointsLogical, q->cSystem, orientation);
+	errorBarsPath = errorBar->painterPath(pointsLogical, q->cSystem, orientation);
 	recalcShapeAndBoundingRect();
 }
 
@@ -1463,8 +1446,8 @@ void HistogramPrivate::recalcShapeAndBoundingRect() {
 	if (value->type() != Value::NoValues)
 		m_shape.addPath(valuesPath);
 
-	if (errorBar->type() != ErrorBar::Type::NoError)
-		m_shape.addPath(WorksheetElement::shapeFromPath(errorBarsPath, errorBarStyle->line()->pen()));
+	if (errorBar->yErrorType() != ErrorBar::ErrorType::NoError)
+		m_shape.addPath(WorksheetElement::shapeFromPath(errorBarsPath, errorBar->line()->pen()));
 
 	m_shape.addPath(rugPath);
 	m_shape.addPolygon(fillPolygon);
@@ -1505,8 +1488,8 @@ void HistogramPrivate::draw(QPainter* painter) {
 	value->draw(painter, valuesPoints, valuesStrings);
 
 	// draw error bars
-	if (errorBar->type() != ErrorBar::Type::NoError)
-		errorBarStyle->draw(painter, errorBarsPath);
+	if (errorBar->yErrorType() != ErrorBar::ErrorType::NoError)
+		errorBar->draw(painter, errorBarsPath);
 
 	// draw rug
 	if (rugEnabled) {
@@ -1662,7 +1645,6 @@ void Histogram::save(QXmlStreamWriter* writer) const {
 	// Error bars
 	writer->writeStartElement(QStringLiteral("errorBars"));
 	d->errorBar->save(writer);
-	d->errorBarStyle->save(writer);
 	writer->writeEndElement();
 
 	// margin plots
@@ -1726,10 +1708,9 @@ bool Histogram::load(XmlStreamReader* reader, bool preview) {
 			d->value->load(reader, preview);
 		else if (!preview && reader->name() == QLatin1String("filling"))
 			d->background->load(reader, preview);
-		else if (!preview && reader->name() == QLatin1String("errorBars")) {
+		else if (!preview && reader->name() == QLatin1String("errorBars"))
 			d->errorBar->load(reader, preview);
-			d->errorBarStyle->load(reader, preview);
-		} else if (!preview && reader->name() == QLatin1String("margins")) {
+		else if (!preview && reader->name() == QLatin1String("margins")) {
 			attribs = reader->attributes();
 
 			READ_INT_VALUE("rugEnabled", rugEnabled, bool);
@@ -1768,7 +1749,7 @@ void Histogram::loadThemeConfig(const KConfig& config) {
 	d->symbol->loadThemeConfig(group, themeColor);
 	d->value->loadThemeConfig(group, themeColor);
 	d->background->loadThemeConfig(group, themeColor);
-	d->errorBarStyle->loadThemeConfig(group, themeColor);
+	d->errorBar->loadThemeConfig(group, themeColor);
 
 	if (plot->theme() == QLatin1String("Tufte")) {
 		d->line->setHistogramLineType(Histogram::LineType::HalfBars);
@@ -1789,7 +1770,7 @@ void Histogram::saveThemeConfig(const KConfig& config) {
 	d->symbol->saveThemeConfig(group);
 	d->value->saveThemeConfig(group);
 	d->background->saveThemeConfig(group);
-	d->errorBarStyle->saveThemeConfig(group);
+	d->errorBar->saveThemeConfig(group);
 
 	int index = parentAspect()->indexOfChild<Histogram>(this);
 	if (index < 5) {

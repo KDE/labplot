@@ -12,6 +12,7 @@ New features:
 			* Lollipop plot
 			* Q-Q plot
 			* KDE plot
+		* Error bars for bar plots
 		* New worksheet theme "Dracula"
 		* Add possibility to lock elements for unintentional change in the plot
 		* New panel in the presenter widget to allow the selection, zooming and navigation also in the presenter mode

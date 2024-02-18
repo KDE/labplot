@@ -32,7 +32,6 @@
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
-#include "backend/worksheet/plots/cartesian/ErrorBarStyle.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "tools/ImageTools.h"
 
@@ -153,33 +152,12 @@ void XYCurve::init() {
 	});
 
 	// error bars
-	d->xErrorBar = new ErrorBar(QString());
-	d->xErrorBar->setPrefix(QStringLiteral("X"));
-	addChild(d->xErrorBar);
-	d->xErrorBar->setHidden(true);
-	d->xErrorBar->init(group);
-	connect(d->xErrorBar, &ErrorBar::updateRequested, [=] {
+	d->errorBar = new ErrorBar(QString(), ErrorBar::Dimension::XY);
+	addChild(d->errorBar);
+	d->errorBar->setHidden(true);
+	d->errorBar->init(group);
+	connect(d->errorBar, &ErrorBar::updateRequested, [=] {
 		d->updateErrorBars();
-	});
-
-	d->yErrorBar = new ErrorBar(QString());
-	d->yErrorBar->setPrefix(QStringLiteral("Y"));
-	addChild(d->yErrorBar);
-	d->yErrorBar->setHidden(true);
-	d->yErrorBar->init(group);
-	connect(d->yErrorBar, &ErrorBar::updateRequested, [=] {
-		d->updateErrorBars();
-	});
-
-	d->errorBarStyle = new ErrorBarStyle(QString());
-	addChild(d->errorBarStyle);
-	d->errorBarStyle->setHidden(true);
-	d->errorBarStyle->init(group);
-	connect(d->errorBarStyle, &ErrorBarStyle::updateRequested, [=] {
-		d->updateErrorBars();
-	});
-	connect(d->errorBarStyle, &ErrorBarStyle::updatePixmapRequested, [=] {
-		d->updatePixmap();
 	});
 
 	// marginal plots (rug, histogram, boxplot)
@@ -301,19 +279,9 @@ Background* XYCurve::background() const {
 }
 
 // error bars
-ErrorBar* XYCurve::xErrorBar() const {
+ErrorBar* XYCurve::errorBar() const {
 	Q_D(const XYCurve);
-	return d->xErrorBar;
-}
-
-ErrorBar* XYCurve::yErrorBar() const {
-	Q_D(const XYCurve);
-	return d->yErrorBar;
-}
-
-ErrorBarStyle* XYCurve::errorBarStyle() const {
-	Q_D(const XYCurve);
-	return d->errorBarStyle;
+	return d->errorBar;
 }
 
 // margin plots
@@ -348,10 +316,10 @@ bool XYCurve::hasData() const {
 
 bool XYCurve::usingColumn(const Column* column) const {
 	Q_D(const XYCurve);
-	return (d->xColumn == column || d->yColumn == column || (d->xErrorBar->type() == ErrorBar::Type::Symmetric && d->xErrorBar->plusColumn() == column)
-			|| (d->xErrorBar->type() == ErrorBar::Type::Asymmetric && (d->xErrorBar->plusColumn() == column || d->xErrorBar->minusColumn() == column))
-			|| (d->yErrorBar->type() == ErrorBar::Type::Symmetric && d->yErrorBar->plusColumn() == column)
-			|| (d->yErrorBar->type() == ErrorBar::Type::Asymmetric && (d->yErrorBar->plusColumn() == column || d->yErrorBar->minusColumn() == column))
+	return (d->xColumn == column || d->yColumn == column || (d->errorBar->xErrorType() == ErrorBar::ErrorType::Symmetric && d->errorBar->xPlusColumn() == column)
+			|| (d->errorBar->xErrorType() == ErrorBar::ErrorType::Asymmetric && (d->errorBar->xPlusColumn() == column || d->errorBar->xMinusColumn() == column))
+			|| (d->errorBar->yErrorType() == ErrorBar::ErrorType::Symmetric && d->errorBar->yPlusColumn() == column)
+			|| (d->errorBar->yErrorType() == ErrorBar::ErrorType::Asymmetric && (d->errorBar->yPlusColumn() == column || d->errorBar->yMinusColumn() == column))
 			|| (d->valuesType == ValuesType::CustomColumn && d->valuesColumn == column));
 }
 
@@ -378,25 +346,27 @@ void XYCurve::updateColumnDependencies(const AbstractColumn* column) {
 	if (d->valuesColumnPath == columnPath)
 		setValuesColumn(column);
 
-	if (d->xErrorBar->plusColumn() == column)
-		d->xErrorBar->plusColumnPath() = columnPath;
-	else if (d->xErrorBar->plusColumnPath() == columnPath)
-		d->yErrorBar->setPlusColumn(column);
+	// x errors
+	if (d->errorBar->xPlusColumn() == column)
+		d->errorBar->xPlusColumnPath() = columnPath;
+	else if (d->errorBar->xPlusColumnPath() == columnPath)
+		d->errorBar->setXPlusColumn(column);
 
-	if (d->xErrorBar->minusColumn() == column)
-		d->xErrorBar->minusColumnPath() = columnPath;
-	else if (d->xErrorBar->minusColumnPath() == columnPath)
-		d->xErrorBar->setMinusColumn(column);
+	if (d->errorBar->xMinusColumn() == column)
+		d->errorBar->xMinusColumnPath() = columnPath;
+	else if (d->errorBar->xMinusColumnPath() == columnPath)
+		d->errorBar->setXMinusColumn(column);
 
-	if (d->yErrorBar->plusColumn() == column)
-		d->yErrorBar->plusColumnPath() = columnPath;
-	else if (d->yErrorBar->plusColumnPath() == columnPath)
-		d->yErrorBar->setPlusColumn(column);
+	// y errors
+	if (d->errorBar->yPlusColumn() == column)
+		d->errorBar->yPlusColumnPath() = columnPath;
+	else if (d->errorBar->yPlusColumnPath() == columnPath)
+		d->errorBar->setYPlusColumn(column);
 
-	if (d->yErrorBar->minusColumn() == column)
-		d->yErrorBar->minusColumnPath() = columnPath;
-	else if (d->yErrorBar->minusColumnPath() == columnPath)
-		d->yErrorBar->setMinusColumn(column);
+	if (d->errorBar->yMinusColumn() == column)
+		d->errorBar->yMinusColumnPath() = columnPath;
+	else if (d->errorBar->yMinusColumnPath() == columnPath)
+		d->errorBar->setYMinusColumn(column);
 
 	setUndoAware(true);
 }
@@ -2221,9 +2191,9 @@ bool XYCurve::minMax(const Dimension dim, const Range<int>& indexRange, Range<do
 	Q_D(const XYCurve);
 	switch (dim) {
 	case Dimension::X:
-		return minMax(xColumn(), yColumn(), d->xErrorBar->type(), d->xErrorBar->plusColumn(), d->xErrorBar->minusColumn(), indexRange, r, includeErrorBars);
+		return minMax(xColumn(), yColumn(), d->errorBar->xErrorType(), d->errorBar->xPlusColumn(), d->errorBar->xMinusColumn(), indexRange, r, includeErrorBars);
 	case Dimension::Y:
-		return minMax(yColumn(), xColumn(), d->yErrorBar->type(), d->yErrorBar->plusColumn(), d->yErrorBar->minusColumn(), indexRange, r, includeErrorBars);
+		return minMax(yColumn(), xColumn(), d->errorBar->yErrorType(), d->errorBar->yPlusColumn(), d->errorBar->yMinusColumn(), indexRange, r, includeErrorBars);
 	}
 	return false;
 }
@@ -2244,7 +2214,7 @@ bool XYCurve::minMax(const Dimension dim, const Range<int>& indexRange, Range<do
  */
 bool XYCurve::minMax(const AbstractColumn* column1,
 					 const AbstractColumn* column2,
-					 const ErrorBar::Type errorType,
+					 const ErrorBar::ErrorType errorType,
 					 const AbstractColumn* errorPlusColumn,
 					 const AbstractColumn* errorMinusColumn,
 					 const Range<int>& indexRange,
@@ -2257,7 +2227,7 @@ bool XYCurve::minMax(const AbstractColumn* column1,
 	// for property == AbstractColumn::Properties::No it must be iterated over all values so it does not matter if this function or the below one is used
 	// if the property of the second column is not AbstractColumn::Properties::No means, that all values are valid and not masked
 	// DEBUG(Q_FUNC_INFO << "\n, column 1 min/max = " << column1->minimum() << "/" << column1->maximum())
-	if ((!includeErrorBars || errorType == ErrorBar::Type::NoError) && column1->properties() != AbstractColumn::Properties::No && column2
+	if ((!includeErrorBars || errorType == ErrorBar::ErrorType::NoError) && column1->properties() != AbstractColumn::Properties::No && column2
 		&& column2->properties() != AbstractColumn::Properties::No) {
 		auto min = column1->minimum(indexRange.start(), indexRange.end());
 		auto max = column1->maximum(indexRange.start(), indexRange.end());
@@ -2289,7 +2259,7 @@ bool XYCurve::minMax(const AbstractColumn* column1,
 		else
 			return false;
 
-		if (errorType == ErrorBar::Type::NoError) {
+		if (errorType == ErrorBar::ErrorType::NoError) {
 			if (value < range.start())
 				range.start() = value;
 
@@ -2310,7 +2280,7 @@ bool XYCurve::minMax(const AbstractColumn* column1,
 			else
 				errorPlus = 0;
 
-			if (errorType == ErrorBar::Type::Symmetric)
+			if (errorType == ErrorBar::ErrorType::Symmetric)
 				errorMinus = errorPlus;
 			else {
 				if (errorMinusColumn && errorMinusColumn->isValid(i) && !errorMinusColumn->isMasked(i))
@@ -2544,17 +2514,16 @@ bool XYCurvePrivate::pointLiesNearCurve(const QPointF mouseScenePos,
 
 void XYCurvePrivate::updateErrorBars() {
 	errorBarsPath = QPainterPath();
-	if (xErrorBar->type() == ErrorBar::Type::NoError && yErrorBar->type() == ErrorBar::Type::NoError) {
+	if (errorBar->xErrorType() == ErrorBar::ErrorType::NoError && errorBar->yErrorType() == ErrorBar::ErrorType::NoError) {
 		recalcShapeAndBoundingRect();
 		return;
 	}
 
+	calculateScenePoints();
+
 	QVector<QLineF> elines;
 	QVector<QPointF> pointsErrorBarAnchorX;
 	QVector<QPointF> pointsErrorBarAnchorY;
-	const auto errorBarStyleType = errorBarStyle->type();
-
-	calculateScenePoints();
 
 	for (int i = 0; i < m_logicalPoints.size(); ++i) {
 		if (!m_pointVisible.at(i))
@@ -2565,17 +2534,17 @@ void XYCurvePrivate::updateErrorBars() {
 		double errorPlus, errorMinus;
 
 		// error bars for x
-		const auto xErrorType = xErrorBar->type();
-		const auto* xErrorPlusColumn = xErrorBar->plusColumn();
-		const auto* xErrorMinusColumn = xErrorBar->minusColumn();
-		if (xErrorType != ErrorBar::Type::NoError) {
+		const auto xErrorType = errorBar->xErrorType();
+		const auto* xErrorPlusColumn = errorBar->xPlusColumn();
+		const auto* xErrorMinusColumn = errorBar->xMinusColumn();
+		if (xErrorType != ErrorBar::ErrorType::NoError) {
 			// determine the values for the errors
 			if (xErrorPlusColumn && xErrorPlusColumn->isValid(index) && !xErrorPlusColumn->isMasked(index))
 				errorPlus = xErrorPlusColumn->valueAt(index);
 			else
 				errorPlus = 0;
 
-			if (xErrorType == ErrorBar::Type::Symmetric)
+			if (xErrorType == ErrorBar::ErrorType::Symmetric)
 				errorMinus = errorPlus;
 			else {
 				if (xErrorMinusColumn && xErrorMinusColumn->isValid(index) && !xErrorMinusColumn->isMasked(index))
@@ -2589,7 +2558,7 @@ void XYCurvePrivate::updateErrorBars() {
 				elines.append(QLineF(QPointF(point.x() - errorMinus, point.y()), QPointF(point.x() + errorPlus, point.y())));
 
 			// determine the end points of the errors bars in logical coordinates to draw later the cap
-			if (errorBarStyleType == ErrorBarStyle::Type::WithEnds) {
+			if (errorBar->type() == ErrorBar::Type::WithEnds) {
 				if (errorMinus != 0.)
 					pointsErrorBarAnchorX << QPointF(point.x() - errorMinus, point.y());
 				if (errorPlus != 0.)
@@ -2598,17 +2567,17 @@ void XYCurvePrivate::updateErrorBars() {
 		}
 
 		// error bars for y
-		const auto yErrorType = yErrorBar->type();
-		const auto* yErrorPlusColumn = yErrorBar->plusColumn();
-		const auto* yErrorMinusColumn = yErrorBar->minusColumn();
-		if (yErrorType != ErrorBar::Type::NoError) {
+		const auto yErrorType = errorBar->yErrorType();
+		const auto* yErrorPlusColumn = errorBar->yPlusColumn();
+		const auto* yErrorMinusColumn = errorBar->yMinusColumn();
+		if (yErrorType != ErrorBar::ErrorType::NoError) {
 			// determine the values for the errors
 			if (yErrorPlusColumn && yErrorPlusColumn->isValid(index) && !yErrorPlusColumn->isMasked(index))
 				errorPlus = yErrorPlusColumn->valueAt(index);
 			else
 				errorPlus = 0;
 
-			if (yErrorType == ErrorBar::Type::Symmetric)
+			if (yErrorType == ErrorBar::ErrorType::Symmetric)
 				errorMinus = errorPlus;
 			else {
 				if (yErrorMinusColumn && yErrorMinusColumn->isValid(index) && !yErrorMinusColumn->isMasked(index))
@@ -2622,7 +2591,7 @@ void XYCurvePrivate::updateErrorBars() {
 				elines.append(QLineF(QPointF(point.x(), point.y() + errorPlus), QPointF(point.x(), point.y() - errorMinus)));
 
 			// determine the end points of the errors bars in logical coordinates to draw later the cap
-			if (errorBarStyleType == ErrorBarStyle::Type::WithEnds) {
+			if (errorBar->type() == ErrorBar::Type::WithEnds) {
 				if (errorMinus != 0.)
 					pointsErrorBarAnchorY << QPointF(point.x(), point.y() + errorPlus);
 				if (errorPlus != 0.)
@@ -2641,7 +2610,7 @@ void XYCurvePrivate::updateErrorBars() {
 	}
 
 	// add caps for x error bars
-	const auto errorBarsCapSize = errorBarStyle->capSize();
+	const auto errorBarsCapSize = errorBar->capSize();
 	if (!pointsErrorBarAnchorX.isEmpty()) {
 		pointsErrorBarAnchorX = q->cSystem->mapLogicalToScene(pointsErrorBarAnchorX);
 		for (const auto& point : qAsConst(pointsErrorBarAnchorX)) {
@@ -2659,6 +2628,7 @@ void XYCurvePrivate::updateErrorBars() {
 		}
 	}
 
+	// TODO errorBarsPaths= errorBar->path(m_logicalPoints, q->cSystem);
 	recalcShapeAndBoundingRect();
 }
 
@@ -2690,8 +2660,8 @@ void XYCurvePrivate::recalcShapeAndBoundingRect() {
 	if (valuesType != XYCurve::ValuesType::NoValues)
 		m_shape.addPath(valuesPath);
 
-	if (xErrorBar->type() != ErrorBar::Type::NoError || yErrorBar->type() != ErrorBar::Type::NoError)
-		m_shape.addPath(WorksheetElement::shapeFromPath(errorBarsPath, errorBarStyle->line()->pen()));
+	if (errorBar->xErrorType() != ErrorBar::ErrorType::NoError || errorBar->yErrorType() != ErrorBar::ErrorType::NoError)
+		m_shape.addPath(WorksheetElement::shapeFromPath(errorBarsPath, errorBar->line()->pen()));
 
 	m_boundingRectangle = m_shape.boundingRect();
 
@@ -2746,8 +2716,8 @@ void XYCurvePrivate::draw(QPainter* painter) {
 	}
 
 	// draw error bars
-	if ((xErrorBar->type() != ErrorBar::Type::NoError) || (yErrorBar->type() != ErrorBar::Type::NoError))
-		errorBarStyle->draw(painter, errorBarsPath);
+	if ((errorBar->xErrorType() != ErrorBar::ErrorType::NoError) || (errorBar->yErrorType() != ErrorBar::ErrorType::NoError))
+		errorBar->draw(painter, errorBarsPath);
 
 	// draw symbols
 	if (symbol->style() != Symbol::Style::NoSymbols) {
@@ -2966,9 +2936,7 @@ void XYCurve::save(QXmlStreamWriter* writer) const {
 
 	// Error bars
 	writer->writeStartElement(QStringLiteral("errorBars"));
-	d->xErrorBar->save(writer);
-	d->yErrorBar->save(writer);
-	d->errorBarStyle->save(writer);
+	d->errorBar->save(writer);
 	writer->writeEndElement();
 
 	// margin plots
@@ -3057,9 +3025,7 @@ bool XYCurve::load(XmlStreamReader* reader, bool preview) {
 		} else if (!preview && reader->name() == QLatin1String("filling"))
 			d->background->load(reader, preview);
 		else if (reader->name() == QLatin1String("errorBars")) {
-			d->xErrorBar->load(reader, preview);
-			d->yErrorBar->load(reader, preview);
-			d->errorBarStyle->load(reader, preview);
+			d->errorBar->load(reader, preview);
 		} else if (!preview && reader->name() == QLatin1String("margins")) {
 			attribs = reader->attributes();
 
@@ -3097,7 +3063,7 @@ void XYCurve::loadThemeConfig(const KConfig& config) {
 	d->dropLine->loadThemeConfig(group, themeColor);
 	d->symbol->loadThemeConfig(group, themeColor);
 	d->background->loadThemeConfig(group);
-	d->errorBarStyle->loadThemeConfig(group, themeColor);
+	d->errorBar->loadThemeConfig(group, themeColor);
 
 	// Values
 	this->setValuesOpacity(group.readEntry(QStringLiteral("ValuesOpacity"), 1.0));
@@ -3124,7 +3090,7 @@ void XYCurve::saveThemeConfig(const KConfig& config) {
 	d->dropLine->saveThemeConfig(group);
 	d->background->saveThemeConfig(group);
 	d->symbol->saveThemeConfig(group);
-	d->errorBarStyle->saveThemeConfig(group);
+	d->errorBar->saveThemeConfig(group);
 
 	// Values
 	group.writeEntry(QStringLiteral("ValuesOpacity"), this->valuesOpacity());

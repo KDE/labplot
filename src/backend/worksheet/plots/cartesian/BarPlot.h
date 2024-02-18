@@ -16,7 +16,6 @@ class BarPlotPrivate;
 class AbstractColumn;
 class Background;
 class ErrorBar;
-class ErrorBarStyle;
 class Line;
 class Value;
 
@@ -50,17 +49,10 @@ public:
 	BASIC_D_ACCESSOR_DECL(BarPlot::Orientation, orientation, Orientation)
 	BASIC_D_ACCESSOR_DECL(double, widthFactor, WidthFactor)
 
-	// box filling
-	Background* backgroundAt(int) const;
-
-	// box border line
-	Line* lineAt(int) const;
-	// values
+	Background* backgroundAt(int) const; // box filling
+	Line* lineAt(int) const; // box border line
 	Value* value() const;
-
-	// error bars;
 	ErrorBar* errorBarAt(int) const;
-	ErrorBarStyle* errorBarStyleAt(int) const;
 
 	void retransform() override;
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;

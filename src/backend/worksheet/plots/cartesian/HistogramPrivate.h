@@ -4,7 +4,7 @@
 	Description          : Private members of Histogram
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2016 Anu Mittal <anu22mittal@gmail.com>
-	SPDX-FileCopyrightText: 2018-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2018-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -70,7 +70,6 @@ public:
 	Background* background{nullptr};
 	Value* value{nullptr};
 	ErrorBar* errorBar{nullptr};
-	ErrorBarStyle* errorBarStyle{nullptr};
 
 	// rug
 	bool rugEnabled{false};

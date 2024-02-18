@@ -12,13 +12,12 @@
 #ifndef HISTOGRAMDOCK_H
 #define HISTOGRAMDOCK_H
 
-#include "backend/worksheet/plots/cartesian/ErrorBar.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
 #include "kdefrontend/dockwidgets/BaseDock.h"
 #include "ui_histogramdock.h"
 
 class BackgroundWidget;
-class ErrorBarStyleWidget;
+class ErrorBarWidget;
 class LineWidget;
 class SymbolWidget;
 class ValueWidget;
@@ -35,8 +34,6 @@ public:
 
 private:
 	TreeViewComboBox* cbDataColumn{nullptr};
-	TreeViewComboBox* cbErrorPlusColumn{nullptr};
-	TreeViewComboBox* cbErrorMinusColumn{nullptr};
 
 	void updateValuesWidgets();
 	void updateLocale() override;
@@ -49,8 +46,7 @@ protected:
 	LineWidget* lineWidget{nullptr};
 	SymbolWidget* symbolWidget{nullptr};
 	ValueWidget* valueWidget{nullptr};
-	ErrorBarStyleWidget* errorBarStyleWidget{nullptr};
-
+	ErrorBarWidget* errorBarWidget{nullptr};
 	QList<Histogram*> m_curvesList;
 	Histogram* m_curve{nullptr};
 
@@ -76,11 +72,6 @@ private Q_SLOTS:
 	void binRangesMinDateTimeChanged(qint64);
 	void binRangesMaxDateTimeChanged(qint64);
 
-	//"Error bars"-Tab
-	void errorTypeChanged(int);
-	void errorPlusColumnChanged(const QModelIndex&);
-	void errorMinusColumnChanged(const QModelIndex&);
-
 	//"Margin Plots"-Tab
 	void rugEnabledChanged(bool);
 	void rugLengthChanged(double) const;
@@ -99,11 +90,6 @@ private Q_SLOTS:
 	void curveAutoBinRangesChanged(bool);
 	void curveBinRangesMinChanged(double);
 	void curveBinRangesMaxChanged(double);
-
-	//"Error bars"-Tab
-	void curveErrorTypeChanged(ErrorBar::Type);
-	void curveErrorPlusColumnChanged(const AbstractColumn*);
-	void curveErrorMinusColumnChanged(const AbstractColumn*);
 
 	//"Margin Plots"-Tab
 	void curveRugEnabledChanged(bool);
