@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-16 01:37+0000\n"
-"PO-Revision-Date: 2024-02-04 17:21+0100\n"
+"PO-Revision-Date: 2024-02-17 11:46+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -9742,10 +9742,9 @@ msgid "Show Comments"
 msgstr "Montri Komentojn"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:323
-#, fuzzy, kde-format
-#| msgid "Somewhat Sparse"
+#, kde-format
 msgid "Show SparkLine"
-msgstr "Iom Maldensa"
+msgstr "Montri SparkLinion"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:325
 #, kde-format
@@ -10039,21 +10038,19 @@ msgid "Hide Comments"
 msgstr "Kaŝi Komentojn"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1151
-#, fuzzy, kde-format
-#| msgid "Hide Options"
+#, kde-format
 msgid "Hide Spark Lines"
-msgstr "Kaŝi Opciojn"
+msgstr "Kaŝi Sparkliniojn"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1153
-#, fuzzy, kde-format
-#| msgid "Show Options"
+#, kde-format
 msgid "Show Spark Lines"
-msgstr "Montri Opciojn"
+msgstr "Montri Sparkliniojn"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1613
 #, kde-format
 msgid "Unfreeze Column"
-msgstr "Malgeli Kolumnon"
+msgstr "Malfrostigi Kolumnon"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1695
 #, kde-format
@@ -19932,10 +19929,9 @@ msgstr "Ebligita"
 
 #. i18n: ectx: property (text), widget (QLabel, lShowSparklines)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:174
-#, fuzzy, kde-format
-#| msgid "Column Separator:"
+#, kde-format
 msgid "Column Sparklines:"
-msgstr "Kolumna apartigilo:"
+msgstr "Kolumnaj Sparklinioj:"
 
 #. i18n: ectx: property (text), widget (QLabel, lShowComments)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:220

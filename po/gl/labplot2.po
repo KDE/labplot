@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-16 01:37+0000\n"
-"PO-Revision-Date: 2024-02-04 12:53+0100\n"
+"PO-Revision-Date: 2024-02-17 06:55+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -9780,10 +9780,9 @@ msgid "Show Comments"
 msgstr "Amosar os comentarios"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:323
-#, fuzzy, kde-format
-#| msgid "Somewhat Sparse"
+#, kde-format
 msgid "Show SparkLine"
-msgstr "Algo escasa"
+msgstr "Amosar a liña de chispas"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:325
 #, kde-format
@@ -10077,16 +10076,14 @@ msgid "Hide Comments"
 msgstr "Agochar os comentarios"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1151
-#, fuzzy, kde-format
-#| msgid "Hide Options"
+#, kde-format
 msgid "Hide Spark Lines"
-msgstr "Agochar as opcións"
+msgstr "Agochar a liña de chispas"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1153
-#, fuzzy, kde-format
-#| msgid "Show Options"
+#, kde-format
 msgid "Show Spark Lines"
-msgstr "Amosar as opcións"
+msgstr "Amosar a liña de chispas"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1613
 #, kde-format
@@ -20001,10 +19998,9 @@ msgstr "Activado."
 
 #. i18n: ectx: property (text), widget (QLabel, lShowSparklines)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:174
-#, fuzzy, kde-format
-#| msgid "Column Separator:"
+#, kde-format
 msgid "Column Sparklines:"
-msgstr "Separador de columnas:"
+msgstr "Liñas de chispas da columna:"
 
 #. i18n: ectx: property (text), widget (QLabel, lShowComments)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:220

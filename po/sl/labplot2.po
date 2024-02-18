@@ -9,16 +9,16 @@ msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-16 01:37+0000\n"
-"PO-Revision-Date: 2024-02-16 20:26+0100\n"
+"PO-Revision-Date: 2024-02-17 07:45+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100>=3 && n"
-"%100<=4 ? 2 : 3);\n"
-"X-Generator: Poedit 3.4.2\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
+"%100==4 ? 3 : 0);\n"
+"X-Generator: Lokalize 23.08.4\n"
 "X-Accelerator-Marker: ~\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
@@ -9806,7 +9806,7 @@ msgstr "Pokaži komentarje"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:323
 #, kde-format
 msgid "Show SparkLine"
-msgstr ""
+msgstr "Prikaži črto iskrenja"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:325
 #, kde-format
@@ -10102,12 +10102,12 @@ msgstr "Skrij komentarje"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1151
 #, kde-format
 msgid "Hide Spark Lines"
-msgstr ""
+msgstr "Skrij črte iskrenja"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1153
 #, kde-format
 msgid "Show Spark Lines"
-msgstr ""
+msgstr "Prikazuj črte iskrenja"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1613
 #, kde-format
@@ -20023,7 +20023,7 @@ msgstr "Omogočeno"
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:174
 #, kde-format
 msgid "Column Sparklines:"
-msgstr ""
+msgstr "Stolpične črte iskrenja:"
 
 #. i18n: ectx: property (text), widget (QLabel, lShowComments)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:220
