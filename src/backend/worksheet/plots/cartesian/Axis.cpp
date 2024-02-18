@@ -3275,6 +3275,10 @@ void Axis::loadThemeConfig(const KConfig& config) {
 		d->line->setStyle((Qt::PenStyle)group.readEntry(QStringLiteral("LineStyle"), (int)Qt::SolidLine));
 	}
 
+	// Title
+	if (plot->theme() == QLatin1String("Sparkline"))
+		d->title->setText(QString());
+
 	// Major grid
 	if (firstAxis)
 		d->majorGridLine->setStyle((Qt::PenStyle)group.readEntry(QStringLiteral("MajorGridStyle"), (int)Qt::SolidLine));

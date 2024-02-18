@@ -37,6 +37,8 @@ SpreadsheetDock::SpreadsheetDock(QWidget* parent)
 	connect(ui.sbColumnCount, QOverload<int>::of(&QSpinBox::valueChanged), this, &SpreadsheetDock::columnCountChanged);
 	connect(ui.sbRowCount, QOverload<int>::of(&QSpinBox::valueChanged), this, &SpreadsheetDock::rowCountChanged);
 	connect(ui.cbShowComments, &QCheckBox::toggled, this, &SpreadsheetDock::commentsShownChanged);
+	connect(ui.cbShowSparklines, &QCheckBox::toggled, this, &SpreadsheetDock::sparklinesShownChanged);
+
 	connect(ui.cbLinkingEnabled, &QCheckBox::toggled, this, &SpreadsheetDock::linkingChanged);
 	connect(ui.cbLinkedSpreadsheet, &TreeViewComboBox::currentModelIndexChanged, this, &SpreadsheetDock::linkedSpreadsheetChanged);
 
@@ -107,6 +109,8 @@ void SpreadsheetDock::setSpreadsheets(const QList<Spreadsheet*> list) {
 	ui.lFormat->setVisible(!nonEditable);
 	ui.lShowComments->setVisible(!nonEditable);
 	ui.cbShowComments->setVisible(!nonEditable);
+	ui.lShowSparklines->setVisible(!nonEditable);
+	ui.cbShowSparklines->setVisible(!nonEditable);
 }
 
 //*************************************************************
@@ -134,6 +138,15 @@ void SpreadsheetDock::commentsShownChanged(bool state) {
 
 	for (auto* spreadsheet : m_spreadsheetList)
 		static_cast<SpreadsheetView*>(spreadsheet->view())->showComments(state);
+}
+/*!
+  enable/disable the sparkline header in the views of the selected spreadsheets.
+*/
+void SpreadsheetDock::sparklinesShownChanged(bool state) {
+	CONDITIONAL_LOCK_RETURN;
+
+	for (auto* spreadsheet : m_spreadsheetList)
+		static_cast<SpreadsheetView*>(spreadsheet->view())->showSparkLines(state);
 }
 
 void SpreadsheetDock::linkingChanged(bool linking) {
@@ -181,6 +194,11 @@ void SpreadsheetDock::spreadsheetShowCommentsChanged(bool checked) {
 	ui.cbShowComments->setChecked(checked);
 }
 
+void SpreadsheetDock::spreadsheetShowSparklinesChanged(bool checked) {
+	CONDITIONAL_LOCK_RETURN;
+	ui.cbShowSparklines->setChecked(checked);
+}
+
 void SpreadsheetDock::spreadsheetLinkingChanged(bool linking) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.cbLinkingEnabled->setChecked(linking);
@@ -200,7 +218,7 @@ void SpreadsheetDock::load() {
 
 	auto* view = static_cast<SpreadsheetView*>(m_spreadsheet->view());
 	ui.cbShowComments->setChecked(view->areCommentsShown());
-
+	ui.cbShowSparklines->setChecked(view->areSparkLinesShown());
 	ui.cbLinkedSpreadsheet->setAspect(m_spreadsheet->linkedSpreadsheet());
 	ui.cbLinkingEnabled->setChecked(m_spreadsheet->linking());
 	linkingChanged(m_spreadsheet->linking()); // call this to update the widgets
@@ -230,6 +248,7 @@ void SpreadsheetDock::loadConfig(KConfig& config) {
 
 	auto* view = static_cast<SpreadsheetView*>(m_spreadsheet->view());
 	ui.cbShowComments->setChecked(group.readEntry(QStringLiteral("ShowComments"), view->areCommentsShown()));
+	ui.cbShowSparklines->setChecked(group.readEntry(QStringLiteral("ShowSparklines"), view->areSparkLinesShown()));
 }
 
 /*!
@@ -240,5 +259,7 @@ void SpreadsheetDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry(QStringLiteral("ColumnCount"), ui.sbColumnCount->value());
 	group.writeEntry(QStringLiteral("RowCount"), ui.sbRowCount->value());
 	group.writeEntry(QStringLiteral("ShowComments"), ui.cbShowComments->isChecked());
+	group.writeEntry(QStringLiteral("ShowSparklines"), ui.cbShowSparklines->isChecked());
+
 	config.sync();
 }

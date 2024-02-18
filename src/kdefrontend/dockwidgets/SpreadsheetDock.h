@@ -40,6 +40,7 @@ private Q_SLOTS:
 	void rowCountChanged(int);
 	void columnCountChanged(int);
 	void commentsShownChanged(bool);
+	void sparklinesShownChanged(bool);
 	void linkingChanged(bool);
 	void linkedSpreadsheetChanged(const QModelIndex& index);
 
@@ -47,6 +48,7 @@ private Q_SLOTS:
 	void spreadsheetRowCountChanged(int);
 	void spreadsheetColumnCountChanged(int);
 	void spreadsheetShowCommentsChanged(bool);
+	void spreadsheetShowSparklinesChanged(bool);
 	void spreadsheetLinkingChanged(bool);
 	void spreadsheetLinkedSpreadsheetChanged(const Spreadsheet*);
 

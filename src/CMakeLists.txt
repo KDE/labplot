@@ -288,6 +288,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/core/AbstractFilter.cpp
 	${BACKEND_DIR}/core/AbstractSimpleFilter.cpp
 	${BACKEND_DIR}/core/column/Column.cpp
+
 	${BACKEND_DIR}/core/column/ColumnPrivate.cpp
 	${BACKEND_DIR}/core/column/ColumnStringIO.cpp
 	${BACKEND_DIR}/core/column/columncommands.cpp
@@ -480,7 +481,10 @@ set(COMMONFRONTEND_SOURCES
 	${COMMONFRONTEND_DIR}/note/NoteView.cpp
 	${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetCommentsHeaderModel.cpp
 	${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetHeaderView.cpp
+        ${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetSparkLineHeaderModel.cpp
 	${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetItemDelegate.cpp
+        ${COMMONFRONTEND_DIR}/spreadsheet/SparklineRunnable.h
+        ${COMMONFRONTEND_DIR}/spreadsheet/SparklineRunnable.cpp
 	${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetView.cpp
 	${COMMONFRONTEND_DIR}/workbook/WorkbookView.cpp
 	${COMMONFRONTEND_DIR}/worksheet/WorksheetView.cpp
@@ -738,12 +742,22 @@ IF (APPLE AND ${ECM_VERSION} VERSION_GREATER "5.48.0")
 	ecm_add_app_icon(LABPLOT_SOURCE ICONS ${LML_ICONS} OUTFILE_BASENAME LML_ICONS)
 ENDIF ()
 
-add_executable( labplot2 ${LABPLOT_SOURCE} ${GUI_QRC} ${qml_QRC} )
+add_executable( labplot2 ${LABPLOT_SOURCE} ${GUI_QRC} ${qml_QRC})
 target_link_libraries( labplot2 labplot2lib labplot2backendlib labplot2nsllib )
+
 #if (KUserFeedbackQt6_FOUND)
 #	target_link_libraries( labplot2 KUserFeedbackCoreQt6 KUserFeedbackWidgetsQt6 )
 #endif ()
 target_compile_definitions(labplot2 PRIVATE ${LABPLOT_COMPILE_DEFINITIONS})
+
+if (APPLE) # Apple app package
+    set_target_properties(labplot2 PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist)
+    set_target_properties(labplot2 PROPERTIES
+    MACOSX_BUNDLE_BUNDLE_NAME "LabPlot2"
+    MACOSX_BUNDLE_LONG_VERSION_STRING "${LABPLOT_VERSION}"
+    MACOSX_BUNDLE_SHORT_VERSION_STRING "${LABPLOT_VERSION}"
+    MACOSX_BUNDLE_GUI_IDENTIFIER "org.kde.labplot")
+endif()
 
 ############## installation ################################
 install( TARGETS labplot2 ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})

@@ -3325,7 +3325,6 @@ void CartesianPlotPrivate::retransformScales(int xIndex, int yIndex) {
  */
 void CartesianPlotPrivate::updateDataRect() {
 	dataRect = mapRectFromScene(rect);
-
 	double paddingLeft = horizontalPadding;
 	double paddingRight = rightPadding;
 	double paddingTop = verticalPadding;

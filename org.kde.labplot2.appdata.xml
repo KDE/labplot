@@ -15,6 +15,7 @@
   <developer_name xml:lang="tr">KDE topluluğu</developer_name>
   <developer_name xml:lang="uk">Спільнота KDE</developer_name>
   <developer_name xml:lang="x-test">xxThe KDE communityxx</developer_name>
+  <launchable type="desktop-id">org.kde.labplot2.desktop</launchable>
   <name>LabPlot</name>
   <name xml:lang="ar">معمل الرسم</name>
   <name xml:lang="bs">LabPlot</name>

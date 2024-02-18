@@ -16,9 +16,8 @@
 #include "backend/core/Settings.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/XmlStreamReader.h"
-#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "backend/worksheet/WorksheetElement.h"
 #include "commonfrontend/core/ContentDockWidget.h"
-
 #include <KConfig>
 #include <KConfigGroup>
 #include <KLocalizedString>
