@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-10 02:40+0000\n"
+"POT-Creation-Date: 2024-02-18 03:06+0000\n"
 "PO-Revision-Date: 2014-03-25 11:30+0800\n"
 "Last-Translator: Franklin Weng <franklin at goodhorse dot idv dot tw>\n"
 "Language-Team: Chinese Traditional <kde-tw@googlegroups.com>\n"
@@ -468,13 +468,13 @@ msgstr "於："
 msgid "Import Data"
 msgstr "匯入"
 
-#: src/backend/core/AbstractPart.cpp:93 src/kdefrontend/MainWin.cpp:569
-#: src/kdefrontend/MainWin.cpp:578
+#: src/backend/core/AbstractPart.cpp:93 src/kdefrontend/MainWin.cpp:567
+#: src/kdefrontend/MainWin.cpp:576
 #, fuzzy, kde-format
 msgid "From File..."
 msgstr "image"
 
-#: src/backend/core/AbstractPart.cpp:95 src/kdefrontend/MainWin.cpp:585
+#: src/backend/core/AbstractPart.cpp:95 src/kdefrontend/MainWin.cpp:583
 #, kde-format
 msgid "From SQL Database..."
 msgstr ""
@@ -1885,7 +1885,7 @@ msgstr "未知"
 #: src/backend/datasources/filters/MatioFilter.cpp:448
 #: src/commonfrontend/workbook/WorkbookView.cpp:53
 #: src/commonfrontend/workbook/WorkbookView.cpp:160
-#: src/kdefrontend/MainWin.cpp:536 src/kdefrontend/MainWin.cpp:1897
+#: src/kdefrontend/MainWin.cpp:534 src/kdefrontend/MainWin.cpp:1895
 #, kde-format
 msgid "Matrix"
 msgstr "矩陣"
@@ -7502,7 +7502,7 @@ msgstr "函式"
 #: src/commonfrontend/workbook/WorkbookView.cpp:135
 #: src/commonfrontend/worksheet/WorksheetView.cpp:483
 #: src/commonfrontend/worksheet/WorksheetView.cpp:552
-#: src/kdefrontend/MainWin.cpp:765
+#: src/kdefrontend/MainWin.cpp:763
 #, fuzzy, kde-format
 #| msgid "Add new"
 msgid "Add New"
@@ -10196,8 +10196,8 @@ msgstr ""
 #: src/kdefrontend/dockwidgets/XYIntegrationCurveDock.cpp:58
 #: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:62
 #: src/kdefrontend/dockwidgets/XYSmoothCurveDock.cpp:54
-#: src/kdefrontend/labplot2ui.rc:28 src/kdefrontend/MainWin.cpp:530
-#: src/kdefrontend/MainWin.cpp:1879 src/kdefrontend/SettingsDialog.cpp:66
+#: src/kdefrontend/labplot2ui.rc:28 src/kdefrontend/MainWin.cpp:528
+#: src/kdefrontend/MainWin.cpp:1877 src/kdefrontend/SettingsDialog.cpp:66
 #, fuzzy, kde-format
 msgid "Spreadsheet"
 msgstr "工作表"
@@ -10377,7 +10377,7 @@ msgstr "全部選取"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
 #: src/commonfrontend/worksheet/WorksheetView.cpp:332
-#: src/kdefrontend/MainWin.cpp:2367
+#: src/kdefrontend/MainWin.cpp:2365
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1426
 #, kde-format
 msgid "Cursor"
@@ -11544,7 +11544,7 @@ msgid "Open LabPlot Project"
 msgstr "開啟專案"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:379
-#: src/kdefrontend/MainWin.cpp:1364
+#: src/kdefrontend/MainWin.cpp:1362
 #, fuzzy, kde-format
 #| msgid "Close Project"
 msgid "LabPlot Projects (%1)"
@@ -11558,7 +11558,7 @@ msgid "Open Origin Project"
 msgstr "開啟專案"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:385
-#: src/kdefrontend/MainWin.cpp:1369
+#: src/kdefrontend/MainWin.cpp:1367
 #, fuzzy, kde-format
 #| msgid "Open project"
 msgid "Origin Projects (%1)"
@@ -11796,7 +11796,7 @@ msgstr ""
 
 #: src/kdefrontend/datasources/MQTTSubscriptionWidget.cpp:856
 #: src/kdefrontend/datasources/MQTTSubscriptionWidget.cpp:858
-#: src/kdefrontend/MainWin.cpp:2689
+#: src/kdefrontend/MainWin.cpp:2687
 #, kde-format
 msgid "Warning"
 msgstr ""
@@ -13328,7 +13328,7 @@ msgid ""
 "installation."
 msgstr ""
 
-#: src/kdefrontend/GuiObserver.cpp:184 src/kdefrontend/MainWin.cpp:1310
+#: src/kdefrontend/GuiObserver.cpp:184 src/kdefrontend/MainWin.cpp:1308
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Properties"
@@ -14086,15 +14086,15 @@ msgid "Failed to Open"
 msgstr "開啟失敗"
 
 #. i18n: ectx: ToolBar (worksheet_toolbar)
-#: src/kdefrontend/labplot2ui.rc:20 src/kdefrontend/MainWin.cpp:542
-#: src/kdefrontend/MainWin.cpp:1915 src/kdefrontend/SettingsDialog.cpp:61
+#: src/kdefrontend/labplot2ui.rc:20 src/kdefrontend/MainWin.cpp:540
+#: src/kdefrontend/MainWin.cpp:1913 src/kdefrontend/SettingsDialog.cpp:61
 #, fuzzy, kde-format
 msgid "Worksheet"
 msgstr "工作表(&W)"
 
 #. i18n: ectx: ToolBar (datapicker_toolbar)
-#: src/kdefrontend/labplot2ui.rc:24 src/kdefrontend/MainWin.cpp:525
-#: src/kdefrontend/MainWin.cpp:1871
+#: src/kdefrontend/labplot2ui.rc:24 src/kdefrontend/MainWin.cpp:523
+#: src/kdefrontend/MainWin.cpp:1869
 #, fuzzy, kde-format
 msgid "Data Extractor"
 msgstr "資料格式"
@@ -14204,57 +14204,57 @@ msgctxt "%1 is the LabPlot version"
 msgid "Welcome to LabPlot %1"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:273
+#: src/kdefrontend/MainWin.cpp:271
 #, fuzzy, kde-format
 msgid "GUI configuration file not found"
 msgstr "專案屬性"
 
-#: src/kdefrontend/MainWin.cpp:274
+#: src/kdefrontend/MainWin.cpp:272
 #, kde-format
 msgid "%1 file was not found. Please check your installation."
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:502
+#: src/kdefrontend/MainWin.cpp:500
 #, fuzzy, kde-format
 msgid "&Open Example"
 msgstr "新增過濾器"
 
-#: src/kdefrontend/MainWin.cpp:520 src/kdefrontend/MainWin.cpp:1863
+#: src/kdefrontend/MainWin.cpp:518 src/kdefrontend/MainWin.cpp:1861
 #, kde-format
 msgid "Workbook"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:522
+#: src/kdefrontend/MainWin.cpp:520
 #, kde-format
 msgid "Creates a new workbook for collection spreadsheets, matrices and plots"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:526
+#: src/kdefrontend/MainWin.cpp:524
 #, kde-format
 msgid "Creates a data extractor for getting data from a picture"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:532
+#: src/kdefrontend/MainWin.cpp:530
 #, kde-format
 msgid "Creates a new spreadsheet for data editing"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:538
+#: src/kdefrontend/MainWin.cpp:536
 #, kde-format
 msgid "Creates a new matrix for data editing"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:544
+#: src/kdefrontend/MainWin.cpp:542
 #, kde-format
 msgid "Creates a new worksheet for data plotting"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:548 src/kdefrontend/MainWin.cpp:1923
+#: src/kdefrontend/MainWin.cpp:546 src/kdefrontend/MainWin.cpp:1921
 #, fuzzy, kde-format
 msgid "Note"
 msgstr "備忘"
 
-#: src/kdefrontend/MainWin.cpp:549
+#: src/kdefrontend/MainWin.cpp:547
 #, kde-format
 msgid "Creates a new note for arbitrary text"
 msgstr ""
@@ -14262,388 +14262,388 @@ msgstr ""
 #. i18n("Note/Script"),this);
 #. actionCollection()->addAction(QLatin1String("new_script"), m_newScriptAction);
 #. connect(m_newScriptAction, &QAction::triggered,SLOT(newScript()));
-#: src/kdefrontend/MainWin.cpp:557 src/kdefrontend/MainWin.cpp:1855
+#: src/kdefrontend/MainWin.cpp:555 src/kdefrontend/MainWin.cpp:1853
 #, fuzzy, kde-format
 msgid "Folder"
 msgstr "資料夾"
 
-#: src/kdefrontend/MainWin.cpp:558
+#: src/kdefrontend/MainWin.cpp:556
 #, kde-format
 msgid "Creates a new folder to collect sheets and other elements"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:563
+#: src/kdefrontend/MainWin.cpp:561
 #, fuzzy, kde-format
 #| msgid "Add new"
 msgid "Live Data Source..."
 msgstr "新增"
 
-#: src/kdefrontend/MainWin.cpp:564
+#: src/kdefrontend/MainWin.cpp:562
 #, kde-format
 msgid "Creates a live data source to read data from a real time device"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:571 src/kdefrontend/MainWin.cpp:580
+#: src/kdefrontend/MainWin.cpp:569 src/kdefrontend/MainWin.cpp:578
 #, kde-format
 msgid "Import data from a regular file"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:586
+#: src/kdefrontend/MainWin.cpp:584
 #, kde-format
 msgid "Import data from a SQL database"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:590
+#: src/kdefrontend/MainWin.cpp:588
 #, fuzzy, kde-format
 msgid "From Dataset Collection..."
 msgstr "連線"
 
-#: src/kdefrontend/MainWin.cpp:591
+#: src/kdefrontend/MainWin.cpp:589
 #, fuzzy, kde-format
 msgid "Imports data from an online dataset"
 msgstr "匯入"
 
-#: src/kdefrontend/MainWin.cpp:595
+#: src/kdefrontend/MainWin.cpp:593
 #, fuzzy, kde-format
 #| msgid "Close Project"
 msgid "LabPlot Project..."
 msgstr "關閉專案"
 
-#: src/kdefrontend/MainWin.cpp:596
+#: src/kdefrontend/MainWin.cpp:594
 #, kde-format
 msgid "Import a project from a LabPlot project file (.lml)"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:601
+#: src/kdefrontend/MainWin.cpp:599
 #, fuzzy, kde-format
 #| msgid "Open project"
 msgid "Origin Project (OPJ)..."
 msgstr "開啟專案"
 
-#: src/kdefrontend/MainWin.cpp:602
+#: src/kdefrontend/MainWin.cpp:600
 #, kde-format
 msgid "Import a project from an OriginLab Origin project file (.opj)"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:607
+#: src/kdefrontend/MainWin.cpp:605
 #, fuzzy, kde-format
 #| msgid "Export"
 msgid "Export..."
 msgstr "匯出"
 
-#: src/kdefrontend/MainWin.cpp:608
+#: src/kdefrontend/MainWin.cpp:606
 #, fuzzy, kde-format
 msgid "Export selected element"
 msgstr "符合選擇區域"
 
-#: src/kdefrontend/MainWin.cpp:614
+#: src/kdefrontend/MainWin.cpp:612
 #, kde-format
 msgid "Color Maps Browser"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:615
+#: src/kdefrontend/MainWin.cpp:613
 #, kde-format
 msgid "Open dialog to browse through the available color maps."
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:624
+#: src/kdefrontend/MainWin.cpp:622
 #, kde-format
 msgid "FITS Metadata Editor..."
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:625
+#: src/kdefrontend/MainWin.cpp:623
 #, kde-format
 msgid "Open editor to edit FITS meta data"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:634
+#: src/kdefrontend/MainWin.cpp:632
 #, kde-format
 msgid "Undo/Redo History..."
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:652
+#: src/kdefrontend/MainWin.cpp:650
 #, fuzzy, kde-format
 msgid "&Close"
 msgstr "全部關閉"
 
-#: src/kdefrontend/MainWin.cpp:654
+#: src/kdefrontend/MainWin.cpp:652
 #, kde-format
 msgid "Close the active window"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:657
+#: src/kdefrontend/MainWin.cpp:655
 #, fuzzy, kde-format
 msgid "Close &All"
 msgstr "全部關閉"
 
-#: src/kdefrontend/MainWin.cpp:658
+#: src/kdefrontend/MainWin.cpp:656
 #, kde-format
 msgid "Close all the windows"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:661
+#: src/kdefrontend/MainWin.cpp:659
 #, fuzzy, kde-format
 msgid "&Tile"
 msgstr "鋪排"
 
-#: src/kdefrontend/MainWin.cpp:662
+#: src/kdefrontend/MainWin.cpp:660
 #, kde-format
 msgid "Tile the windows"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:665
+#: src/kdefrontend/MainWin.cpp:663
 #, fuzzy, kde-format
 msgid "&Cascade"
 msgstr "層疊"
 
-#: src/kdefrontend/MainWin.cpp:666
+#: src/kdefrontend/MainWin.cpp:664
 #, kde-format
 msgid "Cascade the windows"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:669
+#: src/kdefrontend/MainWin.cpp:667
 #, fuzzy, kde-format
 msgid "Ne&xt"
 msgstr "下一個"
 
-#: src/kdefrontend/MainWin.cpp:671
+#: src/kdefrontend/MainWin.cpp:669
 #, kde-format
 msgid "Move the focus to the next window"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:674
+#: src/kdefrontend/MainWin.cpp:672
 #, fuzzy, kde-format
 msgid "Pre&vious"
 msgstr "前一個"
 
-#: src/kdefrontend/MainWin.cpp:676
+#: src/kdefrontend/MainWin.cpp:674
 #, kde-format
 msgid "Move the focus to the previous window"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:683
+#: src/kdefrontend/MainWin.cpp:681
 #, kde-format
 msgid "Current &Folder Only"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:688
+#: src/kdefrontend/MainWin.cpp:686
 #, kde-format
 msgid "Current Folder and &Subfolders"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:692
+#: src/kdefrontend/MainWin.cpp:690
 #, kde-format
 msgid "&All"
 msgstr "全部(&A)"
 
-#: src/kdefrontend/MainWin.cpp:714
+#: src/kdefrontend/MainWin.cpp:712
 #, kde-format
 msgid "Show Memory Usage"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:722
+#: src/kdefrontend/MainWin.cpp:720
 #, kde-format
 msgid "Project Explorer"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:727
+#: src/kdefrontend/MainWin.cpp:725
 #, fuzzy, kde-format
 msgid "Properties Explorer"
 msgstr "屬性"
 
-#: src/kdefrontend/MainWin.cpp:790
+#: src/kdefrontend/MainWin.cpp:788
 #, kde-format
 msgid "Window Visibility"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:814
+#: src/kdefrontend/MainWin.cpp:812
 #, fuzzy, kde-format
 msgid "Color Scheme"
 msgstr "色彩映射"
 
-#: src/kdefrontend/MainWin.cpp:861
+#: src/kdefrontend/MainWin.cpp:859
 #, kde-format
 msgid "Configure CAS..."
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:897 src/kdefrontend/MainWin.cpp:911
+#: src/kdefrontend/MainWin.cpp:895 src/kdefrontend/MainWin.cpp:909
 #, kde-format
 msgid "The current project %1 has been modified. Do you want to save it?"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:898 src/kdefrontend/MainWin.cpp:912
+#: src/kdefrontend/MainWin.cpp:896 src/kdefrontend/MainWin.cpp:910
 #, kde-format
 msgid "Save Project"
 msgstr "儲存專案"
 
-#: src/kdefrontend/MainWin.cpp:1296
+#: src/kdefrontend/MainWin.cpp:1294
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Project Explorer"
 msgstr "專案屬性"
 
-#: src/kdefrontend/MainWin.cpp:1355
+#: src/kdefrontend/MainWin.cpp:1353
 #, fuzzy, kde-format
 #| msgid "%1: clear"
 msgid "%1: created"
 msgstr "%1：清除"
 
-#: src/kdefrontend/MainWin.cpp:1375
+#: src/kdefrontend/MainWin.cpp:1373
 #, fuzzy, kde-format
 #| msgid "Close Project"
 msgid "Cantor Projects (*.cws)"
 msgstr "關閉專案"
 
-#: src/kdefrontend/MainWin.cpp:1376
+#: src/kdefrontend/MainWin.cpp:1374
 #, kde-format
 msgid "Jupyter Notebooks (*.ipynb)"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:1383
+#: src/kdefrontend/MainWin.cpp:1381
 #, kde-format
 msgid "All supported files (%1)"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:1387
+#: src/kdefrontend/MainWin.cpp:1385
 #, fuzzy, kde-format
 #| msgid "Open project"
 msgctxt "@title:window"
 msgid "Open Project"
 msgstr "開啟專案"
 
-#: src/kdefrontend/MainWin.cpp:1404
+#: src/kdefrontend/MainWin.cpp:1402
 #, kde-format
 msgid "The project file %1 is already opened."
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:1404
+#: src/kdefrontend/MainWin.cpp:1402
 #, fuzzy, kde-format
 #| msgid "Open project"
 msgid "Open Project"
 msgstr "開啟專案"
 
-#: src/kdefrontend/MainWin.cpp:1417
+#: src/kdefrontend/MainWin.cpp:1415
 #, kde-format
 msgid "Loading %1..."
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:1467 src/kdefrontend/MainWin.cpp:1471
-#: src/kdefrontend/MainWin.cpp:1476 src/kdefrontend/MainWin.cpp:1481
-#: src/kdefrontend/MainWin.cpp:1485 src/kdefrontend/MainWin.cpp:1532
-#: src/kdefrontend/MainWin.cpp:1537 src/kdefrontend/MainWin.cpp:1542
-#: src/kdefrontend/MainWin.cpp:1548
+#: src/kdefrontend/MainWin.cpp:1465 src/kdefrontend/MainWin.cpp:1469
+#: src/kdefrontend/MainWin.cpp:1474 src/kdefrontend/MainWin.cpp:1479
+#: src/kdefrontend/MainWin.cpp:1483 src/kdefrontend/MainWin.cpp:1530
+#: src/kdefrontend/MainWin.cpp:1535 src/kdefrontend/MainWin.cpp:1540
+#: src/kdefrontend/MainWin.cpp:1546
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to open project"
 msgstr "開啟失敗"
 
-#: src/kdefrontend/MainWin.cpp:1467 src/kdefrontend/MainWin.cpp:1476
-#: src/kdefrontend/MainWin.cpp:1481 src/kdefrontend/MainWin.cpp:1532
-#: src/kdefrontend/MainWin.cpp:1537 src/kdefrontend/MainWin.cpp:1542
+#: src/kdefrontend/MainWin.cpp:1465 src/kdefrontend/MainWin.cpp:1474
+#: src/kdefrontend/MainWin.cpp:1479 src/kdefrontend/MainWin.cpp:1530
+#: src/kdefrontend/MainWin.cpp:1535 src/kdefrontend/MainWin.cpp:1540
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to process the content of the file '%1'."
 msgstr "開啟失敗"
 
-#: src/kdefrontend/MainWin.cpp:1471 src/kdefrontend/MainWin.cpp:1485
-#: src/kdefrontend/MainWin.cpp:1548
+#: src/kdefrontend/MainWin.cpp:1469 src/kdefrontend/MainWin.cpp:1483
+#: src/kdefrontend/MainWin.cpp:1546
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to open the file '%1'."
 msgstr "開啟失敗"
 
-#: src/kdefrontend/MainWin.cpp:1562
+#: src/kdefrontend/MainWin.cpp:1560
 #, kde-format
 msgid "%1: opened"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:1571
+#: src/kdefrontend/MainWin.cpp:1569
 #, kde-format
 msgid "Project successfully opened (in %1 seconds)."
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:1667
+#: src/kdefrontend/MainWin.cpp:1665
 #, fuzzy, kde-format
 #| msgid "Save Project"
 msgctxt "@title:window"
 msgid "Save Project As"
 msgstr "儲存專案"
 
-#: src/kdefrontend/MainWin.cpp:1669
+#: src/kdefrontend/MainWin.cpp:1667
 #, kde-format
 msgid ""
 "LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 "
 "*.LML.XZ)"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:1695
+#: src/kdefrontend/MainWin.cpp:1693
 #, fuzzy, kde-format
 msgid "Couldn't open the temporary file for writing."
 msgstr "無法開啟檔案 %1 以讀取"
 
-#: src/kdefrontend/MainWin.cpp:1747
+#: src/kdefrontend/MainWin.cpp:1745
 #, kde-format
 msgid "Project saved"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:1763
+#: src/kdefrontend/MainWin.cpp:1761
 #, kde-format
 msgid "Couldn't save the file '%1'."
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:1768
+#: src/kdefrontend/MainWin.cpp:1766
 #, fuzzy, kde-format
 msgid "Couldn't open the file '%1' for writing."
 msgstr "無法開啟檔案 %1 以讀取"
 
-#: src/kdefrontend/MainWin.cpp:1813
+#: src/kdefrontend/MainWin.cpp:1811
 #, fuzzy, kde-format
 msgid "Changed"
 msgstr "（已改變）"
 
-#: src/kdefrontend/MainWin.cpp:1829 src/kdefrontend/MainWin.cpp:1842
+#: src/kdefrontend/MainWin.cpp:1827 src/kdefrontend/MainWin.cpp:1840
 #, kde-format
 msgid "Preparing printing of %1"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:1831 src/kdefrontend/MainWin.cpp:1844
+#: src/kdefrontend/MainWin.cpp:1829 src/kdefrontend/MainWin.cpp:1842
 #, kde-format
 msgid "%1 printed"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2621
+#: src/kdefrontend/MainWin.cpp:2619
 #: src/kdefrontend/welcomescreen/WelcomeScreenHelper.cpp:115
 #, fuzzy, kde-format
 msgid "Dataset%1"
 msgstr "dataSet：資料集"
 
-#: src/kdefrontend/MainWin.cpp:2652
+#: src/kdefrontend/MainWin.cpp:2650
 #, kde-format
 msgid "%1 exported"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2659
+#: src/kdefrontend/MainWin.cpp:2657
 #, kde-format
 msgid "FITS files saved"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2671
+#: src/kdefrontend/MainWin.cpp:2669
 #, kde-format
 msgid "MQTT Client%1"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2689
+#: src/kdefrontend/MainWin.cpp:2687
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2693
+#: src/kdefrontend/MainWin.cpp:2691
 #, fuzzy, kde-format
 #| msgid "Add new"
 msgid "Live data source%1"
 msgstr "新增"
 
-#: src/kdefrontend/MainWin.cpp:2737
+#: src/kdefrontend/MainWin.cpp:2735
 #, kde-format
 msgid "No Cantor backends found. Please install the ones you want to use."
 msgstr ""
