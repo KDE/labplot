@@ -29,7 +29,7 @@ public:
 
 	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace);
 	void importData(AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace, int lines = -1);
-	int mcapToJson(const QString& fileName);
+	int mcapToJson(const QString& fileName,int lines=INT_MAX);
 	QJsonDocument getJsonDocument(const QString&);
 
 	void write(const QString& fileName, AbstractDataSource*);

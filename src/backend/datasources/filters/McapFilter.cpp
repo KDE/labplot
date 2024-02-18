@@ -28,8 +28,14 @@
 
 #include <cmath>
 
-#define MCAP_COMPRESSION_NO_LZ4
-#define MCAP_COMPRESSION_NO_ZSTD
+#ifndef HAVE_LZ4
+	#define MCAP_COMPRESSION_NO_LZ4
+#endif
+
+#ifndef HAVE_LZ4
+	#define MCAP_COMPRESSION_NO_ZSTD
+#endif
+
 #define MCAP_IMPLEMENTATION
 #include <3rdparty/mcap/include/mcap/mcap.hpp>
 
@@ -462,7 +468,7 @@ bool McapFilterPrivate::prepareDocumentToRead() {
 	return true;
 }
 
-int McapFilterPrivate::mcapToJson(const QString& fileName) {
+int McapFilterPrivate::mcapToJson(const QString& fileName,int lines) {
 	DEBUG("MCAP Filter mcapToJson:" << STDSTRING(current_topic));
 
 	mcap::McapReader reader;
@@ -475,7 +481,8 @@ int McapFilterPrivate::mcapToJson(const QString& fileName) {
 	}
 
 	if(current_topic==""){
-		current_topic = m_validTopics[0];
+		QVector<QString> topics = getValidTopics(fileName); //Todo: make this more efficient. Only open file once.
+		current_topic = topics[0];
 	}
 
 	mcap::ReadMessageOptions opt;
@@ -491,11 +498,12 @@ int McapFilterPrivate::mcapToJson(const QString& fileName) {
 	int msg_count = 0;
 
 	QJsonArray jsonArray;
+	try{
 	for (auto it = messageView.begin(); it != messageView.end(); it++) {
 		// skip any non-json-encoded messages.
 		// qDebug() << "Processing topic " << QString::fromStdString(it->channel->topic) << "with encoding"
 		// 		 << QString::fromStdString(it->channel->messageEncoding);
-
+		
 		if (it->channel->messageEncoding != "json") { // only support json encoding for now
 			continue;
 		}
@@ -539,7 +547,14 @@ int McapFilterPrivate::mcapToJson(const QString& fileName) {
 		// }
 		jsonArray.append(obj);
 		msg_count++;
+		if(msg_count==lines){
+			qDebug() << "Stop reading MCAP file. Requested number of " << lines << "lines reached.";
+			break;
+		}
 	}
+	} catch (const std::exception& e) {
+        std::cerr << "Error parsing MCAP file: " << e.what() << std::endl;
+    }
 
 	QJsonDocument finalJsonDocument(jsonArray);
 
@@ -665,9 +680,8 @@ QVector<QStringList> McapFilterPrivate::preview(const QString& fileName, int lin
 	DEBUG(Q_FUNC_INFO);
 
 	if (!m_prepared) {
-		mcapToJson(fileName);
+		mcapToJson(fileName,lines);
 		bool success = prepareDocumentToRead();
-		QDEBUG(success);
 		return preview(lines);
 	} else
 		return preview(lines);

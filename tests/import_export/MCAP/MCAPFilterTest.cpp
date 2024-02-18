@@ -21,83 +21,79 @@ void MCAPFilterTest::initTestCase() {
 }
 
 void MCAPFilterTest::testArrayImport() {
-	Spreadsheet spreadsheet(QStringLiteral("test"), false);
-	McapFilter filter;
-
-	const QString& fileName = QFINDTESTDATA(QLatin1String("data/basic.mcap"));
-
 	// This mcap file has one topic with name: integer_topic with 10 entries
 	// Its encoded in json schema, so each entry looks like this: {"value": n } with n from 0 to 9
 	// mcap info basic.mcap
 	// library: python mcap 1.1.1
-	// profile: 
+	// profile:
 	// messages: 10
 	// duration: 9h0m0s
 	// start: 0.000000000
 	// end: 32400.000000000
-	// compression:
-	// 	: [1/1 chunks] [575.00 B/575.00 B (0.00%)] [0.00 B/sec] 
+	// compression: {none,lz4 or zstd}
+	// 	: [1/1 chunks] [575.00 B/575.00 B (0.00%)] [0.00 B/sec]
 	// channels:
-	//   	(1) integer_topic  10 msgs (0.00 Hz)   : sample [jsonschema]  
+	//   	(1) integer_topic  10 msgs (0.00 Hz)   : sample [jsonschema]
 	// attachments: 0
 	// metadata: 0
 
+	QVector<QString> compression_types = {"data/basic_NONE.mcap", "data/basic_LZ4.mcap", "data/basic_ZSTD.mcap"};
 
+	for (const QString& file : compression_types) {
+		Spreadsheet spreadsheet(QStringLiteral("test"), false);
+		McapFilter filter;
 
-	AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode::Replace;
-	filter.setCreateIndexEnabled(true);
-	filter.setDataRowType(QJsonValue::Object);
-	filter.setDateTimeFormat(QLatin1String("yyyy-MM-dd"));
-	filter.readDataFromFile(fileName, &spreadsheet, mode);
+		const QString& fileName = QFINDTESTDATA(file);
 
+		AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode::Replace;
+		filter.setCreateIndexEnabled(true);
+		filter.setDataRowType(QJsonValue::Object);
+		filter.setDateTimeFormat(QLatin1String("yyyy-MM-dd"));
+		filter.readDataFromFile(fileName, &spreadsheet, mode);
 
-	QCOMPARE(spreadsheet.columnCount(), 5);
-	QCOMPARE(spreadsheet.rowCount(), 10);
-	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer); // Index
-	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Integer); // LogTime
-	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::ColumnMode::Integer); // PublishTime
-	QCOMPARE(spreadsheet.column(3)->columnMode(), AbstractColumn::ColumnMode::Double); // Sequence
-	QCOMPARE(spreadsheet.column(4)->columnMode(), AbstractColumn::ColumnMode::Double); // Value
+		QCOMPARE(spreadsheet.columnCount(), 5);
+		QCOMPARE(spreadsheet.rowCount(), 10);
+		QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer); // Index
+		QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Integer); // LogTime
+		QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::ColumnMode::Integer); // PublishTime
+		QCOMPARE(spreadsheet.column(3)->columnMode(), AbstractColumn::ColumnMode::Double); // Sequence
+		QCOMPARE(spreadsheet.column(4)->columnMode(), AbstractColumn::ColumnMode::Double); // Value
 
+		QCOMPARE(spreadsheet.column(0)->plotDesignation(), AbstractColumn::PlotDesignation::X);
+		QCOMPARE(spreadsheet.column(1)->plotDesignation(), AbstractColumn::PlotDesignation::Y);
+		QCOMPARE(spreadsheet.column(2)->plotDesignation(), AbstractColumn::PlotDesignation::Y);
 
-	QCOMPARE(spreadsheet.column(0)->plotDesignation(), AbstractColumn::PlotDesignation::X);
-	QCOMPARE(spreadsheet.column(1)->plotDesignation(), AbstractColumn::PlotDesignation::Y);
-	QCOMPARE(spreadsheet.column(2)->plotDesignation(), AbstractColumn::PlotDesignation::Y);
+		QCOMPARE(spreadsheet.column(0)->name(), i18n("index"));
+		QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("logTime"));
+		QCOMPARE(spreadsheet.column(2)->name(), QLatin1String("publishTime"));
+		QCOMPARE(spreadsheet.column(3)->name(), QLatin1String("sequence"));
+		QCOMPARE(spreadsheet.column(4)->name(), QLatin1String("value"));
 
-	QCOMPARE(spreadsheet.column(0)->name(), i18n("index"));
-	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("logTime"));
-	QCOMPARE(spreadsheet.column(2)->name(), QLatin1String("publishTime"));
-	QCOMPARE(spreadsheet.column(3)->name(), QLatin1String("sequence"));
-	QCOMPARE(spreadsheet.column(4)->name(), QLatin1String("value"));
+		// Check Sequence
+		QCOMPARE(spreadsheet.column(3)->valueAt(0), 0);
+		QCOMPARE(spreadsheet.column(3)->valueAt(1), 1);
+		QCOMPARE(spreadsheet.column(3)->valueAt(2), 2);
 
+		// Check Value
+		QCOMPARE(spreadsheet.column(4)->valueAt(0), 0);
+		QCOMPARE(spreadsheet.column(4)->valueAt(1), 1);
+		QCOMPARE(spreadsheet.column(4)->valueAt(2), 2);
 
-	// Check Sequence
-	QCOMPARE(spreadsheet.column(3)->valueAt(0), 0);
-	QCOMPARE(spreadsheet.column(3)->valueAt(1), 1);
-	QCOMPARE(spreadsheet.column(3)->valueAt(2), 2);
+		// Check index
+		QCOMPARE(spreadsheet.column(0)->integerAt(0), 1);
+		QCOMPARE(spreadsheet.column(0)->integerAt(1), 2);
+		QCOMPARE(spreadsheet.column(0)->integerAt(2), 3);
 
-	// Check Value
-	QCOMPARE(spreadsheet.column(4)->valueAt(0), 0);
-	QCOMPARE(spreadsheet.column(4)->valueAt(1), 1);
-	QCOMPARE(spreadsheet.column(4)->valueAt(2), 2);
+		// Check Logging Times
+		QCOMPARE(spreadsheet.column(1)->valueAt(0), 0);
+		QCOMPARE(spreadsheet.column(1)->valueAt(1), 1 * 3600000);
+		QCOMPARE(spreadsheet.column(1)->valueAt(2), 2 * 3600000);
 
-	// Check index
-	QCOMPARE(spreadsheet.column(0)->integerAt(0), 1);
-	QCOMPARE(spreadsheet.column(0)->integerAt(1), 2);
-	QCOMPARE(spreadsheet.column(0)->integerAt(2), 3);
-
-	// Check Logging Times
-	QCOMPARE(spreadsheet.column(1)->valueAt(0), 0);
-	QCOMPARE(spreadsheet.column(1)->valueAt(1), 1 * 3600000);
-	QCOMPARE(spreadsheet.column(1)->valueAt(2), 2 * 3600000);
-
-	// Check Logging Times
-	QCOMPARE(spreadsheet.column(2)->valueAt(0), 0);
-	QCOMPARE(spreadsheet.column(2)->valueAt(1), 1 * 3600000);
-	QCOMPARE(spreadsheet.column(2)->valueAt(2), 2 * 3600000);
-
+		// Check Logging Times
+		QCOMPARE(spreadsheet.column(2)->valueAt(0), 0);
+		QCOMPARE(spreadsheet.column(2)->valueAt(1), 1 * 3600000);
+		QCOMPARE(spreadsheet.column(2)->valueAt(2), 2 * 3600000);
+	}
 }
 
 QTEST_MAIN(MCAPFilterTest)
-
-
