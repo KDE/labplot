@@ -420,6 +420,9 @@ ErrorBar* BarPlotPrivate::addErrorBar(const KConfigGroup& group) {
 	q->addChild(errorBar);
 	errorBar->setHidden(true);
 	errorBar->init(group);
+	q->connect(errorBar, &ErrorBar::updatePixmapRequested, [=] {
+		updatePixmap();
+	});
 	q->connect(errorBar, &ErrorBar::updateRequested, [=] {
 		updateErrorBars(errorBars.indexOf(errorBar));
 	});

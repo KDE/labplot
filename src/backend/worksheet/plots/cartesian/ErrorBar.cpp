@@ -348,9 +348,8 @@ void ErrorBarPrivate::painterPathForY(QPainterPath& path, const QVector<QPointF>
 			}
 		} else {
 			for (auto& point : points) {
-				// TODO plus column!
-				if (yMinusColumn && yMinusColumn->isValid(index) && !yMinusColumn->isMasked(index)) {
-					double error = yMinusColumn->valueAt(index);
+				if (yPlusColumn && yPlusColumn->isValid(index) && !yPlusColumn->isMasked(index)) {
+					double error = yPlusColumn->valueAt(index);
 					if (error != 0.)
 						elines << QLineF(point.x() - error, point.y(), point.x() + error, point.y());
 				}

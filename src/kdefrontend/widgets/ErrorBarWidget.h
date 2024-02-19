@@ -72,9 +72,6 @@ private Q_SLOTS:
 
 	void errorBarTypeChanged(ErrorBar::Type);
 	void errorBarCapSizeChanged(double);
-
-Q_SIGNALS:
-	void colorChanged(const QColor&);
 };
 
 #endif // ERRORBARWIDGET_H

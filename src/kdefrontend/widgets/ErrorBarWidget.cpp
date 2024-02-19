@@ -152,7 +152,6 @@ void ErrorBarWidget::setErrorBars(const QList<ErrorBar*>& errorBars) {
 		cbYMinusColumn->setCurrentModelIndex(QModelIndex());
 	}
 
-
 	// x
 	connect(m_errorBar, &ErrorBar::xErrorTypeChanged, this, &ErrorBarWidget::errorBarXErrorTypeChanged);
 	connect(m_errorBar, &ErrorBar::xPlusColumnChanged, this, &ErrorBarWidget::errorBarXPlusColumnChanged);
@@ -212,17 +211,10 @@ void ErrorBarWidget::adjustLayout() {
 	if (!parentWidget)
 		return;
 
-	auto* widget = ui.gridLayout->itemAtPosition(0, 0)->widget();
-
-	if (parentWidget->width() >= widget->width()) {
-		ui.gridLayout->activate();
-		widget->setMinimumWidth(parentWidget->width());
-		updateGeometry();
-	} else {
-		parentGridLayout->activate();
-		parentWidget->setMinimumWidth(widget->width());
-		this->parentWidget()->updateGeometry();
-	}
+	if (parentWidget->width() >= ui.lYError->width()) // use lYError since it's always visible
+		ui.lYError->setMinimumWidth(parentWidget->width());
+	else
+		parentWidget->setMinimumWidth(ui.lYError->width());
 }
 
 void ErrorBarWidget::updateLocale() {

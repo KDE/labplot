@@ -156,6 +156,9 @@ void XYCurve::init() {
 	addChild(d->errorBar);
 	d->errorBar->setHidden(true);
 	d->errorBar->init(group);
+	connect(d->errorBar, &ErrorBar::updatePixmapRequested, [=] {
+		d->updatePixmap();
+	});
 	connect(d->errorBar, &ErrorBar::updateRequested, [=] {
 		d->updateErrorBars();
 	});

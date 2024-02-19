@@ -188,6 +188,7 @@ void HistogramDock::setModel() {
 	list = {AspectType::Column};
 	model->setSelectableAspects(list);
 	cbDataColumn->setModel(model);
+	errorBarWidget->setModel(model);
 }
 
 void HistogramDock::setCurves(QList<Histogram*> list) {
