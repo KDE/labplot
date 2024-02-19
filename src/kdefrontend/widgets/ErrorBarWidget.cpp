@@ -85,7 +85,7 @@ ErrorBarWidget::ErrorBarWidget(QWidget* parent, bool poissonAvailable)
 	pa.drawLine(3, 10, 17, 10); // vert. line
 	pa.drawLine(10, 3, 10, 17); // hor. line
 	pa.end();
-	ui.cbType->addItem(i18n("Bars"));
+	ui.cbType->addItem(i18n("Bars"), static_cast<int>(ErrorBar::Type::Simple));
 	ui.cbType->setItemIcon(0, pm);
 
 	pm.fill(Qt::transparent);
@@ -99,7 +99,7 @@ ErrorBarWidget::ErrorBarWidget(QWidget* parent, bool poissonAvailable)
 	pa.drawLine(3, 7, 3, 13); // left cap
 	pa.drawLine(17, 7, 17, 13); // right cap
 	pa.end();
-	ui.cbType->addItem(i18n("Bars with Ends"));
+	ui.cbType->addItem(i18n("Bars with Ends"), static_cast<int>(ErrorBar::Type::WithEnds));
 	ui.cbType->setItemIcon(1, pm);
 
 	// x
@@ -138,15 +138,20 @@ void ErrorBarWidget::setErrorBars(const QList<ErrorBar*>& errorBars) {
 		ui.lXDataMinus->hide();
 		cbXMinusColumn->hide();
 	}
-	// if there are more than one plot in the list, disable the columns for error bars
-	// if (m_barPlots.size() == 1) {
-	// 	auto* errorBar = m_barPlot->errorBarAt(0);
-	// 	cbErrorPlusColumn->setColumn(errorBar->plusColumn(), errorBar->plusColumnPath());
-	// 	cbErrorMinusColumn->setColumn(errorBar->minusColumn(), errorBar->minusColumnPath());
-	// } else {
-	// 	cbErrorPlusColumn->setCurrentModelIndex(QModelIndex());
-	// 	cbErrorMinusColumn->setCurrentModelIndex(QModelIndex());
-	// }
+
+	// TODO
+	if (m_errorBars.size() == 1) {
+		cbXPlusColumn->setColumn(m_errorBar->xPlusColumn(), m_errorBar->xPlusColumnPath());
+		cbXMinusColumn->setColumn(m_errorBar->xMinusColumn(), m_errorBar->xMinusColumnPath());
+		cbYPlusColumn->setColumn(m_errorBar->yPlusColumn(), m_errorBar->yPlusColumnPath());
+		cbYMinusColumn->setColumn(m_errorBar->yMinusColumn(), m_errorBar->yMinusColumnPath());
+	} else {
+		cbXPlusColumn->setCurrentModelIndex(QModelIndex());
+		cbXMinusColumn->setCurrentModelIndex(QModelIndex());
+		cbYPlusColumn->setCurrentModelIndex(QModelIndex());
+		cbYMinusColumn->setCurrentModelIndex(QModelIndex());
+	}
+
 
 	// x
 	connect(m_errorBar, &ErrorBar::xErrorTypeChanged, this, &ErrorBarWidget::errorBarXErrorTypeChanged);
@@ -224,6 +229,30 @@ void ErrorBarWidget::updateLocale() {
 	ui.sbCapSize->setLocale(QLocale());
 }
 
+/*!
+ * updates the visibility of styling related widgets upon changes in the error type (no error, etc.) settings.
+ */
+void ErrorBarWidget::updateStylingWidgets() {
+	const auto xErrorType = static_cast<ErrorBar::ErrorType>(ui.cbXErrorType->currentData().toInt());
+	const auto yErrorType = static_cast<ErrorBar::ErrorType>(ui.cbYErrorType->currentData().toInt());
+
+	const bool visible = (xErrorType != ErrorBar::ErrorType::NoError || yErrorType != ErrorBar::ErrorType::NoError);
+	ui.lFormat->setVisible(visible);
+	ui.lType->setVisible(visible);
+	ui.cbType->setVisible(visible);
+	lineWidget->setVisible(visible);
+
+	if(visible) {
+		const auto type = static_cast<ErrorBar::Type>(ui.cbType->currentData().toInt());
+		const bool b = (type == ErrorBar::Type::WithEnds);
+		ui.lCapSize->setVisible(b);
+		ui.sbCapSize->setVisible(b);
+	} else {
+		ui.lCapSize->hide();
+		ui.sbCapSize->hide();
+	}
+}
+
 //*************************************************************
 //******** SLOTs for changes triggered in ErrorBarWidget **********
 //*************************************************************
@@ -253,12 +282,7 @@ void ErrorBarWidget::xErrorTypeChanged(int) {
 		ui.lXDataPlus->setText(i18n("Data, +:"));
 	}
 
-	const bool visible = (errorType != ErrorBar::ErrorType::NoError);
-	ui.lFormat->setVisible(visible);
-	ui.lType->setVisible(visible);
-	ui.cbType->setVisible(visible);
-	//TODO cap size
-	lineWidget->setVisible(visible);
+	updateStylingWidgets();
 
 	CONDITIONAL_LOCK_RETURN;
 
@@ -314,12 +338,7 @@ void ErrorBarWidget::yErrorTypeChanged(int) {
 		ui.lYDataPlus->setText(i18n("Data, +:"));
 	}
 
-	const bool visible = (errorType != ErrorBar::ErrorType::NoError);
-	ui.lFormat->setVisible(visible);
-	ui.lType->setVisible(visible);
-	ui.cbType->setVisible(visible);
-	//TODO cap size
-	lineWidget->setVisible(visible);
+	updateStylingWidgets();
 
 	CONDITIONAL_LOCK_RETURN;
 
@@ -350,8 +369,8 @@ void ErrorBarWidget::yMinusColumnChanged(const QModelIndex& index) {
 }
 
 // styling
-void ErrorBarWidget::typeChanged(int index) {
-	const auto type = ErrorBar::Type(index);
+void ErrorBarWidget::typeChanged(int) {
+	const auto type = static_cast<ErrorBar::Type>(ui.cbType->currentData().toInt());
 	const bool b = (type == ErrorBar::Type::WithEnds);
 	ui.lCapSize->setVisible(b);
 	ui.sbCapSize->setVisible(b);

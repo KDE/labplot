@@ -18,7 +18,6 @@ class AbstractAspect;
 class BackgroundWidget;
 class BarPlot;
 class ErrorBarWidget;
-class ErrorBarStyleWidget;
 class LineWidget;
 class TreeViewComboBox;
 class ValueWidget;
@@ -39,7 +38,6 @@ private:
 	LineWidget* lineWidget{nullptr};
 	ValueWidget* valueWidget{nullptr};
 	ErrorBarWidget* errorBarWidget{nullptr};
-	ErrorBarStyleWidget* errorBarStyleWidget{nullptr};
 	QList<BarPlot*> m_barPlots;
 	BarPlot* m_barPlot{nullptr};
 	TreeViewComboBox* cbXColumn{nullptr};

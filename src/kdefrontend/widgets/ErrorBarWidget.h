@@ -46,6 +46,7 @@ private:
 
 	void showEvent(QShowEvent*) override;
 	void adjustLayout();
+	void updateStylingWidgets();
 
 private Q_SLOTS:
 	// SLOTs for changes triggered in ErrorBarWidget

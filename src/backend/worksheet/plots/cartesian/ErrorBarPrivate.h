@@ -24,6 +24,9 @@ public:
 	void update();
 	void updatePixmap();
 
+	void painterPathForX(QPainterPath&, const QVector<QPointF>&, const CartesianCoordinateSystem*) const;
+	void painterPathForY(QPainterPath&, const QVector<QPointF>&, const CartesianCoordinateSystem*, WorksheetElement::Orientation) const;
+
 	ErrorBar::Dimension dimension;
 
 	ErrorBar::ErrorType xErrorType{ErrorBar::ErrorType::NoError};

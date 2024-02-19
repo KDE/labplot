@@ -45,7 +45,7 @@ public:
 
 	void init(const KConfigGroup&);
 	void update();
-	QPainterPath painterPath(const QVector<QPointF>&, const CartesianCoordinateSystem*, WorksheetElement::Orientation) const;
+	QPainterPath painterPath(const QVector<QPointF>&, const CartesianCoordinateSystem*, WorksheetElement::Orientation = WorksheetElement::Orientation::Vertical) const;
 	void draw(QPainter*, const QPainterPath&);
 
 	Dimension dimension() const;
