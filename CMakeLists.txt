@@ -496,22 +496,6 @@ ELSE ()
 	MESSAGE (STATUS "libcerf library DISABLED")
 ENDIF ()
 
-### LZ4 and ZSTD for MCAP #################
-FIND_PACKAGE(ZSTD)
-IF (ZSTD_FOUND)
-	MESSAGE (STATUS "Found ZSTD (needed for MCAP ZSTD support)")
-	add_definitions (-DHAVE_ZSTD)
-
-ELSE ()
-	MESSAGE (STATUS "Could not find ZSTD (needed for MCAP ZSTD support)")
-ENDIF ()
-
-FIND_PACKAGE(LZ4)
-IF(LZ4_FOUND)
-	MESSAGE (STATUS "Found LZ4 (needed for MCAP LZ4 support)")
-	add_definitions (-DHAVE_LZ4)
-ENDIF()
-
 ### ZLIB for ROOT and READSTAT #################
 
 
@@ -526,11 +510,6 @@ ENDIF ()
 
 ### ROOT (optional) #############################
 IF (ENABLE_ROOT)
-	FIND_PACKAGE(LZ4)
-	IF(LZ4_FOUND)
-		MESSAGE (STATUS "Found LZ4 (needed for MCAP LZ4 support)")
-		add_definitions (-DHAVE_LZ4)
-	ENDIF()
 	IF (ZLIB_FOUND AND LZ4_FOUND)
 		MESSAGE (STATUS "Found ZIP libraries ZLIB and LZ4 (needed for ROOT importer)")
 		add_definitions (-DHAVE_ZIP)
@@ -541,6 +520,25 @@ ELSE ()
 	add_definitions (-DROOT_DISABLED)
 	MESSAGE (STATUS "ROOT (CERN) importer DISABLED")
 ENDIF ()
+
+
+### LZ4 and ZSTD for MCAP #################
+FIND_PACKAGE(LZ4)
+IF(LZ4_FOUND)
+	MESSAGE (STATUS "Found LZ4 (needed for MCAP LZ4 support)")
+	add_definitions (-DHAVE_LZ4)
+ENDIF()
+
+FIND_PACKAGE(ZSTD)
+IF (ZSTD_FOUND)
+	MESSAGE (STATUS "Found ZSTD (needed for MCAP ZSTD support)")
+	#add_definitions (-DHAVE_ZSTD)
+
+ELSE ()
+	MESSAGE (STATUS "Could not find ZSTD (needed for MCAP ZSTD support)")
+ENDIF ()
+
+MESSAGE (STATUS "${PC_ZSTD_VERSION} ${ZSTD_LIBRARIES} ${ZSTD_INCLUDE_DIR}")
 
 ### ReadStat (optional) #############################
 IF (ENABLE_READSTAT)
