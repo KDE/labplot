@@ -19,6 +19,8 @@ private Q_SLOTS:
 	void initTestCase();
 
 	void testArrayImport();
+	void testExport();
+
 };
 
 #endif

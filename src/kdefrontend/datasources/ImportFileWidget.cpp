@@ -521,11 +521,6 @@ void ImportFileWidget::showJsonModel(bool b) {
 	ui.lField->setVisible(b);
 }
 
-void ImportFileWidget::showMcapView(bool b) {
-	ui.tvMcap->setVisible(b);
-	ui.lMcap->setVisible(b);
-}
-
 void ImportFileWidget::showOptions(bool b) {
 	ui.gbOptions->setVisible(b);
 
@@ -1186,7 +1181,6 @@ void ImportFileWidget::fileTypeChanged(int /*index*/) {
 	ui.sbEndColumn->show();
 
 	showJsonModel(false);
-	showMcapView(false);
 
 	switch (fileType) {
 	case AbstractFileFilter::FileType::Ascii:
@@ -1248,7 +1242,6 @@ void ImportFileWidget::fileTypeChanged(int /*index*/) {
 		showJsonModel(true);
 		break;
 	case AbstractFileFilter::FileType::MCAP:
-		showMcapView(true);
 		break;
 	case AbstractFileFilter::FileType::READSTAT:
 		ui.tabWidget->removeTab(0);
@@ -1422,7 +1415,6 @@ void ImportFileWidget::initOptionsWidget() {
 		} else
 			m_mcapOptionsWidget->clearModel();
 		ui.swOptions->setCurrentWidget(m_mcapOptionsWidget->parentWidget());
-		showMcapView(true);
 		break;
 	case AbstractFileFilter::FileType::ROOT:
 		if (!m_rootOptionsWidget) {
@@ -1891,53 +1883,8 @@ void ImportFileWidget::refreshPreview() {
 		importedStrings = filter->preview(file, lines);
 
 		doc = filter->getJsonDocument(file);
-		m_mcapOptionsWidget->loadDocument(doc);
-    // Get the array from the document
-    QJsonArray jsonArray = doc.array();
-
-   if (!jsonArray.isEmpty()) {
-    QJsonObject firstObject = jsonArray.at(0).toObject();
-    QStringList keys = firstObject.keys();
-    qDebug() << "Keys of the first object:";
-    for (const QString &key : keys) {
-        qDebug() << key;
-		qDebug() << firstObject[key];
-    }
-
-    // Create a standard item model
-    QStandardItemModel *model = new QStandardItemModel();
-
-    // Set the number of rows and columns
-    model->setRowCount(firstObject.size());
-    model->setColumnCount(2); // Assuming you want 2 columns: Key and Value
-
-    int row = 0;
-    // Fill the model with key-value pairs
-    for (auto it = firstObject.constBegin(); it != firstObject.constEnd(); ++it) {
-        QString valueString;
-        if (it.value().isDouble()) {
-            valueString = QString::number(it.value().toDouble()); // Convert double to string
-        } else {
-            valueString = it.value().toString(); // Convert other types to string
-        }
-
-        model->setItem(row, 0, new QStandardItem(it.key())); // Key
-        model->setItem(row, 1, new QStandardItem(valueString)); // Value
-        ++row;
-    }
-
-    // Set the model to the table view
-    ui.tvMcap->setModel(model);
-	ui.tvMcap->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-    ui.tvMcap->show();
-} else {
-    qDebug() << "JSON array is empty.";
-}
+		m_mcapOptionsWidget->loadDocument(doc);	
 	
-	
-			ui.tvJson->setExpanded(m_mcapOptionsWidget->model()->index(0, 0), true);
-
-		m_mcapOptionsWidget->applyFilterSettings(filter, ui.tvJson->currentIndex());
 		vectorNameList = filter->vectorNames();
 		columnModes = filter->columnModes();
 		break;

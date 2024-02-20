@@ -19,25 +19,29 @@
 
 #include <KCompressionDevice>
 #include <KLocalizedString>
-
 #include <QDataStream>
 #include <QDateTime>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <chrono>
+#include <thread>
+#include <unistd.h>
 
 #include <cmath>
-
+#define NUM_FRAMES 100
+#define NS_PER_MS 1000000
 #ifndef HAVE_LZ4
-	#define MCAP_COMPRESSION_NO_LZ4
+#define MCAP_COMPRESSION_NO_LZ4
 #endif
 
-#ifndef HAVE_LZ4
-	#define MCAP_COMPRESSION_NO_ZSTD
+#ifndef HAVE_ZSTD
+#define MCAP_COMPRESSION_NO_ZSTD
 #endif
 
 #define MCAP_IMPLEMENTATION
 #include <3rdparty/mcap/include/mcap/mcap.hpp>
+#include <3rdparty/mcap/include/mcap/writer.hpp>
 
 /*!
 \class McapFilter
@@ -468,7 +472,7 @@ bool McapFilterPrivate::prepareDocumentToRead() {
 	return true;
 }
 
-int McapFilterPrivate::mcapToJson(const QString& fileName,int lines) {
+int McapFilterPrivate::mcapToJson(const QString& fileName, int lines) {
 	DEBUG("MCAP Filter mcapToJson:" << STDSTRING(current_topic));
 
 	mcap::McapReader reader;
@@ -480,8 +484,8 @@ int McapFilterPrivate::mcapToJson(const QString& fileName,int lines) {
 		}
 	}
 
-	if(current_topic==""){
-		QVector<QString> topics = getValidTopics(fileName); //Todo: make this more efficient. Only open file once.
+	if (current_topic == "") {
+		QVector<QString> topics = getValidTopics(fileName); // Todo: make this more efficient. Only open file once.
 		current_topic = topics[0];
 	}
 
@@ -498,67 +502,66 @@ int McapFilterPrivate::mcapToJson(const QString& fileName,int lines) {
 	int msg_count = 0;
 
 	QJsonArray jsonArray;
-	try{
-	for (auto it = messageView.begin(); it != messageView.end(); it++) {
-		// skip any non-json-encoded messages.
-		// qDebug() << "Processing topic " << QString::fromStdString(it->channel->topic) << "with encoding"
-		// 		 << QString::fromStdString(it->channel->messageEncoding);
-		
-		if (it->channel->messageEncoding != "json") { // only support json encoding for now
-			continue;
-		}
-		if(current_topic!=""){
-			if (QString::fromStdString(it->channel->topic) != current_topic) { // only support json encoding for now
+	try {
+		for (auto it = messageView.begin(); it != messageView.end(); it++) {
+			// skip any non-json-encoded messages.
+			// qDebug() << "Processing topic " << QString::fromStdString(it->channel->topic) << "with encoding"
+			// 		 << QString::fromStdString(it->channel->messageEncoding);
+
+			if (it->channel->messageEncoding != "json") { // only support json encoding for now
 				continue;
 			}
+			if (current_topic != "") {
+				if (QString::fromStdString(it->channel->topic) != current_topic) { // only support json encoding for now
+					continue;
+				}
+			}
+
+			// Without going to string_view first I get this error:
+			// 32: QWARN  : MCAPFilterTest::testArrayImport() Error parsing JSON string: "{\"value\": 0}\u0005" "garbage at the end of the document"
+			std::string_view a(reinterpret_cast<const char*>(it->message.data), it->message.dataSize);
+
+			QString asString = QString::fromStdString(std::string(a));
+			QJsonParseError error;
+			QJsonDocument jsonDocument = QJsonDocument::fromJson(asString.toUtf8(), &error);
+
+			QJsonObject obj = flattenJson(jsonDocument.object());
+
+			obj.insert(QLatin1String("sequence"), QJsonValue::fromVariant(it->message.sequence));
+			obj.insert(QLatin1String("logTime"), QJsonValue::fromVariant(QString::number(it->message.logTime / 1000000))); // nano to milli otherwise value is 0
+			obj.insert(QLatin1String("publishTime"),
+					   QJsonValue::fromVariant(QString::number(it->message.publishTime / 1000000))); // nano to milli otherwise value is 0
+
+			if (error.error != QJsonParseError::NoError) {
+				qWarning() << "Error parsing JSON string:" << asString << error.errorString();
+				continue;
+			}
+
+			// Check if the parsed JSON document is an object
+			if (!jsonDocument.isObject()) {
+				qWarning() << "JSON string does not contain an object:" << asString;
+				continue;
+			}
+
+			// Convert the JSON document to a JSON object and add it to the JSON array
+			// foreach (const QString& key, jsonDocument.object().keys()) {
+			// 	QJsonValue value = jsonDocument.object().value(key);
+			// 	qDebug() << "Key = " << key << ", Value = " << value;
+			// }
+			jsonArray.append(obj);
+			msg_count++;
+			if (msg_count == lines) {
+				qDebug() << "Stop reading MCAP file. Requested number of " << lines << "lines reached.";
+				break;
+			}
 		}
-
-
-		// Without going to string_view first I get this error:
-		// 32: QWARN  : MCAPFilterTest::testArrayImport() Error parsing JSON string: "{\"value\": 0}\u0005" "garbage at the end of the document"
-		std::string_view a(reinterpret_cast<const char*>(it->message.data), it->message.dataSize);
-
-		QString asString = QString::fromStdString(std::string(a));
-		QJsonParseError error;
-		QJsonDocument jsonDocument = QJsonDocument::fromJson(asString.toUtf8(), &error);
-
-		QJsonObject obj = flattenJson(jsonDocument.object());
-
-		obj.insert(QLatin1String("sequence"), QJsonValue::fromVariant(it->message.sequence));
-		obj.insert(QLatin1String("logTime"), QJsonValue::fromVariant(QString::number(it->message.logTime / 1000000))); // nano to milli otherwise value is 0
-		obj.insert(QLatin1String("publishTime"),
-				   QJsonValue::fromVariant(QString::number(it->message.publishTime / 1000000))); // nano to milli otherwise value is 0
-
-		if (error.error != QJsonParseError::NoError) {
-			qWarning() << "Error parsing JSON string:" << asString << error.errorString();
-			continue;
-		}
-
-		// Check if the parsed JSON document is an object
-		if (!jsonDocument.isObject()) {
-			qWarning() << "JSON string does not contain an object:" << asString;
-			continue;
-		}
-
-		// Convert the JSON document to a JSON object and add it to the JSON array
-		// foreach (const QString& key, jsonDocument.object().keys()) {
-		// 	QJsonValue value = jsonDocument.object().value(key);
-		// 	qDebug() << "Key = " << key << ", Value = " << value;
-		// }
-		jsonArray.append(obj);
-		msg_count++;
-		if(msg_count==lines){
-			qDebug() << "Stop reading MCAP file. Requested number of " << lines << "lines reached.";
-			break;
-		}
-	}
 	} catch (const std::exception& e) {
-        std::cerr << "Error parsing MCAP file: " << e.what() << std::endl;
-    }
+		std::cerr << "Error parsing MCAP file: " << e.what() << std::endl;
+	}
 
 	QJsonDocument finalJsonDocument(jsonArray);
 
-	//qDebug() << finalJsonDocument.toJson(QJsonDocument::Compact);
+	// qDebug() << finalJsonDocument.toJson(QJsonDocument::Compact);
 
 	m_doc = finalJsonDocument;
 	return msg_count;
@@ -680,7 +683,7 @@ QVector<QStringList> McapFilterPrivate::preview(const QString& fileName, int lin
 	DEBUG(Q_FUNC_INFO);
 
 	if (!m_prepared) {
-		mcapToJson(fileName,lines);
+		mcapToJson(fileName, lines);
 		bool success = prepareDocumentToRead();
 		return preview(lines);
 	} else
@@ -696,7 +699,7 @@ QVector<QStringList> McapFilterPrivate::preview(int lines) {
 	QVector<QStringList> dataStrings;
 	const int rowOffset = startRow - 1;
 	DEBUG("	Generating preview for " << std::min(lines, m_actualRows) << " lines");
-	
+
 	const auto& array = m_preparedDoc.array();
 	const auto& arrayIterator = array.begin();
 	const auto& object = m_preparedDoc.object();
@@ -766,8 +769,87 @@ QVector<QStringList> McapFilterPrivate::preview(int lines) {
 /*!
 writes the content of \c dataSource to the file \c fileName.
 */
-void McapFilterPrivate::write(const QString& /*fileName*/, AbstractDataSource* /*dataSource*/) {
-	// TODO: saving data to json file not supported yet
+void McapFilterPrivate::write(const QString& fileName, AbstractDataSource* dataSource) {
+	auto* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
+
+	DEBUG(Q_FUNC_INFO << fileName.toStdString());
+	std::string outputFilename = fileName.toStdString();
+
+	static const char* SCHEMA_NAME = "labplot.Spreadsheet";
+	static const char* SCHEMA_TEXT = R"({
+	"title": "Spreadsheet", 
+	"description": "An object exported from Labplot", 
+	"type": "object"
+	})"; // Todo: Create proper schema.
+
+	mcap::McapWriter writer;
+	{
+		auto options = mcap::McapWriterOptions("json");
+		const auto res = writer.open(outputFilename, options);
+		if (!res.ok()) {
+			std::cerr << "Failed to open " << outputFilename << " for writing: " << res.message << std::endl;
+			return;
+		}
+	}
+	// Create a channel and schema for our messages.
+	// A message's channel informs the reader which topic those messages were published on.
+	// A channel's schema informs the reader of how to interpret the messages' content.
+	// A schema can be used by multiple channels, and a channel can be used by multiple messages.
+	mcap::ChannelId channelId;
+	{
+		mcap::Schema schema(SCHEMA_NAME, "jsonschema", SCHEMA_TEXT);
+		writer.addSchema(schema);
+
+		// choose an arbitrary topic name.
+		mcap::Channel channel("/spreadsheet", "json", schema.id);
+		writer.addChannel(channel);
+		channelId = channel.id;
+	}
+	mcap::Timestamp startTime = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+	QJsonArray jsonArray = m_preparedDoc.array();
+
+	int numRows = spreadsheet->rowCount();
+	int numCols = spreadsheet->columnCount();
+
+	qDebug() << "Export spreadsheet with " << numRows << " rows and " << numCols << "columns.";
+
+	for (int row = 0; row < numRows; ++row) {
+		QJsonObject obj;
+		mcap::Message msg;
+		msg.channelId = channelId;
+		for (int col = 0; col < numCols; ++col) {
+			QString columnName = spreadsheet->column(col)->name();
+			QVariant value = spreadsheet->column(col)->valueAt(row);
+			QJsonValue jsonValue = QJsonValue::fromVariant(value);
+			if (columnName == "logTime") { // Special field in MCAP
+				msg.logTime = mcap::Timestamp(value.toLongLong() * 100000);
+				continue;
+			}
+			if (columnName == "publishTime") { // Special field in MCAP
+				msg.publishTime = mcap::Timestamp(value.toLongLong() * 100000);
+				continue;
+			}
+			if (columnName == "sequence") { // Special field in MCAP
+				msg.sequence = mcap::Timestamp(value.toLongLong());
+				continue;
+			}
+			obj.insert(columnName, jsonValue);
+		}
+
+		QJsonDocument doc(obj); // TODO: Unflatten json?
+		QByteArray data = doc.toJson(QJsonDocument::Compact);
+
+		msg.data = reinterpret_cast<const std::byte*>(data.constData());
+		msg.dataSize = data.size();
+		auto res = writer.write(msg);
+		if (!res.ok()) {
+			std::cerr << "failed to write message: " << res.message << std::endl;
+			writer.close();
+			return;
+		}
+	}
+	std::cout << "wrote " << NUM_FRAMES << " " << SCHEMA_NAME << " messages to " << outputFilename << std::endl;
+	writer.close();
 }
 
 // ##############################################################################
@@ -903,7 +985,7 @@ QVector<QString> McapFilterPrivate::getValidTopics(const QString& fileName) {
 		if (entry.second->messageEncoding == "json") {
 			DEBUG("Found valid topic:" << entry.second->topic);
 			valid_topics.append(QString::fromStdString((entry.second->topic)));
-			current_topic = QString::fromStdString(entry.second->topic); //Last topic by default?
+			current_topic = QString::fromStdString(entry.second->topic); // Last topic by default?
 		}
 	});
 	return valid_topics;
@@ -914,11 +996,10 @@ QVector<QString> McapFilter::getValidTopics(const QString& fileName) {
 }
 
 void McapFilterPrivate::setCurrentTopic(QString topic) {
-	if(current_topic!=topic){
+	if (current_topic != topic) {
 		m_prepared = false;
 	}
 	current_topic = topic;
-	
 }
 
 void McapFilter::setCurrentTopic(QString topic) {

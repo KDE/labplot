@@ -73,7 +73,6 @@ public:
 	QJsonDocument getJsonDocument(const QString&);
 	QVector<QString> getValidTopics(const QString& fileName);
 	void setCurrentTopic(QString currentTopic);
-
 private:
 	std::unique_ptr<McapFilterPrivate> const d;
 	friend class McapFilterPrivate;

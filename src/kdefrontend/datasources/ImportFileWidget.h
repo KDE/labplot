@@ -94,7 +94,6 @@ private:
 	void initSlots();
 	QString fileInfoString(const QString&) const;
 	void showJsonModel(bool);
-	void showMcapView(bool);
 	void enableFirstRowAsColNames(bool enable); // used by XLSX and Ods
 	void updateHeaderOptions();
 
