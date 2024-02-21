@@ -94,22 +94,25 @@ void LineWidget::adjustLayout() {
 	if (!parentGridLayout)
 		return;
 
-	auto* parentWidget = parentGridLayout->itemAtPosition(0, 0)->widget();
+	// the first widget in the first column of the parent widget is not always visible,
+	// for example when LineWidget is embedded into ErrorWidbget and the x-error is not shown.
+	// determine the first _visible_ widget in the first column in the parent widget
+	QWidget* parentWidget = nullptr;
+	for (int row = 0; row < parentGridLayout->rowCount(); ++row) {
+		 auto* widget = parentGridLayout->itemAtPosition(row, 0)->widget();
+		 if (widget && widget->isVisible()) {
+			 parentWidget = widget;
+			 break;
+		 }
+	}
+
 	if (!parentWidget)
 		return;
 
-	auto* gridLayout = static_cast<QGridLayout*>(layout());
-	auto* widget = gridLayout->itemAtPosition(2, 0)->widget(); // use the third line, the first two are optional and not always visible
-
-	if (parentWidget->width() >= widget->width()) {
-		gridLayout->activate();
-		widget->setMinimumWidth(parentWidget->width());
-		updateGeometry();
-	} else {
-		parentGridLayout->activate();
-		parentWidget->setMinimumWidth(widget->width());
-		this->parentWidget()->updateGeometry();
-	}
+	if (parentWidget->width() >= ui.lStyle->width()) // use lStyle since it's always available
+		ui.lStyle->setMinimumWidth(parentWidget->width());
+	else
+		parentWidget->setMinimumWidth(ui.lStyle->width());
 }
 
 void LineWidget::setEnabled(bool enabled) {
@@ -151,10 +154,6 @@ void LineWidget::typeChanged(int index) {
 	ui.kcbColor->setEnabled(enabled);
 	ui.sbWidth->setEnabled(enabled);
 	ui.sbOpacity->setEnabled(enabled);
-
-	// TODO
-	// const bool fillingEnabled = (lineType == Histogram::LineType::Bars || lineType == Histogram::LineType::Envelope);
-	// backgroundWidget->setEnabled(fillingEnabled);
 }
 
 void LineWidget::styleChanged(int index) {

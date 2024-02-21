@@ -217,6 +217,7 @@ void ErrorBarWidget::adjustLayout() {
 
 void ErrorBarWidget::updateLocale() {
 	ui.sbCapSize->setLocale(QLocale());
+	lineWidget->updateLocale();
 }
 
 /*!
