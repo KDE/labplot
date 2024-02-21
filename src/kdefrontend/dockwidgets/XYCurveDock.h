@@ -13,7 +13,6 @@
 #define XYCURVEDOCK_H
 
 #include "backend/core/AbstractColumn.h"
-#include "backend/worksheet/plots/cartesian/ErrorBar.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "kdefrontend/dockwidgets/BaseDock.h"
 
@@ -21,7 +20,7 @@
 #include "ui_xycurvedockgeneraltab.h"
 
 class BackgroundWidget;
-class ErrorBarStyleWidget;
+class ErrorBarWidget;
 class LineWidget;
 class Column;
 class SymbolWidget;
@@ -50,10 +49,6 @@ private:
 	TreeViewComboBox* cbXColumn{nullptr};
 	TreeViewComboBox* cbYColumn{nullptr};
 	TreeViewComboBox* cbValuesColumn;
-	TreeViewComboBox* cbXErrorPlusColumn;
-	TreeViewComboBox* cbXErrorMinusColumn;
-	TreeViewComboBox* cbYErrorPlusColumn;
-	TreeViewComboBox* cbYErrorMinusColumn;
 
 protected:
 	void initTabs();
@@ -66,7 +61,7 @@ protected:
 	LineWidget* dropLineWidget{nullptr};
 	BackgroundWidget* backgroundWidget{nullptr};
 	SymbolWidget* symbolWidget{nullptr};
-	ErrorBarStyleWidget* errorBarStyleWidget{nullptr};
+	ErrorBarWidget* errorBarWidget{nullptr};
 	QList<XYCurve*> m_curvesList;
 	XYCurve* m_curve{nullptr};
 	AspectTreeModel* m_valuesModel{nullptr};
@@ -99,14 +94,6 @@ private Q_SLOTS:
 	void valuesSuffixChanged();
 	void valuesFontChanged(const QFont&);
 	void valuesColorChanged(const QColor&);
-
-	//"Error bars"-Tab
-	void xErrorTypeChanged(int);
-	void yErrorTypeChanged(int);
-	void xErrorPlusColumnChanged(const QModelIndex&);
-	void xErrorMinusColumnChanged(const QModelIndex&);
-	void yErrorPlusColumnChanged(const QModelIndex&);
-	void yErrorMinusColumnChanged(const QModelIndex&);
 
 	//"Margin Plots"-Tab
 	void rugEnabledChanged(bool);
@@ -141,14 +128,6 @@ private Q_SLOTS:
 	void curveValuesSuffixChanged(const QString&);
 	void curveValuesFontChanged(QFont);
 	void curveValuesColorChanged(QColor);
-
-	//"Error bars"-Tab
-	void curveXErrorTypeChanged(ErrorBar::Type);
-	void curveXErrorPlusColumnChanged(const AbstractColumn*);
-	void curveXErrorMinusColumnChanged(const AbstractColumn*);
-	void curveYErrorTypeChanged(ErrorBar::Type);
-	void curveYErrorPlusColumnChanged(const AbstractColumn*);
-	void curveYErrorMinusColumnChanged(const AbstractColumn*);
 
 	//"Margin Plots"-Tab
 	void curveRugEnabledChanged(bool);

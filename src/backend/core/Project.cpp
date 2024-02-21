@@ -60,7 +60,7 @@ namespace {
 // the project version will compared with this.
 // if you make any compatibilty changes to the xmlfile
 // or the function in labplot, increase this number
-int buildXmlVersion = 11;
+int buildXmlVersion = 12;
 }
 
 /**
@@ -868,10 +868,10 @@ void Project::restorePointers(AbstractAspect* aspect) {
 			RESTORE_COLUMN_POINTER(curve, xColumn, XColumn);
 			RESTORE_COLUMN_POINTER(curve, yColumn, YColumn);
 			RESTORE_COLUMN_POINTER(curve, valuesColumn, ValuesColumn);
-			RESTORE_COLUMN_POINTER(curve->xErrorBar(), plusColumn, PlusColumn);
-			RESTORE_COLUMN_POINTER(curve->xErrorBar(), minusColumn, MinusColumn);
-			RESTORE_COLUMN_POINTER(curve->yErrorBar(), plusColumn, PlusColumn);
-			RESTORE_COLUMN_POINTER(curve->yErrorBar(), minusColumn, MinusColumn);
+			RESTORE_COLUMN_POINTER(curve->errorBar(), xPlusColumn, XPlusColumn);
+			RESTORE_COLUMN_POINTER(curve->errorBar(), xMinusColumn, XMinusColumn);
+			RESTORE_COLUMN_POINTER(curve->errorBar(), yPlusColumn, YPlusColumn);
+			RESTORE_COLUMN_POINTER(curve->errorBar(), yMinusColumn, YMinusColumn);
 		}
 
 		if (analysisCurve)
@@ -918,8 +918,8 @@ void Project::restorePointers(AbstractAspect* aspect) {
 		RESTORE_COLUMN_POINTER(hist, dataColumn, DataColumn);
 		auto* value = hist->value();
 		RESTORE_COLUMN_POINTER(value, column, Column);
-		RESTORE_COLUMN_POINTER(hist->errorBar(), plusColumn, PlusColumn);
-		RESTORE_COLUMN_POINTER(hist->errorBar(), minusColumn, MinusColumn);
+		RESTORE_COLUMN_POINTER(hist->errorBar(), yPlusColumn, YPlusColumn);
+		RESTORE_COLUMN_POINTER(hist->errorBar(), yMinusColumn, YMinusColumn);
 	}
 
 	// QQ-plots
@@ -999,6 +999,7 @@ void Project::restorePointers(AbstractAspect* aspect) {
 
 		// restore the pointers
 		for (int i = 0; i < count; ++i) {
+			// data columns
 			dataColumns[i] = nullptr;
 			const auto& path = barPlot->dataColumnPaths().at(i);
 			for (Column* column : columns) {
@@ -1009,6 +1010,10 @@ void Project::restorePointers(AbstractAspect* aspect) {
 					break;
 				}
 			}
+
+			// error bars
+			RESTORE_COLUMN_POINTER(barPlot->errorBarAt(i), yPlusColumn, YPlusColumn);
+			RESTORE_COLUMN_POINTER(barPlot->errorBarAt(i), yMinusColumn, YMinusColumn);
 		}
 
 		barPlot->setDataColumns(dataColumns);

@@ -390,8 +390,8 @@ void OriginProjectParser::restorePointers(Project* project) {
 		// unused: auto* value = hist->value();
 		// RESTORE_COLUMN_POINTER(value, column, Column);
 		// TODO
-		RESTORE_COLUMN_POINTER(hist->errorBar(), plusColumn, PlusColumn);
-		RESTORE_COLUMN_POINTER(hist->errorBar(), minusColumn, MinusColumn);
+		RESTORE_COLUMN_POINTER(hist->errorBar(), xPlusColumn, XPlusColumn);
+		RESTORE_COLUMN_POINTER(hist->errorBar(), xMinusColumn, XMinusColumn);
 		hist->setSuppressRetransform(false);
 	}
 

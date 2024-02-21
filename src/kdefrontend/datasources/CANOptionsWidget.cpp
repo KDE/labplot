@@ -37,7 +37,7 @@ void CANOptionsWidget::saveSettings() const {
 }
 
 void CANOptionsWidget::loadSettings() const {
-	KConfigGroup conf = Settings::group(QStringLiteral("ImportJson"));
+	KConfigGroup conf = Settings::group(QStringLiteral("ImportCANOptions"));
 
 	ui->cbConvertSeconds->setChecked(conf.readEntry("ConvertSeconds", true));
 	const auto mode = conf.readEntry("TimeHandlingMode", (int)VectorBLFFilter::TimeHandling::ConcatPrevious);

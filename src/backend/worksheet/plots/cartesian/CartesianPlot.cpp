@@ -1899,11 +1899,11 @@ void CartesianPlot::addFitCurve() {
 		curve->initStartValues(curCurve);
 
 		// fit with weights for y if the curve has error bars for y
-		if (curCurve->yErrorBar()->type() == ErrorBar::Type::Symmetric && curCurve->yErrorBar()->plusColumn()) {
+		if (curCurve->errorBar()->yErrorType() == ErrorBar::ErrorType::Symmetric && curCurve->errorBar()->yPlusColumn()) {
 			auto fitData = curve->fitData();
 			fitData.yWeightsType = nsl_fit_weight_instrumental;
 			curve->setFitData(fitData);
-			curve->setYErrorColumn(curCurve->yErrorBar()->plusColumn());
+			curve->errorBar()->setYPlusColumn(curCurve->errorBar()->yPlusColumn());
 		}
 
 		curve->recalculate();
@@ -2154,13 +2154,13 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		connect(curve, &XYCurve::xDataChanged, [this, curve]() {
 			this->dataChanged(const_cast<XYCurve*>(curve), Dimension::X);
 		});
-		connect(curve->xErrorBar(), &ErrorBar::typeChanged, [this, curve]() {
+		connect(curve->errorBar(), &ErrorBar::xErrorTypeChanged, [this, curve]() {
 			this->dataChanged(const_cast<XYCurve*>(curve), Dimension::X);
 		});
-		connect(curve->xErrorBar(), &ErrorBar::plusColumnChanged, [this, curve]() {
+		connect(curve->errorBar(), &ErrorBar::xPlusColumnChanged, [this, curve]() {
 			this->dataChanged(const_cast<XYCurve*>(curve), Dimension::X);
 		});
-		connect(curve->xErrorBar(), &ErrorBar::minusColumnChanged, [this, curve]() {
+		connect(curve->errorBar(), &ErrorBar::xMinusColumnChanged, [this, curve]() {
 			this->dataChanged(const_cast<XYCurve*>(curve), Dimension::X);
 		});
 
@@ -2172,13 +2172,13 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		connect(curve, &XYCurve::yDataChanged, [this, curve]() {
 			this->dataChanged(const_cast<XYCurve*>(curve), Dimension::Y);
 		});
-		connect(curve->yErrorBar(), &ErrorBar::typeChanged, [this, curve]() {
+		connect(curve->errorBar(), &ErrorBar::yErrorTypeChanged, [this, curve]() {
 			this->dataChanged(const_cast<XYCurve*>(curve), Dimension::Y);
 		});
-		connect(curve->yErrorBar(), &ErrorBar::plusColumnChanged, [this, curve]() {
+		connect(curve->errorBar(), &ErrorBar::yPlusColumnChanged, [this, curve]() {
 			this->dataChanged(const_cast<XYCurve*>(curve), Dimension::Y);
 		});
-		connect(curve->yErrorBar(), &ErrorBar::minusColumnChanged, [this, curve]() {
+		connect(curve->errorBar(), &ErrorBar::yMinusColumnChanged, [this, curve]() {
 			this->dataChanged(const_cast<XYCurve*>(curve), Dimension::Y);
 		});
 

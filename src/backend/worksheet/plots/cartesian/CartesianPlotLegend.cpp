@@ -28,7 +28,6 @@
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegendPrivate.h"
 #include "backend/worksheet/plots/cartesian/ErrorBar.h"
-#include "backend/worksheet/plots/cartesian/ErrorBarStyle.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
 #include "backend/worksheet/plots/cartesian/KDEPlot.h"
 #include "backend/worksheet/plots/cartesian/LollipopPlot.h"
@@ -589,11 +588,11 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 			}
 
 			// error bars
-			const auto xErrorType = curve->xErrorBar()->type();
-			const auto yErrorType = curve->yErrorBar()->type();
-			const auto* errorBarsLine = curve->errorBarStyle()->line();
-			if ((xErrorType != ErrorBar::Type::NoError && curve->xErrorBar()->plusColumn())
-				|| (yErrorType != ErrorBar::Type::NoError && curve->yErrorBar()->plusColumn())) {
+			const auto xErrorType = curve->errorBar()->xErrorType();
+			const auto yErrorType = curve->errorBar()->yErrorType();
+			const auto* errorBarsLine = curve->errorBar()->line();
+			if ((xErrorType != ErrorBar::ErrorType::NoError && curve->errorBar()->xPlusColumn())
+				|| (yErrorType != ErrorBar::ErrorType::NoError && curve->errorBar()->yPlusColumn())) {
 				painter->setOpacity(errorBarsLine->opacity());
 				painter->setPen(errorBarsLine->pen());
 
@@ -602,18 +601,18 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 				if (curve->symbol()->style() != Symbol::Style::NoSymbols && errorBarsSize < curve->symbol()->size() * 1.4)
 					errorBarsSize = curve->symbol()->size() * 1.4;
 
-				switch (curve->errorBarStyle()->type()) {
-				case ErrorBarStyle::Type::Simple:
+				switch (curve->errorBar()->type()) {
+				case ErrorBar::Type::Simple:
 					// horiz. line
-					if (xErrorType != ErrorBar::Type::NoError)
+					if (xErrorType != ErrorBar::ErrorType::NoError)
 						painter->drawLine(lineSymbolWidth / 2 - errorBarsSize / 2, h / 2, lineSymbolWidth / 2 + errorBarsSize / 2, h / 2);
 					// vert. line
-					if (yErrorType != ErrorBar::Type::NoError)
+					if (yErrorType != ErrorBar::ErrorType::NoError)
 						painter->drawLine(lineSymbolWidth / 2, h / 2 - errorBarsSize / 2, lineSymbolWidth / 2, h / 2 + errorBarsSize / 2);
 					break;
-				case ErrorBarStyle::Type::WithEnds:
+				case ErrorBar::Type::WithEnds:
 					// horiz. line
-					if (xErrorType != ErrorBar::Type::NoError) {
+					if (xErrorType != ErrorBar::ErrorType::NoError) {
 						painter->drawLine(lineSymbolWidth / 2 - errorBarsSize / 2, h / 2, lineSymbolWidth / 2 + errorBarsSize / 2, h / 2);
 
 						// caps for the horiz. line
@@ -628,7 +627,7 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 					}
 
 					// vert. line
-					if (yErrorType != ErrorBar::Type::NoError) {
+					if (yErrorType != ErrorBar::ErrorType::NoError) {
 						painter->drawLine(lineSymbolWidth / 2, h / 2 - errorBarsSize / 2, lineSymbolWidth / 2, h / 2 + errorBarsSize / 2);
 
 						// caps for the vert. line

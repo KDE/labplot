@@ -96,15 +96,10 @@ void BackgroundWidget::adjustLayout() {
 	auto* gridLayout = static_cast<QGridLayout*>(layout());
 	auto* widget = gridLayout->itemAtPosition(2, 0)->widget(); // use the third line, the first two are optional and not always visible
 
-	if (parentWidget->width() >= widget->width()) {
-		gridLayout->activate();
+	if (parentWidget->width() >= widget->width())
 		widget->setMinimumWidth(parentWidget->width());
-		updateGeometry();
-	} else {
-		parentGridLayout->activate();
+	else
 		parentWidget->setMinimumWidth(widget->width());
-		this->parentWidget()->updateGeometry();
-	}
 }
 
 void BackgroundWidget::setEnabled(bool enabled) {

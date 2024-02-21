@@ -101,4 +101,4 @@ void SparkLineRunnable::run() {
 
 QPixmap SparkLineRunnable::pixmap() {
 	return mPixmap;
-};
+}
