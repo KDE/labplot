@@ -644,6 +644,9 @@ ENDIF ()
 IF (KF${KF_MAJOR_VERSION}Purpose_FOUND)
 	target_link_libraries( labplot2lib KF${KF_MAJOR_VERSION}::PurposeWidgets )
 ENDIF ()
+IF (ZSTD_FOUND)
+        target_link_libraries( labplot2backendlib ${ZSTD_LIBRARIES})
+ENDIF()
 
 IF (RECENT_CANTOR)
 	# KFX::Service, KFX::Parts is optional but probably required by Cantor
