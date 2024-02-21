@@ -17,23 +17,23 @@
 #include "ErrorBar.h"
 #include "ErrorBarPrivate.h"
 #include "backend/core/AbstractColumn.h"
+#include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macrosCurve.h"
-#include "backend/lib/XmlStreamReader.h"
 #include "backend/worksheet/Line.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 
-#include <QPainter>
 #include <KConfigGroup>
 #include <KLocalizedString>
+#include <QPainter>
 
 CURVE_COLUMN_CONNECT(ErrorBar, XPlus, xPlus, update)
 CURVE_COLUMN_CONNECT(ErrorBar, XMinus, xMinus, update)
 CURVE_COLUMN_CONNECT(ErrorBar, YPlus, yPlus, update)
 CURVE_COLUMN_CONNECT(ErrorBar, YMinus, yMinus, update)
 
-ErrorBar::ErrorBar(const QString& name,  Dimension dim)
+ErrorBar::ErrorBar(const QString& name, Dimension dim)
 	: AbstractAspect(name, AspectType::AbstractAspect)
 	, d_ptr(new ErrorBarPrivate(this, dim)) {
 	Q_D(ErrorBar);
@@ -246,7 +246,8 @@ void ErrorBar::setCapSize(qreal size) {
 // ####################### Private implementation ###############################
 // ##############################################################################
 ErrorBarPrivate::ErrorBarPrivate(ErrorBar* owner, ErrorBar::Dimension dim)
-	: dimension(dim), q(owner) {
+	: dimension(dim)
+	, q(owner) {
 }
 
 QString ErrorBarPrivate::name() const {
@@ -323,7 +324,10 @@ void ErrorBarPrivate::painterPathForX(QPainterPath& path, const QVector<QPointF>
 }
 
 // error bars for y
-void ErrorBarPrivate::painterPathForY(QPainterPath& path, const QVector<QPointF>& points, const CartesianCoordinateSystem* cSystem, WorksheetElement::Orientation orientation) const {
+void ErrorBarPrivate::painterPathForY(QPainterPath& path,
+									  const QVector<QPointF>& points,
+									  const CartesianCoordinateSystem* cSystem,
+									  WorksheetElement::Orientation orientation) const {
 	QVector<QLineF> elines;
 
 	switch (yErrorType) {

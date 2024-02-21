@@ -166,18 +166,18 @@ void ErrorBarWidget::setErrorBars(const QList<ErrorBar*>& errorBars) {
 }
 
 void ErrorBarWidget::setModel(AspectTreeModel* model) {
-	QList<AspectType> list {AspectType::Folder,
-			AspectType::Workbook,
-			AspectType::Datapicker,
-			AspectType::DatapickerCurve,
-			AspectType::Spreadsheet,
-			AspectType::LiveDataSource,
-			AspectType::Column,
-			AspectType::Worksheet,
-			AspectType::CartesianPlot,
-			AspectType::XYFitCurve,
-			AspectType::XYSmoothCurve,
-			AspectType::CantorWorksheet};
+	QList<AspectType> list{AspectType::Folder,
+						   AspectType::Workbook,
+						   AspectType::Datapicker,
+						   AspectType::DatapickerCurve,
+						   AspectType::Spreadsheet,
+						   AspectType::LiveDataSource,
+						   AspectType::Column,
+						   AspectType::Worksheet,
+						   AspectType::CartesianPlot,
+						   AspectType::XYFitCurve,
+						   AspectType::XYSmoothCurve,
+						   AspectType::CantorWorksheet};
 
 	cbXPlusColumn->setModel(model);
 	cbXMinusColumn->setModel(model);
@@ -233,7 +233,7 @@ void ErrorBarWidget::updateStylingWidgets() {
 	ui.cbType->setVisible(visible);
 	lineWidget->setVisible(visible);
 
-	if(visible) {
+	if (visible) {
 		const auto type = static_cast<ErrorBar::Type>(ui.cbType->currentData().toInt());
 		const bool b = (type == ErrorBar::Type::WithEnds);
 		ui.lCapSize->setVisible(b);

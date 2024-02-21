@@ -99,11 +99,11 @@ void LineWidget::adjustLayout() {
 	// determine the first _visible_ widget in the first column in the parent widget
 	QWidget* parentWidget = nullptr;
 	for (int row = 0; row < parentGridLayout->rowCount(); ++row) {
-		 auto* widget = parentGridLayout->itemAtPosition(row, 0)->widget();
-		 if (widget && widget->isVisible()) {
-			 parentWidget = widget;
-			 break;
-		 }
+		auto* widget = parentGridLayout->itemAtPosition(row, 0)->widget();
+		if (widget && widget->isVisible()) {
+			parentWidget = widget;
+			break;
+		}
 	}
 
 	if (!parentWidget)

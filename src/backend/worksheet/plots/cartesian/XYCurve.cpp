@@ -319,7 +319,8 @@ bool XYCurve::hasData() const {
 
 bool XYCurve::usingColumn(const Column* column) const {
 	Q_D(const XYCurve);
-	return (d->xColumn == column || d->yColumn == column || (d->errorBar->xErrorType() == ErrorBar::ErrorType::Symmetric && d->errorBar->xPlusColumn() == column)
+	return (d->xColumn == column || d->yColumn == column
+			|| (d->errorBar->xErrorType() == ErrorBar::ErrorType::Symmetric && d->errorBar->xPlusColumn() == column)
 			|| (d->errorBar->xErrorType() == ErrorBar::ErrorType::Asymmetric && (d->errorBar->xPlusColumn() == column || d->errorBar->xMinusColumn() == column))
 			|| (d->errorBar->yErrorType() == ErrorBar::ErrorType::Symmetric && d->errorBar->yPlusColumn() == column)
 			|| (d->errorBar->yErrorType() == ErrorBar::ErrorType::Asymmetric && (d->errorBar->yPlusColumn() == column || d->errorBar->yMinusColumn() == column))
@@ -2194,9 +2195,23 @@ bool XYCurve::minMax(const Dimension dim, const Range<int>& indexRange, Range<do
 	Q_D(const XYCurve);
 	switch (dim) {
 	case Dimension::X:
-		return minMax(xColumn(), yColumn(), d->errorBar->xErrorType(), d->errorBar->xPlusColumn(), d->errorBar->xMinusColumn(), indexRange, r, includeErrorBars);
+		return minMax(xColumn(),
+					  yColumn(),
+					  d->errorBar->xErrorType(),
+					  d->errorBar->xPlusColumn(),
+					  d->errorBar->xMinusColumn(),
+					  indexRange,
+					  r,
+					  includeErrorBars);
 	case Dimension::Y:
-		return minMax(yColumn(), xColumn(), d->errorBar->yErrorType(), d->errorBar->yPlusColumn(), d->errorBar->yMinusColumn(), indexRange, r, includeErrorBars);
+		return minMax(yColumn(),
+					  xColumn(),
+					  d->errorBar->yErrorType(),
+					  d->errorBar->yPlusColumn(),
+					  d->errorBar->yMinusColumn(),
+					  indexRange,
+					  r,
+					  includeErrorBars);
 	}
 	return false;
 }

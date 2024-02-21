@@ -32,7 +32,7 @@ public:
 
 	enum class ErrorType { NoError, Symmetric, Asymmetric, Poisson };
 	enum class Type { Simple, WithEnds };
-	enum class Dimension {Y, XY };
+	enum class Dimension { Y, XY };
 
 	explicit ErrorBar(const QString& name, Dimension);
 	~ErrorBar() override;
@@ -45,7 +45,8 @@ public:
 
 	void init(const KConfigGroup&);
 	void update();
-	QPainterPath painterPath(const QVector<QPointF>&, const CartesianCoordinateSystem*, WorksheetElement::Orientation = WorksheetElement::Orientation::Vertical) const;
+	QPainterPath
+	painterPath(const QVector<QPointF>&, const CartesianCoordinateSystem*, WorksheetElement::Orientation = WorksheetElement::Orientation::Vertical) const;
 	void draw(QPainter*, const QPainterPath&);
 
 	Dimension dimension() const;
