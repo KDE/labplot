@@ -479,7 +479,6 @@ bool ErrorBar::load(XmlStreamReader* reader, bool preview) {
 		return true;
 
 	Q_D(ErrorBar);
-	QString str;
 	auto attribs = reader->attributes();
 
 	// x and y error values
@@ -502,9 +501,12 @@ bool ErrorBar::load(XmlStreamReader* reader, bool preview) {
 	}
 
 	// styling
-	READ_INT_VALUE("type", type, ErrorBar::Type);
-	READ_DOUBLE_VALUE("capSize", capSize);
-	d->line->load(reader, preview);
+	if (!preview) {
+		QString str;
+		READ_INT_VALUE("type", type, ErrorBar::Type);
+		READ_DOUBLE_VALUE("capSize", capSize);
+		d->line->load(reader, preview);
+	}
 
 	return true;
 }

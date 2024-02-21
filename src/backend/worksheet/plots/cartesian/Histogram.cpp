@@ -1704,6 +1704,17 @@ bool Histogram::load(XmlStreamReader* reader, bool preview) {
 				reader->raiseMissingAttributeWarning(QStringLiteral("visible"));
 			else
 				d->setVisible(str.toInt());
+
+			// prior to XML version 12, Histogram used its own enum for the orientation instead of the enum in WorksheetElement
+			// which had a different order of values ("{Vertical, Horizontal}" in Histogram vs. "{Horizontal, Vertical}" in WorksheetElement)
+			// and we need to map from the old to the new values
+			if (Project::xmlVersion() < 12) {
+				const int orientation = static_cast<int>(d->orientation);
+				if (orientation == 0)
+					d->orientation = Orientation::Vertical;
+				else if (orientation == 1)
+					d->orientation = Orientation::Horizontal;
+			}
 		} else if (!preview && reader->name() == QLatin1String("line")) {
 			d->line->load(reader, preview);
 		} else if (!preview && reader->name() == QLatin1String("symbols"))
@@ -1712,7 +1723,7 @@ bool Histogram::load(XmlStreamReader* reader, bool preview) {
 			d->value->load(reader, preview);
 		else if (!preview && reader->name() == QLatin1String("filling"))
 			d->background->load(reader, preview);
-		else if (!preview && reader->name() == QLatin1String("errorBars")) {
+		else if (reader->name() == QLatin1String("errorBars")) {
 			d->errorBar->load(reader, preview);
 
 			// prior to XML version 11, a different order of enum values for the error type was used in Histogram
@@ -1741,6 +1752,7 @@ bool Histogram::load(XmlStreamReader* reader, bool preview) {
 				return false;
 		}
 	}
+
 	return true;
 }
 

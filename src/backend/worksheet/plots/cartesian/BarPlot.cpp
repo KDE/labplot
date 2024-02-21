@@ -1459,7 +1459,7 @@ bool BarPlot::load(XmlStreamReader* reader, bool preview) {
 			}
 		} else if (!preview && reader->name() == QLatin1String("values")) {
 			d->value->load(reader, preview);
-		} else if (!preview && reader->name() == QLatin1String("errorBars")) {
+		} else if (reader->name() == QLatin1String("errorBars")) {
 			if (!firstErrorBarRead) {
 				auto* errorBar = d->errorBars.at(0);
 				errorBar->load(reader, preview);
