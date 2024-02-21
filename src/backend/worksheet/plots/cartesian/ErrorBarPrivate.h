@@ -29,18 +29,21 @@ public:
 
 	ErrorBar::Dimension dimension;
 
+	// x
 	ErrorBar::ErrorType xErrorType{ErrorBar::ErrorType::NoError};
 	const AbstractColumn* xPlusColumn{nullptr};
 	QString xPlusColumnPath;
 	const AbstractColumn* xMinusColumn{nullptr};
 	QString xMinusColumnPath;
 
+	// y
 	ErrorBar::ErrorType yErrorType{ErrorBar::ErrorType::NoError};
 	const AbstractColumn* yPlusColumn{nullptr};
 	QString yPlusColumnPath;
 	const AbstractColumn* yMinusColumn{nullptr};
 	QString yMinusColumnPath;
 
+	// styling
 	ErrorBar::Type type{ErrorBar::Type::Simple};
 	double capSize{1.};
 	Line* line{nullptr};

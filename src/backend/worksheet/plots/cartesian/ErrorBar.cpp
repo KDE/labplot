@@ -17,7 +17,6 @@
 #include "ErrorBar.h"
 #include "ErrorBarPrivate.h"
 #include "backend/core/AbstractColumn.h"
-#include "backend/core/Project.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macrosCurve.h"
 #include "backend/lib/XmlStreamReader.h"
@@ -79,10 +78,16 @@ void ErrorBar::draw(QPainter* painter, const QPainterPath& path) {
 	painter->drawPath(path);
 }
 
+/*!
+ * calculates and returns the painter path for the error bars.
+ * The error bars are placed at the points in logical coordinates \c points.
+ * The transformation to the scene coordinates is done via \c cSystem that is owned by the parent plot owning the error bar object.
+ * Some plot types like histogram, bar plot, etc. can have different orientations (vertical vs. horizontal) which is provided via \c orientation,
+ * the error is specified for the y-dimentions for such plot types and is drawn either vertically or horizontally depending on the orientation of the plot.
+ */
 QPainterPath ErrorBar::painterPath(const QVector<QPointF>& points, const CartesianCoordinateSystem* cSystem, WorksheetElement::Orientation orientation) const {
 	Q_D(const ErrorBar);
 	auto path = QPainterPath();
-	QVector<QLineF> elines;
 
 	if (d->dimension == Dimension::XY)
 		d->painterPathForX(path, points, cSystem);
@@ -100,18 +105,21 @@ ErrorBar::Dimension ErrorBar::dimension() const {
 	return d->dimension;
 }
 
+// x
 BASIC_SHARED_D_READER_IMPL(ErrorBar, ErrorBar::ErrorType, xErrorType, xErrorType)
 BASIC_SHARED_D_READER_IMPL(ErrorBar, const AbstractColumn*, xPlusColumn, xPlusColumn)
 BASIC_SHARED_D_READER_IMPL(ErrorBar, const AbstractColumn*, xMinusColumn, xMinusColumn)
 BASIC_SHARED_D_READER_IMPL(ErrorBar, QString, xPlusColumnPath, xPlusColumnPath)
 BASIC_SHARED_D_READER_IMPL(ErrorBar, QString, xMinusColumnPath, xMinusColumnPath)
 
+// y
 BASIC_SHARED_D_READER_IMPL(ErrorBar, ErrorBar::ErrorType, yErrorType, yErrorType)
 BASIC_SHARED_D_READER_IMPL(ErrorBar, const AbstractColumn*, yPlusColumn, yPlusColumn)
 BASIC_SHARED_D_READER_IMPL(ErrorBar, const AbstractColumn*, yMinusColumn, yMinusColumn)
 BASIC_SHARED_D_READER_IMPL(ErrorBar, QString, yPlusColumnPath, yPlusColumnPath)
 BASIC_SHARED_D_READER_IMPL(ErrorBar, QString, yMinusColumnPath, yMinusColumnPath)
 
+// styling
 BASIC_SHARED_D_READER_IMPL(ErrorBar, ErrorBar::Type, type, type)
 BASIC_SHARED_D_READER_IMPL(ErrorBar, double, capSize, capSize)
 Line* ErrorBar::line() const {
@@ -439,28 +447,25 @@ void ErrorBarPrivate::painterPathForY(QPainterPath& path, const QVector<QPointF>
 void ErrorBar::save(QXmlStreamWriter* writer) const {
 	Q_D(const ErrorBar);
 
-	// if (!d->prefix.isEmpty()) {
-	// 	// for names in the XML file, the first letter is lower case but the camel case still remains.
-	// 	QString newPrefix = d->prefix;
-	// 	newPrefix.replace(0, 1, d->prefix.at(0).toLower());
- //
-	// 	writer->writeAttribute(newPrefix + QStringLiteral("ErrorType"), QString::number(static_cast<int>(d->type)));
- //
-	// 	if (d->plusColumn)
-	// 		writer->writeAttribute(newPrefix + QStringLiteral("ErrorPlusColumn"), d->plusColumn->path());
-	// 	else
-	// 		writer->writeAttribute(newPrefix + QStringLiteral("ErrorPlusColumn"), QString());
- //
-	// 	if (d->minusColumn)
-	// 		writer->writeAttribute(newPrefix + QStringLiteral("ErrorMinusColumn"), d->minusColumn->path());
-	// 	else
-	// 		writer->writeAttribute(newPrefix + QStringLiteral("ErrorMinusColumn"), QString());
-	// } else {
-	// 	writer->writeAttribute(QStringLiteral("errorType"), QString::number(static_cast<int>(d->type)));
-	// 	WRITE_COLUMN(d->plusColumn, errorPlusColumn);
-	// 	WRITE_COLUMN(d->minusColumn, errorMinusColumn);
-	// }
+	// x and y error values
+	switch (d->dimension) {
+	case (Dimension::XY): {
+		writer->writeAttribute(QStringLiteral("xErrorType"), QString::number(static_cast<int>(d->xErrorType)));
+		WRITE_COLUMN(d->xPlusColumn, xErrorPlusColumn);
+		WRITE_COLUMN(d->xMinusColumn, xErrorMinusColumn);
+		writer->writeAttribute(QStringLiteral("yErrorType"), QString::number(static_cast<int>(d->yErrorType)));
+		WRITE_COLUMN(d->yPlusColumn, yErrorPlusColumn);
+		WRITE_COLUMN(d->yMinusColumn, yErrorMinusColumn);
+		break;
+	}
+	case (Dimension::Y): {
+		writer->writeAttribute(QStringLiteral("errorType"), QString::number(static_cast<int>(d->yErrorType)));
+		WRITE_COLUMN(d->yPlusColumn, errorPlusColumn);
+		WRITE_COLUMN(d->yMinusColumn, errorMinusColumn);
+	}
+	}
 
+	// styling
 	writer->writeAttribute(QStringLiteral("type"), QString::number(static_cast<int>(d->type)));
 	writer->writeAttribute(QStringLiteral("capSize"), QString::number(d->capSize));
 	d->line->save(writer);
@@ -474,37 +479,27 @@ bool ErrorBar::load(XmlStreamReader* reader, bool preview) {
 	Q_D(ErrorBar);
 	QString str;
 	auto attribs = reader->attributes();
-	// int errorType = 0;
 
-	// if (!d->prefix.isEmpty()) {
-	// 	QString newPrefix = d->prefix;
-	// 	newPrefix.replace(0, 1, d->prefix.at(0).toLower());
- //
-	// 	errorType = attribs.value(newPrefix + QStringLiteral("ErrorType")).toInt();
-	// 	d->plusColumnPath = attribs.value(newPrefix + QStringLiteral("ErrorPlusColumn")).toString();
-	// 	d->minusColumnPath = attribs.value(newPrefix + QStringLiteral("ErrorMinusColumn")).toString();
-	// } else {
-	// 	errorType = attribs.value(QStringLiteral("errorType")).toInt();
-	// 	d->plusColumnPath = attribs.value(QStringLiteral("errorPlusColumn")).toString();
-	// 	d->minusColumnPath = attribs.value(QStringLiteral("errorMinusColumn")).toString();
-	// }
- //
-	// // prior to XML version 11, a different order of enum values for the error type was used in Histogram
-	// // (old "{ NoError, Poisson, CustomSymmetric, CustomAsymmetric }" instead of
-	// // the new "{ NoError, Symmetric, Asymmetric, Poisson }")
-	// // and we need to map from the old to the new values
-	// if (Project::xmlVersion() < 11 && parentAspect()->type() == AspectType::Histogram) {
-	// 	if (errorType == 0)
-	// 		d->errorType = ErrorBar::ErrorType::NoError;
-	// 	else if (errorType == 1)
-	// 		d->errorType = ErrorBar::ErrorType::Poisson;
-	// 	else if (errorType == 2)
-	// 		d->errorType = ErrorBar::ErrorType::Symmetric;
-	// 	else if (errorType == 3)
-	// 		d->errorType = ErrorBar::ErrorType::Asymmetric;
-	// } else
-	// 	d->errorType = static_cast<ErrorType>(errorType);
+	// x and y error values
+	switch (d->dimension) {
+	case (Dimension::XY): {
+		d->xErrorType = static_cast<ErrorBar::ErrorType>(attribs.value(QStringLiteral("xErrorType")).toInt());
+		d->xPlusColumnPath = attribs.value(QStringLiteral("xErrorPlusColumn")).toString();
+		d->xMinusColumnPath = attribs.value(QStringLiteral("xErrorMinusColumn")).toString();
 
+		d->yErrorType = static_cast<ErrorBar::ErrorType>(attribs.value(QStringLiteral("yErrorType")).toInt());
+		d->yPlusColumnPath = attribs.value(QStringLiteral("yErrorPlusColumn")).toString();
+		d->yMinusColumnPath = attribs.value(QStringLiteral("yErrorMinusColumn")).toString();
+		break;
+	}
+	case (Dimension::Y): {
+		d->yErrorType = static_cast<ErrorBar::ErrorType>(attribs.value(QStringLiteral("errorType")).toInt());
+		d->yPlusColumnPath = attribs.value(QStringLiteral("errorPlusColumn")).toString();
+		d->yMinusColumnPath = attribs.value(QStringLiteral("errorMinusColumn")).toString();
+	}
+	}
+
+	// styling
 	READ_INT_VALUE("type", type, ErrorBar::Type);
 	READ_DOUBLE_VALUE("capSize", capSize);
 	d->line->load(reader, preview);

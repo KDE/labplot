@@ -19,6 +19,7 @@
 #include "HistogramPrivate.h"
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/Folder.h"
+#include "backend/core/Project.h"
 #include "backend/core/Settings.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/XmlStreamReader.h"
@@ -1711,9 +1712,23 @@ bool Histogram::load(XmlStreamReader* reader, bool preview) {
 			d->value->load(reader, preview);
 		else if (!preview && reader->name() == QLatin1String("filling"))
 			d->background->load(reader, preview);
-		else if (!preview && reader->name() == QLatin1String("errorBars"))
+		else if (!preview && reader->name() == QLatin1String("errorBars")) {
 			d->errorBar->load(reader, preview);
-		else if (!preview && reader->name() == QLatin1String("margins")) {
+
+			// prior to XML version 11, a different order of enum values for the error type was used in Histogram
+			// (old "{ NoError, Poisson, CustomSymmetric, CustomAsymmetric }" instead of
+			// the new "{ NoError, Symmetric, Asymmetric, Poisson }")
+			// and we need to map from the old to the new values
+			if (Project::xmlVersion() < 11) {
+				const int errorType = static_cast<int>(d->errorBar->yErrorType());
+				if (errorType == 1)
+					d->errorBar->setYErrorType(ErrorBar::ErrorType::Poisson);
+				else if (errorType == 2)
+					d->errorBar->setYErrorType(ErrorBar::ErrorType::Symmetric);
+				else if (errorType == 3)
+					d->errorBar->setYErrorType(ErrorBar::ErrorType::Asymmetric);
+			}
+		} else if (!preview && reader->name() == QLatin1String("margins")) {
 			attribs = reader->attributes();
 
 			READ_INT_VALUE("rugEnabled", rugEnabled, bool);

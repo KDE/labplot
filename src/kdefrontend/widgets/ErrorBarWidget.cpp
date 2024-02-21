@@ -9,7 +9,6 @@
 
 #include "ErrorBarWidget.h"
 #include "backend/core/AbstractColumn.h"
-#include "kdefrontend/GuiTools.h"
 #include "backend/core/Settings.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 #include "kdefrontend/dockwidgets/BaseDock.h"
@@ -17,7 +16,6 @@
 
 #include <KConfigGroup>
 #include <QPainter>
-#include <QTimer>
 
 /*!
 	\class ErrorBarWidget
@@ -457,7 +455,7 @@ void ErrorBarWidget::loadConfig(const KConfigGroup& group) {
 		yErrorTypeChanged(ui.cbYErrorType->currentIndex());
 	}
 
-	ui.cbType->setCurrentIndex(group.readEntry(QStringLiteral("ErrorBarType"), static_cast<int>(m_errorBar->type())));
+	ui.cbType->setCurrentIndex(group.readEntry(QStringLiteral("ErrorBarsType"), static_cast<int>(m_errorBar->type())));
 	typeChanged(ui.cbType->currentIndex());
 
 	const double size = group.readEntry(QStringLiteral("ErrorBarsCapSize"), m_errorBar->capSize());

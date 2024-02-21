@@ -1474,6 +1474,13 @@ bool BarPlot::load(XmlStreamReader* reader, bool preview) {
 
 	d->dataColumns.resize(d->dataColumnPaths.size());
 
+	// error bars were added after the initial implementation of the bar plot
+	// and older projects don't have any error bars saved. Create here the
+	// required internal objects for all data columns used in the bar plot.
+	const int diff = d->dataColumns.size() - d->errorBars.size();
+	for (int i = 0; i < diff; ++i)
+		d->addErrorBar(KConfigGroup());
+
 	return true;
 }
 
