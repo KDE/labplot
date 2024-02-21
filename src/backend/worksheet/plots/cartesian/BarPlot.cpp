@@ -417,12 +417,15 @@ void BarPlotPrivate::addValue(const KConfigGroup& group) {
 
 ErrorBar* BarPlotPrivate::addErrorBar(const KConfigGroup& group) {
 	auto* errorBar = new ErrorBar(QString(), ErrorBar::Dimension::Y);
-	q->addChild(errorBar);
 	errorBar->setHidden(true);
-	errorBar->init(group);
+	q->addChild(errorBar);
+	if (!q->isLoading())
+		errorBar->init(group);
+
 	q->connect(errorBar, &ErrorBar::updatePixmapRequested, [=] {
 		updatePixmap();
 	});
+
 	q->connect(errorBar, &ErrorBar::updateRequested, [=] {
 		updateErrorBars(errorBars.indexOf(errorBar));
 	});

@@ -36,6 +36,13 @@ CURVE_COLUMN_CONNECT(ErrorBar, YMinus, yMinus, update)
 ErrorBar::ErrorBar(const QString& name,  Dimension dim)
 	: AbstractAspect(name, AspectType::AbstractAspect)
 	, d_ptr(new ErrorBarPrivate(this, dim)) {
+	Q_D(ErrorBar);
+	d->line = new Line(QString());
+	d->line->setHidden(true);
+	d->line->setCreateXmlElement(false);
+	addChild(d->line);
+	connect(d->line, &Line::updatePixmapRequested, this, &ErrorBar::updatePixmapRequested);
+	connect(d->line, &Line::updateRequested, this, &ErrorBar::updateRequested);
 }
 
 ErrorBar::~ErrorBar() {
@@ -44,6 +51,7 @@ ErrorBar::~ErrorBar() {
 
 void ErrorBar::init(const KConfigGroup& group) {
 	Q_D(ErrorBar);
+	// x and y errors
 	switch (d->dimension) {
 	case Dimension::Y:
 		d->yErrorType = (ErrorType)group.readEntry(QStringLiteral("ErrorType"), static_cast<int>(ErrorType::NoError));
@@ -53,16 +61,10 @@ void ErrorBar::init(const KConfigGroup& group) {
 		d->yErrorType = (ErrorType)group.readEntry(QStringLiteral("YErrorType"), static_cast<int>(ErrorType::NoError));
 	}
 
+	// styling
 	d->type = (Type)group.readEntry(QStringLiteral("ErrorBarsType"), static_cast<int>(Type::Simple));
 	d->capSize = group.readEntry(QStringLiteral("ErrorBarsCapSize"), Worksheet::convertToSceneUnits(10, Worksheet::Unit::Point));
-
-	d->line = new Line(QString());
-	d->line->setHidden(true);
-	d->line->setCreateXmlElement(false);
-	addChild(d->line);
 	d->line->init(group);
-	connect(d->line, &Line::updatePixmapRequested, this, &ErrorBar::updatePixmapRequested);
-	connect(d->line, &Line::updateRequested, this, &ErrorBar::updateRequested);
 }
 
 void ErrorBar::update() {

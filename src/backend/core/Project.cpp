@@ -998,6 +998,7 @@ void Project::restorePointers(AbstractAspect* aspect) {
 
 		// restore the pointers
 		for (int i = 0; i < count; ++i) {
+			// data columns
 			dataColumns[i] = nullptr;
 			const auto& path = barPlot->dataColumnPaths().at(i);
 			for (Column* column : columns) {
@@ -1008,6 +1009,10 @@ void Project::restorePointers(AbstractAspect* aspect) {
 					break;
 				}
 			}
+
+			// error bars
+			RESTORE_COLUMN_POINTER(barPlot->errorBarAt(i), yPlusColumn, YPlusColumn);
+			RESTORE_COLUMN_POINTER(barPlot->errorBarAt(i), yMinusColumn, YMinusColumn);
 		}
 
 		barPlot->setDataColumns(dataColumns);

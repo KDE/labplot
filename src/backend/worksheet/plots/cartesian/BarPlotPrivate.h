@@ -72,8 +72,8 @@ private:
 
 	void draw(QPainter*);
 
-	QVector<QPointF> m_valuesPoints; // values positions in scene coordinates for all columns
-	QVector<QVector<QPointF>> m_valuesPointsLogical; // QVector<QPointF> contains the poins in logical coordinates for the value positions for one data column
+	QVector<QPointF> m_valuesPoints; // positions of values in scene coordinates for all columns
+	QVector<QVector<QPointF>> m_valuesPointsLogical; // QVector<QPointF> contains the points in logical coordinates for the value positions for one data column
 	QVector<QString> m_valuesStrings;
 	QPainterPath m_valuesPath;
 	QVector<QPainterPath> m_errorBarsPaths;
