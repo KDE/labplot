@@ -294,6 +294,14 @@ void Column::copyData() {
 	QApplication::clipboard()->setText(output);
 }
 
+void Column::setSparkline(const QPixmap& pix) {
+	m_sparkline = pix;
+}
+
+QPixmap Column::sparkline() {
+	return m_sparkline;
+}
+
 void Column::pasteData() {
 	auto* spreadsheet = dynamic_cast<Spreadsheet*>(parentAspect());
 	if (spreadsheet)
@@ -939,7 +947,6 @@ qint64 Column::bigIntAt(int row) const {
 void Column::setChanged() {
 	if (!m_suppressDataChangedSignal)
 		Q_EMIT dataChanged(this);
-
 	invalidateProperties();
 }
 
