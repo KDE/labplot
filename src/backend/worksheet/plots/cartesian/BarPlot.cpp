@@ -1251,12 +1251,8 @@ void BarPlotPrivate::draw(QPainter* painter) {
 			// draw the box filling
 			if (columnIndex < backgrounds.size()) { // TODO: remove this check later
 				const auto* background = backgrounds.at(columnIndex);
-				if (background->enabled()) {
-					painter->setOpacity(background->opacity());
-					painter->setPen(Qt::NoPen);
-					const QPolygonF& polygon = m_fillPolygons.at(columnIndex).at(valueIndex);
-					drawFillingPollygon(polygon, painter, background);
-				}
+				if (background->enabled())
+					background->draw(painter, m_fillPolygons.at(columnIndex).at(valueIndex));
 			}
 
 			// draw the border
