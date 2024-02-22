@@ -1572,6 +1572,10 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 		DEBUG(Q_FUNC_INFO << ", y column name = " << STDSTRING(yColumnName));
 		DEBUG(Q_FUNC_INFO << ", y column info = " << STDSTRING(yColumnInfo));
 
+		// for histogram use y column info for x column
+		if (originCurve.type == Origin::GraphCurve::Histogram && xColumnInfo.isEmpty())
+			xColumnInfo = yColumnInfo;
+
 		loadAxes(layer, plot, layerIndex, xColumnInfo, yColumnInfo);
 	}
 
