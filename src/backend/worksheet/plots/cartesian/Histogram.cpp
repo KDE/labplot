@@ -1480,11 +1480,8 @@ void HistogramPrivate::draw(QPainter* painter) {
 	}
 
 	// draw filling
-	if (background->enabled()) {
-		painter->setOpacity(background->opacity());
-		painter->setPen(Qt::NoPen);
-		drawFillingPollygon(fillPolygon, painter, background);
-	}
+	if (background->enabled())
+		background->draw(painter, fillPolygon);
 
 	// draw symbols
 	symbol->draw(painter, pointsScene);

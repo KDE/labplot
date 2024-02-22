@@ -59,6 +59,7 @@ Bug fixes:
 	* Fix calculating skewness and kurtosis
 	* Support start/end row/column in XLSX import preview
 	* Fixed wrong string to load CANSettings
+	* Don't draw any border line for the worksheet canvas (BUG 470625)
 
 Internal:
 	* Switch from C++11 to C++17

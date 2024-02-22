@@ -2592,12 +2592,9 @@ void XYCurvePrivate::draw(QPainter* painter) {
 #endif
 
 	// draw filling
-	if (background->position() != Background::Position::No) {
-		painter->setOpacity(background->opacity());
-		painter->setPen(Qt::SolidLine);
+	if (background->position() != Background::Position::No)
 		for (const auto& polygon : qAsConst(m_fillPolygons))
-			drawFillingPollygon(polygon, painter, background);
-	}
+			background->draw(painter, polygon);
 
 	// draw lines
 	if (lineType != XYCurve::LineType::NoLine) {
@@ -2605,7 +2602,7 @@ void XYCurvePrivate::draw(QPainter* painter) {
 		painter->setPen(line->pen());
 		painter->setBrush(Qt::NoBrush);
 		if (line->pen().style() == Qt::SolidLine && !q->isPrinting()) {
-			// Much fast than drawPath but has problems
+			// Much faster than drawPath but has problems
 			// with different styles
 			// When exporting to svg or pdf, this creates for every line
 			// it's own path in the saved file which is not desired. We
