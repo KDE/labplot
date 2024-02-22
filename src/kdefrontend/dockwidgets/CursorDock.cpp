@@ -20,8 +20,6 @@
 #include <QKeyEvent>
 #include <QMenu>
 
-struct Lock;
-
 CursorDock::CursorDock(QWidget* parent)
 	: QWidget(parent)
 	, ui(new Ui::CursorDock) {
