@@ -19,7 +19,7 @@ if (NOT qt${QT_VERSION_MAJOR}advanceddocking_FOUND)
 	MESSAGE (FATAL_ERROR "Missing Qt${QT_VERSION_MAJOR}::GuiPrivate to build local version of Qt-Advanced-Docking-System.")
     endif ()
 endif ()
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lzstd")
+
 set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/DatasetModel.cpp
 	${KDEFRONTEND_DIR}/GuiObserver.cpp

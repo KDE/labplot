@@ -24,6 +24,10 @@
 
 #include <QCompleter>
 #include <QDialogButtonBox>
+#include <3rdparty/mcap/include/mcap/types.hpp>
+#include <3rdparty/mcap/include/mcap/writer.hpp>
+
+
 // see https://gitlab.kitware.com/cmake/cmake/-/issues/21609
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
 #include <QFileSystemModel>
@@ -34,6 +38,8 @@
 #include <QSqlDatabase>
 #include <QStandardItemModel>
 #include <QWindow>
+#include <QDebug>
+
 
 /*!
 	\class ExportSpreadsheetDialog
@@ -75,6 +81,7 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent)
 	const QStringList& drivers = QSqlDatabase::drivers();
 	if (drivers.contains(QLatin1String("QSQLITE")) || drivers.contains(QLatin1String("QSQLITE3")))
 		ui->cbFormat->addItem(QStringLiteral("SQLite"), static_cast<int>(Format::SQLite));
+	ui->cbFormat->addItem(QStringLiteral("MCAP"), static_cast<int>(Format::MCAP));
 
 	QStringList separators = AsciiFilter::separatorCharacters();
 	separators.takeAt(0); // remove the first entry "auto"
@@ -86,6 +93,18 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent)
 
 	ui->cbLaTeXExport->addItem(i18n("Export Spreadsheet"));
 	ui->cbLaTeXExport->addItem(i18n("Export Selection"));
+
+	// See: https://mcap.dev/docs/cpp/e3B3464E30CB968FB
+	ui->cbCompressionLevel->addItem(QStringLiteral("Fastest"),static_cast<int>(mcap::CompressionLevel::Fastest));
+	ui->cbCompressionLevel->addItem(QStringLiteral("Fast"), static_cast<int>(mcap::CompressionLevel::Fast));
+	ui->cbCompressionLevel->addItem(QStringLiteral("Default"),static_cast<int>(mcap::CompressionLevel::Default));
+	ui->cbCompressionLevel->addItem(QStringLiteral("Slow"),static_cast<int>(mcap::CompressionLevel::Slow));
+	ui->cbCompressionLevel->addItem(QStringLiteral("Slowest"), static_cast<int>(mcap::CompressionLevel::Slowest));
+	ui->cbCompressionLevel->setCurrentIndex(2); //Default
+
+	ui->rbNone->setChecked(true);
+	ui->rbLZ4->setChecked(false);
+	ui->rbZSTD->setChecked(false);
 
 	ui->bOpen->setIcon(QIcon::fromTheme(QStringLiteral("document-open")));
 
@@ -199,6 +218,20 @@ void ExportSpreadsheetDialog::fitsExportToChanged(int idx) {
 			ui->lColumnAsUnits->show();
 		}
 	}
+}
+
+mcap::McapWriterOptions ExportSpreadsheetDialog::getMcapSettings() {
+	auto opts = mcap::McapWriterOptions("json");
+	opts.compressionLevel = static_cast<mcap::CompressionLevel>(ui->cbCompressionLevel->currentIndex());
+	if(ui->rbLZ4->isChecked()){
+		opts.compression = mcap::Compression::Lz4;
+	}else if(ui->rbZSTD->isChecked()){
+		opts.compression = mcap::Compression::Zstd;
+	}else{
+		opts.compression = mcap::Compression::None;
+	}
+
+	return opts;
 }
 
 void ExportSpreadsheetDialog::setMatrixMode(bool b) {
@@ -377,6 +410,9 @@ void ExportSpreadsheetDialog::selectFile() {
 	case Format::XLSX:
 		extensions = i18n("Excel 2007+ (*.xlsx)");
 		break;
+	case Format::MCAP:
+		extensions = i18n("MCAP Files (*.mcap)");
+		break;
 	case Format::SQLite:
 		extensions = i18n("SQLite databases files (*.db *.sqlite *.sdb *.db2 *.sqlite2 *.sdb2 *.db3 *.sqlite3 *.sdb3)");
 		break;
@@ -408,6 +444,8 @@ void ExportSpreadsheetDialog::formatChanged(int index) {
 	extensions << QStringLiteral(".xlsx");
 #endif
 	extensions << QStringLiteral(".db");
+	extensions << QStringLiteral(".mcap"); //Todo: Order of suffixes matters
+
 	QString path = ui->leFileName->text();
 	int i = path.indexOf(QLatin1Char('.'));
 	if (index != -1) {
@@ -451,7 +489,7 @@ void ExportSpreadsheetDialog::formatChanged(int index) {
 		ui->lExportToFITS->hide();
 		ui->lColumnAsUnits->hide();
 		ui->chkColumnsAsUnits->hide();
-
+		ui->mcapwidget->hide();
 		break;
 	case Format::FITS:
 		ui->lCaptions->hide();
@@ -483,6 +521,7 @@ void ExportSpreadsheetDialog::formatChanged(int index) {
 				ui->chkColumnsAsUnits->show();
 			}
 		}
+		ui->mcapwidget->hide();
 
 		break;
 	case Format::SQLite:
@@ -542,6 +581,39 @@ void ExportSpreadsheetDialog::formatChanged(int index) {
 		ui->lExportToFITS->hide();
 		ui->lColumnAsUnits->hide();
 		ui->chkColumnsAsUnits->hide();
+		ui->mcapwidget->hide();
+		break;
+	case Format::MCAP:
+		ui->cbSeparator->hide();
+		ui->lSeparator->hide();
+		ui->lDecimalSeparator->hide();
+		ui->cbDecimalSeparator->hide();
+
+		ui->chkCaptions->hide();
+		ui->chkEmptyRows->hide();
+		ui->chkGridLines->hide();
+		ui->lEmptyRows->hide();
+		ui->lExportArea->hide();
+		ui->lGridLines->hide();
+		ui->lCaptions->hide();
+		ui->cbLaTeXExport->hide();
+		ui->cbLaTeXExport->hide();
+		ui->lMatrixHHeader->hide();
+		ui->lMatrixVHeader->hide();
+		ui->chkMatrixHHeader->hide();
+		ui->chkMatrixVHeader->hide();
+
+		ui->lHeader->hide();
+		ui->chkHeaders->hide();
+		ui->chkExportHeader->hide();
+		ui->lExportHeader->hide();
+
+		ui->cbExportToFITS->hide();
+		ui->lExportToFITS->hide();
+		ui->lColumnAsUnits->hide();
+		ui->chkColumnsAsUnits->hide();
+		ui->mcapwidget->show();
+
 		break;
 	case Format::ASCII:
 		ui->cbSeparator->show();
@@ -569,9 +641,10 @@ void ExportSpreadsheetDialog::formatChanged(int index) {
 		ui->lExportToFITS->hide();
 		ui->lColumnAsUnits->hide();
 		ui->chkColumnsAsUnits->hide();
+		ui->mcapwidget->hide();
 	}
 
-	if (!m_matrixMode && !(format == Format::FITS || format == Format::SQLite)) {
+	if (!m_matrixMode && !(format == Format::FITS || format == Format::SQLite || format == Format::MCAP)) {
 		ui->chkExportHeader->show();
 		ui->lExportHeader->show();
 	}

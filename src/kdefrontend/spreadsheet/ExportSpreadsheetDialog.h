@@ -12,6 +12,7 @@
 
 #include <QDialog>
 #include <QLocale>
+#include <3rdparty/mcap/include/mcap/writer.hpp>
 
 namespace Ui {
 class ExportSpreadsheetWidget;
@@ -19,6 +20,7 @@ class ExportSpreadsheetWidget;
 
 class QPushButton;
 class QAbstractButton;
+
 
 class ExportSpreadsheetDialog : public QDialog {
 	Q_OBJECT
@@ -47,8 +49,12 @@ public:
 	bool commentsAsUnitsFits() const;
 	void setExportTo(const QStringList& to);
 	void setExportToImage(bool possible);
+	mcap::McapWriterOptions getMcapSettings();
 
-	enum class Format { ASCII, LaTeX, FITS, XLSX, SQLite };
+// Todo: Get rid of order matters. Fits need to be at the end.
+enum class Format { ASCII, LaTeX, XLSX, SQLite,MCAP,FITS };
+
+
 
 	Format format() const;
 
@@ -72,6 +78,7 @@ private Q_SLOTS:
 	void formatChanged(int);
 	void fileNameChanged(const QString&);
 	void fitsExportToChanged(int);
+
 };
 
 #endif

@@ -17,6 +17,7 @@
 #include "backend/core/datatypes/Double2StringFilter.h"
 #include "backend/datasources/filters/FITSFilter.h"
 #include "backend/datasources/filters/XLSXFilter.h"
+#include "backend/datasources/filters/McapFilter.h"
 #include "backend/lib/macros.h"
 #include "backend/lib/trace.h"
 #include "backend/spreadsheet/StatisticsSpreadsheet.h"
@@ -3673,6 +3674,7 @@ void SpreadsheetView::selectionChanged(const QItemSelection& /*selected*/, const
 }
 
 bool SpreadsheetView::exportView() {
+	QDEBUG(Q_FUNC_INFO)
 	auto* dlg = new ExportSpreadsheetDialog(this);
 	dlg->setProjectFileName(m_spreadsheet->project()->fileName());
 	dlg->setFileName(m_spreadsheet->name());
@@ -3687,20 +3689,24 @@ bool SpreadsheetView::exportView() {
 	}
 	if (selectedColumnCount(false /* partial selection */) == 0)
 		dlg->setExportSelection(false);
-
 	bool ret;
 	if ((ret = dlg->exec()) == QDialog::Accepted) {
 		const QString path = dlg->path();
 		const bool exportHeader = dlg->exportHeader();
 		WAIT_CURSOR;
+		QDEBUG(static_cast<int>(dlg->format()));
 		switch (dlg->format()) {
 		case ExportSpreadsheetDialog::Format::ASCII: {
+			QDEBUG("ASCII");
+
 			const QString separator = dlg->separator();
 			const QLocale::Language format = dlg->numberFormat();
 			exportToFile(path, exportHeader, separator, format);
 			break;
 		}
 		case ExportSpreadsheetDialog::Format::LaTeX: {
+						QDEBUG("LATEX");
+
 			const bool exportLatexHeader = dlg->exportLatexHeader();
 			const bool gridLines = dlg->gridLines();
 			const bool captions = dlg->captions();
@@ -3717,13 +3723,25 @@ bool SpreadsheetView::exportView() {
 #endif
 			break;
 		}
-		case ExportSpreadsheetDialog::Format::XLSX:
+		case ExportSpreadsheetDialog::Format::XLSX:{
+			QDEBUG("xlsx");
 			exportToXLSX(path, exportHeader);
 			break;
-		case ExportSpreadsheetDialog::Format::SQLite:
+			}
+		case ExportSpreadsheetDialog::Format::SQLite:{
+			QDEBUG("sclite");
 			exportToSQLite(path);
 			break;
+			}
+		case ExportSpreadsheetDialog::Format::MCAP:{
+
+			QDEBUG("Export to mcap");
+			auto options =  dlg->getMcapSettings();
+			exportToMCAP(path,options);
+			break;
+			}
 		}
+
 		RESET_CURSOR;
 	}
 	delete dlg;
@@ -4309,6 +4327,13 @@ void SpreadsheetView::exportToFits(const QString& fileName, const int exportTo, 
 	delete filter;
 }
 
+void SpreadsheetView::exportToMCAP(const QString& fileName,mcap::McapWriterOptions opts) const{
+	auto* filter = new McapFilter;
+	filter->writeWithOptions(fileName, m_spreadsheet,opts);
+
+	delete filter;
+}
+
 void SpreadsheetView::exportToXLSX(const QString& fileName, const bool exportHeader) const {
 	auto* filter = new XLSXFilter;
 
@@ -4318,6 +4343,8 @@ void SpreadsheetView::exportToXLSX(const QString& fileName, const bool exportHea
 
 	delete filter;
 }
+
+
 
 void SpreadsheetView::exportToSQLite(const QString& path) const {
 	QFile file(path);

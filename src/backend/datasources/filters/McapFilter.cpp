@@ -74,6 +74,11 @@ void McapFilter::write(const QString& fileName, AbstractDataSource* dataSource) 
 	d->write(fileName, dataSource);
 }
 
+void McapFilter::writeWithOptions(const QString& fileName, AbstractDataSource* dataSource,mcap::McapWriterOptions& opts) {
+	d->writeWithOptions(fileName, dataSource,opts);
+}
+
+
 /*!
 returns the list of all predefined data types.
 */
@@ -770,6 +775,16 @@ QVector<QStringList> McapFilterPrivate::preview(int lines) {
 writes the content of \c dataSource to the file \c fileName.
 */
 void McapFilterPrivate::write(const QString& fileName, AbstractDataSource* dataSource) {
+	auto options = mcap::McapWriterOptions("json");
+	return writeWithOptions(fileName,dataSource,options);
+}
+
+
+/*!
+writes the content of \c dataSource to the file \c fileName.
+*/
+void McapFilterPrivate::writeWithOptions(const QString& fileName, AbstractDataSource* dataSource, mcap::McapWriterOptions& opts) {
+
 	auto* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
 
 	DEBUG(Q_FUNC_INFO << fileName.toStdString());
@@ -784,8 +799,7 @@ void McapFilterPrivate::write(const QString& fileName, AbstractDataSource* dataS
 
 	mcap::McapWriter writer;
 	{
-		auto options = mcap::McapWriterOptions("json");
-		const auto res = writer.open(outputFilename, options);
+		const auto res = writer.open(outputFilename, opts);
 		if (!res.ok()) {
 			std::cerr << "Failed to open " << outputFilename << " for writing: " << res.message << std::endl;
 			return;
@@ -811,8 +825,6 @@ void McapFilterPrivate::write(const QString& fileName, AbstractDataSource* dataS
 	int numRows = spreadsheet->rowCount();
 	int numCols = spreadsheet->columnCount();
 
-	qDebug() << "Export spreadsheet with " << numRows << " rows and " << numCols << "columns.";
-
 	for (int row = 0; row < numRows; ++row) {
 		QJsonObject obj;
 		mcap::Message msg;
@@ -822,11 +834,11 @@ void McapFilterPrivate::write(const QString& fileName, AbstractDataSource* dataS
 			QVariant value = spreadsheet->column(col)->valueAt(row);
 			QJsonValue jsonValue = QJsonValue::fromVariant(value);
 			if (columnName == "logTime") { // Special field in MCAP
-				msg.logTime = mcap::Timestamp(value.toLongLong() * 100000);
+				msg.logTime = mcap::Timestamp(value.toLongLong() * 1000000);
 				continue;
 			}
 			if (columnName == "publishTime") { // Special field in MCAP
-				msg.publishTime = mcap::Timestamp(value.toLongLong() * 100000);
+				msg.publishTime = mcap::Timestamp(value.toLongLong() * 1000000);
 				continue;
 			}
 			if (columnName == "sequence") { // Special field in MCAP
@@ -848,8 +860,9 @@ void McapFilterPrivate::write(const QString& fileName, AbstractDataSource* dataS
 			return;
 		}
 	}
-	std::cout << "wrote " << NUM_FRAMES << " " << SCHEMA_NAME << " messages to " << outputFilename << std::endl;
 	writer.close();
+	qDebug() << "Exported spreadsheet with " << numRows << " rows and " << numCols << "columns to" << fileName;
+
 }
 
 // ##############################################################################

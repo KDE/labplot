@@ -19,7 +19,10 @@
 class QJsonDocument;
 class QJsonModel;
 class McapFilterPrivate;
-
+namespace mcap
+{
+    class McapWriterOptions;
+}
 class McapFilter : public AbstractFileFilter {
 	Q_OBJECT
 
@@ -36,7 +39,7 @@ public:
 	void
 	readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace) override;
 	void write(const QString& fileName, AbstractDataSource*) override;
-
+	void writeWithOptions(const QString& fileName, AbstractDataSource* datasource,mcap::McapWriterOptions& opts);
 	QVector<QStringList> preview(const QString& fileName, int lines);
 
 	void setDataRowType(const QJsonValue::Type);

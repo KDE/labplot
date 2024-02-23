@@ -2076,7 +2076,6 @@ void ImportFileWidget::updateContent(const QString& fileName) {
 
 			doc = mcap_filter->getJsonDocument(fileName);
 			m_mcapOptionsWidget->loadDocument(doc);
-			ui.tvJson->setExpanded(m_mcapOptionsWidget->model()->index(0, 0), true); // expand the root node
 			break;
 			}
 		case AbstractFileFilter::FileType::MATIO:

@@ -15,6 +15,7 @@
 
 #include "backend/core/AbstractColumn.h"
 #include "backend/lib/IntervalAttribute.h"
+#include <3rdparty/mcap/include/mcap/writer.hpp>
 #include <QLocale>
 
 class AbstractAspect;
@@ -93,6 +94,7 @@ private:
 	void exportToFits(const QString& path, int exportTo, bool commentsAsUnits) const;
 	void exportToXLSX(const QString& path, bool exportHeaders) const;
 	void exportToSQLite(const QString& path) const;
+	void exportToMCAP(const QString& path,mcap::McapWriterOptions opts) const;
 	int maxRowToExport() const;
 	bool hasValues(const QVector<Column*>);
 
