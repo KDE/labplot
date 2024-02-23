@@ -2273,12 +2273,11 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 
 void OriginProjectParser::loadBackground(const Origin::GraphCurve& originCurve, Background* background) const {
 	DEBUG(Q_FUNC_INFO << ", fill area? " << originCurve.fillArea)
-	// TODO: fillArea option not used in Origin?
-	/*	if (!originCurve.fillArea) {
-			background->setPosition(Background::Position::No);
-			return;
-		}
-	*/
+	// fillArea option not used in histogram
+	if (!originCurve.fillArea && originCurve.type != Origin::GraphCurve::Histogram) {
+		background->setPosition(Background::Position::No);
+		return;
+	}
 	// TODO: handle unsigned char fillAreaType;
 	// with 'fillAreaType'=0x10 the area between the curve and the x-axis is filled
 	// with 'fillAreaType'=0x14 the area included inside the curve is filled. First and last curve points are joined by a line to close the otherwise open
