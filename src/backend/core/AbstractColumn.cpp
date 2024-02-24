@@ -72,6 +72,7 @@ AbstractColumn::AbstractColumn(const QString& name, AspectType type)
 
 AbstractColumn::~AbstractColumn() {
 	Q_EMIT aboutToBeDestroyed(this);
+	delete d->m_heatmapFormat;
 	delete d;
 }
 

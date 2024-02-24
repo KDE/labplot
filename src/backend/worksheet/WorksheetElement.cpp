@@ -870,11 +870,15 @@ void WorksheetElementPrivate::updatePosition() {
 }
 
 bool WorksheetElementPrivate::sceneEvent(QEvent* event) {
-	// don't allow to move the element with the mouse or with the cursor keys if it's locked, react on all other events
-	if (lock && (event->type() == QEvent::GraphicsSceneMouseMove || event->type() == QEvent::KeyPress)) {
+	// don't allow to move the element with the mouse or with the cursor keys if it's locked
+	// or if its not movable (ItemIsMovable blocks mouse moves only, we also need to block key press events),
+	// react on all other events
+	if ((lock && (event->type() == QEvent::GraphicsSceneMouseMove || event->type() == QEvent::KeyPress)) ||
+		(!flags().testFlag(QGraphicsItem::ItemIsMovable) && event->type() == QEvent::KeyPress)) {
 		event->ignore();
 		return true;
 	}
+
 	return QGraphicsItem::sceneEvent(event);
 }
 
