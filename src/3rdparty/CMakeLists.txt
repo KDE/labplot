@@ -72,7 +72,7 @@ if (ENABLE_VECTOR_BLF)
       FetchContent_Declare(
         dbc_parser_cpp
         GIT_REPOSITORY https://github.com/LinuxDevon/dbc_parser_cpp.git
-        GIT_TAG 0f3b22b3fe124976a86a85fcd1bfdd55c20ca428 # At least this version is needed!
+        GIT_TAG 753119d6615674876d5f21216438d8dd663bca92
       )
       # fix missing variable and keyword for fast_float
       IF (NOT MSVC_FOUND)
