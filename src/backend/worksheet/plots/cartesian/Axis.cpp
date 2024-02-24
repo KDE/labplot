@@ -1088,6 +1088,7 @@ AxisPrivate::AxisPrivate(Axis* owner)
 	, q(owner) {
 	setFlag(QGraphicsItem::ItemIsSelectable, true);
 	setFlag(QGraphicsItem::ItemIsFocusable, true);
+	setFlag(QGraphicsItem::ItemIsMovable, false);
 	setAcceptHoverEvents(true);
 }
 
