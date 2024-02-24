@@ -36,8 +36,8 @@ public:
 	static QStringList dataRowTypes();
 	static QString fileInfoString(const QString&);
 
-	void
-	readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace) override;
+	
+	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace) override;
 	void write(const QString& fileName, AbstractDataSource*) override;
 	void writeWithOptions(const QString& fileName, AbstractDataSource* datasource,mcap::McapWriterOptions& opts);
 	QVector<QStringList> preview(const QString& fileName, int lines);
@@ -76,6 +76,7 @@ public:
 	QJsonDocument getJsonDocument(const QString&);
 	QVector<QString> getValidTopics(const QString& fileName);
 	void setCurrentTopic(QString currentTopic);
+	QString getCurrentTopic();
 private:
 	std::unique_ptr<McapFilterPrivate> const d;
 	friend class McapFilterPrivate;

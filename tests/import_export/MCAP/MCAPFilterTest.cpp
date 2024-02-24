@@ -97,11 +97,14 @@ void MCAPFilterTest::testArrayImport() {
 }
 
 void MCAPFilterTest::testExport() {
+
+		QElapsedTimer timer_import;
+		timer_import.start();
+
 		Spreadsheet spreadsheet(QStringLiteral("test"), false);
 		McapFilter filter;
 
-		//const QString& fileName = QFINDTESTDATA("data/basic_NONE.mcap");
-		const QString& fileName = QFINDTESTDATA("/media/raphael/Raphael0/t/nuscenes2mcap/output/NuScenes-v1.0-mini-scene-0103.mcap");
+		const QString& fileName = QFINDTESTDATA("data/basic_LZ4.mcap");
 
 		AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode::Replace;
 		filter.setCreateIndexEnabled(true);
@@ -111,10 +114,16 @@ void MCAPFilterTest::testExport() {
 
 		//QCOMPARE(spreadsheet.columnCount(), 5);
 		//QCOMPARE(spreadsheet.rowCount(), 10);
+		qDebug() << "The importing took" << timer_import.elapsed() << "milliseconds";
 
+		QElapsedTimer timer_export;
+		timer_export.start();
 
-		filter.write("/home/raphael/basic_out.mcap",&spreadsheet);
-		QCOMPARE(QFile::exists("/home/raphael/basic_out.mcap"),true);
+		filter.write("/tmp/basic_out.mcap",&spreadsheet);
+		QCOMPARE(QFile::exists("/tmp/basic_out.mcap"),true);
+		
+		qDebug() << "The exporting" << timer_export.elapsed() << "milliseconds";
+
 		}
 
 QTEST_MAIN(MCAPFilterTest)

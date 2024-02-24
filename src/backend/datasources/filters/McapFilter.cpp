@@ -386,29 +386,8 @@ void McapFilterPrivate::setValueFromString(int column, int row, const QString& v
 	returns \c true if successful, \c false otherwise.
 */
 bool McapFilterPrivate::prepareDocumentToRead() {
+	DEBUG(Q_FUNC_INFO);
 	PERFTRACE(QStringLiteral("Prepare the JSON document to read"));
-
-	if (modelRows.isEmpty())
-		m_preparedDoc = m_doc;
-	else {
-		if (modelRows.size() == 1)
-			m_preparedDoc = m_doc; // root element selected, use the full document
-		else {
-			// when running tests there is no ImportFileWidget and JsonOptionsWidget available
-			// where the model is created and also passed to JsonFilter. So, we need to create
-			// a model here for in this case.
-			if (!model) {
-				model = new QJsonModel();
-				model->loadJson(m_doc);
-			}
-
-			QModelIndex index;
-			for (auto& it : modelRows)
-				index = model->index(it, 0, index);
-
-			m_preparedDoc = model->genJsonByIndex(index);
-		}
-	}
 
 	if (!m_preparedDoc.isEmpty()) {
 		if (m_preparedDoc.isArray())
@@ -478,6 +457,7 @@ bool McapFilterPrivate::prepareDocumentToRead() {
 }
 
 int McapFilterPrivate::mcapToJson(const QString& fileName, int lines) {
+	DEBUG(Q_FUNC_INFO);
 	DEBUG("MCAP Filter mcapToJson:" << STDSTRING(current_topic));
 
 	mcap::McapReader reader;
@@ -568,7 +548,7 @@ int McapFilterPrivate::mcapToJson(const QString& fileName, int lines) {
 
 	// qDebug() << finalJsonDocument.toJson(QJsonDocument::Compact);
 
-	m_doc = finalJsonDocument;
+	m_preparedDoc = finalJsonDocument;
 	return msg_count;
 }
 
@@ -588,6 +568,8 @@ void McapFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSo
 import the content of document \c m_preparedDoc to the data source \c dataSource. Uses the settings defined in the data source.
 */
 void McapFilterPrivate::importData(AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
+	DEBUG(Q_FUNC_INFO);
+
 	m_columnOffset = dataSource->prepareImport(m_dataContainer, importMode, m_actualRows, m_actualCols, vectorNames, columnModes);
 	int rowOffset = startRow - 1;
 	int colOffset = (int)createIndexEnabled + (int)importObjectNames;
@@ -685,14 +667,11 @@ void McapFilterPrivate::importData(AbstractDataSource* dataSource, AbstractFileF
 generates the preview for the file \c fileName.
 */
 QVector<QStringList> McapFilterPrivate::preview(const QString& fileName, int lines) {
-	DEBUG(Q_FUNC_INFO);
+	DEBUG(Q_FUNC_INFO << "lines=" << std::to_string(lines));
 
-	if (!m_prepared) {
-		mcapToJson(fileName, lines);
-		bool success = prepareDocumentToRead();
-		return preview(lines);
-	} else
-		return preview(lines);
+	mcapToJson(fileName, lines);
+	bool success = prepareDocumentToRead();
+	return preview(lines);
 }
 
 /*!
@@ -775,6 +754,8 @@ QVector<QStringList> McapFilterPrivate::preview(int lines) {
 writes the content of \c dataSource to the file \c fileName.
 */
 void McapFilterPrivate::write(const QString& fileName, AbstractDataSource* dataSource) {
+	DEBUG(Q_FUNC_INFO);
+
 	auto options = mcap::McapWriterOptions("json");
 	return writeWithOptions(fileName,dataSource,options);
 }
@@ -784,6 +765,7 @@ void McapFilterPrivate::write(const QString& fileName, AbstractDataSource* dataS
 writes the content of \c dataSource to the file \c fileName.
 */
 void McapFilterPrivate::writeWithOptions(const QString& fileName, AbstractDataSource* dataSource, mcap::McapWriterOptions& opts) {
+	DEBUG(Q_FUNC_INFO);
 
 	auto* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
 
@@ -924,6 +906,7 @@ bool McapFilter::load(XmlStreamReader* reader) {
 }
 
 QJsonDocument McapFilter::getJsonDocument(const QString& fileName) {
+	DEBUG(Q_FUNC_INFO);
 	return d->getJsonDocument(fileName);
 }
 
@@ -982,6 +965,8 @@ QJsonObject McapFilterPrivate::mergeJsonObjects(const QJsonObject& obj1, const Q
 }
 
 QVector<QString> McapFilterPrivate::getValidTopics(const QString& fileName) {
+	DEBUG(Q_FUNC_INFO);
+
 	QVector<QString> valid_topics;
 	mcap::McapReader reader;
 	{
@@ -1009,6 +994,7 @@ QVector<QString> McapFilter::getValidTopics(const QString& fileName) {
 }
 
 void McapFilterPrivate::setCurrentTopic(QString topic) {
+	DEBUG(Q_FUNC_INFO);
 	if (current_topic != topic) {
 		m_prepared = false;
 	}
@@ -1016,5 +1002,15 @@ void McapFilterPrivate::setCurrentTopic(QString topic) {
 }
 
 void McapFilter::setCurrentTopic(QString topic) {
+	DEBUG(Q_FUNC_INFO);
 	d->setCurrentTopic(topic);
+}
+
+QString McapFilterPrivate::getCurrentTopic() {
+	DEBUG(Q_FUNC_INFO);
+	return current_topic;
+}
+
+QString McapFilter::getCurrentTopic() {
+	return d->getCurrentTopic();
 }

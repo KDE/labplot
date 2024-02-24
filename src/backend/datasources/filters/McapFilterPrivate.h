@@ -66,7 +66,7 @@ public:
 	
 	QVector<QString> getValidTopics(const QString& fileName);
 	void setCurrentTopic(QString currentTopic);
-
+	QString getCurrentTopic();
 private:
 	int m_actualRows{0};
 	int m_actualCols{0};

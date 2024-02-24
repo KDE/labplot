@@ -29,23 +29,18 @@
 */
 McapOptionsWidget::McapOptionsWidget(QWidget* parent)
 	: QWidget(parent)
-	, m_model(new QJsonModel()) {
+	{
 	ui.setupUi(parent);
 
 	ui.cbDecimalSeparator->addItem(i18n("Point '.'"));
 	ui.cbDecimalSeparator->addItem(i18n("Comma ','"));
 	ui.cbDateTimeFormat->addItems(AbstractColumn::dateTimeFormats());
 
-	connect(m_model, &QJsonModel::error, this, &McapOptionsWidget::error);
-
 	setTooltips();
 }
 
 void McapOptionsWidget::applyFilterSettings(McapFilter* filter, const QModelIndex& index) const {
 	Q_ASSERT(filter);
-
-	filter->setModel(m_model);
-	filter->setModelRows(getIndexRows(index));
 
 	QLocale::Language lang;
 	if (ui.cbDecimalSeparator->currentIndex() == 0)
@@ -61,17 +56,6 @@ void McapOptionsWidget::applyFilterSettings(McapFilter* filter, const QModelInde
 
 	// TODO: change this after implementation other row types
 	filter->setDataRowType(QJsonValue::Object);
-	if (!index.isValid())
-		return;
-	auto* item = static_cast<QJsonTreeItem*>(index.internalPointer());
-	if (item->childCount() < 1)
-		return;
-	filter->setDataRowType(item->child(0)->type());
-}
-
-void McapOptionsWidget::clearModel() {
-	m_model->clear();
-	m_filename.clear();
 }
 
 void McapOptionsWidget::loadSettings() const {
@@ -95,18 +79,6 @@ void McapOptionsWidget::saveSettings() {
 	conf.writeEntry("CreateIndex", ui.chbCreateIndex->isChecked());
 	conf.writeEntry("ConvertNaNToZero", ui.chbConvertNaNToZero->isChecked());
 	conf.writeEntry("ParseRowsName", ui.chbImportObjectNames->isChecked());
-}
-
-void McapOptionsWidget::loadDocument(const QJsonDocument& doc) {
-	PERFTRACE(QStringLiteral("McapOptionsWidget::loadDocument"));
-
-	m_model->clear();
-	if (!m_model->loadJson(doc.toJson()))
-		clearModel();
-}
-
-QAbstractItemModel* McapOptionsWidget::model() {
-	return m_model;
 }
 
 void McapOptionsWidget::setTooltips() {
@@ -175,14 +147,4 @@ void McapOptionsWidget::setTooltips() {
 	ui.lDateTimeFormat->setWhatsThis(textDateTimeFormat);
 	ui.cbDateTimeFormat->setToolTip(textDateTimeFormatShort);
 	ui.cbDateTimeFormat->setWhatsThis(textDateTimeFormat);
-}
-
-QVector<int> McapOptionsWidget::getIndexRows(const QModelIndex& index) const {
-	QVector<int> rows;
-	QModelIndex current = index;
-	while (current.isValid()) {
-		rows.prepend(current.row());
-		current = current.parent();
-	}
-	return rows;
 }

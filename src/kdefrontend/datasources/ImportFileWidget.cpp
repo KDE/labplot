@@ -1407,13 +1407,11 @@ void ImportFileWidget::initOptionsWidget() {
 		if (!m_mcapOptionsWidget) {
 			auto* jsonw = new QWidget();
 			m_mcapOptionsWidget = std::unique_ptr<McapOptionsWidget>(new McapOptionsWidget(jsonw));
-			ui.tvJson->setModel(m_mcapOptionsWidget->model());
 			ui.swOptions->addWidget(jsonw);
 			m_mcapOptionsWidget->loadSettings();
 
 			connect(m_mcapOptionsWidget.get(), &McapOptionsWidget::error, this, &ImportFileWidget::error);
-		} else
-			m_mcapOptionsWidget->clearModel();
+		}
 		ui.swOptions->setCurrentWidget(m_mcapOptionsWidget->parentWidget());
 		break;
 	case AbstractFileFilter::FileType::ROOT:
@@ -1881,10 +1879,6 @@ void ImportFileWidget::refreshPreview() {
 		DEBUG("Current selected topic" << STDSTRING(current_topic));
 		filter->setCurrentTopic(current_topic);
 		importedStrings = filter->preview(file, lines);
-
-		doc = filter->getJsonDocument(file);
-		m_mcapOptionsWidget->loadDocument(doc);	
-	
 		vectorNameList = filter->vectorNames();
 		columnModes = filter->columnModes();
 		break;
@@ -2024,7 +2018,6 @@ void ImportFileWidget::updateContent(const QString& fileName) {
 
 	QApplication::processEvents(QEventLoop::AllEvents, 0);
 	WAIT_CURSOR;
-	QJsonDocument doc;
 	QString current_topic;
 	QVector<QString> topics;
 	DEBUG(Q_FUNC_INFO << ", file name = " << STDSTRING(fileName));
@@ -2073,9 +2066,6 @@ void ImportFileWidget::updateContent(const QString& fileName) {
 			current_topic = ui.cbTopics->currentText();
 			DEBUG("Current selected topic" << STDSTRING(current_topic));
 			mcap_filter->setCurrentTopic(current_topic);
-
-			doc = mcap_filter->getJsonDocument(fileName);
-			m_mcapOptionsWidget->loadDocument(doc);
 			break;
 			}
 		case AbstractFileFilter::FileType::MATIO:
@@ -2401,7 +2391,10 @@ void ImportFileWidget::changeTopic() {
 	if (auto filter = currentFileFilter()) {
 		switch (filter->type()) {
 		case AbstractFileFilter::FileType::MCAP: {
-			refreshPreview();
+			auto mcap_filter = static_cast<McapFilter*>(filter);
+			if(!(mcap_filter->getCurrentTopic()==ui.cbTopics->currentText())){
+				refreshPreview();
+			}
 		}
 		}
 	}
