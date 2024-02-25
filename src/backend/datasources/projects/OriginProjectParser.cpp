@@ -318,21 +318,21 @@ void OriginProjectParser::restorePointers(Project* project) {
 		// x-column
 		auto spreadsheetName = curve->xColumnPath();
 		spreadsheetName.truncate(curve->xColumnPath().lastIndexOf(QLatin1Char('/')));
-		DEBUG(Q_FUNC_INFO << ", SPREADSHEET name from column: " << STDSTRING(spreadsheetName))
+		// DEBUG(Q_FUNC_INFO << ", SPREADSHEET name from column: " << STDSTRING(spreadsheetName))
 		for (const auto* spreadsheet : spreadsheets) {
 			QString container, containerPath = spreadsheet->parentAspect()->path();
 			if (spreadsheetName.contains(QLatin1Char('/'))) { // part of a workbook
 				container = containerPath.mid(containerPath.lastIndexOf(QLatin1Char('/')) + 1) + QLatin1Char('/');
 				containerPath = containerPath.left(containerPath.lastIndexOf(QLatin1Char('/')));
 			}
-			DEBUG("CONTAINER = " << STDSTRING(container))
-			DEBUG("CONTAINER PATH = " << STDSTRING(containerPath))
-			DEBUG(Q_FUNC_INFO << ", LOOP spreadsheet names = \"" << STDSTRING(container) +
-				STDSTRING(spreadsheet->name()) << "\", path = " << STDSTRING(spreadsheetName))
-			DEBUG("SPREADSHEET parent path = " << STDSTRING(spreadsheet->parentAspect()->path()))
+			// DEBUG("CONTAINER = " << STDSTRING(container))
+			// DEBUG("CONTAINER PATH = " << STDSTRING(containerPath))
+			// DEBUG(Q_FUNC_INFO << ", LOOP spreadsheet names = \"" << STDSTRING(container) +
+			//	STDSTRING(spreadsheet->name()) << "\", path = " << STDSTRING(spreadsheetName))
+			// DEBUG("SPREADSHEET parent path = " << STDSTRING(spreadsheet->parentAspect()->path()))
 			if (container + spreadsheet->name() == spreadsheetName) {
 				const QString& newPath = containerPath + QLatin1Char('/') + curve->xColumnPath();
-				DEBUG(Q_FUNC_INFO << ", SET COLUMN PATH to \"" << STDSTRING(newPath) << "\"")
+				// DEBUG(Q_FUNC_INFO << ", SET COLUMN PATH to \"" << STDSTRING(newPath) << "\"")
 				curve->setXColumnPath(newPath);
 
 				RESTORE_COLUMN_POINTER(curve, xColumn, XColumn);
@@ -359,28 +359,41 @@ void OriginProjectParser::restorePointers(Project* project) {
 		}
 		DEBUG(Q_FUNC_INFO << ", curve x/y COLUMNS = " << curve->xColumn() << "/" << curve->yColumn())
 
-		// TODO: error columns
-		// y-error-column
-		spreadsheetName = curve->errorBar()->yPlusColumnPath();
-		spreadsheetName.truncate(curve->errorBar()->yPlusColumnPath().lastIndexOf(QLatin1Char('/')));
-		DEBUG(Q_FUNC_INFO << ", SPREADSHEET name from column: " << STDSTRING(spreadsheetName))
+		// error columns
+		// x-error-column
+		spreadsheetName = curve->errorBar()->xPlusColumnPath();
+		spreadsheetName.truncate(curve->errorBar()->xPlusColumnPath().lastIndexOf(QLatin1Char('/')));
 		for (const auto* spreadsheet : spreadsheets) {
 			QString container, containerPath = spreadsheet->parentAspect()->path();
 			if (spreadsheetName.contains(QLatin1Char('/'))) { // part of a workbook
 				container = containerPath.mid(containerPath.lastIndexOf(QLatin1Char('/')) + 1) + QLatin1Char('/');
 				containerPath = containerPath.left(containerPath.lastIndexOf(QLatin1Char('/')));
 			}
-			DEBUG("CONTAINER = " << STDSTRING(container))
-			DEBUG("CONTAINER PATH = " << STDSTRING(containerPath))
-			DEBUG(Q_FUNC_INFO << ", LOOP spreadsheet names = \"" << STDSTRING(container) +
-				STDSTRING(spreadsheet->name()) << "\", path = " << STDSTRING(spreadsheetName))
-			DEBUG("SPREADSHEET parent path = " << STDSTRING(spreadsheet->parentAspect()->path()))
+			if (container + spreadsheet->name() == spreadsheetName) {
+				const QString& newPath = containerPath + QLatin1Char('/') + curve->errorBar()->xPlusColumnPath();
+				DEBUG(Q_FUNC_INFO << ", SET COLUMN PATH to \"" << STDSTRING(newPath) << "\"")
+				curve->errorBar()->setXPlusColumnPath(newPath);
+
+				// not needed
+				// RESTORE_COLUMN_POINTER(curve, errorBar()->yPlusColumn, errorBar()->YPlusColumn);
+				break;
+			}
+		}
+		// y-error-column
+		spreadsheetName = curve->errorBar()->yPlusColumnPath();
+		spreadsheetName.truncate(curve->errorBar()->yPlusColumnPath().lastIndexOf(QLatin1Char('/')));
+		for (const auto* spreadsheet : spreadsheets) {
+			QString container, containerPath = spreadsheet->parentAspect()->path();
+			if (spreadsheetName.contains(QLatin1Char('/'))) { // part of a workbook
+				container = containerPath.mid(containerPath.lastIndexOf(QLatin1Char('/')) + 1) + QLatin1Char('/');
+				containerPath = containerPath.left(containerPath.lastIndexOf(QLatin1Char('/')));
+			}
 			if (container + spreadsheet->name() == spreadsheetName) {
 				const QString& newPath = containerPath + QLatin1Char('/') + curve->errorBar()->yPlusColumnPath();
-				DEBUG(Q_FUNC_INFO << ", SET COLUMN PATH to \"" << STDSTRING(newPath) << "\"")
 				curve->errorBar()->setYPlusColumnPath(newPath);
 
-				//TODO: RESTORE_COLUMN_POINTER(curve, errorBar()->yPlusColumn, errorBar()->YPlusColumn);
+				// not needed
+				// RESTORE_COLUMN_POINTER(curve, errorBar()->yPlusColumn, errorBar()->YPlusColumn);
 				break;
 			}
 		}
@@ -1763,19 +1776,21 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 						curve->setLegendVisible(enableCurveInLegend);
 					}
 				} else { // error "curves"
-					DEBUG(Q_FUNC_INFO << ", ERROR CURVE. curve index = " << curveIndex)
-					// TODO: find corresponing curve to add error column
-					// is it the previous curve or one with the same y column?
-					DEBUG(Q_FUNC_INFO << ", x column path = " << xColumnPath.toStdString());
-					if (!preview) {	// curves not added in preview
+					// DEBUG(Q_FUNC_INFO << ", ERROR CURVE. curve index = " << curveIndex)
+					// find corresponing curve to add error column
+					// we use the previous curve if it has the same y column
+					if (!preview) { // curves not available in preview
 						auto childIndex = plot->childCount<XYCurve>() - 1; // last curve
-						DEBUG("XYCurve CHILD index = " << childIndex);
 						auto curve = plot->children<XYCurve>().at(childIndex);
-						DEBUG("curve y column path = " << curve->yColumnPath().toStdString())
-						// TODO: set error column (depending on type)
 						if (xColumnPath == curve->yColumnPath()) {
-							curve->errorBar()->setYErrorType(ErrorBar::ErrorType::Symmetric);
-							curve->errorBar()->setYPlusColumnPath(yColumnPath);
+							if (type == Origin::GraphCurve::ErrorBar) {
+								curve->errorBar()->setYErrorType(ErrorBar::ErrorType::Symmetric);
+								curve->errorBar()->setYPlusColumnPath(yColumnPath);
+							} else if (type == Origin::GraphCurve::XErrorBar) {
+								curve->errorBar()->setXErrorType(ErrorBar::ErrorType::Symmetric);
+								curve->errorBar()->setXPlusColumnPath(yColumnPath);
+							}
+							// TODO: YErrorBar, XYErrorBar
 						}
 					}
 				}
