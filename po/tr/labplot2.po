@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-23 01:33+0000\n"
-"PO-Revision-Date: 2024-02-23 12:18+0300\n"
+"POT-Creation-Date: 2024-02-25 01:41+0000\n"
+"PO-Revision-Date: 2024-02-24 22:09+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -173,37 +173,37 @@ msgstr "'name' özniteliği eksik veya boş."
 msgid "Invalid creation time for '%1'. Using current time."
 msgstr "'%1' için geçersiz oluşturma zamanı. Geçerli zaman kullanılıyor."
 
-#: src/backend/core/AbstractColumn.cpp:134
+#: src/backend/core/AbstractColumn.cpp:135
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:68
 #, kde-format
 msgid "Milliseconds"
 msgstr "Milisaniye"
 
-#: src/backend/core/AbstractColumn.cpp:136
+#: src/backend/core/AbstractColumn.cpp:137
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:67
 #, kde-format
 msgid "Seconds"
 msgstr "Saniye"
 
-#: src/backend/core/AbstractColumn.cpp:138
+#: src/backend/core/AbstractColumn.cpp:139
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:66
 #, kde-format
 msgid "Minutes"
 msgstr "Dakika"
 
-#: src/backend/core/AbstractColumn.cpp:140
+#: src/backend/core/AbstractColumn.cpp:141
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:65
 #, kde-format
 msgid "Hours"
 msgstr "Saat"
 
-#: src/backend/core/AbstractColumn.cpp:142
+#: src/backend/core/AbstractColumn.cpp:143
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:64
 #, kde-format
 msgid "Days"
 msgstr "Gün"
 
-#: src/backend/core/AbstractColumn.cpp:158 src/backend/nsl/nsl_conv.c:22
+#: src/backend/core/AbstractColumn.cpp:159 src/backend/nsl/nsl_conv.c:22
 #: src/backend/nsl/nsl_conv.c:23 src/backend/nsl/nsl_corr.c:19
 #: src/backend/nsl/nsl_smooth.c:22 src/kdefrontend/dockwidgets/AxisDock.cpp:275
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:288
@@ -216,79 +216,79 @@ msgstr "Gün"
 msgid "None"
 msgstr "Hiçbiri"
 
-#: src/backend/core/AbstractColumn.cpp:171
+#: src/backend/core/AbstractColumn.cpp:172
 #, kde-format
 msgid "X-Uncertainty"
 msgstr "X Belirsizliği"
 
-#: src/backend/core/AbstractColumn.cpp:173
+#: src/backend/core/AbstractColumn.cpp:174
 #, kde-format
 msgid "X-Error"
 msgstr "X Hatası"
 
-#: src/backend/core/AbstractColumn.cpp:177
+#: src/backend/core/AbstractColumn.cpp:178
 #, kde-format
 msgid "X-Uncertainty +"
 msgstr "X Belirsizliği +"
 
-#: src/backend/core/AbstractColumn.cpp:179
+#: src/backend/core/AbstractColumn.cpp:180
 #, kde-format
 msgid "X-Error +"
 msgstr "X Hatası +"
 
-#: src/backend/core/AbstractColumn.cpp:183
+#: src/backend/core/AbstractColumn.cpp:184
 #, kde-format
 msgid "X-Uncertainty -"
 msgstr "X Belirsizliği -"
 
-#: src/backend/core/AbstractColumn.cpp:185
+#: src/backend/core/AbstractColumn.cpp:186
 #, kde-format
 msgid "X-Error -"
 msgstr "X Hatası -"
 
-#: src/backend/core/AbstractColumn.cpp:189
+#: src/backend/core/AbstractColumn.cpp:190
 #, kde-format
 msgid "Y-Uncertainty"
 msgstr "Y Belirsizliği"
 
-#: src/backend/core/AbstractColumn.cpp:191
+#: src/backend/core/AbstractColumn.cpp:192
 #, kde-format
 msgid "Y-Error"
 msgstr "Y Hatası"
 
-#: src/backend/core/AbstractColumn.cpp:195
+#: src/backend/core/AbstractColumn.cpp:196
 #, kde-format
 msgid "Y-Uncertainty +"
 msgstr "Y Belirsizliği +"
 
-#: src/backend/core/AbstractColumn.cpp:197
+#: src/backend/core/AbstractColumn.cpp:198
 #, kde-format
 msgid "Y-Error +"
 msgstr "Y Hatası +"
 
-#: src/backend/core/AbstractColumn.cpp:201
+#: src/backend/core/AbstractColumn.cpp:202
 #, kde-format
 msgid "Y-Uncertainty -"
 msgstr "Y Belirsizliği -"
 
-#: src/backend/core/AbstractColumn.cpp:203
+#: src/backend/core/AbstractColumn.cpp:204
 #, kde-format
 msgid "Y-Error -"
 msgstr "Y Hatası -"
 
-#: src/backend/core/AbstractColumn.cpp:222
+#: src/backend/core/AbstractColumn.cpp:223
 #: src/backend/datasources/filters/MatioFilter.cpp:382
 #: src/backend/datasources/filters/MatioFilter.cpp:428
 #, kde-format
 msgid "Double"
 msgstr "Ondalıklı"
 
-#: src/backend/core/AbstractColumn.cpp:224
+#: src/backend/core/AbstractColumn.cpp:225
 #, kde-format
 msgid "Integer"
 msgstr "Tamsayı"
 
-#: src/backend/core/AbstractColumn.cpp:226
+#: src/backend/core/AbstractColumn.cpp:227
 #, kde-format
 msgid "Big Integer"
 msgstr "Büyük Tamsayı"
@@ -296,7 +296,7 @@ msgstr "Büyük Tamsayı"
 #. i18n: ectx: property (text), widget (QLabel, lLabelsText)
 #. i18n: ectx: property (text), widget (QLabel, lText)
 #. i18n: ectx: property (text), widget (QLabel, lValuesText)
-#: src/backend/core/AbstractColumn.cpp:228
+#: src/backend/core/AbstractColumn.cpp:229
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:437
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:95
 #: src/commonfrontend/worksheet/WorksheetView.cpp:220
@@ -310,29 +310,29 @@ msgid "Text"
 msgstr "Metin"
 
 #. i18n: ectx: property (text), widget (QLabel, lDateTime)
-#: src/backend/core/AbstractColumn.cpp:230
+#: src/backend/core/AbstractColumn.cpp:231
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:210
 #: src/kdefrontend/ui/spreadsheet/equidistantvalueswidget.ui:120
 #, kde-format
 msgid "Date & Time"
 msgstr "Tarih ve Zaman"
 
-#: src/backend/core/AbstractColumn.cpp:232
+#: src/backend/core/AbstractColumn.cpp:233
 #, kde-format
 msgid "Month Names"
 msgstr "Ay Adları"
 
-#: src/backend/core/AbstractColumn.cpp:234
+#: src/backend/core/AbstractColumn.cpp:235
 #, kde-format
 msgid "Day Names"
 msgstr "Gün Adları"
 
-#: src/backend/core/AbstractColumn.cpp:237
+#: src/backend/core/AbstractColumn.cpp:238
 #, kde-format
 msgid "UNDEFINED"
 msgstr "TANIMLANMAMIŞ"
 
-#: src/backend/core/AbstractColumn.cpp:327
+#: src/backend/core/AbstractColumn.cpp:328
 #: src/backend/spreadsheet/Spreadsheet.cpp:199
 #, kde-format
 msgid "%1: insert 1 row"
@@ -340,7 +340,7 @@ msgid_plural "%1: insert %2 rows"
 msgstr[0] "%1: 1 satır ekle"
 msgstr[1] "%1: %2 satır ekle"
 
-#: src/backend/core/AbstractColumn.cpp:329
+#: src/backend/core/AbstractColumn.cpp:330
 #: src/backend/spreadsheet/Spreadsheet.cpp:201
 #, kde-format
 msgid "%1: remove 1 row"
@@ -348,7 +348,7 @@ msgid_plural "%1: remove %2 rows"
 msgstr[0] "%1: 1 satır sil"
 msgstr[1] "%1: %2 satır sil"
 
-#: src/backend/core/AbstractColumn.cpp:925
+#: src/backend/core/AbstractColumn.cpp:926
 #, kde-format
 msgid "invalid or missing start or end row"
 msgstr "başlangıç ve bitiş satırı geçersiz veya eksik"
@@ -1530,7 +1530,7 @@ msgstr "Seçili veri kümesi yok"
 #: src/backend/datasources/filters/HDF5Filter.cpp:1582
 #, kde-format
 msgid "rank 0 not implemented yet for type %1"
-msgstr "tür %1 için sıra 0 henüz gerçekleştirilmemiş"
+msgstr "tür %1 için sıra 0 henüz gerçeklenmedi"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:1716
 #: src/backend/datasources/filters/HDF5Filter.cpp:1855
@@ -1546,7 +1546,7 @@ msgstr "sıra 1 için desteklenmeyen kayan noktalı sayı türü"
 #: src/backend/datasources/filters/HDF5Filter.cpp:1872
 #, kde-format
 msgid "rank 1 not implemented yet for type %1"
-msgstr "tür %1 için sıra 1 henüz gerçekleştirilmemiş"
+msgstr "tür %1 için sıra 1 henüz gerçeklenmedi"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:2000
 #, kde-format
@@ -1561,12 +1561,12 @@ msgstr "sıra 2 için desteklenmeyen kayan noktalı sayı türü"
 #: src/backend/datasources/filters/HDF5Filter.cpp:2078
 #, kde-format
 msgid "rank 2 not implemented yet for type %1"
-msgstr "tür %1 için sıra 2 henüz gerçekleştirilmemiş"
+msgstr "tür %1 için sıra 2 henüz gerçeklenmedi"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:2088
 #, kde-format
 msgid "rank %1 not implemented yet for type %2"
-msgstr "tür %2 için sıra %1 henüz gerçekleştirilmemiş"
+msgstr "tür %2 için sıra %1 henüz gerçeklenmedi"
 
 #: src/backend/datasources/filters/ImageFilter.cpp:36
 #, kde-format
@@ -1863,7 +1863,7 @@ msgstr "Yapı alan içermiyor"
 #: src/backend/datasources/filters/MatioFilter.cpp:1212
 #, kde-format
 msgid "Not implemented yet"
-msgstr "Henüz gerçekleştirilmemiş"
+msgstr "Henüz gerçeklenmedi"
 
 #: src/backend/datasources/filters/NetCDFFilter.cpp:213
 #, kde-format
@@ -2974,7 +2974,7 @@ msgstr "İstenilen özellik donanım tarafından desteklenmiyor"
 #: src/backend/gsl/errors.h:70
 #, kde-format
 msgid "Requested feature not (yet) implemented"
-msgstr "İstenilen özellik (henüz) gerçekleştirilmedi"
+msgstr "İstenilen özellik (henüz) gerçeklenmedi"
 
 #: src/backend/gsl/errors.h:72
 #, kde-format
@@ -7386,7 +7386,7 @@ msgstr "kullanılabilir veri yok"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTitle)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:165
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5010
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5014
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:483
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:543
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:466
@@ -7792,7 +7792,7 @@ msgid "%1: load default theme"
 msgstr "%1: Öntanımlı temayı yükle"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1694
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5320
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5324
 #: src/backend/worksheet/Worksheet.cpp:818
 #, kde-format
 msgid "%1: set theme"
@@ -7926,24 +7926,24 @@ msgstr "%1: Fourier süzgeci eğrisi ekle"
 msgid "Text Label"
 msgstr "Metin Etiketi"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3719
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3725
 #, kde-format
 msgid "Not inside of the bounding rect"
 msgstr "Sınırlayıcı dörtgenin içinde değil"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3943
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3964
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3949
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3970
 #, kde-format
 msgid "from x=%1 to x=%2"
 msgstr "x=%1 konumundan x=%2 konumuna"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3951
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3977
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3957
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3983
 #, kde-format
 msgid "from y=%1 to y=%2"
 msgstr "y=%1 konumundan y=%2 konumuna"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3996
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4002
 #, kde-format
 msgid "x=%1"
 msgstr "x=%1"
@@ -22451,14 +22451,14 @@ msgstr ""
 "li><li>Markdown - Markdown biçimlendirmesi kullanarak metin ayarları</li></"
 "ul>"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:876
-#: src/kdefrontend/widgets/LabelWidget.cpp:902
+#: src/kdefrontend/widgets/LabelWidget.cpp:875
+#: src/kdefrontend/widgets/LabelWidget.cpp:901
 #, kde-format
 msgid "Date"
 msgstr "Tarih"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:884
-#: src/kdefrontend/widgets/LabelWidget.cpp:910
+#: src/kdefrontend/widgets/LabelWidget.cpp:883
+#: src/kdefrontend/widgets/LabelWidget.cpp:909
 #, kde-format
 msgid "Date and Time"
 msgstr "Tarih ve Zaman"
