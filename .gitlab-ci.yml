@@ -8,9 +8,9 @@ include:
     file:
 # fails
 #      - /gitlab-templates/reuse-lint.yml
-      - /gitlab-templates/linux.yml
+#      - /gitlab-templates/linux.yml
       - /gitlab-templates/windows.yml
-#      - /gitlab-templates/freebsd.yml
+      - /gitlab-templates/freebsd.yml
 # poppler not building due to Qt6 missing (see below)
 #      - /gitlab-templates/flatpak.yml
 #      - /gitlab-templates/craft-appimage.yml
