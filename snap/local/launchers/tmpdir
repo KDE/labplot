@@ -1,5 +1,5 @@
 
 #!/bin/bash
 
-# Set TMPDIR to be under the user's default Downloads dir
-export TMPDIR=$(xdg-user-dir DOWNLOAD)/labplot.tmp
+# Set TMPDIR
+export TMPDIR=$SNAP_USER_DATA/labplot.tmp
