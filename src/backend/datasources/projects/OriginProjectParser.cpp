@@ -318,18 +318,18 @@ void OriginProjectParser::restorePointers(Project* project) {
 		// x-column
 		auto spreadsheetName = curve->xColumnPath();
 		spreadsheetName.truncate(curve->xColumnPath().lastIndexOf(QLatin1Char('/')));
-		// DEBUG(Q_FUNC_INFO << ", SPREADSHEET name from column: " << STDSTRING(spreadsheetName))
+		DEBUG(Q_FUNC_INFO << ", SPREADSHEET name from column: " << STDSTRING(spreadsheetName))
 		for (const auto* spreadsheet : spreadsheets) {
 			QString container, containerPath = spreadsheet->parentAspect()->path();
 			if (spreadsheetName.contains(QLatin1Char('/'))) { // part of a workbook
 				container = containerPath.mid(containerPath.lastIndexOf(QLatin1Char('/')) + 1) + QLatin1Char('/');
 				containerPath = containerPath.left(containerPath.lastIndexOf(QLatin1Char('/')));
 			}
-			// DEBUG("CONTAINER = " << STDSTRING(container))
-			// DEBUG("CONTAINER PATH = " << STDSTRING(containerPath))
-			// DEBUG(Q_FUNC_INFO << ", LOOP spreadsheet names = \"" << STDSTRING(container) +
-			//	STDSTRING(spreadsheet->name()) << "\", path = " << STDSTRING(spreadsheetName))
-			// DEBUG("SPREADSHEET parent path = " << STDSTRING(spreadsheet->parentAspect()->path()))
+			DEBUG("CONTAINER = " << STDSTRING(container))
+			DEBUG("CONTAINER PATH = " << STDSTRING(containerPath))
+			DEBUG(Q_FUNC_INFO << ", LOOP spreadsheet names = \"" << STDSTRING(container) +
+				STDSTRING(spreadsheet->name()) << "\", path = " << STDSTRING(spreadsheetName))
+			DEBUG("SPREADSHEET parent path = " << STDSTRING(spreadsheet->parentAspect()->path()))
 			if (container + spreadsheet->name() == spreadsheetName) {
 				const QString& newPath = containerPath + QLatin1Char('/') + curve->xColumnPath();
 				DEBUG(Q_FUNC_INFO << ", SET COLUMN PATH to \"" << STDSTRING(newPath) << "\"")
@@ -360,6 +360,31 @@ void OriginProjectParser::restorePointers(Project* project) {
 		DEBUG(Q_FUNC_INFO << ", curve x/y COLUMNS = " << curve->xColumn() << "/" << curve->yColumn())
 
 		// TODO: error columns
+		// y-error-column
+		spreadsheetName = curve->errorBar()->yPlusColumnPath();
+		spreadsheetName.truncate(curve->errorBar()->yPlusColumnPath().lastIndexOf(QLatin1Char('/')));
+		DEBUG(Q_FUNC_INFO << ", SPREADSHEET name from column: " << STDSTRING(spreadsheetName))
+		for (const auto* spreadsheet : spreadsheets) {
+			QString container, containerPath = spreadsheet->parentAspect()->path();
+			if (spreadsheetName.contains(QLatin1Char('/'))) { // part of a workbook
+				container = containerPath.mid(containerPath.lastIndexOf(QLatin1Char('/')) + 1) + QLatin1Char('/');
+				containerPath = containerPath.left(containerPath.lastIndexOf(QLatin1Char('/')));
+			}
+			DEBUG("CONTAINER = " << STDSTRING(container))
+			DEBUG("CONTAINER PATH = " << STDSTRING(containerPath))
+			DEBUG(Q_FUNC_INFO << ", LOOP spreadsheet names = \"" << STDSTRING(container) +
+				STDSTRING(spreadsheet->name()) << "\", path = " << STDSTRING(spreadsheetName))
+			DEBUG("SPREADSHEET parent path = " << STDSTRING(spreadsheet->parentAspect()->path()))
+			if (container + spreadsheet->name() == spreadsheetName) {
+				const QString& newPath = containerPath + QLatin1Char('/') + curve->errorBar()->yPlusColumnPath();
+				DEBUG(Q_FUNC_INFO << ", SET COLUMN PATH to \"" << STDSTRING(newPath) << "\"")
+				curve->errorBar()->setYPlusColumnPath(newPath);
+
+				//TODO: RESTORE_COLUMN_POINTER(curve, errorBar()->yPlusColumn, errorBar()->YPlusColumn);
+				break;
+			}
+		}
+		DEBUG(Q_FUNC_INFO << ", curve x/y error COLUMNS = " << curve->errorBar()->xPlusColumn() << "/" << curve->errorBar()->yPlusColumn())
 
 		curve->setSuppressRetransform(false);
 	}
@@ -1589,7 +1614,7 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 	int curveIndex = 1;
 	for (const auto& originCurve : layer.curves) {
 		QString dataName(QString::fromStdString(originCurve.dataName));
-		DEBUG(Q_FUNC_INFO << ", NEW CURVE " << STDSTRING(dataName))
+		DEBUG(Q_FUNC_INFO << ", NEW CURVE. data name = " << STDSTRING(dataName))
 		DEBUG(Q_FUNC_INFO << ", curve x column name = " << originCurve.xColumnName)
 		DEBUG(Q_FUNC_INFO << ", curve y column name = " << originCurve.yColumnName)
 		DEBUG(Q_FUNC_INFO << ", curve x data name = " << originCurve.xDataName)
@@ -1614,6 +1639,7 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 			DEBUG(Q_FUNC_INFO << ", x/y column path = \"" << STDSTRING(xColumnPath) << "\" \"" << STDSTRING(yColumnPath) << "\"")
 
 			const auto type = originCurve.type;
+			DEBUG(Q_FUNC_INFO << ", curve type = " << (int)type)
 			switch (type) {
 			case Origin::GraphCurve::Line:
 			case Origin::GraphCurve::Scatter:
@@ -1725,15 +1751,33 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 
 				DEBUG(Q_FUNC_INFO << ", curve name = \"" << curveName.toStdString() << "\", in legend = " << enableCurveInLegend)
 
-				auto* curve = new XYCurve(curveName);
-				childPlot = curve;
-				curve->setXColumnPath(xColumnPath);
-				curve->setYColumnPath(yColumnPath);
+				if (type == Origin::GraphCurve::Line || type == Origin::GraphCurve::Scatter || type == Origin::GraphCurve::LineSymbol) {
+					auto* curve = new XYCurve(curveName);
+					childPlot = curve;
+					curve->setXColumnPath(xColumnPath);
+					curve->setYColumnPath(yColumnPath);
 
-				curve->setSuppressRetransform(true);
-				if (!preview) {
-					loadCurve(originCurve, curve);
-					curve->setLegendVisible(enableCurveInLegend);
+					curve->setSuppressRetransform(true);
+					if (!preview) {
+						loadCurve(originCurve, curve);
+						curve->setLegendVisible(enableCurveInLegend);
+					}
+				} else { // error "curves"
+					DEBUG(Q_FUNC_INFO << ", ERROR CURVE. curve index = " << curveIndex)
+					// TODO: find corresponing curve to add error column
+					// is it the previous curve or one with the same y column?
+					DEBUG(Q_FUNC_INFO << ", x column path = " << xColumnPath.toStdString());
+					if (!preview) {	// curves not added in preview
+						auto childIndex = plot->childCount<XYCurve>() - 1; // last curve
+						DEBUG("XYCurve CHILD index = " << childIndex);
+						auto curve = plot->children<XYCurve>().at(childIndex);
+						DEBUG("curve y column path = " << curve->yColumnPath().toStdString())
+						// TODO: set error column (depending on type)
+						if (xColumnPath == curve->yColumnPath()) {
+							curve->errorBar()->setYErrorType(ErrorBar::ErrorType::Symmetric);
+							curve->errorBar()->setYPlusColumnPath(yColumnPath);
+						}
+					}
 				}
 			} break;
 			case Origin::GraphCurve::Column:
@@ -1890,6 +1934,7 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 				childPlot->setCoordinateSystemIndex(layerIndex);
 
 			plot->addChildFast(childPlot);
+			DEBUG("ADDED CURVE. child count = " << plot->childCount<XYCurve>())
 			childPlot->setSuppressRetransform(false);
 		}
 
