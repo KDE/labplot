@@ -29,8 +29,8 @@ New features:
 		* When generating values via a mathematical expression ("generate function values"), allow to use variables in CAS-notebooks as source columns
 		* Generatation of equidistant values: support for Date&Time and integer columns
 		* Generatation of equidistant values: allow to fix the number of values and the increment at the same time
-                * Support parsing more functions and operators for formulas and expressions
-                * Added support to show the Sparkline of each respective column
+		* Support parsing more functions and operators for formulas and expressions
+		* Added support to show the Sparkline of each respective column
 	* [notebook]
 		* Export to PDF
 		* "Configure CAS" in the menu to create a new notebook to directly allow the user to enable new backends in case not done yet
@@ -45,6 +45,7 @@ New features:
 			* Properly import projects having graphs with multiple axes (BUG 476355)
 			* correctly import font sizes and legend fixes (#839)
 			* improved text and legend label and positioning
+			* import histogram and error bars
 
 Performance improvements:
 	* Make baseline removal much faster by using Eigen3 library (optional dependency)
