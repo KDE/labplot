@@ -2329,14 +2329,13 @@ bool XYCurvePrivate::activatePlot(QPointF mouseScenePos, double maxDist) {
 	if (!isVisible())
 		return false;
 
-	calculateScenePoints();
-
 	int rowCount{0};
-	if (lineType != XYCurve::LineType::NoLine && m_scenePoints.size() > 1)
+	if (lineType != XYCurve::LineType::NoLine && m_lines.size() > 1)
 		rowCount = m_lines.count();
-	else if (symbol->style() != Symbol::Style::NoSymbols)
+	else if (symbol->style() != Symbol::Style::NoSymbols) {
+		calculateScenePoints();
 		rowCount = m_scenePoints.size();
-	else
+	} else
 		return false;
 
 	if (rowCount == 0)
@@ -2350,7 +2349,8 @@ bool XYCurvePrivate::activatePlot(QPointF mouseScenePos, double maxDist) {
 	auto properties = q->xColumn()->properties();
 	if (properties == AbstractColumn::Properties::No || properties == AbstractColumn::Properties::NonMonotonic) {
 		// assumption: points exist if no line. otherwise previously returned false
-		if (lineType == XYCurve::LineType::NoLine || (lineType != XYCurve::LineType::NoLine && rowCount == 1)) {
+		if (lineType == XYCurve::LineType::NoLine || (lineType != XYCurve::LineType::NoLine && m_lines.isEmpty())) {
+			calculateScenePoints();
 			QPointF curvePosPrevScene = m_scenePoints.at(0);
 			QPointF curvePosScene = curvePosPrevScene;
 			for (int row = 0; row < rowCount; row++) {
@@ -2366,7 +2366,6 @@ bool XYCurvePrivate::activatePlot(QPointF mouseScenePos, double maxDist) {
 					return true;
 			}
 		}
-
 	} else if (properties == AbstractColumn::Properties::MonotonicIncreasing || properties == AbstractColumn::Properties::MonotonicDecreasing) {
 		bool increase{true};
 		if (properties == AbstractColumn::Properties::MonotonicDecreasing)
@@ -2378,7 +2377,8 @@ bool XYCurvePrivate::activatePlot(QPointF mouseScenePos, double maxDist) {
 		QPointF curvePosScene;
 		QPointF curvePosPrevScene;
 
-		if (lineType == XYCurve::LineType::NoLine || (lineType != XYCurve::LineType::NoLine && rowCount == 1)) {
+		if (lineType == XYCurve::LineType::NoLine || (lineType != XYCurve::LineType::NoLine && m_lines.isEmpty())) {
+			calculateScenePoints();
 			curvePosScene = m_scenePoints.at(index);
 			curvePosPrevScene = curvePosScene;
 			index = Column::indexForValue(x, m_scenePoints, static_cast<AbstractColumn::Properties>(properties));
@@ -2394,7 +2394,7 @@ bool XYCurvePrivate::activatePlot(QPointF mouseScenePos, double maxDist) {
 		bool stop{false};
 		while (true) {
 			// assumption: points exist if no line. otherwise previously returned false
-			if (lineType == XYCurve::LineType::NoLine || (lineType != XYCurve::LineType::NoLine && rowCount == 1)) { // check points only if no line otherwise check only the lines
+			if (lineType == XYCurve::LineType::NoLine || (lineType != XYCurve::LineType::NoLine && m_lines.isEmpty())) { // check points only if no line otherwise check only the lines
 				if (curvePosScene.x() > xMax)
 					stop = true; // one more time if bigger
 				if (gsl_hypot(mouseScenePos.x() - curvePosScene.x(), mouseScenePos.y() - curvePosScene.y()) <= maxDist)
@@ -2416,7 +2416,7 @@ bool XYCurvePrivate::activatePlot(QPointF mouseScenePos, double maxDist) {
 			else
 				index--;
 
-			if (lineType == XYCurve::LineType::NoLine || (lineType != XYCurve::LineType::NoLine && rowCount == 1)) {
+			if (lineType == XYCurve::LineType::NoLine || (lineType != XYCurve::LineType::NoLine && m_lines.isEmpty())) {
 				curvePosPrevScene = curvePosScene;
 				curvePosScene = m_scenePoints.at(index);
 			}
