@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-25 01:41+0000\n"
+"POT-Creation-Date: 2024-02-26 01:36+0000\n"
 "PO-Revision-Date: 2024-02-24 22:09+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -783,7 +783,7 @@ msgstr "proje ögesi bulunamadı"
 msgid "no valid XML document found"
 msgstr "geçerli XML belgesi bulunamadı"
 
-#: src/backend/core/Project.cpp:1132
+#: src/backend/core/Project.cpp:1133
 #, kde-format
 msgid "Invalid project modification time. Using current time."
 msgstr "Geçersiz proje değiştirme zamanı. Geçerli zaman kullanılıyor."
@@ -2205,12 +2205,12 @@ msgstr "Şu hata oluştu: %1."
 msgid "Plot data"
 msgstr "Veriyi çiz"
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1184
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1251
 #, kde-format
 msgid "Plot%1"
 msgstr "%1 çiz"
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1390
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1409
 #, kde-format
 msgid "legend"
 msgstr "gösterge"
@@ -7235,25 +7235,25 @@ msgstr "%1: Etiket sonekini ayarla"
 msgid "%1: set labels opacity"
 msgstr "%1: Etiketlerin matlığını ayarla"
 
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:266
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:262
 #: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:269
 #, kde-format
 msgid "%1: set x column"
 msgstr "%1: x sütununu ayarla"
 
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:284
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:280
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:481
 #: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:287
 #, kde-format
 msgid "%1: set data columns"
 msgstr "%1: Veri sütunlarını ayarla"
 
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:306
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:307
 #, kde-format
 msgid "%1: set type"
 msgstr "%1: Türü ayarla"
 
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:313
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:314
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:509
 #: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:309
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:196
@@ -7262,7 +7262,7 @@ msgstr "%1: Türü ayarla"
 msgid "%1: set orientation"
 msgstr "%1: Yönelimi ayarla"
 
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:320
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:321
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:523
 #, kde-format
 msgid "%1: width factor changed"

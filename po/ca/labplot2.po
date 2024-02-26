@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-25 01:41+0000\n"
+"POT-Creation-Date: 2024-02-26 01:36+0000\n"
 "PO-Revision-Date: 2024-02-23 10:34+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -793,7 +793,7 @@ msgstr "no s'ha trobat cap element de projecte"
 msgid "no valid XML document found"
 msgstr "s'ha trobat un document XML no vàlid"
 
-#: src/backend/core/Project.cpp:1132
+#: src/backend/core/Project.cpp:1133
 #, kde-format
 msgid "Invalid project modification time. Using current time."
 msgstr "Hora de modificació del projecte no vàlida. S'usarà l'hora actual."
@@ -2231,12 +2231,12 @@ msgstr "Ha ocorregut el següent error: %1."
 msgid "Plot data"
 msgstr "Dibuixa el diagrama de les dades"
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1184
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1251
 #, kde-format
 msgid "Plot%1"
 msgstr "Diagrama%1"
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1390
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1409
 #, kde-format
 msgid "legend"
 msgstr "llegenda"
@@ -7328,25 +7328,25 @@ msgstr "%1: estableix el sufix de les etiquetes"
 msgid "%1: set labels opacity"
 msgstr "%1: estableix l'opacitat de les etiquetes"
 
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:266
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:262
 #: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:269
 #, kde-format
 msgid "%1: set x column"
 msgstr "%1: estableix la columna X"
 
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:284
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:280
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:481
 #: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:287
 #, kde-format
 msgid "%1: set data columns"
 msgstr "%1: estableix les columnes de dades"
 
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:306
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:307
 #, kde-format
 msgid "%1: set type"
 msgstr "%1: estableix el tipus"
 
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:313
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:314
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:509
 #: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:309
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:196
@@ -7355,7 +7355,7 @@ msgstr "%1: estableix el tipus"
 msgid "%1: set orientation"
 msgstr "%1: estableix l'orientació"
 
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:320
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:321
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:523
 #, kde-format
 msgid "%1: width factor changed"
