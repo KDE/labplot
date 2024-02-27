@@ -17,8 +17,8 @@ include:
 #      - /gitlab-templates/craft-windows-x86-64.yml
 #      - /gitlab-templates/craft-windows-appx-qt5.yml
 #      - /gitlab-templates/craft-windows-mingw64.yml
-#      - /gitlab-templates/craft-macos-x86-64.yml
-#      - /gitlab-templates/craft-macos-arm64.yml
+      - /gitlab-templates/craft-macos-x86-64.yml
+      - /gitlab-templates/craft-macos-arm64.yml
 
 clang_format:
   stage: test
