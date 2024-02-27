@@ -1790,7 +1790,7 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 								curve->errorBar()->setXErrorType(ErrorBar::ErrorType::Symmetric);
 								curve->errorBar()->setXPlusColumnPath(yColumnPath);
 							}
-							// TODO: YErrorBar, XYErrorBar
+							// YErrorBar, XYErrorBar not available
 						}
 					}
 				}
@@ -1949,7 +1949,7 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 				childPlot->setCoordinateSystemIndex(layerIndex);
 
 			plot->addChildFast(childPlot);
-			DEBUG("ADDED CURVE. child count = " << plot->childCount<XYCurve>())
+			// DEBUG("ADDED CURVE. child count = " << plot->childCount<XYCurve>())
 			childPlot->setSuppressRetransform(false);
 		}
 
