@@ -10,7 +10,8 @@ include:
 #      - /gitlab-templates/reuse-lint.yml
 # unused
       - /gitlab-templates/clang-format.yml
-      - /gitlab-templates/linux.yml
+# fails (poppler)
+#      - /gitlab-templates/linux.yml
       - /gitlab-templates/windows.yml
       - /gitlab-templates/linux-qt6.yml
       - /gitlab-templates/windows-qt6.yml
@@ -38,9 +39,9 @@ include:
 # fails linking tests due to undefined references to GSL functions
 #      - /gitlab-templates/craft-windows-mingw64.yml
 
-#craft_appimage_qt515_x86_64:
-#  only:
-#    - master
+craft_appimage_qt515_x86_64:
+  only:
+    - master
 
 #craft_windows_qt515_x86_64:
 #  only:

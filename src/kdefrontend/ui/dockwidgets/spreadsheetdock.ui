@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>412</width>
-    <height>616</height>
+    <width>414</width>
+    <height>694</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
@@ -150,6 +150,7 @@
     <widget class="QLabel" name="lDimensions">
      <property name="font">
       <font>
+       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -171,7 +172,7 @@
    <item row="11" column="0">
     <widget class="QLabel" name="lShowSparklines">
      <property name="text">
-      <string>Column Sparklines:</string>
+      <string>Sparklines:</string>
      </property>
     </widget>
    </item>
@@ -189,11 +190,12 @@
     <widget class="QLabel" name="lFormat">
      <property name="font">
       <font>
+       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
      <property name="text">
-      <string>Format</string>
+      <string>Column Format</string>
      </property>
     </widget>
    </item>
@@ -217,7 +219,7 @@
    <item row="10" column="0" colspan="2">
     <widget class="QLabel" name="lShowComments">
      <property name="text">
-      <string>Column Comments:</string>
+      <string>Comments:</string>
      </property>
     </widget>
    </item>
@@ -225,6 +227,7 @@
     <widget class="QLabel" name="lLinking">
      <property name="font">
       <font>
+       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -258,14 +261,14 @@
    <header>src/kdefrontend/widgets/ResizableTextEdit.h</header>
   </customwidget>
   <customwidget>
-   <class>TreeViewComboBox</class>
-   <extends>QComboBox</extends>
-   <header>TreeViewComboBox.h</header>
-  </customwidget>
-  <customwidget>
    <class>TimedLineEdit</class>
    <extends>QLineEdit</extends>
    <header>src/kdefrontend/widgets/TimedLineEdit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>TreeViewComboBox</class>
+   <extends>QComboBox</extends>
+   <header>TreeViewComboBox.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

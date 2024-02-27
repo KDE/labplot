@@ -17,8 +17,6 @@
 
 class AbstractColumn;
 class Background;
-class ErrorBar;
-class ErrorBarStyle;
 class Line;
 class Symbol;
 class XYCurvePrivate;
@@ -108,9 +106,7 @@ public:
 	CLASS_D_ACCESSOR_DECL(QColor, valuesColor, ValuesColor)
 	CLASS_D_ACCESSOR_DECL(QFont, valuesFont, ValuesFont)
 
-	ErrorBar* xErrorBar() const;
-	ErrorBar* yErrorBar() const;
-	ErrorBarStyle* errorBarStyle() const;
+	ErrorBar* errorBar() const;
 
 	// margin plots
 	BASIC_D_ACCESSOR_DECL(bool, rugEnabled, RugEnabled)
@@ -152,7 +148,7 @@ private:
 
 	bool minMax(const AbstractColumn* column1,
 				const AbstractColumn* column2,
-				const ErrorBar::Type errorType,
+				const ErrorBar::ErrorType errorType,
 				const AbstractColumn* errorPlusColumn,
 				const AbstractColumn* errorMinusColumn,
 				const Range<int>& indexRange,

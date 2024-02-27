@@ -12,6 +12,7 @@ New features:
 			* Lollipop plot
 			* Q-Q plot
 			* KDE plot
+		* Error bars for bar plots
 		* New worksheet theme "Dracula"
 		* Add possibility to lock elements for unintentional change in the plot
 		* New panel in the presenter widget to allow the selection, zooming and navigation also in the presenter mode
@@ -28,8 +29,8 @@ New features:
 		* When generating values via a mathematical expression ("generate function values"), allow to use variables in CAS-notebooks as source columns
 		* Generatation of equidistant values: support for Date&Time and integer columns
 		* Generatation of equidistant values: allow to fix the number of values and the increment at the same time
-                * Support parsing more functions and operators for formulas and expressions
-                * Added support to show the Sparkline of each respective column
+		* Support parsing more functions and operators for formulas and expressions
+		* Added support to show the Sparkline of each respective column
 	* [notebook]
 		* Export to PDF
 		* "Configure CAS" in the menu to create a new notebook to directly allow the user to enable new backends in case not done yet
@@ -44,6 +45,7 @@ New features:
 			* Properly import projects having graphs with multiple axes (BUG 476355)
 			* correctly import font sizes and legend fixes (#839)
 			* improved text and legend label and positioning
+			* import histogram and error bars
 
 Performance improvements:
 	* Make baseline removal much faster by using Eigen3 library (optional dependency)
@@ -57,6 +59,8 @@ Bug fixes:
 	* Fix copying Elements (Issue #622)
 	* Fix calculating skewness and kurtosis
 	* Support start/end row/column in XLSX import preview
+	* Fixed wrong string to load CANSettings
+	* Don't draw any border line for the worksheet canvas (BUG 470625)
 
 Internal:
 	* Switch from C++11 to C++17

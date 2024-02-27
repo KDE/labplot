@@ -1587,12 +1587,8 @@ void BoxPlotPrivate::draw(QPainter* painter) {
 		if (!m_boxRect.at(i).isEmpty()) {
 			// draw the box filling
 			const auto* background = backgrounds.at(i);
-			if (background->enabled()) {
-				painter->setOpacity(backgrounds.at(i)->opacity());
-				painter->setPen(Qt::NoPen);
-				const QPolygonF& polygon = m_fillPolygon.at(i);
-				drawFillingPollygon(polygon, painter, background);
-			}
+			if (background->enabled())
+				background->draw(painter, m_fillPolygon.at(i));
 
 			// draw the border
 			const auto* borderLine = borderLines.at(i);
@@ -1964,22 +1960,20 @@ void BoxPlot::loadThemeConfig(const KConfig& config) {
 	Q_D(BoxPlot);
 	d->suppressRecalc = true;
 
-	// box fillings
-	for (int i = 0; i < d->backgrounds.count(); ++i) {
+	for (int i = 0; i < d->dataColumns.count(); ++i) {
+		const auto& color = plot->themeColorPalette(i);
+
+		// box fillings
 		auto* background = d->backgrounds.at(i);
-		background->loadThemeConfig(group, plot->themeColorPalette(i));
-	}
+		background->loadThemeConfig(group, color);
 
-	// box border lines
-	for (int i = 0; i < d->borderLines.count(); ++i) {
+		// box border lines
 		auto* line = d->borderLines.at(i);
-		line->loadThemeConfig(group, plot->themeColorPalette(i));
-	}
+		line->loadThemeConfig(group, color);
 
-	// median lines
-	for (int i = 0; i < d->medianLines.count(); ++i) {
-		auto* line = d->medianLines.at(i);
-		line->loadThemeConfig(group, plot->themeColorPalette(i));
+		// median lines
+		line = d->medianLines.at(i);
+		line->loadThemeConfig(group, color);
 	}
 
 	// whiskers

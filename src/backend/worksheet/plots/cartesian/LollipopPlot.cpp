@@ -1103,16 +1103,16 @@ void LollipopPlot::loadThemeConfig(const KConfig& config) {
 	Q_D(LollipopPlot);
 	d->suppressRecalc = true;
 
-	// lines
-	for (int i = 0; i < d->lines.count(); ++i) {
-		auto* line = d->lines.at(i);
-		line->loadThemeConfig(group, plot->themeColorPalette(i));
-	}
+	for (int i = 0; i < d->dataColumns.count(); ++i) {
+		const auto& color = plot->themeColorPalette(i);
 
-	// symbols
-	for (int i = 0; i < d->symbols.count(); ++i) {
+		// lines
+		auto* line = d->lines.at(i);
+		line->loadThemeConfig(group, color);
+
+		// symbols
 		auto* symbol = d->symbols.at(i);
-		symbol->loadThemeConfig(group, plot->themeColorPalette(i));
+		symbol->loadThemeConfig(group, color);
 	}
 
 	// values

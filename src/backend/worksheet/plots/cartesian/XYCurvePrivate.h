@@ -106,9 +106,7 @@ public:
 	Background* background{nullptr};
 
 	// error bars
-	ErrorBar* xErrorBar{nullptr};
-	ErrorBar* yErrorBar{nullptr};
-	ErrorBarStyle* errorBarStyle{nullptr};
+	ErrorBar* errorBar{nullptr};
 
 	XYCurve* const q;
 	friend class XYCurve;

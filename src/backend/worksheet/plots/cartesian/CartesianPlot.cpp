@@ -126,9 +126,9 @@ Action evaluateKeys(int key, Qt::KeyboardModifiers) {
  * \class CartesianPlot
  * \brief A xy-plot.
  */
-CartesianPlot::CartesianPlot(const QString& name)
+CartesianPlot::CartesianPlot(const QString& name, bool loading)
 	: AbstractPlot(name, new CartesianPlotPrivate(this), AspectType::CartesianPlot) {
-	init();
+	init(loading);
 }
 
 CartesianPlot::CartesianPlot(const QString& name, CartesianPlotPrivate* dd)
@@ -155,8 +155,8 @@ CartesianPlot::~CartesianPlot() {
 /*!
 	initializes all member variables of \c CartesianPlot
 */
-void CartesianPlot::init() {
-	m_coordinateSystems.append(new CartesianCoordinateSystem(this));
+void CartesianPlot::init(bool loading) {
+	// initialize the children objects
 	m_plotArea = new PlotArea(name() + QStringLiteral(" plot area"), this);
 	connect(m_plotArea, &WorksheetElement::changed, this, &WorksheetElement::changed);
 	addChildFast(m_plotArea);
@@ -167,22 +167,12 @@ void CartesianPlot::init() {
 	m_title->setHidden(true);
 	m_title->setParentGraphicsItem(m_plotArea->graphicsItem());
 
-	// offset between the plot area and the area defining the coordinate system, in scene units.
-	Q_D(CartesianPlot);
-	d->horizontalPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter);
-	d->verticalPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter);
-	d->rightPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter);
-	d->bottomPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter);
-	d->symmetricPadding = true;
-
 	// cursor line
+	Q_D(CartesianPlot);
 	d->cursorLine = new Line(QString());
 	d->cursorLine->setPrefix(QLatin1String("Cursor"));
 	d->cursorLine->setHidden(true);
 	addChild(d->cursorLine);
-	d->cursorLine->setStyle(Qt::SolidLine);
-	d->cursorLine->setColor(Qt::red); // TODO: use theme specific initial settings
-	d->cursorLine->setWidth(Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point));
 	connect(d->cursorLine, &Line::updatePixmapRequested, [=] {
 		d->update();
 	});
@@ -193,11 +183,21 @@ void CartesianPlot::init() {
 	connect(this, &AbstractAspect::childAspectAdded, this, &CartesianPlot::childAdded);
 	connect(this, &AbstractAspect::childAspectRemoved, this, &CartesianPlot::childRemoved);
 
-	graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, true);
-	graphicsItem()->setFlag(QGraphicsItem::ItemClipsChildrenToShape, true);
-	graphicsItem()->setFlag(QGraphicsItem::ItemIsSelectable, true);
-	graphicsItem()->setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
-	graphicsItem()->setFlag(QGraphicsItem::ItemIsFocusable, true);
+	// if not loading, initialize the default properties (read in load() otherweise)
+	if (loading)
+		return;
+
+	m_coordinateSystems << new CartesianCoordinateSystem(this);
+
+	d->horizontalPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter);
+	d->verticalPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter);
+	d->rightPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter);
+	d->bottomPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter);
+	d->symmetricPadding = true;
+
+	d->cursorLine->setStyle(Qt::SolidLine);
+	d->cursorLine->setColor(Qt::red); // TODO: use theme specific initial settings
+	d->cursorLine->setWidth(Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point));
 
 	// theme is not set at this point, initialize the color palette with default colors
 	this->setColorPalette(KConfig());
@@ -1899,11 +1899,11 @@ void CartesianPlot::addFitCurve() {
 		curve->initStartValues(curCurve);
 
 		// fit with weights for y if the curve has error bars for y
-		if (curCurve->yErrorBar()->type() == ErrorBar::Type::Symmetric && curCurve->yErrorBar()->plusColumn()) {
+		if (curCurve->errorBar()->yErrorType() == ErrorBar::ErrorType::Symmetric && curCurve->errorBar()->yPlusColumn()) {
 			auto fitData = curve->fitData();
 			fitData.yWeightsType = nsl_fit_weight_instrumental;
 			curve->setFitData(fitData);
-			curve->setYErrorColumn(curCurve->yErrorBar()->plusColumn());
+			curve->errorBar()->setYPlusColumn(curCurve->errorBar()->yPlusColumn());
 		}
 
 		curve->recalculate();
@@ -2154,13 +2154,13 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		connect(curve, &XYCurve::xDataChanged, [this, curve]() {
 			this->dataChanged(const_cast<XYCurve*>(curve), Dimension::X);
 		});
-		connect(curve->xErrorBar(), &ErrorBar::typeChanged, [this, curve]() {
+		connect(curve->errorBar(), &ErrorBar::xErrorTypeChanged, [this, curve]() {
 			this->dataChanged(const_cast<XYCurve*>(curve), Dimension::X);
 		});
-		connect(curve->xErrorBar(), &ErrorBar::plusColumnChanged, [this, curve]() {
+		connect(curve->errorBar(), &ErrorBar::xPlusColumnChanged, [this, curve]() {
 			this->dataChanged(const_cast<XYCurve*>(curve), Dimension::X);
 		});
-		connect(curve->xErrorBar(), &ErrorBar::minusColumnChanged, [this, curve]() {
+		connect(curve->errorBar(), &ErrorBar::xMinusColumnChanged, [this, curve]() {
 			this->dataChanged(const_cast<XYCurve*>(curve), Dimension::X);
 		});
 
@@ -2172,13 +2172,13 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		connect(curve, &XYCurve::yDataChanged, [this, curve]() {
 			this->dataChanged(const_cast<XYCurve*>(curve), Dimension::Y);
 		});
-		connect(curve->yErrorBar(), &ErrorBar::typeChanged, [this, curve]() {
+		connect(curve->errorBar(), &ErrorBar::yErrorTypeChanged, [this, curve]() {
 			this->dataChanged(const_cast<XYCurve*>(curve), Dimension::Y);
 		});
-		connect(curve->yErrorBar(), &ErrorBar::plusColumnChanged, [this, curve]() {
+		connect(curve->errorBar(), &ErrorBar::yPlusColumnChanged, [this, curve]() {
 			this->dataChanged(const_cast<XYCurve*>(curve), Dimension::Y);
 		});
-		connect(curve->yErrorBar(), &ErrorBar::minusColumnChanged, [this, curve]() {
+		connect(curve->errorBar(), &ErrorBar::yMinusColumnChanged, [this, curve]() {
 			this->dataChanged(const_cast<XYCurve*>(curve), Dimension::Y);
 		});
 
@@ -2247,7 +2247,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 			WorksheetElementContainer::retransform();
 	}
 
-	if (!this->pasted() && !child->pasted() && !child->isMoved()) {
+	if (!isLoading() && !pasted() && !child->pasted() && !child->isMoved()) {
 		// new child was added which might change the ranges and the axis tick labels.
 		// adjust the plot area padding if the axis label is outside of the plot area
 		if (rangeChanged) {
@@ -3130,6 +3130,12 @@ void CartesianPlot::mouseHoverOutsideDataRect() {
 CartesianPlotPrivate::CartesianPlotPrivate(CartesianPlot* plot)
 	: AbstractPlotPrivate(plot)
 	, q(plot) {
+	setFlag(QGraphicsItem::ItemIsMovable, true);
+	setFlag(QGraphicsItem::ItemClipsChildrenToShape, true);
+	setFlag(QGraphicsItem::ItemIsSelectable, true);
+	setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
+	setFlag(QGraphicsItem::ItemIsFocusable, true);
+
 	m_cursor0Text.prepare();
 	m_cursor1Text.prepare();
 }
@@ -4804,8 +4810,6 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			READ_DOUBLE_VALUE("bottomPadding", bottomPadding);
 			READ_INT_VALUE("symmetricPadding", symmetricPadding, bool);
 			hasCoordinateSystems = true;
-
-			m_coordinateSystems.clear();
 
 			if (Project::xmlVersion() < 7) {
 				d->niceExtend = true;

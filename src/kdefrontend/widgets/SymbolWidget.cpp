@@ -81,15 +81,10 @@ void SymbolWidget::adjustLayout() {
 	auto* gridLayout = static_cast<QGridLayout*>(layout());
 	auto* widget = gridLayout->itemAtPosition(2, 0)->widget(); // use the third line, the first two are optional and not always visible
 
-	if (parentWidget->width() >= widget->width()) {
-		gridLayout->activate();
-		widget->setMinimumWidth(parentWidget->width());
+	if (parentWidget->width() >= widget->width())
 		updateGeometry();
-	} else {
-		parentGridLayout->activate();
+	else
 		parentWidget->setMinimumWidth(widget->width());
-		this->parentWidget()->updateGeometry();
-	}
 }
 
 /*
