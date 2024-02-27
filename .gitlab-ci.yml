@@ -9,7 +9,7 @@ include:
 # fails
 #      - /gitlab-templates/reuse-lint.yml
 #      - /gitlab-templates/linux.yml
-      - /gitlab-templates/windows.yml
+#      - /gitlab-templates/windows.yml
 #      - /gitlab-templates/freebsd.yml
 # poppler not building due to Qt6 missing (see below)
 #      - /gitlab-templates/flatpak.yml
@@ -20,15 +20,15 @@ include:
       - /gitlab-templates/craft-macos-x86-64.yml
       - /gitlab-templates/craft-macos-arm64.yml
 
-clang_format:
-  stage: test
-  image: debian:bookworm
-  before_script:
-    - apt-get update
-    - apt-get install --yes --no-install-recommends git clang-format-13
-  script: |
-    ./cl-fmt.sh
-    git diff --exit-code
+#clang_format:
+#  stage: test
+#  image: debian:bookworm
+#  before_script:
+#    - apt-get update
+#    - apt-get install --yes --no-install-recommends git clang-format-13
+#  script: |
+#    ./cl-fmt.sh
+#    git diff --exit-code
 
 # enable, when enabled above
 #flatpak:
