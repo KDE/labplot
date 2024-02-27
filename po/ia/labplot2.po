@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-26 01:36+0000\n"
-"PO-Revision-Date: 2024-01-31 11:52+0100\n"
+"PO-Revision-Date: 2024-02-26 11:02+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -8007,10 +8007,9 @@ msgid "%1: set error column"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/ErrorBar.cpp:235
-#, fuzzy, kde-format
-#| msgid "%1: error type changed"
+#, kde-format
 msgid "%1: error bar type changed"
-msgstr "%1:  typo de error cambiate"
+msgstr "%1:  typo de barra  de error cambiate"
 
 #: src/backend/worksheet/plots/cartesian/ErrorBar.cpp:242
 #, kde-format
@@ -9719,10 +9718,9 @@ msgid "Show Comments"
 msgstr "Monstra commentos"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:322
-#, fuzzy, kde-format
-#| msgid "No Drop Lines"
+#, kde-format
 msgid "Show SparkLines"
-msgstr "Necun Lineas a Cadita"
+msgstr "Monstra  Lineas Sparkline"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:324
 #, kde-format
@@ -10018,17 +10016,15 @@ msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1147
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1519
-#, fuzzy, kde-format
-#| msgid "Columns:"
+#, kde-format
 msgid "Hide Sparklines"
-msgstr "Columnas"
+msgstr "Cela Lineas Sparkline"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1149
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1521
-#, fuzzy, kde-format
-#| msgid "No Drop Lines"
+#, kde-format
 msgid "Show Sparklines"
-msgstr "Necun Lineas a Cadita"
+msgstr "Monstra Lineas Sparkline"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1610
 #, kde-format
@@ -11689,12 +11685,10 @@ msgid "LabPlot Projects (%1)"
 msgstr ""
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:443
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Open Project"
+#, kde-format
 msgctxt "@title:window"
 msgid "Open Origin OPJ Project"
-msgstr "Aperi projecto"
+msgstr "Aperi origine de projecto OPJ"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:445
 #, kde-format
@@ -19593,24 +19587,21 @@ msgstr "Habilitate"
 
 #. i18n: ectx: property (text), widget (QLabel, lShowSparklines)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:175
-#, fuzzy, kde-format
-#| msgid "Columns:"
+#, kde-format
 msgid "Sparklines:"
-msgstr "Columnas"
+msgstr "Lineas Sparkline:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFormat)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:198
-#, fuzzy, kde-format
-#| msgid "Column %1"
+#, kde-format
 msgid "Column Format"
-msgstr "Columna %1"
+msgstr "Formato de coluimna"
 
 #. i18n: ectx: property (text), widget (QLabel, lShowComments)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:222
-#, fuzzy, kde-format
-#| msgid "Comment:"
+#, kde-format
 msgid "Comments:"
-msgstr "Commento:"
+msgstr "Commentos:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLinking)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:235
