@@ -40,10 +40,83 @@ VectorBLFFilter::VectorBLFFilter()
 VectorBLFFilter::~VectorBLFFilter() = default;
 
 QString VectorBLFFilter::fileInfoString(const QString& fileName) {
-	DEBUG(Q_FUNC_INFO);
 	QString info;
+#ifdef HAVE_VECTOR_BLF
+	Vector::BLF::File f;
+	f.open(fileName.toLocal8Bit().data());
+	if (!f.is_open())
+		return info;
 
-	Q_UNUSED(fileName);
+	auto statistics = f.fileStatistics;
+	QString appName;
+
+	switch (f.fileStatistics.applicationId) {
+	case Vector::BLF::Unknown:
+		appName = i18n("Unknown");
+		break;
+	case Vector::BLF::Canalyzer:
+		appName = QStringLiteral("CANalyzer");
+		break;
+	case Vector::BLF::Canoe:
+		appName = QStringLiteral("CANoe");
+		break;
+	case Vector::BLF::Canstress:
+		appName = QStringLiteral("CANstress");
+		break;
+	case Vector::BLF::Canlog:
+		appName = QStringLiteral("CANlog");
+		break;
+	case Vector::BLF::Canape:
+		appName = QStringLiteral("CANape");
+		break;
+	case Vector::BLF::Cancasexllog:
+		appName = QStringLiteral("CANcaseXL log");
+		break;
+	case Vector::BLF::Vlconfig:
+		appName = QStringLiteral("Vector Logger Configurator");
+		break;
+	case Vector::BLF::Porschelogger:
+		appName = QStringLiteral("Porsche Logger");
+		break;
+	case Vector::BLF::Caeteclogger:
+		appName = QStringLiteral("CAETEC Logger");
+		break;
+	case Vector::BLF::Vectornetworksimulator:
+		appName = QStringLiteral("Vector Network Simulator");
+		break;
+	case Vector::BLF::Ipetroniklogger:
+		appName = QStringLiteral("IPETRONIK Logger");
+		break;
+	case Vector::BLF::RtPk:
+		appName = QStringLiteral("RT PK");
+		break;
+	case Vector::BLF::Piketec:
+		appName = QStringLiteral("PikeTec");
+		break;
+	case Vector::BLF::Sparks:
+		appName = QStringLiteral("Sparks");
+		break;
+	}
+
+    info += i18n("Application: %1", appName);
+	info += QStringLiteral("<br>");
+
+	info += i18n("Application version: %1.%2", f.fileStatistics.applicationMajor, f.fileStatistics.applicationMinor);
+	info += QStringLiteral("<br>");
+
+	info += i18n("Compression Level: %1", f.fileStatistics.compressionLevel);
+	info += QStringLiteral("<br>");
+
+	info += i18n("Uncompressed File Size: %1 Bytes", f.fileStatistics.uncompressedFileSize);
+	info += QStringLiteral("<br>");
+
+	info += i18n("Number of Objects: %1", f.fileStatistics.objectCount);
+	info += QStringLiteral("<br>");
+
+	f.close();
+#else
+	Q_UNUSED(fileName)
+#endif
 	return info;
 }
 

@@ -41,6 +41,8 @@ New features:
 		* Support data import from ODS (Open Document Spreadsheet) files
 		* When importing tables from SQL databases, allow to specify which data region to read (start/end values for columns and records)
 		* Addeded seaborn's datasets to the collection of datasets
+		* BLF
+			* show additional information about the file (application name the file was created with, etc.) in the import dialog
 		* OPJ:
 			* Properly import projects having graphs with multiple axes (BUG 476355)
 			* correctly import font sizes and legend fixes (#839)
