@@ -49,6 +49,8 @@ public:
 	bool commentsAsUnitsFits() const;
 	void setExportTo(const QStringList& to);
 	void setExportToImage(bool possible);
+	void onCompressionToggled(bool checked);
+
 	mcap::McapWriterOptions getMcapSettings();
 
 // Todo: Get rid of order matters. Fits need to be at the end.

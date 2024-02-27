@@ -54,9 +54,9 @@ void MCAPFilterTest::testArrayImport() {
 		QCOMPARE(spreadsheet.columnCount(), 5);
 		QCOMPARE(spreadsheet.rowCount(), 10);
 		QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer); // Index
-		QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Integer); // LogTime
-		QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::ColumnMode::Integer); // PublishTime
-		QCOMPARE(spreadsheet.column(3)->columnMode(), AbstractColumn::ColumnMode::Double); // Sequence
+		QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::DateTime); // LogTime
+		QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::ColumnMode::DateTime); // PublishTime
+		QCOMPARE(spreadsheet.column(3)->columnMode(), AbstractColumn::ColumnMode::Integer); // Sequence
 		QCOMPARE(spreadsheet.column(4)->columnMode(), AbstractColumn::ColumnMode::Double); // Value
 
 		QCOMPARE(spreadsheet.column(0)->plotDesignation(), AbstractColumn::PlotDesignation::X);
@@ -112,8 +112,8 @@ void MCAPFilterTest::testExport() {
 		filter.setDateTimeFormat(QLatin1String("yyyy-MM-dd"));
 		filter.readDataFromFile(fileName, &spreadsheet, mode);
 
-		//QCOMPARE(spreadsheet.columnCount(), 5);
-		//QCOMPARE(spreadsheet.rowCount(), 10);
+		QCOMPARE(spreadsheet.columnCount(), 5);
+		QCOMPARE(spreadsheet.rowCount(), 10);
 		qDebug() << "The importing took" << timer_import.elapsed() << "milliseconds";
 
 		QElapsedTimer timer_export;

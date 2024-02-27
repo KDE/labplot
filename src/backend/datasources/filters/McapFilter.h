@@ -39,7 +39,7 @@ public:
 	
 	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace) override;
 	void write(const QString& fileName, AbstractDataSource*) override;
-	void writeWithOptions(const QString& fileName, AbstractDataSource* datasource,mcap::McapWriterOptions& opts);
+	void writeWithOptions(const QString& fileName, AbstractDataSource* datasource,const mcap::McapWriterOptions& opts);
 	QVector<QStringList> preview(const QString& fileName, int lines);
 
 	void setDataRowType(const QJsonValue::Type);
@@ -56,7 +56,6 @@ public:
 	void setNaNValueToZero(const bool);
 	bool NaNValueToZeroEnabled() const;
 	void setCreateIndexEnabled(const bool);
-	void setImportObjectNames(const bool);
 
 	QStringList vectorNames() const;
 	QVector<AbstractColumn::ColumnMode> columnModes();

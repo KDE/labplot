@@ -103,6 +103,8 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent)
 	ui->cbCompressionLevel->setCurrentIndex(2); //Default
 
 	ui->rbNone->setChecked(true);
+	ui->cbCompressionLevel->setEnabled(false);
+
 	ui->rbLZ4->setChecked(false);
 	ui->rbZSTD->setChecked(false);
 
@@ -119,6 +121,10 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent)
 	connect(m_showOptionsButton, &QPushButton::clicked, this, &ExportSpreadsheetDialog::toggleOptions);
 	connect(ui->cbFormat, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ExportSpreadsheetDialog::formatChanged);
 	connect(ui->cbExportToFITS, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ExportSpreadsheetDialog::fitsExportToChanged);
+	connect(ui->rbZSTD, &QRadioButton::toggled, this, &ExportSpreadsheetDialog::onCompressionToggled);
+	connect(ui->rbLZ4, &QRadioButton::toggled, this, &ExportSpreadsheetDialog::onCompressionToggled);
+	connect(ui->rbNone, &QRadioButton::toggled, this, &ExportSpreadsheetDialog::onCompressionToggled);
+
 
 	setWindowTitle(i18nc("@title:window", "Export Spreadsheet"));
 	setWindowIcon(QIcon::fromTheme(QStringLiteral("document-export-database")));
@@ -225,9 +231,12 @@ mcap::McapWriterOptions ExportSpreadsheetDialog::getMcapSettings() {
 	opts.compressionLevel = static_cast<mcap::CompressionLevel>(ui->cbCompressionLevel->currentIndex());
 	if(ui->rbLZ4->isChecked()){
 		opts.compression = mcap::Compression::Lz4;
+		qDebug() << "LZ4 compression";
 	}else if(ui->rbZSTD->isChecked()){
 		opts.compression = mcap::Compression::Zstd;
+		qDebug() << "ZSTD compression";
 	}else{
+		qDebug() << "No compression";
 		opts.compression = mcap::Compression::None;
 	}
 
@@ -553,6 +562,7 @@ void ExportSpreadsheetDialog::formatChanged(int index) {
 		ui->lExportToFITS->hide();
 		ui->lColumnAsUnits->hide();
 		ui->chkColumnsAsUnits->hide();
+		ui->mcapwidget->hide();
 
 		break;
 	case Format::XLSX:
@@ -691,4 +701,17 @@ void ExportSpreadsheetDialog::fileNameChanged(const QString& name) {
 	}
 
 	m_okButton->setEnabled(true);
+}
+
+void ExportSpreadsheetDialog::onCompressionToggled(bool checked)
+{
+    if(checked){
+        QRadioButton *btn = static_cast<QRadioButton *>(sender());
+		if(btn->objectName() == "rbNone"){
+
+			ui->cbCompressionLevel->setEnabled(false);
+		}else{
+			ui->cbCompressionLevel->setEnabled(true);
+		}
+    }
 }

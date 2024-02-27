@@ -27,8 +27,6 @@ public:
 	void saveSettings();
 
 private:
-	void setTooltips();
-
 	QString m_filename;
 	Ui::McapOptionsWidget ui;
 

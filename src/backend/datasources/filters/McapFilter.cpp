@@ -29,8 +29,7 @@
 #include <unistd.h>
 
 #include <cmath>
-#define NUM_FRAMES 100
-#define NS_PER_MS 1000000
+
 #ifndef HAVE_LZ4
 #define MCAP_COMPRESSION_NO_LZ4
 #endif
@@ -74,7 +73,7 @@ void McapFilter::write(const QString& fileName, AbstractDataSource* dataSource) 
 	d->write(fileName, dataSource);
 }
 
-void McapFilter::writeWithOptions(const QString& fileName, AbstractDataSource* dataSource,mcap::McapWriterOptions& opts) {
+void McapFilter::writeWithOptions(const QString& fileName, AbstractDataSource* dataSource,const mcap::McapWriterOptions& opts) {
 	d->writeWithOptions(fileName, dataSource,opts);
 }
 
@@ -143,10 +142,6 @@ bool McapFilter::NaNValueToZeroEnabled() const {
 
 void McapFilter::setCreateIndexEnabled(bool b) {
 	d->createIndexEnabled = b;
-}
-
-void McapFilter::setImportObjectNames(bool b) {
-	d->importObjectNames = b;
 }
 
 QStringList McapFilter::vectorNames() const {
@@ -264,46 +259,23 @@ int McapFilterPrivate::parseColumnModes(const QJsonValue& row, const QString& ro
 	if (createIndexEnabled) {
 		columnModes << AbstractColumn::ColumnMode::Integer;
 		vectorNames << i18n("index");
-	}
-
-	// add column for object names if required
-	if (importObjectNames) {
-		const auto mode = AbstractFileFilter::columnMode(rowName, dateTimeFormat, numberFormat);
-		columnModes << mode;
-		if (mode == AbstractColumn::ColumnMode::DateTime)
-			vectorNames << i18n("timestamp");
-		else if (mode == AbstractColumn::ColumnMode::Month)
-			vectorNames << i18n("month");
-		else if (mode == AbstractColumn::ColumnMode::Day)
-			vectorNames << i18n("day");
-		else
-			vectorNames << i18n("name");
-	}
+	}	
 
 	// determine the column modes and names
 	for (int i = startColumn - 1; i < endColumn; ++i) {
 		QJsonValue columnValue;
-		switch (rowType) {
-		case QJsonValue::Array: {
-			columnValue = *(row.toArray().begin() + i);
-			vectorNames << i18n("Column %1", QString::number(i + 1));
-			break;
-		}
-		case QJsonValue::Object: {
-			QString key = row.toObject().keys().at(i);
-			vectorNames << key;
-			columnValue = row.toObject().value(key);
-			break;
-		}
-		// TODO: implement other value types
-		case QJsonValue::Double:
-		case QJsonValue::String:
-		case QJsonValue::Bool:
-		case QJsonValue::Null:
-		case QJsonValue::Undefined:
-			return 1;
-		}
 
+		QString key = row.toObject().keys().at(i);
+		vectorNames << key;
+		columnValue = row.toObject().value(key);
+		if(key == "logTime" || key=="publishTime"){
+			columnModes << AbstractColumn::ColumnMode::DateTime;
+			continue;
+		}
+		if(key == "sequence"){
+			columnModes << AbstractColumn::ColumnMode::Integer;
+			continue;
+		}
 		switch (columnValue.type()) {
 		case QJsonValue::Double:
 			columnModes << AbstractColumn::ColumnMode::Double;
@@ -368,6 +340,10 @@ void McapFilterPrivate::setValueFromString(int column, int row, const QString& v
 		break;
 	}
 	case AbstractColumn::ColumnMode::DateTime: {
+	if(vectorNames[column]=="publishTime" || vectorNames[column]=="logTime"){
+		static_cast<QVector<QDateTime>*>(m_dataContainer[column])->operator[](row) = QDateTime::fromMSecsSinceEpoch(valueString.toLong());
+		break;
+	}
 		const QDateTime valueDateTime = QDateTime::fromString(valueString, dateTimeFormat);
 		static_cast<QVector<QDateTime>*>(m_dataContainer[column])->operator[](row) = valueDateTime.isValid() ? valueDateTime : QDateTime();
 		break;
@@ -403,7 +379,6 @@ bool McapFilterPrivate::prepareDocumentToRead() {
 	int countCols = -1;
 	QJsonValue firstRow;
 	QString firstRowName;
-	importObjectNames = (importObjectNames && (rowType == QJsonValue::Object));
 
 	switch (containerType) {
 	case McapFilter::DataContainerType::Array: {
@@ -444,7 +419,7 @@ bool McapFilterPrivate::prepareDocumentToRead() {
 		endColumn = countCols;
 
 	m_actualRows = countRows;
-	m_actualCols = endColumn - startColumn + 1 + createIndexEnabled + importObjectNames;
+	m_actualCols = endColumn - startColumn + 1 + createIndexEnabled;
 
 	if (parseColumnModes(firstRow, firstRowName) != 0)
 		return false;
@@ -512,7 +487,8 @@ int McapFilterPrivate::mcapToJson(const QString& fileName, int lines) {
 
 			QJsonObject obj = flattenJson(jsonDocument.object());
 
-			obj.insert(QLatin1String("sequence"), QJsonValue::fromVariant(it->message.sequence));
+			//TODO: handle seqeunce, and times as longs instead of strings
+			obj.insert(QLatin1String("sequence"), QJsonValue::fromVariant(QString::number(it->message.sequence))); 
 			obj.insert(QLatin1String("logTime"), QJsonValue::fromVariant(QString::number(it->message.logTime / 1000000))); // nano to milli otherwise value is 0
 			obj.insert(QLatin1String("publishTime"),
 					   QJsonValue::fromVariant(QString::number(it->message.publishTime / 1000000))); // nano to milli otherwise value is 0
@@ -546,7 +522,7 @@ int McapFilterPrivate::mcapToJson(const QString& fileName, int lines) {
 
 	QJsonDocument finalJsonDocument(jsonArray);
 
-	// qDebug() << finalJsonDocument.toJson(QJsonDocument::Compact);
+	qDebug() << finalJsonDocument.toJson(QJsonDocument::Compact);
 
 	m_preparedDoc = finalJsonDocument;
 	return msg_count;
@@ -572,7 +548,7 @@ void McapFilterPrivate::importData(AbstractDataSource* dataSource, AbstractFileF
 
 	m_columnOffset = dataSource->prepareImport(m_dataContainer, importMode, m_actualRows, m_actualCols, vectorNames, columnModes);
 	int rowOffset = startRow - 1;
-	int colOffset = (int)createIndexEnabled + (int)importObjectNames;
+	int colOffset = (int)createIndexEnabled;
 	DEBUG("reading " << m_actualRows << " lines");
 	DEBUG("reading " << m_actualCols << " columns");
 
@@ -594,10 +570,6 @@ void McapFilterPrivate::importData(AbstractDataSource* dataSource, AbstractFileF
 			row = *(arrayIterator + rowOffset + i);
 			break;
 		case McapFilter::DataContainerType::Object:
-			if (importObjectNames) {
-				const QString& rowName = (objectIterator + rowOffset + i).key();
-				setValueFromString((int)createIndexEnabled, i, rowName);
-			}
 			row = *(objectIterator + rowOffset + i);
 			break;
 		}
@@ -627,9 +599,10 @@ void McapFilterPrivate::importData(AbstractDataSource* dataSource, AbstractFileF
 				else
 					setEmptyValue(colOffset + n, i + startRow - 1);
 				break;
-			case QJsonValue::String:
+			case QJsonValue::String:{
 				setValueFromString(colOffset + n, i, value.toString());
 				break;
+			}
 			case QJsonValue::Array:
 			case QJsonValue::Object:
 			case QJsonValue::Bool:
@@ -656,8 +629,6 @@ void McapFilterPrivate::importData(AbstractDataSource* dataSource, AbstractFileF
 	if (spreadsheet) {
 		if (createIndexEnabled)
 			spreadsheet->column(m_columnOffset)->setPlotDesignation(AbstractColumn::PlotDesignation::X);
-		if (importObjectNames)
-			spreadsheet->column(m_columnOffset + (int)createIndexEnabled)->setPlotDesignation(AbstractColumn::PlotDesignation::X);
 	}
 
 	dataSource->finalizeImport(m_columnOffset, startColumn, startColumn + m_actualCols - 1, dateTimeFormat, importMode);
@@ -687,7 +658,6 @@ QVector<QStringList> McapFilterPrivate::preview(int lines) {
 	const auto& array = m_preparedDoc.array();
 	const auto& arrayIterator = array.begin();
 	const auto& object = m_preparedDoc.object();
-
 	const auto& objectIterator = object.begin();
 
 	for (int i = 0; i < std::min(lines, m_actualRows); ++i) {
@@ -708,8 +678,6 @@ QVector<QStringList> McapFilterPrivate::preview(int lines) {
 		QStringList lineString;
 		if (createIndexEnabled)
 			lineString += QString::number(i + 1);
-		if (importObjectNames)
-			lineString += rowName;
 
 		for (int n = startColumn - 1; n < endColumn; ++n) {
 			QJsonValue value;
@@ -764,7 +732,7 @@ void McapFilterPrivate::write(const QString& fileName, AbstractDataSource* dataS
 /*!
 writes the content of \c dataSource to the file \c fileName.
 */
-void McapFilterPrivate::writeWithOptions(const QString& fileName, AbstractDataSource* dataSource, mcap::McapWriterOptions& opts) {
+void McapFilterPrivate::writeWithOptions(const QString& fileName, AbstractDataSource* dataSource,const mcap::McapWriterOptions& opts) {
 	DEBUG(Q_FUNC_INFO);
 
 	auto* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
@@ -778,6 +746,8 @@ void McapFilterPrivate::writeWithOptions(const QString& fileName, AbstractDataSo
 	"description": "An object exported from Labplot", 
 	"type": "object"
 	})"; // Todo: Create proper schema.
+	qDebug() << static_cast<int>(opts.compression);
+	qDebug() << static_cast<int>(opts.compressionLevel);
 
 	mcap::McapWriter writer;
 	{
@@ -796,7 +766,6 @@ void McapFilterPrivate::writeWithOptions(const QString& fileName, AbstractDataSo
 		mcap::Schema schema(SCHEMA_NAME, "jsonschema", SCHEMA_TEXT);
 		writer.addSchema(schema);
 
-		// choose an arbitrary topic name.
 		mcap::Channel channel("/spreadsheet", "json", schema.id);
 		writer.addChannel(channel);
 		channelId = channel.id;
@@ -859,7 +828,6 @@ void McapFilter::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("dateTimeFormat"), d->dateTimeFormat);
 	writer->writeAttribute(QStringLiteral("numberFormat"), QString::number(d->numberFormat));
 	writer->writeAttribute(QStringLiteral("createIndex"), QString::number(d->createIndexEnabled));
-	writer->writeAttribute(QStringLiteral("importObjectNames"), QString::number(d->importObjectNames));
 	writer->writeAttribute(QStringLiteral("nanValue"), QString::number(d->nanValue));
 	writer->writeAttribute(QStringLiteral("startRow"), QString::number(d->startRow));
 	writer->writeAttribute(QStringLiteral("endRow"), QString::number(d->endRow));
@@ -886,7 +854,6 @@ bool McapFilter::load(XmlStreamReader* reader) {
 	READ_STRING_VALUE("dateTimeFormat", dateTimeFormat);
 	READ_INT_VALUE("numberFormat", numberFormat, QLocale::Language);
 	READ_INT_VALUE("createIndex", createIndexEnabled, bool);
-	READ_INT_VALUE("importObjectNames", importObjectNames, bool);
 	READ_DOUBLE_VALUE("nanValue", nanValue);
 	READ_INT_VALUE("startRow", startRow, int);
 	READ_INT_VALUE("endRow", endRow, int);
