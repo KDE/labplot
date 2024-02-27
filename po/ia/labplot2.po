@@ -1,13 +1,13 @@
 # Copyright (C) YEAR This file is copyright:
 # This file is distributed under the same license as the labplot package.
 #
-# giovanni <g.sora@tiscali.it>, 2023.
+# giovanni <g.sora@tiscali.it>, 2023, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-18 03:06+0000\n"
-"PO-Revision-Date: 2023-11-30 10:35+0100\n"
+"PO-Revision-Date: 2024-02-26 11:09+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -6527,7 +6527,7 @@ msgstr ""
 #: src/backend/worksheet/Line.cpp:125
 #, kde-format
 msgid "%1: error bar type changed"
-msgstr ""
+msgstr "%1:  typo de barra  de error cambiate"
 
 #: src/backend/worksheet/Line.cpp:132
 #, kde-format
