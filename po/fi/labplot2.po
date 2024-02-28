@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-26 01:36+0000\n"
+"POT-Creation-Date: 2024-02-28 01:33+0000\n"
 "PO-Revision-Date: 2023-10-30 14:32+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -1916,6 +1916,7 @@ msgid "Undefined"
 msgstr "viiva"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:412
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:55
 #, fuzzy, kde-format
 #| msgid "unknown"
 msgid "Unknown"
@@ -2250,64 +2251,94 @@ msgstr ""
 msgid "Size of TStreamerInfo record: %1 bytes"
 msgstr ""
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:89
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:101
+#, fuzzy, kde-format
+#| msgid "Rotation:"
+msgid "Application: %1"
+msgstr "Kierto:"
+
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:104
+#, fuzzy, kde-format
+#| msgid "Show Options"
+msgid "Application version: %1.%2"
+msgstr "Näytä asetukset"
+
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:107
+#, fuzzy, kde-format
+#| msgid "Show Options"
+msgid "Compression Level: %1"
+msgstr "Näytä asetukset"
+
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:110
+#, fuzzy, kde-format
+#| msgid "File type: %1"
+msgid "Uncompressed File Size: %1 Bytes"
+msgstr "Tiedoston tyyppi: %1"
+
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:113
+#, fuzzy, kde-format
+#| msgid "Number of lines: %1"
+msgid "Number of Objects: %1"
+msgstr "Rivien määrä: %1"
+
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:162
 #, kde-format
 msgid "Big Endian not supported. CAN id: %1"
 msgstr ""
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:92
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:165
 #, kde-format
 msgid "Message too long. CAN id: %1"
 msgstr ""
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:95
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:168
 #, fuzzy, kde-format
 #| msgid "unknown"
 msgid "Unknown id: %1"
 msgstr "tuntematon"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:98
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:171
 #, fuzzy, kde-format
 #| msgid "Export to file"
 msgid "Invalid blf file"
 msgstr "Vie tiedostoon"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:101
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:174
 #, fuzzy, kde-format
 #| msgid "Show Options"
 msgid "Unable to calculate conversion: %1"
 msgstr "Näytä asetukset"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:104
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:177
 #, kde-format
 msgid "No dbc parser installed"
 msgstr ""
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:107
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:180
 #, fuzzy, kde-format
 #| msgid "Invalid pointer"
 msgid "Invalid dbc file"
 msgstr "Virheellinen osoitin"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:110
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:183
 #, fuzzy, kde-format
 #| msgid "unknown"
 msgid "Unknown error"
 msgstr "tuntematon"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:351
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:424
 #, fuzzy, kde-format
 #| msgid "Timestamp"
 msgid "Time_s"
 msgstr "Aikaleima"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:353
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:426
 #, fuzzy, kde-format
 #| msgid "Timestamp"
 msgid "Time_ns"
 msgstr "Aikaleima"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:355
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:428
 #, kde-format
 msgid "Time_10µs"
 msgstr ""
