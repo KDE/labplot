@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-26 01:36+0000\n"
-"PO-Revision-Date: 2024-02-16 11:13+0100\n"
+"POT-Creation-Date: 2024-02-28 01:33+0000\n"
+"PO-Revision-Date: 2024-02-28 10:33+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -1808,6 +1808,7 @@ msgid "Undefined"
 msgstr "Sense definir"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:412
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:55
 #, kde-format
 msgid "Unknown"
 msgstr "Desconegut"
@@ -2109,57 +2110,82 @@ msgstr "Nivell i algorisme de compressió: %1"
 msgid "Size of TStreamerInfo record: %1 bytes"
 msgstr "Mida de la gravació «TStreamerInfo»: %1 bytes"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:89
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:101
+#, kde-format
+msgid "Application: %1"
+msgstr "Aplicació: %1"
+
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:104
+#, kde-format
+msgid "Application version: %1.%2"
+msgstr "Versió de l'aplicació: %1.%2"
+
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:107
+#, kde-format
+msgid "Compression Level: %1"
+msgstr "Nivell de compressió: %1"
+
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:110
+#, kde-format
+msgid "Uncompressed File Size: %1 Bytes"
+msgstr "Mida del fitxer descomprimit: %1 bytes"
+
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:113
+#, kde-format
+msgid "Number of Objects: %1"
+msgstr "Nombre d'objectes: %1"
+
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:162
 #, kde-format
 msgid "Big Endian not supported. CAN id: %1"
 msgstr "No s'admet «big-endian». ID del CAN: %1"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:92
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:165
 #, kde-format
 msgid "Message too long. CAN id: %1"
 msgstr "Missatge massa llarg. ID del CAN: %1"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:95
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:168
 #, kde-format
 msgid "Unknown id: %1"
 msgstr "ID desconegut: %1"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:98
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:171
 #, kde-format
 msgid "Invalid blf file"
 msgstr "Fitxer «blf» no vàlid"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:101
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:174
 #, kde-format
 msgid "Unable to calculate conversion: %1"
 msgstr "No s'ha pogut calcular la conversió: %1"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:104
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:177
 #, kde-format
 msgid "No dbc parser installed"
 msgstr "No hi ha instal·lat l'analitzador «dbc»"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:107
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:180
 #, kde-format
 msgid "Invalid dbc file"
 msgstr "Fitxer «dbc» no vàlid"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:110
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:183
 #, kde-format
 msgid "Unknown error"
 msgstr "S'ha produït un error desconegut"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:351
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:424
 #, kde-format
 msgid "Time_s"
 msgstr "Hora_s"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:353
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:426
 #, kde-format
 msgid "Time_ns"
 msgstr "Hora_ns"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:355
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:428
 #, kde-format
 msgid "Time_10µs"
 msgstr "Hora_10µs"
@@ -8138,10 +8164,9 @@ msgid "%1: set error column"
 msgstr "%1: establix la columna d'error"
 
 #: src/backend/worksheet/plots/cartesian/ErrorBar.cpp:235
-#, fuzzy, kde-format
-#| msgid "%1: error type changed"
+#, kde-format
 msgid "%1: error bar type changed"
-msgstr "%1: s'ha canviat el tipus d'error"
+msgstr "%1: s'ha canviat el tipus de la barra d'errors"
 
 #: src/backend/worksheet/plots/cartesian/ErrorBar.cpp:242
 #, kde-format
@@ -9870,8 +9895,7 @@ msgid "Show Comments"
 msgstr "Mostra els comentaris"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:322
-#, fuzzy, kde-format
-#| msgid "Show Spark Lines"
+#, kde-format
 msgid "Show SparkLines"
 msgstr "Mostra els minidiagrames"
 
@@ -10170,15 +10194,13 @@ msgstr "Oculta els comentaris"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1147
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1519
-#, fuzzy, kde-format
-#| msgid "Hide Spark Lines"
+#, kde-format
 msgid "Hide Sparklines"
 msgstr "Oculta els minidiagrames"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1149
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1521
-#, fuzzy, kde-format
-#| msgid "Show Spark Lines"
+#, kde-format
 msgid "Show Sparklines"
 msgstr "Mostra els minidiagrames"
 
@@ -20082,24 +20104,21 @@ msgstr "Habilitat"
 
 #. i18n: ectx: property (text), widget (QLabel, lShowSparklines)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:175
-#, fuzzy, kde-format
-#| msgid "Column Sparklines:"
+#, kde-format
 msgid "Sparklines:"
-msgstr "Minidiagrames de les columnes:"
+msgstr "Minidiagrames:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFormat)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:198
-#, fuzzy, kde-format
-#| msgid "Column Major"
+#, kde-format
 msgid "Column Format"
-msgstr "Columna principal"
+msgstr "Format de columna"
 
 #. i18n: ectx: property (text), widget (QLabel, lShowComments)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:222
-#, fuzzy, kde-format
-#| msgid "Comment:"
+#, kde-format
 msgid "Comments:"
-msgstr "Comentari:"
+msgstr "Comentaris:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLinking)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:235
@@ -22946,12 +22965,3 @@ msgstr "El procés «convert» ha fallat, codi d'eixida ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "No s'ha pogut obrir el fitxer:"
-
-#~ msgid "Show SparkLine"
-#~ msgstr "Mostra un minidiagrama"
-
-#~ msgid "Column Comments:"
-#~ msgstr "Comentaris de les columnes:"
-
-#~ msgid "%1: error bar style type changed"
-#~ msgstr "%1: s'ha canviat el tipus d'estil de la barra d'errors"

@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-26 01:36+0000\n"
-"PO-Revision-Date: 2024-02-24 22:09+0300\n"
+"POT-Creation-Date: 2024-02-28 01:33+0000\n"
+"PO-Revision-Date: 2024-02-28 11:26+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -1786,6 +1786,7 @@ msgid "Undefined"
 msgstr "Tanımlanmamış"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:412
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:55
 #, kde-format
 msgid "Unknown"
 msgstr "Bilinmeyen"
@@ -2087,57 +2088,82 @@ msgstr "Sıkıştırma düzeyi ve algoritması: %1"
 msgid "Size of TStreamerInfo record: %1 bytes"
 msgstr "TStreamerInfo kaydı boyutu: %1 bayt"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:89
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:101
+#, kde-format
+msgid "Application: %1"
+msgstr "Uygulama: %1"
+
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:104
+#, kde-format
+msgid "Application version: %1.%2"
+msgstr "Uygulama sürümü: %1.%2"
+
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:107
+#, kde-format
+msgid "Compression Level: %1"
+msgstr "Sıkıştırma düzeyi: %1"
+
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:110
+#, kde-format
+msgid "Uncompressed File Size: %1 Bytes"
+msgstr "Sıkıştırılmamış dosya boyutu: %1 bayt"
+
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:113
+#, kde-format
+msgid "Number of Objects: %1"
+msgstr "Nesnelerin sayısı: %1"
+
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:162
 #, kde-format
 msgid "Big Endian not supported. CAN id: %1"
 msgstr "Büyük son haneli desteklenmiyor. CAN kimliği: %1"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:92
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:165
 #, kde-format
 msgid "Message too long. CAN id: %1"
 msgstr "İleti pek uzun. CAN kimliği: %1"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:95
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:168
 #, kde-format
 msgid "Unknown id: %1"
 msgstr "Bilinmeyen kimlik: %1"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:98
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:171
 #, kde-format
 msgid "Invalid blf file"
 msgstr "Geçersiz blf dosyası"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:101
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:174
 #, kde-format
 msgid "Unable to calculate conversion: %1"
 msgstr "Dönüştürme hesaplanamıyor: %1"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:104
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:177
 #, kde-format
 msgid "No dbc parser installed"
 msgstr "Bir dbc ayrıştırıcısı kurulu değil"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:107
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:180
 #, kde-format
 msgid "Invalid dbc file"
 msgstr "Geçersiz dbc dosyası"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:110
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:183
 #, kde-format
 msgid "Unknown error"
 msgstr "Bilinmeyen hata"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:351
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:424
 #, kde-format
 msgid "Time_s"
 msgstr "Zaman_s"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:353
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:426
 #, kde-format
 msgid "Time_ns"
 msgstr "Zaman_ns"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:355
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:428
 #, kde-format
 msgid "Time_10µs"
 msgstr "Zaman_10µs"
@@ -22729,48 +22755,3 @@ msgstr "dönüştürme süreci başarısız, çıkış kodu ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Dosya açılamadı:"
-
-#~ msgid "Show SparkLine"
-#~ msgstr "Kıvılcım Çizgisini Göster"
-
-#~ msgid "Column Comments:"
-#~ msgstr "Sütun Açıklamaları:"
-
-#~ msgid "%1: error bar style type changed"
-#~ msgstr "%1: Hata çubuğu biçemi türü değişti"
-
-#~ msgid "%1 CustomPoints: visibility changed"
-#~ msgstr "%1 ÖzelNoktalar: Görünebilirlik değişti"
-
-#~ msgid "%1: set x-error column"
-#~ msgstr "%1: x hatası sütununu ayarla"
-
-#~ msgid "%1: y-error type changed"
-#~ msgstr "%1: y hatası türü değişti"
-
-#~ msgid "%1: set y-error column"
-#~ msgstr "%1: y hatası sütununu ayarla"
-
-#~ msgid "XY-Curves"
-#~ msgstr "XY Eğrileri"
-
-#~ msgid "Do Nothing"
-#~ msgstr "Bir Şey Yapma"
-
-#~ msgid "Create New Project with Worksheet"
-#~ msgstr "Çalışma Sayfasıyla Yeni Proje Oluştur"
-
-#~ msgid "Create New Project with Spreadsheet"
-#~ msgstr "Hesap Tablosuyla Yeni Proje Oluştur"
-
-#~ msgid "Create New Project with Notebook"
-#~ msgstr "Defter ile Yeni Proje Oluştur"
-
-#~ msgid "Locking"
-#~ msgstr "Kilitleme"
-
-#~ msgid "number should be bigger than number of data points"
-#~ msgstr "sayı veri noktalarının sayısından büyük olmalıdır"
-
-#~ msgid "auto update"
-#~ msgstr "otomatik güncelleme"
