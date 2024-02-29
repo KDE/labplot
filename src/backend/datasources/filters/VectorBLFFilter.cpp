@@ -278,7 +278,6 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 	file.open(fileName.toLocal8Bit().data());
 
 	// 1. Reading in messages
-	QVector<const Vector::BLF::ObjectHeaderBase*> v;
 	Vector::BLF::ObjectHeaderBase* ohb = nullptr;
 	QVector<uint32_t> ids;
 	int message_counter = 0;
@@ -301,12 +300,13 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 			} else
 				return 0;
 
-			v.append(ohb);
 			if (!ids.contains(id))
 				ids.append(id);
 			message_counter++;
 		}
 	}
+	file.close();
+	file.open(fileName.toLocal8Bit().data()); // Restart reading
 
 	// 2. Create vector names
 	QHash<uint32_t, int> idIndexTable;
@@ -332,7 +332,15 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 	int message_index = 0;
 	bool timeInNS = true;
 	if (timeHandlingMode == CANFilter::TimeHandling::ConcatNAN) {
-		for (const auto ohb : v) {
+		while (file.good() && ((lines >= 0 && message_counter < lines) || lines < 0)) {
+			try {
+				ohb = file.read();
+			} catch (std::runtime_error& e) { DEBUG("Exception: " << e.what() << std::endl); }
+			if (ohb == nullptr)
+				break;
+			if (ohb->objectType != Vector::BLF::ObjectType::CAN_MESSAGE2)
+				continue;
+			
 			uint32_t id;
 			std::vector<double> values;
 			DbcParser::ParseStatus status;
@@ -377,7 +385,14 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 		}
 	} else {
 		bool firstMessageValid = false;
-		for (const auto ohb : v) {
+		while (file.good() && ((lines >= 0 && message_counter < lines) || lines < 0)) {
+			try {
+				ohb = file.read();
+			} catch (std::runtime_error& e) { DEBUG("Exception: " << e.what() << std::endl); }
+			if (ohb == nullptr)
+				break;
+			if (ohb->objectType != Vector::BLF::ObjectType::CAN_MESSAGE2)
+				continue;
 			uint32_t id;
 			std::vector<double> values;
 			DbcParser::ParseStatus status;
@@ -441,9 +456,6 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 	else
 		m_signals.signal_names.prepend(i18n("Time_10µs")); // Must be done after allocating memory
 	m_signals.value_descriptions.insert(m_signals.value_descriptions.begin(), std::vector<DbcParser::ValueDescriptions>()); // Time does not have any labels
-
-	for (const auto& message : v)
-		delete message;
 
 	if (!m_DataContainer.resize(message_index))
 		return 0;
