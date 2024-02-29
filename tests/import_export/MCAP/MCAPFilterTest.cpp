@@ -37,8 +37,14 @@ void MCAPFilterTest::testArrayImport() {
 	// attachments: 0
 	// metadata: 0
 
-	QVector<QString> compression_types = {"data/basic_NONE.mcap", "data/basic_LZ4.mcap", "data/basic_ZSTD.mcap"};
-
+	QVector<QString> compression_types = {"data/basic_NONE.mcap"};
+	#ifdef HAVE_LZ4
+	compression_types.append("data/basic_LZ4.mcap");
+	#endif
+	#ifdef HAVE_ZSTD
+	compression_types.append("data/basic_ZSTD.mcap");
+	#endif
+	
 	for (const QString& file : compression_types) {
 		Spreadsheet spreadsheet(QStringLiteral("test"), false);
 		McapFilter filter;
