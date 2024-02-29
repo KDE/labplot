@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-26 01:36+0000\n"
+"POT-Creation-Date: 2024-02-28 01:33+0000\n"
 "PO-Revision-Date: 2014-03-25 11:30+0800\n"
 "Last-Translator: Franklin Weng <franklin at goodhorse dot idv dot tw>\n"
 "Language-Team: Chinese Traditional <kde-tw@googlegroups.com>\n"
@@ -1824,6 +1824,7 @@ msgid "Undefined"
 msgstr "線條"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:412
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:55
 #, fuzzy, kde-format
 msgid "Unknown"
 msgstr "未知"
@@ -2136,58 +2137,84 @@ msgstr ""
 msgid "Size of TStreamerInfo record: %1 bytes"
 msgstr ""
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:89
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:101
+#, fuzzy, kde-format
+#| msgid "Rotation"
+msgid "Application: %1"
+msgstr "旋轉"
+
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:104
+#, fuzzy, kde-format
+msgid "Application version: %1.%2"
+msgstr "顯示選項(&H)"
+
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:107
+#, fuzzy, kde-format
+msgid "Compression Level: %1"
+msgstr "顯示選項(&H)"
+
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:110
+#, fuzzy, kde-format
+msgid "Uncompressed File Size: %1 Bytes"
+msgstr "檔案型態"
+
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:113
+#, fuzzy, kde-format
+msgid "Number of Objects: %1"
+msgstr "行數："
+
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:162
 #, kde-format
 msgid "Big Endian not supported. CAN id: %1"
 msgstr ""
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:92
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:165
 #, kde-format
 msgid "Message too long. CAN id: %1"
 msgstr ""
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:95
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:168
 #, fuzzy, kde-format
 msgid "Unknown id: %1"
 msgstr "未知"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:98
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:171
 #, fuzzy, kde-format
 #| msgid "Export to file"
 msgid "Invalid blf file"
 msgstr "匯出到檔案"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:101
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:174
 #, fuzzy, kde-format
 msgid "Unable to calculate conversion: %1"
 msgstr "顯示選項(&H)"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:104
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:177
 #, kde-format
 msgid "No dbc parser installed"
 msgstr ""
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:107
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:180
 #, fuzzy, kde-format
 msgid "Invalid dbc file"
 msgstr "數值"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:110
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:183
 #, fuzzy, kde-format
 msgid "Unknown error"
 msgstr "未知"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:351
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:424
 #, kde-format
 msgid "Time_s"
 msgstr ""
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:353
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:426
 #, kde-format
 msgid "Time_ns"
 msgstr ""
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:355
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:428
 #, kde-format
 msgid "Time_10µs"
 msgstr ""

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-26 01:36+0000\n"
+"POT-Creation-Date: 2024-02-28 01:33+0000\n"
 "PO-Revision-Date: 2024-02-24 08:49+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
@@ -1790,6 +1790,7 @@ msgid "Undefined"
 msgstr "Sen definir"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:412
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:55
 #, kde-format
 msgid "Unknown"
 msgstr "Descoñecida"
@@ -2091,57 +2092,87 @@ msgstr "Nivel de compresión e algoritmo: %1"
 msgid "Size of TStreamerInfo record: %1 bytes"
 msgstr "Tamaño de rexistro TStreamerInfo: %1 bytes"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:89
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:101
+#, fuzzy, kde-format
+#| msgid "Ratio: %1"
+msgid "Application: %1"
+msgstr "Proporción: %1"
+
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:104
+#, fuzzy, kde-format
+#| msgid "Format version: %1"
+msgid "Application version: %1.%2"
+msgstr "Versión do formato: %1"
+
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:107
+#, fuzzy, kde-format
+#| msgid "Compression: %1"
+msgid "Compression Level: %1"
+msgstr "Compresión: %1"
+
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:110
+#, fuzzy, kde-format
+#| msgid "File size: %1 bytes"
+msgid "Uncompressed File Size: %1 Bytes"
+msgstr "Tamaño do ficheiro: %1 bytes"
+
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:113
+#, fuzzy, kde-format
+#| msgid "Number of all objects: %1"
+msgid "Number of Objects: %1"
+msgstr "Número de todos os obxectos: %1"
+
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:162
 #, kde-format
 msgid "Big Endian not supported. CAN id: %1"
 msgstr "Non se permite o extremo maior. Identificador de CAN: %1"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:92
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:165
 #, kde-format
 msgid "Message too long. CAN id: %1"
 msgstr "A mensaxe é longa de máis. Identificador de CAN: %1"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:95
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:168
 #, kde-format
 msgid "Unknown id: %1"
 msgstr "Identificador descoñecido: %1"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:98
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:171
 #, kde-format
 msgid "Invalid blf file"
 msgstr "Ficheiro blf non válido"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:101
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:174
 #, kde-format
 msgid "Unable to calculate conversion: %1"
 msgstr "Non é posíbel calcular a conversión: %1"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:104
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:177
 #, kde-format
 msgid "No dbc parser installed"
 msgstr "Non hai ningún analizador de dbc instalado"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:107
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:180
 #, kde-format
 msgid "Invalid dbc file"
 msgstr "O ficheiro dbc non é válido"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:110
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:183
 #, kde-format
 msgid "Unknown error"
 msgstr "Erro descoñecido"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:351
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:424
 #, kde-format
 msgid "Time_s"
 msgstr "Tempo_s"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:353
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:426
 #, kde-format
 msgid "Time_ns"
 msgstr "Tempo_ns"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:355
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:428
 #, kde-format
 msgid "Time_10µs"
 msgstr "Tempo_10µs"
