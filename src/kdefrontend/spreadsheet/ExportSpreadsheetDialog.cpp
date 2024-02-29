@@ -22,11 +22,10 @@
 #include <KWindowConfig>
 #include <kcoreaddons_version.h>
 
-#include <QCompleter>
-#include <QDialogButtonBox>
 #include <3rdparty/mcap/include/mcap/types.hpp>
 #include <3rdparty/mcap/include/mcap/writer.hpp>
-
+#include <QCompleter>
+#include <QDialogButtonBox>
 
 // see https://gitlab.kitware.com/cmake/cmake/-/issues/21609
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
@@ -34,12 +33,11 @@
 #else
 #include <QDirModel>
 #endif
+#include <QDebug>
 #include <QFileDialog>
 #include <QSqlDatabase>
 #include <QStandardItemModel>
 #include <QWindow>
-#include <QDebug>
-
 
 /*!
 	\class ExportSpreadsheetDialog
@@ -95,12 +93,12 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent)
 	ui->cbLaTeXExport->addItem(i18n("Export Selection"));
 
 	// See: https://mcap.dev/docs/cpp/e3B3464E30CB968FB
-	ui->cbCompressionLevel->addItem(QStringLiteral("Fastest"),static_cast<int>(mcap::CompressionLevel::Fastest));
+	ui->cbCompressionLevel->addItem(QStringLiteral("Fastest"), static_cast<int>(mcap::CompressionLevel::Fastest));
 	ui->cbCompressionLevel->addItem(QStringLiteral("Fast"), static_cast<int>(mcap::CompressionLevel::Fast));
-	ui->cbCompressionLevel->addItem(QStringLiteral("Default"),static_cast<int>(mcap::CompressionLevel::Default));
-	ui->cbCompressionLevel->addItem(QStringLiteral("Slow"),static_cast<int>(mcap::CompressionLevel::Slow));
+	ui->cbCompressionLevel->addItem(QStringLiteral("Default"), static_cast<int>(mcap::CompressionLevel::Default));
+	ui->cbCompressionLevel->addItem(QStringLiteral("Slow"), static_cast<int>(mcap::CompressionLevel::Slow));
 	ui->cbCompressionLevel->addItem(QStringLiteral("Slowest"), static_cast<int>(mcap::CompressionLevel::Slowest));
-	ui->cbCompressionLevel->setCurrentIndex(2); //Default
+	ui->cbCompressionLevel->setCurrentIndex(2); // Default
 
 	ui->rbNone->setChecked(true);
 	ui->cbCompressionLevel->setEnabled(false);
@@ -124,7 +122,6 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent)
 	connect(ui->rbZSTD, &QRadioButton::toggled, this, &ExportSpreadsheetDialog::onCompressionToggled);
 	connect(ui->rbLZ4, &QRadioButton::toggled, this, &ExportSpreadsheetDialog::onCompressionToggled);
 	connect(ui->rbNone, &QRadioButton::toggled, this, &ExportSpreadsheetDialog::onCompressionToggled);
-
 
 	setWindowTitle(i18nc("@title:window", "Export Spreadsheet"));
 	setWindowIcon(QIcon::fromTheme(QStringLiteral("document-export-database")));
@@ -229,13 +226,13 @@ void ExportSpreadsheetDialog::fitsExportToChanged(int idx) {
 mcap::McapWriterOptions ExportSpreadsheetDialog::getMcapSettings() {
 	auto opts = mcap::McapWriterOptions("json");
 	opts.compressionLevel = static_cast<mcap::CompressionLevel>(ui->cbCompressionLevel->currentIndex());
-	if(ui->rbLZ4->isChecked()){
+	if (ui->rbLZ4->isChecked()) {
 		opts.compression = mcap::Compression::Lz4;
 		qDebug() << "LZ4 compression";
-	}else if(ui->rbZSTD->isChecked()){
+	} else if (ui->rbZSTD->isChecked()) {
 		opts.compression = mcap::Compression::Zstd;
 		qDebug() << "ZSTD compression";
-	}else{
+	} else {
 		qDebug() << "No compression";
 		opts.compression = mcap::Compression::None;
 	}
@@ -453,7 +450,7 @@ void ExportSpreadsheetDialog::formatChanged(int index) {
 	extensions << QStringLiteral(".xlsx");
 #endif
 	extensions << QStringLiteral(".db");
-	extensions << QStringLiteral(".mcap"); //Todo: Order of suffixes matters
+	extensions << QStringLiteral(".mcap"); // Todo: Order of suffixes matters
 
 	QString path = ui->leFileName->text();
 	int i = path.indexOf(QLatin1Char('.'));
@@ -703,15 +700,13 @@ void ExportSpreadsheetDialog::fileNameChanged(const QString& name) {
 	m_okButton->setEnabled(true);
 }
 
-void ExportSpreadsheetDialog::onCompressionToggled(bool checked)
-{
-    if(checked){
-        QRadioButton *btn = static_cast<QRadioButton *>(sender());
-		if(btn->objectName() == "rbNone"){
-
+void ExportSpreadsheetDialog::onCompressionToggled(bool checked) {
+	if (checked) {
+		QRadioButton* btn = static_cast<QRadioButton*>(sender());
+		if (btn->objectName() == QLatin1String("rbNone")) {
 			ui->cbCompressionLevel->setEnabled(false);
-		}else{
+		} else {
 			ui->cbCompressionLevel->setEnabled(true);
 		}
-    }
+	}
 }
