@@ -98,7 +98,7 @@ QString VectorBLFFilter::fileInfoString(const QString& fileName) {
 		break;
 	}
 
-    info += i18n("Application: %1", appName);
+	info += i18n("Application: %1", appName);
 	info += QStringLiteral("<br>");
 
 	info += i18n("Application version: %1.%2", f.fileStatistics.applicationMajor, f.fileStatistics.applicationMinor);
