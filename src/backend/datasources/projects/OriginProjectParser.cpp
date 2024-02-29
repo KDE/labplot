@@ -1342,9 +1342,9 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 	else
 		plot->plotArea()->borderLine()->setStyle(Qt::SolidLine);
 
-	// ranges
-	const auto& originXAxis = layer.xAxis;
-	const auto& originYAxis = layer.yAxis;
+	// ranges: swap axes when exchanged
+	const auto& originXAxis = layer.exchangedAxes ? layer.yAxis : layer.xAxis;
+	const auto& originYAxis = layer.exchangedAxes ? layer.xAxis : layer.yAxis;
 
 	Range<double> xRange(originXAxis.min, originXAxis.max);
 	Range<double> yRange(originYAxis.min, originYAxis.max);
@@ -1844,15 +1844,11 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 					hist->setBinRangesMin(layer.histogramBegin);
 					hist->setBinRangesMax(layer.histogramEnd);
 
-					// TODO: the orientation of the histogram is indirectly determined by the "swapped axes" parameter.
-					// while we can handle the orientation of the histogram here, we also need to handle this parameter
-					// for axes and ranges correctly further above.
 					if (layer.exchangedAxes)
 						hist->setOrientation(Histogram::Orientation::Horizontal);
 					else
 						hist->setOrientation(Histogram::Orientation::Vertical);
 
-					// TODO: doesn't work
 					loadBackground(originCurve, hist->background());
 				}
 				break;
@@ -1962,8 +1958,9 @@ void OriginProjectParser::loadAxes(const Origin::GraphLayer& layer,
 								   int layerIndex,
 								   const QString& xColumnInfo,
 								   const QString& yColumnInfo) {
-	const auto& originXAxis = layer.xAxis;
-	const auto& originYAxis = layer.yAxis;
+	// swap axes when exchanged
+	const auto& originXAxis = layer.exchangedAxes ? layer.yAxis : layer.xAxis;
+	const auto& originYAxis = layer.exchangedAxes ? layer.xAxis : layer.yAxis;
 
 	// x bottom
 	if (!originXAxis.formatAxis[0].hidden || originXAxis.tickAxis[0].showMajorLabels) {
