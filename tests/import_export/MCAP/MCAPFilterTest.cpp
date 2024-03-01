@@ -37,12 +37,12 @@ void MCAPFilterTest::testArrayImport() {
 	// attachments: 0
 	// metadata: 0
 
-	QVector<QString> compression_types = {"data/basic_NONE.mcap"};
+	QVector<QString> compression_types = {QLatin1String("data/basic_NONE.mcap")};
 	#ifdef HAVE_LZ4
-	compression_types.append("data/basic_LZ4.mcap");
+	compression_types.append(QLatin1String("data/basic_LZ4.mcap"));
 	#endif
 	#ifdef HAVE_ZSTD
-	compression_types.append("data/basic_ZSTD.mcap");
+	compression_types.append(QLatin1String("data/basic_ZSTD.mcap"));
 	#endif
 	
 	for (const QString& file : compression_types) {
@@ -110,7 +110,7 @@ void MCAPFilterTest::testExport() {
 		Spreadsheet spreadsheet(QStringLiteral("test"), false);
 		McapFilter filter;
 
-		const QString& fileName = QFINDTESTDATA("data/basic_LZ4.mcap");
+		const QString& fileName = QFINDTESTDATA(QLatin1String("data/basic_LZ4.mcap"));
 
 		AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode::Replace;
 		filter.setCreateIndexEnabled(true);
@@ -125,8 +125,8 @@ void MCAPFilterTest::testExport() {
 		QElapsedTimer timer_export;
 		timer_export.start();
 
-		filter.write("/tmp/basic_out.mcap",&spreadsheet);
-		QCOMPARE(QFile::exists("/tmp/basic_out.mcap"),true);
+		filter.write(QLatin1String("/tmp/basic_out.mcap"),&spreadsheet);
+		QCOMPARE(QFile::exists(QLatin1String("/tmp/basic_out.mcap")),true);
 		
 		qDebug() << "The exporting" << timer_export.elapsed() << "milliseconds";
 
