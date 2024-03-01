@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-28 01:33+0000\n"
-"PO-Revision-Date: 2024-02-05 11:40\n"
+"PO-Revision-Date: 2024-02-29 12:57\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -2088,10 +2088,9 @@ msgid "Uncompressed File Size: %1 Bytes"
 msgstr ""
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:113
-#, fuzzy, kde-format
-#| msgid "Number of lines: %1"
+#, kde-format
 msgid "Number of Objects: %1"
-msgstr "行数：%1"
+msgstr ""
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:162
 #, kde-format
@@ -9705,10 +9704,9 @@ msgid "Show Comments"
 msgstr "显示注释"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:322
-#, fuzzy, kde-format
-#| msgid "Show Options"
+#, kde-format
 msgid "Show SparkLines"
-msgstr "显示选项"
+msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:324
 #, kde-format
@@ -10004,17 +10002,15 @@ msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1147
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1519
-#, fuzzy, kde-format
-#| msgid "Hide Options"
+#, kde-format
 msgid "Hide Sparklines"
-msgstr "隐藏选项"
+msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1149
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1521
-#, fuzzy, kde-format
-#| msgid "Show Options"
+#, kde-format
 msgid "Show Sparklines"
-msgstr "显示选项"
+msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1610
 #, kde-format
@@ -19560,24 +19556,21 @@ msgstr "已启用"
 
 #. i18n: ectx: property (text), widget (QLabel, lShowSparklines)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:175
-#, fuzzy, kde-format
-#| msgid "Columns:"
+#, kde-format
 msgid "Sparklines:"
-msgstr "栏数："
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lFormat)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:198
-#, fuzzy, kde-format
-#| msgid "Column Major"
+#, kde-format
 msgid "Column Format"
-msgstr "列"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lShowComments)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:222
-#, fuzzy, kde-format
-#| msgid "Comment:"
+#, kde-format
 msgid "Comments:"
-msgstr "注释："
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lLinking)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:235
@@ -22375,8 +22368,3 @@ msgstr ""
 #, kde-format
 msgid "Unable to open file:"
 msgstr ""
-
-#, fuzzy
-#~| msgid "Show Options"
-#~ msgid "Show SparkLine"
-#~ msgstr "显示选项"
