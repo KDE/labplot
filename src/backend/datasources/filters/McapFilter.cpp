@@ -443,7 +443,7 @@ int McapFilterPrivate::mcapToJson(const QString& fileName, int lines) {
 		}
 	}
 
-	if (current_topic == "") {
+	if (current_topic == QLatin1String("")) {
 		QVector<QString> topics = getValidTopics(fileName); // Todo: make this more efficient. Only open file once.
 		current_topic = topics[0];
 	}

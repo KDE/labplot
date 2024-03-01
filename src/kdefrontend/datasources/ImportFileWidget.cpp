@@ -2392,12 +2392,27 @@ void ImportFileWidget::changeTopic() {
 		switch (filter->type()) {
 		case AbstractFileFilter::FileType::MCAP: {
 			auto mcap_filter = static_cast<McapFilter*>(filter);
-			if(!(mcap_filter->getCurrentTopic()==ui.cbTopics->currentText())){
+			if (!(mcap_filter->getCurrentTopic() == ui.cbTopics->currentText())) {
 				refreshPreview();
 			}
 			break;
 		}
-		default:{
+		case AbstractFileFilter::FileType::Ascii:
+		case AbstractFileFilter::FileType::Binary:
+		case AbstractFileFilter::FileType::XLSX:
+		case AbstractFileFilter::FileType::Ods:
+		case AbstractFileFilter::FileType::Image:
+		case AbstractFileFilter::FileType::HDF5:
+		case AbstractFileFilter::FileType::NETCDF:
+		case AbstractFileFilter::FileType::VECTOR_BLF:
+		case AbstractFileFilter::FileType::FITS:
+		case AbstractFileFilter::FileType::JSON:
+		case AbstractFileFilter::FileType::ROOT:
+		case AbstractFileFilter::FileType::Spice:
+		case AbstractFileFilter::FileType::READSTAT:
+		case AbstractFileFilter::FileType::MATIO:
+			break;		
+		default: {
 			break;
 		}
 		}
