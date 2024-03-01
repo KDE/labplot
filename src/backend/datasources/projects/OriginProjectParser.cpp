@@ -408,6 +408,8 @@ void OriginProjectParser::restorePointers(Project* project) {
 		if (!hist)
 			continue;
 		hist->setSuppressRetransform(true);
+
+		// data column
 		auto spreadsheetName = hist->dataColumnPath();
 		spreadsheetName.truncate(hist->dataColumnPath().lastIndexOf(QLatin1Char('/')));
 
@@ -434,14 +436,34 @@ void OriginProjectParser::restorePointers(Project* project) {
 	}
 
 	// bar plots
-	// TODO: barPlot->setDataColumnPaths({yColumnPath});
 	const auto& barPlots = project->children<BarPlot>(AbstractAspect::ChildIndexFlag::Recursive);
 	for (auto* barPlot : barPlots) {
 		if (!barPlot)
 			continue;
 		barPlot->setSuppressRetransform(true);
-		auto spreadsheetName = barPlot->dataColumnPath();
-		spreadsheetName.truncate(barPlot->dataColumnPath().lastIndexOf(QLatin1Char('/')));
+
+		// x-column
+		auto spreadsheetName = barPlot->xColumnPath();
+		spreadsheetName.truncate(barPlot->xColumnPath().lastIndexOf(QLatin1Char('/')));
+		for (const auto* spreadsheet : spreadsheets) {
+			QString container, containerPath = spreadsheet->parentAspect()->path();
+			if (spreadsheetName.contains(QLatin1Char('/'))) { // part of a workbook
+				container = containerPath.mid(containerPath.lastIndexOf(QLatin1Char('/')) + 1) + QLatin1Char('/');
+				containerPath = containerPath.left(containerPath.lastIndexOf(QLatin1Char('/')));
+			}
+			if (container + spreadsheet->name() == spreadsheetName) {
+				// TODO: not implemented/working yet?
+				// const QString& newPath = containerPath + QLatin1Char('/') + barPlot->xColumnPath();
+				// barPlot->setXColumnPath(newPath);
+
+				RESTORE_COLUMN_POINTER(barPlot, xColumn, XColumn);
+				break;
+			}
+		}
+
+		// data column
+		spreadsheetName = barPlot->dataColumnPaths().first();
+		spreadsheetName.truncate(barPlot->dataColumnPaths().first().lastIndexOf(QLatin1Char('/')));
 
 		for (const auto* spreadsheet : spreadsheets) {
 			QString container, containerPath = spreadsheet->parentAspect()->path();
@@ -450,12 +472,25 @@ void OriginProjectParser::restorePointers(Project* project) {
 				containerPath = containerPath.left(containerPath.lastIndexOf(QLatin1Char('/')));
 			}
 			if (container + spreadsheet->name() == spreadsheetName) {
-				const QString& newPath = containerPath + QLatin1Char('/') + barPlot->dataColumnPath();
-				hist->setDataColumnPath(newPath);
-				RESTORE_COLUMN_POINTER(hist, dataColumn, DataColumn);
+				const QString& newPath = containerPath + QLatin1Char('/') + barPlot->dataColumnPaths().first();
+				DEBUG("NEW PATH = " << newPath.toStdString())
+				barPlot->setDataColumnPaths({newPath});
+
+				// RESTORE_COLUMN_POINTER
+				if (!barPlot->dataColumnPaths().first().isEmpty()) {
+					for (auto* column : columns) {
+						if (!column)
+							continue;
+						if (column->path() == barPlot->dataColumnPaths().first()) {
+							barPlot->setDataColumns({column});
+							break;
+						}
+					}
+				}
 				break;
 			}
 		}
+		barPlot->setSuppressRetransform(false);
 	}
 
 	// TODO: others
@@ -1828,8 +1863,6 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 				auto* barPlot = new BarPlot(yColumnName);
 				childPlot = barPlot;
 
-				// TODO: this leads to a crash at the moment since the pointers are not properly restored yet in OriginProjectParser::restorePointers() and in
-				// Project::restorePointers() and we have nullptr's in BarPlot
 				barPlot->setDataColumnPaths({yColumnPath});
 
 				if (!preview) {
@@ -1844,6 +1877,8 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 						barPlot->setType(BarPlot::Type::Stacked);
 					else
 						barPlot->setType(BarPlot::Type::Grouped);
+
+					loadBackground(originCurve, barPlot->backgroundAt(0));
 				}
 
 				break;
@@ -2358,8 +2393,8 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 
 void OriginProjectParser::loadBackground(const Origin::GraphCurve& originCurve, Background* background) const {
 	DEBUG(Q_FUNC_INFO << ", fill area? " << originCurve.fillArea)
-	// fillArea option not used in histogram
-	if (!originCurve.fillArea && originCurve.type != Origin::GraphCurve::Histogram) {
+	// fillArea option not used in histogram and bar plot
+	if (!originCurve.fillArea && originCurve.type != Origin::GraphCurve::Histogram && originCurve.type != Origin::GraphCurve::Bar) {
 		background->setPosition(Background::Position::No);
 		return;
 	}
