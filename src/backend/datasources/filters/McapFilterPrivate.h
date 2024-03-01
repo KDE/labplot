@@ -61,8 +61,8 @@ public:
 	int startColumn{1}; // start column
 	int endColumn{-1}; // end column
 
-	QJsonObject flattenJson(QJsonValue jsonVal, QString aggregatedKey = "");
-	QJsonObject unflattenJson(const QJsonObject& json, QString separator = ".");
+	QJsonObject flattenJson(QJsonValue jsonVal, QString aggregatedKey = QLatin1String(""));
+	QJsonObject unflattenJson(const QJsonObject& json, QString separator = QLatin1String("."));
 
 	QJsonObject mergeJsonObjects(const QJsonObject& obj1, const QJsonObject& obj2);
 	
@@ -74,7 +74,7 @@ private:
 	int m_actualCols{0};
 	int m_prepared{false};
 	int m_columnOffset{0}; // indexes the "start column" in the datasource. Data will be imported starting from this column.
-	QString current_topic = "";
+	QString current_topic = QLatin1String("");
 	std::vector<void*> m_dataContainer; // pointers to the actual data containers (columns).
 	QJsonDocument m_doc; // original and full JSON document
 	QJsonDocument m_preparedDoc; // selected part of the full JSON document, the part that needs to be imported

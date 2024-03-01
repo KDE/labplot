@@ -267,11 +267,11 @@ int McapFilterPrivate::parseColumnModes(const QJsonValue& row, const QString& ro
 		QString key = row.toObject().keys().at(i);
 		vectorNames << key;
 		columnValue = row.toObject().value(key);
-		if(key == "logTime" || key=="publishTime"){
+		if(key == QLatin1String("logTime") || key==QLatin1String("publishTime")){
 			columnModes << AbstractColumn::ColumnMode::DateTime;
 			continue;
 		}
-		if(key == "sequence"){
+		if(key == QLatin1String("sequence")){
 			columnModes << AbstractColumn::ColumnMode::Integer;
 			continue;
 		}
@@ -339,7 +339,7 @@ void McapFilterPrivate::setValueFromString(int column, int row, const QString& v
 		break;
 	}
 	case AbstractColumn::ColumnMode::DateTime: {
-	if(vectorNames[column]=="publishTime" || vectorNames[column]=="logTime"){
+	if(vectorNames[column]==QLatin1String("publishTime") || vectorNames[column]==QLatin1String("logTime")){
 		static_cast<QVector<QDateTime>*>(m_dataContainer[column])->operator[](row) = QDateTime::fromMSecsSinceEpoch(valueString.toLong());
 		break;
 	}
@@ -783,15 +783,15 @@ void McapFilterPrivate::writeWithOptions(const QString& fileName, AbstractDataSo
 			QString columnName = spreadsheet->column(col)->name();
 			QVariant value = spreadsheet->column(col)->valueAt(row);
 			QJsonValue jsonValue = QJsonValue::fromVariant(value);
-			if (columnName == "logTime") { // Special field in MCAP
+			if (columnName == QLatin1String("logTime")) { // Special field in MCAP
 				msg.logTime = mcap::Timestamp(value.toLongLong() * 1000000);
 				continue;
 			}
-			if (columnName == "publishTime") { // Special field in MCAP
+			if (columnName == QLatin1String("publishTime")) { // Special field in MCAP
 				msg.publishTime = mcap::Timestamp(value.toLongLong() * 1000000);
 				continue;
 			}
-			if (columnName == "sequence") { // Special field in MCAP
+			if (columnName == QLatin1String("sequence")) { // Special field in MCAP
 				msg.sequence = mcap::Timestamp(value.toLongLong());
 				continue;
 			}
@@ -888,7 +888,7 @@ QJsonObject McapFilterPrivate::flattenJson(QJsonValue jsonVal, QString aggregate
 	QJsonObject flattenedJson;
 
 	auto dryFx = [&](auto& key, auto& value) {
-		const QString delimiter = ".";
+		const QString delimiter = QLatin1String(".");
 		QString nKey = aggregatedKey + delimiter + key;
 		if (nKey.at(0) == delimiter)
 			nKey.remove(0, 1);

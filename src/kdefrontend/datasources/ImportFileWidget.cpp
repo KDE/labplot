@@ -2395,6 +2395,10 @@ void ImportFileWidget::changeTopic() {
 			if(!(mcap_filter->getCurrentTopic()==ui.cbTopics->currentText())){
 				refreshPreview();
 			}
+			break;
+		}
+		default:{
+			break;
 		}
 		}
 	}
