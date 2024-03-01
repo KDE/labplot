@@ -26,7 +26,6 @@
 #include <QJsonObject>
 #include <chrono>
 #include <thread>
-#include <unistd.h>
 
 #include <cmath>
 
@@ -922,6 +921,12 @@ QJsonObject McapFilterPrivate::flattenJson(QJsonValue jsonVal, QString aggregate
 
 	return flattenedJson;
 }
+
+// TODO: implement unflatten method
+QJsonObject McapFilterPrivate::unflattenJson(const QJsonObject& obj, QString seperator) {
+	return obj;
+}
+
 
 QJsonObject McapFilterPrivate::mergeJsonObjects(const QJsonObject& obj1, const QJsonObject& obj2) {
 	QJsonObject mergedObj = obj1;

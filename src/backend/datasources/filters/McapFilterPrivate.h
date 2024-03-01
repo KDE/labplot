@@ -62,6 +62,8 @@ public:
 	int endColumn{-1}; // end column
 
 	QJsonObject flattenJson(QJsonValue jsonVal, QString aggregatedKey = "");
+	QJsonObject unflattenJson(const QJsonObject& json, QString separator = ".");
+
 	QJsonObject mergeJsonObjects(const QJsonObject& obj1, const QJsonObject& obj2);
 	
 	QVector<QString> getValidTopics(const QString& fileName);
