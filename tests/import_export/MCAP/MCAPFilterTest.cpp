@@ -110,7 +110,7 @@ void MCAPFilterTest::testExport() {
 		Spreadsheet spreadsheet(QStringLiteral("test"), false);
 		McapFilter filter;
 
-		const QString& fileName = QFINDTESTDATA(QLatin1String("data/basic_LZ4.mcap"));
+		const QString& fileName = QFINDTESTDATA(QLatin1String("data/basic_NONE.mcap"));
 
 		AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode::Replace;
 		filter.setCreateIndexEnabled(true);
