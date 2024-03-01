@@ -412,7 +412,6 @@ void OriginProjectParser::restorePointers(Project* project) {
 		// data column
 		auto spreadsheetName = hist->dataColumnPath();
 		spreadsheetName.truncate(hist->dataColumnPath().lastIndexOf(QLatin1Char('/')));
-
 		for (const auto* spreadsheet : spreadsheets) {
 			QString container, containerPath = spreadsheet->parentAspect()->path();
 			if (spreadsheetName.contains(QLatin1Char('/'))) { // part of a workbook
@@ -464,7 +463,6 @@ void OriginProjectParser::restorePointers(Project* project) {
 		// data column
 		spreadsheetName = barPlot->dataColumnPaths().first();
 		spreadsheetName.truncate(barPlot->dataColumnPaths().first().lastIndexOf(QLatin1Char('/')));
-
 		for (const auto* spreadsheet : spreadsheets) {
 			QString container, containerPath = spreadsheet->parentAspect()->path();
 			if (spreadsheetName.contains(QLatin1Char('/'))) { // part of a workbook
@@ -473,7 +471,6 @@ void OriginProjectParser::restorePointers(Project* project) {
 			}
 			if (container + spreadsheet->name() == spreadsheetName) {
 				const QString& newPath = containerPath + QLatin1Char('/') + barPlot->dataColumnPaths().first();
-				DEBUG("NEW PATH = " << newPath.toStdString())
 				barPlot->setDataColumnPaths({newPath});
 
 				// RESTORE_COLUMN_POINTER
@@ -1673,6 +1670,9 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 		// for histogram use y column info for x column
 		if (originCurve.type == Origin::GraphCurve::Histogram && xColumnInfo.isEmpty())
 			xColumnInfo = yColumnInfo;
+		// for bar plot reverse x and y column info
+		if (originCurve.type == Origin::GraphCurve::Bar)
+			xColumnInfo.swap(yColumnInfo);
 
 		loadAxes(layer, plot, layerIndex, xColumnInfo, yColumnInfo);
 	}
@@ -2022,6 +2022,7 @@ void OriginProjectParser::loadAxes(const Origin::GraphLayer& layer,
 								   const QString& xColumnInfo,
 								   const QString& yColumnInfo) {
 	// swap axes when exchanged
+	DEBUG(Q_FUNC_INFO << ", exchanged axes? = " << layer.exchangedAxes)
 	const auto& originXAxis = layer.exchangedAxes ? layer.yAxis : layer.xAxis;
 	const auto& originYAxis = layer.exchangedAxes ? layer.xAxis : layer.yAxis;
 
