@@ -433,6 +433,31 @@ void OriginProjectParser::restorePointers(Project* project) {
 		hist->setSuppressRetransform(false);
 	}
 
+	// bar plots
+	// TODO: barPlot->setDataColumnPaths({yColumnPath});
+	const auto& barPlots = project->children<BarPlot>(AbstractAspect::ChildIndexFlag::Recursive);
+	for (auto* barPlot : barPlots) {
+		if (!barPlot)
+			continue;
+		barPlot->setSuppressRetransform(true);
+		auto spreadsheetName = barPlot->dataColumnPath();
+		spreadsheetName.truncate(barPlot->dataColumnPath().lastIndexOf(QLatin1Char('/')));
+
+		for (const auto* spreadsheet : spreadsheets) {
+			QString container, containerPath = spreadsheet->parentAspect()->path();
+			if (spreadsheetName.contains(QLatin1Char('/'))) { // part of a workbook
+				container = containerPath.mid(containerPath.lastIndexOf(QLatin1Char('/')) + 1) + QLatin1Char('/');
+				containerPath = containerPath.left(containerPath.lastIndexOf(QLatin1Char('/')));
+			}
+			if (container + spreadsheet->name() == spreadsheetName) {
+				const QString& newPath = containerPath + QLatin1Char('/') + barPlot->dataColumnPath();
+				hist->setDataColumnPath(newPath);
+				RESTORE_COLUMN_POINTER(hist, dataColumn, DataColumn);
+				break;
+			}
+		}
+	}
+
 	// TODO: others
 }
 
@@ -1799,11 +1824,13 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 			case Origin::GraphCurve::ColumnStack:
 			case Origin::GraphCurve::Bar:
 			case Origin::GraphCurve::BarStack: {
+				DEBUG(Q_FUNC_INFO << ", BAR PLOT")
 				auto* barPlot = new BarPlot(yColumnName);
 				childPlot = barPlot;
 
 				// TODO: this leads to a crash at the moment since the pointers are not properly restored yet in OriginProjectParser::restorePointers() and in
-				// Project::restorePointers() and we have nullptr's in BarPlot barPlot->setDataColumnPaths({yColumnPath});
+				// Project::restorePointers() and we have nullptr's in BarPlot
+				barPlot->setDataColumnPaths({yColumnPath});
 
 				if (!preview) {
 					// orientation
@@ -1822,6 +1849,7 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 				break;
 			}
 			case Origin::GraphCurve::Box: { // box plot
+				DEBUG(Q_FUNC_INFO << ", BOX PLOT")
 				auto* boxPlot = new BoxPlot(yColumnName);
 				childPlot = boxPlot;
 
