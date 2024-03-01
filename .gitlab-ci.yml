@@ -8,8 +8,8 @@ include:
     file:
 # fails
 #      - /gitlab-templates/reuse-lint.yml
-       #- /gitlab-templates/linux.yml
-       #- /gitlab-templates/windows.yml
+       - /gitlab-templates/linux.yml
+       - /gitlab-templates/windows.yml
 #      - /gitlab-templates/freebsd.yml
 # poppler not building due to Qt6 missing (see below)
 #      - /gitlab-templates/flatpak.yml
@@ -17,7 +17,7 @@ include:
 #      - /gitlab-templates/craft-windows-x86-64.yml
 #      - /gitlab-templates/craft-windows-appx-qt5.yml
 #      - /gitlab-templates/craft-windows-mingw64.yml
-      - /gitlab-templates/craft-macos-x86-64.yml
+#      - /gitlab-templates/craft-macos-x86-64.yml
 #      - /gitlab-templates/craft-macos-arm64.yml
 
 #clang_format:
@@ -43,7 +43,8 @@ include:
     - !reference [.craft_macos_base, script]
     - python3 ci-notary-service/notarizemacapp.py -v --config $KDECI_NOTARIZEMACAPP_CONFIG $CI_PROJECT_DIR/.kde-ci-packages/*.dmg
 
-craft_macos_x86_64_notarize:
+# remove . to enable
+.craft_macos_x86_64_notarize:
   extends:
     - craft_macos_x86_64
     - .craft-mac-notarize
