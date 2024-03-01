@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-28 01:33+0000\n"
-"PO-Revision-Date: 2024-02-19 06:06+0100\n"
+"PO-Revision-Date: 2024-02-29 03:22+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -2080,34 +2080,29 @@ msgid "Size of TStreamerInfo record: %1 bytes"
 msgstr "TStreamerInfo ჩანაწერის ზომა: %1 ბაიტი"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:101
-#, fuzzy, kde-format
-#| msgid "Ratio: %1"
+#, kde-format
 msgid "Application: %1"
-msgstr "პროპორცია: %1"
+msgstr "აპლიკაცია: %1"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:104
-#, fuzzy, kde-format
-#| msgid "Format version: %1"
+#, kde-format
 msgid "Application version: %1.%2"
-msgstr "ფორმატის ვერსია: %1"
+msgstr "აპლიკაციის ვერსია: %1.%2"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:107
-#, fuzzy, kde-format
-#| msgid "Compression: %1"
+#, kde-format
 msgid "Compression Level: %1"
-msgstr "შეკუმშვა: %1"
+msgstr "შეკუმშვის დონე: %1"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:110
-#, fuzzy, kde-format
-#| msgid "File size: %1 bytes"
+#, kde-format
 msgid "Uncompressed File Size: %1 Bytes"
-msgstr "ფაილის ზომა: %1 ბაიტი"
+msgstr "შეუკუმშავი ფაილის ზომა: %1 ბაიტი"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:113
-#, fuzzy, kde-format
-#| msgid "Number of all objects: %1"
+#, kde-format
 msgid "Number of Objects: %1"
-msgstr "ყველა ობიექტის რიცხვი: %1"
+msgstr "ობიექტის რაოდენობა: %1"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:162
 #, kde-format
@@ -8027,10 +8022,9 @@ msgid "%1: set error column"
 msgstr "%1: სვეტის შეცდომის დაყენება"
 
 #: src/backend/worksheet/plots/cartesian/ErrorBar.cpp:235
-#, fuzzy, kde-format
-#| msgid "%1: error type changed"
+#, kde-format
 msgid "%1: error bar type changed"
-msgstr "%1: შეცდომის ტიპი შეიცვალა"
+msgstr "%1: შეცდომის ზოლის ტიპი შეიცვალა"
 
 #: src/backend/worksheet/plots/cartesian/ErrorBar.cpp:242
 #, kde-format
@@ -9739,8 +9733,7 @@ msgid "Show Comments"
 msgstr "კომენტარების ჩვენება"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:322
-#, fuzzy, kde-format
-#| msgid "Show Spark Lines"
+#, kde-format
 msgid "Show SparkLines"
 msgstr "ნაპერწკლის ხაზების ჩვენება"
 
@@ -10038,15 +10031,13 @@ msgstr "კომენტარების დამალვბა"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1147
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1519
-#, fuzzy, kde-format
-#| msgid "Hide Spark Lines"
+#, kde-format
 msgid "Hide Sparklines"
 msgstr "ნაპერწკლის ხაზების დამალვა"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1149
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1521
-#, fuzzy, kde-format
-#| msgid "Show Spark Lines"
+#, kde-format
 msgid "Show Sparklines"
 msgstr "ნაპერწკლის ხაზების ჩვენება"
 
@@ -19615,24 +19606,21 @@ msgstr "ჩართულია"
 
 #. i18n: ectx: property (text), widget (QLabel, lShowSparklines)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:175
-#, fuzzy, kde-format
-#| msgid "Column Sparklines:"
+#, kde-format
 msgid "Sparklines:"
-msgstr "სვეტის ნაპერწკლის ხაზები:"
+msgstr "ნაპერწკლის ხაზები:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFormat)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:198
-#, fuzzy, kde-format
-#| msgid "Column Major"
+#, kde-format
 msgid "Column Format"
-msgstr "ძირითადი სვეტი"
+msgstr "სვეტის ფორმატი"
 
 #. i18n: ectx: property (text), widget (QLabel, lShowComments)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:222
-#, fuzzy, kde-format
-#| msgid "Comment:"
+#, kde-format
 msgid "Comments:"
-msgstr "კომენტარი:"
+msgstr "კომენტარები:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLinking)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:235
