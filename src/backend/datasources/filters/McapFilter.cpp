@@ -470,7 +470,7 @@ int McapFilterPrivate::mcapToJson(const QString& fileName, int lines) {
 			if (it->channel->messageEncoding != "json") { // only support json encoding for now
 				continue;
 			}
-			if (current_topic != "") {
+			if (current_topic != QLatin1String("")) {
 				if (QString::fromStdString(it->channel->topic) != current_topic) { // only support json encoding for now
 					continue;
 				}
