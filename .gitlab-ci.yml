@@ -1,5 +1,5 @@
 # SPDX-FileCopyrightText: 2020 Volker Krause <vkrause@kde.org>
-# SPDX-FileCopyrightText: 2022-2023 Stefan Gerlach <stefan.gerlach@uni.kn>
+# SPDX-FileCopyrightText: 2022-2024 Stefan Gerlach <stefan.gerlach@uni.kn>
 # SPDX-License-Identifier: CC0-1.0
 
 # full path: https://invent.kde.org/sysadmin/ci-utilities/-/tree/master/gitlab-templates?ref_type=heads
@@ -38,36 +38,36 @@ include:
 
 # notarization on macOS (experimental, 20240301)
 
-.craft-mac-notarize:
-  variables:
-    KDECI_NOTARIZEMACAPP_CONFIG: $CI_PROJECT_DIR/ci-utilities/signing/notarizemacapp.ini
-  script:
-    - !reference [.craft_macos_base, script]
-    - python3 ci-notary-service/notarizemacapp.py -v --config $KDECI_NOTARIZEMACAPP_CONFIG $CI_PROJECT_DIR/.kde-ci-packages/*.dmg
+#.craft-mac-notarize:
+#  variables:
+#    KDECI_NOTARIZEMACAPP_CONFIG: $CI_PROJECT_DIR/ci-utilities/signing/notarizemacapp.ini
+#  script:
+#    - !reference [.craft_macos_base, script]
+#    - python3 ci-notary-service/notarizemacapp.py -v --config $KDECI_NOTARIZEMACAPP_CONFIG $CI_PROJECT_DIR/.kde-ci-packages/*.dmg
 
-craft_macos_x86_64_notarize:
-  extends:
-    - craft_macos_x86_64
-    - .craft-mac-notarize
-  artifacts:
-    expire_in: 3 days
-    when: always
-    expose_as: "macOS x86_64 signed"
-    paths:
-     - ".kde-ci-packages/"
-     - ".logs/"
+#craft_macos_x86_64_notarize:
+#  extends:
+#    - craft_macos_x86_64
+#    - .craft-mac-notarize
+#  artifacts:
+#    expire_in: 3 days
+#    when: always
+#    expose_as: "macOS x86_64 signed"
+#    paths:
+#     - ".kde-ci-packages/"
+#     - ".logs/"
 
-craft_macos_arm64_notarize:
-  extends:
-    - craft_macos_arm64
-    - .craft-mac-notarize
-  artifacts:
-    expire_in: 3 days
-    when: always
-    expose_as: "macOS arm64 signed"
-    paths:
-     - ".kde-ci-packages/"
-     - ".logs/"
+#craft_macos_arm64_notarize:
+#  extends:
+#    - craft_macos_arm64
+#    - .craft-mac-notarize
+#  artifacts:
+#    expire_in: 3 days
+#    when: always
+#    expose_as: "macOS arm64 signed"
+#    paths:
+#     - ".kde-ci-packages/"
+#     - ".logs/"
 
 #variables:
 #  QT_TEST_TIMEOUT_FUNCTION: "600"
