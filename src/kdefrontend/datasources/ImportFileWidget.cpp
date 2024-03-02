@@ -859,7 +859,7 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 			m_currentFilter.reset(new McapFilter);
 		auto filter = static_cast<McapFilter*>(m_currentFilter.get());
 
-		m_mcapOptionsWidget->applyFilterSettings(filter, ui.tvJson->currentIndex());
+		m_mcapOptionsWidget->applyFilterSettings(filter);
 
 		filter->setStartRow(ui.sbStartRow->value());
 		filter->setEndRow(ui.sbEndRow->value());

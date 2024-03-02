@@ -36,7 +36,7 @@ McapOptionsWidget::McapOptionsWidget(QWidget* parent)
 
 }
 
-void McapOptionsWidget::applyFilterSettings(McapFilter* filter, const QModelIndex& index) const {
+void McapOptionsWidget::applyFilterSettings(McapFilter* filter) const {
 	Q_ASSERT(filter);
 
 	QLocale::Language lang;
@@ -53,10 +53,6 @@ void McapOptionsWidget::applyFilterSettings(McapFilter* filter, const QModelInde
 
 void McapOptionsWidget::loadSettings() const {
 	KConfigGroup conf = Settings::group(QStringLiteral("ImportMcap"));
-
-	const auto decimalSeparator = QLocale().decimalPoint();
-	int index = (decimalSeparator == QLatin1Char('.')) ? 0 : 1;
-
 	ui.cbDateTimeFormat->setCurrentItem(conf.readEntry("DateTimeFormat", "yyyy-MM-dd hh:mm:ss.zzz"));
 	ui.chbCreateIndex->setChecked(conf.readEntry("CreateIndex", false));
 	ui.chbConvertNaNToZero->setChecked(conf.readEntry("ConvertNaNToZero", false));

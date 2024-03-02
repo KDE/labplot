@@ -22,7 +22,7 @@ class McapOptionsWidget : public QWidget {
 public:
 	explicit McapOptionsWidget(QWidget*);
 
-	void applyFilterSettings(McapFilter*, const QModelIndex&) const;
+	void applyFilterSettings(McapFilter*) const;
 	void loadSettings() const;
 	void saveSettings();
 

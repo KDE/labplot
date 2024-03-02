@@ -521,7 +521,7 @@ int McapFilterPrivate::mcapToJson(const QString& fileName, int lines) {
 
 	QJsonDocument finalJsonDocument(jsonArray);
 
-	qDebug() << finalJsonDocument.toJson(QJsonDocument::Compact);
+	//qDebug() << finalJsonDocument.toJson(QJsonDocument::Compact);
 
 	m_preparedDoc = finalJsonDocument;
 	return msg_count;
