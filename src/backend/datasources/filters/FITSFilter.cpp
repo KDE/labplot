@@ -36,12 +36,12 @@ FITSFilter::FITSFilter()
 
 FITSFilter::~FITSFilter() = default;
 
-void FITSFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
+void FITSFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, ImportMode importMode) {
 	d->readCHDU(fileName, dataSource, importMode);
 }
 
 QVector<QStringList> FITSFilter::readChdu(const QString& fileName, bool* okToMatrix, int lines) {
-	return d->readCHDU(fileName, nullptr, AbstractFileFilter::ImportMode::Replace, okToMatrix, lines);
+	return d->readCHDU(fileName, nullptr, ImportMode::Replace, okToMatrix, lines);
 }
 
 void FITSFilter::write(const QString& fileName, AbstractDataSource* dataSource) {
@@ -321,7 +321,12 @@ FITSFilterPrivate::readCHDU(const QString& fileName, AbstractDataSource* dataSou
 		std::vector<void*> dataContainer;
 		if (dataSource) {
 			dataContainer.reserve(actualCols - j);
-			columnOffset = dataSource->prepareImport(dataContainer, importMode, lines - i, actualCols - j, vectorNames, columnModes);
+			bool ok = false;
+			columnOffset = dataSource->prepareImport(dataContainer, importMode, lines - i, actualCols - j, vectorNames, columnModes, ok);
+			if (!ok) {
+				q->addError(i18n("Not enough memory."));
+				return QVector<QStringList>();
+			}
 		}
 
 		long pixelCount = lines * actualCols;
@@ -511,7 +516,12 @@ FITSFilterPrivate::readCHDU(const QString& fileName, AbstractDataSource* dataSou
 			} else {
 				numericDataPointers.reserve(matrixNumericColumnIndices.size());
 
-				columnOffset = dataSource->prepareImport(numericDataPointers, importMode, lines - startRrow, matrixNumericColumnIndices.size());
+				bool ok = false;
+				columnOffset = dataSource->prepareImport(numericDataPointers, importMode, lines - startRrow, matrixNumericColumnIndices.size(), QStringList{}, QVector<AbstractColumn::ColumnMode>{}, ok);
+				if (!ok) {
+					q->addError(i18n("Not enough memory."));
+					return QVector<QStringList>();
+				}
 			}
 		}
 

@@ -139,14 +139,14 @@ QString NetCDFFilter::readAttribute(const QString& fileName, const QString& name
   reads the content of the current variable from file \c fileName.
 */
 QVector<QStringList>
-NetCDFFilter::readCurrentVar(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
+NetCDFFilter::readCurrentVar(const QString& fileName, AbstractDataSource* dataSource, ImportMode importMode, int lines) {
 	return d->readCurrentVar(fileName, dataSource, importMode, lines);
 }
 
 /*!
   reads the content of the file \c fileName to the data source \c dataSource.
 */
-void NetCDFFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode) {
+void NetCDFFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, ImportMode mode) {
 	d->readDataFromFile(fileName, dataSource, mode);
 }
 
@@ -751,8 +751,14 @@ NetCDFFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource*
 		// TODO: use given names?
 		QStringList vectorNames;
 
-		if (dataSource)
-			columnOffset = dataSource->prepareImport(dataContainer, mode, actualRows, actualCols, vectorNames, columnModes);
+		if (dataSource) {
+			bool ok = false;
+			columnOffset = dataSource->prepareImport(dataContainer, mode, actualRows, actualCols, vectorNames, columnModes, ok);
+			if (!ok) {
+				q->addError(i18n("Not enough memory."));
+				return QVector<QStringList>();
+			}
+		}
 
 		DEBUG("	Reading data of type " << STDSTRING(translateDataType(type)));
 		switch (type) {
@@ -856,8 +862,14 @@ NetCDFFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource*
 		// TODO: use given names?
 		QStringList vectorNames;
 
-		if (dataSource)
-			columnOffset = dataSource->prepareImport(dataContainer, mode, actualRows, actualCols, vectorNames, columnModes);
+		if (dataSource) {
+			bool ok = false;
+			columnOffset = dataSource->prepareImport(dataContainer, mode, actualRows, actualCols, vectorNames, columnModes, ok);
+			if (!ok) {
+				q->addError(i18n("Not enough memory."));
+				return QVector<QStringList>();
+			}
+		}
 
 		DEBUG("	Reading data of type " << STDSTRING(translateDataType(type)));
 		switch (type) {
@@ -981,8 +993,14 @@ NetCDFFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource*
 		// TODO: use given names?
 		QStringList vectorNames;
 
-		if (dataSource)
-			columnOffset = dataSource->prepareImport(dataContainer, mode, actualRows, actualCols, vectorNames, columnModes);
+		if (dataSource) {
+			bool ok = false;
+			columnOffset = dataSource->prepareImport(dataContainer, mode, actualRows, actualCols, vectorNames, columnModes, ok);
+			if (!ok) {
+				q->addError(i18n("Not enough memory."));
+				return QVector<QStringList>();
+			}
+		}
 
 		switch (type) {
 		case NC_BYTE: {

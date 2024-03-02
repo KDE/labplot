@@ -41,6 +41,8 @@ New features:
 		* Support data import from ODS (Open Document Spreadsheet) files
 		* When importing tables from SQL databases, allow to specify which data region to read (start/end values for columns and records)
 		* Addeded seaborn's datasets to the collection of datasets
+		* Properly handle out-of-memory situations when importing large amount of data
+		* Better reporting of error messages in the import dialog
 		* BLF
 			* show additional information about the file (application name the file was created with, etc.) in the import dialog
 		* OPJ:

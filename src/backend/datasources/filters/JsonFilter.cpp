@@ -44,14 +44,14 @@ JsonFilter::~JsonFilter() = default;
 /*!
 reads the content of the device \c device.
 */
-void JsonFilter::readDataFromDevice(QIODevice& device, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
+void JsonFilter::readDataFromDevice(QIODevice& device, AbstractDataSource* dataSource, ImportMode importMode, int lines) {
 	d->readDataFromDevice(device, dataSource, importMode, lines);
 }
 
 /*!
 reads the content of the file \c fileName.
 */
-void JsonFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
+void JsonFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, ImportMode importMode) {
 	d->readDataFromFile(fileName, dataSource, importMode);
 }
 
@@ -528,7 +528,13 @@ void JsonFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSource
 import the content of document \c m_preparedDoc to the data source \c dataSource. Uses the settings defined in the data source.
 */
 void JsonFilterPrivate::importData(AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
-	m_columnOffset = dataSource->prepareImport(m_dataContainer, importMode, m_actualRows, m_actualCols, vectorNames, columnModes);
+	bool ok = false;
+	m_columnOffset = dataSource->prepareImport(m_dataContainer, importMode, m_actualRows, m_actualCols, vectorNames, columnModes, ok);
+	if (!ok) {
+		q->addError(i18n("Not enough memory."));
+		return;
+	}
+
 	int rowOffset = startRow - 1;
 	int colOffset = (int)createIndexEnabled + (int)importObjectNames;
 	DEBUG("reading " << m_actualRows << " lines");

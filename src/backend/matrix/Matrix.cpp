@@ -1339,8 +1339,9 @@ int Matrix::prepareImport(std::vector<void*>& dataContainer,
 						  AbstractFileFilter::ImportMode mode,
 						  int actualRows,
 						  int actualCols,
-						  QStringList /*colNameList*/,
-						  QVector<AbstractColumn::ColumnMode> columnMode,
+						  const QStringList& /*colNameList*/,
+						  const QVector<AbstractColumn::ColumnMode>& columnMode,
+						  bool& ok,
 						  bool initializeDataContainer) {
 	Q_D(Matrix);
 	auto newColumnMode = columnMode.at(0); // only first column mode used
@@ -1353,29 +1354,34 @@ int Matrix::prepareImport(std::vector<void*>& dataContainer,
 	setSuppressDataChangedSignal(true);
 
 	// resize the matrix
-	if (mode == AbstractFileFilter::ImportMode::Replace) {
-		clear();
-		setDimensions(actualRows, actualCols);
-	} else { // Append
-		// handle mismatch of modes
-		DEBUG(Q_FUNC_INFO << ", TODO: matrix mode = " << ENUM_TO_STRING(AbstractColumn, ColumnMode, d->mode)
-						  << ", columnMode = " << ENUM_TO_STRING(AbstractColumn, ColumnMode, columnMode.at(0)))
-		// TODO: no way to convert types yet!
-		if (d->mode != newColumnMode) {
-			DEBUG(Q_FUNC_INFO << ", WARNING mismatch of types in append mode!")
-		}
-		// catch some cases
-		if ((d->mode == AbstractColumn::ColumnMode::Integer || d->mode == AbstractColumn::ColumnMode::BigInt)
-			&& newColumnMode == AbstractColumn::ColumnMode::Double)
-			d->mode = newColumnMode;
-
-		columnOffset = columnCount();
-		actualCols += columnOffset;
-		DEBUG(Q_FUNC_INFO << ", col count = " << columnCount() << ", actualCols = " << actualCols)
-		if (rowCount() < actualRows)
+	try {
+		if (mode == AbstractFileFilter::ImportMode::Replace) {
+			clear();
 			setDimensions(actualRows, actualCols);
-		else
-			setDimensions(rowCount(), actualCols);
+		} else { // Append
+			// handle mismatch of modes
+			DEBUG(Q_FUNC_INFO << ", TODO: matrix mode = " << ENUM_TO_STRING(AbstractColumn, ColumnMode, d->mode)
+							<< ", columnMode = " << ENUM_TO_STRING(AbstractColumn, ColumnMode, columnMode.at(0)))
+			// TODO: no way to convert types yet!
+			if (d->mode != newColumnMode) {
+				DEBUG(Q_FUNC_INFO << ", WARNING mismatch of types in append mode!")
+			}
+			// catch some cases
+			if ((d->mode == AbstractColumn::ColumnMode::Integer || d->mode == AbstractColumn::ColumnMode::BigInt)
+				&& newColumnMode == AbstractColumn::ColumnMode::Double)
+				d->mode = newColumnMode;
+
+			columnOffset = columnCount();
+			actualCols += columnOffset;
+			DEBUG(Q_FUNC_INFO << ", col count = " << columnCount() << ", actualCols = " << actualCols)
+			if (rowCount() < actualRows)
+				setDimensions(actualRows, actualCols);
+			else
+				setDimensions(rowCount(), actualCols);
+		}
+	} catch (std::bad_alloc&) {
+		ok = false;
+		return 0;
 	}
 
 	DEBUG(Q_FUNC_INFO << ", actual rows/cols = " << actualRows << "/" << actualCols)
@@ -1429,6 +1435,7 @@ int Matrix::prepareImport(std::vector<void*>& dataContainer,
 		}
 	}
 
+	ok = true;
 	return columnOffset;
 }
 

@@ -1294,8 +1294,9 @@ int Spreadsheet::prepareImport(std::vector<void*>& dataContainer,
 							   AbstractFileFilter::ImportMode importMode,
 							   int actualRows,
 							   int actualCols,
-							   QStringList colNameList,
-							   QVector<AbstractColumn::ColumnMode> columnMode,
+							   const QStringList& colNameList,
+							   const QVector<AbstractColumn::ColumnMode>& columnMode,
+							   bool& ok,
 							   bool initializeContainer) {
 	PERFTRACE(QLatin1String(Q_FUNC_INFO));
 	DEBUG(Q_FUNC_INFO << ", resize spreadsheet to rows = " << actualRows << " and cols = " << actualCols)
@@ -1319,12 +1320,17 @@ int Spreadsheet::prepareImport(std::vector<void*>& dataContainer,
 	const auto& columns = children<Column>(); // Get new children because of the resize it might be different
 
 	// resize the spreadsheet
-	if (importMode == AbstractFileFilter::ImportMode::Replace) {
-		clear();
-		setRowCount(actualRows);
-	} else {
-		if (rowCount() < actualRows)
+	try {
+		if (importMode == AbstractFileFilter::ImportMode::Replace) {
+			clear();
 			setRowCount(actualRows);
+		} else {
+			if (rowCount() < actualRows)
+				setRowCount(actualRows);
+		}
+	} catch (std::bad_alloc&) {
+		ok = false;
+		return 0;
 	}
 
 	if (columnMode.size() < actualCols) {
@@ -1385,6 +1391,7 @@ int Spreadsheet::prepareImport(std::vector<void*>& dataContainer,
 
 	// DEBUG(Q_FUNC_INFO << ", DONE");
 
+	ok = true;
 	return columnOffset;
 }
 

@@ -436,7 +436,12 @@ void BinaryFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSour
 	}
 
 	std::vector<void*> dataContainer;
-	int columnOffset = dataSource->prepareImport(dataContainer, importMode, m_actualRows, m_actualCols, vectorNames, columnModes);
+	bool ok = false;
+	int columnOffset = dataSource->prepareImport(dataContainer, importMode, m_actualRows, m_actualCols, vectorNames, columnModes, ok);
+	if (!ok) {
+		q->addError(i18n("Not enough memory."));
+		return;
+	}
 
 	if (lines == -1)
 		lines = m_actualRows;

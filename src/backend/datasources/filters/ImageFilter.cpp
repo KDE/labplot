@@ -160,9 +160,14 @@ void ImageFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataS
 	// TODO: use given names?
 	QStringList vectorNames;
 
-	if (dataSource)
-		columnOffset = dataSource->prepareImport(dataContainer, mode, actualRows, actualCols, vectorNames, columnModes);
-	else {
+	if (dataSource) {
+		bool ok = false;
+		columnOffset = dataSource->prepareImport(dataContainer, mode, actualRows, actualCols, vectorNames, columnModes, ok);
+		if (!ok) {
+			q->addError(i18n("Not enough memory."));
+			return;
+		}
+	} else {
 		DEBUG("data source in image import not defined! Giving up.");
 		return;
 	}

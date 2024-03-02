@@ -41,7 +41,7 @@ QVector<QStringList> ReadStatFilter::preview(const QString& fileName, int lines)
 /*!
   reads the content of the file \c fileName to the data source \c dataSource.
 */
-void ReadStatFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode) {
+void ReadStatFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, ImportMode mode) {
 	d->readDataFromFile(fileName, dataSource, mode);
 }
 
@@ -409,7 +409,8 @@ int ReadStatFilterPrivate::getValueLabels(const char* val_label, readstat_value_
 }
 #endif
 
-ReadStatFilterPrivate::ReadStatFilterPrivate(ReadStatFilter*) {
+ReadStatFilterPrivate::ReadStatFilterPrivate(ReadStatFilter* owner)
+	: q(owner) {
 }
 
 #ifdef HAVE_READSTAT
@@ -518,7 +519,13 @@ void ReadStatFilterPrivate::readDataFromFile(const QString& fileName, AbstractDa
 	const int actualEndColumn = (endColumn == -1 || endColumn > m_varCount) ? m_varCount : endColumn;
 	const int actualCols = actualEndColumn - startColumn + 1;
 	DEBUG(Q_FUNC_INFO << ", actual cols/rows = " << actualCols << " / " << actualRows)
-	const int columnOffset = dataSource->prepareImport(m_dataContainer, mode, actualRows, actualCols, varNames, columnModes);
+
+	bool ok = false;
+	const int columnOffset = dataSource->prepareImport(m_dataContainer, mode, actualRows, actualCols, varNames, columnModes, ok);
+	if (!ok) {
+		q->addError(i18n("Not enough memory."));
+		return;
+	}
 
 	error = parse(fileName);
 	if (error != READSTAT_OK) {

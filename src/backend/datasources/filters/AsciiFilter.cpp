@@ -56,7 +56,7 @@ AsciiFilter::~AsciiFilter() = default;
 /*!
   reads the content of the device \c device.
 */
-void AsciiFilter::readDataFromDevice(QIODevice& device, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
+void AsciiFilter::readDataFromDevice(QIODevice& device, AbstractDataSource* dataSource, ImportMode importMode, int lines) {
 	d->readDataFromDevice(device, dataSource, importMode, lines);
 }
 
@@ -105,7 +105,7 @@ int AsciiFilter::isPrepared() {
 /*!
   reads the content of the file \c fileName.
 */
-void AsciiFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
+void AsciiFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, ImportMode importMode) {
 	d->readDataFromFile(fileName, dataSource, importMode);
 }
 
@@ -1295,7 +1295,12 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 		}
 
 		Q_ASSERT(dataSource);
-		m_columnOffset = dataSource->prepareImport(m_dataContainer, importMode, m_actualRows, m_actualCols, columnNames, columnModes);
+		bool ok = false;
+		m_columnOffset = dataSource->prepareImport(m_dataContainer, importMode, m_actualRows, m_actualCols, columnNames, columnModes, ok);
+		if (!ok) {
+			q->addError(i18n("Not enough memory."));
+			return;
+		}
 		m_prepared = true;
 	}
 

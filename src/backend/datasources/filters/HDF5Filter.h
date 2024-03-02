@@ -25,12 +25,11 @@ public:
 	static QString fileDDLString(const QString&);
 
 	int parse(const QString& fileName, QTreeWidgetItem* rootItem);
-	void
-	readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace) override;
+	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, ImportMode = ImportMode::Replace) override;
 	QVector<QStringList> readCurrentDataSet(const QString& fileName,
 											AbstractDataSource*,
 											bool& ok,
-											AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace,
+											ImportMode = ImportMode::Replace,
 											int lines = -1);
 	void write(const QString& fileName, AbstractDataSource*) override;
 

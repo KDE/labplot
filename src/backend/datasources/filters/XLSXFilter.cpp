@@ -256,7 +256,8 @@ bool XLSXFilter::load(XmlStreamReader*) {
 // ################### Private implementation ##########################
 // #####################################################################
 
-XLSXFilterPrivate::XLSXFilterPrivate(XLSXFilter*) {
+XLSXFilterPrivate::XLSXFilterPrivate(XLSXFilter* owner)
+	: q(owner) {
 }
 
 XLSXFilterPrivate::~XLSXFilterPrivate() {
@@ -508,7 +509,13 @@ void XLSXFilterPrivate::readDataRegion(const QXlsx::CellRange& region, AbstractD
 		columnModes.resize(colCount);
 		std::vector<void*> dataContainer;
 		dataContainer.reserve(colCount);
-		columnOffset = dataSource->prepareImport(dataContainer, importMode, rowCount, colCount, vectorNames, columnModes);
+		bool ok = false;
+		columnOffset = dataSource->prepareImport(dataContainer, importMode, rowCount, colCount, vectorNames, columnModes, ok);
+		if (!ok) {
+			q->addError(i18n("Not enough memory."));
+			return;
+		}
+
 
 		int i = 0;
 		for (int row = region.firstRow(); row <= region.lastRow(); ++row) {

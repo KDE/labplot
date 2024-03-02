@@ -96,14 +96,14 @@ int HDF5Filter::parse(const QString& fileName, QTreeWidgetItem* rootItem) {
   reads the content of the data set \c dataSet from file \c fileName.
 */
 QVector<QStringList>
-HDF5Filter::readCurrentDataSet(const QString& fileName, AbstractDataSource* dataSource, bool& ok, AbstractFileFilter::ImportMode importMode, int lines) {
+HDF5Filter::readCurrentDataSet(const QString& fileName, AbstractDataSource* dataSource, bool& ok, ImportMode importMode, int lines) {
 	return d->readCurrentDataSet(fileName, dataSource, ok, importMode, lines);
 }
 
 /*!
   reads the content of the file \c fileName to the data source \c dataSource.
 */
-void HDF5Filter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode) {
+void HDF5Filter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, ImportMode mode) {
 	d->readDataFromFile(fileName, dataSource, mode);
 }
 
@@ -1625,8 +1625,14 @@ HDF5FilterPrivate::readCurrentDataSet(const QString& fileName, AbstractDataSourc
 		QStringList vectorNames = {currentDataSetName.mid(currentDataSetName.lastIndexOf(QLatin1Char('/')) + 1)};
 		QDEBUG(Q_FUNC_INFO << ", vector names = " << vectorNames)
 
-		if (dataSource && dclass != H5T_VLEN && dclass != H5T_COMPOUND)
-			columnOffset = dataSource->prepareImport(dataContainer, mode, actualRows, actualCols, vectorNames, columnModes);
+		if (dataSource && dclass != H5T_VLEN && dclass != H5T_COMPOUND) {
+			bool ok = false;
+			columnOffset = dataSource->prepareImport(dataContainer, mode, actualRows, actualCols, vectorNames, columnModes, ok);
+			if (!ok) {
+				q->addError(i18n("Not enough memory."));
+				return QVector<QStringList>();
+			}
+		}
 
 		QStringList dataString; // data saved in a list
 		switch (dclass) {
@@ -1737,9 +1743,14 @@ HDF5FilterPrivate::readCurrentDataSet(const QString& fileName, AbstractDataSourc
 			handleError(members, QStringLiteral("H5Tget_nmembers"));
 			DEBUG(Q_FUNC_INFO << ", COMPOUND type. members: " << members)
 			columnModes.resize(members);
-			if (dataSource) // create data pointer here
-				dataSource->prepareImport(dataContainer, mode, actualRows, members, vectorNames, columnModes);
-			else
+			if (dataSource) { // create data pointer here
+				bool ok = false;
+				dataSource->prepareImport(dataContainer, mode, actualRows, members, vectorNames, columnModes, ok);
+				if (!ok) {
+					q->addError(i18n("Not enough memory."));
+					return QVector<QStringList>();
+				}
+			} else
 				dataStrings << readHDF5Compound(dtype);
 			dataString = readHDF5CompoundData1D(dataset, dtype, rows, lines, dataContainer);
 			break;
@@ -1781,8 +1792,14 @@ HDF5FilterPrivate::readCurrentDataSet(const QString& fileName, AbstractDataSourc
 					for (int i = startColumn; i <= endColumn; i++)
 						vectorNames << datasetName + QStringLiteral("_") + QString::number(i);
 				}
+
 				// create data pointer here
-				dataSource->prepareImport(dataContainer, mode, actualRows, actualCols, vectorNames, columnModes);
+				bool ok = false;
+				dataSource->prepareImport(dataContainer, mode, actualRows, actualCols, vectorNames, columnModes, ok);
+				if (!ok) {
+					q->addError(i18n("Not enough memory."));
+					return QVector<QStringList>();
+				}
 			}
 
 			for (int c = startColumn - 1; c < endColumn; c++) { // columns
@@ -1935,8 +1952,14 @@ HDF5FilterPrivate::readCurrentDataSet(const QString& fileName, AbstractDataSourc
 			vectorNames << colName + QLatin1String("_") + QString::number(i + 1);
 		QDEBUG(Q_FUNC_INFO << ", vector names = " << vectorNames)
 
-		if (dataSource)
-			columnOffset = dataSource->prepareImport(dataContainer, mode, actualRows, actualCols, vectorNames, columnModes);
+		if (dataSource) {
+			bool ok = false;
+			columnOffset = dataSource->prepareImport(dataContainer, mode, actualRows, actualCols, vectorNames, columnModes, ok);
+			if (!ok) {
+				q->addError(i18n("Not enough memory."));
+				return QVector<QStringList>();
+			}
+		}
 
 		// read data
 		switch (dclass) {

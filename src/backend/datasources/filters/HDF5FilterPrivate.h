@@ -34,7 +34,7 @@ public:
 											int lines = -1);
 	void write(const QString& fileName, AbstractDataSource*);
 
-	const HDF5Filter* q;
+	HDF5Filter* const q;
 
 	QString currentDataSetName;
 	int startRow{1};

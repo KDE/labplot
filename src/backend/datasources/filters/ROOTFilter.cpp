@@ -30,7 +30,7 @@
 
 ROOTFilter::ROOTFilter()
 	: AbstractFileFilter(FileType::ROOT)
-	, d(new ROOTFilterPrivate) {
+	, d(new ROOTFilterPrivate(this)) {
 }
 
 ROOTFilter::~ROOTFilter() = default;
@@ -153,7 +153,9 @@ bool ROOTFilter::load(XmlStreamReader* reader) {
 
 /**************** ROOTFilterPrivate implementation *******************/
 
-ROOTFilterPrivate::ROOTFilterPrivate() = default;
+ROOTFilterPrivate::ROOTFilterPrivate(ROOTFilter* owner)
+	: q(owner){
+}
 
 ROOTFilterPrivate::FileType ROOTFilterPrivate::currentObjectPosition(const QString& fileName, long int& pos) {
 	QStringList typeobject = currentObject.split(QLatin1Char(':'));
@@ -220,12 +222,18 @@ void ROOTFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSo
 		}
 
 		std::vector<void*> dataContainer;
+		bool ok = false;
 		const int columnOffset = dataSource->prepareImport(dataContainer,
 														   importMode,
 														   last - first + 1,
 														   columns.size(),
 														   headers,
-														   QVector<AbstractColumn::ColumnMode>(columns.size(), AbstractColumn::ColumnMode::Double));
+														   QVector<AbstractColumn::ColumnMode>(columns.size(), AbstractColumn::ColumnMode::Double),
+														   ok);
+		if (!ok) {
+			q->addError(i18n("Not enough memory."));
+			return;
+		}
 
 		// read data
 		DEBUG("	reading " << last - first + 1 << " lines");
@@ -284,12 +292,16 @@ void ROOTFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSo
 		}
 
 		std::vector<void*> dataContainer;
+		bool ok = false;
 		const int columnOffset = dataSource->prepareImport(dataContainer,
 														   importMode,
 														   last - first + 1,
 														   columns.size(),
 														   headers,
-														   QVector<AbstractColumn::ColumnMode>(columns.size(), AbstractColumn::ColumnMode::Double));
+														   QVector<AbstractColumn::ColumnMode>(columns.size(), AbstractColumn::ColumnMode::Double),
+														   ok);
+		if (!ok)
+			return;
 
 		int c = 0;
 		for (const auto& l : columns) {

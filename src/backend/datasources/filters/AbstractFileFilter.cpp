@@ -116,13 +116,21 @@ QStringList AbstractFileFilter::numberFormats() {
 	return formats;
 }
 
+void AbstractFileFilter::clearLastErrors() {
+	m_lastErrors.clear();
+}
+
+void AbstractFileFilter::addError(const QString& error) {
+	m_lastErrors << error;
+}
+
 /*!
  * \brief AbstractFileFilter::lastErrors
  * Errors occured during last parse
  * \return
  */
-QStringList AbstractFileFilter::lastErrors() {
-	return QStringList();
+QStringList AbstractFileFilter::lastErrors() const {
+	return m_lastErrors;
 }
 
 AbstractFileFilter::FileType AbstractFileFilter::fileType(const QString& fileName) {

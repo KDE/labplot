@@ -227,14 +227,14 @@ void MatioFilter::parse(const QString& fileName) {
   reads the content of the current variable from file \c fileName.
 */
 QVector<QStringList>
-MatioFilter::readCurrentVar(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
+MatioFilter::readCurrentVar(const QString& fileName, AbstractDataSource* dataSource, ImportMode importMode, int lines) {
 	return d->readCurrentVar(fileName, dataSource, importMode, (size_t)lines);
 }
 
 /*!
   reads the content of the file \c fileName to the data source \c dataSource.
 */
-void MatioFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode) {
+void MatioFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, ImportMode mode) {
 	d->readDataFromFile(fileName, dataSource, mode);
 }
 
@@ -358,7 +358,8 @@ QString MatioFilter::fileInfoString(const QString& fileName) {
 // ################### Private implementation ##########################
 // #####################################################################
 
-MatioFilterPrivate::MatioFilterPrivate(MatioFilter*) {
+MatioFilterPrivate::MatioFilterPrivate(MatioFilter* owner)
+	: q(owner) {
 }
 
 // helper functions
@@ -875,8 +876,15 @@ MatioFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource* 
 		}
 
 		// prepare import
-		if (dataSource)
-			columnOffset = dataSource->prepareImport(dataContainer, importMode, actualRows, actualCols, vectorNames, columnModes);
+		if (dataSource) {
+			bool ok = false;
+			columnOffset = dataSource->prepareImport(dataContainer, importMode, actualRows, actualCols, vectorNames, columnModes, ok);
+			if (!ok) {
+				q->addError(i18n("Not enough memory."));
+				return QVector<QStringList>{};
+			}
+		}
+
 		DEBUG(Q_FUNC_INFO << ", column offset = " << columnOffset)
 
 		// B: read data

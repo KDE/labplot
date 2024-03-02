@@ -333,6 +333,7 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 	}
 	statusBar->showMessage(i18n("File %1 imported in %2 seconds.", fileName, (float)timer.elapsed() / 1000));
 
+	RESET_CURSOR;
 	const auto errors = filter->lastErrors();
 	if (!errors.isEmpty()) {
 		ImportErrorDialog* d = new ImportErrorDialog(errors);
@@ -340,7 +341,6 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 		d->show();
 	}
 
-	RESET_CURSOR;
 	statusBar->removeWidget(progressBar);
 	DEBUG(Q_FUNC_INFO << ", DONE")
 }

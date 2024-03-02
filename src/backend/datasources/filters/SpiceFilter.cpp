@@ -56,7 +56,7 @@ QVector<QStringList> SpiceFilter::preview(const QString& fileName, int lines) {
 /*!
   reads the content of the file \c fileName.
 */
-void SpiceFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
+void SpiceFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, ImportMode importMode) {
 	d->readDataFromFile(fileName, dataSource, importMode);
 }
 
@@ -188,7 +188,12 @@ void SpiceFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataS
 	const int actualRows = actualEndRow - startRow + 1;
 	const int actualCols = reader.isReal() ? numberVariables : 2 * numberVariables;
 	// resize dataContainer
-	const int columnOffset = dataSource->prepareImport(m_dataContainer, importMode, actualRows, actualCols, vectorNames, columnModes);
+	bool ok = false;
+	const int columnOffset = dataSource->prepareImport(m_dataContainer, importMode, actualRows, actualCols, vectorNames, columnModes, ok);
+	if (!ok) {
+		q->addError(i18n("Not enough memory."));
+		return;
+	}
 
 	// skip data lines, if required
 	const int skip = startRow - 1;
