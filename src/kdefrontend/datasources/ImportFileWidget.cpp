@@ -1182,6 +1182,8 @@ void ImportFileWidget::fileTypeChanged(int /*index*/) {
 
 	showJsonModel(false);
 
+	ui.cbTopics->hide();
+
 	switch (fileType) {
 	case AbstractFileFilter::FileType::Ascii:
 		ui.lFilter->show();
@@ -1242,6 +1244,7 @@ void ImportFileWidget::fileTypeChanged(int /*index*/) {
 		showJsonModel(true);
 		break;
 	case AbstractFileFilter::FileType::MCAP:
+		ui.cbTopics->show();
 		break;
 	case AbstractFileFilter::FileType::READSTAT:
 		ui.tabWidget->removeTab(0);
