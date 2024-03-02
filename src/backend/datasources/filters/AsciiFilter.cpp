@@ -726,6 +726,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 			const int deviceError = prepareDeviceToRead(device);
 			if (deviceError != 0) {
 				DEBUG(Q_FUNC_INFO << ", Device ERROR: " << deviceError);
+				q->setLastError(i18n("Failed to open the device/file or it's empty."));
 				return 0;
 			}
 			break;
@@ -1280,6 +1281,7 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 		const int deviceError = prepareDeviceToRead(device);
 		if (deviceError) {
 			DEBUG(Q_FUNC_INFO << ", DEVICE ERROR = " << deviceError);
+			q->setLastError(i18n("Failed to open the device/file or it's empty."));
 			return;
 		}
 

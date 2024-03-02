@@ -513,7 +513,7 @@ void JsonFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSource
 	if (!m_prepared) {
 		const int deviceError = prepareDeviceToRead(device);
 		if (deviceError != 0) {
-			DEBUG("Device error = " << deviceError);
+			q->setLastError(i18n("Empty file or invalid JSON document."));
 			return;
 		}
 		// TODO: support other modes and vector names
