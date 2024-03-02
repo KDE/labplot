@@ -512,7 +512,7 @@ void XLSXFilterPrivate::readDataRegion(const QXlsx::CellRange& region, AbstractD
 		bool ok = false;
 		columnOffset = dataSource->prepareImport(dataContainer, importMode, rowCount, colCount, vectorNames, columnModes, ok);
 		if (!ok) {
-			q->addError(i18n("Not enough memory."));
+			q->setLastError(i18n("Not enough memory."));
 			return;
 		}
 

@@ -1298,7 +1298,7 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 		bool ok = false;
 		m_columnOffset = dataSource->prepareImport(m_dataContainer, importMode, m_actualRows, m_actualCols, columnNames, columnModes, ok);
 		if (!ok) {
-			q->addError(i18n("Not enough memory."));
+			q->setLastError(i18n("Not enough memory."));
 			return;
 		}
 		m_prepared = true;

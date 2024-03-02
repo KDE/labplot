@@ -523,7 +523,7 @@ void ReadStatFilterPrivate::readDataFromFile(const QString& fileName, AbstractDa
 	bool ok = false;
 	const int columnOffset = dataSource->prepareImport(m_dataContainer, mode, actualRows, actualCols, varNames, columnModes, ok);
 	if (!ok) {
-		q->addError(i18n("Not enough memory."));
+		q->setLastError(i18n("Not enough memory."));
 		return;
 	}
 

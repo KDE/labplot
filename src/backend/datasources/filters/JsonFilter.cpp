@@ -531,7 +531,7 @@ void JsonFilterPrivate::importData(AbstractDataSource* dataSource, AbstractFileF
 	bool ok = false;
 	m_columnOffset = dataSource->prepareImport(m_dataContainer, importMode, m_actualRows, m_actualCols, vectorNames, columnModes, ok);
 	if (!ok) {
-		q->addError(i18n("Not enough memory."));
+		q->setLastError(i18n("Not enough memory."));
 		return;
 	}
 

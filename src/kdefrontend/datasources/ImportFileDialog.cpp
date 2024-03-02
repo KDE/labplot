@@ -9,8 +9,8 @@
 */
 
 #include "ImportFileDialog.h"
-#include "ImportErrorDialog.h"
 #include "ImportFileWidget.h"
+#include "ImportWarningsDialog.h"
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/Settings.h"
 #include "backend/core/Workbook.h"
@@ -64,7 +64,7 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool liveDataSource, const Q
 		setModel();
 
 	// Signals/Slots
-	connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+	connect(buttonBox, &QDialogButtonBox::accepted, this, &ImportDialog::accept);
 	connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
 	if (!liveDataSource)
@@ -163,7 +163,7 @@ void ImportFileDialog::importToMQTT(MQTTClient* client) const {
 /*!
   triggers data import to the currently selected data container
 */
-void ImportFileDialog::importTo(QStatusBar* statusBar) const {
+bool ImportFileDialog::importTo(QStatusBar* statusBar) const {
 	DEBUG(Q_FUNC_INFO);
 	QDEBUG("	cbAddTo->currentModelIndex() =" << cbAddTo->currentModelIndex());
 	AbstractAspect* aspect = static_cast<AbstractAspect*>(cbAddTo->currentModelIndex().internalPointer());
@@ -171,21 +171,8 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 		DEBUG(Q_FUNC_INFO << ", ERROR: No aspect available");
 		DEBUG("	cbAddTo->currentModelIndex().isValid() = " << cbAddTo->currentModelIndex().isValid());
 		DEBUG("	cbAddTo->currentModelIndex() row/column = " << cbAddTo->currentModelIndex().row() << ' ' << cbAddTo->currentModelIndex().column());
-		return;
-	}
-
-	auto filter = m_importFileWidget->currentFileFilter();
-	if (m_importFileWidget->importValid()) {
-		DEBUG(Q_FUNC_INFO << ", Import VALID!")
-		auto errors = filter->lastErrors();
-		if (errors.isEmpty()) {
-			// Default message, because not all filters implement lastErrors yet
-			errors.append(i18n("No data to import."));
-		}
-		ImportErrorDialog* d = new ImportErrorDialog(errors);
-		d->setAttribute(Qt::WA_DeleteOnClose);
-		d->show();
-		return;
+		const_cast<ImportFileDialog*>(this)->showErrorMessage(i18n("No target data container selected"));
+		return false;
 	}
 
 	QString fileName = m_importFileWidget->fileName();
@@ -194,6 +181,9 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 	// show a progress bar in the status bar
 	auto* progressBar = new QProgressBar();
 	progressBar->setRange(0, 100);
+	auto* filter = m_importFileWidget->currentFileFilter();
+	filter->setLastError(QString()); // clear the previos error, if any available
+	filter->clearLastWarnings(); // clear the previos warnings, if any available
 	connect(filter, &AbstractFileFilter::completed, progressBar, &QProgressBar::setValue);
 
 	statusBar->clearMessage();
@@ -334,15 +324,23 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 	statusBar->showMessage(i18n("File %1 imported in %2 seconds.", fileName, (float)timer.elapsed() / 1000));
 
 	RESET_CURSOR;
-	const auto errors = filter->lastErrors();
-	if (!errors.isEmpty()) {
-		ImportErrorDialog* d = new ImportErrorDialog(errors);
-		d->setAttribute(Qt::WA_DeleteOnClose);
+
+	// handle errors
+	if (!filter->lastError().isEmpty()) {
+		const_cast<ImportFileDialog*>(this)->showErrorMessage(i18n("Failed to import. Reason: %1", filter->lastError()));
+		return false;
+	}
+
+	// show warnings, if available
+	const auto& warnings = filter->lastWarnings();
+	if (!warnings.isEmpty()) {
+		auto* d = new ImportWarningsDialog(warnings);
 		d->show();
 	}
 
 	statusBar->removeWidget(progressBar);
 	DEBUG(Q_FUNC_INFO << ", DONE")
+	return true;
 }
 
 void ImportFileDialog::toggleOptions() {

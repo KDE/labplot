@@ -164,7 +164,7 @@ void ImageFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataS
 		bool ok = false;
 		columnOffset = dataSource->prepareImport(dataContainer, mode, actualRows, actualCols, vectorNames, columnModes, ok);
 		if (!ok) {
-			q->addError(i18n("Not enough memory."));
+			q->setLastError(i18n("Not enough memory."));
 			return;
 		}
 	} else {

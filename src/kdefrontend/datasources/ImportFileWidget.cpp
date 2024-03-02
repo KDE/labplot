@@ -573,14 +573,6 @@ QString ImportFileWidget::selectedObject() const {
 	return name;
 }
 
-/*!
- * returns \c true if the number of lines to be imported from the currently selected file is zero ("file is empty"),
- * returns \c false otherwise.
- */
-bool ImportFileWidget::importValid() const {
-	return m_importValid;
-}
-
 QString ImportFileWidget::host() const {
 	return ui.leHost->text();
 }
@@ -1930,9 +1922,7 @@ void ImportFileWidget::refreshPreview() {
 		}
 
 		tmpTableWidget->horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
-		m_importValid = false;
-	} else
-		m_importValid = true;
+	}
 
 	RESET_CURSOR;
 }

@@ -194,7 +194,8 @@ bool OdsFilter::load(XmlStreamReader*) {
 // ################### Private implementation ##########################
 // #####################################################################
 
-OdsFilterPrivate::OdsFilterPrivate(OdsFilter*) {
+OdsFilterPrivate::OdsFilterPrivate(OdsFilter* owner)
+	: q(owner){
 }
 
 OdsFilterPrivate::~OdsFilterPrivate() {
@@ -377,7 +378,13 @@ void OdsFilterPrivate::readCurrentSheet(const QString& fileName, AbstractDataSou
 	std::vector<void*> dataContainer;
 
 	// prepare import
+	bool ok = false;
 	int columnOffset = dataSource->prepareImport(dataContainer, importMode, actualRows, actualCols, vectorNames, columnModes);
+	if (!ok) {
+		q->setLastError(i18n("Not enough memory."));
+		return;
+	}
+
 	DEBUG(Q_FUNC_INFO << ", column offset = " << columnOffset)
 
 	// import data

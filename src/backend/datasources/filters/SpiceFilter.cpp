@@ -191,7 +191,7 @@ void SpiceFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataS
 	bool ok = false;
 	const int columnOffset = dataSource->prepareImport(m_dataContainer, importMode, actualRows, actualCols, vectorNames, columnModes, ok);
 	if (!ok) {
-		q->addError(i18n("Not enough memory."));
+		q->setLastError(i18n("Not enough memory."));
 		return;
 	}
 

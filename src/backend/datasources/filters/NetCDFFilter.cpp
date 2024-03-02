@@ -755,7 +755,7 @@ NetCDFFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource*
 			bool ok = false;
 			columnOffset = dataSource->prepareImport(dataContainer, mode, actualRows, actualCols, vectorNames, columnModes, ok);
 			if (!ok) {
-				q->addError(i18n("Not enough memory."));
+				q->setLastError(i18n("Not enough memory."));
 				return QVector<QStringList>();
 			}
 		}
@@ -866,7 +866,7 @@ NetCDFFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource*
 			bool ok = false;
 			columnOffset = dataSource->prepareImport(dataContainer, mode, actualRows, actualCols, vectorNames, columnModes, ok);
 			if (!ok) {
-				q->addError(i18n("Not enough memory."));
+				q->setLastError(i18n("Not enough memory."));
 				return QVector<QStringList>();
 			}
 		}
@@ -997,7 +997,7 @@ NetCDFFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource*
 			bool ok = false;
 			columnOffset = dataSource->prepareImport(dataContainer, mode, actualRows, actualCols, vectorNames, columnModes, ok);
 			if (!ok) {
-				q->addError(i18n("Not enough memory."));
+				q->setLastError(i18n("Not enough memory."));
 				return QVector<QStringList>();
 			}
 		}

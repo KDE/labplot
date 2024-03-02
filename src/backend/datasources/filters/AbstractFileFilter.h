@@ -49,8 +49,12 @@ public:
 	virtual void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, ImportMode = ImportMode::Replace) = 0;
 	virtual void write(const QString& fileName, AbstractDataSource*) = 0;
 
-	void addError(const QString&);
-	virtual QStringList lastErrors() const;
+	QString lastError() const;
+	void setLastError(const QString&);
+
+	QStringList lastWarnings() const;
+	void addWarning(const QString&);
+	void clearLastWarnings();
 
 	// save/load in the project XML
 	virtual void save(QXmlStreamWriter*) const = 0;
@@ -64,12 +68,9 @@ Q_SIGNALS:
 	void completed(int) const; //!< int ranging from 0 to 100 notifies about the status of a read/write process
 
 protected:
-	void clearLastErrors();
-
 	const FileType m_type;
-
-private:
-	QStringList m_lastErrors;
+	QString m_lastError;
+	QStringList m_lastWarnings;
 };
 
 #endif

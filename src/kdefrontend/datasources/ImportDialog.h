@@ -35,7 +35,7 @@ public:
 	explicit ImportDialog(MainWin*);
 	~ImportDialog() override;
 
-	virtual void importTo(QStatusBar*) const = 0;
+	virtual bool importTo(QStatusBar*) const = 0;
 	void setCurrentIndex(const QModelIndex&);
 	virtual QString selectedObject() const = 0;
 
@@ -53,6 +53,9 @@ protected:
 	QMenu* m_newDataContainerMenu{nullptr};
 	AspectTreeModel* m_aspectTreeModel;
 	KMessageWidget* m_messageWidget{nullptr};
+
+public Q_SLOTS:
+	void accept() override;
 
 protected Q_SLOTS:
 	virtual void checkOkButton() = 0;

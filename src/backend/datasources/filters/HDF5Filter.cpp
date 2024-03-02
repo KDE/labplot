@@ -1629,7 +1629,7 @@ HDF5FilterPrivate::readCurrentDataSet(const QString& fileName, AbstractDataSourc
 			bool ok = false;
 			columnOffset = dataSource->prepareImport(dataContainer, mode, actualRows, actualCols, vectorNames, columnModes, ok);
 			if (!ok) {
-				q->addError(i18n("Not enough memory."));
+				q->setLastError(i18n("Not enough memory."));
 				return QVector<QStringList>();
 			}
 		}
@@ -1747,7 +1747,7 @@ HDF5FilterPrivate::readCurrentDataSet(const QString& fileName, AbstractDataSourc
 				bool ok = false;
 				dataSource->prepareImport(dataContainer, mode, actualRows, members, vectorNames, columnModes, ok);
 				if (!ok) {
-					q->addError(i18n("Not enough memory."));
+					q->setLastError(i18n("Not enough memory."));
 					return QVector<QStringList>();
 				}
 			} else
@@ -1797,7 +1797,7 @@ HDF5FilterPrivate::readCurrentDataSet(const QString& fileName, AbstractDataSourc
 				bool ok = false;
 				dataSource->prepareImport(dataContainer, mode, actualRows, actualCols, vectorNames, columnModes, ok);
 				if (!ok) {
-					q->addError(i18n("Not enough memory."));
+					q->setLastError(i18n("Not enough memory."));
 					return QVector<QStringList>();
 				}
 			}
@@ -1956,7 +1956,7 @@ HDF5FilterPrivate::readCurrentDataSet(const QString& fileName, AbstractDataSourc
 			bool ok = false;
 			columnOffset = dataSource->prepareImport(dataContainer, mode, actualRows, actualCols, vectorNames, columnModes, ok);
 			if (!ok) {
-				q->addError(i18n("Not enough memory."));
+				q->setLastError(i18n("Not enough memory."));
 				return QVector<QStringList>();
 			}
 		}

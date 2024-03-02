@@ -291,7 +291,7 @@ int CANFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSour
 	bool ok = false;
 	const int columnOffset = dataSource->prepareImport(dc, mode, rows, m_signals.signal_names.length(), m_signals.signal_names, columnModes(), ok, false);
 	if (!ok) {
-		q->addError(i18n("Not enough memory."));
+		q->setLastError(i18n("Not enough memory."));
 		return 0;
 	}
 

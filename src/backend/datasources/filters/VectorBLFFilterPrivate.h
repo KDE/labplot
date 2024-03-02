@@ -37,11 +37,11 @@ private:
 	};
 	static ParseStatus DBCParserParseStatusToVectorBLFStatus(DbcParser::ParseStatus);
 
-	struct Error {
-		ParseStatus e;
+	struct Warning {
+		ParseStatus status;
 		uint32_t CANId;
 	};
-	void addError(const Error&) const;
+	void addWarning(const Warning&) const;
 
 private:
 	virtual int readDataFromFileCommonTime(const QString& fileName, int lines = -1) override;

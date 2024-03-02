@@ -2770,12 +2770,7 @@ void MainWin::importFileDialog(const QString& fileName) {
 	else if (m_currentAspect->type() == AspectType::Column && m_currentAspect->parentAspect()->type() == AspectType::Spreadsheet)
 		dlg->setCurrentIndex(m_aspectTreeModel->modelIndexOfAspect(m_currentAspect->parentAspect()));
 
-	if (dlg->exec() == QDialog::Accepted) {
-		dlg->importTo(statusBar());
-		m_project->setChanged(true);
-	}
-
-	delete dlg;
+	dlg->exec();
 	DEBUG(Q_FUNC_INFO << " DONE");
 }
 
@@ -2789,12 +2784,7 @@ void MainWin::importSqlDialog() {
 	else if (m_currentAspect->type() == AspectType::Column && m_currentAspect->parentAspect()->type() == AspectType::Spreadsheet)
 		dlg->setCurrentIndex(m_aspectTreeModel->modelIndexOfAspect(m_currentAspect->parentAspect()));
 
-	if (dlg->exec() == QDialog::Accepted) {
-		dlg->importTo(statusBar());
-		m_project->setChanged(true);
-	}
-
-	delete dlg;
+	dlg->exec();
 	DEBUG(Q_FUNC_INFO << " DONE");
 }
 

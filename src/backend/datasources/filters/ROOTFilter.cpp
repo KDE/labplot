@@ -231,7 +231,7 @@ void ROOTFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSo
 														   QVector<AbstractColumn::ColumnMode>(columns.size(), AbstractColumn::ColumnMode::Double),
 														   ok);
 		if (!ok) {
-			q->addError(i18n("Not enough memory."));
+			q->setLastError(i18n("Not enough memory."));
 			return;
 		}
 

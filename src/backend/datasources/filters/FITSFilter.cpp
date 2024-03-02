@@ -324,7 +324,7 @@ FITSFilterPrivate::readCHDU(const QString& fileName, AbstractDataSource* dataSou
 			bool ok = false;
 			columnOffset = dataSource->prepareImport(dataContainer, importMode, lines - i, actualCols - j, vectorNames, columnModes, ok);
 			if (!ok) {
-				q->addError(i18n("Not enough memory."));
+				q->setLastError(i18n("Not enough memory."));
 				return QVector<QStringList>();
 			}
 		}
@@ -519,7 +519,7 @@ FITSFilterPrivate::readCHDU(const QString& fileName, AbstractDataSource* dataSou
 				bool ok = false;
 				columnOffset = dataSource->prepareImport(numericDataPointers, importMode, lines - startRrow, matrixNumericColumnIndices.size(), QStringList{}, QVector<AbstractColumn::ColumnMode>{}, ok);
 				if (!ok) {
-					q->addError(i18n("Not enough memory."));
+					q->setLastError(i18n("Not enough memory."));
 					return QVector<QStringList>();
 				}
 			}
