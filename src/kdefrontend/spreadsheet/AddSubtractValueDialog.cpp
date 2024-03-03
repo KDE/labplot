@@ -848,8 +848,8 @@ void AddSubtractValueDialog::generateForColumn(Column* col, int colIndex) {
 	} else { // datetime
 		qint64 value;
 		setDateTimeValue(value);
-		auto* data = static_cast<QVector<QDateTime>*>(col->data());
-		QVector<QDateTime> new_data(rows);
+		auto* data = static_cast<QVector<quint64>*>(col->data());
+		QVector<quint64> new_data(rows);
 
 		switch (m_operation) {
 		case Subtract:
@@ -857,9 +857,9 @@ void AddSubtractValueDialog::generateForColumn(Column* col, int colIndex) {
 			[[fallthrough]];
 		case Add:
 			for (int i = 0; i < rows; ++i)
-				new_data[i] = QDateTime::fromMSecsSinceEpoch(data->at(i).toMSecsSinceEpoch() + value, Qt::UTC);
+				new_data[i] = data->at(i) + value;
 
-			col->replaceDateTimes(0, new_data);
+			col->replaceTimestamps(0, new_data);
 			break;
 		case Multiply:
 		case Divide:

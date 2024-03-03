@@ -210,6 +210,7 @@ public:
 		int indexForValue(double value) const;
 		double valueAt(int index) const;
 		QDateTime dateTimeAt(int index) const;
+		quint64 timestampAt(int index) const;
 		bool isValid(int index) const;
 		bool isMasked(int index) const;
 		QString labelAt(int index) const;

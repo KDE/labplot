@@ -675,10 +675,14 @@ void Column::setTimestamps(const QVector<quint64>& timestamps) {
  * Use this only when columnMode() is DateTime, Month or Day
  */
 void Column::replaceDateTimes(int first, const QVector<QDateTime>& new_values) {
+	QVector<quint64> timestamps;
+	for(auto& value:new_values){
+		timestamps.append(value.toMSecsSinceEpoch());
+	}
 	if (isLoading())
-		d->replaceDateTimes(first, new_values);
+		d->replaceTimestamps(first, timestamps);
 	else
-		exec(new ColumnReplaceCmd<QDateTime>(d, first, new_values));
+		exec(new ColumnReplaceCmd<quint64>(d, first, timestamps));
 }
 
 /**
@@ -1208,7 +1212,7 @@ void Column::save(QXmlStreamWriter* writer) const {
 				auto it = labels->constBegin();
 				while (it != labels->constEnd()) {
 					writer->writeStartElement(QStringLiteral("valueLabel"));
-					writer->writeAttribute(QStringLiteral("value"), QString::number(it->value.toMSecsSinceEpoch()));
+					writer->writeAttribute(QStringLiteral("value"), it->value.toString());
 					writer->writeAttribute(QStringLiteral("label"), it->label);
 					writer->writeEndElement();
 					++it;
@@ -1869,12 +1873,12 @@ double Column::minimum(int startIndex, int endIndex) const {
 		case ColumnMode::Text:
 			break;
 		case ColumnMode::DateTime: {
-			auto* vec = static_cast<QVector<QDateTime>*>(data());
+			auto* vec = static_cast<QVector<quint64>*>(data());
 			for (int row = startIndex; row <= endIndex; ++row) {
 				if (!isValid(row) || isMasked(row))
 					continue;
 
-				const qint64 val = vec->at(row).toMSecsSinceEpoch();
+				const qint64 val = vec->at(row);
 
 				if (val < min)
 					min = val;
@@ -1903,7 +1907,7 @@ double Column::minimum(int startIndex, int endIndex) const {
 		case ColumnMode::DateTime:
 		case ColumnMode::Month:
 		case ColumnMode::Day:
-			min = dateTimeAt(foundIndex).toMSecsSinceEpoch();
+			min = timestampAt(foundIndex);
 			break;
 		case ColumnMode::Text:
 			break;
@@ -2011,11 +2015,11 @@ double Column::maximum(int startIndex, int endIndex) const {
 		case ColumnMode::Text:
 			break;
 		case ColumnMode::DateTime: {
-			auto* vec = static_cast<QVector<QDateTime>*>(data());
+			auto* vec = static_cast<QVector<quint64>*>(data());
 			for (int row = startIndex; row <= endIndex; ++row) {
 				if (!isValid(row) || isMasked(row))
 					continue;
-				const qint64 val = vec->at(row).toMSecsSinceEpoch();
+				const qint64 val = vec->at(row);
 
 				if (val > max)
 					max = val;
@@ -2044,7 +2048,7 @@ double Column::maximum(int startIndex, int endIndex) const {
 		case ColumnMode::DateTime:
 		case ColumnMode::Month:
 		case ColumnMode::Day:
-			max = dateTimeAt(foundIndex).toMSecsSinceEpoch();
+			max = timestampAt(foundIndex);
 			break;
 		case ColumnMode::Text:
 			break;
@@ -2334,25 +2338,25 @@ bool Column::indicesMinMax(double v1, double v2, int& start, int& end) const {
 			qint64 value;
 			if (property == Properties::MonotonicIncreasing) {
 				if (start > 0) {
-					value = dateTimeAt(start - 1).toMSecsSinceEpoch();
+					value = timestampAt(start - 1);
 					if (value <= v2int64 && value >= v1int64)
 						start--;
 				}
 
 				if (end > rowCount() - 1) {
-					value = dateTimeAt(end + 1).toMSecsSinceEpoch();
+					value = timestampAt(end + 1);
 					if (value <= v2int64 && value >= v1int64)
 						end++;
 				}
 			} else {
 				if (end > 0) {
-					value = dateTimeAt(end - 1).toMSecsSinceEpoch();
+					value = timestampAt(end - 1);
 					if (value <= v2int64 && value >= v1int64)
 						end--;
 				}
 
 				if (start > rowCount() - 1) {
-					value = dateTimeAt(start + 1).toMSecsSinceEpoch();
+					value = timestampAt(start + 1);
 					if (value <= v2int64 && value >= v1int64)
 						start++;
 				}
@@ -2391,13 +2395,13 @@ bool Column::indicesMinMax(double v1, double v2, int& start, int& end) const {
 	case ColumnMode::DateTime:
 	case ColumnMode::Month:
 	case ColumnMode::Day: {
-		qint64 value;
-		qint64 v2int64 = v2;
-		qint64 v1int64 = v1;
+		quint64 value;
+		quint64 v2int64 = v2;
+		quint64 v1int64 = v1;
 		for (int i = 0; i < rowCount(); i++) {
 			if (!isValid(i) || isMasked(i))
 				continue;
-			value = dateTimeAt(i).toMSecsSinceEpoch();
+			value = timestampAt(i);
 			if (value <= v2int64 && value >= v1int64) {
 				end = i;
 				if (start < 0)

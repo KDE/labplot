@@ -34,13 +34,13 @@ int indexForValueCommon(const T* obj,
 						const std::function<AbstractColumn::ColumnMode(const T*)> columnMode,
 						const std::function<int(const T*)> rowCount,
 						const std::function<double(const T*, int)> valueAt,
-						const std::function<QDateTime(const T*, int)> dateTimeAt,
+						const std::function<quint64(const T*, int)> timestampAt,
 						const std::function<AbstractColumn::Properties(const T*)> properties,
 						const std::function<bool(const T*, int)> isValid,
 						const std::function<bool(const T*, int)> isMasked) {
 	int rc = rowCount(obj);
 	double prevValue = 0;
-	qint64 prevValueDateTime = 0;
+	quint64 prevValueDateTime = 0;
 	auto mode = columnMode(obj);
 	auto property = properties(obj);
 	if (property == Column::Properties::MonotonicIncreasing || property == Column::Properties::MonotonicDecreasing) {
@@ -84,14 +84,14 @@ int indexForValueCommon(const T* obj,
 		case Column::ColumnMode::DateTime:
 		case Column::ColumnMode::Month:
 		case Column::ColumnMode::Day: {
-			qint64 xInt64 = static_cast<qint64>(x);
+			quint64 xInt64 = static_cast<quint64>(x);
 			for (unsigned int i = 0; i < maxSteps; i++) { // so no log_2(rowCount) needed
 				int index = lowerIndex + round(static_cast<double>(higherIndex - lowerIndex) / 2);
-				qint64 value = dateTimeAt(obj, index).toMSecsSinceEpoch();
+				quint64 value = timestampAt(obj, index);
 
 				if (higherIndex - lowerIndex < 2) {
-					if (std::abs(dateTimeAt(obj, lowerIndex).toMSecsSinceEpoch() - xInt64)
-						< std::abs(dateTimeAt(obj, higherIndex).toMSecsSinceEpoch() - xInt64))
+					if (std::llabs(timestampAt(obj, index) - xInt64)
+						< std::llabs(timestampAt(obj, index) - xInt64))
 						index = lowerIndex;
 					else
 						index = higherIndex;
@@ -141,16 +141,16 @@ int indexForValueCommon(const T* obj,
 		case Column::ColumnMode::DateTime:
 		case Column::ColumnMode::Month:
 		case Column::ColumnMode::Day: {
-			qint64 xInt64 = static_cast<qint64>(x);
+			quint64 xInt64 = static_cast<quint64>(x);
 			for (int row = 0; row < rc; row++) {
 				if (!isValid(obj, row) || isMasked(obj, row))
 					continue;
 
 				if (row == 0)
-					prevValueDateTime = dateTimeAt(obj, row).toMSecsSinceEpoch();
+					prevValueDateTime = timestampAt(obj, row);
 
-				qint64 value = dateTimeAt(obj, row).toMSecsSinceEpoch();
-				if (std::abs(value - xInt64) <= std::abs(prevValueDateTime - xInt64)) { // "<=" prevents also that row - 1 become < 0
+				qint64 value =  timestampAt(obj, row);
+				if (std::llabs(value - xInt64) <= std::llabs(prevValueDateTime - xInt64)) { // "<=" prevents also that row - 1 become < 0
 					prevValueDateTime = value;
 					index = row;
 				}
@@ -249,7 +249,7 @@ double ColumnPrivate::ValueLabels::valueAt(int index) const {
 	case AbstractColumn::ColumnMode::DateTime:
 	case AbstractColumn::ColumnMode::Month:
 	case AbstractColumn::ColumnMode::Day:
-		return cast_vector<QDateTime>()->at(index).value.toMSecsSinceEpoch();
+		return cast_vector<quint64>()->at(index).value;
 	}
 	Q_ASSERT(false);
 	return std::nan("0");
@@ -272,6 +272,25 @@ QDateTime ColumnPrivate::ValueLabels::dateTimeAt(int index) const {
 	}
 	Q_ASSERT(false);
 	return QDateTime();
+}
+
+quint64 ColumnPrivate::ValueLabels::timestampAt(int index) const {
+	if (!initialized())
+		return 0;
+
+	switch (m_mode) {
+	case AbstractColumn::ColumnMode::DateTime:
+	case AbstractColumn::ColumnMode::Month:
+	case AbstractColumn::ColumnMode::Day:
+		return cast_vector<quint64>()->at(index).value;
+	case AbstractColumn::ColumnMode::Double:
+	case AbstractColumn::ColumnMode::Integer:
+	case AbstractColumn::ColumnMode::BigInt:
+	case AbstractColumn::ColumnMode::Text:
+		return 0;
+	}
+	Q_ASSERT(false);
+	return 0;
 }
 
 void ColumnPrivate::ValueLabels::migrateLabels(AbstractColumn::ColumnMode newMode) {
@@ -443,7 +462,7 @@ int ColumnPrivate::ValueLabels::indexForValue(double value) const {
 											std::mem_fn(&ValueLabels::mode),
 											std::mem_fn<int() const>(&ValueLabels::count),
 											std::mem_fn(&ValueLabels::valueAt),
-											std::mem_fn(&ValueLabels::dateTimeAt),
+											std::mem_fn(&ValueLabels::timestampAt),
 											std::mem_fn(&ValueLabels::properties),
 											std::mem_fn<bool(int) const>(&ValueLabels::isValid),
 											std::mem_fn<bool(int) const>(&ValueLabels::isMasked));
@@ -602,9 +621,9 @@ int ColumnPrivate::ValueLabels::count(double min, double max) const {
 	case AbstractColumn::ColumnMode::DateTime:
 	case AbstractColumn::ColumnMode::Month:
 	case AbstractColumn::ColumnMode::Day: {
-		const auto* data = cast_vector<QDateTime>();
+		const auto* data = cast_vector<quint64>();
 		for (const auto& d : *data) {
-			const auto value = d.value.toMSecsSinceEpoch();
+			const auto value = d.value;
 			if (value >= min && value <= max)
 				counter++;
 		}
@@ -1691,9 +1710,9 @@ int ColumnPrivate::rowCount(double min, double max) const {
 	case AbstractColumn::ColumnMode::DateTime:
 	case AbstractColumn::ColumnMode::Month:
 	case AbstractColumn::ColumnMode::Day: {
-		const auto* data = static_cast<QVector<QDateTime>*>(m_data);
+		const auto* data = static_cast<QVector<quint64>*>(m_data);
 		for (const auto& d : *data) {
-			const auto value = d.toMSecsSinceEpoch();
+			const auto value = d;
 			if (value >= min && value <= max)
 				counter++;
 		}
@@ -1888,7 +1907,7 @@ int ColumnPrivate::indexForValue(double x) const {
 									   std::mem_fn(&Column::columnMode),
 									   std::mem_fn<int() const>(&Column::rowCount),
 									   std::mem_fn(&Column::valueAt),
-									   std::mem_fn(&Column::dateTimeAt),
+									   std::mem_fn(&Column::timestampAt),
 									   std::mem_fn(&Column::properties),
 									   std::mem_fn<bool(int) const>(&Column::isValid),
 									   std::mem_fn<bool(int) const>(&Column::isMasked));
@@ -2598,7 +2617,7 @@ double ColumnPrivate::valueAt(int index) const {
 	case AbstractColumn::ColumnMode::BigInt:
 		return static_cast<QVector<qint64>*>(m_data)->value(index, 0);
 	case AbstractColumn::ColumnMode::DateTime:
-		return static_cast<QVector<QDateTime>*>(m_data)->value(index).toMSecsSinceEpoch();
+		return static_cast<QVector<quint64>*>(m_data)->value(index);
 	case AbstractColumn::ColumnMode::Month: // Fall through
 	case AbstractColumn::ColumnMode::Day: // Fall through
 	case AbstractColumn::ColumnMode::Text: // Fall through
@@ -2919,7 +2938,7 @@ void ColumnPrivate::updateProperties() {
 	double prevValue = NAN;
 	int prevValueInt = 0;
 	qint64 prevValueBigInt = 0;
-	qint64 prevValueDatetime = 0;
+	quint64 prevValueDatetime = 0;
 
 	if (m_columnMode == AbstractColumn::ColumnMode::Integer)
 		prevValueInt = integerAt(0);
@@ -2929,7 +2948,7 @@ void ColumnPrivate::updateProperties() {
 		prevValue = valueAt(0);
 	else if (m_columnMode == AbstractColumn::ColumnMode::DateTime || m_columnMode == AbstractColumn::ColumnMode::Month
 			 || m_columnMode == AbstractColumn::ColumnMode::Day)
-		prevValueDatetime = dateTimeAt(0).toMSecsSinceEpoch();
+		prevValueDatetime = timestampAt(0);
 	else {
 		properties = AbstractColumn::Properties::No;
 		available.properties = true;
@@ -2942,7 +2961,7 @@ void ColumnPrivate::updateProperties() {
 	double value;
 	int valueInt;
 	qint64 valueBigInt;
-	qint64 valueDateTime;
+	quint64 valueDateTime;
 	for (int row = 1; row < rows; row++) {
 		if (!m_owner->isValid(row) || m_owner->isMasked(row)) {
 			// if there is one invalid or masked value, the property is No, because
@@ -3037,7 +3056,7 @@ void ColumnPrivate::updateProperties() {
 			prevValue = value;
 		} else if (m_columnMode == AbstractColumn::ColumnMode::DateTime || m_columnMode == AbstractColumn::ColumnMode::Month
 				   || m_columnMode == AbstractColumn::ColumnMode::Day) {
-			valueDateTime = dateTimeAt(row).toMSecsSinceEpoch();
+			valueDateTime = timestampAt(row);
 
 			if (valueDateTime > prevValueDatetime) {
 				monotonic_decreasing = 0;
@@ -3297,11 +3316,9 @@ void ColumnPrivate::calculateDateTimeStatistics() {
 		if (m_owner->isMasked(row))
 			continue;
 
-		const auto& value = dateTimeAt(row);
-		if (!value.isValid())
-			continue;
+		const auto& value = timestampAt(row);
 
-		quint64 val = value.toMSecsSinceEpoch();
+		quint64 val = value;
 		if (val < statistics.minimum)
 			statistics.minimum = val;
 		if (val > statistics.maximum)

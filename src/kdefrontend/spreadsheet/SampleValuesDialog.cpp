@@ -138,12 +138,12 @@ public:
 		case AbstractColumn::ColumnMode::Month:
 		case AbstractColumn::ColumnMode::Day:
 		case AbstractColumn::ColumnMode::DateTime: {
-			auto* dataSource = static_cast<QVector<QDateTime>*>(m_source->data());
-			QVector<QDateTime> dataTarget(size);
+			auto* dataSource = static_cast<QVector<quint64>*>(m_source->data());
+			QVector<quint64> dataTarget(size);
 			for (int i = 0; i < size; ++i)
 				dataTarget[i] = dataSource->at(m_rows.at(i));
 
-			m_target->setDateTimes(dataTarget);
+			m_target->setTimestamps(dataTarget);
 			break;
 		}
 		case AbstractColumn::ColumnMode::Integer: {

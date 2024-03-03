@@ -1835,7 +1835,7 @@ void AxisPrivate::retransformTicks() {
 							case AbstractColumn::ColumnMode::DateTime:
 							case AbstractColumn::ColumnMode::Month:
 							case AbstractColumn::ColumnMode::Day:
-								tickLabelValues << labelsTextColumn->dateTimeAt(columnIndex).toMSecsSinceEpoch();
+								tickLabelValues << labelsTextColumn->timestampAt(columnIndex);
 								break;
 							case AbstractColumn::ColumnMode::Text:
 								tickLabelValuesString << labelsTextColumn->textAt(columnIndex);

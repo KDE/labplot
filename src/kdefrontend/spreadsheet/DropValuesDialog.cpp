@@ -204,7 +204,7 @@ public:
 		auto* data = static_cast<QVector<double>*>(m_column->data());
 		auto* data_int = static_cast<QVector<int>*>(m_column->data());
 		auto* data_bigint = static_cast<QVector<qint64>*>(m_column->data());
-		auto* data_datetime = static_cast<QVector<QDateTime>*>(m_column->data());
+		auto* data_datetime = static_cast<QVector<quint64>*>(m_column->data());
 		const int rows = m_column->rowCount();
 
 		auto mode = m_column->columnMode();
@@ -233,7 +233,7 @@ public:
 				}
 			} else if (mode == AbstractColumn::ColumnMode::DateTime) {
 				for (int i = 0; i < rows; ++i) {
-					if (data_datetime->at(i).toMSecsSinceEpoch() == m_value1) {
+					if (data_datetime->at(i) == m_value1) {
 						m_column->setMasked(i, true);
 						changed = true;
 					}
@@ -264,7 +264,7 @@ public:
 				}
 			} else if (mode == AbstractColumn::ColumnMode::DateTime) {
 				for (int i = 0; i < rows; ++i) {
-					if (data_datetime->at(i).toMSecsSinceEpoch() != m_value1) {
+					if (data_datetime->at(i) != m_value1) {
 						m_column->setMasked(i, true);
 						changed = true;
 					}
@@ -295,7 +295,7 @@ public:
 				}
 			} else if (mode == AbstractColumn::ColumnMode::DateTime) {
 				for (int i = 0; i < rows; ++i) {
-					if (data_datetime->at(i).toMSecsSinceEpoch() >= m_value1 && data_datetime->at(i).toMSecsSinceEpoch() <= m_value2) {
+					if (data_datetime->at(i) >= m_value1 && data_datetime->at(i) <= m_value2) {
 						m_column->setMasked(i, true);
 						changed = true;
 					}
@@ -326,7 +326,7 @@ public:
 				}
 			} else if (mode == AbstractColumn::ColumnMode::DateTime) {
 				for (int i = 0; i < rows; ++i) {
-					if (data_datetime->at(i).toMSecsSinceEpoch() > m_value1 && data_datetime->at(i).toMSecsSinceEpoch() < m_value2) {
+					if (data_datetime->at(i) > m_value1 && data_datetime->at(i) < m_value2) {
 						m_column->setMasked(i, true);
 						changed = true;
 					}
@@ -357,7 +357,7 @@ public:
 				}
 			} else if (mode == AbstractColumn::ColumnMode::DateTime) {
 				for (int i = 0; i < rows; ++i) {
-					if (data_datetime->at(i).toMSecsSinceEpoch() > m_value1) {
+					if (data_datetime->at(i) > m_value1) {
 						m_column->setMasked(i, true);
 						changed = true;
 					}
@@ -388,7 +388,7 @@ public:
 				}
 			} else if (mode == AbstractColumn::ColumnMode::DateTime) {
 				for (int i = 0; i < rows; ++i) {
-					if (data_datetime->at(i).toMSecsSinceEpoch() >= m_value1) {
+					if (data_datetime->at(i) >= m_value1) {
 						m_column->setMasked(i, true);
 						changed = true;
 					}
@@ -419,7 +419,7 @@ public:
 				}
 			} else if (mode == AbstractColumn::ColumnMode::DateTime) {
 				for (int i = 0; i < rows; ++i) {
-					if (data_datetime->at(i).toMSecsSinceEpoch() < m_value1) {
+					if (data_datetime->at(i) < m_value1) {
 						m_column->setMasked(i, true);
 						changed = true;
 					}
@@ -450,7 +450,7 @@ public:
 				}
 			} else if (mode == AbstractColumn::ColumnMode::DateTime) {
 				for (int i = 0; i < rows; ++i) {
-					if (data_datetime->at(i).toMSecsSinceEpoch() <= m_value1) {
+					if (data_datetime->at(i) <= m_value1) {
 						m_column->setMasked(i, true);
 						changed = true;
 					}
@@ -701,77 +701,77 @@ public:
 			if (changed)
 				m_column->setBigInts(new_data);
 		} else if (mode == AbstractColumn::ColumnMode::DateTime) {
-			auto* data = static_cast<QVector<QDateTime>*>(m_column->data());
-			QVector<QDateTime> new_data(*data);
+			auto* data = static_cast<QVector<quint64>*>(m_column->data());
+			QVector<quint64> new_data(*data);
 
 			switch (m_operator) {
 			case Operator::EqualTo:
 				for (auto& d : new_data) {
-					if (d.toMSecsSinceEpoch() == m_value1) {
-						d = QDateTime();
+					if (d == m_value1) {
+						d = 0;
 						changed = true;
 					}
 				}
 				break;
 			case Operator::NotEqualTo:
 				for (auto& d : new_data) {
-					if (d.toMSecsSinceEpoch() != m_value1) {
-						d = QDateTime();
+					if (d != m_value1) {
+						d = 0;
 						changed = true;
 					}
 				}
 				break;
 			case Operator::BetweenIncl:
 				for (auto& d : new_data) {
-					if (d.toMSecsSinceEpoch() >= m_value1 && d.toMSecsSinceEpoch() <= m_value2) {
-						d = QDateTime();
+					if (d >= m_value1 &&  d <= m_value2) {
+						d = 0;
 						changed = true;
 					}
 				}
 				break;
 			case Operator::BetweenExcl:
 				for (auto& d : new_data) {
-					if (d.toMSecsSinceEpoch() > m_value1 && d.toMSecsSinceEpoch() < m_value2) {
-						d = QDateTime();
+					if (d > m_value1 && d < m_value2) {
+						d = 0;
 						changed = true;
 					}
 				}
 				break;
 			case Operator::GreaterThan:
 				for (auto& d : new_data) {
-					if (d.toMSecsSinceEpoch() > m_value1) {
-						d = QDateTime();
+					if (d > m_value1) {
+						d = 0;
 						changed = true;
 					}
 				}
 				break;
 			case Operator::GreaterThanEqualTo:
 				for (auto& d : new_data) {
-					if (d.toMSecsSinceEpoch() >= m_value1) {
-						d = QDateTime();
+					if (d >= m_value1) {
+						d = 0;
 						changed = true;
 					}
 				}
 				break;
 			case Operator::LessThan:
 				for (auto& d : new_data) {
-					if (d.toMSecsSinceEpoch() < m_value1) {
-						d = QDateTime();
+					if (d < m_value1) {
+						d = 0;
 						changed = true;
 					}
 				}
 				break;
 			case Operator::LessThanEqualTo:
 				for (auto& d : new_data) {
-					if (d.toMSecsSinceEpoch() <= m_value1) {
-						d = QDateTime();
+					if (d <= m_value1) {
+						d =0;
 						changed = true;
 					}
 				}
 			}
 
 			if (changed)
-				m_column->setDateTimes(new_data);
+				m_column->setTimestamps(new_data);
 		}
 	}
 

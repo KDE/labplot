@@ -47,7 +47,7 @@ QVector<double>& VariableParser::doublePrecision() {
 }
 
 QVector<QDateTime>& VariableParser::dateTime() {
-	return *static_cast<QVector<QDateTime>*>(m_values);
+	return *static_cast<QVector<quint64>*>(m_values);
 }
 
 QVector<QString>& VariableParser::text() {
@@ -175,7 +175,7 @@ void VariableParser::clearValues() {
 	case AbstractColumn::ColumnMode::Day:
 	case AbstractColumn::ColumnMode::Month:
 	case AbstractColumn::ColumnMode::DateTime:
-		delete static_cast<QVector<QDateTime>*>(m_values);
+		delete static_cast<QVector<quint64>*>(m_values);
 		break;
 	case AbstractColumn::ColumnMode::Text:
 		delete static_cast<QVector<QString>*>(m_values);

@@ -1372,7 +1372,7 @@ int Spreadsheet::prepareImport(std::vector<void*>& dataContainer,
 			case AbstractColumn::ColumnMode::Month:
 			case AbstractColumn::ColumnMode::Day:
 			case AbstractColumn::ColumnMode::DateTime: {
-				auto* vector = static_cast<QVector<QDateTime>*>(column->data());
+				auto* vector = static_cast<QVector<quint64>*>(column->data());
 				dataContainer[n] = static_cast<void*>(vector);
 				break;
 			}
