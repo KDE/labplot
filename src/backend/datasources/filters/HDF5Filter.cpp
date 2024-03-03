@@ -1512,7 +1512,8 @@ HDF5FilterPrivate::readCurrentDataSet(const QString& fileName, AbstractDataSourc
 	if (currentDataSetName.isEmpty()) {
 		// return QString("No data set selected").replace(QLatin1Char(' '),QChar::Nbsp);
 		ok = false;
-		return dataStrings << (QStringList() << i18n("No data set selected"));
+		q->setLastError(i18n("No data set selected."));
+		return dataStrings;
 	}
 	DEBUG(Q_FUNC_INFO << ", current data set = " << STDSTRING(currentDataSetName));
 
@@ -1579,8 +1580,7 @@ HDF5FilterPrivate::readCurrentDataSet(const QString& fileName, AbstractDataSourc
 		case H5T_NO_CLASS:
 		case H5T_NCLASSES: {
 			ok = false;
-			dataStrings << (QStringList() << i18n("rank 0 not implemented yet for type %1", translateHDF5Class(dclass)));
-			QDEBUG(dataStrings);
+			q->setLastError(i18n("rank 0 not implemented yet for type %1", translateHDF5Class(dclass)));
 		}
 		default:
 			break;
@@ -1719,8 +1719,7 @@ HDF5FilterPrivate::readCurrentDataSet(const QString& fileName, AbstractDataSourc
 				dataString = readHDF5Data1D<unsigned long long>(dataset, dtype, rows, lines, dataContainer[0]);
 			else {
 				ok = false;
-				dataString = (QStringList() << i18n("unsupported integer type for rank 1"));
-				QDEBUG(dataString);
+				q->setLastError(i18n("unsupported integer type for rank 1"));
 			}
 			break;
 		}
@@ -1733,7 +1732,7 @@ HDF5FilterPrivate::readCurrentDataSet(const QString& fileName, AbstractDataSourc
 				dataString = readHDF5Data1D<long double>(dataset, H5T_NATIVE_LDOUBLE, rows, lines, dataContainer[0]);
 			else {
 				ok = false;
-				dataString = (QStringList() << i18n("unsupported float type for rank 1"));
+				q->setLastError(i18n("unsupported float type for rank 1"));
 				QDEBUG(dataString);
 			}
 			break;
@@ -1868,10 +1867,8 @@ HDF5FilterPrivate::readCurrentDataSet(const QString& fileName, AbstractDataSourc
 					HDF5_READ_VLEN_1D(double, double)
 				else if (H5Tequal(base_type, H5T_NATIVE_LDOUBLE))
 					HDF5_READ_VLEN_1D(double, double) // long double not supported from QString::number
-				else {
-					dataString = (QStringList() << i18n("unsupported integer type for rank 1"));
-					QDEBUG(dataString);
-				}
+				else
+					q->setLastError(i18n("unsupported integer type for rank 1"));
 			}
 
 			free(rdata);
@@ -1886,8 +1883,7 @@ HDF5FilterPrivate::readCurrentDataSet(const QString& fileName, AbstractDataSourc
 		case H5T_NO_CLASS:
 		case H5T_NCLASSES: {
 			ok = false;
-			dataString = (QStringList() << i18n("rank 1 not implemented yet for type %1", translateHDF5Class(dclass)));
-			QDEBUG(dataString);
+			q->setLastError(i18n("rank 1 not implemented yet for type %1", translateHDF5Class(dclass)));
 		}
 		default:
 			break;
@@ -2020,8 +2016,7 @@ HDF5FilterPrivate::readCurrentDataSet(const QString& fileName, AbstractDataSourc
 				dataStrings << readHDF5Data2D<unsigned long long>(dataset, H5T_NATIVE_ULLONG, rows, cols, lines, dataContainer);
 			else {
 				ok = false;
-				dataStrings << (QStringList() << i18n("unsupported integer type for rank 2"));
-				// QDEBUG(dataStrings);
+				q->setLastError(i18n("unsupported integer type for rank 2"));
 			}
 			break;
 		}
@@ -2034,8 +2029,7 @@ HDF5FilterPrivate::readCurrentDataSet(const QString& fileName, AbstractDataSourc
 				dataStrings << readHDF5Data2D<long double>(dataset, H5T_NATIVE_LDOUBLE, rows, cols, lines, dataContainer);
 			else {
 				ok = false;
-				dataStrings << (QStringList() << i18n("unsupported float type for rank 2"));
-				QDEBUG(dataStrings);
+				q->setLastError(i18n("unsupported float type for rank 2"));
 			}
 			break;
 		}
@@ -2098,8 +2092,7 @@ HDF5FilterPrivate::readCurrentDataSet(const QString& fileName, AbstractDataSourc
 		case H5T_NO_CLASS:
 		case H5T_NCLASSES: {
 			ok = false;
-			dataStrings << (QStringList() << i18n("rank 2 not implemented yet for type %1", translateHDF5Class(dclass)));
-			QDEBUG(dataStrings);
+			q->setLastError(i18n("rank 2 not implemented yet for type %1", translateHDF5Class(dclass)));
 		}
 		default:
 			break;
@@ -2108,8 +2101,7 @@ HDF5FilterPrivate::readCurrentDataSet(const QString& fileName, AbstractDataSourc
 	}
 	default: { // 3D or higher dim data
 		ok = false;
-		dataStrings << (QStringList() << i18n("rank %1 not implemented yet for type %2", rank, translateHDF5Class(dclass)));
-		QDEBUG(dataStrings);
+		q->setLastError(i18n("rank %1 not implemented yet for type %2", rank, translateHDF5Class(dclass)));
 	}
 	}
 
@@ -2146,6 +2138,7 @@ void HDF5FilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSo
 
 	if (currentDataSetName.isEmpty()) {
 		DEBUG("WARNING: No data set selected");
+		q->setLastError(i18n("No data set selected."));
 		return;
 	}
 

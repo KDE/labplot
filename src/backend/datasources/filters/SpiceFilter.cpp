@@ -173,8 +173,10 @@ void SpiceFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataS
 #ifdef SPICEFILTERTEST_EN
 	reader.setBulkReadLines(q->mBulkLineCount);
 #endif
-	if (!reader.open() || !reader.validSpiceFile())
+	if (!reader.open() || !reader.validSpiceFile()) {
+		q->setLastError(i18n("Failed to open the device/file or it's empty."));
 		return;
+	}
 
 	q->connect(&reader, &SpiceFileReader::processed, [=](double processed) {
 		Q_EMIT q->completed(processed);

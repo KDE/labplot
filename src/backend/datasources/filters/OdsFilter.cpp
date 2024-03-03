@@ -212,6 +212,7 @@ void OdsFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSou
 
 	if (selectedSheetNames.isEmpty()) {
 		DEBUG(Q_FUNC_INFO << ", WARNING: no sheet selected");
+		q->setLastError(i18n("No sheet selected."));
 		return;
 	}
 
@@ -246,12 +247,14 @@ void OdsFilterPrivate::readCurrentSheet(const QString& fileName, AbstractDataSou
 	auto* sheet = m_document.get_sheet(currentSheetName.toStdString());
 	if (!sheet) {
 		DEBUG(Q_FUNC_INFO << ", sheet not found: " << currentSheetName.toStdString())
+		q->setLastError(i18n("Selected sheet not found."));
 		return;
 	}
 
 	const auto sheetIndex = sheet->get_index();
 	if (sheetIndex == ixion::invalid_sheet) {
 		DEBUG(Q_FUNC_INFO << ", invalid sheet")
+		q->setLastError(i18n("Invalid sheet."));
 		return;
 	}
 
@@ -312,6 +315,7 @@ void OdsFilterPrivate::readCurrentSheet(const QString& fileName, AbstractDataSou
 				// case ixion::formula_result::result_type::boolean:
 				case ixion::formula_result::result_type::matrix:
 					DEBUG(Q_FUNC_INFO << ", formula type not supported yet.")
+					q->setLastError(i18n("Formulas not supported yet."));
 					break;
 				}
 				break;

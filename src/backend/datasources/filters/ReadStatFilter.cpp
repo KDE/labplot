@@ -508,6 +508,7 @@ void ReadStatFilterPrivate::readDataFromFile(const QString& fileName, AbstractDa
 	readstat_error_t error = parse(fileName, false, true);
 	if (error != READSTAT_OK) {
 		DEBUG(Q_FUNC_INFO << ", ERROR preparsing file " << STDSTRING(fileName))
+		q->setLastError(i18n("Failed to parse the file."));
 		return;
 	}
 
@@ -527,9 +528,10 @@ void ReadStatFilterPrivate::readDataFromFile(const QString& fileName, AbstractDa
 		return;
 	}
 
-	error = parse(fileName);
+	error = parse(fileName); // TODO: parse was already done above. why it's needed here again?
 	if (error != READSTAT_OK) {
 		DEBUG(Q_FUNC_INFO << ", ERROR parsing file " << STDSTRING(fileName))
+		q->setLastError(i18n("Failed to parse the file."));
 		return;
 	}
 

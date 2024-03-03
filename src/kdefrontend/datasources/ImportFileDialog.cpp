@@ -327,14 +327,14 @@ bool ImportFileDialog::importTo(QStatusBar* statusBar) const {
 
 	// handle errors
 	if (!filter->lastError().isEmpty()) {
-		const_cast<ImportFileDialog*>(this)->showErrorMessage(i18n("Failed to import. Reason: %1", filter->lastError()));
+		const_cast<ImportFileDialog*>(this)->showErrorMessage(filter->lastError());
 		return false;
 	}
 
 	// show warnings, if available
 	const auto& warnings = filter->lastWarnings();
 	if (!warnings.isEmpty()) {
-		auto* d = new ImportWarningsDialog(warnings);
+		auto* d = new ImportWarningsDialog(warnings, m_mainWin);
 		d->show();
 	}
 

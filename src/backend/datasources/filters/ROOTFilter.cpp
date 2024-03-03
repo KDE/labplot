@@ -159,8 +159,10 @@ ROOTFilterPrivate::ROOTFilterPrivate(ROOTFilter* owner)
 
 ROOTFilterPrivate::FileType ROOTFilterPrivate::currentObjectPosition(const QString& fileName, long int& pos) {
 	QStringList typeobject = currentObject.split(QLatin1Char(':'));
-	if (typeobject.size() < 2)
+	if (typeobject.size() < 2) {
+		q->setLastError(i18n("Unsupported file type, neither histogram no tree."));
 		return FileType::Invalid;
+	}
 
 	FileType type;
 	if (typeobject.first() == QStringLiteral("Hist"))
@@ -300,8 +302,10 @@ void ROOTFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSo
 														   headers,
 														   QVector<AbstractColumn::ColumnMode>(columns.size(), AbstractColumn::ColumnMode::Double),
 														   ok);
-		if (!ok)
+		if (!ok) {
+			q->setLastError(i18n("Not enough memory."));
 			return;
+		}
 
 		int c = 0;
 		for (const auto& l : columns) {

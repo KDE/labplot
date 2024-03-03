@@ -41,7 +41,7 @@ private:
 		ParseStatus status;
 		uint32_t CANId;
 	};
-	void addWarning(const Warning&) const;
+	void addWarningError(const Warning&) const;
 
 private:
 	virtual int readDataFromFileCommonTime(const QString& fileName, int lines = -1) override;

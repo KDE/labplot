@@ -295,6 +295,7 @@ void NetCDFFilterPrivate::handleError(int err, const QString& function) {
 	Q_UNUSED(function);
 	if (err != NC_NOERR) {
 		DEBUG("NETCDF ERROR:" << STDSTRING(function) << "() - " << nc_strerror(err));
+		// TODO q->setLastError(i18n("NetCDF Error: %1() - %2", function, nc_strerror(err)));
 		return;
 	}
 }
@@ -688,7 +689,8 @@ NetCDFFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource*
 
 	if (currentVarName.isEmpty()) {
 		DEBUG(Q_FUNC_INFO << ", WARNING: current var name is empty!")
-		return dataStrings << (QStringList() << i18n("No variable selected"));
+		q->setLastError(i18n("No variable selected."));
+		return dataStrings;
 	}
 	DEBUG(" current variable = " << STDSTRING(currentVarName));
 
@@ -698,6 +700,7 @@ NetCDFFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource*
 	handleError(m_status, QStringLiteral("nc_open"));
 	if (m_status != NC_NOERR) {
 		DEBUG("	Giving up");
+		q->setLastError(i18n("Failed to open the file or it's empty."));
 		return dataStrings;
 	}
 
@@ -935,6 +938,7 @@ NetCDFFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource*
 		// TODO: NC_STRING
 		default:
 			DEBUG("	data type not supported yet");
+			q->setLastError(i18n("Data type not supported yet."));
 		}
 
 		break;
@@ -1074,12 +1078,12 @@ NetCDFFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource*
 		// TODO: NC_STRING
 		default:
 			DEBUG("	data type not supported yet");
+			q->setLastError(i18n("Data type not supported yet."));
 		}
 		break;
 	}
 	default:
-		dataStrings << (QStringList() << i18n("%1 dimensional data of type %2 not supported yet", ndims, translateDataType(type)));
-		QDEBUG(dataStrings);
+		q->setLastError(i18n("%1 dimensional data of type %2 not supported yet", ndims, translateDataType(type)));
 	}
 
 	free(dimids);
@@ -1110,6 +1114,7 @@ QVector<QStringList> NetCDFFilterPrivate::readDataFromFile(const QString& fileNa
 
 	if (currentVarName.isEmpty()) {
 		DEBUG(Q_FUNC_INFO << ", no variable selected");
+		q->setLastError(i18n("No variable selected."));
 		return dataStrings;
 	}
 

@@ -397,6 +397,7 @@ void BinaryFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSour
 	if (deviceError) {
 		dataSource->clear();
 		DEBUG(Q_FUNC_INFO << ", Device error. Gving up");
+		q->setLastError(i18n("Failed to open the device/file or it's empty."));
 		return;
 	}
 

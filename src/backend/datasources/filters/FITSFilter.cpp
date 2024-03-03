@@ -256,6 +256,7 @@ FITSFilterPrivate::readCHDU(const QString& fileName, AbstractDataSource* dataSou
 	if (fits_open_file(&m_fitsFile, qPrintable(fileName), READONLY, &status)) {
 		DEBUG(Q_FUNC_INFO << ", ERROR opening file " << STDSTRING(fileName));
 		printError(status);
+		q->setLastError(i18n("Failed to read the file."));
 		return dataStrings;
 	}
 
@@ -263,6 +264,7 @@ FITSFilterPrivate::readCHDU(const QString& fileName, AbstractDataSource* dataSou
 
 	if (fits_get_hdu_type(m_fitsFile, &chduType, &status)) {
 		printError(status);
+		q->setLastError(i18n("Failed to read the file."));
 		return dataStrings;
 	}
 
@@ -325,7 +327,7 @@ FITSFilterPrivate::readCHDU(const QString& fileName, AbstractDataSource* dataSou
 			columnOffset = dataSource->prepareImport(dataContainer, importMode, lines - i, actualCols - j, vectorNames, columnModes, ok);
 			if (!ok) {
 				q->setLastError(i18n("Not enough memory."));
-				return QVector<QStringList>();
+				return dataStrings;
 			}
 		}
 
@@ -334,13 +336,15 @@ FITSFilterPrivate::readCHDU(const QString& fileName, AbstractDataSource* dataSou
 
 		if (!data) {
 			DEBUG(Q_FUNC_INFO << ", Not enough memory for data");
+			q->setLastError(i18n("Not enough memory."));
 			return dataStrings;
 		}
 
 		// TODO: other types
 		if (fits_read_img(m_fitsFile, TDOUBLE, 1, pixelCount, nullptr, data, nullptr, &status)) {
 			printError(status);
-			return dataStrings << (QStringList() << QLatin1String("Error"));
+			q->setLastError(i18n("Failed to read the file."));
+			return dataStrings;
 		}
 
 		int ii = 0;
@@ -520,7 +524,7 @@ FITSFilterPrivate::readCHDU(const QString& fileName, AbstractDataSource* dataSou
 				columnOffset = dataSource->prepareImport(numericDataPointers, importMode, lines - startRrow, matrixNumericColumnIndices.size(), QStringList{}, QVector<AbstractColumn::ColumnMode>{}, ok);
 				if (!ok) {
 					q->setLastError(i18n("Not enough memory."));
-					return QVector<QStringList>();
+					return dataStrings;
 				}
 			}
 		}

@@ -170,31 +170,35 @@ bool VectorBLFFilterPrivate::isValid(const QString& filename) const {
 	return VectorBLFFilter::isValid(filename);
 }
 
-void VectorBLFFilterPrivate::addWarning(const Warning& warning) const {
+/*!
+ * depending on the parse status in \c Warning, adds either a warning or set the last error in the filter class
+ * to be shown in the import dialog.
+ */
+void VectorBLFFilterPrivate::addWarningError(const Warning& warning) const {
 	switch (warning.status) {
 	case ParseStatus::DBCBigEndian:
-		q->addWarning(i18n("Big Endian not supported. CAN id: %1", QStringLiteral("0x%1").arg(warning.CANId, 0, 16)));
+		q->addWarning(i18n("Big Endian not supported. CAN id: %1.", QStringLiteral("0x%1").arg(warning.CANId, 0, 16)));
 		break;
 	case ParseStatus::DBCMessageToLong:
-		q->addWarning(i18n("Message too long. CAN id: %1", QStringLiteral("0x%1").arg(warning.CANId, 0, 16)));
+		q->addWarning(i18n("Message too long. CAN id: %1.", QStringLiteral("0x%1").arg(warning.CANId, 0, 16)));
 		break;
 	case ParseStatus::DBCUnknownID:
-		q->addWarning(i18n("Unknown id: %1", QStringLiteral("0x%1").arg(warning.CANId, 0, 16)));
+		q->addWarning(i18n("Unknown id: %1.", QStringLiteral("0x%1").arg(warning.CANId, 0, 16)));
 		break;
 	case ParseStatus::ErrorInvalidFile:
-		q->addWarning(i18n("Invalid blf file"));
+		q->setLastError(i18n("Invalid BLF file"));
 		break;
 	case ParseStatus::DBCInvalidConversion:
-		q->addWarning(i18n("Unable to calculate conversion: %1", QStringLiteral("0x%1").arg(warning.CANId, 0, 16)));
+		q->setLastError(i18n("Unable to calculate conversion: %1.", QStringLiteral("0x%1").arg(warning.CANId, 0, 16)));
 		break;
 	case ParseStatus::DBCParserUnsupported:
-		q->addWarning(i18n("No dbc parser installed"));
+		q->setLastError(i18n("No DBC parser installed."));
 		break;
 	case ParseStatus::DBCInvalidFile:
-		q->addWarning(i18n("Invalid dbc file"));
+		q->setLastError(i18n("Invalid DBC file."));
 		break;
 	case ParseStatus::ErrorUnknown:
-		q->addWarning(i18n("Unknown error"));
+		q->setLastError(i18n("Unknown error,"));
 		break;
 	case ParseStatus::Success:
 		break;
@@ -254,13 +258,13 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 	PERFTRACE(QLatin1String(Q_FUNC_INFO));
 
 	if (!isValid(fileName)) {
-		addWarning({ParseStatus::ErrorInvalidFile, 0});
+		q->setLastError(i18n("Invalid file."));
 		return 0;
 	}
 
 	const auto status = m_dbcParser.isValid();
 	if (status != DbcParser::ParseStatus::Success) {
-		addWarning({DBCParserParseStatusToVectorBLFStatus(status), 0});
+		addWarningError({DBCParserParseStatusToVectorBLFStatus(status), 0});
 		return 0;
 	}
 
@@ -342,7 +346,7 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 			if (status != DbcParser::ParseStatus::Success) {
 				// id is not available in the dbc file, so it is not possible to decode
 				DEBUG("Unable to decode message: " << id << ": " << (int)status);
-				addWarning({DBCParserParseStatusToVectorBLFStatus(status), id});
+				addWarningError({DBCParserParseStatusToVectorBLFStatus(status), id});
 				continue;
 			}
 
@@ -386,7 +390,7 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 
 			if (status != DbcParser::ParseStatus::Success) {
 				// id is not available in the dbc file, so it is not possible to decode
-				addWarning({DBCParserParseStatusToVectorBLFStatus(status), id});
+				addWarningError({DBCParserParseStatusToVectorBLFStatus(status), id});
 				continue;
 			}
 
