@@ -363,7 +363,8 @@ void JsonFilterPrivate::setValueFromString(int column, int row, const QString& v
 		break;
 	}
 	case AbstractColumn::ColumnMode::DateTime: {
-		static_cast<QVector<quint64>*>(m_dataContainer[column])->operator[](row) = valueString.toULongLong();
+		const QDateTime valueDateTime = QDateTime::fromString(valueString, dateTimeFormat);
+		static_cast<QVector<quint64>*>(m_dataContainer[column])->operator[](row) = valueDateTime.isValid() ? valueDateTime.toMSecsSinceEpoch() : 0;
 		break;
 	}
 	case AbstractColumn::ColumnMode::Text:

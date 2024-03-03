@@ -921,7 +921,7 @@ void ColumnPrivate::deleteData() {
 	case AbstractColumn::ColumnMode::DateTime:
 	case AbstractColumn::ColumnMode::Month:
 	case AbstractColumn::ColumnMode::Day:
-		delete static_cast<QVector<QDateTime>*>(m_data);
+		delete static_cast<QVector<quint64>*>(m_data);
 		break;
 	}
 	m_data = nullptr;
@@ -2580,7 +2580,8 @@ QDateTime ColumnPrivate::dateTimeAt(int row) const {
 		|| (m_columnMode != AbstractColumn::ColumnMode::DateTime && m_columnMode != AbstractColumn::ColumnMode::Month
 			&& m_columnMode != AbstractColumn::ColumnMode::Day))
 		return QDateTime();
-	return static_cast<QVector<QDateTime>*>(m_data)->value(row);
+	qDebug() << static_cast<QVector<quint64>*>(m_data)->value(row);
+	return QDateTime::fromMSecsSinceEpoch(static_cast<QVector<quint64>*>(m_data)->value(row));
 }
 
 /**
