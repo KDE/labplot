@@ -1739,4 +1739,44 @@ void ColumnTest::testRowCountValueLabelsDateTime() {
 			 3);
 }
 
+
+void ColumnTest::saveLoadTimestamps() {
+
+	QVector<quint64> data = {100000,200000,300000,40000};
+
+	Column c(QStringLiteral("Datetime column"), Column::ColumnMode::DateTime);
+	c.setTimestamps(data);
+
+	QByteArray array;
+	QXmlStreamWriter writer(&array);
+	c.save(&writer);
+
+	QDEBUG(array);
+
+	Column c2(QStringLiteral("Datetime 2 column"), Column::ColumnMode::DateTime);
+	XmlStreamReader reader(array);
+	bool found = false;
+	while (!reader.atEnd()) {
+		reader.readNext();
+		if (reader.isStartElement() && reader.name() == QLatin1String("column")) {
+			found = true;
+			break;
+		}
+	}
+	QCOMPARE(found, true);
+	QCOMPARE(c2.load(&reader, false), true);
+
+	QCOMPARE(c2.rowCount(), 4);
+	QCOMPARE(c2.timestampAt(0), 100000);
+	QCOMPARE(c2.timestampAt(1), 200000);
+	QCOMPARE(c2.timestampAt(2), 300000);
+	QCOMPARE(c2.timestampAt(3), 400000);
+
+	QCOMPARE(c2.dateTimeAt(0), QDateTime::fromMSecsSinceEpoch(100000));
+	QCOMPARE(c2.dateTimeAt(1), QDateTime::fromMSecsSinceEpoch(200000));
+	QCOMPARE(c2.dateTimeAt(2), QDateTime::fromMSecsSinceEpoch(300000));
+	QCOMPARE(c2.dateTimeAt(3), QDateTime::fromMSecsSinceEpoch(400000));
+
+}
+
 QTEST_MAIN(ColumnTest)

@@ -72,6 +72,7 @@ AbstractColumn::AbstractColumn(const QString& name, AspectType type)
 
 AbstractColumn::~AbstractColumn() {
 	Q_EMIT aboutToBeDestroyed(this);
+	delete d->m_heatmapFormat;
 	delete d;
 }
 
@@ -671,11 +672,37 @@ void AbstractColumn::setDateTimeAt(int /*row*/, const QDateTime&) {
 }
 
 /**
+ * \brief Return the quint64 in row 'row'
+ *
+ * Use this only when columnMode() is DateTime, Month or Day
+ */
+quint64 AbstractColumn::timestampAt(int /*row*/) const {
+	return 0;
+}
+
+/**
+ * \brief Set the content of row 'row'
+ *
+ * Use this only when columnMode() is DateTime, Month or Day
+ */
+void AbstractColumn::setTimestampAt(int /*row*/, const quint64&) {
+}
+
+
+/**
  * \brief Replace a range of values
  *
  * Use this only when columnMode() is DateTime, Month or Day
  */
 void AbstractColumn::replaceDateTimes(int /*first*/, const QVector<QDateTime>&) {
+}
+
+/**
+ * \brief Replace a range of values
+ *
+ * Use this only when columnMode() is DateTime, Month or Day
+ */
+void AbstractColumn::replaceTimestamps(int /*first*/, const QVector<quint64>&) {
 }
 
 /**

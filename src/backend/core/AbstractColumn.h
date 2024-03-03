@@ -180,6 +180,10 @@ public:
 	virtual QDateTime dateTimeAt(int row) const;
 	virtual void setDateTimeAt(int row, const QDateTime& new_value);
 	virtual void replaceDateTimes(int first, const QVector<QDateTime>& new_values);
+	virtual quint64 timestampAt(int row) const;
+	virtual void setTimestampAt(int row, const quint64& new_value);
+	virtual void replaceTimestamps(int first, const QVector<quint64>& new_values);
+
 
 	virtual double doubleAt(int row) const;
 	virtual double valueAt(int row) const;

@@ -653,6 +653,23 @@ void Column::setDateTimes(const QVector<QDateTime>& dateTimes) {
 }
 
 /**
+ * \brief Set the content of row 'row'
+ *
+ * Use this only when columnMode() is DateTime, Month or Day
+ */
+void Column::setTimestampAt(int row, const quint64& new_value) {
+	if (isLoading())
+		d->setValueAt(row, new_value);
+	else
+		exec(new ColumnSetCmd<quint64>(d, row, timestampAt(row), new_value));
+}
+
+void Column::setTimestamps(const QVector<quint64>& timestamps) {
+	replaceTimestamps(-1, timestamps);
+}
+
+
+/**
  * \brief Replace a range of values
  *
  * Use this only when columnMode() is DateTime, Month or Day
@@ -662,6 +679,18 @@ void Column::replaceDateTimes(int first, const QVector<QDateTime>& new_values) {
 		d->replaceDateTimes(first, new_values);
 	else
 		exec(new ColumnReplaceCmd<QDateTime>(d, first, new_values));
+}
+
+/**
+ * \brief Replace a range of values
+ *
+ * Use this only when columnMode() is DateTime, Month or Day
+ */
+void Column::replaceTimestamps(int first, const QVector<quint64>& new_values) {
+	if (isLoading())
+		d->replaceTimestamps(first, new_values);
+	else
+		exec(new ColumnReplaceCmd<quint64>(d, first, new_values));
 }
 
 void Column::addValueLabel(const QDateTime& value, const QString& label) {
@@ -914,6 +943,16 @@ QDateTime Column::dateTimeAt(int row) const {
 	return d->dateTimeAt(row);
 }
 
+/**
+ * \brief Return the QDateTime in row 'row'
+ *
+ * Use this only when columnMode() is DateTime, Month or Day
+ */
+quint64 Column::timestampAt(int row) const {
+	return d->timestampAt(row);
+}
+
+
 double Column::doubleAt(int row) const {
 	return d->doubleAt(row);
 }
@@ -983,6 +1022,10 @@ const QVector<Column::ValueLabel<QString>>* Column::textValueLabels() const {
 
 const QVector<Column::ValueLabel<QDateTime>>* Column::dateTimeValueLabels() const {
 	return d->dateTimeValueLabels();
+}
+
+const QVector<Column::ValueLabel<quint64>>* Column::timestampValueLabels() const {
+	return d->timestampValueLabels();
 }
 
 int Column::valueLabelsCount() const {
@@ -1229,7 +1272,7 @@ void Column::save(QXmlStreamWriter* writer) const {
 		for (i = 0; i < rowCount(); ++i) {
 			writer->writeStartElement(QStringLiteral("row"));
 			writer->writeAttribute(QStringLiteral("index"), QString::number(i));
-			writer->writeCharacters(dateTimeAt(i).toString(QLatin1String("yyyy-dd-MM hh:mm:ss:zzz")));
+			writer->writeCharacters(QString::number(timestampAt(i)));
 			writer->writeEndElement();
 		}
 		break;
@@ -1299,7 +1342,7 @@ bool Column::load(XmlStreamReader* reader, bool preview) {
 	else
 		d->setWidth(str.toInt());
 
-	QVector<QDateTime> dateTimeVector;
+	QVector<quint64> timestampsVector;
 	QVector<QString> textVector;
 
 	// read child elements
@@ -1378,7 +1421,7 @@ bool Column::load(XmlStreamReader* reader, bool preview) {
 				case AbstractColumn::ColumnMode::Month:
 				case AbstractColumn::ColumnMode::Day:
 				case AbstractColumn::ColumnMode::DateTime:
-					addValueLabel(QDateTime::fromMSecsSinceEpoch(attribs.value(QLatin1String("value")).toLongLong(), Qt::UTC), label);
+					addValueLabel(attribs.value(QLatin1String("value")).toLongLong(), label);
 					break;
 				}
 			} else if (reader->name() == QLatin1String("row")) {
@@ -1392,8 +1435,7 @@ bool Column::load(XmlStreamReader* reader, bool preview) {
 				case Column::ColumnMode::DateTime:
 				case Column::ColumnMode::Month:
 				case Column::ColumnMode::Day: {
-					dateTimeVector << QDateTime::fromString(reader->readElementText() + QStringLiteral("Z"),
-															QStringLiteral("yyyy-dd-MM hh:mm:ss:zzzt")); // timezone is important
+					timestampsVector << static_cast<quint64>(reader->readElementText().toULongLong()); // timezone is important
 					break;
 				}
 				case Column::ColumnMode::Text: {
@@ -1429,7 +1471,7 @@ bool Column::load(XmlStreamReader* reader, bool preview) {
 	case AbstractColumn::ColumnMode::DateTime:
 	case AbstractColumn::ColumnMode::Month:
 	case AbstractColumn::ColumnMode::Day:
-		setDateTimes(dateTimeVector);
+		setTimestamps(timestampsVector);
 		break;
 	case AbstractColumn::ColumnMode::Text:
 		setText(textVector);

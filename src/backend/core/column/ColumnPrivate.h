@@ -113,6 +113,13 @@ public:
 	void replaceValues(int first, const QVector<QDateTime>&);
 	void replaceDateTimes(int first, const QVector<QDateTime>&);
 
+	quint64 timestampAt(int row) const;
+	void setTimestampAt(int row, const quint64);
+	void replaceValues(int first, const QVector<quint64>&);
+	void replaceTimestamps(int first, const QVector<quint64>&);
+	void setValueAt(int row, quint64 new_value);
+
+
 	double doubleAt(int row) const;
 	double valueAt(int row) const;
 	void setValueAt(int row, double new_value);
@@ -199,6 +206,7 @@ public:
 		const QVector<Column::ValueLabel<double>>* valueLabels() const;
 		const QVector<Column::ValueLabel<int>>* intValueLabels() const;
 		const QVector<Column::ValueLabel<qint64>>* bigIntValueLabels() const;
+		const QVector<Column::ValueLabel<quint64>>* timestampValueLabels() const;
 		int indexForValue(double value) const;
 		double valueAt(int index) const;
 		QDateTime dateTimeAt(int index) const;
@@ -248,6 +256,9 @@ public:
 	const QVector<Column::ValueLabel<QDateTime>>* dateTimeValueLabels() const;
 	void addValueLabel(const QString&, const QString&);
 	const QVector<Column::ValueLabel<QString>>* textValueLabels() const;
+	void addValueLabel(quint64, const QString&);
+	const QVector<Column::ValueLabel<quint64>>* timestampValueLabels() const;
+
 
 private:
 	AbstractColumn::ColumnMode m_columnMode; // type of column data

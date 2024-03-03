@@ -747,6 +747,12 @@ const QVector<Column::ValueLabel<qint64>>* ColumnPrivate::ValueLabels::bigIntVal
 	return cast_vector<qint64>();
 }
 
+const QVector<Column::ValueLabel<quint64>>* ColumnPrivate::ValueLabels::timestampValueLabels() const {
+	if (!initialized() || m_mode != AbstractColumn::ColumnMode::DateTime)
+		return nullptr;
+	return cast_vector<quint64>();
+}
+
 // ######################################################################################################
 // ######################################################################################################
 // ######################################################################################################
@@ -1991,6 +1997,10 @@ const QVector<Column::ValueLabel<QDateTime>>* ColumnPrivate::dateTimeValueLabels
 	return m_labels.dateTimeValueLabels();
 }
 
+const QVector<Column::ValueLabel<quint64>>* ColumnPrivate::timestampValueLabels() const {
+	return m_labels.timestampValueLabels();
+}
+
 int ColumnPrivate::valueLabelsCount() const {
 	return m_labels.count();
 }
@@ -2472,6 +2482,14 @@ void ColumnPrivate::setValueAt(int row, QString new_value) {
 	setTextAt(row, new_value);
 }
 
+void ColumnPrivate::setValueAt(int row, quint64 new_value) {
+	setTimestampAt(row, new_value);
+}
+
+void ColumnPrivate::setTimestampAt(int row, quint64 new_value) {
+	setTimestampAt(row, new_value);
+}
+
 void ColumnPrivate::replaceValues(int first, const QVector<int>& new_values) {
 	replaceInteger(first, new_values);
 }
@@ -2486,6 +2504,10 @@ void ColumnPrivate::replaceValues(int first, const QVector<QDateTime>& new_value
 
 void ColumnPrivate::replaceValues(int first, const QVector<QString>& new_values) {
 	replaceTexts(first, new_values);
+}
+
+void ColumnPrivate::replaceValues(int first, const QVector<quint64>& new_values) {
+	replaceTimestamps(first, new_values);
 }
 
 /**
@@ -2537,6 +2559,20 @@ QDateTime ColumnPrivate::dateTimeAt(int row) const {
 		return QDateTime();
 	return static_cast<QVector<QDateTime>*>(m_data)->value(row);
 }
+
+/**
+ * \brief Return the Timestamp quint64 in row 'row'
+ *
+ * Use this only when columnMode() is DateTime, Month or Day
+ */
+quint64 ColumnPrivate::timestampAt(int row) const {
+	if (!m_data
+		|| (m_columnMode != AbstractColumn::ColumnMode::DateTime && m_columnMode != AbstractColumn::ColumnMode::Month
+			&& m_columnMode != AbstractColumn::ColumnMode::Day))
+		return 0;
+	return static_cast<QVector<quint64>*>(m_data)->value(row);
+}
+
 
 double ColumnPrivate::doubleAt(int index) const {
 	if (!m_data)
@@ -2728,6 +2764,21 @@ void ColumnPrivate::replaceDateTimes(int first, const QVector<QDateTime>& new_va
 		return;
 
 	replaceValuePrivate<QDateTime>(first, new_values);
+}
+
+/**
+ * \brief Replace a range of values
+ * \param first first index which should be replaced. If first < 0, the complete vector
+ * will be replaced
+ * \param new_values
+ * Use this only when columnMode() is DateTime, Month or Day
+ */
+void ColumnPrivate::replaceTimestamps(int first, const QVector<quint64>& new_values) {
+	if (m_columnMode != AbstractColumn::ColumnMode::DateTime && m_columnMode != AbstractColumn::ColumnMode::Month
+		&& m_columnMode != AbstractColumn::ColumnMode::Day)
+		return;
+
+	replaceValuePrivate<quint64>(first, new_values);
 }
 
 /**
