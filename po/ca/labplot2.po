@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-28 01:33+0000\n"
-"PO-Revision-Date: 2024-02-23 10:34+0100\n"
+"PO-Revision-Date: 2024-02-28 10:33+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -2112,34 +2112,29 @@ msgid "Size of TStreamerInfo record: %1 bytes"
 msgstr "Mida de l'enregistrament «TStreamerInfo»: %1 bytes"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:101
-#, fuzzy, kde-format
-#| msgid "Ratio: %1"
+#, kde-format
 msgid "Application: %1"
-msgstr "Relació: %1"
+msgstr "Aplicació: %1"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:104
-#, fuzzy, kde-format
-#| msgid "Format version: %1"
+#, kde-format
 msgid "Application version: %1.%2"
-msgstr "Versió del format: %1"
+msgstr "Versió de l'aplicació: %1.%2"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:107
-#, fuzzy, kde-format
-#| msgid "Compression: %1"
+#, kde-format
 msgid "Compression Level: %1"
-msgstr "Compressió: %1"
+msgstr "Nivell de compressió: %1"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:110
-#, fuzzy, kde-format
-#| msgid "File size: %1 bytes"
+#, kde-format
 msgid "Uncompressed File Size: %1 Bytes"
-msgstr "Mida del fitxer: %1 bytes"
+msgstr "Mida del fitxer descomprimit: %1 bytes"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:113
-#, fuzzy, kde-format
-#| msgid "Number of all objects: %1"
+#, kde-format
 msgid "Number of Objects: %1"
-msgstr "Nombre total d'objectes: %1"
+msgstr "Nombre d'objectes: %1"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:162
 #, kde-format

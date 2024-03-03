@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-28 01:33+0000\n"
-"PO-Revision-Date: 2024-02-23 12:38+0100\n"
+"PO-Revision-Date: 2024-02-28 11:08+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -2086,34 +2086,29 @@ msgid "Size of TStreamerInfo record: %1 bytes"
 msgstr "Grootte record TStreamerinfo: %1 bytes"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:101
-#, fuzzy, kde-format
-#| msgid "Ratio: %1"
+#, kde-format
 msgid "Application: %1"
-msgstr "Verhouding: %1"
+msgstr "Toepassing: %1"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:104
-#, fuzzy, kde-format
-#| msgid "Format version: %1"
+#, kde-format
 msgid "Application version: %1.%2"
-msgstr "Format versie: %1"
+msgstr "Versie van toepassing: %1.%2"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:107
-#, fuzzy, kde-format
-#| msgid "Compression: %1"
+#, kde-format
 msgid "Compression Level: %1"
-msgstr "Compressie: %1"
+msgstr "Compressieniveau: %1"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:110
-#, fuzzy, kde-format
-#| msgid "File size: %1 bytes"
+#, kde-format
 msgid "Uncompressed File Size: %1 Bytes"
-msgstr "Bestandsgrootte: %1 bytes"
+msgstr "Bestandsgrootte zonder compressie: %1 bytes"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:113
-#, fuzzy, kde-format
-#| msgid "Number of all objects: %1"
+#, kde-format
 msgid "Number of Objects: %1"
-msgstr "Aantal alle objecten: %1"
+msgstr "Aantal objecten: %1"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:162
 #, kde-format

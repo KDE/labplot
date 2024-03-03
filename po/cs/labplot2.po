@@ -2077,10 +2077,9 @@ msgid "Size of TStreamerInfo record: %1 bytes"
 msgstr ""
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:101
-#, fuzzy, kde-format
-#| msgid "Ratio: %1"
+#, kde-format
 msgid "Application: %1"
-msgstr "Poměr: %1"
+msgstr ""
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:104
 #, kde-format
@@ -2088,22 +2087,19 @@ msgid "Application version: %1.%2"
 msgstr ""
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:107
-#, fuzzy, kde-format
-#| msgid "Compression: %1"
+#, kde-format
 msgid "Compression Level: %1"
-msgstr "Komprese: %1"
+msgstr ""
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:110
-#, fuzzy, kde-format
-#| msgid "File size: %1 bytes"
+#, kde-format
 msgid "Uncompressed File Size: %1 Bytes"
-msgstr "Velikost souboru: %1 bajt;"
+msgstr ""
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:113
-#, fuzzy, kde-format
-#| msgid "Number of records: %1"
+#, kde-format
 msgid "Number of Objects: %1"
-msgstr "Počet záznamů: %1"
+msgstr ""
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:162
 #, kde-format
@@ -9753,10 +9749,9 @@ msgid "Show Comments"
 msgstr "Zobrazit komentáře"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:322
-#, fuzzy, kde-format
-#| msgid "Show Options"
+#, kde-format
 msgid "Show SparkLines"
-msgstr "Zobrazit možnosti"
+msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:324
 #, kde-format
@@ -10052,17 +10047,15 @@ msgstr "Skrýt komentáře"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1147
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1519
-#, fuzzy, kde-format
-#| msgid "Hide Options"
+#, kde-format
 msgid "Hide Sparklines"
-msgstr "Skrýt možnosti"
+msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1149
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1521
-#, fuzzy, kde-format
-#| msgid "Show Options"
+#, kde-format
 msgid "Show Sparklines"
-msgstr "Zobrazit možnosti"
+msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1610
 #, kde-format
@@ -19639,24 +19632,21 @@ msgstr "Povoleno"
 
 #. i18n: ectx: property (text), widget (QLabel, lShowSparklines)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:175
-#, fuzzy, kde-format
-#| msgid "Grid lines:"
+#, kde-format
 msgid "Sparklines:"
-msgstr "Čáry mřížky:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lFormat)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:198
-#, fuzzy, kde-format
-#| msgid "Column Comments:"
+#, kde-format
 msgid "Column Format"
-msgstr "Komentáře sloupců:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lShowComments)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:222
-#, fuzzy, kde-format
-#| msgid "Comment:"
+#, kde-format
 msgid "Comments:"
-msgstr "Komentář:"
+msgstr "Komentáře:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLinking)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:235
