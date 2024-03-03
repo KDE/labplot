@@ -2580,7 +2580,7 @@ QDateTime ColumnPrivate::dateTimeAt(int row) const {
 		|| (m_columnMode != AbstractColumn::ColumnMode::DateTime && m_columnMode != AbstractColumn::ColumnMode::Month
 			&& m_columnMode != AbstractColumn::ColumnMode::Day))
 		return QDateTime();
-	qDebug() << static_cast<QVector<quint64>*>(m_data)->value(row);
+
 	return QDateTime::fromMSecsSinceEpoch(static_cast<QVector<quint64>*>(m_data)->value(row));
 }
 

@@ -772,6 +772,12 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 		static bool QDateTimeGreater(const QPair<QDateTime, int>& a, const QPair<QDateTime, int>& b) {
 			return a > b;
 		}
+		static bool timestampLess(QPair<quint64, int> a, QPair<quint64, int> b) {
+			return a.first < b.first;
+		}
+		static bool timestampGreater(QPair<quint64, int> a, QPair<quint64, int> b) {
+			return a.first > b.first;
+		}
 	};
 
 	WAIT_CURSOR;
@@ -871,17 +877,17 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 			case AbstractColumn::ColumnMode::DateTime:
 			case AbstractColumn::ColumnMode::Month:
 			case AbstractColumn::ColumnMode::Day: {
-				QVector<QPair<QDateTime, int>> map;
+				QVector<QPair<quint64, int>> map;
 
 				for (int i = 0; i < rows; i++)
 					if (col->isValid(i))
-						map.append(QPair<QDateTime, int>(col->dateTimeAt(i), i));
+						map.append(QPair<quint64, int>(col->timestampAt(i), i));
 				const int filledRows = map.size();
 
 				if (ascending)
-					std::stable_sort(map.begin(), map.end(), CompareFunctions::QDateTimeLess);
+					std::stable_sort(map.begin(), map.end(), CompareFunctions::timestampLess);
 				else
-					std::stable_sort(map.begin(), map.end(), CompareFunctions::QDateTimeGreater);
+					std::stable_sort(map.begin(), map.end(), CompareFunctions::timestampGreater);
 
 				// put the values in the right order into tempCol
 				for (int i = 0; i < filledRows; i++) {

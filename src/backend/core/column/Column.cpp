@@ -906,7 +906,7 @@ void Column::setFromColumn(int i, AbstractColumn* col, int j) {
 	case ColumnMode::DateTime:
 	case ColumnMode::Month:
 	case ColumnMode::Day:
-		setDateTimeAt(i, col->dateTimeAt(j));
+		setTimestampAt(i, col->timestampAt(j));
 		break;
 	}
 }

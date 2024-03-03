@@ -1770,7 +1770,7 @@ void AsciiFilterPrivate::setValue(int col, int row, QStringView valueString) {
 		}
 		case AbstractColumn::ColumnMode::DateTime: {
 			QDateTime valueDateTime = parseDateTime(valueString.toString(), dateTimeFormat);
-			(*static_cast<QVector<quint64>*>(m_dataContainer[col]))[row] = valueString.toULongLong();
+			(*static_cast<QVector<quint64>*>(m_dataContainer[col]))[row] = valueDateTime.toMSecsSinceEpoch();
 			break;
 		}
 		case AbstractColumn::ColumnMode::Text: {
