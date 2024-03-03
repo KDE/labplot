@@ -2506,7 +2506,11 @@ void ColumnPrivate::setValueAt(int row, quint64 new_value) {
 }
 
 void ColumnPrivate::setTimestampAt(int row, quint64 new_value) {
-	setTimestampAt(row, new_value);
+	if (m_columnMode != AbstractColumn::ColumnMode::DateTime && m_columnMode != AbstractColumn::ColumnMode::Month
+		&& m_columnMode != AbstractColumn::ColumnMode::Day)
+		return;
+
+	setValueAtPrivate<quint64>(row, new_value);;
 }
 
 void ColumnPrivate::replaceValues(int first, const QVector<int>& new_values) {
