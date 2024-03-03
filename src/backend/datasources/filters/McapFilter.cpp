@@ -543,8 +543,6 @@ void McapFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSo
 import the content of document \c m_preparedDoc to the data source \c dataSource. Uses the settings defined in the data source.
 */
 void McapFilterPrivate::importData(AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
-	DEBUG(Q_FUNC_INFO);
-
 	m_columnOffset = dataSource->prepareImport(m_dataContainer, importMode, m_actualRows, m_actualCols, vectorNames, columnModes);
 	int rowOffset = startRow - 1;
 	int colOffset = (int)createIndexEnabled;
@@ -556,40 +554,17 @@ void McapFilterPrivate::importData(AbstractDataSource* dataSource, AbstractFileF
 
 	const auto& array = m_preparedDoc.array();
 	const auto& arrayIterator = array.begin();
-	const auto& object = m_preparedDoc.object();
-	const auto& objectIterator = object.begin();
 
 	for (int i = 0; i < m_actualRows; ++i) {
 		if (createIndexEnabled)
 			static_cast<QVector<int>*>(m_dataContainer[0])->operator[](i) = i + 1;
 
 		QJsonValue row;
-		switch (containerType) {
-		case McapFilter::DataContainerType::Array:
-			row = *(arrayIterator + rowOffset + i);
-			break;
-		case McapFilter::DataContainerType::Object:
-			row = *(objectIterator + rowOffset + i);
-			break;
-		}
+		row = *(arrayIterator + rowOffset + i);
 
 		for (int n = 0; n < m_actualCols - colOffset; ++n) {
 			QJsonValue value;
-			switch (rowType) {
-			case QJsonValue::Array:
-				value = *(row.toArray().begin() + n + startColumn - 1);
-				break;
-			case QJsonValue::Object:
-				value = *(row.toObject().begin() + n + startColumn - 1);
-				break;
-			// TODO: implement other value types
-			case QJsonValue::Double:
-			case QJsonValue::String:
-			case QJsonValue::Bool:
-			case QJsonValue::Null:
-			case QJsonValue::Undefined:
-				break;
-			}
+			value = *(row.toObject().begin() + n + startColumn - 1);
 
 			switch (value.type()) {
 			case QJsonValue::Double:
@@ -598,7 +573,7 @@ void McapFilterPrivate::importData(AbstractDataSource* dataSource, AbstractFileF
 				else
 					setEmptyValue(colOffset + n, i + startRow - 1);
 				break;
-			case QJsonValue::String:{
+			case QJsonValue::String: {
 				setValueFromString(colOffset + n, i, value.toString());
 				break;
 			}
@@ -621,20 +596,20 @@ void McapFilterPrivate::importData(AbstractDataSource* dataSource, AbstractFileF
 			progressIndex = 0;
 			QApplication::processEvents(QEventLoop::AllEvents, 0);
 		}
-	}
 
-	// set the plot designation to 'X' for index and name columns, if available
-	auto* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
-	if (spreadsheet) {
-		if (createIndexEnabled)
-			spreadsheet->column(m_columnOffset)->setPlotDesignation(AbstractColumn::PlotDesignation::X);
-	}
+		// set the plot designation to 'X' for index and name columns, if available
+		auto* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
+		if (spreadsheet) {
+			if (createIndexEnabled)
+				spreadsheet->column(m_columnOffset)->setPlotDesignation(AbstractColumn::PlotDesignation::X);
+		}
 
-	dataSource->finalizeImport(m_columnOffset, startColumn, startColumn + m_actualCols - 1, dateTimeFormat, importMode);
+		dataSource->finalizeImport(m_columnOffset, startColumn, startColumn + m_actualCols - 1, dateTimeFormat, importMode);
+	}
 }
 
 /*!
-generates the preview for the file \c fileName.
+generates the preview for the file \c fileName.a
 */
 QVector<QStringList> McapFilterPrivate::preview(const QString& fileName, int lines) {
 	DEBUG(Q_FUNC_INFO << "lines=" << std::to_string(lines));
