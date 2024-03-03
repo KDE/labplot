@@ -2645,7 +2645,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, AbstractDataSourc
 
 			// add current timestamp if required
 			if (createTimestampEnabled) {
-				static_cast<QVector<quint64>*>(m_dataContainer[offset])->operator[](currentRow) = QDateTime::currentDateTime().toMSecsSinceEpoch;
+				static_cast<QVector<quint64>*>(m_dataContainer[offset])->operator[](currentRow) = QDateTime::currentDateTime().toMSecsSinceEpoch();
 				++offset;
 			}
 
