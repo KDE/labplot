@@ -39,7 +39,7 @@ QStringList ImageFilter::importFormats() {
 /*!
   reads the content of the file \c fileName to the data source \c dataSource.
 */
-void ImageFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
+void ImageFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, ImportMode importMode) {
 	d->readDataFromFile(fileName, dataSource, importMode);
 }
 

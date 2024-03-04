@@ -42,7 +42,7 @@ public:
 	static AbstractColumn::ColumnMode columnMode(const QString& valueString, QString& dateTimeFormat, const QLocale& = QLocale());
 	static QString dateTimeFormat(const QString& valueString);
 	static QStringList numberFormats();
-	static AbstractFileFilter::FileType fileType(const QString&);
+	static FileType fileType(const QString&);
 	static QStringList fileTypes();
 	static QString convertFromNumberToColumn(int n);
 
