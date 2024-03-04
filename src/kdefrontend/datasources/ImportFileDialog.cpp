@@ -308,17 +308,12 @@ bool ImportFileDialog::importTo(QStatusBar* statusBar) const {
 
 			workbook->setUndoAware(true);
 		} else { // single import file types
-			// use active spreadsheet/matrix if present, else new spreadsheet
-			auto* sheet = workbook->currentSpreadsheet();
-			if (sheet)
-				filter->readDataFromFile(fileName, sheet, mode);
-			else {
-				workbook->setUndoAware(true);
-				auto* spreadsheet = new Spreadsheet(fileName);
-				workbook->addChild(spreadsheet);
-				workbook->setUndoAware(false);
-				filter->readDataFromFile(fileName, spreadsheet, mode);
-			}
+			// workbook selected -> create a new spreadsheet in the workbook
+			workbook->setUndoAware(true);
+			auto* spreadsheet = new Spreadsheet(fileName);
+			workbook->addChild(spreadsheet);
+			workbook->setUndoAware(false);
+			filter->readDataFromFile(fileName, spreadsheet, mode);
 		}
 	}
 	statusBar->showMessage(i18n("File %1 imported in %2 seconds.", fileName, (float)timer.elapsed() / 1000));
