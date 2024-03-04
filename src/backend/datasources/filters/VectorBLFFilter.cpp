@@ -19,6 +19,7 @@
 #include "backend/lib/trace.h"
 
 #include <KLocalizedString>
+#include <QDateTime>
 
 #ifdef HAVE_VECTOR_BLF
 #include <Vector/BLF/Exceptions.h>
@@ -48,8 +49,9 @@ QString VectorBLFFilter::fileInfoString(const QString& fileName) {
 		return info;
 
 	auto statistics = f.fileStatistics;
-	QString appName;
 
+	// application info
+	QString appName;
 	switch (f.fileStatistics.applicationId) {
 	case Vector::BLF::Unknown:
 		appName = i18n("Unknown");
@@ -100,17 +102,31 @@ QString VectorBLFFilter::fileInfoString(const QString& fileName) {
 
 	info += i18n("Application: %1", appName);
 	info += QStringLiteral("<br>");
-
-	info += i18n("Application version: %1.%2", f.fileStatistics.applicationMajor, f.fileStatistics.applicationMinor);
+	info += i18n("Application version: %1.%2.%3", f.fileStatistics.applicationMajor, f.fileStatistics.applicationMinor, f.fileStatistics.applicationBuild);
+	info += QStringLiteral("<br>");
+	info += i18n("Number of Objects: %1", f.fileStatistics.objectCount);
 	info += QStringLiteral("<br>");
 
+	// measurement start time
+	auto start = f.fileStatistics.measurementStartTime;
+	QDate startDate(start.year, start.month, start.day);
+	QTime startTime(start.hour, start.minute, start.second, start.milliseconds);
+	QDateTime startDateTime(startDate, startTime);
+	info += i18n("Start Time: %1", startDateTime.toString(QLatin1String("yyyy-MM-dd hh:mm:ss.zzz")));
+	info += QStringLiteral("<br>");
+
+	// measurement end time
+	auto end = f.fileStatistics.lastObjectTime;
+	QDate endDate(end.year, end.month, end.day);
+	QTime endTime(end.hour, end.minute, end.second, end.milliseconds);
+	QDateTime endDateTime(endDate, endTime);
+	info += i18n("End Time: %1", endDateTime.toString(QLatin1String("yyyy-MM-dd hh:mm:ss.zzz")));
+	info += QStringLiteral("<br>");
+
+	// compression
 	info += i18n("Compression Level: %1", f.fileStatistics.compressionLevel);
 	info += QStringLiteral("<br>");
-
 	info += i18n("Uncompressed File Size: %1 Bytes", f.fileStatistics.uncompressedFileSize);
-	info += QStringLiteral("<br>");
-
-	info += i18n("Number of Objects: %1", f.fileStatistics.objectCount);
 	info += QStringLiteral("<br>");
 
 	f.close();
@@ -154,39 +170,39 @@ bool VectorBLFFilterPrivate::isValid(const QString& filename) const {
 	return VectorBLFFilter::isValid(filename);
 }
 
-QStringList VectorBLFFilterPrivate::lastErrors() const {
-	QStringList r;
-	for (const auto& e : errors) {
-		switch (e.e) {
-		case ParseStatus::DBCBigEndian:
-			r.append(i18n("Big Endian not supported. CAN id: %1", QStringLiteral("0x%1").arg(e.CANId, 0, 16)));
-			break;
-		case ParseStatus::DBCMessageToLong:
-			r.append(i18n("Message too long. CAN id: %1", QStringLiteral("0x%1").arg(e.CANId, 0, 16)));
-			break;
-		case ParseStatus::DBCUnknownID:
-			r.append(i18n("Unknown id: %1", QStringLiteral("0x%1").arg(e.CANId, 0, 16)));
-			break;
-		case ParseStatus::ErrorInvalidFile:
-			r.append(i18n("Invalid blf file"));
-			break;
-		case ParseStatus::DBCInvalidConversion:
-			r.append(i18n("Unable to calculate conversion: %1", QStringLiteral("0x%1").arg(e.CANId, 0, 16)));
-			break;
-		case ParseStatus::DBCParserUnsupported:
-			r.append(i18n("No dbc parser installed"));
-			break;
-		case ParseStatus::DBCInvalidFile:
-			r.append(i18n("Invalid dbc file"));
-			break;
-		case ParseStatus::ErrorUnknown:
-			r.append(i18n("Unknown error"));
-			break;
-		case ParseStatus::Success:
-			break;
-		}
+/*!
+ * depending on the parse status in \c Warning, adds either a warning or set the last error in the filter class
+ * to be shown in the import dialog.
+ */
+void VectorBLFFilterPrivate::addWarningError(const Warning& warning) const {
+	switch (warning.status) {
+	case ParseStatus::DBCBigEndian:
+		q->addWarning(i18n("Big Endian not supported. CAN id: %1.", QStringLiteral("0x%1").arg(warning.CANId, 0, 16)));
+		break;
+	case ParseStatus::DBCMessageToLong:
+		q->addWarning(i18n("Message too long. CAN id: %1.", QStringLiteral("0x%1").arg(warning.CANId, 0, 16)));
+		break;
+	case ParseStatus::DBCUnknownID:
+		q->addWarning(i18n("Unknown id: %1.", QStringLiteral("0x%1").arg(warning.CANId, 0, 16)));
+		break;
+	case ParseStatus::ErrorInvalidFile:
+		q->setLastError(i18n("Invalid BLF file"));
+		break;
+	case ParseStatus::DBCInvalidConversion:
+		q->setLastError(i18n("Unable to calculate conversion: %1.", QStringLiteral("0x%1").arg(warning.CANId, 0, 16)));
+		break;
+	case ParseStatus::DBCParserUnsupported:
+		q->setLastError(i18n("No DBC parser installed."));
+		break;
+	case ParseStatus::DBCInvalidFile:
+		q->setLastError(i18n("Invalid DBC file."));
+		break;
+	case ParseStatus::ErrorUnknown:
+		q->setLastError(i18n("Unknown error,"));
+		break;
+	case ParseStatus::Success:
+		break;
 	}
-	return r;
 }
 
 VectorBLFFilterPrivate::ParseStatus VectorBLFFilterPrivate::DBCParserParseStatusToVectorBLFStatus(DbcParser::ParseStatus s) {
@@ -241,16 +257,14 @@ bool getTime(const Vector::BLF::ObjectHeaderBase* ohb, uint64_t& timestamp) {
 int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, int lines) {
 	PERFTRACE(QLatin1String(Q_FUNC_INFO));
 
-	errors.clear();
-
 	if (!isValid(fileName)) {
-		errors.append({ParseStatus::ErrorInvalidFile, 0});
+		q->setLastError(i18n("Invalid file."));
 		return 0;
 	}
 
 	const auto status = m_dbcParser.isValid();
 	if (status != DbcParser::ParseStatus::Success) {
-		errors.append({DBCParserParseStatusToVectorBLFStatus(status), 0});
+		addWarningError({DBCParserParseStatusToVectorBLFStatus(status), 0});
 		return 0;
 	}
 
@@ -332,7 +346,7 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 			if (status != DbcParser::ParseStatus::Success) {
 				// id is not available in the dbc file, so it is not possible to decode
 				DEBUG("Unable to decode message: " << id << ": " << (int)status);
-				errors.append({DBCParserParseStatusToVectorBLFStatus(status), id});
+				addWarningError({DBCParserParseStatusToVectorBLFStatus(status), id});
 				continue;
 			}
 
@@ -350,15 +364,15 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 				m_DataContainer.setData<qint64>(0, message_index, timestamp);
 
 			const size_t startIndex = idIndexTable.value(id) + 1; // +1 because of time
-			for (size_t i = 1; i < startIndex; i++) {
+			for (size_t i = 1; i < startIndex; i++)
 				m_DataContainer.setData<double>(i, message_index, std::nan("0"));
-			}
-			for (size_t i = startIndex; i < startIndex + values.size(); i++) {
+
+			for (size_t i = startIndex; i < startIndex + values.size(); i++)
 				m_DataContainer.setData<double>(i, message_index, values.at(i - startIndex));
-			}
-			for (size_t i = startIndex + values.size(); i < m_DataContainer.size(); i++) {
+
+			for (size_t i = startIndex + values.size(); i < m_DataContainer.size(); i++)
 				m_DataContainer.setData<double>(i, message_index, std::nan("0"));
-			}
+
 			message_index++;
 		}
 	} else {
@@ -376,7 +390,7 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 
 			if (status != DbcParser::ParseStatus::Success) {
 				// id is not available in the dbc file, so it is not possible to decode
-				errors.append({DBCParserParseStatusToVectorBLFStatus(status), id});
+				addWarningError({DBCParserParseStatusToVectorBLFStatus(status), id});
 				continue;
 			}
 

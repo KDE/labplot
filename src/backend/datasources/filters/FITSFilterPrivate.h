@@ -42,7 +42,7 @@ public:
 					 const QList<FITSFilter::Keyword>& keys = QList<FITSFilter::Keyword>());
 	void parseExtensions(const QString& fileName, QTreeWidget*, bool checkPrimary = false);
 
-	const FITSFilter* q;
+	FITSFilter* const q;
 
 	int startRow{1};
 	int endRow{-1};

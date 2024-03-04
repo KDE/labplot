@@ -117,12 +117,29 @@ QStringList AbstractFileFilter::numberFormats() {
 }
 
 /*!
- * \brief AbstractFileFilter::lastErrors
- * Errors occured during last parse
- * \return
+ * Returns the last error that occured during the last parse step.
  */
-QStringList AbstractFileFilter::lastErrors() {
-	return QStringList();
+QString AbstractFileFilter::lastError() const {
+	return m_lastError;
+}
+
+void AbstractFileFilter::setLastError(const QString& error) {
+	m_lastError = error;
+}
+
+/*!
+ * Returns the list of warnings that occured during the last parse step.
+ */
+QStringList AbstractFileFilter::lastWarnings() const {
+	return m_lastWarnings;
+}
+
+void AbstractFileFilter::addWarning(const QString& warning) {
+	m_lastWarnings << warning;
+}
+
+void AbstractFileFilter::clearLastWarnings() {
+	m_lastWarnings.clear();
 }
 
 AbstractFileFilter::FileType AbstractFileFilter::fileType(const QString& fileName) {

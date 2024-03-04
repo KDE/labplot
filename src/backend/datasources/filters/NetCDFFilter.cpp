@@ -138,15 +138,14 @@ QString NetCDFFilter::readAttribute(const QString& fileName, const QString& name
 /*!
   reads the content of the current variable from file \c fileName.
 */
-QVector<QStringList>
-NetCDFFilter::readCurrentVar(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
+QVector<QStringList> NetCDFFilter::readCurrentVar(const QString& fileName, AbstractDataSource* dataSource, ImportMode importMode, int lines) {
 	return d->readCurrentVar(fileName, dataSource, importMode, lines);
 }
 
 /*!
   reads the content of the file \c fileName to the data source \c dataSource.
 */
-void NetCDFFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode) {
+void NetCDFFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, ImportMode mode) {
 	d->readDataFromFile(fileName, dataSource, mode);
 }
 
@@ -295,6 +294,7 @@ void NetCDFFilterPrivate::handleError(int err, const QString& function) {
 	Q_UNUSED(function);
 	if (err != NC_NOERR) {
 		DEBUG("NETCDF ERROR:" << STDSTRING(function) << "() - " << nc_strerror(err));
+		// TODO q->setLastError(i18n("NetCDF Error: %1() - %2", function, nc_strerror(err)));
 		return;
 	}
 }
@@ -684,21 +684,20 @@ QString NetCDFFilterPrivate::readAttribute(const QString& fileName, const QStrin
 */
 QVector<QStringList>
 NetCDFFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode, int lines) {
-	QVector<QStringList> dataStrings;
-
 	if (currentVarName.isEmpty()) {
-		DEBUG(Q_FUNC_INFO << ", WARNING: current var name is empty!")
-		return dataStrings << (QStringList() << i18n("No variable selected"));
+		q->setLastError(i18n("No variable selected."));
+		return {};
 	}
 	DEBUG(" current variable = " << STDSTRING(currentVarName));
 
+	QVector<QStringList> dataStrings;
 #ifdef HAVE_NETCDF
 	int ncid;
 	m_status = nc_open(qPrintable(fileName), NC_NOWRITE, &ncid);
 	handleError(m_status, QStringLiteral("nc_open"));
 	if (m_status != NC_NOERR) {
-		DEBUG("	Giving up");
-		return dataStrings;
+		q->setLastError(i18n("Failed to open the file or it's empty."));
+		return {};
 	}
 
 	int varid;
@@ -751,8 +750,14 @@ NetCDFFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource*
 		// TODO: use given names?
 		QStringList vectorNames;
 
-		if (dataSource)
-			columnOffset = dataSource->prepareImport(dataContainer, mode, actualRows, actualCols, vectorNames, columnModes);
+		if (dataSource) {
+			bool ok = false;
+			columnOffset = dataSource->prepareImport(dataContainer, mode, actualRows, actualCols, vectorNames, columnModes, ok);
+			if (!ok) {
+				q->setLastError(i18n("Not enough memory."));
+				return QVector<QStringList>();
+			}
+		}
 
 		DEBUG("	Reading data of type " << STDSTRING(translateDataType(type)));
 		switch (type) {
@@ -856,8 +861,14 @@ NetCDFFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource*
 		// TODO: use given names?
 		QStringList vectorNames;
 
-		if (dataSource)
-			columnOffset = dataSource->prepareImport(dataContainer, mode, actualRows, actualCols, vectorNames, columnModes);
+		if (dataSource) {
+			bool ok = false;
+			columnOffset = dataSource->prepareImport(dataContainer, mode, actualRows, actualCols, vectorNames, columnModes, ok);
+			if (!ok) {
+				q->setLastError(i18n("Not enough memory."));
+				return QVector<QStringList>();
+			}
+		}
 
 		DEBUG("	Reading data of type " << STDSTRING(translateDataType(type)));
 		switch (type) {
@@ -923,6 +934,7 @@ NetCDFFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource*
 		// TODO: NC_STRING
 		default:
 			DEBUG("	data type not supported yet");
+			q->setLastError(i18n("Data type not supported yet."));
 		}
 
 		break;
@@ -981,8 +993,14 @@ NetCDFFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource*
 		// TODO: use given names?
 		QStringList vectorNames;
 
-		if (dataSource)
-			columnOffset = dataSource->prepareImport(dataContainer, mode, actualRows, actualCols, vectorNames, columnModes);
+		if (dataSource) {
+			bool ok = false;
+			columnOffset = dataSource->prepareImport(dataContainer, mode, actualRows, actualCols, vectorNames, columnModes, ok);
+			if (!ok) {
+				q->setLastError(i18n("Not enough memory."));
+				return QVector<QStringList>();
+			}
+		}
 
 		switch (type) {
 		case NC_BYTE: {
@@ -1056,12 +1074,12 @@ NetCDFFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource*
 		// TODO: NC_STRING
 		default:
 			DEBUG("	data type not supported yet");
+			q->setLastError(i18n("Data type not supported yet."));
 		}
 		break;
 	}
 	default:
-		dataStrings << (QStringList() << i18n("%1 dimensional data of type %2 not supported yet", ndims, translateDataType(type)));
-		QDEBUG(dataStrings);
+		q->setLastError(i18n("%1 dimensional data of type %2 not supported yet", ndims, translateDataType(type)));
 	}
 
 	free(dimids);
@@ -1092,6 +1110,7 @@ QVector<QStringList> NetCDFFilterPrivate::readDataFromFile(const QString& fileNa
 
 	if (currentVarName.isEmpty()) {
 		DEBUG(Q_FUNC_INFO << ", no variable selected");
+		q->setLastError(i18n("No variable selected."));
 		return dataStrings;
 	}
 

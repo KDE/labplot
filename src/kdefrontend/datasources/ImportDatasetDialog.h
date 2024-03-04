@@ -25,7 +25,7 @@ public:
 
 	QString selectedObject() const override;
 	void importToDataset(DatasetHandler*, QStatusBar*) const;
-	void importTo(QStatusBar*) const override;
+	bool importTo(QStatusBar*) const override;
 
 private:
 	ImportDatasetWidget* m_importDatasetWidget;

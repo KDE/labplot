@@ -27,8 +27,9 @@ public:
 							  AbstractFileFilter::ImportMode,
 							  int actualRows,
 							  int actualCols,
-							  QStringList colNameList = QStringList(),
-							  QVector<AbstractColumn::ColumnMode> = QVector<AbstractColumn::ColumnMode>(),
+							  const QStringList& colNameList,
+							  const QVector<AbstractColumn::ColumnMode>&,
+							  bool& ok,
 							  bool initializeDataContainer = true) = 0;
 	virtual void finalizeImport(size_t columnOffset = 0,
 								size_t startColumn = 0,
