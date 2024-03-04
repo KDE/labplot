@@ -470,13 +470,15 @@ QVector<QStringList> OdsFilterPrivate::preview(const QString& sheetName, int lin
 	const auto* sheet = m_document.get_sheet(sheetName.toStdString());
 	if (!sheet) {
 		DEBUG(Q_FUNC_INFO << ", sheet not found: " << sheetName.toStdString())
-		return dataString;
+		q->setLastError(i18n("Sheet not found."));
+		return {};
 	}
 
 	const auto sheetIndex = sheet->get_index();
 	if (sheetIndex == ixion::invalid_sheet) {
 		DEBUG(Q_FUNC_INFO << ", invalid sheet index " << sheetIndex)
-		return dataString;
+		q->setLastError(i18n("Invalid sheet index."));
+		return {};
 	}
 
 	const auto ranges = sheet->get_data_range();

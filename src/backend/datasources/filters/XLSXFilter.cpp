@@ -622,79 +622,87 @@ QVector<QXlsx::CellRange> XLSXFilterPrivate::dataRegions(const QString& fileName
 #ifdef HAVE_QXLSX
 QVector<QStringList> XLSXFilterPrivate::previewForDataRegion(const QString& sheetName, const QXlsx::CellRange& region, bool* okToMatrix, int lines) {
 	DEBUG(Q_FUNC_INFO << ", sheet name = " << STDSTRING(sheetName))
-	QVector<QStringList> infoString;
 
 	if (!m_document) {
 		delete m_document;
 		m_document = new QXlsx::Document(m_fileName);
 	}
 
-	if (m_document->selectSheet(sheetName) && region.isValid()) { // valid sheet name and region
-		if (okToMatrix && dataRangeCanBeExportedToMatrix(region))
-			*okToMatrix = true;
+	if (!m_document->selectSheet(sheetName)) {
+		q->setLastError(i18n("No sheet selected."));
+		return {};
+	}
+	if (!region.isValid()) {
+		q->setLastError(i18n("Invalid region specified."));
+		return {};
+	}
 
-		const auto& documentRegion = m_document->dimension();
-		if (region.lastRow() <= documentRegion.lastRow() && region.lastColumn() <= documentRegion.lastColumn()) {
-			DEBUG(Q_FUNC_INFO << ", region first/last row = " << region.firstRow() << " " << region.lastRow())
-			DEBUG(Q_FUNC_INFO << ", region first/last column = " << region.firstColumn() << " " << region.lastColumn())
-			DEBUG(Q_FUNC_INFO << ", start/end row = " << startRow << " " << endRow)
-			DEBUG(Q_FUNC_INFO << ", start/end col = " << startColumn << " " << endColumn)
+	if (okToMatrix && dataRangeCanBeExportedToMatrix(region))
+		*okToMatrix = true;
 
-			int rows = region.lastRow() - region.firstRow() + 1;
-			if (startRow > rows) // if startRow is bigger than available rows -> show all
-				startRow = 1;
-			if (endRow == -1 || endRow < startRow || endRow > rows)
-				endRow = rows;
-			int cols = region.lastColumn() - region.firstColumn() + 1;
-			if (startColumn > cols) // if startColumn is bigger than available columns -> show all
-				startColumn = 1;
-			if (endColumn == -1 || endColumn < startColumn || endColumn > cols)
-				endColumn = cols;
-			firstColumn = startColumn;
+	const auto& documentRegion = m_document->dimension();
+	QVector<QStringList> infoString;
+	if (region.lastRow() <= documentRegion.lastRow() && region.lastColumn() <= documentRegion.lastColumn()) {
+		DEBUG(Q_FUNC_INFO << ", region first/last row = " << region.firstRow() << " " << region.lastRow())
+		DEBUG(Q_FUNC_INFO << ", region first/last column = " << region.firstColumn() << " " << region.lastColumn())
+		DEBUG(Q_FUNC_INFO << ", start/end row = " << startRow << " " << endRow)
+		DEBUG(Q_FUNC_INFO << ", start/end col = " << startColumn << " " << endColumn)
 
-			const int maxCols = 100;
-			rows = std::min(lines, endRow);
-			cols = std::min(maxCols, endColumn);
-			for (int row = region.firstRow() + startRow - 1; row < region.firstRow() + rows; ++row) {
-				QStringList line;
-				for (int col = region.firstColumn() + startColumn - 1; col < region.firstColumn() + cols; ++col) {
-					// see https://github.com/QtExcel/QXlsx/wiki for read() vs. cellAt()->value()
-					const auto val = m_document->read(row, col);
-					if (val.isValid())
-						QDEBUG("value =" << val)
-					// Excel: double is always QString
-					// OO: can always convert to Double
+		int rows = region.lastRow() - region.firstRow() + 1;
+		if (startRow > rows) // if startRow is bigger than available rows -> show all
+			startRow = 1;
+		if (endRow == -1 || endRow < startRow || endRow > rows)
+			endRow = rows;
+		int cols = region.lastColumn() - region.firstColumn() + 1;
+		if (startColumn > cols) // if startColumn is bigger than available columns -> show all
+			startColumn = 1;
+		if (endColumn == -1 || endColumn < startColumn || endColumn > cols)
+			endColumn = cols;
+		firstColumn = startColumn;
 
-					// correctly read values and show with locale
-					if (val.type() == QVariant::Double)
-						line << QLocale().toString(val.toDouble());
-					else if (val.type() == QVariant::String) {
-						QString valueString = val.toString();
+		const int maxCols = 100;
+		rows = std::min(lines, endRow);
+		cols = std::min(maxCols, endColumn);
+		for (int row = region.firstRow() + startRow - 1; row < region.firstRow() + rows; ++row) {
+			QStringList line;
+			for (int col = region.firstColumn() + startColumn - 1; col < region.firstColumn() + cols; ++col) {
+				// see https://github.com/QtExcel/QXlsx/wiki for read() vs. cellAt()->value()
+				const auto val = m_document->read(row, col);
+				if (val.isValid())
+					QDEBUG("value =" << val)
 
-						bool ok; // check if double value
-						double value = valueString.toDouble(&ok);
-						if (ok)
-							line << QLocale().toString(value);
-						else
-							line << valueString;
-					} else if (val.canConvert(QMetaType::QDateTime)) {
-						QDateTime dt = val.toDateTime();
-						// TODO: use certain date/datetime format?
-						if (dt.time() == QTime(0, 0)) // just a date
-							line << val.toDate().toString();
-						else
-							line << dt.toString();
-					} else if (val.canConvert(QMetaType::QTime)) {
-						QTime t = val.toTime();
-						// TODO: use certain time format?
-						line << t.toString();
-					} else {
-						QString valueString = val.toString();
+				// Excel: double is always QString
+				// OO: can always convert to Double
+
+				// correctly read values and show with locale
+				if (val.type() == QVariant::Double)
+					line << QLocale().toString(val.toDouble());
+				else if (val.type() == QVariant::String) {
+					QString valueString = val.toString();
+
+					bool ok; // check if double value
+					double value = valueString.toDouble(&ok);
+					if (ok)
+						line << QLocale().toString(value);
+					else
 						line << valueString;
-					}
+				} else if (val.canConvert(QMetaType::QDateTime)) {
+					QDateTime dt = val.toDateTime();
+					// TODO: use certain date/datetime format?
+					if (dt.time() == QTime(0, 0)) // just a date
+						line << val.toDate().toString();
+					else
+						line << dt.toString();
+				} else if (val.canConvert(QMetaType::QTime)) {
+					QTime t = val.toTime();
+					// TODO: use certain time format?
+					line << t.toString();
+				} else {
+					QString valueString = val.toString();
+					line << valueString;
 				}
-				infoString << line;
 			}
+			infoString << line;
 		}
 	}
 

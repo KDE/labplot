@@ -118,14 +118,19 @@ void SpiceFilterPrivate::generateVectorNamesColumnModes(const SpiceFileReader& r
  */
 QVector<QStringList> SpiceFilterPrivate::preview(const QString& fileName, int lines) {
 	DEBUG(Q_FUNC_INFO);
-	QVector<QStringList> dataStrings;
 
 	SpiceFileReader reader(fileName);
 #ifdef SPICEFILTERTEST_EN
 	reader.setBulkReadLines(q->mBulkLineCount);
 #endif
-	if (!reader.open() || !reader.validSpiceFile())
-		return dataStrings;
+	if (!reader.open()) {
+		q->setLastError(i18n("Failed to open the device/file."));
+		return {};
+	}
+	if (!reader.validSpiceFile()) {
+		q->setLastError(i18n("Invalid file."));
+		return {};
+	}
 
 	generateVectorNamesColumnModes(reader);
 
@@ -146,6 +151,7 @@ QVector<QStringList> SpiceFilterPrivate::preview(const QString& fileName, int li
 	QStringList lineString;
 	int isComplex = !reader.isReal();
 
+	QVector<QStringList> dataStrings;
 	for (int l = 0; l < linesRead; l++) {
 		lineString.clear();
 		for (int i = 0; i < numberVariables * (1 + isComplex); i++) {
@@ -173,8 +179,12 @@ void SpiceFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataS
 #ifdef SPICEFILTERTEST_EN
 	reader.setBulkReadLines(q->mBulkLineCount);
 #endif
-	if (!reader.open() || !reader.validSpiceFile()) {
-		q->setLastError(i18n("Failed to open the device/file or it's empty."));
+	if (!reader.open()) {
+		q->setLastError(i18n("Failed to open the device/file."));
+		return;
+	}
+	if (!reader.validSpiceFile()) {
+		q->setLastError(i18n("Invalid file."));
 		return;
 	}
 

@@ -1613,7 +1613,7 @@ void ImportFileWidget::refreshPreview() {
 		m_twPreview->hide();
 
 	bool ok = true;
-	QTableWidget* tmpTableWidget = m_twPreview;
+	auto* tmpTableWidget = m_twPreview;
 	QVector<QStringList> importedStrings;
 	QStringList vectorNameList;
 	QVector<AbstractColumn::ColumnMode> columnModes;
@@ -1748,7 +1748,7 @@ void ImportFileWidget::refreshPreview() {
 		ui.tePreview->clear();
 
 		QImage image(file);
-		QTextCursor cursor = ui.tePreview->textCursor();
+		auto cursor = ui.tePreview->textCursor();
 		cursor.insertImage(image);
 		RESET_CURSOR;
 		error(currentFilter->lastError());

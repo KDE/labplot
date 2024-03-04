@@ -1506,13 +1506,11 @@ int HDF5FilterPrivate::parse(const QString& fileName, QTreeWidgetItem* rootItem)
 */
 QVector<QStringList>
 HDF5FilterPrivate::readCurrentDataSet(const QString& fileName, AbstractDataSource* dataSource, bool& ok, AbstractFileFilter::ImportMode mode, int lines) {
-	QVector<QStringList> dataStrings;
-
 	if (currentDataSetName.isEmpty()) {
 		// return QString("No data set selected").replace(QLatin1Char(' '),QChar::Nbsp);
 		ok = false;
 		q->setLastError(i18n("No data set selected."));
-		return dataStrings;
+		return {};
 	}
 	DEBUG(Q_FUNC_INFO << ", current data set = " << STDSTRING(currentDataSetName));
 
@@ -1548,6 +1546,7 @@ HDF5FilterPrivate::readCurrentDataSet(const QString& fileName, AbstractDataSourc
 	std::vector<void*> dataContainer(1, nullptr);
 
 	// rank= 0: single value, 1: vector, 2: matrix, 3: 3D data, ...
+	QVector<QStringList> dataStrings;
 	switch (rank) {
 	case 0: { // single value
 		actualCols = 1;

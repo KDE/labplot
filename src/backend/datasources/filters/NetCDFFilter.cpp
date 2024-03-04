@@ -684,12 +684,9 @@ QString NetCDFFilterPrivate::readAttribute(const QString& fileName, const QStrin
 */
 QVector<QStringList>
 NetCDFFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode, int lines) {
-	QVector<QStringList> dataStrings;
-
 	if (currentVarName.isEmpty()) {
-		DEBUG(Q_FUNC_INFO << ", WARNING: current var name is empty!")
 		q->setLastError(i18n("No variable selected."));
-		return dataStrings;
+		return {};
 	}
 	DEBUG(" current variable = " << STDSTRING(currentVarName));
 
@@ -698,9 +695,8 @@ NetCDFFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource*
 	m_status = nc_open(qPrintable(fileName), NC_NOWRITE, &ncid);
 	handleError(m_status, QStringLiteral("nc_open"));
 	if (m_status != NC_NOERR) {
-		DEBUG("	Giving up");
 		q->setLastError(i18n("Failed to open the file or it's empty."));
-		return dataStrings;
+		return {};
 	}
 
 	int varid;
@@ -721,6 +717,7 @@ NetCDFFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource*
 	int actualRows = 0, actualCols = 0;
 	int columnOffset = 0;
 	std::vector<void*> dataContainer;
+	QVector<QStringList> dataStrings;
 	switch (ndims) {
 	case 0: {
 		DEBUG("	zero dimensions");

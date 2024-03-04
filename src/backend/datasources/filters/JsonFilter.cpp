@@ -377,22 +377,28 @@ void JsonFilterPrivate::setValueFromString(int column, int row, const QString& v
 }
 
 /*!
-returns -1 if the device couldn't be opened, 1 if the current read position in the device is at the end
-*/
+ * prepare device/file for reading
+ */
 int JsonFilterPrivate::prepareDeviceToRead(QIODevice& device) {
-	DEBUG("device is sequential = " << device.isSequential());
+	DEBUG(Q_FUNC_INFO << ", device is sequential = " << device.isSequential());
 
-	if (!device.open(QIODevice::ReadOnly))
+	if (!device.open(QIODevice::ReadOnly)) {
+		q->setLastError(i18n("Failed to open the device/file."));
 		return -1;
+	}
 
-	if (device.atEnd() && !device.isSequential()) // empty file
+	if (device.atEnd() && !device.isSequential()) { // empty file
+		q->setLastError(i18n("Device/file is empty."));
 		return 1;
+	}
 
 	QJsonParseError err;
 	m_doc = QJsonDocument::fromJson(device.readAll(), &err);
 
-	if (err.error != QJsonParseError::NoError || m_doc.isEmpty())
+	if (err.error != QJsonParseError::NoError || m_doc.isEmpty()) {
+		q->setLastError(i18n("JSON format error or document empty."));
 		return 1;
+	}
 
 	// reset to start of file
 	if (!device.isSequential())

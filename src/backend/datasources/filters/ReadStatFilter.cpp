@@ -479,6 +479,7 @@ QVector<QStringList> ReadStatFilterPrivate::preview(const QString& fileName, int
 			DEBUG(Q_FUNC_INFO << ", column mode " << i << " = " << ENUM_TO_STRING(AbstractColumn, ColumnMode, columnModes.at(i)))
 		DEBUG(Q_FUNC_INFO << ", read " << dataStrings.size() << " lines")
 	} else {
+		q->setLastError(i18n("Error reading file."));
 		DEBUG(Q_FUNC_INFO << ", ERROR: processing " << qPrintable(fileName))
 	}
 #else

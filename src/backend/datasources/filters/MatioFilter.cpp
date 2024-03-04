@@ -628,12 +628,11 @@ void MatioFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataS
 QVector<QStringList>
 MatioFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, size_t lines) {
 	PERFTRACE(QLatin1String(Q_FUNC_INFO));
-	QVector<QStringList> dataStrings;
 
 	if (currentVarName.isEmpty()) {
 		DEBUG(Q_FUNC_INFO << ", WARNING: current var name is empty!")
 		q->setLastError(i18n("No valid variable selected."));
-		return dataStrings;
+		return {};
 	}
 	DEBUG(Q_FUNC_INFO << ", current variable: " << STDSTRING(currentVarName));
 
@@ -645,7 +644,7 @@ MatioFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource* 
 	}
 	if (!matfp) { // open failed
 		q->setLastError(i18n("Failed to open the file."));
-		return dataStrings;
+		return {};
 	}
 
 	// read info and data
@@ -656,12 +655,12 @@ MatioFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource* 
 	//	DEBUG(Q_FUNC_INFO << ", was NEXT!")
 	if (!var) {
 		q->setLastError(i18n("Selected variable not found."));
-		return dataStrings;
+		return {};
 	}
 
 	if (!var->data) {
 		q->setLastError(i18n("No valid variable selected."));
-		return dataStrings;
+		return {};
 	}
 
 	// DEBUG(Q_FUNC_INFO << ", start/end row = " << startRow << '/' << endRow)
@@ -671,6 +670,7 @@ MatioFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource* 
 	int columnOffset = 0;
 	std::vector<void*> dataContainer;
 	QStringList vectorNames;
+	QVector<QStringList> dataStrings;
 	if (var->rank == 2) { // rank is always >= 2
 		// read data
 		size_t rows = var->dims[0], cols = var->dims[1];

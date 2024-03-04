@@ -214,15 +214,18 @@ CANFilterPrivate::CANFilterPrivate(CANFilter* owner)
 	returns -1 on error
 */
 QVector<QStringList> CANFilterPrivate::preview(const QString& fileName, int lines) {
-	if (!isValid(fileName))
-		return QVector<QStringList>();
+	if (!isValid(fileName)) {
+		q->setLastError(i18n("Invalid file."));
+		return {};
+	}
 
 	const int readMessages = readDataFromFile(fileName, lines);
-	if (readMessages == 0)
-		return QVector<QStringList>();
+	if (readMessages == 0) {
+		q->setLastError(i18n("No messages read."));
+		return {};
+	}
 
 	QVector<QStringList> strings;
-
 	for (int i = 0; i < readMessages; i++) {
 		QStringList l;
 		for (size_t c = 0; c < m_DataContainer.size(); c++) {

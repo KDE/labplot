@@ -267,19 +267,22 @@ int BinaryFilterPrivate::prepareStreamToRead(QDataStream& in) {
 */
 QVector<QStringList> BinaryFilterPrivate::preview(const QString& fileName, int lines) {
 	DEBUG(Q_FUNC_INFO << ", fileName = " << STDSTRING(fileName) << ", lines = " << lines);
-	QVector<QStringList> dataStrings;
 
 	KCompressionDevice device(fileName);
-	if (!device.open(QIODevice::ReadOnly))
-		return dataStrings << (QStringList() << i18n("could not open device"));
+	if (!device.open(QIODevice::ReadOnly)) {
+		q->setLastError(i18n("Failed to open the device/file."));
+		return {};
+	}
 
 	numRows = BinaryFilter::rowNumber(fileName, vectors, dataType, lines);
 
 	QDataStream in(&device);
 	const int deviceError = prepareStreamToRead(in);
 
-	if (deviceError)
-		return dataStrings << (QStringList() << i18n("data selection empty"));
+	if (deviceError) {
+		q->setLastError(i18n("Data selection empty."));
+		return {};
+	}
 
 	// all columns as double is ok for preview
 	columnModes.resize(m_actualCols);
@@ -298,6 +301,7 @@ QVector<QStringList> BinaryFilterPrivate::preview(const QString& fileName, int l
 	int progressIndex = 0;
 	const qreal progressInterval = 0.01 * lines; // update on every 1% only
 
+	QVector<QStringList> dataStrings;
 	for (int i = 0; i < lines; ++i) {
 		QStringList lineString;
 

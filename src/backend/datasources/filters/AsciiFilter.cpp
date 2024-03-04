@@ -1612,14 +1612,14 @@ QVector<QStringList> AsciiFilterPrivate::preview(QIODevice& device) {
  */
 QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int lines) {
 	DEBUG(Q_FUNC_INFO)
-	QVector<QStringList> dataStrings;
 
 	KCompressionDevice device(fileName);
 	const int deviceError = prepareDeviceToRead(device, lines);
 
 	if (deviceError != 0) {
 		DEBUG("Device error = " << deviceError);
-		return dataStrings;
+		q->setLastError(i18n("Failed to open the device/file or it's empty."));
+		return {};
 	}
 
 	// number formatting
@@ -1656,6 +1656,7 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 	QString line;
 
 	// loop over the preview lines in the file and parse the available columns
+	QVector<QStringList> dataStrings;
 	for (int i = 0; i < lines; ++i) {
 		line = QString::fromUtf8(device.readLine());
 
