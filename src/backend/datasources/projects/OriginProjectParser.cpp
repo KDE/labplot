@@ -1859,7 +1859,7 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 			case Origin::GraphCurve::ColumnStack:
 			case Origin::GraphCurve::Bar:
 			case Origin::GraphCurve::BarStack: {
-				DEBUG(Q_FUNC_INFO << ", BAR PLOT")
+				DEBUG(Q_FUNC_INFO << ", BAR/COLUMN PLOT")
 				auto* barPlot = new BarPlot(yColumnName);
 				childPlot = barPlot;
 
@@ -2394,8 +2394,9 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 
 void OriginProjectParser::loadBackground(const Origin::GraphCurve& originCurve, Background* background) const {
 	DEBUG(Q_FUNC_INFO << ", fill area? " << originCurve.fillArea)
-	// fillArea option not used in histogram and bar plot
-	if (!originCurve.fillArea && originCurve.type != Origin::GraphCurve::Histogram && originCurve.type != Origin::GraphCurve::Bar) {
+	// fillArea option not used in histogram and bar/column plot
+	auto type = originCurve.type;
+	if (!originCurve.fillArea && type != Origin::GraphCurve::Histogram && type != Origin::GraphCurve::Bar && type != Origin::GraphCurve::Column) {
 		background->setPosition(Background::Position::No);
 		return;
 	}
