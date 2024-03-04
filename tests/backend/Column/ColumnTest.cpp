@@ -777,7 +777,7 @@ void ColumnTest::saveLoadDateTime() {
 			Qt::DateFormat::ISODateWithMs), // without the timezone declaration it would be invalid (in some regions), because of the daylight time
 		QDateTime::fromString(QStringLiteral("2018-03-26T02:14:34.000Z"), Qt::DateFormat::ISODateWithMs),
 		QDateTime::fromString(QStringLiteral("2019-03-26T02:14:34.000Z"), Qt::DateFormat::ISODateWithMs),
-		QDateTime::fromString(QStringLiteral("2019-26-03 02:14:34:000"), QStringLiteral("yyyy-dd-MM hh:mm:ss:zzz")),
+		QDateTime::fromString(QStringLiteral("2019-26-03 02:14:34:000"), QStringLiteral("yyyy-dd-MM hh:mm:ss:zzz")), //In local timezone
 	});
 
 	QByteArray array;
@@ -807,7 +807,7 @@ void ColumnTest::saveLoadDateTime() {
 	QCOMPARE(c2.dateTimeAt(2).isValid(), true);
 	QCOMPARE(c2.dateTimeAt(2), QDateTime::fromString(QStringLiteral("2019-03-26T02:14:34.000Z"), Qt::DateFormat::ISODateWithMs));
 	QCOMPARE(c2.dateTimeAt(3).isValid(), true);
-	QCOMPARE(c2.dateTimeAt(3), QDateTime::fromString(QStringLiteral("2019-03-26T02:14:34.000Z"), Qt::DateFormat::ISODateWithMs));
+	QCOMPARE(c2.dateTimeAt(3), QDateTime::fromString(QStringLiteral("2019-03-26T02:14:34.000"), Qt::DateFormat::ISODateWithMs)); //In local timezone
 }
 
 void ColumnTest::loadDoubleFromProject() {
@@ -1695,7 +1695,7 @@ void ColumnTest::testRowCountDateTime() {
 
 	QCOMPARE(c.rowCount(QDateTime::fromString(QStringLiteral("2018-03-27T02:14:34.000Z"), Qt::DateFormat::ISODateWithMs).toMSecsSinceEpoch(),
 						QDateTime::fromString(QStringLiteral("2018-03-30T02:14:34.000Z"), Qt::DateFormat::ISODateWithMs).toMSecsSinceEpoch()),
-			 4);
+			 5); 
 }
 
 void ColumnTest::testRowCountDateTimeMonotonDecrease() {
@@ -1712,7 +1712,7 @@ void ColumnTest::testRowCountDateTimeMonotonDecrease() {
 
 	QCOMPARE(c.rowCount(QDateTime::fromString(QStringLiteral("2018-03-27T02:14:34.000Z"), Qt::DateFormat::ISODateWithMs).toMSecsSinceEpoch(),
 						QDateTime::fromString(QStringLiteral("2018-03-30T02:14:34.000Z"), Qt::DateFormat::ISODateWithMs).toMSecsSinceEpoch()),
-			 4);
+			 5); // Start and end included
 }
 
 void ColumnTest::testRowCountValueLabels() {

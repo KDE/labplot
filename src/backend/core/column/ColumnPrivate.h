@@ -183,6 +183,7 @@ public:
 		void add(int, const QString&);
 		void add(double, const QString&);
 		void add(const QDateTime&, const QString&);
+		void add(quint64, const QString&);
 		void add(const QString&, const QString&);
 		void removeAll();
 		AbstractColumn::ColumnMode mode() const;

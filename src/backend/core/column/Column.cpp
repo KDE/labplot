@@ -698,7 +698,7 @@ void Column::replaceTimestamps(int first, const QVector<quint64>& new_values) {
 }
 
 void Column::addValueLabel(const QDateTime& value, const QString& label) {
-	d->addValueLabel(value, label);
+	d->addValueLabel(static_cast<quint64>(value.toMSecsSinceEpoch()), label);
 	if (project())
 		project()->setChanged(true);
 }
