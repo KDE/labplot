@@ -195,7 +195,7 @@ bool OdsFilter::load(XmlStreamReader*) {
 // #####################################################################
 
 OdsFilterPrivate::OdsFilterPrivate(OdsFilter* owner)
-	: q(owner){
+	: q(owner) {
 }
 
 OdsFilterPrivate::~OdsFilterPrivate() {

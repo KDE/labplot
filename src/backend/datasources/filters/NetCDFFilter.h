@@ -27,10 +27,7 @@ public:
 	void parse(const QString& fileName, QTreeWidgetItem* rootItem);
 	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, ImportMode = ImportMode::Replace) override;
 	QString readAttribute(const QString& fileName, const QString& name, const QString& varName);
-	QVector<QStringList> readCurrentVar(const QString& fileName,
-										AbstractDataSource* = nullptr,
-										ImportMode = ImportMode::Replace,
-										int lines = -1);
+	QVector<QStringList> readCurrentVar(const QString& fileName, AbstractDataSource* = nullptr, ImportMode = ImportMode::Replace, int lines = -1);
 	void write(const QString& fileName, AbstractDataSource*) override;
 
 	void setCurrentVarName(const QString&);

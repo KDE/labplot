@@ -117,7 +117,7 @@ QStringList AbstractFileFilter::numberFormats() {
 }
 
 /*!
-  * Returns the last error that occured during the last parse step.
+ * Returns the last error that occured during the last parse step.
  */
 QString AbstractFileFilter::lastError() const {
 	return m_lastError;
@@ -128,7 +128,7 @@ void AbstractFileFilter::setLastError(const QString& error) {
 }
 
 /*!
-  * Returns the list of warnings that occured during the last parse step.
+ * Returns the list of warnings that occured during the last parse step.
  */
 QStringList AbstractFileFilter::lastWarnings() const {
 	return m_lastWarnings;

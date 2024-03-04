@@ -516,7 +516,6 @@ void XLSXFilterPrivate::readDataRegion(const QXlsx::CellRange& region, AbstractD
 			return;
 		}
 
-
 		int i = 0;
 		for (int row = region.firstRow(); row <= region.lastRow(); ++row) {
 			int j = 0;

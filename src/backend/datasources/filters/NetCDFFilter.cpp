@@ -138,8 +138,7 @@ QString NetCDFFilter::readAttribute(const QString& fileName, const QString& name
 /*!
   reads the content of the current variable from file \c fileName.
 */
-QVector<QStringList>
-NetCDFFilter::readCurrentVar(const QString& fileName, AbstractDataSource* dataSource, ImportMode importMode, int lines) {
+QVector<QStringList> NetCDFFilter::readCurrentVar(const QString& fileName, AbstractDataSource* dataSource, ImportMode importMode, int lines) {
 	return d->readCurrentVar(fileName, dataSource, importMode, lines);
 }
 

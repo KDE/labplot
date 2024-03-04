@@ -226,8 +226,7 @@ void MatioFilter::parse(const QString& fileName) {
 /*!
   reads the content of the current variable from file \c fileName.
 */
-QVector<QStringList>
-MatioFilter::readCurrentVar(const QString& fileName, AbstractDataSource* dataSource, ImportMode importMode, int lines) {
+QVector<QStringList> MatioFilter::readCurrentVar(const QString& fileName, AbstractDataSource* dataSource, ImportMode importMode, int lines) {
 	return d->readCurrentVar(fileName, dataSource, importMode, (size_t)lines);
 }
 
@@ -644,7 +643,7 @@ MatioFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource* 
 		matfp = Mat_Open(qPrintable(fileName), MAT_ACC_RDONLY);
 		openedFile = true;
 	}
-	if (!matfp) {// open failed
+	if (!matfp) { // open failed
 		q->setLastError(i18n("Failed to open the file."));
 		return dataStrings;
 	}

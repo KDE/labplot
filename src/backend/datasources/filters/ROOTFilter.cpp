@@ -154,7 +154,7 @@ bool ROOTFilter::load(XmlStreamReader* reader) {
 /**************** ROOTFilterPrivate implementation *******************/
 
 ROOTFilterPrivate::ROOTFilterPrivate(ROOTFilter* owner)
-	: q(owner){
+	: q(owner) {
 }
 
 ROOTFilterPrivate::FileType ROOTFilterPrivate::currentObjectPosition(const QString& fileName, long int& pos) {

@@ -95,8 +95,7 @@ int HDF5Filter::parse(const QString& fileName, QTreeWidgetItem* rootItem) {
 /*!
   reads the content of the data set \c dataSet from file \c fileName.
 */
-QVector<QStringList>
-HDF5Filter::readCurrentDataSet(const QString& fileName, AbstractDataSource* dataSource, bool& ok, ImportMode importMode, int lines) {
+QVector<QStringList> HDF5Filter::readCurrentDataSet(const QString& fileName, AbstractDataSource* dataSource, bool& ok, ImportMode importMode, int lines) {
 	return d->readCurrentDataSet(fileName, dataSource, ok, importMode, lines);
 }
 

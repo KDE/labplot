@@ -1361,7 +1361,7 @@ int Matrix::prepareImport(std::vector<void*>& dataContainer,
 		} else { // Append
 			// handle mismatch of modes
 			DEBUG(Q_FUNC_INFO << ", TODO: matrix mode = " << ENUM_TO_STRING(AbstractColumn, ColumnMode, d->mode)
-							<< ", columnMode = " << ENUM_TO_STRING(AbstractColumn, ColumnMode, columnMode.at(0)))
+							  << ", columnMode = " << ENUM_TO_STRING(AbstractColumn, ColumnMode, columnMode.at(0)))
 			// TODO: no way to convert types yet!
 			if (d->mode != newColumnMode) {
 				DEBUG(Q_FUNC_INFO << ", WARNING mismatch of types in append mode!")
