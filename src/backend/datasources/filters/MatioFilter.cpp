@@ -636,6 +636,7 @@ MatioFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource* 
 	}
 	DEBUG(Q_FUNC_INFO << ", current variable: " << STDSTRING(currentVarName));
 
+	QVector<QStringList> dataStrings;
 #ifdef HAVE_MATIO
 	bool openedFile = false;
 	if (!matfp) { // file not open
@@ -670,7 +671,6 @@ MatioFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource* 
 	int columnOffset = 0;
 	std::vector<void*> dataContainer;
 	QStringList vectorNames;
-	QVector<QStringList> dataStrings;
 	if (var->rank == 2) { // rank is always >= 2
 		// read data
 		size_t rows = var->dims[0], cols = var->dims[1];

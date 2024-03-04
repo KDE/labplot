@@ -690,6 +690,7 @@ NetCDFFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource*
 	}
 	DEBUG(" current variable = " << STDSTRING(currentVarName));
 
+	QVector<QStringList> dataStrings;
 #ifdef HAVE_NETCDF
 	int ncid;
 	m_status = nc_open(qPrintable(fileName), NC_NOWRITE, &ncid);
@@ -717,7 +718,6 @@ NetCDFFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource*
 	int actualRows = 0, actualCols = 0;
 	int columnOffset = 0;
 	std::vector<void*> dataContainer;
-	QVector<QStringList> dataStrings;
 	switch (ndims) {
 	case 0: {
 		DEBUG("	zero dimensions");

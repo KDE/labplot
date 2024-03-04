@@ -249,6 +249,7 @@ QVector<QStringList>
 FITSFilterPrivate::readCHDU(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, bool* okToMatrix, int lines) {
 	DEBUG(Q_FUNC_INFO << ", file name = " << STDSTRING(fileName));
 
+	QVector<QStringList> dataStrings;
 #ifdef HAVE_FITS
 	int status = 0;
 
@@ -271,7 +272,6 @@ FITSFilterPrivate::readCHDU(const QString& fileName, AbstractDataSource* dataSou
 	int actualCols;
 	int columnOffset = 0;
 
-	QVector<QStringList> dataStrings;
 	if (chduType == IMAGE_HDU) {
 		DEBUG("IMAGE_HDU");
 		int maxdim = 2;

@@ -1514,6 +1514,7 @@ HDF5FilterPrivate::readCurrentDataSet(const QString& fileName, AbstractDataSourc
 	}
 	DEBUG(Q_FUNC_INFO << ", current data set = " << STDSTRING(currentDataSetName));
 
+	QVector<QStringList> dataStrings;
 #ifdef HAVE_HDF5
 	hid_t file = H5Fopen(qPrintable(fileName), H5F_ACC_RDONLY, H5P_DEFAULT);
 	handleError((int)file, QStringLiteral("H5Fopen"), fileName);
@@ -1546,7 +1547,6 @@ HDF5FilterPrivate::readCurrentDataSet(const QString& fileName, AbstractDataSourc
 	std::vector<void*> dataContainer(1, nullptr);
 
 	// rank= 0: single value, 1: vector, 2: matrix, 3: 3D data, ...
-	QVector<QStringList> dataStrings;
 	switch (rank) {
 	case 0: { // single value
 		actualCols = 1;
