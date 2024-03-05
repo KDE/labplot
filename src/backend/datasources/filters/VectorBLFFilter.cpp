@@ -332,7 +332,7 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 	int message_index = 0;
 	bool timeInNS = true;
 	if (timeHandlingMode == CANFilter::TimeHandling::ConcatNAN) {
-		while (file.good() && ((lines >= 0 && message_counter < lines) || lines < 0)) {
+		while (file.good() && ((lines >= 0 && message_index < lines) || lines < 0)) {
 			try {
 				ohb = std::shared_ptr<Vector::BLF::ObjectHeaderBase>(file.read());
 			} catch (std::runtime_error& e) { DEBUG("Exception: " << e.what() << std::endl); }
@@ -385,7 +385,7 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 		}
 	} else {
 		bool firstMessageValid = false;
-		while (file.good() && ((lines >= 0 && message_counter < lines) || lines < 0)) {
+		while (file.good() && ((lines >= 0 && message_index < lines) || lines < 0)) {
 			try {
 				ohb = std::shared_ptr<Vector::BLF::ObjectHeaderBase>(file.read());
 			} catch (std::runtime_error& e) { DEBUG("Exception: " << e.what() << std::endl); }
