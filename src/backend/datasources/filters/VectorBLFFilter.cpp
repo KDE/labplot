@@ -278,16 +278,16 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 	file.open(fileName.toLocal8Bit().data());
 
 	// 1. Reading in messages
-	Vector::BLF::ObjectHeaderBase* ohb = nullptr;
+	std::shared_ptr<Vector::BLF::ObjectHeaderBase> ohb;
 	QVector<uint32_t> ids;
 	int message_counter = 0;
 	{
 		PERFTRACE(QLatin1String(Q_FUNC_INFO) + QLatin1String("Parsing BLF file"));
 		while (file.good() && ((lines >= 0 && message_counter < lines) || lines < 0)) {
 			try {
-				ohb = file.read();
+				ohb = std::make_shared<Vector::BLF::ObjectHeaderBase>(file.read());
 			} catch (std::runtime_error& e) { DEBUG("Exception: " << e.what() << std::endl); }
-			if (ohb == nullptr)
+			if (!ohb)
 				break;
 
 			if (ohb->objectType != Vector::BLF::ObjectType::CAN_MESSAGE2)
@@ -295,7 +295,7 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 
 			int id;
 			if (ohb->objectType == Vector::BLF::ObjectType::CAN_MESSAGE2) {
-				const auto message = reinterpret_cast<Vector::BLF::CanMessage2*>(ohb);
+				const auto message = reinterpret_pointer_cast<Vector::BLF::CanMessage2>(ohb);
 				id = message->id;
 			} else
 				return 0;
@@ -334,9 +334,9 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 	if (timeHandlingMode == CANFilter::TimeHandling::ConcatNAN) {
 		while (file.good() && ((lines >= 0 && message_counter < lines) || lines < 0)) {
 			try {
-				ohb = file.read();
+				ohb = std::make_shared<Vector::BLF::ObjectHeaderBase>(file.read());
 			} catch (std::runtime_error& e) { DEBUG("Exception: " << e.what() << std::endl); }
-			if (ohb == nullptr)
+			if (!ohb)
 				break;
 			if (ohb->objectType != Vector::BLF::ObjectType::CAN_MESSAGE2)
 				continue;
@@ -345,7 +345,7 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 			std::vector<double> values;
 			DbcParser::ParseStatus status;
 			if (ohb->objectType == Vector::BLF::ObjectType::CAN_MESSAGE2) {
-				const auto message = reinterpret_cast<const Vector::BLF::CanMessage2*>(ohb);
+				const auto message = reinterpret_pointer_cast<Vector::BLF::CanMessage2>(ohb);
 				id = message->id;
 				status = m_dbcParser.parseMessage(message->id, message->data, values);
 			} else
@@ -387,9 +387,9 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 		bool firstMessageValid = false;
 		while (file.good() && ((lines >= 0 && message_counter < lines) || lines < 0)) {
 			try {
-				ohb = file.read();
+				ohb = std::make_shared<Vector::BLF::ObjectHeaderBase>(file.read());
 			} catch (std::runtime_error& e) { DEBUG("Exception: " << e.what() << std::endl); }
-			if (ohb == nullptr)
+			if (!ohb)
 				break;
 			if (ohb->objectType != Vector::BLF::ObjectType::CAN_MESSAGE2)
 				continue;
@@ -397,7 +397,7 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 			std::vector<double> values;
 			DbcParser::ParseStatus status;
 			if (ohb->objectType == Vector::BLF::ObjectType::CAN_MESSAGE2) {
-				const auto message = reinterpret_cast<const Vector::BLF::CanMessage2*>(ohb);
+				const auto message = reinterpret_pointer_cast<Vector::BLF::CanMessage2>(ohb);
 				id = message->id;
 				status = m_dbcParser.parseMessage(message->id, message->data, values);
 			} else
