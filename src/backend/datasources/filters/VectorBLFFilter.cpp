@@ -228,7 +228,7 @@ VectorBLFFilterPrivate::ParseStatus VectorBLFFilterPrivate::DBCParserParseStatus
 #ifdef HAVE_VECTOR_BLF
 bool getTime(const std::shared_ptr<Vector::BLF::ObjectHeaderBase> ohb, uint64_t& timestamp) {
 	/* ObjectHeader */
-	auto* oh = std::dynamic_pointer_cast<Vector::BLF::ObjectHeader>(ohb);
+	std::shared_ptr<Vector::BLF::ObjectHeader> oh = std::dynamic_pointer_cast<Vector::BLF::ObjectHeader>(ohb);
 	if (oh != nullptr) {
 		timestamp = oh->objectTimeStamp;
 		switch (oh->objectFlags) {
@@ -240,7 +240,7 @@ bool getTime(const std::shared_ptr<Vector::BLF::ObjectHeaderBase> ohb, uint64_t&
 	}
 
 	/* ObjectHeader2 */
-	auto* oh2 = std::dynamic_pointer_cast<Vector::BLF::ObjectHeader2>(ohb);
+	std::shared_ptr<Vector::BLF::ObjectHeader2> oh2 = std::dynamic_pointer_cast<Vector::BLF::ObjectHeader2>(ohb);
 	if (oh2 != nullptr) {
 		timestamp = oh2->objectTimeStamp;
 		switch (oh2->objectFlags) {
