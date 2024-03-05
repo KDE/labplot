@@ -285,7 +285,7 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 		PERFTRACE(QLatin1String(Q_FUNC_INFO) + QLatin1String("Parsing BLF file"));
 		while (file.good() && ((lines >= 0 && message_counter < lines) || lines < 0)) {
 			try {
-				ohb = std::make_shared<Vector::BLF::ObjectHeaderBase>(file.read());
+				ohb = std::shared_ptr<Vector::BLF::ObjectHeaderBase>(file.read());
 			} catch (std::runtime_error& e) { DEBUG("Exception: " << e.what() << std::endl); }
 			if (!ohb)
 				break;
@@ -334,7 +334,7 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 	if (timeHandlingMode == CANFilter::TimeHandling::ConcatNAN) {
 		while (file.good() && ((lines >= 0 && message_counter < lines) || lines < 0)) {
 			try {
-				ohb = std::make_shared<Vector::BLF::ObjectHeaderBase>(file.read());
+				ohb = std::shared_ptr<Vector::BLF::ObjectHeaderBase>(file.read());
 			} catch (std::runtime_error& e) { DEBUG("Exception: " << e.what() << std::endl); }
 			if (!ohb)
 				break;
@@ -387,7 +387,7 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 		bool firstMessageValid = false;
 		while (file.good() && ((lines >= 0 && message_counter < lines) || lines < 0)) {
 			try {
-				ohb = std::make_shared<Vector::BLF::ObjectHeaderBase>(file.read());
+				ohb = std::shared_ptr<Vector::BLF::ObjectHeaderBase>(file.read());
 			} catch (std::runtime_error& e) { DEBUG("Exception: " << e.what() << std::endl); }
 			if (!ohb)
 				break;
