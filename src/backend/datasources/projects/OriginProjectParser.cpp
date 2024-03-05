@@ -1667,11 +1667,13 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 		DEBUG(Q_FUNC_INFO << ", y column name = " << STDSTRING(yColumnName));
 		DEBUG(Q_FUNC_INFO << ", y column info = " << STDSTRING(yColumnInfo));
 
+		// type specific settings
+		const auto type = originCurve.type;
 		// for histogram use y column info for x column
-		if (originCurve.type == Origin::GraphCurve::Histogram && xColumnInfo.isEmpty())
+		if (type == Origin::GraphCurve::Histogram && xColumnInfo.isEmpty())
 			xColumnInfo = yColumnInfo;
 		// for bar plot reverse x and y column info
-		if (originCurve.type == Origin::GraphCurve::Bar)
+		if (type == Origin::GraphCurve::Bar || type == Origin::GraphCurve::BarStack)
 			xColumnInfo.swap(yColumnInfo);
 
 		loadAxes(layer, plot, layerIndex, xColumnInfo, yColumnInfo);
@@ -2396,7 +2398,8 @@ void OriginProjectParser::loadBackground(const Origin::GraphCurve& originCurve, 
 	DEBUG(Q_FUNC_INFO << ", fill area? " << originCurve.fillArea)
 	// fillArea option not used in histogram and bar/column plot
 	auto type = originCurve.type;
-	if (!originCurve.fillArea && type != Origin::GraphCurve::Histogram && type != Origin::GraphCurve::Bar && type != Origin::GraphCurve::Column) {
+	if (!originCurve.fillArea && type != Origin::GraphCurve::Histogram && type != Origin::GraphCurve::Bar && type != Origin::GraphCurve::Column
+		&& type != Origin::GraphCurve::BarStack && type != Origin::GraphCurve::ColumnStack) {
 		background->setPosition(Background::Position::No);
 		return;
 	}
