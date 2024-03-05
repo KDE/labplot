@@ -295,7 +295,7 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 
 			int id;
 			if (ohb->objectType == Vector::BLF::ObjectType::CAN_MESSAGE2) {
-				const auto message = reinterpret_pointer_cast<Vector::BLF::CanMessage2>(ohb);
+				const auto message = std::reinterpret_pointer_cast<Vector::BLF::CanMessage2>(ohb);
 				id = message->id;
 			} else
 				return 0;
@@ -345,7 +345,7 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 			std::vector<double> values;
 			DbcParser::ParseStatus status;
 			if (ohb->objectType == Vector::BLF::ObjectType::CAN_MESSAGE2) {
-				const auto message = reinterpret_pointer_cast<Vector::BLF::CanMessage2>(ohb);
+				const auto message = std::reinterpret_pointer_cast<Vector::BLF::CanMessage2>(ohb);
 				id = message->id;
 				status = m_dbcParser.parseMessage(message->id, message->data, values);
 			} else
@@ -397,7 +397,7 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 			std::vector<double> values;
 			DbcParser::ParseStatus status;
 			if (ohb->objectType == Vector::BLF::ObjectType::CAN_MESSAGE2) {
-				const auto message = reinterpret_pointer_cast<Vector::BLF::CanMessage2>(ohb);
+				const auto message = std::reinterpret_pointer_cast<Vector::BLF::CanMessage2>(ohb);
 				id = message->id;
 				status = m_dbcParser.parseMessage(message->id, message->data, values);
 			} else
