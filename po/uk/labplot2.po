@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-03-05 01:33+0000\n"
-"PO-Revision-Date: 2024-03-04 08:53+0200\n"
+"PO-Revision-Date: 2024-03-05 09:58+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
@@ -1189,10 +1189,9 @@ msgstr "Індекс"
 #: src/backend/datasources/filters/AsciiFilter.cpp:1284
 #: src/backend/datasources/filters/AsciiFilter.cpp:1621
 #: src/backend/datasources/filters/BinaryFilter.cpp:404
-#, fuzzy, kde-format
-#| msgid "Failed to open the device."
+#, kde-format
 msgid "Failed to open the device/file or it's empty."
-msgstr "Не вдалося відкрити пристрій."
+msgstr "Не вдалося відкрити пристрій або файл або вони є порожніми."
 
 #. i18n: ectx: property (text), widget (QTableWidget, twLabels)
 #: src/backend/datasources/filters/AsciiFilter.cpp:755
@@ -1242,39 +1241,35 @@ msgstr "Значення %1"
 #: src/backend/datasources/filters/ROOTFilter.cpp:306
 #: src/backend/datasources/filters/SpiceFilter.cpp:206
 #: src/backend/datasources/filters/XLSXFilter.cpp:515
-#, fuzzy, kde-format
-#| msgid "Not a number"
+#, kde-format
 msgid "Not enough memory."
-msgstr "Не є числом"
+msgstr "Не вистачає пам'яті."
 
 #: src/backend/datasources/filters/BinaryFilter.cpp:273
 #: src/backend/datasources/filters/JsonFilter.cpp:386
 #: src/backend/datasources/filters/SpiceFilter.cpp:127
 #: src/backend/datasources/filters/SpiceFilter.cpp:183
-#, fuzzy, kde-format
-#| msgid "Failed to open the device."
+#, kde-format
 msgid "Failed to open the device/file."
-msgstr "Не вдалося відкрити пристрій."
+msgstr "Не вдалося відкрити пристрій або файл."
 
 #: src/backend/datasources/filters/BinaryFilter.cpp:283
-#, fuzzy, kde-format
-#| msgid "data selection empty"
+#, kde-format
 msgid "Data selection empty."
-msgstr "позначено порожні дані"
+msgstr "Позначено порожні дані."
 
 #: src/backend/datasources/filters/CANFilter.cpp:218
 #: src/backend/datasources/filters/SpiceFilter.cpp:131
 #: src/backend/datasources/filters/SpiceFilter.cpp:187
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:261
-#, fuzzy, kde-format
-#| msgid "Invalid blf file"
+#, kde-format
 msgid "Invalid file."
-msgstr "Некоректний файл blf"
+msgstr "Некоректний файл."
 
 #: src/backend/datasources/filters/CANFilter.cpp:224
 #, kde-format
 msgid "No messages read."
-msgstr ""
+msgstr "Не прочитано жодного повідомлення."
 
 #: src/backend/datasources/filters/FITSFilter.cpp:224
 #, kde-format
@@ -1288,23 +1283,20 @@ msgstr "Таблиці: %1"
 
 #: src/backend/datasources/filters/FITSFilter.cpp:259
 #: src/backend/datasources/filters/MatioFilter.cpp:647
-#, fuzzy, kde-format
-#| msgid "Failed to open the file '%1'."
+#, kde-format
 msgid "Failed to open the file."
-msgstr "Не вдалося відкрити файл «%1»."
+msgstr "Не вдалося відкрити файл."
 
 #: src/backend/datasources/filters/FITSFilter.cpp:267
 #: src/backend/datasources/filters/FITSFilter.cpp:346
-#, fuzzy, kde-format
-#| msgid "Unable to read the file"
+#, kde-format
 msgid "Failed to read the file."
-msgstr "Не вдалося прочитати файл"
+msgstr "Не вдалося прочитати файл."
 
 #: src/backend/datasources/filters/FITSFilter.cpp:288
-#, fuzzy, kde-format
-#| msgid "dimension"
+#, kde-format
 msgid "Zero dimensions."
-msgstr "розмірність"
+msgstr "Нульова розмірність."
 
 #: src/backend/datasources/filters/FITSFilter.cpp:1026
 #: src/backend/datasources/filters/FITSFilter.cpp:1547
@@ -1613,10 +1605,9 @@ msgstr "невідомо"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:1512
 #: src/backend/datasources/filters/HDF5Filter.cpp:2139
-#, fuzzy, kde-format
-#| msgid "No data set selected"
+#, kde-format
 msgid "No data set selected."
-msgstr "Не вибрано набору даних"
+msgstr "Не вибрано набору даних."
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:1581
 #, kde-format
@@ -1677,7 +1668,7 @@ msgstr "XYRGB"
 #: src/backend/datasources/filters/ImageFilter.cpp:118
 #, kde-format
 msgid "Empty file or invalid or non-supported format."
-msgstr ""
+msgstr "Порожній файл або некоректний чи непідтримуваний формат."
 
 #: src/backend/datasources/filters/ImageFilter.cpp:219
 #, kde-format
@@ -1740,21 +1731,19 @@ msgid "Column %1"
 msgstr "Стовпчик %1"
 
 #: src/backend/datasources/filters/JsonFilter.cpp:391
-#, fuzzy, kde-format
-#| msgid "The project file is empty."
+#, kde-format
 msgid "Device/file is empty."
-msgstr "Файл проєкту є порожнім."
+msgstr "Пристрій або файл є порожнім."
 
 #: src/backend/datasources/filters/JsonFilter.cpp:399
 #, kde-format
 msgid "JSON format error or document empty."
-msgstr ""
+msgstr "Помилка форматування JSON або документ є порожнім."
 
 #: src/backend/datasources/filters/JsonFilter.cpp:522
-#, fuzzy, kde-format
-#| msgid "Valid JSON document"
+#, kde-format
 msgid "Empty file or invalid JSON document."
-msgstr "Коректний документ JSON"
+msgstr "Порожній файл або некоректний документ JSON."
 
 #: src/backend/datasources/filters/MatioFilter.cpp:308
 #: src/backend/datasources/filters/NetCDFFilter.cpp:236
@@ -1947,16 +1936,14 @@ msgstr "Масив"
 #: src/backend/datasources/filters/MatioFilter.cpp:602
 #: src/backend/datasources/filters/MatioFilter.cpp:634
 #: src/backend/datasources/filters/MatioFilter.cpp:663
-#, fuzzy, kde-format
-#| msgid "No variable selected"
+#, kde-format
 msgid "No valid variable selected."
-msgstr "Не позначено змінної"
+msgstr "Не вибрано коректної змінної."
 
 #: src/backend/datasources/filters/MatioFilter.cpp:658
-#, fuzzy, kde-format
-#| msgid "Variable not found"
+#, kde-format
 msgid "Selected variable not found."
-msgstr "Змінної не знайдено"
+msgstr "Вибраної змінної не знайдено."
 
 #: src/backend/datasources/filters/MatioFilter.cpp:799
 #, kde-format
@@ -1966,12 +1953,12 @@ msgstr "У структурі не міститься полів"
 #: src/backend/datasources/filters/MatioFilter.cpp:881
 #, kde-format
 msgid "Support for this variable type not implemented yet."
-msgstr ""
+msgstr "Підтримку цього типу змінних ще не реалізовано."
 
 #: src/backend/datasources/filters/MatioFilter.cpp:1227
 #, kde-format
 msgid "Variables with rank greater than 2 not supported yet."
-msgstr ""
+msgstr "Підтримку змінних із рангом, що перевищує 2, ще не реалізовано."
 
 #: src/backend/datasources/filters/NetCDFFilter.cpp:212
 #, kde-format
@@ -2061,23 +2048,20 @@ msgstr "Змінні"
 
 #: src/backend/datasources/filters/NetCDFFilter.cpp:688
 #: src/backend/datasources/filters/NetCDFFilter.cpp:1113
-#, fuzzy, kde-format
-#| msgid "No variable selected"
+#, kde-format
 msgid "No variable selected."
-msgstr "Не позначено змінної"
+msgstr "Не вибрано змінної."
 
 #: src/backend/datasources/filters/NetCDFFilter.cpp:699
-#, fuzzy, kde-format
-#| msgid "Failed to open the file '%1'."
+#, kde-format
 msgid "Failed to open the file or it's empty."
-msgstr "Не вдалося відкрити файл «%1»."
+msgstr "Не вдалося відкрити файл або файл є порожнім."
 
 #: src/backend/datasources/filters/NetCDFFilter.cpp:937
 #: src/backend/datasources/filters/NetCDFFilter.cpp:1077
-#, fuzzy, kde-format
-#| msgid "rank %1 not supported yet"
+#, kde-format
 msgid "Data type not supported yet."
-msgstr "підтримки рангу %1 ще не передбачено"
+msgstr "Підтримку цього типу даних ще не реалізовано."
 
 #: src/backend/datasources/filters/NetCDFFilter.cpp:1082
 #, kde-format
@@ -2092,40 +2076,34 @@ msgstr "Кількість аркушів: %1"
 
 #: src/backend/datasources/filters/OdsFilter.cpp:215
 #: src/backend/datasources/filters/XLSXFilter.cpp:632
-#, fuzzy, kde-format
-#| msgid "No data set selected"
+#, kde-format
 msgid "No sheet selected."
-msgstr "Не вибрано набору даних"
+msgstr "Не вибрано аркуша."
 
 #: src/backend/datasources/filters/OdsFilter.cpp:250
-#, fuzzy, kde-format
-#| msgid "latex not found"
+#, kde-format
 msgid "Selected sheet not found."
-msgstr "Не знайдено latex"
+msgstr "Не знайдено вибраного аркуша."
 
 #: src/backend/datasources/filters/OdsFilter.cpp:257
-#, fuzzy, kde-format
-#| msgid "Invalid image"
+#, kde-format
 msgid "Invalid sheet."
-msgstr "Некоректне зображення"
+msgstr "Некоректний аркуш."
 
 #: src/backend/datasources/filters/OdsFilter.cpp:318
-#, fuzzy, kde-format
-#| msgid "rank %1 not supported yet"
+#, kde-format
 msgid "Formulas not supported yet."
-msgstr "підтримки рангу %1 ще не передбачено"
+msgstr "Підтримку формул ще не реалізовано."
 
 #: src/backend/datasources/filters/OdsFilter.cpp:473
-#, fuzzy, kde-format
-#| msgid "File not found"
+#, kde-format
 msgid "Sheet not found."
-msgstr "Файл не знайдено"
+msgstr "Аркуш не знайдено."
 
 #: src/backend/datasources/filters/OdsFilter.cpp:480
-#, fuzzy, kde-format
-#| msgid "Invalid metadata file"
+#, kde-format
 msgid "Invalid sheet index."
-msgstr "Некоректний файл метаданих"
+msgstr "Некоректний індекс аркуша."
 
 #: src/backend/datasources/filters/QJsonModel.cpp:132
 #: src/kdefrontend/widgets/FITSHeaderEditWidget.cpp:64
@@ -2199,17 +2177,15 @@ msgid "64bit: %1"
 msgstr "64-бітовий: %1"
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:482
-#, fuzzy, kde-format
-#| msgid "Error opening file"
+#, kde-format
 msgid "Error reading file."
-msgstr "Помилка під час відкриття файла"
+msgstr "Помилка під час спроби прочитати файл."
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:512
 #: src/backend/datasources/filters/ReadStatFilter.cpp:535
-#, fuzzy, kde-format
-#| msgid "Failed to open the file '%1'."
+#, kde-format
 msgid "Failed to parse the file."
-msgstr "Не вдалося відкрити файл «%1»."
+msgstr "Не вдалося обробити файл."
 
 #: src/backend/datasources/filters/ROOTFilter.cpp:113
 #: src/backend/datasources/MQTTClient.cpp:1200
@@ -2228,10 +2204,9 @@ msgid "No column available"
 msgstr "Немає доступних стовпчиків"
 
 #: src/backend/datasources/filters/ROOTFilter.cpp:163
-#, fuzzy, kde-format
-#| msgid "unsupported float type for rank 1"
+#, kde-format
 msgid "Unsupported file type, neither histogram no tree."
-msgstr "непідтримуваний тип чисел із рухомою крапкою для рангу 1"
+msgstr "Непідтримуваний тип файлів, гістограми або ієрархії."
 
 #: src/backend/datasources/filters/ROOTFilter.cpp:1470
 #, kde-format
@@ -2309,53 +2284,45 @@ msgid "Uncompressed File Size: %1 Bytes"
 msgstr "Розмір нестисненого файла: %1 байтів"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:180
-#, fuzzy, kde-format
-#| msgid "Big Endian not supported. CAN id: %1"
+#, kde-format
 msgid "Big Endian not supported. CAN id: %1."
 msgstr ""
-"Підтримки зворотного порядку байтів не передбачено. Ідентифікатор CAN: %1"
+"Підтримки зворотного порядку байтів не передбачено. Ідентифікатор CAN: %1."
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:183
-#, fuzzy, kde-format
-#| msgid "Message too long. CAN id: %1"
+#, kde-format
 msgid "Message too long. CAN id: %1."
-msgstr "Надто довге повідомлення. Ідентифікатор CAN: %1"
+msgstr "Надто довге повідомлення. Ідентифікатор CAN: %1."
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:186
-#, fuzzy, kde-format
-#| msgid "Unknown id: %1"
+#, kde-format
 msgid "Unknown id: %1."
-msgstr "Невідомий ідентифікатор: %1"
+msgstr "Невідомий ідентифікатор: %1."
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:189
-#, fuzzy, kde-format
-#| msgid "Invalid blf file"
+#, kde-format
 msgid "Invalid BLF file"
-msgstr "Некоректний файл blf"
+msgstr "Некоректний файл BLF"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:192
-#, fuzzy, kde-format
-#| msgid "Unable to calculate conversion: %1"
+#, kde-format
 msgid "Unable to calculate conversion: %1."
-msgstr "Не вдалося обчислити перетворення: %1"
+msgstr "Не вдалося обчислити перетворення: %1."
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:195
-#, fuzzy, kde-format
-#| msgid "No dbc parser installed"
+#, kde-format
 msgid "No DBC parser installed."
-msgstr "Не встановлено обробника dbc"
+msgstr "Не встановлено обробника DBC."
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:198
-#, fuzzy, kde-format
-#| msgid "Invalid blf file"
+#, kde-format
 msgid "Invalid DBC file."
-msgstr "Некоректний файл blf"
+msgstr "Некоректний файл DBC."
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:201
-#, fuzzy, kde-format
-#| msgid "Unknown error"
+#, kde-format
 msgid "Unknown error,"
-msgstr "Невідома помилка"
+msgstr "Невідома помилка,"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:438
 #, kde-format
@@ -2378,10 +2345,9 @@ msgid "Sheets: "
 msgstr "Аркуші: "
 
 #: src/backend/datasources/filters/XLSXFilter.cpp:636
-#, fuzzy, kde-format
-#| msgid "Invalid tolerance specified"
+#, kde-format
 msgid "Invalid region specified."
-msgstr "Вказано некоректний допуск"
+msgstr "Вказано некоректний регіон."
 
 #: src/backend/datasources/LiveDataSource.cpp:691
 #: src/backend/datasources/LiveDataSource.cpp:694
@@ -11581,10 +11547,9 @@ msgid "Live data source created in %1 seconds."
 msgstr "Інтерактивне джерело даних створено протягом %1 секунд."
 
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:174
-#, fuzzy, kde-format
-#| msgid "No data set selected"
+#, kde-format
 msgid "No target data container selected"
-msgstr "Не вибрано набору даних"
+msgstr "Не вибрано контейнера призначення даних"
 
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:319
 #, kde-format
@@ -18511,10 +18476,9 @@ msgstr "Запит"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, ImportWarningsDialog)
 #: src/kdefrontend/ui/datasources/importwarningsdialog.ui:14
-#, fuzzy, kde-format
-#| msgid "Import as:"
+#, kde-format
 msgid "Import Warnings"
-msgstr "Імпортувати як:"
+msgstr "Попередження при імпортуванні"
 
 #. i18n: ectx: property (text), widget (QPushButton, pbOk)
 #: src/kdefrontend/ui/datasources/importwarningsdialog.ui:38

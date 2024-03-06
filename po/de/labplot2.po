@@ -8293,10 +8293,9 @@ msgid "%1: set error column"
 msgstr "%1: Fehlerspalte festlegen"
 
 #: src/backend/worksheet/plots/cartesian/ErrorBar.cpp:235
-#, fuzzy, kde-format
-#| msgid "%1: x-error type changed"
+#, kde-format
 msgid "%1: error bar type changed"
-msgstr "%1: X-Fehlertyp geändert"
+msgstr "%1: Fehlerbalkentyp geändert"
 
 #: src/backend/worksheet/plots/cartesian/ErrorBar.cpp:242
 #, kde-format

@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-03-05 01:33+0000\n"
-"PO-Revision-Date: 2024-03-04 09:52+0100\n"
+"PO-Revision-Date: 2024-03-05 09:27+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -1186,10 +1186,9 @@ msgstr "Kazalo"
 #: src/backend/datasources/filters/AsciiFilter.cpp:1284
 #: src/backend/datasources/filters/AsciiFilter.cpp:1621
 #: src/backend/datasources/filters/BinaryFilter.cpp:404
-#, fuzzy, kde-format
-#| msgid "Failed to open the device."
+#, kde-format
 msgid "Failed to open the device/file or it's empty."
-msgstr "Odpiranje naprave ni uspelo."
+msgstr "Odpiranje naprave ni uspelo ali je prazna."
 
 #. i18n: ectx: property (text), widget (QTableWidget, twLabels)
 #: src/backend/datasources/filters/AsciiFilter.cpp:755
@@ -1239,39 +1238,35 @@ msgstr "Vrednost %1"
 #: src/backend/datasources/filters/ROOTFilter.cpp:306
 #: src/backend/datasources/filters/SpiceFilter.cpp:206
 #: src/backend/datasources/filters/XLSXFilter.cpp:515
-#, fuzzy, kde-format
-#| msgid "Not a number"
+#, kde-format
 msgid "Not enough memory."
-msgstr "Ni število"
+msgstr "Ni dovolj pomnilnika."
 
 #: src/backend/datasources/filters/BinaryFilter.cpp:273
 #: src/backend/datasources/filters/JsonFilter.cpp:386
 #: src/backend/datasources/filters/SpiceFilter.cpp:127
 #: src/backend/datasources/filters/SpiceFilter.cpp:183
-#, fuzzy, kde-format
-#| msgid "Failed to open the device."
+#, kde-format
 msgid "Failed to open the device/file."
-msgstr "Odpiranje naprave ni uspelo."
+msgstr "Odpiranje naprave/datoteke ni uspelo."
 
 #: src/backend/datasources/filters/BinaryFilter.cpp:283
-#, fuzzy, kde-format
-#| msgid "data selection empty"
+#, kde-format
 msgid "Data selection empty."
-msgstr "izbira podatkov je prazen"
+msgstr "Izbira podatkov je prazna"
 
 #: src/backend/datasources/filters/CANFilter.cpp:218
 #: src/backend/datasources/filters/SpiceFilter.cpp:131
 #: src/backend/datasources/filters/SpiceFilter.cpp:187
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:261
-#, fuzzy, kde-format
-#| msgid "Invalid blf file"
+#, kde-format
 msgid "Invalid file."
-msgstr "Neveljavna datoteka blf"
+msgstr "Neveljavna datoteka."
 
 #: src/backend/datasources/filters/CANFilter.cpp:224
 #, kde-format
 msgid "No messages read."
-msgstr ""
+msgstr "Ni prebranih sporočil."
 
 #: src/backend/datasources/filters/FITSFilter.cpp:224
 #, kde-format
@@ -1285,23 +1280,20 @@ msgstr "Tabele: %1"
 
 #: src/backend/datasources/filters/FITSFilter.cpp:259
 #: src/backend/datasources/filters/MatioFilter.cpp:647
-#, fuzzy, kde-format
-#| msgid "Failed to open the file '%1'."
+#, kde-format
 msgid "Failed to open the file."
-msgstr "Odpiranje datoteke »%1« ni uspelo."
+msgstr "Odpiranje datoteke ni uspelo."
 
 #: src/backend/datasources/filters/FITSFilter.cpp:267
 #: src/backend/datasources/filters/FITSFilter.cpp:346
-#, fuzzy, kde-format
-#| msgid "Unable to read the file"
+#, kde-format
 msgid "Failed to read the file."
-msgstr "Datoteke ni mogoče brati"
+msgstr "Ni bilo mogoče prebrati datoteke."
 
 #: src/backend/datasources/filters/FITSFilter.cpp:288
-#, fuzzy, kde-format
-#| msgid "dimension"
+#, kde-format
 msgid "Zero dimensions."
-msgstr "mera"
+msgstr "Ničelne dimenzije."
 
 #: src/backend/datasources/filters/FITSFilter.cpp:1026
 #: src/backend/datasources/filters/FITSFilter.cpp:1547
@@ -1604,10 +1596,9 @@ msgstr "neznano"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:1512
 #: src/backend/datasources/filters/HDF5Filter.cpp:2139
-#, fuzzy, kde-format
-#| msgid "No data set selected"
+#, kde-format
 msgid "No data set selected."
-msgstr "Ni izbrane množice podatkov"
+msgstr "Ni izbrane množice podatkov."
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:1581
 #, kde-format
@@ -1668,7 +1659,7 @@ msgstr "XYRGB"
 #: src/backend/datasources/filters/ImageFilter.cpp:118
 #, kde-format
 msgid "Empty file or invalid or non-supported format."
-msgstr ""
+msgstr "Prazna datoteka ali neveljaven ali nepodprt format."
 
 #: src/backend/datasources/filters/ImageFilter.cpp:219
 #, kde-format
@@ -1731,21 +1722,19 @@ msgid "Column %1"
 msgstr "Stolpec %1"
 
 #: src/backend/datasources/filters/JsonFilter.cpp:391
-#, fuzzy, kde-format
-#| msgid "The project file is empty."
+#, kde-format
 msgid "Device/file is empty."
-msgstr "Datoteka projekta je prazna."
+msgstr "Naprava/datoteka je prazna."
 
 #: src/backend/datasources/filters/JsonFilter.cpp:399
 #, kde-format
 msgid "JSON format error or document empty."
-msgstr ""
+msgstr "Napaka formata JSON ali je dokument prazen."
 
 #: src/backend/datasources/filters/JsonFilter.cpp:522
-#, fuzzy, kde-format
-#| msgid "Valid JSON document"
+#, kde-format
 msgid "Empty file or invalid JSON document."
-msgstr "Veljaven dokument JSON"
+msgstr "Prazna datoteka ali neveljaven dokument JSON."
 
 #: src/backend/datasources/filters/MatioFilter.cpp:308
 #: src/backend/datasources/filters/NetCDFFilter.cpp:236
@@ -1938,16 +1927,14 @@ msgstr "Polje"
 #: src/backend/datasources/filters/MatioFilter.cpp:602
 #: src/backend/datasources/filters/MatioFilter.cpp:634
 #: src/backend/datasources/filters/MatioFilter.cpp:663
-#, fuzzy, kde-format
-#| msgid "No variable selected"
+#, kde-format
 msgid "No valid variable selected."
-msgstr "Ni izbrane spremenljivke"
+msgstr "Ni izbrane veljavne spremenljivke."
 
 #: src/backend/datasources/filters/MatioFilter.cpp:658
-#, fuzzy, kde-format
-#| msgid "Variable not found"
+#, kde-format
 msgid "Selected variable not found."
-msgstr "Spremenljivke ni mogoče najti"
+msgstr "Izbrane spremenljivke ni bilo mogoče najti."
 
 #: src/backend/datasources/filters/MatioFilter.cpp:799
 #, kde-format
@@ -1957,12 +1944,12 @@ msgstr "Struct ne vsebuje polj"
 #: src/backend/datasources/filters/MatioFilter.cpp:881
 #, kde-format
 msgid "Support for this variable type not implemented yet."
-msgstr ""
+msgstr "Podpora za to vrsto spremenljivke še ni izdelana."
 
 #: src/backend/datasources/filters/MatioFilter.cpp:1227
 #, kde-format
 msgid "Variables with rank greater than 2 not supported yet."
-msgstr ""
+msgstr "Spremenljivke z rangom nad 2 še niso podprte."
 
 #: src/backend/datasources/filters/NetCDFFilter.cpp:212
 #, kde-format
@@ -2052,23 +2039,20 @@ msgstr "Spremenljivke"
 
 #: src/backend/datasources/filters/NetCDFFilter.cpp:688
 #: src/backend/datasources/filters/NetCDFFilter.cpp:1113
-#, fuzzy, kde-format
-#| msgid "No variable selected"
+#, kde-format
 msgid "No variable selected."
-msgstr "Ni izbrane spremenljivke"
+msgstr "Ni izbranih spremenljivk."
 
 #: src/backend/datasources/filters/NetCDFFilter.cpp:699
-#, fuzzy, kde-format
-#| msgid "Failed to open the file '%1'."
+#, kde-format
 msgid "Failed to open the file or it's empty."
-msgstr "Odpiranje datoteke »%1« ni uspelo."
+msgstr "Odpiranje datoteke ni uspelo ali je prazna."
 
 #: src/backend/datasources/filters/NetCDFFilter.cpp:937
 #: src/backend/datasources/filters/NetCDFFilter.cpp:1077
-#, fuzzy, kde-format
-#| msgid "rank %1 not supported yet"
+#, kde-format
 msgid "Data type not supported yet."
-msgstr "rang %1 še ni podprt"
+msgstr "Vrsta podatkov še ni podprta."
 
 #: src/backend/datasources/filters/NetCDFFilter.cpp:1082
 #, kde-format
@@ -2083,40 +2067,34 @@ msgstr "Števec listov: %1"
 
 #: src/backend/datasources/filters/OdsFilter.cpp:215
 #: src/backend/datasources/filters/XLSXFilter.cpp:632
-#, fuzzy, kde-format
-#| msgid "No data set selected"
+#, kde-format
 msgid "No sheet selected."
-msgstr "Ni izbrane množice podatkov"
+msgstr "Ni izbrane preglednice podatkov."
 
 #: src/backend/datasources/filters/OdsFilter.cpp:250
-#, fuzzy, kde-format
-#| msgid "ncdump not found."
+#, kde-format
 msgid "Selected sheet not found."
-msgstr "ncdump ni mogoče najti."
+msgstr "Izbrane preglednice ni mogoče najti."
 
 #: src/backend/datasources/filters/OdsFilter.cpp:257
-#, fuzzy, kde-format
-#| msgid "Invalid image"
+#, kde-format
 msgid "Invalid sheet."
-msgstr "Neveljavna slika"
+msgstr "Neveljavna preglednica"
 
 #: src/backend/datasources/filters/OdsFilter.cpp:318
-#, fuzzy, kde-format
-#| msgid "rank %1 not supported yet"
+#, kde-format
 msgid "Formulas not supported yet."
-msgstr "rang %1 še ni podprt"
+msgstr "Formule še niso podprte."
 
 #: src/backend/datasources/filters/OdsFilter.cpp:473
-#, fuzzy, kde-format
-#| msgid "File not found"
+#, kde-format
 msgid "Sheet not found."
-msgstr "Datoteke ni mogoče najti"
+msgstr "Preglednice ni mogoče najti."
 
 #: src/backend/datasources/filters/OdsFilter.cpp:480
-#, fuzzy, kde-format
-#| msgid "Invalid metadata file"
+#, kde-format
 msgid "Invalid sheet index."
-msgstr "Neveljavna datoteka metapodatkov"
+msgstr "Neveljaven indeks preglednice."
 
 #: src/backend/datasources/filters/QJsonModel.cpp:132
 #: src/kdefrontend/widgets/FITSHeaderEditWidget.cpp:64
@@ -2190,17 +2168,15 @@ msgid "64bit: %1"
 msgstr "64bit: %1"
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:482
-#, fuzzy, kde-format
-#| msgid "Error opening file"
+#, kde-format
 msgid "Error reading file."
-msgstr "Napaka pri odpiranju datoteke"
+msgstr "Napaka pri branju datoteke."
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:512
 #: src/backend/datasources/filters/ReadStatFilter.cpp:535
-#, fuzzy, kde-format
-#| msgid "Failed to open the file '%1'."
+#, kde-format
 msgid "Failed to parse the file."
-msgstr "Odpiranje datoteke »%1« ni uspelo."
+msgstr "Razčlenjevanje datoteke ni uspelo."
 
 #: src/backend/datasources/filters/ROOTFilter.cpp:113
 #: src/backend/datasources/MQTTClient.cpp:1200
@@ -2217,10 +2193,9 @@ msgid "No column available"
 msgstr "Stolpec ni na voljo"
 
 #: src/backend/datasources/filters/ROOTFilter.cpp:163
-#, fuzzy, kde-format
-#| msgid "unsupported float type for rank 1"
+#, kde-format
 msgid "Unsupported file type, neither histogram no tree."
-msgstr "nepodprta vrsta plavajoče vejice za rang 1"
+msgstr "Nepodprta vrsta datoteke, niti histogram niti drevo."
 
 #: src/backend/datasources/filters/ROOTFilter.cpp:1470
 #, kde-format
@@ -2298,52 +2273,44 @@ msgid "Uncompressed File Size: %1 Bytes"
 msgstr "Nestisnjena velikost datoteke: %1 bajtov"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:180
-#, fuzzy, kde-format
-#| msgid "Big Endian not supported. CAN id: %1"
+#, kde-format
 msgid "Big Endian not supported. CAN id: %1."
-msgstr "Big Endian ni podprt. CAN id: %1"
+msgstr "Big Endian ni podprt. CAN id: %1."
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:183
-#, fuzzy, kde-format
-#| msgid "Message too long. CAN id: %1"
+#, kde-format
 msgid "Message too long. CAN id: %1."
-msgstr "Sporočilo predolgo. CAN id: %1"
+msgstr "Sporočilo predolgo. CAN id: %1."
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:186
-#, fuzzy, kde-format
-#| msgid "Unknown id: %1"
+#, kde-format
 msgid "Unknown id: %1."
-msgstr "Neznan id: %1"
+msgstr "Neznan id: %1."
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:189
-#, fuzzy, kde-format
-#| msgid "Invalid blf file"
+#, kde-format
 msgid "Invalid BLF file"
-msgstr "Neveljavna datoteka blf"
+msgstr "Neveljavna datoteka BLF"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:192
-#, fuzzy, kde-format
-#| msgid "Unable to calculate conversion: %1"
+#, kde-format
 msgid "Unable to calculate conversion: %1."
-msgstr "Ni mogoče izračunati prevoda: %1"
+msgstr "Pretvorbe ni mogoče izračunati: %1."
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:195
-#, fuzzy, kde-format
-#| msgid "No dbc parser installed"
+#, kde-format
 msgid "No DBC parser installed."
-msgstr "Ni nameščenega razčlenjevalnika dbc"
+msgstr "Ni nameščenega razčlenjevalnika DBC."
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:198
-#, fuzzy, kde-format
-#| msgid "Invalid blf file"
+#, kde-format
 msgid "Invalid DBC file."
-msgstr "Neveljavna datoteka blf"
+msgstr "Neveljavna datoteka DBC."
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:201
-#, fuzzy, kde-format
-#| msgid "Unknown error"
+#, kde-format
 msgid "Unknown error,"
-msgstr "Neznana napaka"
+msgstr "Neznana napaka,"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:438
 #, kde-format
@@ -2366,10 +2333,9 @@ msgid "Sheets: "
 msgstr "Listi: "
 
 #: src/backend/datasources/filters/XLSXFilter.cpp:636
-#, fuzzy, kde-format
-#| msgid "Invalid tolerance specified"
+#, kde-format
 msgid "Invalid region specified."
-msgstr "Navedena je neveljavna toleranca"
+msgstr "Navedena neveljavna regija."
 
 #: src/backend/datasources/LiveDataSource.cpp:691
 #: src/backend/datasources/LiveDataSource.cpp:694
@@ -11544,10 +11510,9 @@ msgid "Live data source created in %1 seconds."
 msgstr "Vir podatkov v živo, ustvarjen v %1 sekundah."
 
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:174
-#, fuzzy, kde-format
-#| msgid "No data set selected"
+#, kde-format
 msgid "No target data container selected"
-msgstr "Ni izbrane množice podatkov"
+msgstr "Ni izbranega nobenega ciljnega vsebnika podatkov"
 
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:319
 #, kde-format
@@ -15481,22 +15446,22 @@ msgstr "Naloži nazadnje uporabljen projekt"
 #: src/kdefrontend/SettingsGeneralPage.cpp:197
 #, kde-format
 msgid "With Worksheet"
-msgstr "z delovnim listom"
+msgstr "Z delovnim listom"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:198
 #, kde-format
 msgid "With Spreadsheet"
-msgstr "s preglednico"
+msgstr "S preglednico"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:199
 #, kde-format
 msgid "With Worksheet and Spreadsheet"
-msgstr "z delovnim listom in preglednico"
+msgstr "Z delovnim listom in preglednico"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:201
 #, kde-format
 msgid "With Notebook"
-msgstr "z zvezkom"
+msgstr "Z zvezkom"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:204
 #, kde-format
@@ -15568,8 +15533,8 @@ msgid ""
 "documents/jcgm/JCGM_100_2008_E.pdf\">Guide to the Expression of Uncertainty "
 "in Measurement (GUM)</a>"
 msgstr ""
-"Uporabi termine, ki so v skladu z vodnikom <a href=\"http://www.bipm.org/"
-"utils/common/documents/jcgm/JCGM_100_2008_E.pdf\">Guide to the Expression of "
+"Uporabi termine v skladu z vodnikom <a href=\"http://www.bipm.org/utils/"
+"common/documents/jcgm/JCGM_100_2008_E.pdf\">Guide to the Expression of "
 "Uncertainty in Measurement (GUM)</a> (v angl.)."
 
 #: src/kdefrontend/SettingsNotebookPage.cpp:23
@@ -18452,10 +18417,9 @@ msgstr "Poizvedba"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, ImportWarningsDialog)
 #: src/kdefrontend/ui/datasources/importwarningsdialog.ui:14
-#, fuzzy, kde-format
-#| msgid "Import as:"
+#, kde-format
 msgid "Import Warnings"
-msgstr "Uvozi kot:"
+msgstr "Uvozi opozorila"
 
 #. i18n: ectx: property (text), widget (QPushButton, pbOk)
 #: src/kdefrontend/ui/datasources/importwarningsdialog.ui:38
