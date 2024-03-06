@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-18 03:06+0000\n"
-"PO-Revision-Date: 2024-01-30 19:50+0100\n"
+"PO-Revision-Date: 2024-03-05 18:40+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -1571,7 +1571,7 @@ msgstr "tipus de dades"
 #: src/backend/datasources/filters/HDF5Filter.cpp:1363
 #, kde-format
 msgid "rank %1 not supported yet"
-msgstr "un interval %1 encara no s'admet"
+msgstr "el rang %1 encara no s'admet"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:1370
 #: src/kdefrontend/datasources/HDF5OptionsWidget.cpp:75
@@ -1607,43 +1607,43 @@ msgstr "No s'ha seleccionat cap conjunt de dades"
 #: src/backend/datasources/filters/HDF5Filter.cpp:1594
 #, kde-format
 msgid "rank 0 not implemented yet for type %1"
-msgstr "un interval 0 encara no està implementat per al tipus %1"
+msgstr "el rang 0 encara no està implementat per al tipus %1"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:1728
 #: src/backend/datasources/filters/HDF5Filter.cpp:1867
 #, kde-format
 msgid "unsupported integer type for rank 1"
-msgstr "tipus d'enter no acceptat per l'interval 1"
+msgstr "tipus d'enter no admès per al rang 1"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:1742
 #, kde-format
 msgid "unsupported float type for rank 1"
-msgstr "tipus de flotant no acceptat per l'interval 1"
+msgstr "tipus de flotant no admès per al rang 1"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:1884
 #, kde-format
 msgid "rank 1 not implemented yet for type %1"
-msgstr "un interval 1 encara no està implementat per al tipus %1"
+msgstr "el rang 1 encara no està implementat per al tipus %1"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:2012
 #, kde-format
 msgid "unsupported integer type for rank 2"
-msgstr "tipus d'enter no acceptat per l'interval 2"
+msgstr "tipus d'enter no admès per al rang 2"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:2026
 #, kde-format
 msgid "unsupported float type for rank 2"
-msgstr "tipus de flotant no acceptat per l'interval 2"
+msgstr "tipus de flotant no admès per al rang 2"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:2090
 #, kde-format
 msgid "rank 2 not implemented yet for type %1"
-msgstr "un interval 2 encara no està implementat per al tipus %1"
+msgstr "el rang 2 encara no està implementat per al tipus %1"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:2100
 #, kde-format
 msgid "rank %1 not implemented yet for type %2"
-msgstr "un interval %1 encara no està implementat per al tipus %2"
+msgstr "el rang %1 encara no està implementat per al tipus %2"
 
 #: src/backend/datasources/filters/ImageFilter.cpp:36
 #, kde-format
@@ -2032,7 +2032,7 @@ msgstr "Variables"
 #: src/backend/datasources/filters/NetCDFFilter.cpp:1075
 #, kde-format
 msgid "%1 dimensional data of type %2 not supported yet"
-msgstr "les dades dimensionals %1 de tipus %2 encara no estan implementades"
+msgstr "les dades dimensionals %1 de tipus %2 encara no estan admeses"
 
 #: src/backend/datasources/filters/QJsonModel.cpp:132
 #: src/kdefrontend/widgets/FITSHeaderEditWidget.cpp:63
@@ -17512,7 +17512,7 @@ msgstr "Variable"
 #: src/kdefrontend/ui/datasources/matiooptionswidget.ui:32
 #, kde-format
 msgid "Rank"
-msgstr "Amplitud"
+msgstr "Rang"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twContent)
 #: src/kdefrontend/ui/datasources/matiooptionswidget.ui:37
