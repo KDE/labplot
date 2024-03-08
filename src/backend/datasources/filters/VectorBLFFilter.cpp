@@ -339,7 +339,7 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 				break;
 			if (ohb->objectType != Vector::BLF::ObjectType::CAN_MESSAGE2)
 				continue;
-			
+
 			std::vector<double> values;
 			const auto message = std::reinterpret_pointer_cast<Vector::BLF::CanMessage2>(ohb);
 			const auto id = message->id;
