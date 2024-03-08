@@ -341,15 +341,10 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 			if (ohb->objectType != Vector::BLF::ObjectType::CAN_MESSAGE2)
 				continue;
 			
-			uint32_t id;
 			std::vector<double> values;
-			DbcParser::ParseStatus status;
-			if (ohb->objectType == Vector::BLF::ObjectType::CAN_MESSAGE2) {
-				const auto message = std::reinterpret_pointer_cast<Vector::BLF::CanMessage2>(ohb);
-				id = message->id;
-				status = m_dbcParser.parseMessage(message->id, message->data, values);
-			} else
-				return 0;
+			const auto message = std::reinterpret_pointer_cast<Vector::BLF::CanMessage2>(ohb);
+			const auto id = message->id;
+			const auto status = m_dbcParser.parseMessage(message->id, message->data, values);
 
 			if (status != DbcParser::ParseStatus::Success) {
 				// id is not available in the dbc file, so it is not possible to decode
@@ -393,15 +388,10 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 				break;
 			if (ohb->objectType != Vector::BLF::ObjectType::CAN_MESSAGE2)
 				continue;
-			uint32_t id;
 			std::vector<double> values;
-			DbcParser::ParseStatus status;
-			if (ohb->objectType == Vector::BLF::ObjectType::CAN_MESSAGE2) {
-				const auto message = std::reinterpret_pointer_cast<Vector::BLF::CanMessage2>(ohb);
-				id = message->id;
-				status = m_dbcParser.parseMessage(message->id, message->data, values);
-			} else
-				return 0;
+			const auto message = std::reinterpret_pointer_cast<Vector::BLF::CanMessage2>(ohb);
+			const auto id = message->id;
+			const auto status = m_dbcParser.parseMessage(message->id, message->data, values);
 
 			if (status != DbcParser::ParseStatus::Success) {
 				// id is not available in the dbc file, so it is not possible to decode
