@@ -498,7 +498,7 @@ void BarPlotDock::plotOrientationChanged(BarPlot::Orientation orientation) {
 // box
 void BarPlotDock::plotWidthFactorChanged(double factor) {
 	CONDITIONAL_LOCK_RETURN;
-	ui.sbWidthFactor->setValue(round(factor * 100));
+	ui.sbWidthFactor->setValue(round(factor * 100.));
 }
 
 //**********************************************************
@@ -510,7 +510,8 @@ void BarPlotDock::load() {
 	ui.cbOrientation->setCurrentIndex((int)m_barPlot->orientation());
 
 	// box
-	ui.sbWidthFactor->setValue(round(m_barPlot->widthFactor()) * 100);
+	qDebug()<<"#############" << m_barPlot->widthFactor() << "  " << round(m_barPlot->widthFactor() * 100.);
+	ui.sbWidthFactor->setValue(round(m_barPlot->widthFactor() * 100.));
 }
 
 void BarPlotDock::loadConfig(KConfig& config) {
@@ -521,7 +522,7 @@ void BarPlotDock::loadConfig(KConfig& config) {
 	ui.cbOrientation->setCurrentIndex(group.readEntry(QStringLiteral("Orientation"), (int)m_barPlot->orientation()));
 
 	// box
-	ui.sbWidthFactor->setValue(round(group.readEntry(QStringLiteral("WidthFactor"), m_barPlot->widthFactor()) * 100));
+	ui.sbWidthFactor->setValue(round(group.readEntry(QStringLiteral("WidthFactor"), m_barPlot->widthFactor()) * 100.));
 	backgroundWidget->loadConfig(group);
 	lineWidget->loadConfig(group);
 
