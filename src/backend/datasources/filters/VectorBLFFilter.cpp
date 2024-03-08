@@ -274,15 +274,14 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 	m_DataContainer.clear();
 
 #ifdef HAVE_VECTOR_BLF
-	Vector::BLF::File file;
-	file.open(fileName.toLocal8Bit().data());
-
 	// 1. Reading in messages
 	std::shared_ptr<Vector::BLF::ObjectHeaderBase> ohb;
 	QVector<uint32_t> ids;
 	int message_counter = 0;
 	{
 		PERFTRACE(QLatin1String(Q_FUNC_INFO) + QLatin1String("Parsing BLF file"));
+		Vector::BLF::File file;
+		file.open(fileName.toLocal8Bit().data());
 		while (file.good() && ((lines >= 0 && message_counter < lines) || lines < 0)) {
 			try {
 				ohb = std::shared_ptr<Vector::BLF::ObjectHeaderBase>(file.read());
@@ -305,7 +304,7 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 			message_counter++;
 		}
 	}
-	file.close();
+	Vector::BLF::File file;
 	file.open(fileName.toLocal8Bit().data()); // Restart reading
 
 	// 2. Create vector names
