@@ -510,7 +510,6 @@ void BarPlotDock::load() {
 	ui.cbOrientation->setCurrentIndex((int)m_barPlot->orientation());
 
 	// box
-	qDebug()<<"#############" << m_barPlot->widthFactor() << "  " << round(m_barPlot->widthFactor() * 100.);
 	ui.sbWidthFactor->setValue(round(m_barPlot->widthFactor() * 100.));
 }
 
