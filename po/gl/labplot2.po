@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-03-05 01:33+0000\n"
-"PO-Revision-Date: 2024-03-04 22:04+0100\n"
+"PO-Revision-Date: 2024-03-07 22:25+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -1182,10 +1182,9 @@ msgstr "Índice"
 #: src/backend/datasources/filters/AsciiFilter.cpp:1284
 #: src/backend/datasources/filters/AsciiFilter.cpp:1621
 #: src/backend/datasources/filters/BinaryFilter.cpp:404
-#, fuzzy, kde-format
-#| msgid "Failed to open the device."
+#, kde-format
 msgid "Failed to open the device/file or it's empty."
-msgstr "Non foi posíbel abrir o dispositivo."
+msgstr "Non foi posíbel abrir o dispositivo ou ficheiro, ou está baleiro."
 
 #. i18n: ectx: property (text), widget (QTableWidget, twLabels)
 #: src/backend/datasources/filters/AsciiFilter.cpp:755
@@ -1235,39 +1234,35 @@ msgstr "Valor %1"
 #: src/backend/datasources/filters/ROOTFilter.cpp:306
 #: src/backend/datasources/filters/SpiceFilter.cpp:206
 #: src/backend/datasources/filters/XLSXFilter.cpp:515
-#, fuzzy, kde-format
-#| msgid "Not a number"
+#, kde-format
 msgid "Not enough memory."
-msgstr "Non é un número"
+msgstr "Non hai memoria dabondo."
 
 #: src/backend/datasources/filters/BinaryFilter.cpp:273
 #: src/backend/datasources/filters/JsonFilter.cpp:386
 #: src/backend/datasources/filters/SpiceFilter.cpp:127
 #: src/backend/datasources/filters/SpiceFilter.cpp:183
-#, fuzzy, kde-format
-#| msgid "Failed to open the device."
+#, kde-format
 msgid "Failed to open the device/file."
-msgstr "Non foi posíbel abrir o dispositivo."
+msgstr "Non foi posíbel abrir o dispositivo ou ficheiro."
 
 #: src/backend/datasources/filters/BinaryFilter.cpp:283
-#, fuzzy, kde-format
-#| msgid "data selection empty"
+#, kde-format
 msgid "Data selection empty."
-msgstr "a selección de datos está baleira"
+msgstr "A selección de datos está baleira."
 
 #: src/backend/datasources/filters/CANFilter.cpp:218
 #: src/backend/datasources/filters/SpiceFilter.cpp:131
 #: src/backend/datasources/filters/SpiceFilter.cpp:187
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:261
-#, fuzzy, kde-format
-#| msgid "Invalid blf file"
+#, kde-format
 msgid "Invalid file."
-msgstr "Ficheiro blf non válido"
+msgstr "O ficheiro non é válido."
 
 #: src/backend/datasources/filters/CANFilter.cpp:224
 #, kde-format
 msgid "No messages read."
-msgstr ""
+msgstr "Non hai mensaxes lidas."
 
 #: src/backend/datasources/filters/FITSFilter.cpp:224
 #, kde-format
@@ -1281,23 +1276,20 @@ msgstr "Táboas: %1"
 
 #: src/backend/datasources/filters/FITSFilter.cpp:259
 #: src/backend/datasources/filters/MatioFilter.cpp:647
-#, fuzzy, kde-format
-#| msgid "Failed to open the file '%1'."
+#, kde-format
 msgid "Failed to open the file."
-msgstr "Non se puido abrir o ficheiro «%1»."
+msgstr "Non foi posíbel abrir o ficheiro."
 
 #: src/backend/datasources/filters/FITSFilter.cpp:267
 #: src/backend/datasources/filters/FITSFilter.cpp:346
-#, fuzzy, kde-format
-#| msgid "Unable to read the file"
+#, kde-format
 msgid "Failed to read the file."
-msgstr "Non é posíbel ler o ficheiro."
+msgstr "Non foi posíbel ler o ficheiro."
 
 #: src/backend/datasources/filters/FITSFilter.cpp:288
-#, fuzzy, kde-format
-#| msgid "zero dimensions"
+#, kde-format
 msgid "Zero dimensions."
-msgstr "cero dimensións"
+msgstr "Non hai dimensións."
 
 #: src/backend/datasources/filters/FITSFilter.cpp:1026
 #: src/backend/datasources/filters/FITSFilter.cpp:1547
@@ -1603,10 +1595,9 @@ msgstr "descoñecido"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:1512
 #: src/backend/datasources/filters/HDF5Filter.cpp:2139
-#, fuzzy, kde-format
-#| msgid "No data set selected"
+#, kde-format
 msgid "No data set selected."
-msgstr "Non seleccionou ningún conxunto de datos"
+msgstr "Non seleccionou ningún conxunto de datos."
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:1581
 #, kde-format
@@ -1667,7 +1658,7 @@ msgstr "XYRGB"
 #: src/backend/datasources/filters/ImageFilter.cpp:118
 #, kde-format
 msgid "Empty file or invalid or non-supported format."
-msgstr ""
+msgstr "O ficheiro está baleiro ou o formato é incompatíbel."
 
 #: src/backend/datasources/filters/ImageFilter.cpp:219
 #, kde-format
@@ -1728,21 +1719,19 @@ msgid "Column %1"
 msgstr "Columna %1"
 
 #: src/backend/datasources/filters/JsonFilter.cpp:391
-#, fuzzy, kde-format
-#| msgid "The project file is empty."
+#, kde-format
 msgid "Device/file is empty."
-msgstr "O ficheiro de proxecto está baleiro."
+msgstr "O dispositivo ou ficheiro está baleiro."
 
 #: src/backend/datasources/filters/JsonFilter.cpp:399
 #, kde-format
 msgid "JSON format error or document empty."
-msgstr ""
+msgstr "Hai un erro de formato JSON ou o documento está baleiro."
 
 #: src/backend/datasources/filters/JsonFilter.cpp:522
-#, fuzzy, kde-format
-#| msgid "Valid JSON document"
+#, kde-format
 msgid "Empty file or invalid JSON document."
-msgstr "Documento JSON válido"
+msgstr "O ficheiro está baleiro ou é un documento JSON non válido."
 
 #: src/backend/datasources/filters/MatioFilter.cpp:308
 #: src/backend/datasources/filters/NetCDFFilter.cpp:236
@@ -1935,16 +1924,14 @@ msgstr "Matriz"
 #: src/backend/datasources/filters/MatioFilter.cpp:602
 #: src/backend/datasources/filters/MatioFilter.cpp:634
 #: src/backend/datasources/filters/MatioFilter.cpp:663
-#, fuzzy, kde-format
-#| msgid "No variable selected"
+#, kde-format
 msgid "No valid variable selected."
-msgstr "Non seleccionou ningunha variábel"
+msgstr "Non seleccionou ningunha variábel válida."
 
 #: src/backend/datasources/filters/MatioFilter.cpp:658
-#, fuzzy, kde-format
-#| msgid "Variable not found"
+#, kde-format
 msgid "Selected variable not found."
-msgstr "Non se atopou a variábel"
+msgstr "Non se atopou a variábel seleccionada."
 
 #: src/backend/datasources/filters/MatioFilter.cpp:799
 #, kde-format
@@ -1954,12 +1941,12 @@ msgstr "A estrutura non contén campos"
 #: src/backend/datasources/filters/MatioFilter.cpp:881
 #, kde-format
 msgid "Support for this variable type not implemented yet."
-msgstr ""
+msgstr "Aínda non se permite este tipo de variábel."
 
 #: src/backend/datasources/filters/MatioFilter.cpp:1227
 #, kde-format
 msgid "Variables with rank greater than 2 not supported yet."
-msgstr ""
+msgstr "Aínda non se permiten variábeis cun rango superior a 2."
 
 #: src/backend/datasources/filters/NetCDFFilter.cpp:212
 #, kde-format
@@ -2049,23 +2036,20 @@ msgstr "Variábeis"
 
 #: src/backend/datasources/filters/NetCDFFilter.cpp:688
 #: src/backend/datasources/filters/NetCDFFilter.cpp:1113
-#, fuzzy, kde-format
-#| msgid "No variable selected"
+#, kde-format
 msgid "No variable selected."
-msgstr "Non seleccionou ningunha variábel"
+msgstr "Non seleccionou ningunha variábel."
 
 #: src/backend/datasources/filters/NetCDFFilter.cpp:699
-#, fuzzy, kde-format
-#| msgid "Failed to open the file '%1'."
+#, kde-format
 msgid "Failed to open the file or it's empty."
-msgstr "Non se puido abrir o ficheiro «%1»."
+msgstr "Non se puido abrir o ficheiro ou está baleiro."
 
 #: src/backend/datasources/filters/NetCDFFilter.cpp:937
 #: src/backend/datasources/filters/NetCDFFilter.cpp:1077
-#, fuzzy, kde-format
-#| msgid "rank %1 not supported yet"
+#, kde-format
 msgid "Data type not supported yet."
-msgstr "aínda non é compatíbel con clasificación %1"
+msgstr "Aínda non se permite ese tipo de dato."
 
 #: src/backend/datasources/filters/NetCDFFilter.cpp:1082
 #, kde-format
@@ -2080,10 +2064,9 @@ msgstr "Número de follas: %1"
 
 #: src/backend/datasources/filters/OdsFilter.cpp:215
 #: src/backend/datasources/filters/XLSXFilter.cpp:632
-#, fuzzy, kde-format
-#| msgid "No data set selected"
+#, kde-format
 msgid "No sheet selected."
-msgstr "Non seleccionou ningún conxunto de datos"
+msgstr "Non seleccionou ningunha folla."
 
 #: src/backend/datasources/filters/OdsFilter.cpp:250
 #, fuzzy, kde-format
