@@ -451,9 +451,8 @@ void OriginProjectParser::restorePointers(Project* project) {
 				containerPath = containerPath.left(containerPath.lastIndexOf(QLatin1Char('/')));
 			}
 			if (container + spreadsheet->name() == spreadsheetName) {
-				// TODO: not implemented/working yet?
-				// const QString& newPath = containerPath + QLatin1Char('/') + barPlot->xColumnPath();
-				// barPlot->setXColumnPath(newPath);
+				const QString& newPath = containerPath + QLatin1Char('/') + barPlot->xColumnPath();
+				barPlot->xColumnPath() = newPath;
 
 				RESTORE_COLUMN_POINTER(barPlot, xColumn, XColumn);
 				break;
@@ -1865,6 +1864,7 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 				auto* barPlot = new BarPlot(yColumnName);
 				childPlot = barPlot;
 
+				barPlot->xColumnPath() = xColumnPath;
 				barPlot->setDataColumnPaths({yColumnPath});
 
 				if (!preview) {
