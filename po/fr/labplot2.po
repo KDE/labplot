@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-18 03:06+0000\n"
-"PO-Revision-Date: 2023-12-20 09:45+0100\n"
+"PO-Revision-Date: 2024-03-06 13:54+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: fr\n"
 "Language: fr\n"
@@ -1577,7 +1577,7 @@ msgstr "type de données"
 #: src/backend/datasources/filters/HDF5Filter.cpp:1363
 #, kde-format
 msgid "rank %1 not supported yet"
-msgstr "Rangée %1 non encore pris en charge"
+msgstr "La rangée %1 n'est pas encore pris en charge."
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:1370
 #: src/kdefrontend/datasources/HDF5OptionsWidget.cpp:75
@@ -1790,7 +1790,7 @@ msgstr "Objet"
 #: src/backend/datasources/filters/MatioFilter.cpp:392
 #, kde-format
 msgid "Char"
-msgstr "Carac"
+msgstr "Car."
 
 #: src/backend/datasources/filters/MatioFilter.cpp:394
 #, kde-format
@@ -2038,7 +2038,8 @@ msgstr "Variables"
 #: src/backend/datasources/filters/NetCDFFilter.cpp:1075
 #, kde-format
 msgid "%1 dimensional data of type %2 not supported yet"
-msgstr "Données dimensionnelles %1 de type %2 non encore prises en charge"
+msgstr ""
+"Les données dimensionnelles %1 de type %2 ne sont pas encore prises en charge"
 
 #: src/backend/datasources/filters/QJsonModel.cpp:132
 #: src/kdefrontend/widgets/FITSHeaderEditWidget.cpp:63
