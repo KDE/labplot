@@ -460,30 +460,38 @@ void OriginProjectParser::restorePointers(Project* project) {
 		}
 
 		// data column
-		spreadsheetName = barPlot->dataColumnPaths().first();
-		spreadsheetName.truncate(barPlot->dataColumnPaths().first().lastIndexOf(QLatin1Char('/')));
-		for (const auto* spreadsheet : spreadsheets) {
-			QString container, containerPath = spreadsheet->parentAspect()->path();
-			if (spreadsheetName.contains(QLatin1Char('/'))) { // part of a workbook
-				container = containerPath.mid(containerPath.lastIndexOf(QLatin1Char('/')) + 1) + QLatin1Char('/');
-				containerPath = containerPath.left(containerPath.lastIndexOf(QLatin1Char('/')));
-			}
-			if (container + spreadsheet->name() == spreadsheetName) {
-				const QString& newPath = containerPath + QLatin1Char('/') + barPlot->dataColumnPaths().first();
-				barPlot->setDataColumnPaths({newPath});
+		for (auto path : barPlot->dataColumnPaths()) {
+			spreadsheetName = path;
+			spreadsheetName.truncate(spreadsheetName.lastIndexOf(QLatin1Char('/')));
+			for (const auto* spreadsheet : spreadsheets) {
+				QString container, containerPath = spreadsheet->parentAspect()->path();
+				if (spreadsheetName.contains(QLatin1Char('/'))) { // part of a workbook
+					container = containerPath.mid(containerPath.lastIndexOf(QLatin1Char('/')) + 1) + QLatin1Char('/');
+					containerPath = containerPath.left(containerPath.lastIndexOf(QLatin1Char('/')));
+				}
+				if (container + spreadsheet->name() == spreadsheetName) {
+					auto paths = barPlot->dataColumnPaths();
+					const QString& newPath = containerPath + QLatin1Char('/') + path;
+					paths[paths.indexOf(path)] = newPath; // replace path
+					barPlot->setDataColumnPaths(paths);
 
-				// RESTORE_COLUMN_POINTER
-				if (!barPlot->dataColumnPaths().first().isEmpty()) {
-					for (auto* column : columns) {
-						if (!column)
-							continue;
-						if (column->path() == barPlot->dataColumnPaths().first()) {
-							barPlot->setDataColumns({column});
-							break;
+					// RESTORE_COLUMN_POINTER
+					if (!path.isEmpty()) {
+						for (auto* column : columns) {
+							if (!column)
+								continue;
+							if (column->path() == newPath) {
+								auto dataColumns = barPlot->dataColumns();
+								if (!dataColumns.contains(column)) {
+									dataColumns.append(column);
+									barPlot->setDataColumns(dataColumns);
+								}
+								break;
+							}
 						}
 					}
+					break;
 				}
-				break;
 			}
 		}
 		barPlot->setSuppressRetransform(false);
@@ -1843,7 +1851,7 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 					if (!preview) { // curves not available in preview
 						auto childIndex = plot->childCount<XYCurve>() - 1; // last curve
 						auto curve = plot->children<XYCurve>().at(childIndex);
-						if (xColumnPath == curve->yColumnPath()) {
+						if (xColumnPath == curve->yColumnPath()) { // TODO: only for reversed plots?
 							if (type == Origin::GraphCurve::ErrorBar) {
 								curve->errorBar()->setYErrorType(ErrorBar::ErrorType::Symmetric);
 								curve->errorBar()->setYPlusColumnPath(yColumnPath);
@@ -1861,26 +1869,39 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 			case Origin::GraphCurve::Bar:
 			case Origin::GraphCurve::BarStack: {
 				DEBUG(Q_FUNC_INFO << ", BAR/COLUMN PLOT")
-				auto* barPlot = new BarPlot(yColumnName);
-				childPlot = barPlot;
+				BarPlot* lastPlot = nullptr;
+				auto childIndex = plot->childCount<BarPlot>() - 1; // last bar plot
+				if (childIndex >= 0)
+					lastPlot = plot->children<BarPlot>().at(childIndex);
+				if (!lastPlot || xColumnPath != lastPlot->xColumnPath()) { // new bar plot. TODO: column plot: compare yColumnPath?
+					auto* barPlot = new BarPlot(yColumnName);
+					childPlot = barPlot;
 
-				barPlot->xColumnPath() = xColumnPath;
-				barPlot->setDataColumnPaths({yColumnPath});
+					DEBUG(Q_FUNC_INFO << ", x/y column path = " << xColumnPath.toStdString() << ", " << yColumnPath.toStdString())
+					barPlot->xColumnPath() = xColumnPath;
+					barPlot->setDataColumnPaths({yColumnPath});
 
-				if (!preview) {
-					// orientation
-					if (type == Origin::GraphCurve::Column || type == Origin::GraphCurve::ColumnStack)
-						barPlot->setOrientation(BarPlot::Orientation::Vertical);
-					else
-						barPlot->setOrientation(BarPlot::Orientation::Horizontal);
+					// TODO: BarPlot::Type::Stacked_100_Percent
 
-					// type - grouped vs. stacked
-					if (type == Origin::GraphCurve::ColumnStack || type == Origin::GraphCurve::BarStack)
-						barPlot->setType(BarPlot::Type::Stacked);
-					else
-						barPlot->setType(BarPlot::Type::Grouped);
+					if (!preview) {
+						// orientation
+						if (type == Origin::GraphCurve::Column || type == Origin::GraphCurve::ColumnStack)
+							barPlot->setOrientation(BarPlot::Orientation::Vertical);
+						else
+							barPlot->setOrientation(BarPlot::Orientation::Horizontal);
 
-					loadBackground(originCurve, barPlot->backgroundAt(0));
+						// type - grouped vs. stacked
+						if (type == Origin::GraphCurve::ColumnStack || type == Origin::GraphCurve::BarStack)
+							barPlot->setType(BarPlot::Type::Stacked);
+						else
+							barPlot->setType(BarPlot::Type::Grouped);
+
+						loadBackground(originCurve, barPlot->backgroundAt(0));
+					}
+				} else { // additional columns
+					auto dataColumnPaths = lastPlot->dataColumnPaths();
+					dataColumnPaths.append(yColumnPath);
+					lastPlot->setDataColumnPaths(dataColumnPaths);
 				}
 
 				break;
