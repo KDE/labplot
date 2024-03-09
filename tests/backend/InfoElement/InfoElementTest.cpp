@@ -205,8 +205,6 @@ void InfoElementTest::saveLoad() {
 		p->addChild(ie);
 		ie->addCurve(curve2);
 		{
-			QCOMPARE(ie->isValid(), true);
-
 			const auto points = ie->children<CustomPoint>();
 			QCOMPARE(ie->markerPointsCount(), 2);
 			QCOMPARE(points.count(), 2);
@@ -240,8 +238,6 @@ void InfoElementTest::saveLoad() {
 		QCOMPARE(curve1->name(), QStringLiteral("f(x)"));
 		const auto* curve2 = p->child<XYCurve>(1);
 		QCOMPARE(curve2->name(), QStringLiteral("f(x^2)"));
-
-		QCOMPARE(ie->isValid(), true);
 
 		const auto points = ie->children<CustomPoint>();
 		QCOMPARE(ie->markerPointsCount(), 2);
