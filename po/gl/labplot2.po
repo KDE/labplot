@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-05 01:33+0000\n"
-"PO-Revision-Date: 2024-03-07 22:25+0100\n"
+"POT-Creation-Date: 2024-03-10 01:56+0000\n"
+"PO-Revision-Date: 2024-03-09 10:01+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -2069,35 +2069,29 @@ msgid "No sheet selected."
 msgstr "Non seleccionou ningunha folla."
 
 #: src/backend/datasources/filters/OdsFilter.cpp:250
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "File Information"
+#, kde-format
 msgid "Selected sheet not found."
-msgstr "Información do ficheiro"
+msgstr "Non se atopou a folla seleccionada."
 
 #: src/backend/datasources/filters/OdsFilter.cpp:257
-#, fuzzy, kde-format
-#| msgid "Invalid image"
+#, kde-format
 msgid "Invalid sheet."
-msgstr "A imaxe non é válida"
+msgstr "A folla non é válida."
 
 #: src/backend/datasources/filters/OdsFilter.cpp:318
-#, fuzzy, kde-format
-#| msgid "rank %1 not supported yet"
+#, kde-format
 msgid "Formulas not supported yet."
-msgstr "aínda non é compatíbel con clasificación %1"
+msgstr "Aínda non se permite fórmulas."
 
 #: src/backend/datasources/filters/OdsFilter.cpp:473
-#, fuzzy, kde-format
-#| msgid "File not found"
+#, kde-format
 msgid "Sheet not found."
-msgstr "Non se atopou o ficheiro"
+msgstr "Non se atopou a folla."
 
 #: src/backend/datasources/filters/OdsFilter.cpp:480
-#, fuzzy, kde-format
-#| msgid "Invalid metadata file"
+#, kde-format
 msgid "Invalid sheet index."
-msgstr "O ficheiro de metadatos non é válido"
+msgstr "O índice da folla non é válido."
 
 #: src/backend/datasources/filters/QJsonModel.cpp:132
 #: src/kdefrontend/widgets/FITSHeaderEditWidget.cpp:64
@@ -2171,17 +2165,15 @@ msgid "64bit: %1"
 msgstr "64bit: %1"
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:482
-#, fuzzy, kde-format
-#| msgid "Error opening file"
+#, kde-format
 msgid "Error reading file."
-msgstr "Produciuse un erro ao abrir o ficheiro"
+msgstr "Produciuse un erro ao ler o ficheiro."
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:512
 #: src/backend/datasources/filters/ReadStatFilter.cpp:535
-#, fuzzy, kde-format
-#| msgid "Failed to open the file '%1'."
+#, kde-format
 msgid "Failed to parse the file."
-msgstr "Non se puido abrir o ficheiro «%1»."
+msgstr "Non foi posíbel analizar o ficheiro."
 
 #: src/backend/datasources/filters/ROOTFilter.cpp:113
 #: src/backend/datasources/MQTTClient.cpp:1200
@@ -2198,10 +2190,9 @@ msgid "No column available"
 msgstr "Non hai ningunha columna dispoñíbel"
 
 #: src/backend/datasources/filters/ROOTFilter.cpp:163
-#, fuzzy, kde-format
-#| msgid "unsupported float type for rank 1"
+#, kde-format
 msgid "Unsupported file type, neither histogram no tree."
-msgstr "tipo flotante incompatíbel con clasificación 1"
+msgstr "O tipo de ficheiro non é compatíbel, non ten histograma nin árbore."
 
 #: src/backend/datasources/filters/ROOTFilter.cpp:1470
 #, kde-format
@@ -2279,52 +2270,44 @@ msgid "Uncompressed File Size: %1 Bytes"
 msgstr "Tamaño do ficheiro sen comprimir: %1 bytes"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:180
-#, fuzzy, kde-format
-#| msgid "Big Endian not supported. CAN id: %1"
+#, kde-format
 msgid "Big Endian not supported. CAN id: %1."
-msgstr "Non se permite o extremo maior. Identificador de CAN: %1"
+msgstr "Non se permite o extremo maior. Identificador de CAN: %1."
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:183
-#, fuzzy, kde-format
-#| msgid "Message too long. CAN id: %1"
+#, kde-format
 msgid "Message too long. CAN id: %1."
-msgstr "A mensaxe é longa de máis. Identificador de CAN: %1"
+msgstr "A mensaxe é longa de máis. Identificador de CAN: %1."
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:186
-#, fuzzy, kde-format
-#| msgid "Unknown id: %1"
+#, kde-format
 msgid "Unknown id: %1."
-msgstr "Identificador descoñecido: %1"
+msgstr "Identificador descoñecido: %1."
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:189
-#, fuzzy, kde-format
-#| msgid "Invalid blf file"
+#, kde-format
 msgid "Invalid BLF file"
-msgstr "Ficheiro blf non válido"
+msgstr "O ficheiro BLF non é válido."
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:192
-#, fuzzy, kde-format
-#| msgid "Unable to calculate conversion: %1"
+#, kde-format
 msgid "Unable to calculate conversion: %1."
-msgstr "Non é posíbel calcular a conversión: %1"
+msgstr "Non é posíbel calcular a conversión: %1."
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:195
-#, fuzzy, kde-format
-#| msgid "No dbc parser installed"
+#, kde-format
 msgid "No DBC parser installed."
-msgstr "Non hai ningún analizador de dbc instalado"
+msgstr "Non hai ningún analizador de DBC instalado."
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:198
-#, fuzzy, kde-format
-#| msgid "Invalid blf file"
+#, kde-format
 msgid "Invalid DBC file."
-msgstr "Ficheiro blf non válido"
+msgstr "O ficheiro DBC non é válido."
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:201
-#, fuzzy, kde-format
-#| msgid "Unknown error"
+#, kde-format
 msgid "Unknown error,"
-msgstr "Erro descoñecido"
+msgstr "Erro descoñecido,"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:438
 #, kde-format
@@ -2347,10 +2330,9 @@ msgid "Sheets: "
 msgstr "Follas: "
 
 #: src/backend/datasources/filters/XLSXFilter.cpp:636
-#, fuzzy, kde-format
-#| msgid "Invalid tolerance specified"
+#, kde-format
 msgid "Invalid region specified."
-msgstr "Indicouse unha tolerancia incorrecta"
+msgstr "A rexión indicada non é válida."
 
 #: src/backend/datasources/LiveDataSource.cpp:691
 #: src/backend/datasources/LiveDataSource.cpp:694
@@ -7037,7 +7019,7 @@ msgstr "%1: cambiar manter as proporcións"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twLabels)
 #: src/backend/worksheet/InfoElement.cpp:135
-#: src/backend/worksheet/InfoElement.cpp:1231
+#: src/backend/worksheet/InfoElement.cpp:1230
 #: src/kdefrontend/ui/dockwidgets/columndock.ui:187
 #, kde-format
 msgid "Label"
@@ -11495,10 +11477,9 @@ msgid "Live data source created in %1 seconds."
 msgstr "A fonte de datos en directo creouse en %1 segundos."
 
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:174
-#, fuzzy, kde-format
-#| msgid "No data set selected"
+#, kde-format
 msgid "No target data container selected"
-msgstr "Non seleccionou ningún conxunto de datos"
+msgstr "Non seleccionou ningún contedor de datos de destino."
 
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:319
 #, kde-format
@@ -18411,10 +18392,9 @@ msgstr "Consultar"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, ImportWarningsDialog)
 #: src/kdefrontend/ui/datasources/importwarningsdialog.ui:14
-#, fuzzy, kde-format
-#| msgid "Import as:"
+#, kde-format
 msgid "Import Warnings"
-msgstr "Importar como:"
+msgstr "Avisos de importación"
 
 #. i18n: ectx: property (text), widget (QPushButton, pbOk)
 #: src/kdefrontend/ui/datasources/importwarningsdialog.ui:38

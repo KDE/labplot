@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-05 01:33+0000\n"
+"POT-Creation-Date: 2024-03-10 01:56+0000\n"
 "PO-Revision-Date: 2022-07-14 10:06-0300\n"
 "Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
 "Language-Team: Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -7329,7 +7329,7 @@ msgstr "%1: definir o retângulo da geometria"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twLabels)
 #: src/backend/worksheet/InfoElement.cpp:135
-#: src/backend/worksheet/InfoElement.cpp:1231
+#: src/backend/worksheet/InfoElement.cpp:1230
 #: src/kdefrontend/ui/dockwidgets/columndock.ui:187
 #, fuzzy, kde-format
 #| msgid "Labels"

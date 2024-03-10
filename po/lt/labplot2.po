@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: l 10n\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-05 01:33+0000\n"
+"POT-Creation-Date: 2024-03-10 01:56+0000\n"
 "PO-Revision-Date: 2014-06-30 02:02+0000\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: lt\n"
@@ -6974,7 +6974,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QTableWidget, twLabels)
 #: src/backend/worksheet/InfoElement.cpp:135
-#: src/backend/worksheet/InfoElement.cpp:1231
+#: src/backend/worksheet/InfoElement.cpp:1230
 #: src/kdefrontend/ui/dockwidgets/columndock.ui:187
 #, kde-format
 msgid "Label"
