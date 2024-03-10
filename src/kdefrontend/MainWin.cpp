@@ -51,6 +51,7 @@
 #include "kdefrontend/datasources/ImportDatasetDialog.h"
 #include "kdefrontend/datasources/ImportDatasetWidget.h"
 #include "kdefrontend/datasources/ImportFileDialog.h"
+#include "kdefrontend/datasources/ImportKaggleDialog.h"
 #include "kdefrontend/datasources/ImportProjectDialog.h"
 #include "kdefrontend/datasources/ImportSQLDatabaseDialog.h"
 #include "kdefrontend/dockwidgets/CursorDock.h"
@@ -103,6 +104,7 @@
 #include <QMenu>
 #include <QMenuBar>
 #include <QMimeData>
+#include <QProcess>
 #include <QStackedWidget>
 #include <QStatusBar>
 #include <QTemporaryFile>
@@ -674,6 +676,11 @@ void MainWin::initActions() {
 		importFileDialog();
 	});
 
+	m_importKaggleAction = new QAction(QIcon::fromTheme(QLatin1String("network-receive")), i18n("From Kaggle..."), this);
+	m_importKaggleAction->setWhatsThis(i18n("Imports data from kaggle.com"));
+	actionCollection()->addAction(QLatin1String("import_dataset_kaggle"), m_importKaggleAction);
+	connect(m_importKaggleAction, &QAction::triggered, this, &MainWin::importKaggleDialog);
+
 	m_importSqlAction = new QAction(QIcon::fromTheme(QLatin1String("network-server-database")), i18n("From SQL Database..."), this);
 	m_importSqlAction->setWhatsThis(i18n("Import data from a SQL database"));
 	actionCollection()->addAction(QLatin1String("import_sql"), m_importSqlAction);
@@ -889,6 +896,7 @@ void MainWin::initMenus() {
 	m_importMenu = new QMenu(this);
 	m_importMenu->setIcon(QIcon::fromTheme(QLatin1String("document-import")));
 	m_importMenu->addAction(m_importFileAction_2);
+	m_importMenu->addAction(m_importKaggleAction);
 	m_importMenu->addAction(m_importSqlAction);
 	m_importMenu->addAction(m_importDatasetAction);
 	m_importMenu->addSeparator();
@@ -2643,6 +2651,49 @@ void MainWin::importFileDialog(const QString& fileName) {
 	DEBUG(Q_FUNC_INFO << " DONE");
 }
 
+void MainWin::importKaggleDialog() {
+	DEBUG(Q_FUNC_INFO);
+	QString errorTitle = i18n("Running kaggle failed");
+	QString errorMessage = i18n(
+		"Couldn't run kaggle. Please follow the instructions here "
+		"https://www.kaggle.com/docs/api#getting-started-installation-&-authentication to "
+		"install and setup the kaggle cli tool. Then save the path to the kaggle cli tool under Settings > Configure LabPlot > Datasets.");
+	QProcess* kaggleCli = new QProcess(this);
+	connect(kaggleCli, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), [=](int exitCode, QProcess::ExitStatus exitStatus) {
+		if (exitStatus == QProcess::NormalExit && exitCode == 0) {
+			kaggleCli->setReadChannel(QProcess::StandardOutput);
+			QRegularExpression re(QStringLiteral(R"(^Kaggle API \d+\.\d+\.\d+$)"));
+			bool matched = false;
+			while (kaggleCli->canReadLine()) {
+				QString text = QLatin1String(kaggleCli->readLine()).trimmed();
+				QRegularExpressionMatch match = re.match(text);
+				if (match.hasMatch()) {
+					matched = true;
+					break;
+				}
+			}
+			if (matched) {
+				auto* dlg = new ImportKaggleDialog(this);
+				dlg->exec();
+			} else {
+				QMessageBox::critical(this, errorTitle, errorMessage);
+			}
+		} else {
+			QMessageBox::critical(this, errorTitle, errorMessage);
+		}
+		kaggleCli->deleteLater();
+	});
+	connect(kaggleCli, &QProcess::errorOccurred, [=] {
+		QMessageBox::critical(this, errorTitle, errorMessage);
+		kaggleCli->deleteLater();
+	});
+	const auto group = Settings::group(QStringLiteral("Settings_Datasets"));
+	kaggleCli->setProgram(group.readEntry(QLatin1String("KaggleCLIPath"), QString()));
+	kaggleCli->setArguments({QStringLiteral("--version")});
+	kaggleCli->start();
+	DEBUG(Q_FUNC_INFO << " DONE");
+}
+
 void MainWin::importSqlDialog() {
 	DEBUG(Q_FUNC_INFO);
 	auto* dlg = new ImportSQLDatabaseDialog(this);
@@ -2684,8 +2735,10 @@ void MainWin::importProjectDialog() {
  * \brief opens a dialog to import datasets
  */
 void MainWin::importDatasetDialog() {
+	DEBUG(Q_FUNC_INFO);
 	auto* dlg = new ImportDatasetDialog(this);
 	dlg->exec();
+	DEBUG(Q_FUNC_INFO << ", DONE");
 }
 
 /*!

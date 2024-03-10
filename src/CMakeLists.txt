@@ -61,6 +61,8 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/datasources/ImportWarningsDialog.cpp
 	${KDEFRONTEND_DIR}/datasources/ImportFileWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/ImportFileDialog.cpp
+	${KDEFRONTEND_DIR}/datasources/ImportKaggleWidget.cpp
+	${KDEFRONTEND_DIR}/datasources/ImportKaggleDialog.cpp
 	${KDEFRONTEND_DIR}/datasources/ImportProjectDialog.cpp
 	${KDEFRONTEND_DIR}/datasources/ImportSQLDatabaseDialog.cpp
 	${KDEFRONTEND_DIR}/datasources/ImportSQLDatabaseWidget.cpp
