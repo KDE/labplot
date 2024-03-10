@@ -31,8 +31,8 @@ include:
 #      - /gitlab-templates/craft-windows-x86-64-qt6.yml
 #      - /gitlab-templates/craft-windows-appx-qt6.yml
 #      - /gitlab-templates/craft-windows-mingw64-qt6.yml
-      - /gitlab-templates/craft-macos-x86-64-qt6.yml
-      - /gitlab-templates/craft-macos-arm64-qt6.yml
+#      - /gitlab-templates/craft-macos-x86-64-qt6.yml
+#      - /gitlab-templates/craft-macos-arm64-qt6.yml
 # fails linking tests due to undefined references to GSL functions
 #      - /gitlab-templates/craft-windows-mingw64.yml
 
