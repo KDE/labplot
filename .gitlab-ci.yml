@@ -21,21 +21,20 @@ include:
       - /gitlab-templates/craft-appimage.yml
 # see below for flatpak variables
       - /gitlab-templates/flatpak.yml
-# currently fails (20240212)
       - /gitlab-templates/craft-windows-x86-64.yml
       - /gitlab-templates/craft-windows-appx-qt5.yml
 # currently both fail (20240215)
       - /gitlab-templates/craft-macos-x86-64.yml
       - /gitlab-templates/craft-macos-arm64.yml
-# Qt6 fails for analitza (20240105)
-      - /gitlab-templates/craft-appimage-qt6.yml
-      - /gitlab-templates/craft-windows-x86-64-qt6.yml
-      - /gitlab-templates/craft-windows-appx-qt6.yml
-      - /gitlab-templates/craft-windows-mingw64-qt6.yml
+# all fail due to cantor (not Qt6)
+#      - /gitlab-templates/craft-appimage-qt6.yml
+#      - /gitlab-templates/craft-windows-x86-64-qt6.yml
+#      - /gitlab-templates/craft-windows-appx-qt6.yml
+#      - /gitlab-templates/craft-windows-mingw64-qt6.yml
       - /gitlab-templates/craft-macos-x86-64-qt6.yml
       - /gitlab-templates/craft-macos-arm64-qt6.yml
 # fails linking tests due to undefined references to GSL functions
-      - /gitlab-templates/craft-windows-mingw64.yml
+#      - /gitlab-templates/craft-windows-mingw64.yml
 
 craft_appimage_qt515_x86_64:
   rules:
