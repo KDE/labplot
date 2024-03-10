@@ -1937,6 +1937,7 @@ void ImportFileWidget::refreshPreview() {
 	error(currentFilter->lastError());
 
 	RESET_CURSOR;
+	Q_EMIT previewReady();
 }
 
 void ImportFileWidget::updateStartRow(int line) {

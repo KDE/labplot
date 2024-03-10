@@ -38,6 +38,7 @@ class NetCDFOptionsWidget;
 class OdsOptionsWidget;
 class ROOTOptionsWidget;
 class TemplateHandler;
+class ImportKaggleWidget;
 
 class QTableWidget;
 class QCompleter;
@@ -81,6 +82,8 @@ public:
 	QString port() const;
 	QString serialPort() const;
 	int baudRate() const;
+
+	friend class ImportKaggleWidget;
 
 public Q_SLOTS:
 	void dataContainerChanged(AbstractAspect*);
@@ -128,6 +131,7 @@ Q_SIGNALS:
 	void hostChanged();
 	void portChanged();
 	void error(const QString&);
+	void previewReady();
 
 private Q_SLOTS:
 	void fileNameChanged(const QString&);
