@@ -22,7 +22,8 @@ include:
 # see below for flatpak variables
       - /gitlab-templates/flatpak.yml
       - /gitlab-templates/craft-windows-x86-64.yml
-      - /gitlab-templates/craft-windows-appx-qt5.yml
+# only for publishing in the MS Store
+#      - /gitlab-templates/craft-windows-appx-qt5.yml
 # currently both fail (20240215)
       - /gitlab-templates/craft-macos-x86-64.yml
       - /gitlab-templates/craft-macos-arm64.yml
