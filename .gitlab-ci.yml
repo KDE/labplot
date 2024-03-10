@@ -14,10 +14,9 @@ include:
       - /gitlab-templates/windows.yml
       - /gitlab-templates/linux-qt6.yml
       - /gitlab-templates/windows-qt6.yml
-# csv.h file not found (20240228)
-      - /gitlab-templates/freebsd.yml
-# finds Qt5 but KF5 is not installed
-      - /gitlab-templates/freebsd-qt6.yml
+# readstat (missing prototype) error on FreeBSD
+#      - /gitlab-templates/freebsd.yml
+#      - /gitlab-templates/freebsd-qt6.yml
 ### DEPLOY
       - /gitlab-templates/craft-appimage.yml
 # see below for flatpak variables
