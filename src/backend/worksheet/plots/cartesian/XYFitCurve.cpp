@@ -66,7 +66,7 @@ void XYFitCurve::evaluate(bool preview) {
 	Q_D(XYFitCurve);
 	if (d->evaluate(preview)) {
 		// redraw the curve
-		recalcLogicalPoints();
+		recalc();
 		Q_EMIT dataChanged();
 	}
 }
@@ -3019,7 +3019,7 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 		static_cast<XYCurvePrivate*>(d_ptr)->xColumn = d->xColumn;
 		static_cast<XYCurvePrivate*>(d_ptr)->yColumn = d->yColumn;
 
-		recalcLogicalPoints();
+		recalc();
 	}
 
 	return true;

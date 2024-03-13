@@ -2453,12 +2453,12 @@ void CartesianPlot::dataChanged(int xIndex, int yIndex, WorksheetElement* sender
 		if (sender)
 			sender->retransform();
 		else {
-			// no sender available, the function was called directly in the file filter (live data source got new data)
-			// or in Project::load() -> retransform all available curves since we don't know which curves are affected.
+			// no sender available, the function was called directly in the file filter (live data source got new data) or in Project::load()-.
+			// -> recalculate the internal structures in all plots and retransform them since we don't know which plots are affected.
 			// TODO: this logic can be very expensive
-			for (auto* child : children<XYCurve>()) {
-				child->recalcLogicalPoints();
-				child->retransform();
+			for (auto* plot : children<Plot>()) {
+				plot->recalc();
+				plot->retransform();
 			}
 		}
 	}

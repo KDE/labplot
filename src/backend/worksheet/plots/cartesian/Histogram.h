@@ -49,6 +49,10 @@ public:
 	void loadThemeConfig(const KConfig&) override;
 	void saveThemeConfig(const KConfig&) override;
 
+	void retransform() override;
+	void recalc() override;
+	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
+
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, dataColumn, DataColumn)
 	CLASS_D_ACCESSOR_DECL(QString, dataColumnPath, DataColumnPath)
 
@@ -89,9 +93,6 @@ public:
 	typedef HistogramPrivate Private;
 
 public Q_SLOTS:
-	void retransform() override;
-	void recalc();
-	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
 	void createDataSpreadsheet();
 
 private Q_SLOTS:
