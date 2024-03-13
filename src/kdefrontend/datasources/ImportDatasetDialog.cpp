@@ -12,6 +12,8 @@
 #include "backend/core/Settings.h"
 #include "backend/datasources/DatasetHandler.h"
 #include "backend/lib/macros.h"
+#include "backend/spreadsheet/Spreadsheet.h"
+#include "kdefrontend/MainWin.h"
 
 #include <QDialogButtonBox>
 #include <QElapsedTimer>
@@ -32,6 +34,7 @@
  */
 ImportDatasetDialog::ImportDatasetDialog(MainWin* parent)
 	: ImportDialog(parent)
+	, m_mainWin(parent)
 	, m_importDatasetWidget(new ImportDatasetWidget(this)) {
 	vLayout->addWidget(m_importDatasetWidget);
 	connect(m_importDatasetWidget, &ImportDatasetWidget::datasetSelected, this, &ImportDatasetDialog::checkOkButton);
@@ -47,7 +50,7 @@ ImportDatasetDialog::ImportDatasetDialog(MainWin* parent)
 	okButton->setEnabled(false); // ok is only available if a valid container was selected
 	vLayout->addWidget(buttonBox);
 
-	connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+	connect(buttonBox, &QDialogButtonBox::accepted, this, &ImportDialog::accept);
 	connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
 	setWindowTitle(i18nc("@title:window", "Import from Dataset Collection"));
@@ -75,31 +78,6 @@ QString ImportDatasetDialog::selectedObject() const {
 	return {};
 }
 
-/*!
-  triggers the import of a dataset's data
-*/
-void ImportDatasetDialog::importToDataset(DatasetHandler* datasetHandler, QStatusBar* statusBar) const {
-	// show a progress bar in the status bar
-	auto* progressBar = new QProgressBar();
-	progressBar->setRange(0, 100);
-	connect(datasetHandler, &DatasetHandler::downloadProgress, progressBar, &QProgressBar::setValue);
-
-	statusBar->clearMessage();
-	statusBar->addWidget(progressBar, 1);
-
-	WAIT_CURSOR;
-	QApplication::processEvents(QEventLoop::AllEvents, 100);
-
-	QElapsedTimer timer;
-	timer.start();
-
-	m_importDatasetWidget->import(datasetHandler);
-
-	statusBar->showMessage(i18n("Dataset imported in %1 seconds.", static_cast<float>(timer.elapsed()) / 1000));
-	RESET_CURSOR;
-	statusBar->removeWidget(progressBar);
-}
-
 /**
  * @brief Checks whether the OK button of the dialog can be pressed or not
  */
@@ -108,6 +86,51 @@ void ImportDatasetDialog::checkOkButton() {
 	okButton->setEnabled(enable);
 }
 
-bool ImportDatasetDialog::importTo(QStatusBar*) const {
-	return true;
+bool ImportDatasetDialog::importTo(QStatusBar* statusBar) const {
+	auto* progressBar = new QProgressBar();
+	progressBar->setRange(0, 100);
+
+	Spreadsheet* spreadsheet = new Spreadsheet(i18n("Dataset%1", 1));
+	DatasetHandler* datasetHandler = new DatasetHandler(spreadsheet);
+
+	QEventLoop loop;
+	connect(datasetHandler, &DatasetHandler::downloadProgress, progressBar, &QProgressBar::setValue);
+	connect(datasetHandler, &DatasetHandler::downloadCompleted, [&] {
+		m_mainWin->addAspectToProject(spreadsheet);
+		loop.quit();
+	});
+
+	statusBar->clearMessage();
+	statusBar->addWidget(progressBar, 1);
+
+	WAIT_CURSOR;
+	QApplication::processEvents(QEventLoop::AllEvents, 100);
+
+	QTimer timer;
+	timer.setSingleShot(true);
+	int duration = 1500;
+
+	connect(&timer, &QTimer::timeout, [&] {
+		disconnect(datasetHandler, &DatasetHandler::downloadCompleted, nullptr, nullptr);
+		loop.quit();
+	});
+
+	timer.start(duration);
+	m_importDatasetWidget->import(datasetHandler);
+	loop.exec();
+
+	bool success = timer.isActive();
+	if (success) {
+		statusBar->showMessage(i18n("Dataset imported in %1 seconds.", static_cast<float>(duration - timer.remainingTime()) / 1000));
+		timer.stop();
+	} else {
+		const_cast<ImportDatasetDialog*>(this)->showErrorMessage(QStringLiteral("Could not download dataset. Please check network connectivity."));
+		delete spreadsheet;
+	}
+
+	delete datasetHandler;
+
+	RESET_CURSOR;
+	statusBar->removeWidget(progressBar);
+	return success;
 }

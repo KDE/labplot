@@ -24,10 +24,10 @@ public:
 	~ImportDatasetDialog() override;
 
 	QString selectedObject() const override;
-	void importToDataset(DatasetHandler*, QStatusBar*) const;
 	bool importTo(QStatusBar*) const override;
 
 private:
+	MainWin* m_mainWin{nullptr};
 	ImportDatasetWidget* m_importDatasetWidget;
 
 protected Q_SLOTS:

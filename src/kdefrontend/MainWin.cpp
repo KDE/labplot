@@ -2816,26 +2816,7 @@ void MainWin::importProjectDialog() {
  */
 void MainWin::importDatasetDialog() {
 	auto* dlg = new ImportDatasetDialog(this);
-	if (dlg->exec() == QDialog::Accepted) {
-		auto* spreadsheet = new Spreadsheet(i18n("Dataset%1", 1));
-		auto* dataset = new DatasetHandler(spreadsheet);
-		dlg->importToDataset(dataset, statusBar());
-
-		QTimer timer;
-		timer.setSingleShot(true);
-		QEventLoop loop;
-		connect(dataset, &DatasetHandler::downloadCompleted, &loop, &QEventLoop::quit);
-		connect(&timer, &QTimer::timeout, &loop, &QEventLoop::quit);
-		timer.start(1500);
-		loop.exec();
-
-		if (timer.isActive()) {
-			timer.stop();
-			addAspectToProject(spreadsheet);
-		}
-		delete dataset;
-	}
-	delete dlg;
+	dlg->exec();
 }
 
 /*!
