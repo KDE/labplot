@@ -93,13 +93,25 @@ bool ImportDatasetDialog::importTo(QStatusBar* statusBar) const {
 	auto* spreadsheet = new Spreadsheet(i18n("Dataset%1", 1));
 	auto* datasetHandler = new DatasetHandler(spreadsheet);
 
+	int duration = 5000;
+	QTimer timer;
+	timer.setSingleShot(true);
 	QEventLoop loop;
-	connect(datasetHandler, &DatasetHandler::error, this, &ImportDatasetDialog::showErrorMessage);
-	connect(datasetHandler, &DatasetHandler::downloadProgress, progressBar, &QProgressBar::setValue);
+	connect(&timer, &QTimer::timeout, [&] {
+		disconnect(datasetHandler, &DatasetHandler::downloadCompleted, nullptr, nullptr);
+		disconnect(datasetHandler, &DatasetHandler::error, nullptr, nullptr);
+		const_cast<ImportDatasetDialog*>(this)->showErrorMessage(i18n("Failed to connect within %1 seconds", static_cast<float>(duration) / 1000));
+		loop.exit(static_cast<int>(Status::FAILURE));
+	});
+	connect(datasetHandler, &DatasetHandler::error, [&](const QString& message) {
+		const_cast<ImportDatasetDialog*>(this)->showErrorMessage(message);
+		loop.exit(static_cast<int>(Status::FAILURE));
+	});
 	connect(datasetHandler, &DatasetHandler::downloadCompleted, [&] {
 		m_mainWin->addAspectToProject(spreadsheet);
-		loop.quit();
+		loop.exit(static_cast<int>(Status::SUCCESS));
 	});
+	connect(datasetHandler, &DatasetHandler::downloadProgress, progressBar, &QProgressBar::setValue);
 
 	statusBar->clearMessage();
 	statusBar->addWidget(progressBar, 1);
@@ -107,20 +119,11 @@ bool ImportDatasetDialog::importTo(QStatusBar* statusBar) const {
 	WAIT_CURSOR;
 	QApplication::processEvents(QEventLoop::AllEvents, 100);
 
-	QTimer timer;
-	timer.setSingleShot(true);
-	int duration = 1500;
-
-	connect(&timer, &QTimer::timeout, [&] {
-		disconnect(datasetHandler, &DatasetHandler::downloadCompleted, nullptr, nullptr);
-		loop.quit();
-	});
-
 	timer.start(duration);
 	m_importDatasetWidget->import(datasetHandler);
-	loop.exec();
+	int status = loop.exec();
 
-	bool success = timer.isActive();
+	bool success = status == static_cast<int>(Status::SUCCESS);
 	if (success) {
 		statusBar->showMessage(i18n("Dataset imported in %1 seconds.", static_cast<float>(duration - timer.remainingTime()) / 1000));
 		timer.stop();

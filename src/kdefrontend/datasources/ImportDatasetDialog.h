@@ -29,6 +29,7 @@ public:
 private:
 	MainWin* m_mainWin{nullptr};
 	ImportDatasetWidget* m_importDatasetWidget;
+	enum class Status { SUCCESS = 0, FAILURE = 1 };
 
 protected Q_SLOTS:
 	void checkOkButton() override;
