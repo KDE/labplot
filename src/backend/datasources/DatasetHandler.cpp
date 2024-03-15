@@ -4,7 +4,7 @@
 	Description          : Processes a dataset's metadata file
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2019 Kovacs Ferencz <kferike98@gmail.com>
-	SPDX-FileCopyrightText: 2019-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2019-2024 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -17,7 +17,6 @@
 #include <QFile>
 #include <QJsonArray>
 #include <QJsonObject>
-#include <QMessageBox>
 #include <QStandardPaths>
 #include <QTextEdit>
 #include <QtNetwork/QNetworkAccessManager>
@@ -65,7 +64,7 @@ void DatasetHandler::processMetadata(const QJsonObject& object, const QString& d
  */
 void DatasetHandler::markMetadataAsInvalid() {
 	m_invalidMetadataFile = true;
-	QMessageBox::critical(nullptr, i18n("Invalid metadata file"), i18n("The metadata file for the selected dataset is invalid."));
+	Q_EMIT error(i18n("The metadata file for the selected dataset is invalid."));
 }
 
 /**
@@ -154,9 +153,8 @@ void DatasetHandler::prepareForDataset() {
 		if (m_object->contains(QLatin1String("url"))) {
 			const QString& url = m_object->value(QStringLiteral("url")).toString();
 			doDownload(QUrl(url));
-		} else {
-			QMessageBox::critical(nullptr, i18n("Invalid metadata file"), i18n("There is no download URL present in the metadata file!"));
-		}
+		} else
+			Q_EMIT error(i18n("There is no download URL present in the metadata file!"));
 	} else
 		markMetadataAsInvalid();
 }
@@ -188,13 +186,11 @@ void DatasetHandler::downloadFinished(QNetworkReply* reply) {
 	DEBUG("Download finished");
 	const QUrl& url = reply->url();
 	if (reply->error()) {
-		QMessageBox::critical(nullptr,
-							  i18n("Failed to download the dataset"),
-							  i18n("Failed to download the dataset from %1.\n%2.", url.toDisplayString(), reply->errorString()));
+		Q_EMIT error(i18n("Failed to download the dataset from %1.\n%2.", url.toDisplayString(), reply->errorString()));
 	} else {
 		QString filename = saveFileName(url);
 		if (saveToDisk(filename, reply)) {
-			qDebug("Download of %s succeeded (saved to %s)\n", url.toEncoded().constData(), qPrintable(filename));
+			// qDebug("Download of %s succeeded (saved to %s)\n", url.toEncoded().constData(), qPrintable(filename));
 			m_fileName = filename;
 			Q_EMIT downloadCompleted();
 		}
@@ -224,9 +220,7 @@ QString DatasetHandler::saveFileName(const QUrl& url) {
 	QDir downloadDir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + QStringLiteral("/datasets_local/"));
 	if (!downloadDir.exists()) {
 		if (!downloadDir.mkpath(downloadDir.path())) {
-			QMessageBox::critical(nullptr,
-								  i18n("Failed to save the dataset"),
-								  i18n("Failed to create the directory %1 to save the dataset.", downloadDir.path()));
+			Q_EMIT error(i18n("Failed to create the directory %1 to save the dataset.", downloadDir.path()));
 			return {};
 		}
 	}
@@ -249,7 +243,7 @@ QString DatasetHandler::saveFileName(const QUrl& url) {
 bool DatasetHandler::saveToDisk(const QString& filename, QIODevice* data) {
 	QFile file(filename);
 	if (!file.open(QIODevice::WriteOnly)) {
-		QMessageBox::critical(nullptr, i18n("Failed to save the dataset"), i18n("Couldn't open the file %1 for writing.\n%2", filename, file.errorString()));
+		Q_EMIT error(i18n("Couldn't open the file %1 for writing.\n%2", filename, file.errorString()));
 		return false;
 	}
 

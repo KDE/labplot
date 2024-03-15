@@ -90,10 +90,11 @@ bool ImportDatasetDialog::importTo(QStatusBar* statusBar) const {
 	auto* progressBar = new QProgressBar();
 	progressBar->setRange(0, 100);
 
-	Spreadsheet* spreadsheet = new Spreadsheet(i18n("Dataset%1", 1));
-	DatasetHandler* datasetHandler = new DatasetHandler(spreadsheet);
+	auto* spreadsheet = new Spreadsheet(i18n("Dataset%1", 1));
+	auto* datasetHandler = new DatasetHandler(spreadsheet);
 
 	QEventLoop loop;
+	connect(datasetHandler, &DatasetHandler::error, this, &ImportDatasetDialog::showErrorMessage);
 	connect(datasetHandler, &DatasetHandler::downloadProgress, progressBar, &QProgressBar::setValue);
 	connect(datasetHandler, &DatasetHandler::downloadCompleted, [&] {
 		m_mainWin->addAspectToProject(spreadsheet);
@@ -123,10 +124,7 @@ bool ImportDatasetDialog::importTo(QStatusBar* statusBar) const {
 	if (success) {
 		statusBar->showMessage(i18n("Dataset imported in %1 seconds.", static_cast<float>(duration - timer.remainingTime()) / 1000));
 		timer.stop();
-	} else {
-		const_cast<ImportDatasetDialog*>(this)->showErrorMessage(QStringLiteral("Could not download dataset. Please check network connectivity."));
-		delete spreadsheet;
-	}
+	} else
 
 	delete datasetHandler;
 
