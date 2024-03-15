@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-10 01:56+0000\n"
+"POT-Creation-Date: 2024-03-15 01:57+0000\n"
 "PO-Revision-Date: 2014-03-25 11:30+0800\n"
 "Last-Translator: Franklin Weng <franklin at goodhorse dot idv dot tw>\n"
 "Language-Team: Chinese Traditional <kde-tw@googlegroups.com>\n"
@@ -11544,13 +11544,19 @@ msgstr "屬性"
 msgid "This option determines how the image is converted when importing."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportDatasetDialog.cpp:53
+#: src/kdefrontend/datasources/ImportDatasetDialog.cpp:56
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Import from Dataset Collection"
 msgstr "匯入"
 
-#: src/kdefrontend/datasources/ImportDatasetDialog.cpp:98
+#: src/kdefrontend/datasources/ImportDatasetDialog.cpp:93
+#: src/kdefrontend/welcomescreen/WelcomeScreenHelper.cpp:115
+#, fuzzy, kde-format
+msgid "Dataset%1"
+msgstr "dataSet：資料集"
+
+#: src/kdefrontend/datasources/ImportDatasetDialog.cpp:124
 #, fuzzy, kde-format
 #| msgid "Add new"
 msgid "Dataset imported in %1 seconds."
@@ -12514,7 +12520,7 @@ msgstr ""
 
 #: src/kdefrontend/datasources/MQTTSubscriptionWidget.cpp:856
 #: src/kdefrontend/datasources/MQTTSubscriptionWidget.cpp:858
-#: src/kdefrontend/MainWin.cpp:2887
+#: src/kdefrontend/MainWin.cpp:2868
 #, kde-format
 msgid "Warning"
 msgstr ""
@@ -15354,44 +15360,38 @@ msgstr ""
 msgid "You can find the shared project at: <a href=\"%1\">%1</a>"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2820
-#: src/kdefrontend/welcomescreen/WelcomeScreenHelper.cpp:115
-#, fuzzy, kde-format
-msgid "Dataset%1"
-msgstr "dataSet：資料集"
-
-#: src/kdefrontend/MainWin.cpp:2850
+#: src/kdefrontend/MainWin.cpp:2831
 #, kde-format
 msgid "%1 exported"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2857
+#: src/kdefrontend/MainWin.cpp:2838
 #, kde-format
 msgid "FITS files saved"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2869
+#: src/kdefrontend/MainWin.cpp:2850
 #, kde-format
 msgid "MQTT Client%1"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2887
+#: src/kdefrontend/MainWin.cpp:2868
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2891
+#: src/kdefrontend/MainWin.cpp:2872
 #, fuzzy, kde-format
 #| msgid "Add new"
 msgid "Live data source%1"
 msgstr "新增"
 
-#: src/kdefrontend/MainWin.cpp:2942
+#: src/kdefrontend/MainWin.cpp:2923
 #, kde-format
 msgid "No Cantor backends found. Please install the ones you want to use."
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2956
+#: src/kdefrontend/MainWin.cpp:2937
 #, kde-format
 msgid "Creates a new %1 notebook"
 msgstr ""

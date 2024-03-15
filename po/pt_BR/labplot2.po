@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-10 01:56+0000\n"
+"POT-Creation-Date: 2024-03-15 01:57+0000\n"
 "PO-Revision-Date: 2022-07-14 10:06-0300\n"
 "Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
 "Language-Team: Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -11942,14 +11942,21 @@ msgstr "Propriedades"
 msgid "This option determines how the image is converted when importing."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportDatasetDialog.cpp:53
+#: src/kdefrontend/datasources/ImportDatasetDialog.cpp:56
 #, fuzzy, kde-format
 #| msgid "From SQL Database"
 msgctxt "@title:window"
 msgid "Import from Dataset Collection"
 msgstr "Do banco de dados SQL"
 
-#: src/kdefrontend/datasources/ImportDatasetDialog.cpp:98
+#: src/kdefrontend/datasources/ImportDatasetDialog.cpp:93
+#: src/kdefrontend/welcomescreen/WelcomeScreenHelper.cpp:115
+#, fuzzy, kde-format
+#| msgid "Dataset"
+msgid "Dataset%1"
+msgstr "Conjunto de dados"
+
+#: src/kdefrontend/datasources/ImportDatasetDialog.cpp:124
 #, fuzzy, kde-format
 #| msgid "File %1 imported in %2 seconds."
 msgid "Dataset imported in %1 seconds."
@@ -12958,7 +12965,7 @@ msgstr ""
 
 #: src/kdefrontend/datasources/MQTTSubscriptionWidget.cpp:856
 #: src/kdefrontend/datasources/MQTTSubscriptionWidget.cpp:858
-#: src/kdefrontend/MainWin.cpp:2887
+#: src/kdefrontend/MainWin.cpp:2868
 #, kde-format
 msgid "Warning"
 msgstr ""
@@ -15993,45 +16000,38 @@ msgstr "Projeto salvo"
 msgid "You can find the shared project at: <a href=\"%1\">%1</a>"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2820
-#: src/kdefrontend/welcomescreen/WelcomeScreenHelper.cpp:115
-#, fuzzy, kde-format
-#| msgid "Dataset"
-msgid "Dataset%1"
-msgstr "Conjunto de dados"
-
-#: src/kdefrontend/MainWin.cpp:2850
+#: src/kdefrontend/MainWin.cpp:2831
 #, kde-format
 msgid "%1 exported"
 msgstr "%1 exportado(s)"
 
-#: src/kdefrontend/MainWin.cpp:2857
+#: src/kdefrontend/MainWin.cpp:2838
 #, kde-format
 msgid "FITS files saved"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2869
+#: src/kdefrontend/MainWin.cpp:2850
 #, kde-format
 msgid "MQTT Client%1"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2887
+#: src/kdefrontend/MainWin.cpp:2868
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2891
+#: src/kdefrontend/MainWin.cpp:2872
 #, fuzzy, kde-format
 #| msgid "File data source"
 msgid "Live data source%1"
 msgstr "Fonte de dados em arquivo"
 
-#: src/kdefrontend/MainWin.cpp:2942
+#: src/kdefrontend/MainWin.cpp:2923
 #, kde-format
 msgid "No Cantor backends found. Please install the ones you want to use."
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2956
+#: src/kdefrontend/MainWin.cpp:2937
 #, kde-format
 msgid "Creates a new %1 notebook"
 msgstr ""

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-10 01:56+0000\n"
+"POT-Creation-Date: 2024-03-15 01:57+0000\n"
 "PO-Revision-Date: 2024-01-04 20:52+0100\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -11328,13 +11328,19 @@ msgstr "Egenskaper"
 msgid "This option determines how the image is converted when importing."
 msgstr "Alternativet bestämmer hur bilden konverteras vid import."
 
-#: src/kdefrontend/datasources/ImportDatasetDialog.cpp:53
+#: src/kdefrontend/datasources/ImportDatasetDialog.cpp:56
 #, kde-format
 msgctxt "@title:window"
 msgid "Import from Dataset Collection"
 msgstr "Importera från datamängdssamling"
 
-#: src/kdefrontend/datasources/ImportDatasetDialog.cpp:98
+#: src/kdefrontend/datasources/ImportDatasetDialog.cpp:93
+#: src/kdefrontend/welcomescreen/WelcomeScreenHelper.cpp:115
+#, kde-format
+msgid "Dataset%1"
+msgstr "Datamängd%1"
+
+#: src/kdefrontend/datasources/ImportDatasetDialog.cpp:124
 #, kde-format
 msgid "Dataset imported in %1 seconds."
 msgstr "Datamängd importerad på %1 sekunder."
@@ -12368,7 +12374,7 @@ msgstr ""
 
 #: src/kdefrontend/datasources/MQTTSubscriptionWidget.cpp:856
 #: src/kdefrontend/datasources/MQTTSubscriptionWidget.cpp:858
-#: src/kdefrontend/MainWin.cpp:2887
+#: src/kdefrontend/MainWin.cpp:2868
 #, kde-format
 msgid "Warning"
 msgstr "Varning"
@@ -15157,43 +15163,37 @@ msgstr "Projektet delat med lyckat resultat"
 msgid "You can find the shared project at: <a href=\"%1\">%1</a>"
 msgstr "Det delade projektet finns på: <a href=\"%1\">%1</a>"
 
-#: src/kdefrontend/MainWin.cpp:2820
-#: src/kdefrontend/welcomescreen/WelcomeScreenHelper.cpp:115
-#, kde-format
-msgid "Dataset%1"
-msgstr "Datamängd%1"
-
-#: src/kdefrontend/MainWin.cpp:2850
+#: src/kdefrontend/MainWin.cpp:2831
 #, kde-format
 msgid "%1 exported"
 msgstr "%1 exporterad"
 
-#: src/kdefrontend/MainWin.cpp:2857
+#: src/kdefrontend/MainWin.cpp:2838
 #, kde-format
 msgid "FITS files saved"
 msgstr "FITS-filer sparade"
 
-#: src/kdefrontend/MainWin.cpp:2869
+#: src/kdefrontend/MainWin.cpp:2850
 #, kde-format
 msgid "MQTT Client%1"
 msgstr "MQTT-klient%1"
 
-#: src/kdefrontend/MainWin.cpp:2887
+#: src/kdefrontend/MainWin.cpp:2868
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
 msgstr "Det finns redan en MQTT-klient med värddatorn."
 
-#: src/kdefrontend/MainWin.cpp:2891
+#: src/kdefrontend/MainWin.cpp:2872
 #, kde-format
 msgid "Live data source%1"
 msgstr "Direktdatakälla %1"
 
-#: src/kdefrontend/MainWin.cpp:2942
+#: src/kdefrontend/MainWin.cpp:2923
 #, kde-format
 msgid "No Cantor backends found. Please install the ones you want to use."
 msgstr "Inga Cantor bakgrundsprogram hittades. Installera de du vill använda."
 
-#: src/kdefrontend/MainWin.cpp:2956
+#: src/kdefrontend/MainWin.cpp:2937
 #, kde-format
 msgid "Creates a new %1 notebook"
 msgstr "Skapar ett nytt %1 anteckningsblock"
