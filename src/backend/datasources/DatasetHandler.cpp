@@ -42,6 +42,7 @@ DatasetHandler::DatasetHandler(Spreadsheet* spreadsheet)
 DatasetHandler::~DatasetHandler() {
 	delete m_downloadManager;
 	delete m_filter;
+	delete m_object;
 }
 
 /**
@@ -49,6 +50,7 @@ DatasetHandler::~DatasetHandler() {
  * @param path the path to the metadata file
  */
 void DatasetHandler::processMetadata(const QJsonObject& object, const QString& description) {
+	delete m_object;
 	m_object = new QJsonObject(object);
 	DEBUG("Start processing dataset...");
 

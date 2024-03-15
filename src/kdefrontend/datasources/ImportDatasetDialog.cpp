@@ -125,6 +125,7 @@ bool ImportDatasetDialog::importTo(QStatusBar* statusBar) const {
 		statusBar->showMessage(i18n("Dataset imported in %1 seconds.", static_cast<float>(duration - timer.remainingTime()) / 1000));
 		timer.stop();
 	} else
+		delete spreadsheet;
 
 	delete datasetHandler;
 
