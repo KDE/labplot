@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-15 01:57+0000\n"
+"POT-Creation-Date: 2024-03-16 02:01+0000\n"
 "PO-Revision-Date: 2024-02-26 11:02+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
@@ -1026,28 +1026,17 @@ msgstr "%1: assigna position -delta_Y"
 msgid "%1: draw points over segment"
 msgstr "%1: dessigna punctos sur segmento"
 
-#: src/backend/datasources/DatasetHandler.cpp:68
-#: src/backend/datasources/DatasetHandler.cpp:158
-#, kde-format
-msgid "Invalid metadata file"
-msgstr "File de metadatos invalide"
-
-#: src/backend/datasources/DatasetHandler.cpp:68
+#: src/backend/datasources/DatasetHandler.cpp:69
 #, kde-format
 msgid "The metadata file for the selected dataset is invalid."
 msgstr "Le file de metadatos per le insimul de datos seligite es invalide"
 
-#: src/backend/datasources/DatasetHandler.cpp:158
+#: src/backend/datasources/DatasetHandler.cpp:159
 #, kde-format
 msgid "There is no download URL present in the metadata file!"
 msgstr "Il non ha discargamento de URL inle file de metadata!"
 
-#: src/backend/datasources/DatasetHandler.cpp:192
-#, kde-format
-msgid "Failed to download the dataset"
-msgstr "Falleva a discargar insimul de datos"
-
-#: src/backend/datasources/DatasetHandler.cpp:193
+#: src/backend/datasources/DatasetHandler.cpp:191
 #, kde-format
 msgid ""
 "Failed to download the dataset from %1.\n"
@@ -1056,18 +1045,12 @@ msgstr ""
 "Falleva a discargar insimul de datos ex %1.\n"
 "%2"
 
-#: src/backend/datasources/DatasetHandler.cpp:228
-#: src/backend/datasources/DatasetHandler.cpp:252
-#, kde-format
-msgid "Failed to save the dataset"
-msgstr "Falleva a salveguardar insimul de datos"
-
-#: src/backend/datasources/DatasetHandler.cpp:229
+#: src/backend/datasources/DatasetHandler.cpp:225
 #, kde-format
 msgid "Failed to create the directory %1 to save the dataset."
 msgstr ""
 
-#: src/backend/datasources/DatasetHandler.cpp:252
+#: src/backend/datasources/DatasetHandler.cpp:248
 #, kde-format
 msgid ""
 "Couldn't open the file %1 for writing.\n"
@@ -11221,7 +11204,7 @@ msgstr ""
 msgid "Dataset%1"
 msgstr "Insimul de datos%1"
 
-#: src/kdefrontend/datasources/ImportDatasetDialog.cpp:124
+#: src/kdefrontend/datasources/ImportDatasetDialog.cpp:125
 #, kde-format
 msgid "Dataset imported in %1 seconds."
 msgstr ""
@@ -22623,6 +22606,15 @@ msgstr ""
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Incapace a aperir file:"
+
+#~ msgid "Invalid metadata file"
+#~ msgstr "File de metadatos invalide"
+
+#~ msgid "Failed to download the dataset"
+#~ msgstr "Falleva a discargar insimul de datos"
+
+#~ msgid "Failed to save the dataset"
+#~ msgstr "Falleva a salveguardar insimul de datos"
 
 #~ msgid "could not open device"
 #~ msgstr "Il non pote aperir dispositivo "

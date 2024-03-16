@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-15 01:57+0000\n"
+"POT-Creation-Date: 2024-03-16 02:01+0000\n"
 "PO-Revision-Date: 2024-02-29 03:22+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -1015,28 +1015,17 @@ msgstr "%1: დააყენეთ -delta_Y მდებარეობა"
 msgid "%1: draw points over segment"
 msgstr "%1: სეგმენტზე წერტილების აგება"
 
-#: src/backend/datasources/DatasetHandler.cpp:68
-#: src/backend/datasources/DatasetHandler.cpp:158
-#, kde-format
-msgid "Invalid metadata file"
-msgstr "არასწორი მეტამონაცემების ფაილი"
-
-#: src/backend/datasources/DatasetHandler.cpp:68
+#: src/backend/datasources/DatasetHandler.cpp:69
 #, kde-format
 msgid "The metadata file for the selected dataset is invalid."
 msgstr "მონაცემების ფაილი არასწორიამონიშნული მონაცემების სეტისთვის."
 
-#: src/backend/datasources/DatasetHandler.cpp:158
+#: src/backend/datasources/DatasetHandler.cpp:159
 #, kde-format
 msgid "There is no download URL present in the metadata file!"
 msgstr "მეტამონაცემების ფაილი გადმოწერის ბმულს არ შეიცავს!"
 
-#: src/backend/datasources/DatasetHandler.cpp:192
-#, kde-format
-msgid "Failed to download the dataset"
-msgstr "მონაცემების სეტის გადმოწერა ჩავარდა"
-
-#: src/backend/datasources/DatasetHandler.cpp:193
+#: src/backend/datasources/DatasetHandler.cpp:191
 #, kde-format
 msgid ""
 "Failed to download the dataset from %1.\n"
@@ -1045,18 +1034,12 @@ msgstr ""
 "%1-დან მონაცემების სეტის გადმოწერა ჩავარდა.\n"
 "%2."
 
-#: src/backend/datasources/DatasetHandler.cpp:228
-#: src/backend/datasources/DatasetHandler.cpp:252
-#, kde-format
-msgid "Failed to save the dataset"
-msgstr "მონაცემების სეტის შენახვა ჩავარდა"
-
-#: src/backend/datasources/DatasetHandler.cpp:229
+#: src/backend/datasources/DatasetHandler.cpp:225
 #, kde-format
 msgid "Failed to create the directory %1 to save the dataset."
 msgstr ""
 
-#: src/backend/datasources/DatasetHandler.cpp:252
+#: src/backend/datasources/DatasetHandler.cpp:248
 #, kde-format
 msgid ""
 "Couldn't open the file %1 for writing.\n"
@@ -11215,7 +11198,7 @@ msgstr ""
 msgid "Dataset%1"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportDatasetDialog.cpp:124
+#: src/kdefrontend/datasources/ImportDatasetDialog.cpp:125
 #, kde-format
 msgid "Dataset imported in %1 seconds."
 msgstr ""
@@ -22622,6 +22605,15 @@ msgstr ""
 #, kde-format
 msgid "Unable to open file:"
 msgstr "ფაილის გახსნა შეუძლებელია:"
+
+#~ msgid "Invalid metadata file"
+#~ msgstr "არასწორი მეტამონაცემების ფაილი"
+
+#~ msgid "Failed to download the dataset"
+#~ msgstr "მონაცემების სეტის გადმოწერა ჩავარდა"
+
+#~ msgid "Failed to save the dataset"
+#~ msgstr "მონაცემების სეტის შენახვა ჩავარდა"
 
 #~ msgid "could not open device"
 #~ msgstr "მოწყობილობის გახსნი შეცდომა"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-15 01:57+0000\n"
+"POT-Creation-Date: 2024-03-16 02:01+0000\n"
 "PO-Revision-Date: 2022-07-14 10:06-0300\n"
 "Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
 "Language-Team: Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -1036,29 +1036,17 @@ msgstr "%1: definir a posição -delta_Y"
 msgid "%1: draw points over segment"
 msgstr "%1: desenhar pontos sobre o segmento"
 
-#: src/backend/datasources/DatasetHandler.cpp:68
-#: src/backend/datasources/DatasetHandler.cpp:158
-#, kde-format
-msgid "Invalid metadata file"
-msgstr ""
-
-#: src/backend/datasources/DatasetHandler.cpp:68
+#: src/backend/datasources/DatasetHandler.cpp:69
 #, kde-format
 msgid "The metadata file for the selected dataset is invalid."
 msgstr ""
 
-#: src/backend/datasources/DatasetHandler.cpp:158
+#: src/backend/datasources/DatasetHandler.cpp:159
 #, kde-format
 msgid "There is no download URL present in the metadata file!"
 msgstr ""
 
-#: src/backend/datasources/DatasetHandler.cpp:192
-#, fuzzy, kde-format
-#| msgid "Failed to open"
-msgid "Failed to download the dataset"
-msgstr "Falha ao abrir"
-
-#: src/backend/datasources/DatasetHandler.cpp:193
+#: src/backend/datasources/DatasetHandler.cpp:191
 #, fuzzy, kde-format
 #| msgid "no valid XML document found"
 msgid ""
@@ -1066,20 +1054,13 @@ msgid ""
 "%2."
 msgstr "não foi encontrado nenhum documento XML válido"
 
-#: src/backend/datasources/DatasetHandler.cpp:228
-#: src/backend/datasources/DatasetHandler.cpp:252
-#, fuzzy, kde-format
-#| msgid "Failed to open"
-msgid "Failed to save the dataset"
-msgstr "Falha ao abrir"
-
-#: src/backend/datasources/DatasetHandler.cpp:229
+#: src/backend/datasources/DatasetHandler.cpp:225
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to create the directory %1 to save the dataset."
 msgstr "Falha ao abrir"
 
-#: src/backend/datasources/DatasetHandler.cpp:252
+#: src/backend/datasources/DatasetHandler.cpp:248
 #, fuzzy, kde-format
 #| msgid "Could not open file %1 for reading."
 msgid ""
@@ -11956,7 +11937,7 @@ msgstr "Do banco de dados SQL"
 msgid "Dataset%1"
 msgstr "Conjunto de dados"
 
-#: src/kdefrontend/datasources/ImportDatasetDialog.cpp:124
+#: src/kdefrontend/datasources/ImportDatasetDialog.cpp:125
 #, fuzzy, kde-format
 #| msgid "File %1 imported in %2 seconds."
 msgid "Dataset imported in %1 seconds."
@@ -24386,6 +24367,16 @@ msgstr ""
 #| msgid "Failed to open"
 msgid "Unable to open file:"
 msgstr "Falha ao abrir"
+
+#, fuzzy
+#~| msgid "Failed to open"
+#~ msgid "Failed to download the dataset"
+#~ msgstr "Falha ao abrir"
+
+#, fuzzy
+#~| msgid "Failed to open"
+#~ msgid "Failed to save the dataset"
+#~ msgstr "Falha ao abrir"
 
 #~ msgid "could not open device"
 #~ msgstr "não foi possível abrir o dispositivo"

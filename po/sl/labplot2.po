@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-15 01:57+0000\n"
+"POT-Creation-Date: 2024-03-16 02:01+0000\n"
 "PO-Revision-Date: 2024-03-05 09:27+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -1029,28 +1029,17 @@ msgstr "%1: določite položaj -delta_Y"
 msgid "%1: draw points over segment"
 msgstr "%1: rišite točke nad odsekom"
 
-#: src/backend/datasources/DatasetHandler.cpp:68
-#: src/backend/datasources/DatasetHandler.cpp:158
-#, kde-format
-msgid "Invalid metadata file"
-msgstr "Neveljavna datoteka metapodatkov"
-
-#: src/backend/datasources/DatasetHandler.cpp:68
+#: src/backend/datasources/DatasetHandler.cpp:69
 #, kde-format
 msgid "The metadata file for the selected dataset is invalid."
 msgstr "Datoteka metapodatkov za izbrani nabor podatkov ni veljavna."
 
-#: src/backend/datasources/DatasetHandler.cpp:158
+#: src/backend/datasources/DatasetHandler.cpp:159
 #, kde-format
 msgid "There is no download URL present in the metadata file!"
 msgstr "V datoteki metapodatkov ni URL-ja za prenos!"
 
-#: src/backend/datasources/DatasetHandler.cpp:192
-#, kde-format
-msgid "Failed to download the dataset"
-msgstr "Prenos podatkovne zbirke ni uspel"
-
-#: src/backend/datasources/DatasetHandler.cpp:193
+#: src/backend/datasources/DatasetHandler.cpp:191
 #, kde-format
 msgid ""
 "Failed to download the dataset from %1.\n"
@@ -1059,18 +1048,12 @@ msgstr ""
 "Prenos podatkovne zbirke iz %1 ni uspel.\n"
 "%2."
 
-#: src/backend/datasources/DatasetHandler.cpp:228
-#: src/backend/datasources/DatasetHandler.cpp:252
-#, kde-format
-msgid "Failed to save the dataset"
-msgstr "Shranjevanje zbirke podatkov ni uspelo"
-
-#: src/backend/datasources/DatasetHandler.cpp:229
+#: src/backend/datasources/DatasetHandler.cpp:225
 #, kde-format
 msgid "Failed to create the directory %1 to save the dataset."
 msgstr "Kreiranje imenika %1 za shranjevanje podatkovne zbirke ni uspelo."
 
-#: src/backend/datasources/DatasetHandler.cpp:252
+#: src/backend/datasources/DatasetHandler.cpp:248
 #, kde-format
 msgid ""
 "Couldn't open the file %1 for writing.\n"
@@ -11351,7 +11334,7 @@ msgstr "Uvoz iz zbirke podatkovnih naborov"
 msgid "Dataset%1"
 msgstr "Nabor podatkov%1"
 
-#: src/kdefrontend/datasources/ImportDatasetDialog.cpp:124
+#: src/kdefrontend/datasources/ImportDatasetDialog.cpp:125
 #, kde-format
 msgid "Dataset imported in %1 seconds."
 msgstr "Nabor podatkov se je uvozil v %1 s."
@@ -22997,6 +22980,15 @@ msgstr "proces convert je izpadel, izhodna koda ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Ni mogoče odpreti datoteke:"
+
+#~ msgid "Invalid metadata file"
+#~ msgstr "Neveljavna datoteka metapodatkov"
+
+#~ msgid "Failed to download the dataset"
+#~ msgstr "Prenos podatkovne zbirke ni uspel"
+
+#~ msgid "Failed to save the dataset"
+#~ msgstr "Shranjevanje zbirke podatkov ni uspelo"
 
 #~ msgid "could not open device"
 #~ msgstr "naprave ni bilo mogoče odpreti"

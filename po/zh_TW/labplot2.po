@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-15 01:57+0000\n"
+"POT-Creation-Date: 2024-03-16 02:01+0000\n"
 "PO-Revision-Date: 2014-03-25 11:30+0800\n"
 "Last-Translator: Franklin Weng <franklin at goodhorse dot idv dot tw>\n"
 "Language-Team: Chinese Traditional <kde-tw@googlegroups.com>\n"
@@ -1047,29 +1047,17 @@ msgstr "設定不透明度"
 msgid "%1: draw points over segment"
 msgstr ""
 
-#: src/backend/datasources/DatasetHandler.cpp:68
-#: src/backend/datasources/DatasetHandler.cpp:158
-#, kde-format
-msgid "Invalid metadata file"
-msgstr ""
-
-#: src/backend/datasources/DatasetHandler.cpp:68
+#: src/backend/datasources/DatasetHandler.cpp:69
 #, kde-format
 msgid "The metadata file for the selected dataset is invalid."
 msgstr ""
 
-#: src/backend/datasources/DatasetHandler.cpp:158
+#: src/backend/datasources/DatasetHandler.cpp:159
 #, kde-format
 msgid "There is no download URL present in the metadata file!"
 msgstr ""
 
-#: src/backend/datasources/DatasetHandler.cpp:192
-#, fuzzy, kde-format
-#| msgid "Failed to open"
-msgid "Failed to download the dataset"
-msgstr "開啟失敗"
-
-#: src/backend/datasources/DatasetHandler.cpp:193
+#: src/backend/datasources/DatasetHandler.cpp:191
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid ""
@@ -1077,20 +1065,13 @@ msgid ""
 "%2."
 msgstr "開啟失敗"
 
-#: src/backend/datasources/DatasetHandler.cpp:228
-#: src/backend/datasources/DatasetHandler.cpp:252
-#, fuzzy, kde-format
-#| msgid "Failed to open"
-msgid "Failed to save the dataset"
-msgstr "開啟失敗"
-
-#: src/backend/datasources/DatasetHandler.cpp:229
+#: src/backend/datasources/DatasetHandler.cpp:225
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to create the directory %1 to save the dataset."
 msgstr "開啟失敗"
 
-#: src/backend/datasources/DatasetHandler.cpp:252
+#: src/backend/datasources/DatasetHandler.cpp:248
 #, fuzzy, kde-format
 msgid ""
 "Couldn't open the file %1 for writing.\n"
@@ -11556,7 +11537,7 @@ msgstr "匯入"
 msgid "Dataset%1"
 msgstr "dataSet：資料集"
 
-#: src/kdefrontend/datasources/ImportDatasetDialog.cpp:124
+#: src/kdefrontend/datasources/ImportDatasetDialog.cpp:125
 #, fuzzy, kde-format
 #| msgid "Add new"
 msgid "Dataset imported in %1 seconds."
@@ -23340,6 +23321,16 @@ msgstr ""
 #| msgid "Failed to open"
 msgid "Unable to open file:"
 msgstr "開啟失敗"
+
+#, fuzzy
+#~| msgid "Failed to open"
+#~ msgid "Failed to download the dataset"
+#~ msgstr "開啟失敗"
+
+#, fuzzy
+#~| msgid "Failed to open"
+#~ msgid "Failed to save the dataset"
+#~ msgstr "開啟失敗"
 
 #, fuzzy
 #~ msgid "Variable contains no data"

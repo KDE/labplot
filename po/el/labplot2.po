@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-15 01:57+0000\n"
+"POT-Creation-Date: 2024-03-16 02:01+0000\n"
 "PO-Revision-Date: 2017-04-20 14:04+0200\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -1057,29 +1057,17 @@ msgstr ""
 msgid "%1: draw points over segment"
 msgstr ""
 
-#: src/backend/datasources/DatasetHandler.cpp:68
-#: src/backend/datasources/DatasetHandler.cpp:158
-#, kde-format
-msgid "Invalid metadata file"
-msgstr ""
-
-#: src/backend/datasources/DatasetHandler.cpp:68
+#: src/backend/datasources/DatasetHandler.cpp:69
 #, kde-format
 msgid "The metadata file for the selected dataset is invalid."
 msgstr ""
 
-#: src/backend/datasources/DatasetHandler.cpp:158
+#: src/backend/datasources/DatasetHandler.cpp:159
 #, kde-format
 msgid "There is no download URL present in the metadata file!"
 msgstr ""
 
-#: src/backend/datasources/DatasetHandler.cpp:192
-#, fuzzy, kde-format
-#| msgid "Connection:"
-msgid "Failed to download the dataset"
-msgstr "Σύνδεση:"
-
-#: src/backend/datasources/DatasetHandler.cpp:193
+#: src/backend/datasources/DatasetHandler.cpp:191
 #, fuzzy, kde-format
 #| msgid "Connection:"
 msgid ""
@@ -1087,19 +1075,12 @@ msgid ""
 "%2."
 msgstr "Σύνδεση:"
 
-#: src/backend/datasources/DatasetHandler.cpp:228
-#: src/backend/datasources/DatasetHandler.cpp:252
-#, fuzzy, kde-format
-#| msgid "Connection:"
-msgid "Failed to save the dataset"
-msgstr "Σύνδεση:"
-
-#: src/backend/datasources/DatasetHandler.cpp:229
+#: src/backend/datasources/DatasetHandler.cpp:225
 #, kde-format
 msgid "Failed to create the directory %1 to save the dataset."
 msgstr ""
 
-#: src/backend/datasources/DatasetHandler.cpp:252
+#: src/backend/datasources/DatasetHandler.cpp:248
 #, fuzzy, kde-format
 #| msgid "Sorry. Could not open file for writing."
 msgid ""
@@ -11699,7 +11680,7 @@ msgstr "Εισαγωγή"
 msgid "Dataset%1"
 msgstr "Δεδομένα:"
 
-#: src/kdefrontend/datasources/ImportDatasetDialog.cpp:124
+#: src/kdefrontend/datasources/ImportDatasetDialog.cpp:125
 #, fuzzy, kde-format
 #| msgid "Data portion to read"
 msgid "Dataset imported in %1 seconds."
@@ -23875,6 +23856,16 @@ msgstr ""
 #| msgid "Connection:"
 msgid "Unable to open file:"
 msgstr "Σύνδεση:"
+
+#, fuzzy
+#~| msgid "Connection:"
+#~ msgid "Failed to download the dataset"
+#~ msgstr "Σύνδεση:"
+
+#, fuzzy
+#~| msgid "Connection:"
+#~ msgid "Failed to save the dataset"
+#~ msgstr "Σύνδεση:"
 
 #, fuzzy
 #~| msgid "Format Type"

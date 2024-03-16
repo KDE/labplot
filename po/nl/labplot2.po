@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-15 01:57+0000\n"
+"POT-Creation-Date: 2024-03-16 02:01+0000\n"
 "PO-Revision-Date: 2024-03-05 12:27+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
@@ -1020,29 +1020,18 @@ msgstr "%1: -delta_Y positie instellen"
 msgid "%1: draw points over segment"
 msgstr "%1: punten op lijnstuk tekenen"
 
-#: src/backend/datasources/DatasetHandler.cpp:68
-#: src/backend/datasources/DatasetHandler.cpp:158
-#, kde-format
-msgid "Invalid metadata file"
-msgstr "ongeldig metadata-bestand"
-
-#: src/backend/datasources/DatasetHandler.cpp:68
+#: src/backend/datasources/DatasetHandler.cpp:69
 #, kde-format
 msgid "The metadata file for the selected dataset is invalid."
 msgstr ""
 "Het metadata-bestand voor de geselecteerde gegevensverzameling is ongeldig."
 
-#: src/backend/datasources/DatasetHandler.cpp:158
+#: src/backend/datasources/DatasetHandler.cpp:159
 #, kde-format
 msgid "There is no download URL present in the metadata file!"
 msgstr "In het metadata-bestand is geen download-URL aanwezig!"
 
-#: src/backend/datasources/DatasetHandler.cpp:192
-#, kde-format
-msgid "Failed to download the dataset"
-msgstr "Downloaden van de gegevensset is mislukt"
-
-#: src/backend/datasources/DatasetHandler.cpp:193
+#: src/backend/datasources/DatasetHandler.cpp:191
 #, kde-format
 msgid ""
 "Failed to download the dataset from %1.\n"
@@ -1051,18 +1040,12 @@ msgstr ""
 "Downloaden van de gegevensset is uit %1 mislukt.\n"
 "%2."
 
-#: src/backend/datasources/DatasetHandler.cpp:228
-#: src/backend/datasources/DatasetHandler.cpp:252
-#, kde-format
-msgid "Failed to save the dataset"
-msgstr "Gegevensset opslaan is mislukt"
-
-#: src/backend/datasources/DatasetHandler.cpp:229
+#: src/backend/datasources/DatasetHandler.cpp:225
 #, kde-format
 msgid "Failed to create the directory %1 to save the dataset."
 msgstr "Map %1 aanmaken voor opslaan van de gegevensset is mislukt."
 
-#: src/backend/datasources/DatasetHandler.cpp:252
+#: src/backend/datasources/DatasetHandler.cpp:248
 #, kde-format
 msgid ""
 "Couldn't open the file %1 for writing.\n"
@@ -11294,7 +11277,7 @@ msgstr "Importeren uit collectie gegevensbestanden"
 msgid "Dataset%1"
 msgstr "Gegevensverzameling %1"
 
-#: src/kdefrontend/datasources/ImportDatasetDialog.cpp:124
+#: src/kdefrontend/datasources/ImportDatasetDialog.cpp:125
 #, kde-format
 msgid "Dataset imported in %1 seconds."
 msgstr "Gegevensbestand geïmporteerd in %1 seconden."
@@ -22941,6 +22924,15 @@ msgstr "conversie is mislukt, exitcode ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Kon bestand niet openen:"
+
+#~ msgid "Invalid metadata file"
+#~ msgstr "ongeldig metadata-bestand"
+
+#~ msgid "Failed to download the dataset"
+#~ msgstr "Downloaden van de gegevensset is mislukt"
+
+#~ msgid "Failed to save the dataset"
+#~ msgstr "Gegevensset opslaan is mislukt"
 
 #~ msgid "could not open device"
 #~ msgstr "kon apparaat niet openen"

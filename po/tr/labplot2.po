@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-15 01:57+0000\n"
+"POT-Creation-Date: 2024-03-16 02:01+0000\n"
 "PO-Revision-Date: 2024-03-05 11:31+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -1023,28 +1023,17 @@ msgstr "%1: -delta_Y konumunu ayarla"
 msgid "%1: draw points over segment"
 msgstr "%1: Noktaları, bölütler üzerinden çiz"
 
-#: src/backend/datasources/DatasetHandler.cpp:68
-#: src/backend/datasources/DatasetHandler.cpp:158
-#, kde-format
-msgid "Invalid metadata file"
-msgstr "Geçersiz üst veri dosyası"
-
-#: src/backend/datasources/DatasetHandler.cpp:68
+#: src/backend/datasources/DatasetHandler.cpp:69
 #, kde-format
 msgid "The metadata file for the selected dataset is invalid."
 msgstr "Seçili veri kümesi için olan üst veri dosyası geçersiz."
 
-#: src/backend/datasources/DatasetHandler.cpp:158
+#: src/backend/datasources/DatasetHandler.cpp:159
 #, kde-format
 msgid "There is no download URL present in the metadata file!"
 msgstr "Üst veri dosyasında bir indirme URL'si yok!"
 
-#: src/backend/datasources/DatasetHandler.cpp:192
-#, kde-format
-msgid "Failed to download the dataset"
-msgstr "Veri kümesi indirilemedi"
-
-#: src/backend/datasources/DatasetHandler.cpp:193
+#: src/backend/datasources/DatasetHandler.cpp:191
 #, kde-format
 msgid ""
 "Failed to download the dataset from %1.\n"
@@ -1053,18 +1042,12 @@ msgstr ""
 "%1 konumundan veri kümesi indirilemedi.\n"
 "%2."
 
-#: src/backend/datasources/DatasetHandler.cpp:228
-#: src/backend/datasources/DatasetHandler.cpp:252
-#, kde-format
-msgid "Failed to save the dataset"
-msgstr "Veri kümesi kaydedilemedi"
-
-#: src/backend/datasources/DatasetHandler.cpp:229
+#: src/backend/datasources/DatasetHandler.cpp:225
 #, kde-format
 msgid "Failed to create the directory %1 to save the dataset."
 msgstr "Veri kümesini kaydetmek üzere %1 dizini oluşturulamadı."
 
-#: src/backend/datasources/DatasetHandler.cpp:252
+#: src/backend/datasources/DatasetHandler.cpp:248
 #, kde-format
 msgid ""
 "Couldn't open the file %1 for writing.\n"
@@ -11291,7 +11274,7 @@ msgstr "Veri Kümesi Koleksiyonundan İçe Aktar"
 msgid "Dataset%1"
 msgstr "Veri kümesi%1"
 
-#: src/kdefrontend/datasources/ImportDatasetDialog.cpp:124
+#: src/kdefrontend/datasources/ImportDatasetDialog.cpp:125
 #, kde-format
 msgid "Dataset imported in %1 seconds."
 msgstr "Veri kümesi, %1 saniyede içe aktarıldı."
@@ -22919,6 +22902,15 @@ msgstr "dönüştürme süreci başarısız, çıkış kodu ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Dosya açılamadı:"
+
+#~ msgid "Invalid metadata file"
+#~ msgstr "Geçersiz üst veri dosyası"
+
+#~ msgid "Failed to download the dataset"
+#~ msgstr "Veri kümesi indirilemedi"
+
+#~ msgid "Failed to save the dataset"
+#~ msgstr "Veri kümesi kaydedilemedi"
 
 #~ msgid "could not open device"
 #~ msgstr "aygıt açılamadı"

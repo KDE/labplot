@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-15 01:57+0000\n"
+"POT-Creation-Date: 2024-03-16 02:01+0000\n"
 "PO-Revision-Date: 2023-09-19 23:30+0200\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -1028,28 +1028,17 @@ msgstr "%1: ezarri -delta_Y posizioa"
 msgid "%1: draw points over segment"
 msgstr "%1: marraztu puntuak segmentuaren gainean"
 
-#: src/backend/datasources/DatasetHandler.cpp:68
-#: src/backend/datasources/DatasetHandler.cpp:158
-#, kde-format
-msgid "Invalid metadata file"
-msgstr "Metadatu fitxategi baliogabea"
-
-#: src/backend/datasources/DatasetHandler.cpp:68
+#: src/backend/datasources/DatasetHandler.cpp:69
 #, kde-format
 msgid "The metadata file for the selected dataset is invalid."
 msgstr "Hautatutako datu-multzoaren metadatu fitxategia baliogabea da."
 
-#: src/backend/datasources/DatasetHandler.cpp:158
+#: src/backend/datasources/DatasetHandler.cpp:159
 #, kde-format
 msgid "There is no download URL present in the metadata file!"
 msgstr "Metadatu fitxategian ez dago zama-jaisteko URLrik!"
 
-#: src/backend/datasources/DatasetHandler.cpp:192
-#, kde-format
-msgid "Failed to download the dataset"
-msgstr "Datu-multzoa zama-jaistea huts egin du"
-
-#: src/backend/datasources/DatasetHandler.cpp:193
+#: src/backend/datasources/DatasetHandler.cpp:191
 #, kde-format
 msgid ""
 "Failed to download the dataset from %1.\n"
@@ -1058,18 +1047,12 @@ msgstr ""
 "%1(e)tik datu-multzoa zama-jaistea huts egin du.\n"
 " %2"
 
-#: src/backend/datasources/DatasetHandler.cpp:228
-#: src/backend/datasources/DatasetHandler.cpp:252
-#, kde-format
-msgid "Failed to save the dataset"
-msgstr "Datu-multzoa gordetzea huts egin du"
-
-#: src/backend/datasources/DatasetHandler.cpp:229
+#: src/backend/datasources/DatasetHandler.cpp:225
 #, kde-format
 msgid "Failed to create the directory %1 to save the dataset."
 msgstr "Datu-multzoa gordetzeko %1 direktorioa sortzea huts egin du."
 
-#: src/backend/datasources/DatasetHandler.cpp:252
+#: src/backend/datasources/DatasetHandler.cpp:248
 #, kde-format
 msgid ""
 "Couldn't open the file %1 for writing.\n"
@@ -11397,7 +11380,7 @@ msgstr "SQL datu-basetik"
 msgid "Dataset%1"
 msgstr "Datu-multzoa%1"
 
-#: src/kdefrontend/datasources/ImportDatasetDialog.cpp:124
+#: src/kdefrontend/datasources/ImportDatasetDialog.cpp:125
 #, kde-format
 msgid "Dataset imported in %1 seconds."
 msgstr ""
@@ -22990,6 +22973,15 @@ msgstr "«convert» prozesuak huts egin du, irteera kodea ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Ez da fitxategia irekitzeko gai:"
+
+#~ msgid "Invalid metadata file"
+#~ msgstr "Metadatu fitxategi baliogabea"
+
+#~ msgid "Failed to download the dataset"
+#~ msgstr "Datu-multzoa zama-jaistea huts egin du"
+
+#~ msgid "Failed to save the dataset"
+#~ msgstr "Datu-multzoa gordetzea huts egin du"
 
 #~ msgid "could not open device"
 #~ msgstr "Ezin izan du gailua ireki"

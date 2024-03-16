@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-15 01:57+0000\n"
+"POT-Creation-Date: 2024-03-16 02:01+0000\n"
 "PO-Revision-Date: 2023-11-13 14:41+0300\n"
 "Last-Translator: Sergey Kazorin <translation-team@basealt.ru>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -1040,46 +1040,29 @@ msgstr "%1: задание положения -delta_Y"
 msgid "%1: draw points over segment"
 msgstr "%1: построение точек на сегменте"
 
-#: src/backend/datasources/DatasetHandler.cpp:68
-#: src/backend/datasources/DatasetHandler.cpp:158
-#, kde-format
-msgid "Invalid metadata file"
-msgstr "Недопустимый файл метаданных"
-
-#: src/backend/datasources/DatasetHandler.cpp:68
+#: src/backend/datasources/DatasetHandler.cpp:69
 #, kde-format
 msgid "The metadata file for the selected dataset is invalid."
 msgstr "Недопустимый файл метаданных для выбранного набора данных."
 
-#: src/backend/datasources/DatasetHandler.cpp:158
+#: src/backend/datasources/DatasetHandler.cpp:159
 #, kde-format
 msgid "There is no download URL present in the metadata file!"
 msgstr "В файле метаданных отсутствует URL-адрес для загрузки!"
 
-#: src/backend/datasources/DatasetHandler.cpp:192
-#, fuzzy, kde-format
-msgid "Failed to download the dataset"
-msgstr "Не удалось подключиться к базе данных «%1»."
-
-#: src/backend/datasources/DatasetHandler.cpp:193
+#: src/backend/datasources/DatasetHandler.cpp:191
 #, fuzzy, kde-format
 msgid ""
 "Failed to download the dataset from %1.\n"
 "%2."
 msgstr "Не удалось подключиться к базе данных «%1»."
 
-#: src/backend/datasources/DatasetHandler.cpp:228
-#: src/backend/datasources/DatasetHandler.cpp:252
-#, fuzzy, kde-format
-msgid "Failed to save the dataset"
-msgstr "Ошибка чтения данных изображения"
-
-#: src/backend/datasources/DatasetHandler.cpp:229
+#: src/backend/datasources/DatasetHandler.cpp:225
 #, fuzzy, kde-format
 msgid "Failed to create the directory %1 to save the dataset."
 msgstr "Не удалось создать таблицу в базе данных SQLite %1."
 
-#: src/backend/datasources/DatasetHandler.cpp:252
+#: src/backend/datasources/DatasetHandler.cpp:248
 #, fuzzy, kde-format
 msgid ""
 "Couldn't open the file %1 for writing.\n"
@@ -11586,7 +11569,7 @@ msgstr "Импорт из коллекции набора данных"
 msgid "Dataset%1"
 msgstr "Набор данных%1"
 
-#: src/kdefrontend/datasources/ImportDatasetDialog.cpp:124
+#: src/kdefrontend/datasources/ImportDatasetDialog.cpp:125
 #, kde-format
 msgid "Dataset imported in %1 seconds."
 msgstr "Набор данных импортирован за %1 секунд."
@@ -23521,6 +23504,17 @@ msgstr "сбой процесса convert, код выхода ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Не удалось открыть файл:"
+
+#~ msgid "Invalid metadata file"
+#~ msgstr "Недопустимый файл метаданных"
+
+#, fuzzy
+#~ msgid "Failed to download the dataset"
+#~ msgstr "Не удалось подключиться к базе данных «%1»."
+
+#, fuzzy
+#~ msgid "Failed to save the dataset"
+#~ msgstr "Ошибка чтения данных изображения"
 
 #~ msgid "could not open device"
 #~ msgstr "не удалось открыть устройство"

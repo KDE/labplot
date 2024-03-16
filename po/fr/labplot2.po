@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-15 01:57+0000\n"
+"POT-Creation-Date: 2024-03-16 02:01+0000\n"
 "PO-Revision-Date: 2024-03-06 13:54+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: fr\n"
@@ -1039,32 +1039,21 @@ msgstr "%1 : définir la position en « -delta_Y »"
 msgid "%1: draw points over segment"
 msgstr "%1 : dessiner les points au dessus le segment"
 
-#: src/backend/datasources/DatasetHandler.cpp:68
-#: src/backend/datasources/DatasetHandler.cpp:158
-#, kde-format
-msgid "Invalid metadata file"
-msgstr "Fichier de métadonnées non valable"
-
-#: src/backend/datasources/DatasetHandler.cpp:68
+#: src/backend/datasources/DatasetHandler.cpp:69
 #, kde-format
 msgid "The metadata file for the selected dataset is invalid."
 msgstr ""
 "Le fichier de métadonnées pour l'ensemble sélectionné de données est non "
 "valable."
 
-#: src/backend/datasources/DatasetHandler.cpp:158
+#: src/backend/datasources/DatasetHandler.cpp:159
 #, kde-format
 msgid "There is no download URL present in the metadata file!"
 msgstr ""
 "Il n'y a aucune « URL » de téléchargement présente dans le fichier de "
 "métadonnées !"
 
-#: src/backend/datasources/DatasetHandler.cpp:192
-#, kde-format
-msgid "Failed to download the dataset"
-msgstr "Impossible de télécharger la collection de données"
-
-#: src/backend/datasources/DatasetHandler.cpp:193
+#: src/backend/datasources/DatasetHandler.cpp:191
 #, kde-format
 msgid ""
 "Failed to download the dataset from %1.\n"
@@ -1073,19 +1062,13 @@ msgstr ""
 "Impossible de télécharger la collection de données à partir de %1.\n"
 "%2"
 
-#: src/backend/datasources/DatasetHandler.cpp:228
-#: src/backend/datasources/DatasetHandler.cpp:252
-#, kde-format
-msgid "Failed to save the dataset"
-msgstr "Impossible d'enregistrer la collection de données"
-
-#: src/backend/datasources/DatasetHandler.cpp:229
+#: src/backend/datasources/DatasetHandler.cpp:225
 #, kde-format
 msgid "Failed to create the directory %1 to save the dataset."
 msgstr ""
 "Impossible de créer le dossier %1 pour enregistrer la collection de données."
 
-#: src/backend/datasources/DatasetHandler.cpp:252
+#: src/backend/datasources/DatasetHandler.cpp:248
 #, kde-format
 msgid ""
 "Couldn't open the file %1 for writing.\n"
@@ -11371,7 +11354,7 @@ msgstr "Importer à partir de la collection des ensembles de données"
 msgid "Dataset%1"
 msgstr "Ensemble de données %1"
 
-#: src/kdefrontend/datasources/ImportDatasetDialog.cpp:124
+#: src/kdefrontend/datasources/ImportDatasetDialog.cpp:125
 #, kde-format
 msgid "Dataset imported in %1 seconds."
 msgstr "Ensemble des données importé en %1 secondes."
@@ -23097,6 +23080,15 @@ msgstr "Le processus « conversion » a échoué avec le code de sortie ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Impossible d'ouvrir un fichier :"
+
+#~ msgid "Invalid metadata file"
+#~ msgstr "Fichier de métadonnées non valable"
+
+#~ msgid "Failed to download the dataset"
+#~ msgstr "Impossible de télécharger la collection de données"
+
+#~ msgid "Failed to save the dataset"
+#~ msgstr "Impossible d'enregistrer la collection de données"
 
 #~ msgid "could not open device"
 #~ msgstr "impossible d'ouvrir le périphérique"

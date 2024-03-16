@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-15 01:57+0000\n"
+"POT-Creation-Date: 2024-03-16 02:01+0000\n"
 "PO-Revision-Date: 2023-10-30 14:32+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -1108,29 +1108,17 @@ msgstr "%1: aseta sijainti"
 msgid "%1: draw points over segment"
 msgstr ""
 
-#: src/backend/datasources/DatasetHandler.cpp:68
-#: src/backend/datasources/DatasetHandler.cpp:158
-#, kde-format
-msgid "Invalid metadata file"
-msgstr ""
-
-#: src/backend/datasources/DatasetHandler.cpp:68
+#: src/backend/datasources/DatasetHandler.cpp:69
 #, kde-format
 msgid "The metadata file for the selected dataset is invalid."
 msgstr ""
 
-#: src/backend/datasources/DatasetHandler.cpp:158
+#: src/backend/datasources/DatasetHandler.cpp:159
 #, kde-format
 msgid "There is no download URL present in the metadata file!"
 msgstr ""
 
-#: src/backend/datasources/DatasetHandler.cpp:192
-#, fuzzy, kde-format
-#| msgid "Failed to read image data"
-msgid "Failed to download the dataset"
-msgstr "Kuvatietoa ei voi lukea"
-
-#: src/backend/datasources/DatasetHandler.cpp:193
+#: src/backend/datasources/DatasetHandler.cpp:191
 #, fuzzy, kde-format
 #| msgid "no valid XML document found"
 msgid ""
@@ -1138,20 +1126,13 @@ msgid ""
 "%2."
 msgstr "kelvollista XML-asiakirjaa ei löytynyt"
 
-#: src/backend/datasources/DatasetHandler.cpp:228
-#: src/backend/datasources/DatasetHandler.cpp:252
-#, fuzzy, kde-format
-#| msgid "Failed to read image data"
-msgid "Failed to save the dataset"
-msgstr "Kuvatietoa ei voi lukea"
-
-#: src/backend/datasources/DatasetHandler.cpp:229
+#: src/backend/datasources/DatasetHandler.cpp:225
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to create the directory %1 to save the dataset."
 msgstr "Avaaminen epäonnistui"
 
-#: src/backend/datasources/DatasetHandler.cpp:252
+#: src/backend/datasources/DatasetHandler.cpp:248
 #, fuzzy, kde-format
 #| msgid "Could not open file %1 for reading."
 msgid ""
@@ -11985,7 +11966,7 @@ msgstr "Tuo kohteeseen"
 msgid "Dataset%1"
 msgstr "Datajoukko"
 
-#: src/kdefrontend/datasources/ImportDatasetDialog.cpp:124
+#: src/kdefrontend/datasources/ImportDatasetDialog.cpp:125
 #, fuzzy, kde-format
 #| msgid "File %1 imported in %2 seconds."
 msgid "Dataset imported in %1 seconds."
@@ -23885,6 +23866,16 @@ msgstr ""
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Tiedostoa ei voi avata:"
+
+#, fuzzy
+#~| msgid "Failed to read image data"
+#~ msgid "Failed to download the dataset"
+#~ msgstr "Kuvatietoa ei voi lukea"
+
+#, fuzzy
+#~| msgid "Failed to read image data"
+#~ msgid "Failed to save the dataset"
+#~ msgstr "Kuvatietoa ei voi lukea"
 
 #, fuzzy
 #~| msgid "Could not open file %1 for reading."
