@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-16 02:01+0000\n"
+"POT-Creation-Date: 2024-03-17 01:56+0000\n"
 "PO-Revision-Date: 2019-07-11 18:46+0200\n"
 "Last-Translator: Matej Mrenica <matejm98mthw@gmail.com>\n"
 "Language-Team: Slovak <kde-i18n-doc@kde.org>\n"
@@ -11993,7 +11993,13 @@ msgstr "Importovať dáta"
 msgid "Dataset%1"
 msgstr "Dátová sada"
 
-#: src/kdefrontend/datasources/ImportDatasetDialog.cpp:125
+#: src/kdefrontend/datasources/ImportDatasetDialog.cpp:103
+#, fuzzy, kde-format
+#| msgid "Add new variable"
+msgid "Failed to connect within %1 seconds"
+msgstr "Pridať novú premennú"
+
+#: src/kdefrontend/datasources/ImportDatasetDialog.cpp:128
 #, fuzzy, kde-format
 #| msgid "Add new variable"
 msgid "Dataset imported in %1 seconds."

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-16 02:01+0000\n"
+"POT-Creation-Date: 2024-03-17 01:56+0000\n"
 "PO-Revision-Date: 2017-04-20 14:04+0200\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -11680,7 +11680,13 @@ msgstr "Εισαγωγή"
 msgid "Dataset%1"
 msgstr "Δεδομένα:"
 
-#: src/kdefrontend/datasources/ImportDatasetDialog.cpp:125
+#: src/kdefrontend/datasources/ImportDatasetDialog.cpp:103
+#, fuzzy, kde-format
+#| msgid "Data portion to read"
+msgid "Failed to connect within %1 seconds"
+msgstr "Τμήμα δεδομένων για ανάγνωση"
+
+#: src/kdefrontend/datasources/ImportDatasetDialog.cpp:128
 #, fuzzy, kde-format
 #| msgid "Data portion to read"
 msgid "Dataset imported in %1 seconds."

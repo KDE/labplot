@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-16 02:01+0000\n"
+"POT-Creation-Date: 2024-03-17 01:56+0000\n"
 "PO-Revision-Date: 2024-03-06 13:54+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: fr\n"
@@ -11354,7 +11354,13 @@ msgstr "Importer à partir de la collection des ensembles de données"
 msgid "Dataset%1"
 msgstr "Ensemble de données %1"
 
-#: src/kdefrontend/datasources/ImportDatasetDialog.cpp:125
+#: src/kdefrontend/datasources/ImportDatasetDialog.cpp:103
+#, fuzzy, kde-format
+#| msgid "File %1 imported in %2 seconds."
+msgid "Failed to connect within %1 seconds"
+msgstr "Fichier %1 importé en %2 secondes."
+
+#: src/kdefrontend/datasources/ImportDatasetDialog.cpp:128
 #, kde-format
 msgid "Dataset imported in %1 seconds."
 msgstr "Ensemble des données importé en %1 secondes."

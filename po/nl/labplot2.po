@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-16 02:01+0000\n"
+"POT-Creation-Date: 2024-03-17 01:56+0000\n"
 "PO-Revision-Date: 2024-03-05 12:27+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
@@ -11277,7 +11277,13 @@ msgstr "Importeren uit collectie gegevensbestanden"
 msgid "Dataset%1"
 msgstr "Gegevensverzameling %1"
 
-#: src/kdefrontend/datasources/ImportDatasetDialog.cpp:125
+#: src/kdefrontend/datasources/ImportDatasetDialog.cpp:103
+#, fuzzy, kde-format
+#| msgid "File %1 imported in %2 seconds."
+msgid "Failed to connect within %1 seconds"
+msgstr "Bestand %1 geïmporteerd in %2 seconden."
+
+#: src/kdefrontend/datasources/ImportDatasetDialog.cpp:128
 #, kde-format
 msgid "Dataset imported in %1 seconds."
 msgstr "Gegevensbestand geïmporteerd in %1 seconden."

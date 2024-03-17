@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-16 02:01+0000\n"
+"POT-Creation-Date: 2024-03-17 01:56+0000\n"
 "PO-Revision-Date: 2023-10-30 14:32+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -11966,7 +11966,13 @@ msgstr "Tuo kohteeseen"
 msgid "Dataset%1"
 msgstr "Datajoukko"
 
-#: src/kdefrontend/datasources/ImportDatasetDialog.cpp:125
+#: src/kdefrontend/datasources/ImportDatasetDialog.cpp:103
+#, fuzzy, kde-format
+#| msgid "File %1 imported in %2 seconds."
+msgid "Failed to connect within %1 seconds"
+msgstr "Tiedosto %1 tuotiin %2 sekunnissa."
+
+#: src/kdefrontend/datasources/ImportDatasetDialog.cpp:128
 #, fuzzy, kde-format
 #| msgid "File %1 imported in %2 seconds."
 msgid "Dataset imported in %1 seconds."
