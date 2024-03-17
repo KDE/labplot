@@ -44,7 +44,7 @@
 #include <QGraphicsSceneMouseEvent>
 
 CURVE_COLUMN_CONNECT(Histogram, Data, data, recalc)
-static constexpr double zero =  0.001; // zero baseline, don't use the exact 0.0 since it breaks the histrogram with log-scaling
+static constexpr double zero = 0.001; // zero baseline, don't use the exact 0.0 since it breaks the histrogram with log-scaling
 
 Histogram::Histogram(const QString& name)
 	: Plot(name, new HistogramPrivate(this), AspectType::Histogram) {
