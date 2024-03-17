@@ -8,10 +8,12 @@
 */
 
 #include "SettingsDatasetsPage.h"
+#include "backend/core/Settings.h"
 #include "backend/lib/macros.h"
+#include "kdefrontend/SettingsPage.h"
 
+#include <KConfigGroup>
 #include <KLocalizedString>
-
 #include <QDir>
 #include <QMessageBox>
 #include <QStandardPaths>
@@ -27,18 +29,33 @@ SettingsDatasetsPage::SettingsDatasetsPage(QWidget* parent)
 	ui.bClearCache->setToolTip(i18n("Clear downloaded files"));
 	ui.bClearCache->setEnabled(false);
 
-	connect(ui.bClearCache, &QPushButton::clicked, this, &SettingsDatasetsPage::clearCache);
-
 	loadSettings();
+
+	connect(ui.bClearCache, &QPushButton::clicked, this, &SettingsDatasetsPage::clearCache);
+	connect(ui.leKagglePath, &QLineEdit::textChanged, [&] {
+		m_changed = true;
+		Q_EMIT settingsChanged();
+	});
 }
 
 void SettingsDatasetsPage::applySettings() {
+	DEBUG(Q_FUNC_INFO)
+	if (!m_changed) {
+		return;
+	}
+
+	KConfigGroup group = Settings::group(QStringLiteral("Settings_Datasets"));
+	group.writeEntry(QLatin1String("KaggleCLIPath"), ui.leKagglePath->text());
 }
 
 void SettingsDatasetsPage::restoreDefaults() {
+	ui.leKagglePath->clear();
 }
 
 void SettingsDatasetsPage::loadSettings() {
+	const auto group = Settings::group(QStringLiteral("Settings_Datasets"));
+	ui.leKagglePath->setText(group.readEntry(QLatin1String("KaggleCLIPath"), QString()));
+
 	QDir dir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + QLatin1String("/datasets_local/"));
 	if (dir.exists()) {
 		int count = dir.count() - 2; // subtract 2 for . and ..
