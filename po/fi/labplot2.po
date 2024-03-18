@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-17 01:56+0000\n"
+"POT-Creation-Date: 2024-03-18 01:58+0000\n"
 "PO-Revision-Date: 2023-10-30 14:32+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -7893,7 +7893,7 @@ msgid "%1: width factor changed"
 msgstr "%1: aseta numeeriseksi muodoksi ”%2”"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:291
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:164
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:165
 #: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:366
 #: src/backend/worksheet/plots/cartesian/XYEquationCurve.cpp:112
 #, fuzzy, kde-format
@@ -7991,7 +7991,7 @@ msgid "%1: jitterring changed"
 msgstr "%1: aseta luontiaika"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:568
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:512
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:513
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:556
 #, fuzzy, kde-format
 #| msgid "%1: change column order"
@@ -7999,7 +7999,7 @@ msgid "%1: change rug enabled"
 msgstr "%1: aseta sarakejärjestys"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:575
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:519
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:520
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:570
 #, fuzzy, kde-format
 #| msgid "%1: change line+symbol width"
@@ -8007,7 +8007,7 @@ msgid "%1: change rug width"
 msgstr "%1: aseta viivan ja symbolin leveys"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:582
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:526
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:527
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:577
 #, fuzzy, kde-format
 #| msgid "%1: change comment"
@@ -8015,7 +8015,7 @@ msgid "%1: change rug length"
 msgstr "%1: muuta kommenttia"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:589
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:533
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:534
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:584
 #, fuzzy, kde-format
 #| msgid "%1: change comment"
@@ -8358,7 +8358,7 @@ msgstr "&Analyysi"
 #. dataManipulationMenu->addAction(addDataReductionAction);
 #. analysis menu
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:646
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:189
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:190
 #, kde-format
 msgid "Analysis"
 msgstr "Analyysi"
@@ -8752,61 +8752,61 @@ msgstr "%1: viivan tyyppi muuttunut"
 msgid "%1: set error bar cap size"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:170
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:171
 #, fuzzy, kde-format
 #| msgid "Tab position:"
 msgid "bin positions"
 msgstr "Välilehden sijainti:"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:176
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:177
 #, fuzzy, kde-format
 #| msgid "no values"
 msgid "bin values"
 msgstr "ei arvoja"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:192
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:193
 #, fuzzy, kde-format
 #| msgid "Gaussian Distribution"
 msgid "Fit Gaussian (Normal) Distribution"
 msgstr "Gaussin jakauma"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:198
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:199
 #, fuzzy, kde-format
 #| msgid "Exponential Distribution"
 msgid "Fit Exponential Distribution"
 msgstr "Eksponentiaalinen jakauma"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:204
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:205
 #, fuzzy, kde-format
 #| msgid "Laplace Distribution"
 msgid "Fit Laplace Distribution"
 msgstr "Laplacen jakauma"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:210
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:211
 #, fuzzy, kde-format
 #| msgid "Cauchy Distribution"
 msgid "Fit Cauchy-Lorentz Distribution"
 msgstr "Cauchyn jakauma"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:216
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:217
 #, fuzzy, kde-format
 #| msgid "Direction"
 msgid "Fit Log-normal Distribution"
 msgstr "Suunta"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:222
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:223
 #, fuzzy, kde-format
 #| msgid "Poisson Distribution"
 msgid "Fit Poisson Distribution"
 msgstr "Poissonin jakauma"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:228
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:229
 #, fuzzy, kde-format
 #| msgid "Binomial Distribution"
 msgid "Fit Binomial Distribution"
 msgstr "Binomijakauma"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:394
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:395
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:225
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:250
 #, fuzzy, kde-format
@@ -8814,61 +8814,61 @@ msgstr "Binomijakauma"
 msgid "%1: set data column"
 msgstr "%1: lisää tyhjiä sarakkeita"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:406
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:407
 #, fuzzy, kde-format
 #| msgid "Data type:"
 msgid "%1: set histogram type"
 msgstr "Tietotyyppi:"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:413
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:414
 #, fuzzy, kde-format
 #| msgid "%1: set position"
 msgid "%1: set histogram orientation"
 msgstr "%1: aseta sijainti"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:420
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:421
 #, fuzzy, kde-format
 #| msgid "%1: set position"
 msgid "%1: set histogram normalization"
 msgstr "%1: aseta sijainti"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:427
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:428
 #, fuzzy, kde-format
 #| msgid "%1: set creation time"
 msgid "%1: set binning method"
 msgstr "%1: aseta luontiaika"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:434
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:435
 #, fuzzy, kde-format
 #| msgid "%1: set font"
 msgid "%1: set bin count"
 msgstr "%1: aseta fontti"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:441
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:442
 #, fuzzy, kde-format
 #| msgid "%1: set font"
 msgid "%1: set bin width"
 msgstr "%1: aseta fontti"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:449
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:450
 #, fuzzy, kde-format
 #| msgid "%1: change column order"
 msgid "%1: change auto bin ranges"
 msgstr "%1: aseta sarakejärjestys"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:497
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:498
 #, fuzzy, kde-format
 #| msgid "%1: set page size"
 msgid "%1: set bin ranges start"
 msgstr "%1: aseta sivukoko"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:504
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:505
 #, fuzzy, kde-format
 #| msgid "%1: set page size"
 msgid "%1: set bin ranges end"
 msgstr "%1: aseta sivukoko"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:824
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:825
 #, kde-format
 msgid ""
 "Calculation of the histogram not possible. The max value must be bigger than "

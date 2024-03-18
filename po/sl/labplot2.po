@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-17 01:56+0000\n"
-"PO-Revision-Date: 2024-03-05 09:27+0100\n"
+"POT-Creation-Date: 2024-03-18 01:58+0000\n"
+"PO-Revision-Date: 2024-03-17 08:14+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -1236,7 +1236,7 @@ msgstr "Odpiranje naprave/datoteke ni uspelo."
 #: src/backend/datasources/filters/BinaryFilter.cpp:283
 #, kde-format
 msgid "Data selection empty."
-msgstr "Izbira podatkov je prazna"
+msgstr "Izbira podatkov prazna."
 
 #: src/backend/datasources/filters/CANFilter.cpp:218
 #: src/backend/datasources/filters/SpiceFilter.cpp:131
@@ -2062,7 +2062,7 @@ msgstr "Izbrane preglednice ni mogoče najti."
 #: src/backend/datasources/filters/OdsFilter.cpp:257
 #, kde-format
 msgid "Invalid sheet."
-msgstr "Neveljavna preglednica"
+msgstr "Neveljavna preglednica."
 
 #: src/backend/datasources/filters/OdsFilter.cpp:318
 #, kde-format
@@ -7479,7 +7479,7 @@ msgid "%1: width factor changed"
 msgstr "%1: faktor širine spremenjen"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:291
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:164
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:165
 #: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:366
 #: src/backend/worksheet/plots/cartesian/XYEquationCurve.cpp:112
 #, kde-format
@@ -7562,28 +7562,28 @@ msgid "%1: jitterring changed"
 msgstr "%1: spremenjeno stresanje"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:568
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:512
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:513
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:556
 #, kde-format
 msgid "%1: change rug enabled"
 msgstr "%1: sprememba omogočenega raztrosa"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:575
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:519
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:520
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:570
 #, kde-format
 msgid "%1: change rug width"
 msgstr "%1: spremenite širino raztrosa"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:582
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:526
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:527
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:577
 #, kde-format
 msgid "%1: change rug length"
 msgstr "%1: spremenite dolžino raztrosa"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:589
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:533
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:534
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:584
 #, kde-format
 msgid "%1: change rug offset"
@@ -7905,7 +7905,7 @@ msgstr "Analiza krivulje"
 #. dataManipulationMenu->addAction(addDataReductionAction);
 #. analysis menu
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:646
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:189
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:190
 #, kde-format
 msgid "Analysis"
 msgstr "Analiza"
@@ -8257,104 +8257,104 @@ msgstr "%1: spremenjena vrsta označevanja napake"
 msgid "%1: set error bar cap size"
 msgstr "%1: nastavite velikost konca vrstice z napakami"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:170
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:171
 #, kde-format
 msgid "bin positions"
 msgstr "pozicije intervalov"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:176
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:177
 #, kde-format
 msgid "bin values"
 msgstr "vrednosti intervala"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:192
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:193
 #, kde-format
 msgid "Fit Gaussian (Normal) Distribution"
 msgstr "Prilegajoča Gaussova (navadna) porazdelitev"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:198
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:199
 #, kde-format
 msgid "Fit Exponential Distribution"
 msgstr "Prilegajoča eksponentna porazdelitev"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:204
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:205
 #, kde-format
 msgid "Fit Laplace Distribution"
 msgstr "Prilegajoča Laplaceova porazdelitev"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:210
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:211
 #, kde-format
 msgid "Fit Cauchy-Lorentz Distribution"
 msgstr "Prilegajoča Cauchy-Lorentzova porazdelitev"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:216
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:217
 #, kde-format
 msgid "Fit Log-normal Distribution"
 msgstr "Prilegajoča log. navadna porazdelitev"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:222
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:223
 #, kde-format
 msgid "Fit Poisson Distribution"
 msgstr "Prilegajoča Poissonova porazdelitev"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:228
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:229
 #, kde-format
 msgid "Fit Binomial Distribution"
 msgstr "Prilegajoča binomska porazdelitev"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:394
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:395
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:225
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:250
 #, kde-format
 msgid "%1: set data column"
 msgstr "%1: nastavite podatkovni stolpec"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:406
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:407
 #, kde-format
 msgid "%1: set histogram type"
 msgstr "%1: nastavite vrsto histograma"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:413
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:414
 #, kde-format
 msgid "%1: set histogram orientation"
 msgstr "%1: nastavite usmerjenost histograma"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:420
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:421
 #, kde-format
 msgid "%1: set histogram normalization"
 msgstr "%1: nastavite normalizacijo histograma"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:427
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:428
 #, kde-format
 msgid "%1: set binning method"
 msgstr "%1: nastavite metodo diskretnega spajanja"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:434
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:435
 #, kde-format
 msgid "%1: set bin count"
 msgstr "%1: nastavite število spajanj"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:441
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:442
 #, kde-format
 msgid "%1: set bin width"
 msgstr "%1: nastavite širino spajanja"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:449
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:450
 #, kde-format
 msgid "%1: change auto bin ranges"
 msgstr "%1: spremenite obsege samodejnega spajanja"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:497
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:498
 #, kde-format
 msgid "%1: set bin ranges start"
 msgstr "%1: nastavite začetek obsegov spajanja"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:504
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:505
 #, kde-format
 msgid "%1: set bin ranges end"
 msgstr "%1: nastavite konec obsegov spajanja"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:824
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:825
 #, kde-format
 msgid ""
 "Calculation of the histogram not possible. The max value must be bigger than "
@@ -9662,7 +9662,7 @@ msgstr "Vrstice, stolpci in vrednosti xy"
 #: src/commonfrontend/matrix/MatrixView.cpp:180
 #, kde-format
 msgid "&Add Columns"
-msgstr "&Dodaj stolpce"
+msgstr "Dodaj stolpce"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:181
 #, kde-format
@@ -11335,10 +11335,9 @@ msgid "Dataset%1"
 msgstr "Nabor podatkov%1"
 
 #: src/kdefrontend/datasources/ImportDatasetDialog.cpp:103
-#, fuzzy, kde-format
-#| msgid "File %1 imported in %2 seconds."
+#, kde-format
 msgid "Failed to connect within %1 seconds"
-msgstr "Datoteka %1, uvožena v %2 s."
+msgstr "Povezava ni uspela v %1 sekundah"
 
 #: src/kdefrontend/datasources/ImportDatasetDialog.cpp:128
 #, kde-format
