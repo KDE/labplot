@@ -391,7 +391,9 @@ void AspectTreeModel::aspectAboutToBeMoved(const AbstractAspect* aspect, int des
 	int index = parent->indexOfChild<AbstractAspect>(aspect);
 	const auto& parentIndex = modelIndexOfAspect(parent);
 	m_aspectAboutToBeMovedCalled = true;
-	Q_ASSERT(beginMoveRows(parentIndex, index, index, parentIndex, destinationRow));
+	if (!beginMoveRows(parentIndex, index, index, parentIndex, destinationRow)) {
+		Q_ASSERT(false); // Must be done like this, because otherwise in release build the assert will not be executed
+	}
 }
 
 void AspectTreeModel::aspectMoved() {
