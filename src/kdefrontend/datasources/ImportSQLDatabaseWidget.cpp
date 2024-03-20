@@ -429,7 +429,11 @@ void ImportSQLDatabaseWidget::read(AbstractDataSource* dataSource, AbstractFileF
 	// pointers to the actual data containers
 	// columnOffset indexes the "start column" in the datasource. Data will be imported starting from this column.
 	std::vector<void*> dataContainer;
-	const int columnOffset = dataSource->prepareImport(dataContainer, importMode, m_actualRows, m_actualCols, m_actualColumnNames, m_actualColumnModes);
+	bool ok = false;
+	const int columnOffset = dataSource->prepareImport(dataContainer, importMode, m_actualRows, m_actualCols, m_actualColumnNames, m_actualColumnModes, ok);
+	// TODO: error handling
+	if (!ok)
+		return;
 
 	// number and DateTime formatting
 	const auto& dateTimeFormat = ui.cbDateTimeFormat->currentText();

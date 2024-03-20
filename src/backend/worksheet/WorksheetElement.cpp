@@ -309,13 +309,15 @@ QMenu* WorksheetElement::createContextMenu() {
 
 void WorksheetElement::prepareDrawingOrderMenu() {
 	const auto* parent = parentAspect();
-	const int index = parent->indexOfChild<WorksheetElement>(this);
-	const auto& children = parent->children<WorksheetElement>();
+	const int index = parent->indexOfChild<AbstractAspect>(this, ChildIndexFlag::IncludeHidden);
+	const auto& children = parent->children<AbstractAspect>(ChildIndexFlag::IncludeHidden);
 
 	//"move behind" sub-menu
 	m_moveBehindMenu->clear();
 	for (int i = 0; i < index; ++i) {
 		const auto* elem = children.at(i);
+		if (elem->hidden())
+			continue;
 		// axes and legends are always drawn on top of other elements, don't add them to the menu
 		if (elem->type() != AspectType::Axis && elem->type() != AspectType::CartesianPlotLegend) {
 			auto* action = m_moveBehindMenu->addAction(elem->icon(), elem->name());
@@ -327,6 +329,8 @@ void WorksheetElement::prepareDrawingOrderMenu() {
 	m_moveInFrontOfMenu->clear();
 	for (int i = index + 1; i < children.size(); ++i) {
 		const auto* elem = children.at(i);
+		if (elem->hidden())
+			continue;
 		// axes and legends are always drawn on top of other elements, don't add them to the menu
 		if (elem->type() != AspectType::Axis && elem->type() != AspectType::CartesianPlotLegend) {
 			auto* action = m_moveInFrontOfMenu->addAction(elem->icon(), elem->name());
@@ -340,32 +344,17 @@ void WorksheetElement::prepareDrawingOrderMenu() {
 }
 
 void WorksheetElement::execMoveInFrontOf(QAction* action) {
-	Q_EMIT moveBegin();
 	auto* parent = parentAspect();
-	int index = action->data().toInt();
-	auto* sibling1 = parent->child<WorksheetElement>(index);
-	auto* sibling2 = parent->child<WorksheetElement>(index + 1);
-	beginMacro(i18n("%1: move behind %2.", name(), sibling1->name()));
-	setMoved(true);
-	remove();
-	parent->insertChildBefore(this, sibling2);
-	setMoved(false);
-	endMacro();
-	Q_EMIT moveEnd();
+	const int newIndex = action->data().toInt();
+	const int currIndex = parent->indexOfChild<AbstractAspect>(this, ChildIndexFlag::IncludeHidden);
+	parent->moveChild(this, newIndex - currIndex);
 }
 
 void WorksheetElement::execMoveBehind(QAction* action) {
-	Q_EMIT moveBegin();
 	auto* parent = parentAspect();
-	int index = action->data().toInt();
-	auto* sibling = parent->child<WorksheetElement>(index);
-	beginMacro(i18n("%1: move in front of %2.", name(), sibling->name()));
-	setMoved(true);
-	remove();
-	parent->insertChildBefore(this, sibling);
-	setMoved(false);
-	endMacro();
-	Q_EMIT moveEnd();
+	const int newIndex = action->data().toInt();
+	const int currIndex = parent->indexOfChild<AbstractAspect>(this, ChildIndexFlag::IncludeHidden);
+	parent->moveChild(this, newIndex - currIndex);
 }
 
 QPointF WorksheetElement::align(QPointF pos, QRectF rect, HorizontalAlignment horAlign, VerticalAlignment vertAlign, bool positive) const {

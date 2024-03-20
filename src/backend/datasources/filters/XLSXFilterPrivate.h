@@ -54,6 +54,9 @@ public:
 	QXlsx::CellRange currentRange;
 	QXlsx::CellReference dataExportStartCell;
 #endif
+
+	XLSXFilter* const q;
+
 private:
 #ifdef HAVE_QXLSX
 	QXlsx::Document* m_document{nullptr};

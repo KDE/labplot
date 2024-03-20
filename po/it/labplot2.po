@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-28 01:33+0000\n"
-"PO-Revision-Date: 2024-01-14 14:50+0100\n"
+"POT-Creation-Date: 2024-03-19 01:39+0000\n"
+"PO-Revision-Date: 2024-03-10 09:33+0100\n"
 "Last-Translator: Paolo Zamponi <feus73@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -105,7 +105,7 @@ msgid "Down"
 msgstr "Giù"
 
 #: src/backend/core/AbstractAspect.cpp:518
-#: src/backend/core/aspectcommands.h:121
+#: src/backend/core/aspectcommands.h:170
 #: src/backend/datapicker/Datapicker.cpp:220
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2022
 #, kde-format
@@ -128,47 +128,38 @@ msgstr "%1: inserisci %2 prima di %3"
 msgid "%1: insert %2 before end"
 msgstr "%1: inserisci %2 prima della fine"
 
-#: src/backend/core/AbstractAspect.cpp:606 src/backend/core/aspectcommands.h:43
+#: src/backend/core/AbstractAspect.cpp:606
+#: src/backend/core/aspectcommands.h:103
 #, kde-format
 msgid "%1: remove %2"
 msgstr "%1: rimuovi %2"
 
-#: src/backend/core/AbstractAspect.cpp:619
+#: src/backend/core/AbstractAspect.cpp:626
 #, kde-format
 msgid "%1: remove all children"
 msgstr "%1: rimuovi tutti i figli"
 
-#: src/backend/core/AbstractAspect.cpp:702
-#, kde-format
-msgid "%1: move up"
-msgstr "%1: sposta in su"
-
-#: src/backend/core/AbstractAspect.cpp:714
-#, kde-format
-msgid "%1: move down"
-msgstr "%1: sposta in giù"
-
-#: src/backend/core/AbstractAspect.cpp:830
+#: src/backend/core/AbstractAspect.cpp:825
 #, kde-format
 msgid "%1: pasted '%2'"
 msgstr "%1: incollato «%2»"
 
-#: src/backend/core/AbstractAspect.cpp:832
+#: src/backend/core/AbstractAspect.cpp:827
 #, kde-format
 msgid "%1: duplicated '%2'"
 msgstr "%1: duplicato «%2»"
 
-#: src/backend/core/AbstractAspect.cpp:833
+#: src/backend/core/AbstractAspect.cpp:828
 #, kde-format
 msgid "Copy of '%1'"
 msgstr "Copia di «%1»"
 
-#: src/backend/core/AbstractAspect.cpp:965
+#: src/backend/core/AbstractAspect.cpp:960
 #, kde-format
 msgid "Attribute 'name' is missing or empty."
 msgstr "L'attributo «name» è mancante o vuoto."
 
-#: src/backend/core/AbstractAspect.cpp:972
+#: src/backend/core/AbstractAspect.cpp:967
 #, kde-format
 msgid "Invalid creation time for '%1'. Using current time."
 msgstr "L'ora di creazione di «%1» non è valida: uso quella attuale."
@@ -455,17 +446,22 @@ msgstr "tipo di filtro incompatibile"
 msgid "unknown element '%1'"
 msgstr "elemento sconosciuto «%1»"
 
-#: src/backend/core/aspectcommands.h:147
+#: src/backend/core/aspectcommands.h:42
+#, kde-format
+msgid "%1: move up"
+msgstr "%1: sposta in su"
+
+#: src/backend/core/aspectcommands.h:196
 #, kde-format
 msgid "%1: move %2 to %3."
 msgstr "%1: sposta %2 in %3."
 
-#: src/backend/core/aspectcommands.h:181
+#: src/backend/core/aspectcommands.h:230
 #, kde-format
 msgid "%1: rename to %2"
 msgstr "%1: rinomina in %2"
 
-#: src/backend/core/AspectTreeModel.cpp:155
+#: src/backend/core/AspectTreeModel.cpp:157
 #: src/kdefrontend/datasources/HDF5OptionsWidget.cpp:27
 #: src/kdefrontend/datasources/NetCDFOptionsWidget.cpp:29
 #: src/kdefrontend/widgets/FitParametersWidget.cpp:35
@@ -474,7 +470,7 @@ msgid "Name"
 msgstr "Nome"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twContent)
-#: src/backend/core/AspectTreeModel.cpp:157
+#: src/backend/core/AspectTreeModel.cpp:159
 #: src/kdefrontend/datasources/HDF5OptionsWidget.cpp:27
 #: src/kdefrontend/datasources/NetCDFOptionsWidget.cpp:29
 #: src/kdefrontend/ui/datasources/matiooptionswidget.ui:47
@@ -482,65 +478,65 @@ msgstr "Nome"
 msgid "Type"
 msgstr "Tipo"
 
-#: src/backend/core/AspectTreeModel.cpp:159
+#: src/backend/core/AspectTreeModel.cpp:161
 #, kde-format
 msgid "Created"
 msgstr "Creato"
 
-#: src/backend/core/AspectTreeModel.cpp:161
+#: src/backend/core/AspectTreeModel.cpp:163
 #: src/kdefrontend/widgets/FITSHeaderEditWidget.cpp:66
 #, kde-format
 msgid "Comment"
 msgstr "Commento"
 
-#: src/backend/core/AspectTreeModel.cpp:184
+#: src/backend/core/AspectTreeModel.cpp:186
 #, kde-format
 msgid "%1   (non-plottable data)"
 msgstr "%1   (dato non stampabile)"
 
-#: src/backend/core/AspectTreeModel.cpp:186
+#: src/backend/core/AspectTreeModel.cpp:188
 #, kde-format
 msgid "%1   (non-numeric data)"
 msgstr "%1   (dato non numerico)"
 
-#: src/backend/core/AspectTreeModel.cpp:188
+#: src/backend/core/AspectTreeModel.cpp:190
 #, kde-format
 msgid "%1   (no values)"
 msgstr "%1   (nessun valore)"
 
-#: src/backend/core/AspectTreeModel.cpp:226
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1504
+#: src/backend/core/AspectTreeModel.cpp:228
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1496
 #, kde-format
 msgid "Size: %1"
 msgstr "Dimensione: %1"
 
 #. i18n("Values: %1", col->availableRowCount());
-#: src/backend/core/AspectTreeModel.cpp:229
+#: src/backend/core/AspectTreeModel.cpp:231
 #, kde-format
 msgid "Type: %1"
 msgstr "Tipo: %1"
 
-#: src/backend/core/AspectTreeModel.cpp:230
+#: src/backend/core/AspectTreeModel.cpp:232
 #, kde-format
 msgid "Plot Designation: %1"
 msgstr "Designazione dei grafici: %1"
 
-#: src/backend/core/AspectTreeModel.cpp:235
+#: src/backend/core/AspectTreeModel.cpp:237
 #, kde-format
 msgid "Formula:"
 msgstr "Formula:"
 
-#: src/backend/core/AspectTreeModel.cpp:257
+#: src/backend/core/AspectTreeModel.cpp:259
 #, kde-format
 msgid "auto update: true"
 msgstr "aggiornamento automatico: vero"
 
-#: src/backend/core/AspectTreeModel.cpp:259
+#: src/backend/core/AspectTreeModel.cpp:261
 #, kde-format
 msgid "auto update: false"
 msgstr "aggiornamento automatico: falso"
 
-#: src/backend/core/AspectTreeModel.cpp:414
+#: src/backend/core/AspectTreeModel.cpp:432
 #, kde-format
 msgid "The name \"%1\" is already in use. Choose another name."
 msgstr "Il nome «%1» è già in uso, scegline un altro."
@@ -928,7 +924,7 @@ msgstr "%1: imposta visibile"
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:126
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:138
 #: src/backend/worksheet/WorksheetElement.cpp:161
-#: src/backend/worksheet/WorksheetElement.cpp:778
+#: src/backend/worksheet/WorksheetElement.cpp:767
 #: src/backend/worksheet/WorksheetElementContainer.cpp:66
 #: src/backend/worksheet/WorksheetElementContainer.cpp:84
 #, kde-format
@@ -953,7 +949,7 @@ msgid "%1: upload new image"
 msgstr "%1: carica una nuova immagine"
 
 #: src/backend/datapicker/DatapickerImage.cpp:385
-#: src/backend/worksheet/WorksheetElement.cpp:819
+#: src/backend/worksheet/WorksheetElement.cpp:808
 #, kde-format
 msgid "%1: set rotation angle"
 msgstr "%1: imposta l'angolo di rotazione"
@@ -986,7 +982,7 @@ msgstr "Impossibile leggere i dati dell'immagine."
 
 #: src/backend/datapicker/DatapickerPoint.cpp:213
 #: src/backend/worksheet/InfoElement.cpp:780
-#: src/backend/worksheet/WorksheetElement.cpp:740
+#: src/backend/worksheet/WorksheetElement.cpp:729
 #, kde-format
 msgid "%1: set position"
 msgstr "%1: imposta la posizione"
@@ -1028,28 +1024,17 @@ msgstr "%1: imposta la posizione -delta_Y"
 msgid "%1: draw points over segment"
 msgstr "%1: disegna i punti sopra il segmento"
 
-#: src/backend/datasources/DatasetHandler.cpp:68
-#: src/backend/datasources/DatasetHandler.cpp:158
-#, kde-format
-msgid "Invalid metadata file"
-msgstr "File di metadati non valido"
-
-#: src/backend/datasources/DatasetHandler.cpp:68
+#: src/backend/datasources/DatasetHandler.cpp:69
 #, kde-format
 msgid "The metadata file for the selected dataset is invalid."
 msgstr "Il file di metadati per l'insieme di dati selezionato non è valido."
 
-#: src/backend/datasources/DatasetHandler.cpp:158
+#: src/backend/datasources/DatasetHandler.cpp:159
 #, kde-format
 msgid "There is no download URL present in the metadata file!"
 msgstr "Nei metadati del file non è presente un URL scaricabile."
 
-#: src/backend/datasources/DatasetHandler.cpp:192
-#, kde-format
-msgid "Failed to download the dataset"
-msgstr "Impossibile scaricare l'insieme di dati"
-
-#: src/backend/datasources/DatasetHandler.cpp:193
+#: src/backend/datasources/DatasetHandler.cpp:191
 #, kde-format
 msgid ""
 "Failed to download the dataset from %1.\n"
@@ -1058,18 +1043,12 @@ msgstr ""
 "Impossibile scaricare l'insieme di dati da %1.\n"
 "%2."
 
-#: src/backend/datasources/DatasetHandler.cpp:228
-#: src/backend/datasources/DatasetHandler.cpp:252
-#, kde-format
-msgid "Failed to save the dataset"
-msgstr "Impossibile salvare l'insieme di dati"
-
-#: src/backend/datasources/DatasetHandler.cpp:229
+#: src/backend/datasources/DatasetHandler.cpp:225
 #, kde-format
 msgid "Failed to create the directory %1 to save the dataset."
 msgstr "Impossibile creare la cartella %1 per salvare l'insieme di dati."
 
-#: src/backend/datasources/DatasetHandler.cpp:252
+#: src/backend/datasources/DatasetHandler.cpp:248
 #, kde-format
 msgid ""
 "Couldn't open the file %1 for writing.\n"
@@ -1078,7 +1057,7 @@ msgstr ""
 "Impossibile aprire il file %1 in scrittura.\n"
 "%2"
 
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:224
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:241
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:438
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1999
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:108
@@ -1091,61 +1070,61 @@ msgstr ""
 msgid "Image"
 msgstr "Immagine"
 
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:224
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:241
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:106
 #, kde-format
 msgid "Hierarchical Data Format 5 (HDF5)"
 msgstr "Hierarchical Data Format 5 (HDF5)"
 
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:224
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:241
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:136
 #, kde-format
 msgid "ASCII Data"
 msgstr "Dati ASCII"
 
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:224
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:241
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:137
 #, kde-format
 msgid "Binary Data"
 msgstr "Dati binari"
 
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:224
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:241
 #, kde-format
 msgid "Excel"
 msgstr "Excel"
 
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:225
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:242
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:109
 #, kde-format
 msgid "Network Common Data Format (NetCDF)"
 msgstr "Network Common Data Format (NetCDF)"
 
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:225
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:242
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:115
 #, kde-format
 msgid "Flexible Image Transport System Data Format (FITS)"
 msgstr "Flexible Image Transport System Data Format (FITS)"
 
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:225
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:242
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:117
 #, kde-format
 msgid "JSON Data"
 msgstr "Dati JSON"
 
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:226
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:243
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:121
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:141
 #, kde-format
 msgid "Spice"
 msgstr "Spice"
 
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:226
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:243
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:123
 #, kde-format
 msgid "SAS, Stata or SPSS"
 msgstr "SAS, Stata o SPSS"
 
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:226
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:243
 #, kde-format
 msgid "ROOT (CERN) Histograms"
 msgstr "Istogrammi ROOT (CERN)"
@@ -1161,31 +1140,39 @@ msgid "Number of lines: %1"
 msgstr "Numero di righe: %1"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:546
-#: src/backend/datasources/filters/AsciiFilter.cpp:748
-#: src/backend/datasources/filters/AsciiFilter.cpp:955
-#: src/backend/datasources/filters/AsciiFilter.cpp:1521
-#: src/backend/datasources/filters/AsciiFilter.cpp:2081
+#: src/backend/datasources/filters/AsciiFilter.cpp:749
+#: src/backend/datasources/filters/AsciiFilter.cpp:956
+#: src/backend/datasources/filters/AsciiFilter.cpp:1528
+#: src/backend/datasources/filters/AsciiFilter.cpp:2089
 #, kde-format
 msgid "Timestamp"
 msgstr "Data e ora"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:550
-#: src/backend/datasources/filters/AsciiFilter.cpp:742
-#: src/backend/datasources/filters/AsciiFilter.cpp:953
-#: src/backend/datasources/filters/AsciiFilter.cpp:1516
-#: src/backend/datasources/filters/AsciiFilter.cpp:2075
-#: src/backend/datasources/filters/BinaryFilter.cpp:290
-#: src/backend/datasources/filters/BinaryFilter.cpp:434
+#: src/backend/datasources/filters/AsciiFilter.cpp:743
+#: src/backend/datasources/filters/AsciiFilter.cpp:954
+#: src/backend/datasources/filters/AsciiFilter.cpp:1523
+#: src/backend/datasources/filters/AsciiFilter.cpp:2083
+#: src/backend/datasources/filters/BinaryFilter.cpp:293
+#: src/backend/datasources/filters/BinaryFilter.cpp:439
 #: src/backend/nsl/nsl_dft.c:29 src/backend/nsl/nsl_filter.c:23
 #, kde-format
 msgid "Index"
 msgstr "Indice"
 
+#: src/backend/datasources/filters/AsciiFilter.cpp:729
+#: src/backend/datasources/filters/AsciiFilter.cpp:1284
+#: src/backend/datasources/filters/AsciiFilter.cpp:1621
+#: src/backend/datasources/filters/BinaryFilter.cpp:404
+#, kde-format
+msgid "Failed to open the device/file or it's empty."
+msgstr "Impossibile aprire il dispositivo o il file, oppure è vuoto."
+
 #. i18n: ectx: property (text), widget (QTableWidget, twLabels)
-#: src/backend/datasources/filters/AsciiFilter.cpp:754
-#: src/backend/datasources/filters/AsciiFilter.cpp:960
-#: src/backend/datasources/filters/AsciiFilter.cpp:1540
-#: src/backend/datasources/filters/AsciiFilter.cpp:2094
+#: src/backend/datasources/filters/AsciiFilter.cpp:755
+#: src/backend/datasources/filters/AsciiFilter.cpp:961
+#: src/backend/datasources/filters/AsciiFilter.cpp:1547
+#: src/backend/datasources/filters/AsciiFilter.cpp:2102
 #: src/backend/datasources/filters/QJsonModel.cpp:133
 #: src/commonfrontend/matrix/MatrixView.cpp:619
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2380
@@ -1200,22 +1187,64 @@ msgstr "Indice"
 msgid "Value"
 msgstr "Valore"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:962
-#: src/backend/datasources/filters/AsciiFilter.cpp:1542
-#: src/backend/datasources/filters/AsciiFilter.cpp:2096
+#: src/backend/datasources/filters/AsciiFilter.cpp:963
+#: src/backend/datasources/filters/AsciiFilter.cpp:1549
+#: src/backend/datasources/filters/AsciiFilter.cpp:2104
 #, kde-format
 msgid "Value %1"
 msgstr "Valore %1"
 
-#: src/backend/datasources/filters/BinaryFilter.cpp:274
+#: src/backend/datasources/filters/AsciiFilter.cpp:1303
+#: src/backend/datasources/filters/BinaryFilter.cpp:447
+#: src/backend/datasources/filters/CANFilter.cpp:297
+#: src/backend/datasources/filters/FITSFilter.cpp:329
+#: src/backend/datasources/filters/FITSFilter.cpp:339
+#: src/backend/datasources/filters/FITSFilter.cpp:534
+#: src/backend/datasources/filters/HDF5Filter.cpp:1630
+#: src/backend/datasources/filters/HDF5Filter.cpp:1747
+#: src/backend/datasources/filters/HDF5Filter.cpp:1797
+#: src/backend/datasources/filters/HDF5Filter.cpp:1953
+#: src/backend/datasources/filters/ImageFilter.cpp:165
+#: src/backend/datasources/filters/JsonFilter.cpp:540
+#: src/backend/datasources/filters/MatioFilter.cpp:890
+#: src/backend/datasources/filters/NetCDFFilter.cpp:757
+#: src/backend/datasources/filters/NetCDFFilter.cpp:868
+#: src/backend/datasources/filters/NetCDFFilter.cpp:1000
+#: src/backend/datasources/filters/OdsFilter.cpp:388
+#: src/backend/datasources/filters/ReadStatFilter.cpp:528
+#: src/backend/datasources/filters/ROOTFilter.cpp:236
+#: src/backend/datasources/filters/ROOTFilter.cpp:306
+#: src/backend/datasources/filters/SpiceFilter.cpp:206
+#: src/backend/datasources/filters/XLSXFilter.cpp:515
 #, kde-format
-msgid "could not open device"
-msgstr "impossibile aprire il dispositivo"
+msgid "Not enough memory."
+msgstr "Memoria insufficiente."
 
-#: src/backend/datasources/filters/BinaryFilter.cpp:282
+#: src/backend/datasources/filters/BinaryFilter.cpp:273
+#: src/backend/datasources/filters/JsonFilter.cpp:386
+#: src/backend/datasources/filters/SpiceFilter.cpp:127
+#: src/backend/datasources/filters/SpiceFilter.cpp:183
 #, kde-format
-msgid "data selection empty"
-msgstr "selezione dei dati vuota"
+msgid "Failed to open the device/file."
+msgstr "Impossibile aprire il dispositivo o il file."
+
+#: src/backend/datasources/filters/BinaryFilter.cpp:283
+#, kde-format
+msgid "Data selection empty."
+msgstr "Selezione dei dati vuota."
+
+#: src/backend/datasources/filters/CANFilter.cpp:218
+#: src/backend/datasources/filters/SpiceFilter.cpp:131
+#: src/backend/datasources/filters/SpiceFilter.cpp:187
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:261
+#, kde-format
+msgid "Invalid file."
+msgstr "File non valido."
+
+#: src/backend/datasources/filters/CANFilter.cpp:224
+#, kde-format
+msgid "No messages read."
+msgstr "Nessun messaggio letto."
 
 #: src/backend/datasources/filters/FITSFilter.cpp:224
 #, kde-format
@@ -1227,8 +1256,25 @@ msgstr "Immagini: %1"
 msgid "Tables: %1"
 msgstr "Tabelle: %1"
 
-#: src/backend/datasources/filters/FITSFilter.cpp:1004
-#: src/backend/datasources/filters/FITSFilter.cpp:1524
+#: src/backend/datasources/filters/FITSFilter.cpp:259
+#: src/backend/datasources/filters/MatioFilter.cpp:647
+#, kde-format
+msgid "Failed to open the file."
+msgstr "Impossibile aprire il file."
+
+#: src/backend/datasources/filters/FITSFilter.cpp:267
+#: src/backend/datasources/filters/FITSFilter.cpp:346
+#, kde-format
+msgid "Failed to read the file."
+msgstr "Impossibile leggere il file."
+
+#: src/backend/datasources/filters/FITSFilter.cpp:288
+#, kde-format
+msgid "Zero dimensions."
+msgstr "Zero dimensioni."
+
+#: src/backend/datasources/filters/FITSFilter.cpp:1026
+#: src/backend/datasources/filters/FITSFilter.cpp:1547
 #: src/kdefrontend/datasources/FITSOptionsWidget.cpp:42
 #: src/kdefrontend/datasources/FITSOptionsWidget.cpp:75
 #: src/kdefrontend/datasources/FITSOptionsWidget.cpp:144
@@ -1236,347 +1282,348 @@ msgstr "Tabelle: %1"
 msgid "Primary header"
 msgstr "Intestazione primaria"
 
-#: src/backend/datasources/filters/FITSFilter.cpp:1006
+#: src/backend/datasources/filters/FITSFilter.cpp:1028
 #, kde-format
 msgid "IMAGE #%1"
 msgstr "IMMAGINE #%1"
 
-#: src/backend/datasources/filters/FITSFilter.cpp:1009
+#: src/backend/datasources/filters/FITSFilter.cpp:1031
 #, kde-format
 msgid "ASCII_TBL #%1"
 msgstr "ASCII_TBL #%1"
 
-#: src/backend/datasources/filters/FITSFilter.cpp:1012
+#: src/backend/datasources/filters/FITSFilter.cpp:1034
 #, kde-format
 msgid "BINARY_TBL #%1"
 msgstr "BINARY_TBL #%1"
 
-#: src/backend/datasources/filters/FITSFilter.cpp:1517
+#: src/backend/datasources/filters/FITSFilter.cpp:1540
 #, kde-format
 msgid "Images"
 msgstr "Immagini"
 
-#: src/backend/datasources/filters/FITSFilter.cpp:1543
+#: src/backend/datasources/filters/FITSFilter.cpp:1566
 #, kde-format
 msgid "Tables"
 msgstr "Tabelle"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:170
+#: src/backend/datasources/filters/HDF5Filter.cpp:169
 #, kde-format
 msgid "Not a HDF5 file"
 msgstr "Non è un file HDF5"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:174
+#: src/backend/datasources/filters/HDF5Filter.cpp:173
 #, kde-format
 msgid "Failed checking file"
 msgstr "Impossibile controllare il file"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:182
+#: src/backend/datasources/filters/HDF5Filter.cpp:181
 #, kde-format
 msgid "Failed opening HDF5 file"
 msgstr "Impossibile aprire il file HDF5"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:188
+#: src/backend/datasources/filters/HDF5Filter.cpp:187
 #, kde-format
 msgid "File size: %1 bytes"
 msgstr "Dimensione del file: %1 byte"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:193
+#: src/backend/datasources/filters/HDF5Filter.cpp:192
 #, kde-format
 msgid "Free space: %1 bytes"
 msgstr "Spazio libero: %1 byte"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:199
+#: src/backend/datasources/filters/HDF5Filter.cpp:198
 #, kde-format
 msgid "Number of files: %1"
 msgstr "Numero di file: %1"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:202
+#: src/backend/datasources/filters/HDF5Filter.cpp:201
 #, kde-format
 msgid "Number of data sets: %1"
 msgstr "Numero di insiemi di dati: %1"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:205
+#: src/backend/datasources/filters/HDF5Filter.cpp:204
 #, kde-format
 msgid "Number of groups: %1"
 msgstr "Numero di gruppi: %1"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:208
+#: src/backend/datasources/filters/HDF5Filter.cpp:207
 #, kde-format
 msgid "Number of named datatypes: %1"
 msgstr "Numero di tipi di dati con nome: %1"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:211
+#: src/backend/datasources/filters/HDF5Filter.cpp:210
 #, kde-format
 msgid "Number of attributes: %1"
 msgstr "Numero di attributi: %1"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:214
+#: src/backend/datasources/filters/HDF5Filter.cpp:213
 #, kde-format
 msgid "Number of all objects: %1"
 msgstr "Numero di tutti gli oggetti: %1"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:222
+#: src/backend/datasources/filters/HDF5Filter.cpp:221
 #, kde-format
 msgid "Version of superblock: %1"
 msgstr "Versione del superblocco: %1"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:224
+#: src/backend/datasources/filters/HDF5Filter.cpp:223
 #, kde-format
 msgid "Size of superblock: %1 bytes"
 msgstr "Dimensione del superblocco: %1 byte"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:226
-#: src/backend/datasources/filters/HDF5Filter.cpp:247
+#: src/backend/datasources/filters/HDF5Filter.cpp:225
+#: src/backend/datasources/filters/HDF5Filter.cpp:246
 #, kde-format
 msgid "Size of superblock extension: %1 bytes"
 msgstr "Dimensione dell'estensione del superblocco: %1 byte"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:228
+#: src/backend/datasources/filters/HDF5Filter.cpp:227
 #, kde-format
 msgid "Version of free-space manager: %1"
 msgstr "Versione del gestore di spazio libero: %1"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:230
+#: src/backend/datasources/filters/HDF5Filter.cpp:229
 #, kde-format
 msgid "Size of free-space manager metadata: %1 bytes"
 msgstr "Dimensione dei metadati del gestore di spazio libero: %1 byte"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:232
+#: src/backend/datasources/filters/HDF5Filter.cpp:231
 #, kde-format
 msgid "Total size of free space: %1 bytes"
 msgstr "Dimensione totale dello spazio libero: %1 byte"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:234
+#: src/backend/datasources/filters/HDF5Filter.cpp:233
 #, kde-format
 msgid "Version of shared object header: %1"
 msgstr "Versione dell'intestazione degli oggetti condivisi: %1"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:236
-#: src/backend/datasources/filters/HDF5Filter.cpp:249
+#: src/backend/datasources/filters/HDF5Filter.cpp:235
+#: src/backend/datasources/filters/HDF5Filter.cpp:248
 #, kde-format
 msgid "Size of shared object header: %1 bytes"
 msgstr "Dimensione dell'intestazione degli oggetti condivisi: %1 byte"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:238
-#: src/backend/datasources/filters/HDF5Filter.cpp:251
+#: src/backend/datasources/filters/HDF5Filter.cpp:237
+#: src/backend/datasources/filters/HDF5Filter.cpp:250
 #, kde-format
 msgid "Size of all shared object header indexes: %1 bytes"
 msgstr ""
 "Dimensione di tutti gli indici dell'intestazione degli oggetti condivisi: %1 "
 "byte"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:240
-#: src/backend/datasources/filters/HDF5Filter.cpp:253
+#: src/backend/datasources/filters/HDF5Filter.cpp:239
+#: src/backend/datasources/filters/HDF5Filter.cpp:252
 #, kde-format
 msgid "Size of the heap: %1 bytes"
 msgstr "Dimensione dello heap: %1 byte"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:265
+#: src/backend/datasources/filters/HDF5Filter.cpp:264
 #, kde-format
 msgid "Cache config version: %1"
 msgstr "Versione di configurazione della cache: %1"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:267
-#: src/backend/datasources/filters/HDF5Filter.cpp:307
-#: src/backend/datasources/filters/HDF5Filter.cpp:309
+#: src/backend/datasources/filters/HDF5Filter.cpp:266
+#: src/backend/datasources/filters/HDF5Filter.cpp:306
+#: src/backend/datasources/filters/HDF5Filter.cpp:308
 #: src/backend/datasources/filters/MatioFilter.cpp:574
 #: src/backend/datasources/filters/MatioFilter.cpp:578
 #, kde-format
 msgid "Yes"
 msgstr "Sì"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:267
-#: src/backend/datasources/filters/HDF5Filter.cpp:307
-#: src/backend/datasources/filters/HDF5Filter.cpp:309
+#: src/backend/datasources/filters/HDF5Filter.cpp:266
+#: src/backend/datasources/filters/HDF5Filter.cpp:306
+#: src/backend/datasources/filters/HDF5Filter.cpp:308
 #: src/backend/datasources/filters/MatioFilter.cpp:576
 #: src/backend/datasources/filters/MatioFilter.cpp:580
 #, kde-format
 msgid "No"
 msgstr "No"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:267
+#: src/backend/datasources/filters/HDF5Filter.cpp:266
 #, kde-format
 msgid "Adaptive cache resize report function enabled: %1"
 msgstr ""
 "Funzione di riporto del ridimensionamento della cache adattiva abilitata: %1"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:269
+#: src/backend/datasources/filters/HDF5Filter.cpp:268
 #, kde-format
 msgid "Cache initial maximum size: %1 bytes"
 msgstr "Dimensione iniziale minima della cache: %1 byte"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:271
+#: src/backend/datasources/filters/HDF5Filter.cpp:270
 #, kde-format
 msgid "Adaptive cache maximum size: %1 bytes"
 msgstr "Dimensione massima della cache adattiva: %1 byte"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:273
+#: src/backend/datasources/filters/HDF5Filter.cpp:272
 #, kde-format
 msgid "Adaptive cache minimum size: %1 bytes"
 msgstr "Dimensione minima della cache adattiva: %1 byte"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:279
+#: src/backend/datasources/filters/HDF5Filter.cpp:278
 #, kde-format
 msgid "Metadata cache hit rate: %1"
 msgstr "Frequenza di successo per i metadati nella cache: %1"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:286
+#: src/backend/datasources/filters/HDF5Filter.cpp:285
 #, kde-format
 msgid "Current cache maximum size: %1 bytes"
 msgstr "Dimensione attuale massima della cache: %1 byte"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:288
+#: src/backend/datasources/filters/HDF5Filter.cpp:287
 #, kde-format
 msgid "Current cache minimum clean size: %1 bytes"
 msgstr "Dimensione minima pulita attuale della cache: %1 byte"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:290
+#: src/backend/datasources/filters/HDF5Filter.cpp:289
 #, kde-format
 msgid "Current cache size: %1 bytes"
 msgstr "Dimensione attuale della cache: %1 byte"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:292
+#: src/backend/datasources/filters/HDF5Filter.cpp:291
 #, kde-format
 msgid "Current number of entries in the cache: %1"
 msgstr "Numero di voci attualmente nella cache: %1"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:307
+#: src/backend/datasources/filters/HDF5Filter.cpp:306
 #, kde-format
 msgid "Logging enabled: %1"
 msgstr "Registrazione abilitata: %1"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:309
+#: src/backend/datasources/filters/HDF5Filter.cpp:308
 #, kde-format
 msgid "Events are currently logged: %1"
 msgstr "Gli eventi sono attualmente registrati: %1"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:317
+#: src/backend/datasources/filters/HDF5Filter.cpp:316
 #, kde-format
 msgid "Metadata/raw data page buffer accesses: %1 %2"
 msgstr "Accessi al buffer di pagina per i metadati o i dati grezzi: %1 %2"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:319
+#: src/backend/datasources/filters/HDF5Filter.cpp:318
 #, kde-format
 msgid "Metadata/raw data page buffer hits: %1 %2"
 msgstr ""
 "Elementi trovati con successo nel buffer di pagina per i metadati o i dati "
 "grezzi: %1 %2"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:321
+#: src/backend/datasources/filters/HDF5Filter.cpp:320
 #, kde-format
 msgid "Metadata/raw data page buffer misses: %1 %2"
 msgstr ""
 "Elementi non trovati nel buffer di pagina per i metadati o i dati grezzi: %1 "
 "%2"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:323
+#: src/backend/datasources/filters/HDF5Filter.cpp:322
 #, kde-format
 msgid "Metadata/raw data page buffer evictions: %1 %2"
 msgstr ""
 "Eliminazioni del buffer delle pagine di metadati/dati non elaborati: %1 %2"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:325
+#: src/backend/datasources/filters/HDF5Filter.cpp:324
 #, kde-format
 msgid "Metadata/raw data accesses bypassing page buffer: %1 %2"
 msgstr ""
 "Accessi ai metadati o ai dati grezzi scavalcando il buffer di pagina: %1 %2"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:328
+#: src/backend/datasources/filters/HDF5Filter.cpp:327
 #, kde-format
 msgid "Page buffer disabled"
 msgstr "Buffer di pagina disabilitato"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:350
+#: src/backend/datasources/filters/HDF5Filter.cpp:349
 #, kde-format
 msgid "h5dump not found."
 msgstr "h5dump non trovato."
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:358
-#: src/backend/datasources/filters/NetCDFFilter.cpp:268
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1479
+#: src/backend/datasources/filters/HDF5Filter.cpp:357
+#: src/backend/datasources/filters/NetCDFFilter.cpp:267
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1471
 #, kde-format
 msgid "Reading from file %1 failed."
 msgstr "Lettura del file %1 non riuscita."
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1300
+#: src/backend/datasources/filters/HDF5Filter.cpp:1299
 #, kde-format
 msgid "data type"
 msgstr "tipo di dati"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1351
+#: src/backend/datasources/filters/HDF5Filter.cpp:1350
 #, kde-format
 msgid "rank %1 not supported yet"
 msgstr "rank %1 non ancora supportato"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1358
+#: src/backend/datasources/filters/HDF5Filter.cpp:1357
 #: src/kdefrontend/datasources/HDF5OptionsWidget.cpp:75
 #, kde-format
 msgid "data set"
 msgstr "insieme di dati"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1376
+#: src/backend/datasources/filters/HDF5Filter.cpp:1375
 #, kde-format
 msgid "symbolic link"
 msgstr "collegamento simbolico"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1376
+#: src/backend/datasources/filters/HDF5Filter.cpp:1375
 #, kde-format
 msgid "link to %1"
 msgstr "collegamento a %1"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1389
+#: src/backend/datasources/filters/HDF5Filter.cpp:1388
 #, kde-format
 msgid "hard link"
 msgstr "collegamento fisso"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1453
+#: src/backend/datasources/filters/HDF5Filter.cpp:1452
 #, kde-format
 msgid "unknown"
 msgstr "sconosciuto"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1515
+#: src/backend/datasources/filters/HDF5Filter.cpp:1512
+#: src/backend/datasources/filters/HDF5Filter.cpp:2139
 #, kde-format
-msgid "No data set selected"
-msgstr "Nessun insieme di dati selezionato"
+msgid "No data set selected."
+msgstr "Nessun insieme di dati selezionato."
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1582
+#: src/backend/datasources/filters/HDF5Filter.cpp:1581
 #, kde-format
 msgid "rank 0 not implemented yet for type %1"
 msgstr "rank 0 non ancora implementato per il tipo %1"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1716
-#: src/backend/datasources/filters/HDF5Filter.cpp:1855
+#: src/backend/datasources/filters/HDF5Filter.cpp:1720
+#: src/backend/datasources/filters/HDF5Filter.cpp:1869
 #, kde-format
 msgid "unsupported integer type for rank 1"
 msgstr "tipo intero non supportato per rank 1"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1730
+#: src/backend/datasources/filters/HDF5Filter.cpp:1733
 #, kde-format
 msgid "unsupported float type for rank 1"
 msgstr "tipo in virgola mobile non supportato per rank 1"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1872
+#: src/backend/datasources/filters/HDF5Filter.cpp:1884
 #, kde-format
 msgid "rank 1 not implemented yet for type %1"
 msgstr "rank 1 non ancora implementato per il tipo %1"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:2000
+#: src/backend/datasources/filters/HDF5Filter.cpp:2017
 #, kde-format
 msgid "unsupported integer type for rank 2"
 msgstr "tipo intero non supportato per rank 2"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:2014
+#: src/backend/datasources/filters/HDF5Filter.cpp:2030
 #, kde-format
 msgid "unsupported float type for rank 2"
 msgstr "tipo in virgola mobile non supportato per rank 2"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:2078
+#: src/backend/datasources/filters/HDF5Filter.cpp:2093
 #, kde-format
 msgid "rank 2 not implemented yet for type %1"
 msgstr "rank 2 non ancora implementato per il tipo %1"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:2088
+#: src/backend/datasources/filters/HDF5Filter.cpp:2102
 #, kde-format
 msgid "rank %1 not implemented yet for type %2"
 msgstr "rank %1 non ancora implementato per il tipo %2"
@@ -1596,7 +1643,12 @@ msgstr "XYZ (scala di grigi)"
 msgid "XYRGB"
 msgstr "XYRGB"
 
-#: src/backend/datasources/filters/ImageFilter.cpp:216
+#: src/backend/datasources/filters/ImageFilter.cpp:118
+#, kde-format
+msgid "Empty file or invalid or non-supported format."
+msgstr "File vuoto, oppure formato non valido o non supportato."
+
+#: src/backend/datasources/filters/ImageFilter.cpp:219
 #, kde-format
 msgid "numerical data, %1 element"
 msgid_plural "numerical data, %1 elements"
@@ -1654,39 +1706,54 @@ msgstr "nome"
 msgid "Column %1"
 msgstr "Colonna %1"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:309
-#: src/backend/datasources/filters/NetCDFFilter.cpp:237
+#: src/backend/datasources/filters/JsonFilter.cpp:391
+#, kde-format
+msgid "Device/file is empty."
+msgstr "Il dispositivo o il file è vuoto."
+
+#: src/backend/datasources/filters/JsonFilter.cpp:399
+#, kde-format
+msgid "JSON format error or document empty."
+msgstr "Errore nel formato JSON, oppure documento vuoto."
+
+#: src/backend/datasources/filters/JsonFilter.cpp:522
+#, kde-format
+msgid "Empty file or invalid JSON document."
+msgstr "File vuoto o documento JSON non valido."
+
+#: src/backend/datasources/filters/MatioFilter.cpp:308
+#: src/backend/datasources/filters/NetCDFFilter.cpp:236
 #: src/backend/datasources/filters/ReadStatFilter.cpp:176
 #, kde-format
 msgid "Error getting file info"
 msgstr "Errore durante il recupero delle informazioni sul file"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:318
+#: src/backend/datasources/filters/MatioFilter.cpp:317
 #, kde-format
 msgid "Matlab version 7.3"
 msgstr "Versione 7.3 di Matlab"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:321
+#: src/backend/datasources/filters/MatioFilter.cpp:320
 #, kde-format
 msgid "Matlab version 5"
 msgstr "Versione 5 di Matlab"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:324
+#: src/backend/datasources/filters/MatioFilter.cpp:323
 #, kde-format
 msgid "Matlab version 4"
 msgstr "Versione 4 di Matlab"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:327
+#: src/backend/datasources/filters/MatioFilter.cpp:326
 #, kde-format
 msgid "Matlab version undefined"
 msgstr "Versione di Matlab non definita"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:333
+#: src/backend/datasources/filters/MatioFilter.cpp:332
 #, kde-format
 msgid "Number of variables: "
 msgstr "Numero di variabili: "
 
-#: src/backend/datasources/filters/MatioFilter.cpp:336
+#: src/backend/datasources/filters/MatioFilter.cpp:335
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:326
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:346
 #, kde-format
@@ -1694,7 +1761,7 @@ msgid "Variables:"
 msgstr "Variabili:"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:370
-#: src/backend/datasources/filters/MatioFilter.cpp:731
+#: src/backend/datasources/filters/MatioFilter.cpp:740
 #, kde-format
 msgid "Empty"
 msgstr "Vuoto"
@@ -1799,7 +1866,7 @@ msgid "Undefined"
 msgstr "Indefinita"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:412
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:55
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:57
 #, kde-format
 msgid "Unknown"
 msgstr "Sconosciuta"
@@ -1842,76 +1909,67 @@ msgstr "Stringa"
 msgid "Array"
 msgstr "Vettore"
 
+#: src/backend/datasources/filters/MatioFilter.cpp:602
 #: src/backend/datasources/filters/MatioFilter.cpp:634
-#: src/backend/datasources/filters/NetCDFFilter.cpp:691
+#: src/backend/datasources/filters/MatioFilter.cpp:663
 #, kde-format
-msgid "No variable selected"
-msgstr "Nessuna variabile selezionata"
+msgid "No valid variable selected."
+msgstr "Nessuna variabile valida selezionata."
 
-#: src/backend/datasources/filters/MatioFilter.cpp:645
-#: src/kdefrontend/datasources/ImportDatasetWidget.cpp:170
-#: src/kdefrontend/examples/ExamplesManager.cpp:175
-#: src/tools/ColorMapsManager.cpp:152
+#: src/backend/datasources/filters/MatioFilter.cpp:658
 #, kde-format
-msgid "File not found"
-msgstr "File non trovato"
+msgid "Selected variable not found."
+msgstr "La variabile selezionata non è stata trovata."
 
-#: src/backend/datasources/filters/MatioFilter.cpp:654
-#, kde-format
-msgid "Variable not found"
-msgstr "Variabile non trovata"
-
-#: src/backend/datasources/filters/MatioFilter.cpp:656
-#, kde-format
-msgid "Variable contains no data"
-msgstr "La variabile non contiene nessun dato"
-
-#: src/backend/datasources/filters/MatioFilter.cpp:790
+#: src/backend/datasources/filters/MatioFilter.cpp:799
 #, kde-format
 msgid "Struct contains no fields"
 msgstr "La struttura non contiene nessun campo"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:868
-#: src/backend/datasources/filters/MatioFilter.cpp:872
-#: src/backend/datasources/filters/MatioFilter.cpp:874
-#: src/backend/datasources/filters/MatioFilter.cpp:1212
+#: src/backend/datasources/filters/MatioFilter.cpp:881
 #, kde-format
-msgid "Not implemented yet"
-msgstr "Non ancora implementato"
+msgid "Support for this variable type not implemented yet."
+msgstr ""
+"Il supporto per questo tipo di variabile non è stato ancora implementato."
 
-#: src/backend/datasources/filters/NetCDFFilter.cpp:213
+#: src/backend/datasources/filters/MatioFilter.cpp:1227
+#, kde-format
+msgid "Variables with rank greater than 2 not supported yet."
+msgstr "Le variabili con rank maggiore di 2 non sono ancora supportate."
+
+#: src/backend/datasources/filters/NetCDFFilter.cpp:212
 #, kde-format
 msgid "Error opening file"
 msgstr "Errore nell'apertura del file"
 
-#: src/backend/datasources/filters/NetCDFFilter.cpp:222
+#: src/backend/datasources/filters/NetCDFFilter.cpp:221
 #, kde-format
 msgid "Number of global attributes: %1"
 msgstr "Numero di attributi globali: %1"
 
-#: src/backend/datasources/filters/NetCDFFilter.cpp:224
+#: src/backend/datasources/filters/NetCDFFilter.cpp:223
 #, kde-format
 msgid "Number of dimensions: %1"
 msgstr "Numero di dimensioni: %1"
 
-#: src/backend/datasources/filters/NetCDFFilter.cpp:226
+#: src/backend/datasources/filters/NetCDFFilter.cpp:225
 #: src/backend/datasources/filters/ReadStatFilter.cpp:131
 #, kde-format
 msgid "Number of variables: %1"
 msgstr "Numero di variabili: %1"
 
-#: src/backend/datasources/filters/NetCDFFilter.cpp:232
+#: src/backend/datasources/filters/NetCDFFilter.cpp:231
 #: src/backend/datasources/filters/ReadStatFilter.cpp:137
 #, kde-format
 msgid "Format version: %1"
 msgstr "Versione del formato: %1"
 
-#: src/backend/datasources/filters/NetCDFFilter.cpp:235
+#: src/backend/datasources/filters/NetCDFFilter.cpp:234
 #, kde-format
 msgid "Using library version %1"
 msgstr "Uso la versione della libreria %1"
 
-#: src/backend/datasources/filters/NetCDFFilter.cpp:260
+#: src/backend/datasources/filters/NetCDFFilter.cpp:259
 #, kde-format
 msgid "ncdump not found."
 msgstr "ncdump non trovato."
@@ -1965,7 +2023,24 @@ msgstr "Dimensioni"
 msgid "Variables"
 msgstr "Variabili"
 
-#: src/backend/datasources/filters/NetCDFFilter.cpp:1063
+#: src/backend/datasources/filters/NetCDFFilter.cpp:688
+#: src/backend/datasources/filters/NetCDFFilter.cpp:1113
+#, kde-format
+msgid "No variable selected."
+msgstr "Nessuna variabile selezionata."
+
+#: src/backend/datasources/filters/NetCDFFilter.cpp:699
+#, kde-format
+msgid "Failed to open the file or it's empty."
+msgstr "Impossibile aprire il file, oppure è vuoto."
+
+#: src/backend/datasources/filters/NetCDFFilter.cpp:937
+#: src/backend/datasources/filters/NetCDFFilter.cpp:1077
+#, kde-format
+msgid "Data type not supported yet."
+msgstr "Tipo di dato non ancora supportato."
+
+#: src/backend/datasources/filters/NetCDFFilter.cpp:1082
 #, kde-format
 msgid "%1 dimensional data of type %2 not supported yet"
 msgstr "dati a %1 dimensioni di tipo %2 non ancora supportati"
@@ -1975,6 +2050,37 @@ msgstr "dati a %1 dimensioni di tipo %2 non ancora supportati"
 #, kde-format
 msgid "Sheet count: %1"
 msgstr "Conteggio dei fogli: %1"
+
+#: src/backend/datasources/filters/OdsFilter.cpp:215
+#: src/backend/datasources/filters/XLSXFilter.cpp:632
+#, kde-format
+msgid "No sheet selected."
+msgstr "Nessun foglio selezionato."
+
+#: src/backend/datasources/filters/OdsFilter.cpp:250
+#, kde-format
+msgid "Selected sheet not found."
+msgstr "Il foglio selezionato non è stato trovato."
+
+#: src/backend/datasources/filters/OdsFilter.cpp:257
+#, kde-format
+msgid "Invalid sheet."
+msgstr "Foglio non valido."
+
+#: src/backend/datasources/filters/OdsFilter.cpp:318
+#, kde-format
+msgid "Formulas not supported yet."
+msgstr "Le formule non sono ancora supportate."
+
+#: src/backend/datasources/filters/OdsFilter.cpp:473
+#, kde-format
+msgid "Sheet not found."
+msgstr "Foglio non trovato."
+
+#: src/backend/datasources/filters/OdsFilter.cpp:480
+#, kde-format
+msgid "Invalid sheet index."
+msgstr "Indice del foglio non valido."
 
 #: src/backend/datasources/filters/QJsonModel.cpp:132
 #: src/kdefrontend/widgets/FITSHeaderEditWidget.cpp:64
@@ -2047,6 +2153,17 @@ msgstr "Codifica del file: %1"
 msgid "64bit: %1"
 msgstr "64bit: %1"
 
+#: src/backend/datasources/filters/ReadStatFilter.cpp:482
+#, kde-format
+msgid "Error reading file."
+msgstr "Errore durante la lettura del file."
+
+#: src/backend/datasources/filters/ReadStatFilter.cpp:512
+#: src/backend/datasources/filters/ReadStatFilter.cpp:535
+#, kde-format
+msgid "Failed to parse the file."
+msgstr "Impossibile analizzare il file."
+
 #: src/backend/datasources/filters/ROOTFilter.cpp:113
 #: src/backend/datasources/MQTTClient.cpp:1200
 #: src/backend/datasources/MQTTTopic.cpp:218
@@ -2061,127 +2178,137 @@ msgstr "L'attributo «%1» è mancate o vuoto, uso il valore predefinito"
 msgid "No column available"
 msgstr "Nessuna colonna disponibile"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1454
+#: src/backend/datasources/filters/ROOTFilter.cpp:163
+#, kde-format
+msgid "Unsupported file type, neither histogram no tree."
+msgstr "Tipo di file mobile non supportato, né istogramma, né albero."
+
+#: src/backend/datasources/filters/ROOTFilter.cpp:1470
 #, kde-format
 msgid "Not a ROOT file"
 msgstr "Non è un file ROOT"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1459
+#: src/backend/datasources/filters/ROOTFilter.cpp:1475
 #, kde-format
 msgid "File format version: %1"
 msgstr "Versione del formato del file: %1"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1467
+#: src/backend/datasources/filters/ROOTFilter.cpp:1483
 #, kde-format
 msgid "FREE data record size: %1 bytes"
 msgstr "Dimensione del record di dati LIBERO: %1 byte"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1469
+#: src/backend/datasources/filters/ROOTFilter.cpp:1485
 #, kde-format
 msgid "Number of free data records: %1"
 msgstr "Numero di record di dati liberi: %1"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1471
+#: src/backend/datasources/filters/ROOTFilter.cpp:1487
 #, kde-format
 msgid "TNamed size: %1 bytes"
 msgstr "Dimensione TNamed: %1 byte"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1473
+#: src/backend/datasources/filters/ROOTFilter.cpp:1489
 #, kde-format
 msgid "Size of file pointers: %1 bytes"
 msgstr "Dimensione dei puntatori di file: %1 byte"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1478
+#: src/backend/datasources/filters/ROOTFilter.cpp:1494
 #, kde-format
 msgid "Compression level and algorithm: %1"
 msgstr "Livello di compressione ed algoritmo: %1"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1483
+#: src/backend/datasources/filters/ROOTFilter.cpp:1499
 #, kde-format
 msgid "Size of TStreamerInfo record: %1 bytes"
 msgstr "Dimensione del record TStreamerInfo: %1 byte"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:101
-#, fuzzy, kde-format
-#| msgid "Ratio: %1"
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:103
+#, kde-format
 msgid "Application: %1"
-msgstr "Rapporto: %1"
+msgstr "Applicazione: %1"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:104
-#, fuzzy, kde-format
-#| msgid "Format version: %1"
-msgid "Application version: %1.%2"
-msgstr "Versione del formato: %1"
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:105
+#, kde-format
+msgid "Application version: %1.%2.%3"
+msgstr "Versione dell'applicazione: %1.%2.%3"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:107
-#, fuzzy, kde-format
-#| msgid "Compression: %1"
-msgid "Compression Level: %1"
-msgstr "Compressione: %1"
-
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:110
-#, fuzzy, kde-format
-#| msgid "File size: %1 bytes"
-msgid "Uncompressed File Size: %1 Bytes"
-msgstr "Dimensione del file: %1 byte"
-
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:113
-#, fuzzy, kde-format
-#| msgid "Number of all objects: %1"
+#, kde-format
 msgid "Number of Objects: %1"
-msgstr "Numero di tutti gli oggetti: %1"
+msgstr "Numero di oggetti: %1"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:162
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:115
 #, kde-format
-msgid "Big Endian not supported. CAN id: %1"
-msgstr "Big Endian non è supportato. Id CAN: %1"
+msgid "Start Time: %1"
+msgstr "Ora d'inizio: %1"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:165
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:123
 #, kde-format
-msgid "Message too long. CAN id: %1"
-msgstr "Messaggio troppo lungo. Id CAN: %1"
+msgid "End Time: %1"
+msgstr "Ora di fine: %1"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:168
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:127
 #, kde-format
-msgid "Unknown id: %1"
-msgstr "Id sconosciuto: %1"
+msgid "Compression Level: %1"
+msgstr "Livello di compressione: %1"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:171
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:129
 #, kde-format
-msgid "Invalid blf file"
-msgstr "File blf non valido"
-
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:174
-#, kde-format
-msgid "Unable to calculate conversion: %1"
-msgstr "Impossibile calcolare la conversione: %1"
-
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:177
-#, kde-format
-msgid "No dbc parser installed"
-msgstr "Nessun analizzatore dbc installato"
+msgid "Uncompressed File Size: %1 Bytes"
+msgstr "Dimensione del file non compresso: %1 byte"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:180
 #, kde-format
-msgid "Invalid dbc file"
-msgstr "File dbc non valido"
+msgid "Big Endian not supported. CAN id: %1."
+msgstr "Big Endian non supportato. Id CAN: %1."
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:183
 #, kde-format
-msgid "Unknown error"
-msgstr "Errore sconosciuto"
+msgid "Message too long. CAN id: %1."
+msgstr "Messaggio troppo lungo. Id CAN: %1."
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:424
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:186
+#, kde-format
+msgid "Unknown id: %1."
+msgstr "Id sconosciuto: %1."
+
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:189
+#, kde-format
+msgid "Invalid BLF file"
+msgstr "File BLF non valido"
+
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:192
+#, kde-format
+msgid "Unable to calculate conversion: %1."
+msgstr "Impossibile calcolare la conversione: %1."
+
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:195
+#, kde-format
+msgid "No DBC parser installed."
+msgstr "Nessun analizzatore DBC installato."
+
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:198
+#, kde-format
+msgid "Invalid DBC file."
+msgstr "File DBC non valido."
+
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:201
+#, kde-format
+msgid "Unknown error,"
+msgstr "Errore sconosciuto,"
+
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:438
 #, kde-format
 msgid "Time_s"
 msgstr "Tempo_s"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:426
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:440
 #, kde-format
 msgid "Time_ns"
 msgstr "Tempo_ns"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:428
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:442
 #, kde-format
 msgid "Time_10µs"
 msgstr "Tempo_10µs"
@@ -2190,6 +2317,11 @@ msgstr "Tempo_10µs"
 #, kde-format
 msgid "Sheets: "
 msgstr "Fogli: "
+
+#: src/backend/datasources/filters/XLSXFilter.cpp:636
+#, kde-format
+msgid "Invalid region specified."
+msgstr "Regione specificata non valida."
 
 #: src/backend/datasources/LiveDataSource.cpp:691
 #: src/backend/datasources/LiveDataSource.cpp:694
@@ -3758,28 +3890,27 @@ msgstr "uguale a epsilon"
 #: src/backend/gsl/functions.cpp:315
 #, kde-format
 msgid "between with boundaries included"
-msgstr ""
+msgstr "compreso con gli estremi inclusi"
 
 #: src/backend/gsl/functions.cpp:316
 #, kde-format
 msgid "outside with boundaries included"
-msgstr ""
+msgstr "esterno con gli estremi inclusi"
 
 #: src/backend/gsl/functions.cpp:317
 #, kde-format
 msgid "between with boundaries excluded"
-msgstr ""
+msgstr "compreso con gli estremi esclusi"
 
 #: src/backend/gsl/functions.cpp:318
-#, fuzzy, kde-format
-#| msgid "Not inside of the bounding rect"
+#, kde-format
 msgid "outside with boundaries excluded"
-msgstr "Non all'interno del riquadro dell'oggetto"
+msgstr "esterno con gli estremi esclusi"
 
 #: src/backend/gsl/functions.cpp:321
 #, kde-format
 msgid "if(condition; ifTrue; ifFalse)"
-msgstr ""
+msgstr "if(condition; ifTrue; ifFalse)"
 
 #. i18n: ectx: property (text), widget (QLabel, lAnd)
 #. i18n: ectx: property (text), widget (QLabel, lAndDateTime)
@@ -3806,10 +3937,9 @@ msgid "xor"
 msgstr "xor"
 
 #: src/backend/gsl/functions.cpp:325
-#, fuzzy, kde-format
-#| msgid "no"
+#, kde-format
 msgid "not"
-msgstr "no"
+msgstr "non"
 
 #: src/backend/gsl/functions.cpp:329
 #, kde-format
@@ -6006,7 +6136,7 @@ msgstr "Statistica (distribuzioni)"
 #: src/backend/nsl/nsl_fit.c:24
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:554
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:550
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1231
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1223
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:242
 #: src/kdefrontend/dockwidgets/KDEPlotDock.cpp:191
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:277
@@ -6624,49 +6754,49 @@ msgstr "%1: ordina le colonne"
 msgid "%1: linked spreadsheet removed"
 msgstr "%1: foglio elettronico collegato rimosso"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1516
+#: src/backend/spreadsheet/Spreadsheet.cpp:1523
 #, kde-format
 msgid "double precision data, %1 element"
 msgid_plural "numerical data, %1 elements"
 msgstr[0] "dato a doppia precisione, %1 elemento"
 msgstr[1] "dato numerico, %1 elementi"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1519
+#: src/backend/spreadsheet/Spreadsheet.cpp:1526
 #, kde-format
 msgid "integer data, %1 element"
 msgid_plural "integer data, %1 elements"
 msgstr[0] "dato intero, %1 elemento"
 msgstr[1] "dato intero, %1 elementi"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1522
+#: src/backend/spreadsheet/Spreadsheet.cpp:1529
 #, kde-format
 msgid "big integer data, %1 element"
 msgid_plural "big integer data, %1 elements"
 msgstr[0] "numero intero grande, 1 elemento"
 msgstr[1] "numero intero grande, %1 elementi"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1525
+#: src/backend/spreadsheet/Spreadsheet.cpp:1532
 #, kde-format
 msgid "text data, %1 element"
 msgid_plural "text data, %1 elements"
 msgstr[0] "dato testuale, %1 elemento"
 msgstr[1] "dato testuale, %1 elementi"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1528
+#: src/backend/spreadsheet/Spreadsheet.cpp:1535
 #, kde-format
 msgid "month data, %1 element"
 msgid_plural "month data, %1 elements"
 msgstr[0] "mese, %1 elemento"
 msgstr[1] "mese, %1 elementi"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1531
+#: src/backend/spreadsheet/Spreadsheet.cpp:1538
 #, kde-format
 msgid "day data, %1 element"
 msgid_plural "day data, %1 elements"
 msgstr[0] "giorno, %1 elemento"
 msgstr[1] "giorno, %1 elementi"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1534
+#: src/backend/spreadsheet/Spreadsheet.cpp:1541
 #, kde-format
 msgid "date and time data, %1 element"
 msgid_plural "date and time data, %1 elements"
@@ -6881,7 +7011,7 @@ msgstr "%1: cambia il rapporto di mantenimento"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twLabels)
 #: src/backend/worksheet/InfoElement.cpp:135
-#: src/backend/worksheet/InfoElement.cpp:1231
+#: src/backend/worksheet/InfoElement.cpp:1230
 #: src/kdefrontend/ui/dockwidgets/columndock.ui:187
 #, kde-format
 msgid "Label"
@@ -7336,7 +7466,7 @@ msgid "%1: width factor changed"
 msgstr "%1: fattore di larghezza modificato"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:291
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:164
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:165
 #: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:366
 #: src/backend/worksheet/plots/cartesian/XYEquationCurve.cpp:112
 #, kde-format
@@ -7419,28 +7549,28 @@ msgid "%1: jitterring changed"
 msgstr "%1: fluttuazione modificata"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:568
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:512
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:513
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:556
 #, kde-format
 msgid "%1: change rug enabled"
 msgstr "%1: cambia il tappeto abilitato"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:575
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:519
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:520
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:570
 #, kde-format
 msgid "%1: change rug width"
 msgstr "%1: cambia larghezza del tappeto"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:582
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:526
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:527
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:577
 #, kde-format
 msgid "%1: change rug length"
 msgstr "%1: cambia lunghezza del tappeto"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:589
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:533
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:534
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:584
 #, kde-format
 msgid "%1: change rug offset"
@@ -7762,7 +7892,7 @@ msgstr "Curva di analisi"
 #. dataManipulationMenu->addAction(addDataReductionAction);
 #. analysis menu
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:646
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:189
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:190
 #, kde-format
 msgid "Analysis"
 msgstr "Analisi"
@@ -8115,104 +8245,104 @@ msgstr "%1: tipo di barra di errore modificato"
 msgid "%1: set error bar cap size"
 msgstr "%1: imposta la dimensione della punta delle barre di errore"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:170
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:171
 #, kde-format
 msgid "bin positions"
 msgstr "posizione degli intervalli"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:176
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:177
 #, kde-format
 msgid "bin values"
 msgstr "valori binari"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:192
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:193
 #, kde-format
 msgid "Fit Gaussian (Normal) Distribution"
 msgstr "Adatta distribuzione gaussiana (normale)"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:198
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:199
 #, kde-format
 msgid "Fit Exponential Distribution"
 msgstr "Adatta distribuzione esponenziale"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:204
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:205
 #, kde-format
 msgid "Fit Laplace Distribution"
 msgstr "Adatta distribuzione di Laplace"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:210
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:211
 #, kde-format
 msgid "Fit Cauchy-Lorentz Distribution"
 msgstr "Adatta distribuzione di Cauchy"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:216
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:217
 #, kde-format
 msgid "Fit Log-normal Distribution"
 msgstr "Adatta distribuzione lognormale"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:222
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:223
 #, kde-format
 msgid "Fit Poisson Distribution"
 msgstr "Adatta distribuzione di Poisson"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:228
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:229
 #, kde-format
 msgid "Fit Binomial Distribution"
 msgstr "Adatta distribuzione binomiale"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:394
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:395
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:225
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:250
 #, kde-format
 msgid "%1: set data column"
 msgstr "%1: imposta la colonna dati"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:406
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:407
 #, kde-format
 msgid "%1: set histogram type"
 msgstr "%1: imposta il tipo di istogramma"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:413
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:414
 #, kde-format
 msgid "%1: set histogram orientation"
 msgstr "%1: imposta l'orientazione dell'istogramma"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:420
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:421
 #, kde-format
 msgid "%1: set histogram normalization"
 msgstr "%1: imposta normalizzazione dell'istogramma"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:427
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:428
 #, kde-format
 msgid "%1: set binning method"
 msgstr "%1: imposta il metodo di binning"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:434
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:435
 #, kde-format
 msgid "%1: set bin count"
 msgstr "%1: imposta il conteggio del contenitore"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:441
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:442
 #, kde-format
 msgid "%1: set bin width"
 msgstr "%1: imposta la larghezza del contenitore"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:449
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:450
 #, kde-format
 msgid "%1: change auto bin ranges"
 msgstr "%1: cambia gli intervalli automatici del contenitore"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:497
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:498
 #, kde-format
 msgid "%1: set bin ranges start"
 msgstr "%1: imposta l'inizio degli intervalli del contenitore"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:504
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:505
 #, kde-format
 msgid "%1: set bin ranges end"
 msgstr "%1: imposta la fine degli intervalli del contenitore"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:824
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:825
 #, kde-format
 msgid ""
 "Calculation of the histogram not possible. The max value must be bigger than "
@@ -9053,32 +9183,22 @@ msgstr "Sposta &dietro a"
 msgid "Move in &front of"
 msgstr "Sposta di &fronte a"
 
-#: src/backend/worksheet/WorksheetElement.cpp:348
-#, kde-format
-msgid "%1: move behind %2."
-msgstr "%1: sposta dietro a %2."
-
-#: src/backend/worksheet/WorksheetElement.cpp:362
-#, kde-format
-msgid "%1: move in front of %2."
-msgstr "%1: sposta di fronte a %2."
-
-#: src/backend/worksheet/WorksheetElement.cpp:752
+#: src/backend/worksheet/WorksheetElement.cpp:741
 #, kde-format
 msgid "%1: set horizontal alignment"
 msgstr "%1: imposta l'allineamento orizzontale"
 
-#: src/backend/worksheet/WorksheetElement.cpp:764
+#: src/backend/worksheet/WorksheetElement.cpp:753
 #, kde-format
 msgid "%1: set vertical alignment"
 msgstr "%1: imposta l'allineamento verticale"
 
-#: src/backend/worksheet/WorksheetElement.cpp:778
+#: src/backend/worksheet/WorksheetElement.cpp:767
 #, kde-format
 msgid "%1: use logical coordinates"
 msgstr "%1: usa le coordinate logiche"
 
-#: src/backend/worksheet/WorksheetElement.cpp:788
+#: src/backend/worksheet/WorksheetElement.cpp:777
 #, kde-format
 msgid "%1: set logical position"
 msgstr "%1: imposta la posizione logica"
@@ -9112,7 +9232,7 @@ msgid "Find"
 msgstr "Trova"
 
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:64
-#: src/kdefrontend/datasources/ImportDialog.cpp:108
+#: src/kdefrontend/datasources/ImportDialog.cpp:110
 #, kde-format
 msgid "Replace"
 msgstr "Sostituisci"
@@ -10513,7 +10633,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, lLinkedSpreadsheet)
 #: src/commonfrontend/workbook/WorkbookView.cpp:52
 #: src/commonfrontend/workbook/WorkbookView.cpp:165
-#: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:115
+#: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:116
 #: src/kdefrontend/dockwidgets/XYAnalysisCurveDock.cpp:57
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:75
 #: src/kdefrontend/labplot2ui.rc:32 src/kdefrontend/MainWin.cpp:716
@@ -11182,13 +11302,25 @@ msgstr ""
 "Questa opzione determina come le immagini debbano essere convertite quando "
 "vengono importate."
 
-#: src/kdefrontend/datasources/ImportDatasetDialog.cpp:53
+#: src/kdefrontend/datasources/ImportDatasetDialog.cpp:56
 #, kde-format
 msgctxt "@title:window"
 msgid "Import from Dataset Collection"
 msgstr "Importa da collezione di insieme di dati"
 
-#: src/kdefrontend/datasources/ImportDatasetDialog.cpp:98
+#: src/kdefrontend/datasources/ImportDatasetDialog.cpp:93
+#: src/kdefrontend/welcomescreen/WelcomeScreenHelper.cpp:115
+#, kde-format
+msgid "Dataset%1"
+msgstr "Insieme di dati%1"
+
+#: src/kdefrontend/datasources/ImportDatasetDialog.cpp:103
+#, fuzzy, kde-format
+#| msgid "File %1 imported in %2 seconds."
+msgid "Failed to connect within %1 seconds"
+msgstr "File %1 importato in %2 secondi."
+
+#: src/kdefrontend/datasources/ImportDatasetDialog.cpp:128
 #, kde-format
 msgid "Dataset imported in %1 seconds."
 msgstr "Insieme di dati importato in %1 secondi."
@@ -11201,6 +11333,13 @@ msgstr "Insieme di dati importato in %1 secondi."
 #, kde-format
 msgid "All"
 msgstr "Tutto"
+
+#: src/kdefrontend/datasources/ImportDatasetWidget.cpp:170
+#: src/kdefrontend/examples/ExamplesManager.cpp:175
+#: src/tools/ColorMapsManager.cpp:152
+#, kde-format
+msgid "File not found"
+msgstr "File non trovato"
 
 #: src/kdefrontend/datasources/ImportDatasetWidget.cpp:171
 #, kde-format
@@ -11223,45 +11362,45 @@ msgstr "Insieme di dati"
 msgid "Description"
 msgstr "Descrizione"
 
-#: src/kdefrontend/datasources/ImportDialog.cpp:49
+#: src/kdefrontend/datasources/ImportDialog.cpp:51
 #, kde-format
 msgid "New Workbook"
 msgstr "Nuova cartella di lavoro"
 
-#: src/kdefrontend/datasources/ImportDialog.cpp:50
+#: src/kdefrontend/datasources/ImportDialog.cpp:52
 #, kde-format
 msgid "New Spreadsheet"
 msgstr "Nuovo foglio elettronico"
 
-#: src/kdefrontend/datasources/ImportDialog.cpp:51
+#: src/kdefrontend/datasources/ImportDialog.cpp:53
 #, kde-format
 msgid "New Matrix"
 msgstr "Nuova matrice"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbImportTo)
-#: src/kdefrontend/datasources/ImportDialog.cpp:72
+#: src/kdefrontend/datasources/ImportDialog.cpp:74
 #: src/kdefrontend/ui/datasources/importprojectwidget.ui:108
 #, kde-format
 msgid "Import to"
 msgstr "Importa in"
 
-#: src/kdefrontend/datasources/ImportDialog.cpp:74
+#: src/kdefrontend/datasources/ImportDialog.cpp:76
 #, kde-format
 msgid "Data container:"
 msgstr "Contenitore di dati:"
 
-#: src/kdefrontend/datasources/ImportDialog.cpp:75
-#: src/kdefrontend/datasources/ImportDialog.cpp:81
+#: src/kdefrontend/datasources/ImportDialog.cpp:77
+#: src/kdefrontend/datasources/ImportDialog.cpp:83
 #, kde-format
 msgid "Data container where the data has to be imported into"
 msgstr "Contenitore di dati in cui importare i dati"
 
-#: src/kdefrontend/datasources/ImportDialog.cpp:94
+#: src/kdefrontend/datasources/ImportDialog.cpp:96
 #, kde-format
 msgid "New"
 msgstr "Nuovo"
 
-#: src/kdefrontend/datasources/ImportDialog.cpp:97
+#: src/kdefrontend/datasources/ImportDialog.cpp:99
 #, kde-format
 msgid "Add new data container to the project"
 msgstr "Aggiungi un nuovo contenitore di dati al progetto"
@@ -11273,7 +11412,7 @@ msgstr "Aggiungi un nuovo contenitore di dati al progetto"
 #. i18n: ectx: property (text), widget (QLabel, lLabelsPosition)
 #. i18n: ectx: property (text), widget (QLabel, lValuesPosition)
 #. i18n: ectx: property (text), widget (QLabel, lPositionDateTime)
-#: src/kdefrontend/datasources/ImportDialog.cpp:100
+#: src/kdefrontend/datasources/ImportDialog.cpp:102
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:65
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:616
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1272
@@ -11287,22 +11426,22 @@ msgstr "Aggiungi un nuovo contenitore di dati al progetto"
 msgid "Position:"
 msgstr "Posizione:"
 
-#: src/kdefrontend/datasources/ImportDialog.cpp:106
+#: src/kdefrontend/datasources/ImportDialog.cpp:108
 #, kde-format
 msgid "Append"
 msgstr "Aggiungi"
 
-#: src/kdefrontend/datasources/ImportDialog.cpp:107
+#: src/kdefrontend/datasources/ImportDialog.cpp:109
 #, kde-format
 msgid "Prepend"
 msgstr "Anteponi"
 
-#: src/kdefrontend/datasources/ImportDialog.cpp:145
+#: src/kdefrontend/datasources/ImportDialog.cpp:147
 #, kde-format
 msgid "Add %1"
 msgstr "Aggiungi %1"
 
-#: src/kdefrontend/datasources/ImportDialog.cpp:145
+#: src/kdefrontend/datasources/ImportDialog.cpp:147
 #, kde-format
 msgid "%1 name:"
 msgstr "nome per %1:"
@@ -11321,7 +11460,7 @@ msgid "Add New Live Data Source"
 msgstr "Aggiungi una nuova fonte dati attiva"
 
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:106
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:351
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:344
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:130
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:346
 #: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:113
@@ -11331,7 +11470,7 @@ msgid "Hide Options"
 msgstr "Nascondi le opzioni"
 
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:106
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:351
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:344
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:130
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:346
 #: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:113
@@ -11345,85 +11484,86 @@ msgstr "Mostra le opzioni"
 msgid "Live data source created in %1 seconds."
 msgstr "Fonte dati attiva creata in %1 secondi."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:183
-#, kde-format
-msgid "No data to import."
-msgstr "Nessun dato da importare."
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:174
+#, fuzzy, kde-format
+#| msgid "No data set selected"
+msgid "No target data container selected"
+msgstr "Nessun insieme di dati selezionato"
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:334
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:319
 #, kde-format
 msgid "File %1 imported in %2 seconds."
 msgstr "File %1 importato in %2 secondi."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:370
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:406
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:433
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:457
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:482
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:515
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:538
-#: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:158
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:363
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:399
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:426
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:450
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:475
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:508
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:531
+#: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:160
 #, kde-format
 msgid "Close the dialog and import the data."
 msgstr "Chiudi la finestra e importa i dati."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:372
-#: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:152
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:365
+#: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:154
 #, kde-format
 msgid "Cannot import into a matrix since the data contains non-numerical data."
 msgstr ""
 "Impossibile importare in una matrice, dato che contiene dati non numerici."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:384
-#: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:136
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:377
+#: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:138
 #, kde-format
 msgid "Select a data container where the data has to be imported into."
 msgstr "Seleziona un contenitore in cui importare i dati."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:409
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:402
 #, kde-format
 msgid "The provided file doesn't exist."
 msgstr "Il file fornito non esiste."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:437
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:430
 #, kde-format
 msgid "Could not connect to the provided local socket. Error: %1."
 msgstr "Impossibile connettersi al socket locale fornito. Errore: %1."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:443
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:436
 #, kde-format
 msgid ""
 "Could not connect to the provided local socket. The socket does not exist."
 msgstr ""
 "Impossibile connettersi al socket locale fornito: il socket non esiste."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:462
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:455
 #, kde-format
 msgid "Could not connect to the provided TCP socket. Error: %1."
 msgstr "Impossibile connettersi al socket TCP fornito. Errore: %1."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:468
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:494
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:461
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:487
 #, kde-format
 msgid "Either the host name or the port number is missing."
 msgstr "Sia il nome dell'host che la porta sono mancanti."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:488
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:481
 #, kde-format
 msgid "Could not connect to the provided UDP socket. Error: %1."
 msgstr "Impossibile connettersi al socket UDP fornito. Errore: %1."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:519
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:512
 #, kde-format
 msgid "Could not connect to the provided serial port."
 msgstr "Impossibile connettersi alla porta seriale fornita."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:525
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:518
 #, kde-format
 msgid "Serial port number is missing."
 msgstr "Il numero della porta seriale è mancante."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:541
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:534
 #, kde-format
 msgid ""
 "Either there is no connection, or no subscriptions were made, or the file "
@@ -11575,32 +11715,32 @@ msgstr ""
 "Specifica il messaggio «Ultime volontà e testamento» (LWT). Deve essere "
 "sottoscritto almeno un argomento."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:908
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:900
 #, kde-format
 msgctxt "@title:window"
 msgid "Select the File Data Source"
 msgstr "Seleziona la fonte dati file"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:938
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:930
 #, kde-format
 msgctxt "@title:window"
 msgid "Select the DBC file"
 msgstr "Seleziona il file DBC"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:938
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:930
 #, kde-format
 msgid "DBC file (*.dbc)"
 msgstr "File DBC (*.dbc)"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataFormat)
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1144
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1136
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:402
 #, kde-format
 msgid "Data Format"
 msgstr "Formato dati"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataPreview)
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1145
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1137
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:456
 #: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:158
 #, kde-format
@@ -11608,183 +11748,183 @@ msgid "Preview"
 msgstr "Anteprima"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataPortion)
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1147
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1139
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:535
 #: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:239
 #, kde-format
 msgid "Data Portion to Read"
 msgstr "Porzione di dati da leggere"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1187
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1179
 #, kde-format
 msgid "Data format && preview"
 msgstr "Formato dei dati e anteprima"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1230
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1222
 #: src/kdefrontend/SettingsGeneralPage.cpp:226
 #, kde-format
 msgid "Automatic"
 msgstr "Automatico"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1471
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1463
 #, kde-format
 msgid "file command not found"
 msgstr "file di comandi non trovato"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1482
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1474
 #, kde-format
 msgid "cannot open"
 msgstr "impossibile aprire"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1487
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1479
 #, kde-format
 msgid "<b>File type:</b> %1"
 msgstr "<b>Tipo di file:</b> %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1492
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1484
 #, kde-format
 msgid "General:"
 msgstr "Generale:"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1494
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1495
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1496
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1486
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1487
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1488
 #, kde-format
 msgid "yes"
 msgstr "sì"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1494
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1495
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1496
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1486
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1487
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1488
 #, kde-format
 msgid "no"
 msgstr "no"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1494
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1486
 #, kde-format
 msgid "Readable: %1"
 msgstr "Leggibile: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1495
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1487
 #, kde-format
 msgid "Writable: %1"
 msgstr "Scrivibile: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1496
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1488
 #, kde-format
 msgid "Executable: %1"
 msgstr "Eseguibile: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1498
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1490
 #, kde-format
 msgid "Birth time: %1"
 msgstr "Ora di nascita: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1499
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1491
 #, kde-format
 msgid "Last metadata changed: %1"
 msgstr "Ultimo metadato modificato: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1500
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1492
 #, kde-format
 msgid "Last modified: %1"
 msgstr "Ultima modifica: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1501
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1493
 #, kde-format
 msgid "Last read: %1"
 msgstr "Ultima lettura: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1502
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1494
 #, kde-format
 msgid "Owner: %1"
 msgstr "Proprietario: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1503
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1495
 #, kde-format
 msgid "Group: %1"
 msgstr "Gruppo: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1504
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1496
 #, kde-format
 msgid "%1 cByte"
 msgid_plural "%1 cBytes"
 msgstr[0] "%1 cByte"
 msgstr[1] "%1 cByte"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1507
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1499
 #, kde-format
 msgid "Summary:"
 msgstr "Riepilogo:"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1530
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1535
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1522
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1527
 #, kde-format
 msgid "Content:"
 msgstr "Contenuto:"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1563
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1555
 #, kde-format
 msgid "Could not open file %1 for reading."
 msgstr "Impossibile aprire il file %1 in lettura."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1723
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1718
 #, kde-format
 msgid "No data arrived yet for the selected topic"
 msgstr "Non è ancora arrivato nessun dato per l'argomento selezionato"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1959
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1955
 #, kde-format
 msgid "Not a HDF5 file: %1"
 msgstr "Non è un file HDF5: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2392
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2388
 #, kde-format
 msgid "Couldn't subscribe to all available topics."
 msgstr "Impossibile iscriversi a tutti gli argomenti."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2422
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2418
 #, kde-format
 msgid "Disconnected from '%1'."
 msgstr "Disconnesso da «%1»."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2491
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2487
 #, kde-format
 msgid "Available (%1)"
 msgstr "Disponibile (%1)"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2603
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2599
 #, kde-format
 msgid "Wrong username or password"
 msgstr "Nome utente o password non corretti"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2606
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2602
 #, kde-format
 msgid "The client ID wasn't accepted"
 msgstr "L'ID del client non è stato accettato"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2610
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2606
 #, kde-format
 msgid "The broker %1 couldn't be reached."
 msgstr "Il broker %1 non può essere raggiunto."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2613
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2609
 #, kde-format
 msgid "The client is not authorized to connect."
 msgstr "Il client non è autorizzato alla connessione."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2616
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2612
 #, kde-format
 msgid "An unknown error occurred."
 msgstr "Si è verificato un errore sconosciuto."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2622
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2625
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2618
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2621
 #, kde-format
 msgid "An error occurred."
 msgstr "Si è verificato un errore."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2639
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2635
 #, kde-format
 msgid "Connecting to '%1:%2' timed out."
 msgstr "Connessione a «%1:%2» scaduta."
@@ -11916,30 +12056,27 @@ msgid "LabPlot Projects (%1)"
 msgstr "Progetti di LabPlot (%1)"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:443
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Open Origin Project"
+#, kde-format
 msgctxt "@title:window"
 msgid "Open Origin OPJ Project"
-msgstr "Apri progetto di Origin"
+msgstr "Apri progetto di Origin OPJ"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:445
-#, fuzzy, kde-format
-#| msgid "Origin Projects (%1)"
+#, kde-format
 msgid "Origin OPJ Projects (%1)"
-msgstr "Progetto di Origin (%1)"
+msgstr "Progetto di Origin OPJ (%1)"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:514
 #, kde-format
 msgid "Folder name:"
 msgstr "Nome della cartella:"
 
-#: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:120
+#: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:121
 #, kde-format
 msgid "Data imported in %1 seconds."
 msgstr "Dati importati in %1 secondi."
 
-#: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:144
+#: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:146
 #, kde-format
 msgid ""
 "Select a valid database object (table or query result set) that has to be "
@@ -11995,8 +12132,8 @@ msgstr "Aggiorna l'anteprima dei dati della tavola selezionata"
 msgid "Execute the query and preview its result"
 msgstr "Esegui l'interrogazione e fai l'anteprima dei suoi risultati"
 
-#: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:529
-#: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:531
+#: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:533
+#: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:535
 #, kde-format
 msgid "Failed to execute the query"
 msgstr "Impossibile eseguire l'interrogazione"
@@ -12216,7 +12353,7 @@ msgstr ""
 
 #: src/kdefrontend/datasources/MQTTSubscriptionWidget.cpp:856
 #: src/kdefrontend/datasources/MQTTSubscriptionWidget.cpp:858
-#: src/kdefrontend/MainWin.cpp:2897
+#: src/kdefrontend/MainWin.cpp:2868
 #, kde-format
 msgid "Warning"
 msgstr "Attenzione"
@@ -12970,10 +13107,9 @@ msgstr "Centra"
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:258
 #: src/kdefrontend/widgets/LabelWidget.cpp:142
 #: src/kdefrontend/widgets/LabelWidget.cpp:147
-#, fuzzy, kde-format
-#| msgid "Relative Path"
+#, kde-format
 msgid "Relative to plot"
-msgstr "Percorso relativo"
+msgstr "Relativo al grafico"
 
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:779
 #, kde-format
@@ -15020,43 +15156,37 @@ msgstr "Progetto condiviso con successo"
 msgid "You can find the shared project at: <a href=\"%1\">%1</a>"
 msgstr "Puoi trovare i progetti condivisi su: <a href=\"%1\">%1</a>"
 
-#: src/kdefrontend/MainWin.cpp:2830
-#: src/kdefrontend/welcomescreen/WelcomeScreenHelper.cpp:115
-#, kde-format
-msgid "Dataset%1"
-msgstr "Insieme di dati%1"
-
-#: src/kdefrontend/MainWin.cpp:2860
+#: src/kdefrontend/MainWin.cpp:2831
 #, kde-format
 msgid "%1 exported"
 msgstr "%1 esportato"
 
-#: src/kdefrontend/MainWin.cpp:2867
+#: src/kdefrontend/MainWin.cpp:2838
 #, kde-format
 msgid "FITS files saved"
 msgstr "File FITS salvati"
 
-#: src/kdefrontend/MainWin.cpp:2879
+#: src/kdefrontend/MainWin.cpp:2850
 #, kde-format
 msgid "MQTT Client%1"
 msgstr "Client MQTT %1"
 
-#: src/kdefrontend/MainWin.cpp:2897
+#: src/kdefrontend/MainWin.cpp:2868
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
 msgstr "C'è già un MQTTClient con questo host."
 
-#: src/kdefrontend/MainWin.cpp:2901
+#: src/kdefrontend/MainWin.cpp:2872
 #, kde-format
 msgid "Live data source%1"
 msgstr "Fonte dati attiva%1"
 
-#: src/kdefrontend/MainWin.cpp:2952
+#: src/kdefrontend/MainWin.cpp:2923
 #, kde-format
 msgid "No Cantor backends found. Please install the ones you want to use."
 msgstr "Nessun motore di Cantor trovato. installane uno se vuoi usarlo."
 
-#: src/kdefrontend/MainWin.cpp:2966
+#: src/kdefrontend/MainWin.cpp:2937
 #, kde-format
 msgid "Creates a new %1 notebook"
 msgstr "Crea un nuovo notebook %1"
@@ -15290,24 +15420,19 @@ msgid "Load Last Used Project"
 msgstr "Carica l'ultimo progetto utilizzato"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:197
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Print Worksheet"
+#, kde-format
 msgid "With Worksheet"
-msgstr "Stampa il foglio di lavoro"
+msgstr "Con il foglio di lavoro"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:198
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Print Spreadsheet"
+#, kde-format
 msgid "With Spreadsheet"
-msgstr "Stampa il foglio elettronico"
+msgstr "Con il foglio elettronico"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:199
-#, fuzzy, kde-format
-#| msgid "%1: set linked spreadsheet"
+#, kde-format
 msgid "With Worksheet and Spreadsheet"
-msgstr "%1: imposta foglio elettronico collegato"
+msgstr "Con il foglio di lavoro e il foglio elettronico"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:201
 #, kde-format
@@ -17933,18 +18058,6 @@ msgstr "Insieme di dati:"
 msgid "Categories"
 msgstr "Categorie"
 
-#. i18n: ectx: property (windowTitle), widget (QDialog, ImportErrorDialog)
-#: src/kdefrontend/ui/datasources/ImportErrorDialog.ui:14
-#, kde-format
-msgid "Parse Errors"
-msgstr "Elabora errori"
-
-#. i18n: ectx: property (text), widget (QPushButton, pbOk)
-#: src/kdefrontend/ui/datasources/ImportErrorDialog.ui:38
-#, kde-format
-msgid "OK"
-msgstr "OK"
-
 #. i18n: ectx: property (title), widget (QGroupBox, gbDataSource)
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:44
 #, kde-format
@@ -18283,6 +18396,18 @@ msgstr "Separatore decimale:"
 msgid "Query"
 msgstr "Interrogazione"
 
+#. i18n: ectx: property (windowTitle), widget (QDialog, ImportWarningsDialog)
+#: src/kdefrontend/ui/datasources/importwarningsdialog.ui:14
+#, kde-format
+msgid "Import Warnings"
+msgstr "Importa gli avvisi"
+
+#. i18n: ectx: property (text), widget (QPushButton, pbOk)
+#: src/kdefrontend/ui/datasources/importwarningsdialog.ui:38
+#, kde-format
+msgid "OK"
+msgstr "OK"
+
 #. i18n: ectx: property (text), widget (QCheckBox, chbImportObjectNames)
 #: src/kdefrontend/ui/datasources/jsonoptionswidget.ui:99
 #, kde-format
@@ -18307,7 +18432,7 @@ msgstr "Variabile"
 #: src/kdefrontend/ui/datasources/matiooptionswidget.ui:32
 #, kde-format
 msgid "Rank"
-msgstr "Posizione"
+msgstr "Rank"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twContent)
 #: src/kdefrontend/ui/datasources/matiooptionswidget.ui:37
@@ -20022,10 +20147,9 @@ msgstr "Colonna maggiore"
 
 #. i18n: ectx: property (text), widget (QLabel, lShowComments)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:222
-#, fuzzy, kde-format
-#| msgid "Comment:"
+#, kde-format
 msgid "Comments:"
-msgstr "Commento:"
+msgstr "Commenti:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLinking)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:235
@@ -22870,6 +22994,42 @@ msgstr "processo convert non riuscito, codice di uscita ="
 msgid "Unable to open file:"
 msgstr "Impossibile aprire il file:"
 
+#~ msgid "%1: move down"
+#~ msgstr "%1: sposta in giù"
+
+#~ msgid "%1: move behind %2."
+#~ msgstr "%1: sposta dietro a %2."
+
+#~ msgid "%1: move in front of %2."
+#~ msgstr "%1: sposta di fronte a %2."
+
+#~ msgid "Invalid metadata file"
+#~ msgstr "File di metadati non valido"
+
+#~ msgid "Failed to download the dataset"
+#~ msgstr "Impossibile scaricare l'insieme di dati"
+
+#~ msgid "Failed to save the dataset"
+#~ msgstr "Impossibile salvare l'insieme di dati"
+
+#~ msgid "could not open device"
+#~ msgstr "impossibile aprire il dispositivo"
+
+#~ msgid "Variable contains no data"
+#~ msgstr "La variabile non contiene nessun dato"
+
+#~ msgid "Not implemented yet"
+#~ msgstr "Non ancora implementato"
+
+#~ msgid "Invalid dbc file"
+#~ msgstr "File dbc non valido"
+
+#~ msgid "No data to import."
+#~ msgstr "Nessun dato da importare."
+
+#~ msgid "Parse Errors"
+#~ msgstr "Elabora errori"
+
 #, fuzzy
 #~| msgid "Somewhat Sparse"
 #~ msgid "Show SparkLine"
@@ -23418,9 +23578,6 @@ msgstr "Impossibile aprire il file:"
 
 #~ msgid "Font color:"
 #~ msgstr "Colore del carattere:"
-
-#~ msgid "latex not found"
-#~ msgstr "latex non trovato"
 
 #~ msgid "%1: set border style"
 #~ msgstr "%1: imposta lo stile del bordo"
@@ -24529,9 +24686,6 @@ msgstr "Impossibile aprire il file:"
 
 #~ msgid "Subscribed topics"
 #~ msgstr "Argomenti a cui sei iscritto"
-
-#~ msgid "zero dimensions"
-#~ msgstr "zero dimensioni"
 
 #~ msgid "Format Options"
 #~ msgstr "Opzioni del formato"

@@ -55,6 +55,7 @@ public:
 	ErrorBar* errorBarAt(int) const;
 
 	void retransform() override;
+	void recalc() override;
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
 
 	double minimum(CartesianCoordinateSystem::Dimension) const override;
@@ -78,9 +79,6 @@ private:
 	QAction* orientationHorizontalAction{nullptr};
 	QAction* orientationVerticalAction{nullptr};
 	QMenu* orientationMenu{nullptr};
-
-public Q_SLOTS:
-	void recalc();
 
 private Q_SLOTS:
 	// SLOTs for changes triggered via QActions in the context menu

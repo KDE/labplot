@@ -416,7 +416,7 @@
 </para>
 
 <para
->Les dades de la matriu es poden introduir manualment o mitjançant una importació des d'un fitxer extern. Similar a la generació de dades per a una columna en un full de càlcul, la matriu es pot omplir amb valors constants o també a través d'una fórmula. La captura de pantalla següent mostra la vista d'imatge d'una matriu juntament amb la fórmula que es va utilitzar per generar els elements de la matriu: <screenshot
+>Les dades de la matriu es poden introduir manualment o mitjançant una importació des d'un fitxer extern. Similar a la generació de dades per a una columna en un full de càlcul, la matriu es pot omplir amb valors constants o també a través d'una fórmula. La captura de pantalla següent mostra la vista d'imatge d'una matriu juntament amb la fórmula que es va utilitzar per a generar els elements de la matriu: <screenshot
 ><mediaobject
 ><imageobject>
       <imagedata fileref="matrix_function_values.png" format="PNG"/>
@@ -1759,7 +1759,7 @@
 >punts</link
 > (amagats) de corba i un full de càlcul que conté posicions lògiques de tots els seus punts de corba, i proporciona opcions per a actualitzar el full de càlcul i commutar la visibilitat dels seus punts de corba utilitzant el menú contextual. S'ha de seleccionar el mode <guimenuitem
 >Estableix els punts de corba</guimenuitem
-> al menú contextual del selector de dades per crear els punts de corba. </para>
+> al menú contextual del selector de dades per a crear els punts de corba. </para>
   <para
 >Es poden crear múltiples corbes per al mateix selector de dades. Els punts de corba creats sempre corresponen a la corba activa de l'acoblador de dades que es pot canviar mitjançant l'opció <guimenuitem
 >Corba activa</guimenuitem
@@ -1776,7 +1776,7 @@
 >Seleccioneu els segments de corba</guimenuitem
 > al menú contextual del selector de dades. Un segment és un objecte seleccionable sobre una imatge que es pot seleccionar fent-hi clic dret del ratolí. </para>
   <para
->Els segments es creen mitjançant el processament de la imatge en l'interval base dels atributs de color per tal de traçar automàticament les corbes. Per millorar els resultats aquests intervals i tipus d'atributs de color es poden canviar a la secció «Edita» del giny acoblat. El giny acoblat també proporciona opcions per a canviar entre la imatge processada i la imatge original, i per a establir la longitud mínima possible dels segments. </para>
+>Els segments es creen mitjançant el processament de la imatge en l'interval base dels atributs de color per tal de traçar automàticament les corbes. Per a millorar els resultats aquests intervals i tipus d'atributs de color es poden canviar a la secció «Edita» del giny acoblat. El giny acoblat també proporciona opcions per a canviar entre la imatge processada i la imatge original, i per a establir la longitud mínima possible dels segments. </para>
   <para
 >Una vegada seleccionat un segment crearà punts de corba sobre seu amb una distància mínima especificada entre ells. La distància mínima especificada entre els punts es pot canviar al giny acoblat del selector de dades. L'usuari podria haver de seleccionar els segments de nou per tal d'observar els canvis. </para>
 </sect1>
@@ -7038,7 +7038,7 @@ data sources for the curves, add legends, export everything to pdf) would also h
 </question>
 <answer
 ><para
->Sembla que aquest paquet del &LabPlot; s'ha compilat sense el suport de la GSL (Biblioteca Científica de &GNU;). El &LabPlot; va ser dissenyat per treballar en sistemes que els hi manquin la majoria de les biblioteques estàndard. Moltes distribucions lliuren els paquets del &LabPlot; sense aquesta funcionalitat addicional. En aquest cas algunes funcions no estan disponibles. Afortunadament alguns programes (com el <application
+>Sembla que aquest paquet del &LabPlot; s'ha compilat sense el suport de la GSL (Biblioteca Científica de &GNU;). El &LabPlot; va ser dissenyat per a treballar en sistemes que els hi manquin la majoria de les biblioteques estàndard. Moltes distribucions lliuren els paquets del &LabPlot; sense aquesta funcionalitat addicional. En aquest cas algunes funcions no estan disponibles. Afortunadament alguns programes (com el <application
 >pstoedit</application
 > o el <application
 >texvc</application

@@ -120,7 +120,6 @@ private:
 	KUrlComboBox* m_cbDBCFileName{nullptr};
 	const QString& m_fileName;
 	const QString m_dbcFileName;
-	bool m_importValid{false};
 	bool m_liveDataSource;
 	bool m_suppressRefresh{false};
 	TemplateHandler* m_templateHandler{nullptr};

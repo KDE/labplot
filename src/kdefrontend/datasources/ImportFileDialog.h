@@ -33,7 +33,7 @@ public:
 	QString selectedObject() const override;
 	LiveDataSource::SourceType sourceType() const;
 	void importToLiveDataSource(LiveDataSource*, QStatusBar*) const;
-	void importTo(QStatusBar*) const override;
+	bool importTo(QStatusBar*) const override;
 #ifdef HAVE_MQTT
 	void importToMQTT(MQTTClient*) const;
 #endif

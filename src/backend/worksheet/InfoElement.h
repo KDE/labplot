@@ -52,20 +52,20 @@ public:
 
 	TextLabel* title();
 	void addCurve(const XYCurve*, CustomPoint* = nullptr);
-	void addCurvePath(QString& curvePath, CustomPoint* = nullptr);
+	void addCurvePath(const QString& curvePath, CustomPoint* = nullptr);
 	bool assignCurve(const QVector<XYCurve*>&);
 	void removeCurve(const XYCurve*);
 	void setZValue(qreal) override;
-	int markerPointsCount();
-	MarkerPoints_T markerPointAt(int index);
-	int gluePointsCount();
-	TextLabel::GluePoint gluePoint(int index);
+	int markerPointsCount() const;
+	MarkerPoints_T markerPointAt(int index) const;
+	int gluePointsCount() const;
+	TextLabel::GluePoint gluePoint(int index) const;
 	TextLabel::TextWrapper createTextLabelText();
 	QMenu* createContextMenu() override;
 
 	bool isTextLabel() const;
 	double setMarkerpointPosition(double x);
-	int currentIndex(double new_x, double* found_x = nullptr);
+	int currentIndex(double new_x, double* found_x = nullptr) const;
 
 	void retransform() override;
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
@@ -113,6 +113,7 @@ private:
 	void initActions();
 	void initMenus();
 	void initCurveConnections(const XYCurve*);
+	void loadPoints(XmlStreamReader* reader, bool preview);
 
 Q_SIGNALS:
 	void gluePointIndexChanged(const int);

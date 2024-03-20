@@ -73,7 +73,7 @@ QString OdsFilter::fileInfoString(const QString& fileName) {
 	return {};
 }
 
-void OdsFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
+void OdsFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, ImportMode importMode) {
 	d->readDataFromFile(fileName, dataSource, importMode);
 }
 void OdsFilter::write(const QString& fileName, AbstractDataSource* dataSource) {
@@ -194,7 +194,8 @@ bool OdsFilter::load(XmlStreamReader*) {
 // ################### Private implementation ##########################
 // #####################################################################
 
-OdsFilterPrivate::OdsFilterPrivate(OdsFilter*) {
+OdsFilterPrivate::OdsFilterPrivate(OdsFilter* owner)
+	: q(owner) {
 }
 
 OdsFilterPrivate::~OdsFilterPrivate() {
@@ -211,6 +212,7 @@ void OdsFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSou
 
 	if (selectedSheetNames.isEmpty()) {
 		DEBUG(Q_FUNC_INFO << ", WARNING: no sheet selected");
+		q->setLastError(i18n("No sheet selected."));
 		return;
 	}
 
@@ -245,12 +247,14 @@ void OdsFilterPrivate::readCurrentSheet(const QString& fileName, AbstractDataSou
 	auto* sheet = m_document.get_sheet(currentSheetName.toStdString());
 	if (!sheet) {
 		DEBUG(Q_FUNC_INFO << ", sheet not found: " << currentSheetName.toStdString())
+		q->setLastError(i18n("Selected sheet not found."));
 		return;
 	}
 
 	const auto sheetIndex = sheet->get_index();
 	if (sheetIndex == ixion::invalid_sheet) {
 		DEBUG(Q_FUNC_INFO << ", invalid sheet")
+		q->setLastError(i18n("Invalid sheet."));
 		return;
 	}
 
@@ -311,6 +315,7 @@ void OdsFilterPrivate::readCurrentSheet(const QString& fileName, AbstractDataSou
 				// case ixion::formula_result::result_type::boolean:
 				case ixion::formula_result::result_type::matrix:
 					DEBUG(Q_FUNC_INFO << ", formula type not supported yet.")
+					q->setLastError(i18n("Formulas not supported yet."));
 					break;
 				}
 				break;
@@ -377,7 +382,13 @@ void OdsFilterPrivate::readCurrentSheet(const QString& fileName, AbstractDataSou
 	std::vector<void*> dataContainer;
 
 	// prepare import
+	bool ok = false;
 	int columnOffset = dataSource->prepareImport(dataContainer, importMode, actualRows, actualCols, vectorNames, columnModes);
+	if (!ok) {
+		q->setLastError(i18n("Not enough memory."));
+		return;
+	}
+
 	DEBUG(Q_FUNC_INFO << ", column offset = " << columnOffset)
 
 	// import data
@@ -459,13 +470,15 @@ QVector<QStringList> OdsFilterPrivate::preview(const QString& sheetName, int lin
 	const auto* sheet = m_document.get_sheet(sheetName.toStdString());
 	if (!sheet) {
 		DEBUG(Q_FUNC_INFO << ", sheet not found: " << sheetName.toStdString())
-		return dataString;
+		q->setLastError(i18n("Sheet not found."));
+		return {};
 	}
 
 	const auto sheetIndex = sheet->get_index();
 	if (sheetIndex == ixion::invalid_sheet) {
 		DEBUG(Q_FUNC_INFO << ", invalid sheet index " << sheetIndex)
-		return dataString;
+		q->setLastError(i18n("Invalid sheet index."));
+		return {};
 	}
 
 	const auto ranges = sheet->get_data_range();

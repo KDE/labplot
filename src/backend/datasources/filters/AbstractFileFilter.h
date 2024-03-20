@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : file I/O-filter related interface
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2009-2018 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2009-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2017 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -13,6 +13,7 @@
 #define ABSTRACTFILEFILTER_H
 
 #include "backend/core/AbstractColumn.h"
+#include <KLocalizedString> // i18n for error messages
 #include <QLocale>
 #include <QObject>
 #include <memory> // smart pointer
@@ -41,14 +42,19 @@ public:
 	static AbstractColumn::ColumnMode columnMode(const QString& valueString, QString& dateTimeFormat, const QLocale& = QLocale());
 	static QString dateTimeFormat(const QString& valueString);
 	static QStringList numberFormats();
-	static AbstractFileFilter::FileType fileType(const QString&);
+	static FileType fileType(const QString&);
 	static QStringList fileTypes();
 	static QString convertFromNumberToColumn(int n);
 
 	virtual void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, ImportMode = ImportMode::Replace) = 0;
 	virtual void write(const QString& fileName, AbstractDataSource*) = 0;
 
-	virtual QStringList lastErrors();
+	QString lastError() const;
+	void setLastError(const QString&);
+
+	QStringList lastWarnings() const;
+	void addWarning(const QString&);
+	void clearLastWarnings();
 
 	// save/load in the project XML
 	virtual void save(QXmlStreamWriter*) const = 0;
@@ -63,6 +69,8 @@ Q_SIGNALS:
 
 protected:
 	const FileType m_type;
+	QString m_lastError;
+	QStringList m_lastWarnings;
 };
 
 #endif
