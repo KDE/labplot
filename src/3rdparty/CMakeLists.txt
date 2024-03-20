@@ -68,12 +68,11 @@ option(LOCAL_DBC_PARSER "Use local build of dbc parser" OFF)
 option(LOCAL_VECTOR_BLF "Use local build of Vector BLF" OFF)
 if (ENABLE_VECTOR_BLF)
   set(OPTION_RUN_DOXYGEN OFF CACHE BOOL "" FORCE) # disable running doxygen
-  # dbc 0.2.0 requires cmake 3.23.0 for FILE_SET
-  if (${LOCAL_DBC_PARSER} AND CMAKE_VERSION VERSION_GREATER_EQUAL "3.23.0")
+  if (${LOCAL_DBC_PARSER})
       FetchContent_Declare(
         dbc_parser_cpp
         GIT_REPOSITORY https://github.com/LinuxDevon/dbc_parser_cpp.git
-        GIT_TAG 753119d6615674876d5f21216438d8dd663bca92
+        GIT_TAG cc4e80c7b6e1f7a13cc47b45f226756f823888e2 # v0.4.0
       )
       # fix missing variable and keyword for fast_float
       IF (NOT MSVC_FOUND)
