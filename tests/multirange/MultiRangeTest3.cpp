@@ -1,16 +1,18 @@
 /*
 	File                 : MultiRangeTest3.cpp
 	Project              : LabPlot
-	Description          : Third tests for multi ranges
+	Description          : Tests for multi ranges, part 3
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2021 Martin Marmsoler <martin.marmsoler@gmail.com>
 	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2024 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "MultiRangeTest3.h"
 #include "MultiRangeTest_macros.h"
+#include "backend/worksheet/plots/cartesian/Histogram.h"
 
 void MultiRangeTest3::baseDockSetAspects_NoPlotRangeChange() {
 	LOAD_PROJECT
@@ -97,4 +99,27 @@ void MultiRangeTest3::curveRangeChange() {
 	CHECK_RANGE(plot, curve, Dimension::Y, 0., 10.);
 }
 
+/*!
+ * test the load of a project created with v.2.6 that didn't have any ranges nor multiple coordinates systems yet.
+ * upon loading the default coordinate system together with the ranges have to be created.
+ */
+void MultiRangeTest3::loadLegacyProject() {
+	Project project;
+	project.load(QFINDTESTDATA(QLatin1String("data/histogram_2.6.lml")));
+
+	// check the content
+	const auto& plots = project.children<CartesianPlot>(AbstractAspect::ChildIndexFlag::Recursive);
+	QCOMPARE(plots.size(), 1);
+	const auto* plot = plots.first();
+
+	const auto& histograms = plot->children<Histogram>();
+	QCOMPARE(histograms.size(), 1);
+	const auto* histogram = histograms.first();
+
+	// check the ranges
+	QCOMPARE(plot->coordinateSystemCount(), 1);
+	CHECK_RANGE(plot, histogram, Dimension::X, 0., 6.);
+	CHECK_RANGE(plot, histogram, Dimension::Y, 0., 7.);
+
+}
 QTEST_MAIN(MultiRangeTest3)
