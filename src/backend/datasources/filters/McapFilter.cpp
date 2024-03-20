@@ -543,7 +543,8 @@ void McapFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSo
 import the content of document \c m_preparedDoc to the data source \c dataSource. Uses the settings defined in the data source.
 */
 void McapFilterPrivate::importData(AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
-	m_columnOffset = dataSource->prepareImport(m_dataContainer, importMode, m_actualRows, m_actualCols, vectorNames, columnModes);
+	bool ok = false;
+	m_columnOffset = dataSource->prepareImport(m_dataContainer, importMode, m_actualRows, m_actualCols, vectorNames, columnModes,ok);
 	int rowOffset = startRow - 1;
 	int colOffset = (int)createIndexEnabled;
 	DEBUG("reading " << m_actualRows << " lines");
