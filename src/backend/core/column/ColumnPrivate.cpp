@@ -34,13 +34,13 @@ int indexForValueCommon(const T* obj,
 						const std::function<AbstractColumn::ColumnMode(const T*)> columnMode,
 						const std::function<int(const T*)> rowCount,
 						const std::function<double(const T*, int)> valueAt,
-						const std::function<quint64(const T*, int)> timestampAt,
+						const std::function<qint64(const T*, int)> timestampAt,
 						const std::function<AbstractColumn::Properties(const T*)> properties,
 						const std::function<bool(const T*, int)> isValid,
 						const std::function<bool(const T*, int)> isMasked) {
 	int rc = rowCount(obj);
 	double prevValue = 0;
-	quint64 prevValueDateTime = 0;
+	qint64 prevValueDateTime = 0;
 	auto mode = columnMode(obj);
 	auto property = properties(obj);
 	if (property == Column::Properties::MonotonicIncreasing || property == Column::Properties::MonotonicDecreasing) {
@@ -84,10 +84,10 @@ int indexForValueCommon(const T* obj,
 		case Column::ColumnMode::DateTime:
 		case Column::ColumnMode::Month:
 		case Column::ColumnMode::Day: {
-			quint64 xInt64 = static_cast<quint64>(x);
+			qint64 xInt64 = static_cast<qint64>(x);
 			for (unsigned int i = 0; i < maxSteps; i++) { // so no log_2(rowCount) needed
 				int index = lowerIndex + round(static_cast<double>(higherIndex - lowerIndex) / 2);
-				quint64 value = timestampAt(obj, index);
+				qint64 value = timestampAt(obj, index);
 
 				if (higherIndex - lowerIndex < 2) {
 					if (std::llabs(timestampAt(obj, index) - xInt64)
@@ -141,7 +141,7 @@ int indexForValueCommon(const T* obj,
 		case Column::ColumnMode::DateTime:
 		case Column::ColumnMode::Month:
 		case Column::ColumnMode::Day: {
-			quint64 xInt64 = static_cast<quint64>(x);
+			qint64 xInt64 = static_cast<qint64>(x);
 			for (int row = 0; row < rc; row++) {
 				if (!isValid(obj, row) || isMasked(obj, row))
 					continue;
@@ -249,7 +249,7 @@ double ColumnPrivate::ValueLabels::valueAt(int index) const {
 	case AbstractColumn::ColumnMode::DateTime:
 	case AbstractColumn::ColumnMode::Month:
 	case AbstractColumn::ColumnMode::Day:
-		return cast_vector<quint64>()->at(index).value;
+		return cast_vector<qint64>()->at(index).value;
 	}
 	Q_ASSERT(false);
 	return std::nan("0");
@@ -263,7 +263,7 @@ QDateTime ColumnPrivate::ValueLabels::dateTimeAt(int index) const {
 	case AbstractColumn::ColumnMode::DateTime:
 	case AbstractColumn::ColumnMode::Month:
 	case AbstractColumn::ColumnMode::Day:{
-		quint64 ts = cast_vector<quint64>()->at(index).value;
+		qint64 ts = cast_vector<qint64>()->at(index).value;
 		return QDateTime::fromMSecsSinceEpoch(ts);
 	}
 	case AbstractColumn::ColumnMode::Double:
@@ -276,7 +276,7 @@ QDateTime ColumnPrivate::ValueLabels::dateTimeAt(int index) const {
 	return QDateTime();
 }
 
-quint64 ColumnPrivate::ValueLabels::timestampAt(int index) const {
+qint64 ColumnPrivate::ValueLabels::timestampAt(int index) const {
 	if (!initialized())
 		return 0;
 
@@ -284,7 +284,7 @@ quint64 ColumnPrivate::ValueLabels::timestampAt(int index) const {
 	case AbstractColumn::ColumnMode::DateTime:
 	case AbstractColumn::ColumnMode::Month:
 	case AbstractColumn::ColumnMode::Day:
-		return cast_vector<quint64>()->at(index).value;
+		return cast_vector<qint64>()->at(index).value;
 	case AbstractColumn::ColumnMode::Double:
 	case AbstractColumn::ColumnMode::Integer:
 	case AbstractColumn::ColumnMode::BigInt:
@@ -623,7 +623,7 @@ int ColumnPrivate::ValueLabels::count(double min, double max) const {
 	case AbstractColumn::ColumnMode::DateTime:
 	case AbstractColumn::ColumnMode::Month:
 	case AbstractColumn::ColumnMode::Day: {
-		const auto* data = cast_vector<quint64>();
+		const auto* data = cast_vector<qint64>();
 		for (const auto& d : *data) {
 			const auto value = d.value;
 			if (value >= min && value <= max)
@@ -681,14 +681,14 @@ void ColumnPrivate::ValueLabels::add(qint64 value, const QString& label) {
 	cast_vector<qint64>()->append({value, label});
 }
 
-void ColumnPrivate::ValueLabels::add(quint64 value, const QString& label) {
+void ColumnPrivate::ValueLabels::add(qint64 value, const QString& label) {
 	if (initialized() && m_mode != AbstractColumn::ColumnMode::DateTime && m_mode != AbstractColumn::ColumnMode::Day
 		&& m_mode != AbstractColumn::ColumnMode::Month)
 		return;
 
 	init(AbstractColumn::ColumnMode::DateTime);
 	invalidateStatistics();
-	cast_vector<quint64>()->append({value, label});
+	cast_vector<qint64>()->append({value, label});
 }
 
 void ColumnPrivate::ValueLabels::removeAll() {
@@ -778,10 +778,10 @@ const QVector<Column::ValueLabel<qint64>>* ColumnPrivate::ValueLabels::bigIntVal
 	return cast_vector<qint64>();
 }
 
-const QVector<Column::ValueLabel<quint64>>* ColumnPrivate::ValueLabels::timestampValueLabels() const {
+const QVector<Column::ValueLabel<qint64>>* ColumnPrivate::ValueLabels::timestampValueLabels() const {
 	if (!initialized() || m_mode != AbstractColumn::ColumnMode::DateTime)
 		return nullptr;
-	return cast_vector<quint64>();
+	return cast_vector<qint64>();
 }
 
 // ######################################################################################################
@@ -933,7 +933,7 @@ void ColumnPrivate::deleteData() {
 	case AbstractColumn::ColumnMode::DateTime:
 	case AbstractColumn::ColumnMode::Month:
 	case AbstractColumn::ColumnMode::Day:
-		delete static_cast<QVector<quint64>*>(m_data);
+		delete static_cast<QVector<qint64>*>(m_data);
 		break;
 	}
 	m_data = nullptr;
@@ -1456,7 +1456,7 @@ bool ColumnPrivate::copy(const AbstractColumn* other) {
 	case AbstractColumn::ColumnMode::DateTime:
 	case AbstractColumn::ColumnMode::Month:
 	case AbstractColumn::ColumnMode::Day: {
-		auto* vec = static_cast<QVector<quint64>*>(m_data);
+		auto* vec = static_cast<QVector<qint64>*>(m_data);
 		for (int i = 0; i < num_rows; ++i)
 			vec->replace(i, other->timestampAt(i));
 		break;
@@ -1525,7 +1525,7 @@ bool ColumnPrivate::copy(const AbstractColumn* source, int source_start, int des
 	case AbstractColumn::ColumnMode::Month:
 	case AbstractColumn::ColumnMode::Day:
 		for (int i = 0; i < num_rows; i++)
-			static_cast<QVector<quint64>*>(m_data)->replace(dest_start + i, source->timestampAt(source_start + i));
+			static_cast<QVector<qint64>*>(m_data)->replace(dest_start + i, source->timestampAt(source_start + i));
 		break;
 	}
 
@@ -1585,7 +1585,7 @@ bool ColumnPrivate::copy(const ColumnPrivate* other) {
 	case AbstractColumn::ColumnMode::Month:
 	case AbstractColumn::ColumnMode::Day:
 		for (int i = 0; i < num_rows; ++i)
-			static_cast<QVector<quint64>*>(m_data)->replace(i, other->timestampAt(i));
+			static_cast<QVector<qint64>*>(m_data)->replace(i, other->timestampAt(i));
 		break;
 	}
 
@@ -1650,7 +1650,7 @@ bool ColumnPrivate::copy(const ColumnPrivate* source, int source_start, int dest
 	case AbstractColumn::ColumnMode::Month:
 	case AbstractColumn::ColumnMode::Day:
 		for (int i = 0; i < num_rows; ++i)
-			static_cast<QVector<quint64>*>(m_data)->replace(dest_start + i, source->timestampAt(source_start + i));
+			static_cast<QVector<qint64>*>(m_data)->replace(dest_start + i, source->timestampAt(source_start + i));
 		break;
 	}
 
@@ -1681,7 +1681,7 @@ int ColumnPrivate::rowCount() const {
 	case AbstractColumn::ColumnMode::DateTime:
 	case AbstractColumn::ColumnMode::Month:
 	case AbstractColumn::ColumnMode::Day:
-		return static_cast<QVector<quint64>*>(m_data)->size();
+		return static_cast<QVector<qint64>*>(m_data)->size();
 	case AbstractColumn::ColumnMode::Text:
 		return static_cast<QVector<QString>*>(m_data)->size();
 	}
@@ -1722,7 +1722,7 @@ int ColumnPrivate::rowCount(double min, double max) const {
 	case AbstractColumn::ColumnMode::DateTime:
 	case AbstractColumn::ColumnMode::Month:
 	case AbstractColumn::ColumnMode::Day: {
-		const auto* data = static_cast<QVector<quint64>*>(m_data);
+		const auto* data = static_cast<QVector<qint64>*>(m_data);
 		for (const auto& d : *data) {
 			const auto value = d;
 			if (value >= min && value <= max)
@@ -1815,7 +1815,7 @@ void ColumnPrivate::resizeTo(int new_size) {
 	case AbstractColumn::ColumnMode::DateTime:
 	case AbstractColumn::ColumnMode::Month:
 	case AbstractColumn::ColumnMode::Day: {
-		auto* data = static_cast<QVector<quint64>*>(m_data);
+		auto* data = static_cast<QVector<qint64>*>(m_data);
 		if (new_rows > 0)
 			data->insert(data->end(), new_rows, 0);
 		else
@@ -1856,7 +1856,7 @@ void ColumnPrivate::insertRows(int before, int count) {
 		case AbstractColumn::ColumnMode::Month:
 		case AbstractColumn::ColumnMode::Day:
 			for (int i = 0; i < count; ++i)
-				static_cast<QVector<quint64>*>(m_data)->insert(before, 0);
+				static_cast<QVector<qint64>*>(m_data)->insert(before, 0);
 			break;
 		case AbstractColumn::ColumnMode::Text:
 			for (int i = 0; i < count; ++i)
@@ -1901,7 +1901,7 @@ void ColumnPrivate::removeRows(int first, int count) {
 		case AbstractColumn::ColumnMode::Month:
 		case AbstractColumn::ColumnMode::Day:
 			for (int i = 0; i < corrected_count; ++i)
-				static_cast<QVector<quint64>*>(m_data)->removeAt(first);
+				static_cast<QVector<qint64>*>(m_data)->removeAt(first);
 			break;
 		case AbstractColumn::ColumnMode::Text:
 			for (int i = 0; i < corrected_count; ++i)
@@ -2028,7 +2028,7 @@ const QVector<Column::ValueLabel<QDateTime>>* ColumnPrivate::dateTimeValueLabels
 	return m_labels.dateTimeValueLabels();
 }
 
-const QVector<Column::ValueLabel<quint64>>* ColumnPrivate::timestampValueLabels() const {
+const QVector<Column::ValueLabel<qint64>>* ColumnPrivate::timestampValueLabels() const {
 	return m_labels.timestampValueLabels();
 }
 
@@ -2513,16 +2513,16 @@ void ColumnPrivate::setValueAt(int row, QString new_value) {
 	setTextAt(row, new_value);
 }
 
-void ColumnPrivate::setValueAt(int row, quint64 new_value) {
+void ColumnPrivate::setValueAt(int row, qint64 new_value) {
 	setTimestampAt(row, new_value);
 }
 
-void ColumnPrivate::setTimestampAt(int row, quint64 new_value) {
+void ColumnPrivate::setTimestampAt(int row, qint64 new_value) {
 	if (m_columnMode != AbstractColumn::ColumnMode::DateTime && m_columnMode != AbstractColumn::ColumnMode::Month
 		&& m_columnMode != AbstractColumn::ColumnMode::Day)
 		return;
 
-	setValueAtPrivate<quint64>(row, new_value);;
+	setValueAtPrivate<qint64>(row, new_value);;
 }
 
 void ColumnPrivate::replaceValues(int first, const QVector<int>& new_values) {
@@ -2541,7 +2541,7 @@ void ColumnPrivate::replaceValues(int first, const QVector<QString>& new_values)
 	replaceTexts(first, new_values);
 }
 
-void ColumnPrivate::replaceValues(int first, const QVector<quint64>& new_values) {
+void ColumnPrivate::replaceValues(int first, const QVector<qint64>& new_values) {
 	replaceTimestamps(first, new_values);
 }
 
@@ -2593,20 +2593,20 @@ QDateTime ColumnPrivate::dateTimeAt(int row) const {
 			&& m_columnMode != AbstractColumn::ColumnMode::Day))
 		return QDateTime();
 
-	return QDateTime::fromMSecsSinceEpoch(static_cast<QVector<quint64>*>(m_data)->value(row));
+	return QDateTime::fromMSecsSinceEpoch(static_cast<QVector<qint64>*>(m_data)->value(row));
 }
 
 /**
- * \brief Return the Timestamp quint64 in row 'row'
+ * \brief Return the Timestamp qint64 in row 'row'
  *
  * Use this only when columnMode() is DateTime, Month or Day
  */
-quint64 ColumnPrivate::timestampAt(int row) const {
+qint64 ColumnPrivate::timestampAt(int row) const {
 	if (!m_data
 		|| (m_columnMode != AbstractColumn::ColumnMode::DateTime && m_columnMode != AbstractColumn::ColumnMode::Month
 			&& m_columnMode != AbstractColumn::ColumnMode::Day))
 		return 0;
-	return static_cast<QVector<quint64>*>(m_data)->value(row);
+	return static_cast<QVector<qint64>*>(m_data)->value(row);
 }
 
 
@@ -2634,7 +2634,7 @@ double ColumnPrivate::valueAt(int index) const {
 	case AbstractColumn::ColumnMode::BigInt:
 		return static_cast<QVector<qint64>*>(m_data)->value(index, 0);
 	case AbstractColumn::ColumnMode::DateTime:
-		return static_cast<QVector<quint64>*>(m_data)->value(index);
+		return static_cast<QVector<qint64>*>(m_data)->value(index);
 	case AbstractColumn::ColumnMode::Month: // Fall through
 	case AbstractColumn::ColumnMode::Day: // Fall through
 	case AbstractColumn::ColumnMode::Text: // Fall through
@@ -2784,7 +2784,7 @@ void ColumnPrivate::setDateTimeAt(int row, const QDateTime& new_value) {
 		&& m_columnMode != AbstractColumn::ColumnMode::Day)
 		return;
 
-	setValueAtPrivate<quint64>(row, new_value.toMSecsSinceEpoch());
+	setValueAtPrivate<qint64>(row, new_value.toMSecsSinceEpoch());
 }
 
 /**
@@ -2809,12 +2809,12 @@ void ColumnPrivate::replaceDateTimes(int first, const QVector<QDateTime>& new_va
  * \param new_values
  * Use this only when columnMode() is DateTime, Month or Day
  */
-void ColumnPrivate::replaceTimestamps(int first, const QVector<quint64>& new_values) {
+void ColumnPrivate::replaceTimestamps(int first, const QVector<qint64>& new_values) {
 	if (m_columnMode != AbstractColumn::ColumnMode::DateTime && m_columnMode != AbstractColumn::ColumnMode::Month
 		&& m_columnMode != AbstractColumn::ColumnMode::Day)
 		return;
 
-	replaceValuePrivate<quint64>(first, new_values);
+	replaceValuePrivate<qint64>(first, new_values);
 }
 
 /**
@@ -2872,7 +2872,7 @@ void ColumnPrivate::addValueLabel(const QDateTime& value, const QString& label) 
 	m_labels.add(value, label);
 }
 
-void ColumnPrivate::addValueLabel(quint64 value, const QString& label) {
+void ColumnPrivate::addValueLabel(qint64 value, const QString& label) {
 	m_labels.add(value, label);
 }
 
@@ -2959,7 +2959,7 @@ void ColumnPrivate::updateProperties() {
 	double prevValue = NAN;
 	int prevValueInt = 0;
 	qint64 prevValueBigInt = 0;
-	quint64 prevValueDatetime = 0;
+	qint64 prevValueDatetime = 0;
 
 	if (m_columnMode == AbstractColumn::ColumnMode::Integer)
 		prevValueInt = integerAt(0);
@@ -2982,7 +2982,7 @@ void ColumnPrivate::updateProperties() {
 	double value;
 	int valueInt;
 	qint64 valueBigInt;
-	quint64 valueDateTime;
+	qint64 valueDateTime;
 	for (int row = 1; row < rows; row++) {
 		if (!m_owner->isValid(row) || m_owner->isMasked(row)) {
 			// if there is one invalid or masked value, the property is No, because
@@ -3339,7 +3339,7 @@ void ColumnPrivate::calculateDateTimeStatistics() {
 
 		const auto& value = timestampAt(row);
 
-		quint64 val = value;
+		qint64 val = value;
 		if (val < statistics.minimum)
 			statistics.minimum = val;
 		if (val > statistics.maximum)

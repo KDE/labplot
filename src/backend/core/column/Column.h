@@ -165,10 +165,10 @@ public:
 	void setDateTimeAt(int, const QDateTime&) override;
 	void replaceDateTimes(int, const QVector<QDateTime>&) override;
 
-	void setTimestamps(const QVector<quint64>&);
-	quint64 timestampAt(int) const override;
-	void setTimestampAt(int, const quint64&) override;
-	void replaceTimestamps(int, const QVector<quint64>&) override;
+	void setTimestamps(const QVector<qint64>&);
+	qint64 timestampAt(int) const override;
+	void setTimestampAt(int, const qint64&) override;
+	void replaceTimestamps(int, const QVector<qint64>&) override;
 
 
 	double doubleAt(int) const override;
@@ -224,8 +224,7 @@ public:
 	const QVector<ValueLabel<QDateTime>>* dateTimeValueLabels() const;
 	void addValueLabel(const QString&, const QString&);
 	const QVector<ValueLabel<QString>>* textValueLabels() const;
-	void addValueLabel(quint64, const QString&);
-	const QVector<ValueLabel<quint64>>* timestampValueLabels() const;
+	const QVector<ValueLabel<qint64>>* timestampValueLabels() const;
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;

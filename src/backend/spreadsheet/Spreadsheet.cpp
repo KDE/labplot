@@ -772,10 +772,10 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 		static bool QDateTimeGreater(const QPair<QDateTime, int>& a, const QPair<QDateTime, int>& b) {
 			return a > b;
 		}
-		static bool timestampLess(QPair<quint64, int> a, QPair<quint64, int> b) {
+		static bool timestampLess(QPair<qint64, int> a, QPair<qint64, int> b) {
 			return a.first < b.first;
 		}
-		static bool timestampGreater(QPair<quint64, int> a, QPair<quint64, int> b) {
+		static bool timestampGreater(QPair<qint64, int> a, QPair<qint64, int> b) {
 			return a.first > b.first;
 		}
 	};
@@ -877,11 +877,11 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 			case AbstractColumn::ColumnMode::DateTime:
 			case AbstractColumn::ColumnMode::Month:
 			case AbstractColumn::ColumnMode::Day: {
-				QVector<QPair<quint64, int>> map;
+				QVector<QPair<qint64, int>> map;
 
 				for (int i = 0; i < rows; i++)
 					if (col->isValid(i))
-						map.append(QPair<quint64, int>(col->timestampAt(i), i));
+						map.append(QPair<qint64, int>(col->timestampAt(i), i));
 				const int filledRows = map.size();
 
 				if (ascending)
@@ -1378,7 +1378,7 @@ int Spreadsheet::prepareImport(std::vector<void*>& dataContainer,
 			case AbstractColumn::ColumnMode::Month:
 			case AbstractColumn::ColumnMode::Day:
 			case AbstractColumn::ColumnMode::DateTime: {
-				auto* vector = static_cast<QVector<quint64>*>(column->data());
+				auto* vector = static_cast<QVector<qint64>*>(column->data());
 				dataContainer[n] = static_cast<void*>(vector);
 				break;
 			}

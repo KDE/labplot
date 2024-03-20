@@ -662,9 +662,9 @@ void ColumnClearCmd::redo() {
 		case AbstractColumn::ColumnMode::DateTime:
 		case AbstractColumn::ColumnMode::Month:
 		case AbstractColumn::ColumnMode::Day:
-			m_empty_data = new QVector<quint64>();
+			m_empty_data = new QVector<qint64>();
 			for (int i = 0; i < rowCount; ++i)
-				static_cast<QVector<quint64>*>(m_empty_data)->append(0);
+				static_cast<QVector<qint64>*>(m_empty_data)->append(0);
 			break;
 		case AbstractColumn::ColumnMode::Text:
 			m_empty_data = new QVector<QString>();

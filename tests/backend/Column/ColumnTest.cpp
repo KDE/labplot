@@ -1742,7 +1742,7 @@ void ColumnTest::testRowCountValueLabelsDateTime() {
 
 void ColumnTest::saveLoadTimestamps() {
 
-	QVector<quint64> data = {100000,200000,300000,400000};
+	QVector<qint64> data = {100000,200000,300000,400000};
 
 	Column c(QStringLiteral("Datetime column"), Column::ColumnMode::DateTime);
 	c.setTimestamps(data);

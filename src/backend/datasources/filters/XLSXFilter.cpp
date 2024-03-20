@@ -425,7 +425,7 @@ void XLSXFilterPrivate::readDataRegion(const QXlsx::CellRange& region, AbstractD
 
 	if (auto* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource)) {
 		std::vector<void*> numericDataPointers;
-		QVector<QVector<quint64>*> datetimeDataPointers;
+		QVector<QVector<qint64>*> datetimeDataPointers;
 		QVector<QVector<QString>*> stringDataPointers;
 		QList<QXlsx::Cell::CellType> columnNumericTypes;
 		QStringList columnNames;
@@ -462,7 +462,7 @@ void XLSXFilterPrivate::readDataRegion(const QXlsx::CellRange& region, AbstractD
 					data->clear();
 			} else if (columnNumericTypes.at(n) == QXlsx::Cell::CellType::DateType) {
 				col->setColumnMode(AbstractColumn::ColumnMode::DateTime);
-				auto* data = static_cast<QVector<quint64>*>(col->data());
+				auto* data = static_cast<QVector<qint64>*>(col->data());
 				datetimeDataPointers.push_back(data);
 				if (importMode == AbstractFileFilter::ImportMode::Replace)
 					data->clear();
@@ -490,7 +490,7 @@ void XLSXFilterPrivate::readDataRegion(const QXlsx::CellRange& region, AbstractD
 					if (datetimeidx < datetimeDataPointers.size()) {
 						if (val.toDateTime().time() != QTime(0, 0))
 							isDateOnly = false;
-						static_cast<QVector<quint64>*>(datetimeDataPointers[datetimeidx++])->push_back(val.toULongLong());
+						static_cast<QVector<qint64>*>(datetimeDataPointers[datetimeidx++])->push_back(val.toULongLong());
 					}
 				} else {
 					if (!stringDataPointers.isEmpty() && stringidx < stringDataPointers.size()) {

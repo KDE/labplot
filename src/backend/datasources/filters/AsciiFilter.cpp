@@ -1118,7 +1118,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 						break;
 					}
 					case AbstractColumn::ColumnMode::DateTime: {
-						auto* vector = static_cast<QVector<quint64>*>(columns.at(col)->data());
+						auto* vector = static_cast<QVector<qint64>*>(columns.at(col)->data());
 						vector->pop_front();
 						vector->resize(m_actualRows);
 						m_dataContainer[col] = static_cast<void*>(vector);
@@ -1223,8 +1223,8 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 
 			// add current timestamp if required
 			if (createTimestampEnabled) {
-				DEBUG("current row = " << currentRow << ", container size = " << static_cast<QVector<quint64>*>(m_dataContainer[offset])->size())
-				(*static_cast<QVector<quint64>*>(m_dataContainer[offset]))[currentRow] = QDateTime::currentDateTime().toMSecsSinceEpoch();
+				DEBUG("current row = " << currentRow << ", container size = " << static_cast<QVector<qint64>*>(m_dataContainer[offset])->size())
+				(*static_cast<QVector<qint64>*>(m_dataContainer[offset]))[currentRow] = QDateTime::currentDateTime().toMSecsSinceEpoch();
 				++offset;
 			}
 
@@ -1770,7 +1770,7 @@ void AsciiFilterPrivate::setValue(int col, int row, QStringView valueString) {
 		}
 		case AbstractColumn::ColumnMode::DateTime: {
 			QDateTime valueDateTime = parseDateTime(valueString.toString(), dateTimeFormat);
-			(*static_cast<QVector<quint64>*>(m_dataContainer[col]))[row] = valueDateTime.toMSecsSinceEpoch();
+			(*static_cast<QVector<qint64>*>(m_dataContainer[col]))[row] = valueDateTime.toMSecsSinceEpoch();
 			break;
 		}
 		case AbstractColumn::ColumnMode::Text: {
@@ -1794,7 +1794,7 @@ void AsciiFilterPrivate::setValue(int col, int row, QStringView valueString) {
 			(*static_cast<QVector<qint64>*>(m_dataContainer[col]))[row] = 0;
 			break;
 		case AbstractColumn::ColumnMode::DateTime:
-			(*static_cast<QVector<quint64>*>(m_dataContainer[col]))[row] = 0;
+			(*static_cast<QVector<qint64>*>(m_dataContainer[col]))[row] = 0;
 			break;
 		case AbstractColumn::ColumnMode::Text:
 			(*static_cast<QVector<QString>*>(m_dataContainer[col]))[row].clear();
@@ -1839,7 +1839,7 @@ void AsciiFilterPrivate::initDataContainer(Spreadsheet* spreadsheet) {
 			break;
 		}
 		case AbstractColumn::ColumnMode::DateTime: {
-			auto* vector = static_cast<QVector<quint64>*>(columns.at(n)->data());
+			auto* vector = static_cast<QVector<qint64>*>(columns.at(n)->data());
 			vector->resize(m_actualRows);
 			m_dataContainer[n] = static_cast<void*>(vector);
 			break;
@@ -2407,15 +2407,15 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, AbstractDataSourc
 						break;
 					}
 					case AbstractColumn::ColumnMode::DateTime: {
-						auto* vector = static_cast<QVector<quint64>*>(columns.at(n)->data());
+						auto* vector = static_cast<QVector<qint64>*>(columns.at(n)->data());
 						m_dataContainer[n] = static_cast<void*>(vector);
 
 						// if the keepNValues got smaller then we move the last keepNValues count of data
 						// in the first keepNValues places
 						if (m_actualRows > keepNValues) {
 							for (int i = 0; i < keepNValues; i++) {
-								static_cast<QVector<quint64>*>(m_dataContainer[n])->operator[](i) =
-									static_cast<QVector<quint64>*>(m_dataContainer[n])->operator[](m_actualRows - keepNValues + i);
+								static_cast<QVector<qint64>*>(m_dataContainer[n])->operator[](i) =
+									static_cast<QVector<qint64>*>(m_dataContainer[n])->operator[](m_actualRows - keepNValues + i);
 							}
 						}
 
@@ -2425,11 +2425,11 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, AbstractDataSourc
 							vector->reserve(keepNValues);
 							vector->resize(keepNValues);
 							for (int i = 1; i <= m_actualRows; i++) {
-								static_cast<QVector<quint64>*>(m_dataContainer[n])->operator[](keepNValues - i) =
-									static_cast<QVector<quint64>*>(m_dataContainer[n])->operator[](keepNValues - i - rowDiff);
+								static_cast<QVector<qint64>*>(m_dataContainer[n])->operator[](keepNValues - i) =
+									static_cast<QVector<qint64>*>(m_dataContainer[n])->operator[](keepNValues - i - rowDiff);
 							}
 							for (int i = 0; i < rowDiff; i++)
-								static_cast<QVector<quint64>*>(m_dataContainer[n])->operator[](i) = 0;
+								static_cast<QVector<qint64>*>(m_dataContainer[n])->operator[](i) = 0;
 						}
 						break;
 					}
@@ -2577,7 +2577,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, AbstractDataSourc
 						break;
 					}
 					case AbstractColumn::ColumnMode::DateTime: {
-						auto* vector = static_cast<QVector<quint64>*>(columns.at(col)->data());
+						auto* vector = static_cast<QVector<qint64>*>(columns.at(col)->data());
 						vector->pop_front();
 						vector->reserve(m_actualRows);
 						vector->resize(m_actualRows);
@@ -2645,7 +2645,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, AbstractDataSourc
 
 			// add current timestamp if required
 			if (createTimestampEnabled) {
-				static_cast<QVector<quint64>*>(m_dataContainer[offset])->operator[](currentRow) = QDateTime::currentDateTime().toMSecsSinceEpoch();
+				static_cast<QVector<qint64>*>(m_dataContainer[offset])->operator[](currentRow) = QDateTime::currentDateTime().toMSecsSinceEpoch();
 				++offset;
 			}
 

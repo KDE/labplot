@@ -330,7 +330,7 @@ void JsonFilterPrivate::setEmptyValue(int column, int row) {
 		static_cast<QVector<qint64>*>(m_dataContainer[column])->operator[](row) = 0;
 		break;
 	case AbstractColumn::ColumnMode::DateTime:
-		static_cast<QVector<quint64>*>(m_dataContainer[column])->operator[](row) = 0;
+		static_cast<QVector<qint64>*>(m_dataContainer[column])->operator[](row) = 0;
 		break;
 	case AbstractColumn::ColumnMode::Text:
 		static_cast<QVector<QString>*>(m_dataContainer[column])->operator[](row) = QString();
@@ -364,7 +364,7 @@ void JsonFilterPrivate::setValueFromString(int column, int row, const QString& v
 	}
 	case AbstractColumn::ColumnMode::DateTime: {
 		const QDateTime valueDateTime = QDateTime::fromString(valueString, dateTimeFormat);
-		static_cast<QVector<quint64>*>(m_dataContainer[column])->operator[](row) = valueDateTime.isValid() ? valueDateTime.toMSecsSinceEpoch() : 0;
+		static_cast<QVector<qint64>*>(m_dataContainer[column])->operator[](row) = valueDateTime.isValid() ? valueDateTime.toMSecsSinceEpoch() : 0;
 		break;
 	}
 	case AbstractColumn::ColumnMode::Text:

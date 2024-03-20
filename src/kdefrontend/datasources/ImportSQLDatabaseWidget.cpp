@@ -481,7 +481,7 @@ void ImportSQLDatabaseWidget::read(AbstractDataSource* dataSource, AbstractFileF
 				break;
 			}
 			case AbstractColumn::ColumnMode::DateTime: {
-				static_cast<QVector<quint64>*>(dataContainer[col])->operator[](row) = valueString.toULongLong();
+				static_cast<QVector<qint64>*>(dataContainer[col])->operator[](row) = valueString.toULongLong();
 				break;
 			}
 			case AbstractColumn::ColumnMode::Text:

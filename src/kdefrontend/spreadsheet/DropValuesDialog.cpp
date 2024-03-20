@@ -204,7 +204,7 @@ public:
 		auto* data = static_cast<QVector<double>*>(m_column->data());
 		auto* data_int = static_cast<QVector<int>*>(m_column->data());
 		auto* data_bigint = static_cast<QVector<qint64>*>(m_column->data());
-		auto* data_datetime = static_cast<QVector<quint64>*>(m_column->data());
+		auto* data_datetime = static_cast<QVector<qint64>*>(m_column->data());
 		const int rows = m_column->rowCount();
 
 		auto mode = m_column->columnMode();
@@ -701,8 +701,8 @@ public:
 			if (changed)
 				m_column->setBigInts(new_data);
 		} else if (mode == AbstractColumn::ColumnMode::DateTime) {
-			auto* data = static_cast<QVector<quint64>*>(m_column->data());
-			QVector<quint64> new_data(*data);
+			auto* data = static_cast<QVector<qint64>*>(m_column->data());
+			QVector<qint64> new_data(*data);
 
 			switch (m_operator) {
 			case Operator::EqualTo:

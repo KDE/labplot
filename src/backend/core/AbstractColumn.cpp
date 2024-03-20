@@ -672,11 +672,11 @@ void AbstractColumn::setDateTimeAt(int /*row*/, const QDateTime&) {
 }
 
 /**
- * \brief Return the quint64 in row 'row'
+ * \brief Return the qint64 in row 'row'
  *
  * Use this only when columnMode() is DateTime, Month or Day
  */
-quint64 AbstractColumn::timestampAt(int /*row*/) const {
+qint64 AbstractColumn::timestampAt(int /*row*/) const {
 	return 0;
 }
 
@@ -685,7 +685,7 @@ quint64 AbstractColumn::timestampAt(int /*row*/) const {
  *
  * Use this only when columnMode() is DateTime, Month or Day
  */
-void AbstractColumn::setTimestampAt(int /*row*/, const quint64&) {
+void AbstractColumn::setTimestampAt(int /*row*/, const qint64&) {
 }
 
 
@@ -702,7 +702,7 @@ void AbstractColumn::replaceDateTimes(int /*first*/, const QVector<QDateTime>&) 
  *
  * Use this only when columnMode() is DateTime, Month or Day
  */
-void AbstractColumn::replaceTimestamps(int /*first*/, const QVector<quint64>&) {
+void AbstractColumn::replaceTimestamps(int /*first*/, const QVector<qint64>&) {
 }
 
 /**

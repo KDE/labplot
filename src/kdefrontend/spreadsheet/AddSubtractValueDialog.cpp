@@ -848,8 +848,8 @@ void AddSubtractValueDialog::generateForColumn(Column* col, int colIndex) {
 	} else { // datetime
 		qint64 value;
 		setDateTimeValue(value);
-		auto* data = static_cast<QVector<quint64>*>(col->data());
-		QVector<quint64> new_data(rows);
+		auto* data = static_cast<QVector<qint64>*>(col->data());
+		QVector<qint64> new_data(rows);
 
 		switch (m_operation) {
 		case Subtract:
@@ -1176,7 +1176,7 @@ bool AddSubtractValueDialog::setDateTimeValue(qint64& value, int columnIndex) co
 		if (type == ValueType::Difference) { // add/subtract an absolute value
 			const auto numberLocale = QLocale();
 			bool ok;
-			quint64 msecsValue = numberLocale.toLongLong(ui.leTimeValue->text(), &ok);
+			qint64 msecsValue = numberLocale.toLongLong(ui.leTimeValue->text(), &ok);
 			if (!ok)
 				return false;
 

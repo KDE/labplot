@@ -657,14 +657,14 @@ void Column::setDateTimes(const QVector<QDateTime>& dateTimes) {
  *
  * Use this only when columnMode() is DateTime, Month or Day
  */
-void Column::setTimestampAt(int row, const quint64& new_value) {
+void Column::setTimestampAt(int row, const qint64& new_value) {
 	if (isLoading())
 		d->setValueAt(row, new_value);
 	else
-		exec(new ColumnSetCmd<quint64>(d, row, timestampAt(row), new_value));
+		exec(new ColumnSetCmd<qint64>(d, row, timestampAt(row), new_value));
 }
 
-void Column::setTimestamps(const QVector<quint64>& timestamps) {
+void Column::setTimestamps(const QVector<qint64>& timestamps) {
 	replaceTimestamps(-1, timestamps);
 }
 
@@ -675,14 +675,14 @@ void Column::setTimestamps(const QVector<quint64>& timestamps) {
  * Use this only when columnMode() is DateTime, Month or Day
  */
 void Column::replaceDateTimes(int first, const QVector<QDateTime>& new_values) {
-	QVector<quint64> timestamps;
+	QVector<qint64> timestamps;
 	for(auto& value:new_values){
 		timestamps.append(value.toMSecsSinceEpoch());
 	}
 	if (isLoading())
 		d->replaceTimestamps(first, timestamps);
 	else
-		exec(new ColumnReplaceCmd<quint64>(d, first, timestamps));
+		exec(new ColumnReplaceCmd<qint64>(d, first, timestamps));
 }
 
 /**
@@ -690,15 +690,15 @@ void Column::replaceDateTimes(int first, const QVector<QDateTime>& new_values) {
  *
  * Use this only when columnMode() is DateTime, Month or Day
  */
-void Column::replaceTimestamps(int first, const QVector<quint64>& new_values) {
+void Column::replaceTimestamps(int first, const QVector<qint64>& new_values) {
 	if (isLoading())
 		d->replaceTimestamps(first, new_values);
 	else
-		exec(new ColumnReplaceCmd<quint64>(d, first, new_values));
+		exec(new ColumnReplaceCmd<qint64>(d, first, new_values));
 }
 
 void Column::addValueLabel(const QDateTime& value, const QString& label) {
-	d->addValueLabel(static_cast<quint64>(value.toMSecsSinceEpoch()), label);
+	d->addValueLabel(static_cast<qint64>(value.toMSecsSinceEpoch()), label);
 	if (project())
 		project()->setChanged(true);
 }
@@ -952,7 +952,7 @@ QDateTime Column::dateTimeAt(int row) const {
  *
  * Use this only when columnMode() is DateTime, Month or Day
  */
-quint64 Column::timestampAt(int row) const {
+qint64 Column::timestampAt(int row) const {
 	return d->timestampAt(row);
 }
 
@@ -1028,7 +1028,7 @@ const QVector<Column::ValueLabel<QDateTime>>* Column::dateTimeValueLabels() cons
 	return d->dateTimeValueLabels();
 }
 
-const QVector<Column::ValueLabel<quint64>>* Column::timestampValueLabels() const {
+const QVector<Column::ValueLabel<qint64>>* Column::timestampValueLabels() const {
 	return d->timestampValueLabels();
 }
 
@@ -1346,7 +1346,7 @@ bool Column::load(XmlStreamReader* reader, bool preview) {
 	else
 		d->setWidth(str.toInt());
 
-	QVector<quint64> timestampsVector;
+	QVector<qint64> timestampsVector;
 	QVector<QString> textVector;
 
 	// read child elements
@@ -1439,7 +1439,7 @@ bool Column::load(XmlStreamReader* reader, bool preview) {
 				case Column::ColumnMode::DateTime:
 				case Column::ColumnMode::Month:
 				case Column::ColumnMode::Day: {
-					timestampsVector << static_cast<quint64>(reader->readElementText().toULongLong()); // timezone is important
+					timestampsVector << static_cast<qint64>(reader->readElementText().toULongLong()); // timezone is important
 					break;
 				}
 				case Column::ColumnMode::Text: {
@@ -1873,7 +1873,7 @@ double Column::minimum(int startIndex, int endIndex) const {
 		case ColumnMode::Text:
 			break;
 		case ColumnMode::DateTime: {
-			auto* vec = static_cast<QVector<quint64>*>(data());
+			auto* vec = static_cast<QVector<qint64>*>(data());
 			for (int row = startIndex; row <= endIndex; ++row) {
 				if (!isValid(row) || isMasked(row))
 					continue;
@@ -2015,7 +2015,7 @@ double Column::maximum(int startIndex, int endIndex) const {
 		case ColumnMode::Text:
 			break;
 		case ColumnMode::DateTime: {
-			auto* vec = static_cast<QVector<quint64>*>(data());
+			auto* vec = static_cast<QVector<qint64>*>(data());
 			for (int row = startIndex; row <= endIndex; ++row) {
 				if (!isValid(row) || isMasked(row))
 					continue;
@@ -2395,9 +2395,9 @@ bool Column::indicesMinMax(double v1, double v2, int& start, int& end) const {
 	case ColumnMode::DateTime:
 	case ColumnMode::Month:
 	case ColumnMode::Day: {
-		quint64 value;
-		quint64 v2int64 = v2;
-		quint64 v1int64 = v1;
+		qint64 value;
+		qint64 v2int64 = v2;
+		qint64 v1int64 = v1;
 		for (int i = 0; i < rowCount(); i++) {
 			if (!isValid(i) || isMasked(i))
 				continue;

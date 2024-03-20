@@ -113,11 +113,9 @@ public:
 	void replaceValues(int first, const QVector<QDateTime>&);
 	void replaceDateTimes(int first, const QVector<QDateTime>&);
 
-	quint64 timestampAt(int row) const;
-	void setTimestampAt(int row, const quint64);
-	void replaceValues(int first, const QVector<quint64>&);
-	void replaceTimestamps(int first, const QVector<quint64>&);
-	void setValueAt(int row, quint64 new_value);
+	qint64 timestampAt(int row) const;
+	void setTimestampAt(int row, const qint64);
+	void replaceTimestamps(int first, const QVector<qint64>&);
 
 
 	double doubleAt(int row) const;
@@ -183,7 +181,6 @@ public:
 		void add(int, const QString&);
 		void add(double, const QString&);
 		void add(const QDateTime&, const QString&);
-		void add(quint64, const QString&);
 		void add(const QString&, const QString&);
 		void removeAll();
 		AbstractColumn::ColumnMode mode() const;
@@ -207,11 +204,11 @@ public:
 		const QVector<Column::ValueLabel<double>>* valueLabels() const;
 		const QVector<Column::ValueLabel<int>>* intValueLabels() const;
 		const QVector<Column::ValueLabel<qint64>>* bigIntValueLabels() const;
-		const QVector<Column::ValueLabel<quint64>>* timestampValueLabels() const;
+		const QVector<Column::ValueLabel<qint64>>* timestampValueLabels() const;
 		int indexForValue(double value) const;
 		double valueAt(int index) const;
 		QDateTime dateTimeAt(int index) const;
-		quint64 timestampAt(int index) const;
+		qint64 timestampAt(int index) const;
 		bool isValid(int index) const;
 		bool isMasked(int index) const;
 		QString labelAt(int index) const;
@@ -258,8 +255,7 @@ public:
 	const QVector<Column::ValueLabel<QDateTime>>* dateTimeValueLabels() const;
 	void addValueLabel(const QString&, const QString&);
 	const QVector<Column::ValueLabel<QString>>* textValueLabels() const;
-	void addValueLabel(quint64, const QString&);
-	const QVector<Column::ValueLabel<quint64>>* timestampValueLabels() const;
+	const QVector<Column::ValueLabel<qint64>>* timestampValueLabels() const;
 
 
 private:
