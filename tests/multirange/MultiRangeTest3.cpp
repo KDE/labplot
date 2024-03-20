@@ -120,6 +120,6 @@ void MultiRangeTest3::loadLegacyProject() {
 	QCOMPARE(plot->coordinateSystemCount(), 1);
 	CHECK_RANGE(plot, histogram, Dimension::X, 0., 6.);
 	CHECK_RANGE(plot, histogram, Dimension::Y, 0., 7.);
-
 }
+
 QTEST_MAIN(MultiRangeTest3)
