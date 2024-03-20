@@ -126,9 +126,9 @@ Action evaluateKeys(int key, Qt::KeyboardModifiers) {
  * \class CartesianPlot
  * \brief A xy-plot.
  */
-CartesianPlot::CartesianPlot(const QString& name)
+CartesianPlot::CartesianPlot(const QString& name, bool loading)
 	: AbstractPlot(name, new CartesianPlotPrivate(this), AspectType::CartesianPlot) {
-	init();
+	init(loading);
 }
 
 CartesianPlot::CartesianPlot(const QString& name, CartesianPlotPrivate* dd)
@@ -155,8 +155,8 @@ CartesianPlot::~CartesianPlot() {
 /*!
 	initializes all member variables of \c CartesianPlot
 */
-void CartesianPlot::init() {
-	m_coordinateSystems.append(new CartesianCoordinateSystem(this));
+void CartesianPlot::init(bool loading) {
+	// initialize the children objects
 	m_plotArea = new PlotArea(name() + QStringLiteral(" plot area"), this);
 	connect(m_plotArea, &WorksheetElement::changed, this, &WorksheetElement::changed);
 	addChildFast(m_plotArea);
@@ -167,22 +167,12 @@ void CartesianPlot::init() {
 	m_title->setHidden(true);
 	m_title->setParentGraphicsItem(m_plotArea->graphicsItem());
 
-	// offset between the plot area and the area defining the coordinate system, in scene units.
-	Q_D(CartesianPlot);
-	d->horizontalPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter);
-	d->verticalPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter);
-	d->rightPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter);
-	d->bottomPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter);
-	d->symmetricPadding = true;
-
 	// cursor line
+	Q_D(CartesianPlot);
 	d->cursorLine = new Line(QString());
 	d->cursorLine->setPrefix(QLatin1String("Cursor"));
 	d->cursorLine->setHidden(true);
 	addChild(d->cursorLine);
-	d->cursorLine->setStyle(Qt::SolidLine);
-	d->cursorLine->setColor(Qt::red); // TODO: use theme specific initial settings
-	d->cursorLine->setWidth(Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point));
 	connect(d->cursorLine, &Line::updatePixmapRequested, [=] {
 		d->update();
 	});
@@ -193,11 +183,21 @@ void CartesianPlot::init() {
 	connect(this, &AbstractAspect::childAspectAdded, this, &CartesianPlot::childAdded);
 	connect(this, &AbstractAspect::childAspectRemoved, this, &CartesianPlot::childRemoved);
 
-	graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, true);
-	graphicsItem()->setFlag(QGraphicsItem::ItemClipsChildrenToShape, true);
-	graphicsItem()->setFlag(QGraphicsItem::ItemIsSelectable, true);
-	graphicsItem()->setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
-	graphicsItem()->setFlag(QGraphicsItem::ItemIsFocusable, true);
+	// if not loading, initialize the default properties (read in load() otherweise)
+	if (loading)
+		return;
+
+	m_coordinateSystems << new CartesianCoordinateSystem(this);
+
+	d->horizontalPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter);
+	d->verticalPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter);
+	d->rightPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter);
+	d->bottomPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter);
+	d->symmetricPadding = true;
+
+	d->cursorLine->setStyle(Qt::SolidLine);
+	d->cursorLine->setColor(Qt::red); // TODO: use theme specific initial settings
+	d->cursorLine->setWidth(Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point));
 
 	// theme is not set at this point, initialize the color palette with default colors
 	this->setColorPalette(KConfig());
@@ -2247,7 +2247,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 			WorksheetElementContainer::retransform();
 	}
 
-	if (!this->pasted() && !child->pasted() && !child->isMoved()) {
+	if (!isLoading() && !pasted() && !child->pasted() && !child->isMoved()) {
 		// new child was added which might change the ranges and the axis tick labels.
 		// adjust the plot area padding if the axis label is outside of the plot area
 		if (rangeChanged) {
@@ -2453,12 +2453,12 @@ void CartesianPlot::dataChanged(int xIndex, int yIndex, WorksheetElement* sender
 		if (sender)
 			sender->retransform();
 		else {
-			// no sender available, the function was called directly in the file filter (live data source got new data)
-			// or in Project::load() -> retransform all available curves since we don't know which curves are affected.
+			// no sender available, the function was called directly in the file filter (live data source got new data) or in Project::load()-.
+			// -> recalculate the internal structures in all plots and retransform them since we don't know which plots are affected.
 			// TODO: this logic can be very expensive
-			for (auto* child : children<XYCurve>()) {
-				child->recalcLogicalPoints();
-				child->retransform();
+			for (auto* plot : children<Plot>()) {
+				plot->recalc();
+				plot->retransform();
 			}
 		}
 	}
@@ -3130,6 +3130,12 @@ void CartesianPlot::mouseHoverOutsideDataRect() {
 CartesianPlotPrivate::CartesianPlotPrivate(CartesianPlot* plot)
 	: AbstractPlotPrivate(plot)
 	, q(plot) {
+	setFlag(QGraphicsItem::ItemIsMovable, true);
+	setFlag(QGraphicsItem::ItemClipsChildrenToShape, true);
+	setFlag(QGraphicsItem::ItemIsSelectable, true);
+	setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
+	setFlag(QGraphicsItem::ItemIsFocusable, true);
+
 	m_cursor0Text.prepare();
 	m_cursor1Text.prepare();
 }
@@ -4805,8 +4811,6 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("symmetricPadding", symmetricPadding, bool);
 			hasCoordinateSystems = true;
 
-			m_coordinateSystems.clear();
-
 			if (Project::xmlVersion() < 7) {
 				d->niceExtend = true;
 			} else {
@@ -4824,7 +4828,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			if (str.isEmpty())
 				reader->raiseMissingAttributeWarning(QStringLiteral("xIndex"));
 			else {
-				CartesianCoordinateSystem* cSystem{new CartesianCoordinateSystem(this)};
+				auto* cSystem = new CartesianCoordinateSystem(this);
 				cSystem->setIndex(Dimension::X, str.toInt());
 
 				str = attribs.value(QStringLiteral("yIndex")).toString();
@@ -4920,6 +4924,11 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				str = attribs.value(QStringLiteral("yRangeDateTimeFormat")).toString();
 				if (!str.isEmpty())
 					d->yRanges[0].range.setDateTimeFormat(str);
+
+				auto* cSystem = new CartesianCoordinateSystem(this);
+				cSystem->setIndex(Dimension::X, 0);
+				cSystem->setIndex(Dimension::Y, 0);
+				addCoordinateSystem(cSystem);
 
 				READ_DOUBLE_VALUE("horizontalPadding", horizontalPadding);
 				READ_DOUBLE_VALUE("verticalPadding", verticalPadding);

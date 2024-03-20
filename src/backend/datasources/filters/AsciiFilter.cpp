@@ -56,7 +56,7 @@ AsciiFilter::~AsciiFilter() = default;
 /*!
   reads the content of the device \c device.
 */
-void AsciiFilter::readDataFromDevice(QIODevice& device, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
+void AsciiFilter::readDataFromDevice(QIODevice& device, AbstractDataSource* dataSource, ImportMode importMode, int lines) {
 	d->readDataFromDevice(device, dataSource, importMode, lines);
 }
 
@@ -105,7 +105,7 @@ int AsciiFilter::isPrepared() {
 /*!
   reads the content of the file \c fileName.
 */
-void AsciiFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
+void AsciiFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, ImportMode importMode) {
 	d->readDataFromFile(fileName, dataSource, importMode);
 }
 
@@ -726,6 +726,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 			const int deviceError = prepareDeviceToRead(device);
 			if (deviceError != 0) {
 				DEBUG(Q_FUNC_INFO << ", Device ERROR: " << deviceError);
+				q->setLastError(i18n("Failed to open the device/file or it's empty."));
 				return 0;
 			}
 			break;
@@ -1280,6 +1281,7 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 		const int deviceError = prepareDeviceToRead(device);
 		if (deviceError) {
 			DEBUG(Q_FUNC_INFO << ", DEVICE ERROR = " << deviceError);
+			q->setLastError(i18n("Failed to open the device/file or it's empty."));
 			return;
 		}
 
@@ -1295,7 +1297,12 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 		}
 
 		Q_ASSERT(dataSource);
-		m_columnOffset = dataSource->prepareImport(m_dataContainer, importMode, m_actualRows, m_actualCols, columnNames, columnModes);
+		bool ok = false;
+		m_columnOffset = dataSource->prepareImport(m_dataContainer, importMode, m_actualRows, m_actualCols, columnNames, columnModes, ok);
+		if (!ok) {
+			q->setLastError(i18n("Not enough memory."));
+			return;
+		}
 		m_prepared = true;
 	}
 
@@ -1605,14 +1612,14 @@ QVector<QStringList> AsciiFilterPrivate::preview(QIODevice& device) {
  */
 QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int lines) {
 	DEBUG(Q_FUNC_INFO)
-	QVector<QStringList> dataStrings;
 
 	KCompressionDevice device(fileName);
 	const int deviceError = prepareDeviceToRead(device, lines);
 
 	if (deviceError != 0) {
 		DEBUG("Device error = " << deviceError);
-		return dataStrings;
+		q->setLastError(i18n("Failed to open the device/file or it's empty."));
+		return {};
 	}
 
 	// number formatting
@@ -1649,6 +1656,7 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 	QString line;
 
 	// loop over the preview lines in the file and parse the available columns
+	QVector<QStringList> dataStrings;
 	for (int i = 0; i < lines; ++i) {
 		line = QString::fromUtf8(device.readLine());
 

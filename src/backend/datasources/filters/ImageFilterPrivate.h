@@ -19,7 +19,7 @@ public:
 	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace);
 	void write(const QString& fileName, AbstractDataSource*);
 
-	const ImageFilter* q;
+	ImageFilter* const q;
 
 	ImageFilter::ImportFormat importFormat{ImageFilter::ImportFormat::MATRIX}; // how to import the image
 	int startRow{1}; // start row

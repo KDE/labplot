@@ -26,8 +26,7 @@ public:
 	static QStringList importFormats();
 	static QString fileInfoString(const QString&);
 
-	void
-	readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace) override;
+	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, ImportMode = ImportMode::Replace) override;
 	void write(const QString& fileName, AbstractDataSource*) override;
 
 	void setImportFormat(const ImageFilter::ImportFormat);

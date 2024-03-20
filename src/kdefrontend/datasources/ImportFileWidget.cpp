@@ -573,14 +573,6 @@ QString ImportFileWidget::selectedObject() const {
 	return name;
 }
 
-/*!
- * returns \c true if the number of lines to be imported from the currently selected file is zero ("file is empty"),
- * returns \c false otherwise.
- */
-bool ImportFileWidget::importValid() const {
-	return m_importValid;
-}
-
 QString ImportFileWidget::host() const {
 	return ui.leHost->text();
 }
@@ -1600,6 +1592,9 @@ void ImportFileWidget::refreshPreview() {
 
 	WAIT_CURSOR;
 
+	auto* currentFilter = currentFileFilter();
+	currentFilter->setLastError(QString()); // clear the last error message, if any available
+
 	QString file = absolutePath(fileName());
 	const QString dbcFile = dbcFileName();
 	auto fileType = currentFileType();
@@ -1618,7 +1613,7 @@ void ImportFileWidget::refreshPreview() {
 		m_twPreview->hide();
 
 	bool ok = true;
-	QTableWidget* tmpTableWidget = m_twPreview;
+	auto* tmpTableWidget = m_twPreview;
 	QVector<QStringList> importedStrings;
 	QStringList vectorNameList;
 	QVector<AbstractColumn::ColumnMode> columnModes;
@@ -1627,7 +1622,7 @@ void ImportFileWidget::refreshPreview() {
 	case AbstractFileFilter::FileType::Ascii: {
 		ui.tePreview->clear();
 
-		auto filter = static_cast<AsciiFilter*>(currentFileFilter());
+		auto filter = static_cast<AsciiFilter*>(currentFilter);
 
 		DEBUG(Q_FUNC_INFO << ", Data Source Type: " << ENUM_TO_STRING(LiveDataSource, SourceType, sourceType));
 		switch (sourceType) {
@@ -1733,7 +1728,7 @@ void ImportFileWidget::refreshPreview() {
 	}
 	case AbstractFileFilter::FileType::Binary: {
 		ui.tePreview->clear();
-		auto filter = static_cast<BinaryFilter*>(currentFileFilter());
+		auto filter = static_cast<BinaryFilter*>(currentFilter);
 		importedStrings = filter->preview(file, lines);
 		break;
 	}
@@ -1753,14 +1748,15 @@ void ImportFileWidget::refreshPreview() {
 		ui.tePreview->clear();
 
 		QImage image(file);
-		QTextCursor cursor = ui.tePreview->textCursor();
+		auto cursor = ui.tePreview->textCursor();
 		cursor.insertImage(image);
 		RESET_CURSOR;
+		error(currentFilter->lastError());
 		return;
 	}
 	case AbstractFileFilter::FileType::HDF5: {
 		DEBUG(Q_FUNC_INFO << ", HDF5");
-		auto filter = static_cast<HDF5Filter*>(currentFileFilter());
+		auto filter = static_cast<HDF5Filter*>(currentFilter);
 		lines = m_hdf5OptionsWidget->lines();
 
 		importedStrings = filter->readCurrentDataSet(file, nullptr, ok, AbstractFileFilter::ImportMode::Replace, lines);
@@ -1769,7 +1765,7 @@ void ImportFileWidget::refreshPreview() {
 	}
 	case AbstractFileFilter::FileType::NETCDF: {
 		DEBUG(Q_FUNC_INFO << ", NetCDF");
-		auto filter = static_cast<NetCDFFilter*>(currentFileFilter());
+		auto filter = static_cast<NetCDFFilter*>(currentFilter);
 		lines = m_netcdfOptionsWidget->lines();
 
 		importedStrings = filter->readCurrentVar(file, nullptr, AbstractFileFilter::ImportMode::Replace, lines);
@@ -1778,7 +1774,7 @@ void ImportFileWidget::refreshPreview() {
 	}
 	case AbstractFileFilter::FileType::VECTOR_BLF: {
 		ui.tePreview->clear();
-		auto filter = static_cast<VectorBLFFilter*>(currentFileFilter());
+		auto filter = static_cast<VectorBLFFilter*>(currentFilter);
 		filter->setDBCFile(dbcFile);
 		importedStrings = filter->preview(file, lines);
 		vectorNameList = filter->vectorNames();
@@ -1787,7 +1783,7 @@ void ImportFileWidget::refreshPreview() {
 	}
 	case AbstractFileFilter::FileType::FITS: {
 		DEBUG(Q_FUNC_INFO << ", FITS");
-		auto filter = static_cast<FITSFilter*>(currentFileFilter());
+		auto filter = static_cast<FITSFilter*>(currentFilter);
 		lines = m_fitsOptionsWidget->lines();
 
 		QString extensionName = m_fitsOptionsWidget->extensionName(&ok);
@@ -1805,7 +1801,7 @@ void ImportFileWidget::refreshPreview() {
 	}
 	case AbstractFileFilter::FileType::JSON: {
 		ui.tePreview->clear();
-		auto filter = static_cast<JsonFilter*>(currentFileFilter());
+		auto filter = static_cast<JsonFilter*>(currentFilter);
 		m_jsonOptionsWidget->applyFilterSettings(filter, ui.tvJson->currentIndex());
 		importedStrings = filter->preview(file, lines);
 
@@ -1814,7 +1810,7 @@ void ImportFileWidget::refreshPreview() {
 		break;
 	}
 	case AbstractFileFilter::FileType::ROOT: {
-		auto filter = static_cast<ROOTFilter*>(currentFileFilter());
+		auto filter = static_cast<ROOTFilter*>(currentFilter);
 		lines = m_rootOptionsWidget->lines();
 		m_rootOptionsWidget->setNRows(filter->rowsInCurrentObject(file));
 		importedStrings = filter->previewCurrentObject(file,
@@ -1829,7 +1825,7 @@ void ImportFileWidget::refreshPreview() {
 	}
 	case AbstractFileFilter::FileType::Spice: {
 		ui.tePreview->clear();
-		auto filter = static_cast<SpiceFilter*>(currentFileFilter());
+		auto filter = static_cast<SpiceFilter*>(currentFilter);
 		importedStrings = filter->preview(file, lines);
 		vectorNameList = filter->vectorNames();
 		columnModes = filter->columnModes();
@@ -1837,7 +1833,7 @@ void ImportFileWidget::refreshPreview() {
 	}
 	case AbstractFileFilter::FileType::READSTAT: {
 		ui.tePreview->clear();
-		auto filter = static_cast<ReadStatFilter*>(currentFileFilter());
+		auto filter = static_cast<ReadStatFilter*>(currentFilter);
 		importedStrings = filter->preview(file, lines);
 		vectorNameList = filter->vectorNames();
 		columnModes = filter->columnModes();
@@ -1845,7 +1841,7 @@ void ImportFileWidget::refreshPreview() {
 		break;
 	}
 	case AbstractFileFilter::FileType::MATIO: {
-		auto filter = static_cast<MatioFilter*>(currentFileFilter());
+		auto filter = static_cast<MatioFilter*>(currentFilter);
 		lines = m_matioOptionsWidget->lines();
 
 		QVector<QStringList> strings;
@@ -1930,9 +1926,9 @@ void ImportFileWidget::refreshPreview() {
 		}
 
 		tmpTableWidget->horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
-		m_importValid = false;
-	} else
-		m_importValid = true;
+	}
+
+	error(currentFilter->lastError());
 
 	RESET_CURSOR;
 }

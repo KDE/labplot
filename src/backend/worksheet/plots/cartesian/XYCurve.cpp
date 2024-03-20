@@ -50,9 +50,9 @@
 
 using Dimension = CartesianCoordinateSystem::Dimension;
 
-CURVE_COLUMN_CONNECT(XYCurve, X, x, recalcLogicalPoints)
-CURVE_COLUMN_CONNECT(XYCurve, Y, y, recalcLogicalPoints)
-CURVE_COLUMN_CONNECT(XYCurve, Values, values, recalcLogicalPoints)
+CURVE_COLUMN_CONNECT(XYCurve, X, x, recalc)
+CURVE_COLUMN_CONNECT(XYCurve, Y, y, recalc)
+CURVE_COLUMN_CONNECT(XYCurve, Values, values, recalc)
 
 XYCurve::XYCurve(const QString& name, AspectType type)
 	: Plot(name, new XYCurvePrivate(this), type) {
@@ -391,14 +391,14 @@ QColor XYCurve::color() const {
 // 1) add XYCurveSetXColumnCmd as friend class to XYCurve
 // 2) add XYCURVE_COLUMN_CONNECT(x) as private method to XYCurve
 // 3) define all missing slots
-CURVE_COLUMN_SETTER_CMD_IMPL_F_S(XYCurve, X, x, recalcLogicalPoints)
+CURVE_COLUMN_SETTER_CMD_IMPL_F_S(XYCurve, X, x, recalc)
 void XYCurve::setXColumn(const AbstractColumn* column) {
 	Q_D(XYCurve);
 	if (column != d->xColumn)
 		exec(new XYCurveSetXColumnCmd(d, column, ki18n("%1: x-data source changed")));
 }
 
-CURVE_COLUMN_SETTER_CMD_IMPL_F_S(XYCurve, Y, y, recalcLogicalPoints)
+CURVE_COLUMN_SETTER_CMD_IMPL_F_S(XYCurve, Y, y, recalc)
 void XYCurve::setYColumn(const AbstractColumn* column) {
 	Q_D(XYCurve);
 	if (column != d->yColumn)
@@ -459,7 +459,7 @@ void XYCurve::setValuesColumn(const AbstractColumn* column) {
 		exec(new XYCurveSetValuesColumnCmd(d, column, ki18n("%1: set values column")));
 
 		// no need to recalculate the points on value labels changes
-		disconnect(column, &AbstractColumn::dataChanged, this, &XYCurve::recalcLogicalPoints);
+		disconnect(column, &AbstractColumn::dataChanged, this, &XYCurve::recalc);
 
 		if (column)
 			connect(column, &AbstractColumn::dataChanged, this, &XYCurve::updateValues);
@@ -592,9 +592,9 @@ void XYCurve::retransform() {
 	d->retransform();
 }
 
-void XYCurve::recalcLogicalPoints() {
+void XYCurve::recalc() {
 	Q_D(XYCurve);
-	d->recalcLogicalPoints();
+	d->recalc();
 }
 
 void XYCurve::updateValues() {
@@ -853,7 +853,7 @@ void XYCurvePrivate::retransform() {
  * called if the x- or y-data was changed.
  * copies the valid data points from the x- and y-columns into the internal container
  */
-void XYCurvePrivate::recalcLogicalPoints() {
+void XYCurvePrivate::recalc() {
 	PERFTRACE(QLatin1String(Q_FUNC_INFO) + QStringLiteral(", curve ") + name());
 
 	m_pointVisible.clear();
@@ -2330,7 +2330,7 @@ bool XYCurvePrivate::activatePlot(QPointF mouseScenePos, double maxDist) {
 		return false;
 
 	int rowCount{0};
-	if (lineType != XYCurve::LineType::NoLine)
+	if (lineType != XYCurve::LineType::NoLine && m_lines.size() > 1)
 		rowCount = m_lines.count();
 	else if (symbol->style() != Symbol::Style::NoSymbols) {
 		calculateScenePoints();
@@ -2346,11 +2346,14 @@ bool XYCurvePrivate::activatePlot(QPointF mouseScenePos, double maxDist) {
 
 	const double maxDistSquare = gsl_pow_2(maxDist);
 
+	const bool noLines = lineType == XYCurve::LineType::NoLine || (lineType != XYCurve::LineType::NoLine && m_lines.isEmpty());
+	if (noLines)
+		calculateScenePoints();
+
 	auto properties = q->xColumn()->properties();
 	if (properties == AbstractColumn::Properties::No || properties == AbstractColumn::Properties::NonMonotonic) {
 		// assumption: points exist if no line. otherwise previously returned false
-		if (lineType == XYCurve::LineType::NoLine) {
-			calculateScenePoints();
+		if (noLines) {
 			QPointF curvePosPrevScene = m_scenePoints.at(0);
 			QPointF curvePosScene = curvePosPrevScene;
 			for (int row = 0; row < rowCount; row++) {
@@ -2361,13 +2364,11 @@ bool XYCurvePrivate::activatePlot(QPointF mouseScenePos, double maxDist) {
 				curvePosScene = m_scenePoints.at(row);
 			}
 		} else {
-			for (int row = 0; row < rowCount; row++) {
-				QLineF line = m_lines.at(row);
+			for (const auto& line : m_lines) {
 				if (pointLiesNearLine(line.p1(), line.p2(), mouseScenePos, maxDist))
 					return true;
 			}
 		}
-
 	} else if (properties == AbstractColumn::Properties::MonotonicIncreasing || properties == AbstractColumn::Properties::MonotonicDecreasing) {
 		bool increase{true};
 		if (properties == AbstractColumn::Properties::MonotonicDecreasing)
@@ -2379,8 +2380,7 @@ bool XYCurvePrivate::activatePlot(QPointF mouseScenePos, double maxDist) {
 		QPointF curvePosScene;
 		QPointF curvePosPrevScene;
 
-		if (lineType == XYCurve::LineType::NoLine) {
-			calculateScenePoints();
+		if (noLines) {
 			curvePosScene = m_scenePoints.at(index);
 			curvePosPrevScene = curvePosScene;
 			index = Column::indexForValue(x, m_scenePoints, static_cast<AbstractColumn::Properties>(properties));
@@ -2396,7 +2396,7 @@ bool XYCurvePrivate::activatePlot(QPointF mouseScenePos, double maxDist) {
 		bool stop{false};
 		while (true) {
 			// assumption: points exist if no line. otherwise previously returned false
-			if (lineType == XYCurve::LineType::NoLine) { // check points only if no line otherwise check only the lines
+			if (noLines) { // check points only if no line otherwise check only the lines
 				if (curvePosScene.x() > xMax)
 					stop = true; // one more time if bigger
 				if (gsl_hypot(mouseScenePos.x() - curvePosScene.x(), mouseScenePos.y() - curvePosScene.y()) <= maxDist)
@@ -2405,7 +2405,7 @@ bool XYCurvePrivate::activatePlot(QPointF mouseScenePos, double maxDist) {
 				if (m_lines.at(index).p1().x() > xMax)
 					stop = true; // one more time if bigger
 
-				QLineF line = m_lines.at(index);
+				const auto& line = m_lines.at(index);
 				if (pointLiesNearLine(line.p1(), line.p2(), mouseScenePos, maxDist))
 					return true;
 			}
@@ -2418,8 +2418,7 @@ bool XYCurvePrivate::activatePlot(QPointF mouseScenePos, double maxDist) {
 			else
 				index--;
 
-			if (lineType == XYCurve::LineType::NoLine) {
-				calculateScenePoints();
+			if (noLines) {
 				curvePosPrevScene = curvePosScene;
 				curvePosScene = m_scenePoints.at(index);
 			}

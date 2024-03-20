@@ -120,7 +120,7 @@ public:
 	typedef XYCurvePrivate Private;
 
 	void retransform() override;
-	void recalcLogicalPoints();
+	void recalc() override;
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
 	double y(double x, double& x_new, bool& valueFound) const;
 	int getNextValue(double xpos, int index, double& x, double& y, bool& valueFound) const;

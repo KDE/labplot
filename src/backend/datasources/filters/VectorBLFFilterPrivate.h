@@ -23,8 +23,6 @@ public:
 	}
 	virtual bool isValid(const QString& filename) const override;
 
-	virtual QStringList lastErrors() const override;
-
 private:
 	enum class ParseStatus {
 		Success,
@@ -38,18 +36,19 @@ private:
 		DBCInvalidConversion
 	};
 	static ParseStatus DBCParserParseStatusToVectorBLFStatus(DbcParser::ParseStatus);
-	struct Errors {
-		ParseStatus e;
+
+	struct Warning {
+		ParseStatus status;
 		uint32_t CANId;
 	};
-	QList<Errors> errors;
+	void addWarningError(const Warning&) const;
 
 private:
 	virtual int readDataFromFileCommonTime(const QString& fileName, int lines = -1) override;
 	virtual int readDataFromFileSeparateTime(const QString& fileName, int lines = -1) override;
 
 #ifdef HAVE_VECTOR_BLF
-	const VectorBLFFilter* q;
+	VectorBLFFilter* const q;
 #endif
 };
 

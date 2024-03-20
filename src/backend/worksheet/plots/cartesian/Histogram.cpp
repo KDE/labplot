@@ -44,6 +44,7 @@
 #include <QGraphicsSceneMouseEvent>
 
 CURVE_COLUMN_CONNECT(Histogram, Data, data, recalc)
+static constexpr double zero = 0.001; // zero baseline, don't use the exact 0.0 since it breaks the histrogram with log-scaling
 
 Histogram::Histogram(const QString& name)
 	: Plot(name, new HistogramPrivate(this), AspectType::Histogram) {
@@ -1008,6 +1009,9 @@ void HistogramPrivate::histogramValue(double& value, int bin) const {
 		break;
 	}
 	}
+
+	if (value == 0.0)
+		value = zero;
 }
 
 void HistogramPrivate::verticalHistogram() {
@@ -1022,9 +1026,9 @@ void HistogramPrivate::verticalHistogram() {
 		for (size_t i = 0; i < m_bins; ++i) {
 			histogramValue(value, i);
 			const double x = binRangesMin + i * width;
-			lines.append(QLineF(x, 0., x, value));
+			lines.append(QLineF(x, zero, x, value));
 			lines.append(QLineF(x, value, x + width, value));
-			lines.append(QLineF(x + width, value, x + width, 0.));
+			lines.append(QLineF(x + width, value, x + width, zero));
 			pointsLogical.append(QPointF(x + width / 2, value));
 		}
 		break;
@@ -1040,7 +1044,7 @@ void HistogramPrivate::verticalHistogram() {
 			pointsLogical.append(QPointF(x + width / 2, value));
 
 			if (i == m_bins - 1)
-				lines.append(QLineF(x + width, value, x + width, 0.));
+				lines.append(QLineF(x + width, value, x + width, zero));
 
 			prevValue = value;
 		}
@@ -1050,7 +1054,7 @@ void HistogramPrivate::verticalHistogram() {
 		for (size_t i = 0; i < m_bins; ++i) {
 			histogramValue(value, i);
 			const double x = binRangesMin + i * width + width / 2;
-			lines.append(QLineF(x, 0., x, value));
+			lines.append(QLineF(x, zero, x, value));
 			pointsLogical.append(QPointF(x, value));
 		}
 		break;
@@ -1059,7 +1063,7 @@ void HistogramPrivate::verticalHistogram() {
 		for (size_t i = 0; i < m_bins; ++i) {
 			histogramValue(value, i);
 			const double x = binRangesMin + i * width + width / 2;
-			lines.append(QLineF(x, 0., x, value));
+			lines.append(QLineF(x, zero, x, value));
 			lines.append(QLineF(x, value, x - width / 4, value));
 			pointsLogical.append(QPointF(x, value));
 		}
@@ -1068,7 +1072,7 @@ void HistogramPrivate::verticalHistogram() {
 	}
 
 	if (lineType != Histogram::DropLines && lineType != Histogram::HalfBars)
-		lines.append(QLineF(binRangesMax, 0., binRangesMin, 0.));
+		lines.append(QLineF(binRangesMax, zero, binRangesMin, zero));
 }
 
 void HistogramPrivate::horizontalHistogram() {
@@ -1083,9 +1087,9 @@ void HistogramPrivate::horizontalHistogram() {
 		for (size_t i = 0; i < m_bins; ++i) {
 			histogramValue(value, i);
 			const double y = binRangesMin + i * width;
-			lines.append(QLineF(0., y, value, y));
+			lines.append(QLineF(zero, y, value, y));
 			lines.append(QLineF(value, y, value, y + width));
-			lines.append(QLineF(value, y + width, 0., y + width));
+			lines.append(QLineF(value, y + width, zero, y + width));
 			pointsLogical.append(QPointF(value, y + width / 2));
 		}
 		break;
@@ -1101,7 +1105,7 @@ void HistogramPrivate::horizontalHistogram() {
 			pointsLogical.append(QPointF(value, y + width / 2));
 
 			if (i == m_bins - 1)
-				lines.append(QLineF(value, y + width, 0., y + width));
+				lines.append(QLineF(value, y + width, zero, y + width));
 
 			prevValue = value;
 		}
@@ -1111,7 +1115,7 @@ void HistogramPrivate::horizontalHistogram() {
 		for (size_t i = 0; i < m_bins; ++i) {
 			histogramValue(value, i);
 			const double y = binRangesMin + i * width + width / 2;
-			lines.append(QLineF(0., y, value, y));
+			lines.append(QLineF(zero, y, value, y));
 			pointsLogical.append(QPointF(value, y));
 		}
 		break;
@@ -1120,7 +1124,7 @@ void HistogramPrivate::horizontalHistogram() {
 		for (size_t i = 0; i < m_bins; ++i) {
 			histogramValue(value, i);
 			const double y = binRangesMin + i * width + width / 2;
-			lines.append(QLineF(0., y, value, y));
+			lines.append(QLineF(zero, y, value, y));
 			lines.append(QLineF(value, y, value, y + width / 4));
 			pointsLogical.append(QPointF(value, y));
 		}
@@ -1129,7 +1133,7 @@ void HistogramPrivate::horizontalHistogram() {
 	}
 
 	if (lineType != Histogram::DropLines && lineType != Histogram::HalfBars)
-		lines.append(QLineF(0., binRangesMin, 0., binRangesMax));
+		lines.append(QLineF(zero, binRangesMin, zero, binRangesMax));
 }
 
 void HistogramPrivate::updateSymbols() {

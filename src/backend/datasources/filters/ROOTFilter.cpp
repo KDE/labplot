@@ -30,12 +30,12 @@
 
 ROOTFilter::ROOTFilter()
 	: AbstractFileFilter(FileType::ROOT)
-	, d(new ROOTFilterPrivate) {
+	, d(new ROOTFilterPrivate(this)) {
 }
 
 ROOTFilter::~ROOTFilter() = default;
 
-void ROOTFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
+void ROOTFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, ImportMode importMode) {
 	d->readDataFromFile(fileName, dataSource, importMode);
 }
 
@@ -153,12 +153,16 @@ bool ROOTFilter::load(XmlStreamReader* reader) {
 
 /**************** ROOTFilterPrivate implementation *******************/
 
-ROOTFilterPrivate::ROOTFilterPrivate() = default;
+ROOTFilterPrivate::ROOTFilterPrivate(ROOTFilter* owner)
+	: q(owner) {
+}
 
 ROOTFilterPrivate::FileType ROOTFilterPrivate::currentObjectPosition(const QString& fileName, long int& pos) {
 	QStringList typeobject = currentObject.split(QLatin1Char(':'));
-	if (typeobject.size() < 2)
+	if (typeobject.size() < 2) {
+		q->setLastError(i18n("Unsupported file type, neither histogram no tree."));
 		return FileType::Invalid;
+	}
 
 	FileType type;
 	if (typeobject.first() == QStringLiteral("Hist"))
@@ -220,12 +224,18 @@ void ROOTFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSo
 		}
 
 		std::vector<void*> dataContainer;
+		bool ok = false;
 		const int columnOffset = dataSource->prepareImport(dataContainer,
 														   importMode,
 														   last - first + 1,
 														   columns.size(),
 														   headers,
-														   QVector<AbstractColumn::ColumnMode>(columns.size(), AbstractColumn::ColumnMode::Double));
+														   QVector<AbstractColumn::ColumnMode>(columns.size(), AbstractColumn::ColumnMode::Double),
+														   ok);
+		if (!ok) {
+			q->setLastError(i18n("Not enough memory."));
+			return;
+		}
 
 		// read data
 		DEBUG("	reading " << last - first + 1 << " lines");
@@ -284,12 +294,18 @@ void ROOTFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSo
 		}
 
 		std::vector<void*> dataContainer;
+		bool ok = false;
 		const int columnOffset = dataSource->prepareImport(dataContainer,
 														   importMode,
 														   last - first + 1,
 														   columns.size(),
 														   headers,
-														   QVector<AbstractColumn::ColumnMode>(columns.size(), AbstractColumn::ColumnMode::Double));
+														   QVector<AbstractColumn::ColumnMode>(columns.size(), AbstractColumn::ColumnMode::Double),
+														   ok);
+		if (!ok) {
+			q->setLastError(i18n("Not enough memory."));
+			return;
+		}
 
 		int c = 0;
 		for (const auto& l : columns) {
@@ -494,7 +510,7 @@ bool ROOTFilterPrivate::setFile(const QString& fileName) {
 		return false;
 	}
 
-	QDateTime modified = file.lastModified();
+	auto modified = file.lastModified();
 	qint64 size = file.size();
 	if (!currentROOTData || fileName != currentFile.name || modified != currentFile.modified || size != currentFile.size) {
 		currentFile.name = fileName;

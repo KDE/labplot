@@ -44,6 +44,8 @@ ImportDialog::ImportDialog(MainWin* parent)
 	, vLayout(new QVBoxLayout(this))
 	, m_mainWin(parent)
 	, m_aspectTreeModel(new AspectTreeModel(parent->project())) {
+	setAttribute(Qt::WA_DeleteOnClose);
+
 	// menu for new data container
 	m_newDataContainerMenu = new QMenu(this);
 	m_newDataContainerMenu->addAction(QIcon::fromTheme(QStringLiteral("labplot-workbook-new")), i18n("New Workbook"));
@@ -77,7 +79,7 @@ void ImportDialog::setModel() {
 	auto* grid = new QGridLayout(frameAddTo);
 	grid->addWidget(label, 0, 0);
 
-	cbAddTo = new TreeViewComboBox();
+	cbAddTo = new TreeViewComboBox(this);
 	cbAddTo->setToolTip(i18n("Data container where the data has to be imported into"));
 	cbAddTo->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 	grid->addWidget(cbAddTo, 0, 1);
@@ -182,5 +184,14 @@ void ImportDialog::showErrorMessage(const QString& message) {
 		m_messageWidget->setText(message);
 		m_messageWidget->animatedShow();
 		QDEBUG(message);
+	}
+}
+
+void ImportDialog::accept() {
+	bool rc = importTo(m_mainWin->statusBar());
+	if (rc) {
+		// the import was successful, set the project to Changed and close the dialog
+		m_mainWin->project()->setChanged(true);
+		QDialog::accept();
 	}
 }

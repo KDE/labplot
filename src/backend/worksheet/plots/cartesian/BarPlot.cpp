@@ -135,6 +135,7 @@ void BarPlot::handleResize(double /*horizontalRatio*/, double /*verticalRatio*/,
 /* ============================ getter methods ================= */
 // general
 BASIC_SHARED_D_READER_IMPL(BarPlot, QVector<const AbstractColumn*>, dataColumns, dataColumns)
+BASIC_SHARED_D_READER_IMPL(BarPlot, QVector<QString>, dataColumnPaths, dataColumnPaths)
 BASIC_SHARED_D_READER_IMPL(BarPlot, BarPlot::Type, type, type)
 BASIC_SHARED_D_READER_IMPL(BarPlot, BarPlot::Orientation, orientation, orientation)
 BASIC_SHARED_D_READER_IMPL(BarPlot, double, widthFactor, widthFactor)
@@ -170,11 +171,6 @@ ErrorBar* BarPlot::errorBarAt(int index) const {
 		return d->errorBars.at(index);
 	else
 		return nullptr;
-}
-
-QVector<QString>& BarPlot::dataColumnPaths() const {
-	D(BarPlot);
-	return d->dataColumnPaths;
 }
 
 double BarPlot::minimum(const Dimension dim) const {
@@ -299,6 +295,11 @@ void BarPlot::setDataColumns(const QVector<const AbstractColumn*> columns) {
 	}
 }
 
+void BarPlot::setDataColumnPaths(const QVector<QString>& paths) {
+	Q_D(BarPlot);
+	d->dataColumnPaths = paths;
+}
+
 STD_SETTER_CMD_IMPL_F_S(BarPlot, SetType, BarPlot::Type, type, recalc)
 void BarPlot::setType(BarPlot::Type type) {
 	Q_D(BarPlot);
@@ -353,6 +354,10 @@ BarPlotPrivate::BarPlotPrivate(BarPlot* owner)
 	, q(owner) {
 	setFlag(QGraphicsItem::ItemIsSelectable);
 	setAcceptHoverEvents(false);
+
+	// TODO: make this parameters adjustable for the user?
+	m_groupWidth = 1.0; // width of a group and of the gaps around a group
+	m_groupGap = m_groupWidth * 0.1; // gap around a group - the gap between two neighbour groups is 2*m_groupGap
 }
 
 Background* BarPlotPrivate::addBackground(const KConfigGroup& group) {
@@ -676,13 +681,6 @@ void BarPlotPrivate::recalc() {
 		}
 	}
 
-	// determine the width of a group and of the gaps around a group
-	m_groupWidth = 1.0;
-	if (xColumn && newSize != 0)
-		m_groupWidth = (xColumn->maximum() - xColumn->minimum()) / newSize;
-
-	m_groupGap = m_groupWidth * 0.1; // gap around a group - the gap between two neighbour groups is 2*m_groupGap
-
 	// if the size of the plot has changed because of the actual
 	// data changes or because of new plot settings, emit dataChanged()
 	// in order to recalculate the data ranges in the parent plot area
@@ -706,7 +704,9 @@ void BarPlotPrivate::verticalBarPlot(int columnIndex) {
 	case BarPlot::Type::Grouped: {
 		const double barGap = m_groupWidth * 0.1; // gap between two bars within a group
 		const int barCount = dataColumns.size(); // number of bars within a group
-		const double width = (m_groupWidth * widthFactor - 2 * m_groupGap - (barCount - 1) * barGap) / barCount; // bar width
+		double width = (m_groupWidth - 2 * m_groupGap - (barCount - 1) * barGap) / barCount; // bar width
+		width *= widthFactor; // scaled bar width
+		const double scalingOffset = width * (1. / widthFactor - 1.) / 2.; // offset to be added to x to accomodate for a smaller/scaled bar width
 
 		int valueIndex = 0;
 		for (int i = 0; i < column->rowCount(); ++i) {
@@ -716,13 +716,14 @@ void BarPlotPrivate::verticalBarPlot(int columnIndex) {
 			const double value = column->valueAt(i);
 			double x;
 
+			// translate to the beginning of the group
 			if (xColumn)
-				x = xColumn->valueAt(i);
+				x = xColumn->valueAt(i) - m_groupWidth / 2;
 			else
-				x = m_groupGap + m_groupWidth * (1 - widthFactor) / 2
-					+ valueIndex * m_groupWidth; // translate to the beginning of the group - 1st group is placed between 0 and 1, 2nd between 1 and 2, etc.
+				x = valueIndex * m_groupWidth; // for m_groupWidth = 1, 1st group is placed between 0 and 1, 2nd between 1 and 2, etc.
 
-			x += (width + barGap) * columnIndex; // translate to the beginning of the bar within the current group
+			// translate to the beginning of the bar within the current group
+			x += m_groupGap + scalingOffset + (width + barGap + 2 * scalingOffset) * columnIndex;
 
 			lines.clear();
 			lines << QLineF(x, value, x + width, value);
@@ -740,8 +741,11 @@ void BarPlotPrivate::verticalBarPlot(int columnIndex) {
 		break;
 	}
 	case BarPlot::Type::Stacked: {
-		const double width = m_groupWidth * widthFactor - 2 * m_groupGap; // bar width
+		double width = m_groupWidth - 2 * m_groupGap; // bar width
+		width *= widthFactor; // scaled bar width
+		const double scalingOffset = width * (1. / widthFactor - 1.) / 2.; // offset to be added to x to accomodate for a smaller/scaled bar width
 		int valueIndex = 0;
+
 		for (int i = 0; i < column->rowCount(); ++i) {
 			if (!column->isValid(i) || column->isMasked(i))
 				continue;
@@ -753,11 +757,15 @@ void BarPlotPrivate::verticalBarPlot(int columnIndex) {
 			else
 				offset = m_stackedBarNegativeOffsets.at(valueIndex);
 
+			// translate to the beginning of the group
 			double x;
 			if (xColumn)
-				x = xColumn->valueAt(i);
+				x = xColumn->valueAt(i) - m_groupWidth / 2;
 			else
-				x = m_groupGap + m_groupWidth * (1 - widthFactor) / 2 + valueIndex * m_groupWidth; // translate to the beginning of the group
+				x = valueIndex * m_groupWidth;
+
+			// translate to the beginning of the bar
+			x += m_groupGap + scalingOffset;
 
 			lines.clear();
 			lines << QLineF(x, value + offset, x + width, value + offset);
@@ -781,7 +789,9 @@ void BarPlotPrivate::verticalBarPlot(int columnIndex) {
 		break;
 	}
 	case BarPlot::Type::Stacked_100_Percent: {
-		const double width = m_groupWidth * widthFactor - 2 * m_groupGap; // bar width
+		double width = m_groupWidth - 2 * m_groupGap; // bar width
+		width *= widthFactor; // scaled bar width
+		const double scalingOffset = width * (1. / widthFactor - 1.) / 2.; // offset to be added to x to accomodate for a smaller/scaled bar width
 		int valueIndex = 0;
 
 		for (int i = 0; i < column->rowCount(); ++i) {
@@ -793,13 +803,17 @@ void BarPlotPrivate::verticalBarPlot(int columnIndex) {
 				continue;
 
 			value = value * 100 / m_stackedBar100PercentValues.at(valueIndex);
-			double offset = m_stackedBarPositiveOffsets.at(valueIndex);
-			double x;
+			const double offset = m_stackedBarPositiveOffsets.at(valueIndex);
 
+			// translate to the beginning of the group
+			double x;
 			if (xColumn)
-				x = xColumn->valueAt(i);
+				x = xColumn->valueAt(i) - m_groupWidth / 2;
 			else
-				x = m_groupGap + m_groupWidth * (1 - widthFactor) / 2 + valueIndex * m_groupWidth; // translate to the beginning of the group
+				x = valueIndex * m_groupWidth;
+
+			// translate to the beginning of the bar
+			x += m_groupGap + scalingOffset;
 
 			lines.clear();
 			lines << QLineF(x, value + offset, x + width, value + offset);
@@ -835,7 +849,9 @@ void BarPlotPrivate::horizontalBarPlot(int columnIndex) {
 	case BarPlot::Type::Grouped: {
 		const double barGap = m_groupWidth * 0.1; // gap between two bars within a group
 		const int barCount = dataColumns.size(); // number of bars within a group
-		const double width = (m_groupWidth * widthFactor - 2 * m_groupGap - (barCount - 1) * barGap) / barCount; // bar width
+		double width = (m_groupWidth - 2 * m_groupGap - (barCount - 1) * barGap) / barCount; // bar width
+		width *= widthFactor; // scaled bar width
+		const double scalingOffset = width * (1. / widthFactor - 1.) / 2.; // offset to be added to y to accomodate for a smaller/scaled bar width
 
 		int valueIndex = 0;
 		for (int i = 0; i < column->rowCount(); ++i) {
@@ -844,12 +860,15 @@ void BarPlotPrivate::horizontalBarPlot(int columnIndex) {
 
 			const double value = column->valueAt(i);
 			double y;
-			if (xColumn)
-				y = xColumn->valueAt(i);
-			else
-				y = m_groupGap + m_groupWidth * (1 - widthFactor) / 2 + valueIndex * m_groupWidth; // translate to the beginning of the group
 
-			y += (width + barGap) * columnIndex; // translate to the beginning of the bar within the current group
+			// translate to the beginning of the group
+			if (xColumn)
+				y = xColumn->valueAt(i) - m_groupWidth / 2;
+			else
+				y = valueIndex * m_groupWidth;
+
+			// translate to the beginning of the bar within the current group
+			y += m_groupGap + scalingOffset + (width + barGap + 2 * scalingOffset) * columnIndex;
 
 			lines.clear();
 			lines << QLineF(value, y, value, y + width);
@@ -867,7 +886,9 @@ void BarPlotPrivate::horizontalBarPlot(int columnIndex) {
 		break;
 	}
 	case BarPlot::Type::Stacked: {
-		const double width = m_groupWidth * widthFactor - 2 * m_groupGap; // bar width
+		double width = m_groupWidth - 2 * m_groupGap; // bar width
+		width *= widthFactor; // scaled bar width
+		const double scalingOffset = width * (1. / widthFactor - 1.) / 2.; // offset to be added to y to accomodate for a smaller/scaled bar width
 		int valueIndex = 0;
 		for (int i = 0; i < column->rowCount(); ++i) {
 			if (!column->isValid(i) || column->isMasked(i))
@@ -880,11 +901,15 @@ void BarPlotPrivate::horizontalBarPlot(int columnIndex) {
 			else
 				offset = m_stackedBarNegativeOffsets.at(valueIndex);
 
+			// translate to the beginning of the group
 			double y;
 			if (xColumn)
-				y = xColumn->valueAt(i);
+				y = xColumn->valueAt(i) - m_groupWidth / 2;
 			else
-				y = m_groupGap + m_groupWidth * (1 - widthFactor) / 2 + valueIndex * m_groupWidth; // translate to the beginning of the group
+				y = valueIndex * m_groupWidth;
+
+			// translate to the beginning of the bar
+			y += m_groupGap + scalingOffset;
 
 			lines.clear();
 			lines << QLineF(value + offset, y, value + offset, y + width);
@@ -907,8 +932,11 @@ void BarPlotPrivate::horizontalBarPlot(int columnIndex) {
 		break;
 	}
 	case BarPlot::Type::Stacked_100_Percent: {
-		const double width = m_groupWidth * widthFactor - 2 * m_groupGap; // bar width
+		double width = m_groupWidth - 2 * m_groupGap; // bar width
+		width *= widthFactor; // scaled bar width
+		const double scalingOffset = width * (1. / widthFactor - 1.) / 2.; // offset to be added to x to accomodate for a smaller/scaled bar width
 		int valueIndex = 0;
+
 		for (int i = 0; i < column->rowCount(); ++i) {
 			if (!column->isValid(i) || column->isMasked(i))
 				continue;
@@ -918,13 +946,16 @@ void BarPlotPrivate::horizontalBarPlot(int columnIndex) {
 				continue;
 
 			value = value * 100 / m_stackedBar100PercentValues.at(valueIndex);
-			double offset = m_stackedBarPositiveOffsets.at(valueIndex);
+			const double offset = m_stackedBarPositiveOffsets.at(valueIndex);
 
 			double y;
 			if (xColumn)
-				y = xColumn->valueAt(i);
+				y = xColumn->valueAt(i) - m_groupWidth / 2;
 			else
-				y = m_groupGap + m_groupWidth * (1 - widthFactor) / 2 + valueIndex * m_groupWidth; // translate to the beginning of the group
+				y = valueIndex * m_groupWidth;
+
+			// translate to the beginning of the bar
+			y += m_groupGap + scalingOffset;
 
 			lines.clear();
 			lines << QLineF(value + offset, y, value + offset, y + width);

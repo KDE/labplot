@@ -817,6 +817,7 @@ void Project::retransformElements(AbstractAspect* aspect) {
  * to restore the pointers.
  */
 void Project::restorePointers(AbstractAspect* aspect) {
+	DEBUG(Q_FUNC_INFO)
 	// wait until all columns are decoded from base64-encoded data
 	QThreadPool::globalInstance()->waitForDone();
 

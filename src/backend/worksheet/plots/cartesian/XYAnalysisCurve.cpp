@@ -460,7 +460,7 @@ void XYAnalysisCurvePrivate::recalculate() {
 
 		if (result) {
 			// redraw the curve
-			recalcLogicalPoints();
+			recalc();
 		}
 	}
 	Q_EMIT q->dataChanged();
