@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-19 01:39+0000\n"
-"PO-Revision-Date: 2024-03-08 21:37+0100\n"
+"POT-Creation-Date: 2024-03-21 01:37+0000\n"
+"PO-Revision-Date: 2024-03-20 22:52+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -7538,7 +7538,7 @@ msgstr "neniu informo havebla"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTitle)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:165
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5014
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5019
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:483
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:543
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:466
@@ -7944,7 +7944,7 @@ msgid "%1: load default theme"
 msgstr "%1: ŝargi defaŭltan etoson"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1694
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5324
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5329
 #: src/backend/worksheet/Worksheet.cpp:818
 #, kde-format
 msgid "%1: set theme"
@@ -11246,10 +11246,9 @@ msgid "Dataset%1"
 msgstr "Datumaro%1"
 
 #: src/kdefrontend/datasources/ImportDatasetDialog.cpp:103
-#, fuzzy, kde-format
-#| msgid "File %1 imported in %2 seconds."
+#, kde-format
 msgid "Failed to connect within %1 seconds"
-msgstr "Dosiero %1 importita en %2 sekundoj."
+msgstr "Malsukcesis konektiĝi ene de %1 sekundoj."
 
 #: src/kdefrontend/datasources/ImportDatasetDialog.cpp:128
 #, kde-format
@@ -22879,21 +22878,3 @@ msgstr "konvertprocezo malsukcesis, elirkodo ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Ne eblas malfermi dosieron:"
-
-#~ msgid "%1: move down"
-#~ msgstr "%1: movi malsupren"
-
-#~ msgid "%1: move behind %2."
-#~ msgstr "%1: movi malantaŭ %2."
-
-#~ msgid "%1: move in front of %2."
-#~ msgstr "%1: movi antaŭ %2."
-
-#~ msgid "Invalid metadata file"
-#~ msgstr "Nevalida metadatuma dosiero"
-
-#~ msgid "Failed to download the dataset"
-#~ msgstr "Malsukcesis elŝuti la datumaron"
-
-#~ msgid "Failed to save the dataset"
-#~ msgstr "Malsukcesis konservi la datumaron"
