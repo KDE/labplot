@@ -1320,17 +1320,19 @@ int Spreadsheet::prepareImport(std::vector<void*>& dataContainer,
 	const auto& columns = children<Column>(); // Get new children because of the resize it might be different
 
 	// resize the spreadsheet
-	try {
-		if (importMode == AbstractFileFilter::ImportMode::Replace) {
-			clear();
-			setRowCount(actualRows);
-		} else {
-			if (rowCount() < actualRows)
+	if (initializeContainer) {
+		try {
+			if (importMode == AbstractFileFilter::ImportMode::Replace) {
+				clear();
 				setRowCount(actualRows);
+			} else {
+				if (rowCount() < actualRows)
+					setRowCount(actualRows);
+			}
+		} catch (std::bad_alloc&) {
+			ok = false;
+			return 0;
 		}
-	} catch (std::bad_alloc&) {
-		ok = false;
-		return 0;
 	}
 
 	if (columnMode.size() < actualCols) {
