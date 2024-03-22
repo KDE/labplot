@@ -672,21 +672,16 @@ void ColumnPrivate::ValueLabels::add(int value, const QString& label) {
 	cast_vector<int>()->append({value, label});
 }
 
-void ColumnPrivate::ValueLabels::add(qint64 value, const QString& label) {
-	if (initialized() && m_mode != AbstractColumn::ColumnMode::BigInt)
-		return;
-
-	init(AbstractColumn::ColumnMode::BigInt);
-	invalidateStatistics();
-	cast_vector<qint64>()->append({value, label});
-}
 
 void ColumnPrivate::ValueLabels::add(qint64 value, const QString& label) {
 	if (initialized() && m_mode != AbstractColumn::ColumnMode::DateTime && m_mode != AbstractColumn::ColumnMode::Day
-		&& m_mode != AbstractColumn::ColumnMode::Month)
+		&& m_mode != AbstractColumn::ColumnMode::Month && m_mode != AbstractColumn::ColumnMode::BigInt)
 		return;
-
-	init(AbstractColumn::ColumnMode::DateTime);
+	if(m_mode == AbstractColumn::ColumnMode::BigInt)
+		init(AbstractColumn::ColumnMode::BigInt);
+	else{
+		init(AbstractColumn::ColumnMode::DateTime);
+	}
 	invalidateStatistics();
 	cast_vector<qint64>()->append({value, label});
 }
@@ -852,7 +847,7 @@ bool ColumnPrivate::initDataContainer(bool resize) {
 	case AbstractColumn::ColumnMode::DateTime:
 	case AbstractColumn::ColumnMode::Month:
 	case AbstractColumn::ColumnMode::Day: {
-		auto* vec = new QVector<QDateTime>();
+		auto* vec = new QVector<qint64>();
 		try {
 			if (resize)
 				vec->resize(m_rowCount);
@@ -2501,10 +2496,6 @@ void ColumnPrivate::setValueAt(int row, int new_value) {
 	setIntegerAt(row, new_value);
 }
 
-void ColumnPrivate::setValueAt(int row, qint64 new_value) {
-	setBigIntAt(row, new_value);
-}
-
 void ColumnPrivate::setValueAt(int row, QDateTime new_value) {
 	setDateTimeAt(row, new_value);
 }
@@ -2514,7 +2505,11 @@ void ColumnPrivate::setValueAt(int row, QString new_value) {
 }
 
 void ColumnPrivate::setValueAt(int row, qint64 new_value) {
-	setTimestampAt(row, new_value);
+	if(m_columnMode == AbstractColumn::ColumnMode::BigInt){
+		setBigIntAt(row, new_value);
+	}else{
+		setTimestampAt(row, new_value);
+	}
 }
 
 void ColumnPrivate::setTimestampAt(int row, qint64 new_value) {
@@ -2529,9 +2524,7 @@ void ColumnPrivate::replaceValues(int first, const QVector<int>& new_values) {
 	replaceInteger(first, new_values);
 }
 
-void ColumnPrivate::replaceValues(int first, const QVector<qint64>& new_values) {
-	replaceBigInt(first, new_values);
-}
+
 
 void ColumnPrivate::replaceValues(int first, const QVector<QDateTime>& new_values) {
 	replaceDateTimes(first, new_values);
@@ -2542,7 +2535,11 @@ void ColumnPrivate::replaceValues(int first, const QVector<QString>& new_values)
 }
 
 void ColumnPrivate::replaceValues(int first, const QVector<qint64>& new_values) {
-	replaceTimestamps(first, new_values);
+	if(m_columnMode== AbstractColumn::ColumnMode::BigInt){
+		replaceBigInt(first, new_values);
+	}else{
+		replaceTimestamps(first,new_values);
+	}
 }
 
 /**
@@ -2881,10 +2878,6 @@ void ColumnPrivate::addValueLabel(double value, const QString& label) {
 }
 
 void ColumnPrivate::addValueLabel(int value, const QString& label) {
-	m_labels.add(value, label);
-}
-
-void ColumnPrivate::addValueLabel(qint64 value, const QString& label) {
 	m_labels.add(value, label);
 }
 
