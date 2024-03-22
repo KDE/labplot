@@ -31,7 +31,7 @@ if (QT_VERSION_MAJOR GREATER_EQUAL 6)
 endif ()
 set(QT_MAJOR_VERSION ${QT_VERSION_MAJOR})
 
-set(APPLE_SUPPRESS_XCMAKE_BUILD_TYPE11_WARNING ON)
+set(APPLE_SUPPRESS_X11_WARNING ON)
 
 find_package(ECM ${KF_MIN_VERSION} REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/ ${ECM_MODULE_PATH})
@@ -206,6 +206,8 @@ endif ()
 
 # see also https://wiki.qt.io/Using_QString_Effectively
 set(LABPLOT_COMPILE_DEFINITIONS
+    -DQT_NO_CAST_TO_ASCII
+    -DQT_NO_CAST_FROM_ASCII
     -DQT_NO_CAST_FROM_BYTEARRAY
     -DQT_NO_URL_CAST_FROM_STRING
     -DQT_USE_FAST_CONCATENATION
@@ -497,8 +499,6 @@ ELSE ()
 ENDIF ()
 
 ### ZLIB for ROOT and READSTAT #################
-
-
 FIND_PACKAGE(ZLIB)
 SET_PACKAGE_PROPERTIES (ZLIB PROPERTIES
 	DESCRIPTION "General purpose compression library"
@@ -507,6 +507,23 @@ SET_PACKAGE_PROPERTIES (ZLIB PROPERTIES
 IF (NOT ZLIB_FOUND)
 	SET(ZLIB_LIBRARIES "")
 ENDIF ()
+
+### LZ4 for ROOT and MCAP #################
+FIND_PACKAGE(LZ4)
+IF(LZ4_FOUND)
+	MESSAGE (STATUS "Found LZ4 (needed for MCAP LZ4 support)")
+	add_definitions (-DHAVE_LZ4)
+ENDIF()
+
+### ZSTD for MCAP #################
+FIND_PACKAGE(ZSTD)
+IF (ZSTD_FOUND)
+	MESSAGE (STATUS "Found ZSTD (needed for MCAP ZSTD support)")
+	add_definitions (-DHAVE_ZSTD)
+ELSE ()
+	MESSAGE (STATUS "Could not find ZSTD (needed for MCAP ZSTD support)")
+ENDIF ()
+
 
 ### ROOT (optional) #############################
 IF (ENABLE_ROOT)
@@ -520,24 +537,6 @@ ELSE ()
 	add_definitions (-DROOT_DISABLED)
 	MESSAGE (STATUS "ROOT (CERN) importer DISABLED")
 ENDIF ()
-
-
-### LZ4 and ZSTD for MCAP #################
-FIND_PACKAGE(LZ4)
-IF(LZ4_FOUND)
-	MESSAGE (STATUS "Found LZ4 (needed for MCAP LZ4 support)")
-	add_definitions (-DHAVE_LZ4)
-ENDIF()
-
-FIND_PACKAGE(ZSTD)
-IF (ZSTD_FOUND)
-	MESSAGE (STATUS "Found ZSTD (needed for MCAP ZSTD support)")
-	add_definitions (-DHAVE_ZSTD)
-ELSE ()
-	MESSAGE (STATUS "Could not find ZSTD (needed for MCAP ZSTD support)")
-ENDIF ()
-
-MESSAGE (STATUS "${PC_ZSTD_VERSION} ${ZSTD_LIBRARIES} ${ZSTD_INCLUDE_DIR}")
 
 ### ReadStat (optional) #############################
 IF (ENABLE_READSTAT)
