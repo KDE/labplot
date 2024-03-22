@@ -13,6 +13,7 @@
 #include "backend/datasources/filters/CANFilterPrivate.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/macros.h"
+#include <QUndoStack>
 
 //////////////////////////////////////////////////////////////////////
 CANFilter::CANFilter(FileType type, CANFilterPrivate* p)
@@ -285,6 +286,13 @@ int CANFilterPrivate::readDataFromFile(const QString& fileName, int lines) {
 int CANFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode, int lines) {
 	if (!isValid(fileName))
 		return 0;
+
+	auto sh = dynamic_cast<Spreadsheet*>(dataSource);
+	if (sh) {
+		QUndoCommand cmd;
+		sh->setRowCount(0, &cmd);
+		cmd.redo();
+	}
 
 	int rows = readDataFromFile(fileName, lines);
 	if (rows == 0)

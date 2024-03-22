@@ -1314,7 +1314,6 @@ int Spreadsheet::prepareImport(std::vector<void*>& dataContainer,
 			column->setUndoAware(false);
 	}
 
-	setRowCount(0);
 	columnOffset = this->resize(importMode, colNameList, actualCols);
 	if (initializeContainer)
 		dataContainer.resize(actualCols);
