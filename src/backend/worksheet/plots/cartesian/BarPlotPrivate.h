@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Bar Plot - private implementation
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2022-2024 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -16,6 +16,7 @@
 #include <QPen>
 
 class Background;
+class ErrorBar;
 class Line;
 class CartesianCoordinateSystem;
 class Value;
@@ -36,6 +37,7 @@ public:
 	Background* addBackground(const KConfigGroup&);
 	Line* addBorderLine(const KConfigGroup&);
 	void addValue(const KConfigGroup&);
+	ErrorBar* addErrorBar(const KConfigGroup&);
 
 	BarPlot* const q;
 
@@ -54,11 +56,9 @@ public:
 	double yMin{0.};
 	double yMax{1.};
 
-	// bar properties
 	QVector<Background*> backgrounds;
 	QVector<Line*> borderLines;
-
-	// values
+	QVector<ErrorBar*> errorBars;
 	Value* value{nullptr};
 
 private:
@@ -67,14 +67,16 @@ private:
 	void recalc(int);
 	void verticalBarPlot(int);
 	void horizontalBarPlot(int);
+	void updateErrorBars(int);
 	void updateFillingRect(int columnIndex, int valueIndex, const QVector<QLineF>&);
 
 	void draw(QPainter*);
 
-	QVector<QPointF> m_valuesPoints;
-	QVector<QPointF> m_valuesPointsLogical;
+	QVector<QPointF> m_valuesPoints; // positions of values in scene coordinates for all columns
+	QVector<QVector<QPointF>> m_valuesPointsLogical; // QVector<QPointF> contains the points in logical coordinates for the value positions for one data column
 	QVector<QString> m_valuesStrings;
 	QPainterPath m_valuesPath;
+	QVector<QPainterPath> m_errorBarsPaths;
 
 	QVector<QVector<QVector<QLineF>>> m_barLines; // QVector<QLineF> contains four lines that are clipped on the plot rectangle
 	QVector<QVector<QPolygonF>> m_fillPolygons; // polygons used for the filling (clipped versions of the boxes)

@@ -20,6 +20,7 @@ private Q_SLOTS:
 
 	void addPlot();
 	void addRemoveCurve();
+	void saveLoad();
 };
 
 #endif // INFOELEMENTTEST_H

@@ -600,7 +600,7 @@ void BoxPlotDock::plotNotchesEnabledChanged(bool on) {
 // box
 void BoxPlotDock::plotWidthFactorChanged(double factor) {
 	CONDITIONAL_LOCK_RETURN;
-	ui.sbWidthFactor->setValue(round(factor * 100));
+	ui.sbWidthFactor->setValue(round(factor * 100.));
 }
 
 // symbols
@@ -654,7 +654,7 @@ void BoxPlotDock::load() {
 	ui.chkNotches->setChecked(m_boxPlot->notchesEnabled());
 
 	// box
-	ui.sbWidthFactor->setValue(round(m_boxPlot->widthFactor()) * 100);
+	ui.sbWidthFactor->setValue(round(m_boxPlot->widthFactor() * 100.));
 
 	// symbols
 	symbolCategoryChanged();
@@ -684,7 +684,7 @@ void BoxPlotDock::loadConfig(KConfig& config) {
 	ui.chkNotches->setChecked(group.readEntry(QStringLiteral("NotchesEnabled"), m_boxPlot->notchesEnabled()));
 
 	// box
-	ui.sbWidthFactor->setValue(round(group.readEntry(QStringLiteral("WidthFactor"), m_boxPlot->widthFactor()) * 100));
+	ui.sbWidthFactor->setValue(round(group.readEntry(QStringLiteral("WidthFactor"), m_boxPlot->widthFactor()) * 100.));
 	backgroundWidget->loadConfig(group);
 	borderLineWidget->loadConfig(group);
 	medianLineWidget->loadConfig(group);

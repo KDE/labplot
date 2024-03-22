@@ -103,8 +103,9 @@ public:
 					  AbstractFileFilter::ImportMode,
 					  int rows,
 					  int cols,
-					  QStringList colNameList,
-					  QVector<AbstractColumn::ColumnMode>,
+					  const QStringList& colNameList,
+					  const QVector<AbstractColumn::ColumnMode>&,
+					  bool& ok,
 					  bool initializeDataContainer) override;
 	void finalizeImport(size_t columnOffset, size_t startColumn, size_t endColumn, const QString& dateTimeFormat, AbstractFileFilter::ImportMode) override;
 

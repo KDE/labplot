@@ -1836,7 +1836,7 @@ bool Worksheet::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("cartesianPlotActionMode", cartesianPlotActionMode, Worksheet::CartesianPlotActionMode);
 			READ_INT_VALUE("cartesianPlotCursorMode", cartesianPlotCursorMode, Worksheet::CartesianPlotActionMode);
 		} else if (reader->name() == QLatin1String("cartesianPlot")) {
-			auto* plot = new CartesianPlot(QString());
+			auto* plot = new CartesianPlot(QString(), true);
 			plot->setIsLoading(true);
 			if (!plot->load(reader, preview)) {
 				delete plot;

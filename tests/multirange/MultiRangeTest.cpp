@@ -1,7 +1,7 @@
 /*
 	File                 : MultiRangeTest.cpp
 	Project              : LabPlot
-	Description          : Tests for multi ranges
+	Description          : Tests for multi ranges, part 1
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2021 Martin Marmsoler <martin.marmsoler@gmail.com>
 	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>

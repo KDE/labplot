@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Bar Plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2022-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2022-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -15,6 +15,7 @@
 class BarPlotPrivate;
 class AbstractColumn;
 class Background;
+class ErrorBar;
 class Line;
 class Value;
 
@@ -43,21 +44,18 @@ public:
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, xColumn, XColumn)
 	QString& xColumnPath() const;
 	BASIC_D_ACCESSOR_DECL(QVector<const AbstractColumn*>, dataColumns, DataColumns)
-	QVector<QString>& dataColumnPaths() const;
+	CLASS_D_ACCESSOR_DECL(QVector<QString>, dataColumnPaths, DataColumnPaths)
 	BASIC_D_ACCESSOR_DECL(BarPlot::Type, type, Type)
 	BASIC_D_ACCESSOR_DECL(BarPlot::Orientation, orientation, Orientation)
 	BASIC_D_ACCESSOR_DECL(double, widthFactor, WidthFactor)
 
-	// box filling
-	Background* backgroundAt(int) const;
-
-	// box border line
-	Line* lineAt(int) const;
-
-	// values
+	Background* backgroundAt(int) const; // box filling
+	Line* lineAt(int) const; // box border line
 	Value* value() const;
+	ErrorBar* errorBarAt(int) const;
 
 	void retransform() override;
+	void recalc() override;
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
 
 	double minimum(CartesianCoordinateSystem::Dimension) const override;
@@ -81,9 +79,6 @@ private:
 	QAction* orientationHorizontalAction{nullptr};
 	QAction* orientationVerticalAction{nullptr};
 	QMenu* orientationMenu{nullptr};
-
-public Q_SLOTS:
-	void recalc();
 
 private Q_SLOTS:
 	// SLOTs for changes triggered via QActions in the context menu

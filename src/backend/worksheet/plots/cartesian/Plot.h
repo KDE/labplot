@@ -40,6 +40,12 @@ public:
 	virtual bool usingColumn(const Column*) const = 0;
 
 	/*!
+	 * recalculates the internal structures (additional data containers, drawing primitives, etc.) on data changes in the source data colums.
+	 * these structures are used in the plot during the actual drawing of the plot on geometry changes.
+	 */
+	virtual void recalc() = 0;
+
+	/*!
 	 * This function is called when a column in the project was renamed or a new column was added
 	 * with the name/path that was potentially used earlier in the plot.
 	 * The implementation in the derived classes should handle these two cases and update the visualisation accordingly:

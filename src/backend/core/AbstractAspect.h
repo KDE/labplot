@@ -304,6 +304,7 @@ public:
 	 */
 	void removeChild(AbstractAspect*, QUndoCommand* parent = nullptr);
 	void removeAllChildren();
+	void moveChild(AbstractAspect*, int steps, QUndoCommand* parent = nullptr);
 	virtual QVector<AbstractAspect*> dependsOn() const;
 
 	virtual QVector<AspectType> pasteTypes() const;
@@ -474,6 +475,8 @@ Q_SIGNALS:
 	 * Called by the aspect itself when it's being removed
 	 */
 	void aspectAboutToBeRemoved(const AbstractAspect*);
+	void childAspectAboutToBeMoved(const AbstractAspect*, int destinationRow);
+	void childAspectMoved();
 	void aspectHiddenAboutToChange(const AbstractAspect*);
 	void aspectHiddenChanged(const AbstractAspect*);
 	void statusInfo(const QString&);

@@ -45,6 +45,8 @@ public:
 	int startColumn{1};
 	int endColumn{-1};
 
+	MatioFilter* const q;
+
 private:
 #ifdef HAVE_MATIO
 	mat_t* matfp{nullptr};

@@ -53,14 +53,14 @@ BinaryFilter::~BinaryFilter() = default;
 /*!
   reads the content of the file \c fileName.
 */
-void BinaryFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
+void BinaryFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, ImportMode importMode) {
 	d->readDataFromFile(fileName, dataSource, importMode);
 }
 
 /*!
   reads the content of the device \c device.
 */
-void BinaryFilter::readDataFromDevice(QIODevice& device, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
+void BinaryFilter::readDataFromDevice(QIODevice& device, AbstractDataSource* dataSource, ImportMode importMode, int lines) {
 	d->readDataFromDevice(device, dataSource, importMode, lines);
 }
 
@@ -267,19 +267,22 @@ int BinaryFilterPrivate::prepareStreamToRead(QDataStream& in) {
 */
 QVector<QStringList> BinaryFilterPrivate::preview(const QString& fileName, int lines) {
 	DEBUG(Q_FUNC_INFO << ", fileName = " << STDSTRING(fileName) << ", lines = " << lines);
-	QVector<QStringList> dataStrings;
 
 	KCompressionDevice device(fileName);
-	if (!device.open(QIODevice::ReadOnly))
-		return dataStrings << (QStringList() << i18n("could not open device"));
+	if (!device.open(QIODevice::ReadOnly)) {
+		q->setLastError(i18n("Failed to open the device/file."));
+		return {};
+	}
 
 	numRows = BinaryFilter::rowNumber(fileName, vectors, dataType, lines);
 
 	QDataStream in(&device);
 	const int deviceError = prepareStreamToRead(in);
 
-	if (deviceError)
-		return dataStrings << (QStringList() << i18n("data selection empty"));
+	if (deviceError) {
+		q->setLastError(i18n("Data selection empty."));
+		return {};
+	}
 
 	// all columns as double is ok for preview
 	columnModes.resize(m_actualCols);
@@ -298,6 +301,7 @@ QVector<QStringList> BinaryFilterPrivate::preview(const QString& fileName, int l
 	int progressIndex = 0;
 	const qreal progressInterval = 0.01 * lines; // update on every 1% only
 
+	QVector<QStringList> dataStrings;
 	for (int i = 0; i < lines; ++i) {
 		QStringList lineString;
 
@@ -397,6 +401,7 @@ void BinaryFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSour
 	if (deviceError) {
 		dataSource->clear();
 		DEBUG(Q_FUNC_INFO << ", Device error. Gving up");
+		q->setLastError(i18n("Failed to open the device/file or it's empty."));
 		return;
 	}
 
@@ -436,7 +441,12 @@ void BinaryFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSour
 	}
 
 	std::vector<void*> dataContainer;
-	int columnOffset = dataSource->prepareImport(dataContainer, importMode, m_actualRows, m_actualCols, vectorNames, columnModes);
+	bool ok = false;
+	int columnOffset = dataSource->prepareImport(dataContainer, importMode, m_actualRows, m_actualCols, vectorNames, columnModes, ok);
+	if (!ok) {
+		q->setLastError(i18n("Not enough memory."));
+		return;
+	}
 
 	if (lines == -1)
 		lines = m_actualRows;

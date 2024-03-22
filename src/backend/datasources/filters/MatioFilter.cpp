@@ -226,15 +226,14 @@ void MatioFilter::parse(const QString& fileName) {
 /*!
   reads the content of the current variable from file \c fileName.
 */
-QVector<QStringList>
-MatioFilter::readCurrentVar(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
+QVector<QStringList> MatioFilter::readCurrentVar(const QString& fileName, AbstractDataSource* dataSource, ImportMode importMode, int lines) {
 	return d->readCurrentVar(fileName, dataSource, importMode, (size_t)lines);
 }
 
 /*!
   reads the content of the file \c fileName to the data source \c dataSource.
 */
-void MatioFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode) {
+void MatioFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, ImportMode mode) {
 	d->readDataFromFile(fileName, dataSource, mode);
 }
 
@@ -358,7 +357,8 @@ QString MatioFilter::fileInfoString(const QString& fileName) {
 // ################### Private implementation ##########################
 // #####################################################################
 
-MatioFilterPrivate::MatioFilterPrivate(MatioFilter*) {
+MatioFilterPrivate::MatioFilterPrivate(MatioFilter* owner)
+	: q(owner) {
 }
 
 // helper functions
@@ -599,6 +599,7 @@ void MatioFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataS
 
 	if (currentVarName.isEmpty()) {
 		DEBUG(Q_FUNC_INFO << ", no variable selected");
+		q->setLastError(i18n("No valid variable selected."));
 		return;
 	}
 
@@ -627,22 +628,25 @@ void MatioFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataS
 QVector<QStringList>
 MatioFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, size_t lines) {
 	PERFTRACE(QLatin1String(Q_FUNC_INFO));
-	QVector<QStringList> dataStrings;
 
 	if (currentVarName.isEmpty()) {
 		DEBUG(Q_FUNC_INFO << ", WARNING: current var name is empty!")
-		return dataStrings << (QStringList() << i18n("No variable selected"));
+		q->setLastError(i18n("No valid variable selected."));
+		return {};
 	}
 	DEBUG(Q_FUNC_INFO << ", current variable: " << STDSTRING(currentVarName));
 
+	QVector<QStringList> dataStrings;
 #ifdef HAVE_MATIO
 	bool openedFile = false;
 	if (!matfp) { // file not open
 		matfp = Mat_Open(qPrintable(fileName), MAT_ACC_RDONLY);
 		openedFile = true;
 	}
-	if (!matfp) // open failed
-		return dataStrings << (QStringList() << i18n("File not found"));
+	if (!matfp) { // open failed
+		q->setLastError(i18n("Failed to open the file."));
+		return {};
+	}
 
 	// read info and data
 	matvar_t* var = Mat_VarReadNext(matfp); // try next first (faster)
@@ -650,10 +654,15 @@ MatioFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource* 
 		var = Mat_VarRead(matfp, qPrintable(currentVarName));
 	// else
 	//	DEBUG(Q_FUNC_INFO << ", was NEXT!")
-	if (!var)
-		return dataStrings << (QStringList() << i18n("Variable not found"));
-	if (!var->data)
-		return dataStrings << (QStringList() << i18n("Variable contains no data"));
+	if (!var) {
+		q->setLastError(i18n("Selected variable not found."));
+		return {};
+	}
+
+	if (!var->data) {
+		q->setLastError(i18n("No valid variable selected."));
+		return {};
+	}
 
 	// DEBUG(Q_FUNC_INFO << ", start/end row = " << startRow << '/' << endRow)
 	// DEBUG(Q_FUNC_INFO << ", start/end col = " << startColumn << '/' << endColumn)
@@ -864,19 +873,25 @@ MatioFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource* 
 			break;
 		}
 		case MAT_C_OBJECT: // not available (not supported by matio yet)
-			DEBUG(Q_FUNC_INFO << ", found OBJECT. name = " << var->name << ", nbytes = " << var->nbytes << ", size = " << var->data_size)
-			return dataStrings << (QStringList() << i18n("Not implemented yet"));
 		case MAT_C_FUNCTION: // not available (not supported by matio yet)
 			DEBUG(Q_FUNC_INFO << ", found FUNCTION. name = " << var->name << ", nbytes = " << var->nbytes << ", size = " << var->data_size)
 			QDEBUG(Q_FUNC_INFO << ", data: " << (const char*)var->data)
-			return dataStrings << (QStringList() << i18n("Not implemented yet"));
+			[[fallthrough]];
 		case MAT_C_OPAQUE:
-			return dataStrings << (QStringList() << i18n("Not implemented yet"));
+			q->setLastError(i18n("Support for this variable type not implemented yet."));
+			return dataStrings;
 		}
 
 		// prepare import
-		if (dataSource)
-			columnOffset = dataSource->prepareImport(dataContainer, importMode, actualRows, actualCols, vectorNames, columnModes);
+		if (dataSource) {
+			bool ok = false;
+			columnOffset = dataSource->prepareImport(dataContainer, importMode, actualRows, actualCols, vectorNames, columnModes, ok);
+			if (!ok) {
+				q->setLastError(i18n("Not enough memory."));
+				return QVector<QStringList>{};
+			}
+		}
+
 		DEBUG(Q_FUNC_INFO << ", column offset = " << columnOffset)
 
 		// B: read data
@@ -1208,8 +1223,10 @@ MatioFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource* 
 			break;
 		}
 	}
-	if (var->rank > 2) // TODO
-		return dataStrings << (QStringList() << i18n("Not implemented yet"));
+	if (var->rank > 2) { // TODO
+		q->setLastError(i18n("Variables with rank greater than 2 not supported yet."));
+		return dataStrings;
+	}
 
 	Mat_VarFree(var);
 	if (openedFile) {

@@ -57,7 +57,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/datasources/ImportDatasetWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/ImportDatasetDialog.cpp
 	${KDEFRONTEND_DIR}/datasources/ImportDialog.cpp
-	${KDEFRONTEND_DIR}/datasources/ImportErrorDialog.cpp
+	${KDEFRONTEND_DIR}/datasources/ImportWarningsDialog.cpp
 	${KDEFRONTEND_DIR}/datasources/ImportFileWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/ImportFileDialog.cpp
 	${KDEFRONTEND_DIR}/datasources/ImportProjectDialog.cpp
@@ -140,7 +140,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/widgets/FitParametersWidget.cpp
 	${KDEFRONTEND_DIR}/widgets/FunctionsWidget.cpp
 	${KDEFRONTEND_DIR}/widgets/LabelWidget.cpp
-	${KDEFRONTEND_DIR}/widgets/ErrorBarStyleWidget.cpp
+	${KDEFRONTEND_DIR}/widgets/ErrorBarWidget.cpp
 	${KDEFRONTEND_DIR}/widgets/LineWidget.cpp
 	${KDEFRONTEND_DIR}/widgets/SymbolWidget.cpp
 	${KDEFRONTEND_DIR}/widgets/ValueWidget.cpp
@@ -195,7 +195,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/datasources/imageoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/importdatasetwidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/importfilewidget.ui
-	${KDEFRONTEND_DIR}/ui/datasources/ImportErrorDialog.ui
+	${KDEFRONTEND_DIR}/ui/datasources/importwarningsdialog.ui
 	${KDEFRONTEND_DIR}/ui/datasources/importprojectwidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/importsqldatabasewidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/matiooptionswidget.ui
@@ -217,7 +217,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/dockwidgets/boxplotdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/columndock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/custompointdock.ui
-	${KDEFRONTEND_DIR}/ui/dockwidgets/errorbarstylewidget.ui
+	${KDEFRONTEND_DIR}/ui/dockwidgets/errorbarwidget.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/imagedock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/kdeplotdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/linewidget.ui
@@ -401,7 +401,6 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/worksheet/plots/cartesian/CartesianPlot.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/CartesianPlotLegend.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/ErrorBar.cpp
-	${BACKEND_DIR}/worksheet/plots/cartesian/ErrorBarStyle.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/Histogram.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/CustomPoint.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/KDEPlot.cpp

@@ -4,6 +4,7 @@ New features:
 		* New application theme "Dracula"
 		* New categorical color map "Dracula"
 		* New option in the application settings to run a selected CAS engine at startup
+		* New option in the application settings to control if the state of the dock widgets should be saved in the project file
 		* Share the project via email, Nextcloud, etc. directly from the main menu
 	* [worksheet]
 		* Preview panel for all available worksheets in the project
@@ -12,6 +13,7 @@ New features:
 			* Lollipop plot
 			* Q-Q plot
 			* KDE plot
+		* Error bars for bar plots
 		* New worksheet theme "Dracula"
 		* Add possibility to lock elements for unintentional change in the plot
 		* New panel in the presenter widget to allow the selection, zooming and navigation also in the presenter mode
@@ -26,10 +28,10 @@ New features:
 		* Allow to sort the whole spreadsheet even if one single column was selected, use it rather as the key sort column
 		* When generating values via a function, allow to control whether the target spreadsheet should be resized to the size of the variable columns
 		* When generating values via a mathematical expression ("generate function values"), allow to use variables in CAS-notebooks as source columns
-		* Generatation of equidistant values: support for Date&Time and integer columns
-		* Generatation of equidistant values: allow to fix the number of values and the increment at the same time
-                * Support parsing more functions and operators for formulas and expressions
-                * Added support to show the Sparkline of each respective column
+		* Generation of equidistant values: support for date&time and integer columns
+		* Generation of equidistant values: allow to fix the number of values and the increment at the same time
+		* Support parsing more functions and operators for formulas and expressions
+		* Added support to show the Sparkline of each respective column
 	* [notebook]
 		* Export to PDF
 		* "Configure CAS" in the menu to create a new notebook to directly allow the user to enable new backends in case not done yet
@@ -40,10 +42,15 @@ New features:
 		* Support data import from ODS (Open Document Spreadsheet) files
 		* When importing tables from SQL databases, allow to specify which data region to read (start/end values for columns and records)
 		* Addeded seaborn's datasets to the collection of datasets
+		* Properly handle out-of-memory situations when importing large amount of data
+		* Better reporting of error messages in the import dialog
+		* BLF
+			* show additional information about the file (application name the file was created with, etc.) in the import dialog
 		* OPJ:
 			* Properly import projects having graphs with multiple axes (BUG 476355)
 			* correctly import font sizes and legend fixes (#839)
 			* improved text and legend label and positioning
+			* import histogram and error bars
 
 Performance improvements:
 	* Make baseline removal much faster by using Eigen3 library (optional dependency)
@@ -57,6 +64,8 @@ Bug fixes:
 	* Fix copying Elements (Issue #622)
 	* Fix calculating skewness and kurtosis
 	* Support start/end row/column in XLSX import preview
+	* Fixed wrong string to load CANSettings
+	* Don't draw any border line for the worksheet canvas (BUG 470625)
 
 Internal:
 	* Switch from C++11 to C++17

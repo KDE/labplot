@@ -52,7 +52,7 @@ public:
 	XYCurve* rugCurve() const;
 
 	void retransform() override;
-	void recalc();
+	void recalc() override;
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
 	void setVisible(bool) override;
 

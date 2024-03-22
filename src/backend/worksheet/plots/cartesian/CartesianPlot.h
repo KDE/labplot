@@ -41,7 +41,7 @@ class CartesianPlot : public AbstractPlot {
 	Q_OBJECT
 
 public:
-	explicit CartesianPlot(const QString& name);
+	explicit CartesianPlot(const QString& name, bool loading = false);
 	~CartesianPlot() override;
 
 	enum class Type { FourAxes, TwoAxes, TwoAxesCentered, TwoAxesCenteredZero };
@@ -212,7 +212,7 @@ public Q_SLOTS:
 	virtual void retransform() override;
 
 private:
-	void init();
+	void init(bool loading = false);
 	void initActions();
 	void initMenus();
 	void setColorPalette(const KConfig&);

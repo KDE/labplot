@@ -26,7 +26,7 @@ public:
 	explicit XYCurvePrivate(XYCurve*);
 
 	void retransform() override;
-	void recalcLogicalPoints();
+	void recalc();
 	void updateLines();
 	void addLine(QPointF p,
 				 double& x,
@@ -106,9 +106,7 @@ public:
 	Background* background{nullptr};
 
 	// error bars
-	ErrorBar* xErrorBar{nullptr};
-	ErrorBar* yErrorBar{nullptr};
-	ErrorBarStyle* errorBarStyle{nullptr};
+	ErrorBar* errorBar{nullptr};
 
 	XYCurve* const q;
 	friend class XYCurve;

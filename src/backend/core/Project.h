@@ -50,6 +50,7 @@ public:
 	CLASS_D_ACCESSOR_DECL(QString, fileName, FileName)
 	CLASS_D_ACCESSOR_DECL(QString, author, Author)
 	CLASS_D_ACCESSOR_DECL(QDateTime, modificationTime, ModificationTime)
+	BASIC_D_ACCESSOR_DECL(bool, saveDockStates, SaveDockStates)
 	BASIC_D_ACCESSOR_DECL(bool, saveCalculations, SaveCalculations)
 	CLASS_D_ACCESSOR_DECL(QString, windowState, WindowState)
 
@@ -84,6 +85,7 @@ public Q_SLOTS:
 
 Q_SIGNALS:
 	void authorChanged(const QString&);
+	void saveDockStatesChanged(bool);
 	void saveCalculationsChanged(bool);
 	void requestSaveState(QXmlStreamWriter*) const;
 	void requestLoadState(XmlStreamReader*);

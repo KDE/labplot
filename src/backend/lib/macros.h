@@ -687,7 +687,7 @@ private:
 // used in Project::load()
 #define RESTORE_COLUMN_POINTER(obj, col, Col)                                                                                                                  \
 	if (!obj->col##Path().isEmpty()) {                                                                                                                         \
-		for (Column * column : columns) {                                                                                                                      \
+		for (auto* column : columns) {                                                                                                                         \
 			if (!column)                                                                                                                                       \
 				continue;                                                                                                                                      \
 			if (column->path() == obj->col##Path()) {                                                                                                          \
@@ -712,7 +712,7 @@ private:
 
 #define RESTORE_POINTER(obj, name, Name, Type, list)                                                                                                           \
 	if (!obj->name##Path().isEmpty()) {                                                                                                                        \
-		for (AbstractAspect * aspect : list) {                                                                                                                 \
+		for (auto* aspect : list) {                                                                                                                            \
 			if (aspect->path() == obj->name##Path()) {                                                                                                         \
 				auto a = dynamic_cast<Type*>(aspect);                                                                                                          \
 				if (!a)                                                                                                                                        \

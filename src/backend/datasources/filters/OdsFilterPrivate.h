@@ -38,6 +38,8 @@ public:
 	int endColumn{-1};
 	int firstColumn{1}; // actual start column (including range)
 
+	OdsFilter* const q;
+
 private:
 #ifdef HAVE_ORCUS
 	orcus::spreadsheet::range_size_t m_ss{1048576, 16384};

@@ -137,10 +137,6 @@ SpreadsheetView::SpreadsheetView(Spreadsheet* spreadsheet, bool readOnly)
 
 		resize(w + 50, h);
 	}
-
-	KConfigGroup group = Settings::group(QStringLiteral("Spreadsheet"));
-	showComments(group.readEntry(QLatin1String("ShowComments"), false));
-	showSparkLines(group.readEntry(QLatin1String("ShowSparkLines"), false));
 }
 
 SpreadsheetView::~SpreadsheetView() {
@@ -198,8 +194,11 @@ void SpreadsheetView::init() {
 	setFocusPolicy(Qt::StrongFocus);
 	setFocus();
 	installEventFilter(this);
-	showComments(false);
-	showSparkLines(false);
+
+	// save and load the values from Spreadsheet
+	KConfigGroup group = Settings::group(QStringLiteral("Spreadsheet"));
+	showComments(group.readEntry(QLatin1String("ShowComments"), false));
+	showSparkLines(group.readEntry(QLatin1String("ShowSparkLines"), false));
 
 	connect(m_model, &SpreadsheetModel::headerDataChanged, this, &SpreadsheetView::updateHeaderGeometry);
 	connect(m_model, &SpreadsheetModel::headerDataChanged, this, &SpreadsheetView::handleHeaderDataChanged);
@@ -320,7 +319,7 @@ void SpreadsheetView::initActions() {
 
 	// spreadsheet related actions
 	action_toggle_comments = new QAction(QIcon::fromTheme(QStringLiteral("document-properties")), i18n("Show Comments"), this);
-	action_toggle_sparklines = new QAction(QIcon::fromTheme(QStringLiteral("view-sparkline")), i18n("Show SparkLine"), this);
+	action_toggle_sparklines = new QAction(QIcon::fromTheme(QStringLiteral("office-chart-line")), i18n("Show SparkLines"), this);
 
 	action_clear_spreadsheet = new QAction(QIcon::fromTheme(QStringLiteral("edit-clear")), i18n("Clear Spreadsheet"), this);
 	action_clear_masks = new QAction(QIcon::fromTheme(QStringLiteral("format-remove-node")), i18n("Clear Masks"), this);
@@ -754,8 +753,6 @@ void SpreadsheetView::initMenus() {
 	m_columnMenu->addSeparator();
 	m_columnMenu->addAction(action_freeze_columns);
 	m_columnMenu->addSeparator();
-	m_columnMenu->addAction(action_toggle_comments);
-	m_columnMenu->addSeparator();
 	m_columnMenu->addAction(action_statistics_columns);
 
 	if (!m_readOnly) {
@@ -773,17 +770,9 @@ void SpreadsheetView::initMenus() {
 		m_columnMenu->addAction(action_mask_missing_value_rows);
 	}
 
-	m_columnMenu->addSeparator();
-	m_columnMenu->addAction(action_toggle_sparklines);
-	m_columnMenu->addSeparator();
-
 	// Spreadsheet menu
 	m_spreadsheetMenu = new QMenu(this);
 	createContextMenu(m_spreadsheetMenu);
-
-	m_columnMenu->addSeparator();
-	m_columnMenu->addAction(action_toggle_sparklines);
-	m_columnMenu->addSeparator();
 
 	// Row menu
 	m_rowMenu = new QMenu(this);
@@ -984,8 +973,6 @@ void SpreadsheetView::createContextMenu(QMenu* menu) {
 		menu->insertAction(firstAction, action_search_replace);
 	menu->insertSeparator(firstAction);
 	menu->insertAction(firstAction, action_toggle_comments);
-	menu->insertSeparator(firstAction);
-	menu->insertSeparator(firstAction);
 	menu->insertAction(firstAction, action_toggle_sparklines);
 	menu->insertSeparator(firstAction);
 	menu->insertAction(firstAction, action_statistics_spreadsheet);
@@ -1036,8 +1023,6 @@ void SpreadsheetView::fillColumnContextMenu(QMenu* menu, Column* column) {
 	menu->insertMenu(firstAction, m_formattingMenu);
 	menu->insertSeparator(firstAction);
 	menu->insertAction(firstAction, action_freeze_columns);
-	menu->insertSeparator(firstAction);
-	menu->insertAction(firstAction, action_toggle_comments);
 	menu->insertSeparator(firstAction);
 	menu->insertAction(firstAction, action_statistics_columns);
 
@@ -1135,32 +1120,34 @@ bool SpreadsheetView::areSparkLinesShown() const {
 */
 void SpreadsheetView::toggleComments() {
 	showComments(!areCommentsShown());
-	// TODO
-	if (areCommentsShown())
-		action_toggle_comments->setText(i18n("Hide Comments"));
-	else
-		action_toggle_comments->setText(i18n("Show Comments"));
 }
 /*!
   toggles the column spark line in the horizontal header
 */
 void SpreadsheetView::toggleSparkLines() {
 	showSparkLines(!areSparkLinesShown());
-	// TODO
-	if (areSparkLinesShown())
-		action_toggle_sparklines->setText(i18n("Hide Spark Lines"));
-	else
-		action_toggle_sparklines->setText(i18n("Show Spark Lines"));
 }
 
 //! Shows (\c on=true) or hides (\c on=false) the column comments in the horizontal header
 void SpreadsheetView::showComments(bool on) {
 	m_horizontalHeader->showComments(on);
+	if (action_toggle_comments) {
+		if (on)
+			action_toggle_comments->setText(i18n("Hide Comments"));
+		else
+			action_toggle_comments->setText(i18n("Show Comments"));
+	}
 }
 
 //! Shows (\c on=true) or hides (\c on=false) the column sparkline in the horizontal header
 void SpreadsheetView::showSparkLines(bool on) {
 	m_horizontalHeader->showSparkLines(on);
+	if (action_toggle_sparklines) {
+		if (on)
+			action_toggle_sparklines->setText(i18n("Hide Sparklines"));
+		else
+			action_toggle_sparklines->setText(i18n("Show Sparklines"));
+	}
 }
 
 void SpreadsheetView::handleHeaderDataChanged(Qt::Orientation orientation, int first, int last) {
@@ -1522,6 +1509,16 @@ void SpreadsheetView::checkSpreadsheetMenu() {
 	}
 
 	action_formatting_remove->setVisible(hasFormat);
+
+	if (areCommentsShown())
+		action_toggle_comments->setText(i18n("Hide Comments"));
+	else
+		action_toggle_comments->setText(i18n("Show Comments"));
+
+	if (areSparkLinesShown())
+		action_toggle_sparklines->setText(i18n("Hide Sparklines"));
+	else
+		action_toggle_sparklines->setText(i18n("Show Sparklines"));
 }
 
 void SpreadsheetView::checkSpreadsheetSelectionMenu() {

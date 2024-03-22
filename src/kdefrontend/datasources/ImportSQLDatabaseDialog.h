@@ -23,7 +23,7 @@ public:
 	explicit ImportSQLDatabaseDialog(MainWin*);
 	~ImportSQLDatabaseDialog() override;
 
-	void importTo(QStatusBar*) const override;
+	bool importTo(QStatusBar*) const override;
 	QString selectedObject() const override;
 
 private:

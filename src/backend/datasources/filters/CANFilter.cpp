@@ -25,7 +25,7 @@ CANFilter::~CANFilter() = default;
 /*!
   reads the content of the file \c fileName to the data source \c dataSource.
 */
-void CANFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode) {
+void CANFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, ImportMode mode) {
 	d->readDataFromFile(fileName, dataSource, mode);
 }
 
@@ -37,11 +37,6 @@ void CANFilter::write(const QString& fileName, AbstractDataSource* dataSource) {
 }
 
 ///////////////////////////////////////////////////////////////////////
-
-QStringList CANFilter::lastErrors() {
-	return d->lastErrors();
-}
-
 QStringList CANFilter::vectorNames() const {
 	return d->m_signals.signal_names;
 }
@@ -219,15 +214,18 @@ CANFilterPrivate::CANFilterPrivate(CANFilter* owner)
 	returns -1 on error
 */
 QVector<QStringList> CANFilterPrivate::preview(const QString& fileName, int lines) {
-	if (!isValid(fileName))
-		return QVector<QStringList>();
+	if (!isValid(fileName)) {
+		q->setLastError(i18n("Invalid file."));
+		return {};
+	}
 
 	const int readMessages = readDataFromFile(fileName, lines);
-	if (readMessages == 0)
-		return QVector<QStringList>();
+	if (readMessages == 0) {
+		q->setLastError(i18n("No messages read."));
+		return {};
+	}
 
 	QVector<QStringList> strings;
-
 	for (int i = 0; i < readMessages; i++) {
 		QStringList l;
 		for (size_t c = 0; c < m_DataContainer.size(); c++) {
@@ -293,7 +291,13 @@ int CANFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSour
 		return 0;
 
 	auto dc = m_DataContainer.dataContainer();
-	const int columnOffset = dataSource->prepareImport(dc, mode, rows, m_signals.signal_names.length(), m_signals.signal_names, columnModes(), false);
+	bool ok = false;
+	const int columnOffset = dataSource->prepareImport(dc, mode, rows, m_signals.signal_names.length(), m_signals.signal_names, columnModes(), ok, false);
+	if (!ok) {
+		q->setLastError(i18n("Not enough memory."));
+		return 0;
+	}
+
 	dataSource->finalizeImport(columnOffset, 0, m_signals.signal_names.length() - 1);
 
 	// Assign value labels to the column

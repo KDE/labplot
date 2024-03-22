@@ -30,12 +30,8 @@ public:
 	static QString fileInfoString(const QString&);
 
 	void parse(const QString& fileName);
-	void
-	readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace) override;
-	QVector<QStringList> readCurrentVar(const QString& fileName,
-										AbstractDataSource* = nullptr,
-										AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace,
-										int lines = -1);
+	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, ImportMode = ImportMode::Replace) override;
+	QVector<QStringList> readCurrentVar(const QString& fileName, AbstractDataSource* = nullptr, ImportMode = ImportMode::Replace, int lines = -1);
 	void write(const QString& fileName, AbstractDataSource*) override;
 
 	void setCurrentVarName(const QString&);

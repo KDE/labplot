@@ -33,7 +33,6 @@ class Histogram : public Plot {
 public:
 	friend class HistogramSetDataColumnCmd;
 	enum Type { Ordinary, Cumulative, AvgShift };
-	enum Orientation { Vertical, Horizontal };
 	enum Normalization { Count, Probability, CountDensity, ProbabilityDensity };
 	enum BinningMethod { ByNumber, ByWidth, SquareRoot, Rice, Sturges, Doane, Scott };
 	enum LineType { NoLine, Bars, Envelope, DropLines, HalfBars };
@@ -49,6 +48,10 @@ public:
 	bool load(XmlStreamReader*, bool preview) override;
 	void loadThemeConfig(const KConfig&) override;
 	void saveThemeConfig(const KConfig&) override;
+
+	void retransform() override;
+	void recalc() override;
+	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
 
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, dataColumn, DataColumn)
 	CLASS_D_ACCESSOR_DECL(QString, dataColumnPath, DataColumnPath)
@@ -67,10 +70,7 @@ public:
 	Background* background() const;
 	Symbol* symbol() const;
 	Value* value() const;
-
-	// error bars
 	ErrorBar* errorBar() const;
-	ErrorBarStyle* errorBarStyle() const;
 
 	// margin plots
 	BASIC_D_ACCESSOR_DECL(bool, rugEnabled, RugEnabled)
@@ -93,9 +93,6 @@ public:
 	typedef HistogramPrivate Private;
 
 public Q_SLOTS:
-	void retransform() override;
-	void recalc();
-	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
 	void createDataSpreadsheet();
 
 private Q_SLOTS:

@@ -55,7 +55,7 @@ public:
 	void setPreparedForMQTT(bool, MQTTTopic*, const QString&);
 #endif
 
-	const AsciiFilter* q;
+	AsciiFilter* const q;
 
 	QString commentCharacter{QStringLiteral("#")};
 	QString separatingCharacter{QStringLiteral("auto")};

@@ -56,7 +56,7 @@ QVector<QStringList> SpiceFilter::preview(const QString& fileName, int lines) {
 /*!
   reads the content of the file \c fileName.
 */
-void SpiceFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
+void SpiceFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, ImportMode importMode) {
 	d->readDataFromFile(fileName, dataSource, importMode);
 }
 
@@ -118,14 +118,19 @@ void SpiceFilterPrivate::generateVectorNamesColumnModes(const SpiceFileReader& r
  */
 QVector<QStringList> SpiceFilterPrivate::preview(const QString& fileName, int lines) {
 	DEBUG(Q_FUNC_INFO);
-	QVector<QStringList> dataStrings;
 
 	SpiceFileReader reader(fileName);
 #ifdef SPICEFILTERTEST_EN
 	reader.setBulkReadLines(q->mBulkLineCount);
 #endif
-	if (!reader.open() || !reader.validSpiceFile())
-		return dataStrings;
+	if (!reader.open()) {
+		q->setLastError(i18n("Failed to open the device/file."));
+		return {};
+	}
+	if (!reader.validSpiceFile()) {
+		q->setLastError(i18n("Invalid file."));
+		return {};
+	}
 
 	generateVectorNamesColumnModes(reader);
 
@@ -146,6 +151,7 @@ QVector<QStringList> SpiceFilterPrivate::preview(const QString& fileName, int li
 	QStringList lineString;
 	int isComplex = !reader.isReal();
 
+	QVector<QStringList> dataStrings;
 	for (int l = 0; l < linesRead; l++) {
 		lineString.clear();
 		for (int i = 0; i < numberVariables * (1 + isComplex); i++) {
@@ -173,8 +179,14 @@ void SpiceFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataS
 #ifdef SPICEFILTERTEST_EN
 	reader.setBulkReadLines(q->mBulkLineCount);
 #endif
-	if (!reader.open() || !reader.validSpiceFile())
+	if (!reader.open()) {
+		q->setLastError(i18n("Failed to open the device/file."));
 		return;
+	}
+	if (!reader.validSpiceFile()) {
+		q->setLastError(i18n("Invalid file."));
+		return;
+	}
 
 	q->connect(&reader, &SpiceFileReader::processed, [=](double processed) {
 		Q_EMIT q->completed(processed);
@@ -188,7 +200,12 @@ void SpiceFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataS
 	const int actualRows = actualEndRow - startRow + 1;
 	const int actualCols = reader.isReal() ? numberVariables : 2 * numberVariables;
 	// resize dataContainer
-	const int columnOffset = dataSource->prepareImport(m_dataContainer, importMode, actualRows, actualCols, vectorNames, columnModes);
+	bool ok = false;
+	const int columnOffset = dataSource->prepareImport(m_dataContainer, importMode, actualRows, actualCols, vectorNames, columnModes, ok);
+	if (!ok) {
+		q->setLastError(i18n("Not enough memory."));
+		return;
+	}
 
 	// skip data lines, if required
 	const int skip = startRow - 1;

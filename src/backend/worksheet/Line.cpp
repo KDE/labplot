@@ -18,7 +18,7 @@
 #include "LinePrivate.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
-#include "backend/worksheet/plots/cartesian/ErrorBarStyle.h"
+#include "backend/worksheet/plots/cartesian/ErrorBar.h"
 
 #include <KConfigGroup>
 #include <KLocalizedString>
@@ -143,7 +143,7 @@ LinePrivate::LinePrivate(Line* owner)
 }
 
 QString LinePrivate::name() const {
-	if (dynamic_cast<ErrorBarStyle*>(q->parentAspect()))
+	if (dynamic_cast<ErrorBar*>(q->parentAspect()))
 		return q->parentAspect()->parentAspect()->name(); // for error bars we need to go one level higher to get the curve/plot name
 	else
 		return q->parentAspect()->name();
