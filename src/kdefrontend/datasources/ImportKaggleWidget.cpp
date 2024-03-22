@@ -9,24 +9,18 @@
 
 #include "kdefrontend/datasources/ImportKaggleWidget.h"
 #include "backend/core/Settings.h"
-#include "backend/lib/macros.h"
 #include "kdefrontend/datasources/ImportDatasetWidget.h"
 #include "kdefrontend/datasources/ImportFileWidget.h"
 #include "kdefrontend/datasources/ImportKaggleWidget.h"
+
+#include <QCompleter>
+#include <QDirIterator>
+#include <QJsonDocument>
+#include <QNetworkAccessManager>
+#include <QTableWidget>
+
 #include <KConfigGroup>
 #include <KUrlComboBox>
-#include <QComboBox>
-#include <QCompleter>
-#include <QDir>
-#include <QDirIterator>
-#include <QFile>
-#include <QGridLayout>
-#include <QJsonDocument>
-#include <QJsonObject>
-#include <QListWidgetItem>
-#include <QNetworkAccessManager>
-#include <QStandardPaths>
-#include <QTableWidget>
 
 ImportKaggleWidget::ImportKaggleWidget(QWidget* parent)
 	: QWidget(parent)
@@ -56,9 +50,9 @@ ImportKaggleWidget::ImportKaggleWidget(QWidget* parent)
 		m_importFileWidget->m_twPreview->clear();
 		m_importDatasetWidget->ui.lInfo->clear();
 		m_bDownloadDataset->setEnabled(true);
-		if (index != -1) {
+		if (index != -1)
 			fetchKaggleDatasetMetadata(index);
-		}
+
 		Q_EMIT toggleOkBtn(false);
 	});
 	connect(m_bPrevDatasets, &QToolButton::clicked, [&] {
@@ -79,13 +73,12 @@ ImportKaggleWidget::ImportKaggleWidget(QWidget* parent)
 	connect(m_kaggleCli, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), [&](int exitCode, QProcess::ExitStatus exitStatus) {
 		RESET_CURSOR;
 		if (exitStatus == QProcess::NormalExit && exitCode == 0) {
-			if (m_kaggleCli->arguments().at(1) == QLatin1String("list")) {
+			if (m_kaggleCli->arguments().at(1) == QLatin1String("list"))
 				listKaggleDatasets();
-			} else if (m_kaggleCli->arguments().at(1) == QLatin1String("metadata")) {
+			else if (m_kaggleCli->arguments().at(1) == QLatin1String("metadata"))
 				displayKaggleDatasetMetadata();
-			} else if (m_kaggleCli->arguments().at(1) == QLatin1String("download")) {
+			else if (m_kaggleCli->arguments().at(1) == QLatin1String("download"))
 				listDownloadedKaggleDatasetFiles(m_kaggleCli->arguments().at(4));
-			}
 		}
 	});
 	connect(m_kaggleCli, &QProcess::errorOccurred, [&] {
@@ -169,13 +162,14 @@ void ImportKaggleWidget::searchKaggleDatasets() {
 						  QLatin1String("--page"),
 						  QString::number(m_resultPage)};
 
-	if (!filter.isEmpty()) {
+	if (!filter.isEmpty())
 		arguments << QLatin1String("--search") << filter;
-	}
+
 	if (m_kaggleCli->state() != QProcess::NotRunning) {
 		RESET_CURSOR;
 		m_kaggleCli->kill();
 	}
+
 	m_kaggleCli->setArguments(arguments);
 	m_kaggleCli->start();
 	WAIT_CURSOR;
@@ -185,11 +179,10 @@ void ImportKaggleWidget::searchKaggleDatasets() {
 void ImportKaggleWidget::listKaggleDatasets() {
 	DEBUG(Q_FUNC_INFO);
 
-	if (m_resultPage == 1) {
+	if (m_resultPage == 1)
 		m_bPrevDatasets->setEnabled(false);
-	} else {
+	else
 		m_bPrevDatasets->setEnabled(true);
-	}
 
 	QLatin1String headerRow("ref,title,size,lastUpdated,downloadCount,voteCount,usabilityRating");
 	QLatin1String noDatasetsRow("No datasets found");
@@ -201,14 +194,13 @@ void ImportKaggleWidget::listKaggleDatasets() {
 	while (m_kaggleCli->canReadLine()) {
 		QString row = QLatin1String(m_kaggleCli->readLine()).trimmed();
 
-		if (row.startsWith(QLatin1String("Warning: ")) || row == headerRow || row == noDatasetsRow) {
+		if (row.startsWith(QLatin1String("Warning: ")) || row == headerRow || row == noDatasetsRow)
 			continue;
-		}
 
 		QString datasetName = row.section(QLatin1String(","), 1, 1);
 		QString refName = row.section(QLatin1String(","), 0, 0);
 
-		QListWidgetItem* listItem = new QListWidgetItem(datasetName);
+		auto* listItem = new QListWidgetItem(datasetName);
 		listItem->setData(Qt::ItemDataRole::UserRole, refName);
 
 		m_importDatasetWidget->ui.lwDatasets->addItem(listItem);
@@ -218,11 +210,11 @@ void ImportKaggleWidget::listKaggleDatasets() {
 		m_bNextDatasets->setEnabled(false);
 		m_bDownloadDataset->setEnabled(false);
 	} else {
-		if (m_importDatasetWidget->ui.lwDatasets->count() == 20) {
+		if (m_importDatasetWidget->ui.lwDatasets->count() == 20)
 			m_bNextDatasets->setEnabled(true);
-		} else {
+		else
 			m_bNextDatasets->setEnabled(false);
-		}
+
 		m_importDatasetWidget->ui.lwDatasets->setCurrentRow(0);
 	}
 }
@@ -316,9 +308,8 @@ void ImportKaggleWidget::listDownloadedKaggleDatasetFiles(const QString& dataset
 		m_cbDatasetFiles->addItem(datasetFile.fileName());
 	}
 
-	if (m_cbDatasetFiles->count() != 0) {
+	if (m_cbDatasetFiles->count() != 0)
 		m_importFileWidget->ui.gbOptions->setEnabled(true);
-	}
 }
 
 void ImportKaggleWidget::importToSpreadsheet(Spreadsheet* spreadsheet) const {
