@@ -13,7 +13,7 @@
 #include "backend/datasources/filters/CANFilterPrivate.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/macros.h"
-#include <QUndoStack>
+#include <QUndoCommand>
 
 //////////////////////////////////////////////////////////////////////
 CANFilter::CANFilter(FileType type, CANFilterPrivate* p)
