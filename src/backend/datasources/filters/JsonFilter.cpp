@@ -44,14 +44,14 @@ JsonFilter::~JsonFilter() = default;
 /*!
 reads the content of the device \c device.
 */
-void JsonFilter::readDataFromDevice(QIODevice& device, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
+void JsonFilter::readDataFromDevice(QIODevice& device, AbstractDataSource* dataSource, ImportMode importMode, int lines) {
 	d->readDataFromDevice(device, dataSource, importMode, lines);
 }
 
 /*!
 reads the content of the file \c fileName.
 */
-void JsonFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
+void JsonFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, ImportMode importMode) {
 	d->readDataFromFile(fileName, dataSource, importMode);
 }
 
@@ -377,22 +377,28 @@ void JsonFilterPrivate::setValueFromString(int column, int row, const QString& v
 }
 
 /*!
-returns -1 if the device couldn't be opened, 1 if the current read position in the device is at the end
-*/
+ * prepare device/file for reading
+ */
 int JsonFilterPrivate::prepareDeviceToRead(QIODevice& device) {
-	DEBUG("device is sequential = " << device.isSequential());
+	DEBUG(Q_FUNC_INFO << ", device is sequential = " << device.isSequential());
 
-	if (!device.open(QIODevice::ReadOnly))
+	if (!device.open(QIODevice::ReadOnly)) {
+		q->setLastError(i18n("Failed to open the device/file."));
 		return -1;
+	}
 
-	if (device.atEnd() && !device.isSequential()) // empty file
+	if (device.atEnd() && !device.isSequential()) { // empty file
+		q->setLastError(i18n("Device/file is empty."));
 		return 1;
+	}
 
 	QJsonParseError err;
 	m_doc = QJsonDocument::fromJson(device.readAll(), &err);
 
-	if (err.error != QJsonParseError::NoError || m_doc.isEmpty())
+	if (err.error != QJsonParseError::NoError || m_doc.isEmpty()) {
+		q->setLastError(i18n("JSON format error or document empty."));
 		return 1;
+	}
 
 	// reset to start of file
 	if (!device.isSequential())
@@ -513,7 +519,7 @@ void JsonFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSource
 	if (!m_prepared) {
 		const int deviceError = prepareDeviceToRead(device);
 		if (deviceError != 0) {
-			DEBUG("Device error = " << deviceError);
+			q->setLastError(i18n("Empty file or invalid JSON document."));
 			return;
 		}
 		// TODO: support other modes and vector names
@@ -528,7 +534,13 @@ void JsonFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSource
 import the content of document \c m_preparedDoc to the data source \c dataSource. Uses the settings defined in the data source.
 */
 void JsonFilterPrivate::importData(AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
-	m_columnOffset = dataSource->prepareImport(m_dataContainer, importMode, m_actualRows, m_actualCols, vectorNames, columnModes);
+	bool ok = false;
+	m_columnOffset = dataSource->prepareImport(m_dataContainer, importMode, m_actualRows, m_actualCols, vectorNames, columnModes, ok);
+	if (!ok) {
+		q->setLastError(i18n("Not enough memory."));
+		return;
+	}
+
 	int rowOffset = startRow - 1;
 	int colOffset = (int)createIndexEnabled + (int)importObjectNames;
 	DEBUG("reading " << m_actualRows << " lines");

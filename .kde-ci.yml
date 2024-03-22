@@ -16,6 +16,7 @@ Dependencies:
     'frameworks/kxmlgui': '@stable'
     'frameworks/knewstuff': '@stable'
     'frameworks/kuserfeedback': '@stable'
+    'frameworks/purpose': '@stable'
     'education/cantor': '@stable'
 
 - 'on': ['Linux/Qt6', 'FreeBSD/Qt6', 'Windows/Qt6', 'macOS/Qt6']
@@ -35,6 +36,7 @@ Dependencies:
     'frameworks/kxmlgui': '@latest-kf6'
     'frameworks/knewstuff': '@latest-kf6'
     'frameworks/kuserfeedback': '@latest-kf6'
+    'frameworks/purpose': '@latest-kf6'
 
 Environment:
   KDECI_BUILD: "TRUE"

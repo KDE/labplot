@@ -22,7 +22,6 @@ public:
 	bool legendVisible{true};
 
 protected:
-	void drawFillingPollygon(const QPolygonF&, QPainter*, const Background*) const;
 	virtual void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
 
 protected:

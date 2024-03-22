@@ -11,22 +11,42 @@
 #ifndef ERRORBARPRIVATE_H
 #define ERRORBARPRIVATE_H
 
+#include "backend/worksheet/plots/cartesian/ErrorBar.h"
+
 class AbstractColumn;
+class Line;
 
 class ErrorBarPrivate {
 public:
-	explicit ErrorBarPrivate(ErrorBar*);
+	explicit ErrorBarPrivate(ErrorBar*, ErrorBar::Dimension dim);
 
 	QString name() const;
 	void update();
+	void updatePixmap();
 
-	QString prefix;
+	void painterPathForX(QPainterPath&, const QVector<QPointF>&, const CartesianCoordinateSystem*) const;
+	void painterPathForY(QPainterPath&, const QVector<QPointF>&, const CartesianCoordinateSystem*, WorksheetElement::Orientation) const;
 
-	ErrorBar::Type type{ErrorBar::Type::NoError};
-	const AbstractColumn* plusColumn{nullptr};
-	QString plusColumnPath;
-	const AbstractColumn* minusColumn{nullptr};
-	QString minusColumnPath;
+	ErrorBar::Dimension dimension;
+
+	// x
+	ErrorBar::ErrorType xErrorType{ErrorBar::ErrorType::NoError};
+	const AbstractColumn* xPlusColumn{nullptr};
+	QString xPlusColumnPath;
+	const AbstractColumn* xMinusColumn{nullptr};
+	QString xMinusColumnPath;
+
+	// y
+	ErrorBar::ErrorType yErrorType{ErrorBar::ErrorType::NoError};
+	const AbstractColumn* yPlusColumn{nullptr};
+	QString yPlusColumnPath;
+	const AbstractColumn* yMinusColumn{nullptr};
+	QString yMinusColumnPath;
+
+	// styling
+	ErrorBar::Type type{ErrorBar::Type::Simple};
+	double capSize{1.};
+	Line* line{nullptr};
 
 	ErrorBar* const q{nullptr};
 };

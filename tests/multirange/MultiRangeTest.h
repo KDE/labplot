@@ -1,7 +1,7 @@
 /*
 	File                 : MultiRangeTest.h
 	Project              : LabPlot
-	Description          : Tests for project imports
+	Description          : Tests for multi ranges, part 1
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2018 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>

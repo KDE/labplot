@@ -1,7 +1,7 @@
 /*
 	File                 : MultiRangeTest3.h
 	Project              : LabPlot
-	Description          : Third tests for project imports
+	Description          : Tests for multi ranges, part 3
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2018 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
@@ -20,5 +20,6 @@ private Q_SLOTS:
 	void baseDockSetAspects_NoPlotRangeChange();
 
 	void curveRangeChange();
+	void loadLegacyProject();
 };
 #endif

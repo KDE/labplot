@@ -78,6 +78,7 @@ public:
 	BASIC_D_ACCESSOR_DECL(double, rugWidth, RugWidth)
 
 	void retransform() override;
+	void recalc() override;
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
 
 	double minimum(CartesianCoordinateSystem::Dimension) const override;
@@ -103,7 +104,6 @@ private:
 	QMenu* orientationMenu{nullptr};
 
 public Q_SLOTS:
-	void recalc();
 	void createDataSpreadsheet();
 
 private Q_SLOTS:

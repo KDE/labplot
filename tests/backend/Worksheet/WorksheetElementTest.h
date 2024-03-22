@@ -61,6 +61,12 @@ private Q_SLOTS:
 	void referenceLineSquareScaling();
 	void referenceLineSqrtScaling();
 	void referenceLineInverseScaling();
+
+	void moveElementBefore();
+	void moveElementAfter();
+	void prepareDrawingMenu();
+
+	void moveTreeModelInteraction();
 };
 
 #endif // WORKSHEETELEMENTTEST_H

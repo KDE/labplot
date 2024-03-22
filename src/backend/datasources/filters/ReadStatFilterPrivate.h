@@ -105,6 +105,8 @@ public:
 	static int startColumn;
 	static int endColumn;
 
+	ReadStatFilter* const q;
+
 private:
 	static int m_varCount; // nr of cols (vars)
 	static int m_rowCount; // nr of rows

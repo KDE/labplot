@@ -19,6 +19,7 @@
 #include "HistogramPrivate.h"
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/Folder.h"
+#include "backend/core/Project.h"
 #include "backend/core/Settings.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/XmlStreamReader.h"
@@ -30,7 +31,6 @@
 #include "backend/worksheet/Line.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/ErrorBar.h"
-#include "backend/worksheet/plots/cartesian/ErrorBarStyle.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "backend/worksheet/plots/cartesian/Value.h"
 #include "tools/ImageTools.h"
@@ -44,6 +44,7 @@
 #include <QGraphicsSceneMouseEvent>
 
 CURVE_COLUMN_CONNECT(Histogram, Data, data, recalc)
+static constexpr double zero = 0.001; // zero baseline, don't use the exact 0.0 since it breaks the histrogram with log-scaling
 
 Histogram::Histogram(const QString& name)
 	: Plot(name, new HistogramPrivate(this), AspectType::Histogram) {
@@ -66,7 +67,7 @@ void Histogram::init() {
 	KConfigGroup group = config.group(QStringLiteral("Histogram"));
 
 	d->type = (Histogram::Type)group.readEntry(QStringLiteral("Type"), (int)Histogram::Ordinary);
-	d->orientation = (Histogram::Orientation)group.readEntry(QStringLiteral("Orientation"), (int)Histogram::Vertical);
+	d->orientation = (Histogram::Orientation)group.readEntry(QStringLiteral("Orientation"), (int)Histogram::Orientation::Vertical);
 	d->normalization = (Histogram::Normalization)group.readEntry(QStringLiteral("Normalization"), (int)Histogram::Count);
 	d->binningMethod = (Histogram::BinningMethod)group.readEntry(QStringLiteral("BinningMethod"), (int)Histogram::SquareRoot);
 	d->binCount = group.readEntry(QStringLiteral("BinCount"), 10);
@@ -131,23 +132,15 @@ void Histogram::init() {
 	});
 
 	// error bars
-	d->errorBar = new ErrorBar(QString());
+	d->errorBar = new ErrorBar(QString(), ErrorBar::Dimension::Y);
 	addChild(d->errorBar);
 	d->errorBar->setHidden(true);
 	d->errorBar->init(group);
+	connect(d->errorBar, &ErrorBar::updatePixmapRequested, [=] {
+		d->updatePixmap();
+	});
 	connect(d->errorBar, &ErrorBar::updateRequested, [=] {
 		d->updateErrorBars();
-	});
-
-	d->errorBarStyle = new ErrorBarStyle(QString());
-	addChild(d->errorBarStyle);
-	d->errorBarStyle->setHidden(true);
-	d->errorBarStyle->init(group);
-	connect(d->errorBarStyle, &ErrorBarStyle::updateRequested, [=] {
-		d->updateErrorBars();
-	});
-	connect(d->errorBarStyle, &ErrorBarStyle::updatePixmapRequested, [=] {
-		d->updatePixmap();
 	});
 
 	// marginal plots (rug, histogram, boxplot)
@@ -298,11 +291,6 @@ ErrorBar* Histogram::errorBar() const {
 	return d->errorBar;
 }
 
-ErrorBarStyle* Histogram::errorBarStyle() const {
-	Q_D(const Histogram);
-	return d->errorBarStyle;
-}
-
 // margin plots
 BASIC_SHARED_D_READER_IMPL(Histogram, bool, rugEnabled, rugEnabled)
 BASIC_SHARED_D_READER_IMPL(Histogram, double, rugLength, rugLength)
@@ -338,8 +326,9 @@ bool Histogram::hasData() const {
 
 bool Histogram::usingColumn(const Column* column) const {
 	Q_D(const Histogram);
-	return (d->dataColumn == column || (d->errorBar->type() == ErrorBar::Type::Symmetric && d->errorBar->plusColumn() == column)
-			|| (d->errorBar->type() == ErrorBar::Type::Asymmetric && (d->errorBar->plusColumn() == column || d->errorBar->minusColumn() == column)));
+	return (
+		d->dataColumn == column || (d->errorBar->yErrorType() == ErrorBar::ErrorType::Symmetric && d->errorBar->yPlusColumn() == column)
+		|| (d->errorBar->yErrorType() == ErrorBar::ErrorType::Asymmetric && (d->errorBar->yPlusColumn() == column || d->errorBar->yMinusColumn() == column)));
 }
 
 void Histogram::updateColumnDependencies(const AbstractColumn* column) {
@@ -357,15 +346,15 @@ void Histogram::updateColumnDependencies(const AbstractColumn* column) {
 	else if (d->value->columnPath() == columnPath)
 		d->value->setColumn(column);
 
-	if (d->errorBar->plusColumn() == column)
-		d->errorBar->setPlusColumnPath(columnPath);
-	else if (d->errorBar->plusColumnPath() == columnPath)
-		d->errorBar->setPlusColumn(column);
+	if (d->errorBar->yPlusColumn() == column)
+		d->errorBar->setYPlusColumnPath(columnPath);
+	else if (d->errorBar->yPlusColumnPath() == columnPath)
+		d->errorBar->setYPlusColumn(column);
 
-	if (d->errorBar->minusColumn() == column)
-		d->errorBar->setMinusColumnPath(columnPath);
-	else if (d->errorBar->minusColumnPath() == columnPath)
-		d->errorBar->setMinusColumn(column);
+	if (d->errorBar->yMinusColumn() == column)
+		d->errorBar->setYMinusColumnPath(columnPath);
+	else if (d->errorBar->yMinusColumnPath() == columnPath)
+		d->errorBar->setYMinusColumn(column);
 
 	setUndoAware(true);
 }
@@ -655,9 +644,9 @@ double HistogramPrivate::getMaximumOccuranceofHistogram() const {
 
 double HistogramPrivate::xMinimum() const {
 	switch (orientation) {
-	case Histogram::Vertical:
+	case Histogram::Orientation::Vertical:
 		return autoBinRanges ? dataColumn->minimum() : binRangesMin;
-	case Histogram::Horizontal:
+	case Histogram::Orientation::Horizontal:
 		return 0;
 	}
 	return INFINITY;
@@ -665,9 +654,9 @@ double HistogramPrivate::xMinimum() const {
 
 double HistogramPrivate::xMaximum() const {
 	switch (orientation) {
-	case Histogram::Vertical:
+	case Histogram::Orientation::Vertical:
 		return autoBinRanges ? dataColumn->maximum() : binRangesMax;
-	case Histogram::Horizontal:
+	case Histogram::Orientation::Horizontal:
 		return getMaximumOccuranceofHistogram();
 	}
 	return -INFINITY;
@@ -675,9 +664,9 @@ double HistogramPrivate::xMaximum() const {
 
 double HistogramPrivate::yMinimum() const {
 	switch (orientation) {
-	case Histogram::Vertical:
+	case Histogram::Orientation::Vertical:
 		return 0;
-	case Histogram::Horizontal:
+	case Histogram::Orientation::Horizontal:
 		return autoBinRanges ? dataColumn->minimum() : binRangesMin;
 	}
 	return INFINITY;
@@ -685,9 +674,9 @@ double HistogramPrivate::yMinimum() const {
 
 double HistogramPrivate::yMaximum() const {
 	switch (orientation) {
-	case Histogram::Vertical:
+	case Histogram::Orientation::Vertical:
 		return getMaximumOccuranceofHistogram();
-	case Histogram::Horizontal:
+	case Histogram::Orientation::Horizontal:
 		return autoBinRanges ? dataColumn->maximum() : binRangesMax;
 	}
 	return -INFINITY;
@@ -968,7 +957,7 @@ void HistogramPrivate::updateLines() {
 	pointsLogical.clear();
 	pointsScene.clear();
 
-	if (orientation == Histogram::Vertical)
+	if (orientation == Histogram::Orientation::Vertical)
 		verticalHistogram();
 	else
 		horizontalHistogram();
@@ -1020,6 +1009,9 @@ void HistogramPrivate::histogramValue(double& value, int bin) const {
 		break;
 	}
 	}
+
+	if (value == 0.0)
+		value = zero;
 }
 
 void HistogramPrivate::verticalHistogram() {
@@ -1034,9 +1026,9 @@ void HistogramPrivate::verticalHistogram() {
 		for (size_t i = 0; i < m_bins; ++i) {
 			histogramValue(value, i);
 			const double x = binRangesMin + i * width;
-			lines.append(QLineF(x, 0., x, value));
+			lines.append(QLineF(x, zero, x, value));
 			lines.append(QLineF(x, value, x + width, value));
-			lines.append(QLineF(x + width, value, x + width, 0.));
+			lines.append(QLineF(x + width, value, x + width, zero));
 			pointsLogical.append(QPointF(x + width / 2, value));
 		}
 		break;
@@ -1052,7 +1044,7 @@ void HistogramPrivate::verticalHistogram() {
 			pointsLogical.append(QPointF(x + width / 2, value));
 
 			if (i == m_bins - 1)
-				lines.append(QLineF(x + width, value, x + width, 0.));
+				lines.append(QLineF(x + width, value, x + width, zero));
 
 			prevValue = value;
 		}
@@ -1062,7 +1054,7 @@ void HistogramPrivate::verticalHistogram() {
 		for (size_t i = 0; i < m_bins; ++i) {
 			histogramValue(value, i);
 			const double x = binRangesMin + i * width + width / 2;
-			lines.append(QLineF(x, 0., x, value));
+			lines.append(QLineF(x, zero, x, value));
 			pointsLogical.append(QPointF(x, value));
 		}
 		break;
@@ -1071,7 +1063,7 @@ void HistogramPrivate::verticalHistogram() {
 		for (size_t i = 0; i < m_bins; ++i) {
 			histogramValue(value, i);
 			const double x = binRangesMin + i * width + width / 2;
-			lines.append(QLineF(x, 0., x, value));
+			lines.append(QLineF(x, zero, x, value));
 			lines.append(QLineF(x, value, x - width / 4, value));
 			pointsLogical.append(QPointF(x, value));
 		}
@@ -1080,7 +1072,7 @@ void HistogramPrivate::verticalHistogram() {
 	}
 
 	if (lineType != Histogram::DropLines && lineType != Histogram::HalfBars)
-		lines.append(QLineF(binRangesMax, 0., binRangesMin, 0.));
+		lines.append(QLineF(binRangesMax, zero, binRangesMin, zero));
 }
 
 void HistogramPrivate::horizontalHistogram() {
@@ -1095,9 +1087,9 @@ void HistogramPrivate::horizontalHistogram() {
 		for (size_t i = 0; i < m_bins; ++i) {
 			histogramValue(value, i);
 			const double y = binRangesMin + i * width;
-			lines.append(QLineF(0., y, value, y));
+			lines.append(QLineF(zero, y, value, y));
 			lines.append(QLineF(value, y, value, y + width));
-			lines.append(QLineF(value, y + width, 0., y + width));
+			lines.append(QLineF(value, y + width, zero, y + width));
 			pointsLogical.append(QPointF(value, y + width / 2));
 		}
 		break;
@@ -1113,7 +1105,7 @@ void HistogramPrivate::horizontalHistogram() {
 			pointsLogical.append(QPointF(value, y + width / 2));
 
 			if (i == m_bins - 1)
-				lines.append(QLineF(value, y + width, 0., y + width));
+				lines.append(QLineF(value, y + width, zero, y + width));
 
 			prevValue = value;
 		}
@@ -1123,7 +1115,7 @@ void HistogramPrivate::horizontalHistogram() {
 		for (size_t i = 0; i < m_bins; ++i) {
 			histogramValue(value, i);
 			const double y = binRangesMin + i * width + width / 2;
-			lines.append(QLineF(0., y, value, y));
+			lines.append(QLineF(zero, y, value, y));
 			pointsLogical.append(QPointF(value, y));
 		}
 		break;
@@ -1132,7 +1124,7 @@ void HistogramPrivate::horizontalHistogram() {
 		for (size_t i = 0; i < m_bins; ++i) {
 			histogramValue(value, i);
 			const double y = binRangesMin + i * width + width / 2;
-			lines.append(QLineF(0., y, value, y));
+			lines.append(QLineF(zero, y, value, y));
 			lines.append(QLineF(value, y, value, y + width / 4));
 			pointsLogical.append(QPointF(value, y));
 		}
@@ -1141,7 +1133,7 @@ void HistogramPrivate::horizontalHistogram() {
 	}
 
 	if (lineType != Histogram::DropLines && lineType != Histogram::HalfBars)
-		lines.append(QLineF(0., binRangesMin, 0., binRangesMax));
+		lines.append(QLineF(zero, binRangesMin, zero, binRangesMax));
 }
 
 void HistogramPrivate::updateSymbols() {
@@ -1295,7 +1287,7 @@ void HistogramPrivate::updateValues() {
 			if (visiblePoints.at(j) == true)
 				listBarWidth.append(columnBarLines.length());
 		}
-		if (orientation == Histogram::Vertical)
+		if (orientation == Histogram::Orientation::Vertical)
 			for (int i = 0; i < valuesStrings.size(); i++) {
 				w = fm.boundingRect(valuesStrings.at(i)).width();
 				tempPoint.setX(pointsScene.at(i).x() - w / 2);
@@ -1379,7 +1371,7 @@ void HistogramPrivate::updateFilling() {
 		else {
 			// close the polygon for the last line,
 			// take care of the different order for different orientations
-			if (orientation == Histogram::Vertical) {
+			if (orientation == Histogram::Orientation::Vertical) {
 				fillPolygon << p1;
 				fillPolygon << p2;
 			} else {
@@ -1395,132 +1387,7 @@ void HistogramPrivate::updateFilling() {
 }
 
 void HistogramPrivate::updateErrorBars() {
-	errorBarsPath = QPainterPath();
-
-	QVector<QLineF> elines;
-
-	switch (errorBar->type()) {
-	case ErrorBar::Type::NoError:
-		break;
-	case ErrorBar::Type::Poisson: {
-		if (orientation == Histogram::Vertical) {
-			for (auto& point : pointsLogical) {
-				double error = sqrt(point.y());
-				if (error != 0.)
-					elines << QLineF(point.x(), point.y() + error, point.x(), point.y() - error);
-			}
-		} else {
-			for (auto& point : pointsLogical) {
-				double error = sqrt(point.x());
-				if (error != 0.)
-					elines << QLineF(point.x() - error, point.y(), point.x() + error, point.y());
-			}
-		}
-		break;
-	}
-	case ErrorBar::Type::Symmetric: {
-		int index = 0;
-		if (orientation == Histogram::Vertical) {
-			const auto* errorPlusColumn = errorBar->plusColumn();
-			for (auto& point : pointsLogical) {
-				if (errorPlusColumn && errorPlusColumn->isValid(index) && !errorPlusColumn->isMasked(index)) {
-					double error = errorPlusColumn->valueAt(index);
-					if (error != 0.)
-						elines << QLineF(point.x(), point.y() + error, point.x(), point.y() - error);
-				}
-				++index;
-			}
-		} else {
-			const auto* errorMinusColumn = errorBar->minusColumn();
-			for (auto& point : pointsLogical) {
-				if (errorMinusColumn && errorMinusColumn->isValid(index) && !errorMinusColumn->isMasked(index)) {
-					double error = errorMinusColumn->valueAt(index);
-					if (error != 0.)
-						elines << QLineF(point.x() - error, point.y(), point.x() + error, point.y());
-				}
-				++index;
-			}
-		}
-		break;
-	}
-	case ErrorBar::Type::Asymmetric: {
-		int index = 0;
-		if (orientation == Histogram::Vertical) {
-			for (auto& point : pointsLogical) {
-				double errorPlus = 0.;
-				double errorMinus = 0.;
-				const auto* errorPlusColumn = errorBar->plusColumn();
-				const auto* errorMinusColumn = errorBar->minusColumn();
-
-				if (errorPlusColumn && errorPlusColumn->isValid(index) && !errorPlusColumn->isMasked(index))
-					errorPlus = errorPlusColumn->valueAt(index);
-
-				if (errorMinusColumn && errorMinusColumn->isValid(index) && !errorMinusColumn->isMasked(index))
-					errorMinus = errorMinusColumn->valueAt(index);
-
-				if (errorPlus != 0. || errorMinus != 0.)
-					elines << QLineF(point.x(), point.y() - errorMinus, point.x(), point.y() + errorPlus);
-
-				++index;
-			}
-		} else {
-			for (auto& point : pointsLogical) {
-				double errorPlus = 0.;
-				double errorMinus = 0.;
-				const auto* errorPlusColumn = errorBar->plusColumn();
-				const auto* errorMinusColumn = errorBar->minusColumn();
-
-				if (errorPlusColumn && errorPlusColumn->isValid(index) && !errorPlusColumn->isMasked(index))
-					errorPlus = errorPlusColumn->valueAt(index);
-
-				if (errorMinusColumn && errorMinusColumn->isValid(index) && !errorMinusColumn->isMasked(index))
-					errorMinus = errorMinusColumn->valueAt(index);
-
-				if (errorPlus != 0. || errorMinus != 0.)
-					elines << QLineF(point.x() - errorMinus, point.y(), point.x() + errorPlus, point.y());
-
-				++index;
-			}
-		}
-		break;
-	}
-	}
-
-	// map the error bars to scene coordinates
-	elines = q->cSystem->mapLogicalToScene(elines);
-
-	// new painter path for the error bars
-	for (const auto& line : qAsConst(elines)) {
-		errorBarsPath.moveTo(line.p1());
-		errorBarsPath.lineTo(line.p2());
-	}
-
-	// add caps for error bars
-	const auto errorBarsCapSize = errorBarStyle->capSize();
-	if (errorBarStyle->type() == ErrorBarStyle::Type::WithEnds) {
-		if (orientation == Histogram::Vertical) {
-			for (const auto& line : qAsConst(elines)) {
-				const auto& p1 = line.p1();
-				errorBarsPath.moveTo(QPointF(p1.x() - errorBarsCapSize / 2., p1.y()));
-				errorBarsPath.lineTo(QPointF(p1.x() + errorBarsCapSize / 2., p1.y()));
-
-				const auto& p2 = line.p2();
-				errorBarsPath.moveTo(QPointF(p2.x() - errorBarsCapSize / 2., p2.y()));
-				errorBarsPath.lineTo(QPointF(p2.x() + errorBarsCapSize / 2., p2.y()));
-			}
-		} else {
-			for (const auto& line : qAsConst(elines)) {
-				const auto& p1 = line.p1();
-				errorBarsPath.moveTo(QPointF(p1.x(), p1.y() - errorBarsCapSize / 2.));
-				errorBarsPath.lineTo(QPointF(p1.x(), p1.y() + errorBarsCapSize / 2.));
-
-				const auto& p2 = line.p2();
-				errorBarsPath.moveTo(QPointF(p2.x(), p2.y() - errorBarsCapSize / 2.));
-				errorBarsPath.lineTo(QPointF(p2.x(), p2.y() + errorBarsCapSize / 2.));
-			}
-		}
-	}
-
+	errorBarsPath = errorBar->painterPath(pointsLogical, q->cSystem, orientation);
 	recalcShapeAndBoundingRect();
 }
 
@@ -1537,7 +1404,7 @@ void HistogramPrivate::updateRug() {
 	const double xMin = q->plot()->range(Dimension::X, cs->index(Dimension::X)).start();
 	const double yMin = q->plot()->range(Dimension::Y, cs->index(Dimension::Y)).start();
 
-	if (orientation == Histogram::Vertical) {
+	if (orientation == Histogram::Orientation::Vertical) {
 		for (int row = 0; row < dataColumn->rowCount(); ++row) {
 			if (dataColumn->isValid(row) && !dataColumn->isMasked(row))
 				points << QPointF(dataColumn->valueAt(row), yMin);
@@ -1588,8 +1455,8 @@ void HistogramPrivate::recalcShapeAndBoundingRect() {
 	if (value->type() != Value::NoValues)
 		m_shape.addPath(valuesPath);
 
-	if (errorBar->type() != ErrorBar::Type::NoError)
-		m_shape.addPath(WorksheetElement::shapeFromPath(errorBarsPath, errorBarStyle->line()->pen()));
+	if (errorBar->yErrorType() != ErrorBar::ErrorType::NoError)
+		m_shape.addPath(WorksheetElement::shapeFromPath(errorBarsPath, errorBar->line()->pen()));
 
 	m_shape.addPath(rugPath);
 	m_shape.addPolygon(fillPolygon);
@@ -1617,11 +1484,8 @@ void HistogramPrivate::draw(QPainter* painter) {
 	}
 
 	// draw filling
-	if (background->enabled()) {
-		painter->setOpacity(background->opacity());
-		painter->setPen(Qt::NoPen);
-		drawFillingPollygon(fillPolygon, painter, background);
-	}
+	if (background->enabled())
+		background->draw(painter, fillPolygon);
 
 	// draw symbols
 	symbol->draw(painter, pointsScene);
@@ -1630,12 +1494,8 @@ void HistogramPrivate::draw(QPainter* painter) {
 	value->draw(painter, valuesPoints, valuesStrings);
 
 	// draw error bars
-	if (errorBar->type() != ErrorBar::Type::NoError) {
-		painter->setOpacity(errorBarStyle->line()->opacity());
-		painter->setPen(errorBarStyle->line()->pen());
-		painter->setBrush(Qt::NoBrush);
-		painter->drawPath(errorBarsPath);
-	}
+	if (errorBar->yErrorType() != ErrorBar::ErrorType::NoError)
+		errorBar->draw(painter, errorBarsPath);
 
 	// draw rug
 	if (rugEnabled) {
@@ -1770,7 +1630,7 @@ void Histogram::save(QXmlStreamWriter* writer) const {
 	writer->writeStartElement(QStringLiteral("general"));
 	WRITE_COLUMN(d->dataColumn, dataColumn);
 	writer->writeAttribute(QStringLiteral("type"), QString::number(d->type));
-	writer->writeAttribute(QStringLiteral("orientation"), QString::number(d->orientation));
+	writer->writeAttribute(QStringLiteral("orientation"), QString::number(static_cast<int>(d->orientation)));
 	writer->writeAttribute(QStringLiteral("normalization"), QString::number(d->normalization));
 	writer->writeAttribute(QStringLiteral("binningMethod"), QString::number(d->binningMethod));
 	writer->writeAttribute(QStringLiteral("binCount"), QString::number(d->binCount));
@@ -1791,7 +1651,6 @@ void Histogram::save(QXmlStreamWriter* writer) const {
 	// Error bars
 	writer->writeStartElement(QStringLiteral("errorBars"));
 	d->errorBar->save(writer);
-	d->errorBarStyle->save(writer);
 	writer->writeEndElement();
 
 	// margin plots
@@ -1847,6 +1706,17 @@ bool Histogram::load(XmlStreamReader* reader, bool preview) {
 				reader->raiseMissingAttributeWarning(QStringLiteral("visible"));
 			else
 				d->setVisible(str.toInt());
+
+			// prior to XML version 12, Histogram used its own enum for the orientation instead of the enum in WorksheetElement
+			// which had a different order of values ("{Vertical, Horizontal}" in Histogram vs. "{Horizontal, Vertical}" in WorksheetElement)
+			// and we need to map from the old to the new values
+			if (Project::xmlVersion() < 12) {
+				const int orientation = static_cast<int>(d->orientation);
+				if (orientation == 0)
+					d->orientation = Orientation::Vertical;
+				else if (orientation == 1)
+					d->orientation = Orientation::Horizontal;
+			}
 		} else if (!preview && reader->name() == QLatin1String("line")) {
 			d->line->load(reader, preview);
 		} else if (!preview && reader->name() == QLatin1String("symbols"))
@@ -1855,9 +1725,22 @@ bool Histogram::load(XmlStreamReader* reader, bool preview) {
 			d->value->load(reader, preview);
 		else if (!preview && reader->name() == QLatin1String("filling"))
 			d->background->load(reader, preview);
-		else if (!preview && reader->name() == QLatin1String("errorBars")) {
+		else if (reader->name() == QLatin1String("errorBars")) {
 			d->errorBar->load(reader, preview);
-			d->errorBarStyle->load(reader, preview);
+
+			// prior to XML version 11, a different order of enum values for the error type was used in Histogram
+			// (old "{ NoError, Poisson, CustomSymmetric, CustomAsymmetric }" instead of
+			// the new "{ NoError, Symmetric, Asymmetric, Poisson }")
+			// and we need to map from the old to the new values
+			if (Project::xmlVersion() < 11) {
+				const int errorType = static_cast<int>(d->errorBar->yErrorType());
+				if (errorType == 1)
+					d->errorBar->setYErrorType(ErrorBar::ErrorType::Poisson);
+				else if (errorType == 2)
+					d->errorBar->setYErrorType(ErrorBar::ErrorType::Symmetric);
+				else if (errorType == 3)
+					d->errorBar->setYErrorType(ErrorBar::ErrorType::Asymmetric);
+			}
 		} else if (!preview && reader->name() == QLatin1String("margins")) {
 			attribs = reader->attributes();
 
@@ -1871,6 +1754,7 @@ bool Histogram::load(XmlStreamReader* reader, bool preview) {
 				return false;
 		}
 	}
+
 	return true;
 }
 
@@ -1897,7 +1781,7 @@ void Histogram::loadThemeConfig(const KConfig& config) {
 	d->symbol->loadThemeConfig(group, themeColor);
 	d->value->loadThemeConfig(group, themeColor);
 	d->background->loadThemeConfig(group, themeColor);
-	d->errorBarStyle->loadThemeConfig(group, themeColor);
+	d->errorBar->loadThemeConfig(group, themeColor);
 
 	if (plot->theme() == QLatin1String("Tufte")) {
 		d->line->setHistogramLineType(Histogram::LineType::HalfBars);
@@ -1918,7 +1802,7 @@ void Histogram::saveThemeConfig(const KConfig& config) {
 	d->symbol->saveThemeConfig(group);
 	d->value->saveThemeConfig(group);
 	d->background->saveThemeConfig(group);
-	d->errorBarStyle->saveThemeConfig(group);
+	d->errorBar->saveThemeConfig(group);
 
 	int index = parentAspect()->indexOfChild<Histogram>(this);
 	if (index < 5) {
