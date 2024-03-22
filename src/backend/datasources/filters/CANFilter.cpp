@@ -10,6 +10,7 @@
 #include "backend/datasources/filters/CANFilter.h"
 #include "backend/core/column/Column.h"
 #include "backend/datasources/AbstractDataSource.h"
+#include "backend/backend/spreadsheet/Spreadsheet.h"
 #include "backend/datasources/filters/CANFilterPrivate.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/macros.h"
