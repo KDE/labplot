@@ -181,6 +181,10 @@ void VariableParser::clearValues() {
 		delete static_cast<QVector<QString>*>(m_values);
 		break;
 	}
+	case AbstractColumn::ColumnMode::Timestamp:
+		delete static_cast<QVector<qint64>*>(m_values);
+		break;
+	}
 }
 
 VariableParser::Datatype VariableParser::convertNumpyDatatype(const QString& d) {

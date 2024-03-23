@@ -1220,6 +1220,20 @@ void Column::save(QXmlStreamWriter* writer) const {
 			}
 			break;
 		}
+		case AbstractColumn::ColumnMode::Timestamp: {
+			const auto* labels = const_cast<Column*>(this)->timestampValueLabels();
+			if (labels) {
+				auto it = labels->constBegin();
+				while (it != labels->constEnd()) {
+					writer->writeStartElement(QStringLiteral("valueLabel"));
+					writer->writeAttribute(QStringLiteral("value"), QString::number(it->value));
+					writer->writeAttribute(QStringLiteral("label"), it->label);
+					writer->writeEndElement();
+					++it;
+				}
+			}
+			break;
+		}
 		}
 
 		writer->writeEndElement(); // "valueLabels"
@@ -1427,6 +1441,9 @@ bool Column::load(XmlStreamReader* reader, bool preview) {
 				case AbstractColumn::ColumnMode::DateTime:
 					addValueLabel(attribs.value(QLatin1String("value")).toLongLong(), label);
 					break;
+				case AbstractColumn::ColumnMode::Timestamp:
+					addValueLabel(attribs.value(QLatin1String("value")).toLongLong(), label);
+					break;
 				}
 			} else if (reader->name() == QLatin1String("row")) {
 				// Assumption: the next elements are all rows
@@ -1479,6 +1496,9 @@ bool Column::load(XmlStreamReader* reader, bool preview) {
 		break;
 	case AbstractColumn::ColumnMode::Text:
 		setText(textVector);
+		break;
+	case AbstractColumn::ColumnMode::Timestamp:
+		setTimestamps(timestampsVector);
 		break;
 	}
 

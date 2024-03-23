@@ -113,6 +113,9 @@ ColumnSetModeCmd::~ColumnSetModeCmd() {
 			case AbstractColumn::ColumnMode::Day:
 				delete static_cast<QVector<QDateTime>*>(m_new_data);
 				break;
+			case AbstractColumn::ColumnMode::Timestamp:
+				delete static_cast<QVector<qint64>*>(m_new_data);
+				break;
 			}
 	} else {
 		if (m_new_data != m_old_data)
@@ -133,6 +136,9 @@ ColumnSetModeCmd::~ColumnSetModeCmd() {
 			case AbstractColumn::ColumnMode::Month:
 			case AbstractColumn::ColumnMode::Day:
 				delete static_cast<QVector<QDateTime>*>(m_old_data);
+				break;
+			case AbstractColumn::ColumnMode::Timestamp:
+				delete static_cast<QVector<qint64>*>(m_old_data);
 				break;
 			}
 	}
@@ -605,6 +611,8 @@ ColumnClearCmd::~ColumnClearCmd() {
 		case AbstractColumn::ColumnMode::Day:
 			delete static_cast<QVector<QDateTime>*>(m_empty_data);
 			break;
+		case AbstractColumn::ColumnMode::Timestamp:
+			delete static_cast<QVector<qint64>*>(m_empty_data);
 		}
 	} else {
 		if (!m_data)
@@ -626,6 +634,9 @@ ColumnClearCmd::~ColumnClearCmd() {
 		case AbstractColumn::ColumnMode::Month:
 		case AbstractColumn::ColumnMode::Day:
 			delete static_cast<QVector<QDateTime>*>(m_data);
+			break;
+		case AbstractColumn::ColumnMode::Timestamp:
+			delete static_cast<QVector<qint64>*>(m_data);
 			break;
 		}
 	}
@@ -670,6 +681,12 @@ void ColumnClearCmd::redo() {
 			m_empty_data = new QVector<QString>();
 			for (int i = 0; i < rowCount; ++i)
 				static_cast<QVector<QString>*>(m_empty_data)->append(QString());
+			break;
+		case AbstractColumn::ColumnMode::Timestamp:
+			auto* vec = new QVector<qint64>(rowCount);
+			m_empty_data = vec;
+			for (int i = 0; i < rowCount; ++i)
+				vec->operator[](i) = 0;
 			break;
 		}
 		m_data = m_col->data();

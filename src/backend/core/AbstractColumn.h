@@ -66,6 +66,7 @@ public:
 		//		UInt64 = 27,	// quint64 (unsigned long)
 		// MISC
 		// QBrush = 30
+		Timestamp = 31, // (qint64) for us resolution
 		// QColor
 		// QFont
 		// QPoint
