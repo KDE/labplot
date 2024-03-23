@@ -117,14 +117,18 @@ LabelWidget::LabelWidget(QWidget* parent)
 	ui.sbBorderWidth->setMinimum(0);
 
 	// Icons
-	ui.tbFontBold->setIcon(QIcon::fromTheme(QLatin1String("format-text-bold")));
-	ui.tbFontItalic->setIcon(QIcon::fromTheme(QLatin1String("format-text-italic")));
-	ui.tbFontUnderline->setIcon(QIcon::fromTheme(QLatin1String("format-text-underline")));
-	ui.tbFontStrikeOut->setIcon(QIcon::fromTheme(QLatin1String("format-text-strikethrough")));
-	ui.tbFontSuperScript->setIcon(QIcon::fromTheme(QLatin1String("format-text-superscript")));
-	ui.tbFontSubScript->setIcon(QIcon::fromTheme(QLatin1String("format-text-subscript")));
-	ui.tbSymbols->setIcon(QIcon::fromTheme(QLatin1String("labplot-format-text-symbol")));
-	ui.tbDateTime->setIcon(QIcon::fromTheme(QLatin1String("chronometer")));
+	ui.tbFontBold->setIcon(QIcon::fromTheme(QStringLiteral("format-text-bold")));
+	ui.tbFontItalic->setIcon(QIcon::fromTheme(QStringLiteral("format-text-italic")));
+	ui.tbFontUnderline->setIcon(QIcon::fromTheme(QStringLiteral("format-text-underline")));
+	ui.tbFontStrikeOut->setIcon(QIcon::fromTheme(QStringLiteral("format-text-strikethrough")));
+	ui.tbFontSuperScript->setIcon(QIcon::fromTheme(QStringLiteral("format-text-superscript")));
+	ui.tbFontSubScript->setIcon(QIcon::fromTheme(QStringLiteral("format-text-subscript")));
+	ui.tbAlignLeft->setIcon(QIcon::fromTheme(QStringLiteral("format-justify-left")));
+	ui.tbAlignCenter->setIcon(QIcon::fromTheme(QStringLiteral("format-justify-center")));
+	ui.tbAlignRight->setIcon(QIcon::fromTheme(QStringLiteral("format-justify-right")));
+	ui.tbAlignJustify->setIcon(QIcon::fromTheme(QStringLiteral("format-justify-fill")));
+	ui.tbSymbols->setIcon(QIcon::fromTheme(QStringLiteral("labplot-format-text-symbol")));
+	ui.tbDateTime->setIcon(QIcon::fromTheme(QStringLiteral("chronometer")));
 
 	ui.tbFontBold->setToolTip(i18n("Bold"));
 	ui.tbFontItalic->setToolTip(i18n("Italic"));
@@ -245,6 +249,10 @@ LabelWidget::LabelWidget(QWidget* parent)
 	connect(ui.tbFontStrikeOut, &QToolButton::clicked, this, &LabelWidget::fontStrikeOutChanged);
 	connect(ui.tbFontSuperScript, &QToolButton::clicked, this, &LabelWidget::fontSuperScriptChanged);
 	connect(ui.tbFontSubScript, &QToolButton::clicked, this, &LabelWidget::fontSubScriptChanged);
+	connect(ui.tbAlignLeft, &QToolButton::clicked, this, &LabelWidget::alignLeft);
+	connect(ui.tbAlignCenter, &QToolButton::clicked, this, &LabelWidget::alignCenter);
+	connect(ui.tbAlignRight, &QToolButton::clicked, this, &LabelWidget::alignRight);
+	connect(ui.tbAlignJustify, &QToolButton::clicked, this, &LabelWidget::alignJustify);
 	connect(ui.tbSymbols, &QToolButton::clicked, this, &LabelWidget::charMenu);
 	connect(ui.tbDateTime, &QToolButton::clicked, this, &LabelWidget::dateTimeMenu);
 	connect(m_dateTimeMenu, &QMenu::triggered, this, &LabelWidget::insertDateTime);
@@ -755,6 +763,26 @@ void LabelWidget::fontSizeChanged(int value) {
 	font.setPointSize(value);
 	for (auto* label : m_labelsList)
 		label->setTeXFont(font);
+}
+
+void LabelWidget::alignLeft() {
+	CONDITIONAL_LOCK_RETURN;
+	SETLABELTEXTPROPERTY(setAlignment, Qt::AlignLeft);
+}
+
+void LabelWidget::alignCenter() {
+	CONDITIONAL_LOCK_RETURN;
+	SETLABELTEXTPROPERTY(setAlignment, Qt::AlignHCenter);
+}
+
+void LabelWidget::alignRight() {
+	CONDITIONAL_LOCK_RETURN;
+	SETLABELTEXTPROPERTY(setAlignment, Qt::AlignRight);
+}
+
+void LabelWidget::alignJustify() {
+	CONDITIONAL_LOCK_RETURN;
+	SETLABELTEXTPROPERTY(setAlignment, Qt::AlignJustify);
 }
 
 void LabelWidget::fontBoldChanged(bool checked) {
