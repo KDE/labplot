@@ -677,7 +677,11 @@ QVector<QStringList> McapFilterPrivate::preview(int lines) {
 				lineString += QString::number(value.toDouble(), 'g', 16);
 				break;
 			case QJsonValue::String:
-				lineString += value.toString();
+				if(columnModes.at(n+createIndexEnabled)==AbstractColumn::ColumnMode::DateTime){
+					lineString += QDateTime::fromMSecsSinceEpoch(value.toString().toLong()).toString(dateTimeFormat);
+				}else{
+					lineString += value.toString();
+				}
 				break;
 			case QJsonValue::Array:
 			case QJsonValue::Object:
