@@ -1,5 +1,5 @@
 /*
-	File                 : ImportKaggleWidget.h
+	File                 : ImportKaggleDatasetWidget.h
 	Project              : LabPlot
 	Description          : import kaggle dataset widget
 	--------------------------------------------------------------------
@@ -7,40 +7,35 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-#ifndef IMPORTKAGGLEWIDGET_H
-#define IMPORTKAGGLEWIDGET_H
+#ifndef IMPORTKAGGLEDATASETWIDGET_H
+#define IMPORTKAGGLEDATASETWIDGET_H
 
-#include "kdefrontend/datasources/ImportDatasetWidget.h"
 #include "kdefrontend/datasources/ImportFileWidget.h"
+#include "ui_importkaggledatasetwidget.h"
 #include <QProcess>
 #include <QToolButton>
 #include <QVBoxLayout>
 #include <QWidget>
-#include <qobjectdefs.h>
 
-class ImportKaggleWidget : public QWidget {
+class ImportKaggleDatasetWidget : public QWidget {
 	Q_OBJECT
 
 public:
-	explicit ImportKaggleWidget(QWidget*);
-	~ImportKaggleWidget() override;
+	explicit ImportKaggleDatasetWidget(QWidget*);
+	~ImportKaggleDatasetWidget() override;
 
 	void importToSpreadsheet(Spreadsheet*) const;
 
 private:
-	ImportDatasetWidget* m_importDatasetWidget{nullptr};
+	Ui::ImportKaggleDatasetWidget ui;
 	ImportFileWidget* m_importFileWidget{nullptr};
 	QProcess* m_kaggleCli{nullptr};
 	int m_resultPage{1};
-	QVBoxLayout* m_vLayout{nullptr};
-	QToolButton* m_bPrevDatasets{nullptr};
-	QToolButton* m_bNextDatasets{nullptr};
-	QToolButton* m_bDownloadDataset{nullptr};
 	QComboBox* m_cbDatasetFiles{nullptr};
+	const int RESULTS_PER_PAGE{20};
 
-	void prepareImportDatasetWidget();
 	void prepareImportFileWidget();
-	void addWidgetsToUi();
+	void prepareImportKaggleDatasetWidget();
 	void listKaggleDatasets();
 	void displayKaggleDatasetMetadata();
 	void searchKaggleDatasets();

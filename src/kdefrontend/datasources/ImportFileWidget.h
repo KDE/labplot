@@ -38,7 +38,7 @@ class NetCDFOptionsWidget;
 class OdsOptionsWidget;
 class ROOTOptionsWidget;
 class TemplateHandler;
-class ImportKaggleWidget;
+class ImportKaggleDatasetWidget;
 
 class QTableWidget;
 class QCompleter;
@@ -83,7 +83,7 @@ public:
 	QString serialPort() const;
 	int baudRate() const;
 
-	friend class ImportKaggleWidget;
+	friend class ImportKaggleDatasetWidget;
 
 public Q_SLOTS:
 	void dataContainerChanged(AbstractAspect*);

@@ -143,7 +143,7 @@ private:
 	QAction* m_printPreviewAction;
 	QAction* m_importFileAction;
 	QAction* m_importFileAction_2;
-	QAction* m_importKaggleAction;
+	QAction* m_importKaggleDatasetAction;
 	QAction* m_importSqlAction;
 	QAction* m_importDatasetAction;
 	QAction* m_importLabPlotAction;
@@ -250,7 +250,7 @@ private Q_SLOTS:
 
 	void historyDialog();
 	void importFileDialog(const QString& fileName = QString());
-	void importKaggleDialog();
+	void importKaggleDatasetDialog();
 	void importSqlDialog();
 	void importProjectDialog();
 	void importDatasetDialog();

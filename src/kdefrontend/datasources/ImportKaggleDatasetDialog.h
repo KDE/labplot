@@ -1,5 +1,5 @@
 /*
-	File                 : ImportKaggleDialog.h
+	File                 : ImportKaggleDatasetDialog.h
 	Project              : LabPlot
 	Description          : import kaggle dataset dialog
 	--------------------------------------------------------------------
@@ -7,30 +7,30 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-#ifndef IMPORTKAGGLEDIALOG_H
-#define IMPORTKAGGLEDIALOG_H
+#ifndef IMPORTKAGGLEDATASETDIALOG_H
+#define IMPORTKAGGLEDATASETDIALOG_H
 
 #include "ImportDialog.h"
 #include "kdefrontend/MainWin.h"
 
-class ImportKaggleWidget;
+class ImportKaggleDatasetWidget;
 
-class ImportKaggleDialog : public ImportDialog {
+class ImportKaggleDatasetDialog : public ImportDialog {
 	Q_OBJECT
 
 public:
-	explicit ImportKaggleDialog(MainWin*);
-	~ImportKaggleDialog() override;
+	explicit ImportKaggleDatasetDialog(MainWin*);
+	~ImportKaggleDatasetDialog() override;
 
 	QString selectedObject() const override;
 	bool importTo(QStatusBar*) const override;
 
 private:
 	MainWin* m_mainWin{nullptr};
-	ImportKaggleWidget* m_importKaggleWidget;
+	ImportKaggleDatasetWidget* m_importKaggleDatasetWidget;
 
 protected Q_SLOTS:
 	void checkOkButton() override;
 };
 
-#endif // IMPORTKAGGLEDIALOG_H
+#endif // IMPORTKAGGLEDATASETDIALOG_H

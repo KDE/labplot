@@ -61,8 +61,8 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/datasources/ImportWarningsDialog.cpp
 	${KDEFRONTEND_DIR}/datasources/ImportFileWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/ImportFileDialog.cpp
-	${KDEFRONTEND_DIR}/datasources/ImportKaggleWidget.cpp
-	${KDEFRONTEND_DIR}/datasources/ImportKaggleDialog.cpp
+	${KDEFRONTEND_DIR}/datasources/ImportKaggleDatasetWidget.cpp
+	${KDEFRONTEND_DIR}/datasources/ImportKaggleDatasetDialog.cpp
 	${KDEFRONTEND_DIR}/datasources/ImportProjectDialog.cpp
 	${KDEFRONTEND_DIR}/datasources/ImportSQLDatabaseDialog.cpp
 	${KDEFRONTEND_DIR}/datasources/ImportSQLDatabaseWidget.cpp
@@ -197,6 +197,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/datasources/hdf5optionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/imageoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/importdatasetwidget.ui
+  ${KDEFRONTEND_DIR}/ui/datasources/importkaggledatasetwidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/importfilewidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/importwarningsdialog.ui
 	${KDEFRONTEND_DIR}/ui/datasources/importprojectwidget.ui

@@ -51,7 +51,7 @@
 #include "kdefrontend/datasources/ImportDatasetDialog.h"
 #include "kdefrontend/datasources/ImportDatasetWidget.h"
 #include "kdefrontend/datasources/ImportFileDialog.h"
-#include "kdefrontend/datasources/ImportKaggleDialog.h"
+#include "kdefrontend/datasources/ImportKaggleDatasetDialog.h"
 #include "kdefrontend/datasources/ImportProjectDialog.h"
 #include "kdefrontend/datasources/ImportSQLDatabaseDialog.h"
 #include "kdefrontend/dockwidgets/CursorDock.h"
@@ -676,10 +676,10 @@ void MainWin::initActions() {
 		importFileDialog();
 	});
 
-	m_importKaggleAction = new QAction(QIcon::fromTheme(QLatin1String("network-receive")), i18n("From Kaggle..."), this);
-	m_importKaggleAction->setWhatsThis(i18n("Imports data from kaggle.com"));
-	actionCollection()->addAction(QLatin1String("import_dataset_kaggle"), m_importKaggleAction);
-	connect(m_importKaggleAction, &QAction::triggered, this, &MainWin::importKaggleDialog);
+	m_importKaggleDatasetAction = new QAction(QIcon::fromTheme(QLatin1String("network-receive")), i18n("From Kaggle..."), this);
+	m_importKaggleDatasetAction->setWhatsThis(i18n("Imports data from kaggle.com"));
+	actionCollection()->addAction(QLatin1String("import_dataset_kaggle"), m_importKaggleDatasetAction);
+	connect(m_importKaggleDatasetAction, &QAction::triggered, this, &MainWin::importKaggleDatasetDialog);
 
 	m_importSqlAction = new QAction(QIcon::fromTheme(QLatin1String("network-server-database")), i18n("From SQL Database..."), this);
 	m_importSqlAction->setWhatsThis(i18n("Import data from a SQL database"));
@@ -896,7 +896,7 @@ void MainWin::initMenus() {
 	m_importMenu = new QMenu(this);
 	m_importMenu->setIcon(QIcon::fromTheme(QLatin1String("document-import")));
 	m_importMenu->addAction(m_importFileAction_2);
-	m_importMenu->addAction(m_importKaggleAction);
+	m_importMenu->addAction(m_importKaggleDatasetAction);
 	m_importMenu->addAction(m_importSqlAction);
 	m_importMenu->addAction(m_importDatasetAction);
 	m_importMenu->addSeparator();
@@ -2651,7 +2651,7 @@ void MainWin::importFileDialog(const QString& fileName) {
 	DEBUG(Q_FUNC_INFO << " DONE");
 }
 
-void MainWin::importKaggleDialog() {
+void MainWin::importKaggleDatasetDialog() {
 	DEBUG(Q_FUNC_INFO);
 	QString errorTitle = i18n("Running kaggle failed");
 	QString errorMessage = i18n(
@@ -2673,7 +2673,7 @@ void MainWin::importKaggleDialog() {
 				}
 			}
 			if (matched) {
-				auto* dlg = new ImportKaggleDialog(this);
+				auto* dlg = new ImportKaggleDatasetDialog(this);
 				dlg->exec();
 			} else {
 				QMessageBox::critical(this, errorTitle, errorMessage);

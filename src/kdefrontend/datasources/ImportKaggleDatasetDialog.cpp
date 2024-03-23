@@ -1,13 +1,13 @@
 /*
-	File                 : ImportKaggleDialog.cpp
+	File                 : ImportKaggleDatasetDialog.cpp
 	Project              : LabPlot
 	Description          : import kaggle dataset dialog
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2024 Israel Galadima <izzygaladima@gmail.com>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
-#include "ImportKaggleDialog.h"
-#include "ImportKaggleWidget.h"
+#include "ImportKaggleDatasetDialog.h"
+#include "ImportKaggleDatasetWidget.h"
 #include "backend/core/Settings.h"
 #include "backend/lib/macros.h"
 
@@ -23,31 +23,31 @@
 #include <KWindowConfig>
 
 /*!
-	\class ImportKaggleDialog
-	\brief Dialog for importing dataset from kaggle.com. Embeds \c ImportKaggleWidget and provides the standard buttons.
+	\class ImportKaggleDatasetDialog
+	\brief Dialog for importing dataset from kaggle.com. Embeds \c ImportKaggleDatasetWidget and provides the standard buttons.
 
 	\ingroup kdefrontend
  */
-ImportKaggleDialog::ImportKaggleDialog(MainWin* parent)
+ImportKaggleDatasetDialog::ImportKaggleDatasetDialog(MainWin* parent)
 	: ImportDialog(parent)
 	, m_mainWin(parent)
-	, m_importKaggleWidget(new ImportKaggleWidget(this)) {
+	, m_importKaggleDatasetWidget(new ImportKaggleDatasetWidget(this)) {
 	auto* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
 	okButton = buttonBox->button(QDialogButtonBox::Ok);
 	okButton->setEnabled(false);
 
-	connect(m_importKaggleWidget, &ImportKaggleWidget::toggleOkBtn, [&](bool enabled) {
+	connect(m_importKaggleDatasetWidget, &ImportKaggleDatasetWidget::toggleOkBtn, [&](bool enabled) {
 		okButton->setEnabled(enabled);
 	});
-	connect(m_importKaggleWidget, &ImportKaggleWidget::showError, this, &ImportKaggleDialog::showErrorMessage);
-	connect(m_importKaggleWidget, &ImportKaggleWidget::clearError, [&] {
+	connect(m_importKaggleDatasetWidget, &ImportKaggleDatasetWidget::showError, this, &ImportKaggleDatasetDialog::showErrorMessage);
+	connect(m_importKaggleDatasetWidget, &ImportKaggleDatasetWidget::clearError, [&] {
 		DEBUG(Q_FUNC_INFO << " clearError");
 		showErrorMessage(QString());
 	});
 	connect(buttonBox, &QDialogButtonBox::accepted, this, &ImportDialog::accept);
 	connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
-	vLayout->addWidget(m_importKaggleWidget);
+	vLayout->addWidget(m_importKaggleDatasetWidget);
 	vLayout->addWidget(buttonBox);
 
 	setWindowTitle(i18nc("@title:window", "Import from kaggle.com"));
@@ -55,7 +55,7 @@ ImportKaggleDialog::ImportKaggleDialog(MainWin* parent)
 
 	QApplication::processEvents(QEventLoop::AllEvents, 0);
 
-	KConfigGroup conf = Settings::group(QStringLiteral("ImportKaggleDialog"));
+	KConfigGroup conf = Settings::group(QStringLiteral("ImportKaggleDatasetDialog"));
 	if (conf.exists()) {
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
 		resize(windowHandle()->size());
@@ -63,21 +63,21 @@ ImportKaggleDialog::ImportKaggleDialog(MainWin* parent)
 		resize(QSize(0, 0).expandedTo(minimumSize()));
 }
 
-ImportKaggleDialog::~ImportKaggleDialog() {
-	KConfigGroup conf = Settings::group(QStringLiteral("ImportKaggleDialog"));
+ImportKaggleDatasetDialog::~ImportKaggleDatasetDialog() {
+	KConfigGroup conf = Settings::group(QStringLiteral("ImportKaggleDatasetDialog"));
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 
-void ImportKaggleDialog::checkOkButton() {
+void ImportKaggleDatasetDialog::checkOkButton() {
 }
 
-QString ImportKaggleDialog::selectedObject() const {
+QString ImportKaggleDatasetDialog::selectedObject() const {
 	return {};
 }
 
-bool ImportKaggleDialog::importTo(QStatusBar*) const {
+bool ImportKaggleDatasetDialog::importTo(QStatusBar*) const {
 	auto* spreadsheet = new Spreadsheet(i18n("Dataset%1", 1));
-	m_importKaggleWidget->importToSpreadsheet(spreadsheet);
+	m_importKaggleDatasetWidget->importToSpreadsheet(spreadsheet);
 	m_mainWin->addAspectToProject(spreadsheet);
 	return true;
 }

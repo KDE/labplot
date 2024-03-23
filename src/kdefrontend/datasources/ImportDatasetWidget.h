@@ -22,7 +22,6 @@ class DatasetModel;
 class QCompleter;
 class QNetworkAccessManager;
 class QNetworkReply;
-class ImportKaggleWidget;
 
 typedef QMap<QString, QMap<QString, QMap<QString, QVector<QString>>>> DatasetsMap;
 
@@ -41,8 +40,6 @@ public:
 	void setSubcategory(const QString&);
 	void setDataset(const QString&);
 	void processTest(const QString& category, const QString& subcategory, const QString& dataset, DatasetHandler*);
-
-	friend class ImportKaggleWidget;
 
 private:
 	Ui::ImportDatasetWidget ui;
