@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-18 01:58+0000\n"
+"POT-Creation-Date: 2024-03-23 01:36+0000\n"
 "PO-Revision-Date: 2014-03-19 20:12+0100\n"
 "Last-Translator: Manfred Wiese <m.j.wiese@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -99,7 +99,7 @@ msgid "Down"
 msgstr ""
 
 #: src/backend/core/AbstractAspect.cpp:518
-#: src/backend/core/aspectcommands.h:121
+#: src/backend/core/aspectcommands.h:170
 #: src/backend/datapicker/Datapicker.cpp:220
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2022
 #, kde-format
@@ -122,47 +122,38 @@ msgstr ""
 msgid "%1: insert %2 before end"
 msgstr ""
 
-#: src/backend/core/AbstractAspect.cpp:606 src/backend/core/aspectcommands.h:43
+#: src/backend/core/AbstractAspect.cpp:606
+#: src/backend/core/aspectcommands.h:103
 #, kde-format
 msgid "%1: remove %2"
 msgstr ""
 
-#: src/backend/core/AbstractAspect.cpp:619
+#: src/backend/core/AbstractAspect.cpp:626
 #, kde-format
 msgid "%1: remove all children"
 msgstr ""
 
-#: src/backend/core/AbstractAspect.cpp:702
-#, kde-format
-msgid "%1: move up"
-msgstr ""
-
-#: src/backend/core/AbstractAspect.cpp:714
-#, kde-format
-msgid "%1: move down"
-msgstr ""
-
-#: src/backend/core/AbstractAspect.cpp:830
+#: src/backend/core/AbstractAspect.cpp:825
 #, kde-format
 msgid "%1: pasted '%2'"
 msgstr ""
 
-#: src/backend/core/AbstractAspect.cpp:832
+#: src/backend/core/AbstractAspect.cpp:827
 #, kde-format
 msgid "%1: duplicated '%2'"
 msgstr ""
 
-#: src/backend/core/AbstractAspect.cpp:833
+#: src/backend/core/AbstractAspect.cpp:828
 #, kde-format
 msgid "Copy of '%1'"
 msgstr ""
 
-#: src/backend/core/AbstractAspect.cpp:965
+#: src/backend/core/AbstractAspect.cpp:960
 #, kde-format
 msgid "Attribute 'name' is missing or empty."
 msgstr ""
 
-#: src/backend/core/AbstractAspect.cpp:972
+#: src/backend/core/AbstractAspect.cpp:967
 #, kde-format
 msgid "Invalid creation time for '%1'. Using current time."
 msgstr ""
@@ -435,7 +426,7 @@ msgid "incompatible filter type"
 msgstr ""
 
 #: src/backend/core/AbstractSimpleFilter.cpp:366
-#: src/backend/core/Folder.cpp:151 src/backend/core/Project.cpp:705
+#: src/backend/core/Folder.cpp:151 src/backend/core/Project.cpp:720
 #: src/backend/datasources/MQTTClient.cpp:1376
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:283
@@ -445,17 +436,22 @@ msgstr ""
 msgid "unknown element '%1'"
 msgstr ""
 
-#: src/backend/core/aspectcommands.h:147
+#: src/backend/core/aspectcommands.h:42
+#, kde-format
+msgid "%1: move up"
+msgstr ""
+
+#: src/backend/core/aspectcommands.h:196
 #, kde-format
 msgid "%1: move %2 to %3."
 msgstr ""
 
-#: src/backend/core/aspectcommands.h:181
+#: src/backend/core/aspectcommands.h:230
 #, kde-format
 msgid "%1: rename to %2"
 msgstr ""
 
-#: src/backend/core/AspectTreeModel.cpp:155
+#: src/backend/core/AspectTreeModel.cpp:157
 #: src/kdefrontend/datasources/HDF5OptionsWidget.cpp:27
 #: src/kdefrontend/datasources/NetCDFOptionsWidget.cpp:29
 #: src/kdefrontend/widgets/FitParametersWidget.cpp:35
@@ -464,7 +460,7 @@ msgid "Name"
 msgstr "Naam"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twContent)
-#: src/backend/core/AspectTreeModel.cpp:157
+#: src/backend/core/AspectTreeModel.cpp:159
 #: src/kdefrontend/datasources/HDF5OptionsWidget.cpp:27
 #: src/kdefrontend/datasources/NetCDFOptionsWidget.cpp:29
 #: src/kdefrontend/ui/datasources/matiooptionswidget.ui:47
@@ -472,66 +468,66 @@ msgstr "Naam"
 msgid "Type"
 msgstr ""
 
-#: src/backend/core/AspectTreeModel.cpp:159
+#: src/backend/core/AspectTreeModel.cpp:161
 #, kde-format
 msgid "Created"
 msgstr ""
 
-#: src/backend/core/AspectTreeModel.cpp:161
+#: src/backend/core/AspectTreeModel.cpp:163
 #: src/kdefrontend/widgets/FITSHeaderEditWidget.cpp:66
 #, kde-format
 msgid "Comment"
 msgstr ""
 
-#: src/backend/core/AspectTreeModel.cpp:184
+#: src/backend/core/AspectTreeModel.cpp:186
 #, kde-format
 msgid "%1   (non-plottable data)"
 msgstr ""
 
-#: src/backend/core/AspectTreeModel.cpp:186
+#: src/backend/core/AspectTreeModel.cpp:188
 #, kde-format
 msgid "%1   (non-numeric data)"
 msgstr ""
 
-#: src/backend/core/AspectTreeModel.cpp:188
+#: src/backend/core/AspectTreeModel.cpp:190
 #, kde-format
 msgid "%1   (no values)"
 msgstr ""
 
-#: src/backend/core/AspectTreeModel.cpp:226
+#: src/backend/core/AspectTreeModel.cpp:228
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1496
 #, kde-format
 msgid "Size: %1"
 msgstr ""
 
 #. i18n("Values: %1", col->availableRowCount());
-#: src/backend/core/AspectTreeModel.cpp:229
+#: src/backend/core/AspectTreeModel.cpp:231
 #, kde-format
 msgid "Type: %1"
 msgstr ""
 
-#: src/backend/core/AspectTreeModel.cpp:230
+#: src/backend/core/AspectTreeModel.cpp:232
 #, fuzzy, kde-format
 #| msgid "Statistics"
 msgid "Plot Designation: %1"
 msgstr "Statistik"
 
-#: src/backend/core/AspectTreeModel.cpp:235
+#: src/backend/core/AspectTreeModel.cpp:237
 #, kde-format
 msgid "Formula:"
 msgstr ""
 
-#: src/backend/core/AspectTreeModel.cpp:257
+#: src/backend/core/AspectTreeModel.cpp:259
 #, kde-format
 msgid "auto update: true"
 msgstr ""
 
-#: src/backend/core/AspectTreeModel.cpp:259
+#: src/backend/core/AspectTreeModel.cpp:261
 #, kde-format
 msgid "auto update: false"
 msgstr ""
 
-#: src/backend/core/AspectTreeModel.cpp:414
+#: src/backend/core/AspectTreeModel.cpp:432
 #, kde-format
 msgid "The name \"%1\" is already in use. Choose another name."
 msgstr ""
@@ -696,54 +692,58 @@ msgstr ""
 
 #. i18n: ectx: ToolBar (main_toolbar)
 #. i18n: ectx: property (title), widget (QGroupBox, gbProject)
-#: src/backend/core/Project.cpp:168 src/backend/core/Project.cpp:184
-#: src/kdefrontend/labplot2ui.rc:6
+#: src/backend/core/Project.cpp:169 src/kdefrontend/labplot2ui.rc:6
 #: src/kdefrontend/ui/datasources/importprojectwidget.ui:17
 #, kde-format
 msgid "Project"
 msgstr ""
 
-#: src/backend/core/Project.cpp:249
+#: src/backend/core/Project.cpp:250
 #, kde-format
 msgid "Close"
 msgstr ""
 
-#: src/backend/core/Project.cpp:284
+#: src/backend/core/Project.cpp:286
 #, kde-format
 msgid "%1: set author"
 msgstr ""
 
-#: src/backend/core/Project.cpp:291
+#: src/backend/core/Project.cpp:293
+#, kde-format
+msgid "%1: save dock states changed"
+msgstr ""
+
+#: src/backend/core/Project.cpp:300
 #, kde-format
 msgid "%1: save calculation changed"
 msgstr ""
 
-#: src/backend/core/Project.cpp:540 src/backend/core/Project.cpp:574
+#: src/backend/core/Project.cpp:555 src/backend/core/Project.cpp:589
 #, kde-format
 msgid "Sorry. Could not open file for reading."
 msgstr ""
 
-#: src/backend/core/Project.cpp:551 src/backend/core/Project.cpp:581
+#: src/backend/core/Project.cpp:566 src/backend/core/Project.cpp:596
 #, kde-format
 msgid "The project file is empty."
 msgstr ""
 
-#: src/backend/core/Project.cpp:551 src/backend/core/Project.cpp:581
+#: src/backend/core/Project.cpp:566 src/backend/core/Project.cpp:596
 #, kde-format
 msgid "Error opening project"
 msgstr ""
 
-#: src/backend/core/Project.cpp:600
+#: src/backend/core/Project.cpp:615
 #, kde-format
 msgid "Unknown error when opening the project %1."
 msgstr ""
 
-#: src/backend/core/Project.cpp:601
+#: src/backend/core/Project.cpp:616
 #, kde-format
 msgid "Error when opening the project"
 msgstr ""
 
-#: src/backend/core/Project.cpp:621
+#: src/backend/core/Project.cpp:636
 #, kde-format
 msgid ""
 "The project has content written with %1. Your installation of LabPlot lacks "
@@ -755,27 +755,27 @@ msgid ""
 "Do you want to continue?"
 msgstr ""
 
-#: src/backend/core/Project.cpp:628 src/backend/core/Project.cpp:631
+#: src/backend/core/Project.cpp:643 src/backend/core/Project.cpp:646
 #, kde-format
 msgid "Missing Support for CAS"
 msgstr ""
 
-#: src/backend/core/Project.cpp:662
+#: src/backend/core/Project.cpp:677
 #, kde-format
 msgid "Attribute 'version' is missing."
 msgstr ""
 
-#: src/backend/core/Project.cpp:712
+#: src/backend/core/Project.cpp:727
 #, kde-format
 msgid "no project element found"
 msgstr ""
 
-#: src/backend/core/Project.cpp:714
+#: src/backend/core/Project.cpp:729
 #, kde-format
 msgid "no valid XML document found"
 msgstr ""
 
-#: src/backend/core/Project.cpp:1133
+#: src/backend/core/Project.cpp:1148
 #, kde-format
 msgid "Invalid project modification time. Using current time."
 msgstr ""
@@ -915,7 +915,7 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:126
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:138
 #: src/backend/worksheet/WorksheetElement.cpp:161
-#: src/backend/worksheet/WorksheetElement.cpp:778
+#: src/backend/worksheet/WorksheetElement.cpp:767
 #: src/backend/worksheet/WorksheetElementContainer.cpp:66
 #: src/backend/worksheet/WorksheetElementContainer.cpp:84
 #, kde-format
@@ -940,7 +940,7 @@ msgid "%1: upload new image"
 msgstr ""
 
 #: src/backend/datapicker/DatapickerImage.cpp:385
-#: src/backend/worksheet/WorksheetElement.cpp:819
+#: src/backend/worksheet/WorksheetElement.cpp:808
 #, kde-format
 msgid "%1: set rotation angle"
 msgstr ""
@@ -973,7 +973,7 @@ msgstr ""
 
 #: src/backend/datapicker/DatapickerPoint.cpp:213
 #: src/backend/worksheet/InfoElement.cpp:780
-#: src/backend/worksheet/WorksheetElement.cpp:740
+#: src/backend/worksheet/WorksheetElement.cpp:729
 #, kde-format
 msgid "%1: set position"
 msgstr ""
@@ -7537,7 +7537,7 @@ msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTitle)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:165
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5014
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5019
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:483
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:543
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:466
@@ -7947,7 +7947,7 @@ msgid "%1: load default theme"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1694
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5324
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5329
 #: src/backend/worksheet/Worksheet.cpp:818
 #, kde-format
 msgid "%1: set theme"
@@ -9133,32 +9133,22 @@ msgstr ""
 msgid "Move in &front of"
 msgstr ""
 
-#: src/backend/worksheet/WorksheetElement.cpp:348
-#, kde-format
-msgid "%1: move behind %2."
-msgstr ""
-
-#: src/backend/worksheet/WorksheetElement.cpp:362
-#, kde-format
-msgid "%1: move in front of %2."
-msgstr ""
-
-#: src/backend/worksheet/WorksheetElement.cpp:752
+#: src/backend/worksheet/WorksheetElement.cpp:741
 #, kde-format
 msgid "%1: set horizontal alignment"
 msgstr ""
 
-#: src/backend/worksheet/WorksheetElement.cpp:764
+#: src/backend/worksheet/WorksheetElement.cpp:753
 #, kde-format
 msgid "%1: set vertical alignment"
 msgstr ""
 
-#: src/backend/worksheet/WorksheetElement.cpp:778
+#: src/backend/worksheet/WorksheetElement.cpp:767
 #, kde-format
 msgid "%1: use logical coordinates"
 msgstr ""
 
-#: src/backend/worksheet/WorksheetElement.cpp:788
+#: src/backend/worksheet/WorksheetElement.cpp:777
 #, kde-format
 msgid "%1: set logical position"
 msgstr ""
@@ -11641,7 +11631,7 @@ msgid "Data format && preview"
 msgstr ""
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1222
-#: src/kdefrontend/SettingsGeneralPage.cpp:226
+#: src/kdefrontend/SettingsGeneralPage.cpp:234
 #, kde-format
 msgid "Automatic"
 msgstr ""
@@ -13145,7 +13135,14 @@ msgstr ""
 msgid "%1 matrices: template \"%2\" loaded"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/ProjectDock.cpp:29
+#: src/kdefrontend/dockwidgets/ProjectDock.cpp:28
+#, kde-format
+msgid ""
+"If checked, the state (position and geometry) of the docks is saved in the "
+"project file and restored on project load."
+msgstr ""
+
+#: src/kdefrontend/dockwidgets/ProjectDock.cpp:33
 #, kde-format
 msgid ""
 "If checked, the results of the calculations in the analysis curves will be "
@@ -15187,107 +15184,128 @@ msgstr ""
 msgid "min."
 msgstr ""
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:192
+#: src/kdefrontend/SettingsGeneralPage.cpp:200
 #, kde-format
 msgid "Create New Project"
 msgstr ""
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:193
+#: src/kdefrontend/SettingsGeneralPage.cpp:201
 #, kde-format
 msgid "Load Last Used Project"
 msgstr ""
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:197
+#: src/kdefrontend/SettingsGeneralPage.cpp:205
 #, kde-format
 msgid "With Worksheet"
 msgstr ""
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:198
+#: src/kdefrontend/SettingsGeneralPage.cpp:206
 #, fuzzy, kde-format
 #| msgid "Statistics"
 msgid "With Spreadsheet"
 msgstr "Statistik"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:199
+#: src/kdefrontend/SettingsGeneralPage.cpp:207
 #, kde-format
 msgid "With Worksheet and Spreadsheet"
 msgstr ""
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:201
+#: src/kdefrontend/SettingsGeneralPage.cpp:209
 #, kde-format
 msgid "With Notebook"
 msgstr ""
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:204
+#: src/kdefrontend/SettingsGeneralPage.cpp:212
 #, kde-format
 msgid "Notebook type to create automatically on startup"
 msgstr ""
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:208
+#: src/kdefrontend/SettingsGeneralPage.cpp:216
 #, kde-format
 msgid ""
 "Controls the behavior of where the dock widgets are placed after being re-"
 "opened"
 msgstr ""
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:212
+#: src/kdefrontend/SettingsGeneralPage.cpp:220
 #, kde-format
 msgid "Original Position"
 msgstr ""
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:213
+#: src/kdefrontend/SettingsGeneralPage.cpp:221
 #, kde-format
 msgid "On top of the last active Dock Widget"
 msgstr ""
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:216
+#: src/kdefrontend/SettingsGeneralPage.cpp:224
 #, kde-format
 msgid "Show File Path"
 msgstr ""
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:217
+#: src/kdefrontend/SettingsGeneralPage.cpp:225
 #, fuzzy, kde-format
 #| msgctxt "NAME OF TRANSLATORS"
 #| msgid "Your names"
 msgid "Show File Name"
 msgstr "Manfred Wiese"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:218
+#: src/kdefrontend/SettingsGeneralPage.cpp:226
 #, kde-format
 msgid "Show Project Name"
 msgstr ""
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:220
+#: src/kdefrontend/SettingsGeneralPage.cpp:228
 #, kde-format
 msgid "Metric"
 msgstr ""
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:221
+#: src/kdefrontend/SettingsGeneralPage.cpp:229
 #, kde-format
 msgid "Imperial"
 msgstr ""
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:223
+#: src/kdefrontend/SettingsGeneralPage.cpp:231
 #, kde-format
 msgid "Dot (.)"
 msgstr ""
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:224
+#: src/kdefrontend/SettingsGeneralPage.cpp:232
 #, kde-format
 msgid "Comma (,)"
 msgstr ""
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:225
+#: src/kdefrontend/SettingsGeneralPage.cpp:233
 #, kde-format
 msgid "Arabic (٫)"
 msgstr ""
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:229
+#: src/kdefrontend/SettingsGeneralPage.cpp:237
 #, kde-format
 msgid ""
 "Use terms compliant with the <a href=\"http://www.bipm.org/utils/common/"
 "documents/jcgm/JCGM_100_2008_E.pdf\">Guide to the Expression of Uncertainty "
 "in Measurement (GUM)</a>"
+msgstr ""
+
+#: src/kdefrontend/SettingsGeneralPage.cpp:242
+#, kde-format
+msgid ""
+"Save the state (position and geometry) of the docks in the project file. \n"
+"Determines the default behaviour for new projects. \n"
+"The setting can be changed for every project separately in the project "
+"properties."
+msgstr ""
+
+#: src/kdefrontend/SettingsGeneralPage.cpp:249
+#, kde-format
+msgid ""
+"Save the results of the calculations in the analysis curves in the project "
+"file. \n"
+"Uncheck this option to reduce the size of the project file at costs of the "
+"longer project load times. \n"
+"Determines the default behaviour for new projects. \n"
+"The setting can be changed for every project separately in the project "
+"properties."
 msgstr ""
 
 #: src/kdefrontend/SettingsNotebookPage.cpp:23
@@ -16711,7 +16729,7 @@ msgstr ""
 #: src/kdefrontend/ui/dockwidgets/lollipopplotdock.ui:92
 #: src/kdefrontend/ui/dockwidgets/matrixdock.ui:43
 #: src/kdefrontend/ui/dockwidgets/notedock.ui:43
-#: src/kdefrontend/ui/dockwidgets/projectdock.ui:228
+#: src/kdefrontend/ui/dockwidgets/projectdock.ui:243
 #: src/kdefrontend/ui/dockwidgets/qqplotdock.ui:99
 #: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:119
 #: src/kdefrontend/ui/dockwidgets/referencerangedock.ui:56
@@ -16761,7 +16779,7 @@ msgstr ""
 #: src/kdefrontend/ui/dockwidgets/lollipopplotdock.ui:112
 #: src/kdefrontend/ui/dockwidgets/matrixdock.ui:17
 #: src/kdefrontend/ui/dockwidgets/notedock.ui:17
-#: src/kdefrontend/ui/dockwidgets/projectdock.ui:194
+#: src/kdefrontend/ui/dockwidgets/projectdock.ui:107
 #: src/kdefrontend/ui/dockwidgets/qqplotdock.ui:55
 #: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:190
 #: src/kdefrontend/ui/dockwidgets/referencerangedock.ui:112
@@ -18136,7 +18154,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, lDecimalSeparator)
 #: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:91
 #: src/kdefrontend/ui/datasources/jsonoptionswidget.ui:76
-#: src/kdefrontend/ui/settingsgeneralpage.ui:120
+#: src/kdefrontend/ui/settingsgeneralpage.ui:24
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:152
 #, kde-format
 msgid "Decimal separator:"
@@ -19721,7 +19739,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, lAutoSaveInterval)
 #. i18n: ectx: property (text), widget (QLabel, lUpdateInterval)
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:113
-#: src/kdefrontend/ui/settingsgeneralpage.ui:219
+#: src/kdefrontend/ui/settingsgeneralpage.ui:108
 #, fuzzy, kde-format
 #| msgctxt "NAME OF TRANSLATORS"
 #| msgid "Your names"
@@ -19803,27 +19821,34 @@ msgstr ""
 msgid "Text color:"
 msgstr ""
 
-#. i18n: ectx: property (text), widget (QLabel, lSettings)
-#: src/kdefrontend/ui/dockwidgets/projectdock.ui:140
+#. i18n: ectx: property (text), widget (QLabel, lVersion_2)
+#: src/kdefrontend/ui/dockwidgets/projectdock.ui:66
 #, kde-format
-msgid "Settings:"
+msgid "Version:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: src/kdefrontend/ui/dockwidgets/projectdock.ui:73
+#, kde-format
+msgid "Created:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lSaveDockStates)
+#: src/kdefrontend/ui/dockwidgets/projectdock.ui:80
+#: src/kdefrontend/ui/settingsgeneralpage.ui:41
+#, kde-format
+msgid "Save Dock States:"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
-#: src/kdefrontend/ui/dockwidgets/projectdock.ui:147
+#: src/kdefrontend/ui/dockwidgets/projectdock.ui:100
 #, kde-format
 msgid "Modified:"
 msgstr ""
 
-#. i18n: ectx: property (text), widget (QLabel, lSaveCalculations)
-#: src/kdefrontend/ui/dockwidgets/projectdock.ui:154
-#, kde-format
-msgid "Save Calculations:"
-msgstr ""
-
 #. i18n: ectx: property (text), widget (QLabel, lFileName)
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: src/kdefrontend/ui/dockwidgets/projectdock.ui:174
+#: src/kdefrontend/ui/dockwidgets/projectdock.ui:114
 #: src/kdefrontend/ui/worksheet/exportworksheetwidget.ui:49
 #, fuzzy, kde-format
 #| msgctxt "NAME OF TRANSLATORS"
@@ -19831,22 +19856,22 @@ msgstr ""
 msgid "File Name:"
 msgstr "Manfred Wiese"
 
-#. i18n: ectx: property (text), widget (QLabel, lVersion_2)
-#: src/kdefrontend/ui/dockwidgets/projectdock.ui:201
+#. i18n: ectx: property (text), widget (QLabel, lSettings)
+#: src/kdefrontend/ui/dockwidgets/projectdock.ui:202
 #, kde-format
-msgid "Version:"
+msgid "Settings:"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: src/kdefrontend/ui/dockwidgets/projectdock.ui:221
+#: src/kdefrontend/ui/dockwidgets/projectdock.ui:209
 #, kde-format
 msgid "Author:"
 msgstr ""
 
-#. i18n: ectx: property (text), widget (QLabel, label_5)
-#: src/kdefrontend/ui/dockwidgets/projectdock.ui:238
+#. i18n: ectx: property (text), widget (QLabel, lSaveCalculations)
+#: src/kdefrontend/ui/dockwidgets/projectdock.ui:253
 #, kde-format
-msgid "Created:"
+msgid "Save Calculations:"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lDistribution)
@@ -19885,9 +19910,13 @@ msgid "Start x:"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoSave)
+#. i18n: ectx: property (text), widget (QCheckBox, chkSaveDockStates)
+#. i18n: ectx: property (text), widget (QCheckBox, chkSaveCalculations)
 #. i18n: ectx: property (text), widget (QLabel, lLinkingEnabled)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:17
-#: src/kdefrontend/ui/settingsgeneralpage.ui:196
+#: src/kdefrontend/ui/settingsgeneralpage.ui:85
+#: src/kdefrontend/ui/settingsgeneralpage.ui:324
+#: src/kdefrontend/ui/settingsgeneralpage.ui:331
 #, kde-format
 msgid "Enabled"
 msgstr ""
@@ -21149,56 +21178,46 @@ msgstr ""
 msgid "Clear"
 msgstr ""
 
-#. i18n: ectx: property (text), widget (QLabel, lTitleBar)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:17
-#, kde-format
-msgid "Title Bar:"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, lAutoSave)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:24
-#, kde-format
-msgid "Auto-save:"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, lCompatible)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:37
-#, kde-format
-msgid "Compatibility:"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, lUnits)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:44
-#, kde-format
-msgid "Units:"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, lNewProjectNotebook)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:73
-#, kde-format
-msgid "Notebook:"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, lNewProject)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:96
-#, kde-format
-msgid "New Project:"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, lGUMTerms)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:106
-#, kde-format
-msgid "Terms:"
-msgstr ""
-
 #. i18n: ectx: property (text), widget (QCheckBox, chkOmitLeadingZeroInExponent)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:113
+#: src/kdefrontend/ui/settingsgeneralpage.ui:17
 #, kde-format
 msgid "Omit leading zero in exponent"
 msgstr ""
 
+#. i18n: ectx: property (text), widget (QLabel, lNumberOptions)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:34
+#, kde-format
+msgid "Number options:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lSaveCalculations)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:157
+#, kde-format
+msgid "Compatibility:"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, chkCompatible)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:167
+#, kde-format
+msgid ""
+"<html><head/><body><p>Save projects in a compatible format that can be "
+"opened in LabPlot versions older than 2.9.</p></body></html>"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkCompatible)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:170
+#, kde-format
+msgid "Save in compatible format"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkOmitGroupSeparator)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:177
+#, kde-format
+msgid "Omit group separator"
+msgstr ""
+
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkGUMTerms)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:127
+#: src/kdefrontend/ui/settingsgeneralpage.ui:219
 #, kde-format
 msgid ""
 "<html><head/><body><p>Use terms compliant with the <a href=\"http://www.bipm."
@@ -21208,54 +21227,71 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkGUMTerms)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:130
+#: src/kdefrontend/ui/settingsgeneralpage.ui:222
 #, kde-format
 msgid "GUM compliant"
 msgstr ""
 
+#. i18n: ectx: property (text), widget (QLabel, lNewProject)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:229
+#, kde-format
+msgid "New Project:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lUnits)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:239
+#, kde-format
+msgid "Units:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lAutoSave)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:268
+#, kde-format
+msgid "Auto-save:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lGUMTerms)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:275
+#, kde-format
+msgid "Terms:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lTitleBar)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:282
+#, kde-format
+msgid "Title Bar:"
+msgstr ""
+
 #. i18n: ectx: property (text), widget (QLabel, lStartup)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:137
+#: src/kdefrontend/ui/settingsgeneralpage.ui:289
 #, kde-format
 msgid "Startup:"
 msgstr ""
 
+#. i18n: ectx: property (text), widget (QLabel, lDockWindowPositionReopen)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:296
+#, kde-format
+msgid "Dock widget placement:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lNewProjectNotebook)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:303
+#, kde-format
+msgid "Notebook:"
+msgstr ""
+
 #. i18n: ectx: property (text), widget (QCheckBox, chkIncludeTrailingZeroesAfterDot)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:144
+#: src/kdefrontend/ui/settingsgeneralpage.ui:310
 #, kde-format
 msgid "Include trailing zeroes after dot"
 msgstr ""
 
-#. i18n: ectx: property (text), widget (QLabel, lNumberOptions)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:151
-#, kde-format
-msgid "Number options:"
-msgstr ""
-
-#. i18n: ectx: property (toolTip), widget (QCheckBox, chkCompatible)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:158
-#, kde-format
-msgid ""
-"<html><head/><body><p>Save projects in a compatible format that can be "
-"opened in LabPlot versions older than 2.9.</p></body></html>"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QCheckBox, chkCompatible)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:161
-#, kde-format
-msgid "Save in compatible format"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QCheckBox, chkOmitGroupSeparator)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:168
-#, kde-format
-msgid "Omit group separator"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, lDockWindowPositionReopen)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:287
-#, kde-format
-msgid "Dock widget placement:"
-msgstr ""
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:317
+#, fuzzy, kde-format
+#| msgid "Statistics"
+msgid "Save  Calculations:"
+msgstr "Statistik"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode_2)

@@ -4,13 +4,14 @@
 	Description          : Represents a LabPlot project.
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
-	SPDX-FileCopyrightText: 2011-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2007-2008 Tilman Benkert <thzs@gmx.net>
 	SPDX-FileCopyrightText: 2007 Knut Franke <knut.franke@gmx.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 #include "backend/core/Project.h"
+#include "backend/core/Settings.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/spreadsheet/Spreadsheet.h"
@@ -26,7 +27,6 @@
 #include "backend/worksheet/plots/cartesian/QQPlot.h"
 #include "backend/worksheet/plots/cartesian/Value.h"
 #include "backend/worksheet/plots/cartesian/XYFitCurve.h"
-
 #ifdef HAVE_LIBORIGIN
 #include "backend/datasources/projects/OriginProjectParser.h"
 #endif
@@ -156,6 +156,7 @@ public:
 	QString fileName;
 	QString windowState;
 	QString author;
+	bool saveDockStates{false};
 	bool saveCalculations{true};
 	QUndoStack undo_stack;
 };
@@ -168,21 +169,21 @@ Project::Project()
 	: Folder(i18n("Project"), AspectType::Project)
 	, d_ptr(new ProjectPrivate(this)) {
 	Q_D(Project);
-	// load default values for name, comment and author from config
-	KConfig config;
-	KConfigGroup group = config.group(QStringLiteral("Project"));
 
 	QString user = qEnvironmentVariable("USER"); // !Windows
 	if (user.isEmpty())
 		user = qEnvironmentVariable("USERNAME"); // Windows
-	d->author = group.readEntry(QStringLiteral("Author"), user);
+	d->author = user;
 
 	// we don't have direct access to the members name and comment
 	//->temporary disable the undo stack and call the setters
 	setUndoAware(false);
 	setIsLoading(true);
-	setName(group.readEntry(QStringLiteral("Name"), i18n("Project")));
-	setComment(group.readEntry(QStringLiteral("Comment"), QString()));
+
+	const auto& group = Settings::group(QStringLiteral("Settings_General"));
+	setSaveDockStates(group.readEntry(QStringLiteral("SaveDockStates"), false));
+	setSaveCalculations(group.readEntry(QStringLiteral("SaveCalculations"), true));
+
 	setUndoAware(true);
 	setIsLoading(false);
 	d->changed = false;
@@ -275,6 +276,7 @@ CLASS_D_ACCESSOR_IMPL(Project, QString, fileName, FileName, fileName)
 CLASS_D_ACCESSOR_IMPL(Project, QString, windowState, WindowState, windowState)
 BASIC_D_READER_IMPL(Project, QString, author, author)
 CLASS_D_ACCESSOR_IMPL(Project, QDateTime, modificationTime, ModificationTime, modificationTime)
+BASIC_D_READER_IMPL(Project, bool, saveDockStates, saveDockStates)
 BASIC_D_READER_IMPL(Project, bool, saveCalculations, saveCalculations)
 
 STD_SETTER_CMD_IMPL_S(Project, SetAuthor, QString, author)
@@ -282,6 +284,13 @@ void Project::setAuthor(const QString& author) {
 	Q_D(Project);
 	if (author != d->author)
 		exec(new ProjectSetAuthorCmd(d, author, ki18n("%1: set author")));
+}
+
+STD_SETTER_CMD_IMPL_S(Project, SetSaveDockStates, bool, saveDockStates)
+void Project::setSaveDockStates(bool save) {
+	Q_D(Project);
+	if (save != d->saveDockStates)
+		exec(new ProjectSetSaveDockStatesCmd(d, save, ki18n("%1: save dock states changed")));
 }
 
 STD_SETTER_CMD_IMPL_S(Project, SetSaveCalculations, bool, saveCalculations)
@@ -487,8 +496,14 @@ void Project::save(const QPixmap& thumbnail, QXmlStreamWriter* writer) {
 	writer->writeAttribute(QStringLiteral("xmlVersion"), QString::number(buildXmlVersion));
 	writer->writeAttribute(QStringLiteral("modificationTime"), modificationTime().toString(QStringLiteral("yyyy-dd-MM hh:mm:ss:zzz")));
 	writer->writeAttribute(QStringLiteral("author"), author());
-	writer->writeAttribute(QStringLiteral("saveCalculations"), QString::number(d->saveCalculations));
-	writer->writeAttribute(QStringLiteral("windowState"), d->windowState);
+
+	if (d->saveDockStates) {
+		writer->writeAttribute(QStringLiteral("saveDockStates"), QString::number(d->saveDockStates));
+		writer->writeAttribute(QStringLiteral("windowState"), d->windowState);
+	}
+
+	if (d->saveCalculations)
+		writer->writeAttribute(QStringLiteral("saveCalculations"), QString::number(d->saveCalculations));
 
 	QString image;
 	if (!thumbnail.isNull()) {
@@ -1136,8 +1151,16 @@ bool Project::readProjectAttributes(XmlStreamReader* reader) {
 		d->modificationTime = modificationTime;
 
 	d->author = attribs.value(QStringLiteral("author")).toString();
-	d->saveCalculations = attribs.value(QStringLiteral("saveCalculations")).toInt();
-	d->windowState = attribs.value(QStringLiteral("windowState")).toString();
+
+	str = attribs.value(QStringLiteral("saveDockStates")).toString();
+	if (!str.isEmpty())
+		d->saveDockStates = str.toInt();
+	if (d->saveDockStates)
+		d->windowState = attribs.value(QStringLiteral("windowState")).toString();
+
+	str = attribs.value(QStringLiteral("saveCalculations")).toString();
+	if (!str.isEmpty())
+		d->saveCalculations = str.toInt();
 
 	return true;
 }

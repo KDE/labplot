@@ -4,6 +4,7 @@ New features:
 		* New application theme "Dracula"
 		* New categorical color map "Dracula"
 		* New option in the application settings to run a selected CAS engine at startup
+		* New option in the application settings to control if the state of the dock widgets should be saved in the project file
 		* Share the project via email, Nextcloud, etc. directly from the main menu
 	* [worksheet]
 		* Preview panel for all available worksheets in the project
