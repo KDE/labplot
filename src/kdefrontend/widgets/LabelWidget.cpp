@@ -136,6 +136,10 @@ LabelWidget::LabelWidget(QWidget* parent)
 	ui.tbFontStrikeOut->setToolTip(i18n("Strike Out"));
 	ui.tbFontSuperScript->setToolTip(i18n("Super Script"));
 	ui.tbFontSubScript->setToolTip(i18n("Sub-Script"));
+	ui.tbAlignLeft->setToolTip(i18n("Left Align"));
+	ui.tbAlignCenter->setToolTip(i18n("Center"));
+	ui.tbAlignRight->setToolTip(i18n("Right Align"));
+	ui.tbAlignJustify->setToolTip(i18n("Justify"));
 	ui.tbSymbols->setToolTip(i18n("Insert Symbol"));
 	ui.tbDateTime->setToolTip(i18n("Insert Date/Time"));
 
