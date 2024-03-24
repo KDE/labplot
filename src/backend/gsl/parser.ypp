@@ -481,7 +481,7 @@ symbol* put_symbol(const char *symbol_name, int symbol_type) {
 
 	ptr->next = (symbol *)symbol_table;
 	symbol_table = ptr;
-	
+
 /*	pdebug("PARSER: put_symbol() DONE\n"); */
 	return ptr;
 }
@@ -498,7 +498,7 @@ int remove_symbol(const char *symbol_name) {
 			pdebug("PARSER: REMOVING symbol '%s'\n", symbol_name);
 			symbol_table = ptr->next;
 			free(ptr->name);
-			free(ptr);
+			delete ptr;
 		}
 		return 0;
 	}
@@ -518,7 +518,7 @@ int remove_symbol(const char *symbol_name) {
 	pdebug("PARSER: REMOVING symbol '%s'\n", symbol_name);
 	prev->next = ptr->next;
 	free(ptr->name);
-	free(ptr);
+	delete ptr;
 
 	return 0;
 }
@@ -527,7 +527,7 @@ int remove_symbol(const char *symbol_name) {
    returns 0 if symbol not found */
 symbol* get_symbol(const char *symbol_name) {
 	pdebug("PARSER: get_symbol(): symbol_name = '%s'\n", symbol_name);
-	
+
 	symbol *ptr;
 	for (ptr = symbol_table; ptr != nullptr; ptr = (symbol *)ptr->next) {
 		/* pdebug("%s ", ptr->name); */
