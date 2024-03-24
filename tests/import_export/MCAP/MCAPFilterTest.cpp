@@ -132,4 +132,19 @@ void MCAPFilterTest::testExport() {
 
 		}
 
+void MCAPFilterTest::testImportWithoutValidTopics() {
+
+		McapFilter filter;
+
+		Spreadsheet spreadsheet(QStringLiteral("test"), false);
+		const QString& fileName = QFINDTESTDATA(QLatin1String("data/basic_NONE_unsupported_encoding.mcap"));
+		QCOMPARE(filter.getValidTopics(fileName).size(),0);
+
+		AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode::Replace;
+		filter.readDataFromFile(fileName, &spreadsheet, mode);
+
+		QCOMPARE(filter.lastError(),i18n("No JSON encoded topics found."));
+		
+		}
+
 QTEST_MAIN(MCAPFilterTest)

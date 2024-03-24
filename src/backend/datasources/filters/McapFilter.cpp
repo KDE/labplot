@@ -439,12 +439,17 @@ int McapFilterPrivate::mcapToJson(const QString& fileName, int lines) {
 		const auto res = reader.open(STDSTRING(fileName));
 		if (!res.ok()) {
 			std::cerr << "Failed to open " << STDSTRING(fileName) << " for reading: " << res.message << std::endl;
+			const_cast<McapFilter*>(q)->setLastError(i18n("Failed to read the file. Reason: %1", QString::fromStdString(res.message)));
 			return 0;
 		}
 	}
 
 	if (current_topic == QLatin1String("")) {
 		QVector<QString> topics = getValidTopics(fileName); // Todo: make this more efficient. Only open file once.
+		if(topics.size() == 0){
+			const_cast<McapFilter*>(q)->setLastError(i18n("No JSON encoded topics found."));
+			return 0;
+		}
 		current_topic = topics[0];
 	}
 
@@ -925,6 +930,7 @@ QVector<QString> McapFilterPrivate::getValidTopics(const QString& fileName) {
 		const auto res = reader.open(STDSTRING(fileName));
 		if (!res.ok()) {
 			std::cerr << "Failed to open " << STDSTRING(fileName) << " for reading: " << res.message << std::endl;
+			const_cast<McapFilter*>(q)->setLastError(i18n("Failed to read the file. Reason: %1", QString::fromStdString(res.message)));
 			return valid_topics;
 		}
 	}
