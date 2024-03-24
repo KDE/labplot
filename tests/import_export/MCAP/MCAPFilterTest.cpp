@@ -145,6 +145,17 @@ void MCAPFilterTest::testImportWithoutValidTopics() {
 
 		QCOMPARE(filter.lastError(),i18n("No JSON encoded topics found."));
 		
-		}
+}
+
+void MCAPFilterTest::testImportWrongFile() {
+
+		McapFilter filter;
+
+		Spreadsheet spreadsheet(QStringLiteral("test"), false);
+		const QString& fileName = QFINDTESTDATA(QLatin1String("data/empty_file.mcap"));
+		QCOMPARE(filter.getValidTopics(fileName).size(),0);
+		QCOMPARE(filter.lastError(),i18n("Failed to read the file. Reason: file too small"));
+		
+}
 
 QTEST_MAIN(MCAPFilterTest)

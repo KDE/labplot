@@ -21,6 +21,7 @@ private Q_SLOTS:
 	void testArrayImport();
 	void testExport();
 	void testImportWithoutValidTopics();
+	void testImportWrongFile();
 
 };
 
