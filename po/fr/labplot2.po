@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-03-25 01:58+0000\n"
-"PO-Revision-Date: 2024-03-18 10:00+0100\n"
+"PO-Revision-Date: 2024-03-24 17:11+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -726,10 +726,9 @@ msgid "%1: set author"
 msgstr "%1 : définir l'auteur"
 
 #: src/backend/core/Project.cpp:293
-#, fuzzy, kde-format
-#| msgid "%1: save calculation changed"
+#, kde-format
 msgid "%1: save dock states changed"
-msgstr "%1 : le calcul enregistré a été modifié"
+msgstr "%1 : enregistrer les modifications des états de panneaux :"
 
 #: src/backend/core/Project.cpp:300
 #, kde-format
@@ -13407,6 +13406,9 @@ msgid ""
 "If checked, the state (position and geometry) of the docks is saved in the "
 "project file and restored on project load."
 msgstr ""
+"Si cette option est sélectionnée, l'état (position et géométrie) des "
+"panneaux est enregistré dans le fichier du projet et restauré au chargement "
+"du projet."
 
 #: src/kdefrontend/dockwidgets/ProjectDock.cpp:33
 #, kde-format
@@ -15589,14 +15591,14 @@ msgid ""
 "The setting can be changed for every project separately in the project "
 "properties."
 msgstr ""
+"Enregistrer l'état (position et géométrie) des panneaux dans le fichier du "
+"projet. \n"
+"Détermine le comportement par défaut pour les nouveaux projets. \n"
+"Le paramètre peut être modifié séparément pour chaque projet dans les "
+"propriétés du projet."
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:249
-#, fuzzy, kde-format
-#| msgid ""
-#| "If checked, the results of the calculations in the analysis curves will "
-#| "be saved in the project file.\n"
-#| "Uncheck this option to reduce the size of the project file at costs of "
-#| "the longer project load times."
+#, kde-format
 msgid ""
 "Save the results of the calculations in the analysis curves in the project "
 "file. \n"
@@ -15606,10 +15608,13 @@ msgid ""
 "The setting can be changed for every project separately in the project "
 "properties."
 msgstr ""
-"Si cette option est cochée, les résultats des calculs dans les courbes "
-"d'analyse seront enregistrés dans le fichier du projet.\n"
-"Décochez cette option pour réduire la taille du fichier de projet au prix "
-"d'un temps de chargement plus long du projet."
+"Enregistrer les résultats des calculs dans les courbes d'analyse dans le "
+"fichier du projet.\n"
+"Décochez cette option pour réduire la taille de votre fichier de projet au "
+"prix d'un temps de chargement plus long du projet.\n"
+"Détermine le comportement par défaut pour les nouveaux projets. \n"
+"Le paramètre peut être modifié séparément pour chaque projet dans les "
+"propriétés du projet."
 
 #: src/kdefrontend/SettingsNotebookPage.cpp:23
 #, kde-format
@@ -20173,10 +20178,9 @@ msgstr "Créé : "
 #. i18n: ectx: property (text), widget (QLabel, lSaveDockStates)
 #: src/kdefrontend/ui/dockwidgets/projectdock.ui:80
 #: src/kdefrontend/ui/settingsgeneralpage.ui:41
-#, fuzzy, kde-format
-#| msgid "Save project as"
+#, kde-format
 msgid "Save Dock States:"
-msgstr "Enregistrer le projet sous"
+msgstr "Enregistrer les états de panneaux :"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: src/kdefrontend/ui/dockwidgets/projectdock.ui:100
@@ -21660,8 +21664,7 @@ msgstr "Inclure les zéros superflus après le point"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:317
-#, fuzzy, kde-format
-#| msgid "Save Calculations:"
+#, kde-format
 msgid "Save  Calculations:"
 msgstr "Enregistrer les calculs :"
 
