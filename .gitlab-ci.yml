@@ -40,17 +40,17 @@ craft_appimage_qt515_x86_64:
   rules:
     - if: '$CI_COMMIT_REF_NAME == "master"'
 
-#craft_windows_qt515_x86_64:
-#  rules:
-#    - if: '$CI_COMMIT_REF_NAME == "master"'
+craft_windows_qt515_x86_64:
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "master"'
 
-#craft_macos_x86_64:
-#  rules:
-#    - if: '$CI_COMMIT_REF_NAME == "master"'
+craft_macos_x86_64:
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "master"'
 
-#craft_macos_arm64:
-#  rules:
-#    - if: '$CI_COMMIT_REF_NAME == "master"'
+craft_macos_arm64:
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "master"'
 
 clang_format:
   stage: test
