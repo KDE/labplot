@@ -1,17 +1,17 @@
 /*******************************************************************************
 ** Qt Advanced Docking System
 ** Copyright (C) 2017 Uwe Kindler
-** 
+**
 ** This library is free software; you can redistribute it and/or
 ** modify it under the terms of the GNU Lesser General Public
 ** License as published by the Free Software Foundation; either
 ** version 2.1 of the License, or (at your option) any later version.
-** 
+**
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 ** Lesser General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU Lesser General Public
 ** License along with this library; If not, see <http://www.gnu.org/licenses/>.
 ******************************************************************************/
@@ -69,18 +69,18 @@ namespace ads
  */
 struct DockWidgetPrivate
 {
-	struct WidgetFactory 
+	struct WidgetFactory
 	{
 		CDockWidget::FactoryFunc createWidget;
 		CDockWidget::eInsertMode insertMode;
-	};	
-	
+	};
+
 	CDockWidget* _this = nullptr;
 	QBoxLayout* Layout = nullptr;
 	QWidget* Widget = nullptr;
 	CDockWidgetTab* TabWidget = nullptr;
 	CDockWidget::DockWidgetFeatures Features = CDockWidget::DefaultDockWidgetFeatures;
-	CDockManager* DockManager = nullptr;
+	QPointer<CDockManager> DockManager;
 	QPointer<CDockAreaWidget> DockArea;
 	QAction* ToggleViewAction = nullptr;
 	bool Closed = false;
@@ -96,7 +96,7 @@ struct DockWidgetPrivate
 	WidgetFactory* Factory = nullptr;
 	QPointer<CAutoHideTab> SideTabWidget;
 	CDockWidget::eToolBarStyleSource ToolBarStyleSource = CDockWidget::ToolBarStyleFromDockManager;
-	
+
 	/**
 	 * Private data constructor
 	 */
@@ -134,7 +134,7 @@ struct DockWidgetPrivate
 	 * Setup the main scroll area
 	 */
 	void setupScrollArea();
-	
+
 	/**
 	 * Creates the content widget with the registered widget factory and
 	 * returns true on success.
@@ -166,10 +166,10 @@ void DockWidgetPrivate::showDockWidget()
 			Q_ASSERT(!Features.testFlag(CDockWidget::DeleteContentOnClose)
 					 && "DeleteContentOnClose flag was set, but the widget "
 						"factory is missing or it doesn't return a valid QWidget.");
-			return;	
+			return;
 		}
 	}
-	
+
 	if (!DockArea)
 	{
 		CFloatingDockContainer* FloatingWidget = new CFloatingDockContainer(_this);
@@ -271,7 +271,10 @@ void DockWidgetPrivate::closeAutoHideDockWidgetsIfNeeded()
 		return;
 	}
 
-	if (!DockContainer->openedDockWidgets().isEmpty())
+	// If the dock container is the dock manager, or if it is not empty, then we
+	// don't need to do anything
+	if ((DockContainer == _this->dockManager())
+	 || !DockContainer->openedDockWidgets().isEmpty())
 	{
 		return;
 	}
@@ -316,22 +319,22 @@ void DockWidgetPrivate::setupScrollArea()
 //============================================================================
 bool DockWidgetPrivate::createWidgetFromFactory()
 {
-	if (!Features.testFlag(CDockWidget::DeleteContentOnClose)) 
+	if (!Features.testFlag(CDockWidget::DeleteContentOnClose))
 	{
 		return false;
 	}
-	
+
 	if (!Factory)
 	{
 		return false;
 	}
-	
+
 	QWidget* w = Factory->createWidget(_this);
 	if (!w)
 	{
 		return false;
 	}
-	
+
 	_this->setWidget(w, Factory->insertMode);
 	return true;
 }
@@ -511,10 +514,19 @@ void CDockWidget::setFeatures(DockWidgetFeatures features)
 		return;
 	}
 	d->Features = features;
+	notifyFeaturesChanged();
+}
+
+
+//============================================================================
+void CDockWidget::notifyFeaturesChanged()
+{
 	Q_EMIT featuresChanged(d->Features);
 	d->TabWidget->onDockWidgetFeaturesChanged();
 	if(CDockAreaWidget* DockArea = dockAreaWidget())
+	{
 		DockArea->onDockWidgetFeaturesChanged();
+	}
 }
 
 
@@ -530,7 +542,14 @@ void CDockWidget::setFeature(DockWidgetFeature flag, bool on)
 //============================================================================
 CDockWidget::DockWidgetFeatures CDockWidget::features() const
 {
-	return d->Features;
+	if (d->DockManager)
+	{
+		return d->Features &~ d->DockManager->globallyLockedDockWidgetFeatures();
+	}
+	else
+	{
+		return d->Features;
+	}
 }
 
 
