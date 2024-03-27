@@ -176,7 +176,7 @@ QSize CElidingLabel::minimumSizeHint() const
     #if (QT_VERSION >= QT_VERSION_CHECK(5, 11, 0))
         QSize size(fm.horizontalAdvance(d->Text.left(2) + QStringLiteral("…")), fm.height());
     #else
-        QSize size(fm.width(d->Text.left(2) + QStringLiteral("…")), fm.height());
+        QSize size(fm.width(d->Text.left(2) + "…"), fm.height());
     #endif
     return size;
 }
