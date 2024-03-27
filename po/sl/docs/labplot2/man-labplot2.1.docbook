@@ -1,0 +1,189 @@
+<?xml version="1.0" ?>
+<!DOCTYPE refentry PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN" "dtd/kdedbx45.dtd" [
+<!ENTITY % Slovenian "INCLUDE">
+]>
+
+<!--  Please keep this man page content in sync with Command Line Options sections of Okular handbook -->
+<refentry lang="&language;">
+<refentryinfo>
+<title
+>Uporabniški priročnik LabPlot</title>
+<author
+><firstname
+>Helen</firstname
+><surname
+>Faulkner</surname
+> <contrib
+>Stran z navodili za LabPlot.</contrib
+> <email
+>helen_ml_faulkner@yahoo.co.uk</email
+></author>
+<date
+>28.09.2018</date>
+<releaseinfo
+>LabPlot 2.6</releaseinfo>
+<productname
+>LabPlot</productname>
+</refentryinfo>
+
+<refmeta>
+<refentrytitle
+><command
+>labplot2</command
+></refentrytitle>
+<manvolnum
+>1</manvolnum>
+</refmeta>
+
+<refnamediv>
+<refname
+>labplot2</refname>
+<refpurpose
+>aplikacija KDE za interaktivno risanje grafov in analizo znanstvenih podatkov.</refpurpose>
+</refnamediv>
+<!-- body begins here -->
+<refsynopsisdiv id='synopsis'>
+<cmdsynopsis
+><command
+>labplot2</command
+> <arg choice="opt"
+><replaceable
+>Možnosti LabPlot</replaceable
+></arg
+> <arg choice="opt"
+><replaceable
+>datoteka</replaceable
+></arg
+> </cmdsynopsis>
+</refsynopsisdiv>
+
+
+<refsect1 id="description"
+><title
+>Opis</title>
+<para
+>LabPlot je orodje za risanje in analizo podatkov. </para>
+<para
+>Njegove zmožnosti vključujejo 2D in 3D podatke in risanje funkcij, enostavno urejanje grafikonov, analizo podatkov in funkcij, podporo za različne delovne liste z uporabo projektnih datotek MDI in LabPlot. </para>
+<para
+>Upoštevajte, da se LabPlot kliče z <command
+>labplot2</command
+>. </para>
+
+</refsect1>
+
+<refsect1 id="options"
+><title
+>Možnosti LabPlot</title>
+<para
+>Za popoln povzetek splošnih možnosti zaženite <userinput
+><command
+>labplot2</command
+> <parameter
+>--help</parameter
+></userinput
+>. </para>
+
+<variablelist>
+<varlistentry>
+<term
+><option
+>--no-splash</option
+></term>
+<listitem>
+<para
+>Ne prikaži pozdravnega zaslona.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><option
+>--presenter</option
+></term>
+<listitem>
+<para
+>Začni v načinu predstavitelja.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</refsect1>
+
+<refsect1 id="arguments"
+><title
+>Argumenti</title>
+<variablelist>
+  <varlistentry>
+    <term
+><option
+>datoteka</option
+></term>
+  <listitem>
+    <para
+>Lokacija projekta, ki ga želite odpreti, običajno s končnico <literal role="extension"
+>.lml</literal
+>.</para>
+    <para
+>Projektno datoteko je mogoče tudi stisniti, pri čemer se njeno ime datoteke konča z <literal role="extension"
+>.lml.gz</literal
+>, <literal role="extension"
+>.lml.bz2</literal
+> ali <literal role ="razširitev"
+>.lml.xz</literal
+>.</para>
+  </listitem>
+  </varlistentry>
+</variablelist>
+</refsect1>
+
+<refsect1>
+<title
+>Poglejte tudi</title>
+<simplelist>
+<member
+>Celotna uporabniška dokumentacija je na voljo v centru za pomoč KDE. Vnesete lahko tudi URL <ulink url="help:/labplot2"
+>help:/labplot2</ulink
+> (bodisi vnesite ta <acronym
+>URL</acronym
+> v &dolphin; ali zaženite <userinput
+><command
+>khelpcenter </command
+> <parameter
+>help:/labplot2</parameter
+></userinput
+>).</member>
+<member
+>kf5options(7)</member>
+<member
+>qt5options(7)</member>
+<member
+>Dodatne informacije so na voljo tudi na <ulink url="https://labplot.kde.org/"
+>https://labplot.kde.org/</ulink
+></member>
+</simplelist>
+</refsect1>
+
+<refsect1 id="authors"
+><title
+>Avtorji</title>
+<para
+>LabPlot2 je napisal </para>
+<simplelist>
+    <member
+>Stefan Gerlach &lt;stefan.gerlach@uni.kn&gt;,</member>
+    <member
+>Alexander Semke &lt;alexander.semke@web.de&gt;,</member>
+    <member
+>F&aacute;bi&aacute;n Krist&oacute;f-Szabolcs &lt;f-kristof@hotmail.com&gt;</member>
+    <member
+>in več drugih avtorjev.</member>
+</simplelist>
+<para
+>To stran priročnika je pripravila Helen Faulkner &lt;helen_ml_faulkner@yahoo.co.uk&gt; za sistem Debian GNU/Linux (lahko pa ga uporabljajo tudi drugi). </para>
+<para
+>Licenca: GNU Splošna javna različica 2 &lt;<ulink url="http://www.gnu.org/licenses/gpl-2.0.html"
+>http://www.gnu.org/licenses/gpl-2.0.html </ulink
+>&gt; </para>
+</refsect1>
+</refentry>
+
