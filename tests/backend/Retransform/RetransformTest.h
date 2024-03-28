@@ -43,6 +43,9 @@ private Q_SLOTS:
 
 	void testPlotRecalcRetransform();
 	void testPlotRecalcNoRetransform();
+
+	void removeReaddxColum();
+	void removeReaddyColum();
 };
 
 /*!

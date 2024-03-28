@@ -328,6 +328,51 @@ bool Project::hasChanged() const {
 }
 
 /*!
+ * \brief Project::getElements
+ * get all Elements of type T from the aspect. If the aspect is of type T this element is returned
+ * otherwise all childs of type T from the aspect are returned
+ *
+ * Example: curve needs "column1"
+ * An Existing column is called "column2". This existing column will be renamed to "column1". Now the column shall be connected to the curve
+ * \param aspect
+ * \return
+ */
+template<typename T>
+QVector<const AbstractAspect*> Project::getElements(const AbstractAspect* aspect) {
+	QVector<const AbstractAspect*> elements;
+	const auto* element = static_cast<const T*>(aspect);
+	if (element)
+		elements.append(element);
+	else {
+		for (auto* child : aspect->children<T>(ChildIndexFlag::Recursive))
+			elements.append(static_cast<const T*>(child));
+	}
+	return elements;
+}
+
+/*!
+ * \brief Project::updateDependencies
+ * Notify that WorksheetElements are updated. This is required if the element
+ * is not a child of another element, like a XYCurve for an InfoElement, ...
+ * \param changedElements
+ */
+template<typename T>
+void Project::updateDependencies(const QVector<const AbstractAspect*> changedElements) {
+	if (!changedElements.isEmpty()) {
+		// if a new element was addded, check whether the element names match the missing
+		// names in the other elements, etc. and update the dependencies
+		const auto& elements = children<T>(ChildIndexFlag::Recursive);
+
+		for (const auto* element : changedElements) {
+			const auto& elementPath = element->path();
+			for (auto* e : elements) {
+				e->handleElementUpdated(elementPath, element);
+			}
+		}
+	}
+}
+
+/*!
  * \brief Project::descriptionChanged
  * This function is called, when an object changes its name. When a column changed its name and wasn't connected
  * before to the curve/column(formula), this is updated in this function.
@@ -337,11 +382,8 @@ void Project::descriptionChanged(const AbstractAspect* aspect) {
 	if (isLoading())
 		return;
 
-	// when the name of a column is being changed, it can match again the names being used in the plots, etc.
-	// and we need to update the dependencies
-	const auto* column = dynamic_cast<const AbstractColumn*>(aspect);
-	if (column)
-		updateColumnDependencies(column);
+	updateDependencies<Column>({aspect}); // notify all columns
+	updateDependencies<WorksheetElement>({aspect}); // notify all worksheetelements
 
 	Q_D(Project);
 	d->changed = true;
@@ -357,29 +399,12 @@ void Project::aspectAddedSlot(const AbstractAspect* aspect) {
 	if (isLoading())
 		return;
 
-	if (aspect->inherits(AspectType::AbstractColumn)) {
-		// check whether new columns were added and if yes,
-		// update the dependencies in the project
-		QVector<const AbstractColumn*> columns;
-		const auto* column = static_cast<const AbstractColumn*>(aspect);
-		if (column)
-			columns.append(column);
-		else {
-			for (auto* child : aspect->children<Column>(ChildIndexFlag::Recursive))
-				columns.append(static_cast<const AbstractColumn*>(child));
-		}
+	updateDependencies<Column>({aspect});
+	updateDependencies<WorksheetElement>({aspect});
 
-		if (!columns.isEmpty()) {
-			// if a new column was addded, check whether the column name matches the missing
-			// names in the plots, etc. and update the dependencies
-			for (auto column : columns)
-				updateColumnDependencies(column);
-		}
-	} else if (aspect->inherits(AspectType::Spreadsheet)) {
-		// if a new spreadsheet was addded, check whether the spreadsheet name matches the missing
+	if (aspect->inherits(AspectType::Spreadsheet)) {
+		// if a new spreadsheet was addded, check whether the spreadsheet name match the missing
 		// name in a linked spreadsheet, etc. and update the dependencies
-		const auto* newSpreadsheet = static_cast<const Spreadsheet*>(aspect);
-		updateSpreadsheetDependencies(newSpreadsheet);
 
 		connect(static_cast<const Spreadsheet*>(aspect), &Spreadsheet::aboutToResize, [this]() {
 			const auto& wes = children<WorksheetElement>(AbstractAspect::ChildIndexFlag::Recursive);
@@ -391,39 +416,6 @@ void Project::aspectAddedSlot(const AbstractAspect* aspect) {
 			for (auto* we : wes)
 				we->setSuppressRetransform(false);
 		});
-	}
-}
-
-void Project::updateSpreadsheetDependencies(const Spreadsheet* spreadsheet) const {
-	const QString& spreadsheetPath = spreadsheet->path();
-	const auto& spreadsheets = children<Spreadsheet>(ChildIndexFlag::Recursive);
-
-	for (auto* sh : spreadsheets) {
-		sh->setUndoAware(false);
-		if (sh->linkedSpreadsheetPath() == spreadsheetPath)
-			sh->setLinkedSpreadsheet(spreadsheet);
-		sh->setUndoAware(true);
-	}
-}
-
-/*!
- * in case the column \c column was added or renamed, update all dependent objects in the project accordingly.
- */
-void Project::updateColumnDependencies(const AbstractColumn* column) const {
-	// update the dependencies in the plots
-	const auto& plots = children<Plot>(ChildIndexFlag::Recursive);
-	for (auto* plot : plots)
-		plot->updateColumnDependencies(column);
-
-	// update the dependencies in the column formulas
-	const QString& columnPath = column->path();
-	const auto& columns = children<Column>(ChildIndexFlag::Recursive);
-	for (auto* tempColumn : columns) {
-		for (int i = 0; i < tempColumn->formulaData().count(); i++) {
-			auto path = tempColumn->formulaData().at(i).columnName();
-			if (path == columnPath)
-				tempColumn->setFormulVariableColumn(i, const_cast<Column*>(static_cast<const Column*>(column)));
-		}
 	}
 }
 

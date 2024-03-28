@@ -218,6 +218,34 @@ QIcon XYCurve::icon() const {
 	return QIcon::fromTheme(QStringLiteral("labplot-xy-curve"));
 }
 
+void XYCurve::handleElementUpdated(const QString& aspectPath, const AbstractAspect* element) {
+	Q_D(XYCurve);
+	const auto* column = dynamic_cast<const Column*>(element);
+	if (!column)
+		return;
+
+	setUndoAware(false);
+	if (xColumnPath() == aspectPath)
+		setXColumn(column);
+	if (yColumnPath() == aspectPath)
+		setYColumn(column);
+	if (valuesColumnPath() == aspectPath)
+		setValuesColumn(column);
+	if (d->errorBar->xPlusColumnPath() == aspectPath)
+		d->errorBar->setXPlusColumn(column);
+	if (d->errorBar->xMinusColumnPath() == aspectPath)
+		d->errorBar->setXMinusColumn(column);
+	if (d->errorBar->yPlusColumnPath() == aspectPath)
+		d->errorBar->setYPlusColumn(column);
+	if (d->errorBar->yMinusColumnPath() == aspectPath)
+		d->errorBar->setYMinusColumn(column);
+
+	if (valuesColumnPath() == aspectPath)
+		setValuesColumn(column);
+
+	setUndoAware(true);
+}
+
 // ##############################################################################
 // ##########################  getter methods  ##################################
 // ##############################################################################
@@ -680,7 +708,7 @@ void XYCurve::xColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	if (aspect == d->xColumn) {
 		d->xColumn = nullptr;
 		d->m_logicalPoints.clear();
-		d->retransform();
+		CURVE_COLUMN_REMOVED(x);
 	}
 }
 
@@ -689,7 +717,7 @@ void XYCurve::yColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	if (aspect == d->yColumn) {
 		d->yColumn = nullptr;
 		d->m_logicalPoints.clear();
-		d->retransform();
+		CURVE_COLUMN_REMOVED(x);
 	}
 }
 
@@ -2110,13 +2138,13 @@ void XYCurvePrivate::updateFilling() {
 double XYCurve::y(double x, bool& valueFound) const {
 	if (!yColumn() || !xColumn()) {
 		valueFound = false;
-		return NAN;
+		return std::nan("0");
 	}
 
 	const int index = xColumn()->indexForValue(x);
 	if (index < 0) {
 		valueFound = false;
-		return NAN;
+		return std::nan("0");
 	}
 
 	valueFound = true;
@@ -2124,7 +2152,7 @@ double XYCurve::y(double x, bool& valueFound) const {
 		return yColumn()->valueAt(index);
 	else {
 		valueFound = false;
-		return NAN;
+		return std::nan("0");
 	}
 }
 
@@ -2138,7 +2166,7 @@ double XYCurve::y(double x, double& x_new, bool& valueFound) const {
 	int index = xColumn()->indexForValue(x);
 	if (index < 0) {
 		valueFound = false;
-		return NAN;
+		return std::nan("0");
 	}
 
 	AbstractColumn::ColumnMode xColumnMode = xColumn()->columnMode();
@@ -2150,7 +2178,7 @@ double XYCurve::y(double x, double& x_new, bool& valueFound) const {
 	else {
 		// any other type implemented
 		valueFound = false;
-		return NAN;
+		return std::nan("0");
 	}
 
 	valueFound = true;
@@ -2158,7 +2186,7 @@ double XYCurve::y(double x, double& x_new, bool& valueFound) const {
 		return yColumn()->valueAt(index);
 	else {
 		valueFound = false;
-		return NAN;
+		return std::nan("0");
 	}
 }
 

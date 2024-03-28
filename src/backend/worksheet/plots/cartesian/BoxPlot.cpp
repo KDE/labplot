@@ -471,6 +471,30 @@ QColor BoxPlot::color() const {
 	return QColor();
 }
 
+void BoxPlot::handleElementUpdated(const QString& aspectPath, const AbstractAspect* element) {
+	const auto* column = dynamic_cast<const Column*>(element);
+	if (!column)
+		return;
+
+	const auto& dataColumnPaths = this->dataColumnPaths();
+	auto dataColumns = this->dataColumns();
+	bool changed = false;
+	for (int i = 0; i < dataColumnPaths.count(); ++i) {
+		const auto& path = dataColumnPaths.at(i);
+
+		if (path == aspectPath) {
+			dataColumns[i] = column;
+			changed = true;
+		}
+	}
+
+	if (changed) {
+		setUndoAware(false);
+		setDataColumns(dataColumns);
+		setUndoAware(true);
+	}
+}
+
 /* ============================ setter methods and undo commands ================= */
 
 // General

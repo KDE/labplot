@@ -148,6 +148,7 @@ private Q_SLOTS:
 	void childDeselected(const AbstractAspect*) override;
 	void linkedSpreadsheetDeleted();
 	void linkedSpreadsheetNewRowCount(int);
+	void handleElementUpdated(const QString& aspectPath, const AbstractAspect* element);
 
 Q_SIGNALS:
 	void requestProjectContextMenu(QMenu*);

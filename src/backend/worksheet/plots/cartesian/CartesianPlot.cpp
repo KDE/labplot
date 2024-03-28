@@ -2216,10 +2216,6 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 	} else if (axis) {
 		connect(axis, &Axis::shiftSignal, this, &CartesianPlot::axisShiftSignal);
 	} else {
-		const auto* infoElement = dynamic_cast<const InfoElement*>(child);
-		if (infoElement)
-			connect(this, &CartesianPlot::curveRemoved, infoElement, &InfoElement::removeCurve);
-
 		// if an element is hovered, the curves which are handled manually in this class
 		// must be unhovered
 		if (elem)

@@ -129,6 +129,9 @@ protected:
 	CartesianPlot* m_plot{nullptr};
 	const CartesianCoordinateSystem* cSystem{nullptr}; // current cSystem
 
+	virtual void handleElementUpdated(const QString& path, const AbstractAspect*);
+	friend class Project;
+
 public Q_SLOTS:
 	virtual void retransform() = 0;
 
@@ -174,10 +177,6 @@ Q_SIGNALS:
 
 	void hovered();
 	void unhovered();
-	// needed in the worksheet info element, because execMoveInFrontOf and execMoveBehind
-	// call also child removed but this is only temporary
-	void moveBegin(); // called, at the begin of execMoveInFrontOf or execMoveBehind is called
-	void moveEnd(); // called, at the end of execMoveInFrontOf or execMoveBehind is called
 
 	void plotRangeListChanged();
 

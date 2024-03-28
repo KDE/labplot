@@ -137,6 +137,7 @@ private Q_SLOTS:
 
 protected:
 	XYCurve(const QString& name, XYCurvePrivate* dd, AspectType type);
+	virtual void handleElementUpdated(const QString& aspectPath, const AbstractAspect*) override;
 
 private:
 	Q_DECLARE_PRIVATE(XYCurve)

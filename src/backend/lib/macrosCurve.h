@@ -91,4 +91,9 @@
 		const AbstractColumn* m_columnOld{nullptr};                                                                                                            \
 	};
 
+#define CURVE_COLUMN_REMOVED(prefix)                                                                                                                           \
+	Q_EMIT prefix##ColumnChanged(d->prefix##Column);                                                                                                           \
+	/* emit DataChanged() in order to notify the plot about the changes */                                                                                     \
+	Q_EMIT prefix##DataChanged();
+
 #endif // MACROSXYCURVE_H

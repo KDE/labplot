@@ -103,6 +103,7 @@ private Q_SLOTS:
 
 protected:
 	Histogram(const QString& name, HistogramPrivate* dd);
+	virtual void handleElementUpdated(const QString& aspectPath, const AbstractAspect*) override;
 
 private:
 	Q_DECLARE_PRIVATE(Histogram)

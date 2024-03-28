@@ -1582,6 +1582,15 @@ void Spreadsheet::finalizeImport(size_t columnOffset,
 	// DEBUG(Q_FUNC_INFO << " DONE");
 }
 
+void Spreadsheet::handleElementUpdated(const QString& aspectPath, const AbstractAspect* element) {
+	const auto* sh = dynamic_cast<const Spreadsheet*>(element);
+	if (sh && linkedSpreadsheetPath() == aspectPath) {
+		setUndoAware(false);
+		setLinkedSpreadsheet(sh);
+		setUndoAware(true);
+	}
+}
+
 // ##############################################################################
 // ######################### Private implementation #############################
 // ##############################################################################

@@ -397,6 +397,23 @@ void XYAnalysisCurve::createDataSpreadsheet() {
 	folder()->addChild(spreadsheet);
 }
 
+void XYAnalysisCurve::handleElementUpdated(const QString& aspectPath, const AbstractAspect* element) {
+	const auto* column = dynamic_cast<const Column*>(element);
+
+	setUndoAware(false);
+	if (xDataColumnPath() == aspectPath)
+		setXDataColumn(column);
+	if (yDataColumnPath() == aspectPath)
+		setYDataColumn(column);
+	if (y2DataColumnPath() == aspectPath)
+		setY2DataColumn(column);
+
+	// From XYCurve
+	if (valuesColumnPath() == aspectPath)
+		setValuesColumn(column);
+	setUndoAware(true);
+}
+
 // ##############################################################################
 // ######################### Private implementation #############################
 // ##############################################################################

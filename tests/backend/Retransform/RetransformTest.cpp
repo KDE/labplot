@@ -2013,6 +2013,151 @@ void RetransformCallCounter::aspectAdded(const AbstractAspect* aspect) {
 		connect(plot, &CartesianPlot::scaleRetransformed, this, &RetransformCallCounter::retransformScaleCalled);
 }
 
+void RetransformTest::removeReaddxColum() {
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	QVERIFY(ws != nullptr);
+	project.addChild(ws);
+
+	auto* sheet = new Spreadsheet(QStringLiteral("Spreadsheet"), false);
+	sheet->setColumnCount(2);
+	sheet->setRowCount(11);
+	project.addChild(sheet);
+
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	QVERIFY(p != nullptr);
+	ws->addChild(p);
+
+	auto* curve{new XYEquationCurve(QStringLiteral("f(x)"))};
+	curve->setCoordinateSystemIndex(p->defaultCoordinateSystemIndex());
+	p->addChild(curve);
+
+	XYEquationCurve::EquationData data;
+	data.min = QStringLiteral("0");
+	data.max = QStringLiteral("10");
+	data.count = 11;
+	data.expression1 = QStringLiteral("x");
+	curve->setEquationData(data);
+	curve->recalculate();
+
+	auto* curve2 = new XYCurve(QStringLiteral("curve2"));
+	p->addChild(curve2);
+
+	auto* xColumn = sheet->column(0);
+	auto* yColumn = sheet->column(1);
+	{
+		QVector<int> xData;
+		QVector<double> yData;
+		for (int i = 1; i < 11; i++) { // different to the above
+			xData.append(i);
+			yData.append(pow(i, 2));
+		}
+
+		xColumn->setColumnMode(AbstractColumn::ColumnMode::Integer);
+		xColumn->replaceInteger(0, xData);
+		yColumn->setColumnMode(AbstractColumn::ColumnMode::Double);
+		yColumn->replaceValues(0, yData);
+		curve2->setXColumn(xColumn);
+		curve2->setYColumn(yColumn);
+	}
+
+	CHECK_RANGE(p, curve, Dimension::X, 0., 10.);
+	CHECK_RANGE(p, curve, Dimension::Y, 0., 100.);
+
+	sheet->removeChild(xColumn);
+
+	// Curve 2 got invalid
+	CHECK_RANGE(p, curve, Dimension::X, 0., 10.);
+	CHECK_RANGE(p, curve, Dimension::Y, 0., 10.);
+
+	const auto oldNameXColumn = xColumn->name();
+	xColumn->setName(QStringLiteral("NewName"));
+
+	sheet->addChild(xColumn);
+
+	CHECK_RANGE(p, curve, Dimension::X, 0., 10.);
+	CHECK_RANGE(p, curve, Dimension::Y, 0., 10.);
+
+	xColumn->setName(oldNameXColumn);
+
+	QCOMPARE(curve2->xColumn(), xColumn);
+	QCOMPARE(curve2->yColumn(), yColumn);
+
+	CHECK_RANGE(p, curve, Dimension::X, 0., 10.);
+	CHECK_RANGE(p, curve, Dimension::Y, 0., 100.);
+}
+
+void RetransformTest::removeReaddyColum() {
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	QVERIFY(ws != nullptr);
+	project.addChild(ws);
+
+	auto* sheet = new Spreadsheet(QStringLiteral("Spreadsheet"), false);
+	sheet->setColumnCount(2);
+	sheet->setRowCount(11);
+	project.addChild(sheet);
+
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	QVERIFY(p != nullptr);
+	ws->addChild(p);
+
+	auto* curve{new XYEquationCurve(QStringLiteral("f(x)"))};
+	curve->setCoordinateSystemIndex(p->defaultCoordinateSystemIndex());
+	p->addChild(curve);
+
+	XYEquationCurve::EquationData data;
+	data.min = QStringLiteral("0");
+	data.max = QStringLiteral("10");
+	data.count = 11;
+	data.expression1 = QStringLiteral("x");
+	curve->setEquationData(data);
+	curve->recalculate();
+
+	auto* curve2 = new XYCurve(QStringLiteral("curve2"));
+	p->addChild(curve2);
+
+	auto* xColumn = sheet->column(0);
+	auto* yColumn = sheet->column(1);
+	{
+		QVector<int> xData;
+		QVector<double> yData;
+		for (int i = 1; i < 11; i++) { // different to the above
+			xData.append(i);
+			yData.append(pow(i, 2));
+		}
+
+		xColumn->setColumnMode(AbstractColumn::ColumnMode::Integer);
+		xColumn->replaceInteger(0, xData);
+		yColumn->setColumnMode(AbstractColumn::ColumnMode::Double);
+		yColumn->replaceValues(0, yData);
+		curve2->setXColumn(xColumn);
+		curve2->setYColumn(yColumn);
+	}
+
+	CHECK_RANGE(p, curve, Dimension::X, 0., 10.);
+	CHECK_RANGE(p, curve, Dimension::Y, 0., 100.);
+
+	sheet->removeChild(yColumn);
+
+	// Curve 2 got invalid
+	CHECK_RANGE(p, curve, Dimension::X, 0., 10.);
+	CHECK_RANGE(p, curve, Dimension::Y, 0., 10.);
+
+	const auto oldNameYColumn = yColumn->name();
+	yColumn->setName(QStringLiteral("NewName"));
+
+	sheet->addChild(yColumn);
+
+	CHECK_RANGE(p, curve, Dimension::X, 0., 10.);
+	CHECK_RANGE(p, curve, Dimension::Y, 0., 10.);
+
+	yColumn->setName(oldNameYColumn);
+
+	CHECK_RANGE(p, curve, Dimension::X, 0., 10.);
+	CHECK_RANGE(p, curve, Dimension::Y, 0., 100.);
+}
+
 // Test change data
 
 QTEST_MAIN(RetransformTest)

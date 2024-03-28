@@ -383,6 +383,24 @@ const AbstractColumn* Histogram::binPDValues() const {
 	return d->binPDValues();
 }
 
+void Histogram::handleElementUpdated(const QString& aspectPath, const AbstractAspect* element) {
+	const auto* column = dynamic_cast<const Column*>(element);
+	if (!column)
+		return;
+
+	if (dataColumnPath() == aspectPath) {
+		setUndoAware(false);
+		setDataColumn(column);
+		setUndoAware(true);
+	}
+
+	if (value()->columnPath() == aspectPath) {
+		setUndoAware(false);
+		value()->setColumn(column);
+		setUndoAware(true);
+	}
+}
+
 // ##############################################################################
 // #################  setter methods and undo commands ##########################
 // ##############################################################################
