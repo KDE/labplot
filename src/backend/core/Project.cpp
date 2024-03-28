@@ -376,6 +376,9 @@ void Project::updateDependencies(const QVector<const AbstractAspect*> changedEle
  * \brief Project::descriptionChanged
  * This function is called, when an object changes its name. When a column changed its name and wasn't connected
  * before to the curve/column(formula), this is updated in this function.
+ *
+ * Example: curve needs "column1"
+ * An Existing column is called "column2". This existing column will be renamed to "column1". Now the column shall be connected to the curve
  * \param aspect
  */
 void Project::descriptionChanged(const AbstractAspect* aspect) {
