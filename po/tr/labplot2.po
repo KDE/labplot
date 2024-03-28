@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-19 01:39+0000\n"
-"PO-Revision-Date: 2024-03-17 21:10+0300\n"
+"POT-Creation-Date: 2024-03-23 01:36+0000\n"
+"PO-Revision-Date: 2024-03-22 16:18+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 24.02.0\n"
+"X-Generator: Lokalize 24.02.1\n"
 "X-POOTLE-MTIME: 1502201241.000000\n"
 
 #, kde-format
@@ -431,7 +431,7 @@ msgid "incompatible filter type"
 msgstr "uyumsuz süzgeç türü"
 
 #: src/backend/core/AbstractSimpleFilter.cpp:366
-#: src/backend/core/Folder.cpp:151 src/backend/core/Project.cpp:705
+#: src/backend/core/Folder.cpp:151 src/backend/core/Project.cpp:720
 #: src/backend/datasources/MQTTClient.cpp:1376
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:283
@@ -693,54 +693,59 @@ msgstr "Henüz yüklenmedi."
 
 #. i18n: ectx: ToolBar (main_toolbar)
 #. i18n: ectx: property (title), widget (QGroupBox, gbProject)
-#: src/backend/core/Project.cpp:168 src/backend/core/Project.cpp:184
-#: src/kdefrontend/labplot2ui.rc:6
+#: src/backend/core/Project.cpp:169 src/kdefrontend/labplot2ui.rc:6
 #: src/kdefrontend/ui/datasources/importprojectwidget.ui:17
 #, kde-format
 msgid "Project"
 msgstr "Proje"
 
-#: src/backend/core/Project.cpp:249
+#: src/backend/core/Project.cpp:250
 #, kde-format
 msgid "Close"
 msgstr "Kapat"
 
-#: src/backend/core/Project.cpp:284
+#: src/backend/core/Project.cpp:286
 #, kde-format
 msgid "%1: set author"
 msgstr "%1: Yazarı ayarla"
 
-#: src/backend/core/Project.cpp:291
+#: src/backend/core/Project.cpp:293
+#, fuzzy, kde-format
+#| msgid "%1: save calculation changed"
+msgid "%1: save dock states changed"
+msgstr "%1: Kaydetme hesaplaması değişti"
+
+#: src/backend/core/Project.cpp:300
 #, kde-format
 msgid "%1: save calculation changed"
 msgstr "%1: Kaydetme hesaplaması değişti"
 
-#: src/backend/core/Project.cpp:540 src/backend/core/Project.cpp:574
+#: src/backend/core/Project.cpp:555 src/backend/core/Project.cpp:589
 #, kde-format
 msgid "Sorry. Could not open file for reading."
 msgstr "Üzgünüm. Dosyayı okuma için açamadık."
 
-#: src/backend/core/Project.cpp:551 src/backend/core/Project.cpp:581
+#: src/backend/core/Project.cpp:566 src/backend/core/Project.cpp:596
 #, kde-format
 msgid "The project file is empty."
 msgstr "Proje dosyası boş."
 
-#: src/backend/core/Project.cpp:551 src/backend/core/Project.cpp:581
+#: src/backend/core/Project.cpp:566 src/backend/core/Project.cpp:596
 #, kde-format
 msgid "Error opening project"
 msgstr "Proje açılırken hata oluştu"
 
-#: src/backend/core/Project.cpp:600
+#: src/backend/core/Project.cpp:615
 #, kde-format
 msgid "Unknown error when opening the project %1."
 msgstr "%1 projesini açarken bilinmeyen hata oluştu."
 
-#: src/backend/core/Project.cpp:601
+#: src/backend/core/Project.cpp:616
 #, kde-format
 msgid "Error when opening the project"
 msgstr "Proje açılırken hata oluştu"
 
-#: src/backend/core/Project.cpp:621
+#: src/backend/core/Project.cpp:636
 #, kde-format
 msgid ""
 "The project has content written with %1. Your installation of LabPlot lacks "
@@ -759,27 +764,27 @@ msgstr ""
 "\n"
 "Sürdürmek istiyor musunuz?"
 
-#: src/backend/core/Project.cpp:628 src/backend/core/Project.cpp:631
+#: src/backend/core/Project.cpp:643 src/backend/core/Project.cpp:646
 #, kde-format
 msgid "Missing Support for CAS"
 msgstr "CAS Desteği Eksik"
 
-#: src/backend/core/Project.cpp:662
+#: src/backend/core/Project.cpp:677
 #, kde-format
 msgid "Attribute 'version' is missing."
 msgstr "'version' öznitelği bulunamadı."
 
-#: src/backend/core/Project.cpp:712
+#: src/backend/core/Project.cpp:727
 #, kde-format
 msgid "no project element found"
 msgstr "proje ögesi bulunamadı"
 
-#: src/backend/core/Project.cpp:714
+#: src/backend/core/Project.cpp:729
 #, kde-format
 msgid "no valid XML document found"
 msgstr "geçerli XML belgesi bulunamadı"
 
-#: src/backend/core/Project.cpp:1133
+#: src/backend/core/Project.cpp:1148
 #, kde-format
 msgid "Invalid project modification time. Using current time."
 msgstr "Geçersiz proje değiştirme zamanı. Geçerli zaman kullanılıyor."
@@ -7548,7 +7553,7 @@ msgstr "kullanılabilir veri yok"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTitle)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:165
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5014
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5019
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:483
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:543
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:466
@@ -7954,7 +7959,7 @@ msgid "%1: load default theme"
 msgstr "%1: Öntanımlı temayı yükle"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1694
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5324
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5329
 #: src/backend/worksheet/Worksheet.cpp:818
 #, kde-format
 msgid "%1: set theme"
@@ -10875,7 +10880,7 @@ msgstr "İmleci Şuna Uygula"
 #, kde-format
 msgid "Do you really want to delete the selected object?"
 msgid_plural "Do you really want to delete the selected %1 objects?"
-msgstr[0] "Seçilen nesneyi gerçekten silmek istediğinize emin misiniz?"
+msgstr[0] "Seçilen nesneyi gerçekten silmek istediğinizden emin misiniz?"
 msgstr[1] "Seçilen %1 nesneyi silmek istediğinizden emin misiniz?"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:1464
@@ -11700,7 +11705,7 @@ msgid "Data format && preview"
 msgstr "Veri biçimi ve önizleme"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1222
-#: src/kdefrontend/SettingsGeneralPage.cpp:226
+#: src/kdefrontend/SettingsGeneralPage.cpp:234
 #, kde-format
 msgid "Automatic"
 msgstr "Otomatik"
@@ -13275,7 +13280,14 @@ msgstr "Otomatik (G)"
 msgid "%1 matrices: template \"%2\" loaded"
 msgstr "%1 matrisler: \"%2\" şablonu yüklendi"
 
-#: src/kdefrontend/dockwidgets/ProjectDock.cpp:29
+#: src/kdefrontend/dockwidgets/ProjectDock.cpp:28
+#, kde-format
+msgid ""
+"If checked, the state (position and geometry) of the docks is saved in the "
+"project file and restored on project load."
+msgstr ""
+
+#: src/kdefrontend/dockwidgets/ProjectDock.cpp:33
 #, kde-format
 msgid ""
 "If checked, the results of the calculations in the analysis curves will be "
@@ -15328,42 +15340,42 @@ msgstr "Tercihler [Değiştirildi]"
 msgid "min."
 msgstr "en küç."
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:192
+#: src/kdefrontend/SettingsGeneralPage.cpp:200
 #, kde-format
 msgid "Create New Project"
 msgstr "Yeni Proje Oluştur"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:193
+#: src/kdefrontend/SettingsGeneralPage.cpp:201
 #, kde-format
 msgid "Load Last Used Project"
 msgstr "Son Kullanılan Projeyi Yükle"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:197
+#: src/kdefrontend/SettingsGeneralPage.cpp:205
 #, kde-format
 msgid "With Worksheet"
 msgstr "Çalışma Sayfası ile"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:198
+#: src/kdefrontend/SettingsGeneralPage.cpp:206
 #, kde-format
 msgid "With Spreadsheet"
 msgstr "Hesap Tablosu ile"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:199
+#: src/kdefrontend/SettingsGeneralPage.cpp:207
 #, kde-format
 msgid "With Worksheet and Spreadsheet"
 msgstr "Çalışma Sayfası ve Hesap Tablosu ile"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:201
+#: src/kdefrontend/SettingsGeneralPage.cpp:209
 #, kde-format
 msgid "With Notebook"
 msgstr "Defter ile"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:204
+#: src/kdefrontend/SettingsGeneralPage.cpp:212
 #, kde-format
 msgid "Notebook type to create automatically on startup"
 msgstr "Başlangıçta kendiliğinden oluşturulacak defter türü"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:208
+#: src/kdefrontend/SettingsGeneralPage.cpp:216
 #, kde-format
 msgid ""
 "Controls the behavior of where the dock widgets are placed after being re-"
@@ -15372,57 +15384,57 @@ msgstr ""
 "Rıhtım araç takımlarının yeniden açıldıktan sonra nice davranacaklarını "
 "denetler"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:212
+#: src/kdefrontend/SettingsGeneralPage.cpp:220
 #, kde-format
 msgid "Original Position"
 msgstr "Özgün Konum"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:213
+#: src/kdefrontend/SettingsGeneralPage.cpp:221
 #, kde-format
 msgid "On top of the last active Dock Widget"
 msgstr "Son etkin rıhtım araç takımının üzerinde"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:216
+#: src/kdefrontend/SettingsGeneralPage.cpp:224
 #, kde-format
 msgid "Show File Path"
 msgstr "Dosya Yolunu Göster"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:217
+#: src/kdefrontend/SettingsGeneralPage.cpp:225
 #, kde-format
 msgid "Show File Name"
 msgstr "Dosya Adını Göster"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:218
+#: src/kdefrontend/SettingsGeneralPage.cpp:226
 #, kde-format
 msgid "Show Project Name"
 msgstr "Proje Adını Göster"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:220
+#: src/kdefrontend/SettingsGeneralPage.cpp:228
 #, kde-format
 msgid "Metric"
 msgstr "Metrik"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:221
+#: src/kdefrontend/SettingsGeneralPage.cpp:229
 #, kde-format
 msgid "Imperial"
 msgstr "İmparatorluk"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:223
+#: src/kdefrontend/SettingsGeneralPage.cpp:231
 #, kde-format
 msgid "Dot (.)"
 msgstr "Nokta (.)"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:224
+#: src/kdefrontend/SettingsGeneralPage.cpp:232
 #, kde-format
 msgid "Comma (,)"
 msgstr "Virgül (,)"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:225
+#: src/kdefrontend/SettingsGeneralPage.cpp:233
 #, kde-format
 msgid "Arabic (٫)"
 msgstr "Arapça (٫)"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:229
+#: src/kdefrontend/SettingsGeneralPage.cpp:237
 #, kde-format
 msgid ""
 "Use terms compliant with the <a href=\"http://www.bipm.org/utils/common/"
@@ -15432,6 +15444,36 @@ msgstr ""
 "<a href=\"http://www.bipm.org/utils/common/documents/jcgm/JCGM_100_2008_E.pdf"
 "\">Ölçümde Belirsizliğin İfadesi Kılavuzu (GUM)</a> ile uyumlu terimler "
 "kullanın"
+
+#: src/kdefrontend/SettingsGeneralPage.cpp:242
+#, kde-format
+msgid ""
+"Save the state (position and geometry) of the docks in the project file. \n"
+"Determines the default behaviour for new projects. \n"
+"The setting can be changed for every project separately in the project "
+"properties."
+msgstr ""
+
+#: src/kdefrontend/SettingsGeneralPage.cpp:249
+#, fuzzy, kde-format
+#| msgid ""
+#| "If checked, the results of the calculations in the analysis curves will "
+#| "be saved in the project file.\n"
+#| "Uncheck this option to reduce the size of the project file at costs of "
+#| "the longer project load times."
+msgid ""
+"Save the results of the calculations in the analysis curves in the project "
+"file. \n"
+"Uncheck this option to reduce the size of the project file at costs of the "
+"longer project load times. \n"
+"Determines the default behaviour for new projects. \n"
+"The setting can be changed for every project separately in the project "
+"properties."
+msgstr ""
+"İşaretlenmişse çözümleme eğrilerindeki hesaplamaların sonucu proje dosyasına "
+"kaydedilecektir.\n"
+"Proje dosyasının boyutunu daha yavaş yükleme süresi bedeliyle küçültmek için "
+"bu seçeneğin işaretini kaldırın."
 
 #: src/kdefrontend/SettingsNotebookPage.cpp:23
 #, kde-format
@@ -16878,7 +16920,7 @@ msgstr "Y hatası türü:"
 #: src/kdefrontend/ui/dockwidgets/lollipopplotdock.ui:92
 #: src/kdefrontend/ui/dockwidgets/matrixdock.ui:43
 #: src/kdefrontend/ui/dockwidgets/notedock.ui:43
-#: src/kdefrontend/ui/dockwidgets/projectdock.ui:228
+#: src/kdefrontend/ui/dockwidgets/projectdock.ui:243
 #: src/kdefrontend/ui/dockwidgets/qqplotdock.ui:99
 #: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:119
 #: src/kdefrontend/ui/dockwidgets/referencerangedock.ui:56
@@ -16928,7 +16970,7 @@ msgstr "Açıklama:"
 #: src/kdefrontend/ui/dockwidgets/lollipopplotdock.ui:112
 #: src/kdefrontend/ui/dockwidgets/matrixdock.ui:17
 #: src/kdefrontend/ui/dockwidgets/notedock.ui:17
-#: src/kdefrontend/ui/dockwidgets/projectdock.ui:194
+#: src/kdefrontend/ui/dockwidgets/projectdock.ui:107
 #: src/kdefrontend/ui/dockwidgets/qqplotdock.ui:55
 #: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:190
 #: src/kdefrontend/ui/dockwidgets/referencerangedock.ui:112
@@ -18294,7 +18336,7 @@ msgstr "Şuradan içe aktar:"
 #. i18n: ectx: property (text), widget (QLabel, lDecimalSeparator)
 #: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:91
 #: src/kdefrontend/ui/datasources/jsonoptionswidget.ui:76
-#: src/kdefrontend/ui/settingsgeneralpage.ui:120
+#: src/kdefrontend/ui/settingsgeneralpage.ui:24
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:152
 #, kde-format
 msgid "Decimal separator:"
@@ -19873,7 +19915,7 @@ msgstr "Konular"
 #. i18n: ectx: property (text), widget (QLabel, lAutoSaveInterval)
 #. i18n: ectx: property (text), widget (QLabel, lUpdateInterval)
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:113
-#: src/kdefrontend/ui/settingsgeneralpage.ui:219
+#: src/kdefrontend/ui/settingsgeneralpage.ui:108
 #, kde-format
 msgid "Interval:"
 msgstr "Aralık:"
@@ -19952,49 +19994,56 @@ msgstr "Arka plan rengi:"
 msgid "Text color:"
 msgstr "Metin rengi:"
 
-#. i18n: ectx: property (text), widget (QLabel, lSettings)
-#: src/kdefrontend/ui/dockwidgets/projectdock.ui:140
+#. i18n: ectx: property (text), widget (QLabel, lVersion_2)
+#: src/kdefrontend/ui/dockwidgets/projectdock.ui:66
 #, kde-format
-msgid "Settings:"
-msgstr "Ayarlar:"
+msgid "Version:"
+msgstr "Sürüm:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: src/kdefrontend/ui/dockwidgets/projectdock.ui:73
+#, kde-format
+msgid "Created:"
+msgstr "Oluşturulma:"
+
+#. i18n: ectx: property (text), widget (QLabel, lSaveDockStates)
+#: src/kdefrontend/ui/dockwidgets/projectdock.ui:80
+#: src/kdefrontend/ui/settingsgeneralpage.ui:41
+#, kde-format
+msgid "Save Dock States:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
-#: src/kdefrontend/ui/dockwidgets/projectdock.ui:147
+#: src/kdefrontend/ui/dockwidgets/projectdock.ui:100
 #, kde-format
 msgid "Modified:"
 msgstr "Değiştirilme:"
 
-#. i18n: ectx: property (text), widget (QLabel, lSaveCalculations)
-#: src/kdefrontend/ui/dockwidgets/projectdock.ui:154
-#, kde-format
-msgid "Save Calculations:"
-msgstr "Hesaplamaları kaydet:"
-
 #. i18n: ectx: property (text), widget (QLabel, lFileName)
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: src/kdefrontend/ui/dockwidgets/projectdock.ui:174
+#: src/kdefrontend/ui/dockwidgets/projectdock.ui:114
 #: src/kdefrontend/ui/worksheet/exportworksheetwidget.ui:49
 #, kde-format
 msgid "File Name:"
 msgstr "Dosya adı:"
 
-#. i18n: ectx: property (text), widget (QLabel, lVersion_2)
-#: src/kdefrontend/ui/dockwidgets/projectdock.ui:201
+#. i18n: ectx: property (text), widget (QLabel, lSettings)
+#: src/kdefrontend/ui/dockwidgets/projectdock.ui:202
 #, kde-format
-msgid "Version:"
-msgstr "Sürüm:"
+msgid "Settings:"
+msgstr "Ayarlar:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: src/kdefrontend/ui/dockwidgets/projectdock.ui:221
+#: src/kdefrontend/ui/dockwidgets/projectdock.ui:209
 #, kde-format
 msgid "Author:"
 msgstr "Yazar:"
 
-#. i18n: ectx: property (text), widget (QLabel, label_5)
-#: src/kdefrontend/ui/dockwidgets/projectdock.ui:238
+#. i18n: ectx: property (text), widget (QLabel, lSaveCalculations)
+#: src/kdefrontend/ui/dockwidgets/projectdock.ui:253
 #, kde-format
-msgid "Created:"
-msgstr "Oluşturulma:"
+msgid "Save Calculations:"
+msgstr "Hesaplamaları kaydet:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDistribution)
 #: src/kdefrontend/ui/dockwidgets/qqplotdock.ui:109
@@ -20032,9 +20081,13 @@ msgid "Start x:"
 msgstr "X başlangıcı:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoSave)
+#. i18n: ectx: property (text), widget (QCheckBox, chkSaveDockStates)
+#. i18n: ectx: property (text), widget (QCheckBox, chkSaveCalculations)
 #. i18n: ectx: property (text), widget (QLabel, lLinkingEnabled)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:17
-#: src/kdefrontend/ui/settingsgeneralpage.ui:196
+#: src/kdefrontend/ui/settingsgeneralpage.ui:85
+#: src/kdefrontend/ui/settingsgeneralpage.ui:324
+#: src/kdefrontend/ui/settingsgeneralpage.ui:331
 #, kde-format
 msgid "Enabled"
 msgstr "Etkin"
@@ -21292,56 +21345,48 @@ msgstr "Toplam boyut - "
 msgid "Clear"
 msgstr "Temizle"
 
-#. i18n: ectx: property (text), widget (QLabel, lTitleBar)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:17
-#, kde-format
-msgid "Title Bar:"
-msgstr "Başlık çubuğu:"
-
-#. i18n: ectx: property (text), widget (QLabel, lAutoSave)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:24
-#, kde-format
-msgid "Auto-save:"
-msgstr "Otomatik kaydet:"
-
-#. i18n: ectx: property (text), widget (QLabel, lCompatible)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:37
-#, kde-format
-msgid "Compatibility:"
-msgstr "Uyumluluk:"
-
-#. i18n: ectx: property (text), widget (QLabel, lUnits)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:44
-#, kde-format
-msgid "Units:"
-msgstr "Birimler:"
-
-#. i18n: ectx: property (text), widget (QLabel, lNewProjectNotebook)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:73
-#, kde-format
-msgid "Notebook:"
-msgstr "Defter:"
-
-#. i18n: ectx: property (text), widget (QLabel, lNewProject)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:96
-#, kde-format
-msgid "New Project:"
-msgstr "Yeni proje:"
-
-#. i18n: ectx: property (text), widget (QLabel, lGUMTerms)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:106
-#, kde-format
-msgid "Terms:"
-msgstr "Terimler:"
-
 #. i18n: ectx: property (text), widget (QCheckBox, chkOmitLeadingZeroInExponent)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:113
+#: src/kdefrontend/ui/settingsgeneralpage.ui:17
 #, kde-format
 msgid "Omit leading zero in exponent"
 msgstr "Üs içindeki ilk sıfırları at"
 
+#. i18n: ectx: property (text), widget (QLabel, lNumberOptions)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:34
+#, kde-format
+msgid "Number options:"
+msgstr "Sayı seçenekleri:"
+
+#. i18n: ectx: property (text), widget (QLabel, lSaveCalculations)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:157
+#, kde-format
+msgid "Compatibility:"
+msgstr "Uyumluluk:"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, chkCompatible)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:167
+#, kde-format
+msgid ""
+"<html><head/><body><p>Save projects in a compatible format that can be "
+"opened in LabPlot versions older than 2.9.</p></body></html>"
+msgstr ""
+"<html><head/><body><p>Projeleri LabPlot'un 2.9 sürümünden önceki sürümlerle "
+"açılabilecek uyumlu bir biçimde kaydet.</p></body></html>"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkCompatible)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:170
+#, kde-format
+msgid "Save in compatible format"
+msgstr "Uyumlu biçimde kaydet"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkOmitGroupSeparator)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:177
+#, kde-format
+msgid "Omit group separator"
+msgstr "Grup ayırıcısını at"
+
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkGUMTerms)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:127
+#: src/kdefrontend/ui/settingsgeneralpage.ui:219
 #, kde-format
 msgid ""
 "<html><head/><body><p>Use terms compliant with the <a href=\"http://www.bipm."
@@ -21355,56 +21400,71 @@ msgstr ""
 "uyumlu terimler kullanın</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkGUMTerms)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:130
+#: src/kdefrontend/ui/settingsgeneralpage.ui:222
 #, kde-format
 msgid "GUM compliant"
 msgstr "GUM uyumlu"
 
+#. i18n: ectx: property (text), widget (QLabel, lNewProject)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:229
+#, kde-format
+msgid "New Project:"
+msgstr "Yeni proje:"
+
+#. i18n: ectx: property (text), widget (QLabel, lUnits)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:239
+#, kde-format
+msgid "Units:"
+msgstr "Birimler:"
+
+#. i18n: ectx: property (text), widget (QLabel, lAutoSave)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:268
+#, kde-format
+msgid "Auto-save:"
+msgstr "Otomatik kaydet:"
+
+#. i18n: ectx: property (text), widget (QLabel, lGUMTerms)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:275
+#, kde-format
+msgid "Terms:"
+msgstr "Terimler:"
+
+#. i18n: ectx: property (text), widget (QLabel, lTitleBar)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:282
+#, kde-format
+msgid "Title Bar:"
+msgstr "Başlık çubuğu:"
+
 #. i18n: ectx: property (text), widget (QLabel, lStartup)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:137
+#: src/kdefrontend/ui/settingsgeneralpage.ui:289
 #, kde-format
 msgid "Startup:"
 msgstr "Başlangıç:"
 
+#. i18n: ectx: property (text), widget (QLabel, lDockWindowPositionReopen)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:296
+#, kde-format
+msgid "Dock widget placement:"
+msgstr "Rıhtım araç takımı konumlandırması:"
+
+#. i18n: ectx: property (text), widget (QLabel, lNewProjectNotebook)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:303
+#, kde-format
+msgid "Notebook:"
+msgstr "Defter:"
+
 #. i18n: ectx: property (text), widget (QCheckBox, chkIncludeTrailingZeroesAfterDot)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:144
+#: src/kdefrontend/ui/settingsgeneralpage.ui:310
 #, kde-format
 msgid "Include trailing zeroes after dot"
 msgstr "Noktadan sonra gelen sıfırları içer"
 
-#. i18n: ectx: property (text), widget (QLabel, lNumberOptions)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:151
-#, kde-format
-msgid "Number options:"
-msgstr "Sayı seçenekleri:"
-
-#. i18n: ectx: property (toolTip), widget (QCheckBox, chkCompatible)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:158
-#, kde-format
-msgid ""
-"<html><head/><body><p>Save projects in a compatible format that can be "
-"opened in LabPlot versions older than 2.9.</p></body></html>"
-msgstr ""
-"<html><head/><body><p>Projeleri LabPlot'un 2.9 sürümünden önceki sürümlerle "
-"açılabilecek uyumlu bir biçimde kaydet.</p></body></html>"
-
-#. i18n: ectx: property (text), widget (QCheckBox, chkCompatible)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:161
-#, kde-format
-msgid "Save in compatible format"
-msgstr "Uyumlu biçimde kaydet"
-
-#. i18n: ectx: property (text), widget (QCheckBox, chkOmitGroupSeparator)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:168
-#, kde-format
-msgid "Omit group separator"
-msgstr "Grup ayırıcısını at"
-
-#. i18n: ectx: property (text), widget (QLabel, lDockWindowPositionReopen)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:287
-#, kde-format
-msgid "Dock widget placement:"
-msgstr "Rıhtım araç takımı konumlandırması:"
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:317
+#, fuzzy, kde-format
+#| msgid "Save Calculations:"
+msgid "Save  Calculations:"
+msgstr "Hesaplamaları kaydet:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode_2)

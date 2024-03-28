@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-19 01:39+0000\n"
+"POT-Creation-Date: 2024-03-23 01:36+0000\n"
 "PO-Revision-Date: 2017-04-20 14:04+0200\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -451,7 +451,7 @@ msgid "incompatible filter type"
 msgstr "ασύμβατος τύπος φίλτρου"
 
 #: src/backend/core/AbstractSimpleFilter.cpp:366
-#: src/backend/core/Folder.cpp:151 src/backend/core/Project.cpp:705
+#: src/backend/core/Folder.cpp:151 src/backend/core/Project.cpp:720
 #: src/backend/datasources/MQTTClient.cpp:1376
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:283
@@ -725,60 +725,65 @@ msgstr "Δεν φορτώθηκε ακόμη."
 
 #. i18n: ectx: ToolBar (main_toolbar)
 #. i18n: ectx: property (title), widget (QGroupBox, gbProject)
-#: src/backend/core/Project.cpp:168 src/backend/core/Project.cpp:184
-#: src/kdefrontend/labplot2ui.rc:6
+#: src/backend/core/Project.cpp:169 src/kdefrontend/labplot2ui.rc:6
 #: src/kdefrontend/ui/datasources/importprojectwidget.ui:17
 #, kde-format
 msgid "Project"
 msgstr ""
 
-#: src/backend/core/Project.cpp:249
+#: src/backend/core/Project.cpp:250
 #, fuzzy, kde-format
 #| msgid "&Close"
 msgid "Close"
 msgstr "&Κλείσιμο"
 
-#: src/backend/core/Project.cpp:284
+#: src/backend/core/Project.cpp:286
 #, fuzzy, kde-format
 #| msgid "%1: set formula"
 msgid "%1: set author"
 msgstr "%1: ορισμός τύπου"
 
-#: src/backend/core/Project.cpp:291
+#: src/backend/core/Project.cpp:293
+#, fuzzy, kde-format
+#| msgid "%1: set formula"
+msgid "%1: save dock states changed"
+msgstr "%1: ορισμός τύπου"
+
+#: src/backend/core/Project.cpp:300
 #, fuzzy, kde-format
 #| msgid "%1: set formula"
 msgid "%1: save calculation changed"
 msgstr "%1: ορισμός τύπου"
 
-#: src/backend/core/Project.cpp:540 src/backend/core/Project.cpp:574
+#: src/backend/core/Project.cpp:555 src/backend/core/Project.cpp:589
 #, kde-format
 msgid "Sorry. Could not open file for reading."
 msgstr "Αδυναμία ανοίγματος αρχείου για ανάγνωση."
 
-#: src/backend/core/Project.cpp:551 src/backend/core/Project.cpp:581
+#: src/backend/core/Project.cpp:566 src/backend/core/Project.cpp:596
 #, fuzzy, kde-format
 #| msgid "The project file %1 is already opened."
 msgid "The project file is empty."
 msgstr "το αρχείο %1 του έργου είναι ήδη ανοιχτό."
 
-#: src/backend/core/Project.cpp:551 src/backend/core/Project.cpp:581
+#: src/backend/core/Project.cpp:566 src/backend/core/Project.cpp:596
 #, fuzzy, kde-format
 #| msgid "Error when opening the project"
 msgid "Error opening project"
 msgstr "Σφάλμα κατά το άνοιγμα του έργου"
 
-#: src/backend/core/Project.cpp:600
+#: src/backend/core/Project.cpp:615
 #, fuzzy, kde-format
 #| msgid "Error when opening the project"
 msgid "Unknown error when opening the project %1."
 msgstr "Σφάλμα κατά το άνοιγμα του έργου"
 
-#: src/backend/core/Project.cpp:601
+#: src/backend/core/Project.cpp:616
 #, kde-format
 msgid "Error when opening the project"
 msgstr "Σφάλμα κατά το άνοιγμα του έργου"
 
-#: src/backend/core/Project.cpp:621
+#: src/backend/core/Project.cpp:636
 #, kde-format
 msgid ""
 "The project has content written with %1. Your installation of LabPlot lacks "
@@ -790,27 +795,27 @@ msgid ""
 "Do you want to continue?"
 msgstr ""
 
-#: src/backend/core/Project.cpp:628 src/backend/core/Project.cpp:631
+#: src/backend/core/Project.cpp:643 src/backend/core/Project.cpp:646
 #, kde-format
 msgid "Missing Support for CAS"
 msgstr ""
 
-#: src/backend/core/Project.cpp:662
+#: src/backend/core/Project.cpp:677
 #, kde-format
 msgid "Attribute 'version' is missing."
 msgstr ""
 
-#: src/backend/core/Project.cpp:712
+#: src/backend/core/Project.cpp:727
 #, kde-format
 msgid "no project element found"
 msgstr ""
 
-#: src/backend/core/Project.cpp:714
+#: src/backend/core/Project.cpp:729
 #, kde-format
 msgid "no valid XML document found"
 msgstr ""
 
-#: src/backend/core/Project.cpp:1133
+#: src/backend/core/Project.cpp:1148
 #, kde-format
 msgid "Invalid project modification time. Using current time."
 msgstr ""
@@ -7780,7 +7785,7 @@ msgstr "Διακύμανση"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTitle)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:165
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5014
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5019
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:483
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:543
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:466
@@ -8218,7 +8223,7 @@ msgid "%1: load default theme"
 msgstr "%1: ορισμός τύπου"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1694
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5324
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5329
 #: src/backend/worksheet/Worksheet.cpp:818
 #, fuzzy, kde-format
 #| msgid "%1: set formula"
@@ -12110,7 +12115,7 @@ msgid "Data format && preview"
 msgstr ""
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1222
-#: src/kdefrontend/SettingsGeneralPage.cpp:226
+#: src/kdefrontend/SettingsGeneralPage.cpp:234
 #, kde-format
 msgid "Automatic"
 msgstr ""
@@ -13690,7 +13695,14 @@ msgstr ""
 msgid "%1 matrices: template \"%2\" loaded"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/ProjectDock.cpp:29
+#: src/kdefrontend/dockwidgets/ProjectDock.cpp:28
+#, kde-format
+msgid ""
+"If checked, the state (position and geometry) of the docks is saved in the "
+"project file and restored on project load."
+msgstr ""
+
+#: src/kdefrontend/dockwidgets/ProjectDock.cpp:33
 #, kde-format
 msgid ""
 "If checked, the results of the calculations in the analysis curves will be "
@@ -15867,115 +15879,136 @@ msgstr "Το %1    [άλλαξε]"
 msgid "min."
 msgstr "min."
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:192
+#: src/kdefrontend/SettingsGeneralPage.cpp:200
 #, fuzzy, kde-format
 #| msgid "Create new empty project"
 msgid "Create New Project"
 msgstr "Δημιουργία νέου κενού έργου"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:193
+#: src/kdefrontend/SettingsGeneralPage.cpp:201
 #, fuzzy, kde-format
 #| msgid "Load last used project"
 msgid "Load Last Used Project"
 msgstr "Φόρτωση τελευταίου έργου"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:197
+#: src/kdefrontend/SettingsGeneralPage.cpp:205
 #, fuzzy, kde-format
 #| msgid "&Worksheet"
 msgid "With Worksheet"
 msgstr "&Φύλλο εργασίας"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:198
+#: src/kdefrontend/SettingsGeneralPage.cpp:206
 #, fuzzy, kde-format
 #| msgid "&Spreadsheet"
 msgid "With Spreadsheet"
 msgstr "Λογι&στικό φύλλο"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:199
+#: src/kdefrontend/SettingsGeneralPage.cpp:207
 #, fuzzy, kde-format
 #| msgid "%1: set value for row %2"
 msgid "With Worksheet and Spreadsheet"
 msgstr "%1: ορισμός τιμής για τη γραμμή %2"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:201
+#: src/kdefrontend/SettingsGeneralPage.cpp:209
 #, fuzzy, kde-format
 #| msgid "Workbook"
 msgid "With Notebook"
 msgstr "Βιβλίο εργασίας"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:204
+#: src/kdefrontend/SettingsGeneralPage.cpp:212
 #, kde-format
 msgid "Notebook type to create automatically on startup"
 msgstr ""
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:208
+#: src/kdefrontend/SettingsGeneralPage.cpp:216
 #, kde-format
 msgid ""
 "Controls the behavior of where the dock widgets are placed after being re-"
 "opened"
 msgstr ""
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:212
+#: src/kdefrontend/SettingsGeneralPage.cpp:220
 #, fuzzy, kde-format
 #| msgid "Tab position"
 msgid "Original Position"
 msgstr "Θέση καρτέλας"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:213
+#: src/kdefrontend/SettingsGeneralPage.cpp:221
 #, kde-format
 msgid "On top of the last active Dock Widget"
 msgstr ""
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:216
+#: src/kdefrontend/SettingsGeneralPage.cpp:224
 #, fuzzy, kde-format
 #| msgid "Show"
 msgid "Show File Path"
 msgstr "Εμφάνιση"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:217
+#: src/kdefrontend/SettingsGeneralPage.cpp:225
 #, fuzzy, kde-format
 #| msgid "File name"
 msgid "Show File Name"
 msgstr "Όνομα αρχείου"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:218
+#: src/kdefrontend/SettingsGeneralPage.cpp:226
 #, fuzzy, kde-format
 #| msgid "Project saved"
 msgid "Show Project Name"
 msgstr "Το έργο αποθηκεύτηκε"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:220
+#: src/kdefrontend/SettingsGeneralPage.cpp:228
 #, fuzzy, kde-format
 #| msgid "Parameter"
 msgid "Metric"
 msgstr "Παράμετρος"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:221
+#: src/kdefrontend/SettingsGeneralPage.cpp:229
 #, kde-format
 msgid "Imperial"
 msgstr ""
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:223
+#: src/kdefrontend/SettingsGeneralPage.cpp:231
 #, kde-format
 msgid "Dot (.)"
 msgstr ""
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:224
+#: src/kdefrontend/SettingsGeneralPage.cpp:232
 #, kde-format
 msgid "Comma (,)"
 msgstr ""
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:225
+#: src/kdefrontend/SettingsGeneralPage.cpp:233
 #, kde-format
 msgid "Arabic (٫)"
 msgstr ""
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:229
+#: src/kdefrontend/SettingsGeneralPage.cpp:237
 #, kde-format
 msgid ""
 "Use terms compliant with the <a href=\"http://www.bipm.org/utils/common/"
 "documents/jcgm/JCGM_100_2008_E.pdf\">Guide to the Expression of Uncertainty "
 "in Measurement (GUM)</a>"
+msgstr ""
+
+#: src/kdefrontend/SettingsGeneralPage.cpp:242
+#, kde-format
+msgid ""
+"Save the state (position and geometry) of the docks in the project file. \n"
+"Determines the default behaviour for new projects. \n"
+"The setting can be changed for every project separately in the project "
+"properties."
+msgstr ""
+
+#: src/kdefrontend/SettingsGeneralPage.cpp:249
+#, kde-format
+msgid ""
+"Save the results of the calculations in the analysis curves in the project "
+"file. \n"
+"Uncheck this option to reduce the size of the project file at costs of the "
+"longer project load times. \n"
+"Determines the default behaviour for new projects. \n"
+"The setting can be changed for every project separately in the project "
+"properties."
 msgstr ""
 
 #: src/kdefrontend/SettingsNotebookPage.cpp:23
@@ -17490,7 +17523,7 @@ msgstr "Τύπος σφάλματος"
 #: src/kdefrontend/ui/dockwidgets/lollipopplotdock.ui:92
 #: src/kdefrontend/ui/dockwidgets/matrixdock.ui:43
 #: src/kdefrontend/ui/dockwidgets/notedock.ui:43
-#: src/kdefrontend/ui/dockwidgets/projectdock.ui:228
+#: src/kdefrontend/ui/dockwidgets/projectdock.ui:243
 #: src/kdefrontend/ui/dockwidgets/qqplotdock.ui:99
 #: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:119
 #: src/kdefrontend/ui/dockwidgets/referencerangedock.ui:56
@@ -17540,7 +17573,7 @@ msgstr "Σχόλιο:"
 #: src/kdefrontend/ui/dockwidgets/lollipopplotdock.ui:112
 #: src/kdefrontend/ui/dockwidgets/matrixdock.ui:17
 #: src/kdefrontend/ui/dockwidgets/notedock.ui:17
-#: src/kdefrontend/ui/dockwidgets/projectdock.ui:194
+#: src/kdefrontend/ui/dockwidgets/projectdock.ui:107
 #: src/kdefrontend/ui/dockwidgets/qqplotdock.ui:55
 #: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:190
 #: src/kdefrontend/ui/dockwidgets/referencerangedock.ui:112
@@ -18966,7 +18999,7 @@ msgstr "Εισαγωγή"
 #. i18n: ectx: property (text), widget (QLabel, lDecimalSeparator)
 #: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:91
 #: src/kdefrontend/ui/datasources/jsonoptionswidget.ui:76
-#: src/kdefrontend/ui/settingsgeneralpage.ui:120
+#: src/kdefrontend/ui/settingsgeneralpage.ui:24
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:152
 #, fuzzy, kde-format
 #| msgid "Interm. points"
@@ -20643,7 +20676,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, lAutoSaveInterval)
 #. i18n: ectx: property (text), widget (QLabel, lUpdateInterval)
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:113
-#: src/kdefrontend/ui/settingsgeneralpage.ui:219
+#: src/kdefrontend/ui/settingsgeneralpage.ui:108
 #, fuzzy, kde-format
 #| msgid "Integration:"
 msgid "Interval:"
@@ -20732,56 +20765,64 @@ msgstr "Χρώμα παρασκηνίου"
 msgid "Text color:"
 msgstr "Χρώμα κειμένου"
 
-#. i18n: ectx: property (text), widget (QLabel, lSettings)
-#: src/kdefrontend/ui/dockwidgets/projectdock.ui:140
+#. i18n: ectx: property (text), widget (QLabel, lVersion_2)
+#: src/kdefrontend/ui/dockwidgets/projectdock.ui:66
 #, fuzzy, kde-format
-#| msgid "Number of levels"
-msgid "Settings:"
-msgstr "Πλήθος επιπέδων"
+#| msgid "Dimensions:"
+msgid "Version:"
+msgstr "Διαστάσεις:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: src/kdefrontend/ui/dockwidgets/projectdock.ui:73
+#, fuzzy, kde-format
+#| msgid "Created"
+msgid "Created:"
+msgstr "Δημιουργήθηκε"
+
+#. i18n: ectx: property (text), widget (QLabel, lSaveDockStates)
+#: src/kdefrontend/ui/dockwidgets/projectdock.ui:80
+#: src/kdefrontend/ui/settingsgeneralpage.ui:41
+#, fuzzy, kde-format
+#| msgid "Save project as"
+msgid "Save Dock States:"
+msgstr "Αποθήκευση έργου ως"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
-#: src/kdefrontend/ui/dockwidgets/projectdock.ui:147
+#: src/kdefrontend/ui/dockwidgets/projectdock.ui:100
 #, fuzzy, kde-format
 #| msgid "Last modified"
 msgid "Modified:"
 msgstr "Τελευταία αλλαγή"
 
-#. i18n: ectx: property (text), widget (QLabel, lSaveCalculations)
-#: src/kdefrontend/ui/dockwidgets/projectdock.ui:154
-#, fuzzy, kde-format
-#| msgid "Tab position"
-msgid "Save Calculations:"
-msgstr "Θέση καρτέλας"
-
 #. i18n: ectx: property (text), widget (QLabel, lFileName)
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: src/kdefrontend/ui/dockwidgets/projectdock.ui:174
+#: src/kdefrontend/ui/dockwidgets/projectdock.ui:114
 #: src/kdefrontend/ui/worksheet/exportworksheetwidget.ui:49
 #, fuzzy, kde-format
 #| msgid "File name"
 msgid "File Name:"
 msgstr "Όνομα αρχείου"
 
-#. i18n: ectx: property (text), widget (QLabel, lVersion_2)
-#: src/kdefrontend/ui/dockwidgets/projectdock.ui:201
+#. i18n: ectx: property (text), widget (QLabel, lSettings)
+#: src/kdefrontend/ui/dockwidgets/projectdock.ui:202
 #, fuzzy, kde-format
-#| msgid "Dimensions:"
-msgid "Version:"
-msgstr "Διαστάσεις:"
+#| msgid "Number of levels"
+msgid "Settings:"
+msgstr "Πλήθος επιπέδων"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: src/kdefrontend/ui/dockwidgets/projectdock.ui:221
+#: src/kdefrontend/ui/dockwidgets/projectdock.ui:209
 #, fuzzy, kde-format
 #| msgid "Author"
 msgid "Author:"
 msgstr "Συγγραφέας"
 
-#. i18n: ectx: property (text), widget (QLabel, label_5)
-#: src/kdefrontend/ui/dockwidgets/projectdock.ui:238
+#. i18n: ectx: property (text), widget (QLabel, lSaveCalculations)
+#: src/kdefrontend/ui/dockwidgets/projectdock.ui:253
 #, fuzzy, kde-format
-#| msgid "Created"
-msgid "Created:"
-msgstr "Δημιουργήθηκε"
+#| msgid "Tab position"
+msgid "Save Calculations:"
+msgstr "Θέση καρτέλας"
 
 #. i18n: ectx: property (text), widget (QLabel, lDistribution)
 #: src/kdefrontend/ui/dockwidgets/qqplotdock.ui:109
@@ -20824,9 +20865,13 @@ msgid "Start x:"
 msgstr "Έναρξη"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoSave)
+#. i18n: ectx: property (text), widget (QCheckBox, chkSaveDockStates)
+#. i18n: ectx: property (text), widget (QCheckBox, chkSaveCalculations)
 #. i18n: ectx: property (text), widget (QLabel, lLinkingEnabled)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:17
-#: src/kdefrontend/ui/settingsgeneralpage.ui:196
+#: src/kdefrontend/ui/settingsgeneralpage.ui:85
+#: src/kdefrontend/ui/settingsgeneralpage.ui:324
+#: src/kdefrontend/ui/settingsgeneralpage.ui:331
 #, kde-format
 msgid "Enabled"
 msgstr "Ενεργό"
@@ -22172,62 +22217,50 @@ msgstr ""
 msgid "Clear"
 msgstr "Καθαρισμός"
 
-#. i18n: ectx: property (text), widget (QLabel, lTitleBar)
+#. i18n: ectx: property (text), widget (QCheckBox, chkOmitLeadingZeroInExponent)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:17
-#, fuzzy, kde-format
-#| msgid "Title"
-msgid "Title Bar:"
-msgstr "Τίτλος"
+#, kde-format
+msgid "Omit leading zero in exponent"
+msgstr ""
 
-#. i18n: ectx: property (text), widget (QLabel, lAutoSave)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:24
+#. i18n: ectx: property (text), widget (QLabel, lNumberOptions)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:34
 #, fuzzy, kde-format
-#| msgid "Scale"
-msgid "Auto-save:"
-msgstr "Κλίμακα"
+#| msgid "Number of levels"
+msgid "Number options:"
+msgstr "Πλήθος επιπέδων"
 
-#. i18n: ectx: property (text), widget (QLabel, lCompatible)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:37
+#. i18n: ectx: property (text), widget (QLabel, lSaveCalculations)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:157
 #, fuzzy, kde-format
 #| msgid "Continuity"
 msgid "Compatibility:"
 msgstr "Συνέχεια:"
 
-#. i18n: ectx: property (text), widget (QLabel, lUnits)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:44
-#, fuzzy, kde-format
-#| msgid "Unit"
-msgid "Units:"
-msgstr "Μονάδα"
-
-#. i18n: ectx: property (text), widget (QLabel, lNewProjectNotebook)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:73
-#, fuzzy, kde-format
-#| msgid "Workbook"
-msgid "Notebook:"
-msgstr "Βιβλίο εργασίας"
-
-#. i18n: ectx: property (text), widget (QLabel, lNewProject)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:96
-#, fuzzy, kde-format
-#| msgid "Save Project"
-msgid "New Project:"
-msgstr "Αποθήκευση έργου"
-
-#. i18n: ectx: property (text), widget (QLabel, lGUMTerms)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:106
+#. i18n: ectx: property (toolTip), widget (QCheckBox, chkCompatible)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:167
 #, kde-format
-msgid "Terms:"
+msgid ""
+"<html><head/><body><p>Save projects in a compatible format that can be "
+"opened in LabPlot versions older than 2.9.</p></body></html>"
 msgstr ""
 
-#. i18n: ectx: property (text), widget (QCheckBox, chkOmitLeadingZeroInExponent)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:113
-#, kde-format
-msgid "Omit leading zero in exponent"
-msgstr ""
+#. i18n: ectx: property (text), widget (QCheckBox, chkCompatible)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:170
+#, fuzzy, kde-format
+#| msgid "incompatible filter type"
+msgid "Save in compatible format"
+msgstr "ασύμβατος τύπος φίλτρου"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkOmitGroupSeparator)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:177
+#, fuzzy, kde-format
+#| msgid "Max. iterations"
+msgid "Omit group separator"
+msgstr "Max. επαναλήψεις"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkGUMTerms)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:127
+#: src/kdefrontend/ui/settingsgeneralpage.ui:219
 #, kde-format
 msgid ""
 "<html><head/><body><p>Use terms compliant with the <a href=\"http://www.bipm."
@@ -22237,58 +22270,77 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkGUMTerms)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:130
+#: src/kdefrontend/ui/settingsgeneralpage.ui:222
 #, kde-format
 msgid "GUM compliant"
 msgstr ""
 
+#. i18n: ectx: property (text), widget (QLabel, lNewProject)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:229
+#, fuzzy, kde-format
+#| msgid "Save Project"
+msgid "New Project:"
+msgstr "Αποθήκευση έργου"
+
+#. i18n: ectx: property (text), widget (QLabel, lUnits)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:239
+#, fuzzy, kde-format
+#| msgid "Unit"
+msgid "Units:"
+msgstr "Μονάδα"
+
+#. i18n: ectx: property (text), widget (QLabel, lAutoSave)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:268
+#, fuzzy, kde-format
+#| msgid "Scale"
+msgid "Auto-save:"
+msgstr "Κλίμακα"
+
+#. i18n: ectx: property (text), widget (QLabel, lGUMTerms)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:275
+#, kde-format
+msgid "Terms:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lTitleBar)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:282
+#, fuzzy, kde-format
+#| msgid "Title"
+msgid "Title Bar:"
+msgstr "Τίτλος"
+
 #. i18n: ectx: property (text), widget (QLabel, lStartup)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:137
+#: src/kdefrontend/ui/settingsgeneralpage.ui:289
 #, fuzzy, kde-format
 #| msgid "Start"
 msgid "Startup:"
 msgstr "Έναρξη"
 
+#. i18n: ectx: property (text), widget (QLabel, lDockWindowPositionReopen)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:296
+#, kde-format
+msgid "Dock widget placement:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lNewProjectNotebook)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:303
+#, fuzzy, kde-format
+#| msgid "Workbook"
+msgid "Notebook:"
+msgstr "Βιβλίο εργασίας"
+
 #. i18n: ectx: property (text), widget (QCheckBox, chkIncludeTrailingZeroesAfterDot)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:144
+#: src/kdefrontend/ui/settingsgeneralpage.ui:310
 #, kde-format
 msgid "Include trailing zeroes after dot"
 msgstr ""
 
-#. i18n: ectx: property (text), widget (QLabel, lNumberOptions)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:151
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:317
 #, fuzzy, kde-format
-#| msgid "Number of levels"
-msgid "Number options:"
-msgstr "Πλήθος επιπέδων"
-
-#. i18n: ectx: property (toolTip), widget (QCheckBox, chkCompatible)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:158
-#, kde-format
-msgid ""
-"<html><head/><body><p>Save projects in a compatible format that can be "
-"opened in LabPlot versions older than 2.9.</p></body></html>"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QCheckBox, chkCompatible)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:161
-#, fuzzy, kde-format
-#| msgid "incompatible filter type"
-msgid "Save in compatible format"
-msgstr "ασύμβατος τύπος φίλτρου"
-
-#. i18n: ectx: property (text), widget (QCheckBox, chkOmitGroupSeparator)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:168
-#, fuzzy, kde-format
-#| msgid "Max. iterations"
-msgid "Omit group separator"
-msgstr "Max. επαναλήψεις"
-
-#. i18n: ectx: property (text), widget (QLabel, lDockWindowPositionReopen)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:287
-#, kde-format
-msgid "Dock widget placement:"
-msgstr ""
+#| msgid "Tab position"
+msgid "Save  Calculations:"
+msgstr "Θέση καρτέλας"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode_2)
@@ -25021,9 +25073,6 @@ msgstr "Σύνδεση:"
 
 #~ msgid "Project explorer"
 #~ msgstr "Εξερευνητής έργων"
-
-#~ msgid "Save project as"
-#~ msgstr "Αποθήκευση έργου ως"
 
 #, fuzzy
 #~| msgid "no folder element found"

@@ -4828,7 +4828,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			if (str.isEmpty())
 				reader->raiseMissingAttributeWarning(QStringLiteral("xIndex"));
 			else {
-				CartesianCoordinateSystem* cSystem{new CartesianCoordinateSystem(this)};
+				auto* cSystem = new CartesianCoordinateSystem(this);
 				cSystem->setIndex(Dimension::X, str.toInt());
 
 				str = attribs.value(QStringLiteral("yIndex")).toString();
@@ -4924,6 +4924,11 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				str = attribs.value(QStringLiteral("yRangeDateTimeFormat")).toString();
 				if (!str.isEmpty())
 					d->yRanges[0].range.setDateTimeFormat(str);
+
+				auto* cSystem = new CartesianCoordinateSystem(this);
+				cSystem->setIndex(Dimension::X, 0);
+				cSystem->setIndex(Dimension::Y, 0);
+				addCoordinateSystem(cSystem);
 
 				READ_DOUBLE_VALUE("horizontalPadding", horizontalPadding);
 				READ_DOUBLE_VALUE("verticalPadding", verticalPadding);

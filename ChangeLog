@@ -4,6 +4,7 @@ New features:
 		* New application theme "Dracula"
 		* New categorical color map "Dracula"
 		* New option in the application settings to run a selected CAS engine at startup
+		* New option in the application settings to control if the state of the dock widgets should be saved in the project file
 		* Share the project via email, Nextcloud, etc. directly from the main menu
 	* [worksheet]
 		* Preview panel for all available worksheets in the project
@@ -54,6 +55,7 @@ New features:
 Performance improvements:
 	* Make baseline removal much faster by using Eigen3 library (optional dependency)
 	* Refactor formula parsing including better error handling
+	* Reduced the memory consumption during the import of BLF files.
 
 Bug fixes:
 	* Set mousemode to selection when leaving the plot (Issue #614)
