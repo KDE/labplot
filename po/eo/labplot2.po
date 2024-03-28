@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-03-25 01:58+0000\n"
-"PO-Revision-Date: 2024-03-23 10:43+0100\n"
+"PO-Revision-Date: 2024-03-27 19:34+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -9696,7 +9696,7 @@ msgstr "Plenigi la matricon kun konstanta valoro"
 #: src/commonfrontend/matrix/MatrixView.cpp:638
 #, kde-format
 msgid "%1: cut selected cell(s)"
-msgstr "%1: tranĉi elektitan ĉelon(j)"
+msgstr "%1: tranĉi elektita(j)n ĉelo(j)n"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:689
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1773
@@ -9717,12 +9717,12 @@ msgstr "%1: enigu malplena(j)n kolumnon(j)"
 #: src/commonfrontend/matrix/MatrixView.cpp:934
 #, kde-format
 msgid "%1: remove selected column(s)"
-msgstr "%1: forigi elektita(j)n kolumnon(j)"
+msgstr "%1: forigi elektita(j)n kolumno(j)n"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:944
 #, kde-format
 msgid "%1: clear selected column(s)"
-msgstr "%1: forigi elektita(j)n kolumnon(j)"
+msgstr "%1: forigi elektita(j)n kolumno(j)n"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:970
 #, kde-format
@@ -15450,12 +15450,7 @@ msgid ""
 msgstr ""
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:249
-#, fuzzy, kde-format
-#| msgid ""
-#| "If checked, the results of the calculations in the analysis curves will "
-#| "be saved in the project file.\n"
-#| "Uncheck this option to reduce the size of the project file at costs of "
-#| "the longer project load times."
+#, kde-format
 msgid ""
 "Save the results of the calculations in the analysis curves in the project "
 "file. \n"
@@ -21070,10 +21065,9 @@ msgstr "Deŝovo X:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/kdefrontend/ui/labelwidget.ui:494
-#, fuzzy, kde-format
-#| msgid "Model:"
+#, kde-format
 msgid "Mode:"
-msgstr "Modelo:"
+msgstr "Reĝimo:"
 
 #. i18n: ectx: property (text), widget (QLabel, lBorderShape)
 #: src/kdefrontend/ui/labelwidget.ui:586
@@ -22578,21 +22572,19 @@ msgid "Sub-Script"
 msgstr "Subskripto"
 
 #: src/kdefrontend/widgets/LabelWidget.cpp:139
-#, fuzzy, kde-format
-#| msgid "Vert. Alignment:"
+#, kde-format
 msgid "Left Align"
-msgstr "Vert. Alineado:"
+msgstr "Vicigi Maldekstre"
 
 #: src/kdefrontend/widgets/LabelWidget.cpp:141
-#, fuzzy, kde-format
-#| msgid "Right"
+#, kde-format
 msgid "Right Align"
-msgstr "Ĝuste"
+msgstr "Vicigi Dekstre"
 
 #: src/kdefrontend/widgets/LabelWidget.cpp:142
 #, kde-format
 msgid "Justify"
-msgstr ""
+msgstr "Ĝisrandigi"
 
 #: src/kdefrontend/widgets/LabelWidget.cpp:143
 #, kde-format
