@@ -1,10 +1,9 @@
 /*
 	File                 : MCAPFilter.h
 	Project              : LabPlot
-	Description          : JSON I/O-filter.
+	Description          : MCAP I/O-filter.
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2018 Andrey Cygankov <craftplace.ms@gmail.com>
-	SPDX-FileCopyrightText: 2018-2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2024 Raphael Wirth <wirthra@gmail.com>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 

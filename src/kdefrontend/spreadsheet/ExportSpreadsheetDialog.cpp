@@ -702,11 +702,10 @@ void ExportSpreadsheetDialog::fileNameChanged(const QString& name) {
 
 void ExportSpreadsheetDialog::onCompressionToggled(bool checked) {
 	if (checked) {
-		QRadioButton* btn = static_cast<QRadioButton*>(sender());
-		if (btn->objectName() == QLatin1String("rbNone")) {
+		auto* btn = static_cast<QRadioButton*>(sender());
+		if (btn->objectName() == QLatin1String("rbNone"))
 			ui->cbCompressionLevel->setEnabled(false);
-		} else {
+		else
 			ui->cbCompressionLevel->setEnabled(true);
-		}
 	}
 }

@@ -1066,7 +1066,7 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 			}
 		}
 	}
-	topicsPopulated = false;
+	mcapTopicsInitialized = false;
 	Q_EMIT fileNameChanged();
 	refreshPreview();
 }
@@ -1667,7 +1667,7 @@ void ImportFileWidget::refreshPreview() {
 	QVector<AbstractColumn::ColumnMode> columnModes;
 	DEBUG(Q_FUNC_INFO << ", Data File Type: " << ENUM_TO_STRING(AbstractFileFilter, FileType, fileType));
 	QVector<QString> s;
-	QString current_topic;
+	QString currentMcapTopic;
 	QJsonDocument doc;
 	switch (fileType) {
 	case AbstractFileFilter::FileType::Ascii: {
@@ -1865,18 +1865,18 @@ void ImportFileWidget::refreshPreview() {
 		ui.tePreview->clear();
 		auto filter = static_cast<McapFilter*>(currentFileFilter());
 
-		if (!topicsPopulated) {
+		if (!mcapTopicsInitialized) {
 			ui.cbTopics->clear();
 			s = filter->getValidTopics(file);
 			for (int i = 0; i < s.size(); i++) {
 				ui.cbTopics->addItem(s[i]);
 			}
-			topicsPopulated = true;
+			mcapTopicsInitialized = true;
 		}
 
-		current_topic = ui.cbTopics->currentText();
-		DEBUG("Current selected topic" << STDSTRING(current_topic));
-		filter->setCurrentTopic(current_topic);
+		currentMcapTopic = ui.cbTopics->currentText();
+		DEBUG("Current selected topic" << STDSTRING(currentMcapTopic));
+		filter->setCurrentTopic(currentMcapTopic);
 		importedStrings = filter->preview(file, lines);
 		vectorNameList = filter->vectorNames();
 		columnModes = filter->columnModes();
@@ -2017,8 +2017,8 @@ void ImportFileWidget::updateContent(const QString& fileName) {
 
 	QApplication::processEvents(QEventLoop::AllEvents, 0);
 	WAIT_CURSOR;
-	QString current_topic;
-	QVector<QString> topics;
+	QString currentMcapTopic;
+	QVector<QString> mcapTopics;
 	DEBUG(Q_FUNC_INFO << ", file name = " << STDSTRING(fileName));
 	if (auto filter = currentFileFilter()) {
 		switch (filter->type()) {
@@ -2051,20 +2051,19 @@ void ImportFileWidget::updateContent(const QString& fileName) {
 		case AbstractFileFilter::FileType::MCAP:
 		{
 			DEBUG(Q_FUNC_INFO << "loadDocument, file name = " << STDSTRING(fileName));
-			auto mcap_filter = static_cast<McapFilter*>(filter);
+			auto* mcap_filter = static_cast<McapFilter*>(filter);
 
-			if (!topicsPopulated) {
+			if (!mcapTopicsInitialized) {
 				ui.cbTopics->clear();
-				topics = mcap_filter->getValidTopics(fileName);
-				for (int i = 0; i < topics.size(); i++) {
-					ui.cbTopics->addItem(topics[i]);
-				}
-				topicsPopulated = true;
+				mcapTopics = mcap_filter->getValidTopics(fileName);
+				for (int i = 0; i < mcapTopics.size(); i++)
+					ui.cbTopics->addItem(mcapTopics.at(i));
+				mcapTopicsInitialized = true;
 			}
 
-			current_topic = ui.cbTopics->currentText();
-			DEBUG("Current selected topic" << STDSTRING(current_topic));
-			mcap_filter->setCurrentTopic(current_topic);
+			currentMcapTopic = ui.cbTopics->currentText();
+			DEBUG("Current selected topic" << STDSTRING(currentMcapTopic));
+			mcap_filter->setCurrentTopic(currentMcapTopic);
 			break;
 			}
 		case AbstractFileFilter::FileType::MATIO:
@@ -2390,7 +2389,7 @@ void ImportFileWidget::changeTopic() {
 	if (auto filter = currentFileFilter()) {
 		switch (filter->type()) {
 		case AbstractFileFilter::FileType::MCAP: {
-			auto mcap_filter = static_cast<McapFilter*>(filter);
+			auto* mcap_filter = static_cast<McapFilter*>(filter);
 			if (!(mcap_filter->getCurrentTopic() == ui.cbTopics->currentText())) {
 				refreshPreview();
 			}

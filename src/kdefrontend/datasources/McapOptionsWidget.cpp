@@ -31,16 +31,14 @@ McapOptionsWidget::McapOptionsWidget(QWidget* parent)
 	: QWidget(parent)
 	{
 	ui.setupUi(parent);
-
 	ui.cbDateTimeFormat->addItems(AbstractColumn::dateTimeFormats());
-
 }
 
 void McapOptionsWidget::applyFilterSettings(McapFilter* filter) const {
 	Q_ASSERT(filter);
 
 	QLocale::Language lang;
-	lang = QLocale::Language::German;
+	lang = QLocale::Language::C;
 	filter->setNumberFormat(lang);
 
 	filter->setDateTimeFormat(ui.cbDateTimeFormat->currentText());

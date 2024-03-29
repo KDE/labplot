@@ -3691,19 +3691,14 @@ bool SpreadsheetView::exportView() {
 		const QString path = dlg->path();
 		const bool exportHeader = dlg->exportHeader();
 		WAIT_CURSOR;
-		QDEBUG(static_cast<int>(dlg->format()));
 		switch (dlg->format()) {
 		case ExportSpreadsheetDialog::Format::ASCII: {
-			QDEBUG("ASCII");
-
 			const QString separator = dlg->separator();
 			const QLocale::Language format = dlg->numberFormat();
 			exportToFile(path, exportHeader, separator, format);
 			break;
 		}
 		case ExportSpreadsheetDialog::Format::LaTeX: {
-						QDEBUG("LATEX");
-
 			const bool exportLatexHeader = dlg->exportLatexHeader();
 			const bool gridLines = dlg->gridLines();
 			const bool captions = dlg->captions();
@@ -3721,18 +3716,14 @@ bool SpreadsheetView::exportView() {
 			break;
 		}
 		case ExportSpreadsheetDialog::Format::XLSX:{
-			QDEBUG("xlsx");
 			exportToXLSX(path, exportHeader);
 			break;
 			}
 		case ExportSpreadsheetDialog::Format::SQLite:{
-			QDEBUG("sclite");
 			exportToSQLite(path);
 			break;
 			}
 		case ExportSpreadsheetDialog::Format::MCAP:{
-
-			QDEBUG("Export to mcap");
 			auto options =  dlg->getMcapSettings();
 			exportToMCAP(path,options);
 			break;
