@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-18 03:06+0000\n"
-"PO-Revision-Date: 2024-01-08 22:51+0100\n"
+"PO-Revision-Date: 2024-03-27 19:34+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -788,7 +788,7 @@ msgstr "%1: agordi aŭtoron"
 #: src/backend/core/Project.cpp:280
 #, kde-format
 msgid "%1: save calculation changed"
-msgstr "%1: konservi kalkulon ŝanĝita"
+msgstr "%1: konservkalkulo ŝanĝiĝis"
 
 #: src/backend/core/Project.cpp:597 src/backend/core/Project.cpp:631
 #, kde-format
@@ -5237,7 +5237,7 @@ msgstr ""
 #: src/kdefrontend/ui/spreadsheet/dropvalueswidget.ui:220
 #, kde-format
 msgid "and"
-msgstr "kaj"
+msgstr "and"
 
 #: src/backend/lib/XmlStreamReader.cpp:91
 #: src/backend/lib/XmlStreamReader.cpp:95
@@ -6549,7 +6549,7 @@ msgstr "%1: agordi erarbretan limgrandon"
 #: src/backend/worksheet/Line.cpp:125
 #, kde-format
 msgid "%1: error bar type changed"
-msgstr "%1: tipo de erarbreto ŝanĝita"
+msgstr "%1: erarbreta tipo ŝanĝiĝis"
 
 #: src/backend/worksheet/Line.cpp:132
 #, kde-format
@@ -9111,7 +9111,7 @@ msgstr "Plenigi la matricon kun konstanta valoro"
 #: src/commonfrontend/matrix/MatrixView.cpp:633
 #, kde-format
 msgid "%1: cut selected cell(s)"
-msgstr "%1: tranĉi elektitan ĉelon(j)"
+msgstr "%1: tranĉi elektita(j)n ĉelo(j)n"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:684
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1707
@@ -9132,12 +9132,12 @@ msgstr "%1: enigu malplena(j)n kolumnon(j)"
 #: src/commonfrontend/matrix/MatrixView.cpp:929
 #, kde-format
 msgid "%1: remove selected column(s)"
-msgstr "%1: forigi elektita(j)n kolumnon(j)"
+msgstr "%1: forigi elektita(j)n kolumno(j)n"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:939
 #, kde-format
 msgid "%1: clear selected column(s)"
-msgstr "%1: forigi elektita(j)n kolumnon(j)"
+msgstr "%1: forigi elektita(j)n kolumno(j)n"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:965
 #, kde-format
@@ -9596,7 +9596,7 @@ msgstr "Kaŝi Komentojn"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1580
 #, kde-format
 msgid "Unfreeze Column"
-msgstr "Malgeli Kolumnon"
+msgstr "Malfrostigi Kolumnon"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1626
 #, kde-format
@@ -19031,7 +19031,7 @@ msgstr "Rezulto:"
 #: src/kdefrontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:117
 #, kde-format
 msgid "or"
-msgstr "aŭ"
+msgstr "or"
 
 #. i18n: ectx: property (text), widget (QLabel, lYColumn)
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:335
@@ -20784,7 +20784,7 @@ msgstr "Eksporti Fonon:"
 #: src/kdefrontend/ui/worksheet/exportworksheetwidget.ui:139
 #, kde-format
 msgid "Resolution:"
-msgstr "Rezolucio:"
+msgstr "Distingivo:"
 
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:128
 #, kde-format
