@@ -35,7 +35,7 @@ public:
 	QJsonDocument getJsonDocument(const QString&);
 
 	void write(const QString& fileName, AbstractDataSource*);
-	void writeWithOptions(const QString& fileName, AbstractDataSource*,const mcap::McapWriterOptions& opts);
+	void writeWithOptions(const QString& fileName, AbstractDataSource*,int compressionMode,int compressionLevel);
 
 	QVector<QStringList> preview(const QString& fileName, int lines);
 	QVector<QStringList> preview(int lines);

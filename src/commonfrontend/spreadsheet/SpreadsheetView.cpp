@@ -3724,8 +3724,8 @@ bool SpreadsheetView::exportView() {
 			break;
 			}
 		case ExportSpreadsheetDialog::Format::MCAP:{
-			auto options =  dlg->getMcapSettings();
-			exportToMCAP(path,options);
+			std::pair<int,int> compressionSettings = dlg->getMcapSettings();
+			exportToMCAP(path,compressionSettings.first,compressionSettings.second);
 			break;
 			}
 		}
@@ -4315,9 +4315,9 @@ void SpreadsheetView::exportToFits(const QString& fileName, const int exportTo, 
 	delete filter;
 }
 
-void SpreadsheetView::exportToMCAP(const QString& fileName,mcap::McapWriterOptions opts) const{
+void SpreadsheetView::exportToMCAP(const QString& fileName,int compressionMode,int compressionLevel) const{
 	auto* filter = new McapFilter;
-	filter->writeWithOptions(fileName, m_spreadsheet,opts);
+	filter->writeWithOptions(fileName, m_spreadsheet,compressionMode,compressionLevel);
 
 	delete filter;
 }

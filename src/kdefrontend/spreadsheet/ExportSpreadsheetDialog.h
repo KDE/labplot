@@ -12,7 +12,6 @@
 
 #include <QDialog>
 #include <QLocale>
-#include <3rdparty/mcap/include/mcap/writer.hpp>
 
 namespace Ui {
 class ExportSpreadsheetWidget;
@@ -51,7 +50,7 @@ public:
 	void setExportToImage(bool possible);
 	void onCompressionToggled(bool checked);
 
-	mcap::McapWriterOptions getMcapSettings();
+	std::pair<int,int> getMcapSettings();
 
 // Todo: Get rid of order matters. Fits need to be at the end.
 enum class Format { ASCII, LaTeX, XLSX, SQLite,MCAP,FITS };

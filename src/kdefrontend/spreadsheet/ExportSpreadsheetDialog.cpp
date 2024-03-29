@@ -22,8 +22,6 @@
 #include <KWindowConfig>
 #include <kcoreaddons_version.h>
 
-#include <3rdparty/mcap/include/mcap/types.hpp>
-#include <3rdparty/mcap/include/mcap/writer.hpp>
 #include <QCompleter>
 #include <QDialogButtonBox>
 
@@ -93,11 +91,12 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent)
 	ui->cbLaTeXExport->addItem(i18n("Export Selection"));
 
 	// See: https://mcap.dev/docs/cpp/e3B3464E30CB968FB
-	ui->cbCompressionLevel->addItem(QStringLiteral("Fastest"), static_cast<int>(mcap::CompressionLevel::Fastest));
-	ui->cbCompressionLevel->addItem(QStringLiteral("Fast"), static_cast<int>(mcap::CompressionLevel::Fast));
-	ui->cbCompressionLevel->addItem(QStringLiteral("Default"), static_cast<int>(mcap::CompressionLevel::Default));
-	ui->cbCompressionLevel->addItem(QStringLiteral("Slow"), static_cast<int>(mcap::CompressionLevel::Slow));
-	ui->cbCompressionLevel->addItem(QStringLiteral("Slowest"), static_cast<int>(mcap::CompressionLevel::Slowest));
+	ui->cbCompressionLevel->addItem(QStringLiteral("Fastest"), 0); // mcap::CompressionLevel::Fastest
+	ui->cbCompressionLevel->addItem(QStringLiteral("Fast"), 1); //mcap::CompressionLevel::Fast
+	ui->cbCompressionLevel->addItem(QStringLiteral("Default"),2); //mcap::CompressionLevel::Default
+	ui->cbCompressionLevel->addItem(QStringLiteral("Slow"), 3); // mcap::CompressionLevel::Slow
+	ui->cbCompressionLevel->addItem(QStringLiteral("Slowest"),4); // mcap::CompressionLevel::Slowest
+
 	ui->cbCompressionLevel->setCurrentIndex(2); // Default
 
 	ui->rbNone->setChecked(true);
@@ -223,21 +222,15 @@ void ExportSpreadsheetDialog::fitsExportToChanged(int idx) {
 	}
 }
 
-mcap::McapWriterOptions ExportSpreadsheetDialog::getMcapSettings() {
-	auto opts = mcap::McapWriterOptions("json");
-	opts.compressionLevel = static_cast<mcap::CompressionLevel>(ui->cbCompressionLevel->currentIndex());
+std::pair<int,int> ExportSpreadsheetDialog::getMcapSettings() {
+	int compressionLevel = ui->cbCompressionLevel->currentIndex();
+	int compressionMode = 0; // mcap::Compression::None
 	if (ui->rbLZ4->isChecked()) {
-		opts.compression = mcap::Compression::Lz4;
-		qDebug() << "LZ4 compression";
+		compressionMode = 1; // mcap::Compression::Lz4
 	} else if (ui->rbZSTD->isChecked()) {
-		opts.compression = mcap::Compression::Zstd;
-		qDebug() << "ZSTD compression";
-	} else {
-		qDebug() << "No compression";
-		opts.compression = mcap::Compression::None;
+		compressionMode =  2; // mcap::Compression::ZSTD
 	}
-
-	return opts;
+	return std::pair<int,int>(compressionMode,compressionLevel); 
 }
 
 void ExportSpreadsheetDialog::setMatrixMode(bool b) {

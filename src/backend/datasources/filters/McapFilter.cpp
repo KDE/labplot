@@ -72,8 +72,8 @@ void McapFilter::write(const QString& fileName, AbstractDataSource* dataSource) 
 	d->write(fileName, dataSource);
 }
 
-void McapFilter::writeWithOptions(const QString& fileName, AbstractDataSource* dataSource,const mcap::McapWriterOptions& opts) {
-	d->writeWithOptions(fileName, dataSource,opts);
+void McapFilter::writeWithOptions(const QString& fileName, AbstractDataSource* dataSource,int compressionMode,int compressionLevel) {
+	d->writeWithOptions(fileName, dataSource,compressionMode,compressionLevel);
 }
 
 
@@ -707,19 +707,23 @@ writes the content of \c dataSource to the file \c fileName.
 */
 void McapFilterPrivate::write(const QString& fileName, AbstractDataSource* dataSource) {
 	DEBUG(Q_FUNC_INFO);
-
-	auto options = mcap::McapWriterOptions("json");
-	return writeWithOptions(fileName,dataSource,options);
+	int compression_type = 0; // None
+	int compression_level = 0; // Fastest
+	return writeWithOptions(fileName,dataSource,compression_type,compression_level);
 }
 
 
 /*!
 writes the content of \c dataSource to the file \c fileName.
 */
-void McapFilterPrivate::writeWithOptions(const QString& fileName, AbstractDataSource* dataSource,const mcap::McapWriterOptions& opts) {
+void McapFilterPrivate::writeWithOptions(const QString& fileName, AbstractDataSource* dataSource,int compression_mode,int compression_level) {
 	DEBUG(Q_FUNC_INFO);
 
 	auto* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
+
+	auto opts = mcap::McapWriterOptions("json");
+	opts.compressionLevel = static_cast<mcap::CompressionLevel>(compression_level);
+	opts.compression = static_cast<mcap::Compression>(compression_mode);
 
 	DEBUG(Q_FUNC_INFO << fileName.toStdString());
 	std::string outputFilename = fileName.toStdString();
@@ -730,8 +734,6 @@ void McapFilterPrivate::writeWithOptions(const QString& fileName, AbstractDataSo
 	"description": "An object exported from Labplot", 
 	"type": "object"
 	})"; // Todo: Create proper schema.
-	qDebug() << static_cast<int>(opts.compression);
-	qDebug() << static_cast<int>(opts.compressionLevel);
 
 	mcap::McapWriter writer;
 	{

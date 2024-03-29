@@ -38,7 +38,7 @@ public:
 	
 	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace) override;
 	void write(const QString& fileName, AbstractDataSource*) override;
-	void writeWithOptions(const QString& fileName, AbstractDataSource* datasource,const mcap::McapWriterOptions& opts);
+	void writeWithOptions(const QString& fileName, AbstractDataSource* datasource,int compressionMode,int compressionLevel);
 	QVector<QStringList> preview(const QString& fileName, int lines);
 
 	void setDataRowType(const QJsonValue::Type);
