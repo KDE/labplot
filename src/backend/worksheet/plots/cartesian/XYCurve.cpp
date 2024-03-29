@@ -717,7 +717,7 @@ void XYCurve::yColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	if (aspect == d->yColumn) {
 		d->yColumn = nullptr;
 		d->m_logicalPoints.clear();
-		CURVE_COLUMN_REMOVED(x);
+		CURVE_COLUMN_REMOVED(y);
 	}
 }
 

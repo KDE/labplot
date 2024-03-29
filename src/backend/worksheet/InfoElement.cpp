@@ -193,13 +193,11 @@ void InfoElement::initCurveConnections(const XYCurve* curve) {
 	connect(curve, &XYCurve::visibleChanged, this, &InfoElement::curveVisibilityChanged);
 	connect(curve, &XYCurve::coordinateSystemIndexChanged, this, &InfoElement::curveCoordinateSystemIndexChanged);
 	connect(curve, &XYCurve::dataChanged, this, &InfoElement::curveDataChanged);
-	connect(curve, &XYCurve::childAspectAdded, [this](const AbstractAspect* aspect) {
-		if (dynamic_cast<const AbstractColumn*>(aspect))
-			retransform();
+	connect(curve, &XYCurve::xColumnChanged, [this](const AbstractColumn*) {
+		retransform();
 	});
-	connect(curve, &XYCurve::childAspectRemoved, [this](const AbstractAspect* aspect) {
-		if (dynamic_cast<const AbstractColumn*>(aspect))
-			retransform();
+	connect(curve, &XYCurve::yColumnChanged, [this](const AbstractColumn*) {
+		retransform();
 	});
 	connect(curve, &XYCurve::aspectAboutToBeRemoved, this, &InfoElement::curveDeleted);
 }
