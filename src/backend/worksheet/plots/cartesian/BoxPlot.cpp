@@ -443,9 +443,12 @@ bool BoxPlot::usingColumn(const Column* column) const {
 	return false;
 }
 
-void BoxPlot::updateColumnDependencies(const AbstractColumn* column) {
+void BoxPlot::handleElementUpdated(const QString& aspectPath, const AbstractAspect* element) {
 	Q_D(const BoxPlot);
-	const QString& columnPath = column->path();
+	const auto column = dynamic_cast<const AbstractColumn*>(element);
+	if (!column)
+		return;
+
 	const auto dataColumnPaths = d->dataColumnPaths;
 	auto dataColumns = d->dataColumns;
 	bool changed = false;
@@ -453,7 +456,7 @@ void BoxPlot::updateColumnDependencies(const AbstractColumn* column) {
 	for (int i = 0; i < dataColumnPaths.count(); ++i) {
 		const auto& path = dataColumnPaths.at(i);
 
-		if (path == columnPath) {
+		if (path == aspectPath) {
 			dataColumns[i] = column;
 			changed = true;
 		}
@@ -469,30 +472,6 @@ void BoxPlot::updateColumnDependencies(const AbstractColumn* column) {
 QColor BoxPlot::color() const {
 	// Q_D(const BoxPlot);
 	return QColor();
-}
-
-void BoxPlot::handleElementUpdated(const QString& aspectPath, const AbstractAspect* element) {
-	const auto* column = dynamic_cast<const Column*>(element);
-	if (!column)
-		return;
-
-	const auto& dataColumnPaths = this->dataColumnPaths();
-	auto dataColumns = this->dataColumns();
-	bool changed = false;
-	for (int i = 0; i < dataColumnPaths.count(); ++i) {
-		const auto& path = dataColumnPaths.at(i);
-
-		if (path == aspectPath) {
-			dataColumns[i] = column;
-			changed = true;
-		}
-	}
-
-	if (changed) {
-		setUndoAware(false);
-		setDataColumns(dataColumns);
-		setUndoAware(true);
-	}
 }
 
 /* ============================ setter methods and undo commands ================= */

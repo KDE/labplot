@@ -218,34 +218,6 @@ QIcon XYCurve::icon() const {
 	return QIcon::fromTheme(QStringLiteral("labplot-xy-curve"));
 }
 
-void XYCurve::handleElementUpdated(const QString& aspectPath, const AbstractAspect* element) {
-	Q_D(XYCurve);
-	const auto* column = dynamic_cast<const Column*>(element);
-	if (!column)
-		return;
-
-	setUndoAware(false);
-	if (xColumnPath() == aspectPath)
-		setXColumn(column);
-	if (yColumnPath() == aspectPath)
-		setYColumn(column);
-	if (valuesColumnPath() == aspectPath)
-		setValuesColumn(column);
-	if (d->errorBar->xPlusColumnPath() == aspectPath)
-		d->errorBar->setXPlusColumn(column);
-	if (d->errorBar->xMinusColumnPath() == aspectPath)
-		d->errorBar->setXMinusColumn(column);
-	if (d->errorBar->yPlusColumnPath() == aspectPath)
-		d->errorBar->setYPlusColumn(column);
-	if (d->errorBar->yMinusColumnPath() == aspectPath)
-		d->errorBar->setYMinusColumn(column);
-
-	if (valuesColumnPath() == aspectPath)
-		setValuesColumn(column);
-
-	setUndoAware(true);
-}
-
 // ##############################################################################
 // ##########################  getter methods  ##################################
 // ##############################################################################
@@ -355,49 +327,52 @@ bool XYCurve::usingColumn(const Column* column) const {
 			|| (d->valuesType == ValuesType::CustomColumn && d->valuesColumn == column));
 }
 
-void XYCurve::updateColumnDependencies(const AbstractColumn* column) {
+void XYCurve::handleElementUpdated(const QString& aspectPath, const AbstractAspect* element) {
 	Q_D(XYCurve);
-	const QString& columnPath = column->path();
+	const auto column = dynamic_cast<const AbstractColumn*>(element);
+	if (!column)
+		return;
+
 	setUndoAware(false);
 
 	if (d->xColumn == column) // the column is the same and was just renamed -> update the column path
-		d->xColumnPath = columnPath;
-	else if (d->xColumnPath == columnPath) // another column was renamed to the current path -> set and connect to the new column
+		d->xColumnPath = aspectPath;
+	else if (d->xColumnPath == aspectPath) // another column was renamed to the current path -> set and connect to the new column
 		setXColumn(column);
 
 	if (d->yColumn == column)
-		d->yColumnPath = columnPath;
-	else if (d->yColumnPath == columnPath)
+		d->yColumnPath = aspectPath;
+	else if (d->yColumnPath == aspectPath)
 		setYColumn(column);
 
 	if (d->valuesColumn == column)
-		d->valuesColumnPath = columnPath;
-	else if (d->valuesColumnPath == columnPath)
+		d->valuesColumnPath = aspectPath;
+	else if (d->valuesColumnPath == aspectPath)
 		setValuesColumn(column);
 
-	if (d->valuesColumnPath == columnPath)
+	if (d->valuesColumnPath == aspectPath)
 		setValuesColumn(column);
 
 	// x errors
 	if (d->errorBar->xPlusColumn() == column)
-		d->errorBar->xPlusColumnPath() = columnPath;
-	else if (d->errorBar->xPlusColumnPath() == columnPath)
+		d->errorBar->xPlusColumnPath() = aspectPath;
+	else if (d->errorBar->xPlusColumnPath() == aspectPath)
 		d->errorBar->setXPlusColumn(column);
 
 	if (d->errorBar->xMinusColumn() == column)
-		d->errorBar->xMinusColumnPath() = columnPath;
-	else if (d->errorBar->xMinusColumnPath() == columnPath)
+		d->errorBar->xMinusColumnPath() = aspectPath;
+	else if (d->errorBar->xMinusColumnPath() == aspectPath)
 		d->errorBar->setXMinusColumn(column);
 
 	// y errors
 	if (d->errorBar->yPlusColumn() == column)
-		d->errorBar->yPlusColumnPath() = columnPath;
-	else if (d->errorBar->yPlusColumnPath() == columnPath)
+		d->errorBar->yPlusColumnPath() = aspectPath;
+	else if (d->errorBar->yPlusColumnPath() == aspectPath)
 		d->errorBar->setYPlusColumn(column);
 
 	if (d->errorBar->yMinusColumn() == column)
-		d->errorBar->yMinusColumnPath() = columnPath;
-	else if (d->errorBar->yMinusColumnPath() == columnPath)
+		d->errorBar->yMinusColumnPath() = aspectPath;
+	else if (d->errorBar->yMinusColumnPath() == aspectPath)
 		d->errorBar->setYMinusColumn(column);
 
 	setUndoAware(true);

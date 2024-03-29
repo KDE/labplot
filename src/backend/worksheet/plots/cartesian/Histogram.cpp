@@ -331,29 +331,32 @@ bool Histogram::usingColumn(const Column* column) const {
 		|| (d->errorBar->yErrorType() == ErrorBar::ErrorType::Asymmetric && (d->errorBar->yPlusColumn() == column || d->errorBar->yMinusColumn() == column)));
 }
 
-void Histogram::updateColumnDependencies(const AbstractColumn* column) {
+void Histogram::handleElementUpdated(const QString& aspectPath, const AbstractAspect* element) {
 	Q_D(Histogram);
+	const auto column = dynamic_cast<const AbstractColumn*>(element);
+	if (!column)
+		return;
+
 	setUndoAware(false);
-	const QString& columnPath = column->path();
 
 	if (d->dataColumn == column) // the column is the same and was just renamed -> update the column path
-		d->dataColumnPath = columnPath;
-	else if (d->dataColumnPath == columnPath) // another column was renamed to the current path -> set and connect to the new column
+		d->dataColumnPath = aspectPath;
+	else if (d->dataColumnPath == aspectPath) // another column was renamed to the current path -> set and connect to the new column
 		setDataColumn(column);
 
 	if (d->value->column() == column)
-		d->value->setColumnPath(columnPath);
-	else if (d->value->columnPath() == columnPath)
+		d->value->setColumnPath(aspectPath);
+	else if (d->value->columnPath() == aspectPath)
 		d->value->setColumn(column);
 
 	if (d->errorBar->yPlusColumn() == column)
-		d->errorBar->setYPlusColumnPath(columnPath);
-	else if (d->errorBar->yPlusColumnPath() == columnPath)
+		d->errorBar->setYPlusColumnPath(aspectPath);
+	else if (d->errorBar->yPlusColumnPath() == aspectPath)
 		d->errorBar->setYPlusColumn(column);
 
 	if (d->errorBar->yMinusColumn() == column)
-		d->errorBar->setYMinusColumnPath(columnPath);
-	else if (d->errorBar->yMinusColumnPath() == columnPath)
+		d->errorBar->setYMinusColumnPath(aspectPath);
+	else if (d->errorBar->yMinusColumnPath() == aspectPath)
 		d->errorBar->setYMinusColumn(column);
 
 	setUndoAware(true);
@@ -381,24 +384,6 @@ const AbstractColumn* Histogram::binValues() const {
 const AbstractColumn* Histogram::binPDValues() const {
 	D(Histogram);
 	return d->binPDValues();
-}
-
-void Histogram::handleElementUpdated(const QString& aspectPath, const AbstractAspect* element) {
-	const auto* column = dynamic_cast<const Column*>(element);
-	if (!column)
-		return;
-
-	if (dataColumnPath() == aspectPath) {
-		setUndoAware(false);
-		setDataColumn(column);
-		setUndoAware(true);
-	}
-
-	if (value()->columnPath() == aspectPath) {
-		setUndoAware(false);
-		value()->setColumn(column);
-		setUndoAware(true);
-	}
 }
 
 // ##############################################################################

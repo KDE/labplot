@@ -214,9 +214,12 @@ bool BarPlot::usingColumn(const Column* column) const {
 	return false;
 }
 
-void BarPlot::updateColumnDependencies(const AbstractColumn* column) {
+void BarPlot::handleElementUpdated(const QString& aspectPath, const AbstractAspect* element) {
 	Q_D(const BarPlot);
-	const QString& columnPath = column->path();
+	const auto column = dynamic_cast<const AbstractColumn*>(element);
+	if (!column)
+		return;
+
 	const auto dataColumnPaths = d->dataColumnPaths;
 	auto dataColumns = d->dataColumns;
 	bool changed = false;
@@ -224,7 +227,7 @@ void BarPlot::updateColumnDependencies(const AbstractColumn* column) {
 	for (int i = 0; i < dataColumnPaths.count(); ++i) {
 		const auto& path = dataColumnPaths.at(i);
 
-		if (path == columnPath) {
+		if (path == aspectPath) {
 			dataColumns[i] = column;
 			changed = true;
 		}

@@ -58,32 +58,6 @@ bool XYAnalysisCurve::usingColumn(const Column* column) const {
 		return (d->dataSourceCurve->xColumn() == column || d->dataSourceCurve->yColumn() == column);
 }
 
-void XYAnalysisCurve::updateColumnDependencies(const AbstractColumn* column) {
-	D(const XYAnalysisCurve);
-	const QString& columnPath = column->path();
-	setUndoAware(false);
-
-	if (d->xDataColumnPath == columnPath)
-		setXDataColumn(column);
-	if (d->yDataColumnPath == columnPath)
-		setYDataColumn(column);
-	if (d->y2DataColumnPath == columnPath)
-		setY2DataColumn(column);
-
-	auto* fitCurve = dynamic_cast<XYFitCurve*>(this);
-	if (fitCurve) {
-		if (fitCurve->xErrorColumnPath() == columnPath)
-			fitCurve->setXErrorColumn(column);
-		if (fitCurve->yErrorColumnPath() == columnPath)
-			fitCurve->setYErrorColumn(column);
-	}
-
-	if (d->valuesColumnPath == columnPath)
-		setValuesColumn(column);
-
-	setUndoAware(true);
-}
-
 // copy valid data from x/y data columns to x/y data vectors
 // for analysis functions
 // avgUniqueX: average y values for duplicate x values
@@ -398,7 +372,9 @@ void XYAnalysisCurve::createDataSpreadsheet() {
 }
 
 void XYAnalysisCurve::handleElementUpdated(const QString& aspectPath, const AbstractAspect* element) {
-	const auto* column = dynamic_cast<const Column*>(element);
+	const auto column = dynamic_cast<const AbstractColumn*>(element);
+	if (!column)
+		return;
 
 	setUndoAware(false);
 	if (xDataColumnPath() == aspectPath)
