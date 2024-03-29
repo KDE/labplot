@@ -124,7 +124,7 @@ private:
 	bool m_suppressRefresh{false};
 	TemplateHandler* m_templateHandler{nullptr};
 	bool mcapTopicsInitialized{false};
-	
+
 Q_SIGNALS:
 	void enableImportToMatrix(bool enable);
 	void fileNameChanged();

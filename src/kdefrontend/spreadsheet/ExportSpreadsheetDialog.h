@@ -20,7 +20,6 @@ class ExportSpreadsheetWidget;
 class QPushButton;
 class QAbstractButton;
 
-
 class ExportSpreadsheetDialog : public QDialog {
 	Q_OBJECT
 
@@ -50,12 +49,10 @@ public:
 	void setExportToImage(bool possible);
 	void onCompressionToggled(bool checked);
 
-	std::pair<int,int> getMcapSettings();
+	std::pair<int, int> getMcapSettings();
 
-// Todo: Get rid of order matters. Fits need to be at the end.
-enum class Format { ASCII, LaTeX, XLSX, SQLite,MCAP,FITS };
-
-
+	// Todo: Get rid of order matters. Fits need to be at the end.
+	enum class Format { ASCII, LaTeX, XLSX, SQLite, MCAP, FITS };
 
 	Format format() const;
 
@@ -79,7 +76,6 @@ private Q_SLOTS:
 	void formatChanged(int);
 	void fileNameChanged(const QString&);
 	void fitsExportToChanged(int);
-
 };
 
 #endif

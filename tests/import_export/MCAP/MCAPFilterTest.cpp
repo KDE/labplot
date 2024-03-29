@@ -38,13 +38,13 @@ void MCAPFilterTest::testArrayImport() {
 	// metadata: 0
 
 	QVector<QString> compression_types = {QLatin1String("data/basic_NONE.mcap")};
-	#ifdef HAVE_LZ4
+#ifdef HAVE_LZ4
 	compression_types.append(QLatin1String("data/basic_LZ4.mcap"));
-	#endif
-	#ifdef HAVE_ZSTD
+#endif
+#ifdef HAVE_ZSTD
 	compression_types.append(QLatin1String("data/basic_ZSTD.mcap"));
-	#endif
-	
+#endif
+
 	for (const QString& file : compression_types) {
 		Spreadsheet spreadsheet(QStringLiteral("test"), false);
 		McapFilter filter;
@@ -103,59 +103,53 @@ void MCAPFilterTest::testArrayImport() {
 }
 
 void MCAPFilterTest::testExport() {
+	QElapsedTimer timer_import;
+	timer_import.start();
 
-		QElapsedTimer timer_import;
-		timer_import.start();
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+	McapFilter filter;
 
-		Spreadsheet spreadsheet(QStringLiteral("test"), false);
-		McapFilter filter;
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/basic_NONE.mcap"));
 
-		const QString& fileName = QFINDTESTDATA(QLatin1String("data/basic_NONE.mcap"));
+	AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode::Replace;
+	filter.setCreateIndexEnabled(true);
+	filter.setDataRowType(QJsonValue::Object);
+	filter.setDateTimeFormat(QLatin1String("yyyy-MM-dd"));
+	filter.readDataFromFile(fileName, &spreadsheet, mode);
 
-		AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode::Replace;
-		filter.setCreateIndexEnabled(true);
-		filter.setDataRowType(QJsonValue::Object);
-		filter.setDateTimeFormat(QLatin1String("yyyy-MM-dd"));
-		filter.readDataFromFile(fileName, &spreadsheet, mode);
+	QCOMPARE(spreadsheet.columnCount(), 5);
+	QCOMPARE(spreadsheet.rowCount(), 10);
+	qDebug() << "The importing took" << timer_import.elapsed() << "milliseconds";
 
-		QCOMPARE(spreadsheet.columnCount(), 5);
-		QCOMPARE(spreadsheet.rowCount(), 10);
-		qDebug() << "The importing took" << timer_import.elapsed() << "milliseconds";
+	QElapsedTimer timer_export;
+	timer_export.start();
 
-		QElapsedTimer timer_export;
-		timer_export.start();
+	filter.write(QLatin1String("/tmp/basic_out.mcap"), &spreadsheet);
+	QCOMPARE(QFile::exists(QLatin1String("/tmp/basic_out.mcap")), true);
 
-		filter.write(QLatin1String("/tmp/basic_out.mcap"),&spreadsheet);
-		QCOMPARE(QFile::exists(QLatin1String("/tmp/basic_out.mcap")),true);
-		
-		qDebug() << "The exporting" << timer_export.elapsed() << "milliseconds";
-
-		}
+	qDebug() << "The exporting" << timer_export.elapsed() << "milliseconds";
+}
 
 void MCAPFilterTest::testImportWithoutValidTopics() {
+	McapFilter filter;
 
-		McapFilter filter;
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/basic_NONE_unsupported_encoding.mcap"));
+	QCOMPARE(filter.getValidTopics(fileName).size(), 0);
 
-		Spreadsheet spreadsheet(QStringLiteral("test"), false);
-		const QString& fileName = QFINDTESTDATA(QLatin1String("data/basic_NONE_unsupported_encoding.mcap"));
-		QCOMPARE(filter.getValidTopics(fileName).size(),0);
+	AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode::Replace;
+	filter.readDataFromFile(fileName, &spreadsheet, mode);
 
-		AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode::Replace;
-		filter.readDataFromFile(fileName, &spreadsheet, mode);
-
-		QCOMPARE(filter.lastError(),i18n("No JSON encoded topics found."));
-		
+	QCOMPARE(filter.lastError(), i18n("No JSON encoded topics found."));
 }
 
 void MCAPFilterTest::testImportWrongFile() {
+	McapFilter filter;
 
-		McapFilter filter;
-
-		Spreadsheet spreadsheet(QStringLiteral("test"), false);
-		const QString& fileName = QFINDTESTDATA(QLatin1String("data/empty_file.mcap"));
-		QCOMPARE(filter.getValidTopics(fileName).size(),0);
-		QCOMPARE(filter.lastError(),i18n("Failed to read the file. Reason: file too small"));
-		
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/empty_file.mcap"));
+	QCOMPARE(filter.getValidTopics(fileName).size(), 0);
+	QCOMPARE(filter.lastError(), i18n("Failed to read the file. Reason: file too small"));
 }
 
 QTEST_MAIN(MCAPFilterTest)

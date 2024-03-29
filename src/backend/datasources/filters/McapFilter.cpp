@@ -72,10 +72,9 @@ void McapFilter::write(const QString& fileName, AbstractDataSource* dataSource) 
 	d->write(fileName, dataSource);
 }
 
-void McapFilter::writeWithOptions(const QString& fileName, AbstractDataSource* dataSource,int compressionMode,int compressionLevel) {
-	d->writeWithOptions(fileName, dataSource,compressionMode,compressionLevel);
+void McapFilter::writeWithOptions(const QString& fileName, AbstractDataSource* dataSource, int compressionMode, int compressionLevel) {
+	d->writeWithOptions(fileName, dataSource, compressionMode, compressionLevel);
 }
-
 
 /*!
 returns the list of all predefined data types.
@@ -258,7 +257,7 @@ int McapFilterPrivate::parseColumnModes(const QJsonValue& row, const QString& ro
 	if (createIndexEnabled) {
 		columnModes << AbstractColumn::ColumnMode::Integer;
 		vectorNames << i18n("index");
-	}	
+	}
 
 	// determine the column modes and names
 	for (int i = startColumn - 1; i < endColumn; ++i) {
@@ -267,11 +266,11 @@ int McapFilterPrivate::parseColumnModes(const QJsonValue& row, const QString& ro
 		QString key = row.toObject().keys().at(i);
 		vectorNames << key;
 		columnValue = row.toObject().value(key);
-		if(key == QLatin1String("logTime") || key==QLatin1String("publishTime")){
+		if (key == QLatin1String("logTime") || key == QLatin1String("publishTime")) {
 			columnModes << AbstractColumn::ColumnMode::DateTime;
 			continue;
 		}
-		if(key == QLatin1String("sequence")){
+		if (key == QLatin1String("sequence")) {
 			columnModes << AbstractColumn::ColumnMode::Integer;
 			continue;
 		}
@@ -339,10 +338,10 @@ void McapFilterPrivate::setValueFromString(int column, int row, const QString& v
 		break;
 	}
 	case AbstractColumn::ColumnMode::DateTime: {
-	if(vectorNames[column]==QLatin1String("publishTime") || vectorNames[column]==QLatin1String("logTime")){
-		static_cast<QVector<QDateTime>*>(m_dataContainer[column])->operator[](row) = QDateTime::fromMSecsSinceEpoch(valueString.toLong());
-		break;
-	}
+		if (vectorNames[column] == QLatin1String("publishTime") || vectorNames[column] == QLatin1String("logTime")) {
+			static_cast<QVector<QDateTime>*>(m_dataContainer[column])->operator[](row) = QDateTime::fromMSecsSinceEpoch(valueString.toLong());
+			break;
+		}
 		const QDateTime valueDateTime = QDateTime::fromString(valueString, dateTimeFormat);
 		static_cast<QVector<QDateTime>*>(m_dataContainer[column])->operator[](row) = valueDateTime.isValid() ? valueDateTime : QDateTime();
 		break;
@@ -446,7 +445,7 @@ int McapFilterPrivate::mcapToJson(const QString& fileName, int lines) {
 
 	if (current_topic == QLatin1String("")) {
 		QVector<QString> topics = getValidTopics(fileName); // Todo: make this more efficient. Only open file once.
-		if(topics.size() == 0){
+		if (topics.size() == 0) {
 			const_cast<McapFilter*>(q)->setLastError(i18n("No JSON encoded topics found."));
 			return 0;
 		}
@@ -491,8 +490,8 @@ int McapFilterPrivate::mcapToJson(const QString& fileName, int lines) {
 
 			QJsonObject obj = flattenJson(jsonDocument.object());
 
-			//TODO: handle seqeunce, and times as longs instead of strings
-			obj.insert(QLatin1String("sequence"), QJsonValue::fromVariant(QString::number(it->message.sequence))); 
+			// TODO: handle seqeunce, and times as longs instead of strings
+			obj.insert(QLatin1String("sequence"), QJsonValue::fromVariant(QString::number(it->message.sequence)));
 			obj.insert(QLatin1String("logTime"), QJsonValue::fromVariant(QString::number(it->message.logTime / 1000000))); // nano to milli otherwise value is 0
 			obj.insert(QLatin1String("publishTime"),
 					   QJsonValue::fromVariant(QString::number(it->message.publishTime / 1000000))); // nano to milli otherwise value is 0
@@ -526,7 +525,7 @@ int McapFilterPrivate::mcapToJson(const QString& fileName, int lines) {
 
 	QJsonDocument finalJsonDocument(jsonArray);
 
-	//qDebug() << finalJsonDocument.toJson(QJsonDocument::Compact);
+	// qDebug() << finalJsonDocument.toJson(QJsonDocument::Compact);
 
 	m_preparedDoc = finalJsonDocument;
 	return msg_count;
@@ -549,7 +548,7 @@ import the content of document \c m_preparedDoc to the data source \c dataSource
 */
 void McapFilterPrivate::importData(AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
 	bool ok = false;
-	m_columnOffset = dataSource->prepareImport(m_dataContainer, importMode, m_actualRows, m_actualCols, vectorNames, columnModes,ok);
+	m_columnOffset = dataSource->prepareImport(m_dataContainer, importMode, m_actualRows, m_actualCols, vectorNames, columnModes, ok);
 	int rowOffset = startRow - 1;
 	int colOffset = (int)createIndexEnabled;
 	DEBUG("reading " << m_actualRows << " lines");
@@ -682,9 +681,9 @@ QVector<QStringList> McapFilterPrivate::preview(int lines) {
 				lineString += QString::number(value.toDouble(), 'g', 16);
 				break;
 			case QJsonValue::String:
-				if(columnModes.at(n+createIndexEnabled)==AbstractColumn::ColumnMode::DateTime){
+				if (columnModes.at(n + createIndexEnabled) == AbstractColumn::ColumnMode::DateTime) {
 					lineString += QDateTime::fromMSecsSinceEpoch(value.toString().toLong()).toString(dateTimeFormat);
-				}else{
+				} else {
 					lineString += value.toString();
 				}
 				break;
@@ -709,14 +708,13 @@ void McapFilterPrivate::write(const QString& fileName, AbstractDataSource* dataS
 	DEBUG(Q_FUNC_INFO);
 	int compression_type = 0; // None
 	int compression_level = 0; // Fastest
-	return writeWithOptions(fileName,dataSource,compression_type,compression_level);
+	return writeWithOptions(fileName, dataSource, compression_type, compression_level);
 }
-
 
 /*!
 writes the content of \c dataSource to the file \c fileName.
 */
-void McapFilterPrivate::writeWithOptions(const QString& fileName, AbstractDataSource* dataSource,int compression_mode,int compression_level) {
+void McapFilterPrivate::writeWithOptions(const QString& fileName, AbstractDataSource* dataSource, int compression_mode, int compression_level) {
 	DEBUG(Q_FUNC_INFO);
 
 	auto* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
@@ -799,7 +797,6 @@ void McapFilterPrivate::writeWithOptions(const QString& fileName, AbstractDataSo
 	}
 	writer.close();
 	qDebug() << "Exported spreadsheet with " << numRows << " rows and " << numCols << "columns to" << fileName;
-
 }
 
 // ##############################################################################
@@ -913,7 +910,6 @@ QJsonObject McapFilterPrivate::flattenJson(QJsonValue jsonVal, QString aggregate
 QJsonObject McapFilterPrivate::unflattenJson(const QJsonObject& obj, QString seperator) {
 	return obj;
 }
-
 
 QJsonObject McapFilterPrivate::mergeJsonObjects(const QJsonObject& obj1, const QJsonObject& obj2) {
 	QJsonObject mergedObj = obj1;

@@ -228,7 +228,7 @@ AbstractFileFilter::FileType AbstractFileFilter::fileType(const QString& fileNam
 	else if (fileInfo.contains(QLatin1String("image")) || fileInfo.contains(QLatin1String("bitmap")) || !imageFormat.isEmpty())
 		fileType = FileType::Image;
 #ifdef HAVE_MCAP
-	else if (fileInfo.contains(QLatin1String("mcap"))  || fileName.endsWith(QLatin1String(".mcap")))
+	else if (fileInfo.contains(QLatin1String("mcap")) || fileName.endsWith(QLatin1String(".mcap")))
 		fileType = FileType::MCAP;
 #endif
 	else

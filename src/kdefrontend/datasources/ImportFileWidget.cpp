@@ -29,12 +29,18 @@
 #include "backend/lib/macros.h"
 #include "kdefrontend/TemplateHandler.h"
 
+#include <KConfig>
+#include <KConfigGroup>
+#include <KLocalizedString>
 #include <QCompleter>
 #include <QDir>
 #include <QFileDialog>
 #include <QFileSystemModel>
 #include <QIntValidator>
+#include <QJsonArray>
 #include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonValue>
 #include <QLocalSocket>
 #include <QProcess>
 #include <QStandardItemModel>
@@ -44,14 +50,6 @@
 #include <QTreeWidgetItem>
 #include <QUdpSocket>
 #include <QWhatsThis>
-#include <QJsonArray>
-#include <KConfig>
-#include <KConfigGroup>
-#include <KLocalizedString>
-#include <QJsonDocument>
-#include <QJsonValue>
-#include <QJsonArray>
-#include <QJsonObject>
 
 #include <KUrlComboBox>
 
@@ -2049,8 +2047,7 @@ void ImportFileWidget::updateContent(const QString& fileName) {
 			m_jsonOptionsWidget->loadDocument(fileName);
 			ui.tvJson->setExpanded(m_jsonOptionsWidget->model()->index(0, 0), true); // expand the root node
 			break;
-		case AbstractFileFilter::FileType::MCAP:
-		{
+		case AbstractFileFilter::FileType::MCAP: {
 #ifdef HAVE_MCAP
 			DEBUG(Q_FUNC_INFO << "loadDocument, file name = " << STDSTRING(fileName));
 			auto* mcap_filter = static_cast<McapFilter*>(filter);
@@ -2068,7 +2065,7 @@ void ImportFileWidget::updateContent(const QString& fileName) {
 			mcap_filter->setCurrentTopic(currentMcapTopic);
 #endif
 			break;
-			}
+		}
 		case AbstractFileFilter::FileType::MATIO:
 			m_matioOptionsWidget->updateContent(static_cast<MatioFilter*>(filter), fileName);
 			break;
@@ -2412,7 +2409,7 @@ void ImportFileWidget::changeTopic() {
 		case AbstractFileFilter::FileType::Spice:
 		case AbstractFileFilter::FileType::READSTAT:
 		case AbstractFileFilter::FileType::MATIO:
-			break;		
+			break;
 		default: {
 			break;
 		}

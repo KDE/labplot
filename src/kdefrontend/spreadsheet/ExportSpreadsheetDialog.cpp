@@ -94,10 +94,10 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent)
 	// See: https://mcap.dev/docs/cpp/e3B3464E30CB968FB
 #ifdef HAVE_MCAP
 	ui->cbCompressionLevel->addItem(QStringLiteral("Fastest"), 0); // mcap::CompressionLevel::Fastest
-	ui->cbCompressionLevel->addItem(QStringLiteral("Fast"), 1); //mcap::CompressionLevel::Fast
-	ui->cbCompressionLevel->addItem(QStringLiteral("Default"),2); //mcap::CompressionLevel::Default
+	ui->cbCompressionLevel->addItem(QStringLiteral("Fast"), 1); // mcap::CompressionLevel::Fast
+	ui->cbCompressionLevel->addItem(QStringLiteral("Default"), 2); // mcap::CompressionLevel::Default
 	ui->cbCompressionLevel->addItem(QStringLiteral("Slow"), 3); // mcap::CompressionLevel::Slow
-	ui->cbCompressionLevel->addItem(QStringLiteral("Slowest"),4); // mcap::CompressionLevel::Slowest
+	ui->cbCompressionLevel->addItem(QStringLiteral("Slowest"), 4); // mcap::CompressionLevel::Slowest
 
 	ui->cbCompressionLevel->setCurrentIndex(2); // Default
 
@@ -225,15 +225,15 @@ void ExportSpreadsheetDialog::fitsExportToChanged(int idx) {
 	}
 }
 
-std::pair<int,int> ExportSpreadsheetDialog::getMcapSettings() {
+std::pair<int, int> ExportSpreadsheetDialog::getMcapSettings() {
 	int compressionLevel = ui->cbCompressionLevel->currentIndex();
 	int compressionMode = 0; // mcap::Compression::None
 	if (ui->rbLZ4->isChecked()) {
 		compressionMode = 1; // mcap::Compression::Lz4
 	} else if (ui->rbZSTD->isChecked()) {
-		compressionMode =  2; // mcap::Compression::ZSTD
+		compressionMode = 2; // mcap::Compression::ZSTD
 	}
-	return std::pair<int,int>(compressionMode,compressionLevel); 
+	return std::pair<int, int>(compressionMode, compressionLevel);
 }
 
 void ExportSpreadsheetDialog::setMatrixMode(bool b) {

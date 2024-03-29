@@ -16,8 +16,8 @@
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "backend/core/datatypes/Double2StringFilter.h"
 #include "backend/datasources/filters/FITSFilter.h"
-#include "backend/datasources/filters/XLSXFilter.h"
 #include "backend/datasources/filters/McapFilter.h"
+#include "backend/datasources/filters/XLSXFilter.h"
 #include "backend/lib/macros.h"
 #include "backend/lib/trace.h"
 #include "backend/spreadsheet/StatisticsSpreadsheet.h"
@@ -3715,19 +3715,19 @@ bool SpreadsheetView::exportView() {
 #endif
 			break;
 		}
-		case ExportSpreadsheetDialog::Format::XLSX:{
+		case ExportSpreadsheetDialog::Format::XLSX: {
 			exportToXLSX(path, exportHeader);
 			break;
-			}
-		case ExportSpreadsheetDialog::Format::SQLite:{
+		}
+		case ExportSpreadsheetDialog::Format::SQLite: {
 			exportToSQLite(path);
 			break;
-			}
-		case ExportSpreadsheetDialog::Format::MCAP:{
-			std::pair<int,int> compressionSettings = dlg->getMcapSettings();
-			exportToMCAP(path,compressionSettings.first,compressionSettings.second);
+		}
+		case ExportSpreadsheetDialog::Format::MCAP: {
+			std::pair<int, int> compressionSettings = dlg->getMcapSettings();
+			exportToMCAP(path, compressionSettings.first, compressionSettings.second);
 			break;
-			}
+		}
 		}
 
 		RESET_CURSOR;
@@ -4315,9 +4315,9 @@ void SpreadsheetView::exportToFits(const QString& fileName, const int exportTo, 
 	delete filter;
 }
 
-void SpreadsheetView::exportToMCAP(const QString& fileName,int compressionMode,int compressionLevel) const{
+void SpreadsheetView::exportToMCAP(const QString& fileName, int compressionMode, int compressionLevel) const {
 	auto* filter = new McapFilter;
-	filter->writeWithOptions(fileName, m_spreadsheet,compressionMode,compressionLevel);
+	filter->writeWithOptions(fileName, m_spreadsheet, compressionMode, compressionLevel);
 
 	delete filter;
 }
@@ -4331,8 +4331,6 @@ void SpreadsheetView::exportToXLSX(const QString& fileName, const bool exportHea
 
 	delete filter;
 }
-
-
 
 void SpreadsheetView::exportToSQLite(const QString& path) const {
 	QFile file(path);

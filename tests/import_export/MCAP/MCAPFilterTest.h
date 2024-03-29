@@ -22,7 +22,6 @@ private Q_SLOTS:
 	void testExport();
 	void testImportWithoutValidTopics();
 	void testImportWrongFile();
-
 };
 
 #endif

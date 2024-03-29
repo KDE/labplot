@@ -16,9 +16,8 @@
 class QJsonDocument;
 class AbstractDataSource;
 class AbstractColumn;
-namespace mcap
-{
-    class McapWriterOptions;
+namespace mcap {
+class McapWriterOptions;
 }
 class McapFilterPrivate {
 public:
@@ -31,11 +30,11 @@ public:
 
 	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace);
 	void importData(AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace, int lines = -1);
-	int mcapToJson(const QString& fileName,int lines=INT_MAX);
+	int mcapToJson(const QString& fileName, int lines = INT_MAX);
 	QJsonDocument getJsonDocument(const QString&);
 
 	void write(const QString& fileName, AbstractDataSource*);
-	void writeWithOptions(const QString& fileName, AbstractDataSource*,int compressionMode,int compressionLevel);
+	void writeWithOptions(const QString& fileName, AbstractDataSource*, int compressionMode, int compressionLevel);
 
 	QVector<QStringList> preview(const QString& fileName, int lines);
 	QVector<QStringList> preview(int lines);
@@ -64,10 +63,11 @@ public:
 	QJsonObject unflattenJson(const QJsonObject& json, QString separator = QLatin1String("."));
 
 	QJsonObject mergeJsonObjects(const QJsonObject& obj1, const QJsonObject& obj2);
-	
+
 	QVector<QString> getValidTopics(const QString& fileName);
 	void setCurrentTopic(QString currentTopic);
 	QString getCurrentTopic();
+
 private:
 	int m_actualRows{0};
 	int m_actualCols{0};
@@ -80,7 +80,6 @@ private:
 	QVector<QString> m_validTopics;
 
 	bool prepareDocumentToRead();
-
 };
 
 #endif

@@ -28,8 +28,7 @@
 \ingroup kdefrontend
 */
 McapOptionsWidget::McapOptionsWidget(QWidget* parent)
-	: QWidget(parent)
-	{
+	: QWidget(parent) {
 	ui.setupUi(parent);
 	ui.cbDateTimeFormat->addItems(AbstractColumn::dateTimeFormats());
 }
@@ -63,4 +62,3 @@ void McapOptionsWidget::saveSettings() {
 	conf.writeEntry("CreateIndex", ui.chbCreateIndex->isChecked());
 	conf.writeEntry("ConvertNaNToZero", ui.chbConvertNaNToZero->isChecked());
 }
-
