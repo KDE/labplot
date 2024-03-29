@@ -77,8 +77,9 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent)
 	const QStringList& drivers = QSqlDatabase::drivers();
 	if (drivers.contains(QLatin1String("QSQLITE")) || drivers.contains(QLatin1String("QSQLITE3")))
 		ui->cbFormat->addItem(QStringLiteral("SQLite"), static_cast<int>(Format::SQLite));
+#ifdef HAVE_MCAP
 	ui->cbFormat->addItem(QStringLiteral("MCAP"), static_cast<int>(Format::MCAP));
-
+#endif
 	QStringList separators = AsciiFilter::separatorCharacters();
 	separators.takeAt(0); // remove the first entry "auto"
 	ui->cbSeparator->addItems(separators);
@@ -91,6 +92,7 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent)
 	ui->cbLaTeXExport->addItem(i18n("Export Selection"));
 
 	// See: https://mcap.dev/docs/cpp/e3B3464E30CB968FB
+#ifdef HAVE_MCAP
 	ui->cbCompressionLevel->addItem(QStringLiteral("Fastest"), 0); // mcap::CompressionLevel::Fastest
 	ui->cbCompressionLevel->addItem(QStringLiteral("Fast"), 1); //mcap::CompressionLevel::Fast
 	ui->cbCompressionLevel->addItem(QStringLiteral("Default"),2); //mcap::CompressionLevel::Default
@@ -104,7 +106,7 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent)
 
 	ui->rbLZ4->setChecked(false);
 	ui->rbZSTD->setChecked(false);
-
+#endif
 	ui->bOpen->setIcon(QIcon::fromTheme(QStringLiteral("document-open")));
 
 	ui->leFileName->setFocus();
@@ -118,10 +120,11 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent)
 	connect(m_showOptionsButton, &QPushButton::clicked, this, &ExportSpreadsheetDialog::toggleOptions);
 	connect(ui->cbFormat, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ExportSpreadsheetDialog::formatChanged);
 	connect(ui->cbExportToFITS, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ExportSpreadsheetDialog::fitsExportToChanged);
+#ifdef HAVE_MCAP
 	connect(ui->rbZSTD, &QRadioButton::toggled, this, &ExportSpreadsheetDialog::onCompressionToggled);
 	connect(ui->rbLZ4, &QRadioButton::toggled, this, &ExportSpreadsheetDialog::onCompressionToggled);
 	connect(ui->rbNone, &QRadioButton::toggled, this, &ExportSpreadsheetDialog::onCompressionToggled);
-
+#endif
 	setWindowTitle(i18nc("@title:window", "Export Spreadsheet"));
 	setWindowIcon(QIcon::fromTheme(QStringLiteral("document-export-database")));
 
@@ -443,8 +446,9 @@ void ExportSpreadsheetDialog::formatChanged(int index) {
 	extensions << QStringLiteral(".xlsx");
 #endif
 	extensions << QStringLiteral(".db");
+#ifdef HAVE_MCAP
 	extensions << QStringLiteral(".mcap"); // Todo: Order of suffixes matters
-
+#endif
 	QString path = ui->leFileName->text();
 	int i = path.indexOf(QLatin1Char('.'));
 	if (index != -1) {

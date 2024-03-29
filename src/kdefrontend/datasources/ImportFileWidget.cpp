@@ -132,8 +132,9 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 #ifdef HAVE_MATIO
 		ui.cbFileType->addItem(i18n("MATLAB MAT file"), static_cast<int>(AbstractFileFilter::FileType::MATIO));
 #endif
+#ifdef HAVE_MCAP
 		ui.cbFileType->addItem(i18n("MCAP Data"), static_cast<int>(AbstractFileFilter::FileType::MCAP));
-
+#endif
 		// hide widgets relevant for live data reading only
 		ui.lRelativePath->hide();
 		ui.chbRelativePath->hide();
@@ -2050,6 +2051,7 @@ void ImportFileWidget::updateContent(const QString& fileName) {
 			break;
 		case AbstractFileFilter::FileType::MCAP:
 		{
+#ifdef HAVE_MCAP
 			DEBUG(Q_FUNC_INFO << "loadDocument, file name = " << STDSTRING(fileName));
 			auto* mcap_filter = static_cast<McapFilter*>(filter);
 
@@ -2064,6 +2066,7 @@ void ImportFileWidget::updateContent(const QString& fileName) {
 			currentMcapTopic = ui.cbTopics->currentText();
 			DEBUG("Current selected topic" << STDSTRING(currentMcapTopic));
 			mcap_filter->setCurrentTopic(currentMcapTopic);
+#endif
 			break;
 			}
 		case AbstractFileFilter::FileType::MATIO:

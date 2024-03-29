@@ -295,6 +295,8 @@ option(ENABLE_QTSERIALPORT "Build with QtSerialPort support" ON)
 option(ENABLE_DISCOUNT "Build with Discount support" ON)
 option(ENABLE_REPRODUCIBLE "Enable reproducible builds" OFF)
 option(ENABLE_XLSX "Build with XLSX (Excel) support" ON)
+option(ENABLE_MCAP "Build with MCAP support" OFF)
+
 IF (WIN32)	# C++17 needed by Orcus not working with MSVC
 	option(ENABLE_ORCUS "Build with Orcus support" OFF)
 ELSE ()
@@ -305,6 +307,7 @@ option(ENABLE_EIGEN3 "Build with Eigen3 support" ON)
 IF (APPLE)
 	option(ENABLE_TOUCHBAR "Enable touch bar support on macOS" ON)
 ENDIF ()
+
 
 ### OS macros ####################################
 IF (WIN32)
@@ -509,21 +512,28 @@ IF (NOT ZLIB_FOUND)
 ENDIF ()
 
 ### LZ4 for ROOT and MCAP #################
-FIND_PACKAGE(LZ4)
-IF(LZ4_FOUND)
-	MESSAGE (STATUS "Found LZ4 (needed for MCAP LZ4 support)")
-	add_definitions (-DHAVE_LZ4)
+IF (ENABLE_ROOT OR ENABLE_MCAP)
+	FIND_PACKAGE(LZ4)
+	IF(LZ4_FOUND)
+		MESSAGE (STATUS "Found LZ4")
+		add_definitions (-DHAVE_LZ4)
+	ENDIF()
 ENDIF()
-
 ### ZSTD for MCAP #################
-FIND_PACKAGE(ZSTD)
-IF (ZSTD_FOUND)
-	MESSAGE (STATUS "Found ZSTD (needed for MCAP ZSTD support)")
-	add_definitions (-DHAVE_ZSTD)
-ELSE ()
-	MESSAGE (STATUS "Could not find ZSTD (needed for MCAP ZSTD support)")
-ENDIF ()
 
+IF(ENABLE_MCAP)
+	add_definitions (-DHAVE_MCAP)
+	FIND_PACKAGE(ZSTD)
+	IF (ZSTD_FOUND)
+		MESSAGE (STATUS "Found ZSTD (needed for MCAP ZSTD support)")
+		add_definitions (-DHAVE_ZSTD)
+	ELSE ()
+		MESSAGE (STATUS "Could not find ZSTD (needed for MCAP ZSTD support)")
+	ENDIF ()
+ELSE ()
+	add_definitions (-DMCAP_DISABLED)
+	MESSAGE (STATUS "MCAP DISABLED")
+ENDIF ()
 
 ### ROOT (optional) #############################
 IF (ENABLE_ROOT)
