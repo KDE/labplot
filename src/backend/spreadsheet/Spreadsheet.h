@@ -177,6 +177,7 @@ Q_SIGNALS:
 
 	friend class SpreadsheetSetLinkingCmd;
 	friend class SpreadsheetSetColumnCountCommand;
+	friend class Project; // handleElementUpdated required
 };
 
 #endif

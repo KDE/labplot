@@ -387,6 +387,7 @@ void Project::descriptionChanged(const AbstractAspect* aspect) {
 
 	updateDependencies<Column>({aspect}); // notify all columns
 	updateDependencies<WorksheetElement>({aspect}); // notify all worksheetelements
+	updateDependencies<Spreadsheet>({aspect}); // notify all spreadsheets. Linked spreadsheets
 
 	Q_D(Project);
 	d->changed = true;
@@ -404,6 +405,7 @@ void Project::aspectAddedSlot(const AbstractAspect* aspect) {
 
 	updateDependencies<Column>({aspect});
 	updateDependencies<WorksheetElement>({aspect});
+	updateDependencies<Spreadsheet>({aspect});
 
 	if (aspect->inherits(AspectType::Spreadsheet)) {
 		// if a new spreadsheet was addded, check whether the spreadsheet name match the missing
