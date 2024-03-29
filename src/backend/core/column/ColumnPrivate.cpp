@@ -2395,12 +2395,11 @@ void ColumnPrivate::formulaVariableColumnAdded(const AbstractAspect* aspect) {
 		return;
 
 	const auto& path = aspect->path();
-	int index = -1;
 	for (int i = 0; i < formulaData().count(); i++) {
 		if (formulaData().at(i).columnName() == path) {
 			// m_formulaData[index].setColumn(const_cast<Column*>(column));
 			// DEBUG(Q_FUNC_INFO << ", calling updateFormula()")
-			setFormulVariableColumn(index, column);
+			setFormulVariableColumn(i, column);
 			updateFormula();
 			return;
 		}
