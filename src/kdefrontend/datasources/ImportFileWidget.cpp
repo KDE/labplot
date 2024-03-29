@@ -2390,9 +2390,8 @@ void ImportFileWidget::changeTopic() {
 		switch (filter->type()) {
 		case AbstractFileFilter::FileType::MCAP: {
 			auto* mcap_filter = static_cast<McapFilter*>(filter);
-			if (!(mcap_filter->getCurrentTopic() == ui.cbTopics->currentText())) {
+			if (!(mcap_filter->getCurrentTopic() == ui.cbTopics->currentText()))
 				refreshPreview();
-			}
 			break;
 		}
 		case AbstractFileFilter::FileType::Ascii:
