@@ -577,6 +577,7 @@ void TextLabelPrivate::updateText() {
 
 		m_textItem->show();
 		m_textItem->setHtml(textWrapper.text);
+		m_textItem->adjustSize(); // has to be called so the text alignment is properly updated
 
 		// the size of the label was most probably changed,
 		// recalculate the bounding box of the label

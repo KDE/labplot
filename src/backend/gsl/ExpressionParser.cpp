@@ -263,6 +263,9 @@ const QVector<ConstantGroups>& ExpressionParser::constantsGroupIndices() {
 
 bool ExpressionParser::isValid(const QString& expr, const QStringList& vars) {
 	QDEBUG(Q_FUNC_INFO << ", expr:" << expr << ", vars:" << vars);
+	if (expr.isEmpty())
+		return true;
+
 	gsl_set_error_handler_off();
 
 	Lock l(skipSpecialFunctionEvaluation);

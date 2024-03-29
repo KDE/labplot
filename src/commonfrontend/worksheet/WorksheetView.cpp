@@ -881,12 +881,17 @@ void WorksheetView::zoom(int numSteps) {
 	if (m_numScheduledScalings * numSteps < 0) // if user moved the wheel in another direction, we reset previously scheduled scalings
 		m_numScheduledScalings = numSteps;
 
-	auto* anim = new QTimeLine(350, this);
-	anim->setUpdateInterval(20);
+	if (!m_zoomTimeLine) {
+		m_zoomTimeLine = new QTimeLine(350, this);
+		m_zoomTimeLine->setUpdateInterval(20);
+		connect(m_zoomTimeLine, &QTimeLine::valueChanged, this, &WorksheetView::scalingTime);
+		connect(m_zoomTimeLine, &QTimeLine::finished, this, &WorksheetView::animFinished);
+	}
 
-	connect(anim, &QTimeLine::valueChanged, this, &WorksheetView::scalingTime);
-	connect(anim, &QTimeLine::finished, this, &WorksheetView::animFinished);
-	anim->start();
+	if (m_zoomTimeLine->state() == QTimeLine::Running)
+		m_zoomTimeLine->stop();
+
+	m_zoomTimeLine->start();
 }
 
 void WorksheetView::scalingTime() {
@@ -899,7 +904,6 @@ void WorksheetView::animFinished() {
 		m_numScheduledScalings--;
 	else
 		m_numScheduledScalings++;
-	sender()->~QObject();
 
 	updateLabelsZoom();
 }
@@ -1404,14 +1408,14 @@ void WorksheetView::addNew(QAction* action) {
 	// if there is already an element fading in, stop the time line and show the element with the full opacity.
 	if (m_fadeInTimeLine->state() == QTimeLine::Running) {
 		m_fadeInTimeLine->stop();
-		auto* effect = new QGraphicsOpacityEffect();
+		auto* effect = new QGraphicsOpacityEffect(this);
 		effect->setOpacity(1);
 		lastAddedWorksheetElement->graphicsItem()->setGraphicsEffect(effect);
 	}
 
 	// create the opacity effect and start the actual fade-in
 	lastAddedWorksheetElement = aspect;
-	auto* effect = new QGraphicsOpacityEffect();
+	auto* effect = new QGraphicsOpacityEffect(this);
 	effect->setOpacity(0);
 	lastAddedWorksheetElement->graphicsItem()->setGraphicsEffect(effect);
 	m_fadeInTimeLine->start();

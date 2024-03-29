@@ -1,17 +1,17 @@
 /*******************************************************************************
 ** Qt Advanced Docking System
 ** Copyright (C) 2017 Uwe Kindler
-** 
+**
 ** This library is free software; you can redistribute it and/or
 ** modify it under the terms of the GNU Lesser General Public
 ** License as published by the Free Software Foundation; either
 ** version 2.1 of the License, or (at your option) any later version.
-** 
+**
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 ** Lesser General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU Lesser General Public
 ** License along with this library; If not, see <http://www.gnu.org/licenses/>.
 ******************************************************************************/
@@ -1644,6 +1644,15 @@ emitAndExit:
 
 
 //============================================================================
+QList<QPointer<CDockAreaWidget>> CDockContainerWidget::removeAllDockAreas()
+{
+	auto Result = d->DockAreas;
+	d->DockAreas.clear();
+	return Result;
+}
+
+
+//============================================================================
 CDockAreaWidget* CDockContainerWidget::dockAreaAt(const QPoint& GlobalPos) const
 {
 	for (const auto& DockArea : d->DockAreas)
@@ -1754,9 +1763,9 @@ void CDockContainerWidget::dropFloatingWidget(CFloatingDockContainer* FloatingWi
 	}
 
 	if (Dropped)
-	{ 
+	{
 		// Fix https://github.com/githubuser0xFFFF/Qt-Advanced-Docking-System/issues/351
-		FloatingWidget->hideAndDeleteLater();
+		FloatingWidget->finishDropOperation();
 
 		// If we dropped a floating widget with only one single dock widget, then we
 		// drop a top level widget that changes from floating to docked now

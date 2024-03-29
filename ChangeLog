@@ -20,6 +20,7 @@ New features:
 		* Add possibility to limit the number of ticks for custom columns
 		* Allow to show/hide the entry in the legend for all supported plot types and not only for XY-Curve
 		* Add setting legend and text position relative to plot
+		* Text alignment (left, center, right, block) in text labels
 	* [spreadsheet]
 		* Spreadsheet linking - allow to synchronize number of rows across multiple spreadsheets
 		* Extended search and replace
