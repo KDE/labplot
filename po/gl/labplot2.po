@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-03-25 01:58+0000\n"
-"PO-Revision-Date: 2024-03-23 21:09+0100\n"
+"PO-Revision-Date: 2024-03-29 10:45+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 24.02.0\n"
+"X-Generator: Lokalize 24.02.1\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -21115,6 +21115,16 @@ msgid ""
 "margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"
 "\"><br /></p></body></html>"
 msgstr ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Noto Sans'; font-size:10pt; font-"
+"weight:400; font-style:normal;\">\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"
+"\"><br /></p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lBackgroundColor)
 #: src/kdefrontend/ui/labelwidget.ui:231
@@ -21137,10 +21147,9 @@ msgstr "Desprazamento en X:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/kdefrontend/ui/labelwidget.ui:494
-#, fuzzy, kde-format
-#| msgid "Model:"
+#, kde-format
 msgid "Mode:"
-msgstr "Modelo:"
+msgstr "Modo:"
 
 #. i18n: ectx: property (text), widget (QLabel, lBorderShape)
 #: src/kdefrontend/ui/labelwidget.ui:586
@@ -22646,26 +22655,24 @@ msgid "Sub-Script"
 msgstr "Subíndice"
 
 #: src/kdefrontend/widgets/LabelWidget.cpp:139
-#, fuzzy, kde-format
-#| msgid "Left margin:"
+#, kde-format
 msgid "Left Align"
-msgstr "Marxe esquerda:"
+msgstr "Aliñar á esquerda"
 
 #: src/kdefrontend/widgets/LabelWidget.cpp:141
-#, fuzzy, kde-format
-#| msgid "Right margin:"
+#, kde-format
 msgid "Right Align"
-msgstr "Marxe dereita:"
+msgstr "Aliñar á dereita"
 
 #: src/kdefrontend/widgets/LabelWidget.cpp:142
 #, kde-format
 msgid "Justify"
-msgstr ""
+msgstr "Xustificar"
 
 #: src/kdefrontend/widgets/LabelWidget.cpp:143
 #, kde-format
 msgid "Insert Symbol"
-msgstr "Inserir o símbolo"
+msgstr "Inserir un símbolo"
 
 #: src/kdefrontend/widgets/LabelWidget.cpp:144
 #, kde-format
