@@ -214,9 +214,9 @@ bool BarPlot::usingColumn(const Column* column) const {
 	return false;
 }
 
-void BarPlot::handleElementUpdated(const QString& aspectPath, const AbstractAspect* element) {
+void BarPlot::handleAspectUpdated(const QString& aspectPath, const AbstractAspect* aspect) {
 	Q_D(const BarPlot);
-	const auto column = dynamic_cast<const AbstractColumn*>(element);
+	const auto column = dynamic_cast<const AbstractColumn*>(aspect);
 	if (!column)
 		return;
 

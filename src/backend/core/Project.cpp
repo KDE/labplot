@@ -328,46 +328,22 @@ bool Project::hasChanged() const {
 }
 
 /*!
- * \brief Project::getElements
- * get all Elements of type T from the aspect. If the aspect is of type T this element is returned
- * otherwise all childs of type T from the aspect are returned
- *
- * Example: curve needs "column1"
- * An Existing column is called "column2". This existing column will be renamed to "column1". Now the column shall be connected to the curve
- * \param aspect
- * \return
- */
-template<typename T>
-QVector<const AbstractAspect*> Project::getElements(const AbstractAspect* aspect) {
-	QVector<const AbstractAspect*> elements;
-	const auto* element = static_cast<const T*>(aspect);
-	if (element)
-		elements.append(element);
-	else {
-		for (auto* child : aspect->children<T>(ChildIndexFlag::Recursive))
-			elements.append(static_cast<const T*>(child));
-	}
-	return elements;
-}
-
-/*!
  * \brief Project::updateDependencies
  * Notify that WorksheetElements are updated. This is required if the element
  * is not a child of another element, like a XYCurve for an InfoElement, ...
  * \param changedElements
  */
 template<typename T>
-void Project::updateDependencies(const QVector<const AbstractAspect*> changedElements) {
-	if (!changedElements.isEmpty()) {
-		// if a new element was addded, check whether the element names match the missing
-		// names in the other elements, etc. and update the dependencies
-		const auto& elements = children<T>(ChildIndexFlag::Recursive);
+void Project::updateDependencies(const QVector<const AbstractAspect*> changedAspects) {
+	if (!changedAspects.isEmpty()) {
+		// if a new aspect was addded, check whether the aspect names match the missing
+		// names in the other aspects and update the dependencies
+		const auto& children = this->children<T>(ChildIndexFlag::Recursive);
 
-		for (const auto* element : changedElements) {
-			const auto& elementPath = element->path();
-			for (auto* e : elements) {
-				e->handleElementUpdated(elementPath, element);
-			}
+		for (const auto* changedAspect : changedAspects) {
+			const auto& changedAspectPath = changedAspect->path();
+			for (auto* child : children)
+				child->handleAspectUpdated(changedAspectPath, changedAspect);
 		}
 	}
 }

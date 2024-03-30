@@ -220,10 +220,10 @@ bool QQPlot::usingColumn(const Column* column) const {
 	return (d->dataColumn == column);
 }
 
-void QQPlot::handleElementUpdated(const QString& aspectPath, const AbstractAspect* element) {
+void QQPlot::handleAspectUpdated(const QString& aspectPath, const AbstractAspect* aspect) {
 	Q_D(QQPlot);
 
-	const auto column = dynamic_cast<const AbstractColumn*>(element);
+	const auto column = dynamic_cast<const AbstractColumn*>(aspect);
 	if (!column)
 		return;
 

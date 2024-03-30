@@ -327,9 +327,9 @@ bool XYCurve::usingColumn(const Column* column) const {
 			|| (d->valuesType == ValuesType::CustomColumn && d->valuesColumn == column));
 }
 
-void XYCurve::handleElementUpdated(const QString& aspectPath, const AbstractAspect* element) {
+void XYCurve::handleAspectUpdated(const QString& aspectPath, const AbstractAspect* aspect) {
 	Q_D(XYCurve);
-	const auto column = dynamic_cast<const AbstractColumn*>(element);
+	const auto column = dynamic_cast<const AbstractColumn*>(aspect);
 	if (!column)
 		return;
 

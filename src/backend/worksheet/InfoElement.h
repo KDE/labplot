@@ -109,7 +109,7 @@ private:
 	void initCustomPointConnections(const CustomPoint*);
 	void updateValid();
 	void setConnectionLineNextValidCurve();
-	virtual void handleElementUpdated(const QString& path, const AbstractAspect*) override;
+	virtual void handleAspectUpdated(const QString& path, const AbstractAspect*) override;
 	void loadPoints(XmlStreamReader* reader, bool preview);
 
 Q_SIGNALS:

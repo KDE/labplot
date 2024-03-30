@@ -443,9 +443,9 @@ bool BoxPlot::usingColumn(const Column* column) const {
 	return false;
 }
 
-void BoxPlot::handleElementUpdated(const QString& aspectPath, const AbstractAspect* element) {
+void BoxPlot::handleAspectUpdated(const QString& aspectPath, const AbstractAspect* aspect) {
 	Q_D(const BoxPlot);
-	const auto column = dynamic_cast<const AbstractColumn*>(element);
+	const auto column = dynamic_cast<const AbstractColumn*>(aspect);
 	if (!column)
 		return;
 

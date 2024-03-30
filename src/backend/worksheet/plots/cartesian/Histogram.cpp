@@ -331,9 +331,9 @@ bool Histogram::usingColumn(const Column* column) const {
 		|| (d->errorBar->yErrorType() == ErrorBar::ErrorType::Asymmetric && (d->errorBar->yPlusColumn() == column || d->errorBar->yMinusColumn() == column)));
 }
 
-void Histogram::handleElementUpdated(const QString& aspectPath, const AbstractAspect* element) {
+void Histogram::handleAspectUpdated(const QString& aspectPath, const AbstractAspect* aspect) {
 	Q_D(Histogram);
-	const auto column = dynamic_cast<const AbstractColumn*>(element);
+	const auto column = dynamic_cast<const AbstractColumn*>(aspect);
 	if (!column)
 		return;
 

@@ -129,7 +129,7 @@ protected:
 	CartesianPlot* m_plot{nullptr};
 	const CartesianCoordinateSystem* cSystem{nullptr}; // current cSystem
 
-	virtual void handleElementUpdated(const QString& path, const AbstractAspect*);
+	virtual void handleAspectUpdated(const QString& path, const AbstractAspect*);
 	friend class Project;
 
 public Q_SLOTS:

@@ -107,8 +107,6 @@ private:
 	void save(QXmlStreamWriter*) const override;
 
 	template<typename T>
-	QVector<const AbstractAspect*> getElements(const AbstractAspect* aspect);
-	template<typename T>
 	void updateDependencies(const QVector<const AbstractAspect*>);
 };
 

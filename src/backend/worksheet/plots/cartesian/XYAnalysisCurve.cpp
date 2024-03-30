@@ -371,8 +371,8 @@ void XYAnalysisCurve::createDataSpreadsheet() {
 	folder()->addChild(spreadsheet);
 }
 
-void XYAnalysisCurve::handleElementUpdated(const QString& aspectPath, const AbstractAspect* element) {
-	const auto column = dynamic_cast<const AbstractColumn*>(element);
+void XYAnalysisCurve::handleAspectUpdated(const QString& aspectPath, const AbstractAspect* aspect) {
+	const auto column = dynamic_cast<const AbstractColumn*>(aspect);
 	if (!column)
 		return;
 

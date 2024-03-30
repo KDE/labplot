@@ -91,7 +91,7 @@ public:
 
 protected:
 	BoxPlot(const QString& name, BoxPlotPrivate* dd);
-	virtual void handleElementUpdated(const QString& aspectPath, const AbstractAspect*) override;
+	virtual void handleAspectUpdated(const QString& aspectPath, const AbstractAspect*) override;
 
 private:
 	Q_DECLARE_PRIVATE(BoxPlot)

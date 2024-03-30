@@ -2376,6 +2376,6 @@ AbstractColumn::ColumnMode Column::labelsMode() const {
 	return d->m_labels.mode();
 }
 
-void Column::handleElementUpdated(const QString&, const AbstractAspect* element) {
-	d->formulaVariableColumnAdded(element);
+void Column::handleAspectUpdated(const QString&, const AbstractAspect* aspect) {
+	d->formulaVariableColumnAdded(aspect);
 }

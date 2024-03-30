@@ -85,7 +85,7 @@ public:
 
 protected:
 	XYAnalysisCurve(const QString& name, XYAnalysisCurvePrivate*, AspectType);
-	virtual void handleElementUpdated(const QString& aspectPath, const AbstractAspect*) override;
+	virtual void handleAspectUpdated(const QString& aspectPath, const AbstractAspect*) override;
 
 private:
 	Q_DECLARE_PRIVATE(XYAnalysisCurve)

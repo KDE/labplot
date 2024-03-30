@@ -791,7 +791,7 @@ void InfoElement::retransform() {
 void InfoElement::handleResize(double /*horizontalRatio*/, double /*verticalRatio*/, bool /*pageResize*/) {
 }
 
-void InfoElement::handleElementUpdated(const QString& path, const AbstractAspect* aspect) {
+void InfoElement::handleAspectUpdated(const QString& path, const AbstractAspect* aspect) {
 	const auto* curve = dynamic_cast<const XYCurve*>(aspect);
 	if (!curve)
 		return;

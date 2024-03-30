@@ -221,9 +221,9 @@ bool LollipopPlot::usingColumn(const Column* column) const {
 	return false;
 }
 
-void LollipopPlot::handleElementUpdated(const QString& aspectPath, const AbstractAspect* element) {
+void LollipopPlot::handleAspectUpdated(const QString& aspectPath, const AbstractAspect* aspect) {
 	Q_D(const LollipopPlot);
-	const auto column = dynamic_cast<const AbstractColumn*>(element);
+	const auto column = dynamic_cast<const AbstractColumn*>(aspect);
 	if (!column)
 		return;
 	const auto dataColumnPaths = d->dataColumnPaths;

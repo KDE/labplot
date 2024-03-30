@@ -2390,7 +2390,7 @@ void ColumnPrivate::formulaVariableColumnRemoved(const AbstractAspect* aspect) {
 
 void ColumnPrivate::formulaVariableColumnAdded(const AbstractAspect* aspect) {
 	PERFTRACE(QLatin1String(Q_FUNC_INFO));
-	Column* column = dynamic_cast<Column*>(const_cast<AbstractAspect*>(aspect));
+	auto* column = dynamic_cast<Column*>(const_cast<AbstractAspect*>(aspect));
 	if (!column)
 		return;
 

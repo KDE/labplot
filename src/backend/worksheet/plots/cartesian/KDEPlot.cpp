@@ -187,9 +187,9 @@ bool KDEPlot::usingColumn(const Column* column) const {
 	return (d->dataColumn == column);
 }
 
-void KDEPlot::handleElementUpdated(const QString& aspectPath, const AbstractAspect* element) {
+void KDEPlot::handleAspectUpdated(const QString& aspectPath, const AbstractAspect* aspect) {
 	Q_D(KDEPlot);
-	const auto column = dynamic_cast<const AbstractColumn*>(element);
+	const auto column = dynamic_cast<const AbstractColumn*>(aspect);
 	if (!column)
 		return;
 

@@ -873,12 +873,12 @@ QIcon XYFitCurve::icon() const {
 	return QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve"));
 }
 
-void XYFitCurve::handleElementUpdated(const QString& aspectPath, const AbstractAspect* element) {
-	const auto* column = dynamic_cast<const Column*>(element);
+void XYFitCurve::handleAspectUpdated(const QString& aspectPath, const AbstractAspect* aspect) {
+	const auto* column = dynamic_cast<const Column*>(aspect);
 	if (!column)
 		return;
 
-	XYAnalysisCurve::handleElementUpdated(aspectPath, element);
+	XYAnalysisCurve::handleAspectUpdated(aspectPath, aspect);
 
 	setUndoAware(true);
 	if (xErrorColumnPath() == aspectPath)
