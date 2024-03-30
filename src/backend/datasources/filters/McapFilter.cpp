@@ -181,30 +181,57 @@ int McapFilter::endColumn() const {
 QString McapFilter::fileInfoString(const QString& fileName) {
 	DEBUG(Q_FUNC_INFO);
 
-	KCompressionDevice device(fileName);
+	mcap::McapReader reader;
+	{
+		const auto res = reader.open(STDSTRING(fileName));
+		if (!res.ok()) {
+			return i18n("Failed to open the device/file or it's empty.");
+		}
+	}
 
-	if (!device.open(QIODevice::ReadOnly))
-		return i18n("Open device failed");
-
-	if (device.atEnd() && !device.isSequential())
-		return i18n("Empty file");
-
-	QJsonParseError err;
-	QJsonDocument doc = QJsonDocument::fromJson(device.readAll(), &err);
-
-	if (err.error != QJsonParseError::NoError || doc.isEmpty())
-		return i18n("Parse error: %1 at offset %2", err.errorString(), err.offset);
+	reader.readSummary(mcap::ReadSummaryMethod::NoFallbackScan);
 
 	QString info;
-	info += i18n("Valid JSON document");
+	info += i18n("Valid MCAP file");
+	info += QLatin1String("<br>");
 
-	// TODO: get number of object, etc.
-	// if (prepareDocumentToRead(doc) != 0)
-	//	return info;
+	auto stats = reader.statistics();
+	if(stats.has_value()){
+	info+= i18n("Message count: ") + QString::number(stats.value().messageCount);
+	info += QLatin1String("<br>");
+	info+= i18n("Schema count: ") + QString::number(stats.value().schemaCount);
+	info += QLatin1String("<br>");
+	info+= i18n("Channel count: ") + QString::number(stats.value().channelCount);
+	info += QLatin1String("<br>");	
+	info+= i18n("Attachement count: ") + QString::number(stats.value().attachmentCount);
+	info += QLatin1String("<br>");
+	info+= i18n("Metadata count: ") + QString::number(stats.value().metadataCount);
+	info += QLatin1String("<br>");
+	info+= i18n("Message Start Time: ") + QDateTime::fromMSecsSinceEpoch(static_cast<long>(stats.value().messageStartTime) / 1000000).toString();
+	info += QLatin1String("<br>");
+	info+= i18n("Message End Time: ") + QDateTime::fromMSecsSinceEpoch(static_cast<long>(stats.value().messageEndTime / 1000000)).toString();
+	}else{
+		info += i18n("No Statistics found.");
+	}
 
-	// reset to start of file
-	if (!device.isSequential())
-		device.seek(0);
+	info += QLatin1String("<br>");
+	info += QLatin1String("JSON Encoded Topics:");
+	info += QLatin1String("<br>");
+
+	int maxNoOfTopics = 5;
+	int topicCount = 0;
+	std::unordered_map<mcap::ChannelId, mcap::ChannelPtr> channel_map = reader.channels();
+	std::for_each(channel_map.begin(), channel_map.end(), [&](std::pair<mcap::ChannelId, mcap::ChannelPtr> entry) {
+		if (entry.second->messageEncoding == "json") {
+				info += QString::fromStdString((entry.second->topic));
+				info += QLatin1String("<br>");
+				topicCount +=1;
+				if(topicCount == maxNoOfTopics){
+					info += QLatin1String("...");
+					info += QLatin1String("<br>");					
+				}
+		}
+	});
 
 	return info;
 }
@@ -609,8 +636,8 @@ void McapFilterPrivate::importData(AbstractDataSource* dataSource, AbstractFileF
 				spreadsheet->column(m_columnOffset)->setPlotDesignation(AbstractColumn::PlotDesignation::X);
 		}
 
-		dataSource->finalizeImport(m_columnOffset, startColumn, startColumn + m_actualCols - 1, dateTimeFormat, importMode);
 	}
+	dataSource->finalizeImport(m_columnOffset, startColumn, startColumn + m_actualCols - 1, dateTimeFormat, importMode);
 }
 
 /*!
