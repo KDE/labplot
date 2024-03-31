@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-25 01:58+0000\n"
+"POT-Creation-Date: 2024-03-31 01:57+0000\n"
 "PO-Revision-Date: 2024-03-24 07:48+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -437,12 +437,12 @@ msgid "incompatible filter type"
 msgstr "nezdružljiva vrsta filtra"
 
 #: src/backend/core/AbstractSimpleFilter.cpp:366
-#: src/backend/core/Folder.cpp:151 src/backend/core/Project.cpp:720
+#: src/backend/core/Folder.cpp:151 src/backend/core/Project.cpp:693
 #: src/backend/datasources/MQTTClient.cpp:1376
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:283
 #: src/backend/lib/XmlStreamReader.cpp:104
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1897
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1900
 #, kde-format
 msgid "unknown element '%1'"
 msgstr "neznan element '%1'"
@@ -725,32 +725,32 @@ msgstr "%1: shrani spremenjena stanja sidrišč"
 msgid "%1: save calculation changed"
 msgstr "%1: shrani spremenjen izračun"
 
-#: src/backend/core/Project.cpp:555 src/backend/core/Project.cpp:589
+#: src/backend/core/Project.cpp:528 src/backend/core/Project.cpp:562
 #, kde-format
 msgid "Sorry. Could not open file for reading."
 msgstr "Oprostite. Datoteke ni bilo mogoče odpreti za branje."
 
-#: src/backend/core/Project.cpp:566 src/backend/core/Project.cpp:596
+#: src/backend/core/Project.cpp:539 src/backend/core/Project.cpp:569
 #, kde-format
 msgid "The project file is empty."
 msgstr "Datoteka projekta je prazna."
 
-#: src/backend/core/Project.cpp:566 src/backend/core/Project.cpp:596
+#: src/backend/core/Project.cpp:539 src/backend/core/Project.cpp:569
 #, kde-format
 msgid "Error opening project"
 msgstr "Napaka pri odpiranju projekta"
 
-#: src/backend/core/Project.cpp:615
+#: src/backend/core/Project.cpp:588
 #, kde-format
 msgid "Unknown error when opening the project %1."
 msgstr "Neznana napaka pri odpiranju projekta %1."
 
-#: src/backend/core/Project.cpp:616
+#: src/backend/core/Project.cpp:589
 #, kde-format
 msgid "Error when opening the project"
 msgstr "Napaka pri odpiranju projekta"
 
-#: src/backend/core/Project.cpp:636
+#: src/backend/core/Project.cpp:609
 #, kde-format
 msgid ""
 "The project has content written with %1. Your installation of LabPlot lacks "
@@ -769,27 +769,27 @@ msgstr ""
 "\n"
 "Ali želite nadaljevati?"
 
-#: src/backend/core/Project.cpp:643 src/backend/core/Project.cpp:646
+#: src/backend/core/Project.cpp:616 src/backend/core/Project.cpp:619
 #, kde-format
 msgid "Missing Support for CAS"
 msgstr "Manjkajoča podpora za CAS"
 
-#: src/backend/core/Project.cpp:677
+#: src/backend/core/Project.cpp:650
 #, kde-format
 msgid "Attribute 'version' is missing."
 msgstr "Manjka atribut »različica« (»version«)."
 
-#: src/backend/core/Project.cpp:727
+#: src/backend/core/Project.cpp:700
 #, kde-format
 msgid "no project element found"
 msgstr "ni najdenega elementa projekta"
 
-#: src/backend/core/Project.cpp:729
+#: src/backend/core/Project.cpp:702
 #, kde-format
 msgid "no valid XML document found"
 msgstr "ni bilo najdenega veljavnega dokumenta XML"
 
-#: src/backend/core/Project.cpp:1148
+#: src/backend/core/Project.cpp:1121
 #, kde-format
 msgid "Invalid project modification time. Using current time."
 msgstr "Neveljaven čas spreminjanja projekta. Uporabljen bo trenutni čas."
@@ -913,7 +913,7 @@ msgstr "%1: nastavite sloga orisa vrstice napak"
 
 #: src/backend/datapicker/DatapickerCurve.cpp:376
 #: src/backend/datapicker/DatapickerImage.cpp:414
-#: src/backend/worksheet/InfoElement.cpp:810
+#: src/backend/worksheet/InfoElement.cpp:871
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:126
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:138
 #: src/backend/worksheet/WorksheetElement.cpp:161
@@ -925,11 +925,11 @@ msgstr "%1: nastavite vidno"
 
 #: src/backend/datapicker/DatapickerCurve.cpp:376
 #: src/backend/datapicker/DatapickerImage.cpp:414
-#: src/backend/worksheet/InfoElement.cpp:810
+#: src/backend/worksheet/InfoElement.cpp:871
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:126
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:138
 #: src/backend/worksheet/WorksheetElement.cpp:161
-#: src/backend/worksheet/WorksheetElement.cpp:767
+#: src/backend/worksheet/WorksheetElement.cpp:783
 #: src/backend/worksheet/WorksheetElementContainer.cpp:66
 #: src/backend/worksheet/WorksheetElementContainer.cpp:84
 #, kde-format
@@ -954,7 +954,7 @@ msgid "%1: upload new image"
 msgstr "%1: naložite novo sliko"
 
 #: src/backend/datapicker/DatapickerImage.cpp:385
-#: src/backend/worksheet/WorksheetElement.cpp:808
+#: src/backend/worksheet/WorksheetElement.cpp:824
 #, kde-format
 msgid "%1: set rotation angle"
 msgstr "%1: določite kot vrtenja"
@@ -986,8 +986,8 @@ msgid "Failed to read image data"
 msgstr "Branja podatkov o sliki ni uspelo"
 
 #: src/backend/datapicker/DatapickerPoint.cpp:213
-#: src/backend/worksheet/InfoElement.cpp:780
-#: src/backend/worksheet/WorksheetElement.cpp:729
+#: src/backend/worksheet/InfoElement.cpp:841
+#: src/backend/worksheet/WorksheetElement.cpp:745
 #, kde-format
 msgid "%1: set position"
 msgstr "%1: določite položaj"
@@ -2166,7 +2166,7 @@ msgstr "Razčlenjevanje datoteke ni uspelo."
 #: src/backend/datasources/MQTTClient.cpp:1200
 #: src/backend/datasources/MQTTTopic.cpp:218
 #: src/backend/lib/XmlStreamReader.cpp:99
-#: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:465
+#: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:467
 #, kde-format
 msgid "Attribute '%1' missing or empty, default value is used"
 msgstr "Atribut '%1' manjka ali je prazen, uporabljena je privzeta vrednost"
@@ -3014,7 +3014,7 @@ msgid "Energy 1 erg"
 msgstr "Energija 1 erg"
 
 #: src/backend/gsl/errors.h:20
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1955
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1970
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1180
 #, kde-format
 msgid "Success"
@@ -7025,8 +7025,8 @@ msgid "%1: change keep ratio"
 msgstr "%1: spremeni proporce"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twLabels)
-#: src/backend/worksheet/InfoElement.cpp:135
-#: src/backend/worksheet/InfoElement.cpp:1230
+#: src/backend/worksheet/InfoElement.cpp:143
+#: src/backend/worksheet/InfoElement.cpp:1339
 #: src/kdefrontend/ui/dockwidgets/columndock.ui:187
 #, kde-format
 msgid "Label"
@@ -7034,7 +7034,7 @@ msgstr "Oznaka"
 
 #. i18n: ectx: property (text), widget (QLabel, lGeneral)
 #. i18n: ectx: attribute (title), widget (QWidget, tabSymbol)
-#: src/backend/worksheet/InfoElement.cpp:287
+#: src/backend/worksheet/InfoElement.cpp:309
 #: src/kdefrontend/ui/dockwidgets/custompointdock.ui:331
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:413
 #: src/kdefrontend/ui/dockwidgets/lollipopplotdock.ui:318
@@ -7044,18 +7044,18 @@ msgstr "Oznaka"
 msgid "Symbol"
 msgstr "Simbol"
 
-#: src/backend/worksheet/InfoElement.cpp:796
+#: src/backend/worksheet/InfoElement.cpp:857
 #, kde-format
 msgid "%1: set gluepoint index"
 msgstr "%1: nastavite indeks točke lepljenja"
 
-#: src/backend/worksheet/InfoElement.cpp:803
+#: src/backend/worksheet/InfoElement.cpp:864
 #, kde-format
 msgid "%1: set connectionline curve name"
 msgstr "%1: nastavite ime krivulje povezovalne črte"
 
 #: src/backend/worksheet/Line.cpp:100
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:423
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:426
 #, kde-format
 msgid "%1: line type changed"
 msgstr "%1: spremenjena vrsta črte"
@@ -7446,42 +7446,42 @@ msgstr "%1: določi pripono oznake"
 msgid "%1: set labels opacity"
 msgstr "%1: določi prekrivnost oznak"
 
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:262
-#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:269
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:265
+#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:271
 #, kde-format
 msgid "%1: set x column"
 msgstr "%1: nastavi stolpec x"
 
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:280
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:481
-#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:287
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:283
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:484
+#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:289
 #, kde-format
 msgid "%1: set data columns"
 msgstr "%1: nastavi podatkovne stolpce"
 
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:307
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:310
 #, kde-format
 msgid "%1: set type"
 msgstr "%1: nastavi vrsto"
 
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:314
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:509
-#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:309
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:317
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:512
+#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:311
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:196
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:219
 #, kde-format
 msgid "%1: set orientation"
 msgstr "%1: določite usmerjenost"
 
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:321
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:523
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:324
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:526
 #, kde-format
 msgid "%1: width factor changed"
 msgstr "%1: faktor širine spremenjen"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:291
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:165
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:366
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:340
 #: src/backend/worksheet/plots/cartesian/XYEquationCurve.cpp:112
 #, kde-format
 msgid "%1 - Data"
@@ -7527,65 +7527,65 @@ msgstr "število osamelcev"
 msgid "far out points count"
 msgstr "število oddaljenih točk"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:502
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:505
 #, kde-format
 msgid "%1: set ordering"
 msgstr "%1: določite razvrščenost"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:516
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:519
 #, kde-format
 msgid "%1: variable width changed"
 msgstr "%1: spremenjena širina spremenljivke"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:530
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:533
 #, kde-format
 msgid "%1: changed notches"
 msgstr "%1: spremenjene zareze"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:538
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:541
 #, kde-format
 msgid "%1: set whiskers type"
 msgstr "%1: nastavite vrsto brkov"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:545
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:548
 #, kde-format
 msgid "%1: set whiskers range parameter"
 msgstr "%1: določite parameter obsegov brkov"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:552
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:555
 #, kde-format
 msgid "%1: set whiskers cap size"
 msgstr "%1: nastavite velikost konca brkov"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:560
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:563
 #, kde-format
 msgid "%1: jitterring changed"
 msgstr "%1: spremenjeno stresanje"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:568
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:513
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:556
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:571
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:516
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:559
 #, kde-format
 msgid "%1: change rug enabled"
 msgstr "%1: sprememba omogočenega raztrosa"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:575
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:520
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:570
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:578
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:523
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:573
 #, kde-format
 msgid "%1: change rug width"
 msgstr "%1: spremenite širino raztrosa"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:582
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:527
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:577
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:585
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:530
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:580
 #, kde-format
 msgid "%1: change rug length"
 msgstr "%1: spremenite dolžino raztrosa"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:589
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:534
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:584
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:592
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:537
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:587
 #, kde-format
 msgid "%1: change rug offset"
 msgstr "%1: spremenite odmik raztrosa"
@@ -7597,7 +7597,7 @@ msgstr "informacije niso na voljo"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTitle)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:165
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5019
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5015
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:483
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:543
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:466
@@ -8003,7 +8003,7 @@ msgid "%1: load default theme"
 msgstr "%1: naložite privzeto temo"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1694
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5329
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5325
 #: src/backend/worksheet/Worksheet.cpp:818
 #, kde-format
 msgid "%1: set theme"
@@ -8137,24 +8137,24 @@ msgstr "%1: dodajte krivuljo filtra Fourier"
 msgid "Text Label"
 msgstr "Besedilna oznaka"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3725
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3721
 #, kde-format
 msgid "Not inside of the bounding rect"
 msgstr "Ne znotraj omejevalnega pravok"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3949
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3970
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3945
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3966
 #, kde-format
 msgid "from x=%1 to x=%2"
 msgstr "od x=%1 do x=%2"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3957
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3983
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3953
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3979
 #, kde-format
 msgid "from y=%1 to y=%2"
 msgstr "od y=%1 do y=%2"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4002
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3998
 #, kde-format
 msgid "x=%1"
 msgstr "x=%1"
@@ -8303,59 +8303,59 @@ msgstr "Prilegajoča Poissonova porazdelitev"
 msgid "Fit Binomial Distribution"
 msgstr "Prilegajoča binomska porazdelitev"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:395
-#: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:225
-#: src/backend/worksheet/plots/cartesian/QQPlot.cpp:250
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:398
+#: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:227
+#: src/backend/worksheet/plots/cartesian/QQPlot.cpp:253
 #, kde-format
 msgid "%1: set data column"
 msgstr "%1: nastavite podatkovni stolpec"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:407
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:410
 #, kde-format
 msgid "%1: set histogram type"
 msgstr "%1: nastavite vrsto histograma"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:414
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:417
 #, kde-format
 msgid "%1: set histogram orientation"
 msgstr "%1: nastavite usmerjenost histograma"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:421
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:424
 #, kde-format
 msgid "%1: set histogram normalization"
 msgstr "%1: nastavite normalizacijo histograma"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:428
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:431
 #, kde-format
 msgid "%1: set binning method"
 msgstr "%1: nastavite metodo diskretnega spajanja"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:435
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:438
 #, kde-format
 msgid "%1: set bin count"
 msgstr "%1: nastavite število spajanj"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:442
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:445
 #, kde-format
 msgid "%1: set bin width"
 msgstr "%1: nastavite širino spajanja"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:450
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:453
 #, kde-format
 msgid "%1: change auto bin ranges"
 msgstr "%1: spremenite obsege samodejnega spajanja"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:498
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:501
 #, kde-format
 msgid "%1: set bin ranges start"
 msgstr "%1: nastavite začetek obsegov spajanja"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:505
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:508
 #, kde-format
 msgid "%1: set bin ranges end"
 msgstr "%1: nastavite konec obsegov spajanja"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:825
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:828
 #, kde-format
 msgid ""
 "Calculation of the histogram not possible. The max value must be bigger than "
@@ -8364,17 +8364,17 @@ msgstr ""
 "Izračun histograma ni mogoč. Največja vrednost mora biti večja od najmanjše "
 "vrednosti."
 
-#: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:237
+#: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:239
 #, kde-format
 msgid "%1: set kernel type"
 msgstr "%1: določite vrsto jedra"
 
-#: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:244
+#: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:246
 #, kde-format
 msgid "%1: set bandwidth type"
 msgstr "%1: nastavite vrsto pasu"
 
-#: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:251
+#: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:253
 #, kde-format
 msgid "%1: set bandwidth"
 msgstr "%1: nastavite pasovno širino"
@@ -8384,7 +8384,7 @@ msgstr "%1: nastavite pasovno širino"
 msgid "%1: legend visibility changed"
 msgstr "%1: vidnost legende spremenjena"
 
-#: src/backend/worksheet/plots/cartesian/QQPlot.cpp:262
+#: src/backend/worksheet/plots/cartesian/QQPlot.cpp:265
 #, kde-format
 msgid "%1: set distribution"
 msgstr "%1: nastavite porazdelitev"
@@ -8745,104 +8745,104 @@ msgid "club"
 msgstr "križ"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:113
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:452
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:455
 #, kde-format
 msgid "%1: set values type"
 msgstr "%1: določite vrsto vrednosti"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:124
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:459
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:462
 #, kde-format
 msgid "%1: set values column"
 msgstr "%1: določite stolpec vrednosti"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:136
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:478
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:481
 #, kde-format
 msgid "%1: set values position"
 msgstr "%1: določite položaj vrednosti"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:143
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:485
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:488
 #, kde-format
 msgid "%1: set values distance"
 msgstr "%1: določite razdaljo vrednosti"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:150
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:492
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:495
 #, kde-format
 msgid "%1: rotate values"
 msgstr "%1: vrtite vrednosti"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:157
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:499
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:502
 #, kde-format
 msgid "%1: set values opacity"
 msgstr "%1: določite prekrivnost vrednosti"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:164
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:506
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:509
 #, kde-format
 msgid "%1: set values numeric format"
 msgstr "%1: določite številsko obliko vrednosti"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:171
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:513
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:516
 #, kde-format
 msgid "%1: set values precision"
 msgstr "%1: določite natančnost vrednosti"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:178
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:520
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:523
 #, kde-format
 msgid "%1: set values datetime format"
 msgstr "%1: določite vrednosti zapisa datuma"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:185
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:527
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:530
 #, kde-format
 msgid "%1: set values prefix"
 msgstr "%1: določite predpono vrednosti"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:192
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:534
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:537
 #, kde-format
 msgid "%1: set values suffix"
 msgstr "%1: določite pripono vrednosti"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:199
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:541
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:544
 #, kde-format
 msgid "%1: set values font"
 msgstr "%1: določite pisave vrednosti"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:206
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:548
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:551
 #, kde-format
 msgid "%1: set values color"
 msgstr "%1: določite barve vrednosti"
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:218
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:192
 #, kde-format
 msgid "%1: data source type changed"
 msgstr "%1: spremenjena vrsta vira podatkov"
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:225
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:199
 #, kde-format
 msgid "%1: data source curve changed"
 msgstr "%1: spremenjena krivulja vira podatkov"
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:246
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:220
 #, kde-format
 msgid "%1: assign x-data"
 msgstr "%1: dodelite x-podatke"
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:264
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:238
 #, kde-format
 msgid "%1: assign y-data"
 msgstr "%1: dodelite y-podatke"
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:282
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:256
 #, kde-format
 msgid "%1: assign second y-data"
 msgstr "%1: dodelite drugotne y-podatke"
@@ -8873,52 +8873,52 @@ msgstr "%1: nastavite možnosti in izvedite korelacijo"
 msgid "Navigate to \"%1\""
 msgstr "Krmari do »%1«"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:398
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:401
 #, kde-format
 msgid "%1: x-data source changed"
 msgstr "%1: vir x-podatkov je bil spremenjen"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:405
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:408
 #, kde-format
 msgid "%1: y-data source changed"
 msgstr "%1: vir y-podatkov je bil spremenjen"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:430
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:433
 #, kde-format
 msgid "%1: set skip line gaps"
 msgstr "%1: nastavite vrzeli preskočenih vrstic"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:437
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:440
 #, kde-format
 msgid "%1: set increasing X"
 msgstr "%1: nastavite naraščajoči X"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:444
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:447
 #, kde-format
 msgid "%1: set the number of interpolation points"
 msgstr "%1: nastavite število interpolacijskih točk"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:563
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:566
 #, kde-format
 msgid "%1: set rug orientation"
 msgstr "%1: določite usmerjenost raztrosa"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1375
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1378
 #, kde-format
 msgid "Error: Akima spline interpolation requires a minimum of 5 points."
 msgstr "Napaka: interpolacija zlepka Akima zahteva najmanj 5 točk."
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1377
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1380
 #, kde-format
 msgid "Error: Could not initialize the spline function."
 msgstr "Napaka: funkcije zlepka ni bilo mogoče inicializirati."
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1390
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1393
 #, kde-format
 msgid "x values must be monotonically increasing."
 msgstr "vrednosti x se morajo monotono povečevati."
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1393
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1396
 #, kde-format
 msgid "Error: %1"
 msgstr "Napaka: %1"
@@ -8938,37 +8938,37 @@ msgstr "%1: nastavite možnosti in izvedite odvajanje"
 msgid "%1: set equation"
 msgstr "%1: nastavite enačbo"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:915
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:930
 #, kde-format
 msgid "%1: data source histogram changed"
 msgstr "%1: spremenjen histogram vira podatkov"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:927
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:942
 #, kde-format
 msgid "%1: assign x-error"
 msgstr "%1: dodelite x-napako"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:942
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:957
 #, kde-format
 msgid "%1: assign y-error"
 msgstr "%1: dodelite y-napako"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:958
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:973
 #, kde-format
 msgid "%1: set fit options and perform the fit"
 msgstr "%1: nastavite možnosti prileganja in opravite prileganje"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2141
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2156
 #, kde-format
 msgid "Model has no parameters."
 msgstr "Model nima parametrov."
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2148
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2163
 #, kde-format
 msgid "Not sufficient weight data points provided."
 msgstr "Ni zagotovljenih dovolj podatkovnih točk o teži."
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2225
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2240
 #: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:175
 #: src/backend/worksheet/plots/cartesian/XYFourierTransformCurve.cpp:125
 #: src/backend/worksheet/plots/cartesian/XYHilbertTransformCurve.cpp:132
@@ -8976,7 +8976,7 @@ msgstr "Ni zagotovljenih dovolj podatkovnih točk o teži."
 msgid "No data points available."
 msgstr "Podatkovne točke niso na voljo."
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2232
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2247
 #, kde-format
 msgid ""
 "The number of data points (%1) must be greater than or equal to the number "
@@ -8985,7 +8985,7 @@ msgstr ""
 "Število podatkovnih točk (%1) mora biti večje ali enako številu parametrov "
 "(%2)."
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2239
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2254
 #, kde-format
 msgid "Fit model not specified."
 msgstr "Model za prileganje ni naveden."
@@ -9194,22 +9194,22 @@ msgstr "Premakni &za"
 msgid "Move in &front of"
 msgstr "Premakni &pred"
 
-#: src/backend/worksheet/WorksheetElement.cpp:741
+#: src/backend/worksheet/WorksheetElement.cpp:757
 #, kde-format
 msgid "%1: set horizontal alignment"
 msgstr "%1: nastavite vodoravno poravnavo"
 
-#: src/backend/worksheet/WorksheetElement.cpp:753
+#: src/backend/worksheet/WorksheetElement.cpp:769
 #, kde-format
 msgid "%1: set vertical alignment"
 msgstr "%1: določite navpično poravnavo"
 
-#: src/backend/worksheet/WorksheetElement.cpp:767
+#: src/backend/worksheet/WorksheetElement.cpp:783
 #, kde-format
 msgid "%1: use logical coordinates"
 msgstr "%1: uporabite logične koordinate"
 
-#: src/backend/worksheet/WorksheetElement.cpp:777
+#: src/backend/worksheet/WorksheetElement.cpp:793
 #, kde-format
 msgid "%1: set logical position"
 msgstr "%1: določi logični položaj"
