@@ -2760,14 +2760,42 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 				title->setPosition(QPointF(rect.topLeft().x() + offsetX, (rect.topLeft().y() + rect.bottomLeft().y()) / 2. - titleOffsetY));
 			}
 			titlePath = WorksheetElement::shapeFromPath(title->graphicsItem()->mapToParent(title->graphicsItem()->shape()), linePen);
-			tmpPath.addPath(titlePath);
+			if (!titlePath.intersects(tmpPath)) {
+				// Draw combined bounding rectangle
+				// Draw merged t-shaped polygon for title and axis
+				QPointF axisTopLeft = axisRect.topLeft();
+				QPointF axisTopRight = axisRect.topRight();
+				QPointF axisBottomLeft = axisRect.bottomLeft();
+				QPointF axisBottomRight = axisRect.bottomRight();
+				QPointF titleTopLeft = titlePath.boundingRect().topLeft();
+				QPointF titleTopRight = titlePath.boundingRect().topRight();
+				QPointF titleBottomLeft = titlePath.boundingRect().bottomLeft();
+				QPointF titleBottomRight = titlePath.boundingRect().bottomRight();
+
+				QVector<QPointF> vertices;
+				if (Axis::Orientation::Horizontal == orientation)
+					vertices << axisTopLeft << axisBottomLeft << QPointF(titleTopLeft.x(), axisBottomLeft.y()) << titleTopLeft << titleBottomLeft
+							 << titleBottomRight << titleTopRight << QPointF(titleTopRight.x(), axisBottomRight.y()) << axisBottomRight << axisTopRight
+							 << axisTopLeft;
+				else
+					vertices << axisTopLeft << QPointF(axisTopLeft.x(), titleTopRight.y()) << titleTopRight << titleTopLeft << titleBottomLeft
+							 << titleBottomRight << QPointF(axisBottomLeft.x(), titleBottomRight.y()) << axisBottomLeft << axisBottomRight << axisTopRight
+							 << axisTopLeft;
+
+				QPolygonF polygon(vertices);
+				tmpPath.addPolygon(polygon);
+				m_boundingRectangle = tmpPath.boundingRect();
+				m_shape = QPainterPath();
+				m_shape.addPolygon(polygon);
+
+			} else {
+				tmpPath.addPath(titlePath);
+				m_boundingRectangle = tmpPath.boundingRect();
+				m_shape = QPainterPath();
+				m_shape.addRect(m_boundingRectangle);
+			}
 		}
 	}
-
-	m_boundingRectangle = tmpPath.boundingRect();
-	m_shape = QPainterPath();
-	m_shape.addRect(m_boundingRectangle);
-
 	// if the axis goes beyond the current bounding box of the plot (too high offset is used, too long labels etc.)
 	// request a prepareGeometryChange() for the plot in order to properly keep track of geometry changes
 	if (plot())
