@@ -351,7 +351,6 @@ bool InfoElement::assignCurve(const QVector<XYCurve*>& curves) {
 }
 
 void InfoElement::curveDeleted(const AbstractAspect* aspect) {
-	Q_D(InfoElement);
 	auto curve = dynamic_cast<const XYCurve*>(aspect);
 	if (!curve)
 		return;
