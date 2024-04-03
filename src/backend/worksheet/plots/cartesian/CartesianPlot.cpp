@@ -5182,7 +5182,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				return false;
 			}
 		} else if (!preview && reader->name() == QLatin1String("customPoint")) {
-			auto* point = new CustomPoint(this, QString());
+			auto* point = new CustomPoint(this, QString(), true);
 			point->setIsLoading(true);
 			if (point->load(reader, preview))
 				addChildFast(point);
@@ -5191,7 +5191,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				return false;
 			}
 		} else if (!preview && reader->name() == QLatin1String("referenceLine")) {
-			auto* line = new ReferenceLine(this, QString());
+			auto* line = new ReferenceLine(this, QString(), true);
 			line->setIsLoading(true);
 			if (line->load(reader, preview))
 				addChildFast(line);
@@ -5200,7 +5200,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				return false;
 			}
 		} else if (!preview && reader->name() == QLatin1String("referenceRange")) {
-			auto* range = new ReferenceRange(this, QString());
+			auto* range = new ReferenceRange(this, QString(), true);
 			range->setIsLoading(true);
 			if (range->load(reader, preview))
 				addChildFast(range);
