@@ -187,7 +187,6 @@ void BoxPlot::init(bool loading) {
 	d->whiskersLine->init(group);
 	d->whiskersCapLine->init(group);
 
-
 	// marginal plots (rug, BoxPlot, boxplot)
 	d->rugEnabled = group.readEntry(QStringLiteral("RugEnabled"), false);
 	d->rugLength = group.readEntry(QStringLiteral("RugLength"), Worksheet::convertToSceneUnits(5, Worksheet::Unit::Point));
