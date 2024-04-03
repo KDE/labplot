@@ -4800,6 +4800,14 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("defaultCoordinateSystem", defaultCoordinateSystemIndex, int);
 			DEBUG(Q_FUNC_INFO << ", got default cSystem index = " << d->defaultCoordinateSystemIndex)
 
+			// the file can be corrupted, either because of bugs like in
+			// https://invent.kde.org/education/labplot/-/issues/598, https://invent.kde.org/education/labplot/-/issues/869
+			// or because it was manually compromized.
+			// In order not to crash because of the wrong indices, add a safety check here.
+			// TODO: check the ranges and the coordinate system to make sure they're available.
+			if (d->defaultCoordinateSystemIndex > m_coordinateSystems.size() - 1)
+				d->defaultCoordinateSystemIndex = 0;
+
 			READ_DOUBLE_VALUE("horizontalPadding", horizontalPadding);
 			READ_DOUBLE_VALUE("verticalPadding", verticalPadding);
 			READ_DOUBLE_VALUE("rightPadding", rightPadding);
@@ -5267,13 +5275,6 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				return false;
 		}
 	}
-
-	// the file can be corrupted, either because of bugs like in
-	// https://invent.kde.org/education/labplot/-/issues/598 or because it was manually compromized.
-	// In order not to crash because of the wrong indices, add a safety check here.
-	// TODO: check the ranges and the coordinate system to make sure they're available.
-	if (d->defaultCoordinateSystemIndex > m_coordinateSystems.size() - 1)
-		d->defaultCoordinateSystemIndex = 0;
 
 	if (preview)
 		return true;
