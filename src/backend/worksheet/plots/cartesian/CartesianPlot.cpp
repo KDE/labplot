@@ -5047,7 +5047,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			m_plotArea->setIsLoading(true);
 			m_plotArea->load(reader, preview);
 		} else if (!preview && reader->name() == QLatin1String("axis")) {
-			auto* axis = new Axis(QString());
+			auto* axis = new Axis(QString(), Axis::Orientation::Horizontal, true);
 			axis->setIsLoading(true);
 			if (axis->load(reader, preview))
 				addChildFast(axis);
@@ -5056,7 +5056,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				return false;
 			}
 		} else if (reader->name() == QLatin1String("xyCurve")) {
-			auto* curve = new XYCurve(QString());
+			auto* curve = new XYCurve(QString(), AspectType::XYCurve, true);
 			curve->setIsLoading(true);
 			if (curve->load(reader, preview))
 				addChildFast(curve);

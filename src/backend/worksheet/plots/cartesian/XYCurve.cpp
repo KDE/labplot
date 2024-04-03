@@ -54,9 +54,9 @@ CURVE_COLUMN_CONNECT(XYCurve, X, x, recalc)
 CURVE_COLUMN_CONNECT(XYCurve, Y, y, recalc)
 CURVE_COLUMN_CONNECT(XYCurve, Values, values, recalc)
 
-XYCurve::XYCurve(const QString& name, AspectType type)
+XYCurve::XYCurve(const QString& name, AspectType type, bool loading)
 	: Plot(name, new XYCurvePrivate(this), type) {
-	init();
+	init(loading);
 }
 
 XYCurve::XYCurve(const QString& name, XYCurvePrivate* dd, AspectType type)
@@ -68,22 +68,14 @@ XYCurve::XYCurve(const QString& name, XYCurvePrivate* dd, AspectType type)
 // and is deleted during the cleanup in QGraphicsScene
 XYCurve::~XYCurve() = default;
 
-void XYCurve::init() {
+void XYCurve::init(bool loading) {
 	Q_D(XYCurve);
 
-	KConfig config;
-	KConfigGroup group = config.group(QStringLiteral("XYCurve"));
-
-	d->lineType = (LineType)group.readEntry(QStringLiteral("LineType"), static_cast<int>(LineType::Line));
-	d->lineIncreasingXOnly = group.readEntry(QStringLiteral("LineIncreasingXOnly"), false);
-	d->lineSkipGaps = group.readEntry(QStringLiteral("SkipLineGaps"), false);
-	d->lineInterpolationPointsCount = group.readEntry(QStringLiteral("LineInterpolationPointsCount"), 1);
-
+	// line
 	d->line = new Line(QString());
 	d->line->setCreateXmlElement(false);
 	d->line->setHidden(true);
 	addChild(d->line);
-	d->line->init(group);
 	connect(d->line, &Line::updatePixmapRequested, [=] {
 		d->updatePixmap();
 		Q_EMIT appearanceChanged();
@@ -93,11 +85,11 @@ void XYCurve::init() {
 		Q_EMIT appearanceChanged();
 	});
 
+	// drop line
 	d->dropLine = new Line(QString());
 	d->dropLine->setPrefix(QStringLiteral("DropLine"));
 	d->dropLine->setHidden(true);
 	addChild(d->dropLine);
-	d->dropLine->init(group);
 	connect(d->dropLine, &Line::dropLineTypeChanged, [=] {
 		d->updateDropLines();
 	});
@@ -108,11 +100,10 @@ void XYCurve::init() {
 		d->recalcShapeAndBoundingRect();
 	});
 
-	// initialize the symbol
+	// symbol
 	d->symbol = new Symbol(QString());
 	addChild(d->symbol);
 	d->symbol->setHidden(true);
-	d->symbol->init(group);
 	connect(d->symbol, &Symbol::updateRequested, [=] {
 		d->updateSymbols();
 		Q_EMIT appearanceChanged();
@@ -121,6 +112,50 @@ void XYCurve::init() {
 		d->updatePixmap();
 		Q_EMIT appearanceChanged();
 	});
+
+	// Background/Filling
+	d->background = new Background(QString());
+	d->background->setPrefix(QStringLiteral("Filling"));
+	d->background->setPositionAvailable(true);
+	addChild(d->background);
+	d->background->setHidden(true);
+
+	connect(d->background, &Background::updateRequested, [=] {
+		d->updatePixmap();
+	});
+	connect(d->background, &Background::updatePositionRequested, [=] {
+		d->updateFilling();
+	});
+
+	// error bars
+	d->errorBar = new ErrorBar(QString(), ErrorBar::Dimension::XY);
+	addChild(d->errorBar);
+	d->errorBar->setHidden(true);
+	connect(d->errorBar, &ErrorBar::updatePixmapRequested, [=] {
+		d->updatePixmap();
+	});
+	connect(d->errorBar, &ErrorBar::updateRequested, [=] {
+		d->updateErrorBars();
+	});
+
+	// init the properties
+	if (loading)
+		return;
+
+	KConfig config;
+	KConfigGroup group = config.group(QStringLiteral("XYCurve"));
+
+	// line
+	d->lineType = (LineType)group.readEntry(QStringLiteral("LineType"), static_cast<int>(LineType::Line));
+	d->lineIncreasingXOnly = group.readEntry(QStringLiteral("LineIncreasingXOnly"), false);
+	d->lineSkipGaps = group.readEntry(QStringLiteral("SkipLineGaps"), false);
+	d->lineInterpolationPointsCount = group.readEntry(QStringLiteral("LineInterpolationPointsCount"), 1);
+
+	d->line->init(group);
+	d->dropLine->init(group);
+	d->symbol->init(group);
+	d->background->init(group);
+	d->errorBar->init(group);
 
 	// values
 	d->valuesType = (ValuesType)group.readEntry(QStringLiteral("ValuesType"), static_cast<int>(ValuesType::NoValues));
@@ -136,32 +171,6 @@ void XYCurve::init() {
 	d->valuesFont = group.readEntry(QStringLiteral("ValuesFont"), QFont());
 	d->valuesFont.setPixelSize(Worksheet::convertToSceneUnits(8, Worksheet::Unit::Point));
 	d->valuesColor = group.readEntry(QStringLiteral("ValuesColor"), QColor(Qt::black));
-
-	// Background/Filling
-	d->background = new Background(QString());
-	d->background->setPrefix(QStringLiteral("Filling"));
-	d->background->setPositionAvailable(true);
-	addChild(d->background);
-	d->background->setHidden(true);
-	d->background->init(group);
-	connect(d->background, &Background::updateRequested, [=] {
-		d->updatePixmap();
-	});
-	connect(d->background, &Background::updatePositionRequested, [=] {
-		d->updateFilling();
-	});
-
-	// error bars
-	d->errorBar = new ErrorBar(QString(), ErrorBar::Dimension::XY);
-	addChild(d->errorBar);
-	d->errorBar->setHidden(true);
-	d->errorBar->init(group);
-	connect(d->errorBar, &ErrorBar::updatePixmapRequested, [=] {
-		d->updatePixmap();
-	});
-	connect(d->errorBar, &ErrorBar::updateRequested, [=] {
-		d->updateErrorBars();
-	});
 
 	// marginal plots (rug, histogram, boxplot)
 	d->rugEnabled = group.readEntry(QStringLiteral("RugEnabled"), false);

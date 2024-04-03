@@ -55,7 +55,7 @@ public:
 	enum class ValuesType { NoValues, X, Y, XY, XYBracketed, CustomColumn };
 	enum class ValuesPosition { Above, Under, Left, Right };
 
-	explicit XYCurve(const QString& name, AspectType type = AspectType::XYCurve);
+	explicit XYCurve(const QString& name, AspectType type = AspectType::XYCurve, bool loading = false);
 	~XYCurve() override;
 
 	QIcon icon() const override;
@@ -140,7 +140,7 @@ protected:
 
 private:
 	Q_DECLARE_PRIVATE(XYCurve)
-	void init();
+	void init(bool loading = false);
 	void initActions();
 	void connectXColumn(const AbstractColumn*);
 	void connectYColumn(const AbstractColumn*);

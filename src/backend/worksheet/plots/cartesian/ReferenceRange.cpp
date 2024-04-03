@@ -98,6 +98,7 @@ void ReferenceRange::init(bool loading) {
 	}
 
 	connect(this, &WorksheetElement::objectPositionChanged, this, &ReferenceRange::updateStartEndPositions);
+	retransform(); // TODO: why is this required here?!?
 }
 
 /*!
