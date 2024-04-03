@@ -30,7 +30,7 @@ public:
 	enum class Ordering { None, MedianAscending, MedianDescending, MeanAscending, MeanDescending };
 	enum class WhiskersType { MinMax, IQR, SD, MAD, PERCENTILES_10_90, PERCENTILES_5_95, PERCENTILES_1_99 };
 
-	explicit BoxPlot(const QString&);
+	explicit BoxPlot(const QString&, bool loading = false);
 	~BoxPlot() override;
 
 	QIcon icon() const override;
@@ -95,7 +95,7 @@ protected:
 
 private:
 	Q_DECLARE_PRIVATE(BoxPlot)
-	void init();
+	void init(bool loading = false);
 	void initActions();
 	void initMenus();
 

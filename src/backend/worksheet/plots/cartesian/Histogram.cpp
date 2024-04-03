@@ -46,9 +46,9 @@
 CURVE_COLUMN_CONNECT(Histogram, Data, data, recalc)
 static constexpr double zero = 0.001; // zero baseline, don't use the exact 0.0 since it breaks the histrogram with log-scaling
 
-Histogram::Histogram(const QString& name)
+Histogram::Histogram(const QString& name, bool loading)
 	: Plot(name, new HistogramPrivate(this), AspectType::Histogram) {
-	init();
+	init(loading);
 }
 
 Histogram::Histogram(const QString& name, HistogramPrivate* dd)
@@ -60,28 +60,14 @@ Histogram::Histogram(const QString& name, HistogramPrivate* dd)
 // and is deleted during the cleanup in QGraphicsScene
 Histogram::~Histogram() = default;
 
-void Histogram::init() {
+void Histogram::init(bool loading) {
 	Q_D(Histogram);
-
-	KConfig config;
-	KConfigGroup group = config.group(QStringLiteral("Histogram"));
-
-	d->type = (Histogram::Type)group.readEntry(QStringLiteral("Type"), (int)Histogram::Ordinary);
-	d->orientation = (Histogram::Orientation)group.readEntry(QStringLiteral("Orientation"), (int)Histogram::Orientation::Vertical);
-	d->normalization = (Histogram::Normalization)group.readEntry(QStringLiteral("Normalization"), (int)Histogram::Count);
-	d->binningMethod = (Histogram::BinningMethod)group.readEntry(QStringLiteral("BinningMethod"), (int)Histogram::SquareRoot);
-	d->binCount = group.readEntry(QStringLiteral("BinCount"), 10);
-	d->binWidth = group.readEntry(QStringLiteral("BinWidth"), 1.0);
-	d->autoBinRanges = group.readEntry(QStringLiteral("AutoBinRanges"), true);
-	d->binRangesMin = 0.0;
-	d->binRangesMax = 1.0;
 
 	// line
 	d->line = new Line(QString());
 	d->line->setHistogramLineTypeAvailable(true);
 	d->line->setHidden(true);
 	addChild(d->line);
-	d->line->init(group);
 	connect(d->line, &Line::histogramLineTypeChanged, [=] {
 		d->updateLines();
 	});
@@ -96,7 +82,6 @@ void Histogram::init() {
 	d->symbol = new Symbol(QString());
 	addChild(d->symbol);
 	d->symbol->setHidden(true);
-	d->symbol->init(group);
 	connect(d->symbol, &Symbol::updateRequested, [=] {
 		d->updateSymbols();
 	});
@@ -109,7 +94,6 @@ void Histogram::init() {
 	addChild(d->value);
 	d->value->setHidden(true);
 	d->value->setcenterPositionAvailable(true);
-	d->value->init(group);
 	connect(d->value, &Value::updatePixmapRequested, [=] {
 		d->updatePixmap();
 	});
@@ -123,7 +107,6 @@ void Histogram::init() {
 	d->background->setEnabledAvailable(true);
 	addChild(d->background);
 	d->background->setHidden(true);
-	d->background->init(group);
 	connect(d->background, &Background::updateRequested, [=] {
 		d->updatePixmap();
 	});
@@ -135,13 +118,33 @@ void Histogram::init() {
 	d->errorBar = new ErrorBar(QString(), ErrorBar::Dimension::Y);
 	addChild(d->errorBar);
 	d->errorBar->setHidden(true);
-	d->errorBar->init(group);
 	connect(d->errorBar, &ErrorBar::updatePixmapRequested, [=] {
 		d->updatePixmap();
 	});
 	connect(d->errorBar, &ErrorBar::updateRequested, [=] {
 		d->updateErrorBars();
 	});
+
+	if (loading)
+		return;
+
+	// init the properties
+	KConfig config;
+	KConfigGroup group = config.group(QStringLiteral("Histogram"));
+
+	d->type = (Histogram::Type)group.readEntry(QStringLiteral("Type"), (int)Histogram::Ordinary);
+	d->orientation = (Histogram::Orientation)group.readEntry(QStringLiteral("Orientation"), (int)Histogram::Orientation::Vertical);
+	d->normalization = (Histogram::Normalization)group.readEntry(QStringLiteral("Normalization"), (int)Histogram::Count);
+	d->binningMethod = (Histogram::BinningMethod)group.readEntry(QStringLiteral("BinningMethod"), (int)Histogram::SquareRoot);
+	d->binCount = group.readEntry(QStringLiteral("BinCount"), 10);
+	d->binWidth = group.readEntry(QStringLiteral("BinWidth"), 1.0);
+	d->autoBinRanges = group.readEntry(QStringLiteral("AutoBinRanges"), true);
+
+	d->line->init(group);
+	d->symbol->init(group);
+	d->value->init(group);
+	d->background->init(group);
+	d->errorBar->init(group);
 
 	// marginal plots (rug, histogram, boxplot)
 	d->rugEnabled = group.readEntry(QStringLiteral("RugEnabled"), false);

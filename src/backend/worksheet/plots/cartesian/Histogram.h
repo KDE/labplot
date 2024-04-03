@@ -39,7 +39,7 @@ public:
 	enum ValuesType { NoValues, ValuesBinEntries, ValuesCustomColumn };
 	enum ValuesPosition { ValuesAbove, ValuesUnder, ValuesLeft, ValuesRight };
 
-	explicit Histogram(const QString& name);
+	explicit Histogram(const QString& name, bool loading = false);
 	~Histogram() override;
 
 	QIcon icon() const override;
@@ -106,7 +106,7 @@ protected:
 
 private:
 	Q_DECLARE_PRIVATE(Histogram)
-	void init();
+	void init(bool loading = false);
 	void initActions();
 	void connectDataColumn(const AbstractColumn*);
 

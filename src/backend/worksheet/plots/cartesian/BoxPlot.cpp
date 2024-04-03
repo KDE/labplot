@@ -42,9 +42,9 @@
  * \brief Box Plot
  */
 
-BoxPlot::BoxPlot(const QString& name)
+BoxPlot::BoxPlot(const QString& name, bool loading)
 	: Plot(name, new BoxPlotPrivate(this), AspectType::BoxPlot) {
-	init();
+	init(loading);
 }
 
 BoxPlot::BoxPlot(const QString& name, BoxPlotPrivate* dd)
@@ -56,20 +56,11 @@ BoxPlot::BoxPlot(const QString& name, BoxPlotPrivate* dd)
 // and is deleted during the cleanup in QGraphicsScene
 BoxPlot::~BoxPlot() = default;
 
-void BoxPlot::init() {
+void BoxPlot::init(bool loading) {
 	Q_D(BoxPlot);
 
 	KConfig config;
 	KConfigGroup group = config.group(QStringLiteral("BoxPlot"));
-
-	// general
-	d->ordering = (BoxPlot::Ordering)group.readEntry(QStringLiteral("Ordering"), (int)BoxPlot::Ordering::None);
-	d->whiskersType = (BoxPlot::WhiskersType)group.readEntry(QStringLiteral("WhiskersType"), (int)BoxPlot::WhiskersType::IQR);
-	d->whiskersRangeParameter = group.readEntry(QStringLiteral("WhiskersIQRParameter"), 1.5);
-	d->orientation = (BoxPlot::Orientation)group.readEntry(QStringLiteral("Orientation"), (int)BoxPlot::Orientation::Vertical);
-	d->variableWidth = group.readEntry(QStringLiteral("VariableWidth"), false);
-	d->widthFactor = group.readEntry(QStringLiteral("WidthFactor"), 1.0);
-	d->notchesEnabled = group.readEntry(QStringLiteral("NotchesEnabled"), false);
 
 	// box
 	d->addBackground(group);
@@ -80,7 +71,6 @@ void BoxPlot::init() {
 	d->symbolMean = new Symbol(QStringLiteral("symbolMean"));
 	addChild(d->symbolMean);
 	d->symbolMean->setHidden(true);
-	d->symbolMean->init(group);
 	d->symbolMean->setStyle(Symbol::Style::Square);
 	connect(d->symbolMean, &Symbol::updateRequested, [=] {
 		d->recalcShapeAndBoundingRect();
@@ -92,7 +82,6 @@ void BoxPlot::init() {
 	d->symbolMedian = new Symbol(QStringLiteral("symbolMedian"));
 	addChild(d->symbolMedian);
 	d->symbolMedian->setHidden(true);
-	d->symbolMedian->init(group);
 	d->symbolMedian->setStyle(Symbol::Style::NoSymbols);
 	connect(d->symbolMedian, &Symbol::updateRequested, [=] {
 		d->recalcShapeAndBoundingRect();
@@ -104,7 +93,6 @@ void BoxPlot::init() {
 	d->symbolOutlier = new Symbol(QStringLiteral("symbolOutlier"));
 	addChild(d->symbolOutlier);
 	d->symbolOutlier->setHidden(true);
-	d->symbolOutlier->init(group);
 	connect(d->symbolOutlier, &Symbol::updateRequested, [=] {
 		d->recalcShapeAndBoundingRect();
 	});
@@ -115,7 +103,6 @@ void BoxPlot::init() {
 	d->symbolFarOut = new Symbol(QStringLiteral("symbolFarOut"));
 	addChild(d->symbolFarOut);
 	d->symbolFarOut->setHidden(true);
-	d->symbolFarOut->init(group);
 	d->symbolFarOut->setStyle(Symbol::Style::Plus);
 	connect(d->symbolFarOut, &Symbol::updateRequested, [=] {
 		d->recalcShapeAndBoundingRect();
@@ -127,7 +114,6 @@ void BoxPlot::init() {
 	d->symbolData = new Symbol(QStringLiteral("symbolData"));
 	addChild(d->symbolData);
 	d->symbolData->setHidden(true);
-	d->symbolData->init(group);
 	d->symbolData->setStyle(Symbol::Style::NoSymbols);
 	d->symbolData->setOpacity(0.5);
 	connect(d->symbolData, &Symbol::updateRequested, [=] {
@@ -140,7 +126,6 @@ void BoxPlot::init() {
 	d->symbolWhiskerEnd = new Symbol(QStringLiteral("symbolWhiskerEnd"));
 	addChild(d->symbolWhiskerEnd);
 	d->symbolWhiskerEnd->setHidden(true);
-	d->symbolWhiskerEnd->init(group);
 	d->symbolWhiskerEnd->setStyle(Symbol::Style::NoSymbols);
 	connect(d->symbolWhiskerEnd, &Symbol::updateRequested, [=] {
 		d->recalcShapeAndBoundingRect();
@@ -149,15 +134,13 @@ void BoxPlot::init() {
 		d->updatePixmap();
 	});
 
-	d->jitteringEnabled = group.readEntry(QStringLiteral("JitteringEnabled"), true);
-
 	// whiskers
 	d->whiskersLine = new Line(QString());
 	d->whiskersLine->setPrefix(QStringLiteral("Whiskers"));
 	d->whiskersLine->setCreateXmlElement(false); // whiskers element is created in BoxPlot::save()
 	d->whiskersLine->setHidden(true);
 	addChild(d->whiskersLine);
-	d->whiskersLine->init(group);
+
 	connect(d->whiskersLine, &Line::updatePixmapRequested, [=] {
 		d->updatePixmap();
 	});
@@ -165,19 +148,45 @@ void BoxPlot::init() {
 		d->recalcShapeAndBoundingRect();
 	});
 
-	d->whiskersCapSize = group.readEntry(QStringLiteral("WhiskersCapSize"), Worksheet::convertToSceneUnits(5.0, Worksheet::Unit::Point));
 	d->whiskersCapLine = new Line(QString());
 	d->whiskersCapLine->setPrefix(QStringLiteral("WhiskersCap"));
 	d->whiskersCapLine->setCreateXmlElement(false); // whiskers cap element is created in BoxPlot::save()
 	d->whiskersCapLine->setHidden(true);
 	addChild(d->whiskersCapLine);
-	d->whiskersCapLine->init(group);
 	connect(d->whiskersCapLine, &Line::updatePixmapRequested, [=] {
 		d->updatePixmap();
 	});
 	connect(d->whiskersCapLine, &Line::updateRequested, [=] {
 		d->recalcShapeAndBoundingRect();
 	});
+
+	if (loading)
+		return;
+
+	// init the properties
+	// general
+	d->ordering = (BoxPlot::Ordering)group.readEntry(QStringLiteral("Ordering"), (int)BoxPlot::Ordering::None);
+	d->whiskersType = (BoxPlot::WhiskersType)group.readEntry(QStringLiteral("WhiskersType"), (int)BoxPlot::WhiskersType::IQR);
+	d->whiskersRangeParameter = group.readEntry(QStringLiteral("WhiskersIQRParameter"), 1.5);
+	d->orientation = (BoxPlot::Orientation)group.readEntry(QStringLiteral("Orientation"), (int)BoxPlot::Orientation::Vertical);
+	d->variableWidth = group.readEntry(QStringLiteral("VariableWidth"), false);
+	d->widthFactor = group.readEntry(QStringLiteral("WidthFactor"), 1.0);
+	d->notchesEnabled = group.readEntry(QStringLiteral("NotchesEnabled"), false);
+
+	// symbols
+	d->symbolMean->init(group);
+	d->symbolMedian->init(group);
+	d->symbolOutlier->init(group);
+	d->symbolFarOut->init(group);
+	d->symbolData->init(group);
+	d->symbolWhiskerEnd->init(group);
+	d->jitteringEnabled = group.readEntry(QStringLiteral("JitteringEnabled"), true);
+
+	// whiskers
+	d->whiskersCapSize = group.readEntry(QStringLiteral("WhiskersCapSize"), Worksheet::convertToSceneUnits(5.0, Worksheet::Unit::Point));
+	d->whiskersLine->init(group);
+	d->whiskersCapLine->init(group);
+
 
 	// marginal plots (rug, BoxPlot, boxplot)
 	d->rugEnabled = group.readEntry(QStringLiteral("RugEnabled"), false);

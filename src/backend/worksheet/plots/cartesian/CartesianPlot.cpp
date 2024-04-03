@@ -5209,7 +5209,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				return false;
 			}
 		} else if (reader->name() == QLatin1String("boxPlot")) {
-			auto* boxPlot = new BoxPlot(QStringLiteral("BoxPlot"));
+			auto* boxPlot = new BoxPlot(QStringLiteral("BoxPlot"), true);
 			boxPlot->setIsLoading(true);
 			if (boxPlot->load(reader, preview))
 				addChildFast(boxPlot);
@@ -5236,7 +5236,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				return false;
 			}
 		} else if (reader->name() == QLatin1String("Histogram")) {
-			auto* hist = new Histogram(QStringLiteral("Histogram"));
+			auto* hist = new Histogram(QStringLiteral("Histogram"), true);
 			hist->setIsLoading(true);
 			if (hist->load(reader, preview))
 				addChildFast(hist);
