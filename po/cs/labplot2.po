@@ -710,10 +710,9 @@ msgid "%1: set author"
 msgstr "%1: zadat autora"
 
 #: src/backend/core/Project.cpp:293
-#, fuzzy, kde-format
-#| msgid "%1: border type changed"
+#, kde-format
 msgid "%1: save dock states changed"
-msgstr "%1: změněn typ okraje"
+msgstr ""
 
 #: src/backend/core/Project.cpp:300
 #, kde-format
@@ -20769,6 +20768,16 @@ msgid ""
 "margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"
 "\"><br /></p></body></html>"
 msgstr ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Noto Sans'; font-size:10pt; font-"
+"weight:400; font-style:normal;\">\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"
+"\"><br /></p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lBackgroundColor)
 #: src/kdefrontend/ui/labelwidget.ui:231
@@ -20791,10 +20800,9 @@ msgstr "Posun X:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/kdefrontend/ui/labelwidget.ui:494
-#, fuzzy, kde-format
-#| msgid "Model:"
+#, kde-format
 msgid "Mode:"
-msgstr "Model:"
+msgstr "Režim:"
 
 #. i18n: ectx: property (text), widget (QLabel, lBorderShape)
 #: src/kdefrontend/ui/labelwidget.ui:586
@@ -21196,10 +21204,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:317
-#, fuzzy, kde-format
-#| msgid "Save Calculations:"
+#, kde-format
 msgid "Save  Calculations:"
-msgstr "Uložit výpočty:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode_2)
@@ -22279,21 +22286,19 @@ msgid "Sub-Script"
 msgstr ""
 
 #: src/kdefrontend/widgets/LabelWidget.cpp:139
-#, fuzzy, kde-format
-#| msgid "Vert. Alignment:"
+#, kde-format
 msgid "Left Align"
-msgstr "Svislé zarovnání:"
+msgstr "Zarovnat doleva"
 
 #: src/kdefrontend/widgets/LabelWidget.cpp:141
-#, fuzzy, kde-format
-#| msgid "Right"
+#, kde-format
 msgid "Right Align"
-msgstr "Vpravo"
+msgstr "Zarovnat doprava"
 
 #: src/kdefrontend/widgets/LabelWidget.cpp:142
 #, kde-format
 msgid "Justify"
-msgstr ""
+msgstr "Do bloku"
 
 #: src/kdefrontend/widgets/LabelWidget.cpp:143
 #, kde-format
@@ -22679,6 +22684,3 @@ msgstr ""
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Nelze otevřít soubor:"
-
-#~ msgid "%1: move down"
-#~ msgstr "%1: posunout dolů"
