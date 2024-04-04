@@ -105,7 +105,13 @@ void Segments::scrollSegment(Segment** left, Segment** right, int height) {
 /*!
 	identify the runs in a column, and connect them to segments
 */
-void Segments::matchRunsToSegments(int x, int height, const bool* lastBool, Segment** lastSegment, const bool* currBool, Segment** currSegment, const bool* nextBool) {
+void Segments::matchRunsToSegments(int x,
+								   int height,
+								   const bool* lastBool,
+								   Segment** lastSegment,
+								   const bool* currBool,
+								   Segment** currSegment,
+								   const bool* nextBool) {
 	loadSegment(currSegment, height);
 
 	int yStart = 0;
