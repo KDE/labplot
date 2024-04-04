@@ -57,7 +57,7 @@
         <x>0</x>
         <y>0</y>
         <width>360</width>
-        <height>664</height>
+        <height>665</height>
        </rect>
       </property>
       <property name="sizePolicy">
@@ -138,7 +138,7 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="bPrev">
+      <widget class="QToolButton" name="bPrev">
        <property name="enabled">
         <bool>false</bool>
        </property>
@@ -148,7 +148,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="bNext">
+      <widget class="QToolButton" name="bNext">
        <property name="enabled">
         <bool>false</bool>
        </property>
@@ -174,7 +174,7 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="bDownload">
+      <widget class="QToolButton" name="bDownload">
        <property name="enabled">
         <bool>false</bool>
        </property>

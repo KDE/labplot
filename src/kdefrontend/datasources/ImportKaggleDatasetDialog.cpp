@@ -32,18 +32,24 @@ ImportKaggleDatasetDialog::ImportKaggleDatasetDialog(MainWin* parent)
 	: ImportDialog(parent)
 	, m_mainWin(parent)
 	, m_importKaggleDatasetWidget(new ImportKaggleDatasetWidget(this)) {
-	auto* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+	auto* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Reset);
 	okButton = buttonBox->button(QDialogButtonBox::Ok);
 	okButton->setEnabled(false);
+	m_optionsButton = buttonBox->button(QDialogButtonBox::Reset);
+	m_optionsButton->setText(i18n("Toggle Options"));
 
 	connect(m_importKaggleDatasetWidget, &ImportKaggleDatasetWidget::toggleOkBtn, [&](bool enabled) {
 		okButton->setEnabled(enabled);
+	});
+	connect(m_importKaggleDatasetWidget, &ImportKaggleDatasetWidget::toggleOptionsBtn, [&](bool enabled) {
+		m_optionsButton->setEnabled(enabled);
 	});
 	connect(m_importKaggleDatasetWidget, &ImportKaggleDatasetWidget::showError, this, &ImportKaggleDatasetDialog::showErrorMessage);
 	connect(m_importKaggleDatasetWidget, &ImportKaggleDatasetWidget::clearError, [&] {
 		DEBUG(Q_FUNC_INFO << " clearError");
 		showErrorMessage(QString());
 	});
+	connect(m_optionsButton, &QPushButton::clicked, m_importKaggleDatasetWidget, &ImportKaggleDatasetWidget::toggleOptionsVisibility);
 	connect(buttonBox, &QDialogButtonBox::accepted, this, &ImportDialog::accept);
 	connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
@@ -61,6 +67,9 @@ ImportKaggleDatasetDialog::ImportKaggleDatasetDialog(MainWin* parent)
 		resize(windowHandle()->size());
 	} else
 		resize(QSize(0, 0).expandedTo(minimumSize()));
+
+	m_optionsButton->setEnabled(false);
+	okButton->setEnabled(false);
 }
 
 ImportKaggleDatasetDialog::~ImportKaggleDatasetDialog() {

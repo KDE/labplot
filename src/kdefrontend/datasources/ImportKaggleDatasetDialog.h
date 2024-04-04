@@ -28,6 +28,7 @@ public:
 private:
 	MainWin* m_mainWin{nullptr};
 	ImportKaggleDatasetWidget* m_importKaggleDatasetWidget;
+	QPushButton* m_optionsButton{nullptr};
 
 protected Q_SLOTS:
 	void checkOkButton() override;

@@ -43,8 +43,12 @@ private:
 	void downloadKaggleDataset();
 	void listDownloadedKaggleDatasetFiles(const QString&);
 
+public Q_SLOTS:
+	void toggleOptionsVisibility();
+
 Q_SIGNALS:
 	void toggleOkBtn(bool);
+	void toggleOptionsBtn(bool);
 	void showError(const QString&);
 	void clearError();
 };

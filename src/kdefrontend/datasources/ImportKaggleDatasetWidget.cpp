@@ -27,23 +27,20 @@ ImportKaggleDatasetWidget::ImportKaggleDatasetWidget(QWidget* parent)
 	, m_kaggleCli(new QProcess(this))
 	, m_cbDatasetFiles(new QComboBox(this)) {
 	ui.setupUi(this);
+
+	prepareImportKaggleDatasetWidget();
+	prepareImportFileWidget();
+
+	auto* layout = static_cast<QGridLayout*>(this->layout());
+	layout->addWidget(m_importFileWidget, layout->rowCount(), 0, -1, -1);
+
+	const auto group = Settings::group(QStringLiteral("Settings_Datasets"));
+	m_kaggleCli->setProgram(group.readEntry(QLatin1String("KaggleCLIPath"), QString()));
+
 	connect(ui.leSearch, &TimedLineEdit::textChanged, [&] {
 		Q_EMIT clearError();
 		m_resultPage = 1;
 		searchKaggleDatasets();
-	});
-	connect(ui.lwDatasets, &QListWidget::currentRowChanged, [&](int index) {
-		Q_EMIT clearError();
-		m_cbDatasetFiles->clear();
-		m_importFileWidget->ui.gbOptions->setEnabled(false);
-		m_importFileWidget->ui.tePreview->clear();
-		m_importFileWidget->m_twPreview->clear();
-		ui.lInfo->clear();
-		ui.bDownload->setEnabled(true);
-		if (index != -1)
-			fetchKaggleDatasetMetadata(index);
-
-		Q_EMIT toggleOkBtn(false);
 	});
 	connect(ui.bPrev, &QToolButton::clicked, [&] {
 		Q_EMIT clearError();
@@ -54,6 +51,21 @@ ImportKaggleDatasetWidget::ImportKaggleDatasetWidget(QWidget* parent)
 		Q_EMIT clearError();
 		m_resultPage += 1;
 		searchKaggleDatasets();
+	});
+	connect(ui.lwDatasets, &QListWidget::currentRowChanged, [&](int index) {
+		Q_EMIT clearError();
+		m_cbDatasetFiles->clear();
+		m_importFileWidget->ui.gbOptions->setEnabled(false);
+		m_importFileWidget->ui.gbOptions->hide();
+		m_importFileWidget->ui.tePreview->clear();
+		m_importFileWidget->m_twPreview->clear();
+		ui.lInfo->clear();
+		ui.bDownload->setEnabled(true);
+		if (index != -1)
+			fetchKaggleDatasetMetadata(index);
+
+		Q_EMIT toggleOkBtn(false);
+		Q_EMIT toggleOptionsBtn(false);
 	});
 	connect(ui.bDownload, &QToolButton::clicked, [&] {
 		Q_EMIT clearError();
@@ -86,15 +98,6 @@ ImportKaggleDatasetWidget::ImportKaggleDatasetWidget(QWidget* parent)
 		Q_EMIT toggleOkBtn(true);
 	});
 
-	prepareImportKaggleDatasetWidget();
-	prepareImportFileWidget();
-
-	auto* layout = static_cast<QGridLayout*>(this->layout());
-	layout->addWidget(m_importFileWidget, layout->rowCount(), 0, -1, -1);
-
-	const auto group = Settings::group(QStringLiteral("Settings_Datasets"));
-	m_kaggleCli->setProgram(group.readEntry(QLatin1String("KaggleCLIPath"), QString()));
-
 	Q_EMIT ui.leSearch->textChanged();
 }
 
@@ -106,7 +109,7 @@ void ImportKaggleDatasetWidget::prepareImportFileWidget() {
 	m_importFileWidget->ui.gbUpdateOptions->hide();
 	m_importFileWidget->ui.gbOptions->layout()->addWidget(m_cbDatasetFiles);
 	m_importFileWidget->ui.gbOptions->setEnabled(false);
-	m_importFileWidget->ui.gbOptions->show();
+	m_importFileWidget->ui.gbOptions->hide();
 	m_importFileWidget->initSlots();
 }
 
@@ -121,9 +124,9 @@ void ImportKaggleDatasetWidget::prepareImportKaggleDatasetWidget() {
 	ui.leSearch->setFocus();
 
 	ui.lCategories->setText(i18n("Dataset:"));
-	ui.bPrev->setText(i18n("Previous"));
-	ui.bNext->setText(i18n("Next"));
-	ui.bDownload->setText(i18n("Download"));
+	ui.bPrev->setIcon(QIcon::fromTheme(QStringLiteral("go-previous")));
+	ui.bNext->setIcon(QIcon::fromTheme(QStringLiteral("go-next")));
+	ui.bDownload->setIcon(QIcon::fromTheme(QStringLiteral("download")));
 }
 
 void ImportKaggleDatasetWidget::searchKaggleDatasets() {
@@ -278,15 +281,22 @@ void ImportKaggleDatasetWidget::listDownloadedKaggleDatasetFiles(const QString& 
 	DEBUG(Q_FUNC_INFO);
 
 	m_cbDatasetFiles->clear();
+	QStringList datasetFiles;
 
 	QDirIterator datasetDirIterator(datasetDirPath, QStringList() << QStringLiteral("*.csv"), QDir::Files, QDirIterator::Subdirectories);
 	while (datasetDirIterator.hasNext()) {
 		QFile datasetFile(datasetDirIterator.next());
-		m_cbDatasetFiles->addItem(datasetFile.fileName());
+		datasetFiles.append(datasetFile.fileName());
 	}
 
-	if (m_cbDatasetFiles->count() != 0)
+	if (datasetFiles.isEmpty()) {
+		Q_EMIT showError(i18n("Could not find .csv files in %1", datasetDirPath));
+	} else {
 		m_importFileWidget->ui.gbOptions->setEnabled(true);
+		m_importFileWidget->ui.gbOptions->show();
+		m_cbDatasetFiles->addItems(datasetFiles);
+		Q_EMIT toggleOptionsBtn(true);
+	}
 }
 
 void ImportKaggleDatasetWidget::importToSpreadsheet(Spreadsheet* spreadsheet) const {
@@ -294,4 +304,12 @@ void ImportKaggleDatasetWidget::importToSpreadsheet(Spreadsheet* spreadsheet) co
 	spreadsheet->setName(ui.lwDatasets->selectedItems().at(0)->text());
 	spreadsheet->setComment(ui.lInfo->text());
 	m_importFileWidget->currentFileFilter()->readDataFromFile(m_cbDatasetFiles->currentText(), spreadsheet);
+}
+
+void ImportKaggleDatasetWidget::toggleOptionsVisibility() {
+	if (m_importFileWidget->ui.gbOptions->isVisible()) {
+		m_importFileWidget->ui.gbOptions->hide();
+	} else {
+		m_importFileWidget->ui.gbOptions->show();
+	}
 }
