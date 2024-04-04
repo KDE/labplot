@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-31 01:57+0000\n"
+"POT-Creation-Date: 2024-04-04 01:43+0000\n"
 "PO-Revision-Date: 2024-03-24 12:30+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
@@ -445,7 +445,7 @@ msgstr "несумісний тип фільтрування"
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:283
 #: src/backend/lib/XmlStreamReader.cpp:104
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1900
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1908
 #, kde-format
 msgid "unknown element '%1'"
 msgstr "невідомий елемент «%1»"
@@ -916,7 +916,7 @@ msgstr "%1: встановити стиль контурів позначок п
 
 #: src/backend/datapicker/DatapickerCurve.cpp:376
 #: src/backend/datapicker/DatapickerImage.cpp:414
-#: src/backend/worksheet/InfoElement.cpp:871
+#: src/backend/worksheet/InfoElement.cpp:870
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:126
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:138
 #: src/backend/worksheet/WorksheetElement.cpp:161
@@ -928,7 +928,7 @@ msgstr "%1: зробити видимим"
 
 #: src/backend/datapicker/DatapickerCurve.cpp:376
 #: src/backend/datapicker/DatapickerImage.cpp:414
-#: src/backend/worksheet/InfoElement.cpp:871
+#: src/backend/worksheet/InfoElement.cpp:870
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:126
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:138
 #: src/backend/worksheet/WorksheetElement.cpp:161
@@ -989,7 +989,7 @@ msgid "Failed to read image data"
 msgstr "Не вдалося прочитати дані зображення"
 
 #: src/backend/datapicker/DatapickerPoint.cpp:213
-#: src/backend/worksheet/InfoElement.cpp:841
+#: src/backend/worksheet/InfoElement.cpp:840
 #: src/backend/worksheet/WorksheetElement.cpp:745
 #, kde-format
 msgid "%1: set position"
@@ -1684,7 +1684,7 @@ msgid "Valid JSON document"
 msgstr "Коректний документ JSON"
 
 #: src/backend/datasources/filters/JsonFilter.cpp:261
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:296
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:304
 #, kde-format
 msgid "index"
 msgstr "індекс"
@@ -7058,7 +7058,7 @@ msgstr "%1: змінити співвідношення розмірів"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twLabels)
 #: src/backend/worksheet/InfoElement.cpp:143
-#: src/backend/worksheet/InfoElement.cpp:1339
+#: src/backend/worksheet/InfoElement.cpp:1338
 #: src/kdefrontend/ui/dockwidgets/columndock.ui:187
 #, kde-format
 msgid "Label"
@@ -7076,18 +7076,18 @@ msgstr "Мітка"
 msgid "Symbol"
 msgstr "Позначення"
 
-#: src/backend/worksheet/InfoElement.cpp:857
+#: src/backend/worksheet/InfoElement.cpp:856
 #, kde-format
 msgid "%1: set gluepoint index"
 msgstr "%1: встановити індекс точки прилипання"
 
-#: src/backend/worksheet/InfoElement.cpp:864
+#: src/backend/worksheet/InfoElement.cpp:863
 #, kde-format
 msgid "%1: set connectionline curve name"
 msgstr "%1: встановити назву кривої лінії з'єднання"
 
 #: src/backend/worksheet/Line.cpp:100
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:426
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:435
 #, kde-format
 msgid "%1: line type changed"
 msgstr "%1: змінено тип лінії"
@@ -7140,12 +7140,12 @@ msgstr "%1: встановити праву фаску"
 msgid "%1: set bottom padding"
 msgstr "%1: встановити нижню фаску"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:272
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:281
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:86
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:223
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:231
 #: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:102
-#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:108
-#: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:124
+#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:100
+#: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:117
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:258
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:56
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:52
@@ -7160,12 +7160,12 @@ msgstr "Горизонтальне"
 
 #. i18n("AvgShifted Histogram"));
 #. Orientation
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:275
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:284
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:89
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:226
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:234
 #: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:105
-#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:111
-#: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:127
+#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:103
+#: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:120
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:259
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:57
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:53
@@ -7180,12 +7180,12 @@ msgstr "Горизонтальне"
 msgid "Vertical"
 msgstr "Вертикальне"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:295
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:304
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:97
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:234
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:242
 #: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:113
-#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:128
-#: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:144
+#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:120
+#: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:137
 #, kde-format
 msgid "Orientation"
 msgstr "Орієнтація"
@@ -7195,8 +7195,8 @@ msgstr "Орієнтація"
 #. i18n: ectx: property (text), widget (QLabel, lEstimationLine)
 #. i18n: ectx: property (text), widget (QLabel, lWhiskersFormat)
 #. i18n: ectx: property (text), widget (QLabel, lLine)
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:301
-#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:134
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:310
+#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:126
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:196
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:488
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:628
@@ -7211,269 +7211,269 @@ msgstr "Орієнтація"
 msgid "Line"
 msgstr "Лінія"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:303
-#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:136
-#: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:152
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:312
+#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:128
+#: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:145
 #, kde-format
 msgid "Style"
 msgstr "Стиль"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:308
-#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:141
-#: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:157
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:317
+#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:133
+#: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:150
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:318
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:131
 #, kde-format
 msgid "Color"
 msgstr "Колір"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:533
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:542
 #, kde-format
 msgid "%1: set axis range type"
 msgstr "%1: встановити тип діапазону вісі"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:558
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:567
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:621
 #, kde-format
 msgid "%1: set axis orientation"
 msgstr "%1: встановити орієнтацію вісі"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:565
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:574
 #, kde-format
 msgid "%1: set axis position"
 msgstr "%1: встановити розташування вісі"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:573
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:582
 #, kde-format
 msgid "%1: set axis offset"
 msgstr "%1: встановити відступ вісі"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:588
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:597
 #, kde-format
 msgid "%1: set axis range"
 msgstr "%1: встановити діапазон вісі"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:627
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:636
 #, kde-format
 msgid "%1: set range scale"
 msgstr "%1: встановити масштаб діапазону"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:634
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:643
 #, kde-format
 msgid "%1: set scale"
 msgstr "%1: встановити масштаб"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:641
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:650
 #, kde-format
 msgid "%1: set major tick start type"
 msgstr "%1: встановити тип початку основних позначок"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:648
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:657
 #, kde-format
 msgid "%1: set major tick start offset"
 msgstr "%1: встановити початковий відступ основної поділки"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:656
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:665
 #, kde-format
 msgid "%1: set major tick start value"
 msgstr "%1: встановити початкове значення основної поділки"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:668
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:677
 #, kde-format
 msgid "%1: set axis scaling factor"
 msgstr "%1: встановити коефіцієнт масштабування вісі"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:677
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:686
 #, kde-format
 msgid "%1: set axis zero offset"
 msgstr "%1: встановити відступ від нуля для вісі"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:683
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:692
 #, kde-format
 msgid "%1: show scale and offset"
 msgstr "%1: показати шкалу і відступ"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:690
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:699
 #, kde-format
 msgid "%1: set axis logical position"
 msgstr "%1: встановити логічну позицію вісі"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:698
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:705
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:707
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:714
 #, kde-format
 msgid "%1: set title offset"
 msgstr "%1: встановити відступ заголовка"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:713
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:722
 #, kde-format
 msgid "%1: set arrow type"
 msgstr "%1: встановити тип стрілки"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:720
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:729
 #, kde-format
 msgid "%1: set arrow position"
 msgstr "%1: встановити розташування стрілки"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:727
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:736
 #, kde-format
 msgid "%1: set arrow size"
 msgstr "%1: встановити розмір стрілки"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:735
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:744
 #, kde-format
 msgid "%1: set major ticks direction"
 msgstr "%1: встановити напрям основних позначок"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:742
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:751
 #, kde-format
 msgid "%1: set major ticks type"
 msgstr "%1: встановити тип основних позначок"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:750
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:759
 #, kde-format
 msgid "%1: enable/disable major automatic tick numbers"
 msgstr "%1: увімкнути/вимкнути автоматичні числові мітки основних поділок"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:752
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:767
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:761
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:776
 #, kde-format
 msgid "%1: set the total number of the major ticks"
 msgstr "%1: встановити загальну кількість основних позначок"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:769
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:851
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:778
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:860
 #, kde-format
 msgid "%1: disable major automatic tick numbers"
 msgstr "%1: вимкнути автоматичні числові мітки основних поділок"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:792
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:801
 #, kde-format
 msgid "%1: set the spacing of the major ticks"
 msgstr "%1: встановити інтервал між основними позначками"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:799
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:808
 #, kde-format
 msgid "%1: assign major ticks' values"
 msgstr "%1: встановити значення для основних позначок"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:813
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:822
 #, kde-format
 msgid "%1: set major ticks length"
 msgstr "%1: встановити довжину основних позначок"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:821
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:830
 #, kde-format
 msgid "%1: set minor ticks direction"
 msgstr "%1: встановити напрям основних позначок"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:828
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:837
 #, kde-format
 msgid "%1: set minor ticks type"
 msgstr "%1: встановити тип допоміжних позначок"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:836
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:845
 #, kde-format
 msgid "%1: enable/disable minor automatic tick numbers"
 msgstr "%1: увімкнути/вимкнути автоматичні числові мітки додаткових поділок"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:839
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:850
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:848
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:859
 #, kde-format
 msgid "%1: set the total number of the minor ticks"
 msgstr "%1: встановити загальну кількість допоміжних позначок"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:881
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:890
 #, kde-format
 msgid "%1: set the spacing of the minor ticks"
 msgstr "%1: встановити інтервал між допоміжними позначками"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:888
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:897
 #, kde-format
 msgid "%1: assign minor ticks' values"
 msgstr "%1: встановити значення для допоміжних позначок"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:902
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:911
 #, kde-format
 msgid "%1: set minor ticks length"
 msgstr "%1: встановити довжину допоміжних позначок"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:911
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:920
 #, kde-format
 msgid "%1: set labels format"
 msgstr "%1: встановити формат міток"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:918
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:927
 #, kde-format
 msgid "%1: set labels format automatic"
 msgstr "%1: встановити автоматичний формат міток"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:925
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:932
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:934
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:941
 #, kde-format
 msgid "%1: set labels precision"
 msgstr "%1: встановити точність міток"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:939
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:948
 #, kde-format
 msgid "%1: set labels datetime format"
 msgstr "%1: встановити формат дати і часу для міток"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:946
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:955
 #, kde-format
 msgid "%1: set labels position"
 msgstr "%1: встановити розташування міток"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:953
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:962
 #, kde-format
 msgid "%1: set label offset"
 msgstr "%1: встановити відступ міток"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:960
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:969
 #, kde-format
 msgid "%1: set label rotation angle"
 msgstr "%1: встановити кут обертання міток"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:967
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:976
 #, kde-format
 msgid "%1: set labels text type"
 msgstr "%1: встановити тип тексту мітки"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:974
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:983
 #, kde-format
 msgid "%1: set labels text column"
 msgstr "%1: встановити стовпчик тексту міток"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:988
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:997
 #, kde-format
 msgid "%1: set label color"
 msgstr "%1: встановити колір міток"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:995
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1004
 #, kde-format
 msgid "%1: set label font"
 msgstr "%1: встановити шрифт міток"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1002
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1011
 #, kde-format
 msgid "%1: set labels background type"
 msgstr "%1: встановити тип тла міток"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1009
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1018
 #, kde-format
 msgid "%1: set label background color"
 msgstr "%1: встановити колір тла міток"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1016
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1025
 #, kde-format
 msgid "%1: set label prefix"
 msgstr "%1: встановити префікс мітки"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1023
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1032
 #, kde-format
 msgid "%1: set label suffix"
 msgstr "%1: встановити суфікс міток"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1030
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1039
 #, kde-format
 msgid "%1: set labels opacity"
 msgstr "%1: встановити рівень непрозорості міток"
@@ -7485,7 +7485,7 @@ msgid "%1: set x column"
 msgstr "%1: встановити стовпчик даних x"
 
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:283
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:484
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:492
 #: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:289
 #, kde-format
 msgid "%1: set data columns"
@@ -7497,127 +7497,127 @@ msgid "%1: set type"
 msgstr "%1: встановити тип"
 
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:317
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:512
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:520
 #: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:311
-#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:196
-#: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:219
+#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:188
+#: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:212
 #, kde-format
 msgid "%1: set orientation"
 msgstr "%1: встановити орієнтацію"
 
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:324
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:526
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:534
 #, kde-format
 msgid "%1: width factor changed"
 msgstr "%1: змінено коефіцієнт ширини"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:291
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:165
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:299
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:168
 #: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:340
 #: src/backend/worksheet/plots/cartesian/XYEquationCurve.cpp:112
 #, kde-format
 msgid "%1 - Data"
 msgstr "%1 – дані"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:297
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:305
 #, kde-format
 msgid "1st quartile"
 msgstr "перший квартиль"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:298
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:306
 #, kde-format
 msgid "3rd quartile"
 msgstr "третій квартиль"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:299
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:307
 #, kde-format
 msgid "median"
 msgstr "медіана"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:300
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:308
 #, kde-format
 msgid "whiskers min"
 msgstr "мін. вусиків"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:301
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:309
 #, kde-format
 msgid "whiskers max"
 msgstr "макс. вусиків"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:302
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:310
 #, kde-format
 msgid "data points count"
 msgstr "кількість точок даних"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:303
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:311
 #, kde-format
 msgid "outliers count"
 msgstr "кількість викидів"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:304
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:312
 #, kde-format
 msgid "far out points count"
 msgstr "кількість віддалених точок"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:505
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:513
 #, kde-format
 msgid "%1: set ordering"
 msgstr "%1: упорядковування наборів"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:519
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:527
 #, kde-format
 msgid "%1: variable width changed"
 msgstr "%1: змінено змінну ширину"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:533
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:541
 #, kde-format
 msgid "%1: changed notches"
 msgstr "%1: змінено рівні"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:541
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:549
 #, kde-format
 msgid "%1: set whiskers type"
 msgstr "%1: встановити тип вусів"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:548
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:556
 #, kde-format
 msgid "%1: set whiskers range parameter"
 msgstr "%1: встановити параметр діапазон для кінчиків вусів"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:555
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:563
 #, kde-format
 msgid "%1: set whiskers cap size"
 msgstr "%1: встановити розмір кінчика для вусів"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:563
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:571
 #, kde-format
 msgid "%1: jitterring changed"
 msgstr "%1: змінено тремтіння"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:571
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:516
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:559
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:579
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:519
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:568
 #, kde-format
 msgid "%1: change rug enabled"
 msgstr "%1: змінити стан вмикання килимка"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:578
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:523
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:573
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:586
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:526
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:582
 #, kde-format
 msgid "%1: change rug width"
 msgstr "%1: змінити ширину килимка"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:585
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:530
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:580
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:593
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:533
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:589
 #, kde-format
 msgid "%1: change rug length"
 msgstr "%1: змінити довжину килимка"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:592
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:537
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:587
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:600
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:540
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:596
 #, kde-format
 msgid "%1: change rug offset"
 msgstr "%1: змінити зсув килимка"
@@ -7629,7 +7629,7 @@ msgstr "немає доступних відомостей"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTitle)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:165
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5015
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5023
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:483
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:543
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:466
@@ -7938,7 +7938,7 @@ msgstr "Аналітична крива"
 #. dataManipulationMenu->addAction(addDataReductionAction);
 #. analysis menu
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:646
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:190
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:193
 #, kde-format
 msgid "Analysis"
 msgstr "Аналіз"
@@ -8035,7 +8035,7 @@ msgid "%1: load default theme"
 msgstr "%1: завантажити типову тему"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1694
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5325
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5326
 #: src/backend/worksheet/Worksheet.cpp:818
 #, kde-format
 msgid "%1: set theme"
@@ -8290,104 +8290,104 @@ msgstr "%1: змінено тип позначки похибки"
 msgid "%1: set error bar cap size"
 msgstr "%1: встановити розмір кінчика позначки похибки"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:171
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:174
 #, kde-format
 msgid "bin positions"
 msgstr "позиції дискретизації"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:177
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:180
 #, kde-format
 msgid "bin values"
 msgstr "значення позицій дискретизації"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:193
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:196
 #, kde-format
 msgid "Fit Gaussian (Normal) Distribution"
 msgstr "Відповідність гаусовому (нормальному) розподілу"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:199
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:202
 #, kde-format
 msgid "Fit Exponential Distribution"
 msgstr "Відповідність експоненційному розподілу"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:205
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:208
 #, kde-format
 msgid "Fit Laplace Distribution"
 msgstr "Відповідність розподілу Лапласа"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:211
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:214
 #, kde-format
 msgid "Fit Cauchy-Lorentz Distribution"
 msgstr "Відповідність розподілу Коші-Лоренца"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:217
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:220
 #, kde-format
 msgid "Fit Log-normal Distribution"
 msgstr "Відповідність логнормальному розподілу"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:223
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:226
 #, kde-format
 msgid "Fit Poisson Distribution"
 msgstr "Відповідність розподілу Пуассона"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:229
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:232
 #, kde-format
 msgid "Fit Binomial Distribution"
 msgstr "Відповідність біноміальному розподілу"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:398
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:401
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:227
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:253
 #, kde-format
 msgid "%1: set data column"
 msgstr "%1: встановити стовпчик даних"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:410
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:413
 #, kde-format
 msgid "%1: set histogram type"
 msgstr "%1: встановити тип гістограми"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:417
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:420
 #, kde-format
 msgid "%1: set histogram orientation"
 msgstr "%1: встановити орієнтацію гістограми"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:424
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:427
 #, kde-format
 msgid "%1: set histogram normalization"
 msgstr "%1: встановити нормалізацію гістограми"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:431
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:434
 #, kde-format
 msgid "%1: set binning method"
 msgstr "%1: встановити спосіб поділу на інтервали"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:438
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:441
 #, kde-format
 msgid "%1: set bin count"
 msgstr "%1: встановити кількість інтервалів"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:445
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:448
 #, kde-format
 msgid "%1: set bin width"
 msgstr "%1: встановити ширину інтервалу"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:453
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:456
 #, kde-format
 msgid "%1: change auto bin ranges"
 msgstr "%1: змінити автоматичні діапазони позначок"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:501
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:504
 #, kde-format
 msgid "%1: set bin ranges start"
 msgstr "%1: встановити початок діапазонів позначок"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:508
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:511
 #, kde-format
 msgid "%1: set bin ranges end"
 msgstr "%1: встановити кінець діапазонів позначок"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:828
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:831
 #, kde-format
 msgid ""
 "Calculation of the histogram not possible. The max value must be bigger than "
@@ -8421,17 +8421,17 @@ msgstr "%1: змінено видимість панелі умовних поз
 msgid "%1: set distribution"
 msgstr "%1: встановити розподіл"
 
-#: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:150
+#: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:143
 #, kde-format
 msgid "Border Line"
 msgstr "Лінія межі"
 
-#: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:226
+#: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:219
 #, kde-format
 msgid "%1: set start logical position"
 msgstr "%1: встановлення початкової логічної позиції"
 
-#: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:233
+#: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:226
 #, kde-format
 msgid "%1: set end logical position"
 msgstr "%1: встановлення кінцевої логічної позиції"
@@ -8777,79 +8777,79 @@ msgid "club"
 msgstr "палиця"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:113
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:455
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:464
 #, kde-format
 msgid "%1: set values type"
 msgstr "%1: встановити тип значень"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:124
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:462
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:471
 #, kde-format
 msgid "%1: set values column"
 msgstr "%1: встановити стовпчик значень"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:136
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:481
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:490
 #, kde-format
 msgid "%1: set values position"
 msgstr "%1: встановити розташування значень"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:143
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:488
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:497
 #, kde-format
 msgid "%1: set values distance"
 msgstr "%1: встановлення значення відстані"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:150
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:495
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:504
 #, kde-format
 msgid "%1: rotate values"
 msgstr "%1: значення обертань"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:157
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:502
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:511
 #, kde-format
 msgid "%1: set values opacity"
 msgstr "%1: встановлення значення непрозорості"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:164
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:509
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:518
 #, kde-format
 msgid "%1: set values numeric format"
 msgstr "%1: встановлення числового формату значень"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:171
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:516
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:525
 #, kde-format
 msgid "%1: set values precision"
 msgstr "%1: встановлення точності значень"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:178
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:523
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:532
 #, kde-format
 msgid "%1: set values datetime format"
 msgstr "%1: встановити формат дати і часу значень"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:185
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:530
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:539
 #, kde-format
 msgid "%1: set values prefix"
 msgstr "%1: встановлення значення префікса"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:192
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:537
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:546
 #, kde-format
 msgid "%1: set values suffix"
 msgstr "%1: встановлення значення суфікса"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:199
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:544
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:553
 #, kde-format
 msgid "%1: set values font"
 msgstr "%1: встановлення значення шрифту"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:206
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:551
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:560
 #, kde-format
 msgid "%1: set values color"
 msgstr "%1: встановлення значення кольору"
@@ -8900,57 +8900,57 @@ msgstr "Недостатньо точок даних."
 msgid "%1: set options and perform the correlation"
 msgstr "%1: встановити параметри і виконати кореляцію"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:201
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:210
 #, kde-format
 msgid "Navigate to \"%1\""
 msgstr "Перейти до «%1»"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:401
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:410
 #, kde-format
 msgid "%1: x-data source changed"
 msgstr "%1: змінено джерело даних x"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:408
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:417
 #, kde-format
 msgid "%1: y-data source changed"
 msgstr "%1: змінено джерело даних y"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:433
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:442
 #, kde-format
 msgid "%1: set skip line gaps"
 msgstr "%1: встановити пропуск прогалин у лінії"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:440
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:449
 #, kde-format
 msgid "%1: set increasing X"
 msgstr "%1: встановити зростання X"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:447
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:456
 #, kde-format
 msgid "%1: set the number of interpolation points"
 msgstr "%1: встановлення кількості точок інтерполяції"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:566
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:575
 #, kde-format
 msgid "%1: set rug orientation"
 msgstr "%1: встановити орієнтацію килимка"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1378
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1387
 #, kde-format
 msgid "Error: Akima spline interpolation requires a minimum of 5 points."
 msgstr "Помилка: для сплайнового наближення Акіми потрібно принаймні 5 точок."
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1380
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1389
 #, kde-format
 msgid "Error: Could not initialize the spline function."
 msgstr "Помилка: не вдалося ініціалізувати сплайнову функцію."
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1393
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1402
 #, kde-format
 msgid "x values must be monotonically increasing."
 msgstr "Значення x мають бути монотонно зростаючими."
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1396
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1405
 #, kde-format
 msgid "Error: %1"
 msgstr "Помилка: %1"
