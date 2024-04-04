@@ -71,7 +71,7 @@ void nsl_baseline_remove_median(double* data, const size_t n) {
 }
 
 /* do a linear interpolation using first and last point and substract that */
-int nsl_baseline_remove_endpoints(double* xdata, double* ydata, const size_t n) {
+int nsl_baseline_remove_endpoints(const double* xdata, double* ydata, const size_t n) {
 	// not possible
 	if (xdata[0] == xdata[n - 1])
 		return -1;

@@ -58,16 +58,16 @@ void VariableParser::parseMaximaValues() {
 	if (m_string.count(QStringLiteral("[")) > 2)
 		return;
 
-	Datatype dataType = Datatype::float64;
+	Datatype type = Datatype::float64;
 	if (m_string.startsWith(QLatin1String("[\""))) // Maxime uses " to quote string values in the output
-		dataType = Datatype::text;
+		type = Datatype::text;
 
 	m_string = m_string.replace(QStringLiteral("["), QString());
 	m_string = m_string.replace(QStringLiteral("]"), QString());
 	m_string = m_string.trimmed();
 
 	const QStringList valueStringList = m_string.split(QStringLiteral(","));
-	parseValues(valueStringList, dataType);
+	parseValues(valueStringList, type);
 }
 
 /*!
@@ -79,7 +79,7 @@ void VariableParser::parseMaximaValues() {
  * */
 void VariableParser::parsePythonValues() {
 	QStringList valueStringList;
-	QString dataType = QStringLiteral("float64");
+	QString type = QStringLiteral("float64");
 	m_string = m_string.trimmed();
 	if (m_string.startsWith(QLatin1String("array"))) {
 		// parse numpy arrays, string representation like array([1,2,3,4,5]) or
@@ -94,26 +94,26 @@ void VariableParser::parsePythonValues() {
 		auto numpyDatatypeRegex = QStringLiteral("\\s*,\\s*dtype='{0,1}[a-zA-Z0-9\\[\\]]*'{0,1}");
 		m_string.indexOf(QRegularExpression(numpyDatatypeRegex), 0, &match);
 		if (match.isValid() && match.captured() != QString())
-			dataType = match.captured().replace(QStringLiteral("'"), QString()).replace(QStringLiteral(", dtype="), QString());
+			type = match.captured().replace(QStringLiteral("'"), QString()).replace(QStringLiteral(", dtype="), QString());
 		m_string = m_string.replace(QStringLiteral("array(["), QString());
 		m_string = m_string.replace(QRegExp(numpyDatatypeRegex), QString());
 		m_string = m_string.replace(QStringLiteral("])"), QString());
 	} else if (m_string.startsWith(QStringLiteral("["))) {
 		// parse python's lists
 		if (m_string.startsWith(QLatin1String("['"))) // python uses ' to quote string values in the output
-			dataType = QStringLiteral("text");
+			type = QStringLiteral("text");
 		m_string = m_string.replace(QStringLiteral("["), QString());
 		m_string = m_string.replace(QStringLiteral("]"), QString());
 	} else if (m_string.startsWith(QStringLiteral("("))) {
 		// parse python's tuples
 		if (m_string.startsWith(QLatin1String("('")))
-			dataType = QStringLiteral("text");
+			type = QStringLiteral("text");
 		m_string = m_string.replace(QStringLiteral("("), QString());
 		m_string = m_string.replace(QStringLiteral(")"), QString());
 	} else if (m_string.startsWith(QStringLiteral("{"))) {
 		// parse python's sets
 		if (m_string.startsWith(QLatin1String("{'")))
-			dataType = QStringLiteral("text");
+			type = QStringLiteral("text");
 		m_string = m_string.replace(QStringLiteral("{"), QString());
 		m_string = m_string.replace(QStringLiteral("}"), QString());
 	} else {
@@ -127,7 +127,7 @@ void VariableParser::parsePythonValues() {
 	else
 		valueStringList = m_string.split(QStringLiteral(" "));
 
-	parseValues(valueStringList, convertNumpyDatatype(dataType));
+	parseValues(valueStringList, convertNumpyDatatype(type));
 }
 
 void VariableParser::parseRValues() {
@@ -267,8 +267,7 @@ void VariableParser::parseValues(const QStringList& values, VariableParser::Data
 
 			// accept the variable only if there is at least one numerical value in the array.
 			if (isNumber) {
-				if (!m_parsed)
-					m_parsed = true;
+				m_parsed = true;
 			} else
 				value = 0;
 
@@ -282,8 +281,7 @@ void VariableParser::parseValues(const QStringList& values, VariableParser::Data
 		for (const auto& v : values) {
 			qint64 value = v.trimmed().toLongLong(&isNumber);
 			if (isNumber) {
-				if (!m_parsed)
-					m_parsed = true;
+				m_parsed = true;
 			} else
 				value = 0;
 
@@ -308,8 +306,7 @@ void VariableParser::parseValues(const QStringList& values, VariableParser::Data
 			for (const auto& v : values) {
 				double value = v.trimmed().toDouble(&isNumber);
 				if (isNumber) {
-					if (!m_parsed)
-						m_parsed = true;
+					m_parsed = true;
 				} else
 					value = NAN;
 
@@ -321,8 +318,7 @@ void VariableParser::parseValues(const QStringList& values, VariableParser::Data
 			for (const auto& v : values) {
 				double value = locale.toDouble(v.trimmed(), &isNumber);
 				if (isNumber) {
-					if (!m_parsed)
-						m_parsed = true;
+					m_parsed = true;
 				} else
 					value = NAN;
 

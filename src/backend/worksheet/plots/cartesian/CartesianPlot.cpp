@@ -2216,10 +2216,6 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 	} else if (axis) {
 		connect(axis, &Axis::shiftSignal, this, &CartesianPlot::axisShiftSignal);
 	} else {
-		const auto* infoElement = dynamic_cast<const InfoElement*>(child);
-		if (infoElement)
-			connect(this, &CartesianPlot::curveRemoved, infoElement, &InfoElement::removeCurve);
-
 		// if an element is hovered, the curves which are handled manually in this class
 		// must be unhovered
 		if (elem)
@@ -2453,12 +2449,12 @@ void CartesianPlot::dataChanged(int xIndex, int yIndex, WorksheetElement* sender
 		if (sender)
 			sender->retransform();
 		else {
-			// no sender available, the function was called directly in the file filter (live data source got new data)
-			// or in Project::load() -> retransform all available curves since we don't know which curves are affected.
+			// no sender available, the function was called directly in the file filter (live data source got new data) or in Project::load()-.
+			// -> recalculate the internal structures in all plots and retransform them since we don't know which plots are affected.
 			// TODO: this logic can be very expensive
-			for (auto* child : children<XYCurve>()) {
-				child->recalcLogicalPoints();
-				child->retransform();
+			for (auto* plot : children<Plot>()) {
+				plot->recalc();
+				plot->retransform();
 			}
 		}
 	}
@@ -4804,6 +4800,14 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("defaultCoordinateSystem", defaultCoordinateSystemIndex, int);
 			DEBUG(Q_FUNC_INFO << ", got default cSystem index = " << d->defaultCoordinateSystemIndex)
 
+			// the file can be corrupted, either because of bugs like in
+			// https://invent.kde.org/education/labplot/-/issues/598, https://invent.kde.org/education/labplot/-/issues/869
+			// or because it was manually compromized.
+			// In order not to crash because of the wrong indices, add a safety check here.
+			// TODO: check the ranges and the coordinate system to make sure they're available.
+			if (d->defaultCoordinateSystemIndex > m_coordinateSystems.size() - 1)
+				d->defaultCoordinateSystemIndex = 0;
+
 			READ_DOUBLE_VALUE("horizontalPadding", horizontalPadding);
 			READ_DOUBLE_VALUE("verticalPadding", verticalPadding);
 			READ_DOUBLE_VALUE("rightPadding", rightPadding);
@@ -4828,7 +4832,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			if (str.isEmpty())
 				reader->raiseMissingAttributeWarning(QStringLiteral("xIndex"));
 			else {
-				CartesianCoordinateSystem* cSystem{new CartesianCoordinateSystem(this)};
+				auto* cSystem = new CartesianCoordinateSystem(this);
 				cSystem->setIndex(Dimension::X, str.toInt());
 
 				str = attribs.value(QStringLiteral("yIndex")).toString();
@@ -4924,6 +4928,11 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				str = attribs.value(QStringLiteral("yRangeDateTimeFormat")).toString();
 				if (!str.isEmpty())
 					d->yRanges[0].range.setDateTimeFormat(str);
+
+				auto* cSystem = new CartesianCoordinateSystem(this);
+				cSystem->setIndex(Dimension::X, 0);
+				cSystem->setIndex(Dimension::Y, 0);
+				addCoordinateSystem(cSystem);
 
 				READ_DOUBLE_VALUE("horizontalPadding", horizontalPadding);
 				READ_DOUBLE_VALUE("verticalPadding", verticalPadding);
@@ -5046,7 +5055,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			m_plotArea->setIsLoading(true);
 			m_plotArea->load(reader, preview);
 		} else if (!preview && reader->name() == QLatin1String("axis")) {
-			auto* axis = new Axis(QString());
+			auto* axis = new Axis(QString(), Axis::Orientation::Horizontal, true);
 			axis->setIsLoading(true);
 			if (axis->load(reader, preview))
 				addChildFast(axis);
@@ -5055,7 +5064,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				return false;
 			}
 		} else if (reader->name() == QLatin1String("xyCurve")) {
-			auto* curve = new XYCurve(QString());
+			auto* curve = new XYCurve(QString(), AspectType::XYCurve, true);
 			curve->setIsLoading(true);
 			if (curve->load(reader, preview))
 				addChildFast(curve);
@@ -5181,7 +5190,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				return false;
 			}
 		} else if (!preview && reader->name() == QLatin1String("customPoint")) {
-			auto* point = new CustomPoint(this, QString());
+			auto* point = new CustomPoint(this, QString(), true);
 			point->setIsLoading(true);
 			if (point->load(reader, preview))
 				addChildFast(point);
@@ -5190,7 +5199,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				return false;
 			}
 		} else if (!preview && reader->name() == QLatin1String("referenceLine")) {
-			auto* line = new ReferenceLine(this, QString());
+			auto* line = new ReferenceLine(this, QString(), true);
 			line->setIsLoading(true);
 			if (line->load(reader, preview))
 				addChildFast(line);
@@ -5199,7 +5208,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				return false;
 			}
 		} else if (!preview && reader->name() == QLatin1String("referenceRange")) {
-			auto* range = new ReferenceRange(this, QString());
+			auto* range = new ReferenceRange(this, QString(), true);
 			range->setIsLoading(true);
 			if (range->load(reader, preview))
 				addChildFast(range);
@@ -5208,7 +5217,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				return false;
 			}
 		} else if (reader->name() == QLatin1String("boxPlot")) {
-			auto* boxPlot = new BoxPlot(QStringLiteral("BoxPlot"));
+			auto* boxPlot = new BoxPlot(QStringLiteral("BoxPlot"), true);
 			boxPlot->setIsLoading(true);
 			if (boxPlot->load(reader, preview))
 				addChildFast(boxPlot);
@@ -5235,7 +5244,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				return false;
 			}
 		} else if (reader->name() == QLatin1String("Histogram")) {
-			auto* hist = new Histogram(QStringLiteral("Histogram"));
+			auto* hist = new Histogram(QStringLiteral("Histogram"), true);
 			hist->setIsLoading(true);
 			if (hist->load(reader, preview))
 				addChildFast(hist);
@@ -5266,13 +5275,6 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				return false;
 		}
 	}
-
-	// the file can be corrupted, either because of bugs like in
-	// https://invent.kde.org/education/labplot/-/issues/598 or because it was manually compromized.
-	// In order not to crash because of the wrong indices, add a safety check here.
-	// TODO: check the ranges and the coordinate system to make sure they're available.
-	if (d->defaultCoordinateSystemIndex > m_coordinateSystems.size() - 1)
-		d->defaultCoordinateSystemIndex = 0;
 
 	if (preview)
 		return true;

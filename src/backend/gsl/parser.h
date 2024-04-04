@@ -29,7 +29,7 @@ typedef struct parser_var {
 } parser_var;
 
 struct Payload {
-	Payload(bool constant = false)
+	explicit Payload(bool constant = false)
 		: constant(constant) {
 	}
 	virtual ~Payload() {

@@ -40,13 +40,10 @@ public:
 	virtual bool usingColumn(const Column*) const = 0;
 
 	/*!
-	 * This function is called when a column in the project was renamed or a new column was added
-	 * with the name/path that was potentially used earlier in the plot.
-	 * The implementation in the derived classes should handle these two cases and update the visualisation accordingly:
-	 * 1. the column is the same and was just renamed -> update the column path internally
-	 * 2. another column was added or renamed and fits to the path that was used before -> set and connect to the new column and update the visualisation
+	 * recalculates the internal structures (additional data containers, drawing primitives, etc.) on data changes in the source data colums.
+	 * these structures are used in the plot during the actual drawing of the plot on geometry changes.
 	 */
-	virtual void updateColumnDependencies(const AbstractColumn*) = 0;
+	virtual void recalc() = 0;
 
 	typedef PlotPrivate Private;
 

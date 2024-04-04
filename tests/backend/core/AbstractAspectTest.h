@@ -23,6 +23,7 @@ private Q_SLOTS:
 
 	void moveUp();
 	void moveDown();
+	void moveUpDown();
 };
 
 #endif // ABSTRACTASPECTTEST_H

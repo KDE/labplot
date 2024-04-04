@@ -44,10 +44,11 @@
 #include <QGraphicsSceneMouseEvent>
 
 CURVE_COLUMN_CONNECT(Histogram, Data, data, recalc)
+static constexpr double zero = 0.001; // zero baseline, don't use the exact 0.0 since it breaks the histrogram with log-scaling
 
-Histogram::Histogram(const QString& name)
+Histogram::Histogram(const QString& name, bool loading)
 	: Plot(name, new HistogramPrivate(this), AspectType::Histogram) {
-	init();
+	init(loading);
 }
 
 Histogram::Histogram(const QString& name, HistogramPrivate* dd)
@@ -59,28 +60,14 @@ Histogram::Histogram(const QString& name, HistogramPrivate* dd)
 // and is deleted during the cleanup in QGraphicsScene
 Histogram::~Histogram() = default;
 
-void Histogram::init() {
+void Histogram::init(bool loading) {
 	Q_D(Histogram);
-
-	KConfig config;
-	KConfigGroup group = config.group(QStringLiteral("Histogram"));
-
-	d->type = (Histogram::Type)group.readEntry(QStringLiteral("Type"), (int)Histogram::Ordinary);
-	d->orientation = (Histogram::Orientation)group.readEntry(QStringLiteral("Orientation"), (int)Histogram::Orientation::Vertical);
-	d->normalization = (Histogram::Normalization)group.readEntry(QStringLiteral("Normalization"), (int)Histogram::Count);
-	d->binningMethod = (Histogram::BinningMethod)group.readEntry(QStringLiteral("BinningMethod"), (int)Histogram::SquareRoot);
-	d->binCount = group.readEntry(QStringLiteral("BinCount"), 10);
-	d->binWidth = group.readEntry(QStringLiteral("BinWidth"), 1.0);
-	d->autoBinRanges = group.readEntry(QStringLiteral("AutoBinRanges"), true);
-	d->binRangesMin = 0.0;
-	d->binRangesMax = 1.0;
 
 	// line
 	d->line = new Line(QString());
 	d->line->setHistogramLineTypeAvailable(true);
 	d->line->setHidden(true);
 	addChild(d->line);
-	d->line->init(group);
 	connect(d->line, &Line::histogramLineTypeChanged, [=] {
 		d->updateLines();
 	});
@@ -95,7 +82,6 @@ void Histogram::init() {
 	d->symbol = new Symbol(QString());
 	addChild(d->symbol);
 	d->symbol->setHidden(true);
-	d->symbol->init(group);
 	connect(d->symbol, &Symbol::updateRequested, [=] {
 		d->updateSymbols();
 	});
@@ -108,7 +94,6 @@ void Histogram::init() {
 	addChild(d->value);
 	d->value->setHidden(true);
 	d->value->setcenterPositionAvailable(true);
-	d->value->init(group);
 	connect(d->value, &Value::updatePixmapRequested, [=] {
 		d->updatePixmap();
 	});
@@ -122,7 +107,6 @@ void Histogram::init() {
 	d->background->setEnabledAvailable(true);
 	addChild(d->background);
 	d->background->setHidden(true);
-	d->background->init(group);
 	connect(d->background, &Background::updateRequested, [=] {
 		d->updatePixmap();
 	});
@@ -134,13 +118,33 @@ void Histogram::init() {
 	d->errorBar = new ErrorBar(QString(), ErrorBar::Dimension::Y);
 	addChild(d->errorBar);
 	d->errorBar->setHidden(true);
-	d->errorBar->init(group);
 	connect(d->errorBar, &ErrorBar::updatePixmapRequested, [=] {
 		d->updatePixmap();
 	});
 	connect(d->errorBar, &ErrorBar::updateRequested, [=] {
 		d->updateErrorBars();
 	});
+
+	if (loading)
+		return;
+
+	// init the properties
+	KConfig config;
+	KConfigGroup group = config.group(QStringLiteral("Histogram"));
+
+	d->type = (Histogram::Type)group.readEntry(QStringLiteral("Type"), (int)Histogram::Ordinary);
+	d->orientation = (Histogram::Orientation)group.readEntry(QStringLiteral("Orientation"), (int)Histogram::Orientation::Vertical);
+	d->normalization = (Histogram::Normalization)group.readEntry(QStringLiteral("Normalization"), (int)Histogram::Count);
+	d->binningMethod = (Histogram::BinningMethod)group.readEntry(QStringLiteral("BinningMethod"), (int)Histogram::SquareRoot);
+	d->binCount = group.readEntry(QStringLiteral("BinCount"), 10);
+	d->binWidth = group.readEntry(QStringLiteral("BinWidth"), 1.0);
+	d->autoBinRanges = group.readEntry(QStringLiteral("AutoBinRanges"), true);
+
+	d->line->init(group);
+	d->symbol->init(group);
+	d->value->init(group);
+	d->background->init(group);
+	d->errorBar->init(group);
 
 	// marginal plots (rug, histogram, boxplot)
 	d->rugEnabled = group.readEntry(QStringLiteral("RugEnabled"), false);
@@ -330,29 +334,32 @@ bool Histogram::usingColumn(const Column* column) const {
 		|| (d->errorBar->yErrorType() == ErrorBar::ErrorType::Asymmetric && (d->errorBar->yPlusColumn() == column || d->errorBar->yMinusColumn() == column)));
 }
 
-void Histogram::updateColumnDependencies(const AbstractColumn* column) {
+void Histogram::handleAspectUpdated(const QString& aspectPath, const AbstractAspect* aspect) {
 	Q_D(Histogram);
+	const auto column = dynamic_cast<const AbstractColumn*>(aspect);
+	if (!column)
+		return;
+
 	setUndoAware(false);
-	const QString& columnPath = column->path();
 
 	if (d->dataColumn == column) // the column is the same and was just renamed -> update the column path
-		d->dataColumnPath = columnPath;
-	else if (d->dataColumnPath == columnPath) // another column was renamed to the current path -> set and connect to the new column
+		d->dataColumnPath = aspectPath;
+	else if (d->dataColumnPath == aspectPath) // another column was renamed to the current path -> set and connect to the new column
 		setDataColumn(column);
 
 	if (d->value->column() == column)
-		d->value->setColumnPath(columnPath);
-	else if (d->value->columnPath() == columnPath)
+		d->value->setColumnPath(aspectPath);
+	else if (d->value->columnPath() == aspectPath)
 		d->value->setColumn(column);
 
 	if (d->errorBar->yPlusColumn() == column)
-		d->errorBar->setYPlusColumnPath(columnPath);
-	else if (d->errorBar->yPlusColumnPath() == columnPath)
+		d->errorBar->setYPlusColumnPath(aspectPath);
+	else if (d->errorBar->yPlusColumnPath() == aspectPath)
 		d->errorBar->setYPlusColumn(column);
 
 	if (d->errorBar->yMinusColumn() == column)
-		d->errorBar->setYMinusColumnPath(columnPath);
-	else if (d->errorBar->yMinusColumnPath() == columnPath)
+		d->errorBar->setYMinusColumnPath(aspectPath);
+	else if (d->errorBar->yMinusColumnPath() == aspectPath)
 		d->errorBar->setYMinusColumn(column);
 
 	setUndoAware(true);
@@ -1008,6 +1015,9 @@ void HistogramPrivate::histogramValue(double& value, int bin) const {
 		break;
 	}
 	}
+
+	if (value == 0.0)
+		value = zero;
 }
 
 void HistogramPrivate::verticalHistogram() {
@@ -1022,9 +1032,9 @@ void HistogramPrivate::verticalHistogram() {
 		for (size_t i = 0; i < m_bins; ++i) {
 			histogramValue(value, i);
 			const double x = binRangesMin + i * width;
-			lines.append(QLineF(x, 0., x, value));
+			lines.append(QLineF(x, zero, x, value));
 			lines.append(QLineF(x, value, x + width, value));
-			lines.append(QLineF(x + width, value, x + width, 0.));
+			lines.append(QLineF(x + width, value, x + width, zero));
 			pointsLogical.append(QPointF(x + width / 2, value));
 		}
 		break;
@@ -1040,7 +1050,7 @@ void HistogramPrivate::verticalHistogram() {
 			pointsLogical.append(QPointF(x + width / 2, value));
 
 			if (i == m_bins - 1)
-				lines.append(QLineF(x + width, value, x + width, 0.));
+				lines.append(QLineF(x + width, value, x + width, zero));
 
 			prevValue = value;
 		}
@@ -1050,7 +1060,7 @@ void HistogramPrivate::verticalHistogram() {
 		for (size_t i = 0; i < m_bins; ++i) {
 			histogramValue(value, i);
 			const double x = binRangesMin + i * width + width / 2;
-			lines.append(QLineF(x, 0., x, value));
+			lines.append(QLineF(x, zero, x, value));
 			pointsLogical.append(QPointF(x, value));
 		}
 		break;
@@ -1059,7 +1069,7 @@ void HistogramPrivate::verticalHistogram() {
 		for (size_t i = 0; i < m_bins; ++i) {
 			histogramValue(value, i);
 			const double x = binRangesMin + i * width + width / 2;
-			lines.append(QLineF(x, 0., x, value));
+			lines.append(QLineF(x, zero, x, value));
 			lines.append(QLineF(x, value, x - width / 4, value));
 			pointsLogical.append(QPointF(x, value));
 		}
@@ -1068,7 +1078,7 @@ void HistogramPrivate::verticalHistogram() {
 	}
 
 	if (lineType != Histogram::DropLines && lineType != Histogram::HalfBars)
-		lines.append(QLineF(binRangesMax, 0., binRangesMin, 0.));
+		lines.append(QLineF(binRangesMax, zero, binRangesMin, zero));
 }
 
 void HistogramPrivate::horizontalHistogram() {
@@ -1083,9 +1093,9 @@ void HistogramPrivate::horizontalHistogram() {
 		for (size_t i = 0; i < m_bins; ++i) {
 			histogramValue(value, i);
 			const double y = binRangesMin + i * width;
-			lines.append(QLineF(0., y, value, y));
+			lines.append(QLineF(zero, y, value, y));
 			lines.append(QLineF(value, y, value, y + width));
-			lines.append(QLineF(value, y + width, 0., y + width));
+			lines.append(QLineF(value, y + width, zero, y + width));
 			pointsLogical.append(QPointF(value, y + width / 2));
 		}
 		break;
@@ -1101,7 +1111,7 @@ void HistogramPrivate::horizontalHistogram() {
 			pointsLogical.append(QPointF(value, y + width / 2));
 
 			if (i == m_bins - 1)
-				lines.append(QLineF(value, y + width, 0., y + width));
+				lines.append(QLineF(value, y + width, zero, y + width));
 
 			prevValue = value;
 		}
@@ -1111,7 +1121,7 @@ void HistogramPrivate::horizontalHistogram() {
 		for (size_t i = 0; i < m_bins; ++i) {
 			histogramValue(value, i);
 			const double y = binRangesMin + i * width + width / 2;
-			lines.append(QLineF(0., y, value, y));
+			lines.append(QLineF(zero, y, value, y));
 			pointsLogical.append(QPointF(value, y));
 		}
 		break;
@@ -1120,7 +1130,7 @@ void HistogramPrivate::horizontalHistogram() {
 		for (size_t i = 0; i < m_bins; ++i) {
 			histogramValue(value, i);
 			const double y = binRangesMin + i * width + width / 2;
-			lines.append(QLineF(0., y, value, y));
+			lines.append(QLineF(zero, y, value, y));
 			lines.append(QLineF(value, y, value, y + width / 4));
 			pointsLogical.append(QPointF(value, y));
 		}
@@ -1129,7 +1139,7 @@ void HistogramPrivate::horizontalHistogram() {
 	}
 
 	if (lineType != Histogram::DropLines && lineType != Histogram::HalfBars)
-		lines.append(QLineF(0., binRangesMin, 0., binRangesMax));
+		lines.append(QLineF(zero, binRangesMin, zero, binRangesMax));
 }
 
 void HistogramPrivate::updateSymbols() {

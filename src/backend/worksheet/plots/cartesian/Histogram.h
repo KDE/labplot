@@ -39,7 +39,7 @@ public:
 	enum ValuesType { NoValues, ValuesBinEntries, ValuesCustomColumn };
 	enum ValuesPosition { ValuesAbove, ValuesUnder, ValuesLeft, ValuesRight };
 
-	explicit Histogram(const QString& name);
+	explicit Histogram(const QString& name, bool loading = false);
 	~Histogram() override;
 
 	QIcon icon() const override;
@@ -48,6 +48,10 @@ public:
 	bool load(XmlStreamReader*, bool preview) override;
 	void loadThemeConfig(const KConfig&) override;
 	void saveThemeConfig(const KConfig&) override;
+
+	void retransform() override;
+	void recalc() override;
+	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
 
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, dataColumn, DataColumn)
 	CLASS_D_ACCESSOR_DECL(QString, dataColumnPath, DataColumnPath)
@@ -78,7 +82,6 @@ public:
 	double maximum(CartesianCoordinateSystem::Dimension) const override;
 	bool hasData() const override;
 	bool usingColumn(const Column*) const override;
-	void updateColumnDependencies(const AbstractColumn*) override;
 	QColor color() const override;
 
 	const AbstractColumn* bins() const;
@@ -89,9 +92,6 @@ public:
 	typedef HistogramPrivate Private;
 
 public Q_SLOTS:
-	void retransform() override;
-	void recalc();
-	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
 	void createDataSpreadsheet();
 
 private Q_SLOTS:
@@ -102,10 +102,11 @@ private Q_SLOTS:
 
 protected:
 	Histogram(const QString& name, HistogramPrivate* dd);
+	virtual void handleAspectUpdated(const QString& aspectPath, const AbstractAspect*) override;
 
 private:
 	Q_DECLARE_PRIVATE(Histogram)
-	void init();
+	void init(bool loading = false);
 	void initActions();
 	void connectDataColumn(const AbstractColumn*);
 

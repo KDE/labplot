@@ -4,7 +4,7 @@
  **
  ** This library is free software; you can redistribute it and/or
  ** modify it under the terms of the GNU Lesser General Public
- ** License as published by the Free Software Foundation; either
+ ** License as published by the Free Software Foundation;
  ** version 2.1 of the License, or (at your option) any later version.
  **
  ** This library is distributed in the hope that it will be useful,
@@ -357,7 +357,7 @@ static const char* windowsMessageString(int MessageId)
 #endif
 
 
-static unsigned int zOrderCounter = 0;
+static unsigned int zOrderCounterFloating = 0;
 /**
  * Private data class of CFloatingDockContainer class (pimpl)
  */
@@ -365,7 +365,7 @@ struct FloatingDockContainerPrivate
 {
 	CFloatingDockContainer *_this;
 	CDockContainerWidget *DockContainer;
-	unsigned int zOrderIndex = ++zOrderCounter;
+	unsigned int zOrderIndex = ++zOrderCounterFloating;
 	QPointer<CDockManager> DockManager;
 	eDragState DraggingState = DraggingInactive;
 	QPoint DragStartMousePosition;
@@ -760,10 +760,22 @@ CFloatingDockContainer::CFloatingDockContainer(CDockWidget *DockWidget) :
     d->DockManager->notifyWidgetOrAreaRelocation(DockWidget);
 }
 
+
 //============================================================================
 CFloatingDockContainer::~CFloatingDockContainer()
 {
 	ADS_PRINT("~CFloatingDockContainer");
+	if (d->DockManager)
+	{
+		d->DockManager->removeFloatingWidget(this);
+	}
+	delete d;
+}
+
+
+//============================================================================
+void CFloatingDockContainer::deleteContent()
+{
 	std::vector<QPointer<ads::CDockAreaWidget>> areas;
 	for (int i = 0; i != dockContainer()->dockAreaCount(); ++i)
 	{
@@ -776,7 +788,7 @@ CFloatingDockContainer::~CFloatingDockContainer()
 			continue;
 		}
 
-		// QPointer delete safety - just in case some dock wigdet in destruction
+		// QPointer delete safety - just in case some dock widget in destruction
 		// deletes another related/twin or child dock widget.
 		std::vector<QPointer<QWidget>> deleteWidgets;
 		for (auto widget : area->dockWidgets())
@@ -788,12 +800,6 @@ CFloatingDockContainer::~CFloatingDockContainer()
 			delete ptrWdg;
 		}
 	}
-
-	if (d->DockManager)
-	{
-		d->DockManager->removeFloatingWidget(this);
-	}
-	delete d;
 }
 
 //============================================================================
@@ -812,7 +818,7 @@ void CFloatingDockContainer::changeEvent(QEvent *event)
 		if (isActiveWindow())
 		{
 			ADS_PRINT("FloatingWidget::changeEvent QEvent::ActivationChange ");
-			d->zOrderIndex = ++zOrderCounter;
+			d->zOrderIndex = ++zOrderCounterFloating;
 
 #if defined(Q_OS_UNIX) && !defined(Q_OS_MACOS)
 			if (d->DraggingState == DraggingFloatingWidget)
@@ -1167,14 +1173,19 @@ QList<CDockWidget*> CFloatingDockContainer::dockWidgets() const
 }
 
 //============================================================================
-void CFloatingDockContainer::hideAndDeleteLater()
+void CFloatingDockContainer::finishDropOperation()
 {
-	// Widget has been redocked, so it must be hidden right way (see 
+	// Widget has been redocked, so it must be hidden right way (see
 	// https://github.com/githubuser0xFFFF/Qt-Advanced-Docking-System/issues/351)
 	// but AutoHideChildren must be set to false because "this" still contains
 	// dock widgets that shall not be toggled hidden.
 	d->AutoHideChildren = false;
 	hide();
+	// The floating widget will be deleted now. Ensure, that the destructor
+	// of the floating widget does not delete any dock areas that have been
+	// moved to a new container - simply remove all dock areas before deleting
+	// the floating widget
+	d->DockContainer->removeAllDockAreas();
 	deleteLater();
 	if (d->DockManager)
 	{

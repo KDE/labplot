@@ -59,6 +59,8 @@ private Q_SLOTS:
 	void aspectSelectedInView(const AbstractAspect*);
 	void aspectDeselectedInView(const AbstractAspect*);
 	void renameRequestedSlot();
+	void aspectAboutToBeMoved(const AbstractAspect*, int destinationRow);
+	void aspectMoved();
 
 private:
 	AbstractAspect* m_root;
@@ -75,6 +77,7 @@ private:
 	bool m_matchCompleteWord{false};
 	bool containsFilterString(const AbstractAspect*) const;
 	bool m_aspectAboutToBeRemovedCalled{false};
+	bool m_aspectAboutToBeMovedCalled{false};
 
 Q_SIGNALS:
 	void renameRequested(const QModelIndex&);

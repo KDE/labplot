@@ -103,9 +103,9 @@ private:
  *
  *  \ingroup worksheet
  */
-Axis::Axis(const QString& name, Orientation orientation)
+Axis::Axis(const QString& name, Orientation orientation, bool loading)
 	: WorksheetElement(name, new AxisPrivate(this), AspectType::Axis) {
-	init(orientation);
+	init(orientation, loading);
 }
 
 Axis::Axis(const QString& name, Orientation orientation, AxisPrivate* dd)
@@ -113,9 +113,91 @@ Axis::Axis(const QString& name, Orientation orientation, AxisPrivate* dd)
 	init(orientation);
 }
 
-void Axis::init(Orientation orientation) {
+void Axis::init(Orientation orientation, bool loading) {
 	Q_D(Axis);
 
+	// line
+	d->line = new Line(QString());
+	d->line->setHidden(true);
+	d->line->setCreateXmlElement(false); // line properties are written out together with arrow properties in Axis::save()
+	addChild(d->line);
+	connect(d->line, &Line::updatePixmapRequested, [=] {
+		d->update();
+	});
+	connect(d->line, &Line::updateRequested, [=] {
+		d->recalcShapeAndBoundingRect();
+	});
+
+	// axis title
+	d->title = new TextLabel(this->name(), TextLabel::Type::AxisTitle);
+	d->title->setText(this->name());
+	connect(d->title, &TextLabel::changed, this, &Axis::labelChanged);
+	addChild(d->title);
+	d->title->setHidden(true);
+	d->title->graphicsItem()->setParentItem(d);
+	d->title->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
+	d->title->graphicsItem()->setFlag(QGraphicsItem::ItemIsFocusable, false);
+	d->title->graphicsItem()->setAcceptHoverEvents(false);
+
+	// major ticks line
+	d->majorTicksLine = new Line(QString());
+	d->majorTicksLine->setHidden(true);
+	d->majorTicksLine->setPrefix(QStringLiteral("MajorTicks"));
+	d->majorTicksLine->setCreateXmlElement(false);
+	addChild(d->majorTicksLine);
+	connect(d->majorTicksLine, &Line::updatePixmapRequested, [=] {
+		d->update();
+	});
+	connect(d->majorTicksLine, &Line::updateRequested, [=] {
+		d->recalcShapeAndBoundingRect();
+	});
+
+	// minor ticks line
+	d->minorTicksLine = new Line(QString());
+	d->minorTicksLine->setHidden(true);
+	d->minorTicksLine->setPrefix(QStringLiteral("MinorTicks"));
+	d->minorTicksLine->setCreateXmlElement(false);
+	addChild(d->minorTicksLine);
+	connect(d->minorTicksLine, &Line::updatePixmapRequested, [=] {
+		d->update();
+	});
+	connect(d->minorTicksLine, &Line::updateRequested, [=] {
+		d->recalcShapeAndBoundingRect();
+	});
+
+	// major grid line
+	d->majorGridLine = new Line(QString());
+	d->majorGridLine->setPrefix(QStringLiteral("MajorGrid"));
+	d->majorGridLine->setHidden(true);
+	addChild(d->majorGridLine);
+	connect(d->majorGridLine, &Line::updatePixmapRequested, [=] {
+		d->updateGrid();
+	});
+	connect(d->majorGridLine, &Line::updateRequested, [=] {
+		d->retransformMajorGrid();
+	});
+
+	// minor grid line
+	d->minorGridLine = new Line(QString());
+	d->minorGridLine->setPrefix(QStringLiteral("MinorGrid"));
+	d->minorGridLine->setHidden(true);
+	addChild(d->minorGridLine);
+	connect(d->minorGridLine, &Line::updatePixmapRequested, [=] {
+		d->updateGrid();
+	});
+	connect(d->minorGridLine, &Line::updateRequested, [=] {
+		d->retransformMinorGrid();
+	});
+
+	connect(this, &WorksheetElement::coordinateSystemIndexChanged, [this]() {
+		Q_D(Axis);
+		d->retransformRange();
+	});
+
+	if (loading)
+		return;
+
+	// init the properties
 	KConfig config;
 	KConfigGroup group = config.group(QStringLiteral("Axis"));
 
@@ -133,33 +215,11 @@ void Axis::init(Orientation orientation) {
 	d->zeroOffset = group.readEntry(QStringLiteral("ZeroOffset"), 0);
 	d->showScaleOffset = group.readEntry(QStringLiteral("ShowScaleOffset"), true);
 
-	// line
-	d->line = new Line(QString());
-	d->line->setHidden(true);
-	d->line->setCreateXmlElement(false); // line properties are written out together with arrow properties in Axis::save()
-	addChild(d->line);
 	d->line->init(group);
-	connect(d->line, &Line::updatePixmapRequested, [=] {
-		d->update();
-	});
-	connect(d->line, &Line::updateRequested, [=] {
-		d->recalcShapeAndBoundingRect();
-	});
-
 	d->arrowType = (Axis::ArrowType)group.readEntry(QStringLiteral("ArrowType"), static_cast<int>(ArrowType::NoArrow));
 	d->arrowPosition = (Axis::ArrowPosition)group.readEntry(QStringLiteral("ArrowPosition"), static_cast<int>(ArrowPosition::Right));
 	d->arrowSize = group.readEntry(QStringLiteral("ArrowSize"), Worksheet::convertToSceneUnits(10, Worksheet::Unit::Point));
 
-	// axis title
-	d->title = new TextLabel(this->name(), TextLabel::Type::AxisTitle);
-	d->title->setText(this->name());
-	connect(d->title, &TextLabel::changed, this, &Axis::labelChanged);
-	addChild(d->title);
-	d->title->setHidden(true);
-	d->title->graphicsItem()->setParentItem(d);
-	d->title->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
-	d->title->graphicsItem()->setFlag(QGraphicsItem::ItemIsFocusable, false);
-	d->title->graphicsItem()->setAcceptHoverEvents(false);
 	if (d->orientation == Orientation::Vertical) {
 		d->title->setRotationAngle(90);
 		d->titleOffsetX = 0; // distance to the axis tick labels
@@ -169,6 +229,7 @@ void Axis::init(Orientation orientation) {
 		d->titleOffsetY = 0; // distance to the axis tick labels
 	}
 
+	d->majorTicksLine->init(group);
 	d->majorTicksDirection = (Axis::TicksDirection)group.readEntry(QStringLiteral("MajorTicksDirection"), (int)Axis::ticksOut);
 	d->majorTicksType = (TicksType)group.readEntry(QStringLiteral("MajorTicksType"), static_cast<int>(TicksType::TotalNumber));
 	d->majorTicksNumber = group.readEntry(QStringLiteral("MajorTicksNumber"), 11);
@@ -176,37 +237,12 @@ void Axis::init(Orientation orientation) {
 										   0.0); // set to 0, so axisdock determines the value to not have to many labels the first time switched to Spacing
 	d->majorTicksLength = group.readEntry(QStringLiteral("MajorTicksLength"), Worksheet::convertToSceneUnits(6.0, Worksheet::Unit::Point));
 
-	d->majorTicksLine = new Line(QString());
-	d->majorTicksLine->setHidden(true);
-	d->majorTicksLine->setPrefix(QStringLiteral("MajorTicks"));
-	d->majorTicksLine->setCreateXmlElement(false);
-	addChild(d->majorTicksLine);
-	d->majorTicksLine->init(group);
-	connect(d->majorTicksLine, &Line::updatePixmapRequested, [=] {
-		d->update();
-	});
-	connect(d->majorTicksLine, &Line::updateRequested, [=] {
-		d->recalcShapeAndBoundingRect();
-	});
-
+	d->minorTicksLine->init(group);
 	d->minorTicksDirection = (TicksDirection)group.readEntry(QStringLiteral("MinorTicksDirection"), (int)Axis::ticksOut);
 	d->minorTicksType = (TicksType)group.readEntry(QStringLiteral("MinorTicksType"), static_cast<int>(TicksType::TotalNumber));
 	d->minorTicksNumber = group.readEntry(QStringLiteral("MinorTicksNumber"), 1);
 	d->minorTicksIncrement = group.readEntry(QStringLiteral("MinorTicksIncrement"), 0.0); // see MajorTicksIncrement
 	d->minorTicksLength = group.readEntry(QStringLiteral("MinorTicksLength"), Worksheet::convertToSceneUnits(3.0, Worksheet::Unit::Point));
-
-	d->minorTicksLine = new Line(QString());
-	d->minorTicksLine->setHidden(true);
-	d->minorTicksLine->setPrefix(QStringLiteral("MinorTicks"));
-	d->minorTicksLine->setCreateXmlElement(false);
-	addChild(d->minorTicksLine);
-	d->minorTicksLine->init(group);
-	connect(d->minorTicksLine, &Line::updatePixmapRequested, [=] {
-		d->update();
-	});
-	connect(d->minorTicksLine, &Line::updateRequested, [=] {
-		d->recalcShapeAndBoundingRect();
-	});
 
 	// Labels
 	d->labelsFormat = (LabelsFormat)group.readEntry(QStringLiteral("LabelsFormat"), static_cast<int>(LabelsFormat::Decimal));
@@ -227,36 +263,9 @@ void Axis::init(Orientation orientation) {
 	d->labelsSuffix = group.readEntry(QStringLiteral("LabelsSuffix"), QStringLiteral(""));
 	d->labelsOpacity = group.readEntry(QStringLiteral("LabelsOpacity"), 1.0);
 
-	// major grid
-	d->majorGridLine = new Line(QString());
-	d->majorGridLine->setPrefix(QStringLiteral("MajorGrid"));
-	d->majorGridLine->setHidden(true);
-	addChild(d->majorGridLine);
+	// grid lines
 	d->majorGridLine->init(group);
-	connect(d->majorGridLine, &Line::updatePixmapRequested, [=] {
-		d->updateGrid();
-	});
-	connect(d->majorGridLine, &Line::updateRequested, [=] {
-		d->retransformMajorGrid();
-	});
-
-	// minor grid
-	d->minorGridLine = new Line(QString());
-	d->minorGridLine->setPrefix(QStringLiteral("MinorGrid"));
-	d->minorGridLine->setHidden(true);
-	addChild(d->minorGridLine);
 	d->minorGridLine->init(group);
-	connect(d->minorGridLine, &Line::updatePixmapRequested, [=] {
-		d->updateGrid();
-	});
-	connect(d->minorGridLine, &Line::updateRequested, [=] {
-		d->retransformMinorGrid();
-	});
-
-	connect(this, &WorksheetElement::coordinateSystemIndexChanged, [this]() {
-		Q_D(Axis);
-		d->retransformRange();
-	});
 }
 
 /*!

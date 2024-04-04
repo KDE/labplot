@@ -494,6 +494,8 @@ void MainWin::createADS() {
 	ads::CDockManager::setConfigFlag(ads::CDockManager::XmlCompressionEnabled, false);
 	ads::CDockManager::setConfigFlag(ads::CDockManager::FocusHighlighting, true);
 	ads::CDockManager::setConfigFlag(ads::CDockManager::MiddleMouseButtonClosesTab, true);
+	ads::CDockManager::setConfigFlag(ads::CDockManager::AllTabsHaveCloseButton, true);
+	ads::CDockManager::setConfigFlag(ads::CDockManager::RetainTabSizeWhenCloseButtonHidden, true);
 	// must be after the config flags!
 	ads::CDockManager::setAutoHideConfigFlags(ads::CDockManager::DefaultAutoHideConfig);
 	ads::CDockManager::setAutoHideConfigFlag(ads::CDockManager::AutoHideShowOnMouseOver, true);
@@ -2816,26 +2818,7 @@ void MainWin::importProjectDialog() {
  */
 void MainWin::importDatasetDialog() {
 	auto* dlg = new ImportDatasetDialog(this);
-	if (dlg->exec() == QDialog::Accepted) {
-		auto* spreadsheet = new Spreadsheet(i18n("Dataset%1", 1));
-		auto* dataset = new DatasetHandler(spreadsheet);
-		dlg->importToDataset(dataset, statusBar());
-
-		QTimer timer;
-		timer.setSingleShot(true);
-		QEventLoop loop;
-		connect(dataset, &DatasetHandler::downloadCompleted, &loop, &QEventLoop::quit);
-		connect(&timer, &QTimer::timeout, &loop, &QEventLoop::quit);
-		timer.start(1500);
-		loop.exec();
-
-		if (timer.isActive()) {
-			timer.stop();
-			addAspectToProject(spreadsheet);
-		}
-		delete dataset;
-	}
-	delete dlg;
+	dlg->exec();
 }
 
 /*!

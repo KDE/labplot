@@ -55,13 +55,14 @@ public:
 	ErrorBar* errorBarAt(int) const;
 
 	void retransform() override;
+	void recalc() override;
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
 
 	double minimum(CartesianCoordinateSystem::Dimension) const override;
 	double maximum(CartesianCoordinateSystem::Dimension) const override;
 	bool hasData() const override;
 	bool usingColumn(const Column*) const override;
-	void updateColumnDependencies(const AbstractColumn*) override;
+	void handleAspectUpdated(const QString& aspectPath, const AbstractAspect* element) override;
 	QColor color() const override;
 
 	typedef BarPlotPrivate Private;
@@ -78,9 +79,6 @@ private:
 	QAction* orientationHorizontalAction{nullptr};
 	QAction* orientationVerticalAction{nullptr};
 	QMenu* orientationMenu{nullptr};
-
-public Q_SLOTS:
-	void recalc();
 
 private Q_SLOTS:
 	// SLOTs for changes triggered via QActions in the context menu

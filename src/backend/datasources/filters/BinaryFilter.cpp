@@ -416,19 +416,16 @@ void BinaryFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSour
 	case BinaryFilter::DataType::INT32:
 	case BinaryFilter::DataType::UINT8:
 	case BinaryFilter::DataType::UINT16:
-		for (auto& c : columnModes)
-			c = AbstractColumn::ColumnMode::Integer;
+		columnModes.fill(AbstractColumn::ColumnMode::Integer);
 		break;
 	case BinaryFilter::DataType::UINT32:
 	case BinaryFilter::DataType::INT64:
-		for (auto& c : columnModes)
-			c = AbstractColumn::ColumnMode::BigInt;
+		columnModes.fill(AbstractColumn::ColumnMode::BigInt);
 		break;
 	case BinaryFilter::DataType::UINT64:
 	case BinaryFilter::DataType::REAL32:
 	case BinaryFilter::DataType::REAL64:
-		for (auto& c : columnModes)
-			c = AbstractColumn::ColumnMode::Double;
+		columnModes.fill(AbstractColumn::ColumnMode::Double);
 		break;
 	}
 

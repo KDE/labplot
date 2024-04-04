@@ -14,7 +14,7 @@ DbcParser::ParseStatus DbcParser::parseFile(const QString& filename) {
 	try {
 		m_parser.parse_file(filename.toStdString());
 		m_parseFileStatus = DbcParser::ParseStatus::Success;
-	} catch (libdbc::validity_error e) {
+	} catch (const libdbc::validity_error& e) {
 		// e.what(); // TODO: turn on
 		m_parseFileStatus = DbcParser::ParseStatus::ErrorInvalidFile;
 	}

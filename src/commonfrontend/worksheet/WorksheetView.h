@@ -124,6 +124,7 @@ private:
 	WorksheetElement* lastAddedWorksheetElement{nullptr};
 	QTimeLine* m_fadeInTimeLine{nullptr};
 	QTimeLine* m_fadeOutTimeLine{nullptr};
+	QTimeLine* m_zoomTimeLine{nullptr};
 	bool m_isClosing{false};
 	bool m_isPrinting{false};
 	bool m_actionsInitialized{false};

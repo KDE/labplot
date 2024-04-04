@@ -229,6 +229,9 @@ public Q_SLOTS:
 	void setSparkline(const QPixmap&);
 	QPixmap sparkline();
 
+protected:
+	void handleAspectUpdated(const QString& aspectPath, const AbstractAspect*);
+
 private:
 	bool XmlReadInputFilter(XmlStreamReader*);
 	bool XmlReadOutputFilter(XmlStreamReader*);
@@ -261,6 +264,7 @@ private Q_SLOTS:
 	friend class ColumnStringIO;
 	friend class ColumnRemoveRowsCmd;
 	friend class ColumnInsertRowsCmd;
+	friend class Project; // requires handleAspectUpdated()
 };
 
 #endif

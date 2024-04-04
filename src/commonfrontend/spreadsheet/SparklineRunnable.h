@@ -16,7 +16,7 @@
 class SparkLineRunnable : public QObject, public QRunnable {
 	Q_OBJECT
 public:
-	SparkLineRunnable(Column* col)
+	explicit SparkLineRunnable(Column* col)
 		: QObject(nullptr)
 		, col(col) {
 	}

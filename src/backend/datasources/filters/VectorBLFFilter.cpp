@@ -145,7 +145,7 @@ bool VectorBLFFilter::isValid(const QString& filename) {
 			return false; // No file
 		f.close();
 		return true;
-	} catch (Vector::BLF::Exception& e) {
+	} catch (const Vector::BLF::Exception& e) {
 		return false; // Signature was invalid or something else
 	}
 #else
@@ -313,19 +313,24 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 	m_dbcParser.getSignals(ids, DbcParser::PrefixType::None, DbcParser::SuffixType::Unit, idIndexTable, m_signals);
 
 	// 3. allocate memory
-	if (convertTimeToSeconds) {
-		auto* vector = new QVector<double>();
-		vector->resize(message_counter);
-		m_DataContainer.appendVector<double>(vector, AbstractColumn::ColumnMode::Double);
-	} else {
-		auto* vector = new QVector<qint64>();
-		vector->resize(message_counter);
-		m_DataContainer.appendVector<qint64>(vector, AbstractColumn::ColumnMode::BigInt); // BigInt is qint64 and not quint64!
-	}
-	for (int i = 0; i < m_signals.signal_names.length(); i++) {
-		auto* vector = new QVector<double>();
-		vector->resize(message_counter);
-		m_DataContainer.appendVector(vector, AbstractColumn::ColumnMode::Double);
+	try {
+		if (convertTimeToSeconds) {
+			auto* vector = new QVector<double>();
+			vector->resize(message_counter);
+			m_DataContainer.appendVector<double>(vector, AbstractColumn::ColumnMode::Double);
+		} else {
+			auto* vector = new QVector<qint64>();
+			vector->resize(message_counter);
+			m_DataContainer.appendVector<qint64>(vector, AbstractColumn::ColumnMode::BigInt); // BigInt is qint64 and not quint64!
+		}
+		for (int i = 0; i < m_signals.signal_names.length(); i++) {
+			auto* vector = new QVector<double>();
+			vector->resize(message_counter);
+			m_DataContainer.appendVector(vector, AbstractColumn::ColumnMode::Double);
+		}
+	} catch (std::bad_alloc&) {
+		q->setLastError(i18n("Not enough memory."));
+		return 0;
 	}
 
 	// 4. fill datacontainer

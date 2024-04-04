@@ -4,13 +4,14 @@
 	Description          : Represents a LabPlot project.
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
-	SPDX-FileCopyrightText: 2011-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2007-2008 Tilman Benkert <thzs@gmx.net>
 	SPDX-FileCopyrightText: 2007 Knut Franke <knut.franke@gmx.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 #include "backend/core/Project.h"
+#include "backend/core/Settings.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/spreadsheet/Spreadsheet.h"
@@ -26,7 +27,6 @@
 #include "backend/worksheet/plots/cartesian/QQPlot.h"
 #include "backend/worksheet/plots/cartesian/Value.h"
 #include "backend/worksheet/plots/cartesian/XYFitCurve.h"
-
 #ifdef HAVE_LIBORIGIN
 #include "backend/datasources/projects/OriginProjectParser.h"
 #endif
@@ -156,6 +156,7 @@ public:
 	QString fileName;
 	QString windowState;
 	QString author;
+	bool saveDockStates{false};
 	bool saveCalculations{true};
 	QUndoStack undo_stack;
 };
@@ -168,21 +169,21 @@ Project::Project()
 	: Folder(i18n("Project"), AspectType::Project)
 	, d_ptr(new ProjectPrivate(this)) {
 	Q_D(Project);
-	// load default values for name, comment and author from config
-	KConfig config;
-	KConfigGroup group = config.group(QStringLiteral("Project"));
 
 	QString user = qEnvironmentVariable("USER"); // !Windows
 	if (user.isEmpty())
 		user = qEnvironmentVariable("USERNAME"); // Windows
-	d->author = group.readEntry(QStringLiteral("Author"), user);
+	d->author = user;
 
 	// we don't have direct access to the members name and comment
 	//->temporary disable the undo stack and call the setters
 	setUndoAware(false);
 	setIsLoading(true);
-	setName(group.readEntry(QStringLiteral("Name"), i18n("Project")));
-	setComment(group.readEntry(QStringLiteral("Comment"), QString()));
+
+	const auto& group = Settings::group(QStringLiteral("Settings_General"));
+	setSaveDockStates(group.readEntry(QStringLiteral("SaveDockStates"), false));
+	setSaveCalculations(group.readEntry(QStringLiteral("SaveCalculations"), true));
+
 	setUndoAware(true);
 	setIsLoading(false);
 	d->changed = false;
@@ -275,6 +276,7 @@ CLASS_D_ACCESSOR_IMPL(Project, QString, fileName, FileName, fileName)
 CLASS_D_ACCESSOR_IMPL(Project, QString, windowState, WindowState, windowState)
 BASIC_D_READER_IMPL(Project, QString, author, author)
 CLASS_D_ACCESSOR_IMPL(Project, QDateTime, modificationTime, ModificationTime, modificationTime)
+BASIC_D_READER_IMPL(Project, bool, saveDockStates, saveDockStates)
 BASIC_D_READER_IMPL(Project, bool, saveCalculations, saveCalculations)
 
 STD_SETTER_CMD_IMPL_S(Project, SetAuthor, QString, author)
@@ -282,6 +284,13 @@ void Project::setAuthor(const QString& author) {
 	Q_D(Project);
 	if (author != d->author)
 		exec(new ProjectSetAuthorCmd(d, author, ki18n("%1: set author")));
+}
+
+STD_SETTER_CMD_IMPL_S(Project, SetSaveDockStates, bool, saveDockStates)
+void Project::setSaveDockStates(bool save) {
+	Q_D(Project);
+	if (save != d->saveDockStates)
+		exec(new ProjectSetSaveDockStatesCmd(d, save, ki18n("%1: save dock states changed")));
 }
 
 STD_SETTER_CMD_IMPL_S(Project, SetSaveCalculations, bool, saveCalculations)
@@ -319,20 +328,42 @@ bool Project::hasChanged() const {
 }
 
 /*!
+ * \brief Project::updateDependencies
+ * Notify that WorksheetElements are updated. This is required if the element
+ * is not a child of another element, like a XYCurve for an InfoElement, ...
+ * \param changedElements
+ */
+template<typename T>
+void Project::updateDependencies(const QVector<const AbstractAspect*> changedAspects) {
+	if (!changedAspects.isEmpty()) {
+		// if a new aspect was addded, check whether the aspect names match the missing
+		// names in the other aspects and update the dependencies
+		const auto& children = this->children<T>(ChildIndexFlag::Recursive);
+
+		for (const auto* changedAspect : changedAspects) {
+			const auto& changedAspectPath = changedAspect->path();
+			for (auto* child : children)
+				child->handleAspectUpdated(changedAspectPath, changedAspect);
+		}
+	}
+}
+
+/*!
  * \brief Project::descriptionChanged
  * This function is called, when an object changes its name. When a column changed its name and wasn't connected
  * before to the curve/column(formula), this is updated in this function.
+ *
+ * Example: curve needs "column1"
+ * An Existing column is called "column2". This existing column will be renamed to "column1". Now the column shall be connected to the curve
  * \param aspect
  */
 void Project::descriptionChanged(const AbstractAspect* aspect) {
 	if (isLoading())
 		return;
 
-	// when the name of a column is being changed, it can match again the names being used in the plots, etc.
-	// and we need to update the dependencies
-	const auto* column = dynamic_cast<const AbstractColumn*>(aspect);
-	if (column)
-		updateColumnDependencies(column);
+	updateDependencies<Column>({aspect}); // notify all columns
+	updateDependencies<WorksheetElement>({aspect}); // notify all worksheetelements
+	updateDependencies<Spreadsheet>({aspect}); // notify all spreadsheets. Linked spreadsheets
 
 	Q_D(Project);
 	d->changed = true;
@@ -348,29 +379,13 @@ void Project::aspectAddedSlot(const AbstractAspect* aspect) {
 	if (isLoading())
 		return;
 
-	if (aspect->inherits(AspectType::AbstractColumn)) {
-		// check whether new columns were added and if yes,
-		// update the dependencies in the project
-		QVector<const AbstractColumn*> columns;
-		const auto* column = static_cast<const AbstractColumn*>(aspect);
-		if (column)
-			columns.append(column);
-		else {
-			for (auto* child : aspect->children<Column>(ChildIndexFlag::Recursive))
-				columns.append(static_cast<const AbstractColumn*>(child));
-		}
+	updateDependencies<Column>({aspect});
+	updateDependencies<WorksheetElement>({aspect});
+	updateDependencies<Spreadsheet>({aspect});
 
-		if (!columns.isEmpty()) {
-			// if a new column was addded, check whether the column name matches the missing
-			// names in the plots, etc. and update the dependencies
-			for (auto column : columns)
-				updateColumnDependencies(column);
-		}
-	} else if (aspect->inherits(AspectType::Spreadsheet)) {
-		// if a new spreadsheet was addded, check whether the spreadsheet name matches the missing
+	if (aspect->inherits(AspectType::Spreadsheet)) {
+		// if a new spreadsheet was addded, check whether the spreadsheet name match the missing
 		// name in a linked spreadsheet, etc. and update the dependencies
-		const auto* newSpreadsheet = static_cast<const Spreadsheet*>(aspect);
-		updateSpreadsheetDependencies(newSpreadsheet);
 
 		connect(static_cast<const Spreadsheet*>(aspect), &Spreadsheet::aboutToResize, [this]() {
 			const auto& wes = children<WorksheetElement>(AbstractAspect::ChildIndexFlag::Recursive);
@@ -382,39 +397,6 @@ void Project::aspectAddedSlot(const AbstractAspect* aspect) {
 			for (auto* we : wes)
 				we->setSuppressRetransform(false);
 		});
-	}
-}
-
-void Project::updateSpreadsheetDependencies(const Spreadsheet* spreadsheet) const {
-	const QString& spreadsheetPath = spreadsheet->path();
-	const auto& spreadsheets = children<Spreadsheet>(ChildIndexFlag::Recursive);
-
-	for (auto* sh : spreadsheets) {
-		sh->setUndoAware(false);
-		if (sh->linkedSpreadsheetPath() == spreadsheetPath)
-			sh->setLinkedSpreadsheet(spreadsheet);
-		sh->setUndoAware(true);
-	}
-}
-
-/*!
- * in case the column \c column was added or renamed, update all dependent objects in the project accordingly.
- */
-void Project::updateColumnDependencies(const AbstractColumn* column) const {
-	// update the dependencies in the plots
-	const auto& plots = children<Plot>(ChildIndexFlag::Recursive);
-	for (auto* plot : plots)
-		plot->updateColumnDependencies(column);
-
-	// update the dependencies in the column formulas
-	const QString& columnPath = column->path();
-	const auto& columns = children<Column>(ChildIndexFlag::Recursive);
-	for (auto* tempColumn : columns) {
-		for (int i = 0; i < tempColumn->formulaData().count(); i++) {
-			auto path = tempColumn->formulaData().at(i).columnName();
-			if (path == columnPath)
-				tempColumn->setFormulVariableColumn(i, const_cast<Column*>(static_cast<const Column*>(column)));
-		}
 	}
 }
 
@@ -487,8 +469,14 @@ void Project::save(const QPixmap& thumbnail, QXmlStreamWriter* writer) {
 	writer->writeAttribute(QStringLiteral("xmlVersion"), QString::number(buildXmlVersion));
 	writer->writeAttribute(QStringLiteral("modificationTime"), modificationTime().toString(QStringLiteral("yyyy-dd-MM hh:mm:ss:zzz")));
 	writer->writeAttribute(QStringLiteral("author"), author());
-	writer->writeAttribute(QStringLiteral("saveCalculations"), QString::number(d->saveCalculations));
-	writer->writeAttribute(QStringLiteral("windowState"), d->windowState);
+
+	if (d->saveDockStates) {
+		writer->writeAttribute(QStringLiteral("saveDockStates"), QString::number(d->saveDockStates));
+		writer->writeAttribute(QStringLiteral("windowState"), d->windowState);
+	}
+
+	if (d->saveCalculations)
+		writer->writeAttribute(QStringLiteral("saveCalculations"), QString::number(d->saveCalculations));
 
 	QString image;
 	if (!thumbnail.isNull()) {
@@ -1136,8 +1124,16 @@ bool Project::readProjectAttributes(XmlStreamReader* reader) {
 		d->modificationTime = modificationTime;
 
 	d->author = attribs.value(QStringLiteral("author")).toString();
-	d->saveCalculations = attribs.value(QStringLiteral("saveCalculations")).toInt();
-	d->windowState = attribs.value(QStringLiteral("windowState")).toString();
+
+	str = attribs.value(QStringLiteral("saveDockStates")).toString();
+	if (!str.isEmpty())
+		d->saveDockStates = str.toInt();
+	if (d->saveDockStates)
+		d->windowState = attribs.value(QStringLiteral("windowState")).toString();
+
+	str = attribs.value(QStringLiteral("saveCalculations")).toString();
+	if (!str.isEmpty())
+		d->saveCalculations = str.toInt();
 
 	return true;
 }
