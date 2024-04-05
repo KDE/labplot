@@ -1632,6 +1632,9 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 		DEBUG(Q_FUNC_INFO << ", curve y column name = " << originCurve.yColumnName)
 		DEBUG(Q_FUNC_INFO << ", curve x data name = " << originCurve.xDataName)
 
+		if (dataName.isEmpty()) // formula may be empty?
+			continue;
+
 		Plot* childPlot{nullptr};
 
 		// handle the different data sources for plots (spreadsheet, workbook, matrix and function)
@@ -1911,6 +1914,7 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 			XYEquationCurve::EquationData eqData;
 			eqData.count = function.totalPoints;
 			eqData.expression1 = QString::fromStdString(function.formula);
+			DEBUG("STRING FUNCTION FORMULA: " << function.formula)
 
 			if (function.type == Origin::Function::Polar) {
 				eqData.type = XYEquationCurve::EquationType::Polar;
