@@ -412,7 +412,7 @@ QMenu* AbstractAspect::createContextMenu() {
 		const auto* parent = parentAspect();
 		int count = parent->childCount<AbstractAspect>();
 		if (count > 1) {
-			auto* moveMenu = new QMenu(i18n("Move"));
+			auto* moveMenu = new QMenu(i18n("Move"), menu);
 			moveMenu->setIcon(QIcon::fromTheme(QStringLiteral("layer-bottom")));
 			if (parent->indexOfChild<AbstractAspect>(this) != 0)
 				moveMenu->addAction(QIcon::fromTheme(QStringLiteral("draw-arrow-up")), i18n("Up"), this, &AbstractAspect::moveUp);
@@ -612,6 +612,13 @@ void AbstractAspect::removeChild(AbstractAspect* child, QUndoCommand* parent) {
 		exec(parent);
 }
 
+void AbstractAspect::moveChild(AbstractAspect* child, int steps, QUndoCommand* parent) {
+	auto* command = new AspectChildMoveCmd(d, child, steps, parent);
+	if (!parent)
+		exec(command);
+	// otherwise handled by parent
+}
+
 /**
  * \brief Remove all child Aspects.
  */
@@ -697,26 +704,14 @@ void AbstractAspect::remove() {
 
 void AbstractAspect::moveUp() {
 	auto* parent = parentAspect();
-	int index = parent->indexOfChild<AbstractAspect>(this);
-	auto* sibling = parent->child<AbstractAspect>(index - 1);
-	beginMacro(i18n("%1: move up", name()));
-	setMoved(true);
-	remove();
-	parent->insertChildBefore(this, sibling);
-	setMoved(false);
-	endMacro();
+	if (parent)
+		parent->moveChild(this, -1);
 }
 
 void AbstractAspect::moveDown() {
 	auto* parent = parentAspect();
-	int index = parent->indexOfChild<AbstractAspect>(this);
-	auto* sibling = parent->child<AbstractAspect>(index + 2);
-	beginMacro(i18n("%1: move down", name()));
-	setMoved(true);
-	remove();
-	parent->insertChildBefore(this, sibling);
-	setMoved(false);
-	endMacro();
+	if (parent)
+		parent->moveChild(this, 1);
 }
 
 /*!
@@ -937,7 +932,7 @@ void AbstractAspect::writeCommentElement(QXmlStreamWriter* writer) const {
  * \brief Load comment from an XML element
  */
 bool AbstractAspect::readCommentElement(XmlStreamReader* reader) {
-	setComment(reader->readElementText());
+	d->m_comment = reader->readElementText();
 	return true;
 }
 
@@ -1192,6 +1187,8 @@ void AbstractAspect::connectChild(AbstractAspect* child) {
 			this,
 			QOverload<const AbstractAspect*>::of(&AbstractAspect::childAspectAboutToBeRemoved));
 	connect(child, &AbstractAspect::childAspectRemoved, this, &AbstractAspect::childAspectRemoved);
+	connect(child, &AbstractAspect::childAspectAboutToBeMoved, this, &AbstractAspect::childAspectAboutToBeMoved);
+	connect(child, &AbstractAspect::childAspectMoved, this, &AbstractAspect::childAspectMoved);
 	connect(child, &AbstractAspect::aspectHiddenAboutToChange, this, &AbstractAspect::aspectHiddenAboutToChange);
 	connect(child, &AbstractAspect::aspectHiddenChanged, this, &AbstractAspect::aspectHiddenChanged);
 	connect(child, &AbstractAspect::statusInfo, this, &AbstractAspect::statusInfo);

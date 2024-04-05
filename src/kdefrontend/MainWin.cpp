@@ -325,7 +325,7 @@ void MainWin::initGUI(const QString& fileName) {
 	m_recentProjectsAction->loadEntries(Settings::group(QStringLiteral("Recent Files")));
 
 	// General Settings
-	const KConfigGroup& group = Settings::group(QStringLiteral("Settings_General"));
+	auto group = Settings::group(QStringLiteral("Settings_General"));
 
 	// title bar
 	m_titleBarMode = static_cast<MainWin::TitleBarMode>(group.readEntry("TitleBar", 0));
@@ -352,48 +352,56 @@ void MainWin::initGUI(const QString& fileName) {
 	} else {
 		// There is no file to open. Depending on the settings do nothing,
 		// create a new project or open the last used project.
-		LoadOnStart load = (LoadOnStart)group.readEntry("LoadOnStart", static_cast<int>(LoadOnStart::NewProject));
-		if (load != LoadOnStart::WelcomeScreen) {
-			createADS();
-			switch (load) {
-			case LoadOnStart::NewProject:
-				newProject();
-				break;
-			case LoadOnStart::NewProjectWorksheet:
-				newProject();
-				newWorksheet();
-				break;
-			case LoadOnStart::NewProjectSpreadsheet:
-				newProject();
-				newSpreadsheet();
-				break;
-			case LoadOnStart::LastProject: {
-				const QString& path = Settings::group(QStringLiteral("MainWin")).readEntry("LastOpenProject", "");
-				if (!path.isEmpty())
-					openProject(path);
-				break;
-			}
-			case LoadOnStart::NewProjectNotebook: {
-				newProject();
-#ifdef HAVE_CANTOR_LIBS
-				const auto& backend = group.readEntry(QLatin1String("LoadOnStartNotebook"), QString());
-				if (Cantor::Backend::listAvailableBackends().indexOf(backend) != -1)
-					addAspectToProject(new CantorWorksheet(backend));
-#endif
-				break;
-			}
-			case LoadOnStart::Nothing:
-			case LoadOnStart::WelcomeScreen:
-				break;
-			}
+		auto load = (LoadOnStart)group.readEntry("LoadOnStart", static_cast<int>(LoadOnStart::NewProject));
 
-			updateGUIOnProjectChanges();
-			if (m_project)
-				m_project->setChanged(false); // the project was initialized on startup, nothing has changed from user's perspective
-		} else { // welcome screen
-			// 			m_showWelcomeScreen = true;
-			// 			m_welcomeWidget = createWelcomeScreen();
-			// 			setCentralWidget(m_welcomeWidget);
+		// in case we're starting with the settings created with an older version where the LoadOnStart enum had more values
+		// or in case the config file was manipulated, we need to ensure we start with proper values and properly initialize the docks
+		// by mapping the old/manipulated values to the new/correct values:
+		// * old value 0 - "do nothing" -> map to new values "new project" and "with worksheet" which are default
+		// * old value 1 - "new project" -> map to new values "new project" and "with worksheet" which are default
+		// * old value 2 - "new project with worksheet" -> map to new values "new project" and "with worksheet" which are default
+		// * old value 3 - "new project with spreadsheet" -> map to new values "new project" and "with spreadsheet"
+		// * old value 4 - "last project" -> map to the new "last project"
+		// * any higher values or <0, manipulated file -> map to the new default values
+		if (load > LoadOnStart::LastProject) {
+			int oldLoad = static_cast<int>(load);
+			if (oldLoad == 2) { // old "new project with worksheet"
+				load = LoadOnStart::NewProject;
+				group.writeEntry(QStringLiteral("LoadOnStart"), static_cast<int>(load));
+				group.writeEntry(QStringLiteral("NewProject"), static_cast<int>(NewProject::WithWorksheet));
+			} else if (oldLoad == 3) { // old "new project with spreadsheet"
+				load = LoadOnStart::NewProject;
+				group.writeEntry(QStringLiteral("LoadOnStart"), static_cast<int>(load));
+				group.writeEntry(QStringLiteral("NewProject"), static_cast<int>(NewProject::WithSpreadsheet));
+			} else if (oldLoad == 4) { // old "last project"
+				load = LoadOnStart::LastProject;
+				group.writeEntry(QStringLiteral("LoadOnStart"), static_cast<int>(load));
+			} else if (oldLoad > 4 || oldLoad < 0) {
+				load = LoadOnStart::NewProject;
+				group.writeEntry(QStringLiteral("LoadOnStart"), static_cast<int>(load));
+			}
+		}
+
+		switch (load) {
+		case LoadOnStart::NewProject:
+			createADS();
+			newProject();
+			break;
+		case LoadOnStart::LastProject: {
+			createADS();
+			const QString& path = Settings::group(QStringLiteral("MainWin")).readEntry("LastOpenProject", "");
+			if (!path.isEmpty())
+				openProject(path);
+			else
+				newProject();
+			break;
+		}
+		case LoadOnStart::WelcomeScreen:
+			// TODO:
+			// m_showWelcomeScreen = true;
+			// m_welcomeWidget = createWelcomeScreen();
+			// setCentralWidget(m_welcomeWidget);
+			break;
 		}
 	}
 
@@ -486,6 +494,8 @@ void MainWin::createADS() {
 	ads::CDockManager::setConfigFlag(ads::CDockManager::XmlCompressionEnabled, false);
 	ads::CDockManager::setConfigFlag(ads::CDockManager::FocusHighlighting, true);
 	ads::CDockManager::setConfigFlag(ads::CDockManager::MiddleMouseButtonClosesTab, true);
+	ads::CDockManager::setConfigFlag(ads::CDockManager::AllTabsHaveCloseButton, true);
+	ads::CDockManager::setConfigFlag(ads::CDockManager::RetainTabSizeWhenCloseButtonHidden, true);
 	// must be after the config flags!
 	ads::CDockManager::setAutoHideConfigFlags(ads::CDockManager::DefaultAutoHideConfig);
 	ads::CDockManager::setAutoHideConfigFlag(ads::CDockManager::AutoHideShowOnMouseOver, true);
@@ -662,11 +672,16 @@ void MainWin::dockFocusChanged(ads::CDockWidget* old, ads::CDockWidget* now) {
 void MainWin::initActions() {
 	// ******************** File-menu *******************************
 	// add some standard actions
-	m_newProjectAction = KStandardAction::openNew(this, &MainWin::newProject, actionCollection());
+	m_newProjectAction = KStandardAction::openNew(
+		this,
+		[=]() {
+			newProject(true);
+		},
+		actionCollection());
 	m_openProjectAction = KStandardAction::open(this, static_cast<void (MainWin::*)()>(&MainWin::openProject), actionCollection());
 	m_recentProjectsAction = KStandardAction::openRecent(this, &MainWin::openRecentProject, actionCollection());
-	m_closeAction = KStandardAction::close(this, &MainWin::closeProject, actionCollection());
-	actionCollection()->setDefaultShortcut(m_closeAction, QKeySequence()); // remove the shortcut, QKeySequence::Close will be used for closing sub-windows
+	// m_closeAction = KStandardAction::close(this, &MainWin::closeProject, actionCollection());
+	// actionCollection()->setDefaultShortcut(m_closeAction, QKeySequence()); // remove the shortcut, QKeySequence::Close will be used for closing sub-windows
 	m_saveAction = KStandardAction::save(this, &MainWin::saveProject, actionCollection());
 	m_saveAsAction = KStandardAction::saveAs(this, &MainWin::saveProjectAs, actionCollection());
 	m_printAction = KStandardAction::print(this, &MainWin::print, actionCollection());
@@ -877,7 +892,7 @@ void MainWin::initActions() {
 	KStandardAction::showMenubar(this, &MainWin::toggleMenuBar, actionCollection());
 
 	// show/hide the memory usage widget
-	m_memoryInfoAction = new QAction(i18n("Show Memory Usage"));
+	m_memoryInfoAction = new QAction(i18n("Show Memory Usage"), this);
 	m_memoryInfoAction->setCheckable(true);
 	connect(m_memoryInfoAction, &QAction::triggered, this, &MainWin::toggleMemoryInfo);
 
@@ -928,7 +943,7 @@ void MainWin::initActions() {
 
 void MainWin::initMenus() {
 #ifdef HAVE_PURPOSE
-	m_shareMenu = new Purpose::Menu();
+	m_shareMenu = new Purpose::Menu(this);
 	m_shareMenu->model()->setPluginType(QStringLiteral("Export"));
 	connect(m_shareMenu, &Purpose::Menu::finished, this, &MainWin::shareActionFinished);
 	m_shareAction->setMenu(m_shareMenu);
@@ -1113,54 +1128,9 @@ bool MainWin::warnModified() {
  * on project changes (project closes and opens)
  */
 void MainWin::updateGUIOnProjectChanges(const QByteArray& windowState) {
+	// return;
 	if (m_closing)
 		return;
-
-	// disable all menus if there is no project
-	bool hasProject = (m_project != nullptr);
-	m_saveAction->setEnabled(hasProject);
-	m_saveAsAction->setEnabled(hasProject);
-	m_importFileAction->setEnabled(hasProject);
-	m_importFileAction_2->setEnabled(hasProject);
-	m_importSqlAction->setEnabled(hasProject);
-	m_importLabPlotAction->setEnabled(hasProject);
-#ifdef HAVE_LIBORIGIN
-	m_importOpjAction->setEnabled(hasProject);
-#endif
-	m_importDatasetAction->setEnabled(hasProject);
-#ifdef HAVE_PURPOSE
-	m_shareAction->setEnabled(hasProject);
-#endif
-	m_newFolderAction->setEnabled(hasProject);
-	m_newWorkbookAction->setEnabled(hasProject);
-	m_newSpreadsheetAction->setEnabled(hasProject);
-	m_newMatrixAction->setEnabled(hasProject);
-	m_newWorksheetAction->setEnabled(hasProject);
-	m_newDatapickerAction->setEnabled(hasProject);
-	m_newNotesAction->setEnabled(hasProject);
-	m_newLiveDataSourceAction->setEnabled(hasProject);
-#ifdef HAVE_CANTOR_LIBS
-	for (auto* action : m_newNotebookMenu->actions())
-		action->setEnabled(hasProject);
-#endif
-	m_closeAction->setEnabled(hasProject);
-	m_projectExplorerDockAction->setEnabled(hasProject);
-	m_propertiesDockAction->setEnabled(hasProject);
-	m_worksheetPreviewAction->setEnabled(hasProject);
-	m_closeWindowAction->setEnabled(hasProject);
-	m_closeAllWindowsAction->setEnabled(hasProject);
-	m_nextWindowAction->setEnabled(hasProject);
-	m_prevWindowAction->setEnabled(hasProject);
-
-	// disable print and export actions if there is no project
-	// and don't activate them if a new project was created.
-	// they will be activated later in updateGUI() once there is
-	// a view to print or to export
-	if (!hasProject) {
-		m_printAction->setEnabled(false);
-		m_printPreviewAction->setEnabled(false);
-		m_exportAction->setEnabled(false);
-	}
 
 	auto* factory = this->guiFactory();
 	if (!m_DockManager || !m_DockManager->focusedDockWidget()) {
@@ -1171,8 +1141,6 @@ void MainWin::updateGUIOnProjectChanges(const QByteArray& windowState) {
 		factory->container(QLatin1String("spreadsheet_toolbar"), this)->hide();
 		factory->container(QLatin1String("worksheet_toolbar"), this)->hide();
 		factory->container(QLatin1String("cartesian_plot_toolbar"), this)->hide();
-		// 		factory->container(QLatin1String("histogram_toolbar"),this)->hide();
-		// 		factory->container(QLatin1String("barchart_toolbar"),this)->hide();
 		factory->container(QLatin1String("datapicker_toolbar"), this)->hide();
 #ifdef HAVE_CANTOR_LIBS
 		factory->container(QLatin1String("notebook"), this)->setEnabled(false);
@@ -1180,25 +1148,8 @@ void MainWin::updateGUIOnProjectChanges(const QByteArray& windowState) {
 #endif
 	}
 
-	factory->container(QLatin1String("new"), this)->setEnabled(hasProject);
-	factory->container(QLatin1String("edit"), this)->setEnabled(hasProject);
-	factory->container(QLatin1String("import"), this)->setEnabled(hasProject);
-
 	updateTitleBar();
 
-#ifdef HAVE_TOUCHBAR
-	m_touchBar->clear();
-
-	if (!hasProject) {
-		m_touchBar->addAction(m_newProjectAction);
-		m_touchBar->addAction(m_openProjectAction);
-	} else {
-		m_touchBar->addAction(m_importFileAction);
-		m_touchBar->addAction(m_newWorksheetAction);
-		m_touchBar->addAction(m_newSpreadsheetAction);
-		m_touchBar->addAction(m_newMatrixAction);
-	}
-#endif
 	// undo/redo actions are disabled in both cases - when the project is closed or opened
 	m_undoAction->setEnabled(false);
 	m_redoAction->setEnabled(false);
@@ -1238,10 +1189,9 @@ void MainWin::updateGUI() {
 	if (m_closing || m_projectClosing)
 		return;
 
-		// reset the touchbar
 #ifdef HAVE_TOUCHBAR
+	// reset the touchbar
 	m_touchBar->clear();
-
 	m_touchBar->addAction(m_undoIconOnlyAction);
 	m_touchBar->addAction(m_redoIconOnlyAction);
 	m_touchBar->addSeparator();
@@ -1255,8 +1205,6 @@ void MainWin::updateGUI() {
 		factory->container(QLatin1String("datapicker"), this)->setEnabled(false);
 		factory->container(QLatin1String("spreadsheet_toolbar"), this)->hide();
 		factory->container(QLatin1String("worksheet_toolbar"), this)->hide();
-		// 		factory->container(QLatin1String("histogram_toolbar"),this)->hide();
-		// 		factory->container(QLatin1String("barchart_toolbar"),this)->hide();
 		factory->container(QLatin1String("cartesian_plot_toolbar"), this)->hide();
 		factory->container(QLatin1String("datapicker_toolbar"), this)->hide();
 #ifdef HAVE_CANTOR_LIBS
@@ -1443,16 +1391,13 @@ void MainWin::updateGUI() {
 
 /*!
 	creates a new empty project. Returns \c true, if a new project was created.
+	the parameter \c createInitialContent whether a default content (new worksheet, etc. )
+	has to be created automatically (it's \c false if a project is opened, \c true if a new project is created).
 */
-bool MainWin::newProject() {
+bool MainWin::newProject(bool createInitialContent) {
 	// close the current project, if available
 	if (!closeProject())
 		return false;
-
-	// 	if (dynamic_cast<QQuickWidget*>(centralWidget())) {
-	// 		createMdiArea();
-	// 		setCentralWidget(m_mdiArea);
-	// 	}
 
 	QApplication::processEvents(QEventLoop::AllEvents, 100);
 
@@ -1479,7 +1424,7 @@ bool MainWin::newProject() {
 	// newProject is called for the first time, there is no project explorer yet
 	//-> initialize the project explorer,  the GUI-observer and the dock widgets.
 	if (!m_projectExplorer) {
-		group = Settings::group(QStringLiteral("MainWin"));
+		const auto groupMainWin = Settings::group(QStringLiteral("MainWin"));
 
 		// project explorer
 		m_projectExplorerDock = new ads::CDockWidget(i18nc("@title:window", "Project Explorer"));
@@ -1517,8 +1462,8 @@ bool MainWin::newProject() {
 		m_DockManager->addDockWidget(ads::LeftDockWidgetArea, m_projectExplorerDock);
 		m_DockManager->addDockWidget(ads::RightDockWidgetArea, m_propertiesDock);
 		m_DockManager->addDockWidget(ads::RightDockWidgetArea, m_worksheetPreviewDock, m_projectExplorerDock->dockAreaWidget());
-		if (group.keyList().indexOf(QLatin1String("WindowState")) != -1)
-			restoreState(group.readEntry("WindowState", QByteArray()));
+		if (groupMainWin.keyList().indexOf(QLatin1String("WindowState")) != -1)
+			restoreState(groupMainWin.readEntry("WindowState", QByteArray()));
 
 		auto* scrollArea = new QScrollArea(m_propertiesDock);
 		scrollArea->setWidgetResizable(true);
@@ -1535,7 +1480,6 @@ bool MainWin::newProject() {
 	m_projectExplorer->setCurrentAspect(m_project);
 	m_worksheetPreviewWidget->setProject(m_project);
 
-	updateGUIOnProjectChanges();
 	m_newProjectAction->setEnabled(false);
 #ifdef HAVE_PURPOSE
 	m_shareAction->setEnabled(false); // sharing is only possible after the project was saved to a file
@@ -1554,8 +1498,35 @@ bool MainWin::newProject() {
 	connect(m_project, &Project::mdiWindowVisibilityChanged, this, &MainWin::updateDockWindowVisibility);
 	connect(m_project, &Project::closeRequested, this, &MainWin::closeProject);
 
+	// depending on the settings, create the default project content (add a worksheet, etc.)
+	if (createInitialContent) {
+		const auto newProject = (NewProject)group.readEntry(QStringLiteral("NewProject"), static_cast<int>(NewProject::WithWorksheet));
+		switch (newProject) {
+		case NewProject::WithWorksheet:
+			newWorksheet();
+			break;
+		case NewProject::WithSpreadsheet:
+			newSpreadsheet();
+			break;
+		case NewProject::WithWorksheetSpreadsheet:
+			newWorksheet();
+			newSpreadsheet();
+			break;
+		case NewProject::WithNotebook: {
+#ifdef HAVE_CANTOR_LIBS
+			const auto& backend = group.readEntry(QLatin1String("LoadOnStartNotebook"), QString());
+			if (Cantor::Backend::listAvailableBackends().indexOf(backend) != -1)
+				addAspectToProject(new CantorWorksheet(backend));
+#endif
+			break;
+		}
+		}
+
+		m_project->setChanged(false); // the project was initialized on startup, nothing has changed from user's perspective
+	}
+
 	m_undoViewEmptyLabel = i18n("%1: created", m_project->name());
-	updateTitleBar();
+	updateGUIOnProjectChanges();
 
 	return true;
 }
@@ -1621,12 +1592,7 @@ void MainWin::openProject(const QString& filename) {
 	} else
 		file.close();
 
-	// 	if (dynamic_cast<QQuickWidget*>(centralWidget())) {
-	// 		createMdiArea();
-	// 		setCentralWidget(m_mdiArea);
-	// 	}
-
-	if (!newProject())
+	if (!newProject(false))
 		return;
 
 	WAIT_CURSOR;
@@ -1777,7 +1743,6 @@ void MainWin::openProject(const QString& filename) {
 	m_project->undoStack()->clear();
 	m_undoViewEmptyLabel = i18n("%1: opened", m_project->name());
 	m_recentProjectsAction->addUrl(QUrl(filename));
-	updateTitleBar();
 	updateGUIOnProjectChanges(m_project->windowState().toUtf8());
 	updateGUI(); // there are most probably worksheets or spreadsheets in the open project -> update the GUI
 	if (m_project->windowState().toUtf8().isEmpty())
@@ -1785,6 +1750,7 @@ void MainWin::openProject(const QString& filename) {
 	m_saveAction->setEnabled(false);
 	m_newProjectAction->setEnabled(true);
 #ifdef HAVE_PURPOSE
+	m_shareAction->setEnabled(true);
 	fillShareMenu();
 #endif
 	statusBar()->showMessage(i18n("Project successfully opened (in %1 seconds).", (float)timer.elapsed() / 1000));
@@ -1820,6 +1786,11 @@ bool MainWin::closeProject() {
 	if (warnModified())
 		return false;
 
+	// clear the worksheet preview before deleting the project and before deleting the dock widgets
+	// so we don't need to react on current aspect changes
+	if (m_worksheetPreviewWidget)
+		m_worksheetPreviewWidget->setProject(nullptr);
+
 	if (!m_closing) {
 		// 		if (dynamic_cast<QQuickWidget*>(centralWidget()) && m_showWelcomeScreen) {
 		// 			m_welcomeWidget = createWelcomeScreen();
@@ -1836,7 +1807,6 @@ bool MainWin::closeProject() {
 
 	m_projectClosing = true;
 	statusBar()->clearMessage();
-	m_worksheetPreviewWidget->setProject(nullptr); // clear the preview befor deleting the project so we don't need to update it
 	delete m_guiObserver;
 	m_guiObserver = nullptr;
 	delete m_aspectTreeModel;
@@ -2802,12 +2772,7 @@ void MainWin::importFileDialog(const QString& fileName) {
 	else if (m_currentAspect->type() == AspectType::Column && m_currentAspect->parentAspect()->type() == AspectType::Spreadsheet)
 		dlg->setCurrentIndex(m_aspectTreeModel->modelIndexOfAspect(m_currentAspect->parentAspect()));
 
-	if (dlg->exec() == QDialog::Accepted) {
-		dlg->importTo(statusBar());
-		m_project->setChanged(true);
-	}
-
-	delete dlg;
+	dlg->exec();
 	DEBUG(Q_FUNC_INFO << " DONE");
 }
 
@@ -2821,12 +2786,7 @@ void MainWin::importSqlDialog() {
 	else if (m_currentAspect->type() == AspectType::Column && m_currentAspect->parentAspect()->type() == AspectType::Spreadsheet)
 		dlg->setCurrentIndex(m_aspectTreeModel->modelIndexOfAspect(m_currentAspect->parentAspect()));
 
-	if (dlg->exec() == QDialog::Accepted) {
-		dlg->importTo(statusBar());
-		m_project->setChanged(true);
-	}
-
-	delete dlg;
+	dlg->exec();
 	DEBUG(Q_FUNC_INFO << " DONE");
 }
 
@@ -2858,26 +2818,7 @@ void MainWin::importProjectDialog() {
  */
 void MainWin::importDatasetDialog() {
 	auto* dlg = new ImportDatasetDialog(this);
-	if (dlg->exec() == QDialog::Accepted) {
-		auto* spreadsheet = new Spreadsheet(i18n("Dataset%1", 1));
-		auto* dataset = new DatasetHandler(spreadsheet);
-		dlg->importToDataset(dataset, statusBar());
-
-		QTimer timer;
-		timer.setSingleShot(true);
-		QEventLoop loop;
-		connect(dataset, &DatasetHandler::downloadCompleted, &loop, &QEventLoop::quit);
-		connect(&timer, &QTimer::timeout, &loop, &QEventLoop::quit);
-		timer.start(1500);
-		loop.exec();
-
-		if (timer.isActive()) {
-			timer.stop();
-			addAspectToProject(spreadsheet);
-		}
-		delete dataset;
-	}
-	delete dlg;
+	dlg->exec();
 }
 
 /*!

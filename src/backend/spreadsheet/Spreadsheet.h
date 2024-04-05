@@ -77,13 +77,16 @@ public:
 		Q_EMIT columnCountChanged(columnCount());
 	}
 
+	bool isSparklineShown{false};
+
 	// data import
 	int prepareImport(std::vector<void*>& dataContainer,
 					  AbstractFileFilter::ImportMode,
 					  int rows,
 					  int cols,
-					  QStringList colNameList,
-					  QVector<AbstractColumn::ColumnMode>,
+					  const QStringList& colNameList,
+					  const QVector<AbstractColumn::ColumnMode>&,
+					  bool& ok,
 					  bool initializeContainer) override;
 	void finalizeImport(size_t columnOffset, size_t startColumn, size_t endColumn, const QString& dateTimeFormat, AbstractFileFilter::ImportMode) override;
 	int resize(AbstractFileFilter::ImportMode, QStringList colNameList, int cols);
@@ -145,6 +148,7 @@ private Q_SLOTS:
 	void childDeselected(const AbstractAspect*) override;
 	void linkedSpreadsheetDeleted();
 	void linkedSpreadsheetNewRowCount(int);
+	void handleAspectUpdated(const QString& aspectPath, const AbstractAspect*);
 
 Q_SIGNALS:
 	void requestProjectContextMenu(QMenu*);
@@ -173,6 +177,7 @@ Q_SIGNALS:
 
 	friend class SpreadsheetSetLinkingCmd;
 	friend class SpreadsheetSetColumnCountCommand;
+	friend class Project; // handleAspectUpdated required
 };
 
 #endif

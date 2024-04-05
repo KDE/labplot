@@ -49,6 +49,15 @@ bool XYAnalysisCurve::resultAvailable() const {
 	return result().available;
 }
 
+bool XYAnalysisCurve::usingColumn(const Column* column) const {
+	Q_D(const XYAnalysisCurve);
+
+	if (d->dataSourceType == DataSourceType::Spreadsheet)
+		return (d->xDataColumn == column || d->yDataColumn == column || d->y2DataColumn == column);
+	else
+		return (d->dataSourceCurve->xColumn() == column || d->dataSourceCurve->yColumn() == column);
+}
+
 // copy valid data from x/y data columns to x/y data vectors
 // for analysis functions
 // avgUniqueX: average y values for duplicate x values
@@ -362,6 +371,25 @@ void XYAnalysisCurve::createDataSpreadsheet() {
 	folder()->addChild(spreadsheet);
 }
 
+void XYAnalysisCurve::handleAspectUpdated(const QString& aspectPath, const AbstractAspect* aspect) {
+	const auto column = dynamic_cast<const AbstractColumn*>(aspect);
+	if (!column)
+		return;
+
+	setUndoAware(false);
+	if (xDataColumnPath() == aspectPath)
+		setXDataColumn(column);
+	if (yDataColumnPath() == aspectPath)
+		setYDataColumn(column);
+	if (y2DataColumnPath() == aspectPath)
+		setY2DataColumn(column);
+
+	// From XYCurve
+	if (valuesColumnPath() == aspectPath)
+		setValuesColumn(column);
+	setUndoAware(true);
+}
+
 // ##############################################################################
 // ######################### Private implementation #############################
 // ##############################################################################
@@ -425,7 +453,7 @@ void XYAnalysisCurvePrivate::recalculate() {
 
 		if (result) {
 			// redraw the curve
-			recalcLogicalPoints();
+			recalc();
 		}
 	}
 	Q_EMIT q->dataChanged();

@@ -10,12 +10,11 @@
 #ifndef LOLLIPOPPLOT_H
 #define LOLLIPOPPLOT_H
 
-#include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/Plot.h"
 
-class LollipopPlotPrivate;
 class AbstractColumn;
 class Line;
+class LollipopPlotPrivate;
 class Symbol;
 class Value;
 
@@ -32,6 +31,7 @@ public:
 	~LollipopPlot() override;
 
 	QIcon icon() const override;
+	static QIcon staticIcon();
 	QMenu* createContextMenu() override;
 
 	void save(QXmlStreamWriter*) const override;
@@ -51,11 +51,15 @@ public:
 	Value* value() const;
 
 	void retransform() override;
+	void recalc() override;
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
 
 	double minimum(CartesianCoordinateSystem::Dimension) const override;
 	double maximum(CartesianCoordinateSystem::Dimension) const override;
 	bool hasData() const override;
+	bool usingColumn(const Column*) const override;
+	void handleAspectUpdated(const QString& aspectPath, const AbstractAspect* element) override;
+	QColor color() const override;
 
 	typedef LollipopPlotPrivate Private;
 
@@ -72,9 +76,6 @@ private:
 	QAction* orientationVerticalAction{nullptr};
 	QMenu* orientationMenu{nullptr};
 
-public Q_SLOTS:
-	void recalc();
-
 private Q_SLOTS:
 	// SLOTs for changes triggered via QActions in the context menu
 	void orientationChangedSlot(QAction*);
@@ -85,10 +86,6 @@ Q_SIGNALS:
 	void xColumnChanged(const AbstractColumn*);
 	void dataColumnsChanged(const QVector<const AbstractColumn*>&);
 	void orientationChanged(LollipopPlot::Orientation);
-
-	// box border
-	// void borderPenChanged(QPen&);
-	// void borderOpacityChanged(float);
 };
 
 #endif

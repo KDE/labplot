@@ -9,6 +9,7 @@
 
 #include "Plot.h"
 #include "PlotPrivate.h"
+#include "backend/lib/commandtemplates.h"
 #include "backend/lib/trace.h"
 #include "backend/worksheet/Background.h"
 
@@ -47,6 +48,16 @@ bool Plot::activatePlot(QPointF mouseScenePos, double maxDist) {
 	return d->activatePlot(mouseScenePos, maxDist);
 }
 
+// general
+BASIC_SHARED_D_READER_IMPL(Plot, bool, legendVisible, legendVisible)
+
+STD_SETTER_CMD_IMPL_S(Plot, SetLegendVisible, bool, legendVisible)
+void Plot::setLegendVisible(bool visible) {
+	Q_D(Plot);
+	if (visible != d->legendVisible)
+		exec(new PlotSetLegendVisibleCmd(d, visible, ki18n("%1: legend visibility changed")));
+}
+
 // ##############################################################################
 // ####################### Private implementation ###############################
 // ##############################################################################
@@ -68,93 +79,4 @@ void PlotPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
 		return;
 	}
 	QGraphicsItem::contextMenuEvent(event);
-}
-
-void PlotPrivate::drawFillingPollygon(const QPolygonF& polygon, QPainter* painter, const Background* background) const {
-	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
-	const QRectF& rect = polygon.boundingRect();
-
-	if (background->type() == Background::Type::Color) {
-		switch (background->colorStyle()) {
-		case Background::ColorStyle::SingleColor: {
-			painter->setBrush(QBrush(background->firstColor()));
-			break;
-		}
-		case Background::ColorStyle::HorizontalLinearGradient: {
-			QLinearGradient linearGrad(rect.topLeft(), rect.topRight());
-			linearGrad.setColorAt(0, background->firstColor());
-			linearGrad.setColorAt(1, background->secondColor());
-			painter->setBrush(QBrush(linearGrad));
-			break;
-		}
-		case Background::ColorStyle::VerticalLinearGradient: {
-			QLinearGradient linearGrad(rect.topLeft(), rect.bottomLeft());
-			linearGrad.setColorAt(0, background->firstColor());
-			linearGrad.setColorAt(1, background->secondColor());
-			painter->setBrush(QBrush(linearGrad));
-			break;
-		}
-		case Background::ColorStyle::TopLeftDiagonalLinearGradient: {
-			QLinearGradient linearGrad(rect.topLeft(), rect.bottomRight());
-			linearGrad.setColorAt(0, background->firstColor());
-			linearGrad.setColorAt(1, background->secondColor());
-			painter->setBrush(QBrush(linearGrad));
-			break;
-		}
-		case Background::ColorStyle::BottomLeftDiagonalLinearGradient: {
-			QLinearGradient linearGrad(rect.bottomLeft(), rect.topRight());
-			linearGrad.setColorAt(0, background->firstColor());
-			linearGrad.setColorAt(1, background->secondColor());
-			painter->setBrush(QBrush(linearGrad));
-			break;
-		}
-		case Background::ColorStyle::RadialGradient: {
-			QRadialGradient radialGrad(rect.center(), rect.width() / 2);
-			radialGrad.setColorAt(0, background->firstColor());
-			radialGrad.setColorAt(1, background->secondColor());
-			painter->setBrush(QBrush(radialGrad));
-			break;
-		}
-		}
-	} else if (background->type() == Background::Type::Image) {
-		if (!background->fileName().trimmed().isEmpty()) {
-			QPixmap pix(background->fileName());
-			switch (background->imageStyle()) {
-			case Background::ImageStyle::ScaledCropped:
-				pix = pix.scaled(rect.size().toSize(), Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
-				painter->setBrush(QBrush(pix));
-				painter->setBrushOrigin(pix.size().width() / 2, pix.size().height() / 2);
-				break;
-			case Background::ImageStyle::Scaled:
-				pix = pix.scaled(rect.size().toSize(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-				painter->setBrush(QBrush(pix));
-				painter->setBrushOrigin(pix.size().width() / 2, pix.size().height() / 2);
-				break;
-			case Background::ImageStyle::ScaledAspectRatio:
-				pix = pix.scaled(rect.size().toSize(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
-				painter->setBrush(QBrush(pix));
-				painter->setBrushOrigin(pix.size().width() / 2, pix.size().height() / 2);
-				break;
-			case Background::ImageStyle::Centered: {
-				QPixmap backpix(rect.size().toSize());
-				backpix.fill();
-				QPainter p(&backpix);
-				p.drawPixmap(QPointF(0, 0), pix);
-				p.end();
-				painter->setBrush(QBrush(backpix));
-				painter->setBrushOrigin(-pix.size().width() / 2, -pix.size().height() / 2);
-				break;
-			}
-			case Background::ImageStyle::Tiled:
-				painter->setBrush(QBrush(pix));
-				break;
-			case Background::ImageStyle::CenterTiled:
-				painter->setBrush(QBrush(pix));
-				painter->setBrushOrigin(pix.size().width() / 2, pix.size().height() / 2);
-			}
-		}
-	} else if (background->type() == Background::Type::Pattern)
-		painter->setBrush(QBrush(background->firstColor(), background->brushStyle()));
-
-	painter->drawPolygon(polygon);
 }

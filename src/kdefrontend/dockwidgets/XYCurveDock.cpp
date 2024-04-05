@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : widget for XYCurve properties
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2010-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2010-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2012-2022 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -21,6 +21,7 @@
 #include "kdefrontend/GuiTools.h"
 #include "kdefrontend/TemplateHandler.h"
 #include "kdefrontend/widgets/BackgroundWidget.h"
+#include "kdefrontend/widgets/ErrorBarWidget.h"
 #include "kdefrontend/widgets/LineWidget.h"
 #include "kdefrontend/widgets/SymbolWidget.h"
 
@@ -84,28 +85,12 @@ XYCurveDock::XYCurveDock(QWidget* parent)
 
 	// Tab "Error Bars"
 	const KConfigGroup group = Settings::group(QStringLiteral("Settings_General"));
-	if (group.readEntry(QStringLiteral("GUMTerms"), false)) {
+	if (group.readEntry(QStringLiteral("GUMTerms"), false))
 		ui.tabWidget->setTabText(ui.tabWidget->indexOf(ui.tabErrorBars), i18n("Uncertainty Bars"));
-		ui.lErrorBarX->setText(i18n("X Uncertainty"));
-		ui.lErrorBarY->setText(i18n("Y Uncertainty"));
-	}
 
-	gridLayout = qobject_cast<QGridLayout*>(ui.tabErrorBars->layout());
-
-	cbXErrorPlusColumn = new TreeViewComboBox(ui.tabErrorBars);
-	gridLayout->addWidget(cbXErrorPlusColumn, 2, 2, 1, 1);
-
-	cbXErrorMinusColumn = new TreeViewComboBox(ui.tabErrorBars);
-	gridLayout->addWidget(cbXErrorMinusColumn, 3, 2, 1, 1);
-
-	cbYErrorPlusColumn = new TreeViewComboBox(ui.tabErrorBars);
-	gridLayout->addWidget(cbYErrorPlusColumn, 7, 2, 1, 1);
-
-	cbYErrorMinusColumn = new TreeViewComboBox(ui.tabErrorBars);
-	gridLayout->addWidget(cbYErrorMinusColumn, 8, 2, 1, 1);
-
-	errorBarsLineWidget = new LineWidget(ui.tabErrorBars);
-	gridLayout->addWidget(errorBarsLineWidget, 11, 0, 1, 3);
+	errorBarWidget = new ErrorBarWidget(ui.tabErrorBars);
+	auto* vLayout = qobject_cast<QVBoxLayout*>(ui.tabErrorBars->layout());
+	vLayout->insertWidget(0, errorBarWidget);
 
 	// Tab "Margin Plots"
 	ui.cbRugOrientation->addItem(i18n("Vertical"));
@@ -148,14 +133,6 @@ XYCurveDock::XYCurveDock(QWidget* parent)
 	connect(ui.kfrValuesFont, &KFontRequester::fontSelected, this, &XYCurveDock::valuesFontChanged);
 	connect(ui.kcbValuesColor, &KColorButton::changed, this, &XYCurveDock::valuesColorChanged);
 
-	// Error bars
-	connect(ui.cbXErrorType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYCurveDock::xErrorTypeChanged);
-	connect(cbXErrorPlusColumn, &TreeViewComboBox::currentModelIndexChanged, this, &XYCurveDock::xErrorPlusColumnChanged);
-	connect(cbXErrorMinusColumn, &TreeViewComboBox::currentModelIndexChanged, this, &XYCurveDock::xErrorMinusColumnChanged);
-	connect(ui.cbYErrorType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYCurveDock::yErrorTypeChanged);
-	connect(cbYErrorPlusColumn, &TreeViewComboBox::currentModelIndexChanged, this, &XYCurveDock::yErrorPlusColumnChanged);
-	connect(cbYErrorMinusColumn, &TreeViewComboBox::currentModelIndexChanged, this, &XYCurveDock::yErrorMinusColumnChanged);
-
 	// Margin Plots
 	connect(ui.chkRugEnabled, &QCheckBox::toggled, this, &XYCurveDock::rugEnabledChanged);
 	connect(ui.cbRugOrientation, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYCurveDock::rugOrientationChanged);
@@ -180,13 +157,16 @@ XYCurveDock::XYCurveDock(QWidget* parent)
 	init();
 }
 
-XYCurveDock::~XYCurveDock() = default;
+XYCurveDock::~XYCurveDock() {
+	delete m_valuesModel;
+}
 
 void XYCurveDock::setupGeneral() {
 	auto* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
 	setPlotRangeCombobox(uiGeneralTab.cbPlotRanges);
 	setBaseWidgets(uiGeneralTab.leName, uiGeneralTab.teComment);
+	setVisibilityWidgets(uiGeneralTab.chkVisible, uiGeneralTab.chkLegendVisible);
 
 	auto* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setContentsMargins(0, 0, 0, 0);
@@ -204,11 +184,8 @@ void XYCurveDock::setupGeneral() {
 	gridLayout->addWidget(cbYColumn, 5, 2, 1, 1);
 
 	// General
-	connect(uiGeneralTab.chkLegendVisible, &QCheckBox::toggled, this, &XYCurveDock::legendVisibleChanged);
-	connect(uiGeneralTab.chkVisible, &QCheckBox::clicked, this, &XYCurveDock::visibilityChanged);
 	connect(cbXColumn, &TreeViewComboBox::currentModelIndexChanged, this, &XYCurveDock::xColumnChanged);
 	connect(cbYColumn, &TreeViewComboBox::currentModelIndexChanged, this, &XYCurveDock::yColumnChanged);
-	connect(uiGeneralTab.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYCurveDock::plotRangeChanged);
 }
 
 void XYCurveDock::init() {
@@ -362,15 +339,6 @@ void XYCurveDock::init() {
 	ui.cbValuesPosition->addItem(i18n("Below"));
 	ui.cbValuesPosition->addItem(i18n("Left"));
 	ui.cbValuesPosition->addItem(i18n("Right"));
-
-	// Error Bars
-	ui.cbXErrorType->addItem(i18n("No"));
-	ui.cbXErrorType->addItem(i18n("Symmetric"));
-	ui.cbXErrorType->addItem(i18n("Asymmetric"));
-
-	ui.cbYErrorType->addItem(i18n("No"));
-	ui.cbYErrorType->addItem(i18n("Symmetric"));
-	ui.cbYErrorType->addItem(i18n("Asymmetric"));
 }
 
 QList<AspectType> XYCurveDock::defaultColumnTopLevelClasses() {
@@ -400,10 +368,6 @@ void XYCurveDock::setModel() {
 		cbYColumn->setTopLevelClasses(list);
 	}
 	cbValuesColumn->setTopLevelClasses(list);
-	cbXErrorMinusColumn->setTopLevelClasses(list);
-	cbXErrorPlusColumn->setTopLevelClasses(list);
-	cbYErrorMinusColumn->setTopLevelClasses(list);
-	cbYErrorPlusColumn->setTopLevelClasses(list);
 
 	if (m_curve->inherits(AspectType::XYAnalysisCurve))
 		// the model is used in the combobox for curve data sources -> allow to also select analysis curves
@@ -428,16 +392,15 @@ void XYCurveDock::setModel() {
 		cbYColumn->setModel(model);
 	}
 
-	cbXErrorMinusColumn->setModel(model);
-	cbXErrorPlusColumn->setModel(model);
-	cbYErrorMinusColumn->setModel(model);
-	cbYErrorPlusColumn->setModel(model);
-
 	// for value labels we need a dedicated model since we also want to allow
 	// to select text columns and we don't want to call enablePlottableColumnsOnly().
-	auto* valuesTreeModel = new AspectTreeModel(m_curve->project());
-	valuesTreeModel->setSelectableAspects(list);
-	cbValuesColumn->setModel(valuesTreeModel);
+	if (!m_valuesModel) {
+		m_valuesModel = new AspectTreeModel(m_curve->project());
+		m_valuesModel->setSelectableAspects(list);
+	}
+	cbValuesColumn->setModel(m_valuesModel);
+
+	errorBarWidget->setModel(model);
 
 	// this function is called after the dock widget is initialized and the curves are set.
 	// so, we use this function to finalize the initialization even though it's not related
@@ -482,20 +445,20 @@ void XYCurveDock::setSymbols(QList<XYCurve*> curves) {
 	QList<Background*> backgrounds;
 	QList<Line*> lines;
 	QList<Line*> dropLines;
-	QList<Line*> errorBarLines;
+	QList<ErrorBar*> errorBars;
 	for (auto* curve : curves) {
 		symbols << curve->symbol();
 		backgrounds << curve->background();
 		lines << curve->line();
 		dropLines << curve->dropLine();
-		errorBarLines << curve->errorBarsLine();
+		errorBars << curve->errorBar();
 	}
 
 	symbolWidget->setSymbols(symbols);
 	backgroundWidget->setBackgrounds(backgrounds);
 	lineWidget->setLines(lines);
 	dropLineWidget->setLines(dropLines);
-	errorBarsLineWidget->setLines(errorBarLines);
+	errorBarWidget->setErrorBars(errorBars);
 }
 
 void XYCurveDock::initGeneralTab() {
@@ -505,32 +468,21 @@ void XYCurveDock::initGeneralTab() {
 	uiGeneralTab.chkLegendVisible->setChecked(m_curve->legendVisible());
 	uiGeneralTab.chkVisible->setChecked(m_curve->isVisible());
 
-	updatePlotRanges();
+	updatePlotRangeList();
 
 	// Slots
 	connect(m_curve, &XYCurve::aspectDescriptionChanged, this, &XYCurveDock::curveDescriptionChanged);
 	connect(m_curve, &XYCurve::xColumnChanged, this, &XYCurveDock::curveXColumnChanged);
 	connect(m_curve, &XYCurve::yColumnChanged, this, &XYCurveDock::curveYColumnChanged);
-	connect(m_curve, &WorksheetElement::plotRangeListChanged, this, &XYCurveDock::updatePlotRanges);
-	connect(m_curve, &XYCurve::legendVisibleChanged, this, &XYCurveDock::curveLegendVisibleChanged);
-	connect(m_curve, &WorksheetElement::visibleChanged, this, &XYCurveDock::curveVisibilityChanged);
+	connect(m_curve, &WorksheetElement::plotRangeListChanged, this, &XYCurveDock::updatePlotRangeList);
 }
 
 void XYCurveDock::initTabs() {
 	// if there are more than one curve in the list, disable the tab "general"
-	if (m_curvesList.size() == 1) {
+	if (m_curvesList.size() == 1)
 		cbValuesColumn->setColumn(m_curve->valuesColumn(), m_curve->valuesColumnPath());
-		cbXErrorPlusColumn->setColumn(m_curve->xErrorPlusColumn(), m_curve->xErrorPlusColumnPath());
-		cbXErrorMinusColumn->setColumn(m_curve->xErrorMinusColumn(), m_curve->xErrorMinusColumnPath());
-		cbYErrorPlusColumn->setColumn(m_curve->yErrorPlusColumn(), m_curve->yErrorPlusColumnPath());
-		cbYErrorMinusColumn->setColumn(m_curve->yErrorMinusColumn(), m_curve->yErrorMinusColumnPath());
-	} else {
+	else
 		cbValuesColumn->setCurrentModelIndex(QModelIndex());
-		cbXErrorPlusColumn->setCurrentModelIndex(QModelIndex());
-		cbXErrorMinusColumn->setCurrentModelIndex(QModelIndex());
-		cbYErrorPlusColumn->setCurrentModelIndex(QModelIndex());
-		cbYErrorMinusColumn->setCurrentModelIndex(QModelIndex());
-	}
 
 	// show the properties of the first curve
 	load();
@@ -558,14 +510,6 @@ void XYCurveDock::initTabs() {
 	connect(m_curve, &XYCurve::valuesFontChanged, this, &XYCurveDock::curveValuesFontChanged);
 	connect(m_curve, &XYCurve::valuesColorChanged, this, &XYCurveDock::curveValuesColorChanged);
 
-	//"Error bars"-Tab
-	connect(m_curve, &XYCurve::xErrorTypeChanged, this, &XYCurveDock::curveXErrorTypeChanged);
-	connect(m_curve, &XYCurve::xErrorPlusColumnChanged, this, &XYCurveDock::curveXErrorPlusColumnChanged);
-	connect(m_curve, &XYCurve::xErrorMinusColumnChanged, this, &XYCurveDock::curveXErrorMinusColumnChanged);
-	connect(m_curve, &XYCurve::yErrorTypeChanged, this, &XYCurveDock::curveYErrorTypeChanged);
-	connect(m_curve, &XYCurve::yErrorPlusColumnChanged, this, &XYCurveDock::curveYErrorPlusColumnChanged);
-	connect(m_curve, &XYCurve::yErrorMinusColumnChanged, this, &XYCurveDock::curveYErrorMinusColumnChanged);
-
 	//"Margin Plots"-Tab
 	connect(m_curve, &XYCurve::rugEnabledChanged, this, &XYCurveDock::curveRugEnabledChanged);
 	connect(m_curve, &XYCurve::rugOrientationChanged, this, &XYCurveDock::curveRugOrientationChanged);
@@ -579,11 +523,7 @@ void XYCurveDock::updateLocale() {
 	lineWidget->updateLocale();
 	dropLineWidget->updateLocale();
 	symbolWidget->updateLocale();
-	errorBarsLineWidget->updateLocale();
-}
-
-void XYCurveDock::updatePlotRanges() {
-	updatePlotRangeList();
+	errorBarWidget->updateLocale();
 }
 
 //*************************************************************
@@ -634,20 +574,6 @@ void XYCurveDock::yColumnChanged(const QModelIndex& index) {
 
 	for (auto* curve : m_curvesList)
 		curve->setYColumn(column);
-}
-
-void XYCurveDock::legendVisibleChanged(bool state) {
-	CONDITIONAL_LOCK_RETURN;
-
-	for (auto* curve : m_curvesList)
-		curve->setLegendVisible(state);
-}
-
-void XYCurveDock::visibilityChanged(bool state) {
-	CONDITIONAL_LOCK_RETURN;
-
-	for (auto* curve : m_curvesList)
-		curve->setVisible(state);
 }
 
 // "Line"-tab
@@ -917,117 +843,6 @@ void XYCurveDock::valuesColorChanged(const QColor& color) {
 		curve->setValuesColor(color);
 }
 
-//"Error bars"-Tab
-void XYCurveDock::xErrorTypeChanged(int index) {
-	if (index == 0) {
-		// no error
-		ui.lXErrorDataPlus->setVisible(false);
-		cbXErrorPlusColumn->setVisible(false);
-		ui.lXErrorDataMinus->setVisible(false);
-		cbXErrorMinusColumn->setVisible(false);
-	} else if (index == 1) {
-		// symmetric error
-		ui.lXErrorDataPlus->setVisible(true);
-		cbXErrorPlusColumn->setVisible(true);
-		ui.lXErrorDataMinus->setVisible(false);
-		cbXErrorMinusColumn->setVisible(false);
-		ui.lXErrorDataPlus->setText(i18n("Data, +-:"));
-	} else if (index == 2) {
-		// asymmetric error
-		ui.lXErrorDataPlus->setVisible(true);
-		cbXErrorPlusColumn->setVisible(true);
-		ui.lXErrorDataMinus->setVisible(true);
-		cbXErrorMinusColumn->setVisible(true);
-		ui.lXErrorDataPlus->setText(i18n("Data, +:"));
-	}
-
-	bool b = (index != 0 || ui.cbYErrorType->currentIndex() != 0);
-	ui.lErrorFormat->setVisible(b);
-	errorBarsLineWidget->setVisible(b);
-
-	CONDITIONAL_LOCK_RETURN;
-
-	for (auto* curve : m_curvesList)
-		curve->setXErrorType(XYCurve::ErrorType(index));
-}
-
-void XYCurveDock::xErrorPlusColumnChanged(const QModelIndex& index) {
-	CONDITIONAL_LOCK_RETURN;
-
-	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	auto* column = dynamic_cast<AbstractColumn*>(aspect);
-	Q_ASSERT(column);
-
-	for (auto* curve : m_curvesList)
-		curve->setXErrorPlusColumn(column);
-}
-
-void XYCurveDock::xErrorMinusColumnChanged(const QModelIndex& index) {
-	CONDITIONAL_LOCK_RETURN;
-
-	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	auto* column = dynamic_cast<AbstractColumn*>(aspect);
-	Q_ASSERT(column);
-
-	for (auto* curve : m_curvesList)
-		curve->setXErrorMinusColumn(column);
-}
-
-void XYCurveDock::yErrorTypeChanged(int index) {
-	if (index == 0) {
-		// no error
-		ui.lYErrorDataPlus->setVisible(false);
-		cbYErrorPlusColumn->setVisible(false);
-		ui.lYErrorDataMinus->setVisible(false);
-		cbYErrorMinusColumn->setVisible(false);
-	} else if (index == 1) {
-		// symmetric error
-		ui.lYErrorDataPlus->setVisible(true);
-		cbYErrorPlusColumn->setVisible(true);
-		ui.lYErrorDataMinus->setVisible(false);
-		cbYErrorMinusColumn->setVisible(false);
-		ui.lYErrorDataPlus->setText(i18n("Data, +-:"));
-	} else if (index == 2) {
-		// asymmetric error
-		ui.lYErrorDataPlus->setVisible(true);
-		cbYErrorPlusColumn->setVisible(true);
-		ui.lYErrorDataMinus->setVisible(true);
-		cbYErrorMinusColumn->setVisible(true);
-		ui.lYErrorDataPlus->setText(i18n("Data, +:"));
-	}
-
-	bool b = (index != 0 || ui.cbXErrorType->currentIndex() != 0);
-	ui.lErrorFormat->setVisible(b);
-	errorBarsLineWidget->setVisible(b);
-
-	CONDITIONAL_LOCK_RETURN;
-
-	for (auto* curve : m_curvesList)
-		curve->setYErrorType(XYCurve::ErrorType(index));
-}
-
-void XYCurveDock::yErrorPlusColumnChanged(const QModelIndex& index) {
-	CONDITIONAL_LOCK_RETURN;
-
-	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	auto* column = dynamic_cast<AbstractColumn*>(aspect);
-	Q_ASSERT(column);
-
-	for (auto* curve : m_curvesList)
-		curve->setYErrorPlusColumn(column);
-}
-
-void XYCurveDock::yErrorMinusColumnChanged(const QModelIndex& index) {
-	CONDITIONAL_LOCK_RETURN;
-
-	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	auto* column = dynamic_cast<AbstractColumn*>(aspect);
-	Q_ASSERT(column);
-
-	for (auto* curve : m_curvesList)
-		curve->setYErrorMinusColumn(column);
-}
-
 //"Margin Plots"-Tab
 void XYCurveDock::rugEnabledChanged(bool state) {
 	CONDITIONAL_LOCK_RETURN;
@@ -1093,14 +908,6 @@ void XYCurveDock::curveYColumnChanged(const AbstractColumn* column) {
 	updateValuesWidgets();
 	CONDITIONAL_LOCK_RETURN;
 	cbYColumn->setColumn(column, m_curve->yColumnPath());
-}
-void XYCurveDock::curveLegendVisibleChanged(bool on) {
-	CONDITIONAL_LOCK_RETURN;
-	uiGeneralTab.chkLegendVisible->setChecked(on);
-}
-void XYCurveDock::curveVisibilityChanged(bool on) {
-	CONDITIONAL_LOCK_RETURN;
-	uiGeneralTab.chkVisible->setChecked(on);
 }
 
 // Line-Tab
@@ -1176,32 +983,6 @@ void XYCurveDock::curveValuesColorChanged(QColor color) {
 	ui.kcbValuesColor->setColor(color);
 }
 
-//"Error bars"-Tab
-void XYCurveDock::curveXErrorTypeChanged(XYCurve::ErrorType type) {
-	CONDITIONAL_LOCK_RETURN;
-	ui.cbXErrorType->setCurrentIndex((int)type);
-}
-void XYCurveDock::curveXErrorPlusColumnChanged(const AbstractColumn* column) {
-	CONDITIONAL_LOCK_RETURN;
-	cbXErrorPlusColumn->setColumn(column, m_curve->xErrorPlusColumnPath());
-}
-void XYCurveDock::curveXErrorMinusColumnChanged(const AbstractColumn* column) {
-	CONDITIONAL_LOCK_RETURN;
-	cbXErrorMinusColumn->setColumn(column, m_curve->xErrorMinusColumnPath());
-}
-void XYCurveDock::curveYErrorTypeChanged(XYCurve::ErrorType type) {
-	CONDITIONAL_LOCK_RETURN;
-	ui.cbYErrorType->setCurrentIndex((int)type);
-}
-void XYCurveDock::curveYErrorPlusColumnChanged(const AbstractColumn* column) {
-	CONDITIONAL_LOCK_RETURN;
-	cbYErrorPlusColumn->setColumn(column, m_curve->yErrorPlusColumnPath());
-}
-void XYCurveDock::curveYErrorMinusColumnChanged(const AbstractColumn* column) {
-	CONDITIONAL_LOCK_RETURN;
-	cbYErrorMinusColumn->setColumn(column, m_curve->yErrorMinusColumnPath());
-}
-
 //"Margin Plot"-Tab
 void XYCurveDock::curveRugEnabledChanged(bool status) {
 	CONDITIONAL_LOCK_RETURN;
@@ -1255,12 +1036,6 @@ void XYCurveDock::load() {
 	ui.kfrValuesFont->setFont(valuesFont);
 	ui.kcbValuesColor->setColor(m_curve->valuesColor());
 	this->updateValuesWidgets();
-
-	// Error bars
-	if (xyCurve) {
-		ui.cbXErrorType->setCurrentIndex((int)m_curve->xErrorType());
-		ui.cbYErrorType->setCurrentIndex((int)m_curve->yErrorType());
-	}
 
 	// Margin plots
 	ui.chkRugEnabled->setChecked(m_curve->rugEnabled());
@@ -1320,13 +1095,6 @@ void XYCurveDock::loadConfig(KConfig& config) {
 
 	// Filling
 	backgroundWidget->loadConfig(group);
-
-	// Error bars
-	if (xyCurve) {
-		ui.cbXErrorType->setCurrentIndex(group.readEntry(QStringLiteral("XErrorType"), (int)m_curve->xErrorType()));
-		ui.cbYErrorType->setCurrentIndex(group.readEntry(QStringLiteral("YErrorType"), (int)m_curve->yErrorType()));
-		errorBarsLineWidget->loadConfig(group);
-	}
 }
 
 void XYCurveDock::saveConfigAsTemplate(KConfig& config) {
@@ -1367,11 +1135,8 @@ void XYCurveDock::saveConfigAsTemplate(KConfig& config) {
 	backgroundWidget->saveConfig(group);
 
 	// Error bars
-	if (xyCurve) {
-		group.writeEntry(QStringLiteral("XErrorType"), ui.cbXErrorType->currentIndex());
-		group.writeEntry(QStringLiteral("YErrorType"), ui.cbYErrorType->currentIndex());
-		errorBarsLineWidget->saveConfig(group);
-	}
+	if (xyCurve)
+		errorBarWidget->saveConfig(group);
 
 	config.sync();
 }

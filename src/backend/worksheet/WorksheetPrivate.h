@@ -58,9 +58,12 @@ public:
 	Worksheet::CartesianPlotActionMode cartesianPlotActionMode{Worksheet::CartesianPlotActionMode::ApplyActionToSelection};
 	Worksheet::CartesianPlotActionMode cartesianPlotCursorMode{Worksheet::CartesianPlotActionMode::ApplyActionToAll};
 
+	int cursorTreeModelCurveBackgroundAlpha{50};
 	enum class TreeModelColumn { PLOTNAME = 0, SIGNALNAME = 0, CURSOR0, CURSOR1, CURSORDIFF };
 
 	TreeModel* cursorData{nullptr};
+
+	friend class WorksheetTest;
 };
 
 #endif

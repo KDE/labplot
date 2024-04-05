@@ -4,7 +4,7 @@
 	Description          : Private members of Histogram
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2016 Anu Mittal <anu22mittal@gmail.com>
-	SPDX-FileCopyrightText: 2018-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2018-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -55,7 +55,7 @@ public:
 	const AbstractColumn* dataColumn{nullptr};
 	QString dataColumnPath;
 	Histogram::Type type{Histogram::Ordinary};
-	Histogram::Orientation orientation{Histogram::Vertical};
+	Histogram::Orientation orientation{Histogram::Orientation::Vertical};
 	Histogram::Normalization normalization{Histogram::Count};
 	Histogram::BinningMethod binningMethod{Histogram::SquareRoot};
 	int totalCount{0};
@@ -69,14 +69,7 @@ public:
 	Symbol* symbol{nullptr};
 	Background* background{nullptr};
 	Value* value{nullptr};
-
-	// error bars
-	Histogram::ErrorType errorType{Histogram::NoError};
-	const AbstractColumn* errorPlusColumn{nullptr};
-	QString errorPlusColumnPath;
-	const AbstractColumn* errorMinusColumn{nullptr};
-	QString errorMinusColumnPath;
-	Line* errorBarsLine{nullptr};
+	ErrorBar* errorBar{nullptr};
 
 	// rug
 	bool rugEnabled{false};

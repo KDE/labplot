@@ -55,16 +55,16 @@ Worksheet::Worksheet(const QString& name, bool loading)
 	: AbstractPart(name, AspectType::Worksheet)
 	, d_ptr(new WorksheetPrivate(this)) {
 	Q_D(Worksheet);
-	connect(this, &Worksheet::childAspectAdded, this, &Worksheet::handleAspectAdded);
-	connect(this, &Worksheet::childAspectAboutToBeRemoved, this, &Worksheet::handleAspectAboutToBeRemoved);
-	connect(this, &Worksheet::childAspectRemoved, this, &Worksheet::handleAspectRemoved);
-
 	d->background = new Background(QString());
 	addChild(d->background);
 	d->background->setHidden(true);
 	connect(d->background, &Background::updateRequested, [=] {
 		d->update();
 	});
+
+	connect(this, &Worksheet::childAspectAdded, this, &Worksheet::handleAspectAdded);
+	connect(this, &Worksheet::childAspectAboutToBeRemoved, this, &Worksheet::handleAspectAboutToBeRemoved);
+	connect(this, &Worksheet::childAspectRemoved, this, &Worksheet::handleAspectRemoved);
 
 	if (!loading)
 		init();
@@ -172,6 +172,9 @@ QWidget* Worksheet::view() const {
 		connect(m_view, &WorksheetView::propertiesExplorerRequested, this, &Worksheet::propertiesExplorerRequested);
 		connect(this, &Worksheet::cartesianPlotMouseModeChanged, m_view, &WorksheetView::cartesianPlotMouseModeChangedSlot);
 		connect(this, &Worksheet::childContextMenuRequested, m_view, &WorksheetView::childContextMenuRequested);
+		connect(this, &Worksheet::viewAboutToBeDeleted, [this]() {
+			m_view = nullptr;
+		});
 		Q_EMIT const_cast<Worksheet*>(this)->changed();
 	}
 	return m_partView;
@@ -298,7 +301,10 @@ void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 		connect(plot, &CartesianPlot::visibleChanged, this, &Worksheet::updateCompleteCursorTreeModel);
 		connect(plot, &CartesianPlot::curveVisibilityChangedSignal, this, &Worksheet::updateCompleteCursorTreeModel);
 		connect(plot, &CartesianPlot::curveDataChanged, this, &Worksheet::curveDataChanged);
-		connect(plot, static_cast<void (CartesianPlot::*)(QPen, QString)>(&CartesianPlot::curveLinePenChanged), this, &Worksheet::updateCurveBackground);
+		connect(plot,
+				static_cast<void (CartesianPlot::*)(const QColor&, const QString&)>(&CartesianPlot::plotColorChanged),
+				this,
+				&Worksheet::updateCurveBackground);
 		connect(plot, &CartesianPlot::mouseModeChanged, this, &Worksheet::cartesianPlotMouseModeChangedSlot);
 		auto* p = const_cast<CartesianPlot*>(plot);
 		p->setInteractive(d->plotsInteractive);
@@ -1317,6 +1323,7 @@ void Worksheet::curveDataChanged(const XYCurve* curve) {
 }
 
 void Worksheet::curveAdded(const XYCurve* curve) {
+	Q_D(const Worksheet);
 	auto* plot = dynamic_cast<CartesianPlot*>(QObject::sender());
 	if (!plot)
 		return;
@@ -1345,7 +1352,7 @@ void Worksheet::curveAdded(const XYCurve* curve) {
 
 			treeModel->setTreeData(QVariant(curve->name()), row, static_cast<int>(WorksheetPrivate::TreeModelColumn::SIGNALNAME), plotIndex);
 			QColor curveColor = curve->line()->pen().color();
-			curveColor.setAlpha(50);
+			curveColor.setAlpha(d->cursorTreeModelCurveBackgroundAlpha);
 			treeModel->setTreeData(QVariant(curveColor), row, static_cast<int>(WorksheetPrivate::TreeModelColumn::SIGNALNAME), plotIndex, Qt::BackgroundRole);
 			bool valueFound;
 			double valueCursor0 = curve->y(plot->cursorPos(0), valueFound);
@@ -1392,7 +1399,8 @@ void Worksheet::curveRemoved(const XYCurve* curve) {
  * @param pen Pen of the curve
  * @param curveName Curve name to find in treemodel
  */
-void Worksheet::updateCurveBackground(const QPen& pen, const QString& curveName) {
+void Worksheet::updateCurveBackground(QColor color, const QString& curveName) {
+	Q_D(const Worksheet);
 	const auto* plot = static_cast<const CartesianPlot*>(QObject::sender());
 	auto* treeModel = cursorModel();
 	int rowCount = treeModel->rowCount();
@@ -1409,9 +1417,8 @@ void Worksheet::updateCurveBackground(const QPen& pen, const QString& curveName)
 			if (curveIndex.data().toString().compare(curveName) != 0)
 				continue;
 
-			QColor curveColor = pen.color();
-			curveColor.setAlpha(50);
-			treeModel->setTreeData(QVariant(curveColor), j, static_cast<int>(WorksheetPrivate::TreeModelColumn::SIGNALNAME), plotIndex, Qt::BackgroundRole);
+			color.setAlpha(d->cursorTreeModelCurveBackgroundAlpha);
+			treeModel->setTreeData(QVariant(color), j, static_cast<int>(WorksheetPrivate::TreeModelColumn::SIGNALNAME), plotIndex, Qt::BackgroundRole);
 			return;
 		}
 		return;
@@ -1423,6 +1430,7 @@ void Worksheet::updateCurveBackground(const QPen& pen, const QString& curveName)
  * If the plot or the curve are not available, the plot/curve is not in the treemodel!
  */
 void Worksheet::updateCompleteCursorTreeModel() {
+	Q_D(const Worksheet);
 	if (isLoading())
 		return;
 
@@ -1508,7 +1516,7 @@ void Worksheet::updateCompleteCursorTreeModel() {
 			}
 			treeModel->insertRows(rowCurve, 1, plotName);
 			QColor curveColor = curve->line()->pen().color();
-			curveColor.setAlpha(50);
+			curveColor.setAlpha(d->cursorTreeModelCurveBackgroundAlpha);
 			treeModel->setTreeData(QVariant(curveColor), rowCurve, 0, plotName, Qt::BackgroundRole);
 			treeModel->setTreeData(QVariant(curve->name()), rowCurve, static_cast<int>(WorksheetPrivate::TreeModelColumn::SIGNALNAME), plotName);
 			treeModel->setTreeData(QVariant(cursorValue[0]), rowCurve, static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSOR0), plotName);
@@ -1576,6 +1584,7 @@ void WorksheetPrivate::update() {
 
 WorksheetPrivate::~WorksheetPrivate() {
 	delete m_scene;
+	delete cursorData;
 }
 
 void WorksheetPrivate::updateLayout(bool undoable) {
@@ -1827,7 +1836,7 @@ bool Worksheet::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("cartesianPlotActionMode", cartesianPlotActionMode, Worksheet::CartesianPlotActionMode);
 			READ_INT_VALUE("cartesianPlotCursorMode", cartesianPlotCursorMode, Worksheet::CartesianPlotActionMode);
 		} else if (reader->name() == QLatin1String("cartesianPlot")) {
-			auto* plot = new CartesianPlot(QString());
+			auto* plot = new CartesianPlot(QString(), true);
 			plot->setIsLoading(true);
 			if (!plot->load(reader, preview)) {
 				delete plot;

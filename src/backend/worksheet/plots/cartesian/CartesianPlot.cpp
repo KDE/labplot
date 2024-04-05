@@ -43,6 +43,7 @@
 #include "backend/worksheet/plots/cartesian/BoxPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
 #include "backend/worksheet/plots/cartesian/CustomPoint.h"
+#include "backend/worksheet/plots/cartesian/ErrorBar.h"
 #include "backend/worksheet/plots/cartesian/KDEPlot.h"
 #include "backend/worksheet/plots/cartesian/LollipopPlot.h"
 #include "backend/worksheet/plots/cartesian/QQPlot.h"
@@ -125,9 +126,9 @@ Action evaluateKeys(int key, Qt::KeyboardModifiers) {
  * \class CartesianPlot
  * \brief A xy-plot.
  */
-CartesianPlot::CartesianPlot(const QString& name)
+CartesianPlot::CartesianPlot(const QString& name, bool loading)
 	: AbstractPlot(name, new CartesianPlotPrivate(this), AspectType::CartesianPlot) {
-	init();
+	init(loading);
 }
 
 CartesianPlot::CartesianPlot(const QString& name, CartesianPlotPrivate* dd)
@@ -138,6 +139,7 @@ CartesianPlot::CartesianPlot(const QString& name, CartesianPlotPrivate* dd)
 CartesianPlot::~CartesianPlot() {
 	if (m_menusInitialized) {
 		delete m_addNewMenu;
+		delete dataAnalysisMenu;
 		delete themeMenu;
 	}
 
@@ -153,8 +155,8 @@ CartesianPlot::~CartesianPlot() {
 /*!
 	initializes all member variables of \c CartesianPlot
 */
-void CartesianPlot::init() {
-	m_coordinateSystems.append(new CartesianCoordinateSystem(this));
+void CartesianPlot::init(bool loading) {
+	// initialize the children objects
 	m_plotArea = new PlotArea(name() + QStringLiteral(" plot area"), this);
 	connect(m_plotArea, &WorksheetElement::changed, this, &WorksheetElement::changed);
 	addChildFast(m_plotArea);
@@ -177,9 +179,6 @@ void CartesianPlot::init() {
 	d->cursorLine->setPrefix(QLatin1String("Cursor"));
 	d->cursorLine->setHidden(true);
 	addChild(d->cursorLine);
-	d->cursorLine->setStyle(Qt::SolidLine);
-	d->cursorLine->setColor(Qt::red); // TODO: use theme specific initial settings
-	d->cursorLine->setWidth(Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point));
 	connect(d->cursorLine, &Line::updatePixmapRequested, [=] {
 		d->update();
 	});
@@ -190,11 +189,21 @@ void CartesianPlot::init() {
 	connect(this, &AbstractAspect::childAspectAdded, this, &CartesianPlot::childAdded);
 	connect(this, &AbstractAspect::childAspectRemoved, this, &CartesianPlot::childRemoved);
 
-	graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, true);
-	graphicsItem()->setFlag(QGraphicsItem::ItemClipsChildrenToShape, true);
-	graphicsItem()->setFlag(QGraphicsItem::ItemIsSelectable, true);
-	graphicsItem()->setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
-	graphicsItem()->setFlag(QGraphicsItem::ItemIsFocusable, true);
+	// if not loading, initialize the default properties (read in load() otherweise)
+	if (loading)
+		return;
+
+	m_coordinateSystems << new CartesianCoordinateSystem(this);
+
+	d->horizontalPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter);
+	d->verticalPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter);
+	d->rightPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter);
+	d->bottomPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter);
+	d->symmetricPadding = true;
+
+	d->cursorLine->setStyle(Qt::SolidLine);
+	d->cursorLine->setColor(Qt::red); // TODO: use theme specific initial settings
+	d->cursorLine->setWidth(Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point));
 
 	// theme is not set at this point, initialize the color palette with default colors
 	this->setColorPalette(KConfig());
@@ -430,7 +439,7 @@ void CartesianPlot::initActions() {
 
 	// bar plots
 	addBarPlotAction = new QAction(QIcon::fromTheme(QStringLiteral("office-chart-bar")), i18n("Bar Plot"), this);
-	addLollipopPlotAction = new QAction(QIcon::fromTheme(QStringLiteral("office-chart-bar")), i18n("Lollipop Plot"), this);
+	addLollipopPlotAction = new QAction(LollipopPlot::staticIcon(), i18n("Lollipop Plot"), this);
 
 	// analysis curves, no icons yet
 	addDataReductionCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Data Reduction"), this);
@@ -606,21 +615,21 @@ void CartesianPlot::initMenus() {
 	m_addNewMenu->addAction(addCurveAction);
 	m_addNewMenu->addAction(addEquationCurveAction);
 
-	auto* addNewStatisticalPlotsMenu = new QMenu(i18n("Statistical Plots"));
+	auto* addNewStatisticalPlotsMenu = new QMenu(i18n("Statistical Plots"), m_addNewMenu);
 	addNewStatisticalPlotsMenu->addAction(addHistogramAction);
 	addNewStatisticalPlotsMenu->addAction(addBoxPlotAction);
 	addNewStatisticalPlotsMenu->addAction(addKDEPlotAction);
 	addNewStatisticalPlotsMenu->addAction(addQQPlotAction);
 	m_addNewMenu->addMenu(addNewStatisticalPlotsMenu);
 
-	auto* addNewBarPlotsMenu = new QMenu(i18n("Bar Plots"));
+	auto* addNewBarPlotsMenu = new QMenu(i18n("Bar Plots"), m_addNewMenu);
 	addNewBarPlotsMenu->addAction(addBarPlotAction);
 	addNewBarPlotsMenu->addAction(addLollipopPlotAction);
 	m_addNewMenu->addMenu(addNewBarPlotsMenu);
 
 	m_addNewMenu->addSeparator();
 
-	addNewAnalysisMenu = new QMenu(i18n("Analysis Curve"));
+	addNewAnalysisMenu = new QMenu(i18n("Analysis Curve"), m_addNewMenu);
 	addNewAnalysisMenu->addAction(addFitCurveAction);
 	addNewAnalysisMenu->addSeparator();
 	addNewAnalysisMenu->addAction(addDifferentiationCurveAction);
@@ -659,8 +668,10 @@ void CartesianPlot::initMenus() {
 	// 	dataManipulationMenu->addAction(addDataOperationAction);
 	// 	dataManipulationMenu->addAction(addDataReductionAction);
 
-	// Data fit menu
-	QMenu* dataFitMenu = new QMenu(i18n("Fit"));
+	// analysis menu
+	dataAnalysisMenu = new QMenu(i18n("Analysis"));
+
+	QMenu* dataFitMenu = new QMenu(i18n("Fit"), dataAnalysisMenu);
 	dataFitMenu->setIcon(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")));
 	dataFitMenu->addAction(addFitActions.at(0));
 	dataFitMenu->addAction(addFitActions.at(1));
@@ -676,10 +687,8 @@ void CartesianPlot::initMenus() {
 	dataFitMenu->addAction(addFitActions.at(9));
 	dataFitMenu->addSeparator();
 	dataFitMenu->addAction(addFitActions.at(10));
-
-	// analysis menu
-	dataAnalysisMenu = new QMenu(i18n("Analysis"));
 	dataAnalysisMenu->addMenu(dataFitMenu);
+
 	dataAnalysisMenu->addSeparator();
 	dataAnalysisMenu->addAction(addDifferentiationAction);
 	dataAnalysisMenu->addAction(addIntegrationAction);
@@ -1916,11 +1925,11 @@ void CartesianPlot::addFitCurve() {
 		curve->initStartValues(curCurve);
 
 		// fit with weights for y if the curve has error bars for y
-		if (curCurve->yErrorType() == XYCurve::ErrorType::Symmetric && curCurve->yErrorPlusColumn()) {
+		if (curCurve->errorBar()->yErrorType() == ErrorBar::ErrorType::Symmetric && curCurve->errorBar()->yPlusColumn()) {
 			auto fitData = curve->fitData();
 			fitData.yWeightsType = nsl_fit_weight_instrumental;
 			curve->setFitData(fitData);
-			curve->setYErrorColumn(curCurve->yErrorPlusColumn());
+			curve->errorBar()->setYPlusColumn(curCurve->errorBar()->yPlusColumn());
 		}
 
 		curve->recalculate();
@@ -2135,7 +2144,9 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 	if (plot) {
 		connect(plot, &WorksheetElement::visibleChanged, this, &CartesianPlot::curveVisibilityChanged);
 		connect(plot, &WorksheetElement::aspectDescriptionChanged, this, &CartesianPlot::updateLegend);
-		connect(plot, &Plot::updateLegendRequested, this, &CartesianPlot::updateLegend);
+		connect(plot, &Plot::legendVisibleChanged, this, &CartesianPlot::updateLegend);
+		connect(plot, &Plot::appearanceChanged, this, &CartesianPlot::updateLegend);
+		connect(plot, &Plot::appearanceChanged, this, QOverload<>::of(&CartesianPlot::plotColorChanged)); // forward to Worksheet to update CursorDock
 
 		connect(plot, &Plot::dataChanged, [this, elem] {
 			this->dataChanged(const_cast<WorksheetElement*>(elem));
@@ -2169,13 +2180,13 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		connect(curve, &XYCurve::xDataChanged, [this, curve]() {
 			this->dataChanged(const_cast<XYCurve*>(curve), Dimension::X);
 		});
-		connect(curve, &XYCurve::xErrorTypeChanged, [this, curve]() {
+		connect(curve->errorBar(), &ErrorBar::xErrorTypeChanged, [this, curve]() {
 			this->dataChanged(const_cast<XYCurve*>(curve), Dimension::X);
 		});
-		connect(curve, &XYCurve::xErrorPlusColumnChanged, [this, curve]() {
+		connect(curve->errorBar(), &ErrorBar::xPlusColumnChanged, [this, curve]() {
 			this->dataChanged(const_cast<XYCurve*>(curve), Dimension::X);
 		});
-		connect(curve, &XYCurve::xErrorMinusColumnChanged, [this, curve]() {
+		connect(curve->errorBar(), &ErrorBar::xMinusColumnChanged, [this, curve]() {
 			this->dataChanged(const_cast<XYCurve*>(curve), Dimension::X);
 		});
 
@@ -2187,19 +2198,18 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		connect(curve, &XYCurve::yDataChanged, [this, curve]() {
 			this->dataChanged(const_cast<XYCurve*>(curve), Dimension::Y);
 		});
-		connect(curve, &XYCurve::yErrorTypeChanged, [this, curve]() {
+		connect(curve->errorBar(), &ErrorBar::yErrorTypeChanged, [this, curve]() {
 			this->dataChanged(const_cast<XYCurve*>(curve), Dimension::Y);
 		});
-		connect(curve, &XYCurve::yErrorPlusColumnChanged, [this, curve]() {
+		connect(curve->errorBar(), &ErrorBar::yPlusColumnChanged, [this, curve]() {
 			this->dataChanged(const_cast<XYCurve*>(curve), Dimension::Y);
 		});
-		connect(curve, &XYCurve::yErrorMinusColumnChanged, [this, curve]() {
+		connect(curve->errorBar(), &ErrorBar::yMinusColumnChanged, [this, curve]() {
 			this->dataChanged(const_cast<XYCurve*>(curve), Dimension::Y);
 		});
 
 		// update the legend on line and symbol properties changes
 		connect(curve, &XYCurve::aspectDescriptionChanged, this, &CartesianPlot::curveNameChanged);
-		connect(curve, &XYCurve::legendVisibleChanged, this, &CartesianPlot::updateLegend);
 		connect(curve, &XYCurve::lineTypeChanged, this, &CartesianPlot::updateLegend);
 
 		// in case the first curve is added, check whether we start plotting datetime data
@@ -2232,10 +2242,6 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 	} else if (axis) {
 		connect(axis, &Axis::shiftSignal, this, &CartesianPlot::axisShiftSignal);
 	} else {
-		const auto* infoElement = dynamic_cast<const InfoElement*>(child);
-		if (infoElement)
-			connect(this, &CartesianPlot::curveRemoved, infoElement, &InfoElement::removeCurve);
-
 		// if an element is hovered, the curves which are handled manually in this class
 		// must be unhovered
 		if (elem)
@@ -2263,7 +2269,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 			WorksheetElementContainer::retransform();
 	}
 
-	if (!this->pasted() && !child->pasted() && !child->isMoved()) {
+	if (!isLoading() && !pasted() && !child->pasted() && !child->isMoved()) {
 		// new child was added which might change the ranges and the axis tick labels.
 		// adjust the plot area padding if the axis label is outside of the plot area
 		if (rangeChanged) {
@@ -2469,12 +2475,12 @@ void CartesianPlot::dataChanged(int xIndex, int yIndex, WorksheetElement* sender
 		if (sender)
 			sender->retransform();
 		else {
-			// no sender available, the function was called directly in the file filter (live data source got new data)
-			// or in Project::load() -> retransform all available curves since we don't know which curves are affected.
+			// no sender available, the function was called directly in the file filter (live data source got new data) or in Project::load()-.
+			// -> recalculate the internal structures in all plots and retransform them since we don't know which plots are affected.
 			// TODO: this logic can be very expensive
-			for (auto* child : children<XYCurve>()) {
-				child->recalcLogicalPoints();
-				child->retransform();
+			for (auto* plot : children<Plot>()) {
+				plot->recalc();
+				plot->retransform();
 			}
 		}
 	}
@@ -2589,9 +2595,9 @@ void CartesianPlot::curveVisibilityChanged() {
 	Q_EMIT curveVisibilityChangedSignal();
 }
 
-void CartesianPlot::curveLinePenChanged(QPen pen) {
-	const auto* curve = qobject_cast<const XYCurve*>(QObject::sender());
-	Q_EMIT curveLinePenChanged(pen, curve->name());
+void CartesianPlot::plotColorChanged() {
+	const auto* curve = qobject_cast<const Plot*>(QObject::sender());
+	Q_EMIT plotColorChanged(curve->color(), curve->name());
 }
 
 void CartesianPlot::setMouseMode(MouseMode mouseMode) {
@@ -3146,6 +3152,12 @@ void CartesianPlot::mouseHoverOutsideDataRect() {
 CartesianPlotPrivate::CartesianPlotPrivate(CartesianPlot* plot)
 	: AbstractPlotPrivate(plot)
 	, q(plot) {
+	setFlag(QGraphicsItem::ItemIsMovable, true);
+	setFlag(QGraphicsItem::ItemClipsChildrenToShape, true);
+	setFlag(QGraphicsItem::ItemIsSelectable, true);
+	setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
+	setFlag(QGraphicsItem::ItemIsFocusable, true);
+
 	m_cursor0Text.prepare();
 	m_cursor1Text.prepare();
 }
@@ -3341,7 +3353,6 @@ void CartesianPlotPrivate::retransformScales(int xIndex, int yIndex) {
  */
 void CartesianPlotPrivate::updateDataRect() {
 	dataRect = mapRectFromScene(rect);
-
 	double paddingLeft = horizontalPadding;
 	double paddingRight = rightPadding;
 	double paddingTop = verticalPadding;
@@ -4815,14 +4826,20 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("defaultCoordinateSystem", defaultCoordinateSystemIndex, int);
 			DEBUG(Q_FUNC_INFO << ", got default cSystem index = " << d->defaultCoordinateSystemIndex)
 
+			// the file can be corrupted, either because of bugs like in
+			// https://invent.kde.org/education/labplot/-/issues/598, https://invent.kde.org/education/labplot/-/issues/869
+			// or because it was manually compromized.
+			// In order not to crash because of the wrong indices, add a safety check here.
+			// TODO: check the ranges and the coordinate system to make sure they're available.
+			if (d->defaultCoordinateSystemIndex > m_coordinateSystems.size() - 1)
+				d->defaultCoordinateSystemIndex = 0;
+
 			READ_DOUBLE_VALUE("horizontalPadding", horizontalPadding);
 			READ_DOUBLE_VALUE("verticalPadding", verticalPadding);
 			READ_DOUBLE_VALUE("rightPadding", rightPadding);
 			READ_DOUBLE_VALUE("bottomPadding", bottomPadding);
 			READ_INT_VALUE("symmetricPadding", symmetricPadding, bool);
 			hasCoordinateSystems = true;
-
-			m_coordinateSystems.clear();
 
 			if (Project::xmlVersion() < 7) {
 				d->niceExtend = true;
@@ -4841,7 +4858,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			if (str.isEmpty())
 				reader->raiseMissingAttributeWarning(QStringLiteral("xIndex"));
 			else {
-				CartesianCoordinateSystem* cSystem{new CartesianCoordinateSystem(this)};
+				auto* cSystem = new CartesianCoordinateSystem(this);
 				cSystem->setIndex(Dimension::X, str.toInt());
 
 				str = attribs.value(QStringLiteral("yIndex")).toString();
@@ -4937,6 +4954,11 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				str = attribs.value(QStringLiteral("yRangeDateTimeFormat")).toString();
 				if (!str.isEmpty())
 					d->yRanges[0].range.setDateTimeFormat(str);
+
+				auto* cSystem = new CartesianCoordinateSystem(this);
+				cSystem->setIndex(Dimension::X, 0);
+				cSystem->setIndex(Dimension::Y, 0);
+				addCoordinateSystem(cSystem);
 
 				READ_DOUBLE_VALUE("horizontalPadding", horizontalPadding);
 				READ_DOUBLE_VALUE("verticalPadding", verticalPadding);
@@ -5059,7 +5081,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			m_plotArea->setIsLoading(true);
 			m_plotArea->load(reader, preview);
 		} else if (!preview && reader->name() == QLatin1String("axis")) {
-			auto* axis = new Axis(QString());
+			auto* axis = new Axis(QString(), Axis::Orientation::Horizontal, true);
 			axis->setIsLoading(true);
 			if (axis->load(reader, preview))
 				addChildFast(axis);
@@ -5068,7 +5090,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				return false;
 			}
 		} else if (reader->name() == QLatin1String("xyCurve")) {
-			auto* curve = new XYCurve(QString());
+			auto* curve = new XYCurve(QString(), AspectType::XYCurve, true);
 			curve->setIsLoading(true);
 			if (curve->load(reader, preview))
 				addChildFast(curve);
@@ -5194,7 +5216,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				return false;
 			}
 		} else if (!preview && reader->name() == QLatin1String("customPoint")) {
-			auto* point = new CustomPoint(this, QString());
+			auto* point = new CustomPoint(this, QString(), true);
 			point->setIsLoading(true);
 			if (point->load(reader, preview))
 				addChildFast(point);
@@ -5203,7 +5225,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				return false;
 			}
 		} else if (!preview && reader->name() == QLatin1String("referenceLine")) {
-			auto* line = new ReferenceLine(this, QString());
+			auto* line = new ReferenceLine(this, QString(), true);
 			line->setIsLoading(true);
 			if (line->load(reader, preview))
 				addChildFast(line);
@@ -5212,7 +5234,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				return false;
 			}
 		} else if (!preview && reader->name() == QLatin1String("referenceRange")) {
-			auto* range = new ReferenceRange(this, QString());
+			auto* range = new ReferenceRange(this, QString(), true);
 			range->setIsLoading(true);
 			if (range->load(reader, preview))
 				addChildFast(range);
@@ -5221,7 +5243,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				return false;
 			}
 		} else if (reader->name() == QLatin1String("boxPlot")) {
-			auto* boxPlot = new BoxPlot(QStringLiteral("BoxPlot"));
+			auto* boxPlot = new BoxPlot(QStringLiteral("BoxPlot"), true);
 			boxPlot->setIsLoading(true);
 			if (boxPlot->load(reader, preview))
 				addChildFast(boxPlot);
@@ -5248,7 +5270,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				return false;
 			}
 		} else if (reader->name() == QLatin1String("Histogram")) {
-			auto* hist = new Histogram(QStringLiteral("Histogram"));
+			auto* hist = new Histogram(QStringLiteral("Histogram"), true);
 			hist->setIsLoading(true);
 			if (hist->load(reader, preview))
 				addChildFast(hist);
@@ -5279,13 +5301,6 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				return false;
 		}
 	}
-
-	// the file can be corrupted, either because of bugs like in
-	// https://invent.kde.org/education/labplot/-/issues/598 or because it was manually compromized.
-	// In order not to crash because of the wrong indices, add a safety check here.
-	// TODO: check the ranges and the coordinate system to make sure they're available.
-	if (d->defaultCoordinateSystemIndex > m_coordinateSystems.size() - 1)
-		d->defaultCoordinateSystemIndex = 0;
 
 	if (preview)
 		return true;

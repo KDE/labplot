@@ -1,10 +1,10 @@
 /*
-	File                 : PartMdiView.cpp
+	File                 : ContentDockWidget.cpp
 	Project              : LabPlot
-	Description          : QMdiSubWindow wrapper for aspect views.
+	Description          : ads::CDockWidget wrapper for aspect views.
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2013-2019 Alexander Semke <alexander.semke@web.de>
-	SPDX-FileCopyrightText: 2007, 2008 Tilman Benkert <thzs@gmx.net>
+	SPDX-FileCopyrightText: 2013-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2023 Martin Marmsoler <martin.marmsoler@gmail.com>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -12,18 +12,14 @@
 #include "backend/core/AbstractPart.h"
 #include "backend/worksheet/Worksheet.h"
 
-#include <DockWidget.h>
-
-#include <QCloseEvent>
-#include <QIcon>
 #include <QUuid>
 
 /*!
- * \class PartMdiView
+ * \class ContentDockWidget
  *
- * \brief QMdiSubWindow wrapper for aspect views.
+ * \brief ads::CDockWidget wrapper for aspect views.
  *
- * In addition to the functionality provided by QMdiSubWindow,
+ * In addition to the functionality provided by ads::CDockWidget,
  * this class automatically updates the window title when AbstractAspect::caption() is changed
  * and holds the connection to the actual data visualized in this window via the pointer to \c AbstractPart.
  */
@@ -36,6 +32,7 @@ ContentDockWidget::ContentDockWidget(AbstractPart* part)
 
 	// resize the MDI sub window to fit the content of the view
 	resize(m_part->view()->size());
+
 	// Must be unique and must not be changed after the dock was added to the dockmanager, because
 	// the objectname is used in the content manager map
 	setObjectName(m_part->uuid().toString());

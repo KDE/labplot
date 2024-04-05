@@ -133,5 +133,6 @@ protected:
 			QVERIFY(!gsl_fcmp(actual, expected, delta));
 		}
 	}
+	static void listStack(QUndoStack* stack);
 };
 #endif

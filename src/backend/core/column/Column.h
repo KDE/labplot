@@ -13,6 +13,7 @@
 #define COLUMN_H
 
 #include "backend/core/AbstractColumn.h"
+#include <QPixmap>
 
 class AbstractSimpleFilter;
 class CartesianPlot;
@@ -66,6 +67,7 @@ public:
 	bool isReadOnly() const override;
 	void resizeTo(int);
 	int rowCount() const override;
+	int rowCount(double min, double max) const override;
 	int availableRowCount(int max = -1) const override;
 	int width() const;
 	void setWidth(const int);
@@ -137,6 +139,8 @@ public:
 	void setData(void*);
 	bool hasValues() const;
 	bool valueLabelsInitialized() const;
+	double valueLabelsMinimum() const;
+	double valueLabelsMaximum() const;
 	void setLabelsMode(ColumnMode mode);
 	void removeValueLabel(const QString&);
 	void valueLabelsRemoveAll();
@@ -190,7 +194,6 @@ public:
 
 	void setChanged();
 	void setSuppressDataChangedSignal(const bool);
-
 	void addUsedInPlots(QVector<CartesianPlot*>&);
 
 	// Value Labels
@@ -201,6 +204,10 @@ public:
 	};
 	AbstractColumn::ColumnMode labelsMode() const;
 	int valueLabelsCount() const;
+	int valueLabelsCount(double min, double max) const;
+	int valueLabelsIndexForValue(double x) const;
+	double valueLabelsValueAt(int index) const;
+	QString valueLabelAt(int index) const;
 	void addValueLabel(qint64, const QString&);
 	const QVector<ValueLabel<qint64>>* bigIntValueLabels() const;
 	void addValueLabel(int, const QString&);
@@ -219,6 +226,11 @@ public:
 public Q_SLOTS:
 	void pasteData();
 	void updateFormula();
+	void setSparkline(const QPixmap&);
+	QPixmap sparkline();
+
+protected:
+	void handleAspectUpdated(const QString& aspectPath, const AbstractAspect*);
 
 private:
 	bool XmlReadInputFilter(XmlStreamReader*);
@@ -237,6 +249,8 @@ private:
 	ColumnPrivate* d;
 	ColumnStringIO* m_string_io;
 
+	QPixmap m_sparkline;
+
 Q_SIGNALS:
 	void requestProjectContextMenu(QMenu*);
 	void formulaChanged(const AbstractColumn*);
@@ -250,6 +264,7 @@ private Q_SLOTS:
 	friend class ColumnStringIO;
 	friend class ColumnRemoveRowsCmd;
 	friend class ColumnInsertRowsCmd;
+	friend class Project; // requires handleAspectUpdated()
 };
 
 #endif

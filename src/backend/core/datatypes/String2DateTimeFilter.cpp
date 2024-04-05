@@ -75,14 +75,14 @@ QDateTime String2DateTimeFilter::dateTimeAt(int row) const {
 		time_string = date_string;
 
 	// try to find a valid date
-	for (const auto& format : AbstractColumn::dateFormats()) {
-		date_result = QDate::fromString(date_string, format);
+	for (const auto& dateFormat : AbstractColumn::dateFormats()) {
+		date_result = QDate::fromString(date_string, dateFormat);
 		if (date_result.isValid())
 			break;
 	}
 	// try to find a valid time
-	for (const auto& format : AbstractColumn::timeFormats()) {
-		time_result = QTime::fromString(time_string, format);
+	for (const auto& timeFormat : AbstractColumn::timeFormats()) {
+		time_result = QTime::fromString(time_string, timeFormat);
 		if (time_result.isValid())
 			break;
 	}

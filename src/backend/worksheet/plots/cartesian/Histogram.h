@@ -4,7 +4,7 @@
 	Description          : Histogram
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2016 Anu Mittal <anu22mittal@gmail.com>
-	SPDX-FileCopyrightText: 2018-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2018-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -16,6 +16,8 @@
 class AbstractColumn;
 class HistogramPrivate;
 class Background;
+class ErrorBar;
+class ErrorBarStyle;
 class Line;
 class Symbol;
 class Value;
@@ -30,19 +32,14 @@ class Histogram : public Plot {
 
 public:
 	friend class HistogramSetDataColumnCmd;
-	friend class HistogramSetErrorPlusColumnCmd;
-	friend class HistogramSetErrorMinusColumnCmd;
-
 	enum Type { Ordinary, Cumulative, AvgShift };
-	enum Orientation { Vertical, Horizontal };
 	enum Normalization { Count, Probability, CountDensity, ProbabilityDensity };
 	enum BinningMethod { ByNumber, ByWidth, SquareRoot, Rice, Sturges, Doane, Scott };
 	enum LineType { NoLine, Bars, Envelope, DropLines, HalfBars };
 	enum ValuesType { NoValues, ValuesBinEntries, ValuesCustomColumn };
 	enum ValuesPosition { ValuesAbove, ValuesUnder, ValuesLeft, ValuesRight };
-	enum ErrorType { NoError, Poisson, CustomSymmetric, CustomAsymmetric };
 
-	explicit Histogram(const QString& name);
+	explicit Histogram(const QString& name, bool loading = false);
 	~Histogram() override;
 
 	QIcon icon() const override;
@@ -51,6 +48,10 @@ public:
 	bool load(XmlStreamReader*, bool preview) override;
 	void loadThemeConfig(const KConfig&) override;
 	void saveThemeConfig(const KConfig&) override;
+
+	void retransform() override;
+	void recalc() override;
+	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
 
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, dataColumn, DataColumn)
 	CLASS_D_ACCESSOR_DECL(QString, dataColumnPath, DataColumnPath)
@@ -69,14 +70,7 @@ public:
 	Background* background() const;
 	Symbol* symbol() const;
 	Value* value() const;
-
-	// error bars
-	BASIC_D_ACCESSOR_DECL(ErrorType, errorType, ErrorType)
-	POINTER_D_ACCESSOR_DECL(const AbstractColumn, errorPlusColumn, ErrorPlusColumn)
-	CLASS_D_ACCESSOR_DECL(QString, errorPlusColumnPath, ErrorPlusColumnPath)
-	POINTER_D_ACCESSOR_DECL(const AbstractColumn, errorMinusColumn, ErrorMinusColumn)
-	CLASS_D_ACCESSOR_DECL(QString, errorMinusColumnPath, ErrorMinusColumnPath)
-	Line* errorBarsLine() const;
+	ErrorBar* errorBar() const;
 
 	// margin plots
 	BASIC_D_ACCESSOR_DECL(bool, rugEnabled, RugEnabled)
@@ -87,6 +81,8 @@ public:
 	double minimum(CartesianCoordinateSystem::Dimension) const override;
 	double maximum(CartesianCoordinateSystem::Dimension) const override;
 	bool hasData() const override;
+	bool usingColumn(const Column*) const override;
+	QColor color() const override;
 
 	const AbstractColumn* bins() const;
 	const AbstractColumn* binValues() const;
@@ -96,9 +92,6 @@ public:
 	typedef HistogramPrivate Private;
 
 public Q_SLOTS:
-	void retransform() override;
-	void recalc();
-	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
 	void createDataSpreadsheet();
 
 private Q_SLOTS:
@@ -106,24 +99,16 @@ private Q_SLOTS:
 	void updateErrorBars();
 
 	void dataColumnAboutToBeRemoved(const AbstractAspect*);
-	void dataColumnNameChanged();
-
-	void errorPlusColumnAboutToBeRemoved(const AbstractAspect*);
-	void errorPlusColumnNameChanged();
-
-	void errorMinusColumnAboutToBeRemoved(const AbstractAspect*);
-	void errorMinusColumnNameChanged();
 
 protected:
 	Histogram(const QString& name, HistogramPrivate* dd);
+	virtual void handleAspectUpdated(const QString& aspectPath, const AbstractAspect*) override;
 
 private:
 	Q_DECLARE_PRIVATE(Histogram)
-	void init();
+	void init(bool loading = false);
 	void initActions();
 	void connectDataColumn(const AbstractColumn*);
-	void connectErrorPlusColumn(const AbstractColumn*);
-	void connectErrorMinusColumn(const AbstractColumn*);
 
 Q_SIGNALS:
 	// General-Tab
@@ -139,13 +124,6 @@ Q_SIGNALS:
 	void autoBinRangesChanged(bool);
 	void binRangesMinChanged(double);
 	void binRangesMaxChanged(double);
-
-	// Error bars
-	void errorTypeChanged(Histogram::ErrorType);
-	void errorPlusDataChanged();
-	void errorPlusColumnChanged(const AbstractColumn*);
-	void errorMinusDataChanged();
-	void errorMinusColumnChanged(const AbstractColumn*);
 
 	// Margin Plots
 	void rugEnabledChanged(bool);

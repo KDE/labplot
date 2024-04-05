@@ -153,7 +153,7 @@
       <property name="currentIndex">
        <number>0</number>
       </property>
-      <widget class="QWidget" name="tab_3">
+      <widget class="QWidget" name="tabDataPreview">
        <attribute name="title">
         <string>Preview</string>
        </attribute>
@@ -234,7 +234,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="tab_4">
+      <widget class="QWidget" name="tabDataPortion">
        <attribute name="title">
         <string>Data Portion to Read</string>
        </attribute>

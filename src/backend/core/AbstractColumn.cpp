@@ -72,6 +72,7 @@ AbstractColumn::AbstractColumn(const QString& name, AspectType type)
 
 AbstractColumn::~AbstractColumn() {
 	Q_EMIT aboutToBeDestroyed(this);
+	delete d->m_heatmapFormat;
 	delete d;
 }
 
@@ -566,9 +567,15 @@ void AbstractColumn::removeFormat() {
 	exec(new AbstractColumnRemoveHeatmapFormatCmd(d));
 }
 
+/*!
+ * resets the connections for the dependent objects like plots and formulas in other columns
+ * to the dataChanged signal in the current column.
+ */
 void AbstractColumn::reset() {
-	disconnect(this, nullptr, nullptr, nullptr);
+	// don't disconnect from all signals since we'd loose all connections done in AbstractAspect::connectChild().
+	// disconnect from the dataChanged signal only, the reconnect is triggered in Project::descriptionChanged().
 	Q_EMIT aboutToReset(this);
+	disconnect(this, &AbstractColumn::dataChanged, nullptr, nullptr);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

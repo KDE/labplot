@@ -35,8 +35,8 @@ public:
 	~WorksheetElement() override;
 
 	enum class Orientation { Horizontal, Vertical, Both };
-	enum class HorizontalPosition { Left, Center, Right, Custom };
-	enum class VerticalPosition { Top, Center, Bottom, Custom };
+	enum class HorizontalPosition { Left, Center, Right, Relative }; // Relative: relative to plot area
+	enum class VerticalPosition { Top, Center, Bottom, Relative };
 
 	enum class HorizontalAlignment { Left, Center, Right };
 	enum class VerticalAlignment { Top, Center, Bottom };
@@ -53,7 +53,7 @@ public:
 			, positionLimit(limit) {
 		}
 
-		QPointF point;
+		QPointF point; // range [0 .. 1] for relative position
 		HorizontalPosition horizontalPosition{HorizontalPosition::Center};
 		VerticalPosition verticalPosition{VerticalPosition::Center};
 		PositionLimit positionLimit{PositionLimit::None};
@@ -129,6 +129,9 @@ protected:
 	CartesianPlot* m_plot{nullptr};
 	const CartesianCoordinateSystem* cSystem{nullptr}; // current cSystem
 
+	virtual void handleAspectUpdated(const QString& path, const AbstractAspect*);
+	friend class Project;
+
 public Q_SLOTS:
 	virtual void retransform() = 0;
 
@@ -174,10 +177,6 @@ Q_SIGNALS:
 
 	void hovered();
 	void unhovered();
-	// needed in the worksheet info element, because execMoveInFrontOf and execMoveBehind
-	// call also child removed but this is only temporary
-	void moveBegin(); // called, at the begin of execMoveInFrontOf or execMoveBehind is called
-	void moveEnd(); // called, at the end of execMoveInFrontOf or execMoveBehind is called
 
 	void plotRangeListChanged();
 

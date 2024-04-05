@@ -40,9 +40,6 @@ private:
 
 private Q_SLOTS:
 	// SLOTs for changes triggered in ReferenceRangeDock
-	void visibilityChanged(bool);
-
-	// Position
 	void orientationChanged(int);
 	void positionLogicalStartChanged(double);
 	void positionLogicalEndChanged(double);
@@ -50,10 +47,6 @@ private Q_SLOTS:
 	void positionLogicalDateTimeEndChanged(qint64);
 
 	// SLOTs for changes triggered in ReferenceRange
-	void updatePlotRanges() override;
-	void rangeVisibilityChanged(bool);
-
-	// Position
 	void rangePositionLogicalStartChanged(const QPointF&);
 	void rangePositionLogicalEndChanged(const QPointF&);
 	void rangeOrientationChanged(ReferenceRange::Orientation);

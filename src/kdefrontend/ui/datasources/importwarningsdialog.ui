@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>ImportErrorDialog</class>
- <widget class="QDialog" name="ImportErrorDialog">
+ <class>ImportWarningsDialog</class>
+ <widget class="QDialog" name="ImportWarningsDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,11 +11,11 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Parse Errors</string>
+   <string>Import Warnings</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QListWidget" name="lwErrors"/>
+    <widget class="QListWidget" name="lwWarnings"/>
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">

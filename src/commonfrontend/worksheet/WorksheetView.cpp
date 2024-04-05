@@ -722,87 +722,7 @@ void WorksheetView::drawForeground(QPainter* painter, const QRectF& rect) {
 
 void WorksheetView::drawBackgroundItems(QPainter* painter, const QRectF& scene_rect) {
 	// canvas
-	const auto* background = m_worksheet->background();
-	painter->setOpacity(background->opacity());
-	if (background->type() == Background::Type::Color) {
-		switch (background->colorStyle()) {
-		case Background::ColorStyle::SingleColor: {
-			painter->setBrush(QBrush(background->firstColor()));
-			break;
-		}
-		case Background::ColorStyle::HorizontalLinearGradient: {
-			QLinearGradient linearGrad(scene_rect.topLeft(), scene_rect.topRight());
-			linearGrad.setColorAt(0, background->firstColor());
-			linearGrad.setColorAt(1, background->secondColor());
-			painter->setBrush(QBrush(linearGrad));
-			break;
-		}
-		case Background::ColorStyle::VerticalLinearGradient: {
-			QLinearGradient linearGrad(scene_rect.topLeft(), scene_rect.bottomLeft());
-			linearGrad.setColorAt(0, background->firstColor());
-			linearGrad.setColorAt(1, background->secondColor());
-			painter->setBrush(QBrush(linearGrad));
-			break;
-		}
-		case Background::ColorStyle::TopLeftDiagonalLinearGradient: {
-			QLinearGradient linearGrad(scene_rect.topLeft(), scene_rect.bottomRight());
-			linearGrad.setColorAt(0, background->firstColor());
-			linearGrad.setColorAt(1, background->secondColor());
-			painter->setBrush(QBrush(linearGrad));
-			break;
-		}
-		case Background::ColorStyle::BottomLeftDiagonalLinearGradient: {
-			QLinearGradient linearGrad(scene_rect.bottomLeft(), scene_rect.topRight());
-			linearGrad.setColorAt(0, background->firstColor());
-			linearGrad.setColorAt(1, background->secondColor());
-			painter->setBrush(QBrush(linearGrad));
-			break;
-		}
-		case Background::ColorStyle::RadialGradient: {
-			QRadialGradient radialGrad(scene_rect.center(), scene_rect.width() / 2);
-			radialGrad.setColorAt(0, background->firstColor());
-			radialGrad.setColorAt(1, background->secondColor());
-			painter->setBrush(QBrush(radialGrad));
-			break;
-		}
-			// default:
-			//	painter->setBrush(QBrush(m_worksheet->backgroundFirstColor()));
-		}
-		painter->drawRect(scene_rect);
-	} else if (background->type() == Background::Type::Image) { // background image
-		const QString& backgroundFileName = background->fileName().trimmed();
-		if (!backgroundFileName.isEmpty()) {
-			QPixmap pix(backgroundFileName);
-			switch (background->imageStyle()) {
-			case Background::ImageStyle::ScaledCropped:
-				pix = pix.scaled(scene_rect.size().toSize(), Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
-				painter->drawPixmap(scene_rect.topLeft(), pix);
-				break;
-			case Background::ImageStyle::Scaled:
-				pix = pix.scaled(scene_rect.size().toSize(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-				painter->drawPixmap(scene_rect.topLeft(), pix);
-				break;
-			case Background::ImageStyle::ScaledAspectRatio:
-				pix = pix.scaled(scene_rect.size().toSize(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
-				painter->drawPixmap(scene_rect.topLeft(), pix);
-				break;
-			case Background::ImageStyle::Centered:
-				painter->drawPixmap(QPointF(scene_rect.center().x() - pix.size().width() / 2, scene_rect.center().y() - pix.size().height() / 2), pix);
-				break;
-			case Background::ImageStyle::Tiled:
-				painter->drawTiledPixmap(scene_rect, pix);
-				break;
-			case Background::ImageStyle::CenterTiled:
-				painter->drawTiledPixmap(scene_rect, pix, QPoint(scene_rect.size().width() / 2, scene_rect.size().height() / 2));
-				break;
-				// default:
-				//	painter->drawPixmap(scene_rect.topLeft(),pix);
-			}
-		}
-	} else if (background->type() == Background::Type::Pattern) { // background pattern
-		painter->setBrush(QBrush(background->firstColor(), background->brushStyle()));
-		painter->drawRect(scene_rect);
-	}
+	m_worksheet->background()->draw(painter, scene_rect);
 
 	// grid
 	if (m_gridSettings.style != GridStyle::NoGrid && !m_isPrinting) {
@@ -961,12 +881,17 @@ void WorksheetView::zoom(int numSteps) {
 	if (m_numScheduledScalings * numSteps < 0) // if user moved the wheel in another direction, we reset previously scheduled scalings
 		m_numScheduledScalings = numSteps;
 
-	auto* anim = new QTimeLine(350, this);
-	anim->setUpdateInterval(20);
+	if (!m_zoomTimeLine) {
+		m_zoomTimeLine = new QTimeLine(350, this);
+		m_zoomTimeLine->setUpdateInterval(20);
+		connect(m_zoomTimeLine, &QTimeLine::valueChanged, this, &WorksheetView::scalingTime);
+		connect(m_zoomTimeLine, &QTimeLine::finished, this, &WorksheetView::animFinished);
+	}
 
-	connect(anim, &QTimeLine::valueChanged, this, &WorksheetView::scalingTime);
-	connect(anim, &QTimeLine::finished, this, &WorksheetView::animFinished);
-	anim->start();
+	if (m_zoomTimeLine->state() == QTimeLine::Running)
+		m_zoomTimeLine->stop();
+
+	m_zoomTimeLine->start();
 }
 
 void WorksheetView::scalingTime() {
@@ -979,7 +904,6 @@ void WorksheetView::animFinished() {
 		m_numScheduledScalings--;
 	else
 		m_numScheduledScalings++;
-	sender()->~QObject();
 
 	updateLabelsZoom();
 }
@@ -1484,14 +1408,14 @@ void WorksheetView::addNew(QAction* action) {
 	// if there is already an element fading in, stop the time line and show the element with the full opacity.
 	if (m_fadeInTimeLine->state() == QTimeLine::Running) {
 		m_fadeInTimeLine->stop();
-		auto* effect = new QGraphicsOpacityEffect();
+		auto* effect = new QGraphicsOpacityEffect(this);
 		effect->setOpacity(1);
 		lastAddedWorksheetElement->graphicsItem()->setGraphicsEffect(effect);
 	}
 
 	// create the opacity effect and start the actual fade-in
 	lastAddedWorksheetElement = aspect;
-	auto* effect = new QGraphicsOpacityEffect();
+	auto* effect = new QGraphicsOpacityEffect(this);
 	effect->setOpacity(0);
 	lastAddedWorksheetElement->graphicsItem()->setGraphicsEffect(effect);
 	m_fadeInTimeLine->start();
@@ -2150,8 +2074,8 @@ void WorksheetView::handleCartesianPlotActions() {
 		cartesianPlotZoomXSelectionModeAction->setChecked(false);
 		cartesianPlotZoomYSelectionModeAction->setEnabled(false);
 		cartesianPlotZoomYSelectionModeAction->setChecked(false);
-		for (auto* plot : m_worksheet->children<CartesianPlot>())
-			plot->setMouseMode(CartesianPlot::MouseMode::Selection);
+		for (auto* p : m_worksheet->children<CartesianPlot>())
+			p->setMouseMode(CartesianPlot::MouseMode::Selection);
 		zoomInAction->setEnabled(false);
 		zoomOutAction->setEnabled(false);
 		zoomInXAction->setEnabled(false);
@@ -2294,6 +2218,7 @@ void WorksheetView::exportToFile(const QString& path, const ExportFormat format,
 
 void WorksheetView::exportToPixmap(QPixmap& pixmap) {
 	const auto& sourceRect = scene()->sceneRect();
+
 	int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Unit::Millimeter);
 	int h = Worksheet::convertFromSceneUnits(sourceRect.height(), Worksheet::Unit::Millimeter);
 	w = w * QApplication::primaryScreen()->physicalDotsPerInchX() / 25.4;

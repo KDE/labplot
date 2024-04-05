@@ -10,9 +10,12 @@
 #ifndef PLOT_H
 #define PLOT_H
 
+#include "backend/lib/macros.h"
 #include "backend/worksheet/WorksheetElement.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 
+class AbstractColumn;
+class Column;
 class PlotPrivate;
 class QPointF;
 
@@ -22,11 +25,25 @@ class Plot : public WorksheetElement {
 public:
 	virtual ~Plot();
 
+	BASIC_D_ACCESSOR_DECL(bool, legendVisible, LegendVisible)
 	virtual bool minMax(const CartesianCoordinateSystem::Dimension dim, const Range<int>& indexRange, Range<double>& r, bool includeErrorBars = true) const;
 	virtual double minimum(CartesianCoordinateSystem::Dimension dim) const = 0;
 	virtual double maximum(CartesianCoordinateSystem::Dimension dim) const = 0;
 	virtual bool hasData() const = 0;
 	bool activatePlot(QPointF mouseScenePos, double maxDist = -1);
+	virtual QColor color() const = 0; // Color of the plot. If the plot consists multiple colors, return the main Color (This is used in the cursor dock as
+									  // background color for example)
+
+	/*!
+	 * returns \c true if the column is used internally in the plot for the visualisation, returns \c false otherwise.
+	 */
+	virtual bool usingColumn(const Column*) const = 0;
+
+	/*!
+	 * recalculates the internal structures (additional data containers, drawing primitives, etc.) on data changes in the source data colums.
+	 * these structures are used in the plot during the actual drawing of the plot on geometry changes.
+	 */
+	virtual void recalc() = 0;
 
 	typedef PlotPrivate Private;
 
@@ -39,7 +56,8 @@ protected:
 
 Q_SIGNALS:
 	void dataChanged(); // emitted when the data to be plotted was changed to re-adjust the parent plot area
-	void updateLegendRequested();
+	void appearanceChanged();
+	void legendVisibleChanged(bool);
 };
 
 #endif

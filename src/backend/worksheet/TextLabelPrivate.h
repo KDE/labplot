@@ -39,7 +39,7 @@ public:
 	TextLabel::TextWrapper textWrapper;
 	QFont teXFont{QStringLiteral("Computer Modern"), 12}; // reasonable default font and size
 	QColor fontColor{Qt::black}; // used only by the theme for unformatted text. The text font is in the HTML and so this variable is never set
-	QColor backgroundColor{Qt::white}; // same as fontColor
+	QColor backgroundColor{Qt::transparent}; // same as fontColor
 	QImage teXImage;
 	QByteArray teXPdfData;
 	QFutureWatcher<QByteArray> teXImageFutureWatcher;
@@ -65,19 +65,16 @@ public:
 
 	ScaledTextItem* m_textItem{nullptr};
 
-	QRectF transformedBoundingRectangle; // bounding rectangle of transformed (rotated etc.) text
 	QPainterPath borderShapePath;
 	QPainterPath labelShape;
 
 	// reimplemented from QGraphicsItem
-	QRectF boundingRect() const override;
 	QPainterPath shape() const override;
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* = nullptr) override;
 	TextLabel* const q{nullptr};
 
 	// used in the InfoElement (Marker) to attach the line to the label
 	QVector<TextLabel::GluePoint> m_gluePoints;
-	QVector<TextLabel::GluePoint> m_gluePointsTransformed;
 };
 
 #endif

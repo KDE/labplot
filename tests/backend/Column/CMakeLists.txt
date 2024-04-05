@@ -1,5 +1,11 @@
-add_executable (ColumnTest ColumnTest.cpp)
+option(ENABLE_TEST_BACKEND_COLUMN "Enable Column Tests" ON)
 
-target_link_libraries(ColumnTest labplot2backendlib labplot2lib labplot2nsllib labplot2test)
+if (ENABLE_TEST_BACKEND_COLUMN)
 
-add_test(NAME ColumnTest COMMAND ColumnTest)
+    add_executable (ColumnTest ColumnTest.cpp)
+
+    target_link_libraries(ColumnTest labplot2backendlib labplot2lib labplot2nsllib labplot2test)
+
+    add_test(NAME ColumnTest COMMAND ColumnTest)
+
+endif()

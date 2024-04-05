@@ -31,8 +31,7 @@ public:
 	static QString fileInfoString(const QString&);
 
 	QVector<QStringList> preview(const QString& fileName, int lines);
-	void
-	readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace) override;
+	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, ImportMode = ImportMode::Replace) override;
 	void write(const QString& fileName, AbstractDataSource*) override;
 
 	QStringList vectorNames() const;

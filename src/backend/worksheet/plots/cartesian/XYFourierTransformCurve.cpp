@@ -150,6 +150,7 @@ bool XYFourierTransformCurvePrivate::recalculateSpecific(const AbstractColumn* t
 
 	///////////////////////////////////////////////////////////
 	// transform with window
+	gsl_set_error_handler_off();
 	int status = nsl_dft_transform_window(ydata, 1, n, twoSided, type, windowType);
 
 	unsigned int N = n;
@@ -322,7 +323,7 @@ bool XYFourierTransformCurve::load(XmlStreamReader* reader, bool preview) {
 		static_cast<XYCurvePrivate*>(d_ptr)->xColumn = d->xColumn;
 		static_cast<XYCurvePrivate*>(d_ptr)->yColumn = d->yColumn;
 
-		recalcLogicalPoints();
+		recalc();
 	}
 
 	return true;

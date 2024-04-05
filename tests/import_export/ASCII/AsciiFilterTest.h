@@ -89,8 +89,15 @@ private Q_SLOTS:
 	// matrix import
 	void testMatrixHeader();
 
-	// benchmarks
+	// check updates in the dependent objects after the data was modified by the import
+	void spreadsheetFormulaUpdateAfterImport();
+	void spreadsheetFormulaUpdateAfterImportWithColumnRestore();
+	void plotUpdateAfterImport();
+	void plotUpdateAfterImportWithColumnRestore();
+	void plotUpdateAfterImportWithColumnRenaming();
+	void plotUpdateAfterImportWithColumnRemove();
 
+	// benchmarks
 	void benchDoubleImport_data();
 	// this is called multiple times (warm-up of BENCHMARK)
 	// see https://stackoverflow.com/questions/36916962/qtest-executes-test-case-twic
@@ -99,7 +106,7 @@ private Q_SLOTS:
 
 private:
 	QString benchDataFileName;
-	const size_t lines = 1e6;
+	const size_t lines = 1e5;
 	static const int paths = 5;
 };
 #endif

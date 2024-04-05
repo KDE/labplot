@@ -4,7 +4,7 @@
 	Description          : widget for histogram plot properties
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2016 Anu Mittal <anu22mittal@gmail.com>
-	SPDX-FileCopyrightText: 2016-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2016-2024 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -17,6 +17,7 @@
 #include "ui_histogramdock.h"
 
 class BackgroundWidget;
+class ErrorBarWidget;
 class LineWidget;
 class SymbolWidget;
 class ValueWidget;
@@ -32,12 +33,9 @@ public:
 	void setCurves(QList<Histogram*>);
 
 private:
-	TreeViewComboBox* cbDataColumn;
-	TreeViewComboBox* cbErrorPlusColumn;
-	TreeViewComboBox* cbErrorMinusColumn;
+	TreeViewComboBox* cbDataColumn{nullptr};
 
 	void updateValuesWidgets();
-	void updatePlotRanges() override;
 	void updateLocale() override;
 	void load();
 	void loadConfig(KConfig&);
@@ -48,8 +46,7 @@ protected:
 	LineWidget* lineWidget{nullptr};
 	SymbolWidget* symbolWidget{nullptr};
 	ValueWidget* valueWidget{nullptr};
-	LineWidget* errorBarsLineWidget{nullptr};
-
+	ErrorBarWidget* errorBarWidget{nullptr};
 	QList<Histogram*> m_curvesList;
 	Histogram* m_curve{nullptr};
 
@@ -63,7 +60,6 @@ private Q_SLOTS:
 
 	// General-Tab
 	void dataColumnChanged(const QModelIndex&);
-	void visibilityChanged(bool);
 	void typeChanged(int);
 	void orientationChanged(int);
 	void normalizationChanged(int);
@@ -75,11 +71,6 @@ private Q_SLOTS:
 	void binRangesMaxChanged(double);
 	void binRangesMinDateTimeChanged(qint64);
 	void binRangesMaxDateTimeChanged(qint64);
-
-	//"Error bars"-Tab
-	void errorTypeChanged(int);
-	void errorPlusColumnChanged(const QModelIndex&);
-	void errorMinusColumnChanged(const QModelIndex&);
 
 	//"Margin Plots"-Tab
 	void rugEnabledChanged(bool);
@@ -99,12 +90,6 @@ private Q_SLOTS:
 	void curveAutoBinRangesChanged(bool);
 	void curveBinRangesMinChanged(double);
 	void curveBinRangesMaxChanged(double);
-	void curveVisibilityChanged(bool);
-
-	//"Error bars"-Tab
-	void curveErrorTypeChanged(Histogram::ErrorType);
-	void curveErrorPlusColumnChanged(const AbstractColumn*);
-	void curveErrorMinusColumnChanged(const AbstractColumn*);
 
 	//"Margin Plots"-Tab
 	void curveRugEnabledChanged(bool);

@@ -33,7 +33,11 @@ BaseDock::BaseDock(QWidget* parent)
 }
 
 void BaseDock::setPlotRangeCombobox(QComboBox* cb) {
+	if (m_cbPlotRangeList)
+		disconnect(m_cbPlotRangeList, nullptr, this, nullptr);
+
 	m_cbPlotRangeList = cb;
+	connect(m_cbPlotRangeList, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BaseDock::plotRangeChanged);
 }
 
 BaseDock::~BaseDock() {
@@ -47,7 +51,7 @@ BaseDock::~BaseDock() {
  * the default value is 1.2 to make the comment field looking slightly bigger so the user can realize a multi-line text can be
  * enterede in this field.
  */
-void BaseDock::setBaseWidgets(QLineEdit* nameLabel, ResizableTextEdit* commentLabel, double commentHeightFactorNameLabel) {
+void BaseDock::setBaseWidgets(TimedLineEdit* nameLabel, ResizableTextEdit* commentLabel, double commentHeightFactorNameLabel) {
 	if (m_leName)
 		disconnect(m_leName, nullptr, this, nullptr);
 	if (m_teComment)
@@ -60,11 +64,25 @@ void BaseDock::setBaseWidgets(QLineEdit* nameLabel, ResizableTextEdit* commentLa
 	Q_ASSERT(m_teComment);
 
 	connect(m_teComment, &QTextEdit::textChanged, this, &BaseDock::commentChanged);
-	connect(m_leName, &QLineEdit::textChanged, this, &BaseDock::nameChanged);
+	connect(m_leName, &TimedLineEdit::textChanged, this, &BaseDock::nameChanged);
 
 	// adjust the height of the TextEdit for the comment since it's default value
 	// is too high and we want to set it to a more reasonable value
 	m_teComment->setFixedHeight(commentHeightFactorNameLabel * m_leName->height());
+}
+
+void BaseDock::setVisibilityWidgets(QCheckBox* visible, QCheckBox* legendVisible) {
+	if (m_chkVisible)
+		disconnect(m_chkVisible, nullptr, this, nullptr);
+	if (m_chkLegendVisible)
+		disconnect(m_chkLegendVisible, nullptr, this, nullptr);
+
+	m_chkVisible = visible;
+	m_chkLegendVisible = legendVisible;
+
+	connect(m_chkVisible, &QCheckBox::clicked, this, &BaseDock::visibleChanged);
+	if (m_chkLegendVisible)
+		connect(m_chkLegendVisible, &QCheckBox::toggled, this, &BaseDock::legendVisibleChanged);
 }
 
 void BaseDock::updatePlotRangeList() {
@@ -101,6 +119,10 @@ void BaseDock::updatePlotRangeList() {
 	m_cbPlotRangeList->setEnabled(cSystemCount == 1 ? false : true);
 }
 
+//*************************************************************
+//******* SLOTs for changes triggered in the dock widget *****
+//*************************************************************
+// used in worksheet element docks
 void BaseDock::plotRangeChanged(int index) {
 	if (m_suppressPlotRetransform)
 		return;
@@ -176,7 +198,7 @@ void BaseDock::plotRangeChanged(int index) {
 }
 
 void BaseDock::nameChanged() {
-	if (m_initializing || !m_aspect)
+	if (m_initializing || !m_aspect || m_aspects.size() > 1)
 		return;
 
 	if (!m_leName) {
@@ -195,7 +217,7 @@ void BaseDock::nameChanged() {
 }
 
 void BaseDock::commentChanged() {
-	if (m_initializing || !m_aspect)
+	if (m_initializing || !m_aspect || m_aspects.size() > 1)
 		return;
 
 	if (!m_teComment) {
@@ -207,8 +229,31 @@ void BaseDock::commentChanged() {
 	m_aspect->setComment(m_teComment->text());
 }
 
+void BaseDock::visibleChanged(bool state) {
+	CONDITIONAL_LOCK_RETURN;
+
+	for (auto* aspect : m_aspects) {
+		auto* we = dynamic_cast<WorksheetElement*>(aspect);
+		if (we)
+			we->setVisible(state);
+	}
+}
+
+void BaseDock::legendVisibleChanged(bool state) {
+	CONDITIONAL_LOCK_RETURN;
+
+	for (auto* aspect : m_aspects) {
+		auto* plot = dynamic_cast<Plot*>(aspect);
+		if (plot)
+			plot->setLegendVisible(state);
+	}
+}
+
+//*************************************************************
+//********** SLOTs for changes triggered in the aspect ********
+//*************************************************************
 void BaseDock::aspectDescriptionChanged(const AbstractAspect* aspect) {
-	if (m_aspect != aspect)
+	if (m_aspect != aspect || m_aspects.size() > 1)
 		return;
 
 	if (!m_leName) {
@@ -229,6 +274,16 @@ void BaseDock::aspectDescriptionChanged(const AbstractAspect* aspect) {
 		if (aspect->comment() != m_teComment->text())
 			m_teComment->document()->setPlainText(aspect->comment());
 	}
+}
+
+void BaseDock::aspectVisibleChanged(bool on) {
+	CONDITIONAL_LOCK_RETURN;
+	m_chkVisible->setChecked(on);
+}
+
+void BaseDock::aspectLegendVisibleChanged(bool on) {
+	CONDITIONAL_LOCK_RETURN;
+	m_chkLegendVisible->setChecked(on);
 }
 
 AspectTreeModel* BaseDock::aspectModel() {

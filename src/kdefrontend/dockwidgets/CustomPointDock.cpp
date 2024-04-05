@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : widget for CustomPoint properties
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2015-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2015-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -21,6 +21,7 @@ CustomPointDock::CustomPointDock(QWidget* parent)
 	ui.setupUi(this);
 	setPlotRangeCombobox(ui.cbPlotRanges);
 	setBaseWidgets(ui.leName, ui.teComment);
+	setVisibilityWidgets(ui.chkVisible);
 
 	//"Symbol"-tab
 	auto* hboxLayout = new QHBoxLayout(ui.tabSymbol);
@@ -53,8 +54,7 @@ CustomPointDock::CustomPointDock(QWidget* parent)
 
 	// SLOTS
 	// General
-	connect(ui.chkVisible, &QCheckBox::clicked, this, &CustomPointDock::visibilityChanged);
-	connect(ui.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CustomPointDock::plotRangeChanged);
+	connect(ui.chbLock, &QCheckBox::clicked, this, &CustomPointDock::lockChanged);
 
 	// positioning
 	connect(ui.chbBindLogicalPos, &QCheckBox::clicked, this, &CustomPointDock::bindingChanged);
@@ -97,7 +97,7 @@ void CustomPointDock::setPoints(QList<CustomPoint*> points) {
 	// show the properties of the first custom point
 	this->load();
 	initConnections();
-	updatePlotRanges(); // needed when loading project
+	updatePlotRangeList(); // needed when loading project
 
 	// for custom points being children of an InfoElement, the position is changed
 	// via the parent settings -> disable the positioning here.
@@ -111,9 +111,7 @@ void CustomPointDock::setPoints(QList<CustomPoint*> points) {
 
 void CustomPointDock::initConnections() const {
 	// SIGNALs/SLOTs
-	//  general
-	connect(m_point, &WorksheetElement::plotRangeListChanged, this, &CustomPointDock::updatePlotRanges);
-	connect(m_point, &CustomPoint::visibleChanged, this, &CustomPointDock::pointVisibilityChanged);
+	connect(m_point, &CustomPoint::lockChanged, this, &CustomPointDock::pointLockChanged);
 	connect(m_point, &CustomPoint::positionChanged, this, &CustomPointDock::pointPositionChanged);
 	connect(m_point, &CustomPoint::positionLogicalChanged, this, &CustomPointDock::pointPositionLogicalChanged);
 	connect(m_point, &CustomPoint::coordinateBindingEnabledChanged, this, &CustomPointDock::pointCoordinateBindingEnabledChanged);
@@ -129,10 +127,6 @@ void CustomPointDock::updateLocale() {
 	ui.sbPositionXLogical->setLocale(numberLocale);
 	ui.sbPositionYLogical->setLocale(numberLocale);
 	symbolWidget->updateLocale();
-}
-
-void CustomPointDock::updatePlotRanges() {
-	updatePlotRangeList();
 }
 
 //**********************************************************
@@ -226,13 +220,10 @@ void CustomPointDock::positionYLogicalDateTimeChanged(qint64 value) {
 		point->setPositionLogical(pos);
 }
 
-void CustomPointDock::visibilityChanged(bool state) {
+void CustomPointDock::lockChanged(bool locked) {
 	CONDITIONAL_LOCK_RETURN;
-
-	m_point->beginMacro(i18n("%1 CustomPoints: visibility changed", m_points.count()));
 	for (auto* point : m_points)
-		point->setVisible(state);
-	m_point->endMacro();
+		point->setLock(locked);
 }
 
 /*!
@@ -307,9 +298,9 @@ void CustomPointDock::pointPositionLogicalChanged(QPointF pos) {
 	ui.dtePositionYLogical->setMSecsSinceEpochUTC(pos.y());
 }
 
-void CustomPointDock::pointVisibilityChanged(bool on) {
+void CustomPointDock::pointLockChanged(bool on) {
 	CONDITIONAL_LOCK_RETURN;
-	ui.chkVisible->setChecked(on);
+	ui.chbLock->setChecked(on);
 }
 
 //**********************************************************
@@ -373,6 +364,8 @@ void CustomPointDock::load() {
 		ui.lPositionYLogicalDateTime->hide();
 		ui.dtePositionYLogical->hide();
 	}
+
+	ui.chbLock->setChecked(m_point->isLocked());
 	ui.chkVisible->setChecked(m_point->isVisible());
 }
 

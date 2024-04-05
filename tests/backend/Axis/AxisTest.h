@@ -1,15 +1,15 @@
 /*
-	File                 : WorksheetElementTest.h
+	File                 : AxisTest.h
 	Project              : LabPlot
-	Description          : Tests for WorksheetElements in the graphical representation sense
+	Description          : Tests for Axis methods
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2022 Martin Marmsoler <martin.marmsoler@gmail.com>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-#ifndef WORKSHEETELEMENTTEST_H
-#define WORKSHEETELEMENTTEST_H
+#ifndef AXISTEST_H
+#define AXISTEST_H
 
 #include "../../CommonTest.h"
 
@@ -38,24 +38,9 @@ private Q_SLOTS:
 	void automaticTicNumberUpdateDockMinorTicks();
 
 	void columnLabelValues();
+	void columnLabelValuesMaxValues();
 
 	void customTextLabels();
-
-	void dateTime();
-	void dateTimeSpacing();
-	void dateTimeSpacingOffsetNonZero();
-	void dateTimeSpacingStartValueNonZero();
-
-	void numeric();
-	void numericSpacing();
-	void numericSpacingOffsetNonZero();
-	void numericSpacingStartValueNonZero();
-
-	void customColumnNumeric();
-	void customColumnDateTime();
-
-	void autoScale();
-	void autoScale2();
 };
 
-#endif // WORKSHEETELEMENTTEST_H
+#endif // AXISTEST_H

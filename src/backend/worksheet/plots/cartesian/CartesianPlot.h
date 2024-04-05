@@ -41,7 +41,7 @@ class CartesianPlot : public AbstractPlot {
 	Q_OBJECT
 
 public:
-	explicit CartesianPlot(const QString& name);
+	explicit CartesianPlot(const QString& name, bool loading = false);
 	~CartesianPlot() override;
 
 	enum class Type { FourAxes, TwoAxes, TwoAxesCentered, TwoAxesCenteredZero };
@@ -212,7 +212,7 @@ public Q_SLOTS:
 	virtual void retransform() override;
 
 private:
-	void init();
+	void init(bool loading = false);
 	void initActions();
 	void initMenus();
 	void setColorPalette(const KConfig&);
@@ -292,7 +292,7 @@ private:
 
 	friend CartesianPlotDock;
 	friend class CartesianPlotTest;
-	friend class MultiRangeTest;
+	friend class MultiRangeTest2;
 
 public Q_SLOTS:
 	void addHorizontalAxis();
@@ -344,7 +344,7 @@ private Q_SLOTS:
 
 	void dataChanged(WorksheetElement*);
 	void dataChanged(XYCurve*, const Dimension);
-	void curveLinePenChanged(QPen);
+	void plotColorChanged();
 	void curveVisibilityChanged();
 	void boxPlotOrientationChanged(WorksheetElement::Orientation);
 
@@ -387,7 +387,7 @@ Q_SIGNALS:
 	void cursorPosChanged(int cursorNumber, double xPos);
 	void curveAdded(const XYCurve*);
 	void curveRemoved(const XYCurve*);
-	void curveLinePenChanged(QPen, QString curveName);
+	void plotColorChanged(const QColor&, const QString& curveName);
 	void cursorPenChanged(QPen);
 	void curveDataChanged(const XYCurve*);
 	void curveVisibilityChangedSignal();

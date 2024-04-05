@@ -18,6 +18,8 @@ class RetransformTest : public CommonTest {
 
 	// Tests
 private Q_SLOTS:
+	void initTestCase();
+
 	void TestLoadProject();
 	void TestLoadProject2();
 	void TestResizeWindows();
@@ -41,6 +43,9 @@ private Q_SLOTS:
 
 	void testPlotRecalcRetransform();
 	void testPlotRecalcNoRetransform();
+
+	void removeReaddxColum();
+	void removeReaddyColum();
 };
 
 /*!

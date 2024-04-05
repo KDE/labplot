@@ -10,12 +10,11 @@
 #ifndef BOXPLOT_H
 #define BOXPLOT_H
 
-#include "backend/lib/macros.h"
 #include "backend/worksheet/plots/cartesian/Plot.h"
 
-class BoxPlotPrivate;
 class AbstractColumn;
 class Background;
+class BoxPlotPrivate;
 class Line;
 class Symbol;
 
@@ -31,7 +30,7 @@ public:
 	enum class Ordering { None, MedianAscending, MedianDescending, MeanAscending, MeanDescending };
 	enum class WhiskersType { MinMax, IQR, SD, MAD, PERCENTILES_10_90, PERCENTILES_5_95, PERCENTILES_1_99 };
 
-	explicit BoxPlot(const QString&);
+	explicit BoxPlot(const QString&, bool loading = false);
 	~BoxPlot() override;
 
 	QIcon icon() const override;
@@ -79,20 +78,24 @@ public:
 	BASIC_D_ACCESSOR_DECL(double, rugWidth, RugWidth)
 
 	void retransform() override;
+	void recalc() override;
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
 
 	double minimum(CartesianCoordinateSystem::Dimension) const override;
 	double maximum(CartesianCoordinateSystem::Dimension) const override;
 	bool hasData() const override;
+	bool usingColumn(const Column*) const override;
+	QColor color() const override;
 
 	typedef BoxPlotPrivate Private;
 
 protected:
 	BoxPlot(const QString& name, BoxPlotPrivate* dd);
+	virtual void handleAspectUpdated(const QString& aspectPath, const AbstractAspect*) override;
 
 private:
 	Q_DECLARE_PRIVATE(BoxPlot)
-	void init();
+	void init(bool loading = false);
 	void initActions();
 	void initMenus();
 
@@ -101,7 +104,6 @@ private:
 	QMenu* orientationMenu{nullptr};
 
 public Q_SLOTS:
-	void recalc();
 	void createDataSpreadsheet();
 
 private Q_SLOTS:

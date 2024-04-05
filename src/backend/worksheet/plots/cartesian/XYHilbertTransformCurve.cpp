@@ -151,6 +151,7 @@ bool XYHilbertTransformCurvePrivate::recalculateSpecific(const AbstractColumn* t
 	///////////////////////////////////////////////////////////
 	// transform with window
 	//	TODO: type
+	gsl_set_error_handler_off();
 	int status = nsl_hilbert_transform(ydata, 1, n, type);
 
 	unsigned int N = n;
@@ -278,7 +279,7 @@ bool XYHilbertTransformCurve::load(XmlStreamReader* reader, bool preview) {
 		static_cast<XYCurvePrivate*>(d_ptr)->xColumn = d->xColumn;
 		static_cast<XYCurvePrivate*>(d_ptr)->yColumn = d->yColumn;
 
-		recalcLogicalPoints();
+		recalc();
 	}
 
 	return true;

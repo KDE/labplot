@@ -39,7 +39,7 @@ QStringList ImageFilter::importFormats() {
 /*!
   reads the content of the file \c fileName to the data source \c dataSource.
 */
-void ImageFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
+void ImageFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, ImportMode importMode) {
 	d->readDataFromFile(fileName, dataSource, importMode);
 }
 
@@ -115,9 +115,7 @@ ImageFilterPrivate::ImageFilterPrivate(ImageFilter* owner)
 void ImageFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode) {
 	QImage image = QImage(fileName);
 	if (image.isNull() || image.format() == QImage::Format_Invalid) {
-#ifdef QT_DEBUG
-		qDebug() << "failed to read image" << fileName << "or invalid image format";
-#endif
+		q->setLastError(i18n("Empty file or invalid or non-supported format."));
 		return;
 	}
 
@@ -160,9 +158,14 @@ void ImageFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataS
 	// TODO: use given names?
 	QStringList vectorNames;
 
-	if (dataSource)
-		columnOffset = dataSource->prepareImport(dataContainer, mode, actualRows, actualCols, vectorNames, columnModes);
-	else {
+	if (dataSource) {
+		bool ok = false;
+		columnOffset = dataSource->prepareImport(dataContainer, mode, actualRows, actualCols, vectorNames, columnModes, ok);
+		if (!ok) {
+			q->setLastError(i18n("Not enough memory."));
+			return;
+		}
+	} else {
 		DEBUG("data source in image import not defined! Giving up.");
 		return;
 	}

@@ -57,7 +57,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/datasources/ImportDatasetWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/ImportDatasetDialog.cpp
 	${KDEFRONTEND_DIR}/datasources/ImportDialog.cpp
-	${KDEFRONTEND_DIR}/datasources/ImportErrorDialog.cpp
+	${KDEFRONTEND_DIR}/datasources/ImportWarningsDialog.cpp
 	${KDEFRONTEND_DIR}/datasources/ImportFileWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/ImportFileDialog.cpp
 	${KDEFRONTEND_DIR}/datasources/ImportProjectDialog.cpp
@@ -140,6 +140,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/widgets/FitParametersWidget.cpp
 	${KDEFRONTEND_DIR}/widgets/FunctionsWidget.cpp
 	${KDEFRONTEND_DIR}/widgets/LabelWidget.cpp
+	${KDEFRONTEND_DIR}/widgets/ErrorBarWidget.cpp
 	${KDEFRONTEND_DIR}/widgets/LineWidget.cpp
 	${KDEFRONTEND_DIR}/widgets/SymbolWidget.cpp
 	${KDEFRONTEND_DIR}/widgets/ValueWidget.cpp
@@ -150,6 +151,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/widgets/FITSHeaderEditAddUnitDialog.cpp
 	${KDEFRONTEND_DIR}/widgets/FITSHeaderEditDialog.cpp
 	${KDEFRONTEND_DIR}/widgets/ResizableTextEdit.cpp
+  ${KDEFRONTEND_DIR}/widgets/TimedLineEdit.cpp
 )
 
 if (Qt${QT_VERSION_MAJOR}Mqtt_FOUND)
@@ -193,7 +195,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/datasources/imageoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/importdatasetwidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/importfilewidget.ui
-	${KDEFRONTEND_DIR}/ui/datasources/ImportErrorDialog.ui
+	${KDEFRONTEND_DIR}/ui/datasources/importwarningsdialog.ui
 	${KDEFRONTEND_DIR}/ui/datasources/importprojectwidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/importsqldatabasewidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/matiooptionswidget.ui
@@ -215,6 +217,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/dockwidgets/boxplotdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/columndock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/custompointdock.ui
+	${KDEFRONTEND_DIR}/ui/dockwidgets/errorbarwidget.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/imagedock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/kdeplotdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/linewidget.ui
@@ -285,6 +288,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/core/AbstractFilter.cpp
 	${BACKEND_DIR}/core/AbstractSimpleFilter.cpp
 	${BACKEND_DIR}/core/column/Column.cpp
+
 	${BACKEND_DIR}/core/column/ColumnPrivate.cpp
 	${BACKEND_DIR}/core/column/ColumnStringIO.cpp
 	${BACKEND_DIR}/core/column/columncommands.cpp
@@ -396,6 +400,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/worksheet/plots/cartesian/CartesianCoordinateSystem.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/CartesianPlot.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/CartesianPlotLegend.cpp
+	${BACKEND_DIR}/worksheet/plots/cartesian/ErrorBar.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/Histogram.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/CustomPoint.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/KDEPlot.cpp
@@ -476,7 +481,10 @@ set(COMMONFRONTEND_SOURCES
 	${COMMONFRONTEND_DIR}/note/NoteView.cpp
 	${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetCommentsHeaderModel.cpp
 	${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetHeaderView.cpp
+        ${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetSparkLineHeaderModel.cpp
 	${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetItemDelegate.cpp
+        ${COMMONFRONTEND_DIR}/spreadsheet/SparklineRunnable.h
+        ${COMMONFRONTEND_DIR}/spreadsheet/SparklineRunnable.cpp
 	${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetView.cpp
 	${COMMONFRONTEND_DIR}/workbook/WorkbookView.cpp
 	${COMMONFRONTEND_DIR}/worksheet/WorksheetView.cpp
@@ -685,7 +693,7 @@ IF (ENABLE_LIBORIGIN)
 		target_include_directories( labplot2lib PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/liborigin" )
 	ENDIF()
 ENDIF ()
-IF (WIN32)
+IF (PSAPI)
 	target_link_libraries( labplot2lib ${PSAPI} )
 ENDIF ()
 
@@ -734,12 +742,22 @@ IF (APPLE AND ${ECM_VERSION} VERSION_GREATER "5.48.0")
 	ecm_add_app_icon(LABPLOT_SOURCE ICONS ${LML_ICONS} OUTFILE_BASENAME LML_ICONS)
 ENDIF ()
 
-add_executable( labplot2 ${LABPLOT_SOURCE} ${GUI_QRC} ${qml_QRC} )
+add_executable( labplot2 ${LABPLOT_SOURCE} ${GUI_QRC} ${qml_QRC})
 target_link_libraries( labplot2 labplot2lib labplot2backendlib labplot2nsllib )
+
 #if (KUserFeedbackQt6_FOUND)
 #	target_link_libraries( labplot2 KUserFeedbackCoreQt6 KUserFeedbackWidgetsQt6 )
 #endif ()
 target_compile_definitions(labplot2 PRIVATE ${LABPLOT_COMPILE_DEFINITIONS})
+
+if (APPLE) # Apple app package
+    set_target_properties(labplot2 PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist)
+    set_target_properties(labplot2 PROPERTIES
+    MACOSX_BUNDLE_BUNDLE_NAME "LabPlot2"
+    MACOSX_BUNDLE_LONG_VERSION_STRING "${LABPLOT_VERSION}"
+    MACOSX_BUNDLE_SHORT_VERSION_STRING "${LABPLOT_VERSION}"
+    MACOSX_BUNDLE_GUI_IDENTIFIER "org.kde.labplot")
+endif()
 
 ############## installation ################################
 install( TARGETS labplot2 ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})

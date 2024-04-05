@@ -172,6 +172,7 @@ bool XYSmoothCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDataCol
 
 	///////////////////////////////////////////////////////////
 	int status = 0;
+	gsl_set_error_handler_off();
 
 	switch (type) {
 	case nsl_smooth_type_moving_average:
@@ -339,7 +340,7 @@ bool XYSmoothCurve::load(XmlStreamReader* reader, bool preview) {
 		static_cast<XYCurvePrivate*>(d_ptr)->xColumn = d->xColumn;
 		static_cast<XYCurvePrivate*>(d_ptr)->yColumn = d->yColumn;
 
-		recalcLogicalPoints();
+		recalc();
 	}
 
 	if (d->roughColumn) {

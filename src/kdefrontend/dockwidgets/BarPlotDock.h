@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Dock widget for the bar plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2022-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -16,10 +16,12 @@
 
 class AbstractAspect;
 class BackgroundWidget;
-class LineWidget;
-class ValueWidget;
 class BarPlot;
+class ErrorBarWidget;
+class LineWidget;
 class TreeViewComboBox;
+class ValueWidget;
+
 class KConfig;
 
 class BarPlotDock : public BaseDock {
@@ -35,6 +37,7 @@ private:
 	BackgroundWidget* backgroundWidget{nullptr};
 	LineWidget* lineWidget{nullptr};
 	ValueWidget* valueWidget{nullptr};
+	ErrorBarWidget* errorBarWidget{nullptr};
 	QList<BarPlot*> m_barPlots;
 	BarPlot* m_barPlot{nullptr};
 	TreeViewComboBox* cbXColumn{nullptr};
@@ -61,21 +64,21 @@ private Q_SLOTS:
 	void dataColumnChanged(const QModelIndex&);
 	void typeChanged(int);
 	void orientationChanged(int);
-	void visibilityChanged(bool);
 
-	//"Box"-tab
-	void currentBarChanged(int);
+	//"Bars"-tab
+	void barNumberChanged(int);
 	void widthFactorChanged(int);
+
+	//"Error Bars"-tab
+	void errorNumberChanged(int);
 
 	// SLOTs for changes triggered in BarPlot
 	// general
-	void updatePlotRanges() override;
 	void plotXColumnChanged(const AbstractColumn*);
 	void plotDataColumnsChanged(const QVector<const AbstractColumn*>&);
 	void plotTypeChanged(BarPlot::Type);
 	void plotOrientationChanged(BarPlot::Orientation);
 	void plotWidthFactorChanged(double);
-	void plotVisibilityChanged(bool);
 
 	// load and save
 	void loadConfigFromTemplate(KConfig&);

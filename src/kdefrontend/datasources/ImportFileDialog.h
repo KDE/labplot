@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : import data dialog
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2008-2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2008-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2008-2015 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -22,7 +22,6 @@ class MQTTClient;
 #endif
 
 class QStatusBar;
-class KMessageWidget;
 
 class ImportFileDialog : public ImportDialog {
 	Q_OBJECT
@@ -34,7 +33,7 @@ public:
 	QString selectedObject() const override;
 	LiveDataSource::SourceType sourceType() const;
 	void importToLiveDataSource(LiveDataSource*, QStatusBar*) const;
-	void importTo(QStatusBar*) const override;
+	bool importTo(QStatusBar*) const override;
 #ifdef HAVE_MQTT
 	void importToMQTT(MQTTClient*) const;
 #endif
@@ -43,7 +42,6 @@ private:
 	ImportFileWidget* m_importFileWidget;
 	bool m_showOptions{false};
 	QPushButton* m_optionsButton;
-	KMessageWidget* m_messageWidget{nullptr};
 
 protected Q_SLOTS:
 	void checkOkButton() override;
@@ -51,7 +49,6 @@ protected Q_SLOTS:
 private Q_SLOTS:
 	void toggleOptions();
 	void enableImportToMatrix(const bool enable);
-	void showErrorMessage(const QString&);
 };
 
 #endif // IMPORTFILEDIALOG_H

@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Dock widget for the reference line on the plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2020-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2020-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -15,7 +15,6 @@
 #include "kdefrontend/dockwidgets/BaseDock.h"
 #include "ui_referencelinedock.h"
 
-class AbstractAspect;
 class LineWidget;
 class ReferenceLine;
 class KConfig;
@@ -39,18 +38,13 @@ private:
 
 private Q_SLOTS:
 	// SLOTs for changes triggered in ReferenceLineDock
-	void visibilityChanged(bool);
-
-	// Position
+	void lockChanged(bool);
 	void orientationChanged(int);
 	void positionLogicalChanged(double);
 	void positionLogicalDateTimeChanged(qint64);
 
 	// SLOTs for changes triggered in ReferenceLine
-	void updatePlotRanges() override;
-	void lineVisibilityChanged(bool);
-
-	// Position
+	void lineLockChanged(bool);
 	void linePositionLogicalChanged(const QPointF&);
 	void lineOrientationChanged(ReferenceLine::Orientation);
 

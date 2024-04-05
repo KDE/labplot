@@ -223,6 +223,10 @@ int AbstractSimpleFilter::rowCount() const {
 	return m_inputs.value(0) ? m_inputs.at(0)->rowCount() : 0;
 }
 
+int AbstractSimpleFilter::rowCount(double min, double max) const {
+	return m_inputs.value(0) ? m_inputs.at(0)->rowCount(min, max) : 0;
+}
+
 /**
  * \brief Number of output rows == number of input rows
  *

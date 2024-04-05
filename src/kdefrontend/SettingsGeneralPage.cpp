@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : general settings page
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2008-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2008-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2020-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -29,7 +29,8 @@ SettingsGeneralPage::SettingsGeneralPage(QWidget* parent)
 	retranslateUi();
 
 	connect(ui.cbLoadOnStart, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsGeneralPage::loadOnStartChanged);
-	connect(ui.cbLoadOnStartNotebook, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsGeneralPage::changed);
+	connect(ui.cbNewProject, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsGeneralPage::newProjectChanged);
+	connect(ui.cbNewProjectNotebook, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsGeneralPage::changed);
 	connect(ui.cbDockWindowPositionReopen, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsGeneralPage::changed);
 	connect(ui.cbLoadOnStart, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsGeneralPage::changed);
 	connect(ui.cbTitleBar, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsGeneralPage::changed);
@@ -40,12 +41,14 @@ SettingsGeneralPage::SettingsGeneralPage(QWidget* parent)
 	connect(ui.chkOmitLeadingZeroInExponent, &QCheckBox::toggled, this, &SettingsGeneralPage::changed);
 	connect(ui.chkIncludeTrailingZeroesAfterDot, &QCheckBox::toggled, this, &SettingsGeneralPage::changed);
 	connect(ui.chkAutoSave, &QCheckBox::toggled, this, &SettingsGeneralPage::autoSaveChanged);
+	connect(ui.chkSaveDockStates, &QCheckBox::toggled, this, &SettingsGeneralPage::changed);
+	connect(ui.chkSaveCalculations, &QCheckBox::toggled, this, &SettingsGeneralPage::changed);
 	connect(ui.chkCompatible, &QCheckBox::toggled, this, &SettingsGeneralPage::changed);
 
 #ifdef HAVE_CANTOR_LIBS
 	for (auto* backend : Cantor::Backend::availableBackends()) {
 		if (backend->isEnabled())
-			ui.cbLoadOnStartNotebook->addItem(QIcon::fromTheme(backend->icon()), backend->name());
+			ui.cbNewProjectNotebook->addItem(QIcon::fromTheme(backend->icon()), backend->name());
 	}
 #endif
 
@@ -101,7 +104,8 @@ void SettingsGeneralPage::applySettings() {
 
 	KConfigGroup group = Settings::settingsGeneral();
 	group.writeEntry(QLatin1String("LoadOnStart"), ui.cbLoadOnStart->currentData().toInt());
-	group.writeEntry(QLatin1String("LoadOnStartNotebook"), ui.cbLoadOnStartNotebook->currentText());
+	group.writeEntry(QLatin1String("NewProject"), ui.cbNewProject->currentData().toInt());
+	group.writeEntry(QLatin1String("NewProjectNotebook"), ui.cbNewProjectNotebook->currentText());
 	group.writeEntry(QLatin1String("TitleBar"), ui.cbTitleBar->currentIndex());
 	group.writeEntry(QLatin1String("Units"), ui.cbUnits->currentIndex());
 	if (ui.cbDecimalSeparator->currentIndex() == static_cast<int>(DecimalSeparator::Automatic)) // need to overwrite previous setting
@@ -119,12 +123,15 @@ void SettingsGeneralPage::applySettings() {
 	group.writeEntry(QLatin1String("NumberOptions"), static_cast<int>(numberOptions));
 	group.writeEntry(QLatin1String("AutoSave"), ui.chkAutoSave->isChecked());
 	group.writeEntry(QLatin1String("AutoSaveInterval"), ui.sbAutoSaveInterval->value());
+	group.writeEntry(QLatin1String("SaveDockStates"), ui.chkSaveDockStates->isChecked());
+	group.writeEntry(QLatin1String("SaveCalculations"), ui.chkSaveCalculations->isChecked());
 	group.writeEntry(QLatin1String("CompatibleSave"), ui.chkCompatible->isChecked());
 	Settings::writeDockPosBehaviour(static_cast<Settings::DockPosBehaviour>(ui.cbDockWindowPositionReopen->currentData().toInt()));
 }
 
 void SettingsGeneralPage::restoreDefaults() {
 	ui.cbLoadOnStart->setCurrentIndex(ui.cbLoadOnStart->findData(static_cast<int>(MainWin::LoadOnStart::NewProject)));
+	ui.cbNewProject->setCurrentIndex(ui.cbNewProject->findData(static_cast<int>(MainWin::NewProject::WithWorksheet)));
 	ui.cbTitleBar->setCurrentIndex(0);
 	ui.cbUnits->setCurrentIndex(0);
 	ui.cbDecimalSeparator->setCurrentIndex(static_cast<int>(DecimalSeparator::Automatic));
@@ -134,24 +141,30 @@ void SettingsGeneralPage::restoreDefaults() {
 	ui.chkIncludeTrailingZeroesAfterDot->setChecked(false);
 	ui.chkAutoSave->setChecked(false);
 	ui.sbAutoSaveInterval->setValue(5);
+	ui.chkSaveDockStates->setChecked(false);
+	ui.chkSaveCalculations->setChecked(true);
 	ui.chkCompatible->setChecked(false);
 	ui.cbDockWindowPositionReopen->setCurrentIndex(ui.cbDockWindowPositionReopen->findData(static_cast<int>(Settings::DockPosBehaviour::AboveLastActive)));
 }
 
 void SettingsGeneralPage::loadSettings() {
-	const KConfigGroup group = Settings::group(QStringLiteral("Settings_General"));
+	const auto group = Settings::group(QStringLiteral("Settings_General"));
 
-	auto loadOnStart = group.readEntry(QLatin1String("LoadOnStart"), static_cast<int>(MainWin::LoadOnStart::NewProject));
+	const auto loadOnStart = group.readEntry(QLatin1String("LoadOnStart"), static_cast<int>(MainWin::LoadOnStart::NewProject));
 	ui.cbLoadOnStart->setCurrentIndex(ui.cbLoadOnStart->findData(loadOnStart));
-	loadOnStartChanged(); // call it to update notebook related widgets also if the current index above was not changed (true for index=0)
+	loadOnStartChanged();
+
+	const auto newProject = group.readEntry(QLatin1String("NewProject"), static_cast<int>(MainWin::NewProject::WithWorksheet));
+	ui.cbNewProject->setCurrentIndex(ui.cbNewProject->findData(newProject));
+	newProjectChanged(); // call it to update notebook related widgets also if the current index above was not changed (true for index=0)
 
 #ifdef HAVE_CANTOR_LIBS
 	const auto& backendName = group.readEntry(QLatin1String("LoadOnStartNotebook"), QString());
-	int index = ui.cbLoadOnStartNotebook->findText(backendName);
-	if (index == -1 && ui.cbLoadOnStartNotebook->count() > 0)
-		ui.cbLoadOnStartNotebook->setCurrentIndex(0); // select the first available backend if not backend was select yet
+	int index = ui.cbNewProjectNotebook->findText(backendName);
+	if (index == -1 && ui.cbNewProjectNotebook->count() > 0)
+		ui.cbNewProjectNotebook->setCurrentIndex(0); // select the first available backend if not backend was select yet
 	else
-		ui.cbLoadOnStartNotebook->setCurrentIndex(index);
+		ui.cbNewProjectNotebook->setCurrentIndex(index);
 #endif
 
 	ui.cbTitleBar->setCurrentIndex(group.readEntry(QLatin1String("TitleBar"), 0));
@@ -177,24 +190,28 @@ void SettingsGeneralPage::loadSettings() {
 
 	ui.chkAutoSave->setChecked(group.readEntry<bool>(QLatin1String("AutoSave"), false));
 	ui.sbAutoSaveInterval->setValue(group.readEntry(QLatin1String("AutoSaveInterval"), 0));
+	ui.chkSaveDockStates->setChecked(group.readEntry<bool>(QLatin1String("SaveDockStates"), false));
+	ui.chkSaveCalculations->setChecked(group.readEntry<bool>(QLatin1String("SaveCalculations"), true));
 	ui.chkCompatible->setChecked(group.readEntry<bool>(QLatin1String("CompatibleSave"), false));
 }
 
 void SettingsGeneralPage::retranslateUi() {
 	ui.cbLoadOnStart->clear();
-	ui.cbLoadOnStart->addItem(i18n("Do Nothing"), static_cast<int>(MainWin::LoadOnStart::Nothing));
-	ui.cbLoadOnStart->addItem(i18n("Create New Empty Project"), static_cast<int>(MainWin::LoadOnStart::NewProject));
-	ui.cbLoadOnStart->addItem(i18n("Create New Project with Worksheet"), static_cast<int>(MainWin::LoadOnStart::NewProjectWorksheet));
-	ui.cbLoadOnStart->addItem(i18n("Create New Project with Spreadsheet"), static_cast<int>(MainWin::LoadOnStart::NewProjectSpreadsheet));
-#ifdef HAVE_CANTOR_LIBS
-	ui.cbLoadOnStart->addItem(i18n("Create New Project with Notebook"), static_cast<int>(MainWin::LoadOnStart::NewProjectNotebook));
-#endif
+	ui.cbLoadOnStart->addItem(i18n("Create New Project"), static_cast<int>(MainWin::LoadOnStart::NewProject));
 	ui.cbLoadOnStart->addItem(i18n("Load Last Used Project"), static_cast<int>(MainWin::LoadOnStart::LastProject));
-	// 	ui.cbLoadOnStart->addItem(i18n("Show Welcome Screen"));
+	// ui.cbLoadOnStart->addItem(i18n("Show Welcome Screen"), static_cast<int>(MainWin::LoadOnStart::WelcomeScreen));
+
+	ui.cbNewProject->clear();
+	ui.cbNewProject->addItem(i18n("With Worksheet"), static_cast<int>(MainWin::NewProject::WithWorksheet));
+	ui.cbNewProject->addItem(i18n("With Spreadsheet"), static_cast<int>(MainWin::NewProject::WithSpreadsheet));
+	ui.cbNewProject->addItem(i18n("With Worksheet and Spreadsheet"), static_cast<int>(MainWin::NewProject::WithWorksheetSpreadsheet));
+#ifdef HAVE_CANTOR_LIBS
+	ui.cbNewProject->addItem(i18n("With Notebook"), static_cast<int>(MainWin::NewProject::WithNotebook));
+#endif
 
 	QString msg = i18n("Notebook type to create automatically on startup");
-	ui.lLoadOnStartNotebook->setToolTip(msg);
-	ui.cbLoadOnStartNotebook->setToolTip(msg);
+	ui.lNewProjectNotebook->setToolTip(msg);
+	ui.cbNewProjectNotebook->setToolTip(msg);
 
 	msg = i18n("Controls the behavior of where the dock widgets are placed after being re-opened");
 	ui.lDockWindowPositionReopen->setToolTip(msg);
@@ -215,13 +232,41 @@ void SettingsGeneralPage::retranslateUi() {
 	ui.cbDecimalSeparator->addItem(i18n("Comma (,)"));
 	ui.cbDecimalSeparator->addItem(i18n("Arabic (٫)"));
 	ui.cbDecimalSeparator->addItem(i18n("Automatic"));
+
+	msg = i18n(
+		"Use terms compliant with the <a href=\"http://www.bipm.org/utils/common/documents/jcgm/JCGM_100_2008_E.pdf\">Guide to the Expression of Uncertainty "
+		"in Measurement (GUM)</a>");
+	ui.chkGUMTerms->setWhatsThis(msg);
+
+	msg = i18n(
+		"Save the state (position and geometry) of the docks in the project file. \n"
+		"Determines the default behaviour for new projects. \n"
+		"The setting can be changed for every project separately in the project properties.");
+	ui.lSaveDockStates->setToolTip(msg);
+	ui.chkSaveDockStates->setToolTip(msg);
+
+	msg = i18n(
+		"Save the results of the calculations in the analysis curves in the project file. \n"
+		"Uncheck this option to reduce the size of the project file at costs of the longer project load times. \n"
+		"Determines the default behaviour for new projects. \n"
+		"The setting can be changed for every project separately in the project properties.");
+	ui.lSaveCalculations->setToolTip(msg);
+	ui.chkSaveCalculations->setToolTip(msg);
 }
 
 void SettingsGeneralPage::loadOnStartChanged() {
 	const auto loadOnStart = static_cast<MainWin::LoadOnStart>(ui.cbLoadOnStart->currentData().toInt());
-	const bool visible = (loadOnStart == MainWin::LoadOnStart::NewProjectNotebook);
-	ui.lLoadOnStartNotebook->setVisible(visible);
-	ui.cbLoadOnStartNotebook->setVisible(visible);
+	const bool visible = (loadOnStart == MainWin::LoadOnStart::NewProject);
+	ui.lNewProject->setVisible(visible);
+	ui.cbNewProject->setVisible(visible);
+	newProjectChanged();
+}
+
+void SettingsGeneralPage::newProjectChanged() {
+	const auto newProject = static_cast<MainWin::NewProject>(ui.cbNewProject->currentData().toInt());
+	const bool visible = (newProject == MainWin::NewProject::WithNotebook);
+	ui.lNewProjectNotebook->setVisible(visible);
+	ui.cbNewProjectNotebook->setVisible(visible);
 	changed();
 }
 

@@ -16,6 +16,9 @@
 #include <QContextMenuEvent>
 #include <QMenu>
 #include <QScreen>
+#include <QTimer>
+
+#include <gsl/gsl_const_cgs.h>
 
 /*!
   \class WorksheetPreviewWidget
@@ -36,13 +39,16 @@ WorksheetPreviewWidget::WorksheetPreviewWidget(QWidget* parent)
 	connect(ui.lwPreview, &QListWidget::currentRowChanged, this, &WorksheetPreviewWidget::currentChanged);
 
 	// make the icon 5x5cm big
-	const int iconSize = std::ceil(5.0 / 2.54 * QApplication::primaryScreen()->physicalDotsPerInchX());
+	const int iconSize = std::ceil(5.0 / GSL_CONST_CGS_INCH * QApplication::primaryScreen()->physicalDotsPerInchX());
 	ui.lwPreview->setIconSize(QSize(iconSize, iconSize));
 }
 
 WorksheetPreviewWidget::~WorksheetPreviewWidget() = default;
 
 void WorksheetPreviewWidget::setProject(Project* project) {
+	// TODO: disconnect to all slots here doesn't seem to work, we still need nullptr checks in the slots.
+	// disconnect(m_project, nullptr, this, nullptr);
+
 	m_project = project;
 
 	// clear the content of the previous project
@@ -55,6 +61,16 @@ void WorksheetPreviewWidget::setProject(Project* project) {
 
 	connect(m_project, &Project::loaded, this, &WorksheetPreviewWidget::initPreview);
 	connect(m_project, &Project::childAspectAdded, this, &WorksheetPreviewWidget::aspectAdded);
+	connect(m_project, &Project::aboutToClose, this, &WorksheetPreviewWidget::projectAboutToClose);
+}
+
+void WorksheetPreviewWidget::projectAboutToClose() {
+	m_suppressNavigate = true;
+	ui.lwPreview->clear();
+	m_suppressNavigate = false;
+	m_dirtyPreviews.clear();
+
+	m_project = nullptr;
 }
 
 /*!
@@ -62,6 +78,8 @@ void WorksheetPreviewWidget::setProject(Project* project) {
  * creates thumbnails for all available worksheets in the project.
  */
 void WorksheetPreviewWidget::initPreview() {
+	if (!m_project)
+		return;
 	const auto& worksheets = m_project->children<Worksheet>(AbstractAspect::ChildIndexFlag::Recursive);
 	for (int i = 0; i < worksheets.size(); ++i)
 		addPreview(worksheets.at(i), i);
@@ -73,7 +91,7 @@ void WorksheetPreviewWidget::addPreview(const Worksheet* w, int row) const {
 	if (!rc) {
 		// the view is not available yet, show the placeholder preview
 		const auto icon = QIcon::fromTheme(QLatin1String("view-preview"));
-		const int iconSize = std::ceil(5.0 / 2.54 * QApplication::primaryScreen()->physicalDotsPerInchX());
+		const int iconSize = std::ceil(5.0 / GSL_CONST_CGS_INCH * QApplication::primaryScreen()->physicalDotsPerInchX());
 		pix = icon.pixmap(iconSize, iconSize);
 	}
 	ui.lwPreview->insertItem(row, new QListWidgetItem(QIcon(pix), w->name()));
@@ -108,13 +126,27 @@ void WorksheetPreviewWidget::aspectAdded(const AbstractAspect* aspect) {
 		return;
 
 	const auto* w = dynamic_cast<const Worksheet*>(aspect);
-	if (!w)
+	if (w) {
+		addPreview(w, indexOfWorksheet(w));
 		return;
+	}
 
-	addPreview(w, indexOfWorksheet(w));
+	// in case a folder was added (copy&paste, duplicate, project import), check whether it has worksheets
+	// and add previews for them
+	const auto* folder = dynamic_cast<const Folder*>(aspect);
+	if (folder) {
+		QTimer::singleShot(0, this, [=]() {
+			const auto& worksheets = folder->children<Worksheet>(AbstractAspect::ChildIndexFlag::Recursive);
+			for (const auto* w : worksheets)
+				addPreview(w, indexOfWorksheet(w));
+		});
+	}
 }
 
 void WorksheetPreviewWidget::aspectSelected(const AbstractAspect* aspect) {
+	if (!m_project)
+		return;
+
 	const auto* w = dynamic_cast<const Worksheet*>(aspect);
 	if (!w)
 		return;
@@ -125,6 +157,9 @@ void WorksheetPreviewWidget::aspectSelected(const AbstractAspect* aspect) {
 }
 
 void WorksheetPreviewWidget::aspectDeselected(const AbstractAspect* aspect) {
+	if (!m_project)
+		return;
+
 	const auto* w = dynamic_cast<const Worksheet*>(aspect);
 	if (!w)
 		return;
@@ -141,6 +176,9 @@ void WorksheetPreviewWidget::aspectDeselected(const AbstractAspect* aspect) {
 }
 
 void WorksheetPreviewWidget::aspectAboutToBeRemoved(const AbstractAspect* aspect) {
+	if (!m_project)
+		return;
+
 	const auto* w = dynamic_cast<const Worksheet*>(aspect);
 	if (!w)
 		return;

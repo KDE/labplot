@@ -9,6 +9,7 @@
 */
 
 #include "functions.h"
+#include "backend/nsl/nsl_math.h"
 #include "backend/nsl/nsl_sf_basic.h"
 #include "parser.h"
 #include "parserFunctionTypes.h"
@@ -35,11 +36,13 @@ double ifCondition(const double condition, const double valueIfTrue, const doubl
 double andFunction(const double v1, const double v2);
 double orFunction(const double v1, const double v2);
 double xorFunction(const double v1, const double v2);
+double notFunction(const double v);
 double between(const double x, const double min, const double max);
 double outside(const double x, const double min, const double max);
 double equalEpsilon(const double v1, const double v2, const double epsilon);
 double betweenIncluded(const double x, const double min, const double max);
 double outsideIncluded(const double x, const double min, const double max);
+double roundn(const double v, const double precision);
 
 // Parameter function definitions
 QString parameterXE(int parameterIndex);
@@ -284,13 +287,12 @@ struct funs _functions[] = {
 	{[]() { return i18n("Heavyside theta function"); }, "theta", nsl_sf_theta, 1, nullptr, FunctionGroups::StandardMathematicalFunctions},
 	{[]() { return i18n("Harmonic number function"); }, "harmonic", nsl_sf_harmonic, 1, nullptr, FunctionGroups::StandardMathematicalFunctions},
 
-#ifndef HAVE_WINDOWS
 	{[]() { return i18n("Cube root"); }, "cbrt", static_cast<double (*)(double)>(&cbrt), 1, nullptr, FunctionGroups::StandardMathematicalFunctions},
 	{[]() { return i18n("Extract the exponent"); }, "logb", static_cast<double (*)(double)>(&logb), 1, nullptr, FunctionGroups::StandardMathematicalFunctions},
 	{[]() { return i18n("Round to an integer value"); }, "rint", static_cast<double (*)(double)>(&rint), 1, nullptr, FunctionGroups::StandardMathematicalFunctions},
 	{[]() { return i18n("Round to the nearest integer"); }, "round", static_cast<double (*)(double)>(&round), 1, nullptr, FunctionGroups::StandardMathematicalFunctions},
 	{[]() { return i18n("Round to the nearest integer"); }, "trunc", static_cast<double (*)(double)>(&trunc), 1, nullptr, FunctionGroups::StandardMathematicalFunctions},
-#endif
+	{[]() { return i18n("Round to y decimal places"); }, "roundn", static_cast<double (*)(double, double)>(&roundn), 2, nullptr, FunctionGroups::StandardMathematicalFunctions},
 	{[]() { return QStringLiteral("log(1+x)"); }, "log1p", gsl_log1p, 1, nullptr, FunctionGroups::StandardMathematicalFunctions},
 	{[]() { return QStringLiteral("x * 2^e"); }, "ldexp", nsl_sf_ldexp, 2, &parameterXE, FunctionGroups::StandardMathematicalFunctions},
 	{[]() { return QStringLiteral("x^y"); }, "powint", nsl_sf_powint, 2, nullptr, FunctionGroups::StandardMathematicalFunctions},
@@ -320,6 +322,7 @@ struct funs _functions[] = {
 	{[]() { return i18n("and"); }, "and", andFunction, 2, nullptr, FunctionGroups::LogicalFunctions},
 	{[]() { return i18n("or"); }, "or", orFunction, 2, nullptr, FunctionGroups::LogicalFunctions},
 	{[]() { return i18n("xor"); }, "xor", xorFunction, 2, nullptr, FunctionGroups::LogicalFunctions},
+	{[]() { return i18n("not"); }, "not", notFunction, 1, nullptr, FunctionGroups::LogicalFunctions},
 
 	// https://www.gnu.org/software/gsl/doc/html/specfunc.html
 	// Airy Functions and Derivatives
@@ -879,6 +882,12 @@ double xorFunction(const double v1, const double v2) {
 	return 1;
 }
 
+double notFunction(const double v) {
+	if (convertDoubleToBool(v))
+		return 0;
+	return 1;
+}
+
 double betweenIncluded(const double x, const double min, const double max) {
 	if (x >= min && x <= max)
 		return 1;
@@ -907,6 +916,10 @@ double equalEpsilon(const double v1, const double v2, const double epsilon) {
 	if (fabs(v2 - v1) <= epsilon)
 		return 1;
 	return 0;
+}
+
+double roundn(const double v, const double precision) {
+	return nsl_math_round_places(v, static_cast<int>(precision));
 }
 
 // ########################################################################

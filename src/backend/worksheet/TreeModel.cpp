@@ -55,9 +55,9 @@ bool TreeItem::insertChildren(int position, int count, int columns) {
 		return false;
 
 	for (int row = 0; row < count; ++row) {
-		QVector<QVariant> data(columns);
-		auto* item = new TreeItem(data, this);
-		childItems.insert(position, item);
+		QVector<QVariant> childData(columns);
+		auto* childItem = new TreeItem(childData, this);
+		childItems.insert(position, childItem);
 	}
 
 	return true;
@@ -70,8 +70,8 @@ bool TreeItem::insertColumns(int position, int columns) {
 	for (int column = 0; column < columns; ++column)
 		itemData.insert(position, QVariant());
 
-	for (auto* child : childItems)
-		child->insertColumns(position, columns);
+	for (auto* childItem : childItems)
+		childItem->insertColumns(position, columns);
 
 	return true;
 }
@@ -97,8 +97,8 @@ bool TreeItem::removeColumns(int position, int columns) {
 	for (int column = 0; column < columns; ++column)
 		itemData.remove(position);
 
-	for (auto* child : childItems)
-		child->removeColumns(position, columns);
+	for (auto* childItem : childItems)
+		childItem->removeColumns(position, columns);
 
 	return true;
 }
@@ -126,7 +126,7 @@ bool TreeItem::setBackgroundColor(int column, const QVariant& value) {
 TreeModel::TreeModel(const QStringList& headers, QObject* parent)
 	: QAbstractItemModel(parent) {
 	QVector<QVariant> rootData;
-	for (auto& header : headers)
+	for (const auto& header : headers)
 		rootData << header;
 
 	rootItem = new TreeItem(rootData);
@@ -152,7 +152,7 @@ QVariant TreeModel::data(const QModelIndex& index, int role) const {
 	if (role != Qt::DisplayRole && role != Qt::EditRole && role != Qt::BackgroundRole)
 		return {};
 
-	TreeItem* item = getItem(index);
+	const auto* item = getItem(index);
 
 	if (role != Qt::BackgroundRole)
 		return item->data(index.column());
@@ -254,8 +254,7 @@ bool TreeModel::removeRows(int position, int rows, const QModelIndex& parent) {
 }
 
 int TreeModel::rowCount(const QModelIndex& parent) const {
-	TreeItem* parentItem = getItem(parent);
-
+	const auto* parentItem = getItem(parent);
 	return parentItem->childCount();
 }
 

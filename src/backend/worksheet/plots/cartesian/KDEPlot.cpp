@@ -27,10 +27,6 @@
 #include "backend/nsl/nsl_kde.h"
 #include "backend/nsl/nsl_sf_kernel.h"
 
-#include <gsl/gsl_cdf.h>
-#include <gsl/gsl_math.h>
-#include <gsl/gsl_statistics.h>
-
 #include <QMenu>
 #include <QPainter>
 
@@ -186,6 +182,30 @@ bool KDEPlot::hasData() const {
 	return (d->dataColumn != nullptr);
 }
 
+bool KDEPlot::usingColumn(const Column* column) const {
+	Q_D(const KDEPlot);
+	return (d->dataColumn == column);
+}
+
+void KDEPlot::handleAspectUpdated(const QString& aspectPath, const AbstractAspect* aspect) {
+	Q_D(KDEPlot);
+	const auto column = dynamic_cast<const AbstractColumn*>(aspect);
+	if (!column)
+		return;
+
+	if (d->dataColumn == column) // the column is the same and was just renamed -> update the column path
+		d->dataColumnPath = aspectPath;
+	else if (d->dataColumnPath == aspectPath) { // another column was renamed to the current path -> set and connect to the new column
+		setUndoAware(false);
+		setDataColumn(column);
+		setUndoAware(true);
+	}
+}
+
+QColor KDEPlot::color() const {
+	Q_D(const KDEPlot);
+	return d->estimationCurve->color();
+}
 /*!
  * returns the the number of equaly spaced points at which the density is to be evaluated,
  * which also corresponds to the number of data points in the xy-curve used internally.
@@ -251,11 +271,6 @@ void KDEPlot::dataColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 		d->dataColumn = nullptr;
 		d->retransform();
 	}
-}
-
-void KDEPlot::dataColumnNameChanged() {
-	Q_D(KDEPlot);
-	setDataColumnPath(d->dataColumn->path());
 }
 
 // ##############################################################################
@@ -428,6 +443,7 @@ void KDEPlot::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("bandwidthType"), QString::number(d->bandwidthType));
 	writer->writeAttribute(QStringLiteral("bandwidth"), QString::number(d->bandwidth));
 	writer->writeAttribute(QStringLiteral("visible"), QString::number(d->isVisible()));
+	writer->writeAttribute(QStringLiteral("legendVisible"), QString::number(d->legendVisible));
 	writer->writeEndElement();
 
 	// save the internal columns, above only the references to them were saved
@@ -471,6 +487,8 @@ bool KDEPlot::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("kernelType", kernelType, nsl_kernel_type);
 			READ_INT_VALUE("bandwidthType", bandwidthType, nsl_kde_bandwidth_type);
 			READ_DOUBLE_VALUE("bandwidth", bandwidth);
+			READ_INT_VALUE("legendVisible", legendVisible, bool);
+
 			str = attribs.value(QStringLiteral("visible")).toString();
 			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs(QStringLiteral("visible")).toString());
@@ -538,7 +556,7 @@ void KDEPlot::loadThemeConfig(const KConfig& config) {
 }
 
 void KDEPlot::saveThemeConfig(const KConfig& config) {
-	Q_D(const KDEPlot);
+	// Q_D(const KDEPlot);
 	KConfigGroup group = config.group(QStringLiteral("KDEPlot"));
 	// TODO
 }

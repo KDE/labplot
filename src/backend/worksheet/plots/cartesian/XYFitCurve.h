@@ -128,6 +128,7 @@ public:
 
 protected:
 	XYFitCurve(const QString& name, XYFitCurvePrivate* dd);
+	virtual void handleAspectUpdated(const QString& aspectPath, const AbstractAspect* element) override;
 
 private:
 	Q_DECLARE_PRIVATE(XYFitCurve)

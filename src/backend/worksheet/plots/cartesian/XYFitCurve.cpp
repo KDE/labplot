@@ -66,7 +66,7 @@ void XYFitCurve::evaluate(bool preview) {
 	Q_D(XYFitCurve);
 	if (d->evaluate(preview)) {
 		// redraw the curve
-		recalcLogicalPoints();
+		recalc();
 		Q_EMIT dataChanged();
 	}
 }
@@ -871,6 +871,21 @@ void XYFitCurve::FitResult::calculateResult(size_t n, unsigned int np) {
 */
 QIcon XYFitCurve::icon() const {
 	return QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve"));
+}
+
+void XYFitCurve::handleAspectUpdated(const QString& aspectPath, const AbstractAspect* aspect) {
+	const auto* column = dynamic_cast<const Column*>(aspect);
+	if (!column)
+		return;
+
+	XYAnalysisCurve::handleAspectUpdated(aspectPath, aspect);
+
+	setUndoAware(true);
+	if (xErrorColumnPath() == aspectPath)
+		setXErrorColumn(column);
+	if (yErrorColumnPath() == aspectPath)
+		setYErrorColumn(column);
+	setUndoAware(false);
 }
 
 // ##############################################################################
@@ -3019,7 +3034,7 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 		static_cast<XYCurvePrivate*>(d_ptr)->xColumn = d->xColumn;
 		static_cast<XYCurvePrivate*>(d_ptr)->yColumn = d->yColumn;
 
-		recalcLogicalPoints();
+		recalc();
 	}
 
 	return true;

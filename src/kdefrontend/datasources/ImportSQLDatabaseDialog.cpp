@@ -3,8 +3,7 @@
 	Project              : LabPlot
 	Description          : import SQL dataase dialog
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2016 Ankit Wagadre <wagadre.ankit@gmail.com>
-	SPDX-FileCopyrightText: 2016-2017 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2016-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -52,7 +51,8 @@ ImportSQLDatabaseDialog::ImportSQLDatabaseDialog(MainWin* parent)
 
 	// Signals/Slots
 	connect(importSQLDatabaseWidget, &ImportSQLDatabaseWidget::stateChanged, this, &ImportSQLDatabaseDialog::checkOkButton);
-	connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+	connect(importSQLDatabaseWidget, &ImportSQLDatabaseWidget::error, this, &ImportSQLDatabaseDialog::showErrorMessage);
+	connect(buttonBox, &QDialogButtonBox::accepted, this, &ImportDialog::accept);
 	connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
 	// restore saved settings if available
@@ -71,12 +71,12 @@ ImportSQLDatabaseDialog::~ImportSQLDatabaseDialog() {
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 
-void ImportSQLDatabaseDialog::importTo(QStatusBar* statusBar) const {
+bool ImportSQLDatabaseDialog::importTo(QStatusBar* statusBar) const {
 	DEBUG("ImportSQLDatabaseDialog::import()");
 	AbstractAspect* aspect = static_cast<AbstractAspect*>(cbAddTo->currentModelIndex().internalPointer());
 	if (!aspect) {
 		DEBUG("ERROR: No aspect available!");
-		return;
+		return false;
 	}
 
 	const auto mode = AbstractFileFilter::ImportMode(cbPosition->currentIndex());
@@ -93,6 +93,7 @@ void ImportSQLDatabaseDialog::importTo(QStatusBar* statusBar) const {
 	WAIT_CURSOR;
 	QApplication::processEvents(QEventLoop::AllEvents, 100);
 
+	// TODO: error handling
 	QElapsedTimer timer;
 	timer.start();
 	if (aspect->inherits(AspectType::Matrix)) {
@@ -121,6 +122,7 @@ void ImportSQLDatabaseDialog::importTo(QStatusBar* statusBar) const {
 
 	RESET_CURSOR;
 	statusBar->removeWidget(progressBar);
+	return true;
 }
 
 QString ImportSQLDatabaseDialog::selectedObject() const {

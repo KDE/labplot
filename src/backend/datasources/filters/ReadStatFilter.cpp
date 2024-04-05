@@ -41,7 +41,7 @@ QVector<QStringList> ReadStatFilter::preview(const QString& fileName, int lines)
 /*!
   reads the content of the file \c fileName to the data source \c dataSource.
 */
-void ReadStatFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode) {
+void ReadStatFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, ImportMode mode) {
 	d->readDataFromFile(fileName, dataSource, mode);
 }
 
@@ -409,7 +409,8 @@ int ReadStatFilterPrivate::getValueLabels(const char* val_label, readstat_value_
 }
 #endif
 
-ReadStatFilterPrivate::ReadStatFilterPrivate(ReadStatFilter*) {
+ReadStatFilterPrivate::ReadStatFilterPrivate(ReadStatFilter* owner)
+	: q(owner) {
 }
 
 #ifdef HAVE_READSTAT
@@ -478,6 +479,7 @@ QVector<QStringList> ReadStatFilterPrivate::preview(const QString& fileName, int
 			DEBUG(Q_FUNC_INFO << ", column mode " << i << " = " << ENUM_TO_STRING(AbstractColumn, ColumnMode, columnModes.at(i)))
 		DEBUG(Q_FUNC_INFO << ", read " << dataStrings.size() << " lines")
 	} else {
+		q->setLastError(i18n("Error reading file."));
 		DEBUG(Q_FUNC_INFO << ", ERROR: processing " << qPrintable(fileName))
 	}
 #else
@@ -507,6 +509,7 @@ void ReadStatFilterPrivate::readDataFromFile(const QString& fileName, AbstractDa
 	readstat_error_t error = parse(fileName, false, true);
 	if (error != READSTAT_OK) {
 		DEBUG(Q_FUNC_INFO << ", ERROR preparsing file " << STDSTRING(fileName))
+		q->setLastError(i18n("Failed to parse the file."));
 		return;
 	}
 
@@ -518,11 +521,18 @@ void ReadStatFilterPrivate::readDataFromFile(const QString& fileName, AbstractDa
 	const int actualEndColumn = (endColumn == -1 || endColumn > m_varCount) ? m_varCount : endColumn;
 	const int actualCols = actualEndColumn - startColumn + 1;
 	DEBUG(Q_FUNC_INFO << ", actual cols/rows = " << actualCols << " / " << actualRows)
-	const int columnOffset = dataSource->prepareImport(m_dataContainer, mode, actualRows, actualCols, varNames, columnModes);
 
-	error = parse(fileName);
+	bool ok = false;
+	const int columnOffset = dataSource->prepareImport(m_dataContainer, mode, actualRows, actualCols, varNames, columnModes, ok);
+	if (!ok) {
+		q->setLastError(i18n("Not enough memory."));
+		return;
+	}
+
+	error = parse(fileName); // TODO: parse was already done above. why it's needed here again?
 	if (error != READSTAT_OK) {
 		DEBUG(Q_FUNC_INFO << ", ERROR parsing file " << STDSTRING(fileName))
+		q->setLastError(i18n("Failed to parse the file."));
 		return;
 	}
 

@@ -217,9 +217,9 @@
 >Àrea principal</link
 > de la finestra de l'aplicació. L'<link linkend="project-explorer"
 >Explorador del projecte</link
-> serveix com a eina per crear i organitzar aquests objectes en una estructura similar a un arbre. L'<link linkend="properties-explorer"
+> serveix com a eina per a crear i organitzar aquests objectes en una estructura similar a un arbre. L'<link linkend="properties-explorer"
 >Explorador de les propietats</link
-> s'utilitza per modificar les propietats dels objectes actualment seleccionats. Moltes funcions són accessibles a través del menú principal i a través de les barres d'eines específiques de l'objecte i els menús contextuals. A la barra d'estat es mostra informació addicional i les notificacions de l'aplicació. </para>
+> s'utilitza per a modificar les propietats dels objectes actualment seleccionats. Moltes funcions són accessibles a través del menú principal i a través de les barres d'eines específiques de l'objecte i els menús contextuals. A la barra d'estat es mostra informació addicional i les notificacions de l'aplicació. </para>
 
   <screenshot>
     <screeninfo
@@ -337,7 +337,7 @@
 ></screenshot>
 
 <para
->Les dades noves es poden produir introduint-les manualment al full de càlcul o generant les dades d'acord amb una determinada fórmula. El &LabPlot; proporciona 5 mètodes diferents per generar dades, accessibles a través del menú contextual de la columna: <itemizedlist>
+>Les dades noves es poden produir introduint-les manualment al full de càlcul o generant les dades d'acord amb una determinada fórmula. El &LabPlot; proporciona 5 mètodes diferents per a generar dades, accessibles a través del menú contextual de la columna: <itemizedlist>
 <listitem>
 <para
 >Números de fila: els valors de la columna s'estableixen segons el seu número de fila, això proporciona una forma fàcil de crear ràpidament un índex. </para>
@@ -362,7 +362,7 @@
 
 <listitem>
 <para
->Valors aleatoris (només per a columnes numèriques): els valors es generen aleatòriament d'acord amb la distribució seleccionada. Per generar nombres aleatoris distribuïts uniformement, seleccioneu la distribució «Plana». </para>
+>Valors aleatoris (només per a columnes numèriques): els valors es generen aleatòriament d'acord amb la distribució seleccionada. Per a generar nombres aleatoris distribuïts uniformement, seleccioneu la distribució «Plana». </para>
 <screenshot
 ><mediaobject
 ><imageobject>
@@ -416,7 +416,7 @@
 </para>
 
 <para
->Les dades de la matriu es poden introduir manualment o mitjançant una importació des d'un fitxer extern. Similar a la generació de dades per a una columna en un full de càlcul, la matriu es pot omplir amb valors constants o també a través d'una fórmula. La captura de pantalla següent mostra la vista d'imatge d'una matriu juntament amb la fórmula que es va utilitzar per generar els elements de la matriu: <screenshot
+>Les dades de la matriu es poden introduir manualment o mitjançant una importació des d'un fitxer extern. Similar a la generació de dades per a una columna en un full de càlcul, la matriu es pot omplir amb valors constants o també a través d'una fórmula. La captura de pantalla següent mostra la vista d'imatge d'una matriu juntament amb la fórmula que es va utilitzar per a generar els elements de la matriu: <screenshot
 ><mediaobject
 ><imageobject>
       <imagedata fileref="matrix_function_values.png" format="PNG"/>
@@ -456,7 +456,7 @@
 >Full de càlcul</link
 > i <link linkend="matrix"
 >Matriu</link
->, una altra part central de l'aplicació i proporciona una àrea per mostrar i agrupar diferents classes d'objectes de full de treball: diagrames, etiquetes, &etc; </para>
+>, una altra part central de l'aplicació i proporciona una àrea per a mostrar i agrupar diferents classes d'objectes de full de treball: diagrames, etiquetes, &etc; </para>
 <para
 >Els fulls de treball poden tenir una mida fixa (una mida definida per l'usuari o una de les mides predeterminades com A4, Carta, &etc;) o poden omplir l'àrea completa disponible per a la finestra del full de treball. Es poden organitzar múltiples diagrames en el full de treball en un format vertical, horitzontal o de quadrícula. </para>
 <para
@@ -473,7 +473,7 @@
 </para>
 
 <para
->Diferents accions de full de treball que s'ocupen de la creació de nous objectes, el canvi del mode actual del ratolí o el zoom es pot accedir a través de la barra d'eines, el menú principal o el menú contextual del full de treball en l'<link linkend="project-explorer"
+>Diferents accions de full de treball que s'ocupen de la creació d'objectes nous, el canvi del mode actual del ratolí o el zoom es pot accedir a través de la barra d'eines, el menú principal o el menú contextual del full de treball en l'<link linkend="project-explorer"
 >Explorador del projecte</link
 >. </para>
 
@@ -489,7 +489,7 @@
 <para
 >El full de treball CAS és, a banda del <link linkend="worksheet"
 >full de treball</link
->, la tercera part central de l'aplicació i proporciona una àrea per utilitzar les vostres aplicacions matemàtiques favorites des d'una interfície elegant de full de treball. </para>
+>, la tercera part central de l'aplicació i proporciona una àrea per a utilitzar les vostres aplicacions matemàtiques favorites des d'una interfície elegant de full de treball. </para>
 <para
 >El &LabPlot; ofereix diverses opcions per als dorsals amb els quals el vulgueu utilitzar. Les opcions dependran del que vulgueu aconseguir. </para>
 <para>
@@ -659,7 +659,7 @@
 <title
 >Selector de dades</title>
 <para
->El selector de dades és una eina que permet extreure fàcilment les dades dels fitxers d'imatge. El procés d'extracció consisteix principalment en els següents passos: <itemizedlist>
+>El selector de dades és una eina que permet extreure fàcilment les dades dels fitxers d'imatge. El procés d'extracció consisteix principalment en els passos següents: <itemizedlist>
 <listitem
 ><para
 >Importa una imatge que conté diagrames i corbes des d'on voleu llegir els punts de dades.</para
@@ -703,7 +703,7 @@
 
 
 <para
->El procediment per a l'extracció de dades d'un diagrama importat tal com s'ha descrit anteriorment és factible quan es tracta d'un nombre limitat de punts. En el cas que les corbes de la imatge importada es donin com a línies sòlides, l'eina de selecció de dades del &LabPlot; permet llegir-les (semi-)automàticament. Per a això, després d'afegir una corba nova del selector de dades com s'ha descrit anteriorment, canvieu al mode de ratolí «Selecciona els segments de la corba». Les corbes del diagrama es reconeixen i ressalten. En fer clic sobre una corba ressaltada (o un dels seus segments), es creen punts al llarg d'aquesta corba. La longitud d'un segment i la densitat de punts creats (separació entre dos punts) són paràmetres ajustables. A les captures de pantalla següents, després de canviar al mode de segment totes les línies negres s'han ressaltat (color verd). En aquest cas específic, la corba s'ha reconegut com un segment únic i un clic únic del ratolí en aquest segment és suficient per digitalitzar aquesta corba i per col·locar automàticament punts al llarg de la corba. <screenshot
+>El procediment per a l'extracció de dades d'un diagrama importat tal com s'ha descrit anteriorment és factible quan es tracta d'un nombre limitat de punts. En el cas que les corbes de la imatge importada es donin com a línies sòlides, l'eina de selecció de dades del &LabPlot; permet llegir-les (semi-)automàticament. Per a això, després d'afegir una corba nova del selector de dades com s'ha descrit anteriorment, canvieu al mode de ratolí «Selecciona els segments de la corba». Les corbes del diagrama es reconeixen i ressalten. En fer clic sobre una corba ressaltada (o un dels seus segments), es creen punts al llarg d'aquesta corba. La longitud d'un segment i la densitat de punts creats (separació entre dos punts) són paràmetres ajustables. A les captures de pantalla següents, després de canviar al mode de segment totes les línies negres s'han ressaltat (color verd). En aquest cas específic, la corba s'ha reconegut com un segment únic i un clic únic del ratolí en aquest segment és suficient per a digitalitzar aquesta corba i per a col·locar automàticament punts al llarg de la corba. <screenshot
 ><mediaobject
 ><imageobject>
       <imagedata fileref="datapicker_segments.png" format="PNG"/>
@@ -713,10 +713,10 @@
 </para>
 
 <para
->En molts casos el diagrama no és tan simple com l'anterior (una corba negra única sobre fons blanc) i conté línies de quadrícula, moltes corbes de color i gruix diferent i un fons no blanc. En aquest cas falla la detecció automàtica (no es ressalta cap objecte o n'hi ha massa). Per ajudar el selector de dades a determinar correctament les corbes, l'usuari ha de limitar els intervals permesos en els espais de color HSV (o HSI). Per restar el fons no blanc també és possible limitar el rang per al color del primer pla. Internament, cada píxel de la imatge es converteix a blanc i negre, on només els punts que s'ajusten a les àrees definides per l'usuari per to, saturació, valor, intensitat i primer pla s'estableixen a negre. </para>
+>En molts casos el diagrama no és tan simple com l'anterior (una corba negra única sobre fons blanc) i conté línies de quadrícula, moltes corbes de color i gruix diferent i un fons no blanc. En aquest cas falla la detecció automàtica (no es ressalta cap objecte o n'hi ha massa). Per a ajudar el selector de dades a determinar correctament les corbes, l'usuari ha de limitar els intervals permesos en els espais de color HSV (o HSI). Per a restar el fons no blanc també és possible limitar el rang per al color del primer pla. Internament, cada píxel de la imatge es converteix a blanc i negre, on només els punts que s'ajusten a les àrees definides per l'usuari per to, saturació, valor, intensitat i primer pla s'estableixen a negre. </para>
 
 <para
->A les captures de pantalla de sota, les corbes blaves de la imatge original es van projectar per haver reduït adequadament els intervals permesos en l'espai de color (vegeu el pic per al blau en l'histograma del to). La imatge transformada en blanc i negre només conté les corbes en les quals l'usuari està interessat i ara és una tasca fàcil per al selector de dades determinar les corbes i col·locar punts sobre elles. <screenshot
+>A les captures de pantalla de sota, les corbes blaves de la imatge original es van projectar per a haver reduït adequadament els intervals permesos en l'espai de color (vegeu el pic per al blau en l'histograma del to). La imatge transformada en blanc i negre només conté les corbes en les quals l'usuari està interessat i ara és una tasca fàcil per al selector de dades determinar les corbes i col·locar punts sobre elles. <screenshot
 ><mediaobject
 ><imageobject>
       <imagedata fileref="datapicker_original_transformed_segments.png" format="PNG"/>
@@ -763,7 +763,7 @@
 >FITS</para
 ></listitem
 > </itemizedlist
-> En el diàleg d'importació està disponible la vista prèvia de tots els tipus de fitxers admesos. Per a formats de dades amb estructures internes complexes (com NetCDF, HDF5 i FITS), el contingut del fitxer es presenta en una vista en arbre que permet una navegació còmoda a través del fitxer. També es proporciona un diàleg versàtil per editar les capçaleres (paraules clau) d'un fitxer FITS. </para>
+> En el diàleg d'importació està disponible la vista prèvia de tots els tipus de fitxers admesos. Per a formats de dades amb estructures internes complexes (com NetCDF, HDF5 i FITS), el contingut del fitxer es presenta en una vista en arbre que permet una navegació còmoda a través del fitxer. També es proporciona un diàleg versàtil per a editar les capçaleres (paraules clau) d'un fitxer FITS. </para>
 
 <para
 >La importació de dades ASCII i binàries comprimides amb gzip, bzip2 o xz es pot fer directament a mesura que es fa la descompressió de manera transparent per a l'usuari. </para>
@@ -776,7 +776,7 @@
 <para
 >La fila d'inici i final a llegir es pot personalitzar utilitzant la pestanya <guilabel
 >Porció de dades a llegir</guilabel
->. Per llegir totes les dades especifiqueu <userinput
+>. Per a llegir totes les dades especifiqueu <userinput
 >-1</userinput
 > com una fila o columna final. </para>
 <screenshot>
@@ -1112,7 +1112,7 @@
 >Importa dades al full de càlcul actiu</action
 ></para>
 <para
->Aquest element es pot utilitzar per importar dades al &LabPlot;. Llegiu-ne més en la secció del <link linkend="importdialog"
+>Aquest element es pot utilitzar per a importar dades al &LabPlot;. Llegiu-ne més en la secció del <link linkend="importdialog"
 >diàleg d'importació</link
 >. </para>
 </listitem>
@@ -1207,7 +1207,7 @@
 ><para
 ><action
 >Obre la finestra de l'historial d'accions del &LabPlot;.</action
-> Seleccioneu un element de la llista per navegar al pas corresponent. </para
+> Seleccioneu un element de la llista per a navegar al pas corresponent. </para
 ></listitem>
 </varlistentry>
 
@@ -1331,9 +1331,9 @@
   <title
 >Corbes</title>
   <para
->Les corbes contenen punts de dades que es poden mostrar en un diagrama. Hi ha tres mètodes diferents per crear corbes: la corba XY estàndard, una corba XY d'una expressió matemàtica i una corba XY d'una funció d'anàlisi de dades. </para>
+>Les corbes contenen punts de dades que es poden mostrar en un diagrama. Hi ha tres mètodes diferents per a crear corbes: la corba XY estàndard, una corba XY d'una expressió matemàtica i una corba XY d'una funció d'anàlisi de dades. </para>
     <para
->La corba XY estàndard es pot omplir amb valors d'un full de càlcul seleccionant les dades X i Y com a columna del full de càlcul al giny acoblat de la corba XY. Un altre mètode per omplir una corba és utilitzar una expressió matemàtica. Aquí podeu seleccionar qualsevol funció matemàtica i interval per crear la corba. El tercer mètode per crear una corba és utilitzar una funció d'anàlisi de dades. Les dades i la funció d'anàlisi es poden seleccionar al giny acoblat de la funció d'anàlisi. </para>
+>La corba XY estàndard es pot omplir amb valors d'un full de càlcul seleccionant les dades X i Y com a columna del full de càlcul al giny acoblat de la corba XY. Un altre mètode per a omplir una corba és utilitzar una expressió matemàtica. Aquí podeu seleccionar qualsevol funció matemàtica i interval per a crear la corba. El tercer mètode per a crear una corba és utilitzar una funció d'anàlisi de dades. Les dades i la funció d'anàlisi es poden seleccionar al giny acoblat de la funció d'anàlisi. </para>
   <para
 >Per a tots els tipus de corbes es poden canviar els estils de línia i símbols al giny acoblat. Aquí també es poden canviar els valors anotats i els paràmetres de la barra d'errors. </para>
 </sect1>
@@ -1399,7 +1399,7 @@
     <title
 >Reducció de dades</title>
     <para
->Per reduir el nombre de punts de dades sense perdre les característiques d'un conjunt de dades podeu aplicar un dels diversos algorismes de simplificació de línies: </para>
+>Per a reduir el nombre de punts de dades sense perdre les característiques d'un conjunt de dades podeu aplicar un dels diversos algorismes de simplificació de línies: </para>
       <itemizedlist>
 	<listitem
 ><para
@@ -1584,18 +1584,18 @@
 ></listitem>
       </itemizedlist>
     <para
->Tots els mètodes de suavitzat permeten diversos modes de farciment (constant, periòdic, mirall, més proper, etc.) per al començament i el final del conjunt de dades. Les mitjanes mòbils permeten diverses funcions de ponderació (uniforme, triangular, binomial, parabòlic, tricúbic, etc.) que es poden seleccionar per ponderar els punts de dades seleccionats depenent de la seva distància. </para>
+>Tots els mètodes de suavitzat permeten diversos modes de farciment (constant, periòdic, mirall, més proper, etc.) per al començament i el final del conjunt de dades. Les mitjanes mòbils permeten diverses funcions de ponderació (uniforme, triangular, binomial, parabòlic, tricúbic, etc.) que es poden seleccionar per a ponderar els punts de dades seleccionats depenent de la seva distància. </para>
   </sect1>
   
   <sect1 id="fitting">
     <title
 >Ajustament de la corba</title>
     <para
->L'ajustament lineal i no lineal de les dades es pot fer amb diversos models d'ajustament predefinits (per exemple polinòmic, exponencial, gaussià o personalitzat) a les dades que consisteixen en columnes X i Y amb una columna de pes opcional. Amb un model personalitzat qualsevol funció amb un nombre il·limitat de paràmetres es pot utilitzar per ajustar. Els resultats, incloent-hi les propietats estadístiques, es mostren al text de resultat. </para>
+>L'ajustament lineal i no lineal de les dades es pot fer amb diversos models d'ajustament predefinits (per exemple polinòmic, exponencial, gaussià o personalitzat) a les dades que consisteixen en columnes X i Y amb una columna de pes opcional. Amb un model personalitzat qualsevol funció amb un nombre il·limitat de paràmetres es pot utilitzar per a ajustar. Els resultats, incloent-hi les propietats estadístiques, es mostren al text de resultat. </para>
     <para
 >Els valors d'inici del paràmetre es poden establir en el diàleg de paràmetres. També és possible corregir qualsevol paràmetre i establir aquí límits inferiors i superiors als valors. Tingueu en compte que reduir l'espai dels paràmetres fent fix un paràmetre o especificant límits pot frenar la convergència o evitar trobar un bon resultat. Sempre és una bona idea eliminar qualsevol limitació dels paràmetres quan es troben valors bons d'inici. </para>
     <para
->Les opcions següents es poden establir en el diàleg d'opcions per optimitzar l'ajustament: </para>
+>Les opcions següents es poden establir en el diàleg d'opcions per a optimitzar l'ajustament: </para>
       <itemizedlist>
 	<listitem
 ><para
@@ -1615,7 +1615,7 @@
 ></listitem>
 	<listitem
 ><para
->Usa els resultats com a nous valors d'inici: els resultats seran els valors nous d'inici del paràmetre</para
+>Usa els resultats com a valors d'inici nous: els resultats seran els valors nous d'inici del paràmetre</para
 ></listitem>
 	</itemizedlist>
 
@@ -1625,7 +1625,7 @@
     <title
 >Filtre de Fourier</title>
     <para
->Aquesta funció es pot utilitzar per aplicar un filtre de Fourier a qualsevol dada que consisteixi en columnes X i Y. Els tipus de filtres suportats són: </para>
+>Aquesta funció es pot utilitzar per a aplicar un filtre de Fourier a qualsevol dada que consisteixi en columnes X i Y. Els tipus de filtres suportats són: </para>
       <itemizedlist>
 	<listitem
 ><para
@@ -1676,11 +1676,11 @@
     <title
 >Transformada de Fourier</title>
     <para
->Per convertir un senyal de temps a domini de freqüència o per canviar entre altres variables conjugades com la posició i el moment (espai-k) es pot aplicar una transformada de Fourier discreta. Es poden utilitzar les opcions següents per adaptar-se a les necessitats: </para>
+>Per a convertir un senyal de temps a domini de freqüència o per a canviar entre altres variables conjugades com la posició i el moment (espai-k) es pot aplicar una transformada de Fourier discreta. Es poden utilitzar les opcions següents per a adaptar-se a les necessitats: </para>
       <itemizedlist>
 	<listitem
 ><para
->Funció de finestra (Welch, Hann, Hamming, etc.) per evitar efectes de fuita</para
+>Funció de finestra (Welch, Hann, Hamming, etc.) per a evitar efectes de fuita</para
 ></listitem>
 	<listitem
 ><para
@@ -1712,7 +1712,7 @@
 >Diagrama</guilabel
 > en el giny acoblat corresponent. </para>
   <para
->Després de pujar la imatge es poden utilitzar diferents opcions de zoom des de la barra d'eines menú contextual/selector de dades per canviar l'amplada i l'alçada de la imatge. La imatge també es pot girar a un angle utilitzant <guilabel
+>Després de pujar la imatge es poden utilitzar diferents opcions de zoom des de la barra d'eines menú contextual/selector de dades per a canviar l'amplada i l'alçada de la imatge. La imatge també es pot girar a un angle utilitzant <guilabel
 >Gir</guilabel
 > a la secció «edició» del giny acoblat. Després d'això, cal que l'usuari <link linkend="axispoint"
 >estableixi els punts de l'eix</link
@@ -1723,13 +1723,13 @@
   <title
 >Símbols</title>
   <para
->Els símbols són els punts que es poden dibuixar sobre la imatge del selector de dades. Els símbols es poden crear directament amb un clic dret del ratolí sobre la imatge. Els símbols són principalment de dos tipus, amb barra d'error o sense depenent del tipus de <link linkend="datapickercurve"
+>Els símbols són els punts que es poden dibuixar sobre la imatge del selector de dades. Els símbols es poden crear directament amb un clic dret del ratolí sobre la imatge. Els símbols són principalment de dos tipus, amb barra d'error o sense, depenent del tipus de <link linkend="datapickercurve"
 >corba</link
 > a la qual pertanyen. </para>
   <para
 >Cada corba del selector de dades pot tenir el seu propi estil de símbol que es pot canviar a la secció <guilabel
 >Símbols</guilabel
-> del giny acoblat. El mode de ratolí «selecció i moure» es pot utilitzar per seleccionar múltiples punts/símbols i es poden moure utilitzant les tecles de navegació. </para>
+> del giny acoblat. El mode de ratolí «selecció i moure» es pot utilitzar per a seleccionar múltiples punts/símbols i es poden moure utilitzant les tecles de navegació. </para>
 </sect1>
 
 <sect1 id="axispoint">
@@ -1757,9 +1757,9 @@
   <para
 >Cada objecte de la corba conté tots els <link linkend="symbols"
 >punts</link
-> (amagats) de corba i un full de càlcul que conté posicions lògiques de tots els seus punts de corba, i proporciona opcions per actualitzar el full de càlcul i commutar la visibilitat dels seus punts de corba utilitzant el menú contextual. S'ha de seleccionar el mode <guimenuitem
+> (amagats) de corba i un full de càlcul que conté posicions lògiques de tots els seus punts de corba, i proporciona opcions per a actualitzar el full de càlcul i commutar la visibilitat dels seus punts de corba utilitzant el menú contextual. S'ha de seleccionar el mode <guimenuitem
 >Estableix els punts de corba</guimenuitem
-> al menú contextual del selector de dades per crear els punts de corba. </para>
+> al menú contextual del selector de dades per a crear els punts de corba. </para>
   <para
 >Es poden crear múltiples corbes per al mateix selector de dades. Els punts de corba creats sempre corresponen a la corba activa de l'acoblador de dades que es pot canviar mitjançant l'opció <guimenuitem
 >Corba activa</guimenuitem
@@ -1776,7 +1776,7 @@
 >Seleccioneu els segments de corba</guimenuitem
 > al menú contextual del selector de dades. Un segment és un objecte seleccionable sobre una imatge que es pot seleccionar fent-hi clic dret del ratolí. </para>
   <para
->Els segments es creen mitjançant el processament de la imatge en l'interval base dels atributs de color per tal de traçar automàticament les corbes. Per millorar els resultats aquests intervals i tipus d'atributs de color es poden canviar a la secció «Edita» del giny acoblat. El giny acoblat també proporciona opcions per canviar entre la imatge processada i la imatge original, i per establir la longitud mínima possible dels segments. </para>
+>Els segments es creen mitjançant el processament de la imatge en l'interval base dels atributs de color per tal de traçar automàticament les corbes. Per a millorar els resultats aquests intervals i tipus d'atributs de color es poden canviar a la secció «Edita» del giny acoblat. El giny acoblat també proporciona opcions per a canviar entre la imatge processada i la imatge original, i per a establir la longitud mínima possible dels segments. </para>
   <para
 >Una vegada seleccionat un segment crearà punts de corba sobre seu amb una distància mínima especificada entre ells. La distància mínima especificada entre els punts es pot canviar al giny acoblat del selector de dades. L'usuari podria haver de seleccionar els segments de nou per tal d'observar els canvis. </para>
 </sect1>
@@ -1811,7 +1811,7 @@ consuming the data from this data source will also be updated.
 >Barres d'errors</guilabel
 > de <link linkend="properties-explorer"
 >les propietats de la corba</link
-> per seleccionar <guilabel
+> per a seleccionar <guilabel
 >Tipus d'error</guilabel
 >, trieu la columna d'error de la llista <guilabel
 >Dades, +-</guilabel
@@ -1824,7 +1824,7 @@ consuming the data from this data source will also be updated.
 <title
 >Etiqueta TeX</title>
 <para
->Per utilitzar etiquetes TeX només cal activar el botó de commutació <guiicon
+>Per a utilitzar etiquetes TeX només cal activar el botó de commutació <guiicon
 >TeX</guiicon
 > a la pestanya <guilabel
 >Títol</guilabel
@@ -1978,7 +1978,7 @@ data sources for the curves, add legends, export everything to pdf) would also h
       <para
 >Utilitzeu la subfinestra <guilabel
 >Propietats de la corba d'equació XY</guilabel
-> a la dreta per introduir <userinput
+> a la dreta per a introduir <userinput
 >sin(x)</userinput
 > al camp <guilabel
 >y=f(x)</guilabel
@@ -1992,7 +1992,7 @@ data sources for the curves, add legends, export everything to pdf) would also h
 >x, màx</guilabel
 > i feu clic al botó <guibutton
 >Recalcula</guibutton
-> per veure el resultat. </para>
+> per a veure el resultat. </para>
       <screenshot>
       <screeninfo
 >El diagrama de corba predeterminat</screeninfo>
@@ -2010,7 +2010,7 @@ data sources for the curves, add legends, export everything to pdf) would also h
 	<para
 >El &LabPlot; ressalta la sintaxi desconeguda en el camp <guilabel
 >y=f(x)</guilabel
->. Això és útil per controlar la correcció de l'entrada. </para>
+>. Això és útil per a controlar la correcció de l'entrada. </para>
       </note>
       <important>
 	<para
@@ -2112,7 +2112,7 @@ data sources for the curves, add legends, export everything to pdf) would also h
 ><guimenuitem
 >Exporta</guimenuitem
 ></menuchoice
-> des del menú principal. Seleccioneu el lloc i el format per desar el diagrama. </para>
+> des del menú principal. Seleccioneu el lloc i el format per a desar el diagrama. </para>
       <screenshot>
       <screeninfo
 >Exportació del diagrama</screeninfo>
@@ -2234,7 +2234,7 @@ data sources for the curves, add legends, export everything to pdf) would also h
 >Format</guilabel
 > a les <guilabel
 >Propietats de la columna</guilabel
-> de l'acoblador de la dreta per millorar la presentació de dades per a la primera columna. </para>
+> de l'acoblador de la dreta per a millorar la presentació de dades per a la primera columna. </para>
     </step>
     <step>
       <para
@@ -2350,7 +2350,7 @@ data sources for the curves, add legends, export everything to pdf) would also h
       <para
 >Utilitzeu la subfinestra <guilabel
 >Propietats de la corba XY</guilabel
-> a la dreta per seleccionar <menuchoice
+> a la dreta per a seleccionar <menuchoice
 ><guimenu
 >Projecte</guimenu
 ><guisubmenu
@@ -2360,7 +2360,7 @@ data sources for the curves, add legends, export everything to pdf) would also h
 ></menuchoice
 > en el camp <guilabel
 >Dades X</guilabel
-> (només feu clic a l'element i premeu &Intro;). Utilitzeu el mateix procediment per seleccionar <guimenuitem
+> (només feu clic a l'element i premeu &Intro;). Utilitzeu el mateix procediment per a seleccionar <guimenuitem
 >2</guimenuitem
 > per al camp <guilabel
 >Dades Y</guilabel
@@ -2412,7 +2412,7 @@ data sources for the curves, add legends, export everything to pdf) would also h
 >Full de treball</guilabel
 > al plafó <guilabel
 >Explorador del projecte</guilabel
-> amb el &BER; per veure els resultats. </para>
+> amb el &BER; per a veure els resultats. </para>
       <screenshot>
       <screeninfo
 >El diagrama per a les dades ordenades</screeninfo>
@@ -2450,7 +2450,7 @@ data sources for the curves, add legends, export everything to pdf) would also h
 >Filtre de Fourier</term>
     <listitem>
         <para
->Un senyal de temps que contingui codi Morse s'aplica la transformada de Fourier a l'espai de freqüència per veure el component principal. Aplicant un filtre de pas de banda estreta s'extreu el senyal Morse i es pot veure un bon «SOS»: </para>
+>Un senyal de temps que contingui codi Morse s'aplica la transformada de Fourier a l'espai de freqüència per a veure el component principal. Aplicant un filtre de pas de banda estreta s'extreu el senyal Morse i es pot veure un bon «SOS»: </para>
         
         <screenshot>
         <mediaobject
@@ -3959,7 +3959,7 @@ data sources for the curves, add legends, export everything to pdf) would also h
 >exp_mult(x,y)</entry
 ><entry
 ><action
->Exponencial de x i multiplica pel factor y per retornar el producte y exp(x)</action
+>Exponencial de x i multiplica pel factor y per a retornar el producte y exp(x)</action
 ></entry
 ></row>
 <row
@@ -6982,7 +6982,7 @@ data sources for the curves, add legends, export everything to pdf) would also h
 </question>
 <answer>
 <para
->El &LabPlot; es desenvolupa per a plataformes Unix i utilitza el conjunt d'eines de les &Qt; i els &kde-frameworks;. Normalment podeu esperar que el &LabPlot; construeixi i s'executi en totes les plataformes que implementi el &kde-frameworks;. Una llista recent de plataformes i consells per compilar i executar el &LabPlot; es pot trobar a <ulink url="http://labplot.wiki.sourceforge.net/Download"
+>El &LabPlot; es desenvolupa per a plataformes Unix i utilitza el conjunt d'eines de les &Qt; i els &kde-frameworks;. Normalment podeu esperar que el &LabPlot; construeixi i s'executi en totes les plataformes que implementi el &kde-frameworks;. Una llista recent de plataformes i consells per a compilar i executar el &LabPlot; es pot trobar a <ulink url="http://labplot.wiki.sourceforge.net/Download"
 >http://labplot.wiki.sourceforge.net/Download</ulink
 >. </para>
 </answer>
@@ -7014,9 +7014,9 @@ data sources for the curves, add legends, export everything to pdf) would also h
 <para
 >Utilitzeu el botó <guiicon
 >&pi;</guiicon
-> per obrir la finestra del selector de caràcters o el <guiicon
+> per a obrir la finestra del selector de caràcters o el <guiicon
 >&tex;</guiicon
-> per generar lletres gregues i altres símbols utilitzant el &latex;. </para>
+> per a generar lletres gregues i altres símbols utilitzant el &latex;. </para>
 </answer>
 </qandaentry>
 
@@ -7027,7 +7027,7 @@ data sources for the curves, add legends, export everything to pdf) would also h
 </question>
 <answer>
 <para
->Doneu un cop d'ull al fitxer TODO de la documentació del &LabPlot;. Aquí, totes les característiques planificades estan llistades en un ordre més o menys ordenat que implementaré en versions futures del &LabPlot;. Si us agrada tenir característiques addicionals o tenir una característica llistada aviat, envieu-me els vostres desitjos i, si és possible, envieu-me dades d'exemple o una breu descripció del que us agrada fer. No és improbable que la vostra característica aparegui en el següent llançament estable del &LabPlot; :-) </para>
+>Doneu un cop d'ull al fitxer TODO de la documentació del &LabPlot;. Aquí, totes les característiques planificades estan llistades en un ordre més o menys ordenat que implementaré en versions futures del &LabPlot;. Si us agrada tenir característiques addicionals o tenir una característica llistada aviat, envieu-me els vostres desitjos i, si és possible, envieu-me dades d'exemple o una breu descripció del que us agrada fer. No és improbable que la vostra característica aparegui en el llançament següent estable del &LabPlot; :-) </para>
 </answer>
 </qandaentry>
 
@@ -7038,13 +7038,13 @@ data sources for the curves, add legends, export everything to pdf) would also h
 </question>
 <answer
 ><para
->Sembla que aquest paquet del &LabPlot; s'ha compilat sense el suport de la GSL (Biblioteca Científica de &GNU;). El &LabPlot; va ser dissenyat per treballar en sistemes que els hi manquin la majoria de les biblioteques estàndard. Moltes distribucions lliuren els paquets del &LabPlot; sense aquesta funcionalitat addicional. En aquest cas algunes funcions no estan disponibles. Afortunadament alguns programes (com el <application
+>Sembla que aquest paquet del &LabPlot; s'ha compilat sense el suport de la GSL (Biblioteca Científica de &GNU;). El &LabPlot; va ser dissenyat per a treballar en sistemes que els hi manquin la majoria de les biblioteques estàndard. Moltes distribucions lliuren els paquets del &LabPlot; sense aquesta funcionalitat addicional. En aquest cas algunes funcions no estan disponibles. Afortunadament alguns programes (com el <application
 >pstoedit</application
 > o el <application
 >texvc</application
 >) es poden afegir sense tornar a compilar el &LabPlot;. Sempre podeu comprovar l'entorn del vostre sistema en el menú Ajuda del &LabPlot;. </para>
 <para
->Els paquets proporcionats a la pàgina oficial de descàrrega sempre es construeixen amb les biblioteques estàndard (GSL, &etc;). Hauríeu d'utilitzar-les per tenir totes les característiques. </para>
+>Els paquets proporcionats a la pàgina oficial de descàrrega sempre es construeixen amb les biblioteques estàndard (GSL, &etc;). Hauríeu d'utilitzar-les per a tenir totes les característiques. </para>
 </answer>
 </qandaentry>
 
@@ -7055,7 +7055,7 @@ data sources for the curves, add legends, export everything to pdf) would also h
 </question>
 <answer
 ><para
->Sí, és clar. Hi ha moltes coses a fer. Fins i tot si no coneixeu res sobre la programació, sempre necessitem gent per trobar errors, provar coses i fer suggeriments. També la traducció i la documentació sempre necessiten molta feina. </para
+>Sí, és clar. Hi ha moltes coses a fer. Fins i tot si no coneixeu res sobre la programació, sempre necessitem gent per a trobar errors, provar coses i fer suggeriments. També la traducció i la documentació sempre necessiten molta feina. </para
 ></answer>
 </qandaentry>
 
@@ -7083,7 +7083,7 @@ data sources for the curves, add legends, export everything to pdf) would also h
 </important>
 
 <para
->Com que hi ha moltes coses per fer, els desenvolupadors necessiten tota l'ajuda que pugueu donar. És benvinguda qualsevol col·laboració com desitjos, correccions, pedaços, informes d'errors o captures de pantalla. </para>
+>Com que hi ha moltes coses per a fer, els desenvolupadors necessiten tota l'ajuda que pugueu donar. És benvinguda qualsevol col·laboració com desitjos, correccions, pedaços, informes d'errors o captures de pantalla. </para>
 
 <para
 >Copyright de la documentació &copy; 2007-2016 Stefan Gerlach <email

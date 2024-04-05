@@ -72,13 +72,6 @@ private:
 	CONDITIONAL_RETURN_NO_LOCK                                                                                                                                 \
 	const Lock lock(m_initializing);
 
-#if QT_VERSION < 0x050700
-template<class T>
-constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
-	return t;
-}
-#endif
-
 #define WAIT_CURSOR QApplication::setOverrideCursor(QCursor(Qt::WaitCursor))
 #define RESET_CURSOR QApplication::restoreOverrideCursor()
 
@@ -694,7 +687,7 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
 // used in Project::load()
 #define RESTORE_COLUMN_POINTER(obj, col, Col)                                                                                                                  \
 	if (!obj->col##Path().isEmpty()) {                                                                                                                         \
-		for (Column * column : columns) {                                                                                                                      \
+		for (auto* column : columns) {                                                                                                                         \
 			if (!column)                                                                                                                                       \
 				continue;                                                                                                                                      \
 			if (column->path() == obj->col##Path()) {                                                                                                          \
@@ -719,7 +712,7 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
 
 #define RESTORE_POINTER(obj, name, Name, Type, list)                                                                                                           \
 	if (!obj->name##Path().isEmpty()) {                                                                                                                        \
-		for (AbstractAspect * aspect : list) {                                                                                                                 \
+		for (auto* aspect : list) {                                                                                                                            \
 			if (aspect->path() == obj->name##Path()) {                                                                                                         \
 				auto a = dynamic_cast<Type*>(aspect);                                                                                                          \
 				if (!a)                                                                                                                                        \

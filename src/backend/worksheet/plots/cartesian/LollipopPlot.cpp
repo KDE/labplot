@@ -19,6 +19,7 @@
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "backend/worksheet/plots/cartesian/Value.h"
+#include "kdefrontend/GuiTools.h"
 #include "tools/ImageTools.h"
 
 #include <KConfig>
@@ -68,7 +69,28 @@ void LollipopPlot::init() {
 	Returns an icon to be used in the project explorer.
 */
 QIcon LollipopPlot::icon() const {
-	return QIcon::fromTheme(QStringLiteral("office-chart-bar"));
+	return LollipopPlot::staticIcon();
+}
+
+QIcon LollipopPlot::staticIcon() {
+	QPainter pa;
+	pa.setRenderHint(QPainter::Antialiasing);
+	int iconSize = 20;
+	QPixmap pm(iconSize, iconSize);
+
+	QPen pen(Qt::SolidLine);
+	pen.setColor(GuiTools::isDarkMode() ? Qt::white : Qt::black);
+	pen.setWidthF(0.0);
+
+	pm.fill(Qt::transparent);
+	pa.begin(&pm);
+	pa.setPen(pen);
+	pa.setBrush(pen.color());
+	pa.drawLine(10, 6, 10, 14);
+	pa.drawEllipse(8, 4, 4, 4);
+	pa.end();
+
+	return {pm};
 }
 
 void LollipopPlot::initActions() {
@@ -185,6 +207,54 @@ bool LollipopPlot::hasData() const {
 	return !d->dataColumns.isEmpty();
 }
 
+bool LollipopPlot::usingColumn(const Column* column) const {
+	Q_D(const LollipopPlot);
+
+	if (d->xColumn == column)
+		return true;
+
+	for (auto* c : d->dataColumns) {
+		if (c == column)
+			return true;
+	}
+
+	return false;
+}
+
+void LollipopPlot::handleAspectUpdated(const QString& aspectPath, const AbstractAspect* aspect) {
+	Q_D(const LollipopPlot);
+	const auto column = dynamic_cast<const AbstractColumn*>(aspect);
+	if (!column)
+		return;
+	const auto dataColumnPaths = d->dataColumnPaths;
+	auto dataColumns = d->dataColumns;
+	bool changed = false;
+
+	for (int i = 0; i < dataColumnPaths.count(); ++i) {
+		const auto& path = dataColumnPaths.at(i);
+
+		if (path == aspectPath) {
+			dataColumns[i] = column;
+			changed = true;
+		}
+	}
+
+	if (changed) {
+		setUndoAware(false);
+		setDataColumns(dataColumns);
+		setUndoAware(true);
+	}
+}
+
+QColor LollipopPlot::color() const {
+	Q_D(const LollipopPlot);
+	if (d->lines.size() > 0 && d->lines.at(0)->style() != Qt::PenStyle::NoPen)
+		return d->lines.at(0)->pen().color();
+	else if (d->symbols.size() > 0 && d->symbols.at(0)->style() != Symbol::Style::NoSymbols)
+		return d->symbols.at(0)->pen().color();
+	return QColor();
+}
+
 // values
 Value* LollipopPlot::value() const {
 	Q_D(const LollipopPlot);
@@ -229,6 +299,7 @@ void LollipopPlot::setDataColumns(const QVector<const AbstractColumn*> columns) 
 			// TODO: add disconnect in the undo-function
 
 			connect(column, &AbstractColumn::dataChanged, this, &LollipopPlot::dataChanged);
+			connect(column, &AbstractAspect::aspectDescriptionChanged, this, &Plot::appearanceChanged);
 		}
 	}
 }
@@ -284,12 +355,12 @@ Line* LollipopPlotPrivate::addLine(const KConfigGroup& group) {
 
 	q->connect(line, &Line::updatePixmapRequested, [=] {
 		updatePixmap();
-		Q_EMIT q->updateLegendRequested();
+		Q_EMIT q->appearanceChanged();
 	});
 
 	q->connect(line, &Line::updateRequested, [=] {
 		recalcShapeAndBoundingRect();
-		Q_EMIT q->updateLegendRequested();
+		Q_EMIT q->appearanceChanged();
 	});
 
 	lines << line;
@@ -307,7 +378,7 @@ Symbol* LollipopPlotPrivate::addSymbol(const KConfigGroup& group) {
 
 	q->connect(symbol, &Symbol::updateRequested, [=] {
 		updatePixmap();
-		Q_EMIT q->updateLegendRequested();
+		Q_EMIT q->appearanceChanged();
 	});
 
 	symbols << symbol;
@@ -319,6 +390,7 @@ void LollipopPlotPrivate::addValue(const KConfigGroup& group) {
 	value = new Value(QString());
 	q->addChild(value);
 	value->setHidden(true);
+	value->setcenterPositionAvailable(true);
 	if (!q->isLoading())
 		value->init(group);
 
@@ -540,6 +612,7 @@ void LollipopPlotPrivate::verticalPlot(int columnIndex) {
 		x += (width + barGap) * columnIndex; // translate to the beginning of the bar within the current group
 
 		symbolPoints << QPointF(x + width / 2, value);
+		m_valuesPointsLogical << QPointF(x + width / 2, value);
 		barLines << QLineF(x + width / 2, 0, x + width / 2, value);
 		++valueIndex;
 	}
@@ -692,6 +765,20 @@ void LollipopPlotPrivate::updateValues() {
 		}
 		break;
 	case Value::Center:
+		QVector<qreal> listBarWidth;
+		for (const auto& columnBarLines : m_barLines) // loop over the different data columns
+			for (const auto& line : columnBarLines)
+				listBarWidth.append(line.length());
+
+		for (int i = 0; i < m_valuesStrings.size(); i++) {
+			w = fm.boundingRect(m_valuesStrings.at(i)).width();
+			const auto& point = pointsScene.at(i);
+			if (orientation == LollipopPlot::Orientation::Vertical)
+				m_valuesPoints << QPointF(point.x() - w / 2,
+										  point.y() + listBarWidth.at(i) / 2 + offset - Worksheet::convertToSceneUnits(1, Worksheet::Unit::Point));
+			else
+				m_valuesPoints << QPointF(point.x() - listBarWidth.at(i) / 2 - offset + h / 2 - w / 2, point.y() + h / 2);
+		}
 		break;
 	}
 
@@ -894,6 +981,7 @@ void LollipopPlot::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("xMax"), QString::number(d->xMax));
 	writer->writeAttribute(QStringLiteral("yMin"), QString::number(d->yMin));
 	writer->writeAttribute(QStringLiteral("yMax"), QString::number(d->yMax));
+	writer->writeAttribute(QStringLiteral("legendVisible"), QString::number(d->legendVisible));
 	writer->writeAttribute(QStringLiteral("visible"), QString::number(d->isVisible()));
 
 	if (d->xColumn)
@@ -954,6 +1042,7 @@ bool LollipopPlot::load(XmlStreamReader* reader, bool preview) {
 			READ_DOUBLE_VALUE("yMin", yMin);
 			READ_DOUBLE_VALUE("yMax", yMax);
 			READ_COLUMN(xColumn);
+			READ_INT_VALUE("legendVisible", legendVisible, bool);
 
 			str = attribs.value(QStringLiteral("visible")).toString();
 			if (str.isEmpty())
@@ -1016,16 +1105,16 @@ void LollipopPlot::loadThemeConfig(const KConfig& config) {
 	Q_D(LollipopPlot);
 	d->suppressRecalc = true;
 
-	// lines
-	for (int i = 0; i < d->lines.count(); ++i) {
-		auto* line = d->lines.at(i);
-		line->loadThemeConfig(group, plot->themeColorPalette(i));
-	}
+	for (int i = 0; i < d->dataColumns.count(); ++i) {
+		const auto& color = plot->themeColorPalette(i);
 
-	// symbols
-	for (int i = 0; i < d->symbols.count(); ++i) {
+		// lines
+		auto* line = d->lines.at(i);
+		line->loadThemeConfig(group, color);
+
+		// symbols
 		auto* symbol = d->symbols.at(i);
-		symbol->loadThemeConfig(group, plot->themeColorPalette(i));
+		symbol->loadThemeConfig(group, color);
 	}
 
 	// values

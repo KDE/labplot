@@ -55,6 +55,7 @@ AxisDock::AxisDock(QWidget* parent)
 	ui.setupUi(this);
 	setPlotRangeCombobox(ui.cbPlotRanges);
 	setBaseWidgets(ui.leName, ui.teComment);
+	setVisibilityWidgets(ui.chkVisible);
 
 	//"Title"-tab
 	auto* hboxLayout = new QHBoxLayout(ui.tabTitle);
@@ -148,8 +149,6 @@ AxisDock::AxisDock(QWidget* parent)
 	connect(ui.tbUnityRange, &QToolButton::clicked, this, &AxisDock::setUnityRange);
 
 	connect(ui.chkShowScaleOffset, &QCheckBox::toggled, this, &AxisDock::showScaleOffsetChanged);
-
-	connect(ui.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AxisDock::plotRangeChanged);
 
 	//"Line"-tab
 	connect(lineWidget, &LineWidget::colorChanged, this, &AxisDock::updateArrowLineColor);
@@ -381,7 +380,7 @@ void AxisDock::setAxes(QList<Axis*> list) {
 	majorGridLineWidget->setLines(majorGridLines);
 	minorGridLineWidget->setLines(minorGridLines);
 
-	updatePlotRanges();
+	updatePlotRangeList();
 	initConnections();
 }
 
@@ -399,7 +398,6 @@ void AxisDock::initConnections() {
 	connect(m_axis, &Axis::zeroOffsetChanged, this, &AxisDock::axisZeroOffsetChanged);
 	connect(m_axis, &Axis::scalingFactorChanged, this, &AxisDock::axisScalingFactorChanged);
 	connect(m_axis, &Axis::showScaleOffsetChanged, this, &AxisDock::axisShowScaleOffsetChanged);
-	connect(m_axis, &WorksheetElement::plotRangeListChanged, this, &AxisDock::updatePlotRanges);
 
 	// line
 	connect(m_axis, &Axis::arrowTypeChanged, this, &AxisDock::axisArrowTypeChanged);
@@ -511,8 +509,8 @@ void AxisDock::setModelIndexFromColumn(TreeViewComboBox* cb, const AbstractColum
 		cb->setCurrentModelIndex(QModelIndex());
 }
 
-void AxisDock::updatePlotRanges() {
-	updatePlotRangeList();
+void AxisDock::updatePlotRangeList() {
+	BaseDock::updatePlotRangeList();
 
 	if (m_axis->coordinateSystemCount() == 0)
 		return;
@@ -1029,9 +1027,9 @@ void AxisDock::majorTicksTypeChanged(int index) {
 	case Axis::TicksType::ColumnLabels:
 		// Fall through
 	case Axis::TicksType::CustomColumn: {
-		ui.lMajorTicksNumber->hide();
-		ui.sbMajorTicksNumber->hide();
-		ui.cbMajorTicksAutoNumber->hide();
+		ui.lMajorTicksNumber->show();
+		ui.sbMajorTicksNumber->show();
+		ui.cbMajorTicksAutoNumber->show();
 		ui.lMajorTicksSpacingNumeric->hide();
 		ui.sbMajorTicksSpacingNumeric->hide();
 		ui.lMajorTicksIncrementDateTime->hide();

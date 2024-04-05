@@ -1,35 +1,79 @@
 # SPDX-FileCopyrightText: 2020 Volker Krause <vkrause@kde.org>
-# SPDX-FileCopyrightText: 2022-2023 Stefan Gerlach <stefan.gerlach@uni.kn>
+# SPDX-FileCopyrightText: 2022-2024 Stefan Gerlach <stefan.gerlach@uni.kn>
 # SPDX-License-Identifier: CC0-1.0
 
-# full path: https://invent.kde.org/sysadmin/ci-utilities/-/tree/master/gitlab-templates?ref_type=heads
+# full path: https://invent.kde.org/sysadmin/ci-utilities/-/tree/master/gitlab-templates
 include:
   - project: sysadmin/ci-utilities
     file:
-# fails
+# reuse-lint fails
 #      - /gitlab-templates/reuse-lint.yml
-# TODO: fails atm due to libpoppler linking
-#      - /gitlab-templates/linux.yml
+# unused
+      - /gitlab-templates/clang-format.yml
+      - /gitlab-templates/linux.yml
       - /gitlab-templates/windows.yml
       - /gitlab-templates/linux-qt6.yml
       - /gitlab-templates/windows-qt6.yml
-      - /gitlab-templates/freebsd.yml
-# finds Qt5 but KF5 is not installed
+# readstat (missing prototype) error on FreeBSD
+#      - /gitlab-templates/freebsd.yml
 #      - /gitlab-templates/freebsd-qt6.yml
-# replaced with own target for correct module name:
-#      - /gitlab-templates/flatpak.yml
-# supposed to run manual:
-#      - /gitlab-templates/craft-appimage.yml
-#      - /gitlab-templates/craft-windows-x86-64.yml
+### DEPLOY
+      - /gitlab-templates/craft-appimage.yml
+# see below for flatpak variables
+      - /gitlab-templates/flatpak.yml
+      - /gitlab-templates/craft-macos-x86-64.yml
+      - /gitlab-templates/craft-macos-arm64.yml
+      - /gitlab-templates/craft-windows-x86-64.yml
+# only for publishing in the MS Store
+#      - /gitlab-templates/craft-windows-appx-qt5.yml
+# all fail due to cantor (not Qt6)
+#      - /gitlab-templates/craft-appimage-qt6.yml
+#      - /gitlab-templates/craft-windows-x86-64-qt6.yml
+#      - /gitlab-templates/craft-windows-appx-qt6.yml
+#      - /gitlab-templates/craft-windows-mingw64-qt6.yml
+#      - /gitlab-templates/craft-macos-x86-64-qt6.yml
+#      - /gitlab-templates/craft-macos-arm64-qt6.yml
+# fails linking tests due to undefined references to GSL functions
 #      - /gitlab-templates/craft-windows-mingw64.yml
-# fails because cantor needs Qt5WebEngine:
-#      - /gitlab-templates/craft-macos-x86-64.yml
-#      - /gitlab-templates/craft-macos-arm64.yml
 
-# needed for tests (use "ctest -V" for more output)
-#variables:
-#  QT_TEST_TIMEOUT_FUNCTION: "600"
+craft_appimage_qt515_x86_64:
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "master"'
 
+craft_windows_qt515_x86_64:
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "master"'
+
+craft_macos_x86_64:
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "master"'
+
+craft_macos_arm64:
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "master"'
+
+clang_format:
+  stage: test
+  image: debian:bookworm
+  before_script:
+    - apt-get update
+    - apt-get install --yes --no-install-recommends git clang-format-13
+  script: |
+    ./cl-fmt.sh
+    git diff --exit-code
+
+# see above
+flatpak:
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "master"'
+  variables:
+    KDE_FLATPAK_MODULE_NAME: labplot2
+    KDE_FLATPAK_APP_ID: org.kde.${KDE_FLATPAK_MODULE_NAME}
+
+variables:
+    QT_TEST_TIMEOUT_FUNCTION: "600"
+
+########################################################
 # test builds (prepend '.' to temporary disable):
 ## Ubuntu 22.04 min (Debug)
 ## Ubuntu 22.04 full (Release)
@@ -38,8 +82,6 @@ include:
 ## OS 15.5 min (Release)
 ## OS 15.5 full (Debug)
 ## Tumbleweed full (Debug)
-
-########################################################
 
 .ubuntu_22.04_min:
   stage: build
@@ -173,42 +215,3 @@ include:
 # libEGL warning: DRI2: failed to create any config
 #    - xvfb-run ctest -T Test --output-on-failure
 
-#########################################################
-
-clang_format:
-  stage: test
-  image: debian:testing
-  before_script:
-    - apt-get update
-    - apt-get install --yes --no-install-recommends git clang-format-13
-  script: |
-    ./cl-fmt.sh
-    git diff --exit-code
-
-# see https://invent.kde.org/sysadmin/ci-utilities/-/blob/master/gitlab-templates/flatpak.yml
-flatpak:
-  stage: deploy
-  image: invent-registry.kde.org/sysadmin/ci-images/flatpak-builder:latest
-  only:
-#    - merge_requests
-    - master
-  tags:
-    - Linux
-  variables:
-    KDE_FLATPAK_MODULE_NAME: labplot2
-    KDE_FLATPAK_APP_ID: org.kde.${KDE_FLATPAK_MODULE_NAME}
-  interruptible: true
-  before_script:
-    - git clone https://invent.kde.org/sysadmin/ci-utilities.git --depth=1
-  script:
-    - echo ${KDE_FLATPAK_MODULE_NAME}
-    - echo ${KDE_FLATPAK_APP_ID}
-    # Build and install
-    - python3 -u ci-utilities/flatpak-build.py ${KDE_FLATPAK_MODULE_NAME}
-  artifacts:
-    name: Flatpak artifacts
-    expose_as: 'Flatpak Bundle'
-    when: on_success
-    paths:
-      - "${KDE_FLATPAK_MODULE_NAME}.flatpak"
-    expire_in: 7 days

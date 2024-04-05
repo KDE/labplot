@@ -27,6 +27,10 @@ DateTimeSpinBox::DateTimeSpinBox(QWidget* parent)
 	lineEdit()->setValidator(m_regularExpressionValidator);
 }
 
+DateTimeSpinBox::~DateTimeSpinBox() {
+	delete m_regularExpressionValidator;
+}
+
 void DateTimeSpinBox::keyPressEvent(QKeyEvent* event) {
 	if (event->key() >= Qt::Key_0 && event->key() <= Qt::Key_9) {
 		int cursorPos = lineEdit()->cursorPosition();

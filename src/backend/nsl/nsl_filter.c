@@ -239,7 +239,7 @@ int nsl_filter_apply(double data[], size_t n, nsl_filter_type type, nsl_filter_f
 	return 0;
 }
 
-void print_fdata(double data[], size_t n) {
+void print_fdata(double const data[], size_t n) {
 	size_t i;
 	for (i = 0; i < 2 * (n / 2 + 1); i++)
 		printf("%g ", data[i]);

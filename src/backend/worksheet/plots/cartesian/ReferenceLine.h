@@ -22,7 +22,7 @@ class ReferenceLine : public WorksheetElement {
 	Q_OBJECT
 
 public:
-	explicit ReferenceLine(CartesianPlot*, const QString&);
+	explicit ReferenceLine(CartesianPlot*, const QString&, bool loading = false);
 	~ReferenceLine() override;
 
 	QIcon icon() const override;
@@ -45,7 +45,7 @@ protected:
 
 private:
 	Q_DECLARE_PRIVATE(ReferenceLine)
-	void init();
+	void init(bool loading = false);
 	void initActions();
 	void initMenus();
 
