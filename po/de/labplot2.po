@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-04 01:43+0000\n"
+"POT-Creation-Date: 2024-04-05 01:38+0000\n"
 "PO-Revision-Date: 2023-11-26 22:42+0100\n"
 "Last-Translator: Stefan Gerlach <stefan.gerlach@uni.kn>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -1164,7 +1164,7 @@ msgstr "Zeitstempel"
 #: src/backend/datasources/filters/AsciiFilter.cpp:1523
 #: src/backend/datasources/filters/AsciiFilter.cpp:2083
 #: src/backend/datasources/filters/BinaryFilter.cpp:293
-#: src/backend/datasources/filters/BinaryFilter.cpp:439
+#: src/backend/datasources/filters/BinaryFilter.cpp:436
 #: src/backend/nsl/nsl_dft.c:29 src/backend/nsl/nsl_filter.c:23
 #, kde-format
 msgid "Index"
@@ -1206,7 +1206,7 @@ msgid "Value %1"
 msgstr "Wert %1"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:1303
-#: src/backend/datasources/filters/BinaryFilter.cpp:447
+#: src/backend/datasources/filters/BinaryFilter.cpp:444
 #: src/backend/datasources/filters/CANFilter.cpp:299
 #: src/backend/datasources/filters/FITSFilter.cpp:329
 #: src/backend/datasources/filters/FITSFilter.cpp:339
