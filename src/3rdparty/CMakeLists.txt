@@ -35,6 +35,7 @@ IF (BUILD_READSTAT)
 	set(ext_insource ON)
 	#set(ext_make ${CMAKE_MAKE_PROGRAM} CXXFLAGS=-fPIC CFLAGS=-fPIC)
 
+	set(patch_command git apply ${CMAKE_CURRENT_SOURCE_DIR}/patches/readstat-1.1.9.patch)
 	set(readstat_library libreadstat.a)
 #endif()
 	ExternalProject_Add(3rdparty_readstat
@@ -43,6 +44,7 @@ IF (BUILD_READSTAT)
 		SOURCE_DIR ${ext_src}
 		CONFIGURE_COMMAND ${ext_configure}
 		BUILD_IN_SOURCE ${ext_insource}
+		PATCH_COMMAND ${patch_command}
 		#BUILD_COMMAND ${ext_make}
 		# libtool install does not work with spaces
 		#INSTALL_COMMAND ${CMAKE_MAKE_PROGRAM} install
