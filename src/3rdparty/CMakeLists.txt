@@ -81,6 +81,10 @@ if (ENABLE_VECTOR_BLF)
           add_definitions (-DFASTFLOAT_VISUAL_STUDIO=0)
           add_definitions (-D__forceinline=inline)
       ENDIF ()
+      # disable -Werror=maybe-uninitialized since gcc gives false positive warnings when address sanitizer is used
+      IF ("${CMAKE_C_COMPILER_ID}" MATCHES "GNU")
+          set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-error=maybe-uninitialized")
+      ENDIF ()
       # dbc is the root project name
       # https://gitlab.kitware.com/cmake/cmake/-/issues/19854
       set(CMAKE_PROJECT_dbc_INCLUDE "${CMAKE_CURRENT_SOURCE_DIR}/cmake/dbc_database_parser_disableTests.cmake")
