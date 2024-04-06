@@ -1,5 +1,5 @@
 /*
-	File                 : OriginProjectParser.h
+	File                 : OriginProjectParser.cpp
 	Project              : LabPlot
 	Description          : parser for Origin projects
 	--------------------------------------------------------------------
