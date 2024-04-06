@@ -39,7 +39,7 @@ public:
 	enum ValuesType { NoValues, ValuesBinEntries, ValuesCustomColumn };
 	enum ValuesPosition { ValuesAbove, ValuesUnder, ValuesLeft, ValuesRight };
 
-	explicit Histogram(const QString& name);
+	explicit Histogram(const QString& name, bool loading = false);
 	~Histogram() override;
 
 	QIcon icon() const override;
@@ -82,7 +82,6 @@ public:
 	double maximum(CartesianCoordinateSystem::Dimension) const override;
 	bool hasData() const override;
 	bool usingColumn(const Column*) const override;
-	void updateColumnDependencies(const AbstractColumn*) override;
 	QColor color() const override;
 
 	const AbstractColumn* bins() const;
@@ -103,10 +102,11 @@ private Q_SLOTS:
 
 protected:
 	Histogram(const QString& name, HistogramPrivate* dd);
+	virtual void handleAspectUpdated(const QString& aspectPath, const AbstractAspect*) override;
 
 private:
 	Q_DECLARE_PRIVATE(Histogram)
-	void init();
+	void init(bool loading = false);
 	void initActions();
 	void connectDataColumn(const AbstractColumn*);
 

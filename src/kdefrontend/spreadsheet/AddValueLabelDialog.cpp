@@ -40,8 +40,8 @@ AddValueLabelDialog::AddValueLabelDialog(QWidget* parent, const Column* column)
 	auto* layout = new QGridLayout(this);
 
 	// value
-	auto* label = new QLabel(i18n("Value:"));
-	layout->addWidget(label, 0, 0);
+	auto* l = new QLabel(i18n("Value:"));
+	layout->addWidget(l, 0, 0);
 
 	if (mode == AbstractColumn::ColumnMode::Double || mode == AbstractColumn::ColumnMode::Integer || mode == AbstractColumn::ColumnMode::BigInt) {
 		leValue = new QLineEdit(this);
@@ -81,8 +81,8 @@ AddValueLabelDialog::AddValueLabelDialog(QWidget* parent, const Column* column)
 	}
 
 	// label
-	label = new QLabel(i18n("Label:"));
-	layout->addWidget(label, 1, 0);
+	l = new QLabel(i18n("Label:"));
+	layout->addWidget(l, 1, 0);
 
 	leLabel = new QLineEdit(this);
 	layout->addWidget(leLabel, 1, 1);
@@ -123,16 +123,16 @@ double AddValueLabelDialog::value() const {
 
 int AddValueLabelDialog::valueInt() const {
 	bool ok;
-	int value = QLocale().toInt(leValue->text(), &ok);
+	const int v = QLocale().toInt(leValue->text(), &ok);
 
-	return ok ? value : 0;
+	return ok ? v : 0;
 }
 
 qint64 AddValueLabelDialog::valueBigInt() const {
 	bool ok;
-	qint64 value = QLocale().toLongLong(leValue->text(), &ok);
+	const qint64 v = QLocale().toLongLong(leValue->text(), &ok);
 
-	return ok ? value : 0;
+	return ok ? v : 0;
 }
 
 QString AddValueLabelDialog::valueText() const {

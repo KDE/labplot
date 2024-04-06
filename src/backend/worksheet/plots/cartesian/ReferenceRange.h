@@ -25,7 +25,7 @@ class ReferenceRange : public WorksheetElement {
 	Q_OBJECT
 
 public:
-	explicit ReferenceRange(CartesianPlot*, const QString&);
+	explicit ReferenceRange(CartesianPlot*, const QString&, bool loading = false);
 	~ReferenceRange() override;
 
 	QIcon icon() const override;
@@ -54,7 +54,7 @@ protected:
 
 private:
 	Q_DECLARE_PRIVATE(ReferenceRange)
-	void init();
+	void init(bool loading);
 	void initActions();
 	void initMenus();
 

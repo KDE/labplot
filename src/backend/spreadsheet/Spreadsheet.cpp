@@ -1320,17 +1320,19 @@ int Spreadsheet::prepareImport(std::vector<void*>& dataContainer,
 	const auto& columns = children<Column>(); // Get new children because of the resize it might be different
 
 	// resize the spreadsheet
-	try {
-		if (importMode == AbstractFileFilter::ImportMode::Replace) {
-			clear();
-			setRowCount(actualRows);
-		} else {
-			if (rowCount() < actualRows)
+	if (initializeContainer) {
+		try {
+			if (importMode == AbstractFileFilter::ImportMode::Replace) {
+				clear();
 				setRowCount(actualRows);
+			} else {
+				if (rowCount() < actualRows)
+					setRowCount(actualRows);
+			}
+		} catch (std::bad_alloc&) {
+			ok = false;
+			return 0;
 		}
-	} catch (std::bad_alloc&) {
-		ok = false;
-		return 0;
 	}
 
 	if (columnMode.size() < actualCols) {
@@ -1384,6 +1386,7 @@ int Spreadsheet::prepareImport(std::vector<void*>& dataContainer,
 			}
 			}
 		} else {
+			// Assign already allocated datacontainer to the column
 			column->setData(dataContainer[n]);
 		}
 	}
@@ -1577,6 +1580,15 @@ void Spreadsheet::finalizeImport(size_t columnOffset,
 	Q_EMIT rowCountChanged(rowCount());
 
 	// DEBUG(Q_FUNC_INFO << " DONE");
+}
+
+void Spreadsheet::handleAspectUpdated(const QString& aspectPath, const AbstractAspect* aspect) {
+	const auto* sh = dynamic_cast<const Spreadsheet*>(aspect);
+	if (sh && linkedSpreadsheetPath() == aspectPath) {
+		setUndoAware(false);
+		setLinkedSpreadsheet(sh);
+		setUndoAware(true);
+	}
 }
 
 // ##############################################################################

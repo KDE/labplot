@@ -3222,7 +3222,7 @@ void OriginAnyParser::getProjectLeafProperties(tree<ProjectNode>::iterator curre
     LOG_PRINT(logfile, "file_type=%d file_object_id=%d\n", file_type, file_object_id);
     if (file_type == 0x100000) { // Note window
         LOG_PRINT(logfile, "notes.size()=%d\n", (int)notes.size());
-        if ((file_object_id <= notes.size()) && (notes.size() > 0)) {
+        if ((file_object_id < notes.size()) && (notes.size() > 0)) {
             projectTree.append_child(current_folder,
                                      ProjectNode(notes[file_object_id].name, ProjectNode::Note));
         }

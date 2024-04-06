@@ -33,8 +33,8 @@ private:
 	int adjacentRuns(const bool*, int, int, int);
 	Segment* adjacentSegment(Segment**, int, int, int);
 	int adjacentSegments(Segment**, int, int, int);
-	void matchRunsToSegments(int, int, bool*, Segment**, const bool*, Segment**, bool*);
-	void finishRun(bool*, bool*, Segment**, Segment**, int, int, int, int);
+	void matchRunsToSegments(int, int, const bool*, Segment**, const bool*, Segment**, const bool*);
+	void finishRun(const bool*, const bool*, Segment**, Segment**, int, int, int, int);
 	void scrollSegment(Segment**, Segment**, int);
 	void removeUnneededLines(Segment**, Segment**, int);
 };

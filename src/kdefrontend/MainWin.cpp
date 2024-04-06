@@ -494,6 +494,8 @@ void MainWin::createADS() {
 	ads::CDockManager::setConfigFlag(ads::CDockManager::XmlCompressionEnabled, false);
 	ads::CDockManager::setConfigFlag(ads::CDockManager::FocusHighlighting, true);
 	ads::CDockManager::setConfigFlag(ads::CDockManager::MiddleMouseButtonClosesTab, true);
+	ads::CDockManager::setConfigFlag(ads::CDockManager::AllTabsHaveCloseButton, true);
+	ads::CDockManager::setConfigFlag(ads::CDockManager::RetainTabSizeWhenCloseButtonHidden, true);
 	// must be after the config flags!
 	ads::CDockManager::setAutoHideConfigFlags(ads::CDockManager::DefaultAutoHideConfig);
 	ads::CDockManager::setAutoHideConfigFlag(ads::CDockManager::AutoHideShowOnMouseOver, true);

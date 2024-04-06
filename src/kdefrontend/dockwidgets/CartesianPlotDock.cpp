@@ -381,9 +381,9 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list) {
 	// show the properties of the first plot
 	this->load();
 
-	// set the current locale
-	updateLocale();
-	updatePlotRangeList();
+	// set the current locale:
+	// no need to call updateLocale() and updatePlotRangeList() here explicitely,
+	// it's being done in updateRangeList() that is called in load().
 
 	// update active widgets
 	m_themeHandler->setCurrentTheme(m_plot->theme());

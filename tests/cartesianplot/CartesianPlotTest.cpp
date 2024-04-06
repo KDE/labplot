@@ -1114,6 +1114,10 @@ void CartesianPlotTest::wheelEventOutsideTopLeft() {
 	worksheet->addChild(plot);
 	plot->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
 	plot->setNiceExtend(false);
+	plot->setHorizontalPadding(Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter));
+	plot->setVerticalPadding(Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter));
+	plot->setRightPadding(Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter));
+	plot->setBottomPadding(Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter));
 
 	auto* equationCurve{new XYEquationCurve(QStringLiteral("f(x)"))};
 	equationCurve->setCoordinateSystemIndex(plot->defaultCoordinateSystemIndex());
@@ -1170,6 +1174,10 @@ void CartesianPlotTest::wheelEventOutsideBottomRight() {
 	worksheet->addChild(plot);
 	plot->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
 	plot->setNiceExtend(false);
+	plot->setHorizontalPadding(Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter));
+	plot->setVerticalPadding(Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter));
+	plot->setRightPadding(Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter));
+	plot->setBottomPadding(Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter));
 
 	auto* equationCurve{new XYEquationCurve(QStringLiteral("f(x)"))};
 	equationCurve->setCoordinateSystemIndex(plot->defaultCoordinateSystemIndex());

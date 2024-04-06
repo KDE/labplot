@@ -167,8 +167,14 @@ void CartesianPlot::init(bool loading) {
 	m_title->setHidden(true);
 	m_title->setParentGraphicsItem(m_plotArea->graphicsItem());
 
-	// cursor line
+	// offset between the plot area and the area defining the coordinate system, in scene units.
 	Q_D(CartesianPlot);
+	d->horizontalPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter);
+	d->verticalPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter);
+	d->rightPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter);
+	d->bottomPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter);
+
+	// cursor line
 	d->cursorLine = new Line(QString());
 	d->cursorLine->setPrefix(QLatin1String("Cursor"));
 	d->cursorLine->setHidden(true);
@@ -268,6 +274,11 @@ void CartesianPlot::setType(Type type) {
 		axis->setLabelsPosition(Axis::LabelsPosition::NoLabels);
 		axis->setSuppressRetransform(false);
 
+		d->horizontalPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter);
+		d->verticalPadding = Worksheet::convertToSceneUnits(0.5, Worksheet::Unit::Centimeter);
+		d->rightPadding = Worksheet::convertToSceneUnits(0.5, Worksheet::Unit::Centimeter);
+		d->bottomPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter);
+
 		break;
 	}
 	case Type::TwoAxes: {
@@ -294,6 +305,11 @@ void CartesianPlot::setType(Type type) {
 		axis->setMinorTicksNumber(1);
 		axis->setArrowType(Axis::ArrowType::FilledSmall);
 		axis->setSuppressRetransform(false);
+
+		d->horizontalPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter);
+		d->verticalPadding = Worksheet::convertToSceneUnits(0.5, Worksheet::Unit::Centimeter);
+		d->rightPadding = Worksheet::convertToSceneUnits(0.5, Worksheet::Unit::Centimeter);
+		d->bottomPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter);
 
 		break;
 	}
@@ -331,6 +347,11 @@ void CartesianPlot::setType(Type type) {
 		axis->setMinorTicksNumber(1);
 		axis->setArrowType(Axis::ArrowType::FilledSmall);
 		axis->setSuppressRetransform(false);
+
+		d->horizontalPadding = Worksheet::convertToSceneUnits(0.5, Worksheet::Unit::Centimeter);
+		d->verticalPadding = Worksheet::convertToSceneUnits(0.5, Worksheet::Unit::Centimeter);
+		d->rightPadding = Worksheet::convertToSceneUnits(0.5, Worksheet::Unit::Centimeter);
+		d->bottomPadding = Worksheet::convertToSceneUnits(0.5, Worksheet::Unit::Centimeter);
 
 		break;
 	}
@@ -372,6 +393,11 @@ void CartesianPlot::setType(Type type) {
 		axis->setMinorTicksNumber(1);
 		axis->setArrowType(Axis::ArrowType::FilledSmall);
 		axis->setSuppressRetransform(false);
+
+		d->horizontalPadding = Worksheet::convertToSceneUnits(0.5, Worksheet::Unit::Centimeter);
+		d->verticalPadding = Worksheet::convertToSceneUnits(0.5, Worksheet::Unit::Centimeter);
+		d->rightPadding = Worksheet::convertToSceneUnits(0.5, Worksheet::Unit::Centimeter);
+		d->bottomPadding = Worksheet::convertToSceneUnits(0.5, Worksheet::Unit::Centimeter);
 
 		break;
 	}
@@ -2216,10 +2242,6 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 	} else if (axis) {
 		connect(axis, &Axis::shiftSignal, this, &CartesianPlot::axisShiftSignal);
 	} else {
-		const auto* infoElement = dynamic_cast<const InfoElement*>(child);
-		if (infoElement)
-			connect(this, &CartesianPlot::curveRemoved, infoElement, &InfoElement::removeCurve);
-
 		// if an element is hovered, the curves which are handled manually in this class
 		// must be unhovered
 		if (elem)
@@ -4804,6 +4826,14 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("defaultCoordinateSystem", defaultCoordinateSystemIndex, int);
 			DEBUG(Q_FUNC_INFO << ", got default cSystem index = " << d->defaultCoordinateSystemIndex)
 
+			// the file can be corrupted, either because of bugs like in
+			// https://invent.kde.org/education/labplot/-/issues/598, https://invent.kde.org/education/labplot/-/issues/869
+			// or because it was manually compromized.
+			// In order not to crash because of the wrong indices, add a safety check here.
+			// TODO: check the ranges and the coordinate system to make sure they're available.
+			if (d->defaultCoordinateSystemIndex > m_coordinateSystems.size() - 1)
+				d->defaultCoordinateSystemIndex = 0;
+
 			READ_DOUBLE_VALUE("horizontalPadding", horizontalPadding);
 			READ_DOUBLE_VALUE("verticalPadding", verticalPadding);
 			READ_DOUBLE_VALUE("rightPadding", rightPadding);
@@ -5051,7 +5081,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			m_plotArea->setIsLoading(true);
 			m_plotArea->load(reader, preview);
 		} else if (!preview && reader->name() == QLatin1String("axis")) {
-			auto* axis = new Axis(QString());
+			auto* axis = new Axis(QString(), Axis::Orientation::Horizontal, true);
 			axis->setIsLoading(true);
 			if (axis->load(reader, preview))
 				addChildFast(axis);
@@ -5060,7 +5090,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				return false;
 			}
 		} else if (reader->name() == QLatin1String("xyCurve")) {
-			auto* curve = new XYCurve(QString());
+			auto* curve = new XYCurve(QString(), AspectType::XYCurve, true);
 			curve->setIsLoading(true);
 			if (curve->load(reader, preview))
 				addChildFast(curve);
@@ -5186,7 +5216,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				return false;
 			}
 		} else if (!preview && reader->name() == QLatin1String("customPoint")) {
-			auto* point = new CustomPoint(this, QString());
+			auto* point = new CustomPoint(this, QString(), true);
 			point->setIsLoading(true);
 			if (point->load(reader, preview))
 				addChildFast(point);
@@ -5195,7 +5225,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				return false;
 			}
 		} else if (!preview && reader->name() == QLatin1String("referenceLine")) {
-			auto* line = new ReferenceLine(this, QString());
+			auto* line = new ReferenceLine(this, QString(), true);
 			line->setIsLoading(true);
 			if (line->load(reader, preview))
 				addChildFast(line);
@@ -5204,7 +5234,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				return false;
 			}
 		} else if (!preview && reader->name() == QLatin1String("referenceRange")) {
-			auto* range = new ReferenceRange(this, QString());
+			auto* range = new ReferenceRange(this, QString(), true);
 			range->setIsLoading(true);
 			if (range->load(reader, preview))
 				addChildFast(range);
@@ -5213,7 +5243,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				return false;
 			}
 		} else if (reader->name() == QLatin1String("boxPlot")) {
-			auto* boxPlot = new BoxPlot(QStringLiteral("BoxPlot"));
+			auto* boxPlot = new BoxPlot(QStringLiteral("BoxPlot"), true);
 			boxPlot->setIsLoading(true);
 			if (boxPlot->load(reader, preview))
 				addChildFast(boxPlot);
@@ -5240,7 +5270,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				return false;
 			}
 		} else if (reader->name() == QLatin1String("Histogram")) {
-			auto* hist = new Histogram(QStringLiteral("Histogram"));
+			auto* hist = new Histogram(QStringLiteral("Histogram"), true);
 			hist->setIsLoading(true);
 			if (hist->load(reader, preview))
 				addChildFast(hist);
@@ -5271,13 +5301,6 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				return false;
 		}
 	}
-
-	// the file can be corrupted, either because of bugs like in
-	// https://invent.kde.org/education/labplot/-/issues/598 or because it was manually compromized.
-	// In order not to crash because of the wrong indices, add a safety check here.
-	// TODO: check the ranges and the coordinate system to make sure they're available.
-	if (d->defaultCoordinateSystemIndex > m_coordinateSystems.size() - 1)
-		d->defaultCoordinateSystemIndex = 0;
 
 	if (preview)
 		return true;

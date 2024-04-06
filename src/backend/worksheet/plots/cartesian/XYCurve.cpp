@@ -54,9 +54,9 @@ CURVE_COLUMN_CONNECT(XYCurve, X, x, recalc)
 CURVE_COLUMN_CONNECT(XYCurve, Y, y, recalc)
 CURVE_COLUMN_CONNECT(XYCurve, Values, values, recalc)
 
-XYCurve::XYCurve(const QString& name, AspectType type)
+XYCurve::XYCurve(const QString& name, AspectType type, bool loading)
 	: Plot(name, new XYCurvePrivate(this), type) {
-	init();
+	init(loading);
 }
 
 XYCurve::XYCurve(const QString& name, XYCurvePrivate* dd, AspectType type)
@@ -68,22 +68,14 @@ XYCurve::XYCurve(const QString& name, XYCurvePrivate* dd, AspectType type)
 // and is deleted during the cleanup in QGraphicsScene
 XYCurve::~XYCurve() = default;
 
-void XYCurve::init() {
+void XYCurve::init(bool loading) {
 	Q_D(XYCurve);
 
-	KConfig config;
-	KConfigGroup group = config.group(QStringLiteral("XYCurve"));
-
-	d->lineType = (LineType)group.readEntry(QStringLiteral("LineType"), static_cast<int>(LineType::Line));
-	d->lineIncreasingXOnly = group.readEntry(QStringLiteral("LineIncreasingXOnly"), false);
-	d->lineSkipGaps = group.readEntry(QStringLiteral("SkipLineGaps"), false);
-	d->lineInterpolationPointsCount = group.readEntry(QStringLiteral("LineInterpolationPointsCount"), 1);
-
+	// line
 	d->line = new Line(QString());
 	d->line->setCreateXmlElement(false);
 	d->line->setHidden(true);
 	addChild(d->line);
-	d->line->init(group);
 	connect(d->line, &Line::updatePixmapRequested, [=] {
 		d->updatePixmap();
 		Q_EMIT appearanceChanged();
@@ -93,11 +85,11 @@ void XYCurve::init() {
 		Q_EMIT appearanceChanged();
 	});
 
+	// drop line
 	d->dropLine = new Line(QString());
 	d->dropLine->setPrefix(QStringLiteral("DropLine"));
 	d->dropLine->setHidden(true);
 	addChild(d->dropLine);
-	d->dropLine->init(group);
 	connect(d->dropLine, &Line::dropLineTypeChanged, [=] {
 		d->updateDropLines();
 	});
@@ -108,11 +100,10 @@ void XYCurve::init() {
 		d->recalcShapeAndBoundingRect();
 	});
 
-	// initialize the symbol
+	// symbol
 	d->symbol = new Symbol(QString());
 	addChild(d->symbol);
 	d->symbol->setHidden(true);
-	d->symbol->init(group);
 	connect(d->symbol, &Symbol::updateRequested, [=] {
 		d->updateSymbols();
 		Q_EMIT appearanceChanged();
@@ -121,6 +112,50 @@ void XYCurve::init() {
 		d->updatePixmap();
 		Q_EMIT appearanceChanged();
 	});
+
+	// Background/Filling
+	d->background = new Background(QString());
+	d->background->setPrefix(QStringLiteral("Filling"));
+	d->background->setPositionAvailable(true);
+	addChild(d->background);
+	d->background->setHidden(true);
+
+	connect(d->background, &Background::updateRequested, [=] {
+		d->updatePixmap();
+	});
+	connect(d->background, &Background::updatePositionRequested, [=] {
+		d->updateFilling();
+	});
+
+	// error bars
+	d->errorBar = new ErrorBar(QString(), ErrorBar::Dimension::XY);
+	addChild(d->errorBar);
+	d->errorBar->setHidden(true);
+	connect(d->errorBar, &ErrorBar::updatePixmapRequested, [=] {
+		d->updatePixmap();
+	});
+	connect(d->errorBar, &ErrorBar::updateRequested, [=] {
+		d->updateErrorBars();
+	});
+
+	// init the properties
+	if (loading)
+		return;
+
+	KConfig config;
+	KConfigGroup group = config.group(QStringLiteral("XYCurve"));
+
+	// line
+	d->lineType = (LineType)group.readEntry(QStringLiteral("LineType"), static_cast<int>(LineType::Line));
+	d->lineIncreasingXOnly = group.readEntry(QStringLiteral("LineIncreasingXOnly"), false);
+	d->lineSkipGaps = group.readEntry(QStringLiteral("SkipLineGaps"), false);
+	d->lineInterpolationPointsCount = group.readEntry(QStringLiteral("LineInterpolationPointsCount"), 1);
+
+	d->line->init(group);
+	d->dropLine->init(group);
+	d->symbol->init(group);
+	d->background->init(group);
+	d->errorBar->init(group);
 
 	// values
 	d->valuesType = (ValuesType)group.readEntry(QStringLiteral("ValuesType"), static_cast<int>(ValuesType::NoValues));
@@ -136,32 +171,6 @@ void XYCurve::init() {
 	d->valuesFont = group.readEntry(QStringLiteral("ValuesFont"), QFont());
 	d->valuesFont.setPixelSize(Worksheet::convertToSceneUnits(8, Worksheet::Unit::Point));
 	d->valuesColor = group.readEntry(QStringLiteral("ValuesColor"), QColor(Qt::black));
-
-	// Background/Filling
-	d->background = new Background(QString());
-	d->background->setPrefix(QStringLiteral("Filling"));
-	d->background->setPositionAvailable(true);
-	addChild(d->background);
-	d->background->setHidden(true);
-	d->background->init(group);
-	connect(d->background, &Background::updateRequested, [=] {
-		d->updatePixmap();
-	});
-	connect(d->background, &Background::updatePositionRequested, [=] {
-		d->updateFilling();
-	});
-
-	// error bars
-	d->errorBar = new ErrorBar(QString(), ErrorBar::Dimension::XY);
-	addChild(d->errorBar);
-	d->errorBar->setHidden(true);
-	d->errorBar->init(group);
-	connect(d->errorBar, &ErrorBar::updatePixmapRequested, [=] {
-		d->updatePixmap();
-	});
-	connect(d->errorBar, &ErrorBar::updateRequested, [=] {
-		d->updateErrorBars();
-	});
 
 	// marginal plots (rug, histogram, boxplot)
 	d->rugEnabled = group.readEntry(QStringLiteral("RugEnabled"), false);
@@ -327,49 +336,52 @@ bool XYCurve::usingColumn(const Column* column) const {
 			|| (d->valuesType == ValuesType::CustomColumn && d->valuesColumn == column));
 }
 
-void XYCurve::updateColumnDependencies(const AbstractColumn* column) {
+void XYCurve::handleAspectUpdated(const QString& aspectPath, const AbstractAspect* aspect) {
 	Q_D(XYCurve);
-	const QString& columnPath = column->path();
+	const auto column = dynamic_cast<const AbstractColumn*>(aspect);
+	if (!column)
+		return;
+
 	setUndoAware(false);
 
 	if (d->xColumn == column) // the column is the same and was just renamed -> update the column path
-		d->xColumnPath = columnPath;
-	else if (d->xColumnPath == columnPath) // another column was renamed to the current path -> set and connect to the new column
+		d->xColumnPath = aspectPath;
+	else if (d->xColumnPath == aspectPath) // another column was renamed to the current path -> set and connect to the new column
 		setXColumn(column);
 
 	if (d->yColumn == column)
-		d->yColumnPath = columnPath;
-	else if (d->yColumnPath == columnPath)
+		d->yColumnPath = aspectPath;
+	else if (d->yColumnPath == aspectPath)
 		setYColumn(column);
 
 	if (d->valuesColumn == column)
-		d->valuesColumnPath = columnPath;
-	else if (d->valuesColumnPath == columnPath)
+		d->valuesColumnPath = aspectPath;
+	else if (d->valuesColumnPath == aspectPath)
 		setValuesColumn(column);
 
-	if (d->valuesColumnPath == columnPath)
+	if (d->valuesColumnPath == aspectPath)
 		setValuesColumn(column);
 
 	// x errors
 	if (d->errorBar->xPlusColumn() == column)
-		d->errorBar->xPlusColumnPath() = columnPath;
-	else if (d->errorBar->xPlusColumnPath() == columnPath)
+		d->errorBar->xPlusColumnPath() = aspectPath;
+	else if (d->errorBar->xPlusColumnPath() == aspectPath)
 		d->errorBar->setXPlusColumn(column);
 
 	if (d->errorBar->xMinusColumn() == column)
-		d->errorBar->xMinusColumnPath() = columnPath;
-	else if (d->errorBar->xMinusColumnPath() == columnPath)
+		d->errorBar->xMinusColumnPath() = aspectPath;
+	else if (d->errorBar->xMinusColumnPath() == aspectPath)
 		d->errorBar->setXMinusColumn(column);
 
 	// y errors
 	if (d->errorBar->yPlusColumn() == column)
-		d->errorBar->yPlusColumnPath() = columnPath;
-	else if (d->errorBar->yPlusColumnPath() == columnPath)
+		d->errorBar->yPlusColumnPath() = aspectPath;
+	else if (d->errorBar->yPlusColumnPath() == aspectPath)
 		d->errorBar->setYPlusColumn(column);
 
 	if (d->errorBar->yMinusColumn() == column)
-		d->errorBar->yMinusColumnPath() = columnPath;
-	else if (d->errorBar->yMinusColumnPath() == columnPath)
+		d->errorBar->yMinusColumnPath() = aspectPath;
+	else if (d->errorBar->yMinusColumnPath() == aspectPath)
 		d->errorBar->setYMinusColumn(column);
 
 	setUndoAware(true);
@@ -680,7 +692,7 @@ void XYCurve::xColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	if (aspect == d->xColumn) {
 		d->xColumn = nullptr;
 		d->m_logicalPoints.clear();
-		d->retransform();
+		CURVE_COLUMN_REMOVED(x);
 	}
 }
 
@@ -689,7 +701,7 @@ void XYCurve::yColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	if (aspect == d->yColumn) {
 		d->yColumn = nullptr;
 		d->m_logicalPoints.clear();
-		d->retransform();
+		CURVE_COLUMN_REMOVED(y);
 	}
 }
 
@@ -2110,13 +2122,13 @@ void XYCurvePrivate::updateFilling() {
 double XYCurve::y(double x, bool& valueFound) const {
 	if (!yColumn() || !xColumn()) {
 		valueFound = false;
-		return NAN;
+		return std::nan("0");
 	}
 
 	const int index = xColumn()->indexForValue(x);
 	if (index < 0) {
 		valueFound = false;
-		return NAN;
+		return std::nan("0");
 	}
 
 	valueFound = true;
@@ -2124,7 +2136,7 @@ double XYCurve::y(double x, bool& valueFound) const {
 		return yColumn()->valueAt(index);
 	else {
 		valueFound = false;
-		return NAN;
+		return std::nan("0");
 	}
 }
 
@@ -2138,7 +2150,7 @@ double XYCurve::y(double x, double& x_new, bool& valueFound) const {
 	int index = xColumn()->indexForValue(x);
 	if (index < 0) {
 		valueFound = false;
-		return NAN;
+		return std::nan("0");
 	}
 
 	AbstractColumn::ColumnMode xColumnMode = xColumn()->columnMode();
@@ -2150,7 +2162,7 @@ double XYCurve::y(double x, double& x_new, bool& valueFound) const {
 	else {
 		// any other type implemented
 		valueFound = false;
-		return NAN;
+		return std::nan("0");
 	}
 
 	valueFound = true;
@@ -2158,7 +2170,7 @@ double XYCurve::y(double x, double& x_new, bool& valueFound) const {
 		return yColumn()->valueAt(index);
 	else {
 		valueFound = false;
-		return NAN;
+		return std::nan("0");
 	}
 }
 

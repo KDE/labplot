@@ -23,6 +23,7 @@ public:
 	void retransform() override;
 	void recalcShapeAndBoundingRect() override;
 	void updateOrientation();
+	void updatePositionLimit();
 
 	bool m_visible{true}; // point inside the plot (visible) or not
 

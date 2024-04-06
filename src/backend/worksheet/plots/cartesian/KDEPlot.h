@@ -62,7 +62,7 @@ public:
 	int gridPointsCount() const;
 	bool hasData() const override;
 	bool usingColumn(const Column*) const override;
-	void updateColumnDependencies(const AbstractColumn*) override;
+	void handleAspectUpdated(const QString& aspectPath, const AbstractAspect* element) override;
 	QColor color() const override;
 
 	typedef KDEPlotPrivate Private;
