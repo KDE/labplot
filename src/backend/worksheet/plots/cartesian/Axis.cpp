@@ -2773,7 +2773,7 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 
 			QVector<QPointF> vertices;
 			if (Axis::Orientation::Horizontal == orientation) {
-				if (axisTopLeft.y() <= titleTopLeft.y())
+				if (axisTopLeft.y() < titleTopLeft.y() || axisBottomLeft.y() <  titleBottomLeft.y())
 					vertices << axisTopLeft << axisBottomLeft << QPointF(titleTopLeft.x(), axisBottomLeft.y()) << titleBottomLeft << titleBottomRight
 							 << QPointF(titleTopRight.x(), axisBottomRight.y()) << axisBottomRight << axisTopRight << axisTopLeft;
 				else
@@ -2781,7 +2781,7 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 							 << QPointF(titleBottomRight.x(), axisTopRight.y()) << axisTopRight << axisBottomRight << axisBottomLeft << axisTopLeft;
 
 			} else {
-				if (axisTopLeft.x() >= titleTopLeft.x())
+				if (axisTopLeft.x() > titleTopLeft.x() || axisBottomLeft.x() > titleBottomLeft.x())
 					vertices << axisTopLeft << QPointF(axisTopLeft.x(), titleTopRight.y()) << titleTopLeft << titleBottomLeft
 							 << QPointF(axisBottomLeft.x(), titleBottomRight.y()) << axisBottomLeft << axisBottomRight << axisTopRight << axisTopLeft;
 
