@@ -35,6 +35,7 @@ public:
 	void updateVerticalLine();
 	void updateConnectionLine();
 	bool changeVisibility(bool on);
+	void updateValid();
 
 	virtual bool activate(QPointF mouseScenePos, double maxDist = -1);
 
@@ -46,6 +47,8 @@ public:
 
 	Line* verticalLine{nullptr};
 	Line* connectionLine{nullptr};
+
+	bool valid{true};
 
 	// TODO
 	//	CartesianPlot* plot{nullptr};

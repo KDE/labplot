@@ -873,6 +873,21 @@ QIcon XYFitCurve::icon() const {
 	return QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve"));
 }
 
+void XYFitCurve::handleAspectUpdated(const QString& aspectPath, const AbstractAspect* aspect) {
+	const auto* column = dynamic_cast<const Column*>(aspect);
+	if (!column)
+		return;
+
+	XYAnalysisCurve::handleAspectUpdated(aspectPath, aspect);
+
+	setUndoAware(true);
+	if (xErrorColumnPath() == aspectPath)
+		setXErrorColumn(column);
+	if (yErrorColumnPath() == aspectPath)
+		setYErrorColumn(column);
+	setUndoAware(false);
+}
+
 // ##############################################################################
 // ##########################  getter methods  ##################################
 // ##############################################################################
@@ -1968,7 +1983,7 @@ void XYFitCurvePrivate::runMaximumLikelihood(const AbstractColumn* tmpXDataColum
 	// TODO: parameter values (error, etc.)
 	// TODO: currently all values are used (data range not changeable)
 	const double alpha = 1.0 - fitData.confidenceInterval / 100.;
-	const auto statistics = ((Column*)tmpXDataColumn)->statistics();
+	const auto& statistics = ((Column*)tmpXDataColumn)->statistics();
 	const double mean = statistics.arithmeticMean;
 	const double var = statistics.variance;
 	const double median = statistics.median;

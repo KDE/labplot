@@ -214,9 +214,12 @@ bool BarPlot::usingColumn(const Column* column) const {
 	return false;
 }
 
-void BarPlot::updateColumnDependencies(const AbstractColumn* column) {
+void BarPlot::handleAspectUpdated(const QString& aspectPath, const AbstractAspect* aspect) {
 	Q_D(const BarPlot);
-	const QString& columnPath = column->path();
+	const auto column = dynamic_cast<const AbstractColumn*>(aspect);
+	if (!column)
+		return;
+
 	const auto dataColumnPaths = d->dataColumnPaths;
 	auto dataColumns = d->dataColumns;
 	bool changed = false;
@@ -224,7 +227,7 @@ void BarPlot::updateColumnDependencies(const AbstractColumn* column) {
 	for (int i = 0; i < dataColumnPaths.count(); ++i) {
 		const auto& path = dataColumnPaths.at(i);
 
-		if (path == columnPath) {
+		if (path == aspectPath) {
 			dataColumns[i] = column;
 			changed = true;
 		}
@@ -432,7 +435,9 @@ ErrorBar* BarPlotPrivate::addErrorBar(const KConfigGroup& group) {
 	});
 
 	q->connect(errorBar, &ErrorBar::updateRequested, [=] {
-		updateErrorBars(errorBars.indexOf(errorBar));
+		const int index = errorBars.indexOf(errorBar);
+		if (index != -1)
+			updateErrorBars(index);
 	});
 
 	errorBars << errorBar;

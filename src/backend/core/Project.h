@@ -102,10 +102,12 @@ Q_SIGNALS:
 private:
 	Q_DECLARE_PRIVATE(Project)
 	ProjectPrivate* const d_ptr;
-	void updateColumnDependencies(const AbstractColumn*) const;
 	void updateSpreadsheetDependencies(const Spreadsheet*) const;
 	bool readProjectAttributes(XmlStreamReader*);
 	void save(QXmlStreamWriter*) const override;
+
+	template<typename T>
+	void updateDependencies(const QVector<const AbstractAspect*>);
 };
 
 #endif // ifndef PROJECT_H

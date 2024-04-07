@@ -62,7 +62,7 @@ void SparkLineRunnable::run() {
 		for (const auto& pair : qAsConst(pairs))
 			data << pair.second;
 		dataColumn->replaceInteger(0, data);
-		QVector<const AbstractColumn*> columns{dataColumn};
+		const QVector<const AbstractColumn*> columns{dataColumn};
 		barPlot->setDataColumns(columns);
 		plot->addChild(barPlot);
 		barPlot->setSuppressRetransform(false);

@@ -71,7 +71,7 @@ void nsl_baseline_remove_median(double* data, const size_t n) {
 }
 
 /* do a linear interpolation using first and last point and substract that */
-int nsl_baseline_remove_endpoints(double* xdata, double* ydata, const size_t n) {
+int nsl_baseline_remove_endpoints(const double* xdata, double* ydata, const size_t n) {
 	// not possible
 	if (xdata[0] == xdata[n - 1])
 		return -1;
@@ -445,7 +445,7 @@ double nsl_baseline_remove_arpls(double* data, const size_t n, double p, double 
 
 #ifdef HAVE_EIGEN3
 	return nsl_baseline_remove_arpls_Eigen3(data, n, p, lambda, niter);
-#endif
-
+#else
 	return nsl_baseline_remove_arpls_GSL(data, n, p, lambda, niter);
+#endif
 }

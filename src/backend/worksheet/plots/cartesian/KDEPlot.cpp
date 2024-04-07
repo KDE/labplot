@@ -187,13 +187,15 @@ bool KDEPlot::usingColumn(const Column* column) const {
 	return (d->dataColumn == column);
 }
 
-void KDEPlot::updateColumnDependencies(const AbstractColumn* column) {
+void KDEPlot::handleAspectUpdated(const QString& aspectPath, const AbstractAspect* aspect) {
 	Q_D(KDEPlot);
-	const QString& columnPath = column->path();
+	const auto column = dynamic_cast<const AbstractColumn*>(aspect);
+	if (!column)
+		return;
 
 	if (d->dataColumn == column) // the column is the same and was just renamed -> update the column path
-		d->dataColumnPath = columnPath;
-	else if (d->dataColumnPath == columnPath) { // another column was renamed to the current path -> set and connect to the new column
+		d->dataColumnPath = aspectPath;
+	else if (d->dataColumnPath == aspectPath) { // another column was renamed to the current path -> set and connect to the new column
 		setUndoAware(false);
 		setDataColumn(column);
 		setUndoAware(true);

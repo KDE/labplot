@@ -110,7 +110,7 @@ QString ExpressionParser::parameters(const QString& functionName) {
 	for (int i = 0; i < _number_functions; i++) {
 		if (functionName == QLatin1String(_functions[i].name)) {
 			int count = _functions[i].argc;
-			const auto parameterFunction = _functions[i].parameterFunction;
+			const auto& parameterFunction = _functions[i].parameterFunction;
 
 			if (parameterFunction == nullptr)
 				return QStringLiteral("");
@@ -131,7 +131,7 @@ QString ExpressionParser::parameters(const QString& functionName) {
 	for (int i = 0; i < _number_specialfunctions; i++) {
 		if (functionName == QLatin1String(_special_functions[i].name)) {
 			int count = _special_functions[i].argc;
-			const auto parameterFunction = _special_functions[i].parameterFunction;
+			const auto& parameterFunction = _special_functions[i].parameterFunction;
 
 			if (parameterFunction == nullptr)
 				return QStringLiteral("");
@@ -471,12 +471,11 @@ struct PayloadExpressionParser : public Payload {
 	PayloadExpressionParser(const QStringList* vars, const QVector<QVector<double>*>* xVectors, bool constant = false)
 		: Payload(constant)
 		, vars(vars)
-		, row(0)
 		, xVectors(xVectors) {
 	}
-	const QStringList* vars;
-	int row;
-	const QVector<QVector<double>*>* xVectors;
+	const QStringList* vars{nullptr};
+	int row{0};
+	const QVector<QVector<double>*>* xVectors{nullptr};
 };
 
 double cell(double x, const char* variable, const std::weak_ptr<Payload> payload) {

@@ -1330,9 +1330,8 @@ void FITSFilterPrivate::addKeywordUnit(const QString& fileName, const QList<FITS
  */
 void FITSFilterPrivate::removeExtensions(const QStringList& extensions) {
 #ifdef HAVE_FITS
-	int status = 0;
 	for (const auto& ext : extensions) {
-		status = 0;
+		int status = 0;
 		if (fits_open_file(&m_fitsFile, qPrintable(ext), READWRITE, &status)) {
 			printError(status);
 			continue;

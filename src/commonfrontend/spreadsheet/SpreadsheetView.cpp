@@ -3376,8 +3376,6 @@ void SpreadsheetView::clearSelectedCells() {
 			empty = false;
 			break;
 		}
-		if (!empty)
-			break;
 	}
 
 	if (empty)

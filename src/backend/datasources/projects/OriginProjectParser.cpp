@@ -1,5 +1,5 @@
 /*
-	File                 : OriginProjectParser.h
+	File                 : OriginProjectParser.cpp
 	Project              : LabPlot
 	Description          : parser for Origin projects
 	--------------------------------------------------------------------
@@ -149,7 +149,7 @@ unsigned int OriginProjectParser::findSpreadsheetByName(const QString& name) {
 }
 unsigned int OriginProjectParser::findColumnByName(Origin::SpreadSheet& spread, const QString& name) {
 	for (unsigned int i = 0; i < spread.columns.size(); i++) {
-		auto column = spread.columns[i];
+		const auto& column = spread.columns[i];
 		if (column.name == name.toStdString())
 			return i;
 	}
@@ -1263,12 +1263,12 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 	DEBUG(Q_FUNC_INFO << ", number of layer = " << numberOfLayer)
 	if (numberOfLayer == 1 || !m_graphLayerAsPlotArea) { // use layer clientRect for padding
 		DEBUG(Q_FUNC_INFO << ", using layer rect for padding")
-		double aspectRatio = graphSize.width() / graphSize.height();
+		double aspectRatio = (double)graphSize.width() / graphSize.height();
 
-		double leftPadding = layerRect.left / (double)graphSize.width() * aspectRatio * fixedHeight;
-		double topPadding = layerRect.top / (double)graphSize.height() * fixedHeight;
-		double rightPadding = (graphSize.width() - layerRect.right) / (double)graphSize.width() * aspectRatio * fixedHeight;
-		double bottomPadding = (graphSize.height() - layerRect.bottom) / (double)graphSize.height() * fixedHeight;
+		const double leftPadding = layerRect.left / (double)graphSize.width() * aspectRatio * fixedHeight;
+		const double topPadding = layerRect.top / (double)graphSize.height() * fixedHeight;
+		const double rightPadding = (graphSize.width() - layerRect.right) / (double)graphSize.width() * aspectRatio * fixedHeight;
+		const double bottomPadding = (graphSize.height() - layerRect.bottom) / (double)graphSize.height() * fixedHeight;
 		plot->setHorizontalPadding(Worksheet::convertToSceneUnits(leftPadding, Worksheet::Unit::Centimeter));
 		plot->setVerticalPadding(Worksheet::convertToSceneUnits(topPadding, Worksheet::Unit::Centimeter));
 		plot->setRightPadding(Worksheet::convertToSceneUnits(rightPadding, Worksheet::Unit::Centimeter));
@@ -1564,7 +1564,7 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 	if (layer.curves.empty()) // no curves, just axes
 		loadAxes(layer, plot, layerIndex, QLatin1String("X Axis Title"), QLatin1String("Y Axis Title"));
 	else {
-		auto originCurve = layer.curves.at(0);
+		const auto& originCurve = layer.curves.at(0);
 		// see loadCurves()
 		QString dataName(QString::fromStdString(originCurve.dataName));
 		DEBUG(Q_FUNC_INFO << ", curve data name " << STDSTRING(dataName))
@@ -1577,7 +1577,7 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 		else
 			xColumnName = QString::fromStdString(originCurve.xColumnName);
 
-		auto xColumn = sheet.columns[findColumnByName(sheet, xColumnName)];
+		const auto& xColumn = sheet.columns[findColumnByName(sheet, xColumnName)];
 		QString xColumnInfo = xColumnName;
 		if (xColumn.comment.length() > 0) { // long name(, unit(, comment))
 			if (m_originFile->version() < 9.5) // <= 2017 : pre-Unicode
@@ -1597,7 +1597,7 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 		else
 			yColumnName = QString::fromStdString(originCurve.yColumnName);
 
-		auto yColumn = sheet.columns[findColumnByName(sheet, yColumnName)];
+		const auto& yColumn = sheet.columns[findColumnByName(sheet, yColumnName)];
 		QString yColumnInfo = yColumnName;
 		if (yColumn.comment.length() > 0) { // long name(, unit(, comment))
 			if (m_originFile->version() < 9.5) // <= 2017 : pre-Unicode
@@ -1632,6 +1632,9 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 		DEBUG(Q_FUNC_INFO << ", curve y column name = " << originCurve.yColumnName)
 		DEBUG(Q_FUNC_INFO << ", curve x data name = " << originCurve.xDataName)
 
+		if (dataName.isEmpty()) // formula may be empty?
+			continue;
+
 		Plot* childPlot{nullptr};
 
 		// handle the different data sources for plots (spreadsheet, workbook, matrix and function)
@@ -1661,8 +1664,8 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 			case Origin::GraphCurve::XErrorBar:
 			case Origin::GraphCurve::YErrorBar:
 			case Origin::GraphCurve::XYErrorBar: {
-				auto columnName(QString::fromStdString(originCurve.yColumnName));
-				auto column = sheet.columns[findColumnByName(sheet, columnName)];
+				const auto columnName(QString::fromStdString(originCurve.yColumnName));
+				const auto column = sheet.columns[findColumnByName(sheet, columnName)];
 				QString shortName = columnName, curveName = columnName;
 				QString longName, unit, comments;
 				if (column.comment.length() > 0) {
@@ -1911,6 +1914,7 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 			XYEquationCurve::EquationData eqData;
 			eqData.count = function.totalPoints;
 			eqData.expression1 = QString::fromStdString(function.formula);
+			DEBUG("STRING FUNCTION FORMULA: " << function.formula)
 
 			if (function.type == Origin::Function::Polar) {
 				eqData.type = XYEquationCurve::EquationType::Polar;

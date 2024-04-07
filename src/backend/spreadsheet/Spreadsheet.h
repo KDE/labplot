@@ -148,6 +148,7 @@ private Q_SLOTS:
 	void childDeselected(const AbstractAspect*) override;
 	void linkedSpreadsheetDeleted();
 	void linkedSpreadsheetNewRowCount(int);
+	void handleAspectUpdated(const QString& aspectPath, const AbstractAspect*);
 
 Q_SIGNALS:
 	void requestProjectContextMenu(QMenu*);
@@ -176,6 +177,7 @@ Q_SIGNALS:
 
 	friend class SpreadsheetSetLinkingCmd;
 	friend class SpreadsheetSetColumnCountCommand;
+	friend class Project; // handleAspectUpdated required
 };
 
 #endif

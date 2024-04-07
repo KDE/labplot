@@ -2400,19 +2400,19 @@ void ColumnPrivate::formulaVariableColumnRemoved(const AbstractAspect* aspect) {
 
 void ColumnPrivate::formulaVariableColumnAdded(const AbstractAspect* aspect) {
 	PERFTRACE(QLatin1String(Q_FUNC_INFO));
+	auto* column = dynamic_cast<Column*>(const_cast<AbstractAspect*>(aspect));
+	if (!column)
+		return;
+
 	const auto& path = aspect->path();
-	int index = -1;
 	for (int i = 0; i < formulaData().count(); i++) {
 		if (formulaData().at(i).columnName() == path) {
-			index = i;
-			break;
+			// m_formulaData[index].setColumn(const_cast<Column*>(column));
+			// DEBUG(Q_FUNC_INFO << ", calling updateFormula()")
+			setFormulVariableColumn(i, column);
+			updateFormula();
+			return;
 		}
-	}
-	if (index != -1) {
-		const Column* column = dynamic_cast<const Column*>(aspect);
-		m_formulaData[index].setColumn(const_cast<Column*>(column));
-		DEBUG(Q_FUNC_INFO << ", calling updateFormula()")
-		updateFormula();
 	}
 }
 

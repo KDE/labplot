@@ -35,6 +35,7 @@ IF (BUILD_READSTAT)
 	set(ext_insource ON)
 	#set(ext_make ${CMAKE_MAKE_PROGRAM} CXXFLAGS=-fPIC CFLAGS=-fPIC)
 
+	set(patch_command git apply ${CMAKE_CURRENT_SOURCE_DIR}/patches/readstat-1.1.9.patch)
 	set(readstat_library libreadstat.a)
 #endif()
 	ExternalProject_Add(3rdparty_readstat
@@ -43,6 +44,7 @@ IF (BUILD_READSTAT)
 		SOURCE_DIR ${ext_src}
 		CONFIGURE_COMMAND ${ext_configure}
 		BUILD_IN_SOURCE ${ext_insource}
+		PATCH_COMMAND ${patch_command}
 		#BUILD_COMMAND ${ext_make}
 		# libtool install does not work with spaces
 		#INSTALL_COMMAND ${CMAKE_MAKE_PROGRAM} install
@@ -72,12 +74,16 @@ if (ENABLE_VECTOR_BLF)
       FetchContent_Declare(
         dbc_parser_cpp
         GIT_REPOSITORY https://github.com/LinuxDevon/dbc_parser_cpp.git
-        GIT_TAG 0f3b22b3fe124976a86a85fcd1bfdd55c20ca428 # At least this version is needed!
+        GIT_TAG cc4e80c7b6e1f7a13cc47b45f226756f823888e2 # v0.4.0
       )
       # fix missing variable and keyword for fast_float
       IF (NOT MSVC_FOUND)
           add_definitions (-DFASTFLOAT_VISUAL_STUDIO=0)
           add_definitions (-D__forceinline=inline)
+      ENDIF ()
+      # disable -Werror=maybe-uninitialized since gcc gives false positive warnings when address sanitizer is used
+      IF ("${CMAKE_C_COMPILER_ID}" MATCHES "GNU")
+          set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-error=maybe-uninitialized")
       ENDIF ()
       # dbc is the root project name
       # https://gitlab.kitware.com/cmake/cmake/-/issues/19854

@@ -46,36 +46,21 @@ constexpr auto name = "customPoint";
  * x- and y- coordinates in parent's coordinate system
  */
 
-CustomPoint::CustomPoint(CartesianPlot* plot, const QString& name)
+CustomPoint::CustomPoint(CartesianPlot* plot, const QString& name, bool loading)
 	: WorksheetElement(name, new CustomPointPrivate(this), AspectType::CustomPoint) {
 	m_plot = plot;
-	DEBUG(Q_FUNC_INFO << ", cSystem index = " << m_cSystemIndex)
-	DEBUG(Q_FUNC_INFO << ", plot cSystem count = " << m_plot->coordinateSystemCount())
-	cSystem = dynamic_cast<const CartesianCoordinateSystem*>(m_plot->coordinateSystem(m_cSystemIndex));
 
-	init();
+	init(loading);
 }
 
 // no need to delete the d-pointer here - it inherits from QGraphicsItem
 // and is deleted during the cleanup in QGraphicsScene
 CustomPoint::~CustomPoint() = default;
 
-void CustomPoint::init() {
+void CustomPoint::init(bool loading) {
 	Q_D(CustomPoint);
 
-	// default position
-	if (plot()) {
-		d->coordinateBindingEnabled = true; // By default on
-		auto cs = plot()->coordinateSystem(plot()->defaultCoordinateSystemIndex());
-		const auto x = m_plot->range(Dimension::X, cs->index(Dimension::X)).center();
-		const auto y = m_plot->range(Dimension::Y, cs->index(Dimension::Y)).center();
-		DEBUG(Q_FUNC_INFO << ", x/y pos = " << x << " / " << y)
-		d->positionLogical = QPointF(x, y);
-	} else
-		d->position.point = QPointF(0, 0);
-	d->updatePosition(); // To update also scene coordinates
-
-	// initialize the symbol
+	// create the symbol
 	d->symbol = new Symbol(QString());
 	addChild(d->symbol);
 	d->symbol->setHidden(true);
@@ -85,10 +70,24 @@ void CustomPoint::init() {
 	connect(d->symbol, &Symbol::updatePixmapRequested, [=] {
 		d->update();
 	});
-	KConfig config;
-	d->symbol->init(config.group(QStringLiteral("CustomPoint")));
 
-	initActions();
+	// init the properties
+	if (!loading) {
+		KConfig config;
+		d->symbol->init(config.group(QStringLiteral("CustomPoint")));
+
+		// default position
+		if (plot()) {
+			d->coordinateBindingEnabled = true; // By default on
+			auto cs = plot()->coordinateSystem(plot()->defaultCoordinateSystemIndex());
+			const auto x = m_plot->range(Dimension::X, cs->index(Dimension::X)).center();
+			const auto y = m_plot->range(Dimension::Y, cs->index(Dimension::Y)).center();
+			DEBUG(Q_FUNC_INFO << ", x/y pos = " << x << " / " << y)
+			d->positionLogical = QPointF(x, y);
+		} else
+			d->position.point = QPointF(0, 0);
+		d->updatePosition(); // To update also scene coordinates
+	}
 }
 
 void CustomPoint::initActions() {
