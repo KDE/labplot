@@ -2569,8 +2569,8 @@ void AxisPrivate::retransformMajorGrid() {
 	DEBUG(Q_FUNC_INFO << ", x range " << q->cSystem->index(Dimension::X) + 1)
 	DEBUG(Q_FUNC_INFO << ", y range " << q->cSystem->index(Dimension::Y) + 1)
 	auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
-	const auto xRange{plot()->range(Dimension::X, cs->index(Dimension::X))};
-	const auto yRange{plot()->range(Dimension::Y, cs->index(Dimension::Y))};
+	const auto& xRange = plot()->range(Dimension::X, cs->index(Dimension::X));
+	const auto& yRange = plot()->range(Dimension::Y, cs->index(Dimension::Y));
 
 	// TODO:
 	// when iterating over all grid lines, skip the first and the last points for auto scaled axes,

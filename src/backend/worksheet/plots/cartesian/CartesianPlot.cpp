@@ -1337,7 +1337,7 @@ public:
 	}
 	void redo() override {
 		m_target->setRangeDirty(m_dimension, m_index, true);
-		auto tmp = m_target->rangeConst(m_dimension, m_index);
+		const auto& tmp = m_target->rangeConst(m_dimension, m_index);
 		m_target->setRange(m_dimension, m_index, m_otherValue);
 		m_otherValue = tmp;
 		finalize();
@@ -3503,7 +3503,7 @@ Range<double> CartesianPlotPrivate::checkRange(const Range<double>& range) {
  * check for negative values in the range when non-linear scalings are used
  */
 void CartesianPlotPrivate::checkRange(Dimension dim, int index) {
-	const auto range = ranges(dim).at(index).range;
+	const auto& range = ranges(dim).at(index).range;
 	DEBUG(Q_FUNC_INFO << ", " << CartesianCoordinateSystem::dimensionToString(dim).toStdString() << " range " << index + 1 << " : " << range.toStdString()
 					  << ", scale = " << ENUM_TO_STRING(RangeT, Scale, range.scale()))
 

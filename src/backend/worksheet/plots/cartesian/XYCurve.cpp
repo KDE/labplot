@@ -1102,8 +1102,8 @@ void XYCurvePrivate::updateLines() {
 		if (columnProperties == AbstractColumn::Properties::Constant) {
 			DEBUG(Q_FUNC_INFO << ", CONSTANT column")
 			auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
-			const auto xRange{plot()->range(Dimension::X, cs->index(Dimension::X))};
-			const auto yRange{plot()->range(Dimension::Y, cs->index(Dimension::Y))};
+			const auto& xRange = plot()->range(Dimension::X, cs->index(Dimension::X));
+			const auto& yRange = plot()->range(Dimension::Y, cs->index(Dimension::Y));
 			tempPoint1 = QPointF(xRange.start(), yRange.start());
 			tempPoint2 = QPointF(xRange.start(), yRange.end());
 			m_lines.append(QLineF(tempPoint1, tempPoint2));
@@ -1113,8 +1113,8 @@ void XYCurvePrivate::updateLines() {
 			bool prevPixelDiffZero = false;
 			double minY{INFINITY}, maxY{-INFINITY};
 			QPointF p0, p1;
-			const auto xIndex{q->cSystem->index(Dimension::X)};
-			const auto xRange{plot()->range(Dimension::X, xIndex)};
+			const auto xIndex = q->cSystem->index(Dimension::X);
+			const auto xRange = plot()->range(Dimension::X, xIndex);
 			double minDiffX;
 			const RangeT::Scale scale = plot()->xRangeScale(xIndex);
 
@@ -1912,8 +1912,8 @@ void XYCurvePrivate::updateFilling() {
 	QPointF edge;
 	double xEnd{0.}, yEnd{0.};
 	auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
-	const auto xRange{plot()->range(Dimension::X, cs->index(Dimension::X))};
-	const auto yRange{plot()->range(Dimension::Y, cs->index(Dimension::Y))};
+	const auto& xRange = plot()->range(Dimension::X, cs->index(Dimension::X));
+	const auto& yRange = plot()->range(Dimension::Y, cs->index(Dimension::Y));
 	const double xMin{xRange.start()}, xMax{xRange.end()};
 	const double yMin{yRange.start()}, yMax{yRange.end()};
 	bool visible;
