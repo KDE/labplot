@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Aspect providing a spreadsheet table with column logic
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2023-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 #include "StatisticsSpreadsheet.h"
@@ -47,6 +47,7 @@ StatisticsSpreadsheet::StatisticsSpreadsheet(Spreadsheet* spreadsheet, bool load
 		{StatisticsSpreadsheet::Metric::Percentile95, i18n("Percentile95")},
 		{StatisticsSpreadsheet::Metric::Percentile99, i18n("Percentile99")},
 		{StatisticsSpreadsheet::Metric::Trimean, i18n("Trimean")},
+		{StatisticsSpreadsheet::Metric::Range, i18n("Range")},
 		{StatisticsSpreadsheet::Metric::Variance, i18n("Variance")},
 		{StatisticsSpreadsheet::Metric::StandardDeviation, i18n("StandardDeviation")},
 		{StatisticsSpreadsheet::Metric::MeanDeviation, i18n("MeanDeviation")},
@@ -224,6 +225,9 @@ void StatisticsSpreadsheet::update() {
 					break;
 				case Metric::Trimean:
 					statisticsColumn->setValueAt(i, statistics.trimean);
+					break;
+				case Metric::Range:
+					statisticsColumn->setValueAt(i, statistics.maximum - statistics.minimum);
 					break;
 				case Metric::Variance:
 					statisticsColumn->setValueAt(i, statistics.variance);
