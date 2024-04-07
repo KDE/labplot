@@ -2760,42 +2760,43 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 				title->setPosition(QPointF(rect.topLeft().x() + offsetX, (rect.topLeft().y() + rect.bottomLeft().y()) / 2. - titleOffsetY));
 			}
 			titlePath = WorksheetElement::shapeFromPath(title->graphicsItem()->mapToParent(title->graphicsItem()->shape()), linePen);
-			if (!titlePath.intersects(tmpPath)) {
-				// Draw combined bounding rectangle
-				// Draw merged t-shaped polygon for title and axis
-				QPointF axisTopLeft = axisRect.topLeft();
-				QPointF axisTopRight = axisRect.topRight();
-				QPointF axisBottomLeft = axisRect.bottomLeft();
-				QPointF axisBottomRight = axisRect.bottomRight();
-				QPointF titleTopLeft = titlePath.boundingRect().topLeft();
-				QPointF titleTopRight = titlePath.boundingRect().topRight();
-				QPointF titleBottomLeft = titlePath.boundingRect().bottomLeft();
-				QPointF titleBottomRight = titlePath.boundingRect().bottomRight();
+			// Draw combined bounding rectangle
+			// Draw merged t-shaped polygon for title and axis
+			QPointF axisTopLeft = axisRect.topLeft();
+			QPointF axisTopRight = axisRect.topRight();
+			QPointF axisBottomLeft = axisRect.bottomLeft();
+			QPointF axisBottomRight = axisRect.bottomRight();
+			QPointF titleTopLeft = titlePath.boundingRect().topLeft();
+			QPointF titleTopRight = titlePath.boundingRect().topRight();
+			QPointF titleBottomLeft = titlePath.boundingRect().bottomLeft();
+			QPointF titleBottomRight = titlePath.boundingRect().bottomRight();
 
-				QVector<QPointF> vertices;
-				if (Axis::Orientation::Horizontal == orientation)
-					vertices << axisTopLeft << axisBottomLeft << QPointF(titleTopLeft.x(), axisBottomLeft.y()) << titleTopLeft << titleBottomLeft
-							 << titleBottomRight << titleTopRight << QPointF(titleTopRight.x(), axisBottomRight.y()) << axisBottomRight << axisTopRight
-							 << axisTopLeft;
+			QVector<QPointF> vertices;
+			if (Axis::Orientation::Horizontal == orientation) {
+				if (axisTopLeft.y() <= titleTopLeft.y())
+					vertices << axisTopLeft << axisBottomLeft << QPointF(titleTopLeft.x(), axisBottomLeft.y()) << titleBottomLeft << titleBottomRight
+							 << QPointF(titleTopRight.x(), axisBottomRight.y()) << axisBottomRight << axisTopRight << axisTopLeft;
 				else
-					vertices << axisTopLeft << QPointF(axisTopLeft.x(), titleTopRight.y()) << titleTopRight << titleTopLeft << titleBottomLeft
-							 << titleBottomRight << QPointF(axisBottomLeft.x(), titleBottomRight.y()) << axisBottomLeft << axisBottomRight << axisTopRight
-							 << axisTopLeft;
-
-				QPolygonF polygon(vertices);
-				tmpPath.addPolygon(polygon);
-				m_boundingRectangle = tmpPath.boundingRect();
-				m_shape = QPainterPath();
-				m_shape.addPolygon(polygon);
+					vertices << axisTopLeft << QPointF(titleBottomLeft.x(), axisTopLeft.y()) << titleTopLeft << titleTopRight
+							 << QPointF(titleBottomRight.x(), axisTopRight.y()) << axisTopRight << axisBottomRight << axisBottomLeft << axisTopLeft;
 
 			} else {
-				tmpPath.addPath(titlePath);
-				m_boundingRectangle = tmpPath.boundingRect();
-				m_shape = QPainterPath();
-				m_shape.addRect(m_boundingRectangle);
+				if (axisTopLeft.x() >= titleTopLeft.x())
+					vertices << axisTopLeft << QPointF(axisTopLeft.x(), titleTopRight.y()) << titleTopLeft << titleBottomLeft
+							 << QPointF(axisBottomLeft.x(), titleBottomRight.y()) << axisBottomLeft << axisBottomRight << axisTopRight << axisTopLeft;
+
+				else
+					vertices << axisTopLeft << axisTopRight << QPointF(axisTopRight.x(), titleTopRight.y()) << titleTopRight << titleBottomRight
+							 << QPointF(axisBottomRight.x(), titleBottomLeft.y()) << axisBottomRight << axisBottomLeft << axisTopLeft;
 			}
+			QPolygonF polygon(vertices);
+			tmpPath.addPolygon(polygon);
+			m_boundingRectangle = tmpPath.boundingRect();
+			m_shape = QPainterPath();
+			m_shape.addPolygon(polygon);
 		}
 	}
+
 	// if the axis goes beyond the current bounding box of the plot (too high offset is used, too long labels etc.)
 	// request a prepareGeometryChange() for the plot in order to properly keep track of geometry changes
 	if (plot())
