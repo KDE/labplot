@@ -471,12 +471,11 @@ struct PayloadExpressionParser : public Payload {
 	PayloadExpressionParser(const QStringList* vars, const QVector<QVector<double>*>* xVectors, bool constant = false)
 		: Payload(constant)
 		, vars(vars)
-		, row(0)
 		, xVectors(xVectors) {
 	}
-	const QStringList* vars;
-	int row;
-	const QVector<QVector<double>*>* xVectors;
+	const QStringList* vars{nullptr};
+	int row{0};
+	const QVector<QVector<double>*>* xVectors{nullptr};
 };
 
 double cell(double x, const char* variable, const std::weak_ptr<Payload> payload) {

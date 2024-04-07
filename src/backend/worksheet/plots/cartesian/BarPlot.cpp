@@ -435,7 +435,9 @@ ErrorBar* BarPlotPrivate::addErrorBar(const KConfigGroup& group) {
 	});
 
 	q->connect(errorBar, &ErrorBar::updateRequested, [=] {
-		updateErrorBars(errorBars.indexOf(errorBar));
+		const int index = errorBars.indexOf(errorBar);
+		if (index != -1)
+			updateErrorBars(index);
 	});
 
 	errorBars << errorBar;

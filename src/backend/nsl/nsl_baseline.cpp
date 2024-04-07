@@ -445,7 +445,7 @@ double nsl_baseline_remove_arpls(double* data, const size_t n, double p, double 
 
 #ifdef HAVE_EIGEN3
 	return nsl_baseline_remove_arpls_Eigen3(data, n, p, lambda, niter);
-#endif
-
+#else
 	return nsl_baseline_remove_arpls_GSL(data, n, p, lambda, niter);
+#endif
 }

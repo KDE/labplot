@@ -21,10 +21,10 @@ public:
 	void retransform() override {
 	}
 
-	double horizontalPadding; // horiz. offset between the plot area and the area defining the coordinate system, in scene units
-	double verticalPadding; // vert. offset between the plot area and the area defining the coordinate system, in scene units
-	double rightPadding;
-	double bottomPadding;
+	double horizontalPadding{0.}; // horiz. offset between the plot area and the area defining the coordinate system, in scene units
+	double verticalPadding{0.}; // vert. offset between the plot area and the area defining the coordinate system, in scene units
+	double rightPadding{0.};
+	double bottomPadding{0.};
 	bool symmetricPadding{false};
 
 	AbstractPlot* q{nullptr};
