@@ -60,7 +60,7 @@ QPixmap SpreadsheetSparkLinesHeaderModel::showSparkLines(Column* col) {
 
 	// Connect the finished signal of the runnable to the watcher's setFuture slot
 	connect(runnable, &SparkLineRunnable::taskFinished, [&]() {
-		QPixmap resultPixmap = runnable->pixmap();
+		const auto& resultPixmap = runnable->pixmap();
 		// Check if the result is valid
 		if (!resultPixmap.isNull()) {
 			watcher.setFuture(QtConcurrent::run(&threadPool, [=]() {

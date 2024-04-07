@@ -1542,13 +1542,7 @@ void SearchReplaceWidget::showExtendedContextMenu(bool replace, const QPoint& po
 		addMenuManager.addEntry(QStringLiteral("+"), QString(), i18n("One or more occurrences"));
 		addMenuManager.addEntry(QStringLiteral("*"), QString(), i18n("Zero or more occurrences"));
 		addMenuManager.addEntry(QStringLiteral("?"), QString(), i18n("Zero or one occurrences"));
-		addMenuManager.addEntry(QStringLiteral("{a"),
-								QStringLiteral(",b}"),
-								i18n("<a> through <b> occurrences"),
-								QStringLiteral("{"),
-								QStringLiteral(",}"));
-
-		addMenuManager.addSeparator();
+		addMenuManager.addEntry(QStringLiteral("{a"), QStringLiteral(",b}"), i18n("<a> through <b> occurrences"), QStringLiteral("{"), QStringLiteral(",}"));
 		addMenuManager.addSeparator();
 		addMenuManager.addEntry(QStringLiteral("("), QStringLiteral(")"), i18n("Group, capturing"));
 		addMenuManager.addEntry(QStringLiteral("|"), QString(), i18n("Or"));

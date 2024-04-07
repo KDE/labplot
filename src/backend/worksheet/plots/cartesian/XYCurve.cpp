@@ -1114,7 +1114,7 @@ void XYCurvePrivate::updateLines() {
 			double minY{INFINITY}, maxY{-INFINITY};
 			QPointF p0, p1;
 			const auto xIndex = q->cSystem->index(Dimension::X);
-			const auto xRange = plot()->range(Dimension::X, xIndex);
+			const auto& xRange = plot()->range(Dimension::X, xIndex);
 			double minDiffX;
 			const RangeT::Scale scale = plot()->xRangeScale(xIndex);
 

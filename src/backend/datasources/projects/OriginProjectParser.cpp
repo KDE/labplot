@@ -1665,7 +1665,7 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 			case Origin::GraphCurve::YErrorBar:
 			case Origin::GraphCurve::XYErrorBar: {
 				const auto columnName(QString::fromStdString(originCurve.yColumnName));
-				const auto column = sheet.columns[findColumnByName(sheet, columnName)];
+				const auto& column = sheet.columns[findColumnByName(sheet, columnName)];
 				QString shortName = columnName, curveName = columnName;
 				QString longName, unit, comments;
 				if (column.comment.length() > 0) {

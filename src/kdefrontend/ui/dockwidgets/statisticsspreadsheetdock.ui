@@ -153,6 +153,13 @@
     </widget>
    </item>
    <item>
+    <widget class="QCheckBox" name="cbRange">
+     <property name="text">
+      <string>Range</string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QCheckBox" name="cbVariance">
      <property name="text">
       <string>Variance</string>

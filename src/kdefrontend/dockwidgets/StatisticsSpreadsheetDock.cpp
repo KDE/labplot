@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : widget for statistics spreadsheet properties
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2023-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -39,6 +39,7 @@ StatisticsSpreadsheetDock::StatisticsSpreadsheetDock(QWidget* parent)
 	m_mappingComboBoxMetric[ui.cbMedian] = StatisticsSpreadsheet::Metric::Median;
 	m_mappingComboBoxMetric[ui.cbThirdQuartile] = StatisticsSpreadsheet::Metric::ThirdQuartile;
 	m_mappingComboBoxMetric[ui.cbTrimean] = StatisticsSpreadsheet::Metric::Trimean;
+	m_mappingComboBoxMetric[ui.cbRange] = StatisticsSpreadsheet::Metric::Range;
 	m_mappingComboBoxMetric[ui.cbVariance] = StatisticsSpreadsheet::Metric::Variance;
 	m_mappingComboBoxMetric[ui.cbStandardDeviation] = StatisticsSpreadsheet::Metric::StandardDeviation;
 	m_mappingComboBoxMetric[ui.cbMeanDeviation] = StatisticsSpreadsheet::Metric::MeanDeviation;
@@ -61,6 +62,7 @@ StatisticsSpreadsheetDock::StatisticsSpreadsheetDock(QWidget* parent)
 	connect(ui.cbMedian, &QCheckBox::toggled, this, &StatisticsSpreadsheetDock::metricChanged);
 	connect(ui.cbThirdQuartile, &QCheckBox::toggled, this, &StatisticsSpreadsheetDock::metricChanged);
 	connect(ui.cbTrimean, &QCheckBox::toggled, this, &StatisticsSpreadsheetDock::metricChanged);
+	connect(ui.cbRange, &QCheckBox::toggled, this, &StatisticsSpreadsheetDock::metricChanged);
 	connect(ui.cbVariance, &QCheckBox::toggled, this, &StatisticsSpreadsheetDock::metricChanged);
 	connect(ui.cbStandardDeviation, &QCheckBox::toggled, this, &StatisticsSpreadsheetDock::metricChanged);
 	connect(ui.cbMeanDeviation, &QCheckBox::toggled, this, &StatisticsSpreadsheetDock::metricChanged);
@@ -119,6 +121,7 @@ void StatisticsSpreadsheetDock::load() {
 	ui.cbMedian->setChecked(metrics.testFlag(StatisticsSpreadsheet::Metric::Median));
 	ui.cbThirdQuartile->setChecked(metrics.testFlag(StatisticsSpreadsheet::Metric::ThirdQuartile));
 	ui.cbTrimean->setChecked(metrics.testFlag(StatisticsSpreadsheet::Metric::Trimean));
+	ui.cbRange->setChecked(metrics.testFlag(StatisticsSpreadsheet::Metric::Range));
 	ui.cbVariance->setChecked(metrics.testFlag(StatisticsSpreadsheet::Metric::Variance));
 	ui.cbStandardDeviation->setChecked(metrics.testFlag(StatisticsSpreadsheet::Metric::StandardDeviation));
 	ui.cbMeanDeviation->setChecked(metrics.testFlag(StatisticsSpreadsheet::Metric::MeanDeviation));
