@@ -110,7 +110,7 @@ QString ExpressionParser::parameters(const QString& functionName) {
 	for (int i = 0; i < _number_functions; i++) {
 		if (functionName == QLatin1String(_functions[i].name)) {
 			int count = _functions[i].argc;
-			const auto parameterFunction = _functions[i].parameterFunction;
+			const auto& parameterFunction = _functions[i].parameterFunction;
 
 			if (parameterFunction == nullptr)
 				return QStringLiteral("");
@@ -131,7 +131,7 @@ QString ExpressionParser::parameters(const QString& functionName) {
 	for (int i = 0; i < _number_specialfunctions; i++) {
 		if (functionName == QLatin1String(_special_functions[i].name)) {
 			int count = _special_functions[i].argc;
-			const auto parameterFunction = _special_functions[i].parameterFunction;
+			const auto& parameterFunction = _special_functions[i].parameterFunction;
 
 			if (parameterFunction == nullptr)
 				return QStringLiteral("");

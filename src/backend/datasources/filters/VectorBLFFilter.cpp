@@ -48,7 +48,7 @@ QString VectorBLFFilter::fileInfoString(const QString& fileName) {
 	if (!f.is_open())
 		return info;
 
-	auto statistics = f.fileStatistics;
+	const auto& statistics = f.fileStatistics;
 
 	// application info
 	QString appName;

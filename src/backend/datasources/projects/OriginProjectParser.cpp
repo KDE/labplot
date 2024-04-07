@@ -149,7 +149,7 @@ unsigned int OriginProjectParser::findSpreadsheetByName(const QString& name) {
 }
 unsigned int OriginProjectParser::findColumnByName(Origin::SpreadSheet& spread, const QString& name) {
 	for (unsigned int i = 0; i < spread.columns.size(); i++) {
-		auto column = spread.columns[i];
+		const auto& column = spread.columns[i];
 		if (column.name == name.toStdString())
 			return i;
 	}
@@ -1564,7 +1564,7 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 	if (layer.curves.empty()) // no curves, just axes
 		loadAxes(layer, plot, layerIndex, QLatin1String("X Axis Title"), QLatin1String("Y Axis Title"));
 	else {
-		auto originCurve = layer.curves.at(0);
+		const auto& originCurve = layer.curves.at(0);
 		// see loadCurves()
 		QString dataName(QString::fromStdString(originCurve.dataName));
 		DEBUG(Q_FUNC_INFO << ", curve data name " << STDSTRING(dataName))
@@ -1577,7 +1577,7 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 		else
 			xColumnName = QString::fromStdString(originCurve.xColumnName);
 
-		auto xColumn = sheet.columns[findColumnByName(sheet, xColumnName)];
+		const auto& xColumn = sheet.columns[findColumnByName(sheet, xColumnName)];
 		QString xColumnInfo = xColumnName;
 		if (xColumn.comment.length() > 0) { // long name(, unit(, comment))
 			if (m_originFile->version() < 9.5) // <= 2017 : pre-Unicode
@@ -1597,7 +1597,7 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 		else
 			yColumnName = QString::fromStdString(originCurve.yColumnName);
 
-		auto yColumn = sheet.columns[findColumnByName(sheet, yColumnName)];
+		const auto& yColumn = sheet.columns[findColumnByName(sheet, yColumnName)];
 		QString yColumnInfo = yColumnName;
 		if (yColumn.comment.length() > 0) { // long name(, unit(, comment))
 			if (m_originFile->version() < 9.5) // <= 2017 : pre-Unicode
@@ -1664,8 +1664,8 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 			case Origin::GraphCurve::XErrorBar:
 			case Origin::GraphCurve::YErrorBar:
 			case Origin::GraphCurve::XYErrorBar: {
-				auto columnName(QString::fromStdString(originCurve.yColumnName));
-				auto column = sheet.columns[findColumnByName(sheet, columnName)];
+				const auto columnName(QString::fromStdString(originCurve.yColumnName));
+				const auto column = sheet.columns[findColumnByName(sheet, columnName)];
 				QString shortName = columnName, curveName = columnName;
 				QString longName, unit, comments;
 				if (column.comment.length() > 0) {

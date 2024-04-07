@@ -1983,7 +1983,7 @@ void XYFitCurvePrivate::runMaximumLikelihood(const AbstractColumn* tmpXDataColum
 	// TODO: parameter values (error, etc.)
 	// TODO: currently all values are used (data range not changeable)
 	const double alpha = 1.0 - fitData.confidenceInterval / 100.;
-	const auto statistics = ((Column*)tmpXDataColumn)->statistics();
+	const auto& statistics = ((Column*)tmpXDataColumn)->statistics();
 	const double mean = statistics.arithmeticMean;
 	const double var = statistics.variance;
 	const double median = statistics.median;
