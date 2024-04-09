@@ -2772,23 +2772,54 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 			QPointF titleBottomRight = titlePath.boundingRect().bottomRight();
 
 			QVector<QPointF> vertices;
-			if (Axis::Orientation::Horizontal == orientation) {
-				if (axisTopLeft.y() < titleTopLeft.y() || axisBottomLeft.y() <  titleBottomLeft.y())
-					vertices << axisTopLeft << axisBottomLeft << QPointF(titleTopLeft.x(), axisBottomLeft.y()) << titleBottomLeft << titleBottomRight
-							 << QPointF(titleTopRight.x(), axisBottomRight.y()) << axisBottomRight << axisTopRight << axisTopLeft;
-				else
-					vertices << axisTopLeft << QPointF(titleBottomLeft.x(), axisTopLeft.y()) << titleTopLeft << titleTopRight
-							 << QPointF(titleBottomRight.x(), axisTopRight.y()) << axisTopRight << axisBottomRight << axisBottomLeft << axisTopLeft;
-
+			if (titlePath.intersects(tmpPath)) {
+				// Draw crossed shaped bounded rect
+				if (Axis::Orientation::Horizontal == orientation) {
+					if (axisTopLeft.y() < titleTopLeft.y()) {
+						vertices << axisTopLeft << axisBottomLeft << QPointF(titleTopLeft.x(), axisBottomLeft.y()) << titleBottomLeft << titleBottomRight
+								 << QPointF(titleTopRight.x(), axisBottomRight.y()) << axisBottomRight << axisTopRight << axisTopLeft;
+					} else if (axisBottomLeft.y() > titleBottomLeft.y()) {
+						vertices << axisTopLeft << QPointF(titleBottomLeft.x(), axisTopLeft.y()) << titleTopLeft << titleTopRight
+								 << QPointF(titleBottomRight.x(), axisTopRight.y()) << axisTopRight << axisBottomRight << axisBottomLeft << axisTopLeft;
+					} else {
+						vertices << titleTopLeft << QPointF(titleTopLeft.x(), axisTopLeft.y()) << axisTopLeft << axisBottomLeft
+								 << QPointF(titleBottomLeft.x(), axisBottomLeft.y()) << titleBottomLeft << titleBottomRight
+								 << QPointF(titleBottomRight.x(), axisBottomRight.y()) << axisBottomRight << axisTopRight
+								 << QPointF(titleTopRight.x(), axisTopRight.y()) << titleTopRight << titleTopLeft;
+					}
+				} else {
+					if (axisTopRight.x() > titleTopRight.x()) {
+						vertices << axisTopLeft << QPointF(axisTopLeft.x(), titleTopRight.y()) << titleTopLeft << titleBottomLeft
+								 << QPointF(axisBottomLeft.x(), titleBottomRight.y()) << axisBottomLeft << axisBottomRight << axisTopRight << axisTopLeft;
+					} else if (axisTopLeft.x() < titleTopLeft.x()) {
+						vertices << axisTopLeft << axisTopRight << QPointF(axisTopRight.x(), titleTopRight.y()) << titleTopRight << titleBottomRight
+								 << QPointF(axisBottomRight.x(), titleBottomLeft.y()) << axisBottomRight << axisBottomLeft << axisTopLeft;
+					} else {
+						vertices << axisTopLeft << QPointF(axisTopLeft.x(), titleTopLeft.y()) << titleTopLeft << titleBottomLeft
+								 << QPointF(axisTopLeft.x(), titleBottomLeft.y()) << axisBottomLeft << axisBottomRight
+								 << QPointF(axisTopRight.x(), titleBottomRight.y()) << titleBottomRight << titleTopRight
+								 << QPointF(axisTopRight.x(), titleTopRight.y()) << axisTopRight << axisTopLeft;
+					}
+				}
 			} else {
-				if (axisTopLeft.x() > titleTopLeft.x() || axisBottomLeft.x() > titleBottomLeft.x())
-					vertices << axisTopLeft << QPointF(axisTopLeft.x(), titleTopRight.y()) << titleTopLeft << titleBottomLeft
-							 << QPointF(axisBottomLeft.x(), titleBottomRight.y()) << axisBottomLeft << axisBottomRight << axisTopRight << axisTopLeft;
-
-				else
-					vertices << axisTopLeft << axisTopRight << QPointF(axisTopRight.x(), titleTopRight.y()) << titleTopRight << titleBottomRight
-							 << QPointF(axisBottomRight.x(), titleBottomLeft.y()) << axisBottomRight << axisBottomLeft << axisTopLeft;
+				// t shaped bounded rect
+				if (Axis::Orientation::Horizontal == orientation) {
+					if (axisTopLeft.y() < titleTopLeft.y() || axisBottomLeft.y() < titleBottomLeft.y())
+						vertices << axisTopLeft << axisBottomLeft << QPointF(titleTopLeft.x(), axisBottomLeft.y()) << titleBottomLeft << titleBottomRight
+								 << QPointF(titleTopRight.x(), axisBottomRight.y()) << axisBottomRight << axisTopRight << axisTopLeft;
+					else
+						vertices << axisTopLeft << QPointF(titleBottomLeft.x(), axisTopLeft.y()) << titleTopLeft << titleTopRight
+								 << QPointF(titleBottomRight.x(), axisTopRight.y()) << axisTopRight << axisBottomRight << axisBottomLeft << axisTopLeft;
+				} else {
+					if (axisTopLeft.x() > titleTopLeft.x() || axisBottomLeft.x() > titleBottomLeft.x())
+						vertices << axisTopLeft << QPointF(axisTopLeft.x(), titleTopRight.y()) << titleTopLeft << titleBottomLeft
+								 << QPointF(axisBottomLeft.x(), titleBottomRight.y()) << axisBottomLeft << axisBottomRight << axisTopRight << axisTopLeft;
+					else
+						vertices << axisTopLeft << axisTopRight << QPointF(axisTopRight.x(), titleTopRight.y()) << titleTopRight << titleBottomRight
+								 << QPointF(axisBottomRight.x(), titleBottomLeft.y()) << axisBottomRight << axisBottomLeft << axisTopLeft;
+				}
 			}
+
 			QPolygonF polygon(vertices);
 			tmpPath.addPolygon(polygon);
 			m_boundingRectangle = tmpPath.boundingRect();
