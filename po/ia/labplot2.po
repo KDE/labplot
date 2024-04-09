@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-08 01:42+0000\n"
-"PO-Revision-Date: 2024-02-26 11:02+0100\n"
+"PO-Revision-Date: 2024-04-08 17:55+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -712,10 +712,9 @@ msgid "%1: set author"
 msgstr "%1: assigna autor"
 
 #: src/backend/core/Project.cpp:293
-#, fuzzy, kde-format
-#| msgid "%1: save calculation changed"
+#, kde-format
 msgid "%1: save dock states changed"
-msgstr "%1: salveguarda calculation modificate"
+msgstr "%1: salveguarda statos de dock (bassino) modificate"
 
 #: src/backend/core/Project.cpp:300
 #, kde-format
@@ -1167,10 +1166,9 @@ msgstr "Indice"
 #: src/backend/datasources/filters/AsciiFilter.cpp:1284
 #: src/backend/datasources/filters/AsciiFilter.cpp:1621
 #: src/backend/datasources/filters/BinaryFilter.cpp:404
-#, fuzzy, kde-format
-#| msgid "Failed to open the file '%1'."
+#, kde-format
 msgid "Failed to open the device/file or it's empty."
-msgstr "Falleva a aperir le file '%1'."
+msgstr "Falleva a aperir le dispositivo/file o illo es vacue."
 
 #. i18n: ectx: property (text), widget (QTableWidget, twLabels)
 #: src/backend/datasources/filters/AsciiFilter.cpp:755
@@ -1221,34 +1219,30 @@ msgstr "Valor %1"
 #: src/backend/datasources/filters/SpiceFilter.cpp:206
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:332
 #: src/backend/datasources/filters/XLSXFilter.cpp:515
-#, fuzzy, kde-format
-#| msgid "Not a number"
+#, kde-format
 msgid "Not enough memory."
-msgstr "Non un numero"
+msgstr "Non assatis memoria."
 
 #: src/backend/datasources/filters/BinaryFilter.cpp:273
 #: src/backend/datasources/filters/JsonFilter.cpp:386
 #: src/backend/datasources/filters/SpiceFilter.cpp:127
 #: src/backend/datasources/filters/SpiceFilter.cpp:183
-#, fuzzy, kde-format
-#| msgid "Failed to open the file '%1'."
+#, kde-format
 msgid "Failed to open the device/file."
-msgstr "Falleva a aperir le file '%1'."
+msgstr "Falleva a aperir le dispositivo/file."
 
 #: src/backend/datasources/filters/BinaryFilter.cpp:283
-#, fuzzy, kde-format
-#| msgid "data selection empty"
+#, kde-format
 msgid "Data selection empty."
-msgstr "selection de datos vacue"
+msgstr "Selection de datos vacue"
 
 #: src/backend/datasources/filters/CANFilter.cpp:218
 #: src/backend/datasources/filters/SpiceFilter.cpp:131
 #: src/backend/datasources/filters/SpiceFilter.cpp:187
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:261
-#, fuzzy, kde-format
-#| msgid "Invalid pointer"
+#, kde-format
 msgid "Invalid file."
-msgstr "Punctator invalide"
+msgstr "File invalide."
 
 #: src/backend/datasources/filters/CANFilter.cpp:224
 #, kde-format
@@ -1267,23 +1261,20 @@ msgstr "Tabellas: %1"
 
 #: src/backend/datasources/filters/FITSFilter.cpp:259
 #: src/backend/datasources/filters/MatioFilter.cpp:647
-#, fuzzy, kde-format
-#| msgid "Failed to open the file '%1'."
+#, kde-format
 msgid "Failed to open the file."
-msgstr "Falleva a aperir le file '%1'."
+msgstr "Falleva a aperir le file."
 
 #: src/backend/datasources/filters/FITSFilter.cpp:267
 #: src/backend/datasources/filters/FITSFilter.cpp:346
-#, fuzzy, kde-format
-#| msgid "Failed to open the file '%1'."
+#, kde-format
 msgid "Failed to read the file."
-msgstr "Falleva a aperir le file '%1'."
+msgstr "Falleva a leger le file."
 
 #: src/backend/datasources/filters/FITSFilter.cpp:288
-#, fuzzy, kde-format
-#| msgid "dimension"
+#, kde-format
 msgid "Zero dimensions."
-msgstr "dimension"
+msgstr "Dimensiones nulle (zero)."
 
 #: src/backend/datasources/filters/FITSFilter.cpp:1026
 #: src/backend/datasources/filters/FITSFilter.cpp:1546
@@ -1586,10 +1577,9 @@ msgstr "incognite"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:1512
 #: src/backend/datasources/filters/HDF5Filter.cpp:2139
-#, fuzzy, kde-format
-#| msgid "No data set selected"
+#, kde-format
 msgid "No data set selected."
-msgstr "Nulle insimul de datos seligite"
+msgstr "Nulle insimul de datos seligite."
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:1581
 #, kde-format
@@ -1711,10 +1701,9 @@ msgid "Column %1"
 msgstr "Columna %1"
 
 #: src/backend/datasources/filters/JsonFilter.cpp:391
-#, fuzzy, kde-format
-#| msgid "The project file is empty."
+#, kde-format
 msgid "Device/file is empty."
-msgstr "Le file de projecto es vacue."
+msgstr "Dispositivo/file es vacue."
 
 #: src/backend/datasources/filters/JsonFilter.cpp:399
 #, kde-format
@@ -1917,16 +1906,14 @@ msgstr ""
 #: src/backend/datasources/filters/MatioFilter.cpp:602
 #: src/backend/datasources/filters/MatioFilter.cpp:634
 #: src/backend/datasources/filters/MatioFilter.cpp:663
-#, fuzzy, kde-format
-#| msgid "No data set selected"
+#, kde-format
 msgid "No valid variable selected."
-msgstr "Nulle insimul de datos seligite"
+msgstr "Nulle variabile valide seligite."
 
 #: src/backend/datasources/filters/MatioFilter.cpp:658
-#, fuzzy, kde-format
-#| msgid "Delete variable"
+#, kde-format
 msgid "Selected variable not found."
-msgstr "Dele variabile"
+msgstr "Variabile seligite non trovate."
 
 #: src/backend/datasources/filters/MatioFilter.cpp:799
 #, kde-format
@@ -2031,16 +2018,14 @@ msgstr "Variabiles"
 
 #: src/backend/datasources/filters/NetCDFFilter.cpp:688
 #: src/backend/datasources/filters/NetCDFFilter.cpp:1113
-#, fuzzy, kde-format
-#| msgid "No data set selected"
+#, kde-format
 msgid "No variable selected."
-msgstr "Nulle insimul de datos seligite"
+msgstr "Nulle variabile seligite"
 
 #: src/backend/datasources/filters/NetCDFFilter.cpp:699
-#, fuzzy, kde-format
-#| msgid "Failed to open the file '%1'."
+#, kde-format
 msgid "Failed to open the file or it's empty."
-msgstr "Falleva a aperir le file '%1'."
+msgstr "Falleva a aperir le file o illo es vacue."
 
 #: src/backend/datasources/filters/NetCDFFilter.cpp:937
 #: src/backend/datasources/filters/NetCDFFilter.cpp:1077
@@ -2061,22 +2046,19 @@ msgstr "Computo de folio: %1"
 
 #: src/backend/datasources/filters/OdsFilter.cpp:215
 #: src/backend/datasources/filters/XLSXFilter.cpp:632
-#, fuzzy, kde-format
-#| msgid "No data set selected"
+#, kde-format
 msgid "No sheet selected."
-msgstr "Nulle insimul de datos seligite"
+msgstr "Nulle folio seligite"
 
 #: src/backend/datasources/filters/OdsFilter.cpp:250
-#, fuzzy, kde-format
-#| msgid "File not found"
+#, kde-format
 msgid "Selected sheet not found."
-msgstr "File non trovate"
+msgstr "Folio selectionate non trovate."
 
 #: src/backend/datasources/filters/OdsFilter.cpp:257
-#, fuzzy, kde-format
-#| msgid "Invalid"
+#, kde-format
 msgid "Invalid sheet."
-msgstr "Invalide"
+msgstr "Folio Invalide."
 
 #: src/backend/datasources/filters/OdsFilter.cpp:318
 #, kde-format
@@ -2084,16 +2066,14 @@ msgid "Formulas not supported yet."
 msgstr ""
 
 #: src/backend/datasources/filters/OdsFilter.cpp:473
-#, fuzzy, kde-format
-#| msgid "File not found"
+#, kde-format
 msgid "Sheet not found."
-msgstr "File non trovate"
+msgstr "Folio non trovate."
 
 #: src/backend/datasources/filters/OdsFilter.cpp:480
-#, fuzzy, kde-format
-#| msgid "Invalid metadata file"
+#, kde-format
 msgid "Invalid sheet index."
-msgstr "File de metadatos invalide"
+msgstr "Invalide indice de folio."
 
 #: src/backend/datasources/filters/QJsonModel.cpp:132
 #: src/kdefrontend/widgets/FITSHeaderEditWidget.cpp:64
@@ -2167,17 +2147,15 @@ msgid "64bit: %1"
 msgstr "64bit: %1"
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:482
-#, fuzzy, kde-format
-#| msgid "Error opening file"
+#, kde-format
 msgid "Error reading file."
-msgstr "Error durante que il aperiva le file"
+msgstr "Error durante que il legeva le file."
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:512
 #: src/backend/datasources/filters/ReadStatFilter.cpp:535
-#, fuzzy, kde-format
-#| msgid "Failed to open the file '%1'."
+#, kde-format
 msgid "Failed to parse the file."
-msgstr "Falleva a aperir le file '%1'."
+msgstr "Falleva a analysar le file."
 
 #: src/backend/datasources/filters/ROOTFilter.cpp:113
 #: src/backend/datasources/MQTTClient.cpp:1200
@@ -2239,46 +2217,39 @@ msgid "Size of TStreamerInfo record: %1 bytes"
 msgstr ""
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:103
-#, fuzzy, kde-format
-#| msgid "Ratio: %1"
+#, kde-format
 msgid "Application: %1"
-msgstr "Proportion: %1"
+msgstr "Application: %1"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:105
-#, fuzzy, kde-format
-#| msgid "Format version: %1"
+#, kde-format
 msgid "Application version: %1.%2.%3"
-msgstr "Version de formato: %1"
+msgstr "Version de application: %1.%2.%3"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:107
-#, fuzzy, kde-format
-#| msgid "Number of all objects: %1"
+#, kde-format
 msgid "Number of Objects: %1"
-msgstr "Numero de omne objectos: %1"
+msgstr "Numero de objectos: %1"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:115
-#, fuzzy, kde-format
-#| msgid "Start Time:"
+#, kde-format
 msgid "Start Time: %1"
-msgstr "Tempore de initio:"
+msgstr "Tempore de initio: %1"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:123
-#, fuzzy, kde-format
-#| msgid "End Time:"
+#, kde-format
 msgid "End Time: %1"
-msgstr "Tempore de Fin: "
+msgstr "Tempore de Fin:  %1"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:127
-#, fuzzy, kde-format
-#| msgid "Compression: %1"
+#, kde-format
 msgid "Compression Level: %1"
-msgstr "Compression: %1"
+msgstr "Nivello de Compression: %1"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:129
-#, fuzzy, kde-format
-#| msgid "File size: %1 bytes"
+#, kde-format
 msgid "Uncompressed File Size: %1 Bytes"
-msgstr "Grandor de file: %1 bytes"
+msgstr "Grandor de file non comprimite : %1 bytes"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:180
 #, kde-format
@@ -2291,16 +2262,14 @@ msgid "Message too long. CAN id: %1."
 msgstr ""
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:186
-#, fuzzy, kde-format
-#| msgid "Unknown"
+#, kde-format
 msgid "Unknown id: %1."
-msgstr "Incognite"
+msgstr "Id Incognite: %1."
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:189
-#, fuzzy, kde-format
-#| msgid "Invalid metadata file"
+#, kde-format
 msgid "Invalid BLF file"
-msgstr "File de metadatos invalide"
+msgstr "File BLF invalide"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:192
 #, kde-format
@@ -2313,16 +2282,14 @@ msgid "No DBC parser installed."
 msgstr ""
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:198
-#, fuzzy, kde-format
-#| msgid "Invalid metadata file"
+#, kde-format
 msgid "Invalid DBC file."
-msgstr "File de metadatos invalide"
+msgstr "File DBC invalide"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:201
-#, fuzzy, kde-format
-#| msgid "Unknown error"
+#, kde-format
 msgid "Unknown error,"
-msgstr "Error Incognite"
+msgstr "Error Incognite,"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:443
 #, kde-format
@@ -6344,7 +6311,7 @@ msgstr ""
 #: src/backend/nsl/nsl_interp.c:25
 #, kde-format
 msgid "Cardinal"
-msgstr ""
+msgstr "Cardinal"
 
 #: src/backend/nsl/nsl_interp.c:25
 #, kde-format
@@ -6872,10 +6839,9 @@ msgstr "Percentile99"
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:50
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:79
 #: src/kdefrontend/ui/dockwidgets/statisticsspreadsheetdock.ui:158
-#, fuzzy, kde-format
-#| msgid "Range:"
+#, kde-format
 msgid "Range"
-msgstr "Extension:"
+msgstr "Extension"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:52
 #, kde-format
@@ -9452,7 +9418,7 @@ msgstr ""
 #: src/commonfrontend/worksheet/WorksheetView.cpp:455
 #, kde-format
 msgid "Magnification"
-msgstr ""
+msgstr "Aggrandimento"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:531
 #, kde-format
@@ -11373,10 +11339,9 @@ msgid "Live data source created in %1 seconds."
 msgstr ""
 
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:174
-#, fuzzy, kde-format
-#| msgid "No data set selected"
+#, kde-format
 msgid "No target data container selected"
-msgstr "Nulle insimul de datos seligite"
+msgstr "Nulle receptaculo de datos objecto seligite"
 
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:319
 #, kde-format
@@ -18102,10 +18067,9 @@ msgstr "Requesta"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, ImportWarningsDialog)
 #: src/kdefrontend/ui/datasources/importwarningsdialog.ui:14
-#, fuzzy, kde-format
-#| msgid "Warning"
+#, kde-format
 msgid "Import Warnings"
-msgstr "Aviso"
+msgstr "Importa Avisos"
 
 #. i18n: ectx: property (text), widget (QPushButton, pbOk)
 #: src/kdefrontend/ui/datasources/importwarningsdialog.ui:38
@@ -20793,6 +20757,16 @@ msgid ""
 "margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"
 "\"><br /></p></body></html>"
 msgstr ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Sans Serif'; font-size:9pt; font-"
+"weight:400; font-style:normal;\">\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"></"
+"p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lBackgroundColor)
 #: src/kdefrontend/ui/labelwidget.ui:231
@@ -20815,10 +20789,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/kdefrontend/ui/labelwidget.ui:494
-#, fuzzy, kde-format
-#| msgid "Model:"
+#, kde-format
 msgid "Mode:"
-msgstr "Modello:"
+msgstr "Modo:"
 
 #. i18n: ectx: property (text), widget (QLabel, lBorderShape)
 #: src/kdefrontend/ui/labelwidget.ui:586
@@ -21220,10 +21193,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:317
-#, fuzzy, kde-format
-#| msgid "Calculations"
+#, kde-format
 msgid "Save  Calculations:"
-msgstr "Calculationes"
+msgstr "Salveguarda Calculationes:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode_2)
@@ -22301,18 +22273,17 @@ msgstr ""
 #: src/kdefrontend/widgets/LabelWidget.cpp:139
 #, kde-format
 msgid "Left Align"
-msgstr ""
+msgstr "Alinea a Dextera"
 
 #: src/kdefrontend/widgets/LabelWidget.cpp:141
-#, fuzzy, kde-format
-#| msgid "Right"
+#, kde-format
 msgid "Right Align"
-msgstr "Dextera"
+msgstr "Alinea a Dextera"
 
 #: src/kdefrontend/widgets/LabelWidget.cpp:142
 #, kde-format
 msgid "Justify"
-msgstr ""
+msgstr "Justifica"
 
 #: src/kdefrontend/widgets/LabelWidget.cpp:143
 #, kde-format
