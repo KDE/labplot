@@ -2740,6 +2740,7 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 	doc.setHtml(title->text().text);
 	// QDEBUG(Q_FUNC_INFO << ", title text plain: " << doc.toPlainText())
 	QPainterPath titlePath;
+	QPolygonF polygon;
 	if (title->isVisible() && !doc.toPlainText().isEmpty()) {
 		const QRectF& titleRect = title->graphicsItem()->boundingRect();
 		if (titleRect.size() != QSizeF(0, 0)) {
@@ -2772,6 +2773,7 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 			QPointF titleBottomRight = titlePath.boundingRect().bottomRight();
 
 			QVector<QPointF> vertices;
+
 			if (titlePath.intersects(tmpPath)) {
 				// Draw crossed shaped bounded rect
 				if (Axis::Orientation::Horizontal == orientation) {
@@ -2819,14 +2821,14 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 								 << QPointF(axisBottomRight.x(), titleBottomLeft.y()) << axisBottomRight << axisBottomLeft << axisTopLeft;
 				}
 			}
-
-			QPolygonF polygon(vertices);
+			for (auto vertex : vertices)
+				polygon.append(vertex);
 			tmpPath.addPolygon(polygon);
-			m_boundingRectangle = tmpPath.boundingRect();
-			m_shape = QPainterPath();
-			m_shape.addPolygon(polygon);
 		}
 	}
+	m_boundingRectangle = tmpPath.boundingRect();
+	m_shape = QPainterPath();
+	m_shape.addPolygon(polygon);
 
 	// if the axis goes beyond the current bounding box of the plot (too high offset is used, too long labels etc.)
 	// request a prepareGeometryChange() for the plot in order to properly keep track of geometry changes
