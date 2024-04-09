@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-18 03:06+0000\n"
-"PO-Revision-Date: 2024-02-26 11:09+0100\n"
+"PO-Revision-Date: 2024-04-08 18:13+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -1887,7 +1887,7 @@ msgstr ""
 #: src/backend/datasources/filters/NetCDFFilter.cpp:703
 #, kde-format
 msgid "No variable selected"
-msgstr ""
+msgstr "Nulle variabile seligite"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:660
 #: src/kdefrontend/datasources/ImportDatasetWidget.cpp:170
@@ -2140,12 +2140,12 @@ msgstr ""
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:95
 #, kde-format
 msgid "Unknown id: %1"
-msgstr ""
+msgstr "Id Incognite: %1"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:98
 #, kde-format
 msgid "Invalid blf file"
-msgstr ""
+msgstr "File BLF invalide"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:101
 #, kde-format
@@ -2160,7 +2160,7 @@ msgstr ""
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:107
 #, kde-format
 msgid "Invalid dbc file"
-msgstr ""
+msgstr "File DBC invalide"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:110
 #, kde-format
@@ -5953,7 +5953,7 @@ msgstr ""
 #: src/backend/nsl/nsl_interp.c:25
 #, kde-format
 msgid "Cardinal"
-msgstr ""
+msgstr "Cardinal"
 
 #: src/backend/nsl/nsl_interp.c:25
 #, kde-format
@@ -8823,7 +8823,7 @@ msgstr ""
 #: src/commonfrontend/worksheet/WorksheetView.cpp:508
 #, kde-format
 msgid "Magnification"
-msgstr ""
+msgstr "Aggrandimento"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:527
 #, kde-format
@@ -18607,7 +18607,7 @@ msgstr "Modificate:"
 #: src/kdefrontend/ui/dockwidgets/projectdock.ui:154
 #, kde-format
 msgid "Save Calculations:"
-msgstr ""
+msgstr "Salveguarda Calculationes:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFileName)
 #. i18n: ectx: property (text), widget (QLabel, label)
