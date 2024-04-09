@@ -2761,8 +2761,6 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 				title->setPosition(QPointF(rect.topLeft().x() + offsetX, (rect.topLeft().y() + rect.bottomLeft().y()) / 2. - titleOffsetY));
 			}
 			titlePath = WorksheetElement::shapeFromPath(title->graphicsItem()->mapToParent(title->graphicsItem()->shape()), linePen);
-			// Draw combined bounding rectangle
-			// Draw merged t-shaped polygon for title and axis
 			QPointF axisTopLeft = axisRect.topLeft();
 			QPointF axisTopRight = axisRect.topRight();
 			QPointF axisBottomLeft = axisRect.bottomLeft();
@@ -2804,7 +2802,7 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 					}
 				}
 			} else {
-				// t shaped bounded rect
+				// Draw t shaped bounded rect
 				if (Axis::Orientation::Horizontal == orientation) {
 					if (axisTopLeft.y() < titleTopLeft.y() || axisBottomLeft.y() < titleBottomLeft.y())
 						vertices << axisTopLeft << axisBottomLeft << QPointF(titleTopLeft.x(), axisBottomLeft.y()) << titleBottomLeft << titleBottomRight
