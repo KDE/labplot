@@ -52,7 +52,7 @@ QString VectorBLFFilter::fileInfoString(const QString& fileName) {
 
 	// application info
 	QString appName;
-	switch (f.fileStatistics.applicationId) {
+	switch (statistics.applicationId) {
 	case Vector::BLF::Unknown:
 		appName = i18n("Unknown");
 		break;
@@ -102,13 +102,13 @@ QString VectorBLFFilter::fileInfoString(const QString& fileName) {
 
 	info += i18n("Application: %1", appName);
 	info += QStringLiteral("<br>");
-	info += i18n("Application version: %1.%2.%3", f.fileStatistics.applicationMajor, f.fileStatistics.applicationMinor, f.fileStatistics.applicationBuild);
+	info += i18n("Application version: %1.%2.%3", statistics.applicationMajor, statistics.applicationMinor, statistics.applicationBuild);
 	info += QStringLiteral("<br>");
-	info += i18n("Number of Objects: %1", f.fileStatistics.objectCount);
+	info += i18n("Number of Objects: %1", statistics.objectCount);
 	info += QStringLiteral("<br>");
 
 	// measurement start time
-	auto start = f.fileStatistics.measurementStartTime;
+	auto start = statistics.measurementStartTime;
 	QDate startDate(start.year, start.month, start.day);
 	QTime startTime(start.hour, start.minute, start.second, start.milliseconds);
 	QDateTime startDateTime(startDate, startTime);
@@ -116,7 +116,7 @@ QString VectorBLFFilter::fileInfoString(const QString& fileName) {
 	info += QStringLiteral("<br>");
 
 	// measurement end time
-	auto end = f.fileStatistics.lastObjectTime;
+	auto end = statistics.lastObjectTime;
 	QDate endDate(end.year, end.month, end.day);
 	QTime endTime(end.hour, end.minute, end.second, end.milliseconds);
 	QDateTime endDateTime(endDate, endTime);
@@ -124,9 +124,9 @@ QString VectorBLFFilter::fileInfoString(const QString& fileName) {
 	info += QStringLiteral("<br>");
 
 	// compression
-	info += i18n("Compression Level: %1", f.fileStatistics.compressionLevel);
+	info += i18n("Compression Level: %1", statistics.compressionLevel);
 	info += QStringLiteral("<br>");
-	info += i18n("Uncompressed File Size: %1 Bytes", f.fileStatistics.uncompressedFileSize);
+	info += i18n("Uncompressed File Size: %1 Bytes", statistics.uncompressedFileSize);
 	info += QStringLiteral("<br>");
 
 	f.close();
