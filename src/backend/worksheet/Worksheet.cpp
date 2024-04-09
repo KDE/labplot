@@ -567,7 +567,7 @@ void Worksheet::setCartesianPlotActionMode(Worksheet::CartesianPlotActionMode mo
 		return;
 
 	d->cartesianPlotActionMode = mode;
-	project()->setChanged(true);
+	setProjectChanged(true);
 }
 
 void Worksheet::setCartesianPlotCursorMode(Worksheet::CartesianPlotActionMode mode) {
@@ -590,7 +590,7 @@ void Worksheet::setCartesianPlotCursorMode(Worksheet::CartesianPlotActionMode mo
 		d->suppressCursorPosChanged = false;
 	}
 	updateCompleteCursorTreeModel();
-	project()->setChanged(true);
+	setProjectChanged(true);
 }
 
 void Worksheet::setInteractive(bool value) {
@@ -609,7 +609,7 @@ void Worksheet::setPlotsInteractive(bool interactive) {
 	for (auto* plot : children<CartesianPlot>())
 		plot->setInteractive(interactive);
 
-	project()->setChanged(true);
+	setProjectChanged(true);
 }
 
 void Worksheet::registerShortcuts() {

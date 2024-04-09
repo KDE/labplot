@@ -498,6 +498,12 @@ Project* AbstractAspect::project() {
 	return parentAspect() ? parentAspect()->project() : nullptr;
 }
 
+void AbstractAspect::setProjectChanged(bool changed) {
+	auto* p = project();
+	if (p)
+		p->setChanged(changed);
+}
+
 /**
  * \brief Return the path that leads from the top-most Aspect (usually a Project) to me.
  */
@@ -1019,7 +1025,7 @@ void AbstractAspect::exec(QUndoCommand* cmd) {
 		}
 
 		if (project())
-			project()->setChanged(true);
+			setProjectChanged(true);
 	} else {
 		cmd->redo();
 		delete cmd;

@@ -54,7 +54,6 @@ public:
 	BASIC_D_ACCESSOR_DECL(bool, saveCalculations, SaveCalculations)
 	CLASS_D_ACCESSOR_DECL(QString, windowState, WindowState)
 
-	void setChanged(const bool value = true);
 	bool hasChanged() const;
 	void navigateTo(const QString& path);
 
@@ -108,6 +107,12 @@ private:
 
 	template<typename T>
 	void updateDependencies(const QVector<const AbstractAspect*>);
+
+private:
+	void setChanged(const bool value = true);
+	friend class AbstractAspect;
+	friend class MainWin;
+	friend class ImportDialog;
 };
 
 #endif // ifndef PROJECT_H

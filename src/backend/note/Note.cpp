@@ -91,7 +91,7 @@ bool Note::exportView() const {
 
 void Note::setNote(const QString& note) {
 	m_note = note;
-	project()->setChanged(true);
+	setProjectChanged(true);
 }
 
 const QString& Note::note() const {

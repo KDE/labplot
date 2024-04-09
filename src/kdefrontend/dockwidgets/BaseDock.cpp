@@ -194,7 +194,7 @@ void BaseDock::plotRangeChanged(int index) {
 	}
 
 	plot->WorksheetElementContainer::retransform();
-	plot->project()->setChanged(true);
+	plot->setProjectChanged(true);
 }
 
 void BaseDock::nameChanged() {

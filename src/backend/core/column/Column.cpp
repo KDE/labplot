@@ -666,8 +666,7 @@ void Column::replaceDateTimes(int first, const QVector<QDateTime>& new_values) {
 
 void Column::addValueLabel(const QDateTime& value, const QString& label) {
 	d->addValueLabel(value, label);
-	if (project())
-		project()->setChanged(true);
+	setProjectChanged(true);
 }
 
 void Column::setValues(const QVector<double>& values) {
@@ -700,8 +699,7 @@ void Column::replaceValues(int first, const QVector<double>& new_values) {
 
 void Column::addValueLabel(double value, const QString& label) {
 	d->addValueLabel(value, label);
-	if (project())
-		project()->setChanged(true);
+	setProjectChanged(true);
 }
 
 void Column::setIntegers(const QVector<int>& integers) {
@@ -734,7 +732,7 @@ void Column::replaceInteger(int first, const QVector<int>& new_values) {
 
 void Column::addValueLabel(int value, const QString& label) {
 	d->addValueLabel(value, label);
-	project()->setChanged(true);
+	setProjectChanged(true);
 }
 
 void Column::setBigInts(const QVector<qint64>& bigInts) {
@@ -767,7 +765,7 @@ void Column::replaceBigInt(int first, const QVector<qint64>& new_values) {
 
 void Column::addValueLabel(qint64 value, const QString& label) {
 	d->addValueLabel(value, label);
-	project()->setChanged(true);
+	setProjectChanged(true);
 }
 
 /*!
@@ -964,17 +962,17 @@ double Column::valueLabelsMaximum() const {
 
 void Column::setLabelsMode(ColumnMode mode) {
 	d->setLabelsMode(mode);
-	project()->setChanged(true);
+	setProjectChanged(true);
 }
 
 void Column::valueLabelsRemoveAll() {
 	d->valueLabelsRemoveAll();
-	project()->setChanged(true);
+	setProjectChanged(true);
 }
 
 void Column::removeValueLabel(const QString& key) {
 	d->removeValueLabel(key);
-	project()->setChanged(true);
+	setProjectChanged(true);
 }
 
 const QVector<Column::ValueLabel<QString>>* Column::textValueLabels() const {

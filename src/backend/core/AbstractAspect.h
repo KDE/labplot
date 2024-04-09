@@ -278,6 +278,7 @@ public:
 	bool isLoading() const;
 	virtual QIcon icon() const;
 	virtual QMenu* createContextMenu();
+	void setProjectChanged(bool);
 
 	AspectType type() const;
 	bool inherits(AspectType type) const;
