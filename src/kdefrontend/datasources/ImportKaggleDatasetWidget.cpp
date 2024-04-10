@@ -31,8 +31,9 @@ ImportKaggleDatasetWidget::ImportKaggleDatasetWidget(QWidget* parent)
 	prepareImportKaggleDatasetWidget();
 	prepareImportFileWidget();
 
-	auto* layout = static_cast<QGridLayout*>(this->layout());
-	layout->addWidget(m_importFileWidget, layout->rowCount(), 0, -1, -1);
+	auto* bottomContainerLayout = new QVBoxLayout();
+	bottomContainerLayout->addWidget(m_importFileWidget);
+	ui.bottomContainer->setLayout(bottomContainerLayout);
 
 	const auto group = Settings::group(QStringLiteral("Settings_Datasets"));
 	m_kaggleCli->setProgram(group.readEntry(QLatin1String("KaggleCLIPath"), QString()));
@@ -307,9 +308,8 @@ void ImportKaggleDatasetWidget::importToSpreadsheet(Spreadsheet* spreadsheet) co
 }
 
 void ImportKaggleDatasetWidget::toggleOptionsVisibility() {
-	if (m_importFileWidget->ui.gbOptions->isVisible()) {
+	if (m_importFileWidget->ui.gbOptions->isVisible())
 		m_importFileWidget->ui.gbOptions->hide();
-	} else {
+	else
 		m_importFileWidget->ui.gbOptions->show();
-	}
 }
