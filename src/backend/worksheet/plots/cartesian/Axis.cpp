@@ -2761,19 +2761,19 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 				title->setPosition(QPointF(rect.topLeft().x() + offsetX, (rect.topLeft().y() + rect.bottomLeft().y()) / 2. - titleOffsetY));
 			}
 			titlePath = WorksheetElement::shapeFromPath(title->graphicsItem()->mapToParent(title->graphicsItem()->shape()), linePen);
-			QPointF axisTopLeft = axisRect.topLeft();
-			QPointF axisTopRight = axisRect.topRight();
-			QPointF axisBottomLeft = axisRect.bottomLeft();
-			QPointF axisBottomRight = axisRect.bottomRight();
-			QPointF titleTopLeft = titlePath.boundingRect().topLeft();
-			QPointF titleTopRight = titlePath.boundingRect().topRight();
-			QPointF titleBottomLeft = titlePath.boundingRect().bottomLeft();
-			QPointF titleBottomRight = titlePath.boundingRect().bottomRight();
+			const auto& axisTopLeft = axisRect.topLeft();
+			const auto& axisTopRight = axisRect.topRight();
+			const auto& axisBottomLeft = axisRect.bottomLeft();
+			const auto& axisBottomRight = axisRect.bottomRight();
+			const auto& titleTopLeft = titlePath.boundingRect().topLeft();
+			const auto& titleTopRight = titlePath.boundingRect().topRight();
+			const auto& titleBottomLeft = titlePath.boundingRect().bottomLeft();
+			const auto& titleBottomRight = titlePath.boundingRect().bottomRight();
 
 			QVector<QPointF> vertices;
 
 			if (titlePath.intersects(tmpPath)) {
-				// Draw crossed shaped bounded rect
+				// Draw cross shaped bounded rect
 				if (Axis::Orientation::Horizontal == orientation) {
 					if (axisTopLeft.y() < titleTopLeft.y()) {
 						vertices << axisTopLeft << axisBottomLeft << QPointF(titleTopLeft.x(), axisBottomLeft.y()) << titleBottomLeft << titleBottomRight
@@ -2802,7 +2802,7 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 					}
 				}
 			} else {
-				// Draw t shaped bounded rect
+				// Draw T-shaped bounded rect
 				if (Axis::Orientation::Horizontal == orientation) {
 					if (axisTopLeft.y() < titleTopLeft.y() || axisBottomLeft.y() < titleBottomLeft.y())
 						vertices << axisTopLeft << axisBottomLeft << QPointF(titleTopLeft.x(), axisBottomLeft.y()) << titleBottomLeft << titleBottomRight
