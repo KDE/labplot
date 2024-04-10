@@ -2826,8 +2826,10 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 	}
 	m_boundingRectangle = tmpPath.boundingRect();
 	m_shape = QPainterPath();
-	m_shape.addPolygon(polygon);
-
+	if (!polygon.isEmpty())
+		m_shape.addPolygon(polygon);
+	else
+		m_shape.addRect(m_boundingRectangle);
 	// if the axis goes beyond the current bounding box of the plot (too high offset is used, too long labels etc.)
 	// request a prepareGeometryChange() for the plot in order to properly keep track of geometry changes
 	if (plot())
