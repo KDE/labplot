@@ -155,6 +155,7 @@ void ImportKaggleDatasetWidget::searchKaggleDatasets() {
 	m_kaggleCli->start();
 	WAIT_CURSOR;
 	DEBUG(Q_FUNC_INFO);
+	DEBUG(m_kaggleCli->program().toStdString() + " " + arguments.join(QStringLiteral(" ")).toStdString());
 }
 
 void ImportKaggleDatasetWidget::listKaggleDatasets() {
@@ -216,6 +217,7 @@ void ImportKaggleDatasetWidget::fetchKaggleDatasetMetadata(int index) {
 	m_kaggleCli->start();
 	WAIT_CURSOR;
 	DEBUG(Q_FUNC_INFO);
+	DEBUG(m_kaggleCli->program().toStdString() + " " + arguments.join(QStringLiteral(" ")).toStdString());
 }
 
 void ImportKaggleDatasetWidget::displayKaggleDatasetMetadata() {
@@ -276,6 +278,7 @@ void ImportKaggleDatasetWidget::downloadKaggleDataset() {
 	m_kaggleCli->start();
 	WAIT_CURSOR;
 	DEBUG(Q_FUNC_INFO);
+	DEBUG(m_kaggleCli->program().toStdString() + " " + arguments.join(QStringLiteral(" ")).toStdString());
 }
 
 void ImportKaggleDatasetWidget::listDownloadedKaggleDatasetFiles(const QString& datasetDirPath) {
