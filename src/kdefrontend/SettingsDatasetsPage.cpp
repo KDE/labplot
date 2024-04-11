@@ -16,6 +16,7 @@
 #include <KConfigGroup>
 #include <KLocalizedString>
 #include <QDir>
+#include <QDirIterator>
 #include <QMessageBox>
 #include <QStandardPaths>
 
@@ -57,51 +58,51 @@ void SettingsDatasetsPage::restoreDefaults() {
 }
 
 void SettingsDatasetsPage::loadSettings() {
-	const auto group = Settings::group(QStringLiteral("Settings_Datasets"));
+	auto group = Settings::group(QStringLiteral("Settings_Datasets"));
 	ui.leKagglePath->setText(group.readEntry(QLatin1String("KaggleCLIPath"), QString()));
+
+	if (ui.leKagglePath->text().isEmpty()) {
+		QString kagglePath = QStandardPaths::findExecutable(QStringLiteral("kaggle"));
+		if (!kagglePath.isEmpty()) {
+			ui.leKagglePath->setText(kagglePath);
+			group.writeEntry(QLatin1String("KaggleCLIPath"), ui.leKagglePath->text());
+		}
+	}
 
 	QDir dir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + QLatin1String("/datasets_local/"));
 	if (dir.exists()) {
-		int count = dir.count() - 2; // subtract 2 for . and ..
+		int count = 0;
+		int size = 0;
+		QDirIterator dirIterator(dir.path(), QDir::Files, QDirIterator::Subdirectories);
+		while (dirIterator.hasNext()) {
+			dirIterator.next();
+			size += dirIterator.fileInfo().size();
+			count++;
+		}
 		ui.lFiles->setText(i18n("Files - %1", count));
 
 		if (count > 0) {
 			ui.bClearCache->setEnabled(true);
+		}
 
-			// calculate the size
-			int size = 0;
-			for (auto& file : dir.entryList()) {
-				if (file == QLatin1Char('.') || file == QLatin1String(".."))
-					continue;
+		const auto numberLocale = QLocale();
+		QString sizeStr;
+		if (size > 1024 * 1024)
+			sizeStr = numberLocale.toString(size / 1024 / 1024) + QLatin1String("MB");
+		else if (size > 1024)
+			sizeStr = numberLocale.toString(size / 1024) + QLatin1String("kB");
+		else
+			sizeStr = numberLocale.toString(size) + QLatin1String("B");
 
-				size += QFileInfo(dir, file).size();
-			}
-
-			const auto numberLocale = QLocale();
-			QString sizeStr;
-			if (size > 1024 * 1024)
-				sizeStr = numberLocale.toString(size / 1024 / 1024) + QLatin1String("MB");
-			else if (size > 1024)
-				sizeStr = numberLocale.toString(size / 1024) + QLatin1String("kB");
-			else
-				sizeStr = numberLocale.toString(size) + QLatin1String("B");
-
-			ui.lSize->setText(i18n("Total size - %1", sizeStr));
-		} else
-			ui.lSize->setText(i18n("Total size - 0B"));
+		ui.lSize->setText(i18n("Total size - %1", sizeStr));
 	}
 }
 
 void SettingsDatasetsPage::clearCache() {
 	QDir dir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + QLatin1String("/datasets_local/"));
 	if (dir.exists()) {
-		for (auto& fileName : dir.entryList()) {
-			if (fileName == QLatin1Char('.') || fileName == QLatin1String(".."))
-				continue;
-
-			QFile file(dir.path() + QLatin1String("/") + fileName);
-			file.remove();
-		}
+		dir.removeRecursively();
+		dir.mkpath(dir.path());
 
 		ui.lFiles->setText(i18n("Files - 0"));
 		ui.lSize->setText(i18n("Total size - 0B"));

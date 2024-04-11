@@ -2687,8 +2687,18 @@ void MainWin::importKaggleDatasetDialog() {
 		QMessageBox::critical(this, errorTitle, errorMessage);
 		kaggleCli->deleteLater();
 	});
-	const auto group = Settings::group(QStringLiteral("Settings_Datasets"));
-	kaggleCli->setProgram(group.readEntry(QLatin1String("KaggleCLIPath"), QString()));
+	auto group = Settings::group(QStringLiteral("Settings_Datasets"));
+	QString kagglePath = group.readEntry(QLatin1String("KaggleCLIPath"), QString());
+	if (kagglePath.isEmpty()) {
+		kagglePath = QStandardPaths::findExecutable(QStringLiteral("kaggle"));
+		if (kagglePath.isEmpty()) {
+			QMessageBox::critical(this, errorTitle, errorMessage);
+			return;
+		} else {
+			group.writeEntry(QLatin1String("KaggleCLIPath"), kagglePath);
+		}
+	}
+	kaggleCli->setProgram(kagglePath);
 	kaggleCli->setArguments({QStringLiteral("--version")});
 	kaggleCli->start();
 	DEBUG(Q_FUNC_INFO << " DONE");

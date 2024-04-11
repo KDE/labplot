@@ -33,6 +33,7 @@ private:
 	int m_resultPage{1};
 	QComboBox* m_cbDatasetFiles{nullptr};
 	const int RESULTS_PER_PAGE{20};
+	QString m_currentDatasetDirPath;
 
 	void prepareImportFileWidget();
 	void prepareImportKaggleDatasetWidget();

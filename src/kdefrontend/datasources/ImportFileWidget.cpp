@@ -82,10 +82,11 @@ QString ImportFileWidget::absolutePath(const QString& fileName) {
 
    \ingroup kdefrontend
 */
-ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const QString& fileName)
+ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const QString& fileName, bool embedded)
 	: QWidget(parent)
 	, m_fileName(fileName)
 	, m_liveDataSource(liveDataSource)
+	, m_embedded(embedded)
 #ifdef HAVE_MQTT
 	, m_subscriptionWidget(new MQTTSubscriptionWidget(this))
 #endif
@@ -372,6 +373,16 @@ void ImportFileWidget::loadSettings() {
 }
 
 ImportFileWidget::~ImportFileWidget() {
+	// clean up and deletions
+#ifdef HAVE_MQTT
+	delete m_connectTimeoutTimer;
+	delete m_subscriptionWidget;
+#endif
+
+	if (m_embedded) {
+		return;
+	}
+
 	// save current settings
 	QString confName;
 	if (m_liveDataSource)
@@ -405,9 +416,6 @@ ImportFileWidget::~ImportFileWidget() {
 	conf.writeEntry("RelativePath", (int)ui.chbRelativePath->checkState());
 
 #ifdef HAVE_MQTT
-	delete m_connectTimeoutTimer;
-	delete m_subscriptionWidget;
-
 	// MQTT related settings
 	conf.writeEntry("Connection", ui.cbConnection->currentText());
 	conf.writeEntry("mqttWillMessageType", static_cast<int>(m_willSettings.willMessageType));

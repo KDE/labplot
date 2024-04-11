@@ -54,7 +54,7 @@ class ImportFileWidget : public QWidget {
 public:
 	static QString absolutePath(const QString& fileName);
 
-	explicit ImportFileWidget(QWidget*, bool liveDataSource, const QString& fileName = QString());
+	explicit ImportFileWidget(QWidget*, bool liveDataSource, const QString& fileName = QString(), bool embedded = false);
 	~ImportFileWidget() override;
 
 	void showOptions(bool);
@@ -122,6 +122,7 @@ private:
 	const QString m_dbcFileName;
 	bool m_liveDataSource;
 	bool m_suppressRefresh{false};
+	bool m_embedded{false};
 	TemplateHandler* m_templateHandler{nullptr};
 
 Q_SIGNALS:
