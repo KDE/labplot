@@ -10,6 +10,7 @@
 #include "SettingsDatasetsPage.h"
 #include "backend/core/Settings.h"
 #include "backend/lib/macros.h"
+#include "kdefrontend/GuiTools.h"
 #include "kdefrontend/SettingsPage.h"
 
 #include <KConfigGroup>
@@ -34,6 +35,9 @@ SettingsDatasetsPage::SettingsDatasetsPage(QWidget* parent)
 	connect(ui.bClearCache, &QPushButton::clicked, this, &SettingsDatasetsPage::clearCache);
 	connect(ui.leKagglePath, &QLineEdit::textChanged, [&] {
 		m_changed = true;
+		const QString& kagglePath = ui.leKagglePath->text();
+		bool invalid = (!kagglePath.isEmpty() && !QFile::exists(kagglePath));
+		GuiTools::highlight(ui.leKagglePath, invalid);
 		Q_EMIT settingsChanged();
 	});
 }
