@@ -933,14 +933,23 @@ void WorksheetElementPrivate::keyPressEvent(QKeyEvent* event) {
 		QGraphicsItem::keyPressEvent(event);
 }
 
+void WorksheetElementPrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
+	// when moving the element with the mouse (left button pressed), the move event doesn't have
+	// the information about the pressed button anymore (NoButton) that is needed in mouseMoveEvent()
+	// to decide if the element move was started or not. So, we check the pressed buttong here.
+	if (event->button() == Qt::LeftButton)
+		m_leftButtonPressed = true;
+}
+
 void WorksheetElementPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
-	if (!m_moveStarted && event->button() == Qt::LeftButton)
+	if (!m_moveStarted && m_leftButtonPressed)
 		m_moveStarted = true;
 
 	QGraphicsItem::mouseMoveEvent(event);
 }
 
 void WorksheetElementPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
+	m_leftButtonPressed = false;
 	if (!m_moveStarted) {
 		QGraphicsItem::mouseReleaseEvent(event);
 		return;
@@ -952,7 +961,7 @@ void WorksheetElementPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
 	if (point != position.point) {
 		// position was changed -> set the position related member variables
 		suppressRetransform = true;
-		WorksheetElement::PositionWrapper tempPosition = position;
+		auto tempPosition = position;
 		tempPosition.point = point;
 		q->setPosition(tempPosition);
 		updatePosition(); // to update the logical position if available
@@ -994,7 +1003,7 @@ QVariant WorksheetElementPrivate::itemChange(GraphicsItemChange change, const QV
 			Q_EMIT q->objectPositionChanged();
 		} else {
 			// convert item's center point in parent's coordinates
-			WorksheetElement::PositionWrapper tempPosition = position;
+			auto tempPosition = position;
 			tempPosition.point = q->parentPosToRelativePos(newPos, position);
 			tempPosition.point = q->align(tempPosition.point, boundingRect(), horizontalAlignment, verticalAlignment, false);
 
