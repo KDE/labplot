@@ -676,7 +676,7 @@ void MainWin::initActions() {
 		importFileDialog();
 	});
 
-	m_importKaggleDatasetAction = new QAction(QIcon::fromTheme(QLatin1String("network-receive")), i18n("From Kaggle..."), this);
+	m_importKaggleDatasetAction = new QAction(QIcon::fromTheme(QLatin1String("labplot-kaggle")), i18n("From Kaggle..."), this);
 	m_importKaggleDatasetAction->setWhatsThis(i18n("Imports data from kaggle.com"));
 	actionCollection()->addAction(QLatin1String("import_dataset_kaggle"), m_importKaggleDatasetAction);
 	connect(m_importKaggleDatasetAction, &QAction::triggered, this, &MainWin::importKaggleDatasetDialog);
