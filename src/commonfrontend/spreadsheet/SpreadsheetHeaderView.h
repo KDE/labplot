@@ -79,9 +79,8 @@ public Q_SLOTS:
 	void refresh();
 
 private:
-	bool m_showComments;
-	bool m_showSparkLines;
-
+	bool m_showComments{false};
+	bool m_showSparkLines{false};
 	bool m_sparklineCalled{0};
 
 private Q_SLOTS:

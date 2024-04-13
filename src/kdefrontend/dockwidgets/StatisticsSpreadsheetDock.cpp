@@ -18,7 +18,7 @@
 
 /*!
  \class StatisticsSpreadsheetDock
- \brief Provides a widget for editing which statistical metris of the parent spreadsheet should be shown in the statistics spreadsheet.
+ \brief Provides a widget for editing which statistical metrics of the parent spreadsheet should be shown in the statistics spreadsheet.
 
  \ingroup kdefrontend
 */

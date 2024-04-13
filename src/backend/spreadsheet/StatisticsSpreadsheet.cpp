@@ -147,10 +147,13 @@ void StatisticsSpreadsheet::update() {
 	it = m_metricNames.constBegin();
 	while (it != m_metricNames.constEnd()) {
 		if (m_metrics.testFlag(it.key())) {
-			statisticsColumns.at(colIndex)->setName(it.value());
+			auto* col = statisticsColumns.at(colIndex);
+			col->setName(it.value());
 
 			if (it.key() == StatisticsSpreadsheet::Metric::Count)
-				statisticsColumns.at(colIndex)->setColumnMode(AbstractColumn::ColumnMode::Integer);
+				col->setColumnMode(AbstractColumn::ColumnMode::Integer);
+			else
+				col->setColumnMode(AbstractColumn::ColumnMode::Double);
 
 			++colIndex;
 		}
