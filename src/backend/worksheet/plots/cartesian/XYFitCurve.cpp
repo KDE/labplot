@@ -464,11 +464,11 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 	QVector<bool>& paramFixed = fitData.paramFixed;
 
 	if (modelCategory != nsl_fit_model_custom) {
-		DEBUG(Q_FUNC_INFO << ", XYFitCurve::initFitData() for model category = " << nsl_fit_model_category_name[modelCategory] << ", model type = " << modelType
+		DEBUG(Q_FUNC_INFO << ", for model category = " << nsl_fit_model_category_name[modelCategory] << ", model type = " << modelType
 						  << ", degree = " << degree);
 		paramNames.clear();
 	} else {
-		DEBUG(Q_FUNC_INFO << ", XYFitCurve::initFitData() for model category = nsl_fit_model_custom, model type = " << modelType << ", degree = " << degree);
+		DEBUG(Q_FUNC_INFO << ", for model category = nsl_fit_model_custom, model type = " << modelType << ", degree = " << degree);
 	}
 	paramNamesUtf8.clear();
 
@@ -2875,15 +2875,16 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 
 			// set the model expression and the parameter names (can be derived from the saved values for category, type and degree)
 			XYFitCurve::initFitData(d->fitData);
-			// remove default names and start values (will be read from project later)
-			d->fitData.paramStartValues.clear();
-
-		} else if (!preview && reader->name() == QLatin1String("name")) { // needed for custom model
+		} else if (!preview && reader->name() == QLatin1String("paramNames")) { // needed for custom model
+			d->fitData.paramNames.clear();
+		} else if (!preview && reader->name() == QLatin1String("name")) {
 			d->fitData.paramNames << reader->readElementText();
+		} else if (!preview && reader->name() == QLatin1String("paramStartValues")) {
+			d->fitData.paramStartValues.clear();
 		} else if (!preview && reader->name() == QLatin1String("startValue")) {
 			d->fitData.paramStartValues << reader->readElementText().toDouble();
-		} else if (!preview && reader->name() == QLatin1String("fixed")) {
-			d->fitData.paramFixed << (bool)reader->readElementText().toInt();
+		} else if (!preview && reader->name() == QLatin1String("paramLowerLimits")) {
+			d->fitData.paramLowerLimits.clear();
 		} else if (!preview && reader->name() == QLatin1String("lowerLimit")) {
 			bool ok;
 			double x = reader->readElementText().toDouble(&ok);
@@ -2891,6 +2892,8 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 				d->fitData.paramLowerLimits << x;
 			else
 				d->fitData.paramLowerLimits << -std::numeric_limits<double>::max();
+		} else if (!preview && reader->name() == QLatin1String("paramUpperLimits")) {
+			d->fitData.paramUpperLimits.clear();
 		} else if (!preview && reader->name() == QLatin1String("upperLimit")) {
 			bool ok;
 			double x = reader->readElementText().toDouble(&ok);
@@ -2898,6 +2901,11 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 				d->fitData.paramUpperLimits << x;
 			else
 				d->fitData.paramUpperLimits << std::numeric_limits<double>::max();
+		} else if (!preview && reader->name() == QLatin1String("paramFixed")) {
+			d->fitData.paramFixed.clear();
+		} else if (!preview && reader->name() == QLatin1String("fixed")) {
+			d->fitData.paramFixed << (bool)reader->readElementText().toInt();
+			// end fitData
 		} else if (!preview && reader->name() == QLatin1String("value")) {
 			d->fitResult.paramValues << reader->readElementText().toDouble();
 		} else if (!preview && reader->name() == QLatin1String("error")) {
