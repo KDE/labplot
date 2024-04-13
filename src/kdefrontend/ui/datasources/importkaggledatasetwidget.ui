@@ -86,7 +86,7 @@
               <string/>
              </property>
              <property name="textFormat">
-              <enum>Qt::RichText</enum>
+              <enum>Qt::MarkdownText</enum>
              </property>
              <property name="alignment">
               <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
