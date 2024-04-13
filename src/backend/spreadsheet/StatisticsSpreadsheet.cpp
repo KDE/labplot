@@ -277,7 +277,7 @@ void StatisticsSpreadsheet::update() {
  */
 void StatisticsSpreadsheet::updateColumnNames() {
 	const auto& columns = m_spreadsheet->children<Column>();
-	auto* nameColumn =  children<Column>().at(0);
+	auto* nameColumn = children<Column>().at(0);
 	for (int i = 0; i < columns.count(); ++i)
 		nameColumn->setTextAt(i, columns.at(i)->name());
 }

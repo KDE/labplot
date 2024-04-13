@@ -101,9 +101,9 @@ which displays the column sparkline and third header showing column comments.
 */
 
 SpreadsheetHeaderView::SpreadsheetHeaderView(QWidget* parent)
-	: QHeaderView(Qt::Horizontal, parent),
-	m_commentSlave(new SpreadsheetCommentsHeaderView()),
-	m_sparkLineSlave(new SpreadsheetSparkLineHeaderView()) {
+	: QHeaderView(Qt::Horizontal, parent)
+	, m_commentSlave(new SpreadsheetCommentsHeaderView())
+	, m_sparkLineSlave(new SpreadsheetSparkLineHeaderView()) {
 	setDefaultAlignment(Qt::AlignLeft | Qt::AlignVCenter);
 	m_commentSlave->setDefaultAlignment(Qt::AlignCenter | Qt::AlignVCenter);
 	m_sparkLineSlave->setDefaultAlignment(Qt::AlignCenter | Qt::AlignVCenter);
