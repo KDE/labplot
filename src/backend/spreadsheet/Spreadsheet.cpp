@@ -32,6 +32,7 @@
 #include <KLocalizedString>
 
 #include <QIcon>
+#include <QMenu>
 #include <QUndoCommand>
 #include <QXmlStreamWriter>
 
@@ -639,6 +640,15 @@ QMenu* Spreadsheet::createContextMenu() {
 	Q_ASSERT(menu);
 	if (type() != AspectType::StatisticsSpreadsheet)
 		Q_EMIT requestProjectContextMenu(menu);
+	else {
+		menu->addSeparator();
+		auto* action = new QAction(QIcon::fromTheme(QLatin1String("edit-delete")), i18n("Delete"), this);
+		connect(action, &QAction::triggered, this, [=]() {
+			auto* parentSpreadsheet = static_cast<Spreadsheet*>(parentAspect());
+			parentSpreadsheet->toggleStatisticsSpreadsheet(false);
+		});
+		menu->addAction(action);
+	}
 	return menu;
 }
 
@@ -1187,7 +1197,7 @@ void Spreadsheet::toggleStatisticsSpreadsheet(bool on) {
 			return;
 
 		d->statisticsSpreadsheet = new StatisticsSpreadsheet(this);
-		addChild(d->statisticsSpreadsheet);
+		addChildFast(d->statisticsSpreadsheet);
 	} else {
 		if (!d->statisticsSpreadsheet)
 			return;
