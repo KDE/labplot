@@ -147,7 +147,7 @@ unsigned int OriginProjectParser::findSpreadsheetByName(const QString& name) {
 	}
 	return 0;
 }
-unsigned int OriginProjectParser::findColumnByName(Origin::SpreadSheet& spread, const QString& name) {
+unsigned int OriginProjectParser::findColumnByName(const Origin::SpreadSheet& spread, const QString& name) {
 	for (unsigned int i = 0; i < spread.columns.size(); i++) {
 		const auto& column = spread.columns[i];
 		if (column.name == name.toStdString())
@@ -1235,7 +1235,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 		DEBUG(Q_FUNC_INFO << ", Graph Layer " << layerIndex + 1)
 		if (layer.is3D()) {
 			// TODO: add an "UnsupportedAspect" here since we don't support 3D yet
-			break;
+			return false;
 		}
 
 		layerRect = layer.clientRect;
@@ -1643,7 +1643,7 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 		case 'E': { // Workbook
 			// determine the used columns first
 			QString containerName = dataName.right(dataName.length() - 2); // strip "E_" or "T_"
-			auto sheet = getSpreadsheetByName(containerName);
+			const auto& sheet = getSpreadsheetByName(containerName);
 			QString tableName = containerName;
 			if (dataName.startsWith(QStringLiteral("E_"))) // container is a workbook
 				tableName += QLatin1Char('/') + QString::fromStdString(sheet.name);

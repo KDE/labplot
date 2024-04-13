@@ -579,7 +579,7 @@ void LabelWidget::textChanged() {
 			if (plainTextChanged) {
 				// set text only if the plain text change. otherwise the text is changed
 				// already in the setter functions
-				wrapper.text = text;
+				wrapper.text = std::move(text);
 				for (auto* label : m_labelsList) {
 					wrapper.textPlaceholder = label->text().textPlaceholder;
 					wrapper.allowPlaceholder = label->text().allowPlaceholder;

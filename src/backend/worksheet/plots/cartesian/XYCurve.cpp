@@ -2674,15 +2674,14 @@ void XYCurvePrivate::updatePixmap() {
 		m_pixmap = QPixmap();
 		return;
 	}
-	QPixmap pixmap(ceil(m_boundingRectangle.width()), ceil(m_boundingRectangle.height()));
-	pixmap.fill(Qt::transparent);
-	QPainter painter(&pixmap);
+	m_pixmap = QPixmap(ceil(m_boundingRectangle.width()), ceil(m_boundingRectangle.height()));
+	m_pixmap.fill(Qt::transparent);
+	QPainter painter(&m_pixmap);
 	painter.setRenderHint(QPainter::Antialiasing, true);
 	painter.translate(-m_boundingRectangle.topLeft());
 
 	draw(&painter);
 	painter.end();
-	m_pixmap = pixmap;
 
 	update();
 	Q_EMIT q->changed();

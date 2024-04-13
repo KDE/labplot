@@ -224,8 +224,10 @@ void InfoElementDock::curveSelectionChanged(bool enabled) {
 			}
 		}
 
-		for (auto* element : m_elements)
-			element->removeCurve(curve);
+		if (curve) {
+			for (auto* element : m_elements)
+				element->removeCurve(curve);
+		}
 
 		if (macroStarted)
 			m_element->endMacro();

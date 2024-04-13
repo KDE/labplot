@@ -1665,7 +1665,7 @@ void WorksheetView::selectionChanged() {
 		m_worksheet->setSelectedInView(false);
 	}
 
-	m_selectedItems = items;
+	m_selectedItems = std::move(items);
 	handleCartesianPlotActions();
 }
 

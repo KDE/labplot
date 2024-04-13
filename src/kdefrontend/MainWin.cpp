@@ -1696,7 +1696,7 @@ void MainWin::openProject(const QString& filename) {
 						else if (kernel == QLatin1String("python3") || kernel == QLatin1String("python2"))
 							backendName = QLatin1String("python");
 						else
-							backendName = kernel;
+							backendName = std::move(kernel);
 					} else
 						backendName = doc[QLatin1String("metadata")].toObject()[QLatin1String("kernelspec")].toObject()[QLatin1String("language")].toString();
 
@@ -2252,6 +2252,7 @@ void MainWin::handleCurrentAspectChanged(AbstractAspect* aspect) {
 
 void MainWin::activateSubWindowForAspect(const AbstractAspect* aspect) {
 	Q_ASSERT(aspect);
+	Q_ASSERT(m_DockManager);
 	const auto* part = dynamic_cast<const AbstractPart*>(aspect);
 	if (part) {
 		ContentDockWidget* win{nullptr};
@@ -2270,7 +2271,7 @@ void MainWin::activateSubWindowForAspect(const AbstractAspect* aspect) {
 			win = part->dockWidget();
 
 		auto* dock = m_DockManager->findDockWidget(win->objectName());
-		if (m_DockManager && dock == nullptr) {
+		if (dock == nullptr) {
 			// Add new dock if not found
 			if (m_DockManager->dockWidgetsMap().count() == 2 || !m_currentAspectDock) {
 				// If only project explorer and properties dock exist place it right to the project explorer
@@ -2288,12 +2289,11 @@ void MainWin::activateSubWindowForAspect(const AbstractAspect* aspect) {
 			// remove the shortcuts in the system menu to avoid this collision.
 			for (QAction* action : win->titleBarActions())
 				action->setShortcut(QKeySequence());
-		} else if (m_DockManager)
+		} else
 			dock->toggleView(true);
 
 		m_currentAspectDock = win;
-		if (m_DockManager)
-			m_DockManager->setDockWidgetFocused(win);
+		m_DockManager->setDockWidgetFocused(win);
 	} else {
 		// activate the mdiView of the parent, if a child was selected
 		const AbstractAspect* parent = aspect->parentAspect();
@@ -2640,11 +2640,13 @@ void MainWin::dropEvent(QDropEvent* event) {
 
 void MainWin::updateLocale() {
 	// Set default locale
-	QLocale::Language numberLocaleLanguage =
+	auto numberLocaleLanguage =
 		static_cast<QLocale::Language>(Settings::group(QStringLiteral("Settings_General"))
 										   .readEntry(QLatin1String("DecimalSeparatorLocale"), static_cast<int>(QLocale::Language::AnyLanguage)));
-	QLocale::NumberOptions numberOptions = static_cast<QLocale::NumberOptions>(
+
+	auto numberOptions = static_cast<QLocale::NumberOptions>(
 		Settings::group(QStringLiteral("Settings_General")).readEntry(QLatin1String("NumberOptions"), static_cast<int>(QLocale::DefaultNumberOptions)));
+
 	QLocale l(numberLocaleLanguage == QLocale::AnyLanguage ? QLocale() : numberLocaleLanguage);
 	l.setNumberOptions(numberOptions);
 	QLocale::setDefault(l);

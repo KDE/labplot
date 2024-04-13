@@ -1763,7 +1763,7 @@ void AxisPrivate::retransformTicks() {
 			else
 				nextMajorTickPos = majorTickPos;
 		} else if (majorTicksType == Axis::TicksType::ColumnLabels) {
-			const Column* c = dynamic_cast<const Column*>(majorTicksColumn);
+			const auto* c = static_cast<const Column*>(majorTicksColumn);
 			Q_ASSERT(tmpMajorTicksNumber > 0);
 			Q_ASSERT(c);
 			columnIndex = c->valueLabelsIndexForValue(majorTickPos);
