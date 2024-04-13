@@ -62,6 +62,7 @@ public:
 private:
 	void init();
 	void update();
+	void updateColumnNames();
 
 	Spreadsheet* m_spreadsheet{nullptr};
 	Metrics m_metrics;

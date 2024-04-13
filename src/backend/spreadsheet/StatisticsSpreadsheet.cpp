@@ -64,6 +64,7 @@ StatisticsSpreadsheet::StatisticsSpreadsheet(Spreadsheet* spreadsheet, bool load
 	connect(model, &SpreadsheetModel::rowsInserted, this, &StatisticsSpreadsheet::update);
 	connect(model, &SpreadsheetModel::columnsRemoved, this, &StatisticsSpreadsheet::update);
 	connect(model, &SpreadsheetModel::columnsInserted, this, &StatisticsSpreadsheet::update);
+	connect(model, &SpreadsheetModel::headerDataChanged, this, &StatisticsSpreadsheet::updateColumnNames);
 
 	setUndoAware(false);
 	setFixed(true);
@@ -112,6 +113,10 @@ void StatisticsSpreadsheet::init() {
 	update();
 }
 
+/*!
+ * updates the content of the statistics spreadsheet.
+ * called when the data in the parent spreadsheet was modified.
+ */
 void StatisticsSpreadsheet::update() {
 	// determine the number of activated metrics and properly resize the spreadsheet
 	int colCount = 1; // first column for "column name"
@@ -261,6 +266,17 @@ void StatisticsSpreadsheet::update() {
 
 		++it;
 	}
+}
+
+/*!
+ * updates the content of the first column that has the names of the columns of the parent spreadsheet.
+ * called when the columns in the parent spreadsheet are renamed.
+ */
+void StatisticsSpreadsheet::updateColumnNames() {
+	const auto& columns = m_spreadsheet->children<Column>();
+	auto* nameColumn =  children<Column>().at(0);
+	for (int i = 0; i < columns.count(); ++i)
+		nameColumn->setTextAt(i, columns.at(i)->name());
 }
 
 // ##############################################################################
