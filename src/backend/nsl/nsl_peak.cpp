@@ -40,6 +40,7 @@ size_t* nsl_peak_detect(T* data, size_t n, size_t& np, T height, size_t distance
 	}
 	if (np == 0) { // nothing found
 		printf("nothing found\n");
+		free(peaks);
 		return nullptr;
 	}
 
