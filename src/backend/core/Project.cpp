@@ -173,7 +173,7 @@ Project::Project()
 	QString user = qEnvironmentVariable("USER"); // !Windows
 	if (user.isEmpty())
 		user = qEnvironmentVariable("USERNAME"); // Windows
-	d->author = user;
+	d->author = std::move(user);
 
 	// we don't have direct access to the members name and comment
 	//->temporary disable the undo stack and call the setters
