@@ -77,17 +77,17 @@ void XYFitCurveDock::setupGeneral() {
 	uiGeneralTab.cbDataSourceType->addItem(i18n("Histogram"));
 
 	cbDataSourceCurve = new TreeViewComboBox(generalTab);
-	gridLayout->addWidget(cbDataSourceCurve, 5, 3, 1, 4);
+	gridLayout->addWidget(cbDataSourceCurve, 5, 2, 1, 2);
 
 	cbXDataColumn = new TreeViewComboBox(generalTab);
-	gridLayout->addWidget(cbXDataColumn, 6, 3, 1, 4);
+	gridLayout->addWidget(cbXDataColumn, 6, 2, 1, 2);
 
 	cbXErrorColumn = new TreeViewComboBox(generalTab);
 	cbXErrorColumn->setEnabled(false);
 	uiGeneralTab.hlXError->addWidget(cbXErrorColumn);
 
 	cbYDataColumn = new TreeViewComboBox(generalTab);
-	gridLayout->addWidget(cbYDataColumn, 7, 3, 1, 4);
+	gridLayout->addWidget(cbYDataColumn, 7, 2, 1, 2);
 
 	cbYErrorColumn = new TreeViewComboBox(generalTab);
 	cbYErrorColumn->setEnabled(false);

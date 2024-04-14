@@ -692,8 +692,11 @@ void MainWin::initActions() {
 	actionCollection()->addAction(QLatin1String("file_example_open"), openExample);
 	connect(openExample, &QAction::triggered, this, [=]() {
 		auto* dlg = new ExamplesDialog(this);
-		if (dlg->exec() == QDialog::Accepted)
-			openProject(dlg->path());
+		if (dlg->exec() == QDialog::Accepted) {
+			const auto& path = dlg->path();
+			if (!path.isEmpty())
+				openProject(path);
+		}
 		delete dlg;
 	});
 
