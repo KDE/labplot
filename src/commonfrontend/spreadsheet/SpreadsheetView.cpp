@@ -215,7 +215,8 @@ void SpreadsheetView::init() {
 			SpreadsheetSparkLinesHeaderModel::sparkLine(m_spreadsheet->column(colIndex));
 			m_horizontalHeader->refresh();
 			connect(m_spreadsheet->column(colIndex), &AbstractColumn::dataChanged, this, [=] {
-				SpreadsheetSparkLinesHeaderModel::sparkLine(m_spreadsheet->column(colIndex));
+				if (m_spreadsheet->isSparklineShown)
+					SpreadsheetSparkLinesHeaderModel::sparkLine(m_spreadsheet->column(colIndex));
 				m_horizontalHeader->refresh();
 			});
 		}
@@ -229,7 +230,8 @@ void SpreadsheetView::init() {
 		// Establish new connections
 		for (int colIndex = 0; colIndex < m_spreadsheet->columnCount(); ++colIndex) {
 			connect(m_spreadsheet->column(colIndex), &AbstractColumn::dataChanged, this, [=] {
-				SpreadsheetSparkLinesHeaderModel::sparkLine(m_spreadsheet->column(colIndex));
+				if (m_spreadsheet->isSparklineShown)
+					SpreadsheetSparkLinesHeaderModel::sparkLine(m_spreadsheet->column(colIndex));
 				m_horizontalHeader->refresh();
 			});
 		}

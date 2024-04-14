@@ -48,6 +48,8 @@
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_spline.h>
 
+#include <kdefrontend/GuiTools.h>
+
 using Dimension = CartesianCoordinateSystem::Dimension;
 
 CURVE_COLUMN_CONNECT(XYCurve, X, x, recalc)
@@ -2981,6 +2983,15 @@ void XYCurve::loadThemeConfig(const KConfig& config) {
 	d->symbol->loadThemeConfig(group, themeColor);
 	d->background->loadThemeConfig(group);
 	d->errorBar->loadThemeConfig(group, themeColor);
+
+	// line
+
+	if (plot->theme() == QLatin1String("Sparkline")) {
+		if (!GuiTools::isDarkMode())
+			d->line->setColor(Qt::black);
+		else
+			d->line->setColor(Qt::white);
+	}
 
 	// Values
 	this->setValuesOpacity(group.readEntry(QStringLiteral("ValuesOpacity"), 1.0));

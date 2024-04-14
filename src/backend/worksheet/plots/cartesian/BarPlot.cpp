@@ -33,6 +33,8 @@
 #include <KConfigGroup>
 #include <KLocalizedString>
 
+#include <kdefrontend/GuiTools.h>
+
 /**
  * \class BarPlot
  * \brief Box Plot
@@ -1544,6 +1546,14 @@ void BarPlot::loadThemeConfig(const KConfig& config) {
 		// bar border lines
 		auto* line = d->borderLines.at(i);
 		line->loadThemeConfig(group, color);
+
+		// line
+		if (plot->theme() == QLatin1String("Sparkline")) {
+			if (!GuiTools::isDarkMode())
+				line->setColor(Qt::black);
+			else
+				line->setColor(Qt::white);
+		}
 
 		// error bars
 		auto* errorBar = d->errorBars.at(i);

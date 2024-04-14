@@ -23,6 +23,8 @@
 #include <KConfigGroup>
 #include <KLocalizedString>
 
+#include <kdefrontend/GuiTools.h>
+
 Line::Line(const QString& name)
 	: AbstractAspect(name, AspectType::AbstractAspect)
 	, d_ptr(new LinePrivate(this)) {
