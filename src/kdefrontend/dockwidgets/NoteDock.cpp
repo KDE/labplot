@@ -35,7 +35,7 @@ NoteDock::NoteDock(QWidget* parent)
 void NoteDock::setNotesList(QList<Note*> list) {
 	m_notesList = list;
 	m_notes = list.first();
-	setAspects(list);
+	setAspects(std::move(list));
 
 	CONDITIONAL_LOCK_RETURN;
 

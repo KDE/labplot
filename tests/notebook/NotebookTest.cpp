@@ -96,7 +96,7 @@ void NotebookTest::testParserPython02() {
 */
 void NotebookTest::testParserPython03() {
 	QString input = QStringLiteral("{1.0, 2.0}");
-	VariableParser parser(QStringLiteral("python"), input);
+	VariableParser parser(QStringLiteral("python"), std::move(input));
 
 	QCOMPARE(parser.isParsed(), true);
 	QCOMPARE(parser.dataType(), AbstractColumn::ColumnMode::Double);

@@ -66,7 +66,7 @@ void MatrixDock::setMatrices(QList<Matrix*> list) {
 	CONDITIONAL_LOCK_RETURN;
 	m_matrixList = list;
 	m_matrix = list.first();
-	setAspects(list);
+	setAspects(std::move(list));
 
 	// show the properties of the first Matrix in the list, if there are >1 matrixs
 	this->load();

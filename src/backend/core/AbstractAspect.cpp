@@ -975,7 +975,7 @@ bool AbstractAspect::readBasicAttributes(XmlStreamReader* reader) {
 	} else {
 		QDateTime creation_time = QDateTime::fromString(str, QLatin1String("yyyy-dd-MM hh:mm:ss:zzz"));
 		if (creation_time.isValid())
-			d->m_creation_time = creation_time;
+			d->m_creation_time = std::move(creation_time);
 		else
 			d->m_creation_time = QDateTime::currentDateTime();
 	}
