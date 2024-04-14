@@ -1258,29 +1258,31 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 	}
 
 	// padding
-	plot->setSymmetricPadding(false);
-	int numberOfLayer = layerIndex + 1;
-	DEBUG(Q_FUNC_INFO << ", number of layer = " << numberOfLayer)
-	if (numberOfLayer == 1 || !m_graphLayerAsPlotArea) { // use layer clientRect for padding
-		DEBUG(Q_FUNC_INFO << ", using layer rect for padding")
-		double aspectRatio = (double)graphSize.width() / graphSize.height();
+	if (plot) {
+		plot->setSymmetricPadding(false);
+		int numberOfLayer = layerIndex + 1;
+		DEBUG(Q_FUNC_INFO << ", number of layer = " << numberOfLayer)
+		if (numberOfLayer == 1 || !m_graphLayerAsPlotArea) { // use layer clientRect for padding
+			DEBUG(Q_FUNC_INFO << ", using layer rect for padding")
+			double aspectRatio = (double)graphSize.width() / graphSize.height();
 
-		const double leftPadding = layerRect.left / (double)graphSize.width() * aspectRatio * fixedHeight;
-		const double topPadding = layerRect.top / (double)graphSize.height() * fixedHeight;
-		const double rightPadding = (graphSize.width() - layerRect.right) / (double)graphSize.width() * aspectRatio * fixedHeight;
-		const double bottomPadding = (graphSize.height() - layerRect.bottom) / (double)graphSize.height() * fixedHeight;
-		plot->setHorizontalPadding(Worksheet::convertToSceneUnits(leftPadding, Worksheet::Unit::Centimeter));
-		plot->setVerticalPadding(Worksheet::convertToSceneUnits(topPadding, Worksheet::Unit::Centimeter));
-		plot->setRightPadding(Worksheet::convertToSceneUnits(rightPadding, Worksheet::Unit::Centimeter));
-		plot->setBottomPadding(Worksheet::convertToSceneUnits(bottomPadding, Worksheet::Unit::Centimeter));
-	} else {
-		plot->setHorizontalPadding(plot->horizontalPadding() * elementScalingFactor);
-		plot->setVerticalPadding(plot->verticalPadding() * elementScalingFactor);
-		plot->setRightPadding(plot->rightPadding() * elementScalingFactor);
-		plot->setBottomPadding(plot->bottomPadding() * elementScalingFactor);
+			const double leftPadding = layerRect.left / (double)graphSize.width() * aspectRatio * fixedHeight;
+			const double topPadding = layerRect.top / (double)graphSize.height() * fixedHeight;
+			const double rightPadding = (graphSize.width() - layerRect.right) / (double)graphSize.width() * aspectRatio * fixedHeight;
+			const double bottomPadding = (graphSize.height() - layerRect.bottom) / (double)graphSize.height() * fixedHeight;
+			plot->setHorizontalPadding(Worksheet::convertToSceneUnits(leftPadding, Worksheet::Unit::Centimeter));
+			plot->setVerticalPadding(Worksheet::convertToSceneUnits(topPadding, Worksheet::Unit::Centimeter));
+			plot->setRightPadding(Worksheet::convertToSceneUnits(rightPadding, Worksheet::Unit::Centimeter));
+			plot->setBottomPadding(Worksheet::convertToSceneUnits(bottomPadding, Worksheet::Unit::Centimeter));
+		} else {
+			plot->setHorizontalPadding(plot->horizontalPadding() * elementScalingFactor);
+			plot->setVerticalPadding(plot->verticalPadding() * elementScalingFactor);
+			plot->setRightPadding(plot->rightPadding() * elementScalingFactor);
+			plot->setBottomPadding(plot->bottomPadding() * elementScalingFactor);
+		}
+		DEBUG(Q_FUNC_INFO << ", PADDING (H/V) = " << plot->horizontalPadding() << ", " << plot->verticalPadding())
+		DEBUG(Q_FUNC_INFO << ", PADDING (R/B) = " << plot->rightPadding() << ", " << plot->bottomPadding())
 	}
-	DEBUG(Q_FUNC_INFO << ", PADDING (H/V) = " << plot->horizontalPadding() << ", " << plot->verticalPadding())
-	DEBUG(Q_FUNC_INFO << ", PADDING (R/B) = " << plot->rightPadding() << ", " << plot->bottomPadding())
 
 	if (!preview) {
 		worksheet->updateLayout();
