@@ -1206,11 +1206,9 @@ bool OriginAnyParser::getColumnInfoAndData(const string &col_header, unsigned in
 
         if (spreadSheets.size() == 0 || findSpreadByName(name) == -1) {
             LOG_PRINT(logfile, "\n  NEW SPREADSHEET\n");
-            current_col = 1;
             spreadSheets.push_back(SpreadSheet(name));
             spread = spreadSheets.size() - 1;
             spreadSheets.back().maxRows = 0;
-            current_sheet = 0;
         } else {
             spread = findSpreadByName(name);
             current_col = spreadSheets[spread].columns.size();
