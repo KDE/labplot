@@ -677,7 +677,7 @@ void MainWin::initActions() {
 	});
 
 	m_importKaggleDatasetAction = new QAction(QIcon::fromTheme(QLatin1String("labplot-kaggle")), i18n("From Kaggle..."), this);
-	m_importKaggleDatasetAction->setWhatsThis(i18n("Imports data from kaggle.com"));
+	m_importKaggleDatasetAction->setWhatsThis(i18n("Import data from kaggle.com"));
 	actionCollection()->addAction(QLatin1String("import_dataset_kaggle"), m_importKaggleDatasetAction);
 	connect(m_importKaggleDatasetAction, &QAction::triggered, this, &MainWin::importKaggleDatasetDialog);
 
@@ -687,7 +687,7 @@ void MainWin::initActions() {
 	connect(m_importSqlAction, &QAction::triggered, this, &MainWin::importSqlDialog);
 
 	m_importDatasetAction = new QAction(QIcon::fromTheme(QLatin1String("database-index")), i18n("From Dataset Collection..."), this);
-	m_importDatasetAction->setWhatsThis(i18n("Imports data from an online dataset"));
+	m_importDatasetAction->setWhatsThis(i18n("Import data from an online dataset"));
 	actionCollection()->addAction(QLatin1String("import_dataset_datasource"), m_importDatasetAction);
 	connect(m_importDatasetAction, &QAction::triggered, this, &MainWin::importDatasetDialog);
 

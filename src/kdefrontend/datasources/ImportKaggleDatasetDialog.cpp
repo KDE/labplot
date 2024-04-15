@@ -11,16 +11,14 @@
 #include "backend/core/Settings.h"
 #include "backend/lib/macros.h"
 
+#include <KConfigGroup>
+#include <KWindowConfig>
 #include <QDialogButtonBox>
 #include <QElapsedTimer>
 #include <QProgressBar>
 #include <QPushButton>
 #include <QStatusBar>
 #include <QWindow>
-
-#include <KConfigGroup>
-
-#include <KWindowConfig>
 
 /*!
 	\class ImportKaggleDatasetDialog

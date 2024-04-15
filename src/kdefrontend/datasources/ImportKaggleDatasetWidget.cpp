@@ -236,10 +236,6 @@ void ImportKaggleDatasetWidget::displayKaggleDatasetMetadata() {
 		}
 
 		QJsonObject metadataObject = metadataFileJsondocument.object();
-		// datasetInfo += QStringLiteral("<b>") + i18n("Dataset") + QStringLiteral(":</b><br>");
-		// datasetInfo += metadataObject[QLatin1String("title")].toString();
-		// datasetInfo += QStringLiteral("<br><br>");
-		// datasetInfo += QStringLiteral("<b>") + i18n("Description") + QStringLiteral(":</b><br>");
 		datasetInfo += metadataObject[QLatin1String("description")].toString();
 	} else {
 		Q_EMIT showError(i18n("Could not open %1", metadataFilePath));

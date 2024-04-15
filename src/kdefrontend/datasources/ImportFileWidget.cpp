@@ -379,9 +379,8 @@ ImportFileWidget::~ImportFileWidget() {
 	delete m_subscriptionWidget;
 #endif
 
-	if (m_embedded) {
+	if (m_embedded)
 		return;
-	}
 
 	// save current settings
 	QString confName;
@@ -1945,9 +1944,8 @@ void ImportFileWidget::refreshPreview() {
 	error(currentFilter->lastError());
 
 	RESET_CURSOR;
-	if (currentFilter->lastError().isEmpty()) {
+	if (currentFilter->lastError().isEmpty())
 		Q_EMIT previewReady();
-	}
 }
 
 void ImportFileWidget::updateStartRow(int line) {

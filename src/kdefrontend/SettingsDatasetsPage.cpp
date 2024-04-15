@@ -45,9 +45,8 @@ SettingsDatasetsPage::SettingsDatasetsPage(QWidget* parent)
 
 void SettingsDatasetsPage::applySettings() {
 	DEBUG(Q_FUNC_INFO)
-	if (!m_changed) {
+	if (!m_changed)
 		return;
-	}
 
 	KConfigGroup group = Settings::group(QStringLiteral("Settings_Datasets"));
 	group.writeEntry(QLatin1String("KaggleCLIPath"), ui.leKagglePath->text());
