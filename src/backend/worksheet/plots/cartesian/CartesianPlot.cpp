@@ -712,7 +712,7 @@ void CartesianPlot::initMenus() {
 			return;
 		auto* themeWidget = new ThemesWidget(nullptr);
 		themeWidget->setFixedMode();
-		connect(themeWidget, &ThemesWidget::themeSelected, this, &CartesianPlot::loadTheme);
+		connect(themeWidget, &ThemesWidget::themeSelected, this, &CartesianPlot::setTheme);
 		connect(themeWidget, &ThemesWidget::themeSelected, themeMenu, &QMenu::close);
 
 		auto* widgetAction = new QWidgetAction(this);
