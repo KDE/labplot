@@ -24,6 +24,7 @@ public:
 
 	QString selectedObject() const override;
 	bool importTo(QStatusBar*) const override;
+	static bool checkKaggle();
 
 private:
 	MainWin* m_mainWin{nullptr};

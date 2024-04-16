@@ -2653,54 +2653,18 @@ void MainWin::importFileDialog(const QString& fileName) {
 
 void MainWin::importKaggleDatasetDialog() {
 	DEBUG(Q_FUNC_INFO);
-	QString errorTitle = i18n("Running kaggle failed");
-	QString errorMessage = i18n(
-		"Couldn't run kaggle. Please follow the instructions here "
-		"https://www.kaggle.com/docs/api#getting-started-installation-&-authentication to "
-		"install and setup the kaggle cli tool. Then save the path to the kaggle cli tool under Settings > Configure LabPlot > Datasets.");
-	QProcess* kaggleCli = new QProcess(this);
-	connect(kaggleCli, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), [=](int exitCode, QProcess::ExitStatus exitStatus) {
-		if (exitStatus == QProcess::NormalExit && exitCode == 0) {
-			kaggleCli->setReadChannel(QProcess::StandardOutput);
-			QRegularExpression re(QStringLiteral(R"(^Kaggle API \d+\.\d+\.\d+$)"));
-			bool matched = false;
-			while (kaggleCli->canReadLine()) {
-				QString text = QLatin1String(kaggleCli->readLine()).trimmed();
-				QRegularExpressionMatch match = re.match(text);
-				if (match.hasMatch()) {
-					matched = true;
-					break;
-				}
-			}
-			if (matched) {
-				auto* dlg = new ImportKaggleDatasetDialog(this);
-				dlg->exec();
-			} else {
-				QMessageBox::critical(this, errorTitle, errorMessage);
-			}
-		} else {
-			QMessageBox::critical(this, errorTitle, errorMessage);
-		}
-		kaggleCli->deleteLater();
-	});
-	connect(kaggleCli, &QProcess::errorOccurred, [=] {
-		QMessageBox::critical(this, errorTitle, errorMessage);
-		kaggleCli->deleteLater();
-	});
-	auto group = Settings::group(QStringLiteral("Settings_Datasets"));
-	QString kagglePath = group.readEntry(QLatin1String("KaggleCLIPath"), QString());
-	if (kagglePath.isEmpty()) {
-		kagglePath = QStandardPaths::findExecutable(QStringLiteral("kaggle"));
-		if (kagglePath.isEmpty()) {
-			QMessageBox::critical(this, errorTitle, errorMessage);
-			return;
-		} else {
-			group.writeEntry(QLatin1String("KaggleCLIPath"), kagglePath);
-		}
-	}
-	kaggleCli->setProgram(kagglePath);
-	kaggleCli->setArguments({QStringLiteral("--version")});
-	kaggleCli->start();
+
+	if (ImportKaggleDatasetDialog::checkKaggle()) {
+		auto* dlg = new ImportKaggleDatasetDialog(this);
+		dlg->exec();
+	} else
+		QMessageBox::critical(
+			this,
+			i18n("Running kaggle failed"),
+			i18n("Couldn't run kaggle. Please follow the instructions here "
+				 "https://www.kaggle.com/docs/api#getting-started-installation-&-authentication to "
+				 "install and setup the kaggle cli tool. Then save the path to the kaggle cli tool under Settings > Configure LabPlot > Datasets."));
+
 	DEBUG(Q_FUNC_INFO << " DONE");
 }
 

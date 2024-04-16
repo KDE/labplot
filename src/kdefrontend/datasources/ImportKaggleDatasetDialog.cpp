@@ -88,3 +88,35 @@ bool ImportKaggleDatasetDialog::importTo(QStatusBar*) const {
 	m_mainWin->addAspectToProject(spreadsheet);
 	return true;
 }
+
+bool ImportKaggleDatasetDialog::checkKaggle() {
+	auto group = Settings::group(QStringLiteral("Settings_Datasets"));
+	QString kagglePath = group.readEntry(QLatin1String("KaggleCLIPath"), QString());
+	if (kagglePath.isEmpty()) {
+		kagglePath = QStandardPaths::findExecutable(QStringLiteral("kaggle"));
+		if (kagglePath.isEmpty())
+			return false;
+		else
+			group.writeEntry(QLatin1String("KaggleCLIPath"), kagglePath);
+	}
+
+	QProcess kaggleCli;
+	kaggleCli.setProgram(kagglePath);
+	kaggleCli.setArguments({QStringLiteral("--version")});
+	kaggleCli.start();
+
+	if (!kaggleCli.waitForFinished(1500))
+		return false;
+
+	QRegularExpression re(QStringLiteral(R"(^Kaggle API \d+\.\d+\.\d+$)"));
+	kaggleCli.setReadChannel(QProcess::StandardOutput);
+
+	while (kaggleCli.canReadLine()) {
+		QString text = QLatin1String(kaggleCli.readLine()).trimmed();
+		QRegularExpressionMatch match = re.match(text);
+		if (match.hasMatch())
+			return true;
+	}
+
+	return false;
+}
