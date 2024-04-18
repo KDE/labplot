@@ -15,7 +15,8 @@
 #include <gsl/gsl_fit.h>
 #include <gsl/gsl_statistics_double.h>
 
-#ifdef HAVE_EIGEN3
+// macOS builds on gitlab CI complain about missing Eigen/Sparse
+#if defined(HAVE_EIGEN3) && !defined(Q_OS_MACOS)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
 #include <Eigen/Sparse>
