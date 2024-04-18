@@ -939,6 +939,8 @@ void WorksheetElementPrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 	// to decide if the element move was started or not. So, we check the pressed buttong here.
 	if (event->button() == Qt::LeftButton)
 		m_leftButtonPressed = true;
+
+	QGraphicsItem::mousePressEvent(event);
 }
 
 void WorksheetElementPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
