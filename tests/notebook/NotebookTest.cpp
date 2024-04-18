@@ -230,7 +230,9 @@ void NotebookTest::testParserPython10() {
 void NotebookTest::testParserDateTime64ns() {
 	// Testing datetime day
 	// example output taken from a column in panda's dataframe, contains line breaks after every second value
-	QString input = QStringLiteral("array(['2009-01-01T00:10:00.000000000', '2009-01-01T00:20:00.000000000',\n       '2009-01-01T00:30:00.000000000', '2009-01-01T00:40:00.000000000'],\n       dtype='datetime64[ns]')");
+	QString input = QStringLiteral(
+		"array(['2009-01-01T00:10:00.000000000', '2009-01-01T00:20:00.000000000',\n       '2009-01-01T00:30:00.000000000', '2009-01-01T00:40:00.000000000'],\n "
+		"      dtype='datetime64[ns]')");
 	VariableParser parser(QStringLiteral("python"), input);
 
 	QTEST_ASSERT(parser.dataType() == AbstractColumn::ColumnMode::DateTime);
