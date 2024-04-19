@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-16 01:46+0000\n"
+"POT-Creation-Date: 2024-04-19 01:44+0000\n"
 "PO-Revision-Date: 2023-11-26 22:42+0100\n"
 "Last-Translator: Stefan Gerlach <stefan.gerlach@uni.kn>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -9602,9 +9602,11 @@ msgstr "&Einfügen"
 msgid "Clea&r Selection"
 msgstr "&Auswahl aufheben"
 
+#. i18n: ectx: property (text), widget (QPushButton, bSelectAll)
 #: src/commonfrontend/matrix/MatrixView.cpp:129
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:307
 #: src/commonfrontend/worksheet/WorksheetView.cpp:132
+#: src/kdefrontend/ui/dockwidgets/statisticsspreadsheetdock.ui:288
 #, kde-format
 msgid "Select All"
 msgstr "Alles auswählen"
@@ -20207,6 +20209,13 @@ msgstr "Kommentar:"
 msgid "Linking"
 msgstr "Verknüpfung"
 
+#. i18n: ectx: property (text), widget (QPushButton, bSelectNone)
+#: src/kdefrontend/ui/dockwidgets/statisticsspreadsheetdock.ui:295
+#, fuzzy, kde-format
+#| msgid "Selection"
+msgid "Select None"
+msgstr "Auswahl"
+
 #. i18n: ectx: property (text), widget (QLabel, lDistance)
 #. i18n: ectx: property (text), widget (QLabel, lValuesDistance)
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:98
@@ -21795,6 +21804,7 @@ msgstr "Fixieren:"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, leFileName)
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:36
+#: src/kdefrontend/ui/worksheet/exportworksheetwidget.ui:63
 #, kde-format
 msgid "Specify the name of the file to export."
 msgstr "Geben Sie den Namen der Datei für den Export an."
@@ -22127,12 +22137,6 @@ msgstr "Aufsteigend"
 #, kde-format
 msgid "Descending"
 msgstr "Absteigend"
-
-#. i18n: ectx: property (toolTip), widget (QLineEdit, leFileName)
-#: src/kdefrontend/ui/worksheet/exportworksheetwidget.ui:63
-#, kde-format
-msgid "Specify the name of the file to import."
-msgstr "Geben Sie den Namen der Datei für den Import an."
 
 #. i18n: ectx: property (text), widget (QLabel, lExportTo)
 #: src/kdefrontend/ui/worksheet/exportworksheetwidget.ui:73
@@ -23080,6 +23084,9 @@ msgstr "convert-Prozess fehlgeschlagen, Fehlercode ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Fehler beim Öffnen der Datei:"
+
+#~ msgid "Specify the name of the file to import."
+#~ msgstr "Geben Sie den Namen der Datei für den Import an."
 
 #~ msgid "%1: move down"
 #~ msgstr "%1: nach unten verschieben"

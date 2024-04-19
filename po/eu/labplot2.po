@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-16 01:46+0000\n"
+"POT-Creation-Date: 2024-04-19 01:44+0000\n"
 "PO-Revision-Date: 2023-09-19 23:30+0200\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -9666,9 +9666,11 @@ msgstr "Itsatsi"
 msgid "Clea&r Selection"
 msgstr "Garbitu hautapena"
 
+#. i18n: ectx: property (text), widget (QPushButton, bSelectAll)
 #: src/commonfrontend/matrix/MatrixView.cpp:129
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:307
 #: src/commonfrontend/worksheet/WorksheetView.cpp:132
+#: src/kdefrontend/ui/dockwidgets/statisticsspreadsheetdock.ui:288
 #, fuzzy, kde-format
 msgid "Select All"
 msgstr "Hautatu guztia"
@@ -20184,6 +20186,12 @@ msgstr "Iruzkina:"
 msgid "Linking"
 msgstr "Esteka"
 
+#. i18n: ectx: property (text), widget (QPushButton, bSelectNone)
+#: src/kdefrontend/ui/dockwidgets/statisticsspreadsheetdock.ui:295
+#, fuzzy, kde-format
+msgid "Select None"
+msgstr "Hautapena"
+
 #. i18n: ectx: property (text), widget (QLabel, lDistance)
 #. i18n: ectx: property (text), widget (QLabel, lValuesDistance)
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:98
@@ -21776,6 +21784,7 @@ msgstr "Konpondu:"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, leFileName)
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:36
+#: src/kdefrontend/ui/worksheet/exportworksheetwidget.ui:63
 #, kde-format
 msgid "Specify the name of the file to export."
 msgstr "Zehaztu esportatu beharreko fitxategiaren izena."
@@ -22110,12 +22119,6 @@ msgstr "Gorakorra"
 #, kde-format
 msgid "Descending"
 msgstr "Beherakorra"
-
-#. i18n: ectx: property (toolTip), widget (QLineEdit, leFileName)
-#: src/kdefrontend/ui/worksheet/exportworksheetwidget.ui:63
-#, kde-format
-msgid "Specify the name of the file to import."
-msgstr "Zehaztu inportatu beharreko fitxategiaren izena."
 
 #. i18n: ectx: property (text), widget (QLabel, lExportTo)
 #: src/kdefrontend/ui/worksheet/exportworksheetwidget.ui:73
@@ -23064,6 +23067,9 @@ msgstr "«convert» prozesuak huts egin du, irteera kodea ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Ez da fitxategia irekitzeko gai:"
+
+#~ msgid "Specify the name of the file to import."
+#~ msgstr "Zehaztu inportatu beharreko fitxategiaren izena."
 
 #~ msgid "%1: move down"
 #~ msgstr "%1: eraman behera"
