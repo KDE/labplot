@@ -1367,22 +1367,29 @@ void CartesianPlotTest::columnRemove() {
 	curve->setXColumn(xColumn);
 	curve->setYColumn(yColumn);
 
+	QSignalSpy xColumnSpy(curve, SIGNAL(xDataChanged()));
+	QSignalSpy yColumnSpy(curve, SIGNAL(yDataChanged()));
+
 	// remove the second column in the spreadsheet
 	// the x-column in the curve is invalidated, the old path is still valid so we can restore later
 	sheet->removeColumns(1, 1);
 	QCOMPARE(curve->xColumn(), xColumn);
 	QCOMPARE(curve->xColumnPath(), xColumnPath);
+	QCOMPARE(xColumnSpy.count(), 0);
 
 	QCOMPARE(curve->yColumn(), nullptr);
 	QCOMPARE(curve->yColumnPath(), yColumnPath);
+	QCOMPARE(yColumnSpy.count(), 1); // data changed signal has to be emitted to notify the parent plot
 
 	// undo the removal and check again
 	project.undoStack()->undo();
 	QCOMPARE(curve->xColumn(), xColumn);
 	QCOMPARE(curve->xColumnPath(), xColumnPath);
+	QCOMPARE(xColumnSpy.count(), 0);
 
 	QCOMPARE(curve->yColumn(), yColumn);
 	QCOMPARE(curve->yColumnPath(), yColumnPath);
+	QCOMPARE(yColumnSpy.count(), 2);
 }
 
 void CartesianPlotTest::spreadsheetRemove() {
@@ -1412,22 +1419,29 @@ void CartesianPlotTest::spreadsheetRemove() {
 	curve->setXColumn(xColumn);
 	curve->setYColumn(yColumn);
 
+	QSignalSpy xColumnSpy(curve, SIGNAL(xDataChanged()));
+	QSignalSpy yColumnSpy(curve, SIGNAL(yDataChanged()));
+
 	// remove the spreadsheet
 	// the x- and y-columns in the curve are invalidated, the old paths are still valid so we can restore later
 	project.removeChild(sheet);
 	QCOMPARE(curve->xColumn(), nullptr);
 	QCOMPARE(curve->xColumnPath(), xColumnPath);
+	QCOMPARE(xColumnSpy.count(), 1);
 
 	QCOMPARE(curve->yColumn(), nullptr);
 	QCOMPARE(curve->yColumnPath(), yColumnPath);
+	QCOMPARE(yColumnSpy.count(), 1);
 
 	// undo the removal and check again
 	project.undoStack()->undo();
 	QCOMPARE(curve->xColumn(), xColumn);
 	QCOMPARE(curve->xColumnPath(), xColumnPath);
+	QCOMPARE(xColumnSpy.count(), 2);
 
 	QCOMPARE(curve->yColumn(), yColumn);
 	QCOMPARE(curve->yColumnPath(), yColumnPath);
+	QCOMPARE(yColumnSpy.count(), 2);
 }
 
 QTEST_MAIN(CartesianPlotTest)
