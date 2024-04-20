@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-19 01:44+0000\n"
-"PO-Revision-Date: 2024-04-08 10:45+0200\n"
+"PO-Revision-Date: 2024-04-19 08:38+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -10850,7 +10850,7 @@ msgid ""
 "If not activated, plots on the worksheet don't react on drag and mouse wheel "
 "events."
 msgstr ""
-"Si no se selecciona, els diagrames del full de treball no reaccionaran als "
+"Si no està marcada, els diagrames del full de treball no reaccionaran als "
 "esdeveniments d'arrossegar ni a la roda del ratolí."
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:300
@@ -11181,7 +11181,7 @@ msgid ""
 "If checked, the specified line in the file will be used to determine the "
 "column names."
 msgstr ""
-"Si se selecciona, la línia especificada en el fitxer s'utilitzarà per a "
+"Si està marcada, la línia especificada en el fitxer s'utilitzarà per a "
 "determinar els noms de les columnes."
 
 #: src/kdefrontend/datasources/AsciiOptionsWidget.cpp:108
@@ -11694,7 +11694,7 @@ msgid ""
 "If this option is checked, only the link to the file is stored in the "
 "project file but not its content."
 msgstr ""
-"Si se selecciona, només s'emmagatzemarà l'enllaç cap al fitxer en el fitxer "
+"Si està marcada, només s'emmagatzemarà l'enllaç cap al fitxer en el fitxer "
 "de projecte, no el seu contingut."
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:150
@@ -11703,7 +11703,7 @@ msgid ""
 "If this option is checked, the relative path of the file (relative to "
 "project's folder) will be saved."
 msgstr ""
-"Si se selecciona, es guardarà el camí relatiu del fitxer (relatiu a la "
+"Si està marcada, es guardarà el camí relatiu del fitxer (relatiu a la "
 "carpeta del projecte)."
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:158
@@ -11777,8 +11777,8 @@ msgid ""
 "Enable to use the first row of the selected data region for the column names "
 "of the spreadsheet."
 msgstr ""
-"Seleccioneu-la per a utilitzar la primera fila de la regió de dades "
-"seleccionada com a noms de columna del full de càlcul."
+"Activeu-la per a utilitzar la primera fila de la regió de dades seleccionada "
+"com a noms de columna del full de càlcul."
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:243
 #, kde-format
@@ -12957,7 +12957,7 @@ msgid ""
 "If checked, the box width is made proportional to the square root of the "
 "number of data points."
 msgstr ""
-"Si se selecciona, l'amplària del quadro es farà proporcional a l'arrel "
+"Si està marcada, l'amplària del quadro es farà proporcional a l'arrel "
 "quadrada del nombre de punts de dades."
 
 # skip-rule: kct-box
@@ -13075,7 +13075,7 @@ msgstr ""
 #, kde-format
 msgid "If checked, automatically extend the plot range to nice values"
 msgstr ""
-"Si se selecciona, l'interval del diagrama s'ampliarà automàticament a valors "
+"Si està marcada, l'interval del diagrama s'ampliarà automàticament a valors "
 "satisfactoris"
 
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:843
@@ -13454,7 +13454,7 @@ msgid ""
 "If checked, the state (position and geometry) of the docks is saved in the "
 "project file and restored on project load."
 msgstr ""
-"Si se selecciona, l'estat (posició i geometria) dels acobladors es guardarà "
+"Si està marcada, l'estat (posició i geometria) dels acobladors es guardarà "
 "en el fitxer del projecte i es restaurarà en carregar el projecte."
 
 #: src/kdefrontend/dockwidgets/ProjectDock.cpp:33
@@ -13465,7 +13465,7 @@ msgid ""
 "Uncheck this option to reduce the size of the project file at costs of the "
 "longer project load times."
 msgstr ""
-"Si se selecciona, els resultats dels càlculs en l'anàlisi de corbes es "
+"Si està marcada, els resultats dels càlculs en l'anàlisi de corbes es "
 "guardaran en el fitxer del projecte.\n"
 "Desmarqueu esta opció per a reduir la mida del fitxer del projecte a canvi "
 "d'un temps més gran en carregar el projecte."
@@ -13499,7 +13499,7 @@ msgid ""
 "If checked, rescale the content of the worksheet on size changes. Otherwise "
 "resize the canvas only."
 msgstr ""
-"Si se selecciona, es tornarà a escalar el contingut del full de treball quan "
+"Si està marcada, es tornarà a escalar el contingut del full de treball quan "
 "es canvie la mida. En cas contrari, només es canviarà la mida del tapís."
 
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:256
@@ -13654,7 +13654,7 @@ msgid ""
 "If checked, connect neighbour points with lines even if there are gaps "
 "(invalid or masked values) between them"
 msgstr ""
-"Si se selecciona, connectarà els punts veïns amb línies, inclús si hi ha "
+"Si està marcada, connectarà els punts veïns amb línies, inclús si hi ha "
 "buits (valors no vàlids o emmascarats) entre ells"
 
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:535
@@ -13663,7 +13663,7 @@ msgstr ""
 msgid ""
 "If checked, connect data points only for strictly increasing values of X"
 msgstr ""
-"Si se selecciona, connectarà els punts de dades únicament per als valors "
+"Si està marcada, connectarà els punts de dades únicament per als valors "
 "estrictament creixents de X"
 
 #: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:65
@@ -20337,10 +20337,9 @@ msgstr "Enllaçat"
 
 #. i18n: ectx: property (text), widget (QPushButton, bSelectNone)
 #: src/kdefrontend/ui/dockwidgets/statisticsspreadsheetdock.ui:295
-#, fuzzy, kde-format
-#| msgid "Selection"
+#, kde-format
 msgid "Select None"
-msgstr "Selecció"
+msgstr "No selecciones res"
 
 #. i18n: ectx: property (text), widget (QLabel, lDistance)
 #. i18n: ectx: property (text), widget (QLabel, lValuesDistance)
@@ -21200,8 +21199,8 @@ msgstr "Interval d'avaluació automàtica"
 #, kde-format
 msgid "If selected, the resulting fit parameter are set as new start values."
 msgstr ""
-"Si se selecciona, els paràmetres d'ajust resultants s'establiran com a "
-"valors inicials nous."
+"Si està marcada, els paràmetres d'ajust resultants s'establiran com a valors "
+"inicials nous."
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbUseResults)
 #: src/kdefrontend/ui/fitoptionswidget.ui:170
@@ -22299,7 +22298,7 @@ msgstr "Àrea que s'ha d'exportar:"
 #: src/kdefrontend/ui/worksheet/exportworksheetwidget.ui:126
 #, kde-format
 msgid "Check this option if the worksheet background should be exported."
-msgstr "Seleccioneu esta opció si s'ha d'exportar el fons del full de treball."
+msgstr "Marqueu esta opció si s'ha d'exportar el fons del full de treball."
 
 #. i18n: ectx: property (text), widget (QLabel, lExportBackground)
 #: src/kdefrontend/ui/worksheet/exportworksheetwidget.ui:119
@@ -23229,6 +23228,3 @@ msgstr "El procés «convert» ha fallat, codi d'eixida ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "No s'ha pogut obrir el fitxer:"
-
-#~ msgid "Specify the name of the file to import."
-#~ msgstr "Indiqueu el nom del fitxer per a importar."
