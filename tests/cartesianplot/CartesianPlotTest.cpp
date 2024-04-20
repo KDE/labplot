@@ -1271,7 +1271,7 @@ void CartesianPlotTest::spreadsheetRemoveRows() {
 	CHECK_RANGE(plot, curve, Dimension::X, 1., 4.);
 	CHECK_RANGE(plot, curve, Dimension::Y, 0., 8.);
 
-	sheet->undoStack()->undo();
+	project.undoStack()->undo();
 
 	CHECK_RANGE(plot, curve, Dimension::X, 1., 5.);
 	CHECK_RANGE(plot, curve, Dimension::Y, 0., 10.);
@@ -1332,12 +1332,102 @@ void CartesianPlotTest::spreadsheetInsertRows() {
 	CHECK_RANGE(plot, curve, Dimension::X, 1., 13.);
 	CHECK_RANGE(plot, curve, Dimension::Y, 0., 25.);
 
-	sheet->undoStack()->undo(); // xColumn replace values
-	sheet->undoStack()->undo(); // yColumn replace values
-	sheet->undoStack()->undo(); // spreadsheet insertRows
+	project.undoStack()->undo(); // xColumn replace values
+	project.undoStack()->undo(); // yColumn replace values
+	project.undoStack()->undo(); // spreadsheet insertRows
 
 	CHECK_RANGE(plot, curve, Dimension::X, 1., 5.);
 	CHECK_RANGE(plot, curve, Dimension::Y, 0., 10.);
+}
+
+void CartesianPlotTest::columnRemove() {
+	Project project;
+
+	auto* worksheet = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(worksheet);
+
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
+	worksheet->addChild(plot);
+	plot->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	plot->setNiceExtend(false);
+
+	auto* sheet = new Spreadsheet(QStringLiteral("data"), false);
+	project.addChild(sheet);
+	sheet->setColumnCount(2);
+
+	const auto& columns = sheet->children<Column>();
+	QCOMPARE(columns.count(), 2);
+	const auto* xColumn = columns.at(0);
+	const auto* yColumn = columns.at(1);
+	const auto& xColumnPath = xColumn->path();
+	const auto& yColumnPath = yColumn->path();
+
+	auto* curve = new XYCurve(QStringLiteral("curve"));
+	plot->addChild(curve);
+	curve->setXColumn(xColumn);
+	curve->setYColumn(yColumn);
+
+	// remove the second column in the spreadsheet
+	// the x-column in the curve is invalidated, the old path is still valid so we can restore later
+	sheet->removeColumns(1, 1);
+	QCOMPARE(curve->xColumn(), xColumn);
+	QCOMPARE(curve->xColumnPath(), xColumnPath);
+
+	QCOMPARE(curve->yColumn(), nullptr);
+	QCOMPARE(curve->yColumnPath(), yColumnPath);
+
+	// undo the removal and check again
+	project.undoStack()->undo();
+	QCOMPARE(curve->xColumn(), xColumn);
+	QCOMPARE(curve->xColumnPath(), xColumnPath);
+
+	QCOMPARE(curve->yColumn(), yColumn);
+	QCOMPARE(curve->yColumnPath(), yColumnPath);
+}
+
+void CartesianPlotTest::spreadsheetRemove() {
+	Project project;
+
+	auto* worksheet = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(worksheet);
+
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
+	worksheet->addChild(plot);
+	plot->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	plot->setNiceExtend(false);
+
+	auto* sheet = new Spreadsheet(QStringLiteral("data"), false);
+	project.addChild(sheet);
+	sheet->setColumnCount(2);
+
+	const auto& columns = sheet->children<Column>();
+	QCOMPARE(columns.count(), 2);
+	const auto* xColumn = columns.at(0);
+	const auto* yColumn = columns.at(1);
+	const auto& xColumnPath = xColumn->path();
+	const auto& yColumnPath = yColumn->path();
+
+	auto* curve = new XYCurve(QStringLiteral("curve"));
+	plot->addChild(curve);
+	curve->setXColumn(xColumn);
+	curve->setYColumn(yColumn);
+
+	// remove the spreadsheet
+	// the x- and y-columns in the curve are invalidated, the old paths are still valid so we can restore later
+	project.removeChild(sheet);
+	QCOMPARE(curve->xColumn(), nullptr);
+	QCOMPARE(curve->xColumnPath(), xColumnPath);
+
+	QCOMPARE(curve->yColumn(), nullptr);
+	QCOMPARE(curve->yColumnPath(), yColumnPath);
+
+	// undo the removal and check again
+	project.undoStack()->undo();
+	QCOMPARE(curve->xColumn(), xColumn);
+	QCOMPARE(curve->xColumnPath(), xColumnPath);
+
+	QCOMPARE(curve->yColumn(), yColumn);
+	QCOMPARE(curve->yColumnPath(), yColumnPath);
 }
 
 QTEST_MAIN(CartesianPlotTest)
