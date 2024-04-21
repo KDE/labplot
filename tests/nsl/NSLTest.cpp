@@ -15,4 +15,5 @@ bool debugOutputEnabled() {
 	return true; // Dummy, because debug.cpp gets not linked
 }
 
-void setDebugOutputEnable(bool) {}
+void setDebugOutputEnable(bool) {
+}
