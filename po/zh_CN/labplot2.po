@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-19 01:44+0000\n"
-"PO-Revision-Date: 2024-04-19 15:23\n"
+"POT-Creation-Date: 2024-04-21 01:41+0000\n"
+"PO-Revision-Date: 2024-04-20 19:45\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -100,7 +100,7 @@ msgid "Down"
 msgstr ""
 
 #: src/backend/core/AbstractAspect.cpp:524
-#: src/backend/core/aspectcommands.h:170
+#: src/backend/core/aspectcommands.h:167
 #: src/backend/datapicker/Datapicker.cpp:220
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2038
 #, kde-format
@@ -424,7 +424,7 @@ msgid "incompatible filter type"
 msgstr ""
 
 #: src/backend/core/AbstractSimpleFilter.cpp:366
-#: src/backend/core/Folder.cpp:151 src/backend/core/Project.cpp:693
+#: src/backend/core/Folder.cpp:151 src/backend/core/Project.cpp:699
 #: src/backend/datasources/MQTTClient.cpp:1376
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:283
@@ -439,12 +439,12 @@ msgstr ""
 msgid "%1: move up"
 msgstr ""
 
-#: src/backend/core/aspectcommands.h:196
+#: src/backend/core/aspectcommands.h:192
 #, kde-format
 msgid "%1: move %2 to %3."
 msgstr "%1：移动 %2 到 %3"
 
-#: src/backend/core/aspectcommands.h:230
+#: src/backend/core/aspectcommands.h:226
 #, kde-format
 msgid "%1: rename to %2"
 msgstr "%1：重命名为 %2"
@@ -712,32 +712,32 @@ msgstr ""
 msgid "%1: save calculation changed"
 msgstr ""
 
-#: src/backend/core/Project.cpp:528 src/backend/core/Project.cpp:562
+#: src/backend/core/Project.cpp:534 src/backend/core/Project.cpp:568
 #, kde-format
 msgid "Sorry. Could not open file for reading."
 msgstr ""
 
-#: src/backend/core/Project.cpp:539 src/backend/core/Project.cpp:569
+#: src/backend/core/Project.cpp:545 src/backend/core/Project.cpp:575
 #, kde-format
 msgid "The project file is empty."
 msgstr ""
 
-#: src/backend/core/Project.cpp:539 src/backend/core/Project.cpp:569
+#: src/backend/core/Project.cpp:545 src/backend/core/Project.cpp:575
 #, kde-format
 msgid "Error opening project"
 msgstr ""
 
-#: src/backend/core/Project.cpp:588
+#: src/backend/core/Project.cpp:594
 #, kde-format
 msgid "Unknown error when opening the project %1."
 msgstr ""
 
-#: src/backend/core/Project.cpp:589
+#: src/backend/core/Project.cpp:595
 #, kde-format
 msgid "Error when opening the project"
 msgstr ""
 
-#: src/backend/core/Project.cpp:609
+#: src/backend/core/Project.cpp:615
 #, kde-format
 msgid ""
 "The project has content written with %1. Your installation of LabPlot lacks "
@@ -749,27 +749,27 @@ msgid ""
 "Do you want to continue?"
 msgstr ""
 
-#: src/backend/core/Project.cpp:616 src/backend/core/Project.cpp:619
+#: src/backend/core/Project.cpp:622 src/backend/core/Project.cpp:625
 #, kde-format
 msgid "Missing Support for CAS"
 msgstr ""
 
-#: src/backend/core/Project.cpp:650
+#: src/backend/core/Project.cpp:656
 #, kde-format
 msgid "Attribute 'version' is missing."
 msgstr ""
 
-#: src/backend/core/Project.cpp:700
+#: src/backend/core/Project.cpp:706
 #, kde-format
 msgid "no project element found"
 msgstr ""
 
-#: src/backend/core/Project.cpp:702
+#: src/backend/core/Project.cpp:708
 #, kde-format
 msgid "no valid XML document found"
 msgstr ""
 
-#: src/backend/core/Project.cpp:1121
+#: src/backend/core/Project.cpp:1127
 #, kde-format
 msgid "Invalid project modification time. Using current time."
 msgstr ""
@@ -19774,10 +19774,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, bSelectNone)
 #: src/kdefrontend/ui/dockwidgets/statisticsspreadsheetdock.ui:295
-#, fuzzy, kde-format
-#| msgid "Selection"
+#, kde-format
 msgid "Select None"
-msgstr "已选项目"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lDistance)
 #. i18n: ectx: property (text), widget (QLabel, lValuesDistance)

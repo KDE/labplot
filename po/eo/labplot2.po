@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-19 01:44+0000\n"
+"POT-Creation-Date: 2024-04-21 01:41+0000\n"
 "PO-Revision-Date: 2024-03-27 19:34+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
@@ -105,7 +105,7 @@ msgid "Down"
 msgstr "Malsupren"
 
 #: src/backend/core/AbstractAspect.cpp:524
-#: src/backend/core/aspectcommands.h:170
+#: src/backend/core/aspectcommands.h:167
 #: src/backend/datapicker/Datapicker.cpp:220
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2038
 #, kde-format
@@ -431,7 +431,7 @@ msgid "incompatible filter type"
 msgstr "nekongrua filtrila tipo"
 
 #: src/backend/core/AbstractSimpleFilter.cpp:366
-#: src/backend/core/Folder.cpp:151 src/backend/core/Project.cpp:693
+#: src/backend/core/Folder.cpp:151 src/backend/core/Project.cpp:699
 #: src/backend/datasources/MQTTClient.cpp:1376
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:283
@@ -446,12 +446,12 @@ msgstr "nekonata elemento '%1'"
 msgid "%1: move up"
 msgstr "%1: movi supren"
 
-#: src/backend/core/aspectcommands.h:196
+#: src/backend/core/aspectcommands.h:192
 #, kde-format
 msgid "%1: move %2 to %3."
 msgstr "%1: movi %2 al %3."
 
-#: src/backend/core/aspectcommands.h:230
+#: src/backend/core/aspectcommands.h:226
 #, kde-format
 msgid "%1: rename to %2"
 msgstr "%1: renomi al %2"
@@ -719,32 +719,32 @@ msgstr "%1: konservi dokstatojn ŝanĝitajn"
 msgid "%1: save calculation changed"
 msgstr "%1: konservkalkulo ŝanĝiĝis"
 
-#: src/backend/core/Project.cpp:528 src/backend/core/Project.cpp:562
+#: src/backend/core/Project.cpp:534 src/backend/core/Project.cpp:568
 #, kde-format
 msgid "Sorry. Could not open file for reading."
 msgstr "Pardonu. Ne eblis malfermi dosieron por legado."
 
-#: src/backend/core/Project.cpp:539 src/backend/core/Project.cpp:569
+#: src/backend/core/Project.cpp:545 src/backend/core/Project.cpp:575
 #, kde-format
 msgid "The project file is empty."
 msgstr "La projektdosiero estas malplena."
 
-#: src/backend/core/Project.cpp:539 src/backend/core/Project.cpp:569
+#: src/backend/core/Project.cpp:545 src/backend/core/Project.cpp:575
 #, kde-format
 msgid "Error opening project"
 msgstr "Eraro dum malfermo de projekto"
 
-#: src/backend/core/Project.cpp:588
+#: src/backend/core/Project.cpp:594
 #, kde-format
 msgid "Unknown error when opening the project %1."
 msgstr "Nekonata eraro dum malfermado de la projekto %1."
 
-#: src/backend/core/Project.cpp:589
+#: src/backend/core/Project.cpp:595
 #, kde-format
 msgid "Error when opening the project"
 msgstr "Eraro dum malfermo de la projekto"
 
-#: src/backend/core/Project.cpp:609
+#: src/backend/core/Project.cpp:615
 #, kde-format
 msgid ""
 "The project has content written with %1. Your installation of LabPlot lacks "
@@ -763,27 +763,27 @@ msgstr ""
 "\n"
 "Ĉu vi volas daŭrigi?"
 
-#: src/backend/core/Project.cpp:616 src/backend/core/Project.cpp:619
+#: src/backend/core/Project.cpp:622 src/backend/core/Project.cpp:625
 #, kde-format
 msgid "Missing Support for CAS"
 msgstr "Mankas Subteno por CAS"
 
-#: src/backend/core/Project.cpp:650
+#: src/backend/core/Project.cpp:656
 #, kde-format
 msgid "Attribute 'version' is missing."
 msgstr "Atributo 'versio' mankas."
 
-#: src/backend/core/Project.cpp:700
+#: src/backend/core/Project.cpp:706
 #, kde-format
 msgid "no project element found"
 msgstr "neniu projektelemento trovita"
 
-#: src/backend/core/Project.cpp:702
+#: src/backend/core/Project.cpp:708
 #, kde-format
 msgid "no valid XML document found"
 msgstr "neniu valida XML-dokumento trovita"
 
-#: src/backend/core/Project.cpp:1121
+#: src/backend/core/Project.cpp:1127
 #, kde-format
 msgid "Invalid project modification time. Using current time."
 msgstr "Nevalida projekta modifa tempo. Uzante aktualan tempon."

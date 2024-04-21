@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-19 01:44+0000\n"
+"POT-Creation-Date: 2024-04-21 01:41+0000\n"
 "PO-Revision-Date: 2024-04-19 13:33+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -105,7 +105,7 @@ msgid "Down"
 msgstr "Aşağı"
 
 #: src/backend/core/AbstractAspect.cpp:524
-#: src/backend/core/aspectcommands.h:170
+#: src/backend/core/aspectcommands.h:167
 #: src/backend/datapicker/Datapicker.cpp:220
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2038
 #, kde-format
@@ -432,7 +432,7 @@ msgid "incompatible filter type"
 msgstr "uyumsuz süzgeç türü"
 
 #: src/backend/core/AbstractSimpleFilter.cpp:366
-#: src/backend/core/Folder.cpp:151 src/backend/core/Project.cpp:693
+#: src/backend/core/Folder.cpp:151 src/backend/core/Project.cpp:699
 #: src/backend/datasources/MQTTClient.cpp:1376
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:283
@@ -447,12 +447,12 @@ msgstr "bilinmeyen öge '%1'"
 msgid "%1: move up"
 msgstr "%1: Yukarı taşı"
 
-#: src/backend/core/aspectcommands.h:196
+#: src/backend/core/aspectcommands.h:192
 #, kde-format
 msgid "%1: move %2 to %3."
 msgstr "%1: %2 ögesini %3 konumuna taşı."
 
-#: src/backend/core/aspectcommands.h:230
+#: src/backend/core/aspectcommands.h:226
 #, kde-format
 msgid "%1: rename to %2"
 msgstr "%1: %2 olarak yeniden adlandır"
@@ -720,32 +720,32 @@ msgstr "%1: Rıhtım durumunu kaydetme ayarı değişti"
 msgid "%1: save calculation changed"
 msgstr "%1: Kaydetme hesaplaması değişti"
 
-#: src/backend/core/Project.cpp:528 src/backend/core/Project.cpp:562
+#: src/backend/core/Project.cpp:534 src/backend/core/Project.cpp:568
 #, kde-format
 msgid "Sorry. Could not open file for reading."
 msgstr "Üzgünüm. Dosyayı okuma için açamadık."
 
-#: src/backend/core/Project.cpp:539 src/backend/core/Project.cpp:569
+#: src/backend/core/Project.cpp:545 src/backend/core/Project.cpp:575
 #, kde-format
 msgid "The project file is empty."
 msgstr "Proje dosyası boş."
 
-#: src/backend/core/Project.cpp:539 src/backend/core/Project.cpp:569
+#: src/backend/core/Project.cpp:545 src/backend/core/Project.cpp:575
 #, kde-format
 msgid "Error opening project"
 msgstr "Proje açılırken hata oluştu"
 
-#: src/backend/core/Project.cpp:588
+#: src/backend/core/Project.cpp:594
 #, kde-format
 msgid "Unknown error when opening the project %1."
 msgstr "%1 projesini açarken bilinmeyen hata oluştu."
 
-#: src/backend/core/Project.cpp:589
+#: src/backend/core/Project.cpp:595
 #, kde-format
 msgid "Error when opening the project"
 msgstr "Proje açılırken hata oluştu"
 
-#: src/backend/core/Project.cpp:609
+#: src/backend/core/Project.cpp:615
 #, kde-format
 msgid ""
 "The project has content written with %1. Your installation of LabPlot lacks "
@@ -764,27 +764,27 @@ msgstr ""
 "\n"
 "Sürdürmek istiyor musunuz?"
 
-#: src/backend/core/Project.cpp:616 src/backend/core/Project.cpp:619
+#: src/backend/core/Project.cpp:622 src/backend/core/Project.cpp:625
 #, kde-format
 msgid "Missing Support for CAS"
 msgstr "CAS Desteği Eksik"
 
-#: src/backend/core/Project.cpp:650
+#: src/backend/core/Project.cpp:656
 #, kde-format
 msgid "Attribute 'version' is missing."
 msgstr "'version' öznitelği bulunamadı."
 
-#: src/backend/core/Project.cpp:700
+#: src/backend/core/Project.cpp:706
 #, kde-format
 msgid "no project element found"
 msgstr "proje ögesi bulunamadı"
 
-#: src/backend/core/Project.cpp:702
+#: src/backend/core/Project.cpp:708
 #, kde-format
 msgid "no valid XML document found"
 msgstr "geçerli XML belgesi bulunamadı"
 
-#: src/backend/core/Project.cpp:1121
+#: src/backend/core/Project.cpp:1127
 #, kde-format
 msgid "Invalid project modification time. Using current time."
 msgstr "Geçersiz proje değiştirme zamanı. Geçerli zaman kullanılıyor."
