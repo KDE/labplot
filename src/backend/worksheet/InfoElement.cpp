@@ -331,7 +331,6 @@ bool InfoElement::assignCurve(const QVector<XYCurve*>& curves) {
 			if (mp.curvePath == curve->path()) {
 				mp.curve = curve;
 				initCurveConnections(curve);
-				mp.customPoint->setVisible(curve->isVisible()); // initial visibility
 				mp.customPoint->setCoordinateSystemIndex(curve->coordinateSystemIndex());
 				break;
 			}
@@ -1285,6 +1284,7 @@ void InfoElement::save(QXmlStreamWriter* writer) const {
 		for (const auto& custompoint : markerpoints) {
 			writer->writeStartElement(QStringLiteral("point"));
 			writer->writeAttribute(QLatin1String("curvepath"), custompoint.curve->path());
+			writer->writeAttribute(QLatin1String("visible"), QString::number(custompoint.visible));
 			custompoint.customPoint->save(writer);
 			writer->writeEndElement(); // close "point"
 		}
@@ -1367,6 +1367,7 @@ void InfoElement::loadPoints(XmlStreamReader* reader, bool preview) {
 			break;
 		const auto& attribs = reader->attributes();
 		const QString curvePath = attribs.value(QStringLiteral("curvepath")).toString();
+		const bool visible = attribs.value(QStringLiteral("visible")).toInt();
 
 		reader->readNextStartElement();
 		if (reader->name() != CustomPoint::xmlName())
@@ -1378,6 +1379,7 @@ void InfoElement::loadPoints(XmlStreamReader* reader, bool preview) {
 			delete point;
 			return;
 		}
+		point->setVisible(visible);
 		this->addChild(point);
 		addCurvePath(curvePath, point);
 	}
