@@ -1057,11 +1057,9 @@ void XYCurvePrivate::updateLines() {
 	}
 
 	const QRectF pageRect = plot()->dataRect();
-	// old method using DPI
-	// const double widthDatarectInch = Worksheet::convertFromSceneUnits(plot()->dataRect().width(), Worksheet::Unit::Inch);
-	// float heightDatarectInch = Worksheet::convertFromSceneUnits(plot()->dataRect().height(), Worksheet::Unit::Inch);
-	// const int numberOfPixelX = ceil(widthDatarectInch * QApplication::desktop()->physicalDpiX());
-	const int numberOfPixelX = pageRect.width();
+	const double widthDatarectInch = Worksheet::convertFromSceneUnits(plot()->dataRect().width(), Worksheet::Unit::Inch);
+	const auto dpi = QApplication::primaryScreen()->physicalDotsPerInchX(); // Assumption: screens have all the same dpi
+	const int numberOfPixelX = ceil(widthDatarectInch * dpi);
 
 	// calculate the lines connecting the data points
 	{
