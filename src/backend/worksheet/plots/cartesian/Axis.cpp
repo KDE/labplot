@@ -117,7 +117,7 @@ void Axis::init(Orientation orientation, bool loading) {
 	Q_D(Axis);
 
 	// line
-	d->line = new Line(QString());
+	d->line = new Line(QStringLiteral("line"));
 	d->line->setHidden(true);
 	d->line->setCreateXmlElement(false); // line properties are written out together with arrow properties in Axis::save()
 	addChild(d->line);
@@ -140,7 +140,7 @@ void Axis::init(Orientation orientation, bool loading) {
 	d->title->graphicsItem()->setAcceptHoverEvents(false);
 
 	// major ticks line
-	d->majorTicksLine = new Line(QString());
+	d->majorTicksLine = new Line(QStringLiteral("majorTicksLine"));
 	d->majorTicksLine->setHidden(true);
 	d->majorTicksLine->setPrefix(QStringLiteral("MajorTicks"));
 	d->majorTicksLine->setCreateXmlElement(false);
@@ -153,7 +153,7 @@ void Axis::init(Orientation orientation, bool loading) {
 	});
 
 	// minor ticks line
-	d->minorTicksLine = new Line(QString());
+	d->minorTicksLine = new Line(QStringLiteral("minorTicksLine"));
 	d->minorTicksLine->setHidden(true);
 	d->minorTicksLine->setPrefix(QStringLiteral("MinorTicks"));
 	d->minorTicksLine->setCreateXmlElement(false);
@@ -166,7 +166,7 @@ void Axis::init(Orientation orientation, bool loading) {
 	});
 
 	// major grid line
-	d->majorGridLine = new Line(QString());
+	d->majorGridLine = new Line(QStringLiteral("majorGridLine"));
 	d->majorGridLine->setPrefix(QStringLiteral("MajorGrid"));
 	d->majorGridLine->setHidden(true);
 	addChild(d->majorGridLine);
@@ -178,7 +178,7 @@ void Axis::init(Orientation orientation, bool loading) {
 	});
 
 	// minor grid line
-	d->minorGridLine = new Line(QString());
+	d->minorGridLine = new Line(QStringLiteral("minorGridLine"));
 	d->minorGridLine->setPrefix(QStringLiteral("MinorGrid"));
 	d->minorGridLine->setHidden(true);
 	addChild(d->minorGridLine);

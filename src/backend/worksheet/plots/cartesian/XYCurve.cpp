@@ -74,7 +74,7 @@ void XYCurve::init(bool loading) {
 	Q_D(XYCurve);
 
 	// line
-	d->line = new Line(QString());
+	d->line = new Line(QStringLiteral("line"));
 	d->line->setCreateXmlElement(false);
 	d->line->setHidden(true);
 	addChild(d->line);
@@ -88,7 +88,7 @@ void XYCurve::init(bool loading) {
 	});
 
 	// drop line
-	d->dropLine = new Line(QString());
+	d->dropLine = new Line(QStringLiteral("dropLine"));
 	d->dropLine->setPrefix(QStringLiteral("DropLine"));
 	d->dropLine->setHidden(true);
 	addChild(d->dropLine);
@@ -103,7 +103,7 @@ void XYCurve::init(bool loading) {
 	});
 
 	// symbol
-	d->symbol = new Symbol(QString());
+	d->symbol = new Symbol(QStringLiteral("symbol"));
 	addChild(d->symbol);
 	d->symbol->setHidden(true);
 	connect(d->symbol, &Symbol::updateRequested, [=] {
@@ -116,7 +116,7 @@ void XYCurve::init(bool loading) {
 	});
 
 	// Background/Filling
-	d->background = new Background(QString());
+	d->background = new Background(QStringLiteral("background"));
 	d->background->setPrefix(QStringLiteral("Filling"));
 	d->background->setPositionAvailable(true);
 	addChild(d->background);
@@ -130,7 +130,7 @@ void XYCurve::init(bool loading) {
 	});
 
 	// error bars
-	d->errorBar = new ErrorBar(QString(), ErrorBar::Dimension::XY);
+	d->errorBar = new ErrorBar(QStringLiteral("errorBar"), ErrorBar::Dimension::XY);
 	addChild(d->errorBar);
 	d->errorBar->setHidden(true);
 	connect(d->errorBar, &ErrorBar::updatePixmapRequested, [=] {

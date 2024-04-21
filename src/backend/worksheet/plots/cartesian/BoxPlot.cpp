@@ -636,7 +636,7 @@ BoxPlotPrivate::BoxPlotPrivate(BoxPlot* owner)
 }
 
 Background* BoxPlotPrivate::addBackground(const KConfigGroup& group) {
-	auto* background = new Background(QString());
+	auto* background = new Background(QStringLiteral("background"));
 	background->setPrefix(QLatin1String("Filling"));
 	background->setEnabledAvailable(true);
 	background->setHidden(true);
@@ -656,7 +656,7 @@ Background* BoxPlotPrivate::addBackground(const KConfigGroup& group) {
 }
 
 Line* BoxPlotPrivate::addBorderLine(const KConfigGroup& group) {
-	auto* line = new Line(QString());
+	auto* line = new Line(QStringLiteral("line"));
 	line->setPrefix(QLatin1String("Border"));
 	line->setHidden(true);
 	q->addChild(line);
@@ -679,7 +679,7 @@ Line* BoxPlotPrivate::addBorderLine(const KConfigGroup& group) {
 }
 
 Line* BoxPlotPrivate::addMedianLine(const KConfigGroup& group) {
-	auto* line = new Line(QString());
+	auto* line = new Line(QStringLiteral("medianLine"));
 	line->setPrefix(QLatin1String("MedianLine"));
 	line->setHidden(true);
 	q->addChild(line);

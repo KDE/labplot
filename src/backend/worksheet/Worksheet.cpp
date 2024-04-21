@@ -55,7 +55,7 @@ Worksheet::Worksheet(const QString& name, bool loading)
 	: AbstractPart(name, AspectType::Worksheet)
 	, d_ptr(new WorksheetPrivate(this)) {
 	Q_D(Worksheet);
-	d->background = new Background(QString());
+	d->background = new Background(QStringLiteral("background"));
 	addChild(d->background);
 	d->background->setHidden(true);
 	connect(d->background, &Background::updateRequested, [=] {

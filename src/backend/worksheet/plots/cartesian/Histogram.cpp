@@ -64,7 +64,7 @@ void Histogram::init(bool loading) {
 	Q_D(Histogram);
 
 	// line
-	d->line = new Line(QString());
+	d->line = new Line(QStringLiteral("line"));
 	d->line->setHistogramLineTypeAvailable(true);
 	d->line->setHidden(true);
 	addChild(d->line);
@@ -79,7 +79,7 @@ void Histogram::init(bool loading) {
 	});
 
 	// symbol
-	d->symbol = new Symbol(QString());
+	d->symbol = new Symbol(QStringLiteral("symbol"));
 	addChild(d->symbol);
 	d->symbol->setHidden(true);
 	connect(d->symbol, &Symbol::updateRequested, [=] {
@@ -102,7 +102,7 @@ void Histogram::init(bool loading) {
 	});
 
 	// Background/Filling
-	d->background = new Background(QString());
+	d->background = new Background(QStringLiteral("background"));
 	d->background->setPrefix(QStringLiteral("Filling"));
 	d->background->setEnabledAvailable(true);
 	addChild(d->background);
@@ -115,7 +115,7 @@ void Histogram::init(bool loading) {
 	});
 
 	// error bars
-	d->errorBar = new ErrorBar(QString(), ErrorBar::Dimension::Y);
+	d->errorBar = new ErrorBar(QStringLiteral("errorBar"), ErrorBar::Dimension::Y);
 	addChild(d->errorBar);
 	d->errorBar->setHidden(true);
 	connect(d->errorBar, &ErrorBar::updatePixmapRequested, [=] {

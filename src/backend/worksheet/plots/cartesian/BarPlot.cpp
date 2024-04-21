@@ -366,7 +366,7 @@ BarPlotPrivate::BarPlotPrivate(BarPlot* owner)
 }
 
 Background* BarPlotPrivate::addBackground(const KConfigGroup& group) {
-	auto* background = new Background(QString());
+	auto* background = new Background(QStringLiteral("background"));
 	background->setPrefix(QLatin1String("Filling"));
 	background->setEnabledAvailable(true);
 	background->setHidden(true);
@@ -386,7 +386,7 @@ Background* BarPlotPrivate::addBackground(const KConfigGroup& group) {
 }
 
 Line* BarPlotPrivate::addBorderLine(const KConfigGroup& group) {
-	auto* line = new Line(QString());
+	auto* line = new Line(QStringLiteral("line"));
 	line->setPrefix(QLatin1String("Border"));
 	line->setHidden(true);
 	q->addChild(line);
@@ -409,7 +409,7 @@ Line* BarPlotPrivate::addBorderLine(const KConfigGroup& group) {
 }
 
 void BarPlotPrivate::addValue(const KConfigGroup& group) {
-	value = new Value(QString());
+	value = new Value(QStringLiteral("value"));
 	q->addChild(value);
 	value->setHidden(true);
 	value->setcenterPositionAvailable(true);
@@ -426,7 +426,7 @@ void BarPlotPrivate::addValue(const KConfigGroup& group) {
 }
 
 ErrorBar* BarPlotPrivate::addErrorBar(const KConfigGroup& group) {
-	auto* errorBar = new ErrorBar(QString(), ErrorBar::Dimension::Y);
+	auto* errorBar = new ErrorBar(QStringLiteral("errorBar"), ErrorBar::Dimension::Y);
 	errorBar->setHidden(true);
 	q->addChild(errorBar);
 	if (!q->isLoading())
