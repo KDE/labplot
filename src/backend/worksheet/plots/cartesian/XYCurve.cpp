@@ -2997,8 +2997,8 @@ void XYCurve::loadThemeConfig(const KConfig& config) {
 	this->setValuesOpacity(group.readEntry(QStringLiteral("ValuesOpacity"), 1.0));
 	this->setValuesColor(group.readEntry(QStringLiteral("ValuesColor"), themeColor));
 
-	// margins
-	if (plot->theme() == QLatin1String("Tufte")) {
+	// margins, activate for XYCurve only, not for analysis curves
+	if (type() == AspectType::XYCurve && plot->theme() == QLatin1String("Tufte")) {
 		if (d->xColumn && d->xColumn->rowCount() < 100) {
 			setRugEnabled(true);
 			setRugOrientation(WorksheetElement::Orientation::Both);
