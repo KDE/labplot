@@ -1,7 +1,7 @@
 /*
 	File                 : TimedLineEdit.h
 	Project              : LabPlot
-	Description          : Extended LineEdit to emit TextChanged event after some time has passed between edits
+	Description          : Extended LineEdit to emit TextChanged/TextEdited event after some time has passed between edits
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2024 Israel Galadima <izzygaladima@gmail.com>
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -26,10 +26,14 @@ public:
 
 private:
 	int m_time{1000};
-	QTimer m_timer;
+	QTimer m_textChangedTimer;
+	QTimer m_textEditedTimer;
+
+	void initTimers();
 
 Q_SIGNALS:
 	void textChanged();
+	void textEdited();
 };
 
 #endif
