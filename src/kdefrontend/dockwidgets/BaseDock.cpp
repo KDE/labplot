@@ -294,7 +294,7 @@ AspectTreeModel* BaseDock::aspectModel() {
 }
 
 /*!
- * shows the name and the description of the first selecte aspect,
+ * shows the name and the description of the first selected aspect,
  * disables the fields "Name" and "Comment" if there are more than one aspects selected.
  */
 void BaseDock::updateNameDescriptionWidgets() {
