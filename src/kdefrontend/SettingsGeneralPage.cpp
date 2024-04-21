@@ -13,6 +13,7 @@
 #include <cantor/backend.h>
 #endif
 #include "backend/core/Settings.h"
+#include "backend/lib/debug.h"
 #include "backend/lib/macros.h"
 #include "kdefrontend/MainWin.h" // LoadOnStart
 
@@ -26,6 +27,10 @@ SettingsGeneralPage::SettingsGeneralPage(QWidget* parent)
 	: SettingsPage(parent) {
 	ui.setupUi(this);
 	ui.sbAutoSaveInterval->setSuffix(i18n("min."));
+#ifdef NDEBUG
+	ui.lDebugOutput->setVisible(false);
+	ui.chkDebugOutput->setVisible(false);
+#endif
 	retranslateUi();
 
 	connect(ui.cbLoadOnStart, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsGeneralPage::loadOnStartChanged);
@@ -44,6 +49,7 @@ SettingsGeneralPage::SettingsGeneralPage(QWidget* parent)
 	connect(ui.chkSaveDockStates, &QCheckBox::toggled, this, &SettingsGeneralPage::changed);
 	connect(ui.chkSaveCalculations, &QCheckBox::toggled, this, &SettingsGeneralPage::changed);
 	connect(ui.chkCompatible, &QCheckBox::toggled, this, &SettingsGeneralPage::changed);
+	connect(ui.chkDebugOutput, &QCheckBox::toggled, this, &SettingsGeneralPage::changed);
 
 #ifdef HAVE_CANTOR_LIBS
 	for (auto* backend : Cantor::Backend::availableBackends()) {
@@ -126,7 +132,10 @@ void SettingsGeneralPage::applySettings() {
 	group.writeEntry(QLatin1String("SaveDockStates"), ui.chkSaveDockStates->isChecked());
 	group.writeEntry(QLatin1String("SaveCalculations"), ui.chkSaveCalculations->isChecked());
 	group.writeEntry(QLatin1String("CompatibleSave"), ui.chkCompatible->isChecked());
+	bool debugOutputEnabled = ui.chkDebugOutput->isChecked();
+	group.writeEntry(QLatin1String("DebugOutput"), debugOutputEnabled);
 	Settings::writeDockPosBehaviour(static_cast<Settings::DockPosBehaviour>(ui.cbDockWindowPositionReopen->currentData().toInt()));
+	setDebugOutputEnable(debugOutputEnabled);
 }
 
 void SettingsGeneralPage::restoreDefaults() {
@@ -144,6 +153,7 @@ void SettingsGeneralPage::restoreDefaults() {
 	ui.chkSaveDockStates->setChecked(false);
 	ui.chkSaveCalculations->setChecked(true);
 	ui.chkCompatible->setChecked(false);
+	ui.chkDebugOutput->setChecked(false);
 	ui.cbDockWindowPositionReopen->setCurrentIndex(ui.cbDockWindowPositionReopen->findData(static_cast<int>(Settings::DockPosBehaviour::AboveLastActive)));
 }
 
@@ -193,6 +203,7 @@ void SettingsGeneralPage::loadSettings() {
 	ui.chkSaveDockStates->setChecked(group.readEntry<bool>(QLatin1String("SaveDockStates"), false));
 	ui.chkSaveCalculations->setChecked(group.readEntry<bool>(QLatin1String("SaveCalculations"), true));
 	ui.chkCompatible->setChecked(group.readEntry<bool>(QLatin1String("CompatibleSave"), false));
+	ui.chkDebugOutput->setChecked(group.readEntry<bool>(QLatin1String("DebugOutput"), false));
 }
 
 void SettingsGeneralPage::retranslateUi() {

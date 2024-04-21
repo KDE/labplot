@@ -18,26 +18,9 @@
 #include "macrosWarningStyle.h"
 
 // C++ style warning (works on Windows)
+#include "debug.h"
 #include <iomanip>
 #include <iostream>
-#define WARN(x)                                                                                                                                                \
-	std::cout << std::dec << std::setprecision(std::numeric_limits<double>::digits10 + 1) << std::boolalpha << x                                               \
-			  << std::resetiosflags(std::ios_base::boolalpha) << std::setprecision(-1) << std::endl;
-
-#ifndef NDEBUG
-#include <QDebug>
-#define QDEBUG(x) qDebug() << x;
-#define DEBUG(x) WARN(x)
-#else
-#define QDEBUG(x)                                                                                                                                              \
-	{ }
-#define DEBUG(x)                                                                                                                                               \
-	{ }
-#endif
-
-#define DEBUG_TEXTLABEL_BOUNDING_RECT 0
-#define DEBUG_TEXTLABEL_GLUEPOINTS 0
-#define DEBUG_AXIS_BOUNDING_RECT 0
 
 struct Lock {
 	inline explicit Lock(bool& variable)
