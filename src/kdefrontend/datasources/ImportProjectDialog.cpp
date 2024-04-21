@@ -47,7 +47,6 @@ ImportProjectDialog::ImportProjectDialog(MainWin* parent, ProjectType type)
 	, m_mainWin(parent)
 	, m_projectType(type)
 	, m_aspectTreeModel(new AspectTreeModel(parent->project())) {
-
 	// main widget
 	auto* mainWidget = new QWidget(this);
 	ui.setupUi(mainWidget);
