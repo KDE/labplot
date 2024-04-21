@@ -10,3 +10,9 @@
 
 #include "NSLTest.h"
 #include "backend/core/column/Column.h"
+
+bool debugOutputEnabled() {
+	return true; // Dummy, because debug.cpp gets not linked
+}
+
+void setDebugOutputEnable(bool) {}
