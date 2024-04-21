@@ -1056,8 +1056,10 @@ void XYCurvePrivate::updateLines() {
 		return;
 	}
 
+	// The numberOfPixelX defines how many lines are drawn (max 2*numberOfPixelX). More lines make no sense, because then
+	// pixels are overlapping.
 	const QRectF pageRect = plot()->dataRect();
-	const double widthDatarectInch = Worksheet::convertFromSceneUnits(plot()->dataRect().width(), Worksheet::Unit::Inch);
+	const double widthDatarectInch = Worksheet::convertFromSceneUnits(pageRect.width(), Worksheet::Unit::Inch);
 	const auto dpi = QApplication::primaryScreen()->physicalDotsPerInchX(); // Assumption: screens have all the same dpi
 	const int numberOfPixelX = ceil(widthDatarectInch * dpi);
 
