@@ -211,7 +211,7 @@ void ColumnDock::updateTypeWidgets(AbstractColumn::ColumnMode mode) {
 }
 
 void ColumnDock::showValueLabels() {
-	for (int i = 0; i < ui.twLabels->rowCount(); ++i)
+	while (ui.twLabels->rowCount() > 0)
 		ui.twLabels->removeRow(0);
 
 	if (m_column->valueLabelsInitialized()) {

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-21 01:41+0000\n"
-"PO-Revision-Date: 2024-04-14 15:11+0200\n"
+"POT-Creation-Date: 2024-04-22 01:52+0000\n"
+"PO-Revision-Date: 2024-04-21 09:29+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 24.02.1\n"
+"X-Generator: Lokalize 24.02.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -907,7 +907,7 @@ msgstr "%1: definir o estilo do contorno da barra de erros"
 
 #: src/backend/datapicker/DatapickerCurve.cpp:376
 #: src/backend/datapicker/DatapickerImage.cpp:414
-#: src/backend/worksheet/InfoElement.cpp:870
+#: src/backend/worksheet/InfoElement.cpp:869
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:126
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:138
 #: src/backend/worksheet/WorksheetElement.cpp:161
@@ -919,7 +919,7 @@ msgstr "%1: definir a visibilidade"
 
 #: src/backend/datapicker/DatapickerCurve.cpp:376
 #: src/backend/datapicker/DatapickerImage.cpp:414
-#: src/backend/worksheet/InfoElement.cpp:870
+#: src/backend/worksheet/InfoElement.cpp:869
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:126
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:138
 #: src/backend/worksheet/WorksheetElement.cpp:161
@@ -980,7 +980,7 @@ msgid "Failed to read image data"
 msgstr "Non foi posíbel ler os datos da imaxe"
 
 #: src/backend/datapicker/DatapickerPoint.cpp:213
-#: src/backend/worksheet/InfoElement.cpp:840
+#: src/backend/worksheet/InfoElement.cpp:839
 #: src/backend/worksheet/WorksheetElement.cpp:745
 #, kde-format
 msgid "%1: set position"
@@ -7030,12 +7030,12 @@ msgstr "Etiqueta"
 msgid "Symbol"
 msgstr "Símbolo"
 
-#: src/backend/worksheet/InfoElement.cpp:856
+#: src/backend/worksheet/InfoElement.cpp:855
 #, kde-format
 msgid "%1: set gluepoint index"
 msgstr "%1: definir o índice do punto de unión"
 
-#: src/backend/worksheet/InfoElement.cpp:863
+#: src/backend/worksheet/InfoElement.cpp:862
 #, kde-format
 msgid "%1: set connectionline curve name"
 msgstr "%1: definir o nome da curva da liña de conexión"
@@ -11913,30 +11913,30 @@ msgstr "Produciuse un erro."
 msgid "Connecting to '%1:%2' timed out."
 msgstr "A conexión a «%1:%2» esgotou o tempo límite."
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:85
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:514
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:83
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:518
 #, kde-format
 msgid "Add new folder"
 msgstr "Engadir un novo cartafol"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:108
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:106
 #, kde-format
 msgctxt "@title:window"
 msgid "Import LabPlot Project"
 msgstr "Importar un proxecto de LabPlot"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:113
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:111
 #, kde-format
 msgctxt "@title:window"
 msgid "Import Origin Project"
 msgstr "Importar un proxecto de Origin"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:123
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:121
 #, kde-format
 msgid "Specify the file where the project content has to be imported from."
 msgstr "Indique o ficheiro do que debe importarse o contido do proxecto."
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:127
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:125
 #, kde-format
 msgid ""
 "Select one or several objects to be imported into the current project.\n"
@@ -11949,7 +11949,7 @@ msgstr ""
 "seleccionados seleccionaranse automaticamente.\n"
 "Seleccione o nodo raíz do proxecto para importar o proxecto enteiro."
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:132
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:130
 #, kde-format
 msgid ""
 "Specify the target folder in the current project where the selected objects "
@@ -11958,22 +11958,22 @@ msgstr ""
 "Indique o cartafol de destino dentro do proxecto actual onde importar os "
 "obxectos seleccionados."
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:161
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:159
 #, kde-format
 msgid "As Plot Area"
 msgstr "Como zona de gráfica"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:162
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:160
 #, kde-format
 msgid "As Coordinate System"
 msgstr "Como sistema de coordenadas"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:166
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:164
 #, kde-format
 msgid "Specify how to import multi-layered graphs."
 msgstr "Indique como importar gráficas de varias capas."
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:171
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:169
 #, kde-format
 msgid ""
 "Multiple layers are used in Origin to either implement multiple plots or "
@@ -11995,7 +11995,7 @@ msgstr ""
 "coordenadas (intervalo de datos) na mesma zona de gráfica por cada capa.</"
 "li></ul>"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:266
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:271
 #, kde-format
 msgid ""
 "The object listed below already exists in target folder and will be "
@@ -12009,56 +12009,56 @@ msgstr[1] ""
 "Os obxectos listados embaixo xa existen no cartafol de destino e "
 "sobrescribiranse:"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:272
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:277
 #, kde-format
 msgid "Do you want to proceed?"
 msgstr "Quere proceder?"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:276
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:280
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:281
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:285
 #, kde-format
 msgid "Override existing objects?"
 msgstr "Sobrepoñer os obxectos existentes?"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:313
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:318
 #, kde-format
 msgid "Project data imported in %1 seconds."
 msgstr "Os datos do proxecto importáronse en %1 segundos."
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:407
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:412
 #, kde-format
 msgid "Close the dialog and import the selected objects."
 msgstr "Pechar o diálogo e importar os obxectos seleccionados."
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:409
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:414
 #, kde-format
 msgid "Select object(s) to be imported."
 msgstr "Seleccione obxectos para importar."
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:437
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:442
 #, kde-format
 msgctxt "@title:window"
 msgid "Open LabPlot Project"
 msgstr "Abrir un proxecto de LabPlot"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:439
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:444
 #: src/kdefrontend/MainWin.cpp:1540
 #, kde-format
 msgid "LabPlot Projects (%1)"
 msgstr "Proxectos de LabPlot (%1)"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:443
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:448
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Origin OPJ Project"
 msgstr "Abrir un proxecto de Origin OPJ"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:445
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:450
 #, kde-format
 msgid "Origin OPJ Projects (%1)"
 msgstr "Proxectos de Origin OPJ (%1)"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:514
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:518
 #, kde-format
 msgid "Folder name:"
 msgstr "Nome do cartafol:"
@@ -20193,10 +20193,9 @@ msgstr "Ligazón"
 
 #. i18n: ectx: property (text), widget (QPushButton, bSelectNone)
 #: src/kdefrontend/ui/dockwidgets/statisticsspreadsheetdock.ui:295
-#, fuzzy, kde-format
-#| msgid "Selection"
+#, kde-format
 msgid "Select None"
-msgstr "Selección"
+msgstr "Non escoller nada"
 
 #. i18n: ectx: property (text), widget (QLabel, lDistance)
 #. i18n: ectx: property (text), widget (QLabel, lValuesDistance)

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-21 01:41+0000\n"
+"POT-Creation-Date: 2024-04-22 01:52+0000\n"
 "PO-Revision-Date: 2024-04-19 16:25+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian\n"
@@ -917,7 +917,7 @@ msgstr "%1: встановити стиль контурів позначок п
 
 #: src/backend/datapicker/DatapickerCurve.cpp:376
 #: src/backend/datapicker/DatapickerImage.cpp:414
-#: src/backend/worksheet/InfoElement.cpp:870
+#: src/backend/worksheet/InfoElement.cpp:869
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:126
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:138
 #: src/backend/worksheet/WorksheetElement.cpp:161
@@ -929,7 +929,7 @@ msgstr "%1: зробити видимим"
 
 #: src/backend/datapicker/DatapickerCurve.cpp:376
 #: src/backend/datapicker/DatapickerImage.cpp:414
-#: src/backend/worksheet/InfoElement.cpp:870
+#: src/backend/worksheet/InfoElement.cpp:869
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:126
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:138
 #: src/backend/worksheet/WorksheetElement.cpp:161
@@ -990,7 +990,7 @@ msgid "Failed to read image data"
 msgstr "Не вдалося прочитати дані зображення"
 
 #: src/backend/datapicker/DatapickerPoint.cpp:213
-#: src/backend/worksheet/InfoElement.cpp:840
+#: src/backend/worksheet/InfoElement.cpp:839
 #: src/backend/worksheet/WorksheetElement.cpp:745
 #, kde-format
 msgid "%1: set position"
@@ -7085,12 +7085,12 @@ msgstr "Мітка"
 msgid "Symbol"
 msgstr "Позначення"
 
-#: src/backend/worksheet/InfoElement.cpp:856
+#: src/backend/worksheet/InfoElement.cpp:855
 #, kde-format
 msgid "%1: set gluepoint index"
 msgstr "%1: встановити індекс точки прилипання"
 
-#: src/backend/worksheet/InfoElement.cpp:863
+#: src/backend/worksheet/InfoElement.cpp:862
 #, kde-format
 msgid "%1: set connectionline curve name"
 msgstr "%1: встановити назву кривої лінії з'єднання"
@@ -11986,30 +11986,30 @@ msgstr "Сталася помилка."
 msgid "Connecting to '%1:%2' timed out."
 msgstr "Перевищено час очікування на встановлення з'єднання із «%1:%2»."
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:85
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:514
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:83
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:518
 #, kde-format
 msgid "Add new folder"
 msgstr "Додати нову теку"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:108
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:106
 #, kde-format
 msgctxt "@title:window"
 msgid "Import LabPlot Project"
 msgstr "Імпортувати проєкт LabPlot"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:113
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:111
 #, kde-format
 msgctxt "@title:window"
 msgid "Import Origin Project"
 msgstr "Імпортувати проєкт Origin"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:123
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:121
 #, kde-format
 msgid "Specify the file where the project content has to be imported from."
 msgstr "Вкажіть файл, з якого має бути імпортовано вміст проєкту."
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:127
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:125
 #, kde-format
 msgid ""
 "Select one or several objects to be imported into the current project.\n"
@@ -12022,7 +12022,7 @@ msgstr ""
 "позначених об'єктів.\n"
 "Щоб імпортувати увесь проєкт, позначте вузол проєкту найвищого рівня."
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:132
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:130
 #, kde-format
 msgid ""
 "Specify the target folder in the current project where the selected objects "
@@ -12031,22 +12031,22 @@ msgstr ""
 "Вкажіть теку призначення у поточному проєкті, до якої має бути імпортовано "
 "вибрані об'єкти."
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:161
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:159
 #, kde-format
 msgid "As Plot Area"
 msgstr "Як область креслення"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:162
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:160
 #, kde-format
 msgid "As Coordinate System"
 msgstr "Як координатну систему"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:166
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:164
 #, kde-format
 msgid "Specify how to import multi-layered graphs."
 msgstr "Вказати спосіб імпортування багатошарових графіків."
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:171
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:169
 #, kde-format
 msgid ""
 "Multiple layers are used in Origin to either implement multiple plots or "
@@ -12068,7 +12068,7 @@ msgstr ""
 "створено власну координатну систему (діапазон даних) на одній області "
 "креслення</li></ul>"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:266
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:271
 #, kde-format
 msgid ""
 "The object listed below already exists in target folder and will be "
@@ -12089,56 +12089,56 @@ msgstr[3] ""
 "Вказаний нижче об'єкт вже зберігається у теці призначення, його буде "
 "перезаписано:"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:272
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:277
 #, kde-format
 msgid "Do you want to proceed?"
 msgstr "Хочете продовжити виконання дії?"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:276
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:280
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:281
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:285
 #, kde-format
 msgid "Override existing objects?"
 msgstr "Перевизначити наявні об'єкти?"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:313
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:318
 #, kde-format
 msgid "Project data imported in %1 seconds."
 msgstr "Дані проєкту імпортовано за %1 секунд."
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:407
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:412
 #, kde-format
 msgid "Close the dialog and import the selected objects."
 msgstr "Закрити діалогове вікно й імпортувати позначені об'єкти."
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:409
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:414
 #, kde-format
 msgid "Select object(s) to be imported."
 msgstr "Виберіть об'єкти для імпортування"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:437
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:442
 #, kde-format
 msgctxt "@title:window"
 msgid "Open LabPlot Project"
 msgstr "Відкрити проєкт LabPlot"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:439
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:444
 #: src/kdefrontend/MainWin.cpp:1540
 #, kde-format
 msgid "LabPlot Projects (%1)"
 msgstr "проєкти LabPlot (%1)"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:443
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:448
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Origin OPJ Project"
 msgstr "Відкрити проєкт OPJ Origin"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:445
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:450
 #, kde-format
 msgid "Origin OPJ Projects (%1)"
 msgstr "проєкти OPJ Origin (%1)"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:514
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:518
 #, kde-format
 msgid "Folder name:"
 msgstr "Назва теки:"
