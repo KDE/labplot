@@ -342,7 +342,7 @@ QString MatioFilter::fileInfoString(const QString& fileName) {
 	info += QLatin1String("<br>");
 
 	size_t n;
-	char** dir = Mat_GetDir(matfp, &n);
+	auto* dir = Mat_GetDir(matfp, &n);
 	info += i18n("Number of variables: ") + QString::number(n);
 	info += QStringLiteral("<br>");
 	if (dir && n < 10) { // only show variable info when there are not too many
@@ -550,7 +550,7 @@ void MatioFilterPrivate::parse(const QString& fileName) {
 	}
 
 	// get names of all vars
-	char** dir = Mat_GetDir(matfp, &varCount);
+	auto* dir = Mat_GetDir(matfp, &varCount);
 	DEBUG(Q_FUNC_INFO << ", found " << varCount << " vars")
 
 	varsInfo.clear();
