@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-18 03:06+0000\n"
-"PO-Revision-Date: 2024-02-08 18:04+0300\n"
+"PO-Revision-Date: 2024-03-23 15:05+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-i18n-doc@kde.org>\n"
 "Language: tr\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 24.01.95\n"
+"X-Generator: Lokalize 24.02.1\n"
 "X-POOTLE-MTIME: 1502201241.000000\n"
 
 #, kde-format
@@ -5290,7 +5290,7 @@ msgstr "1 fotun aydınlığı"
 #: src/backend/gsl/ExpressionParser.cpp:1281
 #, kde-format
 msgid "Illuminance of 1 footcandle"
-msgstr "1 ayak-mumun aydınlığı"
+msgstr "1 ayak mumun aydınlığı"
 
 #: src/backend/gsl/ExpressionParser.cpp:1284
 #, kde-format
@@ -9108,7 +9108,7 @@ msgstr "Kesme"
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:304
 #, kde-format
 msgid "Calculating..."
-msgstr "Hesaplanıyor..."
+msgstr "Hesaplanıyor…"
 
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:308
 #, kde-format
@@ -9349,7 +9349,7 @@ msgstr "Sütunları Temi&zle"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:288
 #, kde-format
 msgid "&Go to Cell..."
-msgstr "Hücreye G&it..."
+msgstr "Hücreye G&it…"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:141
 #, kde-format
@@ -10302,7 +10302,7 @@ msgstr "%1: seçilen hücreleri temizle"
 #: src/kdefrontend/examples/ExamplesWidget.cpp:53
 #, kde-format
 msgid "Search..."
-msgstr "Ara..."
+msgstr "Ara…"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3430
 #, fuzzy, kde-format
@@ -10926,6 +10926,8 @@ msgid ""
 "If checked, the specified line in the file will be used to determine the "
 "column names."
 msgstr ""
+"İşaretlenmişse dosyadaki belirtilen satır sütun adlarını belirlemede "
+"kullanılacaktır."
 
 #: src/kdefrontend/datasources/AsciiOptionsWidget.cpp:108
 #, kde-format
@@ -14817,7 +14819,7 @@ msgstr ""
 #: src/kdefrontend/MainWin.cpp:632
 #, kde-format
 msgid "Undo/Redo History..."
-msgstr ""
+msgstr "Geri Al/Yinele Geçmişi…"
 
 #: src/kdefrontend/MainWin.cpp:650
 #, kde-format
@@ -14924,7 +14926,7 @@ msgstr "Renk Şeması"
 #: src/kdefrontend/MainWin.cpp:859
 #, kde-format
 msgid "Configure CAS..."
-msgstr ""
+msgstr "CAS'ı Yapılandır…"
 
 #: src/kdefrontend/MainWin.cpp:895 src/kdefrontend/MainWin.cpp:909
 #, kde-format
@@ -14983,7 +14985,7 @@ msgstr "Projeyi Aç"
 #: src/kdefrontend/MainWin.cpp:1415
 #, kde-format
 msgid "Loading %1..."
-msgstr ""
+msgstr "%1 yükleniyor…"
 
 #: src/kdefrontend/MainWin.cpp:1465 src/kdefrontend/MainWin.cpp:1469
 #: src/kdefrontend/MainWin.cpp:1474 src/kdefrontend/MainWin.cpp:1479
@@ -18509,7 +18511,7 @@ msgstr "Arttır"
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:760
 #, kde-format
 msgid "1st Tick at:"
-msgstr ""
+msgstr "1. im şurada:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMajorTickStartValue)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:770
@@ -20061,7 +20063,7 @@ msgstr "Acil. noktalar"
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:140
 #, kde-format
 msgid "Ignore Gaps:"
-msgstr ""
+msgstr "Boşlukları yok say:"
 
 #. i18n: ectx: property (text), widget (QLabel, lValuesGeneral_2)
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:153
@@ -20907,7 +20909,7 @@ msgstr "Eksen im etiketlerine uzaklık"
 #: src/kdefrontend/ui/labelwidget.ui:651
 #, kde-format
 msgid "Offset X:"
-msgstr ""
+msgstr "X ofseti:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbShowPlaceholderText)
 #: src/kdefrontend/ui/labelwidget.ui:729
@@ -20919,7 +20921,7 @@ msgstr ""
 #: src/kdefrontend/ui/labelwidget.ui:739
 #, kde-format
 msgid "Offset Y:"
-msgstr ""
+msgstr "Y ofseti:"
 
 #. i18n: ectx: property (text), widget (QLabel, lY)
 #: src/kdefrontend/ui/matrix/matrixfunctionwidget.ui:116
