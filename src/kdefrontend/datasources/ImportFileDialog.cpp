@@ -51,6 +51,7 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool liveDataSource, const Q
 	: ImportDialog(parent)
 	, m_importFileWidget(new ImportFileWidget(this, liveDataSource, fileName)) {
 	vLayout->addWidget(m_importFileWidget);
+	m_liveDataSource = liveDataSource;
 
 	// dialog buttons
 	auto* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Reset | QDialogButtonBox::Cancel);

@@ -19,7 +19,6 @@ class TreeViewComboBox;
 
 class KMessageWidget;
 class QMenu;
-class QAbstractItemModel;
 class QLabel;
 class QModelIndex;
 class QVBoxLayout;
@@ -53,6 +52,7 @@ protected:
 	QMenu* m_newDataContainerMenu{nullptr};
 	AspectTreeModel* m_aspectTreeModel;
 	KMessageWidget* m_messageWidget{nullptr};
+	bool m_liveDataSource{false};
 
 public Q_SLOTS:
 	void accept() override;
