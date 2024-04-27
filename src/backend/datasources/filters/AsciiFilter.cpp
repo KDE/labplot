@@ -4,7 +4,7 @@
 	Description          : ASCII I/O-filter
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2009-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
-	SPDX-FileCopyrightText: 2009-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2009-2024 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -715,14 +715,15 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 	if (!spreadsheet)
 		return 0;
 
-	if (spreadsheet->sourceType() != LiveDataSource::SourceType::FileOrPipe)
+	const auto sourceType = spreadsheet->sourceType();
+	if (sourceType != LiveDataSource::SourceType::FileOrPipe)
 		if (device.isSequential() && device.bytesAvailable() < (int)sizeof(quint16))
 			return 0;
 
 	if (!m_prepared) {
 		DEBUG(Q_FUNC_INFO << ", Preparing ..");
 
-		switch (spreadsheet->sourceType()) {
+		switch (sourceType) {
 		case LiveDataSource::SourceType::FileOrPipe: {
 			const int deviceError = prepareDeviceToRead(device);
 			if (deviceError != 0) {
@@ -777,9 +778,8 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 		}
 
 		// value column, available only when reading from sockets and serial port
-		auto type = spreadsheet->sourceType();
-		if (type == LiveDataSource::SourceType::NetworkTCPSocket || type == LiveDataSource::SourceType::NetworkUDPSocket
-			|| type == LiveDataSource::SourceType::LocalSocket || type == LiveDataSource::SourceType::SerialPort) {
+		if (sourceType == LiveDataSource::SourceType::NetworkTCPSocket || sourceType == LiveDataSource::SourceType::NetworkUDPSocket
+			|| sourceType == LiveDataSource::SourceType::LocalSocket || sourceType == LiveDataSource::SourceType::SerialPort) {
 			const int index = (int)createIndexEnabled + (int)createTimestampEnabled;
 			spreadsheet->column(index)->setPlotDesignation(AbstractColumn::PlotDesignation::Y);
 		}
@@ -832,7 +832,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 
 	// move to the last read position, from == total bytes read
 	// since the other source types are sequential we cannot seek on them
-	if (spreadsheet->sourceType() == LiveDataSource::SourceType::FileOrPipe)
+	if (sourceType == LiveDataSource::SourceType::FileOrPipe)
 		device.seek(from);
 
 	// count the new lines, increase actualrows on each
@@ -849,10 +849,10 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 #ifdef PERFTRACE_LIVE_IMPORT
 		PERFTRACE(QStringLiteral("AsciiLiveDataImportReadingFromFile: "));
 #endif
-		DEBUG("	source type = " << ENUM_TO_STRING(LiveDataSource, SourceType, spreadsheet->sourceType()));
+		DEBUG("	source type = " << ENUM_TO_STRING(LiveDataSource, SourceType, sourceType));
 		while (!device.atEnd()) {
 			if (readingType != LiveDataSource::ReadingType::TillEnd) {
-				switch (spreadsheet->sourceType()) { // different sources need different read methods
+				switch (sourceType) { // different sources need different read methods
 				case LiveDataSource::SourceType::LocalSocket:
 					newData[newDataIdx++] = QString::fromUtf8(device.readAll());
 					break;
@@ -871,7 +871,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 					break;
 				}
 			} else { // ReadingType::TillEnd
-				switch (spreadsheet->sourceType()) { // different sources need different read methods
+				switch (sourceType) { // different sources need different read methods
 				case LiveDataSource::SourceType::LocalSocket:
 					newData.push_back(QString::fromUtf8(device.readAll()));
 					break;
@@ -912,11 +912,11 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 		QDEBUG("	Removed empty lines: " << newData.removeAll(QString()));
 
 	// back to the last read position before counting when reading from files
-	if (spreadsheet->sourceType() == LiveDataSource::SourceType::FileOrPipe)
+	if (sourceType == LiveDataSource::SourceType::FileOrPipe)
 		device.seek(from);
 
 	// split newData to get data columns (only TCP atm)
-	if (!m_prepared && spreadsheet->sourceType() == LiveDataSource::SourceType::NetworkTCPSocket) {
+	if (!m_prepared && sourceType == LiveDataSource::SourceType::NetworkTCPSocket) {
 		DEBUG("TCP: COLUMN count = " << m_actualCols)
 		QString firstRowData = newData.at(0);
 		QStringList dataStringList;
@@ -972,12 +972,11 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 		spreadsheet->resize(AbstractFileFilter::ImportMode::Replace, columnNames, m_actualCols);
 	}
 
+	// determine the number of rows to read
 	const int spreadsheetRowCountBeforeResize = spreadsheet->rowCount();
-
 	int currentRow = 0; // indexes the position in the vector(column)
 	int linesToRead = 0;
 	int keepNValues = spreadsheet->keepNValues();
-
 	DEBUG(Q_FUNC_INFO << ", Increase row count. keepNValues = " << keepNValues);
 	if (m_prepared) {
 		// increase row count if we don't have a fixed size
@@ -988,7 +987,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 				m_actualRows += std::min(static_cast<qsizetype>(newData.size()), static_cast<qsizetype>(spreadsheet->sampleSize()));
 			else {
 				// we don't increase it if we reread the whole file, we reset it
-				if (!(spreadsheet->readingType() == LiveDataSource::ReadingType::WholeFile))
+				if (spreadsheet->readingType() != LiveDataSource::ReadingType::WholeFile)
 					m_actualRows += newData.size();
 				else
 					m_actualRows = newData.size();
@@ -1025,7 +1024,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 	DEBUG(Q_FUNC_INFO << ", actual rows (w/o header) = " << m_actualRows);
 
 	// TODO
-	// 	if (spreadsheet->sourceType() == LiveDataSource::SourceType::FileOrPipe || spreadsheet->sourceType() == LiveDataSource::SourceType::NetworkUdpSocket) {
+	// 	if (sourceType == LiveDataSource::SourceType::FileOrPipe || sourceType == LiveDataSource::SourceType::NetworkUdpSocket) {
 	// 		if (m_actualRows < linesToRead) {
 	// 			DEBUG("	SET lines to read to " << m_actualRows);
 	// 			linesToRead = m_actualRows;
@@ -1083,7 +1082,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 #ifdef PERFTRACE_LIVE_IMPORT
 			PERFTRACE(QLatin1String("AsciiLiveDataImportPopping: "));
 #endif
-			// enable data change signal
+			// disable data change signal
 			const auto& columns = spreadsheet->children<Column>();
 			for (int col = 0; col < m_actualCols; ++col)
 				columns.at(col)->setSuppressDataChangedSignal(false);
@@ -1151,6 +1150,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 	}
 	DEBUG("	newDataIdx: " << newDataIdx);
 
+	// read the new data into the data container
 	static int indexColumnIdx = 1;
 	{
 #ifdef PERFTRACE_LIVE_IMPORT
@@ -1158,7 +1158,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 #endif
 		int row = 0;
 
-		if (readingType == LiveDataSource::ReadingType::TillEnd || (readingType == LiveDataSource::ReadingType::ContinuousFixed)) {
+		if (readingType == LiveDataSource::ReadingType::TillEnd || readingType == LiveDataSource::ReadingType::ContinuousFixed) {
 			if (headerEnabled) {
 				if (!m_prepared) {
 					row = 1;
@@ -1166,29 +1166,26 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 				}
 			}
 		}
-		if (spreadsheet->sourceType() == LiveDataSource::SourceType::FileOrPipe) {
-			if (readingType == LiveDataSource::ReadingType::WholeFile) {
-				if (headerEnabled) {
-					row = 1;
-					bytesread += newData.at(0).size();
-				}
+
+		if (sourceType == LiveDataSource::SourceType::FileOrPipe && readingType == LiveDataSource::ReadingType::WholeFile) {
+			if (headerEnabled) {
+				row = 1;
+				bytesread += newData.at(0).size();
 			}
 		}
 
 		for (; row < linesToRead; ++row) {
-			// 			DEBUG("\n	Reading row " << row + 1 << " of " << linesToRead);
+			DEBUG("\n	Reading row " << row + 1 << " of " << linesToRead);
 			QString line;
 			if (readingType == LiveDataSource::ReadingType::FromEnd)
 				line = newData.at(newDataIdx++);
 			else
 				line = newData.at(row);
+
 			// when we read the whole file we don't care about the previous position
 			// so we don't have to count those bytes
-			if (readingType != LiveDataSource::ReadingType::WholeFile) {
-				if (spreadsheet->sourceType() == LiveDataSource::SourceType::FileOrPipe) {
-					bytesread += line.size();
-				}
-			}
+			if (readingType != LiveDataSource::ReadingType::WholeFile && sourceType == LiveDataSource::SourceType::FileOrPipe)
+				bytesread += line.size();
 
 			if (removeQuotesEnabled)
 				line.remove(QLatin1Char('"'));
@@ -1198,8 +1195,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 
 			QStringList lineStringList;
 			// only FileOrPipe and TCPSocket support multiple columns
-			if (spreadsheet->sourceType() == LiveDataSource::SourceType::FileOrPipe
-				|| spreadsheet->sourceType() == LiveDataSource::SourceType::NetworkTCPSocket) {
+			if (sourceType == LiveDataSource::SourceType::FileOrPipe || sourceType == LiveDataSource::SourceType::NetworkTCPSocket) {
 				QDEBUG("separator = " << m_separator << " , size = " << m_separator.size())
 				if (m_separator.size() > 0)
 					lineStringList = split(line, false);
@@ -1207,9 +1203,10 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 					lineStringList = split(line);
 			} else
 				lineStringList << line;
-			// 			QDEBUG("	line = " << lineStringList << ", separator = \'" << m_separator << "\'");
 
-			// 			DEBUG("	Line bytes: " << line.size() << " line: " << STDSTRING(line));
+			QDEBUG("	line = " << lineStringList << ", separator = \'" << m_separator << "\'");
+			DEBUG("	Line bytes: " << line.size() << " line: " << STDSTRING(line));
+
 			if (simplifyWhitespacesEnabled) {
 				for (int i = 0; i < lineStringList.size(); ++i)
 					lineStringList[i] = lineStringList.at(i).simplified();
@@ -1225,7 +1222,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 
 			// add current timestamp if required
 			if (createTimestampEnabled) {
-				DEBUG("current row = " << currentRow << ", container size = " << static_cast<QVector<QDateTime>*>(m_dataContainer[offset])->size())
+				// DEBUG("current row = " << currentRow << ", container size = " << static_cast<QVector<QDateTime>*>(m_dataContainer[offset])->size())
 				(*static_cast<QVector<QDateTime>*>(m_dataContainer[offset]))[currentRow] = QDateTime::currentDateTime();
 				++offset;
 			}
@@ -2008,7 +2005,7 @@ void AsciiFilter::save(QXmlStreamWriter* writer) const {
   Loads from XML.
 */
 bool AsciiFilter::load(XmlStreamReader* reader) {
-	QXmlStreamAttributes attribs = reader->attributes();
+	const auto& attribs = reader->attributes();
 	QString str;
 
 	READ_STRING_VALUE("commentCharacter", commentCharacter);
