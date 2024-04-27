@@ -186,6 +186,10 @@ private Q_SLOTS:
 #ifdef HAVE_QTSERIALPORT
 	void serialPortError(QSerialPort::SerialPortError);
 #endif
+
+Q_SIGNALS:
+	void readOnUpdateCalled();
+
 };
 
 #endif

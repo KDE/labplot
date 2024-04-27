@@ -49,7 +49,7 @@ LiveDataSource::LiveDataSource(const QString& name, bool loading)
 	, m_updateTimer(new QTimer(this))
 	, m_watchTimer(new QTimer(this)) {
 	m_watchTimer->setSingleShot(true);
-	m_watchTimer->setInterval(100);
+	m_watchTimer->setInterval(100); // maximum read frequency is 1/100ms = 10Hz
 
 	// stop reading from the source before removing the child from the project
 	connect(this, &AbstractAspect::childAspectAboutToBeRemoved, [this](const AbstractAspect* aspect) {
@@ -314,6 +314,7 @@ void LiveDataSource::setUpdateType(UpdateType updatetype) {
 			m_fileSystemWatcher = new QFileSystemWatcher(this);
 
 		m_fileSystemWatcher->addPath(m_fileName);
+
 		QFileInfo file(m_fileName);
 		// If the watched file currently does not exist (because it is recreated for instance), watch its containing
 		// directory instead. Once the file exists again, switch to watching the file in readOnUpdate().
@@ -447,6 +448,8 @@ void LiveDataSource::readOnUpdate() {
 		m_pending = true;
 	else
 		read();
+
+	Q_EMIT readOnUpdateCalled();
 }
 
 /*
