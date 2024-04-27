@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-22 01:52+0000\n"
+"POT-Creation-Date: 2024-04-27 01:35+0000\n"
 "PO-Revision-Date: 2024-04-19 12:13+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
@@ -11410,21 +11410,21 @@ msgstr "Toevoegen %1"
 msgid "%1 name:"
 msgstr "naam %1:"
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:71
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:72
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:42
 #, kde-format
 msgctxt "@title:window"
 msgid "Import Data to Spreadsheet or Matrix"
 msgstr "Gegevens importeren naar rekenblad of matrix"
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:73
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:74
 #, kde-format
 msgctxt "@title:window"
 msgid "Add New Live Data Source"
 msgstr "Nieuw aangesloten bronbestand toevoegen"
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:106
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:344
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:107
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:345
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:130
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:346
 #: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:113
@@ -11433,8 +11433,8 @@ msgstr "Nieuw aangesloten bronbestand toevoegen"
 msgid "Hide Options"
 msgstr "Opties verbergen"
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:106
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:344
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:107
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:345
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:130
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:346
 #: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:113
@@ -11443,91 +11443,91 @@ msgstr "Opties verbergen"
 msgid "Show Options"
 msgstr "Opties tonen"
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:146
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:147
 #, kde-format
 msgid "Live data source created in %1 seconds."
 msgstr "Actieve gegevensbron aangemaakt in %1 seconden."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:174
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:175
 #, kde-format
 msgid "No target data container selected"
 msgstr "Geen doelgegevenscontainer geselecteerd"
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:319
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:320
 #, kde-format
 msgid "File %1 imported in %2 seconds."
 msgstr "Bestand %1 geïmporteerd in %2 seconden."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:363
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:399
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:426
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:450
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:475
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:508
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:531
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:364
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:400
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:427
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:451
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:476
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:509
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:532
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:160
 #, kde-format
 msgid "Close the dialog and import the data."
 msgstr "Dialoog afsluiten en de gegevens importeren."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:365
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:366
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:154
 #, kde-format
 msgid "Cannot import into a matrix since the data contains non-numerical data."
 msgstr ""
 "Kan niet in een matrix importeren, omdat er niet-numerieke gegevens zijn."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:377
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:378
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:138
 #, kde-format
 msgid "Select a data container where the data has to be imported into."
 msgstr ""
 "Selecteer een plaatshouder waarin de gegevens moeten worden geïmporteerd."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:402
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:403
 #, kde-format
 msgid "The provided file doesn't exist."
 msgstr "Het opgegeven bestand bestaat niet."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:430
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:431
 #, kde-format
 msgid "Could not connect to the provided local socket. Error: %1."
 msgstr "Kon geen verbinding maken met opgegeven lokale socket. Fout %1."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:436
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:437
 #, kde-format
 msgid ""
 "Could not connect to the provided local socket. The socket does not exist."
 msgstr ""
 "Kon geen verbinding maken met opgegeven lokale socket. Deze bestaat niet."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:455
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:456
 #, kde-format
 msgid "Could not connect to the provided TCP socket. Error: %1."
 msgstr "Kon niet verbinden met opgegeven TCP-socket. Fout: %1."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:461
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:487
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:462
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:488
 #, kde-format
 msgid "Either the host name or the port number is missing."
 msgstr "De hostnaam of het poortnummer ontbreekt."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:481
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:482
 #, kde-format
 msgid "Could not connect to the provided UDP socket. Error: %1."
 msgstr "Kon niet verbinden met de opgegeven UDP-socket. Fout: %1."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:512
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:513
 #, kde-format
 msgid "Could not connect to the provided serial port."
 msgstr "Kon geen verbinding maken met opgegeven seriële poort."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:518
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:519
 #, kde-format
 msgid "Serial port number is missing."
 msgstr "Seriële pootnummer ontbreekt."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:534
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:535
 #, kde-format
 msgid ""
 "Either there is no connection, or no subscriptions were made, or the file "
