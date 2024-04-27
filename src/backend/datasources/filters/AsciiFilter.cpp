@@ -806,6 +806,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 		DEBUG(Q_FUNC_INFO << ", data source resized to col: " << m_actualCols);
 		DEBUG(Q_FUNC_INFO << ", data source rowCount: " << spreadsheet->rowCount());
 		DEBUG(Q_FUNC_INFO << ", Prepared!");
+		m_prepared = true;
 	}
 
 	qint64 bytesread = 0;
@@ -814,7 +815,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 	PERFTRACE(QStringLiteral("AsciiLiveDataImportTotal: "));
 #endif
 	LiveDataSource::ReadingType readingType;
-	if (!m_prepared) {
+	if (m_firstRead) {
 		readingType = LiveDataSource::ReadingType::TillEnd;
 	} else {
 		// we have to read all the data when reading from end
@@ -916,7 +917,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 		device.seek(from);
 
 	// split newData to get data columns (only TCP atm)
-	if (!m_prepared && sourceType == LiveDataSource::SourceType::NetworkTCPSocket) {
+	if (m_firstRead && sourceType == LiveDataSource::SourceType::NetworkTCPSocket) {
 		DEBUG("TCP: COLUMN count = " << m_actualCols)
 		QString firstRowData = newData.at(0);
 		QStringList dataStringList;
@@ -973,12 +974,12 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 	}
 
 	// determine the number of rows to read
-	const int spreadsheetRowCountBeforeResize = spreadsheet->rowCount();
+	const int rowCountBeforeResize = spreadsheet->rowCount();
 	int currentRow = 0; // indexes the position in the vector(column)
 	int linesToRead = 0;
 	int keepNValues = spreadsheet->keepNValues();
 	DEBUG(Q_FUNC_INFO << ", Increase row count. keepNValues = " << keepNValues);
-	if (m_prepared) {
+	if (!m_firstRead) {
 		// increase row count if we don't have a fixed size
 		// but only after the preparation step
 		if (keepNValues == 0) {
@@ -997,7 +998,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 			if (spreadsheet->readingType() == LiveDataSource::ReadingType::WholeFile)
 				linesToRead = m_actualRows;
 			else
-				linesToRead = m_actualRows - spreadsheetRowCountBeforeResize;
+				linesToRead = m_actualRows - rowCountBeforeResize;
 		} else { // fixed size
 			DEBUG("	keep " << keepNValues << " values");
 			if (readingType == LiveDataSource::ReadingType::TillEnd) {
@@ -1040,23 +1041,23 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 		if (spreadsheet->rowCount() < m_actualRows)
 			spreadsheet->setRowCount(m_actualRows);
 
-		if (!m_prepared)
+		if (m_firstRead)
 			currentRow = 0;
 		else {
 			// indexes the position in the vector(column)
 			if (spreadsheet->readingType() == LiveDataSource::ReadingType::WholeFile)
 				currentRow = 0;
 			else
-				currentRow = spreadsheetRowCountBeforeResize;
+				currentRow = rowCountBeforeResize;
 		}
 
 		// if we have fixed size, we do this only once in preparation, here we can use
-		// m_prepared and we need something to decide whether it has a fixed size or increasing
+		// m_firstRead and we need something to decide whether it has a fixed size or increasing
 		initDataContainer(spreadsheet);
 	} else { // fixed size
 		// when we have a fixed size we have to pop sampleSize number of lines if specified
 		// here popping, setting currentRow
-		if (!m_prepared) {
+		if (m_firstRead) {
 			if (spreadsheet->readingType() == LiveDataSource::ReadingType::WholeFile)
 				currentRow = 0;
 			else
@@ -1078,7 +1079,8 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 			}
 		}
 
-		if (m_prepared) {
+		//TODO: ???
+		if (!m_firstRead) {
 #ifdef PERFTRACE_LIVE_IMPORT
 			PERFTRACE(QLatin1String("AsciiLiveDataImportPopping: "));
 #endif
@@ -1139,14 +1141,12 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 	DEBUG(Q_FUNC_INFO << ", reading from line " << currentRow << " till end line " << newLinesTillEnd);
 	DEBUG(Q_FUNC_INFO << ", lines to read:" << linesToRead << ", actual rows:" << m_actualRows << ", actual cols:" << m_actualCols);
 	newDataIdx = 0;
-	if (readingType == LiveDataSource::ReadingType::FromEnd) {
-		if (m_prepared) {
-			if (newData.size() > spreadsheet->sampleSize())
-				newDataIdx = newData.size() - spreadsheet->sampleSize();
-			// since we skip a couple of lines, we need to count those bytes too
-			for (int i = 0; i < newDataIdx; ++i)
-				bytesread += newData.at(i).size();
-		}
+	if (readingType == LiveDataSource::ReadingType::FromEnd && !m_firstRead) {
+		if (newData.size() > spreadsheet->sampleSize())
+			newDataIdx = newData.size() - spreadsheet->sampleSize();
+		// since we skip a couple of lines, we need to count those bytes too
+		for (int i = 0; i < newDataIdx; ++i)
+			bytesread += newData.at(i).size();
 	}
 	DEBUG("	newDataIdx: " << newDataIdx);
 
@@ -1156,26 +1156,18 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 #ifdef PERFTRACE_LIVE_IMPORT
 		PERFTRACE(QLatin1String("AsciiLiveDataImportFillingContainers: "));
 #endif
+		// handle the header and determine the start row in the new data
 		int row = 0;
-
-		if (readingType == LiveDataSource::ReadingType::TillEnd || readingType == LiveDataSource::ReadingType::ContinuousFixed) {
-			if (headerEnabled) {
-				if (!m_prepared) {
-					row = 1;
-					bytesread += newData.at(0).size();
-				}
-			}
-		}
-
-		if (sourceType == LiveDataSource::SourceType::FileOrPipe && readingType == LiveDataSource::ReadingType::WholeFile) {
-			if (headerEnabled) {
+		if (headerEnabled && sourceType == LiveDataSource::SourceType::FileOrPipe) {
+			// only handle the header if we're reading the file for the first time or re-reading the whole file again
+			if (m_firstRead || spreadsheet->readingType() == LiveDataSource::ReadingType::WholeFile) {
 				row = 1;
 				bytesread += newData.at(0).size();
 			}
 		}
 
 		for (; row < linesToRead; ++row) {
-			DEBUG("\n	Reading row " << row + 1 << " of " << linesToRead);
+			// DEBUG("\n	Reading row " << row << " of " << linesToRead);
 			QString line;
 			if (readingType == LiveDataSource::ReadingType::FromEnd)
 				line = newData.at(newDataIdx++);
@@ -1196,7 +1188,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 			QStringList lineStringList;
 			// only FileOrPipe and TCPSocket support multiple columns
 			if (sourceType == LiveDataSource::SourceType::FileOrPipe || sourceType == LiveDataSource::SourceType::NetworkTCPSocket) {
-				QDEBUG("separator = " << m_separator << " , size = " << m_separator.size())
+				// QDEBUG("separator = " << m_separator << " , size = " << m_separator.size())
 				if (m_separator.size() > 0)
 					lineStringList = split(line, false);
 				else
@@ -1205,7 +1197,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 				lineStringList << line;
 
 			QDEBUG("	line = " << lineStringList << ", separator = \'" << m_separator << "\'");
-			DEBUG("	Line bytes: " << line.size() << " line: " << STDSTRING(line));
+			// DEBUG("	Line bytes: " << line.size() << " line: " << STDSTRING(line));
 
 			if (simplifyWhitespacesEnabled) {
 				for (int i = 0; i < lineStringList.size(); ++i)
@@ -1240,7 +1232,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 		}
 	}
 
-	if (m_prepared) {
+	if (!m_firstRead) {
 		// notify all affected columns and plots about the changes
 		PERFTRACE(QLatin1String("AsciiLiveDataImport, notify affected columns and plots"));
 
@@ -1262,7 +1254,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 			plot->dataChanged(-1, -1); // TODO: check if all ranges must be updated!
 		}
 	} else
-		m_prepared = true;
+		m_firstRead = false;
 
 	DEBUG(Q_FUNC_INFO << ", DONE");
 	return bytesread;
@@ -2277,11 +2269,11 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, AbstractDataSourc
 	if (readingType != MQTTClient::ReadingType::TillEnd)
 		qDebug() << "Removed empty lines: " << newData.removeAll(QString());
 
-	const int spreadsheetRowCountBeforeResize = spreadsheet->rowCount();
+	const int rowCountBeforeResize = spreadsheet->rowCount();
 
 	if (m_prepared) {
 		if (keepNValues == 0)
-			m_actualRows = spreadsheetRowCountBeforeResize;
+			m_actualRows = rowCountBeforeResize;
 		else {
 			// if the keepNValues changed since the last read we have to manage the columns accordingly
 			if (m_actualRows != keepNValues) {
@@ -2493,7 +2485,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, AbstractDataSourc
 					linesToRead = std::min(keepNValues, newLinesTillEnd);
 			}
 		} else
-			linesToRead = m_actualRows - spreadsheetRowCountBeforeResize;
+			linesToRead = m_actualRows - rowCountBeforeResize;
 
 		if (linesToRead == 0)
 			return;
@@ -2517,7 +2509,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, AbstractDataSourc
 			currentRow = 0;
 		else {
 			// indexes the position in the vector(column)
-			currentRow = spreadsheetRowCountBeforeResize;
+			currentRow = rowCountBeforeResize;
 		}
 
 		// if we have fixed size, we do this only once in preparation, here we can use
