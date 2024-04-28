@@ -173,6 +173,8 @@ private:
 	QIODevice* m_device{nullptr};
 	QAction* m_plotDataAction{nullptr};
 
+	void finalizeRead();
+
 public Q_SLOTS:
 	void read();
 	void readOnUpdate();

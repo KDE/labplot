@@ -18,8 +18,6 @@
 #include "backend/lib/macros.h"
 #include "backend/lib/trace.h"
 #include "backend/matrix/Matrix.h"
-#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
-#include "backend/worksheet/plots/cartesian/XYCurve.h"
 
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
 #include "3rdparty/stringtokenizer/qstringtokenizer.h"
@@ -1232,30 +1230,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 		}
 	}
 
-	if (!m_firstRead) {
-		// notify all affected columns and plots about the changes
-		PERFTRACE(QLatin1String("AsciiLiveDataImport, notify affected columns and plots"));
-
-		// determine the dependent plots
-		QVector<CartesianPlot*> plots;
-		for (int n = 0; n < m_actualCols; ++n)
-			spreadsheet->column(n)->addUsedInPlots(plots);
-
-		// suppress retransform in the dependent plots
-		for (auto* plot : plots)
-			plot->setSuppressRetransform(true);
-
-		for (int n = 0; n < m_actualCols; ++n)
-			spreadsheet->column(n)->setChanged();
-
-		// retransform the dependent plots
-		for (auto* plot : plots) {
-			plot->setSuppressRetransform(false);
-			plot->dataChanged(-1, -1); // TODO: check if all ranges must be updated!
-		}
-	} else
-		m_firstRead = false;
-
+	m_firstRead = false;
 	DEBUG(Q_FUNC_INFO << ", DONE");
 	return bytesread;
 }
@@ -2660,40 +2635,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, AbstractDataSourc
 		}
 	}
 
-	if (m_prepared) {
-		// notify all affected columns and plots about the changes
-		PERFTRACE(QStringLiteral("AsciiLiveDataImport, notify affected columns and plots"));
-
-		const Project* project = spreadsheet->project();
-		QVector<const XYCurve*> curves = project->children<const XYCurve>(AbstractAspect::ChildIndexFlag::Recursive);
-		QVector<CartesianPlot*> plots;
-
-		for (int n = 0; n < m_actualCols; ++n) {
-			Column* column = spreadsheet->column(n);
-
-			// determine the plots where the column is consumed
-			for (const auto* curve : curves) {
-				if (curve->xColumn() == column || curve->yColumn() == column) {
-					auto* plot = static_cast<CartesianPlot*>(curve->parentAspect());
-					if (plots.indexOf(plot) == -1) {
-						plots << plot;
-						plot->setSuppressRetransform(true);
-					}
-				}
-			}
-
-			column->setChanged();
-		}
-
-		// loop over all affected plots and retransform them
-		for (auto* const plot : plots) {
-			// TODO setting this back to true triggers again a lot of retransforms in the plot (one for each curve).
-			//  				plot->setSuppressDataChangedSignal(false);
-			plot->dataChanged(-1, -1); // TODO: check if all ranges must be updated!
-		}
-	} else
-		m_prepared = true;
-
+	m_prepared = true;
 	DEBUG(Q_FUNC_INFO << ", DONE");
 }
 

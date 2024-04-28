@@ -41,6 +41,7 @@ public:
 
 private:
 	void initActions();
+	void finalizeRead();
 
 	QString m_topicName;
 	MQTTClient* m_MQTTClient;

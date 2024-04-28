@@ -3,7 +3,7 @@
 	Project		: LabPlot
 	Description	: Represents live data source
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2009-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2009-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2017 Fabian Kristof <fkristofszabolcs@gmail.com>
 	SPDX-FileCopyrightText: 2018 Stefan Gerlach <stefan.gerlach@uni.kn>
 
@@ -17,7 +17,9 @@
 #include "backend/datasources/filters/FITSFilter.h"
 #include "backend/datasources/filters/ROOTFilter.h"
 #include "backend/datasources/filters/SpiceFilter.h"
+#include "backend/lib/trace.h"
 #include "backend/lib/XmlStreamReader.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
 #include "kdefrontend/spreadsheet/PlotDataDialog.h"
 
@@ -619,7 +621,36 @@ void LiveDataSource::read() {
 		break;
 	}
 
+	finalizeRead();
+
 	m_reading = false;
+}
+
+/*!
+ * notify all affected columns and plots about the changes.
+ * this is simililar to \sa Spreadsheet::finalizeImport().
+ */
+void LiveDataSource::finalizeRead() {
+	PERFTRACE(QLatin1String("AsciiLiveDataImport, notify affected columns and plots"));
+
+	// determine the dependent plots
+	QVector<CartesianPlot*> plots;
+	const auto& columns = children<Column>();
+	for (auto* column : columns)
+		column->addUsedInPlots(plots);
+
+	// suppress retransform in the dependent plots
+	for (auto* plot : plots)
+		plot->setSuppressRetransform(true);
+
+	for (auto* column : columns)
+		column->setChanged();
+
+	// retransform the dependent plots
+	for (auto* plot : plots) {
+		plot->setSuppressRetransform(false);
+		plot->dataChanged(-1, -1); // TODO: check if all ranges must be updated!
+	}
 }
 
 /*!
