@@ -173,7 +173,7 @@ Project::Project()
 	QString user = qEnvironmentVariable("USER"); // !Windows
 	if (user.isEmpty())
 		user = qEnvironmentVariable("USERNAME"); // Windows
-	d->author = user;
+	d->author = std::move(user);
 
 	// we don't have direct access to the members name and comment
 	//->temporary disable the undo stack and call the setters
@@ -384,19 +384,25 @@ void Project::aspectAddedSlot(const AbstractAspect* aspect) {
 	updateDependencies<Spreadsheet>({aspect});
 
 	if (aspect->inherits(AspectType::Spreadsheet)) {
+		const auto* spreadsheet = static_cast<const Spreadsheet*>(aspect);
+
 		// if a new spreadsheet was addded, check whether the spreadsheet name match the missing
 		// name in a linked spreadsheet, etc. and update the dependencies
-
-		connect(static_cast<const Spreadsheet*>(aspect), &Spreadsheet::aboutToResize, [this]() {
+		connect(spreadsheet, &Spreadsheet::aboutToResize, [this]() {
 			const auto& wes = children<WorksheetElement>(AbstractAspect::ChildIndexFlag::Recursive);
 			for (auto* we : wes)
 				we->setSuppressRetransform(true);
 		});
-		connect(static_cast<const Spreadsheet*>(aspect), &Spreadsheet::resizeFinished, [this]() {
+		connect(spreadsheet, &Spreadsheet::resizeFinished, [this]() {
 			const auto& wes = children<WorksheetElement>(AbstractAspect::ChildIndexFlag::Recursive);
 			for (auto* we : wes)
 				we->setSuppressRetransform(false);
 		});
+
+		// notify all worksheet elements about all new columns, so the plots, etc. can be updated again
+		const auto& columns = spreadsheet->children<Column>();
+		for (const auto* column : columns)
+			updateDependencies<WorksheetElement>({column});
 	}
 }
 

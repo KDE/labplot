@@ -211,7 +211,7 @@ void ColumnDock::updateTypeWidgets(AbstractColumn::ColumnMode mode) {
 }
 
 void ColumnDock::showValueLabels() {
-	for (int i = 0; i < ui.twLabels->rowCount(); ++i)
+	while (ui.twLabels->rowCount() > 0)
 		ui.twLabels->removeRow(0);
 
 	if (m_column->valueLabelsInitialized()) {
@@ -499,7 +499,7 @@ void ColumnDock::addLabel() {
 	// reload all, because due to the migration the view
 	// might be changed
 	showValueLabels();
-	m_column->project()->setChanged(true);
+	m_column->setProjectChanged(true);
 }
 
 void ColumnDock::removeLabel() {
@@ -513,7 +513,7 @@ void ColumnDock::removeLabel() {
 		col->removeValueLabel(value);
 
 	ui.twLabels->removeRow(ui.twLabels->currentRow());
-	m_column->project()->setChanged(true);
+	m_column->setProjectChanged(true);
 }
 
 void ColumnDock::batchEditLabels() {
@@ -523,7 +523,7 @@ void ColumnDock::batchEditLabels() {
 		showValueLabels(); // new value labels were saved into the columns in the dialog, show them here
 
 	delete dlg;
-	m_column->project()->setChanged(true);
+	m_column->setProjectChanged(true);
 }
 
 //*************************************************************

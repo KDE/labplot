@@ -55,7 +55,7 @@ Worksheet::Worksheet(const QString& name, bool loading)
 	: AbstractPart(name, AspectType::Worksheet)
 	, d_ptr(new WorksheetPrivate(this)) {
 	Q_D(Worksheet);
-	d->background = new Background(QString());
+	d->background = new Background(QStringLiteral("background"));
 	addChild(d->background);
 	d->background->setHidden(true);
 	connect(d->background, &Background::updateRequested, [=] {
@@ -93,10 +93,10 @@ void Worksheet::init() {
 
 	// layout
 	d->layout = (Layout)group.readEntry(QStringLiteral("Layout"), static_cast<int>(Layout::VerticalLayout));
-	d->layoutTopMargin = group.readEntry(QStringLiteral("LayoutTopMargin"), convertToSceneUnits(0.5, Unit::Centimeter));
-	d->layoutBottomMargin = group.readEntry(QStringLiteral("LayoutBottomMargin"), convertToSceneUnits(0.5, Unit::Centimeter));
-	d->layoutLeftMargin = group.readEntry(QStringLiteral("LayoutLeftMargin"), convertToSceneUnits(0.5, Unit::Centimeter));
-	d->layoutRightMargin = group.readEntry(QStringLiteral("LayoutRightMargin"), convertToSceneUnits(0.5, Unit::Centimeter));
+	d->layoutTopMargin = group.readEntry(QStringLiteral("LayoutTopMargin"), convertToSceneUnits(0., Unit::Centimeter));
+	d->layoutBottomMargin = group.readEntry(QStringLiteral("LayoutBottomMargin"), convertToSceneUnits(0., Unit::Centimeter));
+	d->layoutLeftMargin = group.readEntry(QStringLiteral("LayoutLeftMargin"), convertToSceneUnits(0., Unit::Centimeter));
+	d->layoutRightMargin = group.readEntry(QStringLiteral("LayoutRightMargin"), convertToSceneUnits(0., Unit::Centimeter));
 	d->layoutVerticalSpacing = group.readEntry(QStringLiteral("LayoutVerticalSpacing"), convertToSceneUnits(0.5, Unit::Centimeter));
 	d->layoutHorizontalSpacing = group.readEntry(QStringLiteral("LayoutHorizontalSpacing"), convertToSceneUnits(0.5, Unit::Centimeter));
 	d->layoutRowCount = group.readEntry(QStringLiteral("LayoutRowCount"), 2);
@@ -567,7 +567,7 @@ void Worksheet::setCartesianPlotActionMode(Worksheet::CartesianPlotActionMode mo
 		return;
 
 	d->cartesianPlotActionMode = mode;
-	project()->setChanged(true);
+	setProjectChanged(true);
 }
 
 void Worksheet::setCartesianPlotCursorMode(Worksheet::CartesianPlotActionMode mode) {
@@ -590,7 +590,7 @@ void Worksheet::setCartesianPlotCursorMode(Worksheet::CartesianPlotActionMode mo
 		d->suppressCursorPosChanged = false;
 	}
 	updateCompleteCursorTreeModel();
-	project()->setChanged(true);
+	setProjectChanged(true);
 }
 
 void Worksheet::setInteractive(bool value) {
@@ -609,7 +609,7 @@ void Worksheet::setPlotsInteractive(bool interactive) {
 	for (auto* plot : children<CartesianPlot>())
 		plot->setInteractive(interactive);
 
-	project()->setChanged(true);
+	setProjectChanged(true);
 }
 
 void Worksheet::registerShortcuts() {

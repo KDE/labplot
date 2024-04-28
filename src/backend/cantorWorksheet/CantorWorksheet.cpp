@@ -172,7 +172,7 @@ void CantorWorksheet::rowsInserted(const QModelIndex& /*parent*/, int first, int
 	for (int i = first; i <= last; ++i)
 		parseData(i);
 
-	project()->setChanged(true);
+	setProjectChanged(true);
 }
 
 void CantorWorksheet::parseData(int row) {
@@ -252,7 +252,7 @@ void CantorWorksheet::parseData(int row) {
 }
 
 void CantorWorksheet::modified() {
-	project()->setChanged(true);
+	setProjectChanged(true);
 }
 
 void CantorWorksheet::modelReset() {

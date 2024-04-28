@@ -4,6 +4,7 @@
 	Description          : Tests for project imports
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2018-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2024 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -38,9 +39,13 @@ private Q_SLOTS:
 	void testOriginMultiLayersAsCoordinateSystems();
 	void testOriginMultiLayersAsCoordinateSystemsWithLegend();
 
+	// test import strings
+	void testImportOriginStrings();
+
 	// test tags
 	void testParseOriginTags_data();
 	void testParseOriginTags();
+
 #endif
 };
 #endif

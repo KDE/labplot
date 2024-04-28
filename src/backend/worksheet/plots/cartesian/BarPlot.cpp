@@ -33,6 +33,8 @@
 #include <KConfigGroup>
 #include <KLocalizedString>
 
+#include <kdefrontend/GuiTools.h>
+
 /**
  * \class BarPlot
  * \brief Box Plot
@@ -364,7 +366,7 @@ BarPlotPrivate::BarPlotPrivate(BarPlot* owner)
 }
 
 Background* BarPlotPrivate::addBackground(const KConfigGroup& group) {
-	auto* background = new Background(QString());
+	auto* background = new Background(QStringLiteral("background"));
 	background->setPrefix(QLatin1String("Filling"));
 	background->setEnabledAvailable(true);
 	background->setHidden(true);
@@ -384,7 +386,7 @@ Background* BarPlotPrivate::addBackground(const KConfigGroup& group) {
 }
 
 Line* BarPlotPrivate::addBorderLine(const KConfigGroup& group) {
-	auto* line = new Line(QString());
+	auto* line = new Line(QStringLiteral("line"));
 	line->setPrefix(QLatin1String("Border"));
 	line->setHidden(true);
 	q->addChild(line);
@@ -407,7 +409,7 @@ Line* BarPlotPrivate::addBorderLine(const KConfigGroup& group) {
 }
 
 void BarPlotPrivate::addValue(const KConfigGroup& group) {
-	value = new Value(QString());
+	value = new Value(QStringLiteral("value"));
 	q->addChild(value);
 	value->setHidden(true);
 	value->setcenterPositionAvailable(true);
@@ -424,7 +426,7 @@ void BarPlotPrivate::addValue(const KConfigGroup& group) {
 }
 
 ErrorBar* BarPlotPrivate::addErrorBar(const KConfigGroup& group) {
-	auto* errorBar = new ErrorBar(QString(), ErrorBar::Dimension::Y);
+	auto* errorBar = new ErrorBar(QStringLiteral("errorBar"), ErrorBar::Dimension::Y);
 	errorBar->setHidden(true);
 	q->addChild(errorBar);
 	if (!q->isLoading())
@@ -435,7 +437,9 @@ ErrorBar* BarPlotPrivate::addErrorBar(const KConfigGroup& group) {
 	});
 
 	q->connect(errorBar, &ErrorBar::updateRequested, [=] {
-		updateErrorBars(errorBars.indexOf(errorBar));
+		const int index = errorBars.indexOf(errorBar);
+		if (index != -1)
+			updateErrorBars(index);
 	});
 
 	errorBars << errorBar;
@@ -1253,22 +1257,20 @@ void BarPlotPrivate::recalcShapeAndBoundingRect() {
 
 void BarPlotPrivate::updatePixmap() {
 	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
-	QPixmap pixmap(m_boundingRectangle.width(), m_boundingRectangle.height());
+	m_pixmap = QPixmap(m_boundingRectangle.width(), m_boundingRectangle.height());
 	if (m_boundingRectangle.width() == 0. || m_boundingRectangle.height() == 0.) {
-		m_pixmap = pixmap;
 		m_hoverEffectImageIsDirty = true;
 		m_selectionEffectImageIsDirty = true;
 		return;
 	}
-	pixmap.fill(Qt::transparent);
-	QPainter painter(&pixmap);
+	m_pixmap.fill(Qt::transparent);
+	QPainter painter(&m_pixmap);
 	painter.setRenderHint(QPainter::Antialiasing, true);
 	painter.translate(-m_boundingRectangle.topLeft());
 
 	draw(&painter);
 	painter.end();
 
-	m_pixmap = pixmap;
 	m_hoverEffectImageIsDirty = true;
 	m_selectionEffectImageIsDirty = true;
 	Q_EMIT q->changed();
@@ -1544,6 +1546,14 @@ void BarPlot::loadThemeConfig(const KConfig& config) {
 		// bar border lines
 		auto* line = d->borderLines.at(i);
 		line->loadThemeConfig(group, color);
+
+		// line
+		if (plot->theme() == QLatin1String("Sparkline")) {
+			if (!GuiTools::isDarkMode())
+				line->setColor(Qt::black);
+			else
+				line->setColor(Qt::white);
+		}
 
 		// error bars
 		auto* errorBar = d->errorBars.at(i);

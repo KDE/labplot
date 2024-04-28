@@ -215,7 +215,8 @@ void SpreadsheetView::init() {
 			SpreadsheetSparkLinesHeaderModel::sparkLine(m_spreadsheet->column(colIndex));
 			m_horizontalHeader->refresh();
 			connect(m_spreadsheet->column(colIndex), &AbstractColumn::dataChanged, this, [=] {
-				SpreadsheetSparkLinesHeaderModel::sparkLine(m_spreadsheet->column(colIndex));
+				if (m_spreadsheet->isSparklineShown)
+					SpreadsheetSparkLinesHeaderModel::sparkLine(m_spreadsheet->column(colIndex));
 				m_horizontalHeader->refresh();
 			});
 		}
@@ -229,7 +230,8 @@ void SpreadsheetView::init() {
 		// Establish new connections
 		for (int colIndex = 0; colIndex < m_spreadsheet->columnCount(); ++colIndex) {
 			connect(m_spreadsheet->column(colIndex), &AbstractColumn::dataChanged, this, [=] {
-				SpreadsheetSparkLinesHeaderModel::sparkLine(m_spreadsheet->column(colIndex));
+				if (m_spreadsheet->isSparklineShown)
+					SpreadsheetSparkLinesHeaderModel::sparkLine(m_spreadsheet->column(colIndex));
 				m_horizontalHeader->refresh();
 			});
 		}
@@ -332,8 +334,6 @@ void SpreadsheetView::initActions() {
 
 	action_statistics_spreadsheet = new QAction(QIcon::fromTheme(QStringLiteral("view-statistics")), i18n("Column Statistics Spreadsheet"), this);
 	action_statistics_spreadsheet->setCheckable(true);
-	bool hasStatisticsSpreadsheet = (m_spreadsheet->children<StatisticsSpreadsheet>().size() == 1);
-	action_statistics_spreadsheet->setChecked(hasStatisticsSpreadsheet);
 
 	// column related actions
 	action_insert_column_left = new QAction(QIcon::fromTheme(QStringLiteral("edit-table-insert-column-left")), i18n("Insert Column Left"), this);
@@ -1509,6 +1509,9 @@ void SpreadsheetView::checkSpreadsheetMenu() {
 	}
 
 	action_formatting_remove->setVisible(hasFormat);
+
+	bool hasStatisticsSpreadsheet = (m_spreadsheet->children<StatisticsSpreadsheet>().size() == 1);
+	action_statistics_spreadsheet->setChecked(hasStatisticsSpreadsheet);
 
 	if (areCommentsShown())
 		action_toggle_comments->setText(i18n("Hide Comments"));
@@ -3375,8 +3378,6 @@ void SpreadsheetView::clearSelectedCells() {
 			empty = false;
 			break;
 		}
-		if (!empty)
-			break;
 	}
 
 	if (empty)

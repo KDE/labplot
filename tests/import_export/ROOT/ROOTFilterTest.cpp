@@ -15,6 +15,13 @@
 #include <gsl/gsl_randist.h>
 #include <gsl/gsl_rng.h>
 
+void ROOTFilterTest::initTestCase() {
+	// needed in order to have the signals triggered by SignallingUndoCommand, see LabPlot.cpp
+	// TODO: redesign/remove this
+	qRegisterMetaType<const AbstractAspect*>("const AbstractAspect*");
+	qRegisterMetaType<const AbstractColumn*>("const AbstractColumn*");
+}
+
 void ROOTFilterTest::importFile1() {
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/advanced_zlib.root"));
 

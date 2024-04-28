@@ -34,6 +34,7 @@ private Q_SLOTS:
 	void testParserPython08();
 	void testParserPython09();
 	void testParserPython10();
+	void testParserDateTime64ns();
 
 	// Octave
 	void testParserOctaveColumnVector();

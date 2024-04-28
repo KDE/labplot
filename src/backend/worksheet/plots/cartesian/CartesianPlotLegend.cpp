@@ -97,7 +97,7 @@ void CartesianPlotLegend::init() {
 	connect(d->title, &TextLabel::changed, this, &CartesianPlotLegend::retransform);
 
 	// Background
-	d->background = new Background(QString());
+	d->background = new Background(QStringLiteral("background"));
 	addChild(d->background);
 	d->background->setHidden(true);
 	d->background->init(group);
@@ -106,7 +106,7 @@ void CartesianPlotLegend::init() {
 	});
 
 	// Border
-	d->borderLine = new Line(QString());
+	d->borderLine = new Line(QStringLiteral("border"));
 	d->borderLine->setPrefix(QStringLiteral("Border"));
 	d->borderLine->setCreateXmlElement(false);
 	d->borderLine->setHidden(true);

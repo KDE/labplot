@@ -229,8 +229,8 @@ void ReferenceLinePrivate::retransform() {
 		return;
 
 	auto cs = q->plot()->coordinateSystem(q->coordinateSystemIndex());
-	const auto xRange{q->m_plot->range(Dimension::X, cs->index(Dimension::X))};
-	const auto yRange{q->m_plot->range(Dimension::Y, cs->index(Dimension::Y))};
+	const auto& xRange = q->m_plot->range(Dimension::X, cs->index(Dimension::X));
+	const auto& yRange = q->m_plot->range(Dimension::Y, cs->index(Dimension::Y));
 
 	// calculate the position in the scene coordinates
 	if (orientation == ReferenceLine::Orientation::Vertical)

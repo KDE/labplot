@@ -59,7 +59,7 @@ void QQPlot::init() {
 	KConfig config;
 	KConfigGroup group = config.group(QStringLiteral("QQPlot"));
 	// reference curve - line conneting two central quantiles Q1 and Q3
-	d->referenceCurve = new XYCurve(QString());
+	d->referenceCurve = new XYCurve(QStringLiteral("reference"));
 	d->referenceCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
 	d->referenceCurve->setHidden(true);
 	d->referenceCurve->graphicsItem()->setParentItem(d);
@@ -82,7 +82,7 @@ void QQPlot::init() {
 	d->referenceCurve->setYColumn(d->yReferenceColumn);
 
 	// percentiles curve
-	d->percentilesCurve = new XYCurve(QString());
+	d->percentilesCurve = new XYCurve(QStringLiteral("percentiles"));
 	d->percentilesCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
 	d->percentilesCurve->setHidden(true);
 	d->percentilesCurve->graphicsItem()->setParentItem(d);

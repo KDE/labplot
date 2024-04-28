@@ -42,17 +42,12 @@ ProjectDock::ProjectDock(QWidget* parent)
 }
 
 void ProjectDock::setProject(Project* project) {
+	CONDITIONAL_LOCK_RETURN;
 	m_project = project;
 	setAspects(QList<Project*>({project}));
 
-	CONDITIONAL_LOCK_RETURN;
 	ui.leFileName->setText(project->fileName());
-	ui.leName->setStyleSheet(QString());
-	ui.leName->setToolTip(QString());
-	ui.leName->setText(m_project->name());
 	ui.leAuthor->setText(m_project->author());
-
-	ui.teComment->setText(m_project->comment());
 
 	// resize the height of the comment field to fit the content (word wrap is ignored)
 	const QFont& font = ui.teComment->document()->defaultFont();
@@ -78,7 +73,7 @@ void ProjectDock::setProject(Project* project) {
 }
 
 //************************************************************
-//****************** SLOTS ********************************
+//********************* SLOTS ********************************
 //************************************************************
 void ProjectDock::authorChanged() {
 	CONDITIONAL_LOCK_RETURN;

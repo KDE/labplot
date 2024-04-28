@@ -636,7 +636,7 @@ BoxPlotPrivate::BoxPlotPrivate(BoxPlot* owner)
 }
 
 Background* BoxPlotPrivate::addBackground(const KConfigGroup& group) {
-	auto* background = new Background(QString());
+	auto* background = new Background(QStringLiteral("background"));
 	background->setPrefix(QLatin1String("Filling"));
 	background->setEnabledAvailable(true);
 	background->setHidden(true);
@@ -656,7 +656,7 @@ Background* BoxPlotPrivate::addBackground(const KConfigGroup& group) {
 }
 
 Line* BoxPlotPrivate::addBorderLine(const KConfigGroup& group) {
-	auto* line = new Line(QString());
+	auto* line = new Line(QStringLiteral("line"));
 	line->setPrefix(QLatin1String("Border"));
 	line->setHidden(true);
 	q->addChild(line);
@@ -679,7 +679,7 @@ Line* BoxPlotPrivate::addBorderLine(const KConfigGroup& group) {
 }
 
 Line* BoxPlotPrivate::addMedianLine(const KConfigGroup& group) {
-	auto* line = new Line(QString());
+	auto* line = new Line(QStringLiteral("medianLine"));
 	line->setPrefix(QLatin1String("MedianLine"));
 	line->setHidden(true);
 	q->addChild(line);
@@ -1384,7 +1384,7 @@ void BoxPlotPrivate::updateFillingRect(int index, const QVector<QLineF>& lines) 
 		++i;
 	}
 
-	m_fillPolygon[index] = polygon;
+	m_fillPolygon[index] = std::move(polygon);
 }
 
 /*!
@@ -1562,22 +1562,20 @@ void BoxPlotPrivate::recalcShapeAndBoundingRect() {
 
 void BoxPlotPrivate::updatePixmap() {
 	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
-	QPixmap pixmap(m_boundingRectangle.width(), m_boundingRectangle.height());
+	m_pixmap = QPixmap(m_boundingRectangle.width(), m_boundingRectangle.height());
 	if (m_boundingRectangle.width() == 0. || m_boundingRectangle.height() == 0.) {
-		m_pixmap = pixmap;
 		m_hoverEffectImageIsDirty = true;
 		m_selectionEffectImageIsDirty = true;
 		return;
 	}
-	pixmap.fill(Qt::transparent);
-	QPainter painter(&pixmap);
+	m_pixmap.fill(Qt::transparent);
+	QPainter painter(&m_pixmap);
 	painter.setRenderHint(QPainter::Antialiasing, true);
 	painter.translate(-m_boundingRectangle.topLeft());
 
 	draw(&painter);
 	painter.end();
 
-	m_pixmap = pixmap;
 	m_hoverEffectImageIsDirty = true;
 	m_selectionEffectImageIsDirty = true;
 	Q_EMIT q->changed();

@@ -3118,11 +3118,9 @@ void SpreadsheetTest::testStatisticsSpreadsheetChangeMetrics() {
 	auto* statisticsSpreadsheet = sheet->children<StatisticsSpreadsheet>().constFirst();
 	auto metrics = statisticsSpreadsheet->metrics();
 	int colCount = 1; // column "Column Name" is always available
-	auto it = statisticsSpreadsheet->m_metricNames.constBegin();
-	while (it != statisticsSpreadsheet->m_metricNames.constEnd()) {
-		if (metrics.testFlag(it.key()))
+	for (const auto& metric : statisticsSpreadsheet->m_metricValues) {
+		if (metrics.testFlag(metric))
 			++colCount;
-		++it;
 	}
 	QCOMPARE(statisticsSpreadsheet->children<Column>().size(), colCount);
 

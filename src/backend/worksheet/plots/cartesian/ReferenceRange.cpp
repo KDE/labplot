@@ -268,13 +268,13 @@ QPointF ReferenceRangePrivate::recalculateRect() {
 	QPointF p1, p2;
 	switch (orientation) {
 	case ReferenceRange::Orientation::Vertical: {
-		const auto yRange{q->m_plot->range(Dimension::Y, cs->index(Dimension::Y))};
+		const auto& yRange = q->m_plot->range(Dimension::Y, cs->index(Dimension::Y));
 		p1 = QPointF(positionLogicalStart.x(), yRange.start());
 		p2 = QPointF(positionLogicalEnd.x(), yRange.end());
 		break;
 	}
 	case ReferenceRange::Orientation::Horizontal: {
-		const auto xRange{q->m_plot->range(Dimension::X, cs->index(Dimension::X))};
+		const auto& xRange = q->m_plot->range(Dimension::X, cs->index(Dimension::X));
 		p1 = QPointF(xRange.start(), positionLogicalStart.y());
 		p2 = QPointF(xRange.end(), positionLogicalEnd.y());
 		break;

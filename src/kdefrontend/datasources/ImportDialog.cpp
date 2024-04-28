@@ -188,10 +188,13 @@ void ImportDialog::showErrorMessage(const QString& message) {
 }
 
 void ImportDialog::accept() {
-	bool rc = importTo(m_mainWin->statusBar());
-	if (rc) {
-		// the import was successful, set the project to Changed and close the dialog
-		m_mainWin->project()->setChanged(true);
+	if (!m_liveDataSource) {
+		bool rc = importTo(m_mainWin->statusBar());
+		if (rc) {
+			// the import was successful, set the project to Changed and close the dialog
+			m_mainWin->project()->setChanged(true);
+			QDialog::accept();
+		}
+	} else
 		QDialog::accept();
-	}
 }

@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Cartesian plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2011-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2016-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-FileCopyrightText: 2017-2018 Garvit Khatri <garvitdelhi@gmail.com>
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -167,8 +167,9 @@ void CartesianPlot::init(bool loading) {
 	m_title->setHidden(true);
 	m_title->setParentGraphicsItem(m_plotArea->graphicsItem());
 
-	// cursor line
 	Q_D(CartesianPlot);
+
+	// cursor line
 	d->cursorLine = new Line(QString());
 	d->cursorLine->setPrefix(QLatin1String("Cursor"));
 	d->cursorLine->setHidden(true);
@@ -189,11 +190,13 @@ void CartesianPlot::init(bool loading) {
 
 	m_coordinateSystems << new CartesianCoordinateSystem(this);
 
+	// TODO: load from KConfigGroup
+
+	// offset between the plot area and the area defining the coordinate system, in scene units.
 	d->horizontalPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter);
 	d->verticalPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter);
 	d->rightPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter);
 	d->bottomPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter);
-	d->symmetricPadding = true;
 
 	d->cursorLine->setStyle(Qt::SolidLine);
 	d->cursorLine->setColor(Qt::red); // TODO: use theme specific initial settings
@@ -268,6 +271,11 @@ void CartesianPlot::setType(Type type) {
 		axis->setLabelsPosition(Axis::LabelsPosition::NoLabels);
 		axis->setSuppressRetransform(false);
 
+		d->horizontalPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter);
+		d->verticalPadding = Worksheet::convertToSceneUnits(0.5, Worksheet::Unit::Centimeter);
+		d->rightPadding = Worksheet::convertToSceneUnits(0.5, Worksheet::Unit::Centimeter);
+		d->bottomPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter);
+
 		break;
 	}
 	case Type::TwoAxes: {
@@ -294,6 +302,11 @@ void CartesianPlot::setType(Type type) {
 		axis->setMinorTicksNumber(1);
 		axis->setArrowType(Axis::ArrowType::FilledSmall);
 		axis->setSuppressRetransform(false);
+
+		d->horizontalPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter);
+		d->verticalPadding = Worksheet::convertToSceneUnits(0.5, Worksheet::Unit::Centimeter);
+		d->rightPadding = Worksheet::convertToSceneUnits(0.5, Worksheet::Unit::Centimeter);
+		d->bottomPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter);
 
 		break;
 	}
@@ -331,6 +344,11 @@ void CartesianPlot::setType(Type type) {
 		axis->setMinorTicksNumber(1);
 		axis->setArrowType(Axis::ArrowType::FilledSmall);
 		axis->setSuppressRetransform(false);
+
+		d->horizontalPadding = Worksheet::convertToSceneUnits(0.5, Worksheet::Unit::Centimeter);
+		d->verticalPadding = Worksheet::convertToSceneUnits(0.5, Worksheet::Unit::Centimeter);
+		d->rightPadding = Worksheet::convertToSceneUnits(0.5, Worksheet::Unit::Centimeter);
+		d->bottomPadding = Worksheet::convertToSceneUnits(0.5, Worksheet::Unit::Centimeter);
 
 		break;
 	}
@@ -372,6 +390,11 @@ void CartesianPlot::setType(Type type) {
 		axis->setMinorTicksNumber(1);
 		axis->setArrowType(Axis::ArrowType::FilledSmall);
 		axis->setSuppressRetransform(false);
+
+		d->horizontalPadding = Worksheet::convertToSceneUnits(0.5, Worksheet::Unit::Centimeter);
+		d->verticalPadding = Worksheet::convertToSceneUnits(0.5, Worksheet::Unit::Centimeter);
+		d->rightPadding = Worksheet::convertToSceneUnits(0.5, Worksheet::Unit::Centimeter);
+		d->bottomPadding = Worksheet::convertToSceneUnits(0.5, Worksheet::Unit::Centimeter);
 
 		break;
 	}
@@ -689,7 +712,7 @@ void CartesianPlot::initMenus() {
 			return;
 		auto* themeWidget = new ThemesWidget(nullptr);
 		themeWidget->setFixedMode();
-		connect(themeWidget, &ThemesWidget::themeSelected, this, &CartesianPlot::loadTheme);
+		connect(themeWidget, &ThemesWidget::themeSelected, this, &CartesianPlot::setTheme);
 		connect(themeWidget, &ThemesWidget::themeSelected, themeMenu, &QMenu::close);
 
 		auto* widgetAction = new QWidgetAction(this);
@@ -1196,8 +1219,7 @@ void CartesianPlot::setRangeFormat(const Dimension dim, const int index, const R
 	}
 	if (format != rangeFormat(dim, index)) {
 		exec(new CartesianPlotSetRangeFormatIndexCmd(d, dim, format, index));
-		if (project())
-			project()->setChanged(true);
+		setProjectChanged(true);
 	}
 }
 
@@ -1281,8 +1303,7 @@ void CartesianPlot::enableAutoScale(const Dimension dim, int index, const bool e
 		DEBUG(Q_FUNC_INFO << ", x range " << index << " enable auto scale: " << enable)
 		// TODO: maybe using the first and then adding the first one as parent to the next undo command
 		exec(new CartesianPlotEnableAutoScaleIndexCmd(d, dim, enable, index, fullRange));
-		if (project())
-			project()->setChanged(true);
+		setProjectChanged(true);
 	}
 }
 
@@ -1314,7 +1335,7 @@ public:
 	}
 	void redo() override {
 		m_target->setRangeDirty(m_dimension, m_index, true);
-		auto tmp = m_target->rangeConst(m_dimension, m_index);
+		const auto& tmp = m_target->rangeConst(m_dimension, m_index);
 		m_target->setRange(m_dimension, m_index, m_otherValue);
 		m_otherValue = tmp;
 		finalize();
@@ -1406,26 +1427,22 @@ void CartesianPlot::setRangeDirty(const Dimension dim, int index, bool dirty) {
 void CartesianPlot::addXRange() {
 	Q_D(CartesianPlot);
 	d->xRanges.append(CartesianPlot::Private::RichRange());
-	if (project())
-		project()->setChanged(true);
+	setProjectChanged(true);
 }
 void CartesianPlot::addYRange() {
 	Q_D(CartesianPlot);
 	d->yRanges.append(CartesianPlot::Private::RichRange());
-	if (project())
-		project()->setChanged(true);
+	setProjectChanged(true);
 }
 void CartesianPlot::addXRange(const Range<double>& range) {
 	Q_D(CartesianPlot);
 	d->xRanges.append(CartesianPlot::Private::RichRange(range));
-	if (project())
-		project()->setChanged(true);
+	setProjectChanged(true);
 }
 void CartesianPlot::addYRange(const Range<double>& range) {
 	Q_D(CartesianPlot);
 	d->yRanges.append(CartesianPlot::Private::RichRange(range));
-	if (project())
-		project()->setChanged(true);
+	setProjectChanged(true);
 }
 
 void CartesianPlot::removeRange(const Dimension dim, int index) {
@@ -1444,8 +1461,7 @@ void CartesianPlot::removeRange(const Dimension dim, int index) {
 		break;
 	}
 
-	if (project())
-		project()->setChanged(true);
+	setProjectChanged(true);
 }
 
 void CartesianPlot::setMin(const Dimension dim, int index, double value) {
@@ -1545,7 +1561,7 @@ void CartesianPlot::setRangeScale(const Dimension dim, const int index, const Ra
 		if (r == newRange) {
 			exec(new CartesianPlotSetScaleIndexCmd(d, dim, scale, index));
 			if (project())
-				project()->setChanged(true);
+				setProjectChanged(true);
 		} else
 			setRange(dim, index, r);
 	}
@@ -1583,7 +1599,7 @@ void CartesianPlot::addCoordinateSystem() {
 void CartesianPlot::addCoordinateSystem(CartesianCoordinateSystem* s) {
 	m_coordinateSystems.append(s);
 	if (project())
-		project()->setChanged(true);
+		setProjectChanged(true);
 }
 void CartesianPlot::removeCoordinateSystem(int index) {
 	if (index < 0 || index > coordinateSystemCount()) {
@@ -1594,7 +1610,7 @@ void CartesianPlot::removeCoordinateSystem(int index) {
 	// TODO: deleting cSystem?
 	m_coordinateSystems.remove(index);
 	if (project())
-		project()->setChanged(true);
+		setProjectChanged(true);
 }
 
 STD_SETTER_CMD_IMPL_S(CartesianPlot, SetDefaultCoordinateSystemIndex, int, defaultCoordinateSystemIndex)
@@ -3480,7 +3496,7 @@ Range<double> CartesianPlotPrivate::checkRange(const Range<double>& range) {
  * check for negative values in the range when non-linear scalings are used
  */
 void CartesianPlotPrivate::checkRange(Dimension dim, int index) {
-	const auto range = ranges(dim).at(index).range;
+	const auto& range = ranges(dim).at(index).range;
 	DEBUG(Q_FUNC_INFO << ", " << CartesianCoordinateSystem::dimensionToString(dim).toStdString() << " range " << index + 1 << " : " << range.toStdString()
 					  << ", scale = " << ENUM_TO_STRING(RangeT, Scale, range.scale()))
 

@@ -128,7 +128,7 @@ public:
 		for (int c = 0; c < list->size(); c++) {
 			if (list->at(c).touches(i) || list->at(c).intersects(i)) {
 				Interval<T> result = merge(list->takeAt(c), i);
-				mergeIntervalIntoList(list, result);
+				mergeIntervalIntoList(list, std::move(result));
 				return;
 			}
 		}

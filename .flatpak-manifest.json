@@ -198,7 +198,7 @@
                 },
 		{
                     "type": "patch",
-                    "path": "readstat-1.1.9.patch"
+                    "path": "admin/patches/readstat-1.1.9.patch"
                 }
             ]
         },
@@ -270,14 +270,17 @@
             "name": "dbc_parser_cpp",
             "buildsystem": "cmake-ninja",
             "config-opts": [
-                "-DENABLE_TESTS=OFF",
-                "-DBUILD_DOCUMENTATION=OFF"
+                "-DDBC_ENABLE_TESTS=OFF"
             ],
             "sources": [
                 {
                     "type": "git",
                     "url": "https://github.com/LinuxDevon/dbc_parser_cpp.git",
-                    "tag": "0f3b22b3fe124976a86a85fcd1bfdd55c20ca428"
+                    "tag": "cc4e80c7b6e1f7a13cc47b45f226756f823888e2"
+                },
+		{
+                    "type": "patch",
+                    "path": "admin/patches/dbc_parser_cpp.patch"
                 }
             ]
         },

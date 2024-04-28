@@ -48,11 +48,11 @@ QString VectorBLFFilter::fileInfoString(const QString& fileName) {
 	if (!f.is_open())
 		return info;
 
-	auto statistics = f.fileStatistics;
+	const auto& statistics = f.fileStatistics;
 
 	// application info
 	QString appName;
-	switch (f.fileStatistics.applicationId) {
+	switch (statistics.applicationId) {
 	case Vector::BLF::Unknown:
 		appName = i18n("Unknown");
 		break;
@@ -102,13 +102,13 @@ QString VectorBLFFilter::fileInfoString(const QString& fileName) {
 
 	info += i18n("Application: %1", appName);
 	info += QStringLiteral("<br>");
-	info += i18n("Application version: %1.%2.%3", f.fileStatistics.applicationMajor, f.fileStatistics.applicationMinor, f.fileStatistics.applicationBuild);
+	info += i18n("Application version: %1.%2.%3", statistics.applicationMajor, statistics.applicationMinor, statistics.applicationBuild);
 	info += QStringLiteral("<br>");
-	info += i18n("Number of Objects: %1", f.fileStatistics.objectCount);
+	info += i18n("Number of Objects: %1", statistics.objectCount);
 	info += QStringLiteral("<br>");
 
 	// measurement start time
-	auto start = f.fileStatistics.measurementStartTime;
+	auto start = statistics.measurementStartTime;
 	QDate startDate(start.year, start.month, start.day);
 	QTime startTime(start.hour, start.minute, start.second, start.milliseconds);
 	QDateTime startDateTime(startDate, startTime);
@@ -116,7 +116,7 @@ QString VectorBLFFilter::fileInfoString(const QString& fileName) {
 	info += QStringLiteral("<br>");
 
 	// measurement end time
-	auto end = f.fileStatistics.lastObjectTime;
+	auto end = statistics.lastObjectTime;
 	QDate endDate(end.year, end.month, end.day);
 	QTime endTime(end.hour, end.minute, end.second, end.milliseconds);
 	QDateTime endDateTime(endDate, endTime);
@@ -124,9 +124,9 @@ QString VectorBLFFilter::fileInfoString(const QString& fileName) {
 	info += QStringLiteral("<br>");
 
 	// compression
-	info += i18n("Compression Level: %1", f.fileStatistics.compressionLevel);
+	info += i18n("Compression Level: %1", statistics.compressionLevel);
 	info += QStringLiteral("<br>");
-	info += i18n("Uncompressed File Size: %1 Bytes", f.fileStatistics.uncompressedFileSize);
+	info += i18n("Uncompressed File Size: %1 Bytes", statistics.uncompressedFileSize);
 	info += QStringLiteral("<br>");
 
 	f.close();
@@ -262,9 +262,9 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 		return 0;
 	}
 
-	const auto status = m_dbcParser.isValid();
-	if (status != DbcParser::ParseStatus::Success) {
-		addWarningError({DBCParserParseStatusToVectorBLFStatus(status), 0});
+	const auto validStatus = m_dbcParser.isValid();
+	if (validStatus != DbcParser::ParseStatus::Success) {
+		addWarningError({DBCParserParseStatusToVectorBLFStatus(validStatus), 0});
 		return 0;
 	}
 
@@ -278,30 +278,30 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 	file.open(fileName.toLocal8Bit().data());
 
 	// 1. Reading in messages
-	QVector<const Vector::BLF::ObjectHeaderBase*> v;
-	Vector::BLF::ObjectHeaderBase* ohb = nullptr;
+	QVector<const Vector::BLF::ObjectHeaderBase*> objectHeaders;
 	QVector<uint32_t> ids;
 	int message_counter = 0;
 	{
 		PERFTRACE(QLatin1String(Q_FUNC_INFO) + QLatin1String("Parsing BLF file"));
+		Vector::BLF::ObjectHeaderBase* objectHeader = nullptr;
 		while (file.good() && ((lines >= 0 && message_counter < lines) || lines < 0)) {
 			try {
-				ohb = file.read();
+				objectHeader = file.read();
 			} catch (std::runtime_error& e) { DEBUG("Exception: " << e.what() << std::endl); }
-			if (ohb == nullptr)
+			if (objectHeader == nullptr)
 				break;
 
-			if (ohb->objectType != Vector::BLF::ObjectType::CAN_MESSAGE2)
+			if (objectHeader->objectType != Vector::BLF::ObjectType::CAN_MESSAGE2)
 				continue;
 
 			int id;
-			if (ohb->objectType == Vector::BLF::ObjectType::CAN_MESSAGE2) {
-				const auto message = reinterpret_cast<Vector::BLF::CanMessage2*>(ohb);
+			if (objectHeader->objectType == Vector::BLF::ObjectType::CAN_MESSAGE2) {
+				const auto message = reinterpret_cast<Vector::BLF::CanMessage2*>(objectHeader);
 				id = message->id;
 			} else
 				return 0;
 
-			v.append(ohb);
+			objectHeaders.append(objectHeader);
 			if (!ids.contains(id))
 				ids.append(id);
 			message_counter++;
@@ -337,12 +337,12 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 	int message_index = 0;
 	bool timeInNS = true;
 	if (timeHandlingMode == CANFilter::TimeHandling::ConcatNAN) {
-		for (const auto ohb : v) {
+		for (const auto objectHeader : objectHeaders) {
 			uint32_t id;
 			std::vector<double> values;
 			DbcParser::ParseStatus status;
-			if (ohb->objectType == Vector::BLF::ObjectType::CAN_MESSAGE2) {
-				const auto message = reinterpret_cast<const Vector::BLF::CanMessage2*>(ohb);
+			if (objectHeader->objectType == Vector::BLF::ObjectType::CAN_MESSAGE2) {
+				const auto message = reinterpret_cast<const Vector::BLF::CanMessage2*>(objectHeader);
 				id = message->id;
 				status = m_dbcParser.parseMessage(message->id, message->data, values);
 			} else
@@ -356,7 +356,7 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 			}
 
 			uint64_t timestamp;
-			timeInNS = getTime(ohb, timestamp);
+			timeInNS = getTime(objectHeader, timestamp);
 			if (convertTimeToSeconds) {
 				double timestamp_seconds;
 				if (timeInNS)
@@ -382,12 +382,12 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 		}
 	} else {
 		bool firstMessageValid = false;
-		for (const auto ohb : v) {
+		for (const auto objectHeader : objectHeaders) {
 			uint32_t id;
 			std::vector<double> values;
 			DbcParser::ParseStatus status;
-			if (ohb->objectType == Vector::BLF::ObjectType::CAN_MESSAGE2) {
-				const auto message = reinterpret_cast<const Vector::BLF::CanMessage2*>(ohb);
+			if (objectHeader->objectType == Vector::BLF::ObjectType::CAN_MESSAGE2) {
+				const auto message = reinterpret_cast<const Vector::BLF::CanMessage2*>(objectHeader);
 				id = message->id;
 				status = m_dbcParser.parseMessage(message->id, message->data, values);
 			} else
@@ -400,7 +400,7 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 			}
 
 			uint64_t timestamp;
-			timeInNS = getTime(ohb, timestamp);
+			timeInNS = getTime(objectHeader, timestamp);
 			if (convertTimeToSeconds) {
 				double timestamp_seconds;
 				if (timeInNS)
@@ -447,7 +447,7 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 		m_signals.signal_names.prepend(i18n("Time_10µs")); // Must be done after allocating memory
 	m_signals.value_descriptions.insert(m_signals.value_descriptions.begin(), std::vector<DbcParser::ValueDescriptions>()); // Time does not have any labels
 
-	for (const auto& message : v)
+	for (const auto& message : objectHeaders)
 		delete message;
 
 	if (!m_DataContainer.resize(message_index))

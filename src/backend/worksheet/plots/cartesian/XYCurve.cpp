@@ -48,6 +48,8 @@
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_spline.h>
 
+#include <kdefrontend/GuiTools.h>
+
 using Dimension = CartesianCoordinateSystem::Dimension;
 
 CURVE_COLUMN_CONNECT(XYCurve, X, x, recalc)
@@ -72,7 +74,7 @@ void XYCurve::init(bool loading) {
 	Q_D(XYCurve);
 
 	// line
-	d->line = new Line(QString());
+	d->line = new Line(QStringLiteral("line"));
 	d->line->setCreateXmlElement(false);
 	d->line->setHidden(true);
 	addChild(d->line);
@@ -86,7 +88,7 @@ void XYCurve::init(bool loading) {
 	});
 
 	// drop line
-	d->dropLine = new Line(QString());
+	d->dropLine = new Line(QStringLiteral("dropLine"));
 	d->dropLine->setPrefix(QStringLiteral("DropLine"));
 	d->dropLine->setHidden(true);
 	addChild(d->dropLine);
@@ -101,7 +103,7 @@ void XYCurve::init(bool loading) {
 	});
 
 	// symbol
-	d->symbol = new Symbol(QString());
+	d->symbol = new Symbol(QStringLiteral("symbol"));
 	addChild(d->symbol);
 	d->symbol->setHidden(true);
 	connect(d->symbol, &Symbol::updateRequested, [=] {
@@ -114,7 +116,7 @@ void XYCurve::init(bool loading) {
 	});
 
 	// Background/Filling
-	d->background = new Background(QString());
+	d->background = new Background(QStringLiteral("background"));
 	d->background->setPrefix(QStringLiteral("Filling"));
 	d->background->setPositionAvailable(true);
 	addChild(d->background);
@@ -128,7 +130,7 @@ void XYCurve::init(bool loading) {
 	});
 
 	// error bars
-	d->errorBar = new ErrorBar(QString(), ErrorBar::Dimension::XY);
+	d->errorBar = new ErrorBar(QStringLiteral("errorBar"), ErrorBar::Dimension::XY);
 	addChild(d->errorBar);
 	d->errorBar->setHidden(true);
 	connect(d->errorBar, &ErrorBar::updatePixmapRequested, [=] {
@@ -1054,12 +1056,12 @@ void XYCurvePrivate::updateLines() {
 		return;
 	}
 
+	// The numberOfPixelX defines how many lines are drawn (max 2*numberOfPixelX). More lines make no sense, because then
+	// pixels are overlapping.
 	const QRectF pageRect = plot()->dataRect();
-	// old method using DPI
-	// const double widthDatarectInch = Worksheet::convertFromSceneUnits(plot()->dataRect().width(), Worksheet::Unit::Inch);
-	// float heightDatarectInch = Worksheet::convertFromSceneUnits(plot()->dataRect().height(), Worksheet::Unit::Inch);
-	// const int numberOfPixelX = ceil(widthDatarectInch * QApplication::desktop()->physicalDpiX());
-	const int numberOfPixelX = pageRect.width();
+	const double widthDatarectInch = Worksheet::convertFromSceneUnits(pageRect.width(), Worksheet::Unit::Inch);
+	const auto dpi = QApplication::primaryScreen()->physicalDotsPerInchX(); // Assumption: screens have all the same dpi
+	const int numberOfPixelX = ceil(widthDatarectInch * dpi);
 
 	// calculate the lines connecting the data points
 	{
@@ -1102,8 +1104,8 @@ void XYCurvePrivate::updateLines() {
 		if (columnProperties == AbstractColumn::Properties::Constant) {
 			DEBUG(Q_FUNC_INFO << ", CONSTANT column")
 			auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
-			const auto xRange{plot()->range(Dimension::X, cs->index(Dimension::X))};
-			const auto yRange{plot()->range(Dimension::Y, cs->index(Dimension::Y))};
+			const auto& xRange = plot()->range(Dimension::X, cs->index(Dimension::X));
+			const auto& yRange = plot()->range(Dimension::Y, cs->index(Dimension::Y));
 			tempPoint1 = QPointF(xRange.start(), yRange.start());
 			tempPoint2 = QPointF(xRange.start(), yRange.end());
 			m_lines.append(QLineF(tempPoint1, tempPoint2));
@@ -1113,8 +1115,8 @@ void XYCurvePrivate::updateLines() {
 			bool prevPixelDiffZero = false;
 			double minY{INFINITY}, maxY{-INFINITY};
 			QPointF p0, p1;
-			const auto xIndex{q->cSystem->index(Dimension::X)};
-			const auto xRange{plot()->range(Dimension::X, xIndex)};
+			const auto xIndex = q->cSystem->index(Dimension::X);
+			const auto& xRange = plot()->range(Dimension::X, xIndex);
 			double minDiffX;
 			const RangeT::Scale scale = plot()->xRangeScale(xIndex);
 
@@ -1912,8 +1914,8 @@ void XYCurvePrivate::updateFilling() {
 	QPointF edge;
 	double xEnd{0.}, yEnd{0.};
 	auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
-	const auto xRange{plot()->range(Dimension::X, cs->index(Dimension::X))};
-	const auto yRange{plot()->range(Dimension::Y, cs->index(Dimension::Y))};
+	const auto& xRange = plot()->range(Dimension::X, cs->index(Dimension::X));
+	const auto& yRange = plot()->range(Dimension::Y, cs->index(Dimension::Y));
 	const double xMin{xRange.start()}, xMax{xRange.end()};
 	const double yMin{yRange.start()}, yMax{yRange.end()};
 	bool visible;
@@ -2674,15 +2676,14 @@ void XYCurvePrivate::updatePixmap() {
 		m_pixmap = QPixmap();
 		return;
 	}
-	QPixmap pixmap(ceil(m_boundingRectangle.width()), ceil(m_boundingRectangle.height()));
-	pixmap.fill(Qt::transparent);
-	QPainter painter(&pixmap);
+	m_pixmap = QPixmap(ceil(m_boundingRectangle.width()), ceil(m_boundingRectangle.height()));
+	m_pixmap.fill(Qt::transparent);
+	QPainter painter(&m_pixmap);
 	painter.setRenderHint(QPainter::Antialiasing, true);
 	painter.translate(-m_boundingRectangle.topLeft());
 
 	draw(&painter);
 	painter.end();
-	m_pixmap = pixmap;
 
 	update();
 	Q_EMIT q->changed();
@@ -2983,12 +2984,21 @@ void XYCurve::loadThemeConfig(const KConfig& config) {
 	d->background->loadThemeConfig(group);
 	d->errorBar->loadThemeConfig(group, themeColor);
 
+	// line
+
+	if (plot->theme() == QLatin1String("Sparkline")) {
+		if (!GuiTools::isDarkMode())
+			d->line->setColor(Qt::black);
+		else
+			d->line->setColor(Qt::white);
+	}
+
 	// Values
 	this->setValuesOpacity(group.readEntry(QStringLiteral("ValuesOpacity"), 1.0));
 	this->setValuesColor(group.readEntry(QStringLiteral("ValuesColor"), themeColor));
 
-	// margins
-	if (plot->theme() == QLatin1String("Tufte")) {
+	// margins, activate for XYCurve only, not for analysis curves
+	if (type() == AspectType::XYCurve && plot->theme() == QLatin1String("Tufte")) {
 		if (d->xColumn && d->xColumn->rowCount() < 100) {
 			setRugEnabled(true);
 			setRugOrientation(WorksheetElement::Orientation::Both);

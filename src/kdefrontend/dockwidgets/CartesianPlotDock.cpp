@@ -462,7 +462,7 @@ void CartesianPlotDock::updateLocale() {
 		// x ranges
 		bool isDateTime = false;
 		for (int row = 0; row < std::min(ui.twXRanges->rowCount(), m_plot->rangeCount(Dimension::X)); row++) {
-			const auto xRange{m_plot->range(Dimension::X, row)};
+			const auto& xRange = m_plot->range(Dimension::X, row);
 			DEBUG(Q_FUNC_INFO << ", x range " << row << " auto scale = " << xRange.autoScale())
 			if (m_plot->xRangeFormat(row) == RangeT::Format::Numeric) {
 				// const int relPrec = xRange.relativePrecision();
@@ -489,7 +489,7 @@ void CartesianPlotDock::updateLocale() {
 		// y ranges
 		isDateTime = false;
 		for (int row = 0; row < std::min(ui.twYRanges->rowCount(), m_plot->rangeCount(Dimension::Y)); row++) {
-			const auto yRange{m_plot->range(Dimension::Y, row)};
+			const auto& yRange = m_plot->range(Dimension::Y, row);
 			DEBUG(Q_FUNC_INFO << ", y range " << row << " auto scale = " << yRange.autoScale())
 			if (m_plot->yRangeFormat(row) == RangeT::Format::Numeric) {
 				// const int relPrec = yRange.relativePrecision();
@@ -606,7 +606,7 @@ void CartesianPlotDock::updateRangeList(const Dimension dim) {
 		l->setText(i18n("%1-Range:", dir_str.toUpper()));
 	tw->setRowCount(rangeCount);
 	for (int i = 0; i < rangeCount; i++) {
-		const auto r = m_plot->range(dim, i);
+		const auto& r = m_plot->range(dim, i);
 		const auto format = r.format();
 		const auto scale = r.scale();
 		DEBUG(Q_FUNC_INFO << ", range " << i << ": format = " << ENUM_TO_STRING(RangeT, Format, format) << ", scale = " << ENUM_TO_STRING(RangeT, Scale, scale)
@@ -741,7 +741,8 @@ void CartesianPlotDock::updatePlotRangeList() {
 	for (int i = 0; i < cSystemCount; i++) {
 		const auto* cSystem{m_plot->coordinateSystem(i)};
 		const int xIndex{cSystem->index(Dimension::X)}, yIndex{cSystem->index(Dimension::Y)};
-		const auto xRange{m_plot->range(Dimension::X, xIndex)}, yRange{m_plot->range(Dimension::Y, yIndex)};
+		const auto& xRange = m_plot->range(Dimension::X, xIndex);
+		const auto& yRange = m_plot->range(Dimension::Y, yIndex);
 
 		DEBUG(Q_FUNC_INFO << ", coordinate system " << i + 1 << " : xIndex = " << xIndex << ", yIndex = " << yIndex)
 		DEBUG(Q_FUNC_INFO << ", x range = " << xRange.toStdString() << ", auto scale = " << xRange.autoScale())

@@ -6,7 +6,7 @@
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2007-2010 Knut Franke <knut.franke@gmx.de>
 	SPDX-FileCopyrightText: 2007-2009 Tilman Benkert <thzs@gmx.net>
-	SPDX-FileCopyrightText: 2013-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2013-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -118,10 +118,12 @@ public:
 		else
 			nextSibling = m_target->m_children.at(m_target->indexOfChild(m_child) + 1);
 
-		// emit the "about to be removed" signal also for all children columns so the curves can react.
+		// emit the "about to be removed" signal also for all children columns so the plots can react.
 		const auto& columns = m_child->children<Column>(AbstractAspect::ChildIndexFlag::Recursive);
-		for (auto* col : columns)
+		for (auto* col : columns) {
 			Q_EMIT col->parentAspect()->childAspectAboutToBeRemoved(col);
+			Q_EMIT col->aspectAboutToBeRemoved(col);
+		}
 
 		// no need to emit signals if the aspect is hidden, the only exceptions is it's a datapicker point
 		// and we need to react on its removal in order to update the data spreadsheet.
@@ -139,9 +141,6 @@ public:
 
 		if (!m_child->hidden() || m_child->type() == AspectType::DatapickerPoint)
 			Q_EMIT m_target->q->childAspectRemoved(m_target->q, nextSibling, m_child);
-
-		// QDEBUG(Q_FUNC_INFO << ", DONE. CHILD = " << m_child)
-		//		m_removed = true;
 	}
 
 	// calling undo transfers ownership of m_child back to its parent aspect
@@ -153,14 +152,12 @@ public:
 		m_target->insertChild(m_index, m_child);
 		m_child->finalizeAdd();
 		Q_EMIT m_target->q->childAspectAdded(m_child);
-		// 		m_removed = false;
 	}
 
 protected:
 	AbstractAspectPrivate* m_target{nullptr};
 	AbstractAspect* m_child{nullptr};
 	int m_index{-1};
-	// 	bool m_removed{false};
 };
 
 class AspectChildAddCmd : public AspectChildRemoveCmd {
@@ -169,7 +166,6 @@ public:
 		: AspectChildRemoveCmd(target, child, parent) {
 		setText(i18n("%1: add %2", m_target->m_name, m_child->name()));
 		m_index = index;
-		// 		m_removed = true;
 	}
 
 	void redo() override {

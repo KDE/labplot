@@ -17,6 +17,7 @@ class ROOTFilterTest : public CommonTest {
 	Q_OBJECT
 
 private Q_SLOTS:
+	void initTestCase();
 	void importFile1();
 	void importFile2();
 

@@ -51,6 +51,7 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool liveDataSource, const Q
 	: ImportDialog(parent)
 	, m_importFileWidget(new ImportFileWidget(this, liveDataSource, fileName)) {
 	vLayout->addWidget(m_importFileWidget);
+	m_liveDataSource = liveDataSource;
 
 	// dialog buttons
 	auto* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Reset | QDialogButtonBox::Cancel);
@@ -59,9 +60,10 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool liveDataSource, const Q
 	okButton->setEnabled(false); // ok is only available if a valid container was selected
 	vLayout->addWidget(buttonBox);
 
-	// hide the data-source related widgets
 	if (!liveDataSource)
-		setModel();
+		setModel(); // set the model and hide the data-source related widgets
+	else
+		setAttribute(Qt::WA_DeleteOnClose, false); // don't delete on close for live data sources, it's done in MainWin::newLiveDataSource()
 
 	// Signals/Slots
 	connect(buttonBox, &QDialogButtonBox::accepted, this, &ImportDialog::accept);

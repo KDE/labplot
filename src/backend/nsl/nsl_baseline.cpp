@@ -15,6 +15,11 @@
 #include <gsl/gsl_fit.h>
 #include <gsl/gsl_statistics_double.h>
 
+// macOS builds on gitlab CI complain about missing Eigen/Sparse while having Eigen3	-> disable EIGEN3 on macOS for the moment
+#if defined(Q_OS_MACOS)
+#undef HAVE_EIGEN3
+#endif
+
 #ifdef HAVE_EIGEN3
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
@@ -445,7 +450,7 @@ double nsl_baseline_remove_arpls(double* data, const size_t n, double p, double 
 
 #ifdef HAVE_EIGEN3
 	return nsl_baseline_remove_arpls_Eigen3(data, n, p, lambda, niter);
-#endif
-
+#else
 	return nsl_baseline_remove_arpls_GSL(data, n, p, lambda, niter);
+#endif
 }

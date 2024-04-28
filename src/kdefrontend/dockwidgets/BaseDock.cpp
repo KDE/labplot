@@ -64,7 +64,7 @@ void BaseDock::setBaseWidgets(TimedLineEdit* nameLabel, ResizableTextEdit* comme
 	Q_ASSERT(m_teComment);
 
 	connect(m_teComment, &QTextEdit::textChanged, this, &BaseDock::commentChanged);
-	connect(m_leName, &TimedLineEdit::textChanged, this, &BaseDock::nameChanged);
+	connect(m_leName, &TimedLineEdit::textEdited, this, &BaseDock::nameChanged);
 
 	// adjust the height of the TextEdit for the comment since it's default value
 	// is too high and we want to set it to a more reasonable value
@@ -194,7 +194,7 @@ void BaseDock::plotRangeChanged(int index) {
 	}
 
 	plot->WorksheetElementContainer::retransform();
-	plot->project()->setChanged(true);
+	plot->setProjectChanged(true);
 }
 
 void BaseDock::nameChanged() {
@@ -294,7 +294,7 @@ AspectTreeModel* BaseDock::aspectModel() {
 }
 
 /*!
- * shows the name and the description of the first selecte aspect,
+ * shows the name and the description of the first selected aspect,
  * disables the fields "Name" and "Comment" if there are more than one aspects selected.
  */
 void BaseDock::updateNameDescriptionWidgets() {

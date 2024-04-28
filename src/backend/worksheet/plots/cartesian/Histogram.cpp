@@ -44,7 +44,7 @@
 #include <QGraphicsSceneMouseEvent>
 
 CURVE_COLUMN_CONNECT(Histogram, Data, data, recalc)
-static constexpr double zero = 0.001; // zero baseline, don't use the exact 0.0 since it breaks the histrogram with log-scaling
+static constexpr double zero = std::numeric_limits<double>::epsilon(); // zero baseline, don't use the exact 0.0 since it breaks the histrogram with log-scaling
 
 Histogram::Histogram(const QString& name, bool loading)
 	: Plot(name, new HistogramPrivate(this), AspectType::Histogram) {
@@ -64,7 +64,7 @@ void Histogram::init(bool loading) {
 	Q_D(Histogram);
 
 	// line
-	d->line = new Line(QString());
+	d->line = new Line(QStringLiteral("line"));
 	d->line->setHistogramLineTypeAvailable(true);
 	d->line->setHidden(true);
 	addChild(d->line);
@@ -79,7 +79,7 @@ void Histogram::init(bool loading) {
 	});
 
 	// symbol
-	d->symbol = new Symbol(QString());
+	d->symbol = new Symbol(QStringLiteral("symbol"));
 	addChild(d->symbol);
 	d->symbol->setHidden(true);
 	connect(d->symbol, &Symbol::updateRequested, [=] {
@@ -102,7 +102,7 @@ void Histogram::init(bool loading) {
 	});
 
 	// Background/Filling
-	d->background = new Background(QString());
+	d->background = new Background(QStringLiteral("background"));
 	d->background->setPrefix(QStringLiteral("Filling"));
 	d->background->setEnabledAvailable(true);
 	addChild(d->background);
@@ -115,7 +115,7 @@ void Histogram::init(bool loading) {
 	});
 
 	// error bars
-	d->errorBar = new ErrorBar(QString(), ErrorBar::Dimension::Y);
+	d->errorBar = new ErrorBar(QStringLiteral("errorBar"), ErrorBar::Dimension::Y);
 	addChild(d->errorBar);
 	d->errorBar->setHidden(true);
 	connect(d->errorBar, &ErrorBar::updatePixmapRequested, [=] {
@@ -1515,22 +1515,20 @@ void HistogramPrivate::draw(QPainter* painter) {
 }
 
 void HistogramPrivate::updatePixmap() {
-	QPixmap pixmap(m_boundingRectangle.width(), m_boundingRectangle.height());
+	m_pixmap = QPixmap(m_boundingRectangle.width(), m_boundingRectangle.height());
 	if (m_boundingRectangle.width() == 0. || m_boundingRectangle.height() == 0.) {
-		m_pixmap = pixmap;
 		m_hoverEffectImageIsDirty = true;
 		m_selectionEffectImageIsDirty = true;
 		return;
 	}
-	pixmap.fill(Qt::transparent);
-	QPainter painter(&pixmap);
+	m_pixmap.fill(Qt::transparent);
+	QPainter painter(&m_pixmap);
 	painter.setRenderHint(QPainter::Antialiasing, true);
 	painter.translate(-m_boundingRectangle.topLeft());
 
 	draw(&painter);
 	painter.end();
 
-	m_pixmap = pixmap;
 	m_hoverEffectImageIsDirty = true;
 	m_selectionEffectImageIsDirty = true;
 	Q_EMIT q->changed();
