@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-27 01:35+0000\n"
-"PO-Revision-Date: 2024-04-23 21:12+0100\n"
+"POT-Creation-Date: 2024-04-28 01:36+0000\n"
+"PO-Revision-Date: 2024-04-27 22:28+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -11392,21 +11392,21 @@ msgstr "Aldoni %1"
 msgid "%1 name:"
 msgstr "%1 nomo:"
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:72
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:73
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:42
 #, kde-format
 msgctxt "@title:window"
 msgid "Import Data to Spreadsheet or Matrix"
 msgstr "Importi Datumojn al Tabelfolio aŭ Matrico"
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:74
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:75
 #, kde-format
 msgctxt "@title:window"
 msgid "Add New Live Data Source"
 msgstr "Aldoni Novan Vivan Datumfonton"
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:107
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:345
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:108
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:346
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:130
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:346
 #: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:113
@@ -11415,8 +11415,8 @@ msgstr "Aldoni Novan Vivan Datumfonton"
 msgid "Hide Options"
 msgstr "Kaŝi Opciojn"
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:107
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:345
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:108
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:346
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:130
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:346
 #: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:113
@@ -11425,89 +11425,89 @@ msgstr "Kaŝi Opciojn"
 msgid "Show Options"
 msgstr "Montri Opciojn"
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:147
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:148
 #, kde-format
 msgid "Live data source created in %1 seconds."
 msgstr "Viva datumfonto kreita en %1 sekundoj."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:175
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:176
 #, kde-format
 msgid "No target data container selected"
 msgstr "Neniu celdatumujo elektita"
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:320
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:321
 #, kde-format
 msgid "File %1 imported in %2 seconds."
 msgstr "Dosiero %1 importita en %2 sekundoj."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:364
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:400
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:427
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:451
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:476
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:509
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:532
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:365
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:401
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:428
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:452
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:477
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:510
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:533
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:160
 #, kde-format
 msgid "Close the dialog and import the data."
 msgstr "Fermu la dialogon kaj importu la datumojn."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:366
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:367
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:154
 #, kde-format
 msgid "Cannot import into a matrix since the data contains non-numerical data."
 msgstr ""
 "Ne povas importi en matricon ĉar la datumoj enhavas ne-nombrajn datumojn."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:378
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:379
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:138
 #, kde-format
 msgid "Select a data container where the data has to be imported into."
 msgstr "Elektu datumujon, kie la datumoj devas esti importitaj."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:403
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:404
 #, kde-format
 msgid "The provided file doesn't exist."
 msgstr "La provizita dosiero ne ekzistas."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:431
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:432
 #, kde-format
 msgid "Could not connect to the provided local socket. Error: %1."
 msgstr "Ne eblis konekti al la provizita loka ingo. Eraro: %1."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:437
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:438
 #, kde-format
 msgid ""
 "Could not connect to the provided local socket. The socket does not exist."
 msgstr "Ne eblis konekti al la provizita loka ingo. La ingo ne ekzistas."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:456
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:457
 #, kde-format
 msgid "Could not connect to the provided TCP socket. Error: %1."
 msgstr "Ne eblis konekti al la provizita TCP-soko. Eraro: %1."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:462
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:488
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:463
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:489
 #, kde-format
 msgid "Either the host name or the port number is missing."
 msgstr "Aŭ la gastiga nomo aŭ la pordonumero mankas."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:482
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:483
 #, kde-format
 msgid "Could not connect to the provided UDP socket. Error: %1."
 msgstr "Ne eblis konekti al la provizita UDP-ingo. Eraro: %1."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:513
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:514
 #, kde-format
 msgid "Could not connect to the provided serial port."
 msgstr "Ne eblis konekti al la provizita seria pordo."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:519
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:520
 #, kde-format
 msgid "Serial port number is missing."
 msgstr "Mankas seria porda numero."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:535
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:536
 #, kde-format
 msgid ""
 "Either there is no connection, or no subscriptions were made, or the file "
@@ -15459,6 +15459,11 @@ msgid ""
 "The setting can be changed for every project separately in the project "
 "properties."
 msgstr ""
+"Konservi la staton (pozicion kaj geometrion) de la dokoj en la "
+"projektdosiero.\n"
+"Determinas la defaŭltan konduton por novaj projektoj.\n"
+"La agordo povas esti ŝanĝita por ĉiu projekto aparte en la projektaj "
+"proprecoj."
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:249
 #, kde-format

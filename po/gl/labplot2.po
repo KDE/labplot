@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-27 01:35+0000\n"
+"POT-Creation-Date: 2024-04-28 01:36+0000\n"
 "PO-Revision-Date: 2024-04-21 09:29+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
@@ -11434,21 +11434,21 @@ msgstr "Engadir %1"
 msgid "%1 name:"
 msgstr "Nome de %1:"
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:72
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:73
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:42
 #, kde-format
 msgctxt "@title:window"
 msgid "Import Data to Spreadsheet or Matrix"
 msgstr "Importar datos como unha folla de cálculo ou matriz"
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:74
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:75
 #, kde-format
 msgctxt "@title:window"
 msgid "Add New Live Data Source"
 msgstr "Engadir unha nova fonte de datos en directo"
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:107
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:345
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:108
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:346
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:130
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:346
 #: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:113
@@ -11457,8 +11457,8 @@ msgstr "Engadir unha nova fonte de datos en directo"
 msgid "Hide Options"
 msgstr "Agochar as opcións"
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:107
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:345
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:108
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:346
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:130
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:346
 #: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:113
@@ -11467,34 +11467,34 @@ msgstr "Agochar as opcións"
 msgid "Show Options"
 msgstr "Amosar as opcións"
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:147
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:148
 #, kde-format
 msgid "Live data source created in %1 seconds."
 msgstr "A fonte de datos en directo creouse en %1 segundos."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:175
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:176
 #, kde-format
 msgid "No target data container selected"
 msgstr "Non seleccionou ningún contedor de datos de destino."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:320
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:321
 #, kde-format
 msgid "File %1 imported in %2 seconds."
 msgstr "O ficheiro %1 importouse en %2 segundos."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:364
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:400
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:427
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:451
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:476
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:509
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:532
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:365
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:401
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:428
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:452
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:477
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:510
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:533
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:160
 #, kde-format
 msgid "Close the dialog and import the data."
 msgstr "Pechar o diálogo e importar os datos."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:366
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:367
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:154
 #, kde-format
 msgid "Cannot import into a matrix since the data contains non-numerical data."
@@ -11502,55 +11502,55 @@ msgstr ""
 "Non é posíbel importar a matriz dado que os datos inclúen valores non "
 "numéricos."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:378
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:379
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:138
 #, kde-format
 msgid "Select a data container where the data has to be imported into."
 msgstr "Seleccione un contedor no que importar os datos."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:403
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:404
 #, kde-format
 msgid "The provided file doesn't exist."
 msgstr "O ficheiro fornecido non existe."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:431
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:432
 #, kde-format
 msgid "Could not connect to the provided local socket. Error: %1."
 msgstr "Non foi posíbel conectar á toma local fornecida. Erro: %1."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:437
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:438
 #, kde-format
 msgid ""
 "Could not connect to the provided local socket. The socket does not exist."
 msgstr "Non foi posíbel conectar á toma local fornecida. A toma non existe."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:456
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:457
 #, kde-format
 msgid "Could not connect to the provided TCP socket. Error: %1."
 msgstr "Non foi posíbel conectar á toma TCP fornecida. Erro: %1."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:462
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:488
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:463
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:489
 #, kde-format
 msgid "Either the host name or the port number is missing."
 msgstr "Faltan o nome do servidor ou o número de porto."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:482
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:483
 #, kde-format
 msgid "Could not connect to the provided UDP socket. Error: %1."
 msgstr "Non foi posíbel conectar á toma UDP fornecida. Erro: %1."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:513
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:514
 #, kde-format
 msgid "Could not connect to the provided serial port."
 msgstr "Non foi posíbel conectar ao porto serie fornecido."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:519
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:520
 #, kde-format
 msgid "Serial port number is missing."
 msgstr "Falta o número de porto serie."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:535
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:536
 #, kde-format
 msgid ""
 "Either there is no connection, or no subscriptions were made, or the file "
