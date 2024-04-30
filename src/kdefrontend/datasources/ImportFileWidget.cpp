@@ -25,6 +25,7 @@
 #include "XLSXOptionsWidget.h"
 #include "backend/core/Settings.h"
 #include "backend/datasources/filters/filters.h"
+#include "backend/lib/hostprocess.h"
 #include "backend/lib/macros.h"
 #include "kdefrontend/TemplateHandler.h"
 
@@ -1458,14 +1459,14 @@ QString ImportFileWidget::fileInfoString(const QString& name) const {
 
 		// File type given by "file"
 #ifdef Q_OS_LINUX
-		const QString fileFullPath = QStandardPaths::findExecutable(QStringLiteral("file"));
+		const QString fileFullPath = safeExecutableName(QStringLiteral("file"));
 		if (fileFullPath.isEmpty())
 			return i18n("file command not found");
 
 		QProcess proc;
 		QStringList args;
 		args << QStringLiteral("-b") << fileName;
-		proc.start(fileFullPath, args);
+		startHostProcess(proc, fileFullPath, args);
 
 		if (proc.waitForReadyRead(1000) == false)
 			infoStrings << i18n("Reading from file %1 failed.", fileName);

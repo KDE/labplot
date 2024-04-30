@@ -12,6 +12,7 @@
 #include "backend/datasources/filters/AbstractFileFilter.h"
 #include "backend/datasources/filters/SpiceFilter.h"
 #include "backend/datasources/filters/VectorBLFFilter.h"
+#include "backend/lib/hostprocess.h"
 #include "backend/lib/macros.h"
 
 #include <KLocalizedString>
@@ -147,10 +148,10 @@ AbstractFileFilter::FileType AbstractFileFilter::fileType(const QString& fileNam
 	QString fileInfo;
 #ifndef HAVE_WINDOWS
 	// check, if we can guess the file type by content
-	const QString fileFullPath = QStandardPaths::findExecutable(QLatin1String("file"));
+	const QString fileFullPath = safeExecutableName(QLatin1String("file"));
 	if (!fileFullPath.isEmpty()) {
 		QProcess proc;
-		proc.start(fileFullPath, QStringList() << QStringLiteral("-b") << QStringLiteral("-z") << fileName);
+		startHostProcess(proc, fileFullPath, QStringList() << QStringLiteral("-b") << QStringLiteral("-z") << fileName);
 		if (!proc.waitForFinished(1000)) {
 			proc.kill();
 			DEBUG("ERROR: reading file type of file" << STDSTRING(fileName));

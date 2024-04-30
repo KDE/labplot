@@ -17,6 +17,7 @@
 #include "backend/core/datatypes/Double2StringFilter.h"
 #include "backend/datasources/filters/FITSFilter.h"
 #include "backend/datasources/filters/XLSXFilter.h"
+#include "backend/lib/hostprocess.h"
 #include "backend/lib/macros.h"
 #include "backend/lib/trace.h"
 #include "backend/spreadsheet/StatisticsSpreadsheet.h"
@@ -4023,14 +4024,14 @@ void SpreadsheetView::exportToLaTeX(const QString& path,
 	bool columnsSeparating = (cols > columnsPerTable);
 	QTextStream out(&file);
 
-	const QString latexFullPath = QStandardPaths::findExecutable(QLatin1String("latex"));
+	const QString latexFullPath = safeExecutableName(QLatin1String("latex"));
 	if (latexFullPath.isEmpty()) {
 		DEBUG(Q_FUNC_INFO << ", WARNING: latex not found!")
 		return;
 	}
 
 	QProcess tex;
-	tex.start(latexFullPath, QStringList() << QStringLiteral("--version"), QProcess::ReadOnly);
+	startHostProcess(tex, latexFullPath, QStringList() << QStringLiteral("--version"), QProcess::ReadOnly);
 	tex.waitForFinished(500);
 	QString texVersionOutput = QLatin1String(tex.readAllStandardOutput());
 	texVersionOutput = texVersionOutput.split(QLatin1Char('\n'))[0];
