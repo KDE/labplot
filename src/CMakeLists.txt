@@ -372,6 +372,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/lib/Range.cpp
 	${BACKEND_DIR}/lib/XmlStreamReader.cpp
 	${BACKEND_DIR}/lib/SignallingUndoCommand.cpp
+	${BACKEND_DIR}/lib/hostprocess.cpp
 	${BACKEND_DIR}/matrix/Matrix.cpp
 	${BACKEND_DIR}/matrix/matrixcommands.cpp
 	${BACKEND_DIR}/matrix/MatrixModel.cpp
