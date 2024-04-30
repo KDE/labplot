@@ -578,6 +578,7 @@ target_link_libraries( labplot2backendlib
 	KF${KF_MAJOR_VERSION}::ConfigWidgets	# KStandardAction
 	KF${KF_MAJOR_VERSION}::Archive	# KFilterDev
 	KF${KF_MAJOR_VERSION}::TextWidgets	# KTextEdit
+	KF${KF_MAJOR_VERSION}::CoreAddons	# kcoreaddons_version.h
 	${ZLIB_LIBRARIES}
 	${LZ4_LIBRARIES}
 	${GSL_LIBRARIES}
