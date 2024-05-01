@@ -372,6 +372,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/lib/Range.cpp
 	${BACKEND_DIR}/lib/XmlStreamReader.cpp
 	${BACKEND_DIR}/lib/SignallingUndoCommand.cpp
+	${BACKEND_DIR}/lib/hostprocess.cpp
 	${BACKEND_DIR}/matrix/Matrix.cpp
 	${BACKEND_DIR}/matrix/matrixcommands.cpp
 	${BACKEND_DIR}/matrix/MatrixModel.cpp
@@ -577,6 +578,7 @@ target_link_libraries( labplot2backendlib
 	KF${KF_MAJOR_VERSION}::ConfigWidgets	# KStandardAction
 	KF${KF_MAJOR_VERSION}::Archive	# KFilterDev
 	KF${KF_MAJOR_VERSION}::TextWidgets	# KTextEdit
+	KF${KF_MAJOR_VERSION}::CoreAddons	# kcoreaddons_version.h
 	${ZLIB_LIBRARIES}
 	${LZ4_LIBRARIES}
 	${GSL_LIBRARIES}

@@ -14,6 +14,7 @@
 #include "backend/datasources/LiveDataSource.h"
 #include "backend/datasources/filters/AsciiFilterPrivate.h"
 #include "backend/lib/XmlStreamReader.h"
+#include "backend/lib/hostprocess.h"
 #include "backend/lib/macros.h"
 #include "backend/lib/trace.h"
 #include "backend/matrix/Matrix.h"
@@ -210,10 +211,10 @@ size_t AsciiFilter::lineNumber(const QString& fileName, const size_t maxLines) {
 	if (maxLines == std::numeric_limits<std::size_t>::max()) { // only when reading all lines
 		// on Linux and BSD use wc, if available, which is much faster than counting lines in the file
 		DEBUG(Q_FUNC_INFO << ", using wc to count lines")
-		const QString wcFullPath = QStandardPaths::findExecutable(QStringLiteral("wc"));
+		const QString wcFullPath = safeExecutableName(QStringLiteral("wc"));
 		if (device.compressionType() == KCompressionDevice::None && !wcFullPath.isEmpty()) {
 			QProcess wc;
-			wc.start(wcFullPath, QStringList() << QStringLiteral("-l") << fileName);
+			startHostProcess(wc, wcFullPath, QStringList() << QStringLiteral("-l") << fileName);
 			size_t lineCount = 0;
 			while (wc.waitForReadyRead()) {
 				QString line = QLatin1String(wc.readLine());

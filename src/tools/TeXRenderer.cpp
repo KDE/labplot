@@ -10,6 +10,7 @@
 
 #include "TeXRenderer.h"
 #include "backend/core/Settings.h"
+#include "backend/lib/hostprocess.h"
 #include "backend/lib/macros.h"
 #include "kdefrontend/GuiTools.h"
 
@@ -146,7 +147,7 @@ bool TeXRenderer::executeLatexProcess(const QString engine,
 									  const QString& resultFileExtension,
 									  Result* res) {
 	// latex: produce the DVI file
-	const QString engineFullPath = QStandardPaths::findExecutable(engine);
+	const QString engineFullPath = safeExecutableName(engine);
 	if (engineFullPath.isEmpty()) {
 		res->successful = false;
 		res->errorMessage = i18n("%1 not found").arg(engine);
@@ -157,7 +158,7 @@ bool TeXRenderer::executeLatexProcess(const QString engine,
 	WARN(QStringLiteral("Engine fullpath: %1").arg(engineFullPath).toStdString());
 
 	QProcess latexProcess;
-	latexProcess.start(engineFullPath, QStringList() << QStringLiteral("-interaction=batchmode") << file.fileName());
+	startHostProcess(latexProcess, engineFullPath, QStringList() << QStringLiteral("-interaction=batchmode") << file.fileName());
 
 	WARN(QStringLiteral("Workdir: %1").arg(QDir::currentPath()).toStdString());
 
@@ -247,7 +248,7 @@ QByteArray TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, 
 		return {};
 
 	// dvips: DVI -> PS
-	const QString dvipsFullPath = QStandardPaths::findExecutable(QLatin1String("dvips"));
+	const QString dvipsFullPath = safeExecutableName(QStringLiteral("dvips"));
 	if (dvipsFullPath.isEmpty()) {
 		res->successful = false;
 		res->errorMessage = i18n("dvips not found");
@@ -255,7 +256,7 @@ QByteArray TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, 
 		return {};
 	}
 	QProcess dvipsProcess;
-	dvipsProcess.start(dvipsFullPath, QStringList() << QStringLiteral("-E") << baseName);
+	startHostProcess(dvipsProcess, dvipsFullPath, QStringList() << QStringLiteral("-E") << baseName);
 	if (!dvipsProcess.waitForFinished() || dvipsProcess.exitCode() != 0) {
 		QString err = i18n("dvips process failed, exit code =") + QStringLiteral(" ") + QString::number(dvipsProcess.exitCode());
 		WARN(err.toStdString());
@@ -275,7 +276,7 @@ QByteArray TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, 
 	env.insert(QStringLiteral("MAGICK_CODER_MODULE_PATH"), QString::fromLocal8Bit(qgetenv("PROGRAMFILES")) + QStringLiteral("\\labplot2"));
 	convertProcess.setProcessEnvironment(env);
 #endif
-	const QString convertFullPath = QStandardPaths::findExecutable(QLatin1String("convert"));
+	const QString convertFullPath = safeExecutableName(QStringLiteral("convert"));
 	if (convertFullPath.isEmpty()) {
 		WARN("convert not found");
 		res->successful = false;
@@ -284,7 +285,7 @@ QByteArray TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, 
 	}
 
 	const QStringList params{QStringLiteral("-density"), QString::number(dpi), baseName + QStringLiteral(".ps"), baseName + QStringLiteral(".pdf")};
-	convertProcess.start(convertFullPath, params);
+	startHostProcess(convertProcess, convertFullPath, params);
 
 	if (!convertProcess.waitForFinished() || convertProcess.exitCode() != 0) {
 		QString err = i18n("convert process failed, exit code =") + QStringLiteral(" ") + QString::number(convertProcess.exitCode());
@@ -376,5 +377,5 @@ bool TeXRenderer::enabled() {
 }
 
 bool TeXRenderer::executableExists(const QString& exe) {
-	return !QStandardPaths::findExecutable(exe).isEmpty();
+	return !safeExecutableName(exe).isEmpty();
 }
