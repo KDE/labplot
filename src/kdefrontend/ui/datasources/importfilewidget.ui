@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>613</width>
-    <height>1207</height>
+    <height>1211</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -709,23 +709,7 @@
      </property>
      <layout class="QGridLayout" name="gridLayout_4">
       <item row="0" column="1">
-       <widget class="QComboBox" name="cbReadingType">
-        <item>
-         <property name="text">
-          <string>Continuously Fixed</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>From End</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Till the End</string>
-         </property>
-        </item>
-       </widget>
+       <widget class="QComboBox" name="cbReadingType"/>
       </item>
       <item row="2" column="0">
        <widget class="QLabel" name="lUpdateType">

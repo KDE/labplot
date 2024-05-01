@@ -411,7 +411,7 @@ void MainWin::initGUI(const QString& fileName) {
 	// show memory info
 	m_memoryInfoAction->setEnabled(statusBar()->isEnabled()); // disable/enable menu with statusbar
 	bool memoryInfoShown = groupMainWin.readEntry(QLatin1String("ShowMemoryInfo"), true);
-	DEBUG(Q_FUNC_INFO << ", memory info enabled in config: " << memoryInfoShown)
+	// DEBUG(Q_FUNC_INFO << ", memory info enabled in config: " << memoryInfoShown)
 	m_memoryInfoAction->setChecked(memoryInfoShown);
 	if (memoryInfoShown)
 		toggleMemoryInfo();
@@ -2471,7 +2471,6 @@ void MainWin::toggleStatusBar(bool checked) {
 }
 
 void MainWin::toggleMemoryInfo() {
-	DEBUG(Q_FUNC_INFO)
 	if (m_memoryInfoWidget) {
 		statusBar()->removeWidget(m_memoryInfoWidget);
 		delete m_memoryInfoWidget;

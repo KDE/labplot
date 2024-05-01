@@ -156,6 +156,9 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 	ui.gbUpdateOptions->hide();
 	setMQTTVisible(false);
 
+	ui.cbReadingType->addItem(i18n("Continuously Fixed"), static_cast<int>(LiveDataSource::ReadingType::ContinuousFixed));
+	ui.cbReadingType->addItem(i18n("From End"), static_cast<int>(LiveDataSource::ReadingType::FromEnd));
+	ui.cbReadingType->addItem(i18n("Till End"), static_cast<int>(LiveDataSource::ReadingType::TillEnd));
 	ui.cbReadingType->addItem(i18n("Whole File"), static_cast<int>(LiveDataSource::ReadingType::WholeFile));
 
 	ui.bOpen->setIcon(QIcon::fromTheme(QStringLiteral("document-open")));
@@ -594,17 +597,15 @@ int ImportFileWidget::baudRate() const {
 	saves the settings to the data source \c source.
 */
 void ImportFileWidget::saveSettings(LiveDataSource* source) const {
-	auto fileType = currentFileType();
-	auto updateType = static_cast<LiveDataSource::UpdateType>(ui.cbUpdateType->currentIndex());
-	auto sourceType = currentSourceType();
-	auto readingType = static_cast<LiveDataSource::ReadingType>(ui.cbReadingType->currentIndex());
-
+	// file type
+	const auto fileType = currentFileType();
 	source->setFileType(fileType);
 	currentFileFilter();
 	source->setFilter(m_currentFilter.release()); // pass ownership of the filter to the LiveDataSource
 
+	// source type
+	const auto sourceType = currentSourceType();
 	source->setSourceType(sourceType);
-
 	switch (sourceType) {
 	case LiveDataSource::SourceType::FileOrPipe:
 		source->setFileName(fileName());
@@ -632,6 +633,8 @@ void ImportFileWidget::saveSettings(LiveDataSource* source) const {
 	}
 
 	// reading options
+	const auto readingType = static_cast<LiveDataSource::ReadingType>(ui.cbReadingType->currentData().toInt());
+	const auto updateType = static_cast<LiveDataSource::UpdateType>(ui.cbUpdateType->currentIndex());
 	source->setReadingType(readingType);
 	source->setKeepNValues(ui.sbKeepNValues->value());
 	source->setUpdateType(updateType);

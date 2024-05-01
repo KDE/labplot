@@ -63,7 +63,7 @@ void LiveDataTest::testReadContinuousFixed00() {
 	// write out more data to the file
 	file.write("5,6\n7,8\n");
 	file.close();
-	waitForSignal(&dataSource, SIGNAL(readOnUpdateCalled));
+	waitForSignal(&dataSource, SIGNAL(readOnUpdateCalled()));
 
 	// the first line of the new data (sample size = 1) was added, check
 	QCOMPARE(dataSource.columnCount(), 2);
@@ -134,7 +134,7 @@ void LiveDataTest::testReadContinuousFixed01() {
 	// write out more data to the file
 	file.write("5,6\n7,8\n");
 	file.close();
-	waitForSignal(&dataSource, SIGNAL(readOnUpdateCalled));
+	waitForSignal(&dataSource, SIGNAL(readOnUpdateCalled()));
 
 	// the first line of the new data (sample size = 1) was added, check
 	QCOMPARE(dataSource.columnCount(), 2);
@@ -203,7 +203,7 @@ void LiveDataTest::testReadContinuousFixed02() {
 	// write out more data to the file
 	file.write("5,6\n7,8\n");
 	file.close();
-	waitForSignal(&dataSource, SIGNAL(readOnUpdateCalled));
+	waitForSignal(&dataSource, SIGNAL(readOnUpdateCalled()));
 
 	// the first line of the new data (sample size = 1) was added, check
 	QCOMPARE(dataSource.columnCount(), 2);
@@ -272,7 +272,7 @@ void LiveDataTest::testReadFromEnd00() {
 	// write out more data to the file
 	file.write("5,6\n7,8\n");
 	file.close();
-	waitForSignal(&dataSource, SIGNAL(readOnUpdateCalled));
+	waitForSignal(&dataSource, SIGNAL(readOnUpdateCalled()));
 
 	// the first line of the new data (sample size = 1) was added, check
 	QCOMPARE(dataSource.columnCount(), 2);
@@ -343,7 +343,7 @@ void LiveDataTest::testReadFromEnd01() {
 	// write out more data to the file
 	file.write("5,6\n7,8\n");
 	file.close();
-	waitForSignal(&dataSource, SIGNAL(readOnUpdateCalled));
+	waitForSignal(&dataSource, SIGNAL(readOnUpdateCalled()));
 
 	// the first line of the new data (sample size = 1) was added, check
 	QCOMPARE(dataSource.columnCount(), 2);
@@ -412,7 +412,7 @@ void LiveDataTest::testReadFromEnd02() {
 	// write out more data to the file
 	file.write("5,6\n7,8\n");
 	file.close();
-	waitForSignal(&dataSource, SIGNAL(readOnUpdateCalled));
+	waitForSignal(&dataSource, SIGNAL(readOnUpdateCalled()));
 
 	// the first line of the new data (sample size = 1) was added, check
 	QCOMPARE(dataSource.columnCount(), 2);
@@ -479,7 +479,7 @@ void LiveDataTest::testReadTillEnd00() {
 	// write out more data to the file
 	file.write("5,6\n7,8\n");
 	file.close();
-	waitForSignal(&dataSource, SIGNAL(readOnUpdateCalled));
+	waitForSignal(&dataSource, SIGNAL(readOnUpdateCalled()));
 
 	// checks
 	QCOMPARE(dataSource.columnCount(), 2);
@@ -550,7 +550,7 @@ void LiveDataTest::testReadTillEnd01() {
 	// write out more data to the file
 	file.write("5,6\n7,8\n");
 	file.close();
-	waitForSignal(&dataSource, SIGNAL(readOnUpdateCalled));
+	waitForSignal(&dataSource, SIGNAL(readOnUpdateCalled()));
 
 	// checks
 	QCOMPARE(dataSource.columnCount(), 2);
@@ -615,7 +615,7 @@ void LiveDataTest::testReadWholeFile00() {
 	// write out more data to the file
 	file.write("3,4\n");
 	file.close();
-	waitForSignal(&dataSource, SIGNAL(readOnUpdateCalled));
+	waitForSignal(&dataSource, SIGNAL(readOnUpdateCalled()));
 
 	// checks
 	QCOMPARE(dataSource.columnCount(), 2);
@@ -681,7 +681,7 @@ void LiveDataTest::testReadWholeFile01() {
 	// write out more data to the file
 	file.write("3,4\n");
 	file.close();
-	waitForSignal(&dataSource, SIGNAL(readOnUpdateCalled));
+	waitForSignal(&dataSource, SIGNAL(readOnUpdateCalled()));
 
 	// checks
 	QCOMPARE(dataSource.columnCount(), 2);

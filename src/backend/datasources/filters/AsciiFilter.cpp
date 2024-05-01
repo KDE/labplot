@@ -812,21 +812,13 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 #ifdef PERFTRACE_LIVE_IMPORT
 	PERFTRACE(QStringLiteral("AsciiLiveDataImportTotal: "));
 #endif
-	LiveDataSource::ReadingType readingType;
-	if (m_firstRead) {
+
+	// read until the end of the file if it's the first read or FromEnd or WholeFile.
+	// TODO: this temporarliy changes readingType, redesign this part.
+	auto readingType = spreadsheet->readingType();
+	if (m_firstRead || spreadsheet->readingType() == LiveDataSource::ReadingType::FromEnd
+	|| spreadsheet->readingType() == LiveDataSource::ReadingType::WholeFile)
 		readingType = LiveDataSource::ReadingType::TillEnd;
-	} else {
-		// we have to read all the data when reading from end
-		// so we set readingType to TillEnd
-		if (spreadsheet->readingType() == LiveDataSource::ReadingType::FromEnd)
-			readingType = LiveDataSource::ReadingType::TillEnd;
-		// if we read the whole file we just start from the beginning of it
-		// and read till end
-		else if (spreadsheet->readingType() == LiveDataSource::ReadingType::WholeFile)
-			readingType = LiveDataSource::ReadingType::TillEnd;
-		else
-			readingType = spreadsheet->readingType();
-	}
 	DEBUG("	Reading type = " << ENUM_TO_STRING(LiveDataSource, ReadingType, readingType));
 
 	// move to the last read position, from == total bytes read
@@ -1003,8 +995,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 				// we had more lines than the fixed size, so we read m_actualRows number of lines
 				if (newLinesTillEnd > m_actualRows) {
 					linesToRead = m_actualRows;
-					// TODO after reading we should skip the next data lines
-					// because it's TillEnd actually
+					// TODO after reading we should skip the next data lines because it's TillEnd actually
 				} else
 					linesToRead = newLinesTillEnd;
 			} else {
