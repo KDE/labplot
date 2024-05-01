@@ -4024,7 +4024,7 @@ void SpreadsheetView::exportToLaTeX(const QString& path,
 	bool columnsSeparating = (cols > columnsPerTable);
 	QTextStream out(&file);
 
-	const QString latexFullPath = safeExecutableName(QLatin1String("latex"));
+	const QString latexFullPath = safeExecutableName(QStringLiteral("latex"));
 	if (latexFullPath.isEmpty()) {
 		DEBUG(Q_FUNC_INFO << ", WARNING: latex not found!")
 		return;

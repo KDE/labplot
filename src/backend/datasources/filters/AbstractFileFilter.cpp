@@ -148,7 +148,7 @@ AbstractFileFilter::FileType AbstractFileFilter::fileType(const QString& fileNam
 	QString fileInfo;
 #ifndef HAVE_WINDOWS
 	// check, if we can guess the file type by content
-	const QString fileFullPath = safeExecutableName(QLatin1String("file"));
+	const QString fileFullPath = safeExecutableName(QStringLiteral("file"));
 	if (!fileFullPath.isEmpty()) {
 		QProcess proc;
 		startHostProcess(proc, fileFullPath, QStringList() << QStringLiteral("-b") << QStringLiteral("-z") << fileName);

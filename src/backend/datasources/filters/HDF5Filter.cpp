@@ -345,7 +345,7 @@ QString HDF5Filter::fileDDLString(const QString& fileName) {
 
 	QString DDLString;
 #ifdef Q_OS_LINUX
-	const QString h5dumpFullPath = safeExecutableName(QLatin1String("h5dump"));
+	const QString h5dumpFullPath = safeExecutableName(QStringLiteral("h5dump"));
 	if (h5dumpFullPath.isEmpty())
 		return i18n("h5dump not found.");
 

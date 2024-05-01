@@ -255,7 +255,7 @@ QString NetCDFFilter::fileCDLString(const QString& fileName) {
 
 	QString CDLString;
 #ifdef Q_OS_LINUX
-	const QString ncdumpFullPath = safeExecutableName(QLatin1String("ncdump"));
+	const QString ncdumpFullPath = safeExecutableName(QStringLiteral("ncdump"));
 	if (ncdumpFullPath.isEmpty())
 		return i18n("ncdump not found.");
 
