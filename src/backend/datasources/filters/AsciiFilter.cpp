@@ -807,12 +807,9 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 		m_prepared = true;
 	}
 
-	qint64 bytesread = 0;
-
 #ifdef PERFTRACE_LIVE_IMPORT
 	PERFTRACE(QStringLiteral("AsciiLiveDataImportTotal: "));
 #endif
-
 	// read until the end of the file if it's the first read or FromEnd or WholeFile.
 	// TODO: this temporarliy changes readingType, redesign this part.
 	auto readingType = spreadsheet->readingType();
@@ -829,13 +826,13 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 	// count the new lines, increase actualrows on each
 	// now we read all the new lines, if we want to use sample rate
 	// then here we can do it, if we have actually sample rate number of lines :-?
-	int newLinesForSampleSizeNotTillEnd = 0;
-	int newLinesTillEnd = 0;
 	QVector<QString> newData;
 	if (readingType != LiveDataSource::ReadingType::TillEnd)
 		newData.resize(spreadsheet->sampleSize());
 
 	int newDataIdx = 0;
+	int newLinesForSampleSizeNotTillEnd = 0;
+	int newLinesTillEnd = 0;
 	{
 #ifdef PERFTRACE_LIVE_IMPORT
 		PERFTRACE(QStringLiteral("AsciiLiveDataImportReadingFromFile: "));
@@ -980,14 +977,19 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 				// we don't increase it if we reread the whole file, we reset it
 				if (spreadsheet->readingType() != LiveDataSource::ReadingType::WholeFile)
 					m_actualRows += newData.size();
-				else
+				else {
 					m_actualRows = newData.size();
+					if (headerEnabled)
+						m_actualRows -= headerLine;
+				}
 			}
 
 			// appending
-			if (spreadsheet->readingType() == LiveDataSource::ReadingType::WholeFile)
+			if (spreadsheet->readingType() == LiveDataSource::ReadingType::WholeFile) {
 				linesToRead = m_actualRows;
-			else
+				if (headerEnabled)
+					linesToRead += headerLine;
+			} else
 				linesToRead = m_actualRows - rowCountBeforeResize;
 		} else { // fixed size
 			DEBUG("	keep " << keepNValues << " values");
@@ -1007,7 +1009,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 
 		if (linesToRead == 0)
 			return 0;
-	} else // not prepared
+	} else // first initial read, read all data
 		linesToRead = newLinesTillEnd;
 
 	DEBUG(Q_FUNC_INFO << ", lines to read = " << linesToRead);
@@ -1130,6 +1132,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 	DEBUG(Q_FUNC_INFO << ", reading from line " << currentRow << " till end line " << newLinesTillEnd);
 	DEBUG(Q_FUNC_INFO << ", lines to read:" << linesToRead << ", actual rows:" << m_actualRows << ", actual cols:" << m_actualCols);
 	newDataIdx = 0;
+	qint64 bytesread = 0;
 	if (readingType == LiveDataSource::ReadingType::FromEnd && !m_firstRead) {
 		if (newData.size() > spreadsheet->sampleSize())
 			newDataIdx = newData.size() - spreadsheet->sampleSize();
@@ -1140,7 +1143,6 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 	DEBUG("	newDataIdx: " << newDataIdx);
 
 	// read the new data into the data container
-	static int indexColumnIdx = 1;
 	{
 #ifdef PERFTRACE_LIVE_IMPORT
 		PERFTRACE(QLatin1String("AsciiLiveDataImportFillingContainers: "));
@@ -1150,8 +1152,8 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 		if (headerEnabled && sourceType == LiveDataSource::SourceType::FileOrPipe) {
 			// only handle the header if we're reading the file for the first time or re-reading the whole file again
 			if (m_firstRead || spreadsheet->readingType() == LiveDataSource::ReadingType::WholeFile) {
-				row = 1;
-				bytesread += newData.at(0).size();
+				row = m_actualStartRow - 1; // TODO: ???
+				bytesread += newData.at(row - 1).size();
 			}
 		}
 
@@ -1185,7 +1187,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 			} else
 				lineStringList << line;
 
-			QDEBUG("	line = " << lineStringList << ", separator = \'" << m_separator << "\'");
+			// QDEBUG("	line = " << lineStringList << ", separator = \'" << m_separator << "\'");
 			// DEBUG("	Line bytes: " << line.size() << " line: " << STDSTRING(line));
 
 			if (simplifyWhitespacesEnabled) {
@@ -1194,6 +1196,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 			}
 
 			// add index if required
+			static int indexColumnIdx = 1;
 			int offset = 0;
 			if (createIndexEnabled) {
 				int index = (spreadsheet->keepNValues() == 0) ? currentRow + 1 : indexColumnIdx++;
