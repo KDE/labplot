@@ -16,7 +16,7 @@
 #include "backend/worksheet/ResizeItem.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/WorksheetElementContainerPrivate.h"
-#include "backend/worksheet/plots/cartesian/XYCurve.h"
+#include "backend/worksheet/plots/cartesian/Plot.h"
 
 #include <QGraphicsScene>
 #include <QGraphicsSceneContextMenuEvent>
@@ -66,15 +66,15 @@ void WorksheetElementContainer::setVisible(bool on) {
 		beginMacro(i18n("%1: set invisible", name()));
 
 	// change the visibility of all children
-	const auto& elements = children<WorksheetElement>(AbstractAspect::ChildIndexFlag::IncludeHidden | AbstractAspect::ChildIndexFlag::Compress);
+	const auto& elements = children<Plot>(AbstractAspect::ChildIndexFlag::IncludeHidden | AbstractAspect::ChildIndexFlag::Compress);
 	for (auto* elem : elements) {
-		auto* curve = dynamic_cast<XYCurve*>(elem);
-		if (curve) {
+		auto* plot = dynamic_cast<Plot*>(elem);
+		if (plot) {
 			// making curves invisible triggers the recalculation of plot ranges if auto-scale is active.
 			// this should be avoided by supressing the retransformation in the curves.
-			curve->setSuppressRetransform(true);
+			plot->setSuppressRetransform(true);
 			elem->setVisible(on);
-			curve->setSuppressRetransform(false);
+			plot->setSuppressRetransform(false);
 		} else if (elem)
 			elem->setVisible(on);
 	}
