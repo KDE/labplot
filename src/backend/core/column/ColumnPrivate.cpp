@@ -2875,7 +2875,7 @@ void ColumnPrivate::updateProperties() {
 	else if (m_columnMode == AbstractColumn::ColumnMode::BigInt)
 		prevValueBigInt = bigIntAt(0);
 	else if (m_columnMode == AbstractColumn::ColumnMode::Double)
-		prevValue = valueAt(0);
+		prevValue = doubleAt(0);
 	else if (m_columnMode == AbstractColumn::ColumnMode::DateTime || m_columnMode == AbstractColumn::ColumnMode::Month
 			 || m_columnMode == AbstractColumn::ColumnMode::Day)
 		prevValueDatetime = dateTimeAt(0).toMSecsSinceEpoch();

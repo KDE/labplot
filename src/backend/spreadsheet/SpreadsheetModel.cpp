@@ -558,7 +558,7 @@ bool SpreadsheetModel::formulaModeActive() const {
 }
 
 QVariant SpreadsheetModel::color(const AbstractColumn* column, int row, AbstractColumn::Formatting type) const {
-	if ((!column->isNumeric() && column->columnMode() != AbstractColumn::ColumnMode::Text) || !column->isValid(row) || !column->hasHeatmapFormat())
+	if (!column->hasHeatmapFormat() || (!column->isNumeric() && column->columnMode() != AbstractColumn::ColumnMode::Text) || !column->isValid(row))
 		return {};
 
 	const auto& format = column->heatmapFormat();

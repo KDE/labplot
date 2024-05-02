@@ -428,10 +428,8 @@ void AbstractColumn::clear(QUndoCommand*) {
  */
 bool AbstractColumn::isValid(int row) const {
 	switch (columnMode()) {
-	case ColumnMode::Double: {
-		double value = valueAt(row);
-		return std::isfinite(value);
-	}
+	case ColumnMode::Double:
+		return std::isfinite(doubleAt(row));
 	case ColumnMode::Integer: // there is no invalid integer
 	case ColumnMode::BigInt:
 		return true;

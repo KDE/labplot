@@ -651,7 +651,7 @@ void XYCurve::handleResize(double horizontalRatio, double verticalRatio, bool /*
  */
 int XYCurve::getNextValue(double xpos, int offset, double& x, double& y, bool& valueFound) const {
 	valueFound = false;
-	auto properties = xColumn()->properties();
+	const auto& properties = xColumn()->properties();
 	if (properties == AbstractColumn::Properties::MonotonicDecreasing)
 		offset *= -1;
 
@@ -781,7 +781,7 @@ void XYCurvePrivate::calculateScenePoints() {
 			for (auto& col : scenePointsUsed)
 				col.resize(numberOfPixelY + 1);
 
-			const auto columnProperties = xColumn->properties();
+			const auto& columnProperties = xColumn->properties();
 			int startIndex, endIndex;
 			if (columnProperties == AbstractColumn::Properties::MonotonicDecreasing || columnProperties == AbstractColumn::Properties::MonotonicIncreasing) {
 				DEBUG(Q_FUNC_INFO << ", column monotonic")
@@ -1071,7 +1071,7 @@ void XYCurvePrivate::updateLines() {
 
 		// find index for xMin and xMax to not loop through all values
 		int startIndex, endIndex;
-		auto columnProperties = q->xColumn()->properties();
+		const auto& columnProperties = q->xColumn()->properties();
 		if (columnProperties == AbstractColumn::Properties::MonotonicDecreasing || columnProperties == AbstractColumn::Properties::MonotonicIncreasing) {
 			DEBUG(Q_FUNC_INFO << ", monotonic")
 			if (!q->cSystem->isValid())
@@ -2364,7 +2364,7 @@ bool XYCurvePrivate::activatePlot(QPointF mouseScenePos, double maxDist) {
 	if (noLines)
 		calculateScenePoints();
 
-	auto properties = q->xColumn()->properties();
+	const auto& properties = q->xColumn()->properties();
 	if (properties == AbstractColumn::Properties::No || properties == AbstractColumn::Properties::NonMonotonic) {
 		// assumption: points exist if no line. otherwise previously returned false
 		if (noLines) {
