@@ -1242,7 +1242,7 @@ void BarPlotPrivate::recalcShapeAndBoundingRect() {
 			}
 		}
 
-		if (errorBars.at(index)->yErrorType() != ErrorBar::ErrorType::NoError)
+		if (errorBars.at(index) && errorBars.at(index)->yErrorType() != ErrorBar::ErrorType::NoError)
 			m_shape.addPath(WorksheetElement::shapeFromPath(m_errorBarsPaths.at(index), errorBars.at(index)->line()->pen()));
 
 		++index;

@@ -360,7 +360,8 @@ void CartesianPlotLegendPrivate::retransform() {
 			m_plots << barPlot;
 			const auto& columns = barPlot->dataColumns();
 			for (auto* column : columns)
-				m_names << column->name();
+				if (column)
+					m_names << column->name();
 
 			continue;
 		}
