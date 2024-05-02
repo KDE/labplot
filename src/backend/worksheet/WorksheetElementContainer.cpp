@@ -4,7 +4,7 @@
 	Description          : Worksheet element container - parent of multiple elements
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2009 Tilman Benkert <thzs@gmx.net>
-	SPDX-FileCopyrightText: 2012-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2012-2024 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -118,6 +118,10 @@ void WorksheetElementContainer::retransform() {
 	PERFTRACE(QStringLiteral("WorksheetElementContainer::retransform()"));
 	Q_D(WorksheetElementContainer);
 
+	// when retransforming every child here, don't emit the changed signal for every child,
+	// emit it only once for the whole plot to avoid multiple refreshes of the worksheet preview.
+	d->suppressChanged = true;
+
 	const auto& elements = children<WorksheetElement>(AbstractAspect::ChildIndexFlag::IncludeHidden | AbstractAspect::ChildIndexFlag::Compress);
 	for (auto* child : elements)
 		child->retransform();
@@ -126,6 +130,9 @@ void WorksheetElementContainer::retransform() {
 
 	if (m_resizeItem)
 		m_resizeItem->setRect(rect());
+
+	d->suppressChanged = false;
+	Q_EMIT changed();
 }
 
 /*!
@@ -156,7 +163,7 @@ void WorksheetElementContainer::handleAspectAdded(const AbstractAspect* aspect) 
 	if (element && (aspect->parentAspect() == this)) {
 		connect(element, &WorksheetElement::hovered, this, &WorksheetElementContainer::childHovered);
 		connect(element, &WorksheetElement::unhovered, this, &WorksheetElementContainer::childUnhovered);
-		connect(element, &WorksheetElement::changed, this, &WorksheetElementContainer::changed);
+		connect(element, &WorksheetElement::changed, this, &WorksheetElementContainer::childChanged);
 		element->graphicsItem()->setParentItem(d);
 
 		qreal zVal = 0;
@@ -180,9 +187,16 @@ void WorksheetElementContainer::childHovered() {
 
 void WorksheetElementContainer::childUnhovered() {
 	Q_D(WorksheetElementContainer);
-	if (!d->isSelected()) {
+	if (!d->isSelected())
 		setHover(true);
-	}
+}
+
+void WorksheetElementContainer::childChanged() {
+	Q_D(WorksheetElementContainer);
+	if (d->suppressChanged)
+		return;
+
+	Q_EMIT changed();
 }
 
 void WorksheetElementContainer::prepareGeometryChange() {

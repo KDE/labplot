@@ -4,7 +4,7 @@
 	Description          : Private members of WorksheetElementContainer.
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2009 Tilman Benkert <thzs@gmx.net>
-	SPDX-FileCopyrightText: 2012-2015 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2012-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -32,6 +32,7 @@ public:
 	WorksheetElementContainer* q{nullptr};
 	QRectF rect;
 	bool m_printing{false};
+	bool suppressChanged{false};
 
 Q_SIGNALS:
 	void selectedChange(QGraphicsItem*);
