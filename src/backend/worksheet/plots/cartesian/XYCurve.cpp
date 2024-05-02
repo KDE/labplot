@@ -2985,7 +2985,6 @@ void XYCurve::loadThemeConfig(const KConfig& config) {
 	d->errorBar->loadThemeConfig(group, themeColor);
 
 	// line
-
 	// Check if the plot's theme is "Sparkline"
 	if (plot->theme() == QLatin1String("Sparkline")) {
 		// Check if the plot's name is "add-sparkline"
