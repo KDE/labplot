@@ -4,7 +4,7 @@
 	Description          : Worksheet element container - parent of multiple elements
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2009 Tilman Benkert <thzs@gmx.net>
-	SPDX-FileCopyrightText: 2012-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2012-2024 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -16,7 +16,7 @@
 #include "backend/worksheet/ResizeItem.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/WorksheetElementContainerPrivate.h"
-#include "backend/worksheet/plots/cartesian/XYCurve.h"
+#include "backend/worksheet/plots/cartesian/Plot.h"
 
 #include <QGraphicsScene>
 #include <QGraphicsSceneContextMenuEvent>
@@ -66,15 +66,15 @@ void WorksheetElementContainer::setVisible(bool on) {
 		beginMacro(i18n("%1: set invisible", name()));
 
 	// change the visibility of all children
-	const auto& elements = children<WorksheetElement>(AbstractAspect::ChildIndexFlag::IncludeHidden | AbstractAspect::ChildIndexFlag::Compress);
+	const auto& elements = children<Plot>(AbstractAspect::ChildIndexFlag::IncludeHidden | AbstractAspect::ChildIndexFlag::Compress);
 	for (auto* elem : elements) {
-		auto* curve = dynamic_cast<XYCurve*>(elem);
-		if (curve) {
+		auto* plot = dynamic_cast<Plot*>(elem);
+		if (plot) {
 			// making curves invisible triggers the recalculation of plot ranges if auto-scale is active.
 			// this should be avoided by supressing the retransformation in the curves.
-			curve->setSuppressRetransform(true);
+			plot->setSuppressRetransform(true);
 			elem->setVisible(on);
-			curve->setSuppressRetransform(false);
+			plot->setSuppressRetransform(false);
 		} else if (elem)
 			elem->setVisible(on);
 	}
@@ -118,6 +118,10 @@ void WorksheetElementContainer::retransform() {
 	PERFTRACE(QStringLiteral("WorksheetElementContainer::retransform()"));
 	Q_D(WorksheetElementContainer);
 
+	// when retransforming every child here, don't emit the changed signal for every child,
+	// emit it only once for the whole plot to avoid multiple refreshes of the worksheet preview.
+	d->suppressChanged = true;
+
 	const auto& elements = children<WorksheetElement>(AbstractAspect::ChildIndexFlag::IncludeHidden | AbstractAspect::ChildIndexFlag::Compress);
 	for (auto* child : elements)
 		child->retransform();
@@ -126,6 +130,9 @@ void WorksheetElementContainer::retransform() {
 
 	if (m_resizeItem)
 		m_resizeItem->setRect(rect());
+
+	d->suppressChanged = false;
+	Q_EMIT changed();
 }
 
 /*!
@@ -156,7 +163,7 @@ void WorksheetElementContainer::handleAspectAdded(const AbstractAspect* aspect) 
 	if (element && (aspect->parentAspect() == this)) {
 		connect(element, &WorksheetElement::hovered, this, &WorksheetElementContainer::childHovered);
 		connect(element, &WorksheetElement::unhovered, this, &WorksheetElementContainer::childUnhovered);
-		connect(element, &WorksheetElement::changed, this, &WorksheetElementContainer::changed);
+		connect(element, &WorksheetElement::changed, this, &WorksheetElementContainer::childChanged);
 		element->graphicsItem()->setParentItem(d);
 
 		qreal zVal = 0;
@@ -180,9 +187,16 @@ void WorksheetElementContainer::childHovered() {
 
 void WorksheetElementContainer::childUnhovered() {
 	Q_D(WorksheetElementContainer);
-	if (!d->isSelected()) {
+	if (!d->isSelected())
 		setHover(true);
-	}
+}
+
+void WorksheetElementContainer::childChanged() {
+	Q_D(WorksheetElementContainer);
+	if (d->suppressChanged)
+		return;
+
+	Q_EMIT changed();
 }
 
 void WorksheetElementContainer::prepareGeometryChange() {

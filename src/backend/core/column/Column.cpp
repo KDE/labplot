@@ -273,7 +273,7 @@ void Column::copyData() {
 		const Double2StringFilter* filter = static_cast<Double2StringFilter*>(outputFilter());
 		char format = filter->numericFormat();
 		for (int r = 0; r < rows; r++) {
-			output += numberLocale.toString(valueAt(r), format, 16); // copy with max. precision
+			output += numberLocale.toString(doubleAt(r), format, 16); // copy with max. precision
 			if (r < rows - 1)
 				output += QLatin1Char('\n');
 		}
@@ -808,7 +808,7 @@ bool Column::hasValues() const {
 	switch (columnMode()) {
 	case ColumnMode::Double: {
 		for (int row = 0; row < rowCount(); ++row) {
-			if (!std::isnan(valueAt(row))) {
+			if (!std::isnan(doubleAt(row))) {
 				foundValues = true;
 				break;
 			}
@@ -857,7 +857,7 @@ void Column::setFromColumn(int i, AbstractColumn* col, int j) {
 
 	switch (columnMode()) {
 	case ColumnMode::Double:
-		setValueAt(i, col->valueAt(j));
+		setValueAt(i, col->doubleAt(j));
 		break;
 	case ColumnMode::Integer:
 		setIntegerAt(i, col->integerAt(j));
