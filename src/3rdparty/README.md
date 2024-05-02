@@ -26,6 +26,10 @@ QXlsx is an excel file(.xlsx) reader/writer MIT-licensed C++ (with Qt) library (
 
 Qt Advanced Docking System lets you create customizable layouts using a full featured window docking system ([link](https://github.com/githubuser0xFFFF/Qt-Advanced-Docking-System))
 
+## QStringTokenizer
+
+QStringTokenizer is a universal, safe, zero-allocation string splitter and is part of KDToolBox ([link](https://github.com/KDABLabs/KDToolBox/tree/master)).
+
 ## ReadStat (not included)
 
 ReadStat is a command-line tool and MIT-licensed C library for reading files from popular stats packages ([link](https://github.com/WizardMac/ReadStat))
