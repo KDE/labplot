@@ -13,7 +13,7 @@
 #include <cantor/backend.h>
 #endif
 #include "backend/core/Settings.h"
-#include "backend/lib/debug.h"
+#include "backend/lib/Debug.h"
 #include "backend/lib/macros.h"
 #include "kdefrontend/MainWin.h" // LoadOnStart
 
