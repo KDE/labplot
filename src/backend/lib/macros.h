@@ -18,7 +18,7 @@
 #include "macrosWarningStyle.h"
 
 // C++ style warning (works on Windows)
-#include "debug.h"
+#include "Debug.h"
 #include <iomanip>
 #include <iostream>
 

@@ -7,7 +7,7 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-#include "debug.h"
+#include "Debug.h"
 
 namespace {
 bool _debugOutputEnabled = false;

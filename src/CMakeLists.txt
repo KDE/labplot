@@ -370,7 +370,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/gsl/constants.cpp
 	${BACKEND_DIR}/gsl/functions.cpp
 	${BACKEND_DIR}/lib/Range.h
-	${BACKEND_DIR}/lib/debug.cpp
+	${BACKEND_DIR}/lib/Debug.cpp
 	${BACKEND_DIR}/lib/XmlStreamReader.cpp
 	${BACKEND_DIR}/lib/SignallingUndoCommand.cpp
 	${BACKEND_DIR}/lib/hostprocess.cpp
