@@ -10,6 +10,9 @@
 #ifndef DEBUG_H
 #define DEBUG_H
 
+#include <iomanip>
+#include <iostream>
+
 bool debugOutputEnabled();
 void setDebugOutputEnable(bool);
 

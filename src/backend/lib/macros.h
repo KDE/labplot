@@ -19,8 +19,6 @@
 
 // C++ style warning (works on Windows)
 #include "Debug.h"
-#include <iomanip>
-#include <iostream>
 
 struct Lock {
 	inline explicit Lock(bool& variable)
