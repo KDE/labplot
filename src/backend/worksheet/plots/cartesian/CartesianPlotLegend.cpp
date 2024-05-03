@@ -651,7 +651,7 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 				painter->setBrush(symbol->brush());
 				painter->setPen(symbol->pen());
 
-				auto path = Symbol::stylePath(symbol->style());
+				auto path = Symbol::stylePath(symbol->style(), symbol->pen());
 				QTransform trafo;
 				trafo.scale(symbol->size(), symbol->size());
 				path = trafo.map(path);
@@ -781,7 +781,7 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 					painter->setBrush(symbol->brush());
 					painter->setPen(symbol->pen());
 
-					auto path = Symbol::stylePath(symbol->style());
+					auto path = Symbol::stylePath(symbol->style(), symbol->pen());
 					QTransform trafo;
 					trafo.scale(symbol->size(), symbol->size());
 					path = trafo.map(path);
@@ -833,7 +833,7 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 				painter->setBrush(symbol->brush());
 				painter->setPen(symbol->pen());
 
-				auto path = Symbol::stylePath(symbol->style());
+				auto path = Symbol::stylePath(symbol->style(), symbol->pen());
 				QTransform trafo;
 				trafo.scale(symbol->size(), symbol->size());
 				path = trafo.map(path);

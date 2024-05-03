@@ -421,7 +421,7 @@ Symbol::Style Symbol::indexToStyle(const int index) {
 	return StyleOrder.at(index);
 }
 
-QPainterPath Symbol::stylePath(Symbol::Style style) {
+QPainterPath Symbol::stylePath(Symbol::Style style, QPen pen) {
 	QPainterPath path;
 	QPolygonF polygon;
 
@@ -896,7 +896,7 @@ QPainterPath Symbol::stylePath(Symbol::Style style) {
 		break;
 	}
 
-	return path;
+	return WorksheetElement::shapeFromPath(path, pen);
 }
 
 void Symbol::draw(QPainter* painter, QPointF point) {
@@ -909,7 +909,7 @@ void Symbol::draw(QPainter* painter, QPointF point) {
 	painter->setBrush(d->brush);
 	QTransform trafo;
 	trafo.scale(d->size, d->size);
-	QPainterPath path = Symbol::stylePath(d->style);
+	QPainterPath path = Symbol::stylePath(d->style, QPen());
 	if (d->rotationAngle != 0)
 		trafo.rotate(-d->rotationAngle);
 
@@ -928,7 +928,7 @@ void Symbol::draw(QPainter* painter, const QVector<QPointF>& points) {
 	painter->setOpacity(d->opacity);
 	painter->setPen(d->pen);
 	painter->setBrush(d->brush);
-	QPainterPath path = Symbol::stylePath(d->style);
+	QPainterPath path = Symbol::stylePath(d->style, QPen());
 	QTransform trafo;
 	trafo.scale(d->size, d->size);
 	if (d->rotationAngle != 0)

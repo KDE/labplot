@@ -200,6 +200,7 @@ QPainterPath WorksheetElement::shapeFromPath(const QPainterPath& path, const QPe
 
 	QPainterPathStroker ps;
 	ps.setCapStyle(pen.capStyle());
+	DEBUG(Q_FUNC_INFO << "Pen width" << pen.width())
 	if (pen.widthF() <= 0.0)
 		ps.setWidth(penWidthZero);
 	else

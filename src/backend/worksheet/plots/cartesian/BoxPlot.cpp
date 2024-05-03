@@ -1475,7 +1475,7 @@ void BoxPlotPrivate::recalcShapeAndBoundingRect() {
 
 		// outlier values
 		if (symbolOutlier->style() != Symbol::Style::NoSymbols && !m_outlierPoints.at(i).isEmpty()) {
-			QPainterPath path = Symbol::stylePath(symbolOutlier->style());
+			QPainterPath path = Symbol::stylePath(symbolOutlier->style(),symbolOutlier->pen());
 			QTransform trafo;
 			trafo.scale(symbolOutlier->size(), symbolOutlier->size());
 			path = trafo.map(path);
@@ -1495,7 +1495,7 @@ void BoxPlotPrivate::recalcShapeAndBoundingRect() {
 
 		// jitter values
 		if (symbolData->style() != Symbol::Style::NoSymbols && !m_dataPoints.at(i).isEmpty()) {
-			QPainterPath path = Symbol::stylePath(symbolData->style());
+			QPainterPath path = Symbol::stylePath(symbolData->style(),symbolData->pen());
 			QTransform trafo;
 			trafo.scale(symbolData->size(), symbolData->size());
 			path = trafo.map(path);
@@ -1515,7 +1515,7 @@ void BoxPlotPrivate::recalcShapeAndBoundingRect() {
 
 		// far out values
 		if (symbolFarOut->style() != Symbol::Style::NoSymbols && !m_farOutPoints.at(i).isEmpty()) {
-			QPainterPath path = Symbol::stylePath(symbolFarOut->style());
+			QPainterPath path = Symbol::stylePath(symbolFarOut->style(),symbolFarOut->pen());
 			QTransform trafo;
 			trafo.scale(symbolFarOut->size(), symbolFarOut->size());
 			path = trafo.map(path);
@@ -1535,7 +1535,7 @@ void BoxPlotPrivate::recalcShapeAndBoundingRect() {
 
 		// whisker ends
 		if (symbolWhiskerEnd->style() != Symbol::Style::NoSymbols && !m_whiskerEndPoints.at(i).isEmpty()) {
-			QPainterPath path = Symbol::stylePath(symbolWhiskerEnd->style());
+			QPainterPath path = Symbol::stylePath(symbolWhiskerEnd->style(),symbolWhiskerEnd->pen());
 			QTransform trafo;
 			trafo.scale(symbolWhiskerEnd->size(), symbolWhiskerEnd->size());
 			path = trafo.map(path);
