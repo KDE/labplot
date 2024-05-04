@@ -1571,8 +1571,7 @@ void XYCurvePrivate::updateSymbols() {
 #endif
 	symbolsPath = QPainterPath();
 	if (symbol->style() != Symbol::Style::NoSymbols) {
-		QPainterPath path = Symbol::stylePath(symbol->style());
-
+		auto path = WorksheetElement::shapeFromPath(Symbol::stylePath(symbol->style()), symbol->pen());
 		QTransform trafo;
 		trafo.scale(symbol->size(), symbol->size());
 		path = trafo.map(path);
@@ -2578,7 +2577,8 @@ void XYCurvePrivate::recalcShapeAndBoundingRect() {
 	if (symbol->style() != Symbol::Style::NoSymbols)
 		m_shape.addPath(symbolsPath);
 
-	m_shape.addPath(rugPath);
+	if (rugEnabled)
+		m_shape.addPath(rugPath);
 
 	if (valuesType != XYCurve::ValuesType::NoValues)
 		m_shape.addPath(valuesPath);
@@ -2985,14 +2985,16 @@ void XYCurve::loadThemeConfig(const KConfig& config) {
 	d->errorBar->loadThemeConfig(group, themeColor);
 
 	// line
-
+	// Check if the plot's theme is "Sparkline"
 	if (plot->theme() == QLatin1String("Sparkline")) {
-		if (!GuiTools::isDarkMode())
-			d->line->setColor(Qt::black);
+		// Check if the plot's name is "add-sparkline"
+		if (plot->name() == QLatin1String("add-sparkline"))
+			// Set line color based on dark or light mode
+			d->line->setColor(GuiTools::isDarkMode() ? Qt::white : Qt::black);
 		else
-			d->line->setColor(Qt::white);
+			// Set line color based on background color lightness
+			d->line->setColor(d->background->firstColor().lightness() > 125 ? Qt::black : Qt::white);
 	}
-
 	// Values
 	this->setValuesOpacity(group.readEntry(QStringLiteral("ValuesOpacity"), 1.0));
 	this->setValuesColor(group.readEntry(QStringLiteral("ValuesColor"), themeColor));

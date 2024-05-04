@@ -43,6 +43,8 @@
 #include <KLocalizedString>
 #include <QGraphicsSceneMouseEvent>
 
+#include <backend/worksheet/WorksheetElement.h>
+
 CURVE_COLUMN_CONNECT(Histogram, Data, data, recalc)
 static constexpr double zero = std::numeric_limits<double>::epsilon(); // zero baseline, don't use the exact 0.0 since it breaks the histrogram with log-scaling
 
@@ -1145,7 +1147,7 @@ void HistogramPrivate::horizontalHistogram() {
 void HistogramPrivate::updateSymbols() {
 	symbolsPath = QPainterPath();
 	if (symbol->style() != Symbol::Style::NoSymbols) {
-		QPainterPath path = Symbol::stylePath(symbol->style());
+		auto path = WorksheetElement::shapeFromPath(Symbol::stylePath(symbol->style()), symbol->pen());
 
 		QTransform trafo;
 		trafo.scale(symbol->size(), symbol->size());
