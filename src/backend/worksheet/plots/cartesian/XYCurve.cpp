@@ -2282,7 +2282,7 @@ bool XYCurve::minMax(const AbstractColumn* column1,
 			continue;
 
 		double value = 0.;
-		switch (column1->columnMode() ) {
+		switch (column1->columnMode()) {
 		case AbstractColumn::ColumnMode::Double:
 			value = column1->doubleAt(i);
 			break;
