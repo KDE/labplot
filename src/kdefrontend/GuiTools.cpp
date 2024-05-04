@@ -266,7 +266,7 @@ void GuiTools::addSymbolStyles(QComboBox* cb) {
 		pa.setPen(pen);
 		pa.setRenderHint(QPainter::Antialiasing);
 		pa.translate(iconSize / 2, iconSize / 2);
-		pa.drawPath(trafo.map(Symbol::stylePath(style, QPen())));
+		pa.drawPath(trafo.map(Symbol::stylePath(style)));
 		pa.end();
 		cb->addItem(QIcon(pm), Symbol::styleName(style), (int)style);
 	}

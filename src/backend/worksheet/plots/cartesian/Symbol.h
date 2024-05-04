@@ -92,7 +92,7 @@ public:
 	static int stylesCount();
 	static QString styleName(Symbol::Style);
 	static Symbol::Style indexToStyle(int);
-	static QPainterPath stylePath(Symbol::Style, QPen);
+	static QPainterPath stylePath(Symbol::Style);
 
 	explicit Symbol(const QString& name);
 	~Symbol() override;

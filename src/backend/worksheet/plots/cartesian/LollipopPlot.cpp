@@ -832,7 +832,7 @@ void LollipopPlotPrivate::recalcShapeAndBoundingRect() {
 
 		const auto* symbol = symbols.at(index);
 		if (symbol->style() != Symbol::Style::NoSymbols) {
-			auto path = Symbol::stylePath(symbol->style(), symbol->pen());
+			auto path = Symbol::stylePath(symbol->style());
 
 			QTransform trafo;
 			trafo.scale(symbol->size(), symbol->size());

@@ -165,7 +165,7 @@ void CustomPointPrivate::recalcShapeAndBoundingRect() {
 
 	m_shape = QPainterPath();
 	if (insidePlot && symbol->style() != Symbol::Style::NoSymbols) {
-		QPainterPath path = Symbol::stylePath(symbol->style(), symbol->pen());
+		QPainterPath path = Symbol::stylePath(symbol->style());
 
 		QTransform trafo;
 		trafo.scale(symbol->size(), symbol->size());
