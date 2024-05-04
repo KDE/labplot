@@ -59,8 +59,8 @@ QByteArray TeXRenderer::renderImageLaTeX(const QString& teXString, Result* res, 
 #endif
 
 	// make sure we have preview.sty available
-	if (!tempPath.contains(QLatin1String("preview.sty"))) {
-		QString file = QStandardPaths::locate(QStandardPaths::AppDataLocation, QLatin1String("latex/preview.sty"));
+	if (!tempPath.contains(QStringLiteral("preview.sty"))) {
+		QString file = QStandardPaths::locate(QStandardPaths::AppDataLocation, QStringLiteral("latex/preview.sty"));
 		if (file.isEmpty()) {
 			QString err = i18n("Couldn't find preview.sty.");
 			WARN(err.toStdString());
@@ -68,11 +68,11 @@ QByteArray TeXRenderer::renderImageLaTeX(const QString& teXString, Result* res, 
 			res->errorMessage = err;
 			return {};
 		} else
-			QFile::copy(file, tempPath + QLatin1String("/") + QLatin1String("preview.sty"));
+			QFile::copy(file, tempPath + QLatin1Char('/') + QStringLiteral("preview.sty"));
 	}
 
 	// create a temporary file
-	QTemporaryFile file(tempPath + QStringLiteral("/") + QStringLiteral("labplot_XXXXXX.tex"));
+	QTemporaryFile file(tempPath + QLatin1Char('/') + QStringLiteral("labplot_XXXXXX.tex"));
 	// FOR DEBUG: file.setAutoRemove(false);
 	// DEBUG("temp file path = " << file.fileName().toUtf8().constData());
 	if (file.open()) {
@@ -87,16 +87,16 @@ QByteArray TeXRenderer::renderImageLaTeX(const QString& teXString, Result* res, 
 
 	// determine latex engine to be used
 	const auto& group = Settings::group(QStringLiteral("Settings_Worksheet"));
-	const auto& engine = group.readEntry("LaTeXEngine", "pdflatex");
+	const auto& engine = group.readEntry(QStringLiteral("LaTeXEngine"), QStringLiteral("pdflatex"));
 
 	// create latex code
 	QTextStream out(&file);
-	int headerIndex = teXString.indexOf(QLatin1String("\\begin{document}"));
+	const int headerIndex = teXString.indexOf(QStringLiteral("\\begin{document}"));
 	QString body;
 	if (headerIndex != -1) {
 		// user provided a complete latex document -> extract the document header and body
 		QString header = teXString.left(headerIndex);
-		int footerIndex = teXString.indexOf(QLatin1String("\\end{document}"));
+		const int footerIndex = teXString.indexOf(QStringLiteral("\\end{document}"));
 		body = teXString.mid(headerIndex + 16, footerIndex - headerIndex - 16);
 		out << header;
 	} else {
@@ -111,31 +111,33 @@ QByteArray TeXRenderer::renderImageLaTeX(const QString& teXString, Result* res, 
 		body = body.replace(QLatin1String("\n"), QLatin1String("\\\\"));
 	}
 
-	if (engine == QLatin1String("xelatex") || engine == QLatin1String("lualatex")) {
-		out << "\\usepackage{fontspec}";
-		out << "\\defaultfontfeatures{Ligatures=TeX}";
+	if (engine == QStringLiteral("xelatex") || engine == QStringLiteral("lualatex")) {
+		out << QStringLiteral("\\usepackage{fontspec}");
+		out << QStringLiteral("\\defaultfontfeatures{Ligatures=TeX}");
 		if (!fontFamily.isEmpty())
-			out << "\\setmainfont[Mapping=tex-text]{" << fontFamily << "}";
+			out << QStringLiteral("\\setmainfont[Mapping=tex-text]{") << fontFamily << QLatin1Char('}');
 	}
 
-	out << "\\usepackage{color}";
-	out << "\\usepackage[active,displaymath,textmath,tightpage]{preview}";
+	out << QStringLiteral("\\usepackage{color}");
+	out << QStringLiteral("\\usepackage[active,displaymath,textmath,tightpage]{preview}");
 	out << "\\setlength\\PreviewBorder{0pt}";
 	// TODO: this fails with pdflatex
 	// out << "\\usepackage{mathtools}";
-	out << "\\begin{document}";
-	out << "\\begin{preview}";
-	out << "\\setlength{\\fboxsep}{1.0pt}";
-	out << "\\colorbox[rgb]{" << backgroundColor.redF() << ',' << backgroundColor.greenF() << ',' << backgroundColor.blueF() << "}{";
-	out << "\\fontsize{" << QString::number(fontSize) << "}{" << QString::number(fontSize) << "}\\selectfont";
-	out << "\\color[rgb]{" << fontColor.redF() << ',' << fontColor.greenF() << ',' << fontColor.blueF() << "}";
+	out << QStringLiteral("\\begin{document}");
+	out << QStringLiteral("\\begin{preview}");
+	out << QStringLiteral("\\setlength{\\fboxsep}{1.0pt}");
+	if (backgroundColor.alpha() != 0)
+		out << QStringLiteral("\\colorbox[rgb]{") << backgroundColor.redF() << QLatin1Char(',') << backgroundColor.greenF() << QLatin1Char(',') << backgroundColor.blueF() << QLatin1Char('}');
+	out << QLatin1Char('{');
+	out << QStringLiteral("\\fontsize{") << QString::number(fontSize) << QStringLiteral("}{") << QString::number(fontSize) << QStringLiteral("}\\selectfont");
+	out << QStringLiteral("\\color[rgb]{") << fontColor.redF() << QLatin1Char(',') << fontColor.greenF() << QLatin1Char(',') << fontColor.blueF() << QLatin1Char('}');
 	out << body;
-	out << "}";
-	out << "\\end{preview}";
-	out << "\\end{document}";
+	out << QLatin1Char('}');
+	out << QStringLiteral("\\end{preview}");
+	out << QStringLiteral("\\end{document}");
 	out.flush();
 
-	if (engine == QLatin1String("latex"))
+	if (engine == QStringLiteral("latex"))
 		return imageFromDVI(file, dpi, res);
 	else
 		return imageFromPDF(file, engine, res);

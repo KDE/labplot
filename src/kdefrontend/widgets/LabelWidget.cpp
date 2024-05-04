@@ -743,20 +743,21 @@ void LabelWidget::backgroundColorChanged(const QColor& color) {
 	QDEBUG(Q_FUNC_INFO << ", color = " << color)
 	CONDITIONAL_LOCK_RETURN;
 
-	auto mode = m_label->text().mode;
-	DEBUG(Q_FUNC_INFO << ", tex enable = " << m_teXEnabled << ", mode = " << (int)mode)
+	// remove the transparency if it was set initially before
+	auto newColor(color);
+	if (color.alpha() == 0) {
+		newColor.setAlpha(255);
+		ui.kcbBackgroundColor->setColor(newColor);
+	}
+
+	const auto mode = m_label->text().mode;
 	if (mode == TextLabel::Mode::Text || (mode == TextLabel::Mode::LaTeX && !m_teXEnabled)) {
-		auto newColor(color);
-		if (color.alpha() == 0) { // remove the transparency if it was set initially before.
-			newColor.setAlpha(255);
-			ui.kcbBackgroundColor->setColor(newColor);
-		}
-		SETLABELTEXTPROPERTY(setTextBackgroundColor, newColor)
+		SETLABELTEXTPROPERTY(setTextBackgroundColor, newColor);
 	} else { // LaTeX (enabled) or Markup mode
 		// Latex text does not support html code. For this the backgroundColor variable is used
 		// Only single color background is supported
 		for (auto* label : m_labelsList)
-			label->setBackgroundColor(color);
+			label->setBackgroundColor(newColor);
 	}
 }
 
@@ -1609,8 +1610,11 @@ void LabelWidget::updateMode(TextLabel::Mode mode) {
 			ui.lFontSize->setVisible(false);
 			ui.sbFontSize->setVisible(false);
 		} else {
+			// changing the main font for latex and pdflatex is a cumbersome (https://latex-tutorial.com/changing-font-style/),
+			// hide this option completely for these engines for now
 			ui.lFontTeX->setVisible(false);
 			ui.kfontRequesterTeX->setVisible(false);
+
 			ui.lFontSize->setVisible(true);
 			ui.sbFontSize->setVisible(true);
 		}
