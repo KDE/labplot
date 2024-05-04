@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-01 01:39+0000\n"
+"POT-Creation-Date: 2024-05-03 01:41+0000\n"
 "PO-Revision-Date: 2024-02-29 03:22+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -339,7 +339,7 @@ msgid_plural "%1: remove %2 rows"
 msgstr[0] "%1: 1 მწკრივის წაშლა"
 msgstr[1] "%1: %2 მწკრივის წაშლა"
 
-#: src/backend/core/AbstractColumn.cpp:926
+#: src/backend/core/AbstractColumn.cpp:924
 #, kde-format
 msgid "invalid or missing start or end row"
 msgstr "საწყისი ან საბოლოო მწკრივის დასაწყისი ან დასასრული არასწორია"

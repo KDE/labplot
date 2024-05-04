@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-01 01:39+0000\n"
+"POT-Creation-Date: 2024-05-03 01:41+0000\n"
 "PO-Revision-Date: 2022-09-05 22:28+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -357,7 +357,7 @@ msgstr[3] "أزل الصفوفأزل الصفوف"
 msgstr[4] "أزل الصفوفأزل الصفوف"
 msgstr[5] "أزل الصفوفأزل الصفوف"
 
-#: src/backend/core/AbstractColumn.cpp:926
+#: src/backend/core/AbstractColumn.cpp:924
 #, kde-format
 msgid "invalid or missing start or end row"
 msgstr ""

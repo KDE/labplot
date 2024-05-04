@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-01 01:39+0000\n"
+"POT-Creation-Date: 2024-05-03 01:41+0000\n"
 "PO-Revision-Date: 2023-11-26 22:42+0100\n"
 "Last-Translator: Stefan Gerlach <stefan.gerlach@uni.kn>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -347,7 +347,7 @@ msgid_plural "%1: remove %2 rows"
 msgstr[0] "%1: 1 Zeile entfernen"
 msgstr[1] "%1: %2 Zeilen entfernen"
 
-#: src/backend/core/AbstractColumn.cpp:926
+#: src/backend/core/AbstractColumn.cpp:924
 #, kde-format
 msgid "invalid or missing start or end row"
 msgstr "Ungültige oder fehlende erste oder letzte Zeile"

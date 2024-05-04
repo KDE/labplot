@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-01 01:39+0000\n"
+"POT-Creation-Date: 2024-05-03 01:41+0000\n"
 "PO-Revision-Date: 2024-04-21 00:13+0200\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -340,7 +340,7 @@ msgid_plural "%1: remove %2 rows"
 msgstr[0] "%1: eliminar 1 fila"
 msgstr[1] "%1: eliminar %2 filas"
 
-#: src/backend/core/AbstractColumn.cpp:926
+#: src/backend/core/AbstractColumn.cpp:924
 #, kde-format
 msgid "invalid or missing start or end row"
 msgstr "fila de inicio o fin falta o no es válida"

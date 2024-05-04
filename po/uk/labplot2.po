@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-01 01:39+0000\n"
+"POT-Creation-Date: 2024-05-03 01:41+0000\n"
 "PO-Revision-Date: 2024-04-19 16:25+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian\n"
@@ -349,7 +349,7 @@ msgstr[1] "%1: вилучити %2 рядки"
 msgstr[2] "%1: вилучити %2 рядків"
 msgstr[3] "%1: вилучити один рядок"
 
-#: src/backend/core/AbstractColumn.cpp:926
+#: src/backend/core/AbstractColumn.cpp:924
 #, kde-format
 msgid "invalid or missing start or end row"
 msgstr "некоректний або пропущений початковий або кінцевий рядок"
