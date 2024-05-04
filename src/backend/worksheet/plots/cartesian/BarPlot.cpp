@@ -547,6 +547,8 @@ void BarPlotPrivate::recalc() {
 	int barGroupsCount = 0;
 	int columnIndex = 0;
 	for (auto* column : qAsConst(dataColumns)) {
+		if (!column)
+			continue;
 		int size = static_cast<const Column*>(column)->statistics().size;
 		m_barLines[columnIndex].resize(size);
 		m_fillPolygons[columnIndex].resize(size);
@@ -620,6 +622,8 @@ void BarPlotPrivate::recalc() {
 		switch (type) {
 		case BarPlot::Type::Grouped: {
 			for (auto* column : dataColumns) {
+				if (!column)
+					continue;
 				double max = column->maximum();
 				if (max > yMax)
 					yMax = max;
@@ -1242,7 +1246,7 @@ void BarPlotPrivate::recalcShapeAndBoundingRect() {
 			}
 		}
 
-		if (errorBars.at(index) && errorBars.at(index)->yErrorType() != ErrorBar::ErrorType::NoError)
+		if (index < errorBars.size() && errorBars.at(index) && errorBars.at(index)->yErrorType() != ErrorBar::ErrorType::NoError)
 			m_shape.addPath(WorksheetElement::shapeFromPath(m_errorBarsPaths.at(index), errorBars.at(index)->line()->pen()));
 
 		++index;
@@ -1309,7 +1313,7 @@ void BarPlotPrivate::draw(QPainter* painter) {
 
 		// draw error bars
 		auto* errorBar = errorBars.at(columnIndex);
-		if (errorBar->yErrorType() != ErrorBar::ErrorType::NoError)
+		if (errorBar && errorBar->yErrorType() != ErrorBar::ErrorType::NoError)
 			errorBar->draw(painter, m_errorBarsPaths.at(columnIndex));
 
 		++columnIndex;

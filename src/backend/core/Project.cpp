@@ -1006,11 +1006,11 @@ void Project::restorePointers(AbstractAspect* aspect) {
 			}
 
 			// error bars
-			if (auto errorBar = barPlot->errorBarAt(i)) {
+			if (auto* errorBar = barPlot->errorBarAt(i)) {
 				RESTORE_COLUMN_POINTER(errorBar, yPlusColumn, YPlusColumn);
 				RESTORE_COLUMN_POINTER(errorBar, yMinusColumn, YMinusColumn);
 			} else {
-				DEBUG(Q_FUNC_INFO << ", WARNING error bar " << i << " is 0")
+				DEBUG(Q_FUNC_INFO << ", WARNING error bar " << i << " is missing")
 			}
 		}
 

@@ -1885,6 +1885,7 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 					DEBUG(Q_FUNC_INFO << ", x/y column path = " << xColumnPath.toStdString() << ", " << yColumnPath.toStdString())
 					barPlot->xColumnPath() = xColumnPath;
 					barPlot->setDataColumnPaths({yColumnPath});
+					// barPlot->setErrorBar();
 
 					// TODO: BarPlot::Type::Stacked_100_Percent
 

@@ -127,10 +127,12 @@ QByteArray TeXRenderer::renderImageLaTeX(const QString& teXString, Result* res, 
 	out << QStringLiteral("\\begin{preview}");
 	out << QStringLiteral("\\setlength{\\fboxsep}{1.0pt}");
 	if (backgroundColor.alpha() != 0)
-		out << QStringLiteral("\\colorbox[rgb]{") << backgroundColor.redF() << QLatin1Char(',') << backgroundColor.greenF() << QLatin1Char(',') << backgroundColor.blueF() << QLatin1Char('}');
+		out << QStringLiteral("\\colorbox[rgb]{") << backgroundColor.redF() << QLatin1Char(',') << backgroundColor.greenF() << QLatin1Char(',')
+			<< backgroundColor.blueF() << QLatin1Char('}');
 	out << QLatin1Char('{');
 	out << QStringLiteral("\\fontsize{") << QString::number(fontSize) << QStringLiteral("}{") << QString::number(fontSize) << QStringLiteral("}\\selectfont");
-	out << QStringLiteral("\\color[rgb]{") << fontColor.redF() << QLatin1Char(',') << fontColor.greenF() << QLatin1Char(',') << fontColor.blueF() << QLatin1Char('}');
+	out << QStringLiteral("\\color[rgb]{") << fontColor.redF() << QLatin1Char(',') << fontColor.greenF() << QLatin1Char(',') << fontColor.blueF()
+		<< QLatin1Char('}');
 	out << body;
 	out << QLatin1Char('}');
 	out << QStringLiteral("\\end{preview}");

@@ -740,6 +740,8 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 			const auto& columns = barPlot->dataColumns();
 			int index = 0;
 			for (auto* column : columns) {
+				if (!column)
+					continue;
 				// draw the bar
 				auto* background = barPlot->backgroundAt(index);
 				painter->setOpacity(background->opacity());
