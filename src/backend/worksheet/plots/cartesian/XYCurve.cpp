@@ -1571,7 +1571,6 @@ void XYCurvePrivate::updateSymbols() {
 #endif
 	symbolsPath = QPainterPath();
 	if (symbol->style() != Symbol::Style::NoSymbols) {
-		// QPainterPath path = Symbol::stylePath(symbol->style(), symbol->pen());
 		auto path = WorksheetElement::shapeFromPath(Symbol::stylePath(symbol->style()), symbol->pen());
 		QTransform trafo;
 		trafo.scale(symbol->size(), symbol->size());
