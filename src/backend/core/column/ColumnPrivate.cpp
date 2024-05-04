@@ -2855,11 +2855,11 @@ void ColumnPrivate::replaceBigInt(int first, const QVector<qint64>& new_values) 
  * See where variable properties will be used.
  */
 void ColumnPrivate::updateProperties() {
-	// DEBUG(Q_FUNC_INFO);
+	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 
 	// TODO: for double Properties::Constant will never be used. Use an epsilon (difference smaller than epsilon is zero)
-	int rows = rowCount();
-	if (rowCount() == 0) {
+	const int rows = rowCount();
+	if (rows == 0 || m_columnMode == AbstractColumn::ColumnMode::Text) {
 		properties = AbstractColumn::Properties::No;
 		available.properties = true;
 		return;
@@ -2903,7 +2903,8 @@ void ColumnPrivate::updateProperties() {
 			return;
 		}
 
-		if (m_columnMode == AbstractColumn::ColumnMode::Integer) {
+		switch (m_columnMode) {
+		case AbstractColumn::ColumnMode::Integer: {
 			valueInt = integerAt(row);
 
 			if (valueInt > prevValueInt) {
@@ -2928,7 +2929,9 @@ void ColumnPrivate::updateProperties() {
 			}
 
 			prevValueInt = valueInt;
-		} else if (m_columnMode == AbstractColumn::ColumnMode::BigInt) {
+			break;
+		}
+		case AbstractColumn::ColumnMode::BigInt: {
 			valueBigInt = bigIntAt(row);
 
 			if (valueBigInt > prevValueBigInt) {
@@ -2953,8 +2956,10 @@ void ColumnPrivate::updateProperties() {
 			}
 
 			prevValueBigInt = valueBigInt;
-		} else if (m_columnMode == AbstractColumn::ColumnMode::Double) {
-			value = valueAt(row);
+			break;
+		}
+		case AbstractColumn::ColumnMode::Double: {
+			value = doubleAt(row);
 
 			if (std::isnan(value)) {
 				monotonic_increasing = 0;
@@ -2984,8 +2989,11 @@ void ColumnPrivate::updateProperties() {
 			}
 
 			prevValue = value;
-		} else if (m_columnMode == AbstractColumn::ColumnMode::DateTime || m_columnMode == AbstractColumn::ColumnMode::Month
-				   || m_columnMode == AbstractColumn::ColumnMode::Day) {
+			break;
+		}
+		case AbstractColumn::ColumnMode::DateTime:
+		case AbstractColumn::ColumnMode::Month:
+		case AbstractColumn::ColumnMode::Day: {
 			valueDateTime = dateTimeAt(row).toMSecsSinceEpoch();
 
 			if (valueDateTime > prevValueDatetime) {
@@ -3010,6 +3018,10 @@ void ColumnPrivate::updateProperties() {
 			}
 
 			prevValueDatetime = valueDateTime;
+			break;
+		}
+		case AbstractColumn::ColumnMode::Text:
+			break;
 		}
 	}
 

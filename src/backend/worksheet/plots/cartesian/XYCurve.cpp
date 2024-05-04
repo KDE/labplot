@@ -2260,8 +2260,8 @@ bool XYCurve::minMax(const AbstractColumn* column1,
 	// DEBUG(Q_FUNC_INFO << "\n, column 1 min/max = " << column1->minimum() << "/" << column1->maximum())
 	if ((!includeErrorBars || errorType == ErrorBar::ErrorType::NoError) && column1->properties() != AbstractColumn::Properties::No && column2
 		&& column2->properties() != AbstractColumn::Properties::No) {
-		auto min = column1->minimum(indexRange.start(), indexRange.end());
-		auto max = column1->maximum(indexRange.start(), indexRange.end());
+		const auto min = column1->minimum(indexRange.start(), indexRange.end());
+		const auto max = column1->maximum(indexRange.start(), indexRange.end());
 		DEBUG(Q_FUNC_INFO << "\n, column 1 min/max in index range = " << min << "/" << max)
 		// TODO: Range
 		range.setRange(min, max);
@@ -2281,14 +2281,25 @@ bool XYCurve::minMax(const AbstractColumn* column1,
 		if ((errorPlusColumn && i >= errorPlusColumn->rowCount()) || (errorMinusColumn && i >= errorMinusColumn->rowCount()))
 			continue;
 
-		double value;
-		if (column1->isNumeric())
-			value = column1->valueAt(i);
-		else if (column1->columnMode() == AbstractColumn::ColumnMode::DateTime || column1->columnMode() == AbstractColumn::ColumnMode::Month
-				 || column1->columnMode() == AbstractColumn::ColumnMode::Day)
+		double value = 0.;
+		switch (column1->columnMode() ) {
+		case AbstractColumn::ColumnMode::Double:
+			value = column1->doubleAt(i);
+			break;
+		case AbstractColumn::ColumnMode::Integer:
+			value = column1->integerAt(i);
+			break;
+		case AbstractColumn::ColumnMode::BigInt:
+			value = column1->bigIntAt(i);
+			break;
+		case AbstractColumn::ColumnMode::DateTime:
+		case AbstractColumn::ColumnMode::Month:
+		case AbstractColumn::ColumnMode::Day:
 			value = column1->dateTimeAt(i).toMSecsSinceEpoch();
-		else
+			break;
+		case AbstractColumn::ColumnMode::Text:
 			return false;
+		}
 
 		if (errorType == ErrorBar::ErrorType::NoError) {
 			if (value < range.start())
