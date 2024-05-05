@@ -46,7 +46,6 @@ protected:
 
 	QList<KDEPlot*> m_plots;
 	KDEPlot* m_plot{nullptr};
-	AspectTreeModel* m_aspectTreeModel{nullptr};
 
 	virtual void setModel();
 

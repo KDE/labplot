@@ -157,13 +157,6 @@ void XYDataReductionCurveDock::initGeneralTab() {
 	connect(m_dataReductionCurve, &XYDataReductionCurve::sourceDataChanged, this, &XYDataReductionCurveDock::enableRecalculate);
 }
 
-void XYDataReductionCurveDock::setModel() {
-	auto list = defaultColumnTopLevelClasses();
-	list.append(AspectType::XYFitCurve);
-
-	XYAnalysisCurveDock::setModel(list);
-}
-
 /*!
   sets the curves. The properties of the curves in the list \c list can be edited in this widget.
 */
@@ -174,7 +167,6 @@ void XYDataReductionCurveDock::setCurves(QList<XYCurve*> list) {
 	setAspects(list);
 	setAnalysisCurves(list);
 	m_dataReductionCurve = static_cast<XYDataReductionCurve*>(m_curve);
-	this->setModel();
 	m_dataReductionData = m_dataReductionCurve->dataReductionData();
 
 	const auto numberLocale = QLocale();

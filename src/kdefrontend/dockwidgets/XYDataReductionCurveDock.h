@@ -43,9 +43,6 @@ private:
 	XYDataReductionCurve::DataReductionData m_dataReductionData;
 	bool m_dateTimeRange{false};
 
-protected:
-	void setModel();
-
 private Q_SLOTS:
 	// SLOTs for changes triggered in XYDataReductionCurveDock
 	// general tab

@@ -145,13 +145,6 @@ void XYDifferentiationCurveDock::initGeneralTab() {
 	connect(m_differentiationCurve, &XYDifferentiationCurve::sourceDataChanged, this, &XYDifferentiationCurveDock::enableRecalculate);
 }
 
-void XYDifferentiationCurveDock::setModel() {
-	auto list = defaultColumnTopLevelClasses();
-	list.append(AspectType::XYFitCurve);
-
-	XYAnalysisCurveDock::setModel(list);
-}
-
 /*!
   sets the curves. The properties of the curves in the list \c list can be edited in this widget.
 */
@@ -162,7 +155,6 @@ void XYDifferentiationCurveDock::setCurves(QList<XYCurve*> list) {
 	setAspects(list);
 	setAnalysisCurves(list);
 	m_differentiationCurve = static_cast<XYDifferentiationCurve*>(m_curve);
-	this->setModel();
 	m_differentiationData = m_differentiationCurve->differentiationData();
 
 	initGeneralTab();

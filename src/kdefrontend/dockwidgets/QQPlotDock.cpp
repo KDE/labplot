@@ -91,25 +91,8 @@ void QQPlotDock::setModel() {
 	auto* model = aspectModel();
 	model->enablePlottableColumnsOnly(true);
 	model->enableShowPlotDesignation(true);
-
-	QList<AspectType> list{AspectType::Folder,
-						   AspectType::Workbook,
-						   AspectType::Datapicker,
-						   AspectType::DatapickerCurve,
-						   AspectType::Spreadsheet,
-						   AspectType::LiveDataSource,
-						   AspectType::Column,
-						   AspectType::Worksheet,
-						   AspectType::CartesianPlot,
-						   AspectType::XYFitCurve,
-						   AspectType::XYSmoothCurve,
-						   AspectType::CantorWorksheet};
-
-	cbDataColumn->setTopLevelClasses(list);
-
-	list = {AspectType::Column};
-	model->setSelectableAspects(list);
-
+	model->setSelectableAspects({AspectType::Column});
+	cbDataColumn->setTopLevelClasses(plotColumnTopLevelClasses());
 	cbDataColumn->setModel(model);
 }
 
