@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : label settings widget
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2008-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2008-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2012-2022 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -428,7 +428,8 @@ void LabelWidget::initConnections() {
 		QDEBUG(Q_FUNC_INFO << ", LABEL " << m_label << " HAS NO PARENT!")
 		return;
 	}
-	AspectType type = m_label->parentAspect()->type();
+
+	const auto type = m_label->parentAspect()->type();
 	if (type == AspectType::Worksheet) {
 		auto* worksheet = static_cast<const Worksheet*>(m_label->parentAspect());
 		connect(worksheet->background(), &Background::firstColorChanged, this, &LabelWidget::updateBackground);
@@ -438,7 +439,7 @@ void LabelWidget::initConnections() {
 	} else if (type == AspectType::CartesianPlotLegend) {
 		auto* legend = static_cast<const CartesianPlotLegend*>(m_label->parentAspect());
 		connect(legend->background(), &Background::firstColorChanged, this, &LabelWidget::updateBackground);
-	} else if (type == AspectType::Axis) {
+	} else if (type == AspectType::InfoElement || type == AspectType::Axis) {
 		auto* plotArea = static_cast<CartesianPlot*>(m_label->parentAspect()->parentAspect())->plotArea();
 		connect(plotArea->background(), &Background::firstColorChanged, this, &LabelWidget::updateBackground);
 	}
@@ -563,11 +564,11 @@ void LabelWidget::textChanged() {
 	// QDEBUG("############\n" << Q_FUNC_INFO << ", label text =" << m_label->text().text)
 	CONDITIONAL_LOCK_RETURN;
 
-	const QString plainText = ui.teLabel->toPlainText();
+	const auto& plainText = ui.teLabel->toPlainText();
 	QTextEdit te(ui.chbShowPlaceholderText->isChecked() ? m_label->text().textPlaceholder : m_label->text().text);
 	bool plainTextChanged = plainText != te.toPlainText();
 
-	auto mode = static_cast<TextLabel::Mode>(ui.cbMode->currentIndex());
+	const auto mode = static_cast<TextLabel::Mode>(ui.cbMode->currentIndex());
 	switch (mode) {
 	case TextLabel::Mode::LaTeX:
 	case TextLabel::Mode::Markdown: {
@@ -709,8 +710,8 @@ void LabelWidget::labelModeChanged(TextLabel::Mode mode) {
 
 // Called when the combobox changes index
 void LabelWidget::modeChanged(int index) {
-	auto mode = static_cast<TextLabel::Mode>(index);
-	bool plain = (mode != TextLabel::Mode::Text);
+	const auto mode = static_cast<TextLabel::Mode>(index);
+	const bool plain = (mode != TextLabel::Mode::Text);
 
 	labelModeChanged(mode);
 
@@ -726,7 +727,7 @@ void LabelWidget::modeChanged(int index) {
 void LabelWidget::fontColorChanged(const QColor& color) {
 	CONDITIONAL_LOCK_RETURN;
 
-	auto mode = m_label->text().mode;
+	const auto mode = m_label->text().mode;
 	if (mode == TextLabel::Mode::Text || (mode == TextLabel::Mode::LaTeX && !m_teXEnabled)) {
 		SETLABELTEXTPROPERTY(setTextColor, color);
 		if (!cursorHasSelection) {
@@ -816,7 +817,7 @@ void LabelWidget::fontUnderlineChanged(bool checked) {
 void LabelWidget::fontStrikeOutChanged(bool checked) {
 	CONDITIONAL_LOCK_RETURN;
 
-	QTextCharFormat format = ui.teLabel->currentCharFormat();
+	auto format = ui.teLabel->currentCharFormat();
 	format.setFontStrikeOut(checked);
 	SETLABELTEXTPROPERTY(setCurrentCharFormat, format);
 }
@@ -824,7 +825,7 @@ void LabelWidget::fontStrikeOutChanged(bool checked) {
 void LabelWidget::fontSuperScriptChanged(bool checked) {
 	CONDITIONAL_LOCK_RETURN;
 
-	QTextCharFormat format = ui.teLabel->currentCharFormat();
+	auto format = ui.teLabel->currentCharFormat();
 	if (checked)
 		format.setVerticalAlignment(QTextCharFormat::AlignSuperScript);
 	else
@@ -836,7 +837,7 @@ void LabelWidget::fontSuperScriptChanged(bool checked) {
 void LabelWidget::fontSubScriptChanged(bool checked) {
 	CONDITIONAL_LOCK_RETURN;
 
-	QTextCharFormat format = ui.teLabel->currentCharFormat();
+	auto format = ui.teLabel->currentCharFormat();
 	if (checked)
 		format.setVerticalAlignment(QTextCharFormat::AlignSubScript);
 	else
@@ -1406,7 +1407,7 @@ void LabelWidget::labelBorderPenChanged(const QPen& pen) {
 
 void LabelWidget::labelBorderOpacityChanged(float value) {
 	CONDITIONAL_LOCK_RETURN;
-	float v = (float)value * 100.;
+	const float v = (float)value * 100.;
 	ui.sbBorderOpacity->setValue(v);
 }
 
@@ -1430,7 +1431,7 @@ void LabelWidget::load() {
 	ui.chbLock->setChecked(m_label->isLocked());
 
 	// don't show checkbox if Placeholder feature not used
-	bool allowPlaceholder = m_label->text().allowPlaceholder;
+	const bool allowPlaceholder = m_label->text().allowPlaceholder;
 	ui.chbShowPlaceholderText->setVisible(allowPlaceholder);
 	ui.chbShowPlaceholderText->setEnabled(allowPlaceholder);
 	ui.chbShowPlaceholderText->setChecked(allowPlaceholder);
@@ -1440,26 +1441,21 @@ void LabelWidget::load() {
 	ui.cbMode->setCurrentIndex(static_cast<int>(mode));
 	this->updateMode(mode);
 
-	if (!allowPlaceholder) {
-		if (mode == TextLabel::Mode::Text) {
-			ui.teLabel->setHtml(m_label->text().text);
-			ui.teLabel->selectAll(); // must be done to retrieve font
-			ui.kfontRequester->setFont(ui.teLabel->currentFont());
-		} else
-			ui.teLabel->setText(m_label->text().text);
+	QString text;
+	if (!allowPlaceholder)
+		text = m_label->text().text;
+	else
+		text = m_label->text().textPlaceholder;
 
-	} else {
-		if (mode == TextLabel::Mode::Text) {
-			ui.teLabel->setHtml(m_label->text().textPlaceholder);
-			ui.teLabel->selectAll(); // must be done to retrieve font
-			ui.kfontRequester->setFont(ui.teLabel->currentFont());
-		} else
-			ui.teLabel->setText(m_label->text().textPlaceholder);
-	}
-
-	auto format = ui.teLabel->currentCharFormat();
+	if (mode == TextLabel::Mode::Text) {
+		ui.teLabel->setHtml(text);
+		ui.teLabel->selectAll(); // must be done to retrieve font
+		ui.kfontRequester->setFont(ui.teLabel->currentFont());
+	} else
+		ui.teLabel->setText(text);
 
 	// when text is empty the default color of format is black instead of the theme color!
+	const auto& format = ui.teLabel->currentCharFormat();
 	if (m_label->text().isHtml() && format.foreground().color().isValid() && !ui.teLabel->toPlainText().isEmpty())
 		ui.kcbFontColor->setColor(format.foreground().color());
 	else
@@ -1489,7 +1485,7 @@ void LabelWidget::load() {
 	ui.tbFontSubScript->setChecked(format.verticalAlignment() == QTextCharFormat::AlignSubScript);
 
 	// move the cursor to the end
-	QTextCursor cursor = ui.teLabel->textCursor();
+	auto cursor = ui.teLabel->textCursor();
 	cursor.movePosition(QTextCursor::End);
 	ui.teLabel->setTextCursor(cursor);
 	// ui.teLabel->setFocus(); // Do not set focus, otherwise the WorksheetView is not able to catch key input events!
