@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-03 01:41+0000\n"
+"POT-Creation-Date: 2024-05-05 01:42+0000\n"
 "PO-Revision-Date: 2023-11-13 14:41+0300\n"
 "Last-Translator: Sergey Kazorin <translation-team@basealt.ru>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -801,7 +801,7 @@ msgstr "Не найден элемент «project»."
 msgid "no valid XML document found"
 msgstr "Не найден допустимый XML-документ"
 
-#: src/backend/core/Project.cpp:1127
+#: src/backend/core/Project.cpp:1131
 #, kde-format
 msgid "Invalid project modification time. Using current time."
 msgstr "Недопустимое время изменения проекта. Используется текущее время."
@@ -2451,12 +2451,12 @@ msgstr "Произошла следующая ошибка: %1."
 msgid "Plot data"
 msgstr "Данные графика"
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1251
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1315
 #, kde-format
 msgid "Plot%1"
 msgstr "График%1"
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1411
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1475
 #, kde-format
 msgid "legend"
 msgstr "легенда"
@@ -7640,7 +7640,7 @@ msgstr "%1: изменение коэффициента ширины"
 
 # BUGME: please add ctxt --aspotashev
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:299
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:168
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:170
 #: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:340
 #: src/backend/worksheet/plots/cartesian/XYEquationCurve.cpp:112
 #, kde-format
@@ -7726,28 +7726,28 @@ msgid "%1: jitterring changed"
 msgstr "%1: изменение случайного шума"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:579
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:519
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:521
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:570
 #, kde-format
 msgid "%1: change rug enabled"
 msgstr "%1: включение изменения rug-графика"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:586
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:526
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:528
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:584
 #, kde-format
 msgid "%1: change rug width"
 msgstr "%1: изменение ширины rug-графика"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:593
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:533
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:535
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:591
 #, kde-format
 msgid "%1: change rug length"
 msgstr "%1: изменение длины rug-графика"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:600
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:540
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:542
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:598
 #, kde-format
 msgid "%1: change rug offset"
@@ -8081,7 +8081,7 @@ msgstr "Кривая анализа"
 #. dataManipulationMenu->addAction(addDataReductionAction);
 #. analysis menu
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:669
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:193
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:195
 #, kde-format
 msgid "Analysis"
 msgstr "Анализ"
@@ -8447,105 +8447,105 @@ msgid "%1: set error bar cap size"
 msgstr "%1: задание размера конечного маркера планки погрешностей"
 
 # BUGME: please add context --aspotashev
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:174
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:176
 #, kde-format
 msgid "bin positions"
 msgstr "положения интервалов"
 
 # BUGME: please add @title:window --aspotashev
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:180
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:182
 #, kde-format
 msgid "bin values"
 msgstr "значения интервалов"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:196
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:198
 #, kde-format
 msgid "Fit Gaussian (Normal) Distribution"
 msgstr "Подбор Гауссова (нормального) распределения"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:202
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:204
 #, kde-format
 msgid "Fit Exponential Distribution"
 msgstr "Подбор экспоненциального распределения"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:208
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:210
 #, kde-format
 msgid "Fit Laplace Distribution"
 msgstr "Подбор распределения Лапласа"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:214
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:216
 #, kde-format
 msgid "Fit Cauchy-Lorentz Distribution"
 msgstr "Подбор распределения Коши-Лоренца"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:220
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:222
 #, kde-format
 msgid "Fit Log-normal Distribution"
 msgstr "Подбор логнормального распределения"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:226
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:228
 #, kde-format
 msgid "Fit Poisson Distribution"
 msgstr "Подбор распределения Пуассона"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:232
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:234
 #, kde-format
 msgid "Fit Binomial Distribution"
 msgstr "Подбор биномиального распределения"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:401
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:403
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:227
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:253
 #, kde-format
 msgid "%1: set data column"
 msgstr "%1: задание столбца данных"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:413
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:415
 #, kde-format
 msgid "%1: set histogram type"
 msgstr "%1: задание типа гистограммы"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:420
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:422
 #, kde-format
 msgid "%1: set histogram orientation"
 msgstr "%1: задание ориентации гистограммы"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:427
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:429
 #, kde-format
 msgid "%1: set histogram normalization"
 msgstr "%1: задание нормирования гистограммы"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:434
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:436
 #, kde-format
 msgid "%1: set binning method"
 msgstr "%1: задание метода группирования"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:441
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:443
 #, kde-format
 msgid "%1: set bin count"
 msgstr "%1: задание числа интервалов"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:448
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:450
 #, kde-format
 msgid "%1: set bin width"
 msgstr "%1: задание ширины интервала"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:456
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:458
 #, kde-format
 msgid "%1: change auto bin ranges"
 msgstr "%1: изменение на автоматическое группирование интервалов"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:504
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:506
 #, kde-format
 msgid "%1: set bin ranges start"
 msgstr "%1: задание начала интервалов"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:511
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:513
 #, kde-format
 msgid "%1: set bin ranges end"
 msgstr "%1: задание конца интервалов"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:831
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:833
 #, kde-format
 msgid ""
 "Calculation of the histogram not possible. The max value must be bigger than "
@@ -23334,14 +23334,14 @@ msgstr ""
 "с применением LaTeX, требуется установка LaTeX</li><li>Markdown — разметка "
 "осуществляется с помощью языка разметки Markdown</li></ul>"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:907
-#: src/kdefrontend/widgets/LabelWidget.cpp:933
+#: src/kdefrontend/widgets/LabelWidget.cpp:908
+#: src/kdefrontend/widgets/LabelWidget.cpp:934
 #, kde-format
 msgid "Date"
 msgstr "Дата"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:915
-#: src/kdefrontend/widgets/LabelWidget.cpp:941
+#: src/kdefrontend/widgets/LabelWidget.cpp:916
+#: src/kdefrontend/widgets/LabelWidget.cpp:942
 #, kde-format
 msgid "Date and Time"
 msgstr "Дата и время"
@@ -23575,42 +23575,42 @@ msgstr "Не удалось найти preview.sty."
 msgid "Couldn't open the file"
 msgstr "Не удалось открыть файл"
 
-#: src/tools/TeXRenderer.cpp:153
+#: src/tools/TeXRenderer.cpp:157
 #, kde-format
 msgid "%1 not found"
 msgstr "Не удалось найти %1"
 
-#: src/tools/TeXRenderer.cpp:189
+#: src/tools/TeXRenderer.cpp:193
 #, kde-format
 msgid "Timeout: Unable to generate latex file"
 msgstr "Время ожидания истекло: Не удалось сгенерировать файл latex"
 
-#: src/tools/TeXRenderer.cpp:192
+#: src/tools/TeXRenderer.cpp:196
 #, kde-format
 msgid "process failed, exit code ="
 msgstr "сбой процесса, код выхода ="
 
-#: src/tools/TeXRenderer.cpp:254
+#: src/tools/TeXRenderer.cpp:258
 #, kde-format
 msgid "dvips not found"
 msgstr "не удалось найти dvips"
 
-#: src/tools/TeXRenderer.cpp:261
+#: src/tools/TeXRenderer.cpp:265
 #, kde-format
 msgid "dvips process failed, exit code ="
 msgstr "сбой процесса dvips, код выхода ="
 
-#: src/tools/TeXRenderer.cpp:283
+#: src/tools/TeXRenderer.cpp:287
 #, kde-format
 msgid "convert not found"
 msgstr "Не удалось найти convert"
 
-#: src/tools/TeXRenderer.cpp:291
+#: src/tools/TeXRenderer.cpp:295
 #, kde-format
 msgid "convert process failed, exit code ="
 msgstr "сбой процесса convert, код выхода ="
 
-#: src/tools/TeXRenderer.cpp:313
+#: src/tools/TeXRenderer.cpp:317
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Не удалось открыть файл:"

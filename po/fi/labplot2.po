@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-03 01:41+0000\n"
+"POT-Creation-Date: 2024-05-05 01:42+0000\n"
 "PO-Revision-Date: 2023-10-30 14:32+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -836,7 +836,7 @@ msgstr "projektielementtiä ei löytynyt"
 msgid "no valid XML document found"
 msgstr "kelvollista XML-asiakirjaa ei löytynyt"
 
-#: src/backend/core/Project.cpp:1127
+#: src/backend/core/Project.cpp:1131
 #, kde-format
 msgid "Invalid project modification time. Using current time."
 msgstr "Projektin muutosaika on virheellinen. Käytetään nykyistä aikaa."
@@ -2571,13 +2571,13 @@ msgstr "Kaavion alue"
 
 # pmap: =/gen=LabPlot2:n/
 # pmap: =/elat=LabPlot2:sta/
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1251
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1315
 #, fuzzy, kde-format
 #| msgid "LabPlot2"
 msgid "Plot%1"
 msgstr "LabPlot2"
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1411
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1475
 #, kde-format
 msgid "legend"
 msgstr "selite"
@@ -7903,7 +7903,7 @@ msgid "%1: width factor changed"
 msgstr "%1: aseta numeeriseksi muodoksi ”%2”"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:299
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:168
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:170
 #: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:340
 #: src/backend/worksheet/plots/cartesian/XYEquationCurve.cpp:112
 #, fuzzy, kde-format
@@ -8001,7 +8001,7 @@ msgid "%1: jitterring changed"
 msgstr "%1: aseta luontiaika"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:579
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:519
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:521
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:570
 #, fuzzy, kde-format
 #| msgid "%1: change column order"
@@ -8009,7 +8009,7 @@ msgid "%1: change rug enabled"
 msgstr "%1: aseta sarakejärjestys"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:586
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:526
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:528
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:584
 #, fuzzy, kde-format
 #| msgid "%1: change line+symbol width"
@@ -8017,7 +8017,7 @@ msgid "%1: change rug width"
 msgstr "%1: aseta viivan ja symbolin leveys"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:593
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:533
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:535
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:591
 #, fuzzy, kde-format
 #| msgid "%1: change comment"
@@ -8025,7 +8025,7 @@ msgid "%1: change rug length"
 msgstr "%1: muuta kommenttia"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:600
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:540
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:542
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:598
 #, fuzzy, kde-format
 #| msgid "%1: change comment"
@@ -8368,7 +8368,7 @@ msgstr "&Analyysi"
 #. dataManipulationMenu->addAction(addDataReductionAction);
 #. analysis menu
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:669
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:193
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:195
 #, kde-format
 msgid "Analysis"
 msgstr "Analyysi"
@@ -8762,61 +8762,61 @@ msgstr "%1: viivan tyyppi muuttunut"
 msgid "%1: set error bar cap size"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:174
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:176
 #, fuzzy, kde-format
 #| msgid "Tab position:"
 msgid "bin positions"
 msgstr "Välilehden sijainti:"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:180
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:182
 #, fuzzy, kde-format
 #| msgid "no values"
 msgid "bin values"
 msgstr "ei arvoja"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:196
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:198
 #, fuzzy, kde-format
 #| msgid "Gaussian Distribution"
 msgid "Fit Gaussian (Normal) Distribution"
 msgstr "Gaussin jakauma"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:202
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:204
 #, fuzzy, kde-format
 #| msgid "Exponential Distribution"
 msgid "Fit Exponential Distribution"
 msgstr "Eksponentiaalinen jakauma"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:208
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:210
 #, fuzzy, kde-format
 #| msgid "Laplace Distribution"
 msgid "Fit Laplace Distribution"
 msgstr "Laplacen jakauma"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:214
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:216
 #, fuzzy, kde-format
 #| msgid "Cauchy Distribution"
 msgid "Fit Cauchy-Lorentz Distribution"
 msgstr "Cauchyn jakauma"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:220
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:222
 #, fuzzy, kde-format
 #| msgid "Direction"
 msgid "Fit Log-normal Distribution"
 msgstr "Suunta"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:226
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:228
 #, fuzzy, kde-format
 #| msgid "Poisson Distribution"
 msgid "Fit Poisson Distribution"
 msgstr "Poissonin jakauma"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:232
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:234
 #, fuzzy, kde-format
 #| msgid "Binomial Distribution"
 msgid "Fit Binomial Distribution"
 msgstr "Binomijakauma"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:401
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:403
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:227
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:253
 #, fuzzy, kde-format
@@ -8824,61 +8824,61 @@ msgstr "Binomijakauma"
 msgid "%1: set data column"
 msgstr "%1: lisää tyhjiä sarakkeita"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:413
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:415
 #, fuzzy, kde-format
 #| msgid "Data type:"
 msgid "%1: set histogram type"
 msgstr "Tietotyyppi:"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:420
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:422
 #, fuzzy, kde-format
 #| msgid "%1: set position"
 msgid "%1: set histogram orientation"
 msgstr "%1: aseta sijainti"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:427
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:429
 #, fuzzy, kde-format
 #| msgid "%1: set position"
 msgid "%1: set histogram normalization"
 msgstr "%1: aseta sijainti"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:434
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:436
 #, fuzzy, kde-format
 #| msgid "%1: set creation time"
 msgid "%1: set binning method"
 msgstr "%1: aseta luontiaika"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:441
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:443
 #, fuzzy, kde-format
 #| msgid "%1: set font"
 msgid "%1: set bin count"
 msgstr "%1: aseta fontti"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:448
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:450
 #, fuzzy, kde-format
 #| msgid "%1: set font"
 msgid "%1: set bin width"
 msgstr "%1: aseta fontti"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:456
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:458
 #, fuzzy, kde-format
 #| msgid "%1: change column order"
 msgid "%1: change auto bin ranges"
 msgstr "%1: aseta sarakejärjestys"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:504
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:506
 #, fuzzy, kde-format
 #| msgid "%1: set page size"
 msgid "%1: set bin ranges start"
 msgstr "%1: aseta sivukoko"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:511
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:513
 #, fuzzy, kde-format
 #| msgid "%1: set page size"
 msgid "%1: set bin ranges end"
 msgstr "%1: aseta sivukoko"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:831
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:833
 #, kde-format
 msgid ""
 "Calculation of the histogram not possible. The max value must be bigger than "
@@ -23687,14 +23687,14 @@ msgid ""
 "li><li>Markdown - text setting using Markdown markup language</li></ul>"
 msgstr ""
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:907
-#: src/kdefrontend/widgets/LabelWidget.cpp:933
+#: src/kdefrontend/widgets/LabelWidget.cpp:908
+#: src/kdefrontend/widgets/LabelWidget.cpp:934
 #, kde-format
 msgid "Date"
 msgstr "Päiväys"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:915
-#: src/kdefrontend/widgets/LabelWidget.cpp:941
+#: src/kdefrontend/widgets/LabelWidget.cpp:916
+#: src/kdefrontend/widgets/LabelWidget.cpp:942
 #, kde-format
 msgid "Date and Time"
 msgstr "Aika ja päiväys"
@@ -23925,42 +23925,42 @@ msgstr ""
 msgid "Couldn't open the file"
 msgstr "Tiedostoa ei voitu avata"
 
-#: src/tools/TeXRenderer.cpp:153
+#: src/tools/TeXRenderer.cpp:157
 #, kde-format
 msgid "%1 not found"
 msgstr "%1 – ei löydy"
 
-#: src/tools/TeXRenderer.cpp:189
+#: src/tools/TeXRenderer.cpp:193
 #, kde-format
 msgid "Timeout: Unable to generate latex file"
 msgstr "Aikakatkaisu: LaTeX-tiedostoa ei voi luoda"
 
-#: src/tools/TeXRenderer.cpp:192
+#: src/tools/TeXRenderer.cpp:196
 #, kde-format
 msgid "process failed, exit code ="
 msgstr ""
 
-#: src/tools/TeXRenderer.cpp:254
+#: src/tools/TeXRenderer.cpp:258
 #, kde-format
 msgid "dvips not found"
 msgstr "dvips-ohjelmaa ei löytynyt"
 
-#: src/tools/TeXRenderer.cpp:261
+#: src/tools/TeXRenderer.cpp:265
 #, kde-format
 msgid "dvips process failed, exit code ="
 msgstr ""
 
-#: src/tools/TeXRenderer.cpp:283
+#: src/tools/TeXRenderer.cpp:287
 #, kde-format
 msgid "convert not found"
 msgstr "convert-ohjelmaa ei löytynyt"
 
-#: src/tools/TeXRenderer.cpp:291
+#: src/tools/TeXRenderer.cpp:295
 #, kde-format
 msgid "convert process failed, exit code ="
 msgstr ""
 
-#: src/tools/TeXRenderer.cpp:313
+#: src/tools/TeXRenderer.cpp:317
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Tiedostoa ei voi avata:"

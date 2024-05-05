@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-03 01:41+0000\n"
+"POT-Creation-Date: 2024-05-05 01:42+0000\n"
 "PO-Revision-Date: 2024-04-20 06:36+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -790,7 +790,7 @@ msgstr "ni najdenega elementa projekta"
 msgid "no valid XML document found"
 msgstr "ni bilo najdenega veljavnega dokumenta XML"
 
-#: src/backend/core/Project.cpp:1127
+#: src/backend/core/Project.cpp:1131
 #, kde-format
 msgid "Invalid project modification time. Using current time."
 msgstr "Neveljaven čas spreminjanja projekta. Uporabljen bo trenutni čas."
@@ -2380,12 +2380,12 @@ msgstr "Prišlo je do naslednje napake: %1."
 msgid "Plot data"
 msgstr "Izriši podatke"
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1251
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1315
 #, kde-format
 msgid "Plot%1"
 msgstr "Graf%1"
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1411
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1475
 #, kde-format
 msgid "legend"
 msgstr "legenda"
@@ -7489,7 +7489,7 @@ msgid "%1: width factor changed"
 msgstr "%1: faktor širine spremenjen"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:299
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:168
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:170
 #: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:340
 #: src/backend/worksheet/plots/cartesian/XYEquationCurve.cpp:112
 #, kde-format
@@ -7572,28 +7572,28 @@ msgid "%1: jitterring changed"
 msgstr "%1: spremenjeno stresanje"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:579
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:519
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:521
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:570
 #, kde-format
 msgid "%1: change rug enabled"
 msgstr "%1: sprememba omogočenega raztrosa"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:586
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:526
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:528
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:584
 #, kde-format
 msgid "%1: change rug width"
 msgstr "%1: spremenite širino raztrosa"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:593
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:533
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:535
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:591
 #, kde-format
 msgid "%1: change rug length"
 msgstr "%1: spremenite dolžino raztrosa"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:600
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:540
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:542
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:598
 #, kde-format
 msgid "%1: change rug offset"
@@ -7915,7 +7915,7 @@ msgstr "Analiza krivulje"
 #. dataManipulationMenu->addAction(addDataReductionAction);
 #. analysis menu
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:669
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:193
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:195
 #, kde-format
 msgid "Analysis"
 msgstr "Analiza"
@@ -8267,104 +8267,104 @@ msgstr "%1: spremenjena vrsta označevanja napake"
 msgid "%1: set error bar cap size"
 msgstr "%1: nastavite velikost konca vrstice z napakami"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:174
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:176
 #, kde-format
 msgid "bin positions"
 msgstr "pozicije intervalov"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:180
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:182
 #, kde-format
 msgid "bin values"
 msgstr "vrednosti intervala"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:196
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:198
 #, kde-format
 msgid "Fit Gaussian (Normal) Distribution"
 msgstr "Prilegajoča Gaussova (navadna) porazdelitev"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:202
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:204
 #, kde-format
 msgid "Fit Exponential Distribution"
 msgstr "Prilegajoča eksponentna porazdelitev"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:208
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:210
 #, kde-format
 msgid "Fit Laplace Distribution"
 msgstr "Prilegajoča Laplaceova porazdelitev"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:214
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:216
 #, kde-format
 msgid "Fit Cauchy-Lorentz Distribution"
 msgstr "Prilegajoča Cauchy-Lorentzova porazdelitev"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:220
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:222
 #, kde-format
 msgid "Fit Log-normal Distribution"
 msgstr "Prilegajoča log. navadna porazdelitev"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:226
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:228
 #, kde-format
 msgid "Fit Poisson Distribution"
 msgstr "Prilegajoča Poissonova porazdelitev"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:232
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:234
 #, kde-format
 msgid "Fit Binomial Distribution"
 msgstr "Prilegajoča binomska porazdelitev"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:401
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:403
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:227
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:253
 #, kde-format
 msgid "%1: set data column"
 msgstr "%1: nastavite podatkovni stolpec"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:413
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:415
 #, kde-format
 msgid "%1: set histogram type"
 msgstr "%1: nastavite vrsto histograma"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:420
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:422
 #, kde-format
 msgid "%1: set histogram orientation"
 msgstr "%1: nastavite usmerjenost histograma"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:427
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:429
 #, kde-format
 msgid "%1: set histogram normalization"
 msgstr "%1: nastavite normalizacijo histograma"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:434
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:436
 #, kde-format
 msgid "%1: set binning method"
 msgstr "%1: nastavite metodo diskretnega spajanja"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:441
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:443
 #, kde-format
 msgid "%1: set bin count"
 msgstr "%1: nastavite število spajanj"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:448
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:450
 #, kde-format
 msgid "%1: set bin width"
 msgstr "%1: nastavite širino spajanja"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:456
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:458
 #, kde-format
 msgid "%1: change auto bin ranges"
 msgstr "%1: spremenite obsege samodejnega spajanja"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:504
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:506
 #, kde-format
 msgid "%1: set bin ranges start"
 msgstr "%1: nastavite začetek obsegov spajanja"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:511
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:513
 #, kde-format
 msgid "%1: set bin ranges end"
 msgstr "%1: nastavite konec obsegov spajanja"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:831
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:833
 #, kde-format
 msgid ""
 "Calculation of the histogram not possible. The max value must be bigger than "
@@ -22815,14 +22815,14 @@ msgstr ""
 "uporabo LaTeXa, potrebna je namestitev LaTeXa;</li><li> Markdown - "
 "stavljenje besedila z označevalnim jezikom Markdown.</li></ul>"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:907
-#: src/kdefrontend/widgets/LabelWidget.cpp:933
+#: src/kdefrontend/widgets/LabelWidget.cpp:908
+#: src/kdefrontend/widgets/LabelWidget.cpp:934
 #, kde-format
 msgid "Date"
 msgstr "Datum"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:915
-#: src/kdefrontend/widgets/LabelWidget.cpp:941
+#: src/kdefrontend/widgets/LabelWidget.cpp:916
+#: src/kdefrontend/widgets/LabelWidget.cpp:942
 #, kde-format
 msgid "Date and Time"
 msgstr "Datum in čas"
@@ -23052,42 +23052,42 @@ msgstr "Ni mogoče najti preview.sty."
 msgid "Couldn't open the file"
 msgstr "Ni bilo mogoče odpreti datoteke"
 
-#: src/tools/TeXRenderer.cpp:153
+#: src/tools/TeXRenderer.cpp:157
 #, kde-format
 msgid "%1 not found"
 msgstr "%1 ni mogoče najti"
 
-#: src/tools/TeXRenderer.cpp:189
+#: src/tools/TeXRenderer.cpp:193
 #, kde-format
 msgid "Timeout: Unable to generate latex file"
 msgstr "Čas je potekel: Ni mogoče generirati datoteke latex"
 
-#: src/tools/TeXRenderer.cpp:192
+#: src/tools/TeXRenderer.cpp:196
 #, kde-format
 msgid "process failed, exit code ="
 msgstr "proces je izpadel, izhodna koda ="
 
-#: src/tools/TeXRenderer.cpp:254
+#: src/tools/TeXRenderer.cpp:258
 #, kde-format
 msgid "dvips not found"
 msgstr "dvips-a ni bilo mogoče najti"
 
-#: src/tools/TeXRenderer.cpp:261
+#: src/tools/TeXRenderer.cpp:265
 #, kde-format
 msgid "dvips process failed, exit code ="
 msgstr "proces dvips je izpadel, izhodna koda ="
 
-#: src/tools/TeXRenderer.cpp:283
+#: src/tools/TeXRenderer.cpp:287
 #, kde-format
 msgid "convert not found"
 msgstr "convert-a ni bilo mogoče najti"
 
-#: src/tools/TeXRenderer.cpp:291
+#: src/tools/TeXRenderer.cpp:295
 #, kde-format
 msgid "convert process failed, exit code ="
 msgstr "proces convert je izpadel, izhodna koda ="
 
-#: src/tools/TeXRenderer.cpp:313
+#: src/tools/TeXRenderer.cpp:317
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Ni mogoče odpreti datoteke:"
