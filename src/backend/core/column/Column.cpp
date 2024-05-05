@@ -2324,7 +2324,7 @@ bool Column::indicesMinMax(double v1, double v2, int& start, int& end) const {
 		return true;
 	} else if (property == Properties::Constant) {
 		start = 0;
-		end = rowCount- 1;
+		end = rowCount - 1;
 		return true;
 	}
 	// property == Properties::No || AbstractColumn::Properties::NonMonotonic
