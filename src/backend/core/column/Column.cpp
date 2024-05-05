@@ -4,7 +4,7 @@
 	Description          : Aspect that manages a column
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2007-2009 Tilman Benkert <thzs@gmx.net>
-	SPDX-FileCopyrightText: 2013-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2013-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2017-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -2252,14 +2252,15 @@ bool Column::indicesMinMax(double v1, double v2, int& start, int& end) const {
 	// DEBUG(Q_FUNC_INFO << ", values = " << v1 << " .. " << v2)
 	start = -1;
 	end = -1;
-	if (rowCount() == 0)
+	const int rowCount = this->rowCount();
+	if (rowCount == 0)
 		return false;
 
 	// Assumption: v1 is always the smaller value
 	if (v1 > v2)
 		qSwap(v1, v2);
 
-	Properties property = properties();
+	const auto& property = properties();
 	if (property == Properties::MonotonicIncreasing || property == Properties::MonotonicDecreasing) {
 		start = indexForValue(v1);
 		end = indexForValue(v2);
@@ -2271,12 +2272,12 @@ bool Column::indicesMinMax(double v1, double v2, int& start, int& end) const {
 			if (property == Properties::MonotonicIncreasing) {
 				if (start > 0 && valueAt(start - 1) <= v2 && valueAt(start - 1) >= v1)
 					start--;
-				if (end < rowCount() - 1 && valueAt(end + 1) <= v2 && valueAt(end + 1) >= v1)
+				if (end < rowCount - 1 && valueAt(end + 1) <= v2 && valueAt(end + 1) >= v1)
 					end++;
 			} else {
 				if (end > 0 && valueAt(end - 1) <= v2 && valueAt(end - 1) >= v1)
 					end--;
-				if (start < rowCount() - 1 && valueAt(start + 1) <= v2 && valueAt(start + 1) >= v1)
+				if (start < rowCount - 1 && valueAt(start + 1) <= v2 && valueAt(start + 1) >= v1)
 					start++;
 			}
 
@@ -2295,7 +2296,7 @@ bool Column::indicesMinMax(double v1, double v2, int& start, int& end) const {
 						start--;
 				}
 
-				if (end > rowCount() - 1) {
+				if (end > rowCount - 1) {
 					value = dateTimeAt(end + 1).toMSecsSinceEpoch();
 					if (value <= v2int64 && value >= v1int64)
 						end++;
@@ -2307,7 +2308,7 @@ bool Column::indicesMinMax(double v1, double v2, int& start, int& end) const {
 						end--;
 				}
 
-				if (start > rowCount() - 1) {
+				if (start > rowCount - 1) {
 					value = dateTimeAt(start + 1).toMSecsSinceEpoch();
 					if (value <= v2int64 && value >= v1int64)
 						start++;
@@ -2323,7 +2324,7 @@ bool Column::indicesMinMax(double v1, double v2, int& start, int& end) const {
 		return true;
 	} else if (property == Properties::Constant) {
 		start = 0;
-		end = rowCount() - 1;
+		end = rowCount- 1;
 		return true;
 	}
 	// property == Properties::No || AbstractColumn::Properties::NonMonotonic
@@ -2332,7 +2333,7 @@ bool Column::indicesMinMax(double v1, double v2, int& start, int& end) const {
 	case ColumnMode::BigInt:
 	case ColumnMode::Double: {
 		double value;
-		for (int i = 0; i < rowCount(); i++) {
+		for (int i = 0; i < rowCount; i++) {
 			if (!isValid(i) || isMasked(i))
 				continue;
 			value = valueAt(i);
@@ -2350,7 +2351,7 @@ bool Column::indicesMinMax(double v1, double v2, int& start, int& end) const {
 		qint64 value;
 		qint64 v2int64 = v2;
 		qint64 v1int64 = v1;
-		for (int i = 0; i < rowCount(); i++) {
+		for (int i = 0; i < rowCount; i++) {
 			if (!isValid(i) || isMasked(i))
 				continue;
 			value = dateTimeAt(i).toMSecsSinceEpoch();
