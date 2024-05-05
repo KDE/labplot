@@ -309,6 +309,15 @@ public:
         m_type = v.m_type;
         return *this;
     }
+    bool operator< (const Origin::Variant& v) const
+    {
+	if (m_type == V_DOUBLE && v.m_type == V_DOUBLE)
+            return as_double() < v.as_double();
+	else if (m_type == V_STRING && v.m_type == V_STRING)
+	    return as_string() < v.as_string();
+	else
+	    return false;
+    }
 
     ~Variant()
     {
