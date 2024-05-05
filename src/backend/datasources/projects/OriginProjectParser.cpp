@@ -1688,8 +1688,7 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 		loadAxes(layer, plot, layerIndex, xColumnInfo, yColumnInfo);
 	}
 
-	// range breaks
-	// TODO
+	// TODO: range breaks
 }
 
 void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianPlot* plot, int layerIndex, bool preview) {
@@ -1885,7 +1884,26 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 					DEBUG(Q_FUNC_INFO << ", x/y column path = " << xColumnPath.toStdString() << ", " << yColumnPath.toStdString())
 					barPlot->xColumnPath() = xColumnPath;
 					barPlot->setDataColumnPaths({yColumnPath});
-					// barPlot->setErrorBar();
+
+					// calculate bar width
+					const auto& xColumn = sheet.columns[findColumnByName(sheet, xColumnName)];
+					const auto xData = xColumn.data;
+					// this fails due to NaNs
+					// const auto [xMin, xMax] = minmax_element(xData.begin(), xData.end());
+					double xMin = qInf(), xMax = -qInf();
+					int numDataRows = 0;
+					for (unsigned int i = 0; i < xData.size(); i++) {
+						const auto value = xData.at(i).as_double();
+						if (xData.at(i).type() == Origin::Variant::V_DOUBLE && !std::isnan(value)) {
+							if (value < xMin)
+								xMin = value;
+							if (value > xMax)
+								xMax = value;
+							numDataRows++;
+						}
+					}
+					DEBUG(Q_FUNC_INFO << ", x column data rows: " << numDataRows << ", min/max = " << xMin << "/" << xMax)
+					barPlot->setWidthFactor((xMax - xMin) / numDataRows);
 
 					// TODO: BarPlot::Type::Stacked_100_Percent
 
@@ -1903,6 +1921,8 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 							barPlot->setType(BarPlot::Type::Grouped);
 
 						loadBackground(originCurve, barPlot->backgroundAt(0));
+
+						// TODO: set error bar (see error plots?)
 					}
 				} else { // additional columns
 					auto dataColumnPaths = lastPlot->dataColumnPaths();
