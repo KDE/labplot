@@ -1892,9 +1892,9 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 					// const auto [xMin, xMax] = minmax_element(xData.begin(), xData.end());
 					double xMin = qInf(), xMax = -qInf();
 					int numDataRows = 0;
-					for (unsigned int i = 0; i < xData.size(); i++) {
-						const auto value = xData.at(i).as_double();
-						if (xData.at(i).type() == Origin::Variant::V_DOUBLE && !std::isnan(value)) {
+					for (const auto v : xData) {
+						const double value = v.as_double();
+						if (v.type() == Origin::Variant::V_DOUBLE && !std::isnan(value)) {
 							if (value < xMin)
 								xMin = value;
 							if (value > xMax)
