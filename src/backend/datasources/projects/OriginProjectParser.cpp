@@ -250,7 +250,7 @@ bool OriginProjectParser::load(Project* project, bool preview) {
 	}
 
 	DEBUG(Q_FUNC_INFO << ", project file name: " << m_projectFileName.toStdString());
-	DEBUG(Q_FUNC_INFO << ", Origin version: " << m_originFile->version());
+	DEBUG(Q_FUNC_INFO << ", Origin version: " << std::setprecision(4) << m_originFile->version());
 
 	// Origin project tree and the iterator pointing to the root node
 	const auto* projectTree = m_originFile->project();
