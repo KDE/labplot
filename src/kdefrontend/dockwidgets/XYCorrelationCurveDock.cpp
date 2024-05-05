@@ -136,13 +136,6 @@ void XYCorrelationCurveDock::initGeneralTab() {
 	connect(m_correlationCurve, &XYCorrelationCurve::sourceDataChanged, this, &XYCorrelationCurveDock::enableRecalculate);
 }
 
-void XYCorrelationCurveDock::setModel() {
-	auto list = defaultColumnTopLevelClasses();
-	list.append(AspectType::XYCorrelationCurve);
-
-	XYAnalysisCurveDock::setModel(list);
-}
-
 /*!
   sets the curves. The properties of the curves in the list \c list can be edited in this widget.
 */
@@ -153,7 +146,6 @@ void XYCorrelationCurveDock::setCurves(QList<XYCurve*> list) {
 	setAspects(list);
 	setAnalysisCurves(list);
 	m_correlationCurve = static_cast<XYCorrelationCurve*>(m_curve);
-	this->setModel();
 	m_correlationData = m_correlationCurve->correlationData();
 
 	const auto numberLocale = QLocale();

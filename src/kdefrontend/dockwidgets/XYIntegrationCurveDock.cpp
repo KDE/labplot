@@ -143,13 +143,6 @@ void XYIntegrationCurveDock::initGeneralTab() {
 	connect(m_integrationCurve, &XYIntegrationCurve::sourceDataChanged, this, &XYIntegrationCurveDock::enableRecalculate);
 }
 
-void XYIntegrationCurveDock::setModel() {
-	auto list = defaultColumnTopLevelClasses();
-	list.append(AspectType::XYFitCurve);
-
-	XYAnalysisCurveDock::setModel(list);
-}
-
 /*!
   sets the curves. The properties of the curves in the list \c list can be edited in this widget.
 */

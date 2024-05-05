@@ -114,13 +114,6 @@ void XYFourierTransformCurveDock::initGeneralTab() {
 	connect(m_transformCurve, &XYFourierTransformCurve::sourceDataChanged, this, &XYFourierTransformCurveDock::enableRecalculate);
 }
 
-void XYFourierTransformCurveDock::setModel() {
-	auto list = defaultColumnTopLevelClasses();
-	list.append(AspectType::XYFitCurve);
-
-	XYAnalysisCurveDock::setModel(list);
-}
-
 /*!
   sets the curves. The properties of the curves in the list \c list can be edited in this widget.
 */
@@ -131,7 +124,6 @@ void XYFourierTransformCurveDock::setCurves(QList<XYCurve*> list) {
 	setAspects(list);
 	setAnalysisCurves(list);
 	m_transformCurve = static_cast<XYFourierTransformCurve*>(m_curve);
-	this->setModel();
 	m_transformData = m_transformCurve->transformData();
 
 	initGeneralTab();

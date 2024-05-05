@@ -157,13 +157,6 @@ void XYFourierFilterCurveDock::initGeneralTab() {
 	connect(m_filterCurve, &XYFourierFilterCurve::sourceDataChanged, this, &XYFourierFilterCurveDock::enableRecalculate);
 }
 
-void XYFourierFilterCurveDock::setModel() {
-	auto list = defaultColumnTopLevelClasses();
-	list.append(AspectType::XYFitCurve);
-
-	XYAnalysisCurveDock::setModel(list);
-}
-
 /*!
   sets the curves. The properties of the curves in the list \c list can be edited in this widget.
 */
@@ -174,7 +167,6 @@ void XYFourierFilterCurveDock::setCurves(QList<XYCurve*> list) {
 	setAspects(list);
 	setAnalysisCurves(list);
 	m_filterCurve = static_cast<XYFourierFilterCurve*>(m_curve);
-	this->setModel();
 	m_filterData = m_filterCurve->filterData();
 
 	initGeneralTab();

@@ -36,9 +36,6 @@ private:
 	XYFourierFilterCurve::FilterData m_filterData;
 	bool m_dateTimeRange{false};
 
-protected:
-	void setModel();
-
 private Q_SLOTS:
 	// SLOTs for changes triggered in XYFourierFilterCurveDock
 	// general tab

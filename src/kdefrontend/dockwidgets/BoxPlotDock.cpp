@@ -309,20 +309,7 @@ void BoxPlotDock::setDataColumns() const {
 //**********************************************************
 void BoxPlotDock::addDataColumn() {
 	auto* cb = new TreeViewComboBox(this);
-
-	static const QList<AspectType> list{AspectType::Folder,
-										AspectType::Workbook,
-										AspectType::Datapicker,
-										AspectType::DatapickerCurve,
-										AspectType::Spreadsheet,
-										AspectType::LiveDataSource,
-										AspectType::Column,
-										AspectType::Worksheet,
-										AspectType::CartesianPlot,
-										AspectType::XYFitCurve,
-										AspectType::XYSmoothCurve,
-										AspectType::CantorWorksheet};
-	cb->setTopLevelClasses(list);
+	cb->setTopLevelClasses(plotColumnTopLevelClasses());
 	cb->setModel(aspectModel());
 	connect(cb, &TreeViewComboBox::currentModelIndexChanged, this, &BoxPlotDock::dataColumnChanged);
 

@@ -155,24 +155,8 @@ void LollipopPlotDock::setModel() {
 	auto* model = aspectModel();
 	model->enablePlottableColumnsOnly(true);
 	model->enableShowPlotDesignation(true);
-
-	QList<AspectType> list{AspectType::Column};
-	model->setSelectableAspects(list);
-
-	list = {AspectType::Folder,
-			AspectType::Workbook,
-			AspectType::Datapicker,
-			AspectType::DatapickerCurve,
-			AspectType::Spreadsheet,
-			AspectType::LiveDataSource,
-			AspectType::Column,
-			AspectType::Worksheet,
-			AspectType::CartesianPlot,
-			AspectType::XYFitCurve,
-			AspectType::XYSmoothCurve,
-			AspectType::CantorWorksheet};
-
-	cbXColumn->setTopLevelClasses(list);
+	model->setSelectableAspects({AspectType::Column});
+	cbXColumn->setTopLevelClasses(plotColumnTopLevelClasses());
 	cbXColumn->setModel(model);
 }
 

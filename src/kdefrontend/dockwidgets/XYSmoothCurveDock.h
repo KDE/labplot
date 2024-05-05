@@ -35,9 +35,6 @@ private:
 	XYSmoothCurve::SmoothData m_smoothData;
 	bool m_dateTimeRange{false};
 
-protected:
-	void setModel();
-
 private Q_SLOTS:
 	// SLOTs for changes triggered in XYSmoothCurveDock
 	// general tab

@@ -200,13 +200,6 @@ void XYInterpolationCurveDock::initGeneralTab() {
 	connect(m_interpolationCurve, &XYInterpolationCurve::sourceDataChanged, this, &XYInterpolationCurveDock::enableRecalculate);
 }
 
-void XYInterpolationCurveDock::setModel() {
-	auto list = defaultColumnTopLevelClasses();
-	list.append(AspectType::XYFitCurve);
-
-	XYAnalysisCurveDock::setModel(list);
-}
-
 /*!
   sets the curves. The properties of the curves in the list \c list can be edited in this widget.
 */
@@ -217,7 +210,6 @@ void XYInterpolationCurveDock::setCurves(QList<XYCurve*> list) {
 	setAspects(list);
 	setAnalysisCurves(list);
 	m_interpolationCurve = static_cast<XYInterpolationCurve*>(m_curve);
-	this->setModel();
 	m_interpolationData = m_interpolationCurve->interpolationData();
 
 	const auto numberLocale = QLocale();

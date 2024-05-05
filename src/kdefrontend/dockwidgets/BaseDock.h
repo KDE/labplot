@@ -91,6 +91,8 @@ public:
 
 	AspectTreeModel* aspectModel();
 
+	static QList<AspectType> plotColumnTopLevelClasses();
+
 protected:
 	bool m_initializing{false};
 	Units m_units{Units::Metric};

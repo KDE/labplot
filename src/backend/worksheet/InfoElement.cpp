@@ -460,7 +460,7 @@ InfoElement::MarkerPoints_T InfoElement::markerPointAt(int index) const {
  */
 TextLabel::TextWrapper InfoElement::createTextLabelText() {
 	// TODO: save positions of the variables in extra variables to replace faster, because replace takes long time
-	TextLabel::TextWrapper wrapper = m_title->text();
+	auto wrapper = m_title->text();
 	if (markerPointsCount() < 1) {
 		DEBUG(STDSTRING(wrapper.text))
 		DEBUG(STDSTRING(wrapper.textPlaceholder))
@@ -473,11 +473,9 @@ TextLabel::TextWrapper InfoElement::createTextLabelText() {
 
 	Q_D(const InfoElement);
 
-	QString text = wrapper.textPlaceholder;
-
 	// replace the placeholder for the x-value
 	QString xValueStr;
-	auto columnMode = markerpoints.at(0).curve->xColumn()->columnMode();
+	const auto columnMode = markerpoints.at(0).curve->xColumn()->columnMode();
 	if (columnMode == AbstractColumn::ColumnMode::Double || columnMode == AbstractColumn::ColumnMode::Integer
 		|| columnMode == AbstractColumn::ColumnMode::BigInt)
 		xValueStr = QString::number(d->positionLogical);
@@ -487,6 +485,7 @@ TextLabel::TextWrapper InfoElement::createTextLabelText() {
 		xValueStr = dateTime.toString(m_plot->rangeDateTimeFormat(Dimension::X));
 	}
 
+	QString text = wrapper.textPlaceholder;
 	if (wrapper.mode == TextLabel::Mode::Text)
 		text.replace(QStringLiteral("&amp;(x)"), xValueStr);
 	else
@@ -1118,16 +1117,16 @@ void InfoElementPrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 }
 
 void InfoElementPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
-	QPointF eventPos = mapToParent(event->pos());
+	const auto eventPos = mapToParent(event->pos());
 	// 	DEBUG("EventPos: " << eventPos.x() << " Y: " << eventPos.y());
-	QPointF delta = eventPos - oldMousePos;
+	const auto delta = eventPos - oldMousePos;
 	if (delta == QPointF(0, 0))
 		return;
 
 	if (!q->cSystem->isValid())
 		return;
-	QPointF eventLogicPos = q->cSystem->mapSceneToLogical(eventPos, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
-	QPointF delta_logic = eventLogicPos - q->cSystem->mapSceneToLogical(oldMousePos);
+	const auto eventLogicPos = q->cSystem->mapSceneToLogical(eventPos, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+	const auto delta_logic = eventLogicPos - q->cSystem->mapSceneToLogical(oldMousePos);
 
 	if (!q->m_title)
 		return;

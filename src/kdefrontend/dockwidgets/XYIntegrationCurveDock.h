@@ -36,9 +36,6 @@ private:
 	XYIntegrationCurve::IntegrationData m_integrationData;
 	bool m_dateTimeRange{false};
 
-protected:
-	void setModel();
-
 private Q_SLOTS:
 	// SLOTs for changes triggered in XYIntegrationCurveDock
 	// general tab

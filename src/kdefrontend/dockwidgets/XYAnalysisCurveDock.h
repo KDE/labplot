@@ -17,7 +17,7 @@ protected:
 	virtual QString customText() const;
 
 	void setAnalysisCurves(QList<XYCurve*>);
-	void setModel(const QList<AspectType>& list);
+	void setModel();
 	void setBaseWidgets(TimedLineEdit* nameLabel, ResizableTextEdit* commentLabel, QPushButton* recalculate, QComboBox* cbDataSourceType = nullptr);
 	void enableRecalculate() const;
 	virtual void updateSettings(const AbstractColumn*){};
