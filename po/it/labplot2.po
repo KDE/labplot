@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-05-06 01:43+0000\n"
-"PO-Revision-Date: 2024-03-10 09:33+0100\n"
+"PO-Revision-Date: 2024-05-07 18:20+0200\n"
 "Last-Translator: Paolo Zamponi <feus73@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 23.08.4\n"
+"X-Generator: Lokalize 24.02.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -6906,10 +6906,9 @@ msgstr "Percentile99"
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:80
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:79
 #: src/kdefrontend/ui/dockwidgets/statisticsspreadsheetdock.ui:158
-#, fuzzy, kde-format
-#| msgid "Range:"
+#, kde-format
 msgid "Range"
-msgstr "Intervallo:"
+msgstr "Intervallo"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:82
 #, kde-format
@@ -11333,10 +11332,9 @@ msgid "Dataset%1"
 msgstr "Insieme di dati%1"
 
 #: src/kdefrontend/datasources/ImportDatasetDialog.cpp:103
-#, fuzzy, kde-format
-#| msgid "File %1 imported in %2 seconds."
+#, kde-format
 msgid "Failed to connect within %1 seconds"
-msgstr "File %1 importato in %2 secondi."
+msgstr "Connessione al server non riuscita nei %1 secondi"
 
 #: src/kdefrontend/datasources/ImportDatasetDialog.cpp:128
 #, kde-format
@@ -15550,12 +15548,7 @@ msgid ""
 msgstr ""
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:249
-#, fuzzy, kde-format
-#| msgid ""
-#| "If checked, the results of the calculations in the analysis curves will "
-#| "be saved in the project file.\n"
-#| "Uncheck this option to reduce the size of the project file at costs of "
-#| "the longer project load times."
+#, kde-format
 msgid ""
 "Save the results of the calculations in the analysis curves in the project "
 "file. \n"
@@ -15565,10 +15558,12 @@ msgid ""
 "The setting can be changed for every project separately in the project "
 "properties."
 msgstr ""
-"Se spuntato, i risultati dei calcoli nelle curve di analisi verranno salvati "
-"nel file del progetto.\n"
-"Deselezionala per ridurre la dimensione del file del progetto, che avrà "
-"tuttavia dei tempi di caricamento più lunghi."
+"Salva i risultati dei calcoli nelle curve di analisi nel file del progetto.\n"
+"Deseleziona questa opzione per ridurre la dimensione del file del progetto, "
+"che avrà tuttavia dei tempi di caricamento più lunghi.\n"
+"Determina il comportamento predefinito dei nuovi progetti. \n"
+"L'impostazione può essere modificata per ogni progetto in modo separato "
+"nelle proprietà del progetto."
 
 #: src/kdefrontend/SettingsNotebookPage.cpp:23
 #, kde-format
@@ -20208,10 +20203,9 @@ msgstr "Separatore colonna:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFormat)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:198
-#, fuzzy, kde-format
-#| msgid "Column Major"
+#, kde-format
 msgid "Column Format"
-msgstr "Colonna maggiore"
+msgstr "Formato della colonna"
 
 #. i18n: ectx: property (text), widget (QLabel, lShowComments)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:222
@@ -20227,10 +20221,9 @@ msgstr "Collegamenti"
 
 #. i18n: ectx: property (text), widget (QPushButton, bSelectNone)
 #: src/kdefrontend/ui/dockwidgets/statisticsspreadsheetdock.ui:295
-#, fuzzy, kde-format
-#| msgid "Selection"
+#, kde-format
 msgid "Select None"
-msgstr "Selezione"
+msgstr "Nessuna selezione"
 
 #. i18n: ectx: property (text), widget (QLabel, lDistance)
 #. i18n: ectx: property (text), widget (QLabel, lValuesDistance)
@@ -21193,10 +21186,9 @@ msgstr "Scostamento X:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/kdefrontend/ui/labelwidget.ui:494
-#, fuzzy, kde-format
-#| msgid "Model:"
+#, kde-format
 msgid "Mode:"
-msgstr "Modello:"
+msgstr "Modalità:"
 
 #. i18n: ectx: property (text), widget (QLabel, lBorderShape)
 #: src/kdefrontend/ui/labelwidget.ui:586
@@ -21605,10 +21597,9 @@ msgstr "Includi gli zeri finali dopo il punto"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:317
-#, fuzzy, kde-format
-#| msgid "Save Calculations:"
+#, kde-format
 msgid "Save  Calculations:"
-msgstr "Salva calcoli"
+msgstr "Salva i calcoli:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode_2)
@@ -22704,21 +22695,19 @@ msgid "Sub-Script"
 msgstr "Pedice"
 
 #: src/kdefrontend/widgets/LabelWidget.cpp:139
-#, fuzzy, kde-format
-#| msgid "Left margin:"
+#, kde-format
 msgid "Left Align"
-msgstr "Margine sinistro:"
+msgstr "Allinea a sinistra"
 
 #: src/kdefrontend/widgets/LabelWidget.cpp:141
-#, fuzzy, kde-format
-#| msgid "Right margin:"
+#, kde-format
 msgid "Right Align"
-msgstr "Margine destro:"
+msgstr "Allinea a destra"
 
 #: src/kdefrontend/widgets/LabelWidget.cpp:142
 #, kde-format
 msgid "Justify"
-msgstr ""
+msgstr "Giustifica"
 
 #: src/kdefrontend/widgets/LabelWidget.cpp:143
 #, kde-format
