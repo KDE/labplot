@@ -1882,30 +1882,35 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 					childPlot = barPlot;
 
 					DEBUG(Q_FUNC_INFO << ", x/y column path = " << xColumnPath.toStdString() << ", " << yColumnPath.toStdString())
-					barPlot->xColumnPath() = xColumnPath;
+					// TODO: for stacked plots x column is the index, not the value
+					// values are used for the tick label
+					if (type == Origin::GraphCurve::Column || type == Origin::GraphCurve::Bar)
+						barPlot->xColumnPath() = xColumnPath;
 					barPlot->setDataColumnPaths({yColumnPath});
 
-					// calculate bar width
-					const auto& xColumn = sheet.columns[findColumnByName(sheet, xColumnName)];
-					const auto xData = xColumn.data;
-					// this fails due to NaNs
-					// const auto [xMin, xMax] = minmax_element(xData.begin(), xData.end());
-					double xMin = qInf(), xMax = -qInf();
-					int numDataRows = 0;
-					for (const auto v : xData) {
-						const double value = v.as_double();
-						if (v.type() == Origin::Variant::V_DOUBLE && !std::isnan(value)) {
-							if (value < xMin)
-								xMin = value;
-							if (value > xMax)
-								xMax = value;
-							numDataRows++;
-						}
-					}
-					DEBUG(Q_FUNC_INFO << ", x column data rows: " << numDataRows << ", min/max = " << xMin << "/" << xMax)
-					barPlot->setWidthFactor((xMax - xMin) / numDataRows);
-
 					// TODO: BarPlot::Type::Stacked_100_Percent
+
+					// calculate bar width (stacked plots are fixed width)
+					if (type == Origin::GraphCurve::Column || type == Origin::GraphCurve::Bar) {
+						const auto& xColumn = sheet.columns[findColumnByName(sheet, xColumnName)];
+						const auto xData = xColumn.data;
+						// this fails due to NaNs
+						// const auto [xMin, xMax] = minmax_element(xData.begin(), xData.end());
+						double xMin = qInf(), xMax = -qInf();
+						int numDataRows = 0;
+						for (const auto v : xData) {
+							const double value = v.as_double();
+							if (v.type() == Origin::Variant::V_DOUBLE && !std::isnan(value)) {
+								if (value < xMin)
+									xMin = value;
+								if (value > xMax)
+									xMax = value;
+								numDataRows++;
+							}
+						}
+						DEBUG(Q_FUNC_INFO << ", x column data rows: " << numDataRows << ", min/max = " << xMin << "/" << xMax)
+						barPlot->setWidthFactor((xMax - xMin) / numDataRows);
+					}
 
 					if (!preview) {
 						// orientation
