@@ -1431,7 +1431,7 @@ bool MainWin::newProject(bool createInitialContent) {
 
 		// project explorer
 		m_projectExplorerDock = new ads::CDockWidget(i18nc("@title:window", "Project Explorer"));
-		m_projectExplorerDock->setObjectName(QLatin1String("projectexplorer"));
+		m_projectExplorerDock->setObjectName(QLatin1String("project-explorer"));
 		m_projectExplorerDock->setWindowTitle(m_projectExplorerDock->windowTitle().replace(QLatin1String("&"), QString()));
 		m_projectExplorerDock->toggleViewAction()->setText(QLatin1String(""));
 
@@ -1444,12 +1444,12 @@ bool MainWin::newProject(bool createInitialContent) {
 
 		// Properties dock
 		m_propertiesDock = new ads::CDockWidget(i18nc("@title:window", "Properties"));
-		m_propertiesDock->setObjectName(QLatin1String("aspect_properties_dock"));
+		m_propertiesDock->setObjectName(QLatin1String("properties-explorer"));
 		m_propertiesDock->setWindowTitle(m_propertiesDock->windowTitle().replace(QLatin1String("&"), QString()));
 
 		// worksheet preview
 		m_worksheetPreviewDock = new ads::CDockWidget(i18nc("@title:window", "Worksheet Preview"));
-		m_worksheetPreviewDock->setObjectName(QLatin1String("worksheetpreview"));
+		m_worksheetPreviewDock->setObjectName(QLatin1String("worksheet-preview"));
 		m_worksheetPreviewDock->setWindowTitle(m_worksheetPreviewDock->windowTitle().replace(QLatin1String("&"), QString()));
 		m_worksheetPreviewDock->toggleViewAction()->setText(QLatin1String(""));
 		connect(m_worksheetPreviewDock, &ads::CDockWidget::viewToggled, this, &MainWin::worksheetPreviewDockVisibilityChanged);
@@ -1912,16 +1912,34 @@ bool MainWin::save(const QString& fileName) {
 	if (file->open(QIODevice::WriteOnly)) {
 		m_project->setFileName(fileName);
 
-		QPixmap thumbnail;
-		const auto& windows = m_DockManager->dockWidgetsMap();
-		if (!windows.isEmpty()) {
-			// determine the bounding rectangle surrounding all visible sub-windows
-			QRect rect;
-			for (auto* window : windows)
-				rect = rect.united(window->frameGeometry());
+		// thumbnail, used for the project preview
+		QPixmap thumbnail = centralWidget()->grab(centralWidget()->childrenRect());
 
-			thumbnail = centralWidget()->grab(rect);
+		// instead of doing a screenshot of the whole application window including also the special docks (project explorer, etc.) above,
+		// we can also implement the following two cases:
+		// 1. if the states of the dock widgets are saved in the project file, do the screenshot of the whole window
+		// 2. if the states are not saved, determine the area of dock widgets without the special docks.
+		// The logic below is an attempt to achieve this but it doesn't produce the desired results in all cases,
+		// for example not if some of dock widgets are placed above the special docks.
+		// TODO: decide what to do with this logic.
+		/*
+		if (m_project->saveDockStates())
+			thumbnail = centralWidget()->grab(centralWidget()->childrenRect());
+		else {
+			// determine the bounding rectangle of the content (area without the special docks like project explorer, etc.)
+			const auto& docks = m_DockManager->dockWidgetsMap();
+			QRect rect;
+			for (auto* dock : docks) {
+				if (specialDock(dock))
+					continue;
+				auto dockRect = QRect(dock->mapToGlobal(dock->geometry().topLeft()), dock->geometry().size());
+				rect = rect.united(dockRect);
+			}
+
+			if (!rect.isEmpty())
+				thumbnail = centralWidget()->grab(QRect(centralWidget()->mapFromGlobal(rect.topLeft()), rect.size()));
 		}
+		*/
 
 		QXmlStreamWriter writer(file);
 		auto windowState = m_DockManager->saveState();
