@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-05-06 01:43+0000\n"
-"PO-Revision-Date: 2024-04-20 10:32+0200\n"
+"PO-Revision-Date: 2024-05-07 11:40+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -12053,7 +12053,7 @@ msgstr ""
 "plusieurs tracés ou plusieurs axes sur le même tracé (Veuillez consulter la "
 "<a href=\"https://www.originlab.com/doc/Origin-Help/MultiLayer-Graph"
 "\">Documentation du logiciel « Origin »</a> pour plus de détails). LabPlot "
-"ne peut traiter qu’un seul type à la fois. <br><br>Spécifier comment "
+"ne peut traiter qu'un seul type à la fois. <br><br>Spécifier comment "
 "importer des graphiques multi-calques dans le projet sélectionné :"
 "<ul><li>Comme zone de tracé - une nouvelle zone de tracé est créée pour "
 "chaque calque. </li><li>En tant que système de coordonnées - un nouveau "
@@ -13902,7 +13902,7 @@ msgid ""
 "The number of the interpolation points should be bigger than the total "
 "number of points in the data source."
 msgstr ""
-"Le nombre de points d’interpolation doit être supérieur au nombre total de "
+"Le nombre de points d'interpolation doit être supérieur au nombre total de "
 "points dans la source de données."
 
 #: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:540
@@ -16335,7 +16335,7 @@ msgstr ""
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:178
 #, kde-format
 msgid "The variable name 'i' is reserved for the index of the column row."
-msgstr "Le nom de variable « i » est réservé à l’index de la ligne de colonne."
+msgstr "Le nom de variable « i » est réservé à l'index de la ligne de colonne."
 
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:181
 #, kde-format
