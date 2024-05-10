@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-06 01:43+0000\n"
+"POT-Creation-Date: 2024-05-10 01:42+0000\n"
 "PO-Revision-Date: 2023-06-17 12:24+0100\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English\n"
@@ -1876,7 +1876,7 @@ msgstr "Unknown"
 #: src/backend/datasources/filters/MatioFilter.cpp:434
 #: src/commonfrontend/workbook/WorkbookView.cpp:53
 #: src/commonfrontend/workbook/WorkbookView.cpp:160
-#: src/kdefrontend/MainWin.cpp:727 src/kdefrontend/MainWin.cpp:2097
+#: src/kdefrontend/MainWin.cpp:727 src/kdefrontend/MainWin.cpp:2115
 #, kde-format
 msgid "Matrix"
 msgstr "Matrix"
@@ -10737,7 +10737,7 @@ msgstr ""
 #: src/kdefrontend/dockwidgets/XYAnalysisCurveDock.cpp:57
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:75
 #: src/kdefrontend/labplot2ui.rc:32 src/kdefrontend/MainWin.cpp:721
-#: src/kdefrontend/MainWin.cpp:2079 src/kdefrontend/SettingsDialog.cpp:72
+#: src/kdefrontend/MainWin.cpp:2097 src/kdefrontend/SettingsDialog.cpp:72
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:122
 #, kde-format
 msgid "Spreadsheet"
@@ -10916,7 +10916,7 @@ msgstr "Select Y-Region and Zoom In"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
 #: src/commonfrontend/worksheet/WorksheetView.cpp:359
-#: src/kdefrontend/MainWin.cpp:2560
+#: src/kdefrontend/MainWin.cpp:2578
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1426
 #, kde-format
 msgid "Cursor"
@@ -12445,7 +12445,7 @@ msgstr ""
 
 #: src/kdefrontend/datasources/MQTTSubscriptionWidget.cpp:856
 #: src/kdefrontend/datasources/MQTTSubscriptionWidget.cpp:858
-#: src/kdefrontend/MainWin.cpp:2875
+#: src/kdefrontend/MainWin.cpp:2893
 #, kde-format
 msgid "Warning"
 msgstr "Warning"
@@ -14718,14 +14718,14 @@ msgstr "Failed to Open"
 
 #. i18n: ectx: ToolBar (worksheet_toolbar)
 #: src/kdefrontend/labplot2ui.rc:24 src/kdefrontend/MainWin.cpp:733
-#: src/kdefrontend/MainWin.cpp:2115 src/kdefrontend/SettingsDialog.cpp:67
+#: src/kdefrontend/MainWin.cpp:2133 src/kdefrontend/SettingsDialog.cpp:67
 #, kde-format
 msgid "Worksheet"
 msgstr "Worksheet"
 
 #. i18n: ectx: ToolBar (datapicker_toolbar)
 #: src/kdefrontend/labplot2ui.rc:28 src/kdefrontend/MainWin.cpp:716
-#: src/kdefrontend/MainWin.cpp:2071
+#: src/kdefrontend/MainWin.cpp:2089
 #, kde-format
 msgid "Data Extractor"
 msgstr "Data Extractor"
@@ -14841,7 +14841,7 @@ msgstr "Welcome to LabPlot %1"
 msgid "&Open Example"
 msgstr "&Open Example"
 
-#: src/kdefrontend/MainWin.cpp:711 src/kdefrontend/MainWin.cpp:2063
+#: src/kdefrontend/MainWin.cpp:711 src/kdefrontend/MainWin.cpp:2081
 #, kde-format
 msgid "Workbook"
 msgstr "Workbook"
@@ -14871,7 +14871,7 @@ msgstr "Creates a new matrix for data editing"
 msgid "Creates a new worksheet for data plotting"
 msgstr "Creates a new worksheet for data plotting"
 
-#: src/kdefrontend/MainWin.cpp:739 src/kdefrontend/MainWin.cpp:2123
+#: src/kdefrontend/MainWin.cpp:739 src/kdefrontend/MainWin.cpp:2141
 #, kde-format
 msgid "Note"
 msgstr "Note"
@@ -14881,7 +14881,7 @@ msgstr "Note"
 msgid "Creates a new note for arbitrary text"
 msgstr "Creates a new note for arbitrary text"
 
-#: src/kdefrontend/MainWin.cpp:744 src/kdefrontend/MainWin.cpp:2055
+#: src/kdefrontend/MainWin.cpp:744 src/kdefrontend/MainWin.cpp:2073
 #, kde-format
 msgid "Folder"
 msgstr "Folder"
@@ -14951,8 +14951,8 @@ msgstr "Export..."
 msgid "Export selected element"
 msgstr "Export selected element"
 
-#: src/kdefrontend/MainWin.cpp:801 src/kdefrontend/MainWin.cpp:2596
-#: src/kdefrontend/MainWin.cpp:2604
+#: src/kdefrontend/MainWin.cpp:801 src/kdefrontend/MainWin.cpp:2614
+#: src/kdefrontend/MainWin.cpp:2622
 #, kde-format
 msgid "Share"
 msgstr ""
@@ -15209,84 +15209,84 @@ msgstr ""
 msgid "Couldn't open the temporary file for writing."
 msgstr "Could not open the temporary file for writing."
 
-#: src/kdefrontend/MainWin.cpp:1944
+#: src/kdefrontend/MainWin.cpp:1962
 #, kde-format
 msgid "Project saved"
 msgstr "Project saved"
 
-#: src/kdefrontend/MainWin.cpp:1960
+#: src/kdefrontend/MainWin.cpp:1978
 #, kde-format
 msgid "Couldn't save the file '%1'."
 msgstr "Could not save the file '%1'."
 
-#: src/kdefrontend/MainWin.cpp:1965
+#: src/kdefrontend/MainWin.cpp:1983
 #, kde-format
 msgid "Couldn't open the file '%1' for writing."
 msgstr "Could not open the file '%1' for writing."
 
-#: src/kdefrontend/MainWin.cpp:2015
+#: src/kdefrontend/MainWin.cpp:2033
 #, kde-format
 msgid "Changed"
 msgstr "Changed"
 
-#: src/kdefrontend/MainWin.cpp:2030 src/kdefrontend/MainWin.cpp:2042
+#: src/kdefrontend/MainWin.cpp:2048 src/kdefrontend/MainWin.cpp:2060
 #, kde-format
 msgid "Preparing printing of %1"
 msgstr "Preparing printing of %1"
 
-#: src/kdefrontend/MainWin.cpp:2032 src/kdefrontend/MainWin.cpp:2044
+#: src/kdefrontend/MainWin.cpp:2050 src/kdefrontend/MainWin.cpp:2062
 #, kde-format
 msgid "%1 printed"
 msgstr "%1 printed"
 
-#: src/kdefrontend/MainWin.cpp:2596
+#: src/kdefrontend/MainWin.cpp:2614
 #, fuzzy, kde-format
 #| msgid "The following problems occurred when loading the project file:\n"
 msgid "There was a problem sharing the project: %1"
 msgstr "The following problems occurred when loading the project file:\n"
 
-#: src/kdefrontend/MainWin.cpp:2600
+#: src/kdefrontend/MainWin.cpp:2618
 #, fuzzy, kde-format
 #| msgid "Project saved"
 msgid "Project shared successfully"
 msgstr "Project saved"
 
-#: src/kdefrontend/MainWin.cpp:2603
+#: src/kdefrontend/MainWin.cpp:2621
 #, kde-format
 msgid "You can find the shared project at: <a href=\"%1\">%1</a>"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2838
+#: src/kdefrontend/MainWin.cpp:2856
 #, kde-format
 msgid "%1 exported"
 msgstr "%1 exported"
 
-#: src/kdefrontend/MainWin.cpp:2845
+#: src/kdefrontend/MainWin.cpp:2863
 #, kde-format
 msgid "FITS files saved"
 msgstr "FITS files saved"
 
-#: src/kdefrontend/MainWin.cpp:2857
+#: src/kdefrontend/MainWin.cpp:2875
 #, kde-format
 msgid "MQTT Client%1"
 msgstr "MQTT Client%1"
 
-#: src/kdefrontend/MainWin.cpp:2875
+#: src/kdefrontend/MainWin.cpp:2893
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
 msgstr "There already is a MQTTClient with this host!"
 
-#: src/kdefrontend/MainWin.cpp:2879
+#: src/kdefrontend/MainWin.cpp:2897
 #, kde-format
 msgid "Live data source%1"
 msgstr "Live data source%1"
 
-#: src/kdefrontend/MainWin.cpp:2930
+#: src/kdefrontend/MainWin.cpp:2948
 #, kde-format
 msgid "No Cantor backends found. Please install the ones you want to use."
 msgstr "No Cantor backends found. Please install the ones you want to use."
 
-#: src/kdefrontend/MainWin.cpp:2944
+#: src/kdefrontend/MainWin.cpp:2962
 #, fuzzy, kde-format
 #| msgid "Creates a new note for arbitrary text"
 msgid "Creates a new %1 notebook"
