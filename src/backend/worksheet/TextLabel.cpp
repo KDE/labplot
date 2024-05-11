@@ -50,7 +50,6 @@ class ScaledTextItem : public QGraphicsTextItem {
 public:
 	explicit ScaledTextItem(QGraphicsItem* parent = nullptr)
 		: QGraphicsTextItem(parent) {
-
 		auto textOptions = document()->defaultTextOption();
 		textOptions.setWrapMode(QTextOption::NoWrap);
 		document()->setDefaultTextOption(textOptions);
