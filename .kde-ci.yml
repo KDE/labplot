@@ -1,3 +1,4 @@
+# see https://invent.kde.org/sysadmin/repo-metadata/-/blob/master/branch-rules.yml
 Dependencies:
 - 'on': ['Linux/Qt5', 'FreeBSD/Qt5', 'Windows/Qt5', 'macOS/Qt5']
   'require':
@@ -17,7 +18,7 @@ Dependencies:
     'frameworks/knewstuff': '@stable'
     'frameworks/kuserfeedback': '@stable'
     'frameworks/purpose': '@stable'
-    'education/cantor': '@stable'
+    'education/cantor': '@latest'
 
 - 'on': ['Linux/Qt6', 'FreeBSD/Qt6', 'Windows/Qt6', 'macOS/Qt6']
   'require':
