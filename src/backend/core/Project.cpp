@@ -972,7 +972,7 @@ void Project::restorePointers(AbstractAspect* aspect) {
 			}
 		}
 
-		boxPlot->setDataColumns(dataColumns);
+		boxPlot->setDataColumns(std::move(dataColumns));
 	}
 
 	// bar plots
@@ -1049,7 +1049,7 @@ void Project::restorePointers(AbstractAspect* aspect) {
 			}
 		}
 
-		lollipopPlot->setDataColumns(dataColumns);
+		lollipopPlot->setDataColumns(std::move(dataColumns));
 
 		RESTORE_COLUMN_POINTER(lollipopPlot, xColumn, XColumn);
 	}

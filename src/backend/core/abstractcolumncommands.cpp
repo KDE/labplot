@@ -259,9 +259,9 @@ void AbstractColumnSetHeatmapFormatCmd::redo() {
 	if (!m_col->m_heatmapFormat)
 		m_col->m_heatmapFormat = new AbstractColumn::HeatmapFormat();
 
-	AbstractColumn::HeatmapFormat tmp = *(m_col->m_heatmapFormat);
+	auto tmp = *(m_col->m_heatmapFormat);
 	*(m_col->m_heatmapFormat) = m_format;
-	m_format = tmp;
+	m_format = std::move(tmp);
 
 	Q_EMIT m_col->owner()->formatChanged(m_col->owner());
 }

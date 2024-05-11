@@ -126,7 +126,7 @@ void ExpressionTextEdit::validateExpression(bool force) {
 			setStyleSheet(QString());
 		}
 
-		m_currentExpression = text;
+		m_currentExpression = std::move(text);
 	}
 	if (textChanged)
 		Q_EMIT expressionChanged();

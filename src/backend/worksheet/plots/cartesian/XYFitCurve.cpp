@@ -2993,7 +2993,7 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 	// if we have more paramNames than the saved model type, we have a custom model
 	if (d->fitData.paramNamesUtf8.size() < d->fitData.paramNames.size()) {
 		d->fitData.modelCategory = nsl_fit_model_custom;
-		d->fitData.model = model;
+		d->fitData.model = std::move(model);
 		d->fitData.paramNamesUtf8 = d->fitData.paramNames;
 	}
 

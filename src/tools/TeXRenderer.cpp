@@ -65,7 +65,7 @@ QByteArray TeXRenderer::renderImageLaTeX(const QString& teXString, Result* res, 
 			QString err = i18n("Couldn't find preview.sty.");
 			WARN(err.toStdString());
 			res->successful = false;
-			res->errorMessage = err;
+			res->errorMessage = std::move(err);
 			return {};
 		} else
 			QFile::copy(file, tempPath + QLatin1Char('/') + QStringLiteral("preview.sty"));
@@ -81,7 +81,7 @@ QByteArray TeXRenderer::renderImageLaTeX(const QString& teXString, Result* res, 
 		QString err = i18n("Couldn't open the file") + QStringLiteral(" ") + file.fileName();
 		WARN(err.toStdString());
 		res->successful = false;
-		res->errorMessage = err;
+		res->errorMessage = std::move(err);
 		return {};
 	}
 
@@ -203,7 +203,7 @@ bool TeXRenderer::executeLatexProcess(const QString engine,
 		}
 
 		res->successful = false;
-		res->errorMessage = err;
+		res->errorMessage = std::move(err);
 		QFile::remove(baseName + QStringLiteral(".aux"));
 		QFile::remove(logFile.fileName());
 		QFile::remove(baseName + QStringLiteral(".%1").arg(resultFileExtension)); // in some cases the file was also created
@@ -265,7 +265,7 @@ QByteArray TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, 
 		QString err = i18n("dvips process failed, exit code =") + QStringLiteral(" ") + QString::number(dvipsProcess.exitCode());
 		WARN(err.toStdString());
 		res->successful = false;
-		res->errorMessage = err;
+		res->errorMessage = std::move(err);
 		QFile::remove(baseName + QStringLiteral(".aux"));
 		QFile::remove(baseName + QStringLiteral(".log"));
 		QFile::remove(baseName + QStringLiteral(".dvi"));
@@ -295,7 +295,7 @@ QByteArray TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, 
 		QString err = i18n("convert process failed, exit code =") + QStringLiteral(" ") + QString::number(convertProcess.exitCode());
 		WARN(err.toStdString());
 		res->successful = false;
-		res->errorMessage = err;
+		res->errorMessage = std::move(err);
 		QFile::remove(baseName + QStringLiteral(".aux"));
 		QFile::remove(baseName + QStringLiteral(".log"));
 		QFile::remove(baseName + QStringLiteral(".dvi"));

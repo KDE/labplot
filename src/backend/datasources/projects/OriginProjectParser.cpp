@@ -472,7 +472,14 @@ void OriginProjectParser::restorePointers(Project* project) {
 				if (container + spreadsheet->name() == spreadsheetName) {
 					auto paths = barPlot->dataColumnPaths();
 					const QString& newPath = containerPath + QLatin1Char('/') + path;
-					paths[paths.indexOf(path)] = newPath; // replace path
+
+					// replace path
+					const auto index = paths.indexOf(path);
+					if (index != -1)
+						paths[index] = newPath;
+					else
+						continue;
+
 					barPlot->setDataColumnPaths(paths);
 
 					// RESTORE_COLUMN_POINTER
@@ -484,7 +491,7 @@ void OriginProjectParser::restorePointers(Project* project) {
 								auto dataColumns = barPlot->dataColumns();
 								if (!dataColumns.contains(column)) {
 									dataColumns.append(column);
-									barPlot->setDataColumns(dataColumns);
+									barPlot->setDataColumns(std::move(dataColumns));
 								}
 								break;
 							}
@@ -1571,7 +1578,7 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 			legend->background()->setFirstColor(Qt::white);
 
 		// save current legend text
-		m_legendText = legendText;
+		m_legendText = std::move(legendText);
 	}
 
 	// curves
@@ -1882,17 +1889,17 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 					childPlot = barPlot;
 
 					DEBUG(Q_FUNC_INFO << ", x/y column path = " << xColumnPath.toStdString() << ", " << yColumnPath.toStdString())
-					barPlot->xColumnPath() = xColumnPath;
+					barPlot->xColumnPath() = std::move(xColumnPath);
 					barPlot->setDataColumnPaths({yColumnPath});
 
 					// calculate bar width
 					const auto& xColumn = sheet.columns[findColumnByName(sheet, xColumnName)];
-					const auto xData = xColumn.data;
+					const auto& xData = xColumn.data;
 					// this fails due to NaNs
 					// const auto [xMin, xMax] = minmax_element(xData.begin(), xData.end());
 					double xMin = qInf(), xMax = -qInf();
 					int numDataRows = 0;
-					for (const auto v : xData) {
+					for (const auto& v : xData) {
 						const double value = v.as_double();
 						if (v.type() == Origin::Variant::V_DOUBLE && !std::isnan(value)) {
 							if (value < xMin)
@@ -1903,7 +1910,8 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 						}
 					}
 					DEBUG(Q_FUNC_INFO << ", x column data rows: " << numDataRows << ", min/max = " << xMin << "/" << xMax)
-					barPlot->setWidthFactor((xMax - xMin) / numDataRows);
+					if (numDataRows != 0)
+						barPlot->setWidthFactor((xMax - xMin) / numDataRows);
 
 					// TODO: BarPlot::Type::Stacked_100_Percent
 

@@ -510,7 +510,7 @@ bool ROOTFilterPrivate::setFile(const QString& fileName) {
 		return false;
 	}
 
-	auto modified = file.lastModified();
+	const auto& modified = file.lastModified();
 	qint64 size = file.size();
 	if (!currentROOTData || fileName != currentFile.name || modified != currentFile.modified || size != currentFile.size) {
 		currentFile.name = fileName;

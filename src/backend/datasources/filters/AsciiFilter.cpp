@@ -1778,8 +1778,8 @@ void AsciiFilterPrivate::setValue(int col, int row, QStringView valueString) {
 			break;
 		}
 		case AbstractColumn::ColumnMode::DateTime: {
-			QDateTime valueDateTime = parseDateTime(valueString.toString(), dateTimeFormat);
-			(*static_cast<QVector<QDateTime>*>(m_dataContainer[col]))[row] = valueDateTime.isValid() ? valueDateTime : QDateTime();
+			const auto valueDateTime = parseDateTime(valueString.toString(), dateTimeFormat);
+			(*static_cast<QVector<QDateTime>*>(m_dataContainer[col]))[row] = valueDateTime.isValid() ? std::move(valueDateTime) : QDateTime();
 			break;
 		}
 		case AbstractColumn::ColumnMode::Text: {
