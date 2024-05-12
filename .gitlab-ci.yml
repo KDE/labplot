@@ -23,10 +23,12 @@ include:
 #      - /gitlab-templates/flatpak.yml
       - /gitlab-templates/craft-windows-x86-64.yml
       - /gitlab-templates/craft-windows-x86-64-qt6.yml
-      - /gitlab-templates/craft-macos-x86-64.yml
+# currently fails building libs/qt5
+#      - /gitlab-templates/craft-macos-x86-64.yml
       - /gitlab-templates/craft-macos-arm64.yml
-      - /gitlab-templates/craft-macos-x86-64-qt6.yml
-      - /gitlab-templates/craft-macos-arm64-qt6.yml
+# kdmactouchbar requires Qt5
+#      - /gitlab-templates/craft-macos-x86-64-qt6.yml
+#      - /gitlab-templates/craft-macos-arm64-qt6.yml
 # only for publishing in the MS Store
 #      - /gitlab-templates/craft-windows-appx-qt5.yml
 #      - /gitlab-templates/craft-windows-appx-qt6.yml
@@ -48,19 +50,19 @@ craft_windows_qt6_x86_64:
   rules:
     - if: '$CI_COMMIT_REF_NAME == "master"'
 
-craft_macos_x86_64:
-  rules:
-    - if: '$CI_COMMIT_REF_NAME == "master"'
-craft_macos_qt6_x86_64:
-  rules:
-    - if: '$CI_COMMIT_REF_NAME == "master"'
+#craft_macos_x86_64:
+#  rules:
+#    - if: '$CI_COMMIT_REF_NAME == "master"'
+#craft_macos_qt6_x86_64:
+#  rules:
+#    - if: '$CI_COMMIT_REF_NAME == "master"'
 
 craft_macos_arm64:
   rules:
     - if: '$CI_COMMIT_REF_NAME == "master"'
-craft_macos_qt6_arm64:
-  rules:
-    - if: '$CI_COMMIT_REF_NAME == "master"'
+#craft_macos_qt6_arm64:
+#  rules:
+#    - if: '$CI_COMMIT_REF_NAME == "master"'
 
 clang_format:
   stage: test
