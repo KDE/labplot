@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-10 01:42+0000\n"
+"POT-Creation-Date: 2024-05-12 01:54+0000\n"
 "PO-Revision-Date: 2024-02-29 03:22+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -2402,12 +2402,12 @@ msgstr "აღმოჩენილია შემდეგი შეცდო�
 msgid "Plot data"
 msgstr "გრაფიკის მონაცემები"
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1315
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1322
 #, kde-format
 msgid "Plot%1"
 msgstr "გრაფიკი%1"
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1475
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1482
 #, kde-format
 msgid "legend"
 msgstr "შინაარსი"
@@ -6966,7 +6966,7 @@ msgstr "%1: გამოსახულების დაყენება"
 msgid "%1: embed image"
 msgstr "%1: გამოსახულების ჩაშენება"
 
-#: src/backend/worksheet/Image.cpp:151 src/backend/worksheet/TextLabel.cpp:371
+#: src/backend/worksheet/Image.cpp:151 src/backend/worksheet/TextLabel.cpp:374
 #, kde-format
 msgid "%1: set border opacity"
 msgstr "%1: საზღვრის გაუმჭვირვალობის დაყენება"
@@ -8127,7 +8127,7 @@ msgid "%1: set font"
 msgstr "%1: ფონტის დაყენება"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:215
-#: src/backend/worksheet/TextLabel.cpp:349
+#: src/backend/worksheet/TextLabel.cpp:352
 #, kde-format
 msgid "%1: set font color"
 msgstr "%1: ფონტის ფერის დაყენება"
@@ -9004,37 +9004,37 @@ msgstr ""
 msgid "%1: set plot area corner radius"
 msgstr ""
 
-#: src/backend/worksheet/TextLabel.cpp:262
-#: src/backend/worksheet/TextLabel.cpp:301
+#: src/backend/worksheet/TextLabel.cpp:265
+#: src/backend/worksheet/TextLabel.cpp:304
 #, kde-format
 msgid "%1: set background color"
 msgstr ""
 
-#: src/backend/worksheet/TextLabel.cpp:290
-#: src/backend/worksheet/TextLabel.cpp:300
+#: src/backend/worksheet/TextLabel.cpp:293
 #: src/backend/worksheet/TextLabel.cpp:303
-#: src/backend/worksheet/TextLabel.cpp:309
-#: src/backend/worksheet/TextLabel.cpp:318
+#: src/backend/worksheet/TextLabel.cpp:306
+#: src/backend/worksheet/TextLabel.cpp:312
+#: src/backend/worksheet/TextLabel.cpp:321
 #, kde-format
 msgid "%1: set label text"
 msgstr ""
 
-#: src/backend/worksheet/TextLabel.cpp:335
+#: src/backend/worksheet/TextLabel.cpp:338
 #, kde-format
 msgid "%1: set label placeholdertext"
 msgstr ""
 
-#: src/backend/worksheet/TextLabel.cpp:342
+#: src/backend/worksheet/TextLabel.cpp:345
 #, kde-format
 msgid "%1: set TeX main font"
 msgstr ""
 
-#: src/backend/worksheet/TextLabel.cpp:357
+#: src/backend/worksheet/TextLabel.cpp:360
 #, kde-format
 msgid "%1: set border shape"
 msgstr ""
 
-#: src/backend/worksheet/TextLabel.cpp:364
+#: src/backend/worksheet/TextLabel.cpp:367
 #, kde-format
 msgid "%1: set border"
 msgstr "%1: საზღვრის დაყენება"

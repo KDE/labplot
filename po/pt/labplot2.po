@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-10 01:42+0000\n"
+"POT-Creation-Date: 2024-05-12 01:54+0000\n"
 "PO-Revision-Date: 2023-06-24 01:41+0100\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
@@ -2489,12 +2489,12 @@ msgstr "Ocorreu o seguinte erro: %1."
 msgid "Plot data"
 msgstr "Dados do gráfico"
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1315
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1322
 #, kde-format
 msgid "Plot%1"
 msgstr "Gráfico%1"
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1475
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1482
 #, kde-format
 msgid "legend"
 msgstr "legenda"
@@ -7140,7 +7140,7 @@ msgstr "%1: mudar a imagem"
 msgid "%1: embed image"
 msgstr "%1: incorporar a imagem"
 
-#: src/backend/worksheet/Image.cpp:151 src/backend/worksheet/TextLabel.cpp:371
+#: src/backend/worksheet/Image.cpp:151 src/backend/worksheet/TextLabel.cpp:374
 #, kde-format
 msgid "%1: set border opacity"
 msgstr "%1: mudar a opacidade do contorno"
@@ -8304,7 +8304,7 @@ msgid "%1: set font"
 msgstr "%1: mudar o tipo de letra"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:215
-#: src/backend/worksheet/TextLabel.cpp:349
+#: src/backend/worksheet/TextLabel.cpp:352
 #, kde-format
 msgid "%1: set font color"
 msgstr "%1: mudar a cor do texto"
@@ -9196,37 +9196,37 @@ msgstr "%1: o tipo de contorno foi modificado"
 msgid "%1: set plot area corner radius"
 msgstr "%1: mudar o raio dos cantos do contorno da área do gráfico"
 
-#: src/backend/worksheet/TextLabel.cpp:262
-#: src/backend/worksheet/TextLabel.cpp:301
+#: src/backend/worksheet/TextLabel.cpp:265
+#: src/backend/worksheet/TextLabel.cpp:304
 #, kde-format
 msgid "%1: set background color"
 msgstr "%1: mudar a cor de fundo"
 
-#: src/backend/worksheet/TextLabel.cpp:290
-#: src/backend/worksheet/TextLabel.cpp:300
+#: src/backend/worksheet/TextLabel.cpp:293
 #: src/backend/worksheet/TextLabel.cpp:303
-#: src/backend/worksheet/TextLabel.cpp:309
-#: src/backend/worksheet/TextLabel.cpp:318
+#: src/backend/worksheet/TextLabel.cpp:306
+#: src/backend/worksheet/TextLabel.cpp:312
+#: src/backend/worksheet/TextLabel.cpp:321
 #, kde-format
 msgid "%1: set label text"
 msgstr "%1: mudar o texto da legenda"
 
-#: src/backend/worksheet/TextLabel.cpp:335
+#: src/backend/worksheet/TextLabel.cpp:338
 #, kde-format
 msgid "%1: set label placeholdertext"
 msgstr "%1: mudar o texto substituto da legenda"
 
-#: src/backend/worksheet/TextLabel.cpp:342
+#: src/backend/worksheet/TextLabel.cpp:345
 #, kde-format
 msgid "%1: set TeX main font"
 msgstr "%1: mudar o tipo de letra principal do TeX"
 
-#: src/backend/worksheet/TextLabel.cpp:357
+#: src/backend/worksheet/TextLabel.cpp:360
 #, kde-format
 msgid "%1: set border shape"
 msgstr "%1: mudar a forma do contorno"
 
-#: src/backend/worksheet/TextLabel.cpp:364
+#: src/backend/worksheet/TextLabel.cpp:367
 #, kde-format
 msgid "%1: set border"
 msgstr "%1: mudar o contorno"

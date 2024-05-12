@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-10 01:42+0000\n"
+"POT-Creation-Date: 2024-05-12 01:54+0000\n"
 "PO-Revision-Date: 2024-04-17 05:07+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -2431,13 +2431,13 @@ msgstr ""
 msgid "Plot data"
 msgstr "繪製區域"
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1315
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1322
 #, fuzzy, kde-format
 #| msgid "LabPlot2"
 msgid "Plot%1"
 msgstr "LabPlot2"
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1475
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1482
 #, fuzzy, kde-format
 msgid "legend"
 msgstr "圖例"
@@ -7122,7 +7122,7 @@ msgstr "設定字型"
 msgid "%1: embed image"
 msgstr "設定字型"
 
-#: src/backend/worksheet/Image.cpp:151 src/backend/worksheet/TextLabel.cpp:371
+#: src/backend/worksheet/Image.cpp:151 src/backend/worksheet/TextLabel.cpp:374
 #, kde-format
 msgid "%1: set border opacity"
 msgstr ""
@@ -8350,7 +8350,7 @@ msgid "%1: set font"
 msgstr "設定字型"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:215
-#: src/backend/worksheet/TextLabel.cpp:349
+#: src/backend/worksheet/TextLabel.cpp:352
 #, kde-format
 msgid "%1: set font color"
 msgstr ""
@@ -9252,37 +9252,37 @@ msgstr "（已改變）"
 msgid "%1: set plot area corner radius"
 msgstr ""
 
-#: src/backend/worksheet/TextLabel.cpp:262
-#: src/backend/worksheet/TextLabel.cpp:301
+#: src/backend/worksheet/TextLabel.cpp:265
+#: src/backend/worksheet/TextLabel.cpp:304
 #, fuzzy, kde-format
 msgid "%1: set background color"
 msgstr "設定背景影像..."
 
-#: src/backend/worksheet/TextLabel.cpp:290
-#: src/backend/worksheet/TextLabel.cpp:300
+#: src/backend/worksheet/TextLabel.cpp:293
 #: src/backend/worksheet/TextLabel.cpp:303
-#: src/backend/worksheet/TextLabel.cpp:309
-#: src/backend/worksheet/TextLabel.cpp:318
+#: src/backend/worksheet/TextLabel.cpp:306
+#: src/backend/worksheet/TextLabel.cpp:312
+#: src/backend/worksheet/TextLabel.cpp:321
 #, kde-format
 msgid "%1: set label text"
 msgstr ""
 
-#: src/backend/worksheet/TextLabel.cpp:335
+#: src/backend/worksheet/TextLabel.cpp:338
 #, fuzzy, kde-format
 msgid "%1: set label placeholdertext"
 msgstr "設定背景影像..."
 
-#: src/backend/worksheet/TextLabel.cpp:342
+#: src/backend/worksheet/TextLabel.cpp:345
 #, fuzzy, kde-format
 msgid "%1: set TeX main font"
 msgstr "設定字型"
 
-#: src/backend/worksheet/TextLabel.cpp:357
+#: src/backend/worksheet/TextLabel.cpp:360
 #, fuzzy, kde-format
 msgid "%1: set border shape"
 msgstr "設定佈局"
 
-#: src/backend/worksheet/TextLabel.cpp:364
+#: src/backend/worksheet/TextLabel.cpp:367
 #, fuzzy, kde-format
 msgid "%1: set border"
 msgstr "設定字型"

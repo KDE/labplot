@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-10 01:42+0000\n"
+"POT-Creation-Date: 2024-05-12 01:54+0000\n"
 "PO-Revision-Date: 2022-07-14 10:06-0300\n"
 "Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
 "Language-Team: Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -2469,12 +2469,12 @@ msgstr ""
 msgid "Plot data"
 msgstr "Área do gráfico"
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1315
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1322
 #, kde-format
 msgid "Plot%1"
 msgstr "Gráfico%1"
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1475
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1482
 #, kde-format
 msgid "legend"
 msgstr "legenda"
@@ -7295,7 +7295,7 @@ msgstr "%1: definir o ângulo da rotação"
 msgid "%1: embed image"
 msgstr "%1: definir o ângulo da rotação"
 
-#: src/backend/worksheet/Image.cpp:151 src/backend/worksheet/TextLabel.cpp:371
+#: src/backend/worksheet/Image.cpp:151 src/backend/worksheet/TextLabel.cpp:374
 #, kde-format
 msgid "%1: set border opacity"
 msgstr "%1: definir a opacidade da borda"
@@ -8573,7 +8573,7 @@ msgid "%1: set font"
 msgstr "%1: definir a fonte"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:215
-#: src/backend/worksheet/TextLabel.cpp:349
+#: src/backend/worksheet/TextLabel.cpp:352
 #, kde-format
 msgid "%1: set font color"
 msgstr "%1: definir a cor da fonte"
@@ -9537,41 +9537,41 @@ msgstr "%1: o tipo de linha foi alterado"
 msgid "%1: set plot area corner radius"
 msgstr "%1: definir o raio do contorno da área do gráfico"
 
-#: src/backend/worksheet/TextLabel.cpp:262
-#: src/backend/worksheet/TextLabel.cpp:301
+#: src/backend/worksheet/TextLabel.cpp:265
+#: src/backend/worksheet/TextLabel.cpp:304
 #, fuzzy, kde-format
 #| msgid "%1: set background first color"
 msgid "%1: set background color"
 msgstr "%1: definir a primeira cor de fundo"
 
-#: src/backend/worksheet/TextLabel.cpp:290
-#: src/backend/worksheet/TextLabel.cpp:300
+#: src/backend/worksheet/TextLabel.cpp:293
 #: src/backend/worksheet/TextLabel.cpp:303
-#: src/backend/worksheet/TextLabel.cpp:309
-#: src/backend/worksheet/TextLabel.cpp:318
+#: src/backend/worksheet/TextLabel.cpp:306
+#: src/backend/worksheet/TextLabel.cpp:312
+#: src/backend/worksheet/TextLabel.cpp:321
 #, kde-format
 msgid "%1: set label text"
 msgstr "%1: definir o texto da legenda"
 
-#: src/backend/worksheet/TextLabel.cpp:335
+#: src/backend/worksheet/TextLabel.cpp:338
 #, fuzzy, kde-format
 #| msgid "%1: set label text"
 msgid "%1: set label placeholdertext"
 msgstr "%1: definir o texto da legenda"
 
-#: src/backend/worksheet/TextLabel.cpp:342
+#: src/backend/worksheet/TextLabel.cpp:345
 #, fuzzy, kde-format
 #| msgid "%1: set TeX font size"
 msgid "%1: set TeX main font"
 msgstr "%1: definir o tamanho da fonte em TeX"
 
-#: src/backend/worksheet/TextLabel.cpp:357
+#: src/backend/worksheet/TextLabel.cpp:360
 #, fuzzy, kde-format
 #| msgid "%1: set border style"
 msgid "%1: set border shape"
 msgstr "%1: definir o estilo da borda"
 
-#: src/backend/worksheet/TextLabel.cpp:364
+#: src/backend/worksheet/TextLabel.cpp:367
 #, fuzzy, kde-format
 #| msgid "%1: set border style"
 msgid "%1: set border"

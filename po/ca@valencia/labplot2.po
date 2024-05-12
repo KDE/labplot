@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-10 01:42+0000\n"
+"POT-Creation-Date: 2024-05-12 01:54+0000\n"
 "PO-Revision-Date: 2024-04-19 08:38+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -393,12 +393,12 @@ msgstr "Importa dades"
 #: src/kdefrontend/MainWin.cpp:765
 #, kde-format
 msgid "From File..."
-msgstr "Des del fitxer..."
+msgstr "Des del fitxer…"
 
 #: src/backend/core/AbstractPart.cpp:118 src/kdefrontend/MainWin.cpp:772
 #, kde-format
 msgid "From SQL Database..."
-msgstr "Des de la base de dades SQL..."
+msgstr "Des de la base de dades SQL…"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbExport)
 #: src/backend/core/AbstractPart.cpp:127
@@ -2399,12 +2399,12 @@ msgstr "Ha ocorregut l'error següent: %1."
 msgid "Plot data"
 msgstr "Dibuixa el diagrama de les dades"
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1315
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1322
 #, kde-format
 msgid "Plot%1"
 msgstr "Diagrama%1"
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1475
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1482
 #, kde-format
 msgid "legend"
 msgstr "llegenda"
@@ -7061,7 +7061,7 @@ msgstr "%1: establix la imatge"
 msgid "%1: embed image"
 msgstr "%1: incrusta una imatge"
 
-#: src/backend/worksheet/Image.cpp:151 src/backend/worksheet/TextLabel.cpp:371
+#: src/backend/worksheet/Image.cpp:151 src/backend/worksheet/TextLabel.cpp:374
 #, kde-format
 msgid "%1: set border opacity"
 msgstr "%1: establix l'opacitat de la vora"
@@ -8231,7 +8231,7 @@ msgid "%1: set font"
 msgstr "%1: establix el tipus de lletra"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:215
-#: src/backend/worksheet/TextLabel.cpp:349
+#: src/backend/worksheet/TextLabel.cpp:352
 #, kde-format
 msgid "%1: set font color"
 msgstr "%1: establix el color del tipus de lletra"
@@ -9124,37 +9124,37 @@ msgstr "%1: s'ha canviat el tipus de vora"
 msgid "%1: set plot area corner radius"
 msgstr "%1: establix el radi dels cantons de l'àrea del diagrama"
 
-#: src/backend/worksheet/TextLabel.cpp:262
-#: src/backend/worksheet/TextLabel.cpp:301
+#: src/backend/worksheet/TextLabel.cpp:265
+#: src/backend/worksheet/TextLabel.cpp:304
 #, kde-format
 msgid "%1: set background color"
 msgstr "%1: establix el color del fons"
 
-#: src/backend/worksheet/TextLabel.cpp:290
-#: src/backend/worksheet/TextLabel.cpp:300
+#: src/backend/worksheet/TextLabel.cpp:293
 #: src/backend/worksheet/TextLabel.cpp:303
-#: src/backend/worksheet/TextLabel.cpp:309
-#: src/backend/worksheet/TextLabel.cpp:318
+#: src/backend/worksheet/TextLabel.cpp:306
+#: src/backend/worksheet/TextLabel.cpp:312
+#: src/backend/worksheet/TextLabel.cpp:321
 #, kde-format
 msgid "%1: set label text"
 msgstr "%1: establix el text de l'etiqueta"
 
-#: src/backend/worksheet/TextLabel.cpp:335
+#: src/backend/worksheet/TextLabel.cpp:338
 #, kde-format
 msgid "%1: set label placeholdertext"
 msgstr "%1: establix l'etiqueta amb un text d'espai reservat"
 
-#: src/backend/worksheet/TextLabel.cpp:342
+#: src/backend/worksheet/TextLabel.cpp:345
 #, kde-format
 msgid "%1: set TeX main font"
 msgstr "%1: establix el tipus de lletra principal de TeX"
 
-#: src/backend/worksheet/TextLabel.cpp:357
+#: src/backend/worksheet/TextLabel.cpp:360
 #, kde-format
 msgid "%1: set border shape"
 msgstr "%1: establix la forma de la vora"
 
-#: src/backend/worksheet/TextLabel.cpp:364
+#: src/backend/worksheet/TextLabel.cpp:367
 #, kde-format
 msgid "%1: set border"
 msgstr "%1: establix la vora"
@@ -9424,7 +9424,7 @@ msgstr "Dibuixa el diagrama de les dades"
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:291
 #, kde-format
 msgid "Variable Statistics..."
-msgstr "Estadístiques de les variables..."
+msgstr "Estadístiques de les variables…"
 
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:338
 #, kde-format
@@ -9434,7 +9434,7 @@ msgstr "Interrupció"
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:340
 #, kde-format
 msgid "Calculating..."
-msgstr "S'està calculant..."
+msgstr "S'està calculant…"
 
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:344
 #, kde-format
@@ -9672,7 +9672,7 @@ msgstr "Neteja el contingut"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:329
 #, kde-format
 msgid "&Go to Cell..."
-msgstr "&Ves fins a la cel·la..."
+msgstr "&Ves fins a la cel·la…"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:147
 #, kde-format
@@ -10068,7 +10068,7 @@ msgstr "Su&bstituïx"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:478
 #, kde-format
 msgid "Column Statistics..."
-msgstr "Estadístiques de les columnes..."
+msgstr "Estadístiques de les columnes…"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:336
 #, kde-format
@@ -10226,7 +10226,7 @@ msgstr "Canvia l'escala a [a, b]"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:472
 #, kde-format
 msgid "&Sort..."
-msgstr "&Ordena..."
+msgstr "&Ordena…"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:473
 #, kde-format
@@ -11039,7 +11039,7 @@ msgstr "Introduïu la paraula clau que voleu buscar"
 #: src/kdefrontend/examples/ExamplesWidget.cpp:54
 #, kde-format
 msgid "Search..."
-msgstr "Busca..."
+msgstr "Busca…"
 
 # skip-rule: t-sc-plot
 #: src/kdefrontend/datasources/AsciiOptionsWidget.cpp:32
@@ -14906,7 +14906,7 @@ msgstr "Crea una carpeta nova per a col·leccionar els fulls i altres elements"
 #: src/kdefrontend/MainWin.cpp:750
 #, kde-format
 msgid "Live Data Source..."
-msgstr "Origen de les dades en viu..."
+msgstr "Origen de les dades en viu…"
 
 #: src/kdefrontend/MainWin.cpp:751
 #, kde-format
@@ -14928,7 +14928,7 @@ msgstr "Importa les dades des d'una base de dades SQL"
 #: src/kdefrontend/MainWin.cpp:777
 #, kde-format
 msgid "From Dataset Collection..."
-msgstr "Des d'una col·lecció de conjunt de dades..."
+msgstr "Des d'una col·lecció de conjunt de dades…"
 
 #: src/kdefrontend/MainWin.cpp:778
 #, kde-format
@@ -14938,7 +14938,7 @@ msgstr "Importa les dades des d'un conjunt de dades en línia"
 #: src/kdefrontend/MainWin.cpp:782
 #, kde-format
 msgid "LabPlot Project..."
-msgstr "Projecte de LabPlot..."
+msgstr "Projecte de LabPlot…"
 
 #: src/kdefrontend/MainWin.cpp:783
 #, kde-format
@@ -14948,7 +14948,7 @@ msgstr "Importa un projecte des d'un fitxer de projecte de LabPlot (.lml)"
 #: src/kdefrontend/MainWin.cpp:788
 #, kde-format
 msgid "Origin Project (OPJ)..."
-msgstr "Projecte d'Origin (OPJ)..."
+msgstr "Projecte d'Origin (OPJ)…"
 
 #: src/kdefrontend/MainWin.cpp:789
 #, kde-format
@@ -14959,7 +14959,7 @@ msgstr ""
 #: src/kdefrontend/MainWin.cpp:794
 #, kde-format
 msgid "Export..."
-msgstr "Exporta..."
+msgstr "Exporta…"
 
 #: src/kdefrontend/MainWin.cpp:795
 #, kde-format
@@ -14985,7 +14985,7 @@ msgstr "Obri el diàleg per a navegar a través dels mapes de color disponibles.
 #: src/kdefrontend/MainWin.cpp:816
 #, kde-format
 msgid "FITS Metadata Editor..."
-msgstr "Editor de metadades de FITS..."
+msgstr "Editor de metadades de FITS…"
 
 #: src/kdefrontend/MainWin.cpp:817
 #, kde-format
@@ -14995,7 +14995,7 @@ msgstr "Obri l'editor per a editar les metadades de FITS"
 #: src/kdefrontend/MainWin.cpp:826
 #, kde-format
 msgid "Undo/Redo History..."
-msgstr "Historial de desfer/refer..."
+msgstr "Historial de desfer/refer…"
 
 #: src/kdefrontend/MainWin.cpp:846
 #, kde-format
@@ -15070,7 +15070,7 @@ msgstr "Vista prèvia del full de treball"
 #: src/kdefrontend/MainWin.cpp:939
 #, kde-format
 msgid "Configure CAS..."
-msgstr "Configura CAS..."
+msgstr "Configura CAS…"
 
 #: src/kdefrontend/MainWin.cpp:940
 #, kde-format
@@ -15168,7 +15168,7 @@ msgstr "No s'ha pogut llegir el fitxer de projecte %1."
 #: src/kdefrontend/MainWin.cpp:1602
 #, kde-format
 msgid "Loading %1..."
-msgstr "S'està carregant %1..."
+msgstr "S'està carregant %1…"
 
 #: src/kdefrontend/MainWin.cpp:1652 src/kdefrontend/MainWin.cpp:1656
 #: src/kdefrontend/MainWin.cpp:1661 src/kdefrontend/MainWin.cpp:1666
@@ -16686,7 +16686,7 @@ msgstr[1] "S'han fet %1 substitucions"
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1460
 #, kde-format
 msgid "Add..."
-msgstr "Afig..."
+msgstr "Afig…"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1538
 #, kde-format
@@ -19519,7 +19519,7 @@ msgstr "Elimina l'interval X actualment seleccionat"
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:424
 #, kde-format
 msgid "..."
-msgstr "..."
+msgstr "…"
 
 #. i18n: ectx: property (text), widget (QLabel, lRangeType)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:297
@@ -21236,7 +21236,7 @@ msgstr "Clau:"
 #: src/kdefrontend/ui/fitsheadereditwidget.ui:56
 #, kde-format
 msgid "Open File..."
-msgstr "Obri un fitxer..."
+msgstr "Obri un fitxer…"
 
 #. i18n: ectx: property (text), widget (QPushButton, bClose)
 #: src/kdefrontend/ui/fitsheadereditwidget.ui:63
