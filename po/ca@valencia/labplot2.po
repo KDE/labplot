@@ -474,12 +474,12 @@ msgstr "Importa dades"
 #: src/kdefrontend/MainWin.cpp:576
 #, kde-format
 msgid "From File..."
-msgstr "Des del fitxer..."
+msgstr "Des del fitxer…"
 
 #: src/backend/core/AbstractPart.cpp:95 src/kdefrontend/MainWin.cpp:583
 #, kde-format
 msgid "From SQL Database..."
-msgstr "Des de la base de dades SQL..."
+msgstr "Des de la base de dades SQL…"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbExport)
 #: src/backend/core/AbstractPart.cpp:104
@@ -8834,7 +8834,7 @@ msgstr "Interrupció"
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:304
 #, kde-format
 msgid "Calculating..."
-msgstr "S'està calculant..."
+msgstr "S'està calculant…"
 
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:308
 #, kde-format
@@ -9065,7 +9065,7 @@ msgstr "Neteja el contingut"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:288
 #, kde-format
 msgid "&Go to Cell..."
-msgstr "&Ves fins a la cel·la..."
+msgstr "&Ves fins a la cel·la…"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:141
 #, kde-format
@@ -9455,7 +9455,7 @@ msgstr "Bu&sca"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:428
 #, kde-format
 msgid "Column Statistics..."
-msgstr "Estadístiques de les columnes..."
+msgstr "Estadístiques de les columnes…"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:294
 #, kde-format
@@ -9953,7 +9953,7 @@ msgstr "%1: neteja les cel·les seleccionades"
 #: src/kdefrontend/examples/ExamplesWidget.cpp:53
 #, kde-format
 msgid "Search..."
-msgstr "Busca..."
+msgstr "Busca…"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3430
 #, kde-format
@@ -10175,7 +10175,7 @@ msgid ""
 "If activated, plots on the worksheet don't react on drag and mouse wheel "
 "events."
 msgstr ""
-"Si se selecciona, els diagrames del full de treball no reaccionaran als "
+"Si està marcada, els diagrames del full de treball no reaccionaran als "
 "esdeveniments d'arrossegar ni a la roda del ratolí."
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:284
@@ -10536,7 +10536,7 @@ msgid ""
 "If checked, the specified line in the file will be used to determine the "
 "column names."
 msgstr ""
-"Si se selecciona, la línia especificada en el fitxer s'utilitzarà per a "
+"Si està marcada, la línia especificada en el fitxer s'utilitzarà per a "
 "determinar els noms de les columnes."
 
 #: src/kdefrontend/datasources/AsciiOptionsWidget.cpp:108
@@ -11038,7 +11038,7 @@ msgid ""
 "If this option is checked, only the link to the file is stored in the "
 "project file but not its content."
 msgstr ""
-"Si se selecciona, només s'emmagatzemarà l'enllaç cap al fitxer en el fitxer "
+"Si està marcada, només s'emmagatzemarà l'enllaç cap al fitxer en el fitxer "
 "de projecte, no el seu contingut."
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:144
@@ -11047,7 +11047,7 @@ msgid ""
 "If this option is checked, the relative path of the file (relative to "
 "project's folder) will be saved."
 msgstr ""
-"Si se selecciona, es guardarà el camí relatiu del fitxer (relatiu a la "
+"Si està marcada, es guardarà el camí relatiu del fitxer (relatiu a la "
 "carpeta del projecte)."
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:147
@@ -11128,8 +11128,8 @@ msgid ""
 "Enable to use the first row of the selected data region for the column names "
 "of the spreadsheet."
 msgstr ""
-"Seleccioneu-la per a utilitzar la primera fila de la regió de dades "
-"seleccionada com a noms de columna del full de càlcul."
+"Activeu-la per a utilitzar la primera fila de la regió de dades seleccionada "
+"com a noms de columna del full de càlcul."
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:242
 #, kde-format
@@ -12241,7 +12241,7 @@ msgid ""
 "If checked, the box width is made proportional to the square root of the "
 "number of data points."
 msgstr ""
-"Si se selecciona, l'amplària del quadro es farà proporcional a l'arrel "
+"Si està marcada, l'amplària del quadro es farà proporcional a l'arrel "
 "quadrada del nombre de punts de dades."
 
 # skip-rule: kct-box
@@ -12349,7 +12349,7 @@ msgstr ""
 #, kde-format
 msgid "If checked, automatically extend the plot range to nice values"
 msgstr ""
-"Si se selecciona, l'interval del diagrama s'ampliarà automàticament a valors "
+"Si està marcada, l'interval del diagrama s'ampliarà automàticament a valors "
 "satisfactoris"
 
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:866
@@ -12776,7 +12776,7 @@ msgid ""
 "Uncheck this option to reduce the size of the project file at costs of the "
 "longer project load times."
 msgstr ""
-"Si se selecciona, els resultats dels càlculs en l'anàlisi de corbes es "
+"Si està marcada, els resultats dels càlculs en l'anàlisi de corbes es "
 "guardaran en el fitxer del projecte.\n"
 "Desmarqueu esta opció per a reduir la mida del fitxer del projecte a canvi "
 "d'un temps més gran en carregar el projecte."
@@ -12797,7 +12797,7 @@ msgid ""
 "If checked, rescale the content of the worksheet on size changes. Otherwise "
 "resize the canvas only."
 msgstr ""
-"Si se selecciona, es tornarà a escalar el contingut del full de treball quan "
+"Si està marcada, es tornarà a escalar el contingut del full de treball quan "
 "es canvie la mida. En cas contrari, només es canviarà la mida del tapís."
 
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:278
@@ -12980,7 +12980,7 @@ msgid ""
 "If checked, connect neighbour points with lines even if there are gaps "
 "(invalid or masked values) between them"
 msgstr ""
-"Si se selecciona, connectarà els punts veïns amb línies, inclús si hi ha "
+"Si està marcada, connectarà els punts veïns amb línies, inclús si hi ha "
 "buits (valors no vàlids o emmascarats) entre ells"
 
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:617
@@ -12989,7 +12989,7 @@ msgstr ""
 msgid ""
 "If checked, connect data points only for strictly increasing values of X"
 msgstr ""
-"Si se selecciona, connectarà els punts de dades únicament per als valors "
+"Si està marcada, connectarà els punts de dades únicament per als valors "
 "estrictament creixents de X"
 
 #: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:70
@@ -14212,7 +14212,7 @@ msgstr "Crea una carpeta nova per a col·leccionar els fulls i altres elements"
 #: src/kdefrontend/MainWin.cpp:561
 #, kde-format
 msgid "Live Data Source..."
-msgstr "Origen de les dades en viu..."
+msgstr "Origen de les dades en viu…"
 
 #: src/kdefrontend/MainWin.cpp:562
 #, kde-format
@@ -14234,7 +14234,7 @@ msgstr "Importa les dades des d'una base de dades SQL"
 #: src/kdefrontend/MainWin.cpp:588
 #, kde-format
 msgid "From Dataset Collection..."
-msgstr "Des d'una col·lecció de conjunt de dades..."
+msgstr "Des d'una col·lecció de conjunt de dades…"
 
 #: src/kdefrontend/MainWin.cpp:589
 #, kde-format
@@ -14244,7 +14244,7 @@ msgstr "Importa les dades des d'un conjunt de dades en línia"
 #: src/kdefrontend/MainWin.cpp:593
 #, kde-format
 msgid "LabPlot Project..."
-msgstr "Projecte de LabPlot..."
+msgstr "Projecte de LabPlot…"
 
 #: src/kdefrontend/MainWin.cpp:594
 #, kde-format
@@ -14254,7 +14254,7 @@ msgstr "Importa un projecte des d'un fitxer de projecte de LabPlot (.lml)"
 #: src/kdefrontend/MainWin.cpp:599
 #, kde-format
 msgid "Origin Project (OPJ)..."
-msgstr "Projecte d'Origin (OPJ)..."
+msgstr "Projecte d'Origin (OPJ)…"
 
 #: src/kdefrontend/MainWin.cpp:600
 #, kde-format
@@ -14265,7 +14265,7 @@ msgstr ""
 #: src/kdefrontend/MainWin.cpp:605
 #, kde-format
 msgid "Export..."
-msgstr "Exporta..."
+msgstr "Exporta…"
 
 #: src/kdefrontend/MainWin.cpp:606
 #, kde-format
@@ -14285,7 +14285,7 @@ msgstr "Obri el diàleg per a navegar a través dels mapes de color disponibles.
 #: src/kdefrontend/MainWin.cpp:622
 #, kde-format
 msgid "FITS Metadata Editor..."
-msgstr "Editor de metadades de FITS..."
+msgstr "Editor de metadades de FITS…"
 
 #: src/kdefrontend/MainWin.cpp:623
 #, kde-format
@@ -14295,7 +14295,7 @@ msgstr "Obri l'editor per a editar les metadades de FITS"
 #: src/kdefrontend/MainWin.cpp:632
 #, kde-format
 msgid "Undo/Redo History..."
-msgstr "Historial de desfer/refer..."
+msgstr "Historial de desfer/refer…"
 
 #: src/kdefrontend/MainWin.cpp:650
 #, kde-format
@@ -14400,7 +14400,7 @@ msgstr "Esquema de color"
 #: src/kdefrontend/MainWin.cpp:859
 #, kde-format
 msgid "Configure CAS..."
-msgstr "Configura CAS..."
+msgstr "Configura CAS…"
 
 #: src/kdefrontend/MainWin.cpp:895 src/kdefrontend/MainWin.cpp:909
 #, kde-format
@@ -14457,7 +14457,7 @@ msgstr "Obri un projecte"
 #: src/kdefrontend/MainWin.cpp:1415
 #, kde-format
 msgid "Loading %1..."
-msgstr "S'està carregant %1..."
+msgstr "S'està carregant %1…"
 
 #: src/kdefrontend/MainWin.cpp:1465 src/kdefrontend/MainWin.cpp:1469
 #: src/kdefrontend/MainWin.cpp:1474 src/kdefrontend/MainWin.cpp:1479
@@ -18412,7 +18412,7 @@ msgstr "Elimina l'interval X actualment seleccionat"
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:424
 #, kde-format
 msgid "..."
-msgstr "..."
+msgstr "…"
 
 #. i18n: ectx: property (text), widget (QLabel, lRangeType)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:297
@@ -19999,8 +19999,8 @@ msgstr "Interval d'avaluació automàtica"
 #, kde-format
 msgid "If selected, the resulting fit parameter are set as new start values."
 msgstr ""
-"Si se selecciona, els paràmetres d'ajust resultants s'establiran com a "
-"valors inicials nous."
+"Si està marcada, els paràmetres d'ajust resultants s'establiran com a valors "
+"inicials nous."
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbUseResults)
 #: src/kdefrontend/ui/fitoptionswidget.ui:170
@@ -20036,7 +20036,7 @@ msgstr "Clau:"
 #: src/kdefrontend/ui/fitsheadereditwidget.ui:56
 #, kde-format
 msgid "Open File..."
-msgstr "Obri un fitxer..."
+msgstr "Obri un fitxer…"
 
 #. i18n: ectx: property (text), widget (QPushButton, bClose)
 #: src/kdefrontend/ui/fitsheadereditwidget.ui:63
@@ -20985,7 +20985,7 @@ msgstr "Àrea que s'ha d'exportar:"
 #: src/kdefrontend/ui/worksheet/exportworksheetwidget.ui:126
 #, kde-format
 msgid "Check this option if the worksheet background should be exported."
-msgstr "Seleccioneu esta opció si s'ha d'exportar el fons del full de treball."
+msgstr "Marqueu esta opció si s'ha d'exportar el fons del full de treball."
 
 #. i18n: ectx: property (text), widget (QLabel, lExportBackground)
 #: src/kdefrontend/ui/worksheet/exportworksheetwidget.ui:119
