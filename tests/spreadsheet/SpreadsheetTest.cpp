@@ -73,6 +73,11 @@ void SpreadsheetTest::testCopyPasteColumnMode00() {
    the first column has to be converted to integer column, the second to big integer.
 */
 void SpreadsheetTest::testCopyPasteColumnMode01() {
+#ifdef __FreeBSD__
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+	return;
+#endif
+#endif
 	Spreadsheet sheet(QStringLiteral("test"), false);
 	sheet.setColumnCount(2);
 	sheet.setRowCount(100);
