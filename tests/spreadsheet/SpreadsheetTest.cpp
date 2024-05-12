@@ -2086,6 +2086,12 @@ void SpreadsheetTest::testSearchExtended03() {
 }
 
 void SpreadsheetTest::testSearchFindAll() {
+#ifdef __FreeBSD__
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+	// ASSERT failure in QBoxLayout::insert: "index out of range"
+	return;
+#endif
+#endif
 	Project project;
 	auto* sheet = createSearchReplaceSpreadsheet();
 	project.addChild(sheet);
