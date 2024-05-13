@@ -1,7 +1,7 @@
 0. Prepare release
 * Update splash screen src/kdefrontend/splash.png
 * add release in org.kde.labplot2.appdata.xml
-* CmakeLists.txt: set(LABPLOT_VERSION 2.8.0)
+* CmakeLists.txt: project(labplot2 VERSION 2.8.0 LANGUAGES CXX C)
 * admin/create-dmg-craft.sh: VERSION=2.8.0
 
 

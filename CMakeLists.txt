@@ -1,6 +1,5 @@
 cmake_minimum_required (VERSION 3.17.0 FATAL_ERROR)
-project(labplot2)
-set(LABPLOT_VERSION 2.10.1)
+project(labplot2 VERSION 2.10.1 LANGUAGES CXX C)
 
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_STANDARD_REQUIRED ON)
@@ -228,7 +227,7 @@ endif()
 
 include_directories (${QDBUS_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR})
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
-add_definitions (-DLVERSION=\"${LABPLOT_VERSION}\")
+add_definitions (-DLVERSION=\"${labplot2_VERSION}\")
 add_definitions (-DCXX_COMPILER=\"${CMAKE_CXX_COMPILER_ID}\ ${CMAKE_CXX_COMPILER_VERSION}\")
 add_definitions (-DCXX_COMPILER_FLAGS=\"${CMAKE_CXX_FLAGS}\")
 set(BUILD_SHARED_LIBS true)
