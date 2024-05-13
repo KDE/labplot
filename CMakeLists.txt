@@ -302,7 +302,12 @@ ENDIF ()
 option(ENABLE_VECTOR_BLF "Build with Vector BLF file format support" ON)
 option(ENABLE_EIGEN3 "Build with Eigen3 support" ON)
 IF (APPLE)
-	option(ENABLE_TOUCHBAR "Enable touch bar support on macOS" ON)
+	# touch bar is Qt5 only
+	if (QT_MAJOR_VERSION GREATER_EQUAL 6)
+		option(ENABLE_TOUCHBAR "Enable touch bar support on macOS" OFF)
+	else ()
+		option(ENABLE_TOUCHBAR "Enable touch bar support on macOS" ON)
+	endif ()
 ENDIF ()
 
 ### OS macros ####################################
