@@ -16,7 +16,7 @@ Dependencies:
     'frameworks/kxmlgui': '@stable'
     'frameworks/knewstuff': '@stable'
     'frameworks/kuserfeedback': '@stable'
-    'education/cantor': '@stable'
+    'education/cantor': '@latest'
 
 - 'on': ['Linux/Qt6', 'FreeBSD/Qt6', 'Windows/Qt6']
   'require':
