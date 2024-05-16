@@ -576,6 +576,15 @@ bool WorksheetElement::load(XmlStreamReader* reader, bool preview) {
 
 	READ_INT_VALUE("horizontalPosition", position.horizontalPosition, HorizontalPosition);
 	READ_INT_VALUE("verticalPosition", position.verticalPosition, VerticalPosition);
+	if (Project::xmlVersion() < 11) {
+		// In earlier versions 3 was custom which is now center. But now 3 is relative
+		if ((int)d->position.horizontalPosition == 3) {
+			d->position.horizontalPosition = HorizontalPosition::Center;
+		}
+		if ((int)d->position.verticalPosition == 3) {
+			d->position.verticalPosition = VerticalPosition::Center;
+		}
+	}
 	if (Project::xmlVersion() < 1) {
 		// Before 2.9.0 the position.point is only used when horizontalPosition or
 		// vertical position was set to Custom, otherwise the label was attached to the
