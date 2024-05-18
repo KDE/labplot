@@ -1489,7 +1489,6 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 // #####################################################################
 // ############################ Preview ################################
 // #####################################################################
-
 /*!
  * preview for special devices (local/UDP/TCP socket or serial port)
  */
