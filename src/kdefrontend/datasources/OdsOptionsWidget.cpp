@@ -143,7 +143,7 @@ QStringList OdsOptionsWidget::selectedOdsSheetNames() const {
 			QString sheetName = item->parent()->text(0);
 			sheetName = sheetName.split(QLatin1Char('/')).last();
 			// DEBUG(Q_FUNC_INFO << ", sheet name = " << STDSTRING(sheetName))
-			names.push_back({sheetName + QLatin1Char('!') + item->text(0)});
+			names.push_back(QString(sheetName + QLatin1Char('!') + item->text(0)));
 		}
 	}
 

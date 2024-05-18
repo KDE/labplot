@@ -4,7 +4,7 @@
 	Description          : definition of functions
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2014 Alexander Semke <alexander.semke@web.de>
-	SPDX-FileCopyrightText: 2014-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2014-2024 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -639,8 +639,8 @@ struct funs _functions[] = {
 	{[]() { return i18n("Eta function for integer n"); }, "etaint", nsl_sf_etaint, 1, nullptr, FunctionGroups::ZetaFunctions},
 	{[]() { return i18n("Eta function"); }, "eta", gsl_sf_eta, 1, nullptr, FunctionGroups::ZetaFunctions},
 
-	// GSL Random Number Generators: see https://www.gnu.org/software/gsl/doc/html/randist.html
 	// Random number generator
+	// GSL Random Number Generators: see https://www.gnu.org/software/gsl/doc/html/randist.html
 	{[]() { return i18n("Gaussian random numbers"); }, "randgaussian", nsl_sf_ran_gaussian, 1, nullptr, FunctionGroups::RandomNumberGenerator},
 	{[]() { return i18n("Exponential random numbers"); }, "randexponential", nsl_sf_ran_exponential, 1, nullptr, FunctionGroups::RandomNumberGenerator},
 	{[]() { return i18n("Laplacian random numbers"); }, "randlaplace", nsl_sf_ran_laplace, 1, nullptr, FunctionGroups::RandomNumberGenerator},
@@ -658,6 +658,9 @@ struct funs _functions[] = {
 	{[]() { return i18n("Poisson random numbers"); }, "randpoisson", nsl_sf_ran_poisson, 1, nullptr, FunctionGroups::RandomNumberGenerator},
 	{[]() { return i18n("Bernoulli random numbers"); }, "randbernoulli", nsl_sf_ran_bernoulli, 1, nullptr, FunctionGroups::RandomNumberGenerator},
 	{[]() { return i18n("Binomial random numbers"); }, "randbinomial", nsl_sf_ran_binomial, 2, nullptr, FunctionGroups::RandomNumberGenerator},
+
+	// NSL Random Number Generators
+	{[]() { return i18n("Triangular random numbers"); }, "randtriangular", nsl_sf_ran_triangular, 3, nullptr, FunctionGroups::RandomNumberGenerator},
 
 	// GSL Random Number Distributions: see https://www.gnu.org/software/gsl/doc/html/randist.html
 	// Gaussian Distribution

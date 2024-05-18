@@ -33,6 +33,7 @@ New features:
 		* Generation of equidistant values: allow to fix the number of values and the increment at the same time
 		* Support parsing more functions and operators for formulas and expressions
 		* Added support to show the Sparkline of each respective column
+		* Added triangular distribution to parser and random number generation
 	* [notebook]
 		* Export to PDF
 		* "Configure CAS" in the menu to create a new notebook to directly allow the user to enable new backends in case not done yet
@@ -69,14 +70,14 @@ Bug fixes:
 	* Support start/end row/column in XLSX import preview
 	* Fixed wrong string to load CANSettings
 	* Don't draw any border line for the worksheet canvas (BUG 470625)
+	* Fix ascii import (Issues #898, #901)
 
 Internal:
 	* Switch from C++11 to C++17
 	* Support Qt6
 	* Reduce code duplication caused by multiple plot types (Issue #540)
 	* Update included QXlsx to 1.4.6
-	* Build separate libraries for backend, nsl and everything and link
-	only when needed in tests
+	* Build separate libraries for backend, nsl and everything and link only when needed in tests
 	* Log skipped tests
 
 -----2.10.1 (12.07.2023) -----

@@ -459,7 +459,7 @@ bool ColumnPrivate::ValueLabels::isMasked(int) const {
 
 QString ColumnPrivate::ValueLabels::labelAt(int index) const {
 	if (!initialized())
-		return QStringLiteral();
+		return {};
 
 	switch (m_mode) {
 	case AbstractColumn::ColumnMode::Double:
@@ -476,7 +476,7 @@ QString ColumnPrivate::ValueLabels::labelAt(int index) const {
 		return cast_vector<QDateTime>()->at(index).label;
 	}
 	Q_ASSERT(false);
-	return QStringLiteral();
+	return {};
 }
 
 double ColumnPrivate::ValueLabels::minimum() {

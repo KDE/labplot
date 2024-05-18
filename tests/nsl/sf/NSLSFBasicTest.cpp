@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : NSL Tests for basic special functions
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2019 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2019-2024 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -11,6 +11,23 @@
 #include "NSLSFBasicTest.h"
 
 #include "backend/nsl/nsl_sf_basic.h"
+
+// ##############################################################################
+// #################  RNG tests
+// ##############################################################################
+
+void NSLSFBasicTest::testran_triangular() {
+	// out of bounds
+	QCOMPARE(nsl_sf_ran_triangular(1., 1., 1.), 0.);
+	QCOMPARE(nsl_sf_ran_triangular(2., 1., 1.), 0.);
+	QCOMPARE(nsl_sf_ran_triangular(1., 2., 0.), 0.);
+	QCOMPARE(nsl_sf_ran_triangular(1., 2., 3.), 0.);
+
+	QBENCHMARK {
+		for (unsigned int i = 0; i < 1e4; i++)
+			nsl_sf_ran_triangular(0., 1., 0.5);
+	}
+}
 
 // ##############################################################################
 // #################  log2() tests

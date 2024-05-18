@@ -484,6 +484,7 @@ void QQPlotPrivate::updateDistribution() {
 			xData << gsl_cdf_gumbel2_Pinv(double(i) / 100., 1.0, 1.0);
 		break;
 	}
+	// distributions not supporting CDF
 	case nsl_sf_stats_gaussian_tail:
 	case nsl_sf_stats_exponential_power:
 	case nsl_sf_stats_rayleigh_tail:
@@ -502,6 +503,7 @@ void QQPlotPrivate::updateDistribution() {
 	case nsl_sf_stats_sech:
 	case nsl_sf_stats_levy:
 	case nsl_sf_stats_frechet:
+	case nsl_sf_stats_triangular:
 		break;
 	}
 

@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : NSL special basic functions
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2017-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2017-2024 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -61,6 +61,8 @@ double nsl_sf_ran_logistic(double a);
 double nsl_sf_ran_poisson(double mu);
 double nsl_sf_ran_bernoulli(double p);
 double nsl_sf_ran_binomial(double p, double n);
+
+double nsl_sf_ran_triangular(double a, double b, double c);
 
 /* log2(x) for integer value x */
 int nsl_sf_log2_int(unsigned int x);

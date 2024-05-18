@@ -3,11 +3,12 @@
 	Project              : LabPlot
 	Description          : NSL special basic functions
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2018-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2018-2024 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "nsl_sf_basic.h"
+#include "nsl_randist.h"
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_randist.h>
 #include <gsl/gsl_sf.h>
@@ -81,7 +82,7 @@ double nsl_sf_exp10(double x) {
 	const gsl_rng_type* T = gsl_rng_default;                                                                                                                   \
 	gsl_rng* r = gsl_rng_alloc(T);                                                                                                                             \
 	gsl_rng_set(r, rand()); /*seed*/
-
+/* GSL RNGs */
 double nsl_sf_ran_gaussian(double sigma) {
 	SETUP_GSL_RNG
 	return gsl_ran_gaussian_ziggurat(r, sigma);
@@ -134,7 +135,6 @@ double nsl_sf_ran_logistic(double a) {
 	SETUP_GSL_RNG
 	return gsl_ran_logistic(r, a);
 }
-
 double nsl_sf_ran_poisson(double mu) {
 	SETUP_GSL_RNG
 	return (double)gsl_ran_poisson(r, mu);
@@ -146,6 +146,12 @@ double nsl_sf_ran_bernoulli(double p) {
 double nsl_sf_ran_binomial(double p, double n) {
 	SETUP_GSL_RNG
 	return (double)gsl_ran_binomial(r, p, (unsigned int)round(n));
+}
+
+/* NSL RNGs */
+double nsl_sf_ran_triangular(double a, double b, double c) {
+	SETUP_GSL_RNG
+	return nsl_ran_triangular(r, a, b, c);
 }
 
 /*

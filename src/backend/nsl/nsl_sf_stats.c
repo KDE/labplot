@@ -44,7 +44,8 @@ const char* nsl_sf_stats_distribution_name[] = {i18n("Gaussian (Normal)"),
 												i18n("Maxwell-Boltzmann"),
 												i18n("Hyperbolic Secant (sech)"),
 												i18n("Levy"),
-												i18n("Frechet (Inverse Weibull)")};
+												i18n("Frechet (Inverse Weibull)"),
+												i18n("Triangular")};
 const char* nsl_sf_stats_distribution_pic_name[] = {"gaussian",
 													"gaussian_tail",
 													"exponential",
@@ -79,7 +80,8 @@ const char* nsl_sf_stats_distribution_pic_name[] = {"gaussian",
 													"maxwell_boltzmann",
 													"sech",
 													"levy",
-													"frechet"};
+													"frechet",
+													"triangular"};
 const char* nsl_sf_stats_distribution_equation[] = {"a/sqrt(2*pi)/s * exp(-((x-mu)/s)^2/2)",
 													"2*A/sqrt(2*pi)/s/erfc(a/sqrt(2)/s) * exp(-((x-mu)/s)^2/2) * theta(x-mu-a)",
 													"a*l*exp(-l*(x-mu))",
@@ -114,7 +116,14 @@ const char* nsl_sf_stats_distribution_equation[] = {"a/sqrt(2*pi)/s * exp(-((x-m
 													"a*sqrt(2/pi) * x^2/s^3 * exp(-(x/s)^2/2)",
 													"a/2/s * sech(pi/2*(x-mu)/s)",
 													"a * sqrt(g/(2*pi))/pow(x-mu, 1.5) * exp(-g/2./(x-mu))",
-													"a * g/s*((x-mu)/s)^(-g-1) * exp(-((x-mu)/s)^(-g))"};
+													"a * g/s*((x-mu)/s)^(-g-1) * exp(-((x-mu)/s)^(-g))",
+													"Triangular"};
+
+bool nsl_sf_stats_distribution_supports_RNG(nsl_sf_stats_distribution d) {
+	if (d == nsl_sf_stats_maxwell_boltzmann || d == nsl_sf_stats_sech || d == nsl_sf_stats_levy || d == nsl_sf_stats_frechet)
+		return false;
+	return true;
+}
 
 bool nsl_sf_stats_distribution_supports_ML(nsl_sf_stats_distribution d) {
 	if (d == nsl_sf_stats_gaussian || d == nsl_sf_stats_exponential || d == nsl_sf_stats_laplace || d == nsl_sf_stats_cauchy_lorentz
