@@ -23,7 +23,7 @@ __BEGIN_DECLS
 
 #include <stdbool.h>
 
-#define NSL_SF_STATS_DISTRIBUTION_COUNT 35
+#define NSL_SF_STATS_DISTRIBUTION_COUNT 36
 /* ordered as defined in GSL random number distributions */
 /* order is fixed, so append new distros at the end */
 typedef enum {
