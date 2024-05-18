@@ -14,6 +14,9 @@
 // a - lower limit, b - upper limit, c - mode (max value)
 // see https://en.wikipedia.org/wiki/Triangular_distribution#Generating_random_variates
 double nsl_ran_triangular(gsl_rng* r, double a, double b, double c) {
+	if (b <= a || c < a || c > b)
+		return 0.;
+
 	double u = gsl_rng_uniform(r); // u \in [0,1)
 
 	double f = (c - a) / (b - a);
