@@ -36,7 +36,7 @@ void LiveDataTest::testReadContinuousFixed00() {
 	dataSource.setFileType(AbstractFileFilter::FileType::Ascii);
 	dataSource.setFileName(file.fileName());
 	dataSource.setReadingType(LiveDataSource::ReadingType::ContinuousFixed);
-	dataSource.setSampleSize(100); //big number of samples, more then the new data has, meaning we read all new data
+	dataSource.setSampleSize(100); // big number of samples, more then the new data has, meaning we read all new data
 	dataSource.setUpdateType(LiveDataSource::UpdateType::NewData);
 
 	// initialize the ASCII filter
@@ -241,7 +241,7 @@ void LiveDataTest::testReadContinuousFixedWithIndex() {
 	dataSource.setFileType(AbstractFileFilter::FileType::Ascii);
 	dataSource.setFileName(file.fileName());
 	dataSource.setReadingType(LiveDataSource::ReadingType::ContinuousFixed);
-	dataSource.setSampleSize(100); //big number of samples, more then the new data has, meaning we read all new data
+	dataSource.setSampleSize(100); // big number of samples, more then the new data has, meaning we read all new data
 	dataSource.setUpdateType(LiveDataSource::UpdateType::NewData);
 
 	// initialize the ASCII filter
@@ -321,7 +321,7 @@ void LiveDataTest::testReadContinuousFixedWithTimestamp() {
 	dataSource.setFileType(AbstractFileFilter::FileType::Ascii);
 	dataSource.setFileName(file.fileName());
 	dataSource.setReadingType(LiveDataSource::ReadingType::ContinuousFixed);
-	dataSource.setSampleSize(100); //big number of samples, more then the new data has, meaning we read all new data
+	dataSource.setSampleSize(100); // big number of samples, more then the new data has, meaning we read all new data
 	dataSource.setUpdateType(LiveDataSource::UpdateType::NewData);
 
 	// initialize the ASCII filter
@@ -401,7 +401,7 @@ void LiveDataTest::testReadContinuousFixedWithIndexTimestamp() {
 	dataSource.setFileType(AbstractFileFilter::FileType::Ascii);
 	dataSource.setFileName(file.fileName());
 	dataSource.setReadingType(LiveDataSource::ReadingType::ContinuousFixed);
-	dataSource.setSampleSize(100); //big number of samples, more then the new data has, meaning we read all new data
+	dataSource.setSampleSize(100); // big number of samples, more then the new data has, meaning we read all new data
 	dataSource.setUpdateType(LiveDataSource::UpdateType::NewData);
 
 	// initialize the ASCII filter
@@ -495,7 +495,7 @@ void LiveDataTest::testReadFromEnd00() {
 	dataSource.setFileName(file.fileName());
 	dataSource.setReadingType(LiveDataSource::ReadingType::FromEnd);
 	dataSource.setUpdateType(LiveDataSource::UpdateType::NewData);
-	dataSource.setSampleSize(100); //big number of samples, more then the new data has, meaning we read all new data
+	dataSource.setSampleSize(100); // big number of samples, more then the new data has, meaning we read all new data
 
 	// initialize the ASCII filter
 	auto* filter = new AsciiFilter();
@@ -1025,9 +1025,7 @@ void LiveDataTest::testReadWholeFile03() {
 	if (!file.open(QIODevice::ReadWrite | QIODevice::Truncate | QIODevice::Text))
 		QFAIL("failed to open the temp file for writing");
 
-	// TODO: because of https://invent.kde.org/education/labplot/-/issues/901 we need to have more than one line with data initially,
-	// change it later to one single initial line after #901 was fixed.
-	file.write("ignore\nx,y\n1,2\n3,4\n");
+	file.write("ignore\nx,y\n1,2\n");
 	file.flush();
 
 	// initialize the live data source
@@ -1049,6 +1047,24 @@ void LiveDataTest::testReadWholeFile03() {
 	dataSource.read();
 
 	QCOMPARE(dataSource.columnCount(), 2);
+	QCOMPARE(dataSource.rowCount(), 1);
+
+	QCOMPARE(dataSource.column(0)->name(), QStringLiteral("x"));
+	QCOMPARE(dataSource.column(1)->name(), QStringLiteral("y"));
+
+	QCOMPARE(dataSource.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(dataSource.column(1)->columnMode(), AbstractColumn::ColumnMode::Integer);
+
+	QCOMPARE(dataSource.column(0)->integerAt(0), 1);
+	QCOMPARE(dataSource.column(1)->integerAt(0), 2);
+
+	// write out more data to the file
+	file.write("3,4\n");
+	file.close();
+	waitForSignal(&dataSource, SIGNAL(readOnUpdateCalled()));
+
+	// checks
+	QCOMPARE(dataSource.columnCount(), 2);
 	QCOMPARE(dataSource.rowCount(), 2);
 
 	QCOMPARE(dataSource.column(0)->name(), QStringLiteral("x"));
@@ -1062,30 +1078,6 @@ void LiveDataTest::testReadWholeFile03() {
 
 	QCOMPARE(dataSource.column(0)->integerAt(1), 3);
 	QCOMPARE(dataSource.column(1)->integerAt(1), 4);
-
-	// write out more data to the file
-	file.write("5,6\n");
-	file.close();
-	waitForSignal(&dataSource, SIGNAL(readOnUpdateCalled()));
-
-	// checks
-	QCOMPARE(dataSource.columnCount(), 2);
-	QCOMPARE(dataSource.rowCount(), 3);
-
-	QCOMPARE(dataSource.column(0)->name(), QStringLiteral("x"));
-	QCOMPARE(dataSource.column(1)->name(), QStringLiteral("y"));
-
-	QCOMPARE(dataSource.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
-	QCOMPARE(dataSource.column(1)->columnMode(), AbstractColumn::ColumnMode::Integer);
-
-	QCOMPARE(dataSource.column(0)->integerAt(0), 1);
-	QCOMPARE(dataSource.column(1)->integerAt(0), 2);
-
-	QCOMPARE(dataSource.column(0)->integerAt(1), 3);
-	QCOMPARE(dataSource.column(1)->integerAt(1), 4);
-
-	QCOMPARE(dataSource.column(0)->integerAt(2), 5);
-	QCOMPARE(dataSource.column(1)->integerAt(2), 6);
 }
 
 // ##############################################################################

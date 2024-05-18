@@ -819,7 +819,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 	// TODO: this temporarliy changes readingType, redesign this part.
 	auto readingType = spreadsheet->readingType();
 	if (m_firstRead || spreadsheet->readingType() == LiveDataSource::ReadingType::FromEnd
-	|| spreadsheet->readingType() == LiveDataSource::ReadingType::WholeFile)
+		|| spreadsheet->readingType() == LiveDataSource::ReadingType::WholeFile)
 		readingType = LiveDataSource::ReadingType::TillEnd;
 	DEBUG("	Reading type = " << ENUM_TO_STRING(LiveDataSource, ReadingType, readingType));
 
@@ -1075,7 +1075,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 			}
 		}
 
-		//TODO: ???
+		// TODO: ???
 		if (!m_firstRead) {
 #ifdef PERFTRACE_LIVE_IMPORT
 			PERFTRACE(QLatin1String("AsciiLiveDataImportPopping: "));
