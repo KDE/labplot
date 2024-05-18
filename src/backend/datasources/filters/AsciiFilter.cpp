@@ -310,20 +310,9 @@ bool AsciiFilter::isHeaderEnabled() const {
 	return d->headerEnabled;
 }
 
-// TODO: this setter modifies also startRow which is not clear for external consumers,
-// the default value of headerLine is 1, same for startRow. if we don't call setHeaderLine(1),
-// assuming the default value is already set to 1 anyway, startRow is kept at 1 and not set to 2
-// and the file is read wrongly. This forces us to always call this function, like in
-// DatasetHandler::configureFilter() or to call it after setStartRow() was called like in
-// ImportFileWidget::currentFileFilter().
-// We shouldn't be dependent on the order of these calls and there shouldn't be any reason
-// to call this function to set the default value again.
-// -> redesign the APIs.
 void AsciiFilter::setHeaderLine(int line) {
 	d->headerLine = line;
 	DEBUG(Q_FUNC_INFO << ", line = " << line << ", startRow = " << d->startRow)
-	d->startRow = line + 1;
-	DEBUG(Q_FUNC_INFO << ", new startRow = " << d->startRow)
 }
 
 void AsciiFilter::setSkipEmptyParts(const bool b) {
@@ -463,10 +452,9 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device, const size_t maxL
 	QString firstLine;
 	if (headerEnabled && headerLine) {
 		// go to header line (counting comment lines)
-		for (int l = 0; l < headerLine; l++) {
+		for (int l = 0; l < headerLine; l++)
 			firstLine = getLine(device);
-			DEBUG(Q_FUNC_INFO << ", first line (header) = \"" << STDSTRING(firstLine) << "\"");
-		}
+		DEBUG(Q_FUNC_INFO << ", first line (header) = \"" << STDSTRING(firstLine.remove(QRegularExpression(QStringLiteral("[\\n\\r]")))) << "\"");
 	} else { // read first data line (skipping comments)
 		if (!commentCharacter.isEmpty()) {
 			do {
@@ -556,8 +544,11 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device, const size_t maxL
 	/////////////////////////////////////////////////////////////////
 
 	// navigate to the line where we asked to start reading from
-	DEBUG(Q_FUNC_INFO << ", Skipping " << startRow - 1 << " line(s)");
-	for (int i = 0; i < startRow - 1; ++i) {
+	int skipRows = startRow - 1; // skip to start row
+	if (headerEnabled && headerLine) // skip header too
+		skipRows++;
+	DEBUG(Q_FUNC_INFO << ", Skipping " << skipRows << " line(s) (including header)");
+	for (int i = 0; i < skipRows; ++i) {
 		DEBUG(Q_FUNC_INFO << ", skipping line: " << STDSTRING(firstLine));
 		firstLine = getLine(device);
 	}
@@ -570,7 +561,11 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device, const size_t maxL
 		firstLine = firstLine.remove(QLatin1Char('"'));
 	DEBUG(Q_FUNC_INFO << ", Actual first line: \'" << STDSTRING(firstLine) << '\'');
 
+	// actual start row is after header
 	m_actualStartRow = startRow;
+	if (headerEnabled && headerLine)
+		m_actualStartRow += headerLine;
+	DEBUG("actual start row = " << m_actualStartRow)
 
 	// TEST: readline-seek-readline fails
 	/*	qint64 testpos = device.pos();
@@ -583,8 +578,6 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device, const size_t maxL
 
 	// parse first data line to determine data type for each column
 	firstLineStringList = split(firstLine, false);
-
-	DEBUG("actual start row = " << m_actualStartRow)
 	QDEBUG("firstLineStringList = " << firstLineStringList)
 
 	columnModes.resize(m_actualCols);
@@ -664,7 +657,7 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device, const size_t maxL
 
 	// ATTENTION: This resets the position in the device to 0
 	m_actualRows = (int)q->lineNumber(device, maxLines);
-	DEBUG(Q_FUNC_INFO << ", m_actualRows: " << m_actualRows << ", startRow: " << startRow << ", endRow: " << endRow)
+	DEBUG(Q_FUNC_INFO << ", m_actualRows: " << m_actualRows << ", startRow (after header): " << startRow << ", endRow: " << endRow)
 
 	DEBUG(Q_FUNC_INFO << ", headerEnabled = " << headerEnabled << ", headerLine = " << headerLine << ", m_actualStartRow = " << m_actualStartRow)
 	if ((!headerEnabled || headerLine < 1) && startRow <= 2 && m_actualStartRow > 1) // take header line
