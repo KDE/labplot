@@ -139,7 +139,7 @@ void RandomValuesDialog::setColumns(const QVector<Column*>& columns) {
 
 void RandomValuesDialog::distributionChanged(int index) {
 	DEBUG(Q_FUNC_INFO << ", index = " << index)
-	const nsl_sf_stats_distribution dist = (nsl_sf_stats_distribution)ui.cbDistribution->itemData(index).toInt();
+	const auto dist = (nsl_sf_stats_distribution)ui.cbDistribution->itemData(index).toInt();
 	DEBUG(Q_FUNC_INFO << ", dist = " << nsl_sf_stats_distribution_name[(int)dist])
 
 	// default settings (used by most distributions)
@@ -461,7 +461,7 @@ void RandomValuesDialog::generate() {
 		i18np("%1: fill column with non-uniform random numbers", "%1: fill columns with non-uniform random numbers", m_spreadsheet->name(), m_columns.size()));
 
 	const int index = ui.cbDistribution->currentIndex();
-	const nsl_sf_stats_distribution dist = (nsl_sf_stats_distribution)ui.cbDistribution->itemData(index).toInt();
+	const auto dist = (nsl_sf_stats_distribution)ui.cbDistribution->itemData(index).toInt();
 	DEBUG(Q_FUNC_INFO << ", random number distribution: " << nsl_sf_stats_distribution_name[dist]);
 
 	switch (dist) {
