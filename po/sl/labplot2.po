@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-12 01:54+0000\n"
+"POT-Creation-Date: 2024-05-18 01:44+0000\n"
 "PO-Revision-Date: 2024-04-20 06:36+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -930,7 +930,7 @@ msgstr "%1: nastavite vidno"
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:126
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:138
 #: src/backend/worksheet/WorksheetElement.cpp:161
-#: src/backend/worksheet/WorksheetElement.cpp:783
+#: src/backend/worksheet/WorksheetElement.cpp:792
 #: src/backend/worksheet/WorksheetElementContainer.cpp:66
 #: src/backend/worksheet/WorksheetElementContainer.cpp:84
 #, kde-format
@@ -955,7 +955,7 @@ msgid "%1: upload new image"
 msgstr "%1: naložite novo sliko"
 
 #: src/backend/datapicker/DatapickerImage.cpp:385
-#: src/backend/worksheet/WorksheetElement.cpp:824
+#: src/backend/worksheet/WorksheetElement.cpp:833
 #, kde-format
 msgid "%1: set rotation angle"
 msgstr "%1: določite kot vrtenja"
@@ -988,7 +988,7 @@ msgstr "Branja podatkov o sliki ni uspelo"
 
 #: src/backend/datapicker/DatapickerPoint.cpp:213
 #: src/backend/worksheet/InfoElement.cpp:838
-#: src/backend/worksheet/WorksheetElement.cpp:745
+#: src/backend/worksheet/WorksheetElement.cpp:754
 #, kde-format
 msgid "%1: set position"
 msgstr "%1: določite položaj"
@@ -9203,22 +9203,22 @@ msgstr "Premakni &za"
 msgid "Move in &front of"
 msgstr "Premakni &pred"
 
-#: src/backend/worksheet/WorksheetElement.cpp:757
+#: src/backend/worksheet/WorksheetElement.cpp:766
 #, kde-format
 msgid "%1: set horizontal alignment"
 msgstr "%1: nastavite vodoravno poravnavo"
 
-#: src/backend/worksheet/WorksheetElement.cpp:769
+#: src/backend/worksheet/WorksheetElement.cpp:778
 #, kde-format
 msgid "%1: set vertical alignment"
 msgstr "%1: določite navpično poravnavo"
 
-#: src/backend/worksheet/WorksheetElement.cpp:783
+#: src/backend/worksheet/WorksheetElement.cpp:792
 #, kde-format
 msgid "%1: use logical coordinates"
 msgstr "%1: uporabite logične koordinate"
 
-#: src/backend/worksheet/WorksheetElement.cpp:793
+#: src/backend/worksheet/WorksheetElement.cpp:802
 #, kde-format
 msgid "%1: set logical position"
 msgstr "%1: določi logični položaj"
