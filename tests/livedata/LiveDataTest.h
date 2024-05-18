@@ -23,6 +23,9 @@ private Q_SLOTS:
 	void testReadContinuousFixed00();
 	void testReadContinuousFixed01();
 	void testReadContinuousFixed02();
+	void testReadContinuousFixedWithIndex();
+	void testReadContinuousFixedWithTimestamp();
+	void testReadContinuousFixedWithIndexTimestamp();
 
 	// From End - fixed amount of samples is processed starting from the end of the newly received data
 	void testReadFromEnd00();

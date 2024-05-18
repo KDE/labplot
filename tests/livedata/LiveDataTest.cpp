@@ -65,7 +65,7 @@ void LiveDataTest::testReadContinuousFixed00() {
 	file.close();
 	waitForSignal(&dataSource, SIGNAL(readOnUpdateCalled()));
 
-	// the first line of the new data (sample size = 1) was added, check
+	// all new data (2 new lines) was added, check
 	QCOMPARE(dataSource.columnCount(), 2);
 	QCOMPARE(dataSource.rowCount(), 4);
 
@@ -217,6 +217,255 @@ void LiveDataTest::testReadContinuousFixed02() {
 
 	QCOMPARE(dataSource.column(0)->integerAt(1), 5);
 	QCOMPARE(dataSource.column(1)->integerAt(1), 6);
+}
+
+/*!
+ * same as testReadContinuousFixed00 but with an additional index column
+ */
+void LiveDataTest::testReadContinuousFixedWithIndex() {
+	// create a temp file and write some data into it
+	QTemporaryFile tempFile;
+	if (!tempFile.open())
+		QFAIL("failed to create the temp file for writing");
+
+	QFile file(tempFile.fileName());
+	if (!file.open(QIODevice::ReadWrite | QIODevice::Truncate | QIODevice::Text))
+		QFAIL("failed to open the temp file for writing");
+
+	file.write("1,2\n3,4\n");
+	file.flush();
+
+	// initialize the live data source
+	LiveDataSource dataSource(QStringLiteral("test"), false);
+	dataSource.setSourceType(LiveDataSource::SourceType::FileOrPipe);
+	dataSource.setFileType(AbstractFileFilter::FileType::Ascii);
+	dataSource.setFileName(file.fileName());
+	dataSource.setReadingType(LiveDataSource::ReadingType::ContinuousFixed);
+	dataSource.setSampleSize(100); //big number of samples, more then the new data has, meaning we read all new data
+	dataSource.setUpdateType(LiveDataSource::UpdateType::NewData);
+
+	// initialize the ASCII filter
+	auto* filter = new AsciiFilter();
+	filter->setSeparatingCharacter(QStringLiteral(","));
+	filter->setHeaderEnabled(false);
+	filter->setCreateIndexEnabled(true);
+	dataSource.setFilter(filter);
+
+	// read the data and perform checks, after the initial read all data is read
+	dataSource.read();
+
+	QCOMPARE(dataSource.columnCount(), 3);
+	QCOMPARE(dataSource.rowCount(), 2);
+
+	QCOMPARE(dataSource.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(dataSource.column(1)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(dataSource.column(2)->columnMode(), AbstractColumn::ColumnMode::Integer);
+
+	QCOMPARE(dataSource.column(0)->integerAt(0), 1);
+	QCOMPARE(dataSource.column(1)->integerAt(0), 1);
+	QCOMPARE(dataSource.column(2)->integerAt(0), 2);
+
+	QCOMPARE(dataSource.column(0)->integerAt(1), 2);
+	QCOMPARE(dataSource.column(1)->integerAt(1), 3);
+	QCOMPARE(dataSource.column(2)->integerAt(1), 4);
+
+	// write out more data to the file
+	file.write("5,6\n7,8\n");
+	file.close();
+	waitForSignal(&dataSource, SIGNAL(readOnUpdateCalled()));
+
+	// all new data (2 new lines) was added, check
+	QCOMPARE(dataSource.columnCount(), 3);
+	QCOMPARE(dataSource.rowCount(), 4);
+
+	QCOMPARE(dataSource.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(dataSource.column(1)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(dataSource.column(2)->columnMode(), AbstractColumn::ColumnMode::Integer);
+
+	QCOMPARE(dataSource.column(0)->integerAt(0), 1);
+	QCOMPARE(dataSource.column(1)->integerAt(0), 1);
+	QCOMPARE(dataSource.column(2)->integerAt(0), 2);
+
+	QCOMPARE(dataSource.column(0)->integerAt(1), 2);
+	QCOMPARE(dataSource.column(1)->integerAt(1), 3);
+	QCOMPARE(dataSource.column(2)->integerAt(1), 4);
+
+	QCOMPARE(dataSource.column(0)->integerAt(2), 3);
+	QCOMPARE(dataSource.column(1)->integerAt(2), 5);
+	QCOMPARE(dataSource.column(2)->integerAt(2), 6);
+
+	QCOMPARE(dataSource.column(0)->integerAt(3), 4);
+	QCOMPARE(dataSource.column(1)->integerAt(3), 7);
+	QCOMPARE(dataSource.column(2)->integerAt(3), 8);
+}
+
+/*!
+ * same as testReadContinuousFixed00 but with an additional timestamp column
+ */
+void LiveDataTest::testReadContinuousFixedWithTimestamp() {
+	// create a temp file and write some data into it
+	QTemporaryFile tempFile;
+	if (!tempFile.open())
+		QFAIL("failed to create the temp file for writing");
+
+	QFile file(tempFile.fileName());
+	if (!file.open(QIODevice::ReadWrite | QIODevice::Truncate | QIODevice::Text))
+		QFAIL("failed to open the temp file for writing");
+
+	file.write("1,2\n3,4\n");
+	file.flush();
+
+	// initialize the live data source
+	LiveDataSource dataSource(QStringLiteral("test"), false);
+	dataSource.setSourceType(LiveDataSource::SourceType::FileOrPipe);
+	dataSource.setFileType(AbstractFileFilter::FileType::Ascii);
+	dataSource.setFileName(file.fileName());
+	dataSource.setReadingType(LiveDataSource::ReadingType::ContinuousFixed);
+	dataSource.setSampleSize(100); //big number of samples, more then the new data has, meaning we read all new data
+	dataSource.setUpdateType(LiveDataSource::UpdateType::NewData);
+
+	// initialize the ASCII filter
+	auto* filter = new AsciiFilter();
+	filter->setSeparatingCharacter(QStringLiteral(","));
+	filter->setHeaderEnabled(false);
+	filter->setCreateTimestampEnabled(true);
+	dataSource.setFilter(filter);
+
+	// read the data and perform checks, after the initial read all data is read
+	dataSource.read();
+
+	QCOMPARE(dataSource.columnCount(), 3);
+	QCOMPARE(dataSource.rowCount(), 2);
+
+	QCOMPARE(dataSource.column(0)->columnMode(), AbstractColumn::ColumnMode::DateTime);
+	QCOMPARE(dataSource.column(1)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(dataSource.column(2)->columnMode(), AbstractColumn::ColumnMode::Integer);
+
+	QCOMPARE(dataSource.column(0)->dateTimeAt(0).isValid(), true);
+	QCOMPARE(dataSource.column(1)->integerAt(0), 1);
+	QCOMPARE(dataSource.column(2)->integerAt(0), 2);
+
+	QCOMPARE(dataSource.column(0)->dateTimeAt(1).isValid(), true);
+	QCOMPARE(dataSource.column(1)->integerAt(1), 3);
+	QCOMPARE(dataSource.column(2)->integerAt(1), 4);
+
+	// write out more data to the file
+	file.write("5,6\n7,8\n");
+	file.close();
+	waitForSignal(&dataSource, SIGNAL(readOnUpdateCalled()));
+
+	// all new data (2 new lines) was added, check
+	QCOMPARE(dataSource.columnCount(), 3);
+	QCOMPARE(dataSource.rowCount(), 4);
+
+	QCOMPARE(dataSource.column(0)->columnMode(), AbstractColumn::ColumnMode::DateTime);
+	QCOMPARE(dataSource.column(1)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(dataSource.column(2)->columnMode(), AbstractColumn::ColumnMode::Integer);
+
+	QCOMPARE(dataSource.column(0)->dateTimeAt(0).isValid(), true);
+	QCOMPARE(dataSource.column(1)->integerAt(0), 1);
+	QCOMPARE(dataSource.column(2)->integerAt(0), 2);
+
+	QCOMPARE(dataSource.column(0)->dateTimeAt(1).isValid(), true);
+	QCOMPARE(dataSource.column(1)->integerAt(1), 3);
+	QCOMPARE(dataSource.column(2)->integerAt(1), 4);
+
+	QCOMPARE(dataSource.column(0)->dateTimeAt(1).isValid(), true);
+	QCOMPARE(dataSource.column(1)->integerAt(2), 5);
+	QCOMPARE(dataSource.column(2)->integerAt(2), 6);
+
+	QCOMPARE(dataSource.column(0)->dateTimeAt(1).isValid(), true);
+	QCOMPARE(dataSource.column(1)->integerAt(3), 7);
+	QCOMPARE(dataSource.column(2)->integerAt(3), 8);
+}
+
+/*!
+ * same as testReadContinuousFixed00 but with additional index and timestamp columns
+ */
+void LiveDataTest::testReadContinuousFixedWithIndexTimestamp() {
+	// create a temp file and write some data into it
+	QTemporaryFile tempFile;
+	if (!tempFile.open())
+		QFAIL("failed to create the temp file for writing");
+
+	QFile file(tempFile.fileName());
+	if (!file.open(QIODevice::ReadWrite | QIODevice::Truncate | QIODevice::Text))
+		QFAIL("failed to open the temp file for writing");
+
+	file.write("1,2\n3,4\n");
+	file.flush();
+
+	// initialize the live data source
+	LiveDataSource dataSource(QStringLiteral("test"), false);
+	dataSource.setSourceType(LiveDataSource::SourceType::FileOrPipe);
+	dataSource.setFileType(AbstractFileFilter::FileType::Ascii);
+	dataSource.setFileName(file.fileName());
+	dataSource.setReadingType(LiveDataSource::ReadingType::ContinuousFixed);
+	dataSource.setSampleSize(100); //big number of samples, more then the new data has, meaning we read all new data
+	dataSource.setUpdateType(LiveDataSource::UpdateType::NewData);
+
+	// initialize the ASCII filter
+	auto* filter = new AsciiFilter();
+	filter->setSeparatingCharacter(QStringLiteral(","));
+	filter->setHeaderEnabled(false);
+	filter->setCreateIndexEnabled(true);
+	filter->setCreateTimestampEnabled(true);
+	dataSource.setFilter(filter);
+
+	// read the data and perform checks, after the initial read all data is read
+	dataSource.read();
+
+	QCOMPARE(dataSource.columnCount(), 4);
+	QCOMPARE(dataSource.rowCount(), 2);
+
+	QCOMPARE(dataSource.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(dataSource.column(1)->columnMode(), AbstractColumn::ColumnMode::DateTime);
+	QCOMPARE(dataSource.column(2)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(dataSource.column(3)->columnMode(), AbstractColumn::ColumnMode::Integer);
+
+	QCOMPARE(dataSource.column(0)->integerAt(0), 1);
+	QCOMPARE(dataSource.column(1)->dateTimeAt(0).isValid(), true);
+	QCOMPARE(dataSource.column(2)->integerAt(0), 1);
+	QCOMPARE(dataSource.column(3)->integerAt(0), 2);
+
+	QCOMPARE(dataSource.column(0)->integerAt(1), 2);
+	QCOMPARE(dataSource.column(1)->dateTimeAt(1).isValid(), true);
+	QCOMPARE(dataSource.column(2)->integerAt(1), 3);
+	QCOMPARE(dataSource.column(3)->integerAt(1), 4);
+
+	// write out more data to the file
+	file.write("5,6\n7,8\n");
+	file.close();
+	waitForSignal(&dataSource, SIGNAL(readOnUpdateCalled()));
+
+	// all new data (2 new lines) was added, check
+	QCOMPARE(dataSource.columnCount(), 4);
+	QCOMPARE(dataSource.rowCount(), 4);
+
+	QCOMPARE(dataSource.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(dataSource.column(1)->columnMode(), AbstractColumn::ColumnMode::DateTime);
+	QCOMPARE(dataSource.column(2)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(dataSource.column(3)->columnMode(), AbstractColumn::ColumnMode::Integer);
+
+	QCOMPARE(dataSource.column(0)->integerAt(0), 1);
+	QCOMPARE(dataSource.column(1)->dateTimeAt(0).isValid(), true);
+	QCOMPARE(dataSource.column(2)->integerAt(0), 1);
+	QCOMPARE(dataSource.column(3)->integerAt(0), 2);
+
+	QCOMPARE(dataSource.column(0)->integerAt(1), 2);
+	QCOMPARE(dataSource.column(1)->dateTimeAt(1).isValid(), true);
+	QCOMPARE(dataSource.column(2)->integerAt(1), 3);
+	QCOMPARE(dataSource.column(3)->integerAt(1), 4);
+
+	QCOMPARE(dataSource.column(0)->integerAt(2), 3);
+	QCOMPARE(dataSource.column(1)->dateTimeAt(2).isValid(), true);
+	QCOMPARE(dataSource.column(2)->integerAt(2), 5);
+	QCOMPARE(dataSource.column(3)->integerAt(2), 6);
+
+	QCOMPARE(dataSource.column(0)->integerAt(3), 4);
+	QCOMPARE(dataSource.column(1)->dateTimeAt(3).isValid(), true);
+	QCOMPARE(dataSource.column(2)->integerAt(3), 7);
+	QCOMPARE(dataSource.column(3)->integerAt(3), 8);
 }
 
 // ##############################################################################
