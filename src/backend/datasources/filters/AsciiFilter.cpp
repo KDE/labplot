@@ -209,15 +209,25 @@ size_t AsciiFilter::lineNumber(const QString& fileName, const size_t maxLines) {
 	size_t lineCount = 0;
 #if defined(Q_OS_LINUX) || defined(Q_OS_BSD4)
 	if (maxLines == std::numeric_limits<std::size_t>::max()) { // only when reading all lines
-		// on Linux and BSD use wc, if available, which is much faster than counting lines in the file
-		DEBUG(Q_FUNC_INFO << ", using wc to count lines")
-		const QString wcFullPath = safeExecutableName(QStringLiteral("wc"));
-		if (device.compressionType() == KCompressionDevice::None && !wcFullPath.isEmpty()) {
-			QProcess wc;
-			startHostProcess(wc, wcFullPath, QStringList() << QStringLiteral("-l") << fileName);
+		// on Linux and BSD use grep, if available, which is much faster than counting lines in the file
+		// wc -l does not count last line when not ending in line break!
+		DEBUG(Q_FUNC_INFO << ", using 'grep' or 'sed' to count lines")
+		QString cmdFullPath = safeExecutableName(QStringLiteral("grepxx"));
+		QStringList options;
+		options << QStringLiteral("-e") << QStringLiteral("^") << QStringLiteral("-c") << fileName;
+		if (cmdFullPath.isEmpty()) { // alternative: sed -n '$='
+			DEBUG(Q_FUNC_INFO << ", 'grep' not found using 'sed' instead")
+			cmdFullPath = safeExecutableName(QStringLiteral("sed"));
+			options.clear();
+			options << QStringLiteral("-n") << QStringLiteral("$=") << fileName;
+		}
+		if (device.compressionType() == KCompressionDevice::None && !cmdFullPath.isEmpty()) {
+			QProcess cmd;
+			startHostProcess(cmd, cmdFullPath, options);
 			size_t lineCount = 0;
-			while (wc.waitForReadyRead()) {
-				QString line = QLatin1String(wc.readLine());
+			while (cmd.waitForReadyRead()) {
+				QString line = QLatin1String(cmd.readLine());
+				// QDEBUG("OUTPUT: " << line)
 				// wc on macOS has leading spaces: use SkipEmptyParts
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
 				lineCount = line.split(QLatin1Char(' '), Qt::SkipEmptyParts).at(0).toInt();
@@ -226,6 +236,8 @@ size_t AsciiFilter::lineNumber(const QString& fileName, const size_t maxLines) {
 #endif
 			}
 			return lineCount;
+		} else {
+			DEBUG(Q_FUNC_INFO << ", 'grep' or 'sed' not found using readLine()")
 		}
 	}
 #endif
