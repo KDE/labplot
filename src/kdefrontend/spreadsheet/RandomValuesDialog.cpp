@@ -12,8 +12,8 @@
 #include "backend/core/Settings.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/macros.h"
-#include "backend/nsl/nsl_sf_stats.h"
 #include "backend/nsl/nsl_randist.h"
+#include "backend/nsl/nsl_sf_stats.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "kdefrontend/GuiTools.h"
 
