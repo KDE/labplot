@@ -767,7 +767,6 @@ void LiveDataTest::testReadWholeFile02() {
  * comma separated ASCII data, read whole file on changes, with header in the second line, append new data
  */
 void LiveDataTest::testReadWholeFile03() {
-	QSKIP("failing at the moment");
 	// create a temp file and write some data into it
 	QTemporaryFile tempFile;
 	if (!tempFile.open())
@@ -777,7 +776,9 @@ void LiveDataTest::testReadWholeFile03() {
 	if (!file.open(QIODevice::ReadWrite | QIODevice::Truncate | QIODevice::Text))
 		QFAIL("failed to open the temp file for writing");
 
-	file.write("ignore\nx,y\n1,2\n");
+	// TODO: because of https://invent.kde.org/education/labplot/-/issues/901 we need to have more than one line with data initially,
+	// change it later to one single initial line after #901 was fixed.
+	file.write("ignore\nx,y\n1,2\n3,4\n");
 	file.flush();
 
 	// initialize the live data source
@@ -799,24 +800,6 @@ void LiveDataTest::testReadWholeFile03() {
 	dataSource.read();
 
 	QCOMPARE(dataSource.columnCount(), 2);
-	QCOMPARE(dataSource.rowCount(), 1);
-
-	QCOMPARE(dataSource.column(0)->name(), QStringLiteral("x"));
-	QCOMPARE(dataSource.column(1)->name(), QStringLiteral("y"));
-
-	QCOMPARE(dataSource.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
-	QCOMPARE(dataSource.column(1)->columnMode(), AbstractColumn::ColumnMode::Integer);
-
-	QCOMPARE(dataSource.column(0)->integerAt(0), 1);
-	QCOMPARE(dataSource.column(1)->integerAt(0), 2);
-
-	// write out more data to the file
-	file.write("3,4\n");
-	file.close();
-	waitForSignal(&dataSource, SIGNAL(readOnUpdateCalled()));
-
-	// checks
-	QCOMPARE(dataSource.columnCount(), 2);
 	QCOMPARE(dataSource.rowCount(), 2);
 
 	QCOMPARE(dataSource.column(0)->name(), QStringLiteral("x"));
@@ -830,6 +813,30 @@ void LiveDataTest::testReadWholeFile03() {
 
 	QCOMPARE(dataSource.column(0)->integerAt(1), 3);
 	QCOMPARE(dataSource.column(1)->integerAt(1), 4);
+
+	// write out more data to the file
+	file.write("5,6\n");
+	file.close();
+	waitForSignal(&dataSource, SIGNAL(readOnUpdateCalled()));
+
+	// checks
+	QCOMPARE(dataSource.columnCount(), 2);
+	QCOMPARE(dataSource.rowCount(), 3);
+
+	QCOMPARE(dataSource.column(0)->name(), QStringLiteral("x"));
+	QCOMPARE(dataSource.column(1)->name(), QStringLiteral("y"));
+
+	QCOMPARE(dataSource.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(dataSource.column(1)->columnMode(), AbstractColumn::ColumnMode::Integer);
+
+	QCOMPARE(dataSource.column(0)->integerAt(0), 1);
+	QCOMPARE(dataSource.column(1)->integerAt(0), 2);
+
+	QCOMPARE(dataSource.column(0)->integerAt(1), 3);
+	QCOMPARE(dataSource.column(1)->integerAt(1), 4);
+
+	QCOMPARE(dataSource.column(0)->integerAt(2), 5);
+	QCOMPARE(dataSource.column(1)->integerAt(2), 6);
 }
 
 // ##############################################################################
