@@ -8,6 +8,7 @@
 */
 
 #include "nsl_sf_basic.h"
+#include "nsl_randist.h"
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_randist.h>
 #include <gsl/gsl_sf.h>
@@ -134,7 +135,6 @@ double nsl_sf_ran_logistic(double a) {
 	SETUP_GSL_RNG
 	return gsl_ran_logistic(r, a);
 }
-
 double nsl_sf_ran_poisson(double mu) {
 	SETUP_GSL_RNG
 	return (double)gsl_ran_poisson(r, mu);
@@ -146,6 +146,11 @@ double nsl_sf_ran_bernoulli(double p) {
 double nsl_sf_ran_binomial(double p, double n) {
 	SETUP_GSL_RNG
 	return (double)gsl_ran_binomial(r, p, (unsigned int)round(n));
+}
+
+double nsl_sf_ran_triangular(double a, double b, double c) {
+	SETUP_GSL_RNG
+	return nsl_ran_triangular(r, a, b, c);
 }
 
 /*
