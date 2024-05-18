@@ -33,6 +33,7 @@ New features:
 		* Generation of equidistant values: allow to fix the number of values and the increment at the same time
 		* Support parsing more functions and operators for formulas and expressions
 		* Added support to show the Sparkline of each respective column
+		* Added triangular distribution to parser and random number generation
 	* [notebook]
 		* Export to PDF
 		* "Configure CAS" in the menu to create a new notebook to directly allow the user to enable new backends in case not done yet
