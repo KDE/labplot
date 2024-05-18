@@ -76,8 +76,7 @@ Internal:
 	* Support Qt6
 	* Reduce code duplication caused by multiple plot types (Issue #540)
 	* Update included QXlsx to 1.4.6
-	* Build separate libraries for backend, nsl and everything and link
-	only when needed in tests
+	* Build separate libraries for backend, nsl and everything and link only when needed in tests
 	* Log skipped tests
 
 -----2.10.1 (12.07.2023) -----
