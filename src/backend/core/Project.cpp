@@ -1131,7 +1131,7 @@ bool Project::readProjectAttributes(XmlStreamReader* reader) {
 		reader->raiseWarning(i18n("Invalid project modification time. Using current time."));
 		d->modificationTime = QDateTime::currentDateTime();
 	} else
-		d->modificationTime = modificationTime;
+		d->modificationTime = std::move(modificationTime);
 
 	d->author = attribs.value(QStringLiteral("author")).toString();
 
