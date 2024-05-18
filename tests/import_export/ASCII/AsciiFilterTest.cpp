@@ -216,6 +216,36 @@ void AsciiFilterTest::testSparseFile03() {
 	QCOMPARE(spreadsheet.column(2)->valueAt(3), 3.);
 }
 
+void AsciiFilterTest::testFileEndingWithoutLinebreak() {
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+	AsciiFilter filter;
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/file_ending_without_line_break.txt"));
+
+	filter.setHeaderEnabled(true);
+	// filter.setHeaderLine(1);
+	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+	QCOMPARE(spreadsheet.rowCount(), 5);
+	QCOMPARE(spreadsheet.columnCount(), 2);
+
+	QCOMPARE(spreadsheet.column(0)->name(), QLatin1String("some data"));
+	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("more data"));
+
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Integer);
+
+	QCOMPARE(spreadsheet.column(0)->integerAt(0), 1);
+	QCOMPARE(spreadsheet.column(0)->integerAt(1), 2);
+	QCOMPARE(spreadsheet.column(0)->integerAt(2), 3);
+	QCOMPARE(spreadsheet.column(0)->integerAt(3), 4);
+	QCOMPARE(spreadsheet.column(0)->integerAt(4), 5);
+	QCOMPARE(spreadsheet.column(1)->integerAt(0), 1);
+	QCOMPARE(spreadsheet.column(1)->integerAt(1), 4);
+	QCOMPARE(spreadsheet.column(1)->integerAt(2), 9);
+	QCOMPARE(spreadsheet.column(1)->integerAt(3), 16);
+	QCOMPARE(spreadsheet.column(1)->integerAt(4), 25);
+}
+
 // ##############################################################################
 // ################################  header handling ############################
 // ##############################################################################

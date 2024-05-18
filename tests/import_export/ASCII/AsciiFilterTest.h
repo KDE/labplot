@@ -31,6 +31,8 @@ private Q_SLOTS:
 	void testSparseFile02();
 	void testSparseFile03();
 
+	void testFileEndingWithoutLinebreak();
+
 	// header handling
 	void testHeader01();
 	void testHeader02();
