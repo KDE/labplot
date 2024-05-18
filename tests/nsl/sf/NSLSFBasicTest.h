@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : NSL Tests for the basic special functions
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2019 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2019-2024 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -16,6 +16,9 @@ class NSLSFBasicTest : public NSLTest {
 	Q_OBJECT
 
 private Q_SLOTS:
+	// rngs
+	void testran_triangular();
+
 	// log2
 	void testlog2_int_C99();
 	void testlog2_int();
