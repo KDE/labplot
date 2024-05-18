@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-12 01:54+0000\n"
+"POT-Creation-Date: 2024-05-18 01:44+0000\n"
 "PO-Revision-Date: 2022-07-14 10:06-0300\n"
 "Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
 "Language-Team: Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -935,7 +935,7 @@ msgstr "%1: definir como visível"
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:126
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:138
 #: src/backend/worksheet/WorksheetElement.cpp:161
-#: src/backend/worksheet/WorksheetElement.cpp:783
+#: src/backend/worksheet/WorksheetElement.cpp:792
 #: src/backend/worksheet/WorksheetElementContainer.cpp:66
 #: src/backend/worksheet/WorksheetElementContainer.cpp:84
 #, kde-format
@@ -960,7 +960,7 @@ msgid "%1: upload new image"
 msgstr "%1: enviar nova imagem"
 
 #: src/backend/datapicker/DatapickerImage.cpp:385
-#: src/backend/worksheet/WorksheetElement.cpp:824
+#: src/backend/worksheet/WorksheetElement.cpp:833
 #, kde-format
 msgid "%1: set rotation angle"
 msgstr "%1: definir o ângulo da rotação"
@@ -994,7 +994,7 @@ msgstr "Falha ao abrir"
 
 #: src/backend/datapicker/DatapickerPoint.cpp:213
 #: src/backend/worksheet/InfoElement.cpp:838
-#: src/backend/worksheet/WorksheetElement.cpp:745
+#: src/backend/worksheet/WorksheetElement.cpp:754
 #, kde-format
 msgid "%1: set position"
 msgstr "%1: definir a posição"
@@ -9689,23 +9689,23 @@ msgstr "Mover para &trás"
 msgid "Move in &front of"
 msgstr "Mover para a &frente de"
 
-#: src/backend/worksheet/WorksheetElement.cpp:757
+#: src/backend/worksheet/WorksheetElement.cpp:766
 #, kde-format
 msgid "%1: set horizontal alignment"
 msgstr "%1: definir o alinhamento horizontal"
 
-#: src/backend/worksheet/WorksheetElement.cpp:769
+#: src/backend/worksheet/WorksheetElement.cpp:778
 #, kde-format
 msgid "%1: set vertical alignment"
 msgstr "%1: definir o alinhamento vertical"
 
-#: src/backend/worksheet/WorksheetElement.cpp:783
+#: src/backend/worksheet/WorksheetElement.cpp:792
 #, fuzzy, kde-format
 #| msgid "%1: set matrix coordinates"
 msgid "%1: use logical coordinates"
 msgstr "%1: definir as coordenadas da matriz"
 
-#: src/backend/worksheet/WorksheetElement.cpp:793
+#: src/backend/worksheet/WorksheetElement.cpp:802
 #, fuzzy, kde-format
 #| msgid "%1: set labels position"
 msgid "%1: set logical position"

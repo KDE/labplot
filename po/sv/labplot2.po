@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-12 01:54+0000\n"
+"POT-Creation-Date: 2024-05-18 01:44+0000\n"
 "PO-Revision-Date: 2024-05-03 16:07+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -921,7 +921,7 @@ msgstr "%1: gör synlig"
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:126
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:138
 #: src/backend/worksheet/WorksheetElement.cpp:161
-#: src/backend/worksheet/WorksheetElement.cpp:783
+#: src/backend/worksheet/WorksheetElement.cpp:792
 #: src/backend/worksheet/WorksheetElementContainer.cpp:66
 #: src/backend/worksheet/WorksheetElementContainer.cpp:84
 #, kde-format
@@ -946,7 +946,7 @@ msgid "%1: upload new image"
 msgstr "%1: ladda upp ny bild"
 
 #: src/backend/datapicker/DatapickerImage.cpp:385
-#: src/backend/worksheet/WorksheetElement.cpp:824
+#: src/backend/worksheet/WorksheetElement.cpp:833
 #, kde-format
 msgid "%1: set rotation angle"
 msgstr "%1: ställ in rotationsvinkel"
@@ -979,7 +979,7 @@ msgstr "Misslyckades läsa bilddata."
 
 #: src/backend/datapicker/DatapickerPoint.cpp:213
 #: src/backend/worksheet/InfoElement.cpp:838
-#: src/backend/worksheet/WorksheetElement.cpp:745
+#: src/backend/worksheet/WorksheetElement.cpp:754
 #, kde-format
 msgid "%1: set position"
 msgstr "%1: ställ in position"
@@ -9159,22 +9159,22 @@ msgstr "Flytta &bakom"
 msgid "Move in &front of"
 msgstr "Flytta &framför"
 
-#: src/backend/worksheet/WorksheetElement.cpp:757
+#: src/backend/worksheet/WorksheetElement.cpp:766
 #, kde-format
 msgid "%1: set horizontal alignment"
 msgstr "%1: ställ in horisontell justering"
 
-#: src/backend/worksheet/WorksheetElement.cpp:769
+#: src/backend/worksheet/WorksheetElement.cpp:778
 #, kde-format
 msgid "%1: set vertical alignment"
 msgstr "%1: ställ in vertikal justering"
 
-#: src/backend/worksheet/WorksheetElement.cpp:783
+#: src/backend/worksheet/WorksheetElement.cpp:792
 #, kde-format
 msgid "%1: use logical coordinates"
 msgstr "%1: använd logiska koordinater"
 
-#: src/backend/worksheet/WorksheetElement.cpp:793
+#: src/backend/worksheet/WorksheetElement.cpp:802
 #, kde-format
 msgid "%1: set logical position"
 msgstr "%1: ställ in logisk position"
