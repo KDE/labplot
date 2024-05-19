@@ -20,21 +20,29 @@ TimedLineEdit::TimedLineEdit(const QString& contents, QWidget* parent)
 }
 
 void TimedLineEdit::initTimers() {
-	m_textChangedTimer.setSingleShot(true);
 	connect(this, &QLineEdit::textChanged, [&]() {
-		m_textChangedTimer.start(m_time);
-	});
-	connect(&m_textChangedTimer, &QTimer::timeout, [&]() {
-		Q_EMIT textChanged();
+		if (m_textChangedTimerId != -1)
+			killTimer(m_textChangedTimerId);
+		m_textChangedTimerId = startTimer(m_time);
 	});
 
-	m_textEditedTimer.setSingleShot(true);
 	connect(this, &QLineEdit::textEdited, [&]() {
-		m_textEditedTimer.start(m_time);
+		if (m_textEditedTimerId != -1)
+			killTimer(m_textEditedTimerId);
+		m_textEditedTimerId = startTimer(m_time);
 	});
-	connect(&m_textEditedTimer, &QTimer::timeout, [&]() {
+}
+
+void TimedLineEdit::timerEvent(QTimerEvent* event) {
+	if (event->timerId() == m_textChangedTimerId) {
+		killTimer(m_textChangedTimerId);
+		m_textChangedTimerId = -1;
+		Q_EMIT textChanged();
+	} else if (event->timerId() == m_textEditedTimerId) {
+		killTimer(m_textEditedTimerId);
+		m_textEditedTimerId = -1;
 		Q_EMIT textEdited();
-	});
+	}
 }
 
 int TimedLineEdit::getTime() {
