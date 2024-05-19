@@ -16,6 +16,7 @@
 #include <QUndoStack>
 
 void CommonTest::initTestCase() {
+	KLocalizedString::setApplicationDomain("labplot2");
 #ifdef _WIN32
 //	if (AttachConsole(ATTACH_PARENT_PROCESS)) {
 //		freopen("CONOUT$", "w", stdout);
