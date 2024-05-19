@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-18 01:44+0000\n"
+"POT-Creation-Date: 2024-05-19 01:45+0000\n"
 "PO-Revision-Date: 2024-04-19 16:25+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian\n"
@@ -690,7 +690,7 @@ msgstr "%1: встановити кількість десяткових циф�
 msgid "set decimal digits to %1"
 msgstr "встановити кількість десяткових цифр %1"
 
-#: src/backend/core/Folder.cpp:350
+#: src/backend/core/Folder.cpp:352
 #, kde-format
 msgid "unknown element '%1' found"
 msgstr "виявлено невідомий елемент «%1»"
@@ -1149,19 +1149,19 @@ msgid "Number of lines: %1"
 msgstr "Кількість рядків: %1"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:547
-#: src/backend/datasources/filters/AsciiFilter.cpp:750
-#: src/backend/datasources/filters/AsciiFilter.cpp:957
-#: src/backend/datasources/filters/AsciiFilter.cpp:1529
-#: src/backend/datasources/filters/AsciiFilter.cpp:2090
+#: src/backend/datasources/filters/AsciiFilter.cpp:755
+#: src/backend/datasources/filters/AsciiFilter.cpp:962
+#: src/backend/datasources/filters/AsciiFilter.cpp:1533
+#: src/backend/datasources/filters/AsciiFilter.cpp:2094
 #, kde-format
 msgid "Timestamp"
 msgstr "Часова позначка"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:551
-#: src/backend/datasources/filters/AsciiFilter.cpp:744
-#: src/backend/datasources/filters/AsciiFilter.cpp:955
-#: src/backend/datasources/filters/AsciiFilter.cpp:1524
-#: src/backend/datasources/filters/AsciiFilter.cpp:2084
+#: src/backend/datasources/filters/AsciiFilter.cpp:749
+#: src/backend/datasources/filters/AsciiFilter.cpp:960
+#: src/backend/datasources/filters/AsciiFilter.cpp:1528
+#: src/backend/datasources/filters/AsciiFilter.cpp:2088
 #: src/backend/datasources/filters/BinaryFilter.cpp:293
 #: src/backend/datasources/filters/BinaryFilter.cpp:436
 #: src/backend/nsl/nsl_dft.c:29 src/backend/nsl/nsl_filter.c:23
@@ -1169,19 +1169,19 @@ msgstr "Часова позначка"
 msgid "Index"
 msgstr "Індекс"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:730
-#: src/backend/datasources/filters/AsciiFilter.cpp:1285
-#: src/backend/datasources/filters/AsciiFilter.cpp:1622
+#: src/backend/datasources/filters/AsciiFilter.cpp:735
+#: src/backend/datasources/filters/AsciiFilter.cpp:1290
+#: src/backend/datasources/filters/AsciiFilter.cpp:1626
 #: src/backend/datasources/filters/BinaryFilter.cpp:404
 #, kde-format
 msgid "Failed to open the device/file or it's empty."
 msgstr "Не вдалося відкрити пристрій або файл або вони є порожніми."
 
 #. i18n: ectx: property (text), widget (QTableWidget, twLabels)
-#: src/backend/datasources/filters/AsciiFilter.cpp:756
-#: src/backend/datasources/filters/AsciiFilter.cpp:962
-#: src/backend/datasources/filters/AsciiFilter.cpp:1548
-#: src/backend/datasources/filters/AsciiFilter.cpp:2103
+#: src/backend/datasources/filters/AsciiFilter.cpp:761
+#: src/backend/datasources/filters/AsciiFilter.cpp:967
+#: src/backend/datasources/filters/AsciiFilter.cpp:1552
+#: src/backend/datasources/filters/AsciiFilter.cpp:2107
 #: src/backend/datasources/filters/QJsonModel.cpp:133
 #: src/commonfrontend/matrix/MatrixView.cpp:620
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2384
@@ -1196,14 +1196,14 @@ msgstr "Не вдалося відкрити пристрій або файл а
 msgid "Value"
 msgstr "Значення"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:964
-#: src/backend/datasources/filters/AsciiFilter.cpp:1550
-#: src/backend/datasources/filters/AsciiFilter.cpp:2105
+#: src/backend/datasources/filters/AsciiFilter.cpp:969
+#: src/backend/datasources/filters/AsciiFilter.cpp:1554
+#: src/backend/datasources/filters/AsciiFilter.cpp:2109
 #, kde-format
 msgid "Value %1"
 msgstr "Значення %1"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:1304
+#: src/backend/datasources/filters/AsciiFilter.cpp:1309
 #: src/backend/datasources/filters/BinaryFilter.cpp:444
 #: src/backend/datasources/filters/CANFilter.cpp:299
 #: src/backend/datasources/filters/FITSFilter.cpp:329
@@ -3080,7 +3080,7 @@ msgstr "Не вдалося виконати факторизацію"
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:603
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:623
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:658
-#: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:437
+#: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:449
 #, kde-format
 msgid "Failed to allocate memory"
 msgstr "Не вдалося отримати пам'ять"
@@ -5277,61 +5277,22 @@ msgstr "Випадкові числа із розподілом Бернуллі
 msgid "Binomial random numbers"
 msgstr "Випадкові числа із біноміальним розподілом"
 
-#: src/backend/gsl/functions.cpp:664
+#: src/backend/gsl/functions.cpp:663
+#, fuzzy, kde-format
+#| msgid "Landau random numbers"
+msgid "Triangular random numbers"
+msgstr "Випадкові числа із розподілом Ландау"
+
+#: src/backend/gsl/functions.cpp:667
 #, kde-format
 msgid "Probability density for a Gaussian distribution"
 msgstr "Щільність ймовірності випадкової величини із розподілом Гауса"
 
-#: src/backend/gsl/functions.cpp:665
+#: src/backend/gsl/functions.cpp:668
 #, kde-format
 msgid "Probability density for a unit Gaussian distribution"
 msgstr ""
 "Щільність ймовірності випадкової величини із одинарним розподілом Гауса"
-
-#: src/backend/gsl/functions.cpp:666 src/backend/gsl/functions.cpp:681
-#: src/backend/gsl/functions.cpp:688 src/backend/gsl/functions.cpp:700
-#: src/backend/gsl/functions.cpp:707 src/backend/gsl/functions.cpp:718
-#: src/backend/gsl/functions.cpp:725 src/backend/gsl/functions.cpp:732
-#: src/backend/gsl/functions.cpp:739 src/backend/gsl/functions.cpp:746
-#: src/backend/gsl/functions.cpp:753 src/backend/gsl/functions.cpp:760
-#: src/backend/gsl/functions.cpp:767 src/backend/gsl/functions.cpp:774
-#: src/backend/gsl/functions.cpp:781 src/backend/gsl/functions.cpp:788
-#: src/backend/gsl/functions.cpp:793 src/backend/gsl/functions.cpp:800
-#: src/backend/gsl/functions.cpp:808 src/backend/gsl/functions.cpp:811
-#: src/backend/gsl/functions.cpp:816 src/backend/gsl/functions.cpp:821
-#: src/backend/gsl/functions.cpp:826
-#, kde-format
-msgid "Cumulative distribution function P"
-msgstr "Кумулятивна функція розподілу P"
-
-#: src/backend/gsl/functions.cpp:667 src/backend/gsl/functions.cpp:682
-#: src/backend/gsl/functions.cpp:689 src/backend/gsl/functions.cpp:696
-#: src/backend/gsl/functions.cpp:701 src/backend/gsl/functions.cpp:708
-#: src/backend/gsl/functions.cpp:719 src/backend/gsl/functions.cpp:726
-#: src/backend/gsl/functions.cpp:733 src/backend/gsl/functions.cpp:740
-#: src/backend/gsl/functions.cpp:747 src/backend/gsl/functions.cpp:754
-#: src/backend/gsl/functions.cpp:761 src/backend/gsl/functions.cpp:768
-#: src/backend/gsl/functions.cpp:775 src/backend/gsl/functions.cpp:782
-#: src/backend/gsl/functions.cpp:789 src/backend/gsl/functions.cpp:794
-#: src/backend/gsl/functions.cpp:801 src/backend/gsl/functions.cpp:809
-#: src/backend/gsl/functions.cpp:812 src/backend/gsl/functions.cpp:817
-#: src/backend/gsl/functions.cpp:822 src/backend/gsl/functions.cpp:827
-#, kde-format
-msgid "Cumulative distribution function Q"
-msgstr "Кумулятивна функція розподілу Q"
-
-#: src/backend/gsl/functions.cpp:668 src/backend/gsl/functions.cpp:683
-#: src/backend/gsl/functions.cpp:690 src/backend/gsl/functions.cpp:702
-#: src/backend/gsl/functions.cpp:709 src/backend/gsl/functions.cpp:720
-#: src/backend/gsl/functions.cpp:727 src/backend/gsl/functions.cpp:734
-#: src/backend/gsl/functions.cpp:741 src/backend/gsl/functions.cpp:748
-#: src/backend/gsl/functions.cpp:755 src/backend/gsl/functions.cpp:762
-#: src/backend/gsl/functions.cpp:769 src/backend/gsl/functions.cpp:776
-#: src/backend/gsl/functions.cpp:783 src/backend/gsl/functions.cpp:790
-#: src/backend/gsl/functions.cpp:795
-#, kde-format
-msgid "Inverse cumulative distribution function P"
-msgstr "Обернена кумулятивна функція розподілу P"
 
 #: src/backend/gsl/functions.cpp:669 src/backend/gsl/functions.cpp:684
 #: src/backend/gsl/functions.cpp:691 src/backend/gsl/functions.cpp:703
@@ -5341,257 +5302,302 @@ msgstr "Обернена кумулятивна функція розподіл�
 #: src/backend/gsl/functions.cpp:756 src/backend/gsl/functions.cpp:763
 #: src/backend/gsl/functions.cpp:770 src/backend/gsl/functions.cpp:777
 #: src/backend/gsl/functions.cpp:784 src/backend/gsl/functions.cpp:791
-#: src/backend/gsl/functions.cpp:796
+#: src/backend/gsl/functions.cpp:796 src/backend/gsl/functions.cpp:803
+#: src/backend/gsl/functions.cpp:811 src/backend/gsl/functions.cpp:814
+#: src/backend/gsl/functions.cpp:819 src/backend/gsl/functions.cpp:824
+#: src/backend/gsl/functions.cpp:829
+#, kde-format
+msgid "Cumulative distribution function P"
+msgstr "Кумулятивна функція розподілу P"
+
+#: src/backend/gsl/functions.cpp:670 src/backend/gsl/functions.cpp:685
+#: src/backend/gsl/functions.cpp:692 src/backend/gsl/functions.cpp:699
+#: src/backend/gsl/functions.cpp:704 src/backend/gsl/functions.cpp:711
+#: src/backend/gsl/functions.cpp:722 src/backend/gsl/functions.cpp:729
+#: src/backend/gsl/functions.cpp:736 src/backend/gsl/functions.cpp:743
+#: src/backend/gsl/functions.cpp:750 src/backend/gsl/functions.cpp:757
+#: src/backend/gsl/functions.cpp:764 src/backend/gsl/functions.cpp:771
+#: src/backend/gsl/functions.cpp:778 src/backend/gsl/functions.cpp:785
+#: src/backend/gsl/functions.cpp:792 src/backend/gsl/functions.cpp:797
+#: src/backend/gsl/functions.cpp:804 src/backend/gsl/functions.cpp:812
+#: src/backend/gsl/functions.cpp:815 src/backend/gsl/functions.cpp:820
+#: src/backend/gsl/functions.cpp:825 src/backend/gsl/functions.cpp:830
+#, kde-format
+msgid "Cumulative distribution function Q"
+msgstr "Кумулятивна функція розподілу Q"
+
+#: src/backend/gsl/functions.cpp:671 src/backend/gsl/functions.cpp:686
+#: src/backend/gsl/functions.cpp:693 src/backend/gsl/functions.cpp:705
+#: src/backend/gsl/functions.cpp:712 src/backend/gsl/functions.cpp:723
+#: src/backend/gsl/functions.cpp:730 src/backend/gsl/functions.cpp:737
+#: src/backend/gsl/functions.cpp:744 src/backend/gsl/functions.cpp:751
+#: src/backend/gsl/functions.cpp:758 src/backend/gsl/functions.cpp:765
+#: src/backend/gsl/functions.cpp:772 src/backend/gsl/functions.cpp:779
+#: src/backend/gsl/functions.cpp:786 src/backend/gsl/functions.cpp:793
+#: src/backend/gsl/functions.cpp:798
+#, kde-format
+msgid "Inverse cumulative distribution function P"
+msgstr "Обернена кумулятивна функція розподілу P"
+
+#: src/backend/gsl/functions.cpp:672 src/backend/gsl/functions.cpp:687
+#: src/backend/gsl/functions.cpp:694 src/backend/gsl/functions.cpp:706
+#: src/backend/gsl/functions.cpp:713 src/backend/gsl/functions.cpp:724
+#: src/backend/gsl/functions.cpp:731 src/backend/gsl/functions.cpp:738
+#: src/backend/gsl/functions.cpp:745 src/backend/gsl/functions.cpp:752
+#: src/backend/gsl/functions.cpp:759 src/backend/gsl/functions.cpp:766
+#: src/backend/gsl/functions.cpp:773 src/backend/gsl/functions.cpp:780
+#: src/backend/gsl/functions.cpp:787 src/backend/gsl/functions.cpp:794
+#: src/backend/gsl/functions.cpp:799
 #, kde-format
 msgid "Inverse cumulative distribution function Q"
 msgstr "Обернена кумулятивна функція розподілу Q"
 
-#: src/backend/gsl/functions.cpp:670
+#: src/backend/gsl/functions.cpp:673
 #, kde-format
 msgid "Cumulative unit distribution function P"
 msgstr "Кумулятивна одинарна функція розподілу P"
 
-#: src/backend/gsl/functions.cpp:671
+#: src/backend/gsl/functions.cpp:674
 #, kde-format
 msgid "Cumulative unit distribution function Q"
 msgstr "Кумулятивна одинарна функція розподілу Q"
 
-#: src/backend/gsl/functions.cpp:672
+#: src/backend/gsl/functions.cpp:675
 #, kde-format
 msgid "Inverse cumulative unit distribution function P"
 msgstr "Обернена кумулятивна одинарна функція розподілу P"
 
-#: src/backend/gsl/functions.cpp:673
+#: src/backend/gsl/functions.cpp:676
 #, kde-format
 msgid "Inverse cumulative unit distribution function Q"
 msgstr "Обернена кумулятивна одинарна функція розподілу Q"
 
-#: src/backend/gsl/functions.cpp:675
+#: src/backend/gsl/functions.cpp:678
 #, kde-format
 msgid "Probability density for Gaussian tail distribution"
 msgstr ""
 "Щільність ймовірності випадкової величини із хвостовим розподілом Гауса"
 
-#: src/backend/gsl/functions.cpp:676
+#: src/backend/gsl/functions.cpp:679
 #, kde-format
 msgid "Probability density for unit Gaussian tail distribution"
 msgstr ""
 "Щільність ймовірності випадкової величини із хвостовим одинарним розподілом "
 "Гауса"
 
-#: src/backend/gsl/functions.cpp:677
+#: src/backend/gsl/functions.cpp:680
 #, kde-format
 msgid "Probability density for a bivariate Gaussian distribution"
 msgstr ""
 "Щільність ймовірності випадкової величини із двовимірним розподілом Гауса"
 
-#: src/backend/gsl/functions.cpp:680
+#: src/backend/gsl/functions.cpp:683
 #, kde-format
 msgid "Probability density for an exponential distribution"
 msgstr "щільність ймовірності випадкової величини із експоненційним розподілом"
 
-#: src/backend/gsl/functions.cpp:687
+#: src/backend/gsl/functions.cpp:690
 #, kde-format
 msgid "Probability density for a Laplace distribution"
 msgstr "Щільність ймовірності випадкової величини із розподілом Лапласа"
 
-#: src/backend/gsl/functions.cpp:694
+#: src/backend/gsl/functions.cpp:697
 #, kde-format
 msgid "Probability density for an exponential power distribution"
 msgstr "щільність ймовірності випадкової величини із нормальним розподілом"
 
-#: src/backend/gsl/functions.cpp:695
+#: src/backend/gsl/functions.cpp:698
 #, kde-format
 msgid "cumulative distribution function P"
 msgstr "Кумулятивна функція розподілу P"
 
-#: src/backend/gsl/functions.cpp:699
+#: src/backend/gsl/functions.cpp:702
 #, kde-format
 msgid "Probability density for a Cauchy distribution"
 msgstr "Щільність ймовірності випадкової величини із розподілом Коші"
 
-#: src/backend/gsl/functions.cpp:706
+#: src/backend/gsl/functions.cpp:709
 #, kde-format
 msgid "Probability density for a Rayleigh distribution"
 msgstr "Щільність ймовірності випадкової величини із розподілом Релея"
 
-#: src/backend/gsl/functions.cpp:711
+#: src/backend/gsl/functions.cpp:714
 #, kde-format
 msgid "Probability density for a Rayleigh tail distribution"
 msgstr ""
 "Щільність ймовірності випадкової величини із хвостовим розподілом Релея"
 
-#: src/backend/gsl/functions.cpp:714
+#: src/backend/gsl/functions.cpp:717
 #, kde-format
 msgid "Probability density for a Landau distribution"
 msgstr "Щільність ймовірності випадкової величини із розподілом Ландау"
 
-#: src/backend/gsl/functions.cpp:717
+#: src/backend/gsl/functions.cpp:720
 #, kde-format
 msgid "Probability density for a gamma distribution"
 msgstr "Щільність ймовірності випадкової величини із гамма-розподілом"
 
-#: src/backend/gsl/functions.cpp:724
+#: src/backend/gsl/functions.cpp:727
 #, kde-format
 msgid "Probability density for a uniform distribution"
 msgstr "Щільність ймовірності випадкової величини із однорідним розподілом"
 
-#: src/backend/gsl/functions.cpp:731
+#: src/backend/gsl/functions.cpp:734
 #, kde-format
 msgid "Probability density for a lognormal distribution"
 msgstr "Щільність ймовірності випадкової величини із логнормальним розподілом"
 
-#: src/backend/gsl/functions.cpp:738
+#: src/backend/gsl/functions.cpp:741
 #, kde-format
 msgid "Probability density for a chi squared distribution"
 msgstr "Щільність ймовірності випадкової величини із χ²-розподілом"
 
-#: src/backend/gsl/functions.cpp:745
+#: src/backend/gsl/functions.cpp:748
 #, kde-format
 msgid "Probability density for a F-distribution"
 msgstr "Щільність ймовірності випадкової величини із розподілом Фішера"
 
-#: src/backend/gsl/functions.cpp:752
+#: src/backend/gsl/functions.cpp:755
 #, kde-format
 msgid "Probability density for a t-distribution"
 msgstr "Щільність ймовірності випадкової величини із розподілом Стьюдента"
 
-#: src/backend/gsl/functions.cpp:759
+#: src/backend/gsl/functions.cpp:762
 #, kde-format
 msgid "Probability density for a beta distribution"
 msgstr "Щільність ймовірності випадкової величини із бета-розподілом"
 
-#: src/backend/gsl/functions.cpp:766
+#: src/backend/gsl/functions.cpp:769
 #, kde-format
 msgid "Probability density for a logistic distribution"
 msgstr "Щільність ймовірності випадкової величини із логістичним розподілом"
 
-#: src/backend/gsl/functions.cpp:773
+#: src/backend/gsl/functions.cpp:776
 #, kde-format
 msgid "Probability density for a Pareto distribution"
 msgstr "Щільність ймовірності випадкової величини із розподілом Парето"
 
-#: src/backend/gsl/functions.cpp:780
+#: src/backend/gsl/functions.cpp:783
 #, kde-format
 msgid "Probability density for a Weibull distribution"
 msgstr "Щільність ймовірності випадкової величини із розподілом Вейбула"
 
-#: src/backend/gsl/functions.cpp:787
+#: src/backend/gsl/functions.cpp:790
 #, kde-format
 msgid "Probability density for a Type-1 Gumbel distribution"
 msgstr "Щільність ймовірності випадкової величини із розподілом Ґумбеля типу 1"
 
-#: src/backend/gsl/functions.cpp:792
+#: src/backend/gsl/functions.cpp:795
 #, kde-format
 msgid "Probability density for a Type-2 Gumbel distribution"
 msgstr "Щільність ймовірності випадкової величини із розподілом Ґумбеля типу 2"
 
-#: src/backend/gsl/functions.cpp:799
+#: src/backend/gsl/functions.cpp:802
 #, kde-format
 msgid "Probability density for a Poisson distribution"
 msgstr "Щільність ймовірності випадкової величини із розподілом Пуассона"
 
-#: src/backend/gsl/functions.cpp:804
+#: src/backend/gsl/functions.cpp:807
 #, kde-format
 msgid "Probability density for a Bernoulli distribution"
 msgstr "Щільність ймовірності випадкової величини із розподілом Бернуллі"
 
-#: src/backend/gsl/functions.cpp:807
+#: src/backend/gsl/functions.cpp:810
 #, kde-format
 msgid "Probability density for a binomial distribution"
 msgstr "Щільність ймовірності випадкової величини із біноміальним розподілом"
 
-#: src/backend/gsl/functions.cpp:810
+#: src/backend/gsl/functions.cpp:813
 #, kde-format
 msgid "Probability density for a negative binomial distribution"
 msgstr ""
 "Щільність ймовірності випадкової величини із від'ємним біноміальним "
 "розподілом"
 
-#: src/backend/gsl/functions.cpp:815
+#: src/backend/gsl/functions.cpp:818
 #, kde-format
 msgid "Probability density for a Pascal distribution"
 msgstr "Щільність ймовірності випадкової величини із розподілом Паскаля"
 
-#: src/backend/gsl/functions.cpp:820
+#: src/backend/gsl/functions.cpp:823
 #, kde-format
 msgid "Probability density for a geometric distribution"
 msgstr "Щільність ймовірності випадкової величини із геометричним розподілом"
 
-#: src/backend/gsl/functions.cpp:825
+#: src/backend/gsl/functions.cpp:828
 #, kde-format
 msgid "Probability density for a hypergeometric distribution"
 msgstr ""
 "Щільність ймовірності випадкової величини із гіпергеометричним розподілом"
 
-#: src/backend/gsl/functions.cpp:830
+#: src/backend/gsl/functions.cpp:833
 #, kde-format
 msgid "Probability density for a logarithmic distribution"
 msgstr "Щільність ймовірності випадкової величини із логарифмічним розподілом"
 
-#: src/backend/gsl/functions.cpp:936 src/backend/gsl/functions.cpp:948
-#: src/backend/gsl/functions.cpp:962 src/backend/gsl/functions.cpp:974
-#: src/backend/gsl/functions.cpp:986
+#: src/backend/gsl/functions.cpp:939 src/backend/gsl/functions.cpp:951
+#: src/backend/gsl/functions.cpp:965 src/backend/gsl/functions.cpp:977
+#: src/backend/gsl/functions.cpp:989
 #, kde-format
 msgid "Invalid"
 msgstr "Некоректне"
 
-#: src/backend/gsl/functions.cpp:942
+#: src/backend/gsl/functions.cpp:945
 #, kde-format
 msgid "condition"
 msgstr "умова"
 
-#: src/backend/gsl/functions.cpp:944
+#: src/backend/gsl/functions.cpp:947
 #, kde-format
 msgid "trueValue"
 msgstr "значенняTrue"
 
-#: src/backend/gsl/functions.cpp:946
+#: src/backend/gsl/functions.cpp:949
 #, kde-format
 msgid "falseValue"
 msgstr "значенняFalse"
 
-#: src/backend/gsl/functions.cpp:954
+#: src/backend/gsl/functions.cpp:957
 #, kde-format
 msgid "n"
 msgstr "n"
 
-#: src/backend/gsl/functions.cpp:956
+#: src/backend/gsl/functions.cpp:959
 #, kde-format
 msgid "j"
 msgstr "j"
 
-#: src/backend/gsl/functions.cpp:958
+#: src/backend/gsl/functions.cpp:961
 #, kde-format
 msgid "q"
 msgstr "q"
 
-#: src/backend/gsl/functions.cpp:960 src/backend/gsl/functions.cpp:968
+#: src/backend/gsl/functions.cpp:963 src/backend/gsl/functions.cpp:971
 #, kde-format
 msgid "x"
 msgstr "x"
 
-#: src/backend/gsl/functions.cpp:970
+#: src/backend/gsl/functions.cpp:973
 #, kde-format
 msgid "min"
 msgstr "min"
 
-#: src/backend/gsl/functions.cpp:972
+#: src/backend/gsl/functions.cpp:975
 #, kde-format
 msgid "max"
 msgstr "max"
 
-#: src/backend/gsl/functions.cpp:980
+#: src/backend/gsl/functions.cpp:983
 #, kde-format
 msgid "v1"
 msgstr "v1"
 
-#: src/backend/gsl/functions.cpp:982
+#: src/backend/gsl/functions.cpp:985
 #, kde-format
 msgid "v2"
 msgstr "v2"
 
-#: src/backend/gsl/functions.cpp:984
+#: src/backend/gsl/functions.cpp:987
 #, kde-format
 msgid "ep"
 msgstr "ep"
@@ -6583,16 +6589,17 @@ msgstr "Леві"
 msgid "Frechet (Inverse Weibull)"
 msgstr "Фреше (обернений Вейбулла)"
 
-#: src/backend/nsl/nsl_sf_window.c:15
-#, kde-format
-msgid "Rectangular (Uniform)"
-msgstr "Прямокутна (однорідна)"
-
-#: src/backend/nsl/nsl_sf_window.c:16 src/backend/nsl/nsl_smooth.c:24
+#: src/backend/nsl/nsl_sf_stats.c:48 src/backend/nsl/nsl_sf_window.c:16
+#: src/backend/nsl/nsl_smooth.c:24
 #: src/kdefrontend/dockwidgets/KDEPlotDock.cpp:161
 #, kde-format
 msgid "Triangular"
 msgstr "Трикутна"
+
+#: src/backend/nsl/nsl_sf_window.c:15
+#, kde-format
+msgid "Rectangular (Uniform)"
+msgstr "Прямокутна (однорідна)"
 
 #: src/backend/nsl/nsl_sf_window.c:17
 #, kde-format
@@ -15280,7 +15287,7 @@ msgstr[3] "%1 значення"
 #: src/kdefrontend/matrix/MatrixFunctionDialog.cpp:76
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:46
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:78
-#: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:53
+#: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:54
 #, kde-format
 msgid "&Generate"
 msgstr "С&творити"
@@ -16100,7 +16107,7 @@ msgstr[3] "%1: заповнити стовпчик рівномірно розт
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:603
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:623
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:658
-#: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:437
+#: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:449
 #, kde-format
 msgid "Not enough memory to perform this operation."
 msgstr "Недостатньо пам'яті для виконання цієї дії."
@@ -16484,18 +16491,18 @@ msgstr "Слід позначити наявний робочий аркуш."
 msgid "Close the dialog and plot the data."
 msgstr "Закрити діалогове вікно і накреслити дані."
 
-#: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:43
+#: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:44
 #, kde-format
 msgctxt "@title:window"
 msgid "Random Values"
 msgstr "Випадкові значення"
 
-#: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:52
+#: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:53
 #, kde-format
 msgid "Generate random values according to the selected distribution"
 msgstr "Створити набір псевдовипадкових значень із вказаним розподілом"
 
-#: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:83
+#: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:85
 #, kde-format
 msgid ""
 "Seed number to initialize the random number generator.\n"
@@ -16511,7 +16518,7 @@ msgstr ""
 "Якщо значення не вказано, базове значення алгоритму буде визначено за "
 "поточною часовою позначкою."
 
-#: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:89
+#: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:91
 #, kde-format
 msgid ""
 "Random number distributions as defined in <a href=\"https://www.gnu.org/"
@@ -16520,7 +16527,7 @@ msgstr ""
 "Розподіли випадкових чисел, як їх визначено у <a href=\"https://www.gnu.org/"
 "software/gsl/doc/html/randist.html\">документації до GSL</a>"
 
-#: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:461
+#: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:473
 #, kde-format
 msgid "%1: fill column with non-uniform random numbers"
 msgid_plural "%1: fill columns with non-uniform random numbers"

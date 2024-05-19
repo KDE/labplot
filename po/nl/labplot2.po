@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-18 01:44+0000\n"
+"POT-Creation-Date: 2024-05-19 01:45+0000\n"
 "PO-Revision-Date: 2024-04-19 12:13+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
@@ -678,7 +678,7 @@ msgstr "%1: stel decimale cijfers in op %2"
 msgid "set decimal digits to %1"
 msgstr "decimale cijfers op %1 instellen"
 
-#: src/backend/core/Folder.cpp:350
+#: src/backend/core/Folder.cpp:352
 #, kde-format
 msgid "unknown element '%1' found"
 msgstr "onbekend element '%1' gevonden"
@@ -1138,19 +1138,19 @@ msgid "Number of lines: %1"
 msgstr "Aantal regels: %1"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:547
-#: src/backend/datasources/filters/AsciiFilter.cpp:750
-#: src/backend/datasources/filters/AsciiFilter.cpp:957
-#: src/backend/datasources/filters/AsciiFilter.cpp:1529
-#: src/backend/datasources/filters/AsciiFilter.cpp:2090
+#: src/backend/datasources/filters/AsciiFilter.cpp:755
+#: src/backend/datasources/filters/AsciiFilter.cpp:962
+#: src/backend/datasources/filters/AsciiFilter.cpp:1533
+#: src/backend/datasources/filters/AsciiFilter.cpp:2094
 #, kde-format
 msgid "Timestamp"
 msgstr "timestamp (tijdstempel)"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:551
-#: src/backend/datasources/filters/AsciiFilter.cpp:744
-#: src/backend/datasources/filters/AsciiFilter.cpp:955
-#: src/backend/datasources/filters/AsciiFilter.cpp:1524
-#: src/backend/datasources/filters/AsciiFilter.cpp:2084
+#: src/backend/datasources/filters/AsciiFilter.cpp:749
+#: src/backend/datasources/filters/AsciiFilter.cpp:960
+#: src/backend/datasources/filters/AsciiFilter.cpp:1528
+#: src/backend/datasources/filters/AsciiFilter.cpp:2088
 #: src/backend/datasources/filters/BinaryFilter.cpp:293
 #: src/backend/datasources/filters/BinaryFilter.cpp:436
 #: src/backend/nsl/nsl_dft.c:29 src/backend/nsl/nsl_filter.c:23
@@ -1158,19 +1158,19 @@ msgstr "timestamp (tijdstempel)"
 msgid "Index"
 msgstr "Index"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:730
-#: src/backend/datasources/filters/AsciiFilter.cpp:1285
-#: src/backend/datasources/filters/AsciiFilter.cpp:1622
+#: src/backend/datasources/filters/AsciiFilter.cpp:735
+#: src/backend/datasources/filters/AsciiFilter.cpp:1290
+#: src/backend/datasources/filters/AsciiFilter.cpp:1626
 #: src/backend/datasources/filters/BinaryFilter.cpp:404
 #, kde-format
 msgid "Failed to open the device/file or it's empty."
 msgstr "Openen van het apparaat/bestand is mislukt of het is leeg."
 
 #. i18n: ectx: property (text), widget (QTableWidget, twLabels)
-#: src/backend/datasources/filters/AsciiFilter.cpp:756
-#: src/backend/datasources/filters/AsciiFilter.cpp:962
-#: src/backend/datasources/filters/AsciiFilter.cpp:1548
-#: src/backend/datasources/filters/AsciiFilter.cpp:2103
+#: src/backend/datasources/filters/AsciiFilter.cpp:761
+#: src/backend/datasources/filters/AsciiFilter.cpp:967
+#: src/backend/datasources/filters/AsciiFilter.cpp:1552
+#: src/backend/datasources/filters/AsciiFilter.cpp:2107
 #: src/backend/datasources/filters/QJsonModel.cpp:133
 #: src/commonfrontend/matrix/MatrixView.cpp:620
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2384
@@ -1185,14 +1185,14 @@ msgstr "Openen van het apparaat/bestand is mislukt of het is leeg."
 msgid "Value"
 msgstr "Waarde"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:964
-#: src/backend/datasources/filters/AsciiFilter.cpp:1550
-#: src/backend/datasources/filters/AsciiFilter.cpp:2105
+#: src/backend/datasources/filters/AsciiFilter.cpp:969
+#: src/backend/datasources/filters/AsciiFilter.cpp:1554
+#: src/backend/datasources/filters/AsciiFilter.cpp:2109
 #, kde-format
 msgid "Value %1"
 msgstr "Waarde %1"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:1304
+#: src/backend/datasources/filters/AsciiFilter.cpp:1309
 #: src/backend/datasources/filters/BinaryFilter.cpp:444
 #: src/backend/datasources/filters/CANFilter.cpp:299
 #: src/backend/datasources/filters/FITSFilter.cpp:329
@@ -3056,7 +3056,7 @@ msgstr "Factoriseren mislukt"
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:603
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:623
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:658
-#: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:437
+#: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:449
 #, kde-format
 msgid "Failed to allocate memory"
 msgstr "Geheugen toekennen mislukt"
@@ -5244,60 +5244,21 @@ msgstr "Bernoulli willekeurige getallen"
 msgid "Binomial random numbers"
 msgstr "Binomiale willekeurige getallen"
 
-#: src/backend/gsl/functions.cpp:664
+#: src/backend/gsl/functions.cpp:663
+#, fuzzy, kde-format
+#| msgid "Landau random numbers"
+msgid "Triangular random numbers"
+msgstr "Landau willekeurige getallen"
+
+#: src/backend/gsl/functions.cpp:667
 #, kde-format
 msgid "Probability density for a Gaussian distribution"
 msgstr "Kansdichtheid voor een Gaussische verdeling"
 
-#: src/backend/gsl/functions.cpp:665
+#: src/backend/gsl/functions.cpp:668
 #, kde-format
 msgid "Probability density for a unit Gaussian distribution"
 msgstr "Kansdichtheid voor een eendimensionale Gaussische verdeling"
-
-#: src/backend/gsl/functions.cpp:666 src/backend/gsl/functions.cpp:681
-#: src/backend/gsl/functions.cpp:688 src/backend/gsl/functions.cpp:700
-#: src/backend/gsl/functions.cpp:707 src/backend/gsl/functions.cpp:718
-#: src/backend/gsl/functions.cpp:725 src/backend/gsl/functions.cpp:732
-#: src/backend/gsl/functions.cpp:739 src/backend/gsl/functions.cpp:746
-#: src/backend/gsl/functions.cpp:753 src/backend/gsl/functions.cpp:760
-#: src/backend/gsl/functions.cpp:767 src/backend/gsl/functions.cpp:774
-#: src/backend/gsl/functions.cpp:781 src/backend/gsl/functions.cpp:788
-#: src/backend/gsl/functions.cpp:793 src/backend/gsl/functions.cpp:800
-#: src/backend/gsl/functions.cpp:808 src/backend/gsl/functions.cpp:811
-#: src/backend/gsl/functions.cpp:816 src/backend/gsl/functions.cpp:821
-#: src/backend/gsl/functions.cpp:826
-#, kde-format
-msgid "Cumulative distribution function P"
-msgstr "Cumulatieve verdelingsfunctie (P)"
-
-#: src/backend/gsl/functions.cpp:667 src/backend/gsl/functions.cpp:682
-#: src/backend/gsl/functions.cpp:689 src/backend/gsl/functions.cpp:696
-#: src/backend/gsl/functions.cpp:701 src/backend/gsl/functions.cpp:708
-#: src/backend/gsl/functions.cpp:719 src/backend/gsl/functions.cpp:726
-#: src/backend/gsl/functions.cpp:733 src/backend/gsl/functions.cpp:740
-#: src/backend/gsl/functions.cpp:747 src/backend/gsl/functions.cpp:754
-#: src/backend/gsl/functions.cpp:761 src/backend/gsl/functions.cpp:768
-#: src/backend/gsl/functions.cpp:775 src/backend/gsl/functions.cpp:782
-#: src/backend/gsl/functions.cpp:789 src/backend/gsl/functions.cpp:794
-#: src/backend/gsl/functions.cpp:801 src/backend/gsl/functions.cpp:809
-#: src/backend/gsl/functions.cpp:812 src/backend/gsl/functions.cpp:817
-#: src/backend/gsl/functions.cpp:822 src/backend/gsl/functions.cpp:827
-#, kde-format
-msgid "Cumulative distribution function Q"
-msgstr "Cumulatieve verdelingsfunctie Q"
-
-#: src/backend/gsl/functions.cpp:668 src/backend/gsl/functions.cpp:683
-#: src/backend/gsl/functions.cpp:690 src/backend/gsl/functions.cpp:702
-#: src/backend/gsl/functions.cpp:709 src/backend/gsl/functions.cpp:720
-#: src/backend/gsl/functions.cpp:727 src/backend/gsl/functions.cpp:734
-#: src/backend/gsl/functions.cpp:741 src/backend/gsl/functions.cpp:748
-#: src/backend/gsl/functions.cpp:755 src/backend/gsl/functions.cpp:762
-#: src/backend/gsl/functions.cpp:769 src/backend/gsl/functions.cpp:776
-#: src/backend/gsl/functions.cpp:783 src/backend/gsl/functions.cpp:790
-#: src/backend/gsl/functions.cpp:795
-#, kde-format
-msgid "Inverse cumulative distribution function P"
-msgstr "inverse cumulatieve verdelingsfunctie P"
 
 #: src/backend/gsl/functions.cpp:669 src/backend/gsl/functions.cpp:684
 #: src/backend/gsl/functions.cpp:691 src/backend/gsl/functions.cpp:703
@@ -5307,250 +5268,295 @@ msgstr "inverse cumulatieve verdelingsfunctie P"
 #: src/backend/gsl/functions.cpp:756 src/backend/gsl/functions.cpp:763
 #: src/backend/gsl/functions.cpp:770 src/backend/gsl/functions.cpp:777
 #: src/backend/gsl/functions.cpp:784 src/backend/gsl/functions.cpp:791
-#: src/backend/gsl/functions.cpp:796
+#: src/backend/gsl/functions.cpp:796 src/backend/gsl/functions.cpp:803
+#: src/backend/gsl/functions.cpp:811 src/backend/gsl/functions.cpp:814
+#: src/backend/gsl/functions.cpp:819 src/backend/gsl/functions.cpp:824
+#: src/backend/gsl/functions.cpp:829
+#, kde-format
+msgid "Cumulative distribution function P"
+msgstr "Cumulatieve verdelingsfunctie (P)"
+
+#: src/backend/gsl/functions.cpp:670 src/backend/gsl/functions.cpp:685
+#: src/backend/gsl/functions.cpp:692 src/backend/gsl/functions.cpp:699
+#: src/backend/gsl/functions.cpp:704 src/backend/gsl/functions.cpp:711
+#: src/backend/gsl/functions.cpp:722 src/backend/gsl/functions.cpp:729
+#: src/backend/gsl/functions.cpp:736 src/backend/gsl/functions.cpp:743
+#: src/backend/gsl/functions.cpp:750 src/backend/gsl/functions.cpp:757
+#: src/backend/gsl/functions.cpp:764 src/backend/gsl/functions.cpp:771
+#: src/backend/gsl/functions.cpp:778 src/backend/gsl/functions.cpp:785
+#: src/backend/gsl/functions.cpp:792 src/backend/gsl/functions.cpp:797
+#: src/backend/gsl/functions.cpp:804 src/backend/gsl/functions.cpp:812
+#: src/backend/gsl/functions.cpp:815 src/backend/gsl/functions.cpp:820
+#: src/backend/gsl/functions.cpp:825 src/backend/gsl/functions.cpp:830
+#, kde-format
+msgid "Cumulative distribution function Q"
+msgstr "Cumulatieve verdelingsfunctie Q"
+
+#: src/backend/gsl/functions.cpp:671 src/backend/gsl/functions.cpp:686
+#: src/backend/gsl/functions.cpp:693 src/backend/gsl/functions.cpp:705
+#: src/backend/gsl/functions.cpp:712 src/backend/gsl/functions.cpp:723
+#: src/backend/gsl/functions.cpp:730 src/backend/gsl/functions.cpp:737
+#: src/backend/gsl/functions.cpp:744 src/backend/gsl/functions.cpp:751
+#: src/backend/gsl/functions.cpp:758 src/backend/gsl/functions.cpp:765
+#: src/backend/gsl/functions.cpp:772 src/backend/gsl/functions.cpp:779
+#: src/backend/gsl/functions.cpp:786 src/backend/gsl/functions.cpp:793
+#: src/backend/gsl/functions.cpp:798
+#, kde-format
+msgid "Inverse cumulative distribution function P"
+msgstr "inverse cumulatieve verdelingsfunctie P"
+
+#: src/backend/gsl/functions.cpp:672 src/backend/gsl/functions.cpp:687
+#: src/backend/gsl/functions.cpp:694 src/backend/gsl/functions.cpp:706
+#: src/backend/gsl/functions.cpp:713 src/backend/gsl/functions.cpp:724
+#: src/backend/gsl/functions.cpp:731 src/backend/gsl/functions.cpp:738
+#: src/backend/gsl/functions.cpp:745 src/backend/gsl/functions.cpp:752
+#: src/backend/gsl/functions.cpp:759 src/backend/gsl/functions.cpp:766
+#: src/backend/gsl/functions.cpp:773 src/backend/gsl/functions.cpp:780
+#: src/backend/gsl/functions.cpp:787 src/backend/gsl/functions.cpp:794
+#: src/backend/gsl/functions.cpp:799
 #, kde-format
 msgid "Inverse cumulative distribution function Q"
 msgstr "inverse cumulatieve verdelingsfunctie Q"
 
-#: src/backend/gsl/functions.cpp:670
+#: src/backend/gsl/functions.cpp:673
 #, kde-format
 msgid "Cumulative unit distribution function P"
 msgstr "Cumulatieve eendimensionale verdelingsfunctie P"
 
-#: src/backend/gsl/functions.cpp:671
+#: src/backend/gsl/functions.cpp:674
 #, kde-format
 msgid "Cumulative unit distribution function Q"
 msgstr "Cumulatieve eendimensionale verdelingsfunctie Q"
 
-#: src/backend/gsl/functions.cpp:672
+#: src/backend/gsl/functions.cpp:675
 #, kde-format
 msgid "Inverse cumulative unit distribution function P"
 msgstr "inverse cumulatieve eendimensionale verdelingsfunctie P"
 
-#: src/backend/gsl/functions.cpp:673
+#: src/backend/gsl/functions.cpp:676
 #, kde-format
 msgid "Inverse cumulative unit distribution function Q"
 msgstr "Inverse cumulatieve eendimensionale verdelingsfunctie Q"
 
-#: src/backend/gsl/functions.cpp:675
+#: src/backend/gsl/functions.cpp:678
 #, kde-format
 msgid "Probability density for Gaussian tail distribution"
 msgstr "Kansdichtheid voor een Gaussische staartverdeling"
 
-#: src/backend/gsl/functions.cpp:676
+#: src/backend/gsl/functions.cpp:679
 #, kde-format
 msgid "Probability density for unit Gaussian tail distribution"
 msgstr "Kansdichtheid voor een eendimensionale Gaussische staartverdeling"
 
-#: src/backend/gsl/functions.cpp:677
+#: src/backend/gsl/functions.cpp:680
 #, kde-format
 msgid "Probability density for a bivariate Gaussian distribution"
 msgstr ""
 "Kansdichtheid voor een bivariate (tweedimensionale) Gaussische verdeling"
 
-#: src/backend/gsl/functions.cpp:680
+#: src/backend/gsl/functions.cpp:683
 #, kde-format
 msgid "Probability density for an exponential distribution"
 msgstr "Kansdichtheid voor een exponentiële verdeling"
 
-#: src/backend/gsl/functions.cpp:687
+#: src/backend/gsl/functions.cpp:690
 #, kde-format
 msgid "Probability density for a Laplace distribution"
 msgstr "Kansdichtheid voor een Laplace verdeling"
 
-#: src/backend/gsl/functions.cpp:694
+#: src/backend/gsl/functions.cpp:697
 #, kde-format
 msgid "Probability density for an exponential power distribution"
 msgstr "Kansdichtheid voor een exponentiële-macht verdeling"
 
-#: src/backend/gsl/functions.cpp:695
+#: src/backend/gsl/functions.cpp:698
 #, kde-format
 msgid "cumulative distribution function P"
 msgstr "Cumulatieve verdelingsfunctie P"
 
-#: src/backend/gsl/functions.cpp:699
+#: src/backend/gsl/functions.cpp:702
 #, kde-format
 msgid "Probability density for a Cauchy distribution"
 msgstr "Kansdichtheid voor een Cauchy verdeling"
 
-#: src/backend/gsl/functions.cpp:706
+#: src/backend/gsl/functions.cpp:709
 #, kde-format
 msgid "Probability density for a Rayleigh distribution"
 msgstr "Kansdichtheid voor een Rayleigh verdeling"
 
-#: src/backend/gsl/functions.cpp:711
+#: src/backend/gsl/functions.cpp:714
 #, kde-format
 msgid "Probability density for a Rayleigh tail distribution"
 msgstr "Kansdichtheid voor een Rayleigh staartverdeling"
 
-#: src/backend/gsl/functions.cpp:714
+#: src/backend/gsl/functions.cpp:717
 #, kde-format
 msgid "Probability density for a Landau distribution"
 msgstr "Kansdichtheid voor een Landau verdeling"
 
-#: src/backend/gsl/functions.cpp:717
+#: src/backend/gsl/functions.cpp:720
 #, kde-format
 msgid "Probability density for a gamma distribution"
 msgstr "Kansdichtheid voor een gamma verdeling"
 
-#: src/backend/gsl/functions.cpp:724
+#: src/backend/gsl/functions.cpp:727
 #, kde-format
 msgid "Probability density for a uniform distribution"
 msgstr "Kansdichtheid voor een uniforme verdeling"
 
-#: src/backend/gsl/functions.cpp:731
+#: src/backend/gsl/functions.cpp:734
 #, kde-format
 msgid "Probability density for a lognormal distribution"
 msgstr "Kansdichtheid voor een lognormale verdeling"
 
-#: src/backend/gsl/functions.cpp:738
+#: src/backend/gsl/functions.cpp:741
 #, kde-format
 msgid "Probability density for a chi squared distribution"
 msgstr "Kansdichtheid voor een chi-kwadraat verdeling"
 
-#: src/backend/gsl/functions.cpp:745
+#: src/backend/gsl/functions.cpp:748
 #, kde-format
 msgid "Probability density for a F-distribution"
 msgstr "Kansdichtheid voor een F-verdeling"
 
-#: src/backend/gsl/functions.cpp:752
+#: src/backend/gsl/functions.cpp:755
 #, kde-format
 msgid "Probability density for a t-distribution"
 msgstr "Kansdichtheid voor een t-verdeling"
 
-#: src/backend/gsl/functions.cpp:759
+#: src/backend/gsl/functions.cpp:762
 #, kde-format
 msgid "Probability density for a beta distribution"
 msgstr "Kansdichtheid voor een beta-verdeling"
 
-#: src/backend/gsl/functions.cpp:766
+#: src/backend/gsl/functions.cpp:769
 #, kde-format
 msgid "Probability density for a logistic distribution"
 msgstr "Kansdichtheid voor een logistieke verdeling"
 
-#: src/backend/gsl/functions.cpp:773
+#: src/backend/gsl/functions.cpp:776
 #, kde-format
 msgid "Probability density for a Pareto distribution"
 msgstr "Kansdichtheid voor een Pareto verdeling"
 
-#: src/backend/gsl/functions.cpp:780
+#: src/backend/gsl/functions.cpp:783
 #, kde-format
 msgid "Probability density for a Weibull distribution"
 msgstr "Kansdichtheid voor een Weibull verdeling"
 
-#: src/backend/gsl/functions.cpp:787
+#: src/backend/gsl/functions.cpp:790
 #, kde-format
 msgid "Probability density for a Type-1 Gumbel distribution"
 msgstr "Kansdichtheid voor een type-1 Gumbel verdeling"
 
-#: src/backend/gsl/functions.cpp:792
+#: src/backend/gsl/functions.cpp:795
 #, kde-format
 msgid "Probability density for a Type-2 Gumbel distribution"
 msgstr "Kansdichtheid voor een type-2 Gumbel verdeling"
 
-#: src/backend/gsl/functions.cpp:799
+#: src/backend/gsl/functions.cpp:802
 #, kde-format
 msgid "Probability density for a Poisson distribution"
 msgstr "Kansdichtheid voor een Poisson verdeling"
 
-#: src/backend/gsl/functions.cpp:804
+#: src/backend/gsl/functions.cpp:807
 #, kde-format
 msgid "Probability density for a Bernoulli distribution"
 msgstr "Kansdichtheid voor een Bernoulli verdeling"
 
-#: src/backend/gsl/functions.cpp:807
+#: src/backend/gsl/functions.cpp:810
 #, kde-format
 msgid "Probability density for a binomial distribution"
 msgstr "Kansdichtheid voor een een binominale verdeling"
 
-#: src/backend/gsl/functions.cpp:810
+#: src/backend/gsl/functions.cpp:813
 #, kde-format
 msgid "Probability density for a negative binomial distribution"
 msgstr "Kansdichtheid voor een een negatieve binominale verdeling"
 
-#: src/backend/gsl/functions.cpp:815
+#: src/backend/gsl/functions.cpp:818
 #, kde-format
 msgid "Probability density for a Pascal distribution"
 msgstr "Kansdichtheid voor een Pascal verdeling"
 
-#: src/backend/gsl/functions.cpp:820
+#: src/backend/gsl/functions.cpp:823
 #, kde-format
 msgid "Probability density for a geometric distribution"
 msgstr "Kansdichtheid voor een geometrische verdeling"
 
-#: src/backend/gsl/functions.cpp:825
+#: src/backend/gsl/functions.cpp:828
 #, kde-format
 msgid "Probability density for a hypergeometric distribution"
 msgstr "Kansdichtheid voor een hypergeometrische verdeling"
 
-#: src/backend/gsl/functions.cpp:830
+#: src/backend/gsl/functions.cpp:833
 #, kde-format
 msgid "Probability density for a logarithmic distribution"
 msgstr "Kansdichtheid voor een logaritmische verdeling"
 
-#: src/backend/gsl/functions.cpp:936 src/backend/gsl/functions.cpp:948
-#: src/backend/gsl/functions.cpp:962 src/backend/gsl/functions.cpp:974
-#: src/backend/gsl/functions.cpp:986
+#: src/backend/gsl/functions.cpp:939 src/backend/gsl/functions.cpp:951
+#: src/backend/gsl/functions.cpp:965 src/backend/gsl/functions.cpp:977
+#: src/backend/gsl/functions.cpp:989
 #, kde-format
 msgid "Invalid"
 msgstr "Ongeldig"
 
-#: src/backend/gsl/functions.cpp:942
+#: src/backend/gsl/functions.cpp:945
 #, kde-format
 msgid "condition"
 msgstr "conditie"
 
-#: src/backend/gsl/functions.cpp:944
+#: src/backend/gsl/functions.cpp:947
 #, kde-format
 msgid "trueValue"
 msgstr "waarWaarde"
 
-#: src/backend/gsl/functions.cpp:946
+#: src/backend/gsl/functions.cpp:949
 #, kde-format
 msgid "falseValue"
 msgstr "onwaarWaarde"
 
-#: src/backend/gsl/functions.cpp:954
+#: src/backend/gsl/functions.cpp:957
 #, kde-format
 msgid "n"
 msgstr "n"
 
-#: src/backend/gsl/functions.cpp:956
+#: src/backend/gsl/functions.cpp:959
 #, kde-format
 msgid "j"
 msgstr "j"
 
-#: src/backend/gsl/functions.cpp:958
+#: src/backend/gsl/functions.cpp:961
 #, kde-format
 msgid "q"
 msgstr "q"
 
-#: src/backend/gsl/functions.cpp:960 src/backend/gsl/functions.cpp:968
+#: src/backend/gsl/functions.cpp:963 src/backend/gsl/functions.cpp:971
 #, kde-format
 msgid "x"
 msgstr "x"
 
-#: src/backend/gsl/functions.cpp:970
+#: src/backend/gsl/functions.cpp:973
 #, kde-format
 msgid "min"
 msgstr "min"
 
-#: src/backend/gsl/functions.cpp:972
+#: src/backend/gsl/functions.cpp:975
 #, kde-format
 msgid "max"
 msgstr "max"
 
-#: src/backend/gsl/functions.cpp:980
+#: src/backend/gsl/functions.cpp:983
 #, kde-format
 msgid "v1"
 msgstr "v1"
 
-#: src/backend/gsl/functions.cpp:982
+#: src/backend/gsl/functions.cpp:985
 #, kde-format
 msgid "v2"
 msgstr "v2"
 
-#: src/backend/gsl/functions.cpp:984
+#: src/backend/gsl/functions.cpp:987
 #, kde-format
 msgid "ep"
 msgstr "ep"
@@ -6530,16 +6536,17 @@ msgstr "Levy"
 msgid "Frechet (Inverse Weibull)"
 msgstr "Frechet (inverse Weibull)"
 
-#: src/backend/nsl/nsl_sf_window.c:15
-#, kde-format
-msgid "Rectangular (Uniform)"
-msgstr "Rechthoekig (uniform)"
-
-#: src/backend/nsl/nsl_sf_window.c:16 src/backend/nsl/nsl_smooth.c:24
+#: src/backend/nsl/nsl_sf_stats.c:48 src/backend/nsl/nsl_sf_window.c:16
+#: src/backend/nsl/nsl_smooth.c:24
 #: src/kdefrontend/dockwidgets/KDEPlotDock.cpp:161
 #, kde-format
 msgid "Triangular"
 msgstr "Driehoekig"
+
+#: src/backend/nsl/nsl_sf_window.c:15
+#, kde-format
+msgid "Rectangular (Uniform)"
+msgstr "Rechthoekig (uniform)"
 
 #: src/backend/nsl/nsl_sf_window.c:17
 #, kde-format
@@ -15175,7 +15182,7 @@ msgstr[1] "%1 waarden"
 #: src/kdefrontend/matrix/MatrixFunctionDialog.cpp:76
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:46
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:78
-#: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:53
+#: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:54
 #, kde-format
 msgid "&Generate"
 msgstr "&Genereren"
@@ -15997,7 +16004,7 @@ msgstr[1] "%1: kolommen vullen met getallen op gelijke afstand"
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:603
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:623
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:658
-#: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:437
+#: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:449
 #, kde-format
 msgid "Not enough memory to perform this operation."
 msgstr "Niet genoeg geheugen om deze bewerking uit te voeren"
@@ -16379,18 +16386,18 @@ msgstr "Een reeds bestaand werkblad moet worden geselecteerd."
 msgid "Close the dialog and plot the data."
 msgstr "Sluit de dialoog af, en plot de gegevens."
 
-#: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:43
+#: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:44
 #, kde-format
 msgctxt "@title:window"
 msgid "Random Values"
 msgstr "Willekeurige getallen"
 
-#: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:52
+#: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:53
 #, kde-format
 msgid "Generate random values according to the selected distribution"
 msgstr "Willekeurige getallen genereren volgens geselecteerde verdeling"
 
-#: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:83
+#: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:85
 #, kde-format
 msgid ""
 "Seed number to initialize the random number generator.\n"
@@ -16405,7 +16412,7 @@ msgstr ""
 "Als er geen waarde wordt gespecificeerd, zal het huidige tijdstip gebruikt "
 "worden om de generator te voeden."
 
-#: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:89
+#: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:91
 #, kde-format
 msgid ""
 "Random number distributions as defined in <a href=\"https://www.gnu.org/"
@@ -16414,7 +16421,7 @@ msgstr ""
 "Verdelingen van willekeurige getallen zijn als in de <a href=\"https://www."
 "gnu.org/software/gsl/doc/html/randist.html\">GSL-documentatie</a>"
 
-#: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:461
+#: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:473
 #, kde-format
 msgid "%1: fill column with non-uniform random numbers"
 msgid_plural "%1: fill columns with non-uniform random numbers"
