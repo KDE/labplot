@@ -49,10 +49,30 @@
         },
         {
             "name": "poppler",
-            "config-opts": [ "-DENABLE_TESTING=OFF", "-DENABLE_UNSTABLE_API_ABI_HEADERS=ON", "-DENABLE_CPP=OFF", "-DENABLE_GLIB=OFF", "-DENABLE_GOBJECT_INTROSPECTION=OFF", "-DENABLE_UTILS=OFF", "-DENABLE_QT6=OFF" ],
+            "config-opts": [
+                "-DENABLE_TESTING=OFF",
+                "-DENABLE_UNSTABLE_API_ABI_HEADERS=ON",
+                "-DENABLE_CPP=OFF",
+                "-DENABLE_GLIB=OFF",
+                "-DENABLE_GOBJECT_INTROSPECTION=OFF",
+                "-DENABLE_UTILS=OFF",
+                "-DENABLE_QT6=OFF"
+            ],
             "buildsystem": "cmake-ninja",
             "builddir": true,
-            "sources": [ { "type": "git", "url": "git://gitlab.freedesktop.org/poppler/poppler.git", "branch": "master" } ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://poppler.freedesktop.org/poppler-24.05.0.tar.xz",
+                    "sha256": "d8c5eb30b50285ad9f0af8c6335cc2d3b9597fca475cbc2598a5479fa379f779",
+                    "x-checker-data": {
+                        "type": "anitya",
+                        "project-id": 3686,
+                        "stable-only": true,
+                        "url-template": "https://poppler.freedesktop.org/poppler-$version.tar.xz"
+                    }
+                }
+            ],
             "modules": [
                 {
                     "name": "boost",
@@ -81,12 +101,14 @@
                     "builddir": true,
                     "sources": [
                         {
-                            "type": "git",
-                            "url": "https://github.com/uclouvain/openjpeg.git",
-                            "tag": "v2.4.0",
+                            "type": "archive",
+                            "url": "https://github.com/uclouvain/openjpeg/archive/v2.5.2.tar.gz",
+                            "sha256": "90e3896fed910c376aaf79cdd98bdfdaf98c6472efd8e1debf0a854938cbda6a",
                             "x-checker-data": {
-                                "type": "git",
-                                "tag-pattern": "^v([\\d.]+)$"
+                                "type": "anitya",
+                                "project-id": 2550,
+                                "stable-only": true,
+                                "url-template": "https://github.com/uclouvain/openjpeg/archive/v$version.tar.gz"
                             }
                         }
                     ],
