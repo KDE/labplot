@@ -39,7 +39,7 @@ craft_appimage_qt515_x86_64:
 craft_appimage_qt6_x86_64:
   rules:
     - if: '$CI_COMMIT_REF_NAME == "master"'
-    - when: manual
+      when: manual
 
 craft_windows_qt515_x86_64:
   rules:
@@ -47,25 +47,25 @@ craft_windows_qt515_x86_64:
 craft_windows_qt6_x86_64:
   rules:
     - if: '$CI_COMMIT_REF_NAME == "master"'
-    - when: manual
+      when: manual
 
 craft_macos_x86_64:
   rules:
     - if: '$CI_COMMIT_REF_NAME == "master"'
-    - when: manual
+      when: manual
 craft_macos_qt6_x86_64:
   rules:
     - if: '$CI_COMMIT_REF_NAME == "master"'
-    - when: manual
+      when: manual
 
 craft_macos_arm64:
   rules:
     - if: '$CI_COMMIT_REF_NAME == "master"'
-    - when: manual
+      when: manual
 craft_macos_qt6_arm64:
   rules:
     - if: '$CI_COMMIT_REF_NAME == "master"'
-    - when: manual
+      when: manual
 
 clang_format:
   stage: test
