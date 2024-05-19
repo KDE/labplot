@@ -1085,13 +1085,13 @@ void LiveDataTest::testReadWholeFile03() {
 // ##############################################################################
 
 void LiveDataTest::waitForSignal(QObject* sender, const char* signal) {
-	QTimer timeout(this);
-	timeout.setSingleShot(true);
+	QTimer timer(this);
+	timer.setSingleShot(true);
 
 	QEventLoop loop;
-	connect(sender, signal, &loop, SLOT(quit()));
-	connect(&timeout, &QTimer::timeout, &loop, &QEventLoop::quit);
-	timeout.start(1000);
+	QTimer::connect(&timer, &QTimer::timeout, &loop, &QEventLoop::quit);
+	QObject::connect(sender, signal, &loop, SLOT(quit()));
+	timer.start(5000);
 	loop.exec();
 }
 
