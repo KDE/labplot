@@ -435,6 +435,7 @@ QIcon LiveDataSource::icon() const {
  * presumably has finished. Also see LiveDataSource::setUpdateType().
  */
 void LiveDataSource::readOnUpdate() {
+	DEBUG(Q_FUNC_INFO)
 	if (!m_fileSystemWatcher->files().contains(m_fileName)) {
 		m_fileSystemWatcher->addPath(m_fileName);
 		QFileInfo file(m_fileName);
