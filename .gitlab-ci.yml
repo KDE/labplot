@@ -13,14 +13,13 @@ include:
       - /gitlab-templates/windows.yml
       - /gitlab-templates/linux-qt6.yml
       - /gitlab-templates/windows-qt6.yml
-# readstat (missing prototype) error on FreeBSD
       - /gitlab-templates/freebsd.yml
       - /gitlab-templates/freebsd-qt6.yml
 ### DEPLOY
       - /gitlab-templates/craft-appimage.yml
       - /gitlab-templates/craft-appimage-qt6.yml
 # see below for flatpak variables
-#      - /gitlab-templates/flatpak.yml
+      - /gitlab-templates/flatpak.yml
       - /gitlab-templates/craft-windows-x86-64.yml
       - /gitlab-templates/craft-windows-x86-64-qt6.yml
       - /gitlab-templates/craft-macos-x86-64.yml
@@ -40,6 +39,7 @@ craft_appimage_qt515_x86_64:
 craft_appimage_qt6_x86_64:
   rules:
     - if: '$CI_COMMIT_REF_NAME == "master"'
+      when: manual
 
 craft_windows_qt515_x86_64:
   rules:
@@ -47,20 +47,25 @@ craft_windows_qt515_x86_64:
 craft_windows_qt6_x86_64:
   rules:
     - if: '$CI_COMMIT_REF_NAME == "master"'
+      when: manual
 
 craft_macos_x86_64:
   rules:
     - if: '$CI_COMMIT_REF_NAME == "master"'
+      when: manual
 craft_macos_qt6_x86_64:
   rules:
     - if: '$CI_COMMIT_REF_NAME == "master"'
+      when: manual
 
 craft_macos_arm64:
   rules:
     - if: '$CI_COMMIT_REF_NAME == "master"'
+      when: manual
 craft_macos_qt6_arm64:
   rules:
     - if: '$CI_COMMIT_REF_NAME == "master"'
+      when: manual
 
 clang_format:
   stage: test
@@ -73,12 +78,12 @@ clang_format:
     git diff --exit-code
 
 # see above
-#flatpak:
-#  rules:
-#    - if: '$CI_COMMIT_REF_NAME == "master"'
-#  variables:
-#    KDE_FLATPAK_MODULE_NAME: labplot2
-#    KDE_FLATPAK_APP_ID: org.kde.${KDE_FLATPAK_MODULE_NAME}
+flatpak:
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "master"'
+  variables:
+    KDE_FLATPAK_MODULE_NAME: labplot2
+    KDE_FLATPAK_APP_ID: org.kde.${KDE_FLATPAK_MODULE_NAME}
 
 variables:
     QT_TEST_TIMEOUT_FUNCTION: "600"
