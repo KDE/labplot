@@ -5196,10 +5196,9 @@ msgid "Binomial random numbers"
 msgstr ""
 
 #: src/backend/gsl/functions.cpp:663
-#, fuzzy, kde-format
-#| msgid "Gaussian random numbers"
+#, kde-format
 msgid "Triangular random numbers"
-msgstr "Náhodná Gaussova čísla"
+msgstr ""
 
 #: src/backend/gsl/functions.cpp:667
 #, kde-format
