@@ -46,7 +46,8 @@ public:
 	Q_ENUM(Scale)
 	static inline QStringList scaleNames{i18n("Linear"), i18n("Log10"), i18n("Log2"), i18n("Ln"), i18n("Sqrt"), i18n("Square")};
 	// TODO: i18n warnings
-	//static inline QList<KLazyLocalizedString> scaleNames{kli18n("Linear"), kli18n("Log10"), kli18n("Log2"), kli18n("Ln"), kli18n("Sqrt"), kli18n("Square"), kli18n("Inverse")};
+	// static inline QList<KLazyLocalizedString> scaleNames{kli18n("Linear"), kli18n("Log10"), kli18n("Log2"), kli18n("Ln"), kli18n("Sqrt"), kli18n("Square"),
+	// kli18n("Inverse")};
 	static bool isLogScale(Scale scale) {
 		if (scale == Scale::Log10 || scale == Scale::Log2 || scale == Scale::Ln)
 			return true;
