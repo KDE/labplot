@@ -4,14 +4,14 @@
 # version 3 or later versions approved by the membership of KDE e.V.
 #
 # SPDX-FileCopyrightText: 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Antoni Bella Pérez <antonibella5@yahoo.com>
-# Josep M. Ferrer <txemaq@gmail.com>, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024.
+# SPDX-FileCopyrightText: 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024 Josep M. Ferrer <txemaq@gmail.com>
 # Orestes Mas <orestes@tsc.upc.edu>, 2018.
 msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-05-19 01:45+0000\n"
-"PO-Revision-Date: 2024-04-19 08:38+0200\n"
+"PO-Revision-Date: 2024-05-19 08:46+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 22.12.3\n"
+"X-Generator: Lokalize 24.02.2\n"
 "X-Accelerator-Marker: &\n"
 
 #, kde-format
@@ -5322,10 +5322,9 @@ msgid "Binomial random numbers"
 msgstr "Nombres aleatoris binomials"
 
 #: src/backend/gsl/functions.cpp:663
-#, fuzzy, kde-format
-#| msgid "Landau random numbers"
+#, kde-format
 msgid "Triangular random numbers"
-msgstr "Nombres aleatoris de Landau"
+msgstr "Nombres aleatoris triangulars"
 
 #: src/backend/gsl/functions.cpp:667
 #, kde-format

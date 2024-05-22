@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-05-19 01:45+0000\n"
-"PO-Revision-Date: 2024-04-19 12:13+0200\n"
+"PO-Revision-Date: 2024-05-19 13:37+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -5245,10 +5245,9 @@ msgid "Binomial random numbers"
 msgstr "Binomiale willekeurige getallen"
 
 #: src/backend/gsl/functions.cpp:663
-#, fuzzy, kde-format
-#| msgid "Landau random numbers"
+#, kde-format
 msgid "Triangular random numbers"
-msgstr "Landau willekeurige getallen"
+msgstr "Driehoekige willekeurige getallen"
 
 #: src/backend/gsl/functions.cpp:667
 #, kde-format
