@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-19 01:45+0000\n"
+"POT-Creation-Date: 2024-05-23 01:43+0000\n"
 "PO-Revision-Date: 2023-06-24 01:41+0100\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
@@ -503,7 +503,7 @@ msgstr "tipo de filtro incompatível"
 #: src/backend/core/Folder.cpp:151 src/backend/core/Project.cpp:699
 #: src/backend/datasources/MQTTClient.cpp:1376
 #: src/backend/datasources/MQTTSubscription.cpp:168
-#: src/backend/datasources/MQTTTopic.cpp:283
+#: src/backend/datasources/MQTTTopic.cpp:313
 #: src/backend/lib/XmlStreamReader.cpp:104
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1906
 #, kde-format
@@ -569,7 +569,7 @@ msgid "%1   (no values)"
 msgstr "%1 (sem valores)"
 
 #: src/backend/core/AspectTreeModel.cpp:228
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1497
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1500
 #, kde-format
 msgid "Size: %1"
 msgstr "Tamanho: %1"
@@ -1199,30 +1199,30 @@ msgstr "SAS, Stata ou SPSS"
 msgid "ROOT (CERN) Histograms"
 msgstr "Histogramas do ROOT (CERN)"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:169
+#: src/backend/datasources/filters/AsciiFilter.cpp:167
 #, kde-format
 msgid "Number of columns: %1"
 msgstr "Número de colunas: %1"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:171
+#: src/backend/datasources/filters/AsciiFilter.cpp:169
 #, kde-format
 msgid "Number of lines: %1"
 msgstr "Número de linhas: %1"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:547
-#: src/backend/datasources/filters/AsciiFilter.cpp:755
-#: src/backend/datasources/filters/AsciiFilter.cpp:962
-#: src/backend/datasources/filters/AsciiFilter.cpp:1533
-#: src/backend/datasources/filters/AsciiFilter.cpp:2094
+#: src/backend/datasources/filters/AsciiFilter.cpp:545
+#: src/backend/datasources/filters/AsciiFilter.cpp:754
+#: src/backend/datasources/filters/AsciiFilter.cpp:950
+#: src/backend/datasources/filters/AsciiFilter.cpp:1491
+#: src/backend/datasources/filters/AsciiFilter.cpp:2052
 #, kde-format
 msgid "Timestamp"
 msgstr "Hora"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:551
-#: src/backend/datasources/filters/AsciiFilter.cpp:749
-#: src/backend/datasources/filters/AsciiFilter.cpp:960
-#: src/backend/datasources/filters/AsciiFilter.cpp:1528
-#: src/backend/datasources/filters/AsciiFilter.cpp:2088
+#: src/backend/datasources/filters/AsciiFilter.cpp:549
+#: src/backend/datasources/filters/AsciiFilter.cpp:748
+#: src/backend/datasources/filters/AsciiFilter.cpp:948
+#: src/backend/datasources/filters/AsciiFilter.cpp:1486
+#: src/backend/datasources/filters/AsciiFilter.cpp:2046
 #: src/backend/datasources/filters/BinaryFilter.cpp:293
 #: src/backend/datasources/filters/BinaryFilter.cpp:436
 #: src/backend/nsl/nsl_dft.c:29 src/backend/nsl/nsl_filter.c:23
@@ -1230,9 +1230,9 @@ msgstr "Hora"
 msgid "Index"
 msgstr "Índice"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:735
-#: src/backend/datasources/filters/AsciiFilter.cpp:1290
-#: src/backend/datasources/filters/AsciiFilter.cpp:1626
+#: src/backend/datasources/filters/AsciiFilter.cpp:734
+#: src/backend/datasources/filters/AsciiFilter.cpp:1248
+#: src/backend/datasources/filters/AsciiFilter.cpp:1584
 #: src/backend/datasources/filters/BinaryFilter.cpp:404
 #, fuzzy, kde-format
 #| msgid "Failed to open the device."
@@ -1240,10 +1240,10 @@ msgid "Failed to open the device/file or it's empty."
 msgstr "Não foi possível aceder ao dispositivo."
 
 #. i18n: ectx: property (text), widget (QTableWidget, twLabels)
-#: src/backend/datasources/filters/AsciiFilter.cpp:761
-#: src/backend/datasources/filters/AsciiFilter.cpp:967
-#: src/backend/datasources/filters/AsciiFilter.cpp:1552
-#: src/backend/datasources/filters/AsciiFilter.cpp:2107
+#: src/backend/datasources/filters/AsciiFilter.cpp:760
+#: src/backend/datasources/filters/AsciiFilter.cpp:955
+#: src/backend/datasources/filters/AsciiFilter.cpp:1510
+#: src/backend/datasources/filters/AsciiFilter.cpp:2065
 #: src/backend/datasources/filters/QJsonModel.cpp:133
 #: src/commonfrontend/matrix/MatrixView.cpp:620
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2384
@@ -1258,14 +1258,14 @@ msgstr "Não foi possível aceder ao dispositivo."
 msgid "Value"
 msgstr "Valor"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:969
-#: src/backend/datasources/filters/AsciiFilter.cpp:1554
-#: src/backend/datasources/filters/AsciiFilter.cpp:2109
+#: src/backend/datasources/filters/AsciiFilter.cpp:957
+#: src/backend/datasources/filters/AsciiFilter.cpp:1512
+#: src/backend/datasources/filters/AsciiFilter.cpp:2067
 #, kde-format
 msgid "Value %1"
 msgstr "valor %1"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:1309
+#: src/backend/datasources/filters/AsciiFilter.cpp:1267
 #: src/backend/datasources/filters/BinaryFilter.cpp:444
 #: src/backend/datasources/filters/CANFilter.cpp:299
 #: src/backend/datasources/filters/FITSFilter.cpp:329
@@ -1612,7 +1612,7 @@ msgstr "O 'h5dump' não foi encontrado."
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:358
 #: src/backend/datasources/filters/NetCDFFilter.cpp:268
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1472
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1475
 #, kde-format
 msgid "Reading from file %1 failed."
 msgstr "Não foi possível ler do ficheiro %1."
@@ -2254,7 +2254,7 @@ msgstr "Não foi possível abrir o ficheiro '%1'."
 
 #: src/backend/datasources/filters/ROOTFilter.cpp:113
 #: src/backend/datasources/MQTTClient.cpp:1200
-#: src/backend/datasources/MQTTTopic.cpp:218
+#: src/backend/datasources/MQTTTopic.cpp:248
 #: src/backend/lib/XmlStreamReader.cpp:99
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:467
 #, kde-format
@@ -2429,24 +2429,24 @@ msgstr "Folhas: "
 msgid "Invalid region specified."
 msgstr "Foi indicada uma tolerância inválida"
 
-#: src/backend/datasources/LiveDataSource.cpp:691
-#: src/backend/datasources/LiveDataSource.cpp:694
-#: src/backend/datasources/LiveDataSource.cpp:697
-#: src/backend/datasources/LiveDataSource.cpp:700
-#: src/backend/datasources/LiveDataSource.cpp:703
-#: src/backend/datasources/LiveDataSource.cpp:706
-#: src/backend/datasources/LiveDataSource.cpp:709
-#: src/backend/datasources/LiveDataSource.cpp:719
+#: src/backend/datasources/LiveDataSource.cpp:726
+#: src/backend/datasources/LiveDataSource.cpp:729
+#: src/backend/datasources/LiveDataSource.cpp:732
+#: src/backend/datasources/LiveDataSource.cpp:735
+#: src/backend/datasources/LiveDataSource.cpp:738
+#: src/backend/datasources/LiveDataSource.cpp:741
+#: src/backend/datasources/LiveDataSource.cpp:744
+#: src/backend/datasources/LiveDataSource.cpp:754
 #, kde-format
 msgid "Serial Port Error"
 msgstr "Erro na Porta Série"
 
-#: src/backend/datasources/LiveDataSource.cpp:691
+#: src/backend/datasources/LiveDataSource.cpp:726
 #, kde-format
 msgid "Failed to open the device."
 msgstr "Não foi possível aceder ao dispositivo."
 
-#: src/backend/datasources/LiveDataSource.cpp:694
+#: src/backend/datasources/LiveDataSource.cpp:729
 #, kde-format
 msgid ""
 "Failed to open the device. Please check your permissions on this device."
@@ -2454,37 +2454,37 @@ msgstr ""
 "Não foi possível aceder ao dispositivo. Verifique por favor as suas "
 "permissões para esse dispositivo."
 
-#: src/backend/datasources/LiveDataSource.cpp:697
+#: src/backend/datasources/LiveDataSource.cpp:732
 #, kde-format
 msgid "Device already opened."
 msgstr "O dispositivo já está aberto."
 
-#: src/backend/datasources/LiveDataSource.cpp:700
+#: src/backend/datasources/LiveDataSource.cpp:735
 #, kde-format
 msgid "The device is not opened."
 msgstr "O dispositivo não está aberto."
 
-#: src/backend/datasources/LiveDataSource.cpp:703
+#: src/backend/datasources/LiveDataSource.cpp:738
 #, kde-format
 msgid "Failed to read data."
 msgstr "Não foi possível ler os dados."
 
-#: src/backend/datasources/LiveDataSource.cpp:706
+#: src/backend/datasources/LiveDataSource.cpp:741
 #, kde-format
 msgid "Failed to read data. The device is removed."
 msgstr "Não foi possível ler os dados. O dispositivo foi removido."
 
-#: src/backend/datasources/LiveDataSource.cpp:709
+#: src/backend/datasources/LiveDataSource.cpp:744
 #, kde-format
 msgid "The device timed out."
 msgstr "Expirou o tempo-limite de acesso ao dispositivo."
 
-#: src/backend/datasources/LiveDataSource.cpp:719
+#: src/backend/datasources/LiveDataSource.cpp:754
 #, kde-format
 msgid "The following error occurred: %1."
 msgstr "Ocorreu o seguinte erro: %1."
 
-#: src/backend/datasources/MQTTTopic.cpp:142
+#: src/backend/datasources/MQTTTopic.cpp:144
 #, kde-format
 msgid "Plot data"
 msgstr "Dados do gráfico"
@@ -5704,34 +5704,34 @@ msgstr "2"
 msgid "ep"
 msgstr ""
 
-#: src/backend/lib/Range.h:49 src/backend/nsl/nsl_interp.c:14
+#: src/backend/lib/Range.h:47 src/backend/nsl/nsl_interp.c:14
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:537
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:511
 #, kde-format
 msgid "Linear"
 msgstr "Linear"
 
-#: src/backend/lib/Range.h:49
+#: src/backend/lib/Range.h:47
 #, kde-format
 msgid "Log10"
 msgstr "Log10"
 
-#: src/backend/lib/Range.h:49
+#: src/backend/lib/Range.h:47
 #, kde-format
 msgid "Log2"
 msgstr "Log2"
 
-#: src/backend/lib/Range.h:49
+#: src/backend/lib/Range.h:47
 #, kde-format
 msgid "Ln"
 msgstr "Ln"
 
-#: src/backend/lib/Range.h:49
+#: src/backend/lib/Range.h:47
 #, kde-format
 msgid "Sqrt"
 msgstr "Sqrt"
 
-#: src/backend/lib/Range.h:49
+#: src/backend/lib/Range.h:47
 #, kde-format
 msgid "Square"
 msgstr "Quadrado"
@@ -6267,7 +6267,7 @@ msgstr "Estatísticas (Distribuições)"
 #: src/backend/nsl/nsl_fit.c:24
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:577
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:551
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1224
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1227
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:242
 #: src/kdefrontend/dockwidgets/KDEPlotDock.cpp:171
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:277
@@ -11004,7 +11004,7 @@ msgstr "Seleccionar a Região em Y e Ampliar"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
 #: src/commonfrontend/worksheet/WorksheetView.cpp:359
-#: src/kdefrontend/MainWin.cpp:2578
+#: src/kdefrontend/MainWin.cpp:2577
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1426
 #, kde-format
 msgid "Cursor"
@@ -11512,7 +11512,7 @@ msgstr "O conjunto de dados foi importado em %1 segundos."
 #. i18n: ectx: property (specialValueText), widget (QSpinBox, sbKeepNValues)
 #: src/kdefrontend/datasources/ImportDatasetWidget.cpp:163
 #: src/kdefrontend/datasources/ImportDatasetWidget.cpp:232
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:754
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:738
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:189
 #, kde-format
 msgid "All"
@@ -11814,12 +11814,32 @@ msgstr ""
 "Se esta opção estiver assinalada, apenas é guardada a localização relativa "
 "do ficheiro (em relação à pasta do projecto)."
 
+#. i18n: ectx: property (text), item, widget (QComboBox, cbReadingType)
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:159
+#: src/kdefrontend/ui/dockwidgets/livedatadock.ui:348
+#, kde-format
+msgid "Continuously Fixed"
+msgstr "Fixa e Contínua"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cbReadingType)
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:160
+#: src/kdefrontend/ui/dockwidgets/livedatadock.ui:353
+#, kde-format
+msgid "From End"
+msgstr "Do Fim"
+
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:161
+#, fuzzy, kde-format
+#| msgid "Till the End"
+msgid "Till End"
+msgstr "Até ao Fim"
+
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:162
 #, kde-format
 msgid "Whole File"
 msgstr "Ficheiro Inteiro"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:194
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:197
 #, kde-format
 msgid ""
 "Specify how the data source has to be processed on every read:"
@@ -11839,7 +11859,7 @@ msgstr ""
 "processado de novo o ficheiro por inteiro. Só está disponível para as fontes "
 "de dados em \"Ficheiros e 'Pipes' com Nome\".</li></ul>"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:205
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:208
 #, kde-format
 msgid ""
 "Number of samples (lines) to be processed on every read.\n"
@@ -11850,7 +11870,7 @@ msgstr ""
 "Só precisa de ser indicado nos modos de leitura \"Fixo e Contínuo\" e \"A "
 "Partir do Fim\"."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:211
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:214
 #, kde-format
 msgid ""
 "Specify when and how frequently the data source needs to be read:"
@@ -11863,12 +11883,12 @@ msgstr ""
 "intervalo de tempo indicado pelo utilizador.</li><li>Com Dados Novos - a "
 "fonte de dados é lida quando chegarem novos dados.</li></ul>"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:219
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:222
 #, kde-format
 msgid "Specify how frequently the data source has to be read."
 msgstr "Indique com que frequência terá de ser lida a fonte de dados."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:224
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:227
 #, kde-format
 msgid ""
 "Specify how many samples need to be kept in memory after reading.\n"
@@ -11877,7 +11897,7 @@ msgstr ""
 "Indique quantas amostras têm de ser mantidas em memória após a leitura.\n"
 "Use \"Tudo\" se for para manter todos os dados."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:229
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:232
 #, kde-format
 msgid ""
 "Enable to use the first row of the selected data region for the column names "
@@ -11886,12 +11906,12 @@ msgstr ""
 "Active para usar a primeira linha da região de dados seleccionada para os "
 "nome das colunas na folha de cálculo."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:244
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:247
 #, kde-format
 msgid "Manage MQTT connections"
 msgstr "Gerir as ligações MQTT"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:246
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:249
 #: src/kdefrontend/dockwidgets/LiveDataDock.cpp:63
 #, kde-format
 msgid ""
@@ -11901,32 +11921,32 @@ msgstr ""
 "Definir a mensagem de 'Último Pedido e Testamento' (LWT). Tem de ser "
 "subscrito pelo menos um tópico."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:901
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:904
 #, kde-format
 msgctxt "@title:window"
 msgid "Select the File Data Source"
 msgstr "Seleccionar a Fonte de Dados do Ficheiro"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:931
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:934
 #, kde-format
 msgctxt "@title:window"
 msgid "Select the DBC file"
 msgstr "Seleccionar o ficheiro DBC"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:931
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:934
 #, kde-format
 msgid "DBC file (*.dbc)"
 msgstr "Ficheiro DBC (*.dbc)"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataFormat)
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1137
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1140
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:402
 #, kde-format
 msgid "Data Format"
 msgstr "Formato dos Dados"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataPreview)
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1138
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1141
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:456
 #: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:158
 #, kde-format
@@ -11934,183 +11954,183 @@ msgid "Preview"
 msgstr "Antevisão"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataPortion)
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1140
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1143
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:535
 #: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:239
 #, kde-format
 msgid "Data Portion to Read"
 msgstr "Porção de Dados a Ler"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1180
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1183
 #, kde-format
 msgid "Data format && preview"
 msgstr "Formato && antevisão dos dados"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1223
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1226
 #: src/kdefrontend/SettingsGeneralPage.cpp:234
 #, kde-format
 msgid "Automatic"
 msgstr "Automático"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1464
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1467
 #, kde-format
 msgid "file command not found"
 msgstr "o comando do ficheiro não foi encontrado"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1475
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1478
 #, kde-format
 msgid "cannot open"
 msgstr "não é possível abrir"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1480
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1483
 #, kde-format
 msgid "<b>File type:</b> %1"
 msgstr "<b>Tipo de ficheiro:</b> %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1485
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1488
 #, kde-format
 msgid "General:"
 msgstr "Geral:"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1487
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1488
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1489
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1490
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1491
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1492
 #, kde-format
 msgid "yes"
 msgstr "sim"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1487
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1488
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1489
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1490
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1491
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1492
 #, kde-format
 msgid "no"
 msgstr "não"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1487
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1490
 #, kde-format
 msgid "Readable: %1"
 msgstr "Legível: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1488
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1491
 #, kde-format
 msgid "Writable: %1"
 msgstr "Gravável: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1489
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1492
 #, kde-format
 msgid "Executable: %1"
 msgstr "Executável: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1491
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1494
 #, kde-format
 msgid "Birth time: %1"
 msgstr "Hora de nascimento: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1492
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1495
 #, kde-format
 msgid "Last metadata changed: %1"
 msgstr "Última modificação dos meta-dados: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1493
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1496
 #, kde-format
 msgid "Last modified: %1"
 msgstr "Última modificação: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1494
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1497
 #, kde-format
 msgid "Last read: %1"
 msgstr "Última leitura: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1495
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1498
 #, kde-format
 msgid "Owner: %1"
 msgstr "Dono: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1496
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1499
 #, kde-format
 msgid "Group: %1"
 msgstr "Grupo: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1497
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1500
 #, kde-format
 msgid "%1 cByte"
 msgid_plural "%1 cBytes"
 msgstr[0] "%1 'cbyte'"
 msgstr[1] "%1 'cbytes'"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1500
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1503
 #, kde-format
 msgid "Summary:"
 msgstr "Resumo:"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1523
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1528
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1526
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1531
 #, kde-format
 msgid "Content:"
 msgstr "Conteúdo:"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1556
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1559
 #, kde-format
 msgid "Could not open file %1 for reading."
 msgstr "Não foi possível aceder ao ficheiro %1 para leitura."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1719
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1722
 #, kde-format
 msgid "No data arrived yet for the selected topic"
 msgstr "Não chegaram ainda dados para o tópico seleccionado"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1956
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1959
 #, kde-format
 msgid "Not a HDF5 file: %1"
 msgstr "Não é um ficheiro HDF5: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2389
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2392
 #, kde-format
 msgid "Couldn't subscribe to all available topics."
 msgstr "Não foi possível subscrever todos os tópicos disponíveis."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2419
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2422
 #, kde-format
 msgid "Disconnected from '%1'."
 msgstr "Foi desligado de '%1'."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2488
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2491
 #, kde-format
 msgid "Available (%1)"
 msgstr "Disponível (%1)"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2600
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2603
 #, kde-format
 msgid "Wrong username or password"
 msgstr "Utilizador ou senha errados"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2603
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2606
 #, kde-format
 msgid "The client ID wasn't accepted"
 msgstr "O ID do cliente não foi aceite"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2607
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2610
 #, kde-format
 msgid "The broker %1 couldn't be reached."
 msgstr "Não foi possível contactar o mediador %1."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2610
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2613
 #, kde-format
 msgid "The client is not authorized to connect."
 msgstr "O cliente não tem autorização para se ligar."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2613
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2616
 #, kde-format
 msgid "An unknown error occurred."
 msgstr "Ocorreu um erro desconhecido."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2619
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:2622
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2625
 #, kde-format
 msgid "An error occurred."
 msgstr "Ocorreu um erro."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2636
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2639
 #, kde-format
 msgid "Connecting to '%1:%2' timed out."
 msgstr "A ligação a '%1:%2' expirou o tempo-limite."
@@ -12541,7 +12561,7 @@ msgstr ""
 
 #: src/kdefrontend/datasources/MQTTSubscriptionWidget.cpp:856
 #: src/kdefrontend/datasources/MQTTSubscriptionWidget.cpp:858
-#: src/kdefrontend/MainWin.cpp:2893
+#: src/kdefrontend/MainWin.cpp:2892
 #, kde-format
 msgid "Warning"
 msgstr "Aviso"
@@ -15057,8 +15077,8 @@ msgstr "Exportar..."
 msgid "Export selected element"
 msgstr "Exportar o elemento seleccionado"
 
-#: src/kdefrontend/MainWin.cpp:801 src/kdefrontend/MainWin.cpp:2614
-#: src/kdefrontend/MainWin.cpp:2622
+#: src/kdefrontend/MainWin.cpp:801 src/kdefrontend/MainWin.cpp:2613
+#: src/kdefrontend/MainWin.cpp:2621
 #, kde-format
 msgid "Share"
 msgstr ""
@@ -15345,55 +15365,55 @@ msgstr "A preparar a impressão de %1"
 msgid "%1 printed"
 msgstr "%1 impresso"
 
-#: src/kdefrontend/MainWin.cpp:2614
+#: src/kdefrontend/MainWin.cpp:2613
 #, kde-format
 msgid "There was a problem sharing the project: %1"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2618
+#: src/kdefrontend/MainWin.cpp:2617
 #, fuzzy, kde-format
 #| msgid "Project saved"
 msgid "Project shared successfully"
 msgstr "O projecto foi gravado"
 
-#: src/kdefrontend/MainWin.cpp:2621
+#: src/kdefrontend/MainWin.cpp:2620
 #, kde-format
 msgid "You can find the shared project at: <a href=\"%1\">%1</a>"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2856
+#: src/kdefrontend/MainWin.cpp:2855
 #, kde-format
 msgid "%1 exported"
 msgstr "%1 exportado"
 
-#: src/kdefrontend/MainWin.cpp:2863
+#: src/kdefrontend/MainWin.cpp:2862
 #, kde-format
 msgid "FITS files saved"
 msgstr "Ficheiros FITS gravados"
 
-#: src/kdefrontend/MainWin.cpp:2875
+#: src/kdefrontend/MainWin.cpp:2874
 #, kde-format
 msgid "MQTT Client%1"
 msgstr "Cliente de MQTT%1"
 
-#: src/kdefrontend/MainWin.cpp:2893
+#: src/kdefrontend/MainWin.cpp:2892
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
 msgstr "Já existe um MQTTClient para esta máquina!"
 
-#: src/kdefrontend/MainWin.cpp:2897
+#: src/kdefrontend/MainWin.cpp:2896
 #, kde-format
 msgid "Live data source%1"
 msgstr "Fonte de dados em directo %1"
 
-#: src/kdefrontend/MainWin.cpp:2948
+#: src/kdefrontend/MainWin.cpp:2947
 #, kde-format
 msgid "No Cantor backends found. Please install the ones you want to use."
 msgstr ""
 "Não foram encontradas infra-estruturas do Cantor. Instale por favor as que "
 "deseja usar."
 
-#: src/kdefrontend/MainWin.cpp:2962
+#: src/kdefrontend/MainWin.cpp:2961
 #, fuzzy, kde-format
 #| msgid "Creates a new note for arbitrary text"
 msgid "Creates a new %1 notebook"
@@ -18531,84 +18551,63 @@ msgstr "Linha de fim:"
 msgid "Update Options"
 msgstr "Opções de Actualização"
 
-#. i18n: ectx: property (text), item, widget (QComboBox, cbReadingType)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:715
-#: src/kdefrontend/ui/dockwidgets/livedatadock.ui:348
-#, kde-format
-msgid "Continuously Fixed"
-msgstr "Fixa e Contínua"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, cbReadingType)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:720
-#: src/kdefrontend/ui/dockwidgets/livedatadock.ui:353
-#, kde-format
-msgid "From End"
-msgstr "Do Fim"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, cbReadingType)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:725
-#: src/kdefrontend/ui/dockwidgets/livedatadock.ui:358
-#, kde-format
-msgid "Till the End"
-msgstr "Até ao Fim"
-
 #. i18n: ectx: property (text), widget (QLabel, lUpdateType)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:733
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:717
 #, kde-format
 msgid "Update:"
 msgstr "Actualização:"
 
 #. i18n: ectx: property (text), widget (QLabel, lReadingType)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:740
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:724
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:161
 #, kde-format
 msgid "Read:"
 msgstr "Leitura:"
 
 #. i18n: ectx: property (text), widget (QLabel, lUpdateInterval)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:747
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:731
 #, kde-format
 msgid "Update interval:"
 msgstr "Intervalo de actualização:"
 
 #. i18n: ectx: property (text), widget (QLabel, lKeepNvalues)
 #. i18n: ectx: property (text), widget (QLabel, lKeepLastValues)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:764
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:748
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:120
 #, kde-format
 msgid "Keep last values:"
 msgstr "Manter os últimos valores:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSampleSize)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:771
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:755
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:127
 #, kde-format
 msgid "Sample size:"
 msgstr "Tamanho da amostra:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbUpdateType)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:798
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:782
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:18
 #, kde-format
 msgid "Periodically"
 msgstr "Periódica"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbUpdateType)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:803
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:787
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:23
 #, kde-format
 msgid "On New Data"
 msgstr "Com Novos Dados"
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, sbUpdateInterval)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:817
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:801
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:90
 #, kde-format
 msgid " ms"
 msgstr " ms"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbLinkFile)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:836
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:820
 #, kde-format
 msgid "Link the file"
 msgstr "Ligar o ficheiro"
@@ -20260,6 +20259,12 @@ msgstr "Actualizar"
 #, kde-format
 msgid "Update Will Message"
 msgstr "Actualizar a Mensagem do Pedido"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cbReadingType)
+#: src/kdefrontend/ui/dockwidgets/livedatadock.ui:358
+#, kde-format
+msgid "Till the End"
+msgstr "Até ao Fim"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbReadingType)
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:363
