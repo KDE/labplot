@@ -324,6 +324,23 @@
             ]
         },
         {
+            "name": "cantor",
+            "buildsystem": "cmake-ninja",
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://invent.kde.org/education/cantor/-/archive/v24.05.0/cantor-v24.05.0.tar.gz",
+                    "sha256": "97d39b94b87fb884e936bb1e04fbf1437a505b86e1dbb7385607100e347b17a3",
+                    "x-checker-data": {
+                        "type": "anitya",
+                        "project-id": 236341,
+                        "stable-only": true,
+                        "url-template": "https://invent.kde.org/education/cantor/-/archive/v$version/cantor-v$version.tar.gz"
+                    }
+                }
+            ]
+        },
+        {
             "name": "labplot",
             "buildsystem": "cmake-ninja",
             "config-opts": [ "-DQt5Mqtt_DIR=/app/qtmqtt/usr/lib/x86_64-linux-gnu/cmake/Qt5Mqtt", "-DLOCAL_QT_ADVANCED_DOCK_COPY=OFF"],
