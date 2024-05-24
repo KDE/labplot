@@ -11,6 +11,7 @@
 #ifndef XYFITCURVEPRIVATE_H
 #define XYFITCURVEPRIVATE_H
 
+#include "backend/note/Note.h"
 #include "backend/worksheet/plots/cartesian/XYAnalysisCurvePrivate.h"
 #include "backend/worksheet/plots/cartesian/XYFitCurve.h"
 
@@ -45,6 +46,7 @@ public:
 
 	Column* residualsColumn{nullptr};
 	QVector<double>* residualsVector{nullptr};
+	Note* resultsNote{nullptr};
 
 	XYFitCurve* const q;
 

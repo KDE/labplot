@@ -1815,6 +1815,11 @@ void XYFitCurvePrivate::prepareResultColumns() {
 		residualsColumn->setFixed(true); // visible in the project explorer but cannot be modified (renamed, deleted, etc.)
 		q->addChild(residualsColumn);
 	}
+	if (!resultsNote) {
+		resultsNote = new Note(QStringLiteral("fit results"));
+		resultsNote->setFixed(true); // visible in the project explorer but cannot be modified (renamed, deleted, etc.)
+		q->addChild(resultsNote);
+	}
 }
 
 void XYFitCurvePrivate::resetResults() {
