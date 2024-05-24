@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-05-23 01:43+0000\n"
-"PO-Revision-Date: 2024-05-19 09:30+0300\n"
+"PO-Revision-Date: 2024-05-23 06:17+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian\n"
 "Language: uk\n"
@@ -11706,8 +11706,7 @@ msgid "From End"
 msgstr "Від кінця"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:161
-#, fuzzy, kde-format
-#| msgid "Till the End"
+#, kde-format
 msgid "Till End"
 msgstr "До кінця"
 

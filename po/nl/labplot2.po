@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-05-23 01:43+0000\n"
-"PO-Revision-Date: 2024-05-19 13:37+0200\n"
+"PO-Revision-Date: 2024-05-23 12:20+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -11611,8 +11611,7 @@ msgid "From End"
 msgstr "Vanaf einde"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:161
-#, fuzzy, kde-format
-#| msgid "Till the End"
+#, kde-format
 msgid "Till End"
 msgstr "Tot einde"
 

@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-05-23 01:43+0000\n"
-"PO-Revision-Date: 2024-04-20 06:36+0200\n"
+"PO-Revision-Date: 2024-05-23 11:19+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
-"X-Generator: Lokalize 23.08.5\n"
+"X-Generator: Poedit 3.4.4\n"
 "X-Accelerator-Marker: ~\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
@@ -5255,10 +5255,9 @@ msgid "Binomial random numbers"
 msgstr "Binomska naključna števila"
 
 #: src/backend/gsl/functions.cpp:663
-#, fuzzy, kde-format
-#| msgid "Landau random numbers"
+#, kde-format
 msgid "Triangular random numbers"
-msgstr "Landauova naključna števila"
+msgstr "Tragularna naključna števila"
 
 #: src/backend/gsl/functions.cpp:667
 #, kde-format
@@ -11669,8 +11668,7 @@ msgid "From End"
 msgstr "Od konca"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:161
-#, fuzzy, kde-format
-#| msgid "Till the End"
+#, kde-format
 msgid "Till End"
 msgstr "Do konca"
 

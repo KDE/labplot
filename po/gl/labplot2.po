@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-05-23 01:43+0000\n"
-"PO-Revision-Date: 2024-04-21 09:29+0200\n"
+"PO-Revision-Date: 2024-05-23 08:31+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -5257,10 +5257,9 @@ msgid "Binomial random numbers"
 msgstr "Números aleatorios binomiais"
 
 #: src/backend/gsl/functions.cpp:663
-#, fuzzy, kde-format
-#| msgid "Landau random numbers"
+#, kde-format
 msgid "Triangular random numbers"
-msgstr "Números aleatorios de Landau"
+msgstr "Números aleatorios triangulares"
 
 #: src/backend/gsl/functions.cpp:667
 #, kde-format
@@ -11635,8 +11634,7 @@ msgid "From End"
 msgstr "Desde o final"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:161
-#, fuzzy, kde-format
-#| msgid "Till the End"
+#, kde-format
 msgid "Till End"
 msgstr "Ata o final"
 
