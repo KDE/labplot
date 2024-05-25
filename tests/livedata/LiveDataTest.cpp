@@ -11,6 +11,16 @@
 #include "backend/datasources/LiveDataSource.h"
 #include "backend/datasources/filters/AsciiFilter.h"
 
+#include <QTcpServer>
+
+void LiveDataTest::initTestCase() {
+	m_tcpServer = new QTcpServer(this);
+    if (!m_tcpServer->listen())
+       QFAIL("Failed to start the TCP server. "/* + QString(m_tcpServer->errorString())*/);
+
+	connect(m_tcpServer, &QTcpServer::newConnection, this, &LiveDataTest::sendDataOverTcp);
+}
+
 // ##############################################################################
 // Conti. fixed - read fixed number of samples from the beginning of the new data
 // ##############################################################################
@@ -1126,6 +1136,69 @@ void LiveDataTest::testReadWholeFile03() {
 }
 
 // ##############################################################################
+// ##################################  TCP ######################################
+// ##############################################################################
+void LiveDataTest::testTcpReadContinuousFixed00() {
+	// initialize the live data source
+	LiveDataSource dataSource(QStringLiteral("test"), false);
+	dataSource.setSourceType(LiveDataSource::SourceType::NetworkTCPSocket);
+	dataSource.setFileType(AbstractFileFilter::FileType::Ascii);
+	dataSource.setHost(QStringLiteral("localhost"));
+	dataSource.setPort(m_tcpServer->serverPort());
+	dataSource.setReadingType(LiveDataSource::ReadingType::ContinuousFixed);
+	dataSource.setSampleSize(100); // big number of samples, more then the new data has, meaning we read all new data
+	dataSource.setUpdateType(LiveDataSource::UpdateType::TimeInterval);
+	dataSource.setUpdateInterval(10000);
+
+	// initialize the ASCII filter
+	auto* filter = new AsciiFilter();
+	filter->setSeparatingCharacter(QStringLiteral(","));
+	filter->setHeaderEnabled(false);
+	dataSource.setFilter(filter);
+
+	// read the data and perform checks, after the initial read all data is read
+	dataSource.read();
+
+	QCOMPARE(dataSource.columnCount(), 2);
+	QCOMPARE(dataSource.rowCount(), 1);
+
+	QCOMPARE(dataSource.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(dataSource.column(1)->columnMode(), AbstractColumn::ColumnMode::Integer);
+
+	QCOMPARE(dataSource.column(0)->integerAt(0), 1);
+	QCOMPARE(dataSource.column(1)->integerAt(0), 2);
+
+/*
+	// write out more data to the file
+	dataSource.read();
+	waitForSignal(&dataSource, SIGNAL(readOnUpdateCalled()));
+
+	// all new data (2 new lines) was added, check
+	QCOMPARE(dataSource.columnCount(), 2);
+	QCOMPARE(dataSource.rowCount(), 4);
+
+	QCOMPARE(dataSource.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(dataSource.column(1)->columnMode(), AbstractColumn::ColumnMode::Integer);
+
+	QCOMPARE(dataSource.column(0)->integerAt(0), 1);
+	QCOMPARE(dataSource.column(1)->integerAt(0), 2);
+
+	QCOMPARE(dataSource.column(0)->integerAt(1), 3);
+	QCOMPARE(dataSource.column(1)->integerAt(1), 4);
+
+	QCOMPARE(dataSource.column(0)->integerAt(2), 5);
+	QCOMPARE(dataSource.column(1)->integerAt(2), 6);
+
+	QCOMPARE(dataSource.column(0)->integerAt(3), 7);
+	QCOMPARE(dataSource.column(1)->integerAt(3), 8);
+	*/
+}
+
+// ##############################################################################
+// ##################################  UDP ######################################
+// ##############################################################################
+
+// ##############################################################################
 // ##########################  helper functions #################################
 // ##############################################################################
 
@@ -1138,6 +1211,26 @@ void LiveDataTest::waitForSignal(QObject* sender, const char* signal) {
 	QObject::connect(sender, signal, &loop, SLOT(quit()));
 	timer.start(3000);
 	loop.exec();
+}
+
+void LiveDataTest::sendDataOverTcp() {
+    QByteArray block;
+    QDataStream out(&block, QIODevice::WriteOnly);
+    out.setVersion(QDataStream::Qt_5_15);
+
+    //out << fortunes[QRandomGenerator::global()->bounded(fortunes.size())];
+	out << "1,2";
+
+    auto* clientConnection = m_tcpServer->nextPendingConnection();
+    connect(clientConnection, &QAbstractSocket::disconnected,
+            clientConnection, &QObject::deleteLater);
+
+    clientConnection->write(block);
+    clientConnection->disconnectFromHost();
+}
+
+void LiveDataTest::sendDataOverUdp() {
+
 }
 
 QTEST_MAIN(LiveDataTest)
