@@ -1157,8 +1157,7 @@ void XYFitCurveDock::recalculateClicked() {
 	m_fitCurve->recalculate();
 	// setPlotXRange();
 
-	// update fitParametersWidget
-	if (m_fitData.useResults) {
+	if (m_fitData.useResults) { // update fitParametersWidget
 		DEBUG(" nr of param names = " << m_fitData.paramNames.size())
 		DEBUG("	size of start values = " << m_fitData.paramStartValues.size())
 		DEBUG("	size of param values = " << m_fitCurve->fitResult().paramValues.size())

@@ -19,15 +19,20 @@
 #include "XYFitCurvePrivate.h"
 #include "backend/core/column/Column.h"
 #include "backend/gsl/ExpressionParser.h"
+#include "backend/gsl/errors.h"
+#include "backend/gsl/parser.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
-#include "backend/worksheet/plots/cartesian/Histogram.h"
-
-#include "backend/gsl/errors.h"
-#include "backend/gsl/parser.h"
 #include "backend/nsl/nsl_sf_stats.h"
 #include "backend/nsl/nsl_stats.h"
+#include "backend/worksheet/plots/cartesian/Histogram.h"
+
+#include <QDateTime>
+#include <QElapsedTimer>
+#include <QIcon>
+#include <QThreadPool>
+
 #include <gsl/gsl_blas.h>
 #include <gsl/gsl_cdf.h>
 #include <gsl/gsl_matrix.h>
@@ -37,11 +42,6 @@
 #include <gsl/gsl_statistics.h>
 #include <gsl/gsl_vector.h>
 #include <gsl/gsl_version.h>
-
-#include <QDateTime>
-#include <QElapsedTimer>
-#include <QIcon>
-#include <QThreadPool>
 
 XYFitCurve::XYFitCurve(const QString& name)
 	: XYAnalysisCurve(name, new XYFitCurvePrivate(this), AspectType::XYFitCurve) {
@@ -1775,13 +1775,15 @@ int func_fdf(const gsl_vector* x, void* params, gsl_vector* f, gsl_matrix* J) {
 	return GSL_SUCCESS;
 }
 
-/* prepare the fit result columns */
+//////////////////////////////////////////////////////////////////
+
+/* prepare the fit result columns and note */
 void XYFitCurvePrivate::prepareResultColumns() {
 	// DEBUG(Q_FUNC_INFO)
 	// create fit result columns if not available yet, clear them otherwise
 
 	// Done also in XYAnalysisCurve, but this function will be also called directly() from evaluate()
-	// and not over recalculate(). So this is also needed here!
+	// and not via recalculate(). So this is also needed here!
 	if (!xColumn) { // all columns are treated together
 		DEBUG(Q_FUNC_INFO << ", Creating columns")
 		xColumn = new Column(QStringLiteral("x"), AbstractColumn::ColumnMode::Double);
@@ -1804,26 +1806,82 @@ void XYFitCurvePrivate::prepareResultColumns() {
 		DEBUG(Q_FUNC_INFO << ", Clear columns")
 		xColumn->invalidateProperties();
 		yColumn->invalidateProperties();
-		xVector->clear();
-		yVector->clear();
+		if (xVector)
+			xVector->clear();
+		if (yVector)
+			yVector->clear();
 		// TODO: residualsVector->clear();
 	}
 
 	if (!residualsColumn) {
-		residualsColumn = new Column(QStringLiteral("residuals"), AbstractColumn::ColumnMode::Double);
+		residualsColumn = new Column(QStringLiteral("Residuals"), AbstractColumn::ColumnMode::Double);
 		residualsVector = static_cast<QVector<double>*>(residualsColumn->data());
 		residualsColumn->setFixed(true); // visible in the project explorer but cannot be modified (renamed, deleted, etc.)
 		q->addChild(residualsColumn);
 	}
 	if (!resultsNote) {
-		resultsNote = new Note(QStringLiteral("fit results"));
+		resultsNote = new Note(QStringLiteral("Fit Results"));
 		resultsNote->setFixed(true); // visible in the project explorer but cannot be modified (renamed, deleted, etc.)
 		q->addChild(resultsNote);
+		// TODO: don't set focus on Note when recalculate loaded project
 	}
 }
 
 void XYFitCurvePrivate::resetResults() {
 	fitResult = XYFitCurve::FitResult();
+}
+
+void XYFitCurvePrivate::updateResultsNote(Note* note) {
+	if (!note)
+		return;
+
+	QString text;
+	// TODO: i18n
+
+	// model
+	text += QStringLiteral("MODEL\n\n");
+	text += fitData.model + QStringLiteral("\n\n");
+
+	// parameter
+	text += QStringLiteral("PARAMETERS\n\n");
+
+	int np = fitResult.paramValues.size();
+
+	text += QStringLiteral("\tValue\tUncertainty\tUncertainty,%\tt Statistic\tP > |t|\tLower\tUpper\n");
+	for (int i = 0; i < np; i++) {
+		// TODO: number locale
+		text += fitData.paramNames.at(i) + QStringLiteral("\t") + QString::number(fitResult.paramValues.at(i)) + QStringLiteral("\t")
+			+ QString::number(fitResult.errorValues.at(i)) + QStringLiteral("\t\t")
+			+ QString::number(fitResult.errorValues.at(i) / fitResult.paramValues.at(i) * 100.) + QStringLiteral("\t\t")
+			+ QString::number(fitResult.tdist_tValues.at(i)) + QStringLiteral("\t")
+			+ QString::number(fitResult.tdist_pValues.at(i))
+			// TODO: margin2Values?
+			+ QStringLiteral("\t") + QString::number(fitResult.paramValues.at(i) - fitResult.marginValues.at(i)) + QStringLiteral("\t")
+			+ QString::number(fitResult.paramValues.at(i) + fitResult.marginValues.at(i)) + QStringLiteral("\n");
+
+		// for (unsigned int j = 0; j <= i; j++)
+		//	d->fitResult.correlationMatrix << gsl_matrix_get(cov, i, j) / sqrt(gsl_matrix_get(cov, i, i)) / sqrt(gsl_matrix_get(cov, j, j));
+	}
+	text += QStringLiteral("\n");
+
+	// goodness of fit
+	text += QStringLiteral("GOODNESS OF FIT\n\n");
+
+	// TODO: UTF-8 symbols
+	// TODO: round like in dock
+	text += QStringLiteral("Sum of squared residuals (chi²)") + QStringLiteral("\t") + QString::number(fitResult.sse) + QStringLiteral("\n");
+	text += QStringLiteral("Residuals mean square (chi²/dof)") + QStringLiteral("\t") + QString::number(fitResult.rms) + QStringLiteral("\n");
+	text += QStringLiteral("Root mean square deviation (RMSD/SD)") + QStringLiteral("\t") + QString::number(fitResult.rsd) + QStringLiteral("\n");
+	text += QStringLiteral("Coefficient of determination (R²)") + QStringLiteral("\t") + QString::number(fitResult.rsquare) + QStringLiteral("\n");
+	text += QStringLiteral("Adj. coefficient of determination (Rbar²)") + QStringLiteral("\t") + QString::number(fitResult.rsquareAdj) + QStringLiteral("\n");
+	text += QStringLiteral("chi²-Test (P > chi²)") + QStringLiteral("\t") + QString::number(fitResult.chisq_p) + QStringLiteral("\n");
+	text += QStringLiteral("F-Test") + QStringLiteral("\t") + QString::number(fitResult.fdist_F) + QStringLiteral("\n");
+	text += QStringLiteral("P > F") + QStringLiteral("\t") + QString::number(fitResult.fdist_p) + QStringLiteral("\n");
+	text += QStringLiteral("Mean absolute error (MAE)") + QStringLiteral("\t") + QString::number(fitResult.mae) + QStringLiteral("\n");
+	text += QStringLiteral("Akaike information criterion (AIC)") + QStringLiteral("\t") + QString::number(fitResult.aic) + QStringLiteral("\n");
+	text += QStringLiteral("Bayesian information criterion (BIC)") + QStringLiteral("\t") + QString::number(fitResult.bic) + QStringLiteral("\n");
+
+	note->setText(text);
 }
 
 void XYFitCurvePrivate::prepareTmpDataColumn(const AbstractColumn** tmpXDataColumn, const AbstractColumn** tmpYDataColumn) {
@@ -1961,6 +2019,9 @@ bool XYFitCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDataColumn
 	residualsColumn->setChanged();
 
 	fitResult.elapsedTime = timer.elapsed();
+
+	// TODO: not working when recalculate loaded project
+	updateResultsNote(resultsNote);
 
 	return update;
 }
@@ -2972,7 +3033,7 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 				d->xColumn = column;
 			else if (column->name() == QLatin1String("y"))
 				d->yColumn = column;
-			else if (column->name() == QLatin1String("residuals"))
+			else if (column->name() == QLatin1String("Residuals"))
 				d->residualsColumn = column;
 		} else { // unknown element
 			reader->raiseUnknownElementWarning();

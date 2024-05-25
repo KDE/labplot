@@ -29,6 +29,7 @@ public:
 	virtual bool recalculateSpecific(const AbstractColumn* tmpXDataColumn, const AbstractColumn* tmpYDataColumn) override;
 	virtual void prepareTmpDataColumn(const AbstractColumn** tmpXDataColumn, const AbstractColumn** tmpYDataColumn) override;
 	virtual void resetResults() override;
+	void updateResultsNote(Note* note);
 	void runLevenbergMarquardt(const AbstractColumn* xcol, const AbstractColumn* ycol, Range<double> xRange);
 	void runMaximumLikelihood(const AbstractColumn* xcol, double normalization);
 	bool evaluate(bool preview = false);

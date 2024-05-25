@@ -434,8 +434,10 @@ void XYAnalysisCurvePrivate::recalculate() {
 	} else {
 		xColumn->invalidateProperties();
 		yColumn->invalidateProperties();
-		xVector->clear();
-		yVector->clear();
+		if (xVector)
+			xVector->clear();
+		if (yVector)
+			yVector->clear();
 	}
 
 	resetResults();
