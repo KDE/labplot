@@ -1850,16 +1850,16 @@ void XYFitCurvePrivate::updateResultsNote(Note* note) {
 	int np = fitResult.paramValues.size();
 
 	text += QStringLiteral("\tValue\tUncertainty\tUncertainty,%\tt Statistic\tP > |t|\tLower\tUpper\n");
+	const auto numberLocale = QLocale();
 	for (int i = 0; i < np; i++) {
-		// TODO: number locale
-		text += fitData.paramNames.at(i) + QStringLiteral("\t") + QString::number(fitResult.paramValues.at(i)) + QStringLiteral("\t")
-			+ QString::number(fitResult.errorValues.at(i)) + QStringLiteral("\t\t")
-			+ QString::number(fitResult.errorValues.at(i) / fitResult.paramValues.at(i) * 100.) + QStringLiteral("\t\t")
-			+ QString::number(fitResult.tdist_tValues.at(i)) + QStringLiteral("\t")
-			+ QString::number(fitResult.tdist_pValues.at(i))
+		text += fitData.paramNames.at(i) + QStringLiteral("\t") + numberLocale.toString(fitResult.paramValues.at(i)) + QStringLiteral("\t")
+			+ numberLocale.toString(fitResult.errorValues.at(i)) + QStringLiteral("\t\t")
+			+ numberLocale.toString(fitResult.errorValues.at(i) / fitResult.paramValues.at(i) * 100.) + QStringLiteral("\t\t")
+			+ numberLocale.toString(fitResult.tdist_tValues.at(i)) + QStringLiteral("\t")
+			+ numberLocale.toString(fitResult.tdist_pValues.at(i))
 			// TODO: margin2Values?
-			+ QStringLiteral("\t") + QString::number(fitResult.paramValues.at(i) - fitResult.marginValues.at(i)) + QStringLiteral("\t")
-			+ QString::number(fitResult.paramValues.at(i) + fitResult.marginValues.at(i)) + QStringLiteral("\n");
+			+ QStringLiteral("\t") + numberLocale.toString(fitResult.paramValues.at(i) - fitResult.marginValues.at(i)) + QStringLiteral("\t")
+			+ numberLocale.toString(fitResult.paramValues.at(i) + fitResult.marginValues.at(i)) + QStringLiteral("\n");
 
 		// for (unsigned int j = 0; j <= i; j++)
 		//	d->fitResult.correlationMatrix << gsl_matrix_get(cov, i, j) / sqrt(gsl_matrix_get(cov, i, i)) / sqrt(gsl_matrix_get(cov, j, j));
@@ -1869,20 +1869,23 @@ void XYFitCurvePrivate::updateResultsNote(Note* note) {
 	// goodness of fit
 	text += QStringLiteral("GOODNESS OF FIT\n\n");
 
-	// TODO: round like in dock
-	text += i18n("Sum of squared residuals") + UTF8_QSTRING(" (χ²)") + QStringLiteral("\t\t") + QString::number(fitResult.sse) + QStringLiteral("\n");
-	text += i18n("Residuals mean square") + UTF8_QSTRING(" (χ²/dof)") + QStringLiteral("\t\t") + QString::number(fitResult.rms) + QStringLiteral("\n");
-	text += i18n("Root mean square deviation") + QStringLiteral(" (RMSD/SD)") + QStringLiteral("\t") + QString::number(fitResult.rsd) + QStringLiteral("\n");
-	text += i18n("Coefficient of determination") + QStringLiteral(" (R²)") + QStringLiteral("\t") + QString::number(fitResult.rsquare) + QStringLiteral("\n");
-	text += i18n("Adj. coefficient of determination") + QStringLiteral(" (R̄²)") + QStringLiteral("\t") + QString::number(fitResult.rsquareAdj)
-		+ QStringLiteral("\n");
+	text += i18n("Sum of squared residuals") + UTF8_QSTRING(" (χ²)") + QStringLiteral("\t\t") + numberLocale.toString(fitResult.sse) + QStringLiteral("\n");
+	text += i18n("Residuals mean square") + UTF8_QSTRING(" (χ²/dof)") + QStringLiteral("\t\t") + numberLocale.toString(fitResult.rms) + QStringLiteral("\n");
 	text +=
-		UTF8_QSTRING("χ²-") + i18n("Test") + UTF8_QSTRING(" (P > χ²)") + QStringLiteral("\t\t\t") + QString::number(fitResult.chisq_p) + QStringLiteral("\n");
-	text += i18n("F-Test") + QStringLiteral("\t\t\t\t") + QString::number(fitResult.fdist_F) + QStringLiteral("\n");
-	text += QStringLiteral("P > F") + QStringLiteral("\t\t\t\t") + QString::number(fitResult.fdist_p) + QStringLiteral("\n");
-	text += i18n("Mean absolute error") + QStringLiteral(" (MAE)") + QStringLiteral("\t\t") + QString::number(fitResult.mae) + QStringLiteral("\n");
-	text += i18n("Akaike information criterion") + QStringLiteral(" (AIC)") + QStringLiteral("\t") + QString::number(fitResult.aic) + QStringLiteral("\n");
-	text += i18n("Bayesian information criterion") + QStringLiteral(" (BIC)") + QStringLiteral("\t") + QString::number(fitResult.bic) + QStringLiteral("\n");
+		i18n("Root mean square deviation") + QStringLiteral(" (RMSD/SD)") + QStringLiteral("\t") + numberLocale.toString(fitResult.rsd) + QStringLiteral("\n");
+	text +=
+		i18n("Coefficient of determination") + QStringLiteral(" (R²)") + QStringLiteral("\t") + numberLocale.toString(fitResult.rsquare) + QStringLiteral("\n");
+	text += i18n("Adj. coefficient of determination") + QStringLiteral(" (R̄²)") + QStringLiteral("\t") + numberLocale.toString(fitResult.rsquareAdj)
+		+ QStringLiteral("\n");
+	text += UTF8_QSTRING("χ²-") + i18n("Test") + UTF8_QSTRING(" (P > χ²)") + QStringLiteral("\t\t\t") + numberLocale.toString(fitResult.chisq_p, 'g', 3)
+		+ QStringLiteral("\n");
+	text += i18n("F-Test") + QStringLiteral("\t\t\t\t") + numberLocale.toString(fitResult.fdist_F, 'g', 3) + QStringLiteral("\n");
+	text += QStringLiteral("P > F") + QStringLiteral("\t\t\t\t") + numberLocale.toString(fitResult.fdist_p, 'g', 3) + QStringLiteral("\n");
+	text += i18n("Mean absolute error") + QStringLiteral(" (MAE)") + QStringLiteral("\t\t") + numberLocale.toString(fitResult.mae) + QStringLiteral("\n");
+	text += i18n("Akaike information criterion") + QStringLiteral(" (AIC)") + QStringLiteral("\t") + numberLocale.toString(fitResult.aic, 'g', 3)
+		+ QStringLiteral("\n");
+	text += i18n("Bayesian information criterion") + QStringLiteral(" (BIC)") + QStringLiteral("\t") + numberLocale.toString(fitResult.bic, 'g', 3)
+		+ QStringLiteral("\n");
 
 	note->setText(text);
 }
