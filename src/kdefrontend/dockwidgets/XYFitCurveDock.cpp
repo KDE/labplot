@@ -178,7 +178,7 @@ void XYFitCurveDock::setupGeneral() {
 	uiGeneralTab.twGoodness->item(1, 0)->setText(uiGeneralTab.twGoodness->item(1, 0)->text() + UTF8_QSTRING(" (χ²/dof)"));
 	uiGeneralTab.twGoodness->item(3, 0)->setText(uiGeneralTab.twGoodness->item(3, 0)->text() + UTF8_QSTRING(" (R²)"));
 	uiGeneralTab.twGoodness->item(4, 0)->setText(uiGeneralTab.twGoodness->item(4, 0)->text() + UTF8_QSTRING(" (R̄²)"));
-	uiGeneralTab.twGoodness->item(5, 0)->setText(UTF8_QSTRING("χ²-") + i18n("test") + UTF8_QSTRING(" (P > χ²)"));
+	uiGeneralTab.twGoodness->item(5, 0)->setText(UTF8_QSTRING("χ²-") + i18n("Test") + UTF8_QSTRING(" (P > χ²)"));
 
 	auto* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setContentsMargins(0, 0, 0, 0);

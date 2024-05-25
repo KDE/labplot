@@ -1842,6 +1842,8 @@ void XYFitCurvePrivate::updateResultsNote(Note* note) {
 	text += QStringLiteral("MODEL\n\n");
 	text += fitData.model + QStringLiteral("\n\n");
 
+	// TODO: weighting? (see Origin)
+
 	// parameter
 	text += QStringLiteral("PARAMETERS\n\n");
 
@@ -1867,19 +1869,20 @@ void XYFitCurvePrivate::updateResultsNote(Note* note) {
 	// goodness of fit
 	text += QStringLiteral("GOODNESS OF FIT\n\n");
 
-	// TODO: UTF-8 symbols
 	// TODO: round like in dock
-	text += QStringLiteral("Sum of squared residuals (chi²)") + QStringLiteral("\t") + QString::number(fitResult.sse) + QStringLiteral("\n");
-	text += QStringLiteral("Residuals mean square (chi²/dof)") + QStringLiteral("\t") + QString::number(fitResult.rms) + QStringLiteral("\n");
-	text += QStringLiteral("Root mean square deviation (RMSD/SD)") + QStringLiteral("\t") + QString::number(fitResult.rsd) + QStringLiteral("\n");
-	text += QStringLiteral("Coefficient of determination (R²)") + QStringLiteral("\t") + QString::number(fitResult.rsquare) + QStringLiteral("\n");
-	text += QStringLiteral("Adj. coefficient of determination (Rbar²)") + QStringLiteral("\t") + QString::number(fitResult.rsquareAdj) + QStringLiteral("\n");
-	text += QStringLiteral("chi²-Test (P > chi²)") + QStringLiteral("\t") + QString::number(fitResult.chisq_p) + QStringLiteral("\n");
-	text += QStringLiteral("F-Test") + QStringLiteral("\t") + QString::number(fitResult.fdist_F) + QStringLiteral("\n");
-	text += QStringLiteral("P > F") + QStringLiteral("\t") + QString::number(fitResult.fdist_p) + QStringLiteral("\n");
-	text += QStringLiteral("Mean absolute error (MAE)") + QStringLiteral("\t") + QString::number(fitResult.mae) + QStringLiteral("\n");
-	text += QStringLiteral("Akaike information criterion (AIC)") + QStringLiteral("\t") + QString::number(fitResult.aic) + QStringLiteral("\n");
-	text += QStringLiteral("Bayesian information criterion (BIC)") + QStringLiteral("\t") + QString::number(fitResult.bic) + QStringLiteral("\n");
+	text += i18n("Sum of squared residuals") + UTF8_QSTRING(" (χ²)") + QStringLiteral("\t\t") + QString::number(fitResult.sse) + QStringLiteral("\n");
+	text += i18n("Residuals mean square") + UTF8_QSTRING(" (χ²/dof)") + QStringLiteral("\t\t") + QString::number(fitResult.rms) + QStringLiteral("\n");
+	text += i18n("Root mean square deviation") + QStringLiteral(" (RMSD/SD)") + QStringLiteral("\t") + QString::number(fitResult.rsd) + QStringLiteral("\n");
+	text += i18n("Coefficient of determination") + QStringLiteral(" (R²)") + QStringLiteral("\t") + QString::number(fitResult.rsquare) + QStringLiteral("\n");
+	text += i18n("Adj. coefficient of determination") + QStringLiteral(" (R̄²)") + QStringLiteral("\t") + QString::number(fitResult.rsquareAdj)
+		+ QStringLiteral("\n");
+	text +=
+		UTF8_QSTRING("χ²-") + i18n("Test") + UTF8_QSTRING(" (P > χ²)") + QStringLiteral("\t\t\t") + QString::number(fitResult.chisq_p) + QStringLiteral("\n");
+	text += i18n("F-Test") + QStringLiteral("\t\t\t\t") + QString::number(fitResult.fdist_F) + QStringLiteral("\n");
+	text += QStringLiteral("P > F") + QStringLiteral("\t\t\t\t") + QString::number(fitResult.fdist_p) + QStringLiteral("\n");
+	text += i18n("Mean absolute error") + QStringLiteral(" (MAE)") + QStringLiteral("\t\t") + QString::number(fitResult.mae) + QStringLiteral("\n");
+	text += i18n("Akaike information criterion") + QStringLiteral(" (AIC)") + QStringLiteral("\t") + QString::number(fitResult.aic) + QStringLiteral("\n");
+	text += i18n("Bayesian information criterion") + QStringLiteral(" (BIC)") + QStringLiteral("\t") + QString::number(fitResult.bic) + QStringLiteral("\n");
 
 	note->setText(text);
 }
