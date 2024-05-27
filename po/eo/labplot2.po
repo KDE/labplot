@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-05-23 01:43+0000\n"
-"PO-Revision-Date: 2024-04-28 07:38+0100\n"
+"PO-Revision-Date: 2024-05-26 07:22+0200\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -5231,10 +5231,9 @@ msgid "Binomial random numbers"
 msgstr "Binomaj hazardaj nombroj"
 
 #: src/backend/gsl/functions.cpp:663
-#, fuzzy, kde-format
-#| msgid "Landau random numbers"
+#, kde-format
 msgid "Triangular random numbers"
-msgstr "Landau hazardaj nombroj"
+msgstr "Triangulaj hazardaj nombroj"
 
 #: src/backend/gsl/functions.cpp:667
 #, kde-format
@@ -11592,10 +11591,9 @@ msgid "From End"
 msgstr "De Fino"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:161
-#, fuzzy, kde-format
-#| msgid "Till the End"
+#, kde-format
 msgid "Till End"
-msgstr "Ĝis la fino"
+msgstr "Ĝis Fino"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:162
 #, kde-format
@@ -13331,7 +13329,7 @@ msgstr ""
 "Se markite, la rezultoj de la kalkuloj en la analizaj kurboj estos "
 "konservitaj en la projektdosiero.\n"
 "Malmarku ĉi tiun opcion por redukti la grandecon de la projektdosiero koste "
-"de la pli longaj projektaj ŝarĝtempoj."
+"de la pli longaj projektaj ŝargtempoj."
 
 #: src/kdefrontend/dockwidgets/ReferenceLineDock.cpp:227
 #, kde-format
@@ -15506,8 +15504,8 @@ msgstr ""
 "Konservi la rezultojn de la kalkuloj en la analizaj kurboj en la "
 "projektdosiero.\n"
 "Malmarku ĉi tiun opcion por redukti la grandecon de la projektdosiero koste "
-"de la pli longaj projektaj ŝarĝtempoj.Determinas la defaŭltan konduton por "
-"novaj projektoj.\n"
+"de la pli longaj projektaj ŝargtempoj.\n"
+"Determinas la defaŭltan konduton por novaj projektoj.\n"
 "La agordo povas esti ŝanĝata aparte por ĉiu projekto en la projektaj "
 "proprecoj."
 
