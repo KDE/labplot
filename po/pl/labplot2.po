@@ -16,7 +16,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Lokalize 23.04.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -2436,7 +2435,7 @@ msgstr "legenda"
 #: src/backend/datasources/projects/ProjectParser.cpp:99
 #, kde-format
 msgid "%1: Import from %2"
-msgstr "%1: Importuj z %2"
+msgstr "%1: Zaimportuj z %2"
 
 #: src/backend/gsl/constants.cpp:12
 #, kde-format
@@ -3030,7 +3029,7 @@ msgstr "Aktywnośc 1 curie"
 #: src/backend/gsl/constants.cpp:182
 #, kde-format
 msgid "Exposure of 1 roentgen"
-msgstr "Ekspozycja 1 rentgena"
+msgstr "Naświetlenie 1 rentgena"
 
 #: src/backend/gsl/constants.cpp:183
 #, kde-format
@@ -3555,12 +3554,12 @@ msgstr "Zakresy ruchome"
 #: src/backend/gsl/functions.cpp:235
 #, kde-format
 msgid "Simple Moving Minimum"
-msgstr "Proste ruchome minimum"
+msgstr "Minimum prostego ruchu"
 
 #: src/backend/gsl/functions.cpp:236
 #, kde-format
 msgid "Simple Moving Maximum"
-msgstr "Proste ruchome maksimum"
+msgstr "Maksimum prostego ruchu"
 
 #: src/backend/gsl/functions.cpp:237
 #, kde-format
@@ -8312,10 +8311,9 @@ msgid "%1: set error column"
 msgstr "%1: ustaw kolumnę błędu"
 
 #: src/backend/worksheet/plots/cartesian/ErrorBar.cpp:235
-#, fuzzy, kde-format
-#| msgid "%1: x-error type changed"
+#, kde-format
 msgid "%1: error bar type changed"
-msgstr "%1: zmieniono rodzaj błędu x"
+msgstr "%1: zmieniono rodzaj słupka błędu"
 
 #: src/backend/worksheet/plots/cartesian/ErrorBar.cpp:242
 #, kde-format
@@ -9867,7 +9865,7 @@ msgstr "%1: wyczyść wybrany wiersz(e)"
 #: src/commonfrontend/ProjectExplorer.cpp:72
 #, kde-format
 msgid "Search/Filter"
-msgstr "Szukaj/Odfiltruj"
+msgstr "Poszukaj/Odfiltruj"
 
 #: src/commonfrontend/ProjectExplorer.cpp:117
 #, kde-format
@@ -9932,7 +9930,7 @@ msgstr "Rozróżniaj wielkość liter"
 #: src/commonfrontend/ProjectExplorer.cpp:678
 #, kde-format
 msgid "Match Complete Word"
-msgstr "Szukaj całych słów"
+msgstr "Poszukaj całych słów"
 
 #: src/commonfrontend/ProjectExplorer.cpp:687
 #, kde-format
@@ -10048,7 +10046,7 @@ msgstr "Wyczyść maskę"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:330
 #, kde-format
 msgid "&Search"
-msgstr "&Szukaj"
+msgstr "Po&szukaj"
 
 #. i18n: ectx: property (text), widget (QPushButton, bReplaceNext)
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:332
@@ -11038,7 +11036,7 @@ msgstr "Wpisz słowo kluczowe, które chcesz wyszukać"
 #: src/kdefrontend/examples/ExamplesWidget.cpp:54
 #, kde-format
 msgid "Search..."
-msgstr "Szukaj..."
+msgstr "Poszukaj..."
 
 #: src/kdefrontend/datasources/AsciiOptionsWidget.cpp:32
 #: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:49
@@ -14700,13 +14698,13 @@ msgid ""
 "Could not open file '%1'. Click 'Continue' to proceed starting or 'Cancel' "
 "to exit the application."
 msgstr ""
-"Nie można otworzyć pliku '%1'. Naciśnij 'Kontynuuj' aby kontynuować "
+"Nie udało się otworzyć pliku '%1'. Naciśnij 'Kontynuuj' aby kontynuować "
 "uruchamianie lub 'Anuluj' aby wyjść z aplikacji."
 
 #: src/kdefrontend/LabPlot.cpp:156
 #, kde-format
 msgid "Failed to Open"
-msgstr "Nieudane otwieranie"
+msgstr "Nie udało się otworzyć"
 
 #. i18n: ectx: ToolBar (worksheet_toolbar)
 #: src/kdefrontend/labplot2ui.rc:24 src/kdefrontend/MainWin.cpp:733
@@ -19958,7 +19956,7 @@ msgstr "Kształt"
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:133
 #, kde-format
 msgid "Position Y:"
-msgstr "Pozycja Y:"
+msgstr "Położenie Y:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPositionYLogical)
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:186
@@ -19985,7 +19983,7 @@ msgstr "Współrzędne logiczne"
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:229
 #, kde-format
 msgid "Position X:"
-msgstr "Pozycja X:"
+msgstr "Położenie X:"
 
 #. i18n: ectx: property (text), widget (QLabel, lEmbedded)
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:341
@@ -23147,7 +23145,7 @@ msgstr "%1 nieodnaleziony"
 #: src/tools/TeXRenderer.cpp:193
 #, kde-format
 msgid "Timeout: Unable to generate latex file"
-msgstr "Upłynął czas oczekiwania: Nie udało się utworzyć pliku latex"
+msgstr "Przekroczono czas oczekiwania: Nie udało się utworzyć pliku latex"
 
 #: src/tools/TeXRenderer.cpp:196
 #, kde-format
