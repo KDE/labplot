@@ -16,6 +16,6 @@ bool _debugOutputEnabled = false;
 bool debugOutputEnabled() {
 	return _debugOutputEnabled;
 }
-void setDebugOutputEnable(bool enabled) {
+void enableDebugOutput(bool enabled) {
 	_debugOutputEnabled = enabled;
 }

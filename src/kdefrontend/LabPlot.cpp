@@ -124,7 +124,7 @@ int main(int argc, char* argv[]) {
 	KAboutData::setApplicationData(aboutData);
 
 	const auto& group = Settings::settingsGeneral();
-	setDebugOutputEnable(group.readEntry<bool>(QLatin1String("DebugOutput"), false));
+	enableDebugOutput(group.readEntry<bool>(QLatin1String("DebugOutput"), false));
 
 	// TODO: add library information (GSL version, etc.) in about dialog
 

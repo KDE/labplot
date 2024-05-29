@@ -135,7 +135,7 @@ void SettingsGeneralPage::applySettings() {
 	bool debugOutputEnabled = ui.chkDebugOutput->isChecked();
 	group.writeEntry(QLatin1String("DebugOutput"), debugOutputEnabled);
 	Settings::writeDockPosBehaviour(static_cast<Settings::DockPosBehaviour>(ui.cbDockWindowPositionReopen->currentData().toInt()));
-	setDebugOutputEnable(debugOutputEnabled);
+	enableDebugOutput(debugOutputEnabled);
 }
 
 void SettingsGeneralPage::restoreDefaults() {

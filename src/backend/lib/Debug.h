@@ -14,7 +14,7 @@
 #include <iostream>
 
 bool debugOutputEnabled();
-void setDebugOutputEnable(bool);
+void enableDebugOutput(bool);
 
 #define WARN(x)                                                                                                                                                \
 	if (debugOutputEnabled()) {                                                                                                                                \
