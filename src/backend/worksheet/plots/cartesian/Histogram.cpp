@@ -576,6 +576,8 @@ void Histogram::dataColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	if (aspect == d->dataColumn) {
 		d->dataColumn = nullptr;
 		d->retransform();
+		Q_EMIT dataChanged();
+		Q_EMIT changed();
 	}
 }
 
