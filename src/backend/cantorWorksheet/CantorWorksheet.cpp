@@ -104,17 +104,20 @@ bool CantorWorksheet::init(QByteArray* content) {
 		// Cantor's session
 #ifdef HAVE_CANTOR_LIBS
 		m_session = m_worksheetAccess->session();
-		if (m_session) {
-			connect(m_session, &Cantor::Session::statusChanged, this, &CantorWorksheet::statusChanged);
-
-			// variable model
-			m_variableModel = m_session->variableDataModel();
-			connect(m_variableModel, &QAbstractItemModel::dataChanged, this, &CantorWorksheet::dataChanged);
-			connect(m_variableModel, &QAbstractItemModel::rowsInserted, this, &CantorWorksheet::rowsInserted);
-			connect(m_variableModel, &QAbstractItemModel::rowsAboutToBeRemoved, this, &CantorWorksheet::rowsAboutToBeRemoved);
-			connect(m_variableModel, &QAbstractItemModel::modelReset, this, &CantorWorksheet::modelReset);
+		if (!m_session) {
+			WARN("Could not create the session for backend " << STDSTRING(m_backendName))
+			m_error = i18n("Couldn't create the sessions for %1. Please check your installation.", m_backendName);
+			return false;
 		}
-#endif
+
+		connect(m_session, &Cantor::Session::statusChanged, this, &CantorWorksheet::statusChanged);
+
+		// variable model
+		m_variableModel = m_session->variableDataModel();
+		connect(m_variableModel, &QAbstractItemModel::dataChanged, this, &CantorWorksheet::dataChanged);
+		connect(m_variableModel, &QAbstractItemModel::rowsInserted, this, &CantorWorksheet::rowsInserted);
+		connect(m_variableModel, &QAbstractItemModel::rowsAboutToBeRemoved, this, &CantorWorksheet::rowsAboutToBeRemoved);
+		connect(m_variableModel, &QAbstractItemModel::modelReset, this, &CantorWorksheet::modelReset);
 
 		// default settings
 		const KConfigGroup group = Settings::group(QStringLiteral("Settings_Notebook"));
@@ -154,6 +157,7 @@ bool CantorWorksheet::init(QByteArray* content) {
 
 		// bool value = group.readEntry(QLatin1String("ReevaluateEntries"), false);
 		// value = group.readEntry(QLatin1String("AskConfirmation"), true);
+#endif
 	}
 
 	return true;
