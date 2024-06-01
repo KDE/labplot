@@ -15,6 +15,7 @@ public:
 	Spreadsheet::Linking linking;
 	Spreadsheet* q{nullptr};
 	StatisticsSpreadsheet* statisticsSpreadsheet{nullptr};
+	QVector<CartesianPlot*> mChangingPlots;
 };
 
 #endif // SPREADSHEET_PRIVATE
