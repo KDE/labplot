@@ -63,11 +63,9 @@ void LiveDataTest::testReadContinuousFixed00() {
 	QCOMPARE(dataSource.column(0)->integerAt(1), 3);
 	QCOMPARE(dataSource.column(1)->integerAt(1), 4);
 
-// currently fails on Windows-Qt5 (waitForSignal()?)
+// currently fails on Windows (waitForSignal()?)
 #ifdef HAVE_WINDOWS
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
 	return;
-#endif
 #endif
 	// write out more data to the file
 	file.write("5,6\n7,8\n");
@@ -145,11 +143,9 @@ void LiveDataTest::testReadContinuousFixed01() {
 	file.close();
 	waitForSignal(&dataSource, SIGNAL(readOnUpdateCalled()));
 
-// currently fails on Windows-Qt5 (waitForSignal()?)
+// currently fails on Windows (waitForSignal()?)
 #ifdef HAVE_WINDOWS
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
 	return;
-#endif
 #endif
 	// the first line of the new data (sample size = 1) was added, check
 	QCOMPARE(dataSource.columnCount(), 2);
@@ -215,11 +211,9 @@ void LiveDataTest::testReadContinuousFixed02() {
 	QCOMPARE(dataSource.column(0)->integerAt(1), 3);
 	QCOMPARE(dataSource.column(1)->integerAt(1), 4);
 
-// currently fails on Windows-Qt5 (waitForSignal()?)
+// currently fails on Windows (waitForSignal()?)
 #ifdef HAVE_WINDOWS
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
 	return;
-#endif
 #endif
 	// write out more data to the file
 	file.write("5,6\n7,8\n");
@@ -290,11 +284,9 @@ void LiveDataTest::testReadContinuousFixedWithIndex() {
 	QCOMPARE(dataSource.column(1)->integerAt(1), 3);
 	QCOMPARE(dataSource.column(2)->integerAt(1), 4);
 
-// currently fails on Windows-Qt5 (waitForSignal()?)
+// currently fails on Windows (waitForSignal()?)
 #ifdef HAVE_WINDOWS
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
 	return;
-#endif
 #endif
 	// write out more data to the file
 	file.write("5,6\n7,8\n");
@@ -376,11 +368,9 @@ void LiveDataTest::testReadContinuousFixedWithTimestamp() {
 	QCOMPARE(dataSource.column(1)->integerAt(1), 3);
 	QCOMPARE(dataSource.column(2)->integerAt(1), 4);
 
-// currently fails on Windows-Qt5 (waitForSignal()?)
+// currently fails on Windows (waitForSignal()?)
 #ifdef HAVE_WINDOWS
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
 	return;
-#endif
 #endif
 	// write out more data to the file
 	file.write("5,6\n7,8\n");
@@ -466,11 +456,9 @@ void LiveDataTest::testReadContinuousFixedWithIndexTimestamp() {
 	QCOMPARE(dataSource.column(2)->integerAt(1), 3);
 	QCOMPARE(dataSource.column(3)->integerAt(1), 4);
 
-// currently fails on Windows-Qt5 (waitForSignal()?)
+// currently fails on Windows (waitForSignal()?)
 #ifdef HAVE_WINDOWS
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
 	return;
-#endif
 #endif
 	// write out more data to the file
 	file.write("5,6\n7,8\n");
@@ -557,11 +545,9 @@ void LiveDataTest::testReadFromEnd00() {
 	QCOMPARE(dataSource.column(0)->integerAt(1), 3);
 	QCOMPARE(dataSource.column(1)->integerAt(1), 4);
 
-// currently fails on Windows-Qt5 (waitForSignal()?)
+// currently fails on Windows (waitForSignal()?)
 #ifdef HAVE_WINDOWS
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
 	return;
-#endif
 #endif
 	// write out more data to the file
 	file.write("5,6\n7,8\n");
@@ -634,11 +620,9 @@ void LiveDataTest::testReadFromEnd01() {
 	QCOMPARE(dataSource.column(0)->integerAt(1), 3);
 	QCOMPARE(dataSource.column(1)->integerAt(1), 4);
 
-// currently fails on Windows-Qt5 (waitForSignal()?)
+// currently fails on Windows (waitForSignal()?)
 #ifdef HAVE_WINDOWS
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
 	return;
-#endif
 #endif
 	// write out more data to the file
 	file.write("5,6\n7,8\n");
@@ -709,11 +693,9 @@ void LiveDataTest::testReadFromEnd02() {
 	QCOMPARE(dataSource.column(0)->integerAt(1), 3);
 	QCOMPARE(dataSource.column(1)->integerAt(1), 4);
 
-// currently fails on Windows-Qt5 (waitForSignal()?)
+// currently fails on Windows (waitForSignal()?)
 #ifdef HAVE_WINDOWS
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
 	return;
-#endif
 #endif
 	// write out more data to the file
 	file.write("5,6\n7,8\n");
@@ -782,11 +764,9 @@ void LiveDataTest::testReadTillEnd00() {
 	QCOMPARE(dataSource.column(0)->integerAt(1), 3);
 	QCOMPARE(dataSource.column(1)->integerAt(1), 4);
 
-// currently fails on Windows-Qt5 (waitForSignal()?)
+// currently fails on Windows (waitForSignal()?)
 #ifdef HAVE_WINDOWS
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
 	return;
-#endif
 #endif
 	// write out more data to the file
 	file.write("5,6\n7,8\n");
@@ -859,11 +839,9 @@ void LiveDataTest::testReadTillEnd01() {
 	QCOMPARE(dataSource.column(0)->integerAt(1), 3);
 	QCOMPARE(dataSource.column(1)->integerAt(1), 4);
 
-// currently fails on Windows-Qt5 (waitForSignal()?)
+// currently fails on Windows (waitForSignal()?)
 #ifdef HAVE_WINDOWS
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
 	return;
-#endif
 #endif
 	// write out more data to the file
 	file.write("5,6\n7,8\n");
@@ -930,11 +908,9 @@ void LiveDataTest::testReadWholeFile00() {
 	QCOMPARE(dataSource.column(0)->integerAt(0), 1);
 	QCOMPARE(dataSource.column(1)->integerAt(0), 2);
 
-// currently fails on Windows-Qt5 (waitForSignal()?)
+// currently fails on Windows (waitForSignal()?)
 #ifdef HAVE_WINDOWS
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
 	return;
-#endif
 #endif
 	// write out more data to the file
 	file.write("3,4\n");
@@ -997,11 +973,9 @@ void LiveDataTest::testReadWholeFile01() {
 	QCOMPARE(dataSource.column(0)->integerAt(0), 1);
 	QCOMPARE(dataSource.column(1)->integerAt(0), 2);
 
-// currently fails on Windows-Qt5 (waitForSignal()?)
+// currently fails on Windows (waitForSignal()?)
 #ifdef HAVE_WINDOWS
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
 	return;
-#endif
 #endif
 	// close the file, open it again and replace the previous content with the new one
 	file.close();
@@ -1071,11 +1045,9 @@ void LiveDataTest::testReadWholeFile02() {
 	QCOMPARE(dataSource.column(0)->integerAt(0), 1);
 	QCOMPARE(dataSource.column(1)->integerAt(0), 2);
 
-// currently fails on Windows-Qt5 (waitForSignal()?)
+// currently fails on Windows (waitForSignal()?)
 #ifdef HAVE_WINDOWS
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
 	return;
-#endif
 #endif
 	// write out more data to the file
 	file.write("3,4\n");
@@ -1145,11 +1117,9 @@ void LiveDataTest::testReadWholeFile03() {
 	QCOMPARE(dataSource.column(0)->integerAt(0), 1);
 	QCOMPARE(dataSource.column(1)->integerAt(0), 2);
 
-// currently fails on Windows-Qt5 (waitForSignal()?)
+// currently fails on Windows (waitForSignal()?)
 #ifdef HAVE_WINDOWS
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
 	return;
-#endif
 #endif
 	// write out more data to the file
 	file.write("3,4\n");
