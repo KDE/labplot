@@ -63,8 +63,6 @@ void LiveDataTest::testReadContinuousFixed00() {
 	QCOMPARE(dataSource.column(0)->integerAt(1), 3);
 	QCOMPARE(dataSource.column(1)->integerAt(1), 4);
 
-// curently fails on Windows (waitForSignal()?)
-#ifndef HAVE_WINDOWS
 	// write out more data to the file
 	file.write("5,6\n7,8\n");
 	file.close();
@@ -88,7 +86,6 @@ void LiveDataTest::testReadContinuousFixed00() {
 
 	QCOMPARE(dataSource.column(0)->integerAt(3), 7);
 	QCOMPARE(dataSource.column(1)->integerAt(3), 8);
-#endif
 }
 
 /*!
