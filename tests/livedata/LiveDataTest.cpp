@@ -1139,7 +1139,7 @@ void LiveDataTest::waitForSignal(QObject* sender, const char* signal) {
 	QEventLoop loop;
 	QTimer::connect(&timer, &QTimer::timeout, &loop, &QEventLoop::quit);
 	QObject::connect(sender, signal, &loop, SLOT(quit()));
-	timer.start(3000);
+	timer.start(1000);
 	loop.exec();
 }
 
