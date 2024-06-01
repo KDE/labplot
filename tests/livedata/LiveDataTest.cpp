@@ -11,6 +11,9 @@
 #include "backend/datasources/LiveDataSource.h"
 #include "backend/datasources/filters/AsciiFilter.h"
 
+#include <QEventLoop>
+#include <QTimer>
+
 // ##############################################################################
 // Conti. fixed - read fixed number of samples from the beginning of the new data
 // ##############################################################################
