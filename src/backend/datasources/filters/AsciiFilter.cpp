@@ -901,8 +901,10 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 		readingType = spreadsheet->readingType();
 
 	// we have less new lines than the sample size specified
-	if (readingType != LiveDataSource::ReadingType::TillEnd)
-		QDEBUG("	Removed empty lines: " << newData.removeAll(QString()));
+	if (readingType != LiveDataSource::ReadingType::TillEnd) {
+		int nrEmptyLines = newData.removeAll(QString());
+		QDEBUG("	Removed " << nrEmptyLines << " empty lines");
+	}
 
 	// back to the last read position before counting when reading from files
 	if (sourceType == LiveDataSource::SourceType::FileOrPipe)
