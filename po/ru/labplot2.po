@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-01 01:40+0000\n"
+"POT-Creation-Date: 2024-06-02 01:39+0000\n"
 "PO-Revision-Date: 2023-11-13 14:41+0300\n"
 "Last-Translator: Sergey Kazorin <translation-team@basealt.ru>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -1167,18 +1167,18 @@ msgstr "Число строк: %1"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:545
 #: src/backend/datasources/filters/AsciiFilter.cpp:754
-#: src/backend/datasources/filters/AsciiFilter.cpp:950
-#: src/backend/datasources/filters/AsciiFilter.cpp:1491
-#: src/backend/datasources/filters/AsciiFilter.cpp:2052
+#: src/backend/datasources/filters/AsciiFilter.cpp:952
+#: src/backend/datasources/filters/AsciiFilter.cpp:1493
+#: src/backend/datasources/filters/AsciiFilter.cpp:2054
 #, kde-format
 msgid "Timestamp"
 msgstr "Метка времени"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:549
 #: src/backend/datasources/filters/AsciiFilter.cpp:748
-#: src/backend/datasources/filters/AsciiFilter.cpp:948
-#: src/backend/datasources/filters/AsciiFilter.cpp:1486
-#: src/backend/datasources/filters/AsciiFilter.cpp:2046
+#: src/backend/datasources/filters/AsciiFilter.cpp:950
+#: src/backend/datasources/filters/AsciiFilter.cpp:1488
+#: src/backend/datasources/filters/AsciiFilter.cpp:2048
 #: src/backend/datasources/filters/BinaryFilter.cpp:293
 #: src/backend/datasources/filters/BinaryFilter.cpp:436
 #: src/backend/nsl/nsl_dft.c:29 src/backend/nsl/nsl_filter.c:23
@@ -1187,8 +1187,8 @@ msgid "Index"
 msgstr "Индекс"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:734
-#: src/backend/datasources/filters/AsciiFilter.cpp:1248
-#: src/backend/datasources/filters/AsciiFilter.cpp:1584
+#: src/backend/datasources/filters/AsciiFilter.cpp:1250
+#: src/backend/datasources/filters/AsciiFilter.cpp:1586
 #: src/backend/datasources/filters/BinaryFilter.cpp:404
 #, fuzzy, kde-format
 #| msgid "Failed to open the device."
@@ -1197,9 +1197,9 @@ msgstr "Не удалось открыть устройство."
 
 #. i18n: ectx: property (text), widget (QTableWidget, twLabels)
 #: src/backend/datasources/filters/AsciiFilter.cpp:760
-#: src/backend/datasources/filters/AsciiFilter.cpp:955
-#: src/backend/datasources/filters/AsciiFilter.cpp:1510
-#: src/backend/datasources/filters/AsciiFilter.cpp:2065
+#: src/backend/datasources/filters/AsciiFilter.cpp:957
+#: src/backend/datasources/filters/AsciiFilter.cpp:1512
+#: src/backend/datasources/filters/AsciiFilter.cpp:2067
 #: src/backend/datasources/filters/QJsonModel.cpp:133
 #: src/commonfrontend/matrix/MatrixView.cpp:620
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2384
@@ -1215,14 +1215,14 @@ msgid "Value"
 msgstr "Значение"
 
 # BUGME: word puzzle; please use i18np() --aspotashev
-#: src/backend/datasources/filters/AsciiFilter.cpp:957
-#: src/backend/datasources/filters/AsciiFilter.cpp:1512
-#: src/backend/datasources/filters/AsciiFilter.cpp:2067
+#: src/backend/datasources/filters/AsciiFilter.cpp:959
+#: src/backend/datasources/filters/AsciiFilter.cpp:1514
+#: src/backend/datasources/filters/AsciiFilter.cpp:2069
 #, kde-format
 msgid "Value %1"
 msgstr "Значение %1"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:1267
+#: src/backend/datasources/filters/AsciiFilter.cpp:1269
 #: src/backend/datasources/filters/BinaryFilter.cpp:444
 #: src/backend/datasources/filters/CANFilter.cpp:299
 #: src/backend/datasources/filters/FITSFilter.cpp:329
@@ -1977,7 +1977,7 @@ msgstr "В структуре нет полей"
 msgid "Support for this variable type not implemented yet."
 msgstr ""
 
-#: src/backend/datasources/filters/MatioFilter.cpp:1227
+#: src/backend/datasources/filters/MatioFilter.cpp:1228
 #, kde-format
 msgid "Variables with rank greater than 2 not supported yet."
 msgstr ""
@@ -7257,13 +7257,13 @@ msgstr "%1: задание степени непрозрачности лини�
 
 #: src/backend/worksheet/plots/AbstractPlot.cpp:100
 #: src/backend/worksheet/plots/AbstractPlot.cpp:128
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1292
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1293
 #, kde-format
 msgid "%1: set horizontal padding"
 msgstr "%1: задание горизонтального отступа"
 
 #: src/backend/worksheet/plots/AbstractPlot.cpp:107
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1318
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1319
 #, kde-format
 msgid "%1: set vertical padding"
 msgstr "%1: задание вертикального отступа"
@@ -7307,8 +7307,8 @@ msgstr "Горизонтальный"
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:259
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:57
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:53
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:844
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:848
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:845
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:849
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:158
 #: src/kdefrontend/dockwidgets/LollipopPlotDock.cpp:52
 #: src/kdefrontend/dockwidgets/ReferenceLineDock.cpp:28
@@ -12063,7 +12063,7 @@ msgid "Data format && preview"
 msgstr "Формат и предпросмотр данных"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1225
-#: src/kdefrontend/SettingsGeneralPage.cpp:234
+#: src/kdefrontend/SettingsGeneralPage.cpp:245
 #, kde-format
 msgid "Automatic"
 msgstr "Автоматически"
@@ -13044,7 +13044,7 @@ msgstr "Оси (%1): загрузка шаблона «%2»"
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:2045
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:522
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:706
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1793
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1794
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:781
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:378
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:562
@@ -13222,36 +13222,36 @@ msgstr "Сохранено в новый шаблон «%1»."
 msgid "File Browser"
 msgstr "Обозреватель файлов"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:227
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:228
 #, fuzzy, kde-format
 msgid "Save current plot area definition as template"
 msgstr "Сохранить определение текущего графика как шаблон"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:604
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:605
 #, kde-format
 msgid "%1-Ranges:"
 msgstr "Диапазоны по оси %1:"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:606
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:607
 #, kde-format
 msgid "%1-Range:"
 msgstr "Диапазон по оси %1:"
 
 #. i18n: ectx: property (text), widget (QLabel, lNumeric)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:630
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:631
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:209
 #: src/kdefrontend/ui/spreadsheet/equidistantvalueswidget.ui:53
 #, kde-format
 msgid "Numeric"
 msgstr "Числовой"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:733
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:734
 #, kde-format
 msgid "Plot Ranges:"
 msgstr "Диапазоны графика:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPlotRange)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:735
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:736
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:262
 #: src/kdefrontend/ui/dockwidgets/barplotdock.ui:186
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:90
@@ -13277,22 +13277,22 @@ msgstr "Диапазоны графика:"
 msgid "Plot Range:"
 msgstr "Диапазон графика:"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:824
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:825
 #, kde-format
 msgid "Free"
 msgstr "Свободный"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:825
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:826
 #, kde-format
 msgid "Last Points"
 msgstr "Последние точки"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:826
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:827
 #, kde-format
 msgid "First Points"
 msgstr "Первые точки"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:829
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:830
 #, kde-format
 msgid ""
 "Data Range:<ul><li>Free - full data range is plotted</li><li>Last Points - "
@@ -13303,41 +13303,41 @@ msgstr ""
 "li><li>Последние точки — отображается указанное число последних точек</"
 "li><li>Первые точки — отображается указанное число первых точек</li></ul>"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:838
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:839
 #, kde-format
 msgid "If checked, automatically extend the plot range to nice values"
 msgstr ""
 "При включении параметра диапазон графика автоматически расширяется до "
 "круглых чисел"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:843
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:847
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:844
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:848
 #, kde-format
 msgid "Simple"
 msgstr "Простой"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:845
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:849
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:846
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:850
 #, kde-format
 msgid "Sloped"
 msgstr "Наклонный"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1104
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1113
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1105
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1114
 #, kde-format
 msgid "%1 range %2 is used in plot range %3. "
 msgstr "Диапазон по оси %1 %2 используется в диапазоне графика %3. "
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1105
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1114
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1166
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1173
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1106
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1115
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1167
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1174
 #, kde-format
 msgid "Really remove it?"
 msgstr "Удалить его?"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1166
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1173
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1167
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1174
 #, kde-format
 msgid "Plot range %1 is used by element \"%2\". "
 msgstr "Диапазон графика %1 применяется в элементе «%2». "
@@ -13345,7 +13345,7 @@ msgstr "Диапазон графика %1 применяется в элеме�
 # BUGME: please split --aspotashev
 #. i18n: ectx: property (text), widget (QLabel, lPaddingHorizontal)
 #. i18n: ectx: property (text), widget (QLabel, lHorizontalSpacing)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1264
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1265
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:561
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:761
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:342
@@ -13355,7 +13355,7 @@ msgstr "По-горизонтали:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPaddingVertical)
 #. i18n: ectx: property (text), widget (QLabel, lVerticalSpacing)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1265
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1266
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:862
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:716
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:428
@@ -13365,7 +13365,7 @@ msgstr "По-вертикали:"
 
 #. i18n: ectx: property (text), widget (QLabel, lTopMargin)
 #. i18n: ectx: property (text), widget (QLabel, lLeftMargin)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1267
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1268
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:797
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:709
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:414
@@ -13375,7 +13375,7 @@ msgstr "Слева:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLeftMargin)
 #. i18n: ectx: property (text), widget (QLabel, lTopMargin)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1268
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1269
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:804
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:658
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:407
@@ -13383,18 +13383,18 @@ msgstr "Слева:"
 msgid "Top:"
 msgstr "Сверху:"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1600
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1601
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Template Save File"
 msgstr "Выбор файла для сохранения шаблона"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1602
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1603
 #, kde-format
 msgid "Labplot Plot Templates (*%1)"
 msgstr "Шаблоны графиков Labplot (*%1)"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1791
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1792
 #, kde-format
 msgid "%1 cartesian plots: template \"%2\" loaded"
 msgstr "Графики в декартовых координатах (%1): загрузка шаблона «%2»"
@@ -14944,22 +14944,22 @@ msgctxt "@info:credit"
 msgid "Support import of ROOT (CERN) TH1 histograms"
 msgstr "Поддержка импорта гистограмм ROOT (CERN) TH1"
 
-#: src/kdefrontend/LabPlot.cpp:130
+#: src/kdefrontend/LabPlot.cpp:133
 #, kde-format
 msgid "Disable splash screen"
 msgstr "Не показывать заставку"
 
-#: src/kdefrontend/LabPlot.cpp:133
+#: src/kdefrontend/LabPlot.cpp:136
 #, kde-format
 msgid "Start in the presenter mode"
 msgstr "Включить режим презентации"
 
-#: src/kdefrontend/LabPlot.cpp:136
+#: src/kdefrontend/LabPlot.cpp:139
 #, kde-format
 msgid "Open a project file."
 msgstr "Открыть файл проекта."
 
-#: src/kdefrontend/LabPlot.cpp:155
+#: src/kdefrontend/LabPlot.cpp:158
 #, kde-format
 msgid ""
 "Could not open file '%1'. Click 'Continue' to proceed starting or 'Cancel' "
@@ -14968,7 +14968,7 @@ msgstr ""
 "Не удалось открыть файл «%1». Нажмите кнопку «Продолжить», чтобыпродолжить "
 "загрузку программы, либо кнопку «Отмена» для выхода."
 
-#: src/kdefrontend/LabPlot.cpp:156
+#: src/kdefrontend/LabPlot.cpp:159
 #, kde-format
 msgid "Failed to Open"
 msgstr "Ошибка открытия файла"
@@ -15776,7 +15776,7 @@ msgstr "Настройка    [Изменено]"
 # BUGME: plurals please --aspotashev
 #. i18n: ectx: property (text), widget (QLabel, lMin)
 #. i18n: ectx: property (text), widget (QLabel, lMinDateTime)
-#: src/kdefrontend/SettingsGeneralPage.cpp:28
+#: src/kdefrontend/SettingsGeneralPage.cpp:29
 #: src/kdefrontend/ui/spreadsheet/dropvalueswidget.ui:54
 #: src/kdefrontend/ui/spreadsheet/dropvalueswidget.ui:241
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:317
@@ -15785,107 +15785,107 @@ msgstr "Настройка    [Изменено]"
 msgid "min."
 msgstr "мин."
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:200
+#: src/kdefrontend/SettingsGeneralPage.cpp:211
 #, fuzzy, kde-format
 #| msgid "Create New Empty Project"
 msgid "Create New Project"
 msgstr "Создавать новый пустой проект"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:201
+#: src/kdefrontend/SettingsGeneralPage.cpp:212
 #, kde-format
 msgid "Load Last Used Project"
 msgstr "Открывать последний проект"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:205
+#: src/kdefrontend/SettingsGeneralPage.cpp:216
 #, fuzzy, kde-format
 #| msgctxt "@title:window"
 #| msgid "Print Worksheet"
 msgid "With Worksheet"
 msgstr "Печать листа"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:206
+#: src/kdefrontend/SettingsGeneralPage.cpp:217
 #, fuzzy, kde-format
 #| msgctxt "@title:window"
 #| msgid "Print Spreadsheet"
 msgid "With Spreadsheet"
 msgstr "Печать таблицы"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:207
+#: src/kdefrontend/SettingsGeneralPage.cpp:218
 #, fuzzy, kde-format
 msgid "With Worksheet and Spreadsheet"
 msgstr "%1: задание пера линии"
 
 # BUGME: please add colon (:) --aspotashev
-#: src/kdefrontend/SettingsGeneralPage.cpp:209
+#: src/kdefrontend/SettingsGeneralPage.cpp:220
 #, fuzzy, kde-format
 #| msgid "Notebook"
 msgid "With Notebook"
 msgstr "Блокнот"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:212
+#: src/kdefrontend/SettingsGeneralPage.cpp:223
 #, kde-format
 msgid "Notebook type to create automatically on startup"
 msgstr ""
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:216
+#: src/kdefrontend/SettingsGeneralPage.cpp:227
 #, kde-format
 msgid ""
 "Controls the behavior of where the dock widgets are placed after being re-"
 "opened"
 msgstr ""
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:220
+#: src/kdefrontend/SettingsGeneralPage.cpp:231
 #, fuzzy, kde-format
 msgid "Original Position"
 msgstr "Исходный размер"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:221
+#: src/kdefrontend/SettingsGeneralPage.cpp:232
 #, kde-format
 msgid "On top of the last active Dock Widget"
 msgstr ""
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:224
+#: src/kdefrontend/SettingsGeneralPage.cpp:235
 #, kde-format
 msgid "Show File Path"
 msgstr "Показывать путь к файлу"
 
 # BUGME: please add colon (:) to the label in front of text edit --aspotashev
-#: src/kdefrontend/SettingsGeneralPage.cpp:225
+#: src/kdefrontend/SettingsGeneralPage.cpp:236
 #, kde-format
 msgid "Show File Name"
 msgstr "Показывать имя файла"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:226
+#: src/kdefrontend/SettingsGeneralPage.cpp:237
 #, kde-format
 msgid "Show Project Name"
 msgstr "Показывать имя проекта"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:228
+#: src/kdefrontend/SettingsGeneralPage.cpp:239
 #, kde-format
 msgid "Metric"
 msgstr "Метрическая система"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:229
+#: src/kdefrontend/SettingsGeneralPage.cpp:240
 #, kde-format
 msgid "Imperial"
 msgstr "Британская система"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:231
+#: src/kdefrontend/SettingsGeneralPage.cpp:242
 #, kde-format
 msgid "Dot (.)"
 msgstr "Точка (.)"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:232
+#: src/kdefrontend/SettingsGeneralPage.cpp:243
 #, kde-format
 msgid "Comma (,)"
 msgstr "Запятая (,)"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:233
+#: src/kdefrontend/SettingsGeneralPage.cpp:244
 #, kde-format
 msgid "Arabic (٫)"
 msgstr "Арабский (٫)"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:237
+#: src/kdefrontend/SettingsGeneralPage.cpp:248
 #, fuzzy, kde-format
 #| msgid ""
 #| "<html><head/><body><p>Use terms compliant with the <a href=\"http://www."
@@ -15902,7 +15902,7 @@ msgstr ""
 "decoration: underline; color:#2980b9;\">ГОСТ 34100.1-2017 Руководство по "
 "выражению неопределенности измерения</span></a></p></body></html>"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:242
+#: src/kdefrontend/SettingsGeneralPage.cpp:253
 #, kde-format
 msgid ""
 "Save the state (position and geometry) of the docks in the project file. \n"
@@ -15911,7 +15911,7 @@ msgid ""
 "properties."
 msgstr ""
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:249
+#: src/kdefrontend/SettingsGeneralPage.cpp:260
 #, fuzzy, kde-format
 #| msgid ""
 #| "If checked, the results of the calculations in the analysis curves will "
@@ -18853,7 +18853,7 @@ msgstr "Источник импорта:"
 #. i18n: ectx: property (text), widget (QLabel, lDecimalSeparator)
 #: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:91
 #: src/kdefrontend/ui/datasources/jsonoptionswidget.ui:76
-#: src/kdefrontend/ui/settingsgeneralpage.ui:24
+#: src/kdefrontend/ui/settingsgeneralpage.ui:17
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:152
 #, kde-format
 msgid "Decimal separator:"
@@ -20480,7 +20480,7 @@ msgstr "Темы"
 #. i18n: ectx: property (text), widget (QLabel, lAutoSaveInterval)
 #. i18n: ectx: property (text), widget (QLabel, lUpdateInterval)
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:113
-#: src/kdefrontend/ui/settingsgeneralpage.ui:108
+#: src/kdefrontend/ui/settingsgeneralpage.ui:146
 #, kde-format
 msgid "Interval:"
 msgstr "Интервал:"
@@ -20581,7 +20581,7 @@ msgstr "Дата создания:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSaveDockStates)
 #: src/kdefrontend/ui/dockwidgets/projectdock.ui:80
-#: src/kdefrontend/ui/settingsgeneralpage.ui:41
+#: src/kdefrontend/ui/settingsgeneralpage.ui:315
 #, fuzzy, kde-format
 #| msgid "Save project as"
 msgid "Save Dock States:"
@@ -20659,14 +20659,16 @@ msgstr "Конечное значение X:"
 msgid "Start x:"
 msgstr "Начальное значение X:"
 
-#. i18n: ectx: property (text), widget (QCheckBox, chkAutoSave)
-#. i18n: ectx: property (text), widget (QCheckBox, chkSaveDockStates)
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveCalculations)
+#. i18n: ectx: property (text), widget (QCheckBox, chkSaveDockStates)
+#. i18n: ectx: property (text), widget (QCheckBox, chkAutoSave)
+#. i18n: ectx: property (text), widget (QCheckBox, chkDebugOutput)
 #. i18n: ectx: property (text), widget (QLabel, lLinkingEnabled)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:17
+#: src/kdefrontend/ui/settingsgeneralpage.ui:71
 #: src/kdefrontend/ui/settingsgeneralpage.ui:85
-#: src/kdefrontend/ui/settingsgeneralpage.ui:324
-#: src/kdefrontend/ui/settingsgeneralpage.ui:331
+#: src/kdefrontend/ui/settingsgeneralpage.ui:123
+#: src/kdefrontend/ui/settingsgeneralpage.ui:345
 #, kde-format
 msgid "Enabled"
 msgstr "Включено"
@@ -21989,48 +21991,54 @@ msgstr "Общий размер — "
 msgid "Clear"
 msgstr "Очистить"
 
+#. i18n: ectx: property (text), widget (QCheckBox, chkIncludeTrailingZeroesAfterDot)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:24
+#, kde-format
+msgid "Include trailing zeroes after dot"
+msgstr "Вставлять нулевые младшие разряды после точки"
+
+# BUGME: please add colon (:) --aspotashev
+#. i18n: ectx: property (text), widget (QLabel, lNewProjectNotebook)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:34
+#, fuzzy, kde-format
+msgid "Notebook:"
+msgstr "Блокнот"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkOmitGroupSeparator)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:41
+#, kde-format
+msgid "Omit group separator"
+msgstr "Не отображать разделитель разрядов"
+
+# BUGME: please add context --aspotashev
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:64
+#, fuzzy, kde-format
+#| msgid "Save Calculations:"
+msgid "Save  Calculations:"
+msgstr "Сохранять вычисления:"
+
 #. i18n: ectx: property (text), widget (QCheckBox, chkOmitLeadingZeroInExponent)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:17
+#: src/kdefrontend/ui/settingsgeneralpage.ui:78
 #, kde-format
 msgid "Omit leading zero in exponent"
 msgstr "Не отображать ведущий ноль в экспоненте"
 
 #. i18n: ectx: property (text), widget (QLabel, lNumberOptions)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:34
+#: src/kdefrontend/ui/settingsgeneralpage.ui:95
 #, kde-format
 msgid "Number options:"
 msgstr "Параметры отображения чисел:"
 
-#. i18n: ectx: property (text), widget (QLabel, lSaveCalculations)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:157
-#, fuzzy, kde-format
-msgid "Compatibility:"
-msgstr "Вероятность"
-
-#. i18n: ectx: property (toolTip), widget (QCheckBox, chkCompatible)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:167
+# BUGME: please add ctxt --aspotashev
+#. i18n: ectx: property (text), widget (QLabel, lUnits)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:182
 #, kde-format
-msgid ""
-"<html><head/><body><p>Save projects in a compatible format that can be "
-"opened in LabPlot versions older than 2.9.</p></body></html>"
-msgstr ""
-"<html><head/><body><p>Сохранять проекты в совместимом формате, который можно "
-"открывать в версиях старше LabPlot 2.9.</p></body></html>"
-
-#. i18n: ectx: property (text), widget (QCheckBox, chkCompatible)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:170
-#, kde-format
-msgid "Save in compatible format"
-msgstr "Сохранять в совместимом формате"
-
-#. i18n: ectx: property (text), widget (QCheckBox, chkOmitGroupSeparator)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:177
-#, kde-format
-msgid "Omit group separator"
-msgstr "Не отображать разделитель разрядов"
+msgid "Units:"
+msgstr "Единицы измерения:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkGUMTerms)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:219
+#: src/kdefrontend/ui/settingsgeneralpage.ui:189
 #, kde-format
 msgid ""
 "<html><head/><body><p>Use terms compliant with the <a href=\"http://www.bipm."
@@ -22044,76 +22052,77 @@ msgstr ""
 "выражению неопределенности измерения</span></a></p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkGUMTerms)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:222
+#: src/kdefrontend/ui/settingsgeneralpage.ui:192
 #, kde-format
 msgid "GUM compliant"
 msgstr "В соответствии с ГОСТ 34100.1-2017"
 
+#. i18n: ectx: property (text), widget (QLabel, lSaveCalculations)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:202
+#, fuzzy, kde-format
+msgid "Compatibility:"
+msgstr "Вероятность"
+
+#. i18n: ectx: property (text), widget (QLabel, lDockWindowPositionReopen)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:209
+#, fuzzy, kde-format
+msgid "Dock widget placement:"
+msgstr "Размещение ящика с усами"
+
+#. i18n: ectx: property (text), widget (QLabel, lAutoSave)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:219
+#, kde-format
+msgid "Auto-save:"
+msgstr "Автосохранение:"
+
+# BUGME: please split strings --aspotashev
+#. i18n: ectx: property (text), widget (QLabel, lTitleBar)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:226
+#, kde-format
+msgid "Title Bar:"
+msgstr "Заголовок окна:"
+
 #. i18n: ectx: property (text), widget (QLabel, lNewProject)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:229
+#: src/kdefrontend/ui/settingsgeneralpage.ui:233
 #, fuzzy, kde-format
 #| msgid "Save Project"
 msgid "New Project:"
 msgstr "Сохранение проекта"
 
-# BUGME: please add ctxt --aspotashev
-#. i18n: ectx: property (text), widget (QLabel, lUnits)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:239
+#. i18n: ectx: property (toolTip), widget (QCheckBox, chkCompatible)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:240
 #, kde-format
-msgid "Units:"
-msgstr "Единицы измерения:"
+msgid ""
+"<html><head/><body><p>Save projects in a compatible format that can be "
+"opened in LabPlot versions older than 2.9.</p></body></html>"
+msgstr ""
+"<html><head/><body><p>Сохранять проекты в совместимом формате, который можно "
+"открывать в версиях старше LabPlot 2.9.</p></body></html>"
 
-#. i18n: ectx: property (text), widget (QLabel, lAutoSave)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:268
+#. i18n: ectx: property (text), widget (QCheckBox, chkCompatible)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:243
 #, kde-format
-msgid "Auto-save:"
-msgstr "Автосохранение:"
+msgid "Save in compatible format"
+msgstr "Сохранять в совместимом формате"
 
 #. i18n: ectx: property (text), widget (QLabel, lGUMTerms)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:275
+#: src/kdefrontend/ui/settingsgeneralpage.ui:250
 #, kde-format
 msgid "Terms:"
 msgstr "Термины:"
 
-# BUGME: please split strings --aspotashev
-#. i18n: ectx: property (text), widget (QLabel, lTitleBar)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:282
-#, kde-format
-msgid "Title Bar:"
-msgstr "Заголовок окна:"
-
 #. i18n: ectx: property (text), widget (QLabel, lStartup)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:289
+#: src/kdefrontend/ui/settingsgeneralpage.ui:292
 #, kde-format
 msgid "Startup:"
 msgstr "При запуске:"
 
-#. i18n: ectx: property (text), widget (QLabel, lDockWindowPositionReopen)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:296
+#. i18n: ectx: property (text), widget (QLabel, lDebugOutput)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:338
 #, fuzzy, kde-format
-msgid "Dock widget placement:"
-msgstr "Размещение ящика с усами"
-
-# BUGME: please add colon (:) --aspotashev
-#. i18n: ectx: property (text), widget (QLabel, lNewProjectNotebook)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:303
-#, fuzzy, kde-format
-msgid "Notebook:"
-msgstr "Блокнот"
-
-#. i18n: ectx: property (text), widget (QCheckBox, chkIncludeTrailingZeroesAfterDot)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:310
-#, kde-format
-msgid "Include trailing zeroes after dot"
-msgstr "Вставлять нулевые младшие разряды после точки"
-
-# BUGME: please add context --aspotashev
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:317
-#, fuzzy, kde-format
-#| msgid "Save Calculations:"
-msgid "Save  Calculations:"
-msgstr "Сохранять вычисления:"
+#| msgid "Output:"
+msgid "Debug Output:"
+msgstr "Вывод:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode_2)

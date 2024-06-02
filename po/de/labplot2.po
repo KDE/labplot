@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-01 01:40+0000\n"
+"POT-Creation-Date: 2024-06-02 01:39+0000\n"
 "PO-Revision-Date: 2023-11-26 22:42+0100\n"
 "Last-Translator: Stefan Gerlach <stefan.gerlach@uni.kn>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -1160,18 +1160,18 @@ msgstr "Anzahl der Zeilen: %1"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:545
 #: src/backend/datasources/filters/AsciiFilter.cpp:754
-#: src/backend/datasources/filters/AsciiFilter.cpp:950
-#: src/backend/datasources/filters/AsciiFilter.cpp:1491
-#: src/backend/datasources/filters/AsciiFilter.cpp:2052
+#: src/backend/datasources/filters/AsciiFilter.cpp:952
+#: src/backend/datasources/filters/AsciiFilter.cpp:1493
+#: src/backend/datasources/filters/AsciiFilter.cpp:2054
 #, kde-format
 msgid "Timestamp"
 msgstr "Zeitstempel"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:549
 #: src/backend/datasources/filters/AsciiFilter.cpp:748
-#: src/backend/datasources/filters/AsciiFilter.cpp:948
-#: src/backend/datasources/filters/AsciiFilter.cpp:1486
-#: src/backend/datasources/filters/AsciiFilter.cpp:2046
+#: src/backend/datasources/filters/AsciiFilter.cpp:950
+#: src/backend/datasources/filters/AsciiFilter.cpp:1488
+#: src/backend/datasources/filters/AsciiFilter.cpp:2048
 #: src/backend/datasources/filters/BinaryFilter.cpp:293
 #: src/backend/datasources/filters/BinaryFilter.cpp:436
 #: src/backend/nsl/nsl_dft.c:29 src/backend/nsl/nsl_filter.c:23
@@ -1180,8 +1180,8 @@ msgid "Index"
 msgstr "Index"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:734
-#: src/backend/datasources/filters/AsciiFilter.cpp:1248
-#: src/backend/datasources/filters/AsciiFilter.cpp:1584
+#: src/backend/datasources/filters/AsciiFilter.cpp:1250
+#: src/backend/datasources/filters/AsciiFilter.cpp:1586
 #: src/backend/datasources/filters/BinaryFilter.cpp:404
 #, fuzzy, kde-format
 #| msgid "Failed to open the device."
@@ -1190,9 +1190,9 @@ msgstr "Fehler beim Öffnen des Geräts."
 
 #. i18n: ectx: property (text), widget (QTableWidget, twLabels)
 #: src/backend/datasources/filters/AsciiFilter.cpp:760
-#: src/backend/datasources/filters/AsciiFilter.cpp:955
-#: src/backend/datasources/filters/AsciiFilter.cpp:1510
-#: src/backend/datasources/filters/AsciiFilter.cpp:2065
+#: src/backend/datasources/filters/AsciiFilter.cpp:957
+#: src/backend/datasources/filters/AsciiFilter.cpp:1512
+#: src/backend/datasources/filters/AsciiFilter.cpp:2067
 #: src/backend/datasources/filters/QJsonModel.cpp:133
 #: src/commonfrontend/matrix/MatrixView.cpp:620
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2384
@@ -1207,14 +1207,14 @@ msgstr "Fehler beim Öffnen des Geräts."
 msgid "Value"
 msgstr "Wert"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:957
-#: src/backend/datasources/filters/AsciiFilter.cpp:1512
-#: src/backend/datasources/filters/AsciiFilter.cpp:2067
+#: src/backend/datasources/filters/AsciiFilter.cpp:959
+#: src/backend/datasources/filters/AsciiFilter.cpp:1514
+#: src/backend/datasources/filters/AsciiFilter.cpp:2069
 #, kde-format
 msgid "Value %1"
 msgstr "Wert %1"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:1267
+#: src/backend/datasources/filters/AsciiFilter.cpp:1269
 #: src/backend/datasources/filters/BinaryFilter.cpp:444
 #: src/backend/datasources/filters/CANFilter.cpp:299
 #: src/backend/datasources/filters/FITSFilter.cpp:329
@@ -1955,7 +1955,7 @@ msgstr "Struktur hat keine Felder"
 msgid "Support for this variable type not implemented yet."
 msgstr ""
 
-#: src/backend/datasources/filters/MatioFilter.cpp:1227
+#: src/backend/datasources/filters/MatioFilter.cpp:1228
 #, kde-format
 msgid "Variables with rank greater than 2 not supported yet."
 msgstr ""
@@ -7140,13 +7140,13 @@ msgstr "%1: Linien-Deckkraft festlegen"
 
 #: src/backend/worksheet/plots/AbstractPlot.cpp:100
 #: src/backend/worksheet/plots/AbstractPlot.cpp:128
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1292
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1293
 #, kde-format
 msgid "%1: set horizontal padding"
 msgstr "%1: Waagerechte Auffüllung festlegen"
 
 #: src/backend/worksheet/plots/AbstractPlot.cpp:107
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1318
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1319
 #, kde-format
 msgid "%1: set vertical padding"
 msgstr "%1: Senkrechte Auffüllung festlegen"
@@ -7190,8 +7190,8 @@ msgstr "Waagerecht"
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:259
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:57
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:53
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:844
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:848
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:845
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:849
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:158
 #: src/kdefrontend/dockwidgets/LollipopPlotDock.cpp:52
 #: src/kdefrontend/dockwidgets/ReferenceLineDock.cpp:28
@@ -11811,7 +11811,7 @@ msgid "Data format && preview"
 msgstr "Datenformat && Vorschau"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1225
-#: src/kdefrontend/SettingsGeneralPage.cpp:234
+#: src/kdefrontend/SettingsGeneralPage.cpp:245
 #, kde-format
 msgid "Automatic"
 msgstr "Automatisch"
@@ -12746,7 +12746,7 @@ msgstr "%1-Achsen: Vorlage \"%2\" geladen"
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:2045
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:522
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:706
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1793
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1794
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:781
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:378
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:562
@@ -12921,36 +12921,36 @@ msgstr "%1 Box-Plot: Vorlage \"%2\" geladen."
 msgid "File Browser"
 msgstr "Dateibrowser"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:227
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:228
 #, kde-format
 msgid "Save current plot area definition as template"
 msgstr "Aktuelle Plotbereichseinstellungen als Vorlage speichern"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:604
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:605
 #, kde-format
 msgid "%1-Ranges:"
 msgstr "%1-Bereiche:"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:606
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:607
 #, kde-format
 msgid "%1-Range:"
 msgstr "%1-Bereich:"
 
 #. i18n: ectx: property (text), widget (QLabel, lNumeric)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:630
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:631
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:209
 #: src/kdefrontend/ui/spreadsheet/equidistantvalueswidget.ui:53
 #, kde-format
 msgid "Numeric"
 msgstr "Numerisch"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:733
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:734
 #, kde-format
 msgid "Plot Ranges:"
 msgstr "Plotbereiche:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPlotRange)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:735
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:736
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:262
 #: src/kdefrontend/ui/dockwidgets/barplotdock.ui:186
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:90
@@ -12976,22 +12976,22 @@ msgstr "Plotbereiche:"
 msgid "Plot Range:"
 msgstr "Plotbereich:"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:824
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:825
 #, kde-format
 msgid "Free"
 msgstr "Frei"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:825
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:826
 #, kde-format
 msgid "Last Points"
 msgstr "Letzte Punkte"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:826
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:827
 #, kde-format
 msgid "First Points"
 msgstr "Erste Punkte"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:829
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:830
 #, kde-format
 msgid ""
 "Data Range:<ul><li>Free - full data range is plotted</li><li>Last Points - "
@@ -13003,46 +13003,46 @@ msgstr ""
 "gezeichnet</li><li>Erste Punkte - die angegebene Anzahl an ersten Punkte "
 "wird gezeichnet</li></ul>"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:838
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:839
 #, kde-format
 msgid "If checked, automatically extend the plot range to nice values"
 msgstr "Wenn aktiv, wird der Plotbereich automatisch auf runde Werte erweitert"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:843
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:847
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:844
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:848
 #, kde-format
 msgid "Simple"
 msgstr "Einfach"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:845
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:849
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:846
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:850
 #, kde-format
 msgid "Sloped"
 msgstr "Geneigt"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1104
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1113
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1105
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1114
 #, kde-format
 msgid "%1 range %2 is used in plot range %3. "
 msgstr "%1 Bereich %2 wird in Plotbereich %3 genutzt. "
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1105
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1114
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1166
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1173
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1106
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1115
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1167
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1174
 #, kde-format
 msgid "Really remove it?"
 msgstr "Wirklich entfernen?"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1166
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1173
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1167
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1174
 #, kde-format
 msgid "Plot range %1 is used by element \"%2\". "
 msgstr "Plotbereich %1 wird in Element \"%2\" verwendet."
 
 #. i18n: ectx: property (text), widget (QLabel, lPaddingHorizontal)
 #. i18n: ectx: property (text), widget (QLabel, lHorizontalSpacing)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1264
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1265
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:561
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:761
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:342
@@ -13052,7 +13052,7 @@ msgstr "Waagerecht:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPaddingVertical)
 #. i18n: ectx: property (text), widget (QLabel, lVerticalSpacing)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1265
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1266
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:862
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:716
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:428
@@ -13062,7 +13062,7 @@ msgstr "Senkrecht:"
 
 #. i18n: ectx: property (text), widget (QLabel, lTopMargin)
 #. i18n: ectx: property (text), widget (QLabel, lLeftMargin)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1267
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1268
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:797
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:709
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:414
@@ -13072,7 +13072,7 @@ msgstr "Links:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLeftMargin)
 #. i18n: ectx: property (text), widget (QLabel, lTopMargin)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1268
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1269
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:804
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:658
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:407
@@ -13080,18 +13080,18 @@ msgstr "Links:"
 msgid "Top:"
 msgstr "Oben:"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1600
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1601
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Template Save File"
 msgstr "Vorlage zum Dateispeichern auswählen"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1602
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1603
 #, kde-format
 msgid "Labplot Plot Templates (*%1)"
 msgstr "LabPlot-Vorlagen (*%1)"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1791
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1792
 #, kde-format
 msgid "%1 cartesian plots: template \"%2\" loaded"
 msgstr "%1 kartesischer Plot: Die Vorlage \"%2\" wurde geladen"
@@ -14621,22 +14621,22 @@ msgctxt "@info:credit"
 msgid "Support import of ROOT (CERN) TH1 histograms"
 msgstr "Unterstützung beim Import vom ROOT (CERN) TH1 Histogrammen"
 
-#: src/kdefrontend/LabPlot.cpp:130
+#: src/kdefrontend/LabPlot.cpp:133
 #, kde-format
 msgid "Disable splash screen"
 msgstr "Startbildschirm deaktivieren"
 
-#: src/kdefrontend/LabPlot.cpp:133
+#: src/kdefrontend/LabPlot.cpp:136
 #, kde-format
 msgid "Start in the presenter mode"
 msgstr "Im Präsentationsmodus starten"
 
-#: src/kdefrontend/LabPlot.cpp:136
+#: src/kdefrontend/LabPlot.cpp:139
 #, kde-format
 msgid "Open a project file."
 msgstr "Eine Projektdatei Öffnen."
 
-#: src/kdefrontend/LabPlot.cpp:155
+#: src/kdefrontend/LabPlot.cpp:158
 #, kde-format
 msgid ""
 "Could not open file '%1'. Click 'Continue' to proceed starting or 'Cancel' "
@@ -14645,7 +14645,7 @@ msgstr ""
 "Die Datei „%1“ kann nicht geöffnet werden. Klicken Sie auf „Fortsetzen“ um "
 "weiter zu machen, oder auf „Abbrechen“, um die Anwendung zu beenden."
 
-#: src/kdefrontend/LabPlot.cpp:156
+#: src/kdefrontend/LabPlot.cpp:159
 #, kde-format
 msgid "Failed to Open"
 msgstr "Fehler beim Öffnen"
@@ -15432,7 +15432,7 @@ msgstr "Einstellungen    [Geändert]"
 
 #. i18n: ectx: property (text), widget (QLabel, lMin)
 #. i18n: ectx: property (text), widget (QLabel, lMinDateTime)
-#: src/kdefrontend/SettingsGeneralPage.cpp:28
+#: src/kdefrontend/SettingsGeneralPage.cpp:29
 #: src/kdefrontend/ui/spreadsheet/dropvalueswidget.ui:54
 #: src/kdefrontend/ui/spreadsheet/dropvalueswidget.ui:241
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:317
@@ -15441,49 +15441,49 @@ msgstr "Einstellungen    [Geändert]"
 msgid "min."
 msgstr "Min."
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:200
+#: src/kdefrontend/SettingsGeneralPage.cpp:211
 #, fuzzy, kde-format
 #| msgid "Create New Empty Project"
 msgid "Create New Project"
 msgstr "Neues leeres Projekt erstellen"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:201
+#: src/kdefrontend/SettingsGeneralPage.cpp:212
 #, kde-format
 msgid "Load Last Used Project"
 msgstr "Zuletzt verwendetes Projekt laden"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:205
+#: src/kdefrontend/SettingsGeneralPage.cpp:216
 #, fuzzy, kde-format
 #| msgctxt "@title:window"
 #| msgid "Print Worksheet"
 msgid "With Worksheet"
 msgstr "Arbeitsblatt drucken"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:206
+#: src/kdefrontend/SettingsGeneralPage.cpp:217
 #, fuzzy, kde-format
 #| msgctxt "@title:window"
 #| msgid "Print Spreadsheet"
 msgid "With Spreadsheet"
 msgstr "Tabelle drucken"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:207
+#: src/kdefrontend/SettingsGeneralPage.cpp:218
 #, fuzzy, kde-format
 #| msgid "%1: set linked spreadsheet"
 msgid "With Worksheet and Spreadsheet"
 msgstr "%1: Tabellenverknüpfung festlegen"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:209
+#: src/kdefrontend/SettingsGeneralPage.cpp:220
 #, fuzzy, kde-format
 #| msgid "Notebook"
 msgid "With Notebook"
 msgstr "Notebook"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:212
+#: src/kdefrontend/SettingsGeneralPage.cpp:223
 #, kde-format
 msgid "Notebook type to create automatically on startup"
 msgstr "Typ des Notebooks, welches bei Starten automatisch erzeugt wird"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:216
+#: src/kdefrontend/SettingsGeneralPage.cpp:227
 #, kde-format
 msgid ""
 "Controls the behavior of where the dock widgets are placed after being re-"
@@ -15492,57 +15492,57 @@ msgstr ""
 "Verwaltet das Verhalten an welcher Stelle Dock Widgets nach dem erneuten "
 "Öffnen platziert werden"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:220
+#: src/kdefrontend/SettingsGeneralPage.cpp:231
 #, kde-format
 msgid "Original Position"
 msgstr "Originale Position"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:221
+#: src/kdefrontend/SettingsGeneralPage.cpp:232
 #, kde-format
 msgid "On top of the last active Dock Widget"
 msgstr "Über dem zuletzt aktivem Dock Widget"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:224
+#: src/kdefrontend/SettingsGeneralPage.cpp:235
 #, kde-format
 msgid "Show File Path"
 msgstr "Dateipfad anzeigen"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:225
+#: src/kdefrontend/SettingsGeneralPage.cpp:236
 #, kde-format
 msgid "Show File Name"
 msgstr "Dateinamen anzeigen"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:226
+#: src/kdefrontend/SettingsGeneralPage.cpp:237
 #, kde-format
 msgid "Show Project Name"
 msgstr "Projektnamen anzeigen"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:228
+#: src/kdefrontend/SettingsGeneralPage.cpp:239
 #, kde-format
 msgid "Metric"
 msgstr "Metrisch"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:229
+#: src/kdefrontend/SettingsGeneralPage.cpp:240
 #, kde-format
 msgid "Imperial"
 msgstr "Angloamerikanisch"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:231
+#: src/kdefrontend/SettingsGeneralPage.cpp:242
 #, kde-format
 msgid "Dot (.)"
 msgstr "Punkt (.)"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:232
+#: src/kdefrontend/SettingsGeneralPage.cpp:243
 #, kde-format
 msgid "Comma (,)"
 msgstr "Komma (,)"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:233
+#: src/kdefrontend/SettingsGeneralPage.cpp:244
 #, kde-format
 msgid "Arabic (٫)"
 msgstr "Arabisch (٫)"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:237
+#: src/kdefrontend/SettingsGeneralPage.cpp:248
 #, fuzzy, kde-format
 #| msgid ""
 #| "<html><head/><body><p>Use terms compliant with the <a href=\"http://www."
@@ -15559,7 +15559,7 @@ msgstr ""
 "\" text-decoration: underline; color:#2980b9;\">Guide to the Expression of "
 "Uncertainty in Measurement (GUM)</span></a></p></body></html>"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:242
+#: src/kdefrontend/SettingsGeneralPage.cpp:253
 #, kde-format
 msgid ""
 "Save the state (position and geometry) of the docks in the project file. \n"
@@ -15568,7 +15568,7 @@ msgid ""
 "properties."
 msgstr ""
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:249
+#: src/kdefrontend/SettingsGeneralPage.cpp:260
 #, fuzzy, kde-format
 #| msgid ""
 #| "If checked, the results of the calculations in the analysis curves will "
@@ -18436,7 +18436,7 @@ msgstr "Importieren von:"
 #. i18n: ectx: property (text), widget (QLabel, lDecimalSeparator)
 #: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:91
 #: src/kdefrontend/ui/datasources/jsonoptionswidget.ui:76
-#: src/kdefrontend/ui/settingsgeneralpage.ui:24
+#: src/kdefrontend/ui/settingsgeneralpage.ui:17
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:152
 #, kde-format
 msgid "Decimal separator:"
@@ -20018,7 +20018,7 @@ msgstr "Themen"
 #. i18n: ectx: property (text), widget (QLabel, lAutoSaveInterval)
 #. i18n: ectx: property (text), widget (QLabel, lUpdateInterval)
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:113
-#: src/kdefrontend/ui/settingsgeneralpage.ui:108
+#: src/kdefrontend/ui/settingsgeneralpage.ui:146
 #, kde-format
 msgid "Interval:"
 msgstr "Intervall:"
@@ -20117,7 +20117,7 @@ msgstr "Erstellt:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSaveDockStates)
 #: src/kdefrontend/ui/dockwidgets/projectdock.ui:80
-#: src/kdefrontend/ui/settingsgeneralpage.ui:41
+#: src/kdefrontend/ui/settingsgeneralpage.ui:315
 #, fuzzy, kde-format
 #| msgid "Save project as"
 msgid "Save Dock States:"
@@ -20190,14 +20190,16 @@ msgstr "End x:"
 msgid "Start x:"
 msgstr "Start x:"
 
-#. i18n: ectx: property (text), widget (QCheckBox, chkAutoSave)
-#. i18n: ectx: property (text), widget (QCheckBox, chkSaveDockStates)
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveCalculations)
+#. i18n: ectx: property (text), widget (QCheckBox, chkSaveDockStates)
+#. i18n: ectx: property (text), widget (QCheckBox, chkAutoSave)
+#. i18n: ectx: property (text), widget (QCheckBox, chkDebugOutput)
 #. i18n: ectx: property (text), widget (QLabel, lLinkingEnabled)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:17
+#: src/kdefrontend/ui/settingsgeneralpage.ui:71
 #: src/kdefrontend/ui/settingsgeneralpage.ui:85
-#: src/kdefrontend/ui/settingsgeneralpage.ui:324
-#: src/kdefrontend/ui/settingsgeneralpage.ui:331
+#: src/kdefrontend/ui/settingsgeneralpage.ui:123
+#: src/kdefrontend/ui/settingsgeneralpage.ui:345
 #, kde-format
 msgid "Enabled"
 msgstr "Aktiv"
@@ -21486,48 +21488,51 @@ msgstr "Gesamtgröße - "
 msgid "Clear"
 msgstr "Löschen"
 
+#. i18n: ectx: property (text), widget (QCheckBox, chkIncludeTrailingZeroesAfterDot)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:24
+#, kde-format
+msgid "Include trailing zeroes after dot"
+msgstr "Folgende Nullen nach dem Komma belassen"
+
+#. i18n: ectx: property (text), widget (QLabel, lNewProjectNotebook)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:34
+#, kde-format
+msgid "Notebook:"
+msgstr "Notebook:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkOmitGroupSeparator)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:41
+#, kde-format
+msgid "Omit group separator"
+msgstr "Tausendertrenner weglassen"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:64
+#, fuzzy, kde-format
+#| msgid "Save Calculations:"
+msgid "Save  Calculations:"
+msgstr "Berechnungen speichern:"
+
 #. i18n: ectx: property (text), widget (QCheckBox, chkOmitLeadingZeroInExponent)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:17
+#: src/kdefrontend/ui/settingsgeneralpage.ui:78
 #, kde-format
 msgid "Omit leading zero in exponent"
 msgstr "Führende 0 im Exponenten weglassen"
 
 #. i18n: ectx: property (text), widget (QLabel, lNumberOptions)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:34
+#: src/kdefrontend/ui/settingsgeneralpage.ui:95
 #, kde-format
 msgid "Number options:"
 msgstr "Zahlenoptionen:"
 
-#. i18n: ectx: property (text), widget (QLabel, lSaveCalculations)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:157
+#. i18n: ectx: property (text), widget (QLabel, lUnits)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:182
 #, kde-format
-msgid "Compatibility:"
-msgstr "Kompatibilität:"
-
-#. i18n: ectx: property (toolTip), widget (QCheckBox, chkCompatible)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:167
-#, kde-format
-msgid ""
-"<html><head/><body><p>Save projects in a compatible format that can be "
-"opened in LabPlot versions older than 2.9.</p></body></html>"
-msgstr ""
-"<html><head/><body><p>Speichert Projekte in einem Format, dass von älteren "
-"LabPlot Versionen (vor 2.9) geöffnet werden kann.</p></body></html>"
-
-#. i18n: ectx: property (text), widget (QCheckBox, chkCompatible)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:170
-#, kde-format
-msgid "Save in compatible format"
-msgstr "In kompatiblem Format speichern"
-
-#. i18n: ectx: property (text), widget (QCheckBox, chkOmitGroupSeparator)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:177
-#, kde-format
-msgid "Omit group separator"
-msgstr "Tausendertrenner weglassen"
+msgid "Units:"
+msgstr "Einheiten:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkGUMTerms)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:219
+#: src/kdefrontend/ui/settingsgeneralpage.ui:189
 #, kde-format
 msgid ""
 "<html><head/><body><p>Use terms compliant with the <a href=\"http://www.bipm."
@@ -21541,72 +21546,76 @@ msgstr ""
 "Uncertainty in Measurement (GUM)</span></a></p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkGUMTerms)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:222
+#: src/kdefrontend/ui/settingsgeneralpage.ui:192
 #, kde-format
 msgid "GUM compliant"
 msgstr "GUM konform"
 
+#. i18n: ectx: property (text), widget (QLabel, lSaveCalculations)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:202
+#, kde-format
+msgid "Compatibility:"
+msgstr "Kompatibilität:"
+
+#. i18n: ectx: property (text), widget (QLabel, lDockWindowPositionReopen)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:209
+#, kde-format
+msgid "Dock widget placement:"
+msgstr "Dock Widget-Platzierung"
+
+#. i18n: ectx: property (text), widget (QLabel, lAutoSave)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:219
+#, kde-format
+msgid "Auto-save:"
+msgstr "Automatisch speichern:"
+
+#. i18n: ectx: property (text), widget (QLabel, lTitleBar)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:226
+#, kde-format
+msgid "Title Bar:"
+msgstr "Titelleiste:"
+
 #. i18n: ectx: property (text), widget (QLabel, lNewProject)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:229
+#: src/kdefrontend/ui/settingsgeneralpage.ui:233
 #, fuzzy, kde-format
 #| msgid "Save Project"
 msgid "New Project:"
 msgstr "Projekt speichern"
 
-#. i18n: ectx: property (text), widget (QLabel, lUnits)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:239
+#. i18n: ectx: property (toolTip), widget (QCheckBox, chkCompatible)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:240
 #, kde-format
-msgid "Units:"
-msgstr "Einheiten:"
+msgid ""
+"<html><head/><body><p>Save projects in a compatible format that can be "
+"opened in LabPlot versions older than 2.9.</p></body></html>"
+msgstr ""
+"<html><head/><body><p>Speichert Projekte in einem Format, dass von älteren "
+"LabPlot Versionen (vor 2.9) geöffnet werden kann.</p></body></html>"
 
-#. i18n: ectx: property (text), widget (QLabel, lAutoSave)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:268
+#. i18n: ectx: property (text), widget (QCheckBox, chkCompatible)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:243
 #, kde-format
-msgid "Auto-save:"
-msgstr "Automatisch speichern:"
+msgid "Save in compatible format"
+msgstr "In kompatiblem Format speichern"
 
 #. i18n: ectx: property (text), widget (QLabel, lGUMTerms)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:275
+#: src/kdefrontend/ui/settingsgeneralpage.ui:250
 #, kde-format
 msgid "Terms:"
 msgstr "Begriffe:"
 
-#. i18n: ectx: property (text), widget (QLabel, lTitleBar)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:282
-#, kde-format
-msgid "Title Bar:"
-msgstr "Titelleiste:"
-
 #. i18n: ectx: property (text), widget (QLabel, lStartup)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:289
+#: src/kdefrontend/ui/settingsgeneralpage.ui:292
 #, kde-format
 msgid "Startup:"
 msgstr "Start:"
 
-#. i18n: ectx: property (text), widget (QLabel, lDockWindowPositionReopen)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:296
-#, kde-format
-msgid "Dock widget placement:"
-msgstr "Dock Widget-Platzierung"
-
-#. i18n: ectx: property (text), widget (QLabel, lNewProjectNotebook)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:303
-#, kde-format
-msgid "Notebook:"
-msgstr "Notebook:"
-
-#. i18n: ectx: property (text), widget (QCheckBox, chkIncludeTrailingZeroesAfterDot)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:310
-#, kde-format
-msgid "Include trailing zeroes after dot"
-msgstr "Folgende Nullen nach dem Komma belassen"
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:317
+#. i18n: ectx: property (text), widget (QLabel, lDebugOutput)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:338
 #, fuzzy, kde-format
-#| msgid "Save Calculations:"
-msgid "Save  Calculations:"
-msgstr "Berechnungen speichern:"
+#| msgid "Output:"
+msgid "Debug Output:"
+msgstr "Ausgabe:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode_2)
