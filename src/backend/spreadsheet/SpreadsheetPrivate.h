@@ -15,7 +15,7 @@ public:
 	Spreadsheet::Linking linking;
 	Spreadsheet* q{nullptr};
 	StatisticsSpreadsheet* statisticsSpreadsheet{nullptr};
-	QVector<CartesianPlot*> mChangingPlots;
+	QVector<CartesianPlot*> m_usedInPlots; // the list of plots using the columns prior to and after the import in replace mode that need to be updated after the import
 };
 
 #endif // SPREADSHEET_PRIVATE

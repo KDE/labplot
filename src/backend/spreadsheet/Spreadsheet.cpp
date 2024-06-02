@@ -1312,7 +1312,7 @@ int Spreadsheet::prepareImport(std::vector<void*>& dataContainer,
 	PERFTRACE(QLatin1String(Q_FUNC_INFO));
 	DEBUG(Q_FUNC_INFO << ", resize spreadsheet to rows = " << actualRows << " and cols = " << actualCols)
 	QDEBUG(Q_FUNC_INFO << ", column name list = " << colNameList)
-	assert(d->mChangingPlots.size() == 0);
+	assert(d->m_usedInPlots.size() == 0);
 	int columnOffset = 0;
 	setUndoAware(false);
 	if (m_model != nullptr)
@@ -1417,7 +1417,6 @@ int Spreadsheet::prepareImport(std::vector<void*>& dataContainer,
 int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, const QStringList& names, int cols) {
 	//	PERFTRACE(Q_FUNC_INFO);
 	DEBUG(Q_FUNC_INFO << ", mode = " << ENUM_TO_STRING(AbstractFileFilter, ImportMode, mode) << ", cols = " << cols)
-	Q_D(Spreadsheet);
 	// QDEBUG("	column name list = " << colNameList)
 
 	Q_EMIT aboutToResize(); // call this to disable the retransforms in worksheet elements in Project
@@ -1487,11 +1486,12 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, const QStringList& 
 		// 4. column->aspectDescriptionChanged() to trigger the update of the dependencies on column in Project.
 		const auto& columns = children<Column>();
 		int index = 0;
+		Q_D(Spreadsheet);
 		for (auto* column : columns) {
 			column->setSuppressDataChangedSignal(true);
 			const auto& newName = uniqueNames.at(index);
 			if (column->name() != newName) {
-				column->addUsedInPlots(d->mChangingPlots);
+				column->addUsedInPlots(d->m_usedInPlots);
 				column->reset();
 				column->setName(newName, AbstractAspect::NameHandling::UniqueNotRequired);
 				column->aspectDescriptionChanged(column);
@@ -1519,21 +1519,13 @@ void Spreadsheet::finalizeImport(size_t columnOffset,
 		for (size_t n = startColumn; n <= endColumn; n++) {
 			auto* column = this->column((int)(columnOffset + n - startColumn));
 			if (column)
-				column->addUsedInPlots(d->mChangingPlots);
+				column->addUsedInPlots(d->m_usedInPlots);
 		}
-	}
-
-	// Check that each plot is only once in the list
-	QVector<CartesianPlot*> changingPlots;
-	while (!d->mChangingPlots.isEmpty()) {
-		auto plot = d->mChangingPlots.takeFirst();
-		if (!changingPlots.contains(plot))
-			changingPlots << plot;
 	}
 
 	if (importMode == AbstractFileFilter::ImportMode::Replace) {
 		// suppress retransform in the dependent plots
-		for (auto* plot : changingPlots)
+		for (auto* plot : d->m_usedInPlots)
 			plot->setSuppressRetransform(true);
 	}
 
@@ -1580,7 +1572,7 @@ void Spreadsheet::finalizeImport(size_t columnOffset,
 
 	if (importMode == AbstractFileFilter::ImportMode::Replace) {
 		// retransform the dependent plots
-		for (auto* plot : changingPlots) {
+		for (auto* plot : d->m_usedInPlots) {
 			plot->setSuppressRetransform(false);
 			plot->dataChanged(-1, -1); // TODO: check if all ranges must be updated
 		}
