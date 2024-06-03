@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-06-02 01:39+0000\n"
-"PO-Revision-Date: 2024-06-01 08:43+0300\n"
+"PO-Revision-Date: 2024-06-02 08:25+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian\n"
 "Language: uk\n"
@@ -21686,10 +21686,9 @@ msgstr "Запуск:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDebugOutput)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:338
-#, fuzzy, kde-format
-#| msgid "Output:"
+#, kde-format
 msgid "Debug Output:"
-msgstr "Виведення:"
+msgstr "Діагностичне виведення:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode_2)

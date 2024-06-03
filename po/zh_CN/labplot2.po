@@ -21158,10 +21158,9 @@ msgstr "开始:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDebugOutput)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:338
-#, fuzzy, kde-format
-#| msgid "Output:"
+#, kde-format
 msgid "Debug Output:"
-msgstr "输出："
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode_2)

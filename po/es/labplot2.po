@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-06-02 01:39+0000\n"
-"PO-Revision-Date: 2024-05-23 17:08+0200\n"
+"PO-Revision-Date: 2024-06-03 00:59+0200\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -44,11 +44,9 @@ msgstr ""
 "No se ha podido encontrar el complemento para %1. Compruebe su instalación."
 
 #: src/backend/cantorWorksheet/CantorWorksheet.cpp:109
-#, fuzzy, kde-format
-#| msgid "Couldn't find the plugin for %1. Please check your installation."
+#, kde-format
 msgid "Couldn't create the sessions for %1. Please check your installation."
-msgstr ""
-"No se ha podido encontrar el complemento para %1. Compruebe su instalación."
+msgstr "No se han podido crear las sesiones para %1. Compruebe su instalación."
 
 #: src/backend/cantorWorksheet/CantorWorksheet.cpp:287
 #, kde-format
@@ -21622,10 +21620,9 @@ msgstr "Inicio:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDebugOutput)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:338
-#, fuzzy, kde-format
-#| msgid "Output:"
+#, kde-format
 msgid "Debug Output:"
-msgstr "Salida:"
+msgstr "Salida de depuración:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode_2)

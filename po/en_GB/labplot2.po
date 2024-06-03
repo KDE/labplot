@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-06-02 01:39+0000\n"
-"PO-Revision-Date: 2024-05-24 20:04+0100\n"
+"PO-Revision-Date: 2024-06-02 11:36+0100\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English\n"
 "Language: en_GB\n"
@@ -42,10 +42,9 @@ msgid "Couldn't find the plugin for %1. Please check your installation."
 msgstr "Could not find the plugin for %1. Please check your installation."
 
 #: src/backend/cantorWorksheet/CantorWorksheet.cpp:109
-#, fuzzy, kde-format
-#| msgid "Couldn't find the plugin for %1. Please check your installation."
+#, kde-format
 msgid "Couldn't create the sessions for %1. Please check your installation."
-msgstr "Could not find the plugin for %1. Please check your installation."
+msgstr "Could not create the sessions for %1. Please check your installation."
 
 #: src/backend/cantorWorksheet/CantorWorksheet.cpp:287
 #, kde-format
@@ -21538,10 +21537,9 @@ msgstr "Startup:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDebugOutput)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:338
-#, fuzzy, kde-format
-#| msgid "Output:"
+#, kde-format
 msgid "Debug Output:"
-msgstr "Output:"
+msgstr "Debug Output:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode_2)

@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-06-02 01:39+0000\n"
-"PO-Revision-Date: 2024-06-01 06:55+0200\n"
+"PO-Revision-Date: 2024-06-02 07:09+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
@@ -21546,10 +21546,9 @@ msgstr "Start:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDebugOutput)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:338
-#, fuzzy, kde-format
-#| msgid "Output:"
+#, kde-format
 msgid "Debug Output:"
-msgstr "Utdata:"
+msgstr "Felsökningsutmatning:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode_2)
