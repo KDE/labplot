@@ -973,7 +973,7 @@ void RetransformTest::TestImportCSVInvalidateCurve() {
 	QCOMPARE(rangeY.start(), 10);
 	QCOMPARE(rangeY.end(), 30);
 
-	auto children = project.children(AspectType::AbstractAspect, AbstractAspect::ChildIndexFlag::Recursive);
+	const auto& children = project.children(AspectType::AbstractAspect, AbstractAspect::ChildIndexFlag::Recursive);
 	RetransformCallCounter c;
 	// CartesianPlot "plot"
 	// XYCurve "curve"
@@ -985,7 +985,9 @@ void RetransformTest::TestImportCSVInvalidateCurve() {
 		qDebug() << child->name();
 		connect(child, &AbstractAspect::retransformCalledSignal, &c, &RetransformCallCounter::aspectRetransformed);
 	}
-	for (const auto& plot : project.children(AspectType::CartesianPlot, AbstractAspect::ChildIndexFlag::Recursive))
+
+	const auto& plots = project.children(AspectType::CartesianPlot, AbstractAspect::ChildIndexFlag::Recursive);
+	for (const auto& plot : plots)
 		connect(static_cast<CartesianPlot*>(plot), &CartesianPlot::scaleRetransformed, &c, &RetransformCallCounter::retransformScaleCalled);
 
 	// import the data into the source spreadsheet, the columns are renamed to "c1" and "c2"
@@ -1010,20 +1012,13 @@ void RetransformTest::TestImportCSVInvalidateCurve() {
 	QCOMPARE(curve->xColumn(), nullptr);
 	QCOMPARE(curve->yColumn(), nullptr);
 
-	// x and y are called only once
-	QCOMPARE(c.logsXScaleRetransformed.count(), 1); // one plot with 1 x-Axis
-	QCOMPARE(c.logsXScaleRetransformed.at(0).plot, p);
-	QCOMPARE(c.logsXScaleRetransformed.at(0).index, 0);
-	QCOMPARE(c.logsYScaleRetransformed.count(), 1); // one plot with 1 y-Axis
-	QCOMPARE(c.logsYScaleRetransformed.at(0).plot, p);
-	QCOMPARE(c.logsYScaleRetransformed.at(0).index, 0);
+	// the range of the plot didn't change, no retransform
+	QCOMPARE(c.logsXScaleRetransformed.count(), 0);
+	QCOMPARE(c.logsYScaleRetransformed.count(), 0);
 
-	auto list = QStringList({QStringLiteral("Project/plot/curve")});
-	QCOMPARE(c.elementLogCount(false), list.count());
-	for (auto& s : list) {
-		qDebug() << s;
-		QCOMPARE(c.callCount(s), 1);
-	}
+	// the curve that lost the column assignemnt should be retransformed
+	QCOMPARE(c.elementLogCount(false), 1);
+	QCOMPARE(c.callCount(QStringLiteral("Project/plot/curve")), 1);
 }
 
 void RetransformTest::TestSetScale() {
