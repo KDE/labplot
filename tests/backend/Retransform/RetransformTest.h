@@ -27,6 +27,7 @@ private Q_SLOTS:
 	void TestCopyPastePlot();
 	void TestAddCurve();
 	void TestImportCSV();
+	void TestImportCSVInvalidateCurve();
 	void TestSetScale();
 
 	void TestZoomSelectionAutoscale();

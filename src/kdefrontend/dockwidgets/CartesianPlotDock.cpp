@@ -80,16 +80,17 @@ using Dimension = CartesianCoordinateSystem::Dimension;
 				if (obj)                                                                                                                                       \
 					obj->function;                                                                                                                             \
 				else                                                                                                                                           \
-					qDebug() << "ERROR: qobject_cast <castObject*> failed: " << __FILE__ << ":" << __LINE__ << " ( rangeIndex:" << rangeIndex                  \
-							 << ", Column: " << Column << "). Wether the object does not exist or the cellWidget has differnt type";                           \
+					DEBUG("ERROR: qobject_cast <castObject*> failed: " << __FILE__ << ":" << __LINE__ << " ( rangeIndex:" << rangeIndex                        \
+																	   << ", Column: " << Column                                                               \
+																	   << "). Wether the object does not exist or the cellWidget has differnt type");          \
 			}                                                                                                                                                  \
 		} else {                                                                                                                                               \
 			auto obj = qobject_cast<castObject*>(treewidget->cellWidget(rangeIndex, Column));                                                                  \
 			if (obj)                                                                                                                                           \
 				obj->function;                                                                                                                                 \
 			else                                                                                                                                               \
-				qDebug() << "ERROR: qobject_cast <castObject*> failed: " << __FILE__ << ":" << __LINE__ << " (rangeIndex:" << rangeIndex                       \
-						 << ", Column: " << Column << "). Wether the object does not exist or the cellWidget has differnt type";                               \
+				DEBUG("ERROR: qobject_cast <castObject*> failed: " << __FILE__ << ":" << __LINE__ << " (rangeIndex:" << rangeIndex << ", Column: " << Column   \
+																   << "). Wether the object does not exist or the cellWidget has differnt type");              \
 		}                                                                                                                                                      \
 	}
 

@@ -998,7 +998,6 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 	Q_EMIT error(QString()); // clear previous errors
 
 	const QString fileName = absolutePath(name);
-
 	bool fileExists = QFile::exists(fileName);
 	ui.gbOptions->setEnabled(fileExists);
 	ui.cbFilter->setEnabled(fileExists);
@@ -1594,19 +1593,19 @@ void ImportFileWidget::refreshPreview() {
 	if (m_suppressRefresh || !ui.gbOptions->isVisible())
 		return;
 
-	WAIT_CURSOR;
-
 	auto* currentFilter = currentFileFilter();
 	currentFilter->setLastError(QString()); // clear the last error message, if any available
 
-	QString file = absolutePath(fileName());
-	const QString dbcFile = dbcFileName();
-	auto fileType = currentFileType();
-	auto sourceType = currentSourceType();
-	int lines = ui.sbPreviewLines->value();
+	auto file = absolutePath(fileName());
+	const auto sourceType = currentSourceType();
 
-	if (sourceType == LiveDataSource::SourceType::FileOrPipe)
-		DEBUG(Q_FUNC_INFO << ", file name = " << STDSTRING(file));
+	if (sourceType == LiveDataSource::SourceType::FileOrPipe && file.isEmpty())
+		return; // initial open with no file selected yet, nothing to preview
+
+	const auto fileType = currentFileType();
+	DEBUG(Q_FUNC_INFO << ", Data File Type: " << ENUM_TO_STRING(AbstractFileFilter, FileType, fileType));
+	const auto& dbcFile = dbcFileName();
+	int lines = ui.sbPreviewLines->value();
 
 	// default preview widget
 	if (fileType == AbstractFileFilter::FileType::Ascii || fileType == AbstractFileFilter::FileType::Binary || fileType == AbstractFileFilter::FileType::JSON
@@ -1621,7 +1620,9 @@ void ImportFileWidget::refreshPreview() {
 	QVector<QStringList> importedStrings;
 	QStringList vectorNameList;
 	QVector<AbstractColumn::ColumnMode> columnModes;
-	DEBUG(Q_FUNC_INFO << ", Data File Type: " << ENUM_TO_STRING(AbstractFileFilter, FileType, fileType));
+
+	WAIT_CURSOR;
+
 	switch (fileType) {
 	case AbstractFileFilter::FileType::Ascii: {
 		ui.tePreview->clear();
@@ -1631,6 +1632,7 @@ void ImportFileWidget::refreshPreview() {
 		DEBUG(Q_FUNC_INFO << ", Data Source Type: " << ENUM_TO_STRING(LiveDataSource, SourceType, sourceType));
 		switch (sourceType) {
 		case LiveDataSource::SourceType::FileOrPipe: {
+			DEBUG(Q_FUNC_INFO << ", file name = " << STDSTRING(file));
 			importedStrings = filter->preview(file, lines);
 			break;
 		}

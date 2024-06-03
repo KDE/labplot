@@ -336,6 +336,8 @@ void BarPlot::dataColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 		if (aspect == d->dataColumns.at(i)) {
 			d->dataColumns[i] = nullptr;
 			d->retransform();
+			Q_EMIT dataChanged();
+			Q_EMIT changed();
 			break;
 		}
 	}

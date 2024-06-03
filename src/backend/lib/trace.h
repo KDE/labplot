@@ -22,7 +22,8 @@ public:
 	~PerfTracer() {
 		auto end = std::chrono::high_resolution_clock::now();
 		auto diff = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
-		std::cout << msg << ": " << diff << " ms" << std::endl;
+		if (debugOutputEnabled())
+			std::cout << msg << ": " << diff << " ms" << std::endl;
 	}
 
 private:

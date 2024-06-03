@@ -151,7 +151,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/widgets/FITSHeaderEditAddUnitDialog.cpp
 	${KDEFRONTEND_DIR}/widgets/FITSHeaderEditDialog.cpp
 	${KDEFRONTEND_DIR}/widgets/ResizableTextEdit.cpp
-  ${KDEFRONTEND_DIR}/widgets/TimedLineEdit.cpp
+	${KDEFRONTEND_DIR}/widgets/TimedLineEdit.cpp
 )
 
 if (Qt${QT_VERSION_MAJOR}Mqtt_FOUND)
@@ -370,6 +370,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/gsl/constants.cpp
 	${BACKEND_DIR}/gsl/functions.cpp
 	${BACKEND_DIR}/lib/Range.h
+	${BACKEND_DIR}/lib/Debug.cpp
 	${BACKEND_DIR}/lib/XmlStreamReader.cpp
 	${BACKEND_DIR}/lib/SignallingUndoCommand.cpp
 	${BACKEND_DIR}/lib/hostprocess.cpp

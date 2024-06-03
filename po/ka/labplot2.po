@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-23 01:43+0000\n"
+"POT-Creation-Date: 2024-06-02 01:39+0000\n"
 "PO-Revision-Date: 2024-02-29 03:22+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -43,7 +43,14 @@ msgid "Couldn't find the plugin for %1. Please check your installation."
 msgstr ""
 "%1-სთვის დამატების პოვნა შეუძლებელია. შეამოწმეთ პროგრამის თქვენი პაკეტი."
 
-#: src/backend/cantorWorksheet/CantorWorksheet.cpp:283
+#: src/backend/cantorWorksheet/CantorWorksheet.cpp:109
+#, fuzzy, kde-format
+#| msgid "Couldn't find the plugin for %1. Please check your installation."
+msgid "Couldn't create the sessions for %1. Please check your installation."
+msgstr ""
+"%1-სთვის დამატების პოვნა შეუძლებელია. შეამოწმეთ პროგრამის თქვენი პაკეტი."
+
+#: src/backend/cantorWorksheet/CantorWorksheet.cpp:287
 #, kde-format
 msgid "Couldn't find panel plugins. Please check your installation."
 msgstr "პანელის დამატებები ვერ ვიპოვე. შეამოწმეთ პროგრამის თქვენი პაკეტი."
@@ -436,7 +443,7 @@ msgstr "ფილტრის შეუთავსებელი ტიპი"
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:313
 #: src/backend/lib/XmlStreamReader.cpp:104
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1906
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1908
 #, kde-format
 msgid "unknown element '%1'"
 msgstr "უცნობი ელემენტი %1"
@@ -500,7 +507,7 @@ msgid "%1   (no values)"
 msgstr "%1:    (მნიშვნელობების გარეშე)"
 
 #: src/backend/core/AspectTreeModel.cpp:228
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1500
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1499
 #, kde-format
 msgid "Size: %1"
 msgstr "ზომა: %1"
@@ -1134,18 +1141,18 @@ msgstr "ხაზების რაოდენობა: %1"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:545
 #: src/backend/datasources/filters/AsciiFilter.cpp:754
-#: src/backend/datasources/filters/AsciiFilter.cpp:950
-#: src/backend/datasources/filters/AsciiFilter.cpp:1491
-#: src/backend/datasources/filters/AsciiFilter.cpp:2052
+#: src/backend/datasources/filters/AsciiFilter.cpp:952
+#: src/backend/datasources/filters/AsciiFilter.cpp:1493
+#: src/backend/datasources/filters/AsciiFilter.cpp:2054
 #, kde-format
 msgid "Timestamp"
 msgstr "დროის შტამპი"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:549
 #: src/backend/datasources/filters/AsciiFilter.cpp:748
-#: src/backend/datasources/filters/AsciiFilter.cpp:948
-#: src/backend/datasources/filters/AsciiFilter.cpp:1486
-#: src/backend/datasources/filters/AsciiFilter.cpp:2046
+#: src/backend/datasources/filters/AsciiFilter.cpp:950
+#: src/backend/datasources/filters/AsciiFilter.cpp:1488
+#: src/backend/datasources/filters/AsciiFilter.cpp:2048
 #: src/backend/datasources/filters/BinaryFilter.cpp:293
 #: src/backend/datasources/filters/BinaryFilter.cpp:436
 #: src/backend/nsl/nsl_dft.c:29 src/backend/nsl/nsl_filter.c:23
@@ -1154,8 +1161,8 @@ msgid "Index"
 msgstr "ინდექსი"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:734
-#: src/backend/datasources/filters/AsciiFilter.cpp:1248
-#: src/backend/datasources/filters/AsciiFilter.cpp:1584
+#: src/backend/datasources/filters/AsciiFilter.cpp:1250
+#: src/backend/datasources/filters/AsciiFilter.cpp:1586
 #: src/backend/datasources/filters/BinaryFilter.cpp:404
 #, fuzzy, kde-format
 #| msgid "Failed to open the device."
@@ -1164,9 +1171,9 @@ msgstr "მოწყობილობის გახსნის შეცდ�
 
 #. i18n: ectx: property (text), widget (QTableWidget, twLabels)
 #: src/backend/datasources/filters/AsciiFilter.cpp:760
-#: src/backend/datasources/filters/AsciiFilter.cpp:955
-#: src/backend/datasources/filters/AsciiFilter.cpp:1510
-#: src/backend/datasources/filters/AsciiFilter.cpp:2065
+#: src/backend/datasources/filters/AsciiFilter.cpp:957
+#: src/backend/datasources/filters/AsciiFilter.cpp:1512
+#: src/backend/datasources/filters/AsciiFilter.cpp:2067
 #: src/backend/datasources/filters/QJsonModel.cpp:133
 #: src/commonfrontend/matrix/MatrixView.cpp:620
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2384
@@ -1181,14 +1188,14 @@ msgstr "მოწყობილობის გახსნის შეცდ�
 msgid "Value"
 msgstr "მნიშვნელობა"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:957
-#: src/backend/datasources/filters/AsciiFilter.cpp:1512
-#: src/backend/datasources/filters/AsciiFilter.cpp:2067
+#: src/backend/datasources/filters/AsciiFilter.cpp:959
+#: src/backend/datasources/filters/AsciiFilter.cpp:1514
+#: src/backend/datasources/filters/AsciiFilter.cpp:2069
 #, kde-format
 msgid "Value %1"
 msgstr "მნიშვნელობა %1"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:1267
+#: src/backend/datasources/filters/AsciiFilter.cpp:1269
 #: src/backend/datasources/filters/BinaryFilter.cpp:444
 #: src/backend/datasources/filters/CANFilter.cpp:299
 #: src/backend/datasources/filters/FITSFilter.cpp:329
@@ -1533,7 +1540,7 @@ msgstr "h5dump ვერ ვიპოვე."
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:358
 #: src/backend/datasources/filters/NetCDFFilter.cpp:268
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1475
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1474
 #, kde-format
 msgid "Reading from file %1 failed."
 msgstr "ფაილიდან (%1) წაკითხვის შეცდომა."
@@ -1929,7 +1936,7 @@ msgstr "სტრუქტურა ველებს არ შეიცავ
 msgid "Support for this variable type not implemented yet."
 msgstr ""
 
-#: src/backend/datasources/filters/MatioFilter.cpp:1227
+#: src/backend/datasources/filters/MatioFilter.cpp:1228
 #, kde-format
 msgid "Variables with rank greater than 2 not supported yet."
 msgstr ""
@@ -2176,7 +2183,7 @@ msgstr "ფაილის (\"%1\") გახსნის შეცდომა.
 #: src/backend/datasources/MQTTClient.cpp:1200
 #: src/backend/datasources/MQTTTopic.cpp:248
 #: src/backend/lib/XmlStreamReader.cpp:99
-#: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:467
+#: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:469
 #, kde-format
 msgid "Attribute '%1' missing or empty, default value is used"
 msgstr "ატრიბუტი '%1' აკლია ან ცარიელია. გამოიყენება ნაგულისხმები მნისვნელობა"
@@ -6110,7 +6117,7 @@ msgstr "სტატისტიკა (გადანაწილებებ�
 #: src/backend/nsl/nsl_fit.c:24
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:577
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:551
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1227
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1226
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:242
 #: src/kdefrontend/dockwidgets/KDEPlotDock.cpp:171
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:277
@@ -7056,13 +7063,13 @@ msgstr "%1: ხაზის გაუმჭვირვალობის და
 
 #: src/backend/worksheet/plots/AbstractPlot.cpp:100
 #: src/backend/worksheet/plots/AbstractPlot.cpp:128
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1292
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1293
 #, kde-format
 msgid "%1: set horizontal padding"
 msgstr ""
 
 #: src/backend/worksheet/plots/AbstractPlot.cpp:107
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1318
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1319
 #, kde-format
 msgid "%1: set vertical padding"
 msgstr ""
@@ -7106,8 +7113,8 @@ msgstr "ჰორიზონტალური"
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:259
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:57
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:53
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:844
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:848
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:845
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:849
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:158
 #: src/kdefrontend/dockwidgets/LollipopPlotDock.cpp:52
 #: src/kdefrontend/dockwidgets/ReferenceLineDock.cpp:28
@@ -8324,7 +8331,7 @@ msgstr ""
 msgid "%1: set bin ranges end"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:833
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:835
 #, kde-format
 msgid ""
 "Calculation of the histogram not possible. The max value must be bigger than "
@@ -11614,14 +11621,14 @@ msgid "DBC file (*.dbc)"
 msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataFormat)
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1140
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1139
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:402
 #, kde-format
 msgid "Data Format"
 msgstr "მონაცემების ფორმატი"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataPreview)
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1141
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1140
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:456
 #: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:158
 #, kde-format
@@ -11629,183 +11636,183 @@ msgid "Preview"
 msgstr "გადახედვა"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataPortion)
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1143
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1142
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:535
 #: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:239
 #, kde-format
 msgid "Data Portion to Read"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1183
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1182
 #, kde-format
 msgid "Data format && preview"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1226
-#: src/kdefrontend/SettingsGeneralPage.cpp:234
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1225
+#: src/kdefrontend/SettingsGeneralPage.cpp:245
 #, kde-format
 msgid "Automatic"
 msgstr "ავტომატური"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1467
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1466
 #, kde-format
 msgid "file command not found"
 msgstr "ფაილის ბრძანება ვერ მოიძებნა"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1478
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1477
 #, kde-format
 msgid "cannot open"
 msgstr "გახსნის შეცდომა"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1483
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1482
 #, kde-format
 msgid "<b>File type:</b> %1"
 msgstr "<b>ფაილის ტიპი:</b> %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1488
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1487
 #, kde-format
 msgid "General:"
 msgstr "ზოგადი:"
 
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1489
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1490
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1491
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1492
 #, kde-format
 msgid "yes"
 msgstr "დიახ"
 
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1489
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1490
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1491
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1492
 #, kde-format
 msgid "no"
 msgstr "არა"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1490
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1489
 #, kde-format
 msgid "Readable: %1"
 msgstr "წაკითხვადი: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1491
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1490
 #, kde-format
 msgid "Writable: %1"
 msgstr "ჩაწერადი: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1492
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1491
 #, kde-format
 msgid "Executable: %1"
 msgstr "გაშვებადი: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1494
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1493
 #, kde-format
 msgid "Birth time: %1"
 msgstr "დაბადების დრო: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1495
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1494
 #, kde-format
 msgid "Last metadata changed: %1"
 msgstr "მეტამონაცემების ბოლო ცვლილება: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1496
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1495
 #, kde-format
 msgid "Last modified: %1"
 msgstr "ბოლო ცვლილება: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1497
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1496
 #, kde-format
 msgid "Last read: %1"
 msgstr "ბოლოს წაიკითხა: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1498
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1497
 #, kde-format
 msgid "Owner: %1"
 msgstr "მფლობელი: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1499
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1498
 #, kde-format
 msgid "Group: %1"
 msgstr "ჯგუფი: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1500
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1499
 #, kde-format
 msgid "%1 cByte"
 msgid_plural "%1 cBytes"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1503
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1502
 #, kde-format
 msgid "Summary:"
 msgstr "შეჯამება:"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1526
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1531
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1525
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1530
 #, kde-format
 msgid "Content:"
 msgstr "შემცველობა:"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1559
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1558
 #, kde-format
 msgid "Could not open file %1 for reading."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1722
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1724
 #, kde-format
 msgid "No data arrived yet for the selected topic"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1959
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1961
 #, kde-format
 msgid "Not a HDF5 file: %1"
 msgstr "არ წარმოადგენს HDF5 ფაილს: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2392
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2394
 #, kde-format
 msgid "Couldn't subscribe to all available topics."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2422
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2424
 #, kde-format
 msgid "Disconnected from '%1'."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2491
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2493
 #, kde-format
 msgid "Available (%1)"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2603
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2605
 #, kde-format
 msgid "Wrong username or password"
 msgstr "მომხმარებლის სახელი ან პაროლი არასწორია"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2606
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2608
 #, kde-format
 msgid "The client ID wasn't accepted"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2610
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2612
 #, kde-format
 msgid "The broker %1 couldn't be reached."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2613
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2615
 #, kde-format
 msgid "The client is not authorized to connect."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2616
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2618
 #, kde-format
 msgid "An unknown error occurred."
 msgstr "უცნობი შეცდომა."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2622
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2625
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2624
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2627
 #, kde-format
 msgid "An error occurred."
 msgstr "შეცდომა."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2639
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2641
 #, kde-format
 msgid "Connecting to '%1:%2' timed out."
 msgstr ""
@@ -12525,7 +12532,7 @@ msgstr ""
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:2045
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:522
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:706
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1793
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1794
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:781
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:378
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:562
@@ -12692,36 +12699,36 @@ msgstr ""
 msgid "File Browser"
 msgstr "ფაილის ბრაუზერი"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:227
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:228
 #, kde-format
 msgid "Save current plot area definition as template"
 msgstr "მიმდინარე ნახაზის ადგილის ნიმუშად შენახვა"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:604
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:605
 #, kde-format
 msgid "%1-Ranges:"
 msgstr "%1-დიაპაზონები:"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:606
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:607
 #, kde-format
 msgid "%1-Range:"
 msgstr "%1-დიაპაზონი:"
 
 #. i18n: ectx: property (text), widget (QLabel, lNumeric)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:630
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:631
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:209
 #: src/kdefrontend/ui/spreadsheet/equidistantvalueswidget.ui:53
 #, kde-format
 msgid "Numeric"
 msgstr "რიცხვობრივი"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:733
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:734
 #, kde-format
 msgid "Plot Ranges:"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lPlotRange)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:735
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:736
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:262
 #: src/kdefrontend/ui/dockwidgets/barplotdock.ui:186
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:90
@@ -12747,22 +12754,22 @@ msgstr ""
 msgid "Plot Range:"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:824
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:825
 #, kde-format
 msgid "Free"
 msgstr "თავისუფალი"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:825
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:826
 #, kde-format
 msgid "Last Points"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:826
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:827
 #, kde-format
 msgid "First Points"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:829
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:830
 #, kde-format
 msgid ""
 "Data Range:<ul><li>Free - full data range is plotted</li><li>Last Points - "
@@ -12770,46 +12777,46 @@ msgid ""
 "number of first points is plotted</li></ul>"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:838
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:839
 #, kde-format
 msgid "If checked, automatically extend the plot range to nice values"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:843
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:847
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:844
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:848
 #, kde-format
 msgid "Simple"
 msgstr "მარტივი"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:845
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:849
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:846
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:850
 #, kde-format
 msgid "Sloped"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1104
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1113
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1105
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1114
 #, kde-format
 msgid "%1 range %2 is used in plot range %3. "
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1105
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1114
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1166
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1173
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1106
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1115
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1167
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1174
 #, kde-format
 msgid "Really remove it?"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1166
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1173
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1167
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1174
 #, kde-format
 msgid "Plot range %1 is used by element \"%2\". "
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lPaddingHorizontal)
 #. i18n: ectx: property (text), widget (QLabel, lHorizontalSpacing)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1264
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1265
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:561
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:761
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:342
@@ -12819,7 +12826,7 @@ msgstr "ჰორიზონტალური:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPaddingVertical)
 #. i18n: ectx: property (text), widget (QLabel, lVerticalSpacing)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1265
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1266
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:862
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:716
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:428
@@ -12829,7 +12836,7 @@ msgstr "ვერტიკალური:"
 
 #. i18n: ectx: property (text), widget (QLabel, lTopMargin)
 #. i18n: ectx: property (text), widget (QLabel, lLeftMargin)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1267
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1268
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:797
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:709
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:414
@@ -12839,7 +12846,7 @@ msgstr "მარცხენა:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLeftMargin)
 #. i18n: ectx: property (text), widget (QLabel, lTopMargin)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1268
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1269
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:804
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:658
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:407
@@ -12847,18 +12854,18 @@ msgstr "მარცხენა:"
 msgid "Top:"
 msgstr "ზედა:"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1600
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1601
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Template Save File"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1602
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1603
 #, kde-format
 msgid "Labplot Plot Templates (*%1)"
 msgstr "LabPlot-ის ნახაზის ნიმუშები (%1)"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1791
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1792
 #, kde-format
 msgid "%1 cartesian plots: template \"%2\" loaded"
 msgstr ""
@@ -14361,29 +14368,29 @@ msgctxt "@info:credit"
 msgid "Support import of ROOT (CERN) TH1 histograms"
 msgstr ""
 
-#: src/kdefrontend/LabPlot.cpp:130
+#: src/kdefrontend/LabPlot.cpp:133
 #, kde-format
 msgid "Disable splash screen"
 msgstr ""
 
-#: src/kdefrontend/LabPlot.cpp:133
+#: src/kdefrontend/LabPlot.cpp:136
 #, kde-format
 msgid "Start in the presenter mode"
 msgstr ""
 
-#: src/kdefrontend/LabPlot.cpp:136
+#: src/kdefrontend/LabPlot.cpp:139
 #, kde-format
 msgid "Open a project file."
 msgstr "პროექტის ფაილის გახსნა."
 
-#: src/kdefrontend/LabPlot.cpp:155
+#: src/kdefrontend/LabPlot.cpp:158
 #, kde-format
 msgid ""
 "Could not open file '%1'. Click 'Continue' to proceed starting or 'Cancel' "
 "to exit the application."
 msgstr ""
 
-#: src/kdefrontend/LabPlot.cpp:156
+#: src/kdefrontend/LabPlot.cpp:159
 #, kde-format
 msgid "Failed to Open"
 msgstr "გახსნის შეცდომა"
@@ -15161,7 +15168,7 @@ msgstr "მორგება    [შეცვლილია]"
 
 #. i18n: ectx: property (text), widget (QLabel, lMin)
 #. i18n: ectx: property (text), widget (QLabel, lMinDateTime)
-#: src/kdefrontend/SettingsGeneralPage.cpp:28
+#: src/kdefrontend/SettingsGeneralPage.cpp:29
 #: src/kdefrontend/ui/spreadsheet/dropvalueswidget.ui:54
 #: src/kdefrontend/ui/spreadsheet/dropvalueswidget.ui:241
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:317
@@ -15170,99 +15177,99 @@ msgstr "მორგება    [შეცვლილია]"
 msgid "min."
 msgstr "წთ."
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:200
+#: src/kdefrontend/SettingsGeneralPage.cpp:211
 #, kde-format
 msgid "Create New Project"
 msgstr "ახალი პროექტის შექმნა"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:201
+#: src/kdefrontend/SettingsGeneralPage.cpp:212
 #, kde-format
 msgid "Load Last Used Project"
 msgstr ""
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:205
+#: src/kdefrontend/SettingsGeneralPage.cpp:216
 #, kde-format
 msgid "With Worksheet"
 msgstr "სამუშაო ფურცლით"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:206
+#: src/kdefrontend/SettingsGeneralPage.cpp:217
 #, kde-format
 msgid "With Spreadsheet"
 msgstr "ელცხრილით"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:207
+#: src/kdefrontend/SettingsGeneralPage.cpp:218
 #, kde-format
 msgid "With Worksheet and Spreadsheet"
 msgstr "სამუშაო ფურცლითა და ელცხრილით"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:209
+#: src/kdefrontend/SettingsGeneralPage.cpp:220
 #, kde-format
 msgid "With Notebook"
 msgstr "ნოუთბუქით"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:212
+#: src/kdefrontend/SettingsGeneralPage.cpp:223
 #, kde-format
 msgid "Notebook type to create automatically on startup"
 msgstr ""
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:216
+#: src/kdefrontend/SettingsGeneralPage.cpp:227
 #, kde-format
 msgid ""
 "Controls the behavior of where the dock widgets are placed after being re-"
 "opened"
 msgstr ""
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:220
+#: src/kdefrontend/SettingsGeneralPage.cpp:231
 #, kde-format
 msgid "Original Position"
 msgstr "საწყისი მდებარეობა"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:221
+#: src/kdefrontend/SettingsGeneralPage.cpp:232
 #, kde-format
 msgid "On top of the last active Dock Widget"
 msgstr ""
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:224
+#: src/kdefrontend/SettingsGeneralPage.cpp:235
 #, kde-format
 msgid "Show File Path"
 msgstr "ფაილის ბილიკის ჩვენება"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:225
+#: src/kdefrontend/SettingsGeneralPage.cpp:236
 #, kde-format
 msgid "Show File Name"
 msgstr "ფაილის სახელის ჩვენება"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:226
+#: src/kdefrontend/SettingsGeneralPage.cpp:237
 #, kde-format
 msgid "Show Project Name"
 msgstr "პროექტის სახელის ჩვენება"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:228
+#: src/kdefrontend/SettingsGeneralPage.cpp:239
 #, kde-format
 msgid "Metric"
 msgstr "მეტრული სისტემა"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:229
+#: src/kdefrontend/SettingsGeneralPage.cpp:240
 #, kde-format
 msgid "Imperial"
 msgstr "იმპერიული"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:231
+#: src/kdefrontend/SettingsGeneralPage.cpp:242
 #, kde-format
 msgid "Dot (.)"
 msgstr "წერტილი (.)"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:232
+#: src/kdefrontend/SettingsGeneralPage.cpp:243
 #, kde-format
 msgid "Comma (,)"
 msgstr "მძიმე (,)"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:233
+#: src/kdefrontend/SettingsGeneralPage.cpp:244
 #, kde-format
 msgid "Arabic (٫)"
 msgstr "არაბული (٫)"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:237
+#: src/kdefrontend/SettingsGeneralPage.cpp:248
 #, kde-format
 msgid ""
 "Use terms compliant with the <a href=\"http://www.bipm.org/utils/common/"
@@ -15270,7 +15277,7 @@ msgid ""
 "in Measurement (GUM)</a>"
 msgstr ""
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:242
+#: src/kdefrontend/SettingsGeneralPage.cpp:253
 #, kde-format
 msgid ""
 "Save the state (position and geometry) of the docks in the project file. \n"
@@ -15279,7 +15286,7 @@ msgid ""
 "properties."
 msgstr ""
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:249
+#: src/kdefrontend/SettingsGeneralPage.cpp:260
 #, kde-format
 msgid ""
 "Save the results of the calculations in the analysis curves in the project "
@@ -18095,7 +18102,7 @@ msgstr "შემოტანა:"
 #. i18n: ectx: property (text), widget (QLabel, lDecimalSeparator)
 #: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:91
 #: src/kdefrontend/ui/datasources/jsonoptionswidget.ui:76
-#: src/kdefrontend/ui/settingsgeneralpage.ui:24
+#: src/kdefrontend/ui/settingsgeneralpage.ui:17
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:152
 #, kde-format
 msgid "Decimal separator:"
@@ -19668,7 +19675,7 @@ msgstr "თემები"
 #. i18n: ectx: property (text), widget (QLabel, lAutoSaveInterval)
 #. i18n: ectx: property (text), widget (QLabel, lUpdateInterval)
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:113
-#: src/kdefrontend/ui/settingsgeneralpage.ui:108
+#: src/kdefrontend/ui/settingsgeneralpage.ui:146
 #, kde-format
 msgid "Interval:"
 msgstr "ინტერვალი:"
@@ -19767,7 +19774,7 @@ msgstr "შექმნილია:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSaveDockStates)
 #: src/kdefrontend/ui/dockwidgets/projectdock.ui:80
-#: src/kdefrontend/ui/settingsgeneralpage.ui:41
+#: src/kdefrontend/ui/settingsgeneralpage.ui:315
 #, kde-format
 msgid "Save Dock States:"
 msgstr ""
@@ -19839,14 +19846,16 @@ msgstr "დასრულების X:"
 msgid "Start x:"
 msgstr "საწყისი X:"
 
-#. i18n: ectx: property (text), widget (QCheckBox, chkAutoSave)
-#. i18n: ectx: property (text), widget (QCheckBox, chkSaveDockStates)
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveCalculations)
+#. i18n: ectx: property (text), widget (QCheckBox, chkSaveDockStates)
+#. i18n: ectx: property (text), widget (QCheckBox, chkAutoSave)
+#. i18n: ectx: property (text), widget (QCheckBox, chkDebugOutput)
 #. i18n: ectx: property (text), widget (QLabel, lLinkingEnabled)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:17
+#: src/kdefrontend/ui/settingsgeneralpage.ui:71
 #: src/kdefrontend/ui/settingsgeneralpage.ui:85
-#: src/kdefrontend/ui/settingsgeneralpage.ui:324
-#: src/kdefrontend/ui/settingsgeneralpage.ui:331
+#: src/kdefrontend/ui/settingsgeneralpage.ui:123
+#: src/kdefrontend/ui/settingsgeneralpage.ui:345
 #, kde-format
 msgid "Enabled"
 msgstr "ჩართულია"
@@ -21130,46 +21139,51 @@ msgstr "ჯამური ზომა - "
 msgid "Clear"
 msgstr "სუფთა ცა"
 
+#. i18n: ectx: property (text), widget (QCheckBox, chkIncludeTrailingZeroesAfterDot)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:24
+#, kde-format
+msgid "Include trailing zeroes after dot"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lNewProjectNotebook)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:34
+#, kde-format
+msgid "Notebook:"
+msgstr "წიგნაკი:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkOmitGroupSeparator)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:41
+#, kde-format
+msgid "Omit group separator"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:64
+#, fuzzy, kde-format
+#| msgid "Calculations"
+msgid "Save  Calculations:"
+msgstr "გამოთვლები"
+
 #. i18n: ectx: property (text), widget (QCheckBox, chkOmitLeadingZeroInExponent)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:17
+#: src/kdefrontend/ui/settingsgeneralpage.ui:78
 #, kde-format
 msgid "Omit leading zero in exponent"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lNumberOptions)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:34
+#: src/kdefrontend/ui/settingsgeneralpage.ui:95
 #, kde-format
 msgid "Number options:"
 msgstr "რაოდენობის მორგება:"
 
-#. i18n: ectx: property (text), widget (QLabel, lSaveCalculations)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:157
+#. i18n: ectx: property (text), widget (QLabel, lUnits)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:182
 #, kde-format
-msgid "Compatibility:"
-msgstr "თავსებადობა:"
-
-#. i18n: ectx: property (toolTip), widget (QCheckBox, chkCompatible)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:167
-#, kde-format
-msgid ""
-"<html><head/><body><p>Save projects in a compatible format that can be "
-"opened in LabPlot versions older than 2.9.</p></body></html>"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QCheckBox, chkCompatible)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:170
-#, kde-format
-msgid "Save in compatible format"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QCheckBox, chkOmitGroupSeparator)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:177
-#, kde-format
-msgid "Omit group separator"
-msgstr ""
+msgid "Units:"
+msgstr "ერთეულები:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkGUMTerms)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:219
+#: src/kdefrontend/ui/settingsgeneralpage.ui:189
 #, kde-format
 msgid ""
 "<html><head/><body><p>Use terms compliant with the <a href=\"http://www.bipm."
@@ -21179,71 +21193,73 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkGUMTerms)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:222
+#: src/kdefrontend/ui/settingsgeneralpage.ui:192
 #, kde-format
 msgid "GUM compliant"
 msgstr ""
 
-#. i18n: ectx: property (text), widget (QLabel, lNewProject)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:229
+#. i18n: ectx: property (text), widget (QLabel, lSaveCalculations)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:202
 #, kde-format
-msgid "New Project:"
-msgstr "ახალი პროექტი:"
-
-#. i18n: ectx: property (text), widget (QLabel, lUnits)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:239
-#, kde-format
-msgid "Units:"
-msgstr "ერთეულები:"
-
-#. i18n: ectx: property (text), widget (QLabel, lAutoSave)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:268
-#, kde-format
-msgid "Auto-save:"
-msgstr "ავტომატური-შენახვა:"
-
-#. i18n: ectx: property (text), widget (QLabel, lGUMTerms)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:275
-#, kde-format
-msgid "Terms:"
-msgstr "პირობები:"
-
-#. i18n: ectx: property (text), widget (QLabel, lTitleBar)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:282
-#, kde-format
-msgid "Title Bar:"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, lStartup)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:289
-#, kde-format
-msgid "Startup:"
-msgstr "გაშვებისას:"
+msgid "Compatibility:"
+msgstr "თავსებადობა:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDockWindowPositionReopen)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:296
+#: src/kdefrontend/ui/settingsgeneralpage.ui:209
 #, kde-format
 msgid "Dock widget placement:"
 msgstr ""
 
-#. i18n: ectx: property (text), widget (QLabel, lNewProjectNotebook)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:303
+#. i18n: ectx: property (text), widget (QLabel, lAutoSave)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:219
 #, kde-format
-msgid "Notebook:"
-msgstr "წიგნაკი:"
+msgid "Auto-save:"
+msgstr "ავტომატური-შენახვა:"
 
-#. i18n: ectx: property (text), widget (QCheckBox, chkIncludeTrailingZeroesAfterDot)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:310
+#. i18n: ectx: property (text), widget (QLabel, lTitleBar)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:226
 #, kde-format
-msgid "Include trailing zeroes after dot"
+msgid "Title Bar:"
 msgstr ""
 
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:317
+#. i18n: ectx: property (text), widget (QLabel, lNewProject)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:233
+#, kde-format
+msgid "New Project:"
+msgstr "ახალი პროექტი:"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, chkCompatible)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:240
+#, kde-format
+msgid ""
+"<html><head/><body><p>Save projects in a compatible format that can be "
+"opened in LabPlot versions older than 2.9.</p></body></html>"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkCompatible)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:243
+#, kde-format
+msgid "Save in compatible format"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lGUMTerms)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:250
+#, kde-format
+msgid "Terms:"
+msgstr "პირობები:"
+
+#. i18n: ectx: property (text), widget (QLabel, lStartup)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:292
+#, kde-format
+msgid "Startup:"
+msgstr "გაშვებისას:"
+
+#. i18n: ectx: property (text), widget (QLabel, lDebugOutput)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:338
 #, fuzzy, kde-format
-#| msgid "Calculations"
-msgid "Save  Calculations:"
-msgstr "გამოთვლები"
+#| msgid "Output:"
+msgid "Debug Output:"
+msgstr "გამოტანა:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode_2)

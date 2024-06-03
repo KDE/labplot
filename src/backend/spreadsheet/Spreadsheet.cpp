@@ -1308,9 +1308,11 @@ int Spreadsheet::prepareImport(std::vector<void*>& dataContainer,
 							   const QVector<AbstractColumn::ColumnMode>& columnMode,
 							   bool& ok,
 							   bool initializeContainer) {
+	Q_D(Spreadsheet);
 	PERFTRACE(QLatin1String(Q_FUNC_INFO));
 	DEBUG(Q_FUNC_INFO << ", resize spreadsheet to rows = " << actualRows << " and cols = " << actualCols)
 	QDEBUG(Q_FUNC_INFO << ", column name list = " << colNameList)
+	assert(d->m_usedInPlots.size() == 0);
 	int columnOffset = 0;
 	setUndoAware(false);
 	if (m_model != nullptr)
@@ -1484,10 +1486,12 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, const QStringList& 
 		// 4. column->aspectDescriptionChanged() to trigger the update of the dependencies on column in Project.
 		const auto& columns = children<Column>();
 		int index = 0;
+		Q_D(Spreadsheet);
 		for (auto* column : columns) {
 			column->setSuppressDataChangedSignal(true);
 			const auto& newName = uniqueNames.at(index);
 			if (column->name() != newName) {
+				column->addUsedInPlots(d->m_usedInPlots);
 				column->reset();
 				column->setName(newName, AbstractAspect::NameHandling::UniqueNotRequired);
 				column->aspectDescriptionChanged(column);
@@ -1507,19 +1511,21 @@ void Spreadsheet::finalizeImport(size_t columnOffset,
 								 const QString& dateTimeFormat,
 								 AbstractFileFilter::ImportMode importMode) {
 	PERFTRACE(QLatin1String(Q_FUNC_INFO));
+	Q_D(Spreadsheet);
 	// DEBUG(Q_FUNC_INFO << ", start/end col = " << startColumn << " / " << endColumn);
 
 	// determine the dependent plots
-	QVector<CartesianPlot*> plots;
 	if (importMode == AbstractFileFilter::ImportMode::Replace) {
 		for (size_t n = startColumn; n <= endColumn; n++) {
 			auto* column = this->column((int)(columnOffset + n - startColumn));
 			if (column)
-				column->addUsedInPlots(plots);
+				column->addUsedInPlots(d->m_usedInPlots);
 		}
+	}
 
+	if (importMode == AbstractFileFilter::ImportMode::Replace) {
 		// suppress retransform in the dependent plots
-		for (auto* plot : plots)
+		for (auto* plot : d->m_usedInPlots)
 			plot->setSuppressRetransform(true);
 	}
 
@@ -1566,7 +1572,7 @@ void Spreadsheet::finalizeImport(size_t columnOffset,
 
 	if (importMode == AbstractFileFilter::ImportMode::Replace) {
 		// retransform the dependent plots
-		for (auto* plot : plots) {
+		for (auto* plot : d->m_usedInPlots) {
 			plot->setSuppressRetransform(false);
 			plot->dataChanged(-1, -1); // TODO: check if all ranges must be updated
 		}

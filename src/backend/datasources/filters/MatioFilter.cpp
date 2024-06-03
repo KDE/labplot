@@ -1162,10 +1162,11 @@ MatioFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource* 
 						break;
 					}
 
-					if (fields[i]->rank == 2)
+					if (fields[i]->rank == 2) {
 						DEBUG(Q_FUNC_INFO << "  rank = 2 (" << fields[i]->dims[0] << " x " << fields[i]->dims[1] << ")")
-					else
+					} else {
 						DEBUG(Q_FUNC_INFO << "  rank = " << fields[i]->rank)
+					}
 
 					if (fields[i]->data_type == MAT_T_UINT16 || fields[i]->data_type == MAT_T_INT16) {
 						auto* data = (mat_uint16_t*)fields[i]->data;
