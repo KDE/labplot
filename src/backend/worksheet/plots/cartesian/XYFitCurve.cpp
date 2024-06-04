@@ -3032,7 +3032,7 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 				d->xColumn = column;
 			else if (column->name() == QLatin1String("y"))
 				d->yColumn = column;
-			else if (column->name() == QLatin1String("Residuals"))
+			else if (column->name() == QLatin1String("Residuals") || column->name() == QLatin1String("residuals"))
 				d->residualsColumn = column;
 		} else { // unknown element
 			reader->raiseUnknownElementWarning();
