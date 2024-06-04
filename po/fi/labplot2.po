@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-02 01:39+0000\n"
+"POT-Creation-Date: 2024-06-04 01:38+0000\n"
 "PO-Revision-Date: 2023-10-30 14:32+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -7142,7 +7142,7 @@ msgstr ""
 msgid "%1: linked spreadsheet removed"
 msgstr "Lisää uusi laskentataulukko"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1536
+#: src/backend/spreadsheet/Spreadsheet.cpp:1542
 #, fuzzy, kde-format
 #| msgid "numerical data, %1 element"
 #| msgid_plural "numerical data, %1 elements"
@@ -7151,7 +7151,7 @@ msgid_plural "numerical data, %1 elements"
 msgstr[0] "numeerista dataa, %1 elementti"
 msgstr[1] "numeerista dataa, %1 elementtiä"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1539
+#: src/backend/spreadsheet/Spreadsheet.cpp:1545
 #, fuzzy, kde-format
 #| msgid "numerical data, %1 element"
 #| msgid_plural "numerical data, %1 elements"
@@ -7160,7 +7160,7 @@ msgid_plural "integer data, %1 elements"
 msgstr[0] "numeerista dataa, %1 elementti"
 msgstr[1] "numeerista dataa, %1 elementtiä"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1542
+#: src/backend/spreadsheet/Spreadsheet.cpp:1548
 #, fuzzy, kde-format
 #| msgid "numerical data, %1 element"
 #| msgid_plural "numerical data, %1 elements"
@@ -7169,7 +7169,7 @@ msgid_plural "big integer data, %1 elements"
 msgstr[0] "numeerista dataa, %1 elementti"
 msgstr[1] "numeerista dataa, %1 elementtiä"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1545
+#: src/backend/spreadsheet/Spreadsheet.cpp:1551
 #, fuzzy, kde-format
 #| msgid "numerical data, %1 element"
 #| msgid_plural "numerical data, %1 elements"
@@ -7178,7 +7178,7 @@ msgid_plural "text data, %1 elements"
 msgstr[0] "numeerista dataa, %1 elementti"
 msgstr[1] "numeerista dataa, %1 elementtiä"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1548
+#: src/backend/spreadsheet/Spreadsheet.cpp:1554
 #, fuzzy, kde-format
 #| msgid "numerical data, %1 element"
 #| msgid_plural "numerical data, %1 elements"
@@ -7187,7 +7187,7 @@ msgid_plural "month data, %1 elements"
 msgstr[0] "numeerista dataa, %1 elementti"
 msgstr[1] "numeerista dataa, %1 elementtiä"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1551
+#: src/backend/spreadsheet/Spreadsheet.cpp:1557
 #, fuzzy, kde-format
 #| msgid "numerical data, %1 element"
 #| msgid_plural "numerical data, %1 elements"
@@ -7196,7 +7196,7 @@ msgid_plural "day data, %1 elements"
 msgstr[0] "numeerista dataa, %1 elementti"
 msgstr[1] "numeerista dataa, %1 elementtiä"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1554
+#: src/backend/spreadsheet/Spreadsheet.cpp:1560
 #, fuzzy, kde-format
 #| msgid "numerical data, %1 element"
 #| msgid_plural "numerical data, %1 elements"
