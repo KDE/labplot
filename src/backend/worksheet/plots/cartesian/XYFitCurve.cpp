@@ -1836,56 +1836,49 @@ void XYFitCurvePrivate::updateResultsNote(Note* note) {
 		return;
 
 	QString text;
-	// TODO: i18n
 
 	// model
-	text += QStringLiteral("MODEL\n\n");
-	text += fitData.model + QStringLiteral("\n\n");
+	text += i18n("MODEL") + NEWLINE + NEWLINE;
+	text += fitData.model + NEWLINE + NEWLINE;
 
 	// TODO: weighting? (see Origin)
 
 	// parameter
-	text += QStringLiteral("PARAMETERS\n\n");
+	text += i18n("PARAMETERS") + NEWLINE + NEWLINE;
 
 	int np = fitResult.paramValues.size();
 
-	text += QStringLiteral("\tValue\tUncertainty\tUncertainty,%\tt Statistic\tP > |t|\tLower\tUpper\n");
+	text += TAB + i18n("Value") + TAB + i18n("Uncertainty") + TAB + i18n("Uncertainty,%") + TAB + i18n("t Statistic") + TAB + QStringLiteral("P > |t|") + TAB
+		+ i18n("Lower") + TAB + i18n("Upper") + NEWLINE;
 	const auto numberLocale = QLocale();
 	for (int i = 0; i < np; i++) {
-		text += fitData.paramNames.at(i) + QStringLiteral("\t") + numberLocale.toString(fitResult.paramValues.at(i)) + QStringLiteral("\t")
-			+ numberLocale.toString(fitResult.errorValues.at(i)) + QStringLiteral("\t\t")
-			+ numberLocale.toString(fitResult.errorValues.at(i) / fitResult.paramValues.at(i) * 100.) + QStringLiteral("\t\t")
-			+ numberLocale.toString(fitResult.tdist_tValues.at(i)) + QStringLiteral("\t")
+		text += fitData.paramNames.at(i) + TAB + numberLocale.toString(fitResult.paramValues.at(i)) + TAB + numberLocale.toString(fitResult.errorValues.at(i))
+			+ TAB + TAB + numberLocale.toString(fitResult.errorValues.at(i) / fitResult.paramValues.at(i) * 100.) + TAB + TAB
+			+ numberLocale.toString(fitResult.tdist_tValues.at(i)) + TAB
 			+ numberLocale.toString(fitResult.tdist_pValues.at(i))
 			// TODO: margin2Values?
-			+ QStringLiteral("\t") + numberLocale.toString(fitResult.paramValues.at(i) - fitResult.marginValues.at(i)) + QStringLiteral("\t")
-			+ numberLocale.toString(fitResult.paramValues.at(i) + fitResult.marginValues.at(i)) + QStringLiteral("\n");
+			+ TAB + numberLocale.toString(fitResult.paramValues.at(i) - fitResult.marginValues.at(i)) + TAB
+			+ numberLocale.toString(fitResult.paramValues.at(i) + fitResult.marginValues.at(i)) + NEWLINE;
 
 		// for (unsigned int j = 0; j <= i; j++)
 		//	d->fitResult.correlationMatrix << gsl_matrix_get(cov, i, j) / sqrt(gsl_matrix_get(cov, i, i)) / sqrt(gsl_matrix_get(cov, j, j));
 	}
-	text += QStringLiteral("\n");
+	text += NEWLINE;
 
 	// goodness of fit
-	text += QStringLiteral("GOODNESS OF FIT\n\n");
+	text += i18n("GOODNESS OF FIT") + NEWLINE + NEWLINE;
 
-	text += i18n("Sum of squared residuals") + UTF8_QSTRING(" (χ²)") + QStringLiteral("\t\t") + numberLocale.toString(fitResult.sse) + QStringLiteral("\n");
-	text += i18n("Residuals mean square") + UTF8_QSTRING(" (χ²/dof)") + QStringLiteral("\t\t") + numberLocale.toString(fitResult.rms) + QStringLiteral("\n");
-	text +=
-		i18n("Root mean square deviation") + QStringLiteral(" (RMSD/SD)") + QStringLiteral("\t") + numberLocale.toString(fitResult.rsd) + QStringLiteral("\n");
-	text +=
-		i18n("Coefficient of determination") + QStringLiteral(" (R²)") + QStringLiteral("\t") + numberLocale.toString(fitResult.rsquare) + QStringLiteral("\n");
-	text += i18n("Adj. coefficient of determination") + QStringLiteral(" (R̄²)") + QStringLiteral("\t") + numberLocale.toString(fitResult.rsquareAdj)
-		+ QStringLiteral("\n");
-	text += UTF8_QSTRING("χ²-") + i18n("Test") + UTF8_QSTRING(" (P > χ²)") + QStringLiteral("\t\t\t") + numberLocale.toString(fitResult.chisq_p, 'g', 3)
-		+ QStringLiteral("\n");
-	text += i18n("F-Test") + QStringLiteral("\t\t\t\t") + numberLocale.toString(fitResult.fdist_F, 'g', 3) + QStringLiteral("\n");
-	text += QStringLiteral("P > F") + QStringLiteral("\t\t\t\t") + numberLocale.toString(fitResult.fdist_p, 'g', 3) + QStringLiteral("\n");
-	text += i18n("Mean absolute error") + QStringLiteral(" (MAE)") + QStringLiteral("\t\t") + numberLocale.toString(fitResult.mae) + QStringLiteral("\n");
-	text += i18n("Akaike information criterion") + QStringLiteral(" (AIC)") + QStringLiteral("\t") + numberLocale.toString(fitResult.aic, 'g', 3)
-		+ QStringLiteral("\n");
-	text += i18n("Bayesian information criterion") + QStringLiteral(" (BIC)") + QStringLiteral("\t") + numberLocale.toString(fitResult.bic, 'g', 3)
-		+ QStringLiteral("\n");
+	text += i18n("Sum of squared residuals") + UTF8_QSTRING(" (χ²)") + TAB + TAB + numberLocale.toString(fitResult.sse) + NEWLINE;
+	text += i18n("Residuals mean square") + UTF8_QSTRING(" (χ²/dof)") + TAB + TAB + numberLocale.toString(fitResult.rms) + NEWLINE;
+	text += i18n("Root mean square deviation") + QStringLiteral(" (RMSD/SD)") + TAB + numberLocale.toString(fitResult.rsd) + NEWLINE;
+	text += i18n("Coefficient of determination") + QStringLiteral(" (R²)") + TAB + numberLocale.toString(fitResult.rsquare) + NEWLINE;
+	text += i18n("Adj. coefficient of determination") + QStringLiteral(" (R̄²)") + TAB + numberLocale.toString(fitResult.rsquareAdj) + NEWLINE;
+	text += UTF8_QSTRING("χ²-") + i18n("Test") + UTF8_QSTRING(" (P > χ²)") + TAB + TAB + TAB + numberLocale.toString(fitResult.chisq_p, 'g', 3) + NEWLINE;
+	text += i18n("F-Test") + TAB + TAB + TAB + TAB + numberLocale.toString(fitResult.fdist_F, 'g', 3) + NEWLINE;
+	text += QStringLiteral("P > F") + TAB + TAB + TAB + TAB + numberLocale.toString(fitResult.fdist_p, 'g', 3) + NEWLINE;
+	text += i18n("Mean absolute error") + QStringLiteral(" (MAE)") + TAB + TAB + numberLocale.toString(fitResult.mae) + NEWLINE;
+	text += i18n("Akaike information criterion") + QStringLiteral(" (AIC)") + TAB + numberLocale.toString(fitResult.aic, 'g', 3) + NEWLINE;
+	text += i18n("Bayesian information criterion") + QStringLiteral(" (BIC)") + TAB + numberLocale.toString(fitResult.bic, 'g', 3) + NEWLINE;
 
 	note->setText(text);
 }

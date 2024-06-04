@@ -63,6 +63,9 @@ private:
 #endif
 #define UTF8_QSTRING(str) QString::fromUtf8(str)
 
+#define TAB QStringLiteral("\t")
+#define NEWLINE QStringLiteral("\n")
+
 #define CHECK(expr)                                                                                                                                            \
 	if (!(expr)) {                                                                                                                                             \
 		DEBUG(Q_FUNC_INFO << ", FAILING " #expr);                                                                                                              \
