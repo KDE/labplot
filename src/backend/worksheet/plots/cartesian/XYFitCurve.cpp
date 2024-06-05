@@ -1813,17 +1813,16 @@ void XYFitCurvePrivate::prepareResultColumns() {
 		// TODO: residualsVector->clear();
 	}
 
+	if (!resultsNote) {
+		resultsNote = new Note(i18n("Fit Results"));
+		resultsNote->setFixed(true); // visible in the project explorer but cannot be modified (renamed, deleted, etc.)
+		q->addChild(resultsNote);
+	}
 	if (!residualsColumn) {
 		residualsColumn = new Column(QStringLiteral("Residuals"), AbstractColumn::ColumnMode::Double);
 		residualsVector = static_cast<QVector<double>*>(residualsColumn->data());
 		residualsColumn->setFixed(true); // visible in the project explorer but cannot be modified (renamed, deleted, etc.)
 		q->addChild(residualsColumn);
-	}
-	if (!resultsNote) {
-		resultsNote = new Note(QStringLiteral("Fit Results"));
-		resultsNote->setFixed(true); // visible in the project explorer but cannot be modified (renamed, deleted, etc.)
-		q->addChild(resultsNote);
-		// TODO: don't set focus on Note when recalculate loaded project
 	}
 }
 
@@ -1831,8 +1830,9 @@ void XYFitCurvePrivate::resetResults() {
 	fitResult = XYFitCurve::FitResult();
 }
 
-void XYFitCurvePrivate::updateResultsNote(Note* note) {
-	if (!note)
+void XYFitCurvePrivate::updateResultsNote() {
+	DEBUG(Q_FUNC_INFO)
+	if (!resultsNote)
 		return;
 
 	QString text;
@@ -1840,6 +1840,7 @@ void XYFitCurvePrivate::updateResultsNote(Note* note) {
 	// model
 	text += i18n("MODEL") + NEWLINE + NEWLINE;
 	text += fitData.model + NEWLINE + NEWLINE;
+	DEBUG(Q_FUNC_INFO << ", model: " << fitData.model.toStdString())
 
 	// TODO: weighting? (see Origin)
 
@@ -1880,7 +1881,10 @@ void XYFitCurvePrivate::updateResultsNote(Note* note) {
 	text += i18n("Akaike information criterion") + QStringLiteral(" (AIC)") + TAB + numberLocale.toString(fitResult.aic, 'g', 3) + NEWLINE;
 	text += i18n("Bayesian information criterion") + QStringLiteral(" (BIC)") + TAB + numberLocale.toString(fitResult.bic, 'g', 3) + NEWLINE;
 
-	note->setText(text);
+	resultsNote->setNote(text);
+	// resultsNote->view()->repaint();
+
+	DEBUG("NOTE TEXT: " << resultsNote->note().toStdString())
 }
 
 void XYFitCurvePrivate::prepareTmpDataColumn(const AbstractColumn** tmpXDataColumn, const AbstractColumn** tmpYDataColumn) {
@@ -2018,9 +2022,6 @@ bool XYFitCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDataColumn
 	residualsColumn->setChanged();
 
 	fitResult.elapsedTime = timer.elapsed();
-
-	// TODO: not working when recalculate loaded project
-	updateResultsNote(resultsNote);
 
 	return update;
 }
@@ -2713,6 +2714,8 @@ bool XYFitCurvePrivate::evaluate(bool preview) {
 		residualsVector->clear();
 	}
 
+	updateResultsNote();
+
 	return true;
 }
 
@@ -3041,6 +3044,11 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 		}
 	}
 
+	// add result note (not saved in projects)
+	d->resultsNote = new Note(i18n("Fit Results"));
+	d->resultsNote->setFixed(true); // visible in the project explorer but cannot be modified (renamed, deleted, etc.)
+	addChild(d->resultsNote);
+
 	////////////////////////////// fix old projects /////////////////////////
 
 	// reset model type of old projects due to new model style
@@ -3089,6 +3097,8 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 	if (d->fitResult.correlationMatrix.size() == 0)
 		d->fitResult.correlationMatrix.resize(np * (np + 1) / 2);
 
+	///////////////////////////////////////////////////////////////////////////
+
 	// Loading done. Check some parameter
 	DEBUG(Q_FUNC_INFO << ", model category = " << d->fitData.modelCategory);
 	DEBUG(Q_FUNC_INFO << ", model type = " << d->fitData.modelType);
@@ -3121,6 +3131,10 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 
 		recalc();
 	}
+
+	// fill results note now all values are loaded
+	// TODO: parameter list is empty here!
+	d->updateResultsNote();
 
 	return true;
 }
