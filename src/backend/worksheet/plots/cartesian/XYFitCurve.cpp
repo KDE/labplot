@@ -3107,6 +3107,9 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 	// for (const auto& value : d->fitData.paramStartValues)
 	//	DEBUG(Q_FUNC_INFO << ", start value = " << value);
 
+	// fill results note now all values are loaded
+	d->updateResultsNote();
+
 	if (preview)
 		return true;
 
@@ -3131,10 +3134,6 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 
 		recalc();
 	}
-
-	// fill results note now all values are loaded
-	// TODO: parameter list is empty here!
-	d->updateResultsNote();
 
 	return true;
 }
