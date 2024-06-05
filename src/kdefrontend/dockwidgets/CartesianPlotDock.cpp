@@ -748,8 +748,9 @@ void CartesianPlotDock::updatePlotRangeListValues(const Dimension dim, int range
 	for (int i = 0; i < m_plot->coordinateSystemCount(); i++) {
 		const auto* cSystem{m_plot->coordinateSystem(i)};
 		if (cSystem->index(dim) == rangeIndex) {
-			auto* cb = dynamic_cast<ComboBoxIgnoreWheel*>(ui.twPlotRanges->cellWidget(i, column));
-			cb->setItemText(0, generatePlotRangeString(m_plot->rangeCount(dim), rangeIndex, m_plot->range(dim, rangeIndex)));
+			auto* cb = dynamic_cast<QComboBox*>(ui.twPlotRanges->cellWidget(i, column));
+			if (cb)
+				cb->setItemText(0, generatePlotRangeString(m_plot->rangeCount(dim), rangeIndex, m_plot->range(dim, rangeIndex)));
 		}
 	}
 }
