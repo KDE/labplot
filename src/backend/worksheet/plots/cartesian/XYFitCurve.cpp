@@ -2904,18 +2904,32 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 		} else if (!preview && reader->name() == QLatin1String("fixed")) {
 			d->fitData.paramFixed << (bool)reader->readElementText().toInt();
 			// end fitData
+		} else if (!preview && reader->name() == QLatin1String("paramValues")) {
+			d->fitResult.paramValues.clear();
 		} else if (!preview && reader->name() == QLatin1String("value")) {
 			d->fitResult.paramValues << reader->readElementText().toDouble();
+		} else if (!preview && reader->name() == QLatin1String("errorValues")) {
+			d->fitResult.errorValues.clear();
 		} else if (!preview && reader->name() == QLatin1String("error")) {
 			d->fitResult.errorValues << reader->readElementText().toDouble();
+		} else if (!preview && reader->name() == QLatin1String("tdist_tValues")) {
+			d->fitResult.tdist_tValues.clear();
 		} else if (!preview && reader->name() == QLatin1String("tdist_t")) {
 			d->fitResult.tdist_tValues << reader->readElementText().toDouble();
+		} else if (!preview && reader->name() == QLatin1String("tdist_pValues")) {
+			d->fitResult.tdist_pValues.clear();
 		} else if (!preview && reader->name() == QLatin1String("tdist_p")) {
 			d->fitResult.tdist_pValues << reader->readElementText().toDouble();
+		} else if (!preview && reader->name() == QLatin1String("tdist_marginValues")) {
+			d->fitResult.marginValues.clear();
 		} else if (!preview && reader->name() == QLatin1String("tdist_margin")) {
 			d->fitResult.marginValues << reader->readElementText().toDouble();
+		} else if (!preview && reader->name() == QLatin1String("tdist_margin2Values")) {
+			d->fitResult.margin2Values.clear();
 		} else if (!preview && reader->name() == QLatin1String("tdist_margin2")) {
 			d->fitResult.margin2Values << reader->readElementText().toDouble();
+		} else if (!preview && reader->name() == QLatin1String("correlationMatrix")) {
+			d->fitResult.correlationMatrix.clear();
 		} else if (!preview && reader->name() == QLatin1String("correlation")) {
 			d->fitResult.correlationMatrix << reader->readElementText().toDouble();
 		} else if (!preview && reader->name() == QLatin1String("fitResult")) {
