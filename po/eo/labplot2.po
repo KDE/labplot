@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-06-04 01:38+0000\n"
-"PO-Revision-Date: 2024-06-01 10:51+0200\n"
+"PO-Revision-Date: 2024-06-04 23:03+0200\n"
 "Last-Translator: Oliver Kellogg <olivermkellogg@gmail.com>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -16769,7 +16769,7 @@ msgstr "Akumula Procento"
 #: src/kdefrontend/TemplateHandler.cpp:181
 #, kde-format
 msgid "Load"
-msgstr "Ŝarĝo"
+msgstr "Ŝargi"
 
 #: src/kdefrontend/TemplateHandler.cpp:182
 #, kde-format
@@ -21530,10 +21530,9 @@ msgstr "Ekfunkciigo:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDebugOutput)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:338
-#, fuzzy, kde-format
-#| msgid "Output:"
+#, kde-format
 msgid "Debug Output:"
-msgstr "Eligo:"
+msgstr "Sencimiga Eligo:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode_2)
