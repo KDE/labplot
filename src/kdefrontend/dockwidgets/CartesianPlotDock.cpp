@@ -724,9 +724,8 @@ void CartesianPlotDock::updateRangeList(const Dimension dim) {
 }
 
 QString generatePlotRangeString(int rangeCount, int rangeIndex, const Range<double>& range) {
-	if (rangeCount > 1) {
+	if (rangeCount > 1)
 		return QString::number(rangeIndex + 1) + QStringLiteral(" : ") + range.toLocaleString();
-	}
 	return range.toLocaleString();
 }
 
@@ -757,8 +756,8 @@ void CartesianPlotDock::updatePlotRangeListValues(const Dimension dim, int range
 
 /*!
  * \brief CartesianPlotDock::updatePlotRangeList
- * update plot ranges in list by recreating all widgets. This function is really slow, use
- * it only at non critical / positions rearly called!!!!
+ * update plot ranges in list by recreating all widgets. This function is really slow, use it only for non-critical workflows which are called not that often.
+ * Prefer updatePlotRangeListValues()
  */
 void CartesianPlotDock::updatePlotRangeList() {
 	if (!m_plot)
