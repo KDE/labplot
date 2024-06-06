@@ -745,12 +745,19 @@ void CartesianPlotDock::updatePlotRangeListValues(const Dimension dim, int range
 		break;
 	}
 
-	for (int i = 0; i < m_plot->coordinateSystemCount(); i++) {
-		const auto* cSystem{m_plot->coordinateSystem(i)};
-		if (cSystem->index(dim) == rangeIndex) {
-			auto* cb = dynamic_cast<QComboBox*>(ui.twPlotRanges->cellWidget(i, column));
-			if (cb)
-				cb->setItemText(0, generatePlotRangeString(m_plot->rangeCount(dim), rangeIndex, m_plot->range(dim, rangeIndex)));
+	for (auto cSystemIndex = 0; cSystemIndex < ui.twPlotRanges->rowCount(); cSystemIndex++) {
+		auto* cb = dynamic_cast<QComboBox*>(ui.twPlotRanges->cellWidget(cSystemIndex, column));
+		if (cb) {
+			for (auto itemIndex = 0; itemIndex < cb->count(); itemIndex++) {
+				const auto data = cb->itemData(itemIndex);
+				if (data.isValid()) {
+					bool ok = true;
+					const auto rangeIndexComboBox = data.toInt(&ok);
+					Q_ASSERT(ok);
+					if (rangeIndexComboBox == rangeIndex)
+						cb->setItemText(itemIndex, generatePlotRangeString(m_plot->rangeCount(dim), rangeIndex, m_plot->range(dim, rangeIndex)));
+				}
+			}
 		}
 	}
 }
@@ -793,12 +800,12 @@ void CartesianPlotDock::updatePlotRangeList() {
 		const auto xRangeCount = m_plot->rangeCount(Dimension::X);
 		if (xRangeCount > 1) {
 			for (int index = 0; index < xRangeCount; index++)
-				cb->addItem(generatePlotRangeString(xRangeCount, index, m_plot->range(Dimension::X, index)));
+				cb->addItem(generatePlotRangeString(xRangeCount, index, m_plot->range(Dimension::X, index)), QVariant::fromValue(index));
 			cb->setCurrentIndex(xIndex);
 			cb->setProperty("row", i);
 			connect(cb, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CartesianPlotDock::PlotRangeXChanged);
 		} else {
-			cb->addItem(generatePlotRangeString(xRangeCount, 0, xRange));
+			cb->addItem(generatePlotRangeString(xRangeCount, 0, xRange), QVariant::fromValue(0));
 			cb->setStyleSheet(QStringLiteral("QComboBox::drop-down {border-width: 0px;}")); // hide arrow if there is only one range
 		}
 		ui.twPlotRanges->setCellWidget(i, TwPlotRangesColumn::XRange, cb);
