@@ -2908,7 +2908,7 @@ bool OriginProjectParser::loadNote(Note* note, bool preview) {
 		return true;
 
 	note->setComment(QString::fromStdString(originNote.label));
-	note->setNote(QString::fromStdString(originNote.text));
+	note->setText(QString::fromStdString(originNote.text));
 
 	return true;
 }
