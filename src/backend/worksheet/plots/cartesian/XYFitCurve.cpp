@@ -1881,10 +1881,9 @@ void XYFitCurvePrivate::updateResultsNote() {
 	text += i18n("Akaike information criterion") + QStringLiteral(" (AIC)") + TAB + numberLocale.toString(fitResult.aic, 'g', 3) + NEWLINE;
 	text += i18n("Bayesian information criterion") + QStringLiteral(" (BIC)") + TAB + numberLocale.toString(fitResult.bic, 'g', 3) + NEWLINE;
 
-	resultsNote->setNote(text);
-	// resultsNote->view()->repaint();
+	resultsNote->setText(text);
 
-	DEBUG("NOTE TEXT: " << resultsNote->note().toStdString())
+	DEBUG("NOTE TEXT: " << resultsNote->text().toStdString())
 }
 
 void XYFitCurvePrivate::prepareTmpDataColumn(const AbstractColumn** tmpXDataColumn, const AbstractColumn** tmpYDataColumn) {

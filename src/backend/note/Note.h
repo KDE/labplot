@@ -4,7 +4,7 @@
 	Description          : Widget for taking notes
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2016 Garvit Khatri <garvitdelhi@gmail.com>
-	SPDX-FileCopyrightText: 2016-2017 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2016-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -32,11 +32,8 @@ public:
 	bool printView() override;
 	bool printPreview() const override;
 
-	void setNote(const QString&);
-	void setText(const QString& s) {
-		this->setNote(s);
-	}
-	const QString& note() const;
+	void setText(const QString&);
+	const QString& text() const;
 
 	void setBackgroundColor(const QColor&);
 	const QColor& backgroundColor() const;
@@ -51,16 +48,17 @@ public:
 	bool load(XmlStreamReader*, bool preview) override;
 
 Q_SIGNALS:
-	void backgroundColorChanged(QColor);
-	void textColorChanged(QColor);
-	void textFontChanged(QFont);
+	void textChanged(const QString&);
+	void backgroundColorChanged(const QColor&);
+	void textColorChanged(const QColor&);
+	void textFontChanged(const QFont&);
 
 private:
 	mutable NoteView* m_view{nullptr};
 	QColor m_backgroundColor;
 	QColor m_textColor;
 	QFont m_textFont;
-	QString m_note;
+	QString m_text;
 };
 
 #endif // NOTE_H
