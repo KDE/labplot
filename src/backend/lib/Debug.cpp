@@ -11,6 +11,7 @@
 
 namespace {
 bool _debugOutputEnabled = false;
+bool _traceOutputEnabled = false;
 }
 
 bool debugOutputEnabled() {
@@ -18,4 +19,12 @@ bool debugOutputEnabled() {
 }
 void enableDebugOutput(bool enabled) {
 	_debugOutputEnabled = enabled;
+}
+
+bool traceOutputEnabled() {
+	return _traceOutputEnabled;
+}
+
+void enableTraceOutput(bool enabled) {
+	_traceOutputEnabled = enabled;
 }

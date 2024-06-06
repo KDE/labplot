@@ -50,6 +50,7 @@ SettingsGeneralPage::SettingsGeneralPage(QWidget* parent)
 	connect(ui.chkSaveCalculations, &QCheckBox::toggled, this, &SettingsGeneralPage::changed);
 	connect(ui.chkCompatible, &QCheckBox::toggled, this, &SettingsGeneralPage::changed);
 	connect(ui.chkDebugOutput, &QCheckBox::toggled, this, &SettingsGeneralPage::changed);
+	connect(ui.chkTraceOutput, &QCheckBox::toggled, this, &SettingsGeneralPage::changed);
 
 #ifdef HAVE_CANTOR_LIBS
 	for (auto* backend : Cantor::Backend::availableBackends()) {
@@ -132,10 +133,14 @@ void SettingsGeneralPage::applySettings() {
 	group.writeEntry(QLatin1String("SaveDockStates"), ui.chkSaveDockStates->isChecked());
 	group.writeEntry(QLatin1String("SaveCalculations"), ui.chkSaveCalculations->isChecked());
 	group.writeEntry(QLatin1String("CompatibleSave"), ui.chkCompatible->isChecked());
-	bool debugOutputEnabled = ui.chkDebugOutput->isChecked();
+	const bool debugOutputEnabled = ui.chkDebugOutput->isChecked();
 	group.writeEntry(QLatin1String("DebugOutput"), debugOutputEnabled);
-	Settings::writeDockPosBehaviour(static_cast<Settings::DockPosBehaviour>(ui.cbDockWindowPositionReopen->currentData().toInt()));
 	enableDebugOutput(debugOutputEnabled);
+	const bool traceOutputEnabled = ui.chkTraceOutput->isChecked();
+	group.writeEntry(QLatin1String("TraceOutput"), traceOutputEnabled);
+	enableTraceOutput(traceOutputEnabled);
+
+	Settings::writeDockPosBehaviour(static_cast<Settings::DockPosBehaviour>(ui.cbDockWindowPositionReopen->currentData().toInt()));
 }
 
 void SettingsGeneralPage::restoreDefaults() {
@@ -154,6 +159,7 @@ void SettingsGeneralPage::restoreDefaults() {
 	ui.chkSaveCalculations->setChecked(true);
 	ui.chkCompatible->setChecked(false);
 	ui.chkDebugOutput->setChecked(false);
+	ui.chkTraceOutput->setChecked(false);
 	ui.cbDockWindowPositionReopen->setCurrentIndex(ui.cbDockWindowPositionReopen->findData(static_cast<int>(Settings::DockPosBehaviour::AboveLastActive)));
 }
 
@@ -204,6 +210,7 @@ void SettingsGeneralPage::loadSettings() {
 	ui.chkSaveCalculations->setChecked(group.readEntry<bool>(QLatin1String("SaveCalculations"), true));
 	ui.chkCompatible->setChecked(group.readEntry<bool>(QLatin1String("CompatibleSave"), false));
 	ui.chkDebugOutput->setChecked(group.readEntry<bool>(QLatin1String("DebugOutput"), false));
+	ui.chkTraceOutput->setChecked(group.readEntry<bool>(QLatin1String("TraceOutput"), false));
 }
 
 void SettingsGeneralPage::retranslateUi() {

@@ -15,6 +15,8 @@
 
 bool debugOutputEnabled();
 void enableDebugOutput(bool);
+bool traceOutputEnabled();
+void enableTraceOutput(bool);
 
 #define WARN(x)                                                                                                                                                \
 	if (debugOutputEnabled()) {                                                                                                                                \
