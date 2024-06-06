@@ -17,6 +17,7 @@
 #include <QPen>
 
 class DatapickerPoint;
+class Symbol;
 
 class DatapickerPointPrivate : public QGraphicsItem {
 public:
@@ -32,16 +33,10 @@ public:
 	bool m_printing{false};
 	bool isReferencePoint{false};
 
-	qreal rotationAngle{0.0};
+	Symbol* symbol{nullptr};
 	QPointF position;
-	QRectF boundingRectangle;
-	QRectF transformedBoundingRectangle;
-	Symbol::Style pointStyle{Symbol::Style::NoSymbols};
-	QBrush brush;
-	QPen pen;
-	qreal opacity{1.0};
-	qreal size{1.0};
-	QPainterPath itemShape;
+	QRectF m_boundingRectangle;
+	QPainterPath m_shape;
 
 	QPointF plusDeltaXPos;
 	QPointF minusDeltaXPos;

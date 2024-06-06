@@ -117,6 +117,7 @@ void DatapickerImage::init() {
 		d->retransform();
 	});
 	d->symbol->init(group);
+
 	d->pointVisibility = group.readEntry(QStringLiteral("PointVisibility"), true);
 }
 
@@ -429,7 +430,7 @@ void DatapickerImage::setPlotPointsType(const PointsType pointsType) {
 
 	if (pointsType == DatapickerImage::PointsType::AxisPoints) {
 		// clear image
-		auto points = children<DatapickerPoint>(ChildIndexFlag::IncludeHidden);
+		const auto& points = children<DatapickerPoint>(ChildIndexFlag::IncludeHidden);
 		if (!points.isEmpty()) {
 			beginMacro(i18n("%1: remove all axis points", name()));
 
@@ -462,7 +463,7 @@ void DatapickerImage::setPointSeparation(const int value) {
 }
 
 void DatapickerImage::referencePointSelected(const DatapickerPoint* point) {
-	const auto points = children<DatapickerPoint>(AbstractAspect::ChildIndexFlag::IncludeHidden);
+	const auto& points = children<DatapickerPoint>(AbstractAspect::ChildIndexFlag::IncludeHidden);
 	for (int i = 0; i < points.count(); i++) {
 		if (points.at(i) == point) {
 			m_currentRefPoint = i;
@@ -489,7 +490,8 @@ QString DatapickerImagePrivate::name() const {
 void DatapickerImagePrivate::retransform() {
 	if (q->isLoading())
 		return;
-	auto points = q->children<DatapickerPoint>(AbstractAspect::ChildIndexFlag::IncludeHidden);
+
+	const auto& points = q->children<DatapickerPoint>(AbstractAspect::ChildIndexFlag::IncludeHidden);
 	for (auto* point : points)
 		point->retransform();
 }
