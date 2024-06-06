@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-04 01:38+0000\n"
+"POT-Creation-Date: 2024-06-06 01:46+0000\n"
 "PO-Revision-Date: 2024-06-02 10:11+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -7157,13 +7157,13 @@ msgstr "%1: establix l'opacitat de la línia"
 
 #: src/backend/worksheet/plots/AbstractPlot.cpp:100
 #: src/backend/worksheet/plots/AbstractPlot.cpp:128
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1293
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1331
 #, kde-format
 msgid "%1: set horizontal padding"
 msgstr "%1: establix un farciment horitzontal"
 
 #: src/backend/worksheet/plots/AbstractPlot.cpp:107
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1319
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1357
 #, kde-format
 msgid "%1: set vertical padding"
 msgstr "%1: establix un farciment vertical"
@@ -7207,8 +7207,8 @@ msgstr "Horitzontal"
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:259
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:57
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:53
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:845
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:849
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:883
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:887
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:158
 #: src/kdefrontend/dockwidgets/LollipopPlotDock.cpp:52
 #: src/kdefrontend/dockwidgets/ReferenceLineDock.cpp:28
@@ -12839,7 +12839,7 @@ msgstr "%1 eixos: s'ha carregat la plantilla «%2»"
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:2045
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:522
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:706
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1794
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1832
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:781
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:378
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:562
@@ -13043,13 +13043,13 @@ msgstr "Interval de %1:"
 msgid "Numeric"
 msgstr "Numèric"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:734
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:770
 #, kde-format
 msgid "Plot Ranges:"
 msgstr "Intervals del diagrama:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPlotRange)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:736
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:772
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:262
 #: src/kdefrontend/ui/dockwidgets/barplotdock.ui:186
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:90
@@ -13075,23 +13075,23 @@ msgstr "Intervals del diagrama:"
 msgid "Plot Range:"
 msgstr "Interval del diagrama:"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:825
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:863
 #, kde-format
 msgid "Free"
 msgstr "Lliure"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:826
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:864
 #, kde-format
 msgid "Last Points"
 msgstr "Darrers punts"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:827
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:865
 #, kde-format
 msgid "First Points"
 msgstr "Primers punts"
 
 # skip-rule: t-sc-plot
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:830
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:868
 #, kde-format
 msgid ""
 "Data Range:<ul><li>Free - full data range is plotted</li><li>Last Points - "
@@ -13103,48 +13103,48 @@ msgstr ""
 "li><li>Primers punts - es dibuixa el nombre especificat dels primers punts</"
 "li></ul>"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:839
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:877
 #, kde-format
 msgid "If checked, automatically extend the plot range to nice values"
 msgstr ""
 "Si està marcada, l'interval del diagrama s'ampliarà automàticament a valors "
 "satisfactoris"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:844
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:848
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:882
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:886
 #, kde-format
 msgid "Simple"
 msgstr "Simple"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:846
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:850
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:884
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:888
 #, kde-format
 msgid "Sloped"
 msgstr "Inclinada"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1105
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1114
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1143
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1152
 #, kde-format
 msgid "%1 range %2 is used in plot range %3. "
 msgstr "L'interval %2 de %1 s'utilitza en l'interval del diagrama %3. "
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1106
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1115
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1167
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1174
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1144
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1153
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1205
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1212
 #, kde-format
 msgid "Really remove it?"
 msgstr "Esteu segur d'eliminar-lo?"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1167
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1174
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1205
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1212
 #, kde-format
 msgid "Plot range %1 is used by element \"%2\". "
 msgstr "L'element «%2» utilitza l'interval del diagrama %1. "
 
 #. i18n: ectx: property (text), widget (QLabel, lPaddingHorizontal)
 #. i18n: ectx: property (text), widget (QLabel, lHorizontalSpacing)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1265
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1303
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:561
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:761
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:342
@@ -13154,7 +13154,7 @@ msgstr "Horitzontal:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPaddingVertical)
 #. i18n: ectx: property (text), widget (QLabel, lVerticalSpacing)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1266
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1304
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:862
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:716
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:428
@@ -13164,7 +13164,7 @@ msgstr "Vertical:"
 
 #. i18n: ectx: property (text), widget (QLabel, lTopMargin)
 #. i18n: ectx: property (text), widget (QLabel, lLeftMargin)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1268
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1306
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:797
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:709
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:414
@@ -13174,7 +13174,7 @@ msgstr "Esquerra:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLeftMargin)
 #. i18n: ectx: property (text), widget (QLabel, lTopMargin)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1269
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1307
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:804
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:658
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:407
@@ -13182,18 +13182,18 @@ msgstr "Esquerra:"
 msgid "Top:"
 msgstr "Dalt:"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1601
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1639
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Template Save File"
 msgstr "Seleccioneu el fitxer de guardada de plantilla"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1603
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1641
 #, kde-format
 msgid "Labplot Plot Templates (*%1)"
 msgstr "Plantilles de diagrames de LabPlot (*%1)"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1792
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1830
 #, kde-format
 msgid "%1 cartesian plots: template \"%2\" loaded"
 msgstr "Diagrames cartesians %1: s'ha carregat la plantilla «%2»"

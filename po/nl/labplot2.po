@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-04 01:38+0000\n"
+"POT-Creation-Date: 2024-06-06 01:46+0000\n"
 "PO-Revision-Date: 2024-06-02 15:02+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
@@ -7068,13 +7068,13 @@ msgstr "%1: ondoorzichtigheid lijn instellen"
 
 #: src/backend/worksheet/plots/AbstractPlot.cpp:100
 #: src/backend/worksheet/plots/AbstractPlot.cpp:128
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1293
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1331
 #, kde-format
 msgid "%1: set horizontal padding"
 msgstr "%1: horizontaal opvullen instellen"
 
 #: src/backend/worksheet/plots/AbstractPlot.cpp:107
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1319
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1357
 #, kde-format
 msgid "%1: set vertical padding"
 msgstr "%1: verticaal opvullen instellen"
@@ -7118,8 +7118,8 @@ msgstr "Horizontaal"
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:259
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:57
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:53
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:845
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:849
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:883
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:887
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:158
 #: src/kdefrontend/dockwidgets/LollipopPlotDock.cpp:52
 #: src/kdefrontend/dockwidgets/ReferenceLineDock.cpp:28
@@ -12706,7 +12706,7 @@ msgstr "%1 assen: sjabloon \"%2\" ingelezen"
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:2045
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:522
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:706
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1794
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1832
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:781
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:378
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:562
@@ -12906,13 +12906,13 @@ msgstr "%1-bereik:"
 msgid "Numeric"
 msgstr "Numeriek"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:734
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:770
 #, kde-format
 msgid "Plot Ranges:"
 msgstr "Plotbereiken:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPlotRange)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:736
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:772
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:262
 #: src/kdefrontend/ui/dockwidgets/barplotdock.ui:186
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:90
@@ -12938,22 +12938,22 @@ msgstr "Plotbereiken:"
 msgid "Plot Range:"
 msgstr "Plotbereik"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:825
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:863
 #, kde-format
 msgid "Free"
 msgstr "Vrij"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:826
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:864
 #, kde-format
 msgid "Last Points"
 msgstr "Laatste punten"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:827
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:865
 #, kde-format
 msgid "First Points"
 msgstr "Eerste punten"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:830
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:868
 #, kde-format
 msgid ""
 "Data Range:<ul><li>Free - full data range is plotted</li><li>Last Points - "
@@ -12964,48 +12964,48 @@ msgstr ""
 "punten - opgegeven aantal laatste punten worden geplot</li><li>Eerste punten "
 "- opgegeven aantal eerste punten worden geplot</li></ul>"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:839
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:877
 #, kde-format
 msgid "If checked, automatically extend the plot range to nice values"
 msgstr ""
 "Indien gekozen, wordt het plotbereik automatisch uitgebreid naar mooie "
 "waarden."
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:844
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:848
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:882
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:886
 #, kde-format
 msgid "Simple"
 msgstr "Eenvoudig"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:846
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:850
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:884
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:888
 #, kde-format
 msgid "Sloped"
 msgstr "Hellend"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1105
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1114
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1143
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1152
 #, kde-format
 msgid "%1 range %2 is used in plot range %3. "
 msgstr "%1-bereik %2 wordt in plot-bereik %3 gebruikt. "
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1106
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1115
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1167
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1174
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1144
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1153
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1205
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1212
 #, kde-format
 msgid "Really remove it?"
 msgstr "Wilt u dit echt wissen?"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1167
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1174
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1205
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1212
 #, kde-format
 msgid "Plot range %1 is used by element \"%2\". "
 msgstr "Plotbereik %1 wordt door element \"%2\" gebruikt."
 
 #. i18n: ectx: property (text), widget (QLabel, lPaddingHorizontal)
 #. i18n: ectx: property (text), widget (QLabel, lHorizontalSpacing)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1265
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1303
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:561
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:761
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:342
@@ -13015,7 +13015,7 @@ msgstr "Horizontaal:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPaddingVertical)
 #. i18n: ectx: property (text), widget (QLabel, lVerticalSpacing)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1266
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1304
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:862
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:716
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:428
@@ -13025,7 +13025,7 @@ msgstr "Verticaal:"
 
 #. i18n: ectx: property (text), widget (QLabel, lTopMargin)
 #. i18n: ectx: property (text), widget (QLabel, lLeftMargin)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1268
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1306
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:797
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:709
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:414
@@ -13035,7 +13035,7 @@ msgstr "Links:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLeftMargin)
 #. i18n: ectx: property (text), widget (QLabel, lTopMargin)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1269
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1307
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:804
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:658
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:407
@@ -13043,18 +13043,18 @@ msgstr "Links:"
 msgid "Top:"
 msgstr "Top:"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1601
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1639
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Template Save File"
 msgstr "Kies bestand voor opslaan van sjabloon"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1603
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1641
 #, kde-format
 msgid "Labplot Plot Templates (*%1)"
 msgstr "LabPlot-sjablonen (*%1)"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1792
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1830
 #, kde-format
 msgid "%1 cartesian plots: template \"%2\" loaded"
 msgstr "%1 cartesische plots: sjabloon \"%2\" ingelezen"
