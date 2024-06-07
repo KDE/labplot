@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-06 01:46+0000\n"
+"POT-Creation-Date: 2024-06-07 01:40+0000\n"
 "PO-Revision-Date: 2024-04-30 12:35+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
@@ -917,7 +917,7 @@ msgid "%1: set error bar outline style"
 msgstr "%1: assigna le stilo de contorno del barra de error"
 
 #: src/backend/datapicker/DatapickerCurve.cpp:376
-#: src/backend/datapicker/DatapickerImage.cpp:414
+#: src/backend/datapicker/DatapickerImage.cpp:415
 #: src/backend/worksheet/InfoElement.cpp:868
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:126
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:138
@@ -929,7 +929,7 @@ msgid "%1: set visible"
 msgstr "%1: assigna visibile"
 
 #: src/backend/datapicker/DatapickerCurve.cpp:376
-#: src/backend/datapicker/DatapickerImage.cpp:414
+#: src/backend/datapicker/DatapickerImage.cpp:415
 #: src/backend/worksheet/InfoElement.cpp:868
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:126
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:138
@@ -941,90 +941,90 @@ msgstr "%1: assigna visibile"
 msgid "%1: set invisible"
 msgstr "%1: assigna invisibile"
 
-#: src/backend/datapicker/DatapickerImage.cpp:179
+#: src/backend/datapicker/DatapickerImage.cpp:180
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Datapicker Image"
 msgstr "Imprime imagine de DataPicker"
 
-#: src/backend/datapicker/DatapickerImage.cpp:311
-#: src/backend/datapicker/DatapickerImage.cpp:366
+#: src/backend/datapicker/DatapickerImage.cpp:312
+#: src/backend/datapicker/DatapickerImage.cpp:367
 #, kde-format
 msgid "%1: upload image"
 msgstr "%1: Incarga imagine"
 
-#: src/backend/datapicker/DatapickerImage.cpp:365
+#: src/backend/datapicker/DatapickerImage.cpp:366
 #, kde-format
 msgid "%1: upload new image"
 msgstr "%1: incarga nove imagine"
 
-#: src/backend/datapicker/DatapickerImage.cpp:385
+#: src/backend/datapicker/DatapickerImage.cpp:386
 #: src/backend/worksheet/WorksheetElement.cpp:833
 #, kde-format
 msgid "%1: set rotation angle"
 msgstr "%1: assigna angulo de rotation"
 
-#: src/backend/datapicker/DatapickerImage.cpp:392
+#: src/backend/datapicker/DatapickerImage.cpp:393
 #, kde-format
 msgid "%1: set Axis points"
 msgstr "%1: assigna punctos de Axe"
 
-#: src/backend/datapicker/DatapickerImage.cpp:399
+#: src/backend/datapicker/DatapickerImage.cpp:400
 #, kde-format
 msgid "%1: set editor settings"
 msgstr "%1: assigna preferentias de editor"
 
-#: src/backend/datapicker/DatapickerImage.cpp:406
+#: src/backend/datapicker/DatapickerImage.cpp:407
 #, kde-format
 msgid "%1: set minimum segment length"
 msgstr "%1: assigna longitude de segmento minime"
 
-#: src/backend/datapicker/DatapickerImage.cpp:434
+#: src/backend/datapicker/DatapickerImage.cpp:435
 #, kde-format
 msgid "%1: remove all axis points"
 msgstr "%1: remove omne punctos de axe"
 
-#: src/backend/datapicker/DatapickerImage.cpp:681
+#: src/backend/datapicker/DatapickerImage.cpp:683
 #: src/backend/worksheet/Image.cpp:413
 #, kde-format
 msgid "Failed to read image data"
 msgstr "Falleva a leger datos de imagine"
 
-#: src/backend/datapicker/DatapickerPoint.cpp:213
+#: src/backend/datapicker/DatapickerPoint.cpp:212
 #: src/backend/worksheet/InfoElement.cpp:838
 #: src/backend/worksheet/WorksheetElement.cpp:754
 #, kde-format
 msgid "%1: set position"
 msgstr "%1: assigna position"
 
-#: src/backend/datapicker/DatapickerPoint.cpp:224
+#: src/backend/datapicker/DatapickerPoint.cpp:223
 #, kde-format
 msgid "%1: set +delta_X position"
 msgstr "%1: assigna position +delta_X"
 
-#: src/backend/datapicker/DatapickerPoint.cpp:226
-#: src/backend/datapicker/DatapickerPoint.cpp:229
+#: src/backend/datapicker/DatapickerPoint.cpp:225
+#: src/backend/datapicker/DatapickerPoint.cpp:228
 #, kde-format
 msgid "%1: set +delta X position"
 msgstr "%1: assigna position +delta X "
 
-#: src/backend/datapicker/DatapickerPoint.cpp:242
-#: src/backend/datapicker/DatapickerPoint.cpp:244
-#: src/backend/datapicker/DatapickerPoint.cpp:247
+#: src/backend/datapicker/DatapickerPoint.cpp:241
+#: src/backend/datapicker/DatapickerPoint.cpp:243
+#: src/backend/datapicker/DatapickerPoint.cpp:246
 #, kde-format
 msgid "%1: set -delta_X position"
 msgstr "%1: assigna position -delta_X"
 
-#: src/backend/datapicker/DatapickerPoint.cpp:260
-#: src/backend/datapicker/DatapickerPoint.cpp:262
-#: src/backend/datapicker/DatapickerPoint.cpp:265
+#: src/backend/datapicker/DatapickerPoint.cpp:259
+#: src/backend/datapicker/DatapickerPoint.cpp:261
+#: src/backend/datapicker/DatapickerPoint.cpp:264
 #, kde-format
 msgid "%1: set +delta_Y position"
 msgstr "%1: assigna position +delta_Y"
 
-#: src/backend/datapicker/DatapickerPoint.cpp:278
-#: src/backend/datapicker/DatapickerPoint.cpp:280
-#: src/backend/datapicker/DatapickerPoint.cpp:283
+#: src/backend/datapicker/DatapickerPoint.cpp:277
+#: src/backend/datapicker/DatapickerPoint.cpp:279
+#: src/backend/datapicker/DatapickerPoint.cpp:282
 #, kde-format
 msgid "%1: set -delta_Y position"
 msgstr "%1: assigna position -delta_Y"
@@ -7034,13 +7034,13 @@ msgstr ""
 
 #: src/backend/worksheet/plots/AbstractPlot.cpp:100
 #: src/backend/worksheet/plots/AbstractPlot.cpp:128
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1331
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1338
 #, kde-format
 msgid "%1: set horizontal padding"
 msgstr ""
 
 #: src/backend/worksheet/plots/AbstractPlot.cpp:107
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1357
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1364
 #, kde-format
 msgid "%1: set vertical padding"
 msgstr ""
@@ -7084,8 +7084,8 @@ msgstr "Horizontal"
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:259
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:57
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:53
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:883
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:887
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:890
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:894
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:158
 #: src/kdefrontend/dockwidgets/LollipopPlotDock.cpp:52
 #: src/kdefrontend/dockwidgets/ReferenceLineDock.cpp:28
@@ -12501,7 +12501,7 @@ msgstr ""
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:2045
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:522
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:706
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1832
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1839
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:781
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:378
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:562
@@ -12691,13 +12691,13 @@ msgstr "%1-Extension:"
 msgid "Numeric"
 msgstr "Numeric"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:770
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:777
 #, kde-format
 msgid "Plot Ranges:"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lPlotRange)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:772
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:779
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:262
 #: src/kdefrontend/ui/dockwidgets/barplotdock.ui:186
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:90
@@ -12723,22 +12723,22 @@ msgstr ""
 msgid "Plot Range:"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:863
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:870
 #, kde-format
 msgid "Free"
 msgstr "Libere"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:864
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:871
 #, kde-format
 msgid "Last Points"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:865
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:872
 #, kde-format
 msgid "First Points"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:868
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:875
 #, kde-format
 msgid ""
 "Data Range:<ul><li>Free - full data range is plotted</li><li>Last Points - "
@@ -12746,46 +12746,46 @@ msgid ""
 "number of first points is plotted</li></ul>"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:877
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:884
 #, kde-format
 msgid "If checked, automatically extend the plot range to nice values"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:882
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:886
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:889
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:893
 #, kde-format
 msgid "Simple"
 msgstr "Simple"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:884
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:888
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:891
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:895
 #, kde-format
 msgid "Sloped"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1143
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1152
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1150
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1159
 #, kde-format
 msgid "%1 range %2 is used in plot range %3. "
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1144
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1153
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1205
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1151
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1160
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1212
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1219
 #, kde-format
 msgid "Really remove it?"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1205
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1212
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1219
 #, kde-format
 msgid "Plot range %1 is used by element \"%2\". "
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lPaddingHorizontal)
 #. i18n: ectx: property (text), widget (QLabel, lHorizontalSpacing)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1303
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1310
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:561
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:761
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:342
@@ -12795,7 +12795,7 @@ msgstr "Horizontal:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPaddingVertical)
 #. i18n: ectx: property (text), widget (QLabel, lVerticalSpacing)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1304
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1311
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:862
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:716
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:428
@@ -12805,7 +12805,7 @@ msgstr "Vertical:"
 
 #. i18n: ectx: property (text), widget (QLabel, lTopMargin)
 #. i18n: ectx: property (text), widget (QLabel, lLeftMargin)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1306
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1313
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:797
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:709
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:414
@@ -12815,7 +12815,7 @@ msgstr "Sinistra:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLeftMargin)
 #. i18n: ectx: property (text), widget (QLabel, lTopMargin)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1307
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1314
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:804
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:658
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:407
@@ -12823,18 +12823,18 @@ msgstr "Sinistra:"
 msgid "Top:"
 msgstr "Alto (culmine):"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1639
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1646
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Template Save File"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1641
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1648
 #, kde-format
 msgid "Labplot Plot Templates (*%1)"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1830
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1837
 #, kde-format
 msgid "%1 cartesian plots: template \"%2\" loaded"
 msgstr ""
