@@ -1837,6 +1837,8 @@ void XYFitCurvePrivate::updateResultsNote() {
 
 	QString text;
 
+	// TODO: "fit of .. "?
+
 	// model
 	text += i18n("MODEL") + NEWLINE + NEWLINE;
 	text += fitData.model + NEWLINE + NEWLINE;
@@ -2713,7 +2715,8 @@ bool XYFitCurvePrivate::evaluate(bool preview) {
 		residualsVector->clear();
 	}
 
-	updateResultsNote();
+	if (!preview)
+		updateResultsNote();
 
 	return true;
 }
