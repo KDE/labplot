@@ -58,7 +58,10 @@
 	QTextEdit te;                                                                                                                                              \
 	for (auto& label : m_labelsList) {                                                                                                                         \
 		TextLabel::TextWrapper w = label->text();                                                                                                              \
-		te.setText(w.text);                                                                                                                                    \
+		if (w.allowPlaceholder)                                                                                                                                \
+			te.setText(w.textPlaceholder);                                                                                                                     \
+		else                                                                                                                                                   \
+			te.setText(w.text);                                                                                                                                \
 		if (!cursorHasSelection)                                                                                                                               \
 			te.selectAll();                                                                                                                                    \
 		else {                                                                                                                                                 \
@@ -69,7 +72,10 @@
 			te.setTextCursor(c);                                                                                                                               \
 		}                                                                                                                                                      \
 		te.TextEditFunction(TextEditArgument);                                                                                                                 \
-		w.text = te.toHtml();                                                                                                                                  \
+		if (w.allowPlaceholder)                                                                                                                                \
+			w.textPlaceholder = te.toHtml();                                                                                                                   \
+		else                                                                                                                                                   \
+			w.text = te.toHtml();                                                                                                                              \
 		label->setText(w);                                                                                                                                     \
 	}                                                                                                                                                          \
                                                                                                                                                                \
