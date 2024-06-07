@@ -1836,14 +1836,39 @@ void XYFitCurvePrivate::updateResultsNote() {
 		return;
 
 	QString text;
+	const auto numberLocale = QLocale();
 
-	// TODO: "fit of .. "?
+	text += i18n("Nonlinear Fit to X/Y data");
+	if (xDataColumn && yDataColumn)
+		text += QStringLiteral(": ") + xDataColumn->name() + QStringLiteral(" / ") + yDataColumn->name();
+	text += NEWLINE + NEWLINE;
 
 	// model
 	text += i18n("MODEL") + NEWLINE + NEWLINE;
-	text += fitData.model + NEWLINE + NEWLINE;
+	switch (fitData.modelCategory) {
+	case nsl_fit_model_basic:
+		text += QLatin1String(nsl_fit_model_basic_name[fitData.modelType]);
+		text += QStringLiteral(", ") + i18n("Degree") + QStringLiteral(" ") + numberLocale.toString(fitData.degree);
+		break;
+	case nsl_fit_model_peak:
+		text += QLatin1String(nsl_fit_model_peak_name[fitData.modelType]);
+		if (fitData.degree > 1)
+			text += QStringLiteral(", ") + numberLocale.toString(fitData.degree) + QStringLiteral(" ") + i18n("Peaks");
+		break;
+	case nsl_fit_model_growth:
+		text += QLatin1String(nsl_fit_model_growth_name[fitData.modelType]);
+		break;
+	case nsl_fit_model_distribution:
+		text += QLatin1String(nsl_sf_stats_distribution_name[fitData.modelType]);
+		break;
+	case nsl_fit_model_custom:
+		text += i18n("Custom");
+	}
+
+	text += QStringLiteral(": ") + fitData.model + NEWLINE + NEWLINE;
 	DEBUG(Q_FUNC_INFO << ", model: " << fitData.model.toStdString())
 
+	// TODO: errors? (see Origin)
 	// TODO: weighting? (see Origin)
 
 	// parameter
@@ -1853,7 +1878,6 @@ void XYFitCurvePrivate::updateResultsNote() {
 
 	text += TAB + i18n("Value") + TAB + i18n("Uncertainty") + TAB + i18n("Uncertainty,%") + TAB + i18n("t Statistic") + TAB + QStringLiteral("P > |t|") + TAB
 		+ i18n("Lower") + TAB + i18n("Upper") + NEWLINE;
-	const auto numberLocale = QLocale();
 	for (int i = 0; i < np; i++) {
 		text += fitData.paramNames.at(i) + TAB + numberLocale.toString(fitResult.paramValues.at(i)) + TAB + numberLocale.toString(fitResult.errorValues.at(i))
 			+ TAB + TAB + numberLocale.toString(fitResult.errorValues.at(i) / fitResult.paramValues.at(i) * 100.) + TAB + TAB
