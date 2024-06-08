@@ -33,8 +33,8 @@ New features:
 		* Generation of equidistant values: support for date&time and integer columns
 		* Generation of equidistant values: allow to fix the number of values and the increment at the same time
 		* Support parsing more functions and operators for formulas and expressions
-		* Added support to show the Sparkline of each respective column
-		* Added triangular distribution to parser and random number generation
+		* Add support to show the Sparkline of each respective column
+		* Add triangular distribution to parser and random number generation
 	* [notebook]
 		* Export to PDF
 		* "Configure CAS" in the menu to create a new notebook to directly allow the user to enable new backends in case not done yet
@@ -44,7 +44,7 @@ New features:
 		* Templates for ASCII and Binary import filters - allow to save and load current filter settings
 		* Support data import from ODS (Open Document Spreadsheet) files
 		* When importing tables from SQL databases, allow to specify which data region to read (start/end values for columns and records)
-		* Addeded seaborn's datasets to the collection of datasets
+		* Add seaborn's datasets to the collection of datasets
 		* Properly handle out-of-memory situations when importing large amount of data
 		* Better reporting of error messages in the import dialog
 		* BLF
@@ -54,6 +54,8 @@ New features:
 			* correctly import font sizes and legend fixes (#839)
 			* improved text and legend label and positioning
 			* import histogram and error bars
+	* [analysis]
+		* Add note for fit results
 
 Performance improvements:
 	* Make baseline removal much faster by using Eigen3 library (optional dependency)
