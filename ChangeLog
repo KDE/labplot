@@ -6,6 +6,7 @@ New features:
 		* New option in the application settings to run a selected CAS engine at startup
 		* New option in the application settings to control if the state of the dock widgets should be saved in the project file
 		* Share the project via email, Nextcloud, etc. directly from the main menu
+		* Allow to activate and deactivate the debug and performance tracing output in the terminal in the application settings
 	* [worksheet]
 		* Preview panel for all available worksheets in the project
 		* Add possibility to use column labels as axis ticks
@@ -71,6 +72,10 @@ Bug fixes:
 	* Fixed wrong string to load CANSettings
 	* Don't draw any border line for the worksheet canvas (BUG 470625)
 	* Fix ascii import (Issues #898, #901)
+	* Use "export" instead of "import" in the tooltip texts in Export Worksheet Dialog (BUG 485706)
+	* Don't allow to move axes with the arrow keys (BUG 480593)
+	* Don't draw the border line that for the worksheet canvas (BUG 470625)
+	* Fix crash during the data import into spreadsheet with column names changes (BUG 487748)
 
 Internal:
 	* Switch from C++11 to C++17
