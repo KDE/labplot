@@ -124,7 +124,8 @@ int main(int argc, char* argv[]) {
 	KAboutData::setApplicationData(aboutData);
 
 	const auto& group = Settings::settingsGeneral();
-	enableDebugOutput(group.readEntry<bool>(QLatin1String("DebugOutput"), false));
+	enableDebugTrace(group.readEntry<bool>(QLatin1String("DebugTrace"), false));
+	enablePerfTrace(group.readEntry<bool>(QLatin1String("PerfTrace"), false));
 
 	// TODO: add library information (GSL version, etc.) in about dialog
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-02 01:39+0000\n"
+"POT-Creation-Date: 2024-06-08 01:47+0000\n"
 "PO-Revision-Date: 2024-06-02 08:25+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian\n"
@@ -308,7 +308,7 @@ msgstr "Велике ціле число"
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1524
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:269
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:280
-#: src/kdefrontend/widgets/LabelWidget.cpp:202
+#: src/kdefrontend/widgets/LabelWidget.cpp:208
 #, kde-format
 msgid "Text"
 msgstr "Текст"
@@ -923,7 +923,7 @@ msgid "%1: set error bar outline style"
 msgstr "%1: встановити стиль контурів позначок похибки"
 
 #: src/backend/datapicker/DatapickerCurve.cpp:376
-#: src/backend/datapicker/DatapickerImage.cpp:414
+#: src/backend/datapicker/DatapickerImage.cpp:415
 #: src/backend/worksheet/InfoElement.cpp:868
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:126
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:138
@@ -935,7 +935,7 @@ msgid "%1: set visible"
 msgstr "%1: зробити видимим"
 
 #: src/backend/datapicker/DatapickerCurve.cpp:376
-#: src/backend/datapicker/DatapickerImage.cpp:414
+#: src/backend/datapicker/DatapickerImage.cpp:415
 #: src/backend/worksheet/InfoElement.cpp:868
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:126
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:138
@@ -947,90 +947,90 @@ msgstr "%1: зробити видимим"
 msgid "%1: set invisible"
 msgstr "%1: зробити невидимим"
 
-#: src/backend/datapicker/DatapickerImage.cpp:179
+#: src/backend/datapicker/DatapickerImage.cpp:180
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Datapicker Image"
 msgstr "Друк зображення для вибору даних"
 
-#: src/backend/datapicker/DatapickerImage.cpp:311
-#: src/backend/datapicker/DatapickerImage.cpp:366
+#: src/backend/datapicker/DatapickerImage.cpp:312
+#: src/backend/datapicker/DatapickerImage.cpp:367
 #, kde-format
 msgid "%1: upload image"
 msgstr "%1: вивантажити зображення"
 
-#: src/backend/datapicker/DatapickerImage.cpp:365
+#: src/backend/datapicker/DatapickerImage.cpp:366
 #, kde-format
 msgid "%1: upload new image"
 msgstr "%1: вивантажити нове зображення"
 
-#: src/backend/datapicker/DatapickerImage.cpp:385
+#: src/backend/datapicker/DatapickerImage.cpp:386
 #: src/backend/worksheet/WorksheetElement.cpp:833
 #, kde-format
 msgid "%1: set rotation angle"
 msgstr "%1: встановити кут обертання"
 
-#: src/backend/datapicker/DatapickerImage.cpp:392
+#: src/backend/datapicker/DatapickerImage.cpp:393
 #, kde-format
 msgid "%1: set Axis points"
 msgstr "%1: встановити точки вісі"
 
-#: src/backend/datapicker/DatapickerImage.cpp:399
+#: src/backend/datapicker/DatapickerImage.cpp:400
 #, kde-format
 msgid "%1: set editor settings"
 msgstr "%1: встановити параметри редактора"
 
-#: src/backend/datapicker/DatapickerImage.cpp:406
+#: src/backend/datapicker/DatapickerImage.cpp:407
 #, kde-format
 msgid "%1: set minimum segment length"
 msgstr "%1: встановити мінімальну довжину сегмента"
 
-#: src/backend/datapicker/DatapickerImage.cpp:434
+#: src/backend/datapicker/DatapickerImage.cpp:435
 #, kde-format
 msgid "%1: remove all axis points"
 msgstr "%1: вилучити усі точки вісі"
 
-#: src/backend/datapicker/DatapickerImage.cpp:681
+#: src/backend/datapicker/DatapickerImage.cpp:683
 #: src/backend/worksheet/Image.cpp:413
 #, kde-format
 msgid "Failed to read image data"
 msgstr "Не вдалося прочитати дані зображення"
 
-#: src/backend/datapicker/DatapickerPoint.cpp:213
+#: src/backend/datapicker/DatapickerPoint.cpp:212
 #: src/backend/worksheet/InfoElement.cpp:838
 #: src/backend/worksheet/WorksheetElement.cpp:754
 #, kde-format
 msgid "%1: set position"
 msgstr "%1: встановити розташування"
 
-#: src/backend/datapicker/DatapickerPoint.cpp:224
+#: src/backend/datapicker/DatapickerPoint.cpp:223
 #, kde-format
 msgid "%1: set +delta_X position"
 msgstr "%1: встановити позицію +Δ_X"
 
-#: src/backend/datapicker/DatapickerPoint.cpp:226
-#: src/backend/datapicker/DatapickerPoint.cpp:229
+#: src/backend/datapicker/DatapickerPoint.cpp:225
+#: src/backend/datapicker/DatapickerPoint.cpp:228
 #, kde-format
 msgid "%1: set +delta X position"
 msgstr "%1: встановити розташування +Δ_X"
 
-#: src/backend/datapicker/DatapickerPoint.cpp:242
-#: src/backend/datapicker/DatapickerPoint.cpp:244
-#: src/backend/datapicker/DatapickerPoint.cpp:247
+#: src/backend/datapicker/DatapickerPoint.cpp:241
+#: src/backend/datapicker/DatapickerPoint.cpp:243
+#: src/backend/datapicker/DatapickerPoint.cpp:246
 #, kde-format
 msgid "%1: set -delta_X position"
 msgstr "%1: встановити позицію -Δ_X"
 
-#: src/backend/datapicker/DatapickerPoint.cpp:260
-#: src/backend/datapicker/DatapickerPoint.cpp:262
-#: src/backend/datapicker/DatapickerPoint.cpp:265
+#: src/backend/datapicker/DatapickerPoint.cpp:259
+#: src/backend/datapicker/DatapickerPoint.cpp:261
+#: src/backend/datapicker/DatapickerPoint.cpp:264
 #, kde-format
 msgid "%1: set +delta_Y position"
 msgstr "%1: встановити позицію +Δ_X"
 
-#: src/backend/datapicker/DatapickerPoint.cpp:278
-#: src/backend/datapicker/DatapickerPoint.cpp:280
-#: src/backend/datapicker/DatapickerPoint.cpp:283
+#: src/backend/datapicker/DatapickerPoint.cpp:277
+#: src/backend/datapicker/DatapickerPoint.cpp:279
+#: src/backend/datapicker/DatapickerPoint.cpp:282
 #, kde-format
 msgid "%1: set -delta_Y position"
 msgstr "%1: встановити позицію -Δ_X"
@@ -6801,7 +6801,7 @@ msgstr "%1: упорядкувати стовпчики"
 msgid "%1: linked spreadsheet removed"
 msgstr "%1: вилучено пов'язану електронну таблицю"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1536
+#: src/backend/spreadsheet/Spreadsheet.cpp:1542
 #, kde-format
 msgid "double precision data, %1 element"
 msgid_plural "numerical data, %1 elements"
@@ -6810,7 +6810,7 @@ msgstr[1] "дані подвійної точності, %1 елементи"
 msgstr[2] "дані подвійної точності, %1 елементів"
 msgstr[3] "дані подвійної точності, один елемент"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1539
+#: src/backend/spreadsheet/Spreadsheet.cpp:1545
 #, kde-format
 msgid "integer data, %1 element"
 msgid_plural "integer data, %1 elements"
@@ -6819,7 +6819,7 @@ msgstr[1] "цілочисельні дані, %1 елементи"
 msgstr[2] "цілочисельні дані, %1 елементів"
 msgstr[3] "цілочисельні дані, один елемент"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1542
+#: src/backend/spreadsheet/Spreadsheet.cpp:1548
 #, kde-format
 msgid "big integer data, %1 element"
 msgid_plural "big integer data, %1 elements"
@@ -6828,7 +6828,7 @@ msgstr[1] "великі цілочисельні дані, %1 елементи"
 msgstr[2] "великі цілочисельні дані, %1 елементів"
 msgstr[3] "великі цілочисельні дані, один елемент"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1545
+#: src/backend/spreadsheet/Spreadsheet.cpp:1551
 #, kde-format
 msgid "text data, %1 element"
 msgid_plural "text data, %1 elements"
@@ -6837,7 +6837,7 @@ msgstr[1] "текстові дані, %1 елементи"
 msgstr[2] "текстові дані, %1 елементів"
 msgstr[3] "текстові дані, один елемент"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1548
+#: src/backend/spreadsheet/Spreadsheet.cpp:1554
 #, kde-format
 msgid "month data, %1 element"
 msgid_plural "month data, %1 elements"
@@ -6846,7 +6846,7 @@ msgstr[1] "дані щодо місяця, %1 елементи"
 msgstr[2] "дані щодо місяця, %1 елементів"
 msgstr[3] "дані щодо місяця, один елемент"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1551
+#: src/backend/spreadsheet/Spreadsheet.cpp:1557
 #, kde-format
 msgid "day data, %1 element"
 msgid_plural "day data, %1 elements"
@@ -6855,7 +6855,7 @@ msgstr[1] "дані щодо дня, %1 елементи"
 msgstr[2] "дані щодо дня, %1 елементів"
 msgstr[3] "дані щодо дня, один елемент"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1554
+#: src/backend/spreadsheet/Spreadsheet.cpp:1560
 #, kde-format
 msgid "date and time data, %1 element"
 msgid_plural "date and time data, %1 elements"
@@ -7141,13 +7141,13 @@ msgstr "%1: встановити рівень непрозорості ліні�
 
 #: src/backend/worksheet/plots/AbstractPlot.cpp:100
 #: src/backend/worksheet/plots/AbstractPlot.cpp:128
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1293
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1338
 #, kde-format
 msgid "%1: set horizontal padding"
 msgstr "%1: встановити горизонтальну фаску"
 
 #: src/backend/worksheet/plots/AbstractPlot.cpp:107
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1319
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1364
 #, kde-format
 msgid "%1: set vertical padding"
 msgstr "%1: встановити вертикальну фаску"
@@ -7191,8 +7191,8 @@ msgstr "Горизонтальне"
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:259
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:57
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:53
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:845
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:849
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:890
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:894
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:158
 #: src/kdefrontend/dockwidgets/LollipopPlotDock.cpp:52
 #: src/kdefrontend/dockwidgets/ReferenceLineDock.cpp:28
@@ -9330,7 +9330,7 @@ msgid "Command"
 msgstr "Команда"
 
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:101
-#: src/kdefrontend/widgets/LabelWidget.cpp:205
+#: src/kdefrontend/widgets/LabelWidget.cpp:211
 #, kde-format
 msgid "Markdown"
 msgstr "Markdown"
@@ -9338,7 +9338,7 @@ msgstr "Markdown"
 #. i18n: ectx: property (text), widget (QLabel, lTex)
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:105
 #: src/kdefrontend/ui/settingsworksheetpage.ui:147
-#: src/kdefrontend/widgets/LabelWidget.cpp:203
+#: src/kdefrontend/widgets/LabelWidget.cpp:209
 #, kde-format
 msgid "LaTeX"
 msgstr "LaTeX"
@@ -12544,8 +12544,8 @@ msgstr "Області даних"
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:51
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:63
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:71
-#: src/kdefrontend/widgets/LabelWidget.cpp:152
-#: src/kdefrontend/widgets/LabelWidget.cpp:170
+#: src/kdefrontend/widgets/LabelWidget.cpp:158
+#: src/kdefrontend/widgets/LabelWidget.cpp:176
 #, kde-format
 msgid "Top"
 msgstr "Згори"
@@ -12559,8 +12559,8 @@ msgstr "Згори"
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:53
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:65
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:73
-#: src/kdefrontend/widgets/LabelWidget.cpp:154
-#: src/kdefrontend/widgets/LabelWidget.cpp:172
+#: src/kdefrontend/widgets/LabelWidget.cpp:160
+#: src/kdefrontend/widgets/LabelWidget.cpp:178
 #, kde-format
 msgid "Bottom"
 msgstr "Низ"
@@ -12646,8 +12646,8 @@ msgstr "напівзаповнена, велика"
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:67
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:340
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:127
-#: src/kdefrontend/widgets/LabelWidget.cpp:147
-#: src/kdefrontend/widgets/LabelWidget.cpp:166
+#: src/kdefrontend/widgets/LabelWidget.cpp:153
+#: src/kdefrontend/widgets/LabelWidget.cpp:172
 #: src/kdefrontend/widgets/ValueWidget.cpp:37
 #, kde-format
 msgid "Left"
@@ -12664,8 +12664,8 @@ msgstr "Ліворуч"
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:69
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:341
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:128
-#: src/kdefrontend/widgets/LabelWidget.cpp:149
-#: src/kdefrontend/widgets/LabelWidget.cpp:168
+#: src/kdefrontend/widgets/LabelWidget.cpp:155
+#: src/kdefrontend/widgets/LabelWidget.cpp:174
 #: src/kdefrontend/widgets/ValueWidget.cpp:38
 #, kde-format
 msgid "Right"
@@ -12813,7 +12813,7 @@ msgstr "Вісі %1: завантажено шаблон «%2»"
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:2045
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:522
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:706
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1794
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1839
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:781
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:378
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:562
@@ -13012,13 +13012,13 @@ msgstr "%1-діапазон:"
 msgid "Numeric"
 msgstr "Число"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:734
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:777
 #, kde-format
 msgid "Plot Ranges:"
 msgstr "Діапазони графіка:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPlotRange)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:736
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:779
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:262
 #: src/kdefrontend/ui/dockwidgets/barplotdock.ui:186
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:90
@@ -13044,22 +13044,22 @@ msgstr "Діапазони графіка:"
 msgid "Plot Range:"
 msgstr "Діапазон графіка:"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:825
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:870
 #, kde-format
 msgid "Free"
 msgstr "Довільний"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:826
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:871
 #, kde-format
 msgid "Last Points"
 msgstr "Останні точки"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:827
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:872
 #, kde-format
 msgid "First Points"
 msgstr "Перші точки"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:830
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:875
 #, kde-format
 msgid ""
 "Data Range:<ul><li>Free - full data range is plotted</li><li>Last Points - "
@@ -13071,48 +13071,48 @@ msgstr ""
 "кількості останніх точок</li><li>Перші точки — буде побудовано графік для "
 "вказаної кількості перших точок</li></ul>"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:839
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:884
 #, kde-format
 msgid "If checked, automatically extend the plot range to nice values"
 msgstr ""
 "Якщо позначено, автоматично розширювати діапазон графіка до оптимальних "
 "значень"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:844
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:848
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:889
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:893
 #, kde-format
 msgid "Simple"
 msgstr "простий"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:846
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:850
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:891
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:895
 #, kde-format
 msgid "Sloped"
 msgstr "нахилений"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1105
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1114
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1150
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1159
 #, kde-format
 msgid "%1 range %2 is used in plot range %3. "
 msgstr "%1-діапазон %2 використано на діапазоні %3 креслення. "
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1106
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1115
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1167
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1174
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1151
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1160
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1212
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1219
 #, kde-format
 msgid "Really remove it?"
 msgstr "Справді вилучити?"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1167
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1174
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1212
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1219
 #, kde-format
 msgid "Plot range %1 is used by element \"%2\". "
 msgstr "Діапазон креслення %1 використано елементом «%2». "
 
 #. i18n: ectx: property (text), widget (QLabel, lPaddingHorizontal)
 #. i18n: ectx: property (text), widget (QLabel, lHorizontalSpacing)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1265
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1310
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:561
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:761
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:342
@@ -13122,7 +13122,7 @@ msgstr "Горизонтальне:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPaddingVertical)
 #. i18n: ectx: property (text), widget (QLabel, lVerticalSpacing)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1266
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1311
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:862
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:716
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:428
@@ -13132,7 +13132,7 @@ msgstr "Вертикальне:"
 
 #. i18n: ectx: property (text), widget (QLabel, lTopMargin)
 #. i18n: ectx: property (text), widget (QLabel, lLeftMargin)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1268
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1313
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:797
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:709
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:414
@@ -13142,7 +13142,7 @@ msgstr "Ліворуч:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLeftMargin)
 #. i18n: ectx: property (text), widget (QLabel, lTopMargin)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1269
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1314
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:804
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:658
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:407
@@ -13150,18 +13150,18 @@ msgstr "Ліворуч:"
 msgid "Top:"
 msgstr "Верх:"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1601
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1646
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Template Save File"
 msgstr "Виберіть шаблон для збереження файла"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1603
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1648
 #, kde-format
 msgid "Labplot Plot Templates (*%1)"
 msgstr "шаблони креслень Labplot (*%1)"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1792
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1837
 #, kde-format
 msgid "%1 cartesian plots: template \"%2\" loaded"
 msgstr "Креслення у декартовій системі %1: завантажено шаблон «%2»"
@@ -13188,11 +13188,11 @@ msgstr "основний рядка"
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:64
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:68
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:72
-#: src/kdefrontend/widgets/LabelWidget.cpp:140
-#: src/kdefrontend/widgets/LabelWidget.cpp:148
-#: src/kdefrontend/widgets/LabelWidget.cpp:153
-#: src/kdefrontend/widgets/LabelWidget.cpp:167
-#: src/kdefrontend/widgets/LabelWidget.cpp:171
+#: src/kdefrontend/widgets/LabelWidget.cpp:146
+#: src/kdefrontend/widgets/LabelWidget.cpp:154
+#: src/kdefrontend/widgets/LabelWidget.cpp:159
+#: src/kdefrontend/widgets/LabelWidget.cpp:173
+#: src/kdefrontend/widgets/LabelWidget.cpp:177
 #: src/kdefrontend/widgets/ValueWidget.cpp:94
 #: src/kdefrontend/widgets/ValueWidget.cpp:95
 #, kde-format
@@ -13201,8 +13201,8 @@ msgstr "за центром"
 
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:253
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:258
-#: src/kdefrontend/widgets/LabelWidget.cpp:150
-#: src/kdefrontend/widgets/LabelWidget.cpp:155
+#: src/kdefrontend/widgets/LabelWidget.cpp:156
+#: src/kdefrontend/widgets/LabelWidget.cpp:161
 #, kde-format
 msgid "Relative to plot"
 msgstr "Відносно креслення"
@@ -22741,7 +22741,7 @@ msgstr "Не можна вилучати обов'язкові ключові с
 msgid "Removing Keyword"
 msgstr "Вилучаємо ключове слово"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:114
+#: src/kdefrontend/widgets/LabelWidget.cpp:120
 #, kde-format
 msgid ""
 "Use logical instead of absolute coordinates to specify the position on the "
@@ -22750,152 +22750,152 @@ msgstr ""
 "Використовувати замість абсолютних координат для визначення позиції на "
 "кресленні логічні"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:133
+#: src/kdefrontend/widgets/LabelWidget.cpp:139
 #, kde-format
 msgid "Bold"
 msgstr "Напівжирний"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:134
+#: src/kdefrontend/widgets/LabelWidget.cpp:140
 #, kde-format
 msgid "Italic"
 msgstr "Курсив"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:135
+#: src/kdefrontend/widgets/LabelWidget.cpp:141
 #, kde-format
 msgid "Underline"
 msgstr "Підкреслений"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:136
+#: src/kdefrontend/widgets/LabelWidget.cpp:142
 #, kde-format
 msgid "Strike Out"
 msgstr "Перекреслений"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:137
+#: src/kdefrontend/widgets/LabelWidget.cpp:143
 #, kde-format
 msgid "Super Script"
 msgstr "Верхній індекс"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:138
+#: src/kdefrontend/widgets/LabelWidget.cpp:144
 #, kde-format
 msgid "Sub-Script"
 msgstr "Нижній індекс"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:139
+#: src/kdefrontend/widgets/LabelWidget.cpp:145
 #, kde-format
 msgid "Left Align"
 msgstr "Вирівняти ліворуч"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:141
+#: src/kdefrontend/widgets/LabelWidget.cpp:147
 #, kde-format
 msgid "Right Align"
 msgstr "Вирівняти праворуч"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:142
+#: src/kdefrontend/widgets/LabelWidget.cpp:148
 #, kde-format
 msgid "Justify"
 msgstr "За шириною"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:143
+#: src/kdefrontend/widgets/LabelWidget.cpp:149
 #, kde-format
 msgid "Insert Symbol"
 msgstr "Вставити символ"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:144
+#: src/kdefrontend/widgets/LabelWidget.cpp:150
 #, kde-format
 msgid "Insert Date/Time"
 msgstr "Вставити дату і час"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:174
+#: src/kdefrontend/widgets/LabelWidget.cpp:180
 #, kde-format
 msgid "No Border"
 msgstr "Без рамки"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:175
+#: src/kdefrontend/widgets/LabelWidget.cpp:181
 #, kde-format
 msgid "Rectangle"
 msgstr "Прямокутник"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:176
+#: src/kdefrontend/widgets/LabelWidget.cpp:182
 #, kde-format
 msgid "Ellipse"
 msgstr "Еліпс"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:177
+#: src/kdefrontend/widgets/LabelWidget.cpp:183
 #, kde-format
 msgid "Round sided rectangle"
 msgstr "Прямокутник зі скругленими сторонами"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:178
+#: src/kdefrontend/widgets/LabelWidget.cpp:184
 #, kde-format
 msgid "Round corner rectangle"
 msgstr "Прямокутник зі скругленими кутами"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:179
+#: src/kdefrontend/widgets/LabelWidget.cpp:185
 #, kde-format
 msgid "Inwards round corner rectangle"
 msgstr "Прямокутник із заокругленими всередину кутами"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:180
+#: src/kdefrontend/widgets/LabelWidget.cpp:186
 #, kde-format
 msgid "Dented border rectangle"
 msgstr "Вищерблений прямокутник"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:181
+#: src/kdefrontend/widgets/LabelWidget.cpp:187
 #, kde-format
 msgid "Cuboid"
 msgstr "Кубоїд"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:182
+#: src/kdefrontend/widgets/LabelWidget.cpp:188
 #, kde-format
 msgid "Up Pointing rectangle"
 msgstr "Прямокутник зі стрілкою вгору"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:183
+#: src/kdefrontend/widgets/LabelWidget.cpp:189
 #, kde-format
 msgid "Down Pointing rectangle"
 msgstr "Прямокутник зі стрілкою вниз"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:184
+#: src/kdefrontend/widgets/LabelWidget.cpp:190
 #, kde-format
 msgid "Left Pointing rectangle"
 msgstr "Прямокутник зі стрілкою ліворуч"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:185
+#: src/kdefrontend/widgets/LabelWidget.cpp:191
 #, kde-format
 msgid "Right Pointing rectangle"
 msgstr "Прямокутник зі стрілкою праворуч"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:187
+#: src/kdefrontend/widgets/LabelWidget.cpp:193
 #, kde-format
 msgid "No line"
 msgstr "Без лінії"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:188
+#: src/kdefrontend/widgets/LabelWidget.cpp:194
 #, kde-format
 msgid "Solid line"
 msgstr "Суцільна лінія"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:189
+#: src/kdefrontend/widgets/LabelWidget.cpp:195
 #, kde-format
 msgid "Dash line"
 msgstr "Штрихова лінія"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:190
+#: src/kdefrontend/widgets/LabelWidget.cpp:196
 #, kde-format
 msgid "Dot line"
 msgstr "Пунктир"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:191
+#: src/kdefrontend/widgets/LabelWidget.cpp:197
 #, kde-format
 msgid "Dash dot line"
 msgstr "Штрих-пунктир"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:192
+#: src/kdefrontend/widgets/LabelWidget.cpp:198
 #, kde-format
 msgid "Dash dot dot line"
 msgstr "Штрих-подвійний пунктир"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:209
+#: src/kdefrontend/widgets/LabelWidget.cpp:215
 #, kde-format
 msgid ""
 "Text setting mode:<ul><li>Text - text setting using rich-text formatting</"
@@ -22906,14 +22906,14 @@ msgstr ""
 "li><li>LaTeX — режим з використанням LaTeX, має бути встановлено дистрибутив "
 "LaTeX</li><li>Markdown — режим мови розмітки Markdown</li></ul>"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:909
-#: src/kdefrontend/widgets/LabelWidget.cpp:935
+#: src/kdefrontend/widgets/LabelWidget.cpp:915
+#: src/kdefrontend/widgets/LabelWidget.cpp:941
 #, kde-format
 msgid "Date"
 msgstr "Дата"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:917
-#: src/kdefrontend/widgets/LabelWidget.cpp:943
+#: src/kdefrontend/widgets/LabelWidget.cpp:923
+#: src/kdefrontend/widgets/LabelWidget.cpp:949
 #, kde-format
 msgid "Date and Time"
 msgstr "Дата і час"

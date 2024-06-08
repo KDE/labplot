@@ -28,8 +28,7 @@ SettingsGeneralPage::SettingsGeneralPage(QWidget* parent)
 	ui.setupUi(this);
 	ui.sbAutoSaveInterval->setSuffix(i18n("min."));
 #ifdef NDEBUG
-	ui.lDebugOutput->setVisible(false);
-	ui.chkDebugOutput->setVisible(false);
+	ui.chkDebugTrace->setVisible(false);
 #endif
 	retranslateUi();
 
@@ -49,7 +48,8 @@ SettingsGeneralPage::SettingsGeneralPage(QWidget* parent)
 	connect(ui.chkSaveDockStates, &QCheckBox::toggled, this, &SettingsGeneralPage::changed);
 	connect(ui.chkSaveCalculations, &QCheckBox::toggled, this, &SettingsGeneralPage::changed);
 	connect(ui.chkCompatible, &QCheckBox::toggled, this, &SettingsGeneralPage::changed);
-	connect(ui.chkDebugOutput, &QCheckBox::toggled, this, &SettingsGeneralPage::changed);
+	connect(ui.chkDebugTrace, &QCheckBox::toggled, this, &SettingsGeneralPage::changed);
+	connect(ui.chkPerfTrace, &QCheckBox::toggled, this, &SettingsGeneralPage::changed);
 
 #ifdef HAVE_CANTOR_LIBS
 	for (auto* backend : Cantor::Backend::availableBackends()) {
@@ -132,10 +132,14 @@ void SettingsGeneralPage::applySettings() {
 	group.writeEntry(QLatin1String("SaveDockStates"), ui.chkSaveDockStates->isChecked());
 	group.writeEntry(QLatin1String("SaveCalculations"), ui.chkSaveCalculations->isChecked());
 	group.writeEntry(QLatin1String("CompatibleSave"), ui.chkCompatible->isChecked());
-	bool debugOutputEnabled = ui.chkDebugOutput->isChecked();
-	group.writeEntry(QLatin1String("DebugOutput"), debugOutputEnabled);
+	const bool debugTraceEnabled = ui.chkDebugTrace->isChecked();
+	group.writeEntry(QLatin1String("DebugTrace"), debugTraceEnabled);
+	enableDebugTrace(debugTraceEnabled);
+	const bool perfTraceEnabled = ui.chkPerfTrace->isChecked();
+	group.writeEntry(QLatin1String("PerfTrace"), perfTraceEnabled);
+	enablePerfTrace(perfTraceEnabled);
+
 	Settings::writeDockPosBehaviour(static_cast<Settings::DockPosBehaviour>(ui.cbDockWindowPositionReopen->currentData().toInt()));
-	enableDebugOutput(debugOutputEnabled);
 }
 
 void SettingsGeneralPage::restoreDefaults() {
@@ -153,7 +157,8 @@ void SettingsGeneralPage::restoreDefaults() {
 	ui.chkSaveDockStates->setChecked(false);
 	ui.chkSaveCalculations->setChecked(true);
 	ui.chkCompatible->setChecked(false);
-	ui.chkDebugOutput->setChecked(false);
+	ui.chkDebugTrace->setChecked(false);
+	ui.chkPerfTrace->setChecked(false);
 	ui.cbDockWindowPositionReopen->setCurrentIndex(ui.cbDockWindowPositionReopen->findData(static_cast<int>(Settings::DockPosBehaviour::AboveLastActive)));
 }
 
@@ -203,7 +208,8 @@ void SettingsGeneralPage::loadSettings() {
 	ui.chkSaveDockStates->setChecked(group.readEntry<bool>(QLatin1String("SaveDockStates"), false));
 	ui.chkSaveCalculations->setChecked(group.readEntry<bool>(QLatin1String("SaveCalculations"), true));
 	ui.chkCompatible->setChecked(group.readEntry<bool>(QLatin1String("CompatibleSave"), false));
-	ui.chkDebugOutput->setChecked(group.readEntry<bool>(QLatin1String("DebugOutput"), false));
+	ui.chkDebugTrace->setChecked(group.readEntry<bool>(QLatin1String("DebugTrace"), false));
+	ui.chkPerfTrace->setChecked(group.readEntry<bool>(QLatin1String("PerfTrace"), false));
 }
 
 void SettingsGeneralPage::retranslateUi() {
@@ -263,6 +269,10 @@ void SettingsGeneralPage::retranslateUi() {
 		"The setting can be changed for every project separately in the project properties.");
 	ui.lSaveCalculations->setToolTip(msg);
 	ui.chkSaveCalculations->setToolTip(msg);
+
+	ui.lTracing->setToolTip(i18n("Activates additional tracing output in the terminal."));
+	ui.chkDebugTrace->setToolTip(i18n("Debug trace - helpfull to diagnose the application, can have a negative impact on the performance."));
+	ui.chkPerfTrace->setToolTip(i18n("Performance trace - helpfull to analyse performance relevant aspects and bottlenecks."));
 }
 
 void SettingsGeneralPage::loadOnStartChanged() {

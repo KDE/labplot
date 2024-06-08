@@ -109,7 +109,7 @@ void Symbol::init(const KConfigGroup& group) {
 	QColor defaultBorderColor(Qt::black);
 	double defaultBorderWidth = Worksheet::convertToSceneUnits(0.0, Worksheet::Unit::Point);
 
-	auto type = parentAspect()->type();
+	const auto type = parentAspect()->type();
 	if (type == AspectType::CustomPoint || type == AspectType::LollipopPlot)
 		defaultStyle = Symbol::Style::Circle;
 	else if (type == AspectType::DatapickerImage || type == AspectType::DatapickerCurve) {

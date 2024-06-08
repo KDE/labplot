@@ -893,9 +893,9 @@ void DatapickerImageView::exportPaint(QPainter* painter, const QRectF& targetRec
 }
 
 void DatapickerImageView::print(QPrinter* printer) {
-	const QRectF scene_rect = sceneRect();
-	int w = Worksheet::convertFromSceneUnits(scene_rect.width(), Worksheet::Unit::Millimeter);
-	int h = Worksheet::convertFromSceneUnits(scene_rect.height(), Worksheet::Unit::Millimeter);
+	const QRectF& scene_rect = sceneRect();
+	const int w = Worksheet::convertFromSceneUnits(scene_rect.width(), Worksheet::Unit::Millimeter);
+	const int h = Worksheet::convertFromSceneUnits(scene_rect.height(), Worksheet::Unit::Millimeter);
 	printer->setPageSize(QPageSize(QSizeF(w, h), QPageSize::Millimeter));
 	printer->setPageMargins(QMarginsF(0, 0, 0, 0), QPageLayout::Millimeter);
 	printer->setPrintRange(QPrinter::PageRange);

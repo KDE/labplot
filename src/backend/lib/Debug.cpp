@@ -10,12 +10,21 @@
 #include "Debug.h"
 
 namespace {
-bool _debugOutputEnabled = false;
+bool _debugTraceEnabled = false;
+bool _perfTraceEnabled = false;
 }
 
-bool debugOutputEnabled() {
-	return _debugOutputEnabled;
+bool debugTraceEnabled() {
+	return _debugTraceEnabled;
 }
-void enableDebugOutput(bool enabled) {
-	_debugOutputEnabled = enabled;
+void enableDebugTrace(bool enabled) {
+	_debugTraceEnabled = enabled;
+}
+
+bool perfTraceEnabled() {
+	return _perfTraceEnabled;
+}
+
+void enablePerfTrace(bool enabled) {
+	_perfTraceEnabled = enabled;
 }
