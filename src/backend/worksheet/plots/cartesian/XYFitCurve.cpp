@@ -2723,15 +2723,17 @@ bool XYFitCurvePrivate::evaluate(bool preview) {
 	}
 	DEBUG(Q_FUNC_INFO << ", eval range = " << xRange.toStdString());
 
-	xVector->resize((int)fitData.evaluatedPoints);
-	yVector->resize((int)fitData.evaluatedPoints);
+	int nrPoints = (int)fitData.evaluatedPoints;
+	xVector->resize(nrPoints);
+	yVector->resize(nrPoints);
 	DEBUG(Q_FUNC_INFO << ", vector size = " << xVector->size());
 
 	auto paramValues = fitResult.paramValues;
 	if (preview) // results not available yet
 		paramValues = fitData.paramStartValues;
 
-	bool rc = parser->evaluateCartesian(fitData.model, xRange, (int)fitData.evaluatedPoints, xVector, yVector, fitData.paramNames, paramValues);
+	bool rc = parser->evaluateCartesian(fitData.model, xRange, nrPoints, xVector, yVector, fitData.paramNames, paramValues);
+
 	if (!rc) {
 		DEBUG(Q_FUNC_INFO << ", ERROR: Parsing fit function failed")
 		xVector->clear();
