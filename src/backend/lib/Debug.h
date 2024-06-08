@@ -13,13 +13,13 @@
 #include <iomanip>
 #include <iostream>
 
-bool debugOutputEnabled();
-void enableDebugOutput(bool);
-bool traceOutputEnabled();
-void enableTraceOutput(bool);
+bool debugTraceEnabled();
+void enableDebugTrace(bool);
+bool perfTraceEnabled();
+void enablePerfTrace(bool);
 
 #define WARN(x)                                                                                                                                                \
-	if (debugOutputEnabled()) {                                                                                                                                \
+	if (debugTraceEnabled()) {                                                                                                                                 \
 		std::cout << std::dec << std::setprecision(std::numeric_limits<double>::digits10 + 1) << std::boolalpha << x                                           \
 				  << std::resetiosflags(std::ios_base::boolalpha) << std::setprecision(-1) << std::endl;                                                       \
 	}
@@ -27,7 +27,7 @@ void enableTraceOutput(bool);
 #ifndef NDEBUG
 #include <QDebug>
 #define QDEBUG(x)                                                                                                                                              \
-	if (debugOutputEnabled()) {                                                                                                                                \
+	if (debugTraceEnabled()) {                                                                                                                                 \
 		qDebug() << x;                                                                                                                                         \
 	}
 

@@ -16,14 +16,17 @@
 class PerfTracer {
 public:
 	explicit PerfTracer(QString m) {
-		msg = STDSTRING(m);
-		start = std::chrono::high_resolution_clock::now();
+		if (perfTraceEnabled()) {
+			msg = STDSTRING(m);
+			start = std::chrono::high_resolution_clock::now();
+		}
 	};
 	~PerfTracer() {
-		auto end = std::chrono::high_resolution_clock::now();
-		auto diff = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
-		if (traceOutputEnabled())
+		if (perfTraceEnabled()) {
+			const auto end = std::chrono::high_resolution_clock::now();
+			const auto diff = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
 			std::cout << msg << ": " << diff << " ms" << std::endl;
+		}
 	}
 
 private:
