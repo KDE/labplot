@@ -841,6 +841,7 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 }
 
 void XYFitCurve::clearFitResult() {
+	DEBUG(Q_FUNC_INFO)
 	Q_D(XYFitCurve);
 	d->fitResult = XYFitCurve::FitResult();
 }
@@ -2727,6 +2728,15 @@ bool XYFitCurvePrivate::evaluate(bool preview) {
 	xVector->resize(nrPoints);
 	yVector->resize(nrPoints);
 	DEBUG(Q_FUNC_INFO << ", vector size = " << xVector->size());
+
+	if (fitResult.paramValues.size() == 0) { // fit result not initialized yet
+		fitResult.paramValues = fitData.paramStartValues;
+		const int np = fitData.paramStartValues.size();
+		fitResult.errorValues.resize(np);
+		fitResult.tdist_tValues.resize(np);
+		fitResult.tdist_pValues.resize(np);
+		fitResult.marginValues.resize(np);
+	}
 
 	auto paramValues = fitResult.paramValues;
 	if (preview) // results not available yet
