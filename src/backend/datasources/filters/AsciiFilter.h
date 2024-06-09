@@ -47,7 +47,7 @@ public:
 	void write(const QString& fileName, AbstractDataSource*) override;
 
 	QVector<QStringList> preview(const QString& fileName, int lines);
-	QVector<QStringList> preview(QIODevice& device);
+	QVector<QStringList> preview(QIODevice& device, int lines = 1);
 
 #ifdef HAVE_MQTT
 	QVector<QStringList> preview(const QString& message);

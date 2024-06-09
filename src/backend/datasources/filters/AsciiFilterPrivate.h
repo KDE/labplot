@@ -26,7 +26,7 @@ public:
 
 	// preview
 	QVector<QStringList> preview(const QString& fileName, int lines);
-	QVector<QStringList> preview(QIODevice&);
+	QVector<QStringList> preview(QIODevice& device, int lines);
 
 	// read
 	void

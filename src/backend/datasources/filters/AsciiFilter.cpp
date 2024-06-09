@@ -112,8 +112,8 @@ QVector<QStringList> AsciiFilter::preview(const QString& fileName, int lines) {
 	return d->preview(fileName, lines);
 }
 
-QVector<QStringList> AsciiFilter::preview(QIODevice& device) {
-	return d->preview(device);
+QVector<QStringList> AsciiFilter::preview(QIODevice& device, int lines) {
+	return d->preview(device, lines);
 }
 
 /*!
@@ -726,43 +726,11 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 	if (!m_prepared) {
 		DEBUG(Q_FUNC_INFO << ", Preparing ..");
 
-		switch (sourceType) {
-		case LiveDataSource::SourceType::FileOrPipe: {
-			const int deviceError = prepareDeviceToRead(device);
-			if (deviceError != 0) {
-				DEBUG(Q_FUNC_INFO << ", Device ERROR: " << deviceError);
-				q->setLastError(i18n("Failed to open the device/file or it's empty."));
-				return 0;
-			}
-			break;
-		}
-		case LiveDataSource::SourceType::NetworkTCPSocket:
-		case LiveDataSource::SourceType::NetworkUDPSocket:
-		case LiveDataSource::SourceType::LocalSocket:
-		case LiveDataSource::SourceType::SerialPort:
-			m_actualRows = 1;
-			m_actualCols = 1;
-			columnModes.clear();
-			if (createIndexEnabled) {
-				columnModes << AbstractColumn::ColumnMode::Integer;
-				columnNames << i18n("Index");
-				m_actualCols++;
-			}
-
-			if (createTimestampEnabled) {
-				columnModes << AbstractColumn::ColumnMode::DateTime;
-				columnNames << i18n("Timestamp");
-				m_actualCols++;
-			}
-
-			// add column for the actual value
-			columnModes << AbstractColumn::ColumnMode::Double;
-			columnNames << i18n("Value");
-
-			QDEBUG(Q_FUNC_INFO << ", column names = " << columnNames);
-			break;
-		case LiveDataSource::SourceType::MQTT:
-			break;
+		const int deviceError = prepareDeviceToRead(device);
+		if (deviceError != 0) {
+			DEBUG(Q_FUNC_INFO << ", Device ERROR: " << deviceError);
+			q->setLastError(i18n("Failed to open the device/file or it's empty."));
+			return 0;
 		}
 
 		// prepare import for spreadsheet
@@ -780,12 +748,13 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 			spreadsheet->column(index)->setPlotDesignation(AbstractColumn::PlotDesignation::X);
 		}
 
+		// TODO:
 		// value column, available only when reading from sockets and serial port
-		if (sourceType == LiveDataSource::SourceType::NetworkTCPSocket || sourceType == LiveDataSource::SourceType::NetworkUDPSocket
-			|| sourceType == LiveDataSource::SourceType::LocalSocket || sourceType == LiveDataSource::SourceType::SerialPort) {
-			const int index = (int)createIndexEnabled + (int)createTimestampEnabled;
-			spreadsheet->column(index)->setPlotDesignation(AbstractColumn::PlotDesignation::Y);
-		}
+		// if (sourceType == LiveDataSource::SourceType::NetworkTCPSocket || sourceType == LiveDataSource::SourceType::NetworkUDPSocket
+		// 	|| sourceType == LiveDataSource::SourceType::LocalSocket || sourceType == LiveDataSource::SourceType::SerialPort) {
+		// 	const int index = (int)createIndexEnabled + (int)createTimestampEnabled;
+		// 	spreadsheet->column(index)->setPlotDesignation(AbstractColumn::PlotDesignation::Y);
+		// }
 
 		// columns in a file data source don't have any manual changes.
 		// make the available columns undo unaware and suppress the "data changed" signal.
@@ -849,15 +818,12 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 				case LiveDataSource::SourceType::LocalSocket:
 					newData[newDataIdx++] = QString::fromUtf8(device.readAll());
 					break;
-				case LiveDataSource::SourceType::NetworkUDPSocket:
-					newData[newDataIdx++] = QString::fromUtf8(device.read(device.bytesAvailable()));
-					break;
 				case LiveDataSource::SourceType::FileOrPipe:
 					newData.push_back(QString::fromUtf8(device.readLine()));
 					break;
 				case LiveDataSource::SourceType::NetworkTCPSocket:
-				// TODO: check serial port
-				case LiveDataSource::SourceType::SerialPort:
+				case LiveDataSource::SourceType::NetworkUDPSocket:
+				case LiveDataSource::SourceType::SerialPort: // TODO: check serial port
 					newData[newDataIdx++] = QString::fromUtf8(device.read(device.bytesAvailable()));
 					break;
 				case LiveDataSource::SourceType::MQTT:
@@ -868,15 +834,12 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 				case LiveDataSource::SourceType::LocalSocket:
 					newData.push_back(QString::fromUtf8(device.readAll()));
 					break;
-				case LiveDataSource::SourceType::NetworkUDPSocket:
-					newData.push_back(QString::fromUtf8(device.read(device.bytesAvailable())));
-					break;
 				case LiveDataSource::SourceType::FileOrPipe:
 					newData.push_back(QString::fromUtf8(device.readLine()));
 					break;
 				case LiveDataSource::SourceType::NetworkTCPSocket:
-				// TODO: check serial port
-				case LiveDataSource::SourceType::SerialPort:
+				case LiveDataSource::SourceType::NetworkUDPSocket:
+				case LiveDataSource::SourceType::SerialPort: // TODO: check serial port
 					newData.push_back(QString::fromUtf8(device.read(device.bytesAvailable())));
 					break;
 				case LiveDataSource::SourceType::MQTT:
@@ -909,63 +872,6 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 	// back to the last read position before counting when reading from files
 	if (sourceType == LiveDataSource::SourceType::FileOrPipe)
 		device.seek(from);
-
-	// split newData to get data columns (only TCP atm)
-	if (m_firstRead && sourceType == LiveDataSource::SourceType::NetworkTCPSocket) {
-		DEBUG("TCP: COLUMN count = " << m_actualCols)
-		QString firstRowData = newData.at(0);
-		QStringList dataStringList;
-		QDEBUG("TCP: sep char = " << separatingCharacter)
-		if (separatingCharacter == QLatin1String("auto")) {
-			DEBUG(Q_FUNC_INFO << ", using AUTOMATIC separator");
-			if (firstRowData.indexOf(QLatin1Char('\t')) != -1) {
-				// in case we have a mix of tabs and spaces in the header, give the tab character preference
-				m_separator = QLatin1Char('\t');
-				dataStringList = split(firstRowData, false);
-			} else {
-				dataStringList = split(firstRowData);
-			}
-		} else {
-			DEBUG(Q_FUNC_INFO << ", using GIVEN separator: " << STDSTRING(m_separator))
-			// replace symbolic "TAB" with '\t'
-			m_separator = separatingCharacter.replace(QLatin1String("2xTAB"), QLatin1String("\t\t"), Qt::CaseInsensitive);
-			m_separator = separatingCharacter.replace(QLatin1String("TAB"), QLatin1String("\t"), Qt::CaseInsensitive);
-			// replace symbolic "SPACE" with ' '
-			m_separator = m_separator.replace(QLatin1String("2xSPACE"), QLatin1String("  "), Qt::CaseInsensitive);
-			m_separator = m_separator.replace(QLatin1String("3xSPACE"), QLatin1String("   "), Qt::CaseInsensitive);
-			m_separator = m_separator.replace(QLatin1String("4xSPACE"), QLatin1String("    "), Qt::CaseInsensitive);
-			m_separator = m_separator.replace(QLatin1String("SPACE"), QLatin1String(" "), Qt::CaseInsensitive);
-			dataStringList = split(firstRowData, false);
-		}
-		QDEBUG(Q_FUNC_INFO << ", separator: \'" << m_separator << '\'');
-		DEBUG(Q_FUNC_INFO << ", number of data columns: " << dataStringList.size());
-		QDEBUG(Q_FUNC_INFO << ", first data row split: " << dataStringList);
-		int defaultCols = (int)createIndexEnabled + (int)createTimestampEnabled; // automatic columns
-		m_actualCols += dataStringList.size() - 1; // one data column already counted
-		columnModes.resize(m_actualCols);
-
-		// column header
-		columnNames.clear();
-		if (createIndexEnabled)
-			columnNames << i18n("Index");
-		if (createTimestampEnabled)
-			columnNames << i18n("Timestamp");
-
-		for (int i = 0; i < m_actualCols - defaultCols; i++) {
-			columnModes[i + defaultCols] = AbstractFileFilter::columnMode(dataStringList.at(i), dateTimeFormat, numberFormat);
-			if (dataStringList.size() == 1)
-				columnNames << i18n("Value");
-			else
-				columnNames << i18n("Value %1", i + 1);
-		}
-		QDEBUG("COLUMN names: " << columnNames)
-
-		for (int i = 0; i < columnModes.size(); i++)
-			QDEBUG("Data column mode " << i << " : " << ENUM_TO_STRING(AbstractColumn, ColumnMode, columnModes.at(i)))
-
-		spreadsheet->setUndoAware(false);
-		spreadsheet->resize(AbstractFileFilter::ImportMode::Replace, columnNames, m_actualCols);
-	}
 
 	// determine the number of rows to read
 	const int rowCountBeforeResize = spreadsheet->rowCount();
@@ -1184,15 +1090,10 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 				continue;
 
 			QStringList lineStringList;
-			// only FileOrPipe and TCPSocket support multiple columns
-			if (sourceType == LiveDataSource::SourceType::FileOrPipe || sourceType == LiveDataSource::SourceType::NetworkTCPSocket) {
-				// QDEBUG("separator = " << m_separator << " , size = " << m_separator.size())
-				if (m_separator.size() > 0)
-					lineStringList = split(line, false);
-				else
-					lineStringList = split(line);
-			} else
-				lineStringList << line;
+			if (m_separator.size() > 0)
+				lineStringList = split(line, false);
+			else
+				lineStringList = split(line);
 
 			// QDEBUG("	line = " << lineStringList << ", separator = \'" << m_separator << "\'");
 			// DEBUG("	Line bytes: " << line.size() << " line: " << STDSTRING(line));
@@ -1450,135 +1351,15 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 // ############################ Preview ################################
 // #####################################################################
 /*!
- * preview for special devices (local/UDP/TCP socket or serial port)
- */
-QVector<QStringList> AsciiFilterPrivate::preview(QIODevice& device) {
-	DEBUG(Q_FUNC_INFO << ", bytesAvailable = " << device.bytesAvailable() << ", isSequential = " << device.isSequential());
-	QVector<QStringList> dataStrings;
-
-	if (!(device.bytesAvailable() > 0)) {
-		DEBUG("No new data available");
-		return dataStrings;
-	}
-
-	if (device.isSequential() && device.bytesAvailable() < (int)sizeof(quint16))
-		return dataStrings;
-
-	int linesToRead = 0;
-	QVector<QString> newData;
-
-	// TODO: serial port "read(nBytes)"?
-	while (!device.atEnd()) {
-		if (device.canReadLine())
-			newData.push_back(QString::fromUtf8(device.readLine()));
-		else // UDP fails otherwise
-			newData.push_back(QString::fromUtf8(device.readAll()));
-		linesToRead++;
-	}
-	QDEBUG("	data = " << newData);
-
-	if (linesToRead == 0)
-		return dataStrings;
-
-	columnNames.clear();
-	columnModes.clear();
-
-	if (createIndexEnabled) {
-		columnModes << AbstractColumn::ColumnMode::Integer;
-		columnNames << i18n("Index");
-	}
-
-	if (createTimestampEnabled) {
-		columnModes << AbstractColumn::ColumnMode::DateTime;
-		columnNames << i18n("Timestamp");
-	}
-
-	// parse the first data line to determine data type for each column
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
-	QStringList firstLineStringList = newData.at(0).split(separatingCharacter, Qt::SkipEmptyParts);
-#else
-	QStringList firstLineStringList = newData.at(0).split(separatingCharacter, QString::SkipEmptyParts);
-#endif
-	int i = 1;
-	for (auto& valueString : firstLineStringList) {
-		if (simplifyWhitespacesEnabled)
-			valueString = valueString.simplified();
-		if (removeQuotesEnabled)
-			valueString.remove(QLatin1Char('"'));
-		if (skipEmptyParts && !QString::compare(valueString, QLatin1String(" "))) // handle left white spaces
-			continue;
-
-		if (firstLineStringList.size() == 1)
-			columnNames << i18n("Value");
-		else
-			columnNames << i18n("Value %1", i++);
-		columnModes << AbstractFileFilter::columnMode(valueString, dateTimeFormat, numberFormat);
-	}
-
-	int offset = int(createIndexEnabled) + int(createTimestampEnabled);
-	QString line;
-
-	// loop over all lines in the new data in the device and parse the available columns
-	for (int i = 0; i < linesToRead; ++i) {
-		line = newData.at(i);
-
-		// remove any newline
-		line = line.remove(QLatin1Char('\n'));
-		line = line.remove(QLatin1Char('\r'));
-
-		if (simplifyWhitespacesEnabled)
-			line = line.simplified();
-
-		if (line.isEmpty() || (!commentCharacter.isEmpty() && line.startsWith(commentCharacter))) // skip empty or commented lines
-			continue;
-
-		QStringList lineString;
-
-		// index column if required
-		if (createIndexEnabled)
-			lineString += QString::number(i + 1);
-
-		// timestamp column if required
-		if (createTimestampEnabled)
-			lineString += QDateTime::currentDateTime().toString();
-
-			// TODO: use separator
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
-		QStringList lineStringList = line.split(separatingCharacter, Qt::SkipEmptyParts);
-#else
-		QStringList lineStringList = line.split(separatingCharacter, QString::SkipEmptyParts);
-#endif
-		QDEBUG(" line = " << lineStringList);
-
-		// parse columns
-		DEBUG(Q_FUNC_INFO << ", number of columns = " << lineStringList.size())
-		for (int n = 0; n < lineStringList.size(); ++n) {
-			if (n < lineStringList.size()) {
-				QString valueString = lineStringList.at(n);
-				if (removeQuotesEnabled)
-					valueString.remove(QLatin1Char('"'));
-
-				if (skipEmptyParts && !QString::compare(valueString, QLatin1String(" "))) // handle left white spaces
-					continue;
-
-				lineString += previewValue(valueString, columnModes[n + offset]);
-			} else // missing columns in this line
-				lineString += QString();
-		}
-
-		dataStrings << lineString;
-	}
-
-	return dataStrings;
-}
-
-/*!
  * generates the preview for the file \c fileName reading the provided number of \c lines.
  */
 QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int lines) {
 	DEBUG(Q_FUNC_INFO)
-
 	KCompressionDevice device(fileName);
+	return preview(device, lines);
+}
+
+QVector<QStringList> AsciiFilterPrivate::preview(QIODevice& device, int lines) {
 	const int deviceError = prepareDeviceToRead(device, lines);
 
 	if (deviceError != 0) {
@@ -1623,7 +1404,13 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 	// loop over the preview lines in the file and parse the available columns
 	QVector<QStringList> dataStrings;
 	for (int i = 0; i < lines; ++i) {
-		line = QString::fromUtf8(device.readLine());
+		if (device.atEnd())
+			break;
+
+		if (device.canReadLine())
+			line = QString::fromUtf8(device.readLine());
+		else
+			line = QString::fromUtf8(device.readAll());
 
 		// remove any newline
 		line = line.remove(QLatin1Char('\n'));
