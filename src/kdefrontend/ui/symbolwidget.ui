@@ -295,6 +295,9 @@
      <property name="suffix">
       <string> pt</string>
      </property>
+     <property name="minimum">
+      <double>0.000000000000000</double>
+     </property>
      <property name="feedback" stdset="0">
       <bool>true</bool>
      </property>

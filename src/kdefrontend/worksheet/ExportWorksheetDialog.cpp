@@ -140,6 +140,7 @@ ExportWorksheetDialog::~ExportWorksheetDialog() {
  * is determined that is then used as the default location for the exported file.
  */
 void ExportWorksheetDialog::setProjectFileName(const QString& name) {
+	QDEBUG(Q_FUNC_INFO << ", project file name " << name)
 	if (name.isEmpty())
 		return;
 
@@ -148,6 +149,8 @@ void ExportWorksheetDialog::setProjectFileName(const QString& name) {
 }
 
 void ExportWorksheetDialog::setFileName(const QString& name) {
+	QDEBUG(Q_FUNC_INFO << ", name " << name)
+	QDEBUG(Q_FUNC_INFO << ", m_projectPath " << m_projectPath)
 	if (m_projectPath.isEmpty()) {
 		// no project folder is available (yet), use the last used directory in this dialog
 		KConfigGroup conf = Settings::group(QStringLiteral("ExportWorksheetDialog"));
