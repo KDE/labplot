@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-08 01:47+0000\n"
+"POT-Creation-Date: 2024-06-09 01:42+0000\n"
 "PO-Revision-Date: 2024-06-02 11:36+0100\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English\n"
@@ -11743,7 +11743,7 @@ msgid "Data format && preview"
 msgstr "Data format && preview"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1225
-#: src/kdefrontend/SettingsGeneralPage.cpp:245
+#: src/kdefrontend/SettingsGeneralPage.cpp:251
 #, kde-format
 msgid "Automatic"
 msgstr "Automatic"
@@ -14569,22 +14569,22 @@ msgctxt "@info:credit"
 msgid "Support import of ROOT (CERN) TH1 histograms"
 msgstr "Support import of ROOT (CERN) TH1 histograms"
 
-#: src/kdefrontend/LabPlot.cpp:133
+#: src/kdefrontend/LabPlot.cpp:134
 #, kde-format
 msgid "Disable splash screen"
 msgstr "Disable splash screen"
 
-#: src/kdefrontend/LabPlot.cpp:136
+#: src/kdefrontend/LabPlot.cpp:137
 #, kde-format
 msgid "Start in the presenter mode"
 msgstr "Start in the presenter mode"
 
-#: src/kdefrontend/LabPlot.cpp:139
+#: src/kdefrontend/LabPlot.cpp:140
 #, kde-format
 msgid "Open a project file."
 msgstr "Open a project file."
 
-#: src/kdefrontend/LabPlot.cpp:158
+#: src/kdefrontend/LabPlot.cpp:159
 #, kde-format
 msgid ""
 "Could not open file '%1'. Click 'Continue' to proceed starting or 'Cancel' "
@@ -14593,7 +14593,7 @@ msgstr ""
 "Could not open file '%1'. Click 'Continue' to proceed starting or 'Cancel' "
 "to exit the application."
 
-#: src/kdefrontend/LabPlot.cpp:159
+#: src/kdefrontend/LabPlot.cpp:160
 #, kde-format
 msgid "Failed to Open"
 msgstr "Failed to Open"
@@ -15384,42 +15384,42 @@ msgstr "Preferences    [Changed]"
 msgid "min."
 msgstr "min."
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:211
+#: src/kdefrontend/SettingsGeneralPage.cpp:217
 #, kde-format
 msgid "Create New Project"
 msgstr "Create New Project"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:212
+#: src/kdefrontend/SettingsGeneralPage.cpp:218
 #, kde-format
 msgid "Load Last Used Project"
 msgstr "Load Last Used Project"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:216
+#: src/kdefrontend/SettingsGeneralPage.cpp:222
 #, kde-format
 msgid "With Worksheet"
 msgstr "With Worksheet"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:217
+#: src/kdefrontend/SettingsGeneralPage.cpp:223
 #, kde-format
 msgid "With Spreadsheet"
 msgstr "With Spreadsheet"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:218
+#: src/kdefrontend/SettingsGeneralPage.cpp:224
 #, kde-format
 msgid "With Worksheet and Spreadsheet"
 msgstr "With Worksheet and Spreadsheet"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:220
+#: src/kdefrontend/SettingsGeneralPage.cpp:226
 #, kde-format
 msgid "With Notebook"
 msgstr "With Notebook"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:223
+#: src/kdefrontend/SettingsGeneralPage.cpp:229
 #, kde-format
 msgid "Notebook type to create automatically on startup"
 msgstr "Notebook type to create automatically on startup"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:227
+#: src/kdefrontend/SettingsGeneralPage.cpp:233
 #, kde-format
 msgid ""
 "Controls the behavior of where the dock widgets are placed after being re-"
@@ -15428,57 +15428,57 @@ msgstr ""
 "Controls the behaviour of where the dock widgets are placed after being re-"
 "opened"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:231
+#: src/kdefrontend/SettingsGeneralPage.cpp:237
 #, kde-format
 msgid "Original Position"
 msgstr "Original Position"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:232
+#: src/kdefrontend/SettingsGeneralPage.cpp:238
 #, kde-format
 msgid "On top of the last active Dock Widget"
 msgstr "On top of the last active Dock Widget"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:235
+#: src/kdefrontend/SettingsGeneralPage.cpp:241
 #, kde-format
 msgid "Show File Path"
 msgstr "Show File Path"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:236
+#: src/kdefrontend/SettingsGeneralPage.cpp:242
 #, kde-format
 msgid "Show File Name"
 msgstr "Show File Name"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:237
+#: src/kdefrontend/SettingsGeneralPage.cpp:243
 #, kde-format
 msgid "Show Project Name"
 msgstr "Show Project Name"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:239
+#: src/kdefrontend/SettingsGeneralPage.cpp:245
 #, kde-format
 msgid "Metric"
 msgstr "Metric"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:240
+#: src/kdefrontend/SettingsGeneralPage.cpp:246
 #, kde-format
 msgid "Imperial"
 msgstr "Imperial"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:242
+#: src/kdefrontend/SettingsGeneralPage.cpp:248
 #, kde-format
 msgid "Dot (.)"
 msgstr "Dot (.)"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:243
+#: src/kdefrontend/SettingsGeneralPage.cpp:249
 #, kde-format
 msgid "Comma (,)"
 msgstr "Comma (,)"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:244
+#: src/kdefrontend/SettingsGeneralPage.cpp:250
 #, kde-format
 msgid "Arabic (٫)"
 msgstr "Arabic (٫)"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:248
+#: src/kdefrontend/SettingsGeneralPage.cpp:254
 #, kde-format
 msgid ""
 "Use terms compliant with the <a href=\"http://www.bipm.org/utils/common/"
@@ -15489,7 +15489,7 @@ msgstr ""
 "documents/jcgm/JCGM_100_2008_E.pdf\">Guide to the Expression of Uncertainty "
 "in Measurement (GUM)</a>"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:253
+#: src/kdefrontend/SettingsGeneralPage.cpp:259
 #, kde-format
 msgid ""
 "Save the state (position and geometry) of the docks in the project file. \n"
@@ -15502,7 +15502,7 @@ msgstr ""
 "The setting can be changed for every project separately in the project "
 "properties."
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:260
+#: src/kdefrontend/SettingsGeneralPage.cpp:266
 #, kde-format
 msgid ""
 "Save the results of the calculations in the analysis curves in the project "
@@ -15520,6 +15520,25 @@ msgstr ""
 "Determines the default behaviour for new projects. \n"
 "The setting can be changed for every project separately in the project "
 "properties."
+
+#: src/kdefrontend/SettingsGeneralPage.cpp:273
+#, kde-format
+msgid "Activates additional tracing output in the terminal."
+msgstr ""
+
+#: src/kdefrontend/SettingsGeneralPage.cpp:274
+#, kde-format
+msgid ""
+"Debug trace - helpfull to diagnose the application, can have a negative "
+"impact on the performance."
+msgstr ""
+
+#: src/kdefrontend/SettingsGeneralPage.cpp:275
+#, kde-format
+msgid ""
+"Performance trace - helpfull to analyse performance relevant aspects and "
+"bottlenecks."
+msgstr ""
 
 #: src/kdefrontend/SettingsNotebookPage.cpp:23
 #, kde-format
@@ -18360,7 +18379,7 @@ msgstr "Import from:"
 #. i18n: ectx: property (text), widget (QLabel, lDecimalSeparator)
 #: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:91
 #: src/kdefrontend/ui/datasources/jsonoptionswidget.ui:76
-#: src/kdefrontend/ui/settingsgeneralpage.ui:17
+#: src/kdefrontend/ui/settingsgeneralpage.ui:132
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:152
 #, kde-format
 msgid "Decimal separator:"
@@ -19941,7 +19960,7 @@ msgstr "Topics"
 #. i18n: ectx: property (text), widget (QLabel, lAutoSaveInterval)
 #. i18n: ectx: property (text), widget (QLabel, lUpdateInterval)
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:113
-#: src/kdefrontend/ui/settingsgeneralpage.ui:146
+#: src/kdefrontend/ui/settingsgeneralpage.ui:251
 #, kde-format
 msgid "Interval:"
 msgstr "Interval:"
@@ -20040,7 +20059,7 @@ msgstr "Created:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSaveDockStates)
 #: src/kdefrontend/ui/dockwidgets/projectdock.ui:80
-#: src/kdefrontend/ui/settingsgeneralpage.ui:315
+#: src/kdefrontend/ui/settingsgeneralpage.ui:284
 #, kde-format
 msgid "Save Dock States:"
 msgstr "Save Dock States:"
@@ -20112,16 +20131,14 @@ msgstr "End x:"
 msgid "Start x:"
 msgstr "Start x:"
 
-#. i18n: ectx: property (text), widget (QCheckBox, chkSaveCalculations)
-#. i18n: ectx: property (text), widget (QCheckBox, chkSaveDockStates)
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoSave)
-#. i18n: ectx: property (text), widget (QCheckBox, chkDebugOutput)
+#. i18n: ectx: property (text), widget (QCheckBox, chkSaveDockStates)
+#. i18n: ectx: property (text), widget (QCheckBox, chkSaveCalculations)
 #. i18n: ectx: property (text), widget (QLabel, lLinkingEnabled)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:17
-#: src/kdefrontend/ui/settingsgeneralpage.ui:71
-#: src/kdefrontend/ui/settingsgeneralpage.ui:85
-#: src/kdefrontend/ui/settingsgeneralpage.ui:123
-#: src/kdefrontend/ui/settingsgeneralpage.ui:345
+#: src/kdefrontend/ui/settingsgeneralpage.ui:228
+#: src/kdefrontend/ui/settingsgeneralpage.ui:291
+#: src/kdefrontend/ui/settingsgeneralpage.ui:305
 #, kde-format
 msgid "Enabled"
 msgstr "Enabled"
@@ -21415,50 +21432,50 @@ msgstr "Total size - "
 msgid "Clear"
 msgstr "Clear"
 
-#. i18n: ectx: property (text), widget (QCheckBox, chkIncludeTrailingZeroesAfterDot)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:24
+#. i18n: ectx: property (text), widget (QLabel, lStartup)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:17
 #, kde-format
-msgid "Include trailing zeroes after dot"
-msgstr "Include trailing zeroes after dot"
+msgid "Startup:"
+msgstr "Startup:"
+
+#. i18n: ectx: property (text), widget (QLabel, lNewProject)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:50
+#, kde-format
+msgid "New Project:"
+msgstr "New Project:"
 
 #. i18n: ectx: property (text), widget (QLabel, lNewProjectNotebook)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:34
+#: src/kdefrontend/ui/settingsgeneralpage.ui:60
 #, kde-format
 msgid "Notebook:"
 msgstr "Notebook:"
 
-#. i18n: ectx: property (text), widget (QCheckBox, chkOmitGroupSeparator)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:41
+#. i18n: ectx: property (text), widget (QLabel, lDockWindowPositionReopen)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:86
 #, kde-format
-msgid "Omit group separator"
-msgstr "Omit group separator"
+msgid "Dock widget placement:"
+msgstr "Dock widget placement:"
 
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:64
+#. i18n: ectx: property (text), widget (QLabel, lTitleBar)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:96
 #, kde-format
-msgid "Save  Calculations:"
-msgstr "Save  Calculations:"
-
-#. i18n: ectx: property (text), widget (QCheckBox, chkOmitLeadingZeroInExponent)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:78
-#, kde-format
-msgid "Omit leading zero in exponent"
-msgstr "Omit leading zero in exponent"
-
-#. i18n: ectx: property (text), widget (QLabel, lNumberOptions)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:95
-#, kde-format
-msgid "Number options:"
-msgstr "Number options:"
+msgid "Title Bar:"
+msgstr "Title Bar:"
 
 #. i18n: ectx: property (text), widget (QLabel, lUnits)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:182
+#: src/kdefrontend/ui/settingsgeneralpage.ui:122
 #, kde-format
 msgid "Units:"
 msgstr "Units:"
 
+#. i18n: ectx: property (text), widget (QLabel, lGUMTerms)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:142
+#, kde-format
+msgid "Terms:"
+msgstr "Terms:"
+
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkGUMTerms)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:189
+#: src/kdefrontend/ui/settingsgeneralpage.ui:149
 #, kde-format
 msgid ""
 "<html><head/><body><p>Use terms compliant with the <a href=\"http://www.bipm."
@@ -21472,43 +21489,55 @@ msgstr ""
 "Uncertainty in Measurement (GUM)</span></a></p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkGUMTerms)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:192
+#: src/kdefrontend/ui/settingsgeneralpage.ui:152
 #, kde-format
 msgid "GUM compliant"
 msgstr "GUM compliant"
 
-#. i18n: ectx: property (text), widget (QLabel, lSaveCalculations)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:202
+#. i18n: ectx: property (text), widget (QLabel, lNumberOptions)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:159
 #, kde-format
-msgid "Compatibility:"
-msgstr "Compatibility:"
+msgid "Number options:"
+msgstr "Number options:"
 
-#. i18n: ectx: property (text), widget (QLabel, lDockWindowPositionReopen)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:209
+#. i18n: ectx: property (text), widget (QCheckBox, chkOmitGroupSeparator)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:166
 #, kde-format
-msgid "Dock widget placement:"
-msgstr "Dock widget placement:"
+msgid "Omit group separator"
+msgstr "Omit group separator"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkOmitLeadingZeroInExponent)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:173
+#, kde-format
+msgid "Omit leading zero in exponent"
+msgstr "Omit leading zero in exponent"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkIncludeTrailingZeroesAfterDot)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:180
+#, kde-format
+msgid "Include trailing zeroes after dot"
+msgstr "Include trailing zeroes after dot"
 
 #. i18n: ectx: property (text), widget (QLabel, lAutoSave)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:219
+#: src/kdefrontend/ui/settingsgeneralpage.ui:203
 #, kde-format
 msgid "Auto-save:"
 msgstr "Auto-save:"
 
-#. i18n: ectx: property (text), widget (QLabel, lTitleBar)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:226
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:298
 #, kde-format
-msgid "Title Bar:"
-msgstr "Title Bar:"
+msgid "Save  Calculations:"
+msgstr "Save  Calculations:"
 
-#. i18n: ectx: property (text), widget (QLabel, lNewProject)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:233
+#. i18n: ectx: property (text), widget (QLabel, lSaveCalculations)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:312
 #, kde-format
-msgid "New Project:"
-msgstr "New Project:"
+msgid "Compatibility:"
+msgstr "Compatibility:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkCompatible)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:240
+#: src/kdefrontend/ui/settingsgeneralpage.ui:319
 #, kde-format
 msgid ""
 "<html><head/><body><p>Save projects in a compatible format that can be "
@@ -21518,28 +21547,31 @@ msgstr ""
 "opened in LabPlot versions older than 2.9.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCompatible)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:243
+#: src/kdefrontend/ui/settingsgeneralpage.ui:322
 #, kde-format
 msgid "Save in compatible format"
 msgstr "Save in compatible format"
 
-#. i18n: ectx: property (text), widget (QLabel, lGUMTerms)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:250
-#, kde-format
-msgid "Terms:"
-msgstr "Terms:"
+#. i18n: ectx: property (text), widget (QLabel, lTracing)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:329
+#, fuzzy, kde-format
+#| msgid "Spacing:"
+msgid "Tracing:"
+msgstr "Spacing:"
 
-#. i18n: ectx: property (text), widget (QLabel, lStartup)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:292
+#. i18n: ectx: property (text), widget (QCheckBox, chkDebugTrace)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:360
 #, kde-format
-msgid "Startup:"
-msgstr "Startup:"
+msgid "Debug"
+msgstr ""
 
-#. i18n: ectx: property (text), widget (QLabel, lDebugOutput)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:338
+#. i18n: ectx: property (text), widget (QCheckBox, chkPerfTrace)
+#. i18n: ectx: property (text), widget (QLabel, lPerformance)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:383
+#: src/kdefrontend/ui/settingsworksheetpage.ui:111
 #, kde-format
-msgid "Debug Output:"
-msgstr "Debug Output:"
+msgid "Performance"
+msgstr "Performance"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode_2)
@@ -21644,12 +21676,6 @@ msgstr "Theme:"
 #, kde-format
 msgid "Interactive"
 msgstr "Interactive"
-
-#. i18n: ectx: property (text), widget (QLabel, lPerformance)
-#: src/kdefrontend/ui/settingsworksheetpage.ui:111
-#, kde-format
-msgid "Performance"
-msgstr "Performance"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkDoubleBuffering)
 #: src/kdefrontend/ui/settingsworksheetpage.ui:118
@@ -23032,6 +23058,9 @@ msgstr "convert process failed, exit code ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Unable to open file:"
+
+#~ msgid "Debug Output:"
+#~ msgstr "Debug Output:"
 
 #~ msgid "Specify the name of the file to import."
 #~ msgstr "Specify the name of the file to import."

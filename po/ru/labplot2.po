@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-08 01:47+0000\n"
+"POT-Creation-Date: 2024-06-09 01:42+0000\n"
 "PO-Revision-Date: 2023-11-13 14:41+0300\n"
 "Last-Translator: Sergey Kazorin <translation-team@basealt.ru>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -12063,7 +12063,7 @@ msgid "Data format && preview"
 msgstr "Формат и предпросмотр данных"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1225
-#: src/kdefrontend/SettingsGeneralPage.cpp:245
+#: src/kdefrontend/SettingsGeneralPage.cpp:251
 #, kde-format
 msgid "Automatic"
 msgstr "Автоматически"
@@ -14944,22 +14944,22 @@ msgctxt "@info:credit"
 msgid "Support import of ROOT (CERN) TH1 histograms"
 msgstr "Поддержка импорта гистограмм ROOT (CERN) TH1"
 
-#: src/kdefrontend/LabPlot.cpp:133
+#: src/kdefrontend/LabPlot.cpp:134
 #, kde-format
 msgid "Disable splash screen"
 msgstr "Не показывать заставку"
 
-#: src/kdefrontend/LabPlot.cpp:136
+#: src/kdefrontend/LabPlot.cpp:137
 #, kde-format
 msgid "Start in the presenter mode"
 msgstr "Включить режим презентации"
 
-#: src/kdefrontend/LabPlot.cpp:139
+#: src/kdefrontend/LabPlot.cpp:140
 #, kde-format
 msgid "Open a project file."
 msgstr "Открыть файл проекта."
 
-#: src/kdefrontend/LabPlot.cpp:158
+#: src/kdefrontend/LabPlot.cpp:159
 #, kde-format
 msgid ""
 "Could not open file '%1'. Click 'Continue' to proceed starting or 'Cancel' "
@@ -14968,7 +14968,7 @@ msgstr ""
 "Не удалось открыть файл «%1». Нажмите кнопку «Продолжить», чтобыпродолжить "
 "загрузку программы, либо кнопку «Отмена» для выхода."
 
-#: src/kdefrontend/LabPlot.cpp:159
+#: src/kdefrontend/LabPlot.cpp:160
 #, kde-format
 msgid "Failed to Open"
 msgstr "Ошибка открытия файла"
@@ -15785,107 +15785,107 @@ msgstr "Настройка    [Изменено]"
 msgid "min."
 msgstr "мин."
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:211
+#: src/kdefrontend/SettingsGeneralPage.cpp:217
 #, fuzzy, kde-format
 #| msgid "Create New Empty Project"
 msgid "Create New Project"
 msgstr "Создавать новый пустой проект"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:212
+#: src/kdefrontend/SettingsGeneralPage.cpp:218
 #, kde-format
 msgid "Load Last Used Project"
 msgstr "Открывать последний проект"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:216
+#: src/kdefrontend/SettingsGeneralPage.cpp:222
 #, fuzzy, kde-format
 #| msgctxt "@title:window"
 #| msgid "Print Worksheet"
 msgid "With Worksheet"
 msgstr "Печать листа"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:217
+#: src/kdefrontend/SettingsGeneralPage.cpp:223
 #, fuzzy, kde-format
 #| msgctxt "@title:window"
 #| msgid "Print Spreadsheet"
 msgid "With Spreadsheet"
 msgstr "Печать таблицы"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:218
+#: src/kdefrontend/SettingsGeneralPage.cpp:224
 #, fuzzy, kde-format
 msgid "With Worksheet and Spreadsheet"
 msgstr "%1: задание пера линии"
 
 # BUGME: please add colon (:) --aspotashev
-#: src/kdefrontend/SettingsGeneralPage.cpp:220
+#: src/kdefrontend/SettingsGeneralPage.cpp:226
 #, fuzzy, kde-format
 #| msgid "Notebook"
 msgid "With Notebook"
 msgstr "Блокнот"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:223
+#: src/kdefrontend/SettingsGeneralPage.cpp:229
 #, kde-format
 msgid "Notebook type to create automatically on startup"
 msgstr ""
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:227
+#: src/kdefrontend/SettingsGeneralPage.cpp:233
 #, kde-format
 msgid ""
 "Controls the behavior of where the dock widgets are placed after being re-"
 "opened"
 msgstr ""
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:231
+#: src/kdefrontend/SettingsGeneralPage.cpp:237
 #, fuzzy, kde-format
 msgid "Original Position"
 msgstr "Исходный размер"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:232
+#: src/kdefrontend/SettingsGeneralPage.cpp:238
 #, kde-format
 msgid "On top of the last active Dock Widget"
 msgstr ""
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:235
+#: src/kdefrontend/SettingsGeneralPage.cpp:241
 #, kde-format
 msgid "Show File Path"
 msgstr "Показывать путь к файлу"
 
 # BUGME: please add colon (:) to the label in front of text edit --aspotashev
-#: src/kdefrontend/SettingsGeneralPage.cpp:236
+#: src/kdefrontend/SettingsGeneralPage.cpp:242
 #, kde-format
 msgid "Show File Name"
 msgstr "Показывать имя файла"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:237
+#: src/kdefrontend/SettingsGeneralPage.cpp:243
 #, kde-format
 msgid "Show Project Name"
 msgstr "Показывать имя проекта"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:239
+#: src/kdefrontend/SettingsGeneralPage.cpp:245
 #, kde-format
 msgid "Metric"
 msgstr "Метрическая система"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:240
+#: src/kdefrontend/SettingsGeneralPage.cpp:246
 #, kde-format
 msgid "Imperial"
 msgstr "Британская система"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:242
+#: src/kdefrontend/SettingsGeneralPage.cpp:248
 #, kde-format
 msgid "Dot (.)"
 msgstr "Точка (.)"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:243
+#: src/kdefrontend/SettingsGeneralPage.cpp:249
 #, kde-format
 msgid "Comma (,)"
 msgstr "Запятая (,)"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:244
+#: src/kdefrontend/SettingsGeneralPage.cpp:250
 #, kde-format
 msgid "Arabic (٫)"
 msgstr "Арабский (٫)"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:248
+#: src/kdefrontend/SettingsGeneralPage.cpp:254
 #, fuzzy, kde-format
 #| msgid ""
 #| "<html><head/><body><p>Use terms compliant with the <a href=\"http://www."
@@ -15902,7 +15902,7 @@ msgstr ""
 "decoration: underline; color:#2980b9;\">ГОСТ 34100.1-2017 Руководство по "
 "выражению неопределенности измерения</span></a></p></body></html>"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:253
+#: src/kdefrontend/SettingsGeneralPage.cpp:259
 #, kde-format
 msgid ""
 "Save the state (position and geometry) of the docks in the project file. \n"
@@ -15911,7 +15911,7 @@ msgid ""
 "properties."
 msgstr ""
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:260
+#: src/kdefrontend/SettingsGeneralPage.cpp:266
 #, fuzzy, kde-format
 #| msgid ""
 #| "If checked, the results of the calculations in the analysis curves will "
@@ -15931,6 +15931,25 @@ msgstr ""
 "в файле проекта.\n"
 "Снимите флажок для уменьшения размера файла проекта за счёт более "
 "продолжительного времени его загрузки."
+
+#: src/kdefrontend/SettingsGeneralPage.cpp:273
+#, kde-format
+msgid "Activates additional tracing output in the terminal."
+msgstr ""
+
+#: src/kdefrontend/SettingsGeneralPage.cpp:274
+#, kde-format
+msgid ""
+"Debug trace - helpfull to diagnose the application, can have a negative "
+"impact on the performance."
+msgstr ""
+
+#: src/kdefrontend/SettingsGeneralPage.cpp:275
+#, kde-format
+msgid ""
+"Performance trace - helpfull to analyse performance relevant aspects and "
+"bottlenecks."
+msgstr ""
 
 #: src/kdefrontend/SettingsNotebookPage.cpp:23
 #, kde-format
@@ -18853,7 +18872,7 @@ msgstr "Источник импорта:"
 #. i18n: ectx: property (text), widget (QLabel, lDecimalSeparator)
 #: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:91
 #: src/kdefrontend/ui/datasources/jsonoptionswidget.ui:76
-#: src/kdefrontend/ui/settingsgeneralpage.ui:17
+#: src/kdefrontend/ui/settingsgeneralpage.ui:132
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:152
 #, kde-format
 msgid "Decimal separator:"
@@ -20480,7 +20499,7 @@ msgstr "Темы"
 #. i18n: ectx: property (text), widget (QLabel, lAutoSaveInterval)
 #. i18n: ectx: property (text), widget (QLabel, lUpdateInterval)
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:113
-#: src/kdefrontend/ui/settingsgeneralpage.ui:146
+#: src/kdefrontend/ui/settingsgeneralpage.ui:251
 #, kde-format
 msgid "Interval:"
 msgstr "Интервал:"
@@ -20581,7 +20600,7 @@ msgstr "Дата создания:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSaveDockStates)
 #: src/kdefrontend/ui/dockwidgets/projectdock.ui:80
-#: src/kdefrontend/ui/settingsgeneralpage.ui:315
+#: src/kdefrontend/ui/settingsgeneralpage.ui:284
 #, fuzzy, kde-format
 #| msgid "Save project as"
 msgid "Save Dock States:"
@@ -20659,16 +20678,14 @@ msgstr "Конечное значение X:"
 msgid "Start x:"
 msgstr "Начальное значение X:"
 
-#. i18n: ectx: property (text), widget (QCheckBox, chkSaveCalculations)
-#. i18n: ectx: property (text), widget (QCheckBox, chkSaveDockStates)
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoSave)
-#. i18n: ectx: property (text), widget (QCheckBox, chkDebugOutput)
+#. i18n: ectx: property (text), widget (QCheckBox, chkSaveDockStates)
+#. i18n: ectx: property (text), widget (QCheckBox, chkSaveCalculations)
 #. i18n: ectx: property (text), widget (QLabel, lLinkingEnabled)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:17
-#: src/kdefrontend/ui/settingsgeneralpage.ui:71
-#: src/kdefrontend/ui/settingsgeneralpage.ui:85
-#: src/kdefrontend/ui/settingsgeneralpage.ui:123
-#: src/kdefrontend/ui/settingsgeneralpage.ui:345
+#: src/kdefrontend/ui/settingsgeneralpage.ui:228
+#: src/kdefrontend/ui/settingsgeneralpage.ui:291
+#: src/kdefrontend/ui/settingsgeneralpage.ui:305
 #, kde-format
 msgid "Enabled"
 msgstr "Включено"
@@ -21991,54 +22008,54 @@ msgstr "Общий размер — "
 msgid "Clear"
 msgstr "Очистить"
 
-#. i18n: ectx: property (text), widget (QCheckBox, chkIncludeTrailingZeroesAfterDot)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:24
+#. i18n: ectx: property (text), widget (QLabel, lStartup)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:17
 #, kde-format
-msgid "Include trailing zeroes after dot"
-msgstr "Вставлять нулевые младшие разряды после точки"
+msgid "Startup:"
+msgstr "При запуске:"
+
+#. i18n: ectx: property (text), widget (QLabel, lNewProject)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:50
+#, fuzzy, kde-format
+#| msgid "Save Project"
+msgid "New Project:"
+msgstr "Сохранение проекта"
 
 # BUGME: please add colon (:) --aspotashev
 #. i18n: ectx: property (text), widget (QLabel, lNewProjectNotebook)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:34
+#: src/kdefrontend/ui/settingsgeneralpage.ui:60
 #, fuzzy, kde-format
 msgid "Notebook:"
 msgstr "Блокнот"
 
-#. i18n: ectx: property (text), widget (QCheckBox, chkOmitGroupSeparator)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:41
-#, kde-format
-msgid "Omit group separator"
-msgstr "Не отображать разделитель разрядов"
-
-# BUGME: please add context --aspotashev
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:64
+#. i18n: ectx: property (text), widget (QLabel, lDockWindowPositionReopen)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:86
 #, fuzzy, kde-format
-#| msgid "Save Calculations:"
-msgid "Save  Calculations:"
-msgstr "Сохранять вычисления:"
+msgid "Dock widget placement:"
+msgstr "Размещение ящика с усами"
 
-#. i18n: ectx: property (text), widget (QCheckBox, chkOmitLeadingZeroInExponent)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:78
+# BUGME: please split strings --aspotashev
+#. i18n: ectx: property (text), widget (QLabel, lTitleBar)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:96
 #, kde-format
-msgid "Omit leading zero in exponent"
-msgstr "Не отображать ведущий ноль в экспоненте"
-
-#. i18n: ectx: property (text), widget (QLabel, lNumberOptions)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:95
-#, kde-format
-msgid "Number options:"
-msgstr "Параметры отображения чисел:"
+msgid "Title Bar:"
+msgstr "Заголовок окна:"
 
 # BUGME: please add ctxt --aspotashev
 #. i18n: ectx: property (text), widget (QLabel, lUnits)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:182
+#: src/kdefrontend/ui/settingsgeneralpage.ui:122
 #, kde-format
 msgid "Units:"
 msgstr "Единицы измерения:"
 
+#. i18n: ectx: property (text), widget (QLabel, lGUMTerms)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:142
+#, kde-format
+msgid "Terms:"
+msgstr "Термины:"
+
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkGUMTerms)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:189
+#: src/kdefrontend/ui/settingsgeneralpage.ui:149
 #, kde-format
 msgid ""
 "<html><head/><body><p>Use terms compliant with the <a href=\"http://www.bipm."
@@ -22052,45 +22069,57 @@ msgstr ""
 "выражению неопределенности измерения</span></a></p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkGUMTerms)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:192
+#: src/kdefrontend/ui/settingsgeneralpage.ui:152
 #, kde-format
 msgid "GUM compliant"
 msgstr "В соответствии с ГОСТ 34100.1-2017"
 
-#. i18n: ectx: property (text), widget (QLabel, lSaveCalculations)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:202
-#, fuzzy, kde-format
-msgid "Compatibility:"
-msgstr "Вероятность"
+#. i18n: ectx: property (text), widget (QLabel, lNumberOptions)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:159
+#, kde-format
+msgid "Number options:"
+msgstr "Параметры отображения чисел:"
 
-#. i18n: ectx: property (text), widget (QLabel, lDockWindowPositionReopen)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:209
-#, fuzzy, kde-format
-msgid "Dock widget placement:"
-msgstr "Размещение ящика с усами"
+#. i18n: ectx: property (text), widget (QCheckBox, chkOmitGroupSeparator)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:166
+#, kde-format
+msgid "Omit group separator"
+msgstr "Не отображать разделитель разрядов"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkOmitLeadingZeroInExponent)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:173
+#, kde-format
+msgid "Omit leading zero in exponent"
+msgstr "Не отображать ведущий ноль в экспоненте"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkIncludeTrailingZeroesAfterDot)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:180
+#, kde-format
+msgid "Include trailing zeroes after dot"
+msgstr "Вставлять нулевые младшие разряды после точки"
 
 #. i18n: ectx: property (text), widget (QLabel, lAutoSave)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:219
+#: src/kdefrontend/ui/settingsgeneralpage.ui:203
 #, kde-format
 msgid "Auto-save:"
 msgstr "Автосохранение:"
 
-# BUGME: please split strings --aspotashev
-#. i18n: ectx: property (text), widget (QLabel, lTitleBar)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:226
-#, kde-format
-msgid "Title Bar:"
-msgstr "Заголовок окна:"
-
-#. i18n: ectx: property (text), widget (QLabel, lNewProject)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:233
+# BUGME: please add context --aspotashev
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:298
 #, fuzzy, kde-format
-#| msgid "Save Project"
-msgid "New Project:"
-msgstr "Сохранение проекта"
+#| msgid "Save Calculations:"
+msgid "Save  Calculations:"
+msgstr "Сохранять вычисления:"
+
+#. i18n: ectx: property (text), widget (QLabel, lSaveCalculations)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:312
+#, fuzzy, kde-format
+msgid "Compatibility:"
+msgstr "Вероятность"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkCompatible)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:240
+#: src/kdefrontend/ui/settingsgeneralpage.ui:319
 #, kde-format
 msgid ""
 "<html><head/><body><p>Save projects in a compatible format that can be "
@@ -22100,29 +22129,32 @@ msgstr ""
 "открывать в версиях старше LabPlot 2.9.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCompatible)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:243
+#: src/kdefrontend/ui/settingsgeneralpage.ui:322
 #, kde-format
 msgid "Save in compatible format"
 msgstr "Сохранять в совместимом формате"
 
-#. i18n: ectx: property (text), widget (QLabel, lGUMTerms)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:250
-#, kde-format
-msgid "Terms:"
-msgstr "Термины:"
-
-#. i18n: ectx: property (text), widget (QLabel, lStartup)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:292
-#, kde-format
-msgid "Startup:"
-msgstr "При запуске:"
-
-#. i18n: ectx: property (text), widget (QLabel, lDebugOutput)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:338
+# BUGME: please add colon at the end --aspotashev
+#. i18n: ectx: property (text), widget (QLabel, lTracing)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:329
 #, fuzzy, kde-format
-#| msgid "Output:"
-msgid "Debug Output:"
-msgstr "Вывод:"
+#| msgid "Spacing:"
+msgid "Tracing:"
+msgstr "Интервал:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkDebugTrace)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:360
+#, kde-format
+msgid "Debug"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkPerfTrace)
+#. i18n: ectx: property (text), widget (QLabel, lPerformance)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:383
+#: src/kdefrontend/ui/settingsworksheetpage.ui:111
+#, kde-format
+msgid "Performance"
+msgstr "Производительность"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode_2)
@@ -22230,12 +22262,6 @@ msgstr "Тема:"
 #, kde-format
 msgid "Interactive"
 msgstr "Интерактивный"
-
-#. i18n: ectx: property (text), widget (QLabel, lPerformance)
-#: src/kdefrontend/ui/settingsworksheetpage.ui:111
-#, kde-format
-msgid "Performance"
-msgstr "Производительность"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkDoubleBuffering)
 #: src/kdefrontend/ui/settingsworksheetpage.ui:118
@@ -23643,6 +23669,11 @@ msgstr "сбой процесса convert, код выхода ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Не удалось открыть файл:"
+
+#, fuzzy
+#~| msgid "Output:"
+#~ msgid "Debug Output:"
+#~ msgstr "Вывод:"
 
 #~ msgid "Specify the name of the file to import."
 #~ msgstr "Укажите имя экспортируемого файла."
