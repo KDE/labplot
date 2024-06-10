@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-09 01:42+0000\n"
-"PO-Revision-Date: 2024-06-02 15:02+0200\n"
+"POT-Creation-Date: 2024-06-10 02:04+0000\n"
+"PO-Revision-Date: 2024-06-09 16:46+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 24.02.2\n"
+"X-Generator: Lokalize 24.05.0\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -402,8 +402,8 @@ msgstr "Uit SQL-database..."
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:316
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:23
 #: src/kdefrontend/ui/worksheet/exportworksheetwidget.ui:17
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:210
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:215
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:213
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:218
 #, kde-format
 msgid "Export"
 msgstr "Exporteren"
@@ -5769,7 +5769,7 @@ msgstr "Tekstbestand (*.txt)"
 
 #: src/backend/note/Note.cpp:67
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:385
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:289
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:292
 #, kde-format
 msgctxt "@title:window"
 msgid "Export to File"
@@ -11439,7 +11439,7 @@ msgstr "Nieuw aangesloten bronbestand toevoegen"
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:130
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:346
 #: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:113
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:242
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:245
 #, kde-format
 msgid "Hide Options"
 msgstr "Opties verbergen"
@@ -11449,7 +11449,7 @@ msgstr "Opties verbergen"
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:130
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:346
 #: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:113
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:242
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:245
 #, kde-format
 msgid "Show Options"
 msgstr "Opties tonen"
@@ -15544,21 +15544,31 @@ msgstr ""
 #: src/kdefrontend/SettingsGeneralPage.cpp:273
 #, kde-format
 msgid "Activates additional tracing output in the terminal."
-msgstr ""
+msgstr "Activeert extra uitvoer voor trace in de terminal."
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:274
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "Debug trace - helpfull to diagnose the application, can have a negative "
+#| "impact on the performance."
 msgid ""
-"Debug trace - helpfull to diagnose the application, can have a negative "
+"Debug trace - helpful to diagnose the application, can have a negative "
 "impact on the performance."
 msgstr ""
+"Debug-trace - behulpzaam om de toepassing te diagnosticeren, kan een "
+"negatieve invloed hebben op de prestaties."
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:275
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "Performance trace - helpfull to analyse performance relevant aspects and "
+#| "bottlenecks."
 msgid ""
-"Performance trace - helpfull to analyse performance relevant aspects and "
+"Performance trace - helpful to analyse performance relevant aspects and "
 "bottlenecks."
 msgstr ""
+"Prestatie-trace - behulpzaam bij het analyseren van relevante aspecten van "
+"prestatie en bottlenecks."
 
 #: src/kdefrontend/SettingsNotebookPage.cpp:23
 #, kde-format
@@ -16085,8 +16095,8 @@ msgstr "Matrix exporteren"
 
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:310
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:316
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:209
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:215
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:212
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:218
 #, kde-format
 msgid "The file already exists. Do you really want to overwrite it?"
 msgstr "Het bestand bestaat al. Wilt u het werkelijk overschrijven?"
@@ -17353,7 +17363,7 @@ msgstr "Grootte:"
 #: src/kdefrontend/ui/labelwidget.ui:241 src/kdefrontend/ui/labelwidget.ui:303
 #: src/kdefrontend/ui/labelwidget.ui:504 src/kdefrontend/ui/labelwidget.ui:561
 #: src/kdefrontend/ui/labelwidget.ui:754 src/kdefrontend/ui/symbolwidget.ui:293
-#: src/kdefrontend/ui/symbolwidget.ui:309
+#: src/kdefrontend/ui/symbolwidget.ui:312
 #, kde-format
 msgid "Spinbox for numbers."
 msgstr "Draaischakelaar voor getallen."
@@ -17396,7 +17406,7 @@ msgstr "Draaischakelaar voor getallen."
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:552
 #: src/kdefrontend/ui/labelwidget.ui:244 src/kdefrontend/ui/labelwidget.ui:306
 #: src/kdefrontend/ui/labelwidget.ui:507 src/kdefrontend/ui/symbolwidget.ui:296
-#: src/kdefrontend/ui/symbolwidget.ui:312
+#: src/kdefrontend/ui/symbolwidget.ui:315
 #, kde-format
 msgid " pt"
 msgstr " pt"
@@ -21581,16 +21591,15 @@ msgstr "Opslaan in een compatibel formaat"
 
 #. i18n: ectx: property (text), widget (QLabel, lTracing)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:329
-#, fuzzy, kde-format
-#| msgid "Spacing:"
+#, kde-format
 msgid "Tracing:"
-msgstr "Tussenruimte:"
+msgstr "Tracing:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkDebugTrace)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:360
 #, kde-format
 msgid "Debug"
-msgstr ""
+msgstr "Debuggen"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkPerfTrace)
 #. i18n: ectx: property (text), widget (QLabel, lPerformance)
@@ -22948,52 +22957,52 @@ msgctxt "@title:window"
 msgid "Export Worksheet"
 msgstr "Werkblad exporteren"
 
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:264
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:267
 #, kde-format
 msgid "Portable Data Format (*.pdf *.PDF)"
 msgstr "Portable Data Format (PDF) (*.pdf *.PDF)"
 
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:267
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:270
 #, kde-format
 msgid "Scalable Vector Graphics (*.svg *.SVG)"
 msgstr "Scalable Vector Graphics (SVG) (*.svg *.SVG)"
 
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:270
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:273
 #, kde-format
 msgid "Portable Network Graphics (*.png *.PNG)"
 msgstr "Portable Network Graphics (PNG) (*.png *.PNG)"
 
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:273
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:276
 #, kde-format
 msgid "Joint Photographic Experts Group (*.jpg *.jpeg *.JPG *.JPEG)"
 msgstr "Joint Photographic Experts Group (*.jpg *.jpeg *.JPG *.JPEG)"
 
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:276
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:279
 #, kde-format
 msgid "Windows Bitmap (*.bmp *.BMP)"
 msgstr "Windows Bitmap (*.bmp *.BMP)"
 
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:279
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:282
 #, kde-format
 msgid "Portable Pixmap (*.ppm *.PPM)"
 msgstr "Portable Data Format (PDF) (*.pdf *.PDF)"
 
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:282
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:285
 #, kde-format
 msgid "X11 Bitmap (*.xbm *.XBM)"
 msgstr "X11 Bitmap (*.xbm *.XBM)"
 
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:285
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:288
 #, kde-format
 msgid "X11 Bitmap (*.xpm *.XPM)"
 msgstr "X11 Bitmap (*.xpm *.XPM)"
 
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:346
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:349
 #, kde-format
 msgid "Export to file and close the dialog."
 msgstr "Naar bestand exporteren en dialoog afsluiten."
 
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:349
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:352
 #, kde-format
 msgid "Export to clipboard and close the dialog."
 msgstr "Naar klembord exporteren en dialoog afsluiten."

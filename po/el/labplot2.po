@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-09 01:42+0000\n"
+"POT-Creation-Date: 2024-06-10 02:04+0000\n"
 "PO-Revision-Date: 2017-04-20 14:04+0200\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -425,8 +425,8 @@ msgstr ""
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:316
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:23
 #: src/kdefrontend/ui/worksheet/exportworksheetwidget.ui:17
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:210
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:215
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:213
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:218
 #, kde-format
 msgid "Export"
 msgstr "Εξαγωγή"
@@ -5889,7 +5889,7 @@ msgstr ""
 
 #: src/backend/note/Note.cpp:67
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:385
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:289
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:292
 #, fuzzy, kde-format
 #| msgid "Export to"
 msgctxt "@title:window"
@@ -11853,7 +11853,7 @@ msgstr "x-Range"
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:130
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:346
 #: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:113
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:242
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:245
 #, kde-format
 msgid "Hide Options"
 msgstr ""
@@ -11863,7 +11863,7 @@ msgstr ""
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:130
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:346
 #: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:113
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:242
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:245
 #, kde-format
 msgid "Show Options"
 msgstr ""
@@ -16065,14 +16065,14 @@ msgstr ""
 #: src/kdefrontend/SettingsGeneralPage.cpp:274
 #, kde-format
 msgid ""
-"Debug trace - helpfull to diagnose the application, can have a negative "
+"Debug trace - helpful to diagnose the application, can have a negative "
 "impact on the performance."
 msgstr ""
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:275
 #, kde-format
 msgid ""
-"Performance trace - helpfull to analyse performance relevant aspects and "
+"Performance trace - helpful to analyse performance relevant aspects and "
 "bottlenecks."
 msgstr ""
 
@@ -16641,8 +16641,8 @@ msgstr ""
 
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:310
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:316
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:209
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:215
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:212
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:218
 #, kde-format
 msgid "The file already exists. Do you really want to overwrite it?"
 msgstr ""
@@ -17935,7 +17935,7 @@ msgstr ""
 #: src/kdefrontend/ui/labelwidget.ui:241 src/kdefrontend/ui/labelwidget.ui:303
 #: src/kdefrontend/ui/labelwidget.ui:504 src/kdefrontend/ui/labelwidget.ui:561
 #: src/kdefrontend/ui/labelwidget.ui:754 src/kdefrontend/ui/symbolwidget.ui:293
-#: src/kdefrontend/ui/symbolwidget.ui:309
+#: src/kdefrontend/ui/symbolwidget.ui:312
 #, kde-format
 msgid "Spinbox for numbers."
 msgstr ""
@@ -17978,7 +17978,7 @@ msgstr ""
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:552
 #: src/kdefrontend/ui/labelwidget.ui:244 src/kdefrontend/ui/labelwidget.ui:306
 #: src/kdefrontend/ui/labelwidget.ui:507 src/kdefrontend/ui/symbolwidget.ui:296
-#: src/kdefrontend/ui/symbolwidget.ui:312
+#: src/kdefrontend/ui/symbolwidget.ui:315
 #, kde-format
 msgid " pt"
 msgstr ""
@@ -23858,52 +23858,52 @@ msgctxt "@title:window"
 msgid "Export Worksheet"
 msgstr "&Φύλλο εργασίας"
 
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:264
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:267
 #, kde-format
 msgid "Portable Data Format (*.pdf *.PDF)"
 msgstr ""
 
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:267
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:270
 #, kde-format
 msgid "Scalable Vector Graphics (*.svg *.SVG)"
 msgstr ""
 
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:270
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:273
 #, kde-format
 msgid "Portable Network Graphics (*.png *.PNG)"
 msgstr ""
 
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:273
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:276
 #, kde-format
 msgid "Joint Photographic Experts Group (*.jpg *.jpeg *.JPG *.JPEG)"
 msgstr ""
 
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:276
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:279
 #, kde-format
 msgid "Windows Bitmap (*.bmp *.BMP)"
 msgstr ""
 
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:279
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:282
 #, kde-format
 msgid "Portable Pixmap (*.ppm *.PPM)"
 msgstr ""
 
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:282
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:285
 #, kde-format
 msgid "X11 Bitmap (*.xbm *.XBM)"
 msgstr ""
 
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:285
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:288
 #, kde-format
 msgid "X11 Bitmap (*.xpm *.XPM)"
 msgstr ""
 
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:346
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:349
 #, kde-format
 msgid "Export to file and close the dialog."
 msgstr ""
 
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:349
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:352
 #, kde-format
 msgid "Export to clipboard and close the dialog."
 msgstr ""

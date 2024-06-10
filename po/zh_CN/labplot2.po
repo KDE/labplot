@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-09 01:42+0000\n"
+"POT-Creation-Date: 2024-06-10 02:04+0000\n"
 "PO-Revision-Date: 2024-04-22 16:05\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -397,8 +397,8 @@ msgstr ""
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:316
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:23
 #: src/kdefrontend/ui/worksheet/exportworksheetwidget.ui:17
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:210
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:215
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:213
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:218
 #, kde-format
 msgid "Export"
 msgstr "导出"
@@ -5704,7 +5704,7 @@ msgstr ""
 
 #: src/backend/note/Note.cpp:67
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:385
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:289
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:292
 #, kde-format
 msgctxt "@title:window"
 msgid "Export to File"
@@ -11285,7 +11285,7 @@ msgstr ""
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:130
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:346
 #: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:113
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:242
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:245
 #, kde-format
 msgid "Hide Options"
 msgstr "隐藏选项"
@@ -11295,7 +11295,7 @@ msgstr "隐藏选项"
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:130
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:346
 #: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:113
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:242
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:245
 #, kde-format
 msgid "Show Options"
 msgstr "显示选项"
@@ -15219,14 +15219,14 @@ msgstr ""
 #: src/kdefrontend/SettingsGeneralPage.cpp:274
 #, kde-format
 msgid ""
-"Debug trace - helpfull to diagnose the application, can have a negative "
+"Debug trace - helpful to diagnose the application, can have a negative "
 "impact on the performance."
 msgstr ""
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:275
 #, kde-format
 msgid ""
-"Performance trace - helpfull to analyse performance relevant aspects and "
+"Performance trace - helpful to analyse performance relevant aspects and "
 "bottlenecks."
 msgstr ""
 
@@ -15743,8 +15743,8 @@ msgstr ""
 
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:310
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:316
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:209
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:215
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:212
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:218
 #, kde-format
 msgid "The file already exists. Do you really want to overwrite it?"
 msgstr ""
@@ -16979,7 +16979,7 @@ msgstr "尺寸:"
 #: src/kdefrontend/ui/labelwidget.ui:241 src/kdefrontend/ui/labelwidget.ui:303
 #: src/kdefrontend/ui/labelwidget.ui:504 src/kdefrontend/ui/labelwidget.ui:561
 #: src/kdefrontend/ui/labelwidget.ui:754 src/kdefrontend/ui/symbolwidget.ui:293
-#: src/kdefrontend/ui/symbolwidget.ui:309
+#: src/kdefrontend/ui/symbolwidget.ui:312
 #, kde-format
 msgid "Spinbox for numbers."
 msgstr ""
@@ -17022,7 +17022,7 @@ msgstr ""
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:552
 #: src/kdefrontend/ui/labelwidget.ui:244 src/kdefrontend/ui/labelwidget.ui:306
 #: src/kdefrontend/ui/labelwidget.ui:507 src/kdefrontend/ui/symbolwidget.ui:296
-#: src/kdefrontend/ui/symbolwidget.ui:312
+#: src/kdefrontend/ui/symbolwidget.ui:315
 #, kde-format
 msgid " pt"
 msgstr " pt"
@@ -21175,10 +21175,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lTracing)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:329
-#, fuzzy, kde-format
-#| msgid "Spacing"
+#, kde-format
 msgid "Tracing:"
-msgstr "间距"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkDebugTrace)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:360
@@ -22518,52 +22517,52 @@ msgctxt "@title:window"
 msgid "Export Worksheet"
 msgstr ""
 
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:264
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:267
 #, kde-format
 msgid "Portable Data Format (*.pdf *.PDF)"
 msgstr "便携式数据格式 (*.pdf *.PDF)"
 
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:267
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:270
 #, kde-format
 msgid "Scalable Vector Graphics (*.svg *.SVG)"
 msgstr "可缩放矢量图形 (*.svg *.SVG)"
 
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:270
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:273
 #, kde-format
 msgid "Portable Network Graphics (*.png *.PNG)"
 msgstr "便携式网络图形 (*.png *.PNG)"
 
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:273
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:276
 #, kde-format
 msgid "Joint Photographic Experts Group (*.jpg *.jpeg *.JPG *.JPEG)"
 msgstr "JPEG格式 (*.jpg *.jpeg *.JPG *.JPEG)"
 
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:276
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:279
 #, kde-format
 msgid "Windows Bitmap (*.bmp *.BMP)"
 msgstr "Windows Bitmap (*.bmp *.BMP)"
 
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:279
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:282
 #, kde-format
 msgid "Portable Pixmap (*.ppm *.PPM)"
 msgstr "便携式像素图 (*.ppm *.PPM)"
 
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:282
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:285
 #, kde-format
 msgid "X11 Bitmap (*.xbm *.XBM)"
 msgstr "X11 Bitmap (*.xbm *.XBM)"
 
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:285
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:288
 #, kde-format
 msgid "X11 Bitmap (*.xpm *.XPM)"
 msgstr "X11 Bitmap (*.xpm *.XPM)"
 
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:346
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:349
 #, kde-format
 msgid "Export to file and close the dialog."
 msgstr ""
 
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:349
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:352
 #, kde-format
 msgid "Export to clipboard and close the dialog."
 msgstr ""
