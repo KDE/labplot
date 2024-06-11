@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-06-10 02:04+0000\n"
-"PO-Revision-Date: 2024-06-09 08:25+0200\n"
+"PO-Revision-Date: 2024-06-10 07:22+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -430,7 +430,7 @@ msgstr "Predogled tiskanja"
 #: src/backend/core/AbstractPart.cpp:136 src/kdefrontend/MainWin.cpp:844
 #, kde-format
 msgid "&Close"
-msgstr "&Zapri"
+msgstr "Zapri"
 
 #: src/backend/core/AbstractPart.cpp:141 src/backend/core/AbstractPart.cpp:154
 #, kde-format
@@ -9198,21 +9198,21 @@ msgstr "Zakleni"
 #: src/backend/worksheet/WorksheetElement.cpp:236
 #, kde-format
 msgid "Drawing &order"
-msgstr "Vrstni re&d risanja"
+msgstr "Vrstni red risanja"
 
 #: src/backend/worksheet/WorksheetElement.cpp:239
 #: src/backend/worksheet/WorksheetElement.cpp:285
 #: src/backend/worksheet/WorksheetElement.cpp:288
 #, kde-format
 msgid "Move &behind"
-msgstr "Premakni &za"
+msgstr "Premakni za"
 
 #: src/backend/worksheet/WorksheetElement.cpp:243
 #: src/backend/worksheet/WorksheetElement.cpp:283
 #: src/backend/worksheet/WorksheetElement.cpp:290
 #, kde-format
 msgid "Move in &front of"
-msgstr "Premakni &pred"
+msgstr "Premakni pred"
 
 #: src/backend/worksheet/WorksheetElement.cpp:766
 #, kde-format
@@ -9567,13 +9567,13 @@ msgstr "Pisanje v »%1« ni uspelo. Preverite pot."
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:302
 #, kde-format
 msgid "Cu&t"
-msgstr "I&zreži"
+msgstr "Izreži"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:127
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:303
 #, kde-format
 msgid "&Copy"
-msgstr "&Kopiraj"
+msgstr "Kopiraj"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:128
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:304
@@ -9584,7 +9584,7 @@ msgstr "Pril&epi"
 #: src/commonfrontend/matrix/MatrixView.cpp:129
 #, kde-format
 msgid "Clea&r Selection"
-msgstr "Po&čisti Izbor"
+msgstr "Počisti Izbor"
 
 #. i18n: ectx: property (text), widget (QPushButton, bSelectAll)
 #: src/commonfrontend/matrix/MatrixView.cpp:130
@@ -9617,7 +9617,7 @@ msgstr "Počisti vsebino"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:329
 #, kde-format
 msgid "&Go to Cell..."
-msgstr "&Pojdi v celico ..."
+msgstr "Pojdi v celico ..."
 
 #: src/commonfrontend/matrix/MatrixView.cpp:147
 #, kde-format
@@ -9627,12 +9627,12 @@ msgstr "&Transponiraj"
 #: src/commonfrontend/matrix/MatrixView.cpp:148
 #, kde-format
 msgid "Mirror &Horizontally"
-msgstr "Zrcali &vodoravno"
+msgstr "Zrcali vodoravno"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:149
 #, kde-format
 msgid "Mirror &Vertically"
-msgstr "Zrcali &navpično"
+msgstr "Zrcali navpično"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:151
 #, kde-format
@@ -9680,33 +9680,33 @@ msgstr "Dodaj stolpce"
 #: src/commonfrontend/matrix/MatrixView.cpp:182
 #, kde-format
 msgid "&Insert Empty Columns"
-msgstr "&Vstavi prazne stolpce"
+msgstr "Vstavi prazne stolpce"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:183
 #, kde-format
 msgid "Remo&ve Columns"
-msgstr "Odstrani &stolpce"
+msgstr "Odstrani stolpce"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:184
 #, kde-format
 msgid "Clea&r Columns"
-msgstr "Po&čisti stolpce"
+msgstr "Počisti stolpce"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:185
 #: src/commonfrontend/matrix/MatrixView.cpp:192
 #, kde-format
 msgid "Statisti&cs"
-msgstr "Statisti&ka"
+msgstr "Statistika"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:188
 #, kde-format
 msgid "&Add Rows"
-msgstr "&Dodaj vrstice"
+msgstr "Dodaj vrstice"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:189
 #, kde-format
 msgid "&Insert Empty Rows"
-msgstr "&Vstavi prazne vrstice"
+msgstr "Vstavi prazne vrstice"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:190
 #, kde-format
@@ -9716,7 +9716,7 @@ msgstr "Odstrani &vrstice"
 #: src/commonfrontend/matrix/MatrixView.cpp:191
 #, kde-format
 msgid "Clea&r Rows"
-msgstr "Po&čisti vrstice"
+msgstr "Počisti vrstice"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:249
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:565
@@ -9939,12 +9939,12 @@ msgstr "&Maskiraj"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:306
 #, kde-format
 msgid "&Unmask"
-msgstr "&Odmaskiraj"
+msgstr "Odmaskiraj"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:307
 #, kde-format
 msgid "Clea&r Content"
-msgstr "Po&čisti vsebino"
+msgstr "Počisti vsebino"
 
 #. i18n("Assign &Formula"), this);
 #. action_recalculate = new QAction(QIcon::fromTheme(QString()), i18n("Recalculate"), this);
@@ -10004,7 +10004,7 @@ msgstr "Počisti maske"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:330
 #, kde-format
 msgid "&Search"
-msgstr "Poi&šči"
+msgstr "Poišči"
 
 #. i18n: ectx: property (text), widget (QPushButton, bReplaceNext)
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:332
@@ -13242,7 +13242,7 @@ msgstr "Kopiraj izbor"
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1325
 #, kde-format
 msgid "Copy All"
-msgstr "Kopiraj &vse"
+msgstr "Kopiraj vse"
 
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:376
 #, kde-format
@@ -14440,7 +14440,7 @@ msgstr "Zgodovina razveljavitev/ponovitev"
 #: src/kdefrontend/HistoryDialog.cpp:56
 #, kde-format
 msgid "&Clear"
-msgstr "&Počisti"
+msgstr "Počisti"
 
 #: src/kdefrontend/HistoryDialog.cpp:57
 #, kde-format
@@ -14700,20 +14700,20 @@ msgstr "Kartezijski graf"
 #: src/kdefrontend/labplot2ui.rc:44
 #, kde-format
 msgid "&File"
-msgstr "&Datoteka"
+msgstr "Datoteka"
 
 #. i18n: ectx: Menu (new)
 #: src/kdefrontend/labplot2ui.rc:46
 #, kde-format
 msgid "&Add New"
-msgstr "&Dodaj novo"
+msgstr "Dodaj novo"
 
 #. i18n: ectx: Menu (new_notebook)
 #. i18n: ectx: Menu (notebook)
 #: src/kdefrontend/labplot2ui.rc:56 src/kdefrontend/labplot2ui.rc:83
 #, kde-format
 msgid "&Notebook"
-msgstr "&Zvezek"
+msgstr "Zvezek"
 
 #. i18n: ectx: Menu (import)
 #: src/kdefrontend/labplot2ui.rc:63
@@ -14945,7 +14945,7 @@ msgstr "Zapri aktivno okno"
 #: src/kdefrontend/MainWin.cpp:849
 #, kde-format
 msgid "Close &All"
-msgstr "&Zapri vse"
+msgstr "Zapri vse"
 
 #: src/kdefrontend/MainWin.cpp:850
 #, kde-format
@@ -14955,7 +14955,7 @@ msgstr "Zaprite vsa okna"
 #: src/kdefrontend/MainWin.cpp:853
 #, kde-format
 msgid "Ne&xt"
-msgstr "Na&slednji"
+msgstr "Naslednji"
 
 #: src/kdefrontend/MainWin.cpp:855
 #, kde-format
@@ -14965,7 +14965,7 @@ msgstr "Premakni pozornost na naslednje okno"
 #: src/kdefrontend/MainWin.cpp:858
 #, kde-format
 msgid "Pre&vious"
-msgstr "Pre&jšnji"
+msgstr "Prejšnji"
 
 #: src/kdefrontend/MainWin.cpp:860
 #, kde-format
@@ -14975,17 +14975,17 @@ msgstr "Premakni pozornost na prejšnje okno"
 #: src/kdefrontend/MainWin.cpp:867
 #, kde-format
 msgid "Current &Folder Only"
-msgstr "Samo trenutna &mapa"
+msgstr "Samo trenutna mapa"
 
 #: src/kdefrontend/MainWin.cpp:872
 #, kde-format
 msgid "Current Folder and &Subfolders"
-msgstr "Trenutna mapa in &podmape"
+msgstr "Trenutna mapa in podmape"
 
 #: src/kdefrontend/MainWin.cpp:876
 #, kde-format
 msgid "&All"
-msgstr "&Vse"
+msgstr "Vse"
 
 #: src/kdefrontend/MainWin.cpp:898
 #, kde-format
@@ -15602,10 +15602,7 @@ msgid "Activates additional tracing output in the terminal."
 msgstr "Aktivira dodatni izhod sledenja v terminalu."
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:274
-#, fuzzy, kde-format
-#| msgid ""
-#| "Debug trace - helpfull to diagnose the application, can have a negative "
-#| "impact on the performance."
+#, kde-format
 msgid ""
 "Debug trace - helpful to diagnose the application, can have a negative "
 "impact on the performance."
@@ -15614,10 +15611,7 @@ msgstr ""
 "lahko negativno vpliva na hitrost delovanja."
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:275
-#, fuzzy, kde-format
-#| msgid ""
-#| "Performance trace - helpfull to analyse performance relevant aspects and "
-#| "bottlenecks."
+#, kde-format
 msgid ""
 "Performance trace - helpful to analyse performance relevant aspects and "
 "bottlenecks."
@@ -15703,7 +15697,7 @@ msgstr "Dodaj vrednost"
 #: src/kdefrontend/widgets/FITSHeaderEditAddUnitDialog.cpp:28
 #, kde-format
 msgid "&Add"
-msgstr "&Dodaj"
+msgstr "Dodaj"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:112
 #, kde-format
@@ -15725,7 +15719,7 @@ msgstr "Odštej:"
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:117
 #, kde-format
 msgid "&Subtract"
-msgstr "Od&štej"
+msgstr "Odštej"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:120
 #, kde-format
@@ -15996,7 +15990,7 @@ msgstr "Maskiraj vrednosti"
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:78
 #, kde-format
 msgid "&Drop"
-msgstr "&Izpusti"
+msgstr "Izpusti"
 
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:79
 #, kde-format
@@ -16242,7 +16236,7 @@ msgstr "OBlikujte celice glede na nastavitve ravni in barv"
 #: src/kdefrontend/spreadsheet/FormattingHeatmapDialog.cpp:48
 #, kde-format
 msgid "&Format"
-msgstr "&Oblika"
+msgstr "Oblika"
 
 #. i18n: ectx: property (text), widget (QLabel, lBackground)
 #. i18n: ectx: property (text), widget (QLabel, lLabelsBackground)
@@ -22581,7 +22575,7 @@ msgstr "Urejevalnik metapodatkov FITS [spremenjeno]"
 #: src/kdefrontend/widgets/FITSHeaderEditNewKeywordDialog.cpp:43
 #, kde-format
 msgid "&Add Keyword"
-msgstr "&Dodaj ključno besedo"
+msgstr "Dodaj ključno besedo"
 
 #: src/kdefrontend/widgets/FITSHeaderEditNewKeywordDialog.cpp:47
 #, kde-format

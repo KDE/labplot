@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-06-10 02:04+0000\n"
-"PO-Revision-Date: 2024-06-09 20:49+0200\n"
+"PO-Revision-Date: 2024-06-10 04:49+0200\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -15588,10 +15588,7 @@ msgid "Activates additional tracing output in the terminal."
 msgstr "Activa la salida de seguimiento adicional en el terminal."
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:274
-#, fuzzy, kde-format
-#| msgid ""
-#| "Debug trace - helpfull to diagnose the application, can have a negative "
-#| "impact on the performance."
+#, kde-format
 msgid ""
 "Debug trace - helpful to diagnose the application, can have a negative "
 "impact on the performance."
@@ -15600,10 +15597,7 @@ msgstr ""
 "puede tener un impacto negativo en el rendimiento."
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:275
-#, fuzzy, kde-format
-#| msgid ""
-#| "Performance trace - helpfull to analyse performance relevant aspects and "
-#| "bottlenecks."
+#, kde-format
 msgid ""
 "Performance trace - helpful to analyse performance relevant aspects and "
 "bottlenecks."
