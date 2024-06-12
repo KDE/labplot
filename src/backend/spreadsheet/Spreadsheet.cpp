@@ -1577,6 +1577,7 @@ void Spreadsheet::finalizeImport(size_t columnOffset,
 			plot->dataChanged(-1, -1); // TODO: check if all ranges must be updated
 		}
 	}
+	d->m_usedInPlots.clear();
 
 	// make the spreadsheet and all its children undo aware again
 	setUndoAware(true);
