@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-10 02:04+0000\n"
+"POT-Creation-Date: 2024-06-12 01:46+0000\n"
 "PO-Revision-Date: 2019-07-11 18:46+0200\n"
 "Last-Translator: Matej Mrenica <matejm98mthw@gmail.com>\n"
 "Language-Team: Slovak <kde-i18n-doc@kde.org>\n"
@@ -1248,6 +1248,7 @@ msgstr "Nepodarilo sa otvoriť"
 #: src/backend/datasources/filters/AsciiFilter.cpp:1512
 #: src/backend/datasources/filters/AsciiFilter.cpp:2067
 #: src/backend/datasources/filters/QJsonModel.cpp:133
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1880
 #: src/commonfrontend/matrix/MatrixView.cpp:620
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2384
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2405
@@ -3205,8 +3206,8 @@ msgid "Energy 1 erg"
 msgstr ""
 
 #: src/backend/gsl/errors.h:20
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1968
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1180
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2060
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1179
 #, kde-format
 msgid "Success"
 msgstr "Úspech"
@@ -6100,7 +6101,7 @@ msgstr "Exportovať do súboru"
 msgid "Failed to open '%1' for writing."
 msgstr "Nepodarilo sa otvoriť súbor %1 pre čítanie."
 
-#: src/backend/note/Note.cpp:160
+#: src/backend/note/Note.cpp:161
 #, kde-format
 msgid "no note element found"
 msgstr ""
@@ -6462,6 +6463,7 @@ msgstr "Smer"
 
 #: src/backend/nsl/nsl_fit.c:24
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:577
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1866
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:551
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1226
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:242
@@ -9511,40 +9513,169 @@ msgstr ""
 msgid "%1: set equation"
 msgstr "%1: nastaviť písmo"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:928
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:929
 #, fuzzy, kde-format
 #| msgid "%1    [Changed]"
 msgid "%1: data source histogram changed"
 msgstr "%1    [zmenené]"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:940
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:941
 #, fuzzy, kde-format
 #| msgid "%1: set layout"
 msgid "%1: assign x-error"
 msgstr "%1: nastaviť rozloženie"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:955
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:956
 #, fuzzy, kde-format
 #| msgid "%1: set layout"
 msgid "%1: assign y-error"
 msgstr "%1: nastaviť rozloženie"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:971
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:972
 #, kde-format
 msgid "%1: set fit options and perform the fit"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2154
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1818
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:3086
+#, fuzzy, kde-format
+#| msgid "Results:"
+msgid "Fit Results"
+msgstr "Výsledky:"
+
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1842
+#, kde-format
+msgid "Nonlinear Fit to X/Y data"
+msgstr ""
+
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1848
+#, kde-format
+msgid "MODEL"
+msgstr ""
+
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1852
+#, kde-format
+msgid "Degree"
+msgstr "Stupeň"
+
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1857
+#, kde-format
+msgid "Peaks"
+msgstr ""
+
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1876
+#, kde-format
+msgid "PARAMETERS"
+msgstr ""
+
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1880
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:149
+#, kde-format
+msgid "Uncertainty"
+msgstr ""
+
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1880
+#, kde-format
+msgid "Uncertainty,%"
+msgstr ""
+
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1880
+#, fuzzy, kde-format
+#| msgid "Statistics"
+msgid "t Statistic"
+msgstr "Štatistika"
+
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1881
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:150
+#, fuzzy, kde-format
+#| msgid "Power"
+msgid "Lower"
+msgstr "Sila"
+
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1881
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:150
+#, fuzzy, kde-format
+#| msgid "Upper limit"
+msgid "Upper"
+msgstr "Horný limit"
+
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1897
+#, kde-format
+msgid "GOODNESS OF FIT"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1899
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:551
+#, kde-format
+msgid "Sum of squared residuals"
+msgstr ""
+
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1900
+#, kde-format
+msgid "Residuals mean square"
+msgstr ""
+
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1901
+#, fuzzy, kde-format
+msgid "Root mean square deviation"
+msgstr "Smerodajná odchýlka"
+
+#. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1902
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:581
+#, kde-format
+msgid "Coefficient of determination"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1903
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:591
+#, kde-format
+msgid "Adj. coefficient of determination"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, bTest)
+#. i18n: ectx: property (text), widget (QPushButton, bTestConnection)
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1904
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:181
+#: src/kdefrontend/ui/datasources/databasemanagerwidget.ui:263
+#: src/kdefrontend/ui/datasources/mqttconnectionmanagerwidget.ui:168
+#, fuzzy, kde-format
+msgid "Test"
+msgstr "Test"
+
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1905
+#, fuzzy, kde-format
+msgid "F-Test"
+msgstr "Test"
+
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1907
+#, fuzzy, kde-format
+msgid "Mean absolute error"
+msgstr "Smerodajná odchýlka"
+
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1908
+#, kde-format
+msgid "Akaike information criterion"
+msgstr ""
+
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1909
+#, kde-format
+msgid "Bayesian information criterion"
+msgstr ""
+
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2246
 #, kde-format
 msgid "Model has no parameters."
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2161
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2253
 #, kde-format
 msgid "Not sufficient weight data points provided."
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2238
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2330
 #: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:175
 #: src/backend/worksheet/plots/cartesian/XYFourierTransformCurve.cpp:125
 #: src/backend/worksheet/plots/cartesian/XYHilbertTransformCurve.cpp:132
@@ -9552,14 +9683,14 @@ msgstr ""
 msgid "No data points available."
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2245
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2337
 #, kde-format
 msgid ""
 "The number of data points (%1) must be greater than or equal to the number "
 "of parameters (%2)."
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2252
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2344
 #, kde-format
 msgid "Fit model not specified."
 msgstr ""
@@ -13881,18 +14012,18 @@ msgid "Expand all curves"
 msgstr "Rozbaliť všetko"
 
 #: src/kdefrontend/dockwidgets/CursorDock.cpp:148
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1312
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1318
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1324
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1311
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1317
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1323
 #, fuzzy, kde-format
 #| msgid "Selection"
 msgid "Copy Selection"
 msgstr "Kopírovať označené"
 
 #: src/kdefrontend/dockwidgets/CursorDock.cpp:149
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1313
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1319
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1325
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1312
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1318
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1324
 #, kde-format
 msgid "Copy All"
 msgstr "Kopírovať všetko"
@@ -14409,11 +14540,6 @@ msgstr "t, max"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:149
 #, kde-format
-msgid "Uncertainty"
-msgstr ""
-
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:149
-#, kde-format
 msgid "Uncertainty, %"
 msgstr ""
 
@@ -14422,23 +14548,6 @@ msgstr ""
 #| msgid "Statistics"
 msgid "t statistic"
 msgstr "Štatistika"
-
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:150
-#, fuzzy, kde-format
-#| msgid "Power"
-msgid "Lower"
-msgstr "Sila"
-
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:150
-#, fuzzy, kde-format
-#| msgid "Upper limit"
-msgid "Upper"
-msgstr "Horný limit"
-
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:181
-#, kde-format
-msgid "test"
-msgstr "test"
 
 #. i18n: ectx: property (text), widget (QLabel, lDataSourceCurve)
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:400
@@ -14476,18 +14585,18 @@ msgstr "&Stupeň"
 msgid "Number of peaks:"
 msgstr "Počet bodov"
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1181
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1180
 #, fuzzy, kde-format
 #| msgid "status"
 msgid "Fit status: %1"
 msgstr "Stav"
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1359
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1358
 #, kde-format
 msgid "%1 % lower confidence level"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1360
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1359
 #, kde-format
 msgid "%1 % upper confidence level"
 msgstr ""
@@ -18874,14 +18983,6 @@ msgstr "Užívateľ:"
 msgid "Password:"
 msgstr "Heslo:"
 
-#. i18n: ectx: property (text), widget (QPushButton, bTest)
-#. i18n: ectx: property (text), widget (QPushButton, bTestConnection)
-#: src/kdefrontend/ui/datasources/databasemanagerwidget.ui:263
-#: src/kdefrontend/ui/datasources/mqttconnectionmanagerwidget.ui:168
-#, fuzzy, kde-format
-msgid "Test"
-msgstr "Test"
-
 #. i18n: ectx: property (title), widget (QGroupBox, gbColumnDescriptions)
 #: src/kdefrontend/ui/datasources/datasetmetadatamanagerwidget.ui:34
 #, fuzzy, kde-format
@@ -21767,12 +21868,6 @@ msgid "Goodness of fit"
 msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:551
-#, kde-format
-msgid "Sum of squared residuals"
-msgstr ""
-
-#. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:561
 #, kde-format
 msgid "Residual mean square"
@@ -21782,18 +21877,6 @@ msgstr ""
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:571
 #, kde-format
 msgid "Root mean square deviation (RMSD, SD)"
-msgstr ""
-
-#. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:581
-#, kde-format
-msgid "Coefficient of determination"
-msgstr ""
-
-#. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:591
-#, kde-format
-msgid "Adj. coefficient of determination"
 msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
@@ -24326,6 +24409,9 @@ msgstr ""
 msgid "Unable to open file:"
 msgstr "Nepodarilo sa otvoriť"
 
+#~ msgid "test"
+#~ msgstr "test"
+
 #, fuzzy
 #~| msgid "Output"
 #~ msgid "Debug Output:"
@@ -25900,9 +25986,6 @@ msgstr "Nepodarilo sa otvoriť"
 #~ msgstr[0] "Pridať stĺpec"
 #~ msgstr[1] "%1: pridať %2"
 #~ msgstr[2] "%1: pridať %2"
-
-#~ msgid "Degree"
-#~ msgstr "Stupeň"
 
 #, fuzzy
 #~| msgid "%1: add %2"

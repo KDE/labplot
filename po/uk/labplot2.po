@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-10 02:04+0000\n"
+"POT-Creation-Date: 2024-06-12 01:46+0000\n"
 "PO-Revision-Date: 2024-06-10 06:47+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian\n"
@@ -1190,6 +1190,7 @@ msgstr "Не вдалося відкрити пристрій або файл а
 #: src/backend/datasources/filters/AsciiFilter.cpp:1512
 #: src/backend/datasources/filters/AsciiFilter.cpp:2067
 #: src/backend/datasources/filters/QJsonModel.cpp:133
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1880
 #: src/commonfrontend/matrix/MatrixView.cpp:620
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2384
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2405
@@ -3036,8 +3037,8 @@ msgid "Energy 1 erg"
 msgstr "Енергія у один ерг"
 
 #: src/backend/gsl/errors.h:20
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1968
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1180
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2060
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1179
 #, kde-format
 msgid "Success"
 msgstr "Успіх"
@@ -5840,7 +5841,7 @@ msgstr "Не вдалося експортувати"
 msgid "Failed to open '%1' for writing."
 msgstr "Не вдалося відкрити «%1» для читання."
 
-#: src/backend/note/Note.cpp:160
+#: src/backend/note/Note.cpp:161
 #, kde-format
 msgid "no note element found"
 msgstr "не знайдено елемента нотатки"
@@ -6177,6 +6178,7 @@ msgstr "Статистика (розподіли)"
 
 #: src/backend/nsl/nsl_fit.c:24
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:577
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1866
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:551
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1226
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:242
@@ -8992,37 +8994,172 @@ msgstr "%1: встановити параметри і виконати дифе
 msgid "%1: set equation"
 msgstr "%1: встановити рівняння"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:928
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:929
 #, kde-format
 msgid "%1: data source histogram changed"
 msgstr "%1: змінено гістограму джерела даних"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:940
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:941
 #, kde-format
 msgid "%1: assign x-error"
 msgstr "%1: призначити похибку за x"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:955
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:956
 #, kde-format
 msgid "%1: assign y-error"
 msgstr "%1: призначити похибку за y"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:971
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:972
 #, kde-format
 msgid "%1: set fit options and perform the fit"
 msgstr "%1: встановити параметри наближення та виконати його"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2154
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1818
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:3086
+#, fuzzy, kde-format
+#| msgid "Fit results"
+msgid "Fit Results"
+msgstr "Результати апроксимації"
+
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1842
+#, kde-format
+msgid "Nonlinear Fit to X/Y data"
+msgstr ""
+
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1848
+#, kde-format
+msgid "MODEL"
+msgstr ""
+
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1852
+#, fuzzy, kde-format
+#| msgid "Degree:"
+msgid "Degree"
+msgstr "Порядок:"
+
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1857
+#, kde-format
+msgid "Peaks"
+msgstr ""
+
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1876
+#, kde-format
+msgid "PARAMETERS"
+msgstr ""
+
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1880
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:149
+#, kde-format
+msgid "Uncertainty"
+msgstr "Невизначеність"
+
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1880
+#, fuzzy, kde-format
+#| msgid "Uncertainty, %"
+msgid "Uncertainty,%"
+msgstr "Невизначеність, %"
+
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1880
+#, fuzzy, kde-format
+#| msgid "t statistic"
+msgid "t Statistic"
+msgstr "t-статистика"
+
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1881
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:150
+#, kde-format
+msgid "Lower"
+msgstr "Нижній"
+
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1881
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:150
+#, kde-format
+msgid "Upper"
+msgstr "Верхній"
+
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1897
+#, kde-format
+msgid "GOODNESS OF FIT"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1899
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:551
+#, kde-format
+msgid "Sum of squared residuals"
+msgstr "Сума квадратів похибок"
+
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1900
+#, fuzzy, kde-format
+#| msgid "Residual mean square"
+msgid "Residuals mean square"
+msgstr "Середньоквадратичне відхилення"
+
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1901
+#, fuzzy, kde-format
+#| msgid "Root mean square deviation (RMSD, SD)"
+msgid "Root mean square deviation"
+msgstr "Корінь із середньоквадратичного відхилення (СКВ)"
+
+#. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1902
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:581
+#, kde-format
+msgid "Coefficient of determination"
+msgstr "Коефіцієнт визначеності"
+
+#. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1903
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:591
+#, kde-format
+msgid "Adj. coefficient of determination"
+msgstr "Кор. коефіцієнт визначеності"
+
+#. i18n: ectx: property (text), widget (QPushButton, bTest)
+#. i18n: ectx: property (text), widget (QPushButton, bTestConnection)
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1904
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:181
+#: src/kdefrontend/ui/datasources/databasemanagerwidget.ui:263
+#: src/kdefrontend/ui/datasources/mqttconnectionmanagerwidget.ui:168
+#, kde-format
+msgid "Test"
+msgstr "Перевірити"
+
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1905
+#, fuzzy, kde-format
+#| msgid "Test"
+msgid "F-Test"
+msgstr "Перевірити"
+
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1907
+#, fuzzy, kde-format
+#| msgid "Mean absolute error (MAE)"
+msgid "Mean absolute error"
+msgstr "Середня абсолютна похибка (САП)"
+
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1908
+#, fuzzy, kde-format
+#| msgid "Akaike information criterion (AIC)"
+msgid "Akaike information criterion"
+msgstr "Інформаційний критерій Акаїке (ІКА)"
+
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1909
+#, fuzzy, kde-format
+#| msgid "Bayesian information criterion (BIC)"
+msgid "Bayesian information criterion"
+msgstr "Інформаційний критерій Беєса (ІКБ)"
+
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2246
 #, kde-format
 msgid "Model has no parameters."
 msgstr "Модель не має параметрів."
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2161
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2253
 #, kde-format
 msgid "Not sufficient weight data points provided."
 msgstr "Надано недостатню кількість точок даних для зважування."
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2238
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2330
 #: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:175
 #: src/backend/worksheet/plots/cartesian/XYFourierTransformCurve.cpp:125
 #: src/backend/worksheet/plots/cartesian/XYHilbertTransformCurve.cpp:132
@@ -9030,7 +9167,7 @@ msgstr "Надано недостатню кількість точок дани
 msgid "No data points available."
 msgstr "Немає доступних точок даних."
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2245
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2337
 #, kde-format
 msgid ""
 "The number of data points (%1) must be greater than or equal to the number "
@@ -9039,7 +9176,7 @@ msgstr ""
 "Кількість точок даних (%1) має бути більшою або рівною кількості параметрів "
 "(%2)."
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2252
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2344
 #, kde-format
 msgid "Fit model not specified."
 msgstr "Не вказано модель апроксимації."
@@ -13276,17 +13413,17 @@ msgid "Expand all curves"
 msgstr "Розгорнути всі криві"
 
 #: src/kdefrontend/dockwidgets/CursorDock.cpp:148
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1312
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1318
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1324
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1311
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1317
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1323
 #, kde-format
 msgid "Copy Selection"
 msgstr "Копіювати позначене"
 
 #: src/kdefrontend/dockwidgets/CursorDock.cpp:149
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1313
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1319
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1325
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1312
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1318
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1324
 #, kde-format
 msgid "Copy All"
 msgstr "Копіювати все"
@@ -13784,11 +13921,6 @@ msgstr "t, макс."
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:149
 #, kde-format
-msgid "Uncertainty"
-msgstr "Невизначеність"
-
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:149
-#, kde-format
 msgid "Uncertainty, %"
 msgstr "Невизначеність, %"
 
@@ -13796,21 +13928,6 @@ msgstr "Невизначеність, %"
 #, kde-format
 msgid "t statistic"
 msgstr "t-статистика"
-
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:150
-#, kde-format
-msgid "Lower"
-msgstr "Нижній"
-
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:150
-#, kde-format
-msgid "Upper"
-msgstr "Верхній"
-
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:181
-#, kde-format
-msgid "test"
-msgstr "перевірка"
 
 #. i18n: ectx: property (text), widget (QLabel, lDataSourceCurve)
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:400
@@ -13844,17 +13961,17 @@ msgstr "Порядок:"
 msgid "Number of peaks:"
 msgstr "Кількість піків:"
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1181
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1180
 #, kde-format
 msgid "Fit status: %1"
 msgstr "Стан апроксимації: %1"
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1359
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1358
 #, kde-format
 msgid "%1 % lower confidence level"
 msgstr "%1 % нижній довірчий рівень"
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1360
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1359
 #, kde-format
 msgid "%1 % upper confidence level"
 msgstr "%1 % верхній довірчий рівень"
@@ -18054,14 +18171,6 @@ msgstr "Користувач:"
 msgid "Password:"
 msgstr "Пароль:"
 
-#. i18n: ectx: property (text), widget (QPushButton, bTest)
-#. i18n: ectx: property (text), widget (QPushButton, bTestConnection)
-#: src/kdefrontend/ui/datasources/databasemanagerwidget.ui:263
-#: src/kdefrontend/ui/datasources/mqttconnectionmanagerwidget.ui:168
-#, kde-format
-msgid "Test"
-msgstr "Перевірити"
-
 #. i18n: ectx: property (title), widget (QGroupBox, gbColumnDescriptions)
 #: src/kdefrontend/ui/datasources/datasetmetadatamanagerwidget.ui:34
 #, kde-format
@@ -20775,12 +20884,6 @@ msgid "Goodness of fit"
 msgstr "Якість апроксимації"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:551
-#, kde-format
-msgid "Sum of squared residuals"
-msgstr "Сума квадратів похибок"
-
-#. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:561
 #, kde-format
 msgid "Residual mean square"
@@ -20791,18 +20894,6 @@ msgstr "Середньоквадратичне відхилення"
 #, kde-format
 msgid "Root mean square deviation (RMSD, SD)"
 msgstr "Корінь із середньоквадратичного відхилення (СКВ)"
-
-#. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:581
-#, kde-format
-msgid "Coefficient of determination"
-msgstr "Коефіцієнт визначеності"
-
-#. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:591
-#, kde-format
-msgid "Adj. coefficient of determination"
-msgstr "Кор. коефіцієнт визначеності"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:611
@@ -23213,6 +23304,9 @@ msgstr "Не вдалося обробити convert, код виходу ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Не вдалося відкрити файл:"
+
+#~ msgid "test"
+#~ msgstr "перевірка"
 
 #~ msgid "Debug Output:"
 #~ msgstr "Діагностичне виведення:"
