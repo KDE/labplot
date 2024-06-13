@@ -18,6 +18,7 @@ class WorksheetTest : public CommonTest {
 
 private Q_SLOTS:
 	void cursorCurveColor();
+	void exportReplaceExtension();
 };
 
 #endif // WORKSHEETTEST_H

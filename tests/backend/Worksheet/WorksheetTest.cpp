@@ -17,6 +17,7 @@
 #include "backend/worksheet/WorksheetPrivate.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
+#include "kdefrontend/GuiTools.h"
 
 #include <QPen>
 
@@ -65,6 +66,28 @@ void WorksheetTest::cursorCurveColor() {
 		QCOMPARE(treemodel->data(treemodel->index(1, (int)WorksheetPrivate::TreeModelColumn::SIGNALNAME, plotIndex), Qt::BackgroundRole).value<QColor>(),
 				 color);
 	}
+}
+
+/*!
+ * tests the replacement of the file extension when switching between the different formats during the export.
+ */
+// TODO: testing the code in GuiTools only. move it later to another location once we have tests for the common code in the frontend.
+void WorksheetTest::exportReplaceExtension() {
+	QString path = QStringLiteral("/home/user/test_dir/Worksheet");
+	QString extension = QStringLiteral(".pdf");
+	QCOMPARE(GuiTools::replaceExtension(path, extension), QStringLiteral("/home/user/test_dir/Worksheet.pdf"));
+
+	path = QStringLiteral("/home/user/test_dir/Worksheet.pdf");
+	extension = QStringLiteral(".svg");
+	QCOMPARE(GuiTools::replaceExtension(path, extension), QStringLiteral("/home/user/test_dir/Worksheet.svg"));
+
+	path = QStringLiteral("/home/user/test.dir/Worksheet");
+	extension = QStringLiteral(".pdf");
+	QCOMPARE(GuiTools::replaceExtension(path, extension), QStringLiteral("/home/user/test.dir/Worksheet.pdf"));
+
+	path = QStringLiteral("/home/user/test.dir/Worksheet.pdf");
+	extension = QStringLiteral(".svg");
+	QCOMPARE(GuiTools::replaceExtension(path, extension), QStringLiteral("/home/user/test.dir/Worksheet.svg"));
 }
 
 QTEST_MAIN(WorksheetTest)

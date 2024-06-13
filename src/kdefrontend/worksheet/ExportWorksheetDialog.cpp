@@ -66,15 +66,15 @@ ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent)
 	ui->bOpen->setIcon(QIcon::fromTheme(QLatin1String("document-open")));
 
 	// see WorksheetView::ExportFormat
-	ui->cbFormat->addItem(QIcon::fromTheme(QLatin1String("application-pdf")), i18n("Portable Data Format (PDF)"));
-	ui->cbFormat->addItem(QIcon::fromTheme(QLatin1String("image-svg+xml")), i18n("Scalable Vector Graphics (SVG)"));
+	ui->cbFormat->addItem(QIcon::fromTheme(QLatin1String("application-pdf")), i18n("Portable Data Format (PDF)"), QStringLiteral(".pdf"));
+	ui->cbFormat->addItem(QIcon::fromTheme(QLatin1String("image-svg+xml")), i18n("Scalable Vector Graphics (SVG)"), QStringLiteral(".svg"));
 	ui->cbFormat->insertSeparator(3);
-	ui->cbFormat->addItem(QIcon::fromTheme(QLatin1String("image-png")), i18n("Portable Network Graphics (PNG)"));
-	ui->cbFormat->addItem(QIcon::fromTheme(QLatin1String("image-jpeg")), i18n("Joint Photographic Experts Group (JPG)"));
-	ui->cbFormat->addItem(QIcon::fromTheme(QLatin1String("image-bmp")), i18n("Windows Bitmap (BMP)"));
-	ui->cbFormat->addItem(QIcon::fromTheme(QLatin1String("image-x-generic")), i18n("Portable Pixmap (PPM)"));
-	ui->cbFormat->addItem(QIcon::fromTheme(QLatin1String("image-x-generic")), i18n("X11 Bitmap (XBM)"));
-	ui->cbFormat->addItem(QIcon::fromTheme(QLatin1String("image-x-generic")), i18n("X11 Bitmap (XPM)"));
+	ui->cbFormat->addItem(QIcon::fromTheme(QLatin1String("image-png")), i18n("Portable Network Graphics (PNG)"), QStringLiteral(".png"));
+	ui->cbFormat->addItem(QIcon::fromTheme(QLatin1String("image-jpeg")), i18n("Joint Photographic Experts Group (JPG)"), QStringLiteral(".jpg"));
+	ui->cbFormat->addItem(QIcon::fromTheme(QLatin1String("image-bmp")), i18n("Windows Bitmap (BMP)"), QStringLiteral(".bmp"));
+	ui->cbFormat->addItem(QIcon::fromTheme(QLatin1String("image-x-generic")), i18n("Portable Pixmap (PPM)"), QStringLiteral(".ppm"));
+	ui->cbFormat->addItem(QIcon::fromTheme(QLatin1String("image-x-generic")), i18n("X11 Bitmap (XBM)"), QStringLiteral(".xbm"));
+	ui->cbFormat->addItem(QIcon::fromTheme(QLatin1String("image-x-generic")), i18n("X11 Bitmap (XPM)"), QStringLiteral(".xpm"));
 
 	ui->cbExportTo->addItem(i18n("File"));
 	ui->cbExportTo->addItem(i18n("Clipboard"));
@@ -140,17 +140,13 @@ ExportWorksheetDialog::~ExportWorksheetDialog() {
  * is determined that is then used as the default location for the exported file.
  */
 void ExportWorksheetDialog::setProjectFileName(const QString& name) {
-	QDEBUG(Q_FUNC_INFO << ", project file name " << name)
 	if (name.isEmpty())
 		return;
 
-	QFileInfo fi(name);
-	m_projectPath = fi.dir().canonicalPath();
+	m_projectPath = QFileInfo(name).canonicalPath();
 }
 
 void ExportWorksheetDialog::setFileName(const QString& name) {
-	QDEBUG(Q_FUNC_INFO << ", name " << name)
-	QDEBUG(Q_FUNC_INFO << ", m_projectPath " << m_projectPath)
 	if (m_projectPath.isEmpty()) {
 		// no project folder is available (yet), use the last used directory in this dialog
 		KConfigGroup conf = Settings::group(QStringLiteral("ExportWorksheetDialog"));
@@ -317,23 +313,17 @@ void ExportWorksheetDialog::formatChanged(int index) {
 	if (index > 2)
 		index--;
 
-	QStringList extensions;
-	// see WorksheetView::ExportFormat
-	extensions << QLatin1String(".pdf") << QLatin1String(".svg") << QLatin1String(".png") << QLatin1String(".jpg") << QLatin1String(".bmp")
-			   << QLatin1String(".ppm") << QLatin1String(".xbm") << QLatin1String(".xpm");
-	QString path = ui->leFileName->text();
-	int i = path.indexOf(QLatin1Char('.'));
-	if (i == -1)
-		path = path + extensions.at(index);
-	else
-		path = path.left(i) + extensions.at(index);
-
-	ui->leFileName->setText(path);
-
 	// show resolution option for png format
 	bool visible = (index == 2);
 	ui->lResolution->setVisible(visible);
 	ui->cbResolution->setVisible(visible);
+
+	// add/replace the file extension for the current file format
+	const auto& path = ui->leFileName->text();
+	if (!path.isEmpty()) {
+		const auto& extension = ui->cbFormat->currentData().toString();
+		ui->leFileName->setText(GuiTools::replaceExtension(path, extension));
+	}
 }
 
 /*!
