@@ -8908,10 +8908,9 @@ msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1818
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:3086
-#, fuzzy, kde-format
-#| msgid "Results:"
+#, kde-format
 msgid "Fit Results"
-msgstr "Výsledky:"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1842
 #, kde-format
@@ -8924,10 +8923,9 @@ msgid "MODEL"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1852
-#, fuzzy, kde-format
-#| msgid "Degree:"
+#, kde-format
 msgid "Degree"
-msgstr "Stupeň:"
+msgstr "Stupeň"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1857
 #, kde-format
@@ -8946,16 +8944,14 @@ msgid "Uncertainty"
 msgstr "Nepřesnost"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1880
-#, fuzzy, kde-format
-#| msgid "Uncertainty, %"
+#, kde-format
 msgid "Uncertainty,%"
-msgstr "Nepřesnost, %"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1880
-#, fuzzy, kde-format
-#| msgid "Statistics"
+#, kde-format
 msgid "t Statistic"
-msgstr "Statistika"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1881
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:150
@@ -8987,10 +8983,9 @@ msgid "Residuals mean square"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1901
-#, fuzzy, kde-format
-#| msgid "Standard deviation"
+#, kde-format
 msgid "Root mean square deviation"
-msgstr "Směrodatná odchylka"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1902
@@ -9017,16 +9012,14 @@ msgid "Test"
 msgstr "Test"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1905
-#, fuzzy, kde-format
-#| msgid "Test"
+#, kde-format
 msgid "F-Test"
-msgstr "Test"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1907
-#, fuzzy, kde-format
-#| msgid "Median absolute deviation"
+#, kde-format
 msgid "Mean absolute error"
-msgstr "Medián absolutní odchylky"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1908
 #, kde-format
@@ -22832,6 +22825,3 @@ msgstr ""
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Nelze otevřít soubor:"
-
-#~ msgid "test"
-#~ msgstr "test"

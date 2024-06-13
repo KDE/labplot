@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-06-12 01:46+0000\n"
-"PO-Revision-Date: 2024-06-10 12:04+0200\n"
+"PO-Revision-Date: 2024-06-12 10:17+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -8943,20 +8943,19 @@ msgstr "%1: aanpassingsopties instellen en de aanpassing uitvoeren"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1818
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:3086
-#, fuzzy, kde-format
-#| msgid "Fit results"
+#, kde-format
 msgid "Fit Results"
-msgstr "Aanpasresultaten"
+msgstr "Resultaten laten passen"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1842
 #, kde-format
 msgid "Nonlinear Fit to X/Y data"
-msgstr ""
+msgstr "Niet-lineaire fit op X/Y gegevens"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1848
 #, kde-format
 msgid "MODEL"
-msgstr ""
+msgstr "MODEL"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1852
 #, kde-format
@@ -8966,12 +8965,12 @@ msgstr "Graad"
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1857
 #, kde-format
 msgid "Peaks"
-msgstr ""
+msgstr "Pieken"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1876
 #, kde-format
 msgid "PARAMETERS"
-msgstr ""
+msgstr "PARAMETERS"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1880
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:149
@@ -8980,14 +8979,12 @@ msgid "Uncertainty"
 msgstr "Onzekerheid"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1880
-#, fuzzy, kde-format
-#| msgid "Uncertainty, %"
+#, kde-format
 msgid "Uncertainty,%"
-msgstr "Onzekerheid, %"
+msgstr "Onzekerheid,%"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1880
-#, fuzzy, kde-format
-#| msgid "t statistic"
+#, kde-format
 msgid "t Statistic"
 msgstr "t-statistiek"
 
@@ -9006,7 +9003,7 @@ msgstr "Boven"
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1897
 #, kde-format
 msgid "GOODNESS OF FIT"
-msgstr ""
+msgstr "KWALITEIT VAN FIT"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1899
@@ -9016,16 +9013,14 @@ msgid "Sum of squared residuals"
 msgstr "Som kwadraten restwaarden"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1900
-#, fuzzy, kde-format
-#| msgid "Residual mean square"
+#, kde-format
 msgid "Residuals mean square"
 msgstr "Restwaarde gemiddeld kwadraat"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1901
-#, fuzzy, kde-format
-#| msgid "Root mean square deviation (RMSD, SD)"
+#, kde-format
 msgid "Root mean square deviation"
-msgstr "Deviatie wortel kwadratisch gemiddelde (RMSD, SD)"
+msgstr "Deviatie wortel kwadratisch gemiddelde"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1902
@@ -9052,28 +9047,24 @@ msgid "Test"
 msgstr "Test"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1905
-#, fuzzy, kde-format
-#| msgid "Test"
+#, kde-format
 msgid "F-Test"
-msgstr "Test"
+msgstr "F-toets"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1907
-#, fuzzy, kde-format
-#| msgid "mean absolute error:"
+#, kde-format
 msgid "Mean absolute error"
-msgstr "gemiddelde absolute fout:"
+msgstr "Gemiddelde absolute fout"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1908
-#, fuzzy, kde-format
-#| msgid "Akaike information criterion:"
+#, kde-format
 msgid "Akaike information criterion"
-msgstr "Informatiecriterium Akaike:"
+msgstr "Informatiecriterium Akaike"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1909
-#, fuzzy, kde-format
-#| msgid "Bayesian information criterion:"
+#, kde-format
 msgid "Bayesian information criterion"
-msgstr "Informatiecriterium Bayesian:"
+msgstr "Informatiecriterium Bayesian"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2246
 #, kde-format

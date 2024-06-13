@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-06-12 01:46+0000\n"
-"PO-Revision-Date: 2024-06-10 06:47+0300\n"
+"PO-Revision-Date: 2024-06-12 18:51+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian\n"
 "Language: uk\n"
@@ -9016,36 +9016,34 @@ msgstr "%1: встановити параметри наближення та в
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1818
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:3086
-#, fuzzy, kde-format
-#| msgid "Fit results"
+#, kde-format
 msgid "Fit Results"
 msgstr "Результати апроксимації"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1842
 #, kde-format
 msgid "Nonlinear Fit to X/Y data"
-msgstr ""
+msgstr "Нелінійна апроксимація даних X/Y"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1848
 #, kde-format
 msgid "MODEL"
-msgstr ""
+msgstr "МОДЕЛЬ"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1852
-#, fuzzy, kde-format
-#| msgid "Degree:"
+#, kde-format
 msgid "Degree"
-msgstr "Порядок:"
+msgstr "Порядок"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1857
 #, kde-format
 msgid "Peaks"
-msgstr ""
+msgstr "Піки"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1876
 #, kde-format
 msgid "PARAMETERS"
-msgstr ""
+msgstr "ПАРАМЕТРИ"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1880
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:149
@@ -9054,14 +9052,12 @@ msgid "Uncertainty"
 msgstr "Невизначеність"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1880
-#, fuzzy, kde-format
-#| msgid "Uncertainty, %"
+#, kde-format
 msgid "Uncertainty,%"
 msgstr "Невизначеність, %"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1880
-#, fuzzy, kde-format
-#| msgid "t statistic"
+#, kde-format
 msgid "t Statistic"
 msgstr "t-статистика"
 
@@ -9080,7 +9076,7 @@ msgstr "Верхній"
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1897
 #, kde-format
 msgid "GOODNESS OF FIT"
-msgstr ""
+msgstr "ЯКІСТЬ АПРОКСИМАЦІЇ"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1899
@@ -9090,16 +9086,14 @@ msgid "Sum of squared residuals"
 msgstr "Сума квадратів похибок"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1900
-#, fuzzy, kde-format
-#| msgid "Residual mean square"
+#, kde-format
 msgid "Residuals mean square"
 msgstr "Середньоквадратичне відхилення"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1901
-#, fuzzy, kde-format
-#| msgid "Root mean square deviation (RMSD, SD)"
+#, kde-format
 msgid "Root mean square deviation"
-msgstr "Корінь із середньоквадратичного відхилення (СКВ)"
+msgstr "Корінь із середньоквадратичного відхилення"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1902
@@ -9126,28 +9120,24 @@ msgid "Test"
 msgstr "Перевірити"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1905
-#, fuzzy, kde-format
-#| msgid "Test"
+#, kde-format
 msgid "F-Test"
-msgstr "Перевірити"
+msgstr "перевірка Фішера"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1907
-#, fuzzy, kde-format
-#| msgid "Mean absolute error (MAE)"
+#, kde-format
 msgid "Mean absolute error"
-msgstr "Середня абсолютна похибка (САП)"
+msgstr "Середня абсолютна похибка"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1908
-#, fuzzy, kde-format
-#| msgid "Akaike information criterion (AIC)"
+#, kde-format
 msgid "Akaike information criterion"
-msgstr "Інформаційний критерій Акаїке (ІКА)"
+msgstr "Інформаційний критерій Акаїке"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1909
-#, fuzzy, kde-format
-#| msgid "Bayesian information criterion (BIC)"
+#, kde-format
 msgid "Bayesian information criterion"
-msgstr "Інформаційний критерій Беєса (ІКБ)"
+msgstr "Інформаційний критерій Беєса"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2246
 #, kde-format

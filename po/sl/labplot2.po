@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-06-12 01:46+0000\n"
-"PO-Revision-Date: 2024-06-10 07:22+0200\n"
+"PO-Revision-Date: 2024-06-12 07:42+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -8982,36 +8982,34 @@ msgstr "%1: nastavite možnosti prileganja in opravite prileganje"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1818
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:3086
-#, fuzzy, kde-format
-#| msgid "Fit results"
+#, kde-format
 msgid "Fit Results"
-msgstr "Rezultati prileganja"
+msgstr "Prilagodi rezultate"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1842
 #, kde-format
 msgid "Nonlinear Fit to X/Y data"
-msgstr ""
+msgstr "Nelinearno prilagajanje podatkov X/Y"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1848
 #, kde-format
 msgid "MODEL"
-msgstr ""
+msgstr "MODEL"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1852
-#, fuzzy, kde-format
-#| msgid "Degree:"
+#, kde-format
 msgid "Degree"
-msgstr "Stopinja:"
+msgstr "Stopinja"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1857
 #, kde-format
 msgid "Peaks"
-msgstr ""
+msgstr "Vrhovi"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1876
 #, kde-format
 msgid "PARAMETERS"
-msgstr ""
+msgstr "PARAMETRI"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1880
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:149
@@ -9020,14 +9018,12 @@ msgid "Uncertainty"
 msgstr "Negotovost"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1880
-#, fuzzy, kde-format
-#| msgid "Uncertainty, %"
+#, kde-format
 msgid "Uncertainty,%"
 msgstr "Negotovost, %"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1880
-#, fuzzy, kde-format
-#| msgid "t statistic"
+#, kde-format
 msgid "t Statistic"
 msgstr "t-statistika"
 
@@ -9046,26 +9042,24 @@ msgstr "Zgornja"
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1897
 #, kde-format
 msgid "GOODNESS OF FIT"
-msgstr ""
+msgstr "PRILEGANJE"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1899
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:551
 #, kde-format
 msgid "Sum of squared residuals"
-msgstr "Vsota ostankov na kvadrat"
+msgstr "Vsota kvadratov ostankov"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1900
-#, fuzzy, kde-format
-#| msgid "Residual mean square"
+#, kde-format
 msgid "Residuals mean square"
-msgstr "Kvadratna vrednost sredine preostanka"
+msgstr "Kvadrat povprečja ostankov"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1901
-#, fuzzy, kde-format
-#| msgid "Root mean square deviation (RMSD, SD)"
+#, kde-format
 msgid "Root mean square deviation"
-msgstr "Kvadratni koren srednjega odklona (RMSD, SD)"
+msgstr "Koren srednje kvadratne deviacije"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1902
@@ -9092,28 +9086,24 @@ msgid "Test"
 msgstr "Preizkusi"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1905
-#, fuzzy, kde-format
-#| msgid "Test"
+#, kde-format
 msgid "F-Test"
-msgstr "Preizkusi"
+msgstr "F-Test"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1907
-#, fuzzy, kde-format
-#| msgid "Mean absolute error (MAE)"
+#, kde-format
 msgid "Mean absolute error"
-msgstr "Srednja absolutna napaka (MAE)"
+msgstr "Srednja absolutna napaka"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1908
-#, fuzzy, kde-format
-#| msgid "Akaike information criterion (AIC)"
+#, kde-format
 msgid "Akaike information criterion"
-msgstr "Akaikejev informacijski kriterij (AIC)"
+msgstr "Akaikejev informacijski kriterij"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1909
-#, fuzzy, kde-format
-#| msgid "Bayesian information criterion (BIC)"
+#, kde-format
 msgid "Bayesian information criterion"
-msgstr "Bayesovski informacijski kriterij (BIC)"
+msgstr "Bayesov informacijski kriterij"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2246
 #, kde-format
