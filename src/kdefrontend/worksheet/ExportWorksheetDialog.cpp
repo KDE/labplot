@@ -66,13 +66,23 @@ ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent)
 	ui->bOpen->setIcon(QIcon::fromTheme(QLatin1String("document-open")));
 
 	// see WorksheetView::ExportFormat
-	ui->cbFormat->addItem(QIcon::fromTheme(QLatin1String("application-pdf")), i18n("Portable Data Format (PDF)"), static_cast<int>(WorksheetView::ExportFormat::PDF));
-	ui->cbFormat->addItem(QIcon::fromTheme(QLatin1String("image-svg+xml")), i18n("Scalable Vector Graphics (SVG)"), static_cast<int>(WorksheetView::ExportFormat::SVG));
+	ui->cbFormat->addItem(QIcon::fromTheme(QLatin1String("application-pdf")),
+						  i18n("Portable Data Format (PDF)"),
+						  static_cast<int>(WorksheetView::ExportFormat::PDF));
+	ui->cbFormat->addItem(QIcon::fromTheme(QLatin1String("image-svg+xml")),
+						  i18n("Scalable Vector Graphics (SVG)"),
+						  static_cast<int>(WorksheetView::ExportFormat::SVG));
 	ui->cbFormat->insertSeparator(3);
-	ui->cbFormat->addItem(QIcon::fromTheme(QLatin1String("image-png")), i18n("Portable Network Graphics (PNG)"), static_cast<int>(WorksheetView::ExportFormat::PNG));
-	ui->cbFormat->addItem(QIcon::fromTheme(QLatin1String("image-jpeg")), i18n("Joint Photographic Experts Group (JPG)"), static_cast<int>(WorksheetView::ExportFormat::JPG));
+	ui->cbFormat->addItem(QIcon::fromTheme(QLatin1String("image-png")),
+						  i18n("Portable Network Graphics (PNG)"),
+						  static_cast<int>(WorksheetView::ExportFormat::PNG));
+	ui->cbFormat->addItem(QIcon::fromTheme(QLatin1String("image-jpeg")),
+						  i18n("Joint Photographic Experts Group (JPG)"),
+						  static_cast<int>(WorksheetView::ExportFormat::JPG));
 	ui->cbFormat->addItem(QIcon::fromTheme(QLatin1String("image-bmp")), i18n("Windows Bitmap (BMP)"), static_cast<int>(WorksheetView::ExportFormat::BMP));
-	ui->cbFormat->addItem(QIcon::fromTheme(QLatin1String("image-x-generic")), i18n("Portable Pixmap (PPM)"), static_cast<int>(WorksheetView::ExportFormat::PPM));
+	ui->cbFormat->addItem(QIcon::fromTheme(QLatin1String("image-x-generic")),
+						  i18n("Portable Pixmap (PPM)"),
+						  static_cast<int>(WorksheetView::ExportFormat::PPM));
 	ui->cbFormat->addItem(QIcon::fromTheme(QLatin1String("image-x-generic")), i18n("X11 Bitmap (XBM)"), static_cast<int>(WorksheetView::ExportFormat::XBM));
 	ui->cbFormat->addItem(QIcon::fromTheme(QLatin1String("image-x-generic")), i18n("X11 Bitmap (XPM)"), static_cast<int>(WorksheetView::ExportFormat::XPM));
 
