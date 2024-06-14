@@ -9020,8 +9020,7 @@ msgid "MODEL"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1852
-#, fuzzy, kde-format
-#| msgid "Degree"
+#, kde-format
 msgid "Degree"
 msgstr "Degré"
 
