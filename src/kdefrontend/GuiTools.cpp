@@ -369,3 +369,18 @@ QImage GuiTools::imageFromPDFData(const QByteArray& data, double zoomFactor) {
 	return {};
 #endif
 }
+
+/*
+ * replaces the file extension in the path name \c path with \c extension or adds it if not extension available yet.
+ */
+QString GuiTools::replaceExtension(const QString& path, const QString& extension) {
+	const int lastSeparatorIndex = path.lastIndexOf(QDir::separator());
+	const int index = path.lastIndexOf(QLatin1Char('.'));
+	QString newPath;
+	if (index < lastSeparatorIndex) // dot in front of the last separator, is part of the path and not of the file name -> no extension available yet
+		newPath = path + extension;
+	else
+		newPath = path.left(index) + extension;
+
+	return newPath;
+}

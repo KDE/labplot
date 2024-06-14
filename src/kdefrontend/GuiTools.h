@@ -39,6 +39,8 @@ public:
 	static QString openImageFile(const QString&);
 	static QImage importPDFFile(const QString&);
 	static QImage imageFromPDFData(const QByteArray&, double zoomFactor = 1.);
+
+	static QString replaceExtension(const QString& fileName, const QString& extension);
 };
 
 #endif // GUITOOLS_H

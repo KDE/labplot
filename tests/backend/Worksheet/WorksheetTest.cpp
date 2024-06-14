@@ -17,6 +17,7 @@
 #include "backend/worksheet/WorksheetPrivate.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
+#include "kdefrontend/GuiTools.h"
 
 #include <QPen>
 
@@ -65,6 +66,52 @@ void WorksheetTest::cursorCurveColor() {
 		QCOMPARE(treemodel->data(treemodel->index(1, (int)WorksheetPrivate::TreeModelColumn::SIGNALNAME, plotIndex), Qt::BackgroundRole).value<QColor>(),
 				 color);
 	}
+}
+
+/*!
+ * tests the replacement of the file extension when switching between the different formats during the export.
+ */
+// TODO: testing the code in GuiTools only. move it later to another location once we have tests for the common code in the frontend.
+void WorksheetTest::exportReplaceExtension() {
+	// from no extension to .pdf, no dot character in the path
+	QString extension = QStringLiteral(".pdf");
+#if defined(Q_OS_WIN)
+	QString path = QStringLiteral("C:\\Users\\user\\test_dir\\Worksheet");
+	QCOMPARE(GuiTools::replaceExtension(path, extension), QStringLiteral("C:\\Users\\user\\test_dir\\Worksheet.pdf"));
+#else
+	QString path = QStringLiteral("/home/user/test_dir/Worksheet");
+	QCOMPARE(GuiTools::replaceExtension(path, extension), QStringLiteral("/home/user/test_dir/Worksheet.pdf"));
+#endif
+
+	// from .pdf to .svg, no dot character in the path
+	extension = QStringLiteral(".svg");
+#if defined(Q_OS_WIN)
+	path = QStringLiteral("C:\\Users\\user\\test_dir\\Worksheet.pdf");
+	QCOMPARE(GuiTools::replaceExtension(path, extension), QStringLiteral("C:\\Users\\user\\test_dir\\Worksheet.svg"));
+#else
+	path = QStringLiteral("/home/user/test_dir/Worksheet.pdf");
+	QCOMPARE(GuiTools::replaceExtension(path, extension), QStringLiteral("/home/user/test_dir/Worksheet.svg"));
+#endif
+
+	// from no extension to .pdf, dot character in the path
+	extension = QStringLiteral(".pdf");
+#if defined(Q_OS_WIN)
+	path = QStringLiteral("C:\\Users\\user\\test.dir\\Worksheet");
+	QCOMPARE(GuiTools::replaceExtension(path, extension), QStringLiteral("C:\\Users\\user\\test.dir\\Worksheet.pdf"));
+#else
+	path = QStringLiteral("/home/user/test.dir/Worksheet");
+	QCOMPARE(GuiTools::replaceExtension(path, extension), QStringLiteral("/home/user/test.dir/Worksheet.pdf"));
+#endif
+
+	// from .pdf to .svg, dot character in the path
+	extension = QStringLiteral(".svg");
+#if defined(Q_OS_WIN)
+	path = QStringLiteral("C:\\Users\\user\\test.dir\\Worksheet.pdf");
+	QCOMPARE(GuiTools::replaceExtension(path, extension), QStringLiteral("C:\\Users\\user\\test.dir\\Worksheet.svg"));
+#else
+	path = QStringLiteral("/home/user/test.dir/Worksheet.pdf");
+	QCOMPARE(GuiTools::replaceExtension(path, extension), QStringLiteral("/home/user/test.dir/Worksheet.svg"));
+#endif
 }
 
 QTEST_MAIN(WorksheetTest)

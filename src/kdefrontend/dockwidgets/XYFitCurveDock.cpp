@@ -1180,7 +1180,7 @@ void XYFitCurveDock::recalculateClicked() {
 		Q_EMIT info(i18n("Fit status: %1", fitResult.status));
 		if (!m_messageWidget) {
 			m_messageWidget = new KMessageWidget(this);
-			uiGeneralTab.gridLayout_2->addWidget(m_messageWidget, 25, 3, 1, 4);
+			uiGeneralTab.gridLayout_2->addWidget(m_messageWidget, 26, 2, 1, 2);
 		}
 
 		if (!fitResult.valid)

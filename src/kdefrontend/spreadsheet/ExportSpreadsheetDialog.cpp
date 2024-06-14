@@ -91,7 +91,7 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent)
 
 	ui->leFileName->setFocus();
 
-	const QString textNumberFormatShort = i18n("This option determines how the convert numbers to strings.");
+	const QString textNumberFormatShort = i18n("This option determines how to convert numbers to strings.");
 	ui->lDecimalSeparator->setToolTip(textNumberFormatShort);
 	ui->lDecimalSeparator->setToolTip(textNumberFormatShort);
 
@@ -167,8 +167,7 @@ void ExportSpreadsheetDialog::setProjectFileName(const QString& name) {
 	if (name.isEmpty())
 		return;
 
-	QFileInfo fi(name);
-	m_projectPath = fi.dir().canonicalPath();
+	m_projectPath = QFileInfo(name).canonicalPath();
 }
 
 void ExportSpreadsheetDialog::setFileName(const QString& name) {
@@ -399,27 +398,11 @@ void ExportSpreadsheetDialog::selectFile() {
 	called when the output format was changed. Adjusts the extension for the specified file.
  */
 void ExportSpreadsheetDialog::formatChanged(int index) {
-	QStringList extensions;
-	extensions << QStringLiteral(".txt") << QStringLiteral(".tex");
-#ifdef HAVE_FITS
-	extensions << QStringLiteral(".fits");
-#endif
-#ifdef HAVE_QXLSX
-	extensions << QStringLiteral(".xlsx");
-#endif
-	extensions << QStringLiteral(".db");
-	QString path = ui->leFileName->text();
-	int i = path.indexOf(QLatin1Char('.'));
-	if (index != -1) {
-		if (i == -1)
-			path = path + extensions.at(index);
-		else
-			path = path.left(i) + extensions.at(index);
-	}
-
 	const auto format = Format(ui->cbFormat->itemData(ui->cbFormat->currentIndex()).toInt());
+	QString extension;
 	switch (format) {
 	case Format::LaTeX:
+		extension = QStringLiteral(".tex");
 		ui->cbSeparator->hide();
 		ui->lSeparator->hide();
 		ui->lDecimalSeparator->hide();
@@ -454,6 +437,7 @@ void ExportSpreadsheetDialog::formatChanged(int index) {
 
 		break;
 	case Format::FITS:
+		extension = QStringLiteral(".fits");
 		ui->lCaptions->hide();
 		ui->lEmptyRows->hide();
 		ui->lExportArea->hide();
@@ -486,6 +470,7 @@ void ExportSpreadsheetDialog::formatChanged(int index) {
 
 		break;
 	case Format::SQLite:
+		extension = QStringLiteral(".db");
 		ui->cbSeparator->hide();
 		ui->lSeparator->hide();
 		ui->lDecimalSeparator->hide();
@@ -517,6 +502,7 @@ void ExportSpreadsheetDialog::formatChanged(int index) {
 
 		break;
 	case Format::XLSX:
+		extension = QStringLiteral(".xlsx");
 		ui->cbSeparator->hide();
 		ui->lSeparator->hide();
 		ui->lDecimalSeparator->hide();
@@ -544,6 +530,7 @@ void ExportSpreadsheetDialog::formatChanged(int index) {
 		ui->chkColumnsAsUnits->hide();
 		break;
 	case Format::ASCII:
+		extension = QStringLiteral(".txt");
 		ui->cbSeparator->show();
 		ui->lSeparator->show();
 		ui->lDecimalSeparator->show();
@@ -577,7 +564,11 @@ void ExportSpreadsheetDialog::formatChanged(int index) {
 	}
 
 	setFormat(static_cast<Format>(index));
-	ui->leFileName->setText(path);
+
+	// add/replace the file extension for the current file format
+	const auto& path = ui->leFileName->text();
+	if (!path.isEmpty())
+		ui->leFileName->setText(GuiTools::replaceExtension(path, extension));
 }
 
 void ExportSpreadsheetDialog::setExportSelection(bool enable) {
