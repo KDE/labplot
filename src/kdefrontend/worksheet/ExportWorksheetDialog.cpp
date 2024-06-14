@@ -318,7 +318,7 @@ void ExportWorksheetDialog::formatChanged(int) {
 	const auto format = WorksheetView::ExportFormat(ui->cbFormat->currentData().toInt());
 
 	// show resolution option for png format
-	const bool visible = (ui->cbFormat->currentData().toString() == QStringLiteral(".png"));
+	const bool visible = (format == WorksheetView::ExportFormat::PNG);
 	ui->lResolution->setVisible(visible);
 	ui->cbResolution->setVisible(visible);
 
