@@ -32,6 +32,13 @@
 #include <QScreen>
 #include <QWindow>
 
+namespace {
+enum class ExportLocation {
+	File,
+	Clipboard,
+};
+}
+
 /*!
 	\class ExportWorksheetDialog
 	\brief Dialog for exporting a worksheet to a file.
@@ -86,8 +93,8 @@ ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent)
 	ui->cbFormat->addItem(QIcon::fromTheme(QLatin1String("image-x-generic")), i18n("X11 Bitmap (XBM)"), static_cast<int>(WorksheetView::ExportFormat::XBM));
 	ui->cbFormat->addItem(QIcon::fromTheme(QLatin1String("image-x-generic")), i18n("X11 Bitmap (XPM)"), static_cast<int>(WorksheetView::ExportFormat::XPM));
 
-	ui->cbExportTo->addItem(i18n("File"));
-	ui->cbExportTo->addItem(i18n("Clipboard"));
+	ui->cbExportTo->addItem(i18n("File"), static_cast<int>(ExportLocation::File));
+	ui->cbExportTo->addItem(i18n("Clipboard"), static_cast<int>(ExportLocation::Clipboard));
 
 	ui->cbExportArea->addItem(i18n("Object's Bounding Box"), static_cast<int>(WorksheetView::ExportArea::BoundingBox));
 	ui->cbExportArea->addItem(i18n("Current Selection"), static_cast<int>(WorksheetView::ExportArea::Selection));
@@ -172,7 +179,7 @@ void ExportWorksheetDialog::setFileName(const QString& name) {
 }
 
 QString ExportWorksheetDialog::path() const {
-	if (ui->cbExportTo->currentIndex() == 0)
+	if (ExportLocation(ui->cbExportTo->currentIndex()) == ExportLocation::File)
 		return ui->leFileName->text();
 	return {};
 }
@@ -211,8 +218,7 @@ void ExportWorksheetDialog::slotButtonClicked(QAbstractButton* button) {
 
 // SLOTS
 void ExportWorksheetDialog::okClicked() {
-	if (ui->cbExportTo->currentIndex() == 0 /*export to file*/
-		&& m_askOverwrite && QFile::exists(ui->leFileName->text())) {
+	if (static_cast<ExportLocation>(ui->cbExportTo->currentData().toInt()) == ExportLocation::File && m_askOverwrite && QFile::exists(ui->leFileName->text())) {
 #if KCOREADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
 		int status = KMessageBox::questionTwoActions(this,
 													 i18n("The file already exists. Do you really want to overwrite it?"),
@@ -352,47 +358,63 @@ void ExportWorksheetDialog::formatChanged(int) {
 	}
 
 	const auto& path = ui->leFileName->text();
-	if (!path.isEmpty())
+	if (!path.isEmpty()) {
 		ui->leFileName->setText(GuiTools::replaceExtension(path, extension));
+		// check ok Buttons called automatically
+	} else
+		checkOkButton();
 }
 
 /*!
 	called when the target destination (file or clipboard) format was changed.
  */
 void ExportWorksheetDialog::exportToChanged(int index) {
-	bool toFile = (index == 0);
+	const auto loc = static_cast<ExportLocation>(ui->cbExportTo->itemData(index).toInt());
+
+	bool toFile = (loc == ExportLocation::File);
 	ui->lFileName->setVisible(toFile);
 	ui->leFileName->setVisible(toFile);
 	ui->bOpen->setVisible(toFile);
 
-	if (toFile) {
-		m_okButton->setToolTip(i18n("Export to file and close the dialog."));
-		fileNameChanged(ui->leFileName->text()); // call this to check whether a valid file name was provided
-	} else {
-		m_okButton->setToolTip(i18n("Export to clipboard and close the dialog."));
-		m_okButton->setEnabled(true);
-	}
+	checkOkButton();
 }
 
 void ExportWorksheetDialog::fileNameChanged(const QString& name) {
 	CONDITIONAL_LOCK_RETURN;
 
-	if (name.simplified().isEmpty()) {
-		m_okButton->setEnabled(false);
-		return;
-	}
-	QString path = ui->leFileName->text();
-	int pos = path.lastIndexOf(QLatin1String("/"));
-	if (pos != -1) {
-		QString dir = path.left(pos);
-		bool invalid = !QDir(dir).exists();
-		GuiTools::highlight(ui->leFileName, invalid);
-		if (invalid) {
+	checkOkButton();
+}
+
+void ExportWorksheetDialog::checkOkButton() {
+	const auto loc = static_cast<ExportLocation>(ui->cbExportTo->itemData(ui->cbExportTo->currentIndex()).toInt());
+	if (loc == ExportLocation::Clipboard) {
+		if (WorksheetView::supportsClipboardExport(WorksheetView::ExportFormat(ui->cbFormat->currentData().toInt()))) {
+			m_okButton->setEnabled(true);
+			m_okButton->setToolTip(i18n("Export to clipboard and close the dialog."));
+		} else {
 			m_okButton->setEnabled(false);
+			m_okButton->setToolTip(i18n("Format does not support to export to clipboard. Choose another one."));
+		}
+	} else {
+		auto path = ui->leFileName->text();
+		if (path.simplified().isEmpty()) {
+			m_okButton->setEnabled(false);
+			m_okButton->setToolTip(i18n("Set filename."));
 			return;
 		}
-	}
+		int pos = path.lastIndexOf(QLatin1String("/"));
+		if (pos != -1) {
+			QString dir = path.left(pos);
+			bool invalid = !QDir(dir).exists();
+			GuiTools::highlight(ui->leFileName, invalid);
+			if (invalid) {
+				m_okButton->setEnabled(false);
+				return;
+			}
+		}
 
-	m_askOverwrite = true;
-	m_okButton->setEnabled(true);
+		m_askOverwrite = true;
+		m_okButton->setEnabled(true);
+		m_okButton->setToolTip(i18n("Export to file and close the dialog."));
+	}
 }

@@ -37,7 +37,7 @@ class WorksheetView : public QGraphicsView {
 public:
 	explicit WorksheetView(Worksheet* worksheet);
 
-	enum class ExportFormat { PDF, SVG, PNG, JPG, BMP, PPM, XBM, XPM };
+	enum class ExportFormat { PDF, SVG, PNG, JPG, BMP, PPM, XBM, XPM, Clipboard };
 	enum class GridStyle { NoGrid, Line, Dot };
 	enum class ExportArea { BoundingBox, Selection, Worksheet };
 
@@ -52,6 +52,7 @@ public:
 	enum class MouseMode { Selection, Navigation, ZoomSelection };
 
 	void setScene(QGraphicsScene*);
+	static bool supportsClipboardExport(const ExportFormat format);
 	void exportToFile(const QString&, const ExportFormat, const ExportArea, const bool, const int);
 	void exportToClipboard();
 	void exportToPixmap(QPixmap& pixmap);

@@ -2101,6 +2101,22 @@ void WorksheetView::handleCartesianPlotActions() {
 	}
 }
 
+bool WorksheetView::supportsClipboardExport(const ExportFormat format) {
+	switch (format) {
+	case ExportFormat::PDF:
+	case ExportFormat::SVG:
+		return false;
+	case ExportFormat::PNG:
+	case ExportFormat::JPG:
+	case ExportFormat::BMP:
+	case ExportFormat::PPM:
+	case ExportFormat::XBM:
+	case ExportFormat::XPM:
+		return true;
+	}
+	return false;
+}
+
 void WorksheetView::exportToFile(const QString& path, const ExportFormat format, const ExportArea area, const bool background, const int resolution) {
 	QRectF sourceRect;
 

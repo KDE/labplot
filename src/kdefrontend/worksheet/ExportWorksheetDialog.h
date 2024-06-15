@@ -46,6 +46,7 @@ private:
 	QPushButton* m_cancelButton;
 
 private Q_SLOTS:
+	void checkOkButton();
 	void slotButtonClicked(QAbstractButton*);
 	void okClicked();
 	void toggleOptions();
