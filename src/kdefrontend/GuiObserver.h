@@ -98,6 +98,7 @@ private:
 
 	XYCurveDock* m_xyCurveDock{nullptr};
 	XYEquationCurveDock* m_xyEquationCurveDock{nullptr};
+	XYEquationCurveDock* m_xyEquationCurve2Dock{nullptr};
 
 	// bar plots
 	BarPlotDock* m_barPlotDock{nullptr};
