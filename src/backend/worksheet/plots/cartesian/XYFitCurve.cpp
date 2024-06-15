@@ -241,9 +241,14 @@ void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData, const XYCurve* cu
 			gsl_multifit_linear_free(work);
 			gsl_vector_free(w);
 
+			if (paramStartValues.size() < np) {
+				DEBUG(Q_FUNC_INFO << ", WARNING: start value vector is smaller than np! (" << paramStartValues.size() << " < " << np << ")")
+				paramStartValues.resize(np);
+			}
 			for (int i = 0; i < np; i++) {
-				if (!std::isnan(gsl_vector_get(c, i)))
-					paramStartValues[i] = gsl_vector_get(c, i);
+				const auto value = gsl_vector_get(c, i);
+				if (!std::isnan(value))
+					paramStartValues[i] = value;
 			}
 
 			// results
@@ -2977,8 +2982,6 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("previewEnabled", fitData.previewEnabled, bool);
 			READ_DOUBLE_VALUE("confidenceInterval", fitData.confidenceInterval);
 
-			// set the model expression and the parameter names (can be derived from the saved values for category, type and degree)
-			XYFitCurve::initFitData(d->fitData);
 		} else if (!preview && reader->name() == QLatin1String("paramNames")) { // needed for custom model
 			d->fitData.paramNames.clear();
 		} else if (!preview && reader->name() == QLatin1String("name")) {
@@ -3081,6 +3084,9 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 				return false;
 		}
 	}
+
+	// set the model expression and the parameter names (can be derived from the saved values for category, type and degree)
+	XYFitCurve::initFitData(d->fitData);
 
 	// add result note (not saved in projects)
 	d->resultsNote = new Note(i18n("Fit Results"));
