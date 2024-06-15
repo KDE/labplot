@@ -75,6 +75,7 @@
 #include "kdefrontend/dockwidgets/XYCurveDock.h"
 #include "kdefrontend/dockwidgets/XYDataReductionCurveDock.h"
 #include "kdefrontend/dockwidgets/XYDifferentiationCurveDock.h"
+#include "kdefrontend/dockwidgets/XYEquationCurve2Dock.h"
 #include "kdefrontend/dockwidgets/XYEquationCurveDock.h"
 #include "kdefrontend/dockwidgets/XYFitCurveDock.h"
 #include "kdefrontend/dockwidgets/XYFourierFilterCurveDock.h"
@@ -285,6 +286,11 @@ void GuiObserver::selectedAspectsChanged(const QList<AbstractAspect*>& selectedA
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: XY-Equation"));
 		raiseDockSetupConnect(m_xyEquationCurveDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
 		m_xyEquationCurveDock->setCurves(castList<XYCurve>(selectedAspects));
+		break;
+	case AspectType::XYEquationCurve2:
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: XY-Equation from Curve"));
+		raiseDockSetupConnect(m_xyEquationCurve2Dock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
+		m_xyEquationCurve2Dock->setCurves(castList<XYCurve>(selectedAspects));
 		break;
 	case AspectType::XYDataReductionCurve:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Data Reduction"));
