@@ -54,8 +54,15 @@
  */
 
 AspectTreeModel::AspectTreeModel(AbstractAspect* root, QObject* parent)
-	: QAbstractItemModel(parent)
-	, m_root(root) {
+	: QAbstractItemModel(parent) {
+	setRoot(root);
+}
+
+void AspectTreeModel::setRoot(AbstractAspect* root) {
+	if (m_root)
+		disconnect(m_root, nullptr, this, nullptr);
+
+	m_root = root;
 	connect(m_root, &AbstractAspect::renameRequested, this, &AspectTreeModel::renameRequestedSlot);
 	connect(m_root, &AbstractAspect::aspectDescriptionChanged, this, &AspectTreeModel::aspectDescriptionChanged);
 	connect(m_root,
@@ -103,7 +110,7 @@ void AspectTreeModel::enableShowPlotDesignation(bool value) {
 }
 
 QModelIndex AspectTreeModel::index(int row, int column, const QModelIndex& parent) const {
-	if (!hasIndex(row, column, parent))
+	if (!m_root || !hasIndex(row, column, parent))
 		return QModelIndex{};
 
 	if (!parent.isValid()) {
@@ -456,6 +463,8 @@ QModelIndex AspectTreeModel::modelIndexOfAspect(const AbstractAspect* aspect, in
  */
 QModelIndex AspectTreeModel::modelIndexOfAspect(const QString& path, int column) const {
 	// determine the aspect out of aspect path
+	if (!m_root)
+		return QModelIndex();
 	AbstractAspect* aspect = nullptr;
 	if (m_root->path() != path) {
 		const auto& children = m_root->children<AbstractAspect>(AbstractAspect::ChildIndexFlag::Recursive);

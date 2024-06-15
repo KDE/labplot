@@ -22,6 +22,7 @@ class AspectTreeModel : public QAbstractItemModel {
 
 public:
 	explicit AspectTreeModel(AbstractAspect* root, QObject* parent = nullptr);
+	void setRoot(AbstractAspect*);
 
 	QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const override;
 	QModelIndex parent(const QModelIndex& index) const override;
@@ -63,7 +64,7 @@ private Q_SLOTS:
 	void aspectMoved();
 
 private:
-	AbstractAspect* m_root;
+	AbstractAspect* m_root{nullptr};
 	bool m_readOnly{false};
 	bool m_folderSelectable{true};
 	bool m_plottableColumnsOnly{false};
