@@ -52,7 +52,7 @@ ContentDockWidget* AbstractPart::dockWidget() const {
 	if (!m_dockWidget) {
 		m_dockWidget = new ContentDockWidget(const_cast<AbstractPart*>(this));
 		connect(m_dockWidget, &ads::CDockWidget::closed, [this] {
-			const bool deleteOnClose = Settings::readDockPosBehaviour() == Settings::DockPosBehaviour::AboveLastActive;
+			const bool deleteOnClose = Settings::readDockPosBehavior() == Settings::DockPosBehavior::AboveLastActive;
 			if (deleteOnClose && !m_suppressDeletion) {
 				m_dockWidget->dockManager()->removeDockWidget(m_dockWidget);
 				m_dockWidget = nullptr;

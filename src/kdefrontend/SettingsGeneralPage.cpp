@@ -139,7 +139,7 @@ void SettingsGeneralPage::applySettings() {
 	group.writeEntry(QLatin1String("PerfTrace"), perfTraceEnabled);
 	enablePerfTrace(perfTraceEnabled);
 
-	Settings::writeDockPosBehaviour(static_cast<Settings::DockPosBehaviour>(ui.cbDockWindowPositionReopen->currentData().toInt()));
+	Settings::writeDockPosBehavior(static_cast<Settings::DockPosBehavior>(ui.cbDockWindowPositionReopen->currentData().toInt()));
 }
 
 void SettingsGeneralPage::restoreDefaults() {
@@ -159,7 +159,7 @@ void SettingsGeneralPage::restoreDefaults() {
 	ui.chkCompatible->setChecked(false);
 	ui.chkDebugTrace->setChecked(false);
 	ui.chkPerfTrace->setChecked(false);
-	ui.cbDockWindowPositionReopen->setCurrentIndex(ui.cbDockWindowPositionReopen->findData(static_cast<int>(Settings::DockPosBehaviour::AboveLastActive)));
+	ui.cbDockWindowPositionReopen->setCurrentIndex(ui.cbDockWindowPositionReopen->findData(static_cast<int>(Settings::DockPosBehavior::AboveLastActive)));
 }
 
 void SettingsGeneralPage::loadSettings() {
@@ -183,7 +183,7 @@ void SettingsGeneralPage::loadSettings() {
 #endif
 
 	ui.cbTitleBar->setCurrentIndex(group.readEntry(QLatin1String("TitleBar"), 0));
-	ui.cbDockWindowPositionReopen->setCurrentIndex(ui.cbDockWindowPositionReopen->findData(static_cast<int>(Settings::readDockPosBehaviour())));
+	ui.cbDockWindowPositionReopen->setCurrentIndex(ui.cbDockWindowPositionReopen->findData(static_cast<int>(Settings::readDockPosBehavior())));
 
 	ui.cbUnits->setCurrentIndex(group.readEntry(QLatin1String("Units"), 0));
 	// must be done, because locale.language() will return the default locale if AnyLanguage is passed
@@ -234,8 +234,8 @@ void SettingsGeneralPage::retranslateUi() {
 	ui.lDockWindowPositionReopen->setToolTip(msg);
 	ui.cbDockWindowPositionReopen->setToolTip(msg);
 	ui.cbDockWindowPositionReopen->clear();
-	ui.cbDockWindowPositionReopen->addItem(i18n("Original Position"), static_cast<int>(Settings::DockPosBehaviour::OriginalPos));
-	ui.cbDockWindowPositionReopen->addItem(i18n("On top of the last active Dock Widget"), static_cast<int>(Settings::DockPosBehaviour::AboveLastActive));
+	ui.cbDockWindowPositionReopen->addItem(i18n("Original Position"), static_cast<int>(Settings::DockPosBehavior::OriginalPos));
+	ui.cbDockWindowPositionReopen->addItem(i18n("On top of the last active Dock Widget"), static_cast<int>(Settings::DockPosBehavior::AboveLastActive));
 
 	ui.cbTitleBar->clear();
 	ui.cbTitleBar->addItem(i18n("Show File Path"));
@@ -257,7 +257,7 @@ void SettingsGeneralPage::retranslateUi() {
 
 	msg = i18n(
 		"Save the state (position and geometry) of the docks in the project file. \n"
-		"Determines the default behaviour for new projects. \n"
+		"Determines the default behavior for new projects. \n"
 		"The setting can be changed for every project separately in the project properties.");
 	ui.lSaveDockStates->setToolTip(msg);
 	ui.chkSaveDockStates->setToolTip(msg);
@@ -265,7 +265,7 @@ void SettingsGeneralPage::retranslateUi() {
 	msg = i18n(
 		"Save the results of the calculations in the analysis curves in the project file. \n"
 		"Uncheck this option to reduce the size of the project file at costs of the longer project load times. \n"
-		"Determines the default behaviour for new projects. \n"
+		"Determines the default behavior for new projects. \n"
 		"The setting can be changed for every project separately in the project properties.");
 	ui.lSaveCalculations->setToolTip(msg);
 	ui.chkSaveCalculations->setToolTip(msg);
