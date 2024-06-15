@@ -598,7 +598,7 @@ bool Project::load(const QString& filename, bool preview) {
 		return false;
 	}
 
-	if (reader.hasWarnings()) {
+	if (reader.hasWarnings() && debugTraceEnabled()) {
 		qWarning("The following problems occurred when loading the project file:");
 		const QStringList& warnings = reader.warningStrings();
 		for (const auto& str : warnings)
