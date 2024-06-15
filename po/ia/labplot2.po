@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-12 01:46+0000\n"
+"POT-Creation-Date: 2024-06-15 01:42+0000\n"
 "PO-Revision-Date: 2024-04-30 12:35+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
@@ -405,12 +405,12 @@ msgstr "Ex Base de datos SQL..."
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbExport)
 #: src/backend/core/AbstractPart.cpp:127
-#: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:311
-#: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:316
+#: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:310
+#: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:315
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:23
 #: src/kdefrontend/ui/worksheet/exportworksheetwidget.ui:17
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:213
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:218
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:219
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:224
 #, kde-format
 msgid "Export"
 msgstr "Exporta"
@@ -5735,8 +5735,8 @@ msgid "Text file (*.txt)"
 msgstr "File de texto (*.txt)"
 
 #: src/backend/note/Note.cpp:67
-#: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:385
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:292
+#: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:384
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:294
 #, kde-format
 msgctxt "@title:window"
 msgid "Export to File"
@@ -7546,7 +7546,7 @@ msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTitle)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:165
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5039
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5040
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:483
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:543
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:466
@@ -7715,7 +7715,7 @@ msgstr ""
 #: src/kdefrontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:512
 #: src/kdefrontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:418
 #: src/kdefrontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:407
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:818
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:933
 #: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:486
 #: src/kdefrontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:351
 #: src/kdefrontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:313
@@ -7952,7 +7952,7 @@ msgid "%1: load default theme"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1710
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5342
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5343
 #: src/backend/worksheet/Worksheet.cpp:818
 #, kde-format
 msgid "%1: set theme"
@@ -8975,7 +8975,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1899
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:551
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:618
 #, kde-format
 msgid "Sum of squared residuals"
 msgstr ""
@@ -8993,14 +8993,14 @@ msgstr "Deviation standard"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1902
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:581
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:648
 #, kde-format
 msgid "Coefficient of determination"
 msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1903
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:591
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:658
 #, kde-format
 msgid "Adj. coefficient of determination"
 msgstr ""
@@ -9230,7 +9230,7 @@ msgstr "%1: Disbloca"
 #: src/kdefrontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:83
 #: src/kdefrontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:246
 #: src/kdefrontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:172
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:828
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:969
 #: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:38
 #: src/kdefrontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:110
 #: src/kdefrontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:142
@@ -11465,9 +11465,9 @@ msgstr ""
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:108
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:346
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:130
-#: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:346
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:113
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:245
+#: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:345
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:123
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:251
 #, kde-format
 msgid "Hide Options"
 msgstr ""
@@ -11475,9 +11475,9 @@ msgstr ""
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:108
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:346
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:130
-#: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:346
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:113
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:245
+#: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:345
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:123
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:251
 #, kde-format
 msgid "Show Options"
 msgstr ""
@@ -12845,7 +12845,7 @@ msgstr ""
 #: src/kdefrontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:469
 #: src/kdefrontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:33
 #: src/kdefrontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:165
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:811
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1198
 #: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:334
 #: src/kdefrontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:252
 #: src/kdefrontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:80
@@ -13590,7 +13590,7 @@ msgstr ""
 #: src/kdefrontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:359
 #: src/kdefrontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:452
 #: src/kdefrontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:56
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:129
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:504
 #: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:479
 #: src/kdefrontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:389
 #: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:166
@@ -13606,7 +13606,7 @@ msgstr "Histogramma:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDegree)
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:802
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:287
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1191
 #, kde-format
 msgid "Degree:"
 msgstr "Grado:"
@@ -15889,7 +15889,7 @@ msgstr ""
 
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:94
 #, kde-format
-msgid "This option determines how the convert numbers to strings."
+msgid "This option determines how to convert numbers to strings."
 msgstr ""
 
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:104
@@ -15898,47 +15898,47 @@ msgctxt "@title:window"
 msgid "Export Spreadsheet"
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:206
+#: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:205
 #, kde-format
 msgctxt "@title:window"
 msgid "Export Matrix"
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:220
+#: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:219
 #, kde-format
 msgid "Export matrix"
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:310
-#: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:316
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:212
+#: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:309
+#: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:315
 #: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:218
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:224
 #, kde-format
 msgid "The file already exists. Do you really want to overwrite it?"
 msgstr "Le file ja existe. Tu vole vermente superscriber lo?"
 
-#: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:364
+#: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:363
 #, kde-format
 msgid "Text files (*.txt *.dat *.csv)"
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:372
+#: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:371
 #, kde-format
 msgid "LaTeX files (*.tex)"
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:375
+#: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:374
 #: src/kdefrontend/widgets/FITSHeaderEditWidget.cpp:174
 #, kde-format
 msgid "FITS files (*.fits *.fit *.fts)"
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:378
+#: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:377
 #, kde-format
 msgid "Excel 2007+ (*.xlsx)"
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:381
+#: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:380
 #, kde-format
 msgid ""
 "SQLite databases files (*.db *.sqlite *.sdb *.db2 *.sqlite2 *.sdb2 *.db3 *."
@@ -16819,7 +16819,7 @@ msgstr ""
 #: src/kdefrontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:442
 #: src/kdefrontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:253
 #: src/kdefrontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:312
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:49
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:128
 #: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:407
 #: src/kdefrontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:53
 #: src/kdefrontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:287
@@ -16869,7 +16869,7 @@ msgstr "Commento:"
 #: src/kdefrontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:43
 #: src/kdefrontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:340
 #: src/kdefrontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:101
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:23
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:474
 #: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:101
 #: src/kdefrontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:242
 #: src/kdefrontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:73
@@ -18002,7 +18002,7 @@ msgstr "Connexion:"
 #: src/kdefrontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:216
 #: src/kdefrontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:50
 #: src/kdefrontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:73
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:119
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:224
 #: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:61
 #: src/kdefrontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:144
 #: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:417
@@ -18852,7 +18852,7 @@ msgstr "x:"
 #: src/kdefrontend/ui/dockwidgets/kdeplotdock.ui:153
 #: src/kdefrontend/ui/dockwidgets/lollipopplotdock.ui:43
 #: src/kdefrontend/ui/dockwidgets/qqplotdock.ui:85
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:93
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:330
 #, kde-format
 msgid "Data:"
 msgstr "Datos:"
@@ -20015,7 +20015,7 @@ msgstr ""
 #: src/kdefrontend/ui/dockwidgets/xycurvedockgeneraltab.ui:75
 #: src/kdefrontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:161
 #: src/kdefrontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:404
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:139
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:484
 #: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:358
 #: src/kdefrontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:173
 #: src/kdefrontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:90
@@ -20077,7 +20077,7 @@ msgstr ""
 #: src/kdefrontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:85
 #: src/kdefrontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:63
 #: src/kdefrontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:324
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:437
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:279
 #: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:453
 #: src/kdefrontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:23
 #: src/kdefrontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:211
@@ -20097,7 +20097,7 @@ msgstr ""
 #. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
 #. i18n: ectx: property (text), widget (QLabel, lConvolution)
 #: src/kdefrontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:101
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:777
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:844
 #, kde-format
 msgid "Correlation"
 msgstr ""
@@ -20160,7 +20160,7 @@ msgstr ""
 #: src/kdefrontend/ui/dockwidgets/xycurvedockgeneraltab.ui:107
 #: src/kdefrontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:505
 #: src/kdefrontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:353
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:149
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:923
 #: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:304
 #: src/kdefrontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:344
 #: src/kdefrontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:17
@@ -20215,7 +20215,7 @@ msgstr "Equation"
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbFunctions2)
 #: src/kdefrontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:241
 #: src/kdefrontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:384
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1058
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1159
 #: src/kdefrontend/ui/matrix/matrixfunctionwidget.ui:74
 #: src/kdefrontend/ui/spreadsheet/functionvalueswidget.ui:116
 #, kde-format
@@ -20227,7 +20227,7 @@ msgstr "Functiones"
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbConstants2)
 #: src/kdefrontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:251
 #: src/kdefrontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:394
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1071
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1172
 #: src/kdefrontend/ui/matrix/matrixfunctionwidget.ui:84
 #: src/kdefrontend/ui/spreadsheet/functionvalueswidget.ui:126
 #, kde-format
@@ -20240,301 +20240,128 @@ msgstr "Constantes"
 msgid "y=g(t)"
 msgstr "y=g(t)"
 
-#. i18n: ectx: property (toolTip), widget (QLabel, lName)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:20
-#, kde-format
-msgid "Name of the fit curve"
-msgstr ""
-
-#. i18n: ectx: property (toolTip), widget (QLabel, lComment)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:46
-#, kde-format
-msgid "Optional comment"
-msgstr ""
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, lData)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:90
-#, kde-format
-msgid "Data to fit"
-msgstr ""
-
-#. i18n: ectx: property (toolTip), widget (QLabel, lDataSourceType)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:116
-#, kde-format
-msgid "Type of data source"
-msgstr ""
-
-#. i18n: ectx: property (toolTip), widget (QLabel, lDataSourceCurve)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:126
-#, kde-format
-msgid "Source curve"
-msgstr ""
-
-#. i18n: ectx: property (toolTip), widget (QLabel, lXColumn)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:136
-#, kde-format
-msgid "Source of x data"
-msgstr ""
-
-#. i18n: ectx: property (toolTip), widget (QLabel, lYColumn)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:146
-#, kde-format
-msgid "Source of y data"
-msgstr ""
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, lWeights)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:168
-#, kde-format
-msgid "How to weight the data points"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QToolButton, lWeights)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:174
-#, kde-format
-msgid "Weights:"
-msgstr ""
-
-#. i18n: ectx: property (toolTip), widget (QLabel, lXWeight)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:197
-#, kde-format
-msgid "Weight for x data"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, lXWeight)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:200
-#, kde-format
-msgid "X-Weight:"
-msgstr ""
-
-#. i18n: ectx: property (toolTip), widget (QLabel, lYWeight)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:207
-#, kde-format
-msgid "Weight for y data"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, lYWeight)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:210
-#, kde-format
-msgid "Y-Weight:"
-msgstr ""
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, lFit)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:229
-#, kde-format
-msgid "Function to fit and options"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QToolButton, lFit)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:238
-#, kde-format
-msgid "Fit:"
-msgstr "Adapta:"
-
 #. i18n: ectx: property (toolTip), widget (QLabel, lCategory)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:264
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:20
 #, kde-format
 msgid "Fit model category"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lCategory)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:267
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:23
 #, kde-format
 msgid "Category:"
 msgstr "Categoria:"
 
-#. i18n: ectx: property (toolTip), widget (QLabel, lModel)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:274
+#. i18n: ectx: property (toolTip), widget (QToolButton, lFit)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:42
 #, kde-format
-msgid "Fit model type"
+msgid "Function to fit and options"
 msgstr ""
 
-#. i18n: ectx: property (text), widget (QLabel, lModel)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:277
+#. i18n: ectx: property (text), widget (QToolButton, lFit)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:51
 #, kde-format
-msgid "Model:"
-msgstr "Modello:"
+msgid "Fit:"
+msgstr "Adapta:"
 
-#. i18n: ectx: property (toolTip), widget (QLabel, lDegree)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:284
+#. i18n: ectx: property (toolTip), widget (QLabel, lComment)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:125
 #, kde-format
-msgid "Degree of fit model"
+msgid "Optional comment"
 msgstr ""
-
-#. i18n: ectx: property (toolTip), widget (QLabel, lEquation)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:294
-#, kde-format
-msgid "Function of fit model"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, lEquation)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:297
-#, kde-format
-msgid "f(x) ="
-msgstr "f(x) = "
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, lParameters)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:325
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:175
 #, kde-format
 msgid "Specify parameters and their properties"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QToolButton, lParameters)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:328
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:178
 #, kde-format
 msgid "Parameters:"
 msgstr "Parametros:"
 
+#. i18n: ectx: property (toolTip), widget (QLabel, lXWeight)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:201
+#, kde-format
+msgid "Weight for x data"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lXWeight)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:204
+#, kde-format
+msgid "X-Weight:"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QLabel, lModel)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:211
+#, kde-format
+msgid "Fit model type"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lModel)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:214
+#, kde-format
+msgid "Model:"
+msgstr "Modello:"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, lDataSourceType)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:221
+#, kde-format
+msgid "Type of data source"
+msgstr ""
+
 #. i18n: ectx: property (text), widget (QLabel, lAlgorithm)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:367
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:257
 #, kde-format
 msgid "Algorithm:"
 msgstr "Algorithmo:"
 
-#. i18n: ectx: property (toolTip), widget (QPushButton, pbRecalculate)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:396
-#, kde-format
-msgid "Run fit"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QPushButton, pbRecalculate)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:399
-#, kde-format
-msgid "Run"
-msgstr "Exeque"
-
 #. i18n: ectx: property (toolTip), widget (QToolButton, lResults)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:434
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:276
 #, kde-format
 msgid "Fit results"
 msgstr ""
 
-#. i18n: ectx: property (toolTip), widget (QTabWidget, twResults)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:460
+#. i18n: ectx: property (toolTip), widget (QToolButton, lData)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:327
 #, kde-format
-msgid "Resulting fit parameter and properties"
+msgid "Data to fit"
 msgstr ""
 
-#. i18n: ectx: attribute (title), widget (QWidget, tab_3)
-#. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:470
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:757
+#. i18n: ectx: property (toolTip), widget (QToolButton, lWeights)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:365
 #, kde-format
-msgid "Parameters"
-msgstr "Parametros"
-
-#. i18n: ectx: attribute (title), widget (QWidget, tab_4)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:507
-#, kde-format
-msgid "Goodness of fit"
+msgid "How to weight the data points"
 msgstr ""
 
-#. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:561
+#. i18n: ectx: property (text), widget (QToolButton, lWeights)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:371
 #, kde-format
-msgid "Residual mean square"
+msgid "Weights:"
 msgstr ""
 
-#. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:571
+#. i18n: ectx: property (toolTip), widget (QLabel, lEquation)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:404
 #, kde-format
-msgid "Root mean square deviation (RMSD, SD)"
+msgid "Function of fit model"
 msgstr ""
 
-#. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:611
+#. i18n: ectx: property (text), widget (QLabel, lEquation)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:407
 #, kde-format
-msgid "F test"
-msgstr ""
-
-#. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:621
-#, kde-format
-msgid "P > F"
-msgstr "P > F"
-
-#. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:631
-#, kde-format
-msgid "Mean absolute error (MAE)"
-msgstr ""
-
-#. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:641
-#, kde-format
-msgid "Akaike information criterion (AIC)"
-msgstr ""
-
-#. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:651
-#, kde-format
-msgid "Bayesian information criterion (BIC)"
-msgstr ""
-
-#. i18n: ectx: attribute (title), widget (QWidget, tab)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:665
-#, kde-format
-msgid "Log"
-msgstr "Log"
-
-#. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:707
-#, kde-format
-msgid "Status"
-msgstr "Stato"
-
-#. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:717
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:787
-#, kde-format
-msgid "Iterations"
-msgstr "Iterationes"
-
-#. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:727
-#, kde-format
-msgid "Tolerance"
-msgstr ""
-
-#. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:737
-#, kde-format
-msgid "Calculation time"
-msgstr ""
-
-#. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:747
-#, kde-format
-msgid "Degrees of Freedom"
-msgstr ""
-
-#. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:767
-#, kde-format
-msgid "X range"
-msgstr "Extension de X"
-
-#. i18n: ectx: property (toolTip), widget (QCheckBox, chkVisible)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:825
-#, kde-format
-msgid "Show fit curve"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, lXErrorCol)
-#. i18n: ectx: property (text), widget (QLabel, lYErrorCol)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:862
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:888
-#, kde-format
-msgid "col ="
-msgstr "col ="
+msgid "f(x) ="
+msgstr "f(x) = "
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, pbOptions)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:931
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:448
 #, kde-format
 msgid "Advanced fit options"
 msgstr ""
 
 #. i18n: ectx: property (whatsThis), widget (QPushButton, pbOptions)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:934
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:451
 #, kde-format
 msgid "Opens a dialog to change advanced fit options"
 msgstr ""
@@ -20542,7 +20369,7 @@ msgstr ""
 #. i18n: ectx: property (title), widget (QGroupBox, gbOptions)
 #. i18n: ectx: property (text), widget (QLabel, lOptions)
 #. i18n: ectx: property (text), widget (QPushButton, pbOptions)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:940
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:457
 #: src/kdefrontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:186
 #: src/kdefrontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:227
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:75
@@ -20551,16 +20378,189 @@ msgstr ""
 msgid "Options"
 msgstr "Optiones"
 
+#. i18n: ectx: property (toolTip), widget (QLabel, lName)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:471
+#, kde-format
+msgid "Name of the fit curve"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QLabel, lXColumn)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:481
+#, kde-format
+msgid "Source of x data"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QLabel, lDataSourceCurve)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:501
+#, kde-format
+msgid "Source curve"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QTabWidget, twResults)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:527
+#, kde-format
+msgid "Resulting fit parameter and properties"
+msgstr ""
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab_3)
+#. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:537
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:824
+#, kde-format
+msgid "Parameters"
+msgstr "Parametros"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab_4)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:574
+#, kde-format
+msgid "Goodness of fit"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:628
+#, kde-format
+msgid "Residual mean square"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:638
+#, kde-format
+msgid "Root mean square deviation (RMSD, SD)"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:678
+#, kde-format
+msgid "F test"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:688
+#, kde-format
+msgid "P > F"
+msgstr "P > F"
+
+#. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:698
+#, kde-format
+msgid "Mean absolute error (MAE)"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:708
+#, kde-format
+msgid "Akaike information criterion (AIC)"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:718
+#, kde-format
+msgid "Bayesian information criterion (BIC)"
+msgstr ""
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:732
+#, kde-format
+msgid "Log"
+msgstr "Log"
+
+#. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:774
+#, kde-format
+msgid "Status"
+msgstr "Stato"
+
+#. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:784
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:854
+#, kde-format
+msgid "Iterations"
+msgstr "Iterationes"
+
+#. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:794
+#, kde-format
+msgid "Tolerance"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:804
+#, kde-format
+msgid "Calculation time"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:814
+#, kde-format
+msgid "Degrees of Freedom"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:834
+#, kde-format
+msgid "X range"
+msgstr "Extension de X"
+
+#. i18n: ectx: property (text), widget (QLabel, lYErrorCol)
+#. i18n: ectx: property (text), widget (QLabel, lXErrorCol)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:901
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1053
+#, kde-format
+msgid "col ="
+msgstr "col ="
+
+#. i18n: ectx: property (toolTip), widget (QLabel, lYColumn)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:920
+#, kde-format
+msgid "Source of y data"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QLabel, lYWeight)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:956
+#, kde-format
+msgid "Weight for y data"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lYWeight)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:959
+#, kde-format
+msgid "Y-Weight:"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, chkVisible)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:966
+#, kde-format
+msgid "Show fit curve"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, pbRecalculate)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1026
+#, kde-format
+msgid "Run fit"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, pbRecalculate)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1029
+#, kde-format
+msgid "Run"
+msgstr "Exeque"
+
 #. i18n: ectx: property (whatsThis), widget (QToolButton, tbFunctions)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1061
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1162
 #, kde-format
 msgid "Select predefined function"
 msgstr ""
 
 #. i18n: ectx: property (whatsThis), widget (QToolButton, tbConstants)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1074
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1175
 #, kde-format
 msgid "Select predefined constants"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QLabel, lDegree)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1188
+#, kde-format
+msgid "Degree of fit model"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lForm)
@@ -22597,129 +22597,129 @@ msgstr "Lineas a Cadita, X, Linea  de Referentia Max"
 msgid "Close this dialog without exporting."
 msgstr "Claude iste dialogo sin exportar."
 
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:69
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:70
 #, kde-format
 msgid "Portable Data Format (PDF)"
 msgstr "Portable Data Format (PDF)"
 
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:70
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:73
 #, kde-format
 msgid "Scalable Vector Graphics (SVG)"
 msgstr "Scalable Vector Graphics (SVG)"
 
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:72
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:77
 #, kde-format
 msgid "Portable Network Graphics (PNG)"
 msgstr "Portable Network Graphics (PNG)"
 
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:73
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:80
 #, kde-format
 msgid "Joint Photographic Experts Group (JPG)"
 msgstr "Joint Photographic Experts Group (JPG)"
 
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:74
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:82
 #, kde-format
 msgid "Windows Bitmap (BMP)"
 msgstr "Windows Bitmap (BMP)"
 
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:75
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:84
 #, kde-format
 msgid "Portable Pixmap (PPM)"
 msgstr "Portable Pixmap (PPM)"
 
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:76
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:86
 #, kde-format
 msgid "X11 Bitmap (XBM)"
 msgstr "X11 Bitmap (XBM)"
 
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:77
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:87
 #, kde-format
 msgid "X11 Bitmap (XPM)"
 msgstr "X11 Bitmap (XPM)"
 
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:79
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:89
 #, kde-format
 msgid "File"
 msgstr "File"
 
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:80
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:90
 #, kde-format
 msgid "Clipboard"
 msgstr "Area de transferentia"
 
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:82
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:92
 #, kde-format
 msgid "Object's Bounding Box"
 msgstr ""
 
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:83
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:93
 #, kde-format
 msgid "Current Selection"
 msgstr "Selection currente"
 
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:84
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:94
 #, kde-format
 msgid "Complete Worksheet"
 msgstr ""
 
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:87
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:97
 #, kde-format
 msgctxt "%1 is the value of DPI of the current screen"
 msgid "%1 (desktop)"
 msgstr "%1 (Scriptorio)"
 
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:102
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:112
 #, kde-format
 msgctxt "@title:window"
 msgid "Export Worksheet"
 msgstr ""
 
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:267
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:269
 #, kde-format
 msgid "Portable Data Format (*.pdf *.PDF)"
 msgstr "Portable Data Format (*.pdf *.PDF)"
 
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:270
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:272
 #, kde-format
 msgid "Scalable Vector Graphics (*.svg *.SVG)"
 msgstr "Scalable Vector Graphics (*.svg *.SVG)"
 
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:273
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:275
 #, kde-format
 msgid "Portable Network Graphics (*.png *.PNG)"
 msgstr "Portable Network Graphics (*.png *.PNG)"
 
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:276
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:278
 #, kde-format
 msgid "Joint Photographic Experts Group (*.jpg *.jpeg *.JPG *.JPEG)"
 msgstr "Joint Photographic Experts Group (*.jpg *.jpeg *.JPG *.JPEG)"
 
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:279
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:281
 #, kde-format
 msgid "Windows Bitmap (*.bmp *.BMP)"
 msgstr "Windows Bitmap (*.bmp *.BMP)"
 
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:282
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:284
 #, kde-format
 msgid "Portable Pixmap (*.ppm *.PPM)"
 msgstr "Portable Pixmap (*.ppm *.PPM)"
 
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:285
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:287
 #, kde-format
 msgid "X11 Bitmap (*.xbm *.XBM)"
 msgstr "X11 Bitmap (*.xbm *.XBM)"
 
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:288
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:290
 #, kde-format
 msgid "X11 Bitmap (*.xpm *.XPM)"
 msgstr "X11 Bitmap (*.xpm *.XPM)"
 
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:349
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:369
 #, kde-format
 msgid "Export to file and close the dialog."
 msgstr ""
 
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:352
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:372
 #, kde-format
 msgid "Export to clipboard and close the dialog."
 msgstr "Exporta a area de trnsferentia e claude le dialogo."
