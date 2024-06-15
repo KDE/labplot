@@ -21,7 +21,7 @@ class Value;
 
 #ifdef SDK
 #include "labplot_export.h"
-class LABPLOT_EXPORT BarPlot : Plot {
+class LABPLOT_EXPORT BarPlot : public Plot {
 #else
 class BarPlot : public Plot {
 #endif
