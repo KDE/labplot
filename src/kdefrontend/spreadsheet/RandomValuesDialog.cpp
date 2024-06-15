@@ -466,11 +466,13 @@ void RandomValuesDialog::generate() {
 
 	gsl_rng_set(r, seed);
 
-	for (auto* col : m_columns)
-		col->setSuppressDataChangedSignal(true);
-
 	m_spreadsheet->beginMacro(
 		i18np("%1: fill column with non-uniform random numbers", "%1: fill columns with non-uniform random numbers", m_spreadsheet->name(), m_columns.size()));
+
+	for (auto* col : m_columns) {
+		col->setSuppressDataChangedSignal(true);
+		col->clearFormula(); // clear the potentially available column formula
+	}
 
 	const int index = ui.cbDistribution->currentIndex();
 	const auto dist = (nsl_sf_stats_distribution)ui.cbDistribution->itemData(index).toInt();

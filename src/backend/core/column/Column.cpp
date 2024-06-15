@@ -473,7 +473,7 @@ void Column::setWidth(int value) {
 }
 
 /**
- * \brief Clear the whole column
+ * \brief Clear the content of the column (data and formula definition)
  */
 void Column::clear(QUndoCommand* parent) {
 	if (d->formula().isEmpty()) {
@@ -538,6 +538,13 @@ bool Column::formulaAutoResize() const {
  */
 void Column::setFormula(const QString& formula, const QStringList& variableNames, const QVector<Column*>& columns, bool autoUpdate, bool autoResize) {
 	exec(new ColumnSetGlobalFormulaCmd(d, formula, variableNames, columns, autoUpdate, autoResize));
+}
+
+/**
+ * \brief Clears the formula used to generate column values
+ */
+void Column::clearFormula() {
+	setFormula(QString(), QStringList(), QVector<Column*>());
 }
 
 /*!

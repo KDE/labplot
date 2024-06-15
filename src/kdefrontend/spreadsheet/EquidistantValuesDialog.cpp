@@ -528,6 +528,8 @@ void EquidistantValuesDialog::generate() {
 
 	// set the vectors with the generated data in the columns and adjust the column mode, if needed
 	for (auto* col : m_columns) {
+		col->clearFormula(); // clear the potentially available column formula
+
 		switch (col->columnMode()) {
 		case AbstractColumn::ColumnMode::Double:
 			col->setValues(newDoubleData);

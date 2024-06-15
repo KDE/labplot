@@ -2219,6 +2219,8 @@ void SpreadsheetView::fillWithRowNumbers() {
 		int_data[i] = i + 1;
 
 	for (auto* col : columns) {
+		col->clearFormula(); // clear the potentially available column formula
+
 		switch (col->columnMode()) {
 		case AbstractColumn::ColumnMode::Integer:
 			col->replaceInteger(0, int_data);
@@ -2376,6 +2378,8 @@ void SpreadsheetView::fillSelectedCellsWithConstValues() {
 	for (auto* col_ptr : columns) {
 		int col = m_spreadsheet->indexOfChild<Column>(col_ptr);
 		col_ptr->setSuppressDataChangedSignal(true);
+		col_ptr->clearFormula(); // clear the potentially available column formula
+
 		switch (col_ptr->columnMode()) {
 		case AbstractColumn::ColumnMode::Double:
 			if (!doubleOk)
