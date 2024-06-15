@@ -431,6 +431,8 @@ void XYFitCurveDock::dataSourceTypeChanged(int index) {
 		}
 	}
 
+	enableRecalculate();
+
 	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* curve : m_curvesList)
