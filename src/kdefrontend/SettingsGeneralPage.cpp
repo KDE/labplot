@@ -272,7 +272,7 @@ void SettingsGeneralPage::retranslateUi() {
 
 	ui.lTracing->setToolTip(i18n("Activates additional tracing output in the terminal."));
 	ui.chkDebugTrace->setToolTip(i18n("Debug trace - helpful to diagnose the application, can have a negative impact on the performance."));
-	ui.chkPerfTrace->setToolTip(i18n("Performance trace - helpful to analyse performance relevant aspects and bottlenecks."));
+	ui.chkPerfTrace->setToolTip(i18n("Performance trace - helpful to analyze performance relevant aspects and bottlenecks."));
 }
 
 void SettingsGeneralPage::loadOnStartChanged() {
