@@ -53,6 +53,21 @@
 
 #include "ui_plotdatawidget.h"
 
+namespace {
+enum class CurvePlacement {
+	Undefined = 0, // Downward compatibility
+	AllInOnePlotArea = 1,
+	AllInOwnPlotArea = 2,
+};
+
+enum class PlotPlacement {
+	Undefined = 0, // Downward compatibility
+	ExistingPlotArea = 1,
+	ExistingWorksheetNewPlot = 2,
+	NewWorksheet = 3,
+};
+}
+
 /*!
 	\class PlotDataDialog
 	\brief Dialog for generating plots for the spreadsheet data.
@@ -150,15 +165,28 @@ PlotDataDialog::PlotDataDialog(AbstractAspect* parentAspect, PlotType type, QWid
 	// restore saved settings if available
 	create(); // ensure there's a window created
 	KConfigGroup conf = Settings::group(QStringLiteral("PlotDataDialog"));
+	ui->rbPlotPlacementNewWorksheet->setChecked(true); // default, because this can be always the case
 	if (conf.exists()) {
-		int index = conf.readEntry("CurvePlacement", 0);
-		if (index == 2)
+		auto curvePlacement = static_cast<CurvePlacement>(conf.readEntry("CurvePlacement", (int)CurvePlacement::AllInOnePlotArea));
+		switch (curvePlacement) {
+		case CurvePlacement::AllInOwnPlotArea:
 			ui->rbCurvePlacementAllInOwnPlotArea->setChecked(true);
+			break;
+		case CurvePlacement::AllInOnePlotArea: // fall through
+		case CurvePlacement::Undefined:
+			ui->rbCurvePlacementAllInOnePlotArea->setChecked(true);
+			break;
+		}
 
-		index = conf.readEntry("PlotPlacement", 0);
-		if (index == 2)
+		auto plotPlacement = static_cast<PlotPlacement>(conf.readEntry("PlotPlacement", (int)PlotPlacement::NewWorksheet));
+		if (plotPlacement == PlotPlacement::Undefined)
+			plotPlacement = PlotPlacement::NewWorksheet; // downward compatibility
+
+		if (plotPlacement == PlotPlacement::ExistingPlotArea && !plots.isEmpty())
+			ui->rbPlotPlacementExistingPlotArea->setChecked(true);
+		else if (plotPlacement == PlotPlacement::ExistingWorksheetNewPlot && !worksheets.isEmpty())
 			ui->rbPlotPlacementExistingWorksheet->setChecked(true);
-		if (index == 3)
+		else // plotPlacement == PlotPlacement::ExistingWorksheetNewPlot
 			ui->rbPlotPlacementNewWorksheet->setChecked(true);
 
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
@@ -170,20 +198,21 @@ PlotDataDialog::PlotDataDialog(AbstractAspect* parentAspect, PlotType type, QWid
 PlotDataDialog::~PlotDataDialog() {
 	// save current settings
 	KConfigGroup conf = Settings::group(QStringLiteral("PlotDataDialog"));
-	int index = 0;
+	auto curvePlacement = CurvePlacement::AllInOnePlotArea;
 	if (ui->rbCurvePlacementAllInOnePlotArea->isChecked())
-		index = 1;
-	if (ui->rbCurvePlacementAllInOwnPlotArea->isChecked())
-		index = 2;
-	conf.writeEntry("CurvePlacement", index);
+		curvePlacement = CurvePlacement::AllInOnePlotArea;
+	else // (ui->rbCurvePlacementAllInOwnPlotArea->isChecked())
+		curvePlacement = CurvePlacement::AllInOwnPlotArea;
+	conf.writeEntry("CurvePlacement", (int)curvePlacement);
 
+	auto plotAreaPlacement = PlotPlacement::NewWorksheet;
 	if (ui->rbPlotPlacementExistingPlotArea->isChecked())
-		index = 1;
-	if (ui->rbPlotPlacementExistingWorksheet->isChecked())
-		index = 2;
-	if (ui->rbPlotPlacementNewWorksheet->isChecked())
-		index = 3;
-	conf.writeEntry("PlotPlacement", index);
+		plotAreaPlacement = PlotPlacement::ExistingPlotArea;
+	else if (ui->rbPlotPlacementExistingWorksheet->isChecked())
+		plotAreaPlacement = PlotPlacement::ExistingWorksheetNewPlot;
+	else // (ui->rbPlotPlacementNewWorksheet->isChecked())
+		plotAreaPlacement = PlotPlacement::NewWorksheet;
+	conf.writeEntry("PlotPlacement", (int)plotAreaPlacement);
 
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 
