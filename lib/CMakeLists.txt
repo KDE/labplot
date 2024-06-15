@@ -69,7 +69,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/core/datatypes/DayOfWeek2BigIntFilter.h
 	${BACKEND_DIR}/datasources/AbstractDataSource.cpp
 	${BACKEND_DIR}/gsl/ExpressionParser.cpp
-	${BACKEND_DIR}/lib/Range.cpp
+	${BACKEND_DIR}/lib/Range.h
 	${BACKEND_DIR}/lib/XmlStreamReader.cpp
 	${BACKEND_DIR}/lib/SignallingUndoCommand.cpp
 	${BACKEND_DIR}/spreadsheet/Spreadsheet.cpp
@@ -91,7 +91,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/worksheet/plots/cartesian/CartesianCoordinateSystem.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/CartesianPlot.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/CartesianPlotLegend.cpp
-	${BACKEND_DIR}/worksheet/plots/cartesian/Curve.cpp
+	${BACKEND_DIR}/worksheet/plots/cartesian/XYCurve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/Histogram.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/CustomPoint.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/ReferenceLine.cpp
@@ -155,7 +155,7 @@ set(COMMONFRONTEND_SOURCES
 )
 
 bison_target(GslParser
-	${BACKEND_DIR}/gsl/parser.y
+	${BACKEND_DIR}/gsl/parser.ypp
 	${CMAKE_CURRENT_BINARY_DIR}/gsl_parser.cpp
 )
 set(GENERATED_SOURCES
