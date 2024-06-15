@@ -14,6 +14,8 @@
 #include "backend/nsl/nsl_math.h"
 #include "macros.h" //const auto numberLocale = QLocale();
 
+// fix i18n call warnings
+#define TRANSLATION_DOMAIN "labplot2"
 #include <KLocalizedString>
 
 #include <QDateTime>
