@@ -116,7 +116,7 @@ public:
 
 private:
 	CartesianPlot* plot() const {
-		return q->m_plot;
+		return m_plot;
 	} // convenience method
 	void mousePressEvent(QGraphicsSceneMouseEvent*) override;
 	QVariant itemChange(GraphicsItemChange change, const QVariant& value) override;

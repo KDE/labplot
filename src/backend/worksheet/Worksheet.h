@@ -68,7 +68,6 @@ public:
 	double zoomFactor() const;
 	void update();
 	void setPrinting(bool) const;
-	void setThemeName(const QString&);
 
 	void setItemSelectedInView(const QGraphicsItem*, const bool);
 	void setSelectedInView(const bool);

@@ -60,13 +60,13 @@ public:
 
 public Q_SLOTS:
 	void createContextMenu(QMenu*);
+	void goToCell(int row, int col);
 	void print(QPrinter*) const;
 
 private:
 	void init();
 	void initActions();
 	void initMenus();
-	void goToCell(int row, int col);
 	void updateImage();
 
 	bool eventFilter(QObject*, QEvent*) override;

@@ -190,6 +190,7 @@ void XYCurve::initActions() {
 }
 
 QMenu* XYCurve::createContextMenu() {
+	Q_D(const XYCurve);
 	if (!m_menusInitialized)
 		initActions();
 
@@ -198,7 +199,7 @@ QMenu* XYCurve::createContextMenu() {
 
 	//"data analysis" menu
 	//	auto* plot = static_cast<CartesianPlot*>(parentAspect());
-	menu->insertMenu(visibilityAction, m_plot->analysisMenu());
+	menu->insertMenu(visibilityAction, d->m_plot->analysisMenu());
 	menu->insertSeparator(visibilityAction);
 
 	//"Navigate to spreadsheet"-action, show only if x- or y-columns have data from a spreadsheet

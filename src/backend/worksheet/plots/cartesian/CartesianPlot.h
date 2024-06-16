@@ -125,7 +125,6 @@ public:
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
-	void finalizeLoad();
 	void loadThemeConfig(const KConfig&) override;
 	void saveTheme(KConfig& config);
 	void wheelEvent(const QPointF& sceneRelPos, int delta, int xIndex, int yIndex, bool considerDimension, Dimension dim);
