@@ -179,6 +179,8 @@ public:
 			return QStringLiteral("XYCurve");
 		case AspectType::XYEquationCurve:
 			return QStringLiteral("XYEquationCurve");
+		case AspectType::XYEquationCurve2:
+			return QStringLiteral("XYEquationCurve2");
 		case AspectType::XYAnalysisCurve:
 			return QStringLiteral("XYAnalysisCurve");
 		case AspectType::XYConvolutionCurve:

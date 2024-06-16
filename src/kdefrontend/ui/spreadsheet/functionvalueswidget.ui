@@ -110,26 +110,6 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="2">
-       <widget class="QToolButton" name="tbFunctions">
-        <property name="toolTip">
-         <string>Functions</string>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="2">
-       <widget class="QToolButton" name="tbConstants">
-        <property name="toolTip">
-         <string>Constants</string>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-       </widget>
-      </item>
       <item row="0" column="0">
        <widget class="QLabel" name="lFunction">
         <property name="font">
@@ -143,6 +123,26 @@
         </property>
         <property name="alignment">
          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <widget class="QToolButton" name="tbConstants">
+        <property name="toolTip">
+         <string>Constants</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="QToolButton" name="tbFunctions">
+        <property name="toolTip">
+         <string>Functions</string>
+        </property>
+        <property name="text">
+         <string/>
         </property>
        </widget>
       </item>
@@ -185,7 +185,7 @@
   <customwidget>
    <class>ExpressionTextEdit</class>
    <extends>QTextEdit</extends>
-   <header>kdefrontend/widgets/ExpressionTextEdit.h</header>
+   <header>src/kdefrontend/widgets/ExpressionTextEdit.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

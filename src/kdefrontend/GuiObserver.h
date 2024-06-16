@@ -39,6 +39,7 @@ class SpreadsheetDock;
 class StatisticsSpreadsheetDock;
 class XYCurveDock;
 class XYEquationCurveDock;
+class XYEquationCurve2Dock;
 class XYDataReductionCurveDock;
 class XYDifferentiationCurveDock;
 class XYIntegrationCurveDock;
@@ -98,7 +99,7 @@ private:
 
 	XYCurveDock* m_xyCurveDock{nullptr};
 	XYEquationCurveDock* m_xyEquationCurveDock{nullptr};
-	XYEquationCurveDock* m_xyEquationCurve2Dock{nullptr};
+	XYEquationCurve2Dock* m_xyEquationCurve2Dock{nullptr};
 
 	// bar plots
 	BarPlotDock* m_barPlotDock{nullptr};
