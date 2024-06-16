@@ -10,11 +10,11 @@
 #ifndef XYEQUATIONCURVE2DOCK_H
 #define XYEQUATIONCURVE2DOCK_H
 
-#include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
-#include "kdefrontend/dockwidgets/XYCurveDock.h"
+#include "backend/worksheet/plots/cartesian/XYEquationCurve2.h"
+#include "kdefrontend/dockwidgets/XYAnalysisCurveDock.h"
 #include "ui_xyequationcurve2dockgeneraltab.h"
 
-class XYEquationCurve2Dock : public XYCurveDock {
+class XYEquationCurve2Dock : public XYAnalysisCurveDock {
 	Q_OBJECT
 
 public:
@@ -26,23 +26,34 @@ private:
 	void initGeneralTab() override;
 
 	Ui::XYEquationCurve2DockGeneralTab uiGeneralTab;
-	XYEquationCurve* m_equationCurve{nullptr};
+	XYEquationCurve2* m_equationCurve{nullptr};
 
 private Q_SLOTS:
 	// SLOTs for changes triggered in XYCurveDock
-	void typeChanged(int);
 	void recalculateClicked();
 	void showConstants();
 	void showFunctions();
-	void insertFunction1(const QString&);
-	void insertConstant1(const QString&);
-	void insertFunction2(const QString&);
-	void insertConstant2(const QString&);
-	void enableRecalculate();
+	void insertFunction(const QString&);
+	void insertConstant(const QString&);
+	void enableRecalculate() const override;
+	void addVariable();
+	void removeAllVariableWidgets();
+	void deleteVariable();
+
+	void variableNameChanged();
+	void variableColumnChanged(const QModelIndex& index);
 
 	// SLOTs for changes triggered in XYCurve
 	// General-Tab
-	void curveEquationDataChanged(const XYEquationCurve::EquationData&);
+	void curveEquationDataChanged(const XYEquationCurve2::EquationData&);
+
+	// Everything related to equation handling
+private:
+	// variable widgets
+	QList<QLineEdit*> m_variableLineEdits;
+	QList<QLabel*> m_variableLabels; // '=' labels
+	QList<TreeViewComboBox*> m_variableDataCurves;
+	QList<QToolButton*> m_variableDeleteButtons;
 };
 
 #endif

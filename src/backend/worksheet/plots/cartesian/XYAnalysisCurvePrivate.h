@@ -19,7 +19,7 @@ class AbstractColumn;
 
 class XYAnalysisCurvePrivate : public XYCurvePrivate {
 public:
-	explicit XYAnalysisCurvePrivate(XYAnalysisCurve*);
+	explicit XYAnalysisCurvePrivate(XYAnalysisCurve*, bool ignoreXColumn = false);
 	~XYAnalysisCurvePrivate() override;
 
 	XYAnalysisCurve::DataSourceType dataSourceType{XYAnalysisCurve::DataSourceType::Spreadsheet};
@@ -44,6 +44,8 @@ public:
 	QVector<double>* yVector{nullptr};
 
 	XYAnalysisCurve* const q;
+private:
+	bool m_ignoreXColumn {false}; // Sometimes only the ycolumn is calculated but the xColumn is same as for another curve
 };
 
 #endif

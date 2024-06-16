@@ -74,23 +74,29 @@ void XYAnalysisCurveDock::setAnalysisCurves(QList<XYCurve*> curves) {
 	setModel();
 }
 
-void XYAnalysisCurveDock::setModel() {
-	if (cbDataSourceCurve) {
-		// The FourierTransformCurveDock and the XYHilbertTransformCurveDock don't use this datasource
-		// choosing therefore cbDataSourceCurve will not be initialized
-		QList<AspectType> list{AspectType::Folder,
-							   AspectType::Datapicker,
-							   AspectType::Worksheet,
-							   AspectType::CartesianPlot,
-							   AspectType::XYCurve,
-							   AspectType::XYAnalysisCurve};
-		cbDataSourceCurve->setTopLevelClasses(list);
+void XYAnalysisCurveDock::setModelCurve(TreeViewComboBox* cb) {
+	if (!cb)
+		return;
+	// The FourierTransformCurveDock and the XYHilbertTransformCurveDock don't use this datasource
+	// choosing therefore cbDataSourceCurve will not be initialized
+	QList<AspectType> list{AspectType::Folder,
+						   AspectType::Datapicker,
+						   AspectType::Worksheet,
+						   AspectType::CartesianPlot,
+						   AspectType::XYCurve,
+						   AspectType::XYAnalysisCurve};
+	cb->setTopLevelClasses(list);
 
-		QList<const AbstractAspect*> hiddenAspects;
-		for (auto* curve : m_curvesList)
-			hiddenAspects << curve;
-		cbDataSourceCurve->setHiddenAspects(hiddenAspects);
-	}
+	QList<const AbstractAspect*> hiddenAspects;
+	for (auto* curve : m_curvesList)
+		hiddenAspects << curve;
+	cb->setHiddenAspects(hiddenAspects);
+
+	cb->setModel(aspectModel());
+}
+
+void XYAnalysisCurveDock::setModel() {
+	setModelCurve(cbDataSourceCurve);
 
 	auto* model = aspectModel();
 	const auto& topLevelClasses = TreeViewComboBox::plotColumnTopLevelClasses();
@@ -102,8 +108,6 @@ void XYAnalysisCurveDock::setModel() {
 	cbXDataColumn->setTopLevelClasses(topLevelClasses);
 	cbYDataColumn->setTopLevelClasses(topLevelClasses);
 
-	if (cbDataSourceCurve)
-		cbDataSourceCurve->setModel(model);
 	cbXDataColumn->setModel(model);
 	cbYDataColumn->setModel(model);
 

@@ -2372,6 +2372,8 @@ void ColumnPrivate::updateFormula() {
 
 void ColumnPrivate::formulaVariableColumnRemoved(const AbstractAspect* aspect) {
 	const Column* column = dynamic_cast<const Column*>(aspect);
+	if (!column)
+		return;
 	disconnect(column, nullptr, this, nullptr);
 	int index = -1;
 	for (int i = 0; i < formulaData().count(); i++) {

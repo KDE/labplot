@@ -393,9 +393,9 @@ void XYAnalysisCurve::handleAspectUpdated(const QString& aspectPath, const Abstr
 // ##############################################################################
 // ######################### Private implementation #############################
 // ##############################################################################
-XYAnalysisCurvePrivate::XYAnalysisCurvePrivate(XYAnalysisCurve* owner)
+XYAnalysisCurvePrivate::XYAnalysisCurvePrivate(XYAnalysisCurve* owner, bool ignoreXColumn)
 	: XYCurvePrivate(owner)
-	, q(owner) {
+	, q(owner), m_ignoreXColumn(ignoreXColumn) {
 }
 
 // no need to delete xColumn and yColumn, they are deleted
