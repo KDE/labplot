@@ -10,8 +10,8 @@
 #include "CASSettingsDialog.h"
 #include "backend/core/Settings.h"
 
-#include <KConfigGroup>
 #include <KConfigDialog>
+#include <KConfigGroup>
 #include <KConfigSkeleton>
 #include <KCoreConfigSkeleton>
 #include <KLocalizedString>
