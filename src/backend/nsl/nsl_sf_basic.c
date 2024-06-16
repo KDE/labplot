@@ -639,7 +639,7 @@ double nsl_sf_logarithmic(double k, double p) {
 }
 
 double nsl_sf_triangular(double x, double min, double max, double mode) {
-	if (x < min || x > xmax)
+	if (x < min || x > max)
 		return 0;
 
 	if (x <= mode)

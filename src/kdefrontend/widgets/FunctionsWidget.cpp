@@ -30,7 +30,7 @@ FunctionsWidget::FunctionsWidget(QWidget* parent)
 		const auto group = static_cast<FunctionGroups>(i);
 		ui.cbGroup->addItem(FunctionGroupsToString(group), (int)i);
 
-		// Add separator before those groups
+		// Add separator before these groups
 		if (group == FunctionGroups::ColumnStatistics || group == FunctionGroups::AiryFunctionsAndDerivatives || group == FunctionGroups::RandomNumberGenerator
 			|| group == FunctionGroups::GaussianDistribution)
 			separators.append(i);
