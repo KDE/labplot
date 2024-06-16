@@ -259,10 +259,9 @@ private Q_SLOTS:
 	void colorSchemeChanged(QAction*);
 	void openDatasetExample();
 
-	// Cantor
 #ifdef HAVE_CANTOR_LIBS
-	void newCantorWorksheet();
-	void cantorSettingsDialog();
+	void newNotebook();
+	void casSettingsDialog();
 	void updateNotebookActions();
 #endif
 

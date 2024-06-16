@@ -49,6 +49,7 @@
 #include "commonfrontend/note/NoteView.h"
 #include "commonfrontend/widgets/MemoryWidget.h"
 
+#include "kdefrontend/CASSettingsDialog.h"
 #include "kdefrontend/GuiObserver.h"
 #include "kdefrontend/HistoryDialog.h"
 #include "kdefrontend/SettingsDialog.h"
@@ -140,9 +141,6 @@
 #include <kxmlguifactory.h>
 
 #ifdef HAVE_CANTOR_LIBS
-#include <KConfigDialog>
-#include <KConfigSkeleton>
-#include <KCoreConfigSkeleton>
 #include <cantor/backend.h>
 
 // required to parse Cantor and Jupyter files
@@ -940,7 +938,7 @@ void MainWin::initActions() {
 	m_configureCASAction->setWhatsThis(i18n("Opens the settings for Computer Algebra Systems to modify the available systems or to enable new ones"));
 	m_configureCASAction->setMenuRole(QAction::NoRole); // prevent macOS Qt heuristics to select this action for preferences
 	actionCollection()->addAction(QLatin1String("configure_cas"), m_configureCASAction);
-	connect(m_configureCASAction, &QAction::triggered, this, &MainWin::cantorSettingsDialog);
+	connect(m_configureCASAction, &QAction::triggered, this, &MainWin::casSettingsDialog);
 #endif
 }
 
@@ -2171,7 +2169,7 @@ Spreadsheet* MainWin::activeSpreadsheet() const {
 /*
 	adds a new Cantor Spreadsheet to the project.
 */
-void MainWin::newCantorWorksheet() {
+void MainWin::newNotebook() {
 	auto* action = static_cast<QAction*>(QObject::sender());
 	auto* cantorworksheet = new CantorWorksheet(action->data().toString());
 	this->addAspectToProject(cantorworksheet);
@@ -2927,20 +2925,10 @@ void MainWin::settingsDialog() {
 }
 
 #ifdef HAVE_CANTOR_LIBS
-void MainWin::cantorSettingsDialog() {
-	static auto* emptyConfig = new KCoreConfigSkeleton();
-	auto* dlg = new KConfigDialog(this, QLatin1String("Cantor Settings"), emptyConfig);
-	for (auto* backend : Cantor::Backend::availableBackends())
-		if (backend->config()) // It has something to configure, so add it to the dialog
-			dlg->addPage(backend->settingsWidget(dlg), backend->config(), backend->name(), backend->icon());
-
-	// in case the settings were modified (we only need paths), update the "add new notebook" actions
-	// to get the new list of available backend systems in the menu
-	connect(dlg, &KConfigDialog::settingsChanged, this, [=]() {
-		updateNotebookActions();
-	});
-
-	dlg->show();
+void MainWin::casSettingsDialog() {
+	auto* dlg = new CASSettingsDialog(this);
+	connect(dlg, &CASSettingsDialog::settingsChanged, this, &MainWin::updateNotebookActions);
+	dlg->exec();
 
 	DEBUG(Q_FUNC_INFO << ", found " << Cantor::Backend::availableBackends().size() << " backends")
 	if (Cantor::Backend::availableBackends().size() == 0)
@@ -2960,7 +2948,7 @@ void MainWin::updateNotebookActions() {
 		action->setData(backend->name());
 		action->setWhatsThis(i18n("Creates a new %1 notebook", backend->name()));
 		actionCollection()->addAction(QLatin1String("notebook_") + backend->name(), action);
-		connect(action, &QAction::triggered, this, &MainWin::newCantorWorksheet);
+		connect(action, &QAction::triggered, this, &MainWin::newNotebook);
 		newBackendActions << action;
 		menu->addAction(action);
 		m_newNotebookMenu->addAction(action);
