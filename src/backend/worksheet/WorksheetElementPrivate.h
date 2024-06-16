@@ -37,6 +37,8 @@ public:
 	WorksheetElement* const q{nullptr};
 	bool insidePlot{true}; // point inside the plot (visible) or not
 	bool lock{false};
+	// parent plot if available
+	CartesianPlot* m_plot{nullptr};
 
 	bool swapVisible(bool on);
 	QString name() const;

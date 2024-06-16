@@ -134,7 +134,7 @@ public:
 
 private:
 	CartesianPlot* plot() const {
-		return q->m_plot; // convenience method
+		return m_plot; // convenience method
 	}
 	void mousePressEvent(QGraphicsSceneMouseEvent*) override;
 	void mouseMoveEvent(QGraphicsSceneMouseEvent*) override;

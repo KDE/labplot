@@ -555,8 +555,8 @@ bool Axis::isDefault() const {
 bool Axis::isNumeric() const {
 	Q_D(const Axis);
 	const int xIndex{cSystem->index(Dimension::X)}, yIndex{cSystem->index(Dimension::Y)};
-	bool numeric = ((d->orientation == Axis::Orientation::Horizontal && m_plot->xRangeFormat(xIndex) == RangeT::Format::Numeric)
-					|| (d->orientation == Axis::Orientation::Vertical && m_plot->yRangeFormat(yIndex) == RangeT::Format::Numeric));
+	bool numeric = ((d->orientation == Axis::Orientation::Horizontal && d->m_plot->xRangeFormat(xIndex) == RangeT::Format::Numeric)
+					|| (d->orientation == Axis::Orientation::Vertical && d->m_plot->yRangeFormat(yIndex) == RangeT::Format::Numeric));
 	return numeric;
 }
 
@@ -1142,18 +1142,18 @@ void AxisPrivate::retransformRange() {
 	switch (rangeType) { // also if not changing (like on plot range changes)
 	case Axis::RangeType::Auto: {
 		if (orientation == Axis::Orientation::Horizontal)
-			range = q->m_plot->range(Dimension::X, q->cSystem->index(Dimension::X));
+			range = m_plot->range(Dimension::X, q->cSystem->index(Dimension::X));
 		else
-			range = q->m_plot->range(Dimension::Y, q->cSystem->index(Dimension::Y));
+			range = m_plot->range(Dimension::Y, q->cSystem->index(Dimension::Y));
 
 		DEBUG(Q_FUNC_INFO << ", new auto range = " << range.toStdString())
 		break;
 	}
 	case Axis::RangeType::AutoData:
 		if (orientation == Axis::Orientation::Horizontal)
-			range = q->m_plot->dataRange(Dimension::X, q->cSystem->index(Dimension::X));
+			range = m_plot->dataRange(Dimension::X, q->cSystem->index(Dimension::X));
 		else
-			range = q->m_plot->dataRange(Dimension::Y, q->cSystem->index(Dimension::Y));
+			range = m_plot->dataRange(Dimension::Y, q->cSystem->index(Dimension::Y));
 
 		DEBUG(Q_FUNC_INFO << ", new auto data range = " << range.toStdString())
 		break;
@@ -1207,7 +1207,7 @@ void AxisPrivate::retransformLine() {
 
 			if (sceneRange.size() > 0) {
 				// std::max/std::min: stay inside rect()
-				QRectF rect = q->m_plot->dataRect();
+				QRectF rect = m_plot->dataRect();
 				startPoint = QPointF(std::max(sceneRange.at(0).x1(), rect.x()), pos.y());
 				endPoint = QPointF(std::min(sceneRange.at(0).x2(), rect.x() + rect.width()), pos.y());
 
@@ -1240,7 +1240,7 @@ void AxisPrivate::retransformLine() {
 			// QDEBUG(Q_FUNC_INFO << ", scene range = " << sceneRange)
 			if (sceneRange.size() > 0) {
 				// std::max/std::min: stay inside rect()
-				QRectF rect = q->m_plot->dataRect();
+				QRectF rect = m_plot->dataRect();
 				startPoint = QPointF(pos.x(), std::min(sceneRange.at(0).y1(), rect.y() + rect.height()));
 				endPoint = QPointF(pos.x(), std::max(sceneRange.at(0).y2(), rect.y()));
 

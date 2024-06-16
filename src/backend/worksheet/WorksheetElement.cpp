@@ -59,16 +59,17 @@ WorksheetElement::~WorksheetElement() {
 
 void WorksheetElement::finalizeAdd() {
 	DEBUG(Q_FUNC_INFO)
-	if (!m_plot) {
+	Q_D(WorksheetElement);
+	if (!d->m_plot) {
 		// determine the plot parent which is not neccessarily the parent aspect like for
 		// * child CustomPoint in InfoeElement
 		// * child XYCurves in QQPlot
 		// * etc.
-		m_plot = dynamic_cast<CartesianPlot*>(parent(AspectType::CartesianPlot));
+		d->m_plot = dynamic_cast<CartesianPlot*>(parent(AspectType::CartesianPlot));
 	}
 
-	if (m_plot) {
-		cSystem = dynamic_cast<const CartesianCoordinateSystem*>(m_plot->coordinateSystem(m_cSystemIndex));
+	if (d->m_plot) {
+		cSystem = dynamic_cast<const CartesianCoordinateSystem*>(d->m_plot->coordinateSystem(m_cSystemIndex));
 		Q_EMIT plotRangeListChanged();
 	} else
 		DEBUG(Q_FUNC_INFO << ", WARNING: no plot available.")
@@ -708,16 +709,18 @@ void WorksheetElement::setCoordinateSystemIndex(int index, QUndoCommand* parent)
 }
 
 int WorksheetElement::coordinateSystemCount() const {
-	if (m_plot)
-		return m_plot->coordinateSystemCount();
+	Q_D(const WorksheetElement);
+	if (d->m_plot)
+		return d->m_plot->coordinateSystemCount();
 	DEBUG(Q_FUNC_INFO << ", WARNING: no plot set!")
 
 	return 0;
 }
 
 QString WorksheetElement::coordinateSystemInfo(const int index) const {
-	if (m_plot)
-		return m_plot->coordinateSystem(index)->info();
+	Q_D(const WorksheetElement);
+	if (d->m_plot)
+		return d->m_plot->coordinateSystem(index)->info();
 
 	return {};
 }
@@ -1100,4 +1103,9 @@ void WorksheetElementPrivate::setHover(bool on) {
 	m_hovered = on;
 	Q_EMIT q->hoveredChanged(on);
 	update();
+}
+
+CartesianPlot* WorksheetElement::plot() const {
+	Q_D(const WorksheetElement);
+	return d->m_plot;
 }
