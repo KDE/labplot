@@ -44,7 +44,6 @@ public:
 	BASIC_D_ACCESSOR_DECL(QVector<const AbstractColumn*>, dataColumns, DataColumns)
 	QVector<QString>& dataColumnPaths() const;
 	BASIC_D_ACCESSOR_DECL(LollipopPlot::Orientation, orientation, Orientation)
-	BASIC_D_ACCESSOR_DECL(double, widthFactor, WidthFactor)
 
 	Line* lineAt(int) const;
 	Symbol* symbolAt(int) const;

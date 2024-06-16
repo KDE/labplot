@@ -70,7 +70,7 @@ public:
 	BASIC_D_ACCESSOR_DECL(HorizontalAlignment, horizontalAlignment, HorizontalAlignment)
 	BASIC_D_ACCESSOR_DECL(VerticalAlignment, verticalAlignment, VerticalAlignment)
 	BASIC_D_ACCESSOR_DECL(qreal, rotationAngle, RotationAngle)
-	BASIC_D_ACCESSOR_DECL(qreal, scale, Scale)
+	qreal scale() const;
 	BASIC_D_ACCESSOR_DECL(bool, isLocked, Lock)
 	BASIC_D_ACCESSOR_DECL(bool, isHovered, Hover)
 
