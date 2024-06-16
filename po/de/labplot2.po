@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-15 01:42+0000\n"
+"POT-Creation-Date: 2024-06-16 01:42+0000\n"
 "PO-Revision-Date: 2023-11-26 22:42+0100\n"
 "Last-Translator: Stefan Gerlach <stefan.gerlach@uni.kn>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -376,13 +376,13 @@ msgid "%1: unmask cells"
 msgstr "%1: Zellenmaskierung aufheben"
 
 #: src/backend/core/abstractcolumncommands.cpp:253
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2481
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2485
 #, kde-format
 msgid "%1: set heatmap format"
 msgstr "%1: Format der Heatmap festlegen"
 
 #: src/backend/core/abstractcolumncommands.cpp:280
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2498
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2502
 #, kde-format
 msgid "%1: remove heatmap format"
 msgstr "%1: Format der Heatmap entfernen"
@@ -608,14 +608,14 @@ msgstr "%1: Spaltentyp ändern"
 msgid "%1: clear column"
 msgstr "%1: Spalte löschen"
 
-#: src/backend/core/column/Column.cpp:1552
+#: src/backend/core/column/Column.cpp:1559
 #, kde-format
 msgid "invalid or missing row index"
 msgstr "Ungültiger oder fehlender Zeilenindex"
 
-#: src/backend/core/column/Column.cpp:1561
-#: src/backend/core/column/Column.cpp:1570
-#: src/backend/core/column/Column.cpp:1579
+#: src/backend/core/column/Column.cpp:1568
+#: src/backend/core/column/Column.cpp:1577
+#: src/backend/core/column/Column.cpp:1586
 #, kde-format
 msgid "invalid row value"
 msgstr "Ungültiger Zeilenwert"
@@ -627,7 +627,7 @@ msgid "%1: change cell values"
 msgstr "%1: Zellenwerte ändern"
 
 #: src/backend/core/column/columncommands.cpp:531
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2705
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2709
 #, kde-format
 msgid "%1: set plot designation"
 msgstr "%1: Plotzuordnung festlegen"
@@ -846,9 +846,9 @@ msgstr "Unbekanntes Digitalisierelement „%1“"
 #. i18n: ectx: property (text), widget (QRadioButton, rbJitter)
 #: src/backend/datapicker/DatapickerCurve.cpp:176
 #: src/commonfrontend/matrix/MatrixView.cpp:135
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:382
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:401
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:409
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:411
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:430
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:438
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:220
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:557
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:311
@@ -1194,12 +1194,12 @@ msgstr "Fehler beim Öffnen des Geräts."
 #: src/backend/datasources/filters/AsciiFilter.cpp:1512
 #: src/backend/datasources/filters/AsciiFilter.cpp:2067
 #: src/backend/datasources/filters/QJsonModel.cpp:133
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1880
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1885
 #: src/commonfrontend/matrix/MatrixView.cpp:620
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2384
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2405
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2423
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2440
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2388
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2409
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2427
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2444
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:149
 #: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:188
 #: src/kdefrontend/ui/dockwidgets/columndock.ui:182
@@ -3073,8 +3073,8 @@ msgid "Energy 1 erg"
 msgstr "Energie 1 erg"
 
 #: src/backend/gsl/errors.h:20
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2060
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1179
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2065
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1181
 #, kde-format
 msgid "Success"
 msgstr "Erfolg"
@@ -3120,10 +3120,10 @@ msgid "Factorization failed"
 msgstr "Faktorisierung fehlgeschlagen"
 
 #: src/backend/gsl/errors.h:38
-#: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:583
-#: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:603
-#: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:623
-#: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:658
+#: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:585
+#: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:605
+#: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:625
+#: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:660
 #: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:449
 #, kde-format
 msgid "Failed to allocate memory"
@@ -5637,34 +5637,34 @@ msgstr "v2"
 msgid "ep"
 msgstr "ep"
 
-#: src/backend/lib/Range.h:47 src/backend/nsl/nsl_interp.c:14
+#: src/backend/lib/Range.h:49 src/backend/nsl/nsl_interp.c:14
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:537
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:511
 #, kde-format
 msgid "Linear"
 msgstr "Linear"
 
-#: src/backend/lib/Range.h:47
+#: src/backend/lib/Range.h:49
 #, kde-format
 msgid "Log10"
 msgstr "Log10"
 
-#: src/backend/lib/Range.h:47
+#: src/backend/lib/Range.h:49
 #, kde-format
 msgid "Log2"
 msgstr "Log2"
 
-#: src/backend/lib/Range.h:47
+#: src/backend/lib/Range.h:49
 #, kde-format
 msgid "Ln"
 msgstr "Ln"
 
-#: src/backend/lib/Range.h:47
+#: src/backend/lib/Range.h:49
 #, kde-format
 msgid "Sqrt"
 msgstr "Wurzel"
 
-#: src/backend/lib/Range.h:47
+#: src/backend/lib/Range.h:49
 #, kde-format
 msgid "Square"
 msgstr "Quadrat"
@@ -5686,13 +5686,13 @@ msgid "unexpected end of document"
 msgstr "Unerwartetes Ende des Dokuments"
 
 #: src/backend/matrix/Matrix.cpp:121
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3679
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3683
 #, kde-format
 msgid "FITS image"
 msgstr "FITS-Bild"
 
 #: src/backend/matrix/Matrix.cpp:121
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3679
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3683
 #, kde-format
 msgid "FITS table"
 msgstr "FITS-Tabelle"
@@ -6072,7 +6072,7 @@ msgid "Raw"
 msgstr "Unverarbeitet"
 
 #: src/backend/nsl/nsl_dft.c:29 src/backend/nsl/nsl_filter.c:23
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:910
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:939
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:227
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:326
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:489
@@ -6194,13 +6194,13 @@ msgstr "Statistik (Verteilungen)"
 
 #: src/backend/nsl/nsl_fit.c:24
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:577
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1866
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1871
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:551
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1226
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:242
 #: src/kdefrontend/dockwidgets/KDEPlotDock.cpp:171
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:277
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:754
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:756
 #: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:81
 #, kde-format
 msgid "Custom"
@@ -7662,7 +7662,7 @@ msgid "Title"
 msgstr "Titel"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:428
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:205
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:234
 #, kde-format
 msgid "xy-curve"
 msgstr "XY-Kurve"
@@ -7675,7 +7675,7 @@ msgstr "XY-Kurve aus einer Formel"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:432
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:487
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:77
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:210
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:239
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:143
 #, kde-format
 msgid "Histogram"
@@ -7683,8 +7683,8 @@ msgstr "Histogramm"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:433
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:484
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:214
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:744
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:243
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:773
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:146
 #, kde-format
 msgid "Box Plot"
@@ -7692,7 +7692,7 @@ msgstr "Box-Plot"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:434
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:493
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:218
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:247
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:144
 #, kde-format
 msgid "KDE Plot"
@@ -7700,16 +7700,16 @@ msgstr "KDE-Plot"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:435
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:490
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:222
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:251
 #, kde-format
 msgid "Q-Q Plot"
 msgstr "Q-Q-Plot"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:438
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:476
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:228
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:746
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:748
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:257
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:775
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:777
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:149
 #, kde-format
 msgid "Bar Plot"
@@ -7717,7 +7717,7 @@ msgstr "Bar-Plot"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:439
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:479
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:232
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:261
 #, kde-format
 msgid "Lollipop Plot"
 msgstr "Lollipop-Plot"
@@ -7939,13 +7939,13 @@ msgid "Add New"
 msgstr "Neu hinzufügen"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:615
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:209
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:238
 #, kde-format
 msgid "Statistical Plots"
 msgstr "Statistik-Plots"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:622
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:227
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:256
 #, kde-format
 msgid "Bar Plots"
 msgstr "Bar-Plots"
@@ -8080,7 +8080,7 @@ msgid "%1: reduce '%2'"
 msgstr "%1: %2 reduzieren"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1808
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:669
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:698
 #, kde-format
 msgid "Reduction of '%1'"
 msgstr "Reduzierung von '%1'"
@@ -8096,7 +8096,7 @@ msgid "%1: differentiate '%2'"
 msgstr "%1: Differenziere '%2'"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1827
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:672
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:701
 #, kde-format
 msgid "Derivative of '%1'"
 msgstr "Ableitung von „%1“"
@@ -8112,7 +8112,7 @@ msgid "%1: integrate '%2'"
 msgstr "%1: Integriere '%2'"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1846
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:675
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:704
 #, kde-format
 msgid "Integral of '%1'"
 msgstr "Integral von „%1“"
@@ -8128,7 +8128,7 @@ msgid "%1: interpolate '%2'"
 msgstr "%1: interpoliere '%2'"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1865
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:678
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:707
 #, kde-format
 msgid "Interpolation of '%1'"
 msgstr "Interpolation von „%1“"
@@ -8144,7 +8144,7 @@ msgid "%1: smooth '%2'"
 msgstr "%1: glätte '%2'"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1884
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:681
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:710
 #, kde-format
 msgid "Smoothing of '%1'"
 msgstr "Glättung von '%1'"
@@ -8160,7 +8160,7 @@ msgid "%1: fit to '%2'"
 msgstr "%1: Anpassung an '%2'"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1903
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:694
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:723
 #, kde-format
 msgid "Fit to '%1'"
 msgstr "Anpassung an '%1'"
@@ -8994,121 +8994,121 @@ msgstr "%1: Einstellungen festlegen und die Differentiation durchführen"
 msgid "%1: set equation"
 msgstr "%1: Gleichung festlegen"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:929
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:934
 #, kde-format
 msgid "%1: data source histogram changed"
 msgstr "%1: Datenquellen-Histogramm geändert"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:941
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:946
 #, kde-format
 msgid "%1: assign x-error"
 msgstr "%1: X-Fehler zuweisen"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:956
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:961
 #, kde-format
 msgid "%1: assign y-error"
 msgstr "%1: Y-Fehler zuweisen"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:972
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:977
 #, kde-format
 msgid "%1: set fit options and perform the fit"
 msgstr "%1: Einstellungen festlegen und die Anpassung durchführen"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1818
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:3086
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1823
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:3092
 #, fuzzy, kde-format
 #| msgid "Fit results"
 msgid "Fit Results"
 msgstr "Fitergebnisse"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1842
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1847
 #, kde-format
 msgid "Nonlinear Fit to X/Y data"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1848
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1853
 #, kde-format
 msgid "MODEL"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1852
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1857
 #, kde-format
 msgid "Degree"
 msgstr "Grad"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1857
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1862
 #, kde-format
 msgid "Peaks"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1876
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1881
 #, kde-format
 msgid "PARAMETERS"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1880
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1885
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:149
 #, kde-format
 msgid "Uncertainty"
 msgstr "Unsicherheit"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1880
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1885
 #, fuzzy, kde-format
 #| msgid "Uncertainty, %"
 msgid "Uncertainty,%"
 msgstr "Unischerheit, %"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1880
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1885
 #, fuzzy, kde-format
 #| msgid "t statistic"
 msgid "t Statistic"
 msgstr "t-Statistik"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1881
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1886
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:150
 #, kde-format
 msgid "Lower"
 msgstr "Unten"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1881
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1886
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:150
 #, kde-format
 msgid "Upper"
 msgstr "Oben"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1897
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1902
 #, kde-format
 msgid "GOODNESS OF FIT"
 msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1899
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1904
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:618
 #, kde-format
 msgid "Sum of squared residuals"
 msgstr "Summe der quadratischen Fehler"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1900
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1905
 #, fuzzy, kde-format
 #| msgid "Residual mean square"
 msgid "Residuals mean square"
 msgstr "Mittleres Restquadrat"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1901
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1906
 #, fuzzy, kde-format
 #| msgid "Root mean square deviation (RMSD, SD)"
 msgid "Root mean square deviation"
 msgstr "Wurzel des mittleren quadratischen Fehlers (RMSD, SD)"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1902
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1907
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:648
 #, kde-format
 msgid "Coefficient of determination"
 msgstr "Bestimmtheitsmaß"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1903
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1908
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:658
 #, kde-format
 msgid "Adj. coefficient of determination"
@@ -9116,7 +9116,7 @@ msgstr "Korrigiertes Bestimmtheitsmaß"
 
 #. i18n: ectx: property (text), widget (QPushButton, bTest)
 #. i18n: ectx: property (text), widget (QPushButton, bTestConnection)
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1904
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1909
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:181
 #: src/kdefrontend/ui/datasources/databasemanagerwidget.ui:263
 #: src/kdefrontend/ui/datasources/mqttconnectionmanagerwidget.ui:168
@@ -9124,41 +9124,41 @@ msgstr "Korrigiertes Bestimmtheitsmaß"
 msgid "Test"
 msgstr "Test"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1905
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1910
 #, fuzzy, kde-format
 #| msgid "Test"
 msgid "F-Test"
 msgstr "Test"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1907
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1912
 #, fuzzy, kde-format
 #| msgid "mean absolute error:"
 msgid "Mean absolute error"
 msgstr "Mittlerer absoluter Fehler:"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1908
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1913
 #, fuzzy, kde-format
 #| msgid "Akaike information criterion:"
 msgid "Akaike information criterion"
 msgstr "Akaikes Informationskriterium:"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1909
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1914
 #, fuzzy, kde-format
 #| msgid "Bayesian information criterion:"
 msgid "Bayesian information criterion"
 msgstr "Bayessches Informationskriterium:"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2246
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2251
 #, kde-format
 msgid "Model has no parameters."
 msgstr "Modell hat keine Parameter."
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2253
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2258
 #, kde-format
 msgid "Not sufficient weight data points provided."
 msgstr "Nicht genügend Punkte für die Gewichtung angegeben."
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2330
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2335
 #: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:175
 #: src/backend/worksheet/plots/cartesian/XYFourierTransformCurve.cpp:125
 #: src/backend/worksheet/plots/cartesian/XYHilbertTransformCurve.cpp:132
@@ -9166,7 +9166,7 @@ msgstr "Nicht genügend Punkte für die Gewichtung angegeben."
 msgid "No data points available."
 msgstr "Keine Datenpunkte verfügbar."
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2337
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2342
 #, kde-format
 msgid ""
 "The number of data points (%1) must be greater than or equal to the number "
@@ -9175,7 +9175,7 @@ msgstr ""
 "Die Anzahl der Datenpunkte (%1) muss größer oder gleich der Anzahl der "
 "Parameter (%2) sein."
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2344
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2349
 #, kde-format
 msgid "Fit model not specified."
 msgstr "Fitmodell nicht angegeben."
@@ -9715,16 +9715,16 @@ msgid "Curve"
 msgstr "Kurve"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:870
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3919
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3973
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3923
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3977
 #: src/commonfrontend/worksheet/WorksheetView.cpp:2211
 #, kde-format
 msgid "Failed to export"
 msgstr "Fehler beim Exportieren"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:870
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3919
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3973
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3923
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3977
 #: src/commonfrontend/worksheet/WorksheetView.cpp:2211
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
@@ -10498,56 +10498,56 @@ msgid_plural "%1: fill columns with row numbers"
 msgstr[0] "%1: Zelle mit Reihennummern füllen"
 msgstr[1] "%1: Zellen mit Reihennummern füllen"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2255
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2257
 #, kde-format
 msgid "%1: fill cells with random values"
 msgstr "%1: Zellen mit zufälligen Werten füllen"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2375
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2377
 #, kde-format
 msgid "%1: fill cells with const values"
 msgstr "%1: Zellen mit konstanten Werten füllen"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2383
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2405
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2423
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2440
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2387
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2409
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2427
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2444
 #, kde-format
 msgid "Fill the selection with constant value"
 msgstr "Auswahl mit konstanten Werten füllen"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2518
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2552
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2522
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2556
 #, kde-format
 msgid "Insert empty columns"
 msgstr "Leere Spalten einfügen"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2519
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2553
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2523
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2557
 #, kde-format
 msgid "Enter the number of columns to insert"
 msgstr "Geben Sie die Anzahl der Spalten zum Einfügen ein"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2571
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2575
 #, kde-format
 msgid "%1: insert empty column"
 msgid_plural "%1: insert empty columns"
 msgstr[0] "%1: Leere Spalte einfügen"
 msgstr[1] "%1: Leere Spalten einfügen"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2641
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2645
 #, kde-format
 msgid "%1: remove selected columns"
 msgstr "%1: Ausgewählte Spalten entfernen"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2738
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2742
 #, kde-format
 msgid "%1: reverse column"
 msgid_plural "%1: reverse columns"
 msgstr[0] "%1: Spalte umkehren"
 msgstr[1] "%1: Spalten umkehren"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2811
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2815
 #, kde-format
 msgid ""
 "The selected columns have different data types and cannot be flattened "
@@ -10556,221 +10556,221 @@ msgstr ""
 "Die ausgewählten Spalten haben unterschiedliche Datentypen und können "
 "deshalb nicht abgeglichen werden."
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2849
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2853
 #, kde-format
 msgid "%1: normalize columns"
 msgstr "%1: Spalten normalisieren"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2869
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2873
 #, kde-format
 msgid "Sum = 0"
 msgstr "Sum = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2880
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2884
 #, kde-format
 msgid "Min = 0"
 msgstr "Min = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2891
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2895
 #, kde-format
 msgid "Max = 0"
 msgstr "Max = 0 "
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2902
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2906
 #, kde-format
 msgid "Count = 0"
 msgstr "Anzahl = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2913
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2917
 #, kde-format
 msgid "Mean = 0"
 msgstr "Mittelwert = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2924
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2928
 #, kde-format
 msgid "Median = 0"
 msgstr "Median = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2936
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2940
 #, kde-format
 msgid "Mode = 0"
 msgstr "Modus = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2938
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2942
 #, kde-format
 msgid "'Mode not defined'"
 msgstr "Modus nicht angegeben."
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2949
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2953
 #, kde-format
 msgid "Range = 0"
 msgstr "Bereich = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2960
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2994
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2964
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2998
 #, kde-format
 msgid "SD = 0"
 msgstr "SD = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2971
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3006
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2975
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3010
 #, kde-format
 msgid "MAD = 0"
 msgstr "MAD = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2982
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3018
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2986
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3022
 #, kde-format
 msgid "IQR = 0"
 msgstr "IQR = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3030
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3034
 #, kde-format
 msgid "Max - Min = 0"
 msgstr "Max - Min = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3049
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3053
 #, kde-format
 msgid "Normalization not possible"
 msgstr "Normierung nicht möglich"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3061
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3065
 #, kde-format
 msgid "%1: power transform columns"
 msgstr "%1: Potenztransformationsspalten"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3179
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3183
 #, kde-format
 msgid "%1: column statistics"
 msgstr "%1: Spalten-Statistik"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3210
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3214
 #, kde-format
 msgid "Selection in %1"
 msgstr "Auswahl von %1"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3253
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3257
 #, kde-format
 msgid "%1: row statistics"
 msgstr "%1: Reihen-Statistik"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3263
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3267
 #, kde-format
 msgid "Row %1"
 msgstr "Reihe %1"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3288
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3327
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3292
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3331
 #, kde-format
 msgid "Insert multiple rows"
 msgstr "Mehrere Zeilen einfügen"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3289
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3328
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3293
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3332
 #, kde-format
 msgid "Enter the number of rows to insert"
 msgstr "Geben Sie die Anzahl der Zeilen zum Einfügen ein"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3308
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3347
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3312
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3351
 #, kde-format
 msgid "%1: insert empty row"
 msgid_plural "%1: insert empty rows"
 msgstr[0] "%1: Leere Zeile einfügen"
 msgstr[1] "%1: Leere Zeilen einfügen"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3363
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3367
 #, kde-format
 msgid "%1: remove selected rows"
 msgstr "%1: Ausgewählte Zeilen entfernen"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3388
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3392
 #, kde-format
 msgid "%1: clear selected cells"
 msgstr "%1: Ausgewählte Zellen löschen"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3643
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3647
 #, kde-format
 msgid "row"
 msgid_plural "rows"
 msgstr[0] "Reihe"
 msgstr[1] "Reihen"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3644
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3648
 #, kde-format
 msgid "column"
 msgid_plural "columns"
 msgstr[0] "Spalte"
 msgstr[1] "Spalten"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3645
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3649
 #, kde-format
 msgid "cells"
 msgstr "Zellen"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3646
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3650
 #, kde-format
 msgid "masked value"
 msgstr "Maskierte Werte"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3646
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3650
 #, kde-format
 msgid "masked values"
 msgstr "Maskierte Werte"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3647
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3651
 #, kde-format
 msgid "missing value"
 msgstr "Fehlender Wert"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3647
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3651
 #, kde-format
 msgid "missing values"
 msgstr "Fehlende Werte"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3648
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3652
 #, kde-format
 msgid " , "
 msgstr " , "
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3648
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3649
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3652
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3653
 #, kde-format
 msgid "%1"
 msgstr "%1"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3649
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3653
 #, kde-format
 msgid ", "
 msgstr ", "
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3652
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3656
 #, kde-format
 msgid "Selected: %1 %2 , %3 %4%5 %6 %7 %8"
 msgstr "Ausgewählt: %1 %2, %3 %4%5 %6 %7 %8"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3663
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3667
 #, kde-format
 msgid "Selected: %1 %2%3 %4 %5 %6"
 msgstr "Ausgewählt: %1 %2%3 %4 %5 %6"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3736
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3740
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Spreadsheet"
 msgstr "Tabelle drucken"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4341
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4345
 #, kde-format
 msgid "Couldn't create the SQLite database %1."
 msgstr "Erzeugung der SQLite-Datenbank '%1' fehlgeschlagen."
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4373
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4377
 #, kde-format
 msgid "Failed to create table in the SQLite database %1."
 msgstr "Erzeugung einer Tabelle in der SQLite-Datenbank '%1' fehlgeschlagen."
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4426
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4430
 #, kde-format
 msgid "Failed to insert values into the table."
 msgstr "Einfügen von Werten in die Tabelle fehlgeschlagen."
@@ -13344,17 +13344,17 @@ msgid "Expand all curves"
 msgstr "Alle Kurven ausklappen"
 
 #: src/kdefrontend/dockwidgets/CursorDock.cpp:148
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1311
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1317
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1323
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1313
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1319
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1325
 #, kde-format
 msgid "Copy Selection"
 msgstr "Auswahl kopieren"
 
 #: src/kdefrontend/dockwidgets/CursorDock.cpp:149
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1312
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1318
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1324
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1314
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1320
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1326
 #, kde-format
 msgid "Copy All"
 msgstr "Alles kopieren"
@@ -13879,28 +13879,28 @@ msgid "Histogram:"
 msgstr "Histogramm:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDegree)
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:802
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:804
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1191
 #, kde-format
 msgid "Degree:"
 msgstr "Grad:"
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:859
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:861
 #, kde-format
 msgid "Number of peaks:"
 msgstr "Anzahl der Peaks:"
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1180
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1182
 #, kde-format
 msgid "Fit status: %1"
 msgstr "Fit Status: %1"
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1358
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1360
 #, kde-format
 msgid "%1 % lower confidence level"
 msgstr "%1 % untere Vertrauensgrenze"
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1359
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1361
 #, kde-format
 msgid "%1 % upper confidence level"
 msgstr "%1 % obere Vertrauensgrenze"
@@ -15676,13 +15676,22 @@ msgstr ""
 "Uncertainty in Measurement (GUM)</span></a></p></body></html>"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:259
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "If checked, the results of the calculations in the analysis curves will "
+#| "be saved in the project file.\n"
+#| "Uncheck this option to reduce the size of the project file at costs of "
+#| "the longer project load times."
 msgid ""
 "Save the state (position and geometry) of the docks in the project file. \n"
-"Determines the default behaviour for new projects. \n"
+"Determines the default behavior for new projects. \n"
 "The setting can be changed for every project separately in the project "
 "properties."
 msgstr ""
+"Wenn aktiv, werden die Berechnungen von Analysekurven in Projekt "
+"gespeichert.\n"
+"Ohne diese Option wird die Größe der Projektdatei kleiner auf Kosten der "
+"Berechnungszeit beim Laden des Projektes"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:266
 #, fuzzy, kde-format
@@ -15696,7 +15705,7 @@ msgid ""
 "file. \n"
 "Uncheck this option to reduce the size of the project file at costs of the "
 "longer project load times. \n"
-"Determines the default behaviour for new projects. \n"
+"Determines the default behavior for new projects. \n"
 "The setting can be changed for every project separately in the project "
 "properties."
 msgstr ""
@@ -15720,7 +15729,7 @@ msgstr ""
 #: src/kdefrontend/SettingsGeneralPage.cpp:275
 #, kde-format
 msgid ""
-"Performance trace - helpful to analyse performance relevant aspects and "
+"Performance trace - helpful to analyze performance relevant aspects and "
 "bottlenecks."
 msgstr ""
 
@@ -16198,10 +16207,10 @@ msgid_plural "%1: fill columns with equidistant numbers"
 msgstr[0] "%1: Spalte mit äquidistanten Werten füllen"
 msgstr[1] "%1: Spalten mit äquidistanten Werten füllen"
 
-#: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:583
-#: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:603
-#: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:623
-#: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:658
+#: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:585
+#: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:605
+#: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:625
+#: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:660
 #: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:449
 #, kde-format
 msgid "Not enough memory to perform this operation."
@@ -16480,106 +16489,106 @@ msgstr "Gehe zu Zelle"
 msgid "Row:"
 msgstr "Reihe:"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:70
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:85
 #, kde-format
 msgctxt "@title:window"
 msgid "Plot Spreadsheet Data"
 msgstr "Tabellendaten grafisch darstellen"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:79
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:94
 #, kde-format
 msgid "Plot the selected data"
 msgstr "Ausgewählte Daten grafisch darstellen"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:80
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:95
 #, kde-format
 msgid "&Plot"
 msgstr "&Plot"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:329
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:358
 #, kde-format
 msgid "Y-data"
 msgstr "Y-Daten"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:339
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:394
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:368
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:423
 #, kde-format
 msgid "Add Plot to"
 msgstr "Plot hinzufügen zu"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbPlotPlacement)
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:397
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:426
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:180
 #, kde-format
 msgid "Add Plots to"
 msgstr "Plots hinzufügen zu"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:429
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:440
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:470
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:458
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:469
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:499
 #, kde-format
 msgid "Plot Area - %1"
 msgstr "Plotbereich - %1"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:436
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:465
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:494
 #, kde-format
 msgid "Worksheet - %1"
 msgstr "Arbeitsblatt - %1"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:464
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:493
 #, kde-format
 msgid "Plot data from %1"
 msgstr "Daten grafisch darstellen von %1"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:590
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:608
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:625
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:619
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:637
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:654
 #, kde-format
 msgid "Plot Area %1"
 msgstr "Plotbereich %1"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:699
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:728
 #, kde-format
 msgid "Fourier Filter of '%1'"
 msgstr "Fourier-Filter von '%1'"
 
 #. i18n: ectx: property (text), widget (QLabel, lDensity)
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:912
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:941
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:350
 #: src/kdefrontend/ui/plotsurfacestylewidget.ui:23
 #, kde-format
 msgid "Density"
 msgstr "Dichte"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:922
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:951
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:381
 #, kde-format
 msgid "Theoretical Quantiles"
 msgstr "Theoretische Quantile"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:930
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:959
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:383
 #, kde-format
 msgid "Sample Quantiles"
 msgstr "Stichproben-Quantile"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:1044
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:1073
 #, kde-format
 msgid "No data selected to plot."
 msgstr "Kein Datensatz zum darstellen ausgewählt."
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:1049
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:1078
 #, kde-format
 msgid "An already existing plot area has to be selected."
 msgstr "Ein existierender Plotbereich muss ausgewählt sein."
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:1054
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:1083
 #, kde-format
 msgid "An already existing worksheet has to be selected."
 msgstr "Ein existierendes Arbeitsblatt muss ausgewählt sein."
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:1060
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:1089
 #, kde-format
 msgid "Close the dialog and plot the data."
 msgstr "Schließt den Dialog und zeigt die Daten im Plot an."
@@ -16624,7 +16633,7 @@ msgstr ""
 "underline; color:#2980b9;\">GSL documentation</span></a> definiert</p></"
 "body></html>"
 
-#: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:473
+#: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:470
 #, kde-format
 msgid "%1: fill column with non-uniform random numbers"
 msgid_plural "%1: fill columns with non-uniform random numbers"
