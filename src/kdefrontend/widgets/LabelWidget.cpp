@@ -211,15 +211,22 @@ LabelWidget::LabelWidget(QWidget* parent)
 	ui.cbMode->addItem(QIcon::fromTheme(QLatin1String("text-x-markdown")), i18n("Markdown"));
 #endif
 
+#ifdef HAVE_DISCOUNT
 	msg = i18n(
 		"Text setting mode:"
 		"<ul>"
 		"<li>Text - text setting using rich-text formatting</li>"
 		"<li>LaTeX - text setting using LaTeX, installation of LaTeX required</li>"
-#ifdef HAVE_DISCOUNT
 		"<li>Markdown - text setting using Markdown markup language</li>"
-#endif
 		"</ul>");
+#else
+	msg = i18n(
+		"Text setting mode:"
+		"<ul>"
+		"<li>Text - text setting using rich-text formatting</li>"
+		"<li>LaTeX - text setting using LaTeX, installation of LaTeX required</li>"
+		"</ul>");
+#endif
 	ui.cbMode->setToolTip(msg);
 
 	// check whether LaTeX is available and deactivate the item in the combobox, if not.
