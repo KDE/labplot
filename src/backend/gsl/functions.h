@@ -121,6 +121,7 @@ enum class FunctionGroups : int {
 	GeometricDistribution,
 	HypergeometricDistribution,
 	LogarithmicDistribution,
+	TriangularDistribution,
 	// Not implemented
 	// i18n("Coupling Coefficients")
 	// i18n("Elementary Operations")

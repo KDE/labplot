@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : NSL special statistics functions
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2016-2017 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2016-2024 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -117,18 +117,22 @@ const char* nsl_sf_stats_distribution_equation[] = {"a/sqrt(2*pi)/s * exp(-((x-m
 													"a/2/s * sech(pi/2*(x-mu)/s)",
 													"a * sqrt(g/(2*pi))/pow(x-mu, 1.5) * exp(-g/2./(x-mu))",
 													"a * g/s*((x-mu)/s)^(-g-1) * exp(-((x-mu)/s)^(-g))",
-													"Triangular"};
+													"a * triangular(min, max, mode)"};
 
 bool nsl_sf_stats_distribution_supports_RNG(nsl_sf_stats_distribution d) {
+	// blacklist
 	if (d == nsl_sf_stats_maxwell_boltzmann || d == nsl_sf_stats_sech || d == nsl_sf_stats_levy || d == nsl_sf_stats_frechet)
 		return false;
 	return true;
 }
 
 bool nsl_sf_stats_distribution_supports_ML(nsl_sf_stats_distribution d) {
+	// whitelist
 	if (d == nsl_sf_stats_gaussian || d == nsl_sf_stats_exponential || d == nsl_sf_stats_laplace || d == nsl_sf_stats_cauchy_lorentz
 		|| d == nsl_sf_stats_lognormal || d == nsl_sf_stats_poisson || d == nsl_sf_stats_binomial)
 		return true;
 
 	return false;
 }
+
+/* custom distributions are in nsl_sf_basic.h */

@@ -149,9 +149,9 @@ double nsl_sf_ran_binomial(double p, double n) {
 }
 
 /* NSL RNGs */
-double nsl_sf_ran_triangular(double a, double b, double c) {
+double nsl_sf_ran_triangular(double min, double max, double mode) {
 	SETUP_GSL_RNG
-	return nsl_ran_triangular(r, a, b, c);
+	return nsl_ran_triangular(r, min, max, mode);
 }
 
 /*
@@ -636,4 +636,14 @@ double nsl_sf_hypergeometric(double k, double n1, double n2, double t) {
 }
 double nsl_sf_logarithmic(double k, double p) {
 	return gsl_ran_logarithmic_pdf((unsigned int)round(k), p);
+}
+
+double nsl_sf_triangular(double x, double min, double max, double mode) {
+	if (x < min || x > xmax)
+		return 0;
+
+	if (x <= mode)
+		return 2. * (x - min) / (max - min) / (mode - min);
+	else
+		return 2. * (max - x) / (max - min) / (max - mode);
 }

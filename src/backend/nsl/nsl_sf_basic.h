@@ -62,7 +62,7 @@ double nsl_sf_ran_poisson(double mu);
 double nsl_sf_ran_bernoulli(double p);
 double nsl_sf_ran_binomial(double p, double n);
 
-double nsl_sf_ran_triangular(double a, double b, double c);
+double nsl_sf_ran_triangular(double min, double max, double mode);
 
 /* log2(x) for integer value x */
 int nsl_sf_log2_int(unsigned int x);
@@ -211,6 +211,8 @@ double nsl_sf_pascal(double k, double p, double n);
 double nsl_sf_geometric(double k, double p);
 double nsl_sf_hypergeometric(double k, double n1, double n2, double t);
 double nsl_sf_logarithmic(double k, double p);
+
+double nsl_sf_triangular(double x, double min, double max, double mode);
 
 __END_DECLS
 

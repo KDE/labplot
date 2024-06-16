@@ -179,6 +179,8 @@ QString FunctionGroupsToString(FunctionGroups group) {
 		return i18n("Hypergeometric Distribution");
 	case FunctionGroups::LogarithmicDistribution:
 		return i18n("Logarithmic Distribution");
+	case FunctionGroups::TriangularDistribution:
+		return i18n("Triangular Distribution");
 	case FunctionGroups::END:
 		break;
 	}
@@ -831,6 +833,10 @@ struct funs _functions[] = {
 
 	// Logarithmic Distribution
 	{[]() { return i18n("Probability density for a logarithmic distribution"); }, "logarithmic", nsl_sf_logarithmic, 2, nullptr, FunctionGroups::LogarithmicDistribution},
+
+	// Non-GSL Distributions
+	// Triangular Distributions
+	{[]() { return i18n("Probability density for a triangular distribution"); }, "triangular", nsl_sf_triangular, 2, nullptr, FunctionGroups::TriangularDistribution},
 };
 
 // clang-format on

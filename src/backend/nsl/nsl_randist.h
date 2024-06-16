@@ -24,7 +24,7 @@
 __BEGIN_DECLS
 
 /* triangular distribution */
-double nsl_ran_triangular(gsl_rng* r, double a, double b, double c);
+double nsl_ran_triangular(gsl_rng* r, double min, double max, double mode);
 
 __END_DECLS
 

@@ -66,7 +66,7 @@ typedef enum {
 	nsl_sf_stats_frechet,
 	nsl_sf_stats_triangular
 } nsl_sf_stats_distribution;
-/*TODO: CDF, SF, ... */
+/*TODO: CDF, SF, ... ? */
 
 extern const char* nsl_sf_stats_distribution_name[];
 extern const char* nsl_sf_stats_distribution_pic_name[];
