@@ -37,25 +37,27 @@ public:
 	// and is deleted during the cleanup in QGraphicsScene
 	virtual ~XYEquationCurve2() override = default;
 
+	void recalculate() override;
+
 	QIcon icon() const override;
 	inline static constexpr ConstLatin1String saveName = "xyEquationCurve2";
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
 
-	//CLASS_D_ACCESSOR_DECL(Formu, equationData, EquationData);
+	// CLASS_D_ACCESSOR_DECL(Formu, equationData, EquationData);
 
 	typedef XYEquationCurve2Private Private;
 
 	const XYAnalysisCurve::Result& result() const override;
 
 	// void setEquationData(const XYEquationCurve2::EquationData& equationData);
-	void setEquation(const QString& equation, const QStringList& variableNames, const QVector<XYCurve *> &curve);
+	void setEquation(const QString& equation, const QStringList& variableNames, const QVector<XYCurve*>& curve);
 	QString equation() const;
 	void clearEquation();
 	struct EquationData {
-// #if (QT_VERSION < QT_VERSION_CHECK(5, 14, 0)) // required to use in QVector
-// 		EquationData() = default;
-// #endif
+		// #if (QT_VERSION < QT_VERSION_CHECK(5, 14, 0)) // required to use in QVector
+		// 		EquationData() = default;
+		// #endif
 		EquationData(const QString& variableName, const QString& curvePath)
 			: m_variableName(variableName)
 			, m_curvePath(curvePath) {

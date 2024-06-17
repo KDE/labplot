@@ -8,12 +8,12 @@
 */
 
 #include "XYEquationCurve2Dock.h"
+#include "backend/core/Project.h"
 #include "backend/gsl/ExpressionParser.h"
 #include "backend/worksheet/plots/cartesian/XYEquationCurve2.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 #include "kdefrontend/widgets/ConstantsWidget.h"
 #include "kdefrontend/widgets/FunctionsWidget.h"
-#include "backend/core/Project.h"
 
 #include <QCompleter>
 #include <QKeyEvent>
@@ -112,15 +112,14 @@ void XYEquationCurve2Dock::initGeneralTab() {
 				break;
 			}
 
-				   // for the current variable name no curve exists anymore (was deleted)
-				   //->highlight the combobox red
+			// for the current variable name no curve exists anymore (was deleted)
+			//->highlight the combobox red
 			if (!found) {
 				m_variableDataCurves[i]->setCurrentModelIndex(QModelIndex());
 				m_variableDataCurves[i]->useCurrentIndexText(false);
 				m_variableDataCurves[i]->setInvalid(
 					true,
-					i18n("The curve \"%1\"\nis not available anymore. It will be automatically used once it is created again.",
-						 formulaData.at(i).curveName()));
+					i18n("The curve \"%1\"\nis not available anymore. It will be automatically used once it is created again.", formulaData.at(i).curveName()));
 				m_variableDataCurves[i]->setText(formulaData.at(i).curveName().split(QLatin1Char('/')).last());
 			}
 		}
@@ -149,11 +148,12 @@ void XYEquationCurve2Dock::setCurves(QList<XYCurve*> list) {
 		}
 	}
 	setToolTip(QLatin1String(""));
-	aspectModel()->setRoot(m_curve->project());
 
 	m_curvesList = list;
 	m_curve = list.first();
 	setAspects(list);
+
+	aspectModel()->setRoot(m_curve->project());
 	m_equationCurve = dynamic_cast<XYEquationCurve2*>(m_curve);
 	Q_ASSERT(m_equationCurve);
 	XYCurveDock::setModel();
@@ -375,5 +375,5 @@ void XYEquationCurve2Dock::enableRecalculate() const {
 void XYEquationCurve2Dock::curveEquationDataChanged(const XYEquationCurve2::EquationData& data) {
 	CONDITIONAL_LOCK_RETURN;
 	// TODOOOOOOO!!!!
-	//uiGeneralTab.teEquation->setText(data.expression);
+	// uiGeneralTab.teEquation->setText(data.expression);
 }

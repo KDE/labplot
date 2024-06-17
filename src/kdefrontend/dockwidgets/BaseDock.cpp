@@ -287,8 +287,10 @@ void BaseDock::aspectLegendVisibleChanged(bool on) {
 }
 
 AspectTreeModel* BaseDock::aspectModel() {
-	if (!m_aspectModel)
+	if (!m_aspectModel) {
+		Q_ASSERT(m_aspect);
 		m_aspectModel = new AspectTreeModel(m_aspect->project());
+	}
 
 	return m_aspectModel;
 }

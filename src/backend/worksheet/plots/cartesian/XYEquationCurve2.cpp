@@ -26,6 +26,7 @@
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 
 #include <KLocalizedString>
+#include <QElapsedTimer>
 #include <QIcon>
 
 XYEquationCurve2::XYEquationCurve2(const QString& name)
@@ -41,18 +42,9 @@ XYEquationCurve2::XYEquationCurve2(const QString& name, XYEquationCurve2Private*
 void XYEquationCurve2::init() {
 	Q_D(XYEquationCurve2);
 
-	d->resultColumn->setHidden(true);
-	addChildFast(d->resultColumn);
-
 	// TODO: read from the saved settings for XYEquationCurve2?
 	d->lineType = XYCurve::LineType::Line;
 	d->symbol->setStyle(Symbol::Style::NoSymbols);
-
-	setUndoAware(false);
-	setSuppressRetransform(true);
-	setYColumn(d->resultColumn); // Currently only y column as result column supported
-	setSuppressRetransform(false);
-	setUndoAware(true);
 }
 
 /*!
@@ -91,7 +83,8 @@ public:
 									   QString equation,
 									   QStringList variableNames,
 									   QVector<XYCurve*> variableCurves,
-									   QUndoCommand* parent = nullptr)	: QUndoCommand(parent)
+									   QUndoCommand* parent = nullptr)
+		: QUndoCommand(parent)
 		, m_curve(curve)
 		, m_newEquation(std::move(equation))
 		, m_newVariableNames(std::move(variableNames))
@@ -134,7 +127,6 @@ private:
 	QVector<XYCurve*> m_newVariableCurves;
 	bool m_copied{false};
 };
-
 
 void XYEquationCurve2::setEquation(const QString& equation, const QStringList& variableNames, const QVector<XYCurve*>& curves) {
 	Q_D(XYEquationCurve2);
@@ -183,14 +175,18 @@ void XYEquationCurve2::equationVariableCurveAdded(const AbstractAspect* aspect) 
 	d->equationVariableCurveAdded(aspect);
 }
 
+void XYEquationCurve2::recalculate() {
+	Q_D(XYEquationCurve2);
+	d->recalculate();
+}
+
 // ##############################################################################
 // ######################### Private implementation #############################
 // ##############################################################################
 XYEquationCurve2Private::XYEquationCurve2Private(XYEquationCurve2* owner)
 	: XYAnalysisCurvePrivate(owner)
-	, resultColumn(new Column(QStringLiteral("result"), AbstractColumn::ColumnMode::Double))
-	, resultVector(static_cast<QVector<double>*>(resultColumn->data()))
 	, q(owner) {
+	dataSourceType = XYAnalysisCurve::DataSourceType::Curve;
 }
 
 QString XYEquationCurve2Private::equation() const {
@@ -201,14 +197,11 @@ const QVector<XYEquationCurve2::EquationData>& XYEquationCurve2Private::equation
 	return m_equationData;
 }
 
-void XYEquationCurve2Private::setEquation(const QString& equation,
-							   const QStringList& variableNames,
-							   const QStringList& variableCurvePaths) {
+void XYEquationCurve2Private::setEquation(const QString& equation, const QStringList& variableNames, const QStringList& variableCurvePaths) {
 	m_equation = equation;
 	m_equationData.clear();
 	for (int i = 0; i < variableNames.count(); i++)
 		m_equationData.append(XYEquationCurve2::EquationData(variableNames.at(i), variableCurvePaths.at(i)));
-
 }
 
 void XYEquationCurve2Private::setEquationVariableCurvesPath(int index, const QString& path) {
@@ -216,7 +209,7 @@ void XYEquationCurve2Private::setEquationVariableCurvesPath(int index, const QSt
 		DEBUG(Q_FUNC_INFO << ": For some reason, there was already a curve assigned");
 }
 
-void XYEquationCurve2Private::setEquationVariableCurve(int index, XYCurve *curve) {
+void XYEquationCurve2Private::setEquationVariableCurve(int index, XYCurve* curve) {
 	if (m_equationData.at(index).curve()) // if there exists already a valid curve, disconnect it first
 		q->disconnect(m_equationData.at(index).m_curve, nullptr, q, nullptr);
 	m_equationData[index].setCurve(curve);
@@ -236,16 +229,16 @@ void XYEquationCurve2Private::connectEquationCurve(const XYCurve* curve) {
 	if (!curve)
 		return;
 
-   // avoid circular dependencies - the current curve cannot be part of the variable curve.
-   // this should't actually happen because of the checks done when the equation is defined,
-   // but in case we have bugs somewhere or somebody manipulated the project xml file we add
-   // a sanity check to avoid recursive calls here and crash because of the stack overflow.
+	// avoid circular dependencies - the current curve cannot be part of the variable curve.
+	// this should't actually happen because of the checks done when the equation is defined,
+	// but in case we have bugs somewhere or somebody manipulated the project xml file we add
+	// a sanity check to avoid recursive calls here and crash because of the stack overflow.
 	if (curve == q)
 		return;
 
 	DEBUG(Q_FUNC_INFO)
 	m_connectionsUpdateEquation << q->connect(curve, &XYCurve::changed, q, &XYEquationCurve2::recalculate);
-	m_connectionsUpdateEquation << q->connect(curve, &AbstractAspect::aspectAboutToBeRemoved,q,&XYEquationCurve2::equationVariableCurveRemoved);
+	m_connectionsUpdateEquation << q->connect(curve, &AbstractAspect::aspectAboutToBeRemoved, q, &XYEquationCurve2::equationVariableCurveRemoved);
 	m_connectionsUpdateEquation << q->connect(curve->parentAspect(), &AbstractAspect::childAspectAdded, q, &XYEquationCurve2::equationVariableCurveAdded);
 }
 
@@ -312,35 +305,64 @@ void XYEquationCurve2Private::resetResults() {
 // ...
 // see XYFitCurvePrivate
 bool XYEquationCurve2Private::recalculateSpecific(const AbstractColumn* tmpXDataColumn, const AbstractColumn* tmpYDataColumn) {
+	QElapsedTimer timer;
+	timer.start();
+
 	bool valid = true;
+	QString status = QStringLiteral("Valid");
 
 	int numberElements = 0;
 	if (m_equationData.length() == 0) {
 		valid = false;
 	} else {
 		const auto* curve = m_equationData.first().curve();
-		if (!curve->xColumn() || !curve->yColumn() || curve->xColumn()->rowCount() != curve->yColumn()->rowCount())
+		if (!curve || !curve->xColumn() || !curve->yColumn() || curve->xColumn()->rowCount() != curve->yColumn()->rowCount()) {
+			if (!curve)
+				status = i18n("First curve not valid");
+			else if (!curve->xColumn())
+				status = i18n("xColumn of first curve not valid");
+			else if (!curve->yColumn())
+				status = i18n("yColumn of first curve not valid");
+			else if (curve->xColumn()->rowCount() != curve->yColumn()->rowCount())
+				status = i18n("Number of x and y values do not match for the first curve");
 			valid = false;
-		else {
+		} else {
 			numberElements = curve->xColumn()->rowCount();
 		}
 	}
 
-	for (const auto& ed: qAsConst(m_equationData)) {
-		const auto* curve = ed.curve();
-		if (!curve || !curve->xColumn() || !curve->yColumn() || curve->xColumn()->rowCount() != numberElements || curve->yColumn()->rowCount() != numberElements) {
-			valid = false;
-			break;
+	if (valid) {
+		for (const auto& ed : qAsConst(m_equationData)) {
+			const auto* curve = ed.curve();
+			if (!curve || !curve->xColumn() || !curve->yColumn() || curve->xColumn()->rowCount() != numberElements
+				|| curve->yColumn()->rowCount() != numberElements) {
+				valid = false;
+				if (!curve)
+					status = i18n("Curve '%1' not valid").arg(ed.curveName());
+				else if (!curve->xColumn())
+					status = i18n("xColumn of curve '%1' not valid").arg(ed.curveName());
+				else if (!curve->yColumn())
+					status = i18n("yColumn of curve '%1' not valid").arg(ed.curveName());
+				else if (curve->xColumn()->rowCount() != curve->yColumn()->rowCount())
+					status = i18n("Number of x and y values do not match for curve '%1'").arg(ed.curveName());
+				break;
+			}
 		}
 	}
 
-	resultVector->clear();
 	if (valid) {
-		yVector->resize(m_equationData.first().curve()->xColumn()->rowCount());
+		const auto rowCount = m_equationData.first().curve()->xColumn()->rowCount();
+		yVector->resize(rowCount);
 		const auto* xColumn = dynamic_cast<const Column*>(m_equationData.first().curve()->xColumn());
 		Q_ASSERT(xColumn);
-		Q_ASSERT(xColumn->columnMode() == AbstractColumn::ColumnMode::Double);
-		xVector = static_cast<QVector<double>*>(xColumn->data());
+		if (xColumn->columnMode() == AbstractColumn::ColumnMode::Double) {
+			xVector = static_cast<QVector<double>*>(xColumn->data());
+		} else {
+			xVector->resize(rowCount);
+			// convert integers to doubles first
+			for (int i = 0; i < xColumn->rowCount(); ++i)
+				(*xVector)[i] = xColumn->valueAt(i);
+		}
 
 		QVector<QVector<double>*> xVectors;
 		QStringList equationVariableNames;
@@ -352,20 +374,21 @@ bool XYEquationCurve2Private::recalculateSpecific(const AbstractColumn* tmpXData
 
 			equationVariableNames << varName;
 
-			if (column->columnMode() == AbstractColumn::ColumnMode::Integer || column->columnMode() == AbstractColumn::ColumnMode::BigInt) {
+			if (column->columnMode() == AbstractColumn::ColumnMode::Double)
+				xVectors << static_cast<QVector<double>*>(column->data());
+			else {
 				// convert integers to doubles first
 				auto* xVector = new QVector<double>(column->rowCount());
 				for (int i = 0; i < column->rowCount(); ++i)
 					(*xVector)[i] = column->valueAt(i);
 
 				xVectors << xVector;
-			} else
-				xVectors << static_cast<QVector<double>*>(column->data());
+			}
 		}
 
-			   // const auto payload = std::make_shared<PayloadColumn>(m_equationData);
+		// const auto payload = std::make_shared<PayloadColumn>(m_equationData);
 
-			   // evaluate the expression for f(x_1, x_2, ...) and write the calculated values into a new vector.
+		// evaluate the expression for f(x_1, x_2, ...) and write the calculated values into a new vector.
 		auto* parser = ExpressionParser::getInstance();
 		// parser->setSpecialFunction1(colfun_size, columnSize, payload);
 		// parser->setSpecialFunction1(colfun_min, columnMin, payload);
@@ -396,10 +419,21 @@ bool XYEquationCurve2Private::recalculateSpecific(const AbstractColumn* tmpXData
 		// parser->setSpecialFunction1(colfun_entropy, columnEntropy, payload);
 		// parser->setSpecialFunction2(colfun_percentile, columnPercentile, payload);
 		// parser->setSpecialFunction2(colfun_quantile, columnQuantile, payload);
-		parser->evaluateCartesian(m_equation, equationVariableNames, xVectors, resultVector);
+		parser->evaluateCartesian(m_equation, equationVariableNames, xVectors, yVector);
 	}
-	resultColumn->invalidateProperties();
+	m_result.available = true;
+	m_result.valid = valid;
+	m_result.status = status;
+	m_result.elapsedTime = timer.elapsed();
 	return valid;
+}
+
+bool XYEquationCurve2Private::preparationValid(const AbstractColumn*, const AbstractColumn*) {
+	return true;
+}
+
+void XYEquationCurve2Private::prepareTmpDataColumn(const AbstractColumn**, const AbstractColumn**) {
+	// Nothing to do
 }
 
 // ##############################################################################

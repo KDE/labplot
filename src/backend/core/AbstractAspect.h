@@ -67,7 +67,6 @@ enum class AspectType : quint64 {
 	WorksheetElementGroup = 0x0222000,
 	XYCurve = 0x0240000,
 	XYEquationCurve = 0x0240001,
-	XYEquationCurve2 = 0x0240002,
 
 	// analysis curves
 	XYAnalysisCurve = 0x0280000,
@@ -82,6 +81,7 @@ enum class AspectType : quint64 {
 	XYIntegrationCurve = 0x0280100,
 	XYSmoothCurve = 0x0280200,
 	XYHilbertTransformCurve = 0x0280400,
+	XYEquationCurve2 = 0x0280800,
 
 	AbstractPart = 0x0400000,
 	AbstractDataSource = 0x0410000,

@@ -71,6 +71,10 @@ private:
 	bool m_numericColumnsOnly{false};
 	bool m_nonEmptyNumericColumnsOnly{false};
 	bool m_showPlotDesignation{false};
+	/*!
+	 * \brief m_selectableAspects
+	 * Determines the types of selected aspects. If empty all aspects are selectable
+	 */
 	QList<AspectType> m_selectableAspects;
 
 	QString m_filterString;

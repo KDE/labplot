@@ -2286,15 +2286,16 @@ void ColumnPrivate::updateFormula() {
 		auto varName = formulaData.variableName();
 		formulaVariableNames << varName;
 
-		if (column->columnMode() == AbstractColumn::ColumnMode::Integer || column->columnMode() == AbstractColumn::ColumnMode::BigInt) {
+		if (column->columnMode() == AbstractColumn::ColumnMode::Double)
+			xVectors << static_cast<QVector<double>*>(column->data());
+		else {
 			// convert integers to doubles first
 			auto* xVector = new QVector<double>(column->rowCount());
 			for (int i = 0; i < column->rowCount(); ++i)
 				(*xVector)[i] = column->valueAt(i);
 
 			xVectors << xVector;
-		} else
-			xVectors << static_cast<QVector<double>*>(column->data());
+		}
 
 		if (column->rowCount() > maxRowCount)
 			maxRowCount = column->rowCount();
