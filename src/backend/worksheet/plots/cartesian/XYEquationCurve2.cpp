@@ -150,20 +150,20 @@ const QVector<XYEquationCurve2::EquationData>& XYEquationCurve2::equationData() 
 	return d->equationData();
 }
 
-void XYEquationCurve2::setEquationVariableCurve(XYCurve* c) {
-	Q_D(XYEquationCurve2);
-	d->setEquationVariableCurve(c);
-}
+// void XYEquationCurve2::setEquationVariableCurve(XYCurve* c) {
+// 	Q_D(XYEquationCurve2);
+// 	d->setEquationVariableCurve(c);
+// }
 
-void XYEquationCurve2::setEquationVariableCurvesPath(int index, const QString& path) {
-	Q_D(XYEquationCurve2);
-	d->setEquationVariableCurvesPath(index, path);
-}
+// void XYEquationCurve2::setEquationVariableCurvesPath(int index, const QString& path) {
+// 	Q_D(XYEquationCurve2);
+// 	d->setEquationVariableCurvesPath(index, path);
+// }
 
-void XYEquationCurve2::setEquationVariableCurve(int index, XYCurve* curve) {
-	Q_D(XYEquationCurve2);
-	d->setEquationVariableCurve(index, curve);
-}
+// void XYEquationCurve2::setEquationVariableCurve(int index, XYCurve* curve) {
+// 	Q_D(XYEquationCurve2);
+// 	d->setEquationVariableCurve(index, curve);
+// }
 
 void XYEquationCurve2::equationVariableCurveRemoved(const AbstractAspect* aspect) {
 	Q_D(XYEquationCurve2);
