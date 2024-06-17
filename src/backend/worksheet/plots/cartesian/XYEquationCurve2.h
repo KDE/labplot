@@ -99,9 +99,9 @@ public:
 		friend class CurveSetGlobalEquationCmd;
 	};
 	const QVector<EquationData>& equationData() const;
-	void setEquationVariableCurve(XYCurve*);
-	void setEquationVariableCurvesPath(int index, const QString& path);
-	void setEquationVariableCurve(int index, XYCurve*);
+	// void setEquationVariableCurve(XYCurve*);
+	// void setEquationVariableCurvesPath(int index, const QString& path);
+	// void setEquationVariableCurve(int index, XYCurve*);
 
 protected:
 	XYEquationCurve2(const QString& name, XYEquationCurve2Private* dd);
