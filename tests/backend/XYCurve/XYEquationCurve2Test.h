@@ -17,7 +17,12 @@ class XYEquationCurve2Test : public CommonTest {
 	Q_OBJECT
 
 private Q_SLOTS:
-
+	void setCurves();
+	void removeCurves();
+	void removeColumnFromCurve();
+	void addColumnFromCurve();
+	void removeCurveRenameAutomaticAdd();
+	void saveLoad();
 };
 
 #endif // XYEQUATIONCURVE2TEST_H

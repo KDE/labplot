@@ -10,4 +10,17 @@
 
 #include "XYEquationCurve2Test.h"
 
-QTEST_MAIN(XYEquationCurve2Testc)
+void XYEquationCurve2Test::setCurves() {
+}
+void XYEquationCurve2Test::removeCurves() {
+}
+void XYEquationCurve2Test::removeColumnFromCurve() {
+}
+void XYEquationCurve2Test::addColumnFromCurve() {
+}
+void XYEquationCurve2Test::removeCurveRenameAutomaticAdd() {
+}
+void XYEquationCurve2Test::saveLoad() {
+}
+
+QTEST_MAIN(XYEquationCurve2Test)

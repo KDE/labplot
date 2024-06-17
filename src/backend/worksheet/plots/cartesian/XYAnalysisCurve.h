@@ -42,7 +42,8 @@ public:
 	};
 
 	struct Result {
-		Result(){};
+		Result() {
+		}
 
 		bool available{false};
 		bool valid{false};
