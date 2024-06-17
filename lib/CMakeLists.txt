@@ -70,6 +70,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/datasources/AbstractDataSource.cpp
 	${BACKEND_DIR}/gsl/ExpressionParser.cpp
 	${BACKEND_DIR}/lib/Range.h
+	${BACKEND_DIR}/lib/Debug.cpp
 	${BACKEND_DIR}/lib/XmlStreamReader.cpp
 	${BACKEND_DIR}/lib/SignallingUndoCommand.cpp
 	${BACKEND_DIR}/spreadsheet/Spreadsheet.cpp
@@ -164,7 +165,7 @@ set(GENERATED_SOURCES
 
 ##############################################################################
 add_definitions (${QT_DEFINITIONS} ${QT_QTDBUS_DEFINITIONS})
-INCLUDE_DIRECTORIES( ../src/ ${BACKEND_DIR}/gsl ${GSL_INCLUDE_DIR} )
+INCLUDE_DIRECTORIES( ../src/ ${BACKEND_DIR}/gsl ${GSL_INCLUDE_DIR} ../src/3rdparty/liborigin ../src/3rdparty/Qt-Advanced-Docking-System/src/ )
 
 # see also QT_MIN_VERSION
 add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50500)

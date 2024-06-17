@@ -795,13 +795,13 @@ void Project::retransformElements(AbstractAspect* aspect) {
 			column->setChanged();
 		}
 	}
-#endif
 
 	// loop over all affected plots and retransform them
 	for (auto* plot : plots) {
 		plot->setSuppressRetransform(false);
 		plot->dataChanged(-1, -1);
 	}
+#endif
 }
 
 /*!
