@@ -660,8 +660,10 @@ QMenu* Spreadsheet::createContextMenu() {
 }
 
 void Spreadsheet::fillColumnContextMenu(QMenu* menu, Column* column) {
+#ifndef SDK
 	if (m_view)
 		m_view->fillColumnContextMenu(menu, column);
+#endif
 }
 
 void Spreadsheet::moveColumn(int from, int to) {

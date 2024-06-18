@@ -1117,6 +1117,7 @@ void WorksheetView::keyReleaseEvent(QKeyEvent* event) {
 }
 
 void WorksheetView::dragEnterEvent(QDragEnterEvent* event) {
+#ifndef SDK
 	// ignore events not related to internal drags of columns etc., e.g. dropping of external files onto LabPlot
 	const auto* mimeData = event->mimeData();
 	if (!mimeData) {
@@ -1134,6 +1135,7 @@ void WorksheetView::dragEnterEvent(QDragEnterEvent* event) {
 	m_worksheet->dockWidget()->dockManager()->setDockWidgetFocused(m_worksheet->dockWidget());
 
 	event->setAccepted(true);
+#endif
 }
 
 void WorksheetView::dragMoveEvent(QDragMoveEvent* event) {

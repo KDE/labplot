@@ -70,7 +70,11 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/core/datatypes/DayOfWeek2DoubleFilter.h
 	${BACKEND_DIR}/core/datatypes/DayOfWeek2IntegerFilter.h
 	${BACKEND_DIR}/core/datatypes/DayOfWeek2BigIntFilter.h
+	${BACKEND_DIR}/datasources/filters/AbstractFileFilter.cpp
+	${BACKEND_DIR}/datasources/filters/SpiceFilter.cpp
+	${BACKEND_DIR}/datasources/filters/SpiceReader.cpp
 	${BACKEND_DIR}/datasources/AbstractDataSource.cpp
+	${BACKEND_DIR}/datasources/projects/ProjectParser.cpp
 	${BACKEND_DIR}/gsl/ExpressionParser.cpp
 	${BACKEND_DIR}/gsl/constants.cpp
 	${BACKEND_DIR}/gsl/functions.cpp
@@ -135,6 +139,10 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/worksheet/plots/cartesian/Value.cpp
 )
 
+IF (ENABLE_LIBORIGIN)
+        list(APPEND BACKEND_SOURCES ${BACKEND_DIR}/datasources/projects/OriginProjectParser.cpp)
+ENDIF ()
+
 set(NSL_SOURCES
 	${BACKEND_DIR}/nsl/nsl_baseline.cpp
 	${BACKEND_DIR}/nsl/nsl_conv.c
@@ -179,6 +187,7 @@ ENDIF ()
 set(COMMONFRONTEND_SOURCES
 	${COMMONFRONTEND_DIR}/matrix/MatrixView.cpp
 	${COMMONFRONTEND_DIR}/note/NoteView.cpp
+	#	${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetView.cpp
 	${COMMONFRONTEND_DIR}/workbook/WorkbookView.cpp
 	${COMMONFRONTEND_DIR}/worksheet/WorksheetView.cpp
 )
@@ -193,7 +202,7 @@ set(GENERATED_SOURCES
 
 ##############################################################################
 add_definitions (${QT_DEFINITIONS} ${QT_QTDBUS_DEFINITIONS})
-INCLUDE_DIRECTORIES( ../src/ ${BACKEND_DIR}/gsl ${GSL_INCLUDE_DIR} ../src/3rdparty/liborigin ../src/3rdparty/Qt-Advanced-Docking-System/src/)
+INCLUDE_DIRECTORIES( ../src/ ${BACKEND_DIR}/gsl ${GSL_INCLUDE_DIR} ../src/3rdparty/liborigin ../src/3rdparty/Qt-Advanced-Docking-System/src/ ../src/3rdparty/QXlsx/header/)
 
 # see also QT_MIN_VERSION
 add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50500)
@@ -221,6 +230,7 @@ target_link_libraries( labplot
 	Qt${QT_MAJOR_VERSION}::Gui
 	Qt${QT_MAJOR_VERSION}::Widgets
 	Qt${QT_MAJOR_VERSION}::PrintSupport
+	Qt${QT_MAJOR_VERSION}::Sql
 	${GSL_LIBRARIES}
 	${GSL_CBLAS_LIBRARIES}
 	${FFTW3_LIBRARIES}
@@ -230,6 +240,14 @@ target_link_libraries( labplot
 
 IF (Discount_FOUND)
 	target_link_libraries( labplot Discount::Lib )
+ENDIF ()
+
+IF (ENABLE_LIBORIGIN)
+	IF (LIBORIGIN_FOUND)
+		target_link_libraries( labplot ${LIBORIGIN_LIBRARIES} )
+	ELSE ()
+		target_link_libraries( labplot liborigin-static )
+	ENDIF ()
 ENDIF ()
 
 IF (WIN32)

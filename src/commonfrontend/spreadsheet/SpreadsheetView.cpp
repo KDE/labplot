@@ -25,20 +25,22 @@
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "commonfrontend/spreadsheet/SpreadsheetHeaderView.h"
 
+#ifndef SDK
 #include "kdefrontend/spreadsheet/AddSubtractValueDialog.h"
 #include "kdefrontend/spreadsheet/DropValuesDialog.h"
 #include "kdefrontend/spreadsheet/EquidistantValuesDialog.h"
-#include "kdefrontend/spreadsheet/ExportSpreadsheetDialog.h"
 #include "kdefrontend/spreadsheet/FlattenColumnsDialog.h"
 #include "kdefrontend/spreadsheet/FormattingHeatmapDialog.h"
 #include "kdefrontend/spreadsheet/FunctionValuesDialog.h"
-#include "kdefrontend/spreadsheet/GoToDialog.h"
-#include "kdefrontend/spreadsheet/PlotDataDialog.h"
 #include "kdefrontend/spreadsheet/RandomValuesDialog.h"
 #include "kdefrontend/spreadsheet/RescaleDialog.h"
 #include "kdefrontend/spreadsheet/SampleValuesDialog.h"
 #include "kdefrontend/spreadsheet/SearchReplaceWidget.h"
 #include "kdefrontend/spreadsheet/SortDialog.h"
+#endif
+#include "kdefrontend/spreadsheet/ExportSpreadsheetDialog.h"
+#include "kdefrontend/spreadsheet/GoToDialog.h"
+#include "kdefrontend/spreadsheet/PlotDataDialog.h"
 #include "kdefrontend/spreadsheet/StatisticsDialog.h"
 
 #ifdef Q_OS_MAC
@@ -76,6 +78,7 @@
 #include <QTimer>
 #include <QToolBar>
 #include <QUndoCommand>
+#include <QVBoxLayout>
 
 #include <algorithm> //for std::reverse
 
@@ -377,6 +380,7 @@ void SpreadsheetView::initActions() {
 	action_set_as_yerr_minus->setData(static_cast<int>(AbstractColumn::PlotDesignation::YErrorMinus));
 
 	// data manipulation
+#ifndef SDK
 	action_add_value = new QAction(i18n("Add"), this);
 	action_add_value->setData(AddSubtractValueDialog::Add);
 	action_subtract_value = new QAction(i18n("Subtract"), this);
@@ -394,6 +398,7 @@ void SpreadsheetView::initActions() {
 	// algorithms - baseline subtraction, outliar removal, etc.
 	action_subtract_baseline = new QAction(i18n("Subtract Baseline"), this);
 	action_subtract_baseline->setData(AddSubtractValueDialog::SubtractBaseline);
+#endif
 
 	// normalization
 	normalizeColumnActionGroup = new QActionGroup(this);
@@ -1449,8 +1454,10 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 			showSearchReplace(/* replace */ false);
 		else if (key_event->matches(QKeySequence::Replace))
 			showSearchReplace(/* replace */ true);
+#ifndef SDK
 		else if (key_event->key() == Qt::Key_Escape && m_searchReplaceWidget && m_searchReplaceWidget->isVisible())
 			m_searchReplaceWidget->hide();
+#endif
 		else if (key_event->matches(QKeySequence::Cut))
 			cutSelection();
 	}
@@ -2326,6 +2333,7 @@ void SpreadsheetView::fillSelectedCellsWithRandomNumbers() {
 }
 
 void SpreadsheetView::fillWithRandomValues() {
+#ifndef SDK
 	const auto& columns = selectedColumns();
 	if (columns.isEmpty())
 		return;
@@ -2333,9 +2341,11 @@ void SpreadsheetView::fillWithRandomValues() {
 	auto* dlg = new RandomValuesDialog(m_spreadsheet);
 	dlg->setColumns(columns);
 	dlg->exec();
+#endif
 }
 
 void SpreadsheetView::fillWithEquidistantValues() {
+#ifndef SDK
 	const auto& columns = selectedColumns();
 	if (columns.isEmpty())
 		return;
@@ -2343,9 +2353,11 @@ void SpreadsheetView::fillWithEquidistantValues() {
 	auto* dlg = new EquidistantValuesDialog(m_spreadsheet);
 	dlg->setColumns(columns);
 	dlg->exec();
+#endif
 }
 
 void SpreadsheetView::fillWithFunctionValues() {
+#ifndef SDK
 	const auto& columns = selectedColumns();
 	if (columns.isEmpty())
 		return;
@@ -2353,6 +2365,7 @@ void SpreadsheetView::fillWithFunctionValues() {
 	auto* dlg = new FunctionValuesDialog(m_spreadsheet);
 	dlg->setColumns(columns);
 	dlg->exec();
+#endif
 }
 
 void SpreadsheetView::fillSelectedCellsWithConstValues() {
@@ -2469,6 +2482,7 @@ void SpreadsheetView::fillSelectedCellsWithConstValues() {
 }
 
 void SpreadsheetView::formatHeatmap() {
+#ifndef SDK
 	auto columns = selectedColumns();
 	if (columns.isEmpty())
 		columns = m_spreadsheet->children<Column>();
@@ -2490,6 +2504,7 @@ void SpreadsheetView::formatHeatmap() {
 	}
 
 	delete dlg;
+#endif
 }
 
 void SpreadsheetView::removeFormat() {
