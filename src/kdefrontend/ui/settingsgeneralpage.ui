@@ -333,7 +333,7 @@
    <item row="18" column="2">
     <widget class="QFrame" name="frameTracing">
      <property name="frameShape">
-      <enum>QFrame::StyledPanel</enum>
+      <enum>QFrame::NoFrame</enum>
      </property>
      <property name="frameShadow">
       <enum>QFrame::Raised</enum>
@@ -355,9 +355,9 @@
        <number>0</number>
       </property>
       <item>
-       <widget class="QCheckBox" name="chkDebugTrace">
+       <widget class="QCheckBox" name="chkPerfTrace">
         <property name="text">
-         <string>Debug</string>
+         <string>Performance</string>
         </property>
        </widget>
       </item>
@@ -378,9 +378,9 @@
        </spacer>
       </item>
       <item>
-       <widget class="QCheckBox" name="chkPerfTrace">
+       <widget class="QCheckBox" name="chkDebugTrace">
         <property name="text">
-         <string>Performance</string>
+         <string>Debug</string>
         </property>
        </widget>
       </item>

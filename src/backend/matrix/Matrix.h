@@ -94,8 +94,6 @@ public:
 	template<typename T>
 	void setRowCells(int row, int first_column, int last_column, const QVector<T>& values);
 
-	void copy(Matrix* other);
-
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
 
@@ -119,7 +117,6 @@ public Q_SLOTS:
 
 	void addColumns();
 	void addRows();
-	void duplicate();
 
 Q_SIGNALS:
 	void requestProjectContextMenu(QMenu*);

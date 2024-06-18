@@ -62,8 +62,6 @@ public:
 	int colY(int col);
 	QString text(int row, int col) const;
 
-	void copy(Spreadsheet* other);
-
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
 
