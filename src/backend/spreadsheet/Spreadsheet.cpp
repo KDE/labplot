@@ -673,31 +673,6 @@ void Spreadsheet::moveColumn(int from, int to) {
 	endMacro();
 }
 
-void Spreadsheet::copy(Spreadsheet* other) {
-	WAIT_CURSOR;
-	beginMacro(i18n("%1: copy %2", name(), other->name()));
-
-	for (auto* col : children<Column>())
-		col->remove();
-	for (auto* src_col : other->children<Column>()) {
-		Column* new_col = new Column(src_col->name(), src_col->columnMode());
-		new_col->copy(src_col);
-		new_col->setPlotDesignation(src_col->plotDesignation());
-		QVector<Interval<int>> masks = src_col->maskedIntervals();
-		for (const auto& iv : masks)
-			new_col->setMasked(iv);
-		QVector<Interval<int>> formulas = src_col->formulaIntervals();
-		for (const auto& iv : formulas)
-			new_col->setFormula(iv, src_col->formula(iv.start()));
-		new_col->setWidth(src_col->width());
-		addChild(new_col);
-	}
-	setComment(other->comment());
-
-	endMacro();
-	RESET_CURSOR;
-}
-
 // FIXME: replace index-based API with Column*-based one
 /*!
   Determines the corresponding X column.

@@ -514,68 +514,6 @@ void Matrix::setDimensions(int rows, int cols) {
 	RESET_CURSOR;
 }
 
-void Matrix::copy(Matrix* other) {
-	WAIT_CURSOR;
-	Q_D(Matrix);
-	beginMacro(i18n("%1: copy %2", name(), other->name()));
-
-	int rows = other->rowCount();
-	int columns = other->columnCount();
-	setDimensions(rows, columns);
-
-	for (int i = 0; i < rows; i++)
-		setRowHeight(i, other->rowHeight(i));
-
-	for (int i = 0; i < columns; i++)
-		setColumnWidth(i, other->columnWidth(i));
-
-	d->suppressDataChange = true;
-	switch (d->mode) {
-	case AbstractColumn::ColumnMode::Double:
-		for (int i = 0; i < columns; i++)
-			setColumnCells(i, 0, rows - 1, other->columnCells<double>(i, 0, rows - 1));
-		break;
-	case AbstractColumn::ColumnMode::Text:
-		for (int i = 0; i < columns; i++)
-			setColumnCells(i, 0, rows - 1, other->columnCells<QString>(i, 0, rows - 1));
-		break;
-	case AbstractColumn::ColumnMode::Integer:
-		for (int i = 0; i < columns; i++)
-			setColumnCells(i, 0, rows - 1, other->columnCells<int>(i, 0, rows - 1));
-		break;
-	case AbstractColumn::ColumnMode::BigInt:
-		for (int i = 0; i < columns; i++)
-			setColumnCells(i, 0, rows - 1, other->columnCells<qint64>(i, 0, rows - 1));
-		break;
-	case AbstractColumn::ColumnMode::Day:
-	case AbstractColumn::ColumnMode::Month:
-	case AbstractColumn::ColumnMode::DateTime:
-		for (int i = 0; i < columns; i++)
-			setColumnCells(i, 0, rows - 1, other->columnCells<QDateTime>(i, 0, rows - 1));
-		break;
-	}
-
-	setCoordinates(other->xStart(), other->xEnd(), other->yStart(), other->yEnd());
-	setNumericFormat(other->numericFormat());
-	setPrecision(other->precision());
-	d->formula = other->formula();
-	d->suppressDataChange = false;
-	Q_EMIT dataChanged(0, 0, rows - 1, columns - 1);
-	if (m_view)
-		m_view->adjustHeaders();
-
-	endMacro();
-	RESET_CURSOR;
-}
-
-//! Duplicate the matrix inside its folder
-void Matrix::duplicate() {
-	Matrix* matrix = new Matrix(rowCount(), columnCount(), name());
-	matrix->copy(this);
-	if (folder())
-		folder()->addChild(matrix);
-}
-
 void Matrix::addRows() {
 	Q_D(Matrix);
 	if (!m_view)
