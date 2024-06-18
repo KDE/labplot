@@ -270,7 +270,7 @@ install( FILES ../src/backend/gsl/parser.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}
 install( FILES ../src/backend/lib/Interval.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/lib/ COMPONENT Devel )
 install( FILES ../src/backend/lib/IntervalAttribute.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/lib/ COMPONENT Devel )
 install( FILES ../src/backend/lib/macros.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/lib/ COMPONENT Devel )
-install( FILES ../src/backend/lib/macrosXYCurve.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/lib/ COMPONENT Devel )
+install( FILES ../src/backend/lib/macrosCurve.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/lib/ COMPONENT Devel )
 install( FILES ../src/backend/lib/commandtemplates.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/lib/ COMPONENT Devel )
 install( FILES ../src/backend/lib/Range.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/lib/ COMPONENT Devel )
 install( FILES ../src/backend/nsl/nsl_fit.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/nsl/ COMPONENT Devel )
