@@ -49,14 +49,6 @@ void ProjectDock::setProject(Project* project) {
 	ui.leFileName->setText(project->fileName());
 	ui.leAuthor->setText(m_project->author());
 
-	// resize the height of the comment field to fit the content (word wrap is ignored)
-	const QFont& font = ui.teComment->document()->defaultFont();
-	QFontMetrics fontMetrics(font);
-	const QSize& textSize = fontMetrics.size(0, m_project->comment());
-	double height = textSize.height() + 50;
-	ui.teComment->setMinimumSize(0, height);
-	ui.teComment->resize(ui.teComment->width(), height);
-
 	ui.lVersion->setText(project->version());
 	ui.lCreated->setText(project->creationTime().toString());
 	ui.lModified->setText(project->modificationTime().toString());
@@ -66,6 +58,15 @@ void ProjectDock::setProject(Project* project) {
 	ui.lSaveCalculations->setVisible(visible);
 	ui.chkSaveCalculations->setVisible(visible);
 	ui.chkSaveCalculations->setChecked(project->saveCalculations());
+
+	// resize the height of the comment field to fit the content (word wrap is ignored)
+	const double height = ui.teComment->document()->size().height() + ui.teComment->contentsMargins().top()*2;
+	// HACK: we set the fixed height first and then set the min and max values back to the default ones,
+	// other methods don't seem to properly trigger the update of the layout and we don't get the proper
+	// widgets sizes in the dock widget.
+	ui.teComment->setFixedHeight(height);
+	ui.teComment->setMinimumHeight(0);
+	ui.teComment->setMaximumHeight(16777215);
 
 	connect(m_project, &Project::authorChanged, this, &ProjectDock::projectAuthorChanged);
 	connect(m_project, &Project::saveDockStatesChanged, this, &ProjectDock::projectSaveDockStatesChanged);
