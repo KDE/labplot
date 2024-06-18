@@ -120,6 +120,7 @@ QWidget* Matrix::view() const {
 }
 
 bool Matrix::exportView() const {
+#ifndef SDK
 	auto* dlg = new ExportSpreadsheetDialog(m_view);
 	dlg->setFileName(name());
 	dlg->setMatrixMode(true);
@@ -155,6 +156,9 @@ bool Matrix::exportView() const {
 	delete dlg;
 
 	return ret;
+#else
+	return 0;
+#endif
 }
 
 bool Matrix::printView() {

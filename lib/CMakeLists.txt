@@ -18,6 +18,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/ThemeHandler.cpp)
 
 set(BACKEND_SOURCES
+	${BACKEND_DIR}/core/Time.cpp
 	${BACKEND_DIR}/core/Folder.cpp
 	${BACKEND_DIR}/core/AbstractAspect.cpp
 	${BACKEND_DIR}/core/AbstractColumn.cpp
@@ -31,7 +32,9 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/core/column/columncommands.cpp
 	${BACKEND_DIR}/core/Project.cpp
 	${BACKEND_DIR}/core/AbstractPart.cpp
+	${BACKEND_DIR}/core/Workbook.cpp
 	${BACKEND_DIR}/core/AspectTreeModel.cpp
+	${BACKEND_DIR}/core/Settings.cpp
 	${BACKEND_DIR}/core/datatypes/SimpleCopyThroughFilter.h
 	${BACKEND_DIR}/core/datatypes/Double2DateTimeFilter.h
 	${BACKEND_DIR}/core/datatypes/Double2DayOfWeekFilter.h
@@ -69,34 +72,52 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/core/datatypes/DayOfWeek2BigIntFilter.h
 	${BACKEND_DIR}/datasources/AbstractDataSource.cpp
 	${BACKEND_DIR}/gsl/ExpressionParser.cpp
+	${BACKEND_DIR}/gsl/constants.cpp
+	${BACKEND_DIR}/gsl/functions.cpp
 	${BACKEND_DIR}/lib/Range.h
 	${BACKEND_DIR}/lib/Debug.cpp
 	${BACKEND_DIR}/lib/XmlStreamReader.cpp
 	${BACKEND_DIR}/lib/SignallingUndoCommand.cpp
+	${BACKEND_DIR}/lib/hostprocess.cpp
+	${BACKEND_DIR}/matrix/Matrix.cpp
+	${BACKEND_DIR}/matrix/matrixcommands.cpp
+	${BACKEND_DIR}/matrix/MatrixModel.cpp
+	${BACKEND_DIR}/note/Note.cpp
 	${BACKEND_DIR}/spreadsheet/Spreadsheet.cpp
 	${BACKEND_DIR}/spreadsheet/SpreadsheetModel.cpp
+	${BACKEND_DIR}/spreadsheet/StatisticsSpreadsheet.cpp
+	${BACKEND_DIR}/worksheet/Background.cpp
 	${BACKEND_DIR}/worksheet/Image.cpp
+	${BACKEND_DIR}/worksheet/Line.cpp
 	${BACKEND_DIR}/worksheet/ResizeItem.cpp
 	${BACKEND_DIR}/worksheet/WorksheetElement.cpp
 	${BACKEND_DIR}/worksheet/TextLabel.cpp
 	${BACKEND_DIR}/worksheet/InfoElement.cpp
 	${BACKEND_DIR}/worksheet/Worksheet.cpp
 	${BACKEND_DIR}/worksheet/WorksheetElementContainer.cpp
+	${BACKEND_DIR}/worksheet/WorksheetElementGroup.cpp
 	${BACKEND_DIR}/worksheet/TreeModel.cpp
 	${BACKEND_DIR}/worksheet/plots/AbstractPlot.cpp
 	${BACKEND_DIR}/worksheet/plots/AbstractCoordinateSystem.cpp
 	${BACKEND_DIR}/worksheet/plots/PlotArea.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/Axis.cpp
+	${BACKEND_DIR}/worksheet/plots/cartesian/BarPlot.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/BoxPlot.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/CartesianScale.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/CartesianCoordinateSystem.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/CartesianPlot.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/CartesianPlotLegend.cpp
+	${BACKEND_DIR}/worksheet/plots/cartesian/ErrorBar.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYCurve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/Histogram.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/CustomPoint.cpp
+	${BACKEND_DIR}/worksheet/plots/cartesian/KDEPlot.cpp
+	${BACKEND_DIR}/worksheet/plots/cartesian/LollipopPlot.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/ReferenceLine.cpp
+	${BACKEND_DIR}/worksheet/plots/cartesian/Plot.cpp
+	${BACKEND_DIR}/worksheet/plots/cartesian/ReferenceRange.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/Symbol.cpp
+	${BACKEND_DIR}/worksheet/plots/cartesian/QQPlot.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYAnalysisCurve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYCurve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYEquationCurve.cpp
@@ -111,9 +132,11 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYHilbertTransformCurve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYConvolutionCurve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYCorrelationCurve.cpp
+	${BACKEND_DIR}/worksheet/plots/cartesian/Value.cpp
 )
 
 set(NSL_SOURCES
+	${BACKEND_DIR}/nsl/nsl_baseline.cpp
 	${BACKEND_DIR}/nsl/nsl_conv.c
 	${BACKEND_DIR}/nsl/nsl_corr.c
 	${BACKEND_DIR}/nsl/nsl_dft.c
@@ -127,6 +150,8 @@ set(NSL_SOURCES
 	${BACKEND_DIR}/nsl/nsl_interp.c
 	${BACKEND_DIR}/nsl/nsl_kde.c
 	${BACKEND_DIR}/nsl/nsl_math.c
+	${BACKEND_DIR}/nsl/nsl_peak.cpp
+	${BACKEND_DIR}/nsl/nsl_randist.c
 	${BACKEND_DIR}/nsl/nsl_sf_basic.c
 	${BACKEND_DIR}/nsl/nsl_sf_kernel.c
 	${BACKEND_DIR}/nsl/nsl_sf_poly.c
@@ -152,6 +177,9 @@ ENDIF ()
 ENDIF ()
 
 set(COMMONFRONTEND_SOURCES
+	${COMMONFRONTEND_DIR}/matrix/MatrixView.cpp
+	${COMMONFRONTEND_DIR}/note/NoteView.cpp
+	${COMMONFRONTEND_DIR}/workbook/WorkbookView.cpp
 	${COMMONFRONTEND_DIR}/worksheet/WorksheetView.cpp
 )
 
@@ -165,10 +193,18 @@ set(GENERATED_SOURCES
 
 ##############################################################################
 add_definitions (${QT_DEFINITIONS} ${QT_QTDBUS_DEFINITIONS})
-INCLUDE_DIRECTORIES( ../src/ ${BACKEND_DIR}/gsl ${GSL_INCLUDE_DIR} ../src/3rdparty/liborigin ../src/3rdparty/Qt-Advanced-Docking-System/src/ )
+INCLUDE_DIRECTORIES( ../src/ ${BACKEND_DIR}/gsl ${GSL_INCLUDE_DIR} ../src/3rdparty/liborigin ../src/3rdparty/Qt-Advanced-Docking-System/src/)
 
 # see also QT_MIN_VERSION
 add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50500)
+
+# add system QADS include path
+#if (qt${QT_VERSION_MAJOR}advanceddocking_FOUND)
+#	get_target_property(QADS_INCLUDES ads::qt${QT_VERSION_MAJOR}advanceddocking INTERFACE_INCLUDE_DIRECTORIES)
+#	get_target_property(QADS_LIBRARIES ads::qt${QT_VERSION_MAJOR}advanceddocking INTERFACE_LINK_LIBRARIES)
+#	MESSAGE (STATUS "QADS Found LINK_LIBRARIES: ${QADS_LIBRARIES} INCLUDES: ${QADS_INCLUDES}")
+#	target_include_directories( labplot PRIVATE ${QADS_INCLUDES} )
+#endif ()
 
 # dynamic library
 add_library(labplot ${GUI_SOURCES} ${BACKEND_SOURCES} ${NSL_SOURCES} ${COMMONFRONTEND_SOURCES} ${TOOLS_SOURCES} ${GENERATED_SOURCES} ${QTMOC_HDRS})
@@ -188,6 +224,8 @@ target_link_libraries( labplot
 	${GSL_LIBRARIES}
 	${GSL_CBLAS_LIBRARIES}
 	${FFTW3_LIBRARIES}
+	${Poppler_LIBRARIES}
+	#	ads::qt${QT_VERSION_MAJOR}advanceddocking
 	${LIBCERF_LIBRARIES} )
 
 IF (Discount_FOUND)

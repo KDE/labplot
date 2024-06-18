@@ -1340,6 +1340,7 @@ void WorksheetView::addNew(QAction* action) {
 		if (tbNewCartesianPlot)
 			tbNewCartesianPlot->setDefaultAction(addCartesianPlot4Action);
 	} else if (action == addCartesianPlotTemplateAction) {
+#ifndef SDK
 		// open dialog
 		PlotTemplateDialog d;
 		if (d.exec() != QDialog::Accepted)
@@ -1353,6 +1354,7 @@ void WorksheetView::addNew(QAction* action) {
 		aspect = plot;
 		if (tbNewCartesianPlot)
 			tbNewCartesianPlot->setDefaultAction(addCartesianPlotTemplateAction);
+#endif
 	} else if (action == addTextLabelAction) {
 		auto* l = new TextLabel(i18n("Text Label"));
 		l->setText(i18n("Text Label"));
