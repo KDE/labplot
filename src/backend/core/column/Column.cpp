@@ -10,7 +10,9 @@
 */
 
 #include "backend/core/column/Column.h"
+#ifndef SDK
 #include "backend/cantorWorksheet/CantorWorksheet.h"
+#endif
 #include "backend/core/AbstractSimpleFilter.h"
 #include "backend/core/Project.h"
 #include "backend/core/column/ColumnPrivate.h"

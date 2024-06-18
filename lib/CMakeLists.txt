@@ -284,7 +284,7 @@ install( FILES ../src/backend/worksheet/plots/cartesian/Axis.h DESTINATION ${KDE
 install( FILES ../src/backend/worksheet/plots/cartesian/BoxPlot.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/worksheet/plots/cartesian/ COMPONENT Devel )
 install( FILES ../src/backend/worksheet/plots/cartesian/CartesianPlot.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/worksheet/plots/cartesian/ COMPONENT Devel )
 install( FILES ../src/backend/worksheet/plots/cartesian/CartesianPlotLegend.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/worksheet/plots/cartesian/ COMPONENT Devel )
-install( FILES ../src/backend/worksheet/plots/cartesian/Curve.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/worksheet/plots/cartesian/ COMPONENT Devel )
+install( FILES ../src/backend/worksheet/plots/cartesian/XYCurve.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/worksheet/plots/cartesian/ COMPONENT Devel )
 install( FILES ../src/backend/worksheet/plots/cartesian/Histogram.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/worksheet/plots/cartesian/ COMPONENT Devel )
 install( FILES ../src/backend/worksheet/plots/cartesian/XYCurve.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/worksheet/plots/cartesian/ COMPONENT Devel )
 install( FILES ../src/backend/worksheet/plots/cartesian/XYAnalysisCurve.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/worksheet/plots/cartesian/ COMPONENT Devel )
