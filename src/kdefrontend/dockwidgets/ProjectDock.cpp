@@ -60,7 +60,7 @@ void ProjectDock::setProject(Project* project) {
 	ui.chkSaveCalculations->setChecked(project->saveCalculations());
 
 	// resize the height of the comment field to fit the content (word wrap is ignored)
-	const double height = ui.teComment->document()->size().height() + ui.teComment->contentsMargins().top()*2;
+	const double height = ui.teComment->document()->size().height() + ui.teComment->contentsMargins().top() * 2;
 	// HACK: we set the fixed height first and then set the min and max values back to the default ones,
 	// other methods don't seem to properly trigger the update of the layout and we don't get the proper
 	// widgets sizes in the dock widget.
