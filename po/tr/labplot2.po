@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-06-17 01:46+0000\n"
-"PO-Revision-Date: 2024-06-16 10:46+0300\n"
+"PO-Revision-Date: 2024-06-17 12:13+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -36,7 +36,7 @@ msgid ""
 "Couldn't find the dynamic library 'cantorpart'. Please check your "
 "installation."
 msgstr ""
-"'contorpart' devingen kitaplığı bulunamadı. Lütfen kurulumunuzu denetleyin."
+"“contorpart” devingen kitaplığı bulunamadı. Lütfen kurulumunuzu denetleyin."
 
 #: src/backend/cantorWorksheet/CantorWorksheet.cpp:90
 #, kde-format
@@ -161,7 +161,7 @@ msgstr "“%1” kopyası"
 #: src/backend/core/AbstractAspect.cpp:966
 #, kde-format
 msgid "Attribute 'name' is missing or empty."
-msgstr "'name' özniteliği eksik veya boş."
+msgstr "“name” özniteliği eksik veya boş."
 
 #: src/backend/core/AbstractAspect.cpp:973
 #, kde-format
@@ -234,12 +234,12 @@ msgstr "X Hatası +"
 #: src/backend/core/AbstractColumn.cpp:184
 #, kde-format
 msgid "X-Uncertainty -"
-msgstr "X Belirsizliği -"
+msgstr "X Belirsizliği −"
 
 #: src/backend/core/AbstractColumn.cpp:186
 #, kde-format
 msgid "X-Error -"
-msgstr "X Hatası -"
+msgstr "X Hatası −"
 
 #: src/backend/core/AbstractColumn.cpp:190
 #, kde-format
@@ -264,12 +264,12 @@ msgstr "Y Hatası +"
 #: src/backend/core/AbstractColumn.cpp:202
 #, kde-format
 msgid "Y-Uncertainty -"
-msgstr "Y Belirsizliği -"
+msgstr "Y Belirsizliği −"
 
 #: src/backend/core/AbstractColumn.cpp:204
 #, kde-format
 msgid "Y-Error -"
-msgstr "Y Hatası -"
+msgstr "Y Hatası −"
 
 #: src/backend/core/AbstractColumn.cpp:223
 #: src/backend/datasources/filters/MatioFilter.cpp:382
@@ -656,13 +656,13 @@ msgstr "%1: %2 ile %3 arasındaki satırların değerlerini değiştir"
 #: src/backend/core/datatypes/String2DateTimeFilter.cpp:137
 #, kde-format
 msgid "%1: set date-time format to %2"
-msgstr "%1: Tarih-zaman biçimini %2 olarak ayarla"
+msgstr "%1: Tarih–zaman biçimini %2 olarak ayarla"
 
 #: src/backend/core/datatypes/DateTime2StringFilter.cpp:57
 #: src/backend/core/datatypes/String2DateTimeFilter.cpp:139
 #, kde-format
 msgid "set date-time format to %1"
-msgstr "tarih-zaman biçimini %1 olarak ayarla"
+msgstr "tarih–zaman biçimini %1 olarak ayarla"
 
 #: src/backend/core/datatypes/Double2StringFilter.cpp:81
 #, kde-format
@@ -775,7 +775,7 @@ msgstr "CAS Desteği Eksik"
 #: src/backend/core/Project.cpp:656
 #, kde-format
 msgid "Attribute 'version' is missing."
-msgstr "'version' öznitelği bulunamadı."
+msgstr "“version” özniteliği bulunamadı."
 
 #: src/backend/core/Project.cpp:706
 #, kde-format
@@ -882,7 +882,7 @@ msgstr "%1: +delta_X sütununu ayarla"
 #: src/backend/datapicker/DatapickerCurve.cpp:334
 #, kde-format
 msgid "%1: set -delta_X column"
-msgstr "%1: -delta_X sütununu ayarla"
+msgstr "%1: −delta_X sütununu ayarla"
 
 #: src/backend/datapicker/DatapickerCurve.cpp:341
 #, kde-format
@@ -892,7 +892,7 @@ msgstr "%1: +delta_Y sütununu ayarla"
 #: src/backend/datapicker/DatapickerCurve.cpp:348
 #, kde-format
 msgid "%1: set -delta_Y column"
-msgstr "%1: -delta_Y sütununu ayarla"
+msgstr "%1: −delta_Y sütununu ayarla"
 
 #: src/backend/datapicker/DatapickerCurve.cpp:355
 #, kde-format
@@ -1006,7 +1006,7 @@ msgstr "%1: +delta X konumunu ayarla"
 #: src/backend/datapicker/DatapickerPoint.cpp:246
 #, kde-format
 msgid "%1: set -delta_X position"
-msgstr "%1: -delta_X konumunu ayarla"
+msgstr "%1: −delta_X konumunu ayarla"
 
 #: src/backend/datapicker/DatapickerPoint.cpp:259
 #: src/backend/datapicker/DatapickerPoint.cpp:261
@@ -1020,7 +1020,7 @@ msgstr "%1: +delta_Y konumunu ayarla"
 #: src/backend/datapicker/DatapickerPoint.cpp:282
 #, kde-format
 msgid "%1: set -delta_Y position"
-msgstr "%1: -delta_Y konumunu ayarla"
+msgstr "%1: −delta_Y konumunu ayarla"
 
 #: src/backend/datapicker/Segment.cpp:170
 #, kde-format
@@ -1035,7 +1035,7 @@ msgstr "Seçili veri kümesi için olan üst veri dosyası geçersiz."
 #: src/backend/datasources/DatasetHandler.cpp:159
 #, kde-format
 msgid "There is no download URL present in the metadata file!"
-msgstr "Üst veri dosyasında bir indirme URL'si yok!"
+msgstr "Üst veri dosyasında bir indirme URL’si yok!"
 
 #: src/backend/datasources/DatasetHandler.cpp:191
 #, kde-format
@@ -2491,7 +2491,7 @@ msgstr "Pi"
 #: src/backend/gsl/constants.cpp:59
 #, kde-format
 msgid "Euler's constant"
-msgstr "Euler'in sabiti"
+msgstr "Euler’in sabiti"
 
 #: src/backend/gsl/constants.cpp:60
 #, kde-format
@@ -2552,7 +2552,7 @@ msgstr "Standart gaz hacmi"
 #: src/backend/gsl/constants.cpp:73
 #, kde-format
 msgid "Stefan-Boltzmann constant"
-msgstr "Stefan-Boltzmann sabiti"
+msgstr "Stefan–Boltzmann sabiti"
 
 #: src/backend/gsl/constants.cpp:74
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:557
@@ -2682,7 +2682,7 @@ msgstr "Thomson çapraz seçim"
 #: src/backend/gsl/constants.cpp:102
 #, kde-format
 msgid "Electric dipole moment of 1 Debye"
-msgstr "1 Debye'nin elektrik dipol momenti"
+msgstr "1 Debye’nin elektrik dipol momenti"
 
 #. i18n("Measurement of Time"));
 #: src/backend/gsl/constants.cpp:105
@@ -2972,13 +2972,13 @@ msgstr "1 lambertin parlaklığı"
 #: src/backend/gsl/constants.cpp:178
 #, kde-format
 msgid "Luminance of 1 footlambert"
-msgstr "1 footlambert'in parlaklığı"
+msgstr "1 Footlambert’in parlaklığı"
 
 #. i18n("Radioactivity"));
 #: src/backend/gsl/constants.cpp:181
 #, kde-format
 msgid "Activity of 1 curie"
-msgstr "1 curie'nin faaliyeti"
+msgstr "1 Curie’nin faaliyeti"
 
 #: src/backend/gsl/constants.cpp:182
 #, kde-format
@@ -2999,7 +2999,7 @@ msgstr "Gücün SI birimi"
 #: src/backend/gsl/constants.cpp:187
 #, kde-format
 msgid "Force of 1 Dyne"
-msgstr "1 Dyne'nın gücü"
+msgstr "1 Dyne’ın gücü"
 
 #: src/backend/gsl/constants.cpp:188
 #, kde-format
@@ -3009,7 +3009,7 @@ msgstr "Enerjinin SI birimi"
 #: src/backend/gsl/constants.cpp:189
 #, kde-format
 msgid "Energy 1 erg"
-msgstr "1 erg'nin enerjisi"
+msgstr "1 Erg’in enerjisi"
 
 #: src/backend/gsl/errors.h:20
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2065
@@ -3031,7 +3031,7 @@ msgstr "Yineleme yakınsamadı"
 #: src/backend/gsl/errors.h:26
 #, kde-format
 msgid "Input domain error, e.g sqrt(-1)"
-msgstr "Girdi alanı hatası, örn. sqrt(-1)"
+msgstr "Girdi alanı hatası, örn. sqrt(−1)"
 
 #: src/backend/gsl/errors.h:28
 #, kde-format
@@ -3171,12 +3171,12 @@ msgstr "Jacobian değerlendirmeleri çözümü iyileştirmiyor"
 #: src/backend/gsl/errors.h:80
 #, kde-format
 msgid "Cannot reach the specified tolerance in F"
-msgstr "F'de belirtilen toleransa erişilmiyor"
+msgstr "F’de belirtilen toleransa erişilmiyor"
 
 #: src/backend/gsl/errors.h:82
 #, kde-format
 msgid "Cannot reach the specified tolerance in X"
-msgstr "X'te belirtilen toleransa erişilemiyor"
+msgstr "X’te belirtilen toleransa erişilemiyor"
 
 #: src/backend/gsl/errors.h:84
 #, kde-format
@@ -3277,7 +3277,7 @@ msgstr "Üstel İntegraller"
 #: src/backend/gsl/functions.cpp:95
 #, kde-format
 msgid "Fermi-Dirac Function"
-msgstr "Fermi-Dirac İşlevi"
+msgstr "Fermi–Dirac İşlevi"
 
 #: src/backend/gsl/functions.cpp:97
 #, kde-format
@@ -3412,7 +3412,7 @@ msgstr "Lognormal Dağılım"
 #: src/backend/gsl/functions.cpp:153
 #, kde-format
 msgid "Chi-squared Distribution"
-msgstr "Ki-kare Dağılımı"
+msgstr "Ki kare Dağılımı"
 
 #: src/backend/gsl/functions.cpp:155
 #, kde-format
@@ -3873,7 +3873,7 @@ msgstr "eşittir"
 #: src/backend/gsl/functions.cpp:314
 #, kde-format
 msgid "equal with epsilon"
-msgstr "epsilon'a eşit"
+msgstr "Epsilon’a eşit"
 
 #: src/backend/gsl/functions.cpp:315
 #, kde-format
@@ -3972,22 +3972,22 @@ msgstr "İkinci tür ölçekli Airy işlevinin türevi"
 #: src/backend/gsl/functions.cpp:337
 #, kde-format
 msgid "n-th zero of the Airy function of the first kind"
-msgstr "Birinci tür Airy işlevinin n-inci sıfırı"
+msgstr "Birinci tür Airy işlevinin n. sıfırı"
 
 #: src/backend/gsl/functions.cpp:338
 #, kde-format
 msgid "n-th zero of the Airy function of the second kind"
-msgstr "İkinci tür Airy işlevinin n-inci sıfırı"
+msgstr "İkinci tür Airy işlevinin n. sıfırı"
 
 #: src/backend/gsl/functions.cpp:339
 #, kde-format
 msgid "n-th zero of the Airy function derivative of the first kind"
-msgstr "Birinci tür Airy işlevi türevinin n-inci sıfırı"
+msgstr "Birinci tür Airy işlevi türevinin n. sıfırı"
 
 #: src/backend/gsl/functions.cpp:340
 #, kde-format
 msgid "n-th zero of the Airy function derivative of the second kind"
-msgstr "İkinci tür Airy işlevi türevinin n-inci sıfırı"
+msgstr "İkinci tür Airy işlevi türevinin n. sıfırı"
 
 #: src/backend/gsl/functions.cpp:343
 #, kde-format
@@ -4040,7 +4040,7 @@ msgid ""
 "Scaled regular modified cylindrical Bessel function of zeroth order exp(-|"
 "x|) I0(x)"
 msgstr ""
-"exp(-|x|) I0(x) sıfırıncı sıranın ölçeklendirilmiş düzenli düzenlenmiş "
+"exp(−|x|) I0(x) sıfırıncı sıranın ölçeklendirilmiş düzenli düzenlenmiş "
 "silindirik Bessel işlevi"
 
 #: src/backend/gsl/functions.cpp:354
@@ -4049,7 +4049,7 @@ msgid ""
 "Scaled regular modified cylindrical Bessel function of first order exp(-|x|) "
 "I1(x)"
 msgstr ""
-"exp(-|x|) I1(x) birinci sıranın ölçeklendirilmiş düzenli düzenlenmiş "
+"exp(−|x|) I1(x) birinci sıranın ölçeklendirilmiş düzenli düzenlenmiş "
 "silindirik Bessel işlevi"
 
 #: src/backend/gsl/functions.cpp:355
@@ -4058,7 +4058,7 @@ msgid ""
 "Scaled regular modified cylindrical Bessel function of order n exp(-|x|) "
 "In(x)"
 msgstr ""
-"exp(-|x|) In(x) n. sıranın ölçeklendirilmiş düzenli düzenlenmiş silindirik "
+"exp(−|x|) In(x) n. sıranın ölçeklendirilmiş düzenli düzenlenmiş silindirik "
 "Bessel işlevi"
 
 #: src/backend/gsl/functions.cpp:356
@@ -4149,7 +4149,7 @@ msgid ""
 "i0(x)"
 msgstr ""
 "Sıfırıncı dereceden ölçeklendirilmiş düzenli modifiye küresel Bessel işlevi, "
-"exp(-|x|) i0(x)"
+"exp(−|x|) i0(x)"
 
 #: src/backend/gsl/functions.cpp:372
 #, kde-format
@@ -4158,7 +4158,7 @@ msgid ""
 "i1(x)"
 msgstr ""
 "Birinci dereceden ölçeklendirilmiş düzenli modifiye küresel Bessel işlevi, "
-"exp(-|x|) i1(x)"
+"exp(−|x|) i1(x)"
 
 #: src/backend/gsl/functions.cpp:373
 #, kde-format
@@ -4167,14 +4167,14 @@ msgid ""
 "i2(x)"
 msgstr ""
 "İkinci dereceden ölçeklendirilmiş düzenli modifiye küresel Bessel işlevi, "
-"exp(-|x|) i2(x)"
+"exp(−|x|) i2(x)"
 
 #: src/backend/gsl/functions.cpp:374
 #, kde-format
 msgid ""
 "Scaled regular modified spherical Bessel function of order l, exp(-|x|) il(x)"
 msgstr ""
-"I. dereceden ölçeklendirilmiş düzenli modifiye küresel Bessel işlevi, exp(-|"
+"I. dereceden ölçeklendirilmiş düzenli modifiye küresel Bessel işlevi, exp(−|"
 "x|) il(x)"
 
 #: src/backend/gsl/functions.cpp:376
@@ -4192,7 +4192,7 @@ msgid ""
 "Scaled irregular modified spherical Bessel function of first order, exp(-|"
 "x|) k1(x)"
 msgstr ""
-"Birinci dereceden ölçeklenmiş düzensiz modifiye küresel Bessel işlevi, exp(-|"
+"Birinci dereceden ölçeklenmiş düzensiz modifiye küresel Bessel işlevi, exp(−|"
 "x|) k1(x)"
 
 #: src/backend/gsl/functions.cpp:378
@@ -4201,7 +4201,7 @@ msgid ""
 "Scaled irregular modified spherical Bessel function of second order, exp(-|"
 "x|) k2(x)"
 msgstr ""
-"İkinci dereceden ölçeklenmiş düzensiz modifiye küresel Bessel işlevi, exp(-|"
+"İkinci dereceden ölçeklenmiş düzensiz modifiye küresel Bessel işlevi, exp(−|"
 "x|) k2(x)"
 
 #: src/backend/gsl/functions.cpp:379
@@ -4210,7 +4210,7 @@ msgid ""
 "Scaled irregular modified spherical Bessel function of order l, exp(-|x|) "
 "kl(x)"
 msgstr ""
-"I. dereceden ölçeklenmiş düzensiz modifiye küresel Bessel işlevi, exp(-|x|) "
+"I. dereceden ölçeklenmiş düzensiz modifiye küresel Bessel işlevi, exp(−|x|) "
 "kl(x)"
 
 #: src/backend/gsl/functions.cpp:380
@@ -4251,7 +4251,7 @@ msgstr "Kesirli ölçeklendirilmiş düzensiz modifiye Bessel işlevi"
 #: src/backend/gsl/functions.cpp:388
 #, kde-format
 msgid "n-th positive zero of the Bessel function J0"
-msgstr "Bessel işlevi J0'ın n. pozitif sıfırı"
+msgstr "Bessel işlevi J0’ın n. pozitif sıfırı"
 
 #: src/backend/gsl/functions.cpp:389
 #, kde-format
@@ -4282,7 +4282,7 @@ msgstr "n. normalleştirilmiş hidrojen bağlı durum radyal dalga işlevi"
 #: src/backend/gsl/functions.cpp:400 src/backend/gsl/functions.cpp:437
 #, kde-format
 msgid "Dawson's integral D(z) = sqrt(pi)/2 * exp(-z^2) * erfi(z)"
-msgstr "Dawson'un D(z) = sqrt(pi)/2 * exp(-z^2) * erfi(z) integrali"
+msgstr "Dawson’un D(z) = sqrt(pi)/2 * exp(−z^2) * erfi(z) integrali"
 
 #: src/backend/gsl/functions.cpp:403
 #, kde-format
@@ -4322,57 +4322,57 @@ msgstr "Reel argüman için dilogaritma"
 #: src/backend/gsl/functions.cpp:414
 #, kde-format
 msgid "Legendre form of complete elliptic integral K"
-msgstr "Tam eliptik integral K'nin Legendre formu"
+msgstr "Tam eliptik integral K’nin Legendre formu"
 
 #: src/backend/gsl/functions.cpp:415
 #, kde-format
 msgid "Legendre form of complete elliptic integral E"
-msgstr "Tam eliptik integral E'nin Legendre formu"
+msgstr "Tam eliptik integral E’nin Legendre formu"
 
 #: src/backend/gsl/functions.cpp:416
 #, kde-format
 msgid "Legendre form of complete elliptic integral Pi"
-msgstr "Tam eliptik integral Pi'nin Legendre formu"
+msgstr "Tam eliptik integral Pi’nin Legendre formu"
 
 #: src/backend/gsl/functions.cpp:417
 #, kde-format
 msgid "Legendre form of incomplete elliptic integral F"
-msgstr "Tamamlanmamış eliptik integral F'nin legendre biçemi"
+msgstr "Tamamlanmamış eliptik integral F’nin legendre biçemi"
 
 #: src/backend/gsl/functions.cpp:418
 #, kde-format
 msgid "Legendre form of incomplete elliptic integral E"
-msgstr "Tamamlanmamış eliptik integral E'nin Legendre biçimi"
+msgstr "Tamamlanmamış eliptik integral E’nin Legendre biçimi"
 
 #: src/backend/gsl/functions.cpp:419
 #, kde-format
 msgid "Legendre form of incomplete elliptic integral P"
-msgstr "Tamamlanmamış eliptik integral P'nin legendre formu"
+msgstr "Tamamlanmamış eliptik integral P’nin legendre formu"
 
 #: src/backend/gsl/functions.cpp:420
 #, kde-format
 msgid "Legendre form of incomplete elliptic integral D"
-msgstr "Tamamlanmamış eliptik integral D'nin legendre formu"
+msgstr "Tamamlanmamış eliptik integral D’nin legendre formu"
 
 #: src/backend/gsl/functions.cpp:421
 #, kde-format
 msgid "Carlson form of incomplete elliptic integral RC"
-msgstr "Tamamlanmamış eliptik integral RC'nin Carlson formu"
+msgstr "Tamamlanmamış eliptik integral RC’nin Carlson formu"
 
 #: src/backend/gsl/functions.cpp:422
 #, kde-format
 msgid "Carlson form of incomplete elliptic integral RD"
-msgstr "Tamamlanmamış eliptik integral RD'nin Carlson formu"
+msgstr "Tamamlanmamış eliptik integral RD’nin Carlson formu"
 
 #: src/backend/gsl/functions.cpp:423
 #, kde-format
 msgid "Carlson form of incomplete elliptic integral RF"
-msgstr "Tamamlanmamış eliptik integral RF'nin Carlson formu"
+msgstr "Tamamlanmamış eliptik integral RF’nin Carlson formu"
 
 #: src/backend/gsl/functions.cpp:424
 #, kde-format
 msgid "Carlson form of incomplete elliptic integral RJ"
-msgstr "Tamamlanmamış eliptik integral RJ'nin Carlson formu"
+msgstr "Tamamlanmamış eliptik integral RJ’nin Carlson formu"
 
 #: src/backend/gsl/functions.cpp:427
 #, kde-format
@@ -4397,7 +4397,7 @@ msgstr "Gaus olasılık yoğunluk işlevi Z"
 #: src/backend/gsl/functions.cpp:431
 #, kde-format
 msgid "Upper tail of the Gaussian probability function Q"
-msgstr "Gaus olasılık işlevi Q'nın üst kuyruğu"
+msgstr "Gaus olasılık işlevi Q’nün üst kuyruğu"
 
 #: src/backend/gsl/functions.cpp:432
 #, kde-format
@@ -4412,7 +4412,7 @@ msgstr "Gerçek x için aşağı taşma tamamlayıcı exp(x^2) erfc(x) işlevi"
 #: src/backend/gsl/functions.cpp:435
 #, kde-format
 msgid "Imaginary error function erfi(x) = -i erf(ix) for real x"
-msgstr "Gerçek x için hayali erfi(x) = -i erf(ix) işlevi"
+msgstr "Gerçek x için hayali erfi(x) = −i erf(ix) işlevi"
 
 #: src/backend/gsl/functions.cpp:436
 #, kde-format
@@ -4420,7 +4420,7 @@ msgid ""
 "Imaginary part of Faddeeva's scaled complex error function w(x) = exp(-x^2) "
 "erfc(-ix) for real x"
 msgstr ""
-"Gerçek x için Faddeeva'nın ölçekli karmaşık w(x) = exp(-x^2) erfc(-ix) "
+"Gerçek x için Faddeeva’nın ölçekli karmaşık w(x) = exp(−x^2) erfc(−ix) "
 "işlevinin hayali kısmı"
 
 #: src/backend/gsl/functions.cpp:438
@@ -4441,12 +4441,12 @@ msgstr "Üstel işlev"
 #: src/backend/gsl/functions.cpp:444
 #, kde-format
 msgid "exponentiate x and multiply by y"
-msgstr "x'in üssünü al ve y ile çarp"
+msgstr "x’in üssünü al ve y ile çarp"
 
 #: src/backend/gsl/functions.cpp:448
 #, kde-format
 msgid "n-relative exponential"
-msgstr "n-bağıl üstel"
+msgstr "n–bağıl üstel"
 
 #: src/backend/gsl/functions.cpp:451
 #, kde-format
@@ -4501,47 +4501,47 @@ msgstr "Arktanjant integrali"
 #: src/backend/gsl/functions.cpp:463
 #, kde-format
 msgid "Complete Fermi-Dirac integral with index -1"
-msgstr "-1 indeksli tam Fermi-Dirac integrali"
+msgstr "−1 indeksli tam Fermi–Dirac integrali"
 
 #: src/backend/gsl/functions.cpp:464
 #, kde-format
 msgid "Complete Fermi-Dirac integral with index 0"
-msgstr "0 indeksli tam Fermi-Dirac integrali"
+msgstr "0 indeksli tam Fermi–Dirac integrali"
 
 #: src/backend/gsl/functions.cpp:465
 #, kde-format
 msgid "Complete Fermi-Dirac integral with index 1"
-msgstr "1 indeksli tam Fermi-Dirac integrali"
+msgstr "1 indeksli tam Fermi–Dirac integrali"
 
 #: src/backend/gsl/functions.cpp:466
 #, kde-format
 msgid "Complete Fermi-Dirac integral with index 2"
-msgstr "2 indeksli tam Fermi-Dirac integrali"
+msgstr "2 indeksli tam Fermi–Dirac integrali"
 
 #: src/backend/gsl/functions.cpp:467
 #, kde-format
 msgid "Complete Fermi-Dirac integral with integer index j"
-msgstr "j indeksli tam Fermi-Dirac integrali"
+msgstr "j indeksli tam Fermi–Dirac integrali"
 
 #: src/backend/gsl/functions.cpp:468
 #, kde-format
 msgid "Complete Fermi-Dirac integral with index -1/2"
-msgstr "-1/2 indeksli tam Fermi-Dirac integrali"
+msgstr "−1/2 indeksli tam Fermi–Dirac integrali"
 
 #: src/backend/gsl/functions.cpp:469
 #, kde-format
 msgid "Complete Fermi-Dirac integral with index 1/2"
-msgstr "1/2 indeksli tam Fermi-Dirac integrali"
+msgstr "1/2 indeksli tam Fermi–Dirac integrali"
 
 #: src/backend/gsl/functions.cpp:470
 #, kde-format
 msgid "Complete Fermi-Dirac integral with index 3/2"
-msgstr "3/2 indeksli tam Fermi-Dirac integrali"
+msgstr "3/2 indeksli tam Fermi–Dirac integrali"
 
 #: src/backend/gsl/functions.cpp:471
 #, kde-format
 msgid "Incomplete Fermi-Dirac integral with index zero"
-msgstr "Sıfır indeksli eksik Fermi-Dirac integrali"
+msgstr "Sıfır indeksli eksik Fermi–Dirac integrali"
 
 #: src/backend/gsl/functions.cpp:474 src/backend/gsl/functions.cpp:475
 #, kde-format
@@ -4838,7 +4838,7 @@ msgstr "Düzensiz küresel konik işlev P^1/2"
 #: src/backend/gsl/functions.cpp:552
 #, kde-format
 msgid "Regular spherical conical function P^(-1/2)"
-msgstr "Düzenli küresel konik işlevi P^(-1/2)"
+msgstr "Düzenli küresel konik işlevi P^(−1/2)"
 
 #: src/backend/gsl/functions.cpp:553
 #, kde-format
@@ -4853,33 +4853,33 @@ msgstr "Konik işlevi P^1"
 #: src/backend/gsl/functions.cpp:555
 #, kde-format
 msgid "Regular spherical conical function P^(-1/2-l)"
-msgstr "Düzenli küresel konik işlevi P^(-1/2-l)"
+msgstr "Düzenli küresel konik işlevi P^(−1/2−l)"
 
 #: src/backend/gsl/functions.cpp:556
 #, kde-format
 msgid "Regular cylindrical conical function P^(-m)"
-msgstr "Düzenli silindirik konik işlevi P^(-m)"
+msgstr "Düzenli silindirik konik işlevi P^(−m)"
 
 #: src/backend/gsl/functions.cpp:557
 #, kde-format
 msgid ""
 "Zeroth radial eigenfunction of the Laplacian on the 3-dimensional hyperbolic "
 "space"
-msgstr "Laplace'in 3 boyutlu hiperbolik uzayda sıfır radyal eigenişlevi"
+msgstr "Laplace’in 3 boyutlu hiperbolik uzayda sıfır radyal eigenişlevi"
 
 #: src/backend/gsl/functions.cpp:558
 #, kde-format
 msgid ""
 "First radial eigenfunction of the Laplacian on the 3-dimensional hyperbolic "
 "space"
-msgstr "Laplace'in 3 boyutlu hiperbolik uzayda ilk radyal eigenişlevi"
+msgstr "Laplace’in 3 boyutlu hiperbolik uzayda ilk radyal eigenişlevi"
 
 #: src/backend/gsl/functions.cpp:559
 #, kde-format
 msgid ""
 "l-th radial eigenfunction of the Laplacian on the 3-dimensional hyperbolic "
 "space"
-msgstr "Laplace'in 3 boyutlu hiperbolik uzayda I. radyal eigenişlevi"
+msgstr "Laplace’in 3 boyutlu hiperbolik uzayda I. radyal eigenişlevi"
 
 #: src/backend/gsl/functions.cpp:562
 #, kde-format
@@ -4899,12 +4899,12 @@ msgstr "Büyüklüğün logaritması"
 #: src/backend/gsl/functions.cpp:570
 #, kde-format
 msgid "Characteristic values a_n(q) of the Mathieu functions ce_n(q, x)"
-msgstr "Mathieu işlevleri ce_n(q, x)'in a_n(q) karakteristik değerleri"
+msgstr "Mathieu işlevleri ce_n(q, x)’in a_n(q) karakteristik değerleri"
 
 #: src/backend/gsl/functions.cpp:571
 #, kde-format
 msgid "Characteristic values b_n(q) of the Mathieu functions se_n(q, x)"
-msgstr "Mathieu işlevleri se_n(q, x)'in b_n(q) karakteristik değerleri"
+msgstr "Mathieu işlevleri se_n(q, x)’in b_n(q) karakteristik değerleri"
 
 #: src/backend/gsl/functions.cpp:572
 #, kde-format
@@ -4949,12 +4949,12 @@ msgstr "1+i y doğrusu üzerinde digama işlevinin reel parçası"
 #: src/backend/gsl/functions.cpp:585
 #, kde-format
 msgid "Trigamma function psi' for positive integer n"
-msgstr "n pozitif tamsayısı için trigama işlevinin psi'i"
+msgstr "n pozitif tamsayısı için trigama işlevinin psi’si"
 
 #: src/backend/gsl/functions.cpp:586
 #, kde-format
 msgid "Trigamma function psi'"
-msgstr "Trigama işlev psi'"
+msgstr "Trigama işlev psi’"
 
 #: src/backend/gsl/functions.cpp:587
 #, kde-format
@@ -5122,7 +5122,7 @@ msgstr "Üç bileşen hipotenüs işlevi"
 #: src/backend/gsl/functions.cpp:630
 #, kde-format
 msgid "restrict to [-pi, pi]"
-msgstr "[-pi, pi] ile sınırlı"
+msgstr "[−pi, pi] ile sınırlı"
 
 #: src/backend/gsl/functions.cpp:631
 #, kde-format
@@ -5142,12 +5142,12 @@ msgstr "Riemann zeta işlevi"
 #: src/backend/gsl/functions.cpp:636
 #, kde-format
 msgid "zeta(n)-1 for integer n"
-msgstr "n tamsayısı için zeta(n)-1"
+msgstr "n tamsayısı için zeta(n)−1"
 
 #: src/backend/gsl/functions.cpp:637
 #, kde-format
 msgid "zeta(x)-1"
-msgstr "zeta(x)-1"
+msgstr "zeta(x)−1"
 
 #: src/backend/gsl/functions.cpp:638
 #, kde-format
@@ -5217,7 +5217,7 @@ msgstr "Lognormal rastgele sayılar"
 #: src/backend/gsl/functions.cpp:655
 #, kde-format
 msgid "Chi-squared random numbers"
-msgstr "Ki-kare rastgele sayılar"
+msgstr "Ki kare rastgele sayılar"
 
 #: src/backend/gsl/functions.cpp:656
 #, kde-format
@@ -5410,7 +5410,7 @@ msgstr "Lognormal dağılımı için olasılık yoğunluğu"
 #: src/backend/gsl/functions.cpp:741
 #, kde-format
 msgid "Probability density for a chi squared distribution"
-msgstr "Ki-kare dağılımı için olasılık yoğunluğu"
+msgstr "Ki kare dağılımı için olasılık yoğunluğu"
 
 #: src/backend/gsl/functions.cpp:748
 #, kde-format
@@ -5445,12 +5445,12 @@ msgstr "Weibull dağılımı için olasılık yoğunluğu"
 #: src/backend/gsl/functions.cpp:790
 #, kde-format
 msgid "Probability density for a Type-1 Gumbel distribution"
-msgstr "Tip-1 Gumbel dağılımı için olasılık yoğunluğu"
+msgstr "Tip 1 Gumbel dağılımı için olasılık yoğunluğu"
 
 #: src/backend/gsl/functions.cpp:795
 #, kde-format
 msgid "Probability density for a Type-2 Gumbel distribution"
-msgstr "Tip-2 Gumbel dağılımı için olasılık yoğunluğu"
+msgstr "Tip 2 Gumbel dağılımı için olasılık yoğunluğu"
 
 #: src/backend/gsl/functions.cpp:802
 #, kde-format
@@ -6160,7 +6160,7 @@ msgstr "Gauss (normal)"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:535
 #, kde-format
 msgid "Cauchy-Lorentz"
-msgstr "Cauchy-Lorentz"
+msgstr "Cauchy–Lorentz"
 
 #: src/backend/nsl/nsl_fit.c:32 src/backend/nsl/nsl_sf_stats.c:45
 #, kde-format
@@ -6180,7 +6180,7 @@ msgstr "Voigt Profili"
 #: src/backend/nsl/nsl_fit.c:35
 #, kde-format
 msgid "Pseudo-Voigt (same width)"
-msgstr "Sahte-Voight (aynı genişlik)"
+msgstr "Sahte–Voight (Aynı Genişlik)"
 
 #: src/backend/nsl/nsl_fit.c:44
 #, kde-format
@@ -6227,22 +6227,22 @@ msgstr "Gudermann (gd)"
 #: src/backend/nsl/nsl_geom_linesim.c:16
 #, kde-format
 msgid "Douglas-Peucker (Number)"
-msgstr "Douglas-Peucker (Sayı)"
+msgstr "Douglas–Peucker (Sayı)"
 
 #: src/backend/nsl/nsl_geom_linesim.c:17
 #, kde-format
 msgid "Douglas-Peucker (Tolerance)"
-msgstr "Douglas-Peucker (Tolerans)"
+msgstr "Douglas–Peucker (Tolerans)"
 
 #: src/backend/nsl/nsl_geom_linesim.c:18
 #, kde-format
 msgid "Visvalingam-Whyatt"
-msgstr "Visvalingam-Whyatt"
+msgstr "Visvalingam–Whyatt"
 
 #: src/backend/nsl/nsl_geom_linesim.c:19
 #, kde-format
 msgid "Reumann-Witkam"
-msgstr "Reumann-Witkam"
+msgstr "Reumann–Witkam"
 
 #: src/backend/nsl/nsl_geom_linesim.c:20
 #, kde-format
@@ -6348,7 +6348,7 @@ msgstr "Sonlu Farklar"
 #: src/backend/nsl/nsl_interp.c:25
 #, kde-format
 msgid "Catmull-Rom"
-msgstr "Catmull-Rom"
+msgstr "Catmull–Rom"
 
 #: src/backend/nsl/nsl_interp.c:25
 #, kde-format
@@ -6358,7 +6358,7 @@ msgstr "Ana"
 #: src/backend/nsl/nsl_interp.c:25
 #, kde-format
 msgid "Kochanek-Bartels (TCB)"
-msgstr "Kochanek-Bartels (TCB)"
+msgstr "Kochanek–Bartels (TCB)"
 
 #: src/backend/nsl/nsl_interp.c:26
 #, kde-format
@@ -6393,7 +6393,7 @@ msgstr "Üstel Güç"
 #: src/backend/nsl/nsl_sf_stats.c:18
 #, kde-format
 msgid "Cauchy-Lorentz (Breit-Wigner)"
-msgstr "Cauchy-Lorentz (Breit-Wigner)"
+msgstr "Cauchy–Lorentz (Breit–Wigner)"
 
 #: src/backend/nsl/nsl_sf_stats.c:19
 #, kde-format
@@ -6413,12 +6413,12 @@ msgstr "Landau"
 #: src/backend/nsl/nsl_sf_stats.c:22
 #, kde-format
 msgid "Levy Alpha-stable"
-msgstr "Levy Alfa-stabil"
+msgstr "Levy Alfa–Stabil"
 
 #: src/backend/nsl/nsl_sf_stats.c:23
 #, kde-format
 msgid "Levy Skew Alpha-stable"
-msgstr "Levy Eğimi Alfa-stabil"
+msgstr "Levy Eğimi Alfa–Stabil"
 
 #: src/backend/nsl/nsl_sf_stats.c:24
 #, kde-format
@@ -6443,12 +6443,12 @@ msgstr "Ki Kare"
 #: src/backend/nsl/nsl_sf_stats.c:28
 #, kde-format
 msgid "F (Fisher-Snedecor)"
-msgstr "F (Fisher-Snedecor)"
+msgstr "F (Fisher–Snedecor)"
 
 #: src/backend/nsl/nsl_sf_stats.c:29
 #, kde-format
 msgid "Student's t"
-msgstr "Öğrencinin t'si"
+msgstr "Öğrencinin t’si"
 
 #: src/backend/nsl/nsl_sf_stats.c:30
 #, kde-format
@@ -6473,12 +6473,12 @@ msgstr "Weibull"
 #: src/backend/nsl/nsl_sf_stats.c:34
 #, kde-format
 msgid "Gumbel Type-1 (Maximum Value; log-Weibull)"
-msgstr "Gumbel Tür-1 (En Yüksek Değer; log-Weibull)"
+msgstr "Gumbel Tür 1 (En Yüksek Değer; log–Weibull)"
 
 #: src/backend/nsl/nsl_sf_stats.c:35
 #, kde-format
 msgid "Gumbel Type-2"
-msgstr "Gumbel Tip-2"
+msgstr "Gumbel Tip 2"
 
 #: src/backend/nsl/nsl_sf_stats.c:36
 #, kde-format
@@ -6523,7 +6523,7 @@ msgstr "Logaritmik"
 #: src/backend/nsl/nsl_sf_stats.c:44
 #, kde-format
 msgid "Maxwell-Boltzmann"
-msgstr "Maxwell-Boltzmann"
+msgstr "Maxwell–Boltzmann"
 
 #: src/backend/nsl/nsl_sf_stats.c:46
 #, kde-format
@@ -6585,12 +6585,12 @@ msgstr "Nuttall"
 #: src/backend/nsl/nsl_sf_window.c:24
 #, kde-format
 msgid "Blackman-Nuttall"
-msgstr "Blackman-Nuttall"
+msgstr "Blackman–Nuttall"
 
 #: src/backend/nsl/nsl_sf_window.c:25
 #, kde-format
 msgid "Blackman-Harris"
-msgstr "Blackman-Harris"
+msgstr "Blackman–Harris"
 
 #: src/backend/nsl/nsl_sf_window.c:26
 #, kde-format
@@ -6600,7 +6600,7 @@ msgstr "Düz Tepe"
 #: src/backend/nsl/nsl_sf_window.c:28
 #, kde-format
 msgid "Bartlett-Hann"
-msgstr "Bartlett-Hann"
+msgstr "Bartlett–Hann"
 
 #: src/backend/nsl/nsl_sf_window.c:29
 #, kde-format
@@ -6620,7 +6620,7 @@ msgstr "Hareket Ortalaması (Gecikmeli)"
 #: src/backend/nsl/nsl_smooth.c:21
 #, kde-format
 msgid "Savitzky-Golay"
-msgstr "Savitzky-Golay"
+msgstr "Savitzky–Golay"
 
 #: src/backend/nsl/nsl_smooth.c:22
 #: src/kdefrontend/spreadsheet/SampleValuesDialog.cpp:44
@@ -7360,7 +7360,7 @@ msgstr "%1: Etiketlerin keskinliğini ayarla"
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:948
 #, kde-format
 msgid "%1: set labels datetime format"
-msgstr "%1: Etiketlerin tarih-zaman biçimini ayarla"
+msgstr "%1: Etiketlerin tarih–zaman biçimini ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:955
 #, kde-format
@@ -7461,7 +7461,7 @@ msgstr "%1: Genişlik çarpanı değişti"
 #: src/backend/worksheet/plots/cartesian/XYEquationCurve.cpp:112
 #, kde-format
 msgid "%1 - Data"
-msgstr "%1 - Veri"
+msgstr "%1 — Veri"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:305
 #, kde-format
@@ -7624,7 +7624,7 @@ msgstr "KDE Çizimi"
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:251
 #, kde-format
 msgid "Q-Q Plot"
-msgstr "Q-Q Çizimi"
+msgstr "Q–Q Çizimi"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:438
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:476
@@ -8020,7 +8020,7 @@ msgstr "%1: “%2” türevini al"
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:701
 #, kde-format
 msgid "Derivative of '%1'"
-msgstr "'%1 türevi"
+msgstr "“%1” türevi"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1834
 #, kde-format
@@ -8267,7 +8267,7 @@ msgstr "Cauchy Dağılımını Sığdır"
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:223
 #, kde-format
 msgid "Fit Log-normal Distribution"
-msgstr "Log-normal Dağılımı Sığdır"
+msgstr "Log–Normal Dağılımı Sığdır"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:229
 #, kde-format
@@ -8523,7 +8523,7 @@ msgstr "yıldırım"
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:336
 #, kde-format
 msgid "character 'X'"
-msgstr "'X' karakteri"
+msgstr "“X” karakteri"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:338
 #, kde-format
@@ -8772,7 +8772,7 @@ msgstr "%1: Değerlerin kesinliğini ayarla"
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:535
 #, kde-format
 msgid "%1: set values datetime format"
-msgstr "%1: Değerlerin tarih-saat biçimini ayarla"
+msgstr "%1: Değerlerin tarih–saat biçimini ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:185
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:542
@@ -8867,7 +8867,7 @@ msgstr "%1: Atlama satırı boşluklarını ayarla"
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:452
 #, kde-format
 msgid "%1: set increasing X"
-msgstr "%1: Artan X'i ayarla"
+msgstr "%1: Artan X’i ayarla"
 
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:459
 #, kde-format
@@ -9198,7 +9198,7 @@ msgstr "%1: Boyut türünü değiştir"
 #: src/backend/worksheet/Worksheet.cpp:673
 #, kde-format
 msgid "%1: change \"rescale the content\" property"
-msgstr "%1: \"İçeriği yeniden ölçeklendir özelliği\"ni değiştir"
+msgstr "%1: “İçeriği yeniden ölçeklendir özelliği”ni değiştir"
 
 #: src/backend/worksheet/Worksheet.cpp:681
 #: src/backend/worksheet/Worksheet.cpp:682
@@ -9614,7 +9614,7 @@ msgstr ""
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:683
 #, kde-format
 msgid "%1: change position of selected DatapickerPoints."
-msgstr "%1: Seçili DatapickerPoints'in konumunu değiştir."
+msgstr "%1: Seçili DatapickerPoints’in konumunu değiştirin."
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:736
 #, kde-format
@@ -10215,17 +10215,17 @@ msgstr "Erime Böl"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:424
 #, kde-format
 msgid "Divide by SD"
-msgstr "SD'ye Böl"
+msgstr "SD ile Böl"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:427
 #, kde-format
 msgid "Divide by MAD"
-msgstr "MAD'e Böl"
+msgstr "MAD ile Böl"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:430
 #, kde-format
 msgid "Divide by IQR"
-msgstr "IQR'ye Böl"
+msgstr "IQR ile Böl"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:433
 #, kde-format
@@ -10245,7 +10245,7 @@ msgstr "(x Ortancası)/IQR"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:442
 #, kde-format
 msgid "Rescale to [a, b]"
-msgstr "[a, b]'ye yeniden ölçekle"
+msgstr "[a, b]’ye yeniden ölçekle"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:472
 #, kde-format
@@ -10507,7 +10507,7 @@ msgstr "Kip = 0"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2942
 #, kde-format
 msgid "'Mode not defined'"
-msgstr "'Kip tanımlanmamış'"
+msgstr "“Kip tanımlanmamış”"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2953
 #, kde-format
@@ -10535,7 +10535,7 @@ msgstr "IQR = 0"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3034
 #, kde-format
 msgid "Max - Min = 0"
-msgstr "En büyük - en küçük = 0"
+msgstr "En büyük − En küçük = 0"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3053
 #, kde-format
@@ -10941,22 +10941,22 @@ msgstr "Otomatik Ölçekleme Y"
 #: src/commonfrontend/worksheet/WorksheetView.cpp:386
 #, kde-format
 msgid "Zoom In X"
-msgstr "X'e Yakınlaştır"
+msgstr "X’e Yakınlaştır"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:390
 #, kde-format
 msgid "Zoom Out X"
-msgstr "X'ten Uzaklaştır"
+msgstr "X’ten Uzaklaştır"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:394
 #, kde-format
 msgid "Zoom In Y"
-msgstr "Y'ye Yakınlaştır"
+msgstr "Y’ye Yakınlaştır"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:398
 #, kde-format
 msgid "Zoom Out Y"
-msgstr "Y'den Uzaklaştır"
+msgstr "Y’den Uzaklaştır"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:402
 #, kde-format
@@ -11036,12 +11036,10 @@ msgid "%1: Remove selected worksheet elements."
 msgstr "%1: Seçili çalışma sayfası ögelerini kaldır."
 
 #: src/kdefrontend/CASSettingsDialog.cpp:34
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Preferences"
+#, kde-format
 msgctxt "@title:window"
 msgid "CAS Preferences"
-msgstr "Tercihler"
+msgstr "CAS Tercihleri"
 
 #: src/kdefrontend/colormaps/ColorMapsDialog.cpp:42
 #, kde-format
@@ -11075,7 +11073,7 @@ msgstr "Ara…"
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:84
 #, kde-format
 msgid "Point '.'"
-msgstr "Nokta '.'"
+msgstr "Nokta “.”"
 
 #: src/kdefrontend/datasources/AsciiOptionsWidget.cpp:33
 #: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:50
@@ -11083,7 +11081,7 @@ msgstr "Nokta '.'"
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:85
 #, kde-format
 msgid "Comma ','"
-msgstr "Virgül ','"
+msgstr "Virgül “,”"
 
 #: src/kdefrontend/datasources/AsciiOptionsWidget.cpp:36
 #: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:53
@@ -11165,40 +11163,40 @@ msgid ""
 "the format will be auto-detected."
 msgstr ""
 "Biçim dizisinin tarih bölümü için kullanılabilen ifadeler: <table><tr><td>d</"
-"td><td>başında sıfır olmadan sayı olarak gün (1'den 31'e).</td></"
-"tr><tr><td>dd</td><td>başında sıfır ile sayı olarak gün (01'den 31'e).</td></"
-"tr><tr><td>ddd</td><td>kısaltılmış yerelleştirilmiş gün adı (örn. 'Pzt'den "
-"'Paz'a). Sistem yerel ayarını adı yerelleştirmek için kullanır.</td></"
-"tr><tr><td>dddd</td><td>uzun yerelleştirilmiş ad (örn. 'Pazartesi'nden "
-"'Pazar'a). Sistem yerel ayarını adı yerelleştirmek için kullanır.</td></"
-"tr><tr><td>M</td><td>başında sıfır olmadan ay (1'den 12'ye).</td></"
-"tr><tr><td>MM</td><td>başına sıfır koyarak ay (01'den 12'ye).</td></"
-"tr><tr><td>MMM</td><td>kısaltılmış yerelleştirilmiş ay adı (örn. 'OCA'tan "
-"'ARA'a). Sistemin locale ayarını adı yerelleştirmek için kullanır.</td></"
-"tr><tr><td>MMMM</td><td>uzun yerelleştirilmiş ay adı (örnek 'Ocak'tan "
-"'Aralık'a). Sistemin yerel ayarını adı yerelleştirmek için kullanır.</td></"
-"tr><tr><td>yy</td><td>iki rakam olarak yıl (00'dan 99'a).</td></"
-"tr><tr><td>yyyy</td><td>4 rakam olarak yıl. Yıl negatif ise, önüne eksi "
-"işareti eklenir.</td></tr></table><br><br>Format dizisindeki zaman kısmı "
-"için kullanılabilen ifadeler<table><tr><td>h</td><td>başında sıfır olmadan "
-"saat (0'dan 23'e veya 1'den 12'ye AM/PM gösteriliyorsa)</td></tr><tr><td>hh</"
-"td><td>başında sıfır olacak şekilde saat (00'dan 23'e veya 01'den 12'ye AM/"
-"PM gösteriliyorsa)</td></tr><tr><td>H</td><td>başında sıfır olmadan saat "
-"(0'dan 23'e AM/PM gösteriliyor olsa bile)</td></tr><tr><td>HH</"
-"td><td>başında sıfır olacak şekilde saat (00'dan 23'e AM/PM gösteriliyor "
-"olsa bile)</td></tr><tr><td>m</td><td>başında sıfır olmadan dakika (0'dan "
-"59'a)</td></tr><tr><td>mm</td><td>başında sıfır olacak şekilde dakika(00'dan "
-"59'a)</td></tr><tr><td>s</td><td>başında sıfır olmadan saniye (0'dan 59'a)</"
-"td></tr><tr><td>ss</td><td>başında sıfır olacak şekilde saniye (00'dan "
-"59'a)</td></tr><tr><td>z</td><td>başında sıfır olmadan milisaniye (0'dan "
-"999'a)</td></tr><tr><td>zzz</td><td>başında sıfır olacak şekilde milisaniye "
-"(000'dan 999'a)</td></tr><tr><td>AP veya A</td><td>bir AM/PM zamanı olarak "
-"gösterir. AP, hem 'AM' hem de 'PM' olmalıdır.</td></tr><tr><td>ap veya a</"
-"td><td>bir AM/PM zamanı olarak gösterir. ap hem 'am' hem 'pm' olmalıdır.</"
+"td><td>başında sıfır olmadan sayı olarak gün (1’den 31’e).</td></"
+"tr><tr><td>dd</td><td>başında sıfır ile sayı olarak gün (01’den 31’e).</td></"
+"tr><tr><td>ddd</td><td>kısaltılmış yerelleştirilmiş gün adı (örn. “Pzt”den "
+"“Paz”a). Sistem yerel ayarını adı yerelleştirmek için kullanır.</td></"
+"tr><tr><td>dddd</td><td>uzun yerelleştirilmiş ad (örn. “Pazartesi”den "
+"“Pazar”a). Sistem yerel ayarını adı yerelleştirmek için kullanır.</td></"
+"tr><tr><td>M</td><td>başında sıfır olmadan ay (1’den 12’ye).</td></"
+"tr><tr><td>MM</td><td>başına sıfır koyarak ay (01’den 12’ye).</td></"
+"tr><tr><td>MMM</td><td>kısaltılmış yerelleştirilmiş ay adı (örn. “OCA”tan "
+"“ARA”ya). Sistemin yerel ayarını adı yerelleştirmek için kullanır.</td></"
+"tr><tr><td>MMMM</td><td>uzun yerelleştirilmiş ay adı (örnek “Ocak”tan "
+"“Aralık”a). Sistemin yerel ayarını adı yerelleştirmek için kullanır.</td></"
+"tr><tr><td>yy</td><td>iki rakam olarak yıl (00’dan 99’a).</td></"
+"tr><tr><td>yyyy</td><td>4 rakam olarak yıl. Yıl negatif ise önüne eksi "
+"işareti eklenir.</td></tr></table><br><br>Biçim dizisindeki zaman kısmı için "
+"kullanılabilen ifadeler<table><tr><td>h</td><td>başında sıfır olmadan saat "
+"(0’dan 23’e veya 1’den 12’ye ÖÖ/ÖS gösteriliyorsa)</td></tr><tr><td>hh</"
+"td><td>başında sıfır olacak şekilde saat (00’dan 23’e veya 01’den 12’ye ÖÖ/"
+"ÖS gösteriliyorsa)</td></tr><tr><td>H</td><td>başında sıfır olmadan saat "
+"(0’dan 23’e ÖÖ/ÖS gösteriliyor olsa bile)</td></tr><tr><td>HH</"
+"td><td>başında sıfır olacak şekilde saat (00’dan 23’e ÖÖ/ÖS gösteriliyor "
+"olsa bile)</td></tr><tr><td>m</td><td>başında sıfır olmadan dakika (0’dan "
+"59’a)</td></tr><tr><td>mm</td><td>başında sıfır olacak şekilde dakika(00’dan "
+"59’a)</td></tr><tr><td>s</td><td>başında sıfır olmadan saniye (0’dan 59’a)</"
+"td></tr><tr><td>ss</td><td>başında sıfır olacak şekilde saniye (00’dan "
+"59’a)</td></tr><tr><td>z</td><td>başında sıfır olmadan milisaniye (0’dan "
+"999’a)</td></tr><tr><td>zzz</td><td>başında sıfır olacak şekilde milisaniye "
+"(000’dan 999’a)</td></tr><tr><td>AP veya A</td><td>bir ÖÖ/ÖS zamanı olarak "
+"gösterir. AP, hem “AM” hem de “PM” olmalıdır.</td></tr><tr><td>ap veya a</"
+"td><td>bir ÖÖ/ÖS zamanı olarak gösterir. ap hem “am” hem “pm” olmalıdır.</"
 "td></tr></table><br><br>Örnekler<table><tr><td>dd.MM.yyyy</"
-"td><td>20.07.1969</td></tr><tr><td>ddd MMMM d yy</td><td>Sun July 20 69</"
-"td></tr><tr><td>'Gün' dddd</td><td>'Gün' Pazar</td></tr></"
-"table><br><br>Sağlanan ifadenin boş olması durumunda biçim otomatik olarak "
+"td><td>20.07.1969</td></tr><tr><td>ddd MMMM d yy</td><td>Paz Temmuz 20 69</"
+"td></tr><tr><td>“Gün” dddd</td><td>“Gün” Pazar</td></tr></"
+"table><br><br>Sağlanan ifadenin boş olması durumunda biçim kendiliğinden "
 "algılanır."
 
 #: src/kdefrontend/datasources/AsciiOptionsWidget.cpp:105
@@ -11218,7 +11216,7 @@ msgstr "Sütun adlarını belirlemede kullanılması gereken dosyadaki satır."
 #: src/kdefrontend/datasources/AsciiOptionsWidget.cpp:111
 #, kde-format
 msgid "Custom column names, space separated. E.g. \"x y\""
-msgstr "Özel sütun adları, boşlukla ayrılmış. Örn. \"x y\""
+msgstr "Özel sütun adları, boşlukla ayrılmış. Örn. “x y”"
 
 #: src/kdefrontend/datasources/BinaryOptionsWidget.cpp:29
 #, kde-format
@@ -11764,11 +11762,11 @@ msgid ""
 "processed. Only available for \"File Or Named Pipe\" data sources.</li></ul>"
 msgstr ""
 "Her okumada veri kaynağının nasıl işlenmesi gerektiğini belirtin:"
-"<ul><li>Sürekli sabit - Yeni alınan verinin başından itibaren sabit miktarda "
-"örnekler işlenir.</li><li>Sondan - Yeni alınan verinin sonundan itibaren "
-"sabit miktarda örnekler işlenir.</li><li>Sonuna kadar - Tüm yeni alının veri "
-"işlenir.</li><li>Tüm dosya - Her okumada tüm dosya yeniden okunur ve "
-"işlenir. Yalnızca \"Dosya veya Adlı Veriyolu\" veri kaynakları için "
+"<ul><li>Sürekli sabit — Yeni alınan verinin başından itibaren sabit miktarda "
+"örnekler işlenir.</li><li>Sondan — Yeni alınan verinin sonundan itibaren "
+"sabit miktarda örnekler işlenir.</li><li>Sonuna kadar — Tüm yeni alının veri "
+"işlenir.</li><li>Tüm dosya — Her okumada tüm dosya yeniden okunur ve "
+"işlenir. Yalnızca “Dosya veya Adlı Veriyolu” veri kaynakları için "
 "kullanılabilir.</li></ul>"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:208
@@ -11779,8 +11777,7 @@ msgid ""
 "\"From End\"."
 msgstr ""
 "Her okumada işlenecek örnekler (satırlar) sayısı.\n"
-"Yalnızca \"Sürekli Sabit\" ve \"Sondan\" okuma kipleri için belirtilmesi "
-"gerekir."
+"Yalnızca “Sürekli Sabit” ve “Sondan” okuma kipleri için belirtilmesi gerekir."
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:214
 #, kde-format
@@ -11791,8 +11788,8 @@ msgid ""
 "new data arrives.</li></ul>"
 msgstr ""
 "Veri kaynağının ne zaman ve ne kadar sıklıkla okunması gerektiğini belirt:"
-"<ul><li>Periyodik olarak - Veri kaynağı, kullanıcı tarafından belirtilen "
-"aralığa göre periyodik olarak okunur.</li><li>Yeni Veride - Veri kaynağı, "
+"<ul><li>Periyodik olarak — Veri kaynağı, kullanıcı tarafından belirtilen "
+"aralığa göre periyodik olarak okunur.</li><li>Yeni Veride — Veri kaynağı, "
 "yeni veri geldiğinde okunur.</li></ul>"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:222
@@ -11807,7 +11804,7 @@ msgid ""
 "Use \"All\" if all data has to be kept."
 msgstr ""
 "Okumadan sonra kaç tane örneğin bellekte tutulması gerektiğini belirtin.\n"
-"Tüm verinin tutulması gerekiyorsa \"Tümü\"nü seçin."
+"Tüm verinin tutulması gerekiyorsa “Tümü”nü seçin."
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:232
 #, kde-format
@@ -11830,7 +11827,7 @@ msgid ""
 "Specify the 'Last Will and Testament' message (LWT). At least one topic has "
 "to be subscribed."
 msgstr ""
-"'Son Vasiyet ve Ahit' iletisini (LWT) belirtin. En azından bir konuya abone "
+"“Son Vasiyet ve Ahit” iletisini (LWT) belirtin. En azından bir konuya abone "
 "olunmalıdır."
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:904
@@ -12045,7 +12042,7 @@ msgstr "Bir hata oluştu."
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:2641
 #, kde-format
 msgid "Connecting to '%1:%2' timed out."
-msgstr "'%1:%2' konumuna bağlantı zaman aşımına uğradı."
+msgstr "“%1:%2” konumuna bağlantı zaman aşımına uğradı."
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:83
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:518
@@ -12119,13 +12116,13 @@ msgid ""
 "new coordinate system (data range) on the same plot area is created for "
 "every layer</li></ul>"
 msgstr ""
-"Origin'de çoklu katmanlar,aynı çizim üzerinde birden çok çizim veya eksen "
+"Origin’de çoklu katmanlar, aynı çizim üzerinde birden çok çizim veya eksen "
 "koymak için kullanılırlar (daha fazla bilgi için <a href=\"https://www."
-"originlab.com/doc/Origin-Help/MultiLayer-Graph\">Origin'in "
+"originlab.com/doc/Origin-Help/MultiLayer-Graph\">Origin’in "
 "belgelendirmesine</a> bakın). LabPlot aynı anda yalnızca bir türü "
 "işleyebilir.<br><br>Seçili projede çok katmanlı grafiklerin nasıl "
-"uygulanacağını seçin:<ul><li>Çizim Alanı Olarak - Her bir katman için yeni "
-"bir çizim alanı oluşturulur.</li><li>Koordinat Sistemi Olarak - Her bir "
+"uygulanacağını seçin:<ul><li>Çizim Alanı Olarak — Her bir katman için yeni "
+"bir çizim alanı oluşturulur.</li><li>Koordinat Sistemi Olarak — Her bir "
 "katman için aynı çizim alanında yeni bir koordinat sistemi (veri erimi) "
 "oluşturulur</li></ul>"
 
@@ -12271,9 +12268,9 @@ msgid ""
 "valid number representations are:<ul><li>1234,56</li><li>1.234,56</"
 "li><li>etc.</li></ul>"
 msgstr ""
-"'C Biçimi' için, ondalık nokta karakteri için bir nokta, binler grup "
+"“C Biçimi” için, ondalık nokta karakteri için bir nokta, binler grup "
 "ayırıcısı için virgül kullanılır. Geçerli sayı gösterimleri: "
-"<ul><li>1234.56</li><li>1,234.56</li><li>vb.</li></ul>'Sistem yereli' "
+"<ul><li>1234.56</li><li>1,234.56</li><li>vb.</li></ul>“Sistem yereli” "
 "kullanılırken, sistem ayarları kullanılacaktır. Örn., Alman yerel geçerli "
 "sayı gösterimleri:<ul><li>1234,56</li><li>1.234,56</li><li>vb.</li></ul>"
 
@@ -12316,39 +12313,39 @@ msgid ""
 "Sunday</td></tr></table>"
 msgstr ""
 "Biçim dizisinin tarih bölümü için kullanılabilen ifadeler: <table><tr><td>d</"
-"td><td>başında sıfır olmadan sayı olarak gün (1'den 31'e).</td></"
-"tr><tr><td>dd</td><td>başında sıfır ile sayı olarak gün (01'den 31'e).</td></"
-"tr><tr><td>ddd</td><td>kısaltılmış yerelleştirilmiş gün adı (örn. 'Pzt'den "
-"'Paz'a). Sistem yerel ayarını adı yerelleştirmek için kullanır.</td></"
-"tr><tr><td>dddd</td><td>uzun yerelleştirilmiş ad (örn. 'Pazartesi'nden "
-"'Pazar'a). Sistem yerel ayarını adı yerelleştirmek için kullanır.</td></"
-"tr><tr><td>M</td><td>başında sıfır olmadan ay (1'den 12'ye).</td></"
-"tr><tr><td>MM</td><td>başına sıfır koyarak ay (01'den 12'ye).</td></"
-"tr><tr><td>MMM</td><td>kısaltılmış yerelleştirilmiş ay adı (örn. 'OCA'tan "
-"'ARA'a). Sistemin yerel ayarını adı yerelleştirmek için kullanır.</td></"
-"tr><tr><td>MMMM</td><td>uzun yerelleştirilmiş ay adı (örnek 'Ocak'tan "
-"'Aralık'a). Sistemin locale ayarını adı yerelleştirmek için kullanır.</td></"
-"tr><tr><td>yy</td><td>iki rakam olarak yıl (00'dan 99'a).</td></"
-"tr><tr><td>yyyy</td><td>4 rakam olarak yıl. Yıl negatif ise, önüne eksi "
+"td><td>başında sıfır olmadan sayı olarak gün (1’den 31’e).</td></"
+"tr><tr><td>dd</td><td>başında sıfır ile sayı olarak gün (01’den 31’e).</td></"
+"tr><tr><td>ddd</td><td>kısaltılmış yerelleştirilmiş gün adı (örn. “Pzt”den "
+"“Paz”a). Sistem yerel ayarını adı yerelleştirmek için kullanır.</td></"
+"tr><tr><td>dddd</td><td>uzun yerelleştirilmiş ad (örn. “Pazartesi”den "
+"“Pazar”a). Sistem yerel ayarını adı yerelleştirmek için kullanır.</td></"
+"tr><tr><td>M</td><td>başında sıfır olmadan ay (1’den 12’ye).</td></"
+"tr><tr><td>MM</td><td>başına sıfır koyarak ay (01’den 12’ye).</td></"
+"tr><tr><td>MMM</td><td>kısaltılmış yerelleştirilmiş ay adı (örn. “OCA”tan "
+"“ARA”ya). Sistemin yerel ayarını adı yerelleştirmek için kullanır.</td></"
+"tr><tr><td>MMMM</td><td>uzun yerelleştirilmiş ay adı (örnek, “Ocak”tan "
+"“Aralık”a). Sistemin locale ayarını adı yerelleştirmek için kullanır.</td></"
+"tr><tr><td>yy</td><td>iki rakam olarak yıl (00’dan 99’a).</td></"
+"tr><tr><td>yyyy</td><td>4 rakam olarak yıl. Yıl negatif ise önüne eksi "
 "işareti eklenir.</td></tr></table><br><br>Biçim dizisindeki zaman kısmı için "
 "kullanılabilen ifadeler<table><tr><td>h</td><td>başında sıfır olmadan saat "
-"(0'dan 23'e veya 1'den 12'ye AM/PM gösteriliyorsa)</td></tr><tr><td>hh</"
-"td><td>başında sıfır olacak şekilde saat (00'dan 23'e veya 01'den 12'ye AM/"
-"PM gösteriliyorsa)</td></tr><tr><td>H</td><td>başında sıfır olmadan saat "
-"(0'dan 23'e AM/PM gösteriliyor olsa bile)</td></tr><tr><td>HH</"
-"td><td>başında sıfır olacak şekilde saat (00'dan 23'e AM/PM gösteriliyor "
-"olsa bile)</td></tr><tr><td>m</td><td>başında sıfır olmadan dakika (0'dan "
-"59'a)</td></tr><tr><td>mm</td><td>başında sıfır olacak şekilde dakika(00'dan "
-"59'a)</td></tr><tr><td>s</td><td>başında sıfır olmadan saniye (0'dan 59'a)</"
-"td></tr><tr><td>ss</td><td>başında sıfır olacak şekilde saniye (00'dan "
-"59'a)</td></tr><tr><td>z</td><td>başında sıfır olmadan milisaniye (0'dan "
-"999'a)</td></tr><tr><td>zzz</td><td>başında sıfır olacak şekilde milisaniye "
-"(000'dan 999'a)</td></tr><tr><td>AP veya A</td><td>bir AM/PM zamanı olarak "
-"gösterir. AP, hem 'AM' hem de 'PM' olmalıdır.</td></tr><tr><td>ap veya a</"
-"td><td>bir AM/PM zamanı olarak gösterir. ap hem 'am' hem 'pm' olmalıdır.</"
+"(0’dan 23’e veya 1’den 12’ye ÖÖ/ÖS gösteriliyorsa)</td></tr><tr><td>hh</"
+"td><td>başında sıfır olacak şekilde saat (00’dan 23’e veya 01’den 12’ye ÖÖ/"
+"ÖS gösteriliyorsa)</td></tr><tr><td>H</td><td>başında sıfır olmadan saat "
+"(0’dan 23’e ÖÖ/ÖS gösteriliyor olsa bile)</td></tr><tr><td>HH</"
+"td><td>başında sıfır olacak şekilde saat (00’dan 23’e ÖÖ/ÖS gösteriliyor "
+"olsa bile)</td></tr><tr><td>m</td><td>başında sıfır olmadan dakika (0’dan "
+"59’a)</td></tr><tr><td>mm</td><td>başında sıfır olacak şekilde dakika(00’dan "
+"59’a)</td></tr><tr><td>s</td><td>başında sıfır olmadan saniye (0’dan 59’a)</"
+"td></tr><tr><td>ss</td><td>başında sıfır olacak şekilde saniye (00’dan "
+"59’a)</td></tr><tr><td>z</td><td>başında sıfır olmadan milisaniye (0’dan "
+"999’a)</td></tr><tr><td>zzz</td><td>başında sıfır olacak şekilde milisaniye "
+"(000’dan 999’a)</td></tr><tr><td>AP veya A</td><td>bir ÖÖ/ÖS zamanı olarak "
+"gösterir. AP, hem “AM” hem de “PM” olmalıdır.</td></tr><tr><td>ap veya a</"
+"td><td>bir ÖÖ/ÖS zamanı olarak gösterir. ap hem “am” hem “pm” olmalıdır.</"
 "td></tr></table><br><br>Örnekler<table><tr><td>dd.MM.yyyy</"
-"td><td>20.07.1969</td></tr><tr><td>ddd MMMM d yy</td><td>Sun July 20 69</"
-"td></tr><tr><td>'Gün' dddd</td><td>'Gün' Pazar</td></tr></table>"
+"td><td>20.07.1969</td></tr><tr><td>ddd MMMM d yy</td><td>Paz Temmuz 20 69</"
+"td></tr><tr><td>“Gün” dddd</td><td>“Gün” Pazar</td></tr></table>"
 
 #: src/kdefrontend/datasources/MQTTConnectionManagerDialog.cpp:33
 #, kde-format
@@ -12423,18 +12420,18 @@ msgstr "Lütfen geçerli bir kapı ayarlayın."
 #: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:656
 #, kde-format
 msgid "Connection to the broker '%1:%2' was successful."
-msgstr "'%1:%2' aracısına bağlantı başarılı."
+msgstr "“%1:%2” aracısına bağlantı başarılı."
 
 #: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:670
 #, kde-format
 msgid "Failed to connect to the broker '%1:%2'."
-msgstr "'%1:%2' aracısına bağlanılamadı."
+msgstr "“%1:%2” aracısına bağlanılamadı."
 
 #: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:684
 #, kde-format
 msgid ""
 "Disconnected from the broker '%1:%2' before the connection was successful."
-msgstr "Bağlantı başarılı olmadan önce '%1:%2' aracısı bağlantısı kesildi."
+msgstr "Bağlantı başarılı olmadan önce “%1:%2” aracısı bağlantısı kesildi."
 
 #: src/kdefrontend/datasources/MQTTSubscriptionWidget.cpp:40
 #, kde-format
@@ -12464,8 +12461,8 @@ msgid ""
 "- deliver at least once</li><li>2 - deliver exactly once</li></ul>"
 msgstr ""
 "İleti tesliminin garantisini tanımlamak için abonelik Hizmet Kalitesini "
-"(QoS) seçin:<ul><li>0 - bir kerede olabildiğince çok teslim et</li><li>1 - "
-"en az bir kez teslim et</li><li>2 - yalnızca bir kez teslim et</li></ul>"
+"(QoS) seçin:<ul><li>0 — bir kerede olabildiğince çok teslim et</li><li>1 — "
+"en az bir kez teslim et</li><li>2 — yalnızca bir kez teslim et</li></ul>"
 
 #: src/kdefrontend/datasources/MQTTSubscriptionWidget.cpp:856
 #: src/kdefrontend/datasources/MQTTSubscriptionWidget.cpp:858
@@ -12609,10 +12606,10 @@ msgid ""
 "points, respectively</li><li>Custom - manually specify the start and end "
 "points of the axis</li></ul>"
 msgstr ""
-"Eksen erimi:<ul><li>Otomatik - Eksenin başlangıç ve bitiş noktalarını "
-"kendiliğinden geçerli çizim erimlerine ayarla</li><li>Otomatik Veri - "
+"Eksen erimi:<ul><li>Otomatik — Eksenin başlangıç ve bitiş noktalarını "
+"kendiliğinden geçerli çizim erimlerine ayarla</li><li>Otomatik Veri — "
 "Eksenin başlangıç ve bitiş noktalarını otomatik olarak en küçük ve en büyük "
-"çizilmiş veri noktalarına sırasıyla ayarla</li><li>Özel - Eksenin başlangıç "
+"çizilmiş veri noktalarına sırasıyla ayarla</li><li>Özel — Eksenin başlangıç "
 "ve bitiş noktalarını el ile ayarla</li></ul>"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:263
@@ -12780,22 +12777,22 @@ msgstr "Bilimsel E gösterimi"
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:310
 #, kde-format
 msgid "Powers of 10"
-msgstr "10'un kuvveti"
+msgstr "10’un kuvveti"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:311
 #, kde-format
 msgid "Powers of 2"
-msgstr "2'nin kuvveti"
+msgstr "2’nin kuvveti"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:312
 #, kde-format
 msgid "Powers of e"
-msgstr "e'nin kuvveti"
+msgstr "e’nin kuvveti"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:313
 #, kde-format
 msgid "Multiples of π"
-msgstr "π'nin çarpanları"
+msgstr "π’nin çarpanları"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:317
 #, kde-format
@@ -12970,7 +12967,7 @@ msgid ""
 "'None' to keep the original order."
 msgstr ""
 "Birden çok veri kümesi sağlanmışsa nice sıralanmaları gerektiğini tanımlayın "
-"veya özgün sırayı korumak için 'Hiçbiri'ni seçin."
+"veya özgün sırayı korumak için “Yok”u seçin."
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:65
 #, kde-format
@@ -13081,8 +13078,8 @@ msgid ""
 "specified number of last points is plotted</li><li>First Points - specified "
 "number of first points is plotted</li></ul>"
 msgstr ""
-"Veri Erimi:<ul><li>Boş - Tam veri erimi çizilir</li><li>Son Noktalar - "
-"Belirli sayıdaki son noktalar çizilir</li><li>İlk Noktalar - Belirli "
+"Veri Erimi:<ul><li>Boş — Tam veri erimi çizilir</li><li>Son Noktalar — "
+"Belirli sayıdaki son noktalar çizilir</li><li>İlk Noktalar — Belirli "
 "sayıdaki ilk noktalar çizilir</li></ul>"
 
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:884
@@ -13670,7 +13667,7 @@ msgstr ""
 msgid ""
 "If checked, connect data points only for strictly increasing values of X"
 msgstr ""
-"İşaretlenmişse veri noktalarını yalnızca X'in değerlerini artırmak için bağla"
+"İşaretlenmişse veri noktalarını yalnızca X’in değerlerini artırmak için bağla"
 
 #: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:65
 #, kde-format
@@ -14120,7 +14117,7 @@ msgstr "KDE Çizimi"
 #, kde-format
 msgctxt "@title:window"
 msgid "Q-Q Plot"
-msgstr "Q-Q Çizimi"
+msgstr "Q–Q Çizimi"
 
 #: src/kdefrontend/GuiObserver.cpp:386
 #, kde-format
@@ -14242,12 +14239,12 @@ msgstr "Nokta Çizgisi"
 #: src/kdefrontend/GuiTools.cpp:72 src/kdefrontend/GuiTools.cpp:98
 #, kde-format
 msgid "Dash-dot Line"
-msgstr "Tire-Nokta Çizgisi"
+msgstr "Tire–Nokta Çizgisi"
 
 #: src/kdefrontend/GuiTools.cpp:72 src/kdefrontend/GuiTools.cpp:98
 #, kde-format
 msgid "Dash-dot-dot Line"
-msgstr "Tire-Nokta-Nokta Çizgisi"
+msgstr "Tire–Nokta–Nokta Çizgisi"
 
 #: src/kdefrontend/GuiTools.cpp:157
 #, kde-format
@@ -14591,7 +14588,7 @@ msgstr ""
 #: src/kdefrontend/LabPlot.cpp:98
 #, kde-format
 msgid "(c) 2007-2024"
-msgstr "(c) 2007-2024"
+msgstr "(c) 2007–2024"
 
 #: src/kdefrontend/LabPlot.cpp:101
 #, kde-format
@@ -14613,7 +14610,7 @@ msgstr "Alexander Semke"
 #: src/kdefrontend/LabPlot.cpp:103
 #, kde-format
 msgid "Fábián Kristóf-Szabolcs"
-msgstr "Fábián Kristóf-Szabolcs"
+msgstr "Fábián Kristóf–Szabolcs"
 
 #: src/kdefrontend/LabPlot.cpp:104
 #, kde-format
@@ -14664,7 +14661,7 @@ msgstr "Garvit Khatri"
 #, kde-format
 msgctxt "@info:credit"
 msgid "Porting LabPlot2 to KF5 and Integration with Cantor"
-msgstr "LabPlot2'yi KF5'e taşıma ve Cantor tümleştirmesi"
+msgstr "LabPlot2’yi KF5’e taşıma ve Cantor tümleştirmesi"
 
 #: src/kdefrontend/LabPlot.cpp:118
 #, kde-format
@@ -14698,8 +14695,8 @@ msgid ""
 "Could not open file '%1'. Click 'Continue' to proceed starting or 'Cancel' "
 "to exit the application."
 msgstr ""
-"“%1” dosyası açılamadı. Başlatmayı sürdürmek için 'Sürdür’e basın veya "
-"uygulamadan çıkmak için 'İptal'e basın."
+"“%1” dosyası açılamadı. Başlatmayı sürdürmek için “Sürdür”e basın veya "
+"uygulamadan çıkmak için “İptal”e basın."
 
 #: src/kdefrontend/LabPlot.cpp:160
 #, kde-format
@@ -15048,7 +15045,7 @@ msgstr "Çalışma Sayfası Önizlemesi"
 #: src/kdefrontend/MainWin.cpp:937
 #, kde-format
 msgid "Configure CAS..."
-msgstr "CAS'ı Yapılandır…"
+msgstr "CAS’ı Yapılandır…"
 
 #: src/kdefrontend/MainWin.cpp:938
 #, kde-format
@@ -15396,23 +15393,23 @@ msgstr "İndirilen dosyaları temizle"
 #: src/kdefrontend/SettingsDatasetsPage.cpp:45
 #, kde-format
 msgid "Files - %1"
-msgstr "Dosyalar - %1"
+msgstr "Dosyalar — %1"
 
 #: src/kdefrontend/SettingsDatasetsPage.cpp:68
 #, kde-format
 msgid "Total size - %1"
-msgstr "Toplam boyut - %1"
+msgstr "Toplam boyut — %1"
 
 #: src/kdefrontend/SettingsDatasetsPage.cpp:70
 #: src/kdefrontend/SettingsDatasetsPage.cpp:86
 #, kde-format
 msgid "Total size - 0B"
-msgstr "Toplam boyut - 0B"
+msgstr "Toplam boyut — 0 B"
 
 #: src/kdefrontend/SettingsDatasetsPage.cpp:85
 #, kde-format
 msgid "Files - 0"
-msgstr "Dosyalar - 0"
+msgstr "Dosyalar — 0"
 
 #: src/kdefrontend/SettingsDatasetsPage.cpp:88
 #, kde-format
@@ -15711,12 +15708,12 @@ msgstr ""
 #: src/kdefrontend/SettingsWorksheetPage.cpp:143
 #, kde-format
 msgid "No 'convert' found. LaTeX typesetting not possible."
-msgstr "'convert' bulunamadı. LaTeX dizgisi olanaklı değil."
+msgstr "“convert” bulunamadı. LaTeX dizgisi olanaklı değil."
 
 #: src/kdefrontend/SettingsWorksheetPage.cpp:149
 #, kde-format
 msgid "No 'dvips' found. LaTeX typesetting not possible."
-msgstr "'dvips' bulunamadı. LaTeX dizgisi olanaklı değil."
+msgstr "“dvips” bulunamadı. LaTeX dizgisi olanaklı değil."
 
 #: src/kdefrontend/SettingsWorksheetPage.cpp:156
 #: src/kdefrontend/SettingsWorksheetPage.cpp:162
@@ -15808,7 +15805,7 @@ msgid ""
 "Smoothness parameter - the larger the value the smoother the resulting "
 "background."
 msgstr ""
-"Pürüzsüzlük parametresi - değer ne kadar yüksek olursa ortaya çıkan arka "
+"Pürüzsüzlük parametresi — değer ne kadar yüksek olursa ortaya çıkan arka "
 "plan daha pürüzsüz olur."
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:172
@@ -15817,7 +15814,7 @@ msgid ""
 "Weighting termination ratio - value between 0 and 1, smaller values allow "
 "less negative values."
 msgstr ""
-"Tartma sonlandırma oranı - değer 0 ile 1 arasında, daha küçük değerler daha "
+"Tartma sonlandırma oranı — değer 0 ile 1 arasında, daha küçük değerler daha "
 "negatif değerlere izin verir."
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:176
@@ -15921,7 +15918,7 @@ msgstr "Değer Etiketleri:"
 #: src/kdefrontend/spreadsheet/BatchEditValueLabelsDialog.cpp:154
 #, kde-format
 msgid "Provide the list of value-label pairs like in the following example:"
-msgstr "Aşağıdaki örnekteki gibi değer-etiket çiftleri listesini sağlayın:"
+msgstr "Aşağıdaki örnekteki gibi değer–etiket çiftleri listesini sağlayın:"
 
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:45
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:221
@@ -16116,17 +16113,17 @@ msgstr "Geçersiz bitiş değeri; başlangıç değerinden büyük olmalıdır"
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:300
 #, kde-format
 msgid "The number of values to be generated must be bigger than one"
-msgstr "Üretilecek değerlerin sayısı 1'den büyük olmalıdır"
+msgstr "Üretilecek değerlerin sayısı 1’den büyük olmalıdır"
 
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:317
 #, kde-format
 msgid "Invalid numeric increment value, must be bigger than zero"
-msgstr "Geçersiz sayısal artış değeri; 0'dan büyük olmalıdır"
+msgstr "Geçersiz sayısal artış değeri; 0’dan büyük olmalıdır"
 
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:326
 #, kde-format
 msgid "Invalid Date&Time increment value, must be bigger than zero"
-msgstr "Geçersiz Tarih/Zaman artış değeri; 0'dan büyük olmalıdır"
+msgstr "Geçersiz Tarih/Zaman artış değeri; 0’dan büyük olmalıdır"
 
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:487
 #, kde-format
@@ -16263,7 +16260,7 @@ msgstr "Kategori"
 #, kde-format
 msgctxt "@title:window"
 msgid "Conditional Formatting - Heatmap"
-msgstr "Koşullu Biçimlendirme - Isı Haritası"
+msgstr "Koşullu Biçimlendirme — Isı Haritası"
 
 #: src/kdefrontend/spreadsheet/FormattingHeatmapDialog.cpp:47
 #, kde-format
@@ -16352,7 +16349,7 @@ msgstr ""
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:178
 #, kde-format
 msgid "The variable name 'i' is reserved for the index of the column row."
-msgstr "'i' değişkeni, sütun satırının indeksi için ayrılmıştır."
+msgstr "“i” değişkeni, sütun satırının indeksi için ayrılmıştır."
 
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:181
 #, kde-format
@@ -16383,7 +16380,7 @@ msgid ""
 "Variable name can contain letters, digits and '_' only and should start with "
 "a letter"
 msgstr ""
-"Değişken adı; yalnızca harfler, rakamlar ve '_' içerebilir ve yalnızca bir "
+"Değişken adı; yalnızca harfler, rakamlar ve “_” içerebilir ve yalnızca bir "
 "harfle başlamalıdır"
 
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:320
@@ -16455,13 +16452,13 @@ msgstr "Şuraya Çizimler Ekle"
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:499
 #, kde-format
 msgid "Plot Area - %1"
-msgstr "Çizim Alanı - %1"
+msgstr "Çizim Alanı — %1"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:465
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:494
 #, kde-format
 msgid "Worksheet - %1"
-msgstr "Çalışma Sayfası - %1"
+msgstr "Çalışma Sayfası — %1"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:493
 #, kde-format
@@ -16478,7 +16475,7 @@ msgstr "Çizim Alanı %1"
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:728
 #, kde-format
 msgid "Fourier Filter of '%1'"
-msgstr "'%1 Ögesinin Fourier Süzgeci"
+msgstr "“%1” Ögesinin Fourier Süzgeci"
 
 #. i18n: ectx: property (text), widget (QLabel, lDensity)
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:941
@@ -16598,8 +16595,8 @@ msgid ""
 "specified interval.</li><li>Random - samples are created randomly based on "
 "the uniform distribution. </li></ul>"
 msgstr ""
-"Örnekleme yöntemi:<ul><li>Periyodik - Örnekler belirlenen aralığa göre "
-"oluşturulur.</li><li>Rastgele - Örnekler tek tip dağıtıma göre rastgele "
+"Örnekleme yöntemi:<ul><li>Periyodik — Örnekler belirlenen aralığa göre "
+"oluşturulur.</li><li>Rastgele — Örnekler tek tip dağıtıma göre rastgele "
 "oluşturulur. </li></ul>"
 
 #: src/kdefrontend/spreadsheet/SampleValuesDialog.cpp:62
@@ -16772,7 +16769,7 @@ msgstr "Boşluk olmayan"
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1579
 #, kde-format
 msgid "Word character (alphanumerics plus '_')"
-msgstr "Sözcük karakteri (abece-sayısal, artı '_')"
+msgstr "Sözcük karakteri (abece–sayısal, artı “_”)"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1580
 #, kde-format
@@ -16782,12 +16779,12 @@ msgstr "Sayı olmayan karakter"
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1583
 #, kde-format
 msgid "Octal character 000 to 377 (2^8-1)"
-msgstr "Sekizlik karakter 000, 377'ye kadar (2^8-1)"
+msgstr "Sekizlik karakter 000, 377’ye kadar (2^8−1)"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1584
 #, kde-format
 msgid "Hex character 0000 to FFFF (2^16-1)"
-msgstr "Onaltılık karakter 0000, FFFF'ye kadar (2^16-1)"
+msgstr "Onaltılık karakter 0000, FFFF’ye kadar (2^16−1)"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1585
 #, kde-format
@@ -16887,7 +16884,7 @@ msgstr "Genel Görünüm"
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:145
 #, kde-format
 msgid "Normal Q-Q Plot"
-msgstr "Normal Q-Q Çizimi"
+msgstr "Normal Q–Q Çizimi"
 
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:150
 #, kde-format
@@ -17820,7 +17817,7 @@ msgstr "Tırnakları Kaldır"
 #: src/kdefrontend/ui/datasources/jsonoptionswidget.ui:30
 #, kde-format
 msgid "Convert NaN to 0"
-msgstr "NaN'ı 0'a çevir"
+msgstr "NaN’ı 0’a dönüştür"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbHeader)
 #: src/kdefrontend/ui/datasources/asciioptionswidget.ui:205
@@ -18103,7 +18100,7 @@ msgstr "Kısa ad"
 #: src/kdefrontend/ui/datasources/datasetmetadatamanagerwidget.ui:203
 #, kde-format
 msgid "Download URL"
-msgstr "İndirme URL'si"
+msgstr "İndirme URL’si"
 
 #. i18n: ectx: property (text), widget (QLabel, lSubcategory)
 #: src/kdefrontend/ui/datasources/datasetmetadatamanagerwidget.ui:217
@@ -18332,7 +18329,7 @@ msgstr "Satırı başlat:"
 #: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:291
 #, kde-format
 msgid "Specify the end row to import; -1 stands for the last row"
-msgstr "İçe aktarılacak son satırı belirt; -1 son satırı gösterir"
+msgstr "İçe aktarılacak son satırı belirt; −1 son satırı gösterir"
 
 #. i18n: ectx: property (text), widget (QLabel, lStartColumn)
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:564
@@ -18367,7 +18364,7 @@ msgstr "Bitiş sütunu:"
 #: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:363
 #, kde-format
 msgid "Specify the end column to import; -1 stands for the last column"
-msgstr "İçe aktarmak için son sütun belirtin; -1 son sütun için"
+msgstr "İçe aktarmak için son sütun belirtin; −1 son sütun için"
 
 #. i18n: ectx: property (text), widget (QLabel, lEndRow)
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:681
@@ -18788,7 +18785,7 @@ msgstr "Ok"
 msgid ""
 "The opacity ranges from 0 to 100, where 0 is fully transparent and 100 is "
 "fully opaque."
-msgstr "Matlık aralığı 0'dan 100'e, 0 tümüyle saydam ve 100 tamamen mattır."
+msgstr "Matlık aralığı 0’dan 100’e, 0 tümüyle saydam ve 100 tamamen mattır."
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTicks)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:652
@@ -19816,7 +19813,7 @@ msgstr "Veri, +:"
 #: src/kdefrontend/ui/dockwidgets/errorbarwidget.ui:183
 #, kde-format
 msgid "Data, -:"
-msgstr "Veri, -:"
+msgstr "Veri, −:"
 
 #. i18n: ectx: property (text), widget (QLabel, lCapSize)
 #: src/kdefrontend/ui/dockwidgets/errorbarwidget.ui:150
@@ -20257,10 +20254,9 @@ msgstr "Kıvılcım çizgileri:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFormat)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:198
-#, fuzzy, kde-format
-#| msgid "Column Major"
+#, kde-format
 msgid "Column Header"
-msgstr "Ana Sütun"
+msgstr "Sütun Başlığı"
 
 #. i18n: ectx: property (text), widget (QLabel, lShowComments)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:222
@@ -21509,13 +21505,13 @@ msgstr "Önbellek:"
 #: src/kdefrontend/ui/settingsdatasetspage.ui:30
 #, kde-format
 msgid "Files - "
-msgstr "Dosyalar - "
+msgstr "Dosyalar — "
 
 #. i18n: ectx: property (text), widget (QLabel, lSize)
 #: src/kdefrontend/ui/settingsdatasetspage.ui:37
 #, kde-format
 msgid "Total size - "
-msgstr "Toplam boyut - "
+msgstr "Toplam boyut — "
 
 #. i18n: ectx: property (text), widget (QPushButton, bClearCache)
 #: src/kdefrontend/ui/settingsdatasetspage.ui:57
@@ -21634,7 +21630,7 @@ msgid ""
 "<html><head/><body><p>Save projects in a compatible format that can be "
 "opened in LabPlot versions older than 2.9.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Projeleri LabPlot'un 2.9 sürümünden önceki sürümlerle "
+"<html><head/><body><p>Projeleri LabPlot’un 2.9 sürümünden önceki sürümlerle "
 "açılabilecek uyumlu bir biçimde kaydet.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCompatible)
@@ -21801,7 +21797,7 @@ msgstr "Bitiş değeri:"
 #: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:136
 #, kde-format
 msgid "Smoothness (Power of 10):"
-msgstr "Pürüzsüzlük (10'un üssü):"
+msgstr "Pürüzsüzlük (10’un üssü):"
 
 #. i18n: ectx: property (text), widget (QLabel, lBaselineParameter2)
 #: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:162
@@ -22528,7 +22524,7 @@ msgstr "Sonlu Çubuklar"
 #: src/kdefrontend/widgets/ErrorBarWidget.cpp:322
 #, kde-format
 msgid "Data, +-:"
-msgstr "Veri, +-:"
+msgstr "Veri, +−:"
 
 #: src/kdefrontend/widgets/FitParametersWidget.cpp:39
 #, kde-format
@@ -22871,25 +22867,20 @@ msgid ""
 "li><li>LaTeX - text setting using LaTeX, installation of LaTeX required</"
 "li><li>Markdown - text setting using Markdown markup language</li></ul>"
 msgstr ""
-"Metin ayarlama kipi:<ul><li>Metin - Zengin metin kullanarak metin ayarları</"
-"li><li>LaTeX - LaTeX kullanarak metin ayarları, LaTeX kurulumu zorunlu</"
-"li><li>Markdown - Markdown biçimlendirmesi kullanarak metin ayarları</li></"
+"Metin ayarlama kipi:<ul><li>Metin — Zengin metin kullanarak metin ayarları</"
+"li><li>LaTeX — LaTeX kullanarak metin ayarları, LaTeX kurulumu zorunlu</"
+"li><li>Markdown — Markdown biçimlendirmesi kullanarak metin ayarları</li></"
 "ul>"
 
 #: src/kdefrontend/widgets/LabelWidget.cpp:224
-#, fuzzy, kde-format
-#| msgid ""
-#| "Text setting mode:<ul><li>Text - text setting using rich-text formatting</"
-#| "li><li>LaTeX - text setting using LaTeX, installation of LaTeX required</"
-#| "li><li>Markdown - text setting using Markdown markup language</li></ul>"
+#, kde-format
 msgid ""
 "Text setting mode:<ul><li>Text - text setting using rich-text formatting</"
 "li><li>LaTeX - text setting using LaTeX, installation of LaTeX required</"
 "li></ul>"
 msgstr ""
-"Metin ayarlama kipi:<ul><li>Metin - Zengin metin kullanarak metin ayarları</"
-"li><li>LaTeX - LaTeX kullanarak metin ayarları, LaTeX kurulumu zorunlu</"
-"li><li>Markdown - Markdown biçimlendirmesi kullanarak metin ayarları</li></"
+"Metin ayarlama kipi:<ul><li>Metin — Zengin metin kullanarak metin ayarları</"
+"li><li>LaTeX — LaTeX kullanarak metin ayarları, LaTeX kurulumu zorunlu</li></"
 "ul>"
 
 #: src/kdefrontend/widgets/LabelWidget.cpp:922

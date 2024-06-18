@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-06-17 01:46+0000\n"
-"PO-Revision-Date: 2024-04-30 15:54+0200\n"
+"PO-Revision-Date: 2024-06-17 15:29+0200\n"
 "Last-Translator: Vit Pelcak <vpelcak@suse.cz>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 24.02.2\n"
+"X-Generator: Lokalize 24.05.0\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -1235,7 +1235,7 @@ msgstr ""
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:261
 #, kde-format
 msgid "Invalid file."
-msgstr ""
+msgstr "Neplatný soubor."
 
 #: src/backend/datasources/filters/CANFilter.cpp:224
 #, kde-format
@@ -1262,7 +1262,7 @@ msgstr "Soubor se nepodařilo otevřít."
 #: src/backend/datasources/filters/FITSFilter.cpp:346
 #, kde-format
 msgid "Failed to read the file."
-msgstr ""
+msgstr "Soubor se nepodařilo přečíst."
 
 #: src/backend/datasources/filters/FITSFilter.cpp:288
 #, kde-format
@@ -2142,7 +2142,7 @@ msgstr "64bit: %1"
 #: src/backend/datasources/filters/ReadStatFilter.cpp:482
 #, kde-format
 msgid "Error reading file."
-msgstr ""
+msgstr "Chyba při čtení souboru."
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:512
 #: src/backend/datasources/filters/ReadStatFilter.cpp:535
@@ -2212,12 +2212,12 @@ msgstr ""
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:103
 #, kde-format
 msgid "Application: %1"
-msgstr ""
+msgstr "Aplikace: %1"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:105
 #, kde-format
 msgid "Application version: %1.%2.%3"
-msgstr ""
+msgstr "Verze aplikace: %1.%2.%3"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:107
 #, kde-format
@@ -2227,17 +2227,17 @@ msgstr ""
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:115
 #, kde-format
 msgid "Start Time: %1"
-msgstr ""
+msgstr "Čas zahájení: %1"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:123
 #, kde-format
 msgid "End Time: %1"
-msgstr ""
+msgstr "Čas ukončení: %1"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:127
 #, kde-format
 msgid "Compression Level: %1"
-msgstr ""
+msgstr "Úroveň komprese: %1"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:129
 #, kde-format
@@ -2247,22 +2247,22 @@ msgstr ""
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:180
 #, kde-format
 msgid "Big Endian not supported. CAN id: %1."
-msgstr ""
+msgstr "Big Endian není podporován. CAN id: %1."
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:183
 #, kde-format
 msgid "Message too long. CAN id: %1."
-msgstr ""
+msgstr "Zpráva je příliš dlouhá. CAN id: %1."
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:186
 #, kde-format
 msgid "Unknown id: %1."
-msgstr ""
+msgstr "Neznámé ID: %1."
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:189
 #, kde-format
 msgid "Invalid BLF file"
-msgstr ""
+msgstr "Neplatný soubor BLF"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:192
 #, kde-format
@@ -2277,12 +2277,12 @@ msgstr ""
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:198
 #, kde-format
 msgid "Invalid DBC file."
-msgstr ""
+msgstr "Neplatný soubor DBC."
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:201
 #, kde-format
 msgid "Unknown error,"
-msgstr ""
+msgstr "Neznámá chyba,"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:443
 #, kde-format
@@ -4846,7 +4846,7 @@ msgstr ""
 #: src/backend/gsl/functions.cpp:563
 #, kde-format
 msgid "Base 2 logarithm"
-msgstr ""
+msgstr "Logaritmus o základu 2"
 
 #: src/backend/gsl/functions.cpp:564
 #, kde-format
@@ -5722,7 +5722,7 @@ msgstr "Vytisknout poznámku"
 #: src/backend/note/Note.cpp:65
 #, kde-format
 msgid "Text file (*.txt)"
-msgstr ""
+msgstr "Textový soubor (*.txt)"
 
 #: src/backend/note/Note.cpp:67
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:384
@@ -5740,7 +5740,7 @@ msgstr "Export selhal"
 #: src/backend/note/Note.cpp:81
 #, kde-format
 msgid "Failed to open '%1' for writing."
-msgstr ""
+msgstr "Nelze otevřít '%1' pro zápis."
 
 #: src/backend/note/Note.cpp:161
 #, kde-format
@@ -6823,32 +6823,32 @@ msgstr ""
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:73
 #, kde-format
 msgid "Percentile1"
-msgstr ""
+msgstr "Percentil1"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:74
 #, kde-format
 msgid "Percentile5"
-msgstr ""
+msgstr "Percentil5"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:75
 #, kde-format
 msgid "Percentile10"
-msgstr ""
+msgstr "Percentil10"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:76
 #, kde-format
 msgid "Percentile90"
-msgstr ""
+msgstr "Percentil90"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:77
 #, kde-format
 msgid "Percentile95"
-msgstr ""
+msgstr "Percentil95"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:78
 #, kde-format
 msgid "Percentile99"
-msgstr ""
+msgstr "Percentil99"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbRange)
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:80
@@ -8946,7 +8946,7 @@ msgstr "Nepřesnost"
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1885
 #, kde-format
 msgid "Uncertainty,%"
-msgstr ""
+msgstr "Nepřesnost,%"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1885
 #, kde-format
@@ -9195,12 +9195,12 @@ msgstr "Křivky"
 #: src/backend/worksheet/WorksheetElement.cpp:155
 #, kde-format
 msgid "%1: lock"
-msgstr ""
+msgstr "%1: uzamknout"
 
 #: src/backend/worksheet/WorksheetElement.cpp:155
 #, kde-format
 msgid "%1: unlock"
-msgstr ""
+msgstr "%1: odemknout"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbVisible)
 #. i18n: ectx: property (text), widget (QCheckBox, chkVisible)
@@ -10579,14 +10579,14 @@ msgstr[2] ""
 #, kde-format
 msgid "column"
 msgid_plural "columns"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "sloupec"
+msgstr[1] "sloupce"
+msgstr[2] "sloupce"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3649
 #, kde-format
 msgid "cells"
-msgstr ""
+msgstr "buňky"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3650
 #, kde-format
@@ -10632,7 +10632,7 @@ msgstr ""
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3667
 #, kde-format
 msgid "Selected: %1 %2%3 %4 %5 %6"
-msgstr ""
+msgstr "Vybráno: %1 %2%3 %4 %5 %6"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3740
 #, kde-format
@@ -11005,12 +11005,10 @@ msgid "%1: Remove selected worksheet elements."
 msgstr ""
 
 #: src/kdefrontend/CASSettingsDialog.cpp:34
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Preferences"
+#, kde-format
 msgctxt "@title:window"
 msgid "CAS Preferences"
-msgstr "Předvolby"
+msgstr ""
 
 #: src/kdefrontend/colormaps/ColorMapsDialog.cpp:42
 #, kde-format
@@ -14377,7 +14375,7 @@ msgstr ""
 #: src/kdefrontend/LabPlot.cpp:98
 #, kde-format
 msgid "(c) 2007-2024"
-msgstr ""
+msgstr "(c) 2007-2024"
 
 #: src/kdefrontend/LabPlot.cpp:101
 #, kde-format
@@ -16281,6 +16279,8 @@ msgid ""
 "Random number distributions as defined in <a href=\"https://www.gnu.org/"
 "software/gsl/doc/html/randist.html\">GSL documentation</a>"
 msgstr ""
+"Distribuce náhodných čísel jsou určeny v <a href=\"https://www.gnu.org/"
+"software/gsl/doc/html/randist.html\">Dokumentaci GSL</a>"
 
 #: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:470
 #, kde-format
@@ -19745,7 +19745,7 @@ msgstr ""
 #: src/kdefrontend/ui/dockwidgets/kdeplotdock.ui:91
 #, kde-format
 msgid "Kernel:"
-msgstr ""
+msgstr "Jádro:"
 
 #. i18n: ectx: property (text), widget (QLabel, lBandwidthType)
 #: src/kdefrontend/ui/dockwidgets/kdeplotdock.ui:111
@@ -19765,7 +19765,7 @@ msgstr "Rozsah zákresu:"
 #: src/kdefrontend/ui/dockwidgets/kdeplotdock.ui:211
 #, kde-format
 msgid "Estimation"
-msgstr ""
+msgstr "Odhad"
 
 #. i18n: ectx: property (text), widget (QPushButton, bUpdateNow)
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:67
@@ -19973,10 +19973,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lFormat)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:198
-#, fuzzy, kde-format
-#| msgid "Column labels"
+#, kde-format
 msgid "Column Header"
-msgstr "Popisky sloupců"
+msgstr "Záhlaví sloupce"
 
 #. i18n: ectx: property (text), widget (QLabel, lShowComments)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:222
@@ -21245,13 +21244,13 @@ msgstr "Spuštění:"
 #: src/kdefrontend/ui/settingsgeneralpage.ui:50
 #, kde-format
 msgid "New Project:"
-msgstr ""
+msgstr "Nový projekt:"
 
 #. i18n: ectx: property (text), widget (QLabel, lNewProjectNotebook)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:60
 #, kde-format
 msgid "Notebook:"
-msgstr ""
+msgstr "Poznámkový blok:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDockWindowPositionReopen)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:86
@@ -21327,7 +21326,7 @@ msgstr "Automatické ukládání:"
 #: src/kdefrontend/ui/settingsgeneralpage.ui:298
 #, kde-format
 msgid "Save  Calculations:"
-msgstr ""
+msgstr "Uložit výpočty:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSaveCalculations)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:312

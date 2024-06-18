@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-06-17 01:46+0000\n"
-"PO-Revision-Date: 2024-06-13 10:29+0200\n"
+"PO-Revision-Date: 2024-06-16 11:11+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -16325,10 +16325,11 @@ msgid "Export Selection"
 msgstr "Exporter la sélection"
 
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:94
-#, fuzzy, kde-format
-#| msgid "This option determines how the convert numbers to strings."
+#, kde-format
 msgid "This option determines how to convert numbers to strings."
-msgstr "Cette option détermine comment convertir des nombres en chaînes."
+msgstr ""
+"Cette option détermine comment s'effectue la conversion des nombres en "
+"chaînes."
 
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:104
 #, kde-format

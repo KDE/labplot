@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-06-17 01:46+0000\n"
-"PO-Revision-Date: 2024-06-16 15:33+0200\n"
+"PO-Revision-Date: 2024-06-17 10:49+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -11043,12 +11043,10 @@ msgid "%1: Remove selected worksheet elements."
 msgstr "%1: Geselecteerde werkblad-elementen verwijderen"
 
 #: src/kdefrontend/CASSettingsDialog.cpp:34
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Preferences"
+#, kde-format
 msgctxt "@title:window"
 msgid "CAS Preferences"
-msgstr "Voorkeuren"
+msgstr "CAS-voorkeuren"
 
 #: src/kdefrontend/colormaps/ColorMapsDialog.cpp:42
 #, kde-format
@@ -20287,10 +20285,9 @@ msgstr "Sparklines:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFormat)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:198
-#, fuzzy, kde-format
-#| msgid "Column Major"
+#, kde-format
 msgid "Column Header"
-msgstr "Hoofdkolom"
+msgstr "Kolomkop"
 
 #. i18n: ectx: property (text), widget (QLabel, lShowComments)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:222
@@ -22903,19 +22900,15 @@ msgstr ""
 "li><li>Markdown  - tekst instellen met Markdown tekstmarkering</li></ul>"
 
 #: src/kdefrontend/widgets/LabelWidget.cpp:224
-#, fuzzy, kde-format
-#| msgid ""
-#| "Text setting mode:<ul><li>Text - text setting using rich-text formatting</"
-#| "li><li>LaTeX - text setting using LaTeX, installation of LaTeX required</"
-#| "li><li>Markdown - text setting using Markdown markup language</li></ul>"
+#, kde-format
 msgid ""
 "Text setting mode:<ul><li>Text - text setting using rich-text formatting</"
 "li><li>LaTeX - text setting using LaTeX, installation of LaTeX required</"
 "li></ul>"
 msgstr ""
-"Tekst instellen:<ul><li>Tekst - tekst instellen met rich-text formatteren</"
+"Tekst instelmodus:<ul><li>Tekst - tekst instellen met rich-text formatteren</"
 "li><li>LaTeX  - tekst instellen met LaTeX, LaTeX moet zijn geïnstalleerd</"
-"li><li>Markdown  - tekst instellen met Markdown tekstmarkering</li></ul>"
+"li></ul>"
 
 #: src/kdefrontend/widgets/LabelWidget.cpp:922
 #: src/kdefrontend/widgets/LabelWidget.cpp:948

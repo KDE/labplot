@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-06-17 01:46+0000\n"
-"PO-Revision-Date: 2024-06-16 09:21+0300\n"
+"PO-Revision-Date: 2024-06-17 08:27+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian\n"
 "Language: uk\n"
@@ -11136,12 +11136,10 @@ msgid "%1: Remove selected worksheet elements."
 msgstr "%1: вилучити позначені елементи робочого аркуша."
 
 #: src/kdefrontend/CASSettingsDialog.cpp:34
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Preferences"
+#, kde-format
 msgctxt "@title:window"
 msgid "CAS Preferences"
-msgstr "Налаштування"
+msgstr "Налаштування КА"
 
 #: src/kdefrontend/colormaps/ColorMapsDialog.cpp:42
 #, kde-format
@@ -20407,10 +20405,9 @@ msgstr "Спарклайни:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFormat)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:198
-#, fuzzy, kde-format
-#| msgid "Column Major"
+#, kde-format
 msgid "Column Header"
-msgstr "основний стовпчика"
+msgstr "Заголовок стовпчика"
 
 #. i18n: ectx: property (text), widget (QLabel, lShowComments)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:222
@@ -23026,11 +23023,7 @@ msgstr ""
 "LaTeX</li><li>Markdown — режим мови розмітки Markdown</li></ul>"
 
 #: src/kdefrontend/widgets/LabelWidget.cpp:224
-#, fuzzy, kde-format
-#| msgid ""
-#| "Text setting mode:<ul><li>Text - text setting using rich-text formatting</"
-#| "li><li>LaTeX - text setting using LaTeX, installation of LaTeX required</"
-#| "li><li>Markdown - text setting using Markdown markup language</li></ul>"
+#, kde-format
 msgid ""
 "Text setting mode:<ul><li>Text - text setting using rich-text formatting</"
 "li><li>LaTeX - text setting using LaTeX, installation of LaTeX required</"
@@ -23038,7 +23031,7 @@ msgid ""
 msgstr ""
 "Режим обробки тексту:<ul><li>Текст — режим форматованого тексту</"
 "li><li>LaTeX — режим з використанням LaTeX, має бути встановлено дистрибутив "
-"LaTeX</li><li>Markdown — режим мови розмітки Markdown</li></ul>"
+"LaTeX</li></ul>"
 
 #: src/kdefrontend/widgets/LabelWidget.cpp:922
 #: src/kdefrontend/widgets/LabelWidget.cpp:948

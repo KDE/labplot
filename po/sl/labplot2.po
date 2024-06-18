@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-06-17 01:46+0000\n"
-"PO-Revision-Date: 2024-06-16 08:28+0200\n"
+"PO-Revision-Date: 2024-06-17 07:00+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -11103,12 +11103,10 @@ msgid "%1: Remove selected worksheet elements."
 msgstr "%1: odstranite izbrane elemente delovnega lista."
 
 #: src/kdefrontend/CASSettingsDialog.cpp:34
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Preferences"
+#, kde-format
 msgctxt "@title:window"
 msgid "CAS Preferences"
-msgstr "Nastavitve"
+msgstr "Preference CAS"
 
 #: src/kdefrontend/colormaps/ColorMapsDialog.cpp:42
 #, kde-format
@@ -18625,7 +18623,7 @@ msgstr "Rang"
 #: src/kdefrontend/ui/datasources/matiooptionswidget.ui:37
 #, kde-format
 msgid "Dims"
-msgstr "Dim."
+msgstr "Dimenzije"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twContent)
 #: src/kdefrontend/ui/datasources/matiooptionswidget.ui:42
@@ -20341,10 +20339,9 @@ msgstr "Črte iskrenja:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFormat)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:198
-#, fuzzy, kde-format
-#| msgid "Column Major"
+#, kde-format
 msgid "Column Header"
-msgstr "Glavni stolpec"
+msgstr "Glava stolpca"
 
 #. i18n: ectx: property (text), widget (QLabel, lShowComments)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:222
@@ -22491,12 +22488,12 @@ msgstr "Polarne (x, y(rad))"
 #: src/kdefrontend/widgets/DatapickerImageWidget.cpp:168
 #, kde-format
 msgid "Logarithmic (ln(x), ln(y))"
-msgstr "logaritemske (ln(x), ln(y))"
+msgstr "Logaritemske (ln(x), ln(y))"
 
 #: src/kdefrontend/widgets/DatapickerImageWidget.cpp:169
 #, kde-format
 msgid "Logarithmic (ln(x), y)"
-msgstr "logaritemske (ln(x), y)"
+msgstr "Logaritemske (ln(x), y)"
 
 #: src/kdefrontend/widgets/DatapickerImageWidget.cpp:170
 #, kde-format
@@ -22506,12 +22503,12 @@ msgstr "Logaritemske (x, ln(y))"
 #: src/kdefrontend/widgets/DatapickerImageWidget.cpp:171
 #, kde-format
 msgid "Logarithmic (log(x), log(y))"
-msgstr "logaritemske (log(x), log(y))"
+msgstr "Logaritemske (log(x), log(y))"
 
 #: src/kdefrontend/widgets/DatapickerImageWidget.cpp:172
 #, kde-format
 msgid "Logarithmic (log(x), y)"
-msgstr "logaritemske (log(x), y)"
+msgstr "Logaritemske (log(x), y)"
 
 #: src/kdefrontend/widgets/DatapickerImageWidget.cpp:173
 #, kde-format
@@ -22958,11 +22955,7 @@ msgstr ""
 "stavljenje besedila z označevalnim jezikom Markdown.</li></ul>"
 
 #: src/kdefrontend/widgets/LabelWidget.cpp:224
-#, fuzzy, kde-format
-#| msgid ""
-#| "Text setting mode:<ul><li>Text - text setting using rich-text formatting</"
-#| "li><li>LaTeX - text setting using LaTeX, installation of LaTeX required</"
-#| "li><li>Markdown - text setting using Markdown markup language</li></ul>"
+#, kde-format
 msgid ""
 "Text setting mode:<ul><li>Text - text setting using rich-text formatting</"
 "li><li>LaTeX - text setting using LaTeX, installation of LaTeX required</"
@@ -22970,8 +22963,7 @@ msgid ""
 msgstr ""
 "Način stavljenja besedila:<ul><li> Besedilo - stavljenje besedila z uporabo "
 "oblikovanja obogatenega besedila;</li><li> LaTeX - stavljenje besedila z "
-"uporabo LaTeXa, potrebna je namestitev LaTeXa;</li><li> Markdown - "
-"stavljenje besedila z označevalnim jezikom Markdown.</li></ul>"
+"uporabo LaTeXa, potrebna je namestitev LaTeXa;</li></ul>"
 
 #: src/kdefrontend/widgets/LabelWidget.cpp:922
 #: src/kdefrontend/widgets/LabelWidget.cpp:948
