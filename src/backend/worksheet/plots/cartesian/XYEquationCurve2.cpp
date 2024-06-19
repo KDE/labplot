@@ -155,20 +155,10 @@ const QVector<XYEquationCurve2::EquationData>& XYEquationCurve2::equationData() 
 	return d->equationData();
 }
 
-// void XYEquationCurve2::setEquationVariableCurve(XYCurve* c) {
-// 	Q_D(XYEquationCurve2);
-// 	d->setEquationVariableCurve(c);
-// }
-
-// void XYEquationCurve2::setEquationVariableCurvesPath(int index, const QString& path) {
-// 	Q_D(XYEquationCurve2);
-// 	d->setEquationVariableCurvesPath(index, path);
-// }
-
-// void XYEquationCurve2::setEquationVariableCurve(int index, XYCurve* curve) {
-// 	Q_D(XYEquationCurve2);
-// 	d->setEquationVariableCurve(index, curve);
-// }
+void XYEquationCurve2::setEquationVariableCurve(const XYCurve* c) {
+	Q_D(XYEquationCurve2);
+	d->setEquationVariableCurve(c);
+}
 
 void XYEquationCurve2::equationVariableCurveRemoved(const AbstractAspect* aspect) {
 	Q_D(XYEquationCurve2);
@@ -214,14 +204,14 @@ void XYEquationCurve2Private::setEquationVariableCurvesPath(int index, const QSt
 		DEBUG(Q_FUNC_INFO << ": For some reason, there was already a curve assigned");
 }
 
-void XYEquationCurve2Private::setEquationVariableCurve(int index, XYCurve* curve) {
+void XYEquationCurve2Private::setEquationVariableCurve(int index, const XYCurve* curve) {
 	if (m_equationData.at(index).curve()) // if there exists already a valid curve, disconnect it first
 		q->disconnect(m_equationData.at(index).m_curve, nullptr, q, nullptr);
 	m_equationData[index].setCurve(curve);
 	connectEquationCurve(curve);
 }
 
-void XYEquationCurve2Private::setEquationVariableCurve(XYCurve* c) {
+void XYEquationCurve2Private::setEquationVariableCurve(const XYCurve* c) {
 	for (auto& d : m_equationData) {
 		if (d.curvePath() == c->path()) {
 			d.setCurve(c);
@@ -459,10 +449,10 @@ void XYEquationCurve2Private::handleAspectUpdated(const QString& aspectPath, con
 void XYEquationCurve2::save(QXmlStreamWriter* writer) const {
 	Q_D(const XYEquationCurve2);
 
-	writer->writeStartElement(QStringLiteral("XYEquationCurve2"));
+	writer->writeStartElement(XYEquationCurve2::saveName);
 
 	// write xy-curve information
-	XYCurve::save(writer);
+	XYAnalysisCurve::save(writer);
 
 	// write xy-equationCurve specific information
 	// save the equation used to generate column values, if available
@@ -487,6 +477,12 @@ void XYEquationCurve2::save(QXmlStreamWriter* writer) const {
 			writer->writeTextElement(QStringLiteral("path"), path);
 		writer->writeEndElement(); // curvePaths
 
+		// save calculated columns if available
+		if (saveCalculations() && d->xColumn) {
+			d->xColumn->save(writer);
+			d->yColumn->save(writer);
+		}
+
 		writer->writeEndElement(); // equation
 	}
 	writer->writeEndElement(); // XYEquationCurve2
@@ -501,17 +497,17 @@ bool XYEquationCurve2::load(XmlStreamReader* reader, bool preview) {
 
 	while (!reader->atEnd()) {
 		reader->readNext();
-		if (reader->isEndElement() && reader->name() == QLatin1String("XYEquationCurve2"))
+		if (reader->isEndElement() && reader->name() == saveName)
 			break;
 
 		if (!reader->isStartElement())
 			continue;
 
 		if (reader->name() == QLatin1String("xyCurve")) {
-			if (!XYCurve::load(reader, preview))
+			if (!XYAnalysisCurve::load(reader, preview))
 				return false;
 		} else if (reader->name() == QLatin1String("equation")) {
-			if (!XmlReadEquation(reader))
+			if (!XmlReadEquation(reader, preview))
 				return false;
 		} else { // unknown element
 			reader->raiseUnknownElementWarning();
@@ -530,7 +526,7 @@ bool XYEquationCurve2::load(XmlStreamReader* reader, bool preview) {
 /**
  * \brief Read XML equation element
  */
-bool XYEquationCurve2::XmlReadEquation(XmlStreamReader* reader) {
+bool XYEquationCurve2::XmlReadEquation(XmlStreamReader* reader, bool preview) {
 	Q_D(XYEquationCurve2);
 	QString equation;
 	QStringList variableNames;
@@ -558,7 +554,31 @@ bool XYEquationCurve2::XmlReadEquation(XmlStreamReader* reader) {
 				if (reader->isStartElement())
 					curvePaths << reader->readElementText();
 			}
+		} else if (reader->name() == QLatin1String("column")) {
+			Column* column = new Column(QString(), AbstractColumn::ColumnMode::Double);
+			if (!column->load(reader, preview)) {
+				delete column;
+				return false;
+			}
+			if (column->name() == QLatin1String("x"))
+				d->xColumn = column;
+			else if (column->name() == QLatin1String("y"))
+				d->yColumn = column;
 		}
+	}
+
+	if (d->xColumn && d->yColumn) {
+		d->xColumn->setHidden(true);
+		addChild(d->xColumn);
+
+		d->yColumn->setHidden(true);
+		addChild(d->yColumn);
+
+		d->xVector = static_cast<QVector<double>*>(d->xColumn->data());
+		d->yVector = static_cast<QVector<double>*>(d->yColumn->data());
+
+		static_cast<XYCurvePrivate*>(d_ptr)->xColumn = d->xColumn;
+		static_cast<XYCurvePrivate*>(d_ptr)->yColumn = d->yColumn;
 	}
 
 	d->setEquation(equation, variableNames, curvePaths);

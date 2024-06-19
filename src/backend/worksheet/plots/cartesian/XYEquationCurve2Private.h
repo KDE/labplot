@@ -26,8 +26,8 @@ public:
 	QString equation() const;
 	const QVector<XYEquationCurve2::EquationData>& equationData() const;
 	void setEquationVariableCurvesPath(int index, const QString& path);
-	void setEquationVariableCurve(int index, XYCurve*);
-	void setEquationVariableCurve(XYCurve*);
+	void setEquationVariableCurve(int index, const XYCurve*);
+	void setEquationVariableCurve(const XYCurve*);
 	void setEquation(const QString& equation, const QVector<XYEquationCurve2::EquationData>& equationData);
 	void setEquation(const QString& equation, const QStringList& variableNames, const QStringList& variableCurvePaths);
 	void connectEquationCurve(const XYCurve*);
