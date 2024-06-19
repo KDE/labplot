@@ -45,6 +45,8 @@ private Q_SLOTS:
 
 	void removeReaddxColum();
 	void removeReaddyColum();
+
+	void xyEquationCurve2();
 };
 
 /*!

@@ -23,6 +23,7 @@
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/worksheet/plots/cartesian/XYCurvePrivate.h"
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
+#include "backend/worksheet/plots/cartesian/XYEquationCurve2.h"
 #include "commonfrontend/worksheet/WorksheetView.h"
 #include "kdefrontend/dockwidgets/AxisDock.h"
 #include "kdefrontend/dockwidgets/CartesianPlotDock.h"
@@ -1956,6 +1957,97 @@ void RetransformTest::testPlotRecalcRetransform() {
 		QVERIFY(c.calledExact(1, false));
 		QCOMPARE(c.logsXScaleRetransformed.count(), 1);
 		QCOMPARE(c.logsYScaleRetransformed.count(), 1); // y range changes
+	}
+}
+
+void RetransformTest::xyEquationCurve2() {
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("Worksheet"));
+	QVERIFY(ws != nullptr);
+	project.addChild(ws);
+
+	RetransformCallCounter c;
+
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	QVERIFY(p != nullptr);
+	ws->addChild(p);
+	c.aspectAdded(p);
+	const auto& axes = p->children<Axis>();
+	QCOMPARE(axes.count(), 2);
+	c.aspectAdded(axes.at(0));
+	c.aspectAdded(axes.at(1));
+
+	p->addChild(new XYEquationCurve(QLatin1String("eq")));
+
+	auto equationCurves = p->children(AspectType::XYEquationCurve);
+	QCOMPARE(equationCurves.count(), 1);
+	auto* equationCurve = static_cast<XYEquationCurve*>(equationCurves.at(0));
+	XYEquationCurve::EquationData data;
+	data.count = 100;
+	data.expression1 = QStringLiteral("x");
+	data.expression2 = QString();
+	data.min = QStringLiteral("1");
+	data.max = QStringLiteral("100");
+	data.type = XYEquationCurve::EquationType::Cartesian;
+	equationCurve->setEquationData(data);
+
+	c.aspectAdded(equationCurve);
+
+	QCOMPARE(equationCurve->xColumn()->rowCount(), data.count);
+
+	p->addChild(new XYEquationCurve2(QLatin1String("eq2")));
+	auto equationCurves2 = p->children(AspectType::XYEquationCurve2);
+	QCOMPARE(equationCurves2.count(), 1);
+	auto* eq2 = static_cast<XYEquationCurve2*>(equationCurves2.at(0));
+
+	c.aspectAdded(eq2);
+
+	c.resetRetransformCount();
+
+	eq2->setEquation(QStringLiteral("2*x"), {QStringLiteral("x")}, {equationCurve});
+
+	{
+		const auto stat = c.statistic(false);
+		QCOMPARE(stat.count(), 4); // equationCurve, eq2, xAxis and yAxis are inside
+		QCOMPARE(stat.contains(equationCurve->path()), true);
+		QCOMPARE(stat.contains(eq2->path()), true);
+		QCOMPARE(stat.contains(axes.at(0)->path()), true);
+		QCOMPARE(stat.contains(axes.at(1)->path()), true);
+		QVERIFY(c.calledExact(1, false));
+		QCOMPARE(c.logsXScaleRetransformed.count(), 0); // only the y range changed
+		QCOMPARE(c.logsYScaleRetransformed.count(), 1);
+	}
+
+	{
+		const auto* xColumn = eq2->xColumn();
+		const auto* yColumn = eq2->yColumn();
+		QCOMPARE(xColumn->rowCount(), data.count);
+		QCOMPARE(yColumn->rowCount(), data.count);
+		for (int i = 0; i < xColumn->rowCount(); i++) {
+			VALUES_EQUAL(xColumn->valueAt(i), i + 1);
+			VALUES_EQUAL(yColumn->valueAt(i), (i + 1) * 2);
+		}
+	}
+
+	c.resetRetransformCount();
+
+	data.expression1 = QStringLiteral("2*x");
+	data.min = QStringLiteral("10");
+	data.max = QStringLiteral("1000");
+	equationCurve->setEquationData(data);
+
+	{
+		const auto stat = c.statistic(false);
+		QCOMPARE(stat.count(), 4); // equationCurve, eq2, xAxis and yAxis are inside
+		QCOMPARE(stat.contains(equationCurve->path()), true);
+		QCOMPARE(stat.contains(eq2->path()), true);
+		QCOMPARE(stat.contains(axes.at(0)->path()), true);
+		QCOMPARE(stat.contains(axes.at(1)->path()), true);
+		// QVERIFY(c.calledExact(1, false)); // TODO: how to verify that retransform gets called only once?
+		QCOMPARE(c.logsXScaleRetransformed.count(), 1);
+		QVERIFY(c.logsYScaleRetransformed.count() >= 1);
+		// QCOMPARE(c.logsYScaleRetransformed.count(), 1);
 	}
 }
 
