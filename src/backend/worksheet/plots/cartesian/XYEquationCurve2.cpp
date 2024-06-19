@@ -511,10 +511,6 @@ bool XYEquationCurve2::load(XmlStreamReader* reader, bool preview) {
 		}
 	}
 
-	// Recalculate, otherwise xColumn and yColumn are not updated
-	// and so autoscale is wrong
-	recalculate();
-
 	return true;
 }
 
@@ -562,6 +558,8 @@ bool XYEquationCurve2::XmlReadEquation(XmlStreamReader* reader, bool preview) {
 		}
 	}
 
+	d->setEquation(equation, variableNames, curvePaths);
+
 	if (d->xColumn && d->yColumn) {
 		d->xColumn->setHidden(true);
 		addChild(d->xColumn);
@@ -575,8 +573,6 @@ bool XYEquationCurve2::XmlReadEquation(XmlStreamReader* reader, bool preview) {
 		static_cast<XYCurvePrivate*>(d_ptr)->xColumn = d->xColumn;
 		static_cast<XYCurvePrivate*>(d_ptr)->yColumn = d->yColumn;
 	}
-
-	d->setEquation(equation, variableNames, curvePaths);
 
 	return true;
 }

@@ -853,9 +853,6 @@ void Project::retransformElements(AbstractAspect* aspect) {
 	if (!aspect->project()->saveCalculations()) {
 		for (auto* curve : aspect->children<XYAnalysisCurve>(ChildIndexFlag::Recursive))
 			curve->recalculate();
-	} else {
-		for (auto* curve : aspect->children<XYEquationCurve2>(ChildIndexFlag::Recursive))
-			curve->recalculate();
 	}
 
 	// set "isLoading" to false for all worksheet elements
