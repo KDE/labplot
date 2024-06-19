@@ -555,6 +555,10 @@ bool XYEquationCurve2::XmlReadEquation(XmlStreamReader* reader, bool preview) {
 				d->xColumn = column;
 			else if (column->name() == QLatin1String("y"))
 				d->yColumn = column;
+			else {
+				delete column;
+				return false;
+			}
 		}
 	}
 
@@ -572,6 +576,8 @@ bool XYEquationCurve2::XmlReadEquation(XmlStreamReader* reader, bool preview) {
 
 		static_cast<XYCurvePrivate*>(d_ptr)->xColumn = d->xColumn;
 		static_cast<XYCurvePrivate*>(d_ptr)->yColumn = d->yColumn;
+
+		recalc();
 	}
 
 	return true;

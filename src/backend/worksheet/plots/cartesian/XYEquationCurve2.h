@@ -121,6 +121,7 @@ Q_SIGNALS:
 
 	friend class CurveSetGlobalEquationCmd;
 	friend class Project;
+	friend class XYEquationCurve2Test;
 };
 
 #endif

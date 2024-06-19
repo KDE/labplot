@@ -47,6 +47,8 @@ private:
 	QString m_equation;
 	QVector<XYEquationCurve2::EquationData> m_equationData;
 	QVector<QMetaObject::Connection> m_connectionsUpdateEquation;
+
+	friend class XYEquationCurve2Test;
 };
 
 #endif

@@ -17,6 +17,7 @@
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
 #include "backend/worksheet/plots/cartesian/XYEquationCurve2.h"
+#include "backend/worksheet/plots/cartesian/XYEquationCurve2Private.h"
 #include "kdefrontend/dockwidgets/XYEquationCurve2Dock.h"
 
 #include <QUndoStack>
@@ -376,6 +377,9 @@ void XYEquationCurve2Test::saveLoad() {
 				VALUES_EQUAL(yColumn->valueAt(i), (i + 1) * 2);
 			}
 		}
+
+		// Check that the logical points are really set
+		QCOMPARE(eq2->d_func()->m_logicalPoints.length(), 100);
 	}
 }
 
