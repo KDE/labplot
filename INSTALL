@@ -42,7 +42,6 @@ E.g. specify a custom installation path via
 or build a debug build via
 -DCMAKE_BUILD_TYPE=debug
 
-
 LabPlot's cmake configuration script searches for the optional packages and uses them if they are found.
 To compile LabPlot without optional dependencies even if they are present on the system, use the following parameters (default is "ON"):
 -DENABLE_FFTW=OFF
@@ -67,6 +66,12 @@ Note, by switching off these libraries the feature set of LabPlot will be reduce
 
 To enable reproducable builds, use
 -DENABLE_REPRODUCIBLE=ON
+
+To disable building tests, use
+-DENABLE_TESTS=OFF
+
+To disable building the SDK, use
+-DENABLE_SDK=OFF
 
 ================================================================================
 To run the tests execute
