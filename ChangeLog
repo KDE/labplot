@@ -1,6 +1,9 @@
 -----2.12 -----
+New features:
 	* [import]
 		* Download datasets from kaggle.com
+	* [analysis]
+		* Add possibility to do calculations on curves
 
 -----2.11.1 (16.07.2024) -----
 Bug fixes:
