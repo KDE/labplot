@@ -67,7 +67,7 @@ public:
 			, m_variableName(variableName)
 			, m_curvePath(curve->path()) {
 		}
-		QString curveName() const {
+		QString curvePath() const {
 			return (m_curve ? m_curve->path() : m_curvePath);
 		}
 		bool setCurvePath(const QString& path) {

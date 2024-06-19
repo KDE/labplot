@@ -119,8 +119,8 @@ void XYEquationCurve2Dock::initGeneralTab() {
 				m_variableDataCurves[i]->useCurrentIndexText(false);
 				m_variableDataCurves[i]->setInvalid(
 					true,
-					i18n("The curve \"%1\"\nis not available anymore. It will be automatically used once it is created again.", formulaData.at(i).curveName()));
-				m_variableDataCurves[i]->setText(formulaData.at(i).curveName().split(QLatin1Char('/')).last());
+					i18n("The curve \"%1\"\nis not available anymore. It will be automatically used once it is created again.", formulaData.at(i).curvePath()));
+				m_variableDataCurves[i]->setText(formulaData.at(i).curvePath().split(QLatin1Char('/')).last());
 			}
 		}
 	}

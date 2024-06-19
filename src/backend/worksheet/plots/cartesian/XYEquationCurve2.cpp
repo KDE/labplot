@@ -218,7 +218,7 @@ void XYEquationCurve2Private::setEquationVariableCurve(int index, XYCurve* curve
 
 void XYEquationCurve2Private::setEquationVariableCurve(XYCurve* c) {
 	for (auto& d : m_equationData) {
-		if (d.curveName() == c->path()) {
+		if (d.curvePath() == c->path()) {
 			d.setCurve(c);
 			break;
 		}
@@ -258,7 +258,7 @@ void XYEquationCurve2Private::equationVariableCurveRemoved(const AbstractAspect*
 	if (index != -1) {
 		m_equationData[index].setCurve(nullptr);
 		DEBUG(Q_FUNC_INFO << ", calling updateEquation()")
-		recalculate();
+		q->recalculate();
 	}
 }
 
@@ -269,7 +269,7 @@ void XYEquationCurve2Private::equationVariableCurveAdded(const AbstractAspect* a
 
 	const auto& path = aspect->path();
 	for (int i = 0; i < equationData().count(); i++) {
-		if (equationData().at(i).curveName() == path) {
+		if (equationData().at(i).curvePath() == path) {
 			// m_equationData[index].setColumn(const_cast<Column*>(column));
 			// DEBUG(Q_FUNC_INFO << ", calling updateEquation()")
 			setEquationVariableCurve(i, curve);
@@ -295,7 +295,7 @@ void XYEquationCurve2Private::setEquation(const QString& equation, const QVector
 		if (curve)
 			connectEquationCurve(curve);
 	}
-	recalculate();
+	q->recalculate();
 }
 
 void XYEquationCurve2Private::resetResults() {
@@ -338,13 +338,13 @@ bool XYEquationCurve2Private::recalculateSpecific(const AbstractColumn* tmpXData
 				|| curve->yColumn()->rowCount() != numberElements) {
 				valid = false;
 				if (!curve)
-					status = i18n("Curve '%1' not valid").arg(ed.curveName());
+					status = i18n("Curve '%1' not valid").arg(ed.curvePath());
 				else if (!curve->xColumn())
-					status = i18n("xColumn of curve '%1' not valid").arg(ed.curveName());
+					status = i18n("xColumn of curve '%1' not valid").arg(ed.curvePath());
 				else if (!curve->yColumn())
-					status = i18n("yColumn of curve '%1' not valid").arg(ed.curveName());
+					status = i18n("yColumn of curve '%1' not valid").arg(ed.curvePath());
 				else if (curve->xColumn()->rowCount() != curve->yColumn()->rowCount())
-					status = i18n("Number of x and y values do not match for curve '%1'").arg(ed.curveName());
+					status = i18n("Number of x and y values do not match for curve '%1'").arg(ed.curvePath());
 				break;
 			}
 		}
@@ -355,14 +355,10 @@ bool XYEquationCurve2Private::recalculateSpecific(const AbstractColumn* tmpXData
 		yVector->resize(rowCount);
 		const auto* xColumn = dynamic_cast<const Column*>(m_equationData.first().curve()->xColumn());
 		Q_ASSERT(xColumn);
-		if (xColumn->columnMode() == AbstractColumn::ColumnMode::Double) {
-			xVector = static_cast<QVector<double>*>(xColumn->data());
-		} else {
-			xVector->resize(rowCount);
-			// convert integers to doubles first
-			for (int i = 0; i < xColumn->rowCount(); ++i)
-				(*xVector)[i] = xColumn->valueAt(i);
-		}
+		xVector->resize(rowCount);
+		// convert integers to doubles first
+		for (int i = 0; i < xColumn->rowCount(); ++i)
+			(*xVector)[i] = xColumn->valueAt(i);
 
 		QVector<QVector<double>*> xVectors;
 		QStringList equationVariableNames;
@@ -458,7 +454,7 @@ void XYEquationCurve2::save(QXmlStreamWriter* writer) const {
 		QStringList equationVariableColumnPaths;
 		for (auto& d : equationData()) {
 			equationVariableNames << d.variableName();
-			equationVariableColumnPaths << d.curveName();
+			equationVariableColumnPaths << d.curvePath();
 		}
 
 		writer->writeStartElement(QStringLiteral("variableNames"));

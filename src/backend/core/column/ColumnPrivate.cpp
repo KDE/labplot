@@ -1635,8 +1635,10 @@ int ColumnPrivate::rowCount() const {
 		return m_rowCount;
 
 	switch (m_columnMode) {
-	case AbstractColumn::ColumnMode::Double:
+	case AbstractColumn::ColumnMode::Double: {
+		const auto* data = static_cast<QVector<double>*>(m_data);
 		return static_cast<QVector<double>*>(m_data)->size();
+	}
 	case AbstractColumn::ColumnMode::Integer:
 		return static_cast<QVector<int>*>(m_data)->size();
 	case AbstractColumn::ColumnMode::BigInt:
