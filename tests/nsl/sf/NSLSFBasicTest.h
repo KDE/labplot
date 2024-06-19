@@ -16,7 +16,10 @@ class NSLSFBasicTest : public NSLTest {
 	Q_OBJECT
 
 private Q_SLOTS:
-	// rngs
+	// RNG distributions
+	void test_triangular();
+	void test_triangular_P();
+	void test_triangular_Q();
 	void testran_triangular();
 
 	// log2

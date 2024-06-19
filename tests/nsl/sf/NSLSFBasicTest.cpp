@@ -13,9 +13,62 @@
 #include "backend/nsl/nsl_sf_basic.h"
 
 // ##############################################################################
-// #################  RNG tests
+// #################  RNG distribution tests
 // ##############################################################################
 
+void NSLSFBasicTest::test_triangular() {
+	// out of bounds
+	QCOMPARE(nsl_sf_triangular(1., 1., 1., 1.), 0.);
+	QCOMPARE(nsl_sf_triangular(1., 2., 1., 1.), 0.);
+	QCOMPARE(nsl_sf_triangular(1.5, 1., 2., 0.), 0.);
+	QCOMPARE(nsl_sf_triangular(1.5, 1., 2., 3.), 0.);
+	QCOMPARE(nsl_sf_triangular(0., 1., 2., 1.5), 0.);
+	QCOMPARE(nsl_sf_triangular(3., 1., 2., 1.5), 0.);
+
+	// values
+	QCOMPARE(nsl_sf_triangular(1.5, 1., 3., 2.), 0.5);
+	QCOMPARE(nsl_sf_triangular(2.5, 1., 3., 2.), 0.5);
+
+	const int nrPoints = 1e6;
+	QBENCHMARK {
+		for (int i = 0; i < nrPoints; i++)
+			nsl_sf_triangular(3. * i / (double)nrPoints, 1., 2., 1.5);
+	}
+}
+void NSLSFBasicTest::test_triangular_P() {
+	// out of bounds
+	QCOMPARE(nsl_sf_triangular_P(1., 1., 1., 1.), 0.);
+	QCOMPARE(nsl_sf_triangular_P(1., 2., 1., 1.), 0.);
+	QCOMPARE(nsl_sf_triangular_P(0., 1., 2., 1.5), 0.);
+	QCOMPARE(nsl_sf_triangular_P(3., 1., 2., 1.5), 1.);
+
+	// values
+	QCOMPARE(nsl_sf_triangular_P(1.5, 1., 3., 2.), 0.125);
+	QCOMPARE(nsl_sf_triangular_P(2.5, 1., 3., 2.), 0.875);
+
+	const int nrPoints = 1e6;
+	QBENCHMARK {
+		for (int i = 0; i < nrPoints; i++)
+			nsl_sf_triangular_P(3. * i / (double)nrPoints, 1., 2., 1.5);
+	}
+}
+void NSLSFBasicTest::test_triangular_Q() {
+	// out of bounds
+	QCOMPARE(nsl_sf_triangular_Q(1., 1., 1., 1.), 1.);
+	QCOMPARE(nsl_sf_triangular_Q(1., 2., 1., 1.), 1.);
+	QCOMPARE(nsl_sf_triangular_Q(0., 1., 2., 1.5), 1.);
+	QCOMPARE(nsl_sf_triangular_Q(3., 1., 2., 1.5), 0.);
+
+	// values
+	QCOMPARE(nsl_sf_triangular_Q(1.5, 1., 3., 2.), 0.875);
+	QCOMPARE(nsl_sf_triangular_Q(2.5, 1., 3., 2.), 0.125);
+
+	const int nrPoints = 1e6;
+	QBENCHMARK {
+		for (int i = 0; i < nrPoints; i++)
+			nsl_sf_triangular_Q(3. * i / (double)nrPoints, 1., 2., 1.5);
+	}
+}
 void NSLSFBasicTest::testran_triangular() {
 	// out of bounds
 	QCOMPARE(nsl_sf_ran_triangular(1., 1., 1.), 0.);
@@ -23,8 +76,9 @@ void NSLSFBasicTest::testran_triangular() {
 	QCOMPARE(nsl_sf_ran_triangular(1., 2., 0.), 0.);
 	QCOMPARE(nsl_sf_ran_triangular(1., 2., 3.), 0.);
 
+	const int nrPoints = 1e3;
 	QBENCHMARK {
-		for (unsigned int i = 0; i < 1e4; i++)
+		for (int i = 0; i < nrPoints; i++)
 			nsl_sf_ran_triangular(0., 1., 0.5);
 	}
 }
@@ -32,9 +86,10 @@ void NSLSFBasicTest::testran_triangular() {
 // ##############################################################################
 // #################  log2() tests
 // ##############################################################################
+
 void NSLSFBasicTest::testlog2_int_C99() {
 	QBENCHMARK {
-		for (unsigned int i = 1; i < 1e7; i++)
+		for (unsigned int i = 1; i < 4e9; i++)
 			Q_UNUSED((int)log2(i));
 	}
 }

@@ -639,7 +639,7 @@ double nsl_sf_logarithmic(double k, double p) {
 }
 
 double nsl_sf_triangular(double x, double min, double max, double mode) {
-	if (x < min || x > max)
+	if (x <= min || x >= max || mode < min || mode > max)
 		return 0.;
 
 	if (x <= mode)
@@ -648,9 +648,9 @@ double nsl_sf_triangular(double x, double min, double max, double mode) {
 		return 2. * (max - x) / (max - min) / (max - mode);
 }
 double nsl_sf_triangular_P(double x, double min, double max, double mode) {
-	if (x < min)
+	if (x <= min)
 		return 0.;
-	if (x > max)
+	if (x >= max)
 		return 1.;
 
 	if (x <= mode)
@@ -658,7 +658,6 @@ double nsl_sf_triangular_P(double x, double min, double max, double mode) {
 	else
 		return 1. - gsl_pow_2(max - x) / (max - min) / (max - mode);
 }
-
 double nsl_sf_triangular_Q(double x, double min, double max, double mode) {
 	return 1. - nsl_sf_triangular_P(x, min, max, mode);
 }
