@@ -213,6 +213,8 @@ double nsl_sf_hypergeometric(double k, double n1, double n2, double t);
 double nsl_sf_logarithmic(double k, double p);
 
 double nsl_sf_triangular(double x, double min, double max, double mode);
+double nsl_sf_triangular_P(double x, double min, double max, double mode);
+double nsl_sf_triangular_Q(double x, double min, double max, double mode);
 
 __END_DECLS
 
