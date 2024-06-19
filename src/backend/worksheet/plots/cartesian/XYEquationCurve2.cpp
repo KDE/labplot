@@ -59,6 +59,11 @@ const XYAnalysisCurve::Result& XYEquationCurve2::result() const {
 	return d->m_result;
 }
 
+void XYEquationCurve2::handleAspectUpdated(const QString& aspectPath, const AbstractAspect* element) {
+	Q_D(XYEquationCurve2);
+	d->handleAspectUpdated(aspectPath, element);
+}
+
 // ##############################################################################
 // ##########################  getter methods  ##################################
 // ##############################################################################
@@ -82,7 +87,7 @@ public:
 	explicit CurveSetGlobalEquationCmd(XYEquationCurve2Private* curve,
 									   QString equation,
 									   QStringList variableNames,
-									   QVector<XYCurve*> variableCurves,
+									   QVector<const XYCurve*> variableCurves,
 									   QUndoCommand* parent = nullptr)
 		: QUndoCommand(parent)
 		, m_curve(curve)
@@ -121,14 +126,14 @@ private:
 	XYEquationCurve2Private* m_curve;
 	QString m_equation;
 	QStringList m_variableNames;
-	QVector<XYCurve*> m_variableCurves;
+	QVector<const XYCurve*> m_variableCurves;
 	QString m_newEquation;
 	QStringList m_newVariableNames;
-	QVector<XYCurve*> m_newVariableCurves;
+	QVector<const XYCurve*> m_newVariableCurves;
 	bool m_copied{false};
 };
 
-void XYEquationCurve2::setEquation(const QString& equation, const QStringList& variableNames, const QVector<XYCurve*>& curves) {
+void XYEquationCurve2::setEquation(const QString& equation, const QStringList& variableNames, const QVector<const XYCurve*>& curves) {
 	Q_D(XYEquationCurve2);
 	exec(new CurveSetGlobalEquationCmd(d, equation, variableNames, curves));
 }
@@ -137,7 +142,7 @@ void XYEquationCurve2::setEquation(const QString& equation, const QStringList& v
  * \brief Clears the equation used to generate column values
  */
 void XYEquationCurve2::clearEquation() {
-	setEquation(QString(), QStringList(), QVector<XYCurve*>());
+	setEquation(QString(), QStringList(), QVector<const XYCurve*>());
 }
 
 QString XYEquationCurve2::equation() const {
@@ -432,6 +437,19 @@ bool XYEquationCurve2Private::preparationValid(const AbstractColumn*, const Abst
 
 void XYEquationCurve2Private::prepareTmpDataColumn(const AbstractColumn**, const AbstractColumn**) {
 	// Nothing to do
+}
+
+void XYEquationCurve2Private::handleAspectUpdated(const QString& aspectPath, const AbstractAspect* element) {
+	const auto curve = dynamic_cast<const XYCurve*>(element);
+	if (!curve)
+		return;
+	for (auto& data : m_equationData) {
+		if (data.curvePath() == aspectPath) {
+			data.m_curve = curve;
+			// No break, because it could be used multiple times
+		}
+	}
+	q->recalculate();
 }
 
 // ##############################################################################
