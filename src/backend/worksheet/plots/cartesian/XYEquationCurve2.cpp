@@ -72,16 +72,7 @@ void XYEquationCurve2::handleAspectUpdated(const QString& aspectPath, const Abst
 // ##############################################################################
 // #################  setter methods and undo commands ##########################
 // ##############################################################################
-// STD_SETTER_CMD_IMPL_F_S(XYEquationCurve2, SetEquationData, XYEquationCurve2::EquationData, equationData, recalculate)
-// void XYEquationCurve2::setEquationData(const XYEquationCurve2::EquationData& equationData) {
-// 	Q_D(XYEquationCurve2);/*
-// 	if (equationData.expression != d->equationData.expression)
-// 		exec(new XYEquationCurve2SetEquationDataCmd(d, equationData, ki18n("%1: set equation")));*/
-// }
 
-// ##############################################################################
-// #################################  SLOTS  ####################################
-// ##############################################################################
 class CurveSetGlobalEquationCmd : public QUndoCommand {
 public:
 	explicit CurveSetGlobalEquationCmd(XYEquationCurve2Private* curve,
@@ -159,6 +150,10 @@ void XYEquationCurve2::setEquationVariableCurve(const XYCurve* c) {
 	Q_D(XYEquationCurve2);
 	d->setEquationVariableCurve(c);
 }
+
+// ##############################################################################
+// #################################  SLOTS  ####################################
+// ##############################################################################
 
 void XYEquationCurve2::equationVariableCurveRemoved(const AbstractAspect* aspect) {
 	Q_D(XYEquationCurve2);
