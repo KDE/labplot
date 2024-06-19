@@ -99,9 +99,6 @@ public:
 		friend class CurveSetGlobalEquationCmd;
 	};
 	const QVector<EquationData>& equationData() const;
-	// void setEquationVariableCurve(XYCurve*);
-	// void setEquationVariableCurvesPath(int index, const QString& path);
-	// void setEquationVariableCurve(int index, XYCurve*);
 
 protected:
 	XYEquationCurve2(const QString& name, XYEquationCurve2Private* dd);
@@ -110,11 +107,12 @@ protected:
 private Q_SLOTS:
 	void equationVariableCurveRemoved(const AbstractAspect* aspect);
 	void equationVariableCurveAdded(const AbstractAspect* aspect);
+	void setEquationVariableCurve(const XYCurve*);
 
 private:
 	Q_DECLARE_PRIVATE(XYEquationCurve2)
 	void init();
-	bool XmlReadEquation(XmlStreamReader* reader);
+	bool XmlReadEquation(XmlStreamReader* reader, bool preview);
 
 public Q_SLOTS:
 
@@ -122,6 +120,7 @@ Q_SIGNALS:
 	void equationDataChanged(const XYEquationCurve2::EquationData&);
 
 	friend class CurveSetGlobalEquationCmd;
+	friend class Project;
 };
 
 #endif
