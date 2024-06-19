@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-17 01:46+0000\n"
+"POT-Creation-Date: 2024-06-19 01:42+0000\n"
 "PO-Revision-Date: 2022-07-14 10:06-0300\n"
 "Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
 "Language-Team: Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -5852,13 +5852,7 @@ msgstr "%1: a precisão foi alterada"
 msgid "%1: set matrix size to %2x%3"
 msgstr "%1: definir o tamanho da matriz para %2x%3"
 
-#: src/backend/matrix/Matrix.cpp:520
-#: src/backend/spreadsheet/Spreadsheet.cpp:678
-#, kde-format
-msgid "%1: copy %2"
-msgstr "%1: copiar o %2"
-
-#: src/backend/matrix/Matrix.cpp:585
+#: src/backend/matrix/Matrix.cpp:523
 #, fuzzy, kde-format
 #| msgid "%1: add %2 rows"
 #| msgid_plural "%1: add %2 rows"
@@ -5867,14 +5861,14 @@ msgid_plural "%1: add %2 rows"
 msgstr[0] "%1: adicionar %2 linha"
 msgstr[1] "%1: adicionar %2 linhas"
 
-#: src/backend/matrix/Matrix.cpp:597
+#: src/backend/matrix/Matrix.cpp:535
 #, kde-format
 msgid "%1: add %2 column"
 msgid_plural "%1: add %2 columns"
 msgstr[0] "%1: adicionar %2 coluna"
 msgstr[1] "%1: adicionar %2 colunas"
 
-#: src/backend/matrix/Matrix.cpp:722 src/backend/matrix/matrixcommands.h:126
+#: src/backend/matrix/Matrix.cpp:660 src/backend/matrix/matrixcommands.h:126
 #: src/backend/spreadsheet/Spreadsheet.cpp:603
 #, kde-format
 msgid "%1: clear"
@@ -7016,18 +7010,18 @@ msgstr "%1: limpar todas as máscaras"
 msgid "%1: move column %2 from position %3 to %4."
 msgstr "%1: mover a coluna %2 da posição %3 para a %4."
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:795
+#: src/backend/spreadsheet/Spreadsheet.cpp:770
 #, kde-format
 msgid "%1: sort columns"
 msgstr "%1: ordenar as colunas"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1160
+#: src/backend/spreadsheet/Spreadsheet.cpp:1135
 #, fuzzy, kde-format
 #| msgid "no spreadsheet element found"
 msgid "%1: linked spreadsheet removed"
 msgstr "não foi encontrado nenhum elemento da planilha"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1549
+#: src/backend/spreadsheet/Spreadsheet.cpp:1524
 #, fuzzy, kde-format
 #| msgid "numerical data, %1 element"
 #| msgid_plural "numerical data, %1 elements"
@@ -7036,7 +7030,7 @@ msgid_plural "numerical data, %1 elements"
 msgstr[0] "dados numéricos, %1 elemento"
 msgstr[1] "dados numéricos, %1 elementos"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1552
+#: src/backend/spreadsheet/Spreadsheet.cpp:1527
 #, fuzzy, kde-format
 #| msgid "numerical data, %1 element"
 #| msgid_plural "numerical data, %1 elements"
@@ -7045,7 +7039,7 @@ msgid_plural "integer data, %1 elements"
 msgstr[0] "dados numéricos, %1 elemento"
 msgstr[1] "dados numéricos, %1 elementos"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1555
+#: src/backend/spreadsheet/Spreadsheet.cpp:1530
 #, fuzzy, kde-format
 #| msgid "numerical data, %1 element"
 #| msgid_plural "numerical data, %1 elements"
@@ -7054,7 +7048,7 @@ msgid_plural "big integer data, %1 elements"
 msgstr[0] "dados numéricos, %1 elemento"
 msgstr[1] "dados numéricos, %1 elementos"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1558
+#: src/backend/spreadsheet/Spreadsheet.cpp:1533
 #, fuzzy, kde-format
 #| msgid "numerical data, %1 element"
 #| msgid_plural "numerical data, %1 elements"
@@ -7063,7 +7057,7 @@ msgid_plural "text data, %1 elements"
 msgstr[0] "dados numéricos, %1 elemento"
 msgstr[1] "dados numéricos, %1 elementos"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1561
+#: src/backend/spreadsheet/Spreadsheet.cpp:1536
 #, fuzzy, kde-format
 #| msgid "numerical data, %1 element"
 #| msgid_plural "numerical data, %1 elements"
@@ -7072,7 +7066,7 @@ msgid_plural "month data, %1 elements"
 msgstr[0] "dados numéricos, %1 elemento"
 msgstr[1] "dados numéricos, %1 elementos"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1564
+#: src/backend/spreadsheet/Spreadsheet.cpp:1539
 #, fuzzy, kde-format
 #| msgid "numerical data, %1 element"
 #| msgid_plural "numerical data, %1 elements"
@@ -7081,7 +7075,7 @@ msgid_plural "day data, %1 elements"
 msgstr[0] "dados numéricos, %1 elemento"
 msgstr[1] "dados numéricos, %1 elementos"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1567
+#: src/backend/spreadsheet/Spreadsheet.cpp:1542
 #, fuzzy, kde-format
 #| msgid "numerical data, %1 element"
 #| msgid_plural "numerical data, %1 elements"
@@ -22970,20 +22964,20 @@ msgstr "tipo de filtro incompatível"
 msgid "Tracing:"
 msgstr "Espaço:"
 
-#. i18n: ectx: property (text), widget (QCheckBox, chkDebugTrace)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:360
-#, kde-format
-msgid "Debug"
-msgstr ""
-
 #. i18n: ectx: property (text), widget (QCheckBox, chkPerfTrace)
 #. i18n: ectx: property (text), widget (QLabel, lPerformance)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:383
+#: src/kdefrontend/ui/settingsgeneralpage.ui:360
 #: src/kdefrontend/ui/settingsworksheetpage.ui:111
 #, fuzzy, kde-format
 #| msgid "Tolerance"
 msgid "Performance"
 msgstr "Tolerância"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkDebugTrace)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:383
+#, kde-format
+msgid "Debug"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode_2)
@@ -24617,6 +24611,9 @@ msgstr ""
 #| msgid "Failed to open"
 msgid "Unable to open file:"
 msgstr "Falha ao abrir"
+
+#~ msgid "%1: copy %2"
+#~ msgstr "%1: copiar o %2"
 
 #, fuzzy
 #~| msgid "column major"
