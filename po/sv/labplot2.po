@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-17 01:46+0000\n"
+"POT-Creation-Date: 2024-06-19 01:42+0000\n"
 "PO-Revision-Date: 2024-06-17 17:34+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -5665,27 +5665,21 @@ msgstr "%1: precision ändrad"
 msgid "%1: set matrix size to %2x%3"
 msgstr "%1: ställ in matrisstorlek till %2 x %3"
 
-#: src/backend/matrix/Matrix.cpp:520
-#: src/backend/spreadsheet/Spreadsheet.cpp:678
-#, kde-format
-msgid "%1: copy %2"
-msgstr "%1: kopiera %2"
-
-#: src/backend/matrix/Matrix.cpp:585
+#: src/backend/matrix/Matrix.cpp:523
 #, kde-format
 msgid "%1: add %2 row"
 msgid_plural "%1: add %2 rows"
 msgstr[0] "%1: lägg till %2 rad"
 msgstr[1] "%1: lägg till %2 rader"
 
-#: src/backend/matrix/Matrix.cpp:597
+#: src/backend/matrix/Matrix.cpp:535
 #, kde-format
 msgid "%1: add %2 column"
 msgid_plural "%1: add %2 columns"
 msgstr[0] "%1: lägg till %2 kolumn"
 msgstr[1] "%1: lägg till %2 kolumner"
 
-#: src/backend/matrix/Matrix.cpp:722 src/backend/matrix/matrixcommands.h:126
+#: src/backend/matrix/Matrix.cpp:660 src/backend/matrix/matrixcommands.h:126
 #: src/backend/spreadsheet/Spreadsheet.cpp:603
 #, kde-format
 msgid "%1: clear"
@@ -6732,59 +6726,59 @@ msgstr "%1: rensa alla masker"
 msgid "%1: move column %2 from position %3 to %4."
 msgstr "%1: flytta kolumn %2 från position %3 till %4."
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:795
+#: src/backend/spreadsheet/Spreadsheet.cpp:770
 #, kde-format
 msgid "%1: sort columns"
 msgstr "%1: sortera kolumner"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1160
+#: src/backend/spreadsheet/Spreadsheet.cpp:1135
 #, kde-format
 msgid "%1: linked spreadsheet removed"
 msgstr "%1: länkat kalkylark borttaget"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1549
+#: src/backend/spreadsheet/Spreadsheet.cpp:1524
 #, kde-format
 msgid "double precision data, %1 element"
 msgid_plural "numerical data, %1 elements"
 msgstr[0] "data med dubbel precision, %1 element"
 msgstr[1] "numerisk data, %1 element"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1552
+#: src/backend/spreadsheet/Spreadsheet.cpp:1527
 #, kde-format
 msgid "integer data, %1 element"
 msgid_plural "integer data, %1 elements"
 msgstr[0] "heltalsdata, %1 element"
 msgstr[1] "heltalsdata, %1 element"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1555
+#: src/backend/spreadsheet/Spreadsheet.cpp:1530
 #, kde-format
 msgid "big integer data, %1 element"
 msgid_plural "big integer data, %1 elements"
 msgstr[0] "stora heltalsdata, %1 element"
 msgstr[1] "stora heltalsdata, %1 element"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1558
+#: src/backend/spreadsheet/Spreadsheet.cpp:1533
 #, kde-format
 msgid "text data, %1 element"
 msgid_plural "text data, %1 elements"
 msgstr[0] "textdata, %1 element"
 msgstr[1] "textdata, %1 element"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1561
+#: src/backend/spreadsheet/Spreadsheet.cpp:1536
 #, kde-format
 msgid "month data, %1 element"
 msgid_plural "month data, %1 elements"
 msgstr[0] "månadsdata, %1 element"
 msgstr[1] "månadsdata, %1 element"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1564
+#: src/backend/spreadsheet/Spreadsheet.cpp:1539
 #, kde-format
 msgid "day data, %1 element"
 msgid_plural "day data, %1 elements"
 msgstr[0] "dagdata, %1 element"
 msgstr[1] "dagdata, %1 element"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1567
+#: src/backend/spreadsheet/Spreadsheet.cpp:1542
 #, kde-format
 msgid "date and time data, %1 element"
 msgid_plural "date and time data, %1 elements"
@@ -21658,19 +21652,19 @@ msgstr "Spara med kompatibelt format"
 msgid "Tracing:"
 msgstr "Spårning:"
 
-#. i18n: ectx: property (text), widget (QCheckBox, chkDebugTrace)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:360
-#, kde-format
-msgid "Debug"
-msgstr "Felsökning"
-
 #. i18n: ectx: property (text), widget (QCheckBox, chkPerfTrace)
 #. i18n: ectx: property (text), widget (QLabel, lPerformance)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:383
+#: src/kdefrontend/ui/settingsgeneralpage.ui:360
 #: src/kdefrontend/ui/settingsworksheetpage.ui:111
 #, kde-format
 msgid "Performance"
 msgstr "Prestanda"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkDebugTrace)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:383
+#, kde-format
+msgid "Debug"
+msgstr "Felsökning"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode_2)
@@ -23167,6 +23161,9 @@ msgstr "convert-processen misslyckades, slutkod ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Kan inte öppna fil:"
+
+#~ msgid "%1: copy %2"
+#~ msgstr "%1: kopiera %2"
 
 #~ msgid "Column Format"
 #~ msgstr "Kolumnformat"

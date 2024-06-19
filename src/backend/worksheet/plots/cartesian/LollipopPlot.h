@@ -20,7 +20,7 @@ class Value;
 
 #ifdef SDK
 #include "labplot_export.h"
-class LABPLOT_EXPORT LollipopPlot : Plot {
+class LABPLOT_EXPORT LollipopPlot : public Plot {
 #else
 class LollipopPlot : public Plot {
 #endif

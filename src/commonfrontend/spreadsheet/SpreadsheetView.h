@@ -19,7 +19,9 @@
 
 class AbstractAspect;
 class Column;
+#ifndef SDK
 class SearchReplaceWidget;
+#endif
 class Spreadsheet;
 class SpreadsheetHeaderView;
 class SpreadsheetModel;
@@ -112,7 +114,9 @@ private:
 	Spreadsheet* m_spreadsheet;
 	SpreadsheetModel* m_model;
 	SpreadsheetHeaderView* m_horizontalHeader;
+#ifndef SDK
 	SearchReplaceWidget* m_searchReplaceWidget{nullptr};
+#endif
 	bool m_suppressSelectionChangedEvent{false};
 	bool m_readOnly;
 	bool eventFilter(QObject*, QEvent*) override;

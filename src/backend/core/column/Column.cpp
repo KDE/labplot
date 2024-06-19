@@ -10,7 +10,9 @@
 */
 
 #include "backend/core/column/Column.h"
+#ifndef SDK
 #include "backend/cantorWorksheet/CantorWorksheet.h"
+#endif
 #include "backend/core/AbstractSimpleFilter.h"
 #include "backend/core/Project.h"
 #include "backend/core/column/ColumnPrivate.h"
@@ -147,7 +149,7 @@ QMenu* Column::createContextMenu() {
 			auto* spreadsheet = static_cast<Spreadsheet*>(parentAspect());
 			spreadsheet->fillColumnContextMenu(menu, this);
 		} else if (parentAspect()->type() == AspectType::CantorWorksheet) {
-#ifdef HAVE_CANTOR_LIBS
+#if defined(HAVE_CANTOR_LIBS) && !defined(SDK)
 			auto* worksheet = static_cast<CantorWorksheet*>(parentAspect());
 			worksheet->fillColumnContextMenu(menu, this);
 #endif
@@ -303,9 +305,11 @@ QPixmap Column::sparkline() {
 }
 
 void Column::pasteData() {
+#ifndef SDK
 	auto* spreadsheet = dynamic_cast<Spreadsheet*>(parentAspect());
 	if (spreadsheet)
 		static_cast<SpreadsheetView*>(spreadsheet->view())->pasteIntoSelection();
+#endif
 }
 
 /*!

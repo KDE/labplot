@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-17 01:46+0000\n"
+"POT-Creation-Date: 2024-06-19 01:42+0000\n"
 "PO-Revision-Date: 2024-06-17 08:27+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian\n"
@@ -5710,13 +5710,7 @@ msgstr "%1: змінено точність"
 msgid "%1: set matrix size to %2x%3"
 msgstr "%1: встановити розмір матриці %2⨯%3"
 
-#: src/backend/matrix/Matrix.cpp:520
-#: src/backend/spreadsheet/Spreadsheet.cpp:678
-#, kde-format
-msgid "%1: copy %2"
-msgstr "%1: копіювання %2"
-
-#: src/backend/matrix/Matrix.cpp:585
+#: src/backend/matrix/Matrix.cpp:523
 #, kde-format
 msgid "%1: add %2 row"
 msgid_plural "%1: add %2 rows"
@@ -5725,7 +5719,7 @@ msgstr[1] "%1: додати %2 рядки"
 msgstr[2] "%1: додати %2 рядків"
 msgstr[3] "%1: додати %2 рядок"
 
-#: src/backend/matrix/Matrix.cpp:597
+#: src/backend/matrix/Matrix.cpp:535
 #, kde-format
 msgid "%1: add %2 column"
 msgid_plural "%1: add %2 columns"
@@ -5734,7 +5728,7 @@ msgstr[1] "%1: додати %2 стовпчики"
 msgstr[2] "%1: додати %2 стовпчиків"
 msgstr[3] "%1: додати %2 стовпчик"
 
-#: src/backend/matrix/Matrix.cpp:722 src/backend/matrix/matrixcommands.h:126
+#: src/backend/matrix/Matrix.cpp:660 src/backend/matrix/matrixcommands.h:126
 #: src/backend/spreadsheet/Spreadsheet.cpp:603
 #, kde-format
 msgid "%1: clear"
@@ -6793,17 +6787,17 @@ msgstr "%1: зняти маскування повністю"
 msgid "%1: move column %2 from position %3 to %4."
 msgstr "%1: пересунути стовпчик %2 з позиції %3 на позицію %4."
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:795
+#: src/backend/spreadsheet/Spreadsheet.cpp:770
 #, kde-format
 msgid "%1: sort columns"
 msgstr "%1: упорядкувати стовпчики"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1160
+#: src/backend/spreadsheet/Spreadsheet.cpp:1135
 #, kde-format
 msgid "%1: linked spreadsheet removed"
 msgstr "%1: вилучено пов'язану електронну таблицю"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1549
+#: src/backend/spreadsheet/Spreadsheet.cpp:1524
 #, kde-format
 msgid "double precision data, %1 element"
 msgid_plural "numerical data, %1 elements"
@@ -6812,7 +6806,7 @@ msgstr[1] "дані подвійної точності, %1 елементи"
 msgstr[2] "дані подвійної точності, %1 елементів"
 msgstr[3] "дані подвійної точності, один елемент"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1552
+#: src/backend/spreadsheet/Spreadsheet.cpp:1527
 #, kde-format
 msgid "integer data, %1 element"
 msgid_plural "integer data, %1 elements"
@@ -6821,7 +6815,7 @@ msgstr[1] "цілочисельні дані, %1 елементи"
 msgstr[2] "цілочисельні дані, %1 елементів"
 msgstr[3] "цілочисельні дані, один елемент"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1555
+#: src/backend/spreadsheet/Spreadsheet.cpp:1530
 #, kde-format
 msgid "big integer data, %1 element"
 msgid_plural "big integer data, %1 elements"
@@ -6830,7 +6824,7 @@ msgstr[1] "великі цілочисельні дані, %1 елементи"
 msgstr[2] "великі цілочисельні дані, %1 елементів"
 msgstr[3] "великі цілочисельні дані, один елемент"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1558
+#: src/backend/spreadsheet/Spreadsheet.cpp:1533
 #, kde-format
 msgid "text data, %1 element"
 msgid_plural "text data, %1 elements"
@@ -6839,7 +6833,7 @@ msgstr[1] "текстові дані, %1 елементи"
 msgstr[2] "текстові дані, %1 елементів"
 msgstr[3] "текстові дані, один елемент"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1561
+#: src/backend/spreadsheet/Spreadsheet.cpp:1536
 #, kde-format
 msgid "month data, %1 element"
 msgid_plural "month data, %1 elements"
@@ -6848,7 +6842,7 @@ msgstr[1] "дані щодо місяця, %1 елементи"
 msgstr[2] "дані щодо місяця, %1 елементів"
 msgstr[3] "дані щодо місяця, один елемент"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1564
+#: src/backend/spreadsheet/Spreadsheet.cpp:1539
 #, kde-format
 msgid "day data, %1 element"
 msgid_plural "day data, %1 elements"
@@ -6857,7 +6851,7 @@ msgstr[1] "дані щодо дня, %1 елементи"
 msgstr[2] "дані щодо дня, %1 елементів"
 msgstr[3] "дані щодо дня, один елемент"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1567
+#: src/backend/spreadsheet/Spreadsheet.cpp:1542
 #, kde-format
 msgid "date and time data, %1 element"
 msgid_plural "date and time data, %1 elements"
@@ -21798,19 +21792,19 @@ msgstr "Зберегти у сумісному форматі"
 msgid "Tracing:"
 msgstr "Трасування:"
 
-#. i18n: ectx: property (text), widget (QCheckBox, chkDebugTrace)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:360
-#, kde-format
-msgid "Debug"
-msgstr "Діагностика"
-
 #. i18n: ectx: property (text), widget (QCheckBox, chkPerfTrace)
 #. i18n: ectx: property (text), widget (QLabel, lPerformance)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:383
+#: src/kdefrontend/ui/settingsgeneralpage.ui:360
 #: src/kdefrontend/ui/settingsworksheetpage.ui:111
 #, kde-format
 msgid "Performance"
 msgstr "Швидкодія"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkDebugTrace)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:383
+#, kde-format
+msgid "Debug"
+msgstr "Діагностика"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode_2)
@@ -23311,6 +23305,9 @@ msgstr "Не вдалося обробити convert, код виходу ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Не вдалося відкрити файл:"
+
+#~ msgid "%1: copy %2"
+#~ msgstr "%1: копіювання %2"
 
 #~ msgid "Column Format"
 #~ msgstr "Формат стовпчика"

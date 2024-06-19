@@ -20,7 +20,7 @@ class Symbol;
 
 #ifdef SDK
 #include "labplot_export.h"
-class LABPLOT_EXPORT BoxPlot : Plot {
+class LABPLOT_EXPORT BoxPlot : public Plot {
 #else
 class BoxPlot : public Plot {
 #endif

@@ -130,6 +130,7 @@ QMenu* AbstractPart::createContextMenu() {
 	menu->addSeparator();
 
 	// window state related actions
+#ifndef SDK
 	if (m_dockWidget) {
 		const QStyle* style = m_dockWidget->style();
 		if (!m_dockWidget->isClosed()) {
@@ -156,6 +157,7 @@ QMenu* AbstractPart::createContextMenu() {
 			});
 		}
 	}
+#endif
 
 	return menu;
 }
