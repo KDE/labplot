@@ -355,9 +355,9 @@ void MainWin::initGUI(const QString& fileName) {
 		// in case we're starting with the settings created with an older version where the LoadOnStart enum had more values
 		// or in case the config file was manipulated, we need to ensure we start with proper values and properly initialize the docks
 		// by mapping the old/manipulated values to the new/correct values:
-		// * old value 0 - "do nothing" -> map to new values "new project" and "with worksheet" which are default
-		// * old value 1 - "new project" -> map to new values "new project" and "with worksheet" which are default
-		// * old value 2 - "new project with worksheet" -> map to new values "new project" and "with worksheet" which are default
+		// * old value 0 - "do nothing" -> map to new values "new project" and "with spreadsheet" which are default
+		// * old value 1 - "new project" -> map to new values "new project" and "with spreadsheet" which are default
+		// * old value 2 - "new project with worksheet" -> map to new values "new project" and "with worksheet"
 		// * old value 3 - "new project with spreadsheet" -> map to new values "new project" and "with spreadsheet"
 		// * old value 4 - "last project" -> map to the new "last project"
 		// * any higher values or <0, manipulated file -> map to the new default values
@@ -1509,9 +1509,9 @@ bool MainWin::newProject(bool createInitialContent) {
 		case NewProject::WithSpreadsheet:
 			newSpreadsheet();
 			break;
-		case NewProject::WithWorksheetSpreadsheet:
-			newWorksheet();
+		case NewProject::WithSpreadsheetWorksheet:
 			newSpreadsheet();
+			newWorksheet();
 			break;
 		case NewProject::WithNotebook: {
 #ifdef HAVE_CANTOR_LIBS

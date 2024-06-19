@@ -82,7 +82,7 @@ public:
 	static void updateLocale();
 
 	enum class LoadOnStart { NewProject, LastProject, WelcomeScreen };
-	enum class NewProject { WithWorksheet, WithSpreadsheet, WithWorksheetSpreadsheet, WithNotebook };
+	enum class NewProject { WithSpreadsheet, WithWorksheet, WithSpreadsheetWorksheet, WithNotebook };
 	enum class TitleBarMode { ShowFilePath, ShowFileName, ShowProjectName };
 
 #ifdef HAVE_KUSERFEEDBACK

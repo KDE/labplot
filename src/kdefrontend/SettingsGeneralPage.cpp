@@ -144,7 +144,7 @@ void SettingsGeneralPage::applySettings() {
 
 void SettingsGeneralPage::restoreDefaults() {
 	ui.cbLoadOnStart->setCurrentIndex(ui.cbLoadOnStart->findData(static_cast<int>(MainWin::LoadOnStart::NewProject)));
-	ui.cbNewProject->setCurrentIndex(ui.cbNewProject->findData(static_cast<int>(MainWin::NewProject::WithWorksheet)));
+	ui.cbNewProject->setCurrentIndex(ui.cbNewProject->findData(static_cast<int>(MainWin::NewProject::WithSpreadsheet)));
 	ui.cbTitleBar->setCurrentIndex(0);
 	ui.cbUnits->setCurrentIndex(0);
 	ui.cbDecimalSeparator->setCurrentIndex(static_cast<int>(DecimalSeparator::Automatic));
@@ -169,7 +169,7 @@ void SettingsGeneralPage::loadSettings() {
 	ui.cbLoadOnStart->setCurrentIndex(ui.cbLoadOnStart->findData(loadOnStart));
 	loadOnStartChanged();
 
-	const auto newProject = group.readEntry(QLatin1String("NewProject"), static_cast<int>(MainWin::NewProject::WithWorksheet));
+	const auto newProject = group.readEntry(QLatin1String("NewProject"), static_cast<int>(MainWin::NewProject::WithSpreadsheet));
 	ui.cbNewProject->setCurrentIndex(ui.cbNewProject->findData(newProject));
 	newProjectChanged(); // call it to update notebook related widgets also if the current index above was not changed (true for index=0)
 
@@ -219,9 +219,9 @@ void SettingsGeneralPage::retranslateUi() {
 	// ui.cbLoadOnStart->addItem(i18n("Show Welcome Screen"), static_cast<int>(MainWin::LoadOnStart::WelcomeScreen));
 
 	ui.cbNewProject->clear();
-	ui.cbNewProject->addItem(i18n("With Worksheet"), static_cast<int>(MainWin::NewProject::WithWorksheet));
 	ui.cbNewProject->addItem(i18n("With Spreadsheet"), static_cast<int>(MainWin::NewProject::WithSpreadsheet));
-	ui.cbNewProject->addItem(i18n("With Worksheet and Spreadsheet"), static_cast<int>(MainWin::NewProject::WithWorksheetSpreadsheet));
+	ui.cbNewProject->addItem(i18n("With Worksheet"), static_cast<int>(MainWin::NewProject::WithWorksheet));
+	ui.cbNewProject->addItem(i18n("With Spreadsheet and Worksheet"), static_cast<int>(MainWin::NewProject::WithSpreadsheetWorksheet));
 #ifdef HAVE_CANTOR_LIBS
 	ui.cbNewProject->addItem(i18n("With Notebook"), static_cast<int>(MainWin::NewProject::WithNotebook));
 #endif
