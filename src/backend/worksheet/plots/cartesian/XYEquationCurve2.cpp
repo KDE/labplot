@@ -237,9 +237,11 @@ void XYEquationCurve2Private::connectEquationCurve(const XYCurve* curve) {
 		return;
 
 	DEBUG(Q_FUNC_INFO)
-	m_connectionsUpdateEquation << q->connect(curve, &XYCurve::changed, q, &XYEquationCurve2::recalculate);
+	m_connectionsUpdateEquation << q->connect(curve, &XYCurve::dataChanged, q, &XYEquationCurve2::recalculate);
+	m_connectionsUpdateEquation << q->connect(curve, &XYCurve::xDataChanged, q, &XYEquationCurve2::recalculate);
+	m_connectionsUpdateEquation << q->connect(curve, &XYCurve::yDataChanged, q, &XYEquationCurve2::recalculate);
 	m_connectionsUpdateEquation << q->connect(curve, &AbstractAspect::aspectAboutToBeRemoved, q, &XYEquationCurve2::equationVariableCurveRemoved);
-	m_connectionsUpdateEquation << q->connect(curve->parentAspect(), &AbstractAspect::childAspectAdded, q, &XYEquationCurve2::equationVariableCurveAdded);
+	// m_connectionsUpdateEquation << q->connect(curve->parentAspect(), &AbstractAspect::childAspectAdded, q, &XYEquationCurve2::equationVariableCurveAdded);
 }
 
 void XYEquationCurve2Private::equationVariableCurveRemoved(const AbstractAspect* aspect) {
