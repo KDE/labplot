@@ -84,7 +84,8 @@ void XYAnalysisCurveDock::setModelCurve(TreeViewComboBox* cb) {
 						   AspectType::Worksheet,
 						   AspectType::CartesianPlot,
 						   AspectType::XYCurve,
-						   AspectType::XYAnalysisCurve};
+						   AspectType::XYAnalysisCurve,
+						   AspectType::XYEquationCurve};
 	cb->setTopLevelClasses(list);
 
 	QList<const AbstractAspect*> hiddenAspects;
