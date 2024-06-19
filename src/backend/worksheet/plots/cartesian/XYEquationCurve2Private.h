@@ -35,6 +35,7 @@ public:
 	void equationVariableCurveAdded(const AbstractAspect*);
 	bool preparationValid(const AbstractColumn*, const AbstractColumn*) override;
 	void prepareTmpDataColumn(const AbstractColumn**, const AbstractColumn**) override;
+	void handleAspectUpdated(const QString& aspectPath, const AbstractAspect* element);
 
 	void resetResults() override; // Clear the results of the previous calculation
 	bool recalculateSpecific(const AbstractColumn* tmpXDataColumn, const AbstractColumn* tmpYDataColumn) override;

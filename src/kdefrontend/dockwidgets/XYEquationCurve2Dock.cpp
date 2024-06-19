@@ -302,13 +302,13 @@ void XYEquationCurve2Dock::recalculateClicked() {
 
 	// determine variable names and data vectors of the specified curves
 	QStringList variableNames;
-	QVector<XYCurve*> variableCurves;
+	QVector<const XYCurve*> variableCurves;
 	for (int i = 0; i < m_variableLineEdits.size(); ++i) {
 		variableNames << m_variableLineEdits.at(i)->text().simplified();
 
 		auto* aspect{static_cast<AbstractAspect*>(m_variableDataCurves.at(i)->currentModelIndex().internalPointer())};
 		if (aspect) {
-			auto* curve{dynamic_cast<XYCurve*>(aspect)};
+			auto* curve{dynamic_cast<const XYCurve*>(aspect)};
 			if (curve)
 				variableCurves << curve;
 		}

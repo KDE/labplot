@@ -20,7 +20,6 @@ private Q_SLOTS:
 	void setCurves();
 	void removeCurves();
 	void removeColumnFromCurve();
-	void addColumnFromCurve();
 	void removeCurveRenameAutomaticAdd();
 	void saveLoad();
 };

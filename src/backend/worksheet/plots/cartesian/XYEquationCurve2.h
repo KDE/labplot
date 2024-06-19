@@ -51,7 +51,7 @@ public:
 	const XYAnalysisCurve::Result& result() const override;
 
 	// void setEquationData(const XYEquationCurve2::EquationData& equationData);
-	void setEquation(const QString& equation, const QStringList& variableNames, const QVector<XYCurve*>& curve);
+	void setEquation(const QString& equation, const QStringList& variableNames, const QVector<const XYCurve*>& curve);
 	QString equation() const;
 	void clearEquation();
 	struct EquationData {
@@ -62,7 +62,7 @@ public:
 			: m_variableName(variableName)
 			, m_curvePath(curvePath) {
 		}
-		EquationData(const QString& variableName, XYCurve* curve)
+		EquationData(const QString& variableName, const XYCurve* curve)
 			: m_curve(curve)
 			, m_variableName(variableName)
 			, m_curvePath(curve->path()) {
@@ -77,7 +77,7 @@ public:
 				m_curvePath = path;
 			return true;
 		}
-		void setCurve(XYCurve* c) {
+		void setCurve(const XYCurve* c) {
 			m_curve = c;
 			if (c)
 				m_curvePath = c->path(); // do not clear path
@@ -92,7 +92,7 @@ public:
 
 	private:
 		// Should be only accessible by the columnName() function
-		XYCurve* m_curve{nullptr};
+		const XYCurve* m_curve{nullptr};
 		QString m_variableName;
 		QString m_curvePath;
 		friend class XYEquationCurve2Private;
@@ -105,6 +105,7 @@ public:
 
 protected:
 	XYEquationCurve2(const QString& name, XYEquationCurve2Private* dd);
+	virtual void handleAspectUpdated(const QString& aspectPath, const AbstractAspect* element) override;
 
 private Q_SLOTS:
 	void equationVariableCurveRemoved(const AbstractAspect* aspect);
